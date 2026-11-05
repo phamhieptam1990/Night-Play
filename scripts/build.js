@@ -3,7 +3,10 @@
 const fs = require("fs"), path = require("path");
 const root = path.join(__dirname, "..");
 const dist = path.join(root, "dist");
-const PUBLIC = ["index.html", "subscribe.html", "privacy.html", "admin", "cozyplay", "popplay", "shared"];   // thêm mục mới ở đây
+/* SITE_TARGET: "hub" = site công khai (không có admin) · "admin" = chỉ trang quản trị · bỏ trống = tất cả (chạy 1 site) */
+const TARGET = process.env.SITE_TARGET || "all";
+const HUB = ["index.html", "subscribe.html", "privacy.html", "cozyplay", "popplay", "shared"];   // thêm mục mới ở đây
+const PUBLIC = TARGET === "hub" ? HUB : TARGET === "admin" ? ["admin", "shared"] : [...HUB, "admin"];
 fs.rmSync(dist, { recursive: true, force: true });
 fs.mkdirSync(dist, { recursive: true });
 for (const p of PUBLIC) {
@@ -11,4 +14,5 @@ for (const p of PUBLIC) {
   if (!fs.existsSync(src)) { console.warn("bỏ qua (không tồn tại): " + p); continue; }
   fs.cpSync(src, path.join(dist, p), { recursive: true, filter: s => !path.basename(s).startsWith(".") });
 }
-console.log("dist/ sẵn sàng:", fs.readdirSync(dist).join(", "));
+if (TARGET === "admin") fs.writeFileSync(path.join(dist, "_redirects"), "/  /admin/  302\n");   // vào domain admin là thấy trang admin
+console.log("[" + TARGET + "] dist/ sẵn sàng:", fs.readdirSync(dist).join(", "));
