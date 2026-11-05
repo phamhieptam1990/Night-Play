@@ -1,0 +1,13 @@
+/* Footer dùng chung cho trang quản trị và trang chính sách: cùng kiểu với footer thu gọn của các trang game
+   (viền trên, nền chuyển sắc về --hero1, logo + liên kết + bản quyền). Màu lấy từ shared/theme.css. */
+.site-foot{flex:none;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:2px 18px;
+  padding:6px 16px calc(6px + env(safe-area-inset-bottom));border-top:1px solid var(--line);
+  background:linear-gradient(180deg,transparent,var(--hero1,transparent));color:var(--muted);font-size:13px}
+.site-foot .mark{display:flex;align-items:center;gap:8px;font-weight:800;font-size:15px;color:var(--ink)}
+.site-foot .mark svg{width:24px;height:24px;flex:none}
+.site-foot nav{display:flex;flex-wrap:wrap;gap:0 16px}
+.site-foot nav a{color:var(--ink);text-decoration:none;font-weight:600;padding:6px 0}
+.site-foot nav a:hover{color:var(--accent)}
+.site-foot nav a:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:4px}
+@media (max-width:620px){.site-foot{justify-content:flex-start}}
+@media print{.site-foot{display:none}}

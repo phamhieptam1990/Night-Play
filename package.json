@@ -1,0 +1,15 @@
+{
+  "name": "night-play",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build.js",
+    "dev": "DEV_RELOAD=1 node server/server.js",
+    "db:migrate:dev": "node server/db/migrate.js dev",
+    "db:migrate:prod": "node server/db/migrate.js production --yes",
+    "db:seed:dev": "node server/db/seed-dev.js",
+    "db:clean:dev": "node server/db/clean-dev.js"
+  },
+  "dependencies": {
+    "pg": "^8.13.0"
+  }
+}

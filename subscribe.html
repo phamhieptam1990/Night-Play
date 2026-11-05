@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Night Pass · Night Play</title>
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#0E1020">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%237C5CFF'/%3E%3Cpath d='M40 40A16 16 0 1 1 26 16a13 13 0 0 0 14 24z' fill='%23fff'/%3E%3C/svg%3E">
+<script>
+/* Xác định app gọi tới (?from=popplay/index.html) để dùng đúng thương hiệu + màu; chạy trước khi vẽ nên không nháy màu */
+const DEFAULT_HOME = "cozyplay/index.html";
+const MOON = '<path d="M42 40A16 16 0 1 1 26 14a13 13 0 0 0 16 26z" fill="#fff"/><circle cx="44" cy="20" r="2.5" fill="#fff"/>';
+const PLAY = '<path d="M25 18l22 14-22 14z" fill="#fff"/>';
+const logo = p => '<svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="var(--accent)"/>' + p + '</svg>';
+const APPS = {
+  cozyplay:{ brand:"Night Play", theme:"dark", color:{ light:"#F3F0FA", dark:"#0E1020" }, logo:logo(MOON) },
+  popplay: { brand:"Tên Team",   theme:null,   color:{ light:"#FFF6EC", dark:"#1B2340" }, logo:logo(PLAY) }
+};
+/* Trang quay về: ?from= (đường dẫn tương đối, an toàn) → referrer cùng origin → mặc định */
+const HOME = (() => {
+  const ok = p => p && /^[\w\-./]+$/.test(p) && !p.startsWith("/") && !p.includes("..") && !p.includes("//") && !/subscribe\.html/.test(p);
+  const f = new URLSearchParams(location.search).get("from");
+  if(ok(f)) return f;
+  try{
+    const r = new URL(document.referrer);
+    if(r.origin === location.origin && !/subscribe\.html/.test(r.pathname)){
+      const rel = r.pathname.slice(location.pathname.replace(/[^/]*$/, "").length).replace(/\/$/, "/index.html");
+      if(ok(rel)) return rel;
+    }
+  }catch(e){}
+  return DEFAULT_HOME;
+})();
+const APPKEY = APPS[HOME.split("/")[0]] ? HOME.split("/")[0] : "cozyplay", APP = APPS[APPKEY];
+try{var t=localStorage.getItem("theme")}catch(e){}
+document.documentElement.dataset.app = APPKEY;
+document.documentElement.dataset.theme = t || APP.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+</script>
+<link rel="stylesheet" href="shared/theme.css">
+<style>
+/* Bảng màu theo từng app: cozyplay (tím đêm) / popplay (cam) */
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.45}
+body{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+button,input{font:inherit;color:inherit}
+button{border:0;cursor:pointer}
+a{color:var(--accent);font-weight:600}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+/* Header giống landing */
+.nav{flex:none;position:relative;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;background:color-mix(in srgb,var(--bg) 82%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.mark{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:-.2px;min-width:0;color:var(--ink);text-decoration:none}
+.mark svg{width:36px;height:36px;flex:none;display:block}
+.mark .mk{display:flex}
+.mark span:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tools{position:relative;display:flex;gap:10px;align-items:center}
+.ico{width:44px;height:44px;border-radius:50%;background:var(--panel);box-shadow:var(--shadow);display:grid;place-items:center}
+.ico svg{width:22px;height:22px}
+.back{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:44px;padding:0 16px;border-radius:999px;background:var(--panel);box-shadow:var(--shadow);color:var(--ink);text-decoration:none;font-weight:700;font-size:15px;white-space:nowrap}
+@media (max-width:520px){.back{width:44px;padding:0}.back span{display:none}}
+.sun{display:none}[data-theme=dark] .sun{display:block}[data-theme=dark] .moon{display:none}
+#langMenu{position:absolute;top:54px;right:0;min-width:150px;background:var(--panel);border-radius:16px;box-shadow:var(--shadow);padding:6px;display:none;z-index:6}
+#langMenu.on{display:block}
+#langMenu button{display:block;width:100%;text-align:left;padding:12px 14px;border-radius:10px;background:none;font-size:16px;font-weight:600}
+#langMenu button[aria-checked=true]{background:var(--accent);color:var(--on-accent)}
+/* Nội dung chính: cuộn riêng nếu màn quá thấp */
+main{flex:1;min-height:0;overflow-y:auto;padding:0 16px 8px}
+.in{max-width:1280px;margin:0 auto}
+.hero{text-align:center;padding:clamp(8px,2vh,22px) 0 clamp(8px,1.6vh,16px)}
+.hero h1{margin:0;font-size:clamp(24px,min(4.4vw,5vh),38px);line-height:1.1;font-weight:800;letter-spacing:-.5px}
+.hero p{margin:6px auto 0;max-width:520px;opacity:.85;font-size:clamp(14px,2vh,16px)}
+/* Footer giống landing */
+.foot{flex:none;display:flex;flex-wrap:wrap;align-items:center;gap:4px 18px;padding:6px 16px 6px;border-top:1px solid var(--line);background:linear-gradient(180deg,transparent,var(--hero1))}
+.foot .mark{font-size:16px}.foot .mark svg{width:28px;height:28px}
+.fcol{display:flex;flex-wrap:wrap;gap:0 14px}
+.fcol a,.fcol button{padding:8px 0;font-size:14px;font-weight:600;color:var(--ink);text-decoration:none;background:none}
+.fcol a:hover,.fcol button:hover{color:var(--accent)}
+.foot p{margin:0 0 0 auto;font-size:12px;opacity:.75}
+@media (max-width:640px){.foot p,.foot .mark span:last-child{display:none}}
+.status{margin:0 auto 20px;padding:14px 18px;border-radius:18px;background:var(--panel);box-shadow:var(--shadow);font-weight:700;text-align:center;display:none}
+.status.on{display:block;border:2px solid var(--ok)}
+/* Gói */
+.plans{display:grid;gap:14px;grid-template-columns:repeat(2,1fr)}
+@media(min-width:760px){.plans{grid-template-columns:repeat(4,1fr)}}
+.plan{position:relative;text-align:left;padding:18px 16px;border-radius:22px;background:var(--panel);box-shadow:var(--shadow);border:3px solid transparent;display:flex;flex-direction:column;gap:6px;min-height:170px}
+.plan[aria-checked=true]{border-color:var(--accent)}
+.plan h3{margin:0;font-size:16px}
+.price{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}
+.price small{font-size:14px;font-weight:600;opacity:.75}
+.note{font-size:13px;opacity:.8}
+.badge{position:absolute;top:-11px;left:14px;padding:3px 10px;border-radius:999px;background:var(--accent);color:var(--on-accent);font-size:12px;font-weight:800}
+.save{color:var(--ok);font-weight:700;font-size:13px}
+/* So sánh */
+h2{font-size:20px;margin:30px 0 12px}
+table{width:100%;border-collapse:separate;border-spacing:0;background:var(--panel);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);font-size:15px}
+th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line)}
+tbody tr:last-child td{border-bottom:0}
+th{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.7;background:transparent}
+td:first-child{font-weight:600}
+td:not(:first-child),th:not(:first-child){text-align:left;white-space:nowrap}
+th.pro,td.pro{width:42%}
+th:nth-child(2),td.fr{width:24%}
+td.fr{opacity:.8}
+th.pro{background:var(--accent);color:var(--on-accent);opacity:1;font-size:13px;letter-spacing:.04em}
+th.pro svg{width:15px;height:15px;vertical-align:-2px;margin-right:5px}
+td.pro{background:color-mix(in srgb,var(--accent) 11%,transparent);font-weight:700;border-bottom-color:color-mix(in srgb,var(--accent) 18%,var(--line))}
+.ck{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--ok);color:#fff;vertical-align:middle;margin-right:6px;flex:none}
+.ck svg{width:12px;height:12px}
+td.fr .ck{background:var(--line);color:var(--ink)}
+/* Thanh toán */
+.pay{display:grid;gap:16px;margin-top:24px}
+@media(min-width:760px){.pay{grid-template-columns:1.2fr 1fr}}
+.card{background:var(--panel);border-radius:22px;box-shadow:var(--shadow);padding:20px}
+.card h2{margin:0 0 12px;font-size:18px}
+label.f{display:block;font-weight:600;margin:12px 0 6px}
+input[type=email],.dlg input{width:100%;box-sizing:border-box;padding:12px;border-radius:12px;border:2px solid var(--line);background:var(--bg);font-size:16px}
+input[type=email][aria-invalid=true]{border-color:var(--warn)}
+.err{color:var(--warn);font-size:13px;margin:6px 0 0;min-height:18px}
+.methods{display:grid;gap:8px}
+.m{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:var(--bg);border:2px solid var(--line);text-align:left;font-weight:600}
+.m[aria-checked=true]{border-color:var(--accent);background:var(--card)}
+.m i{width:28px;height:28px;border-radius:8px;flex:none;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:12px;color:#fff}
+.order{border:2px solid color-mix(in srgb,var(--accent) 40%,var(--line));background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 9%,var(--panel)),var(--panel))}
+.card.order h2{font-size:12px;text-transform:uppercase;letter-spacing:.09em;opacity:.65;font-weight:700}
+.sum{list-style:none;margin:0;padding:0}
+.sum li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;font-size:14px}
+.sum li>span:first-child{opacity:.7}
+.sum li>span:last-child{font-weight:700;text-align:right}
+.sum .hd>span{white-space:nowrap}
+.sum .hd{padding:0 0 10px;margin-bottom:4px;border-bottom:1px solid var(--line)}
+.sum .hd>span:first-child{opacity:1;font-size:19px;font-weight:800}
+.sum .chip{padding:4px 12px;border-radius:999px;background:var(--accent);color:var(--on-accent);font-size:13px;font-weight:800}
+.sum .pm>span:last-child{display:inline-flex;align-items:center;gap:8px}
+.sum .pm i{width:22px;height:22px;border-radius:6px;display:inline-grid;place-items:center;font-style:normal;font-weight:800;font-size:10px;color:#fff}
+.sum li.t{margin-top:6px;padding-top:12px;border-top:1px solid var(--line)}
+.sum li.t>span:first-child{opacity:1;font-size:15px;font-weight:700}
+.sum li.t>span:last-child{font-size:26px;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums}
+.cta{display:flex;align-items:center;justify-content:center;gap:8px}
+.cta svg{width:18px;height:18px;flex:none}
+.cta{width:100%;margin-top:16px;padding:16px;border-radius:14px;background:var(--accent);color:var(--on-accent);font-weight:800;font-size:17px}
+.cta:disabled{opacity:.5;cursor:not-allowed}
+.fine{font-size:12.5px;opacity:.8;margin:12px 0 0}
+/* Hộp thanh toán / kết quả */
+dialog{border:0;border-radius:24px;padding:0;background:var(--panel);color:var(--ink);width:min(440px,calc(100% - 32px));box-shadow:0 20px 60px rgba(0,0,0,.5)}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+.dlg{padding:22px;text-align:center}
+.dlg h3{margin:0 0 8px;font-size:20px}
+.qr{width:200px;height:200px;margin:12px auto;border-radius:16px;background:repeating-conic-gradient(var(--ink) 0 25%,var(--panel) 0 50%) 0 0/24px 24px;opacity:.15;border:6px solid var(--panel)}
+.kv{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px}.kv span{opacity:.7;flex:0 0 auto}.kv b{margin-left:auto;text-align:right;word-break:break-all}.cp{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:8px;padding:3px 8px;font:inherit;font-size:12px;cursor:pointer}.mut{opacity:.7;font-size:13px;margin:4px 0}
+.demo{margin:8px 0;padding:10px;border-radius:12px;background:#FFD93D;color:#3a2e00;font-size:13px;font-weight:700}
+.row{display:flex;gap:10px;margin-top:14px}
+.row button{flex:1;padding:14px;border-radius:14px;font-weight:700}
+.p{background:var(--accent);color:var(--on-accent)}
+.s{background:var(--bg);border:2px solid var(--line)!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ===== VỪA MỘT MÀN HÌNH ===== */
+.cols{display:block}
+.colR .pay{margin-top:24px}
+@media (min-width:900px){
+  .status{margin:0 0 12px;padding:10px 14px}
+  .cols{display:grid;grid-template-columns:.9fr 1.3fr;gap:20px;align-items:start}
+  .colR .pay{grid-template-columns:1fr 1fr}
+  .plans{grid-template-columns:repeat(2,1fr);gap:14px}
+  .plan{min-height:0;padding:14px 16px}
+  .price{font-size:24px}
+  .colL h2{margin:16px 0 8px;font-size:16px}
+  table{font-size:14px}
+  th,td{padding:8px 12px}
+  .colR .pay{margin-top:0;gap:12px}
+  .card{padding:16px}
+  .card h2{margin:0 0 8px;font-size:16px}
+  label.f{margin:0 0 4px}
+  .err{margin:4px 0 0;min-height:14px}
+  .methods{grid-template-columns:1fr 1fr;gap:8px}
+  .m{padding:9px 12px}
+  .sum li{padding:6px 0}
+  .sum li.t>span:last-child{font-size:24px}
+  .cta{margin-top:12px;padding:13px}
+  .fine{margin-top:8px;font-size:12px}
+}
+@media (min-width:900px) and (max-width:1099px){.cols{grid-template-columns:1fr}.plans{grid-template-columns:repeat(4,1fr)}.colL h2,#cmp{display:none}}   /* tablet: gói giá 1 hàng ngang, 2 card thanh toán bên dưới, không bị ép */
+@media (min-width:900px) and (max-height:800px){.colL h2,#cmp{display:none}}   /* màn thấp: ẩn bảng so sánh */
+@media (max-width:899px){
+  .hero p{display:none}
+  .status{margin-bottom:12px;padding:10px}
+  .plans{gap:10px}
+  .plan{min-height:0;padding:10px 12px;gap:2px}
+  .plan h3{font-size:15px}
+  .plan .note{display:none}
+  .price{font-size:22px}
+  .colL h2,#cmp{display:none}
+  .colR .pay{margin-top:14px;gap:10px}
+  .card{padding:12px}
+  .colR .card h2{display:none}
+  label.f{margin:0 0 4px;font-size:14px}
+  .err{margin:2px 0 0;min-height:12px}
+  .methods{grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+  .m{padding:8px 10px;font-size:14px}
+  .sum li{padding:4px 0}
+  .sum .hd,.sum .dur,.sum .pm{display:none}
+  .sum li.t{margin-top:2px;padding-top:8px}
+  .sum li.t>span:last-child{font-size:22px}
+  .cta{margin-top:8px;padding:12px}
+  .fine{font-size:11.5px;margin-top:6px;line-height:1.35}
+  .hero{padding-top:4px;padding-bottom:8px}
+  .plans{gap:8px}
+  .colR .pay{margin-top:10px;gap:8px}
+  .card{padding:10px 12px}
+  .err{min-height:6px}
+}
+</style>
+</head>
+<body>
+<nav class="nav" aria-label="Main">
+  <a class="mark" id="navHome" href="#"><span class="mk" data-logo></span><span id="hName"></span></a>
+  <div class="tools">
+    <a class="back" id="back" href="#">← <span data-t="back"></span></a>
+    <button id="themeBtn" class="ico" type="button" aria-label="Theme">
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
+    </button>
+    <button id="langBtn" class="ico" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Language">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg>
+    </button>
+    <div id="langMenu" role="menu"></div>
+  </div>
+</nav>
+
+<main><div class="in">
+  <header class="hero">
+    <h1 data-t="title"></h1>
+    <p data-t="sub"></p>
+  </header>
+
+  <div class="status" id="status" role="status"></div>
+
+  <div class="cols">
+    <div class="colL">
+      <div class="plans" id="plans" role="radiogroup" aria-labelledby="plansH"></div>
+      <h2 id="plansH" data-t="compareH"></h2>
+      <table id="cmp"></table>
+    </div>
+    <div class="colR">
+      <section class="pay" aria-label="Checkout">
+        <div class="card">
+          <h2 data-t="acctH"></h2>
+          <label class="f" for="email" data-t="email"></label>
+          <input id="email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com">
+          <p class="err" id="emailErr" role="alert"></p>
+          <h2 style="margin-top:14px" data-t="methodH"></h2>
+          <div class="methods" id="methods" role="radiogroup"></div>
+        </div>
+        <div class="card order">
+          <h2 data-t="orderH"></h2>
+          <ul class="sum" id="sum"></ul>
+          <button class="cta" id="buy" type="button"></button>
+          <p class="fine" data-t="fine"></p>
+        </div>
+      </section>
+    </div>
+  </div>
+</div></main>
+
+<footer class="foot">
+  <div class="mark"><span class="mk" data-logo></span><span id="fName"></span></div>
+  <nav class="fcol">
+    <a id="fHome" href="#"></a>
+    <button id="restore" type="button"></button>
+    <a id="fMail" href="#"></a>
+    <a id="fPriv" href="#" target="_blank" rel="noopener"></a>
+  </nav>
+  <p id="madeBy"></p>
+</footer>
+
+<dialog id="dlg"><div class="dlg" id="dlgBody"></div></dialog>
+
+<script src="shared/track.js"></script>
+<script>window.Track&&Track.view("subscribe")</script>
+<script>
+/* ===== CẤU HÌNH ===== */
+const PAY_API = location.protocol === "file:" ? "" : "/api";   // Base URL backend (server/server.js). Để trống = chế độ DEMO (không thu tiền thật)
+const EMAIL = "phamhieptam@gmail.com";          // Email liên hệ
+const PRIVACY_URL = "privacy.html"; // Link Privacy Policy
+
+/* Gói: days = số ngày hiệu lực; days:0 = mua vĩnh viễn (không dùng ở trang này) */
+const PLANS = [
+  { id:"day",   price:9000,   days:1,   key:"pDay"   },
+  { id:"week",  price:18000,  days:7,   key:"pWeek"  },
+  { id:"month", price:36000,  days:30,  key:"pMonth", best:true },
+  { id:"year",  price:199000, days:365, key:"pYear"  }
+];
+const METHODS = [
+  { id:"momo",  name:"MoMo",           c:"#A50064", tag:"M"  },
+  { id:"zalo",  name:"ZaloPay",        c:"#0068FF", tag:"Z"  },
+  { id:"vnpay", name:"VNPay QR",       c:"#1B4DB1", tag:"VN" },
+  { id:"bank",  name:"VietQR / Bank",  c:"#1F8A5B", tag:"QR" }
+];
+
+const i18n = {
+ vi:{ name:"Tiếng Việt", back:"Quay lại", home:"Game", contact:"Liên hệ", privacy:"Chính sách quyền riêng tư", rights:"Bảo lưu mọi quyền.", title:"Night Pass", sub:"Mở tất cả game, chơi không giới hạn. Không quảng cáo, không theo dõi cá nhân.",
+  pDay:"1 ngày", pWeek:"1 tuần", pMonth:"1 tháng", pYear:"1 năm", best:"Phổ biến nhất",
+  perDay:"/ngày", perWeek:"/tuần", perMonth:"/tháng", perYear:"/năm",
+  noteDay:"Dùng thử, không cam kết", noteWeek:"≈ 72.000đ/tháng", noteMonth:"Rẻ hơn ly cà phê", noteYear:"≈ 16.600đ/tháng", save:"Tiết kiệm",
+  compareH:"Free và Night Pass", feat:"Tính năng", free:"Free", pass:"Night Pass",
+  f1:"Số game", f1a:"3 game", f1b:"Tất cả + game mới", f2:"Thời gian chơi", f2a:"30 phút/ngày", f2b:"Không giới hạn", f3:"Hẹn giờ đi ngủ tự đặt", f4:"Quảng cáo / theo dõi", f4v:"Không",
+  acctH:"Tài khoản", email:"Email (để nhận hoá đơn và khôi phục gói)", emailBad:"Vui lòng nhập email hợp lệ.",
+  methodH:"Phương thức thanh toán", orderH:"Đơn hàng", plan:"Gói", dur:"Thời hạn", expires:"Hết hạn", total:"Tổng cộng", days:"ngày",
+  buy:"Thanh toán", fine:"Không tự động gia hạn. Hết hạn bạn quay về gói Free, chúng tôi sẽ nhắc trước 1 ngày. Giá đã gồm thuế (nếu có).",
+  have:"Đã mua rồi?", restore:"Khôi phục gói",
+  payTitle:"Quét mã để thanh toán", payWith:"Thanh toán", via:"qua", demo:"CHẾ ĐỘ DEMO: chưa kết nối cổng thanh toán, không có giao dịch thật.", paid:"Tôi đã thanh toán (demo)", cancel:"Huỷ",
+  okTitle:"Thanh toán thành công", okTxt:"Night Pass của bạn có hiệu lực đến", play:"Chơi ngay",
+  active:"Night Pass đang hoạt động đến", expired:"Night Pass đã hết hạn. Gia hạn để tiếp tục chơi không giới hạn.",
+  rTitle:"Khôi phục gói", rTxt:"Nhập email đã dùng khi mua. Cần kết nối server để kiểm tra.", rNone:"Chưa kết nối server nên không thể khôi phục (chế độ demo).", close:"Đóng", err:"Có lỗi, vui lòng thử lại.", scanTxt:"Quét mã bằng app ngân hàng hoặc ví (MoMo, ZaloPay…)", bankL:"Ngân hàng", accL:"Số tài khoản", holdL:"Chủ tài khoản", amtL:"Số tiền", codeL:"Nội dung CK", copy:"Chép", copied:"Đã chép", waiting:"Đang chờ thanh toán…", left:"Còn", keep:"Giữ nguyên nội dung chuyển khoản để hệ thống tự xác nhận.", orderExp:"Đơn đã hết hạn. Nếu bạn đã chuyển tiền, hãy dùng Khôi phục gói.", again:"Tạo đơn mới", rEmail:"Email đã dùng khi mua", rSend:"Gửi mã", rCode:"Mã 6 số trong email", rOk:"Xác nhận", rSent:"Nếu email có gói, mã đã được gửi.", rBad:"Mã không đúng hoặc đã hết hạn.", rNo:"Email này chưa có gói đang hoạt động.", slow:"Quá nhiều lần thử, vui lòng đợi một lát.", },
+ en:{ name:"English", back:"Back", home:"Games", contact:"Contact", privacy:"Privacy Policy", rights:"All rights reserved.", title:"Night Pass", sub:"Unlock every game and play without limits. No ads, no personal tracking.",
+  pDay:"1 day", pWeek:"1 week", pMonth:"1 month", pYear:"1 year", best:"Most popular",
+  perDay:"/day", perWeek:"/week", perMonth:"/month", perYear:"/year",
+  noteDay:"Try it, no commitment", noteWeek:"≈ 72,000₫/month", noteMonth:"Cheaper than a coffee", noteYear:"≈ 16,600₫/month", save:"Save",
+  compareH:"Free vs Night Pass", feat:"Feature", free:"Free", pass:"Night Pass",
+  f1:"Games", f1a:"3 games", f1b:"All + new releases", f2:"Play time", f2a:"30 min/day", f2b:"Unlimited", f3:"Custom bedtime timer", f4:"Ads / tracking", f4v:"None",
+  acctH:"Account", email:"Email (for receipt and restoring your pass)", emailBad:"Please enter a valid email.",
+  methodH:"Payment method", orderH:"Order", plan:"Plan", dur:"Duration", expires:"Expires", total:"Total", days:"days",
+  buy:"Pay", fine:"No auto-renewal. When it ends you return to Free; we remind you 1 day before. Prices include tax where applicable.",
+  have:"Already purchased?", restore:"Restore pass",
+  payTitle:"Scan to pay", payWith:"Pay", via:"via", demo:"DEMO MODE: no payment gateway connected, no real charge.", paid:"I have paid (demo)", cancel:"Cancel",
+  okTitle:"Payment successful", okTxt:"Your Night Pass is active until", play:"Play now",
+  active:"Night Pass active until", expired:"Your Night Pass has expired. Renew to keep playing without limits.",
+  rTitle:"Restore pass", rTxt:"Enter the email you purchased with. Needs a server to verify.", rNone:"No server connected, so restore is unavailable (demo mode).", close:"Close", err:"Something went wrong, please try again.", scanTxt:"Scan with your banking app or wallet (MoMo, ZaloPay…)", bankL:"Bank", accL:"Account no.", holdL:"Account name", amtL:"Amount", codeL:"Transfer note", copy:"Copy", copied:"Copied", waiting:"Waiting for payment…", left:"Left", keep:"Keep the transfer note unchanged so we can confirm automatically.", orderExp:"Order expired. If you already paid, use Restore pass.", again:"New order", rEmail:"Email used at purchase", rSend:"Send code", rCode:"6-digit code from email", rOk:"Confirm", rSent:"If the email has a pass, a code was sent.", rBad:"Wrong or expired code.", rNo:"No active pass for this email.", slow:"Too many attempts, please wait a moment.", }
+};
+
+/* ===== TIỆN ÍCH ===== */
+const $ = id => document.getElementById(id);
+const store = {
+  get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } },
+  set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+let lang = (()=>{ const q=new URLSearchParams(location.search).get("lang"); if(q&&i18n[q]) return q; try{ const s=localStorage.getItem("lang"); if(s&&i18n[s]) return s; }catch(e){}
+  for(const l of (navigator.languages||[navigator.language||""])){ const c=String(l).split("-")[0].toLowerCase(); if(i18n[c]) return c; } return "vi"; })();
+const T = k => i18n[lang][k] ?? k;
+const vnd = n => n.toLocaleString(lang==="vi"?"vi-VN":"en-US") + "đ";
+const fmtDate = d => new Date(d).toLocaleDateString(lang==="vi"?"vi-VN":"en-GB");
+const addDays = (from, n) => { const d = new Date(from); d.setDate(d.getDate()+n); return d; };
+
+let planId = "month", methodId = "momo";
+const plan = () => PLANS.find(p => p.id === planId);
+const method = () => METHODS.find(m => m.id === methodId);
+
+/* Gói đang có: {plan, exp(ISO), email}. Cộng dồn nếu mua khi còn hạn */
+const getPass = () => store.get("pass");
+const isActive = p => p && new Date(p.exp) > new Date();
+
+/* ===== VẼ ===== */
+function renderPlans(){
+  const box = $("plans"); box.textContent = "";
+  const monthly = PLANS.find(p=>p.id==="month").price;
+  PLANS.forEach(p => {
+    const b = document.createElement("button");
+    b.type="button"; b.className="plan"; b.setAttribute("role","radio"); b.setAttribute("aria-checked", p.id===planId);
+    const per = {day:"perDay",week:"perWeek",month:"perMonth",year:"perYear"}[p.id];
+    let extra = "";
+    if(p.id==="year") extra = `<span class="save">${T("save")} ${Math.round((1 - p.price/(monthly*12))*100)}%</span>`;
+    b.innerHTML = (p.best?`<span class="badge">${T("best")}</span>`:"") +
+      `<h3>${T(p.key)}</h3><div class="price">${vnd(p.price)}<small>${T(per)}</small></div>` +
+      `<span class="note">${T("note"+p.id[0].toUpperCase()+p.id.slice(1))}</span>${extra}`;
+    b.addEventListener("click", () => { planId = p.id; renderPlans(); renderSum(); });
+    box.appendChild(b);
+  });
+}
+function renderCmp(){
+  const ck = '<span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>';
+  const crown = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/></svg>';
+  const row = (l, a, b, icon) => `<tr><td>${T(l)}</td><td class="fr">${icon ? ck : ""}${a}</td><td class="pro">${ck}${b}</td></tr>`;
+  $("cmp").innerHTML =
+   `<thead><tr><th>${T("feat")}</th><th>${T("free")}</th><th class="pro">${crown}${T("pass")}</th></tr></thead><tbody>` +
+   row("f1", T("f1a"), T("f1b")) + row("f2", T("f2a"), T("f2b")) +
+   row("f3", "", "", true).replace(/<td class="pro">(.*?)<\/td>/, `<td class="pro">${ck}</td>`) +
+   row("f4", T("f4v"), T("f4v"), false) + "</tbody>";
+}
+function renderMethods(){
+  const box = $("methods"); box.textContent = "";
+  METHODS.forEach(m => {
+    const b = document.createElement("button");
+    b.type="button"; b.className="m"; b.setAttribute("role","radio"); b.setAttribute("aria-checked", m.id===methodId);
+    b.innerHTML = `<i style="background:${m.c}">${m.tag}</i><span>${m.name}</span>`;
+    b.addEventListener("click", () => { methodId = m.id; renderMethods(); renderSum(); });
+    box.appendChild(b);
+  });
+}
+function expiryFor(p){
+  const cur = getPass(), from = isActive(cur) ? new Date(cur.exp) : new Date();
+  return addDays(from, p.days);
+}
+function renderSum(){
+  const p = plan();
+  $("sum").innerHTML =
+   `<li class="hd"><span>Night Pass</span><span class="chip">${T(p.key)}</span></li>
+    <li class="dur"><span>${T("dur")}</span><span>${p.days} ${T("days")}</span></li>
+    <li><span>${T("expires")}</span><span>${fmtDate(expiryFor(p))}</span></li>
+    <li class="pm"><span>${T("payWith")}</span><span><i style="background:${method().c}">${method().tag}</i>${method().name}</span></li>
+    <li class="t"><span>${T("total")}</span><span>${vnd(p.price)}</span></li>`;
+  $("buy").innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span></span>';
+  $("buy").lastChild.textContent = T("buy") + " " + vnd(p.price);
+}
+function renderStatus(){
+  const s = $("status"), p = getPass();
+  if(!p){ s.className="status"; return; }
+  s.className = "status on";
+  s.style.borderColor = isActive(p) ? "var(--ok)" : "var(--warn)";
+  s.textContent = isActive(p) ? T("active") + " " + fmtDate(p.exp) : T("expired");
+}
+function applyLang(){
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-t]").forEach(e => { e.textContent = T(e.dataset.t); });
+  $("themeBtn").setAttribute("aria-label", lang==="vi"?"Sáng / Tối":"Light / Dark");
+  $("langBtn").setAttribute("aria-label", lang==="vi"?"Ngôn ngữ":"Language");
+  document.title = T("title") + " · " + APP.brand;
+  $("hName").textContent = APP.brand; $("fName").textContent = APP.brand;
+  $("fHome").textContent = T("home"); $("restore").textContent = T("restore");
+  const fm = $("fMail"); fm.href = "mailto:" + EMAIL; fm.textContent = T("contact");
+  const fp = $("fPriv"); fp.href = PRIVACY_URL; fp.textContent = T("privacy");
+  $("madeBy").textContent = "© " + new Date().getFullYear() + " " + APP.brand + ". " + T("rights");
+  renderPlans(); renderCmp(); renderMethods(); renderSum(); renderStatus();
+}
+
+/* ===== THANH TOÁN ===== */
+const dlg = $("dlg"), body = $("dlgBody");
+const openDlg = html => { body.innerHTML = html; if(!dlg.open) dlg.showModal(); };
+const closeDlg = () => { if(dlg.open) dlg.close(); };
+const validEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+
+function activate(email, server){
+  /* server = { exp (ms), plan, token } khi chạy thật; không có = DEMO */
+  const p = plan(), exp = server ? new Date(server.exp) : expiryFor(p);
+  store.set("pass", { plan: server ? server.plan : p.id, exp: exp.toISOString(), email, token: server ? server.token : undefined });
+  renderStatus(); renderSum();
+  openDlg(`<h3>✅ ${T("okTitle")}</h3><p>${T("okTxt")} <b>${fmtDate(exp)}</b></p>
+    <div class="row"><button class="p" id="goPlay">${T("play")}</button></div>`);
+  $("goPlay").onclick = () => { location.href = HOME; };
+}
+const api = async (path, opt = {}) => {
+  const r = await fetch(PAY_API + path, { ...opt, headers: { "Content-Type": "application/json", ...(opt.headers||{}) } });
+  let d = {}; try { d = await r.json(); } catch(e){}
+  if(!r.ok) throw Object.assign(new Error(d.error || "http"), { status: r.status });
+  return d;
+};
+let pollTimer = null, tickTimer = null;
+const stopTimers = () => { clearInterval(pollTimer); clearInterval(tickTimer); };
+dlg.addEventListener("close", stopTimers);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const errDlg = e => { openDlg(`<h3>${T(e && e.status === 429 ? "slow" : "err")}</h3><div class="row"><button class="p" id="x">${T("close")}</button></div>`); $("x").onclick = closeDlg; };
+
+function showOrder(o, email){
+  const row = (l, v, cp) => `<div class="kv"><span>${T(l)}</span><b>${esc(v)}</b>${cp ? `<button type="button" class="cp" data-c="${esc(v)}">${T("copy")}</button>` : ""}</div>`;
+  openDlg(`<h3>${T("payTitle")}</h3><p class="mut">${T("scanTxt")}</p>
+    <img alt="QR" src="${esc(o.qr)}" width="220" height="220" style="margin:10px auto;display:block;border-radius:14px;background:#fff">
+    ${o.bank.name ? row("bankL", o.bank.name) : ""}${row("accL", o.bank.account, 1)}${o.bank.holder ? row("holdL", o.bank.holder) : ""}
+    ${row("amtL", String(o.amount), 1).replace(esc(String(o.amount)), esc(vnd(o.amount)))}${row("codeL", o.code, 1)}
+    <p class="mut" style="font-size:12px">${T("keep")}</p>
+    <p id="st" role="status" style="font-weight:700">${T("waiting")} <span id="left"></span></p>
+    <div class="row"><button class="s" id="x">${T("cancel")}</button></div>`);
+  $("x").onclick = closeDlg;
+  body.querySelectorAll(".cp").forEach(b => b.onclick = async () => { try{ await navigator.clipboard.writeText(b.dataset.c); b.textContent = T("copied"); setTimeout(()=>b.textContent=T("copy"),1200);}catch(e){} });
+  const tick = () => { const s = Math.max(0, Math.round((o.expiresAt - Date.now())/1000)); $("left").textContent = T("left") + " " + Math.floor(s/60) + ":" + String(s%60).padStart(2,"0"); };
+  tick(); tickTimer = setInterval(tick, 1000);
+  const expired = () => { stopTimers(); openDlg(`<h3>${T("orderExp")}</h3><div class="row"><button class="s" id="x">${T("close")}</button><button class="p" id="again">${T("again")}</button></div>`); $("x").onclick = closeDlg; $("again").onclick = startPay; };
+  pollTimer = setInterval(async () => {
+    try{
+      const d = await api("/orders/" + o.orderId);
+      if(d.status === "paid"){ stopTimers(); activate(email, d); }
+      else if(d.status === "expired" || Date.now() > o.expiresAt + 60000) expired();
+    }catch(e){ /* mạng chập chờn: thử lại ở lần poll sau */ }
+  }, 3000);
+}
+async function startPay(){
+  const email = $("email").value.trim(), er = $("emailErr");
+  if(!validEmail(email)){ $("email").setAttribute("aria-invalid","true"); er.textContent = T("emailBad"); $("email").focus(); return; }
+  $("email").removeAttribute("aria-invalid"); er.textContent = "";
+  const p = plan(), m = method();
+
+  if(PAY_API){
+    /* Server tạo đơn + trả QR. Quyền lợi CHỈ được cấp khi server nhận webhook tiền về, client chỉ poll trạng thái. */
+    $("buy").disabled = true;
+    try{
+      const o = await api("/orders", { method:"POST", body: JSON.stringify({ plan:p.id, method:m.id, email }) });
+      showOrder(o, email);
+    }catch(e){ errDlg(e); }
+    finally{ $("buy").disabled = false; }
+    return;
+  }
+  /* DEMO: không thu tiền thật, chỉ mô phỏng luồng */
+  openDlg(`<h3>${T("payTitle")}</h3><div class="demo">${T("demo")}</div><div class="qr" aria-hidden="true"></div>
+    <p><b>${vnd(p.price)}</b> ${T("via")} ${m.name}</p>
+    <div class="row"><button class="s" id="x">${T("cancel")}</button><button class="p" id="ok">${T("paid")}</button></div>`);
+  $("x").onclick = closeDlg;
+  $("ok").onclick = () => activate(email);
+}
+$("buy").addEventListener("click", startPay);
+$("email").addEventListener("input", () => { $("email").removeAttribute("aria-invalid"); $("emailErr").textContent = ""; });
+
+function restoreStep1(){
+  if(!PAY_API){ openDlg(`<h3>${T("rTitle")}</h3><p>${T("rNone")}</p><div class="row"><button class="p" id="x">${T("close")}</button></div>`); $("x").onclick = closeDlg; return; }
+  openDlg(`<h3>${T("rTitle")}</h3><label class="mut" for="rE">${T("rEmail")}</label><input id="rE" type="email" autocomplete="email" inputmode="email" value="${esc($("email").value.trim())}">
+    <p class="err" id="rErr" role="alert"></p><div class="row"><button class="s" id="x">${T("cancel")}</button><button class="p" id="go">${T("rSend")}</button></div>`);
+  $("x").onclick = closeDlg;
+  $("go").onclick = async () => {
+    const email = $("rE").value.trim();
+    if(!validEmail(email)){ $("rErr").textContent = T("emailBad"); return; }
+    $("go").disabled = true;
+    try{ await api("/restore", { method:"POST", body: JSON.stringify({ email }) }); restoreStep2(email); }
+    catch(e){ errDlg(e); }
+  };
+}
+function restoreStep2(email){
+  openDlg(`<h3>${T("rTitle")}</h3><p class="mut">${T("rSent")}</p><label class="mut" for="rO">${T("rCode")}</label>
+    <input id="rO" inputmode="numeric" maxlength="6" autocomplete="one-time-code"><p class="err" id="rErr" role="alert"></p>
+    <div class="row"><button class="s" id="x">${T("cancel")}</button><button class="p" id="go">${T("rOk")}</button></div>`);
+  $("x").onclick = closeDlg;
+  $("go").onclick = async () => {
+    try{
+      const d = await api("/restore/verify", { method:"POST", body: JSON.stringify({ email, otp: $("rO").value.trim() }) });
+      if(!d.active){ $("rErr").textContent = T("rNo"); return; }
+      store.set("pass", { plan: d.plan, exp: new Date(d.exp).toISOString(), email, token: d.token });
+      renderStatus(); renderSum(); closeDlg();
+    }catch(e){ if(e.status === 429) errDlg(e); else $("rErr").textContent = T("rBad"); }
+  };
+}
+$("restore").addEventListener("click", restoreStep1);
+dlg.addEventListener("click", e => { if(e.target === dlg) closeDlg(); });
+
+/* ===== NGÔN NGỮ + THEME ===== */
+const menu = $("langMenu"), langBtn = $("langBtn");
+for(const k in i18n){
+  const b = document.createElement("button");
+  b.type = "button"; b.dataset.l = k; b.setAttribute("role", "menuitemradio"); b.textContent = i18n[k].name;
+  b.addEventListener("click", () => { setLang(k, true); toggleMenu(false); });
+  menu.appendChild(b);
+}
+function toggleMenu(on){ menu.classList.toggle("on", on); langBtn.setAttribute("aria-expanded", on); }
+langBtn.addEventListener("click", e => { e.stopPropagation(); toggleMenu(!menu.classList.contains("on")); });
+document.addEventListener("click", e => { if(!e.target.closest("#langMenu")) toggleMenu(false); });
+function setLang(l, save){
+  lang = l;
+  if(save) try{ localStorage.setItem("lang", l); }catch(e){}
+  applyLang();
+  menu.querySelectorAll("button").forEach(b => b.setAttribute("aria-checked", b.dataset.l === l));
+}
+function setTheme(t){
+  document.documentElement.dataset.theme = t;
+  document.querySelector("meta[name=theme-color]").content = APP.color[t];
+  try{ localStorage.setItem("theme", t); }catch(e){}
+}
+$("themeBtn").addEventListener("click", () => setTheme(document.documentElement.dataset.theme==="dark"?"light":"dark"));
+document.querySelectorAll("[data-logo]").forEach(e => { e.innerHTML = APP.logo; });
+["back","navHome","fHome"].forEach(id => { $(id).href = HOME; });
+document.querySelector("meta[name=theme-color]").content = APP.color[document.documentElement.dataset.theme];
+const ps = new URLSearchParams(location.search).get("plan");
+if(ps && PLANS.some(p => p.id === ps)) planId = ps;
+const em = (getPass()||{}).email; if(em) $("email").value = em;
+setLang(lang);
+
+/* ===== CHẶN MỞ DEVTOOLS (chỉ cản người dùng thường; không phải bảo mật thật) ===== */
+addEventListener("keydown", e => {
+  const k = e.key.toLowerCase(), mod = e.ctrlKey || e.metaKey;
+  if(e.key === "F12" ||
+     (mod && e.shiftKey && "ijcke".includes(k)) ||      // Ctrl/Cmd+Shift+I/J/C/K/E
+     (e.metaKey && e.altKey && "ijcu".includes(k)) ||    // Cmd+Opt+I/J/C/U (Mac)
+     (e.ctrlKey && k === "u")){                          // Ctrl+U xem mã nguồn
+    e.preventDefault(); e.stopPropagation();
+  }
+}, true);
+document.addEventListener("contextmenu", e => { if(!e.target.closest("input")) e.preventDefault(); });
+</script>
+</body>
+</html>

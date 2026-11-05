@@ -1,0 +1,58 @@
+/* Bảng màu dùng chung cho mọi trang (game, đăng ký gói, chính sách, quản trị).
+   Chọn bảng màu bằng <html data-app="...">; chế độ sáng/tối bằng data-theme (đặt bởi script ở <head>).
+
+   data-app:  cozyplay (mặc định)  Night Play, tím
+              popplay              Pop Play, cam kem
+              hub                  Play Hub (trang chủ, chính sách), trung tính
+
+   Tên token giữ nguyên như các trang game đang dùng; thêm --ink2 / --muted cho chữ phụ. */
+
+/* ---------- Night Play (mặc định) ---------- */
+:root{
+  --bg:#F3F0FA; --card:#E2DCF5; --ink:#1C1833; --ink2:#4B4568; --muted:#6B6488;
+  --accent:#6A48F0; --on-accent:#fff; --hero1:#DCD3F7; --panel:#fff; --line:#CFC6EA;
+  --shadow:0 6px 16px rgba(60,40,140,.18); --ok:#12a150; --warn:#E5484D;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme]){
+    --bg:#0E1020; --card:#1A1D36; --ink:#ECEEFF; --ink2:#C9CCF0; --muted:#A3A8CF;
+    --accent:#9B83FF; --on-accent:#0E0A24; --hero1:#1F1B45; --panel:#171A30; --line:#2C3160;
+    --shadow:0 6px 18px rgba(0,0,0,.5); --ok:#3ddc84;
+  }
+}
+:root[data-theme=dark]{
+  --bg:#0E1020; --card:#1A1D36; --ink:#ECEEFF; --ink2:#C9CCF0; --muted:#A3A8CF;
+  --accent:#9B83FF; --on-accent:#0E0A24; --hero1:#1F1B45; --panel:#171A30; --line:#2C3160;
+  --shadow:0 6px 18px rgba(0,0,0,.5); --ok:#3ddc84;
+}
+
+/* ---------- Pop Play ---------- */
+:root[data-app=popplay]{
+  --bg:#FFF6EC; --card:#FFE3C7; --ink:#2B2118; --ink2:#5B4B3B; --muted:#7A6A58;
+  --accent:#FF5A1F; --on-accent:#fff; --hero1:#FFD9B8; --panel:#fff; --line:#E9D5BF;
+  --shadow:0 6px 16px rgba(120,70,20,.18);
+}
+@media (prefers-color-scheme: dark){
+  :root[data-app=popplay]:not([data-theme]){
+    --bg:#1B2340; --card:#2A3560; --ink:#F2F4FF; --ink2:#D8DCF5; --muted:#B3BCE6;
+    --accent:#FF7A45; --on-accent:#1B1006; --hero1:#2E3A70; --panel:#252F55; --line:#3A4778;
+    --shadow:0 6px 16px rgba(0,0,0,.35);
+  }
+}
+:root[data-app=popplay][data-theme=dark]{
+  --bg:#1B2340; --card:#2A3560; --ink:#F2F4FF; --ink2:#D8DCF5; --muted:#B3BCE6;
+  --accent:#FF7A45; --on-accent:#1B1006; --hero1:#2E3A70; --panel:#252F55; --line:#3A4778;
+  --shadow:0 6px 16px rgba(0,0,0,.35);
+}
+
+/* ---------- Play Hub ---------- */
+:root[data-app=hub]{
+  --bg:#F6F4F1; --ink:#1F1B18; --ink2:#4A433C; --muted:#6B635B; --card:#EDE7E0; --hero1:#ECE6DE;
+  --accent:#7C5CFF; --on-accent:#fff; --panel:#fff; --line:#E4DED7;
+  --shadow:0 8px 22px rgba(40,30,20,.14);
+}
+:root[data-app=hub][data-theme=dark]{
+  --bg:#12141F; --ink:#F1F2FA; --ink2:#CDD0E6; --muted:#A3A8C6; --card:#23263B; --hero1:#1E2136;
+  --accent:#A58BFF; --on-accent:#12141F; --panel:#1B1E2F; --line:#2D3250;
+  --shadow:0 8px 24px rgba(0,0,0,.5);
+}

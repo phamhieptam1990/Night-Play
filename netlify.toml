@@ -1,0 +1,25 @@
+[build]
+  command = "node scripts/build.js"
+  publish = "dist"          # chỉ chứa file công khai (xem scripts/build.js), KHÔNG chứa server/ hay .env
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[functions]
+  node_bundler = "esbuild"
+  included_files = []
+
+# Mọi /api/* đi vào một function; client vẫn gọi /api/... như cũ (cùng origin, không cần CORS)
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+  force = true
+
+# Trang admin không để công cụ tìm kiếm lập chỉ mục (truy cập vẫn cần ADMIN_KEY)
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-store"

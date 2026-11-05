@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="vi" data-l="vi" data-app="hub">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#F6F4F1">
+<meta name="description" content="Chính sách quyền riêng tư / Privacy Policy">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='32' height='64' fill='%23FF5A1F'/%3E%3Crect x='32' width='32' height='64' fill='%237C5CFF'/%3E%3Ccircle cx='32' cy='32' r='14' fill='%23fff'/%3E%3C/svg%3E">
+<title>Chính sách quyền riêng tư · Privacy Policy</title>
+<script>
+/* Theme và ngôn ngữ theo chuẩn của dự án: localStorage "theme" / "lang"; chưa chọn thì theo thiết bị. ?lang=vi|en ghi đè. */
+try{var t=localStorage.getItem("theme")}catch(e){}
+document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
+(function(){
+  var q=new URLSearchParams(location.search).get("lang"),s=null;
+  try{s=localStorage.getItem("lang")}catch(e){}
+  var l=[q,s].find(function(x){return x==="vi"||x==="en"})||(/^vi/i.test(navigator.language||"")?"vi":"en");
+  document.documentElement.dataset.l=l; document.documentElement.lang=l;
+})();
+</script>
+<link rel="stylesheet" href="shared/theme.css">
+<link rel="stylesheet" href="shared/layout.css">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.6}
+body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+button{font:inherit;color:inherit;border:0;cursor:pointer}
+a{color:var(--accent);text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.nav{max-width:760px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px}
+.mark{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:-.2px;color:var(--ink);text-decoration:none}
+.mark svg{width:34px;height:34px}
+.tools{display:flex;gap:10px;align-items:center}
+.ico{width:44px;height:44px;border-radius:50%;background:var(--panel);box-shadow:var(--shadow);display:grid;place-items:center}
+.ico svg{width:22px;height:22px}
+.sun{display:none}[data-theme=dark] .sun{display:block}[data-theme=dark] .moon{display:none}
+.seg{display:inline-flex;background:var(--panel);box-shadow:var(--shadow);border-radius:22px;padding:3px}
+.seg button{background:none;border-radius:19px;height:38px;padding:0 14px;font-weight:700;color:var(--muted)}
+[data-l=vi] #bVi,[data-l=en] #bEn{background:var(--ink);color:var(--bg)}
+main{max-width:760px;margin:0 auto;padding:8px 16px 48px}
+h1{font-size:clamp(26px,5vw,34px);line-height:1.2;margin:16px 0 4px;letter-spacing:-.3px}
+h2{font-size:20px;margin:36px 0 8px;line-height:1.3}
+h3{font-size:16px;margin:20px 0 4px}
+p,li{font-size:16px}
+ul{padding-left:22px;margin:8px 0}
+li{margin:4px 0}
+.meta{color:var(--muted);font-size:14px;margin:0 0 20px}
+.sum{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px 20px;box-shadow:var(--shadow)}
+.sum h2{margin:0 0 6px;font-size:18px}
+.sum ul{margin:0}
+.note{color:var(--muted);font-size:14px}
+table{width:100%;border-collapse:collapse;margin:8px 0;font-size:15px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:14px}
+.tw{overflow-x:auto}
+.L{display:none}
+[data-l=vi] .L[lang=vi],[data-l=en] .L[lang=en]{display:block}
+@media print{.nav .tools{display:none}.sum{box-shadow:none}}
+body{display:flex;flex-direction:column;min-height:100dvh}
+main{flex:1;width:100%}
+</style>
+</head>
+<body>
+<nav class="nav" aria-label="Main">
+  <a class="mark" href="index.html" aria-label="Play Hub">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#7C5CFF"/><path d="M0 0h32v64H0z" fill="#FF5A1F" clip-path="inset(0 round 18px 0 0 18px)"/><circle cx="32" cy="32" r="13" fill="#fff"/></svg>
+    <span>Play Hub</span>
+  </a>
+  <div class="tools">
+    <div class="seg" role="group" aria-label="Language / Ngôn ngữ">
+      <button id="bVi" type="button" lang="vi" aria-label="Tiếng Việt">VI</button>
+      <button id="bEn" type="button" lang="en" aria-label="English">EN</button>
+    </div>
+    <button id="themeBtn" class="ico" type="button" aria-label="Theme">
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+  </div>
+</nav>
+
+<main id="main">
+
+<!-- ====================== TIẾNG VIỆT ====================== -->
+<div class="L" lang="vi">
+  <h1>Chính sách quyền riêng tư</h1>
+  <p class="meta">Cập nhật lần cuối: <span data-fill="updated"></span></p>
+
+  <section class="sum" aria-labelledby="sv">
+    <h2 id="sv">Tóm tắt</h2>
+    <ul>
+      <li>Chơi game <b>không cần tài khoản</b> và không phải nhập thông tin cá nhân.</li>
+      <li><b>Không quảng cáo</b>, không tải mã theo dõi của bên thứ ba, không dùng cookie theo dõi.</li>
+      <li>Chúng tôi chỉ <b>đếm ẩn danh</b>: có bao nhiêu lượt mở trang, game nào được mở và chơi bao lâu. Số liệu không gắn với bất kỳ ai.</li>
+      <li>Chỉ khi <b>mua Night Pass</b>, chúng tôi mới lưu email và thông tin đơn hàng của người mua.</li>
+      <li>Cài đặt của phụ huynh (game được phép, giới hạn thời gian) nằm <b>trên thiết bị của bạn</b>.</li>
+    </ul>
+  </section>
+
+  <h2>1. Ai chịu trách nhiệm về dữ liệu</h2>
+  <p><span data-fill="operator"></span> (“chúng tôi”) vận hành Play Hub, gồm Pop Play, Night Play và Night Pass. Mọi câu hỏi hoặc yêu cầu về dữ liệu, xin gửi tới <a data-fill="email"></a>.</p>
+
+  <h2>2. Chúng tôi thu thập những gì</h2>
+
+  <h3>2.1. Khi bạn chơi game (ẩn danh)</h3>
+  <p>Để biết game nào được yêu thích và để cải thiện dịch vụ, trình duyệt gửi cho chúng tôi vài tín hiệu rất nhỏ:</p>
+  <ul>
+    <li>Khi mở một trang (trang chủ, Pop Play, Night Play, trang đăng ký gói): đếm thêm một lượt truy cập.</li>
+    <li>Khi mở một game: tên game và đếm thêm một lượt chơi.</li>
+    <li>Trong lúc chơi, mỗi 60 giây có một tín hiệu cho biết game vẫn đang được chơi (chỉ khi tab đang hiển thị), để tính thời gian chơi và số người đang chơi. Khi thoát game, bản ghi “đang chơi” được xóa.</li>
+  </ul>
+  <p>Chúng tôi <b>không</b> lưu địa chỉ IP, loại thiết bị hay trình duyệt, không dùng cookie, không lưu mã định danh lâu dài, và không thể biết ai đang chơi. Mã gắn với một lần chơi chỉ là một chuỗi ngẫu nhiên nằm trong bộ nhớ của trang, mất khi bạn đóng trang, nên không thể nối các lần chơi của cùng một người. Nếu trình duyệt bật <b>Do Not Track</b> hoặc <b>Global Privacy Control</b>, chúng tôi không gửi các tín hiệu này. Kết quả chỉ là số tổng hợp theo ngày (ví dụ “game A có 120 lượt chơi hôm nay”).</p>
+
+  <h3>2.2. Lưu trên thiết bị của bạn</h3>
+  <p>Trình duyệt lưu cục bộ (localStorage) các thông tin sau; chúng nằm trên thiết bị của bạn:</p>
+  <ul>
+    <li>Giao diện sáng/tối và ngôn ngữ đã chọn.</li>
+    <li>Cài đặt của phụ huynh: game được phép chơi và giới hạn thời gian mỗi ngày; thời gian đã chơi hôm nay.</li>
+    <li>Điểm cao của một số game.</li>
+    <li>Nếu bạn mua Night Pass: gói, ngày hết hạn, email và mã xác thực của gói trên thiết bị đó.</li>
+  </ul>
+  <p>Bạn có thể xóa tất cả bằng cách xóa dữ liệu trang web trong trình duyệt. Riêng mã xác thực của Night Pass được gửi lên máy chủ khi trang cần kiểm tra gói còn hiệu lực.</p>
+
+  <h3>2.3. Khi bạn mua Night Pass</h3>
+  <p>Việc mua do người lớn thực hiện. Chúng tôi lưu: email bạn nhập, gói đã chọn, số tiền, mã đơn, thời điểm tạo và thanh toán, thời hạn của gói. Thanh toán bằng chuyển khoản ngân hàng (mã QR VietQR). Cổng SePay thông báo cho máy chủ của chúng tôi khi có tiền vào; chúng tôi lưu thông tin giao dịch được thông báo (số tiền, nội dung chuyển khoản, mã giao dịch, thời gian), dùng để khớp đơn và đối soát. Nội dung chuyển khoản có thể chứa thông tin bạn tự nhập khi chuyển. Chúng tôi <b>không</b> nhận hay lưu số thẻ; việc chuyển tiền diễn ra giữa bạn và ngân hàng của bạn.</p>
+
+  <h3>2.4. Khôi phục gói bằng email</h3>
+  <p>Khi bạn chọn khôi phục gói, chúng tôi gửi mã OTP 6 số tới email đã mua. Mã chỉ được lưu dưới dạng băm, hiệu lực 10 phút và có giới hạn số lần thử.</p>
+
+  <h3>2.5. Chống lạm dụng</h3>
+  <p>Ở các chức năng tạo đơn và khôi phục gói, địa chỉ IP được dùng <b>tạm thời</b> để giới hạn số lần gọi, nhằm chống spam và dò mã. Bản ghi này tự hết hạn sau thời gian ngắn và không dùng cho mục đích nào khác.</p>
+
+  <h2>3. Trẻ em</h2>
+  <p>Pop Play dành cho trẻ nhỏ. Các trang cho trẻ không có tài khoản, không quảng cáo và không tải mã theo dõi của bên thứ ba. Chúng tôi không yêu cầu trẻ cung cấp thông tin cá nhân. Số liệu đếm ở mục 2.1 là ẩn danh, không phân biệt trẻ hay người lớn. Việc mua Night Pass và khu vực cài đặt dành cho phụ huynh do người lớn thực hiện. Nếu bạn cho rằng chúng tôi đã vô tình nhận thông tin của trẻ, hãy liên hệ để chúng tôi xóa.</p>
+
+  <h2>4. Dịch vụ của bên thứ ba</h2>
+  <p>Chúng tôi dùng một số nhà cung cấp để vận hành. Họ chỉ xử lý dữ liệu theo mục đích dịch vụ:</p>
+  <div class="tw"><table>
+    <thead><tr><th>Nhà cung cấp</th><th>Vai trò</th><th>Dữ liệu liên quan</th></tr></thead>
+    <tbody>
+      <tr><td>Netlify</td><td>Lưu trữ trang web, chạy máy chủ API</td><td>Nhật ký truy cập tiêu chuẩn của hạ tầng (như địa chỉ IP) theo chính sách của họ</td></tr>
+      <tr><td>Neon (AWS, Singapore)</td><td>Cơ sở dữ liệu</td><td>Số liệu ẩn danh ở 2.1; đơn hàng, email, giao dịch ở 2.3 và 2.4</td></tr>
+      <tr><td>SePay</td><td>Thông báo giao dịch chuyển khoản</td><td>Thông tin giao dịch ngân hàng gửi về máy chủ của chúng tôi</td></tr>
+      <tr><td>VietQR (img.vietqr.io)</td><td>Tạo ảnh mã QR thanh toán</td><td>Khi hiển thị mã QR, trình duyệt của bạn tải ảnh trực tiếp từ dịch vụ này nên họ có thể thấy địa chỉ IP của bạn, cùng số tiền và nội dung có trong mã</td></tr>
+    </tbody>
+  </table></div>
+  <p>Dữ liệu có thể được xử lý ở ngoài Việt Nam (ví dụ Singapore và các khu vực của Netlify). Chúng tôi không bán dữ liệu và không chia sẻ cho mục đích quảng cáo.</p>
+
+  <h2>5. Lưu giữ trong bao lâu</h2>
+  <ul>
+    <li><b>Số liệu ẩn danh theo ngày:</b> giữ lâu dài vì không thể gắn với cá nhân.</li>
+    <li><b>Bản ghi “đang chơi”:</b> xóa khi bạn thoát game; các bản ghi không còn hoạt động được dọn tự động.</li>
+    <li><b>Mã OTP:</b> hiệu lực 10 phút, sau đó bị dọn.</li>
+    <li><b>Bản ghi giới hạn lượt gọi:</b> vài phút đến vài giờ rồi tự xóa.</li>
+    <li><b>Email, đơn hàng, giao dịch:</b> giữ cho đến khi bạn yêu cầu xóa, trừ phần chúng tôi phải giữ theo quy định pháp luật (ví dụ chứng từ kế toán).</li>
+  </ul>
+
+  <h2>6. Quyền của bạn</h2>
+  <p>Bạn có quyền yêu cầu xem, sửa hoặc xóa dữ liệu gắn với email của mình, và rút lại sự đồng ý đã cho. Hãy gửi yêu cầu tới <a data-fill="email"></a> từ chính email đã dùng khi mua để chúng tôi xác minh. Chúng tôi sẽ phản hồi trong thời gian sớm nhất. Việc xóa dữ liệu đơn hàng có thể làm mất quyền khôi phục gói đã mua.</p>
+
+  <h2>7. Bảo mật</h2>
+  <p>Dữ liệu được truyền qua HTTPS. Mã xác thực của gói được ký để chống giả mạo, mã OTP chỉ lưu dạng băm, và khu vực quản trị được bảo vệ bằng khóa riêng. Không hệ thống nào an toàn tuyệt đối; chúng tôi áp dụng các biện pháp hợp lý và sẽ thông báo khi có sự cố ảnh hưởng đến bạn theo quy định.</p>
+
+  <h2>8. Thay đổi chính sách</h2>
+  <p>Khi có thay đổi quan trọng, chúng tôi cập nhật trang này và ngày “Cập nhật lần cuối” ở đầu trang.</p>
+</div>
+
+<!-- ====================== ENGLISH ====================== -->
+<div class="L" lang="en">
+  <h1>Privacy Policy</h1>
+  <p class="meta">Last updated: <span data-fill="updated"></span></p>
+
+  <section class="sum" aria-labelledby="se">
+    <h2 id="se">Summary</h2>
+    <ul>
+      <li>You can play <b>without an account</b> and without entering personal information.</li>
+      <li><b>No ads</b>, no third-party trackers, no tracking cookies.</li>
+      <li>We only <b>count anonymously</b>: how many page visits, which games are opened and for how long. The counts are not linked to anyone.</li>
+      <li>Only when you <b>buy Night Pass</b> do we store the buyer’s email and order details.</li>
+      <li>Parent settings (allowed games, time limits) stay <b>on your device</b>.</li>
+    </ul>
+  </section>
+
+  <h2>1. Who is responsible for the data</h2>
+  <p><span data-fill="operator"></span> (“we”) operates Play Hub, including Pop Play, Night Play and Night Pass. Send any question or data request to <a data-fill="email"></a>.</p>
+
+  <h2>2. What we collect</h2>
+
+  <h3>2.1. When you play (anonymous)</h3>
+  <p>To learn which games people enjoy and to improve the service, your browser sends us a few very small signals:</p>
+  <ul>
+    <li>When a page opens (home, Pop Play, Night Play, the plan page): one visit is counted.</li>
+    <li>When a game opens: the game name, and one play is counted.</li>
+    <li>While playing, a signal every 60 seconds says the game is still being played (only while the tab is visible), used to work out play time and how many people are playing now. When you leave the game, the “playing now” record is deleted.</li>
+  </ul>
+  <p>We do <b>not</b> store your IP address, device or browser type, we use no cookies, we keep no long-lived identifier, and we cannot tell who is playing. The code tied to one play session is just a random string held in the page’s memory and lost when you close the page, so separate plays by the same person cannot be linked. If your browser has <b>Do Not Track</b> or <b>Global Privacy Control</b> turned on, we do not send these signals. The result is only daily totals (for example “game A had 120 plays today”).</p>
+
+  <h3>2.2. Stored on your device</h3>
+  <p>Your browser keeps the following locally (localStorage); it stays on your device:</p>
+  <ul>
+    <li>Your light/dark theme and language.</li>
+    <li>Parent settings: allowed games and the daily time limit, and today’s play time.</li>
+    <li>High scores for some games.</li>
+    <li>If you buy Night Pass: the plan, expiry date, email and the plan’s verification code on that device.</li>
+  </ul>
+  <p>You can remove all of it by clearing the site’s data in your browser. The Night Pass verification code is sent to our server when a page needs to check that the plan is still valid.</p>
+
+  <h3>2.3. When you buy Night Pass</h3>
+  <p>Purchases are made by adults. We store the email you enter, the chosen plan, the amount, the order code, the times of creation and payment, and the plan’s expiry. Payment is by bank transfer (VietQR code). The SePay gateway notifies our server when money arrives; we store the transaction details it reports (amount, transfer note, transaction ID, time) to match orders and reconcile. The transfer note may contain information you typed when transferring. We do <b>not</b> receive or store card numbers; the transfer happens between you and your bank.</p>
+
+  <h3>2.4. Restoring a plan by email</h3>
+  <p>If you choose to restore a plan, we email a 6-digit one-time code to the purchase email. The code is stored only as a hash, is valid for 10 minutes, and the number of attempts is limited.</p>
+
+  <h3>2.5. Abuse prevention</h3>
+  <p>For creating orders and restoring plans, your IP address is used <b>temporarily</b> to rate-limit requests against spam and code guessing. These records expire after a short time and are used for nothing else.</p>
+
+  <h2>3. Children</h2>
+  <p>Pop Play is for young children. The pages for children have no accounts, no ads and load no third-party tracking code. We do not ask children for personal information. The counts in section 2.1 are anonymous and do not distinguish children from adults. Buying Night Pass and the parent settings area are for adults. If you believe we have received a child’s information by mistake, contact us and we will delete it.</p>
+
+  <h2>4. Third-party services</h2>
+  <p>We use a few providers to run the service. They process data only for that purpose:</p>
+  <div class="tw"><table>
+    <thead><tr><th>Provider</th><th>Role</th><th>Related data</th></tr></thead>
+    <tbody>
+      <tr><td>Netlify</td><td>Website hosting and API servers</td><td>Standard infrastructure access logs (such as IP address) under their policy</td></tr>
+      <tr><td>Neon (AWS, Singapore)</td><td>Database</td><td>Anonymous counts from 2.1; orders, email and transactions from 2.3 and 2.4</td></tr>
+      <tr><td>SePay</td><td>Bank transfer notifications</td><td>Bank transaction details sent to our server</td></tr>
+      <tr><td>VietQR (img.vietqr.io)</td><td>Generates the payment QR image</td><td>When the QR code is shown, your browser loads the image directly from this service, so it can see your IP address and the amount and note encoded in the code</td></tr>
+    </tbody>
+  </table></div>
+  <p>Data may be processed outside Vietnam (for example Singapore and Netlify’s regions). We do not sell data and do not share it for advertising.</p>
+
+  <h2>5. How long we keep it</h2>
+  <ul>
+    <li><b>Anonymous daily counts:</b> kept long-term because they cannot be linked to a person.</li>
+    <li><b>“Playing now” records:</b> deleted when you leave the game; inactive ones are cleaned up automatically.</li>
+    <li><b>One-time codes:</b> valid for 10 minutes, then cleaned up.</li>
+    <li><b>Rate-limit records:</b> minutes to hours, then deleted automatically.</li>
+    <li><b>Email, orders, transactions:</b> kept until you ask us to delete them, except what we must keep by law (for example accounting records).</li>
+  </ul>
+
+  <h2>6. Your rights</h2>
+  <p>You may ask to see, correct or delete the data linked to your email, and withdraw consent you have given. Send your request to <a data-fill="email"></a> from the email address used for the purchase so we can verify it. We will reply as soon as we can. Deleting order data may remove your ability to restore a plan you bought.</p>
+
+  <h2>7. Security</h2>
+  <p>Data is sent over HTTPS. Plan verification codes are signed to prevent forgery, one-time codes are stored only as hashes, and the admin area is protected by a private key. No system is perfectly secure; we apply reasonable measures and will notify you of incidents affecting you as required.</p>
+
+  <h2>8. Changes to this policy</h2>
+  <p>When something important changes, we update this page and the “Last updated” date at the top.</p>
+</div>
+
+</main>
+
+<footer class="site-foot">
+  <div class="mark"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#7C5CFF"/><path d="M0 0h32v64H0z" fill="#FF5A1F" clip-path="inset(0 round 18px 0 0 18px)"/><circle cx="32" cy="32" r="13" fill="#fff"/></svg><span>Play Hub</span></div>
+  <nav>
+    <a href="index.html" id="fHome"></a>
+    <a data-fill="email"></a>
+  </nav>
+  <span id="copy"></span>
+</footer>
+
+<script src="shared/site.js"></script>
+<script>
+"use strict";
+/* Thông tin liên hệ lấy từ shared/site.js (operator, email, updated). */
+const INFO = window.SITE;
+
+const $ = id => document.getElementById(id);
+const root = document.documentElement;
+document.querySelectorAll("[data-fill]").forEach(el => {
+  const k = el.dataset.fill;
+  el.textContent = INFO[k];
+  if (k === "email") el.href = "mailto:" + INFO.email;
+});
+
+function setLang(l, save) {
+  root.dataset.l = l; root.lang = l;
+  document.title = l === "vi" ? "Chính sách quyền riêng tư · Play Hub" : "Privacy Policy · Play Hub";
+  $("fHome").textContent = l === "vi" ? "← Về trang chủ" : "← Back to home";
+  $("copy").textContent = "© " + new Date().getFullYear() + " Play Hub. " + (l === "vi" ? "Bảo lưu mọi quyền." : "All rights reserved.");
+  $("themeBtn").setAttribute("aria-label", l === "vi" ? "Sáng / Tối" : "Light / Dark");
+  $("bVi").setAttribute("aria-pressed", String(l === "vi")); $("bEn").setAttribute("aria-pressed", String(l === "en"));
+  if (save) try { localStorage.setItem("lang", l); } catch (e) {}
+}
+$("bVi").addEventListener("click", () => setLang("vi", true));
+$("bEn").addEventListener("click", () => setLang("en", true));
+setLang(root.dataset.l);
+
+const THEME_COLOR = { light: "#F6F4F1", dark: "#12141F" };
+function setTheme(t, save) {
+  root.dataset.theme = t;
+  document.querySelector("meta[name=theme-color]").content = THEME_COLOR[t];
+  if (save) try { localStorage.setItem("theme", t); } catch (e) {}
+}
+$("themeBtn").addEventListener("click", () => setTheme(root.dataset.theme === "dark" ? "light" : "dark", true));
+setTheme(root.dataset.theme);
+</script>
+</body>
+</html>

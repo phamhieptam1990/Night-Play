@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="vi" data-app="hub">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Pop Play · Night Play</title>
+<meta name="description" content="Chọn thế giới của bạn: Pop Play cho bé, Night Play cho người lớn.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F6F4F1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='32' height='64' fill='%23FF5A1F'/%3E%3Crect x='32' width='32' height='64' fill='%237C5CFF'/%3E%3Ccircle cx='32' cy='32' r='14' fill='%23fff'/%3E%3C/svg%3E">
+<script>
+try{var t=localStorage.getItem("theme")}catch(e){}
+document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
+</script>
+<link rel="stylesheet" href="shared/theme.css">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.4}
+body{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+button{font:inherit;color:inherit;border:0;cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:4px solid #7C5CFF;outline-offset:3px}
+.nav{flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px}
+.mark{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:-.2px}
+.mark svg{width:34px;height:34px}
+.tools{position:relative;display:flex;gap:10px}
+.ico{width:44px;height:44px;border-radius:50%;background:var(--panel);box-shadow:var(--shadow);display:grid;place-items:center}
+.ico svg{width:22px;height:22px}
+.sun{display:none}[data-theme=dark] .sun{display:block}[data-theme=dark] .moon{display:none}
+#langMenu{position:absolute;top:54px;right:0;min-width:150px;background:var(--panel);border-radius:16px;box-shadow:var(--shadow);padding:6px;display:none;z-index:6}
+#langMenu.on{display:block}
+#langMenu button{display:block;width:100%;text-align:left;padding:12px 14px;border-radius:10px;background:none;font-size:16px;font-weight:600}
+#langMenu button[aria-checked=true]{background:var(--ink);color:var(--bg)}
+main{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(12px,3vh,28px);padding:0 16px;overflow-y:auto}
+h1{margin:0;text-align:center;font-size:clamp(26px,min(5vw,6vh),46px);line-height:1.1;letter-spacing:-.8px;font-weight:800}
+.sub{margin:-6px 0 0;text-align:center;color:var(--muted);font-size:clamp(14px,2vh,17px)}
+.cards{width:100%;max-width:1000px;display:grid;gap:clamp(12px,2.5vw,24px);grid-template-columns:1fr 1fr}
+@media (max-width:700px){.cards{grid-template-columns:1fr}}
+.card{position:relative;display:flex;flex-direction:column;gap:clamp(6px,1.4vh,12px);padding:clamp(14px,2.6vh,26px);border-radius:28px;text-decoration:none;box-shadow:var(--shadow);overflow:hidden;transition:transform .18s ease,box-shadow .18s ease}
+.card:hover{transform:translateY(-4px)}
+.card:active{transform:scale(.985)}
+.pop{background:linear-gradient(145deg,#FFE1C4,#FF9A5A);color:#2B1708}
+.night{background:linear-gradient(145deg,#2A2160,#0E1020);color:#F1F2FF}
+.tiles{display:flex;gap:10px}
+.tiles svg{width:clamp(52px,min(11vw,11vh),96px);aspect-ratio:1;border-radius:clamp(12px,2vh,20px);box-shadow:0 4px 10px rgba(0,0,0,.2);flex:none}
+.tag{align-self:flex-start;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+.pop .tag{background:rgba(255,255,255,.65)}
+.night .tag{background:rgba(155,131,255,.25);color:#CFC4FF}
+.card h2{margin:0;font-size:clamp(22px,min(3.6vw,4.4vh),34px);line-height:1.1;font-weight:800;letter-spacing:-.4px}
+.card p{margin:0;font-size:clamp(13.5px,1.9vh,16px);opacity:.85;max-width:34ch}
+.go{margin-top:auto;display:inline-flex;align-items:center;gap:8px;align-self:flex-start;padding:11px 20px;border-radius:999px;font-weight:800;font-size:16px}
+.pop .go{background:#FF5A1F;color:#fff}
+.night .go{background:#9B83FF;color:#0E0A24}
+.go svg{width:18px;height:18px;transition:transform .18s}
+.card:hover .go svg{transform:translateX(4px)}
+@media (max-height:720px) and (max-width:700px){.card p{display:none}.tiles svg{width:48px}}
+.foot{flex:none;display:flex;justify-content:center;gap:16px;flex-wrap:wrap;padding:8px 16px 12px;font-size:13px;color:var(--muted)}
+.foot a{text-decoration:none;font-weight:600}.foot a:hover{color:var(--ink)}
+@media (prefers-reduced-motion:reduce){.card,.go svg{transition:none}}
+</style>
+</head>
+<body>
+<nav class="nav" aria-label="Main">
+  <div class="mark">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#7C5CFF"/><path d="M0 0h32v64H0z" fill="#FF5A1F" clip-path="inset(0 round 18px 0 0 18px)"/><circle cx="32" cy="32" r="13" fill="#fff"/></svg>
+    <span>Play Hub</span>
+  </div>
+  <div class="tools">
+    <button id="themeBtn" class="ico" type="button" aria-label="Theme">
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
+    </button>
+    <button id="langBtn" class="ico" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Language">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg>
+    </button>
+    <div id="langMenu" role="menu"></div>
+  </div>
+</nav>
+
+<main>
+  <h1 id="h1"></h1>
+  <p class="sub" id="sub"></p>
+  <div class="cards">
+    <a class="card pop" id="aPop" href="popplay/index.html">
+      <div class="tiles" aria-hidden="true">
+        <svg viewBox="0 0 512 512"><defs><linearGradient id="p1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7EC8FF"/><stop offset="1" stop-color="#4D8DFF"/></linearGradient></defs><rect width="512" height="512" fill="url(#p1)"/><path d="M120 200l20-110 90 60zM392 200l-20-110-90 60z" fill="#FFB347"/><circle cx="256" cy="290" r="150" fill="#FFB347"/><circle cx="200" cy="270" r="26" fill="#fff"/><circle cx="312" cy="270" r="26" fill="#fff"/><circle cx="205" cy="274" r="13" fill="#222"/><circle cx="307" cy="274" r="13" fill="#222"/><path d="M215 340q41 40 82 0" stroke="#222" stroke-width="12" fill="none" stroke-linecap="round"/></svg>
+        <svg viewBox="0 0 512 512"><defs><linearGradient id="p2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#C6F0C2"/><stop offset="1" stop-color="#6FD08C"/></linearGradient></defs><rect width="512" height="512" fill="url(#p2)"/><ellipse cx="190" cy="120" rx="34" ry="100" fill="#F8C8DC"/><ellipse cx="322" cy="120" rx="34" ry="100" fill="#F8C8DC"/><circle cx="256" cy="300" r="140" fill="#FFE4EE"/><circle cx="200" cy="280" r="26" fill="#fff"/><circle cx="312" cy="280" r="26" fill="#fff"/><circle cx="205" cy="284" r="13" fill="#222"/><circle cx="307" cy="284" r="13" fill="#222"/><path d="M215 350q41 40 82 0" stroke="#222" stroke-width="12" fill="none" stroke-linecap="round"/></svg>
+        <svg viewBox="0 0 512 512"><defs><linearGradient id="p3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFB3C7"/><stop offset="1" stop-color="#FF6F91"/></linearGradient></defs><rect width="512" height="512" fill="url(#p3)"/><path d="M256 60l60 130 140 18-103 96 27 140-124-70-124 70 27-140L56 208l140-18z" fill="#FFD93D"/><circle cx="220" cy="270" r="14" fill="#222"/><circle cx="292" cy="270" r="14" fill="#222"/><path d="M226 310q30 30 60 0" stroke="#222" stroke-width="10" fill="none" stroke-linecap="round"/></svg>
+      </div>
+      <span class="tag" id="tPop"></span>
+      <h2>Pop Play</h2>
+      <p id="dPop"></p>
+      <span class="go"><span id="gPop"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>
+
+    <a class="card night" id="aNight" href="cozyplay/index.html">
+      <div class="tiles" aria-hidden="true">
+        <svg viewBox="0 0 512 512"><defs><linearGradient id="n1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6A48F0"/><stop offset="1" stop-color="#2B1B8A"/></linearGradient></defs><rect width="512" height="512" fill="url(#n1)"/><rect x="130" y="110" width="200" height="290" rx="26" fill="#fff" transform="rotate(-12 230 255)"/><rect x="190" y="110" width="200" height="290" rx="26" fill="#fff" transform="rotate(10 290 255)"/><path d="M290 190c-30 40-70 60-70 100 0 30 40 38 70 10 30 28 70 20 70-10 0-40-40-60-70-100z" fill="#E5484D" transform="rotate(10 290 255)"/></svg>
+        <svg viewBox="0 0 512 512"><defs><linearGradient id="n2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E5484D"/><stop offset="1" stop-color="#7A1020"/></linearGradient></defs><rect width="512" height="512" fill="url(#n2)"/><rect x="110" y="110" width="292" height="292" rx="56" fill="#fff"/><g fill="#1C1833"><circle cx="190" cy="190" r="26"/><circle cx="322" cy="190" r="26"/><circle cx="256" cy="256" r="26"/><circle cx="190" cy="322" r="26"/><circle cx="322" cy="322" r="26"/></g></svg>
+        <svg viewBox="0 0 512 512"><defs><linearGradient id="n3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#DFE7EE"/><stop offset="1" stop-color="#8FA6BC"/></linearGradient></defs><rect width="512" height="512" fill="url(#n3)"/><g transform="rotate(-8 256 270)"><rect x="96" y="96" width="320" height="320" rx="20" fill="#FFE25C"/><rect x="96" y="96" width="320" height="52" rx="20" fill="#F5CB2E"/><circle cx="196" cy="236" r="46" fill="#fff" stroke="#1d2a36" stroke-width="12"/><path d="M196 208v30l22 14" stroke="#1d2a36" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M280 214h96M280 250h70M136 332h240M136 366h170" stroke="#1d2a36" stroke-opacity=".45" stroke-width="14" stroke-linecap="round"/></g><g transform="rotate(-14 330 380)"><rect x="210" y="330" width="240" height="96" rx="16" fill="none" stroke="#D7263D" stroke-width="14"/><text x="330" y="402" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="68" fill="#D7263D">XONG</text></g></svg>
+      </div>
+      <span class="tag" id="tNight"></span>
+      <h2>Night Play</h2>
+      <p id="dNight"></p>
+      <span class="go"><span id="gNight"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>
+  </div>
+</main>
+
+<footer class="foot">
+  <span id="copy"></span>
+  <a id="priv" href="privacy.html" target="_blank" rel="noopener"></a>
+  <a id="mail" href="mailto:phamhieptam@gmail.com"></a>
+</footer>
+
+<script src="shared/track.js"></script>
+<script>window.Track&&Track.view("home")</script>
+<script>
+const i18n = {
+  vi:{ name:"Tiếng Việt", h1:"Chọn thế giới của bạn", sub:"Hai nơi chơi game riêng, không quảng cáo, không theo dõi cá nhân.",
+       tPop:"Dành cho bé", dPop:"Game vui, an toàn, màu sắc tươi sáng cho các bé.", gPop:"Vào Pop Play",
+       tNight:"Dành cho người lớn", dNight:"Game thư giãn buổi tối: bài, cờ, xếp hình và hơn thế nữa.", gNight:"Vào Night Play",
+       theme:"Sáng / Tối", lang:"Ngôn ngữ", privacy:"Quyền riêng tư", contact:"Liên hệ", rights:"Bảo lưu mọi quyền." },
+  en:{ name:"English", h1:"Choose your world", sub:"Two separate play spaces. No ads, no personal tracking.",
+       tPop:"For kids", dPop:"Fun, safe, brightly colored games made for little ones.", gPop:"Enter Pop Play",
+       tNight:"For grown-ups", dNight:"Evening unwind games: cards, chess, puzzles and more.", gNight:"Enter Night Play",
+       theme:"Light / Dark", lang:"Language", privacy:"Privacy", contact:"Contact", rights:"All rights reserved." }
+};
+const $ = id => document.getElementById(id);
+let lang = (() => {
+  try{ const s = localStorage.getItem("lang"); if(s && i18n[s]) return s; }catch(e){}
+  for(const l of (navigator.languages || [navigator.language || ""])){ const c = String(l).split("-")[0].toLowerCase(); if(i18n[c]) return c; }
+  return "vi";
+})();
+function applyLang(){
+  const t = i18n[lang];
+  document.documentElement.lang = lang;
+  ["h1","sub","tPop","dPop","gPop","tNight","dNight","gNight"].forEach(k => { $(k).textContent = t[k]; });
+  $("priv").textContent = t.privacy; $("mail").textContent = t.contact;
+  $("copy").textContent = "© " + new Date().getFullYear() + " Play Hub. " + t.rights;
+  $("themeBtn").setAttribute("aria-label", t.theme); $("langBtn").setAttribute("aria-label", t.lang);
+  /* Truyền ngôn ngữ sang landing để khớp */
+  $("aPop").href = "popplay/index.html"; $("aNight").href = "cozyplay/index.html";
+  menu.querySelectorAll("button").forEach(b => b.setAttribute("aria-checked", b.dataset.l === lang));
+}
+const menu = $("langMenu"), langBtn = $("langBtn");
+for(const k in i18n){
+  const b = document.createElement("button");
+  b.type = "button"; b.dataset.l = k; b.setAttribute("role", "menuitemradio"); b.textContent = i18n[k].name;
+  b.addEventListener("click", () => { lang = k; try{ localStorage.setItem("lang", k); }catch(e){} applyLang(); toggleMenu(false); });
+  menu.appendChild(b);
+}
+function toggleMenu(on){ menu.classList.toggle("on", on); langBtn.setAttribute("aria-expanded", on); }
+langBtn.addEventListener("click", e => { e.stopPropagation(); toggleMenu(!menu.classList.contains("on")); });
+document.addEventListener("click", e => { if(!e.target.closest("#langMenu")) toggleMenu(false); });
+const THEME_COLOR = { light:"#F6F4F1", dark:"#12141F" };
+function setTheme(t, save){
+  document.documentElement.dataset.theme = t;
+  document.querySelector("meta[name=theme-color]").content = THEME_COLOR[t];
+  if(save) try{ localStorage.setItem("theme", t); }catch(e){}
+}
+$("themeBtn").addEventListener("click", () => setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark", true));
+setTheme(document.documentElement.dataset.theme);
+applyLang();
+</script>
+</body>
+</html>
