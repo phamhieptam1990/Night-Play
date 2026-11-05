@@ -430,7 +430,7 @@ async function handle({ method, pathname, query = new URLSearchParams(), headers
       return await r.fn({ m, query, headers, body: body && typeof body === "object" ? body : {}, ip });
     } catch (e) {
       console.error(String(e && e.stack || e).replace(/npg_\w+/g, "<ẩn>"));
-      return out(500, { error: "server" });
+      return out(500, { error: "server", code: e && /^[0-9A-Z]{5}$|^E[A-Z]+$/.test(String(e.code || "")) ? e.code : undefined });   // chỉ mã lỗi (vd. 42P01 = chưa có bảng), không kèm chi tiết
     }
   }
   return out(404, { error: "not_found" });
