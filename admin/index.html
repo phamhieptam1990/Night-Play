@@ -52,7 +52,8 @@ h2{font-size:14px;margin:0;font-weight:600}
 /* khung 1 màn hình */
 .shell{flex:1;min-height:0;width:100%;max-width:1280px;margin:0 auto;padding:12px 16px;display:flex;flex-direction:column}
 .top{flex:none;display:flex;align-items:center;gap:12px 20px;flex-wrap:wrap}
-.top .grow{flex:1}
+.top .tools{margin-left:auto}
+.asof{color:var(--muted);font-size:12.5px;white-space:nowrap;font-variant-numeric:tabular-nums;cursor:help}
 .brand{display:flex;align-items:center;gap:10px}
 .brand svg{width:34px;height:34px;flex:none}
 .brand h1{font-size:19px;font-weight:800;letter-spacing:-.2px}
@@ -209,7 +210,6 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
       <button class="tab" role="tab" id="tab-review" data-tab="review" aria-controls="v-review" aria-selected="false" tabindex="-1"><span data-i18n="tabReview"></span> <span class="count" id="reviewBadge" hidden></span></button>
       <button class="tab" role="tab" id="tab-orders" data-tab="orders" aria-controls="v-orders" aria-selected="false" tabindex="-1" data-i18n="tabOrders"></button>
     </nav>
-    <span class="grow sub" id="asof"></span>
     <div class="tools">
       <div class="seg" role="group" data-i18n-attr="aria-label:rangeLabel" id="range">
         <button data-d="7" aria-pressed="false"></button>
@@ -220,6 +220,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
         <button type="button" data-lang="vi" lang="vi" aria-label="Tiếng Việt" aria-pressed="false">VI</button>
         <button type="button" data-lang="en" lang="en" aria-label="English" aria-pressed="false">EN</button>
       </div>
+      <span class="asof" id="asof"></span>
       <button class="btn" id="refresh" type="button" data-i18n="refresh"></button>
       <button class="btn ico" id="themeBtn" type="button" data-i18n-attr="aria-label:theme;title:theme">
         <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
@@ -339,7 +340,7 @@ const I18N = {
     errRate:"Thử quá nhiều lần, đợi một phút rồi thử lại.", errServer:"Lỗi máy chủ ({n}).",
     navLabel:"Mục quản trị", tabOverview:"Tổng quan", tabReview:"Cần xử lý", tabOrders:"Đơn hàng",
     rangeLabel:"Khoảng thời gian", daysN:"{n} ngày", refresh:"Làm mới", theme:"Sáng / Tối", logout:"Đăng xuất", langLabel:"Ngôn ngữ",
-    asof:"Cập nhật {time} · giờ Việt Nam",
+    asof:"Cập nhật {time}", asofTz:"Giờ Việt Nam (GMT+7)",
     revTitle:"Doanh thu theo ngày", trafTitle:"Lưu lượng truy cập", views:"Lượt truy cập", plays:"Lượt chơi",
     viewTable:"Xem dạng bảng", viewChart:"Xem dạng biểu đồ",
     plansTitle:"Doanh thu theo gói", ordersN:"{n} đơn", plansHint:"Chỉ tính đơn đã thanh toán trong {n} ngày.",
@@ -375,7 +376,7 @@ const I18N = {
     errRate:"Too many attempts. Wait a minute and try again.", errServer:"Server error ({n}).",
     navLabel:"Admin sections", tabOverview:"Overview", tabReview:"Needs attention", tabOrders:"Orders",
     rangeLabel:"Time range", daysN:"{n} days", refresh:"Refresh", theme:"Light / Dark", logout:"Sign out", langLabel:"Language",
-    asof:"Updated {time} · Vietnam time",
+    asof:"Updated {time}", asofTz:"Vietnam time (GMT+7)",
     revTitle:"Revenue by day", trafTitle:"Traffic", views:"Visits", plays:"Plays",
     viewTable:"View as table", viewChart:"View as chart",
     plansTitle:"Revenue by plan", ordersN:"{n} orders", plansHint:"Paid orders only, last {n} days.",
@@ -459,6 +460,7 @@ async function api(path) {
 function showLogin(key){ $("app").hidden = true; $("topbar").hidden = true; $("login").hidden = false; loginKey = key || ""; $("loginErr").textContent = loginKey ? t(loginKey) : ""; $("key").focus(); }
 function showApp(){ $("login").hidden = true; $("app").hidden = false; $("topbar").hidden = false; }
 function renderAsof() {
+  $("asof").title = asofErr ? "" : t("asofTz");
   $("asof").textContent = asofErr ? errText(asofErr) : updatedAt ? t("asof", { time: updatedAt.toLocaleTimeString(t("locale"), { hour: "2-digit", minute: "2-digit", hour12: false }) }) : "";
 }
 
