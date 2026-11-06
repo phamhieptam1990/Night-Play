@@ -516,6 +516,7 @@ route("GET", /^\/api\/pro\/dap-deadline\.js$/, async ({ headers, query, ip }) =>
 /* Chim Bay Học Vui (Pop Play): loại trả phí (Bay đếm sao, Tàu bay phép tính) chỉ giao cho người có Night Pass; dùng thử: chỉ Bay đếm sao, 1 ván/ngày */
 route("GET", /^\/api\/pro\/pop-fly\.js$/, async ({ headers, query, ip }) => {
   const pass = await authPass(headers); let trial = false;
+  if (!pass && authHelper(headers)) return out(200, require("./pro/pop-fly").source({ helper: true }), "application/javascript; charset=utf-8");   // vé tạm của người chơi hộ
   if (!pass) {
     if (query.get("trial") !== "1") return out(401, { error: "pass_required" });
     if (await limited("pft:" + ipHash(ip), 1, 86400000)) return out(429, { error: "trial_used" });
