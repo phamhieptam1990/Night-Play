@@ -63,7 +63,7 @@ body{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidd
 #src{display:none}
 #pg{flex:1;min-height:0;width:100%;max-width:760px;margin:0 auto;padding:4px 16px 8px;display:flex;flex-direction:column;gap:8px}
 #pgHead{flex:none}
-#pgHead h1{margin:6px 0 0;font-size:clamp(20px,3.6vw,26px);line-height:1.2}
+#pgHead h1{margin:4px 0 0;font-size:clamp(18px,3vw,22px);line-height:1.2}
 #book{flex:1;min-height:0;position:relative;perspective:1800px}
 /* trang giấy: gáy sách bên trái, mép xếp lớp bên phải */
 #pgBody,.leaf{position:absolute;inset:0;overflow:hidden;overflow-wrap:break-word;hyphens:auto;-webkit-hyphens:auto;
@@ -94,12 +94,30 @@ body{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidd
 @keyframes flipNext{0%{transform:rotateY(0);filter:brightness(1)}100%{transform:rotateY(-112deg);filter:brightness(.55);opacity:.2}}
 @keyframes flipPrev{0%{transform:rotateY(-112deg);filter:brightness(.55);opacity:.2}100%{transform:rotateY(0);filter:brightness(1);opacity:1}}
 @media (prefers-reduced-motion:reduce){.leaf{animation-duration:.01s!important}}
-#pgBar{flex:none;display:flex;align-items:center;gap:10px}
-#pgBar button{flex:none;width:52px;height:44px;border-radius:14px;background:var(--panel);box-shadow:var(--shadow);font-size:26px;font-weight:800;line-height:1;color:var(--ink)}
-#pgBar button:disabled{opacity:.3;cursor:default}
-#pgBar button:focus-visible,#toc:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-#toc{flex:1;min-width:0;height:44px;border-radius:14px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;font-weight:700;padding:0 12px}
+/* nút nổi trên trang sách: tự ẩn khi không dùng, hiện lại khi chạm / rê chuột / bấm phím */
+.bk-ui{position:absolute;z-index:6;display:grid;place-items:center;width:44px;height:44px;padding:0;border-radius:50%;cursor:pointer;color:var(--paper-ink);
+  border:1.5px solid color-mix(in srgb,var(--paper-ink) 24%,transparent);background:color-mix(in srgb,var(--paper) 78%,transparent);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  box-shadow:0 2px 10px rgba(0,0,0,.28);opacity:0;visibility:hidden;transition:opacity .25s ease,visibility 0s linear .25s}
+.bk-ui.show,.bk-ui:focus-visible{opacity:1;visibility:visible;transition-delay:0s}
+.bk-ui svg{width:22px;height:22px}
+.bk-ui:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.bk-ui:disabled{display:none}
+#pgPrev{left:6px;top:50%;margin-top:-22px}#pgNext{right:6px;top:50%;margin-top:-22px}#pgMenu{left:8px;top:8px;width:40px;height:40px}
+/* mục lục dạng ảnh thu nhỏ các trang */
+#thumbs{position:absolute;inset:0;z-index:8;display:none;flex-direction:column;border-radius:4px 14px 14px 4px;padding:10px 12px 12px;
+  background:color-mix(in srgb,var(--paper) 88%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:var(--paper-ink);box-shadow:0 8px 28px rgba(0,0,0,.35)}
+#thumbs.on{display:flex}
+#thBar{flex:none;display:flex;align-items:center;justify-content:space-between;gap:8px;height:34px;font:800 15px system-ui,sans-serif}
+#thClose{width:34px;height:34px;border-radius:50%;background:transparent;border:1.5px solid color-mix(in srgb,var(--paper-ink) 28%,transparent);color:inherit;font-size:16px;font-weight:800}
+#thGrid{flex:1;min-height:0;display:grid;justify-content:center;align-content:center;gap:8px}
+.th{position:relative;display:flex;flex-direction:column;gap:3px;padding:0;background:none;color:inherit;text-align:left;cursor:pointer;min-width:0}
+.thp{position:relative;overflow:hidden;border-radius:3px 6px 6px 3px;border:2px solid var(--paper-edge);box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.th[aria-current=true] .thp{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
+.th .leaf{position:absolute;inset:auto;left:0;top:0;width:var(--pw);height:var(--ph);transform:scale(var(--k));transform-origin:0 0;animation:none;box-shadow:none;pointer-events:none;border-radius:0}
+.thn{font:700 11.5px/1.2 system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.th:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
 @media (max-height:620px),(max-width:360px){#pgBody,.leaf{padding:10px 14px 28px 20px}#pg{gap:6px;padding-bottom:6px}}
+@media (max-height:520px){#pgHead{display:none}.nav{padding:6px 16px}.ico{width:38px;height:38px}.seg button{height:32px}#pg{padding-top:6px}}
 @media print{html,body{height:auto;overflow:visible}#src{display:block;max-width:760px;margin:0 auto}#pg{display:none}}
 </style>
 </head>
@@ -296,11 +314,12 @@ body{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidd
 <!-- Bản đọc theo trang: mỗi màn hình một mục, tự vừa khung nhìn, không cuộn. Nội dung lấy từ #src ở trên. -->
 <main id="pg" aria-label="Privacy">
   <div id="pgHead"><h1 id="pgTitle"></h1></div>
-  <div id="book"><div id="pgBody" tabindex="0"></div></div>
-  <div id="pgBar">
-    <button id="pgPrev" type="button" aria-label="Previous">‹</button>
-    <select id="toc" aria-label="Contents"></select>
-    <button id="pgNext" type="button" aria-label="Next">›</button>
+  <div id="book">
+    <div id="pgBody" tabindex="0"></div>
+    <button class="bk-ui" id="pgMenu" type="button" aria-haspopup="dialog" aria-controls="thumbs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.2"/></svg></button>
+    <button class="bk-ui" id="pgPrev" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <button class="bk-ui" id="pgNext" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+    <div id="thumbs" role="dialog" aria-modal="true" hidden><div id="thBar"><b id="thTitle"></b><button id="thClose" type="button" aria-label="Close">✕</button></div><div id="thGrid"></div></div>
   </div>
 </main>
 
@@ -397,8 +416,9 @@ function layoutPages() {
   add(B.out); flush();
   const label = x => { const h = x.nodes.find(isHead); return h ? h.textContent : (x.nodes[0].textContent || "").slice(0, 40); };
   pg.screens.forEach(x => { x.title = label(x); });
-  $("toc").replaceChildren(...pg.screens.map((x, i) => { const o = document.createElement("option"); o.value = i; o.textContent = (i + 1) + "/" + pg.screens.length + " · " + x.title; return o; }));
-  $("pgPrev").setAttribute("aria-label", l === "vi" ? "Trang trước" : "Previous"); $("pgNext").setAttribute("aria-label", l === "vi" ? "Trang sau" : "Next"); $("toc").setAttribute("aria-label", l === "vi" ? "Mục lục" : "Contents");
+  $("pgPrev").setAttribute("aria-label", l === "vi" ? "Trang trước" : "Previous page"); $("pgNext").setAttribute("aria-label", l === "vi" ? "Trang sau" : "Next page");
+  $("pgMenu").setAttribute("aria-label", l === "vi" ? "Mục lục các trang" : "Page thumbnails"); $("pgMenu").title = $("pgMenu").getAttribute("aria-label"); $("thTitle").textContent = l === "vi" ? "Chọn trang" : "Choose a page"; $("thClose").setAttribute("aria-label", l === "vi" ? "Đóng" : "Close");
+  if (thumbsOpen) buildThumbs();
   show(Math.min(pg.screens.length - 1, Math.round(keep * pg.screens.length)));
 }
 let flipping = null;
@@ -422,16 +442,57 @@ function show(i, dir) {
       body.querySelectorAll("[data-fill]").forEach(el => { const k = el.dataset.fill; el.textContent = INFO[k]; if (k === "email") el.href = "mailto:" + INFO.email; }); } };
     flipping = { leaf, done: after }; leaf.addEventListener("animationend", endFlip, { once: true }); setTimeout(endFlip, 900);
   }
-  $("toc").value = pg.i; $("pgPrev").disabled = pg.i === 0; $("pgNext").disabled = pg.i === pg.screens.length - 1;
+  $("pgPrev").disabled = pg.i === 0; $("pgNext").disabled = pg.i === pg.screens.length - 1;
 }
 $("pgPrev").addEventListener("click", () => show(pg.i - 1, -1));
 $("pgNext").addEventListener("click", () => show(pg.i + 1, 1));
-$("toc").addEventListener("change", e => { const j = +e.target.value; show(j, Math.sign(j - pg.i)); });
-addEventListener("keydown", e => { if (e.target.closest && e.target.closest("select,input")) return; if (e.key === "ArrowRight") show(pg.i + 1, 1); else if (e.key === "ArrowLeft") show(pg.i - 1, -1); });
+
+/* ----- nút tự ẩn thông minh: hiện khi chạm/rê chuột/bấm phím, tự ẩn sau vài giây, giữ nguyên khi đang trỏ vào nút ----- */
+let thumbsOpen = false, hideT = 0;
+const ui = [$("pgMenu"), $("pgPrev"), $("pgNext")];
+function hideUI() {
+  if (ui.some(b => b.matches(":hover") || b === document.activeElement)) { hideT = setTimeout(hideUI, 1200); return; }
+  ui.forEach(b => b.classList.remove("show"));
+}
+function showUI(ms) { if (thumbsOpen) return; ui.forEach(b => b.classList.add("show")); clearTimeout(hideT); hideT = setTimeout(hideUI, ms || 2600); }
+let lastMove = 0;
+$("book").addEventListener("pointermove", () => { const n = Date.now(); if (n - lastMove > 120) { lastMove = n; showUI(); } });
+$("book").addEventListener("pointerdown", () => showUI());
+$("book").addEventListener("touchstart", () => showUI(), { passive: true });
+document.addEventListener("keydown", e => { if (e.key === "Tab") showUI(4000); });
+ui.forEach(b => b.addEventListener("focus", () => { if (!thumbsOpen) { b.classList.add("show"); } }));
+
+/* ----- mục lục dạng ảnh thu nhỏ ----- */
+function buildThumbs() {
+  const grid = $("thGrid"), n = pg.screens.length, pw = body.clientWidth, ph = body.clientHeight; if (!n || !pw || !ph) return;
+  const W = grid.clientWidth, H = grid.clientHeight, a = ph / pw, g = 8, lab = 18; let best = { tw: 0, c: 1 };
+  for (let c = 1; c <= n; c++) { const r = Math.ceil(n / c), tw = Math.min((W - (c - 1) * g) / c, ((H - (r - 1) * g) / r - lab) / a); if (tw > best.tw) best = { tw, c }; }
+  const tw = Math.max(30, Math.floor(best.tw)), th = Math.round(tw * a), k = tw / pw;
+  grid.style.gridTemplateColumns = "repeat(" + best.c + "," + tw + "px)";
+  grid.replaceChildren(...pg.screens.map((sc, i) => {
+    const b = document.createElement("button"); b.type = "button"; b.className = "th"; b.style.width = tw + "px"; b.setAttribute("aria-label", (i + 1) + ". " + sc.title); if (i === pg.i) b.setAttribute("aria-current", "true");
+    const box = document.createElement("div"); box.className = "thp"; box.style.cssText = "width:" + tw + "px;height:" + th + "px";
+    const leaf = document.createElement("div"); leaf.className = "leaf"; leaf.style.cssText = "--pw:" + pw + "px;--ph:" + ph + "px;--k:" + k + ";font-size:" + sc.fs + "px"; leaf.dataset.pno = (i + 1) + " / " + n;
+    sc.nodes.forEach(nd => leaf.appendChild(nd.cloneNode(true))); box.appendChild(leaf);
+    const lb = document.createElement("span"); lb.className = "thn"; lb.textContent = tw >= 84 ? (i + 1) + " · " + sc.title : String(i + 1);
+    b.append(box, lb); b.onclick = () => { closeThumbs(); show(i, Math.sign(i - pg.i)); }; return b;
+  }));
+}
+function openThumbs() { thumbsOpen = true; ui.forEach(b => b.classList.remove("show")); $("thumbs").hidden = false; $("thumbs").classList.add("on"); buildThumbs(); const cur = $("thGrid").querySelector("[aria-current]"); (cur || $("thClose")).focus(); }
+function closeThumbs() { if (!thumbsOpen) return; thumbsOpen = false; $("thumbs").classList.remove("on"); $("thumbs").hidden = true; $("pgMenu").focus({ preventScroll: true }); showUI(1800); }
+$("pgMenu").addEventListener("click", openThumbs);
+$("thClose").addEventListener("click", closeThumbs);
+$("thumbs").addEventListener("click", e => { if (e.target === $("thumbs") || e.target === $("thGrid")) closeThumbs(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeThumbs(); });
+
+/* vuốt ngang bằng hai ngón trên bàn di chuột cũng lật trang */
+let wheelAt = 0;
+$("book").addEventListener("wheel", e => { if (thumbsOpen) return; if (Math.abs(e.deltaX) > 40 && Math.abs(e.deltaX) > Math.abs(e.deltaY) * 1.5 && Date.now() - wheelAt > 600) { wheelAt = Date.now(); e.preventDefault(); show(pg.i + (e.deltaX > 0 ? 1 : -1), e.deltaX > 0 ? 1 : -1); } }, { passive: false });
+addEventListener("keydown", e => { if (thumbsOpen || (e.target.closest && e.target.closest("select,input"))) return; if (e.key === "ArrowRight") show(pg.i + 1, 1); else if (e.key === "ArrowLeft") show(pg.i - 1, -1); });
 let tx = null; body.addEventListener("touchstart", e => { tx = e.touches.length === 1 ? [e.touches[0].clientX, e.touches[0].clientY] : null; }, { passive: true });
 body.addEventListener("touchend", e => { if (!tx) return; const t = e.changedTouches[0], dx = t.clientX - tx[0], dy = t.clientY - tx[1]; tx = null; if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) show(pg.i + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1); }, { passive: true });
 let rz = 0; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(layoutPages, 120); });
-window.__pgReady = true; layoutPages(); if (document.fonts && document.fonts.ready) document.fonts.ready.then(layoutPages);
+window.__pgReady = true; layoutPages(); showUI(4200); if (document.fonts && document.fonts.ready) document.fonts.ready.then(layoutPages);
 </script>
 <script src="shared/bars.js"></script>
 </body>

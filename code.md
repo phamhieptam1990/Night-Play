@@ -1,5 +1,4 @@
-Chặn chế độ F12, bật xem code thì đều chặn chuyển thành page Hạn chế Developer apply cho toàn bộ page.
-Header và footer nếu text bị chèn hoặc icon bị chèn nhìn mất thẩm mỹ thì chuyển layout thành menu.
-Page privacy layout text parapgh lại cho phù hợp. làm thành hiệu ứng trang sách thì càng tốt.
-Thêm chức năng share game cho người chơi khác. người chơi chỉ cần có link thì chơi hộ người chơi kia cho hết màn và có popup trả kết quả game về cho người chơi chính. có thể tạo page thông báo để người chơi chính xem lại kết quả game của mình. Chỉ được share 1 lần và người chơi hộ không được share cho người khác. không được lưu bất cứ thông tin gì của user chỉ truyền data qua lại giữa 2 người share theo phương thức bảo mật.
-THêm chức năng khoe điểm của trò chơi để làm bảng xếp hạng. Nếu user không khoe thì không được luu bất kỳ thông tin gì.
+privacy làm giống trang sách 
+2 buttons next page, back page thiết kết ở giữa page hide thông minh(vuốt qua trái phái ứng với next page và back page). nhằm làm trang sách cao thêm tận dụng chiều cao screen.
+1 button left bên trái trên thì là mở ra menu thumnail trang sách cho user chọn cũng hide thông minh.
+
