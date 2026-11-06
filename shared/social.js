@@ -12,7 +12,16 @@ window.NPS = (function () {
 
   /* Danh sách game hỗ trợ. Thêm game mới ở đây (và SCORE_GAMES ở server/app.js nếu có bảng xếp hạng). */
   var GAMES = {
-    "dap-deadline": { name: { vi: "Đập Deadline", en: "Smash the Deadline" }, url: "cozyplay/games/dap-deadline/index.html", board: true }
+    "dap-deadline": { name: { vi: "Đập Deadline", en: "Smash the Deadline" }, url: "cozyplay/games/dap-deadline/index.html", board: true, site: "cozyplay" },
+    /* Pop Play (trẻ em): chơi hộ + chụp màn hình bật; bảng xếp hạng TẮT (board:false) vì cần biệt danh do trẻ tự gõ */
+    "game-1": { name: { vi: "Mèo con", en: "Kitty" }, url: "popplay/games/game1/index.html", board: false, site: "popplay" },
+    "game-2": { name: { vi: "Gấu nâu", en: "Bear" }, url: "popplay/games/game2/index.html", board: false, site: "popplay" },
+    "game-3": { name: { vi: "Thỏ hồng", en: "Bunny" }, url: "popplay/games/game3/index.html", board: false, site: "popplay" },
+    "game-4": { name: { vi: "Ếch xanh", en: "Froggy" }, url: "popplay/games/game4/index.html", board: false, site: "popplay" },
+    "game-5": { name: { vi: "Cá vàng", en: "Goldfish" }, url: "popplay/games/game5/index.html", board: false, site: "popplay" },
+    "game-6": { name: { vi: "Rô-bốt", en: "Robot" }, url: "popplay/games/game6/index.html", board: false, site: "popplay" },
+    "game-7": { name: { vi: "Ngôi sao", en: "Star" }, url: "popplay/games/game7/index.html", board: false, site: "popplay" },
+    "game-8": { name: { vi: "Mặt trời", en: "Sunny" }, url: "popplay/games/game8/index.html", board: false, site: "popplay" }
   };
 
   var STR = {
@@ -23,7 +32,7 @@ window.NPS = (function () {
       bragOk: "Đã lên bảng xếp hạng!", bragView: "Xem bảng xếp hạng", badNick: "Biệt danh chưa hợp lệ (2–16 ký tự, không chứa link/email).", scoreLine: "Điểm của bạn",
       gotT: "Bạn bè đã chơi hộ xong!", gotP: "Kết quả chơi hộ", points: "điểm", view: "Xem kết quả", rank: "Bảng xếp hạng", results: "Kết quả chơi hộ",
       shot: "Chụp màn hình", shotT: "Ảnh chụp màn hình", shotErr: "Không chụp được màn hình. Vui lòng thử lại.", save: "Lưu ảnh", shareImg: "Chia sẻ ảnh", copyImg: "Sao chép ảnh", imgCopied: "Đã sao chép ảnh",
-      linkCopied: "Đã sao chép link, dán vào Zalo, Messenger… để gửi bạn bè", viaApps: "Link đã được sao chép: dán vào Zalo, Messenger… hoặc gửi nhanh qua:", shareText: "Chơi hộ mình một lượt {g} nhé!", shotText: "Mình vừa chơi {g} trên Night Play!", sendApps: "Gửi qua Zalo, Messenger…" },
+      linkCopied: "Đã sao chép link, dán vào Zalo, Messenger… để gửi bạn bè", viaApps: "Link đã được sao chép: dán vào Zalo, Messenger… hoặc gửi nhanh qua:", shareText: "Chơi hộ mình một lượt {g} nhé!", shotText: "Mình vừa chơi {g} trên {b}!", sendApps: "Gửi qua Zalo, Messenger…" },
     en: { share: "Ask a friend to play", shareT: "Ask a friend to play one round for you", shareP: "Send this link to a friend. They play one round for you and the result is sent back to you.",
       copy: "Copy link", copied: "Copied", send: "Send via…", once: "The link works once and expires in 24 hours. The helper cannot share it further. We don't store your info: the result is encrypted and only you can read it.",
       waiting: "Waiting for your friend to open the link…", playing: "Your friend is playing…", done: "Result is in!", expired: "This link has expired.", close: "Close", err: "Something went wrong, please try again.", slow: "Too many tries, please wait a few minutes.", noShare: "This game doesn't support this yet.",
@@ -31,8 +40,9 @@ window.NPS = (function () {
       bragOk: "You're on the leaderboard!", bragView: "View leaderboard", badNick: "Invalid nickname (2–16 characters, no links/emails).", scoreLine: "Your score",
       gotT: "Your friend finished playing for you!", gotP: "Result", points: "points", view: "View result", rank: "Leaderboard", results: "Shared results",
       shot: "Screenshot", shotT: "Screenshot", shotErr: "Couldn't capture the screen. Please try again.", save: "Save image", shareImg: "Share image", copyImg: "Copy image", imgCopied: "Image copied",
-      linkCopied: "Link copied. Paste it into Zalo, Messenger… to send it to friends", viaApps: "Link copied: paste it into Zalo, Messenger… or send quickly via:", shareText: "Play a round of {g} for me!", shotText: "I just played {g} on Night Play!", sendApps: "Send via Zalo, Messenger…" }
+      linkCopied: "Link copied. Paste it into Zalo, Messenger… to send it to friends", viaApps: "Link copied: paste it into Zalo, Messenger… or send quickly via:", shareText: "Play a round of {g} for me!", shotText: "I just played {g} on {b}!", sendApps: "Send via Zalo, Messenger…" }
   };
+  var brandOf = function (id) { var g = GAMES[id]; return g && g.site === "popplay" ? "Pop Play" : "Night Play"; };
   var lang = function () { return document.documentElement.lang === "en" ? "en" : "vi"; };
   var T = function (k) { return STR[lang()][k] || k; };
   var gameName = function (id) { var g = GAMES[id]; return g ? g.name[lang()] : id; };
@@ -269,13 +279,13 @@ window.NPS = (function () {
       var band = Math.round(48 * sc), out = document.createElement("canvas"); out.width = canvas.width; out.height = canvas.height + band;
       var c = out.getContext("2d"); c.drawImage(canvas, 0, 0); c.fillStyle = "#0E1020"; c.fillRect(0, canvas.height, out.width, band);
       var pad = Math.round(16 * sc), y = canvas.height + band / 2; c.textBaseline = "middle"; c.fillStyle = "#FFFFFF"; c.font = "800 " + Math.round(17 * sc) + 'px system-ui,-apple-system,"Segoe UI",Roboto,sans-serif';
-      var left = "Night Play · " + gameName(curGame()) + (lastScore ? " · " + lastScore + " " + T("points") : ""); c.textAlign = "left"; c.fillText(left, pad, y, out.width * 0.72);
-      c.fillStyle = "#A58BFF"; c.font = "600 " + Math.round(13 * sc) + "px system-ui,sans-serif"; c.textAlign = "right"; c.fillText(location.host, out.width - pad, y, out.width * 0.26);
+      var left = brandOf(curGame()) + " · " + gameName(curGame()) + (lastScore ? " · " + lastScore + " " + T("points") : ""); c.textAlign = "left"; c.fillText(left, pad, y, out.width * 0.72);
+      c.fillStyle = GAMES[curGame()] && GAMES[curGame()].site === "popplay" ? "#FFB27A" : "#A58BFF"; c.font = "600 " + Math.round(13 * sc) + "px system-ui,sans-serif"; c.textAlign = "right"; c.fillText(location.host, out.width - pad, y, out.width * 0.26);
       return new Promise(function (res, rej) { out.toBlob(function (b) { b ? res(b) : rej(new Error("blob")); }, "image/png"); });
     }
     function showShot(blob) {
       if (shotUrl) URL.revokeObjectURL(shotUrl); shotUrl = URL.createObjectURL(blob);
-      var game = curGame(), name = "night-play-" + game + ".png", file = new File([blob], name, { type: "image/png" }), text = T("shotText").replace("{g}", gameName(game));
+      var game = curGame(), name = "night-play-" + game + ".png", file = new File([blob], name, { type: "image/png" }), text = T("shotText").replace("{g}", gameName(game)).replace("{b}", brandOf(game));
       var canShare = !!(navigator.canShare && navigator.share && navigator.canShare({ files: [file] })), canCopy = !!(window.ClipboardItem && navigator.clipboard && navigator.clipboard.write);
       shotDlg.innerHTML = '<h3>' + esc(T("shotT")) + '</h3><img class="nps-shotimg" alt="' + esc(T("shotT")) + '" src="' + shotUrl + '">' +
         '<div class="nps-row"><button class="nps-s" id="npsShotX" type="button">' + esc(T("close")) + '</button><a class="nps-s" id="npsShotSave" download="' + name + '" href="' + shotUrl + '">' + esc(T("save")) + '</a>' +
@@ -319,6 +329,6 @@ window.NPS = (function () {
     setInterval(tick, 8000); document.addEventListener("visibilitychange", tick); poll();
   }
 
-  return { GAMES: GAMES, T: T, lang: lang, gameName: gameName, load: load, save: save, prune: prune, linkFor: linkFor, createShare: createShare, poll: poll, onResult: onResult,
+  return { brandOf: brandOf, GAMES: GAMES, T: T, lang: lang, gameName: gameName, load: load, save: save, prune: prune, linkFor: linkFor, createShare: createShare, poll: poll, onResult: onResult,
     claim: claim, sendResult: sendResult, submitScore: submitScore, getScores: getScores, nickGet: nickGet, nickSet: nickSet, initParent: initParent, TTL: TTL, STR: STR };
 })();

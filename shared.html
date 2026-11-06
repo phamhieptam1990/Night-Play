@@ -10,7 +10,9 @@
 <title>Kết quả chơi hộ · Night Play</title>
 <script>
 try{var t=localStorage.getItem("theme")}catch(e){}
-document.documentElement.dataset.theme=t||"dark";
+var f=new URLSearchParams(location.search).get("from"),pop=f==="popplay/index.html";
+document.documentElement.dataset.app=pop?"popplay":"cozyplay";
+document.documentElement.dataset.theme=t||(pop?"light":"dark");
 (function(){var q=new URLSearchParams(location.search).get("lang"),s=null;try{s=localStorage.getItem("lang")}catch(e){}
 var l=[q,s].find(function(x){return x==="vi"||x==="en"})||(/^vi/i.test(navigator.language||"")?"vi":"en");document.documentElement.lang=l;})();
 </script>
@@ -60,9 +62,9 @@ main{flex:1;min-height:0;width:100%;max-width:640px;margin:0 auto;padding:10px 1
 </head>
 <body>
 <nav class="nav" aria-label="Main">
-  <a class="mark" href="cozyplay/index.html"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="var(--accent)"/><path d="M42 40A16 16 0 1 1 26 14a13 13 0 0 0 16 26z" fill="#fff"/><circle cx="44" cy="20" r="2.5" fill="#fff"/></svg><span>Night Play</span></a>
+  <a class="mark" id="mk" href="cozyplay/index.html"><svg id="mkSvg" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="var(--accent)"/><path d="M42 40A16 16 0 1 1 26 14a13 13 0 0 0 16 26z" fill="#fff"/><circle cx="44" cy="20" r="2.5" fill="#fff"/></svg><span id="mkT">Night Play</span></a>
   <div class="tools">
-    <a class="back" href="cozyplay/index.html">←<span id="backT"></span></a>
+    <a class="back" id="backA" href="cozyplay/index.html">←<span id="backT"></span></a>
     <div class="seg" role="group" id="langSeg"><button type="button" data-l="vi" lang="vi" aria-label="Tiếng Việt">VI</button><button type="button" data-l="en" lang="en" aria-label="English">EN</button></div>
     <button id="themeBtn" class="ico" type="button" aria-label="Theme">
       <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
@@ -91,6 +93,7 @@ const TXT = {
         note: "Results are encrypted; the server can't read them and deletes them as soon as you receive them. This list lives only on your device.", pts: "points", st_open: "Waiting for a friend to open the link", st_claimed: "A friend is playing for you", st_done: "Result received", st_expired: "Expired",
         copy: "Copy link", copied: "Copied", cancel: "Revoke link", del: "Delete", newTag: "New", home: "Home", priv: "Privacy", rank: "Leaderboard", rights: "All rights reserved.", theme: "Light / Dark", page: "Page", of: "/", ago: ["just now", "min ago", "h ago", "d ago"], at: "Created" }
 };
+const POP = root.dataset.app === "popplay", BRAND = POP ? "Pop Play" : "Night Play", HOME = POP ? "popplay/index.html" : "cozyplay/index.html";
 const L = () => TXT[root.lang === "en" ? "en" : "vi"];
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const COLOR = { open: "var(--warn)", claimed: "var(--accent)", done: "var(--ok)", expired: "var(--muted)" };
@@ -99,8 +102,8 @@ let items = NPS.prune(), page = 0;
 const ROW = 84;
 
 function texts() {
-  const t = L(); document.title = t.h + " · Night Play"; $("backT").textContent = t.back; $("h").textContent = t.h; $("sub").textContent = t.sub; $("note").textContent = t.note;
-  $("fHome").textContent = t.home; $("fPriv").textContent = t.priv; $("fRank").textContent = t.rank; $("copy").textContent = "© " + new Date().getFullYear() + " Night Play. " + t.rights; $("themeBtn").setAttribute("aria-label", t.theme);
+  const t = L(); document.title = t.h + " · " + BRAND; $("backT").textContent = BRAND; $("h").textContent = t.h; $("sub").textContent = t.sub; $("note").textContent = t.note;
+  $("fHome").textContent = t.home; $("fPriv").textContent = t.priv; $("fRank").textContent = t.rank; $("copy").textContent = "© " + new Date().getFullYear() + " " + BRAND + ". " + t.rights; $("themeBtn").setAttribute("aria-label", t.theme);
   document.querySelectorAll("#langSeg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.l === root.lang)));
 }
 function draw() {
@@ -131,6 +134,7 @@ function setLang(l, save) { root.lang = l; if (save) try { localStorage.setItem(
 document.querySelectorAll("#langSeg button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.l, true)));
 $("themeBtn").addEventListener("click", () => { const n = root.dataset.theme === "dark" ? "light" : "dark"; root.dataset.theme = n; document.querySelector("meta[name=theme-color]").content = n === "dark" ? "#0E1020" : "#F3F0FA"; try { localStorage.setItem("theme", n); } catch (e) {} });
 let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(draw, 150); });
+if (POP) { $("mk").href = HOME; $("backA").href = HOME; $("mkT").textContent = BRAND; $("mkSvg").innerHTML = '<rect width="64" height="64" rx="18" fill="var(--accent)"/><path d="M25 18l22 14-22 14z" fill="#fff"/>'; document.querySelector("meta[name=theme-color]").content = root.dataset.theme === "dark" ? "#1B2340" : "#FFF6EC"; }
 texts(); requestAnimationFrame(() => { draw(); NPS.poll().then(a => { items = a; draw(); setTimeout(() => { items.forEach(s => { if (s.state === "done") s.seen = true; }); NPS.save(items); }, 1500); }); });
 setInterval(() => { if (!document.hidden) refresh(); }, 6000);
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
