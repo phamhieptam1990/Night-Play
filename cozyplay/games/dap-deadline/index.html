@@ -80,6 +80,23 @@ h1 span{color:var(--accent)}
 .desk[data-n="4"] .note{padding:3px}.desk[data-n="5"] .note,.desk[data-n="6"] .note{padding:1px;box-shadow:0 3px 0 rgba(0,0,0,.18)}
 .desk[data-n="5"] .stampmark span,.desk[data-n="6"] .stampmark span{font-size:calc(var(--w)*.04);padding:1px 4px;border-width:2px}
 .chip.dim{opacity:.4}
+/* ===== NHÂN VẬT NGƯỜI YÊU (mặt đổi theo tâm trạng) + KHOE ĐIỂM / THÁCH ĐẤU ===== */
+#mood{position:relative;display:flex;align-items:center;margin-right:auto}
+#mood[hidden]{display:none}
+#moodFace{width:42px;height:42px;border-radius:50%;border:3px solid var(--line);display:grid;place-items:center;font-size:24px;line-height:1;background:var(--panel);transition:border-color .3s,box-shadow .3s}
+#moodFace.pulse{animation:cbump .3s ease-out}
+#moodSay{position:absolute;top:calc(100% + 4px);left:0;z-index:9;pointer-events:none;background:var(--panel);color:var(--ink);border:2px solid var(--line);border-radius:12px;padding:4px 10px;font-weight:700;font-size:13px;white-space:nowrap;opacity:0;transform:translateY(-4px);transition:opacity .2s,transform .2s}
+#moodSay.on{opacity:1;transform:none}
+.sheet-in.share{align-items:center;gap:8px}
+#shCanvas{display:block;height:min(58dvh,calc(100dvh - 190px));width:auto;max-width:100%;aspect-ratio:9/16;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.sh-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;width:100%}
+.sh-row .icon-btn{flex:1 1 auto;justify-content:center}
+#shLink{width:100%;font:600 12px var(--body);padding:6px 10px;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--ink);-webkit-user-select:text;user-select:text}
+#shLink[hidden]{display:none}
+#shStatus{min-height:16px;font-size:12.5px;color:var(--muted);text-align:center;margin:0}
+#shareBtn{margin-top:2px}
+@media (max-height:520px){.sheet-in.share{flex-direction:row;flex-wrap:wrap;justify-content:center;width:min(640px,100%)}#shCanvas{height:calc(100dvh - 50px)}.sh-col{flex:1 1 200px;display:flex;flex-direction:column;gap:8px}}
+
 /* ===== HIỆU ỨNG COMBO: nóng dần theo bậc (5 / 10 / 20 / 30), thanh đếm thời gian giữ combo, bùng nổ ở mốc, báo khi mất ===== */
 .stat{position:relative}
 #comboStat::after{content:"";position:absolute;left:10px;right:10px;bottom:3px;height:3px;border-radius:3px;background:var(--accent);opacity:0;transform:scaleX(var(--cm,0));transform-origin:left;transition:transform .1s linear,opacity .2s}
@@ -185,6 +202,7 @@ h1 span{color:var(--accent)}
 
 <div class="top">
   <h1><span id="titleTxt"></span><span class="probadge" id="proBadge" hidden></span></h1>
+  <span id="mood" hidden><span id="moodFace" aria-hidden="true">😐</span><span id="moodSay" role="status"></span></span>
   <button class="icon-btn" id="pauseBtn" type="button" hidden><span aria-hidden="true" id="pauseIco">⏸</span><span class="bl" id="pauseTxt"></span></button>
   <button class="icon-btn" id="restartBtn" type="button" hidden><span aria-hidden="true">↻</span><span class="bl" id="restartTxt"></span></button>
   <button class="icon-btn" id="soundBtn" type="button" aria-pressed="true"><span aria-hidden="true" id="soundIco">🔊</span><span class="bl" id="soundTxt"></span></button>
@@ -216,6 +234,14 @@ h1 span{color:var(--accent)}
     <div class="sec"><small data-i="setup.pack"></small><div class="chips" id="chipPacks"></div></div>
     <div class="sec" id="secPartner" hidden><small data-i="setup.partner"></small><div class="chips" id="chipPartners"></div></div>
     <div class="sh-f"><button class="icon-btn" id="statsBtn" type="button"></button><span class="proNote" id="proNote"></span></div>
+  </div>
+</div>
+<div class="sheet" id="shareG" hidden role="dialog" aria-modal="true" aria-labelledby="shT">
+  <div class="sheet-in share">
+    <div class="sh-h" style="width:100%"><span id="shT"></span><button class="icon-btn" id="shX" type="button">✕</button></div>
+    <canvas id="shCanvas" width="1080" height="1920" role="img"></canvas>
+    <div class="sh-col" style="width:100%"><div class="sh-row"><button class="icon-btn" id="shImg" type="button"></button><button class="icon-btn" id="shSave" type="button"></button><button class="icon-btn" id="shCh" type="button"></button></div>
+    <input id="shLink" readonly hidden aria-label="Link"><p id="shStatus" role="status"></p></div>
   </div>
 </div>
 <div class="sheet" id="statsP" hidden role="dialog" aria-modal="true" aria-labelledby="statsT">
@@ -264,7 +290,9 @@ const I18N={vi:{
  "resume.h":"Bạn bè nhờ bạn chơi tiếp!","resume.pl":"Còn {l} mạng, đang {n} điểm. Đập thật nhanh để nâng điểm cho bạn nhé!","resume.p":"Còn {s} giây, đang {n} điểm. Đập thật nhanh để nâng điểm cho bạn nhé!","resume.btn":"Chơi tiếp",go:"Bắt đầu! Đập hết đi!",done:"XONG",
  "end.title":"Tan làm!","end.score":"Điểm","end.combo":"Combo cao nhất","end.rec":"Kỷ lục","end.newrec":"Kỷ lục mới!","end.again":"Đập thêm ván nữa","end.tip":"Hít sâu 4 giây, thở ra 4 giây, rồi quay lại làm việc nhé.","end.helper":"Cảm ơn bạn đã chơi hộ! Kết quả đang được gửi cho bạn của bạn.",
  dailyErr:"Chưa tải được thử thách hôm nay. Thử lại nhé.",busy:"Xong ván này rồi chọn chế độ nhé",cell:"Ô bàn {n}",
- "setup.t":"Chế độ chơi","setup.mode":"Chế độ","setup.diff":"Độ khó","setup.skin":"Giao diện","setup.grid":"Cỡ bàn chơi",comboLost:"Mất combo ×{n}",ct5:"Nóng máy!",ct10:"Bùng cháy!",ct20:"Vô đối!",ct30:"HUYỀN THOẠI!","setup.pack":"Loại game","setup.partner":"Người giận","k.deadline":"Deadline","k.animals":"Thú vật","k.lover":"Người yêu","pt.f":"Bạn gái","pt.m":"Bạn trai","packLocked":"Thử thách ngày luôn là bản Deadline để ai cũng cùng một đề.","gridLocked":"Thử thách ngày luôn dùng bàn 3×3 để ai cũng cùng một đề.","stats.t":"Thống kê của bạn","stats.btn":"Thống kê",
+ "setup.t":"Chế độ chơi","setup.mode":"Chế độ","setup.diff":"Độ khó","setup.skin":"Giao diện","setup.grid":"Cỡ bàn chơi","share.btn":"Khoe / Thách bạn","share.t":"Khoe điểm","share.img":"Chia sẻ ảnh","share.save":"Lưu ảnh","share.ch":"Thách bạn bè","share.saved":"Đã lưu ảnh.","share.copied":"Đã sao chép link thách đấu.","share.copyHint":"Chạm vào link rồi sao chép gửi bạn bè.","share.text":"Mình được {n} điểm! Phá kỷ lục của mình đi 👇","card.foot":"Phá kỷ lục của mình nhé!",
+ "ch.h":"⚔ Bạn được thách đấu!","ch.p":"Phá kỷ lục {s} điểm (combo ×{c}) trong 45 giây.","ch.btn":"Nhận thách đấu","ch.win":"🏆 Bạn thắng! {a} so với {b}.","ch.lose":"Thua rồi: {a} so với {b}. Thử lại nhé!","ch.tie":"Hoà {b} điểm! Đấu lại nào.",
+ fun0:"Sếp vừa nhắn: 'Còn deadline nhé'. Bạn mới đập {n} điểm.",fun1:"Đập được {n} điểm. Pha thêm ly cà phê nhé!",fun2:"{n} điểm trong {s} giây. Sếp thấy hết rồi đó!",fun3:"Dọn sạch deadline trong {s} giây ({n} điểm). Xin tăng lương!",comboLost:"Mất combo ×{n}",ct5:"Nóng máy!",ct10:"Bùng cháy!",ct20:"Vô đối!",ct30:"HUYỀN THOẠI!","setup.pack":"Loại game","setup.partner":"Người giận","k.deadline":"Deadline","k.animals":"Thú vật","k.lover":"Người yêu","pt.f":"Bạn gái","pt.m":"Bạn trai","packLocked":"Thử thách ngày luôn là bản Deadline để ai cũng cùng một đề.","gridLocked":"Thử thách ngày luôn dùng bàn 3×3 để ai cũng cùng một đề.","stats.t":"Thống kê của bạn","stats.btn":"Thống kê",
  "pro.active":"Night Pass đang hoạt động ✓","pro.trial":"Đang dùng thử 1 lượt Vô tận","pro.locked":"Chế độ 🔒 cần Night Pass",lockedLbl:"{n} (cần Night Pass)",
  "m.classic.name":"Cổ điển","m.classic.desc":"45 giây đập thật nhanh. Miễn phí cho mọi người.","m.endless.name":"Vô tận","m.endless.desc":"3 mạng, càng chơi càng nhanh. Ly cà phê hồi thêm 1 mạng.",
  "m.daily.name":"Thử thách ngày","m.daily.desc":"Mỗi ngày một đề giống nhau cho mọi người, kèm mục tiêu riêng và chuỗi ngày chơi.","m.boss.name":"Boss deadline","m.boss.desc":"Sếp gọi dồn dập. Đạt 450 điểm để hạ boss và nhận huy hiệu.",
@@ -283,7 +311,9 @@ en:{
  "resume.h":"A friend asked you to continue!","resume.pl":"{l} lives left, {n} points so far. Smash fast to raise their score!","resume.p":"{s} seconds left, {n} points so far. Smash fast to raise their score!","resume.btn":"Continue",go:"Go! Smash them all!",done:"DONE",
  "end.title":"Clocked out!","end.score":"Score","end.combo":"Best combo","end.rec":"Record","end.newrec":"New record!","end.again":"Smash another round","end.tip":"Breathe in for 4 seconds, out for 4, then get back to work.","end.helper":"Thanks for playing for them! The result is being sent to your friend.",
  dailyErr:"Couldn't load today's challenge. Please try again.",busy:"Finish this round, then pick a mode",cell:"Desk slot {n}",
- "setup.t":"Game modes","setup.mode":"Mode","setup.diff":"Difficulty","setup.skin":"Theme","setup.grid":"Board size",comboLost:"Combo ×{n} lost",ct5:"Heating up!",ct10:"On fire!",ct20:"Unstoppable!",ct30:"LEGENDARY!","setup.pack":"Game type","setup.partner":"Who is upset","k.deadline":"Deadline","k.animals":"Critters","k.lover":"Partner","pt.f":"Girlfriend","pt.m":"Boyfriend","packLocked":"The daily challenge is always the Deadline game so everyone plays the same puzzle.","gridLocked":"The daily challenge always uses the 3×3 board so everyone plays the same puzzle.","stats.t":"Your stats","stats.btn":"Stats",
+ "setup.t":"Game modes","setup.mode":"Mode","setup.diff":"Difficulty","setup.skin":"Theme","setup.grid":"Board size","share.btn":"Show off / Challenge","share.t":"Show your score","share.img":"Share image","share.save":"Save image","share.ch":"Challenge a friend","share.saved":"Image saved.","share.copied":"Challenge link copied.","share.copyHint":"Tap the link, copy it and send it to a friend.","share.text":"I scored {n}! Beat my record 👇","card.foot":"Beat my record!",
+ "ch.h":"⚔ You've been challenged!","ch.p":"Beat the record of {s} points (combo ×{c}) in 45 seconds.","ch.btn":"Accept the challenge","ch.win":"🏆 You win! {a} vs {b}.","ch.lose":"You lost: {a} vs {b}. Try again!","ch.tie":"Tie at {b}! Rematch?",
+ fun0:"Boss just texted: 'Deadline is due'. You only smashed {n} points.",fun1:"{n} points. Time for another coffee!",fun2:"{n} points in {s} seconds. The boss saw everything!",fun3:"Cleared every deadline in {s} seconds ({n} points). Time to ask for a raise!",comboLost:"Combo ×{n} lost",ct5:"Heating up!",ct10:"On fire!",ct20:"Unstoppable!",ct30:"LEGENDARY!","setup.pack":"Game type","setup.partner":"Who is upset","k.deadline":"Deadline","k.animals":"Critters","k.lover":"Partner","pt.f":"Girlfriend","pt.m":"Boyfriend","packLocked":"The daily challenge is always the Deadline game so everyone plays the same puzzle.","gridLocked":"The daily challenge always uses the 3×3 board so everyone plays the same puzzle.","stats.t":"Your stats","stats.btn":"Stats",
  "pro.active":"Night Pass active ✓","pro.trial":"Trying 1 free Endless run","pro.locked":"Locked items 🔒 need Night Pass",lockedLbl:"{n} (needs Night Pass)",
  "m.classic.name":"Classic","m.classic.desc":"45 seconds of fast smashing. Free for everyone.","m.endless.name":"Endless","m.endless.desc":"3 lives, getting faster the longer you last. A coffee restores 1 life.",
  "m.daily.name":"Daily challenge","m.daily.desc":"One identical puzzle a day for everyone, with its own goal and a day streak.","m.boss.name":"Boss deadline","m.boss.desc":"The boss keeps calling. Score 450 to defeat the boss and earn a badge.",
@@ -362,7 +392,7 @@ function show(st,item,stay){
   {const lb=st.note.querySelector(".lbl"),tx=(LANG==="en"&&item.en)||item.lbl;lb.textContent=tx;lb.classList.toggle("long",tx.length>16)}   /* nhãn dài: thu nhỏ chữ + tối đa 2 dòng, biểu tượng không bị đẩy lên */
   void st.note.offsetWidth;st.note.classList.add("up");
   clearTimeout(st.timer);
-  st.timer=setTimeout(()=>{ if(st.up){ hide(st); if(!item.coffee&&!paused){breakCombo();mode.onMiss&&mode.onMiss(item)} } },stay);
+  st.timer=setTimeout(()=>{ if(st.up){ hide(st); if(!item.coffee&&!paused){breakCombo(-9);mode.onMiss&&mode.onMiss(item)} } },stay);
 }
 function hide(st){st.up=false;st.item=null;st.note.classList.remove("up")}
 
@@ -419,25 +449,111 @@ function comboMilestone(n){
   popBig("<b>×"+n+"</b><span>"+pk("ct"+(n>=30?30:n>=20?20:n>=10?10:5))+"</span>","t"+tr);
   burst(tr);chime(tr);desk.classList.remove("cglow");void desk.offsetWidth;desk.classList.add("cglow");
 }
-function breakCombo(){   /* mất combo: báo nhẹ nếu đang có combo đáng kể */
-  const was=combo;combo=0;render();
+
+/* ===== NHÂN VẬT NGƯỜI YÊU: mặt đổi theo tâm trạng ===== */
+let mood=35,moodBand=-1,moodT=0,endMood=35;
+const MOODS=["😡","😠","😒","😐","🙂","😊","🥰"];
+const moodIdx=()=>Math.min(6,Math.floor(mood/14.3));
+const partnerNow=()=>running?partnerId:(DD.sel.partner==="m"?"m":"f");
+function renderMood(){
+  const el=$("mood");if(!el)return;const show=curPackId()==="lover";el.hidden=!show;if(!show)return;
+  const f=$("moodFace"),i=moodIdx();f.textContent=MOODS[i];f.style.borderColor="hsl("+Math.round(mood*1.2)+" 80% 52%)";f.style.boxShadow="0 0 "+(6+i*2)+"px hsl("+Math.round(mood*1.2)+" 80% 52% / .5)";
+  if(i!==moodBand){if(moodBand>=0&&!calm()){f.classList.remove("pulse");void f.offsetWidth;f.classList.add("pulse")}moodBand=i}
+}
+function sayMood(kind){   /* câu thoại ngắn của người ấy (a = giận, h = vui) */
+  if(curPackId()!=="lover")return;const k="q."+kind+Math.floor(Math.random()*3)+"_"+partnerNow(),el=$("moodSay");
+  el.textContent=pk(k);el.classList.add("on");clearTimeout(moodT);moodT=setTimeout(()=>el.classList.remove("on"),2300);
+}
+function moodAdd(d){mood=Math.max(0,Math.min(100,mood+d));renderMood()}
+
+/* ===== LỜI HÀI HƯỚC THEO VÁN + ẢNH KHOE 9:16 + LINK THÁCH ĐẤU ===== */
+const b64e=o=>btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+const b64d=s=>{try{return JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g,"+").replace(/_/g,"/")))))}catch(e){return null}};
+let CH=null;
+{const m=/#ch=([\w-]+)/.exec(location.hash),o=m&&b64d(m[1]);
+ if(o&&Number.isFinite(+o.s)&&o.s>=0&&o.s<1e5)CH={s:o.s|0,c:Math.max(0,o.c|0),p:["deadline","animals","lover"].includes(o.p)?o.p:"deadline",pt:o.pt==="m"?"m":"f",tk:/^h\.\d{13}\.[\w-]{43}$/.test(o.tk||"")?o.tk:null}}
+const roundSecs=()=>Math.max(1,Math.round((performance.now()-runT0)/1000));
+function funLine(e){
+  const n=e.score,tier=n>=450?3:n>=250?2:n>=100?1:0,suf=packId==="lover"?"_"+partnerId:"";
+  return pk("fun"+tier+suf,{n:n,c:e.best,s:endSecs});
+}
+let endSecs=45;
+const wrapText=(x,text,maxW)=>{const words=String(text).split(" "),lines=[];let cur="";for(const w of words){const tt=cur?cur+" "+w:w;if(x.measureText(tt).width>maxW&&cur){lines.push(cur);cur=w}else cur=tt}if(cur)lines.push(cur);return lines};
+async function drawCard(cv){
+  try{await document.fonts.ready}catch(e){}
+  const W=1080,H=1920,x=cv.getContext("2d"),cs=getComputedStyle(document.documentElement),col=(n,d)=>cs.getPropertyValue(n).trim()||d;
+  const bg=col("--bg","#0E1020"),ac=col("--accent","#9B83FF"),ink=col("--ink","#fff"),mut=col("--muted","#aab"),panel=col("--panel","#1A1D36"),stampC=col("--stamp","#ff4d5e");
+  const TINT={deadline:ac,animals:"#3ddc84",lover:"#ff5c8a"}[packId]||ac,e=endInfo||{score:score,best:best,r:RANKS[0]},en=LANG==="en";
+  x.fillStyle=bg;x.fillRect(0,0,W,H);
+  let g=x.createRadialGradient(W/2,H*.34,40,W/2,H*.34,W*.95);g.addColorStop(0,TINT+"66");g.addColorStop(1,"transparent");x.fillStyle=g;x.fillRect(0,0,W,H);
+  g=x.createLinearGradient(0,H*.62,0,H);g.addColorStop(0,"transparent");g.addColorStop(1,"rgba(0,0,0,.45)");x.fillStyle=g;x.fillRect(0,0,W,H);
+  x.textAlign="center";x.textBaseline="alphabetic";
+  const F=(px,fam)=>px+"px "+(fam||"Bungee,'Arial Black',system-ui,sans-serif"),EM="'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";
+  x.fillStyle=ink;x.font=F(78);const title=pk("title").replace(/<[^>]*>/g,"");
+  wrapText(x,title,W-160).forEach((l,i)=>x.fillText(l,W/2,190+i*92));
+  /* nhân vật / biểu tượng chính */
+  let hero="⏰";if(packId==="animals")hero="🐭";if(packId==="lover")hero=MOODS[Math.min(6,Math.floor(endMood/14.3))];
+  x.font="330px "+EM;x.fillStyle=ink;x.fillText(hero,W/2,720);
+  if(packId==="lover"){x.font="120px "+EM;x.fillText(partnerId==="m"?"👨":"👩",W/2-250,520)}
+  /* điểm */
+  x.fillStyle=TINT;x.font=F(260);x.fillText(String(e.score),W/2,1010);
+  x.fillStyle=mut;x.font=F(48);x.fillText(t("end.score").toUpperCase(),W/2,1080);
+  /* tem */
+  x.save();x.translate(W-250,560);x.rotate(-.24);x.strokeStyle=stampC;x.fillStyle=stampC;x.lineWidth=10;x.font=F(66);const sw=x.measureText(pk("done")).width+60;x.strokeRect(-sw/2,-62,sw,110);x.fillText(pk("done"),0,22);x.restore();
+  /* combo + hạng */
+  x.fillStyle=panel;x.beginPath();x.roundRect?x.roundRect(150,1130,W-300,110,55):x.rect(150,1130,W-300,110);x.fill();
+  x.fillStyle=ink;x.font="800 46px system-ui,-apple-system,'Segoe UI',sans-serif";x.fillText("Combo ×"+e.best+"  ·  "+e.r[en?3:1],W/2,1203);
+  /* dòng hài hước */
+  x.fillStyle=ink;x.font="800 58px system-ui,-apple-system,'Segoe UI',sans-serif";
+  wrapText(x,funLine(e),W-200).slice(0,4).forEach((l,i)=>x.fillText(l,W/2,1360+i*78));
+  /* chân trang */
+  x.fillStyle=TINT;x.font=F(54);x.fillText(t("card.foot"),W/2,1760);
+  x.fillStyle=mut;x.font="700 40px system-ui,sans-serif";x.fillText(location.host||"Play Hub",W/2,1830);
+}
+function challengeUrl(){
+  const o={s:endInfo?endInfo.score:score,c:endInfo?endInfo.best:best,p:packId,pt:partnerId};if(packId!=="deadline"&&DD.ticket)o.tk=DD.ticket;
+  return location.origin+location.pathname+"#ch="+b64e(o);
+}
+const shStatus=m=>{$("shStatus").textContent=m||""};
+async function openShare(){
+  $("shT").textContent=t("share.t");$("shImg").textContent="📤 "+t("share.img");$("shSave").textContent="💾 "+t("share.save");$("shCh").textContent="⚔ "+t("share.ch");
+  shStatus("");$("shLink").hidden=true;openSheet("shareG");await drawCard($("shCanvas"));$("shCanvas").setAttribute("aria-label",funLine(endInfo||{score:score,best:best}));
+}
+const cardBlob=()=>new Promise(r=>$("shCanvas").toBlob(r,"image/png"));
+function downloadBlob(b,name){const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
+$("shX").addEventListener("click",()=>closeSheet("shareG"));
+$("shareG").addEventListener("click",e=>{if(e.target===$("shareG"))closeSheet("shareG")});
+$("shSave").addEventListener("click",async()=>{downloadBlob(await cardBlob(),"khoe-diem.png");shStatus(t("share.saved"))});
+$("shImg").addEventListener("click",async()=>{
+  const blob=await cardBlob(),file=new File([blob],"khoe-diem.png",{type:"image/png"}),text=t("share.text",{n:endInfo?endInfo.score:score});
+  if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:pk("docTitle"),text:text+" "+challengeUrl()});return}catch(e){if(e&&e.name==="AbortError")return}}
+  downloadBlob(blob,"khoe-diem.png");shStatus(t("share.saved"));
+});
+$("shCh").addEventListener("click",async()=>{
+  const url=challengeUrl(),text=t("share.text",{n:endInfo?endInfo.score:score});
+  if(navigator.share){try{await navigator.share({title:pk("docTitle"),text:text,url:url});return}catch(e){if(e&&e.name==="AbortError")return}}
+  try{await navigator.clipboard.writeText(url);shStatus(t("share.copied"))}catch(e){const i=$("shLink");i.value=url;i.hidden=false;i.focus();i.select();shStatus(t("share.copyHint"))}
+});
+
+function breakCombo(d){   /* mất combo: báo nhẹ nếu đang có combo đáng kể; d = mức trừ tâm trạng (người yêu) */
+  const was=combo;combo=0;render();if(d){moodAdd(d);if(d<=-9&&Math.random()<.65)sayMood("a")}
   if(was>=5){popBig("<b>"+t("comboLost",{n:was})+"</b>","lost");const st=$("comboStat");st.classList.remove("lose");void st.offsetWidth;st.classList.add("lose")}
 }
 
 function hit(st,e){
   if(!running||paused)return;
-  if(!st.up){breakCombo();buzz();desk.classList.remove("shake");void desk.offsetWidth;desk.classList.add("shake");return}
+  if(!st.up){breakCombo(-3);buzz();desk.classList.remove("shake");void desk.offsetWidth;desk.classList.add("shake");return}
   const item=st.item;clearTimeout(st.timer);
   st.up=false;st.note.classList.add("hit");
   setTimeout(()=>{st.note.classList.remove("hit");if(!st.up)st.note.classList.remove("up")},180);
   const mark=document.createElement("div");mark.className="stampmark"+(item.coffee?" good":"");
   mark.innerHTML="<span>"+(item.coffee?(mv(mode.coffeeText)||"+3S"):pk("done"))+"</span>";st.el.appendChild(mark);setTimeout(()=>mark.remove(),520);
   let gained=0;
-  if(item.coffee){if(mode.onCoffee)mode.onCoffee();else timeLeft=Math.min(ROUND,timeLeft+3);thwack(true)}
+  if(item.coffee){if(mode.onCoffee)mode.onCoffee();else timeLeft=Math.min(ROUND,timeLeft+3);thwack(true);moodAdd(10)}
   else{
     const now=performance.now();combo=(now-lastHit<1400)?combo+1:1;lastHit=now;best=Math.max(best,combo);
-    gained=Math.round(item.pts*(1+Math.floor(combo/5))*diff.score*(grid.mult||1));score+=gained;thwack(false);hudPulse(1600);
-    if(combo>0&&combo%5===0){comboMilestone(combo);say(SHOUTS[LANG][Math.floor(Math.random()*SHOUTS[LANG].length)])}
+    gained=Math.round(item.pts*(1+Math.floor(combo/5))*diff.score*(grid.mult||1));score+=gained;thwack(false);hudPulse(1600);moodAdd(4+comboTier(combo));
+    if(combo>0&&combo%5===0){comboMilestone(combo);sayMood("h");say(SHOUTS[LANG][Math.floor(Math.random()*SHOUTS[LANG].length)])}
   }
   const f=document.createElement("div");f.className="float";f.textContent=item.coffee?(mv(mode.coffeeText)||"+3s"):"+"+gained;
   const r=st.el.getBoundingClientRect(),dr=desk.parentElement.getBoundingClientRect();
@@ -469,7 +585,7 @@ function start(from){
    const pl=p0.pests?(typeof p0.pests==="function"?p0.pests(partnerId):p0.pests):BASE_PACK.pests,cf=p0.coffee?(typeof p0.coffee==="function"?p0.coffee(partnerId):p0.coffee):BASE_PACK.coffee;PESTS=pl;COFFEE=cf}
   grid=mode.lockGrid?DD.grids[mode.lockGrid]:(resumed?(DD.grids[from.grid]||DD.grids.g3):(DD.grids[DD.sel.grid]||DD.grids.g3));buildGrid(grid.n);
   DD.rnd=(mode.rngFactory&&mode.rngFactory())||Math.random;
-  score=0;combo=0;best=0;timeLeft=ROUND;running=true;paused=false;lastHit=0;
+  score=0;combo=0;best=0;timeLeft=ROUND;running=true;paused=false;lastHit=0;mood=35;moodBand=-1;renderMood();
   if(from&&typeof from==='object'&&from.timeLeft){score=Math.max(0,from.score|0);combo=Math.max(0,from.combo|0);best=Math.max(0,from.best|0);timeLeft=Math.min(ROUND,Math.max(3,+from.timeLeft||ROUND))}   /* chơi tiếp lượt đang dở của bạn bè */
   mode.init&&mode.init(resumed?from:null);runT0=performance.now();hudPulse(3500);
   cells.forEach(hide);$("overlay").hidden=true;render();say(t("go"));window.NP&&NP.start();syncPauseBtn();
@@ -491,6 +607,7 @@ function resumeRound(by){
 }
 let endInfo=null,ovKind="start";
 function end(){
+  endSecs=roundSecs();endMood=mood;
   running=false;paused=false;pausedBy=null;$("pauseOv").hidden=true;syncPauseBtn();clearTimeout(hudT);document.body.classList.remove("hud-dim");clearInterval(tickT);clearTimeout(spawnT);cells.forEach(c=>{clearTimeout(c.timer);hide(c)});
   let r=RANKS[0];for(const x of RANKS)if(score>=x[0])r=x;
   const HK=(mode.id==="classic"&&diff.id==="normal"&&grid.id==="g3"&&packId==="deadline")?"dapdeadline-hi":"dd-hi-"+mode.id+"-"+diff.id+(grid.id==="g3"?"":"-"+grid.id)+(packId==="deadline"?"":"-"+packId+(packId==="lover"?partnerId:""));   // kỷ lục riêng cho từng chế độ / độ khó
@@ -505,10 +622,10 @@ function renderEnd(){
   ov.innerHTML='<h2></h2><div class="rank"></div><p class="desc"></p>'+
     '<div class="legend"><span>'+t("end.score")+': <b>'+e.score+'</b></span><span>'+t("end.combo")+': <b>×'+e.best+'</b></span>'+
     '<span>'+t("end.rec")+': <b>'+Math.max(e.hi,e.score)+'</b></span></div>'+
-    (helper?'':'')+''+(helper?'':'<button class="big" id="againBtn">'+t("end.again")+'</button>')+
+    (helper?'':'<button class="big" id="againBtn">'+t("end.again")+'</button><button class="icon-btn" id="shareBtn" type="button">📤 '+t("share.btn")+'</button>')+
     '<div class="tip"></div>';
   ov.querySelector("h2").textContent=mv(e.mode.title)||pk("end.title");ov.querySelector(".rank").textContent=e.r[en?3:1];
-  ov.querySelector(".desc").textContent=e.r[en?4:2]+(e.newRec?" "+t("end.newrec"):"")+(e.mode.endLine?" "+e.mode.endLine(e.score):"");
+  ov.querySelector(".desc").textContent=funLine(e)+(e.newRec?" "+t("end.newrec"):"")+(e.mode.endLine?" "+e.mode.endLine(e.score):"")+(CH&&!helper?" "+(e.score>CH.s?t("ch.win",{a:e.score,b:CH.s}):e.score===CH.s?t("ch.tie",{b:CH.s}):t("ch.lose",{a:e.score,b:CH.s})):"");
   ov.querySelector(".tip").textContent=helper?t("end.helper"):t("end.tip");
   ov.hidden=false;DD.refresh&&DD.refresh();
   const ab=$("againBtn");if(ab)ab.focus({preventScroll:true});
@@ -516,9 +633,9 @@ function renderEnd(){
 let resumeFrom=(window.NP&&NP.helper&&NP.initialState&&NP.initialState.timeLeft)?NP.initialState:null;
 function renderStart(){
   const ov=$("overlay"),rf=resumeFrom;
-  ov.innerHTML='<h2>'+(rf?t("resume.h"):pk("start.h"))+'</h2><p>'+(rf?(rf.mode==="endless"?t("resume.pl",{l:rf.lives|0,n:rf.score|0}):t("resume.p",{s:Math.ceil(Math.min(ROUND,rf.timeLeft)),n:rf.score|0})):pk("start.p"))+'</p>'+
+  ov.innerHTML='<h2>'+(rf?t("resume.h"):CH?t("ch.h"):pk("start.h"))+'</h2><p>'+(rf?(rf.mode==="endless"?t("resume.pl",{l:rf.lives|0,n:rf.score|0}):t("resume.p",{s:Math.ceil(Math.min(ROUND,rf.timeLeft)),n:rf.score|0})):CH?t("ch.p",{s:CH.s,c:CH.c}):pk("start.p"))+'</p>'+
     (rf?'<div class="legend"><span>'+pk("leg1")+'</span><span>'+pk("leg2")+'</span><span>'+pk("leg3")+'</span><span>'+pk("leg4")+'</span></div>':'')+
-    '<button class="big" id="startBtn">'+(rf?t("resume.btn"):t("start.btn"))+'</button><div class="tip">'+(rf?"":t("start.tip"))+'</div>';
+    '<button class="big" id="startBtn">'+(rf?t("resume.btn"):CH?t("ch.btn"):t("start.btn"))+'</button><div class="tip">'+(rf?"":t("start.tip"))+'</div>';
   if(rf){   /* thanh điểm / thời gian hiện đúng tiến trình bạn bè đã chơi, không phải 0 / 45s */
     $("score").textContent=rf.score|0;$("combo").textContent="×"+(rf.combo|0);
     if(rf.mode==="endless"){const l=Math.max(0,Math.min(5,rf.lives|0));$("time").textContent="♥".repeat(l)+"♡".repeat(Math.max(0,3-l))}
@@ -535,7 +652,7 @@ async function go(from){
   catch(e){ say(t("dailyErr")); starting=false; if(sb)sb.disabled=false; return }
   starting=false;if(sb)sb.disabled=false;start(from);
 }
-$("overlay").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.id==="startBtn"){const f=resumeFrom;resumeFrom=null;go(f)}else if(b.id==="againBtn")go(null)});
+$("overlay").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.id==="startBtn"){const f=resumeFrom;resumeFrom=null;go(f)}else if(b.id==="againBtn")go(null);else if(b.id==="shareBtn")openShare()});
 $("pauseBtn").addEventListener("click",()=>{if(paused&&pausedBy==="user")resumeRound("user");else pauseRound("user")});
 $("resumeBtn").addEventListener("click",()=>resumeRound("user"));
 function pauseTxt(q){$("pauseT").textContent=t(q?"restartQ":"pausedT");$("pauseP").textContent=t(q?"restartP":"pausedP")}
@@ -631,7 +748,7 @@ DD.refresh=function(){
     const on=DD.sel.partner===x.id,b=document.createElement("button");b.type="button";b.className="chip"+(on?" on":"");b.setAttribute("aria-pressed",on);
     iconChip(b,x.ico,catName("partners",x),false);b.onclick=()=>pickItem("partners",x);ptb.appendChild(b);
   }}
-  syncPackText();
+  syncPackText();renderMood();
   const gb=$("gridBar");   /* chọn cỡ bàn ngay trên màn bắt đầu / kết thúc */
   if(gb){gb.textContent="";for(const x of DD.catalog.grids){
     const fg=gridForced(),lock=!unlocked("grids",x.id),on=fg?x.id===fg:DD.sel.grid===x.id,b=document.createElement("button");
@@ -656,7 +773,7 @@ function setTitle(){   /* tên game dài → thu nhỏ chữ để không đẩy
 }
 function syncPackText(){   /* tên game / mô tả đổi theo loại game đang chọn */
   setTitle();
-  if(!running&&ovKind==="start"&&!resumeFrom){const ov=$("overlay"),h=ov.querySelector("h2"),p=ov.querySelector("p");if(h)h.innerHTML=pk("start.h");if(p)p.innerHTML=pk("start.p")}
+  if(!running&&ovKind==="start"&&!resumeFrom){const ov=$("overlay"),h=ov.querySelector("h2"),p=ov.querySelector("p");if(!CH){if(h)h.innerHTML=pk("start.h");if(p)p.innerHTML=pk("start.p")}}
   else if(!running&&ovKind==="end"&&endInfo){const h=$("overlay").querySelector("h2");if(h)h.textContent=mv(endInfo.mode.title)||pk("end.title")}
 }
 const subUrl=()=>"../../../subscribe.html?from="+encodeURIComponent("cozyplay/index.html#dap-deadline")+"&plan=month";
@@ -707,6 +824,10 @@ for(const id of ["setup","statsP","pay"])$(id).addEventListener("click",e=>{if(e
 addEventListener("keydown",e=>{if(e.key==="Escape")for(const id of ["pay","statsP","setup"])if(!$(id).hidden){closeSheet(id);break}});
 if(window.NP&&NP.helper){$("setupBtn").hidden=true}   /* người chơi hộ chỉ chơi 1 lượt, không tự đổi chế độ */
 let helperPro=null;
+if(CH){   /* mở bằng link thách đấu: chơi đúng ván Cổ điển 45 giây, cùng loại game với người thách, không đổi cài đặt */
+  $("setupBtn").hidden=true;DD.want={mode:"classic",diff:"normal",skin:"default",grid:"g3",pack:"deadline",partner:CH.pt};
+  if(CH.p!=="deadline"&&CH.tk&&!(window.NP&&NP.helper)){DD.ticket=CH.tk;helperPro=DD.loadPro(false,CH.tk).then(()=>{DD.want.pack=CH.p;DD.refresh()}).catch(()=>{})}
+}
 {const HS=window.NP&&NP.helper&&NP.initialState;
  if(HS&&HS.tk&&HS.mode&&/^h\.\d{13}\.[\w-]{43}$/.test(HS.tk)){DD.ticket=HS.tk;   /* chơi hộ một ván Night Pass: tải mã bằng vé tạm */
    helperPro=DD.loadPro(false,HS.tk).then(()=>{DD.want=Object.assign(DD.want||{},{mode:HS.mode,diff:HS.diff,skin:HS.skin,grid:HS.grid||"g3",pack:HS.pack||"deadline",partner:HS.partner||"f"});DD.refresh()}).catch(()=>{})}}
