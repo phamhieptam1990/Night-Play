@@ -5,7 +5,17 @@
    DD = đối tượng do lõi game (cozyplay/games/dap-deadline/index.html) cung cấp. */
 function main(DD, OPTS) {
   "use strict";
-  var G = DD.g, $ = G.$, TRIAL = !!OPTS.trial;
+  var G = DD.g, $ = G.$, TRIAL = !!OPTS.trial, t = DD.t;
+  DD.addI18n({
+    vi: { "p.end.endless": "Hết mạng!", "p.lives": "Mạng", "p.life1": "+1 mạng!", "p.surv": "Sống sót {s} giây", "p.end.daily": "Hết giờ!", "p.goalOk": "✅ Đạt mục tiêu {g} điểm!", "p.goalNo": "Mục tiêu {g} điểm, còn thiếu {m}",
+      "p.end.boss": "Boss deadline", "p.bossWin": "🏅 Hạ gục boss! Huy hiệu mới", "p.bossLose": "Boss thắng. Cần {g} điểm để hạ boss",
+      "p.st.games": "Số ván", "p.st.best": "Điểm cao", "p.st.combo": "Combo cao nhất", "p.st.avg": "TB tuần này", "p.st.vs": "So tuần trước", "p.st.streak": "Chuỗi ngày", "p.st.badges": "{n} huy hiệu · ",
+      "p.st.last": "Ván gần nhất: {m} {s} điểm", "p.st.aria": "Điểm 20 ván gần nhất", "p.st.empty": "Chưa có ván nào. Chơi vài ván rồi quay lại xem tiến bộ nhé." },
+    en: { "p.end.endless": "Out of lives!", "p.lives": "Lives", "p.life1": "+1 life!", "p.surv": "Survived {s} s", "p.end.daily": "Time's up!", "p.goalOk": "✅ Goal of {g} points reached!", "p.goalNo": "Goal: {g} points, {m} short",
+      "p.end.boss": "Boss deadline", "p.bossWin": "🏅 Boss defeated! New badge", "p.bossLose": "The boss wins. Score {g} to defeat it",
+      "p.st.games": "Games", "p.st.best": "Best score", "p.st.combo": "Best combo", "p.st.avg": "Avg this week", "p.st.vs": "vs last week", "p.st.streak": "Day streak", "p.st.badges": "{n} badges · ",
+      "p.st.last": "Latest game: {m} {s} points", "p.st.aria": "Score of the last 20 games", "p.st.empty": "No games yet. Play a few rounds, then come back to see your progress." }
+  });
   var classic = DD.modes.classic;
   var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
   var store = {
@@ -19,39 +29,39 @@ function main(DD, OPTS) {
   /* ---------- VÔ TẬN: 3 mạng, càng lâu càng nhanh ---------- */
   var lives = 3, elapsed = 0;
   var endless = derive({
-    id: "endless", title: "Hết mạng!", timeLabel: "Mạng", coffeeText: "+1♥",
+    id: "endless", title: function () { return t("p.end.endless"); }, timeLabel: function () { return t("p.lives"); }, coffeeText: "+1♥",
     init: function () { lives = 3; elapsed = 0; G.timeLeft = 999; },
     progress: function () { return Math.min(1, elapsed / 100); },
     tick: function () { elapsed += 0.1; },
     timeText: function () { return "♥".repeat(lives) + "♡".repeat(Math.max(0, 3 - lives)); },
     timeBar: function () { return Math.min(1, lives / 5); },
     onMiss: function () { lives--; if (lives <= 0) { lives = 0; G.end(); } },
-    onCoffee: function () { lives = Math.min(5, lives + 1); G.say("+1 mạng!"); },
+    onCoffee: function () { lives = Math.min(5, lives + 1); G.say(t("p.life1")); },
     stay: function (p) { return 1300 - p * 650; }, stay2: function (p) { return 1200 - p * 600; }, gap: function (p) { return 760 - p * 430; },
     dbl: function (p) { return p > 0.3 ? 0.35 : 0; },
-    endLine: function () { return "Sống sót " + Math.round(elapsed) + " giây"; }
+    endLine: function () { return t("p.surv", { s: Math.round(elapsed) }); }
   });
 
   /* ---------- THỬ THÁCH NGÀY: cùng một đề cho mọi người, có mục tiêu ---------- */
   var daily = null;
   var dailyMode = derive({
-    id: "daily", title: "Hết giờ!", lockDiff: "normal",
+    id: "daily", title: function () { return t("p.end.daily"); }, lockDiff: "normal",
     prepare: function () {
       var t = token(); if (!t) return Promise.reject(new Error("no_pass"));
       return fetch("/api/pro/daily", { headers: { Authorization: "Bearer " + t }, cache: "no-store" })
         .then(function (r) { if (!r.ok) throw new Error("daily"); return r.json(); }).then(function (d) { daily = d; DD.dailyInfo = d; });
     },
     rngFactory: function () { return mulberry32(daily ? daily.seed : 1); },
-    endLine: function (score) { if (!daily) return ""; return score >= daily.goal ? "✅ Đạt mục tiêu " + daily.goal + " điểm!" : "Mục tiêu " + daily.goal + " điểm, còn thiếu " + (daily.goal - score); }
+    endLine: function (score) { if (!daily) return ""; return score >= daily.goal ? t("p.goalOk", { g: daily.goal }) : t("p.goalNo", { g: daily.goal, m: daily.goal - score }); }
   });
 
   /* ---------- BOSS: Sếp gọi dày đặc, hạ boss để nhận huy hiệu ---------- */
   var BOSS_GOAL = 450;
   var boss = derive({
-    id: "boss", title: "Boss deadline", coffeeP: 0.05,
+    id: "boss", title: function () { return t("p.end.boss"); }, coffeeP: 0.05,
     pick: function (R, p) { return R() < 0.5 ? G.PESTS[2] : (R() < 0.05 ? G.COFFEE : G.PESTS[Math.floor(R() * G.PESTS.length)]); },
     stay: function (p) { return 1050 - p * 450; }, stay2: function (p) { return 950 - p * 400; }, gap: function (p) { return 600 - p * 280; }, dbl: function () { return 0.45; },
-    endLine: function (score) { return score >= BOSS_GOAL ? "🏅 Hạ gục boss! Huy hiệu mới" : "Boss thắng. Cần " + BOSS_GOAL + " điểm để hạ boss"; }
+    endLine: function (score) { return score >= BOSS_GOAL ? t("p.bossWin") : t("p.bossLose", { g: BOSS_GOAL }); }
   });
 
   /* ---------- ĐỘ KHÓ ---------- */
@@ -110,7 +120,7 @@ function main(DD, OPTS) {
   var oldEnd = DD.hooks.onEnd; DD.hooks.onEnd = function (r) { if (oldEnd) oldEnd(r); onEnd(r); };
 
   DD.openStats = function () {
-    var h = store.get(HIST, []), box = $("statsBody"), name = { classic: "Cổ điển", endless: "Vô tận", daily: "Thử thách ngày", boss: "Boss" };
+    var h = store.get(HIST, []), box = $("statsBody"), name = function (m) { return t("m." + m + ".name"); };
     var last = h.slice(-20), best = h.reduce(function (a, x) { return Math.max(a, x.s); }, 0), combo = h.reduce(function (a, x) { return Math.max(a, x.c || 0); }, 0);
     var week = 7 * 864e5, now = Date.now(), cur = h.filter(function (x) { return now - x.t < week; }), prev = h.filter(function (x) { return now - x.t >= week && now - x.t < 2 * week; });
     var avg = function (a) { return a.length ? Math.round(a.reduce(function (s, x) { return s + x.s; }, 0) / a.length) : 0; };
@@ -118,12 +128,12 @@ function main(DD, OPTS) {
     var badges = store.get("dd-badges", {}), nb = Object.keys(badges).length;
     var W = 300, Hh = 84, max = Math.max.apply(null, last.map(function (x) { return x.s; }).concat([1])), pts = last.map(function (x, i) { return [last.length > 1 ? 8 + i * (W - 16) / (last.length - 1) : W / 2, Hh - 10 - (x.s / max) * (Hh - 22)]; });
     var path = pts.map(function (p, i) { return (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1); }).join(" ");
-    box.innerHTML = h.length ? '<div class="stt"><div class="row3"><div class="k"><small>Số ván</small><b>' + h.length + '</b></div><div class="k"><small>Điểm cao</small><b>' + best + '</b></div><div class="k"><small>Combo cao nhất</small><b>×' + combo + '</b></div></div>' +
-      '<svg viewBox="0 0 ' + W + ' ' + Hh + '" preserveAspectRatio="none" role="img" aria-label="Điểm 20 ván gần nhất"><path d="' + path + '" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>' +
+    box.innerHTML = h.length ? '<div class="stt"><div class="row3"><div class="k"><small>' + t("p.st.games") + '</small><b>' + h.length + '</b></div><div class="k"><small>' + t("p.st.best") + '</small><b>' + best + '</b></div><div class="k"><small>' + t("p.st.combo") + '</small><b>×' + combo + '</b></div></div>' +
+      '<svg viewBox="0 0 ' + W + ' ' + Hh + '" preserveAspectRatio="none" role="img" aria-label="' + esc(t("p.st.aria")) + '"><path d="' + path + '" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>' +
       pts.map(function (p) { return '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="2.6" fill="var(--accent)"/>'; }).join("") + '</svg>' +
-      '<div class="row3"><div class="k"><small>TB tuần này</small><b>' + avg(cur) + '</b></div><div class="k"><small>So tuần trước</small><b>' + (delta == null ? "—" : (delta > 0 ? "▲ " : delta < 0 ? "▼ " : "＝ ") + Math.abs(delta) + "%") + '</b></div><div class="k"><small>Chuỗi ngày</small><b>🔥 ' + (DD.streakInfo ? DD.streakInfo() : 0) + '</b></div></div>' +
-      '<div class="note2">' + (nb ? "🏅 " + nb + " huy hiệu · " : "") + "Ván gần nhất: " + esc(name[last[last.length - 1].m] || last[last.length - 1].m) + " " + last[last.length - 1].s + " điểm</div></div>"
-      : '<div class="stt"><div class="note2">Chưa có ván nào. Chơi vài ván rồi quay lại xem tiến bộ nhé.</div></div>';
+      '<div class="row3"><div class="k"><small>' + t("p.st.avg") + '</small><b>' + avg(cur) + '</b></div><div class="k"><small>' + t("p.st.vs") + '</small><b>' + (delta == null ? "—" : (delta > 0 ? "▲ " : delta < 0 ? "▼ " : "＝ ") + Math.abs(delta) + "%") + '</b></div><div class="k"><small>' + t("p.st.streak") + '</small><b>🔥 ' + (DD.streakInfo ? DD.streakInfo() : 0) + '</b></div></div>' +
+      '<div class="note2">' + (nb ? "🏅 " + t("p.st.badges", { n: nb }) : "") + esc(t("p.st.last", { m: name(last[last.length - 1].m), s: last[last.length - 1].s })) + "</div></div>"
+      : '<div class="stt"><div class="note2">' + t("p.st.empty") + '</div></div>';
   };
 
   /* ---------- MỞ KHÓA ---------- */
