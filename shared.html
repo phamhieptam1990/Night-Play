@@ -135,6 +135,7 @@ texts(); requestAnimationFrame(() => { draw(); NPS.poll().then(a => { items = a;
 setInterval(() => { if (!document.hidden) refresh(); }, 6000);
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
 </script>
+<script src="shared/updated.js"></script>
 <script src="shared/bars.js"></script>
 </body>
 </html>

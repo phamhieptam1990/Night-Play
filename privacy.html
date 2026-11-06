@@ -63,7 +63,12 @@ body{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidd
 #src{display:none}
 #pg{flex:1;min-height:0;width:100%;max-width:760px;margin:0 auto;padding:4px 16px 8px;display:flex;flex-direction:column;gap:8px}
 #pgHead{flex:none}
-#pgHead h1{margin:4px 0 0;font-size:clamp(18px,3vw,22px);line-height:1.2}
+#pgHead{text-align:center;padding:2px 0 4px}
+#pgHead h1{margin:2px auto 0;display:inline-block;font-family:Georgia,"Iowan Old Style","Times New Roman",serif;font-size:clamp(26px,5.6vw,42px);line-height:1.1;font-weight:800;letter-spacing:-.6px;
+  background:linear-gradient(100deg,var(--accent),#FF5A1F 90%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+#pgHead h1::after{content:"";display:block;width:64px;height:4px;margin:8px auto 0;border-radius:3px;background:linear-gradient(90deg,var(--accent),#FF5A1F)}
+@media (max-height:760px){#pgHead h1{font-size:clamp(22px,4.6vw,32px)}#pgHead h1::after{margin-top:5px;height:3px;width:48px}}
+@media (max-height:640px){#pgHead h1{font-size:clamp(20px,4vw,26px)}#pgHead h1::after{display:none}}
 html{overscroll-behavior:none}
 #book{flex:1;min-height:0;position:relative;touch-action:pinch-zoom}
 #pages{position:absolute;inset:0;perspective:1800px;transform-origin:0 0;transition:transform .3s ease}
@@ -88,7 +93,7 @@ html{overscroll-behavior:none}
 #pgBody .sum h2,.leaf .sum h2{font-size:1.12em}
 #pgBody table,.leaf table{font-size:.92em;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;text-align:left}
 #pgBody > :first-child,.leaf > :first-child{margin-top:0}
-#pgBody::after,.leaf::after{content:attr(data-pno);position:absolute;left:0;right:0;bottom:9px;text-align:center;font:12px/1 system-ui,sans-serif;color:var(--muted);letter-spacing:.08em;text-align:center}
+#pgBody::after,.leaf::after{content:attr(data-pno);position:absolute;left:30px;right:auto;bottom:9px;text-align:left;font:12px/1 system-ui,sans-serif;color:var(--muted);letter-spacing:.08em;text-align:center}
 /* lật trang */
 .leaf{z-index:3;backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform;pointer-events:none}
 .leaf.next{transform-origin:0 50%;animation:flipNext .62s cubic-bezier(.5,.05,.4,1) forwards}
@@ -126,9 +131,9 @@ html{overscroll-behavior:none}
 </head>
 <body>
 <nav class="nav" aria-label="Main">
-  <a class="mark" href="index.html" aria-label="Play Hub">
+  <a class="mark" href="index.html" aria-label="Home">
     <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#7C5CFF"/><path d="M0 0h32v64H0z" fill="#FF5A1F" clip-path="inset(0 round 18px 0 0 18px)"/><circle cx="32" cy="32" r="13" fill="#fff"/></svg>
-    <span>Play Hub</span>
+    <span>Home</span>
   </a>
   <div class="tools">
     <div class="seg" role="group" aria-label="Language / Ngôn ngữ">
@@ -147,7 +152,6 @@ html{overscroll-behavior:none}
 <!-- ====================== TIẾNG VIỆT ====================== -->
 <div class="L" lang="vi">
   <h1>Chính sách quyền riêng tư</h1>
-  <p class="meta">Cập nhật lần cuối: <span data-fill="updated"></span></p>
 
   <section class="sum" aria-labelledby="sv">
     <h2 id="sv">Tóm tắt</h2>
@@ -231,7 +235,6 @@ html{overscroll-behavior:none}
 <!-- ====================== ENGLISH ====================== -->
 <div class="L" lang="en">
   <h1>Privacy Policy</h1>
-  <p class="meta">Last updated: <span data-fill="updated"></span></p>
 
   <section class="sum" aria-labelledby="se">
     <h2 id="se">Summary</h2>
@@ -329,7 +332,7 @@ html{overscroll-behavior:none}
 </main>
 
 <footer class="site-foot">
-  <div class="mark"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#7C5CFF"/><path d="M0 0h32v64H0z" fill="#FF5A1F" clip-path="inset(0 round 18px 0 0 18px)"/><circle cx="32" cy="32" r="13" fill="#fff"/></svg><span>Play Hub</span></div>
+  <div class="mark"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#7C5CFF"/><path d="M0 0h32v64H0z" fill="#FF5A1F" clip-path="inset(0 round 18px 0 0 18px)"/><circle cx="32" cy="32" r="13" fill="#fff"/></svg><span>Home</span></div>
   <nav>
     <a href="index.html" id="fHome"></a>
     <a data-fill="email"></a>
@@ -530,6 +533,7 @@ body.addEventListener("touchend", e => {
 let rz = 0; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { layoutPages(); applyPageShift(); }, 120); });
 window.__pgReady = true; layoutPages(); showUI(4200); if (document.fonts && document.fonts.ready) document.fonts.ready.then(layoutPages);
 </script>
+<script src="shared/updated.js"></script>
 <script src="shared/bars.js"></script>
 </body>
 </html>

@@ -142,6 +142,7 @@ $("themeBtn").addEventListener("click", () => { const n = root.dataset.theme ===
 let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(load, 200); });
 texts(); renderMine(); requestAnimationFrame(load); if (document.fonts && document.fonts.ready) document.fonts.ready.then(load);
 </script>
+<script src="shared/updated.js"></script>
 <script src="shared/bars.js"></script>
 </body>
 </html>

@@ -36,7 +36,7 @@ a{color:inherit}
 #langMenu.on{display:block}
 #langMenu button{display:block;width:100%;text-align:left;padding:12px 14px;border-radius:10px;background:none;font-size:16px;font-weight:600}
 #langMenu button[aria-checked=true]{background:var(--ink);color:var(--bg)}
-main{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(12px,3vh,28px);padding:0 16px;overflow-y:auto}
+main{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(10px,2.6vh,28px);padding:0 16px;overflow-y:auto}
 h1{margin:0;text-align:center;font-size:clamp(26px,min(5vw,6vh),46px);line-height:1.1;letter-spacing:-.8px;font-weight:800}
 .sub{margin:-6px 0 0;text-align:center;color:var(--muted);font-size:clamp(14px,2vh,17px)}
 .cards{width:100%;max-width:1000px;display:grid;gap:clamp(12px,2.5vw,24px);grid-template-columns:1fr 1fr}
@@ -186,6 +186,7 @@ addEventListener("resize", balance); addEventListener("load", balance);
 if(document.fonts && document.fonts.ready) document.fonts.ready.then(balance);
 applyLang();
 </script>
+<script src="shared/updated.js"></script>
 <script src="shared/bars.js"></script>
 </body>
 </html>

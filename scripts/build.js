@@ -14,5 +14,11 @@ for (const p of PUBLIC) {
   if (!fs.existsSync(src)) { console.warn("bỏ qua (không tồn tại): " + p); continue; }
   fs.cpSync(src, path.join(dist, p), { recursive: true, filter: s => !path.basename(s).startsWith(".") });
 }
+/* Ghi ngày build (giờ Việt Nam) để hiển thị "Cập nhật lần cuối" ở cuối mỗi trang */
+const upd = path.join(dist, "shared", "updated.js");
+if (fs.existsSync(upd)) {
+  const day = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Ho_Chi_Minh" }).format(new Date());
+  fs.writeFileSync(upd, 'window.SITE_BUILD = "' + day + '";\n' + fs.readFileSync(upd, "utf8"));
+}
 if (TARGET === "admin") fs.writeFileSync(path.join(dist, "_redirects"), "/  /admin/  302\n");   // vào domain admin là thấy trang admin
 console.log("[" + TARGET + "] dist/ sẵn sàng:", fs.readdirSync(dist).join(", "));

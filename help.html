@@ -64,7 +64,7 @@ ul.how b{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-i
 </head>
 <body>
 <nav class="nav" aria-label="Main">
-  <a class="mark" href="index.html"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#7C5CFF"/><path d="M0 0h32v64H0z" fill="#FF5A1F" clip-path="inset(0 round 18px 0 0 18px)"/><circle cx="32" cy="32" r="13" fill="#fff"/></svg><span>Play Hub</span></a>
+  <a class="mark" href="index.html"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#7C5CFF"/><path d="M0 0h32v64H0z" fill="#FF5A1F" clip-path="inset(0 round 18px 0 0 18px)"/><circle cx="32" cy="32" r="13" fill="#fff"/></svg><span>Home</span></a>
   <div class="tools">
     <div class="seg" role="group" id="langSeg"><button type="button" data-l="vi" lang="vi" aria-label="Tiếng Việt">VI</button><button type="button" data-l="en" lang="en" aria-label="English">EN</button></div>
     <button id="themeBtn" class="ico" type="button" aria-label="Theme">
@@ -152,6 +152,7 @@ document.querySelectorAll("#langSeg button").forEach(b => b.addEventListener("cl
 $("themeBtn").addEventListener("click", () => { const n = root.dataset.theme === "dark" ? "light" : "dark"; root.dataset.theme = n; document.querySelector("meta[name=theme-color]").content = n === "dark" ? "#12141F" : "#F6F4F1"; try { localStorage.setItem("theme", n); } catch (e) {} });
 view();
 </script>
+<script src="shared/updated.js"></script>
 <script src="shared/bars.js"></script>
 </body>
 </html>
