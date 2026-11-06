@@ -602,7 +602,9 @@ $("play").addEventListener("pointerup",pUp);$("play").addEventListener("pointerc
 let kHeld=false;
 addEventListener("keydown",e=>{const S=PF.S;if(e.repeat)return;if(e.code==="Space"||e.key==="ArrowUp"||e.key==="ArrowDown"){if(S&&running&&!paused&&!S.over){if(e.key==="ArrowUp"||e.key==="ArrowDown"){if(S.ty.key){e.preventDefault();S.ty.key(S,e.key);return}}if(S.ty.down&&!(S.type==="kite")){e.preventDefault();kHeld=true;S.ty.down(S,0,null)}}}else if((e.key==="p"||e.key==="P")&&running){paused?resumeRound("user"):pauseRound("user")}});
 addEventListener("keyup",e=>{if((e.code==="Space"||e.key==="ArrowUp")&&kHeld){kHeld=false;const S=PF.S;if(S&&S.ty.up)S.ty.up(S)}});
-$("askBtn").addEventListener("click",()=>{const S=PF.S;if(S&&running&&!paused&&!S.over){pauseRound("user");$("ovPause").hidden=true;openHow(S.type,()=>{showOv(null);resumeRound("user")},true)}else if(!S||!running)openHow(PF.cur||"bee")});
+$("askBtn").addEventListener("click",()=>{const S=PF.S;if(S&&running&&!paused&&!S.over){pauseRound("user");$("ovPause").hidden=true;openHow(S.type,()=>{showOv(null);resumeRound("user")},true)}});
+/* nút ❔ chỉ có nghĩa khi đang bay (xem lại cách chơi của chính ván đó); ở màn chọn chuyến thì ẩn, tránh nhảy sang chuyến khác */
+setInterval(()=>{const on=!!(PF.S&&running&&!PF.S.over&&!paused);$("askBtn").style.visibility=on?"visible":"hidden"},150);
 $("soundBtn").addEventListener("click",()=>{sound=!sound;if(window.NPAudio)NPAudio.set(sound);syncSound()});
 function syncSound(){$("soundBtn").textContent=sound?"🔊":"🔇";$("soundBtn").setAttribute("aria-label",t("sound")+(sound?"":" (off)"))}
 $("langBtn").addEventListener("click",()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}applyLang()});
