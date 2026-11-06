@@ -91,8 +91,19 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 #ovProg{gap:6px}#ovProg h2{display:none}#ovProg .streakBig{font-size:clamp(17px,5vw,22px)}#ovProg .week i{width:26px;height:26px;font-size:13px}#ovProg .week span{width:30px;font-size:10px}
 #ovProg .pgr{padding:5px 10px;font-size:13px;gap:8px}#ovProg .pgr .e{font-size:20px}#ovProg #pgPrac{font-size:13px}
 #ovProg .big{padding:8px 20px;font-size:clamp(15px,4.2vw,19px)}#ovProg .ghost{padding:7px 16px;font-size:14px}
-@media (max-height:460px){#ovProg .week,#ovProg #pgPrac,#ovProg .streakBig+*{display:none}#ovProg .pgrows{flex-direction:row;max-width:520px}#ovProg .pgr{flex-direction:column;padding:5px 8px;font-size:11px;flex:1}#ovProg .pgr .e{font-size:18px}#ovProg input#pgName{padding:4px 10px;font-size:14px}#ovProg .big{padding:5px 14px;font-size:14px;white-space:nowrap}#ovProg .ghost{padding:5px 12px;font-size:13px}#ovProg .pgr span{white-space:normal;line-height:1.1}.streakBig{font-size:16px}.ov .st{display:block!important;font-size:14px}}
-@media (max-height:620px){#ovProg .pgrows{flex-direction:row;max-width:520px}#ovProg .pgr{flex-direction:column;padding:5px 8px;font-size:11px;flex:1;text-align:center}#ovProg .pgr .m{width:100%}#ovProg .pgr .e{font-size:18px}#ovProg .pgr span{white-space:normal;line-height:1.1}}
+@media (max-height:460px){#ovProg .week,#ovProg #pgPrac,#ovProg .streakBig+*{display:none}#ovProg .pgrows{flex-direction:row;max-width:520px}#ovProg .pgr{flex-direction:column;padding:5px 8px;font-size:11px;flex:1}#ovProg .pgr .e{font-size:18px}#ovProg input#pgName{padding:4px 10px;font-size:14px}#ovProg .big{padding:5px 14px;font-size:14px;white-space:nowrap}#ovProg .ghost{padding:5px 12px;font-size:13px}#ovProg .pgr span{white-space:normal;line-height:1.1}.streakBig{font-size:13px;line-height:1.15}#ovProg{gap:4px}#ovProg .pgr{font-size:10px}#ovProg .pgrows{gap:4px}.ov .st{display:block!important;font-size:14px}}
+.rw{display:flex;align-items:center;justify-content:center;gap:10px;max-width:340px;font-weight:800;font-size:clamp(14px,4vw,18px);color:var(--ink)}.rw[hidden]{display:none}.rw .rwt{text-align:left;line-height:1.15}
+.stk{font-size:clamp(40px,12vw,56px);line-height:1;filter:drop-shadow(0 3px 0 rgba(0,0,0,.18));animation:stkpop .7s cubic-bezier(.2,1.6,.4,1) both}
+.stk.leg{filter:drop-shadow(0 0 10px #ffd400)}.stk.rare{filter:drop-shadow(0 0 8px #7ad7ff)}
+@keyframes stkpop{0%{transform:scale(0) rotate(-30deg)}100%{transform:scale(1) rotate(0)}}
+.bkgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;width:100%;max-width:340px}
+.bk{aspect-ratio:1;border-radius:14px;background:var(--panel);box-shadow:var(--shadow);display:grid;place-items:center;font-size:clamp(22px,7vw,32px);position:relative;line-height:1}
+.bk.no{opacity:.45;font-size:18px;color:var(--muted);font-weight:800;box-shadow:none;background:var(--line)}.bk.rare{outline:2px solid #5cc8ff}.bk.leg{outline:2px solid #ffc400;background:color-mix(in srgb,#ffd400 22%,var(--panel))}
+.bk b{position:absolute;right:2px;bottom:1px;font-size:10px;background:var(--accent);color:var(--on-accent);border-radius:8px;padding:0 4px}
+.pgr.btn{cursor:pointer;width:100%;font-family:inherit;font-weight:800;font-size:14px}
+@media (prefers-reduced-motion:reduce){.stk{animation:none}}
+@media (max-height:460px){#enS{display:none!important}#ovEnd .row{gap:6px}#ovEnd .big{padding:6px 16px;font-size:15px}#ovEnd .ghost{padding:6px 12px;font-size:13px}.bkgrid{grid-template-columns:repeat(11,1fr);max-width:520px;gap:4px}#ovBook h2{display:none}.bk{font-size:18px}.rw .rwt{font-size:12px}.stk{font-size:30px}}
+@media (max-height:620px){#ovProg .sh{display:none}#ovProg .pgrows{flex-direction:row;max-width:520px}#ovProg .pgr{flex-direction:column;padding:5px 8px;font-size:11px;flex:1;text-align:center}#ovProg .pgr .m{width:100%}#ovProg .pgr .e{font-size:18px}#ovProg .pgr span{white-space:normal;line-height:1.1}}
 @media (prefers-reduced-motion:reduce){.toast{transition:none}}
 </style>
 <script src="../../../shared/offline.js" defer></script>
@@ -130,7 +141,7 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
     <div class="ov" id="ovEnd" hidden>
       <h2 id="enH"></h2>
       <div class="stars" id="enStars"></div>
-      <p id="enP"></p><div class="st" id="enS"></div>
+      <p id="enP"></p><div class="st" id="enS"></div><div class="rw" id="enR" hidden><span class="stk" id="enK"></span><span class="rwt" id="enL"></span></div>
       <div class="row"><button class="big" id="againBtn" type="button"></button><button class="ghost" id="homeBtn2" type="button"></button><button class="ghost" id="pgBtn2" type="button"></button></div>
     </div>
     <div class="ov" id="ovProg" hidden>
@@ -141,6 +152,11 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
       <div class="pgrows" id="pgRows"></div>
       <p id="pgPrac"></p>
       <div class="row"><button class="big" id="pgShare" type="button"></button><button class="ghost" id="pgBack" type="button"></button></div>
+    </div>
+    <div class="ov" id="ovBook" hidden>
+      <h2 id="bkH"></h2><p id="bkN"></p>
+      <div class="bkgrid" id="bkGrid"></div>
+      <button class="ghost" id="bkBack" type="button"></button>
     </div>
     <div class="ov" id="ovSkin" hidden>
       <h2 id="skH"></h2>
@@ -169,7 +185,7 @@ let LANG=(()=>{const q=new URLSearchParams(location.search).get("lang");if(q==="
 /* ===== NGÔN NGỮ ===== */
 const I18N={
 vi:{title:"Chim Bay Học Vui",docTitle:"Chim Bay Học Vui",sound:"Âm thanh",lang:"Ngôn ngữ",pause:"Tạm dừng",resume:"Tiếp tục",
- "st.h":"Chọn trò chơi","pg.btn":"Tiến độ của bé","pg.h":"Tiến độ học của bé","pg.ph":"Tên bé (chỉ lưu trên máy)","pg.s0":"Chơi 1 ván hôm nay để bắt đầu chuỗi nhé!","pg.s":"🔥 {n} ngày học liền","pg.L":"Chữ đã biết {a}/{b}","pg.S":"Đếm sao đúng {p}%","pg.M":"Phép tính đúng {p}%","pg.none":"Chưa chơi","pg.prac":"Cần luyện thêm: {l}","pg.pracOk":"Chưa có chữ nào khó. Giỏi quá!","pg.share":"📤 Gửi cho ba mẹ","pg.back":"Quay lại","pg.shared":"Đã lưu ảnh","end.streak":"🔥 Chuỗi {n} ngày liền!","end.first":"🌱 Ngày học đầu tiên!","end.today":"Hôm nay bé đã học {n} ván","days":["CN","T2","T3","T4","T5","T6","T7"],"cd.t":"{n} đang học cùng Chim Bay Học Vui","cd.kid":"Bé","cd.sd":"ngày học liền","cd.L":"Chữ cái đã biết","cd.S":"Đếm sao đúng","cd.M":"Phép tính đúng","cd.prac":"Đang luyện: {l}","cd.foot":"Chơi miễn phí tại","cd.share":"Bé học cùng Chim Bay Học Vui","gt.sh":"Chia sẻ ảnh dành cho phụ huynh. Hãy trả lời câu hỏi người lớn nhé:","st.p":"Chạm để bay lên nhé!","ty.letters":"Chim học chữ","ty.letters.d":"Bay qua đúng chữ","ty.stars":"Bay đếm sao","ty.stars.d":"Nhặt sao rồi đếm","ty.math":"Tàu bay phép tính","ty.math.d":"Bay qua đáp án đúng",
+ "st.h":"Chọn trò chơi","lv.L":"🎉 Lên cấp {n}! Chữ mới: {l}","lv.M":"🎉 Phép tính lên cấp {n}!","lv.S":"🎉 Đếm sao lên cấp {n}!","stk.new":"Sticker mới!","stk.dup":"Sticker (đã có rồi)","bk.h":"Album sticker","bk.n":"Sưu tầm {a}/{b}","pg.lvl":"Cấp {n}","pg.top":"⭐ Cấp {n}","pg.bk":"🎴 Album sticker {a}/{b}","cd.lv":"⭐ Cấp {n} · 🎴 {a}/{b} sticker","pg.btn":"Tiến độ của bé","pg.h":"Tiến độ học của bé","pg.ph":"Tên bé (chỉ lưu trên máy)","pg.s0":"Chơi 1 ván hôm nay để bắt đầu chuỗi nhé!","pg.s":"🔥 {n} ngày học liền","pg.L":"Chữ đã biết {a}/{b}","pg.S":"Đếm sao đúng {p}%","pg.M":"Phép tính đúng {p}%","pg.none":"Chưa chơi","pg.prac":"Cần luyện thêm: {l}","pg.pracOk":"Chưa có chữ nào khó. Giỏi quá!","pg.share":"📤 Gửi cho ba mẹ","pg.back":"Quay lại","pg.shared":"Đã lưu ảnh","end.streak":"🔥 Chuỗi {n} ngày liền!","end.first":"🌱 Ngày học đầu tiên!","end.today":"Hôm nay bé đã học {n} ván","days":["CN","T2","T3","T4","T5","T6","T7"],"cd.t":"{n} đang học cùng Chim Bay Học Vui","cd.kid":"Bé","cd.sd":"ngày học liền","cd.L":"Chữ cái đã biết","cd.S":"Đếm sao đúng","cd.M":"Phép tính đúng","cd.prac":"Đang luyện: {l}","cd.foot":"Chơi miễn phí tại","cd.share":"Bé học cùng Chim Bay Học Vui","gt.sh":"Chia sẻ ảnh dành cho phụ huynh. Hãy trả lời câu hỏi người lớn nhé:","st.p":"Chạm để bay lên nhé!","ty.letters":"Chim học chữ","ty.letters.d":"Bay qua đúng chữ","ty.stars":"Bay đếm sao","ty.stars.d":"Nhặt sao rồi đếm","ty.math":"Tàu bay phép tính","ty.math.d":"Bay qua đáp án đúng",
  "ask.letters":"Bay qua chữ {l}","ask.math":"{q}","ask.stars":"Nhặt thật nhiều sao!","say.letters":"Bay qua chữ {l}!","say.math":"{a} cộng {b} bằng mấy?","say.mathMinus":"{a} trừ {b} bằng mấy?",
  right:["Giỏi quá!","Tuyệt vời!","Đúng rồi!","Hoan hô!"],wrong:["Thử lại nhé!","Chưa đúng, mình thử tiếp!","Cố lên nào!"],miss:"Mình thử tiếp nhé!",hintL:"Đây là chữ {l}",hintN:"Đáp án là {n}",
  "q.h":"Bé nhặt mấy ngôi sao?","q.p":"Chạm vào số đúng nhé","q.right":"Đúng rồi! {n} ngôi sao","q.wrong":"Có {n} ngôi sao đó!",
@@ -177,7 +193,7 @@ vi:{title:"Chim Bay Học Vui",docTitle:"Chim Bay Học Vui",sound:"Âm thanh",l
  "sk.pick":"Chọn giao diện","sk.letters.default":"Cổ điển","sk.letters.jungle":"Rừng nhiệt đới","sk.letters.ocean":"Biển xanh","sk.letters.snow":"Núi tuyết","sk.letters.night":"Đêm đèn lồng","sk.letters.fire":"Hoàng hôn lửa","sk.stars.default":"Cổ điển","sk.stars.galaxy":"Dải ngân hà","sk.stars.moon":"Thỏ ngọc","sk.stars.dragon":"Mây rồng","sk.stars.aurora":"Cực quang","sk.stars.candy":"Kẹo ngọt","sk.math.default":"Cổ điển","sk.math.rocket":"Tên lửa","sk.math.sub":"Tàu ngầm","sk.math.balloon":"Khinh khí cầu","sk.math.ufo":"Đĩa bay","sk.math.biplane":"Cánh đôi","pw.h":"Giao diện của Night Pass","pw.p":"Mở khoá {name} và 14 giao diện đẹp khác: thế giới mới, nhân vật mới, bố cục mới cho cả 3 trò. Phần này dành cho phụ huynh.","pw.go":"Dành cho phụ huynh","pw.trial":"Chơi thử 1 ván","pw.later":"Để sau","pw.tried":"Hôm nay đã chơi thử rồi, mai thử tiếp nhé.",
  "gt.h":"Dành cho phụ huynh","gt.p":"Hỏi người lớn: {a} + {b} = ?","gt.x":"Quay lại",lockedLbl:"{n} (cần Night Pass)",badge:"Night Pass"},
 en:{title:"Fly & Learn",docTitle:"Fly & Learn",sound:"Sound",lang:"Language",pause:"Pause",resume:"Resume",
- "st.h":"Pick a game","pg.btn":"Learning progress","pg.h":"Learning progress","pg.ph":"Child name (kept on this device)","pg.s0":"Play one round today to start a streak!","pg.s":"🔥 {n}-day streak","pg.L":"Letters known {a}/{b}","pg.S":"Star counting {p}% right","pg.M":"Math {p}% right","pg.none":"Not played yet","pg.prac":"Needs practice: {l}","pg.pracOk":"No tricky letters. Great!","pg.share":"📤 Send to parents","pg.back":"Back","pg.shared":"Image saved","end.streak":"🔥 {n}-day streak!","end.first":"🌱 First learning day!","end.today":"Today: {n} rounds","days":["Su","Mo","Tu","We","Th","Fr","Sa"],"cd.t":"{n} is learning with Fly & Learn","cd.kid":"My little one","cd.sd":"day streak","cd.L":"Letters known","cd.S":"Star counting","cd.M":"Math right","cd.prac":"Practicing: {l}","cd.foot":"Play free at","cd.share":"Learning with Fly & Learn","gt.sh":"Sharing is for parents. Please answer the grown-up question:","st.p":"Tap to fly up!","ty.letters":"Birdie ABC","ty.letters.d":"Fly through the right letter","ty.stars":"Star counter","ty.stars.d":"Catch stars, then count","ty.math":"Math plane","ty.math.d":"Fly through the right answer",
+ "st.h":"Pick a game","lv.L":"🎉 Level {n}! New letters: {l}","lv.M":"🎉 Math level {n}!","lv.S":"🎉 Star counting level {n}!","stk.new":"New sticker!","stk.dup":"Sticker (already have)","bk.h":"Sticker album","bk.n":"Collected {a}/{b}","pg.lvl":"Lv {n}","pg.top":"⭐ Level {n}","pg.bk":"🎴 Sticker album {a}/{b}","cd.lv":"⭐ Level {n} · 🎴 {a}/{b} stickers","pg.btn":"Learning progress","pg.h":"Learning progress","pg.ph":"Child name (kept on this device)","pg.s0":"Play one round today to start a streak!","pg.s":"🔥 {n}-day streak","pg.L":"Letters known {a}/{b}","pg.S":"Star counting {p}% right","pg.M":"Math {p}% right","pg.none":"Not played yet","pg.prac":"Needs practice: {l}","pg.pracOk":"No tricky letters. Great!","pg.share":"📤 Send to parents","pg.back":"Back","pg.shared":"Image saved","end.streak":"🔥 {n}-day streak!","end.first":"🌱 First learning day!","end.today":"Today: {n} rounds","days":["Su","Mo","Tu","We","Th","Fr","Sa"],"cd.t":"{n} is learning with Fly & Learn","cd.kid":"My little one","cd.sd":"day streak","cd.L":"Letters known","cd.S":"Star counting","cd.M":"Math right","cd.prac":"Practicing: {l}","cd.foot":"Play free at","cd.share":"Learning with Fly & Learn","gt.sh":"Sharing is for parents. Please answer the grown-up question:","st.p":"Tap to fly up!","ty.letters":"Birdie ABC","ty.letters.d":"Fly through the right letter","ty.stars":"Star counter","ty.stars.d":"Catch stars, then count","ty.math":"Math plane","ty.math.d":"Fly through the right answer",
  "ask.letters":"Fly through the letter {l}","ask.math":"{q}","ask.stars":"Catch lots of stars!","say.letters":"Fly through the letter {l}!","say.math":"What is {a} plus {b}?","say.mathMinus":"What is {a} minus {b}?",
  right:["Great job!","Wonderful!","Correct!","Hooray!"],wrong:["Try again!","Not quite, let's try!","You can do it!"],miss:"Let's try the next one!",hintL:"This is the letter {l}",hintN:"The answer is {n}",
  "q.h":"How many stars?","q.p":"Tap the right number","q.right":"Yes! {n} stars","q.wrong":"There were {n} stars!",
@@ -208,20 +224,22 @@ let toastT=0;function toast(m,ms){const e=$("toast");e.textContent=m;e.classList
 PF.toast=toast;
 
 /* ===== LOẠI 1 (MIỄN PHÍ): CHIM HỌC CHỮ ===== */
-const LET={vi:"ABCDEGHIKLMNOPQRSTUVXY".split(""),en:"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")};
+const TIERS={vi:["ABCDE","GHIKLM","NOPQRS","TUVXY","ĂÂÊÔƠƯĐ"].map(x=>Array.from(x)),en:["ABCDE","FGHIJK","LMNOPQ","RSTUV","WXYZ"].map(x=>Array.from(x))};
+const LET={vi:[].concat(...TIERS.vi).sort((a,b)=>"AĂÂBCDĐEÊGHIKLMNOÔƠPQRSTUƯVXY".indexOf(a)-"AĂÂBCDĐEÊGHIKLMNOÔƠPQRSTUƯVXY".indexOf(b)),en:[].concat(...TIERS.en)};
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 PF.shuffle=shuffle;
 PF.types.letters={id:"letters",ico:"🐤",hero:"🐤",total:10,
   name:()=>t("ty.letters"),
-  makeWave(i,S){const pool=LET[LANG].filter(l=>!S.used.includes(l)),target=pickOf(pool.length>3?pool:LET[LANG]);S.used.push(target);
-    const ds=shuffle(LET[LANG].filter(l=>l!==target)).slice(0,2),labels=shuffle([target].concat(ds));
+  makeWave(i,S){const P=Prog.pool(),it=Prog.load().items;let cand=P.filter(l=>!S.used.includes(l));if(!cand.length){S.used=[];cand=P}
+    const need=cand.filter(l=>{const o=it["L:"+l];return !o||o.r<3||o.w>=o.r}),target=pickOf(need.length&&Math.random()<.7?need:cand);S.used.push(target);
+    const ds=shuffle(P.filter(l=>l!==target)).slice(0,2),labels=shuffle([target].concat(ds));
     return {item:"L:"+target,ask:t("ask.letters",{l:'<span class="big">'+target+'</span>'}),askPlain:t("ask.letters",{l:target}),speak:t("say.letters",{l:target}),hint:t("hintL",{l:target}),rings:labels.map(l=>({label:l,ok:l===target}))}}};
 
 /* ===== LOẠI 2 + 3 (MIỄN PHÍ): BAY ĐẾM SAO, TÀU BAY PHÉP TÍNH ===== */
 const rn=n=>Math.floor(Math.random()*n);
 PF.types.math={id:"math",hero:"✈️",total:10,name:()=>t("ty.math"),
   makeWave(i,S){
-    const lvl=Math.min(3,1+Math.floor(S.correct/3));let a,b,minus=false;
+    const lvl=Math.min(3,Math.max(Prog.lv().M,1+Math.floor(S.correct/3)));let a,b,minus=false;
     if(lvl===1){a=1+rn(3);b=1+rn(5-a)}else if(lvl===2){a=1+rn(9);b=1+rn(10-a)}else if(rn(2)){minus=true;a=3+rn(8);b=1+rn(a-1)}else{a=1+rn(9);b=1+rn(10-a)}
     const ans=minus?a-b:a+b;let ds=[];[1,-1,2,-2,3].forEach(d=>{const v=ans+d;if(v>=0&&v<=12&&ds.indexOf(v)<0)ds.push(v)});ds=shuffle(ds).slice(0,2);
     const q=a+(minus?" − ":" + ")+b+" = ?";
@@ -231,7 +249,7 @@ PF.types.stars={id:"stars",hero:"🐤",custom:true,total:4,name:()=>t("ty.stars"
   init(S){S.custom={seg:0,clusters:0,list:[],caught:0,lastX:0,right:0,wait:false};setAsk(t("ask.stars"),t("ask.stars"),t("ask.stars"))},
   update(S,dt,sp){
     const c=S.custom,b=S.bird;if(c.wait)return;
-    if(c.clusters<CLUSTERS&&(!c.list.length||c.lastX<W-200)){const k=1+rn(3),base=PF.safe.top+60+rn(Math.max(40,H-PF.safe.top-PF.safe.bottom-120)),dir=rn(2)?1:-1;
+    if(c.clusters<CLUSTERS&&(!c.list.length||c.lastX<W-200)){const lvS=Prog.lv().S,k=lvS===1?1+rn(2):lvS===2?1+rn(3):2+rn(3),base=PF.safe.top+60+rn(Math.max(40,H-PF.safe.top-PF.safe.bottom-120)),dir=rn(2)?1:-1;
       for(let i=0;i<k;i++)c.list.push({x:W+40+i*38,y:Math.max(60,Math.min(H-60,base+dir*i*34)),got:false});c.lastX=W+40+(k-1)*38;c.clusters++}
     c.lastX-=sp*dt;
     c.list.forEach(st=>{st.x-=sp*dt;if(!st.got&&Math.abs(st.x-BX)<30&&Math.abs(st.y-b.y)<32){st.got=true;c.caught++;addScore(5);sfx.star();burst(st.x,st.y,"✨",5)}});
@@ -245,7 +263,7 @@ PF.types.stars={id:"stars",hero:"🐤",custom:true,total:4,name:()=>t("ty.stars"
 
 /* ===== TRẠNG THÁI VÁN ===== */
 function newState(type){
-  return {type,ty:PF.types[type],score:0,correct:0,wrong:0,streak:0,waves:[],spawned:0,done:0,used:[],t:0,speed:84,slow:0,over:false,
+  return {max0:Prog.maxes(),type,ty:PF.types[type],score:0,correct:0,wrong:0,streak:0,waves:[],spawned:0,done:0,used:[],t:0,speed:84,slow:0,over:false,
     skin:curSkin(type),bird:{y:H/2,vy:0,rot:0,wob:0},parts:[],clouds:Array.from({length:5},(_,i)=>({x:Math.random()*W,y:40+Math.random()*(H-160),s:.6+Math.random()*.9,v:6+Math.random()*10})),dots:Array(PF.types[type].total).fill(0),ask:"",askPlain:"",custom:{}};
 }
 function addScore(n){const S=PF.S;S.score=Math.min(1500,S.score+n);$("sc").textContent=S.score}
@@ -332,7 +350,7 @@ addEventListener("resize",fit);if(window.ResizeObserver)new ResizeObserver(fit).
 function loop(ts){raf=requestAnimationFrame(loop);const dt=Math.min(.05,(ts-last)/1000||0);last=ts;if(running&&!paused)update(dt);draw()}
 
 /* ===== VÒNG ĐỜI VÁN CHƠI ===== */
-const ovs=["ovStart","ovPause","ovQ","ovEnd","ovPay","ovGate","ovSkin","ovProg"];
+const ovs=["ovStart","ovPause","ovQ","ovEnd","ovPay","ovGate","ovSkin","ovProg","ovBook"];
 function showOv(id){for(const o of ovs)$(o).hidden=(o!==id)}
 function applyLayout(l){PF.safe=l==="full"?{top:112,bottom:64,pad:34}:l==="window"?{top:64,bottom:64,pad:64}:{top:0,bottom:0,pad:34};const a=document.querySelector(".app");if(l&&l!=="classic")a.dataset.layout=l;else delete a.dataset.layout;setTimeout(fit,30)}
 PF.applyLayout=applyLayout;
@@ -350,7 +368,10 @@ function finishRound(){
   sfx.win();$("enH").textContent=t("en.h"+stars);$("enStars").textContent="⭐".repeat(stars)+"☆".repeat(3-stars);$("enP").textContent=t("en.p",{n:S.score});showOv("ovEnd");
   const best=LS.get("pf-best",{});if(!best[S.type]||S.score>best[S.type])best[S.type]=S.score;LS.set("pf-best",best);
   window.NP&&NP.result({score:S.score,extra:{type:S.type}});
-  const pr=Prog.finish(),sk=Prog.streak();$("enS").textContent=sk.n>1?t("end.streak",{n:sk.n}):t("end.first");$("enS").hidden=!!(window.NP&&NP.helper);
+  const pr=Prog.finish(S.type,acc,stars,S.max0),sk=Prog.streak(),hp=!!(window.NP&&NP.helper);$("enS").textContent=sk.n>1?t("end.streak",{n:sk.n}):t("end.first");$("enS").hidden=hp;
+  $("enR").hidden=!pr;if(pr){const K=pr.ups[0],lv=Prog.lv(),T=TIERS[LANG],lines=[];
+    if(K){const n=K==="L"?lv.L:K==="M"?lv.M:lv.S;lines.push(K==="L"?t("lv.L",{n,l:T[n-1].join(" ")}):t("lv."+K,{n}))}
+    lines.push(pr.newSt?t("stk.new"):t("stk.dup"));$("enK").textContent=pr.sticker.id;$("enK").className="stk "+pr.sticker.r;$("enL").innerHTML=lines.map(x=>"<div>"+x+"</div>").join("")}
   if(PF.pro&&PF.pro.trial)setTimeout(()=>PF.lockPro(),0);
 }
 PF.finishRound=finishRound;
@@ -419,13 +440,29 @@ function openGate(cb,back,msg){   /* cổng phụ huynh: câu hỏi người l�
 let gateBack="ovStart";$("gtX").addEventListener("click",()=>showOv(gateBack));
 
 /* ===== TIẾN ĐỘ HỌC · CHUỗI NGÀY · THẺ KHOE CHO PHỤ HUYNH (lưu trên máy, không gửi đi đâu) ===== */
+const STK={com:["🐶","🐱","🐰","🦊","🐻","🐼","🐨","🐯","🦁","🐸","🐵","🐷"],rare:["🦄","🐲","🦋","🐬","🦉","🐙"],leg:["🌈","👑","🚀","🏆"]};
+const STK_ALL=[].concat(STK.com.map(e=>({id:e,r:"com"})),STK.rare.map(e=>({id:e,r:"rare"})),STK.leg.map(e=>({id:e,r:"leg"})));
+function pickSticker(tier,own){const order=tier==="leg"?["leg","rare","com"]:tier==="rare"?["rare","com","leg"]:["com","rare","leg"];
+  for(const r of order){const un=STK[r].filter(e=>!own[e]);if(un.length)return{id:pickOf(un),r}}const r=order[0];return{id:pickOf(STK[r]),r}}
 const PROG_K="pf-prog";
 const dayKey=d=>{d=d||new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
 const Prog={
   load(){const p=LS.get(PROG_K,null);return Object.assign({days:[],items:{},rounds:0,name:"",td:{d:"",n:0}},p&&typeof p==="object"?p:{})},
   save(p){p.days=p.days.slice(-120);LS.set(PROG_K,p)},
   rec(item,ok){if(window.NP&&NP.helper)return;const p=this.load(),o=p.items[item]||(p.items[item]={r:0,w:0});ok?o.r++:o.w++;this.save(p)},
-  finish(){if(window.NP&&NP.helper)return null;const p=this.load(),k=dayKey();if(p.days.indexOf(k)<0)p.days.push(k);if(p.td.d!==k)p.td={d:k,n:0};p.td.n++;p.rounds++;this.save(p);return p},
+  /* CẤP: Chữ = theo số chữ đã vững trong các bậc; Đếm sao / Phép tính = nhớ cấp (đúng ≥75% thì lên, <40% thì xuống) */
+  lvL(p){p=p||this.load();const T=TIERS[LANG],it=p.items;let pool=[];for(let n=1;n<=T.length;n++){pool=pool.concat(T[n-1]);const kn=pool.filter(l=>{const o=it["L:"+l];return o&&o.r>=3&&o.r/(o.r+o.w)>=.75}).length;if(kn<Math.ceil(.8*pool.length))return n}return T.length},
+  lv(p){p=p||this.load();p.lvl=p.lvl||{};return{L:this.lvL(p),M:p.lvl.M||1,S:p.lvl.S||1}},
+  pool(){const T=TIERS[LANG],n=this.lvL();return[].concat(...T.slice(0,n))},
+  maxes(p){p=p||this.load();const m=p.max||{},l=this.lv(p);return{L:Math.max(m.L||1,l.L),M:Math.max(m.M||1,l.M),S:Math.max(m.S||1,l.S)}},
+  overall(p){const m=this.maxes(p);return 1+(m.L-1)+(m.M-1)+(m.S-1)},
+  stickers(p){p=p||this.load();return p.stk||{}},
+  finish(type,acc,stars,max0){if(window.NP&&NP.helper)return null;const p=this.load(),k=dayKey();if(p.days.indexOf(k)<0)p.days.push(k);if(p.td.d!==k)p.td={d:k,n:0};p.td.n++;p.rounds++;
+    p.lvl=p.lvl||{};if(type==="math"||type==="stars"){const K=type==="math"?"M":"S";let v=p.lvl[K]||1;if(acc>=.75&&v<3)v++;else if(acc<.4&&v>1)v--;p.lvl[K]=v}
+    const now=this.maxes(p);p.max=now;const ups=[];["L","M","S"].forEach(K=>{if(now[K]>(max0?max0[K]:1))ups.push(K)});
+    const tier=ups.length?"leg":(stars===3&&Math.random()<.5?"rare":"com"),stk=p.stk=p.stk||{};let pick=pickSticker(tier,stk);stk[pick.id]=(stk[pick.id]||0)+1;
+    this.save(p);return{ups,sticker:pick,newSt:stk[pick.id]===1,lvlNow:p.lvl}},
+
   streak(p){p=p||this.load();const has=new Set(p.days);const d=new Date();let today=has.has(dayKey(d));if(!today)d.setDate(d.getDate()-1);let n=0;while(has.has(dayKey(d))){n++;d.setDate(d.getDate()-1)}return{n,today}},
   week(p){p=p||this.load();const has=new Set(p.days),out=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);out.push({k:dayKey(d),dow:d.getDay(),on:has.has(dayKey(d)),today:i===0})}return out},
   stats(p){p=p||this.load();const L=LET[LANG],it=p.items,pct=pre=>{let r=0,w=0;for(const k in it)if(k[0]===pre){r+=it[k].r;w+=it[k].w}return r+w?Math.round(100*r/(r+w)):null};
@@ -439,14 +476,18 @@ let progFrom="ovStart";
 function openProg(from){
   progFrom=from||"ovStart";const p=Prog.load(),st=Prog.stats(p),days=t("days");
   $("pgH").textContent=t("pg.h");$("pgName").placeholder=t("pg.ph");$("pgName").value=p.name||"";
-  $("pgStreak").textContent=st.streak.n>0?t("pg.s",{n:st.streak.n}):t("pg.s0");
+  $("pgStreak").innerHTML=t("pg.top",{n:Prog.overall(p)})+(st.streak.n>0?" · "+t("pg.s",{n:st.streak.n}):'<span class="sh"> · '+t("pg.s0")+'</span>');
   $("pgWeek").innerHTML=Prog.week(p).map(d=>'<span class="'+(d.today?"td":"")+(d.on?" on":"")+'"><i>'+(d.on?"⭐":"")+'</i>'+days[d.dow]+'</span>').join("");
-  const rows=[["🐤",st.total?t("pg.L",{a:st.known,b:st.total}):"",st.total?100*st.known/st.total:0,st.Lp!=null],["⭐",st.S!=null?t("pg.S",{p:st.S}):t("pg.none"),st.S||0,st.S!=null],["✈️",st.M!=null?t("pg.M",{p:st.M}):t("pg.none"),st.M||0,st.M!=null]];
-  rows[0][1]=st.Lp!=null?rows[0][1]:t("pg.none");
-  $("pgRows").innerHTML=rows.map(r=>'<div class="pgr"><span class="e">'+r[0]+'</span><div class="m"><span>'+r[1]+'</span><div class="bar"><b style="width:'+Math.round(r[2])+'%"></b></div></div></div>').join("");
+  const lv=Prog.lv(p),LV=n=>" · "+t("pg.lvl",{n}),nst=Object.keys(Prog.stickers(p)).length;
+  const rows=[["🐤",st.Lp!=null?t("pg.L",{a:st.known,b:st.total})+LV(lv.L):t("pg.none"),st.total?100*st.known/st.total:0],["⭐",(st.S!=null?t("pg.S",{p:st.S}):t("pg.none"))+LV(lv.S),st.S||0],["✈️",(st.M!=null?t("pg.M",{p:st.M}):t("pg.none"))+LV(lv.M),st.M||0]];
+  $("pgRows").innerHTML=rows.map(r=>'<div class="pgr"><span class="e">'+r[0]+'</span><div class="m"><span>'+r[1]+'</span><div class="bar"><b style="width:'+Math.round(r[2])+'%"></b></div></div></div>').join("")+'<button type="button" class="pgr btn" id="pgBk"><span class="e">🎴</span><div class="m"><span>'+t("pg.bk",{a:nst,b:STK_ALL.length}).replace("🎴 ","")+'</span><div class="bar"><b style="width:'+Math.round(100*nst/STK_ALL.length)+'%"></b></div></div></button>';
+  $("pgBk").onclick=()=>openBook();
   $("pgPrac").textContent=st.Lp==null?"":st.prac.length?t("pg.prac",{l:st.prac.join(" · ")}):t("pg.pracOk");
   $("pgShare").textContent=t("pg.share");$("pgBack").textContent=t("pg.back");showOv("ovProg");
 }
+function openBook(){const own=Prog.stickers();$("bkH").textContent=t("bk.h");$("bkN").textContent=t("bk.n",{a:Object.keys(own).length,b:STK_ALL.length});
+  $("bkGrid").innerHTML=STK_ALL.map(s=>own[s.id]?'<div class="bk '+s.r+'">'+s.id+(own[s.id]>1?'<b>×'+own[s.id]+'</b>':'')+'</div>':'<div class="bk no '+s.r+'">?</div>').join("");$("bkBack").textContent=t("pg.back");showOv("ovBook")}
+$("bkBack").addEventListener("click",()=>openProg(progFrom));
 $("pgBtn").addEventListener("click",()=>openProg("ovStart"));
 $("pgBtn2").addEventListener("click",()=>openProg("ovEnd"));
 $("pgBack").addEventListener("click",()=>{if(progFrom==="ovStart")goHome();else showOv(progFrom)});
@@ -470,7 +511,8 @@ function drawCard(){
   /* 3 ô thành tích */
   const tiles=[["🐤",st.Lp!=null?st.known+"/"+st.total:"—",t("cd.L")],["⭐",st.S!=null?st.S+"%":"—",t("cd.S")],["✈️",st.M!=null?st.M+"%":"—",t("cd.M")]];
   tiles.forEach((tl,i)=>{const cx=70+60+i*300+135-0,left=110+i*300;x.fillStyle="#fff4e6";rr(x,left,690,270,210,30);x.fill();x.fillStyle="#3b2a1d";x.font="800 54px "+E+F;x.fillText(tl[0],left+135,735);x.font="800 76px "+F;x.fillText(tl[1],left+135,810);x.fillStyle="#8a6f5a";fitText(x,tl[2],28,"800 $px "+F,240);x.fillText(tl[2],left+135,868)});
-  if(st.Lp!=null&&st.prac.length){x.fillStyle="#8a6f5a";const s2=t("cd.prac",{l:st.prac.join(" · ")});fitText(x,s2,32,"800 $px "+F,860);x.fillText(s2,W2/2,950)}
+  x.fillStyle="#ff5a1f";const s1=t("cd.lv",{n:Prog.overall(p),a:Object.keys(Prog.stickers(p)).length,b:STK_ALL.length});fitText(x,s1,38,"800 $px "+F,860);x.fillText(s1,W2/2,932);
+  if(st.Lp!=null&&st.prac.length){x.fillStyle="#8a6f5a";const s2=t("cd.prac",{l:st.prac.join(" · ")});fitText(x,s2,28,"800 $px "+F,860);x.fillText(s2,W2/2,978)}
   x.fillStyle="#fff";x.font="800 38px "+F;x.fillText(t("cd.foot")+" "+location.host,W2/2,1042);
   return cv2}
 function rr(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
