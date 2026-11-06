@@ -12,14 +12,14 @@ function main(PF, OPTS) {
   const css = document.createElement("style");
   css.textContent = `
 /* --- 1. TOÀN CẢNH: bàn chơi phủ kín màn hình, bảng điểm nổi như kính --- */
-.app[data-layout=full]{position:fixed;inset:0;padding:0;gap:0;z-index:2}
+.app[data-layout=full]{position:fixed;top:0;bottom:0;left:50%;width:min(100vw,calc(100dvh*.8));transform:translateX(-50%);padding:0;gap:0;z-index:2;overflow:hidden}
 .app[data-layout=full] .side{display:contents}
-.app[data-layout=full] .play{position:fixed;inset:0;width:100vw;height:100dvh;aspect-ratio:auto;border-radius:0;box-shadow:none}
+.app[data-layout=full] .play{position:fixed;inset:0;width:100%;height:100%;aspect-ratio:auto;border-radius:0;box-shadow:none}
 .app[data-layout=full] .top{position:fixed;z-index:30;top:max(8px,env(safe-area-inset-top));left:10px;right:10px;pointer-events:none}
 .app[data-layout=full] .top h1{background:rgba(255,255,255,.55);color:#3b2a1d;padding:6px 12px;border-radius:999px;flex:0 1 auto;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);font-size:16px}
 .app[data-layout=full] .top .ib{pointer-events:auto;background:rgba(255,255,255,.6);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:#3b2a1d}
 .app[data-layout=full] .top h1{margin-right:auto}
-.app[data-layout=full] .ask{position:fixed;z-index:30;top:calc(max(8px,env(safe-area-inset-top)) + 54px);left:50%;transform:translateX(-50%);width:min(92vw,440px);background:rgba(255,255,255,.62);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#3b2a1d}
+.app[data-layout=full] .ask{position:fixed;z-index:30;top:calc(max(8px,env(safe-area-inset-top)) + 54px);left:50%;transform:translateX(-50%);width:min(92%,440px);background:rgba(255,255,255,.62);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#3b2a1d}
 .app[data-layout=full] .hud{position:fixed;z-index:30;left:10px;right:10px;bottom:max(10px,env(safe-area-inset-bottom));padding:6px 14px;border-radius:999px;background:rgba(255,255,255,.6);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#3b2a1d}
 .app[data-layout=full] .ov{padding:130px 16px 80px}
 /* --- 2. BUỒNG LÁI: khung kim loại đinh tán, bảng đồng hồ đèn LED bên dưới --- */
