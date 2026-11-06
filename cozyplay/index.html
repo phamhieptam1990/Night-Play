@@ -96,6 +96,12 @@ html.playing,html.playing body{overflow:hidden;height:100%}
 #home svg{width:24px;height:24px;filter:drop-shadow(0 0 1px rgba(0,0,0,.95)) drop-shadow(0 0 1.5px rgba(0,0,0,.8)) drop-shadow(0 1px 3px rgba(0,0,0,.5))}
 #home:hover{background:rgba(255,255,255,.4)}
 #home:focus-visible{outline:3px solid #fff;outline-offset:3px}
+/* Ẩn khi đang chơi; chỉ hiện khi người dùng vuốt (cảm ứng) hoặc đưa chuột lên mép trên */
+#home{opacity:0;pointer-events:none;transform:translateY(-10px);transition:opacity .25s ease,transform .25s ease}
+#home.show,#home:focus-visible{opacity:1;pointer-events:auto;transform:none}
+#edge{display:none}
+#stage.edge #edge{display:block;position:absolute;top:0;left:0;right:0;height:22px;z-index:1}   /* dự phòng nếu game khác domain (không nghe được cử chỉ bên trong) */
+@media (prefers-reduced-motion:reduce){#home{transition:none}}
 /* Màn hình loading: phủ kín, che mọi giật hình lúc vào fullscreen, mờ dần khi game sẵn sàng */
 #loader{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;
   background:linear-gradient(180deg,var(--hero1),var(--bg));pointer-events:none;transition:opacity .35s ease,visibility .35s}
@@ -241,6 +247,7 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
   </div>
   <div id="tleft" class="left" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg><span></span></div>
   <div id="tbar"><b></b></div>
+  <div id="edge" aria-hidden="true"></div>
   <button id="home" type="button" aria-label="Back">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
   </button>
@@ -515,6 +522,24 @@ const stage = $("stage");
 let frame = null, pushed = false;
 const AUTO_FULLSCREEN = false;   // true: tự bật Fullscreen API (có thể giật trên một số máy)
 const MIN_LOAD = 700;            // Màn loading hiện tối thiểu (ms) để không nháy
+/* Nút quay lại: hiện vài giây khi vào game (làm gợi ý), sau đó ẩn; vuốt xuống từ phần trên màn hình hoặc đưa chuột lên mép trên để hiện lại */
+let homeT = 0;
+function revealHome(ms = 3000){
+  const h = $("home"); h.classList.add("show"); clearTimeout(homeT);
+  homeT = setTimeout(function again(){ if(h.matches(":hover") || document.activeElement === h){ homeT = setTimeout(again, 1500); } else h.classList.remove("show"); }, ms);
+}
+function hideHome(){ clearTimeout(homeT); $("home").classList.remove("show"); }
+function watchSwipe(doc){
+  let sx = 0, sy = 0, on = false;
+  doc.addEventListener("touchstart", e => { const t = e.touches[0], H = (doc.documentElement.clientHeight || innerHeight); sx = t.clientX; sy = t.clientY; on = e.touches.length === 1 && sy <= H * 0.3; }, { passive:true });
+  doc.addEventListener("touchmove", e => { if(!on) return; const t = e.touches[0]; if(Math.hypot(t.clientX - sx, t.clientY - sy) >= 40){ on = false; revealHome(); } }, { passive:true });
+  doc.addEventListener("mousemove", e => { if(e.clientY <= 56) revealHome(); }, { passive:true });
+}
+watchSwipe(document);
+(() => { const e = $("edge"); let sy = null;
+  e.addEventListener("touchstart", ev => { sy = ev.touches[0].clientY; }, { passive:true });
+  e.addEventListener("touchmove", ev => { if(sy !== null && Math.abs(ev.touches[0].clientY - sy) >= 15){ sy = null; revealHome(); } }, { passive:true });
+  e.addEventListener("mouseenter", () => revealHome()); })();
 function openGame(g){
   if(frame) return;
   window.Track && Track.play("cozyplay", g.id, g.name.vi || g.name.en);   // đếm lượt chơi ẩn danh
@@ -527,11 +552,13 @@ function openGame(g){
   stage.appendChild(f);
   stage.classList.add("on");
   document.documentElement.classList.add("playing");   // khoá cuộn trang nền
-  startTimer();
+  startTimer(); revealHome(3500);
   document.title = f.title;
   let started = false;
   // Chỉ hiện game khi: đã tải xong + loading đủ MIN_LOAD
   f.addEventListener("load", () => {
+    try{ if(f.contentDocument){ watchSwipe(f.contentDocument); stage.classList.remove("edge"); } else stage.classList.add("edge"); }
+    catch(e){ stage.classList.add("edge"); }   // game khác domain: dùng dải cảm ứng ở mép trên
     setTimeout(() => { if(frame !== f) return; f.classList.add("show"); loader.classList.add("off"); },
       Math.max(0, MIN_LOAD - (performance.now() - t0)));
   });
@@ -550,6 +577,7 @@ function openGame(g){
 function closeGame(){
   if(!frame) return;
   window.Track && Track.stop();
+  hideHome();
   frame.remove(); frame = null; stopTimer();          // xoá iframe: giải phóng bộ nhớ, dừng âm thanh
   stage.classList.remove("on");
   document.documentElement.classList.remove("playing");
