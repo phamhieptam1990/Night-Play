@@ -219,7 +219,7 @@ window.NPS = (function () {
 
     function showBrag(game, score) {
       var g = GAMES[game]; if (!leaderboard || !g || !g.board || score < 1) return;
-      sheet.innerHTML = '<h3>' + esc(T("bragT")) + '</h3><p>' + esc(T("scoreLine")) + ': <b>' + score + '</b>. ' + esc(T("bragP")) + '</p>' +
+      sheet.innerHTML = '<h3>' + esc(T("bragT")) + '</h3><p>' + esc(gameName(game)) + ' · ' + esc(T("scoreLine")) + ': <b>' + score + '</b>. ' + esc(T("bragP")) + '</p>' +
         '<input id="npsNick" maxlength="16" autocomplete="nickname" placeholder="' + esc(T("nick")) + '" value="' + esc(nickGet()) + '"><p class="nps-err" id="npsErr" role="alert"></p>' +
         '<div class="nps-row"><button class="nps-s" id="npsNo" type="button">' + esc(T("skip")) + '</button><button class="nps-p" id="npsYes" type="button">' + esc(T("brag")) + '</button></div>';
       sheet.hidden = false;

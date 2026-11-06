@@ -37,7 +37,7 @@ main{flex:1;min-height:0;width:100%;max-width:640px;margin:0 auto;padding:10px 1
 .hero{flex:none;text-align:center}
 .hero h1{margin:4px 0 0;font-size:clamp(22px,min(5vw,5vh),32px);line-height:1.15}
 .hero p{margin:4px 0 0;font-size:14px;color:var(--ink2)}
-.bar{flex:none;display:flex;justify-content:center;gap:10px;flex-wrap:wrap;align-items:center}
+.bar{flex:none;display:flex;justify-content:center;gap:8px 10px;flex-wrap:wrap;align-items:center}
 .card{flex:1;min-height:0;display:flex;flex-direction:column;background:var(--panel);border-radius:22px;box-shadow:var(--shadow);padding:6px 12px;overflow:hidden}
 #list{flex:1;min-height:0;overflow:hidden}
 .row{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:8px;height:52px;border-bottom:1px solid var(--line)}
@@ -74,7 +74,7 @@ main{flex:1;min-height:0;width:100%;max-width:640px;margin:0 auto;padding:10px 1
 <main>
   <header class="hero"><h1 id="h"></h1><p id="sub"></p></header>
   <div class="bar">
-    <select id="game" class="seg" style="display:none;padding:8px 12px;height:44px" aria-label="Game"></select>
+    <div class="seg" role="group" id="gameSeg" aria-label="Game"></div>
     <div class="seg" role="group" id="period"><button type="button" data-p="day" aria-pressed="false"></button><button type="button" data-p="week" aria-pressed="true"></button><button type="button" data-p="all" aria-pressed="false"></button></div>
   </div>
   <section class="card" aria-live="polite">
@@ -92,10 +92,10 @@ main{flex:1;min-height:0;width:100%;max-width:640px;margin:0 auto;padding:10px 1
 const $ = id => document.getElementById(id), root = document.documentElement;
 const TXT = {
   vi: { back: "Night Play", h: "Bảng xếp hạng", sub: "Chỉ những người chủ động khoe điểm mới có tên ở đây.", day: "Hôm nay", week: "7 ngày", all: "Mọi thời đại", empty: "Chưa ai khoe điểm. Hãy là người đầu tiên!", you: "(bạn)", pts: "điểm",
-        best: "Điểm cao nhất của bạn trên máy này", brag: "Khoe điểm", nick: "Biệt danh", bad: "Biệt danh chưa hợp lệ (2–16 ký tự, không chứa link/email).", slow: "Thao tác quá nhanh, thử lại sau.", err: "Có lỗi, vui lòng thử lại.", ok: "Đã lên bảng xếp hạng!", none: "Bạn chưa có điểm. Hãy chơi một ván!",
+        best: "Điểm cao nhất của bạn ở", brag: "Khoe điểm", nick: "Biệt danh", bad: "Biệt danh chưa hợp lệ (2–16 ký tự, không chứa link/email).", slow: "Thao tác quá nhanh, thử lại sau.", err: "Có lỗi, vui lòng thử lại.", ok: "Đã lên bảng xếp hạng!", none: "Bạn chưa có điểm ở game này. Hãy chơi một ván!",
         home: "Trang chủ", priv: "Quyền riêng tư", help: "Kết quả chơi hộ", rights: "Bảo lưu mọi quyền.", theme: "Sáng / Tối", err2: "Không tải được bảng xếp hạng.", loading: "Đang tải…" },
   en: { back: "Night Play", h: "Leaderboard", sub: "Only people who chose to show off their score appear here.", day: "Today", week: "7 days", all: "All time", empty: "Nobody has shown off a score yet. Be the first!", you: "(you)", pts: "pts",
-        best: "Your best score on this device", brag: "Show off", nick: "Nickname", bad: "Invalid nickname (2–16 characters, no links/emails).", slow: "Too many tries, please wait.", err: "Something went wrong, please try again.", ok: "You're on the leaderboard!", none: "No score yet. Play a round!",
+        best: "Your best score in", brag: "Show off", nick: "Nickname", bad: "Invalid nickname (2–16 characters, no links/emails).", slow: "Too many tries, please wait.", err: "Something went wrong, please try again.", ok: "You're on the leaderboard!", none: "No score in this game yet. Play a round!",
         home: "Home", priv: "Privacy", help: "Shared results", rights: "All rights reserved.", theme: "Light / Dark", err2: "Couldn't load the leaderboard.", loading: "Loading…" }
 };
 const L = () => TXT[root.lang === "en" ? "en" : "vi"];
@@ -112,12 +112,12 @@ function texts() {
   $("fHome").textContent = t.home; $("fPriv").textContent = t.priv; $("fHelp").textContent = t.help; $("copy").textContent = "© " + new Date().getFullYear() + " Night Play. " + t.rights;
   $("themeBtn").setAttribute("aria-label", t.theme);
   document.querySelectorAll("#langSeg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.l === root.lang)));
-  const sel = $("game"); sel.innerHTML = GAME_IDS.map(g => '<option value="' + g + '"' + (g === game ? " selected" : "") + ">" + esc(NPS.gameName(g)) + "</option>").join(""); sel.style.display = GAME_IDS.length > 1 ? "" : "none";
+  $("gameSeg").innerHTML = GAME_IDS.map(g => '<button type="button" data-g="' + g + '" aria-pressed="' + (g === game) + '">' + esc(NPS.gameName(g)) + "</button>").join("");
 }
 function renderMine() {
   const t = L(), b = myBest(), el = $("mine");
   if (!b) { el.innerHTML = '<span style="color:var(--muted)">' + esc(t.none) + "</span>"; return; }
-  el.innerHTML = '<span>' + esc(t.best) + ': <b>' + b + '</b></span><form id="bragF"><input id="bragN" maxlength="16" autocomplete="nickname" placeholder="' + esc(t.nick) + '" value="' + esc(NPS.nickGet()) + '" aria-label="' + esc(t.nick) + '"><button type="submit">' + esc(t.brag) + '</button></form><span class="err" id="bragE" role="alert"></span>';
+  el.innerHTML = '<span>' + esc(t.best) + " " + esc(NPS.gameName(game)) + ': <b>' + b + '</b></span><form id="bragF"><input id="bragN" maxlength="16" autocomplete="nickname" placeholder="' + esc(t.nick) + '" value="' + esc(NPS.nickGet()) + '" aria-label="' + esc(t.nick) + '"><button type="submit">' + esc(t.brag) + '</button></form><span class="err" id="bragE" role="alert"></span>';
   $("bragF").onsubmit = e => { e.preventDefault(); const n = $("bragN").value.trim().replace(/\s+/g, " "), btn = e.target.querySelector("button"); btn.disabled = true;
     NPS.submitScore(game, b, n).then(() => { NPS.nickSet(n); $("bragE").style.color = "var(--ok)"; $("bragE").textContent = t.ok; load(); })
       .catch(x => { btn.disabled = false; $("bragE").style.color = ""; $("bragE").textContent = x.message === "badNick" ? t.bad : x.message === "slow" ? t.slow : t.err; }); };
@@ -137,7 +137,7 @@ function load() {
 function setLang(l, save) { root.lang = l; if (save) try { localStorage.setItem("lang", l); } catch (e) {} texts(); renderMine(); if (last) draw(last); }
 document.querySelectorAll("#langSeg button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.l, true)));
 document.querySelectorAll("#period button").forEach(b => b.addEventListener("click", () => { period = b.dataset.p; texts(); load(); }));
-$("game").addEventListener("change", e => { game = e.target.value; renderMine(); load(); });
+$("gameSeg").addEventListener("click", e => { const b = e.target.closest("button[data-g]"); if (!b || b.dataset.g === game) return; game = b.dataset.g; last = null; texts(); renderMine(); load(); });
 $("themeBtn").addEventListener("click", () => { const n = root.dataset.theme === "dark" ? "light" : "dark"; root.dataset.theme = n; document.querySelector("meta[name=theme-color]").content = n === "dark" ? "#0E1020" : "#F3F0FA"; try { localStorage.setItem("theme", n); } catch (e) {} });
 let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(load, 200); });
 texts(); renderMine(); requestAnimationFrame(load); if (document.fonts && document.fonts.ready) document.fonts.ready.then(load);
