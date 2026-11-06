@@ -20,7 +20,7 @@ const APPS = {
 };
 /* Trang quay về: ?from= (đường dẫn tương đối, an toàn) → referrer cùng origin → mặc định */
 const HOME = (() => {
-  const ok = p => p && /^[\w\-./]+$/.test(p) && !p.startsWith("/") && !p.includes("..") && !p.includes("//") && !/subscribe\.html/.test(p);
+  const ok = p => p && /^[\w\-./]+(#[\w-]+)?$/.test(p) && !p.startsWith("/") && !p.includes("..") && !p.includes("//") && !/subscribe\.html/.test(p);
   const f = new URLSearchParams(location.search).get("from");
   if(ok(f)) return f;
   try{
@@ -336,7 +336,7 @@ const i18n = {
   perDay:"/ngày", perWeek:"/tuần", perMonth:"/tháng", perYear:"/năm",
   noteDay:"Dùng thử, không cam kết", noteWeek:"≈ 72.000đ/tháng", noteMonth:"Rẻ hơn ly cà phê", noteYear:"≈ 16.600đ/tháng", save:"Tiết kiệm",
   compareH:"Free và Night Pass", feat:"Tính năng", free:"Free", pass:"Night Pass",
-  f1:"Số game", f1a:"3 game", f1b:"Tất cả + game mới", f2:"Thời gian chơi", f2a:"30 phút/ngày", f2b:"Không giới hạn", f3:"Hẹn giờ đi ngủ tự đặt", f4:"Quảng cáo / theo dõi", f4v:"Không",
+  f1:"Số game", f1a:"3 game", f1b:"Tất cả + game mới", f2:"Thời gian chơi", f2a:"30 phút/ngày", f2b:"Không giới hạn", f3:"Hẹn giờ đi ngủ tự đặt", f5:"Chế độ & độ khó", f5a:"Cổ điển", f5b:"Vô tận, Thử thách ngày, Boss, 4 độ khó", f6:"Chủ đề, thống kê, huy hiệu", f6a:"Không", f6b:"Có", f4:"Quảng cáo / theo dõi", f4v:"Không",
   acctH:"Tài khoản", email:"Email (để nhận hoá đơn và khôi phục gói)", emailBad:"Vui lòng nhập email hợp lệ.",
   methodH:"Phương thức thanh toán", orderH:"Đơn hàng", plan:"Gói", dur:"Thời hạn", expires:"Hết hạn", total:"Tổng cộng", days:"ngày",
   buy:"Xác nhận thanh toán", toPay:"Thanh toán", change:"Đổi gói", step1:"Chọn gói", step2:"Thanh toán", stepsL:"Các bước", inc1:"Tất cả game, cả game mới", inc2:"Chơi không giới hạn thời gian", inc3:"Không quảng cáo, không theo dõi cá nhân", valid:"Hiệu lực {n} ngày · không tự gia hạn", perDayAbout:"≈ {p}/ngày", descDay:"Dùng thử Night Pass trong 24 giờ, phù hợp để trải nghiệm trước khi quyết định.", descWeek:"Một tuần thoải mái cho kỳ nghỉ cuối tuần hoặc một đợt chơi ngắn.", descMonth:"Lựa chọn phổ biến nhất: đủ dài để chơi đều mỗi ngày với giá dễ chịu.", descYear:"Dùng cả năm với giá tốt nhất, rẻ hơn mua theo tháng.", fine:"Không tự động gia hạn. Hết hạn bạn quay về gói Free, chúng tôi sẽ nhắc trước 1 ngày. Giá đã gồm thuế (nếu có).",
@@ -350,7 +350,7 @@ const i18n = {
   perDay:"/day", perWeek:"/week", perMonth:"/month", perYear:"/year",
   noteDay:"Try it, no commitment", noteWeek:"≈ 72,000₫/month", noteMonth:"Cheaper than a coffee", noteYear:"≈ 16,600₫/month", save:"Save",
   compareH:"Free vs Night Pass", feat:"Feature", free:"Free", pass:"Night Pass",
-  f1:"Games", f1a:"3 games", f1b:"All + new releases", f2:"Play time", f2a:"30 min/day", f2b:"Unlimited", f3:"Custom bedtime timer", f4:"Ads / tracking", f4v:"None",
+  f1:"Games", f1a:"3 games", f1b:"All + new releases", f2:"Play time", f2a:"30 min/day", f2b:"Unlimited", f3:"Custom bedtime timer", f5:"Modes & difficulty", f5a:"Classic", f5b:"Endless, Daily challenge, Boss, 4 difficulties", f6:"Themes, stats, badge", f6a:"No", f6b:"Yes", f4:"Ads / tracking", f4v:"None",
   acctH:"Account", email:"Email (for receipt and restoring your pass)", emailBad:"Please enter a valid email.",
   methodH:"Payment method", orderH:"Order", plan:"Plan", dur:"Duration", expires:"Expires", total:"Total", days:"days",
   buy:"Confirm payment", toPay:"Pay", change:"Change plan", step1:"Choose plan", step2:"Payment", stepsL:"Steps", inc1:"Every game, including new ones", inc2:"Unlimited play time", inc3:"No ads, no personal tracking", valid:"Valid for {n} days · no auto-renewal", perDayAbout:"≈ {p}/day", descDay:"Try Night Pass for 24 hours. A good way to see it before you decide.", descWeek:"A comfortable week for a weekend break or a short play streak.", descMonth:"The most popular choice: long enough to play daily at an easy price.", descYear:"The whole year at the best price, cheaper than paying monthly.", fine:"No auto-renewal. When it ends you return to Free; we remind you 1 day before. Prices include tax where applicable.",
@@ -425,7 +425,7 @@ function renderCmp(){
    `<thead><tr><th>${T("feat")}</th><th>${T("free")}</th><th class="pro">${crown}${T("pass")}</th></tr></thead><tbody>` +
    row("f1", T("f1a"), T("f1b")) + row("f2", T("f2a"), T("f2b")) +
    row("f3", "", "", true).replace(/<td class="pro">(.*?)<\/td>/, `<td class="pro">${ck}</td>`) +
-   row("f4", T("f4v"), T("f4v"), false) + "</tbody>";
+   row("f5", T("f5a"), T("f5b")) + row("f6", T("f6a"), T("f6b")) + row("f4", T("f4v"), T("f4v"), false) + "</tbody>";
 }
 function renderMethods(){
   const box = $("methods"); box.textContent = "";

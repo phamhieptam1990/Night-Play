@@ -129,7 +129,7 @@ async function grant(c, order, txId) {
 /* ===== HANDLERS ===== */
 const routes = [];
 const route = (method, re, fn) => routes.push({ method, re, fn });
-const out = (status, body) => ({ status, body });
+const out = (status, body, type) => ({ status, body, type });   // type: trả văn bản thô (vd. JavaScript) thay vì JSON
 
 route("POST", /^\/api\/orders$/, async ({ body, ip }) => {
   if (await limited("o:" + ip, 10)) return out(429, { error: "rate_limited" });
@@ -313,7 +313,7 @@ route("GET", /^\/api\/admin\/stats$/, async ({ headers, ip, query }) => {
   const denied = await adminGuard(headers, ip); if (denied) return denied;
   const days = Math.min(365, Math.max(1, parseInt(query.get("days"), 10) || 30));
   const { rows: [{ start }] } = await db.query("select (((now() at time zone $1)::date - ($2::int - 1))::timestamp at time zone $1) as start", [TZ, days]);
-  const [tot, daily, plans, users, passes, review, traffic, games, prevGames, live] = await Promise.all([
+  const [tot, daily, plans, users, passes, review, traffic, games, prevGames, live, paywall] = await Promise.all([
     db.query(`select
         count(*) filter (where status = 'paid' and paid_at >= $1)::int paid_period,
         coalesce(sum(amount) filter (where status = 'paid' and paid_at >= $1), 0)::bigint revenue_period,
@@ -339,7 +339,8 @@ route("GET", /^\/api\/admin\/stats$/, async ({ headers, ip, query }) => {
     db.query(`select site, game, sum(plays)::int plays from stats_daily
       where game <> '' and day >= (($1::timestamptz at time zone $2)::date - $3::int) and day < ($1::timestamptz at time zone $2)::date
       group by site, game`, [start, TZ, days]),
-    liveNow()
+    liveNow(),
+    db.query(`select split_part(key, ':', 1) as f, split_part(key, ':', 2) as k, sum(n)::int n from paywall_daily where day >= ($1::timestamptz at time zone $2)::date group by 1, 2`, [start, TZ])
   ]);
   const t = tot.rows[0];
   const byPlan = Object.fromEntries(plans.rows.map(r => [r.plan, r]));
@@ -364,6 +365,8 @@ route("GET", /^\/api\/admin\/stats$/, async ({ headers, ip, query }) => {
                avgMin: r.plays ? Math.round(Number(r.secs) / r.plays / 6) / 10 : 0, prevPlays: prev ? prev.plays : 0 };
     }),
     live,
+    paywall: { view: paywall.rows.filter(r => r.k === "view").reduce((a, r) => a + r.n, 0), click: paywall.rows.filter(r => r.k === "click").reduce((a, r) => a + r.n, 0), trial: paywall.rows.filter(r => r.k === "trial").reduce((a, r) => a + r.n, 0),
+      byFeature: paywall.rows.map(r => ({ feature: r.f, kind: r.k, n: r.n })) },
     plans: Object.keys(PLANS).map(id => ({ plan: id, price: PLANS[id].amount, orders: byPlan[id] ? byPlan[id].n : 0, revenue: byPlan[id] ? Number(byPlan[id].revenue) : 0 }))
   });
 });
@@ -438,7 +441,8 @@ route("POST", /^\/api\/scores$/, async ({ body, ip }) => {
   const nick = String(body.nick || "").trim().replace(/\s+/g, " ");
   if (g.kids ? !kidNickOk(nick) : !nickOk(nick)) return out(400, { error: "bad_nick" });
   if (await limited("sc:" + ipHash(ip), 6, 3600000)) return out(429, { error: "slow_down" });
-  await db.query("insert into scores(game, nick, score, day) values ($1, $2, $3, (now() at time zone $4)::date)", [body.game, nick, score, TZ]);
+  const pro = !!(await passFromToken(body.pass));   // huy hiệu Night Pass: máy chủ tự kiểm tra, không lưu token
+  await db.query("insert into scores(game, nick, score, day, pro) values ($1, $2, $3, (now() at time zone $4)::date, $5)", [body.game, nick, score, TZ, pro]);
   return out(200, { ok: true });
 });
 route("GET", /^\/api\/scores$/, async ({ query }) => {
@@ -447,9 +451,9 @@ route("GET", /^\/api\/scores$/, async ({ query }) => {
   const limit = Math.min(30, Math.max(3, parseInt(query.get("limit") || "10", 10) || 10));
   const today = "(now() at time zone $2)::date", cond = period === "day" ? `day = ${today}` : period === "week" ? `day >= ${today} - 6` : "$2::text is not null";
   const { rows } = await db.query(
-    `select nick, max(score) as score, max(day) as day from scores where game = $1 and ${cond}
+    `select nick, max(score) as score, max(day) as day, bool_or(pro) as pro from scores where game = $1 and ${cond}
      group by nick order by score desc, min(created_at) asc limit $3`, [game, TZ, limit]);
-  return out(200, { game, period, rows: rows.map((r, i) => ({ rank: i + 1, nick: r.nick, score: r.score, day: String(r.day instanceof Date ? r.day.toISOString() : r.day).slice(0, 10) })) });
+  return out(200, { game, period, rows: rows.map((r, i) => ({ rank: i + 1, nick: r.nick, score: r.score, pro: !!r.pro, day: String(r.day instanceof Date ? r.day.toISOString() : r.day).slice(0, 10) })) });
 });
 
 /* Chơi hộ: 1) chủ nhân tạo  2) người chơi hộ nhận (chỉ 1 lần)  3) người chơi hộ gửi kết quả đã mã hoá  4) chủ nhân lấy rồi xác nhận → xoá */
@@ -480,6 +484,40 @@ route("POST", new RegExp("^/api/relay/(" + RID + ")/ack$"), async ({ m, body }) 
   if (typeof body.token !== "string" || body.token.length < 16 || body.token.length > 64) return out(400, { error: "bad_input" });
   const r = await db.query("delete from relays where id = $1 and owner_hash = $2", [m[1], sha256hex(body.token)]);
   return r.rowCount ? out(200, { ok: true }) : out(403, { error: "forbidden" });
+});
+
+/* ===== BẢN TRẢ PHÍ CỦA GAME (Night Pass) =====
+   Mã chế độ/độ khó/chủ đề/thống kê KHÔNG nằm trong thư mục công khai: chỉ giao khi có token Night Pass còn hạn (hoặc bản dùng thử 1 lượt/ngày). */
+async function passFromToken(tok) {
+  const t = readToken(tok); if (!t) return null;
+  const p = await passState(t.u); return p.active ? p : null;
+}
+const authPass = headers => { const m = /^Bearer (.+)$/.exec(headers.authorization || ""); return m ? passFromToken(m[1]) : Promise.resolve(null); };
+route("GET", /^\/api\/pro\/dap-deadline\.js$/, async ({ headers, query, ip }) => {
+  const pass = await authPass(headers); let trial = false;
+  if (!pass) {
+    if (query.get("trial") !== "1") return out(401, { error: "pass_required" });
+    if (await limited("pt:" + ipHash(ip), 1, 86400000)) return out(429, { error: "trial_used" });      // dùng thử: 1 lượt mỗi ngày
+    trial = true;
+    await db.query("insert into paywall_daily(day, key, n) values ((now() at time zone $1)::date, 'endless:trial', 1) on conflict (day, key) do update set n = paywall_daily.n + 1", [TZ]);
+  }
+  return out(200, require("./pro/dap-deadline").source({ trial }), "application/javascript; charset=utf-8");
+});
+/* Thử thách ngày: hạt giống + mục tiêu do máy chủ quyết định (giờ Việt Nam), chỉ cho người có Night Pass */
+route("GET", /^\/api\/pro\/daily$/, async ({ headers }) => {
+  if (!(await authPass(headers))) return out(401, { error: "pass_required" });
+  const day = new Intl.DateTimeFormat("en-CA", { timeZone: TZ }).format(new Date());
+  const h = crypto.createHmac("sha256", CFG.tokenSecret).update("daily|dap-deadline|" + day).digest();
+  return out(200, { day, seed: h.readUInt32BE(0), goal: [300, 350, 400, 450, 500][h[4] % 5] });
+});
+/* Đếm lượt xem / bấm vào tính năng bị khóa (ẩn danh, chỉ số tổng hợp theo ngày) */
+const PAYWALL_KEYS = new Set(["endless", "daily", "boss", "diff", "skin", "stats"]);
+route("POST", /^\/api\/paywall$/, async ({ body, ip }) => {
+  const f = String(body.f || ""), k = String(body.k || "");
+  if (!PAYWALL_KEYS.has(f) || !["view", "click", "trial"].includes(k)) return out(400, { error: "bad_event" });
+  if (await limited("pw:" + ipHash(ip), 60, 3600000)) return out(429, { error: "slow_down" });
+  await db.query("insert into paywall_daily(day, key, n) values ((now() at time zone $1)::date, $2, 1) on conflict (day, key) do update set n = paywall_daily.n + 1", [TZ, f + ":" + k]);
+  return out(200, { ok: true });
 });
 
 route("GET", /^\/api\/health$/, async () => {

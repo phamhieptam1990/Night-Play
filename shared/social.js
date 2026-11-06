@@ -148,8 +148,10 @@ window.NPS = (function () {
   /* ---------- bảng xếp hạng ---------- */
   var nickGet = function () { try { return localStorage.getItem("np_nick") || ""; } catch (e) { return ""; } };
   var nickSet = function (n) { try { localStorage.setItem("np_nick", n); } catch (e) {} };
+  function passToken() { try { var p = JSON.parse(localStorage.getItem("pass")); return p && p.token || ""; } catch (e) { return ""; } }
   function submitScore(game, score, nick) {
-    return call("POST", "/scores", { game: game, score: score, nick: nick }).then(function (r) {
+    var body = { game: game, score: score, nick: nick }, t = passToken(); if (t) body.pass = t;   // máy chủ tự kiểm tra Night Pass để gắn huy hiệu
+    return call("POST", "/scores", body).then(function (r) {
       if (r.status === 200) return true;
       throw new Error(r.status === 429 ? "slow" : r.body && r.body.error === "bad_nick" ? "badNick" : "err");
     });
@@ -338,7 +340,9 @@ window.NPS = (function () {
     addEventListener("message", function (e) {
       var f = stage.querySelector("iframe"); if (e.origin !== location.origin || !f || e.source !== f.contentWindow || !e.data || e.data.np !== 1) return;
       if (e.data.type === "start") { hideSheet(); lastScore = 0; }
-      else if (e.data.type === "result") { var game = curGame(); lastScore = e.data.score | 0; setTimeout(function () { if (stage.classList.contains("on")) showBrag(game, e.data.score | 0); }, 700); }
+      else if (e.data.type === "result") { var game = curGame(), ex = e.data.extra || {}; lastScore = e.data.score | 0;
+        var ranked = !ex.mode || (ex.mode === "classic" && (!ex.diff || ex.diff === "normal"));   // bảng xếp hạng chỉ nhận chế độ Cổ điển, độ khó Thường (công bằng)
+        if (ranked) setTimeout(function () { if (stage.classList.contains("on")) showBrag(game, e.data.score | 0); }, 700); }
     });
     new MutationObserver(function () { if (!stage.classList.contains("on")) { hideSheet(); clearInterval(shareTimer); } }).observe(stage, { attributes: true, attributeFilter: ["class"] });
 

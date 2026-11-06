@@ -153,6 +153,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 .empty{color:var(--muted);padding:32px 0;text-align:center}
 .pager{flex:none;min-height:57px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--grid)}
 .pager .pg{display:flex;gap:6px;align-items:center}
+@media (max-height:640px),(max-width:480px){#pwHint{display:none}}
 .pager .btn{padding:4px 10px;min-width:34px}
 .hint{color:var(--muted);font-size:12px}
 
@@ -302,6 +303,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
           <div class="card-h"><h2 data-i18n="plansTitle"></h2><span class="sub" id="planSub"></span></div>
           <div class="rank" id="plans"></div>
           <div class="hint" id="planHint"></div>
+          <div class="hint" id="pwHint"></div>
         </div>
         <div class="card panel p-games">
           <div class="card-h"><h2 data-i18n="gamesTitle"></h2><span class="sub" id="gamesSub"></span></div>
@@ -386,7 +388,7 @@ const I18N = {
     asof:"Cập nhật {time}", asofTz:"Giờ Việt Nam (GMT+7)", menu:"Tuỳ chọn", panelsLabel:"Chọn khung hiển thị", pnRev:"Doanh thu", pnTraf:"Lưu lượng", pnPlans:"Gói", pnGames:"Game hot", pnLive:"Đang chơi",
     revTitle:"Doanh thu theo ngày", trafTitle:"Lưu lượng truy cập", views:"Lượt truy cập", plays:"Lượt chơi",
     viewTable:"Xem dạng bảng", viewChart:"Xem dạng biểu đồ",
-    plansTitle:"Doanh thu theo gói", ordersN:"{n} đơn", plansHint:"Chỉ tính đơn đã thanh toán trong {n} ngày.",
+    paywallHint:"Chế độ khóa: {v} lượt xem · {c} bấm nâng cấp · {t} dùng thử.", plansTitle:"Doanh thu theo gói", ordersN:"{n} đơn", plansHint:"Chỉ tính đơn đã thanh toán trong {n} ngày.",
     gamesTitle:"Game hot", gamesSub:"theo lượt chơi · {n} ngày", gamesEmpty:"Chưa có lượt chơi nào trong {n} ngày.",
     liveTitle:"Đang chơi", liveSub:"cập nhật mỗi 30 giây", livePeople:"người đang chơi", liveEmpty:"Hiện chưa có ai đang chơi.", liveMore:"và {n} game khác",
     playNote:"trong {n} game", playNone:"Chưa có ai đang chơi",
@@ -422,7 +424,7 @@ const I18N = {
     asof:"Updated {time}", asofTz:"Vietnam time (GMT+7)", menu:"Options", panelsLabel:"Choose panel", pnRev:"Revenue", pnTraf:"Traffic", pnPlans:"Plans", pnGames:"Hot games", pnLive:"Live",
     revTitle:"Revenue by day", trafTitle:"Traffic", views:"Visits", plays:"Plays",
     viewTable:"View as table", viewChart:"View as chart",
-    plansTitle:"Revenue by plan", ordersN:"{n} orders", plansHint:"Paid orders only, last {n} days.",
+    paywallHint:"Locked modes: {v} views · {c} upgrade clicks · {t} trials.", plansTitle:"Revenue by plan", ordersN:"{n} orders", plansHint:"Paid orders only, last {n} days.",
     gamesTitle:"Top games", gamesSub:"by plays · {n} days", gamesEmpty:"No plays in the last {n} days.",
     liveTitle:"Playing now", liveSub:"refreshes every 30 s", livePeople:"playing now", liveEmpty:"Nobody is playing right now.", liveMore:"and {n} more games",
     playNote:"across {n} games", playNone:"Nobody playing",
@@ -659,7 +661,9 @@ function drawPlans() {
   $("plans").innerHTML = rows.map(r =>
     '<div class="rk-row"><div class="rk-name">' + esc(planName(r.plan)) + '</div><div class="rk-bar"><div class="rk-fill" style="width:calc((100% - 150px) * ' + (r.revenue / max) + ')"></div>' +
     '<div class="rk-val">' + esc(compact(r.revenue)) + " ₫ <small>· " + esc(t("ordersN", { n: r.orders })) + "</small></div></div></div>").join("");
+  const pw = stats.paywall || { view: 0, click: 0, trial: 0 };
   $("planHint").textContent = t("plansHint", { n: days });
+  $("pwHint").textContent = pw.view || pw.click || pw.trial ? t("paywallHint", { v: nf.format(pw.view), c: nf.format(pw.click), t: nf.format(pw.trial) }) : "";
 }
 /* game hot: xếp theo lượt chơi trong kỳ; mũi tên so với kỳ liền trước cùng độ dài (có ký hiệu, không chỉ dựa vào màu) */
 function trend(r) {

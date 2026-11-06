@@ -85,7 +85,25 @@ h1 span{color:var(--accent)}
 .big{font-family:var(--display);font-size:20px;background:var(--accent);color:var(--on-accent);border:0;border-radius:999px;padding:12px 32px;cursor:pointer;box-shadow:0 5px 0 color-mix(in srgb,var(--accent) 55%,#000)}
 .big:active{transform:translateY(4px);box-shadow:0 1px 0 color-mix(in srgb,var(--accent) 55%,#000)}
 .tip{font-size:13px;color:var(--muted)}
-/* ===== Luôn vừa một màn hình: thu gọn dần theo chiều cao ===== */
+/* ===== Chọn chế độ / độ khó / giao diện (bản trả phí mở khóa bằng Night Pass) ===== */
+.sel{font-size:12.5px;color:var(--muted);font-weight:600}
+.sheet{position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:12px;background:rgba(8,9,20,.68);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.sheet[hidden]{display:none}
+.sheet-in{width:min(430px,100%);max-height:calc(100dvh - 24px);overflow:hidden;background:var(--panel);color:var(--ink);border:2px solid var(--line);border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:10px;box-shadow:0 16px 48px rgba(0,0,0,.5)}
+.sh-h{display:flex;align-items:center;justify-content:space-between;gap:8px;font-family:var(--display);font-size:18px}
+.sec small{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:5px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:600 13px var(--body);padding:7px 12px;border-radius:999px;border:2px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;min-height:36px}
+.chip.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.chip.lock{opacity:.75}.chip i{font-style:normal;font-size:11px}
+.chip:focus-visible,.sh-f button:focus-visible,.pw-row a:focus-visible,.pw-row button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.sdesc{margin:6px 0 0;font-size:13px;color:var(--muted);line-height:1.4}
+.sh-f{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.proNote{font-size:12.5px;color:var(--muted)}
+.pw-in p{margin:0;font-size:14px;line-height:1.45;color:var(--muted)}.pw-in ul{margin:2px 0 0;padding-left:18px;font-size:13.5px;line-height:1.5}
+.pw-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}.pw-row a.big{font-size:16px;padding:10px 22px;text-decoration:none;display:inline-block}
+@media (max-height:620px){.sdesc,.pw-in ul{display:none}.sheet-in{gap:6px;padding:10px 12px}.sec small{margin-bottom:3px}.chip{padding:5px 10px;min-height:32px}.pw-row a.big{padding:8px 18px}}
+@media (max-height:420px){.sec small{display:none}.chip{font-size:12px;padding:4px 9px;min-height:28px}.sh-h{font-size:15px}}
+/* ===== Luôn vừa một màn hình: thu gọn dần theo chiều cao ===== 
 @media (max-height:760px){.overlay{gap:8px;padding:12px}.overlay .tip{display:none}.stat{padding:4px 10px}.stat b{font-size:21px}.shout{min-height:20px;font-size:15px}}
 @media (max-height:640px){.overlay p{display:none}.overlay .legend span{padding:2px 8px;font-size:12px}.overlay .big{font-size:17px;padding:9px 26px}.overlay h2{font-size:clamp(18px,5vw,24px)}.overlay .rank{font-size:clamp(16px,5vw,22px)}}
 @media (max-height:600px){body{gap:8px;padding-top:60px}.top h1{font-size:22px}.icon-btn{padding:4px 12px}.overlay .legend{display:none}.overlay{gap:6px}.stat small{font-size:10px}}
@@ -112,12 +130,13 @@ h1 span{color:var(--accent)}
 <div class="top">
   <h1>Đập <span>Deadline</span></h1>
   <button class="icon-btn" id="soundBtn" aria-pressed="true">Âm thanh: Bật</button>
+  <button class="icon-btn" id="setupBtn" type="button" aria-haspopup="dialog">⚙ Chế độ</button>
 </div>
 
 <div class="stats">
   <div class="stat"><small>Điểm</small><b id="score">0</b></div>
   <div class="stat"><small>Combo</small><b id="combo">×0</b></div>
-  <div class="stat"><small>Còn lại</small><b id="time">45s</b></div>
+  <div class="stat"><small id="timeLbl">Còn lại</small><b id="time">45s</b></div>
 </div>
 <div class="timebar"><i id="bar"></i></div>
 
@@ -127,11 +146,34 @@ h1 span{color:var(--accent)}
     <h2>Hết giờ làm thì đập nốt deadline</h2>
     <p>Phiền toái văn phòng sẽ ló lên từ bàn làm việc. Chạm thật nhanh để đóng dấu <b>XONG</b>. Gặp ly cà phê thì chạm để được thêm giờ.</p>
     <div class="legend"><span>📧 Email gấp</span><span>📅 Họp</span><span>📞 Sếp gọi</span><span>☕ +3 giây</span></div>
+    <div class="sel" id="selLine"></div>
     <button class="big" id="startBtn">Bắt đầu đập</button>
     <div class="tip">45 giây · chơi xong nhớ đứng dậy vươn vai · v3</div>
   </div>
 </div>
 <div class="shout" id="shout" aria-live="polite"></div>
+
+<div class="sheet" id="setup" hidden role="dialog" aria-modal="true" aria-labelledby="setupT">
+  <div class="sheet-in">
+    <div class="sh-h"><span id="setupT">Chế độ chơi</span><button class="icon-btn" id="setupX" type="button" aria-label="Đóng">✕</button></div>
+    <div class="sec"><small>Chế độ</small><div class="chips" id="chipModes"></div><p class="sdesc" id="modeDesc"></p></div>
+    <div class="sec"><small>Độ khó</small><div class="chips" id="chipDiffs"></div></div>
+    <div class="sec"><small>Giao diện</small><div class="chips" id="chipSkins"></div></div>
+    <div class="sh-f"><button class="icon-btn" id="statsBtn" type="button">📊 Thống kê</button><span class="proNote" id="proNote"></span></div>
+  </div>
+</div>
+<div class="sheet" id="statsP" hidden role="dialog" aria-modal="true" aria-labelledby="statsT">
+  <div class="sheet-in">
+    <div class="sh-h"><span id="statsT">Thống kê của bạn</span><button class="icon-btn" id="statsX" type="button" aria-label="Đóng">✕</button></div>
+    <div id="statsBody"></div>
+  </div>
+</div>
+<div class="sheet" id="pay" hidden role="dialog" aria-modal="true" aria-labelledby="payT">
+  <div class="sheet-in pw-in">
+    <div class="sh-h"><span id="payT"></span><button class="icon-btn" id="payX0" type="button" aria-label="Đóng">✕</button></div>
+    <div id="payBody"></div>
+  </div>
+</div>
 
 <script>
 const PESTS=[
@@ -173,6 +215,18 @@ for(let i=0;i<9;i++){
 
 let score=0,combo=0,best=0,timeLeft=ROUND,running=false,paused=false,spawnT=0,tickT=0,lastHit=0,sound=true,ac=null;
 
+/* ===== CHẾ ĐỘ / ĐỘ KHÓ / GIAO DIỆN =====
+   Lõi miễn phí chỉ có chế độ "Cổ điển". Các chế độ trả phí (Vô tận, Thử thách ngày, Boss), độ khó, giao diện và thống kê
+   được máy chủ giao dưới dạng mã riêng (/api/pro/dap-deadline.js) CHỈ KHI có Night Pass còn hạn, rồi đăng ký vào DD. */
+const DD={rnd:Math.random,modes:{},diffs:{},skins:{"default":{id:"default"}},hooks:{},pro:null,sel:{mode:"classic",diff:"normal",skin:"default"},want:null,baseThwack:null};
+DD.modes.classic={id:"classic",title:"Tan làm!",timeLabel:"Còn lại",
+  progress:()=>1-timeLeft/ROUND,stay:p=>1250-p*550,stay2:p=>1150-p*500,gap:p=>720-p*360,dbl:p=>p>.4?.35:0,coffeeP:.08,
+  tick(){timeLeft-=.1;if(timeLeft<=0){timeLeft=0;end()}},timeText:()=>Math.ceil(timeLeft)+"s",timeBar:()=>timeLeft/ROUND};
+DD.diffs.normal={id:"normal",stay:1,gap:1,score:1};
+let mode=DD.modes.classic,diff=DD.diffs.normal,runT0=0;
+DD.g={PESTS,COFFEE,ROUND,$,cells,say:t=>say(t),render:()=>render(),end:()=>end(),
+  get timeLeft(){return timeLeft},set timeLeft(v){timeLeft=v},get score(){return score},get combo(){return combo},get best(){return best},get running(){return running}};
+
 function audio(){if(!sound)return null;try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();if(ac.state==="suspended")ac.resume();return ac}catch(e){return null}}
 function thwack(good){
   const a=audio();if(!a)return;const t=a.currentTime;
@@ -196,24 +250,24 @@ function show(st,item,stay){
   st.note.querySelector(".lbl").textContent=item.lbl;
   void st.note.offsetWidth;st.note.classList.add("up");
   clearTimeout(st.timer);
-  st.timer=setTimeout(()=>{ if(st.up){ hide(st); if(!item.coffee&&!paused){combo=0;render()} } },stay);
+  st.timer=setTimeout(()=>{ if(st.up){ hide(st); if(!item.coffee&&!paused){combo=0;render();mode.onMiss&&mode.onMiss(item)} } },stay);
 }
 function hide(st){st.up=false;st.item=null;st.note.classList.remove("up")}
 
 function spawn(){
   if(!running)return;
-  const free=cells.filter(c=>!c.up);
-  const progress=1-timeLeft/ROUND;            // speeds up over the round
+  const free=cells.filter(c=>!c.up),R=DD.rnd;
+  const progress=Math.min(1,mode.progress());            // càng chơi càng nhanh
   if(free.length){
-    const st=free[Math.floor(Math.random()*free.length)];
-    const item=Math.random()<.08?COFFEE:PESTS[Math.floor(Math.random()*PESTS.length)];
-    show(st,item,1250-progress*550);
-    if(progress>.4&&Math.random()<.35&&free.length>1){
-      const st2=free.filter(c=>c!==st)[Math.floor(Math.random()*(free.length-1))];
-      show(st2,PESTS[Math.floor(Math.random()*PESTS.length)],1150-progress*500);
+    const st=free[Math.floor(R()*free.length)];
+    const item=mode.pick?mode.pick(R,progress):(R()<mode.coffeeP?COFFEE:PESTS[Math.floor(R()*PESTS.length)]);
+    show(st,item,mode.stay(progress)*diff.stay);
+    if(free.length>1&&R()<mode.dbl(progress)){
+      const st2=free.filter(c=>c!==st)[Math.floor(R()*(free.length-1))];
+      show(st2,PESTS[Math.floor(R()*PESTS.length)],mode.stay2(progress)*diff.stay);
     }
   }
-  spawnT=setTimeout(spawn,720-progress*360);
+  spawnT=setTimeout(spawn,mode.gap(progress)*diff.gap);
 }
 
 function hit(st,e){
@@ -223,18 +277,19 @@ function hit(st,e){
   st.up=false;st.note.classList.add("hit");
   setTimeout(()=>{st.note.classList.remove("hit");if(!st.up)st.note.classList.remove("up")},180);
   const mark=document.createElement("div");mark.className="stampmark"+(item.coffee?" good":"");
-  mark.innerHTML="<span>"+(item.coffee?"+3S":"XONG")+"</span>";st.el.appendChild(mark);setTimeout(()=>mark.remove(),520);
+  mark.innerHTML="<span>"+(item.coffee?(mode.coffeeText||"+3S"):"XONG")+"</span>";st.el.appendChild(mark);setTimeout(()=>mark.remove(),520);
   let gained=0;
-  if(item.coffee){timeLeft=Math.min(ROUND,timeLeft+3);thwack(true)}
+  if(item.coffee){if(mode.onCoffee)mode.onCoffee();else timeLeft=Math.min(ROUND,timeLeft+3);thwack(true)}
   else{
     const now=performance.now();combo=(now-lastHit<1400)?combo+1:1;lastHit=now;best=Math.max(best,combo);
-    gained=item.pts*(1+Math.floor(combo/5));score+=gained;thwack(false);hudPulse(1600);
+    gained=Math.round(item.pts*(1+Math.floor(combo/5))*diff.score);score+=gained;thwack(false);hudPulse(1600);
     if(combo>0&&combo%5===0)say("Combo ×"+combo+"! "+SHOUTS[Math.floor(Math.random()*SHOUTS.length)]);
   }
-  const f=document.createElement("div");f.className="float";f.textContent=item.coffee?"+3s":"+"+gained;
+  const f=document.createElement("div");f.className="float";f.textContent=item.coffee?(mode.coffeeText||"+3s"):"+"+gained;
   const r=st.el.getBoundingClientRect(),dr=desk.parentElement.getBoundingClientRect();
   f.style.left=(r.left-dr.left+r.width/2-16)+"px";f.style.top=(r.top-dr.top+8)+"px";
   desk.parentElement.appendChild(f);setTimeout(()=>f.remove(),800);
+  DD.hooks.onHit&&DD.hooks.onHit(st,gained);
   render();
 }
 
@@ -242,7 +297,7 @@ let shoutT=0;
 function say(t){$("shout").textContent=t;clearTimeout(shoutT);shoutT=setTimeout(()=>$("shout").textContent="",1400)}
 function render(){
   $("score").textContent=score;$("combo").textContent="×"+combo;
-  $("time").textContent=Math.ceil(timeLeft)+"s";$("bar").style.transform="scaleX("+(timeLeft/ROUND)+")";
+  $("time").textContent=mode.timeText();$("bar").style.transform="scaleX("+Math.max(0,Math.min(1,mode.timeBar()))+")";$("timeLbl").textContent=mode.timeLabel||"Còn lại";
   if(running&&timeLeft<=10)document.body.classList.remove("hud-dim");   /* sắp hết giờ: luôn sáng */
 }
 
@@ -253,33 +308,39 @@ function hudPulse(ms) {   /* bảng điểm sáng lên, rồi mờ dần nếu �
 }
 function start(from){
   audio();
+  const resumed=!!(from&&typeof from==='object'&&from.timeLeft);       // người chơi hộ luôn chơi Cổ điển / Thường
+  mode=resumed?DD.modes.classic:(DD.modes[DD.sel.mode]||DD.modes.classic);
+  diff=resumed?DD.diffs.normal:(mode.lockDiff?DD.diffs[mode.lockDiff]:(DD.diffs[DD.sel.diff]||DD.diffs.normal));
+  DD.rnd=(mode.rngFactory&&mode.rngFactory())||Math.random;
   score=0;combo=0;best=0;timeLeft=ROUND;running=true;paused=false;lastHit=0;
   if(from&&typeof from==='object'&&from.timeLeft){score=Math.max(0,from.score|0);combo=Math.max(0,from.combo|0);best=Math.max(0,from.best|0);timeLeft=Math.min(ROUND,Math.max(3,+from.timeLeft||ROUND))}   /* chơi tiếp lượt đang dở của bạn bè */
-  hudPulse(3500);
+  mode.init&&mode.init();runT0=performance.now();hudPulse(3500);
   cells.forEach(hide);$("overlay").hidden=true;render();say("Bắt đầu! Đập hết đi!");window.NP&&NP.start();
   clearTimeout(spawnT);spawn();
   clearInterval(tickT);
   tickT=setInterval(tick,100);
 }
-function tick(){timeLeft-=.1;if(timeLeft<=0){timeLeft=0;end()}render()}
+function tick(){mode.tick();render()}
 function pauseRound(){if(!running||paused)return;paused=true;clearInterval(tickT);clearTimeout(spawnT)}   /* trang cha mở bảng chia sẻ */
 function resumeRound(){if(!running||!paused)return;paused=false;clearInterval(tickT);tickT=setInterval(tick,100);spawn()}
 function end(){
   running=false;paused=false;clearTimeout(hudT);document.body.classList.remove("hud-dim");clearInterval(tickT);clearTimeout(spawnT);cells.forEach(c=>{clearTimeout(c.timer);hide(c)});
   let r=RANKS[0];for(const x of RANKS)if(score>=x[0])r=x;
-  let hi=0;try{hi=+localStorage.getItem("dapdeadline-hi")||0;if(score>hi)localStorage.setItem("dapdeadline-hi",score)}catch(e){}
+  const HK=(mode.id==="classic"&&diff.id==="normal")?"dapdeadline-hi":"dd-hi-"+mode.id+"-"+diff.id;   // kỷ lục riêng cho từng chế độ / độ khó
+  let hi=0;try{hi=+localStorage.getItem(HK)||0;if(score>hi)localStorage.setItem(HK,score)}catch(e){}
   const ov=$("overlay");
-  ov.innerHTML='<h2>Tan làm!</h2><div class="rank"></div><p class="desc"></p>'+
+  ov.innerHTML='<h2></h2><div class="rank"></div><p class="desc"></p>'+
     '<div class="legend"><span>Điểm: <b>'+score+'</b></span><span>Combo cao nhất: <b>×'+best+'</b></span>'+
     '<span>Kỷ lục: <b>'+Math.max(hi,score)+'</b></span></div>'+
-    '<button class="big" id="againBtn">Đập thêm ván nữa</button>'+
+    '<div class="sel" id="selLine"></div><button class="big" id="againBtn">Đập thêm ván nữa</button>'+
     '<div class="tip">Hít sâu 4 giây, thở ra 4 giây, rồi quay lại làm việc nhé.</div>';
-  ov.querySelector(".rank").textContent=r[1];ov.querySelector(".desc").textContent=r[2]+(score>hi&&hi>0?" Kỷ lục mới!":"");
+  ov.querySelector("h2").textContent=mode.title||"Tan làm!";ov.querySelector(".rank").textContent=r[1];ov.querySelector(".desc").textContent=r[2]+(score>hi&&hi>0?" Kỷ lục mới!":"")+(mode.endLine?" "+mode.endLine(score):"");
   ov.hidden=false;
-  window.NP&&NP.result({score:score,extra:{combo:best}});
+  window.NP&&NP.result({score:score,extra:{combo:best,mode:mode.id,diff:diff.id}});
+  DD.hooks.onEnd&&DD.hooks.onEnd({mode:mode.id,diff:diff.id,score:score,combo:best,dur:Math.round((performance.now()-runT0)/1000)});
   if(window.NP&&NP.helper){   /* người chơi hộ: chỉ 1 lượt, không chơi lại */
     ov.querySelector("#againBtn").remove();ov.querySelector(".tip").textContent="Cảm ơn bạn đã chơi hộ! Kết quả đang được gửi cho bạn của bạn.";
-  }else{$("againBtn").addEventListener("click",start);$("againBtn").focus();}
+  }else{$("againBtn").addEventListener("click",()=>go(null));$("againBtn").focus();}
 }
 
 let resumeFrom=(window.NP&&NP.helper&&NP.initialState&&NP.initialState.timeLeft)?NP.initialState:null;
@@ -288,11 +349,95 @@ if(resumeFrom){   /* người chơi hộ: tiếp tục đúng chỗ bạn bè đ
   ov.querySelector("p").textContent="Còn "+Math.ceil(Math.min(ROUND,resumeFrom.timeLeft))+" giây, đang "+(resumeFrom.score|0)+" điểm. Đập thật nhanh để nâng điểm cho bạn nhé!";
   $("startBtn").textContent="Chơi tiếp";
 }
-$("startBtn").addEventListener("click",()=>{const f=resumeFrom;resumeFrom=null;start(f)});
+let starting=false;
+async function go(from){
+  if(starting)return;starting=true;const m=DD.modes[DD.sel.mode]||DD.modes.classic,sb=$("startBtn");
+  try{ if(!(from&&from.timeLeft)&&m.prepare){ if(sb)sb.disabled=true; await m.prepare() } }
+  catch(e){ say("Chưa tải được thử thách hôm nay. Thử lại nhé."); starting=false; if(sb)sb.disabled=false; return }
+  starting=false;if(sb)sb.disabled=false;start(from);
+}
+$("startBtn").addEventListener("click",()=>{const f=resumeFrom;resumeFrom=null;go(f)});
 if(window.NP){
-  NP.state(()=>running?{score:score,combo:combo,best:best,timeLeft:Math.round(timeLeft*10)/10}:null);
+  NP.state(()=>running&&mode.id==="classic"&&diff.id==="normal"?{score:score,combo:combo,best:best,timeLeft:Math.round(timeLeft*10)/10}:null);
   NP.onPause(pauseRound,resumeRound);
 }
+/* ===== Giao diện chọn chế độ, khóa Night Pass, tải mã bản trả phí ===== */
+DD.catalog={
+  modes:[{id:"classic",name:"Cổ điển",ico:"⏱️",desc:"45 giây đập thật nhanh. Miễn phí cho mọi người.",free:1},
+         {id:"endless",name:"Vô tận",ico:"♾️",desc:"3 mạng, càng chơi càng nhanh. Ly cà phê hồi thêm 1 mạng."},
+         {id:"daily",name:"Thử thách ngày",ico:"📅",desc:"Mỗi ngày một đề giống nhau cho mọi người, kèm mục tiêu riêng và chuỗi ngày chơi."},
+         {id:"boss",name:"Boss deadline",ico:"👔",desc:"Sếp gọi dồn dập. Đạt 450 điểm để hạ boss và nhận huy hiệu."}],
+  diffs:[{id:"easy",name:"Dễ"},{id:"normal",name:"Thường",free:1},{id:"hard",name:"Khó"},{id:"rage",name:"Sếp nổi giận"}],
+  skins:[{id:"default",name:"Mặc định",free:1},{id:"cafe",name:"Cà phê"},{id:"retro",name:"Retro"}]
+};
+const LS={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const escH=t=>String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const unlocked=(kind,id)=>{const c=DD.catalog[kind].find(x=>x.id===id);return !!(c&&c.free)||!!DD[kind][id]};
+const KEY={modes:"mode",diffs:"diff",skins:"skin"};
+const passToken=()=>{try{const p=JSON.parse(localStorage.getItem("pass"));return p&&p.token}catch(e){return null}};
+const track=(f,k)=>{try{fetch("/api/paywall",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({f,k}),keepalive:true}).catch(()=>{})}catch(e){}};
+function applySkin(){const sk=DD.skins[DD.sel.skin]?DD.sel.skin:"default";if(sk==="default")delete document.documentElement.dataset.skin;else document.documentElement.dataset.skin=sk}
+function openSheet(id){$(id).hidden=false;const f=$(id).querySelector("button,a");f&&f.focus({preventScroll:true})}
+function closeSheet(id){$(id).hidden=true}
+DD.refresh=function(){
+  const w=DD.want||(DD.want=Object.assign({mode:"classic",diff:"normal",skin:"default"},LS.get("dd-sel",{})));
+  for(const kind of ["modes","diffs","skins"]){const k=KEY[kind];DD.sel[k]=unlocked(kind,w[k])?w[k]:(kind==="modes"?"classic":kind==="diffs"?"normal":"default")}
+  applySkin();
+  for(const kind of ["modes","diffs","skins"]){
+    const box=$({modes:"chipModes",diffs:"chipDiffs",skins:"chipSkins"}[kind]);box.textContent="";
+    for(const x of DD.catalog[kind]){
+      const lock=!unlocked(kind,x.id),on=DD.sel[KEY[kind]]===x.id,b=document.createElement("button");
+      b.type="button";b.className="chip"+(on?" on":"")+(lock?" lock":"");b.setAttribute("aria-pressed",on);
+      b.innerHTML=(x.ico?x.ico+" ":"")+escH(x.name)+(lock?' <i aria-hidden="true">🔒</i>':"");
+      if(lock)b.setAttribute("aria-label",x.name+" (cần Night Pass)");
+      b.onclick=()=>{ if(lock){DD.paywall(kind==="modes"?x.id:kind==="diffs"?"diff":"skin");return} DD.want[KEY[kind]]=x.id;LS.set("dd-sel",DD.want);DD.refresh() };
+      box.appendChild(b);
+    }
+  }
+  const m=DD.catalog.modes.find(x=>x.id===DD.sel.mode),d=DD.catalog.diffs.find(x=>x.id===DD.sel.diff);
+  let desc=m.desc;if(DD.sel.mode==="daily"&&DD.dailyInfo)desc+=" Hôm nay: đạt "+DD.dailyInfo.goal+" điểm."+(DD.streakInfo&&DD.streakInfo()?" 🔥 "+DD.streakInfo()+" ngày liên tiếp.":"");
+  $("modeDesc").textContent=desc;
+  const lockD=DD.modes[DD.sel.mode]&&DD.modes[DD.sel.mode].lockDiff;
+  const sl=$("selLine");if(sl)sl.textContent=m.ico+" "+m.name+" · "+(lockD?"Thường":d.name)+(DD.sel.skin!=="default"?" · "+DD.catalog.skins.find(x=>x.id===DD.sel.skin).name:"");
+  $("proNote").textContent=DD.pro?(DD.pro.trial?"Đang dùng thử 1 lượt Vô tận":"Night Pass đang hoạt động ✓"):"Chế độ 🔒 cần Night Pass";
+  $("statsBtn").textContent=(DD.pro&&DD.pro.stats?"📊 ":"🔒 ")+"Thống kê";
+};
+const subUrl=()=>"../../../subscribe.html?from="+encodeURIComponent("cozyplay/index.html#dap-deadline")+"&plan=month";
+const INFO={endless:["♾️ Chế độ Vô tận","3 mạng, càng chơi càng nhanh. Xem bạn trụ được bao lâu."],daily:["📅 Thử thách ngày","Mỗi ngày một đề giống nhau cho mọi người, có mục tiêu và chuỗi ngày chơi."],boss:["👔 Boss deadline","Sếp gọi dồn dập. Hạ boss để nhận huy hiệu."],
+  diff:["🔥 4 mức độ khó","Từ Dễ tới \"Sếp nổi giận\" với điểm thưởng cao hơn."],skin:["🎨 Chủ đề giao diện","Văn phòng đêm, Cà phê, Retro."],stats:["📊 Thống kê tiến bộ","Lịch sử ván, biểu đồ, combo cao nhất, so sánh với tuần trước."]};
+DD.paywall=function(f){
+  track(f,"view");
+  const today=new Date().toLocaleDateString("en-CA"),trial=f==="endless"&&LS.get("dd-trial","")!==today;
+  $("payT").textContent=INFO[f][0];
+  $("payBody").innerHTML='<p>'+escH(INFO[f][1])+'</p><ul><li>Vô tận · Thử thách ngày · Boss deadline</li><li>4 độ khó, chủ đề giao diện, hiệu ứng thêm</li><li>Thống kê, chuỗi ngày chơi, huy hiệu trên bảng xếp hạng</li></ul>'+
+    '<div class="pw-row"><a class="big" id="payGo" target="_top" href="'+subUrl()+'">Xem Night Pass</a>'+(trial?'<button class="icon-btn" id="payTrial" type="button">Dùng thử 1 lượt Vô tận hôm nay</button>':'')+'<button class="icon-btn" id="payX" type="button">Để sau</button></div>';
+  $("payGo").onclick=()=>track(f,"click");
+  $("payX").onclick=()=>closeSheet("pay");
+  if(trial)$("payTrial").onclick=async()=>{
+    try{ await DD.loadPro(true); LS.set("dd-trial",today); DD.want=Object.assign(DD.want||{},{mode:"endless"}); DD.refresh(); closeSheet("pay"); closeSheet("setup"); say("Chơi thử Vô tận: 1 lượt!") }
+    catch(e){ $("payBody").insertAdjacentHTML("afterbegin",'<p style="color:var(--stamp)">Hôm nay đã dùng thử rồi. Mở Night Pass để chơi không giới hạn.</p>') }
+  };
+  openSheet("pay");
+};
+DD.loadPro=async function(trial){
+  const t=passToken(),r=await fetch("/api/pro/dap-deadline.js"+(trial?"?trial=1":""),{headers:t?{Authorization:"Bearer "+t}:{},cache:"no-store"});
+  if(!r.ok)throw new Error("pro_"+r.status);
+  DD.baseThwack=window.thwack;new Function("DD",await r.text())(DD);
+};
+DD.lockPro=function(){   /* hết lượt dùng thử: trả về bản miễn phí */
+  for(const k of ["endless","daily","boss"])delete DD.modes[k];for(const k of ["easy","hard","rage"])delete DD.diffs[k];delete DD.skins.cafe;delete DD.skins.retro;
+  DD.pro=null;DD.hooks.onHit=null;DD.hooks.onEnd=null;if(DD.baseThwack)window.thwack=DD.baseThwack;DD.want=Object.assign(DD.want||{},{mode:"classic",diff:"normal",skin:"default"});DD.refresh();
+};
+$("setupBtn").addEventListener("click",()=>{ if(running){say("Xong ván này rồi chọn chế độ nhé");return} DD.refresh();openSheet("setup") });
+$("setupX").addEventListener("click",()=>closeSheet("setup"));
+$("statsX").addEventListener("click",()=>closeSheet("statsP"));$("payX0").addEventListener("click",()=>closeSheet("pay"));
+$("statsBtn").addEventListener("click",()=>{ if(DD.pro&&DD.pro.stats&&DD.openStats){DD.openStats();openSheet("statsP")}else DD.paywall("stats") });
+for(const id of ["setup","statsP","pay"])$(id).addEventListener("click",e=>{if(e.target===$(id))closeSheet(id)});
+addEventListener("keydown",e=>{if(e.key==="Escape")for(const id of ["pay","statsP","setup"])if(!$(id).hidden){closeSheet(id);break}});
+if(window.NP&&NP.helper){$("setupBtn").hidden=true}   /* người chơi hộ chỉ chơi 1 lượt Cổ điển */
+DD.refresh();
+if(!(window.NP&&NP.helper)&&passToken())DD.loadPro(false).catch(()=>{});   /* có Night Pass: mở khóa các chế độ trả phí */
+
 $("soundBtn").addEventListener("click",e=>{sound=!sound;e.currentTarget.textContent="Âm thanh: "+(sound?"Bật":"Tắt");e.currentTarget.setAttribute("aria-pressed",sound)});
 render();
 </script>

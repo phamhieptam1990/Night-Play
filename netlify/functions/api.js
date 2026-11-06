@@ -16,7 +16,7 @@ exports.handler = async event => {
   const r = await handle({ method: event.httpMethod, pathname, query: new URLSearchParams(event.queryStringParameters || {}), headers, bodyText, ip });
   return {
     statusCode: r.status,
-    headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store", "Referrer-Policy": "no-referrer" },
-    body: JSON.stringify(r.body)
+    headers: { "Content-Type": r.type || "application/json; charset=utf-8", "Cache-Control": "no-store", "Referrer-Policy": "no-referrer" },
+    body: r.type ? String(r.body) : JSON.stringify(r.body)
   };
 };

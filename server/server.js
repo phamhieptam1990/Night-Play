@@ -27,9 +27,9 @@ const STATIC_ROOT = path.resolve(process.env.STATIC_ROOT || path.join(__dirname,
 const TRUST_PROXY = process.env.TRUST_PROXY === "1";
 const clientIp = req => (TRUST_PROXY && String(req.headers["x-forwarded-for"] || "").split(",")[0].trim()) || req.socket.remoteAddress;
 
-function send(res, code, obj) {
-  res.writeHead(code, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
-  res.end(JSON.stringify(obj));
+function send(res, code, obj, type) {
+  res.writeHead(code, { "Content-Type": type || "application/json; charset=utf-8", "Cache-Control": "no-store" });
+  res.end(type ? String(obj) : JSON.stringify(obj));
 }
 function readBody(req, limit = 10240) {
   return new Promise((resolve, reject) => {
@@ -80,7 +80,7 @@ const server = http.createServer(async (req, res) => {
   try { if (req.method === "POST") bodyText = await readBody(req); }
   catch (e) { return send(res, e.code || 400, { error: e.message }); }
   const r = await handle({ method: req.method, pathname: url.pathname, query: url.searchParams, headers: req.headers, bodyText, ip: clientIp(req) });
-  send(res, r.status, r.body);
+  send(res, r.status, r.body, r.type);
 });
 
 /* Hot reload (chỉ khi DEV_RELOAD=1): theo dõi file tĩnh, báo trình duyệt tải lại */

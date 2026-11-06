@@ -50,6 +50,7 @@ main{flex:1;min-height:0;width:100%;max-width:640px;margin:0 auto;padding:10px 1
 .nick{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}.nick small{font-weight:600;color:var(--muted);margin-left:6px}
 .sc{font-variant-numeric:tabular-nums;font-weight:800;font-size:18px;text-align:right}.sc small{display:block;font-weight:600;font-size:11px;color:var(--muted)}
 .me .nick{color:var(--accent)}
+.pro{color:#E8A400;margin-left:6px;font-size:13px}
 .empty{height:100%;display:grid;place-items:center;text-align:center;color:var(--muted);padding:12px}
 .mine{flex:none;display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:space-between;padding:8px 2px;border-top:1px solid var(--line);font-size:14px}
 .mine b{font-variant-numeric:tabular-nums}
@@ -140,7 +141,7 @@ function renderMine() {
 }
 function draw(rows) {
   const t = L(), me = NPS.nickGet().toLowerCase();
-  $("list").innerHTML = rows.length ? rows.map(r => '<div class="row' + (me && r.nick.toLowerCase() === me ? " me" : "") + '"><span class="rk g' + r.rank + '" aria-label="#' + r.rank + '">' + r.rank + '</span><span class="nick" title="' + esc(r.nick) + '">' + esc(r.nick) + (me && r.nick.toLowerCase() === me ? "<small>" + esc(t.you) + "</small>" : "") + '</span><span class="sc">' + r.score + "<small>" + esc(t.pts) + (period === "all" ? " · " + r.day.slice(5).split("-").reverse().join("/") : "") + "</small></span></div>").join("")
+  $("list").innerHTML = rows.length ? rows.map(r => '<div class="row' + (me && r.nick.toLowerCase() === me ? " me" : "") + '"><span class="rk g' + r.rank + '" aria-label="#' + r.rank + '">' + r.rank + '</span><span class="nick" title="' + esc(r.nick) + '">' + esc(r.nick) + (r.pro ? '<span class="pro" title="Night Pass" aria-label="Night Pass">★</span>' : "") + (me && r.nick.toLowerCase() === me ? "<small>" + esc(t.you) + "</small>" : "") + '</span><span class="sc">' + r.score + "<small>" + esc(t.pts) + (period === "all" ? " · " + r.day.slice(5).split("-").reverse().join("/") : "") + "</small></span></div>").join("")
     : '<div class="empty">' + esc(t.empty) + "</div>";
 }
 function load() {
