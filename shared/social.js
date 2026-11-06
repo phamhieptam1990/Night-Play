@@ -100,7 +100,10 @@ window.NPS = (function () {
   /* Tạo lời nhờ: mỗi game chỉ có 1 lời nhờ đang chờ/đang chơi cùng lúc (dùng lại link cũ nếu còn hiệu lực). */
   function createShare(game, base, st) {
     st = st && st.length <= 1700 ? st : "";
-    var arr = prune(), cur = arr.filter(function (s) { return s.game === game && (s.state === "open" || s.state === "claimed"); })[0];
+    return poll().catch(function () {}).then(function () { return createShare2(game, base, st); });   /* hỏi máy chủ trước: link cũ đã có người nhận thì KHÔNG dùng lại */
+  }
+  function createShare2(game, base, st) {
+    var arr = prune(), cur = arr.filter(function (s) { return s.game === game && s.state === "open"; })[0];   /* link đã có người nhận chỉ dùng được một lần → phải tạo link mới */
     if (cur) { if (cur.state === "open" && (cur.st || "") !== st) { cur.st = st; save(arr); }   /* chưa ai nhận: cập nhật tiến trình mới nhất vào link (không cần máy chủ) */
       return Promise.resolve({ share: cur, link: linkFor(cur, base), reused: true }); }
     var id = b64.enc(rnd(16)), key = b64.enc(rnd(32)), owner = b64.enc(rnd(16));
