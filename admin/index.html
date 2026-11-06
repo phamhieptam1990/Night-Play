@@ -162,25 +162,58 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 .login .go{background:var(--accent);border-color:var(--accent);color:var(--on-accent);padding:10px 12px;font-weight:700}
 .err{color:var(--bad-text);min-height:20px;font-size:13px}
 
-/* màn hình nhỏ hoặc thấp: cho phép cuộn thay vì ép vừa khung */
+/* màn hình nhỏ hoặc thấp: vẫn vừa một khung, KHÔNG cuộn — tuỳ chọn gom vào menu, mỗi lần hiện một khung, danh sách dạng thẻ */
+.pnav,#moreBtn{display:none}
+.top{position:relative}
 @media (max-width:1000px){
-  .kpis{grid-template-columns:repeat(3,minmax(0,1fr))} .hero{grid-column:1/-1}
+  .kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 @media (max-width:760px),(max-height:640px){
-  body{overflow:auto;display:block;height:auto}
-  .shell{min-height:calc(100dvh - 56px)}
-  .view,main{min-height:auto}
-  .panels{grid-template-columns:1fr;grid-template-rows:none}
-  .panels>.panel{grid-column:auto}
-  .panel{overflow:visible}
-  .chart{flex:none;height:240px}
-  .glist{justify-content:flex-start}
-  .listcard{min-height:60vh}
-  .tbl{overflow:auto}
-  table{min-width:600px}
-  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
-  input.field{min-width:0;flex:1}
+  .shell{padding:8px 12px}
+  .top{flex-wrap:nowrap;gap:8px}
+  .brand h1{display:none} .brand svg{width:30px;height:30px}
+  nav.tabs{flex:1;min-width:0}
+  .tab{flex:1;min-width:0;justify-content:center;padding:6px;font-size:13px;gap:5px;overflow:hidden;text-overflow:ellipsis}
+  #moreBtn{display:inline-grid;flex:none}
+  .tools{display:none;position:absolute;right:0;top:calc(100% + 6px);z-index:30;flex-direction:column;align-items:stretch;gap:8px;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:0 8px 28px rgba(0,0,0,.22);min-width:260px}
+  .tools.open{display:flex}
+  .tools .seg{align-self:stretch}.tools .seg button{flex:1;white-space:nowrap;padding:6px 8px}
+  .tools .ico{align-self:center}
+  .tools .asof{text-align:center}
+  main{margin-top:8px}.view{gap:8px}
+  .tile{padding:6px 10px}.tile .label{font-size:12px}
+  .tile .val,.tile.hero .val{font-size:18px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tile .note{display:none}
+  .tile.hero{grid-column:auto}
+  .pnav{display:flex;gap:6px;flex:none}
+  .pnav button{flex:1;min-width:0;border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:5px 6px;font-size:12px;color:var(--ink2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pnav button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent);font-weight:700}
+  .panels{display:flex}
+  .panels>.panel{display:none;flex:1;min-width:0}
+  .panels[data-p="rev"]>.p-rev,.panels[data-p="traf"]>.p-traf,.panels[data-p="plans"]>.p-plans,.panels[data-p="games"]>.p-games,.panels[data-p="live"]>.p-live{display:flex}
+  .toolbar .grow{display:none}
+  .field,input.field{min-width:0;flex:1}
+  .listcard{padding:0 12px}
+  .crow{height:56px;display:grid;grid-template-columns:1fr auto;gap:0 8px;align-content:center;border-bottom:1px solid var(--grid);overflow:hidden}
+  .crow>*{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .crow .c2{color:var(--muted);font-size:12px}
+  .crow .r{text-align:right}
+  .pager{min-height:48px;padding:6px 0;justify-content:center}
+  .pager>.sub:first-child,.pager [data-go=first],.pager [data-go=last]{display:none}
+  .card-h{flex-wrap:wrap;row-gap:2px}
+  .card-h h2{white-space:nowrap}
+  .card-h .legend{order:3;flex-basis:100%;justify-content:flex-start;margin:0}
+  .linkbtn{white-space:nowrap}
 }
+@media (max-width:420px){
+  .brand{display:none}
+  .tab{padding:5px 4px;font-size:12px;gap:4px}.count{min-width:16px;padding:0 4px;font-size:11px;line-height:16px}
+  .tile{padding:4px 10px}.tile .label{font-size:11.5px;line-height:1.3}.tile .val,.tile.hero .val{font-size:17px;line-height:1.25}
+  .site-foot nav{gap:0 12px}.site-foot nav a{font-size:12px}
+}
+@media (max-width:520px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:1000px) and (max-height:640px){.kpis{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media (max-width:640px){.site-foot .mark,#copy{display:none}.site-foot{padding:2px 12px}.site-foot nav a{padding:5px 0;font-size:12.5px}}
 </style>
 </head>
 <body>
@@ -210,7 +243,8 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
       <button class="tab" role="tab" id="tab-review" data-tab="review" aria-controls="v-review" aria-selected="false" tabindex="-1"><span data-i18n="tabReview"></span> <span class="count" id="reviewBadge" hidden></span></button>
       <button class="tab" role="tab" id="tab-orders" data-tab="orders" aria-controls="v-orders" aria-selected="false" tabindex="-1" data-i18n="tabOrders"></button>
     </nav>
-    <div class="tools">
+    <button class="btn ico" id="moreBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="tools" data-i18n-attr="aria-label:menu;title:menu"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg></button>
+    <div class="tools" id="tools">
       <div class="seg" role="group" data-i18n-attr="aria-label:rangeLabel" id="range">
         <button data-d="7" aria-pressed="false"></button>
         <button data-d="30" aria-pressed="true"></button>
@@ -234,7 +268,14 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
     <!-- Tổng quan / Overview -->
     <section class="view" id="v-overview" role="tabpanel" aria-labelledby="tab-overview">
       <div class="kpis" id="kpis"></div>
-      <div class="panels">
+      <div class="pnav" id="pnav" role="group" data-i18n-attr="aria-label:panelsLabel">
+        <button type="button" data-p="rev" data-i18n="pnRev" aria-pressed="true"></button>
+        <button type="button" data-p="traf" data-i18n="pnTraf" aria-pressed="false"></button>
+        <button type="button" data-p="plans" data-i18n="pnPlans" aria-pressed="false"></button>
+        <button type="button" data-p="games" data-i18n="pnGames" aria-pressed="false"></button>
+        <button type="button" data-p="live" data-i18n="pnLive" aria-pressed="false"></button>
+      </div>
+      <div class="panels" data-p="rev">
         <div class="card panel p-rev">
           <div class="card-h">
             <h2 data-i18n="revTitle"></h2>
@@ -340,7 +381,7 @@ const I18N = {
     errRate:"Thử quá nhiều lần, đợi một phút rồi thử lại.", errServer:"Lỗi máy chủ ({n}).",
     navLabel:"Mục quản trị", tabOverview:"Tổng quan", tabReview:"Cần xử lý", tabOrders:"Đơn hàng",
     rangeLabel:"Khoảng thời gian", daysN:"{n} ngày", refresh:"Làm mới", theme:"Sáng / Tối", logout:"Đăng xuất", langLabel:"Ngôn ngữ",
-    asof:"Cập nhật {time}", asofTz:"Giờ Việt Nam (GMT+7)",
+    asof:"Cập nhật {time}", asofTz:"Giờ Việt Nam (GMT+7)", menu:"Tuỳ chọn", panelsLabel:"Chọn khung hiển thị", pnRev:"Doanh thu", pnTraf:"Lưu lượng", pnPlans:"Gói", pnGames:"Game hot", pnLive:"Đang chơi",
     revTitle:"Doanh thu theo ngày", trafTitle:"Lưu lượng truy cập", views:"Lượt truy cập", plays:"Lượt chơi",
     viewTable:"Xem dạng bảng", viewChart:"Xem dạng biểu đồ",
     plansTitle:"Doanh thu theo gói", ordersN:"{n} đơn", plansHint:"Chỉ tính đơn đã thanh toán trong {n} ngày.",
@@ -376,7 +417,7 @@ const I18N = {
     errRate:"Too many attempts. Wait a minute and try again.", errServer:"Server error ({n}).",
     navLabel:"Admin sections", tabOverview:"Overview", tabReview:"Needs attention", tabOrders:"Orders",
     rangeLabel:"Time range", daysN:"{n} days", refresh:"Refresh", theme:"Light / Dark", logout:"Sign out", langLabel:"Language",
-    asof:"Updated {time}", asofTz:"Vietnam time (GMT+7)",
+    asof:"Updated {time}", asofTz:"Vietnam time (GMT+7)", menu:"Options", panelsLabel:"Choose panel", pnRev:"Revenue", pnTraf:"Traffic", pnPlans:"Plans", pnGames:"Hot games", pnLive:"Live",
     revTitle:"Revenue by day", trafTitle:"Traffic", views:"Visits", plays:"Plays",
     viewTable:"View as table", viewChart:"View as chart",
     plansTitle:"Revenue by plan", ordersN:"{n} orders", plansHint:"Paid orders only, last {n} days.",
@@ -626,7 +667,6 @@ function trend(r) {
 }
 /* bỏ bớt dòng cuối cho vừa khung (không cuộn); màn hình nhỏ cho hiện đủ */
 function fitList(box, sel, min) {
-  if (compactMode()) return 0;
   const rows = box.querySelectorAll(sel); let removed = 0;
   for (let i = rows.length; i > min && box.scrollHeight > box.clientHeight + 1; i--) { rows[i - 1].remove(); removed++; }
   return removed;
@@ -663,8 +703,8 @@ const lists = {
 };
 /* số dòng vừa khít khung (không cuộn); màn hình nhỏ dùng 10 dòng */
 function fitSize(L) {
-  if (compactMode()) return 10;
   const h = $(L.tbl).clientHeight;
+  if (compactMode()) return Math.max(3, Math.floor(h / 56));
   return Math.max(3, Math.floor((h - HEAD_H - 2) / ROW_H));
 }
 async function loadList(name, resetPage) {
@@ -711,6 +751,8 @@ for (const name of Object.keys(lists)) {
   });
 }
 function renderReview(rows) {
+  if (compactMode()) return rows.map(r => { const known = I18N.vi["res_" + r.result];
+    return '<div class="crow"><div>' + badge(RESULT_COLOR[r.result] || "var(--muted)", known ? t("res_" + r.result) : r.result, known ? t("res_" + r.result + "_tip") : "") + '</div><div class="r">' + esc(money(r.amount)) + '</div><div class="c2">' + esc(dt(r.at) + " · " + (r.code || r.email || r.content || "—")) + '</div><div class="c2 r">' + esc(r.email || "") + "</div></div>"; }).join("");
   return "<table><thead><tr><th>" + esc(t("colTime")) + "</th><th>" + esc(t("colIssue")) + '</th><th class="num">' + esc(t("colAmount")) + "</th><th>" + esc(t("colNote")) + "</th><th>" + esc(t("colCode")) + "</th><th>" + esc(t("colEmail")) + "</th></tr></thead><tbody>" +
     rows.map(r => { const known = I18N.vi["res_" + r.result];
       const label = known ? t("res_" + r.result) : r.result, tip = known ? t("res_" + r.result + "_tip") : "";
@@ -720,6 +762,8 @@ function renderReview(rows) {
         '</td><td title="' + esc(r.email) + '">' + (r.email ? esc(r.email) : '<span class="muted">—</span>') + "</td></tr>"; }).join("") + "</tbody></table>";
 }
 function renderOrders(rows) {
+  if (compactMode()) return rows.map(r => { const sk = r.status === "pending" && r.expiresAt < Date.now() ? "expired" : r.status, known = I18N.vi["st_" + sk];
+    return '<div class="crow"><div>' + esc(r.code) + " · " + esc(planName(r.plan)) + '</div><div class="r">' + esc(money(r.amount)) + '</div><div class="c2">' + esc(dt(r.createdAt) + " · " + (r.email || "")) + '</div><div class="c2 r">' + badge(STATUS_COLOR[sk] || "var(--muted)", known ? t("st_" + sk) : sk) + "</div></div>"; }).join("");
   return "<table><thead><tr><th>" + esc(t("colCreated")) + "</th><th>" + esc(t("colCode")) + "</th><th>" + esc(t("colEmail")) + "</th><th>" + esc(t("colPlan")) + '</th><th class="num">' + esc(t("colAmount")) + "</th><th>" + esc(t("colStatus")) + "</th><th>" + esc(t("colPaidAt")) + "</th></tr></thead><tbody>" +
     rows.map(r => { const sk = r.status === "pending" && r.expiresAt < Date.now() ? "expired" : r.status, known = I18N.vi["st_" + sk];
       return "<tr><td>" + dt(r.createdAt) + "</td><td>" + esc(r.code) + '</td><td title="' + esc(r.email) + '">' + esc(r.email) + "</td><td>" + esc(planName(r.plan)) +
@@ -754,7 +798,20 @@ document.querySelectorAll("[data-toggle]").forEach(btn => btn.addEventListener("
   btn.textContent = tv[k] ? t("viewChart") : t("viewTable"); btn.setAttribute("aria-pressed", String(tv[k]));
   if (!tv[k]) drawCharts();
 }));
-let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (!stats) return; if (tab === "overview") { drawCharts(); drawGames(); } else loadList(tab); }, 150); });
+let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (!stats) return; if (tab === "overview") { drawPlans(); drawGames(); drawLive(); drawCharts(); } else loadList(tab); }, 150); });
+
+/* màn hình gọn: menu tuỳ chọn + chọn khung hiển thị */
+const tools = $("tools"), more = $("moreBtn");
+const setMore = on => { tools.classList.toggle("open", on); more.setAttribute("aria-expanded", String(on)); };
+more.addEventListener("click", e => { e.stopPropagation(); setMore(!tools.classList.contains("open")); });
+document.addEventListener("click", e => { if (!e.target.closest("#tools")) setMore(false); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") setMore(false); });
+function setPanel(p) {
+  document.querySelector(".panels").dataset.p = p;
+  $("pnav").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.p === p)));
+  if (stats) { drawPlans(); drawGames(); drawLive(); drawCharts(); }
+}
+$("pnav").addEventListener("click", e => { const b = e.target.closest("button[data-p]"); if (b) setPanel(b.dataset.p); });
 
 /* ---------- footer + khởi động ---------- */
 $("fMail").href = "mailto:" + ((window.SITE && SITE.email) || "");

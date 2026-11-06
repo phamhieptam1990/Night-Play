@@ -56,8 +56,30 @@ th{color:var(--muted);font-weight:600;font-size:14px}
 .L{display:none}
 [data-l=vi] .L[lang=vi],[data-l=en] .L[lang=en]{display:block}
 @media print{.nav .tools{display:none}.sum{box-shadow:none}}
-body{display:flex;flex-direction:column;min-height:100dvh}
-main{flex:1;width:100%}
+html,body{height:100%}
+body{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden}
+#src{display:none}
+#pg{flex:1;min-height:0;width:100%;max-width:760px;margin:0 auto;padding:4px 16px 8px;display:flex;flex-direction:column;gap:8px}
+#pgHead{flex:none}
+#pgHead h1{margin:6px 0 0;font-size:clamp(20px,3.6vw,26px);line-height:1.2}
+#pgBody{flex:1;min-height:0;overflow:hidden;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:14px 18px;box-shadow:var(--shadow);overflow-wrap:anywhere}
+#pgBody:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+#pgBody h2{margin:0 0 6px;font-size:1.2em;line-height:1.3}
+#pgBody h3{margin:0 0 4px;font-size:1.05em}
+#pgBody p,#pgBody li{font-size:1em;margin:6px 0}
+#pgBody ul{margin:6px 0;padding-left:20px}
+#pgBody .meta{font-size:.88em;margin:0 0 10px}
+#pgBody .sum{background:none;border:0;box-shadow:none;padding:0}
+#pgBody .sum h2{font-size:1.1em}
+#pgBody table{font-size:.93em}
+#pgBody > :first-child{margin-top:0}
+#pgBar{flex:none;display:flex;align-items:center;gap:10px}
+#pgBar button{flex:none;width:52px;height:44px;border-radius:14px;background:var(--panel);box-shadow:var(--shadow);font-size:26px;font-weight:800;line-height:1;color:var(--ink)}
+#pgBar button:disabled{opacity:.3;cursor:default}
+#pgBar button:focus-visible,#toc:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+#toc{flex:1;min-width:0;height:44px;border-radius:14px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;font-weight:700;padding:0 12px}
+@media (max-height:620px),(max-width:360px){#pgBody{padding:8px 12px}#pg{gap:6px;padding-bottom:6px}}
+@media print{html,body{height:auto;overflow:visible}#src{display:block;max-width:760px;margin:0 auto}#pg{display:none}}
 </style>
 </head>
 <body>
@@ -78,7 +100,7 @@ main{flex:1;width:100%}
   </div>
 </nav>
 
-<main id="main">
+<div id="src">
 
 <!-- ====================== TIẾNG VIỆT ====================== -->
 <div class="L" lang="vi">
@@ -248,6 +270,17 @@ main{flex:1;width:100%}
   <p>When something important changes, we update this page and the “Last updated” date at the top.</p>
 </div>
 
+</div>
+
+<!-- Bản đọc theo trang: mỗi màn hình một mục, tự vừa khung nhìn, không cuộn. Nội dung lấy từ #src ở trên. -->
+<main id="pg" aria-label="Privacy">
+  <div id="pgHead"><h1 id="pgTitle"></h1></div>
+  <div id="pgBody" tabindex="0"></div>
+  <div id="pgBar">
+    <button id="pgPrev" type="button" aria-label="Previous">‹</button>
+    <select id="toc" aria-label="Contents"></select>
+    <button id="pgNext" type="button" aria-label="Next">›</button>
+  </div>
 </main>
 
 <footer class="site-foot">
@@ -281,6 +314,7 @@ function setLang(l, save) {
   $("themeBtn").setAttribute("aria-label", l === "vi" ? "Sáng / Tối" : "Light / Dark");
   $("bVi").setAttribute("aria-pressed", String(l === "vi")); $("bEn").setAttribute("aria-pressed", String(l === "en"));
   if (save) try { localStorage.setItem("lang", l); } catch (e) {}
+  if (window.__pgReady) layoutPages();
 }
 $("bVi").addEventListener("click", () => setLang("vi", true));
 $("bEn").addEventListener("click", () => setLang("en", true));
@@ -294,6 +328,63 @@ function setTheme(t, save) {
 }
 $("themeBtn").addEventListener("click", () => setTheme(root.dataset.theme === "dark" ? "light" : "dark", true));
 setTheme(root.dataset.theme);
+
+/* ===== Đọc theo trang: không cuộn, tự co chữ cho vừa; mục quá dài thì tách thành nhiều màn hình ===== */
+const body = $("pgBody"), pg = { screens: [], i: 0 };
+function sections(L) {
+  const out = []; let h1 = "", meta = null, h2 = "", grp = null;
+  for (const k of [...L.children]) {
+    if (k.tagName === "H1") { h1 = k.textContent; continue; }
+    if (k.classList.contains("meta")) { meta = k; continue; }
+    if (k.matches("section.sum")) { out.push({ title: h1, nodes: [meta, k].filter(Boolean) }); continue; }
+    if (k.tagName === "H2") { h2 = k.textContent; grp = { title: h2, nodes: [] }; out.push(grp); continue; }
+    if (k.tagName === "H3") { grp = { title: h2, nodes: [k] }; out.push(grp); continue; }
+    if (grp) grp.nodes.push(k);
+  }
+  return out.filter(g => g.nodes.length);
+}
+const tableUnits = n => { const t = n.tagName === "TABLE" ? n : n.querySelector("table"); if (!t) return null;
+  const head = t.tHead ? t.tHead.cloneNode(true) : null, rows = [...t.querySelectorAll("tbody tr")]; if (rows.length < 2) return null;
+  return rows.map(r => { const w = n.cloneNode(false), tb = t.cloneNode(false), body = document.createElement("tbody"); body.appendChild(r.cloneNode(true)); if (head) tb.appendChild(head.cloneNode(true)); tb.appendChild(body); w === n ? 0 : 0; if (n.tagName === "TABLE") return tb; w.appendChild(tb); return w; }); };
+const units = n => tableUnits(n) || (n.tagName === "SECTION" ? [...n.children].flatMap(units) : n.tagName === "UL" ? [...n.children].map(li => { const u = n.cloneNode(false); u.appendChild(li.cloneNode(true)); return u; }) : [n]);
+function fits(nodes, list) {
+  body.replaceChildren(...nodes.map(n => n.cloneNode(true)));
+  for (const fs of list) { body.style.fontSize = fs + "px"; if (body.scrollHeight <= body.clientHeight + 1) return fs; }
+  return 0;
+}
+function layoutPages() {
+  const l = root.dataset.l, L = document.querySelector('#src .L[lang="' + l + '"]'); if (!L) return;
+  const FS = innerWidth < 500 ? [15, 14, 13, 12, 11] : [17, 16, 15, 14, 13, 12, 11], secs = sections(L), keep = pg.screens.length ? pg.i / pg.screens.length : 0;
+  pg.screens = [];
+  $("pgTitle").textContent = secs.reduce((m, x) => x.title.length > m.length ? x.title : m, "") + (l === "vi" ? " (tiếp)" : " (cont.)");   // đo với tiêu đề dài nhất để khung nội dung không đổi chiều cao giữa các trang
+  $("pgHead").style.minHeight = ""; $("pgHead").style.minHeight = $("pgHead").offsetHeight + "px";
+  for (const s of secs) {
+    const fs = fits(s.nodes, FS);
+    if (fs) { pg.screens.push({ title: s.title, nodes: s.nodes, fs }); continue; }
+    let chunk = [], first = true;
+    const push = c => { pg.screens.push({ title: s.title + (first ? "" : (l === "vi" ? " (tiếp)" : " (cont.)")), nodes: c, fs: fits(c, FS) || FS[FS.length - 1] }); first = false; };
+    for (const n of s.nodes.flatMap(units)) { if (chunk.length && !fits([...chunk, n], FS)) { push(chunk); chunk = [n]; } else chunk.push(n); }
+    if (chunk.length) push(chunk);
+  }
+  $("toc").replaceChildren(...pg.screens.map((x, i) => { const o = document.createElement("option"); o.value = i; o.textContent = (i + 1) + "/" + pg.screens.length + " · " + x.title; return o; }));
+  $("pgPrev").setAttribute("aria-label", l === "vi" ? "Trang trước" : "Previous"); $("pgNext").setAttribute("aria-label", l === "vi" ? "Trang sau" : "Next"); $("toc").setAttribute("aria-label", l === "vi" ? "Mục lục" : "Contents");
+  show(Math.min(pg.screens.length - 1, Math.round(keep * pg.screens.length)));
+}
+function show(i) {
+  pg.i = Math.max(0, Math.min(pg.screens.length - 1, i)); const s = pg.screens[pg.i]; if (!s) return;
+  $("pgTitle").textContent = s.title;
+  body.replaceChildren(...s.nodes.map(n => n.cloneNode(true))); body.style.fontSize = s.fs + "px"; body.scrollTop = 0;
+  body.querySelectorAll("[data-fill]").forEach(el => { const k = el.dataset.fill; el.textContent = INFO[k]; if (k === "email") el.href = "mailto:" + INFO.email; });
+  $("toc").value = pg.i; $("pgPrev").disabled = pg.i === 0; $("pgNext").disabled = pg.i === pg.screens.length - 1;
+}
+$("pgPrev").addEventListener("click", () => show(pg.i - 1));
+$("pgNext").addEventListener("click", () => show(pg.i + 1));
+$("toc").addEventListener("change", e => show(+e.target.value));
+addEventListener("keydown", e => { if (e.target.closest && e.target.closest("select,input")) return; if (e.key === "ArrowRight") show(pg.i + 1); else if (e.key === "ArrowLeft") show(pg.i - 1); });
+let tx = null; body.addEventListener("touchstart", e => { tx = e.touches.length === 1 ? [e.touches[0].clientX, e.touches[0].clientY] : null; }, { passive: true });
+body.addEventListener("touchend", e => { if (!tx) return; const t = e.changedTouches[0], dx = t.clientX - tx[0], dy = t.clientY - tx[1]; tx = null; if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) show(pg.i + (dx < 0 ? 1 : -1)); }, { passive: true });
+let rz = 0; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(layoutPages, 120); });
+window.__pgReady = true; layoutPages(); if (document.fonts && document.fonts.ready) document.fonts.ready.then(layoutPages);
 </script>
 </body>
 </html>

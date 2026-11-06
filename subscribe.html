@@ -140,7 +140,6 @@ input[type=email],.dlg input{width:100%;box-sizing:border-box;padding:12px;borde
 input[type=email][aria-invalid=true]{border-color:var(--warn)}
 .err{color:var(--warn);font-size:13px;margin:6px 0 0;min-height:18px}
 .methods{display:grid;gap:8px;grid-template-columns:1fr 1fr}
-@media(max-width:380px){.methods{grid-template-columns:1fr}}
 .m{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:var(--bg);border:2px solid var(--line);text-align:left;font-weight:600}
 .m[aria-checked=true]{border-color:var(--accent);background:var(--card)}
 .m i{width:28px;height:28px;border-radius:8px;flex:none;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:12px;color:#fff}
@@ -178,6 +177,58 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
 .s{background:var(--bg);border:2px solid var(--line)!important}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
+/* ===== KHÔNG CUỘN: JS tăng data-dens (0→4) cho tới khi vừa khung nhìn ===== */
+html[data-dens="1"] #cmp,html[data-dens="1"] #plansH,html[data-dens="2"] #cmp,html[data-dens="2"] #plansH,html[data-dens="3"] #cmp,html[data-dens="3"] #plansH,html[data-dens="4"] #cmp,html[data-dens="4"] #plansH{display:none}
+html:not([data-dens="0"]) .hero p{display:none}
+html[data-dens="2"] .hero,html[data-dens="3"] .hero,html[data-dens="4"] .hero{padding:4px 0 2px}
+html[data-dens="2"] .hero h1,html[data-dens="3"] .hero h1,html[data-dens="4"] .hero h1{font-size:22px}
+html[data-dens="4"] .hero{display:none}
+/* bước 1 */
+html[data-dens="2"] .plan,html[data-dens="3"] .plan,html[data-dens="4"] .plan{padding:10px 14px 8px;gap:2px}
+html[data-dens="2"] .per,html[data-dens="3"] .per,html[data-dens="4"] .per{display:none}
+html[data-dens="2"] .plans,html[data-dens="3"] .plans,html[data-dens="4"] .plans{gap:12px;margin-top:10px}
+html[data-dens="3"] .inc,html[data-dens="4"] .inc{display:none}
+html[data-dens="4"] .desc{display:none}
+html[data-dens="2"] .steps,html[data-dens="3"] .steps,html[data-dens="4"] .steps{margin-bottom:4px}
+html[data-dens="3"] .next,html[data-dens="4"] .next{margin-top:6px;padding:6px 16px 4px}
+html[data-dens="3"] .next .cta,html[data-dens="4"] .next .cta{padding:11px}
+/* bước 2 */
+html:not([data-dens="0"]) #s2 .card h2{display:none}
+html[data-dens="2"] #s2 .sum .dur,html[data-dens="2"] #s2 .sum .pm,html[data-dens="3"] #s2 .sum .dur,html[data-dens="3"] #s2 .sum .pm,html[data-dens="4"] #s2 .sum .dur,html[data-dens="4"] #s2 .sum .pm{display:none}
+html[data-dens="3"] #s2 .card,html[data-dens="4"] #s2 .card{padding:10px 12px}
+html[data-dens="3"] #s2 .m,html[data-dens="4"] #s2 .m{padding:6px 10px}
+html[data-dens="3"] #s2 .linkbtn,html[data-dens="4"] #s2 .linkbtn{padding:2px 4px}
+html[data-dens="3"] #s2 .pay,html[data-dens="4"] #s2 .pay{gap:8px;margin-top:4px}
+html[data-dens="3"] #s2 .cta,html[data-dens="4"] #s2 .cta{margin-top:8px;padding:11px}
+html[data-dens="4"] #s2 .fine{font-size:11px;line-height:1.3;margin-top:4px}
+html[data-dens="4"] .foot p{display:none}
+html[data-dens="3"] #s2 .sum .hd,html[data-dens="4"] #s2 .sum .hd{display:none}
+html[data-dens="4"] #s2 .sum li:not(.t){display:none}
+html[data-dens="4"] .steps{display:none}
+html[data-dens="4"] #s2 .card{padding:8px 12px}
+html[data-dens="4"] #s2 .fine{margin:3px 0 0}
+html[data-dens="4"] #s2 .methods{gap:6px;margin-top:4px}
+html[data-dens="4"] #s2 label.f{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}   /* vẫn đọc được bằng trình đọc màn hình */
+html[data-dens="4"] #s2 .m{font-size:13px;padding:5px 8px;gap:8px}
+html[data-dens="4"] #s2 .m i{width:22px;height:22px}
+html[data-dens="4"] #s2 input[type=email]{padding:9px 12px}
+/* phần đầu/cuối trang gọn hơn trên màn hình thấp / điện thoại */
+@media (max-height:720px){.nav{padding:6px 16px}.nav .ico,.nav .back{height:40px;min-width:40px}.nav .ico{width:40px}.mark svg{width:32px;height:32px}}
+@media (max-width:360px){.m span{font-size:12.5px;line-height:1.15}.fcol{gap:0 10px}.fcol a,.fcol button{font-size:12px}}
+@media (max-width:640px){.foot .mark{display:none}.foot{padding:2px 12px}.fcol{gap:0 12px}.fcol a,.fcol button{padding:6px 0;font-size:13px}}
+/* điện thoại: mỗi gói là một hàng gọn */
+@media (max-width:599px){
+  .plans{grid-template-columns:1fr;gap:14px}
+  .plan{display:grid;grid-template-columns:1fr auto;column-gap:10px;row-gap:1px;align-items:center;padding:10px 14px}
+  .ph{grid-column:1;grid-row:1;justify-content:flex-start;gap:10px}
+  .rd{order:-1}
+  .plan .price{grid-column:2;grid-row:1;text-align:right;font-size:22px}
+  .per{grid-column:2;grid-row:2;text-align:right;font-size:12px}
+  .desc{grid-column:1;grid-row:2;margin:0;font-size:12.5px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .inc,.valid{display:none}
+  .badge{top:-9px;left:auto;right:12px;font-size:11px;padding:2px 9px}
+  .hero h1{font-size:26px}
+}
 @media (prefers-reduced-motion:reduce){.plan{transition:none}}
 @media (max-width:640px){.hero p{font-size:14px}.card{padding:16px}}
 </style>
@@ -360,6 +411,7 @@ function go(n, push){
   if(push) history.pushState({ s:n }, "");
   document.querySelector("main").scrollTop = 0;
   $("s" + n).focus({ preventScroll:true });
+  fitSoon();
 }
 function renderCmp(){
   const ck = CK;
@@ -416,6 +468,7 @@ function applyLang(){
   const fp = $("fPriv"); fp.href = PRIVACY_URL; fp.textContent = T("privacy");
   $("madeBy").textContent = "© " + new Date().getFullYear() + " " + APP.brand + ". " + T("rights");
   renderPlans(); renderNext(); renderCmp(); renderMethods(); renderSum(); renderStatus();
+  if(window.fitSoon) fitSoon();
 }
 
 /* ===== THANH TOÁN ===== */
@@ -556,6 +609,17 @@ const ps = new URLSearchParams(location.search).get("plan");
 if(ps && PLANS.some(p => p.id === ps)) planId = ps;
 const em = (getPass()||{}).email; if(em) $("email").value = em;
 setLang(lang);
+
+/* Không cuộn: tăng mức thu gọn (0→4) cho tới khi nội dung vừa khung nhìn */
+let densQ = 0;
+function fitDensity(){
+  const m = document.querySelector("main"), de = document.documentElement;
+  for(let d = 0; d <= 4; d++){ de.dataset.dens = d; if(m.scrollHeight <= m.clientHeight + 1) return; }
+}
+var fitSoon = () => { cancelAnimationFrame(densQ); densQ = requestAnimationFrame(fitDensity); };
+addEventListener("resize", fitSoon);
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(fitSoon);
+fitDensity();
 
 /* ===== CHẶN MỞ DEVTOOLS (chỉ cản người dùng thường; không phải bảo mật thật) ===== */
 addEventListener("keydown", e => {
