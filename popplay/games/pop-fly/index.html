@@ -40,6 +40,7 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 #cv{position:absolute;inset:0;width:100%;height:100%;display:block}
 .ov{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px;text-align:center;background:color-mix(in srgb,var(--bg) 78%,transparent);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .ov[hidden]{display:none}
+.ov{color:var(--ink)}.ov .card,.ov .nums button,.ov .sk,.ov .ghost{color:var(--ink)}.ov .big{color:var(--on-accent)}   /* màu chữ của hộp thoại KHÔNG thừa hưởng từ bố cục (vd. Máy game để chữ trắng) */
 .ov h2{margin:0;font-size:clamp(24px,7.4vw,38px);font-weight:800;line-height:1.05}
 .ov p{margin:0;font-size:clamp(14px,4vw,19px);color:var(--muted);font-weight:700}
 .cards{display:flex;flex-direction:column;gap:10px;width:100%;max-width:340px}
@@ -47,7 +48,17 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .card .e{font-size:clamp(30px,9vw,44px);line-height:1}
 .card small{display:block;font-size:.62em;color:var(--muted);font-weight:700}
 .card.lock{opacity:.92}.card.lock::after{content:"🔒";position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:22px}
+.card{padding:0}
+.card .main{flex:1;display:flex;align-items:center;gap:12px;padding:10px 14px;background:none;text-align:left;font:inherit;color:inherit;min-width:0;border-radius:22px}
+.card .skinBtn{width:48px;height:48px;margin-right:10px;border-radius:50%;background:color-mix(in srgb,var(--accent) 16%,var(--panel));font-size:22px;display:grid;place-items:center;flex:none;position:relative}
+.card .skinBtn i{position:absolute;right:-4px;top:-4px;font-size:12px;font-style:normal;background:var(--panel);border-radius:50%;padding:1px}
 .card:active{transform:scale(.97)}
+.skgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;max-width:360px}
+.sk{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:5px 5px 6px;border-radius:16px;background:var(--panel);box-shadow:var(--shadow);font-size:12.5px;font-weight:800;line-height:1.05}
+.sk img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:11px;background:var(--line)}
+.sk.on{outline:3px solid var(--accent)}.sk.lock img{filter:saturate(.8)}
+.sk.lock::after{content:"🔒";position:absolute;right:6px;top:6px;font-size:16px;background:var(--panel);border-radius:50%;padding:2px 3px;line-height:1}
+.sk:active{transform:scale(.96)}
 .big{background:var(--accent);color:var(--on-accent);border-radius:999px;padding:12px 28px;font-size:clamp(18px,5vw,24px);font-weight:800;box-shadow:0 5px 0 color-mix(in srgb,var(--accent) 55%,#000)}
 .ghost{background:var(--panel);color:var(--ink);border-radius:999px;padding:10px 22px;font-size:clamp(15px,4.2vw,19px);font-weight:800;box-shadow:var(--shadow)}
 .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
@@ -56,15 +67,16 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .nums button{width:clamp(64px,20vw,92px);height:clamp(64px,20vw,92px);border-radius:24px;background:var(--panel);box-shadow:var(--shadow);font-size:clamp(30px,9vw,46px);font-weight:800}
 .nums button:active{transform:scale(.93)}.nums button.ok{background:var(--good);color:#fff}.nums button.no{opacity:.4}
 .toast{position:absolute;left:50%;top:14%;transform:translateX(-50%);z-index:4;padding:6px 16px;border-radius:999px;background:var(--panel);box-shadow:var(--shadow);font-weight:800;font-size:clamp(16px,4.8vw,22px);pointer-events:none;opacity:0;transition:opacity .2s;white-space:nowrap}
-.toast.on{opacity:1}
+.toast{color:var(--ink)}.toast.on{opacity:1}
 @media (max-width:360px){.ask{padding:4px 8px}}
+.app[data-layout]{transition:none}
 /* ngang (xoay điện thoại): bàn chơi ở giữa-phải, bảng tin bên trái */
 @media (max-height:520px) and (min-aspect-ratio:11/10){
   :root{--w:calc((100dvh - 16px)*.75)}
   .app{flex-direction:row;align-items:center;justify-content:center;gap:14px}
   .side{width:min(300px,calc(100vw - var(--w) - 44px));justify-content:center}
   .top h1{font-size:18px}.ask{min-height:48px}.hud{flex-direction:column;align-items:flex-start}
-  .ov{gap:6px;padding:10px}.ov h2{font-size:22px}.ov p{display:none}.card{padding:5px 10px;font-size:15px;gap:8px}.card .e{font-size:26px}.card small{display:none}.cards{gap:6px}.nums button{width:56px;height:56px;font-size:28px}.stars{font-size:30px}
+  .ov{gap:6px;padding:10px}.ov h2{font-size:22px}.ov p{display:none}.card{font-size:15px}.card .main{padding:5px 10px;gap:8px}.card .skinBtn{width:36px;height:36px;font-size:16px;margin-right:6px}.card .e{font-size:26px}.card small{display:none}.skgrid{grid-template-columns:repeat(6,1fr);gap:4px}.sk{font-size:9px;padding:3px}.sk span{display:none}.cards{gap:6px}.nums button{width:56px;height:56px;font-size:28px}.stars{font-size:30px}
 }
 @media (prefers-reduced-motion:reduce){.toast{transition:none}}
 </style>
@@ -105,6 +117,11 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
       <p id="enP"></p>
       <div class="row"><button class="big" id="againBtn" type="button"></button><button class="ghost" id="homeBtn2" type="button"></button></div>
     </div>
+    <div class="ov" id="ovSkin" hidden>
+      <h2 id="skH"></h2>
+      <div class="skgrid" id="skGrid"></div>
+      <button class="ghost" id="skBack" type="button"></button>
+    </div>
     <div class="ov" id="ovPay" hidden>
       <h2 id="pwH"></h2><p id="pwP"></p>
       <div class="row"><button class="big" id="pwGo" type="button"></button></div>
@@ -132,7 +149,7 @@ vi:{title:"Chim Bay Học Vui",docTitle:"Chim Bay Học Vui",sound:"Âm thanh",l
  right:["Giỏi quá!","Tuyệt vời!","Đúng rồi!","Hoan hô!"],wrong:["Thử lại nhé!","Chưa đúng, mình thử tiếp!","Cố lên nào!"],miss:"Mình thử tiếp nhé!",hintL:"Đây là chữ {l}",hintN:"Đáp án là {n}",
  "q.h":"Bé nhặt mấy ngôi sao?","q.p":"Chạm vào số đúng nhé","q.right":"Đúng rồi! {n} ngôi sao","q.wrong":"Có {n} ngôi sao đó!",
  "en.h3":"Siêu giỏi!","en.h2":"Giỏi lắm!","en.h1":"Cố lên nhé!","en.p":"{n} điểm","again":"Chơi tiếp","home":"Đổi trò",
- "pw.h":"Trò của Night Pass","pw.p":"Mở khoá {name} cùng nhiều quyền lợi khác. Phần này dành cho phụ huynh.","pw.go":"Dành cho phụ huynh","pw.trial":"Chơi thử 1 lần","pw.later":"Để sau","pw.tried":"Hôm nay đã chơi thử rồi, mai thử tiếp nhé.",
+ "sk.pick":"Chọn giao diện","sk.letters.default":"Cổ điển","sk.letters.jungle":"Rừng nhiệt đới","sk.letters.ocean":"Biển xanh","sk.letters.snow":"Núi tuyết","sk.letters.night":"Đêm đèn lồng","sk.letters.fire":"Hoàng hôn lửa","sk.stars.default":"Cổ điển","sk.stars.galaxy":"Dải ngân hà","sk.stars.moon":"Thỏ ngọc","sk.stars.dragon":"Mây rồng","sk.stars.aurora":"Cực quang","sk.stars.candy":"Kẹo ngọt","sk.math.default":"Cổ điển","sk.math.rocket":"Tên lửa","sk.math.sub":"Tàu ngầm","sk.math.balloon":"Khinh khí cầu","sk.math.ufo":"Đĩa bay","sk.math.biplane":"Cánh đôi","pw.h":"Giao diện của Night Pass","pw.p":"Mở khoá {name} và 14 giao diện đẹp khác: thế giới mới, nhân vật mới, bố cục mới cho cả 3 trò. Phần này dành cho phụ huynh.","pw.go":"Dành cho phụ huynh","pw.trial":"Chơi thử 1 ván","pw.later":"Để sau","pw.tried":"Hôm nay đã chơi thử rồi, mai thử tiếp nhé.",
  "gt.h":"Dành cho phụ huynh","gt.p":"Hỏi người lớn: {a} + {b} = ?","gt.x":"Quay lại",lockedLbl:"{n} (cần Night Pass)",badge:"Night Pass"},
 en:{title:"Fly & Learn",docTitle:"Fly & Learn",sound:"Sound",lang:"Language",pause:"Pause",resume:"Resume",
  "st.h":"Pick a game","st.p":"Tap to fly up!","ty.letters":"Birdie ABC","ty.letters.d":"Fly through the right letter","ty.stars":"Star counter","ty.stars.d":"Catch stars, then count","ty.math":"Math plane","ty.math.d":"Fly through the right answer",
@@ -140,15 +157,17 @@ en:{title:"Fly & Learn",docTitle:"Fly & Learn",sound:"Sound",lang:"Language",pau
  right:["Great job!","Wonderful!","Correct!","Hooray!"],wrong:["Try again!","Not quite, let's try!","You can do it!"],miss:"Let's try the next one!",hintL:"This is the letter {l}",hintN:"The answer is {n}",
  "q.h":"How many stars?","q.p":"Tap the right number","q.right":"Yes! {n} stars","q.wrong":"There were {n} stars!",
  "en.h3":"Super!","en.h2":"Well done!","en.h1":"Keep going!","en.p":"{n} points","again":"Play again","home":"Pick a game",
- "pw.h":"A Night Pass game","pw.p":"Unlock {name} and more. This part is for parents.","pw.go":"For parents","pw.trial":"Try once","pw.later":"Later","pw.tried":"You already tried today, come back tomorrow.",
+ "sk.pick":"Pick a look","sk.letters.default":"Classic","sk.letters.jungle":"Jungle","sk.letters.ocean":"Ocean","sk.letters.snow":"Snow peaks","sk.letters.night":"Lantern night","sk.letters.fire":"Fire sunset","sk.stars.default":"Classic","sk.stars.galaxy":"Galaxy","sk.stars.moon":"Moon rabbit","sk.stars.dragon":"Dragon clouds","sk.stars.aurora":"Aurora","sk.stars.candy":"Candy land","sk.math.default":"Classic","sk.math.rocket":"Rocket","sk.math.sub":"Submarine","sk.math.balloon":"Hot-air balloon","sk.math.ufo":"Flying saucer","sk.math.biplane":"Biplane","pw.h":"Night Pass looks","pw.p":"Unlock {name} and 14 more beautiful looks: new worlds, new characters, new layouts for all 3 games. This part is for parents.","pw.go":"For parents","pw.trial":"Try once","pw.later":"Later","pw.tried":"You already tried today, come back tomorrow.",
  "gt.h":"For parents","gt.p":"Ask a grown-up: {a} + {b} = ?","gt.x":"Go back",lockedLbl:"{n} (needs Night Pass)",badge:"Night Pass"}};
 const t=(k,p)=>{let x=(I18N[LANG]||{})[k];if(x==null)x=I18N.vi[k];if(x==null)x=k;return p&&typeof x==="string"?x.replace(/\{(\w+)\}/g,(_,y)=>p[y]):x};
 const addI18n=d=>{for(const l in d)Object.assign(I18N[l]=I18N[l]||{},d[l])};
 const pickOf=a=>a[Math.floor(Math.random()*a.length)];
 
 /* ===== LÕI ===== */
-const W=360,H=480,BX=96,R=44;
-const PF=window.PF={W,H,BX,R,t,addI18n,pickOf,types:{},pro:null,order:["letters","stars","math"],S:null};
+const W=360,BX=96,R=44;let H=480;
+const PF=window.PF={W,BX,R,t,addI18n,pickOf,types:{},pro:null,order:["letters","stars","math"],S:null,dim:{W:360,H:480},safe:{top:0,bottom:0,pad:34},skins:{},catalog:{letters:["default","jungle","ocean","snow","night","fire"],stars:["default","galaxy","moon","dragon","aurora","candy"],math:["default","rocket","sub","balloon","ufo","biplane"]},skinSel:{}};
+const curSkin=type=>{const m=PF.skins[type],id=PF.skinSel[type];return m&&id&&m[id]?m[id]:null};
+PF.skinSel=(()=>{try{return JSON.parse(localStorage.getItem("pf-skin"))||{}}catch(e){return {}}})();
 let sound=true,paused=false,running=false,pausedBy=null,raf=0,last=0;
 const cv=$("cv"),ctx=cv.getContext("2d");let K=1,DPR=1;
 
@@ -173,10 +192,36 @@ PF.types.letters={id:"letters",ico:"🐤",hero:"🐤",total:10,
     const ds=shuffle(LET[LANG].filter(l=>l!==target)).slice(0,2),labels=shuffle([target].concat(ds));
     return {ask:t("ask.letters",{l:'<span class="big">'+target+'</span>'}),askPlain:t("ask.letters",{l:target}),speak:t("say.letters",{l:target}),hint:t("hintL",{l:target}),rings:labels.map(l=>({label:l,ok:l===target}))}}};
 
+/* ===== LOẠI 2 + 3 (MIỄN PHÍ): BAY ĐẾM SAO, TÀU BAY PHÉP TÍNH ===== */
+const rn=n=>Math.floor(Math.random()*n);
+PF.types.math={id:"math",hero:"✈️",total:10,name:()=>t("ty.math"),
+  makeWave(i,S){
+    const lvl=Math.min(3,1+Math.floor(S.correct/3));let a,b,minus=false;
+    if(lvl===1){a=1+rn(3);b=1+rn(5-a)}else if(lvl===2){a=1+rn(9);b=1+rn(10-a)}else if(rn(2)){minus=true;a=3+rn(8);b=1+rn(a-1)}else{a=1+rn(9);b=1+rn(10-a)}
+    const ans=minus?a-b:a+b;let ds=[];[1,-1,2,-2,3].forEach(d=>{const v=ans+d;if(v>=0&&v<=12&&ds.indexOf(v)<0)ds.push(v)});ds=shuffle(ds).slice(0,2);
+    const q=a+(minus?" − ":" + ")+b+" = ?";
+    return {ask:q,askPlain:q,speak:t(minus?"say.mathMinus":"say.math",{a,b}),hint:t("hintN",{n:ans}),rings:shuffle([ans].concat(ds)).map(v=>({label:String(v),ok:v===ans}))}}};
+const CLUSTERS=3;
+PF.types.stars={id:"stars",hero:"🐤",custom:true,total:4,name:()=>t("ty.stars"),
+  init(S){S.custom={seg:0,clusters:0,list:[],caught:0,lastX:0,right:0,wait:false};setAsk(t("ask.stars"),t("ask.stars"),t("ask.stars"))},
+  update(S,dt,sp){
+    const c=S.custom,b=S.bird;if(c.wait)return;
+    if(c.clusters<CLUSTERS&&(!c.list.length||c.lastX<W-200)){const k=1+rn(3),base=PF.safe.top+60+rn(Math.max(40,H-PF.safe.top-PF.safe.bottom-120)),dir=rn(2)?1:-1;
+      for(let i=0;i<k;i++)c.list.push({x:W+40+i*38,y:Math.max(60,Math.min(H-60,base+dir*i*34)),got:false});c.lastX=W+40+(k-1)*38;c.clusters++}
+    c.lastX-=sp*dt;
+    c.list.forEach(st=>{st.x-=sp*dt;if(!st.got&&Math.abs(st.x-BX)<30&&Math.abs(st.y-b.y)<32){st.got=true;c.caught++;addScore(5);sfx.star();burst(st.x,st.y,"✨",5)}});
+    c.list=c.list.filter(st=>st.x>-40);
+    if(c.clusters>=CLUSTERS&&!c.list.length){c.wait=true;const seg=c.seg,n=c.caught;
+      const next=()=>{c.seg++;c.clusters=0;c.caught=0;c.list=[];c.lastX=0;c.wait=false;if(c.seg>=S.ty.total)finishRound()};
+      if(n>0)PF.askNumber(n,ok=>{if(ok){c.right++;addScore(20);markDot(seg,1)}else markDot(seg,2);next()});
+      else{markDot(seg,2);toast(t("miss"),1300);setTimeout(next,900)}}},
+  draw(c,S){const sk=S.skin;c.font="34px 'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";c.textAlign="center";c.textBaseline="middle";
+    S.custom.list.forEach(st=>{if(st.got)return;const yy=st.y+Math.sin(S.t*5+st.x)*3;if(sk&&sk.star)sk.star(c,st.x,yy,S);else c.fillText("⭐",st.x,yy)})}};
+
 /* ===== TRẠNG THÁI VÁN ===== */
 function newState(type){
   return {type,ty:PF.types[type],score:0,correct:0,wrong:0,streak:0,waves:[],spawned:0,done:0,used:[],t:0,speed:84,slow:0,over:false,
-    bird:{y:H/2,vy:0,rot:0,wob:0},parts:[],clouds:Array.from({length:5},(_,i)=>({x:Math.random()*W,y:40+Math.random()*(H-160),s:.6+Math.random()*.9,v:6+Math.random()*10})),dots:Array(PF.types[type].total).fill(0),ask:"",askPlain:"",custom:{}};
+    skin:curSkin(type),bird:{y:H/2,vy:0,rot:0,wob:0},parts:[],clouds:Array.from({length:5},(_,i)=>({x:Math.random()*W,y:40+Math.random()*(H-160),s:.6+Math.random()*.9,v:6+Math.random()*10})),dots:Array(PF.types[type].total).fill(0),ask:"",askPlain:"",custom:{}};
 }
 function addScore(n){const S=PF.S;S.score=Math.min(1500,S.score+n);$("sc").textContent=S.score}
 PF.addScore=addScore;
@@ -189,13 +234,14 @@ PF.setAsk=setAsk;
 /* ===== VẬT LÝ NHẸ NHÀNG (không có thua) ===== */
 function flap(){if(!running||paused)return;const S=PF.S;S.bird.vy=-215;sfx.flap();if(S.ty.onFlap)S.ty.onFlap(S)}
 function stepBird(S,dt){const b=S.bird;b.vy=Math.min(250,b.vy+520*dt);b.y+=b.vy*dt;
-  if(b.y>H-34){b.y=H-34;b.vy=-110}if(b.y<34){b.y=34;b.vy=Math.max(0,b.vy)}
+  const pd=PF.safe.pad;if(b.y>H-pd){b.y=H-pd;b.vy=-110}if(b.y<pd){b.y=pd;b.vy=Math.max(0,b.vy)}
   b.rot+=((Math.max(-.5,Math.min(.6,b.vy/330)))-b.rot)*Math.min(1,dt*8);if(b.wob>0)b.wob=Math.max(0,b.wob-dt)}
-function burst(x,y,glyph,n){for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,v=60+Math.random()*120;PF.S.parts.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-60,g:glyph,life:.9,s:16+Math.random()*10})}}
+function burst(x,y,glyph,n){const gl=PF.S.skin&&PF.S.skin.glyphs;for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,v=60+Math.random()*120;PF.S.parts.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-60,g:gl?pickOf(gl):glyph,life:.9,s:16+Math.random()*10})}}
 PF.burst=burst;
 
+function laneYs(){const sf=PF.safe,a=sf.top+40,z=H-sf.bottom-40,c=(a+z)/2,sp=Math.min(.27*H,(z-a)/2);return shuffle([c-sp,c,c+sp])}
 function spawnWave(S){
-  const ty=S.ty,def=ty.makeWave(S.spawned,S),lanes=shuffle([110,240,370]);
+  const ty=S.ty,def=ty.makeWave(S.spawned,S),lanes=laneYs();
   const w={x:W+70,idx:S.spawned,ask:def.ask,askPlain:def.askPlain,speak:def.speak,hint:def.hint,answer:def.answer,rings:def.rings.map((r,i)=>Object.assign({y:lanes[i%3]},r)),done:false,res:null};
   S.waves.push(w);S.spawned++;
 }
@@ -228,11 +274,13 @@ const RING=["#ff8fb1","#ffd166","#7bdcb5"];
 function draw(){
   const S=PF.S;ctx.setTransform(DPR*K,0,0,DPR*K,0,0);ctx.clearRect(0,0,W,H);
   if(!S)return;
-  for(const c of S.clouds){ctx.globalAlpha=.75;ctx.fillStyle="#fff";ctx.beginPath();ctx.ellipse(c.x,c.y,34*c.s,16*c.s,0,0,7);ctx.ellipse(c.x+22*c.s,c.y+4*c.s,26*c.s,13*c.s,0,0,7);ctx.ellipse(c.x-20*c.s,c.y+5*c.s,22*c.s,11*c.s,0,0,7);ctx.fill()}ctx.globalAlpha=1;
+  const sk=S.skin;
+  if(sk&&sk.bg)sk.bg(ctx,S);else for(const c of S.clouds){ctx.globalAlpha=.75;ctx.fillStyle="#fff";ctx.beginPath();ctx.ellipse(c.x,c.y,34*c.s,16*c.s,0,0,7);ctx.ellipse(c.x+22*c.s,c.y+4*c.s,26*c.s,13*c.s,0,0,7);ctx.ellipse(c.x-20*c.s,c.y+5*c.s,22*c.s,11*c.s,0,0,7);ctx.fill()}ctx.globalAlpha=1;
   /* cổng có chữ / số */
   ctx.textAlign="center";ctx.textBaseline="middle";
   for(const w of S.waves){
     w.rings.forEach((r,i)=>{const pul=(w.hintT>0&&r.ok)?1+.08*Math.sin(S.t*14):1;ctx.save();ctx.translate(w.x,r.y);ctx.scale(pul,pul);
+      if(sk&&sk.gate){sk.gate(ctx,r,i,w.hintT>0&&r.ok,S);ctx.restore();return}
       ctx.fillStyle=(w.hintT>0&&r.ok)?"rgba(255,235,120,.95)":"rgba(255,255,255,.88)";ctx.strokeStyle=RING[i%3];ctx.lineWidth=7;ctx.beginPath();ctx.arc(0,0,R,0,7);ctx.fill();ctx.stroke();
       ctx.fillStyle="#3b2a1d";ctx.font='800 '+(String(r.label).length>2?34:46)+'px "Baloo 2",system-ui,sans-serif';ctx.fillText(r.label,0,3);ctx.restore()});
   }
@@ -240,7 +288,7 @@ function draw(){
   /* nhân vật */
   const b=S.bird,hero=S.ty.hero;ctx.save();ctx.translate(BX,b.y+(b.wob>0?Math.sin(S.t*38)*4*b.wob:0));ctx.rotate(S.type==="math"?b.rot*.6:b.rot);
   const sc=S.celebrate>0?1.2:1;ctx.scale(sc,sc);
-  if(S.type==="math")drawPlane(ctx);else{ctx.scale(-1,1);ctx.font="46px 'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";ctx.fillText(hero,0,0)}   /* 🐤 nhìn sang trái → lật để bay sang phải */
+  if(sk&&sk.hero)sk.hero(ctx,S,b);else if(S.type==="math")drawPlane(ctx);else{ctx.scale(-1,1);ctx.font="46px 'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";ctx.fillText(hero,0,0)}   /* 🐤 nhìn sang trái → lật để bay sang phải */
   ctx.restore();
   for(const p of S.parts){ctx.globalAlpha=Math.max(0,p.life);ctx.font=p.s+"px 'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";ctx.fillText(p.g,p.x,p.y)}ctx.globalAlpha=1;
 }
@@ -252,17 +300,19 @@ function drawPlane(c){   /* tàu bay tự vẽ (emoji ✈️ quay mỗi nền t�
   c.fillStyle="#7bdcb5";c.beginPath();c.arc(20,-1,7,Math.PI,0);c.fill();   /* mũi */
   c.fillStyle="#5b8def";for(const x of [-12,-2,8]){c.beginPath();c.arc(x,-2,3,0,7);c.fill()}   /* cửa sổ */
 }
-function fit(){const r=$("play").getBoundingClientRect();DPR=Math.min(2.5,window.devicePixelRatio||1);cv.width=Math.round(r.width*DPR);cv.height=Math.round(r.height*DPR);K=r.width/W;draw()}
+function fit(){const r=$("play").getBoundingClientRect();if(!r.width)return;DPR=Math.min(2.5,window.devicePixelRatio||1);cv.width=Math.round(r.width*DPR);cv.height=Math.round(r.height*DPR);K=r.width/W;H=Math.max(380,Math.min(820,Math.round(W*r.height/r.width)));PF.dim.H=H;if(PF.S&&PF.S.bird)PF.S.bird.y=Math.min(PF.S.bird.y,H-PF.safe.pad);draw()}
 addEventListener("resize",fit);if(window.ResizeObserver)new ResizeObserver(fit).observe($("play"));
 
 function loop(ts){raf=requestAnimationFrame(loop);const dt=Math.min(.05,(ts-last)/1000||0);last=ts;if(running&&!paused)update(dt);draw()}
 
 /* ===== VÒNG ĐỜI VÁN CHƠI ===== */
-const ovs=["ovStart","ovPause","ovQ","ovEnd","ovPay","ovGate"];
+const ovs=["ovStart","ovPause","ovQ","ovEnd","ovPay","ovGate","ovSkin"];
 function showOv(id){for(const o of ovs)$(o).hidden=(o!==id)}
+function applyLayout(l){PF.safe=l==="full"?{top:112,bottom:64,pad:34}:l==="window"?{top:64,bottom:64,pad:64}:{top:0,bottom:0,pad:34};const a=document.querySelector(".app");if(l&&l!=="classic")a.dataset.layout=l;else delete a.dataset.layout;setTimeout(fit,30)}
+PF.applyLayout=applyLayout;
 function startRound(type){
   if(!PF.types[type])return;audio();
-  PF.S=newState(type);PF.cur=type;running=true;paused=false;pausedBy=null;showOv(null);$("pauseBtn").hidden=false;$("sc").textContent="0";renderDots();
+  PF.S=newState(type);applyLayout(PF.S.skin?PF.S.skin.layout:"classic");PF.cur=type;running=true;paused=false;pausedBy=null;showOv(null);$("pauseBtn").hidden=false;$("sc").textContent="0";renderDots();
   const ty=PF.types[type];if(ty.init)ty.init(PF.S);
   if(!ty.custom){$("askTxt").textContent="";}else setAsk(t("ask.stars"),t("ask.stars"),"");
   window.NP&&NP.start();
@@ -277,7 +327,7 @@ function finishRound(){
   if(PF.pro&&PF.pro.trial)setTimeout(()=>PF.lockPro(),0);
 }
 PF.finishRound=finishRound;
-function goHome(){running=false;paused=false;PF.S=null;$("pauseBtn").hidden=true;$("sc").textContent="0";renderDots();setAsk("","","");$("askTxt").textContent=t("st.p");showOv("ovStart");renderCards();draw()}
+function goHome(){applyLayout("classic");running=false;paused=false;PF.S=null;$("pauseBtn").hidden=true;$("sc").textContent="0";renderDots();setAsk("","","");$("askTxt").textContent=t("st.p");showOv("ovStart");renderCards();draw()}
 
 function pauseRound(by){if(!running||paused)return;paused=true;pausedBy=by==="user"?"user":"parent";if(window.speechSynthesis)speechSynthesis.cancel();if(pausedBy==="user"){$("ovPause").hidden=false}}
 function resumeRound(by){if(!paused)return;if(by==="parent"&&pausedBy==="user")return;paused=false;pausedBy=null;$("ovPause").hidden=true;last=performance.now()}
@@ -299,24 +349,39 @@ const subUrl=()=>"../../../subscribe.html?from="+encodeURIComponent("popplay/ind
 function renderCards(){
   const box=$("cards");box.textContent="";
   for(const id of PF.order){
-    const ty=PF.types[id],free=id==="letters",locked=!ty,b=document.createElement("button");b.type="button";b.className="card"+(locked?" lock":"");
+    const sel=PF.skinSel[id],prem=sel&&sel!=="default"&&PF.skins[id]&&PF.skins[id][sel];
+    const c=document.createElement("div");c.className="card";
     const ico={letters:"🐤",stars:"⭐",math:"✈️"}[id];
-    b.innerHTML='<span class="e" aria-hidden="true">'+ico+'</span><span>'+t("ty."+id)+'<small>'+t("ty."+id+".d")+'</small></span>';
-    b.setAttribute("aria-label",locked?t("lockedLbl",{n:t("ty."+id)}):t("ty."+id));
-    b.onclick=()=>locked?openPay(id):startRound(id);box.appendChild(b);
+    const m=document.createElement("button");m.type="button";m.className="main";m.innerHTML='<span class="e" aria-hidden="true">'+ico+'</span><span>'+t("ty."+id)+'<small>'+t("ty."+id+".d")+'</small></span>';m.setAttribute("aria-label",t("ty."+id));m.onclick=()=>startRound(id);
+    const k=document.createElement("button");k.type="button";k.className="skinBtn";k.innerHTML='🎨'+(prem?"<i>★</i>":"");k.setAttribute("aria-label",t("sk.pick"));k.onclick=()=>openSkins(id);
+    c.appendChild(m);c.appendChild(k);box.appendChild(c);
   }
 }
-let payFor=null;
-function openPay(id){
-  payFor=id;track("fly_"+id,"view");
-  $("pwH").textContent=t("pw.h");$("pwP").textContent=t("pw.p",{name:t("ty."+id)});$("pwGo").textContent="🔐 "+t("pw.go");$("pwLater").textContent=t("pw.later");
-  const tried=LS.get("pf-trial","")===new Date().toLocaleDateString("en-CA"),canTry=id==="stars"&&!tried;
-  $("pwTrial").hidden=!canTry;$("pwTrial").textContent="🎈 "+t("pw.trial");showOv("ovPay");
+const THUMB=(ty,id)=>"thumbs/"+ty+"-"+id+".jpg";
+const skLocked=(ty,id)=>id!=="default"&&!(PF.skins[ty]&&PF.skins[ty][id]);
+let skFor=null,payFor=null;
+function openSkins(ty){
+  skFor=ty;$("skH").textContent="🎨 "+t("ty."+ty);$("skBack").textContent=t("home");const g=$("skGrid");g.textContent="";
+  for(const id of PF.catalog[ty]){
+    const locked=skLocked(ty,id),b=document.createElement("button");b.type="button";b.className="sk"+(locked?" lock":"")+((PF.skinSel[ty]||"default")===id?" on":"");
+    b.innerHTML='<img alt="" src="'+THUMB(ty,id)+'" loading="lazy" onerror="this.style.visibility=\'hidden\'"><span>'+t("sk."+ty+"."+id)+'</span>';
+    b.setAttribute("aria-label",locked?t("lockedLbl",{n:t("sk."+ty+"."+id)}):t("sk."+ty+"."+id));
+    b.onclick=()=>locked?openPay(ty,id):chooseSkin(ty,id);g.appendChild(b);
+  }
+  showOv("ovSkin");
 }
-$("pwLater").addEventListener("click",()=>showOv("ovStart"));
-$("pwGo").addEventListener("click",()=>{track("fly_"+payFor,"click");openGate()});
+function chooseSkin(ty,id){PF.skinSel[ty]=id;LS.set("pf-skin",PF.skinSel);renderCards();startRound(ty)}
+$("skBack").addEventListener("click",()=>showOv("ovStart"));
+function openPay(ty,id){
+  payFor={ty,id};track("fly_skin","view");
+  $("pwH").textContent=t("pw.h");$("pwP").textContent=t("pw.p",{name:t("sk."+ty+"."+id)});$("pwGo").textContent="🔐 "+t("pw.go");$("pwLater").textContent=t("pw.later");
+  const tried=LS.get("pf-trial","")===new Date().toLocaleDateString("en-CA");
+  $("pwTrial").hidden=tried;$("pwTrial").textContent="🎈 "+t("pw.trial");showOv("ovPay");
+}
+$("pwLater").addEventListener("click",()=>skFor?openSkins(skFor):showOv("ovStart"));
+$("pwGo").addEventListener("click",()=>{track("fly_skin","click");openGate()});
 $("pwTrial").addEventListener("click",async()=>{
-  try{await PF.loadPro(true);LS.set("pf-trial",new Date().toLocaleDateString("en-CA"));track("fly_stars","trial");renderCards();startRound("stars")}
+  try{await PF.loadPro(true);LS.set("pf-trial",new Date().toLocaleDateString("en-CA"));track("fly_skin","trial");const f=payFor;PF.trialSkin=f.id;const old=PF.skinSel[f.ty];PF.skinSel[f.ty]=f.id;PF.skinRestore={ty:f.ty,old};renderCards();startRound(f.ty)}
   catch(e){toast(t("pw.tried"),2200);showOv("ovStart")}
 });
 function openGate(){   /* cổng phụ huynh: câu hỏi người lớn trước khi sang trang thanh toán */
@@ -351,7 +416,7 @@ PF.loadPro=async function(trial){
   }
   new Function("PF",src)(PF);renderCards();
 };
-PF.lockPro=function(){delete PF.types.stars;delete PF.types.math;PF.pro=null;renderCards()};
+PF.lockPro=function(){PF.skins={};PF.pro=null;if(PF.skinRestore){const r=PF.skinRestore;if(r.old)PF.skinSel[r.ty]=r.old;else delete PF.skinSel[r.ty];PF.skinRestore=null}PF.trialSkin=null;renderCards();applyLayout("classic")};
 
 /* ===== NGÔN NGỮ / GIAO DIỆN ===== */
 function applyLang(){
