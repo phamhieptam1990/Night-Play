@@ -171,7 +171,7 @@ for(let i=0;i<9;i++){
   cells.push(st);
 }
 
-let score=0,combo=0,best=0,timeLeft=ROUND,running=false,spawnT=0,tickT=0,lastHit=0,sound=true,ac=null;
+let score=0,combo=0,best=0,timeLeft=ROUND,running=false,paused=false,spawnT=0,tickT=0,lastHit=0,sound=true,ac=null;
 
 function audio(){if(!sound)return null;try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();if(ac.state==="suspended")ac.resume();return ac}catch(e){return null}}
 function thwack(good){
@@ -196,7 +196,7 @@ function show(st,item,stay){
   st.note.querySelector(".lbl").textContent=item.lbl;
   void st.note.offsetWidth;st.note.classList.add("up");
   clearTimeout(st.timer);
-  st.timer=setTimeout(()=>{ if(st.up){ hide(st); if(!item.coffee){combo=0;render()} } },stay);
+  st.timer=setTimeout(()=>{ if(st.up){ hide(st); if(!item.coffee&&!paused){combo=0;render()} } },stay);
 }
 function hide(st){st.up=false;st.item=null;st.note.classList.remove("up")}
 
@@ -217,7 +217,7 @@ function spawn(){
 }
 
 function hit(st,e){
-  if(!running)return;
+  if(!running||paused)return;
   if(!st.up){combo=0;render();buzz();desk.classList.remove("shake");void desk.offsetWidth;desk.classList.add("shake");return}
   const item=st.item;clearTimeout(st.timer);
   st.up=false;st.note.classList.add("hit");
@@ -251,16 +251,21 @@ function hudPulse(ms) {   /* bảng điểm sáng lên, rồi mờ dần nếu �
   document.body.classList.remove("hud-dim"); clearTimeout(hudT);
   if (running) hudT = setTimeout(() => { if (running && timeLeft > 10) document.body.classList.add("hud-dim"); }, ms || 1800);
 }
-function start(){
+function start(from){
   audio();
-  score=0;combo=0;best=0;timeLeft=ROUND;running=true;lastHit=0;hudPulse(3500);
+  score=0;combo=0;best=0;timeLeft=ROUND;running=true;paused=false;lastHit=0;
+  if(from&&typeof from==='object'&&from.timeLeft){score=Math.max(0,from.score|0);combo=Math.max(0,from.combo|0);best=Math.max(0,from.best|0);timeLeft=Math.min(ROUND,Math.max(3,+from.timeLeft||ROUND))}   /* chơi tiếp lượt đang dở của bạn bè */
+  hudPulse(3500);
   cells.forEach(hide);$("overlay").hidden=true;render();say("Bắt đầu! Đập hết đi!");window.NP&&NP.start();
   clearTimeout(spawnT);spawn();
   clearInterval(tickT);
-  tickT=setInterval(()=>{timeLeft-=.1;if(timeLeft<=0){timeLeft=0;end()}render()},100);
+  tickT=setInterval(tick,100);
 }
+function tick(){timeLeft-=.1;if(timeLeft<=0){timeLeft=0;end()}render()}
+function pauseRound(){if(!running||paused)return;paused=true;clearInterval(tickT);clearTimeout(spawnT)}   /* trang cha mở bảng chia sẻ */
+function resumeRound(){if(!running||!paused)return;paused=false;clearInterval(tickT);tickT=setInterval(tick,100);spawn()}
 function end(){
-  running=false;clearTimeout(hudT);document.body.classList.remove("hud-dim");clearInterval(tickT);clearTimeout(spawnT);cells.forEach(c=>{clearTimeout(c.timer);hide(c)});
+  running=false;paused=false;clearTimeout(hudT);document.body.classList.remove("hud-dim");clearInterval(tickT);clearTimeout(spawnT);cells.forEach(c=>{clearTimeout(c.timer);hide(c)});
   let r=RANKS[0];for(const x of RANKS)if(score>=x[0])r=x;
   let hi=0;try{hi=+localStorage.getItem("dapdeadline-hi")||0;if(score>hi)localStorage.setItem("dapdeadline-hi",score)}catch(e){}
   const ov=$("overlay");
@@ -277,7 +282,17 @@ function end(){
   }else{$("againBtn").addEventListener("click",start);$("againBtn").focus();}
 }
 
-$("startBtn").addEventListener("click",start);
+let resumeFrom=(window.NP&&NP.helper&&NP.initialState&&NP.initialState.timeLeft)?NP.initialState:null;
+if(resumeFrom){   /* người chơi hộ: tiếp tục đúng chỗ bạn bè đang dở */
+  const ov=$("overlay");ov.querySelector("h2").textContent="Bạn bè nhờ bạn chơi tiếp!";
+  ov.querySelector("p").textContent="Còn "+Math.ceil(Math.min(ROUND,resumeFrom.timeLeft))+" giây, đang "+(resumeFrom.score|0)+" điểm. Đập thật nhanh để nâng điểm cho bạn nhé!";
+  $("startBtn").textContent="Chơi tiếp";
+}
+$("startBtn").addEventListener("click",()=>{const f=resumeFrom;resumeFrom=null;start(f)});
+if(window.NP){
+  NP.state(()=>running?{score:score,combo:combo,best:best,timeLeft:Math.round(timeLeft*10)/10}:null);
+  NP.onPause(pauseRound,resumeRound);
+}
 $("soundBtn").addEventListener("click",e=>{sound=!sound;e.currentTarget.textContent="Âm thanh: "+(sound?"Bật":"Tắt");e.currentTarget.setAttribute("aria-pressed",sound)});
 render();
 </script>

@@ -57,6 +57,7 @@ ul.how b{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-i
 #res{position:absolute;inset:0;z-index:3;display:none;place-items:center;background:rgba(8,9,20,.66);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding:16px}
 #res.on{display:grid}
 @media (max-height:700px),(max-width:380px){ul.how{display:none}.card .em{width:44px;height:44px;margin-bottom:6px}.card{padding:14px 18px}.card p{margin-bottom:6px}.small{margin-top:8px}}
+@media (max-height:420px){.small{display:none}.card .em{display:none}.card p{font-size:13.5px;margin-bottom:4px}.card{padding:10px 16px}.cta{height:42px}.nav{padding:4px 16px}h1{font-size:19px;margin-bottom:2px}.game{margin-bottom:4px}}
 @media (max-height:360px){.small,.game{display:none}.card p{font-size:13.5px;margin-bottom:4px}.card{padding:10px 16px}.cta{height:40px}.nav{padding:4px 16px}}
 @media (max-height:600px){.card .em{display:none}.small{font-size:12px;line-height:1.35}h1{font-size:20px}.cta{height:46px}}
 .foot{flex:none;display:flex;justify-content:center;flex-wrap:wrap;gap:4px 18px;padding:6px 16px;border-top:1px solid var(--line);background:linear-gradient(180deg,transparent,var(--hero1));font-size:13px}
@@ -90,11 +91,11 @@ const $ = id => document.getElementById(id), root = document.documentElement;
 const TXT = {
   vi: { bad: "Link không hợp lệ", badP: "Đường link này bị thiếu hoặc sai. Hãy nhờ bạn của bạn gửi lại link.", used: "Link này đã được dùng hoặc đã hết hạn", usedP: "Mỗi link chỉ dùng được một lần và hết hạn sau 24 giờ.", slow: "Thao tác quá nhanh, vui lòng thử lại sau ít phút.",
         t: "Bạn được nhờ chơi hộ một lượt!", p: "Một người bạn muốn bạn chơi hộ họ một lượt. Kết quả sẽ được gửi về cho bạn ấy.", s1: "Bạn chơi đúng một lượt, không cần tài khoản.", s2: "Điểm của bạn được mã hoá rồi gửi cho người nhờ, họ xem ngay trong game của họ.", s3: "Link chỉ dùng được một lần và bạn không thể chia sẻ tiếp.",
-        start: "Bắt đầu chơi hộ", resume: "Tiếp tục chơi hộ", privacy: "Chúng tôi không lưu thông tin của bạn. Kết quả được mã hoá, máy chủ không đọc được và xoá ngay khi người nhờ nhận.", playing: "Bạn đang chơi hộ", sending: "Đang gửi kết quả…",
+        start: "Bắt đầu chơi hộ", resume: "Tiếp tục chơi hộ", resumeP: "Bạn sẽ chơi tiếp đúng chỗ bạn của bạn đang dở, cho tới hết lượt.", privacy: "Chúng tôi không lưu thông tin của bạn. Kết quả được mã hoá, máy chủ không đọc được và xoá ngay khi người nhờ nhận.", playing: "Bạn đang chơi hộ", sending: "Đang gửi kết quả…",
         doneT: "Đã gửi kết quả!", doneP: "Cảm ơn bạn đã chơi hộ. Người bạn của bạn sẽ thấy kết quả ngay.", pts: "điểm", more: "Khám phá Play Hub", retry: "Gửi lại", sendErr: "Chưa gửi được kết quả. Vui lòng thử lại.", close: "Đóng", home: "Trang chủ", priv: "Quyền riêng tư", title: "Chơi hộ bạn · Play Hub", theme: "Sáng / Tối" },
   en: { bad: "Invalid link", badP: "This link is missing or incorrect. Ask your friend to send it again.", used: "This link was already used or has expired", usedP: "Each link works once and expires after 24 hours.", slow: "Too many tries, please wait a few minutes.",
         t: "You've been asked to play a round!", p: "A friend would like you to play one round for them. The result will be sent back to them.", s1: "You play exactly one round, no account needed.", s2: "Your score is encrypted and sent to your friend, who sees it right in their game.", s3: "The link works once and you can't share it further.",
-        start: "Start playing for them", resume: "Continue playing for them", privacy: "We don't store your info. The result is encrypted, the server can't read it, and it's deleted as soon as your friend receives it.", playing: "You're playing for a friend", sending: "Sending result…",
+        start: "Start playing for them", resume: "Continue playing for them", resumeP: "You'll continue right where your friend left off, until the round ends.", privacy: "We don't store your info. The result is encrypted, the server can't read it, and it's deleted as soon as your friend receives it.", playing: "You're playing for a friend", sending: "Sending result…",
         doneT: "Result sent!", doneP: "Thanks for playing for them. Your friend will see it right away.", pts: "points", more: "Explore Play Hub", retry: "Send again", sendErr: "Couldn't send the result. Please try again.", close: "Close", home: "Home", priv: "Privacy", title: "Play for a friend · Play Hub", theme: "Light / Dark" }
 };
 const L = () => TXT[root.lang === "en" ? "en" : "vi"];
@@ -104,7 +105,7 @@ const WARN = '<svg class="em" style="color:var(--warn)" viewBox="0 0 24 24" fill
 
 /* link: help.html#<id 22 ký tự>.<khoá 43 ký tự>.<game> — phần sau # không bao giờ được gửi lên máy chủ */
 const parts = location.hash.slice(1).split(".");
-const id = parts[0], key = parts[1], game = parts[2];
+const id = parts[0], key = parts[1], game = parts[2], rstate = /^[A-Za-z0-9_-]{1,2000}$/.test(parts[3] || "") ? parts[3] : "";   // tiến trình của người nhờ (nếu có)
 const valid = /^[A-Za-z0-9_-]{22}$/.test(id || "") && /^[A-Za-z0-9_-]{43}$/.test(key || "") && NPS.GAMES[game];
 const tokKey = "np_help_" + id;
 const getTok = () => { try { return sessionStorage.getItem(tokKey); } catch (e) { return null; } };
@@ -117,7 +118,7 @@ function view() {
   if (!valid) { card.innerHTML = WARN + "<h1>" + esc(t.bad) + "</h1><p>" + esc(t.badP) + '</p><a href="index.html">' + esc(t.more) + "</a>"; return; }
   if (stage === "used") { card.innerHTML = WARN + "<h1>" + esc(t.used) + "</h1><p>" + esc(t.usedP) + '</p><a href="index.html">' + esc(t.more) + "</a>"; return; }
   if (stage === "done") { card.innerHTML = ICON + "<h1>" + esc(t.doneT) + '</h1><div class="big">' + (result.score | 0) + "</div><p>" + esc(t.pts) + " · " + esc(NPS.gameName(game)) + "</p><p>" + esc(t.doneP) + '</p><button class="cta" id="more" type="button">' + esc(t.more) + "</button>"; $("more").onclick = () => { location.href = "index.html"; }; return; }
-  card.innerHTML = ICON + "<h1>" + esc(t.t) + '</h1><p class="game">' + esc(NPS.gameName(game)) + "</p><p>" + esc(t.p) + '</p><ul class="how"><li><b>1</b><span>' + esc(t.s1) + "</span></li><li><b>2</b><span>" + esc(t.s2) + "</span></li><li><b>3</b><span>" + esc(t.s3) + '</span></li></ul><button class="cta" id="go" type="button">' + esc(getTok() ? t.resume : t.start) + '</button><p class="err" id="err" role="alert"></p><p class="small">' + esc(t.privacy) + "</p>";
+  card.innerHTML = ICON + "<h1>" + esc(t.t) + '</h1><p class="game">' + esc(NPS.gameName(game)) + "</p><p>" + esc(t.p) + '</p>' + (rstate ? '<p class="game" style="font-size:15px">' + esc(t.resumeP) + '</p>' : '') + '<ul class="how"><li><b>1</b><span>' + esc(t.s1) + "</span></li><li><b>2</b><span>" + esc(t.s2) + "</span></li><li><b>3</b><span>" + esc(t.s3) + '</span></li></ul><button class="cta" id="go" type="button">' + esc(getTok() ? t.resume : t.start) + '</button><p class="err" id="err" role="alert"></p><p class="small">' + esc(t.privacy) + "</p>";
   $("go").onclick = start;
 }
 let starting = false;
@@ -129,7 +130,7 @@ function start() {
 }
 function play() {
   const g = NPS.GAMES[game], f = document.createElement("iframe"), u = new URL(g.url, location.href);
-  u.searchParams.set("helper", "1"); u.searchParams.set("lang", root.lang);
+  u.searchParams.set("helper", "1"); u.searchParams.set("lang", root.lang); if (rstate) u.searchParams.set("s", rstate);
   f.allow = "autoplay"; f.title = NPS.gameName(game); f.src = u.href;
   $("stage").querySelectorAll("iframe").forEach(x => x.remove()); $("stage").insertBefore(f, $("tag"));
   $("tag").textContent = L().playing + " · " + NPS.gameName(game); $("stage").classList.add("on"); $("res").classList.remove("on"); root.classList.add("playing");
