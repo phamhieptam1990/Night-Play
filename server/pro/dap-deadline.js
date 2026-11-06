@@ -88,8 +88,8 @@ function main(DD, OPTS) {
     'html[data-skin="cafe"] .note.hot{background:repeating-linear-gradient(0deg,rgba(255,255,255,.08) 0 1px,transparent 1px 8px),linear-gradient(#f09a55,#e07b39);color:#2a1408}' +
     'html[data-skin="cafe"] .note.hot::before{content:"";position:absolute;top:0;left:0;right:0;height:6px;background:repeating-linear-gradient(45deg,#8c2a1a 0 8px,#f6e2b6 8px 16px);border-radius:3px 3px 0 0}' +
     'html[data-skin="cafe"] .note.coffee{background:#fff8ea;border:3px dashed #6f8f4d}' +
-    'html[data-skin="cafe"] .desk-wrap::before{content:"☕";position:absolute;right:-6px;top:-18px;z-index:5;font-size:26px;pointer-events:none;filter:drop-shadow(0 2px 2px rgba(0,0,0,.5))}' +
-    'html[data-skin="cafe"] .desk-wrap::after{content:"~ ~";position:absolute;right:2px;top:-40px;z-index:5;font:700 18px/1 var(--body);letter-spacing:.2em;color:rgba(255,235,205,.65);pointer-events:none;animation:steam 3.2s ease-in-out infinite}' +
+    'html[data-skin="cafe"] .desk-wrap::before{content:"☕";position:absolute;right:10px;top:6px;z-index:5;font-size:20px;opacity:.9;pointer-events:none;filter:drop-shadow(0 2px 2px rgba(0,0,0,.5))}' +
+    'html[data-skin="cafe"] .desk-wrap::after{content:"~";position:absolute;right:17px;top:-4px;z-index:5;font:700 14px/1 var(--body);letter-spacing:.2em;color:rgba(255,235,205,.65);pointer-events:none;animation:steam 3.2s ease-in-out infinite}' +
     '@keyframes steam{0%{opacity:0;transform:translateY(8px) scaleX(.9)}40%{opacity:.8}100%{opacity:0;transform:translateY(-14px) scaleX(1.2)}}' +
     /* ===== RETRO: màn hình CRT phosphor xanh, đường quét, nhấp nháy, giấy là cửa sổ terminal ===== */
     'html[data-skin="retro"] body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(ellipse at 50% 40%,rgba(57,255,122,.13),transparent 65%),radial-gradient(ellipse at 50% 50%,transparent 55%,rgba(0,0,0,.6))}' +
