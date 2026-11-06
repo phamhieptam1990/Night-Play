@@ -57,7 +57,11 @@ window.NPS = (function () {
   var isKid = function (id) { return !!(GAMES[id] && GAMES[id].kids); };
   var lang = function () { return document.documentElement.lang === "en" ? "en" : "vi"; };
   var T = function (k) { return STR[lang()][k] || k; };
-  var gameName = function (id) { var g = GAMES[id]; return g ? g.name[lang()] : id; };
+  /* Đập Deadline có nhiều loại game: tên hiển thị đổi theo loại người nhờ đang chơi (chỉ là tên, không lộ nội dung trả phí) */
+  var PACK_NAMES = { animals: { vi: "Đập Thú quậy", en: "Smash the Critters" }, lover: { vi: "Đập Chuyện giận", en: "Smash the Grudges" } };
+  var gameName = function (id, pack) { var g = GAMES[id]; if (id === "dap-deadline" && pack && PACK_NAMES[pack]) return PACK_NAMES[pack][lang()]; return g ? g.name[lang()] : id; };
+  /* loại game nằm trong tiến trình đính kèm link (chuỗi base64 của JSON nhỏ) */
+  var packOf = function (st) { try { var o = JSON.parse(decodeURIComponent(escape(atob(String(st || "").replace(/-/g, "+").replace(/_/g, "/"))))); return o && PACK_NAMES[o.pack] ? o.pack : ""; } catch (e) { return ""; } };
 
   /* ---------- mã hoá (WebCrypto) ---------- */
   var enc = new TextEncoder(), dec = new TextDecoder();
@@ -296,7 +300,7 @@ window.NPS = (function () {
       if (!g) { sheet.innerHTML = '<p>' + esc(T("noShare")) + '</p><div class="nps-row"><button class="nps-s" id="npsNo" type="button">' + esc(T("close")) + '</button></div>'; sheet.hidden = false; document.getElementById("npsNo").onclick = hideSheet; return; }
       toGame({ type: "pause" });   /* tạm dừng game để tiến trình không chạy tiếp khi đang chia sẻ */
       requestState().then(function (state) { return createShare(game, base, encState(state)); }).then(function (r) {
-        var s = r.share, native = !!navigator.share && coarse(), text = T("shareText").replace("{g}", gameName(game));
+        var s = r.share, native = !!navigator.share && coarse(), text = T("shareText").replace("{g}", gameName(game, packOf(s.st)));
         var enc = encodeURIComponent, apps = [['Telegram', 'https://t.me/share/url?url=' + enc(r.link) + '&text=' + enc(text)], ['WhatsApp', 'https://wa.me/?text=' + enc(text + ' ' + r.link)]];
         if (coarse()) apps.unshift(['Messenger', 'fb-messenger://share/?link=' + enc(r.link)]);
         sheet.innerHTML = '<h3>' + esc(T("shareT")) + '</h3><p>' + esc(T(s.st ? "resumeP" : "shareP")) + '</p>' +
@@ -311,7 +315,7 @@ window.NPS = (function () {
         var copied = function () { copyBtn.textContent = T("copied"); setTimeout(function () { copyBtn.textContent = T("copy"); }, 1600); };
         document.getElementById("npsNo").onclick = function () { clearInterval(shareTimer); hideSheet(); };
         copyBtn.onclick = function () { copyText(r.link).then(function (ok) { if (ok) copied(); else inp.select(); }); };
-        if (native) document.getElementById("npsSend").onclick = function () { navigator.share({ title: gameName(game), text: text, url: r.link }).catch(function () {}); };
+        if (native) document.getElementById("npsSend").onclick = function () { navigator.share({ title: gameName(game, packOf(s.st)), text: text, url: r.link }).catch(function () {}); };
         else copyText(r.link).then(function (ok) { if (ok) { copied(); toast(T("linkCopied"), 3600); } });      /* trên web: tự sao chép link */
         var refresh = function () { var cur = load().filter(function (x) { return x.id === s.id; })[0] || s, el = document.getElementById("npsSt"); if (!el) { clearInterval(shareTimer); return; }
           el.textContent = T(cur.state === "claimed" ? "playing" : cur.state === "done" ? "done" : cur.state === "expired" ? "expired" : "waiting"); };
@@ -368,7 +372,7 @@ window.NPS = (function () {
     var dlg = document.createElement("dialog"); dlg.className = "nps-dlg"; document.body.appendChild(dlg);
     onResult(function (list) {
       var s = list[list.length - 1], r = s.result || {};
-      dlg.innerHTML = '<h3>' + esc(T("gotT")) + '</h3><p>' + esc(gameName(s.game)) + '</p><div class="nps-big">' + (r.score | 0) + '</div><p>' + esc(T("points")) + '</p>' +
+      dlg.innerHTML = '<h3>' + esc(T("gotT")) + '</h3><p>' + esc(gameName(s.game, (r && r.extra && r.extra.pack) || packOf(s.st))) + '</p><div class="nps-big">' + (r.score | 0) + '</div><p>' + esc(T("points")) + '</p>' +
         '<div class="nps-row"><button class="nps-s" id="npsX" type="button">' + esc(T("close")) + '</button><button class="nps-p" id="npsGo" type="button">' + esc(T("view")) + '</button></div>';
       if (!dlg.open) dlg.showModal();
       document.getElementById("npsX").onclick = function () { s.seen = true; mark(s); dlg.close(); };
@@ -379,6 +383,6 @@ window.NPS = (function () {
     setInterval(tick, 8000); document.addEventListener("visibilitychange", tick); poll();
   }
 
-  return { kidName: kidName, isKidName: isKidName, isKid: isKid, brandOf: brandOf, GAMES: GAMES, T: T, lang: lang, gameName: gameName, load: load, save: save, prune: prune, linkFor: linkFor, createShare: createShare, poll: poll, onResult: onResult,
+  return { kidName: kidName, isKidName: isKidName, isKid: isKid, brandOf: brandOf, GAMES: GAMES, T: T, lang: lang, gameName: gameName, packOf: packOf, load: load, save: save, prune: prune, linkFor: linkFor, createShare: createShare, poll: poll, onResult: onResult,
     isNet: isNet, claim: claim, sendResult: sendResult, submitScore: submitScore, getScores: getScores, nickGet: nickGet, nickSet: nickSet, initParent: initParent, TTL: TTL, STR: STR };
 })();

@@ -109,6 +109,7 @@ const parts = location.hash.slice(1).split(".");
 const id = parts[0], key = parts[1], game = parts[2], rstate = /^[A-Za-z0-9_-]{1,2000}$/.test(parts[3] || "") ? parts[3] : "";   // tiến trình của người nhờ (nếu có)
 const valid = /^[A-Za-z0-9_-]{22}$/.test(id || "") && /^[A-Za-z0-9_-]{43}$/.test(key || "") && NPS.GAMES[game];
 const tokKey = "np_help_" + id;
+const GN = () => NPS.gameName(game, (result && result.extra && result.extra.pack) || NPS.packOf(rstate));   /* tên theo loại game của người nhờ (Thú vật / Người yêu…) */
 const getTok = () => { try { return sessionStorage.getItem(tokKey); } catch (e) { return null; } };
 const setTok = v => { try { sessionStorage.setItem(tokKey, v); } catch (e) {} };
 let result = null, stage = "intro";
@@ -118,8 +119,8 @@ function view() {
   document.querySelectorAll("#langSeg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.l === root.lang)));
   if (!valid) { card.innerHTML = WARN + "<h1>" + esc(t.bad) + "</h1><p>" + esc(t.badP) + '</p><a href="index.html">' + esc(t.more) + "</a>"; return; }
   if (stage === "used") { card.innerHTML = WARN + "<h1>" + esc(t.used) + "</h1><p>" + esc(t.usedP) + '</p><a href="index.html">' + esc(t.more) + "</a>"; return; }
-  if (stage === "done") { card.innerHTML = ICON + "<h1>" + esc(t.doneT) + '</h1><div class="big">' + (result.score | 0) + "</div><p>" + esc(t.pts) + " · " + esc(NPS.gameName(game)) + "</p><p>" + esc(t.doneP) + '</p><button class="cta" id="more" type="button">' + esc(t.more) + "</button>"; $("more").onclick = () => { location.href = "index.html"; }; return; }
-  card.innerHTML = ICON + "<h1>" + esc(t.t) + '</h1><p class="game">' + esc(NPS.gameName(game)) + "</p><p>" + esc(t.p) + '</p>' + (rstate ? '<p class="game" style="font-size:15px">' + esc(t.resumeP) + '</p>' : '') + '<ul class="how"><li><b>1</b><span>' + esc(t.s1) + "</span></li><li><b>2</b><span>" + esc(t.s2) + "</span></li><li><b>3</b><span>" + esc(t.s3) + '</span></li></ul><button class="cta" id="go" type="button">' + esc(getTok() ? t.resume : t.start) + '</button><p class="err" id="err" role="alert"></p><p class="small">' + esc(t.privacy) + "</p>";
+  if (stage === "done") { card.innerHTML = ICON + "<h1>" + esc(t.doneT) + '</h1><div class="big">' + (result.score | 0) + "</div><p>" + esc(t.pts) + " · " + esc(GN()) + "</p><p>" + esc(t.doneP) + '</p><button class="cta" id="more" type="button">' + esc(t.more) + "</button>"; $("more").onclick = () => { location.href = "index.html"; }; return; }
+  card.innerHTML = ICON + "<h1>" + esc(t.t) + '</h1><p class="game">' + esc(GN()) + "</p><p>" + esc(t.p) + '</p>' + (rstate ? '<p class="game" style="font-size:15px">' + esc(t.resumeP) + '</p>' : '') + '<ul class="how"><li><b>1</b><span>' + esc(t.s1) + "</span></li><li><b>2</b><span>" + esc(t.s2) + "</span></li><li><b>3</b><span>" + esc(t.s3) + '</span></li></ul><button class="cta" id="go" type="button">' + esc(getTok() ? t.resume : t.start) + '</button><p class="err" id="err" role="alert"></p><p class="small">' + esc(t.privacy) + "</p>";
   $("go").onclick = start;
 }
 let starting = false;
@@ -132,9 +133,9 @@ function start() {
 function play() {
   const g = NPS.GAMES[game], f = document.createElement("iframe"), u = new URL(g.url, location.href);
   u.searchParams.set("helper", "1"); u.searchParams.set("lang", root.lang); if (rstate) u.searchParams.set("s", rstate);
-  f.allow = "autoplay"; f.title = NPS.gameName(game); f.src = u.href;
+  f.allow = "autoplay"; f.title = GN(); f.src = u.href;
   $("stage").querySelectorAll("iframe").forEach(x => x.remove()); $("stage").insertBefore(f, $("tag"));
-  $("tag").textContent = L().playing + " · " + NPS.gameName(game); $("stage").classList.add("on"); $("res").classList.remove("on"); root.classList.add("playing");
+  $("tag").textContent = L().playing + " · " + GN(); $("stage").classList.add("on"); $("res").classList.remove("on"); root.classList.add("playing");
 }
 $("quit").onclick = () => { starting = false; $("stage").classList.remove("on"); $("stage").querySelectorAll("iframe").forEach(x => x.remove()); view(); };
 addEventListener("message", e => {
@@ -154,7 +155,7 @@ function send() {
     $("resCard").innerHTML = WARN + "<h1>" + (result.score | 0) + " " + esc(t.pts) + "</h1><p>" + esc(t.sendErr) + '</p><button class="cta" id="re" type="button">' + esc(t.retry) + "</button>"; $("re").onclick = () => { tries = 0; send(); };
   });
 }
-function setLang(l, save) { root.lang = l; if (save) try { localStorage.setItem("lang", l); } catch (e) {} if (!$("stage").classList.contains("on")) view(); else $("tag").textContent = L().playing + " · " + NPS.gameName(game); }
+function setLang(l, save) { root.lang = l; if (save) try { localStorage.setItem("lang", l); } catch (e) {} if (!$("stage").classList.contains("on")) view(); else $("tag").textContent = L().playing + " · " + GN(); }
 document.querySelectorAll("#langSeg button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.l, true)));
 $("themeBtn").addEventListener("click", () => { const n = root.dataset.theme === "dark" ? "light" : "dark"; root.dataset.theme = n; document.querySelector("meta[name=theme-color]").content = n === "dark" ? "#12141F" : "#F6F4F1"; try { localStorage.setItem("theme", n); } catch (e) {} });
 view();

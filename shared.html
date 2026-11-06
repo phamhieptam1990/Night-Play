@@ -112,7 +112,7 @@ function draw() {
   if (!items.length) { box.innerHTML = '<div class="empty">' + esc(t.empty) + "</div>"; $("pager").hidden = true; return; }
   box.innerHTML = items.slice(page * per, page * per + per).map(s => {
     const r = s.result || {}, live = s.state === "open" || s.state === "claimed";
-    return '<div class="item" data-id="' + s.id + '"><div><div class="g">' + esc(NPS.gameName(s.game)) + (s.state === "done" && !s.seen ? '<span class="new">' + esc(t.newTag) + "</span>" : "") + '</div>' +
+    return '<div class="item" data-id="' + s.id + '"><div><div class="g">' + esc(NPS.gameName(s.game, (s.result && s.result.extra && s.result.extra.pack) || NPS.packOf(s.st))) + (s.state === "done" && !s.seen ? '<span class="new">' + esc(t.newTag) + "</span>" : "") + '</div>' +
       '<div class="meta"><span class="chip"><i style="background:' + COLOR[s.state] + '"></i>' + esc(t["st_" + s.state]) + "</span> · " + esc(t.at + " " + ago(s.at)) + "</div></div>" +
       (s.state === "done" ? '<div class="big">' + (r.score | 0) + "<small>" + esc(t.pts) + "</small></div>" : "") +
       '<div class="act">' + (live ? '<button data-a="copy">' + esc(t.copy) + '</button><button data-a="cancel">' + esc(t.cancel) + "</button>" : '<button data-a="del">' + esc(t.del) + "</button>") + "</div></div>";

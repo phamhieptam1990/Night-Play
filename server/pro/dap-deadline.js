@@ -143,8 +143,7 @@ function main(DD, OPTS) {
     'html[data-skin="cafe"] .note{border-radius:3px 3px 10px 10px;background:repeating-linear-gradient(0deg,rgba(120,70,30,.12) 0 1px,transparent 1px 8px),linear-gradient(#f6e2b6,#ecd199);color:#3a2616;box-shadow:0 5px 0 rgba(0,0,0,.28),0 9px 12px rgba(0,0,0,.25)}' +
     'html[data-skin="cafe"] .note::after{content:"";position:absolute;right:8%;bottom:6%;width:26%;aspect-ratio:1;border-radius:50%;border:3px solid rgba(110,60,20,.28);border-right-color:transparent;transform:rotate(30deg)}' +
     'html[data-skin="cafe"] .note.hot{background:repeating-linear-gradient(0deg,rgba(255,255,255,.08) 0 1px,transparent 1px 8px),linear-gradient(#f09a55,#e07b39);color:#2a1408}' +
-    'html[data-skin="cafe"] .note.hot::before{content:"";position:absolute;top:0;left:0;right:0;height:6px;background:repeating-linear-gradient(45deg,#8c2a1a 0 8px,#f6e2b6 8px 16px);border-radius:3px 3px 0 0}' +
-    'html[data-skin="cafe"] .note.hot{padding-top:12px}' +
+    'html[data-skin="cafe"] .note{overflow:hidden}' +
     'html[data-skin="cafe"] .note.coffee{background:#fff8ea;border:3px dashed #6f8f4d}' +
     'html[data-skin="cafe"] .desk-wrap::before{content:"☕";position:absolute;right:10px;top:6px;z-index:5;font-size:20px;opacity:.9;pointer-events:none;filter:drop-shadow(0 2px 2px rgba(0,0,0,.5))}' +
     'html[data-skin="cafe"] .desk-wrap::after{content:"~";position:absolute;right:17px;top:-4px;z-index:5;font:700 14px/1 var(--body);letter-spacing:.2em;color:rgba(255,235,205,.65);pointer-events:none;animation:steam 3.2s ease-in-out infinite}' +
@@ -208,7 +207,7 @@ function main(DD, OPTS) {
     'html[data-skin="sakura"] .note.coffee{background:#fffef8;border-left:3px dashed var(--good);border:3px dashed var(--good)}' +
     'html[data-skin="sakura"] .note.coffee::after{display:none}' +
     'html[data-skin="sakura"] .stampmark span{border-radius:50%;aspect-ratio:1;display:grid;place-items:center;border-width:4px;font-family:serif}' +
-    'html[data-skin="sakura"] .desk[data-n="5"] .note::after,html[data-skin="sakura"] .desk[data-n="6"] .note::after{display:none}html[data-skin="sakura"] .desk[data-n="5"] .note,html[data-skin="sakura"] .desk[data-n="6"] .note{border-left-width:5px}' +
+    'html[data-skin="sakura"] .desk[data-n="4"] .note::after,html[data-skin="sakura"] .desk[data-n="5"] .note::after,html[data-skin="sakura"] .desk[data-n="6"] .note::after{display:none}html[data-skin="sakura"] .desk[data-n="4"] .note,html[data-skin="sakura"] .desk[data-n="5"] .note,html[data-skin="sakura"] .desk[data-n="6"] .note{border-left-width:4px}' +
     'html[data-skin="sakura"] .desk-wrap::before{content:"🏮";position:absolute;left:8px;top:-4px;z-index:5;font-size:22px;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(0,0,0,.35));animation:lantern 3s ease-in-out infinite;transform-origin:50% 0}' +
     'html[data-skin="sakura"] .desk-wrap::after{content:"🌸";position:absolute;right:8px;top:-4px;z-index:5;font-size:20px;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(0,0,0,.3))}' +
     '@keyframes lantern{50%{transform:rotate(7deg)}}' +
