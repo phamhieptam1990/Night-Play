@@ -2,6 +2,7 @@
 <html lang="vi" data-l="vi" data-app="hub">
 <head>
 <meta charset="utf-8">
+<script src="shared/guard.js"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#F6F4F1">
 <meta name="description" content="Chính sách quyền riêng tư / Privacy Policy">
@@ -20,6 +21,7 @@ document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: da
 </script>
 <link rel="stylesheet" href="shared/theme.css">
 <link rel="stylesheet" href="shared/layout.css">
+<link rel="stylesheet" href="shared/bars.css">
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.6}
@@ -62,23 +64,42 @@ body{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidd
 #pg{flex:1;min-height:0;width:100%;max-width:760px;margin:0 auto;padding:4px 16px 8px;display:flex;flex-direction:column;gap:8px}
 #pgHead{flex:none}
 #pgHead h1{margin:6px 0 0;font-size:clamp(20px,3.6vw,26px);line-height:1.2}
-#pgBody{flex:1;min-height:0;overflow:hidden;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:14px 18px;box-shadow:var(--shadow);overflow-wrap:anywhere}
-#pgBody:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-#pgBody h2{margin:0 0 6px;font-size:1.2em;line-height:1.3}
-#pgBody h3{margin:0 0 4px;font-size:1.05em}
-#pgBody p,#pgBody li{font-size:1em;margin:6px 0}
-#pgBody ul{margin:6px 0;padding-left:20px}
-#pgBody .meta{font-size:.88em;margin:0 0 10px}
-#pgBody .sum{background:none;border:0;box-shadow:none;padding:0}
-#pgBody .sum h2{font-size:1.1em}
-#pgBody table{font-size:.93em}
-#pgBody > :first-child{margin-top:0}
+#book{flex:1;min-height:0;position:relative;perspective:1800px}
+/* trang giấy: gáy sách bên trái, mép xếp lớp bên phải */
+#pgBody,.leaf{position:absolute;inset:0;overflow:hidden;overflow-wrap:break-word;hyphens:auto;-webkit-hyphens:auto;
+  background:linear-gradient(90deg,rgba(60,40,10,.16),rgba(60,40,10,0) 26px),var(--paper);color:var(--paper-ink);
+  border-radius:4px 14px 14px 4px;padding:18px 22px 34px 30px;font-family:Georgia,"Iowan Old Style","Times New Roman",serif;line-height:1.62;
+  box-shadow:1px 0 0 var(--paper-edge),2px 0 0 var(--paper),3px 0 0 var(--paper-edge),5px 2px 10px rgba(0,0,0,.22)}
+:root{--paper:#FBF7EE;--paper-edge:#E4DAC4;--paper-ink:#2a2418}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--paper:#1F2336;--paper-edge:#343b5a;--paper-ink:#E8E9F5}}
+:root[data-theme=dark]{--paper:#1F2336;--paper-edge:#343b5a;--paper-ink:#E8E9F5}
+@media (min-width:520px){#pgBody,.leaf{text-align:justify}}
+#pgBody:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+#pgBody h2,.leaf h2{margin:0 0 .5em;font-size:1.22em;line-height:1.3;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;text-align:left}
+#pgBody h2::after,.leaf h2::after{content:"";display:block;width:42px;height:3px;border-radius:2px;background:var(--accent);margin-top:.3em}
+#pgBody h3,.leaf h3{margin:0 0 .4em;font-size:1.06em;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;text-align:left}
+#pgBody p,#pgBody li,.leaf p,.leaf li{font-size:1em;margin:.55em 0}
+#pgBody ul,.leaf ul{margin:.5em 0;padding-left:1.3em}
+#pgBody li::marker,.leaf li::marker{color:var(--accent)}
+#pgBody .meta,.leaf .meta{font-size:.86em;margin:0 0 .8em;color:var(--muted);font-style:italic;text-align:left}
+#pgBody .sum,.leaf .sum{background:none;border:0;box-shadow:none;padding:0}
+#pgBody .sum h2,.leaf .sum h2{font-size:1.12em}
+#pgBody table,.leaf table{font-size:.92em;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;text-align:left}
+#pgBody > :first-child,.leaf > :first-child{margin-top:0}
+#pgBody::after,.leaf::after{content:attr(data-pno);position:absolute;left:0;right:0;bottom:9px;text-align:center;font:12px/1 system-ui,sans-serif;color:var(--muted);letter-spacing:.08em;text-align:center}
+/* lật trang */
+.leaf{z-index:3;backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform;pointer-events:none}
+.leaf.next{transform-origin:0 50%;animation:flipNext .62s cubic-bezier(.5,.05,.4,1) forwards}
+.leaf.prev{transform-origin:0 50%;animation:flipPrev .62s cubic-bezier(.5,.05,.4,1) forwards}
+@keyframes flipNext{0%{transform:rotateY(0);filter:brightness(1)}100%{transform:rotateY(-112deg);filter:brightness(.55);opacity:.2}}
+@keyframes flipPrev{0%{transform:rotateY(-112deg);filter:brightness(.55);opacity:.2}100%{transform:rotateY(0);filter:brightness(1);opacity:1}}
+@media (prefers-reduced-motion:reduce){.leaf{animation-duration:.01s!important}}
 #pgBar{flex:none;display:flex;align-items:center;gap:10px}
 #pgBar button{flex:none;width:52px;height:44px;border-radius:14px;background:var(--panel);box-shadow:var(--shadow);font-size:26px;font-weight:800;line-height:1;color:var(--ink)}
 #pgBar button:disabled{opacity:.3;cursor:default}
 #pgBar button:focus-visible,#toc:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 #toc{flex:1;min-width:0;height:44px;border-radius:14px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;font-weight:700;padding:0 12px}
-@media (max-height:620px),(max-width:360px){#pgBody{padding:8px 12px}#pg{gap:6px;padding-bottom:6px}}
+@media (max-height:620px),(max-width:360px){#pgBody,.leaf{padding:10px 14px 28px 20px}#pg{gap:6px;padding-bottom:6px}}
 @media print{html,body{height:auto;overflow:visible}#src{display:block;max-width:760px;margin:0 auto}#pg{display:none}}
 </style>
 </head>
@@ -275,7 +296,7 @@ body{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidd
 <!-- Bản đọc theo trang: mỗi màn hình một mục, tự vừa khung nhìn, không cuộn. Nội dung lấy từ #src ở trên. -->
 <main id="pg" aria-label="Privacy">
   <div id="pgHead"><h1 id="pgTitle"></h1></div>
-  <div id="pgBody" tabindex="0"></div>
+  <div id="book"><div id="pgBody" tabindex="0"></div></div>
   <div id="pgBar">
     <button id="pgPrev" type="button" aria-label="Previous">‹</button>
     <select id="toc" aria-label="Contents"></select>
@@ -331,60 +352,87 @@ setTheme(root.dataset.theme);
 
 /* ===== Đọc theo trang: không cuộn, tự co chữ cho vừa; mục quá dài thì tách thành nhiều màn hình ===== */
 const body = $("pgBody"), pg = { screens: [], i: 0 };
-function sections(L) {
-  const out = []; let h1 = "", meta = null, h2 = "", grp = null;
+/* Dàn trang kiểu sách: gom các khối liên tiếp (tiêu đề, đoạn, danh sách...) vào cùng một trang cho tới khi đầy.
+   Tiêu đề không bao giờ nằm cuối trang; khối quá dài thì tách theo mục danh sách / hàng bảng. */
+function blocks(L) {
+  const out = []; let h1 = "", meta = null;
   for (const k of [...L.children]) {
     if (k.tagName === "H1") { h1 = k.textContent; continue; }
     if (k.classList.contains("meta")) { meta = k; continue; }
-    if (k.matches("section.sum")) { out.push({ title: h1, nodes: [meta, k].filter(Boolean) }); continue; }
-    if (k.tagName === "H2") { h2 = k.textContent; grp = { title: h2, nodes: [] }; out.push(grp); continue; }
-    if (k.tagName === "H3") { grp = { title: h2, nodes: [k] }; out.push(grp); continue; }
-    if (grp) grp.nodes.push(k);
+    out.push(k);
   }
-  return out.filter(g => g.nodes.length);
+  if (meta) out.unshift(meta);
+  return { h1, out };
 }
 const tableUnits = n => { const t = n.tagName === "TABLE" ? n : n.querySelector("table"); if (!t) return null;
   const head = t.tHead ? t.tHead.cloneNode(true) : null, rows = [...t.querySelectorAll("tbody tr")]; if (rows.length < 2) return null;
-  return rows.map(r => { const w = n.cloneNode(false), tb = t.cloneNode(false), body = document.createElement("tbody"); body.appendChild(r.cloneNode(true)); if (head) tb.appendChild(head.cloneNode(true)); tb.appendChild(body); w === n ? 0 : 0; if (n.tagName === "TABLE") return tb; w.appendChild(tb); return w; }); };
+  return rows.map(r => { const tb = t.cloneNode(false), bd = document.createElement("tbody"); bd.appendChild(r.cloneNode(true)); if (head) tb.appendChild(head.cloneNode(true)); tb.appendChild(bd);
+    if (n.tagName === "TABLE") return tb; const w = n.cloneNode(false); w.appendChild(tb); return w; }); };
 const units = n => tableUnits(n) || (n.tagName === "SECTION" ? [...n.children].flatMap(units) : n.tagName === "UL" ? [...n.children].map(li => { const u = n.cloneNode(false); u.appendChild(li.cloneNode(true)); return u; }) : [n]);
 function fits(nodes, list) {
   body.replaceChildren(...nodes.map(n => n.cloneNode(true)));
   for (const fs of list) { body.style.fontSize = fs + "px"; if (body.scrollHeight <= body.clientHeight + 1) return fs; }
   return 0;
 }
+const isHead = n => n.tagName === "H2" || n.tagName === "H3";
 function layoutPages() {
   const l = root.dataset.l, L = document.querySelector('#src .L[lang="' + l + '"]'); if (!L) return;
-  const FS = innerWidth < 500 ? [15, 14, 13, 12, 11] : [17, 16, 15, 14, 13, 12, 11], secs = sections(L), keep = pg.screens.length ? pg.i / pg.screens.length : 0;
-  pg.screens = [];
-  $("pgTitle").textContent = secs.reduce((m, x) => x.title.length > m.length ? x.title : m, "") + (l === "vi" ? " (tiếp)" : " (cont.)");   // đo với tiêu đề dài nhất để khung nội dung không đổi chiều cao giữa các trang
-  $("pgHead").style.minHeight = ""; $("pgHead").style.minHeight = $("pgHead").offsetHeight + "px";
-  for (const s of secs) {
-    const fs = fits(s.nodes, FS);
-    if (fs) { pg.screens.push({ title: s.title, nodes: s.nodes, fs }); continue; }
-    let chunk = [], first = true;
-    const push = c => { pg.screens.push({ title: s.title + (first ? "" : (l === "vi" ? " (tiếp)" : " (cont.)")), nodes: c, fs: fits(c, FS) || FS[FS.length - 1] }); first = false; };
-    for (const n of s.nodes.flatMap(units)) { if (chunk.length && !fits([...chunk, n], FS)) { push(chunk); chunk = [n]; } else chunk.push(n); }
-    if (chunk.length) push(chunk);
-  }
+  const FS = innerWidth < 500 ? [15, 14, 13, 12, 11] : [17, 16, 15, 14, 13, 12, 11], B = blocks(L), keep = pg.screens.length ? pg.i / pg.screens.length : 0;
+  $("pgTitle").textContent = B.h1; pg.screens = [];
+  let chunk = [];
+  const flush = () => {
+    if (!chunk.length) return;
+    const tail = [];                                        // tiêu đề ở cuối trang → chuyển sang trang sau
+    while (chunk.length > 1 && isHead(chunk[chunk.length - 1])) tail.unshift(chunk.pop());
+    pg.screens.push({ nodes: chunk, fs: fits(chunk, FS) || FS[FS.length - 1] }); chunk = tail;
+  };
+  const BASE = innerWidth < 500 ? 14 : 16;                 // cỡ chữ dễ đọc: xếp trang theo cỡ này; chỉ co nhỏ khi một khối đơn lẻ quá dài
+  const fitBase = nodes => fits(nodes, [BASE]);
+  const add = (list) => { for (const n of list) {
+    if (fitBase([...chunk, n])) { chunk.push(n); continue; }
+    if (chunk.length) { flush(); if (fitBase([...chunk, n])) { chunk.push(n); continue; } }
+    if (fits([...chunk, n], FS) || units(n).length < 2) { chunk.push(n); continue; }   // co chữ cho vừa, hoặc không tách được nữa
+    add(units(n));
+  } };
+  add(B.out); flush();
+  const label = x => { const h = x.nodes.find(isHead); return h ? h.textContent : (x.nodes[0].textContent || "").slice(0, 40); };
+  pg.screens.forEach(x => { x.title = label(x); });
   $("toc").replaceChildren(...pg.screens.map((x, i) => { const o = document.createElement("option"); o.value = i; o.textContent = (i + 1) + "/" + pg.screens.length + " · " + x.title; return o; }));
   $("pgPrev").setAttribute("aria-label", l === "vi" ? "Trang trước" : "Previous"); $("pgNext").setAttribute("aria-label", l === "vi" ? "Trang sau" : "Next"); $("toc").setAttribute("aria-label", l === "vi" ? "Mục lục" : "Contents");
   show(Math.min(pg.screens.length - 1, Math.round(keep * pg.screens.length)));
 }
-function show(i) {
+let flipping = null;
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
+function endFlip() { if (flipping) { flipping.leaf.remove(); flipping.done && flipping.done(); flipping = null; } }
+function show(i, dir) {
+  endFlip();
+  const prev = pg.i, old = body.cloneNode(true);
   pg.i = Math.max(0, Math.min(pg.screens.length - 1, i)); const s = pg.screens[pg.i]; if (!s) return;
-  $("pgTitle").textContent = s.title;
+  const animate = dir && !reduceMotion.matches && pg.i !== prev;
   body.replaceChildren(...s.nodes.map(n => n.cloneNode(true))); body.style.fontSize = s.fs + "px"; body.scrollTop = 0;
   body.querySelectorAll("[data-fill]").forEach(el => { const k = el.dataset.fill; el.textContent = INFO[k]; if (k === "email") el.href = "mailto:" + INFO.email; });
+  body.dataset.pno = (pg.i + 1) + " / " + pg.screens.length;
+  if (animate) {
+    /* tiến: trang cũ lật đi để lộ trang mới; lùi: trang mới lật đè lên trang cũ */
+    const leaf = document.createElement("div"); leaf.className = "leaf " + (dir > 0 ? "next" : "prev"); leaf.style.fontSize = (dir > 0 ? pg.screens[prev] : s).fs + "px";
+    const src = dir > 0 ? old : body; leaf.dataset.pno = src.dataset.pno; [...src.childNodes].forEach(n => leaf.appendChild(n.cloneNode(true)));
+    if (dir < 0) { body.replaceChildren(...old.childNodes); body.style.fontSize = pg.screens[prev].fs + "px"; body.dataset.pno = old.dataset.pno; }
+    $("book").appendChild(leaf);
+    const after = () => { if (dir < 0) { body.replaceChildren(...s.nodes.map(n => n.cloneNode(true))); body.style.fontSize = s.fs + "px"; body.dataset.pno = (pg.i + 1) + " / " + pg.screens.length;
+      body.querySelectorAll("[data-fill]").forEach(el => { const k = el.dataset.fill; el.textContent = INFO[k]; if (k === "email") el.href = "mailto:" + INFO.email; }); } };
+    flipping = { leaf, done: after }; leaf.addEventListener("animationend", endFlip, { once: true }); setTimeout(endFlip, 900);
+  }
   $("toc").value = pg.i; $("pgPrev").disabled = pg.i === 0; $("pgNext").disabled = pg.i === pg.screens.length - 1;
 }
-$("pgPrev").addEventListener("click", () => show(pg.i - 1));
-$("pgNext").addEventListener("click", () => show(pg.i + 1));
-$("toc").addEventListener("change", e => show(+e.target.value));
-addEventListener("keydown", e => { if (e.target.closest && e.target.closest("select,input")) return; if (e.key === "ArrowRight") show(pg.i + 1); else if (e.key === "ArrowLeft") show(pg.i - 1); });
+$("pgPrev").addEventListener("click", () => show(pg.i - 1, -1));
+$("pgNext").addEventListener("click", () => show(pg.i + 1, 1));
+$("toc").addEventListener("change", e => { const j = +e.target.value; show(j, Math.sign(j - pg.i)); });
+addEventListener("keydown", e => { if (e.target.closest && e.target.closest("select,input")) return; if (e.key === "ArrowRight") show(pg.i + 1, 1); else if (e.key === "ArrowLeft") show(pg.i - 1, -1); });
 let tx = null; body.addEventListener("touchstart", e => { tx = e.touches.length === 1 ? [e.touches[0].clientX, e.touches[0].clientY] : null; }, { passive: true });
-body.addEventListener("touchend", e => { if (!tx) return; const t = e.changedTouches[0], dx = t.clientX - tx[0], dy = t.clientY - tx[1]; tx = null; if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) show(pg.i + (dx < 0 ? 1 : -1)); }, { passive: true });
+body.addEventListener("touchend", e => { if (!tx) return; const t = e.changedTouches[0], dx = t.clientX - tx[0], dy = t.clientY - tx[1]; tx = null; if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) show(pg.i + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1); }, { passive: true });
 let rz = 0; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(layoutPages, 120); });
 window.__pgReady = true; layoutPages(); if (document.fonts && document.fonts.ready) document.fonts.ready.then(layoutPages);
 </script>
+<script src="shared/bars.js"></script>
 </body>
 </html>

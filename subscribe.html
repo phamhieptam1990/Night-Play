@@ -2,6 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8">
+<script src="shared/guard.js"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Night Pass · Night Play</title>
 <meta name="color-scheme" content="light dark">
@@ -37,6 +38,7 @@ document.documentElement.dataset.app = APPKEY;
 document.documentElement.dataset.theme = t || APP.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 </script>
 <link rel="stylesheet" href="shared/theme.css">
+<link rel="stylesheet" href="shared/bars.css">
 <style>
 /* Bảng màu theo từng app: cozyplay (tím đêm) / popplay (cam) */
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -621,17 +623,8 @@ addEventListener("resize", fitSoon);
 if(document.fonts && document.fonts.ready) document.fonts.ready.then(fitSoon);
 fitDensity();
 
-/* ===== CHẶN MỞ DEVTOOLS (chỉ cản người dùng thường; không phải bảo mật thật) ===== */
-addEventListener("keydown", e => {
-  const k = e.key.toLowerCase(), mod = e.ctrlKey || e.metaKey;
-  if(e.key === "F12" ||
-     (mod && e.shiftKey && "ijcke".includes(k)) ||      // Ctrl/Cmd+Shift+I/J/C/K/E
-     (e.metaKey && e.altKey && "ijcu".includes(k)) ||    // Cmd+Opt+I/J/C/U (Mac)
-     (e.ctrlKey && k === "u")){                          // Ctrl+U xem mã nguồn
-    e.preventDefault(); e.stopPropagation();
-  }
-}, true);
-document.addEventListener("contextmenu", e => { if(!e.target.closest("input")) e.preventDefault(); });
+/* Hạn chế DevTools: xem shared/guard.js */
 </script>
+<script src="shared/bars.js"></script>
 </body>
 </html>

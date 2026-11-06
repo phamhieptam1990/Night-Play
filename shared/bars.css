@@ -1,0 +1,25 @@
+/* Header/footer tự chuyển thành menu (xem shared/bars.js) khi chữ hoặc icon bị chèn ép */
+:where(nav.nav,footer.foot,footer.site-foot){position:relative}
+.bars-more{flex:none;width:44px;height:44px;border-radius:50%;border:0;padding:0;display:inline-grid;place-items:center;cursor:pointer;
+  background:var(--panel,var(--surface,#fff));color:var(--ink,inherit);box-shadow:var(--shadow,0 2px 8px rgba(0,0,0,.15))}
+.bars-more svg{width:22px;height:22px;fill:currentColor;display:block}
+.bars-more:focus-visible{outline:3px solid var(--accent,#7C5CFF);outline-offset:3px}
+footer .bars-more{order:2;width:40px;height:40px}
+.bars-pop{position:absolute;z-index:60;min-width:230px;max-width:calc(100vw - 24px);max-height:calc(100dvh - 90px);overflow:hidden;padding:8px;
+  display:flex;flex-direction:column;gap:2px;background:var(--panel,var(--surface,#fff));color:var(--ink,#222);
+  border:1px solid var(--line,var(--border,#ddd));border-radius:18px;box-shadow:0 12px 36px rgba(0,0,0,.28)}
+.bars-pop[hidden]{display:none}
+nav.nav>.bars-pop{right:12px;top:calc(100% + 6px)}
+footer>.bars-pop{left:12px;bottom:calc(100% + 6px)}
+/* các nút trong menu: thành hàng có chữ (lấy từ aria-label) */
+.bars-pop .ico,.bars-pop .back,.bars-pop .pill{display:flex;align-items:center;justify-content:flex-start;gap:12px;width:100%;height:46px;padding:0 12px;border-radius:12px;box-shadow:none;background:transparent;color:inherit;font-weight:700;font-size:15px;text-decoration:none}
+.bars-pop .ico:hover,.bars-pop .back:hover,.bars-pop a:hover,.bars-pop button:hover{background:color-mix(in srgb,var(--accent,#7C5CFF) 12%,transparent)}
+.bars-pop .ico::after{content:attr(aria-label);font-size:15px}
+.bars-pop .back span,.bars-pop .pill span{display:inline!important}
+.bars-pop #langMenu{position:static;display:none;box-shadow:none;margin:0 0 4px 14px;padding:0;background:none;min-width:0;top:auto;right:auto}
+.bars-pop #langMenu.on{display:block}
+.bars-pop #langMenu button{padding:10px 12px;font-size:15px}
+.bars-pop .seg{align-self:stretch;justify-content:center;box-shadow:none;border:1px solid var(--line,#ddd)}
+.bars-pop nav{display:flex;flex-direction:column;gap:0;flex-wrap:nowrap}
+.bars-pop nav a,.bars-pop nav button{display:block;width:100%;padding:12px;border-radius:10px;text-align:left;font-size:15px;font-weight:600;color:inherit;background:none;text-decoration:none;border:0;cursor:pointer}
+@media print{.bars-more,.bars-pop{display:none}}

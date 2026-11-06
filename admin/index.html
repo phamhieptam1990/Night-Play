@@ -2,6 +2,7 @@
 <html lang="vi" data-app="cozyplay">
 <head>
 <meta charset="utf-8">
+<script src="../shared/guard.js"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#F3F0FA">
@@ -20,6 +21,7 @@ document.documentElement.dataset.theme=savedTheme||(matchMedia("(prefers-color-s
 </script>
 <link rel="stylesheet" href="../shared/theme.css">
 <link rel="stylesheet" href="../shared/layout.css">
+<link rel="stylesheet" href="../shared/bars.css">
 <style>
 /* Màu nền, chữ, thẻ, viền, nhấn: lấy từ shared/theme.css (cùng bảng màu Night Play với trang game).
    Dưới đây chỉ đặt tên gọi riêng của trang admin + màu biểu đồ/trạng thái (đã qua validator). */
@@ -818,5 +820,6 @@ $("fMail").href = "mailto:" + ((window.SITE && SITE.email) || "");
 applyStatic();
 start();
 </script>
+<script src="../shared/bars.js"></script>
 </body>
 </html>
