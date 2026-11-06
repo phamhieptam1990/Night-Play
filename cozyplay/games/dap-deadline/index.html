@@ -89,13 +89,10 @@ h1 span{color:var(--accent)}
 @media (max-height:760px){.overlay{gap:8px;padding:12px}.overlay .tip{display:none}.stat{padding:4px 10px}.stat b{font-size:21px}.shout{min-height:20px;font-size:15px}}
 @media (max-height:640px){.overlay p{display:none}.overlay .legend span{padding:2px 8px;font-size:12px}.overlay .big{font-size:17px;padding:9px 26px}.overlay h2{font-size:clamp(18px,5vw,24px)}.overlay .rank{font-size:clamp(16px,5vw,22px)}}
 @media (max-height:600px){body{gap:8px;padding-top:60px}.top h1{font-size:22px}.icon-btn{padding:4px 12px}.overlay .legend{display:none}.overlay{gap:6px}.stat small{font-size:10px}}
-/* màn hình ngang thấp (điện thoại xoay ngang): bảng điểm bên trái, bàn chơi bên phải */
-@media (max-height:520px) and (min-aspect-ratio:11/10){
-  :root{--w:max(150px,min(100dvh - 24px,100vw - 340px))}
-  body{display:grid;grid-template-columns:minmax(150px,1fr) var(--w);grid-template-rows:1fr auto auto auto auto 1fr;align-content:stretch;justify-content:center;column-gap:20px;row-gap:8px;padding:12px 16px}
-  .top{grid-column:1;grid-row:2;max-width:none}.stats{grid-column:1;grid-row:3;max-width:none}.timebar{grid-column:1;grid-row:4;max-width:none}.shout{grid-column:1;grid-row:5}.desk-wrap{grid-column:2;grid-row:1 / span 6;align-self:center}
-  .overlay p,.overlay .legend,.overlay .tip{display:none}.overlay h2{font-size:clamp(16px,3.4vh,22px)}
-}
+/* điện thoại xoay ngang: không ép bố cục, chỉ nhắc xoay dọc (game thiết kế cho màn hình dọc) */
+#rot{display:none;position:fixed;inset:0;z-index:50;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px;text-align:center;background:var(--bg);color:var(--ink)}
+#rot svg{width:44px;height:44px;color:var(--accent)}#rot b{font-family:var(--display);font-weight:400;font-size:18px}#rot span{font-size:13px;color:var(--muted)}
+@media (orientation:landscape) and (max-height:520px) and (pointer:coarse){#rot{display:flex}}
 @media (prefers-reduced-motion: reduce){.note,.note.hit{transition:none}.desk.shake{animation:none}.float{animation-duration:.01s}}
 </style>
 </head>
@@ -124,6 +121,7 @@ h1 span{color:var(--accent)}
   </div>
 </div>
 <div class="shout" id="shout" aria-live="polite"></div>
+<div id="rot" role="alert"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg><b>Xoay điện thoại dọc để chơi</b><span>Game được thiết kế cho màn hình dọc.</span></div>
 
 <script>
 const PESTS=[
