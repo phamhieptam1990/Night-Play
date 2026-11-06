@@ -76,8 +76,19 @@ function main(DD, OPTS) {
   /* ---------- CHỦ ĐỀ GIAO DIỆN ---------- */
   var css = document.createElement("style");
   css.textContent =
-    'html[data-skin="cafe"][data-theme]{--bg:#2a1d14;--desk:#3a281b;--slot:#4a3425;--line:#5b4331;--ink:#f6e7d4;--muted:#c3a98c;--panel:#34251a;--accent:#e0a458;--on-accent:#2a1d14;--note:#f2d9a5;--note-hot:#e07b39;color-scheme:dark}' +
-    'html[data-skin="retro"][data-theme]{--bg:#05110a;--desk:#08200f;--slot:#0d3018;--line:#14522a;--ink:#b6ffcc;--muted:#6fc98a;--panel:#0a2615;--accent:#39ff7a;--on-accent:#04140a;--note:#a8ff6e;--note-hot:#ffd23d;--stamp:#ff5c5c;--good:#39ff7a;--display:"Courier New",ui-monospace,monospace;color-scheme:dark}' +
+    'html[data-skin="cafe"][data-theme="light"]{--bg:#f3e6d2;--desk:#d9b98c;--slot:#c9a475;--line:#b68d5e;--ink:#3a2616;--muted:#7a5a3c;--panel:#fbf1df;--accent:#a8641e;--on-accent:#fff8ec;--note:#fff3d6;--note-hot:#e9803a;color-scheme:light}' +
+    'html[data-skin="cafe"][data-theme="light"] body::before{background:radial-gradient(ellipse at 50% 20%,rgba(255,255,255,.5),transparent 60%),radial-gradient(ellipse at 50% 120%,rgba(120,70,30,.25),transparent 60%)}' +
+    'html[data-skin="cafe"][data-theme="light"] .desk{background:repeating-linear-gradient(90deg,rgba(80,40,10,.07) 0 2px,transparent 2px 46px),linear-gradient(#dcbc90,#c9a475);border-color:#a8804f;box-shadow:inset 0 0 28px rgba(90,50,15,.25),0 8px 0 #9c7646,0 14px 20px rgba(90,50,15,.25)}' +
+    'html[data-skin="cafe"][data-theme="light"] .cell{background:radial-gradient(circle at 50% 45%,#d2ae7e 0 52%,#b98f5d 53% 58%,#d2ae7e 59% 70%,#c39a68 71%)}' +
+    'html[data-skin="cafe"][data-theme="dark"]{--bg:#2a1d14;--desk:#3a281b;--slot:#4a3425;--line:#5b4331;--ink:#f6e7d4;--muted:#c3a98c;--panel:#34251a;--accent:#e0a458;--on-accent:#2a1d14;--note:#f2d9a5;--note-hot:#e07b39;color-scheme:dark}' +
+    'html[data-skin="retro"][data-theme="light"]{--bg:#e3f1e0;--desk:#c4e0c2;--slot:#b4d6b2;--line:#7fb585;--ink:#0b3d1c;--muted:#2f6d44;--panel:#d6ecd3;--accent:#14803d;--on-accent:#eafff0;--note:#0b3d1c;--note-hot:#8a5a00;--stamp:#c0262d;--good:#14803d;--display:"Courier New",ui-monospace,monospace;color-scheme:light}' +
+    'html[data-skin="retro"][data-theme="light"] body::before{background:radial-gradient(ellipse at 50% 40%,rgba(20,128,61,.10),transparent 65%)}' +
+    'html[data-skin="retro"][data-theme="light"] .desk{background:#cfe6cc;border-color:#4e9a62;box-shadow:inset 0 0 30px rgba(20,128,61,.18),0 0 14px rgba(20,128,61,.2)}' +
+    'html[data-skin="retro"][data-theme="light"] .cell{background:#bddbba;border-color:#6fa97b}' +
+    'html[data-skin="retro"][data-theme="light"] .note{background:#0b2a15;color:#7dffa6;border-color:#14803d}' +
+    'html[data-skin="retro"][data-theme="light"] .note.hot{background:#2a1f00;color:#ffd23d;border-color:#ffd23d}' +
+    'html[data-skin="retro"][data-theme="light"] .note.coffee{background:#0b2a15}' +
+    'html[data-skin="retro"][data-theme="dark"]{--bg:#05110a;--desk:#08200f;--slot:#0d3018;--line:#14522a;--ink:#b6ffcc;--muted:#6fc98a;--panel:#0a2615;--accent:#39ff7a;--on-accent:#04140a;--note:#a8ff6e;--note-hot:#ffd23d;--stamp:#ff5c5c;--good:#39ff7a;--display:"Courier New",ui-monospace,monospace;color-scheme:dark}' +
     /* ===== CAFÉ: bàn gỗ, ô là khay lót ly, giấy là phiếu order có vệt cà phê, hơi nóng bốc lên ===== */
     'html[data-skin="cafe"] body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(ellipse at 50% 25%,rgba(255,190,110,.20),transparent 62%),radial-gradient(ellipse at 50% 115%,rgba(0,0,0,.55),transparent 60%)}' +
     'html[data-skin="cafe"] .desk{background:repeating-linear-gradient(90deg,rgba(0,0,0,.08) 0 2px,transparent 2px 46px),repeating-linear-gradient(0deg,rgba(255,220,170,.04) 0 1px,transparent 1px 9px),linear-gradient(#4d3524,#33231a);border-color:#6b4d36;box-shadow:inset 0 0 34px rgba(0,0,0,.5),0 8px 0 #24170f,0 16px 24px rgba(0,0,0,.35)}' +

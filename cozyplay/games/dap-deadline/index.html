@@ -481,6 +481,7 @@ const KEY={modes:"mode",diffs:"diff",skins:"skin",grids:"grid"};
 const passToken=()=>{try{const p=JSON.parse(localStorage.getItem("pass"));return p&&p.token}catch(e){return null}};
 const track=(f,k)=>{try{fetch("/api/paywall",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({f,k}),keepalive:true}).catch(()=>{})}catch(e){}};
 function applySkin(){const sk=DD.skins[DD.sel.skin]?DD.sel.skin:"default";if(sk==="default")delete document.documentElement.dataset.skin;else document.documentElement.dataset.skin=sk}
+addEventListener("storage",e=>{if(e.key==="theme")document.documentElement.dataset.theme=e.newValue||"dark"});   /* nút Sáng/Tối ở trang cha đổi giao diện game ngay, kể cả khi đang chơi */
 function openSheet(id){$(id).hidden=false;const f=$(id).querySelector("button,a");f&&f.focus({preventScroll:true})}
 function closeSheet(id){$(id).hidden=true}
 const gridForced=()=>{const m=DD.modes[DD.sel.mode];return m&&m.lockGrid||null};
