@@ -19,13 +19,13 @@ function main(DD, OPTS) {
   /* ---------- LOẠI GAME: Thú vật, Người yêu ---------- */
   DD.addI18n({
     vi: { "pk.animals.title": "Đập <span>Thú quậy</span>", "pk.animals.docTitle": "Đập Thú quậy", "pk.animals.start.h": "Đuổi hết lũ thú quậy trước khi trời tối", "pk.animals.start.p": "Chuột, muỗi, rắn… chui ra từ khắp nơi. Chạm thật nhanh để <b>ĐUỔI</b> chúng đi. Gặp củ cà rốt thì chạm để cho ăn và được thêm giờ.",
-      "pk.animals.leg1": "🐭 Chuột", "pk.animals.leg2": "🦟 Muỗi", "pk.animals.leg3": "🐍 Rắn", "pk.animals.leg4": "🥕 +3 giây", "pk.animals.done": "BỐP!", "pk.animals.end.title": "Yên ổn rồi!",
+      "pk.animals.leg1": "🐭 Chuột", "pk.animals.leg2": "🦟 Muỗi", "pk.animals.leg3": "🐍 Rắn", "pk.animals.leg4": "🥕 +3 giây", "pk.animals.ct5": "Đuổi gọn!", "pk.animals.ct10": "Thú sợ rồi!", "pk.animals.ct20": "Vua thú!", "pk.animals.ct30": "Chúa sơn lâm!", "pk.animals.done": "BỐP!", "pk.animals.end.title": "Yên ổn rồi!",
       "pk.lover.title": "Đập <span>Chuyện giận</span>", "pk.lover.docTitle": "Đập Chuyện giận", "pk.lover.start.h": "Đừng để người ấy giận!", "pk.lover.start.p": "Những lỗi nhỏ làm người yêu giận cứ nổi lên. Chạm thật nhanh để <b>SỬA</b> kịp lúc. Gặp quà dỗ ngọt thì chạm để được thêm giờ.",
-      "pk.lover.leg1": "🎂 Quên sinh nhật", "pk.lover.leg2": "🕙 Về trễ", "pk.lover.leg3": "🧹 Việc nhà", "pk.lover.leg4": "🌹 +3 giây", "pk.lover.done": "ĐÃ SỬA!", "pk.lover.end.title": "Làm lành rồi!" },
+      "pk.lover.leg1": "🎂 Quên sinh nhật", "pk.lover.leg2": "🕙 Về trễ", "pk.lover.leg3": "🧹 Việc nhà", "pk.lover.leg4": "🌹 +3 giây", "pk.lover.ct5": "Dỗ ngọt!", "pk.lover.ct10": "Tan giận rồi!", "pk.lover.ct20": "Yêu say đắm!", "pk.lover.ct30": "Trái tim vàng!", "pk.lover.done": "ĐÃ SỬA!", "pk.lover.end.title": "Làm lành rồi!" },
     en: { "pk.animals.title": "Smash the <span>Critters</span>", "pk.animals.docTitle": "Smash the Critters", "pk.animals.start.h": "Chase off the critters before sundown", "pk.animals.start.p": "Mice, mosquitoes, snakes… they pop up everywhere. Tap fast to <b>SHOO</b> them away. Tap a carrot to feed a friend and gain time.",
-      "pk.animals.leg1": "🐭 Mouse", "pk.animals.leg2": "🦟 Mosquito", "pk.animals.leg3": "🐍 Snake", "pk.animals.leg4": "🥕 +3 sec", "pk.animals.done": "BONK!", "pk.animals.end.title": "All quiet now!",
+      "pk.animals.leg1": "🐭 Mouse", "pk.animals.leg2": "🦟 Mosquito", "pk.animals.leg3": "🐍 Snake", "pk.animals.leg4": "🥕 +3 sec", "pk.animals.ct5": "Shooed!", "pk.animals.ct10": "They fear you!", "pk.animals.ct20": "King of beasts!", "pk.animals.ct30": "Wild legend!", "pk.animals.done": "BONK!", "pk.animals.end.title": "All quiet now!",
       "pk.lover.title": "Smash the <span>Grudges</span>", "pk.lover.docTitle": "Smash the Grudges", "pk.lover.start.h": "Don't let them get upset!", "pk.lover.start.p": "Little slip-ups that upset your partner keep popping up. Tap fast to <b>FIX</b> them in time. Tap a sweet gift to gain time.",
-      "pk.lover.leg1": "🎂 Forgot birthday", "pk.lover.leg2": "🕙 Home late", "pk.lover.leg3": "🧹 Chores", "pk.lover.leg4": "🌹 +3 sec", "pk.lover.done": "FIXED!", "pk.lover.end.title": "Made up!" }
+      "pk.lover.leg1": "🎂 Forgot birthday", "pk.lover.leg2": "🕙 Home late", "pk.lover.leg3": "🧹 Chores", "pk.lover.leg4": "🌹 +3 sec", "pk.lover.ct5": "Sweet talk!", "pk.lover.ct10": "All forgiven!", "pk.lover.ct20": "Head over heels!", "pk.lover.ct30": "Heart of gold!", "pk.lover.done": "FIXED!", "pk.lover.end.title": "Made up!" }
   });
   var animals = { id: "animals", coffee: { ico: "🥕", lbl: "Cà rốt +3s", en: "Carrot +3s", coffee: true }, pests: [
     { ico: "🐭", lbl: "Chuột phá tủ", en: "Mouse in the pantry", pts: 10 }, { ico: "🦟", lbl: "Muỗi vo ve", en: "Buzzing mosquito", pts: 10 },
@@ -175,7 +175,7 @@ function main(DD, OPTS) {
   window.thwack = function (good) {
     baseThwack(good);
     try {
-      var a = window.audio && window.audio(); if (!a || !good && G.combo % 5 !== 0) return;
+      var a = window.audio && window.audio(); if (!a || !good) return;
       var t = a.currentTime, base = good ? 660 : 440 + Math.min(G.combo, 20) * 18;
       [0, 4, 7].forEach(function (semi, i) { var o = a.createOscillator(), g = a.createGain(); o.type = "sine"; o.frequency.value = base * Math.pow(2, semi / 12);
         g.gain.setValueAtTime(0.0001, t + i * 0.05); g.gain.exponentialRampToValueAtTime(0.12, t + i * 0.05 + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + i * 0.05 + 0.22); o.connect(g).connect(a.destination); o.start(t + i * 0.05); o.stop(t + i * 0.05 + 0.24); });

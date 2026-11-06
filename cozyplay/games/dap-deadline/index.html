@@ -80,6 +80,33 @@ h1 span{color:var(--accent)}
 .desk[data-n="4"] .note{padding:3px}.desk[data-n="5"] .note,.desk[data-n="6"] .note{padding:1px;box-shadow:0 3px 0 rgba(0,0,0,.18)}
 .desk[data-n="5"] .stampmark span,.desk[data-n="6"] .stampmark span{font-size:calc(var(--w)*.04);padding:1px 4px;border-width:2px}
 .chip.dim{opacity:.4}
+/* ===== HIỆU ỨNG COMBO: nóng dần theo bậc (5 / 10 / 20 / 30), thanh đếm thời gian giữ combo, bùng nổ ở mốc, báo khi mất ===== */
+.stat{position:relative}
+#comboStat::after{content:"";position:absolute;left:10px;right:10px;bottom:3px;height:3px;border-radius:3px;background:var(--accent);opacity:0;transform:scaleX(var(--cm,0));transform-origin:left;transition:transform .1s linear,opacity .2s}
+#comboStat:not([data-t="0"])::after{opacity:.95}
+#comboStat[data-t="1"]{border-color:var(--note-hot)}
+#comboStat[data-t="2"]{border-color:var(--note-hot);box-shadow:0 0 14px color-mix(in srgb,var(--note-hot) 55%,transparent)}
+#comboStat[data-t="3"],#comboStat[data-t="4"]{border-color:var(--stamp);box-shadow:0 0 18px color-mix(in srgb,var(--stamp) 60%,transparent);animation:cheat 1s ease-in-out infinite}
+#comboStat[data-t="1"] b,#comboStat[data-t="2"] b{color:var(--note-hot)}
+#comboStat[data-t="3"] b,#comboStat[data-t="4"] b{color:var(--stamp)}
+#comboStat[data-t="4"]::after{background:var(--stamp)}
+#comboStat.bump b{display:inline-block;animation:cbump .26s ease-out}
+#comboStat.lose{animation:close .35s}
+@keyframes cbump{40%{transform:scale(1.4)}}
+@keyframes cheat{50%{box-shadow:0 0 28px color-mix(in srgb,var(--stamp) 80%,transparent)}}
+@keyframes close{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.desk.cglow{animation:cglow .7s ease-out}
+@keyframes cglow{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 75%,transparent)}100%{box-shadow:0 0 0 24px transparent}}
+.cpop{position:absolute;left:50%;top:14%;transform:translateX(-50%);z-index:8;pointer-events:none;text-align:center;white-space:nowrap;animation:cpop 1s ease-out forwards}
+.cpop b{display:block;font-family:var(--display);font-weight:400;font-size:clamp(34px,11vw,64px);line-height:1;color:var(--accent);text-shadow:0 3px 0 rgba(0,0,0,.25)}
+.cpop span{display:block;margin-top:2px;font-weight:800;font-size:clamp(13px,4vw,20px);color:var(--ink);text-shadow:0 2px 10px var(--bg),0 0 4px var(--bg)}
+.cpop.t3 b,.cpop.t4 b{color:var(--stamp)}
+.cpop.lost{top:8%}.cpop.lost b{font-size:clamp(15px,4.4vw,22px);color:var(--muted);text-shadow:none}
+@keyframes cpop{0%{opacity:0;transform:translateX(-50%) scale(.5)}20%{opacity:1;transform:translateX(-50%) scale(1.15)}70%{opacity:1;transform:translateX(-50%) scale(1)}100%{opacity:0;transform:translateX(-50%) translateY(-26px) scale(1)}}
+.cf{position:absolute;pointer-events:none;z-index:7;font-size:clamp(16px,4.5vw,26px);animation:cf .95s ease-out forwards}
+@keyframes cf{0%{opacity:1;transform:translate(0,0) scale(.5) rotate(0)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1.2) rotate(var(--r))}}
+@media (prefers-reduced-motion:reduce){#comboStat,#comboStat.bump b,#comboStat.lose,.desk.cglow{animation:none}.cf{display:none}.cpop{animation-duration:.01s;opacity:1}}
+
 .modebar .chip{position:relative}
 .modebar .chip.ib{width:46px;height:46px;min-height:0;padding:0;border-radius:50%;display:inline-grid;place-items:center}
 .modebar .chip.ib .ie{font-size:23px;line-height:1}
@@ -167,7 +194,7 @@ h1 span{color:var(--accent)}
 
 <div class="stats">
   <div class="stat"><small data-i="score"></small><b id="score">0</b></div>
-  <div class="stat"><small data-i="combo"></small><b id="combo">×0</b></div>
+  <div class="stat" id="comboStat" data-t="0"><small data-i="combo"></small><b id="combo">×0</b></div>
   <div class="stat"><small id="timeLbl"></small><b id="time">45s</b></div>
 </div>
 <div class="timebar"><i id="bar"></i></div>
@@ -237,7 +264,7 @@ const I18N={vi:{
  "resume.h":"Bạn bè nhờ bạn chơi tiếp!","resume.pl":"Còn {l} mạng, đang {n} điểm. Đập thật nhanh để nâng điểm cho bạn nhé!","resume.p":"Còn {s} giây, đang {n} điểm. Đập thật nhanh để nâng điểm cho bạn nhé!","resume.btn":"Chơi tiếp",go:"Bắt đầu! Đập hết đi!",done:"XONG",
  "end.title":"Tan làm!","end.score":"Điểm","end.combo":"Combo cao nhất","end.rec":"Kỷ lục","end.newrec":"Kỷ lục mới!","end.again":"Đập thêm ván nữa","end.tip":"Hít sâu 4 giây, thở ra 4 giây, rồi quay lại làm việc nhé.","end.helper":"Cảm ơn bạn đã chơi hộ! Kết quả đang được gửi cho bạn của bạn.",
  dailyErr:"Chưa tải được thử thách hôm nay. Thử lại nhé.",busy:"Xong ván này rồi chọn chế độ nhé",cell:"Ô bàn {n}",
- "setup.t":"Chế độ chơi","setup.mode":"Chế độ","setup.diff":"Độ khó","setup.skin":"Giao diện","setup.grid":"Cỡ bàn chơi","setup.pack":"Loại game","setup.partner":"Người giận","k.deadline":"Deadline","k.animals":"Thú vật","k.lover":"Người yêu","pt.f":"Bạn gái","pt.m":"Bạn trai","packLocked":"Thử thách ngày luôn là bản Deadline để ai cũng cùng một đề.","gridLocked":"Thử thách ngày luôn dùng bàn 3×3 để ai cũng cùng một đề.","stats.t":"Thống kê của bạn","stats.btn":"Thống kê",
+ "setup.t":"Chế độ chơi","setup.mode":"Chế độ","setup.diff":"Độ khó","setup.skin":"Giao diện","setup.grid":"Cỡ bàn chơi",comboLost:"Mất combo ×{n}",ct5:"Nóng máy!",ct10:"Bùng cháy!",ct20:"Vô đối!",ct30:"HUYỀN THOẠI!","setup.pack":"Loại game","setup.partner":"Người giận","k.deadline":"Deadline","k.animals":"Thú vật","k.lover":"Người yêu","pt.f":"Bạn gái","pt.m":"Bạn trai","packLocked":"Thử thách ngày luôn là bản Deadline để ai cũng cùng một đề.","gridLocked":"Thử thách ngày luôn dùng bàn 3×3 để ai cũng cùng một đề.","stats.t":"Thống kê của bạn","stats.btn":"Thống kê",
  "pro.active":"Night Pass đang hoạt động ✓","pro.trial":"Đang dùng thử 1 lượt Vô tận","pro.locked":"Chế độ 🔒 cần Night Pass",lockedLbl:"{n} (cần Night Pass)",
  "m.classic.name":"Cổ điển","m.classic.desc":"45 giây đập thật nhanh. Miễn phí cho mọi người.","m.endless.name":"Vô tận","m.endless.desc":"3 mạng, càng chơi càng nhanh. Ly cà phê hồi thêm 1 mạng.",
  "m.daily.name":"Thử thách ngày","m.daily.desc":"Mỗi ngày một đề giống nhau cho mọi người, kèm mục tiêu riêng và chuỗi ngày chơi.","m.boss.name":"Boss deadline","m.boss.desc":"Sếp gọi dồn dập. Đạt 450 điểm để hạ boss và nhận huy hiệu.",
@@ -256,7 +283,7 @@ en:{
  "resume.h":"A friend asked you to continue!","resume.pl":"{l} lives left, {n} points so far. Smash fast to raise their score!","resume.p":"{s} seconds left, {n} points so far. Smash fast to raise their score!","resume.btn":"Continue",go:"Go! Smash them all!",done:"DONE",
  "end.title":"Clocked out!","end.score":"Score","end.combo":"Best combo","end.rec":"Record","end.newrec":"New record!","end.again":"Smash another round","end.tip":"Breathe in for 4 seconds, out for 4, then get back to work.","end.helper":"Thanks for playing for them! The result is being sent to your friend.",
  dailyErr:"Couldn't load today's challenge. Please try again.",busy:"Finish this round, then pick a mode",cell:"Desk slot {n}",
- "setup.t":"Game modes","setup.mode":"Mode","setup.diff":"Difficulty","setup.skin":"Theme","setup.grid":"Board size","setup.pack":"Game type","setup.partner":"Who is upset","k.deadline":"Deadline","k.animals":"Critters","k.lover":"Partner","pt.f":"Girlfriend","pt.m":"Boyfriend","packLocked":"The daily challenge is always the Deadline game so everyone plays the same puzzle.","gridLocked":"The daily challenge always uses the 3×3 board so everyone plays the same puzzle.","stats.t":"Your stats","stats.btn":"Stats",
+ "setup.t":"Game modes","setup.mode":"Mode","setup.diff":"Difficulty","setup.skin":"Theme","setup.grid":"Board size",comboLost:"Combo ×{n} lost",ct5:"Heating up!",ct10:"On fire!",ct20:"Unstoppable!",ct30:"LEGENDARY!","setup.pack":"Game type","setup.partner":"Who is upset","k.deadline":"Deadline","k.animals":"Critters","k.lover":"Partner","pt.f":"Girlfriend","pt.m":"Boyfriend","packLocked":"The daily challenge is always the Deadline game so everyone plays the same puzzle.","gridLocked":"The daily challenge always uses the 3×3 board so everyone plays the same puzzle.","stats.t":"Your stats","stats.btn":"Stats",
  "pro.active":"Night Pass active ✓","pro.trial":"Trying 1 free Endless run","pro.locked":"Locked items 🔒 need Night Pass",lockedLbl:"{n} (needs Night Pass)",
  "m.classic.name":"Classic","m.classic.desc":"45 seconds of fast smashing. Free for everyone.","m.endless.name":"Endless","m.endless.desc":"3 lives, getting faster the longer you last. A coffee restores 1 life.",
  "m.daily.name":"Daily challenge","m.daily.desc":"One identical puzzle a day for everyone, with its own goal and a day streak.","m.boss.name":"Boss deadline","m.boss.desc":"The boss keeps calling. Score 450 to defeat the boss and earn a badge.",
@@ -335,7 +362,7 @@ function show(st,item,stay){
   {const lb=st.note.querySelector(".lbl"),tx=(LANG==="en"&&item.en)||item.lbl;lb.textContent=tx;lb.classList.toggle("long",tx.length>16)}   /* nhãn dài: thu nhỏ chữ + tối đa 2 dòng, biểu tượng không bị đẩy lên */
   void st.note.offsetWidth;st.note.classList.add("up");
   clearTimeout(st.timer);
-  st.timer=setTimeout(()=>{ if(st.up){ hide(st); if(!item.coffee&&!paused){combo=0;render();mode.onMiss&&mode.onMiss(item)} } },stay);
+  st.timer=setTimeout(()=>{ if(st.up){ hide(st); if(!item.coffee&&!paused){breakCombo();mode.onMiss&&mode.onMiss(item)} } },stay);
 }
 function hide(st){st.up=false;st.item=null;st.note.classList.remove("up")}
 
@@ -358,9 +385,48 @@ function spawn(){
   spawnT=setTimeout(spawn,mode.gap(progress)*diff.gap);
 }
 
+
+/* ===== HIỆU ỨNG COMBO ===== */
+const CT=[[30,4],[20,3],[10,2],[5,1]];
+const comboTier=n=>{for(const [m,v] of CT)if(n>=m)return v;return 0};
+const CONF={deadline:["✅","📎","⭐","✨"],animals:["🐾","🥕","🦴","⭐"],lover:["💖","💕","🌹","✨"]};
+const CONF_SKIN={cafe:["☕","🍪","🥐","✨"],retro:["01","10","▓","$"]};
+const calm=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
+let prevCombo=0;
+function comboFx(){   /* gọi mỗi lần vẽ lại: bậc nóng + nảy số khi tăng */
+  const st=$("comboStat");st.dataset.t=comboTier(combo);
+  if(combo>prevCombo&&combo>0){st.classList.remove("bump");void st.offsetWidth;st.classList.add("bump")}
+  prevCombo=combo;
+}
+function comboMeter(){   /* thanh nhỏ dưới ô Combo: còn bao lâu nữa thì đứt combo (1,4 giây kể từ lần đập cuối) */
+  if(combo>0&&running&&!paused&&performance.now()-lastHit>=1400){breakCombo();return}   /* quá 1,4 giây không đập: combo đứt, báo ngay thay vì đợi lần đập sau */
+  const r=combo>0&&running&&!paused?Math.max(0,1-(performance.now()-lastHit)/1400):0;$("comboStat").style.setProperty("--cm",r.toFixed(2));
+}
+function popBig(html,cls){const el=document.createElement("div");el.className="cpop "+cls;el.innerHTML=html;desk.parentElement.appendChild(el);setTimeout(()=>el.remove(),1050)}
+function burst(tr){
+  if(calm())return;const wrap=desk.parentElement,skin=document.documentElement.dataset.skin,set=CONF_SKIN[skin]||CONF[packId]||CONF.deadline,n=8+tr*4,w=wrap.clientWidth,h=wrap.clientHeight;
+  for(let i=0;i<n;i++){const e=document.createElement("span");e.className="cf";e.textContent=set[i%set.length];
+    e.style.left=(w/2)+"px";e.style.top=(h/2)+"px";const a=Math.random()*Math.PI*2,d=(.35+Math.random()*.55)*Math.min(w,h)*.6;
+    e.style.setProperty("--dx",Math.cos(a)*d+"px");e.style.setProperty("--dy",Math.sin(a)*d+"px");e.style.setProperty("--r",(Math.random()*240-120)+"deg");wrap.appendChild(e);setTimeout(()=>e.remove(),1000)}
+}
+function chime(tr){
+  const a=audio();if(!a)return;const t0=a.currentTime,base=523.25*(1+tr*.06),r=[1,1.25,1.5,2];
+  for(let i=0;i<Math.min(4,tr+1);i++){const o=a.createOscillator(),g=a.createGain();o.type="triangle";o.frequency.value=base*r[i];
+    g.gain.setValueAtTime(.0001,t0+i*.07);g.gain.exponentialRampToValueAtTime(.14,t0+i*.07+.02);g.gain.exponentialRampToValueAtTime(.0001,t0+i*.07+.28);o.connect(g).connect(a.destination);o.start(t0+i*.07);o.stop(t0+i*.07+.3)}
+}
+function comboMilestone(n){
+  const tr=comboTier(n);if(!tr)return;
+  popBig("<b>×"+n+"</b><span>"+pk("ct"+(n>=30?30:n>=20?20:n>=10?10:5))+"</span>","t"+tr);
+  burst(tr);chime(tr);desk.classList.remove("cglow");void desk.offsetWidth;desk.classList.add("cglow");
+}
+function breakCombo(){   /* mất combo: báo nhẹ nếu đang có combo đáng kể */
+  const was=combo;combo=0;render();
+  if(was>=5){popBig("<b>"+t("comboLost",{n:was})+"</b>","lost");const st=$("comboStat");st.classList.remove("lose");void st.offsetWidth;st.classList.add("lose")}
+}
+
 function hit(st,e){
   if(!running||paused)return;
-  if(!st.up){combo=0;render();buzz();desk.classList.remove("shake");void desk.offsetWidth;desk.classList.add("shake");return}
+  if(!st.up){breakCombo();buzz();desk.classList.remove("shake");void desk.offsetWidth;desk.classList.add("shake");return}
   const item=st.item;clearTimeout(st.timer);
   st.up=false;st.note.classList.add("hit");
   setTimeout(()=>{st.note.classList.remove("hit");if(!st.up)st.note.classList.remove("up")},180);
@@ -371,7 +437,7 @@ function hit(st,e){
   else{
     const now=performance.now();combo=(now-lastHit<1400)?combo+1:1;lastHit=now;best=Math.max(best,combo);
     gained=Math.round(item.pts*(1+Math.floor(combo/5))*diff.score*(grid.mult||1));score+=gained;thwack(false);hudPulse(1600);
-    if(combo>0&&combo%5===0)say("Combo ×"+combo+"! "+SHOUTS[LANG][Math.floor(Math.random()*SHOUTS[LANG].length)]);
+    if(combo>0&&combo%5===0){comboMilestone(combo);say(SHOUTS[LANG][Math.floor(Math.random()*SHOUTS[LANG].length)])}
   }
   const f=document.createElement("div");f.className="float";f.textContent=item.coffee?(mv(mode.coffeeText)||"+3s"):"+"+gained;
   const r=st.el.getBoundingClientRect(),dr=desk.parentElement.getBoundingClientRect();
@@ -384,7 +450,7 @@ function hit(st,e){
 let shoutT=0;
 function say(t){$("shout").textContent=t;clearTimeout(shoutT);shoutT=setTimeout(()=>$("shout").textContent="",1400)}
 function render(){
-  $("score").textContent=score;$("combo").textContent="×"+combo;
+  $("score").textContent=score;$("combo").textContent="×"+combo;comboFx();
   $("time").textContent=mode.timeText();$("bar").style.transform="scaleX("+Math.max(0,Math.min(1,mode.timeBar()))+")";$("timeLbl").textContent=mv(mode.timeLabel)||t("left");
   if(running&&timeLeft<=10)document.body.classList.remove("hud-dim");   /* sắp hết giờ: luôn sáng */
 }
@@ -411,7 +477,7 @@ function start(from){
   clearInterval(tickT);
   tickT=setInterval(tick,100);
 }
-function tick(){mode.tick();render()}
+function tick(){mode.tick();render();comboMeter()}
 let pausedBy=null,pauseT=0;
 function syncPauseBtn(){const rb=$("restartBtn");rb.hidden=!running||!!(window.NP&&NP.helper);const b=$("pauseBtn");b.hidden=!running;$("pauseIco").textContent=paused&&pausedBy==="user"?"▶":"⏸";$("pauseTxt").textContent=" "+t(paused&&pausedBy==="user"?"resume":"pause");b.setAttribute("aria-label",t(paused&&pausedBy==="user"?"resume":"pause"))}
 function pauseRound(by){   /* by="user": nút Tạm dừng / phím P / chuyển tab; mặc định (trang cha mở bảng chia sẻ) */
