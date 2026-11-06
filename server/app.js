@@ -520,7 +520,7 @@ route("GET", /^\/api\/pro\/daily$/, async ({ headers }) => {
   return out(200, { day, seed: h.readUInt32BE(0), goal: [300, 350, 400, 450, 500][h[4] % 5] });
 });
 /* Đếm lượt xem / bấm vào tính năng bị khóa (ẩn danh, chỉ số tổng hợp theo ngày) */
-const PAYWALL_KEYS = new Set(["endless", "daily", "boss", "diff", "skin", "stats"]);
+const PAYWALL_KEYS = new Set(["endless", "daily", "boss", "diff", "skin", "grid", "stats"]);
 route("POST", /^\/api\/paywall$/, async ({ body, ip }) => {
   const f = String(body.f || ""), k = String(body.k || "");
   if (!PAYWALL_KEYS.has(f) || !["view", "click", "trial"].includes(k)) return out(400, { error: "bad_event" });

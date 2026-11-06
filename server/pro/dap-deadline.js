@@ -46,7 +46,7 @@ function main(DD, OPTS) {
   /* ---------- THỬ THÁCH NGÀY: cùng một đề cho mọi người, có mục tiêu ---------- */
   var daily = null;
   var dailyMode = derive({
-    id: "daily", title: function () { return t("p.end.daily"); }, lockDiff: "normal",
+    id: "daily", title: function () { return t("p.end.daily"); }, lockDiff: "normal", lockGrid: "g3",
     prepare: function () {
       var t = token(); if (!t) return Promise.reject(new Error("no_pass"));
       return fetch("/api/pro/daily", { headers: { Authorization: "Bearer " + t }, cache: "no-store" })
@@ -107,6 +107,7 @@ function main(DD, OPTS) {
     'html[data-skin="retro"] .note.coffee{background:#031a0c;border:2px dashed var(--good)}' +
     'html[data-skin="retro"] .note.coffee::before{content:"+ time.dll"}' +
     'html[data-skin="retro"] .note.coffee .lbl{color:var(--good)}' +
+    'html[data-skin="retro"] .desk[data-n="5"] .note::before,html[data-skin="retro"] .desk[data-n="6"] .note::before{display:none}html[data-skin="retro"] .desk[data-n="5"] .note,html[data-skin="retro"] .desk[data-n="6"] .note{padding-top:1px}html[data-skin="retro"] .desk[data-n="4"] .note::before{font-size:8px;line-height:11px}html[data-skin="retro"] .desk[data-n="4"] .note{padding-top:12px}' +
     'html[data-skin="retro"] .stampmark span{border-radius:0;font-family:"Courier New",monospace}' +
     'html[data-skin="retro"] .desk-wrap::before{content:"";position:absolute;inset:0;z-index:6;pointer-events:none;border-radius:10px;background:repeating-linear-gradient(0deg,rgba(0,0,0,.30) 0 1px,transparent 1px 3px);animation:crt 4s steps(2,end) infinite}' +
     'html[data-skin="retro"] .desk-wrap::after{content:"";position:absolute;left:0;right:0;height:22%;top:-25%;z-index:6;pointer-events:none;background:linear-gradient(transparent,rgba(57,255,122,.10),transparent);animation:sweep 5s linear infinite}' +
@@ -179,6 +180,7 @@ function main(DD, OPTS) {
     DD.modes.endless = endless; DD.modes.daily = dailyMode; DD.modes.boss = boss;
     DD.diffs.easy = diffs.easy; DD.diffs.hard = diffs.hard; DD.diffs.rage = diffs.rage;
     DD.skins.cafe = skins.cafe; DD.skins.retro = skins.retro;
+    DD.grids.g4 = { id: "g4", n: 4, mult: 1.2, extra: 1 }; DD.grids.g5 = { id: "g5", n: 5, mult: 1.5, extra: 2 }; DD.grids.g6 = { id: "g6", n: 6, mult: 2, extra: 3 };
   }
   DD.pro = { trial: TRIAL, stats: !TRIAL && !HELP, helper: HELP };
   if (DD.refresh) DD.refresh();

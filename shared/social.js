@@ -344,7 +344,7 @@ window.NPS = (function () {
       var f = stage.querySelector("iframe"); if (e.origin !== location.origin || !f || e.source !== f.contentWindow || !e.data || e.data.np !== 1) return;
       if (e.data.type === "start") { hideSheet(); lastScore = 0; }
       else if (e.data.type === "result") { var game = curGame(), ex = e.data.extra || {}; lastScore = e.data.score | 0;
-        var ranked = !ex.mode || (ex.mode === "classic" && (!ex.diff || ex.diff === "normal"));   // bảng xếp hạng chỉ nhận chế độ Cổ điển, độ khó Thường (công bằng)
+        var ranked = !ex.mode || (ex.mode === "classic" && (!ex.diff || ex.diff === "normal") && (!ex.grid || ex.grid === "g3"));   // bảng xếp hạng chỉ nhận chế độ Cổ điển, độ khó Thường (công bằng)
         if (ranked) setTimeout(function () { if (stage.classList.contains("on")) showBrag(game, e.data.score | 0); }, 700); }
     });
     new MutationObserver(function () { if (!stage.classList.contains("on")) { hideSheet(); clearInterval(shareTimer); } }).observe(stage, { attributes: true, attributeFilter: ["class"] });
