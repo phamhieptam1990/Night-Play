@@ -50,7 +50,7 @@ function main(PF, OPTS) {
 .app[data-layout=arcade] .ask{order:1;width:var(--w);background:#12062b;border:3px solid #00e5ff;border-radius:10px;color:#00e5ff;box-shadow:0 0 14px rgba(0,229,255,.6),inset 0 0 12px rgba(0,229,255,.3);text-shadow:0 0 8px #00e5ff}
 .app[data-layout=arcade] #askTxt .big{background:#ff3df0;color:#12062b;box-shadow:0 0 12px #ff3df0}.app[data-layout=arcade] .ask .ib{background:#ff3df0;color:#12062b}
 .app[data-layout=arcade] .play{order:2;border:8px solid #0e0420;border-radius:18px;box-shadow:0 0 0 3px #ff3df0,0 0 22px rgba(255,61,240,.6);position:relative}
-.app[data-layout=arcade] .play::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:9;background:repeating-linear-gradient(0deg,rgba(0,0,0,.14) 0 1px,transparent 1px 3px);border-radius:10px}
+.app[data-layout=arcade] .play::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:4;background:repeating-linear-gradient(0deg,rgba(0,0,0,.14) 0 1px,transparent 1px 3px);border-radius:10px}
 .app[data-layout=arcade] .hud{order:3;width:var(--w);background:#000;border:3px solid #ff3df0;border-radius:10px;padding:4px 12px;color:#ff4d4d;font-family:"Courier New",monospace}
 .app[data-layout=arcade] .sc b{text-shadow:0 0 10px #ff4d4d;letter-spacing:.1em}.app[data-layout=arcade] .dots i{background:#3a0f1f}.app[data-layout=arcade] .dots i.ok{background:#ffe14d;box-shadow:0 0 8px #ffe14d}
 .app[data-layout=arcade] .top{order:4;width:var(--w);justify-content:center;gap:14px}.app[data-layout=arcade] .top h1{display:none}

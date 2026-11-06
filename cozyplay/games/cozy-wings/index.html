@@ -120,12 +120,12 @@ body{transition:background .4s,color .4s}
 @media (max-height:700px){.tile img{aspect-ratio:1/1}.tile .tb{width:28px;height:28px;font-size:16px}.dif{width:40px;height:40px;font-size:18px}.tiles{gap:6px}}
 @media (max-height:520px) and (min-aspect-ratio:11/10){.tiles{grid-template-columns:repeat(5,1fr);gap:4px}.tile,.tile:nth-child(4),.tile:nth-child(5){grid-column:auto}.tile img{aspect-ratio:3/4}.tile .tb,.tile .skinBtn{width:22px;height:22px;font-size:12px}.tile .best{display:none}.dif{width:30px;height:30px;font-size:14px}}   /* thuộc tính hidden luôn thắng display:flex của từng lớp */
 /* --- màn giải thích cách chơi trước khi bắt đầu --- */
-#ovHow{background:color-mix(in srgb,var(--bg) 38%,transparent);-webkit-backdrop-filter:none;backdrop-filter:none}#ovHow h2{background:var(--panel);color:var(--ink);padding:4px 16px;border-radius:999px;box-shadow:var(--shadow);font-size:clamp(20px,6vw,28px)}
+#ovHow{background:color-mix(in srgb,var(--bg) 60%,transparent);padding:10px;-webkit-backdrop-filter:none;backdrop-filter:none}#ovHow h2{background:var(--panel);color:var(--ink);padding:4px 16px;border-radius:999px;box-shadow:var(--shadow);font-size:clamp(20px,6vw,28px)}
 .hwE{display:none}
 #ovHow p{background:color-mix(in srgb,var(--panel) 85%,transparent);color:var(--ink);padding:3px 12px;border-radius:999px;font-size:clamp(12px,3.6vw,15px)}
 .hwL li{display:flex;align-items:center;gap:10px}.hwL li b{font-size:1.5em;line-height:1;width:1.4em;text-align:center;flex:none}
-.hwL{list-style:none;margin:0;padding:4px 6px;display:flex;flex-direction:column;gap:0;width:100%;max-width:340px;text-align:left;background:var(--panel);border-radius:20px;box-shadow:var(--shadow)}
-.hwL li{color:var(--ink);padding:8px 8px;font-weight:800;font-size:clamp(13px,3.9vw,16px);line-height:1.25}.hwL li+li{border-top:1.5px dashed var(--line)}
+.hwL{list-style:none;margin:0;padding:4px 6px;display:flex;flex-direction:column;gap:0;width:100%;max-width:420px;text-align:left;background:var(--panel);border-radius:20px;box-shadow:var(--shadow)}
+.hwL li{color:var(--ink);padding:8px 8px;font-weight:800;font-size:clamp(12px,3.4vw,15px);line-height:1.25}.hwL li+li{border-top:1.5px dashed var(--line)}
 @media (max-height:600px){#ovHow{gap:4px;padding:8px}#ovHow h2{font-size:18px;padding:2px 12px}.hwL li{padding:2px 6px;font-size:12px}.hwL li b{font-size:1.15em}#ovHow .ib2{width:40px;height:40px;font-size:18px}#ovHow .big{padding:6px 18px;font-size:15px}}
 @media (max-height:700px){#hwR{display:none}#ovHow{gap:6px}.hwL li b{font-size:1.25em}.hwL li{padding:5px 6px;font-size:12.5px}#ovHow .big{padding:8px 22px;font-size:17px}#ovHow .ghost{padding:6px 16px;font-size:14px}}
 @media (max-height:520px) and (min-aspect-ratio:11/10){#ovHow h2{font-size:16px;padding:2px 12px}.hwE{display:none}#ovHow p{display:none}.hwL li{padding:3px 8px;font-size:11px}#ovHow .big{padding:5px 16px;font-size:14px}}
