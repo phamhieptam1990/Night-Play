@@ -368,6 +368,7 @@ DD.modes.classic={id:"classic",title:()=>pk("end.title"),timeLabel:()=>t("left")
   tick(){timeLeft-=.1;if(timeLeft<=0){timeLeft=0;end()}},timeText:()=>Math.ceil(timeLeft)+"s",timeBar:()=>timeLeft/ROUND};
 DD.diffs.normal={id:"normal",stay:1,gap:1,score:1};
 let mode=DD.modes.classic,diff=DD.diffs.normal,runT0=0;
+DD.pk=(k,pr)=>pk(k,pr);
 DD.g={get PESTS(){return PESTS},get COFFEE(){return COFFEE},ROUND,$,cells,say:t=>say(t),render:()=>render(),end:()=>end(),
   get timeLeft(){return timeLeft},set timeLeft(v){timeLeft=v},get score(){return score},get combo(){return combo},get best(){return best},get running(){return running}};
 
@@ -692,8 +693,9 @@ DD.catalog={
   partners:[{id:"f",ico:"👩",free:1},{id:"m",ico:"👨",free:1}]
 };
 const PFX={modes:"m.",diffs:"d.",skins:"s.",packs:"k.",partners:"pt."};
-const catName=(kind,x)=>kind==="grids"?x.n+"×"+x.n:t(PFX[kind]+x.id+(kind==="modes"?".name":""));
-const catDesc=x=>t("m."+x.id+".desc");
+const catName=(kind,x)=>kind==="grids"?x.n+"×"+x.n:(kind==="modes"||kind==="diffs"?pk:t)(PFX[kind]+x.id+(kind==="modes"?".name":""));   /* tên chế độ / độ khó đổi theo loại game (vd. "Sếp nổi giận" → "Giận cực độ") */
+const modeIco=(kind,x)=>{if(kind!=="modes"||x.id!=="boss")return x.ico;const id=curPackId();return id==="animals"?"🦁":id==="lover"?"💢":x.ico};   /* biểu tượng Boss hợp loại game */
+const catDesc=x=>pk("m."+x.id+".desc");
 const LS={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const escH=t=>String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const unlocked=(kind,id)=>{const c=DD.catalog[kind].find(x=>x.id===id);return !!(c&&c.free)||!!DD[kind][id]};
@@ -728,7 +730,7 @@ DD.refresh=function(){
     for(const x of DD.catalog[kind]){
       const fg=kind==="grids"?gridForced():kind==="packs"?packForced():null,lock=!unlocked(kind,x.id),on=fg?x.id===fg:DD.sel[KEY[kind]]===x.id,b=document.createElement("button");
       b.type="button";b.className="chip"+(on?" on":"")+(lock?" lock":"")+(fg&&!on?" dim":"");b.setAttribute("aria-pressed",on);
-      b.innerHTML=(x.ico?x.ico+" ":"")+escH(catName(kind,x))+(lock?' <i aria-hidden="true">🔒</i>':"");
+      b.innerHTML=(x.ico?modeIco(kind,x)+" ":"")+escH(catName(kind,x))+(lock?' <i aria-hidden="true">🔒</i>':"");
       if(lock)b.setAttribute("aria-label",t("lockedLbl",{n:catName(kind,x)}));
       b.onclick=()=>pickItem(kind,x);
       box.appendChild(b);
