@@ -29,7 +29,7 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .ib[hidden]{display:none}
 .ask{display:flex;align-items:center;gap:10px;min-height:56px;padding:6px 10px;border-radius:20px;background:var(--panel);box-shadow:var(--shadow)}
 .ask .ib{width:44px;height:44px;box-shadow:none;background:var(--accent);color:var(--on-accent)}
-#askTxt{flex:1;font-size:clamp(18px,5.6vw,28px);font-weight:800;line-height:1.1;text-align:center}
+#askBtn[hidden]{display:none}#askTxt{flex:1;font-size:clamp(18px,5.6vw,28px);font-weight:800;line-height:1.1;text-align:center}
 #askTxt .big{display:inline-block;min-width:1.3em;padding:0 .25em;border-radius:12px;background:var(--accent);color:var(--on-accent);margin:0 2px}
 .hud{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:30px}
 .sc{font-size:22px;font-weight:800;display:flex;align-items:center;gap:6px}
@@ -604,7 +604,7 @@ addEventListener("keydown",e=>{const S=PF.S;if(e.repeat)return;if(e.code==="Spac
 addEventListener("keyup",e=>{if((e.code==="Space"||e.key==="ArrowUp")&&kHeld){kHeld=false;const S=PF.S;if(S&&S.ty.up)S.ty.up(S)}});
 $("askBtn").addEventListener("click",()=>{const S=PF.S;if(S&&running&&!paused&&!S.over){pauseRound("user");$("ovPause").hidden=true;openHow(S.type,()=>{showOv(null);resumeRound("user")},true)}});
 /* nút ❔ chỉ có nghĩa khi đang bay (xem lại cách chơi của chính ván đó); ở màn chọn chuyến thì ẩn, tránh nhảy sang chuyến khác */
-setInterval(()=>{const on=!!(PF.S&&running&&!PF.S.over&&!paused);$("askBtn").style.visibility=on?"visible":"hidden"},150);
+setInterval(()=>{const on=!!(PF.S&&running&&!PF.S.over&&!paused);$("askBtn").hidden=!on},150);
 $("soundBtn").addEventListener("click",()=>{sound=!sound;if(window.NPAudio)NPAudio.set(sound);syncSound()});
 function syncSound(){$("soundBtn").textContent=sound?"🔊":"🔇";$("soundBtn").setAttribute("aria-label",t("sound")+(sound?"":" (off)"))}
 $("langBtn").addEventListener("click",()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}applyLang()});
