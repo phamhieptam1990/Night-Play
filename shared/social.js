@@ -21,13 +21,17 @@ window.NPS = (function () {
       waiting: "Đang chờ bạn bè mở link…", playing: "Bạn bè đang chơi hộ…", done: "Đã có kết quả!", expired: "Link đã hết hạn.", close: "Đóng", err: "Có lỗi, vui lòng thử lại.", slow: "Thao tác quá nhanh, thử lại sau ít phút.", noShare: "Game này chưa hỗ trợ chơi hộ.",
       brag: "Khoe điểm", bragT: "Khoe điểm lên bảng xếp hạng?", bragP: "Chỉ biệt danh và điểm của bạn được lưu, và chỉ khi bạn bấm \"Khoe điểm\". Không bấm thì không lưu gì.", nick: "Biệt danh (2–16 ký tự)", skip: "Không, cảm ơn",
       bragOk: "Đã lên bảng xếp hạng!", bragView: "Xem bảng xếp hạng", badNick: "Biệt danh chưa hợp lệ (2–16 ký tự, không chứa link/email).", scoreLine: "Điểm của bạn",
-      gotT: "Bạn bè đã chơi hộ xong!", gotP: "Kết quả chơi hộ", points: "điểm", view: "Xem kết quả", rank: "Bảng xếp hạng", results: "Kết quả chơi hộ" },
+      gotT: "Bạn bè đã chơi hộ xong!", gotP: "Kết quả chơi hộ", points: "điểm", view: "Xem kết quả", rank: "Bảng xếp hạng", results: "Kết quả chơi hộ",
+      shot: "Chụp màn hình", shotT: "Ảnh chụp màn hình", shotErr: "Không chụp được màn hình. Vui lòng thử lại.", save: "Lưu ảnh", shareImg: "Chia sẻ ảnh", copyImg: "Sao chép ảnh", imgCopied: "Đã sao chép ảnh",
+      linkCopied: "Đã sao chép link, dán vào Zalo, Messenger… để gửi bạn bè", viaApps: "Link đã được sao chép: dán vào Zalo, Messenger… hoặc gửi nhanh qua:", shareText: "Chơi hộ mình một lượt {g} nhé!", shotText: "Mình vừa chơi {g} trên Night Play!", sendApps: "Gửi qua Zalo, Messenger…" },
     en: { share: "Ask a friend to play", shareT: "Ask a friend to play one round for you", shareP: "Send this link to a friend. They play one round for you and the result is sent back to you.",
       copy: "Copy link", copied: "Copied", send: "Send via…", once: "The link works once and expires in 24 hours. The helper cannot share it further. We don't store your info: the result is encrypted and only you can read it.",
       waiting: "Waiting for your friend to open the link…", playing: "Your friend is playing…", done: "Result is in!", expired: "This link has expired.", close: "Close", err: "Something went wrong, please try again.", slow: "Too many tries, please wait a few minutes.", noShare: "This game doesn't support this yet.",
       brag: "Show off score", bragT: "Post your score to the leaderboard?", bragP: "Only your nickname and score are saved, and only if you press \"Show off score\". If you don't, nothing is saved.", nick: "Nickname (2–16 characters)", skip: "No thanks",
       bragOk: "You're on the leaderboard!", bragView: "View leaderboard", badNick: "Invalid nickname (2–16 characters, no links/emails).", scoreLine: "Your score",
-      gotT: "Your friend finished playing for you!", gotP: "Result", points: "points", view: "View result", rank: "Leaderboard", results: "Shared results" }
+      gotT: "Your friend finished playing for you!", gotP: "Result", points: "points", view: "View result", rank: "Leaderboard", results: "Shared results",
+      shot: "Screenshot", shotT: "Screenshot", shotErr: "Couldn't capture the screen. Please try again.", save: "Save image", shareImg: "Share image", copyImg: "Copy image", imgCopied: "Image copied",
+      linkCopied: "Link copied. Paste it into Zalo, Messenger… to send it to friends", viaApps: "Link copied: paste it into Zalo, Messenger… or send quickly via:", shareText: "Play a round of {g} for me!", shotText: "I just played {g} on Night Play!", sendApps: "Send via Zalo, Messenger…" }
   };
   var lang = function () { return document.documentElement.lang === "en" ? "en" : "vi"; };
   var T = function (k) { return STR[lang()][k] || k; };
@@ -128,7 +132,7 @@ window.NPS = (function () {
   var getScores = function (game, period, limit) { return call("GET", "/scores?game=" + encodeURIComponent(game) + "&period=" + period + "&limit=" + limit); };
 
   /* ---------- giao diện trên trang có game (Night Play) ---------- */
-  var CSS = ".nps-fab{position:absolute;top:max(12px,env(safe-area-inset-top));left:calc(max(12px,env(safe-area-inset-left)) + 54px);z-index:2;width:44px;height:44px;border-radius:50%;padding:0;color:#fff;background:rgba(255,255,255,.28);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1.5px solid rgba(255,255,255,.7);display:grid;place-items:center;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.35),0 0 0 1px rgba(0,0,0,.12);opacity:0;pointer-events:none;transform:translateY(-10px);transition:opacity .25s,transform .25s}" +
+  var CSS = ".nps-fab{position:absolute;top:max(12px,env(safe-area-inset-top));right:var(--nps-r,max(12px,env(safe-area-inset-right)));z-index:2;width:44px;height:44px;border-radius:50%;padding:0;color:#fff;background:rgba(255,255,255,.28);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1.5px solid rgba(255,255,255,.7);display:grid;place-items:center;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.35),0 0 0 1px rgba(0,0,0,.12);opacity:0;pointer-events:none;transform:translateY(-10px);transition:opacity .25s,transform .25s}" +
     ".nps-fab.show,.nps-fab:focus-visible{opacity:1;pointer-events:auto;transform:none}.nps-fab svg{width:22px;height:22px;filter:drop-shadow(0 0 1px rgba(0,0,0,.95)) drop-shadow(0 1px 3px rgba(0,0,0,.5))}.nps-fab:focus-visible{outline:3px solid #fff;outline-offset:3px}" +
     ".nps-sheet{position:absolute;left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom));z-index:3;margin:0 auto;max-width:420px;padding:16px;border-radius:20px;background:var(--panel,#fff);color:var(--ink,#222);box-shadow:0 12px 40px rgba(0,0,0,.45);font:15px/1.45 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}" +
     ".nps-sheet[hidden]{display:none}.nps-sheet h3{margin:0 0 4px;font-size:18px}.nps-sheet p{margin:0 0 10px;opacity:.85;font-size:14px}" +
@@ -138,8 +142,49 @@ window.NPS = (function () {
     ".nps-note{font-size:12.5px;opacity:.75;margin:10px 0 0}.nps-err{color:var(--warn,#c2410c);min-height:18px;font-size:13px;margin:6px 0 0}.nps-st{font-weight:700;margin:10px 0 0;font-size:14px}" +
     ".nps-dlg{border:0;border-radius:22px;padding:22px;max-width:min(380px,calc(100vw - 32px));width:100%;background:var(--panel,#fff);color:var(--ink,#222);box-shadow:0 20px 60px rgba(0,0,0,.5);text-align:center;font:15px/1.45 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}" +
     ".nps-dlg::backdrop{background:rgba(0,0,0,.6)}.nps-dlg h3{margin:0 0 6px;font-size:20px}.nps-big{font-size:44px;font-weight:800;line-height:1.1;margin:8px 0;color:var(--accent,#7C5CFF)}" +
-    "@media (prefers-reduced-motion:reduce){.nps-fab{transition:none}}";
+    ".nps-cam{right:calc(var(--nps-r,max(12px,env(safe-area-inset-right))) + 54px)}.nps-fab:disabled{opacity:.5}" +
+    ".nps-row.wrap{flex-wrap:wrap}.nps-row.wrap .nps-p{flex:1 1 100%;order:-1}.nps-row.wrap .nps-s{flex:1 1 40%}" +
+    ".nps-toast{position:absolute;left:50%;top:max(14px,env(safe-area-inset-top));transform:translate(-50%,-8px);z-index:4;max-width:calc(100% - 140px);padding:10px 16px;border-radius:14px;background:rgba(15,16,32,.92);color:#fff;font:600 14px/1.35 system-ui,sans-serif;text-align:center;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}.nps-toast.on{opacity:1;transform:translate(-50%,0)}" +
+    ".nps-apps{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.nps-apps a{flex:1;min-width:110px;display:inline-flex;align-items:center;justify-content:center;height:42px;border-radius:12px;text-decoration:none;font-weight:700;font-size:14px;color:inherit;background:var(--bg,#eee);border:2px solid var(--line,#ccc)}" +
+    ".nps-shotimg{display:block;max-width:100%;max-height:min(52vh,420px);margin:6px auto 12px;border-radius:12px;box-shadow:0 4px 18px rgba(0,0,0,.35)}.nps-dlg a.nps-s{display:inline-flex;align-items:center;justify-content:center;flex:1;height:46px;border-radius:12px;text-decoration:none;font-weight:800;color:inherit}" +
+    "@media (prefers-reduced-motion:reduce){.nps-fab,.nps-toast{transition:none}}";
   var SHARE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"/></svg>';
+
+  var CAM_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l1.6-2.4h6.8L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.6"/></svg>';
+  var coarse = function () { return !!(window.matchMedia && matchMedia("(pointer:coarse)").matches); };
+  function copyText(t) {
+    return (navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(t).then(function () { return true; }) : Promise.reject()).catch(function () {
+      try { var ta = document.createElement("textarea"); ta.value = t; ta.style.cssText = "position:fixed;opacity:0"; document.body.appendChild(ta); ta.select(); var ok = document.execCommand("copy"); ta.remove(); return ok; } catch (e) { return false; }
+    });
+  }
+  /* html2canvas 1.4 không hiểu màu hiện đại: Chrome trả color-mix()/oklab()… dưới dạng color(srgb …). Đổi sang rgb() trên bản sao trước khi vẽ. */
+  var COLOR_PROPS = ["color", "background-color", "border-top-color", "border-right-color", "border-bottom-color", "border-left-color", "outline-color", "text-decoration-color", "caret-color", "column-rule-color",
+    "box-shadow", "text-shadow", "background-image", "border-image-source", "fill", "stroke", "-webkit-text-fill-color"];
+  var COLOR_FN = /(?:color|oklab|oklch|lab|lch|hwb)\([^()]*\)/g;
+  function toRgb(tok, ctx) {
+    ctx.fillStyle = "#000"; ctx.fillStyle = tok; var v = ctx.fillStyle;
+    if (v.charAt(0) === "#" || v.indexOf("rgb") === 0) return v;
+    var m = /^color\(\s*(?:srgb|srgb-linear)?\s*([\d.e+-]+%?)\s+([\d.e+-]+%?)\s+([\d.e+-]+%?)(?:\s*\/\s*([\d.e+-]+%?))?\s*\)$/.exec(tok);   // trường hợp canvas không đổi được
+    if (!m) return "rgba(0,0,0,0)";
+    var n = function (x) { return /%$/.test(x) ? parseFloat(x) / 100 : parseFloat(x); };
+    return "rgba(" + [n(m[1]), n(m[2]), n(m[3])].map(function (c) { return Math.max(0, Math.min(255, Math.round(c * 255))); }).join(",") + "," + (m[4] ? n(m[4]) : 1) + ")";
+  }
+  function fixColors(doc) {
+    var ctx = document.createElement("canvas").getContext("2d"), win = doc.defaultView, els = doc.querySelectorAll("*");
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i], cs = win.getComputedStyle(el);
+      for (var k = 0; k < COLOR_PROPS.length; k++) {
+        var prop = COLOR_PROPS[k], val = cs.getPropertyValue(prop);
+        if (val && COLOR_FN.test(val)) { COLOR_FN.lastIndex = 0; el.style.setProperty(prop, val.replace(COLOR_FN, function (t) { return toRgb(t, ctx); }), "important"); }
+        COLOR_FN.lastIndex = 0;
+      }
+    }
+  }
+  var h2cPromise = null;
+  function loadH2C(url) {
+    if (window.html2canvas) return Promise.resolve(window.html2canvas);
+    return h2cPromise || (h2cPromise = new Promise(function (res, rej) { var sc = document.createElement("script"); sc.src = url; sc.onload = function () { res(window.html2canvas); }; sc.onerror = function () { h2cPromise = null; rej(new Error("h2c")); }; document.head.appendChild(sc); }));
+  }
 
   function initParent(opts) {
     opts = opts || {};
@@ -151,8 +196,14 @@ window.NPS = (function () {
 
     /* nút chia sẻ: hiện/ẩn cùng nút quay lại */
     var fab = document.createElement("button"); fab.type = "button"; fab.className = "nps-fab"; fab.innerHTML = SHARE_ICON; stage.appendChild(fab);
-    var label = function () { fab.setAttribute("aria-label", T("share")); fab.title = T("share"); }; label();
-    new MutationObserver(function () { fab.classList.toggle("show", home.classList.contains("show")); }).observe(home, { attributes: true, attributeFilter: ["class"] });
+    var cam = document.createElement("button"); cam.type = "button"; cam.className = "nps-fab nps-cam"; cam.innerHTML = CAM_ICON; stage.appendChild(cam);
+    var label = function () { fab.setAttribute("aria-label", T("share")); fab.title = T("share"); cam.setAttribute("aria-label", T("shot")); cam.title = T("shot"); }; label();
+    var place = function () { var t = document.getElementById("tleft"), r = 0; if (t && t.offsetParent) r = Math.round(stage.getBoundingClientRect().right - t.getBoundingClientRect().left + 10); if (r) stage.style.setProperty("--nps-r", r + "px"); else stage.style.removeProperty("--nps-r"); };
+    new MutationObserver(function () { var on = home.classList.contains("show"); if (on) place(); fab.classList.toggle("show", on); cam.classList.toggle("show", on); }).observe(home, { attributes: true, attributeFilter: ["class"] });
+    addEventListener("resize", place);
+    var h2cUrl = opts.h2cUrl || "shared/vendor/html2canvas.min.js", lastScore = 0;
+    var toastEl = document.createElement("div"); toastEl.className = "nps-toast"; toastEl.setAttribute("role", "status"); stage.appendChild(toastEl); var toastT = 0;
+    function toast(m, ms) { toastEl.textContent = m; toastEl.classList.add("on"); clearTimeout(toastT); toastT = setTimeout(function () { toastEl.classList.remove("on"); }, ms || 2600); }
     new MutationObserver(label).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
 
     /* tấm bảng dưới màn hình: dùng cho cả "khoe điểm" lẫn "nhờ chơi hộ" */
@@ -180,16 +231,23 @@ window.NPS = (function () {
       var game = curGame(), g = GAMES[game];
       if (!g) { sheet.innerHTML = '<p>' + esc(T("noShare")) + '</p><div class="nps-row"><button class="nps-s" id="npsNo" type="button">' + esc(T("close")) + '</button></div>'; sheet.hidden = false; document.getElementById("npsNo").onclick = hideSheet; return; }
       createShare(game, base).then(function (r) {
-        var s = r.share;
+        var s = r.share, native = !!navigator.share && coarse(), text = T("shareText").replace("{g}", gameName(game));
+        var enc = encodeURIComponent, apps = [['Telegram', 'https://t.me/share/url?url=' + enc(r.link) + '&text=' + enc(text)], ['WhatsApp', 'https://wa.me/?text=' + enc(text + ' ' + r.link)]];
+        if (coarse()) apps.unshift(['Messenger', 'fb-messenger://share/?link=' + enc(r.link)]);
         sheet.innerHTML = '<h3>' + esc(T("shareT")) + '</h3><p>' + esc(T("shareP")) + '</p>' +
           '<input id="npsLink" readonly value="' + esc(r.link) + '" aria-label="Link"><p class="nps-st" id="npsSt" role="status"></p>' +
-          '<div class="nps-row"><button class="nps-s" id="npsNo" type="button">' + esc(T("close")) + '</button><button class="nps-p" id="npsCopy" type="button">' + esc(T("copy")) + '</button>' +
-          (navigator.share ? '<button class="nps-p" id="npsSend" type="button">' + esc(T("send")) + '</button>' : "") + '</div><p class="nps-note">' + esc(T("once")) + '</p>';
+          '<div class="nps-row' + (native ? ' wrap' : '') + '"><button class="nps-s" id="npsNo" type="button">' + esc(T("close")) + '</button>' +
+          (native ? '<button class="nps-p" id="npsSend" type="button">' + esc(T("sendApps")) + '</button>' : "") +
+          '<button class="' + (native ? "nps-s" : "nps-p") + '" id="npsCopy" type="button">' + esc(T("copy")) + '</button></div>' +
+          (native ? "" : '<p class="nps-note">' + esc(T("viaApps")) + '</p><div class="nps-apps">' + apps.map(function (a) { return '<a href="' + esc(a[1]) + '" target="_blank" rel="noopener noreferrer">' + a[0] + '</a>'; }).join("") + '</div>') +
+          '<p class="nps-note">' + esc(T("once")) + '</p>';
         sheet.hidden = false;
-        var inp = document.getElementById("npsLink"); inp.onfocus = function () { inp.select(); };
+        var inp = document.getElementById("npsLink"), copyBtn = document.getElementById("npsCopy"); inp.onfocus = function () { inp.select(); };
+        var copied = function () { copyBtn.textContent = T("copied"); setTimeout(function () { copyBtn.textContent = T("copy"); }, 1600); };
         document.getElementById("npsNo").onclick = function () { clearInterval(shareTimer); hideSheet(); };
-        document.getElementById("npsCopy").onclick = function () { var b = this; (navigator.clipboard ? navigator.clipboard.writeText(r.link) : Promise.reject()).catch(function () { inp.select(); document.execCommand && document.execCommand("copy"); }).then(function () { b.textContent = T("copied"); setTimeout(function () { b.textContent = T("copy"); }, 1400); }); };
-        if (navigator.share) document.getElementById("npsSend").onclick = function () { navigator.share({ title: gameName(game), text: gameName(game), url: r.link }).catch(function () {}); };
+        copyBtn.onclick = function () { copyText(r.link).then(function (ok) { if (ok) copied(); else inp.select(); }); };
+        if (native) document.getElementById("npsSend").onclick = function () { navigator.share({ title: gameName(game), text: text, url: r.link }).catch(function () {}); };
+        else copyText(r.link).then(function (ok) { if (ok) { copied(); toast(T("linkCopied"), 3600); } });      /* trên web: tự sao chép link */
         var refresh = function () { var cur = load().filter(function (x) { return x.id === s.id; })[0] || s, el = document.getElementById("npsSt"); if (!el) { clearInterval(shareTimer); return; }
           el.textContent = T(cur.state === "claimed" ? "playing" : cur.state === "done" ? "done" : cur.state === "expired" ? "expired" : "waiting"); };
         refresh(); clearInterval(shareTimer); shareTimer = setInterval(function () { poll().then(refresh); }, 5000);
@@ -197,11 +255,45 @@ window.NPS = (function () {
     }
     fab.addEventListener("click", showShare);
 
+    /* Chụp màn hình game (iframe cùng domain): vẽ lại bằng html2canvas (tải khi cần), thêm dải tên game ở dưới. */
+    var shotDlg = document.createElement("dialog"); shotDlg.className = "nps-dlg"; document.body.appendChild(shotDlg);
+    var shotUrl = null; shotDlg.addEventListener("close", function () { if (shotUrl) { URL.revokeObjectURL(shotUrl); shotUrl = null; } });
+    function compose(canvas, sc) {
+      var band = Math.round(48 * sc), out = document.createElement("canvas"); out.width = canvas.width; out.height = canvas.height + band;
+      var c = out.getContext("2d"); c.drawImage(canvas, 0, 0); c.fillStyle = "#0E1020"; c.fillRect(0, canvas.height, out.width, band);
+      var pad = Math.round(16 * sc), y = canvas.height + band / 2; c.textBaseline = "middle"; c.fillStyle = "#FFFFFF"; c.font = "800 " + Math.round(17 * sc) + 'px system-ui,-apple-system,"Segoe UI",Roboto,sans-serif';
+      var left = "Night Play · " + gameName(curGame()) + (lastScore ? " · " + lastScore + " " + T("points") : ""); c.textAlign = "left"; c.fillText(left, pad, y, out.width * 0.72);
+      c.fillStyle = "#A58BFF"; c.font = "600 " + Math.round(13 * sc) + "px system-ui,sans-serif"; c.textAlign = "right"; c.fillText(location.host, out.width - pad, y, out.width * 0.26);
+      return new Promise(function (res, rej) { out.toBlob(function (b) { b ? res(b) : rej(new Error("blob")); }, "image/png"); });
+    }
+    function showShot(blob) {
+      if (shotUrl) URL.revokeObjectURL(shotUrl); shotUrl = URL.createObjectURL(blob);
+      var game = curGame(), name = "night-play-" + game + ".png", file = new File([blob], name, { type: "image/png" }), text = T("shotText").replace("{g}", gameName(game));
+      var canShare = !!(navigator.canShare && navigator.share && navigator.canShare({ files: [file] })), canCopy = !!(window.ClipboardItem && navigator.clipboard && navigator.clipboard.write);
+      shotDlg.innerHTML = '<h3>' + esc(T("shotT")) + '</h3><img class="nps-shotimg" alt="' + esc(T("shotT")) + '" src="' + shotUrl + '">' +
+        '<div class="nps-row"><button class="nps-s" id="npsShotX" type="button">' + esc(T("close")) + '</button><a class="nps-s" id="npsShotSave" download="' + name + '" href="' + shotUrl + '">' + esc(T("save")) + '</a>' +
+        (canShare ? '<button class="nps-p" id="npsShotShare" type="button">' + esc(T("shareImg")) + '</button>' : canCopy ? '<button class="nps-p" id="npsShotCopy" type="button">' + esc(T("copyImg")) + '</button>' : "") + '</div>';
+      if (!shotDlg.open) shotDlg.showModal();
+      document.getElementById("npsShotX").onclick = function () { shotDlg.close(); };
+      if (canShare) document.getElementById("npsShotShare").onclick = function () { navigator.share({ files: [file], title: gameName(game), text: text }).catch(function () {}); };
+      else if (canCopy) document.getElementById("npsShotCopy").onclick = function () { var b = this; navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]).then(function () { b.textContent = T("imgCopied"); }).catch(function () { b.disabled = true; }); };
+    }
+    cam.addEventListener("click", function () {
+      var f = stage.querySelector("iframe"), doc; try { doc = f && f.contentDocument; } catch (e) {}
+      if (!doc || !doc.documentElement) return toast(T("shotErr"));
+      cam.disabled = true;
+      loadH2C(h2cUrl).then(function (h2c) {
+        try { doc.fonts.forEach(function (ff) { if (ff.status === "loaded") document.fonts.add(ff); }); } catch (e) {}   /* cho html2canvas dùng đúng phông chữ web của game */
+        var w = f.clientWidth, h = f.clientHeight, sc = Math.min(2, window.devicePixelRatio || 1), bg = (doc.body && getComputedStyle(doc.body).backgroundColor) || "#0E1020";
+        return h2c(doc.documentElement, { backgroundColor: bg === "rgba(0, 0, 0, 0)" ? "#0E1020" : bg, scale: sc, width: w, height: h, windowWidth: w, windowHeight: h, x: 0, y: 0, useCORS: true, logging: false, onclone: function (cd) { try { fixColors(cd); } catch (e) {} return cd.fonts && cd.fonts.ready ? Promise.race([cd.fonts.ready, new Promise(function (r) { setTimeout(r, 1800); })]) : null; } }).then(function (canvas) { return compose(canvas, sc); });
+      }).then(showShot).catch(function () { toast(T("shotErr")); }).then(function () { cam.disabled = false; });
+    });
+
     /* tin nhắn từ game (chỉ nhận từ đúng iframe cùng origin) */
     addEventListener("message", function (e) {
       var f = stage.querySelector("iframe"); if (e.origin !== location.origin || !f || e.source !== f.contentWindow || !e.data || e.data.np !== 1) return;
-      if (e.data.type === "start") hideSheet();
-      else if (e.data.type === "result") { var game = curGame(); setTimeout(function () { if (stage.classList.contains("on")) showBrag(game, e.data.score | 0); }, 700); }
+      if (e.data.type === "start") { hideSheet(); lastScore = 0; }
+      else if (e.data.type === "result") { var game = curGame(); lastScore = e.data.score | 0; setTimeout(function () { if (stage.classList.contains("on")) showBrag(game, e.data.score | 0); }, 700); }
     });
     new MutationObserver(function () { if (!stage.classList.contains("on")) { hideSheet(); clearInterval(shareTimer); } }).observe(stage, { attributes: true, attributeFilter: ["class"] });
 
