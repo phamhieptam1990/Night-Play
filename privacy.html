@@ -125,6 +125,7 @@ html{overscroll-behavior:none}
 .th:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
 @media (prefers-reduced-motion:reduce){#pages{transition:none}}
 @media (max-height:620px),(max-width:360px){#pgBody,.leaf{padding:10px 14px 28px 20px}#pg{gap:6px;padding-bottom:6px}}
+@media (max-height:420px){.nav{padding:3px 16px}.site-foot{padding:2px 16px}.site-foot nav a{padding:2px 0}.site-foot .mark svg{width:20px;height:20px}#pg{padding-bottom:4px;gap:4px}}
 @media (max-height:520px){#pgHead{display:none}.nav{padding:6px 16px}.ico{width:38px;height:38px}.seg button{height:32px}#pg{padding-top:6px}}
 @media print{html,body{height:auto;overflow:visible}#src{display:block;max-width:760px;margin:0 auto}#pg{display:none}}
 </style>
@@ -422,8 +423,8 @@ function layoutPages() {
     add(units(n));
   } };
   add(B.out); flush();
-  const label = x => { const h = x.nodes.find(isHead); return h ? h.textContent : (x.nodes[0].textContent || "").slice(0, 40); };
-  pg.screens.forEach(x => { x.title = label(x); });
+  let lastHead = "";
+  pg.screens.forEach(x => { const hs = x.nodes.filter(isHead); if (hs.length) { x.title = hs[0].textContent; lastHead = hs[hs.length - 1].textContent; } else x.title = lastHead + (l === "vi" ? " (tiếp)" : " (cont.)"); });
   $("pgPrev").setAttribute("aria-label", l === "vi" ? "Trang trước" : "Previous page"); $("pgNext").setAttribute("aria-label", l === "vi" ? "Trang sau" : "Next page");
   $("pgMenu").setAttribute("aria-label", l === "vi" ? "Mục lục các trang" : "Page thumbnails"); $("pgMenu").title = $("pgMenu").getAttribute("aria-label"); $("thTitle").textContent = l === "vi" ? "Mục lục" : "Pages"; $("thClose").setAttribute("aria-label", l === "vi" ? "Đóng" : "Close");
   if (thumbsOpen) { buildThumbs(); applyPageShift(); }
