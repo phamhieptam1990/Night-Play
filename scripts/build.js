@@ -5,7 +5,7 @@ const root = path.join(__dirname, "..");
 const dist = path.join(root, "dist");
 /* SITE_TARGET: "hub" = site công khai (không có admin) · "admin" = chỉ trang quản trị · bỏ trống = tất cả (chạy 1 site) */
 const TARGET = process.env.SITE_TARGET || "all";
-const HUB = ["index.html", "subscribe.html", "privacy.html", "restricted.html", "cozyplay", "popplay", "shared"];   // thêm mục mới ở đây
+const HUB = ["index.html", "subscribe.html", "privacy.html", "restricted.html", "help.html", "shared.html", "leaderboard.html", "cozyplay", "popplay", "shared"];   // thêm mục mới ở đây
 const PUBLIC = TARGET === "hub" ? HUB : TARGET === "admin" ? ["admin", "shared", "restricted.html"] : [...HUB, "admin"];
 fs.rmSync(dist, { recursive: true, force: true });
 fs.mkdirSync(dist, { recursive: true });

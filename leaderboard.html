@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="vi" data-app="cozyplay">
+<head>
+<meta charset="utf-8">
+<script src="shared/guard.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0E1020">
+<meta name="description" content="Bảng xếp hạng Night Play">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%237C5CFF'/%3E%3Cpath d='M40 40A16 16 0 1 1 26 16a13 13 0 0 0 14 24z' fill='%23fff'/%3E%3C/svg%3E">
+<title>Bảng xếp hạng · Night Play</title>
+<script>
+try{var t=localStorage.getItem("theme")}catch(e){}
+document.documentElement.dataset.theme=t||"dark";
+(function(){var q=new URLSearchParams(location.search).get("lang"),s=null;try{s=localStorage.getItem("lang")}catch(e){}
+var l=[q,s].find(function(x){return x==="vi"||x==="en"})||(/^vi/i.test(navigator.language||"")?"vi":"en");document.documentElement.lang=l;})();
+</script>
+<link rel="stylesheet" href="shared/theme.css">
+<link rel="stylesheet" href="shared/bars.css">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.45;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+button,input,select{font:inherit;color:inherit}button{border:0;cursor:pointer}
+a{color:var(--accent);font-weight:600}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.nav{flex:none;position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;background:color-mix(in srgb,var(--bg) 82%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.mark{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;color:var(--ink);text-decoration:none;min-width:0}
+.mark svg{width:34px;height:34px;flex:none}.mark span:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tools{position:relative;display:flex;gap:10px;align-items:center}
+.ico,.back{height:44px;border-radius:999px;background:var(--panel);box-shadow:var(--shadow);display:inline-flex;align-items:center;justify-content:center;color:var(--ink);text-decoration:none;font-weight:700;font-size:15px}
+.ico{width:44px;padding:0}.back{padding:0 16px;gap:6px;white-space:nowrap}.ico svg{width:22px;height:22px}
+.sun{display:none}[data-theme=dark] .sun{display:block}[data-theme=dark] .moon{display:none}
+.seg{display:inline-flex;background:var(--panel);box-shadow:var(--shadow);border-radius:22px;padding:3px}
+.seg button{background:none;border-radius:19px;height:38px;padding:0 14px;font-weight:700;color:var(--muted)}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--on-accent)}
+main{flex:1;min-height:0;width:100%;max-width:640px;margin:0 auto;padding:10px 16px 8px;display:flex;flex-direction:column;gap:10px}
+.hero{flex:none;text-align:center}
+.hero h1{margin:4px 0 0;font-size:clamp(22px,min(5vw,5vh),32px);line-height:1.15}
+.hero p{margin:4px 0 0;font-size:14px;color:var(--ink2)}
+.bar{flex:none;display:flex;justify-content:center;gap:10px;flex-wrap:wrap;align-items:center}
+.card{flex:1;min-height:0;display:flex;flex-direction:column;background:var(--panel);border-radius:22px;box-shadow:var(--shadow);padding:6px 12px;overflow:hidden}
+#list{flex:1;min-height:0;overflow:hidden}
+.row{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:8px;height:52px;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.rk{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:15px;background:var(--bg);border:2px solid var(--line)}
+.rk.g1{background:#F5C542;border-color:#F5C542;color:#3a2e00}.rk.g2{background:#C9CED8;border-color:#C9CED8;color:#22252d}.rk.g3{background:#D79A6B;border-color:#D79A6B;color:#2f1a08}
+.nick{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}.nick small{font-weight:600;color:var(--muted);margin-left:6px}
+.sc{font-variant-numeric:tabular-nums;font-weight:800;font-size:18px;text-align:right}.sc small{display:block;font-weight:600;font-size:11px;color:var(--muted)}
+.me .nick{color:var(--accent)}
+.empty{height:100%;display:grid;place-items:center;text-align:center;color:var(--muted);padding:12px}
+.mine{flex:none;display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:space-between;padding:8px 2px;border-top:1px solid var(--line);font-size:14px}
+.mine b{font-variant-numeric:tabular-nums}
+.mine form{display:flex;gap:6px;flex:1;min-width:200px;justify-content:flex-end}
+.mine input{flex:1;min-width:0;max-width:200px;padding:8px 10px;border-radius:10px;border:2px solid var(--line);background:var(--bg)}
+.mine button{padding:8px 14px;border-radius:10px;background:var(--accent);color:var(--on-accent);font-weight:800}
+.mine .err{color:var(--warn);font-size:12.5px;flex-basis:100%;text-align:right;min-height:0}
+.foot{flex:none;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 18px;padding:6px 16px;border-top:1px solid var(--line);background:linear-gradient(180deg,transparent,var(--hero1))}
+.foot nav{display:flex;gap:0 16px}.foot nav a{padding:6px 0;font-size:14px;color:var(--ink);text-decoration:none}.foot p{margin:0;font-size:12px;opacity:.75}
+@media (max-width:640px){.foot p{display:none}}
+</style>
+</head>
+<body>
+<nav class="nav" aria-label="Main">
+  <a class="mark" href="cozyplay/index.html"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="var(--accent)"/><path d="M42 40A16 16 0 1 1 26 14a13 13 0 0 0 16 26z" fill="#fff"/><circle cx="44" cy="20" r="2.5" fill="#fff"/></svg><span>Night Play</span></a>
+  <div class="tools">
+    <a class="back" id="back" href="cozyplay/index.html">←<span id="backT"></span></a>
+    <div class="seg" role="group" id="langSeg"><button type="button" data-l="vi" lang="vi" aria-label="Tiếng Việt">VI</button><button type="button" data-l="en" lang="en" aria-label="English">EN</button></div>
+    <button id="themeBtn" class="ico" type="button" aria-label="Theme">
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
+    </button>
+  </div>
+</nav>
+<main>
+  <header class="hero"><h1 id="h"></h1><p id="sub"></p></header>
+  <div class="bar">
+    <select id="game" class="seg" style="display:none;padding:8px 12px;height:44px" aria-label="Game"></select>
+    <div class="seg" role="group" id="period"><button type="button" data-p="day" aria-pressed="false"></button><button type="button" data-p="week" aria-pressed="true"></button><button type="button" data-p="all" aria-pressed="false"></button></div>
+  </div>
+  <section class="card" aria-live="polite">
+    <div id="list"></div>
+    <div class="mine" id="mine"></div>
+  </section>
+</main>
+<footer class="foot">
+  <nav><a id="fHome" href="index.html"></a><a id="fPriv" href="privacy.html"></a><a id="fHelp" href="shared.html"></a></nav>
+  <p id="copy"></p>
+</footer>
+<script src="shared/social.js"></script>
+<script>
+"use strict";
+const $ = id => document.getElementById(id), root = document.documentElement;
+const TXT = {
+  vi: { back: "Night Play", h: "Bảng xếp hạng", sub: "Chỉ những người chủ động khoe điểm mới có tên ở đây.", day: "Hôm nay", week: "7 ngày", all: "Mọi thời đại", empty: "Chưa ai khoe điểm. Hãy là người đầu tiên!", you: "(bạn)", pts: "điểm",
+        best: "Điểm cao nhất của bạn trên máy này", brag: "Khoe điểm", nick: "Biệt danh", bad: "Biệt danh chưa hợp lệ (2–16 ký tự, không chứa link/email).", slow: "Thao tác quá nhanh, thử lại sau.", err: "Có lỗi, vui lòng thử lại.", ok: "Đã lên bảng xếp hạng!", none: "Bạn chưa có điểm. Hãy chơi một ván!",
+        home: "Trang chủ", priv: "Quyền riêng tư", help: "Kết quả chơi hộ", rights: "Bảo lưu mọi quyền.", theme: "Sáng / Tối", err2: "Không tải được bảng xếp hạng.", loading: "Đang tải…" },
+  en: { back: "Night Play", h: "Leaderboard", sub: "Only people who chose to show off their score appear here.", day: "Today", week: "7 days", all: "All time", empty: "Nobody has shown off a score yet. Be the first!", you: "(you)", pts: "pts",
+        best: "Your best score on this device", brag: "Show off", nick: "Nickname", bad: "Invalid nickname (2–16 characters, no links/emails).", slow: "Too many tries, please wait.", err: "Something went wrong, please try again.", ok: "You're on the leaderboard!", none: "No score yet. Play a round!",
+        home: "Home", priv: "Privacy", help: "Shared results", rights: "All rights reserved.", theme: "Light / Dark", err2: "Couldn't load the leaderboard.", loading: "Loading…" }
+};
+const L = () => TXT[root.lang === "en" ? "en" : "vi"];
+const GAME_IDS = Object.keys(NPS.GAMES).filter(g => NPS.GAMES[g].board);
+let game = (new URLSearchParams(location.search).get("game") || "") ; if (!GAME_IDS.includes(game)) game = GAME_IDS[0];
+let period = "week", seq = 0, last = null;
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const bestKey = { "dap-deadline": "dapdeadline-hi" };
+const myBest = () => { try { return +localStorage.getItem(bestKey[game]) || 0; } catch (e) { return 0; } };
+
+function texts() {
+  const t = L(); document.title = t.h + " · Night Play"; $("backT").textContent = t.back; $("h").textContent = t.h; $("sub").textContent = t.sub;
+  document.querySelectorAll("#period button").forEach(b => { b.textContent = t[b.dataset.p]; b.setAttribute("aria-pressed", String(b.dataset.p === period)); });
+  $("fHome").textContent = t.home; $("fPriv").textContent = t.priv; $("fHelp").textContent = t.help; $("copy").textContent = "© " + new Date().getFullYear() + " Night Play. " + t.rights;
+  $("themeBtn").setAttribute("aria-label", t.theme);
+  document.querySelectorAll("#langSeg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.l === root.lang)));
+  const sel = $("game"); sel.innerHTML = GAME_IDS.map(g => '<option value="' + g + '"' + (g === game ? " selected" : "") + ">" + esc(NPS.gameName(g)) + "</option>").join(""); sel.style.display = GAME_IDS.length > 1 ? "" : "none";
+}
+function renderMine() {
+  const t = L(), b = myBest(), el = $("mine");
+  if (!b) { el.innerHTML = '<span style="color:var(--muted)">' + esc(t.none) + "</span>"; return; }
+  el.innerHTML = '<span>' + esc(t.best) + ': <b>' + b + '</b></span><form id="bragF"><input id="bragN" maxlength="16" autocomplete="nickname" placeholder="' + esc(t.nick) + '" value="' + esc(NPS.nickGet()) + '" aria-label="' + esc(t.nick) + '"><button type="submit">' + esc(t.brag) + '</button></form><span class="err" id="bragE" role="alert"></span>';
+  $("bragF").onsubmit = e => { e.preventDefault(); const n = $("bragN").value.trim().replace(/\s+/g, " "), btn = e.target.querySelector("button"); btn.disabled = true;
+    NPS.submitScore(game, b, n).then(() => { NPS.nickSet(n); $("bragE").style.color = "var(--ok)"; $("bragE").textContent = t.ok; load(); })
+      .catch(x => { btn.disabled = false; $("bragE").style.color = ""; $("bragE").textContent = x.message === "badNick" ? t.bad : x.message === "slow" ? t.slow : t.err; }); };
+}
+function draw(rows) {
+  const t = L(), me = NPS.nickGet().toLowerCase();
+  $("list").innerHTML = rows.length ? rows.map(r => '<div class="row' + (me && r.nick.toLowerCase() === me ? " me" : "") + '"><span class="rk g' + r.rank + '" aria-label="#' + r.rank + '">' + r.rank + '</span><span class="nick" title="' + esc(r.nick) + '">' + esc(r.nick) + (me && r.nick.toLowerCase() === me ? "<small>" + esc(t.you) + "</small>" : "") + '</span><span class="sc">' + r.score + "<small>" + esc(t.pts) + (period === "all" ? " · " + r.day.slice(5).split("-").reverse().join("/") : "") + "</small></span></div>").join("")
+    : '<div class="empty">' + esc(t.empty) + "</div>";
+}
+function load() {
+  const mine = $("mine").getBoundingClientRect().height, box = $("list").getBoundingClientRect().height;
+  const rows = Math.max(3, Math.min(30, Math.floor((box || 300) / 52))), my = ++seq;
+  if (!last) $("list").innerHTML = '<div class="empty">' + esc(L().loading) + "</div>";
+  NPS.getScores(game, period, rows).then(r => { if (my !== seq) return; if (r.status !== 200) throw 0; last = r.body.rows; draw(last); })
+    .catch(() => { if (my === seq) $("list").innerHTML = '<div class="empty">' + esc(L().err2) + "</div>"; });
+}
+function setLang(l, save) { root.lang = l; if (save) try { localStorage.setItem("lang", l); } catch (e) {} texts(); renderMine(); if (last) draw(last); }
+document.querySelectorAll("#langSeg button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.l, true)));
+document.querySelectorAll("#period button").forEach(b => b.addEventListener("click", () => { period = b.dataset.p; texts(); load(); }));
+$("game").addEventListener("change", e => { game = e.target.value; renderMine(); load(); });
+$("themeBtn").addEventListener("click", () => { const n = root.dataset.theme === "dark" ? "light" : "dark"; root.dataset.theme = n; document.querySelector("meta[name=theme-color]").content = n === "dark" ? "#0E1020" : "#F3F0FA"; try { localStorage.setItem("theme", n); } catch (e) {} });
+let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(load, 200); });
+texts(); renderMine(); requestAnimationFrame(load); if (document.fonts && document.fonts.ready) document.fonts.ready.then(load);
+</script>
+<script src="shared/bars.js"></script>
+</body>
+</html>

@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <script src="../../../shared/guard.js"></script>
+<script src="../../../shared/bridge.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Đập Deadline</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -228,7 +229,7 @@ function render(){
 function start(){
   audio();
   score=0;combo=0;best=0;timeLeft=ROUND;running=true;lastHit=0;
-  cells.forEach(hide);$("overlay").hidden=true;render();say("Bắt đầu! Đập hết đi!");
+  cells.forEach(hide);$("overlay").hidden=true;render();say("Bắt đầu! Đập hết đi!");window.NP&&NP.start();
   clearTimeout(spawnT);spawn();
   clearInterval(tickT);
   tickT=setInterval(()=>{timeLeft-=.1;if(timeLeft<=0){timeLeft=0;end()}render()},100);
@@ -244,7 +245,11 @@ function end(){
     '<button class="big" id="againBtn">Đập thêm ván nữa</button>'+
     '<div class="tip">Hít sâu 4 giây, thở ra 4 giây, rồi quay lại làm việc nhé.</div>';
   ov.querySelector(".rank").textContent=r[1];ov.querySelector(".desc").textContent=r[2]+(score>hi&&hi>0?" Kỷ lục mới!":"");
-  ov.hidden=false;$("againBtn").addEventListener("click",start);$("againBtn").focus();
+  ov.hidden=false;
+  window.NP&&NP.result({score:score,extra:{combo:best}});
+  if(window.NP&&NP.helper){   /* người chơi hộ: chỉ 1 lượt, không chơi lại */
+    ov.querySelector("#againBtn").remove();ov.querySelector(".tip").textContent="Cảm ơn bạn đã chơi hộ! Kết quả đang được gửi cho bạn của bạn.";
+  }else{$("againBtn").addEventListener("click",start);$("againBtn").focus();}
 }
 
 $("startBtn").addEventListener("click",start);

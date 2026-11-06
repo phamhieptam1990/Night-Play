@@ -89,6 +89,7 @@ async function sweep() {
   await db.query("delete from rate_limits where expires_at < now()");
   await db.query("delete from otps where exp < now()");
   await db.query("delete from presence where last_seen < now() - interval '1 day'");
+  await db.query("delete from relays where expires_at < now()");
 }
 
 /* Gửi email OTP. TODO: nối SMTP/Resend/SES tại đây. */
@@ -409,6 +410,67 @@ route("GET", /^\/api\/admin\/review$/, async ({ headers, ip, query }) => {
   return out(200, { page, size, total: c.n, rows: rows.map(r => ({
     id: r.id, at: ms(r.at), amount: Number(r.amount), content: r.content, account: r.account, result: r.result,
     code: r.code, email: r.email, orderAmount: r.order_amount })) });
+});
+
+/* ===== XÃ HỘI: bảng xếp hạng tự nguyện + chuyển tiếp kết quả "chơi hộ" =====
+   Không lưu IP/thiết bị/email. IP chỉ được băm kèm ngày (không đảo ngược được) để giới hạn spam trong vài giờ. */
+const ipHash = ip => hmac("ip|" + ip + "|" + new Date().toISOString().slice(0, 10)).slice(0, 16);
+const sha256hex = s => crypto.createHash("sha256").update(String(s)).digest("hex");
+const RID = "[A-Za-z0-9_-]{22}", HEX64 = /^[a-f0-9]{64}$/;
+
+/* Game có bảng xếp hạng (chỉ game dành cho người lớn; trang trẻ em không có). max = điểm tối đa hợp lệ của 1 lượt chơi. */
+const SCORE_GAMES = { "dap-deadline": { max: 5000 } };
+const nickOk = n => /^[\p{L}\p{N} _.\-]{2,16}$/u.test(n) && !/https?|www\.|\.(com|net|org|vn|io)\b|@/i.test(n);
+
+/* Chỉ ghi khi người chơi chủ động bấm "Khoe điểm". */
+route("POST", /^\/api\/scores$/, async ({ body, ip }) => {
+  const g = SCORE_GAMES[body.game], score = body.score;
+  if (!g || !Number.isInteger(score) || score < 1 || score > g.max) return out(400, { error: "bad_input" });
+  const nick = String(body.nick || "").trim().replace(/\s+/g, " ");
+  if (!nickOk(nick)) return out(400, { error: "bad_nick" });
+  if (await limited("sc:" + ipHash(ip), 6, 3600000)) return out(429, { error: "slow_down" });
+  await db.query("insert into scores(game, nick, score, day) values ($1, $2, $3, (now() at time zone $4)::date)", [body.game, nick, score, TZ]);
+  return out(200, { ok: true });
+});
+route("GET", /^\/api\/scores$/, async ({ query }) => {
+  const game = query.get("game"), period = query.get("period") || "week";
+  if (!SCORE_GAMES[game] || !["day", "week", "all"].includes(period)) return out(400, { error: "bad_input" });
+  const limit = Math.min(30, Math.max(3, parseInt(query.get("limit") || "10", 10) || 10));
+  const today = "(now() at time zone $2)::date", cond = period === "day" ? `day = ${today}` : period === "week" ? `day >= ${today} - 6` : "$2::text is not null";
+  const { rows } = await db.query(
+    `select nick, max(score) as score, max(day) as day from scores where game = $1 and ${cond}
+     group by nick order by score desc, min(created_at) asc limit $3`, [game, TZ, limit]);
+  return out(200, { game, period, rows: rows.map((r, i) => ({ rank: i + 1, nick: r.nick, score: r.score, day: String(r.day instanceof Date ? r.day.toISOString() : r.day).slice(0, 10) })) });
+});
+
+/* Chơi hộ: 1) chủ nhân tạo  2) người chơi hộ nhận (chỉ 1 lần)  3) người chơi hộ gửi kết quả đã mã hoá  4) chủ nhân lấy rồi xác nhận → xoá */
+route("POST", /^\/api\/relay$/, async ({ body, ip }) => {
+  if (!new RegExp("^" + RID + "$").test(String(body.id)) || !HEX64.test(String(body.owner))) return out(400, { error: "bad_input" });
+  if (await limited("rl:" + ipHash(ip), 8, 3600000)) return out(429, { error: "slow_down" });
+  const r = await db.query("insert into relays(id, owner_hash, expires_at) values ($1, $2, now() + interval '24 hours') on conflict do nothing", [body.id, body.owner]);
+  return r.rowCount ? out(200, { ok: true, ttlHours: 24 }) : out(409, { error: "exists" });
+});
+route("POST", new RegExp("^/api/relay/(" + RID + ")/claim$"), async ({ m, body, ip }) => {
+  if (!HEX64.test(String(body.claim))) return out(400, { error: "bad_input" });
+  if (await limited("rc:" + ipHash(ip), 30, 3600000)) return out(429, { error: "slow_down" });
+  const r = await db.query("update relays set claim_hash = $2, state = 'claimed' where id = $1 and state = 'open' and expires_at > now()", [m[1], body.claim]);
+  return r.rowCount ? out(200, { ok: true }) : out(409, { error: "unavailable" });     // đã có người nhận / hết hạn / không tồn tại
+});
+route("POST", new RegExp("^/api/relay/(" + RID + ")/result$"), async ({ m, body }) => {
+  const blob = String(body.blob || "");
+  if (!/^[A-Za-z0-9_-]{16,3000}$/.test(blob) || typeof body.token !== "string" || body.token.length < 16 || body.token.length > 64) return out(400, { error: "bad_input" });
+  const r = await db.query("update relays set blob = $3, state = 'done' where id = $1 and state = 'claimed' and claim_hash = $2 and expires_at > now()", [m[1], sha256hex(body.token), blob]);
+  return r.rowCount ? out(200, { ok: true }) : out(403, { error: "forbidden" });
+});
+route("GET", new RegExp("^/api/relay/(" + RID + ")$"), async ({ m }) => {
+  const { rows: [r] } = await db.query("select state, blob, expires_at from relays where id = $1", [m[1]]);
+  if (!r || ms(r.expires_at) < Date.now()) return out(404, { error: "gone" });
+  return out(200, { state: r.state, blob: r.state === "done" ? r.blob : null, expiresAt: ms(r.expires_at) });
+});
+route("POST", new RegExp("^/api/relay/(" + RID + ")/ack$"), async ({ m, body }) => {      // chủ nhân đã nhận → xoá hẳn khỏi máy chủ
+  if (typeof body.token !== "string" || body.token.length < 16 || body.token.length > 64) return out(400, { error: "bad_input" });
+  const r = await db.query("delete from relays where id = $1 and owner_hash = $2", [m[1], sha256hex(body.token)]);
+  return r.rowCount ? out(200, { ok: true }) : out(403, { error: "forbidden" });
 });
 
 route("GET", /^\/api\/health$/, async () => {

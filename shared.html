@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="vi" data-app="cozyplay">
+<head>
+<meta charset="utf-8">
+<script src="shared/guard.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0E1020">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%237C5CFF'/%3E%3Cpath d='M40 40A16 16 0 1 1 26 16a13 13 0 0 0 14 24z' fill='%23fff'/%3E%3C/svg%3E">
+<title>Kết quả chơi hộ · Night Play</title>
+<script>
+try{var t=localStorage.getItem("theme")}catch(e){}
+document.documentElement.dataset.theme=t||"dark";
+(function(){var q=new URLSearchParams(location.search).get("lang"),s=null;try{s=localStorage.getItem("lang")}catch(e){}
+var l=[q,s].find(function(x){return x==="vi"||x==="en"})||(/^vi/i.test(navigator.language||"")?"vi":"en");document.documentElement.lang=l;})();
+</script>
+<link rel="stylesheet" href="shared/theme.css">
+<link rel="stylesheet" href="shared/bars.css">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.45;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+button,input{font:inherit;color:inherit}button{border:0;cursor:pointer}
+a{color:var(--accent);font-weight:600}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.nav{flex:none;position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;background:color-mix(in srgb,var(--bg) 82%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.mark{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;color:var(--ink);text-decoration:none;min-width:0}
+.mark svg{width:34px;height:34px;flex:none}.mark span:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tools{position:relative;display:flex;gap:10px;align-items:center}
+.ico,.back{height:44px;border-radius:999px;background:var(--panel);box-shadow:var(--shadow);display:inline-flex;align-items:center;justify-content:center;color:var(--ink);text-decoration:none;font-weight:700;font-size:15px}
+.ico{width:44px;padding:0}.back{padding:0 16px;gap:6px;white-space:nowrap}.ico svg{width:22px;height:22px}
+.sun{display:none}[data-theme=dark] .sun{display:block}[data-theme=dark] .moon{display:none}
+.seg{display:inline-flex;background:var(--panel);box-shadow:var(--shadow);border-radius:22px;padding:3px}
+.seg button{background:none;border-radius:19px;height:38px;padding:0 14px;font-weight:700;color:var(--muted)}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--on-accent)}
+main{flex:1;min-height:0;width:100%;max-width:640px;margin:0 auto;padding:10px 16px 8px;display:flex;flex-direction:column;gap:10px}
+.hero{flex:none;text-align:center}
+.hero h1{margin:4px 0 0;font-size:clamp(22px,min(5vw,5vh),32px);line-height:1.15}
+.hero p{margin:4px 0 0;font-size:14px;color:var(--ink2)}
+.card{flex:1;min-height:0;display:flex;flex-direction:column;background:var(--panel);border-radius:22px;box-shadow:var(--shadow);padding:6px 12px;overflow:hidden}
+#list{flex:1;min-height:0;overflow:hidden}
+.item{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;height:84px;border-bottom:1px solid var(--line)}
+.item:last-child{border-bottom:0}
+.g{font-weight:800;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.meta{color:var(--muted);font-size:12.5px;grid-column:1}
+.big{grid-column:2;grid-row:1 / span 2;text-align:right;font-size:28px;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums;line-height:1}.big small{display:block;font-size:11px;font-weight:600;color:var(--muted)}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700}.chip i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.act{grid-column:1 / -1;display:flex;gap:8px}.act button{padding:0 12px;height:28px;border-radius:999px;background:var(--bg);border:1px solid var(--line);font-size:12.5px;font-weight:700}
+
+.new{background:var(--accent);color:var(--on-accent);border-radius:999px;font-size:11px;font-weight:800;padding:1px 8px;margin-left:6px}
+.empty{height:100%;display:grid;place-items:center;text-align:center;color:var(--muted);padding:16px}
+.pager{flex:none;display:flex;justify-content:center;align-items:center;gap:10px;padding:6px 0;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.pager button{height:34px;min-width:40px;border-radius:10px;background:var(--bg);border:1px solid var(--line);font-weight:800}.pager button:disabled{opacity:.35}
+.note{flex:none;margin:0;font-size:12.5px;color:var(--muted);text-align:center}
+.foot{flex:none;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 18px;padding:6px 16px;border-top:1px solid var(--line);background:linear-gradient(180deg,transparent,var(--hero1))}
+.foot nav{display:flex;gap:0 16px}.foot nav a{padding:6px 0;font-size:14px;color:var(--ink);text-decoration:none}.foot p{margin:0;font-size:12px;opacity:.75}
+@media (max-width:640px){.foot p{display:none}.note{display:none}}
+@media (max-height:640px){.note,.hero p{display:none}}
+</style>
+</head>
+<body>
+<nav class="nav" aria-label="Main">
+  <a class="mark" href="cozyplay/index.html"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="var(--accent)"/><path d="M42 40A16 16 0 1 1 26 14a13 13 0 0 0 16 26z" fill="#fff"/><circle cx="44" cy="20" r="2.5" fill="#fff"/></svg><span>Night Play</span></a>
+  <div class="tools">
+    <a class="back" href="cozyplay/index.html">←<span id="backT"></span></a>
+    <div class="seg" role="group" id="langSeg"><button type="button" data-l="vi" lang="vi" aria-label="Tiếng Việt">VI</button><button type="button" data-l="en" lang="en" aria-label="English">EN</button></div>
+    <button id="themeBtn" class="ico" type="button" aria-label="Theme">
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
+    </button>
+  </div>
+</nav>
+<main>
+  <header class="hero"><h1 id="h"></h1><p id="sub"></p></header>
+  <section class="card" aria-live="polite"><div id="list"></div><div class="pager" id="pager" hidden></div></section>
+  <p class="note" id="note"></p>
+</main>
+<footer class="foot">
+  <nav><a id="fHome" href="index.html"></a><a id="fPriv" href="privacy.html"></a><a id="fRank" href="leaderboard.html"></a></nav>
+  <p id="copy"></p>
+</footer>
+<script src="shared/social.js"></script>
+<script>
+"use strict";
+const $ = id => document.getElementById(id), root = document.documentElement;
+const TXT = {
+  vi: { back: "Night Play", h: "Kết quả chơi hộ", sub: "Theo dõi những lời nhờ bạn bè chơi hộ và xem kết quả khi họ chơi xong.", empty: "Chưa có lời nhờ nào. Khi đang chơi, bấm nút chia sẻ rồi gửi link cho bạn bè nhé.",
+        note: "Kết quả được mã hoá, máy chủ không đọc được và xoá ngay khi bạn nhận. Danh sách này chỉ nằm trên thiết bị của bạn.", pts: "điểm", st_open: "Đang chờ bạn bè mở link", st_claimed: "Bạn bè đang chơi hộ", st_done: "Đã có kết quả", st_expired: "Đã hết hạn",
+        copy: "Sao chép link", copied: "Đã sao chép", cancel: "Huỷ link", del: "Xoá", newTag: "Mới", home: "Trang chủ", priv: "Quyền riêng tư", rank: "Bảng xếp hạng", rights: "Bảo lưu mọi quyền.", theme: "Sáng / Tối", page: "Trang", of: "/", ago: ["vừa xong", "phút trước", "giờ trước", "ngày trước"], at: "Tạo" },
+  en: { back: "Night Play", h: "Shared results", sub: "Track the rounds friends play for you and see the result when they finish.", empty: "No requests yet. While playing, tap the share button and send the link to a friend.",
+        note: "Results are encrypted; the server can't read them and deletes them as soon as you receive them. This list lives only on your device.", pts: "points", st_open: "Waiting for a friend to open the link", st_claimed: "A friend is playing for you", st_done: "Result received", st_expired: "Expired",
+        copy: "Copy link", copied: "Copied", cancel: "Revoke link", del: "Delete", newTag: "New", home: "Home", priv: "Privacy", rank: "Leaderboard", rights: "All rights reserved.", theme: "Light / Dark", page: "Page", of: "/", ago: ["just now", "min ago", "h ago", "d ago"], at: "Created" }
+};
+const L = () => TXT[root.lang === "en" ? "en" : "vi"];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const COLOR = { open: "var(--warn)", claimed: "var(--accent)", done: "var(--ok)", expired: "var(--muted)" };
+const ago = ms => { const t = L().ago, m = Math.floor((Date.now() - ms) / 60000); return m < 1 ? t[0] : m < 60 ? m + " " + t[1] : m < 1440 ? Math.floor(m / 60) + " " + t[2] : Math.floor(m / 1440) + " " + t[3]; };
+let items = NPS.prune(), page = 0;
+const ROW = 84;
+
+function texts() {
+  const t = L(); document.title = t.h + " · Night Play"; $("backT").textContent = t.back; $("h").textContent = t.h; $("sub").textContent = t.sub; $("note").textContent = t.note;
+  $("fHome").textContent = t.home; $("fPriv").textContent = t.priv; $("fRank").textContent = t.rank; $("copy").textContent = "© " + new Date().getFullYear() + " Night Play. " + t.rights; $("themeBtn").setAttribute("aria-label", t.theme);
+  document.querySelectorAll("#langSeg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.l === root.lang)));
+}
+function draw() {
+  const t = L(), box = $("list"), per = Math.max(1, Math.floor((box.getBoundingClientRect().height || 300) / ROW)), pages = Math.max(1, Math.ceil(items.length / per));
+  page = Math.min(page, pages - 1);
+  if (!items.length) { box.innerHTML = '<div class="empty">' + esc(t.empty) + "</div>"; $("pager").hidden = true; return; }
+  box.innerHTML = items.slice(page * per, page * per + per).map(s => {
+    const r = s.result || {}, live = s.state === "open" || s.state === "claimed";
+    return '<div class="item" data-id="' + s.id + '"><div><div class="g">' + esc(NPS.gameName(s.game)) + (s.state === "done" && !s.seen ? '<span class="new">' + esc(t.newTag) + "</span>" : "") + '</div>' +
+      '<div class="meta"><span class="chip"><i style="background:' + COLOR[s.state] + '"></i>' + esc(t["st_" + s.state]) + "</span> · " + esc(t.at + " " + ago(s.at)) + "</div></div>" +
+      (s.state === "done" ? '<div class="big">' + (r.score | 0) + "<small>" + esc(t.pts) + "</small></div>" : "") +
+      '<div class="act">' + (live ? '<button data-a="copy">' + esc(t.copy) + '</button><button data-a="cancel">' + esc(t.cancel) + "</button>" : '<button data-a="del">' + esc(t.del) + "</button>") + "</div></div>";
+  }).join("");
+  $("pager").hidden = pages < 2;
+  $("pager").innerHTML = pages < 2 ? "" : '<button id="pp" aria-label="‹"' + (page ? "" : " disabled") + '>‹</button><span>' + esc(t.page) + " " + (page + 1) + " " + esc(t.of) + " " + pages + '</span><button id="pn" aria-label="›"' + (page < pages - 1 ? "" : " disabled") + ">›</button>";
+  if (pages > 1) { $("pp").onclick = () => { page--; draw(); }; $("pn").onclick = () => { page++; draw(); }; }
+}
+$("list").addEventListener("click", e => {
+  const b = e.target.closest("button[data-a]"); if (!b) return; const id = b.closest(".item").dataset.id, s = items.find(x => x.id === id); if (!s) return;
+  if (b.dataset.a === "copy") { const link = NPS.linkFor(s); (navigator.clipboard ? navigator.clipboard.writeText(link) : Promise.reject()).catch(() => {}).then(() => { b.textContent = L().copied; setTimeout(draw, 1200); }); }
+  else {
+    if (b.dataset.a === "cancel") fetch("/api/relay/" + s.id + "/ack", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ token: s.owner }) }).catch(() => {});   // xoá khỏi máy chủ → link vô hiệu
+    items = items.filter(x => x.id !== id); NPS.save(items); draw();
+  }
+});
+function refresh() { NPS.poll().then(a => { items = a; items.forEach(s => { if (s.state === "done") s.seen = true; }); draw(); }); }
+function setLang(l, save) { root.lang = l; if (save) try { localStorage.setItem("lang", l); } catch (e) {} texts(); draw(); }
+document.querySelectorAll("#langSeg button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.l, true)));
+$("themeBtn").addEventListener("click", () => { const n = root.dataset.theme === "dark" ? "light" : "dark"; root.dataset.theme = n; document.querySelector("meta[name=theme-color]").content = n === "dark" ? "#0E1020" : "#F3F0FA"; try { localStorage.setItem("theme", n); } catch (e) {} });
+let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(draw, 150); });
+texts(); requestAnimationFrame(() => { draw(); NPS.poll().then(a => { items = a; draw(); setTimeout(() => { items.forEach(s => { if (s.state === "done") s.seen = true; }); NPS.save(items); }, 1500); }); });
+setInterval(() => { if (!document.hidden) refresh(); }, 6000);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+</script>
+<script src="shared/bars.js"></script>
+</body>
+</html>
