@@ -104,8 +104,11 @@ h1 span{color:var(--accent)}
 @media (max-height:620px){.sdesc,.pw-in ul{display:none}.sheet-in{gap:6px;padding:10px 12px}.sec small{margin-bottom:3px}.chip{padding:5px 10px;min-height:32px}.pw-row a.big{padding:8px 18px}}
 @media (max-height:420px){.sec small{display:none}.chip{font-size:12px;padding:4px 9px;min-height:28px}.sh-h{font-size:15px}}
 .top .icon-btn{display:inline-flex;align-items:center;gap:4px;min-height:34px}
+.probadge{display:inline-block;margin-left:8px;padding:2px 9px;border-radius:999px;font:700 11px/1.5 var(--body);letter-spacing:.04em;vertical-align:middle;background:var(--accent);color:var(--on-accent);white-space:nowrap}
+.modebar{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:2px 0}.modebar .chip{font-size:12.5px;padding:5px 10px;min-height:32px}
 .top .bl{display:none}
-@media (min-width:560px){.top .bl{display:inline}}
+.top .icon-btn{white-space:nowrap}
+@media (min-width:481px) and (max-aspect-ratio:11/10),(min-width:481px) and (min-height:521px){.top{justify-content:flex-end}.top h1{flex:1 0 100%}}   /* tiêu đề một dòng riêng, 4 nút nằm gọn một hàng ở mọi ngôn ngữ */
 #pauseOv{display:flex;background:var(--bg)}#pauseOv[hidden]{display:none}   /* đặc: không nhìn lén bàn chơi khi tạm dừng */
 @media (max-width:480px){.top{justify-content:flex-end}.top h1{flex:1 0 100%}.top .icon-btn{padding:4px 10px}}
 /* ===== Luôn vừa một màn hình: thu gọn dần theo chiều cao ===== */
@@ -133,7 +136,7 @@ h1 span{color:var(--accent)}
 <body>
 
 <div class="top">
-  <h1 id="title"></h1>
+  <h1><span id="titleTxt"></span><span class="probadge" id="proBadge" hidden></span></h1>
   <button class="icon-btn" id="pauseBtn" type="button" hidden><span aria-hidden="true" id="pauseIco">⏸</span><span class="bl" id="pauseTxt"></span></button>
   <button class="icon-btn" id="soundBtn" type="button" aria-pressed="true"><span aria-hidden="true" id="soundIco">🔊</span><span class="bl" id="soundTxt"></span></button>
   <button class="icon-btn" id="setupBtn" type="button" aria-haspopup="dialog"><span aria-hidden="true">⚙</span><span class="bl" id="setupTxt"></span></button>
@@ -218,7 +221,7 @@ const I18N={vi:{
  "pw.boss.t":"👔 Boss deadline","pw.boss.d":"Sếp gọi dồn dập. Hạ boss để nhận huy hiệu.","pw.diff.t":"🔥 4 mức độ khó","pw.diff.d":"Từ Dễ tới \"Sếp nổi giận\" với điểm thưởng cao hơn.",
  "pw.skin.t":"🎨 Chủ đề giao diện","pw.skin.d":"Văn phòng đêm, Cà phê, Retro.","pw.stats.t":"📊 Thống kê tiến bộ","pw.stats.d":"Lịch sử ván, biểu đồ, combo cao nhất, so sánh với tuần trước.",
  "pw.b1":"Vô tận · Thử thách ngày · Boss deadline","pw.b2":"4 độ khó, chủ đề giao diện, hiệu ứng thêm","pw.b3":"Thống kê, chuỗi ngày chơi, huy hiệu trên bảng xếp hạng",
- "pw.go":"Xem Night Pass","pw.trial":"Dùng thử 1 lượt Vô tận hôm nay","pw.later":"Để sau","pw.tried":"Hôm nay đã dùng thử rồi. Mở Night Pass để chơi không giới hạn.","pw.trialSay":"Chơi thử Vô tận: 1 lượt!"},
+ "badge.trial":"Dùng thử","pw.go":"Xem Night Pass","pw.trial":"Dùng thử 1 lượt Vô tận hôm nay","pw.later":"Để sau","pw.tried":"Hôm nay đã dùng thử rồi. Mở Night Pass để chơi không giới hạn.","pw.trialSay":"Chơi thử Vô tận: 1 lượt!"},
 en:{
  title:'Smash <span>Deadline</span>',docTitle:"Smash Deadline",score:"Score",combo:"Combo",left:"Time left",sound:"Sound",on:"On",off:"Off",modes:"Modes",pause:"Pause",resume:"Resume",lang:"Language",close:"Close",
  pausedT:"Paused",pausedP:"The clock is stopped. Press Resume to keep playing.",
@@ -237,7 +240,7 @@ en:{
  "pw.boss.t":"👔 Boss deadline","pw.boss.d":"The boss keeps calling. Defeat the boss to earn a badge.","pw.diff.t":"🔥 4 difficulty levels","pw.diff.d":"From Easy to \"Angry boss\" with bigger score bonuses.",
  "pw.skin.t":"🎨 Themes","pw.skin.d":"Night office, Café, Retro.","pw.stats.t":"📊 Progress stats","pw.stats.d":"Game history, chart, best combo, comparison with last week.",
  "pw.b1":"Endless · Daily challenge · Boss deadline","pw.b2":"4 difficulty levels, themes, extra effects","pw.b3":"Stats, day streak, badge on the leaderboard",
- "pw.go":"See Night Pass","pw.trial":"Try 1 Endless run today","pw.later":"Maybe later","pw.tried":"You've already tried it today. Get Night Pass to play without limits.","pw.trialSay":"Endless trial: 1 run!"}};
+ "badge.trial":"Trial","pw.go":"See Night Pass","pw.trial":"Try 1 Endless run today","pw.later":"Maybe later","pw.tried":"You've already tried it today. Get Night Pass to play without limits.","pw.trialSay":"Endless trial: 1 run!"}};
 const pickLang=()=>{const q=new URLSearchParams(location.search).get("lang");let st=null;try{st=localStorage.getItem("lang")}catch(e){}return [q,st].find(x=>x==="vi"||x==="en")||(/^vi/i.test(navigator.language||"")?"vi":"en")};
 let LANG=pickLang();
 const t=(k,pr)=>{let x=(I18N[LANG]&&I18N[LANG][k]);if(x==null)x=I18N.vi[k];if(x==null)x=k;return pr?x.replace(/\{(\w+)\}/g,(_,y)=>pr[y]):x};
@@ -392,7 +395,7 @@ function renderEnd(){
   ov.innerHTML='<h2></h2><div class="rank"></div><p class="desc"></p>'+
     '<div class="legend"><span>'+t("end.score")+': <b>'+e.score+'</b></span><span>'+t("end.combo")+': <b>×'+e.best+'</b></span>'+
     '<span>'+t("end.rec")+': <b>'+Math.max(e.hi,e.score)+'</b></span></div>'+
-    '<div class="sel" id="selLine"></div>'+(helper?'':'<button class="big" id="againBtn">'+t("end.again")+'</button>')+
+    (helper?'':'<div class="modebar" id="modeBar" role="group" aria-label="'+t("setup.mode")+'"></div>')+'<div class="sel" id="selLine"></div>'+(helper?'':'<button class="big" id="againBtn">'+t("end.again")+'</button>')+
     '<div class="tip"></div>';
   ov.querySelector("h2").textContent=mv(e.mode.title)||t("end.title");ov.querySelector(".rank").textContent=e.r[en?3:1];
   ov.querySelector(".desc").textContent=e.r[en?4:2]+(e.newRec?" "+t("end.newrec"):"")+(e.mode.endLine?" "+e.mode.endLine(e.score):"");
@@ -404,7 +407,7 @@ let resumeFrom=(window.NP&&NP.helper&&NP.initialState&&NP.initialState.timeLeft)
 function renderStart(){
   const ov=$("overlay"),rf=resumeFrom;
   ov.innerHTML='<h2>'+(rf?t("resume.h"):t("start.h"))+'</h2><p>'+(rf?t("resume.p",{s:Math.ceil(Math.min(ROUND,rf.timeLeft)),n:rf.score|0}):t("start.p"))+'</p>'+
-    '<div class="legend"><span>'+t("leg1")+'</span><span>'+t("leg2")+'</span><span>'+t("leg3")+'</span><span>'+t("leg4")+'</span></div>'+
+    (rf?'<div class="legend"><span>'+t("leg1")+'</span><span>'+t("leg2")+'</span><span>'+t("leg3")+'</span><span>'+t("leg4")+'</span></div>':'<div class="modebar" id="modeBar" role="group" aria-label="'+t("setup.mode")+'"></div>')+
     '<div class="sel" id="selLine"></div><button class="big" id="startBtn">'+(rf?t("resume.btn"):t("start.btn"))+'</button><div class="tip">'+t("start.tip")+'</div>';
   ovKind="start";DD.refresh&&DD.refresh();
 }
@@ -442,6 +445,10 @@ const track=(f,k)=>{try{fetch("/api/paywall",{method:"POST",headers:{"Content-Ty
 function applySkin(){const sk=DD.skins[DD.sel.skin]?DD.sel.skin:"default";if(sk==="default")delete document.documentElement.dataset.skin;else document.documentElement.dataset.skin=sk}
 function openSheet(id){$(id).hidden=false;const f=$(id).querySelector("button,a");f&&f.focus({preventScroll:true})}
 function closeSheet(id){$(id).hidden=true}
+function pickItem(kind,x){
+  if(!unlocked(kind,x.id)){DD.paywall(kind==="modes"?x.id:kind==="diffs"?"diff":"skin");return}
+  DD.want[KEY[kind]]=x.id;LS.set("dd-sel",DD.want);DD.refresh();
+}
 DD.refresh=function(){
   const w=DD.want||(DD.want=Object.assign({mode:"classic",diff:"normal",skin:"default"},LS.get("dd-sel",{})));
   for(const kind of ["modes","diffs","skins"]){const k=KEY[kind];DD.sel[k]=unlocked(kind,w[k])?w[k]:(kind==="modes"?"classic":kind==="diffs"?"normal":"default")}
@@ -453,10 +460,19 @@ DD.refresh=function(){
       b.type="button";b.className="chip"+(on?" on":"")+(lock?" lock":"");b.setAttribute("aria-pressed",on);
       b.innerHTML=(x.ico?x.ico+" ":"")+escH(catName(kind,x))+(lock?' <i aria-hidden="true">🔒</i>':"");
       if(lock)b.setAttribute("aria-label",t("lockedLbl",{n:catName(kind,x)}));
-      b.onclick=()=>{ if(lock){DD.paywall(kind==="modes"?x.id:kind==="diffs"?"diff":"skin");return} DD.want[KEY[kind]]=x.id;LS.set("dd-sel",DD.want);DD.refresh() };
+      b.onclick=()=>pickItem(kind,x);
       box.appendChild(b);
     }
   }
+  const mb=$("modeBar");   /* thanh chế độ ngay trên màn hình bắt đầu / kết thúc */
+  if(mb){mb.textContent="";for(const x of DD.catalog.modes){
+    const lock=!unlocked("modes",x.id),on=DD.sel.mode===x.id,b=document.createElement("button");
+    b.type="button";b.className="chip"+(on?" on":"")+(lock?" lock":"");b.setAttribute("aria-pressed",on);
+    b.innerHTML=x.ico+" "+escH(catName("modes",x))+(lock?' <i aria-hidden="true">🔒</i>':"");
+    if(lock)b.setAttribute("aria-label",t("lockedLbl",{n:catName("modes",x)}));
+    b.onclick=()=>pickItem("modes",x);mb.appendChild(b);
+  }}
+  const pb=$("proBadge");if(pb){pb.hidden=!DD.pro;pb.textContent=DD.pro?(DD.pro.trial?"★ "+t("badge.trial"):"★ Night Pass"):""}
   const m=DD.catalog.modes.find(x=>x.id===DD.sel.mode),d=DD.catalog.diffs.find(x=>x.id===DD.sel.diff);
   let desc=catDesc(m);if(DD.sel.mode==="daily"&&DD.dailyInfo)desc+=t("dailyToday",{g:DD.dailyInfo.goal})+(DD.streakInfo&&DD.streakInfo()?t("streak",{n:DD.streakInfo()}):"");
   $("modeDesc").textContent=desc;
@@ -502,7 +518,7 @@ if(!(window.NP&&NP.helper)&&passToken())DD.loadPro(false).catch(()=>{});   /* c�
 function syncSound(){$("soundIco").textContent=sound?"🔊":"🔇";$("soundTxt").textContent=" "+t("sound")+": "+t(sound?"on":"off");$("soundBtn").setAttribute("aria-pressed",sound);$("soundBtn").setAttribute("aria-label",t("sound")+": "+t(sound?"on":"off"))}
 $("soundBtn").addEventListener("click",()=>{sound=!sound;syncSound()});
 function applyLang(){
-  document.documentElement.lang=LANG;document.title=t("docTitle");$("title").innerHTML=t("title");
+  document.documentElement.lang=LANG;document.title=t("docTitle");$("titleTxt").innerHTML=t("title");
   document.querySelectorAll("[data-i]").forEach(e=>{e.textContent=t(e.dataset.i)});
   $("setupTxt").textContent=" "+t("modes");$("setupBtn").setAttribute("aria-label",t("modes"));$("langTxt").textContent=LANG.toUpperCase();$("langBtn").setAttribute("aria-label",t("lang"));$("langBtn").title=t("lang");
   for(const id of ["setupX","statsX","payX0"])$(id).setAttribute("aria-label",t("close"));

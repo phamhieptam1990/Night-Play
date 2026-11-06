@@ -77,6 +77,40 @@ function main(DD, OPTS) {
   css.textContent =
     'html[data-skin="cafe"][data-theme]{--bg:#2a1d14;--desk:#3a281b;--slot:#4a3425;--line:#5b4331;--ink:#f6e7d4;--muted:#c3a98c;--panel:#34251a;--accent:#e0a458;--on-accent:#2a1d14;--note:#f2d9a5;--note-hot:#e07b39;color-scheme:dark}' +
     'html[data-skin="retro"][data-theme]{--bg:#05110a;--desk:#08200f;--slot:#0d3018;--line:#14522a;--ink:#b6ffcc;--muted:#6fc98a;--panel:#0a2615;--accent:#39ff7a;--on-accent:#04140a;--note:#a8ff6e;--note-hot:#ffd23d;--stamp:#ff5c5c;--good:#39ff7a;--display:"Courier New",ui-monospace,monospace;color-scheme:dark}' +
+    /* ===== CAFÉ: bàn gỗ, ô là khay lót ly, giấy là phiếu order có vệt cà phê, hơi nóng bốc lên ===== */
+    'html[data-skin="cafe"] body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(ellipse at 50% 25%,rgba(255,190,110,.20),transparent 62%),radial-gradient(ellipse at 50% 115%,rgba(0,0,0,.55),transparent 60%)}' +
+    'html[data-skin="cafe"] .desk{background:repeating-linear-gradient(90deg,rgba(0,0,0,.08) 0 2px,transparent 2px 46px),repeating-linear-gradient(0deg,rgba(255,220,170,.04) 0 1px,transparent 1px 9px),linear-gradient(#4d3524,#33231a);border-color:#6b4d36;box-shadow:inset 0 0 34px rgba(0,0,0,.5),0 8px 0 #24170f,0 16px 24px rgba(0,0,0,.35)}' +
+    'html[data-skin="cafe"] .cell{border-radius:30%;background:radial-gradient(circle at 50% 45%,#5b4230 0 52%,#3b291c 53% 58%,#5b4230 59% 70%,#47321f 71%);box-shadow:inset 0 3px 8px rgba(0,0,0,.5),0 1px 0 rgba(255,225,180,.12)}' +
+    'html[data-skin="cafe"] .cell::after{background:rgba(0,0,0,.25)}' +
+    'html[data-skin="cafe"] .note{border-radius:3px 3px 10px 10px;background:repeating-linear-gradient(0deg,rgba(120,70,30,.12) 0 1px,transparent 1px 8px),linear-gradient(#f6e2b6,#ecd199);color:#3a2616;box-shadow:0 5px 0 rgba(0,0,0,.28),0 9px 12px rgba(0,0,0,.25)}' +
+    'html[data-skin="cafe"] .note::after{content:"";position:absolute;right:8%;bottom:6%;width:26%;aspect-ratio:1;border-radius:50%;border:3px solid rgba(110,60,20,.28);border-right-color:transparent;transform:rotate(30deg)}' +
+    'html[data-skin="cafe"] .note.hot{background:repeating-linear-gradient(0deg,rgba(255,255,255,.08) 0 1px,transparent 1px 8px),linear-gradient(#f09a55,#e07b39);color:#2a1408}' +
+    'html[data-skin="cafe"] .note.hot::before{content:"";position:absolute;top:0;left:0;right:0;height:6px;background:repeating-linear-gradient(45deg,#8c2a1a 0 8px,#f6e2b6 8px 16px);border-radius:3px 3px 0 0}' +
+    'html[data-skin="cafe"] .note.coffee{background:#fff8ea;border:3px dashed #6f8f4d}' +
+    'html[data-skin="cafe"] .desk-wrap::before{content:"☕";position:absolute;right:-6px;top:-18px;z-index:5;font-size:26px;pointer-events:none;filter:drop-shadow(0 2px 2px rgba(0,0,0,.5))}' +
+    'html[data-skin="cafe"] .desk-wrap::after{content:"~ ~";position:absolute;right:2px;top:-40px;z-index:5;font:700 18px/1 var(--body);letter-spacing:.2em;color:rgba(255,235,205,.65);pointer-events:none;animation:steam 3.2s ease-in-out infinite}' +
+    '@keyframes steam{0%{opacity:0;transform:translateY(8px) scaleX(.9)}40%{opacity:.8}100%{opacity:0;transform:translateY(-14px) scaleX(1.2)}}' +
+    /* ===== RETRO: màn hình CRT phosphor xanh, đường quét, nhấp nháy, giấy là cửa sổ terminal ===== */
+    'html[data-skin="retro"] body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(ellipse at 50% 40%,rgba(57,255,122,.13),transparent 65%),radial-gradient(ellipse at 50% 50%,transparent 55%,rgba(0,0,0,.6))}' +
+    'html[data-skin="retro"] .top h1,html[data-skin="retro"] .stat b,html[data-skin="retro"] .overlay h2{text-shadow:0 0 8px rgba(57,255,122,.65),0 0 2px rgba(57,255,122,.9)}' +
+    'html[data-skin="retro"] .stat,html[data-skin="retro"] .icon-btn{border-radius:4px;box-shadow:0 0 8px rgba(57,255,122,.18)}' +
+    'html[data-skin="retro"] .desk{border-radius:10px;background:#041208;border:2px solid #1c7a40;box-shadow:inset 0 0 40px rgba(57,255,122,.18),0 0 22px rgba(57,255,122,.28)}' +
+    'html[data-skin="retro"] .cell{border-radius:3px;background:#03150a;border:1px dashed #14522a}' +
+    'html[data-skin="retro"] .cell::after{display:none}' +
+    'html[data-skin="retro"] .note{border-radius:2px;background:#031a0c;color:var(--accent);border:2px solid var(--accent);padding-top:18px;box-shadow:0 0 12px rgba(57,255,122,.55),inset 0 0 14px rgba(57,255,122,.15);text-shadow:0 0 6px rgba(57,255,122,.7)}' +
+    'html[data-skin="retro"] .note::before{content:"> run.exe";position:absolute;top:0;left:0;right:0;font:700 10px/15px "Courier New",monospace;background:var(--accent);color:#04140a;text-align:left;padding:0 5px;text-shadow:none}' +
+    'html[data-skin="retro"] .note .ico{filter:grayscale(1) sepia(1) hue-rotate(70deg) saturate(3.2) drop-shadow(0 0 5px #39ff7a)}' +
+    'html[data-skin="retro"] .note.hot{background:#1d1802;color:#ffd23d;border-color:#ffd23d;box-shadow:0 0 12px rgba(255,210,61,.6),inset 0 0 14px rgba(255,210,61,.15);text-shadow:0 0 6px rgba(255,210,61,.7)}' +
+    'html[data-skin="retro"] .note.hot::before{content:"! ERROR.sys";background:#ffd23d}' +
+    'html[data-skin="retro"] .note.hot .ico{filter:grayscale(1) sepia(1) saturate(4) drop-shadow(0 0 5px #ffd23d)}' +
+    'html[data-skin="retro"] .note.coffee{background:#031a0c;border:2px dashed var(--good)}' +
+    'html[data-skin="retro"] .note.coffee::before{content:"+ time.dll"}' +
+    'html[data-skin="retro"] .note.coffee .lbl{color:var(--good)}' +
+    'html[data-skin="retro"] .stampmark span{border-radius:0;font-family:"Courier New",monospace}' +
+    'html[data-skin="retro"] .desk-wrap::before{content:"";position:absolute;inset:0;z-index:6;pointer-events:none;border-radius:10px;background:repeating-linear-gradient(0deg,rgba(0,0,0,.30) 0 1px,transparent 1px 3px);animation:crt 4s steps(2,end) infinite}' +
+    'html[data-skin="retro"] .desk-wrap::after{content:"";position:absolute;left:0;right:0;height:22%;top:-25%;z-index:6;pointer-events:none;background:linear-gradient(transparent,rgba(57,255,122,.10),transparent);animation:sweep 5s linear infinite}' +
+    '@keyframes crt{0%,100%{opacity:.85}50%{opacity:1}}@keyframes sweep{to{top:105%}}' +
+    '@media (prefers-reduced-motion:reduce){html[data-skin] .desk-wrap::before,html[data-skin] .desk-wrap::after{animation:none}}' +
     '.spark{position:absolute;pointer-events:none;z-index:4;font-size:18px;animation:spk .6s ease-out forwards}@keyframes spk{0%{opacity:1;transform:translate(0,0) scale(.6)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1.3)}}' +
     '@media (prefers-reduced-motion:reduce){.spark{display:none}}' +
     '.stt{width:100%;display:grid;gap:8px}.stt .row3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.stt .k{background:var(--bg);border:2px solid var(--line);border-radius:12px;padding:6px 8px;text-align:center}.stt .k small{display:block;font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}.stt .k b{font-family:var(--display);font-weight:400;font-size:19px}' +
@@ -95,10 +129,11 @@ function main(DD, OPTS) {
         g.gain.setValueAtTime(0.0001, t + i * 0.05); g.gain.exponentialRampToValueAtTime(0.12, t + i * 0.05 + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + i * 0.05 + 0.22); o.connect(g).connect(a.destination); o.start(t + i * 0.05); o.stop(t + i * 0.05 + 0.24); });
     } catch (e) {}
   };
+  var SPK = { d: ["✨", "⭐", "💥"], cafe: ["☕", "🍪", "✨"], retro: ["01", "▓", "$"] };
   DD.hooks.onHit = function (st, gained) {
     if (!gained) return;
     var wrap = st.el.parentElement.parentElement, r = st.el.getBoundingClientRect(), dr = wrap.getBoundingClientRect(), n = G.combo >= 10 ? 5 : G.combo >= 5 ? 3 : 2;
-    for (var i = 0; i < n; i++) { var s = document.createElement("span"); s.className = "spark"; s.textContent = ["✨", "⭐", "💥"][i % 3];
+    for (var i = 0; i < n; i++) { var s = document.createElement("span"); s.className = "spark"; s.textContent = (SPK[document.documentElement.dataset.skin] || SPK.d)[i % 3];
       s.style.left = (r.left - dr.left + r.width / 2) + "px"; s.style.top = (r.top - dr.top + r.height / 2) + "px"; s.style.setProperty("--dx", ((Math.random() - 0.5) * 80) + "px"); s.style.setProperty("--dy", (-20 - Math.random() * 50) + "px");
       wrap.appendChild(s); setTimeout(function (el) { return function () { el.remove(); }; }(s), 650); }
   };
