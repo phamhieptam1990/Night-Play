@@ -166,14 +166,15 @@ function setTheme(t, save){
 }
 $("themeBtn").addEventListener("click", () => setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark", true));
 setTheme(document.documentElement.dataset.theme);
-/* Căn giữa nội dung theo CHIỀU CAO MÀN HÌNH: header cao hơn footer nên vùng giữa lệch xuống dưới;
-   bù chênh lệch bằng padding (chỉ khi còn dư chỗ, không làm nội dung bị cuộn). */
+/* Căn giữa theo CHIỀU CAO MÀN HÌNH, lấy HAI CARD làm tâm (tiêu đề nằm phía trên, không tính vào),
+   vì chữ ở trên làm mắt thấy cả khối bị trôi xuống. Bù bằng padding, chỉ khi còn dư chỗ (không làm nội dung bị cuộn). */
 function balance(){
   const main = document.querySelector("main"), n = document.querySelector(".nav").offsetHeight, f = document.querySelector(".foot").offsetHeight;
   main.style.paddingTop = main.style.paddingBottom = "0px";
   const h1 = document.getElementById("h1").getBoundingClientRect(), c = document.querySelector(".cards").getBoundingClientRect();
-  const slack = Math.max(0, main.clientHeight - (c.bottom - h1.top)), pad = Math.floor(Math.min(Math.abs(n - f), slack));
-  if(n > f) main.style.paddingBottom = pad + "px"; else main.style.paddingTop = pad + "px";
+  const above = c.top - h1.top, slack = Math.max(0, main.clientHeight - (c.bottom - h1.top));
+  const want = (n - f) + above, pad = Math.floor(Math.min(Math.abs(want), Math.max(0, slack - 28)));   // chừa >= 14px phía trên tiêu đề
+  if(want >= 0) main.style.paddingBottom = pad + "px"; else main.style.paddingTop = pad + "px";
 }
 const _apply = applyLang; applyLang = function(){ _apply(); balance(); };
 addEventListener("resize", balance); addEventListener("load", balance);
