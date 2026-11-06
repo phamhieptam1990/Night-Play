@@ -27,7 +27,7 @@ window.NPS = (function () {
   var STR = {
     vi: { share: "Nhờ bạn chơi hộ", shareT: "Nhờ bạn chơi hộ một lượt", shareP: "Gửi link này cho một người bạn. Bạn ấy chơi hộ bạn một lượt và kết quả sẽ báo về cho bạn.",
       copy: "Sao chép link", copied: "Đã sao chép", send: "Gửi qua…", once: "Link chỉ dùng được 1 lần và hết hạn sau 24 giờ. Người chơi hộ không thể chia sẻ tiếp. Chúng tôi không lưu thông tin của bạn: kết quả được mã hoá, chỉ bạn đọc được.",
-      waiting: "Đang chờ bạn bè mở link…", playing: "Bạn bè đang chơi hộ…", done: "Đã có kết quả!", expired: "Link đã hết hạn.", close: "Đóng", err: "Có lỗi, vui lòng thử lại.", slow: "Thao tác quá nhanh, thử lại sau ít phút.", noShare: "Game này chưa hỗ trợ chơi hộ.",
+      waiting: "Đang chờ bạn bè mở link…", playing: "Bạn bè đang chơi hộ…", done: "Đã có kết quả!", expired: "Link đã hết hạn.", close: "Đóng", err: "Có lỗi, vui lòng thử lại.", offline: "Cần có mạng để tạo link chơi hộ. Game của bạn vẫn chạy bình thường, bạn thử lại khi có mạng nhé.", queued: "Đang offline: điểm của bạn sẽ tự gửi khi có mạng lại.", slow: "Thao tác quá nhanh, thử lại sau ít phút.", noShare: "Game này chưa hỗ trợ chơi hộ.",
       brag: "Khoe điểm", bragT: "Khoe điểm lên bảng xếp hạng?", bragP: "Chỉ biệt danh và điểm của bạn được lưu, và chỉ khi bạn bấm \"Khoe điểm\". Không bấm thì không lưu gì.", nick: "Biệt danh (2–16 ký tự)", skip: "Không, cảm ơn",
       bragOk: "Đã lên bảng xếp hạng!", bragView: "Xem bảng xếp hạng", badNick: "Biệt danh chưa hợp lệ (2–16 ký tự, không chứa link/email).", scoreLine: "Điểm của bạn",
       gotT: "Bạn bè đã chơi hộ xong!", gotP: "Kết quả chơi hộ", points: "điểm", view: "Xem kết quả", rank: "Bảng xếp hạng", results: "Kết quả chơi hộ",
@@ -35,7 +35,7 @@ window.NPS = (function () {
       linkCopied: "Đã sao chép link, dán vào Zalo, Messenger… để gửi bạn bè", viaApps: "Link đã được sao chép: dán vào Zalo, Messenger… hoặc gửi nhanh qua:", shareText: "Chơi hộ mình một lượt {g} nhé!", shotText: "Mình vừa chơi {g} trên {b}!", resumeP: "Bạn ấy sẽ chơi tiếp đúng chỗ bạn đang dở rồi báo kết quả về cho bạn.", kidName: "Tên vui của bạn", reroll: "Đổi tên khác", kidP: "Bạn được đặt tên vui tự động, không cần gõ gì cả. Chỉ tên vui và điểm được lưu, và chỉ khi bạn bấm \"Khoe điểm\".", bestIn: "Điểm cao nhất của bạn ở", sendApps: "Gửi qua Zalo, Messenger…" },
     en: { share: "Ask a friend to play", shareT: "Ask a friend to play one round for you", shareP: "Send this link to a friend. They play one round for you and the result is sent back to you.",
       copy: "Copy link", copied: "Copied", send: "Send via…", once: "The link works once and expires in 24 hours. The helper cannot share it further. We don't store your info: the result is encrypted and only you can read it.",
-      waiting: "Waiting for your friend to open the link…", playing: "Your friend is playing…", done: "Result is in!", expired: "This link has expired.", close: "Close", err: "Something went wrong, please try again.", slow: "Too many tries, please wait a few minutes.", noShare: "This game doesn't support this yet.",
+      waiting: "Waiting for your friend to open the link…", playing: "Your friend is playing…", done: "Result is in!", expired: "This link has expired.", close: "Close", err: "Something went wrong, please try again.", offline: "You need a connection to create a help link. Your game keeps running; try again once you are online.", queued: "You are offline: your score will be sent automatically when you are back online.", slow: "Too many tries, please wait a few minutes.", noShare: "This game doesn't support this yet.",
       brag: "Show off score", bragT: "Post your score to the leaderboard?", bragP: "Only your nickname and score are saved, and only if you press \"Show off score\". If you don't, nothing is saved.", nick: "Nickname (2–16 characters)", skip: "No thanks",
       bragOk: "You're on the leaderboard!", bragView: "View leaderboard", badNick: "Invalid nickname (2–16 characters, no links/emails).", scoreLine: "Your score",
       gotT: "Your friend finished playing for you!", gotP: "Result", points: "points", view: "View result", rank: "Leaderboard", results: "Shared results",
@@ -81,9 +81,11 @@ window.NPS = (function () {
 
   /* ---------- gọi API ---------- */
   function call(method, path, body) {
-    return fetch(API + path, { method: method, headers: body ? { "Content-Type": "application/json" } : {}, body: body ? JSON.stringify(body) : undefined, cache: "no-store" })
-      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { status: r.status, body: j }; }); });
+    var ac = window.AbortController ? new AbortController() : null, tm = ac ? setTimeout(function () { ac.abort(); }, method === "GET" ? 45000 : 20000) : 0;   /* mạng treo quá 20 giây = coi như mất mạng */
+    return fetch(API + path, { method: method, headers: body ? { "Content-Type": "application/json" } : {}, body: body ? JSON.stringify(body) : undefined, cache: "no-store", signal: ac ? ac.signal : undefined })
+      .then(function (r) { clearTimeout(tm); return r.json().catch(function () { return {}; }).then(function (j) { return { status: r.status, body: j }; }); }, function (e) { clearTimeout(tm); throw e; });
   }
+  var isNet = function (e) { return navigator.onLine === false || !!e && (e.name === "TypeError" || e.name === "AbortError"); };   /* lỗi do mất mạng, không phải do máy chủ từ chối */
 
   /* ---------- lưu cục bộ (chỉ trên máy người nhờ) ---------- */
   var KEY = "np_shares";
@@ -152,12 +154,25 @@ window.NPS = (function () {
   var nickGet = function () { try { return localStorage.getItem("np_nick") || ""; } catch (e) { return ""; } };
   var nickSet = function (n) { try { localStorage.setItem("np_nick", n); } catch (e) {} };
   function passToken() { try { var p = JSON.parse(localStorage.getItem("pass")); return p && p.token || ""; } catch (e) { return ""; } }
+  /* Điểm khoe lúc mất mạng được cất vào hàng đợi trên máy và tự gửi khi có mạng lại (người chơi không phải làm gì) */
+  var QK = "np_scoreq", qLoad = function () { try { return JSON.parse(localStorage.getItem(QK)) || []; } catch (e) { return []; } }, qSave = function (a) { try { localStorage.setItem(QK, JSON.stringify(a.slice(-5))); } catch (e) {} };
+  var flushing = false;
+  function flushQueue() {
+    if (flushing) return; var q = qLoad().filter(function (x) { return Date.now() - x.at < 864e5; }); if (!q.length) { qSave([]); return; }
+    flushing = true;
+    (function next(i, keep) {
+      if (i >= q.length) { qSave(keep); flushing = false; return; }
+      call("POST", "/scores", q[i].body).then(function (r) { if (r.status >= 500 || r.status === 429) keep.push(q[i]); next(i + 1, keep); }, function () { keep.push(q[i]); next(i + 1, keep); });
+    })(0, []);
+  }
+  addEventListener("online", function () { setTimeout(flushQueue, 800); }); setTimeout(flushQueue, 2500); setInterval(flushQueue, 60000);
   function submitScore(game, score, nick) {
     var body = { game: game, score: score, nick: nick }, t = passToken(); if (t) body.pass = t;   // máy chủ tự kiểm tra Night Pass để gắn huy hiệu
     return call("POST", "/scores", body).then(function (r) {
       if (r.status === 200) return true;
+      if (r.status >= 500) { var q = qLoad(); q.push({ at: Date.now(), body: body }); qSave(q); return "queued"; }
       throw new Error(r.status === 429 ? "slow" : r.body && r.body.error === "bad_nick" ? "badNick" : "err");
-    });
+    }, function (e) { if (!isNet(e)) throw e; var q = qLoad(); q.push({ at: Date.now(), body: body }); qSave(q); return "queued"; });
   }
   var getScores = function (game, period, limit) { return call("GET", "/scores?game=" + encodeURIComponent(game) + "&period=" + period + "&limit=" + limit); };
 
@@ -268,9 +283,9 @@ window.NPS = (function () {
       if (kid) document.getElementById("npsRe").onclick = function () { kname = kidName(lang()); document.getElementById("npsKid").textContent = kname; };
       document.getElementById("npsYes").onclick = function () {
         var n = kid ? kname : document.getElementById("npsNick").value.trim().replace(/\s+/g, " "), btn = this; btn.disabled = true;
-        submitScore(game, score, n).then(function () {
+        submitScore(game, score, n).then(function (res) {
           nickSet(n);
-          sheet.innerHTML = '<h3>' + esc(T("bragOk")) + '</h3><div class="nps-row"><button class="nps-s" id="npsNo" type="button">' + esc(T("close")) + '</button><button class="nps-p" id="npsView" type="button">' + esc(T("bragView")) + '</button></div>';
+          sheet.innerHTML = '<h3>' + esc(T("bragOk")) + '</h3>' + (res === "queued" ? '<p>' + esc(T("queued")) + '</p>' : "") + '<div class="nps-row"><button class="nps-s" id="npsNo" type="button">' + esc(T("close")) + '</button><button class="nps-p" id="npsView" type="button">' + esc(T("bragView")) + '</button></div>';
           document.getElementById("npsNo").onclick = hideSheet; document.getElementById("npsView").onclick = function () { location.href = boardUrl + (boardUrl.indexOf("?") > -1 ? "&" : "?") + "game=" + encodeURIComponent(game); };
         }).catch(function (e) { btn.disabled = false; document.getElementById("npsErr").textContent = T(e.message === "slow" || e.message === "badNick" ? e.message : "err"); });
       };
@@ -301,7 +316,7 @@ window.NPS = (function () {
         var refresh = function () { var cur = load().filter(function (x) { return x.id === s.id; })[0] || s, el = document.getElementById("npsSt"); if (!el) { clearInterval(shareTimer); return; }
           el.textContent = T(cur.state === "claimed" ? "playing" : cur.state === "done" ? "done" : cur.state === "expired" ? "expired" : "waiting"); };
         refresh(); clearInterval(shareTimer); shareTimer = setInterval(function () { poll().then(refresh); }, 5000);
-      }).catch(function (e) { sheet.innerHTML = '<p class="nps-err">' + esc(T(e.message === "slow" ? "slow" : "err")) + '</p><div class="nps-row"><button class="nps-s" id="npsNo" type="button">' + esc(T("close")) + '</button></div>'; sheet.hidden = false; document.getElementById("npsNo").onclick = hideSheet; });
+      }).catch(function (e) { sheet.innerHTML = '<p class="nps-err">' + esc(T(e.message === "slow" ? "slow" : isNet(e) ? "offline" : "err")) + '</p><div class="nps-row"><button class="nps-s" id="npsNo" type="button">' + esc(T("close")) + '</button></div>'; sheet.hidden = false; document.getElementById("npsNo").onclick = hideSheet; });
     }
     fab.addEventListener("click", showShare);
 
@@ -344,7 +359,7 @@ window.NPS = (function () {
       var f = stage.querySelector("iframe"); if (e.origin !== location.origin || !f || e.source !== f.contentWindow || !e.data || e.data.np !== 1) return;
       if (e.data.type === "start") { hideSheet(); lastScore = 0; }
       else if (e.data.type === "result") { var game = curGame(), ex = e.data.extra || {}; lastScore = e.data.score | 0;
-        var ranked = !ex.mode || (ex.mode === "classic" && (!ex.diff || ex.diff === "normal") && (!ex.grid || ex.grid === "g3"));   // bảng xếp hạng chỉ nhận chế độ Cổ điển, độ khó Thường (công bằng)
+        var ranked = !ex.mode || (ex.mode === "classic" && (!ex.diff || ex.diff === "normal") && (!ex.grid || ex.grid === "g3") && (!ex.pack || ex.pack === "deadline"));   // bảng xếp hạng chỉ nhận chế độ Cổ điển, độ khó Thường (công bằng)
         if (ranked) setTimeout(function () { if (stage.classList.contains("on")) showBrag(game, e.data.score | 0); }, 700); }
     });
     new MutationObserver(function () { if (!stage.classList.contains("on")) { hideSheet(); clearInterval(shareTimer); } }).observe(stage, { attributes: true, attributeFilter: ["class"] });
@@ -365,5 +380,5 @@ window.NPS = (function () {
   }
 
   return { kidName: kidName, isKidName: isKidName, isKid: isKid, brandOf: brandOf, GAMES: GAMES, T: T, lang: lang, gameName: gameName, load: load, save: save, prune: prune, linkFor: linkFor, createShare: createShare, poll: poll, onResult: onResult,
-    claim: claim, sendResult: sendResult, submitScore: submitScore, getScores: getScores, nickGet: nickGet, nickSet: nickSet, initParent: initParent, TTL: TTL, STR: STR };
+    isNet: isNet, claim: claim, sendResult: sendResult, submitScore: submitScore, getScores: getScores, nickGet: nickGet, nickSet: nickSet, initParent: initParent, TTL: TTL, STR: STR };
 })();

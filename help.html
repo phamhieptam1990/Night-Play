@@ -63,6 +63,7 @@ ul.how b{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-i
 .foot{flex:none;display:flex;justify-content:center;flex-wrap:wrap;gap:4px 18px;padding:6px 16px;border-top:1px solid var(--line);background:linear-gradient(180deg,transparent,var(--hero1));font-size:13px}
 .foot a{padding:6px 0;color:var(--ink);text-decoration:none}
 </style>
+<script src="shared/offline.js" defer></script>
 </head>
 <body>
 <nav class="nav" aria-label="Main">
@@ -141,12 +142,16 @@ addEventListener("message", e => {
   result = { v: 1, game, score: e.data.score | 0, extra: e.data.extra || null, at: Date.now() };
   setTimeout(send, 900);
 });
+let tries = 0, retryT = 0;
+addEventListener("online", () => { if (result && stage !== "done" && tries > 0) { clearTimeout(retryT); send(); } });
 function send() {
+  clearTimeout(retryT);
   const t = L(); $("res").classList.add("on"); $("resCard").innerHTML = ICON + "<h1>" + (result.score | 0) + " " + esc(t.pts) + "</h1><p>" + esc(t.sending) + "</p>";
   NPS.sendResult(id, getTok(), key, result).then(() => {
     try { sessionStorage.removeItem(tokKey); } catch (e) {} stage = "done"; $("stage").classList.remove("on"); $("stage").querySelectorAll("iframe").forEach(x => x.remove()); root.classList.remove("playing"); view();
   }).catch(() => {
-    $("resCard").innerHTML = WARN + "<h1>" + (result.score | 0) + " " + esc(t.pts) + "</h1><p>" + esc(t.sendErr) + '</p><button class="cta" id="re" type="button">' + esc(t.retry) + "</button>"; $("re").onclick = send;
+    if (++tries < 15) { retryT = setTimeout(send, Math.min(2500 * tries, 10000)); return; }   /* mất mạng: tự gửi lại, người chơi hộ vẫn thấy 'đang gửi' như bình thường */
+    $("resCard").innerHTML = WARN + "<h1>" + (result.score | 0) + " " + esc(t.pts) + "</h1><p>" + esc(t.sendErr) + '</p><button class="cta" id="re" type="button">' + esc(t.retry) + "</button>"; $("re").onclick = () => { tries = 0; send(); };
   });
 }
 function setLang(l, save) { root.lang = l; if (save) try { localStorage.setItem("lang", l); } catch (e) {} if (!$("stage").classList.contains("on")) view(); else $("tag").textContent = L().playing + " · " + NPS.gameName(game); }

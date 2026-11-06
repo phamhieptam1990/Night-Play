@@ -16,6 +16,34 @@ function main(DD, OPTS) {
       "p.st.games": "Games", "p.st.best": "Best score", "p.st.combo": "Best combo", "p.st.avg": "Avg this week", "p.st.vs": "vs last week", "p.st.streak": "Day streak", "p.st.badges": "{n} badges · ",
       "p.st.last": "Latest game: {m} {s} points", "p.st.aria": "Score of the last 20 games", "p.st.empty": "No games yet. Play a few rounds, then come back to see your progress." }
   });
+  /* ---------- LOẠI GAME: Thú vật, Người yêu ---------- */
+  DD.addI18n({
+    vi: { "pk.animals.title": "Đập <span>Thú quậy</span>", "pk.animals.docTitle": "Đập Thú quậy", "pk.animals.start.h": "Đuổi hết lũ thú quậy trước khi trời tối", "pk.animals.start.p": "Chuột, muỗi, rắn… chui ra từ khắp nơi. Chạm thật nhanh để <b>ĐUỔI</b> chúng đi. Gặp củ cà rốt thì chạm để cho ăn và được thêm giờ.",
+      "pk.animals.leg1": "🐭 Chuột", "pk.animals.leg2": "🦟 Muỗi", "pk.animals.leg3": "🐍 Rắn", "pk.animals.leg4": "🥕 +3 giây", "pk.animals.done": "BỐP!", "pk.animals.end.title": "Yên ổn rồi!",
+      "pk.lover.title": "Đập <span>Chuyện giận</span>", "pk.lover.docTitle": "Đập Chuyện giận", "pk.lover.start.h": "Đừng để người ấy giận!", "pk.lover.start.p": "Những lỗi nhỏ làm người yêu giận cứ nổi lên. Chạm thật nhanh để <b>SỬA</b> kịp lúc. Gặp quà dỗ ngọt thì chạm để được thêm giờ.",
+      "pk.lover.leg1": "🎂 Quên sinh nhật", "pk.lover.leg2": "🕙 Về trễ", "pk.lover.leg3": "🧹 Việc nhà", "pk.lover.leg4": "🌹 +3 giây", "pk.lover.done": "ĐÃ SỬA!", "pk.lover.end.title": "Làm lành rồi!" },
+    en: { "pk.animals.title": "Smash the <span>Critters</span>", "pk.animals.docTitle": "Smash the Critters", "pk.animals.start.h": "Chase off the critters before sundown", "pk.animals.start.p": "Mice, mosquitoes, snakes… they pop up everywhere. Tap fast to <b>SHOO</b> them away. Tap a carrot to feed a friend and gain time.",
+      "pk.animals.leg1": "🐭 Mouse", "pk.animals.leg2": "🦟 Mosquito", "pk.animals.leg3": "🐍 Snake", "pk.animals.leg4": "🥕 +3 sec", "pk.animals.done": "BONK!", "pk.animals.end.title": "All quiet now!",
+      "pk.lover.title": "Smash the <span>Grudges</span>", "pk.lover.docTitle": "Smash the Grudges", "pk.lover.start.h": "Don't let them get upset!", "pk.lover.start.p": "Little slip-ups that upset your partner keep popping up. Tap fast to <b>FIX</b> them in time. Tap a sweet gift to gain time.",
+      "pk.lover.leg1": "🎂 Forgot birthday", "pk.lover.leg2": "🕙 Home late", "pk.lover.leg3": "🧹 Chores", "pk.lover.leg4": "🌹 +3 sec", "pk.lover.done": "FIXED!", "pk.lover.end.title": "Made up!" }
+  });
+  var animals = { id: "animals", coffee: { ico: "🥕", lbl: "Cà rốt +3s", en: "Carrot +3s", coffee: true }, pests: [
+    { ico: "🐭", lbl: "Chuột phá tủ", en: "Mouse in the pantry", pts: 10 }, { ico: "🦟", lbl: "Muỗi vo ve", en: "Buzzing mosquito", pts: 10 },
+    { ico: "🐍", lbl: "Rắn bò vào bếp", en: "Snake in the kitchen", pts: 20, hot: true }, { ico: "🐛", lbl: "Sâu ăn rau", en: "Caterpillar", pts: 10 },
+    { ico: "🐜", lbl: "Kiến đầy bàn", en: "Ants on the table", pts: 10 }, { ico: "🐦", lbl: "Chim ăn trộm lúa", en: "Bird stealing seeds", pts: 10 },
+    { ico: "🐗", lbl: "Heo rừng phá vườn", en: "Boar in the garden", pts: 15, hot: true }, { ico: "🦂", lbl: "Bọ cạp", en: "Scorpion", pts: 15, hot: true },
+    { ico: "🐌", lbl: "Ốc sên", en: "Slow snail", pts: 10 }, { ico: "🪳", lbl: "Gián bay!", en: "Flying roach!", pts: 15, hot: true } ] };
+  var loverPests = function (m) {   /* m = "f": người giận là bạn gái (xưng "em"); "m": là bạn trai (xưng "anh") */
+    var me = m === "m" ? "anh" : "em", ehe = m === "m" ? "He" : "She", poss = m === "m" ? "his" : "her";
+    return [
+      { ico: "🎂", lbl: "Quên sinh nhật " + me + "!", en: "Forgot " + poss + " birthday!", pts: 10 }, { ico: "🎁", lbl: "Không tặng quà", en: "No gift again", pts: 10 },
+      { ico: "🕙", lbl: "Về trễ không báo", en: "Home late, no call", pts: 20, hot: true }, { ico: "🧹", lbl: "Không làm việc nhà", en: "Skipped the chores", pts: 10 },
+      { ico: "📱", lbl: "Đọc tin không trả lời", en: "Left on read", pts: 10 }, { ico: "💍", lbl: "Quên ngày kỷ niệm", en: "Forgot anniversary", pts: 15, hot: true },
+      { ico: "🎮", lbl: "Chơi game cả đêm", en: "Gaming all night", pts: 10 }, { ico: "🍽️", lbl: "Chén bát chưa rửa", en: "Dirty dishes", pts: 10 },
+      { ico: "😶", lbl: "\"Gì cũng được\"", en: "\"Anything is fine\"", pts: 15, hot: true }, { ico: "🪞", lbl: "Không khen đồ mới", en: "No compliment", pts: 10 } ];
+  };
+  var lover = { id: "lover", pests: loverPests, coffee: function (m) { return m === "m" ? { ico: "🍫", lbl: "Dỗ ngọt +3s", en: "Sweet talk +3s", coffee: true } : { ico: "🌹", lbl: "Dỗ ngọt +3s", en: "Sweet talk +3s", coffee: true }; } };
+
   var classic = DD.modes.classic;
   var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
   var store = {
@@ -46,11 +74,21 @@ function main(DD, OPTS) {
   /* ---------- THỬ THÁCH NGÀY: cùng một đề cho mọi người, có mục tiêu ---------- */
   var daily = null;
   var dailyMode = derive({
-    id: "daily", title: function () { return t("p.end.daily"); }, lockDiff: "normal", lockGrid: "g3",
+    id: "daily", title: function () { return t("p.end.daily"); }, lockDiff: "normal", lockGrid: "g3", lockPack: "deadline",
     prepare: function () {
       var t = token(); if (!t) return Promise.reject(new Error("no_pass"));
-      return fetch("/api/pro/daily", { headers: { Authorization: "Bearer " + t }, cache: "no-store" })
-        .then(function (r) { if (!r.ok) throw new Error("daily"); return r.json(); }).then(function (d) { daily = d; DD.dailyInfo = d; });
+      /* Mất mạng: dùng đề đã lấy hôm nay; chưa có thì tạo đề tạm theo ngày. Người chơi không thấy lỗi nào, game vẫn mượt. */
+      var today = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Ho_Chi_Minh" }).format(new Date()), cached = store.get("dd-daily", null);
+      var local = function () {
+        if (cached && cached.day === today && !cached.offline) return cached;
+        var h = 7; for (var i = 0; i < today.length; i++) h = (Math.imul(h, 31) + today.charCodeAt(i)) >>> 0;
+        return { day: today, seed: h || 1, goal: [300, 350, 400, 450, 500][h % 5], offline: true };
+      };
+      var ac = window.AbortController ? new AbortController() : null, tm = ac ? setTimeout(function () { ac.abort(); }, 4000) : 0;
+      return fetch("/api/pro/daily", { headers: { Authorization: "Bearer " + t }, cache: "no-store", signal: ac ? ac.signal : undefined })
+        .then(function (r) { clearTimeout(tm); if (!r.ok) throw new Error("daily"); return r.json(); })
+        .then(function (d) { daily = d; store.set("dd-daily", d); }, function () { clearTimeout(tm); daily = local(); })
+        .then(function () { DD.dailyInfo = daily; });
     },
     rngFactory: function () { return mulberry32(daily ? daily.seed : 1); },
     endLine: function (score) { if (!daily) return ""; return score >= daily.goal ? t("p.goalOk", { g: daily.goal }) : t("p.goalNo", { g: daily.goal, m: daily.goal - score }); }
@@ -98,6 +136,7 @@ function main(DD, OPTS) {
     'html[data-skin="cafe"] .note::after{content:"";position:absolute;right:8%;bottom:6%;width:26%;aspect-ratio:1;border-radius:50%;border:3px solid rgba(110,60,20,.28);border-right-color:transparent;transform:rotate(30deg)}' +
     'html[data-skin="cafe"] .note.hot{background:repeating-linear-gradient(0deg,rgba(255,255,255,.08) 0 1px,transparent 1px 8px),linear-gradient(#f09a55,#e07b39);color:#2a1408}' +
     'html[data-skin="cafe"] .note.hot::before{content:"";position:absolute;top:0;left:0;right:0;height:6px;background:repeating-linear-gradient(45deg,#8c2a1a 0 8px,#f6e2b6 8px 16px);border-radius:3px 3px 0 0}' +
+    'html[data-skin="cafe"] .note.hot{padding-top:12px}' +
     'html[data-skin="cafe"] .note.coffee{background:#fff8ea;border:3px dashed #6f8f4d}' +
     'html[data-skin="cafe"] .desk-wrap::before{content:"☕";position:absolute;right:10px;top:6px;z-index:5;font-size:20px;opacity:.9;pointer-events:none;filter:drop-shadow(0 2px 2px rgba(0,0,0,.5))}' +
     'html[data-skin="cafe"] .desk-wrap::after{content:"~";position:absolute;right:17px;top:-4px;z-index:5;font:700 14px/1 var(--body);letter-spacing:.2em;color:rgba(255,235,205,.65);pointer-events:none;animation:steam 3.2s ease-in-out infinite}' +
@@ -191,9 +230,11 @@ function main(DD, OPTS) {
     DD.modes.endless = endless; DD.modes.daily = dailyMode; DD.modes.boss = boss;
     DD.diffs.easy = diffs.easy; DD.diffs.hard = diffs.hard; DD.diffs.rage = diffs.rage;
     DD.skins.cafe = skins.cafe; DD.skins.retro = skins.retro;
+    DD.packs.animals = animals; DD.packs.lover = lover;
     /* stay: giấy nằm lâu hơn vì bàn rộng hơn; cap: tối đa số giấy nổi cùng lúc (để kịp bấm) */ DD.grids.g4 = { id: "g4", n: 4, mult: 1.2, extra: 0, stay: 1.15, cap: 3 }; DD.grids.g5 = { id: "g5", n: 5, mult: 1.5, extra: 1, stay: 1.25, cap: 3 }; DD.grids.g6 = { id: "g6", n: 6, mult: 2, extra: 1, stay: 1.3, cap: 3 };
   }
   DD.pro = { trial: TRIAL, stats: !TRIAL && !HELP, helper: HELP };
+  if (!TRIAL && !HELP) setTimeout(function () { dailyMode.prepare().catch(function () {}); }, 800);   /* lấy sẵn đề hôm nay để dùng được cả khi mất mạng */
   if (DD.refresh) DD.refresh();
 }
 exports.source = function (opts) { return "(" + main.toString() + ")(DD," + JSON.stringify({ trial: !!(opts && opts.trial), helper: !!(opts && opts.helper) }) + ");"; };
