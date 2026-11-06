@@ -432,7 +432,7 @@ const kidNickOk = n => { const p = String(n).split(" "); if (p.length !== 3 || !
   return (KID_NAMES.vi.a.includes(p[0]) && KID_NAMES.vi.j.includes(p[1])) || (KID_NAMES.en.j.includes(p[0]) && KID_NAMES.en.a.includes(p[1])); };
 const POP_GAMES = Object.fromEntries([1, 2, 3, 4, 5, 6, 7, 8].map(i => ["game-" + i, { max: 1000, kids: true }]));   // max = điểm tối đa hợp lệ (chỉnh theo từng game khi có)
 POP_GAMES["pop-fly"] = { max: 1500, kids: true };   // Chim Bay Học Vui
-const SCORE_GAMES = { "dap-deadline": { max: 5000 }, ...POP_GAMES };
+const SCORE_GAMES = { "dap-deadline": { max: 5000 }, "cozy-wings": { max: 5000 }, ...POP_GAMES };   // cozy-wings = Cánh Nhỏ Phiêu Lưu
 const nickOk = n => /^[\p{L}\p{N} _.\-]{2,16}$/u.test(n) && !/https?|www\.|\.(com|net|org|vn|io)\b|@/i.test(n);
 
 /* Chỉ ghi khi người chơi chủ động bấm "Khoe điểm". */
@@ -524,6 +524,62 @@ route("GET", /^\/api\/pro\/pop-fly\.js$/, async ({ headers, query, ip }) => {
   }
   return out(200, require("./pro/pop-fly").source({ trial }), "application/javascript; charset=utf-8");
 });
+/* Cánh Nhỏ Phiêu Lưu (Cozy Play): 4 giao diện đẹp mỗi chuyến bay chỉ giao cho người có Night Pass; dùng thử: 1 ván/ngày */
+route("GET", /^\/api\/pro\/cozy-wings\.js$/, async ({ headers, query, ip }) => {
+  const pass = await authPass(headers); let trial = false;
+  if (!pass && authHelper(headers)) return out(200, require("./pro/cozy-wings").source({ helper: true }), "application/javascript; charset=utf-8");   // vé tạm của người thách đấu / chơi hộ
+  if (!pass) {
+    if (query.get("trial") !== "1") return out(401, { error: "pass_required" });
+    if (await limited("cwt:" + ipHash(ip), 1, 86400000)) return out(429, { error: "trial_used" });
+    trial = true;
+    await db.query("insert into paywall_daily(day, key, n) values ((now() at time zone $1)::date, 'wing_skin:trial', 1) on conflict (day, key) do update set n = paywall_daily.n + 1", [TZ]);
+  }
+  return out(200, require("./pro/cozy-wings").source({ trial }), "application/javascript; charset=utf-8");
+});
+/* Link thách đấu / thử thách ngày của các game: trả trang có thẻ xem trước (Open Graph) để Zalo, Messenger, Facebook hiện hình + điểm,
+   rồi người thật được chuyển ngay vào game. Mọi giá trị đều được kiểm tra và escape (không tin dữ liệu trên link). */
+const escHtml = v => String(v).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const b64json = v => { try { return JSON.parse(Buffer.from(String(v || ""), "base64url").toString("utf8")); } catch (e) { return null; } };
+const reqOrigin = headers => { const host = headers["x-forwarded-host"] || headers.host || "", proto = headers["x-forwarded-proto"] || (/^localhost|^127\./.test(host) ? "http" : "https"); return proto + "://" + host; };
+function ogPage({ en, title, desc, image, target, site }) {
+  return '<!doctype html><html lang="' + (en ? "en" : "vi") + '"><head><meta charset="utf-8"><title>' + escHtml(title) + '</title><meta name="viewport" content="width=device-width,initial-scale=1">' +
+    '<meta property="og:type" content="website"><meta property="og:site_name" content="' + escHtml(site) + '"><meta property="og:title" content="' + escHtml(title) + '"><meta property="og:description" content="' + escHtml(desc) + '">' +
+    '<meta property="og:image" content="' + escHtml(image) + '"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">' +
+    '<meta name="twitter:title" content="' + escHtml(title) + '"><meta name="twitter:description" content="' + escHtml(desc) + '"><meta name="twitter:image" content="' + escHtml(image) + '">' +
+    '<meta http-equiv="refresh" content="0;url=' + escHtml(target) + '"></head><body><script>location.replace(' + JSON.stringify(target).replace(/</g, "\\u003c") + ')</script><a href="' + escHtml(target) + '">' + escHtml(title) + '</a></body></html>';
+}
+const CW_TYPES = { bee: ["Ong Mật Về Tổ", "Honey Bee Home"], fish: ["Cá Chuồn Vượt Sóng", "Flying Fish"], lantern: ["Đèn Lồng Trung Thu", "Mid-Autumn Lantern"], kite: ["Diều Giấy", "Paper Kite"], bug: ["Bọ Rùa Phiêu Lưu", "Ladybug Adventure"] };
+const CW_DIFFS = { easy: ["Dễ", "Easy"], mid: ["Vừa", "Medium"], hard: ["Khó", "Hard"] };
+route("GET", /^\/api\/share\/cozy-wings$/, async ({ query, headers }) => {
+  const en = query.get("l") === "en", L = en ? 1 : 0, o = b64json(query.get("ch"));
+  const okCh = o && Number.isInteger(o.s) && o.s >= 0 && o.s < 1e5 && CW_TYPES[o.t] && CW_DIFFS[o.d];
+  const daily = query.get("d") === "1", dn = /^\d{1,4}$/.test(query.get("n") || "") ? query.get("n") : "", ds = /^\d{1,5}$/.test(query.get("s") || "") ? query.get("s") : "";
+  const origin = reqOrigin(headers); let title, desc, img, go;
+  if (daily) {
+    title = en ? "📅 Daily flight #" + dn + (ds ? " — " + ds + " points, can you beat it?" : " — how far can you fly?") : "📅 Thử thách hôm nay #" + dn + (ds ? " — " + ds + " điểm, bạn vượt được không?" : " — bạn bay được bao xa?");
+    desc = en ? "Everyone flies the same course today. Tap to fly!" : "Hôm nay ai cũng bay cùng một chặng. Chạm là bay, thử ngay!"; img = "daily"; go = "#daily";
+  } else if (okCh) {
+    title = en ? "⚔ You're challenged to beat " + o.s + " points!" : "⚔ Bạn bị thách vượt " + o.s + " điểm!";
+    desc = CW_TYPES[o.t][L] + " · " + CW_DIFFS[o.d][L] + (en ? ". Little Wings: tap to fly, try it now!" : ". Cánh Nhỏ Phiêu Lưu: chạm là bay, thử ngay!"); img = o.t; go = "#ch=" + String(query.get("ch")).replace(/[^\w-]/g, "");
+  } else { title = en ? "Little Wings" : "Cánh Nhỏ Phiêu Lưu"; desc = en ? "Five little flights, one tap each. Try it!" : "Năm chuyến bay nhỏ, mỗi chuyến một cách chơi. Chạm là bay!"; img = "bee"; go = ""; }
+  return out(200, ogPage({ en, title, desc, image: origin + "/cozyplay/games/cozy-wings/og/" + img + ".png", target: "/cozyplay/games/cozy-wings/index.html" + go, site: "Cozy Play" }), "text/html; charset=utf-8");
+});
+const DD_PACKS = { deadline: ["Đập Deadline", "Smash the Deadline"], animals: ["Đập Thú quậy", "Smash the Critters"], lover: ["Đập Chuyện giận", "Smash the Grudges"] };
+route("GET", /^\/api\/share\/dap-deadline$/, async ({ query, headers }) => {
+  const en = query.get("l") === "en", L = en ? 1 : 0, o = b64json(query.get("ch")), origin = reqOrigin(headers);
+  const ok = o && Number.isInteger(o.s) && o.s >= 0 && o.s < 1e5 && DD_PACKS[o.p || "deadline"]; let title, desc, img = "deadline", go = "";
+  if (ok) { const p = o.p || "deadline", c = Number.isInteger(o.c) && o.c >= 0 && o.c < 1e4 ? o.c : 0; img = p;
+    title = en ? "⚔ You're challenged to beat " + o.s + " points!" : "⚔ Bạn bị thách vượt " + o.s + " điểm!";
+    desc = DD_PACKS[p][L] + (c ? (en ? " · best combo ×" : " · combo cao nhất ×") + c : "") + (en ? ". 45 seconds, how fast can you smash?" : ". 45 giây, bạn đập nhanh cỡ nào?"); go = "#ch=" + String(query.get("ch")).replace(/[^\w-]/g, ""); }
+  else { title = en ? "Smash the Deadline" : "Đập Deadline"; desc = en ? "Smash every deadline in 45 seconds!" : "Đập hết deadline trong 45 giây!"; }
+  return out(200, ogPage({ en, title, desc, image: origin + "/cozyplay/games/dap-deadline/og/" + img + ".png", target: "/cozyplay/games/dap-deadline/index.html" + go, site: "Cozy Play" }), "text/html; charset=utf-8");
+});
+route("GET", /^\/api\/share\/pop-fly$/, async ({ query, headers }) => {
+  const en = query.get("l") === "en", origin = reqOrigin(headers), dn = /^\d{1,4}$/.test(query.get("n") || "") ? query.get("n") : "", ds = /^\d{1,5}$/.test(query.get("s") || "") ? query.get("s") : "", daily = query.get("d") === "1";
+  const title = daily ? (en ? "📚 Today's lesson #" + dn + (ds ? " — " + ds + " points" : "") : "📚 Bài học hôm nay #" + dn + (ds ? " — " + ds + " điểm" : "")) : (en ? "Fly & Learn" : "Chim Bay Học Vui");
+  const desc = en ? "Fly through the right letter, count the stars, solve quick sums. A gentle learning game for kids." : "Bay qua đúng chữ, đếm sao, tính nhanh. Trò chơi học vui nhẹ nhàng cho bé.";
+  return out(200, ogPage({ en, title, desc, image: origin + "/popplay/games/pop-fly/og/" + (daily ? "daily" : "home") + ".png", target: "/popplay/games/pop-fly/index.html" + (daily ? "#daily" : ""), site: "Pop Play" }), "text/html; charset=utf-8");
+});
 /* Thử thách ngày: hạt giống + mục tiêu do máy chủ quyết định (giờ Việt Nam), chỉ cho người có Night Pass */
 route("GET", /^\/api\/pro\/daily$/, async ({ headers }) => {
   if (!(await authPass(headers)) && !authHelper(headers)) return out(401, { error: "pass_required" });
@@ -532,7 +588,7 @@ route("GET", /^\/api\/pro\/daily$/, async ({ headers }) => {
   return out(200, { day, seed: h.readUInt32BE(0), goal: [300, 350, 400, 450, 500][h[4] % 5] });
 });
 /* Đếm lượt xem / bấm vào tính năng bị khóa (ẩn danh, chỉ số tổng hợp theo ngày) */
-const PAYWALL_KEYS = new Set(["endless", "daily", "boss", "diff", "skin", "grid", "pack", "stats", "fly_stars", "fly_math", "fly_skin"]);
+const PAYWALL_KEYS = new Set(["endless", "daily", "boss", "diff", "skin", "grid", "pack", "stats", "fly_stars", "fly_math", "fly_skin", "wing_skin"]);
 route("POST", /^\/api\/paywall$/, async ({ body, ip }) => {
   const f = String(body.f || ""), k = String(body.k || "");
   if (!PAYWALL_KEYS.has(f) || !["view", "click", "trial"].includes(k)) return out(400, { error: "bad_event" });

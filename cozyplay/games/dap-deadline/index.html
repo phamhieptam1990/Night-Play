@@ -117,7 +117,7 @@ h1 span{color:var(--accent)}
 #shLink{width:100%;font:600 12px var(--body);padding:6px 10px;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--ink);-webkit-user-select:text;user-select:text}
 #shLink[hidden]{display:none}
 #shStatus{min-height:16px;font-size:12.5px;color:var(--muted);text-align:center;margin:0}
-#shareBtn{margin-top:2px}
+#shareBtn,#rankBtn{margin-top:2px}
 @media (max-height:520px){.sheet-in.share{flex-direction:row;flex-wrap:wrap;justify-content:center;width:min(640px,100%)}#shCanvas{height:calc(100dvh - 50px)}.sh-col{flex:1 1 200px;display:flex;flex-direction:column;gap:8px}}
 
 /* ===== HIỆU ỨNG COMBO: nóng dần theo bậc (5 / 10 / 20 / 30), thanh đếm thời gian giữ combo, bùng nổ ở mốc, báo khi mất ===== */
@@ -264,7 +264,7 @@ h1 span{color:var(--accent)}
   <div class="sheet-in share">
     <div class="sh-h" style="width:100%"><span id="shT"></span><button class="icon-btn" id="shX" type="button">✕</button></div>
     <canvas id="shCanvas" width="1080" height="1920" role="img"></canvas>
-    <div class="sh-col" style="width:100%"><div class="sh-row"><button class="icon-btn" id="shImg" type="button"></button><button class="icon-btn" id="shSave" type="button"></button><button class="icon-btn" id="shCh" type="button"></button></div>
+    <div class="sh-col" style="width:100%"><div class="sh-row"><button class="icon-btn" id="shImg" type="button"></button><button class="icon-btn" id="shSave" type="button"></button><button class="icon-btn" id="shCh" type="button"></button><button class="icon-btn" id="shTx" type="button"></button></div>
     <input id="shLink" readonly hidden aria-label="Link"><p id="shStatus" role="status"></p></div>
   </div>
 </div>
@@ -314,7 +314,7 @@ const I18N={vi:{
  "resume.h":"Bạn bè nhờ bạn chơi tiếp!","resume.pl":"Còn {l} mạng, đang {n} điểm. Đập thật nhanh để nâng điểm cho bạn nhé!","resume.p":"Còn {s} giây, đang {n} điểm. Đập thật nhanh để nâng điểm cho bạn nhé!","resume.btn":"Chơi tiếp",go:"Bắt đầu! Đập hết đi!",done:"XONG",
  "end.title":"Tan làm!","end.score":"Điểm","end.combo":"Combo cao nhất","end.rec":"Kỷ lục","end.newrec":"Kỷ lục mới!","end.again":"Đập thêm ván nữa","end.tip":"Hít sâu 4 giây, thở ra 4 giây, rồi quay lại làm việc nhé.","end.helper":"Cảm ơn bạn đã chơi hộ! Kết quả đang được gửi cho bạn của bạn.",
  dailyErr:"Chưa tải được thử thách hôm nay. Thử lại nhé.",busy:"Xong ván này rồi chọn chế độ nhé",cell:"Ô bàn {n}",
- "setup.t":"Chế độ chơi","setup.mode":"Chế độ","setup.diff":"Độ khó","setup.skin":"Giao diện","setup.grid":"Cỡ bàn chơi","share.btn":"Khoe / Thách bạn","share.t":"Khoe điểm","share.img":"Chia sẻ ảnh","share.save":"Lưu ảnh","share.ch":"Thách bạn bè","share.saved":"Đã lưu ảnh.","share.copied":"Đã sao chép link thách đấu.","share.copyHint":"Chạm vào link rồi sao chép gửi bạn bè.","share.text":"Mình được {n} điểm! Phá kỷ lục của mình đi 👇","card.foot":"Phá kỷ lục của mình nhé!",
+ "rank.btn":"Lên bảng điểm","share.tx":"Chép kết quả","share.pts":"điểm","share.txDone":"Đã chép kết quả!","end.tap":"👆 Chạm để chơi lại","setup.t":"Chế độ chơi","setup.mode":"Chế độ","setup.diff":"Độ khó","setup.skin":"Giao diện","setup.grid":"Cỡ bàn chơi","share.btn":"Khoe / Thách bạn","share.t":"Khoe điểm","share.img":"Chia sẻ ảnh","share.save":"Lưu ảnh","share.ch":"Thách bạn bè","share.saved":"Đã lưu ảnh.","share.copied":"Đã sao chép link thách đấu.","share.copyHint":"Chạm vào link rồi sao chép gửi bạn bè.","share.text":"Mình được {n} điểm! Phá kỷ lục của mình đi 👇","card.foot":"Phá kỷ lục của mình nhé!",
  "ch.h":"⚔ Bạn được thách đấu!","ch.rival":"ĐỐI THỦ","ch.you":"BẠN","ch.beat":"Vượt rồi!","ch.beatPop":"Vượt kỷ lục {b}!","ch.go":"ĐẬP!","ch.badge":"Thách đấu","ch.winT":"BẠN THẮNG!","ch.loseT":"THUA RỒI!","ch.tieT":"HOÀ!","ch.cardWin":"Thắng thách đấu {b} điểm","ch.cardLose":"Chưa phá được {b} điểm","ch.cardTie":"Hoà {b} điểm","ch.p":"Phá kỷ lục {s} điểm (combo ×{c}) trong 45 giây.","ch.btn":"Nhận thách đấu","ch.win":"🏆 Bạn thắng! {a} so với {b}.","ch.lose":"Thua rồi: {a} so với {b}. Thử lại nhé!","ch.tie":"Hoà {b} điểm! Đấu lại nào.",
  fun0:"Sếp vừa nhắn: 'Còn deadline nhé'. Bạn mới đập {n} điểm.",fun1:"Đập được {n} điểm. Pha thêm ly cà phê nhé!",fun2:"{n} điểm trong {s} giây. Sếp thấy hết rồi đó!",fun3:"Dọn sạch deadline trong {s} giây ({n} điểm). Xin tăng lương!",comboLost:"Mất combo ×{n}",ct5:"Nóng máy!",ct10:"Bùng cháy!",ct20:"Vô đối!",ct30:"HUYỀN THOẠI!","setup.pack":"Loại game","setup.partner":"Người giận","k.deadline":"Deadline","k.animals":"Thú vật","k.lover":"Người yêu","pt.f":"Bạn gái","pt.m":"Bạn trai","packLocked":"Thử thách ngày luôn là bản Deadline để ai cũng cùng một đề.","gridLocked":"Thử thách ngày luôn dùng bàn 3×3 để ai cũng cùng một đề.","stats.t":"Thống kê của bạn","stats.btn":"Thống kê",
  "pro.active":"Night Pass đang hoạt động ✓","pro.trial":"Đang dùng thử 1 lượt Vô tận","pro.locked":"Chế độ 🔒 cần Night Pass",lockedLbl:"{n} (cần Night Pass)",
@@ -335,7 +335,7 @@ en:{
  "resume.h":"A friend asked you to continue!","resume.pl":"{l} lives left, {n} points so far. Smash fast to raise their score!","resume.p":"{s} seconds left, {n} points so far. Smash fast to raise their score!","resume.btn":"Continue",go:"Go! Smash them all!",done:"DONE",
  "end.title":"Clocked out!","end.score":"Score","end.combo":"Best combo","end.rec":"Record","end.newrec":"New record!","end.again":"Smash another round","end.tip":"Breathe in for 4 seconds, out for 4, then get back to work.","end.helper":"Thanks for playing for them! The result is being sent to your friend.",
  dailyErr:"Couldn't load today's challenge. Please try again.",busy:"Finish this round, then pick a mode",cell:"Desk slot {n}",
- "setup.t":"Game modes","setup.mode":"Mode","setup.diff":"Difficulty","setup.skin":"Theme","setup.grid":"Board size","share.btn":"Show off / Challenge","share.t":"Show your score","share.img":"Share image","share.save":"Save image","share.ch":"Challenge a friend","share.saved":"Image saved.","share.copied":"Challenge link copied.","share.copyHint":"Tap the link, copy it and send it to a friend.","share.text":"I scored {n}! Beat my record 👇","card.foot":"Beat my record!",
+ "rank.btn":"Leaderboard","share.tx":"Copy result","share.pts":"pts","share.txDone":"Result copied!","end.tap":"👆 Tap to play again","setup.t":"Game modes","setup.mode":"Mode","setup.diff":"Difficulty","setup.skin":"Theme","setup.grid":"Board size","share.btn":"Show off / Challenge","share.t":"Show your score","share.img":"Share image","share.save":"Save image","share.ch":"Challenge a friend","share.saved":"Image saved.","share.copied":"Challenge link copied.","share.copyHint":"Tap the link, copy it and send it to a friend.","share.text":"I scored {n}! Beat my record 👇","card.foot":"Beat my record!",
  "ch.h":"⚔ You've been challenged!","ch.rival":"RIVAL","ch.you":"YOU","ch.beat":"Beaten!","ch.beatPop":"Beat the record of {b}!","ch.go":"SMASH!","ch.badge":"Challenge","ch.winT":"YOU WIN!","ch.loseT":"YOU LOST!","ch.tieT":"TIE!","ch.cardWin":"Beat the challenge of {b}","ch.cardLose":"Missed the challenge of {b}","ch.cardTie":"Tied the challenge of {b}","ch.p":"Beat the record of {s} points (combo ×{c}) in 45 seconds.","ch.btn":"Accept the challenge","ch.win":"🏆 You win! {a} vs {b}.","ch.lose":"You lost: {a} vs {b}. Try again!","ch.tie":"Tie at {b}! Rematch?",
  fun0:"Boss just texted: 'Deadline is due'. You only smashed {n} points.",fun1:"{n} points. Time for another coffee!",fun2:"{n} points in {s} seconds. The boss saw everything!",fun3:"Cleared every deadline in {s} seconds ({n} points). Time to ask for a raise!",comboLost:"Combo ×{n} lost",ct5:"Heating up!",ct10:"On fire!",ct20:"Unstoppable!",ct30:"LEGENDARY!","setup.pack":"Game type","setup.partner":"Who is upset","k.deadline":"Deadline","k.animals":"Critters","k.lover":"Partner","pt.f":"Girlfriend","pt.m":"Boyfriend","packLocked":"The daily challenge is always the Deadline game so everyone plays the same puzzle.","gridLocked":"The daily challenge always uses the 3×3 board so everyone plays the same puzzle.","stats.t":"Your stats","stats.btn":"Stats",
  "pro.active":"Night Pass active ✓","pro.trial":"Trying 1 free Endless run","pro.locked":"Locked items 🔒 need Night Pass",lockedLbl:"{n} (needs Night Pass)",
@@ -565,11 +565,11 @@ async function drawCard(cv){
 }
 function challengeUrl(){
   const o={s:endInfo?endInfo.score:score,c:endInfo?endInfo.best:best,p:packId,pt:partnerId};if(packId!=="deadline"&&DD.ticket)o.tk=DD.ticket;
-  return location.origin+location.pathname+"#ch="+b64e(o);
+  return location.origin+"/api/share/dap-deadline?ch="+b64e(o)+(LANG==="en"?"&l=en":"");
 }
 const shStatus=m=>{$("shStatus").textContent=m||""};
 async function openShare(){
-  $("shT").textContent=t("share.t");$("shImg").textContent="📤 "+t("share.img");$("shSave").textContent="💾 "+t("share.save");$("shCh").textContent="⚔ "+t("share.ch");
+  $("shT").textContent=t("share.t");$("shImg").textContent="📤 "+t("share.img");$("shSave").textContent="💾 "+t("share.save");$("shCh").textContent="⚔ "+t("share.ch");$("shTx").textContent="📋 "+t("share.tx");
   shStatus("");$("shLink").hidden=true;openSheet("shareG");await drawCard($("shCanvas"));$("shCanvas").setAttribute("aria-label",funLine(endInfo||{score:score,best:best}));
 }
 const cardBlob=()=>new Promise(r=>$("shCanvas").toBlob(r,"image/png"));
@@ -582,6 +582,9 @@ $("shImg").addEventListener("click",async()=>{
   if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:pk("docTitle"),text:text+" "+challengeUrl()});return}catch(e){if(e&&e.name==="AbortError")return}}
   downloadBlob(blob,"khoe-diem.png");shStatus(t("share.saved"));
 });
+function resultText(){const e=endInfo||{score:score,best:best},fl=Math.min(8,Math.max(1,Math.round(e.score/60))),bar="🟧".repeat(fl)+"⬜".repeat(8-fl);
+  return "🔨 "+pk("docTitle")+"\n"+e.score+" "+t("share.pts")+" · combo ×"+e.best+"\n"+bar+"\n"+challengeUrl()}
+$("shTx").addEventListener("click",async()=>{const tx=resultText();if(navigator.share){try{await navigator.share({text:tx});return}catch(e){if(e&&e.name==="AbortError")return}}try{await navigator.clipboard.writeText(tx);shStatus(t("share.txDone"))}catch(e){const i=$("shLink");i.value=tx;i.hidden=false;i.focus();i.select();shStatus(t("share.copyHint"))}});
 $("shCh").addEventListener("click",async()=>{
   const url=challengeUrl(),text=t("share.text",{n:endInfo?endInfo.score:score});
   if(navigator.share){try{await navigator.share({title:pk("docTitle"),text:text,url:url});return}catch(e){if(e&&e.name==="AbortError")return}}
@@ -658,14 +661,14 @@ function resumeRound(by){
   if(!running||!paused)return;if(by!=="user"&&pausedBy==="user")return;   /* trang cha không được tiếp tục lượt do người chơi tự tạm dừng */
   paused=false;pausedBy=null;runT0+=performance.now()-pauseT;$("pauseOv").hidden=true;pauseTxt(false);clearInterval(tickT);tickT=setInterval(tick,100);spawn();hudPulse(2500);syncPauseBtn();
 }
-let endInfo=null,ovKind="start";
+let endInfo=null,ovKind="start",endAtDD=0;
 function end(){
   endSecs=roundSecs();endMood=mood;
   running=false;paused=false;pausedBy=null;$("pauseOv").hidden=true;syncPauseBtn();clearTimeout(hudT);document.body.classList.remove("hud-dim");clearInterval(tickT);clearTimeout(spawnT);cells.forEach(c=>{clearTimeout(c.timer);hide(c)});
   let r=RANKS[0];for(const x of RANKS)if(score>=x[0])r=x;
   const HK=(mode.id==="classic"&&diff.id==="normal"&&grid.id==="g3"&&packId==="deadline")?"dapdeadline-hi":"dd-hi-"+mode.id+"-"+diff.id+(grid.id==="g3"?"":"-"+grid.id)+(packId==="deadline"?"":"-"+packId+(packId==="lover"?partnerId:""));   // kỷ lục riêng cho từng chế độ / độ khó
   let hi=0;try{hi=+localStorage.getItem(HK)||0;if(score>hi)localStorage.setItem(HK,score)}catch(e){}
-  endInfo={r,score,best,hi,mode,newRec:score>hi&&hi>0};ovKind="end";
+  endInfo={r,score,best,hi,mode,newRec:score>hi&&hi>0};ovKind="end";endAtDD=performance.now();
   renderEnd();
   window.NP&&NP.result({score:score,extra:{combo:best,mode:mode.id,diff:diff.id,grid:grid.id,pack:packId}});
   DD.hooks.onEnd&&DD.hooks.onEnd({mode:mode.id,diff:diff.id,score:score,combo:best,dur:Math.round((performance.now()-runT0)/1000)});
@@ -675,15 +678,19 @@ function renderEnd(){
   ov.innerHTML='<h2></h2><div class="rank"></div><p class="desc"></p>'+
     '<div class="legend"><span>'+t("end.score")+': <b>'+e.score+'</b></span><span>'+t("end.combo")+': <b>×'+e.best+'</b></span>'+
     '<span>'+t("end.rec")+': <b>'+Math.max(e.hi,e.score)+'</b></span></div>'+
-    (helper?'':'<button class="big" id="againBtn">'+t("end.again")+'</button><button class="icon-btn" id="shareBtn" type="button">📤 '+t("share.btn")+'</button>')+
-    '<div class="tip"></div>';
+    (helper?'':'<button class="big" id="againBtn">'+t("end.again")+'</button><button class="icon-btn" id="shareBtn" type="button">📤 '+t("share.btn")+'</button>'+(window.NP&&e.score>0?'<button class="icon-btn" id="rankBtn" type="button">🏆 '+t("rank.btn")+'</button>':''))+
+    '<div class="tip"></div>'+(helper?'':'<div class="tip entap"></div>');
   ov.querySelector("h2").textContent=mv(e.mode.title)||pk("end.title");
   if(CH&&!helper){const h=ov.querySelector("h2"),w=e.score>CH.s,l=e.score<CH.s;h.textContent=(w?"🏆 ":l?"😅 ":"🤝 ")+t(w?"ch.winT":l?"ch.loseT":"ch.tieT");h.classList.add(w?"chw":l?"chl":"chw")}ov.querySelector(".rank").textContent=e.r[en?3:1];
   ov.querySelector(".desc").textContent=funLine(e)+(e.newRec?" "+t("end.newrec"):"")+(e.mode.endLine?" "+e.mode.endLine(e.score):"")+(CH&&!helper?" "+(e.score>CH.s?t("ch.win",{a:e.score,b:CH.s}):e.score===CH.s?t("ch.tie",{b:CH.s}):t("ch.lose",{a:e.score,b:CH.s})):"");
-  ov.querySelector(".tip").textContent=helper?t("end.helper"):t("end.tip");
+  ov.querySelector(".tip").textContent=helper?t("end.helper"):t("end.tip");{const tp=ov.querySelector(".entap");if(tp)tp.textContent=t("end.tap")}
   ov.hidden=false;DD.refresh&&DD.refresh();
   const ab=$("againBtn");if(ab)ab.focus({preventScroll:true});
 }
+/* chơi lại tức thì: chạm chỗ trống của màn kết thúc, hoặc phím Cách / Enter */
+const canRetry=()=>!running&&ovKind==="end"&&!!endInfo&&!(window.NP&&NP.helper)&&!$("overlay").hidden&&performance.now()-endAtDD>450&&[...document.querySelectorAll(".sheet")].every(x=>x.hidden);
+$("overlay").addEventListener("pointerdown",e=>{if(e.target.closest("button")||!canRetry())return;go(null)});
+addEventListener("keydown",e=>{if((e.code==="Space"||e.key==="Enter")&&!e.repeat&&canRetry()&&document.activeElement===document.body){e.preventDefault();go(null)}});
 let resumeFrom=(window.NP&&NP.helper&&NP.initialState&&NP.initialState.timeLeft)?NP.initialState:null;
 function renderStart(){
   const ov=$("overlay"),rf=resumeFrom;
@@ -707,7 +714,7 @@ async function go(from){
   if(CH&&!from&&!chCounted){chCounted=true;await countdown()}
   starting=false;if(sb)sb.disabled=false;start(from);
 }
-$("overlay").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.id==="startBtn"){const f=resumeFrom;resumeFrom=null;go(f)}else if(b.id==="againBtn")go(null);else if(b.id==="shareBtn")openShare()});
+$("overlay").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.id==="startBtn"){const f=resumeFrom;resumeFrom=null;go(f)}else if(b.id==="againBtn")go(null);else if(b.id==="rankBtn")NP.brag();else if(b.id==="shareBtn")openShare()});
 $("pauseBtn").addEventListener("click",()=>{if(paused&&pausedBy==="user")resumeRound("user");else pauseRound("user")});
 $("resumeBtn").addEventListener("click",()=>resumeRound("user"));
 function pauseTxt(q){$("pauseT").textContent=t(q?"restartQ":"pausedT");$("pauseP").textContent=t(q?"restartP":"pausedP")}

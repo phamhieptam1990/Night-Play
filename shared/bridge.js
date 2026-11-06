@@ -41,6 +41,38 @@
     if (e.source === parent && e.origin === location.origin && e.data && e.data.np === 1 && e.data.type === "stopAudio") stop(true);
   });
 })();
+/* HIỆU ỨNG DÙNG CHUNG CHO MỌI GAME: rung điện thoại (tôn trọng "giảm chuyển động") + QUAY VIDEO ván chơi từ canvas để khoe (nơi trình duyệt hỗ trợ). */
+window.NPFx = (function () {
+  "use strict";
+  var reduce = false; try { reduce = matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
+  var rec = null, chunks = [], mime = "", last = null, timer = 0;
+  function buzz(p) { try { if (!reduce && navigator.vibrate && localStorage.getItem("np-haptic") !== "0") navigator.vibrate(p); } catch (e) {} }
+  function finish(res) { var b = chunks.length ? new Blob(chunks, { type: mime.split(";")[0] }) : null; last = b; rec = null; chunks = []; clearTimeout(timer); if (res) res(b); }
+  function recStart(canvas, maxMs) {
+    recDrop();
+    try {
+      if (!window.MediaRecorder || !canvas || !canvas.captureStream) return false;
+      var ts = ["video/webm;codecs=vp9", "video/webm;codecs=vp8", "video/webm", "video/mp4"]; mime = "";
+      for (var i = 0; i < ts.length; i++) if (MediaRecorder.isTypeSupported(ts[i])) { mime = ts[i]; break; }
+      if (!mime) return false;
+      rec = new MediaRecorder(canvas.captureStream(30), { mimeType: mime, videoBitsPerSecond: 2000000 }); chunks = []; last = null;
+      rec.ondataavailable = function (e) { if (e.data && e.data.size) chunks.push(e.data); };
+      rec.onstop = function () { finish(null); };
+      rec.start(1000); timer = setTimeout(function () { try { if (rec && rec.state !== "inactive") rec.stop(); } catch (e) {} }, maxMs || 70000);
+      return true;
+    } catch (e) { rec = null; return false; }
+  }
+  function recDrop() { try { if (rec && rec.state !== "inactive") { rec.onstop = null; rec.stop(); } } catch (e) {} rec = null; chunks = []; last = null; clearTimeout(timer); }
+  function recStop() {   /* trả về Promise<Blob|null>: video của ván vừa chơi */
+    return new Promise(function (res) {
+      if (!rec) { res(last); return; }
+      if (rec.state === "inactive") { res(last); return; }
+      rec.onstop = function () { finish(res); };
+      try { rec.stop(); } catch (e) { res(null); }
+    });
+  }
+  return { buzz: buzz, recStart: recStart, recStop: recStop, recDrop: recDrop, canRec: function () { return !!(window.MediaRecorder && HTMLCanvasElement.prototype.captureStream); } };
+})();
 window.NP = (function () {
   "use strict";
   var q = new URLSearchParams(location.search), helper = q.get("helper") === "1", getter = null, pauseFn = null, resumeFn = null, initial = null;
@@ -64,6 +96,7 @@ window.NP = (function () {
     helper: helper,
     initialState: initial,
     start: function () { post({ type: "start" }); },
+    brag: function () { post({ type: "brag" }); },     // người chơi chủ động bấm "Lên bảng điểm" → trang cha mở hộp đăng điểm (không tự bật sau mỗi ván)
     result: function (r) { r = r || {}; post({ type: "result", score: Math.max(0, Math.floor(+r.score || 0)), extra: r.extra && typeof r.extra === "object" ? r.extra : null }); },
     state: function (fn) { getter = fn; },
     onPause: function (p, r) { pauseFn = p; resumeFn = r; }
