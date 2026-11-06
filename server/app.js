@@ -431,6 +431,7 @@ const KID_NAMES = {
 const kidNickOk = n => { const p = String(n).split(" "); if (p.length !== 3 || !/^[1-9]\d$/.test(p[2])) return false;
   return (KID_NAMES.vi.a.includes(p[0]) && KID_NAMES.vi.j.includes(p[1])) || (KID_NAMES.en.j.includes(p[0]) && KID_NAMES.en.a.includes(p[1])); };
 const POP_GAMES = Object.fromEntries([1, 2, 3, 4, 5, 6, 7, 8].map(i => ["game-" + i, { max: 1000, kids: true }]));   // max = điểm tối đa hợp lệ (chỉnh theo từng game khi có)
+POP_GAMES["pop-fly"] = { max: 1500, kids: true };   // Chim Bay Học Vui
 const SCORE_GAMES = { "dap-deadline": { max: 5000 }, ...POP_GAMES };
 const nickOk = n => /^[\p{L}\p{N} _.\-]{2,16}$/u.test(n) && !/https?|www\.|\.(com|net|org|vn|io)\b|@/i.test(n);
 
@@ -512,6 +513,17 @@ route("GET", /^\/api\/pro\/dap-deadline\.js$/, async ({ headers, query, ip }) =>
   }
   return out(200, require("./pro/dap-deadline").source({ trial }), "application/javascript; charset=utf-8");
 });
+/* Chim Bay Học Vui (Pop Play): loại trả phí (Bay đếm sao, Tàu bay phép tính) chỉ giao cho người có Night Pass; dùng thử: chỉ Bay đếm sao, 1 ván/ngày */
+route("GET", /^\/api\/pro\/pop-fly\.js$/, async ({ headers, query, ip }) => {
+  const pass = await authPass(headers); let trial = false;
+  if (!pass) {
+    if (query.get("trial") !== "1") return out(401, { error: "pass_required" });
+    if (await limited("pft:" + ipHash(ip), 1, 86400000)) return out(429, { error: "trial_used" });
+    trial = true;
+    await db.query("insert into paywall_daily(day, key, n) values ((now() at time zone $1)::date, 'fly_stars:trial', 1) on conflict (day, key) do update set n = paywall_daily.n + 1", [TZ]);
+  }
+  return out(200, require("./pro/pop-fly").source({ trial }), "application/javascript; charset=utf-8");
+});
 /* Thử thách ngày: hạt giống + mục tiêu do máy chủ quyết định (giờ Việt Nam), chỉ cho người có Night Pass */
 route("GET", /^\/api\/pro\/daily$/, async ({ headers }) => {
   if (!(await authPass(headers)) && !authHelper(headers)) return out(401, { error: "pass_required" });
@@ -520,7 +532,7 @@ route("GET", /^\/api\/pro\/daily$/, async ({ headers }) => {
   return out(200, { day, seed: h.readUInt32BE(0), goal: [300, 350, 400, 450, 500][h[4] % 5] });
 });
 /* Đếm lượt xem / bấm vào tính năng bị khóa (ẩn danh, chỉ số tổng hợp theo ngày) */
-const PAYWALL_KEYS = new Set(["endless", "daily", "boss", "diff", "skin", "grid", "pack", "stats"]);
+const PAYWALL_KEYS = new Set(["endless", "daily", "boss", "diff", "skin", "grid", "pack", "stats", "fly_stars", "fly_math"]);
 route("POST", /^\/api\/paywall$/, async ({ body, ip }) => {
   const f = String(body.f || ""), k = String(body.k || "");
   if (!PAYWALL_KEYS.has(f) || !["view", "click", "trial"].includes(k)) return out(400, { error: "bad_event" });

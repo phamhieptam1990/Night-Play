@@ -14,6 +14,7 @@ window.NPS = (function () {
   var GAMES = {
     "dap-deadline": { name: { vi: "Đập Deadline", en: "Smash the Deadline" }, url: "cozyplay/games/dap-deadline/index.html", board: true, site: "cozyplay" },
     /* Pop Play (trẻ em): bảng xếp hạng chỉ dùng TÊN VUI CÓ SẴN (kids:true), không cho gõ tay */
+    "pop-fly": { name: { vi: "Chim Bay Học Vui", en: "Fly & Learn" }, url: "popplay/games/pop-fly/index.html", board: true, kids: true, site: "popplay" },
     "game-1": { name: { vi: "Mèo con", en: "Kitty" }, url: "popplay/games/game1/index.html", board: true, kids: true, site: "popplay" },
     "game-2": { name: { vi: "Gấu nâu", en: "Bear" }, url: "popplay/games/game2/index.html", board: true, kids: true, site: "popplay" },
     "game-3": { name: { vi: "Thỏ hồng", en: "Bunny" }, url: "popplay/games/game3/index.html", board: true, kids: true, site: "popplay" },
