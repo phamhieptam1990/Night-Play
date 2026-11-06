@@ -141,13 +141,15 @@ window.NPS = (function () {
     ".nps-p{background:var(--accent,#7C5CFF);color:var(--on-accent,#fff)}.nps-s{background:var(--bg,#eee);color:inherit;border:2px solid var(--line,#ccc)!important}" +
     ".nps-note{font-size:12.5px;opacity:.75;margin:10px 0 0}.nps-err{color:var(--warn,#c2410c);min-height:18px;font-size:13px;margin:6px 0 0}.nps-st{font-weight:700;margin:10px 0 0;font-size:14px}" +
     ".nps-dlg{border:0;border-radius:22px;padding:22px;max-width:min(380px,calc(100vw - 32px));width:100%;background:var(--panel,#fff);color:var(--ink,#222);box-shadow:0 20px 60px rgba(0,0,0,.5);text-align:center;font:15px/1.45 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}" +
-    ".nps-dlg::backdrop{background:rgba(0,0,0,.6)}.nps-dlg h3{margin:0 0 6px;font-size:20px}.nps-big{font-size:44px;font-weight:800;line-height:1.1;margin:8px 0;color:var(--accent,#7C5CFF)}" +
+    ".nps-dlg::backdrop{background:rgba(8,9,20,.66);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}" +
+    ".nps-bd{position:absolute;inset:0;z-index:2;background:rgba(8,9,20,.66);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .22s}.nps-bd.on{opacity:1;pointer-events:auto}" +
+    ".nps-dlg h3{margin:0 0 6px;font-size:20px}.nps-big{font-size:44px;font-weight:800;line-height:1.1;margin:8px 0;color:var(--accent,#7C5CFF)}" +
     ".nps-cam{right:calc(var(--nps-r,max(12px,env(safe-area-inset-right))) + 54px)}.nps-fab:disabled{opacity:.5}" +
     ".nps-row.wrap{flex-wrap:wrap}.nps-row.wrap .nps-p{flex:1 1 100%;order:-1}.nps-row.wrap .nps-s{flex:1 1 40%}" +
     ".nps-toast{position:absolute;left:50%;top:max(14px,env(safe-area-inset-top));transform:translate(-50%,-8px);z-index:4;max-width:calc(100% - 140px);padding:10px 16px;border-radius:14px;background:rgba(15,16,32,.92);color:#fff;font:600 14px/1.35 system-ui,sans-serif;text-align:center;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}.nps-toast.on{opacity:1;transform:translate(-50%,0)}" +
     ".nps-apps{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.nps-apps a{flex:1;min-width:110px;display:inline-flex;align-items:center;justify-content:center;height:42px;border-radius:12px;text-decoration:none;font-weight:700;font-size:14px;color:inherit;background:var(--bg,#eee);border:2px solid var(--line,#ccc)}" +
     ".nps-shotimg{display:block;max-width:100%;max-height:min(52vh,420px);margin:6px auto 12px;border-radius:12px;box-shadow:0 4px 18px rgba(0,0,0,.35)}.nps-dlg a.nps-s{display:inline-flex;align-items:center;justify-content:center;flex:1;height:46px;border-radius:12px;text-decoration:none;font-weight:800;color:inherit}" +
-    "@media (prefers-reduced-motion:reduce){.nps-fab,.nps-toast{transition:none}}";
+    "@media (prefers-reduced-motion:reduce){.nps-fab,.nps-toast,.nps-bd{transition:none}}";
   var SHARE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"/></svg>';
 
   var CAM_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l1.6-2.4h6.8L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.6"/></svg>';
@@ -207,8 +209,11 @@ window.NPS = (function () {
     new MutationObserver(label).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
 
     /* tấm bảng dưới màn hình: dùng cho cả "khoe điểm" lẫn "nhờ chơi hộ" */
+    var bd = document.createElement("div"); bd.className = "nps-bd"; stage.appendChild(bd);
     var sheet = document.createElement("div"); sheet.className = "nps-sheet"; sheet.hidden = true; sheet.setAttribute("role", "dialog"); sheet.setAttribute("aria-modal", "false"); stage.appendChild(sheet);
     var hideSheet = function () { sheet.hidden = true; sheet.innerHTML = ""; }, shareTimer = 0;
+    new MutationObserver(function () { bd.classList.toggle("on", !sheet.hidden); }).observe(sheet, { attributes: true, attributeFilter: ["hidden"] });
+    bd.addEventListener("click", function () { clearInterval(shareTimer); hideSheet(); });   /* chạm vào vùng mờ = đóng */
 
     function showBrag(game, score) {
       var g = GAMES[game]; if (!leaderboard || !g || !g.board || score < 1) return;
