@@ -180,7 +180,7 @@ function main(DD, OPTS) {
     DD.modes.endless = endless; DD.modes.daily = dailyMode; DD.modes.boss = boss;
     DD.diffs.easy = diffs.easy; DD.diffs.hard = diffs.hard; DD.diffs.rage = diffs.rage;
     DD.skins.cafe = skins.cafe; DD.skins.retro = skins.retro;
-    DD.grids.g4 = { id: "g4", n: 4, mult: 1.2, extra: 1 }; DD.grids.g5 = { id: "g5", n: 5, mult: 1.5, extra: 2 }; DD.grids.g6 = { id: "g6", n: 6, mult: 2, extra: 3 };
+    /* stay: giấy nằm lâu hơn vì bàn rộng hơn; cap: tối đa số giấy nổi cùng lúc (để kịp bấm) */ DD.grids.g4 = { id: "g4", n: 4, mult: 1.2, extra: 0, stay: 1.15, cap: 3 }; DD.grids.g5 = { id: "g5", n: 5, mult: 1.5, extra: 1, stay: 1.25, cap: 3 }; DD.grids.g6 = { id: "g6", n: 6, mult: 2, extra: 1, stay: 1.3, cap: 3 };
   }
   DD.pro = { trial: TRIAL, stats: !TRIAL && !HELP, helper: HELP };
   if (DD.refresh) DD.refresh();

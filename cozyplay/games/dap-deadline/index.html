@@ -283,7 +283,7 @@ let grid=DD_G3(),score=0,combo=0,best=0,timeLeft=ROUND,running=false,paused=fals
 /* ===== CHẾ ĐỘ / ĐỘ KHÓ / GIAO DIỆN =====
    Lõi miễn phí chỉ có chế độ "Cổ điển". Các chế độ trả phí (Vô tận, Thử thách ngày, Boss), độ khó, giao diện và thống kê
    được máy chủ giao dưới dạng mã riêng (/api/pro/dap-deadline.js) CHỈ KHI có Night Pass còn hạn, rồi đăng ký vào DD. */
-const DD={rnd:Math.random,modes:{},diffs:{},skins:{"default":{id:"default"}},grids:{g3:{id:"g3",n:3,mult:1,extra:0}},hooks:{},pro:null,sel:{mode:"classic",diff:"normal",skin:"default",grid:"g3"},want:null,baseThwack:null};
+const DD={rnd:Math.random,modes:{},diffs:{},skins:{"default":{id:"default"}},grids:{g3:{id:"g3",n:3,mult:1,extra:0,stay:1,cap:9}},hooks:{},pro:null,sel:{mode:"classic",diff:"normal",skin:"default",grid:"g3"},want:null,baseThwack:null};
 DD.modes.classic={id:"classic",title:()=>t("end.title"),timeLabel:()=>t("left"),
   progress:()=>1-timeLeft/ROUND,stay:p=>1250-p*550,stay2:p=>1150-p*500,gap:p=>720-p*360,dbl:p=>p>.4?.35:0,coffeeP:.08,
   tick(){timeLeft-=.1;if(timeLeft<=0){timeLeft=0;end()}},timeText:()=>Math.ceil(timeLeft)+"s",timeBar:()=>timeLeft/ROUND};
@@ -326,14 +326,14 @@ function spawn(){
   if(free.length){
     const st=free[Math.floor(R()*free.length)];
     const item=mode.pick?mode.pick(R,progress):(R()<mode.coffeeP?COFFEE:PESTS[Math.floor(R()*PESTS.length)]);
-    show(st,item,mode.stay(progress)*diff.stay);
+    show(st,item,mode.stay(progress)*diff.stay*(grid.stay||1));
     if(free.length>1&&R()<mode.dbl(progress)){
       const st2=free.filter(c=>c!==st)[Math.floor(R()*(free.length-1))];
-      show(st2,PESTS[Math.floor(R()*PESTS.length)],mode.stay2(progress)*diff.stay);
+      show(st2,PESTS[Math.floor(R()*PESTS.length)],mode.stay2(progress)*diff.stay*(grid.stay||1));
     }
   }
   for(let k=0;k<(grid.extra|0);k++){   /* lưới lớn: thêm giấy nổi cùng lúc */
-    const fr=cells.filter(c=>!c.up);if(fr.length>1&&R()<.55)show(fr[Math.floor(R()*fr.length)],PESTS[Math.floor(R()*PESTS.length)],mode.stay2(progress)*diff.stay);
+    const fr=cells.filter(c=>!c.up);if(fr.length>1&&cells.length-fr.length<(grid.cap||9)&&R()<.35)show(fr[Math.floor(R()*fr.length)],PESTS[Math.floor(R()*PESTS.length)],mode.stay2(progress)*diff.stay*(grid.stay||1));
   }
   spawnT=setTimeout(spawn,mode.gap(progress)*diff.gap);
 }
