@@ -89,10 +89,21 @@ h1 span{color:var(--accent)}
 @media (max-height:760px){.overlay{gap:8px;padding:12px}.overlay .tip{display:none}.stat{padding:4px 10px}.stat b{font-size:21px}.shout{min-height:20px;font-size:15px}}
 @media (max-height:640px){.overlay p{display:none}.overlay .legend span{padding:2px 8px;font-size:12px}.overlay .big{font-size:17px;padding:9px 26px}.overlay h2{font-size:clamp(18px,5vw,24px)}.overlay .rank{font-size:clamp(16px,5vw,22px)}}
 @media (max-height:600px){body{gap:8px;padding-top:60px}.top h1{font-size:22px}.icon-btn{padding:4px 12px}.overlay .legend{display:none}.overlay{gap:6px}.stat small{font-size:10px}}
-/* điện thoại xoay ngang: không ép bố cục, chỉ nhắc xoay dọc (game thiết kế cho màn hình dọc) */
-#rot{display:none;position:fixed;inset:0;z-index:50;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px;text-align:center;background:var(--bg);color:var(--ink)}
-#rot svg{width:44px;height:44px;color:var(--accent)}#rot b{font-family:var(--display);font-weight:400;font-size:18px}#rot span{font-size:13px;color:var(--muted)}
-@media (orientation:landscape) and (max-height:520px) and (pointer:coarse){#rot{display:flex}}
+/* Xoay ngang (màn hình thấp): bàn chơi to nhất, nằm GIỮA; chữ/bảng điểm dạt hai bên và tự mờ đi khi đang chơi, sáng lại khi có điểm hoặc sắp hết giờ */
+@media (max-height:520px) and (min-aspect-ratio:11/10){
+  :root{--w:max(150px,min(100dvh - 16px,100vw - 260px))}
+  body{display:grid;grid-template-columns:minmax(0,1fr) var(--w) minmax(0,1fr);grid-template-rows:1fr auto auto 1fr;column-gap:12px;row-gap:8px;padding:8px 12px;align-content:stretch;justify-items:stretch}
+  .desk-wrap{grid-column:2;grid-row:1 / span 4;align-self:center;justify-self:center}
+  .top{grid-column:1;grid-row:2;max-width:none;flex-direction:column;align-items:flex-start;gap:6px}
+  .shout{grid-column:1;grid-row:3;text-align:left;min-height:18px;font-size:13px}
+  .stats{grid-column:3;grid-row:2;max-width:none;grid-template-columns:1fr;gap:5px}
+  .timebar{grid-column:3;grid-row:3;max-width:none;align-self:start}
+  .top h1{font-size:17px;line-height:1.15}.icon-btn{padding:4px 10px;font-size:12px}
+  .stat{flex-direction:row;align-items:baseline;justify-content:space-between;padding:3px 10px;border-radius:10px}.stat small{font-size:10px}.stat b{font-size:18px}
+  .overlay p,.overlay .legend,.overlay .tip{display:none}.overlay h2{font-size:clamp(16px,3.6vh,22px)}.overlay .big{font-size:16px;padding:8px 22px}
+  .top,.shout,.stats,.timebar{transition:opacity .45s ease}
+  body.hud-dim .top,body.hud-dim .shout,body.hud-dim .stats,body.hud-dim .timebar{opacity:.18}
+}
 @media (prefers-reduced-motion: reduce){.note,.note.hit{transition:none}.desk.shake{animation:none}.float{animation-duration:.01s}}
 </style>
 </head>
@@ -121,7 +132,6 @@ h1 span{color:var(--accent)}
   </div>
 </div>
 <div class="shout" id="shout" aria-live="polite"></div>
-<div id="rot" role="alert"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg><b>Xoay điện thoại dọc để chơi</b><span>Game được thiết kế cho màn hình dọc.</span></div>
 
 <script>
 const PESTS=[
@@ -218,7 +228,7 @@ function hit(st,e){
   if(item.coffee){timeLeft=Math.min(ROUND,timeLeft+3);thwack(true)}
   else{
     const now=performance.now();combo=(now-lastHit<1400)?combo+1:1;lastHit=now;best=Math.max(best,combo);
-    gained=item.pts*(1+Math.floor(combo/5));score+=gained;thwack(false);
+    gained=item.pts*(1+Math.floor(combo/5));score+=gained;thwack(false);hudPulse(1600);
     if(combo>0&&combo%5===0)say("Combo ×"+combo+"! "+SHOUTS[Math.floor(Math.random()*SHOUTS.length)]);
   }
   const f=document.createElement("div");f.className="float";f.textContent=item.coffee?"+3s":"+"+gained;
@@ -233,18 +243,24 @@ function say(t){$("shout").textContent=t;clearTimeout(shoutT);shoutT=setTimeout(
 function render(){
   $("score").textContent=score;$("combo").textContent="×"+combo;
   $("time").textContent=Math.ceil(timeLeft)+"s";$("bar").style.transform="scaleX("+(timeLeft/ROUND)+")";
+  if(running&&timeLeft<=10)document.body.classList.remove("hud-dim");   /* sắp hết giờ: luôn sáng */
 }
 
+let hudT = 0;
+function hudPulse(ms) {   /* bảng điểm sáng lên, rồi mờ dần nếu đang chơi và còn nhiều thời gian */
+  document.body.classList.remove("hud-dim"); clearTimeout(hudT);
+  if (running) hudT = setTimeout(() => { if (running && timeLeft > 10) document.body.classList.add("hud-dim"); }, ms || 1800);
+}
 function start(){
   audio();
-  score=0;combo=0;best=0;timeLeft=ROUND;running=true;lastHit=0;
+  score=0;combo=0;best=0;timeLeft=ROUND;running=true;lastHit=0;hudPulse(3500);
   cells.forEach(hide);$("overlay").hidden=true;render();say("Bắt đầu! Đập hết đi!");window.NP&&NP.start();
   clearTimeout(spawnT);spawn();
   clearInterval(tickT);
   tickT=setInterval(()=>{timeLeft-=.1;if(timeLeft<=0){timeLeft=0;end()}render()},100);
 }
 function end(){
-  running=false;clearInterval(tickT);clearTimeout(spawnT);cells.forEach(c=>{clearTimeout(c.timer);hide(c)});
+  running=false;clearTimeout(hudT);document.body.classList.remove("hud-dim");clearInterval(tickT);clearTimeout(spawnT);cells.forEach(c=>{clearTimeout(c.timer);hide(c)});
   let r=RANKS[0];for(const x of RANKS)if(score>=x[0])r=x;
   let hi=0;try{hi=+localStorage.getItem("dapdeadline-hi")||0;if(score>hi)localStorage.setItem("dapdeadline-hi",score)}catch(e){}
   const ov=$("overlay");
