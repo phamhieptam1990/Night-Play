@@ -493,8 +493,17 @@ async function passFromToken(tok) {
   const p = await passState(t.u); return p.active ? p : null;
 }
 const authPass = headers => { const m = /^Bearer (.+)$/.exec(headers.authorization || ""); return m ? passFromToken(m[1]) : Promise.resolve(null); };
+/* Vé chơi hộ: người có Night Pass cấp một vé ngắn hạn (24 giờ) để bạn bè chơi tiếp đúng chế độ trả phí. Vé KHÔNG phải Night Pass: chỉ mở mã game + thử thách ngày, không có tài khoản, không dùng để đăng ký. */
+const mkTicket = () => { const x = Date.now() + 86400000; return "h." + x + "." + hmac("hticket|" + x); };
+const okTicket = tok => { const m = /^h\.(\d{13})\.([A-Za-z0-9_-]{43})$/.exec(tok || ""); return !!m && +m[1] > Date.now() && safeEq(m[2], hmac("hticket|" + m[1])); };
+const authHelper = headers => { const m = /^Bearer (.+)$/.exec(headers.authorization || ""); return !!m && okTicket(m[1]); };
+route("POST", /^\/api\/pro\/ticket$/, async ({ headers }) => {
+  if (!(await authPass(headers))) return out(401, { error: "pass_required" });
+  return out(200, { ticket: mkTicket() });
+});
 route("GET", /^\/api\/pro\/dap-deadline\.js$/, async ({ headers, query, ip }) => {
   const pass = await authPass(headers); let trial = false;
+  if (!pass && authHelper(headers)) return out(200, require("./pro/dap-deadline").source({ helper: true }), "application/javascript; charset=utf-8");
   if (!pass) {
     if (query.get("trial") !== "1") return out(401, { error: "pass_required" });
     if (await limited("pt:" + ipHash(ip), 1, 86400000)) return out(429, { error: "trial_used" });      // dùng thử: 1 lượt mỗi ngày
@@ -505,7 +514,7 @@ route("GET", /^\/api\/pro\/dap-deadline\.js$/, async ({ headers, query, ip }) =>
 });
 /* Thử thách ngày: hạt giống + mục tiêu do máy chủ quyết định (giờ Việt Nam), chỉ cho người có Night Pass */
 route("GET", /^\/api\/pro\/daily$/, async ({ headers }) => {
-  if (!(await authPass(headers))) return out(401, { error: "pass_required" });
+  if (!(await authPass(headers)) && !authHelper(headers)) return out(401, { error: "pass_required" });
   const day = new Intl.DateTimeFormat("en-CA", { timeZone: TZ }).format(new Date());
   const h = crypto.createHmac("sha256", CFG.tokenSecret).update("daily|dap-deadline|" + day).digest();
   return out(200, { day, seed: h.readUInt32BE(0), goal: [300, 350, 400, 450, 500][h[4] % 5] });

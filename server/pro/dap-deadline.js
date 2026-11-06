@@ -5,7 +5,7 @@
    DD = đối tượng do lõi game (cozyplay/games/dap-deadline/index.html) cung cấp. */
 function main(DD, OPTS) {
   "use strict";
-  var G = DD.g, $ = G.$, TRIAL = !!OPTS.trial, t = DD.t;
+  var G = DD.g, $ = G.$, TRIAL = !!OPTS.trial, HELP = !!OPTS.helper, t = DD.t;
   DD.addI18n({
     vi: { "p.end.endless": "Hết mạng!", "p.lives": "Mạng", "p.life1": "+1 mạng!", "p.surv": "Sống sót {s} giây", "p.end.daily": "Hết giờ!", "p.goalOk": "✅ Đạt mục tiêu {g} điểm!", "p.goalNo": "Mục tiêu {g} điểm, còn thiếu {m}",
       "p.end.boss": "Boss deadline", "p.bossWin": "🏅 Hạ gục boss! Huy hiệu mới", "p.bossLose": "Boss thắng. Cần {g} điểm để hạ boss",
@@ -24,13 +24,14 @@ function main(DD, OPTS) {
   };
   var mulberry32 = function (a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; };
   var derive = function (extra) { var m = {}; for (var k in classic) m[k] = classic[k]; for (var k2 in extra) m[k2] = extra[k2]; return m; };
-  var token = function () { try { var p = JSON.parse(localStorage.getItem("pass")); return p && p.token; } catch (e) { return null; } };
+  var token = function () { if (HELP) return DD.ticket || null; try { var p = JSON.parse(localStorage.getItem("pass")); return p && p.token; } catch (e) { return null; } };
 
   /* ---------- VÔ TẬN: 3 mạng, càng lâu càng nhanh ---------- */
   var lives = 3, elapsed = 0;
   var endless = derive({
     id: "endless", title: function () { return t("p.end.endless"); }, timeLabel: function () { return t("p.lives"); }, coffeeText: "+1♥",
-    init: function () { lives = 3; elapsed = 0; G.timeLeft = 999; },
+    init: function (from) { lives = from && from.lives > 0 ? Math.min(5, from.lives | 0) : 3; elapsed = from && from.el > 0 ? +from.el : 0; G.timeLeft = 999; },
+    snap: function () { return { lives: lives, el: Math.round(elapsed * 10) / 10 }; },
     progress: function () { return Math.min(1, elapsed / 100); },
     tick: function () { elapsed += 0.1; },
     timeText: function () { return "♥".repeat(lives) + "♡".repeat(Math.max(0, 3 - lives)); },
@@ -144,6 +145,7 @@ function main(DD, OPTS) {
   function addDay(day, k) { var d = new Date(day + "T00:00:00Z"); d.setUTCDate(d.getUTCDate() + k); return d.toISOString().slice(0, 10); }
   DD.streakInfo = function () { var s = streak(), today = DD.dailyInfo && DD.dailyInfo.day; if (!s.n) return 0; if (today && s.last !== today && s.last !== addDay(today, -1)) return 0; return s.n; };
   function onEnd(r) {
+    if (HELP) return;   /* người chơi hộ: không ghi thống kê / huy hiệu trên máy họ */
     var h = store.get(HIST, []); h.push({ t: Date.now(), m: r.mode, d: r.diff, s: r.score, c: r.combo, du: r.dur }); if (h.length > 100) h = h.slice(h.length - 100); store.set(HIST, h);
     if (r.mode === "daily" && daily) {   /* chuỗi ngày: mỗi ngày chơi thử thách ngày ít nhất một lượt */
       var s = streak(); if (s.last !== daily.day) { s.n = (s.last === addDay(daily.day, -1)) ? s.n + 1 : 1; s.last = daily.day; store.set("dd-streak", s); }
@@ -178,7 +180,7 @@ function main(DD, OPTS) {
     DD.diffs.easy = diffs.easy; DD.diffs.hard = diffs.hard; DD.diffs.rage = diffs.rage;
     DD.skins.cafe = skins.cafe; DD.skins.retro = skins.retro;
   }
-  DD.pro = { trial: TRIAL, stats: !TRIAL };
+  DD.pro = { trial: TRIAL, stats: !TRIAL && !HELP, helper: HELP };
   if (DD.refresh) DD.refresh();
 }
-exports.source = function (opts) { return "(" + main.toString() + ")(DD," + JSON.stringify({ trial: !!(opts && opts.trial) }) + ");"; };
+exports.source = function (opts) { return "(" + main.toString() + ")(DD," + JSON.stringify({ trial: !!(opts && opts.trial), helper: !!(opts && opts.helper) }) + ");"; };
