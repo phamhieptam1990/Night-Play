@@ -80,6 +80,8 @@ h1 span{color:var(--accent)}
 .desk[data-n="4"] .note{padding:3px}.desk[data-n="5"] .note,.desk[data-n="6"] .note{padding:1px;box-shadow:0 3px 0 rgba(0,0,0,.18)}
 .desk[data-n="5"] .stampmark span,.desk[data-n="6"] .stampmark span{font-size:calc(var(--w)*.04);padding:1px 4px;border-width:2px}
 .chip.dim{opacity:.4}
+@media (max-width:340px),(max-height:600px){.sheet-in .chip{padding:5px 8px;font-size:12px;min-height:30px}.sheet-in{gap:5px}.sec small{margin-bottom:2px}}
+@media (max-height:420px){.sheet-in{gap:3px;padding:7px 10px}.sec small{display:none}.sheet-in .chip{padding:3px 8px;min-height:26px;font-size:11.5px}.chips{gap:4px}.proNote,.sdesc{display:none}.sh-h{font-size:14px}}
 /* ===== NHÂN VẬT NGƯỜI YÊU (mặt đổi theo tâm trạng) + KHOE ĐIỂM / THÁCH ĐẤU ===== */
 #mood{position:relative;display:flex;align-items:center;margin-right:auto}
 #mood[hidden]{display:none}
@@ -296,7 +298,7 @@ const I18N={vi:{
  "pro.active":"Night Pass đang hoạt động ✓","pro.trial":"Đang dùng thử 1 lượt Vô tận","pro.locked":"Chế độ 🔒 cần Night Pass",lockedLbl:"{n} (cần Night Pass)",
  "m.classic.name":"Cổ điển","m.classic.desc":"45 giây đập thật nhanh. Miễn phí cho mọi người.","m.endless.name":"Vô tận","m.endless.desc":"3 mạng, càng chơi càng nhanh. Ly cà phê hồi thêm 1 mạng.",
  "m.daily.name":"Thử thách ngày","m.daily.desc":"Mỗi ngày một đề giống nhau cho mọi người, kèm mục tiêu riêng và chuỗi ngày chơi.","m.boss.name":"Boss deadline","m.boss.desc":"Sếp gọi dồn dập. Đạt 450 điểm để hạ boss và nhận huy hiệu.",
- "d.easy":"Dễ","d.normal":"Thường","d.hard":"Khó","d.rage":"Sếp nổi giận","s.default":"Mặc định","s.cafe":"Cà phê","s.retro":"Retro",
+ "d.easy":"Dễ","d.normal":"Thường","d.hard":"Khó","d.rage":"Sếp nổi giận","s.default":"Mặc định","s.cafe":"Cà phê","s.retro":"Retro","s.neon":"Neon","s.sakura":"Sakura",
  dailyToday:" Hôm nay: đạt {g} điểm.",streak:" 🔥 {n} ngày liên tiếp.",
  "pw.endless.t":"♾️ Chế độ Vô tận","pw.endless.d":"3 mạng, càng chơi càng nhanh. Xem bạn trụ được bao lâu.","pw.daily.t":"📅 Thử thách ngày","pw.daily.d":"Mỗi ngày một đề giống nhau cho mọi người, có mục tiêu và chuỗi ngày chơi.",
  "pw.boss.t":"👔 Boss deadline","pw.boss.d":"Sếp gọi dồn dập. Hạ boss để nhận huy hiệu.","pw.diff.t":"🔥 4 mức độ khó","pw.diff.d":"Từ Dễ tới \"Sếp nổi giận\" với điểm thưởng cao hơn.",
@@ -317,7 +319,7 @@ en:{
  "pro.active":"Night Pass active ✓","pro.trial":"Trying 1 free Endless run","pro.locked":"Locked items 🔒 need Night Pass",lockedLbl:"{n} (needs Night Pass)",
  "m.classic.name":"Classic","m.classic.desc":"45 seconds of fast smashing. Free for everyone.","m.endless.name":"Endless","m.endless.desc":"3 lives, getting faster the longer you last. A coffee restores 1 life.",
  "m.daily.name":"Daily challenge","m.daily.desc":"One identical puzzle a day for everyone, with its own goal and a day streak.","m.boss.name":"Boss deadline","m.boss.desc":"The boss keeps calling. Score 450 to defeat the boss and earn a badge.",
- "d.easy":"Easy","d.normal":"Normal","d.hard":"Hard","d.rage":"Angry boss","s.default":"Default","s.cafe":"Café","s.retro":"Retro",
+ "d.easy":"Easy","d.normal":"Normal","d.hard":"Hard","d.rage":"Angry boss","s.default":"Default","s.cafe":"Café","s.retro":"Retro","s.neon":"Neon","s.sakura":"Sakura",
  dailyToday:" Today: reach {g} points.",streak:" 🔥 {n}-day streak.",
  "pw.endless.t":"♾️ Endless mode","pw.endless.d":"3 lives, faster and faster. See how long you last.","pw.daily.t":"📅 Daily challenge","pw.daily.d":"One identical puzzle a day for everyone, with a goal and a day streak.",
  "pw.boss.t":"👔 Boss deadline","pw.boss.d":"The boss keeps calling. Defeat the boss to earn a badge.","pw.diff.t":"🔥 4 difficulty levels","pw.diff.d":"From Easy to \"Angry boss\" with bigger score bonuses.",
@@ -420,7 +422,7 @@ function spawn(){
 const CT=[[30,4],[20,3],[10,2],[5,1]];
 const comboTier=n=>{for(const [m,v] of CT)if(n>=m)return v;return 0};
 const CONF={deadline:["✅","📎","⭐","✨"],animals:["🐾","🥕","🦴","⭐"],lover:["💖","💕","🌹","✨"]};
-const CONF_SKIN={cafe:["☕","🍪","🥐","✨"],retro:["01","10","▓","$"]};
+const CONF_SKIN={cafe:["☕","🍪","🥐","✨"],retro:["01","10","▓","$"],neon:["⚡","💜","✨","🔷"],sakura:["🌸","🌺","🍃","✨"]};
 const calm=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
 let prevCombo=0;
 function comboFx(){   /* gọi mỗi lần vẽ lại: bậc nóng + nảy số khi tăng */
@@ -500,12 +502,15 @@ async function drawCard(cv){
   x.fillStyle=mut;x.font=F(48);x.fillText(t("end.score").toUpperCase(),W/2,1080);
   /* tem */
   x.save();x.translate(W-250,560);x.rotate(-.24);x.strokeStyle=stampC;x.fillStyle=stampC;x.lineWidth=10;x.font=F(66);const sw=x.measureText(pk("done")).width+60;x.strokeRect(-sw/2,-62,sw,110);x.fillText(pk("done"),0,22);x.restore();
-  /* combo + hạng */
-  x.fillStyle=panel;x.beginPath();x.roundRect?x.roundRect(150,1130,W-300,110,55):x.rect(150,1130,W-300,110);x.fill();
-  x.fillStyle=ink;x.font="800 46px system-ui,-apple-system,'Segoe UI',sans-serif";x.fillText("Combo ×"+e.best+"  ·  "+e.r[en?3:1],W/2,1203);
+  /* combo (ô vừa chữ) + hạng (dòng riêng, tự xuống dòng) */
+  x.font="800 50px system-ui,-apple-system,'Segoe UI',sans-serif";const ct="Combo ×"+e.best,cw=Math.min(W-200,x.measureText(ct).width+110);
+  x.fillStyle=panel;x.beginPath();x.roundRect?x.roundRect((W-cw)/2,1128,cw,104,52):x.rect((W-cw)/2,1128,cw,104);x.fill();
+  x.fillStyle=ink;x.fillText(ct,W/2,1197);
+  x.fillStyle=TINT;x.font="800 46px system-ui,-apple-system,'Segoe UI',sans-serif";
+  wrapText(x,e.r[en?3:1],W-220).slice(0,2).forEach((l,i)=>x.fillText(l,W/2,1300+i*58));
   /* dòng hài hước */
   x.fillStyle=ink;x.font="800 58px system-ui,-apple-system,'Segoe UI',sans-serif";
-  wrapText(x,funLine(e),W-200).slice(0,4).forEach((l,i)=>x.fillText(l,W/2,1360+i*78));
+  wrapText(x,funLine(e),W-200).slice(0,4).forEach((l,i)=>x.fillText(l,W/2,1450+i*76));
   /* chân trang */
   x.fillStyle=TINT;x.font=F(54);x.fillText(t("card.foot"),W/2,1760);
   x.fillStyle=mut;x.font="700 40px system-ui,sans-serif";x.fillText(location.host||"Play Hub",W/2,1830);
@@ -681,7 +686,7 @@ if(window.NP){
 DD.catalog={
   modes:[{id:"classic",ico:"⏱️",free:1},{id:"endless",ico:"♾️"},{id:"daily",ico:"📅"},{id:"boss",ico:"👔"}],
   diffs:[{id:"easy"},{id:"normal",free:1},{id:"hard"},{id:"rage"}],
-  skins:[{id:"default",free:1},{id:"cafe"},{id:"retro"}],
+  skins:[{id:"default",free:1},{id:"cafe"},{id:"retro"},{id:"neon"},{id:"sakura"}],
   grids:[{id:"g3",n:3,free:1},{id:"g4",n:4},{id:"g5",n:5},{id:"g6",n:6}],
   packs:[{id:"deadline",ico:"🏢",free:1},{id:"animals",ico:"🐾"},{id:"lover",ico:"💔"}],
   partners:[{id:"f",ico:"👩",free:1},{id:"m",ico:"👨",free:1}]
@@ -813,7 +818,7 @@ DD.fetchTicket=function(){   /* vé cho bạn bè chơi hộ; tự thử lại k
 addEventListener("online",()=>{if(!DD.ticket)DD.fetchTicket();if(!DD.pro&&passToken()&&!(window.NP&&NP.helper))DD.loadPro(false).catch(()=>{})});
 setInterval(()=>{if(!DD.ticket||Date.now()-(DD.ticketAt||0)>20*36e5)DD.fetchTicket()},60000);
 DD.lockPro=function(){   /* hết lượt dùng thử: trả về bản miễn phí */
-  for(const k of ["endless","daily","boss"])delete DD.modes[k];for(const k of ["easy","hard","rage"])delete DD.diffs[k];delete DD.skins.cafe;delete DD.skins.retro;for(const k of ["g4","g5","g6"])delete DD.grids[k];delete DD.packs.animals;delete DD.packs.lover;
+  for(const k of ["endless","daily","boss"])delete DD.modes[k];for(const k of ["easy","hard","rage"])delete DD.diffs[k];delete DD.skins.cafe;delete DD.skins.retro;delete DD.skins.neon;delete DD.skins.sakura;for(const k of ["g4","g5","g6"])delete DD.grids[k];delete DD.packs.animals;delete DD.packs.lover;
   DD.pro=null;DD.hooks.onHit=null;DD.hooks.onEnd=null;if(DD.baseThwack)window.thwack=DD.baseThwack;DD.want=Object.assign(DD.want||{},{mode:"classic",diff:"normal",skin:"default",grid:"g3",pack:"deadline"});DD.refresh();
 };
 $("setupBtn").addEventListener("click",()=>{ if(running){say(t("busy"));return} DD.refresh();openSheet("setup") });

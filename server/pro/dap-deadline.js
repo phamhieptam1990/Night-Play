@@ -171,12 +171,54 @@ function main(DD, OPTS) {
     'html[data-skin="retro"] .desk-wrap::after{content:"";position:absolute;left:0;right:0;height:22%;top:-25%;z-index:6;pointer-events:none;background:linear-gradient(transparent,rgba(57,255,122,.10),transparent);animation:sweep 5s linear infinite}' +
     '@keyframes crt{0%,100%{opacity:.85}50%{opacity:1}}@keyframes sweep{to{top:105%}}' +
     '@media (prefers-reduced-motion:reduce){html[data-skin] .desk-wrap::before,html[data-skin] .desk-wrap::after{animation:none}}' +
+
+    /* ===== NEON: thành phố cyberpunk về đêm — lưới phát sáng, viền neon hồng/xanh, tia quét ===== */
+    'html[data-skin="neon"][data-theme="dark"]{--bg:#07040f;--desk:#0c0720;--slot:#130b2d;--line:#3a1d78;--ink:#e8f0ff;--muted:#93a3dc;--panel:#100a26;--accent:#00e5ff;--on-accent:#031018;--note:#0c1233;--note-hot:#2a0f3c;--stamp:#ff2bd6;--good:#39ffb0;--g1:#ff2bd6;--g2:#00e5ff;--nbg:#0c1233;--nfg:#d6ecff;--nhot:#2a0f3c;--nhotfg:#ffd6f7;color-scheme:dark}' +
+    'html[data-skin="neon"][data-theme="light"]{--bg:#ece8ff;--desk:#dcd4ff;--slot:#cbc0f8;--line:#a78bf0;--ink:#1a1240;--muted:#5b4fa0;--panel:#fbf9ff;--accent:#7a2cff;--on-accent:#fff;--note:#ffffff;--note-hot:#ffe0f6;--stamp:#e0189f;--good:#0f9f6a;--g1:#ff2bd6;--g2:#7a2cff;--nbg:#ffffff;--nfg:#1a1240;--nhot:#ffe0f6;--nhotfg:#5a0c48;color-scheme:light}' +
+    'html[data-skin="neon"] body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-2;background:radial-gradient(ellipse at 12% 0%,color-mix(in srgb,var(--g1) 30%,transparent),transparent 55%),radial-gradient(ellipse at 92% 100%,color-mix(in srgb,var(--g2) 26%,transparent),transparent 55%)}' +
+    'html[data-skin="neon"] body::after{content:"";position:fixed;left:-25%;width:150%;bottom:0;height:46%;pointer-events:none;z-index:-1;background-image:linear-gradient(color-mix(in srgb,var(--g2) 38%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--g2) 38%,transparent) 1px,transparent 1px);background-size:46px 46px;transform:perspective(320px) rotateX(62deg);transform-origin:50% 100%;-webkit-mask-image:linear-gradient(transparent,#000 70%);mask-image:linear-gradient(transparent,#000 70%);animation:ngrid 2.4s linear infinite}' +
+    '@keyframes ngrid{to{background-position:0 46px}}' +
+    'html[data-skin="neon"] .top h1{text-shadow:0 0 14px color-mix(in srgb,var(--g2) 80%,transparent),0 0 2px var(--g2)}' +
+    'html[data-skin="neon"] .stat,html[data-skin="neon"] .icon-btn{border-color:color-mix(in srgb,var(--g2) 55%,transparent);box-shadow:0 0 12px color-mix(in srgb,var(--g2) 25%,transparent)}' +
+    'html[data-skin="neon"] .stat b{text-shadow:0 0 10px color-mix(in srgb,var(--g2) 70%,transparent)}' +
+    'html[data-skin="neon"] .timebar i{box-shadow:0 0 12px var(--g2);background:linear-gradient(90deg,var(--g1),var(--g2))}' +
+    'html[data-skin="neon"] .desk{background:color-mix(in srgb,var(--desk) 92%,transparent);border:2px solid var(--g2);box-shadow:0 0 26px color-mix(in srgb,var(--g2) 50%,transparent),inset 0 0 34px color-mix(in srgb,var(--g1) 16%,transparent)}' +
+    'html[data-skin="neon"] .cell{border-radius:12px;background:var(--slot);border:1px solid color-mix(in srgb,var(--g1) 45%,transparent);box-shadow:inset 0 0 16px color-mix(in srgb,var(--g1) 20%,transparent)}' +
+    'html[data-skin="neon"] .cell::after{display:none}' +
+    'html[data-skin="neon"] .note{border-radius:7px;background:var(--nbg);color:var(--nfg);border:2px solid var(--g2);box-shadow:0 0 16px color-mix(in srgb,var(--g2) 70%,transparent),inset 0 0 12px color-mix(in srgb,var(--g2) 18%,transparent);text-shadow:0 0 6px color-mix(in srgb,var(--g2) 55%,transparent)}' +
+    'html[data-skin="neon"] .note.hot{background:var(--nhot);color:var(--nhotfg);border-color:var(--g1);box-shadow:0 0 16px color-mix(in srgb,var(--g1) 75%,transparent),inset 0 0 12px color-mix(in srgb,var(--g1) 20%,transparent);text-shadow:0 0 6px color-mix(in srgb,var(--g1) 60%,transparent)}' +
+    'html[data-skin="neon"] .note.coffee{background:var(--nbg);border:2px dashed var(--good);box-shadow:0 0 16px color-mix(in srgb,var(--good) 60%,transparent)}' +
+    'html[data-skin="neon"] .note .ico{filter:drop-shadow(0 0 7px var(--g2))}html[data-skin="neon"] .note.hot .ico{filter:drop-shadow(0 0 7px var(--g1))}' +
+    'html[data-skin="neon"] .stampmark span{border-radius:4px;text-shadow:0 0 8px currentColor;box-shadow:0 0 12px currentColor}' +
+    'html[data-skin="neon"] .desk-wrap::after{content:"";position:absolute;inset:-3px;border-radius:25px;z-index:-1;pointer-events:none;box-shadow:0 0 34px color-mix(in srgb,var(--g1) 55%,transparent);animation:npulse 2.8s ease-in-out infinite}' +
+    '@keyframes npulse{50%{opacity:.35}}' +
+    /* ===== SAKURA: vườn Nhật — cánh hoa rơi, khay tre, ô shoji, giấy ofuda có dấu son ===== */
+    'html[data-skin="sakura"][data-theme="light"]{--bg:#fff1f4;--desk:#e8c9a2;--slot:#fbefe3;--line:#e3a8b6;--ink:#4a2330;--muted:#9a5a6b;--panel:#fffafb;--accent:#e0457b;--on-accent:#fff;--note:#fffaf3;--note-hot:#ffd1dc;--stamp:#c1272d;--good:#2f8a55;--wood1:#e9cba3;--wood2:#d9b68b;--woodline:#b98a5e;--shoji:#fff8ee;--shojiline:#d9b98f;color-scheme:light}' +
+    'html[data-skin="sakura"][data-theme="dark"]{--bg:#1b0f1d;--desk:#4a3040;--slot:#35232f;--line:#6a4570;--ink:#ffe9f0;--muted:#d6a3b8;--panel:#26172a;--accent:#ff7fa8;--on-accent:#2a0f1c;--note:#fff3e8;--note-hot:#ffb9cc;--stamp:#ff5c6c;--good:#5fd68f;--wood1:#5a3d4f;--wood2:#4a3040;--woodline:#8a5d73;--shoji:#4a3a4c;--shojiline:#7b6180;color-scheme:dark}' +
+    'html[data-skin="sakura"] body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-2;background:radial-gradient(ellipse at 50% -8%,color-mix(in srgb,var(--accent) 22%,transparent),transparent 60%),radial-gradient(ellipse at 50% 112%,color-mix(in srgb,var(--accent) 14%,transparent),transparent 55%)}' +
+    'html[data-skin="sakura"] body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background-image:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2790%27 height=%2790%27 viewBox=%270 0 90 90%27%3E%3Cpath d=%27M45 8c14 10 20 27 9 41-6 7-12 8-18 0C26 36 31 19 45 8z%27 fill=%27%23ffb7c9%27 fill-opacity=%27.9%27 transform=%27rotate(28 45 45)%27/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27140%27 height=%27140%27 viewBox=%270 0 140 140%27%3E%3Cpath d=%27M70 20c18 14 26 36 10 54-8 9-17 10-25 0C42 56 50 34 70 20z%27 fill=%27%23ff8fb1%27 fill-opacity=%27.75%27 transform=%27rotate(-35 70 70)%27/%3E%3Cpath d=%27M104 96c8 6 11 15 4 22-3 4-8 4-11 0-4-8-1-16 7-22z%27 fill=%27%23ffd3df%27 fill-opacity=%27.9%27/%3E%3C/svg%3E");background-size:90px 90px,140px 140px;background-position:0 -90px,60px -140px;animation:petals 16s linear infinite;opacity:.8}' +
+    '@keyframes petals{to{background-position:140px 910px,-80px 1260px}}' +
+    'html[data-skin="sakura"] #titleTxt span{color:var(--accent)}' +
+    'html[data-skin="sakura"] .desk{background:repeating-linear-gradient(90deg,var(--wood1) 0 26px,var(--wood2) 26px 28px);border:3px solid var(--woodline);border-radius:18px;box-shadow:0 8px 0 color-mix(in srgb,var(--woodline) 85%,#000),0 16px 24px rgba(60,20,30,.25),inset 0 0 22px rgba(0,0,0,.12)}' +
+    'html[data-skin="sakura"] .cell{border-radius:6px;background-color:var(--shoji);background-image:linear-gradient(var(--shojiline) 2px,transparent 2px),linear-gradient(90deg,var(--shojiline) 2px,transparent 2px);background-size:100% 50%,50% 100%;background-position:0 50%,50% 0;border:3px solid var(--woodline);box-shadow:inset 0 0 12px rgba(120,70,40,.25)}' +
+    'html[data-skin="sakura"] .cell::after{display:none}' +
+    'html[data-skin="sakura"] .note{border-radius:3px;background:var(--note);color:#3a1d27;border-left:9px solid var(--stamp);box-shadow:0 5px 0 rgba(0,0,0,.2),0 9px 14px rgba(70,20,35,.25)}' +
+    'html[data-skin="sakura"] .note::after{content:"印";position:absolute;right:4%;top:4%;width:17%;aspect-ratio:1;display:grid;place-items:center;border-radius:50%;border:2px solid var(--stamp);color:var(--stamp);font:700 clamp(8px,2.6vw,13px)/1 serif;opacity:.8;transform:rotate(-12deg)}' +
+    'html[data-skin="sakura"] .note.hot{background:var(--note-hot);border-left-color:#8a1c2a;box-shadow:0 5px 0 rgba(0,0,0,.2),0 0 0 2px color-mix(in srgb,#d4a84a 70%,transparent),0 9px 14px rgba(70,20,35,.25)}' +
+    'html[data-skin="sakura"] .note.coffee{background:#fffef8;border-left:3px dashed var(--good);border:3px dashed var(--good)}' +
+    'html[data-skin="sakura"] .note.coffee::after{display:none}' +
+    'html[data-skin="sakura"] .stampmark span{border-radius:50%;aspect-ratio:1;display:grid;place-items:center;border-width:4px;font-family:serif}' +
+    'html[data-skin="sakura"] .desk[data-n="5"] .note::after,html[data-skin="sakura"] .desk[data-n="6"] .note::after{display:none}html[data-skin="sakura"] .desk[data-n="5"] .note,html[data-skin="sakura"] .desk[data-n="6"] .note{border-left-width:5px}' +
+    'html[data-skin="sakura"] .desk-wrap::before{content:"🏮";position:absolute;left:8px;top:-4px;z-index:5;font-size:22px;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(0,0,0,.35));animation:lantern 3s ease-in-out infinite;transform-origin:50% 0}' +
+    'html[data-skin="sakura"] .desk-wrap::after{content:"🌸";position:absolute;right:8px;top:-4px;z-index:5;font-size:20px;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(0,0,0,.3))}' +
+    '@keyframes lantern{50%{transform:rotate(7deg)}}' +
+    '@media (prefers-reduced-motion:reduce){html[data-skin="neon"] body::after,html[data-skin="neon"] .desk-wrap::after,html[data-skin="sakura"] body::after,html[data-skin="sakura"] .desk-wrap::before{animation:none}}' +
     '.spark{position:absolute;pointer-events:none;z-index:4;font-size:18px;animation:spk .6s ease-out forwards}@keyframes spk{0%{opacity:1;transform:translate(0,0) scale(.6)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1.3)}}' +
     '@media (prefers-reduced-motion:reduce){.spark{display:none}}' +
     '.stt{width:100%;display:grid;gap:8px}.stt .row3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.stt .k{background:var(--bg);border:2px solid var(--line);border-radius:12px;padding:6px 8px;text-align:center}.stt .k small{display:block;font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}.stt .k b{font-family:var(--display);font-weight:400;font-size:19px}' +
     '.stt svg{width:100%;height:84px;display:block;background:var(--bg);border:2px solid var(--line);border-radius:12px}.stt .note2{font-size:12.5px;color:var(--muted);text-align:center}';
   document.head.appendChild(css);
-  var skins = { "default": { id: "default" }, cafe: { id: "cafe" }, retro: { id: "retro" } };
+  var skins = { "default": { id: "default" }, cafe: { id: "cafe" }, retro: { id: "retro" }, neon: { id: "neon" }, sakura: { id: "sakura" } };
 
   /* ---------- ÂM THANH / HIỆU ỨNG THÊM ---------- */
   var baseThwack = window.thwack;
@@ -189,7 +231,7 @@ function main(DD, OPTS) {
         g.gain.setValueAtTime(0.0001, t + i * 0.05); g.gain.exponentialRampToValueAtTime(0.12, t + i * 0.05 + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + i * 0.05 + 0.22); o.connect(g).connect(a.destination); o.start(t + i * 0.05); o.stop(t + i * 0.05 + 0.24); });
     } catch (e) {}
   };
-  var SPK = { d: ["✨", "⭐", "💥"], cafe: ["☕", "🍪", "✨"], retro: ["01", "▓", "$"] };
+  var SPK = { d: ["✨", "⭐", "💥"], cafe: ["☕", "🍪", "✨"], retro: ["01", "▓", "$"], neon: ["⚡", "💜", "✨"], sakura: ["🌸", "🌺", "✨"] };
   DD.hooks.onHit = function (st, gained) {
     if (!gained) return;
     var wrap = st.el.parentElement.parentElement, r = st.el.getBoundingClientRect(), dr = wrap.getBoundingClientRect(), n = G.combo >= 10 ? 5 : G.combo >= 5 ? 3 : 2;
@@ -237,7 +279,7 @@ function main(DD, OPTS) {
   else {
     DD.modes.endless = endless; DD.modes.daily = dailyMode; DD.modes.boss = boss;
     DD.diffs.easy = diffs.easy; DD.diffs.hard = diffs.hard; DD.diffs.rage = diffs.rage;
-    DD.skins.cafe = skins.cafe; DD.skins.retro = skins.retro;
+    DD.skins.cafe = skins.cafe; DD.skins.retro = skins.retro; DD.skins.neon = skins.neon; DD.skins.sakura = skins.sakura;
     DD.packs.animals = animals; DD.packs.lover = lover;
     /* stay: giấy nằm lâu hơn vì bàn rộng hơn; cap: tối đa số giấy nổi cùng lúc (để kịp bấm) */ DD.grids.g4 = { id: "g4", n: 4, mult: 1.2, extra: 0, stay: 1.15, cap: 3 }; DD.grids.g5 = { id: "g5", n: 5, mult: 1.5, extra: 1, stay: 1.25, cap: 3 }; DD.grids.g6 = { id: "g6", n: 6, mult: 2, extra: 1, stay: 1.3, cap: 3 };
   }
