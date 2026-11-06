@@ -408,7 +408,7 @@ function renderStart(){
   const ov=$("overlay"),rf=resumeFrom;
   ov.innerHTML='<h2>'+(rf?t("resume.h"):t("start.h"))+'</h2><p>'+(rf?(rf.mode==="endless"?t("resume.pl",{l:rf.lives|0,n:rf.score|0}):t("resume.p",{s:Math.ceil(Math.min(ROUND,rf.timeLeft)),n:rf.score|0})):t("start.p"))+'</p>'+
     (rf?'<div class="legend"><span>'+t("leg1")+'</span><span>'+t("leg2")+'</span><span>'+t("leg3")+'</span><span>'+t("leg4")+'</span></div>':'<div class="modebar" id="modeBar" role="group" aria-label="'+t("setup.mode")+'"></div>')+
-    '<div class="sel" id="selLine"></div><button class="big" id="startBtn">'+(rf?t("resume.btn"):t("start.btn"))+'</button><div class="tip">'+t("start.tip")+'</div>';
+    '<div class="sel" id="selLine"></div><button class="big" id="startBtn">'+(rf?t("resume.btn"):t("start.btn"))+'</button><div class="tip">'+(rf?"":t("start.tip"))+'</div>';
   if(rf){   /* thanh điểm / thời gian hiện đúng tiến trình bạn bè đã chơi, không phải 0 / 45s */
     $("score").textContent=rf.score|0;$("combo").textContent="×"+(rf.combo|0);
     if(rf.mode==="endless"){const l=Math.max(0,Math.min(5,rf.lives|0));$("time").textContent="♥".repeat(l)+"♡".repeat(Math.max(0,3-l))}
