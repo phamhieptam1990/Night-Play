@@ -90,11 +90,11 @@ ul.how b{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-i
 "use strict";
 const $ = id => document.getElementById(id), root = document.documentElement;
 const TXT = {
-  vi: { bad: "Link không hợp lệ", badP: "Đường link này bị thiếu hoặc sai. Hãy nhờ bạn của bạn gửi lại link.", used: "Link này đã được dùng hoặc đã hết hạn", usedP: "Mỗi link chỉ dùng được một lần và hết hạn sau 24 giờ.", slow: "Thao tác quá nhanh, vui lòng thử lại sau ít phút.",
+  vi: { offline: "Chưa có mạng. Nhận link cần kết nối một lần, bạn bật mạng rồi bấm Bắt đầu lại nhé. Link vẫn còn nguyên.", bad: "Link không hợp lệ", badP: "Đường link này bị thiếu hoặc sai. Hãy nhờ bạn của bạn gửi lại link.", used: "Link này đã được dùng hoặc đã hết hạn", usedP: "Mỗi link chỉ dùng được một lần và hết hạn sau 24 giờ.", slow: "Thao tác quá nhanh, vui lòng thử lại sau ít phút.",
         t: "Bạn được nhờ chơi hộ một lượt!", p: "Một người bạn muốn bạn chơi hộ họ một lượt. Kết quả sẽ được gửi về cho bạn ấy.", s1: "Bạn chơi đúng một lượt, không cần tài khoản.", s2: "Điểm của bạn được mã hoá rồi gửi cho người nhờ, họ xem ngay trong game của họ.", s3: "Link chỉ dùng được một lần và bạn không thể chia sẻ tiếp.",
         start: "Bắt đầu chơi hộ", resume: "Tiếp tục chơi hộ", resumeP: "Bạn sẽ chơi tiếp đúng chỗ bạn của bạn đang dở, cho tới hết lượt.", privacy: "Chúng tôi không lưu thông tin của bạn. Kết quả được mã hoá, máy chủ không đọc được và xoá ngay khi người nhờ nhận.", playing: "Bạn đang chơi hộ", sending: "Đang gửi kết quả…",
         doneT: "Đã gửi kết quả!", doneP: "Cảm ơn bạn đã chơi hộ. Người bạn của bạn sẽ thấy kết quả ngay.", pts: "điểm", more: "Khám phá Play Hub", retry: "Gửi lại", sendErr: "Chưa gửi được kết quả. Vui lòng thử lại.", close: "Đóng", home: "Trang chủ", priv: "Quyền riêng tư", title: "Chơi hộ bạn · Play Hub", theme: "Sáng / Tối" },
-  en: { bad: "Invalid link", badP: "This link is missing or incorrect. Ask your friend to send it again.", used: "This link was already used or has expired", usedP: "Each link works once and expires after 24 hours.", slow: "Too many tries, please wait a few minutes.",
+  en: { offline: "You are offline. Starting needs a connection once: turn the network on and tap Start again. The link is still valid.", bad: "Invalid link", badP: "This link is missing or incorrect. Ask your friend to send it again.", used: "This link was already used or has expired", usedP: "Each link works once and expires after 24 hours.", slow: "Too many tries, please wait a few minutes.",
         t: "You've been asked to play a round!", p: "A friend would like you to play one round for them. The result will be sent back to them.", s1: "You play exactly one round, no account needed.", s2: "Your score is encrypted and sent to your friend, who sees it right in their game.", s3: "The link works once and you can't share it further.",
         start: "Start playing for them", resume: "Continue playing for them", resumeP: "You'll continue right where your friend left off, until the round ends.", privacy: "We don't store your info. The result is encrypted, the server can't read it, and it's deleted as soon as your friend receives it.", playing: "You're playing for a friend", sending: "Sending result…",
         doneT: "Result sent!", doneP: "Thanks for playing for them. Your friend will see it right away.", pts: "points", more: "Explore Play Hub", retry: "Send again", sendErr: "Couldn't send the result. Please try again.", close: "Close", home: "Home", priv: "Privacy", title: "Play for a friend · Play Hub", theme: "Light / Dark" }
@@ -127,7 +127,7 @@ function start() {
   if (starting) return; starting = true;
   const btn = $("go"); btn.disabled = true;
   (getTok() ? Promise.resolve(getTok()) : NPS.claim(id).then(tok => { setTok(tok); return tok; }))
-    .then(play).catch(e => { starting = false; if (e.message === "slow") { btn.disabled = false; $("err").textContent = L().slow; } else { stage = "used"; view(); } });
+    .then(play).catch(e => { starting = false; if (e.message === "slow" || (NPS.isNet && NPS.isNet(e))) { btn.disabled = false; $("err").textContent = e.message === "slow" ? L().slow : L().offline; } else { stage = "used"; view(); } });   /* mất mạng ≠ link đã dùng: giữ nút để bấm lại khi có mạng */
 }
 function play() {
   const g = NPS.GAMES[game], f = document.createElement("iframe"), u = new URL(g.url, location.href);
