@@ -205,6 +205,7 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 <nav class="nav" aria-label="Main">
   <a class="mark" id="hubLink" href="../index.html"><svg class="mk" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="var(--accent)"/><path d="M25 18l22 14-22 14z" fill="#fff"/></svg><span id="hName"></span></a>
   <div class="tools">
+    <a id="rankBtn" class="ico" href="../leaderboard.html?from=popplay/index.html" aria-label="Leaderboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg></a>
     <a id="hubBtn" class="ico" href="../index.html" aria-label="Home"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3L2 12h3v8h5v-5h4v5h5v-8h3z"/></svg></a>
     <a id="passBtn" class="pill" href="#"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/></svg><span></span></a>
     <button id="themeBtn" class="ico" type="button" aria-label="Theme">
@@ -233,7 +234,7 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 <footer class="foot">
   <div class="fin">
     <div class="fbrand"><div class="mark"><svg class="mk" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="var(--accent)"/><path d="M25 18l22 14-22 14z" fill="#fff"/></svg><span id="fName"></span></div><p id="fTag"></p></div>
-    <nav class="fcol" aria-labelledby="fH1"><h4 id="fH1"></h4><a id="fHub" href="../index.html"></a><a id="fHelp" href="../shared.html?from=popplay/index.html"></a><a id="fGames" href="#grid"></a><a id="fPass" href="#"></a></nav>
+    <nav class="fcol" aria-labelledby="fH1"><h4 id="fH1"></h4><a id="fHub" href="../index.html"></a><a id="fRank" href="../leaderboard.html?from=popplay/index.html"></a><a id="fHelp" href="../shared.html?from=popplay/index.html"></a><a id="fGames" href="#grid"></a><a id="fPass" href="#"></a></nav>
     <nav class="fcol" aria-labelledby="fH2"><h4 id="fH2"></h4><a id="fMail" href="#"></a><a id="fPriv" href="#" target="_blank" rel="noopener"></a></nav>
   </div>
   <div class="fbar"><p id="madeBy"></p>
@@ -304,9 +305,9 @@ const EAGER = 6;                 // Số ô đầu tiên không lazy-load
 /* ===== TỪ ĐIỂN: thêm ngôn ngữ mới = thêm 1 key (vd. fr: {...}) ===== */
 const i18n = {
   en: { slogan:"Play, learn, smile!", desc:"Fun, safe games made for little ones. No ads, no personal tracking.", madeBy:"Made with love by", parents:"Parents", home:"Back", theme:"Light / Dark", timeH:"Play time limit (per day)", off:"Off", min:"min", usedToday:"Played today", reset:"Reset today", gamesH:"Games your child can play", left:"Time left", timesUp:"Time to rest! Come back tomorrow.",
-        lang:"Language", hub:"Home", helpRes:"Shared results", contact:"Contact", privacy:"Privacy Policy", games:"Games", product:"Explore", support:"Support", pass:"Night Pass", noAds:"No ads", noTrack:"No personal tracking", free:"Free to play", rights:"All rights reserved.", close:"Close", upgrade:"Night Pass: unlock all games", name:"English" },
+        lang:"Language", hub:"Home", rank:"Leaderboard", helpRes:"Shared results", contact:"Contact", privacy:"Privacy Policy", games:"Games", product:"Explore", support:"Support", pass:"Night Pass", noAds:"No ads", noTrack:"No personal tracking", free:"Free to play", rights:"All rights reserved.", close:"Close", upgrade:"Night Pass: unlock all games", name:"English" },
   vi: { slogan:"Chơi vui, học giỏi, cười tươi!", desc:"Trò chơi vui, an toàn dành cho các bé. Không quảng cáo, không theo dõi cá nhân.", madeBy:"Được tạo với tình yêu bởi", parents:"Phụ huynh", home:"Quay lại", theme:"Sáng / Tối", timeH:"Giới hạn thời gian chơi (mỗi ngày)", off:"Tắt", min:"phút", usedToday:"Đã chơi hôm nay", reset:"Đặt lại hôm nay", gamesH:"Game cho bé chơi", left:"Thời gian còn lại", timesUp:"Đến giờ nghỉ rồi! Mai chơi tiếp nhé.",
-        lang:"Ngôn ngữ", hub:"Trang chủ", helpRes:"Kết quả chơi hộ", contact:"Liên hệ", privacy:"Chính sách quyền riêng tư", games:"Game", product:"Khám phá", support:"Hỗ trợ", pass:"Night Pass", noAds:"Không quảng cáo", noTrack:"Không theo dõi cá nhân", free:"Chơi miễn phí", rights:"Bảo lưu mọi quyền.", close:"Đóng", upgrade:"Night Pass: mở tất cả game", name:"Tiếng Việt" }
+        lang:"Ngôn ngữ", hub:"Trang chủ", rank:"Bảng xếp hạng", helpRes:"Kết quả chơi hộ", contact:"Liên hệ", privacy:"Chính sách quyền riêng tư", games:"Game", product:"Khám phá", support:"Hỗ trợ", pass:"Night Pass", noAds:"Không quảng cáo", noTrack:"Không theo dõi cá nhân", free:"Chơi miễn phí", rights:"Bảo lưu mọi quyền.", close:"Đóng", upgrade:"Night Pass: mở tất cả game", name:"Tiếng Việt" }
 };
 
 /* ===== THUMBNAIL MẪU (SVG data URI) — khi có ảnh thật chỉ cần ghi thumb:"thumbs/game1.webp" ===== */
@@ -361,7 +362,8 @@ function applyLang(){
   $("fName").textContent = BRAND; $("fTag").textContent = t.desc;
   $("tAds").textContent = t.noAds; $("tTrack").textContent = t.noTrack; $("tFree").textContent = t.free;
   $("fH1").textContent = t.product; $("fH2").textContent = t.support;
-  $("fGames").textContent = t.games; $("fHub").textContent = t.hub; $("fHelp").textContent = t.helpRes;
+  $("fGames").textContent = t.games; $("fHub").textContent = t.hub; $("fHelp").textContent = t.helpRes; $("fRank").textContent = t.rank;
+  $("rankBtn").setAttribute("aria-label", t.rank); $("rankBtn").title = t.rank;
   $("hubBtn").setAttribute("aria-label", t.hub); $("hubBtn").title = t.hub; $("hubLink").setAttribute("aria-label", t.hub + " – " + BRAND);
   const fm = $("fMail"); fm.href = "mailto:" + EMAIL; fm.textContent = t.contact;
   const fp = $("fPriv"); fp.href = PRIVACY_URL; fp.textContent = t.privacy;
@@ -665,7 +667,7 @@ route();
 </script>
 <script src="../shared/updated.js"></script>
 <script src="../shared/social.js"></script>
-<script>NPS.initParent({ helpUrl: "../help.html", sharedUrl: "../shared.html?from=popplay/index.html", leaderboard: false, h2cUrl: "../shared/vendor/html2canvas.min.js" });</script>
+<script>NPS.initParent({ helpUrl: "../help.html", sharedUrl: "../shared.html?from=popplay/index.html", leaderboard: true, boardUrl: "../leaderboard.html?from=popplay/index.html", h2cUrl: "../shared/vendor/html2canvas.min.js" });</script>
 <script src="../shared/bars.js"></script>
 </body>
 </html>

@@ -10,7 +10,9 @@
 <title>Bảng xếp hạng · Night Play</title>
 <script>
 try{var t=localStorage.getItem("theme")}catch(e){}
-document.documentElement.dataset.theme=t||"dark";
+var f=new URLSearchParams(location.search).get("from"),pop=f==="popplay/index.html";
+document.documentElement.dataset.app=pop?"popplay":"cozyplay";
+document.documentElement.dataset.theme=t||(pop?"light":"dark");
 (function(){var q=new URLSearchParams(location.search).get("lang"),s=null;try{s=localStorage.getItem("lang")}catch(e){}
 var l=[q,s].find(function(x){return x==="vi"||x==="en"})||(/^vi/i.test(navigator.language||"")?"vi":"en");document.documentElement.lang=l;})();
 </script>
@@ -42,6 +44,7 @@ main{flex:1;min-height:0;width:100%;max-width:640px;margin:0 auto;padding:10px 1
 #list{flex:1;min-height:0;overflow:hidden}
 .row{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:8px;height:52px;border-bottom:1px solid var(--line)}
 .row:last-child{border-bottom:0}
+#gameSel{height:38px;border:0;border-radius:19px;padding:0 14px;background:var(--panel);color:var(--ink);font:inherit;font-weight:700;max-width:70vw}
 .rk{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:15px;background:var(--bg);border:2px solid var(--line)}
 .rk.g1{background:#F5C542;border-color:#F5C542;color:#3a2e00}.rk.g2{background:#C9CED8;border-color:#C9CED8;color:#22252d}.rk.g3{background:#D79A6B;border-color:#D79A6B;color:#2f1a08}
 .nick{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}.nick small{font-weight:600;color:var(--muted);margin-left:6px}
@@ -53,6 +56,7 @@ main{flex:1;min-height:0;width:100%;max-width:640px;margin:0 auto;padding:10px 1
 .mine form{display:flex;gap:6px;flex:1;min-width:200px;justify-content:flex-end}
 .mine input{flex:1;min-width:0;max-width:200px;padding:8px 10px;border-radius:10px;border:2px solid var(--line);background:var(--bg)}
 .mine button{padding:8px 14px;border-radius:10px;background:var(--accent);color:var(--on-accent);font-weight:800}
+.kidn{padding:6px 12px;border-radius:999px;background:var(--bg);border:2px solid var(--accent);font-size:15px;white-space:nowrap}.mine button.alt{background:var(--bg);color:var(--ink);border:2px solid var(--line);padding:6px 10px}
 .mine .err{color:var(--warn);font-size:12.5px;flex-basis:100%;text-align:right;min-height:0}
 .foot{flex:none;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 18px;padding:6px 16px;border-top:1px solid var(--line);background:linear-gradient(180deg,transparent,var(--hero1))}
 .foot nav{display:flex;gap:0 16px}.foot nav a{padding:6px 0;font-size:14px;color:var(--ink);text-decoration:none}.foot p{margin:0;font-size:12px;opacity:.75}
@@ -61,7 +65,7 @@ main{flex:1;min-height:0;width:100%;max-width:640px;margin:0 auto;padding:10px 1
 </head>
 <body>
 <nav class="nav" aria-label="Main">
-  <a class="mark" href="cozyplay/index.html"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="var(--accent)"/><path d="M42 40A16 16 0 1 1 26 14a13 13 0 0 0 16 26z" fill="#fff"/><circle cx="44" cy="20" r="2.5" fill="#fff"/></svg><span>Night Play</span></a>
+  <a class="mark" id="mk" href="cozyplay/index.html"><svg id="mkSvg" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="var(--accent)"/><path d="M42 40A16 16 0 1 1 26 14a13 13 0 0 0 16 26z" fill="#fff"/><circle cx="44" cy="20" r="2.5" fill="#fff"/></svg><span id="mkT">Night Play</span></a>
   <div class="tools">
     <a class="back" id="back" href="cozyplay/index.html">←<span id="backT"></span></a>
     <div class="seg" role="group" id="langSeg"><button type="button" data-l="vi" lang="vi" aria-label="Tiếng Việt">VI</button><button type="button" data-l="en" lang="en" aria-label="English">EN</button></div>
@@ -92,33 +96,45 @@ main{flex:1;min-height:0;width:100%;max-width:640px;margin:0 auto;padding:10px 1
 const $ = id => document.getElementById(id), root = document.documentElement;
 const TXT = {
   vi: { back: "Night Play", h: "Bảng xếp hạng", sub: "Chỉ những người chủ động khoe điểm mới có tên ở đây.", day: "Hôm nay", week: "7 ngày", all: "Mọi thời đại", empty: "Chưa ai khoe điểm. Hãy là người đầu tiên!", you: "(bạn)", pts: "điểm",
-        best: "Điểm cao nhất của bạn ở", brag: "Khoe điểm", nick: "Biệt danh", bad: "Biệt danh chưa hợp lệ (2–16 ký tự, không chứa link/email).", slow: "Thao tác quá nhanh, thử lại sau.", err: "Có lỗi, vui lòng thử lại.", ok: "Đã lên bảng xếp hạng!", none: "Bạn chưa có điểm ở game này. Hãy chơi một ván!",
+        best: "Điểm cao nhất của bạn ở", reroll: "Đổi tên vui khác", brag: "Khoe điểm", nick: "Biệt danh", bad: "Biệt danh chưa hợp lệ (2–16 ký tự, không chứa link/email).", slow: "Thao tác quá nhanh, thử lại sau.", err: "Có lỗi, vui lòng thử lại.", ok: "Đã lên bảng xếp hạng!", none: "Bạn chưa có điểm ở game này. Hãy chơi một ván!",
         home: "Trang chủ", priv: "Quyền riêng tư", help: "Kết quả chơi hộ", rights: "Bảo lưu mọi quyền.", theme: "Sáng / Tối", err2: "Không tải được bảng xếp hạng.", loading: "Đang tải…" },
   en: { back: "Night Play", h: "Leaderboard", sub: "Only people who chose to show off their score appear here.", day: "Today", week: "7 days", all: "All time", empty: "Nobody has shown off a score yet. Be the first!", you: "(you)", pts: "pts",
-        best: "Your best score in", brag: "Show off", nick: "Nickname", bad: "Invalid nickname (2–16 characters, no links/emails).", slow: "Too many tries, please wait.", err: "Something went wrong, please try again.", ok: "You're on the leaderboard!", none: "No score in this game yet. Play a round!",
+        best: "Your best score in", reroll: "New fun name", brag: "Show off", nick: "Nickname", bad: "Invalid nickname (2–16 characters, no links/emails).", slow: "Too many tries, please wait.", err: "Something went wrong, please try again.", ok: "You're on the leaderboard!", none: "No score in this game yet. Play a round!",
         home: "Home", priv: "Privacy", help: "Shared results", rights: "All rights reserved.", theme: "Light / Dark", err2: "Couldn't load the leaderboard.", loading: "Loading…" }
 };
 const L = () => TXT[root.lang === "en" ? "en" : "vi"];
-const GAME_IDS = Object.keys(NPS.GAMES).filter(g => NPS.GAMES[g].board);
+const POP = document.documentElement.dataset.app === "popplay", BRAND = POP ? "Pop Play" : "Night Play", HOME = POP ? "popplay/index.html" : "cozyplay/index.html";
+const GAME_IDS = Object.keys(NPS.GAMES).filter(g => NPS.GAMES[g].board && (NPS.GAMES[g].site === "popplay") === POP);
 let game = (new URLSearchParams(location.search).get("game") || "") ; if (!GAME_IDS.includes(game)) game = GAME_IDS[0];
 let period = "week", seq = 0, last = null;
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+/* điểm cao lưu trên máy: game cũ có khoá riêng; game mới theo quy ước np-hi-<id game> (xem shared/bridge.js) */
 const bestKey = { "dap-deadline": "dapdeadline-hi" };
-const myBest = () => { try { return +localStorage.getItem(bestKey[game]) || 0; } catch (e) { return 0; } };
+const myBest = () => { try { return +localStorage.getItem(bestKey[game] || ("np-hi-" + game)) || 0; } catch (e) { return 0; } };
 
 function texts() {
-  const t = L(); document.title = t.h + " · Night Play"; $("backT").textContent = t.back; $("h").textContent = t.h; $("sub").textContent = t.sub;
+  const t = L(); document.title = t.h + " · " + BRAND; $("backT").textContent = BRAND; $("h").textContent = t.h; $("sub").textContent = t.sub;
   document.querySelectorAll("#period button").forEach(b => { b.textContent = t[b.dataset.p]; b.setAttribute("aria-pressed", String(b.dataset.p === period)); });
-  $("fHome").textContent = t.home; $("fPriv").textContent = t.priv; $("fHelp").textContent = t.help; $("copy").textContent = "© " + new Date().getFullYear() + " Night Play. " + t.rights;
+  $("fHome").textContent = t.home; $("fPriv").textContent = t.priv; $("fHelp").textContent = t.help; $("copy").textContent = "© " + new Date().getFullYear() + " " + BRAND + ". " + t.rights;
   $("themeBtn").setAttribute("aria-label", t.theme);
   document.querySelectorAll("#langSeg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.l === root.lang)));
-  $("gameSeg").innerHTML = GAME_IDS.map(g => '<button type="button" data-g="' + g + '" aria-pressed="' + (g === game) + '">' + esc(NPS.gameName(g)) + "</button>").join("");
+  $("gameSeg").innerHTML = GAME_IDS.length > 3
+    ? '<select id="gameSel" aria-label="Game">' + GAME_IDS.map(g => '<option value="' + g + '"' + (g === game ? " selected" : "") + ">" + esc(NPS.gameName(g)) + "</option>").join("") + "</select>"
+    : GAME_IDS.map(g => '<button type="button" data-g="' + g + '" aria-pressed="' + (g === game) + '">' + esc(NPS.gameName(g)) + "</button>").join("");
 }
+let kidNick = "";
 function renderMine() {
-  const t = L(), b = myBest(), el = $("mine");
+  const t = L(), b = myBest(), el = $("mine"), kid = NPS.isKid(game);
   if (!b) { el.innerHTML = '<span style="color:var(--muted)">' + esc(t.none) + "</span>"; return; }
-  el.innerHTML = '<span>' + esc(t.best) + " " + esc(NPS.gameName(game)) + ': <b>' + b + '</b></span><form id="bragF"><input id="bragN" maxlength="16" autocomplete="nickname" placeholder="' + esc(t.nick) + '" value="' + esc(NPS.nickGet()) + '" aria-label="' + esc(t.nick) + '"><button type="submit">' + esc(t.brag) + '</button></form><span class="err" id="bragE" role="alert"></span>';
-  $("bragF").onsubmit = e => { e.preventDefault(); const n = $("bragN").value.trim().replace(/\s+/g, " "), btn = e.target.querySelector("button"); btn.disabled = true;
+  if (kid) {
+    if (!kidNick || !NPS.isKidName(kidNick, root.lang)) kidNick = NPS.isKidName(NPS.nickGet(), root.lang) ? NPS.nickGet() : NPS.kidName(root.lang);
+    el.innerHTML = '<span>' + esc(t.best) + " " + esc(NPS.gameName(game)) + ': <b>' + b + '</b></span><form id="bragF"><b class="kidn" id="kidn">' + esc(kidNick) + '</b><button type="button" id="reroll" class="alt">🎲</button><button type="submit">' + esc(t.brag) + '</button></form><span class="err" id="bragE" role="alert"></span>';
+    $("reroll").setAttribute("aria-label", t.reroll); $("reroll").title = t.reroll;
+    $("reroll").onclick = () => { kidNick = NPS.kidName(root.lang); $("kidn").textContent = kidNick; };
+  } else {
+    el.innerHTML = '<span>' + esc(t.best) + " " + esc(NPS.gameName(game)) + ': <b>' + b + '</b></span><form id="bragF"><input id="bragN" maxlength="16" autocomplete="nickname" placeholder="' + esc(t.nick) + '" value="' + esc(NPS.nickGet()) + '" aria-label="' + esc(t.nick) + '"><button type="submit">' + esc(t.brag) + '</button></form><span class="err" id="bragE" role="alert"></span>';
+  }
+  $("bragF").onsubmit = e => { e.preventDefault(); const n = kid ? kidNick : $("bragN").value.trim().replace(/\s+/g, " "), btn = e.target.querySelector("button[type=submit]"); btn.disabled = true;
     NPS.submitScore(game, b, n).then(() => { NPS.nickSet(n); $("bragE").style.color = "var(--ok)"; $("bragE").textContent = t.ok; load(); })
       .catch(x => { btn.disabled = false; $("bragE").style.color = ""; $("bragE").textContent = x.message === "badNick" ? t.bad : x.message === "slow" ? t.slow : t.err; }); };
 }
@@ -137,9 +153,11 @@ function load() {
 function setLang(l, save) { root.lang = l; if (save) try { localStorage.setItem("lang", l); } catch (e) {} texts(); renderMine(); if (last) draw(last); }
 document.querySelectorAll("#langSeg button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.l, true)));
 document.querySelectorAll("#period button").forEach(b => b.addEventListener("click", () => { period = b.dataset.p; texts(); load(); }));
+$("gameSeg").addEventListener("change", e => { if (!e.target.matches("select")) return; game = e.target.value; last = null; texts(); renderMine(); load(); });
 $("gameSeg").addEventListener("click", e => { const b = e.target.closest("button[data-g]"); if (!b || b.dataset.g === game) return; game = b.dataset.g; last = null; texts(); renderMine(); load(); });
 $("themeBtn").addEventListener("click", () => { const n = root.dataset.theme === "dark" ? "light" : "dark"; root.dataset.theme = n; document.querySelector("meta[name=theme-color]").content = n === "dark" ? "#0E1020" : "#F3F0FA"; try { localStorage.setItem("theme", n); } catch (e) {} });
 let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(load, 200); });
+if (POP) { $("mk").href = HOME; $("back").href = HOME; $("mkT").textContent = BRAND; $("mkSvg").innerHTML = '<rect width="64" height="64" rx="18" fill="var(--accent)"/><path d="M25 18l22 14-22 14z" fill="#fff"/>'; document.querySelector("meta[name=theme-color]").content = root.dataset.theme === "dark" ? "#1B2340" : "#FFF6EC"; }
 texts(); renderMine(); requestAnimationFrame(load); if (document.fonts && document.fonts.ready) document.fonts.ready.then(load);
 </script>
 <script src="shared/updated.js"></script>

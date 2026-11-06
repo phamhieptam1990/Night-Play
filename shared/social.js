@@ -13,15 +13,15 @@ window.NPS = (function () {
   /* Danh sách game hỗ trợ. Thêm game mới ở đây (và SCORE_GAMES ở server/app.js nếu có bảng xếp hạng). */
   var GAMES = {
     "dap-deadline": { name: { vi: "Đập Deadline", en: "Smash the Deadline" }, url: "cozyplay/games/dap-deadline/index.html", board: true, site: "cozyplay" },
-    /* Pop Play (trẻ em): chơi hộ + chụp màn hình bật; bảng xếp hạng TẮT (board:false) vì cần biệt danh do trẻ tự gõ */
-    "game-1": { name: { vi: "Mèo con", en: "Kitty" }, url: "popplay/games/game1/index.html", board: false, site: "popplay" },
-    "game-2": { name: { vi: "Gấu nâu", en: "Bear" }, url: "popplay/games/game2/index.html", board: false, site: "popplay" },
-    "game-3": { name: { vi: "Thỏ hồng", en: "Bunny" }, url: "popplay/games/game3/index.html", board: false, site: "popplay" },
-    "game-4": { name: { vi: "Ếch xanh", en: "Froggy" }, url: "popplay/games/game4/index.html", board: false, site: "popplay" },
-    "game-5": { name: { vi: "Cá vàng", en: "Goldfish" }, url: "popplay/games/game5/index.html", board: false, site: "popplay" },
-    "game-6": { name: { vi: "Rô-bốt", en: "Robot" }, url: "popplay/games/game6/index.html", board: false, site: "popplay" },
-    "game-7": { name: { vi: "Ngôi sao", en: "Star" }, url: "popplay/games/game7/index.html", board: false, site: "popplay" },
-    "game-8": { name: { vi: "Mặt trời", en: "Sunny" }, url: "popplay/games/game8/index.html", board: false, site: "popplay" }
+    /* Pop Play (trẻ em): bảng xếp hạng chỉ dùng TÊN VUI CÓ SẴN (kids:true), không cho gõ tay */
+    "game-1": { name: { vi: "Mèo con", en: "Kitty" }, url: "popplay/games/game1/index.html", board: true, kids: true, site: "popplay" },
+    "game-2": { name: { vi: "Gấu nâu", en: "Bear" }, url: "popplay/games/game2/index.html", board: true, kids: true, site: "popplay" },
+    "game-3": { name: { vi: "Thỏ hồng", en: "Bunny" }, url: "popplay/games/game3/index.html", board: true, kids: true, site: "popplay" },
+    "game-4": { name: { vi: "Ếch xanh", en: "Froggy" }, url: "popplay/games/game4/index.html", board: true, kids: true, site: "popplay" },
+    "game-5": { name: { vi: "Cá vàng", en: "Goldfish" }, url: "popplay/games/game5/index.html", board: true, kids: true, site: "popplay" },
+    "game-6": { name: { vi: "Rô-bốt", en: "Robot" }, url: "popplay/games/game6/index.html", board: true, kids: true, site: "popplay" },
+    "game-7": { name: { vi: "Ngôi sao", en: "Star" }, url: "popplay/games/game7/index.html", board: true, kids: true, site: "popplay" },
+    "game-8": { name: { vi: "Mặt trời", en: "Sunny" }, url: "popplay/games/game8/index.html", board: true, kids: true, site: "popplay" }
   };
 
   var STR = {
@@ -32,7 +32,7 @@ window.NPS = (function () {
       bragOk: "Đã lên bảng xếp hạng!", bragView: "Xem bảng xếp hạng", badNick: "Biệt danh chưa hợp lệ (2–16 ký tự, không chứa link/email).", scoreLine: "Điểm của bạn",
       gotT: "Bạn bè đã chơi hộ xong!", gotP: "Kết quả chơi hộ", points: "điểm", view: "Xem kết quả", rank: "Bảng xếp hạng", results: "Kết quả chơi hộ",
       shot: "Chụp màn hình", shotT: "Ảnh chụp màn hình", shotErr: "Không chụp được màn hình. Vui lòng thử lại.", save: "Lưu ảnh", shareImg: "Chia sẻ ảnh", copyImg: "Sao chép ảnh", imgCopied: "Đã sao chép ảnh",
-      linkCopied: "Đã sao chép link, dán vào Zalo, Messenger… để gửi bạn bè", viaApps: "Link đã được sao chép: dán vào Zalo, Messenger… hoặc gửi nhanh qua:", shareText: "Chơi hộ mình một lượt {g} nhé!", shotText: "Mình vừa chơi {g} trên {b}!", sendApps: "Gửi qua Zalo, Messenger…" },
+      linkCopied: "Đã sao chép link, dán vào Zalo, Messenger… để gửi bạn bè", viaApps: "Link đã được sao chép: dán vào Zalo, Messenger… hoặc gửi nhanh qua:", shareText: "Chơi hộ mình một lượt {g} nhé!", shotText: "Mình vừa chơi {g} trên {b}!", kidName: "Tên vui của bạn", reroll: "Đổi tên khác", kidP: "Bạn được đặt tên vui tự động, không cần gõ gì cả. Chỉ tên vui và điểm được lưu, và chỉ khi bạn bấm \"Khoe điểm\".", bestIn: "Điểm cao nhất của bạn ở", sendApps: "Gửi qua Zalo, Messenger…" },
     en: { share: "Ask a friend to play", shareT: "Ask a friend to play one round for you", shareP: "Send this link to a friend. They play one round for you and the result is sent back to you.",
       copy: "Copy link", copied: "Copied", send: "Send via…", once: "The link works once and expires in 24 hours. The helper cannot share it further. We don't store your info: the result is encrypted and only you can read it.",
       waiting: "Waiting for your friend to open the link…", playing: "Your friend is playing…", done: "Result is in!", expired: "This link has expired.", close: "Close", err: "Something went wrong, please try again.", slow: "Too many tries, please wait a few minutes.", noShare: "This game doesn't support this yet.",
@@ -40,9 +40,21 @@ window.NPS = (function () {
       bragOk: "You're on the leaderboard!", bragView: "View leaderboard", badNick: "Invalid nickname (2–16 characters, no links/emails).", scoreLine: "Your score",
       gotT: "Your friend finished playing for you!", gotP: "Result", points: "points", view: "View result", rank: "Leaderboard", results: "Shared results",
       shot: "Screenshot", shotT: "Screenshot", shotErr: "Couldn't capture the screen. Please try again.", save: "Save image", shareImg: "Share image", copyImg: "Copy image", imgCopied: "Image copied",
-      linkCopied: "Link copied. Paste it into Zalo, Messenger… to send it to friends", viaApps: "Link copied: paste it into Zalo, Messenger… or send quickly via:", shareText: "Play a round of {g} for me!", shotText: "I just played {g} on {b}!", sendApps: "Send via Zalo, Messenger…" }
+      linkCopied: "Link copied. Paste it into Zalo, Messenger… to send it to friends", viaApps: "Link copied: paste it into Zalo, Messenger… or send quickly via:", shareText: "Play a round of {g} for me!", shotText: "I just played {g} on {b}!", kidName: "Your fun name", reroll: "New name", kidP: "You get a fun name automatically, no typing needed. Only the fun name and score are saved, and only if you press \"Show off score\".", bestIn: "Your best score in", sendApps: "Send via Zalo, Messenger…" }
   };
   var brandOf = function (id) { var g = GAMES[id]; return g && g.site === "popplay" ? "Pop Play" : "Night Play"; };
+  /* Tên vui cho trẻ em: ghép từ danh sách có sẵn (phải khớp KID_NAMES ở server/app.js) */
+  var KID_NAMES = {
+    vi: { a: ["Mèo", "Gấu", "Thỏ", "Ếch", "Cá", "Voi", "Chim", "Cú", "Hổ", "Sóc"], j: ["Vui", "Nhanh", "Giỏi", "Khỏe", "Xinh", "Ngoan", "Siêu", "Lém"] },
+    en: { a: ["Cat", "Bear", "Bunny", "Frog", "Fish", "Owl", "Tiger", "Lion", "Panda", "Duck"], j: ["Happy", "Swift", "Brave", "Jolly", "Sunny", "Lucky", "Super", "Zippy"] }
+  };
+  var pick = function (a) { return a[Math.floor(Math.random() * a.length)]; };
+  function kidName(l) { var k = KID_NAMES[l === "en" ? "en" : "vi"], n = 10 + Math.floor(Math.random() * 90); return l === "en" ? pick(k.j) + " " + pick(k.a) + " " + n : pick(k.a) + " " + pick(k.j) + " " + n; }
+  /* l = "vi" | "en" để chỉ nhận tên đúng ngôn ngữ đó; bỏ trống = nhận cả hai */
+  function isKidName(n, l) { var p = String(n).split(" "); if (p.length !== 3 || !/^[1-9]\d$/.test(p[2])) return false;
+    var vi = KID_NAMES.vi.a.indexOf(p[0]) > -1 && KID_NAMES.vi.j.indexOf(p[1]) > -1, en = KID_NAMES.en.j.indexOf(p[0]) > -1 && KID_NAMES.en.a.indexOf(p[1]) > -1;
+    return l === "vi" ? vi : l === "en" ? en : (vi || en); }
+  var isKid = function (id) { return !!(GAMES[id] && GAMES[id].kids); };
   var lang = function () { return document.documentElement.lang === "en" ? "en" : "vi"; };
   var T = function (k) { return STR[lang()][k] || k; };
   var gameName = function (id) { var g = GAMES[id]; return g ? g.name[lang()] : id; };
@@ -155,6 +167,7 @@ window.NPS = (function () {
     ".nps-bd{position:absolute;inset:0;z-index:2;background:rgba(8,9,20,.66);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .22s}.nps-bd.on{opacity:1;pointer-events:auto}" +
     ".nps-dlg h3{margin:0 0 6px;font-size:20px}.nps-big{font-size:44px;font-weight:800;line-height:1.1;margin:8px 0;color:var(--accent,#7C5CFF)}" +
     ".nps-cam{right:calc(var(--nps-r,max(12px,env(safe-area-inset-right))) + 54px)}.nps-fab:disabled{opacity:.5}" +
+    ".nps-kid{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:2px 0 4px}.nps-kid span{font-size:13px;opacity:.8}.nps-kid b{font-size:19px;padding:6px 14px;border-radius:999px;background:var(--bg,#fff);border:2px solid var(--accent,#7C5CFF)}.nps-kid button{height:38px;padding:0 14px;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;background:var(--bg,#eee);color:inherit;border:2px solid var(--line,#ccc)}" +
     ".nps-row.wrap{flex-wrap:wrap}.nps-row.wrap .nps-p{flex:1 1 100%;order:-1}.nps-row.wrap .nps-s{flex:1 1 40%}" +
     ".nps-toast{position:absolute;left:50%;top:max(14px,env(safe-area-inset-top));transform:translate(-50%,-8px);z-index:4;max-width:calc(100% - 140px);padding:10px 16px;border-radius:14px;background:rgba(15,16,32,.92);color:#fff;font:600 14px/1.35 system-ui,sans-serif;text-align:center;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}.nps-toast.on{opacity:1;transform:translate(-50%,0)}" +
     ".nps-apps{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.nps-apps a{flex:1;min-width:110px;display:inline-flex;align-items:center;justify-content:center;height:42px;border-radius:12px;text-decoration:none;font-weight:700;font-size:14px;color:inherit;background:var(--bg,#eee);border:2px solid var(--line,#ccc)}" +
@@ -229,17 +242,20 @@ window.NPS = (function () {
 
     function showBrag(game, score) {
       var g = GAMES[game]; if (!leaderboard || !g || !g.board || score < 1) return;
-      sheet.innerHTML = '<h3>' + esc(T("bragT")) + '</h3><p>' + esc(gameName(game)) + ' · ' + esc(T("scoreLine")) + ': <b>' + score + '</b>. ' + esc(T("bragP")) + '</p>' +
-        '<input id="npsNick" maxlength="16" autocomplete="nickname" placeholder="' + esc(T("nick")) + '" value="' + esc(nickGet()) + '"><p class="nps-err" id="npsErr" role="alert"></p>' +
+      var kid = !!g.kids, kname = kid ? (isKidName(nickGet(), lang()) ? nickGet() : kidName(lang())) : "";
+      sheet.innerHTML = '<h3>' + esc(T("bragT")) + '</h3><p>' + esc(gameName(game)) + ' · ' + esc(T("scoreLine")) + ': <b>' + score + '</b>. ' + esc(T(kid ? "kidP" : "bragP")) + '</p>' +
+        (kid ? '<div class="nps-kid"><span>' + esc(T("kidName")) + '</span><b id="npsKid">' + esc(kname) + '</b><button type="button" id="npsRe">🎲 ' + esc(T("reroll")) + '</button></div><p class="nps-err" id="npsErr" role="alert"></p>'
+              : '<input id="npsNick" maxlength="16" autocomplete="nickname" placeholder="' + esc(T("nick")) + '" value="' + esc(nickGet()) + '"><p class="nps-err" id="npsErr" role="alert"></p>') +
         '<div class="nps-row"><button class="nps-s" id="npsNo" type="button">' + esc(T("skip")) + '</button><button class="nps-p" id="npsYes" type="button">' + esc(T("brag")) + '</button></div>';
       sheet.hidden = false;
       document.getElementById("npsNo").onclick = hideSheet;
+      if (kid) document.getElementById("npsRe").onclick = function () { kname = kidName(lang()); document.getElementById("npsKid").textContent = kname; };
       document.getElementById("npsYes").onclick = function () {
-        var n = document.getElementById("npsNick").value.trim().replace(/\s+/g, " "), btn = this; btn.disabled = true;
+        var n = kid ? kname : document.getElementById("npsNick").value.trim().replace(/\s+/g, " "), btn = this; btn.disabled = true;
         submitScore(game, score, n).then(function () {
           nickSet(n);
           sheet.innerHTML = '<h3>' + esc(T("bragOk")) + '</h3><div class="nps-row"><button class="nps-s" id="npsNo" type="button">' + esc(T("close")) + '</button><button class="nps-p" id="npsView" type="button">' + esc(T("bragView")) + '</button></div>';
-          document.getElementById("npsNo").onclick = hideSheet; document.getElementById("npsView").onclick = function () { location.href = boardUrl + "?game=" + encodeURIComponent(game); };
+          document.getElementById("npsNo").onclick = hideSheet; document.getElementById("npsView").onclick = function () { location.href = boardUrl + (boardUrl.indexOf("?") > -1 ? "&" : "?") + "game=" + encodeURIComponent(game); };
         }).catch(function (e) { btn.disabled = false; document.getElementById("npsErr").textContent = T(e.message === "slow" || e.message === "badNick" ? e.message : "err"); });
       };
     }
@@ -329,6 +345,6 @@ window.NPS = (function () {
     setInterval(tick, 8000); document.addEventListener("visibilitychange", tick); poll();
   }
 
-  return { brandOf: brandOf, GAMES: GAMES, T: T, lang: lang, gameName: gameName, load: load, save: save, prune: prune, linkFor: linkFor, createShare: createShare, poll: poll, onResult: onResult,
+  return { kidName: kidName, isKidName: isKidName, isKid: isKid, brandOf: brandOf, GAMES: GAMES, T: T, lang: lang, gameName: gameName, load: load, save: save, prune: prune, linkFor: linkFor, createShare: createShare, poll: poll, onResult: onResult,
     claim: claim, sendResult: sendResult, submitScore: submitScore, getScores: getScores, nickGet: nickGet, nickSet: nickSet, initParent: initParent, TTL: TTL, STR: STR };
 })();

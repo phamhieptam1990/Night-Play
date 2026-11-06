@@ -26,7 +26,7 @@
   /* ----- HEADER ----- */
   function navCrowded(nav, tools) {
     var label = nav.querySelector(".mark span:last-child");
-    return nav.scrollWidth > nav.clientWidth + 1 || (label && label.scrollWidth > label.clientWidth + 1) || tools.getBoundingClientRect().height > 60;
+    return nav.scrollWidth > nav.clientWidth + 1 || nav.scrollWidth > document.documentElement.clientWidth + 1 || (label && label.scrollWidth > label.clientWidth + 1) || tools.getBoundingClientRect().height > 60;
   }
   function expandNav(nav) {
     var st = nav._bars; if (!st) return;

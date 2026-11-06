@@ -419,7 +419,16 @@ const sha256hex = s => crypto.createHash("sha256").update(String(s)).digest("hex
 const RID = "[A-Za-z0-9_-]{22}", HEX64 = /^[a-f0-9]{64}$/;
 
 /* Game có bảng xếp hạng (chỉ game dành cho người lớn; trang trẻ em không có). max = điểm tối đa hợp lệ của 1 lượt chơi. */
-const SCORE_GAMES = { "dap-deadline": { max: 5000 } };
+/* Game trẻ em (kids:true): KHÔNG nhận tên gõ tay. Chỉ nhận tên vui ghép từ danh sách có sẵn: "<Con vật> <Tính từ> <số 10-99>" (VI) hoặc "<Adj> <Animal> <số>" (EN).
+   Danh sách này phải khớp với KID_NAMES trong shared/social.js. */
+const KID_NAMES = {
+  vi: { a: ["Mèo", "Gấu", "Thỏ", "Ếch", "Cá", "Voi", "Chim", "Cú", "Hổ", "Sóc"], j: ["Vui", "Nhanh", "Giỏi", "Khỏe", "Xinh", "Ngoan", "Siêu", "Lém"] },
+  en: { a: ["Cat", "Bear", "Bunny", "Frog", "Fish", "Owl", "Tiger", "Lion", "Panda", "Duck"], j: ["Happy", "Swift", "Brave", "Jolly", "Sunny", "Lucky", "Super", "Zippy"] }
+};
+const kidNickOk = n => { const p = String(n).split(" "); if (p.length !== 3 || !/^[1-9]\d$/.test(p[2])) return false;
+  return (KID_NAMES.vi.a.includes(p[0]) && KID_NAMES.vi.j.includes(p[1])) || (KID_NAMES.en.j.includes(p[0]) && KID_NAMES.en.a.includes(p[1])); };
+const POP_GAMES = Object.fromEntries([1, 2, 3, 4, 5, 6, 7, 8].map(i => ["game-" + i, { max: 1000, kids: true }]));   // max = điểm tối đa hợp lệ (chỉnh theo từng game khi có)
+const SCORE_GAMES = { "dap-deadline": { max: 5000 }, ...POP_GAMES };
 const nickOk = n => /^[\p{L}\p{N} _.\-]{2,16}$/u.test(n) && !/https?|www\.|\.(com|net|org|vn|io)\b|@/i.test(n);
 
 /* Chỉ ghi khi người chơi chủ động bấm "Khoe điểm". */
@@ -427,7 +436,7 @@ route("POST", /^\/api\/scores$/, async ({ body, ip }) => {
   const g = SCORE_GAMES[body.game], score = body.score;
   if (!g || !Number.isInteger(score) || score < 1 || score > g.max) return out(400, { error: "bad_input" });
   const nick = String(body.nick || "").trim().replace(/\s+/g, " ");
-  if (!nickOk(nick)) return out(400, { error: "bad_nick" });
+  if (g.kids ? !kidNickOk(nick) : !nickOk(nick)) return out(400, { error: "bad_nick" });
   if (await limited("sc:" + ipHash(ip), 6, 3600000)) return out(429, { error: "slow_down" });
   await db.query("insert into scores(game, nick, score, day) values ($1, $2, $3, (now() at time zone $4)::date)", [body.game, nick, score, TZ]);
   return out(200, { ok: true });
