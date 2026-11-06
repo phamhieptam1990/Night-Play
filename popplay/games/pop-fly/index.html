@@ -417,7 +417,11 @@ $("play").addEventListener("pointerdown",e=>{if(e.target.closest(".ov")||e.targe
 $("askBtn").addEventListener("click",()=>{const S=PF.S;say(S&&S.speak?S.speak:t("st.p"))});
 $("soundBtn").addEventListener("click",()=>{sound=!sound;if(window.NPAudio)NPAudio.set(sound);else if(!sound&&window.speechSynthesis)speechSynthesis.cancel();syncSound()});
 function syncSound(){$("soundBtn").textContent=sound?"🔊":"🔇";$("soundBtn").setAttribute("aria-label",t("sound")+(sound?"":" (off)"))}
-$("langBtn").addEventListener("click",()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}applyLang()});
+$("langBtn").addEventListener("click",()=>{
+  const S=PF.S,mid=!HELPER&&S&&running&&!S.over&&S.type==="letters",dl=mid&&S.daily;   /* chữ cái vi/en khác bộ → đang chơi dở thì làm lại ván bằng bộ chữ mới, kẻo trộn Ă Â với A B */
+  LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}applyLang();
+  if(mid){if(window.NPAudio)NPAudio.silence();dl?startDaily():startRound("letters")}
+});
 
 /* ===== MÀN CHỌN TRÒ + KHOÁ NIGHT PASS + CỔNG PHỤ HUYNH ===== */
 const passToken=()=>{try{const p=JSON.parse(localStorage.getItem("pass"));return p&&p.token}catch(e){return null}};
