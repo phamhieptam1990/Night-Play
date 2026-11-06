@@ -7,7 +7,8 @@
     "db:migrate:dev": "node server/db/migrate.js dev",
     "db:migrate:prod": "node server/db/migrate.js production --yes",
     "db:seed:dev": "node server/db/seed-dev.js",
-    "db:clean:dev": "node server/db/clean-dev.js"
+    "db:clean:dev": "node server/db/clean-dev.js",
+    "pass:dev": "node server/db/dev-pass.js"
   },
   "dependencies": {
     "pg": "^8.13.0"
