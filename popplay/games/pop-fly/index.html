@@ -168,7 +168,7 @@ const W=360,BX=96,R=44;let H=480;
 const PF=window.PF={W,BX,R,t,addI18n,pickOf,types:{},pro:null,order:["letters","stars","math"],S:null,dim:{W:360,H:480},safe:{top:0,bottom:0,pad:34},skins:{},catalog:{letters:["default","jungle","ocean","snow","night","fire"],stars:["default","galaxy","moon","dragon","aurora","candy"],math:["default","rocket","sub","balloon","ufo","biplane"]},skinSel:{}};
 const curSkin=type=>{const m=PF.skins[type],id=PF.skinSel[type];return m&&id&&m[id]?m[id]:null};
 PF.skinSel=(()=>{try{return JSON.parse(localStorage.getItem("pf-skin"))||{}}catch(e){return {}}})();
-let sound=true,paused=false,running=false,pausedBy=null,raf=0,last=0;
+let sound=(window.NPAudio?NPAudio.get():true),paused=false,running=false,pausedBy=null,raf=0,last=0;
 const cv=$("cv"),ctx=cv.getContext("2d");let K=1,DPR=1;
 
 /* tiếng + giọng đọc (có sẵn trong trình duyệt, không tải gì thêm) */
@@ -327,7 +327,7 @@ function finishRound(){
   if(PF.pro&&PF.pro.trial)setTimeout(()=>PF.lockPro(),0);
 }
 PF.finishRound=finishRound;
-function goHome(){applyLayout("classic");running=false;paused=false;PF.S=null;$("pauseBtn").hidden=true;$("sc").textContent="0";renderDots();setAsk("","","");$("askTxt").textContent=t("st.p");showOv("ovStart");renderCards();draw()}
+function goHome(){if(window.NPAudio)NPAudio.silence();else if(window.speechSynthesis)speechSynthesis.cancel();applyLayout("classic");running=false;paused=false;PF.S=null;$("pauseBtn").hidden=true;$("sc").textContent="0";renderDots();setAsk("","","");$("askTxt").textContent=t("st.p");showOv("ovStart");renderCards();draw()}
 
 function pauseRound(by){if(!running||paused)return;paused=true;pausedBy=by==="user"?"user":"parent";if(window.speechSynthesis)speechSynthesis.cancel();if(pausedBy==="user"){$("ovPause").hidden=false}}
 function resumeRound(by){if(!paused)return;if(by==="parent"&&pausedBy==="user")return;paused=false;pausedBy=null;$("ovPause").hidden=true;last=performance.now()}
@@ -338,7 +338,7 @@ document.addEventListener("visibilitychange",()=>{if(document.hidden&&running&&!
 addEventListener("keydown",e=>{if(e.code==="Space"||e.key==="ArrowUp"){e.preventDefault();flap()}else if((e.key==="p"||e.key==="P")&&running){paused?resumeRound("user"):pauseRound("user")}});
 $("play").addEventListener("pointerdown",e=>{if(e.target.closest(".ov")||e.target.closest("button"))return;e.preventDefault();flap()});
 $("askBtn").addEventListener("click",()=>{const S=PF.S;say(S&&S.speak?S.speak:t("st.p"))});
-$("soundBtn").addEventListener("click",()=>{sound=!sound;if(!sound&&window.speechSynthesis)speechSynthesis.cancel();syncSound()});
+$("soundBtn").addEventListener("click",()=>{sound=!sound;if(window.NPAudio)NPAudio.set(sound);else if(!sound&&window.speechSynthesis)speechSynthesis.cancel();syncSound()});
 function syncSound(){$("soundBtn").textContent=sound?"🔊":"🔇";$("soundBtn").setAttribute("aria-label",t("sound")+(sound?"":" (off)"))}
 $("langBtn").addEventListener("click",()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}applyLang()});
 

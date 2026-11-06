@@ -13,6 +13,34 @@
 
    Quy ước điểm cao lưu trên máy: localStorage "np-hi-<id game>".
    Trang cha (shared/social.js, help.html) chỉ nhận tin từ đúng iframe của mình và cùng origin. */
+/* ÂM THANH: mọi game dùng chung một "công tắc" — khi rời game / đổi trò / ẩn tab thì TẮT HẲN tiếng
+   (giọng đọc, bộ tạo âm Web Audio, thẻ audio/video) rồi mới sang trò khác; bật/tắt được nhớ giữa các game. */
+(function () {
+  "use strict";
+  var ctxs = [];
+  ["AudioContext", "webkitAudioContext"].forEach(function (n) {
+    var C = window[n]; if (!C) return;
+    var W = function (o) { var c = new C(o); ctxs.push(c); return c; };
+    W.prototype = C.prototype; window[n] = W;
+  });
+  function stop(close) {
+    try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {}
+    ctxs.forEach(function (c) { try { close ? c.close() : c.suspend(); } catch (e) {} });
+    if (close) ctxs.length = 0;
+    try { document.querySelectorAll("audio,video").forEach(function (m) { m.pause(); }); } catch (e) {}
+  }
+  window.NPAudio = {
+    silence: function () { stop(false); },
+    kill: function () { stop(true); },
+    get: function () { try { return localStorage.getItem("np-sound") !== "0"; } catch (e) { return true; } },
+    set: function (on) { try { localStorage.setItem("np-sound", on ? "1" : "0"); } catch (e) {} if (!on) stop(false); }
+  };
+  addEventListener("pagehide", function () { stop(true); });
+  document.addEventListener("visibilitychange", function () { if (document.hidden) stop(false); });
+  addEventListener("message", function (e) {
+    if (e.source === parent && e.origin === location.origin && e.data && e.data.np === 1 && e.data.type === "stopAudio") stop(true);
+  });
+})();
 window.NP = (function () {
   "use strict";
   var q = new URLSearchParams(location.search), helper = q.get("helper") === "1", getter = null, pauseFn = null, resumeFn = null, initial = null;

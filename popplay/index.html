@@ -628,6 +628,7 @@ watchSwipe(document);
   e.addEventListener("mouseenter", () => revealHome()); })();
 function openGame(g){
   if(frame) return;
+  try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}
   window.Track && Track.play("popplay", g.id, g.name.vi || g.name.en);   // đếm lượt chơi ẩn danh
   const u = new URL(g.url, location.href), loader = $("loader"), t0 = performance.now();
   u.searchParams.set("lang", lang);
@@ -660,11 +661,19 @@ function openGame(g){
   }
   setTimeout(start, 600);        // dự phòng nếu trình duyệt không báo xong fullscreen
 }
+/* Tắt HẲN âm thanh của game cũ (giọng đọc + Web Audio) trước khi rời / mở game khác */
+function silenceGame(f){
+  try{ if(f && f.contentWindow) f.contentWindow.postMessage({ np:1, type:"stopAudio" }, location.origin); }catch(e){}
+  try{ if(f && f.contentWindow && f.contentWindow.NPAudio) f.contentWindow.NPAudio.kill(); }catch(e){}
+  try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}
+}
 function closeGame(){
   if(!frame) return;
+  silenceGame(frame);
   window.Track && Track.stop();
   hideHome();
   frame.remove(); frame = null; stopTimer();          // xoá iframe: giải phóng bộ nhớ, dừng âm thanh
+  try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}   // giọng đọc có thể còn trong hàng đợi của tab
   stage.classList.remove("on");
   document.documentElement.classList.remove("playing");
   document.title = pageTitle();

@@ -379,7 +379,7 @@ for(let i=0;i<n*n;i++){
 }
 buildGrid(3);
 
-let grid=DD_G3(),score=0,combo=0,best=0,timeLeft=ROUND,running=false,paused=false,spawnT=0,tickT=0,lastHit=0,sound=true,ac=null;
+let grid=DD_G3(),score=0,combo=0,best=0,timeLeft=ROUND,running=false,paused=false,spawnT=0,tickT=0,lastHit=0,sound=(window.NPAudio?NPAudio.get():true),ac=null;
 
 /* ===== CHẾ ĐỘ / ĐỘ KHÓ / GIAO DIỆN =====
    Lõi miễn phí chỉ có chế độ "Cổ điển". Các chế độ trả phí (Vô tận, Thử thách ngày, Boss), độ khó, giao diện và thống kê
@@ -903,7 +903,7 @@ if(CH){   /* mở bằng link thách đấu: chơi đúng ván Cổ điển 45 g
 if(!(window.NP&&NP.helper)&&passToken())DD.loadPro(false).catch(()=>{});   /* có Night Pass: mở khóa các chế độ trả phí */
 
 function syncSound(){$("soundIco").textContent=sound?"🔊":"🔇";$("soundTxt").textContent=" "+t("sound")+": "+t(sound?"on":"off");$("soundBtn").setAttribute("aria-pressed",sound);$("soundBtn").setAttribute("aria-label",t("sound")+": "+t(sound?"on":"off"))}
-$("soundBtn").addEventListener("click",()=>{sound=!sound;syncSound()});
+$("soundBtn").addEventListener("click",()=>{sound=!sound;if(window.NPAudio)NPAudio.set(sound);syncSound()});
 function applyLang(){
   document.documentElement.lang=LANG;setTitle();
   document.querySelectorAll("[data-i]").forEach(e=>{e.textContent=t(e.dataset.i)});
