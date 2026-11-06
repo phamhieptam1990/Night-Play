@@ -80,6 +80,12 @@ h1 span{color:var(--accent)}
 .desk[data-n="4"] .note{padding:3px}.desk[data-n="5"] .note,.desk[data-n="6"] .note{padding:1px;box-shadow:0 3px 0 rgba(0,0,0,.18)}
 .desk[data-n="5"] .stampmark span,.desk[data-n="6"] .stampmark span{font-size:calc(var(--w)*.04);padding:1px 4px;border-width:2px}
 .chip.dim{opacity:.4}
+.modebar .chip{position:relative}
+.modebar .chip.ib{width:46px;height:46px;min-height:0;padding:0;border-radius:50%;display:inline-grid;place-items:center}
+.modebar .chip.ib .ie{font-size:23px;line-height:1}
+.modebar.sm .chip.ib{width:40px;height:40px;min-height:0;padding:0}.modebar.sm .chip.ib .ie{font-size:20px}
+.modebar .chip i{position:absolute;top:-3px;right:-3px;font-size:11px;font-style:normal;line-height:1;background:var(--panel);border-radius:50%;padding:2px}
+.overlay .sel{display:none}   /* tên chế độ đã có trên các icon, không lặp lại bằng chữ */
 .top h1.lt{font-size:clamp(16px,4.6vw,24px)}
 .top h1.lt .probadge{margin-left:6px}
 .modebar[hidden]{display:none}
@@ -433,7 +439,7 @@ function renderEnd(){
   ov.innerHTML='<h2></h2><div class="rank"></div><p class="desc"></p>'+
     '<div class="legend"><span>'+t("end.score")+': <b>'+e.score+'</b></span><span>'+t("end.combo")+': <b>×'+e.best+'</b></span>'+
     '<span>'+t("end.rec")+': <b>'+Math.max(e.hi,e.score)+'</b></span></div>'+
-    (helper?'':'<div class="modebar sm" id="packBar" role="group" aria-label="'+t("setup.pack")+'"></div><div class="modebar sm" id="partnerBar" role="group" aria-label="'+t("setup.partner")+'"></div><div class="modebar" id="modeBar" role="group" aria-label="'+t("setup.mode")+'"></div><div class="modebar sm" id="gridBar" role="group" aria-label="'+t("setup.grid")+'"></div>')+'<div class="sel" id="selLine"></div>'+(helper?'':'<button class="big" id="againBtn">'+t("end.again")+'</button>')+
+    (helper?'':'')+''+(helper?'':'<button class="big" id="againBtn">'+t("end.again")+'</button>')+
     '<div class="tip"></div>';
   ov.querySelector("h2").textContent=mv(e.mode.title)||pk("end.title");ov.querySelector(".rank").textContent=e.r[en?3:1];
   ov.querySelector(".desc").textContent=e.r[en?4:2]+(e.newRec?" "+t("end.newrec"):"")+(e.mode.endLine?" "+e.mode.endLine(e.score):"");
@@ -445,8 +451,8 @@ let resumeFrom=(window.NP&&NP.helper&&NP.initialState&&NP.initialState.timeLeft)
 function renderStart(){
   const ov=$("overlay"),rf=resumeFrom;
   ov.innerHTML='<h2>'+(rf?t("resume.h"):pk("start.h"))+'</h2><p>'+(rf?(rf.mode==="endless"?t("resume.pl",{l:rf.lives|0,n:rf.score|0}):t("resume.p",{s:Math.ceil(Math.min(ROUND,rf.timeLeft)),n:rf.score|0})):pk("start.p"))+'</p>'+
-    (rf?'<div class="legend"><span>'+pk("leg1")+'</span><span>'+pk("leg2")+'</span><span>'+pk("leg3")+'</span><span>'+pk("leg4")+'</span></div>':'<div class="modebar sm" id="packBar" role="group" aria-label="'+t("setup.pack")+'"></div><div class="modebar sm" id="partnerBar" role="group" aria-label="'+t("setup.partner")+'"></div><div class="modebar" id="modeBar" role="group" aria-label="'+t("setup.mode")+'"></div><div class="modebar sm" id="gridBar" role="group" aria-label="'+t("setup.grid")+'"></div>')+
-    '<div class="sel" id="selLine"></div><button class="big" id="startBtn">'+(rf?t("resume.btn"):t("start.btn"))+'</button><div class="tip">'+(rf?"":t("start.tip"))+'</div>';
+    (rf?'<div class="legend"><span>'+pk("leg1")+'</span><span>'+pk("leg2")+'</span><span>'+pk("leg3")+'</span><span>'+pk("leg4")+'</span></div>':'')+
+    '<button class="big" id="startBtn">'+(rf?t("resume.btn"):t("start.btn"))+'</button><div class="tip">'+(rf?"":t("start.tip"))+'</div>';
   if(rf){   /* thanh điểm / thời gian hiện đúng tiến trình bạn bè đã chơi, không phải 0 / 45s */
     $("score").textContent=rf.score|0;$("combo").textContent="×"+(rf.combo|0);
     if(rf.mode==="endless"){const l=Math.max(0,Math.min(5,rf.lives|0));$("time").textContent="♥".repeat(l)+"♡".repeat(Math.max(0,3-l))}
@@ -510,6 +516,11 @@ function applySkin(){const sk=DD.skins[DD.sel.skin]?DD.sel.skin:"default";if(sk=
 addEventListener("storage",e=>{if(e.key==="theme")document.documentElement.dataset.theme=e.newValue||"dark"});   /* nút Sáng/Tối ở trang cha đổi giao diện game ngay, kể cả khi đang chơi */
 function openSheet(id){$(id).hidden=false;const f=$(id).querySelector("button,a");f&&f.focus({preventScroll:true})}
 function closeSheet(id){$(id).hidden=true}
+function iconChip(b,ico,name,lock){   /* chip chỉ có biểu tượng; tên nằm ở tooltip + trình đọc màn hình */
+  b.classList.add("ib");b.textContent="";const e=document.createElement("span");e.className="ie";e.setAttribute("aria-hidden","true");e.textContent=ico;b.appendChild(e);
+  if(lock){const l=document.createElement("i");l.setAttribute("aria-hidden","true");l.textContent="🔒";b.appendChild(l)}
+  b.title=name;b.setAttribute("aria-label",lock?t("lockedLbl",{n:name}):name);
+}
 const gridForced=()=>{const m=DD.modes[DD.sel.mode];return m&&m.lockGrid||null};
 const packForced=()=>{const m=DD.modes[DD.sel.mode];return m&&m.lockPack||null};
 function pickItem(kind,x){
@@ -539,22 +550,20 @@ DD.refresh=function(){
   if(mb){mb.textContent="";for(const x of DD.catalog.modes){
     const lock=!unlocked("modes",x.id),on=DD.sel.mode===x.id,b=document.createElement("button");
     b.type="button";b.className="chip"+(on?" on":"")+(lock?" lock":"");b.setAttribute("aria-pressed",on);
-    b.innerHTML=x.ico+" "+escH(catName("modes",x))+(lock?' <i aria-hidden="true">🔒</i>':"");
-    if(lock)b.setAttribute("aria-label",t("lockedLbl",{n:catName("modes",x)}));
+    iconChip(b,x.ico,catName("modes",x),lock);
     b.onclick=()=>pickItem("modes",x);mb.appendChild(b);
   }}
   const pbr=$("packBar");   /* chọn loại game ngay trên màn bắt đầu / kết thúc */
   if(pbr){pbr.textContent="";for(const x of DD.catalog.packs){
     const fg=packForced(),lock=!unlocked("packs",x.id),on=fg?x.id===fg:DD.sel.pack===x.id,b=document.createElement("button");
     b.type="button";b.className="chip"+(on?" on":"")+(lock?" lock":"")+(fg&&!on?" dim":"");b.setAttribute("aria-pressed",on);
-    b.innerHTML=x.ico+" "+escH(catName("packs",x))+(lock?' <i aria-hidden="true">🔒</i>':"");
-    if(lock)b.setAttribute("aria-label",t("lockedLbl",{n:catName("packs",x)}));
+    iconChip(b,x.ico,catName("packs",x),lock);
     b.onclick=()=>pickItem("packs",x);pbr.appendChild(b);
   }}
   const ptb=$("partnerBar");
   if(ptb){ptb.textContent="";ptb.hidden=curPackId()!=="lover";if(!ptb.hidden)for(const x of DD.catalog.partners){
     const on=DD.sel.partner===x.id,b=document.createElement("button");b.type="button";b.className="chip"+(on?" on":"");b.setAttribute("aria-pressed",on);
-    b.textContent=x.ico+" "+catName("partners",x);b.onclick=()=>pickItem("partners",x);ptb.appendChild(b);
+    iconChip(b,x.ico,catName("partners",x),false);b.onclick=()=>pickItem("partners",x);ptb.appendChild(b);
   }}
   syncPackText();
   const gb=$("gridBar");   /* chọn cỡ bàn ngay trên màn bắt đầu / kết thúc */
@@ -562,7 +571,7 @@ DD.refresh=function(){
     const fg=gridForced(),lock=!unlocked("grids",x.id),on=fg?x.id===fg:DD.sel.grid===x.id,b=document.createElement("button");
     b.type="button";b.className="chip"+(on?" on":"")+(lock?" lock":"")+(fg&&!on?" dim":"");b.setAttribute("aria-pressed",on);
     b.innerHTML=catName("grids",x)+(lock?' <i aria-hidden="true">🔒</i>':"");
-    if(lock)b.setAttribute("aria-label",t("lockedLbl",{n:catName("grids",x)}));
+    b.title=catName("grids",x);b.setAttribute("aria-label",lock?t("lockedLbl",{n:catName("grids",x)}):catName("grids",x));
     b.onclick=()=>pickItem("grids",x);gb.appendChild(b);
   }}
   const pb=$("proBadge");if(pb){pb.hidden=!DD.pro||!!DD.pro.helper;pb.textContent=DD.pro?(DD.pro.trial?"★ "+t("badge.trial"):"★ Night Pass"):""}

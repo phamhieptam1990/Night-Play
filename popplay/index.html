@@ -58,6 +58,14 @@ a.mark{color:inherit;text-decoration:none}
 .trust{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:20px 0 0;padding:0;list-style:none}
 .trust li{display:flex;gap:6px;align-items:center;padding:7px 14px;border-radius:999px;background:var(--panel);border:1px solid var(--line);font-size:13px;font-weight:700}
 .trust li:before{content:"✓";color:var(--accent);font-weight:900}
+/* Rê chuột / chạm vào khẩu hiệu và 3 cam kết: đổi màu cho nổi bật */
+.trust li{cursor:default;transition:background .18s,color .18s,border-color .18s,transform .18s,box-shadow .18s}
+.trust li:before{transition:color .18s}
+.trust li:hover,.trust li:active{background:var(--accent);color:var(--on-accent);border-color:transparent;transform:translateY(-2px);box-shadow:0 6px 16px color-mix(in srgb,var(--accent) 40%,transparent)}
+.trust li:hover:before,.trust li:active:before{color:var(--on-accent)}
+.hero h1{transition:color .2s,text-shadow .2s;cursor:default}
+.hero h1:hover,.hero h1:active{color:var(--accent);text-shadow:0 4px 24px color-mix(in srgb,var(--accent) 45%,transparent)}
+@media (prefers-reduced-motion:reduce){.trust li,.hero h1{transition:none}.trust li:hover{transform:none}}
 .logo{width:96px;height:96px;display:block;margin:0 auto 12px;filter:drop-shadow(var(--shadow));animation:bob 3s ease-in-out infinite}
 @keyframes bob{50%{transform:translateY(-6px) rotate(-3deg)}}
 /* Lưới: 2 cột điện thoại, 3-4 cột tablet, tối đa 6 cột desktop. Khoảng cách >= 16px */
@@ -70,6 +78,14 @@ main{max-width:1200px;margin:0 auto;padding:8px 16px 24px}
   overflow:hidden;box-shadow:var(--shadow);transition:transform .15s ease}
 .tile img{display:block;width:100%;height:100%;object-fit:cover;pointer-events:none}
 .tile.pop{animation:pop .15s ease}
+/* Rê chuột / chạm giữ vào game: phóng to nhẹ + lắc nhẹ để người chơi biết bấm được */
+.tile{transition:transform .22s cubic-bezier(.34,1.56,.64,1),box-shadow .22s,filter .22s;will-change:transform}
+@media (hover:hover){
+  .tile:hover{transform:scale(1.09);box-shadow:0 14px 30px rgba(0,0,0,.35);filter:brightness(1.06) saturate(1.1);z-index:2;animation:wiggle .5s ease .08s}
+}
+.tile:focus-visible{transform:scale(1.07)}
+.tile:active{transform:scale(.95);animation:none}
+@keyframes wiggle{0%{rotate:0deg}30%{rotate:-3deg}60%{rotate:2.5deg}100%{rotate:0deg}}
 @keyframes pop{50%{transform:scale(1.12)}}
 .foot{margin-top:32px;border-top:1px solid var(--line);background:linear-gradient(180deg,transparent,var(--hero1))}
 .fin{max-width:1200px;margin:0 auto;padding:36px 16px 20px;display:grid;gap:28px;grid-template-columns:1fr 1fr}
@@ -168,6 +184,7 @@ body.timeup #grid{opacity:.35;filter:grayscale(1)}
 #tbar.on{display:block}
 #tbar b{display:block;height:100%;background:var(--accent);transform-origin:left;transition:transform 1s linear}
 @media (prefers-reduced-motion:reduce){.logo,.tile,.tile.pop,#bar b{animation:none;transition:none}}
+@media (prefers-reduced-motion:reduce){.tile:hover,.tile:focus-visible{transform:scale(1.04);animation:none}}
 
 /* ===== VỪA MỘT MÀN HÌNH: nav + hero + lưới game + footer luôn nằm gọn trong khung nhìn ===== */
 html,body{height:100%}
@@ -199,6 +216,28 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 }
 @media (max-height:620px){.trust,.hero .desc{display:none}}
 @media (max-height:360px){.nav{padding:4px 16px}.hero{padding:2px 16px}.hero h1{font-size:20px}main{padding-top:2px;padding-bottom:4px}.foot{padding-top:2px;padding-bottom:2px}.foot a,.foot button{padding:4px 0}}
+
+/* ===== Tìm kiếm + lọc game: nút nổi (không chiếm chỗ trong bố cục), bấm mới mở bảng nhỏ ===== */
+#findFab{position:fixed;right:14px;top:calc(var(--navH,64px) + 10px);z-index:4;width:46px;height:46px;border-radius:50%;background:var(--panel);color:var(--ink);box-shadow:var(--shadow);display:grid;place-items:center;border:1px solid var(--line);opacity:.92}
+#findFab svg{width:22px;height:22px}
+#findFab.on{background:var(--accent);color:var(--on-accent);border-color:transparent}
+#findFab:active{transform:scale(.94)}
+#findPanel{position:fixed;right:12px;top:calc(var(--navH,64px) + 64px);z-index:6;width:min(calc(100vw - 24px),360px);padding:12px;border-radius:22px;background:var(--panel);color:var(--ink);box-shadow:0 14px 40px rgba(0,0,0,.35);border:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+#findPanel[hidden]{display:none}
+#qWrap{position:relative}
+#qWrap svg{position:absolute;left:13px;top:50%;width:18px;height:18px;transform:translateY(-50%);opacity:.6;pointer-events:none}
+#q{width:100%;height:42px;padding:0 38px 0 40px;border-radius:999px;border:2px solid var(--line);background:var(--bg);color:var(--ink);font:600 15px/1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-user-select:text;user-select:text;-webkit-appearance:none;appearance:none}
+#q::placeholder{color:var(--ink);opacity:.5}
+#q::-webkit-search-cancel-button,#q::-webkit-search-decoration{-webkit-appearance:none;display:none}
+#q:focus{outline:none;border-color:var(--accent)}
+#qClear{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;background:none;font-size:17px;line-height:1;display:none;place-items:center;color:var(--ink);opacity:.6}
+#qWrap.has #qClear{display:grid}
+#catChips{display:flex;flex-wrap:wrap;gap:6px}
+#catChips button{padding:7px 13px;border-radius:999px;background:var(--bg);border:2px solid var(--line);font-weight:700;font-size:13.5px;color:var(--ink)}
+#catChips button[aria-pressed=true]{background:var(--accent);color:var(--on-accent);border-color:transparent}
+#noRes{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(86%,320px);text-align:center;font-weight:700;opacity:.7;pointer-events:none}
+#noRes[hidden]{display:none}
+@media (max-height:420px){#findFab{width:40px;height:40px;top:calc(var(--navH,40px) + 4px)}#findPanel{top:calc(var(--navH,40px) + 50px)}}
 </style>
 <script src="../shared/offline.js" defer></script>
 </head>
@@ -231,7 +270,13 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
   </div>
   <div id="hleft" class="left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg><span></span></div>
   <div id="grid"></div>
+  <div id="noRes" hidden></div>
 </main>
+<button id="findFab" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="findPanel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button>
+<div id="findPanel" role="search" hidden>
+  <div id="qWrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" enterkeyhint="search" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="40"><button id="qClear" type="button" tabindex="-1">✕</button></div>
+  <div id="catChips" role="group"></div>
+</div>
 <footer class="foot">
   <div class="fin">
     <div class="fbrand"><div class="mark"><svg class="mk" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="var(--accent)"/><path d="M25 18l22 14-22 14z" fill="#fff"/></svg><span id="fName"></span></div><p id="fTag"></p></div>
@@ -328,14 +373,14 @@ const art = {
 
 /* ===== DANH SÁCH GAME: thêm game mới = thêm 1 object vào mảng ===== */
 const games = [
-  { id:"game-1", name:{vi:"Mèo con",en:"Kitty"},     thumb:face("#7EC8FF","#4D8DFF",art.cat),   url:"games/game1/index.html" },
-  { id:"game-2", name:{vi:"Gấu nâu",en:"Bear"},      thumb:face("#FFD1A6","#FF9A5A",art.bear),  url:"games/game2/index.html" },
-  { id:"game-3", name:{vi:"Thỏ hồng",en:"Bunny"},    thumb:face("#C6F0C2","#6FD08C",art.bunny), url:"games/game3/index.html" },
-  { id:"game-4", name:{vi:"Ếch xanh",en:"Froggy"},   thumb:face("#FFF1A8","#FFC94D",art.frog),  url:"games/game4/index.html" },
-  { id:"game-5", name:{vi:"Cá vàng",en:"Goldfish"},  thumb:face("#9FE7FF","#3BB7E8",art.fish),  url:"games/game5/index.html" },
-  { id:"game-6", name:{vi:"Rô-bốt",en:"Robot"},      thumb:face("#E3C9FF","#B07CFF",art.robot), url:"games/game6/index.html" },
-  { id:"game-7", name:{vi:"Ngôi sao",en:"Star"},     thumb:face("#FFB3C7","#FF6F91",art.star),  url:"games/game7/index.html" },
-  { id:"game-8", name:{vi:"Mặt trời",en:"Sunny"},    thumb:face("#8EE3D4","#2FB8A5",art.sun),   url:"games/game8/index.html" }
+  { id:"game-1", cat:"animals", name:{vi:"Mèo con",en:"Kitty"},     thumb:face("#7EC8FF","#4D8DFF",art.cat),   url:"games/game1/index.html" },
+  { id:"game-2", cat:"animals", name:{vi:"Gấu nâu",en:"Bear"},      thumb:face("#FFD1A6","#FF9A5A",art.bear),  url:"games/game2/index.html" },
+  { id:"game-3", cat:"animals", name:{vi:"Thỏ hồng",en:"Bunny"},    thumb:face("#C6F0C2","#6FD08C",art.bunny), url:"games/game3/index.html" },
+  { id:"game-4", cat:"animals", name:{vi:"Ếch xanh",en:"Froggy"},   thumb:face("#FFF1A8","#FFC94D",art.frog),  url:"games/game4/index.html" },
+  { id:"game-5", cat:"animals", name:{vi:"Cá vàng",en:"Goldfish"},  thumb:face("#9FE7FF","#3BB7E8",art.fish),  url:"games/game5/index.html" },
+  { id:"game-6", cat:"toys", name:{vi:"Rô-bốt",en:"Robot"},      thumb:face("#E3C9FF","#B07CFF",art.robot), url:"games/game6/index.html" },
+  { id:"game-7", cat:"sky", name:{vi:"Ngôi sao",en:"Star"},     thumb:face("#FFB3C7","#FF6F91",art.star),  url:"games/game7/index.html" },
+  { id:"game-8", cat:"sky", name:{vi:"Mặt trời",en:"Sunny"},    thumb:face("#8EE3D4","#2FB8A5",art.sun),   url:"games/game8/index.html" }
 ];
 
 /* ===== NGÔN NGỮ ===== */
@@ -351,7 +396,7 @@ function detectLang(){
 }
 const pageTitle = () => BRAND + " · " + i18n[lang].slogan;
 function applyLang(){
-  const t = i18n[lang];
+  const t = i18n[lang]; renderFind();
   document.documentElement.lang = lang;
   document.title = pageTitle();
   document.querySelector('meta[name=description]').content = t.desc;
@@ -420,6 +465,40 @@ const isTimeUp = () => prefs.limit > 0 && usedSec >= prefs.limit * 60;
 const enabled = () => games.filter(g => !prefs.off.includes(g.id));
 const gname = g => g.name[lang] || g.name[DEFAULT_LANG];
 
+/* ===== TÌM KIẾM + LỌC ===== */
+const CATS = { animals:{ vi:"Động vật", en:"Animals" }, toys:{ vi:"Đồ chơi", en:"Toys" }, sky:{ vi:"Bầu trời", en:"Sky" } };
+const FIND_T = { vi:{ ph:"Tìm game…", all:"Tất cả", none:"Không thấy game nào. Thử từ khoá khác nhé.", clear:"Xoá", catL:"Nhóm game" }, en:{ ph:"Search games…", all:"All", none:"No games found. Try another word.", clear:"Clear", catL:"Game type" } };
+let fq = "", fcat = "all";
+const norm = s => String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d");
+const visible = () => enabled().filter(g => (fcat === "all" || g.cat === fcat) && (!fq || [g.name.vi, g.name.en, (CATS[g.cat] || {}).vi, (CATS[g.cat] || {}).en].some(x => norm(x).includes(fq))));
+function renderFind(){
+  const T = FIND_T[lang] || FIND_T.en, q = $("q"), box = $("catChips");
+  q.placeholder = T.ph; q.setAttribute("aria-label", T.ph); $("qClear").setAttribute("aria-label", T.clear); $("findFab").setAttribute("aria-label", T.ph); $("findFab").title = T.ph; box.setAttribute("aria-label", T.catL);
+  box.textContent = "";
+  [["all", T.all]].concat(Object.keys(CATS).map(k => [k, CATS[k][lang] || CATS[k].en])).forEach(([v, l]) => {
+    const b = document.createElement("button"); b.type = "button"; b.textContent = l; b.setAttribute("aria-pressed", String(v === fcat));
+    b.addEventListener("click", () => { fcat = v; applyFind(); }); box.appendChild(b); });
+  $("noRes").textContent = T.none;
+}
+function applyFind(){
+  fq = norm($("q").value.trim()); $("qWrap").classList.toggle("has", !!$("q").value);
+  $("catChips").querySelectorAll("button").forEach((b, i) => b.setAttribute("aria-pressed", String((i === 0 ? "all" : Object.keys(CATS)[i - 1]) === fcat)));
+  $("findFab").classList.toggle("on", !!fq || fcat !== "all");
+  renderGrid(); $("noRes").hidden = grid.children.length > 0;
+}
+function setFind(open){
+  $("findPanel").hidden = !open; $("findFab").setAttribute("aria-expanded", String(open));
+  if(open){ placeFind(); $("q").focus({ preventScroll:true }); }
+}
+function placeFind(){ const n = document.querySelector(".nav"); document.documentElement.style.setProperty("--navH", (n ? n.getBoundingClientRect().height : 64) + "px"); }
+placeFind(); addEventListener("resize", placeFind);
+$("findFab").addEventListener("click", e => { e.stopPropagation(); setFind($("findPanel").hidden); });
+document.addEventListener("click", e => { if(!$("findPanel").hidden && !e.target.closest("#findPanel") && !e.target.closest("#findFab")) setFind(false); });
+$("q").addEventListener("input", applyFind);
+$("qClear").addEventListener("click", () => { $("q").value = ""; applyFind(); $("q").focus(); });
+addEventListener("keydown", e => { if(e.key === "Escape" && !$("findPanel").hidden){ setFind(false); $("findFab").focus(); } });
+$("q").addEventListener("keydown", e => { if(e.key === "Enter"){ setFind(false); } });
+
 let timer = 0, day = today();
 function updateSleep(){
   const up = isTimeUp();
@@ -485,7 +564,7 @@ function setTileLabels(){
 }
 function renderGrid(){
   grid.textContent = "";
-  enabled().forEach((g, i) => {
+  visible().forEach((g, i) => {
     const b = document.createElement("button");
     b.type = "button"; b.className = "tile"; b.dataset.id = g.id;
     const img = new Image();
