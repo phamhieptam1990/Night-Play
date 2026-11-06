@@ -78,6 +78,7 @@ h1 span{color:var(--accent)}
 .desk[data-n="5"] .note .lbl,.desk[data-n="6"] .note .lbl{display:none}
 .desk[data-n="4"] .note{padding:3px}.desk[data-n="5"] .note,.desk[data-n="6"] .note{padding:1px;box-shadow:0 3px 0 rgba(0,0,0,.18)}
 .desk[data-n="5"] .stampmark span,.desk[data-n="6"] .stampmark span{font-size:calc(var(--w)*.04);padding:1px 4px;border-width:2px}
+.chip.dim{opacity:.4}
 .modebar.sm .chip{font-size:12px;padding:3px 9px;min-height:28px}
 .desk.shake{animation:shake .25s}
 @keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
@@ -220,7 +221,7 @@ const I18N={vi:{
  "resume.h":"Bạn bè nhờ bạn chơi tiếp!","resume.pl":"Còn {l} mạng, đang {n} điểm. Đập thật nhanh để nâng điểm cho bạn nhé!","resume.p":"Còn {s} giây, đang {n} điểm. Đập thật nhanh để nâng điểm cho bạn nhé!","resume.btn":"Chơi tiếp",go:"Bắt đầu! Đập hết đi!",done:"XONG",
  "end.title":"Tan làm!","end.score":"Điểm","end.combo":"Combo cao nhất","end.rec":"Kỷ lục","end.newrec":"Kỷ lục mới!","end.again":"Đập thêm ván nữa","end.tip":"Hít sâu 4 giây, thở ra 4 giây, rồi quay lại làm việc nhé.","end.helper":"Cảm ơn bạn đã chơi hộ! Kết quả đang được gửi cho bạn của bạn.",
  dailyErr:"Chưa tải được thử thách hôm nay. Thử lại nhé.",busy:"Xong ván này rồi chọn chế độ nhé",cell:"Ô bàn {n}",
- "setup.t":"Chế độ chơi","setup.mode":"Chế độ","setup.diff":"Độ khó","setup.skin":"Giao diện","setup.grid":"Cỡ bàn chơi","stats.t":"Thống kê của bạn","stats.btn":"Thống kê",
+ "setup.t":"Chế độ chơi","setup.mode":"Chế độ","setup.diff":"Độ khó","setup.skin":"Giao diện","setup.grid":"Cỡ bàn chơi","gridLocked":"Thử thách ngày luôn dùng bàn 3×3 để ai cũng cùng một đề.","stats.t":"Thống kê của bạn","stats.btn":"Thống kê",
  "pro.active":"Night Pass đang hoạt động ✓","pro.trial":"Đang dùng thử 1 lượt Vô tận","pro.locked":"Chế độ 🔒 cần Night Pass",lockedLbl:"{n} (cần Night Pass)",
  "m.classic.name":"Cổ điển","m.classic.desc":"45 giây đập thật nhanh. Miễn phí cho mọi người.","m.endless.name":"Vô tận","m.endless.desc":"3 mạng, càng chơi càng nhanh. Ly cà phê hồi thêm 1 mạng.",
  "m.daily.name":"Thử thách ngày","m.daily.desc":"Mỗi ngày một đề giống nhau cho mọi người, kèm mục tiêu riêng và chuỗi ngày chơi.","m.boss.name":"Boss deadline","m.boss.desc":"Sếp gọi dồn dập. Đạt 450 điểm để hạ boss và nhận huy hiệu.",
@@ -239,7 +240,7 @@ en:{
  "resume.h":"A friend asked you to continue!","resume.pl":"{l} lives left, {n} points so far. Smash fast to raise their score!","resume.p":"{s} seconds left, {n} points so far. Smash fast to raise their score!","resume.btn":"Continue",go:"Go! Smash them all!",done:"DONE",
  "end.title":"Clocked out!","end.score":"Score","end.combo":"Best combo","end.rec":"Record","end.newrec":"New record!","end.again":"Smash another round","end.tip":"Breathe in for 4 seconds, out for 4, then get back to work.","end.helper":"Thanks for playing for them! The result is being sent to your friend.",
  dailyErr:"Couldn't load today's challenge. Please try again.",busy:"Finish this round, then pick a mode",cell:"Desk slot {n}",
- "setup.t":"Game modes","setup.mode":"Mode","setup.diff":"Difficulty","setup.skin":"Theme","setup.grid":"Board size","stats.t":"Your stats","stats.btn":"Stats",
+ "setup.t":"Game modes","setup.mode":"Mode","setup.diff":"Difficulty","setup.skin":"Theme","setup.grid":"Board size","gridLocked":"The daily challenge always uses the 3×3 board so everyone plays the same puzzle.","stats.t":"Your stats","stats.btn":"Stats",
  "pro.active":"Night Pass active ✓","pro.trial":"Trying 1 free Endless run","pro.locked":"Locked items 🔒 need Night Pass",lockedLbl:"{n} (needs Night Pass)",
  "m.classic.name":"Classic","m.classic.desc":"45 seconds of fast smashing. Free for everyone.","m.endless.name":"Endless","m.endless.desc":"3 lives, getting faster the longer you last. A coffee restores 1 life.",
  "m.daily.name":"Daily challenge","m.daily.desc":"One identical puzzle a day for everyone, with its own goal and a day streak.","m.boss.name":"Boss deadline","m.boss.desc":"The boss keeps calling. Score 450 to defeat the boss and earn a badge.",
@@ -482,7 +483,9 @@ const track=(f,k)=>{try{fetch("/api/paywall",{method:"POST",headers:{"Content-Ty
 function applySkin(){const sk=DD.skins[DD.sel.skin]?DD.sel.skin:"default";if(sk==="default")delete document.documentElement.dataset.skin;else document.documentElement.dataset.skin=sk}
 function openSheet(id){$(id).hidden=false;const f=$(id).querySelector("button,a");f&&f.focus({preventScroll:true})}
 function closeSheet(id){$(id).hidden=true}
+const gridForced=()=>{const m=DD.modes[DD.sel.mode];return m&&m.lockGrid||null};
 function pickItem(kind,x){
+  if(kind==="grids"&&gridForced()){say(t("gridLocked"));return}   /* Thử thách ngày luôn 3×3 */
   if(!unlocked(kind,x.id)){DD.paywall(kind==="modes"?x.id:kind==="diffs"?"diff":kind==="grids"?"grid":"skin");return}
   DD.want[KEY[kind]]=x.id;LS.set("dd-sel",DD.want);DD.refresh();
 }
@@ -494,8 +497,8 @@ DD.refresh=function(){
   for(const kind of ["modes","diffs","skins","grids"]){
     const box=$({modes:"chipModes",diffs:"chipDiffs",skins:"chipSkins",grids:"chipGrids"}[kind]);box.textContent="";
     for(const x of DD.catalog[kind]){
-      const lock=!unlocked(kind,x.id),on=DD.sel[KEY[kind]]===x.id,b=document.createElement("button");
-      b.type="button";b.className="chip"+(on?" on":"")+(lock?" lock":"");b.setAttribute("aria-pressed",on);
+      const fg=kind==="grids"&&gridForced(),lock=!unlocked(kind,x.id),on=fg?x.id===fg:DD.sel[KEY[kind]]===x.id,b=document.createElement("button");
+      b.type="button";b.className="chip"+(on?" on":"")+(lock?" lock":"")+(fg&&!on?" dim":"");b.setAttribute("aria-pressed",on);
       b.innerHTML=(x.ico?x.ico+" ":"")+escH(catName(kind,x))+(lock?' <i aria-hidden="true">🔒</i>':"");
       if(lock)b.setAttribute("aria-label",t("lockedLbl",{n:catName(kind,x)}));
       b.onclick=()=>pickItem(kind,x);
@@ -512,8 +515,8 @@ DD.refresh=function(){
   }}
   const gb=$("gridBar");   /* chọn cỡ bàn ngay trên màn bắt đầu / kết thúc */
   if(gb){gb.textContent="";for(const x of DD.catalog.grids){
-    const lock=!unlocked("grids",x.id),on=DD.sel.grid===x.id,b=document.createElement("button");
-    b.type="button";b.className="chip"+(on?" on":"")+(lock?" lock":"");b.setAttribute("aria-pressed",on);
+    const fg=gridForced(),lock=!unlocked("grids",x.id),on=fg?x.id===fg:DD.sel.grid===x.id,b=document.createElement("button");
+    b.type="button";b.className="chip"+(on?" on":"")+(lock?" lock":"")+(fg&&!on?" dim":"");b.setAttribute("aria-pressed",on);
     b.innerHTML=catName("grids",x)+(lock?' <i aria-hidden="true">🔒</i>':"");
     if(lock)b.setAttribute("aria-label",t("lockedLbl",{n:catName("grids",x)}));
     b.onclick=()=>pickItem("grids",x);gb.appendChild(b);
