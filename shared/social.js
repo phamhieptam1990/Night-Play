@@ -16,6 +16,7 @@ window.NPS = (function () {
     "cozy-wings": { name: { vi: "Cánh Nhỏ Phiêu Lưu", en: "Little Wings" }, url: "cozyplay/games/cozy-wings/index.html", board: true, site: "cozyplay" },
     /* Pop Play (trẻ em): bảng xếp hạng chỉ dùng TÊN VUI CÓ SẴN (kids:true), không cho gõ tay */
     "pop-fly": { name: { vi: "Chim Bay Học Vui", en: "Fly & Learn" }, url: "popplay/games/pop-fly/index.html", board: true, kids: true, site: "popplay" },
+    "lang-cua-be": { name: { vi: "Làng Của Bé", en: "Baby's Village" }, url: "popplay/games/lang-cua-be/index.html", board: true, kids: true, site: "popplay" },
     "game-1": { name: { vi: "Mèo con", en: "Kitty" }, url: "popplay/games/game1/index.html", board: true, kids: true, site: "popplay" },
     "game-2": { name: { vi: "Gấu nâu", en: "Bear" }, url: "popplay/games/game2/index.html", board: true, kids: true, site: "popplay" },
     "game-3": { name: { vi: "Thỏ hồng", en: "Bunny" }, url: "popplay/games/game3/index.html", board: true, kids: true, site: "popplay" },

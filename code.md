@@ -1,33 +1,24 @@
-dựa sườn game dap deadline tạo 2 game 
-/// game cozyplay 1 game nhiều game type////
-1. Ong Mật Về Tổ 🐝
-Chú ong bay qua vườn, né mạng nhện và cành gai. Ong thu phấn hoa để mở rộng tổ, và tổ càng lớn thì càng có thêm loại ong mới.
-Điểm riêng: gió đổi hướng theo thời gian, nên lực bay mỗi lúc một khác.
+popplay game 3 game type 
+/////tên game 🏡 “Làng Của Bé”/////
 
-2. Cá Chuồn Vượt Sóng 🐟
-Cá chuồn nhảy lên khỏi mặt nước để né thuyền và đá, rồi lặn xuống để né chim hải âu.
-Điểm riêng: có 2 tầng (trên không và dưới nước), chạm để nhảy lên, giữ tay để lặn xuống.
+Câu chuyện: Bé là “trưởng làng” nhí. Ngôi làng còn trống trơn và cần bé giúp xây dựng. Mỗi bài học hoàn thành sẽ mở thêm một ngôi nhà, một con vật hoặc một cửa hàng mới. Sau vài tuần, bé có cả một ngôi làng do chính mình tạo ra.
 
-3. Đèn Lồng Trung Thu 🏮
-Bé điều khiển chiếc đèn lồng bay qua phố đêm, né mái nhà và dây điện. Đèn phải nhặt nến để không bị tắt.
-Điểm riêng: thanh “lửa” giảm dần, tạo thêm áp lực. Game mang chất Việt Nam.
-
-4. Diều Giấy 🪁
-Bạn không điều khiển trực tiếp mà kéo dây để diều lên xuống, trong khi gió đẩy diều theo nhịp.
-Điểm riêng: cảm giác điều khiển mềm mại, khác hẳn kiểu “nhảy” thông thường.
-
-5. Bọ Rùa Phiêu Lưu 🐞
-Bọ rùa bay qua khu vườn khổng lồ, né giọt mưa rơi và lá rụng.
-Điểm riêng: giữ tay để xòe cánh lượn chậm, thả tay thì rơi nhanh, nên có thêm chiều sâu điều khiển.
-/// end cozyplay ////
-/// game poppay 1 game nhiều game type////
-📚 Kết hợp học tập (cho bé)
-
-6. Chim Non Học Chữ 🐤
-Thay vì né cột, chim bay xuyên qua cổng có chữ cái. Giọng đọc nói “Bay qua chữ B!”, bé chọn cổng đúng, và nếu sai thì chim chỉ chậm lại chứ không chết.
-
-7. Bay Đếm Sao ⭐
-Chim nhặt sao trên đường bay. Cuối mỗi đoạn có câu hỏi: “Bé đã nhặt mấy ngôi sao?”, rồi bé chọn số đúng.
-
-8. Tàu Bay Phép Tính ✈️
-Phù hợp cho bé lớn hơn: các cổng ghi kết quả như 3 / 5 / 7 và câu hỏi là “2 + 3 = ?”. Bé bay qua cổng đúng.
+📍 Khu 1: Bưu Điện Chữ Cái (học chữ)
+Đưa thư: mỗi nhà có một chữ cái, bé đưa lá thư có chữ M đến nhà M. Cách này giúp bé nhận diện chữ.
+Nghe và tìm: bác đưa thư đọc “Bờ”, bé tìm chữ B, qua đó học âm của chữ.
+Tô chữ: bé tô theo nét chấm, tô xong thì chữ biến thành đồ vật (C thành Cá).
+Ghép tên: ở mức nâng cao, bé ghép B + À = BÀ.
+📍 Khu 2: Nông Trại Số (học số 0–10)
+Đếm con vật: “Có mấy chú gà?”, bé chạm từng con để đếm to.
+Thu hoạch: “Hái 7 quả cam!”, bé kéo đủ số cam vào giỏ.
+Xếp hàng: các chú vịt mang số lộn xộn, bé xếp lại theo thứ tự 1 → 10.
+Nhiều hơn / ít hơn: chuồng nào nhiều heo hơn?
+📍 Khu 3: Chợ Phép Tính (cộng trừ trong phạm vi 10)
+Bán hàng: khách mua 3 quả táo, rồi mua thêm 2 quả. Bé đếm xem có tất cả mấy quả. Đây là phép cộng.
+Ăn bánh: đĩa có 6 cái bánh, chú mèo ăn mất 2 cái. Bé đếm xem còn mấy cái. Đây là phép trừ.
+Cân thăng bằng: bên trái có 4, bên phải cần thêm mấy để bằng 10? Đây là cách học tách và gộp số, nền tảng cho tính nhẩm.
+Lộ trình học:
+Có hình ảnh để đếm (🍎🍎🍎 + 🍎🍎)
+Hình ảnh kèm con số (3 + 2)
+Chỉ còn con số
+//// end game ////
