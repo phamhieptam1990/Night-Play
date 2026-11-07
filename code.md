@@ -33,3 +33,51 @@ Cá Con Bơi Xa: hết bong bóng khí thì trả lời câu hỏi để lấy t
 Thêm 4 giao diện cho mỗi game type và 1 giao diện free còn lại tính phí
 
 
+//// Danh sách game ///
+🥇 1. “Bé Nói Đúng Không?” 🎤
+
+Cách chơi: Game hỏi “2 + 3 = ?” và bé nói to “Năm!”. Game nhận diện giọng nói, nếu đúng thì nhân vật nhảy múa.
+Vì sao viral:
+
+Giọng bé ngọng nghịu (“Bốn... à không, năm!”) là nội dung TikTok rất được ưa chuộng.
+Game tự ghi lại câu trả lời dễ thương nhất và ghép thành clip 15 giây có nhạc.
+Bố mẹ chia sẻ vì thấy con đáng yêu, không phải vì game.
+🥈 2. “Đoán Xem Bé Mấy Tuổi” 🧠
+
+Cách chơi: Bé làm 10 câu trong 60 giây gồm chữ cái, số và phép tính. Cuối ván hiện:
+
+“🧠 Bộ não của Bin: 7 tuổi!” (bé thật mới 5 tuổi)
+
+Vì sao viral:
+
+Đánh vào tâm lý bố mẹ thích khoe con giỏi.
+Có thẻ kết quả đẹp, kích thước sẵn cho Story hoặc Zalo.
+Các bố mẹ khác tò mò: “Con mình bao nhiêu tuổi não?”, rồi cũng chơi thử. Đây là vòng lặp viral.
+🥉 3. “Bố Mẹ Thử Thách 5 Giây” ⏱️
+
+Cách chơi: Bố mẹ chơi, bé làm trọng tài. Câu hỏi siêu dễ (“Chữ A ở đâu?”) nhưng chỉ có 5 giây, đáp án thì nhảy lung tung, chữ lộn ngược, màu sai.
+Vì sao viral:
+
+Người lớn bấm sai câu dễ trong khi bé cười chế giễu, tạo ra video rất hài.
+Dễ thành trend: “Bố mình thua bé 3 tuổi 😂”.
+Bé vẫn học được khi chấm đúng sai cho bố mẹ.
+4. “Con Vật Ăn Số” 🐊
+
+Cách chơi: Cá sấu há miệng, bé cho ăn số lớn hơn. Nếu bé chọn sai, cá sấu ợ một tiếng thật to và nhả ra.
+Vì sao viral: âm thanh hài (ợ, xì hơi nhẹ) khiến bé cười lăn, bố mẹ quay lại cảnh đó. Học so sánh số mà không cần giảng giải.
+
+5. “Vẽ Chữ Thành Quái Vật” 👾
+
+Cách chơi: Bé tô chữ B, game biến chữ đó thành một con quái vật dễ thương ngẫu nhiên có mắt, chân và tiếng kêu riêng.
+Vì sao viral:
+
+Mỗi bé có một con quái vật độc nhất, có thể in ra, làm hình nền hoặc gửi ông bà.
+Thu thập đủ 29 quái vật chữ cái tạo động lực sưu tập.
+6. “Nhảy Theo Số” 💃
+
+Cách chơi: Màn hình hiện “3 + 2”, nhạc vang lên, và bé phải nhảy hoặc vỗ tay đúng 5 lần. Camera đếm số lần.
+Vì sao viral: video bé nhảy luôn hút lượt xem, và game có ích vì bé vừa vận động vừa học, không ngồi lì một chỗ.
+
+Danh sách game này mỗi game làm 4 game type và 5 giao diện có 1 giao diện free kèm 3 cấp độ 
+
+Liệt kê danh sách task để thực hiện tất cả các game khi nào done thì báo lại

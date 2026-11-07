@@ -33,7 +33,7 @@ function layer(PF) {
       const L = sk.deco && sk.deco.length ? sk.deco : ["✨"]; spawnT -= dt;
       if (spawnT <= 0 && P.length < 9) { spawnT = .55 + Math.random() * .5; P.push({ x: Math.random() * W, y: H + 20, vy: 22 + Math.random() * 30, sw: Math.random() * 6, ph: Math.random() * 6, e: L[Math.floor(Math.random() * L.length)], s: 20 + Math.random() * 20, t: 0 }) }
       cx.setTransform(dpr, 0, 0, dpr, 0, 0); cx.clearRect(0, 0, W, H); cx.textAlign = "center"; cx.textBaseline = "middle";
-      for (let i = P.length - 1; i >= 0; i--) { const p = P[i]; p.t += dt; p.y -= p.vy * dt; if (p.y < -30) { P.splice(i, 1); continue } const x = p.x + Math.sin(p.t * 1.6 + p.ph) * 14 * (p.sw / 6 + .5); cx.globalAlpha = .55 * Math.min(1, p.t * 2) * Math.min(1, p.y / 80 + .2); cx.shadowColor = "rgba(255,230,140,.9)"; cx.shadowBlur = 12; cx.font = p.s + "px " + em(); cx.fillText(p.e, x, p.y) }
+      for (let i = P.length - 1; i >= 0; i--) { const p = P[i]; p.t += dt; p.y -= p.vy * dt; if (p.y < -30) { P.splice(i, 1); continue } const x = p.x + Math.sin(p.t * 1.6 + p.ph) * 14 * (p.sw / 6 + .5); cx.globalAlpha = .4 * Math.min(1, p.t * 2) * Math.min(1, p.y / 80 + .2); cx.shadowColor = "rgba(255,230,140,.9)"; cx.shadowBlur = 12; cx.font = p.s + "px " + em(); cx.fillText(p.e, x, p.y) }
       for (let i = FL.length - 1; i >= 0; i--) { const f = FL[i]; f.t += dt; if (f.t > f.life) { FL.splice(i, 1); continue } f.vy += 260 * dt; f.x += f.vx * dt; f.y += f.vy * dt; cx.globalAlpha = 1 - f.t / f.life; cx.shadowBlur = 10; cx.shadowColor = "#ffe27a"; cx.font = f.s + "px " + em(); cx.save(); cx.translate(f.x, f.y); cx.rotate(f.r * f.t); cx.fillStyle = "#fff6b0"; cx.fillText(f.e, 0, 0); cx.restore() }
       cx.globalAlpha = 1; cx.shadowBlur = 0
     }
