@@ -26,6 +26,8 @@ function layer(PF) {
   let last = performance.now(), on = false, spawnT = 0;
   const burst = (x, y, L) => { const n = 9; for (let i = 0; i < n; i++) { const a = Math.PI * 2 * i / n + Math.random() * .4, v = 90 + Math.random() * 110; FL.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 60, t: 0, life: .7 + Math.random() * .3, e: i % 3 === 0 ? "✦" : L[i % L.length], s: 16 + Math.random() * 12, r: Math.random() * 6 }) } };
   play.addEventListener("pointerdown", ev => { if (!on) return; const sk = cur(), r = play.getBoundingClientRect(); burst((ev.clientX - r.left) * (W / r.width), (ev.clientY - r.top) * (H / r.height), (sk && sk.deco) || ["✨"]) }, true);
+  /* ăn mừng: game gọi NPFx.buzz khi đúng/combo/thắng ⇒ bung pháo hình giữa màn (chỉ Night Pass) */
+  try { const ob = window.NPFx && NPFx.buzz; if (ob && !ob.__p) { let lt = 0; const nb = function (a) { try { const n = performance.now(); if (on && n - lt > 350 && (Array.isArray(a) || a >= 25)) { lt = n; const sk = cur(), L = (sk && sk.deco) || ["✨"]; burst(W * (.3 + Math.random() * .4), H * (.3 + Math.random() * .25), L); burst(W * (.3 + Math.random() * .4), H * (.3 + Math.random() * .25), ["⭐", "✦", "🎉"]) } } catch (e) {} return ob.apply(this, arguments) }; nb.__p = 1; NPFx.buzz = nb } } catch (e) {}
   const tick = now => {
     const dt = Math.min(.05, (now - last) / 1000); last = now; const sk = cur(), v = !!sk && !document.hidden;
     if (v !== on) { on = v; play.classList.toggle("prem", on); box.hidden = cr.hidden = !on; if (!on) { P.length = FL.length = 0 } }
