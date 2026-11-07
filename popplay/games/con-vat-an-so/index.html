@@ -365,20 +365,21 @@ let ac=null,MG=null,voices=[];const MAXVOICE=4,sTimers=new Set();
 const CHP={tap:1,chew:2,good:3,win:4,burp:5};   /* kênh → độ ưu tiên */
 function audio(){if(!sound)return null;try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();if(ac.state==="suspended")ac.resume();return ac}catch(e){return null}}
 function master(c){if(!MG||MG._c!==c){MG=c.createGain();MG._c=c;MG.gain.value=.9;MG.connect(c.destination)}return MG}
-function fadeVoice(v,c){const t=c.currentTime;try{v.g.gain.cancelScheduledValues(t);v.g.gain.setTargetAtTime(0,t,.012)}catch(e){}v.nodes.forEach(n=>{try{n.stop(t+.06)}catch(e){}});v.end=t}
+function fadeVoice(v,c){const t=c.currentTime;try{v.g.gain.cancelScheduledValues(t);v.g.gain.setTargetAtTime(0,t,.012)}catch(e){}v.nodes.forEach(n=>{try{n.stop(t+.045)}catch(e){}});v.end=t}
 function voice(ch,pri){
   const c=audio();if(!c)return null;const now=c.currentTime;pri=pri||CHP[ch]||1;voices=voices.filter(v=>v.end>now);
   if(voices.some(v=>v.pri>pri&&v.ch!==ch))return null;   /* đang có tiếng ưu tiên hơn → bỏ tiếng nhỏ */
   voices.filter(v=>v.ch===ch).forEach(v=>fadeVoice(v,c));voices=voices.filter(v=>v.ch!==ch);
-  while(voices.length>=MAXVOICE){const lo=voices.reduce((a,b)=>a.pri<=b.pri?a:b);fadeVoice(lo,c);voices.splice(voices.indexOf(lo),1)}
+  const live=()=>voices.reduce((a,v)=>a+v.nodes.filter(n=>n._e>now).length,0);   /* ngân sách nguồn âm: tối đa ~6 nguồn đang chờ/kêu */
+  while(voices.length&&(voices.length>=MAXVOICE||live()>=6)){const lo=voices.reduce((a,b)=>a.pri<=b.pri?a:b);if(lo.pri>pri)return null;fadeVoice(lo,c);voices.splice(voices.indexOf(lo),1)}
   const g=c.createGain();g.connect(master(c));const v={ch,pri,g,c,nodes:[],end:now+.1};voices.push(v);return v}
-function vtone(v,f,d,ty,vol,dl,f2){if(!v)return;const c=v.c,t0=c.currentTime+(dl||0),o=c.createOscillator(),g=c.createGain();o.type=ty||"sine";o.frequency.setValueAtTime(f,t0);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t0+d);g.gain.setValueAtTime(0,t0);g.gain.linearRampToValueAtTime(vol||.1,t0+.02);g.gain.exponentialRampToValueAtTime(.0001,t0+d);o.connect(g);g.connect(v.g);o.start(t0);o.stop(t0+d+.05);v.nodes.push(o);v.end=Math.max(v.end,t0+d+.06)}
+function vtone(v,f,d,ty,vol,dl,f2){if(!v)return;const c=v.c,t0=c.currentTime+(dl||0),o=c.createOscillator(),g=c.createGain();o.type=ty||"sine";o.frequency.setValueAtTime(f,t0);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t0+d);g.gain.setValueAtTime(0,t0);g.gain.linearRampToValueAtTime(vol||.1,t0+.02);g.gain.exponentialRampToValueAtTime(.0001,t0+d);o.connect(g);g.connect(v.g);o.start(t0);o.stop(t0+d+.05);o._e=t0+d+.06;v.nodes.push(o);v.end=Math.max(v.end,t0+d+.06)}
 function vnoise(v,d,vol,fa,fb,dl){if(!v)return;const c=v.c,t0=c.currentTime+(dl||0),n=Math.floor(c.sampleRate*d),b=c.createBuffer(1,n,c.sampleRate),a=b.getChannelData(0);for(let i=0;i<n;i++)a[i]=Math.random()*2-1;
-  const s=c.createBufferSource();s.buffer=b;const f=c.createBiquadFilter();f.type="bandpass";f.frequency.setValueAtTime(fa,t0);f.frequency.exponentialRampToValueAtTime(fb,t0+d);const g=c.createGain();g.gain.setValueAtTime(vol,t0);g.gain.exponentialRampToValueAtTime(.0001,t0+d);s.connect(f);f.connect(g);g.connect(v.g);s.start(t0);s.stop(t0+d+.02);v.nodes.push(s);v.end=Math.max(v.end,t0+d+.03)}
+  const s=c.createBufferSource();s.buffer=b;const f=c.createBiquadFilter();f.type="bandpass";f.frequency.setValueAtTime(fa,t0);f.frequency.exponentialRampToValueAtTime(fb,t0+d);const g=c.createGain();g.gain.setValueAtTime(vol,t0);g.gain.exponentialRampToValueAtTime(.0001,t0+d);s.connect(f);f.connect(g);g.connect(v.g);s.start(t0);s.stop(t0+d+.02);s._e=t0+d+.03;v.nodes.push(s);v.end=Math.max(v.end,t0+d+.03)}
 function burpBody(v,dl){const c=v.c,t0=c.currentTime+dl,d=.85,o=c.createOscillator(),g=c.createGain(),lp=c.createBiquadFilter(),lfo=c.createOscillator(),lg=c.createGain();
   o.type="sawtooth";o.frequency.setValueAtTime(120+Math.random()*30,t0);o.frequency.exponentialRampToValueAtTime(48,t0+d);lp.type="lowpass";lp.frequency.value=480;
   lfo.frequency.value=22;lg.gain.value=.08;g.gain.setValueAtTime(0,t0);g.gain.linearRampToValueAtTime(.2,t0+.06);g.gain.setValueAtTime(.2,t0+.5);g.gain.exponentialRampToValueAtTime(.0001,t0+d);
-  lfo.connect(lg);lg.connect(g.gain);o.connect(lp);lp.connect(g);g.connect(v.g);o.start(t0);lfo.start(t0);o.stop(t0+d+.05);lfo.stop(t0+d+.05);v.nodes.push(o,lfo);v.end=Math.max(v.end,t0+d+.06)}
+  lfo.connect(lg);lg.connect(g.gain);o.connect(lp);lp.connect(g);g.connect(v.g);o.start(t0);lfo.start(t0);o.stop(t0+d+.05);lfo.stop(t0+d+.05);o._e=lfo._e=t0+d+.06;v.nodes.push(o,lfo);v.end=Math.max(v.end,t0+d+.06)}
 const sfx={
  pop:()=>{const v=voice("tap");vtone(v,520,.08,"triangle",.1,0,300)},
  tick:()=>{const v=voice("tap");vtone(v,520,.09,"triangle",.08)},
