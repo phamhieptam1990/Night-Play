@@ -90,7 +90,7 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .ib2{width:46px;height:46px;border-radius:50%;background:var(--panel);color:var(--ink);box-shadow:var(--shadow);font-size:21px;display:grid;place-items:center;flex:none}.ib2.main{width:60px;height:60px;background:var(--accent);color:var(--on-accent);font-size:26px}.ib2:active{transform:scale(.92)}.ib2[hidden]{display:none}
 @media (max-height:700px){.enT{display:none}}
 @media (max-height:620px){#stH{display:none}.card.daily .main{padding:4px 10px}.card small{display:none}.card .main{padding:5px 10px}.card .e{font-size:26px}.cards{gap:6px}.ov .ghost.sm{padding:5px 14px;font-size:13px}}
-.enT{margin:0;font-weight:800;font-size:14px;opacity:.85;animation:enpulse 1.4s ease-in-out infinite}@keyframes enpulse{50%{opacity:.4}}@media (prefers-reduced-motion:reduce){.enT{animation:none}}#ovEnd{cursor:pointer}
+.enT{margin:0;font-weight:800;font-size:14px;opacity:.85;animation:enpulse 1.4s ease-in-out infinite}@keyframes enpulse{50%{opacity:.72}}@media (prefers-reduced-motion:reduce){.enT{animation:none}}#ovEnd{cursor:pointer}
 .card.daily{order:-1}.card.daily .main{background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 22%,var(--panel)),var(--panel))}
 .ov .ghost.sm{padding:8px 16px;font-size:14px}
 #ovProg{gap:6px}#ovProg h2{display:none}#ovProg .streakBig{font-size:clamp(17px,5vw,22px)}#ovProg .week i{width:26px;height:26px;font-size:13px}#ovProg .week span{width:30px;font-size:10px}
@@ -110,6 +110,9 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 @media (max-height:460px){#enS{display:none!important}#ovEnd .row{gap:6px}#ovEnd .big{padding:6px 16px;font-size:15px}#ovEnd .ghost{padding:6px 12px;font-size:13px}.bkgrid{grid-template-columns:repeat(11,1fr);max-width:520px;gap:4px}#ovBook h2{display:none}.bk{font-size:18px}.rw .rwt{font-size:12px}.stk{font-size:30px}}
 @media (max-height:620px){#ovProg .sh{display:none}#ovProg .pgrows{flex-direction:row;max-width:520px}#ovProg .pgr{flex-direction:column;padding:5px 8px;font-size:11px;flex:1;text-align:center}#ovProg .pgr .m{width:100%}#ovProg .pgr .e{font-size:18px}#ovProg .pgr span{white-space:normal;line-height:1.1}}
 @media (prefers-reduced-motion:reduce){.toast{transition:none}}
+/* nút biểu tượng luôn có viền cùng màu biểu tượng để nổi trên mọi nền/giao diện */
+.ib,.ib2{border:max(2px,.4cqw) solid currentColor!important;box-sizing:border-box}
+.ib:not(:disabled),.ib2:not(:disabled){filter:none}
 </style>
 <script src="../../../shared/offline.js" defer></script>
 </head>

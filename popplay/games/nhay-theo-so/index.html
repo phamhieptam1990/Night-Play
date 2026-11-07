@@ -105,6 +105,9 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
   .top h1{font-size:18px}
 }
 @media (prefers-reduced-motion:reduce){.dc i,.reward,.sc,.shake{animation:none}}
+/* nút biểu tượng luôn có viền cùng màu biểu tượng để nổi trên mọi nền/giao diện */
+.ib,.ib2{border:max(2px,.4cqw) solid currentColor!important;box-sizing:border-box}
+.ib:not(:disabled),.ib2:not(:disabled){filter:none}
 </style>
 <script src="../../../shared/offline.js" defer></script>
 </head>
