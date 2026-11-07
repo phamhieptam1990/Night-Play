@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<script src="../../../shared/guard.js"></script>
+<script src="../../../shared/bridge.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Đoán Giá Chợ Việt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Be+Vietnam+Pro:wght@400;600;800&display=swap">
+<style>
+:root{--bg:#0E1020;--panel:#1b2040;--ink:#f3f0ff;--muted:#a9a3c9;--accent:#ffb020;--on:#2a1a00;--good:#3ddc84;--bad:#ff6b6b;--line:#323a70;
+ --display:"Bungee","Arial Black",system-ui,sans-serif;--body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}[hidden]{display:none!important}
+html,body{margin:0;height:100%;background:var(--bg);overflow:hidden;font-family:var(--body);color:var(--ink)}
+body{display:flex;justify-content:center}
+#play{position:relative;height:100dvh;width:min(100vw,66dvh,520px);container-type:size;overflow:hidden;background:var(--pbg,linear-gradient(#1d2250,#0E1020));color:var(--ink);transition:background .3s}
+.deco{position:absolute;inset:0;pointer-events:none;overflow:hidden;opacity:.5}.deco i{position:absolute;font-style:normal;font-size:9cqw;animation:fl 9s ease-in-out infinite}@keyframes fl{50%{transform:translateY(-3cqw) rotate(8deg)}}
+.top{position:absolute;left:3cqw;right:3cqw;top:2.5cqw;height:9cqw;display:flex;align-items:center;gap:2cqw;z-index:2}
+.top h1{margin:0;flex:1;font:400 4.6cqw/1.05 var(--display);letter-spacing:.2cqw;color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ib{width:9cqw;height:9cqw;min-width:36px;min-height:36px;border:0;border-radius:50%;background:rgba(255,255,255,.12);color:var(--ink);font:800 3.6cqw var(--body);cursor:pointer;display:grid;place-items:center}
+.scr{position:absolute;left:4cqw;right:4cqw;top:14cqw;bottom:3cqw;display:flex;flex-direction:column;gap:2.4cqw;z-index:1}
+.card{background:var(--panel);border:.5cqw solid var(--line);border-radius:4cqw;padding:3cqw;box-shadow:0 1.2cqw 0 rgba(0,0,0,.25)}
+.btn{border:0;border-radius:99cqw;min-height:44px;padding:2.6cqw 5cqw;font:800 4.4cqw var(--body);background:var(--accent);color:var(--on);cursor:pointer;box-shadow:0 1cqw 0 rgba(0,0,0,.3)}
+.btn.alt{background:rgba(255,255,255,.14);color:var(--ink);box-shadow:none}.btn:active{transform:translateY(.6cqw)}
+.big{font:400 9cqw var(--display);color:var(--accent)}
+.row{display:flex;gap:2.4cqw;align-items:center;justify-content:center}.grow{flex:1}
+.mut{color:var(--muted);font-size:3.4cqw}
+/* trang chủ */
+#home{justify-content:center}#home .hero{text-align:center;font-size:20cqw;line-height:1}
+.dbtn{display:flex;align-items:center;gap:3cqw;text-align:left;width:100%}.dbtn .n{font:400 7cqw var(--display)}
+/* vòng chơi */
+.dots{display:flex;gap:2cqw;justify-content:center}.dots i{width:5cqw;height:5cqw;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;font-size:3cqw;font-style:normal}.dots i.on{background:var(--accent)}
+.item{text-align:center;padding:3cqw}.item .em{font-size:22cqw;line-height:1.05}.item .nm{font:800 6.4cqw/1.15 var(--body)}.item .un{color:var(--muted);font-size:4cqw}
+.price{text-align:center;font:400 10.5cqw var(--display);color:var(--accent);min-height:13cqw}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:11cqw;background:transparent;margin:0}
+input[type=range]::-webkit-slider-runnable-track{height:3.2cqw;border-radius:9cqw;background:linear-gradient(90deg,var(--good),#ffd24a,var(--bad))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:10cqw;height:10cqw;margin-top:-3.4cqw;border-radius:50%;background:#fff;border:1cqw solid var(--accent);box-shadow:0 .8cqw 0 rgba(0,0,0,.35)}
+input[type=range]::-moz-range-track{height:3.2cqw;border-radius:9cqw;background:linear-gradient(90deg,var(--good),#ffd24a,var(--bad))}
+input[type=range]::-moz-range-thumb{width:8cqw;height:8cqw;border-radius:50%;background:#fff;border:1cqw solid var(--accent)}
+.rng{display:flex;justify-content:space-between;color:var(--muted);font-size:3.2cqw;margin-top:-1cqw}
+.rev{text-align:center}.rev .real{font:400 8cqw var(--display);color:var(--good)}.rev .pts{font:800 5.4cqw var(--body)}
+.bar{height:3.4cqw;border-radius:9cqw;background:rgba(255,255,255,.14);overflow:hidden;margin-top:1.4cqw}.bar b{display:block;height:100%;background:var(--accent);width:0;transition:width .6s}
+/* kết thúc */
+.sq{font-size:9cqw;letter-spacing:.8cqw;text-align:center}.rk{text-align:center;font:800 5cqw var(--body)}
+.chips{display:flex;gap:2cqw;justify-content:center;flex-wrap:wrap}.chip{background:rgba(255,255,255,.12);border-radius:99cqw;padding:1.2cqw 3cqw;font-size:3.6cqw;font-weight:800}
+/* lớp phủ */
+.ov{position:absolute;inset:0;background:rgba(8,6,24,.9);z-index:7;display:flex;flex-direction:column;justify-content:center;gap:2.6cqw;padding:5cqw;text-align:center}
+.ov h2{margin:0;font:400 6cqw var(--display);color:var(--accent)}.ov p{margin:0;color:var(--ink);font-size:4cqw;line-height:1.35}
+.sk{display:grid;grid-template-columns:1fr 1fr;gap:2.4cqw}.skc{position:relative;border:.5cqw solid var(--line);border-radius:3.4cqw;padding:2.4cqw;background:var(--panel);color:var(--ink);font:800 3.8cqw var(--body);cursor:pointer;min-height:44px}.skc.on{border-color:var(--accent)}.skc .e{font-size:9cqw;display:block}.skc.lock{opacity:.7}.skc.lock::after{content:"🔒";position:absolute;top:1.2cqw;right:2cqw;font-size:4cqw}
+.toast{position:absolute;left:50%;bottom:6cqw;transform:translateX(-50%);background:#fff;color:#111;padding:2cqw 4cqw;border-radius:99cqw;font-weight:800;font-size:3.8cqw;z-index:9;white-space:nowrap}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<style id="skCss"></style>
+</head>
+<body>
+<div id="play">
+  <div class="deco" id="deco"></div>
+  <div class="top"><h1 id="ttl"></h1><button class="ib" id="bBoard" type="button" aria-label="🏆">🏆</button><button class="ib" id="bSnd" type="button">🔊</button><button class="ib" id="bLang" type="button">EN</button></div>
+  <section class="scr" id="home">
+    <div class="hero" id="hHero">🧺</div>
+    <button class="btn dbtn" id="bDaily" type="button"><span class="n" id="dN"></span><span class="grow"><b id="dT"></b><br><span class="mut" id="dS"></span></span><span>▶</span></button>
+    <div class="row"><button class="btn alt grow" id="bPractice" type="button"></button><button class="ib" id="bSkin" type="button" style="width:12cqw;height:12cqw">🎨</button></div>
+    <div class="chips" id="hChips"></div>
+    <p class="mut" style="text-align:center;margin:0" id="hNote"></p>
+  </section>
+  <section class="scr" id="round" hidden>
+    <div class="dots" id="dots"></div>
+    <div class="card item"><div class="em" id="iEm"></div><div class="nm" id="iNm"></div><div class="un" id="iUn"></div></div>
+    <div class="price" id="pr"></div>
+    <div><input id="sl" type="range" min="0" max="1000" value="500" aria-label="price"><div class="rng"><span id="rLo"></span><span id="rHi"></span></div></div>
+    <div class="card rev" id="rev" hidden><div class="mut" id="rvT"></div><div class="real" id="rvR"></div><div class="pts" id="rvP"></div><div class="bar"><b id="rvB"></b></div></div>
+    <button class="btn" id="bGo" type="button"></button>
+  </section>
+  <section class="scr" id="end" hidden>
+    <div class="card" style="text-align:center"><div class="mut" id="eT"></div><div class="big" id="eS"></div><div class="rk" id="eR"></div></div>
+    <div class="sq" id="eSq"></div>
+    <div class="chips" id="eChips"></div>
+    <p class="mut" style="text-align:center;margin:0" id="eVs"></p>
+    <div class="row"><button class="btn grow" id="bShare" type="button">📤</button><button class="btn alt" id="bAgain" type="button">↻</button><button class="btn alt" id="bHome" type="button">🏠</button></div>
+  </section>
+  <div class="ov" id="ovCh" hidden><h2 id="chH"></h2><p id="chP"></p><div class="row"><button class="btn alt" id="chNo" type="button">✕</button><button class="btn grow" id="chGo" type="button"></button></div></div>
+  <div class="ov" id="ovSkin" hidden><h2 id="skH"></h2><div class="sk" id="skG"></div><button class="btn alt" id="skX" type="button">✕</button></div>
+  <div class="ov" id="ovPay" hidden><h2>👑 Night Pass</h2><p id="pwP"></p><div class="row" style="flex-wrap:wrap"><button class="btn alt" id="pwNo" type="button">✕</button><button class="btn alt" id="pwTrial" type="button"></button><a class="btn" id="pwGo" target="_top" style="text-decoration:none"></a></div></div>
+  <div class="toast" id="toast" hidden></div>
+</div>
+<script>
+"use strict";
+const GID="gia-cho-viet",$=id=>document.getElementById(id);
+const LS={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const ITEMS=["🥬|Rau muống|Water spinach|1 bó|1 bunch|10000", "🥬|Cải thìa|Bok choy|1 kg|1 kg|30000", "🥒|Dưa leo|Cucumbers|1 kg|1 kg|25000", "🍅|Cà chua|Tomatoes|1 kg|1 kg|30000", "🥔|Khoai tây|Potatoes|1 kg|1 kg|35000", "🧅|Hành tím|Shallots|1 kg|1 kg|60000", "🧄|Tỏi|Garlic|1 kg|1 kg|90000", "🌶️|Ớt sừng|Chili peppers|1 kg|1 kg|60000", "🥕|Cà rốt|Carrots|1 kg|1 kg|28000", "🍋|Chanh|Limes|1 kg|1 kg|40000", "🍌|Chuối|Bananas|1 nải|1 hand|30000", "🍉|Dưa hấu|Watermelon|1 kg|1 kg|18000", "🥭|Xoài cát Hòa Lộc|Hoa Loc mango|1 kg|1 kg|90000", "🍍|Thơm (dứa)|Pineapple|1 trái|1 piece|20000", "🍊|Cam sành|Sành oranges|1 kg|1 kg|35000", "🍇|Nho xanh|Green grapes|1 kg|1 kg|120000", "🥥|Dừa tươi|Fresh coconut|1 trái|1 piece|25000", "🍈|Bưởi da xanh|Green pomelo|1 trái|1 piece|70000", "🍐|Lê|Pears|1 kg|1 kg|60000", "🍎|Táo|Apples|1 kg|1 kg|80000", "🐖|Thịt ba chỉ|Pork belly|1 kg|1 kg|150000", "🐖|Sườn non|Pork ribs|1 kg|1 kg|190000", "🐄|Thịt bò thăn|Beef tenderloin|1 kg|1 kg|290000", "🐔|Gà ta nguyên con|Whole free-range chicken|1 kg|1 kg|140000", "🐔|Đùi gà công nghiệp|Chicken drumsticks|1 kg|1 kg|65000", "🥚|Trứng gà|Chicken eggs|1 chục|10 eggs|35000", "🐟|Cá rô phi|Tilapia|1 kg|1 kg|60000", "🦐|Tôm thẻ|Whiteleg shrimp|1 kg|1 kg|190000", "🦑|Mực lá|Squid|1 kg|1 kg|260000", "🦀|Cua biển|Sea crab|1 kg|1 kg|450000", "🍚|Gạo ST25|ST25 rice|1 kg|1 kg|32000", "🍜|Mì gói Hảo Hảo|Instant noodles|1 gói|1 pack|5000", "🥖|Bánh mì thịt|Banh mi|1 ổ|1 sandwich|25000", "🍲|Phở bò|Beef pho|1 tô|1 bowl|55000", "🍚|Cơm tấm sườn|Broken rice with pork|1 phần|1 plate|50000", "🍜|Bún bò Huế|Hue beef noodles|1 tô|1 bowl|50000", "🍮|Chè thái|Thai dessert|1 ly|1 cup|25000", "🧋|Trà sữa trân châu|Bubble tea|1 ly|1 cup|45000", "☕|Cà phê sữa đá|Iced milk coffee|1 ly|1 cup|25000", "🥤|Nước mía|Sugarcane juice|1 ly|1 cup|12000", "🍺|Bia Saigon|Saigon beer|1 lon|1 can|16000", "🥛|Sữa tươi hộp 1 lít|Fresh milk|1 hộp|1 carton|36000", "💧|Nước suối 500ml|Bottled water|1 chai|1 bottle|6000", "🧴|Dầu ăn Tường An|Cooking oil|1 lít|1 liter|55000", "🧂|Nước mắm Phú Quốc|Fish sauce|1 chai|1 bottle|60000", "🍬|Đường cát|Sugar|1 kg|1 kg|26000", "🧻|Giấy vệ sinh|Toilet paper|1 lốc|1 pack|60000", "🧼|Nước rửa chén|Dish soap|1 chai|1 bottle|35000", "⛽|Xăng RON 95|Gasoline|1 lít|1 liter|23000", "🚌|Vé xe buýt|Bus ticket|1 lượt|1 ride|7000", "🚕|Taxi 5 km|Taxi 5 km|1 chuyến|1 trip|80000", "🛵|Gửi xe máy|Motorbike parking|1 lượt|1 time|5000", "🎬|Vé xem phim|Movie ticket|1 vé|1 ticket|90000", "💇|Cắt tóc nam|Men's haircut|1 lần|1 cut|60000", "🏠|Phòng trọ|Rental room|1 tháng|1 month|2500000", "⚡|Tiền điện|Electricity bill|1 tháng|1 month|700000", "📱|Gói data 4G|4G data plan|1 tháng|1 month|120000", "🥇|Vàng nhẫn 9999|Gold ring 9999|1 chỉ|1 chi|8000000", "🍫|Sô-cô-la thanh|Chocolate bar|1 thanh|1 bar|30000", "🥜|Đậu phộng rang|Roasted peanuts|1 kg|1 kg|70000", "🍯|Mật ong|Honey|1 chai|1 bottle|120000", "🥭|Xoài xanh|Green mango|1 kg|1 kg|35000", "🌽|Bắp ngô|Corn|1 trái|1 ear|10000"].map(l=>{const a=l.split("|");return{e:a[0],vi:a[1],en:a[2],uv:a[3],ue:a[4],p:+a[5]}});
+const MAXS=500,N=5;
+/* ===== NGÔN NGỮ ===== */
+const pickLang=()=>{const q=new URLSearchParams(location.search).get("lang");let st=null;try{st=localStorage.getItem("lang")}catch(e){}return [q,st].find(x=>x==="vi"||x==="en")||(/^vi/i.test(navigator.language||"")?"vi":"en")};
+let LANG=pickLang();
+const I18={vi:{title:"Đoán Giá Chợ Việt",daily:"Đề hôm nay",dS:"Cả nước cùng đoán 5 món",done:"Hôm nay bạn được {s}/500 · chơi lại để cải thiện",practice:"🎲 Chơi tự do",streak:"🔥 {n} ngày",best:"🏆 Cao nhất {n}",tot:"🧺 {n} ván",note:"Giá chỉ mang tính tham khảo cho vui, không phải giá niêm yết.",
+ guess:"Chốt giá!",next:"Món tiếp →",see:"Xem kết quả",real:"Giá chợ",you:"Bạn đoán",pts:"{n} điểm",unit:"/",rank:["Mới ra chợ","Người đi chợ","Bà nội trợ cứng","Thánh đi chợ","Thần giá chợ"],
+ endT:"Kết quả",vsC:"Đề thách đấu: bạn {a} — người gửi {b}",win:"Bạn thắng! 🎉",lose:"Chưa vượt được, thử lại nhé!",tie:"Hòa!",ch:"Bạn được thách!",chP:"Bạn bè đạt {s}/500 ở đề này. Đoán sát hơn không?",chGo:"Chơi đề này",
+ share:"Đoán Giá Chợ Việt",ask:"Bạn đoán sát hơn mình không?",skin:"Giao diện",lockP:"Giao diện này dành cho Night Pass. Dùng thử 1 ván mỗi ngày hoặc mở khoá tất cả.",trial:"🎈 Dùng thử 1 ván",go:"Mở Night Pass",tried:"Hôm nay bạn đã dùng thử rồi",copied:"Đã chép — dán cho bạn bè nhé!",avg:"Sai lệch TB {n}%",lbl:"Giá"},
+ en:{title:"Guess the Market Price",daily:"Today's round",dS:"Everyone guesses the same 5 items",done:"Today you scored {s}/500 · play again to improve",practice:"🎲 Free play",streak:"🔥 {n} days",best:"🏆 Best {n}",tot:"🧺 {n} rounds",note:"Prices are rough Vietnamese market averages, just for fun.",
+ guess:"Lock in!",next:"Next item →",see:"See result",real:"Market price",you:"Your guess",pts:"{n} pts",unit:"/",rank:["Fresh at the market","Market goer","Pro shopper","Market legend","Price oracle"],
+ endT:"Result",vsC:"Challenge: you {a} — sender {b}",win:"You win! 🎉",lose:"Not quite — try again!",tie:"Tie!",ch:"You're challenged!",chP:"A friend scored {s}/500 on this round. Can you get closer?",chGo:"Play this round",
+ share:"Guess the Market Price",ask:"Can you guess closer than me?",skin:"Theme",lockP:"This theme is for Night Pass. Try one round a day or unlock everything.",trial:"🎈 Try 1 round",go:"Get Night Pass",tried:"You already used today's trial",copied:"Copied — paste it to a friend!",avg:"Avg error {n}%",lbl:"Price"}};
+const T=(k,o)=>{let s=(I18[LANG][k]!=null?I18[LANG][k]:I18.vi[k]);if(typeof s==="string"&&o)for(const x in o)s=s.replace("{"+x+"}",o[x]);return s};
+const money=n=>n.toLocaleString(LANG==="vi"?"vi-VN":"en-US")+(LANG==="vi"?"đ":" ₫");
+/* ===== RNG / NGÀY ===== */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const fnv=s=>{let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0};
+const dayKey=()=>new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Ho_Chi_Minh"}).format(new Date());
+const dayNo=k=>Math.floor((Date.parse(k+"T00:00:00Z")-Date.parse("2026-01-01T00:00:00Z"))/864e5)+1;
+const b64e=o=>btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+function parseCh(h){try{const m=/[#&]ch=([A-Za-z0-9_-]{1,200})/.exec(h||"");if(!m)return null;let t=m[1].replace(/-/g,"+").replace(/_/g,"/");while(t.length%4)t+="=";const o=JSON.parse(decodeURIComponent(escape(atob(t))));if(o&&Number.isInteger(o.s)&&o.s>=0&&o.s<=4294967295&&Number.isInteger(o.sc)&&o.sc>=0&&o.sc<=MAXS)return{s:o.s,sc:o.sc};return null}catch(e){return null}}
+/* tạo 5 món từ hạt giống */
+function genRound(seed){const R=mulberry32(seed),pool=ITEMS.map((_,i)=>i),out=[];for(let k=0;k<N;k++){const j=Math.floor(R()*pool.length),it=ITEMS[pool.splice(j,1)[0]],t=.2+R()*.6,lo=it.p/Math.pow(16,t);out.push({it,lo,hi:lo*16})}return out}
+const nice=p=>{const st=p<1000?10:p<10000?100:p<100000?500:p<1e6?1000:p<1e7?10000:50000;return Math.max(st,Math.round(p/st)*st)};
+const priceAt=(q,v)=>nice(q.lo*Math.pow(q.hi/q.lo,v/1000));
+const pointsOf=(g,p)=>Math.round(100*Math.max(0,1-Math.abs(Math.log(g/p))/Math.log(2.2)));
+/* ===== GIAO DIỆN ===== */
+const PF={pro:null,ticket:null,
+ skins:[{basic:{vars:{},deco:["🧺","🥬","🍅"],css:""}}],
+ catalog:[[{id:"basic",vi:"Cơ bản",en:"Basic",e:"🧺"},{id:"market",vi:"Chợ truyền thống",en:"Wet market",e:"🛖"},{id:"super",vi:"Siêu thị",en:"Supermarket",e:"🛒"},{id:"street",vi:"Quán vỉa hè đêm",en:"Night street food",e:"🍜"},{id:"tet",vi:"Chợ Tết",en:"Tet market",e:"🧧"}]],
+ skinSel:[LS.get("gcv-skin","basic")]};
+const skinOf=()=>PF.skins[0][PF.skinSel[0]]||PF.skins[0].basic;
+function applySkin(){const sk=skinOf(),pl=$("play");(pl._v||[]).forEach(k=>pl.style.removeProperty(k));pl._v=Object.keys(sk.vars||{});for(const k of pl._v)pl.style.setProperty(k,sk.vars[k]);$("skCss").textContent=sk.css||"";
+ const d=$("deco");d.innerHTML="";const L=sk.deco||["🧺"],R=mulberry32(7);for(let i=0;i<8;i++){const e=document.createElement("i");e.textContent=L[i%L.length];e.style.left=(R()*90)+"%";e.style.top=(R()*85)+"%";e.style.animationDelay=(-R()*8)+"s";d.appendChild(e)}}
+/* ===== ÂM THANH ===== */
+let AC=null;const snd=()=>!window.NPAudio||NPAudio.get();
+function tone(f,d,ty,v,dl){if(!snd())return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();const t0=AC.currentTime+(dl||0),o=AC.createOscillator(),g=AC.createGain();o.type=ty||"sine";o.frequency.value=f;g.gain.setValueAtTime(.0001,t0);g.gain.exponentialRampToValueAtTime(v||.1,t0+.02);g.gain.exponentialRampToValueAtTime(.0001,t0+d);o.connect(g);g.connect(AC.destination);o.start(t0);o.stop(t0+d+.05)}catch(e){}}
+const sfx={tick:()=>tone(520+Math.random()*60,.04,"square",.03),lock:()=>tone(300,.12,"triangle",.1),great:()=>{[660,880,1100].forEach((f,i)=>tone(f,.16,"triangle",.11,i*.08))},ok:()=>{tone(500,.12,"triangle",.1);tone(620,.14,"triangle",.1,.1)},bad:()=>tone(180,.25,"sawtooth",.08)};
+/* ===== TRẠNG THÁI ===== */
+let G=null,CH=null,mode="practice",lastEnd=0;
+const getSave=()=>LS.get("gcv-save",{streak:0,last:"",best:0,total:0,days:{}});
+function show(id){["home","round","end"].forEach(s=>$(s).hidden=s!==id);["ovCh","ovSkin","ovPay"].forEach(o=>$(o).hidden=true)}
+function toast(m,ms){const t=$("toast");t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,ms||1800)}
+function renderHome(){const sv=getSave(),k=dayKey(),dn=dayNo(k),done=sv.days[k];$("ttl").textContent=T("title");$("dN").textContent="#"+dn;$("dT").textContent=T("daily");$("dS").textContent=done!=null?T("done",{s:done}):T("dS");$("bPractice").textContent=T("practice");$("hNote").textContent=T("note");$("bLang").textContent=LANG==="vi"?"EN":"VI";$("bSnd").textContent=snd()?"🔊":"🔇";
+ $("hChips").innerHTML="";[sv.streak?T("streak",{n:sv.streak}):"",sv.best?T("best",{n:sv.best}):"",sv.total?T("tot",{n:sv.total}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("hChips").appendChild(c)});
+ $("hHero").textContent=skinOf().deco[0]||"🧺"}
+function begin(seed,m,ch){G={seed,mode:m,ch:ch||null,q:genRound(seed),i:0,pts:[],guess:[],done:false,rev:false,m:m};mode=m;applySkin();show("round");window.NP&&NP.start();showQ()}
+function showQ(){const q=G.q[G.i],it=q.it;G.rev=false;$("rev").hidden=true;$("sl").disabled=false;$("sl").value=500;
+ $("dots").innerHTML="";for(let i=0;i<N;i++){const d=document.createElement("i");d.className=i<=G.i?"on":"";d.textContent=i<G.i?"✓":"";$("dots").appendChild(d)}
+ $("iEm").textContent=it.e;$("iNm").textContent=LANG==="vi"?it.vi:it.en;$("iUn").textContent=LANG==="vi"?it.uv:it.ue;$("rLo").textContent=money(nice(q.lo));$("rHi").textContent=money(nice(q.hi));$("bGo").textContent=T("guess");updPrice()}
+function updPrice(){if(!G)return;$("pr").textContent=money(priceAt(G.q[G.i],+$("sl").value))}
+$("sl").addEventListener("input",()=>{updPrice();sfx.tick()});
+$("bGo").onclick=()=>{if(!G||G.done)return;if(!G.rev){const q=G.q[G.i],g=priceAt(q,+$("sl").value),p=q.it.p,pt=pointsOf(g,p);G.rev=true;G.guess.push(g);G.pts.push(pt);$("sl").disabled=true;
+  $("rvT").textContent=T("you")+": "+money(g);$("rvR").textContent=T("real")+": "+money(p);$("rvP").textContent=T("pts",{n:pt});$("rvB").style.width="0";$("rev").hidden=false;requestAnimationFrame(()=>requestAnimationFrame(()=>$("rvB").style.width=pt+"%"));
+  pt>=90?sfx.great():pt>=50?sfx.ok():sfx.bad();if(window.NPFx)NPFx.buzz(pt>=90?[40,30,60]:20);$("bGo").textContent=G.i===N-1?T("see"):T("next")}
+ else{if(G.i<N-1){G.i++;showQ()}else finish()}};
+const sqOf=p=>p>=90?"🟩":p>=60?"🟨":p>=30?"🟧":"🟥";
+const rankOf=s=>s>=450?4:s>=350?3:s>=250?2:s>=150?1:0;
+function finish(){const sc=G.pts.reduce((a,b)=>a+b,0);G.done=true;G.score=sc;lastEnd=performance.now();const sv=getSave();sv.total++;sv.best=Math.max(sv.best,sc);
+ if(G.mode==="daily"){const k=dayKey();if(sv.days[k]==null||sc>sv.days[k]){sv.days[k]=sc}if(sv.last!==k){const y=new Date(Date.parse(k+"T00:00:00Z")-864e5).toISOString().slice(0,10);sv.streak=sv.last===y?sv.streak+1:1;sv.last=k}}
+ LS.set("gcv-save",sv);window.NP&&NP.result({score:sc,extra:{mode:G.mode}});
+ show("end");$("eT").textContent=T("endT");$("eS").textContent=sc+"/"+MAXS;$("eR").textContent="🏅 "+T("rank")[rankOf(sc)];$("eSq").textContent=G.pts.map(sqOf).join("");
+ const avg=Math.round(100*G.guess.reduce((a,g,i)=>a+Math.abs(Math.log(g/G.q[i].it.p)),0)/N);$("eChips").innerHTML="";[T("avg",{n:avg}),G.mode==="daily"?"📅 #"+dayNo(dayKey()):"",sv.streak&&G.mode==="daily"?T("streak",{n:sv.streak}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("eChips").appendChild(c)});
+ $("eVs").textContent=G.ch?T("vsC",{a:sc,b:G.ch.sc})+" · "+(sc>G.ch.sc?T("win"):sc<G.ch.sc?T("lose"):T("tie")):"";
+ const helper=!!(window.NP&&NP.helper);$("bShare").hidden=helper;$("bAgain").hidden=helper;$("bBoard").hidden=helper;
+ if(PF.pro&&PF.pro.trial)PF.lockPro();
+ sc>=350?sfx.great():sfx.ok()}
+function again(){if(!G)return;G.mode==="daily"||G.ch?begin(G.mode==="daily"?G.seed:(Math.random()*4294967296)>>>0,"practice",null):begin((Math.random()*4294967296)>>>0,"practice",null)}
+/* ===== CHIA SẺ ===== */
+function shareLink(){const o={s:G.seed,sc:G.score};return location.origin+"/api/share/"+GID+"?ch="+b64e(o)+(LANG==="en"?"&l=en":"")}
+function shareText(){const day=G.mode==="daily"?" #"+dayNo(dayKey()):"";return "💰 "+T("share")+day+"\n"+G.pts.map(sqOf).join("")+" "+G.score+"/"+MAXS+"\n"+T("ask")+"\n"+shareLink()}
+function drawCard(){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif";
+ const g=x.createLinearGradient(0,0,1080,1350);g.addColorStop(0,"#2b1f6b");g.addColorStop(1,"#0E1020");x.fillStyle=g;x.fillRect(0,0,1080,1350);
+ x.textAlign="center";x.fillStyle="#ffb020";x.font="800 70px "+F;x.fillText("💰 "+T("share")+(G.mode==="daily"?" #"+dayNo(dayKey()):""),540,120);
+ x.font="280px "+F;x.fillText(G.q[0].it.e,540,470);x.fillStyle="#fff";x.font="800 190px "+F;x.fillText(G.score+"/"+MAXS,540,720);
+ x.font="130px "+F;x.fillText(G.pts.map(sqOf).join(""),540,900);x.fillStyle="#ffd98a";x.font="800 64px "+F;x.fillText("🏅 "+T("rank")[rankOf(G.score)],540,1030);
+ x.fillStyle="#fff";x.font="800 62px "+F;x.fillText(T("ask"),540,1180);x.font="800 42px "+F;x.fillStyle="#a9a3c9";x.fillText(location.host,540,1260);return c}
+$("bShare").onclick=async()=>{if(!G||!G.done)return;const txt=shareText();try{const cv=drawCard(),blob=await new Promise(r=>cv.toBlob(r,"image/png")),f=blob&&new File([blob],"gia-cho-viet.png",{type:"image/png"});
+  if(f&&navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],text:txt});return}
+  if(navigator.share){await navigator.share({text:txt});return}}catch(e){if(e&&e.name==="AbortError")return}
+ try{await navigator.clipboard.writeText(txt);toast(T("copied"),2200)}catch(e){toast(txt,3000)}};
+$("bBoard").onclick=()=>window.NP&&NP.brag();
+$("bAgain").onclick=again;$("bHome").onclick=()=>{G=null;show("home");renderHome()};
+function instant(e){if(!G||!G.done||$("end").hidden||window.NP&&NP.helper||performance.now()-lastEnd<450)return;if(e.target.closest("button,a"))return;again()}
+$("end").addEventListener("click",instant);addEventListener("keydown",e=>{if(G&&G.done&&!$("end").hidden&&(e.key===" "||e.key==="Enter")&&!(e.target.closest&&e.target.closest("button"))&&performance.now()-lastEnd>450){e.preventDefault();again()}});
+/* ===== TRANG CHỦ / THÁCH ĐẤU ===== */
+$("bDaily").onclick=()=>begin(fnv("gcv|"+dayKey()),"daily",null);
+$("bPractice").onclick=()=>begin((Math.random()*4294967296)>>>0,"practice",null);
+$("bLang").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}document.documentElement.lang=LANG;if(G&&!G.done&&!$("round").hidden){const r=G.rev;showQ0()}else if(!$("home").hidden)renderHome();else if(G&&G.done)finish2()};
+function showQ0(){const q=G.q[G.i],it=q.it;$("iNm").textContent=LANG==="vi"?it.vi:it.en;$("iUn").textContent=LANG==="vi"?it.uv:it.ue;$("rLo").textContent=money(nice(q.lo));$("rHi").textContent=money(nice(q.hi));updPrice();$("bGo").textContent=G.rev?(G.i===N-1?T("see"):T("next")):T("guess");if(G.rev){const g=G.guess[G.i],p=q.it.p;$("rvT").textContent=T("you")+": "+money(g);$("rvR").textContent=T("real")+": "+money(p);$("rvP").textContent=T("pts",{n:G.pts[G.i]})}}
+function finish2(){$("eT").textContent=T("endT");$("eR").textContent="🏅 "+T("rank")[rankOf(G.score)]}
+$("bSnd").onclick=()=>{if(window.NPAudio)NPAudio.set(!NPAudio.get());$("bSnd").textContent=snd()?"🔊":"🔇"};
+const openCh=c=>{CH=c;$("chH").textContent="⚔ "+T("ch");$("chP").textContent=T("chP",{s:c.sc});$("chGo").textContent=T("chGo");$("ovCh").hidden=false};
+$("chNo").onclick=()=>{$("ovCh").hidden=true;CH=null};$("chGo").onclick=()=>{const c=CH;$("ovCh").hidden=true;if(c)begin(c.s,"practice",c)};
+/* ===== GIAO DIỆN TRẢ PHÍ ===== */
+const subUrl=()=>"../../../subscribe.html?from="+encodeURIComponent("cozyplay/index.html#"+GID)+"&plan=month";
+const passToken=()=>{try{const p=JSON.parse(localStorage.getItem("pass"));return p&&p.token}catch(e){return null}};
+const track=(k,a)=>{try{fetch("/api/paywall",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({f:k,k:a})}).catch(()=>{})}catch(e){}};
+let payFor=null;
+function openSkins(){$("skH").textContent="🎨 "+T("skin");$("skG").innerHTML="";PF.catalog[0].forEach(c=>{const locked=c.id!=="basic"&&!PF.skins[0][c.id],b=document.createElement("button");b.type="button";b.className="skc"+(locked?" lock":"")+(PF.skinSel[0]===c.id?" on":"");b.innerHTML='<span class="e">'+c.e+"</span>"+(LANG==="vi"?c.vi:c.en);b.onclick=()=>locked?openPay(c.id):choose(c.id);$("skG").appendChild(b)});$("ovSkin").hidden=false}
+function choose(id){PF.skinSel[0]=id;LS.set("gcv-skin",id);$("ovSkin").hidden=true;applySkin();renderHome()}
+function openPay(id){payFor=id;track(GID+"_skin","view");$("pwP").textContent=T("lockP");$("pwGo").textContent=T("go");$("pwGo").href=subUrl();$("pwTrial").textContent=T("trial");$("pwTrial").hidden=LS.get("gcv-trial","")===dayKey();$("ovSkin").hidden=true;$("ovPay").hidden=false}
+$("pwGo").onclick=()=>track(GID+"_skin","click");$("pwNo").onclick=()=>{$("ovPay").hidden=true;openSkins()};
+$("pwTrial").onclick=async()=>{try{await PF.loadPro(true);LS.set("gcv-trial",dayKey());track(GID+"_skin","trial");PF.skinRestore=PF.skinSel[0];PF.skinSel[0]=payFor;$("ovPay").hidden=true;begin((Math.random()*4294967296)>>>0,"practice",null)}catch(e){toast(T("tried"),2200);$("ovPay").hidden=true}};
+$("bSkin").onclick=openSkins;$("skX").onclick=()=>$("ovSkin").hidden=true;
+const fetchT=(u,o,ms)=>{const c=new AbortController(),id=setTimeout(()=>c.abort(),ms);return fetch(u,Object.assign({signal:c.signal},o)).finally(()=>clearTimeout(id))};
+PF.loadPro=async function(trial){const tk=passToken(),cacheable=!trial;let src=null,r=null;
+ try{r=await fetchT("/api/pro/"+GID+".js"+(trial?"?trial=1":""),{headers:tk?{Authorization:"Bearer "+tk}:{},cache:"no-store"},8000)}catch(e){r=null}
+ if(r&&r.ok){src=await r.text();if(cacheable)LS.set("gcv-pro-src",{src})}
+ else{if(r&&r.status>=400&&r.status<500&&r.status!==429){if(r.status===401&&cacheable)try{localStorage.removeItem("gcv-pro-src")}catch(e){}throw new Error("pro_"+r.status)}
+  const c=cacheable?LS.get("gcv-pro-src",null):null,p=LS.get("pass",null);if(c&&c.src&&p&&p.exp&&new Date(p.exp)>new Date())src=c.src;else throw new Error("pro_offline")}
+ new Function("PF",src)(PF);
+ if(PF.pro&&!PF.pro.trial){const ad=LS.get("gcv-auto",0);if(!ad){LS.set("gcv-auto",1);if(PF.skinSel[0]==="basic"){const f=Object.keys(PF.skins[0]).find(i=>i!=="basic");if(f){PF.skinSel[0]=f;LS.set("gcv-skin",f)}}}}
+ applySkin();if(!$("home").hidden)renderHome()};
+PF.lockPro=function(){for(const id of Object.keys(PF.skins[0]))if(id!=="basic")delete PF.skins[0][id];PF.pro=null;if(PF.skinRestore!=null){PF.skinSel[0]=PF.skinRestore;PF.skinRestore=null}if(!PF.skins[0][PF.skinSel[0]])PF.skinSel[0]="basic";applySkin()};
+window.PF=PF;
+/* ===== KHỞI ĐỘNG ===== */
+if(window.NP&&NP.onPause)NP.onPause(()=>{},()=>{});
+if(window.NP&&NP.state)NP.state(()=>null);
+applySkin();renderHome();show("home");
+if(passToken()&&!(window.NP&&NP.helper))PF.loadPro(false).catch(()=>{});
+const c0=parseCh(location.hash);if(c0)openCh(c0);else if(location.hash==="#daily")$("bDaily").click();
+window.GC={get G(){return G},begin,finish,again,shareText,shareLink,drawCard,parseCh,genRound,pointsOf,priceAt,fnv,dayKey,dayNo,PF,T,ITEMS};
+</script>
+</body>
+</html>

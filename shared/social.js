@@ -12,6 +12,8 @@ window.NPS = (function () {
 
   /* Danh sách game hỗ trợ. Thêm game mới ở đây (và SCORE_GAMES ở server/app.js nếu có bảng xếp hạng). */
   var GAMES = {
+    "gia-cho-viet": { name: { vi: "Đoán Giá Chợ Việt", en: "Guess the Market Price" }, url: "cozyplay/games/gia-cho-viet/index.html", board: true, site: "cozyplay" },
+    "xin-nghi": { name: { vi: "Sếp Ơi Em Xin Nghỉ", en: "Boss, I Need a Day Off" }, url: "cozyplay/games/xin-nghi/index.html", board: true, site: "cozyplay" },
     "dap-deadline": { name: { vi: "Đập Deadline", en: "Smash the Deadline" }, url: "cozyplay/games/dap-deadline/index.html", board: true, site: "cozyplay" },
     "cozy-wings": { name: { vi: "Cánh Nhỏ Phiêu Lưu", en: "Little Wings" }, url: "cozyplay/games/cozy-wings/index.html", board: true, site: "cozyplay" },
     /* Pop Play (trẻ em): bảng xếp hạng chỉ dùng TÊN VUI CÓ SẴN (kids:true), không cho gõ tay */

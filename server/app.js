@@ -444,7 +444,11 @@ const NEW_GAMES = {   // 7 game mới của Pop Play (mỗi game 4 loại × 5 g
   "nhay-theo-so": { vi: "Nhảy Theo Số", en: "Dance by Numbers", types: [["Nhảy", "Jump"], ["Vỗ tay", "Clap"], ["Dậm chân", "Stomp"], ["Vẫy tay", "Wave"]], dvi: "Màn hình hiện phép tính, bé nhảy hoặc vỗ tay đúng số lần. Vừa học vừa vận động!", den: "A sum appears, the kid jumps or claps that many times. Learn and move!" },
 };
 for (const id in NEW_GAMES) POP_GAMES[id] = { max: 300, kids: true };
-const SCORE_GAMES = { "dap-deadline": { max: 5000 }, "cozy-wings": { max: 5000 }, ...POP_GAMES };   // cozy-wings = Cánh Nhỏ Phiêu Lưu
+const COZY_NEW = {   // game mới của Cozy Play (người lớn): 1 loại × 5 giao diện (1 free + 4 Night Pass). ch = {s:hạt giống uint32, sc:điểm 0..max}
+  "gia-cho-viet": { vi: "Đoán Giá Chợ Việt", en: "Guess the Market Price", max: 500, dvi: "5 món mỗi ngày, cả nước cùng đoán. Bạn đoán sát giá chợ cỡ nào?", den: "5 items a day, everyone guesses the same. How close can you get to the market price?" },
+  "xin-nghi": { vi: "Sếp Ơi Em Xin Nghỉ", en: "Boss, I Need a Day Off", max: 100, dvi: "Nghĩ lý do xin nghỉ thật 'thuyết phục' để qua mặt sếp. Sếp có duyệt không?", den: "Come up with a convincing excuse for a day off. Will the boss approve?" }
+};
+const SCORE_GAMES = { "dap-deadline": { max: 5000 }, "cozy-wings": { max: 5000 }, ...POP_GAMES, ...Object.fromEntries(Object.entries(COZY_NEW).map(([k, v]) => [k, { max: v.max }])) };   // cozy-wings = Cánh Nhỏ Phiêu Lưu
 const nickOk = n => /^[\p{L}\p{N} _.\-]{2,16}$/u.test(n) && !/https?|www\.|\.(com|net|org|vn|io)\b|@/i.test(n);
 
 /* Chỉ ghi khi người chơi chủ động bấm "Khoe điểm". */
@@ -668,6 +672,29 @@ route("GET", new RegExp("^/api/share/(" + NG_IDS + ")$"), async ({ m, query, hea
   else if (okCh) { title = en ? "⚔ " + name + ": " + o.sc + " points! Can you beat it?" : "⚔ " + name + ": " + o.sc + " điểm! Nhà bạn vượt được không?"; desc = g.types[o.t][L] + (en ? ". Same questions, same challenge — try it now!" : ". Cùng một thử thách, thử ngay nào!"); img = "ch"; go = "#ch=" + String(query.get("ch")).replace(/[^\w-]/g, ""); }
   return out(200, ogPage({ en, title, desc, image: origin + "/popplay/games/" + id + "/og/" + img + ".png", target: "/popplay/games/" + id + "/index.html" + go, site: "Pop Play" }), "text/html; charset=utf-8");
 });
+/* Game mới của Cozy Play: mã Night Pass + trang xem trước chung (thách đấu ?ch=, hôm nay ?d=1) */
+const CZ_IDS = Object.keys(COZY_NEW).join("|");
+route("GET", new RegExp("^/api/pro/(" + CZ_IDS + ")\\.js$"), async ({ m, headers, query, ip }) => {
+  const id = m[1], js = "application/javascript; charset=utf-8", mod = () => require("./pro/" + id), pre = () => require("./pro/_premium").code;
+  const pass = await authPass(headers); let trial = false;
+  if (!pass && authHelper(headers)) return out(200, mod().source({ helper: true }) + pre(), js);
+  if (!pass) {
+    if (query.get("trial") !== "1") return out(401, { error: "pass_required" });
+    if (await limited("gt:" + id + ":" + ipHash(ip), 1, 86400000)) return out(429, { error: "trial_used" });
+    trial = true;
+    await db.query("insert into paywall_daily(day, key, n) values ((now() at time zone $1)::date, $2, 1) on conflict (day, key) do update set n = paywall_daily.n + 1", [TZ, id + "_skin:trial"]);
+  }
+  return out(200, mod().source({ trial }) + pre(), js);
+});
+route("GET", new RegExp("^/api/share/(" + CZ_IDS + ")$"), async ({ m, query, headers }) => {
+  const id = m[1], g = COZY_NEW[id], en = query.get("l") === "en", o = b64json(query.get("ch")), origin = reqOrigin(headers), name = g[en ? "en" : "vi"];
+  const okCh = o && intIn(o.s, 0, 4294967295) && intIn(o.sc, 0, g.max);
+  const daily = query.get("d") === "1", dn = /^\d{1,4}$/.test(query.get("n") || "") ? query.get("n") : "", ds = /^\d{1,3}$/.test(query.get("s") || "") ? query.get("s") : "";
+  let title = name, desc = en ? g.den : g.dvi, img = "home", go = "";
+  if (daily) { title = en ? "📅 " + name + " — today #" + dn + (ds ? ": " + ds : "") : "📅 " + name + " — hôm nay #" + dn + (ds ? ": " + ds + " điểm" : ""); desc = en ? "Same challenge for everyone today. Can you beat it?" : "Hôm nay ai cũng chơi cùng một đề. Bạn được bao nhiêu?"; img = "daily"; go = "#daily"; }
+  else if (okCh) { title = en ? "⚔ " + name + ": " + o.sc + "! Can you beat it?" : "⚔ " + name + ": " + o.sc + " điểm! Bạn vượt được không?"; desc = en ? "Same round, same challenge — try it now!" : "Cùng một đề, thử ngay nào!"; img = "ch"; go = "#ch=" + String(query.get("ch")).replace(/[^\w-]/g, ""); }
+  return out(200, ogPage({ en, title, desc, image: origin + "/cozyplay/games/" + id + "/og/" + img + ".png", target: "/cozyplay/games/" + id + "/index.html" + go, site: "Cozy Play" }), "text/html; charset=utf-8");
+});
 /* Thử thách ngày: hạt giống + mục tiêu do máy chủ quyết định (giờ Việt Nam), chỉ cho người có Night Pass */
 route("GET", /^\/api\/pro\/daily$/, async ({ headers }) => {
   if (!(await authPass(headers)) && !authHelper(headers)) return out(401, { error: "pass_required" });
@@ -676,7 +703,7 @@ route("GET", /^\/api\/pro\/daily$/, async ({ headers }) => {
   return out(200, { day, seed: h.readUInt32BE(0), goal: [300, 350, 400, 450, 500][h[4] % 5] });
 });
 /* Đếm lượt xem / bấm vào tính năng bị khóa (ẩn danh, chỉ số tổng hợp theo ngày) */
-const PAYWALL_KEYS = new Set(["endless", "daily", "boss", "diff", "skin", "grid", "pack", "stats", "fly_stars", "fly_math", "fly_skin", "wing_skin", "village_skin", "duel_skin", ...Object.keys(NEW_GAMES).map(id => id + "_skin")]);
+const PAYWALL_KEYS = new Set(["endless", "daily", "boss", "diff", "skin", "grid", "pack", "stats", "fly_stars", "fly_math", "fly_skin", "wing_skin", "village_skin", "duel_skin", ...Object.keys(NEW_GAMES).map(id => id + "_skin"), ...Object.keys(COZY_NEW).map(id => id + "_skin")]);
 route("POST", /^\/api\/paywall$/, async ({ body, ip }) => {
   const f = String(body.f || ""), k = String(body.k || "");
   if (!PAYWALL_KEYS.has(f) || !["view", "click", "trial"].includes(k)) return out(400, { error: "bad_event" });
