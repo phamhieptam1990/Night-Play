@@ -651,9 +651,21 @@ route("GET", /^\/api\/share\/lang-cua-be$/, async ({ query, headers }) => {
   return out(200, ogPage({ en, title, desc, image: origin + "/popplay/games/lang-cua-be/og/" + img + ".png", target: "/popplay/games/lang-cua-be/index.html" + go, site: "Pop Play" }), "text/html; charset=utf-8");
 });
 /* 7 game mới của Pop Play: route Night Pass (giao diện trả phí) + link xem trước thách đấu / hôm nay — dùng chung một khuôn */
+const PRO_MODS = {   // require LITERAL (esbuild của Netlify không gộp được require động: require("./pro/" + id) sẽ thiếu file trên production)
+  "ten-lua-cua-be": () => require("./pro/ten-lua-cua-be"),
+  "be-noi-dung-khong": () => require("./pro/be-noi-dung-khong"),
+  "doan-tuoi-nao": () => require("./pro/doan-tuoi-nao"),
+  "bo-me-5-giay": () => require("./pro/bo-me-5-giay"),
+  "con-vat-an-so": () => require("./pro/con-vat-an-so"),
+  "ve-chu-quai-vat": () => require("./pro/ve-chu-quai-vat"),
+  "nhay-theo-so": () => require("./pro/nhay-theo-so"),
+  "gia-cho-viet": () => require("./pro/gia-cho-viet"),
+  "xin-nghi": () => require("./pro/xin-nghi"),
+  "doi-doi-2048": () => require("./pro/doi-doi-2048"),
+};
 const NG_IDS = Object.keys(NEW_GAMES).join("|");
 route("GET", new RegExp("^/api/pro/(" + NG_IDS + ")\\.js$"), async ({ m, headers, query, ip }) => {
-  const id = m[1], js = "application/javascript; charset=utf-8", mod = () => require("./pro/" + id);
+  const id = m[1], js = "application/javascript; charset=utf-8", mod = () => PRO_MODS[id]();
   const pass = await authPass(headers); let trial = false;
   if (!pass && authHelper(headers)) return out(200, mod().source({ helper: true }) + require("./pro/_premium").code, js);   // vé tạm của người chơi hộ
   if (!pass) {
@@ -677,7 +689,7 @@ route("GET", new RegExp("^/api/share/(" + NG_IDS + ")$"), async ({ m, query, hea
 const CZ_IDS = Object.keys(COZY_NEW).join("|");
 const CZ_PRO_IDS = Object.keys(COZY_NEW).filter(k => !COZY_NEW[k].free).join("|");   // game miễn phí hoàn toàn: không có mã Night Pass
 route("GET", new RegExp("^/api/pro/(" + CZ_PRO_IDS + ")\\.js$"), async ({ m, headers, query, ip }) => {
-  const id = m[1], js = "application/javascript; charset=utf-8", mod = () => require("./pro/" + id), pre = () => require("./pro/_premium").code;
+  const id = m[1], js = "application/javascript; charset=utf-8", mod = () => PRO_MODS[id](), pre = () => require("./pro/_premium").code;
   const pass = await authPass(headers); let trial = false;
   if (!pass && authHelper(headers)) return out(200, mod().source({ helper: true }) + pre(), js);
   if (!pass) {
