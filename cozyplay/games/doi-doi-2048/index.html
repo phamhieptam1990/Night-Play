@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <script src="../../../shared/guard.js"></script>
 <script src="../../../shared/bridge.js"></script>
+<script src="../../../shared/fx.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Đổi Đời 2048</title>
 <script>var savedTheme=null;try{savedTheme=localStorage.getItem("theme")}catch(e){}document.documentElement.dataset.theme=savedTheme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");</script>
@@ -41,6 +42,8 @@ body{display:flex;justify-content:center}
 .tys{display:grid;grid-template-columns:repeat(4,1fr);gap:1.8cqw}.ty{position:relative;border:1.5px solid color-mix(in srgb,var(--ink) 30%,transparent);background:var(--panel);color:var(--ink);border-radius:3cqw;padding:1.6cqw .6cqw;font:800 2.9cqw var(--body);min-height:44px;cursor:pointer;text-align:center}.ty .e{display:block;font-size:7.4cqw;line-height:1.1}.ty.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 20%,var(--panel));box-shadow:0 0 0 .5cqw color-mix(in srgb,var(--accent) 45%,transparent)}.ty.lock{opacity:.8}.ty.lock::after{content:'🔒';position:absolute;top:.4cqw;right:1cqw;font-size:3.4cqw}
 .sk{display:grid;grid-template-columns:1fr 1fr;gap:2.4cqw}.skc{position:relative;border:1.5px solid color-mix(in srgb,var(--ink) 30%,transparent);border-radius:3.4cqw;padding:2.2cqw;background:var(--panel);color:var(--ink);font:800 3.6cqw var(--body);cursor:pointer;min-height:44px}.skc.on{border-color:var(--accent)}.skc .e{font-size:9cqw;display:block}.skc.lock{opacity:.75}.skc.lock::after{content:'🔒';position:absolute;top:1.2cqw;right:2cqw;font-size:4cqw}
 .deco{position:absolute;inset:0;pointer-events:none;overflow:hidden;opacity:.5}.deco i{position:absolute;font-style:normal;font-size:9cqw;animation:fl 9s ease-in-out infinite}@keyframes fl{50%{transform:translateY(-3cqw) rotate(8deg)}}
+.tgt{display:flex;align-items:center;gap:2cqw;background:var(--panel);border:.5cqw solid var(--line);border-radius:99cqw;padding:.8cqw 3cqw;font:800 3.2cqw var(--body)}.tgt i{flex:1;height:2.2cqw;border-radius:9cqw;background:color-mix(in srgb,var(--ink) 14%,transparent);overflow:hidden;font-style:normal}.tgt b{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffb020,#ff5a3d);transition:width .3s}.tgt.beat{border-color:var(--good);box-shadow:0 0 3cqw color-mix(in srgb,var(--good) 55%,transparent)}.tgt.beat b{background:var(--good)}
+.st.pulse{animation:stp .35s ease-out}@keyframes stp{40%{transform:scale(1.18);border-color:var(--accent)}}
 .lad{display:flex;justify-content:center;gap:1cqw;flex-wrap:wrap;font-size:5.4cqw}.lad i{font-style:normal;opacity:.28;filter:grayscale(1)}.lad i.on{opacity:1;filter:none}.lad i.cur{transform:scale(1.35);filter:drop-shadow(0 0 1.2cqw var(--accent))}
 .hint{text-align:center}
 /* kết thúc */
@@ -69,6 +72,7 @@ body{display:flex;justify-content:center}
     <p class="mut" id="hNote" style="text-align:center;margin:0"></p>
   </section>
   <section class="scr" id="game" hidden>
+    <div class="tgt" id="tgt" hidden><span id="tgtT"></span><i><b id="tgtB"></b></i></div>
     <div class="stats"><div class="st"><b id="sSc">0</b><span id="sScL"></span></div><div class="st"><b id="sMv">0</b><span id="sMvL"></span></div><div class="st"><b id="sBt">🥚</b><span id="sBtL"></span></div></div>
     <div class="board" id="board"></div>
     <div class="lad" id="lad"></div>
@@ -79,7 +83,7 @@ body{display:flex;justify-content:center}
     <div class="mini" id="eMini"></div>
     <div class="chips" id="eChips"></div>
     <p class="mut" id="eVs" style="text-align:center;margin:0"></p>
-    <div class="row"><button class="btn grow" id="bShare" type="button">📤</button><button class="btn alt" id="bAgain" type="button">↻</button><button class="btn alt" id="bHome" type="button">🏠</button></div>
+    <div class="row"><button class="btn grow" id="bShare" type="button">📤</button><button class="btn alt" id="bRem" type="button" hidden>⚔↻</button><button class="btn alt" id="bAgain" type="button">↻</button><button class="btn alt" id="bHome" type="button">🏠</button></div>
   </section>
   <div class="ov" id="ovCh" hidden><h2 id="chH"></h2><p id="chP"></p><div class="row"><button class="btn alt" id="chNo" type="button">✕</button><button class="btn grow" id="chGo" type="button"></button></div></div>
   <div class="ov" id="ovSkin" hidden><h2 id="skH"></h2><div class="sk" id="skG"></div><button class="btn alt" id="skX" type="button">✕</button></div>
@@ -101,10 +105,10 @@ const RANKS=[["Ở trọ","Renting"],["Có ruộng","Landowner"],["Có nhà","Ho
 const rankOf=l=>l>=11?4:l>=10?3:l>=8?2:l>=6?1:0;
 const I18={vi:{rankHint:"Chơi “Đề hôm nay” để lên bảng điểm nhé!",title:"Đổi Đời 2048",sub:"Ghép 2 món giống nhau để lên bậc. Từ quả trứng tới biệt thự!",daily:"Đề hôm nay",dS:"Cả nước cùng một bàn · 50 nước",done:"Hôm nay bạn được {s} · chơi lại để cao hơn",free:"🎲 Chơi thoải mái",streak:"🔥 {n} ngày",best:"🏆 Cao nhất {n}",tot:"🎮 {n} ván",note:"Vuốt hoặc dùng phím mũi tên. Chỉ để giải trí.",
  sc:"Điểm",mv:"Nước đi",bt:"Cao nhất",left:"Còn {n} nước",moves:"{n} nước",endT:"Ván kết thúc",endN:"Hết nước đi!",endC:"Hết lượt {n} nước",vsC:"Thách đấu: bạn {a} — người gửi {b}",win:"Bạn lên đời cao hơn! 🎉",lose:"Chưa bằng, thử lại nhé!",tie:"Hòa!",ch:"Bạn bị thách!",chP:"Bạn bè đạt {s} điểm trong {m} nước, cùng một bàn. Bạn làm được không?",chGo:"Chơi thử",
- skin:"Giao diện",lockP:"Loại chơi và giao diện này dành cho Night Pass. Dùng thử 1 ván mỗi ngày hoặc mở khoá tất cả.",trial:"🎈 Dùng thử 1 ván",go:"Mở Night Pass",tried:"Hôm nay bạn đã dùng thử rồi",chL:"Bàn thách đấu thuộc loại “{t}” (Night Pass). Dùng thử 1 ván để nhận thách.",share:"Đổi Đời 2048",ask:"Bạn lên đời cao hơn mình không?",copied:"Đã chép — dán cho bạn bè nhé!",reached:"Tới",first:"🎉 Đổi đời thành công: Biệt thự!"},
+ skin:"Giao diện",lockP:"Loại chơi và giao diện này dành cho Night Pass. Dùng thử 1 ván mỗi ngày hoặc mở khoá tất cả.",trial:"🎈 Dùng thử 1 ván",go:"Mở Night Pass",tried:"Hôm nay bạn đã dùng thử rồi",chL:"Bàn thách đấu thuộc loại “{t}” (Night Pass). Dùng thử 1 ván để nhận thách.",tgt:"⚔ Mục tiêu {n}",beat:"Vượt điểm bạn bè rồi! 🎉",rem:"Đấu lại cùng bàn",cmb:["Hay!","Giỏi!","Tuyệt!","Siêu hạng!"],lvl:"Lên đời: {a}!",share:"Đổi Đời 2048",ask:"Bạn lên đời cao hơn mình không?",copied:"Đã chép — dán cho bạn bè nhé!",reached:"Tới",first:"🎉 Đổi đời thành công: Biệt thự!"},
  en:{rankHint:"Play “Today's round” to make the leaderboard!",title:"Life Upgrade 2048",sub:"Merge two of the same to level up. From an egg to a villa!",daily:"Today's board",dS:"Everyone plays the same board · 50 moves",done:"Today you scored {s} · play again to beat it",free:"🎲 Free play",streak:"🔥 {n} days",best:"🏆 Best {n}",tot:"🎮 {n} games",note:"Swipe or use arrow keys. Just for fun.",
  sc:"Score",mv:"Moves",bt:"Best",left:"{n} moves left",moves:"{n} moves",endT:"Game over",endN:"No moves left!",endC:"Out of moves ({n})",vsC:"Challenge: you {a} — sender {b}",win:"You upgraded higher! 🎉",lose:"Not quite — try again!",tie:"Tie!",ch:"You're challenged!",chP:"A friend scored {s} in {m} moves on this exact board. Can you beat it?",chGo:"Try it",
- skin:"Theme",lockP:"This game type and theme are for Night Pass. Try one round a day or unlock everything.",trial:"🎈 Try 1 round",go:"Get Night Pass",tried:"You already used today's trial",chL:"This challenge uses the “{t}” type (Night Pass). Try one round to accept.",share:"Life Upgrade 2048",ask:"Can you upgrade higher than me?",copied:"Copied — paste it to a friend!",reached:"Reached",first:"🎉 Made it: a villa!"}};
+ skin:"Theme",lockP:"This game type and theme are for Night Pass. Try one round a day or unlock everything.",trial:"🎈 Try 1 round",go:"Get Night Pass",tried:"You already used today's trial",chL:"This challenge uses the “{t}” type (Night Pass). Try one round to accept.",tgt:"⚔ Target {n}",beat:"You passed your friend! 🎉",rem:"Rematch same board",cmb:["Nice!","Great!","Awesome!","Legendary!"],lvl:"Level up: {a}!",share:"Life Upgrade 2048",ask:"Can you upgrade higher than me?",copied:"Copied — paste it to a friend!",reached:"Reached",first:"🎉 Made it: a villa!"}};
 const T=(k,o)=>{let s=(I18[LANG][k]!=null?I18[LANG][k]:I18.vi[k]);if(typeof s==="string"&&o)for(const x in o)s=s.replace("{"+x+"}",o[x]);return s};
 const nm=l=>LANG==="vi"?lad()[l-1][1]:lad()[l-1][2];
 const isDark=()=>document.documentElement.dataset.theme==="dark";
@@ -136,12 +140,12 @@ function applySkin(){const t=tOf(),sk=skinOf(t),pl=$("play");(pl._v||[]).forEach
 /* ===== ÂM THANH ===== */
 let AC=null;const snd=()=>!window.NPAudio||NPAudio.get();
 function tone(f,d,ty,v,dl){if(!snd())return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();const t0=AC.currentTime+(dl||0),o=AC.createOscillator(),g=AC.createGain();o.type=ty||"sine";o.frequency.value=f;g.gain.setValueAtTime(.0001,t0);g.gain.exponentialRampToValueAtTime(v||.08,t0+.02);g.gain.exponentialRampToValueAtTime(.0001,t0+d);o.connect(g);g.connect(AC.destination);o.start(t0);o.stop(t0+d+.05)}catch(e){}}
-const sfx={mv:()=>tone(260,.05,"triangle",.04),mg:l=>tone(330+l*60,.12,"triangle",.09),win:()=>[660,880,1100,1320].forEach((f,i)=>tone(f,.18,"triangle",.1,i*.09)),end:()=>{tone(300,.2,"sawtooth",.07);tone(220,.3,"sawtooth",.07,.18)}};
+const sfx={combo:n=>{const b=440*Math.pow(1.122,Math.min(n,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.12,"triangle",.09,i*.05))},mv:()=>tone(260,.05,"triangle",.04),mg:l=>tone(330+l*60,.12,"triangle",.09),win:()=>[660,880,1100,1320].forEach((f,i)=>tone(f,.18,"triangle",.1,i*.09)),end:()=>{tone(300,.2,"sawtooth",.07);tone(220,.3,"sawtooth",.07,.18)}};
 /* ===== LOGIC 2048 (xác định theo hạt giống + số nước đã đi) ===== */
 let G=null,CH=null,lastEnd=0,uid=0;
 const getSave=()=>LS.get("d48-save",{streak:0,last:"",best:0,total:0,days:{}});
 const spawnRng=(seed,k)=>mulberry32((seed^Math.imul(k+1,2654435761))>>>0);
-function newGame(seed,mode,cap,ch,t){G={t:t|0,seed,mode,cap,ch:ch||null,tiles:[],score:0,moves:0,best:0,over:false,won:false,busy:false};spawn();spawn()}
+function newGame(seed,mode,cap,ch,t){G={chain:0,beat:false,t:t|0,seed,mode,cap,ch:ch||null,tiles:[],score:0,moves:0,best:0,over:false,won:false,busy:false};spawn();spawn()}
 function emptyCells(){const o=Array.from({length:N},()=>Array(N).fill(false));G.tiles.forEach(t=>o[t.r][t.c]=true);const e=[];for(let r=0;r<N;r++)for(let c=0;c<N;c++)if(!o[r][c])e.push([r,c]);return e}
 function spawn(){const e=emptyCells();if(!e.length)return;const R=spawnRng(G.seed,G.moves*2+G.tiles.length);const [r,c]=e[Math.floor(R()*e.length)];const t={id:++uid,v:R()<.9?1:2,r,c,isNew:true};G.tiles.push(t);G.best=Math.max(G.best,t.v)}
 function dirVec(d){return{L:[0,-1],R:[0,1],U:[-1,0],D:[1,0]}[d]}
@@ -156,13 +160,19 @@ function slide(d){const [dr,dc]=dirVec(d);const grid=Array.from({length:N},()=>A
  if(dead.length)moved=true;
  return{moved,gain,dead:dead.map(x=>x[0]),mergedIds}}
 function canMove(){if(emptyCells().length)return true;const g=Array.from({length:N},()=>Array(N).fill(0));G.tiles.forEach(t=>g[t.r][t.c]=t.v);for(let r=0;r<N;r++)for(let c=0;c<N;c++){if(c+1<N&&g[r][c]===g[r][c+1])return true;if(r+1<N&&g[r][c]===g[r+1][c])return true}return false}
-function move(d){if(!G||G.over||G.busy)return false;G.tiles.forEach(t=>{t.m=false;t.isNew=false});const res=slide(d);if(!res.moved){G.tiles.forEach(t=>t.m=false);return false}
+function move(d){if(!G||G.over||G.busy)return false;const pb=G.best;G.tiles.forEach(t=>{t.m=false;t.isNew=false});const res=slide(d);if(!res.moved){G.tiles.forEach(t=>t.m=false);return false}
  G.tiles=G.tiles.filter(t=>!t.gone);G.score+=res.gain;G.moves++;G.tiles.forEach(t=>{if(t.v>G.best)G.best=t.v});
  const hadMerge=res.mergedIds.length>0;spawn();const bestNow=G.best;
- render(res.mergedIds,res.dead);hadMerge?sfx.mg(bestNow):sfx.mv();if(window.NPFx&&hadMerge)NPFx.buzz(10);
+ render(res.mergedIds,res.dead);hadMerge?sfx.mg(bestNow):sfx.mv();if(window.NPFx&&hadMerge)NPFx.buzz(10);juice(res.mergedIds.length,pb);
  if(!G.won&&G.best>=11){G.won=true;sfx.win();toast(T("first"),2200)}
  if(G.cap&&G.moves>=G.cap||!canMove()){G.over=true;setTimeout(finish,320)}
  return true}
+/* ===== HIỆU ỨNG COMBO / LÊN ĐỜI / THÁCH ĐẤU ===== */
+function juice(nmg,pb){const host=$("play");G.chain=nmg?G.chain+1:0;const k=nmg+Math.max(0,G.chain-2),up=G.best>pb&&G.best>=4;
+ if(k>=2){const tier=Math.min(3,k-2);NPJuice.text(host,L2([I18.vi.cmb[tier],I18.en.cmb[tier]])+" ×"+k,{color:NPJuice.tierColor(tier),top:"34%",size:7+tier});sfx.combo(k);const st=$("sSc").parentNode;st.classList.remove("pulse");void st.offsetWidth;st.classList.add("pulse");if(window.NPFx)NPFx.buzz(k>=4?[30,20,30,20,60]:[20,15,30])}
+ if(k>=3||up)NPJuice.shake($("board"));
+ if(up){NPJuice.text(host,T("lvl",{a:lad()[G.best-1][0]+" "+nm(G.best)}),{color:"#7dffb0",top:"52%",size:6});NPJuice.flash(host);NPJuice.confetti(host,G.best>=9?30:14);sfx.win();if(window.NPFx)NPFx.buzz([40,30,70])}
+ if(G.ch&&!G.beat&&G.score>G.ch.sc){G.beat=true;$("tgt").classList.add("beat");NPJuice.text(host,T("beat"),{color:"#3ddc84",top:"24%",size:5.4});NPJuice.confetti(host,22);NPJuice.flash(host,"rgba(80,255,150,.45)");sfx.win();if(window.NPFx)NPFx.buzz([40,30,40,30,80])}}
 /* ===== HIỂN THỊ ===== */
 const els=new Map();
 function render(merged,dead){const bd=$("board");const live=new Set(G.tiles.map(t=>t.id));
@@ -172,7 +182,7 @@ function render(merged,dead){const bd=$("board");const live=new Set(G.tiles.map(
   el.style.setProperty("--r",t.r);el.style.setProperty("--c",t.c);el.style.setProperty("--h",hue(t.v));el.firstChild.textContent=lad()[t.v-1][0];el.lastChild.textContent=Math.pow(2,t.v);
   if(merged&&merged.includes(t.id)){el.classList.remove("mg");void el.offsetWidth;el.classList.add("mg")}});
  updHud()}
-function updHud(){$("sSc").textContent=G.score;$("sMv").textContent=G.cap?G.cap-G.moves:G.moves;$("sMvL").textContent=G.cap?T("left",{n:""}).replace(/\s+/g," ").trim()||T("mv"):T("mv");$("sBt").textContent=lad()[G.best-1][0];$("sScL").textContent=T("sc");$("sBtL").textContent=T("bt");
+function updHud(){const tg=$("tgt");if(G.ch){tg.hidden=false;tg.classList.toggle("beat",!!G.beat);$("tgtT").textContent=T("tgt",{n:G.ch.sc})+" · "+G.score;$("tgtB").style.width=Math.min(100,Math.round(G.score/Math.max(1,G.ch.sc)*100))+"%"}else tg.hidden=true;$("sSc").textContent=G.score;$("sMv").textContent=G.cap?G.cap-G.moves:G.moves;$("sMvL").textContent=G.cap?T("left",{n:""}).replace(/\s+/g," ").trim()||T("mv"):T("mv");$("sBt").textContent=lad()[G.best-1][0];$("sScL").textContent=T("sc");$("sBtL").textContent=T("bt");
  $("lad").innerHTML="";lad().forEach((l,i)=>{const s=document.createElement("i");s.textContent=l[0];if(i+1<=G.best)s.className=(i+1===G.best?"on cur":"on");$("lad").appendChild(s)});
  $("gHint").textContent=G.ch?T("chP",{s:G.ch.sc,m:G.ch.mv}).split(".")[0]:(G.cap?T("left",{n:G.cap-G.moves}):T("moves",{n:G.moves}))}
 function buildBoard(){const bd=$("board");bd.innerHTML="";els.clear();for(let r=0;r<N;r++)for(let c=0;c<N;c++){const e=document.createElement("div");e.className="cell";e.style.left=(c*25+1.25)+"%";e.style.top=(r*25+1.25)+"%";bd.appendChild(e)}}
@@ -192,12 +202,14 @@ function finish(){const sv=getSave();sv.total++;sv.best=Math.max(sv.best,G.score
  const m=$("eMini");m.innerHTML="";boardRows().forEach(r=>r.forEach(v=>{const s=document.createElement("span");s.textContent=v?lad()[v-1][0]:"";m.appendChild(s)}));
  $("eChips").innerHTML="";[G.mode==="daily"?"📅 #"+dayNo(dayKey()):"",T("moves",{n:G.moves}),G.mode==="daily"&&sv.streak?T("streak",{n:sv.streak}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("eChips").appendChild(c)});
  $("eVs").textContent=G.ch?T("vsC",{a:G.score,b:G.ch.sc})+" · "+(G.score>G.ch.sc?T("win"):G.score<G.ch.sc?T("lose"):T("tie")):"";
+ $("bRem").hidden=!(G.ch||G.mode==="daily")||!!(window.NP&&NP.helper);if(G.ch&&G.score>G.ch.sc)NPJuice.confetti($("play"),26);
  const helper=!!(window.NP&&NP.helper);$("bShare").hidden=helper;$("bAgain").hidden=helper;$("bBoard").hidden=helper;$("bHome").hidden=helper}
+function rematch(){if(!G)return;const g=G;if(PF.pro&&PF.pro.trial)PF.lockPro();begin(g.seed,g.mode,g.cap,g.ch,g.t)}
 const L2=a=>LANG==="vi"?a[0]:a[1];
 const newSeed=()=>(Math.random()*4294967296)>>>0;
 function again(){if(!G)return;const tt=G.t;if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",0,null,tt)}
 function shareLink(){return location.origin+"/api/share/"+GID+"?ch="+b64e({s:G.seed,sc:Math.min(MAXS,G.score),mv:Math.max(5,Math.min(500,G.moves)),t:G.t})+(LANG==="en"?"&l=en":"")}
-function shareText(){const rows=boardRows().map(r=>r.map(v=>v?lad()[v-1][0]:"⬜").join("")).join("\n");return PF.types[G.t][0]+" "+T("share")+(G.t?" · "+L2([PF.types[G.t][1],PF.types[G.t][2]]):"")+(G.mode==="daily"?" #"+dayNo(dayKey()):"")+"\n"+rows+"\n"+T("reached")+" "+lad()[G.best-1][0]+" "+nm(G.best)+" · "+G.score+" · "+T("moves",{n:G.moves})+"\n"+T("ask")+"\n"+shareLink()}
+function shareText(){const rows=boardRows().map(r=>r.map(v=>v?lad()[v-1][0]:"⬜").join("")).join("\n");return PF.types[G.t][0]+" "+T("share")+(G.t?" · "+L2([PF.types[G.t][1],PF.types[G.t][2]]):"")+(G.mode==="daily"?" #"+dayNo(dayKey()):"")+"\n"+rows+"\n"+T("reached")+" "+lad()[G.best-1][0]+" "+nm(G.best)+" · "+G.score+" · "+T("moves",{n:G.moves})+(G.ch?"\n⚔ "+G.score+" vs "+G.ch.sc+(G.score>G.ch.sc?" 🎉":""):"")+"\n"+T("ask")+"\n"+shareLink()}
 function drawCard(){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif";
  const g=x.createLinearGradient(0,0,1080,1350);g.addColorStop(0,"#3a2a7a");g.addColorStop(1,"#0E1020");x.fillStyle=g;x.fillRect(0,0,1080,1350);x.textAlign="center";
  x.fillStyle="#ffb020";x.font="800 68px "+F;x.fillText(PF.types[G.t][0]+" "+T("share")+(G.t?" · "+L2([PF.types[G.t][1],PF.types[G.t][2]]):"")+(G.mode==="daily"?" #"+dayNo(dayKey()):""),540,120);
@@ -210,12 +222,12 @@ $("bShare").onclick=async()=>{if(!G||!G.over)return;const txt=shareText();try{co
   if(navigator.share){await navigator.share({text:txt});return}}catch(e){if(e&&e.name==="AbortError")return}
  try{await navigator.clipboard.writeText(txt);toast(T("copied"),2200)}catch(e){toast(txt,3000)}};
 $("bBoard").onclick=()=>window.NP&&NP.brag();
-$("bAgain").onclick=again;$("bHome").onclick=()=>{G=null;if(PF.pro&&PF.pro.trial)PF.lockPro();applySkin();show("home");renderHome()};
-$("end").addEventListener("click",e=>{if(!G||!G.over||$("end").hidden||window.NP&&NP.helper||performance.now()-lastEnd<450||e.target.closest("button,a"))return;again()});
+$("bAgain").onclick=again;$("bRem").onclick=rematch;$("bHome").onclick=()=>{G=null;if(PF.pro&&PF.pro.trial)PF.lockPro();applySkin();show("home");renderHome()};
+$("end").addEventListener("click",e=>{if(!G||!G.over||$("end").hidden||window.NP&&NP.helper||performance.now()-lastEnd<450||e.target.closest("button,a"))return;G.ch?rematch():again()});
 /* ===== ĐIỀU KHIỂN ===== */
 addEventListener("keydown",e=>{const m={ArrowLeft:"L",ArrowRight:"R",ArrowUp:"U",ArrowDown:"D",a:"L",d:"R",w:"U",s:"D",A:"L",D:"R",W:"U",S:"D"}[e.key];
  if(m&&G&&!G.over&&!$("game").hidden){e.preventDefault();move(m);return}
- if(G&&G.over&&!$("end").hidden&&(e.key===" "||e.key==="Enter")&&!(e.target.closest&&e.target.closest("button"))&&performance.now()-lastEnd>450&&!(window.NP&&NP.helper)){e.preventDefault();again()}});
+ if(G&&G.over&&!$("end").hidden&&(e.key===" "||e.key==="Enter")&&!(e.target.closest&&e.target.closest("button"))&&performance.now()-lastEnd>450&&!(window.NP&&NP.helper)){e.preventDefault();G.ch?rematch():again()}});
 let sx=0,sy=0,st=false;
 $("play").addEventListener("pointerdown",e=>{if(e.target.closest("button,a")||$("game").hidden)return;st=true;sx=e.clientX;sy=e.clientY});
 $("play").addEventListener("pointerup",e=>{if(!st)return;st=false;const dx=e.clientX-sx,dy=e.clientY-sy;if(Math.max(Math.abs(dx),Math.abs(dy))<22)return;move(Math.abs(dx)>Math.abs(dy)?(dx>0?"R":"L"):(dy>0?"D":"U"))});
@@ -260,7 +272,7 @@ if(window.NP&&NP.state)NP.state(()=>{if(!G||G.over)return null;const gr=Array(16
 applySkin();renderHome();show("home");const proP=passToken()&&!(window.NP&&NP.helper)?PF.loadPro(false).catch(()=>{}):Promise.resolve();
 if(window.NP&&NP.helper){const HS=NP.initialState&&typeof NP.initialState==="object"?NP.initialState:{};const seed=Number.isInteger(HS.seed)&&HS.seed>=0&&HS.seed<=4294967295?HS.seed:newSeed();const okB=Array.isArray(HS.b)&&HS.b.length===16&&HS.b.every(x=>Number.isInteger(x)&&x>=0&&x<=11)&&Number.isInteger(HS.sc)&&HS.sc>=0&&HS.sc<=MAXS&&Number.isInteger(HS.mv)&&HS.mv>=0&&HS.mv<=500;const mv0=okB?HS.mv:0;const cap=Number.isInteger(HS.cap)&&HS.cap>=5&&HS.cap<=500?HS.cap:(okB&&HS.cap===0?mv0+40:DAILY_CAP);$("bBoard").hidden=true;const ht=Number.isInteger(HS.t)&&HS.t>=0&&HS.t<=3?HS.t:0;const go=()=>{begin(seed,"challenge",cap,null,ht);if(okB&&mv0<cap){G.tiles=[];HS.b.forEach((v,i)=>{if(v)G.tiles.push({id:++uid,v,r:(i/4)|0,c:i%4})});G.score=HS.sc;G.moves=mv0;G.best=Math.max(1,...G.tiles.map(t=>t.v));buildBoard();render(null,null)}};if(/^h\.\d{13}\.[A-Za-z0-9_-]{43}$/.test(HS.tk||""))PF.loadPro(false,HS.tk).then(()=>{if(/^[a-z0-9]{3,10}$/.test(HS.sk||"")&&PF.skins[ht][HS.sk])PF.skinSel[ht]=HS.sk}).catch(()=>{}).finally(go);else go()}
 else{const c0=parseCh(location.hash);if(c0)proP.then(()=>openCh(c0));else if(location.hash==="#daily")$("bDaily").click()}
-window.D48={PF,get TY(){return TY},setTY(t){TY=t;LS.set("d48-type",t);applySkin();renderHome()},get G(){return G},begin,move,finish,again,shareText,shareLink,drawCard,parseCh,fnv,dayKey,dayNo,LADDER,canMove,setBoard(rows){G.tiles=[];rows.forEach((r,ri)=>r.forEach((v,ci)=>{if(v)G.tiles.push({id:++uid,v,r:ri,c:ci})}));G.best=Math.max(1,...G.tiles.map(t=>t.v));buildBoard();els.clear();render()},T};
+window.D48={rematch,juice,PF,get TY(){return TY},setTY(t){TY=t;LS.set("d48-type",t);applySkin();renderHome()},get G(){return G},begin,move,finish,again,shareText,shareLink,drawCard,parseCh,fnv,dayKey,dayNo,LADDER,canMove,setBoard(rows){G.tiles=[];rows.forEach((r,ri)=>r.forEach((v,ci)=>{if(v)G.tiles.push({id:++uid,v,r:ri,c:ci})}));G.best=Math.max(1,...G.tiles.map(t=>t.v));buildBoard();els.clear();render()},T};
 </script>
 </body>
 </html>

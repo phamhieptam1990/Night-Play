@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <script src="../../../shared/guard.js"></script>
 <script src="../../../shared/bridge.js"></script>
+<script src="../../../shared/fx.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Đoán Giá Chợ Việt</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -62,6 +63,7 @@ input[type=range]::-moz-range-thumb{width:8cqw;height:8cqw;border-radius:50%;bac
 .mod{border-color:color-mix(in srgb,var(--ink) 45%,transparent);background:var(--panel)}.mod.on{background:color-mix(in srgb,var(--accent) 30%,var(--panel));border-color:var(--accent)}
 .cat,.opt,.skc{border-color:color-mix(in srgb,var(--ink) 40%,transparent)}.opt.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 22%,var(--panel))}
 .top h1{text-shadow:0 .3cqw 0 color-mix(in srgb,var(--bg) 70%,transparent)}
+.tgt{display:flex;align-items:center;gap:2cqw;background:var(--panel);border:1px solid color-mix(in srgb,var(--ink) 28%,transparent);border-radius:99cqw;padding:.8cqw 3cqw;font:800 3.2cqw var(--body)}.tgt i{flex:1;height:2.2cqw;border-radius:9cqw;background:color-mix(in srgb,var(--ink) 14%,transparent);overflow:hidden;font-style:normal}.tgt b{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffb020,#ff5a3d);transition:width .3s}.tgt.beat{border-color:var(--good);box-shadow:0 0 3cqw color-mix(in srgb,var(--good) 55%,transparent)}.tgt.beat b{background:var(--good)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 <style id="skCss"></style>
@@ -79,6 +81,7 @@ input[type=range]::-moz-range-thumb{width:8cqw;height:8cqw;border-radius:50%;bac
   </section>
   <section class="scr rv" id="round" hidden>
     <div class="dots" id="dots"></div>
+    <div class="tgt" id="tgt" hidden><span id="tgtT"></span><i><b id="tgtB"></b></i></div>
     <div class="card item"><div class="em" id="iEm"></div><div class="nm" id="iNm"></div><div class="un" id="iUn"></div></div>
     <div class="price" id="pr"></div>
     <div><input id="sl" type="range" min="0" max="1000" value="500" aria-label="price"><div class="rng"><span id="rLo"></span><span id="rHi"></span></div></div>
@@ -90,7 +93,7 @@ input[type=range]::-moz-range-thumb{width:8cqw;height:8cqw;border-radius:50%;bac
     <div class="sq" id="eSq"></div>
     <div class="chips" id="eChips"></div>
     <p class="mut" style="text-align:center;margin:0" id="eVs"></p>
-    <div class="row"><button class="btn grow" id="bShare" type="button">📤</button><button class="btn alt" id="bAgain" type="button">↻</button><button class="btn alt" id="bHome" type="button">🏠</button></div>
+    <div class="row"><button class="btn grow" id="bShare" type="button">📤</button><button class="btn alt" id="bRem" type="button" hidden>⚔↻</button><button class="btn alt" id="bAgain" type="button">↻</button><button class="btn alt" id="bHome" type="button">🏠</button></div>
   </section>
   <div class="ov" id="ovCh" hidden><h2 id="chH"></h2><p id="chP"></p><div class="row"><button class="btn alt" id="chNo" type="button">✕</button><button class="btn grow" id="chGo" type="button"></button></div></div>
   <div class="ov" id="ovSkin" hidden><h2 id="skH"></h2><div class="sk" id="skG"></div><button class="btn alt" id="skX" type="button">✕</button></div>
@@ -109,11 +112,11 @@ let LANG=pickLang();
 const I18={vi:{rankHint:"Chơi “Đề hôm nay” để lên bảng điểm nhé!",title:"Đoán Giá Chợ Việt",hdr:"Giá Chợ Việt",daily:"Đề hôm nay",dS:"Cả nước cùng đoán 5 món",done:"Hôm nay bạn được {s}/500 · chơi lại để cải thiện",practice:"🎲 Chơi tự do",streak:"🔥 {n} ngày",best:"🏆 Cao nhất {n}",tot:"🧺 {n} ván",note:"Giá chỉ mang tính tham khảo cho vui, không phải giá niêm yết.",
  guess:"Chốt giá!",next:"Món tiếp →",see:"Xem kết quả",real:"Giá chợ",you:"Bạn đoán",pts:"{n} điểm",unit:"/",rank:["Mới ra chợ","Người đi chợ","Bà nội trợ cứng","Thánh đi chợ","Thần giá chợ"],
  endT:"Kết quả",vsC:"Đề thách đấu: bạn {a} — người gửi {b}",win:"Bạn thắng! 🎉",lose:"Chưa vượt được, thử lại nhé!",tie:"Hòa!",ch:"Bạn được thách!",chP:"Bạn bè đạt {s}/500 ở đề này. Đoán sát hơn không?",chGo:"Chơi đề này",
- share:"Đoán Giá Chợ Việt",ask:"Bạn đoán sát hơn mình không?",skin:"Giao diện",lockP:"Giao diện này dành cho Night Pass. Dùng thử 1 ván mỗi ngày hoặc mở khoá tất cả.",trial:"🎈 Dùng thử 1 ván",go:"Mở Night Pass",tried:"Hôm nay bạn đã dùng thử rồi",copied:"Đã chép — dán cho bạn bè nhé!",avg:"Sai lệch TB {n}%",lbl:"Giá"},
+ tgt:"⚔ Mục tiêu {n}",beat:"Vượt điểm bạn bè rồi! 🎉",rem:"Đấu lại cùng đề",perfect:"Trúng phóc!",cmb:["Chuẩn!","Chuẩn liền!","Thần giá!","Thánh đoán!"],share:"Đoán Giá Chợ Việt",ask:"Bạn đoán sát hơn mình không?",skin:"Giao diện",lockP:"Giao diện này dành cho Night Pass. Dùng thử 1 ván mỗi ngày hoặc mở khoá tất cả.",trial:"🎈 Dùng thử 1 ván",go:"Mở Night Pass",tried:"Hôm nay bạn đã dùng thử rồi",copied:"Đã chép — dán cho bạn bè nhé!",avg:"Sai lệch TB {n}%",lbl:"Giá"},
  en:{rankHint:"Play “Today's round” to make the leaderboard!",title:"Guess the Market Price",hdr:"Market Price",daily:"Today's round",dS:"Everyone guesses the same 5 items",done:"Today you scored {s}/500 · play again to improve",practice:"🎲 Free play",streak:"🔥 {n} days",best:"🏆 Best {n}",tot:"🧺 {n} rounds",note:"Prices are rough Vietnamese market averages, just for fun.",
  guess:"Lock in!",next:"Next item →",see:"See result",real:"Market price",you:"Your guess",pts:"{n} pts",unit:"/",rank:["Fresh at the market","Market goer","Pro shopper","Market legend","Price oracle"],
  endT:"Result",vsC:"Challenge: you {a} — sender {b}",win:"You win! 🎉",lose:"Not quite — try again!",tie:"Tie!",ch:"You're challenged!",chP:"A friend scored {s}/500 on this round. Can you get closer?",chGo:"Play this round",
- share:"Guess the Market Price",ask:"Can you guess closer than me?",skin:"Theme",lockP:"This theme is for Night Pass. Try one round a day or unlock everything.",trial:"🎈 Try 1 round",go:"Get Night Pass",tried:"You already used today's trial",copied:"Copied — paste it to a friend!",avg:"Avg error {n}%",lbl:"Price"}};
+ tgt:"⚔ Target {n}",beat:"You passed your friend! 🎉",rem:"Rematch same round",perfect:"Bullseye!",cmb:["Spot on!","On a roll!","Price wizard!","Market legend!"],share:"Guess the Market Price",ask:"Can you guess closer than me?",skin:"Theme",lockP:"This theme is for Night Pass. Try one round a day or unlock everything.",trial:"🎈 Try 1 round",go:"Get Night Pass",tried:"You already used today's trial",copied:"Copied — paste it to a friend!",avg:"Avg error {n}%",lbl:"Price"}};
 const T=(k,o)=>{let s=(I18[LANG][k]!=null?I18[LANG][k]:I18.vi[k]);if(typeof s==="string"&&o)for(const x in o)s=s.replace("{"+x+"}",o[x]);return s};
 const money=n=>n.toLocaleString(LANG==="vi"?"vi-VN":"en-US")+(LANG==="vi"?"đ":" ₫");
 /* ===== RNG / NGÀY ===== */
@@ -148,7 +151,7 @@ function applySkin(){const sk=skinOf(),pl=$("play");(pl._v||[]).forEach(k=>pl.st
 /* ===== ÂM THANH ===== */
 let AC=null;const snd=()=>!window.NPAudio||NPAudio.get();
 function tone(f,d,ty,v,dl){if(!snd())return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();const t0=AC.currentTime+(dl||0),o=AC.createOscillator(),g=AC.createGain();o.type=ty||"sine";o.frequency.value=f;g.gain.setValueAtTime(.0001,t0);g.gain.exponentialRampToValueAtTime(v||.1,t0+.02);g.gain.exponentialRampToValueAtTime(.0001,t0+d);o.connect(g);g.connect(AC.destination);o.start(t0);o.stop(t0+d+.05)}catch(e){}}
-const sfx={tick:()=>tone(520+Math.random()*60,.04,"square",.03),lock:()=>tone(300,.12,"triangle",.1),great:()=>{[660,880,1100].forEach((f,i)=>tone(f,.16,"triangle",.11,i*.08))},ok:()=>{tone(500,.12,"triangle",.1);tone(620,.14,"triangle",.1,.1)},bad:()=>tone(180,.25,"sawtooth",.08)};
+const sfx={combo:n=>{const b=440*Math.pow(1.122,Math.min(n,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.12,"triangle",.09,i*.05))},tick:()=>tone(520+Math.random()*60,.04,"square",.03),lock:()=>tone(300,.12,"triangle",.1),great:()=>{[660,880,1100].forEach((f,i)=>tone(f,.16,"triangle",.11,i*.08))},ok:()=>{tone(500,.12,"triangle",.1);tone(620,.14,"triangle",.1,.1)},bad:()=>tone(180,.25,"sawtooth",.08)};
 /* ===== TRẠNG THÁI ===== */
 let G=null,CH=null,mode="practice",lastEnd=0;
 const newSeed=()=>(Math.random()*4294967296)>>>0;
@@ -158,15 +161,23 @@ function toast(m,ms){const t=$("toast");t.textContent=m;t.hidden=false;clearTime
 function renderHome(){const sv=getSave(),k=dayKey(),dn=dayNo(k),done=sv.days[k];$("ttl").textContent=T("hdr");$("dN").textContent="#"+dn;$("dT").textContent=T("daily");$("dS").textContent=done!=null?T("done",{s:done}):T("dS");$("bPractice").textContent=T("practice");$("hNote").textContent=T("note");$("bLang").textContent=LANG==="vi"?"EN":"VI";$("bSnd").textContent=snd()?"🔊":"🔇";
  $("hChips").innerHTML="";[sv.streak?T("streak",{n:sv.streak}):"",sv.best?T("best",{n:sv.best}):"",sv.total?T("tot",{n:sv.total}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("hChips").appendChild(c)});
  $("hHero").textContent=skinOf().deco[0]||"🧺"}
-function begin(seed,m,ch){G={seed,mode:m,ch:ch||null,q:genRound(seed),i:0,pts:[],guess:[],done:false,rev:false,m:m};mode=m;applySkin();show("round");window.NP&&NP.start();showQ()}
-function showQ(){const q=G.q[G.i],it=q.it;G.rev=false;$("rev").style.visibility="hidden";$("sl").disabled=false;$("sl").value=500;
+function begin(seed,m,ch){G={streak:0,beat:false,seed,mode:m,ch:ch||null,q:genRound(seed),i:0,pts:[],guess:[],done:false,rev:false,m:m};mode=m;applySkin();show("round");window.NP&&NP.start();showQ()}
+/* ===== HIỆU ỨNG COMBO (đoán chuẩn liên tiếp) / THÁCH ĐẤU ===== */
+const L2=a=>LANG==="vi"?a[0]:a[1];
+function juice(pt){const host=$("play");G.streak=pt>=80?G.streak+1:0;
+ if(pt>=97){NPJuice.text(host,T("perfect"),{color:"#7dffb0",top:"30%"});NPJuice.confetti(host,12);NPJuice.shake($("rev"));NPJuice.flash(host,"rgba(120,255,170,.4)")}
+ if(G.streak>=2){const tier=Math.min(3,G.streak-2);NPJuice.text(host,L2([I18.vi.cmb[tier],I18.en.cmb[tier]])+" ×"+G.streak,{color:NPJuice.tierColor(tier),top:pt>=97?"46%":"34%"});sfx.combo(G.streak);if(!(pt>=97))NPJuice.flash(host);if(window.NPFx)NPFx.buzz([20,15,30])}
+ updTgt(true)}
+function updTgt(check){const tg=$("tgt");if(!G.ch){tg.hidden=true;return}tg.hidden=false;const run=G.pts.reduce((a,b)=>a+b,0);tg.classList.toggle("beat",!!G.beat);$("tgtT").textContent=T("tgt",{n:G.ch.sc})+" · "+run;$("tgtB").style.width=Math.min(100,Math.round(run/Math.max(1,G.ch.sc)*100))+"%";
+ if(check&&!G.beat&&run>G.ch.sc){G.beat=true;tg.classList.add("beat");NPJuice.text($("play"),T("beat"),{color:"#3ddc84",top:"18%",size:5.4});NPJuice.confetti($("play"),22);NPJuice.flash($("play"),"rgba(80,255,150,.45)");sfx.combo(6);if(window.NPFx)NPFx.buzz([40,30,40,30,80])}}
+function showQ(){const q=G.q[G.i],it=q.it;G.rev=false;updTgt(false);$("rev").style.visibility="hidden";$("sl").disabled=false;$("sl").value=500;
  $("dots").innerHTML="";for(let i=0;i<N;i++){const d=document.createElement("i");d.className=i<=G.i?"on":"";d.textContent=i<G.i?"✓":"";$("dots").appendChild(d)}
  $("iEm").textContent=it.e;$("iNm").textContent=LANG==="vi"?it.vi:it.en;$("iUn").textContent=LANG==="vi"?it.uv:it.ue;$("rLo").textContent=money(nice(q.lo));$("rHi").textContent=money(nice(q.hi));$("bGo").textContent=T("guess");updPrice()}
 function updPrice(){if(!G)return;$("pr").textContent=money(priceAt(G.q[G.i],+$("sl").value))}
 $("sl").addEventListener("input",()=>{updPrice();sfx.tick()});
 $("bGo").onclick=()=>{if(!G||G.done)return;if(!G.rev){const q=G.q[G.i],g=priceAt(q,+$("sl").value),p=q.it.p,pt=pointsOf(g,p);G.rev=true;G.guess.push(g);G.pts.push(pt);$("sl").disabled=true;
   $("rvT").textContent=T("you")+": "+money(g);$("rvR").textContent=T("real")+": "+money(p);$("rvP").textContent=T("pts",{n:pt});$("rvB").style.width="0";$("rev").style.visibility="visible";requestAnimationFrame(()=>requestAnimationFrame(()=>$("rvB").style.width=pt+"%"));
-  pt>=90?sfx.great():pt>=50?sfx.ok():sfx.bad();if(window.NPFx)NPFx.buzz(pt>=90?[40,30,60]:20);$("bGo").textContent=G.i===N-1?T("see"):T("next")}
+  pt>=90?sfx.great():pt>=50?sfx.ok():sfx.bad();if(window.NPFx)NPFx.buzz(pt>=90?[40,30,60]:20);juice(pt);$("bGo").textContent=G.i===N-1?T("see"):T("next")}
  else{if(G.i<N-1){G.i++;showQ()}else finish()}};
 const sqOf=p=>p>=90?"🟩":p>=60?"🟨":p>=30?"🟧":"🟥";
 const rankOf=s=>s>=450?4:s>=350?3:s>=250?2:s>=150?1:0;
@@ -175,14 +186,16 @@ function finish(){const sc=G.pts.reduce((a,b)=>a+b,0);G.done=true;G.score=sc;las
  LS.set("gcv-save",sv);window.NP&&NP.result({score:sc,extra:{mode:G.mode,ranked:G.mode==="daily",rankHint:T("rankHint")}});
  show("end");$("eT").textContent=T("endT");$("eS").textContent=sc+"/"+MAXS;$("eR").textContent="🏅 "+T("rank")[rankOf(sc)];$("eSq").textContent=G.pts.map(sqOf).join("");
  const avg=Math.round(100*G.guess.reduce((a,g,i)=>a+Math.abs(Math.log(g/G.q[i].it.p)),0)/N);$("eChips").innerHTML="";[T("avg",{n:avg}),G.mode==="daily"?"📅 #"+dayNo(dayKey()):"",sv.streak&&G.mode==="daily"?T("streak",{n:sv.streak}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("eChips").appendChild(c)});
+ if(G.ch&&sc>G.ch.sc)NPJuice.confetti($("play"),26);$("bRem").hidden=!(G.ch||G.mode==="daily")||!!(window.NP&&NP.helper);
  $("eVs").textContent=G.ch?T("vsC",{a:sc,b:G.ch.sc})+" · "+(sc>G.ch.sc?T("win"):sc<G.ch.sc?T("lose"):T("tie")):"";
  const helper=!!(window.NP&&NP.helper);$("bShare").hidden=helper;$("bAgain").hidden=helper;$("bBoard").hidden=helper;$("bHome").hidden=helper;
  if(PF.pro&&PF.pro.trial)PF.lockPro();
  sc>=350?sfx.great():sfx.ok()}
+function rematch(){if(!G)return;const g=G;if(PF.pro&&PF.pro.trial)PF.lockPro();begin(g.seed,g.mode,g.ch)}
 function again(){if(!G)return;G.mode==="daily"||G.ch?begin(G.mode==="daily"?G.seed:(Math.random()*4294967296)>>>0,"practice",null):begin((Math.random()*4294967296)>>>0,"practice",null)}
 /* ===== CHIA SẺ ===== */
 function shareLink(){const o={s:G.seed,sc:G.score};return location.origin+"/api/share/"+GID+"?ch="+b64e(o)+(LANG==="en"?"&l=en":"")}
-function shareText(){const day=G.mode==="daily"?" #"+dayNo(dayKey()):"";return "💰 "+T("share")+day+"\n"+G.pts.map(sqOf).join("")+" "+G.score+"/"+MAXS+"\n"+T("ask")+"\n"+shareLink()}
+function shareText(){const day=G.mode==="daily"?" #"+dayNo(dayKey()):"";return "💰 "+T("share")+day+"\n"+G.pts.map(sqOf).join("")+" "+G.score+"/"+MAXS+(G.ch?"\n⚔ "+G.score+" vs "+G.ch.sc+(G.score>G.ch.sc?" 🎉":""):"")+"\n"+T("ask")+"\n"+shareLink()}
 function drawCard(){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif";
  const g=x.createLinearGradient(0,0,1080,1350);g.addColorStop(0,"#2b1f6b");g.addColorStop(1,"#0E1020");x.fillStyle=g;x.fillRect(0,0,1080,1350);
  x.textAlign="center";x.fillStyle="#ffb020";x.font="800 70px "+F;x.fillText("💰 "+T("share")+(G.mode==="daily"?" #"+dayNo(dayKey()):""),540,120);
@@ -194,9 +207,9 @@ $("bShare").onclick=async()=>{if(!G||!G.done)return;const txt=shareText();try{co
   if(navigator.share){await navigator.share({text:txt});return}}catch(e){if(e&&e.name==="AbortError")return}
  try{await navigator.clipboard.writeText(txt);toast(T("copied"),2200)}catch(e){toast(txt,3000)}};
 $("bBoard").onclick=()=>window.NP&&NP.brag();
-$("bAgain").onclick=again;$("bHome").onclick=()=>{G=null;show("home");renderHome()};
-function instant(e){if(!G||!G.done||$("end").hidden||window.NP&&NP.helper||performance.now()-lastEnd<450)return;if(e.target.closest("button,a"))return;again()}
-$("end").addEventListener("click",instant);addEventListener("keydown",e=>{if(G&&G.done&&!$("end").hidden&&(e.key===" "||e.key==="Enter")&&!(e.target.closest&&e.target.closest("button"))&&performance.now()-lastEnd>450){e.preventDefault();again()}});
+$("bAgain").onclick=again;$("bRem").onclick=rematch;$("bHome").onclick=()=>{G=null;show("home");renderHome()};
+function instant(e){if(!G||!G.done||$("end").hidden||window.NP&&NP.helper||performance.now()-lastEnd<450)return;if(e.target.closest("button,a"))return;G.ch?rematch():again()}
+$("end").addEventListener("click",instant);addEventListener("keydown",e=>{if(G&&G.done&&!$("end").hidden&&(e.key===" "||e.key==="Enter")&&!(e.target.closest&&e.target.closest("button"))&&performance.now()-lastEnd>450){e.preventDefault();G.ch?rematch():again()}});
 /* ===== TRANG CHỦ / THÁCH ĐẤU ===== */
 $("bDaily").onclick=()=>begin(fnv("gcv|"+dayKey()),"daily",null);
 $("bPractice").onclick=()=>begin((Math.random()*4294967296)>>>0,"practice",null);
@@ -241,7 +254,7 @@ if(window.NP&&NP.helper){const HS=NP.initialState&&typeof NP.initialState==="obj
  if(/^h\.\d{13}\.[A-Za-z0-9_-]{43}$/.test(st.tk||""))PF.loadPro(false,st.tk).then(()=>{if(/^[a-z]{3,10}$/.test(st.sk||"")&&PF.skins[0][st.sk])PF.skinSel[0]=st.sk}).catch(()=>{}).finally(go);else go()}
 else{const c0=parseCh(location.hash);if(c0)openCh(c0);else if(location.hash==="#daily")$("bDaily").click()}
 
-window.GC={get G(){return G},begin,finish,again,shareText,shareLink,drawCard,parseCh,genRound,pointsOf,priceAt,fnv,dayKey,dayNo,PF,T,ITEMS};
+window.GC={rematch,juice,get G(){return G},begin,finish,again,shareText,shareLink,drawCard,parseCh,genRound,pointsOf,priceAt,fnv,dayKey,dayNo,PF,T,ITEMS};
 </script>
 </body>
 </html>

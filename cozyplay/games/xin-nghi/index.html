@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <script src="../../../shared/guard.js"></script>
 <script src="../../../shared/bridge.js"></script>
+<script src="../../../shared/fx.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sếp Ơi Em Xin Nghỉ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -52,6 +53,7 @@ textarea{width:100%;height:20cqw;border-radius:3cqw;border:.5cqw solid var(--lin
 .mod{border-color:color-mix(in srgb,var(--ink) 45%,transparent);background:var(--panel)}.mod.on{background:color-mix(in srgb,var(--accent) 30%,var(--panel));border-color:var(--accent)}
 .cat,.opt,.skc{border-color:color-mix(in srgb,var(--ink) 40%,transparent)}.opt.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 22%,var(--panel))}
 .top h1{text-shadow:0 .3cqw 0 color-mix(in srgb,var(--bg) 70%,transparent)}
+.tgt{display:flex;align-items:center;gap:2cqw;background:var(--panel);border:1px solid color-mix(in srgb,var(--ink) 28%,transparent);border-radius:99cqw;padding:.8cqw 3cqw;font:800 3.2cqw var(--body)}.tgt i{flex:1;height:2.2cqw;border-radius:9cqw;background:color-mix(in srgb,var(--ink) 14%,transparent);overflow:hidden;font-style:normal}.tgt b{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffb020,#ff5a3d)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 <style id="skCss"></style>
@@ -69,6 +71,7 @@ textarea{width:100%;height:20cqw;border-radius:3cqw;border:.5cqw solid var(--lin
   </section>
   <section class="scr" id="ask" hidden>
     <div class="card boss"><div class="av" id="aAv"></div><div class="bub" id="aBub"></div></div>
+    <div class="tgt" id="tgt" hidden><span id="tgtT"></span><i><b id="tgtB"></b></i></div>
     <div class="hints" id="aHints"></div>
     <div id="stepA"><div class="mut" id="sAT" style="margin-bottom:1.6cqw"></div><div class="cats" id="cats"></div></div>
     <div id="stepB" hidden>
@@ -82,7 +85,7 @@ textarea{width:100%;height:20cqw;border-radius:3cqw;border:.5cqw solid var(--lin
     <div class="card"><div class="mut" id="rQT"></div><div class="quote" id="rQ"></div></div>
     <div class="card"><div class="row" style="justify-content:space-between"><span class="mut" id="rMT"></span><b id="rPct" style="font:400 7cqw var(--display);color:var(--accent)"></b></div><div class="meter"><b id="rBar"></b></div></div>
     <div class="chips" id="rChips"></div><p class="mut" style="text-align:center;margin:0" id="rVs"></p>
-    <div class="row"><button class="btn grow" id="bShare" type="button">📤</button><button class="btn alt" id="bAgain" type="button">↻</button><button class="btn alt" id="bHome" type="button">🏠</button></div>
+    <div class="row"><button class="btn grow" id="bShare" type="button">📤</button><button class="btn alt" id="bRem" type="button" hidden>⚔↻</button><button class="btn alt" id="bAgain" type="button">↻</button><button class="btn alt" id="bHome" type="button">🏠</button></div>
   </section>
   <div class="ov" id="ovCh" hidden><h2 id="chH"></h2><p id="chP"></p><div class="row"><button class="btn alt" id="chNo" type="button">✕</button><button class="btn grow" id="chGo" type="button"></button></div></div>
   <div class="ov" id="ovSkin" hidden><h2 id="skH"></h2><div class="sk" id="skG"></div><button class="btn alt" id="skX" type="button">✕</button></div>
@@ -116,11 +119,11 @@ const BAD=/(?:^|[^a-zà-ỹ])(đm|dm|vcl|vkl|cc|clgt|đmm|lồn|cặc|địt|đ�
 const I18={vi:{rankHint:"Chơi “Đề hôm nay” để lên bảng điểm nhé!",title:"Sếp Ơi Em Xin Nghỉ",hdr:"Em Xin Nghỉ",daily:"Tình huống hôm nay",dS:"Ai cũng gặp cùng một ông sếp",done:"Hôm nay bạn được {s}% · thử lại để cao hơn",practice:"🎲 Tình huống ngẫu nhiên",streak:"🔥 {n} ngày",best:"🏆 Cao nhất {n}%",tot:"📝 {n} đơn",note:"Chỉ để giải trí. Kịch bản sếp là hư cấu, đừng áp dụng ngoài đời nhé!",
  boss:"Sếp nói:",pick:"Chọn loại lý do",why:"Chọn lời xin nghỉ",send:"Gửi đơn ✉️",own:"Tự viết lý do (tối đa 90 ký tự)",polite:"Viết lịch sự một chút nhé!",short:"Lý do hơi ngắn, viết thêm chút nữa",
  hintSoft:"Sếp dạo này hay nhắc chuyện: {c}",stampOk:"DUYỆT",stampNo:"TỪ CHỐI",stampHalf:"NỬA NGÀY",pct:"Độ thuyết phục",yours:"Lý do của bạn",vsC:"Đề thách đấu: bạn {a}% — người gửi {b}%",win:"Bạn thuyết phục hơn! 🎉",lose:"Chưa bằng, thử lại nhé!",tie:"Hòa!",ch:"Bạn bị thách!",chP:"Bạn bè thuyết phục sếp được {s}%. Bạn giỏi hơn không?",chGo:"Xin nghỉ thử",
- rank:["Bị đuổi việc","Sếp nhăn mặt","Cũng được","Gần như duyệt","Thánh xin nghỉ"],share:"Sếp Ơi Em Xin Nghỉ",ask:"Bạn xin nghỉ có được duyệt không?",skin:"Chọn sếp",lockP:"Sếp này dành cho Night Pass: mỗi sếp một tính cách và câu trả lời riêng. Dùng thử 1 đơn mỗi ngày hoặc mở khoá tất cả.",trial:"🎈 Dùng thử 1 đơn",go:"Mở Night Pass",tried:"Hôm nay bạn đã dùng thử rồi",copied:"Đã chép — dán cho bạn bè nhé!",holi:"Sắp tới {h}"},
+ rank:["Bị đuổi việc","Sếp nhăn mặt","Cũng được","Gần như duyệt","Thánh xin nghỉ"],tgt:"⚔ Cần vượt {n}%",beat:"Thuyết phục hơn bạn bè rồi! 🎉",rem:"Xin lại cùng tình huống",chain:"Duyệt liên tiếp",cmb:["Hay!","Giỏi!","Tuyệt!","Siêu hạng!"],share:"Sếp Ơi Em Xin Nghỉ",ask:"Bạn xin nghỉ có được duyệt không?",skin:"Chọn sếp",lockP:"Sếp này dành cho Night Pass: mỗi sếp một tính cách và câu trả lời riêng. Dùng thử 1 đơn mỗi ngày hoặc mở khoá tất cả.",trial:"🎈 Dùng thử 1 đơn",go:"Mở Night Pass",tried:"Hôm nay bạn đã dùng thử rồi",copied:"Đã chép — dán cho bạn bè nhé!",holi:"Sắp tới {h}"},
  en:{rankHint:"Play “Today's round” to make the leaderboard!",title:"Boss, I Need a Day Off",hdr:"Day Off",daily:"Today's situation",dS:"Everyone faces the same boss",done:"Today you scored {s}% · try again to beat it",practice:"🎲 Random situation",streak:"🔥 {n} days",best:"🏆 Best {n}%",tot:"📝 {n} requests",note:"For fun only. The boss is fictional — don't try this at work!",
  boss:"Boss says:",pick:"Pick an excuse type",why:"Pick your line",send:"Send request ✉️",own:"Write your own (max 90 chars)",polite:"Keep it polite please!",short:"A little short — add a few words",
  hintSoft:"The boss keeps talking about: {c}",stampOk:"APPROVED",stampNo:"DENIED",stampHalf:"HALF DAY",pct:"Persuasion",yours:"Your excuse",vsC:"Challenge: you {a}% — sender {b}%",win:"You're more convincing! 🎉",lose:"Not quite — try again!",tie:"Tie!",ch:"You're challenged!",chP:"A friend convinced the boss {s}%. Can you do better?",chGo:"Try it",
- rank:["Fired","Boss frowns","Not bad","Almost approved","Day-off legend"],share:"Boss, I Need a Day Off",ask:"Would your request get approved?",skin:"Pick a boss",lockP:"This boss is for Night Pass: each has their own personality and replies. Try one request a day or unlock all.",trial:"🎈 Try 1 request",go:"Get Night Pass",tried:"You already used today's trial",copied:"Copied — paste it to a friend!",holi:"Coming up: {h}"}};
+ rank:["Fired","Boss frowns","Not bad","Almost approved","Day-off legend"],tgt:"⚔ Beat {n}%",beat:"More convincing than your friend! 🎉",rem:"Retry same situation",chain:"Approvals in a row",cmb:["Nice!","Great!","Awesome!","Legendary!"],share:"Boss, I Need a Day Off",ask:"Would your request get approved?",skin:"Pick a boss",lockP:"This boss is for Night Pass: each has their own personality and replies. Try one request a day or unlock all.",trial:"🎈 Try 1 request",go:"Get Night Pass",tried:"You already used today's trial",copied:"Copied — paste it to a friend!",holi:"Coming up: {h}"}};
 const T=(k,o)=>{let s=(I18[LANG][k]!=null?I18[LANG][k]:I18.vi[k]);if(typeof s==="string"&&o)for(const x in o)s=s.replace("{"+x+"}",o[x]);return s};
 const L2=a=>LANG==="vi"?a[0]:a[1];
 /* ===== RNG / NGÀY ===== */
@@ -164,7 +167,7 @@ const replyOf=(out,pick)=>{const sk=skinOf(),pool=(sk.reply&&sk.reply[out])||BAS
 /* ===== ÂM THANH ===== */
 let AC=null;const snd=()=>!window.NPAudio||NPAudio.get();
 function tone(f,d,ty,v,dl){if(!snd())return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();const t0=AC.currentTime+(dl||0),o=AC.createOscillator(),g=AC.createGain();o.type=ty||"sine";o.frequency.value=f;g.gain.setValueAtTime(.0001,t0);g.gain.exponentialRampToValueAtTime(v||.1,t0+.02);g.gain.exponentialRampToValueAtTime(.0001,t0+d);o.connect(g);g.connect(AC.destination);o.start(t0);o.stop(t0+d+.05)}catch(e){}}
-const sfx={pick:()=>tone(560,.06,"triangle",.07),stamp:()=>{tone(120,.16,"square",.12);tone(90,.2,"sawtooth",.08,.04)},ok:()=>{[660,880,1100].forEach((f,i)=>tone(f,.16,"triangle",.11,i*.08+.1))},no:()=>{tone(260,.2,"sawtooth",.09,.1);tone(180,.3,"sawtooth",.09,.3)},half:()=>{tone(500,.14,"triangle",.1,.1);tone(430,.2,"triangle",.1,.25)}};
+const sfx={combo:n=>{const b=440*Math.pow(1.122,Math.min(n,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.12,"triangle",.09,i*.05))},pick:()=>tone(560,.06,"triangle",.07),stamp:()=>{tone(120,.16,"square",.12);tone(90,.2,"sawtooth",.08,.04)},ok:()=>{[660,880,1100].forEach((f,i)=>tone(f,.16,"triangle",.11,i*.08+.1))},no:()=>{tone(260,.2,"sawtooth",.09,.1);tone(180,.3,"sawtooth",.09,.3)},half:()=>{tone(500,.14,"triangle",.1,.1);tone(430,.2,"triangle",.1,.25)}};
 /* ===== TRẠNG THÁI ===== */
 let G=null,CH=null,lastEnd=0;
 const getSave=()=>LS.get("xn-save",{streak:0,last:"",best:0,total:0,days:{}});
@@ -174,7 +177,7 @@ const sitText=s=>MOODS[s.mood].e+" "+L2([MOODS[s.mood].vi,MOODS[s.mood].en]);
 function renderHome(){const sv=getSave(),k=dayKey(),done=sv.days[k],h=holidayNear(k),sk=skinOf();$("ttl").textContent=T("hdr");$("dN").textContent="#"+dayNo(k);$("dT").textContent=T("daily");$("dS").textContent=done!=null?T("done",{s:done}):T("dS");$("bPractice").textContent=T("practice");$("hNote").textContent=T("note");$("bLang").textContent=LANG==="vi"?"EN":"VI";$("bSnd").textContent=snd()?"🔊":"🔇";
  $("hAv").textContent=sk.face||"🧑‍💼";$("hBub").textContent=h?T("holi",{h:LANG==="vi"?h[1]:h[2]})+" 🎊 "+L2(sk.name||PF.skins[0].basic.name)+":\n“…”":L2(sk.name||PF.skins[0].basic.name)+": “…”";
  $("hChips").innerHTML="";[sv.streak?T("streak",{n:sv.streak}):"",sv.best?T("best",{n:sv.best}):"",sv.total?T("tot",{n:sv.total}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("hChips").appendChild(c)})}
-function begin(seed,mode,ch){const hol=mode==="daily"?holidayNear(dayKey()):null;G={seed,mode,ch:ch||null,sit:genSit(seed,hol),ci:-1,di:0,mods:[],own:false,done:false};applySkin();show("ask");window.NP&&NP.start();renderAsk()}
+function begin(seed,mode,ch){const hol=mode==="daily"?holidayNear(dayKey()):null;G={seed,mode,ch:ch||null,sit:genSit(seed,hol),ci:-1,di:0,mods:[],own:false,done:false};applySkin();show("ask");(function(){const tg=$("tgt");if(G.ch){tg.hidden=false;$("tgtT").textContent=T("tgt",{n:G.ch.sc});$("tgtB").style.width=Math.min(100,G.ch.sc)+"%"}else tg.hidden=true})();window.NP&&NP.start();renderAsk()}
 function renderAsk(){const s=G.sit,sk=skinOf(),di=dayInfo(s);$("aAv").innerHTML=(sk.face||"🧑‍💼")+"<small>"+MOODS[s.mood].e+"</small>";
  $("aBub").textContent=L2(sk.name||PF.skins[0].basic.name)+": "+(s.mood===0?(LANG==="vi"?"“Đừng có làm phiền sếp lúc này.”":"“Don't bother me right now.”"):s.mood===2?(LANG==="vi"?"“Hôm nay sếp vui, nói nghe thử.”":"“I'm in a good mood — go on.”"):(LANG==="vi"?"“Có chuyện gì thế?”":"“What is it?”"));
  const H=[sitText(s),di.e+" "+L2([di.vi,di.en]),"💭 "+T("hintSoft",{c:CATS[s.soft].e+" "+L2([CATS[s.soft].vi,CATS[s.soft].en])})];$("aHints").innerHTML="";H.forEach(t=>{const h=document.createElement("span");h.className="hint";h.textContent=t;$("aHints").appendChild(h)});
@@ -192,16 +195,23 @@ function finish(){const sv=getSave(),sc=G.p;sv.total++;sv.best=Math.max(sv.best,
  show("res");const sk=skinOf();$("rAv").textContent=sk.face||"🧑‍💼";const st=$("rSt");st.className="stamp "+(G.out==="ok"?"ok":G.out==="half"?"half":"no");st.textContent=T(G.out==="ok"?"stampOk":G.out==="half"?"stampHalf":"stampNo");st.style.animation="none";void st.offsetWidth;st.style.animation="";
  $("rBub").textContent="“"+G.reply+"”";$("rQT").textContent=T("yours");$("rQ").textContent="“"+G.reason+"”"+(G.mods.length?"  "+G.mods.map(id=>MODS.find(m=>m.id===id).e).join(""):"");$("rMT").textContent=T("pct");$("rPct").textContent=sc+"%";$("rBar").style.width="0";requestAnimationFrame(()=>requestAnimationFrame(()=>$("rBar").style.width=sc+"%"));
  const rk=sc>=80?4:sc>=60?3:sc>=40?2:sc>=20?1:0;$("rChips").innerHTML="";["🏅 "+T("rank")[rk],G.mode==="daily"?"📅 #"+dayNo(dayKey()):"",G.mode==="daily"&&sv.streak?T("streak",{n:sv.streak}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("rChips").appendChild(c)});
+ $("bRem").hidden=!(G.ch||G.mode==="daily")||!!(window.NP&&NP.helper);
  $("rVs").textContent=G.ch?T("vsC",{a:sc,b:G.ch.sc})+" · "+(sc>G.ch.sc?T("win"):sc<G.ch.sc?T("lose"):T("tie")):"";
  const helper=!!(window.NP&&NP.helper);$("bShare").hidden=helper;$("bAgain").hidden=helper;$("bBoard").hidden=helper;$("bHome").hidden=helper;
- setTimeout(()=>{G.out==="ok"?sfx.ok():G.out==="half"?sfx.half():sfx.no()},50);sfx.stamp();if(window.NPFx)NPFx.buzz(G.out==="ok"?[40,30,60]:30);
+ setTimeout(()=>{G.out==="ok"?sfx.ok():G.out==="half"?sfx.half():sfx.no()},50);sfx.stamp();if(window.NPFx)NPFx.buzz(G.out==="ok"?[40,30,60]:30);resFx();
  if(PF.pro&&PF.pro.trial)PF.lockPro()}
 const newSeed=()=>(Math.random()*4294967296)>>>0;
+/* ===== HIỆU ỨNG: đóng dấu rung màn hình, chuỗi được duyệt liên tiếp, vượt điểm thách đấu ===== */
+function resFx(){const host=$("play");const sv=getSave();sv.run=G.out==="ok"?(sv.run||0)+1:0;sv.maxRun=Math.max(sv.maxRun||0,sv.run);LS.set("xn-save",sv);G.run=sv.run;
+ setTimeout(()=>{NPJuice.shake($("res"));if(G.out==="ok"){NPJuice.flash(host,"rgba(80,255,150,.35)");NPJuice.confetti(host,14)}else if(G.out==="no")NPJuice.flash(host,"rgba(255,70,90,.3)")},260);
+ if(sv.run>=2){const tier=Math.min(3,sv.run-2);setTimeout(()=>{NPJuice.text(host,L2([I18.vi.cmb[tier],I18.en.cmb[tier]])+" ×"+sv.run,{color:NPJuice.tierColor(tier),top:"30%"});sfx.combo(sv.run)},520)}
+ if(G.ch&&G.p>G.ch.sc){setTimeout(()=>{NPJuice.text(host,T("beat"),{color:"#3ddc84",top:"20%",size:5.4});NPJuice.confetti(host,26)},800)}}
+function rematch(){if(!G)return;const g=G;if(PF.pro&&PF.pro.trial)PF.lockPro();begin(g.seed,g.mode,g.ch)}
 function again(){if(G)begin(newSeed(),"practice",null)}
 /* ===== CHIA SẺ ===== */
 const outTxt=()=>T(G.out==="ok"?"stampOk":G.out==="half"?"stampHalf":"stampNo");
 function shareLink(){return location.origin+"/api/share/"+GID+"?ch="+b64e({s:G.seed,sc:G.p})+(LANG==="en"?"&l=en":"")}
-function shareText(){return "📝 "+T("share")+(G.mode==="daily"?" #"+dayNo(dayKey()):"")+"\n“"+G.reason+"”\n"+(G.out==="ok"?"✅":G.out==="half"?"🌓":"❌")+" "+outTxt()+" · "+G.p+"%\n💬 “"+G.reply+"”\n"+T("ask")+"\n"+shareLink()}
+function shareText(){return "📝 "+T("share")+(G.mode==="daily"?" #"+dayNo(dayKey()):"")+"\n“"+G.reason+"”\n"+(G.out==="ok"?"✅":G.out==="half"?"🌓":"❌")+" "+outTxt()+" · "+G.p+"%"+(G.ch?" · ⚔ "+G.p+" vs "+G.ch.sc+(G.p>G.ch.sc?" 🎉":""):"")+(G.run>=2?" · 🔥×"+G.run:"")+"\n💬 “"+G.reply+"”\n"+T("ask")+"\n"+shareLink()}
 function wrap(x,t,mx,lh,x0,y0){const w=t.split(" ");let l="",y=y0;for(const s of w){const tt=l?l+" "+s:s;if(x.measureText(tt).width>mx&&l){x.fillText(l,x0,y);y+=lh;l=s}else l=tt}x.fillText(l,x0,y);return y}
 function drawCard(){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif";
  const g=x.createLinearGradient(0,0,1080,1350);g.addColorStop(0,"#2a2160");g.addColorStop(1,"#0E1020");x.fillStyle=g;x.fillRect(0,0,1080,1350);
@@ -216,9 +226,9 @@ $("bShare").onclick=async()=>{if(!G||!G.done)return;const txt=shareText();try{co
   if(navigator.share){await navigator.share({text:txt});return}}catch(e){if(e&&e.name==="AbortError")return}
  try{await navigator.clipboard.writeText(txt);toast(T("copied"),2200)}catch(e){toast(txt,3000)}};
 $("bBoard").onclick=()=>window.NP&&NP.brag();
-$("bAgain").onclick=again;$("bHome").onclick=()=>{G=null;show("home");renderHome()};
-$("res").addEventListener("click",e=>{if(!G||!G.done||$("res").hidden||window.NP&&NP.helper||performance.now()-lastEnd<450||e.target.closest("button,a"))return;again()});
-addEventListener("keydown",e=>{if(G&&G.done&&!$("res").hidden&&(e.key===" "||e.key==="Enter")&&!(e.target.closest&&e.target.closest("button"))&&performance.now()-lastEnd>450){e.preventDefault();again()}});
+$("bAgain").onclick=again;$("bRem").onclick=rematch;$("bHome").onclick=()=>{G=null;show("home");renderHome()};
+$("res").addEventListener("click",e=>{if(!G||!G.done||$("res").hidden||window.NP&&NP.helper||performance.now()-lastEnd<450||e.target.closest("button,a"))return;G.ch?rematch():again()});
+addEventListener("keydown",e=>{if(G&&G.done&&!$("res").hidden&&(e.key===" "||e.key==="Enter")&&!(e.target.closest&&e.target.closest("button"))&&performance.now()-lastEnd>450){e.preventDefault();G.ch?rematch():again()}});
 $("bDaily").onclick=()=>begin(fnv("xn|"+dayKey()),"daily",null);
 $("bPractice").onclick=()=>begin(newSeed(),"practice",null);
 $("bLang").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}document.documentElement.lang=LANG;if(!$("home").hidden)renderHome();else if(!$("ask").hidden&&G){G.reply&&0;renderAsk();if(G.ci>=0)renderStepB()}else if(!$("res").hidden&&G){G.reply=replyOf(G.out,0);finish2()}};
@@ -259,7 +269,7 @@ if(window.NP&&NP.helper){const HS=NP.initialState&&typeof NP.initialState==="obj
  if(/^h\.\d{13}\.[A-Za-z0-9_-]{43}$/.test(st.tk||""))PF.loadPro(false,st.tk).then(()=>{if(/^[a-z]{3,10}$/.test(st.sk||"")&&PF.skins[0][st.sk])PF.skinSel[0]=st.sk}).catch(()=>{}).finally(go);else go()}
 else{const c0=parseCh(location.hash);if(c0)openCh(c0);else if(location.hash==="#daily")$("bDaily").click()}
 
-window.XN={get G(){return G},begin,finish,again,shareText,shareLink,drawCard,parseCh,genSit,evalReq,holidayNear,fnv,dayKey,dayNo,PF,T,CATS,MODS,BAD,send(ci,di,mods,own){G.ci=ci;G.di=di;G.mods=mods||[];G.own=!!own;if(own)$("own").value=own;$("bSend").click()}};
+window.XN={rematch,resFx,get G(){return G},begin,finish,again,shareText,shareLink,drawCard,parseCh,genSit,evalReq,holidayNear,fnv,dayKey,dayNo,PF,T,CATS,MODS,BAD,send(ci,di,mods,own){G.ci=ci;G.di=di;G.mods=mods||[];G.own=!!own;if(own)$("own").value=own;$("bSend").click()}};
 </script>
 </body>
 </html>
