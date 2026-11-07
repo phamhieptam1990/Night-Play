@@ -376,14 +376,6 @@ const art = {
 const games = [
   { id:"cozy-wings", cat:"reflex", name:{vi:"Cánh Nhỏ Phiêu Lưu",en:"Little Wings"}, thumb:face("#6FD3FF","#2B6FD6",art.wings), url:"games/cozy-wings/index.html" },
   { id:"dap-deadline", cat:"reflex", name:{vi:"Đập Deadline",en:"Smash Deadline"}, thumb:face("#DFE7EE","#8FA6BC",art.deadline), url:"games/dap-deadline/index.html" },
-  { id:"game-1", cat:"cards", name:{vi:"Bài Poker",en:"Poker"},        thumb:face("#6A48F0","#2B1B8A",art.cards),  url:"games/game1/index.html" },
-  { id:"game-2", cat:"cards", name:{vi:"Xúc xắc",en:"Dice"},           thumb:face("#E5484D","#7A1020",art.dice),   url:"games/game2/index.html" },
-  { id:"game-3", cat:"brain", name:{vi:"Cờ vua",en:"Chess"},           thumb:face("#2F3A6B","#0E1020",art.chess),  url:"games/game3/index.html" },
-  { id:"game-4", cat:"brain", name:{vi:"Xếp hình",en:"Puzzle"},        thumb:face("#14B8A6","#0B5C60",art.puzzle), url:"games/game4/index.html" },
-  { id:"game-5", cat:"brain", name:{vi:"2048",en:"2048"},              thumb:face("#FAF8EF","#BBADA0",art.tiles),  url:"games/game5/index.html" },
-  { id:"game-6", cat:"reflex", name:{vi:"Rắn săn mồi",en:"Snake"},      thumb:face("#4ADE80","#166534",art.snake),  url:"games/game6/index.html" },
-  { id:"game-7", cat:"brain", name:{vi:"Dò mìn",en:"Minesweeper"},    thumb:face("#FBBF24","#B45309",art.mine),   url:"games/game7/index.html" },
-  { id:"game-8", cat:"brain", name:{vi:"Đố vui",en:"Trivia"},         thumb:face("#F472B6","#9D174D",art.quiz),   url:"games/game8/index.html" }
 ];
 
 /* ===== NGÔN NGỮ ===== */
@@ -469,7 +461,7 @@ const enabled = () => games.filter(g => !prefs.off.includes(g.id));
 const gname = g => g.name[lang] || g.name[DEFAULT_LANG];
 
 /* ===== TÌM KIẾM + LỌC ===== */
-const CATS = { reflex:{ vi:"Phản xạ", en:"Reflex" }, brain:{ vi:"Trí tuệ", en:"Brain" }, cards:{ vi:"Bài & xúc xắc", en:"Cards & dice" } };
+const CATS = { reflex:{ vi:"Phản xạ", en:"Reflex" } };
 const FIND_T = { vi:{ ph:"Tìm game…", all:"Tất cả", none:"Không thấy game nào. Thử từ khoá khác nhé.", clear:"Xoá", catL:"Nhóm game" }, en:{ ph:"Search games…", all:"All", none:"No games found. Try another word.", clear:"Clear", catL:"Game type" } };
 let fq = "", fcat = "all";
 const norm = s => String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d");

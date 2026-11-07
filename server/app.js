@@ -430,7 +430,7 @@ const KID_NAMES = {
 };
 const kidNickOk = n => { const p = String(n).split(" "); if (p.length !== 3 || !/^[1-9]\d$/.test(p[2])) return false;
   return (KID_NAMES.vi.a.includes(p[0]) && KID_NAMES.vi.j.includes(p[1])) || (KID_NAMES.en.j.includes(p[0]) && KID_NAMES.en.a.includes(p[1])); };
-const POP_GAMES = Object.fromEntries([1, 2, 3, 4, 5, 6, 7, 8].map(i => ["game-" + i, { max: 1000, kids: true }]));   // max = điểm tối đa hợp lệ (chỉnh theo từng game khi có)
+const POP_GAMES = {};   // max = điểm tối đa hợp lệ của từng game Pop Play (thêm khi có game mới)
 POP_GAMES["pop-fly"] = { max: 1500, kids: true };   // Chim Bay Học Vui
 POP_GAMES["be-dau-bo-me"] = { max: 200, kids: true };   // Bé Đấu Bố Mẹ (tối đa 10 câu × 10 điểm + 20 thưởng thắng)
 POP_GAMES["lang-cua-be"] = { max: 200, kids: true };   // Làng Của Bé (tối đa 60 điểm bài + 30 điểm sao)

@@ -25,14 +25,6 @@ window.NPS = (function () {
     "nhay-theo-so": { name: { vi: "Nhảy Theo Số", en: "Dance by Numbers" }, url: "popplay/games/nhay-theo-so/index.html", board: true, kids: true, site: "popplay" },
     "be-dau-bo-me": { name: { vi: "Bé Đấu Bố Mẹ", en: "Kid vs Parent" }, url: "popplay/games/be-dau-bo-me/index.html", board: true, kids: true, site: "popplay" },
     "lang-cua-be": { name: { vi: "Làng Của Bé", en: "Baby's Village" }, url: "popplay/games/lang-cua-be/index.html", board: true, kids: true, site: "popplay" },
-    "game-1": { name: { vi: "Mèo con", en: "Kitty" }, url: "popplay/games/game1/index.html", board: true, kids: true, site: "popplay" },
-    "game-2": { name: { vi: "Gấu nâu", en: "Bear" }, url: "popplay/games/game2/index.html", board: true, kids: true, site: "popplay" },
-    "game-3": { name: { vi: "Thỏ hồng", en: "Bunny" }, url: "popplay/games/game3/index.html", board: true, kids: true, site: "popplay" },
-    "game-4": { name: { vi: "Ếch xanh", en: "Froggy" }, url: "popplay/games/game4/index.html", board: true, kids: true, site: "popplay" },
-    "game-5": { name: { vi: "Cá vàng", en: "Goldfish" }, url: "popplay/games/game5/index.html", board: true, kids: true, site: "popplay" },
-    "game-6": { name: { vi: "Rô-bốt", en: "Robot" }, url: "popplay/games/game6/index.html", board: true, kids: true, site: "popplay" },
-    "game-7": { name: { vi: "Ngôi sao", en: "Star" }, url: "popplay/games/game7/index.html", board: true, kids: true, site: "popplay" },
-    "game-8": { name: { vi: "Mặt trời", en: "Sunny" }, url: "popplay/games/game8/index.html", board: true, kids: true, site: "popplay" }
   };
 
   var STR = {
