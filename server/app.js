@@ -540,26 +540,26 @@ route("GET", /^\/api\/pro\/pop-fly\.js$/, async ({ headers, query, ip }) => {
 /* Bé Đấu Bố Mẹ (Pop Play): 4 giao diện Night Pass mỗi loại câu hỏi (20 giao diện); dùng thử 1 ván/ngày */
 route("GET", /^\/api\/pro\/be-dau-bo-me\.js$/, async ({ headers, query, ip }) => {
   const pass = await authPass(headers); let trial = false;
-  if (!pass && authHelper(headers)) return out(200, require("./pro/be-dau-bo-me").source({ helper: true }), "application/javascript; charset=utf-8");
+  if (!pass && authHelper(headers)) return out(200, require("./pro/be-dau-bo-me").source({ helper: true }) + require("./pro/_premium").code, "application/javascript; charset=utf-8");
   if (!pass) {
     if (query.get("trial") !== "1") return out(401, { error: "pass_required" });
     if (await limited("bdt:" + ipHash(ip), 1, 86400000)) return out(429, { error: "trial_used" });
     trial = true;
     await db.query("insert into paywall_daily(day, key, n) values ((now() at time zone $1)::date, 'duel_skin:trial', 1) on conflict (day, key) do update set n = paywall_daily.n + 1", [TZ]);
   }
-  return out(200, require("./pro/be-dau-bo-me").source({ trial }), "application/javascript; charset=utf-8");
+  return out(200, require("./pro/be-dau-bo-me").source({ trial }) + require("./pro/_premium").code, "application/javascript; charset=utf-8");
 });
 /* Làng Của Bé (Pop Play): 4 giao diện Night Pass mỗi khu (12 giao diện); dùng thử 1 bài/ngày; vé tạm cho người chơi hộ */
 route("GET", /^\/api\/pro\/lang-cua-be\.js$/, async ({ headers, query, ip }) => {
   const pass = await authPass(headers); let trial = false;
-  if (!pass && authHelper(headers)) return out(200, require("./pro/lang-cua-be").source({ helper: true }), "application/javascript; charset=utf-8");
+  if (!pass && authHelper(headers)) return out(200, require("./pro/lang-cua-be").source({ helper: true }) + require("./pro/_premium").code, "application/javascript; charset=utf-8");
   if (!pass) {
     if (query.get("trial") !== "1") return out(401, { error: "pass_required" });
     if (await limited("lbt:" + ipHash(ip), 1, 86400000)) return out(429, { error: "trial_used" });
     trial = true;
     await db.query("insert into paywall_daily(day, key, n) values ((now() at time zone $1)::date, 'village_skin:trial', 1) on conflict (day, key) do update set n = paywall_daily.n + 1", [TZ]);
   }
-  return out(200, require("./pro/lang-cua-be").source({ trial }), "application/javascript; charset=utf-8");
+  return out(200, require("./pro/lang-cua-be").source({ trial }) + require("./pro/_premium").code, "application/javascript; charset=utf-8");
 });
 /* Cánh Nhỏ Phiêu Lưu (Cozy Play): 4 giao diện đẹp mỗi chuyến bay chỉ giao cho người có Night Pass; dùng thử: 1 ván/ngày */
 route("GET", /^\/api\/pro\/cozy-wings\.js$/, async ({ headers, query, ip }) => {

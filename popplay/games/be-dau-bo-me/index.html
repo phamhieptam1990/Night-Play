@@ -466,7 +466,7 @@ PF.loadPro=async function(trial,ticket){
     const c=cacheable?LS.get("bd-pro-src",null):null,p=LS.get("pass",null);
     if(c&&c.src&&p&&p.exp&&new Date(p.exp)>new Date())src=c.src;else throw new Error("pro_offline");
   }
-  new Function("PF",src)(PF);if(!G&&!$("home").hidden)renderHome();
+  new Function("PF",src)(PF);if(PF.pro&&!PF.pro.trial){const ad=LS.get("bd-auto",[]);let ch=0;for(let t=0;t<5;t++)if(!ad[t]){ad[t]=1;ch=1;if(PF.skinSel[t]==="basic"){const f=Object.keys(PF.skins[t]).find(i=>i!=="basic");if(f)PF.skinSel[t]=f}}if(ch){LS.set("bd-auto",ad);LS.set("bd-skin",PF.skinSel)}}if(!G&&!$("home").hidden)renderHome();
 };
 PF.lockPro=function(){for(let t=0;t<5;t++)for(const id of Object.keys(PF.skins[t]))if(id!=="basic")delete PF.skins[t][id];PF.pro=null;if(PF.skinRestore){const r=PF.skinRestore;PF.skinSel[r.t]=r.old||"basic";PF.skinRestore=null}};
 
