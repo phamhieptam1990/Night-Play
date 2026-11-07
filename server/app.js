@@ -650,14 +650,14 @@ const NG_IDS = Object.keys(NEW_GAMES).join("|");
 route("GET", new RegExp("^/api/pro/(" + NG_IDS + ")\\.js$"), async ({ m, headers, query, ip }) => {
   const id = m[1], js = "application/javascript; charset=utf-8", mod = () => require("./pro/" + id);
   const pass = await authPass(headers); let trial = false;
-  if (!pass && authHelper(headers)) return out(200, mod().source({ helper: true }), js);   // vé tạm của người chơi hộ
+  if (!pass && authHelper(headers)) return out(200, mod().source({ helper: true }) + require("./pro/_premium").code, js);   // vé tạm của người chơi hộ
   if (!pass) {
     if (query.get("trial") !== "1") return out(401, { error: "pass_required" });
     if (await limited("gt:" + id + ":" + ipHash(ip), 1, 86400000)) return out(429, { error: "trial_used" });   // dùng thử: 1 lượt mỗi ngày
     trial = true;
     await db.query("insert into paywall_daily(day, key, n) values ((now() at time zone $1)::date, $2, 1) on conflict (day, key) do update set n = paywall_daily.n + 1", [TZ, id + "_skin:trial"]);
   }
-  return out(200, mod().source({ trial }), js);
+  return out(200, mod().source({ trial }) + require("./pro/_premium").code, js);
 });
 route("GET", new RegExp("^/api/share/(" + NG_IDS + ")$"), async ({ m, query, headers }) => {
   const id = m[1], g = NEW_GAMES[id], en = query.get("l") === "en", L = en ? 1 : 0, o = b64json(query.get("ch")), origin = reqOrigin(headers), name = g[en ? "en" : "vi"];
