@@ -196,6 +196,18 @@ body{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidd
 .trust{margin-top:clamp(8px,1.6vh,16px)}
 main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction:column;padding:8px 16px 12px;overflow-y:auto}
 #grid{flex:1;min-height:0;display:grid;gap:var(--g,16px);grid-template-columns:repeat(var(--c,3),var(--s,140px));grid-auto-rows:var(--s,140px);justify-content:center;align-content:center}
+/* Nhiều game / ô nhỏ hơn 64px: chuyển thành TRƯỢT NGANG theo trang (vuốt, chấm trang, nút ‹ ›) thay vì ép ô nhỏ lại hay cuộn dọc */
+#grid.slide{grid-auto-flow:column;grid-template-columns:none;grid-template-rows:repeat(var(--r,1),var(--s,140px));grid-auto-columns:var(--s,140px);justify-content:start;align-content:center;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;padding:8px var(--pad,0);scroll-padding-inline:var(--pad,0);overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
+#grid.slide::-webkit-scrollbar{display:none}
+#grid.slide .tile{scroll-snap-align:none}#grid.slide .tile.sn{scroll-snap-align:start}
+@media (prefers-reduced-motion:reduce){#grid.slide{scroll-behavior:auto}}
+#gdots{flex:none;display:none;align-items:center;justify-content:center;gap:2px;min-height:44px;color:var(--ink)}
+#grid.slide ~ #gdots{display:flex}
+#gdots button{width:30px;height:30px;padding:0;background:none;color:inherit;display:grid;place-items:center;border-radius:50%}
+#gdots button::after{content:"";width:10px;height:10px;border-radius:50%;background:currentColor;opacity:.28;transition:opacity .2s,transform .2s}
+#gdots button[aria-current="true"]::after{opacity:1;transform:scale(1.25)}
+#gdots .gn{width:44px;height:44px;font-size:26px;font-weight:800;line-height:1}#gdots .gn::after{content:none}
+#gdots .gn:disabled{opacity:.3}
 .tile{min-width:0;width:var(--s);height:var(--s);border-radius:clamp(14px,15%,28px)}
 #sleep,#hleft{flex:none}
 /* Footer gọn một hàng */
@@ -270,6 +282,7 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
   </div>
   <div id="hleft" class="left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg><span></span></div>
   <div id="grid"></div>
+  <div id="gdots" role="group"></div>
   <div id="noRes" hidden></div>
 </main>
 <button id="findFab" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="findPanel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button>
@@ -577,7 +590,10 @@ function renderGrid(){
   });
   setTileLabels(); fitGrid();
 }
-/* Chọn số cột + cỡ ô lớn nhất để toàn bộ game nằm gọn trong khung, không cuộn */
+/* Chọn số cột + cỡ ô lớn nhất để toàn bộ game nằm gọn trong khung, không cuộn.
+   Nếu ô vẫn nhỏ hơn 64px (quá nhiều game / màn hình thấp) thì chuyển sang TRƯỢT NGANG theo trang. */
+const gdots = $("gdots"), MIN_TILE = 64;
+let gPage = { step:0, n:1 };
 function fitGrid(){
   const n = grid.children.length, w = grid.clientWidth, h = grid.clientHeight;
   if(!n || !w || !h) return;
@@ -588,9 +604,39 @@ function fitGrid(){
     if(s > best.s) best = { s, c };
   }
   grid.style.setProperty("--g", g + "px");
-  grid.style.setProperty("--c", best.c);
-  grid.style.setProperty("--s", Math.max(72, Math.min(260, Math.floor(best.s))) + "px");
+  if(best.s >= MIN_TILE){
+    grid.classList.remove("slide"); grid.style.removeProperty("--r"); grid.style.removeProperty("--pad"); grid.scrollLeft = 0;
+    grid.querySelectorAll(".sn").forEach(t => t.classList.remove("sn")); gdots.textContent = "";
+    grid.style.setProperty("--c", best.c);
+    grid.style.setProperty("--s", Math.min(260, Math.floor(best.s)) + "px");
+    return;
+  }
+  /* trượt ngang: mỗi trang r hàng × c cột với ô cỡ thoải mái (~92px) */
+  const room = h - 16, r = Math.max(1, Math.floor((room + g) / (92 + g))), s = Math.max(MIN_TILE, Math.min(140, Math.floor((room - (r - 1) * g) / r)));
+  const c = Math.max(1, Math.floor((w + g) / (s + g))), per = c * r, pages = Math.ceil(n / per), pageW = c * s + (c - 1) * g;
+  grid.classList.add("slide");
+  grid.style.setProperty("--s", s + "px"); grid.style.setProperty("--r", r); grid.style.setProperty("--pad", Math.max(0, Math.floor((w - pageW) / 2)) + "px");
+  [...grid.children].forEach((t, i) => t.classList.toggle("sn", i % per === 0));
+  gPage = { step: c * (s + g), n: pages };
+  buildDots();
 }
+function buildDots(){
+  gdots.textContent = "";
+  const mk = (cls, txt, label, fn) => { const b = document.createElement("button"); b.type = "button"; if(cls) b.className = cls; if(txt) b.textContent = txt; b.setAttribute("aria-label", label); b.addEventListener("click", fn); gdots.appendChild(b); return b; };
+  const L = (lang === "vi") ? ["Trang trước", "Trang sau", "Trang "] : ["Previous page", "Next page", "Page "];
+  mk("gn", "‹", L[0], () => goPage(curPage() - 1));
+  for(let i = 0; i < gPage.n; i++) mk("", "", L[2] + (i + 1), () => goPage(i));
+  mk("gn", "›", L[1], () => goPage(curPage() + 1));
+  markDots();
+}
+const curPage = () => gPage.step ? Math.min(gPage.n - 1, Math.max(0, Math.round(grid.scrollLeft / gPage.step))) : 0;
+function goPage(i){ i = Math.max(0, Math.min(gPage.n - 1, i)); grid.scrollTo({ left: i * gPage.step, behavior: reduceMotion.matches ? "auto" : "smooth" }); }
+function markDots(){
+  const p = curPage(), bs = gdots.querySelectorAll("button");
+  bs.forEach((b, i) => { if(i > 0 && i <= gPage.n) b.setAttribute("aria-current", String(i - 1 === p)); else if(i === 0) b.disabled = p <= 0; else b.disabled = p >= gPage.n - 1; });
+}
+let gRaf = 0;
+grid.addEventListener("scroll", () => { if(!grid.classList.contains("slide")) return; cancelAnimationFrame(gRaf); gRaf = requestAnimationFrame(markDots); }, { passive:true });
 new ResizeObserver(fitGrid).observe(grid);
 addEventListener("resize", fitGrid);
 document.addEventListener("contextmenu", e => { if(!e.target.closest(".box")) e.preventDefault(); });
