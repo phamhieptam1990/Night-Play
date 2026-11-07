@@ -220,6 +220,10 @@ let sx=0,sy=0,st=false;
 $("play").addEventListener("pointerdown",e=>{if(e.target.closest("button,a")||$("game").hidden)return;st=true;sx=e.clientX;sy=e.clientY});
 $("play").addEventListener("pointerup",e=>{if(!st)return;st=false;const dx=e.clientX-sx,dy=e.clientY-sy;if(Math.max(Math.abs(dx),Math.abs(dy))<22)return;move(Math.abs(dx)>Math.abs(dy)?(dx>0?"R":"L"):(dy>0?"D":"U"))});
 $("play").addEventListener("pointercancel",()=>st=false);
+/* Trackpad: vuốt 2 ngón tay (sự kiện wheel) = một nước đi; quán tính của trackpad không gây nhiều nước (khoá tới khi ngừng cuộn ~140ms) */
+let wa=0,wb=0,wlock=false,wt=0;
+$("play").addEventListener("wheel",e=>{if(e.ctrlKey||$("game").hidden||!G||G.over)return;e.preventDefault();clearTimeout(wt);wt=setTimeout(()=>{wlock=false;wa=wb=0},140);if(wlock)return;wa+=e.deltaX;wb+=e.deltaY;
+ if(Math.max(Math.abs(wa),Math.abs(wb))>=40){move(Math.abs(wa)>Math.abs(wb)?(wa>0?"L":"R"):(wb>0?"U":"D"));wlock=true;wa=wb=0}},{passive:false});
 /* ===== TRANG CHỦ / THÁCH ĐẤU / NGÔN NGỮ ===== */
 $("bDaily").onclick=()=>begin(fnv("d48|"+dayKey()),"daily",DAILY_CAP,null,0);
 $("bFree").onclick=()=>begin(newSeed(),"free",0,null);
