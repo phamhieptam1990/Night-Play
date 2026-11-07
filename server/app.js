@@ -432,6 +432,7 @@ const kidNickOk = n => { const p = String(n).split(" "); if (p.length !== 3 || !
   return (KID_NAMES.vi.a.includes(p[0]) && KID_NAMES.vi.j.includes(p[1])) || (KID_NAMES.en.j.includes(p[0]) && KID_NAMES.en.a.includes(p[1])); };
 const POP_GAMES = Object.fromEntries([1, 2, 3, 4, 5, 6, 7, 8].map(i => ["game-" + i, { max: 1000, kids: true }]));   // max = điểm tối đa hợp lệ (chỉnh theo từng game khi có)
 POP_GAMES["pop-fly"] = { max: 1500, kids: true };   // Chim Bay Học Vui
+POP_GAMES["be-dau-bo-me"] = { max: 200, kids: true };   // Bé Đấu Bố Mẹ (tối đa 10 câu × 10 điểm + 20 thưởng thắng)
 POP_GAMES["lang-cua-be"] = { max: 200, kids: true };   // Làng Của Bé (tối đa 60 điểm bài + 30 điểm sao)
 const SCORE_GAMES = { "dap-deadline": { max: 5000 }, "cozy-wings": { max: 5000 }, ...POP_GAMES };   // cozy-wings = Cánh Nhỏ Phiêu Lưu
 const nickOk = n => /^[\p{L}\p{N} _.\-]{2,16}$/u.test(n) && !/https?|www\.|\.(com|net|org|vn|io)\b|@/i.test(n);
@@ -526,6 +527,18 @@ route("GET", /^\/api\/pro\/pop-fly\.js$/, async ({ headers, query, ip }) => {
   }
   return out(200, require("./pro/pop-fly").source({ trial }), "application/javascript; charset=utf-8");
 });
+/* Bé Đấu Bố Mẹ (Pop Play): 4 giao diện Night Pass mỗi loại câu hỏi (20 giao diện); dùng thử 1 ván/ngày */
+route("GET", /^\/api\/pro\/be-dau-bo-me\.js$/, async ({ headers, query, ip }) => {
+  const pass = await authPass(headers); let trial = false;
+  if (!pass && authHelper(headers)) return out(200, require("./pro/be-dau-bo-me").source({ helper: true }), "application/javascript; charset=utf-8");
+  if (!pass) {
+    if (query.get("trial") !== "1") return out(401, { error: "pass_required" });
+    if (await limited("bdt:" + ipHash(ip), 1, 86400000)) return out(429, { error: "trial_used" });
+    trial = true;
+    await db.query("insert into paywall_daily(day, key, n) values ((now() at time zone $1)::date, 'duel_skin:trial', 1) on conflict (day, key) do update set n = paywall_daily.n + 1", [TZ]);
+  }
+  return out(200, require("./pro/be-dau-bo-me").source({ trial }), "application/javascript; charset=utf-8");
+});
 /* Làng Của Bé (Pop Play): 4 giao diện Night Pass mỗi khu (12 giao diện); dùng thử 1 bài/ngày; vé tạm cho người chơi hộ */
 route("GET", /^\/api\/pro\/lang-cua-be\.js$/, async ({ headers, query, ip }) => {
   const pass = await authPass(headers); let trial = false;
@@ -602,7 +615,7 @@ route("GET", /^\/api\/pro\/daily$/, async ({ headers }) => {
   return out(200, { day, seed: h.readUInt32BE(0), goal: [300, 350, 400, 450, 500][h[4] % 5] });
 });
 /* Đếm lượt xem / bấm vào tính năng bị khóa (ẩn danh, chỉ số tổng hợp theo ngày) */
-const PAYWALL_KEYS = new Set(["endless", "daily", "boss", "diff", "skin", "grid", "pack", "stats", "fly_stars", "fly_math", "fly_skin", "wing_skin", "village_skin"]);
+const PAYWALL_KEYS = new Set(["endless", "daily", "boss", "diff", "skin", "grid", "pack", "stats", "fly_stars", "fly_math", "fly_skin", "wing_skin", "village_skin", "duel_skin"]);
 route("POST", /^\/api\/paywall$/, async ({ body, ip }) => {
   const f = String(body.f || ""), k = String(body.k || "");
   if (!PAYWALL_KEYS.has(f) || !["view", "click", "trial"].includes(k)) return out(400, { error: "bad_event" });
