@@ -448,6 +448,7 @@ const COZY_NEW = {   // game mới của Cozy Play (người lớn): 1 loại ×
   "gia-cho-viet": { vi: "Đoán Giá Chợ Việt", en: "Guess the Market Price", max: 500, dvi: "5 món mỗi ngày, cả nước cùng đoán. Bạn đoán sát giá chợ cỡ nào?", den: "5 items a day, everyone guesses the same. How close can you get to the market price?" },
   "doi-doi-2048": { vi: "Đổi Đời 2048", en: "Life Upgrade 2048", max: 20000, dvi: "Ghép đồ từ quả trứng lên biệt thự. Hôm nay cả nước chơi cùng một bàn, bạn lên đời tới đâu?", den: "Merge from an egg up to a villa. Everyone plays the same board today — how far can you go?" },
   "ga-me-ban-trung": { vi: "Gà Mẹ Bắn Trứng", en: "Mama Hen's Egg Pop", max: 30000, dvi: "Bắn trứng cùng màu để nổ cụm, trứng nở ra con vật để sưu tầm. Hôm nay cả nước chơi cùng một bàn!", den: "Shoot matching eggs to pop clusters and hatch animals to collect. Everyone plays the same board today!" },
+  "me-cung-truyen-tay": { vi: "Mê Cung Truyền Tay", en: "Maze Pass-Along", max: 1000, dvi: "Tự vẽ mê cung rồi gửi cho bạn bè thoát. Hôm nay cả nước cùng một mê cung!", den: "Draw your own maze and send it to friends. Everyone gets the same maze today!" },
   "xin-nghi": { vi: "Sếp Ơi Em Xin Nghỉ", en: "Boss, I Need a Day Off", max: 100, dvi: "Nghĩ lý do xin nghỉ thật 'thuyết phục' để qua mặt sếp. Sếp có duyệt không?", den: "Come up with a convincing excuse for a day off. Will the boss approve?" }
 };
 const SCORE_GAMES = { "dap-deadline": { max: 5000 }, "cozy-wings": { max: 5000 }, ...POP_GAMES, ...Object.fromEntries(Object.entries(COZY_NEW).map(([k, v]) => [k, { max: v.max }])) };   // cozy-wings = Cánh Nhỏ Phiêu Lưu
@@ -664,6 +665,7 @@ const PRO_MODS = {   // require LITERAL (esbuild của Netlify không gộp đư
   "xin-nghi": () => require("./pro/xin-nghi"),
   "doi-doi-2048": () => require("./pro/doi-doi-2048"),
   "ga-me-ban-trung": () => require("./pro/ga-me-ban-trung"),
+  "me-cung-truyen-tay": () => require("./pro/me-cung-truyen-tay"),
 };
 const NG_IDS = Object.keys(NEW_GAMES).join("|");
 route("GET", new RegExp("^/api/pro/(" + NG_IDS + ")\\.js$"), async ({ m, headers, query, ip }) => {
