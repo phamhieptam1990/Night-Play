@@ -14,6 +14,7 @@ window.NPS = (function () {
   var GAMES = {
     "gia-cho-viet": { name: { vi: "Đoán Giá Chợ Việt", en: "Guess the Market Price" }, url: "cozyplay/games/gia-cho-viet/index.html", board: true, site: "cozyplay" },
     "doi-doi-2048": { name: { vi: "Đổi Đời 2048", en: "Life Upgrade 2048" }, url: "cozyplay/games/doi-doi-2048/index.html", board: true, site: "cozyplay" },
+    "ga-me-ban-trung": { name: { vi: "Gà Mẹ Bắn Trứng", en: "Mama Hen's Egg Pop" }, url: "cozyplay/games/ga-me-ban-trung/index.html", board: true, site: "cozyplay" },
     "xin-nghi": { name: { vi: "Sếp Ơi Em Xin Nghỉ", en: "Boss, I Need a Day Off" }, url: "cozyplay/games/xin-nghi/index.html", board: true, site: "cozyplay" },
     "dap-deadline": { name: { vi: "Đập Deadline", en: "Smash the Deadline" }, url: "cozyplay/games/dap-deadline/index.html", board: true, site: "cozyplay" },
     "cozy-wings": { name: { vi: "Cánh Nhỏ Phiêu Lưu", en: "Little Wings" }, url: "cozyplay/games/cozy-wings/index.html", board: true, site: "cozyplay" },

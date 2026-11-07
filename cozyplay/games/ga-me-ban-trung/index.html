@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<script src="../../../shared/guard.js"></script>
+<script src="../../../shared/bridge.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gà Mẹ Bắn Trứng</title>
+<script>var savedTheme=null;try{savedTheme=localStorage.getItem("theme")}catch(e){}document.documentElement.dataset.theme=savedTheme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Be+Vietnam+Pro:wght@400;600;800&display=swap">
+<style>
+:root{--bg:#FFF6E6;--panel:#ffffff;--ink:#3a2410;--muted:#7a5a3a;--accent:#e0661a;--on:#ffffff;--good:#1a9a55;--bad:#d23b3b;--line:#ecd2a6;--pbg:linear-gradient(#ffe9bf,#fff6e6);--field:#fff1d6;--field2:#f5dba6;
+ --display:"Bungee","Arial Black",system-ui,sans-serif;--body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif}
+:root[data-theme="dark"]{--bg:#1a1208;--panel:#2c2010;--ink:#fff1dc;--muted:#d7b98c;--accent:#ffb020;--on:#2a1a00;--good:#3ddc84;--bad:#ff6b6b;--line:#4a3a1c;--pbg:linear-gradient(#3a2a12,#1a1208);--field:#241a0c;--field2:#33250f}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}[hidden]{display:none!important}
+html,body{margin:0;height:100%;background:var(--bg);overflow:hidden;font-family:var(--body);color:var(--ink)}
+body{display:flex;justify-content:center}
+#play{position:relative;height:100dvh;width:min(100vw,62dvh,520px);container-type:size;overflow:hidden;background:var(--pbg);color:var(--ink);touch-action:none;user-select:none;-webkit-user-select:none}
+.deco{position:absolute;inset:0;pointer-events:none;overflow:hidden;opacity:.45}.deco i{position:absolute;font-style:normal;font-size:9cqw;animation:fl 9s ease-in-out infinite}@keyframes fl{50%{transform:translateY(-3cqw) rotate(8deg)}}
+.top{position:absolute;left:3cqw;right:3cqw;top:2.5cqw;height:9cqw;display:flex;align-items:center;gap:2cqw;z-index:3}
+.top h1{margin:0;flex:1;font:400 4.8cqw/1.05 var(--display);color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ib{width:9cqw;height:9cqw;min-width:36px;min-height:36px;border:1.5px solid color-mix(in srgb,var(--ink) 38%,transparent);border-radius:50%;background:var(--panel);color:var(--ink);font:800 3.6cqw var(--body);cursor:pointer;display:grid;place-items:center;box-shadow:0 .5cqw 0 color-mix(in srgb,var(--ink) 18%,transparent)}
+.ib:active{transform:translateY(.5cqw);box-shadow:none}
+.scr{position:absolute;left:4cqw;right:4cqw;top:14cqw;bottom:3cqw;display:flex;flex-direction:column;gap:2.4cqw;z-index:2;justify-content:center}
+.card{background:var(--panel);border:.5cqw solid var(--line);border-radius:4cqw;padding:2.6cqw;box-shadow:0 1.2cqw 0 rgba(0,0,0,.14)}
+.btn{border:0;border-radius:99cqw;min-height:44px;padding:2.4cqw 5cqw;font:800 4.2cqw var(--body);background:var(--accent);color:var(--on);cursor:pointer;box-shadow:0 1cqw 0 rgba(0,0,0,.26)}
+.btn.alt{background:var(--panel);color:var(--ink);border:1.5px solid color-mix(in srgb,var(--ink) 38%,transparent);box-shadow:0 .6cqw 0 color-mix(in srgb,var(--ink) 18%,transparent)}.btn:active{transform:translateY(.6cqw)}
+.row{display:flex;gap:2.2cqw;align-items:center;justify-content:center}.grow{flex:1}.mut{color:color-mix(in srgb,var(--ink) 68%,transparent);font-size:3.3cqw}
+.chips{display:flex;gap:2cqw;justify-content:center;flex-wrap:wrap}.chip{background:var(--panel);border:1px solid color-mix(in srgb,var(--ink) 28%,transparent);border-radius:99cqw;padding:1.2cqw 3cqw;font-size:3.5cqw;font-weight:800}
+.hero{text-align:center;font-size:18cqw;line-height:1.05}
+.dbtn{display:flex;align-items:center;gap:3cqw;text-align:left;width:100%}.dbtn .n{font:400 7cqw var(--display)}
+.tys{display:grid;grid-template-columns:repeat(4,1fr);gap:1.8cqw}.ty{position:relative;border:1.5px solid color-mix(in srgb,var(--ink) 30%,transparent);background:var(--panel);color:var(--ink);border-radius:3cqw;padding:1.6cqw .6cqw;font:800 2.8cqw var(--body);min-height:44px;cursor:pointer;text-align:center}.ty .e{display:block;font-size:7.2cqw;line-height:1.1}.ty.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 20%,var(--panel));box-shadow:0 0 0 .5cqw color-mix(in srgb,var(--accent) 45%,transparent)}.ty.lock{opacity:.8}.ty.lock::after{content:'🔒';position:absolute;top:.4cqw;right:1cqw;font-size:3.4cqw}
+/* ván chơi */
+#game{gap:1.6cqw;justify-content:flex-start}
+.stats{display:flex;gap:2cqw}.st{flex:1;background:var(--panel);border:.5cqw solid var(--line);border-radius:3cqw;padding:1cqw 2cqw;text-align:center}.st b{display:block;font:400 5.4cqw var(--display);color:var(--accent);line-height:1.1}.st span{font-size:2.8cqw;color:color-mix(in srgb,var(--ink) 65%,transparent);font-weight:800}
+#cvw{flex:1;min-height:0;display:flex;justify-content:center;align-items:center}
+canvas#cv{border-radius:3cqw;background:linear-gradient(var(--field),var(--field2));border:.5cqw solid var(--line);touch-action:none;display:block;box-shadow:0 1cqw 0 rgba(0,0,0,.14)}
+.hint{text-align:center;margin:0}
+/* kết thúc */
+.big{font:400 11cqw var(--display);color:var(--accent);text-align:center;line-height:1.1}.rk{text-align:center;font:800 4.6cqw var(--body)}
+.hat{display:flex;gap:1.4cqw;justify-content:center;flex-wrap:wrap;font-size:8cqw;min-height:9cqw}
+.alb{display:grid;grid-template-columns:repeat(4,1fr);gap:1.8cqw}.an{position:relative;background:var(--panel);border:1.5px solid color-mix(in srgb,var(--ink) 25%,transparent);border-radius:3cqw;padding:1.2cqw;text-align:center;font-size:8cqw;line-height:1.1}.an small{display:block;font:800 2.6cqw var(--body);color:color-mix(in srgb,var(--ink) 70%,transparent)}.an.no{opacity:.35;filter:grayscale(1)}.an .c{position:absolute;top:.4cqw;right:1cqw;font:800 2.8cqw var(--body)}.an.r2{border-color:#3d8bff}.an.r3{border-color:#b05cff}.an.r4{border-color:#ffb020;box-shadow:0 0 2cqw rgba(255,176,32,.6)}
+.ov{position:absolute;inset:0;background:color-mix(in srgb,var(--panel) 86%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);z-index:7;display:flex;flex-direction:column;justify-content:center;gap:2.4cqw;padding:5cqw;text-align:center}
+.ov h2{margin:0;font:400 6cqw var(--display);color:var(--accent)}.ov p{margin:0;font-size:3.9cqw;line-height:1.35}
+.sk{display:grid;grid-template-columns:1fr 1fr;gap:2.4cqw}.skc{position:relative;border:1.5px solid color-mix(in srgb,var(--ink) 30%,transparent);border-radius:3.4cqw;padding:2.2cqw;background:var(--panel);color:var(--ink);font:800 3.6cqw var(--body);cursor:pointer;min-height:44px}.skc.on{border-color:var(--accent)}.skc .e{font-size:9cqw;display:block}.skc.lock{opacity:.75}.skc.lock::after{content:'🔒';position:absolute;top:1.2cqw;right:2cqw;font-size:4cqw}
+.toast{position:absolute;left:50%;top:15cqw;transform:translateX(-50%);background:#fff;color:#111;padding:1.8cqw 4cqw;border-radius:99cqw;font-weight:800;font-size:3.6cqw;z-index:9;max-width:92%;text-align:center;box-shadow:0 1cqw 3cqw rgba(0,0,0,.3)}
+@container (max-height:640px){#hSub,#hNote{display:none}.hero{font-size:12cqw}.ty .e{font-size:6cqw}}
+@container (max-height:520px){.hero{display:none}.hint{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<style id="skCss"></style>
+</head>
+<body>
+<div id="play">
+  <div class="deco" id="deco"></div>
+  <div class="top"><h1 id="ttl"></h1><button class="ib" id="bRe" type="button" hidden>↻</button><button class="ib" id="bBoard" type="button">🏆</button><button class="ib" id="bSnd" type="button">🔊</button><button class="ib" id="bLang" type="button">EN</button></div>
+  <section class="scr" id="home">
+    <div class="hero" id="hHero">🐔🥚</div>
+    <p class="mut" id="hSub" style="text-align:center;margin:0;font-size:3.6cqw"></p>
+    <div class="tys" id="tys"></div>
+    <button class="btn dbtn" id="bDaily" type="button"><span class="n" id="dN"></span><span class="grow"><b id="dT"></b><br><span id="dS" style="font-size:3.3cqw;opacity:.85"></span></span><span>▶</span></button>
+    <div class="row"><button class="btn alt grow" id="bFree" type="button"></button><button class="ib" id="bAlb" type="button" style="width:12cqw;height:12cqw">📖</button><button class="ib" id="bSkin" type="button" style="width:12cqw;height:12cqw">🎨</button></div>
+    <div class="chips" id="hChips"></div>
+    <p class="mut" id="hNote" style="text-align:center;margin:0"></p>
+  </section>
+  <section class="scr" id="game" hidden>
+    <div class="stats"><div class="st"><b id="sSc">0</b><span id="sScL"></span></div><div class="st"><b id="sSh">0</b><span id="sShL"></span></div><div class="st"><b id="sEx">0</b><span id="sExL"></span></div></div>
+    <div id="cvw"><canvas id="cv"></canvas></div>
+    <p class="mut hint" id="gHint"></p>
+  </section>
+  <section class="scr" id="end" hidden>
+    <div class="card" style="text-align:center"><div class="mut" id="eT"></div><div class="big" id="eSc"></div><div class="rk" id="eRk"></div></div>
+    <div class="hat" id="eHat"></div>
+    <div class="chips" id="eChips"></div>
+    <p class="mut" id="eVs" style="text-align:center;margin:0"></p>
+    <div class="row"><button class="btn grow" id="bShare" type="button">📤</button><button class="btn alt" id="bAgain" type="button">↻</button><button class="btn alt" id="bHome" type="button">🏠</button></div>
+  </section>
+  <div class="ov" id="ovCh" hidden><h2 id="chH"></h2><p id="chP"></p><div class="row"><button class="btn alt" id="chNo" type="button">✕</button><button class="btn grow" id="chGo" type="button"></button></div></div>
+  <div class="ov" id="ovAlb" hidden><h2 id="alH"></h2><p id="alP"></p><div class="alb" id="alG"></div><button class="btn alt" id="alX" type="button">✕</button></div>
+  <div class="ov" id="ovSkin" hidden><h2 id="skH"></h2><div class="sk" id="skG"></div><button class="btn alt" id="skX" type="button">✕</button></div>
+  <div class="ov" id="ovPay" hidden><h2>👑 Night Pass</h2><p id="pwP"></p><div class="row" style="flex-wrap:wrap"><button class="btn alt" id="pwNo" type="button">✕</button><button class="btn alt" id="pwTrial" type="button"></button><a class="btn" id="pwGo" target="_top" style="text-decoration:none"></a></div></div>
+  <div class="toast" id="toast" hidden></div>
+</div>
+<script>
+"use strict";
+const GID="ga-me-ban-trung",$=id=>document.getElementById(id),MAXS=30000,DAILY_SHOTS=30;
+const LS={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const pickLang=()=>{const q=new URLSearchParams(location.search).get("lang");let st=null;try{st=localStorage.getItem("lang")}catch(e){}return [q,st].find(x=>x==="vi"||x==="en")||(/^vi/i.test(navigator.language||"")?"vi":"en")};
+let LANG=pickLang();const L2=a=>LANG==="vi"?a[0]:a[1];
+/* ===== NỘI DUNG ===== */
+const TYPES=[["🐔","Cổ điển","Classic"],["🐥","Cứu gà con","Rescue"],["🎲","Luật quái","Wild rules"],["⏱️","Đua 60 giây","60s rush"]];
+const ANIM=[["🐥","Gà con","Chick",1],["🐤","Chim non","Hatchling",1],["🐣","Con nở","Newborn",1],["🦆","Vịt con","Duckling",1],["🐧","Cánh cụt","Penguin",2],["🦉","Cú mèo","Owl",2],["🦜","Vẹt","Parrot",2],["🐓","Gà trống","Rooster",2],["🦢","Thiên nga","Swan",3],["🦚","Công","Peacock",3],["🦩","Hồng hạc","Flamingo",3],["🦃","Gà tây","Turkey",3]];
+const SPEC=[["…","…","…",4],["…","…","…",4],["…","…","…",4],["…","…","…",4],["…","…","…",4],["…","…","…",4],["…","…","…",4],["…","…","…",4]];   /* 8 chỗ giấu cho loài hiếm Night Pass (tên thật nằm trong mã trả phí) */
+const I18={vi:{title:"Gà Mẹ Bắn Trứng",sub:"Bắn trứng cùng màu để nổ cụm. Trứng nở ra con vật cho bạn sưu tầm!",daily:"Bàn hôm nay",dS:"Cả nước cùng một bàn · 30 lượt",done:"Hôm nay bạn được {s} · chơi lại để cao hơn",free:"🎲 Chơi thoải mái",streak:"🔥 {n} ngày",best:"🏆 Cao nhất {n}",tot:"🎮 {n} ván",alb:"📖 {a}/{b} loài",note:"Chạm hoặc kéo để ngắm, thả để bắn. Chạm trứng nhỏ để đổi.",
+ sc:"Điểm",sh:"Lượt",tm:"Giây",ex:"Combo",ch1:"Gà con",left:"Còn {n} lượt",endT:"Hết ván!",endW:"Dọn sạch bàn!",endL:"Trứng chạm đáy!",endS:"Hết lượt bắn",endR:"Cứu đủ gà con!",endTm:"Hết giờ!",hatched:"Nở ra",none:"Chưa nở con nào",vsC:"Thách đấu: bạn {a} — người gửi {b}",win:"Bạn bắn giỏi hơn! 🎉",lose:"Chưa bằng, thử lại nhé!",tie:"Hòa!",ch:"Bạn bị thách!",chP:"Bạn bè đạt {s} điểm trong {m} lượt, cùng một bàn trứng. Bạn bắn giỏi hơn không?",chGo:"Bắn thử",
+ share:"Gà Mẹ Bắn Trứng",ask:"Bạn bắn giỏi hơn mình không?",copied:"Đã chép — dán cho bạn bè nhé!",skin:"Giao diện",lockP:"Loại chơi, giao diện và loài hiếm này dành cho Night Pass. Dùng thử 1 ván mỗi ngày hoặc mở khoá tất cả.",trial:"🎈 Dùng thử 1 ván",go:"Mở Night Pass",tried:"Hôm nay bạn đã dùng thử rồi",chL:"Bàn thách đấu thuộc loại “{t}” (Night Pass). Dùng thử 1 ván để nhận thách.",
+ newA:"MỚI! {a} nở ra!",hatchA:"{a} nở ra!",alH:"Album con vật",alP:"Nổ cụm 4 trứng trở lên hoặc làm rơi 3 trứng để trứng nở. Cụm càng lớn càng dễ ra loài hiếm.",
+ rk:["Gà mới tập","Bắn cũng được","Xạ thủ","Xạ thủ trứng","Gà mẹ huyền thoại"],hint0:"Kéo để ngắm, thả để bắn",rows:"Hàng trứng mới sắp xuống!"},
+ en:{title:"Mama Hen's Egg Pop",sub:"Shoot matching eggs to pop clusters. Eggs hatch into animals to collect!",daily:"Today's board",dS:"Everyone gets the same board · 30 shots",done:"Today you scored {s} · play again to beat it",free:"🎲 Free play",streak:"🔥 {n} days",best:"🏆 Best {n}",tot:"🎮 {n} games",alb:"📖 {a}/{b} species",note:"Tap or drag to aim, release to shoot. Tap the small egg to swap.",
+ sc:"Score",sh:"Shots",tm:"Sec",ex:"Combo",ch1:"Chicks",left:"{n} shots left",endT:"Game over!",endW:"Board cleared!",endL:"Eggs hit the bottom!",endS:"Out of shots",endR:"All chicks rescued!",endTm:"Time's up!",hatched:"Hatched",none:"Nothing hatched yet",vsC:"Challenge: you {a} — sender {b}",win:"You shot better! 🎉",lose:"Not quite — try again!",tie:"Tie!",ch:"You're challenged!",chP:"A friend scored {s} in {m} shots on this exact egg board. Can you shoot better?",chGo:"Try it",
+ share:"Mama Hen's Egg Pop",ask:"Can you shoot better than me?",copied:"Copied — paste it to a friend!",skin:"Theme",lockP:"This game type, theme and rare species are for Night Pass. Try one round a day or unlock everything.",trial:"🎈 Try 1 round",go:"Get Night Pass",tried:"You already used today's trial",chL:"This challenge uses the “{t}” type (Night Pass). Try one round to accept.",
+ newA:"NEW! {a} hatched!",hatchA:"{a} hatched!",alH:"Animal album",alP:"Pop a cluster of 4+ eggs or drop 3 eggs to hatch one. Bigger clusters hatch rarer species.",
+ rk:["Rookie hen","Decent shot","Sharpshooter","Egg sniper","Legendary mama hen"],hint0:"Drag to aim, release to shoot",rows:"A new row is coming down!"}};
+const T=(k,o)=>{let s=(I18[LANG][k]!=null?I18[LANG][k]:I18.vi[k]);if(typeof s==="string"&&o)for(const x in o)s=s.replace("{"+x+"}",o[x]);return s};
+const isDark=()=>document.documentElement.dataset.theme==="dark";
+/* ===== RNG / NGÀY ===== */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const fnv=s=>{let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0};
+const sub=(seed,k)=>mulberry32((seed^Math.imul(k+1,2654435761))>>>0);
+const dayKey=()=>new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Ho_Chi_Minh"}).format(new Date());
+const dayNo=k=>Math.floor((Date.parse(k+"T00:00:00Z")-Date.parse("2026-01-01T00:00:00Z"))/864e5)+1;
+const b64e=o=>btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+function parseCh(h){try{const m=/[#&]ch=([A-Za-z0-9_-]{1,200})/.exec(h||"");if(!m)return null;let t=m[1].replace(/-/g,"+").replace(/_/g,"/");while(t.length%4)t+="=";const o=JSON.parse(decodeURIComponent(escape(atob(t))));
+ if(o&&Number.isInteger(o.s)&&o.s>=0&&o.s<=4294967295&&Number.isInteger(o.sc)&&o.sc>=0&&o.sc<=MAXS){const sh=Number.isInteger(o.sh)&&o.sh>=5&&o.sh<=200?o.sh:DAILY_SHOTS;const t2=Number.isInteger(o.t)&&o.t>=0&&o.t<=3?o.t:0;return{s:o.s,sc:o.sc,sh,t:t2}}return null}catch(e){return null}}
+/* ===== HÌNH HỌC LƯỚI LỤC GIÁC ===== */
+const C=9,D=40,R=20,RH=34.64,W=C*D,H=540,TOP=R+6,LOSE_ROW=11,MAXR=16,SX=W/2,SY=H-44;
+const cols=(r,par)=>((r+par)&1)?C-1:C;
+const cx=(r,c,par)=>(c+(((r+par)&1)?1:.5))*D,cy=r=>TOP+r*RH;
+/* ===== PHÔNG MÀU TRỨNG (5 màu + hoa văn để người mù màu phân biệt) ===== */
+const BASEPAL=[[355,78,58],[46,92,56],[135,58,44],[210,82,56],[282,60,58]];
+/* ===== LOẠI GAME / GIAO DIỆN / NIGHT PASS ===== */
+const CATALOG=[["basic","Cơ bản","Basic","🥚"],["easter","Phục sinh","Easter","🐰"],["gold","Trứng vàng","Golden","👑"],["jade","Cẩm thạch","Jade","🍀"],["neon","Neon","Neon","⚡"]];
+const PF={pro:null,ticket:null,types:TYPES,modeCfg:[{rows:6,colors:5},null,null,null],anim2:null,skins:{basic:{}},skinSel:LS.get("gm-skin","basic")};
+let TY=(()=>{const v=LS.get("gm-type",0);return Number.isInteger(v)&&v>=0&&v<4?v:0})();
+const tLocked=t=>!PF.modeCfg[t];
+const skinOf=()=>PF.skins[PF.skinSel]||PF.skins.basic;
+const ANIMS=()=>PF.anim2?ANIM.concat(PF.anim2):ANIM;
+function applySkin(){const sk=skinOf(),pl=$("play");(pl._v||[]).forEach(k=>pl.style.removeProperty(k));const vv=sk.vl?(isDark()?sk.vd:sk.vl):{};pl._v=Object.keys(vv);for(const k of pl._v)pl.style.setProperty(k,vv[k]);
+ let st=$("skCss");st.textContent=sk.css||"";const d=$("deco");d.innerHTML="";const Ld=sk.deco||["🥚","🌾","🐥"],Rr=mulberry32(5);[0,1,2,3,4,5,6,7].forEach(i=>{const e=document.createElement("i");e.textContent=Ld[i%Ld.length];e.style.left=(Rr()*90)+"%";e.style.top=(15+Rr()*80)+"%";e.style.animationDelay=(-Rr()*8)+"s";d.appendChild(e)});if(G&&!$("game").hidden)draw()}
+addEventListener("storage",e=>{if(e.key==="theme"){document.documentElement.dataset.theme=e.newValue||"light";applySkin()}});
+/* ===== ÂM THANH ===== */
+let AC=null;const snd=()=>!window.NPAudio||NPAudio.get();
+function tone(f,d,ty,v,dl){if(!snd())return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();const t0=AC.currentTime+(dl||0),o=AC.createOscillator(),g=AC.createGain();o.type=ty||"sine";o.frequency.value=f;g.gain.setValueAtTime(.0001,t0);g.gain.exponentialRampToValueAtTime(v||.08,t0+.02);g.gain.exponentialRampToValueAtTime(.0001,t0+d);o.connect(g);g.connect(AC.destination);o.start(t0);o.stop(t0+d+.05)}catch(e){}}
+const sfx={shoot:()=>tone(420,.08,"triangle",.07),stick:()=>tone(200,.07,"square",.05),pop:n=>{for(let i=0;i<Math.min(5,n);i++)tone(500+i*90,.1,"triangle",.07,i*.04)},hatch:()=>{[700,900,1200].forEach((f,i)=>tone(f,.14,"sine",.1,i*.08))},rare:()=>{[600,800,1000,1300,1600].forEach((f,i)=>tone(f,.16,"triangle",.1,i*.07))},end:()=>{tone(300,.2,"sawtooth",.07);tone(220,.3,"sawtooth",.07,.18)},row:()=>tone(150,.2,"sawtooth",.06)};
+/* ===== TRẠNG THÁI & LUẬT ===== */
+let G=null,CH=null,lastEnd=0,raf=0;
+const getSave=()=>LS.get("gm-save",{streak:0,last:"",best:0,total:0,days:{}});
+const getAlb=()=>LS.get("gm-alb",{});
+const newSeed=()=>(Math.random()*4294967296)>>>0;
+function cfgOf(t,mode,chSh){const base=PF.modeCfg[t]||PF.modeCfg[0];const c=Object.assign({},base);if(t===0){c.shots=mode==="daily"?DAILY_SHOTS:(mode==="challenge"?chSh:0)}else if(t===3){c.time=60;c.shots=0}else c.shots=c.shots||28;return c}
+function newGame(seed,mode,t,ch){const cfg=cfgOf(t,mode,ch?ch.sh:DAILY_SHOTS);G={seed,mode,t,ch:ch||null,cfg,grid:[],par:0,score:0,used:0,miss:0,combo:0,maxCombo:0,draw:0,rowsAdded:0,hatchIdx:0,hatched:[],freed:0,chicks:0,timeLeft:cfg.time||0,over:false,why:"",ball:null,aim:0,cur:0,nxt:0,fx:[],fall:[],busy:false,popped:0,t0:0};buildBoard();G.cur=drawEgg();G.nxt=drawEgg()}
+function buildBoard(){const R_=mulberry32(G.seed),cfg=G.cfg,rows=cfg.rows||6,nc=Math.min(5,cfg.colors||5);G.grid=[];for(let r=0;r<MAXR;r++){const row=Array(C).fill(null);G.grid.push(row)}
+ for(let r=0;r<rows;r++)for(let c=0;c<cols(r,0);c++)G.grid[r][c]={k:Math.floor(R_()*nc),s:0};
+ const cells=[];for(let r=0;r<rows;r++)for(let c=0;c<cols(r,0);c++)cells.push([r,c]);
+ const place=(n,s)=>{for(let i=0;i<n&&cells.length;i++){const j=Math.floor(R_()*cells.length),[r,c]=cells.splice(j,1)[0];if(G.grid[r][c]&&!G.grid[r][c].s)G.grid[r][c].s=s}};
+ place(cfg.chicks||0,3);place(cfg.bombs||0,1);place(cfg.ice||0,2);G.chicks=cfg.chicks||0}
+const rowsUsed=()=>{let m=-1;for(let r=0;r<MAXR;r++)for(let c=0;c<C;c++)if(G.grid[r][c]){m=r;break}return m};
+function present(){const s=new Set();for(let r=0;r<MAXR;r++)for(const e of G.grid[r])if(e)s.add(e.k);return[...s].sort()}
+function drawEgg(){const p=present();if(!p.length)return 0;const R_=sub(G.seed,G.draw++);return p[Math.floor(R_()*p.length)]}
+function neigh(r,c){const par=G.par,xh=2*c+(((r+par)&1)?1:0),out=[];if(c>0)out.push([r,c-1]);if(c<cols(r,par)-1)out.push([r,c+1]);for(const rr of[r-1,r+1]){if(rr<0||rr>=MAXR)continue;const o2=(rr+par)&1;for(const xx of[xh-1,xh+1]){const cc=(xx-o2)/2;if(Number.isInteger(cc)&&cc>=0&&cc<cols(rr,par))out.push([rr,cc])}}return out}
+/* ---- bắn: mô phỏng cố định bước (xác định) ---- */
+const STEP=6,SPEED=900;
+function simBall(b,dt){let rem=SPEED*dt;while(rem>0){const st=Math.min(STEP,rem);rem-=st;b.x+=b.vx*st;b.y+=b.vy*st;if(b.x<R){b.x=R+(R-b.x);b.vx=-b.vx}else if(b.x>W-R){b.x=(W-R)-(b.x-(W-R));b.vx=-b.vx}
+  if(b.y<=TOP)return"stick";for(let r=0;r<MAXR;r++){const y=cy(r);if(Math.abs(y-b.y)>D)continue;for(let c=0;c<cols(r,G.par);c++){const e=G.grid[r][c];if(!e)continue;const dx=cx(r,c,G.par)-b.x,dy=y-b.y;if(dx*dx+dy*dy<(D*.86)*(D*.86))return"stick"}}}return""}
+function landing(b){let best=null,bd=1e9;for(let r=0;r<MAXR;r++){const y=cy(r);if(Math.abs(y-b.y)>D*1.6)continue;for(let c=0;c<cols(r,G.par);c++){if(G.grid[r][c])continue;let ok=r===0;if(!ok)for(const [rr,cc] of neigh(r,c))if(G.grid[rr][cc]){ok=true;break}if(!ok)continue;const dx=cx(r,c,G.par)-b.x,dy=y-b.y,d=dx*dx+dy*dy;if(d<bd){bd=d;best=[r,c]}}}return best}
+function aimDir(a){return{vx:Math.sin(a),vy:-Math.cos(a)}}
+function fire(a){if(!G||G.over||G.ball||G.busy)return false;if(Math.abs(a)>1.42)a=Math.sign(a)*1.42;const d=aimDir(a);G.ball={x:SX,y:SY,vx:d.vx,vy:d.vy,k:G.cur};G.aim=a;sfx.shoot();return true}
+function preview(a){const pts=[],b=Object.assign({x:SX,y:SY},aimDir(a));for(let i=0;i<70;i++){const hit=simBall(b,STEP/SPEED);pts.push([b.x,b.y]);if(hit)break}return pts}
+/* ---- giải quyết một lượt ---- */
+function settle(){const b=G.ball;G.ball=null;const pos=landing(b);if(!pos){G.over=true;G.why="lose";return endGame()}
+ const [r,c]=pos;if(r>=MAXR){G.over=true;G.why="lose";return endGame()}G.grid[r][c]={k:b.k,s:0};G.used++;sfx.stick();
+ const cl=cluster(r,c);let popped=0,dropped=0,freed=0,thaw=new Set();
+ if(cl.length>=3){const kill=new Set(cl.map(p=>p[0]+","+p[1]));for(const [pr,pc] of cl){const e=G.grid[pr][pc];if(e&&e.s===1)for(const [nr,nc] of neigh(pr,pc))if(G.grid[nr][nc])kill.add(nr+","+nc)}
+  for(const key of kill){const [pr,pc]=key.split(",").map(Number),e=G.grid[pr][pc];if(!e)continue;if(e.s===3)freed++;fxPop(pr,pc,e.k);G.grid[pr][pc]=null;popped++}
+  for(const key of kill){const [pr,pc]=key.split(",").map(Number);for(const [nr,nc] of neigh(pr,pc)){const e=G.grid[nr][nc];if(e&&e.s===2)thaw.add(nr+","+nc)}}
+  thaw.forEach(k=>{const [pr,pc]=k.split(",").map(Number);if(G.grid[pr][pc])G.grid[pr][pc].s=0});
+  const fl=floating();for(const [fr,fc] of fl){const e=G.grid[fr][fc];if(e.s===3)freed++;G.fall.push({x:cx(fr,fc,G.par),y:cy(fr),vy:-80-Math.random()*60,vx:(Math.random()-.5)*120,k:e.k,s:e.s});G.grid[fr][fc]=null;dropped++}}
+ if(popped>0){G.combo++;G.maxCombo=Math.max(G.maxCombo,G.combo);G.miss=0;const mult=1+.25*Math.min(G.combo-1,6);G.score+=Math.round((popped*10+dropped*20)*mult);G.popped+=popped+dropped;sfx.pop(popped);
+  if(popped>=4||dropped>=3)hatch(popped+dropped);if(freed){G.freed+=freed;G.score+=freed*100;toast("🐥 +"+freed,1200)}}
+ else{G.combo=0;G.miss++}
+ G.score=Math.min(MAXS,G.score);
+ /* hàng mới sau mỗi 6 lượt hụt */
+ if(G.miss>=(G.cfg.dropEvery||6)){G.miss=0;addRow();sfx.row()}
+ G.cur=G.nxt;G.nxt=drawEgg();
+ if(rowsUsed()<0){G.score=Math.min(MAXS,G.score+300+(G.cfg.shots?(G.cfg.shots-G.used)*10:0));G.over=true;G.why="clear";return endGame()}
+ for(let rr=LOSE_ROW;rr<MAXR;rr++)for(const e of G.grid[rr])if(e){G.over=true;G.why="lose";return endGame()}
+ if(G.cfg.chicks&&G.freed>=G.chicks){G.score=Math.min(MAXS,G.score+(G.cfg.shots-G.used)*25+200);G.over=true;G.why="rescue";return endGame()}
+ if(G.cfg.shots&&G.used>=G.cfg.shots){G.over=true;G.why="shots";return endGame()}
+ updHud()}
+function cluster(r,c){const e=G.grid[r][c],seen=new Set([r+","+c]),q=[[r,c]],out=[];while(q.length){const [a,b]=q.pop();out.push([a,b]);for(const [nr,nc] of neigh(a,b)){const k=nr+","+nc,n=G.grid[nr][nc];if(!n||seen.has(k)||n.k!==e.k)continue;if(n.s===2&&!(a===r&&b===c))continue;if(n.s===2)continue;seen.add(k);q.push([nr,nc])}}return out}
+function floating(){const seen=new Set(),q=[];for(let c=0;c<cols(0,G.par);c++)if(G.grid[0][c]){seen.add("0,"+c);q.push([0,c])}while(q.length){const [a,b]=q.pop();for(const [nr,nc] of neigh(a,b)){const k=nr+","+nc;if(G.grid[nr][nc]&&!seen.has(k)){seen.add(k);q.push([nr,nc])}}}const out=[];for(let r=0;r<MAXR;r++)for(let c=0;c<cols(r,G.par);c++)if(G.grid[r][c]&&!seen.has(r+","+c))out.push([r,c]);return out}
+function addRow(){const R_=sub(G.seed,5000+G.rowsAdded++),nc=Math.min(5,G.cfg.colors||5);G.par^=1;G.grid.unshift(Array(C).fill(null));G.grid.pop();for(let c=0;c<cols(0,G.par);c++)G.grid[0][c]={k:Math.floor(R_()*nc),s:0};toast(T("rows"),1100)}
+function hatch(n){const R_=sub(G.seed,9000+G.hatchIdx++),all=ANIMS(),pro=!!PF.anim2;let p=R_();const bonus=Math.min(.3,.03*(n-3));let rar=p<.02+bonus*.2?4:p<.12+bonus*.5?3:p<.4+bonus?2:1;if(rar===4&&!pro)rar=3;const pool=all.filter(a=>a[3]===rar);const a=pool[Math.floor(R_()*pool.length)]||all[0];G.hatched.push(a[0]);const alb=getAlb(),isNew=!alb[a[0]];alb[a[0]]=(alb[a[0]]||0)+1;LS.set("gm-alb",alb);G.score=Math.min(MAXS,G.score+50*rar);
+ toast(T(isNew?"newA":"hatchA",{a:a[0]+" "+L2([a[1],a[2]])}),1700);(rar>=3?sfx.rare:sfx.hatch)();if(window.NPFx)NPFx.buzz(rar>=3?[40,30,70]:25)}
+function fxPop(r,c,k){const x=cx(r,c,G.par),y=cy(r);for(let i=0;i<7;i++){const a=i/7*6.283;G.fx.push({x,y,vx:Math.cos(a)*120,vy:Math.sin(a)*120,life:.45,k})}}
+/* ===== VÒNG LẶP ===== */
+let last=0,acc=0;
+function tick(ts){raf=requestAnimationFrame(tick);if(!G||$("game").hidden){last=ts;return}const dt=Math.min(.05,(ts-last)/1000||0);last=ts;
+ if(G.ball){acc+=dt;const sd=STEP/SPEED;let n=0;while(acc>=sd&&G.ball&&n++<8){acc-=sd;const hit=simBall(G.ball,sd);if(hit){settle();acc=0;break}}}
+ if(G.cfg.time&&!G.over){G.timeLeft-=dt;if(G.timeLeft<=0){G.timeLeft=0;G.over=true;G.why="time";endGame()}updHud()}
+ for(const f of G.fx){f.x+=f.vx*dt;f.y+=f.vy*dt;f.life-=dt}G.fx=G.fx.filter(f=>f.life>0);for(const f of G.fall){f.vy+=900*dt;f.x+=f.vx*dt;f.y+=f.vy*dt}G.fall=G.fall.filter(f=>f.y<H+30);draw()}
+/* ===== VẼ ===== */
+const cv=$("cv"),ctx=cv.getContext("2d");let SC=1;
+function fitCanvas(){const w=$("cvw");if(!w)return;const aw=w.clientWidth,ah=w.clientHeight;if(!aw||!ah)return;const s=Math.min(aw/W,ah/H),dpr=Math.min(2,devicePixelRatio||1);cv.style.width=Math.floor(W*s)+"px";cv.style.height=Math.floor(H*s)+"px";cv.width=Math.floor(W*s*dpr);cv.height=Math.floor(H*s*dpr);SC=cv.width/W;draw()}
+new ResizeObserver(fitCanvas).observe($("cvw"));
+function palette(k){const sk=skinOf();const P=sk.pal||BASEPAL;return P[k%5]}
+function eggPath(x,y,rx,ry){ctx.beginPath();ctx.ellipse(x,y+ry*.04,rx,ry,0,0,6.283)}
+function drawEgg2(x,y,k,s,a){const [h,sa,l]=palette(k),sk=skinOf(),rx=R*.84,ry=R*.98;ctx.save();ctx.globalAlpha=a==null?1:a;
+ const g=ctx.createRadialGradient(x-rx*.35,y-ry*.4,2,x,y,ry*1.1);g.addColorStop(0,"hsl("+h+" "+sa+"% "+Math.min(88,l+26)+"%)");g.addColorStop(1,"hsl("+h+" "+sa+"% "+(l-6)+"%)");ctx.fillStyle=g;eggPath(x,y,rx,ry);ctx.fill();ctx.lineWidth=1.6;ctx.strokeStyle="hsl("+h+" "+sa+"% "+(l-26)+"%)";ctx.stroke();
+ ctx.fillStyle="rgba(255,255,255,.78)";ctx.strokeStyle="rgba(255,255,255,.78)";ctx.lineWidth=2;const p=k%5;
+ if(p===0){for(const [dx,dy] of[[-5,-2],[4,-5],[2,5],[-3,6]]){ctx.beginPath();ctx.arc(x+dx,y+dy,2.1,0,6.283);ctx.fill()}}
+ else if(p===1){ctx.beginPath();ctx.moveTo(x-9,y-4);ctx.lineTo(x+9,y-4);ctx.moveTo(x-10,y+3);ctx.lineTo(x+10,y+3);ctx.stroke()}
+ else if(p===2){ctx.beginPath();ctx.moveTo(x-10,y+2);for(let i=0;i<5;i++)ctx.lineTo(x-10+i*5+2.5,y+(i%2?2:-3));ctx.stroke()}
+ else if(p===3){ctx.beginPath();ctx.arc(x,y+1,5.5,0,6.283);ctx.stroke()}
+ else{ctx.font="12px sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("♥",x,y+1)}
+ ctx.fillStyle="rgba(255,255,255,.55)";ctx.beginPath();ctx.ellipse(x-rx*.38,y-ry*.45,rx*.2,ry*.28,-.5,0,6.283);ctx.fill();
+ if(sk.glitter){ctx.fillStyle="rgba(255,255,255,.9)";for(const [dx,dy] of[[7,-8],[-8,5],[8,8]]){ctx.fillRect(x+dx-1,y+dy-1,2,2)}}
+ if(s===1){ctx.font="13px sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("💣",x,y+2)}
+ else if(s===2){ctx.fillStyle="rgba(170,225,255,.55)";eggPath(x,y,rx,ry);ctx.fill();ctx.strokeStyle="#bfeaff";ctx.lineWidth=2;ctx.stroke()}
+ else if(s===3){ctx.font="13px sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("🐥",x,y+2)}
+ ctx.restore()}
+function draw(){if(!G||$("game").hidden)return;ctx.setTransform(SC,0,0,SC,0,0);ctx.clearRect(0,0,W,H);
+ /* đường báo thua */
+ ctx.strokeStyle="rgba(220,60,60,.35)";ctx.setLineDash([6,6]);ctx.beginPath();const ly=cy(LOSE_ROW)-R;ctx.moveTo(0,ly);ctx.lineTo(W,ly);ctx.stroke();ctx.setLineDash([]);
+ for(let r=0;r<MAXR;r++)for(let c=0;c<cols(r,G.par);c++){const e=G.grid[r][c];if(e)drawEgg2(cx(r,c,G.par),cy(r),e.k,e.s)}
+ for(const f of G.fall)drawEgg2(f.x,f.y,f.k,f.s,.9);
+ for(const f of G.fx){ctx.globalAlpha=Math.max(0,f.life/.45);const [h,sa,l]=palette(f.k);ctx.fillStyle="hsl("+h+" "+sa+"% "+l+"%)";ctx.beginPath();ctx.arc(f.x,f.y,4,0,6.283);ctx.fill();ctx.globalAlpha=1}
+ /* đường ngắm */
+ if(!G.ball&&!G.over){const pts=preview(G.aim);ctx.fillStyle="rgba(120,80,30,.55)";if(isDark())ctx.fillStyle="rgba(255,225,160,.65)";pts.forEach((p,i)=>{if(i%2===0){ctx.beginPath();ctx.arc(p[0],p[1],2.4,0,6.283);ctx.fill()}})}
+ /* người bắn: gà mẹ + trứng nạp + trứng kế tiếp */
+ ctx.font="34px sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";ctx.save();ctx.translate(SX,SY+8);ctx.fillText("🐔",0,0);ctx.restore();
+ if(!G.ball&&!G.over)drawEgg2(SX,SY-4,G.cur,0);if(G.ball)drawEgg2(G.ball.x,G.ball.y,G.ball.k,0);
+ ctx.save();ctx.globalAlpha=.95;ctx.translate(W-44,SY+6);ctx.scale(.8,.8);drawEgg2(0,0,G.nxt,0);ctx.restore();ctx.fillStyle="rgba(120,80,30,.8)";if(isDark())ctx.fillStyle="rgba(255,225,160,.85)";ctx.font="800 10px sans-serif";ctx.fillText("⇄",W-44,SY+28)}
+/* ===== HUD / MÀN HÌNH ===== */
+function show(id){["home","game","end"].forEach(s=>$(s).hidden=s!==id);["ovCh","ovAlb","ovSkin","ovPay"].forEach(o=>$(o).hidden=true);$("bRe").hidden=id!=="game"}
+function toast(m,ms){const t=$("toast");t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,ms||1800)}
+function updHud(){if(!G)return;$("sSc").textContent=G.score;$("sScL").textContent=T("sc");
+ if(G.cfg.time){$("sSh").textContent=Math.ceil(G.timeLeft);$("sShL").textContent=T("tm")}else if(G.cfg.shots){$("sSh").textContent=Math.max(0,G.cfg.shots-G.used);$("sShL").textContent=T("sh")}else{$("sSh").textContent=G.used;$("sShL").textContent=T("sh")}
+ if(G.cfg.chicks){$("sEx").textContent=G.freed+"/"+G.chicks;$("sExL").textContent=T("ch1")}else{$("sEx").textContent="×"+Math.max(1,G.combo);$("sExL").textContent=T("ex")}
+ $("gHint").textContent=G.cfg.shots?T("left",{n:Math.max(0,G.cfg.shots-G.used)}):T("hint0")}
+function renderHome(){const sv=getSave(),k=dayKey(),done=sv.days[k],alb=getAlb(),tot=ANIMS().length;$("ttl").textContent=T("title");$("hSub").textContent=T("sub");$("dN").textContent="#"+dayNo(k);$("dT").textContent=T("daily");$("dS").textContent=done!=null?T("done",{s:done}):T("dS");$("bFree").textContent=T("free");$("hNote").textContent=T("note");$("bLang").textContent=LANG==="vi"?"EN":"VI";$("bSnd").textContent=snd()?"🔊":"🔇";
+ $("hHero").textContent=skinOf().hero||"🐔🥚";renderTypes();$("hChips").innerHTML="";[sv.streak?T("streak",{n:sv.streak}):"",sv.best?T("best",{n:sv.best}):"",T("alb",{a:Object.keys(alb).length,b:tot})].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("hChips").appendChild(c)})}
+function renderTypes(){const b=$("tys");b.innerHTML="";TYPES.forEach((t,i)=>{const e=document.createElement("button");e.type="button";e.className="ty"+(TY===i?" on":"")+(tLocked(i)?" lock":"");e.innerHTML='<span class="e">'+t[0]+"</span>"+L2([t[1],t[2]]);e.onclick=()=>{if(tLocked(i)){openPay(i,null);return}TY=i;LS.set("gm-type",i);renderHome()};b.appendChild(e)})}
+function begin(seed,mode,t,ch){t=t==null?(mode==="daily"?0:TY):t;if(tLocked(t))t=0;newGame(seed,mode,t,ch);show("game");applySkin();fitCanvas();updHud();window.NP&&NP.start()}
+function endGame(){G.over=true;const sv=getSave();sv.total++;sv.best=Math.max(sv.best,G.score);if(G.mode==="daily"){const k=dayKey();if(sv.days[k]==null||G.score>sv.days[k])sv.days[k]=G.score;if(sv.last!==k){const y=new Date(Date.parse(k+"T00:00:00Z")-864e5).toISOString().slice(0,10);sv.streak=sv.last===y?sv.streak+1:1;sv.last=k}}
+ LS.set("gm-save",sv);lastEnd=performance.now();const score=Math.min(MAXS,G.score);window.NP&&NP.result({score,extra:{mode:G.mode,t:G.t,hatched:G.hatched.length}});sfx.end();setTimeout(()=>showEnd(),380)}
+const rankIdx=s=>s>=4000?4:s>=2500?3:s>=1400?2:s>=600?1:0;
+function showEnd(){if(!G)return;show("end");const why={lose:"endL",clear:"endW",rescue:"endR",shots:"endS",time:"endTm"}[G.why]||"endT";$("eT").textContent=T(why);$("eSc").textContent=G.score;$("eRk").textContent="🏅 "+T("rk")[rankIdx(G.score)];$("eHat").textContent=G.hatched.length?G.hatched.join(" "):T("none");
+ $("eChips").innerHTML="";const sv=getSave();[L2([TYPES[G.t][1],TYPES[G.t][2]]),G.mode==="daily"?"📅 #"+dayNo(dayKey()):"","🔥 ×"+G.maxCombo,G.mode==="daily"&&sv.streak?T("streak",{n:sv.streak}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("eChips").appendChild(c)});
+ $("eVs").textContent=G.ch?T("vsC",{a:G.score,b:G.ch.sc})+" · "+(G.score>G.ch.sc?T("win"):G.score<G.ch.sc?T("lose"):T("tie")):"";
+ const helper=!!(window.NP&&NP.helper);$("bShare").hidden=helper;$("bAgain").hidden=helper;$("bBoard").hidden=helper;$("bHome").hidden=helper}
+function again(){if(!G)return;const t=G.t;if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",t,null)}
+/* ===== CHIA SẺ ===== */
+function shareLink(){return location.origin+"/api/share/"+GID+"?ch="+b64e({s:G.seed,sc:Math.min(MAXS,G.score),sh:Math.max(5,Math.min(200,G.cfg.shots||G.used||DAILY_SHOTS)),t:G.t})+(LANG==="en"?"&l=en":"")}
+function shareText(){return TYPES[G.t][0]+" "+T("share")+(G.t?" · "+L2([TYPES[G.t][1],TYPES[G.t][2]]):"")+(G.mode==="daily"?" #"+dayNo(dayKey()):"")+"\n"+(G.hatched.length?T("hatched")+": "+G.hatched.join(""):T("none"))+"\n🏅 "+G.score+" · "+T("rk")[rankIdx(G.score)]+(G.maxCombo>1?" · 🔥×"+G.maxCombo:"")+"\n"+T("ask")+"\n"+shareLink()}
+function drawCard(){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif";const g=x.createLinearGradient(0,0,1080,1350);g.addColorStop(0,"#ffb347");g.addColorStop(1,"#c0392b");x.fillStyle=g;x.fillRect(0,0,1080,1350);x.textAlign="center";
+ x.fillStyle="#fff";x.font="800 68px "+F;x.fillText(TYPES[G.t][0]+" "+T("share")+(G.mode==="daily"?" #"+dayNo(dayKey()):""),540,130);x.font="260px "+F;x.fillText("🐔",540,480);
+ x.font="130px "+F;const hs=G.hatched.slice(-6).join("")||"🥚";x.fillText(hs,540,680);x.fillStyle="#fff";x.font="800 170px "+F;x.fillText(String(G.score),540,930);x.font="800 60px "+F;x.fillStyle="#fff3c9";x.fillText("🏅 "+T("rk")[rankIdx(G.score)]+(G.maxCombo>1?" · 🔥×"+G.maxCombo:""),540,1030);
+ x.fillStyle="#fff";x.font="800 58px "+F;x.fillText(T("ask"),540,1180);x.font="800 40px "+F;x.fillStyle="#ffe2b8";x.fillText(location.host,540,1255);return c}
+$("bShare").onclick=async()=>{if(!G||!G.over)return;const txt=shareText();try{const cv2=drawCard(),blob=await new Promise(r=>cv2.toBlob(r,"image/png")),f=blob&&new File([blob],"ga-me-ban-trung.png",{type:"image/png"});if(f&&navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],text:txt});return}if(navigator.share){await navigator.share({text:txt});return}}catch(e){if(e&&e.name==="AbortError")return}
+ try{await navigator.clipboard.writeText(txt);toast(T("copied"),2200)}catch(e){toast(txt,3000)}};
+$("bBoard").onclick=()=>window.NP&&NP.brag();
+$("bAgain").onclick=again;$("bHome").onclick=()=>{G=null;if(PF.pro&&PF.pro.trial)PF.lockPro();applySkin();show("home");renderHome()};$("bRe").onclick=()=>{if(G&&!G.over&&!(window.NP&&NP.helper))again()};
+$("end").addEventListener("click",e=>{if(!G||!G.over||$("end").hidden||window.NP&&NP.helper||performance.now()-lastEnd<450||e.target.closest("button,a"))return;again()});
+/* ===== ĐIỀU KHIỂN ===== */
+let aiming=false;
+function pt(e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H]}
+function setAim(e){const [x,y]=pt(e);const dx=x-SX,dy=SY-y;if(dy<8)return;G.aim=Math.max(-1.35,Math.min(1.35,Math.atan2(dx,dy)))}
+cv.addEventListener("pointerdown",e=>{if(!G||G.over)return;const [x,y]=pt(e);if(x>W-80&&y>SY-14){const t=G.cur;G.cur=G.nxt;G.nxt=t;return}aiming=true;try{cv.setPointerCapture(e.pointerId)}catch(_){}setAim(e)});
+cv.addEventListener("pointermove",e=>{if(aiming&&G&&!G.over)setAim(e)});
+cv.addEventListener("pointerup",e=>{if(!aiming)return;aiming=false;if(G&&!G.over){setAim(e);fire(G.aim)}});
+cv.addEventListener("pointercancel",()=>aiming=false);
+addEventListener("keydown",e=>{if(G&&!G.over&&!$("game").hidden){if(e.key==="ArrowLeft"||e.key==="a"){e.preventDefault();G.aim=Math.max(-1.35,G.aim-.06)}else if(e.key==="ArrowRight"||e.key==="d"){e.preventDefault();G.aim=Math.min(1.35,G.aim+.06)}else if(e.key===" "||e.key==="ArrowUp"||e.key==="Enter"){e.preventDefault();fire(G.aim)}else if(e.key==="s"||e.key==="ArrowDown"){const t=G.cur;G.cur=G.nxt;G.nxt=t}return}
+ if(G&&G.over&&!$("end").hidden&&(e.key===" "||e.key==="Enter")&&!(e.target.closest&&e.target.closest("button"))&&performance.now()-lastEnd>450&&!(window.NP&&NP.helper)){e.preventDefault();again()}});
+/* ===== TRANG CHỦ / ALBUM / THÁCH ĐẤU / NGÔN NGỮ ===== */
+$("bDaily").onclick=()=>begin(fnv("egg|"+dayKey()),"daily",0,null);
+$("bFree").onclick=()=>begin(newSeed(),"free",TY,null);
+$("bLang").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}document.documentElement.lang=LANG;if(!$("home").hidden)renderHome();else if(!$("game").hidden)updHud();else if(!$("end").hidden)showEnd()};
+$("bSnd").onclick=()=>{if(window.NPAudio)NPAudio.set(!NPAudio.get());$("bSnd").textContent=snd()?"🔊":"🔇"};
+function openAlbum(){const alb=getAlb(),all=ANIMS().concat(PF.anim2?[]:SPEC);$("alH").textContent=T("alH");$("alP").textContent=T("alP");$("alG").innerHTML="";all.forEach(a=>{const own=alb[a[0]]||0,d=document.createElement("div");d.className="an r"+a[3]+(own?"":" no");d.innerHTML=(own||a[0]!=="…"?a[0]:"❔")+"<small>"+(own||a[0]!=="…"?L2([a[1],a[2]]):"???")+"</small>"+(own?'<span class="c">×'+own+"</span>":"");$("alG").appendChild(d)});$("ovAlb").hidden=false}
+$("bAlb").onclick=openAlbum;$("alX").onclick=()=>$("ovAlb").hidden=true;
+const openCh=c=>{CH=c;$("chH").textContent="⚔ "+T("ch");$("chP").textContent=T("chP",{s:c.sc,m:c.sh})+(tLocked(c.t)?"\n"+T("chL",{t:L2([TYPES[c.t][1],TYPES[c.t][2]])}):"");$("chGo").textContent=tLocked(c.t)?T("trial"):T("chGo");$("ovCh").hidden=false};
+$("chNo").onclick=()=>{$("ovCh").hidden=true;CH=null};
+$("chGo").onclick=async()=>{const c=CH;$("ovCh").hidden=true;if(!c)return;if(tLocked(c.t)){if(LS.get("gm-trial","")===dayKey()){openPay(c.t,null);return}try{await PF.loadPro(true);LS.set("gm-trial",dayKey());track(GID+"_skin","trial");PF.trialRestore={ty:TY,sk:PF.skinSel};TY=c.t}catch(e){toast(T("tried"),2200);return}}begin(c.s,"challenge",c.t,c)};
+/* ===== NIGHT PASS ===== */
+const subUrl=()=>"../../../subscribe.html?from="+encodeURIComponent("cozyplay/index.html#"+GID)+"&plan=month";
+const passToken=()=>{try{const p=JSON.parse(localStorage.getItem("pass"));return p&&p.token}catch(e){return null}};
+const track=(k,a)=>{try{fetch("/api/paywall",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({f:k,k:a})}).catch(()=>{})}catch(e){}};
+let payFor=null;
+function openSkins(){$("skH").textContent="🎨 "+T("skin");$("skG").innerHTML="";CATALOG.forEach(c=>{const locked=c[0]!=="basic"&&!PF.skins[c[0]],b=document.createElement("button");b.type="button";b.className="skc"+(locked?" lock":"")+(PF.skinSel===c[0]?" on":"");b.innerHTML='<span class="e">'+c[3]+"</span>"+L2([c[1],c[2]]);b.onclick=()=>locked?openPay(TY,c[0]):chooseSkin(c[0]);$("skG").appendChild(b)});$("ovSkin").hidden=false}
+function chooseSkin(id){PF.skinSel=id;LS.set("gm-skin",id);$("ovSkin").hidden=true;applySkin();renderHome()}
+function openPay(t,id){payFor={t,id};track(GID+"_skin","view");$("pwP").textContent=T("lockP");$("pwGo").textContent=T("go");$("pwGo").href=subUrl();$("pwTrial").textContent=T("trial");$("pwTrial").hidden=LS.get("gm-trial","")===dayKey();$("ovSkin").hidden=true;$("ovPay").hidden=false}
+$("pwGo").onclick=()=>track(GID+"_skin","click");$("pwNo").onclick=()=>{$("ovPay").hidden=true};
+$("pwTrial").onclick=async()=>{try{await PF.loadPro(true);LS.set("gm-trial",dayKey());track(GID+"_skin","trial");const f=payFor||{t:0,id:null};PF.trialRestore={ty:TY,sk:PF.skinSel};TY=f.t;if(f.id)PF.skinSel=f.id;$("ovPay").hidden=true;begin(newSeed(),"free",f.t,null)}catch(e){toast(T("tried"),2200);$("ovPay").hidden=true}};
+$("bSkin").onclick=openSkins;$("skX").onclick=()=>$("ovSkin").hidden=true;
+const fetchT=(u,o,ms)=>{const c=new AbortController(),id=setTimeout(()=>c.abort(),ms);return fetch(u,Object.assign({signal:c.signal},o)).finally(()=>clearTimeout(id))};
+PF.loadPro=async function(trial,ticket){const tk=ticket||passToken(),cacheable=!trial&&!ticket;let src=null,r=null;
+ try{r=await fetchT("/api/pro/"+GID+".js"+(trial?"?trial=1":""),{headers:tk?{Authorization:"Bearer "+tk}:{},cache:"no-store"},8000)}catch(e){r=null}
+ if(r&&r.ok){src=await r.text();if(cacheable)LS.set("gm-pro-src",{src})}
+ else{if(r&&r.status>=400&&r.status<500&&r.status!==429){if(r.status===401&&cacheable)try{localStorage.removeItem("gm-pro-src")}catch(e){}throw new Error("pro_"+r.status)}
+  const c=cacheable?LS.get("gm-pro-src",null):null,p=LS.get("pass",null);if(c&&c.src&&p&&p.exp&&new Date(p.exp)>new Date())src=c.src;else throw new Error("pro_offline")}
+ new Function("PF",src)(PF);if(cacheable)PF.fetchTicket();
+ if(cacheable&&PF.pro&&!PF.pro.trial&&!LS.get("gm-auto",0)){LS.set("gm-auto",1);if(PF.skinSel==="basic"){const f=Object.keys(PF.skins).find(i=>i!=="basic");if(f){PF.skinSel=f;LS.set("gm-skin",f)}}}
+ applySkin();if(!$("home").hidden)renderHome()};
+PF.fetchTicket=function(){const t=passToken();if(!t||(window.NP&&NP.helper)||!PF.pro||PF.pro.trial)return;fetchT("/api/pro/ticket",{method:"POST",headers:{Authorization:"Bearer "+t},cache:"no-store"},6000).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.ticket){PF.ticket=j.ticket;PF.ticketAt=Date.now()}}).catch(()=>{})};
+addEventListener("online",()=>{if(!PF.ticket)PF.fetchTicket()});setInterval(()=>{if(PF.pro&&!PF.pro.trial&&(!PF.ticket||Date.now()-(PF.ticketAt||0)>20*36e5))PF.fetchTicket()},60000);
+PF.lockPro=function(){for(const id of Object.keys(PF.skins))if(id!=="basic")delete PF.skins[id];for(let t=1;t<4;t++)PF.modeCfg[t]=null;PF.anim2=null;PF.pro=null;const r=PF.trialRestore;PF.trialRestore=null;if(r){TY=r.ty;PF.skinSel=r.sk}if(tLocked(TY))TY=0;if(!PF.skins[PF.skinSel])PF.skinSel="basic"};
+window.PF=PF;
+/* ===== CHƠI HỘ: gửi đúng thế trận đang dở ===== */
+const encG=()=>{let s="";for(let r=0;r<MAXR;r++)for(let c=0;c<C;c++){const e=G.grid[r][c];s+=e?(e.k+1+6*e.s).toString(36):"0"}return s};
+function decG(str){if(typeof str!=="string"||str.length!==MAXR*C)return null;const g=[];for(let r=0;r<MAXR;r++){const row=[];for(let c=0;c<C;c++){const v=parseInt(str[r*C+c],36);if(!Number.isInteger(v)||v<0||v>23){return null}if(v===0)row.push(null);else{const k=(v-1)%6,s=Math.floor((v-1)/6);if(k>4||s>3)return null;if(c>=cols(r,0)&&c>=cols(r,1))return null;row.push({k,s})}}g.push(row)}return g}
+if(window.NP&&NP.onPause)NP.onPause(()=>{},()=>{});
+if(window.NP&&NP.state)NP.state(()=>{if(!G||G.over)return null;const s={seed:G.seed,t:G.t,cap:G.cfg.shots||0,u:G.used,sc:G.score,par:G.par,rw:G.rowsAdded,dr:G.draw,hi:G.hatchIdx,ms:G.miss,fr:G.freed,tl:Math.round(G.timeLeft),g:encG()};if(PF.pro&&!PF.pro.trial&&PF.ticket){s.tk=PF.ticket;if(PF.skinSel!=="basic"&&PF.skins[PF.skinSel])s.sk=PF.skinSel}return s});
+/* ===== KHỞI ĐỘNG ===== */
+applySkin();renderHome();show("home");requestAnimationFrame(tick);
+const proP=passToken()&&!(window.NP&&NP.helper)?PF.loadPro(false).catch(()=>{}):Promise.resolve();
+if(window.NP&&NP.helper){const HS=NP.initialState&&typeof NP.initialState==="object"?NP.initialState:{};const seed=Number.isInteger(HS.seed)&&HS.seed>=0&&HS.seed<=4294967295?HS.seed:newSeed();const ht=Number.isInteger(HS.t)&&HS.t>=0&&HS.t<=3?HS.t:0;$("bBoard").hidden=true;
+ const go=()=>{begin(seed,"challenge",ht,null);const g=decG(HS.g);if(g&&Number.isInteger(HS.u)&&HS.u>=0&&HS.u<=500&&Number.isInteger(HS.sc)&&HS.sc>=0&&HS.sc<=MAXS){G.grid=g;G.par=HS.par===1?1:0;G.used=HS.u;G.score=HS.sc;G.rowsAdded=Math.max(0,Math.min(500,HS.rw|0));G.draw=Math.max(0,Math.min(5000,HS.dr|0));G.hatchIdx=Math.max(0,Math.min(500,HS.hi|0));G.miss=Math.max(0,Math.min(5,HS.ms|0));G.freed=Math.max(0,Math.min(20,HS.fr|0));if(G.cfg.time)G.timeLeft=Math.max(5,Math.min(60,HS.tl|0));if(G.cfg.shots===0&&HS.cap===0){G.cfg.shots=G.used+25}else if(Number.isInteger(HS.cap)&&HS.cap>=5&&HS.cap<=200)G.cfg.shots=HS.cap;G.cur=drawEgg();G.nxt=drawEgg();updHud()}};
+ if(/^h\.\d{13}\.[A-Za-z0-9_-]{43}$/.test(HS.tk||""))PF.loadPro(false,HS.tk).then(()=>{if(/^[a-z0-9]{3,10}$/.test(HS.sk||"")&&PF.skins[HS.sk])PF.skinSel=HS.sk}).catch(()=>{}).finally(go);else go()}
+else{const c0=parseCh(location.hash);if(c0)proP.then(()=>openCh(c0));else if(location.hash==="#daily")$("bDaily").click()}
+window.GM={get G(){return G},PF,begin,fire,settle,simBall,preview,drawCard,shareText,shareLink,parseCh,fnv,dayKey,dayNo,present,cluster,floating,neigh,encG,decG,cols,get TY(){return TY},setTY(t){TY=t;LS.set("gm-type",t);renderHome()},T,endGame,hatch,ANIMS,cx,cy,C,W,H,run(a){if(!fire(a))return false;let n=0;while(G.ball&&n++<4000){const hit=simBall(G.ball,STEP/SPEED);if(hit){settle();break}}return true}};
+</script>
+</body>
+</html>

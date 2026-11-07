@@ -6,7 +6,7 @@ function layer(PF) {
   if (PF.__prem) return; PF.__prem = 1;
   const play = document.getElementById("play"); if (!play) return;
   const ovh = document.getElementById("ovHow");
-  const cur = () => { try { let t = 0; if (window.__howT != null && ovh && !ovh.hidden) t = window.__howT; else if (typeof G !== "undefined" && G && typeof G.t === "number") t = G.t; else { const i = PF.skinSel.findIndex((id, k) => id !== "basic" && PF.skins[k][id]); if (i >= 0) t = i } const id = PF.skinSel[t], sk = PF.skins[t] && PF.skins[t][id]; return id !== "basic" && sk ? sk : null } catch (e) { return null } };
+  const cur = () => { try { if (typeof PF.skinSel === "string") { const sk1 = PF.skins[PF.skinSel]; return PF.skinSel !== "basic" && sk1 ? sk1 : null } let t = 0; if (window.__howT != null && ovh && !ovh.hidden) t = window.__howT; else if (typeof G !== "undefined" && G && typeof G.t === "number") t = G.t; else { const i = PF.skinSel.findIndex((id, k) => id !== "basic" && PF.skins[k][id]); if (i >= 0) t = i } const id = PF.skinSel[t], sk = PF.skins[t] && PF.skins[t][id]; return id !== "basic" && sk ? sk : null } catch (e) { return null } };
   const st = document.createElement("style");
   st.textContent = "#pxfx{position:absolute;inset:0;pointer-events:none;z-index:3;overflow:hidden;border-radius:inherit}#pxfx canvas{position:absolute;inset:0;width:100%;height:100%}" +
     ".play.prem{box-shadow:0 0 0 .6cqw transparent,0 0 5cqw rgba(255,210,90,.35)}.play.prem::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:4;padding:.9cqw;" +
