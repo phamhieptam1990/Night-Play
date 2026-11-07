@@ -607,6 +607,34 @@ route("GET", /^\/api\/share\/pop-fly$/, async ({ query, headers }) => {
   const desc = en ? "Fly through the right letter, count the stars, solve quick sums. A gentle learning game for kids." : "Bay qua đúng chữ, đếm sao, tính nhanh. Trò chơi học vui nhẹ nhàng cho bé.";
   return out(200, ogPage({ en, title, desc, image: origin + "/popplay/games/pop-fly/og/" + (daily ? "daily" : "home") + ".png", target: "/popplay/games/pop-fly/index.html" + (daily ? "#daily" : ""), site: "Pop Play" }), "text/html; charset=utf-8");
 });
+/* Bé Đấu Bố Mẹ + Làng Của Bé (Pop Play): link xem trước (Open Graph) khi gửi thách đấu / bài hôm nay cho nhà khác */
+const BD_TYPES = [["Tính nhanh", "Quick Math"], ["Tìm chữ", "Find the Letter"], ["Đếm đếm", "Count It"], ["Số to số nhỏ", "Big or Small"], ["Dãy số bí ẩn", "Number Pattern"]];
+const BD_OPP = [["Bố", "Dad"], ["Mẹ", "Mom"], ["Ông", "Grandpa"], ["Bà", "Grandma"], ["Anh chị", "Sibling"]];
+const LC_ZONES = [["Bưu Điện Chữ Cái", "Letter Post Office"], ["Nông Trại Số", "Number Farm"], ["Chợ Phép Tính", "Math Market"]];
+const intIn = (v, a, z) => Number.isInteger(v) && v >= a && v <= z;
+route("GET", /^\/api\/share\/be-dau-bo-me$/, async ({ query, headers }) => {
+  const en = query.get("l") === "en", L = en ? 1 : 0, o = b64json(query.get("ch")), origin = reqOrigin(headers);
+  const okCh = o && intIn(o.t, 0, 4) && intIn(o.lv, 1, 4) && intIn(o.s, 0, 4294967295) && intIn(o.k, 0, 10) && intIn(o.p, 0, 10) && intIn(o.o, 0, 4);
+  const daily = query.get("d") === "1", dn = /^\d{1,4}$/.test(query.get("n") || "") ? query.get("n") : "", ds = /^\d{1,3}$/.test(query.get("s") || "") ? query.get("s") : "";
+  let title, desc, img = "home", go = "";
+  if (daily) { title = en ? "📅 Today's match #" + dn + (ds ? " — kid scored " + ds : "") : "📅 Trận hôm nay #" + dn + (ds ? " — bé được " + ds + " điểm" : ""); desc = en ? "Same questions for every family today. Can your kid beat the grown-up?" : "Hôm nay mọi nhà cùng bộ câu hỏi. Bé nhà bạn có thắng được bố mẹ không?"; img = "daily"; go = "#daily"; }
+  else if (okCh) { const opp = BD_OPP[o.o][L];
+    title = en ? "⚔ Kid " + o.k + " – " + o.p + " " + opp + "! Dare to play?" : "⚔ Bé " + o.k + " – " + o.p + " " + opp + "! Nhà bạn dám đấu không?";
+    desc = BD_TYPES[o.t][L] + (en ? ". Same questions, two players on one phone." : ". Cùng bộ câu hỏi, hai người chơi chung một điện thoại."); img = "ch"; go = "#ch=" + String(query.get("ch")).replace(/[^\w-]/g, ""); }
+  else { title = en ? "Kid vs Parent" : "Bé Đấu Bố Mẹ"; desc = en ? "Two players, one phone. First to tap the right answer wins. Kids often win!" : "Hai người chơi chung một điện thoại. Ai chạm đúng trước thì thắng. Bé hay thắng lắm!"; }
+  return out(200, ogPage({ en, title, desc, image: origin + "/popplay/games/be-dau-bo-me/og/" + img + ".png", target: "/popplay/games/be-dau-bo-me/index.html" + go, site: "Pop Play" }), "text/html; charset=utf-8");
+});
+route("GET", /^\/api\/share\/lang-cua-be$/, async ({ query, headers }) => {
+  const en = query.get("l") === "en", L = en ? 1 : 0, o = b64json(query.get("ch")), origin = reqOrigin(headers);
+  const okCh = o && intIn(o.z, 0, 2) && intIn(o.lv, 1, 3) && intIn(o.s, 0, 4294967295) && intIn(o.sc, 0, 60) && intIn(o.st, 1, 3);
+  const daily = query.get("d") === "1", dn = /^\d{1,4}$/.test(query.get("n") || "") ? query.get("n") : "", ds = /^\d{1,3}$/.test(query.get("s") || "") ? query.get("s") : "";
+  let title, desc, img = "home", go = "";
+  if (daily) { title = en ? "📅 Today's lesson #" + dn + (ds ? " — " + ds + " points" : "") : "📅 Bài học hôm nay #" + dn + (ds ? " — " + ds + " điểm" : ""); desc = en ? "Same lesson for every family today. Build your village!" : "Hôm nay mọi nhà cùng một bài. Cùng xây làng nào!"; img = "daily"; go = "#daily"; }
+  else if (okCh) { title = en ? "⚔ " + "⭐".repeat(o.st) + " — can your kid beat " + o.sc + " points?" : "⚔ " + "⭐".repeat(o.st) + " — bé nhà bạn vượt được " + o.sc + " điểm không?";
+    desc = LC_ZONES[o.z][L] + (en ? ". Baby's Village: learn letters, numbers and math by building a village." : ". Làng Của Bé: học chữ, số, phép tính bằng cách xây làng."); img = "ch"; go = "#ch=" + String(query.get("ch")).replace(/[^\w-]/g, ""); }
+  else { title = en ? "Baby's Village" : "Làng Của Bé"; desc = en ? "Every lesson opens a new house, animal or shop. Build your own village!" : "Mỗi bài học mở thêm một ngôi nhà, con vật hay cửa hàng. Bé tự xây làng của mình!"; }
+  return out(200, ogPage({ en, title, desc, image: origin + "/popplay/games/lang-cua-be/og/" + img + ".png", target: "/popplay/games/lang-cua-be/index.html" + go, site: "Pop Play" }), "text/html; charset=utf-8");
+});
 /* Thử thách ngày: hạt giống + mục tiêu do máy chủ quyết định (giờ Việt Nam), chỉ cho người có Night Pass */
 route("GET", /^\/api\/pro\/daily$/, async ({ headers }) => {
   if (!(await authPass(headers)) && !authHelper(headers)) return out(401, { error: "pass_required" });

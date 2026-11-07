@@ -1,11 +1,35 @@
-⚡ “Bé Đấu Bố Mẹ”
+🚀 “Tên Lửa Của Bé” là 1 game type
+Cách chơi (10 giây):
+Tên lửa tự bay lên trời. Bé chạm trái hoặc phải để né thiên thạch và nhặt sao ⭐. Đơn giản, chỉ một thao tác.
 
-Cách chơi: Hai người chơi trên cùng một điện thoại, chia đôi màn hình: nửa dưới là bé, nửa trên là bố mẹ (màn hình lật ngược để mỗi người ngồi một đầu).
+Đến giây thứ 10, tên lửa hết nhiên liệu ⛽:
+Màn hình dừng lại và hiện câu hỏi:
 
-Giữa màn hình hiện câu hỏi, ví dụ “3 + 2 = ?”, “Chữ B ở đâu?” hoặc “Có mấy con gà? 🐔🐔🐔”
-Mỗi bên có 3 đáp án to. Ai chạm đúng trước thì được 1 điểm.
-10 câu là xong một ván, mất khoảng 1 phút.
-🎯 Bí mật: bé luôn có cơ hội thắng
-Câu hỏi bên bố mẹ khó hơn: bé làm “3 + 2” thì bố mẹ làm “7 + 8 − 6”.
-Hoặc phần đáp án của bố mẹ nhỏ xíu và xáo trộn liên tục.
-Kết quả là trận đấu kịch tính, bé hay thắng và cười rất to.
+“3 + 4 = ?” → [ 6 ] [ 7 ] [ 8 ]
+
+✅ Bé trả lời đúng: đổ đầy nhiên liệu, tên lửa phóng vụt lên kèm hiệu ứng lửa và tiếng “Vèooo!”, rồi bay tiếp 10 giây.
+❌ Bé trả lời sai: chú mèo phi hành gia gợi ý “Đếm ngón tay thử nhé!”, bé chọn lại cho đến khi đúng. Không bao giờ thua.
+Mục tiêu: bay càng cao càng tốt, đi qua Mặt Trăng 🌙, Sao Hỏa 🔴, Sao Thổ 🪐... Mỗi hành tinh mở thêm một skin tên lửa mới.
+
+🔁 Nhịp chơi
+Một lượt chơi gồm 10 câu hỏi, mất khoảng 2–3 phút, rồi đến màn hình “Bé đã bay tới Sao Hỏa! 🎉”.
+
+❓ Các loại câu hỏi (xen kẽ ngẫu nhiên)
+Loại	Ví dụ
+🔤 Chữ cái	Nghe “Mờ” và chọn M
+🔢 Đếm số	⭐⭐⭐⭐⭐ và chọn 5
+➕ Cộng	🍎🍎 + 🍎🍎🍎 = ?
+➖ Trừ	8 − 3 = ?
+🔍 So sánh	Số nào lớn hơn: 4 hay 7?
+Độ khó tự tăng khi bé trả lời đúng liên tục: từ đếm hình, sang phép tính có hình, rồi phép tính chỉ có số.
+
+
+//// Game type khác 
+Cá Con Bơi Xa: hết bong bóng khí thì trả lời câu hỏi để lấy thêm.
+🚂 Tàu Hỏa Chạy Mãi: hết than thì trả lời câu hỏi để nạp thêm.
+🦖 Khủng Long Chạy: đói thì trả lời câu hỏi để có thức ăn.
+/////
+
+Thêm 4 giao diện cho mỗi game type và 1 giao diện free còn lại tính phí
+
+
