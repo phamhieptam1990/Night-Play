@@ -3,7 +3,7 @@
    KHÔNG đụng vào /api/* (dữ liệu, thanh toán, Night Pass luôn đi thẳng ra máy chủ). */
 "use strict";
 const CACHE = "np-shell-v1";
-const SHELL = ["/", "/index.html", "/cozyplay/index.html", "/popplay/index.html", "/cozyplay/games/dap-deadline/index.html", "/cozyplay/games/cozy-wings/index.html", "/popplay/games/pop-fly/index.html", "/popplay/games/lang-cua-be/index.html", "/popplay/games/be-dau-bo-me/index.html",
+const SHELL = ["/", "/index.html", "/cozyplay/index.html", "/popplay/index.html", "/cozyplay/games/dap-deadline/index.html", "/cozyplay/games/cozy-wings/index.html", "/popplay/games/pop-fly/index.html", "/popplay/games/lang-cua-be/index.html", "/popplay/games/be-dau-bo-me/index.html", "/popplay/games/ten-lua-cua-be/index.html", "/popplay/games/be-noi-dung-khong/index.html", "/popplay/games/doan-tuoi-nao/index.html", "/popplay/games/bo-me-5-giay/index.html", "/popplay/games/con-vat-an-so/index.html", "/popplay/games/ve-chu-quai-vat/index.html", "/popplay/games/nhay-theo-so/index.html",
   "/help.html", "/shared.html", "/leaderboard.html", "/subscribe.html", "/privacy.html",
   "/shared/theme.css", "/shared/layout.css", "/shared/bars.css", "/shared/bars.js", "/shared/social.js", "/shared/bridge.js", "/shared/guard.js",
   "/shared/pass.js", "/shared/site.js", "/shared/track.js", "/shared/updated.js", "/shared/offline.js", "/shared/vendor/html2canvas.min.js"];

@@ -16,6 +16,13 @@ window.NPS = (function () {
     "cozy-wings": { name: { vi: "Cánh Nhỏ Phiêu Lưu", en: "Little Wings" }, url: "cozyplay/games/cozy-wings/index.html", board: true, site: "cozyplay" },
     /* Pop Play (trẻ em): bảng xếp hạng chỉ dùng TÊN VUI CÓ SẴN (kids:true), không cho gõ tay */
     "pop-fly": { name: { vi: "Chim Bay Học Vui", en: "Fly & Learn" }, url: "popplay/games/pop-fly/index.html", board: true, kids: true, site: "popplay" },
+    "ten-lua-cua-be": { name: { vi: "Tên Lửa Của Bé", en: "Baby Rocket" }, url: "popplay/games/ten-lua-cua-be/index.html", board: true, kids: true, site: "popplay" },
+    "be-noi-dung-khong": { name: { vi: "Bé Nói Đúng Không?", en: "Did Baby Say It Right?" }, url: "popplay/games/be-noi-dung-khong/index.html", board: true, kids: true, site: "popplay" },
+    "doan-tuoi-nao": { name: { vi: "Đoán Xem Bé Mấy Tuổi", en: "Guess Baby's Brain Age" }, url: "popplay/games/doan-tuoi-nao/index.html", board: true, kids: true, site: "popplay" },
+    "bo-me-5-giay": { name: { vi: "Bố Mẹ Thử Thách 5 Giây", en: "Parents' 5-Second Challenge" }, url: "popplay/games/bo-me-5-giay/index.html", board: true, kids: true, site: "popplay" },
+    "con-vat-an-so": { name: { vi: "Con Vật Ăn Số", en: "Number Munchers" }, url: "popplay/games/con-vat-an-so/index.html", board: true, kids: true, site: "popplay" },
+    "ve-chu-quai-vat": { name: { vi: "Vẽ Chữ Thành Quái Vật", en: "Letter Monsters" }, url: "popplay/games/ve-chu-quai-vat/index.html", board: true, kids: true, site: "popplay" },
+    "nhay-theo-so": { name: { vi: "Nhảy Theo Số", en: "Dance by Numbers" }, url: "popplay/games/nhay-theo-so/index.html", board: true, kids: true, site: "popplay" },
     "be-dau-bo-me": { name: { vi: "Bé Đấu Bố Mẹ", en: "Kid vs Parent" }, url: "popplay/games/be-dau-bo-me/index.html", board: true, kids: true, site: "popplay" },
     "lang-cua-be": { name: { vi: "Làng Của Bé", en: "Baby's Village" }, url: "popplay/games/lang-cua-be/index.html", board: true, kids: true, site: "popplay" },
     "game-1": { name: { vi: "Mèo con", en: "Kitty" }, url: "popplay/games/game1/index.html", board: true, kids: true, site: "popplay" },

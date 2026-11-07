@@ -434,6 +434,16 @@ const POP_GAMES = Object.fromEntries([1, 2, 3, 4, 5, 6, 7, 8].map(i => ["game-" 
 POP_GAMES["pop-fly"] = { max: 1500, kids: true };   // Chim Bay Học Vui
 POP_GAMES["be-dau-bo-me"] = { max: 200, kids: true };   // Bé Đấu Bố Mẹ (tối đa 10 câu × 10 điểm + 20 thưởng thắng)
 POP_GAMES["lang-cua-be"] = { max: 200, kids: true };   // Làng Của Bé (tối đa 60 điểm bài + 30 điểm sao)
+const NEW_GAMES = {   // 7 game mới của Pop Play (mỗi game 4 loại × 5 giao diện × 3 cấp). Hợp đồng chung: ch = {t:loại 0-3, lv:cấp 1-3, s:hạt giống, sc:điểm 0-300}
+  "ten-lua-cua-be": { vi: "Tên Lửa Của Bé", en: "Baby Rocket", types: [["Tên lửa", "Rocket"], ["Cá con bơi xa", "Little Fish"], ["Tàu hỏa chạy mãi", "Choo-Choo Train"], ["Khủng long chạy", "Dino Run"]], dvi: "Bé bay càng cao càng tốt, trả lời đúng để đổ nhiên liệu. Không bao giờ thua!", den: "Fly as high as you can and answer to refuel. You never lose!" },
+  "be-noi-dung-khong": { vi: "Bé Nói Đúng Không?", en: "Did Baby Say It Right?", types: [["Cộng", "Add"], ["Trừ", "Subtract"], ["Đếm", "Count"], ["Chữ cái", "Letters"]], dvi: "Bé nói to đáp án, game nghe và nhảy múa. Giọng ngọng nghịu đáng yêu lắm!", den: "Baby says the answer out loud and the game dances. So cute!" },
+  "doan-tuoi-nao": { vi: "Đoán Xem Bé Mấy Tuổi", en: "Guess Baby's Brain Age", types: [["Tổng hợp", "Mixed"], ["Chữ cái", "Letters"], ["Con số", "Numbers"], ["Phép tính", "Math"]], dvi: "10 câu trong 60 giây, rồi xem bộ não của bé bao nhiêu tuổi!", den: "10 questions in 60 seconds, then see your kid's brain age!" },
+  "bo-me-5-giay": { vi: "Bố Mẹ Thử Thách 5 Giây", en: "Parents' 5-Second Challenge", types: [["Đáp án nhảy", "Jumping answers"], ["Chữ lộn ngược", "Upside-down"], ["Màu sai", "Wrong colors"], ["Chữ mờ", "Fading text"]], dvi: "Bố mẹ chơi, bé làm trọng tài. Câu dễ nhưng chỉ có 5 giây!", den: "Parents play, the kid is the judge. Easy questions, only 5 seconds!" },
+  "con-vat-an-so": { vi: "Con Vật Ăn Số", en: "Number Munchers", types: [["Cá sấu", "Crocodile"], ["Hà mã", "Hippo"], ["Ếch", "Frog"], ["Gấu trúc", "Panda"]], dvi: "Cho con vật ăn đúng số. Chọn sai là nó ợ thật to!", den: "Feed the animal the right number. Pick wrong and it burps loudly!" },
+  "ve-chu-quai-vat": { vi: "Vẽ Chữ Thành Quái Vật", en: "Letter Monsters", types: [["Chữ tiếng Việt", "Vietnamese letters"], ["Chữ tiếng Anh", "English letters"], ["Con số", "Numbers"], ["Hình khối", "Shapes"]], dvi: "Bé tô chữ, chữ biến thành quái vật dễ thương của riêng bé. Sưu tập đủ bộ nhé!", den: "Trace a letter and it turns into your very own cute monster. Collect them all!" },
+  "nhay-theo-so": { vi: "Nhảy Theo Số", en: "Dance by Numbers", types: [["Nhảy", "Jump"], ["Vỗ tay", "Clap"], ["Dậm chân", "Stomp"], ["Vẫy tay", "Wave"]], dvi: "Màn hình hiện phép tính, bé nhảy hoặc vỗ tay đúng số lần. Vừa học vừa vận động!", den: "A sum appears, the kid jumps or claps that many times. Learn and move!" },
+};
+for (const id in NEW_GAMES) POP_GAMES[id] = { max: 300, kids: true };
 const SCORE_GAMES = { "dap-deadline": { max: 5000 }, "cozy-wings": { max: 5000 }, ...POP_GAMES };   // cozy-wings = Cánh Nhỏ Phiêu Lưu
 const nickOk = n => /^[\p{L}\p{N} _.\-]{2,16}$/u.test(n) && !/https?|www\.|\.(com|net|org|vn|io)\b|@/i.test(n);
 
@@ -635,6 +645,29 @@ route("GET", /^\/api\/share\/lang-cua-be$/, async ({ query, headers }) => {
   else { title = en ? "Baby's Village" : "Làng Của Bé"; desc = en ? "Every lesson opens a new house, animal or shop. Build your own village!" : "Mỗi bài học mở thêm một ngôi nhà, con vật hay cửa hàng. Bé tự xây làng của mình!"; }
   return out(200, ogPage({ en, title, desc, image: origin + "/popplay/games/lang-cua-be/og/" + img + ".png", target: "/popplay/games/lang-cua-be/index.html" + go, site: "Pop Play" }), "text/html; charset=utf-8");
 });
+/* 7 game mới của Pop Play: route Night Pass (giao diện trả phí) + link xem trước thách đấu / hôm nay — dùng chung một khuôn */
+const NG_IDS = Object.keys(NEW_GAMES).join("|");
+route("GET", new RegExp("^/api/pro/(" + NG_IDS + ")\\.js$"), async ({ m, headers, query, ip }) => {
+  const id = m[1], js = "application/javascript; charset=utf-8", mod = () => require("./pro/" + id);
+  const pass = await authPass(headers); let trial = false;
+  if (!pass && authHelper(headers)) return out(200, mod().source({ helper: true }), js);   // vé tạm của người chơi hộ
+  if (!pass) {
+    if (query.get("trial") !== "1") return out(401, { error: "pass_required" });
+    if (await limited("gt:" + id + ":" + ipHash(ip), 1, 86400000)) return out(429, { error: "trial_used" });   // dùng thử: 1 lượt mỗi ngày
+    trial = true;
+    await db.query("insert into paywall_daily(day, key, n) values ((now() at time zone $1)::date, $2, 1) on conflict (day, key) do update set n = paywall_daily.n + 1", [TZ, id + "_skin:trial"]);
+  }
+  return out(200, mod().source({ trial }), js);
+});
+route("GET", new RegExp("^/api/share/(" + NG_IDS + ")$"), async ({ m, query, headers }) => {
+  const id = m[1], g = NEW_GAMES[id], en = query.get("l") === "en", L = en ? 1 : 0, o = b64json(query.get("ch")), origin = reqOrigin(headers), name = g[en ? "en" : "vi"];
+  const okCh = o && intIn(o.t, 0, 3) && intIn(o.lv, 1, 3) && intIn(o.s, 0, 4294967295) && intIn(o.sc, 0, 300);
+  const daily = query.get("d") === "1", dn = /^\d{1,4}$/.test(query.get("n") || "") ? query.get("n") : "", ds = /^\d{1,3}$/.test(query.get("s") || "") ? query.get("s") : "";
+  let title = name, desc = en ? g.den : g.dvi, img = "home", go = "";
+  if (daily) { title = en ? "📅 " + name + " — today #" + dn + (ds ? ": " + ds + " points" : "") : "📅 " + name + " — hôm nay #" + dn + (ds ? ": " + ds + " điểm" : ""); desc = en ? "Same challenge for every family today. Can you beat it?" : "Hôm nay mọi nhà cùng một thử thách. Nhà bạn làm được không?"; img = "daily"; go = "#daily"; }
+  else if (okCh) { title = en ? "⚔ " + name + ": " + o.sc + " points! Can you beat it?" : "⚔ " + name + ": " + o.sc + " điểm! Nhà bạn vượt được không?"; desc = g.types[o.t][L] + (en ? ". Same questions, same challenge — try it now!" : ". Cùng một thử thách, thử ngay nào!"); img = "ch"; go = "#ch=" + String(query.get("ch")).replace(/[^\w-]/g, ""); }
+  return out(200, ogPage({ en, title, desc, image: origin + "/popplay/games/" + id + "/og/" + img + ".png", target: "/popplay/games/" + id + "/index.html" + go, site: "Pop Play" }), "text/html; charset=utf-8");
+});
 /* Thử thách ngày: hạt giống + mục tiêu do máy chủ quyết định (giờ Việt Nam), chỉ cho người có Night Pass */
 route("GET", /^\/api\/pro\/daily$/, async ({ headers }) => {
   if (!(await authPass(headers)) && !authHelper(headers)) return out(401, { error: "pass_required" });
@@ -643,7 +676,7 @@ route("GET", /^\/api\/pro\/daily$/, async ({ headers }) => {
   return out(200, { day, seed: h.readUInt32BE(0), goal: [300, 350, 400, 450, 500][h[4] % 5] });
 });
 /* Đếm lượt xem / bấm vào tính năng bị khóa (ẩn danh, chỉ số tổng hợp theo ngày) */
-const PAYWALL_KEYS = new Set(["endless", "daily", "boss", "diff", "skin", "grid", "pack", "stats", "fly_stars", "fly_math", "fly_skin", "wing_skin", "village_skin", "duel_skin"]);
+const PAYWALL_KEYS = new Set(["endless", "daily", "boss", "diff", "skin", "grid", "pack", "stats", "fly_stars", "fly_math", "fly_skin", "wing_skin", "village_skin", "duel_skin", ...Object.keys(NEW_GAMES).map(id => id + "_skin")]);
 route("POST", /^\/api\/paywall$/, async ({ body, ip }) => {
   const f = String(body.f || ""), k = String(body.k || "");
   if (!PAYWALL_KEYS.has(f) || !["view", "click", "trial"].includes(k)) return out(400, { error: "bad_event" });

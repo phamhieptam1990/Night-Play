@@ -369,6 +369,13 @@ const art = {
   fish: `<path d="M400 256l80-70v140z" fill="#FF8A3D"/><ellipse cx="240" cy="256" rx="170" ry="115" fill="#FFB347"/><circle cx="170" cy="230" r="28" fill="#fff"/><circle cx="176" cy="234" r="14" fill="#222"/><path d="M130 300q40 30 80 0" stroke="#222" stroke-width="12" fill="none" stroke-linecap="round"/>`,
   robot:`<rect x="246" y="70" width="20" height="70" fill="#555"/><circle cx="256" cy="68" r="22" fill="#FF4D6D"/><rect x="106" y="140" width="300" height="270" rx="48" fill="#B8C4D6"/>${eyes}`,
   star: `<path d="M256 60l60 130 140 18-103 96 27 140-124-70-124 70 27-140L56 208l140-18z" fill="#FFD93D"/><circle cx="220" cy="270" r="14" fill="#222"/><circle cx="292" cy="270" r="14" fill="#222"/><path d="M226 310q30 30 60 0" stroke="#222" stroke-width="10" fill="none" stroke-linecap="round"/>`,
+  g0:`<text x="256" y="350" font-size="250" text-anchor="middle">🚀</text>`,
+  g1:`<text x="256" y="350" font-size="250" text-anchor="middle">🎤</text>`,
+  g2:`<text x="256" y="350" font-size="250" text-anchor="middle">🧠</text>`,
+  g3:`<text x="256" y="350" font-size="250" text-anchor="middle">⏱️</text>`,
+  g4:`<text x="256" y="350" font-size="250" text-anchor="middle">🐊</text>`,
+  g5:`<text x="256" y="350" font-size="250" text-anchor="middle">👾</text>`,
+  g6:`<text x="256" y="350" font-size="250" text-anchor="middle">💃</text>`,
   duel:`<rect x="70" y="60" width="372" height="170" rx="40" fill="#C6E4FF"/><rect x="70" y="282" width="372" height="170" rx="40" fill="#FFE3C2"/><rect x="40" y="232" width="432" height="48" rx="24" fill="#3A2A5A"/><text x="256" y="266" font-size="40" font-weight="800" text-anchor="middle" fill="#fff" font-family="system-ui">VS</text><text x="256" y="190" font-size="110" text-anchor="middle" transform="rotate(180 256 145)">🧑</text><text x="256" y="410" font-size="110" text-anchor="middle">👶</text>`,
   village:`<path d="M60 330l196-130 196 130v110H60z" fill="#FF8A5C"/><path d="M40 340L256 190l216 150" fill="none" stroke="#C44A2A" stroke-width="30" stroke-linecap="round"/><rect x="214" y="290" width="84" height="150" rx="14" fill="#FFE08A"/><rect x="100" y="340" width="70" height="60" rx="10" fill="#fff"/><rect x="342" y="340" width="70" height="60" rx="10" fill="#fff"/><circle cx="400" cy="110" r="46" fill="#FFD93D"/>`,
   sun:  `<g stroke="#FFF3B0" stroke-width="22" stroke-linecap="round"><path d="M256 40v60M256 412v60M40 256h60M412 256h60M104 104l42 42M366 366l42 42M408 104l-42 42M146 366l-42 42"/></g><circle cx="256" cy="256" r="125" fill="#FFD93D"/>${eyes}`
@@ -376,6 +383,13 @@ const art = {
 
 /* ===== DANH SÁCH GAME: thêm game mới = thêm 1 object vào mảng ===== */
 const games = [
+  { id:"ten-lua-cua-be", cat:"learn", name:{vi:"Tên Lửa Của Bé",en:"Baby Rocket"}, thumb:face("#FFB3A0","#FF5A4D",art.g0), url:"games/ten-lua-cua-be/index.html" },
+  { id:"be-noi-dung-khong", cat:"learn", name:{vi:"Bé Nói Đúng Không?",en:"Did Baby Say It Right?"}, thumb:face("#C9B6FF","#7A5CFF",art.g1), url:"games/be-noi-dung-khong/index.html" },
+  { id:"doan-tuoi-nao", cat:"learn", name:{vi:"Đoán Xem Bé Mấy Tuổi",en:"Guess Baby's Brain Age"}, thumb:face("#FFD98A","#FFA21F",art.g2), url:"games/doan-tuoi-nao/index.html" },
+  { id:"bo-me-5-giay", cat:"learn", name:{vi:"Bố Mẹ Thử Thách 5 Giây",en:"Parents' 5-Second Challenge"}, thumb:face("#B8F0E8","#2FB8A5",art.g3), url:"games/bo-me-5-giay/index.html" },
+  { id:"con-vat-an-so", cat:"learn", name:{vi:"Con Vật Ăn Số",en:"Number Munchers"}, thumb:face("#B8E8A0","#3AA655",art.g4), url:"games/con-vat-an-so/index.html" },
+  { id:"ve-chu-quai-vat", cat:"learn", name:{vi:"Vẽ Chữ Thành Quái Vật",en:"Letter Monsters"}, thumb:face("#E3C9FF","#B07CFF",art.g5), url:"games/ve-chu-quai-vat/index.html" },
+  { id:"nhay-theo-so", cat:"learn", name:{vi:"Nhảy Theo Số",en:"Dance by Numbers"}, thumb:face("#FFC2D9","#FF6F91",art.g6), url:"games/nhay-theo-so/index.html" },
   { id:"be-dau-bo-me", cat:"learn", name:{vi:"Bé Đấu Bố Mẹ",en:"Kid vs Parent"}, thumb:face("#FFC98A","#FF7A59",art.duel), url:"games/be-dau-bo-me/index.html" },
   { id:"lang-cua-be", cat:"learn", name:{vi:"Làng Của Bé",en:"Baby's Village"}, thumb:face("#B8E8A0","#58B86A",art.village), url:"games/lang-cua-be/index.html" },
   { id:"pop-fly", cat:"learn", name:{vi:"Chim Bay Học Vui",en:"Fly & Learn"}, thumb:face("#9AD8FF","#4D9BFF",art.fly), url:"games/pop-fly/index.html" },
