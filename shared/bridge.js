@@ -41,6 +41,45 @@
     if (e.source === parent && e.origin === location.origin && e.data && e.data.np === 1 && e.data.type === "stopAudio") stop(true);
   });
 })();
+/* GIỌNG ĐỌC: mỗi thiết bị có nhiều giọng tổng hợp; chọn giọng HAY NHẤT của ngôn ngữ đang đọc (vi / en) thay vì giọng mặc định.
+   Ưu tiên: giọng tự nhiên/cao cấp/Siri (Natural, Neural, Premium, Enhanced) > Google/Microsoft > giọng thường; giọng cài sẵn trong máy hơn giọng gọi qua mạng
+   (không gửi chữ lên máy chủ hãng, không trễ); tránh giọng "compact", eSpeak và các giọng đùa của macOS. Game không phải sửa gì: lớp này bọc speechSynthesis.speak. */
+(function () {
+  "use strict";
+  if (!window.speechSynthesis || !window.SpeechSynthesisUtterance) return;
+  var synth = window.speechSynthesis, cache = {}, orig = synth.speak.bind(synth);
+  var NOVELTY = /albert|bad news|bahh|bells|boing|bubbles|cellos|deranged|good news|hysterical|junior|kathy|organ|ralph|trinoids|whisper|zarvox|fred|superstar|wobble|jester/;
+  var PREF = { vi: /linh|hoaimy|hoai my|my\b/, en: /ava|aria|jenny|samantha|allison|zoe|karen|joanna|google us english|nicky|serena/ };
+  function score(v, lg) {
+    var n = (v.name || "").toLowerCase(), l = (v.lang || "").toLowerCase().replace("_", "-"), s = 0;
+    if (/natural|neural/.test(n)) s += 45;
+    if (/premium/.test(n)) s += 40;
+    if (/siri/.test(n)) s += 34;
+    if (/enhanced|nâng cao/.test(n)) s += 32;
+    if (/google/.test(n)) s += 22;
+    if (PREF[lg] && PREF[lg].test(n)) s += 20;
+    if (/female|nữ/.test(n)) s += 6;
+    if (/\bnam\s?minh|\bmale\b/.test(n) && !/female/.test(n)) s -= 10;
+    if (lg === "en") s += l === "en-us" ? 10 : l === "en-gb" || l === "en-au" ? 4 : 0;
+    s += v.localService ? 20 : -10;
+    if (/compact/.test(n)) s -= 25;
+    if (/espeak/.test(n)) s -= 40;
+    if (NOVELTY.test(n)) s -= 80;
+    if (v.default) s += 3;
+    return s;
+  }
+  function best(lang) {
+    var lg = String(lang || "").slice(0, 2).toLowerCase(), vs = synth.getVoices() || [];
+    if (!lg || !vs.length) return null;
+    var c = cache[lg]; if (c && c.n === vs.length) return c.v;
+    var top = null, ts = -1e9;
+    for (var i = 0; i < vs.length; i++) { if (String(vs[i].lang || "").toLowerCase().replace("_", "-").indexOf(lg) !== 0) continue; var sc = score(vs[i], lg); if (sc > ts) { ts = sc; top = vs[i]; } }
+    cache[lg] = { n: vs.length, v: top }; return top;
+  }
+  synth.speak = function (u) { try { if (u && !u.voice) { var v = best(u.lang); if (v) u.voice = v; } } catch (e) {} return orig(u); };
+  try { synth.addEventListener("voiceschanged", function () { cache = {}; }); } catch (e) {}
+  window.NPAudio && (window.NPAudio.bestVoice = best);
+})();
 /* HIỆU ỨNG DÙNG CHUNG CHO MỌI GAME: rung điện thoại (tôn trọng "giảm chuyển động") + QUAY VIDEO ván chơi từ canvas để khoe (nơi trình duyệt hỗ trợ). */
 window.NPFx = (function () {
   "use strict";
