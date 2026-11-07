@@ -446,6 +446,7 @@ const NEW_GAMES = {   // 7 game mới của Pop Play (mỗi game 4 loại × 5 g
 for (const id in NEW_GAMES) POP_GAMES[id] = { max: 300, kids: true };
 const COZY_NEW = {   // game mới của Cozy Play (người lớn): 1 loại × 5 giao diện (1 free + 4 Night Pass). ch = {s:hạt giống uint32, sc:điểm 0..max}
   "gia-cho-viet": { vi: "Đoán Giá Chợ Việt", en: "Guess the Market Price", max: 500, dvi: "5 món mỗi ngày, cả nước cùng đoán. Bạn đoán sát giá chợ cỡ nào?", den: "5 items a day, everyone guesses the same. How close can you get to the market price?" },
+  "doi-doi-2048": { vi: "Đổi Đời 2048", en: "Life Upgrade 2048", max: 20000, free: true, dvi: "Ghép đồ từ quả trứng lên biệt thự. Hôm nay cả nước chơi cùng một bàn, bạn lên đời tới đâu?", den: "Merge from an egg up to a villa. Everyone plays the same board today — how far can you go?" },
   "xin-nghi": { vi: "Sếp Ơi Em Xin Nghỉ", en: "Boss, I Need a Day Off", max: 100, dvi: "Nghĩ lý do xin nghỉ thật 'thuyết phục' để qua mặt sếp. Sếp có duyệt không?", den: "Come up with a convincing excuse for a day off. Will the boss approve?" }
 };
 const SCORE_GAMES = { "dap-deadline": { max: 5000 }, "cozy-wings": { max: 5000 }, ...POP_GAMES, ...Object.fromEntries(Object.entries(COZY_NEW).map(([k, v]) => [k, { max: v.max }])) };   // cozy-wings = Cánh Nhỏ Phiêu Lưu
@@ -674,7 +675,8 @@ route("GET", new RegExp("^/api/share/(" + NG_IDS + ")$"), async ({ m, query, hea
 });
 /* Game mới của Cozy Play: mã Night Pass + trang xem trước chung (thách đấu ?ch=, hôm nay ?d=1) */
 const CZ_IDS = Object.keys(COZY_NEW).join("|");
-route("GET", new RegExp("^/api/pro/(" + CZ_IDS + ")\\.js$"), async ({ m, headers, query, ip }) => {
+const CZ_PRO_IDS = Object.keys(COZY_NEW).filter(k => !COZY_NEW[k].free).join("|");   // game miễn phí hoàn toàn: không có mã Night Pass
+route("GET", new RegExp("^/api/pro/(" + CZ_PRO_IDS + ")\\.js$"), async ({ m, headers, query, ip }) => {
   const id = m[1], js = "application/javascript; charset=utf-8", mod = () => require("./pro/" + id), pre = () => require("./pro/_premium").code;
   const pass = await authPass(headers); let trial = false;
   if (!pass && authHelper(headers)) return out(200, mod().source({ helper: true }) + pre(), js);
