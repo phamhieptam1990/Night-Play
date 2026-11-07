@@ -115,8 +115,15 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .eq .g{font-size:8.2cqw;line-height:1.1;text-align:center;letter-spacing:.2cqw}.eq .grp b{font-size:9cqw;line-height:1}
 .eq.num{font-size:20cqw;top:14cqw}
 .eq .op{font-size:12cqw;color:var(--sa)}
+.qa{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9cqw;padding:4cqw}
+.qa .opts{position:static;width:100%}
+.qa .eq{position:static;width:100%}.qa .eq.num{font-size:24cqw}
+.qa .plate{position:static;transform:none;width:72cqw}
+.qa .cat{top:auto;bottom:25cqw;right:2cqw;font-size:15cqw;z-index:2}
+.qa .spk{position:static;transform:none}.qa .lrow{position:static;width:100%}
+.qa .scale{position:relative;top:auto;left:auto;right:auto;width:100%;height:50cqw}
 .plate{position:absolute;left:50%;top:40%;transform:translateX(-50%);width:76cqw;text-align:center}
-.plate .cakes{font-size:14cqw;line-height:1.1;min-height:24cqw;letter-spacing:.4cqw}
+.plate .cakes{font-size:13cqw;line-height:1.1;min-height:15cqw;letter-spacing:.4cqw}
 .plate .cakes s{text-decoration:none;display:inline-block;transition:transform .6s,opacity .6s}.plate .cakes s.gone{opacity:0;transform:translate(14cqw,-10cqw) scale(.3)}
 .plate .pl{font-size:16cqw;line-height:.8}
 .cat{position:absolute;right:4cqw;top:18cqw;font-size:19cqw;animation:hint 1s ease-in-out 2}
@@ -124,7 +131,7 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .beam{position:absolute;left:26cqw;right:26cqw;top:16cqw;height:2.4cqw;border-radius:2cqw;background:var(--si);transform:rotate(var(--ang,-9deg));transition:transform .8s cubic-bezier(.3,1.4,.5,1)}
 .pan{position:absolute;top:2cqw;width:31cqw;min-height:22cqw;transform:translateX(-50%) rotate(calc(var(--ang,-9deg) * -1));transition:transform .8s cubic-bezier(.3,1.4,.5,1);padding:1.6cqw;border-radius:0 0 var(--rad) var(--rad);background:var(--sp);border:var(--bd);box-shadow:var(--sh);text-align:center;font-weight:800;font-size:9cqw;line-height:1.1;color:var(--si)}
 .pan.l{left:0}.pan.r{left:100%}.pan .g{font-size:7cqw;letter-spacing:.2cqw}.pan em{display:block;font-style:normal;font-size:7cqw;color:var(--sa)}
-.post{position:absolute;left:50%;top:22cqw;width:3.4cqw;height:46cqw;transform:translateX(-50%);background:var(--si);border-radius:2cqw;opacity:.8}
+.post{position:absolute;left:50%;top:22cqw;width:3.4cqw;height:22cqw;transform:translateX(-50%);background:var(--si);border-radius:2cqw;opacity:.8}
 /* ---- lớp phủ ---- */
 .ov{position:absolute;inset:0;z-index:8;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.6cqw;padding:4cqw;text-align:center;background:color-mix(in srgb,var(--bg) 82%,transparent);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:var(--ink)}
 .ov h2{margin:0;font-size:7.6cqw;font-weight:800;line-height:1.05}.ov p{margin:0;font-size:4.2cqw;color:var(--muted);font-weight:700}
@@ -312,7 +319,7 @@ function mail(el){
 function listen(el){
   const P=pool(),t=pick(P),cs=shuffle([t].concat(shuffle(P.filter(x=>x!==t)).slice(0,2))),sp=LANG==="vi"?PHON[t]:t;
   ask("a.listen",{},sp);
-  el.innerHTML='<button class="spk" id="spk" type="button">🔊</button><div class="lrow">'+cs.map(l=>'<button class="lcard" type="button" data-l="'+l+'">'+l+"</button>").join("")+"</div>";
+  el.innerHTML='<div class="qa"><button class="spk" id="spk" type="button">🔊</button><div class="lrow">'+cs.map(l=>'<button class="lcard" type="button" data-l="'+l+'">'+l+"</button>").join("")+"</div></div>";
   R.solve=()=>[...el.querySelectorAll(".lcard")].find(b=>b.dataset.l===t).click();R.wrongClick=()=>[...el.querySelectorAll(".lcard")].find(b=>b.dataset.l!==t).click();$("spk").onclick=()=>say(sp);R.hint=()=>[...el.querySelectorAll(".lcard")].find(b=>b.dataset.l===t).classList.add("hint");
   el.querySelectorAll(".lcard").forEach(b=>b.onclick=()=>{if(R.done||paused)return;if(b.dataset.l===t){b.classList.add("good");ok(b)}else{say(b.dataset.l);bad(b)}});
 }
@@ -384,19 +391,19 @@ function expr(a,b,op,e){const lv=lvOf(2);
   return '<div class="eq num"><b>'+a+"</b><span class=op>"+op+"</span><b>"+b+"</b><span class=op>= ?</span></div>"}
 function sale(el){
   const T0=TT(),a=rand(1,T0-1),b=rand(1,Math.min(T0-a,T0-1)),fr=pick(FRUITS),ans=a+b;ask("a.sale",{a,b,f:nm(fr)});
-  el.innerHTML=expr(a,b,"+",fr[0])+optsHTML(numOpts(ans,2,T0));bindOpts(el,ans);
+  el.innerHTML='<div class="qa">'+expr(a,b,"+",fr[0])+optsHTML(numOpts(ans,2,T0))+"</div>";bindOpts(el,ans);
 }
 function cake(el){
   const T0=TT(),a=rand(2,T0),b=rand(1,a-1),ans=a-b;ask("a.cake",{a,b});
   const cakes=Array.from({length:a},(_,i)=>"<s>🧁</s>").join("");
-  el.innerHTML=(lvOf(2)===3?'<div class="eq num" style="top:6cqw"><b>'+a+'</b><span class=op>−</span><b>'+b+'</b><span class=op>= ?</span></div>':lvOf(2)===2?'<div class="eq" style="font-size:12cqw"><b>'+a+'</b><span class=op>−</span><b>'+b+'</b><span class=op>= ?</span></div>':"")+'<div class="cat">🐱</div><div class="plate"><div class="cakes">'+cakes+'</div><div class="pl">🍽️</div></div>'+optsHTML(numOpts(ans,0,T0));
+  el.innerHTML='<div class="qa">'+(lvOf(2)===3?'<div class="eq num"><b>'+a+'</b><span class=op>−</span><b>'+b+'</b><span class=op>= ?</span></div>':lvOf(2)===2?'<div class="eq" style="font-size:14cqw"><b>'+a+'</b><span class=op>−</span><b>'+b+'</b><span class=op>= ?</span></div>':"")+'<div class="cat">🐱</div><div class="plate"><div class="cakes">'+cakes+'</div><div class="pl">🍽️</div></div>'+optsHTML(numOpts(ans,0,T0))+"</div>";
   setTimeout(()=>{const s=[...el.querySelectorAll(".plate s")];s.slice(a-b).forEach(x=>x.classList.add("gone"))},900);
   bindOpts(el,ans);
 }
 function balance(el){
   const x=rand(1,9),ans=10-x,e=pick(FRUITS)[0];ask("a.bal",{t:10});
   const lv=lvOf(2);
-  el.innerHTML='<div class="scale"><div class="post"></div><div class="beam" id="beam"><div class="pan l"><b>10</b></div><div class="pan r" id="pr">'+(lv===2?grp(e,x):"<b>"+x+"</b>")+'<em id="pq">+ ?</em></div></div></div>'+optsHTML(numOpts(ans,1,9));
+  el.innerHTML='<div class="qa"><div class="scale"><div class="post"></div><div class="beam" id="beam"><div class="pan l"><b>10</b></div><div class="pan r" id="pr">'+(lv===2?grp(e,x):"<b>"+x+"</b>")+'<em id="pq">+ ?</em></div></div></div>'+optsHTML(numOpts(ans,1,9))+"</div>";
   const beam=$("beam");beam.style.setProperty("--ang","-9deg");R.solve=()=>el.querySelector('.opt[data-v="'+ans+'"]').click();R.wrongClick=()=>[...el.querySelectorAll(".opt")].find(b=>+b.dataset.v!==ans).click();
   R.hint=()=>{const q=el.querySelector('.opt[data-v="'+ans+'"]');q&&q.classList.add("hint")};
   el.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{if(R.done||paused)return;sayNum(b.dataset.v);
