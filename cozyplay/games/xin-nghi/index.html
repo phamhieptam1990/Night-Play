@@ -37,8 +37,9 @@ textarea{width:100%;height:20cqw;border-radius:3cqw;border:.5cqw solid var(--lin
 .stamp.ok{color:var(--good);border-color:var(--good)}.stamp.no{color:var(--bad);border-color:var(--bad)}.stamp.half{color:#ffd24a;border-color:#ffd24a}
 .quote{font-style:italic;font-size:3.8cqw;line-height:1.35}.meter{height:3.6cqw;border-radius:9cqw;background:color-mix(in srgb,var(--ink) 1400%,transparent);overflow:hidden}.meter b{display:block;height:100%;background:linear-gradient(90deg,var(--bad),#ffd24a,var(--good));width:0;transition:width .7s}
 .chips{display:flex;gap:2cqw;justify-content:center;flex-wrap:wrap}.chip{background:color-mix(in srgb,var(--ink) 1200%,transparent);border-radius:99cqw;padding:1.2cqw 3cqw;font-size:3.5cqw;font-weight:800}
-.ov{position:absolute;inset:0;background:color-mix(in srgb,var(--bg) 93%,transparent2);z-index:7;display:flex;flex-direction:column;justify-content:center;gap:2.6cqw;padding:5cqw;text-align:center}
-.ov h2{margin:0;font:400 6cqw var(--display);color:var(--accent)}.ov p{margin:0;font-size:4cqw;line-height:1.35}
+
+.ov{position:absolute;inset:0;background:color-mix(in srgb,var(--panel) 86%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);z-index:7;display:flex;flex-direction:column;justify-content:center;gap:2.6cqw;padding:5cqw;text-align:center}
+.ov h2{margin:0;font:400 6cqw var(--display);color:var(--accent)}.ov .btn.alt,.ov .skc{background:var(--panel)}.ov p{margin:0;font-size:4cqw;line-height:1.35}
 .sk{display:grid;grid-template-columns:1fr 1fr;gap:2.4cqw}.skc{position:relative;border:.5cqw solid var(--line);border-radius:3.4cqw;padding:2.2cqw;background:var(--panel);color:var(--ink);font:800 3.6cqw var(--body);cursor:pointer;min-height:44px}.skc.on{border-color:var(--accent)}.skc .e{font-size:9cqw;display:block}.skc.lock{opacity:.7}.skc.lock::after{content:"🔒";position:absolute;top:1.2cqw;right:2cqw;font-size:4cqw}
 .toast{position:absolute;left:50%;bottom:6cqw;transform:translateX(-50%);background:#fff;color:#111;padding:2cqw 4cqw;border-radius:99cqw;font-weight:800;font-size:3.6cqw;z-index:9;max-width:92%;text-align:center}
 #home,#ask,#res{justify-content:center}
