@@ -27,7 +27,7 @@ body{display:flex;justify-content:center}
 .row{display:flex;gap:2.4cqw;align-items:center;justify-content:center}.grow{flex:1}
 .mut{color:var(--muted);font-size:3.4cqw}
 /* trang chủ */
-#home{justify-content:center}#home .hero{text-align:center;font-size:20cqw;line-height:1}
+#home,#round,#end{justify-content:center}#home .hero{text-align:center;font-size:20cqw;line-height:1}
 .dbtn{display:flex;align-items:center;gap:3cqw;text-align:left;width:100%}.dbtn .n{font:400 7cqw var(--display)}
 /* vòng chơi */
 .dots{display:flex;gap:2cqw;justify-content:center}.dots i{width:5cqw;height:5cqw;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;font-size:3cqw;font-style:normal}.dots i.on{background:var(--accent)}
@@ -49,6 +49,8 @@ input[type=range]::-moz-range-thumb{width:8cqw;height:8cqw;border-radius:50%;bac
 .ov h2{margin:0;font:400 6cqw var(--display);color:var(--accent)}.ov p{margin:0;color:var(--ink);font-size:4cqw;line-height:1.35}
 .sk{display:grid;grid-template-columns:1fr 1fr;gap:2.4cqw}.skc{position:relative;border:.5cqw solid var(--line);border-radius:3.4cqw;padding:2.4cqw;background:var(--panel);color:var(--ink);font:800 3.8cqw var(--body);cursor:pointer;min-height:44px}.skc.on{border-color:var(--accent)}.skc .e{font-size:9cqw;display:block}.skc.lock{opacity:.7}.skc.lock::after{content:"🔒";position:absolute;top:1.2cqw;right:2cqw;font-size:4cqw}
 .toast{position:absolute;left:50%;bottom:6cqw;transform:translateX(-50%);background:#fff;color:#111;padding:2cqw 4cqw;border-radius:99cqw;font-weight:800;font-size:3.8cqw;z-index:9;white-space:nowrap}
+@container (max-height:780px){.rv .rng{display:none}.rv .item .em{font-size:14cqw}}
+@container (max-height:440px){.rng{display:none}.item .em{font-size:13cqw}.item .nm{font-size:5.4cqw}.price{font-size:8.5cqw;min-height:10cqw}.rev .real{font-size:6.6cqw}.rev .pts{font-size:4.4cqw}.scr{gap:1.6cqw}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 <style id="skCss"></style>
@@ -59,17 +61,17 @@ input[type=range]::-moz-range-thumb{width:8cqw;height:8cqw;border-radius:50%;bac
   <div class="top"><h1 id="ttl"></h1><button class="ib" id="bBoard" type="button" aria-label="🏆">🏆</button><button class="ib" id="bSnd" type="button">🔊</button><button class="ib" id="bLang" type="button">EN</button></div>
   <section class="scr" id="home">
     <div class="hero" id="hHero">🧺</div>
-    <button class="btn dbtn" id="bDaily" type="button"><span class="n" id="dN"></span><span class="grow"><b id="dT"></b><br><span class="mut" id="dS"></span></span><span>▶</span></button>
+    <button class="btn dbtn" id="bDaily" type="button"><span class="n" id="dN"></span><span class="grow"><b id="dT"></b><br><span id="dS" style="font-size:3.3cqw;opacity:.85"></span></span><span>▶</span></button>
     <div class="row"><button class="btn alt grow" id="bPractice" type="button"></button><button class="ib" id="bSkin" type="button" style="width:12cqw;height:12cqw">🎨</button></div>
     <div class="chips" id="hChips"></div>
     <p class="mut" style="text-align:center;margin:0" id="hNote"></p>
   </section>
-  <section class="scr" id="round" hidden>
+  <section class="scr rv" id="round" hidden>
     <div class="dots" id="dots"></div>
     <div class="card item"><div class="em" id="iEm"></div><div class="nm" id="iNm"></div><div class="un" id="iUn"></div></div>
     <div class="price" id="pr"></div>
     <div><input id="sl" type="range" min="0" max="1000" value="500" aria-label="price"><div class="rng"><span id="rLo"></span><span id="rHi"></span></div></div>
-    <div class="card rev" id="rev" hidden><div class="mut" id="rvT"></div><div class="real" id="rvR"></div><div class="pts" id="rvP"></div><div class="bar"><b id="rvB"></b></div></div>
+    <div class="card rev" id="rev" style="visibility:hidden"><div class="mut" id="rvT"></div><div class="real" id="rvR"></div><div class="pts" id="rvP"></div><div class="bar"><b id="rvB"></b></div></div>
     <button class="btn" id="bGo" type="button"></button>
   </section>
   <section class="scr" id="end" hidden>
@@ -129,6 +131,7 @@ function tone(f,d,ty,v,dl){if(!snd())return;try{AC=AC||new (window.AudioContext|
 const sfx={tick:()=>tone(520+Math.random()*60,.04,"square",.03),lock:()=>tone(300,.12,"triangle",.1),great:()=>{[660,880,1100].forEach((f,i)=>tone(f,.16,"triangle",.11,i*.08))},ok:()=>{tone(500,.12,"triangle",.1);tone(620,.14,"triangle",.1,.1)},bad:()=>tone(180,.25,"sawtooth",.08)};
 /* ===== TRẠNG THÁI ===== */
 let G=null,CH=null,mode="practice",lastEnd=0;
+const newSeed=()=>(Math.random()*4294967296)>>>0;
 const getSave=()=>LS.get("gcv-save",{streak:0,last:"",best:0,total:0,days:{}});
 function show(id){["home","round","end"].forEach(s=>$(s).hidden=s!==id);["ovCh","ovSkin","ovPay"].forEach(o=>$(o).hidden=true)}
 function toast(m,ms){const t=$("toast");t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,ms||1800)}
@@ -136,13 +139,13 @@ function renderHome(){const sv=getSave(),k=dayKey(),dn=dayNo(k),done=sv.days[k];
  $("hChips").innerHTML="";[sv.streak?T("streak",{n:sv.streak}):"",sv.best?T("best",{n:sv.best}):"",sv.total?T("tot",{n:sv.total}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("hChips").appendChild(c)});
  $("hHero").textContent=skinOf().deco[0]||"🧺"}
 function begin(seed,m,ch){G={seed,mode:m,ch:ch||null,q:genRound(seed),i:0,pts:[],guess:[],done:false,rev:false,m:m};mode=m;applySkin();show("round");window.NP&&NP.start();showQ()}
-function showQ(){const q=G.q[G.i],it=q.it;G.rev=false;$("rev").hidden=true;$("sl").disabled=false;$("sl").value=500;
+function showQ(){const q=G.q[G.i],it=q.it;G.rev=false;$("rev").style.visibility="hidden";$("sl").disabled=false;$("sl").value=500;
  $("dots").innerHTML="";for(let i=0;i<N;i++){const d=document.createElement("i");d.className=i<=G.i?"on":"";d.textContent=i<G.i?"✓":"";$("dots").appendChild(d)}
  $("iEm").textContent=it.e;$("iNm").textContent=LANG==="vi"?it.vi:it.en;$("iUn").textContent=LANG==="vi"?it.uv:it.ue;$("rLo").textContent=money(nice(q.lo));$("rHi").textContent=money(nice(q.hi));$("bGo").textContent=T("guess");updPrice()}
 function updPrice(){if(!G)return;$("pr").textContent=money(priceAt(G.q[G.i],+$("sl").value))}
 $("sl").addEventListener("input",()=>{updPrice();sfx.tick()});
 $("bGo").onclick=()=>{if(!G||G.done)return;if(!G.rev){const q=G.q[G.i],g=priceAt(q,+$("sl").value),p=q.it.p,pt=pointsOf(g,p);G.rev=true;G.guess.push(g);G.pts.push(pt);$("sl").disabled=true;
-  $("rvT").textContent=T("you")+": "+money(g);$("rvR").textContent=T("real")+": "+money(p);$("rvP").textContent=T("pts",{n:pt});$("rvB").style.width="0";$("rev").hidden=false;requestAnimationFrame(()=>requestAnimationFrame(()=>$("rvB").style.width=pt+"%"));
+  $("rvT").textContent=T("you")+": "+money(g);$("rvR").textContent=T("real")+": "+money(p);$("rvP").textContent=T("pts",{n:pt});$("rvB").style.width="0";$("rev").style.visibility="visible";requestAnimationFrame(()=>requestAnimationFrame(()=>$("rvB").style.width=pt+"%"));
   pt>=90?sfx.great():pt>=50?sfx.ok():sfx.bad();if(window.NPFx)NPFx.buzz(pt>=90?[40,30,60]:20);$("bGo").textContent=G.i===N-1?T("see"):T("next")}
  else{if(G.i<N-1){G.i++;showQ()}else finish()}};
 const sqOf=p=>p>=90?"🟩":p>=60?"🟨":p>=30?"🟧":"🟥";
@@ -153,7 +156,7 @@ function finish(){const sc=G.pts.reduce((a,b)=>a+b,0);G.done=true;G.score=sc;las
  show("end");$("eT").textContent=T("endT");$("eS").textContent=sc+"/"+MAXS;$("eR").textContent="🏅 "+T("rank")[rankOf(sc)];$("eSq").textContent=G.pts.map(sqOf).join("");
  const avg=Math.round(100*G.guess.reduce((a,g,i)=>a+Math.abs(Math.log(g/G.q[i].it.p)),0)/N);$("eChips").innerHTML="";[T("avg",{n:avg}),G.mode==="daily"?"📅 #"+dayNo(dayKey()):"",sv.streak&&G.mode==="daily"?T("streak",{n:sv.streak}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("eChips").appendChild(c)});
  $("eVs").textContent=G.ch?T("vsC",{a:sc,b:G.ch.sc})+" · "+(sc>G.ch.sc?T("win"):sc<G.ch.sc?T("lose"):T("tie")):"";
- const helper=!!(window.NP&&NP.helper);$("bShare").hidden=helper;$("bAgain").hidden=helper;$("bBoard").hidden=helper;
+ const helper=!!(window.NP&&NP.helper);$("bShare").hidden=helper;$("bAgain").hidden=helper;$("bBoard").hidden=helper;$("bHome").hidden=helper;
  if(PF.pro&&PF.pro.trial)PF.lockPro();
  sc>=350?sfx.great():sfx.ok()}
 function again(){if(!G)return;G.mode==="daily"||G.ch?begin(G.mode==="daily"?G.seed:(Math.random()*4294967296)>>>0,"practice",null):begin((Math.random()*4294967296)>>>0,"practice",null)}
@@ -195,22 +198,29 @@ $("pwGo").onclick=()=>track(GID+"_skin","click");$("pwNo").onclick=()=>{$("ovPay
 $("pwTrial").onclick=async()=>{try{await PF.loadPro(true);LS.set("gcv-trial",dayKey());track(GID+"_skin","trial");PF.skinRestore=PF.skinSel[0];PF.skinSel[0]=payFor;$("ovPay").hidden=true;begin((Math.random()*4294967296)>>>0,"practice",null)}catch(e){toast(T("tried"),2200);$("ovPay").hidden=true}};
 $("bSkin").onclick=openSkins;$("skX").onclick=()=>$("ovSkin").hidden=true;
 const fetchT=(u,o,ms)=>{const c=new AbortController(),id=setTimeout(()=>c.abort(),ms);return fetch(u,Object.assign({signal:c.signal},o)).finally(()=>clearTimeout(id))};
-PF.loadPro=async function(trial){const tk=passToken(),cacheable=!trial;let src=null,r=null;
+PF.loadPro=async function(trial,ticket){const tk=ticket||passToken(),cacheable=!trial&&!ticket;let src=null,r=null;
  try{r=await fetchT("/api/pro/"+GID+".js"+(trial?"?trial=1":""),{headers:tk?{Authorization:"Bearer "+tk}:{},cache:"no-store"},8000)}catch(e){r=null}
  if(r&&r.ok){src=await r.text();if(cacheable)LS.set("gcv-pro-src",{src})}
  else{if(r&&r.status>=400&&r.status<500&&r.status!==429){if(r.status===401&&cacheable)try{localStorage.removeItem("gcv-pro-src")}catch(e){}throw new Error("pro_"+r.status)}
   const c=cacheable?LS.get("gcv-pro-src",null):null,p=LS.get("pass",null);if(c&&c.src&&p&&p.exp&&new Date(p.exp)>new Date())src=c.src;else throw new Error("pro_offline")}
- new Function("PF",src)(PF);
- if(PF.pro&&!PF.pro.trial){const ad=LS.get("gcv-auto",0);if(!ad){LS.set("gcv-auto",1);if(PF.skinSel[0]==="basic"){const f=Object.keys(PF.skins[0]).find(i=>i!=="basic");if(f){PF.skinSel[0]=f;LS.set("gcv-skin",f)}}}}
+ new Function("PF",src)(PF);if(cacheable)PF.fetchTicket();
+ if(cacheable&&PF.pro&&!PF.pro.trial){const ad=LS.get("gcv-auto",0);if(!ad){LS.set("gcv-auto",1);if(PF.skinSel[0]==="basic"){const f=Object.keys(PF.skins[0]).find(i=>i!=="basic");if(f){PF.skinSel[0]=f;LS.set("gcv-skin",f)}}}}
  applySkin();if(!$("home").hidden)renderHome()};
 PF.lockPro=function(){for(const id of Object.keys(PF.skins[0]))if(id!=="basic")delete PF.skins[0][id];PF.pro=null;if(PF.skinRestore!=null){PF.skinSel[0]=PF.skinRestore;PF.skinRestore=null}if(!PF.skins[0][PF.skinSel[0]])PF.skinSel[0]="basic";applySkin()};
+PF.fetchTicket=function(){const t=passToken();if(!t||(window.NP&&NP.helper)||!PF.pro||PF.pro.trial)return;fetchT("/api/pro/ticket",{method:"POST",headers:{Authorization:"Bearer "+t},cache:"no-store"},6000).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.ticket){PF.ticket=j.ticket;PF.ticketAt=Date.now()}}).catch(()=>{})};
+addEventListener("online",()=>{if(!PF.ticket)PF.fetchTicket()});setInterval(()=>{if(PF.pro&&!PF.pro.trial&&(!PF.ticket||Date.now()-(PF.ticketAt||0)>20*36e5))PF.fetchTicket()},60000);
 window.PF=PF;
 /* ===== KHỞI ĐỘNG ===== */
 if(window.NP&&NP.onPause)NP.onPause(()=>{},()=>{});
-if(window.NP&&NP.state)NP.state(()=>null);
+if(window.NP&&NP.state)NP.state(()=>{if(!G||G.done)return null;const s={seed:G.seed,mode:G.mode,pts:G.pts.slice(),guess:G.guess.slice()};if(PF.pro&&!PF.pro.trial&&PF.ticket){s.tk=PF.ticket;const sk=PF.skinSel[0];if(sk&&sk!=="basic"&&PF.skins[0][sk])s.sk=sk}return s});
 applySkin();renderHome();show("home");
 if(passToken()&&!(window.NP&&NP.helper))PF.loadPro(false).catch(()=>{});
-const c0=parseCh(location.hash);if(c0)openCh(c0);else if(location.hash==="#daily")$("bDaily").click();
+if(window.NP&&NP.helper){const HS=NP.initialState&&typeof NP.initialState==="object"?NP.initialState:{},st=HS,seed=Number.isInteger(st.seed)&&st.seed>=0&&st.seed<=4294967295?st.seed:newSeed();
+ $("bBoard").hidden=true;
+ const go=()=>{begin(seed,"practice",null);if(Array.isArray(st.pts)&&Array.isArray(st.guess)&&st.pts.length===st.guess.length&&st.pts.length<N&&st.pts.every(x=>Number.isInteger(x)&&x>=0&&x<=100)&&st.guess.every(x=>Number.isInteger(x)&&x>0&&x<1e9)){G.pts=st.pts.slice();G.guess=st.guess.slice();G.i=G.pts.length;showQ()}};
+ if(/^h\.\d{13}\.[A-Za-z0-9_-]{43}$/.test(st.tk||""))PF.loadPro(false,st.tk).then(()=>{if(/^[a-z]{3,10}$/.test(st.sk||"")&&PF.skins[0][st.sk])PF.skinSel[0]=st.sk}).catch(()=>{}).finally(go);else go()}
+else{const c0=parseCh(location.hash);if(c0)openCh(c0);else if(location.hash==="#daily")$("bDaily").click()}
+
 window.GC={get G(){return G},begin,finish,again,shareText,shareLink,drawCard,parseCh,genRound,pointsOf,priceAt,fnv,dayKey,dayNo,PF,T,ITEMS};
 </script>
 </body>

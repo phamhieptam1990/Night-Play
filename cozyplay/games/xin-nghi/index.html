@@ -39,7 +39,7 @@ textarea{width:100%;height:20cqw;border-radius:3cqw;border:.5cqw solid var(--lin
 .ov h2{margin:0;font:400 6cqw var(--display);color:var(--accent)}.ov p{margin:0;font-size:4cqw;line-height:1.35}
 .sk{display:grid;grid-template-columns:1fr 1fr;gap:2.4cqw}.skc{position:relative;border:.5cqw solid var(--line);border-radius:3.4cqw;padding:2.2cqw;background:var(--panel);color:var(--ink);font:800 3.6cqw var(--body);cursor:pointer;min-height:44px}.skc.on{border-color:var(--accent)}.skc .e{font-size:9cqw;display:block}.skc.lock{opacity:.7}.skc.lock::after{content:"🔒";position:absolute;top:1.2cqw;right:2cqw;font-size:4cqw}
 .toast{position:absolute;left:50%;bottom:6cqw;transform:translateX(-50%);background:#fff;color:#111;padding:2cqw 4cqw;border-radius:99cqw;font-weight:800;font-size:3.6cqw;z-index:9;max-width:92%;text-align:center}
-#ask,#res{justify-content:center}
+#home,#ask,#res{justify-content:center}
 @container (max-height:440px){#aHints{display:none}.boss .av{font-size:12cqw}.opt{margin-bottom:1cqw}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -173,7 +173,7 @@ function finish(){const sv=getSave(),sc=G.p;sv.total++;sv.best=Math.max(sv.best,
  $("rBub").textContent="“"+G.reply+"”";$("rQT").textContent=T("yours");$("rQ").textContent="“"+G.reason+"”"+(G.mods.length?"  "+G.mods.map(id=>MODS.find(m=>m.id===id).e).join(""):"");$("rMT").textContent=T("pct");$("rPct").textContent=sc+"%";$("rBar").style.width="0";requestAnimationFrame(()=>requestAnimationFrame(()=>$("rBar").style.width=sc+"%"));
  const rk=sc>=80?4:sc>=60?3:sc>=40?2:sc>=20?1:0;$("rChips").innerHTML="";["🏅 "+T("rank")[rk],G.mode==="daily"?"📅 #"+dayNo(dayKey()):"",G.mode==="daily"&&sv.streak?T("streak",{n:sv.streak}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("rChips").appendChild(c)});
  $("rVs").textContent=G.ch?T("vsC",{a:sc,b:G.ch.sc})+" · "+(sc>G.ch.sc?T("win"):sc<G.ch.sc?T("lose"):T("tie")):"";
- const helper=!!(window.NP&&NP.helper);$("bShare").hidden=helper;$("bAgain").hidden=helper;$("bBoard").hidden=helper;
+ const helper=!!(window.NP&&NP.helper);$("bShare").hidden=helper;$("bAgain").hidden=helper;$("bBoard").hidden=helper;$("bHome").hidden=helper;
  setTimeout(()=>{G.out==="ok"?sfx.ok():G.out==="half"?sfx.half():sfx.no()},50);sfx.stamp();if(window.NPFx)NPFx.buzz(G.out==="ok"?[40,30,60]:30);
  if(PF.pro&&PF.pro.trial)PF.lockPro()}
 const newSeed=()=>(Math.random()*4294967296)>>>0;
@@ -218,20 +218,27 @@ $("pwGo").onclick=()=>track(GID+"_skin","click");$("pwNo").onclick=()=>{$("ovPay
 $("pwTrial").onclick=async()=>{try{await PF.loadPro(true);LS.set("xn-trial",dayKey());track(GID+"_skin","trial");PF.skinRestore=PF.skinSel[0];PF.skinSel[0]=payFor;$("ovPay").hidden=true;begin(newSeed(),"practice",null)}catch(e){toast(T("tried"),2200);$("ovPay").hidden=true}};
 $("bSkin").onclick=openSkins;$("skX").onclick=()=>$("ovSkin").hidden=true;
 const fetchT=(u,o,ms)=>{const c=new AbortController(),id=setTimeout(()=>c.abort(),ms);return fetch(u,Object.assign({signal:c.signal},o)).finally(()=>clearTimeout(id))};
-PF.loadPro=async function(trial){const tk=passToken(),cacheable=!trial;let src=null,r=null;
+PF.loadPro=async function(trial,ticket){const tk=ticket||passToken(),cacheable=!trial&&!ticket;let src=null,r=null;
  try{r=await fetchT("/api/pro/"+GID+".js"+(trial?"?trial=1":""),{headers:tk?{Authorization:"Bearer "+tk}:{},cache:"no-store"},8000)}catch(e){r=null}
  if(r&&r.ok){src=await r.text();if(cacheable)LS.set("xn-pro-src",{src})}
  else{if(r&&r.status>=400&&r.status<500&&r.status!==429){if(r.status===401&&cacheable)try{localStorage.removeItem("xn-pro-src")}catch(e){}throw new Error("pro_"+r.status)}
   const c=cacheable?LS.get("xn-pro-src",null):null,p=LS.get("pass",null);if(c&&c.src&&p&&p.exp&&new Date(p.exp)>new Date())src=c.src;else throw new Error("pro_offline")}
- new Function("PF",src)(PF);
- if(PF.pro&&!PF.pro.trial){if(!LS.get("xn-auto",0)){LS.set("xn-auto",1);if(PF.skinSel[0]==="basic"){const f=Object.keys(PF.skins[0]).find(i=>i!=="basic");if(f){PF.skinSel[0]=f;LS.set("xn-skin",f)}}}}
+ new Function("PF",src)(PF);if(cacheable)PF.fetchTicket();
+ if(cacheable&&PF.pro&&!PF.pro.trial){if(!LS.get("xn-auto",0)){LS.set("xn-auto",1);if(PF.skinSel[0]==="basic"){const f=Object.keys(PF.skins[0]).find(i=>i!=="basic");if(f){PF.skinSel[0]=f;LS.set("xn-skin",f)}}}}
  applySkin();if(!$("home").hidden)renderHome()};
 PF.lockPro=function(){for(const id of Object.keys(PF.skins[0]))if(id!=="basic")delete PF.skins[0][id];PF.pro=null;if(PF.skinRestore!=null){PF.skinSel[0]=PF.skinRestore;PF.skinRestore=null}if(!PF.skins[0][PF.skinSel[0]])PF.skinSel[0]="basic";applySkin()};
+PF.fetchTicket=function(){const t=passToken();if(!t||(window.NP&&NP.helper)||!PF.pro||PF.pro.trial)return;fetchT("/api/pro/ticket",{method:"POST",headers:{Authorization:"Bearer "+t},cache:"no-store"},6000).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.ticket){PF.ticket=j.ticket;PF.ticketAt=Date.now()}}).catch(()=>{})};
+addEventListener("online",()=>{if(!PF.ticket)PF.fetchTicket()});setInterval(()=>{if(PF.pro&&!PF.pro.trial&&(!PF.ticket||Date.now()-(PF.ticketAt||0)>20*36e5))PF.fetchTicket()},60000);
 window.PF=PF;
-if(window.NP&&NP.onPause)NP.onPause(()=>{},()=>{});if(window.NP&&NP.state)NP.state(()=>null);
+if(window.NP&&NP.onPause)NP.onPause(()=>{},()=>{});if(window.NP&&NP.state)NP.state(()=>{if(!G||G.done)return null;const s={seed:G.seed};if(PF.pro&&!PF.pro.trial&&PF.ticket){s.tk=PF.ticket;const sk=PF.skinSel[0];if(sk&&sk!=="basic"&&PF.skins[0][sk])s.sk=sk}return s});
 applySkin();renderHome();show("home");
 if(passToken()&&!(window.NP&&NP.helper))PF.loadPro(false).catch(()=>{});
-const c0=parseCh(location.hash);if(c0)openCh(c0);else if(location.hash==="#daily")$("bDaily").click();
+if(window.NP&&NP.helper){const HS=NP.initialState&&typeof NP.initialState==="object"?NP.initialState:{},st=HS,seed=Number.isInteger(st.seed)&&st.seed>=0&&st.seed<=4294967295?st.seed:newSeed();
+ $("bBoard").hidden=true;
+ const go=()=>{begin(seed,"practice",null);};
+ if(/^h\.\d{13}\.[A-Za-z0-9_-]{43}$/.test(st.tk||""))PF.loadPro(false,st.tk).then(()=>{if(/^[a-z]{3,10}$/.test(st.sk||"")&&PF.skins[0][st.sk])PF.skinSel[0]=st.sk}).catch(()=>{}).finally(go);else go()}
+else{const c0=parseCh(location.hash);if(c0)openCh(c0);else if(location.hash==="#daily")$("bDaily").click()}
+
 window.XN={get G(){return G},begin,finish,again,shareText,shareLink,drawCard,parseCh,genSit,evalReq,holidayNear,fnv,dayKey,dayNo,PF,T,CATS,MODS,BAD,send(ci,di,mods,own){G.ci=ci;G.di=di;G.mods=mods||[];G.own=!!own;if(own)$("own").value=own;$("bSend").click()}};
 </script>
 </body>
