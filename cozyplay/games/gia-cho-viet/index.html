@@ -106,11 +106,11 @@ const MAXS=500,N=5;
 /* ===== NGÔN NGỮ ===== */
 const pickLang=()=>{const q=new URLSearchParams(location.search).get("lang");let st=null;try{st=localStorage.getItem("lang")}catch(e){}return [q,st].find(x=>x==="vi"||x==="en")||(/^vi/i.test(navigator.language||"")?"vi":"en")};
 let LANG=pickLang();
-const I18={vi:{title:"Đoán Giá Chợ Việt",hdr:"Giá Chợ Việt",daily:"Đề hôm nay",dS:"Cả nước cùng đoán 5 món",done:"Hôm nay bạn được {s}/500 · chơi lại để cải thiện",practice:"🎲 Chơi tự do",streak:"🔥 {n} ngày",best:"🏆 Cao nhất {n}",tot:"🧺 {n} ván",note:"Giá chỉ mang tính tham khảo cho vui, không phải giá niêm yết.",
+const I18={vi:{rankHint:"Chơi “Đề hôm nay” để lên bảng điểm nhé!",title:"Đoán Giá Chợ Việt",hdr:"Giá Chợ Việt",daily:"Đề hôm nay",dS:"Cả nước cùng đoán 5 món",done:"Hôm nay bạn được {s}/500 · chơi lại để cải thiện",practice:"🎲 Chơi tự do",streak:"🔥 {n} ngày",best:"🏆 Cao nhất {n}",tot:"🧺 {n} ván",note:"Giá chỉ mang tính tham khảo cho vui, không phải giá niêm yết.",
  guess:"Chốt giá!",next:"Món tiếp →",see:"Xem kết quả",real:"Giá chợ",you:"Bạn đoán",pts:"{n} điểm",unit:"/",rank:["Mới ra chợ","Người đi chợ","Bà nội trợ cứng","Thánh đi chợ","Thần giá chợ"],
  endT:"Kết quả",vsC:"Đề thách đấu: bạn {a} — người gửi {b}",win:"Bạn thắng! 🎉",lose:"Chưa vượt được, thử lại nhé!",tie:"Hòa!",ch:"Bạn được thách!",chP:"Bạn bè đạt {s}/500 ở đề này. Đoán sát hơn không?",chGo:"Chơi đề này",
  share:"Đoán Giá Chợ Việt",ask:"Bạn đoán sát hơn mình không?",skin:"Giao diện",lockP:"Giao diện này dành cho Night Pass. Dùng thử 1 ván mỗi ngày hoặc mở khoá tất cả.",trial:"🎈 Dùng thử 1 ván",go:"Mở Night Pass",tried:"Hôm nay bạn đã dùng thử rồi",copied:"Đã chép — dán cho bạn bè nhé!",avg:"Sai lệch TB {n}%",lbl:"Giá"},
- en:{title:"Guess the Market Price",hdr:"Market Price",daily:"Today's round",dS:"Everyone guesses the same 5 items",done:"Today you scored {s}/500 · play again to improve",practice:"🎲 Free play",streak:"🔥 {n} days",best:"🏆 Best {n}",tot:"🧺 {n} rounds",note:"Prices are rough Vietnamese market averages, just for fun.",
+ en:{rankHint:"Play “Today's round” to make the leaderboard!",title:"Guess the Market Price",hdr:"Market Price",daily:"Today's round",dS:"Everyone guesses the same 5 items",done:"Today you scored {s}/500 · play again to improve",practice:"🎲 Free play",streak:"🔥 {n} days",best:"🏆 Best {n}",tot:"🧺 {n} rounds",note:"Prices are rough Vietnamese market averages, just for fun.",
  guess:"Lock in!",next:"Next item →",see:"See result",real:"Market price",you:"Your guess",pts:"{n} pts",unit:"/",rank:["Fresh at the market","Market goer","Pro shopper","Market legend","Price oracle"],
  endT:"Result",vsC:"Challenge: you {a} — sender {b}",win:"You win! 🎉",lose:"Not quite — try again!",tie:"Tie!",ch:"You're challenged!",chP:"A friend scored {s}/500 on this round. Can you get closer?",chGo:"Play this round",
  share:"Guess the Market Price",ask:"Can you guess closer than me?",skin:"Theme",lockP:"This theme is for Night Pass. Try one round a day or unlock everything.",trial:"🎈 Try 1 round",go:"Get Night Pass",tried:"You already used today's trial",copied:"Copied — paste it to a friend!",avg:"Avg error {n}%",lbl:"Price"}};
@@ -172,7 +172,7 @@ const sqOf=p=>p>=90?"🟩":p>=60?"🟨":p>=30?"🟧":"🟥";
 const rankOf=s=>s>=450?4:s>=350?3:s>=250?2:s>=150?1:0;
 function finish(){const sc=G.pts.reduce((a,b)=>a+b,0);G.done=true;G.score=sc;lastEnd=performance.now();const sv=getSave();sv.total++;sv.best=Math.max(sv.best,sc);
  if(G.mode==="daily"){const k=dayKey();if(sv.days[k]==null||sc>sv.days[k]){sv.days[k]=sc}if(sv.last!==k){const y=new Date(Date.parse(k+"T00:00:00Z")-864e5).toISOString().slice(0,10);sv.streak=sv.last===y?sv.streak+1:1;sv.last=k}}
- LS.set("gcv-save",sv);window.NP&&NP.result({score:sc,extra:{mode:G.mode}});
+ LS.set("gcv-save",sv);window.NP&&NP.result({score:sc,extra:{mode:G.mode,ranked:G.mode==="daily",rankHint:T("rankHint")}});
  show("end");$("eT").textContent=T("endT");$("eS").textContent=sc+"/"+MAXS;$("eR").textContent="🏅 "+T("rank")[rankOf(sc)];$("eSq").textContent=G.pts.map(sqOf).join("");
  const avg=Math.round(100*G.guess.reduce((a,g,i)=>a+Math.abs(Math.log(g/G.q[i].it.p)),0)/N);$("eChips").innerHTML="";[T("avg",{n:avg}),G.mode==="daily"?"📅 #"+dayNo(dayKey()):"",sv.streak&&G.mode==="daily"?T("streak",{n:sv.streak}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("eChips").appendChild(c)});
  $("eVs").textContent=G.ch?T("vsC",{a:sc,b:G.ch.sc})+" · "+(sc>G.ch.sc?T("win"):sc<G.ch.sc?T("lose"):T("tie")):"";

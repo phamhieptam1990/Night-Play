@@ -35,7 +35,7 @@ window.NPS = (function () {
     vi: { share: "Nhờ bạn chơi hộ", shareT: "Nhờ bạn chơi hộ một lượt", shareP: "Gửi link này cho một người bạn. Bạn ấy chơi hộ bạn một lượt và kết quả sẽ báo về cho bạn.",
       copy: "Sao chép link", copied: "Đã sao chép", send: "Gửi qua…", once: "Link chỉ dùng được 1 lần và hết hạn sau 24 giờ. Người chơi hộ không thể chia sẻ tiếp. Chúng tôi không lưu thông tin của bạn: kết quả được mã hoá, chỉ bạn đọc được.",
       waiting: "Đang chờ bạn bè mở link…", playing: "Bạn bè đang chơi hộ…", done: "Đã có kết quả!", expired: "Link đã hết hạn.", close: "Đóng", err: "Có lỗi, vui lòng thử lại.", offline: "Cần có mạng để tạo link chơi hộ. Game của bạn vẫn chạy bình thường, bạn thử lại khi có mạng nhé.", queued: "Đang offline: điểm của bạn sẽ tự gửi khi có mạng lại.", slow: "Thao tác quá nhanh, thử lại sau ít phút.", noShare: "Game này chưa hỗ trợ chơi hộ.",
-      notRanked: "Chế độ này không tính vào bảng xếp hạng. Hãy chơi chế độ Cổ điển, độ khó Thường nhé!", brag: "Khoe điểm", bragT: "Khoe điểm lên bảng xếp hạng?", bragP: "Chỉ biệt danh và điểm của bạn được lưu, và chỉ khi bạn bấm \"Khoe điểm\". Không bấm thì không lưu gì.", nick: "Biệt danh (2–16 ký tự)", skip: "Không, cảm ơn",
+      notRankedBase: "Chế độ này không tính vào bảng xếp hạng.", notRanked: "Chế độ này không tính vào bảng xếp hạng. Hãy chơi chế độ Cổ điển, độ khó Thường nhé!", brag: "Khoe điểm", bragT: "Khoe điểm lên bảng xếp hạng?", bragP: "Chỉ biệt danh và điểm của bạn được lưu, và chỉ khi bạn bấm \"Khoe điểm\". Không bấm thì không lưu gì.", nick: "Biệt danh (2–16 ký tự)", skip: "Không, cảm ơn",
       bragOk: "Đã lên bảng xếp hạng!", bragView: "Xem bảng xếp hạng", badNick: "Biệt danh chưa hợp lệ (2–16 ký tự, không chứa link/email).", scoreLine: "Điểm của bạn",
       gotT: "Bạn bè đã chơi hộ xong!", gotP: "Kết quả chơi hộ", points: "điểm", view: "Xem kết quả", rank: "Bảng xếp hạng", results: "Kết quả chơi hộ",
       shot: "Chụp màn hình", shotT: "Ảnh chụp màn hình", shotErr: "Không chụp được màn hình. Vui lòng thử lại.", save: "Lưu ảnh", shareImg: "Chia sẻ ảnh", copyImg: "Sao chép ảnh", imgCopied: "Đã sao chép ảnh",
@@ -43,7 +43,7 @@ window.NPS = (function () {
     en: { share: "Ask a friend to play", shareT: "Ask a friend to play one round for you", shareP: "Send this link to a friend. They play one round for you and the result is sent back to you.",
       copy: "Copy link", copied: "Copied", send: "Send via…", once: "The link works once and expires in 24 hours. The helper cannot share it further. We don't store your info: the result is encrypted and only you can read it.",
       waiting: "Waiting for your friend to open the link…", playing: "Your friend is playing…", done: "Result is in!", expired: "This link has expired.", close: "Close", err: "Something went wrong, please try again.", offline: "You need a connection to create a help link. Your game keeps running; try again once you are online.", queued: "You are offline: your score will be sent automatically when you are back online.", slow: "Too many tries, please wait a few minutes.", noShare: "This game doesn't support this yet.",
-      notRanked: "This mode isn't ranked. Play Classic mode at Normal difficulty!", brag: "Show off score", bragT: "Post your score to the leaderboard?", bragP: "Only your nickname and score are saved, and only if you press \"Show off score\". If you don't, nothing is saved.", nick: "Nickname (2–16 characters)", skip: "No thanks",
+      notRankedBase: "This mode isn't ranked.", notRanked: "This mode isn't ranked. Play Classic mode at Normal difficulty!", brag: "Show off score", bragT: "Post your score to the leaderboard?", bragP: "Only your nickname and score are saved, and only if you press \"Show off score\". If you don't, nothing is saved.", nick: "Nickname (2–16 characters)", skip: "No thanks",
       bragOk: "You're on the leaderboard!", bragView: "View leaderboard", badNick: "Invalid nickname (2–16 characters, no links/emails).", scoreLine: "Your score",
       gotT: "Your friend finished playing for you!", gotP: "Result", points: "points", view: "View result", rank: "Leaderboard", results: "Shared results",
       shot: "Screenshot", shotT: "Screenshot", shotErr: "Couldn't capture the screen. Please try again.", save: "Save image", shareImg: "Share image", copyImg: "Copy image", imgCopied: "Image copied",
@@ -262,7 +262,7 @@ window.NPS = (function () {
     var place = function () { var t = document.getElementById("tleft"), r = 0; if (t && t.offsetParent) r = Math.round(stage.getBoundingClientRect().right - t.getBoundingClientRect().left + 10); if (r) stage.style.setProperty("--nps-r", r + "px"); else stage.style.removeProperty("--nps-r"); };
     new MutationObserver(function () { var on = home.classList.contains("show"); if (on) place(); fab.classList.toggle("show", on); cam.classList.toggle("show", on); }).observe(home, { attributes: true, attributeFilter: ["class"] });
     addEventListener("resize", place);
-    var h2cUrl = opts.h2cUrl || "shared/vendor/html2canvas.min.js", lastScore = 0, lastRanked = false;
+    var h2cUrl = opts.h2cUrl || "shared/vendor/html2canvas.min.js", lastScore = 0, lastRanked = false, lastHint = "";
     var toastEl = document.createElement("div"); toastEl.className = "nps-toast"; toastEl.setAttribute("role", "status"); stage.appendChild(toastEl); var toastT = 0;
     function toast(m, ms) { toastEl.textContent = m; toastEl.classList.add("on"); clearTimeout(toastT); toastT = setTimeout(function () { toastEl.classList.remove("on"); }, ms || 2600); }
     new MutationObserver(label).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
@@ -370,9 +370,9 @@ window.NPS = (function () {
       var f = stage.querySelector("iframe"); if (e.origin !== location.origin || !f || e.source !== f.contentWindow || !e.data || e.data.np !== 1) return;
       if (e.data.type === "start") { hideSheet(); lastScore = 0; }
       else if (e.data.type === "result") { var game = curGame(), ex = e.data.extra || {}; lastScore = e.data.score | 0;
-        var ranked = !ex.mode || (ex.mode === "classic" && (!ex.diff || ex.diff === "normal") && (!ex.grid || ex.grid === "g3") && (!ex.pack || ex.pack === "deadline"));   // bảng xếp hạng chỉ nhận chế độ Cổ điển, độ khó Thường (công bằng)
-        lastRanked = ranked; }   /* KHÔNG tự bật hộp đăng điểm nữa: chỉ khi người chơi bấm nút "Lên bảng điểm" trong game */
-      else if (e.data.type === "brag") { if (lastRanked) showBrag(curGame(), lastScore); else toast(T("notRanked")); }
+        var ranked = ex.ranked === true ? true : ex.ranked === false ? false : !ex.mode || (ex.mode === "classic" && (!ex.diff || ex.diff === "normal") && (!ex.grid || ex.grid === "g3") && (!ex.pack || ex.pack === "deadline"));   // bảng xếp hạng chỉ nhận chế độ Cổ điển, độ khó Thường (công bằng)
+        lastRanked = ranked; lastHint = typeof ex.rankHint === "string" ? ex.rankHint.slice(0, 120) : ""; }   /* KHÔNG tự bật hộp đăng điểm nữa: chỉ khi người chơi bấm nút "Lên bảng điểm" trong game */
+      else if (e.data.type === "brag") { if (lastRanked) showBrag(curGame(), lastScore); else toast(lastHint ? T("notRankedBase") + " " + lastHint : T("notRanked")); }
     });
     new MutationObserver(function () { if (!stage.classList.contains("on")) { hideSheet(); clearInterval(shareTimer); } }).observe(stage, { attributes: true, attributeFilter: ["class"] });
 
