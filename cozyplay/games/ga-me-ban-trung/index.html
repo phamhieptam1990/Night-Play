@@ -45,6 +45,9 @@ canvas#cv{border-radius:3cqw;background:linear-gradient(var(--field),var(--field
 .ov h2{margin:0;font:400 6cqw var(--display);color:var(--accent)}.ov p{margin:0;font-size:3.9cqw;line-height:1.35}
 .sk{display:grid;grid-template-columns:1fr 1fr;gap:2.4cqw}.skc{position:relative;border:1.5px solid color-mix(in srgb,var(--ink) 30%,transparent);border-radius:3.4cqw;padding:2.2cqw;background:var(--panel);color:var(--ink);font:800 3.6cqw var(--body);cursor:pointer;min-height:44px}.skc.on{border-color:var(--accent)}.skc .e{font-size:9cqw;display:block}.skc.lock{opacity:.75}.skc.lock::after{content:'🔒';position:absolute;top:1.2cqw;right:2cqw;font-size:4cqw}
 .toast{position:absolute;left:50%;top:15cqw;transform:translateX(-50%);background:#fff;color:#111;padding:1.8cqw 4cqw;border-radius:99cqw;font-weight:800;font-size:3.6cqw;z-index:9;max-width:92%;text-align:center;box-shadow:0 1cqw 3cqw rgba(0,0,0,.3)}
+.tgt{display:flex;align-items:center;gap:2cqw;background:var(--panel);border:.5cqw solid var(--line);border-radius:99cqw;padding:.8cqw 3cqw;font:800 3.2cqw var(--body)}.tgt i{flex:1;height:2.2cqw;border-radius:9cqw;background:color-mix(in srgb,var(--ink) 14%,transparent);overflow:hidden;font-style:normal}.tgt b{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffb020,#ff5a3d);transition:width .3s}.tgt.beat{border-color:var(--good);box-shadow:0 0 3cqw color-mix(in srgb,var(--good) 55%,transparent)}.tgt.beat b{background:var(--good)}
+.st.pulse{animation:stp .35s ease-out}@keyframes stp{40%{transform:scale(1.18);border-color:var(--accent)}}
+.conf{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:6}.conf i{position:absolute;top:-8cqw;font-style:normal;font-size:7cqw;animation:cf 2.2s ease-in forwards}@keyframes cf{to{transform:translateY(120cqh) rotate(540deg);opacity:.2}}
 @container (max-height:640px){#hSub,#hNote{display:none}.hero{font-size:12cqw}.ty .e{font-size:6cqw}}
 @container (max-height:520px){.hero{display:none}.hint{display:none}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -66,6 +69,7 @@ canvas#cv{border-radius:3cqw;background:linear-gradient(var(--field),var(--field
   </section>
   <section class="scr" id="game" hidden>
     <div class="stats"><div class="st"><b id="sSc">0</b><span id="sScL"></span></div><div class="st"><b id="sSh">0</b><span id="sShL"></span></div><div class="st"><b id="sEx">0</b><span id="sExL"></span></div></div>
+    <div class="tgt" id="tgt" hidden><span id="tgtT"></span><i><b id="tgtB"></b></i></div>
     <div id="cvw"><canvas id="cv"></canvas></div>
     <p class="mut hint" id="gHint"></p>
   </section>
@@ -74,12 +78,13 @@ canvas#cv{border-radius:3cqw;background:linear-gradient(var(--field),var(--field
     <div class="hat" id="eHat"></div>
     <div class="chips" id="eChips"></div>
     <p class="mut" id="eVs" style="text-align:center;margin:0"></p>
-    <div class="row"><button class="btn grow" id="bShare" type="button">📤</button><button class="btn alt" id="bAgain" type="button">↻</button><button class="btn alt" id="bHome" type="button">🏠</button></div>
+    <div class="row"><button class="btn grow" id="bShare" type="button">📤</button><button class="btn alt" id="bRem" type="button" hidden>⚔↻</button><button class="btn alt" id="bAgain" type="button">↻</button><button class="btn alt" id="bHome" type="button">🏠</button></div>
   </section>
   <div class="ov" id="ovCh" hidden><h2 id="chH"></h2><p id="chP"></p><div class="row"><button class="btn alt" id="chNo" type="button">✕</button><button class="btn grow" id="chGo" type="button"></button></div></div>
   <div class="ov" id="ovAlb" hidden><h2 id="alH"></h2><p id="alP"></p><div class="alb" id="alG"></div><button class="btn alt" id="alX" type="button">✕</button></div>
   <div class="ov" id="ovSkin" hidden><h2 id="skH"></h2><div class="sk" id="skG"></div><button class="btn alt" id="skX" type="button">✕</button></div>
   <div class="ov" id="ovPay" hidden><h2>👑 Night Pass</h2><p id="pwP"></p><div class="row" style="flex-wrap:wrap"><button class="btn alt" id="pwNo" type="button">✕</button><button class="btn alt" id="pwTrial" type="button"></button><a class="btn" id="pwGo" target="_top" style="text-decoration:none"></a></div></div>
+  <div class="conf" id="conf" hidden></div>
   <div class="toast" id="toast" hidden></div>
 </div>
 <script>
@@ -94,12 +99,12 @@ const ANIM=[["🐥","Gà con","Chick",1],["🐤","Chim non","Hatchling",1],["�
 const SPEC=[["…","…","…",4],["…","…","…",4],["…","…","…",4],["…","…","…",4],["…","…","…",4],["…","…","…",4],["…","…","…",4],["…","…","…",4]];   /* 8 chỗ giấu cho loài hiếm Night Pass (tên thật nằm trong mã trả phí) */
 const I18={vi:{title:"Gà Mẹ Bắn Trứng",sub:"Bắn trứng cùng màu để nổ cụm. Trứng nở ra con vật cho bạn sưu tầm!",daily:"Bàn hôm nay",dS:"Cả nước cùng một bàn · 30 lượt",done:"Hôm nay bạn được {s} · chơi lại để cao hơn",free:"🎲 Chơi thoải mái",streak:"🔥 {n} ngày",best:"🏆 Cao nhất {n}",tot:"🎮 {n} ván",alb:"📖 {a}/{b} loài",note:"Chạm hoặc kéo để ngắm, thả để bắn. Chạm trứng nhỏ để đổi.",
  sc:"Điểm",sh:"Lượt",tm:"Giây",ex:"Combo",ch1:"Gà con",left:"Còn {n} lượt",endT:"Hết ván!",endW:"Dọn sạch bàn!",endL:"Trứng chạm đáy!",endS:"Hết lượt bắn",endR:"Cứu đủ gà con!",endTm:"Hết giờ!",hatched:"Nở ra",none:"Chưa nở con nào",vsC:"Thách đấu: bạn {a} — người gửi {b}",win:"Bạn bắn giỏi hơn! 🎉",lose:"Chưa bằng, thử lại nhé!",tie:"Hòa!",ch:"Bạn bị thách!",chP:"Bạn bè đạt {s} điểm trong {m} lượt, cùng một bàn trứng. Bạn bắn giỏi hơn không?",chGo:"Bắn thử",
- share:"Gà Mẹ Bắn Trứng",ask:"Bạn bắn giỏi hơn mình không?",copied:"Đã chép — dán cho bạn bè nhé!",skin:"Giao diện",lockP:"Loại chơi, giao diện và loài hiếm này dành cho Night Pass. Dùng thử 1 ván mỗi ngày hoặc mở khoá tất cả.",trial:"🎈 Dùng thử 1 ván",go:"Mở Night Pass",tried:"Hôm nay bạn đã dùng thử rồi",chL:"Bàn thách đấu thuộc loại “{t}” (Night Pass). Dùng thử 1 ván để nhận thách.",
+ tgt:"⚔ Mục tiêu {n}",beat:"Vượt điểm bạn bè rồi! 🎉",rem:"Đấu lại cùng bàn",cmb:["Hay!","Giỏi!","Tuyệt!","Siêu hạng!"],share:"Gà Mẹ Bắn Trứng",ask:"Bạn bắn giỏi hơn mình không?",copied:"Đã chép — dán cho bạn bè nhé!",skin:"Giao diện",lockP:"Loại chơi, giao diện và loài hiếm này dành cho Night Pass. Dùng thử 1 ván mỗi ngày hoặc mở khoá tất cả.",trial:"🎈 Dùng thử 1 ván",go:"Mở Night Pass",tried:"Hôm nay bạn đã dùng thử rồi",chL:"Bàn thách đấu thuộc loại “{t}” (Night Pass). Dùng thử 1 ván để nhận thách.",
  newA:"MỚI! {a} nở ra!",hatchA:"{a} nở ra!",alH:"Album con vật",alP:"Nổ cụm 4 trứng trở lên hoặc làm rơi 3 trứng để trứng nở. Cụm càng lớn càng dễ ra loài hiếm.",
  rk:["Gà mới tập","Bắn cũng được","Xạ thủ","Xạ thủ trứng","Gà mẹ huyền thoại"],hint0:"Kéo để ngắm, thả để bắn",rows:"Hàng trứng mới sắp xuống!"},
  en:{title:"Mama Hen's Egg Pop",sub:"Shoot matching eggs to pop clusters. Eggs hatch into animals to collect!",daily:"Today's board",dS:"Everyone gets the same board · 30 shots",done:"Today you scored {s} · play again to beat it",free:"🎲 Free play",streak:"🔥 {n} days",best:"🏆 Best {n}",tot:"🎮 {n} games",alb:"📖 {a}/{b} species",note:"Tap or drag to aim, release to shoot. Tap the small egg to swap.",
  sc:"Score",sh:"Shots",tm:"Sec",ex:"Combo",ch1:"Chicks",left:"{n} shots left",endT:"Game over!",endW:"Board cleared!",endL:"Eggs hit the bottom!",endS:"Out of shots",endR:"All chicks rescued!",endTm:"Time's up!",hatched:"Hatched",none:"Nothing hatched yet",vsC:"Challenge: you {a} — sender {b}",win:"You shot better! 🎉",lose:"Not quite — try again!",tie:"Tie!",ch:"You're challenged!",chP:"A friend scored {s} in {m} shots on this exact egg board. Can you shoot better?",chGo:"Try it",
- share:"Mama Hen's Egg Pop",ask:"Can you shoot better than me?",copied:"Copied — paste it to a friend!",skin:"Theme",lockP:"This game type, theme and rare species are for Night Pass. Try one round a day or unlock everything.",trial:"🎈 Try 1 round",go:"Get Night Pass",tried:"You already used today's trial",chL:"This challenge uses the “{t}” type (Night Pass). Try one round to accept.",
+ tgt:"⚔ Target {n}",beat:"You passed your friend! 🎉",rem:"Rematch same board",cmb:["Nice!","Great!","Awesome!","Legendary!"],share:"Mama Hen's Egg Pop",ask:"Can you shoot better than me?",copied:"Copied — paste it to a friend!",skin:"Theme",lockP:"This game type, theme and rare species are for Night Pass. Try one round a day or unlock everything.",trial:"🎈 Try 1 round",go:"Get Night Pass",tried:"You already used today's trial",chL:"This challenge uses the “{t}” type (Night Pass). Try one round to accept.",
  newA:"NEW! {a} hatched!",hatchA:"{a} hatched!",alH:"Animal album",alP:"Pop a cluster of 4+ eggs or drop 3 eggs to hatch one. Bigger clusters hatch rarer species.",
  rk:["Rookie hen","Decent shot","Sharpshooter","Egg sniper","Legendary mama hen"],hint0:"Drag to aim, release to shoot",rows:"A new row is coming down!"}};
 const T=(k,o)=>{let s=(I18[LANG][k]!=null?I18[LANG][k]:I18.vi[k]);if(typeof s==="string"&&o)for(const x in o)s=s.replace("{"+x+"}",o[x]);return s};
@@ -132,14 +137,14 @@ addEventListener("storage",e=>{if(e.key==="theme"){document.documentElement.data
 /* ===== ÂM THANH ===== */
 let AC=null;const snd=()=>!window.NPAudio||NPAudio.get();
 function tone(f,d,ty,v,dl){if(!snd())return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();const t0=AC.currentTime+(dl||0),o=AC.createOscillator(),g=AC.createGain();o.type=ty||"sine";o.frequency.value=f;g.gain.setValueAtTime(.0001,t0);g.gain.exponentialRampToValueAtTime(v||.08,t0+.02);g.gain.exponentialRampToValueAtTime(.0001,t0+d);o.connect(g);g.connect(AC.destination);o.start(t0);o.stop(t0+d+.05)}catch(e){}}
-const sfx={shoot:()=>tone(420,.08,"triangle",.07),stick:()=>tone(200,.07,"square",.05),pop:n=>{for(let i=0;i<Math.min(5,n);i++)tone(500+i*90,.1,"triangle",.07,i*.04)},hatch:()=>{[700,900,1200].forEach((f,i)=>tone(f,.14,"sine",.1,i*.08))},rare:()=>{[600,800,1000,1300,1600].forEach((f,i)=>tone(f,.16,"triangle",.1,i*.07))},end:()=>{tone(300,.2,"sawtooth",.07);tone(220,.3,"sawtooth",.07,.18)},row:()=>tone(150,.2,"sawtooth",.06)};
+const sfx={shoot:()=>tone(420,.08,"triangle",.07),stick:()=>tone(200,.07,"square",.05),pop:n=>{for(let i=0;i<Math.min(5,n);i++)tone(500+i*90,.1,"triangle",.07,i*.04)},hatch:()=>{[700,900,1200].forEach((f,i)=>tone(f,.14,"sine",.1,i*.08))},rare:()=>{[600,800,1000,1300,1600].forEach((f,i)=>tone(f,.16,"triangle",.1,i*.07))},end:()=>{tone(300,.2,"sawtooth",.07);tone(220,.3,"sawtooth",.07,.18)},row:()=>tone(150,.2,"sawtooth",.06),combo:n=>{const b=440*Math.pow(1.122,Math.min(n,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.12,"triangle",.09,i*.05))},beat:()=>{[523,659,784,1047,1319].forEach((f,i)=>tone(f,.2,"triangle",.1,i*.08))}};
 /* ===== TRẠNG THÁI & LUẬT ===== */
 let G=null,CH=null,lastEnd=0,raf=0;
 const getSave=()=>LS.get("gm-save",{streak:0,last:"",best:0,total:0,days:{}});
 const getAlb=()=>LS.get("gm-alb",{});
 const newSeed=()=>(Math.random()*4294967296)>>>0;
 function cfgOf(t,mode,chSh){const base=PF.modeCfg[t]||PF.modeCfg[0];const c=Object.assign({},base);if(t===0){c.shots=mode==="daily"?DAILY_SHOTS:(mode==="challenge"?chSh:0)}else if(t===3){c.time=60;c.shots=0}else c.shots=c.shots||28;return c}
-function newGame(seed,mode,t,ch){const cfg=cfgOf(t,mode,ch?ch.sh:DAILY_SHOTS);G={seed,mode,t,ch:ch||null,cfg,grid:[],par:0,score:0,used:0,miss:0,combo:0,maxCombo:0,draw:0,rowsAdded:0,hatchIdx:0,hatched:[],freed:0,chicks:0,timeLeft:cfg.time||0,over:false,why:"",ball:null,aim:0,cur:0,nxt:0,fx:[],fall:[],busy:false,popped:0,t0:0};buildBoard();G.cur=drawEgg();G.nxt=drawEgg()}
+function newGame(seed,mode,t,ch){const cfg=cfgOf(t,mode,ch?ch.sh:DAILY_SHOTS);G={seed,mode,t,ch:ch||null,cfg,grid:[],par:0,score:0,used:0,miss:0,combo:0,maxCombo:0,draw:0,rowsAdded:0,hatchIdx:0,hatched:[],freed:0,chicks:0,timeLeft:cfg.time||0,over:false,why:"",ball:null,aim:0,cur:0,nxt:0,fx:[],fall:[],txt:[],shake:0,flash:0,beat:false,busy:false,popped:0,t0:0};buildBoard();G.cur=drawEgg();G.nxt=drawEgg()}
 function buildBoard(){const R_=mulberry32(G.seed),cfg=G.cfg,rows=cfg.rows||6,nc=Math.min(5,cfg.colors||5);G.grid=[];for(let r=0;r<MAXR;r++){const row=Array(C).fill(null);G.grid.push(row)}
  for(let r=0;r<rows;r++)for(let c=0;c<cols(r,0);c++)G.grid[r][c]={k:Math.floor(R_()*nc),s:0};
  const cells=[];for(let r=0;r<rows;r++)for(let c=0;c<cols(r,0);c++)cells.push([r,c]);
@@ -169,7 +174,9 @@ function settle(){const b=G.ball;G.ball=null;const pos=landing(b);if(!pos){G.ove
  if(popped>0){G.combo++;G.maxCombo=Math.max(G.maxCombo,G.combo);G.miss=0;const mult=1+.25*Math.min(G.combo-1,6);G.score+=Math.round((popped*10+dropped*20)*mult);G.popped+=popped+dropped;sfx.pop(popped);
   if(popped>=4||dropped>=3)hatch(popped+dropped);if(freed){G.freed+=freed;G.score+=freed*100;toast("🐥 +"+freed,1200)}}
  else{G.combo=0;G.miss++}
+ if(G.combo>=2)comboFx(popped+dropped);
  G.score=Math.min(MAXS,G.score);
+ if(G.ch&&!G.beat&&G.score>G.ch.sc){G.beat=true;beatFx()}
  /* hàng mới sau mỗi 6 lượt hụt */
  if(G.miss>=(G.cfg.dropEvery||6)){G.miss=0;addRow();sfx.row()}
  G.cur=G.nxt;G.nxt=drawEgg();
@@ -181,6 +188,11 @@ function settle(){const b=G.ball;G.ball=null;const pos=landing(b);if(!pos){G.ove
 function cluster(r,c){const e=G.grid[r][c],seen=new Set([r+","+c]),q=[[r,c]],out=[];while(q.length){const [a,b]=q.pop();out.push([a,b]);for(const [nr,nc] of neigh(a,b)){const k=nr+","+nc,n=G.grid[nr][nc];if(!n||seen.has(k)||n.k!==e.k)continue;if(n.s===2&&!(a===r&&b===c))continue;if(n.s===2)continue;seen.add(k);q.push([nr,nc])}}return out}
 function floating(){const seen=new Set(),q=[];for(let c=0;c<cols(0,G.par);c++)if(G.grid[0][c]){seen.add("0,"+c);q.push([0,c])}while(q.length){const [a,b]=q.pop();for(const [nr,nc] of neigh(a,b)){const k=nr+","+nc;if(G.grid[nr][nc]&&!seen.has(k)){seen.add(k);q.push([nr,nc])}}}const out=[];for(let r=0;r<MAXR;r++)for(let c=0;c<cols(r,G.par);c++)if(G.grid[r][c]&&!seen.has(r+","+c))out.push([r,c]);return out}
 function addRow(){const R_=sub(G.seed,5000+G.rowsAdded++),nc=Math.min(5,G.cfg.colors||5);G.par^=1;G.grid.unshift(Array(C).fill(null));G.grid.pop();for(let c=0;c<cols(0,G.par);c++)G.grid[0][c]={k:Math.floor(R_()*nc),s:0};toast(T("rows"),1100)}
+function comboFx(n){const k=G.combo,tier=Math.min(3,k-2),cols=["#ffd24a","#ff9a3d","#ff5a3d","#ff3da0"],t=L2([I18.vi.cmb[tier],I18.en.cmb[tier]]);G.txt=G.txt.filter(x=>!x.cb);G.txt.push({cb:1,x:W/2,y:H*.42,txt:t+" ×"+k,life:1.1,age:0,size:26+tier*5,color:cols[tier]});
+ if(k>=3)G.shake=.25+.05*Math.min(k,8);G.flash=Math.min(.5,.18+.06*k);for(let i=0;i<Math.min(40,12+k*5);i++){const a=Math.random()*6.283,v=140+Math.random()*220;G.fx.push({x:W/2,y:H*.42,vx:Math.cos(a)*v,vy:Math.sin(a)*v-60,life:.7,k:i%5})}
+ sfx.combo(k);if(window.NPFx)NPFx.buzz(k>=4?[30,20,30,20,60]:[20,15,30]);const st=$("sEx").parentNode;st.classList.remove("pulse");void st.offsetWidth;st.classList.add("pulse")}
+function beatFx(){G.txt.push({x:W/2,y:H*.3,txt:L2([I18.vi.beat,I18.en.beat]),life:1.8,age:0,size:22,color:"#3ddc84"});G.flash=.5;sfx.beat();toast(T("beat"),1800);confetti(18);if(window.NPFx)NPFx.buzz([40,30,40,30,80])}
+function confetti(n){const c=$("conf");c.hidden=false;c.innerHTML="";const E=["🎉","⭐","🥚","🐥","✨","🎊"];for(let i=0;i<n;i++){const e=document.createElement("i");e.textContent=E[i%E.length];e.style.left=(Math.random()*92)+"%";e.style.animationDelay=(Math.random()*.9)+"s";e.style.fontSize=(5+Math.random()*4)+"cqw";c.appendChild(e)}clearTimeout(confetti.t);confetti.t=setTimeout(()=>{c.hidden=true;c.innerHTML=""},3400)}
 function hatch(n){const R_=sub(G.seed,9000+G.hatchIdx++),all=ANIMS(),pro=!!PF.anim2;let p=R_();const bonus=Math.min(.3,.03*(n-3));let rar=p<.02+bonus*.2?4:p<.12+bonus*.5?3:p<.4+bonus?2:1;if(rar===4&&!pro)rar=3;const pool=all.filter(a=>a[3]===rar);const a=pool[Math.floor(R_()*pool.length)]||all[0];G.hatched.push(a[0]);const alb=getAlb(),isNew=!alb[a[0]];alb[a[0]]=(alb[a[0]]||0)+1;LS.set("gm-alb",alb);G.score=Math.min(MAXS,G.score+50*rar);
  toast(T(isNew?"newA":"hatchA",{a:a[0]+" "+L2([a[1],a[2]])}),1700);(rar>=3?sfx.rare:sfx.hatch)();if(window.NPFx)NPFx.buzz(rar>=3?[40,30,70]:25)}
 function fxPop(r,c,k){const x=cx(r,c,G.par),y=cy(r);for(let i=0;i<7;i++){const a=i/7*6.283;G.fx.push({x,y,vx:Math.cos(a)*120,vy:Math.sin(a)*120,life:.45,k})}}
@@ -189,7 +201,7 @@ let last=0,acc=0;
 function tick(ts){raf=requestAnimationFrame(tick);if(!G||$("game").hidden){last=ts;return}const dt=Math.min(.05,(ts-last)/1000||0);last=ts;
  if(G.ball){acc+=dt;const sd=STEP/SPEED;let n=0;while(acc>=sd&&G.ball&&n++<8){acc-=sd;const hit=simBall(G.ball,sd);if(hit){settle();acc=0;break}}}
  if(G.cfg.time&&!G.over){G.timeLeft-=dt;if(G.timeLeft<=0){G.timeLeft=0;G.over=true;G.why="time";endGame()}updHud()}
- for(const f of G.fx){f.x+=f.vx*dt;f.y+=f.vy*dt;f.life-=dt}G.fx=G.fx.filter(f=>f.life>0);for(const f of G.fall){f.vy+=900*dt;f.x+=f.vx*dt;f.y+=f.vy*dt}G.fall=G.fall.filter(f=>f.y<H+30);draw()}
+ for(const f of G.fx){f.x+=f.vx*dt;f.y+=f.vy*dt;f.life-=dt}G.fx=G.fx.filter(f=>f.life>0);for(const x of G.txt){x.age+=dt}G.txt=G.txt.filter(x=>x.age<x.life);G.shake=Math.max(0,G.shake-dt);G.flash=Math.max(0,G.flash-dt*1.5);for(const f of G.fall){f.vy+=900*dt;f.x+=f.vx*dt;f.y+=f.vy*dt}G.fall=G.fall.filter(f=>f.y<H+30);draw()}
 /* ===== VẼ ===== */
 const cv=$("cv"),ctx=cv.getContext("2d");let SC=1;
 function fitCanvas(){const w=$("cvw");if(!w)return;const aw=w.clientWidth,ah=w.clientHeight;if(!aw||!ah)return;const s=Math.min(aw/W,ah/H),dpr=Math.min(2,devicePixelRatio||1);cv.style.width=Math.floor(W*s)+"px";cv.style.height=Math.floor(H*s)+"px";cv.width=Math.floor(W*s*dpr);cv.height=Math.floor(H*s*dpr);SC=cv.width/W;draw()}
@@ -210,7 +222,7 @@ function drawEgg2(x,y,k,s,a){const [h,sa,l]=palette(k),sk=skinOf(),rx=R*.84,ry=R
  else if(s===2){ctx.fillStyle="rgba(170,225,255,.55)";eggPath(x,y,rx,ry);ctx.fill();ctx.strokeStyle="#bfeaff";ctx.lineWidth=2;ctx.stroke()}
  else if(s===3){ctx.font="13px sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("🐥",x,y+2)}
  ctx.restore()}
-function draw(){if(!G||$("game").hidden)return;ctx.setTransform(SC,0,0,SC,0,0);ctx.clearRect(0,0,W,H);
+function draw(){if(!G||$("game").hidden)return;ctx.setTransform(SC,0,0,SC,0,0);ctx.clearRect(0,0,W,H);if(G.shake>0){const m=G.shake*18;ctx.translate((Math.random()-.5)*m,(Math.random()-.5)*m)}
  /* đường báo thua */
  ctx.strokeStyle="rgba(220,60,60,.35)";ctx.setLineDash([6,6]);ctx.beginPath();const ly=cy(LOSE_ROW)-R;ctx.moveTo(0,ly);ctx.lineTo(W,ly);ctx.stroke();ctx.setLineDash([]);
  for(let r=0;r<MAXR;r++)for(let c=0;c<cols(r,G.par);c++){const e=G.grid[r][c];if(e)drawEgg2(cx(r,c,G.par),cy(r),e.k,e.s)}
@@ -221,6 +233,8 @@ function draw(){if(!G||$("game").hidden)return;ctx.setTransform(SC,0,0,SC,0,0);c
  /* người bắn: gà mẹ + trứng nạp + trứng kế tiếp */
  ctx.font="34px sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";ctx.save();ctx.translate(SX,SY+8);ctx.fillText("🐔",0,0);ctx.restore();
  if(!G.ball&&!G.over)drawEgg2(SX,SY-4,G.cur,0);if(G.ball)drawEgg2(G.ball.x,G.ball.y,G.ball.k,0);
+ if(G.flash>0){ctx.fillStyle="rgba(255,230,140,"+G.flash+")";ctx.fillRect(0,0,W,H)}
+ for(const x of G.txt){const a=x.age/x.life,sc=a<.15?.6+a/.15*.5:1.1-Math.min(.1,(a-.15)*.2);ctx.save();ctx.globalAlpha=a>.7?Math.max(0,1-(a-.7)/.3):1;ctx.translate(x.x,x.y-a*30);ctx.scale(sc,sc);ctx.font="900 "+x.size+"px 'Be Vietnam Pro',system-ui,sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";ctx.lineWidth=6;ctx.strokeStyle="rgba(60,20,0,.85)";ctx.strokeText(x.txt,0,0);ctx.fillStyle=x.color;ctx.fillText(x.txt,0,0);ctx.restore()}
  ctx.save();ctx.globalAlpha=.95;ctx.translate(W-44,SY+6);ctx.scale(.8,.8);drawEgg2(0,0,G.nxt,0);ctx.restore();ctx.fillStyle="rgba(120,80,30,.8)";if(isDark())ctx.fillStyle="rgba(255,225,160,.85)";ctx.font="800 10px sans-serif";ctx.fillText("⇄",W-44,SY+28)}
 /* ===== HUD / MÀN HÌNH ===== */
 function show(id){["home","game","end"].forEach(s=>$(s).hidden=s!==id);["ovCh","ovAlb","ovSkin","ovPay"].forEach(o=>$(o).hidden=true);$("bRe").hidden=id!=="game"}
@@ -228,6 +242,7 @@ function toast(m,ms){const t=$("toast");t.textContent=m;t.hidden=false;clearTime
 function updHud(){if(!G)return;$("sSc").textContent=G.score;$("sScL").textContent=T("sc");
  if(G.cfg.time){$("sSh").textContent=Math.ceil(G.timeLeft);$("sShL").textContent=T("tm")}else if(G.cfg.shots){$("sSh").textContent=Math.max(0,G.cfg.shots-G.used);$("sShL").textContent=T("sh")}else{$("sSh").textContent=G.used;$("sShL").textContent=T("sh")}
  if(G.cfg.chicks){$("sEx").textContent=G.freed+"/"+G.chicks;$("sExL").textContent=T("ch1")}else{$("sEx").textContent="×"+Math.max(1,G.combo);$("sExL").textContent=T("ex")}
+ const tg=$("tgt");if(G.ch){tg.hidden=false;tg.classList.toggle("beat",!!G.beat);$("tgtT").textContent=T("tgt",{n:G.ch.sc})+" · "+G.score;$("tgtB").style.width=Math.min(100,Math.round(G.score/Math.max(1,G.ch.sc)*100))+"%"}else tg.hidden=true;
  $("gHint").textContent=G.cfg.shots?T("left",{n:Math.max(0,G.cfg.shots-G.used)}):T("hint0")}
 function renderHome(){const sv=getSave(),k=dayKey(),done=sv.days[k],alb=getAlb(),tot=ANIMS().length;$("ttl").textContent=T("title");$("hSub").textContent=T("sub");$("dN").textContent="#"+dayNo(k);$("dT").textContent=T("daily");$("dS").textContent=done!=null?T("done",{s:done}):T("dS");$("bFree").textContent=T("free");$("hNote").textContent=T("note");$("bLang").textContent=LANG==="vi"?"EN":"VI";$("bSnd").textContent=snd()?"🔊":"🔇";
  $("hHero").textContent=skinOf().hero||"🐔🥚";renderTypes();$("hChips").innerHTML="";[sv.streak?T("streak",{n:sv.streak}):"",sv.best?T("best",{n:sv.best}):"",T("alb",{a:Object.keys(alb).length,b:tot})].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("hChips").appendChild(c)})}
@@ -239,11 +254,13 @@ const rankIdx=s=>s>=4000?4:s>=2500?3:s>=1400?2:s>=600?1:0;
 function showEnd(){if(!G)return;show("end");const why={lose:"endL",clear:"endW",rescue:"endR",shots:"endS",time:"endTm"}[G.why]||"endT";$("eT").textContent=T(why);$("eSc").textContent=G.score;$("eRk").textContent="🏅 "+T("rk")[rankIdx(G.score)];$("eHat").textContent=G.hatched.length?G.hatched.join(" "):T("none");
  $("eChips").innerHTML="";const sv=getSave();[L2([TYPES[G.t][1],TYPES[G.t][2]]),G.mode==="daily"?"📅 #"+dayNo(dayKey()):"","🔥 ×"+G.maxCombo,G.mode==="daily"&&sv.streak?T("streak",{n:sv.streak}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("eChips").appendChild(c)});
  $("eVs").textContent=G.ch?T("vsC",{a:G.score,b:G.ch.sc})+" · "+(G.score>G.ch.sc?T("win"):G.score<G.ch.sc?T("lose"):T("tie")):"";
+ $("bRem").hidden=!(G.ch||G.mode==="daily")||!!(window.NP&&NP.helper);$("bRem").title=T("rem");if(G.ch&&G.score>G.ch.sc)confetti(26);
  const helper=!!(window.NP&&NP.helper);$("bShare").hidden=helper;$("bAgain").hidden=helper;$("bBoard").hidden=helper;$("bHome").hidden=helper}
+function rematch(){if(!G)return;const g=G;if(PF.pro&&PF.pro.trial)PF.lockPro();begin(g.seed,g.mode,g.t,g.ch)}
 function again(){if(!G)return;const t=G.t;if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",t,null)}
 /* ===== CHIA SẺ ===== */
 function shareLink(){return location.origin+"/api/share/"+GID+"?ch="+b64e({s:G.seed,sc:Math.min(MAXS,G.score),sh:Math.max(5,Math.min(200,G.cfg.shots||G.used||DAILY_SHOTS)),t:G.t})+(LANG==="en"?"&l=en":"")}
-function shareText(){return TYPES[G.t][0]+" "+T("share")+(G.t?" · "+L2([TYPES[G.t][1],TYPES[G.t][2]]):"")+(G.mode==="daily"?" #"+dayNo(dayKey()):"")+"\n"+(G.hatched.length?T("hatched")+": "+G.hatched.join(""):T("none"))+"\n🏅 "+G.score+" · "+T("rk")[rankIdx(G.score)]+(G.maxCombo>1?" · 🔥×"+G.maxCombo:"")+"\n"+T("ask")+"\n"+shareLink()}
+function shareText(){return TYPES[G.t][0]+" "+T("share")+(G.t?" · "+L2([TYPES[G.t][1],TYPES[G.t][2]]):"")+(G.mode==="daily"?" #"+dayNo(dayKey()):"")+"\n"+(G.hatched.length?T("hatched")+": "+G.hatched.join(""):T("none"))+"\n🏅 "+G.score+" · "+T("rk")[rankIdx(G.score)]+(G.maxCombo>1?" · 🔥×"+G.maxCombo:"")+(G.ch?"\n⚔ "+G.score+" vs "+G.ch.sc+(G.score>G.ch.sc?" 🎉":""):"")+"\n"+T("ask")+"\n"+shareLink()}
 function drawCard(){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif";const g=x.createLinearGradient(0,0,1080,1350);g.addColorStop(0,"#ffb347");g.addColorStop(1,"#c0392b");x.fillStyle=g;x.fillRect(0,0,1080,1350);x.textAlign="center";
  x.fillStyle="#fff";x.font="800 68px "+F;x.fillText(TYPES[G.t][0]+" "+T("share")+(G.mode==="daily"?" #"+dayNo(dayKey()):""),540,130);x.font="260px "+F;x.fillText("🐔",540,480);
  x.font="130px "+F;const hs=G.hatched.slice(-6).join("")||"🥚";x.fillText(hs,540,680);x.fillStyle="#fff";x.font="800 170px "+F;x.fillText(String(G.score),540,930);x.font="800 60px "+F;x.fillStyle="#fff3c9";x.fillText("🏅 "+T("rk")[rankIdx(G.score)]+(G.maxCombo>1?" · 🔥×"+G.maxCombo:""),540,1030);
@@ -251,8 +268,8 @@ function drawCard(){const c=document.createElement("canvas");c.width=1080;c.heig
 $("bShare").onclick=async()=>{if(!G||!G.over)return;const txt=shareText();try{const cv2=drawCard(),blob=await new Promise(r=>cv2.toBlob(r,"image/png")),f=blob&&new File([blob],"ga-me-ban-trung.png",{type:"image/png"});if(f&&navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],text:txt});return}if(navigator.share){await navigator.share({text:txt});return}}catch(e){if(e&&e.name==="AbortError")return}
  try{await navigator.clipboard.writeText(txt);toast(T("copied"),2200)}catch(e){toast(txt,3000)}};
 $("bBoard").onclick=()=>window.NP&&NP.brag();
-$("bAgain").onclick=again;$("bHome").onclick=()=>{G=null;if(PF.pro&&PF.pro.trial)PF.lockPro();applySkin();show("home");renderHome()};$("bRe").onclick=()=>{if(G&&!G.over&&!(window.NP&&NP.helper))again()};
-$("end").addEventListener("click",e=>{if(!G||!G.over||$("end").hidden||window.NP&&NP.helper||performance.now()-lastEnd<450||e.target.closest("button,a"))return;again()});
+$("bAgain").onclick=again;$("bRem").onclick=rematch;$("bHome").onclick=()=>{G=null;if(PF.pro&&PF.pro.trial)PF.lockPro();applySkin();show("home");renderHome()};$("bRe").onclick=()=>{if(G&&!G.over&&!(window.NP&&NP.helper))again()};
+$("end").addEventListener("click",e=>{if(!G||!G.over||$("end").hidden||window.NP&&NP.helper||performance.now()-lastEnd<450||e.target.closest("button,a"))return;G.ch?rematch():again()});
 /* ===== ĐIỀU KHIỂN ===== */
 let aiming=false;
 function pt(e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H]}
@@ -309,7 +326,7 @@ if(window.NP&&NP.helper){const HS=NP.initialState&&typeof NP.initialState==="obj
  const go=()=>{begin(seed,"challenge",ht,null);const g=decG(HS.g);if(g&&Number.isInteger(HS.u)&&HS.u>=0&&HS.u<=500&&Number.isInteger(HS.sc)&&HS.sc>=0&&HS.sc<=MAXS){G.grid=g;G.par=HS.par===1?1:0;G.used=HS.u;G.score=HS.sc;G.rowsAdded=Math.max(0,Math.min(500,HS.rw|0));G.draw=Math.max(0,Math.min(5000,HS.dr|0));G.hatchIdx=Math.max(0,Math.min(500,HS.hi|0));G.miss=Math.max(0,Math.min(5,HS.ms|0));G.freed=Math.max(0,Math.min(20,HS.fr|0));if(G.cfg.time)G.timeLeft=Math.max(5,Math.min(60,HS.tl|0));if(G.cfg.shots===0&&HS.cap===0){G.cfg.shots=G.used+25}else if(Number.isInteger(HS.cap)&&HS.cap>=5&&HS.cap<=200)G.cfg.shots=HS.cap;G.cur=drawEgg();G.nxt=drawEgg();updHud()}};
  if(/^h\.\d{13}\.[A-Za-z0-9_-]{43}$/.test(HS.tk||""))PF.loadPro(false,HS.tk).then(()=>{if(/^[a-z0-9]{3,10}$/.test(HS.sk||"")&&PF.skins[HS.sk])PF.skinSel=HS.sk}).catch(()=>{}).finally(go);else go()}
 else{const c0=parseCh(location.hash);if(c0)proP.then(()=>openCh(c0));else if(location.hash==="#daily")$("bDaily").click()}
-window.GM={get G(){return G},PF,begin,fire,settle,simBall,preview,drawCard,shareText,shareLink,parseCh,fnv,dayKey,dayNo,present,cluster,floating,neigh,encG,decG,cols,get TY(){return TY},setTY(t){TY=t;LS.set("gm-type",t);renderHome()},T,endGame,hatch,ANIMS,cx,cy,C,W,H,run(a){if(!fire(a))return false;let n=0;while(G.ball&&n++<4000){const hit=simBall(G.ball,STEP/SPEED);if(hit){settle();break}}return true}};
+window.GM={rematch,comboFx,beatFx,get G(){return G},PF,begin,fire,settle,simBall,preview,drawCard,shareText,shareLink,parseCh,fnv,dayKey,dayNo,present,cluster,floating,neigh,encG,decG,cols,get TY(){return TY},setTY(t){TY=t;LS.set("gm-type",t);renderHome()},T,endGame,hatch,ANIMS,cx,cy,C,W,H,run(a){if(!fire(a))return false;let n=0;while(G.ball&&n++<4000){const hit=simBall(G.ball,STEP/SPEED);if(hit){settle();break}}return true}};
 </script>
 </body>
 </html>
