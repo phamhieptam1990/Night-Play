@@ -12,7 +12,7 @@ function layer(PF) {
     "background:conic-gradient(from var(--pa,0deg),#ff5ea8,#ffd24a,#5be3a8,#4ab8ff,#b07bff,#ff5ea8);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:pxspin 6s linear infinite;opacity:.9}" +
     "@property --pa{syntax:'<angle>';inherits:false;initial-value:0deg}@keyframes pxspin{to{--pa:360deg}}" +
     "#pxcr{position:absolute;right:2.2cqw;bottom:1.6cqw;font-size:5.2cqw;z-index:5;pointer-events:none;filter:drop-shadow(0 .3cqw .6cqw rgba(0,0,0,.5));animation:pxbob 2.4s ease-in-out infinite}@keyframes pxbob{50%{transform:translateY(-.8cqw) rotate(6deg)}}" +
-    ".prem #pxfx i.sw{position:absolute;top:-20%;left:-40%;width:26%;height:140%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.28),transparent);transform:skewX(-18deg);animation:pxsw 7s ease-in-out infinite}@keyframes pxsw{0%,70%{left:-40%}100%{left:130%}}" +
+    ".prem #pxfx i.sw{position:absolute;top:-20%;left:-40%;width:26%;height:140%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.09),transparent);transform:skewX(-18deg);animation:pxsw 7s ease-in-out infinite}@keyframes pxsw{0%,70%{left:-40%}100%{left:130%}}" +
     "@media (prefers-reduced-motion:reduce){.play.prem::after,#pxcr,.prem #pxfx i.sw{animation:none}}";
   document.head.appendChild(st);
   const box = document.createElement("div"); box.id = "pxfx"; box.hidden = true;
@@ -31,9 +31,9 @@ function layer(PF) {
     if (v !== on) { on = v; play.classList.toggle("prem", on); box.hidden = cr.hidden = !on; if (!on) { P.length = FL.length = 0 } }
     if (on) {
       const L = sk.deco && sk.deco.length ? sk.deco : ["✨"]; spawnT -= dt;
-      if (spawnT <= 0 && P.length < 9) { spawnT = .55 + Math.random() * .5; P.push({ x: Math.random() * W, y: H + 20, vy: 22 + Math.random() * 30, sw: Math.random() * 6, ph: Math.random() * 6, e: L[Math.floor(Math.random() * L.length)], s: 20 + Math.random() * 20, t: 0 }) }
+      if (spawnT <= 0 && P.length < 9) { spawnT = .55 + Math.random() * .5; P.push({ x: Math.random() < .5 ? W * (.02 + Math.random() * .07) : W * (.91 + Math.random() * .07), y: H + 20, vy: 22 + Math.random() * 30, sw: Math.random() * 6, ph: Math.random() * 6, e: L[Math.floor(Math.random() * L.length)], s: 16 + Math.random() * 10, t: 0 }) }
       cx.setTransform(dpr, 0, 0, dpr, 0, 0); cx.clearRect(0, 0, W, H); cx.textAlign = "center"; cx.textBaseline = "middle";
-      for (let i = P.length - 1; i >= 0; i--) { const p = P[i]; p.t += dt; p.y -= p.vy * dt; if (p.y < -30) { P.splice(i, 1); continue } const x = p.x + Math.sin(p.t * 1.6 + p.ph) * 14 * (p.sw / 6 + .5); cx.globalAlpha = .4 * Math.min(1, p.t * 2) * Math.min(1, p.y / 80 + .2); cx.shadowColor = "rgba(255,230,140,.9)"; cx.shadowBlur = 12; cx.font = p.s + "px " + em(); cx.fillText(p.e, x, p.y) }
+      for (let i = P.length - 1; i >= 0; i--) { const p = P[i]; p.t += dt; p.y -= p.vy * dt; if (p.y < -30) { P.splice(i, 1); continue } const x = p.x + Math.sin(p.t * 1.6 + p.ph) * 5 * (p.sw / 6 + .5); cx.globalAlpha = .4 * Math.min(1, p.t * 2) * Math.min(1, p.y / 80 + .2); cx.shadowColor = "rgba(255,230,140,.9)"; cx.shadowBlur = 12; cx.font = p.s + "px " + em(); cx.fillText(p.e, x, p.y) }
       for (let i = FL.length - 1; i >= 0; i--) { const f = FL[i]; f.t += dt; if (f.t > f.life) { FL.splice(i, 1); continue } f.vy += 260 * dt; f.x += f.vx * dt; f.y += f.vy * dt; cx.globalAlpha = 1 - f.t / f.life; cx.shadowBlur = 10; cx.shadowColor = "#ffe27a"; cx.font = f.s + "px " + em(); cx.save(); cx.translate(f.x, f.y); cx.rotate(f.r * f.t); cx.fillStyle = "#fff6b0"; cx.fillText(f.e, 0, 0); cx.restore() }
       cx.globalAlpha = 1; cx.shadowBlur = 0
     }

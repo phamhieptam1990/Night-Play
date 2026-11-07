@@ -563,6 +563,7 @@ function render(){
     c.fillStyle="#fff";c.font="14px sans-serif";c.textAlign="center";c.textBaseline="middle";c.fillText("✦",x+r*.85,yy-r*.85)}
    c.shadowBlur=0;c.shadowOffsetY=0}
   /* nhân vật */
+  {const hg=c.createRadialGradient(hp.x,hp.y,6,hp.x,hp.y,64);hg.addColorStop(0,"rgba(255,255,255,.55)");hg.addColorStop(.55,"rgba(255,255,255,.18)");hg.addColorStop(1,"rgba(255,255,255,0)");c.fillStyle=hg;c.beginPath();c.arc(hp.x,hp.y,64,0,7);c.fill()}   /* quầng sáng sau nhân vật: nổi trên mọi nền */
   c.save();c.translate(hp.x,hp.y);
   const o={t:W.tt,fl:W.ph==="boost"?1:(W.ph==="run"?.3:0),air:G.t===3&&(W.jh>4||W.ph==="ask"),boost:W.ph==="boost"?1:0};
   if(W.ph==="boost"){const u=Math.min(1,W.bo/1.5);if(G.t===0){c.translate(0,-u*30);c.scale(1+.1*u,1+.2*u)}else c.translate(u*10,0)}
