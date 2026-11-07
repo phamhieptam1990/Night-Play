@@ -550,8 +550,18 @@ function render(){
    if(G.t===0){x=C.l0+(C.l1-C.l0)*e.lane;y=C.hy-d*C.V}else if(G.t===3){x=C.hx+d*C.V;y=C.gy-(e.k==="s"&&e.air?78:(e.k==="s"?30:20))}else{x=C.hx+d*C.V;y=C.l0+(C.l1-C.l0)*e.lane-(G.t===1?0:16)}
    if(x<-30||x>390||y<-40||y>H+80)continue;
    c.shadowColor="rgba(0,0,0,.45)";c.shadowBlur=8;c.shadowOffsetY=2;
-   if(e.k==="o")drawEm(c,sk.obs[e.v%sk.obs.length],x,y,G.t===3?40:34,G.t===0?W.tt*2+e.at:0);
-   else if(sk.star==="coal")coal(c,x,y,22+3*Math.sin(W.tt*6+e.at));else drawEm(c,sk.star,x,y+Math.sin(W.tt*5+e.at)*2,26);c.shadowBlur=0;c.shadowOffsetY=0}
+   if(e.k==="o"){/* CHƯỚNG NGẠI: đĩa đỏ sẫm + viền đỏ đứt nét + dấu ✖ ⇒ nhìn là biết "né" */
+    const r=G.t===3?27:25;c.shadowBlur=0;c.shadowOffsetY=0;c.fillStyle="rgba(120,10,20,.72)";c.beginPath();c.arc(x,y,r,0,7);c.fill();
+    c.strokeStyle="#ff4d4d";c.lineWidth=3;c.setLineDash([6,4]);c.lineDashOffset=-W.tt*20;c.beginPath();c.arc(x,y,r,0,7);c.stroke();c.setLineDash([]);
+    c.shadowColor="rgba(0,0,0,.45)";c.shadowBlur=8;drawEm(c,sk.obs[e.v%sk.obs.length],x,y,G.t===3?36:30,G.t===0?W.tt*2+e.at:0);
+    c.shadowBlur=0;c.fillStyle="#ff4d4d";c.beginPath();c.arc(x+r*.72,y-r*.72,9,0,7);c.fill();c.fillStyle="#fff";c.font="800 12px sans-serif";c.textAlign="center";c.textBaseline="middle";c.fillText("✖",x+r*.72,y-r*.72+1)}
+   else{/* ĐỒ ĂN/SAO: quầng vàng sáng nhấp nháy + viền trắng ⇒ nhìn là biết "ăn" */
+    const pu=1+.12*Math.sin(W.tt*6+e.at),r=22*pu,yy=y+Math.sin(W.tt*5+e.at)*2;c.shadowBlur=0;c.shadowOffsetY=0;
+    const g=c.createRadialGradient(x,yy,2,x,yy,r+8);g.addColorStop(0,"rgba(255,244,150,.95)");g.addColorStop(.7,"rgba(255,214,60,.55)");g.addColorStop(1,"rgba(255,214,60,0)");c.fillStyle=g;c.beginPath();c.arc(x,yy,r+8,0,7);c.fill();
+    c.strokeStyle="#fff";c.lineWidth=2.5;c.beginPath();c.arc(x,yy,r,0,7);c.stroke();
+    if(sk.star==="coal")coal(c,x,yy,20+3*Math.sin(W.tt*6+e.at));else drawEm(c,sk.star,x,yy,24);
+    c.fillStyle="#fff";c.font="14px sans-serif";c.textAlign="center";c.textBaseline="middle";c.fillText("✦",x+r*.85,yy-r*.85)}
+   c.shadowBlur=0;c.shadowOffsetY=0}
   /* nhân vật */
   c.save();c.translate(hp.x,hp.y);
   const o={t:W.tt,fl:W.ph==="boost"?1:(W.ph==="run"?.3:0),air:G.t===3&&(W.jh>4||W.ph==="ask"),boost:W.ph==="boost"?1:0};
