@@ -677,7 +677,7 @@ PF.loadPro=async function(trial,ticket){
     if(r&&r.status>=400&&r.status<500&&r.status!==429){if(r.status===401&&cacheable)try{localStorage.removeItem("bn-pro-src")}catch(e){}throw new Error("pro_"+r.status)}
     const c=cacheable?LS.get("bn-pro-src",null):null,p=LS.get("pass",null);
     if(c&&c.src&&p&&p.exp&&new Date(p.exp)>new Date())src=c.src;else throw new Error("pro_offline")}
-  new Function("PF",src)(PF);if(!G&&!$("home").hidden)renderHome();if(cacheable)PF.fetchTicket()};
+  new Function("PF",src)(PF);if(PF.pro&&!PF.pro.trial){const ad=LS.get("bn-auto",[]);let ch=0;for(let t=0;t<4;t++)if(!ad[t]){ad[t]=1;ch=1;if(PF.skinSel[t]==="basic"){const f=Object.keys(PF.skins[t]).find(i=>i!=="basic");if(f)PF.skinSel[t]=f}}if(ch){LS.set("bn-auto",ad);LS.set("bn-skin",PF.skinSel)}}if(!G&&!$("home").hidden)renderHome();if(cacheable)PF.fetchTicket()};
 PF.fetchTicket=function(){const tk=passToken();if(!tk||HELPER||!PF.pro||PF.pro.trial)return;fetchT("/api/pro/ticket",{method:"POST",headers:{Authorization:"Bearer "+tk},cache:"no-store"},6000).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.ticket){PF.ticket=j.ticket;PF.ticketAt=Date.now()}}).catch(()=>{})};
 addEventListener("online",()=>{if(!PF.ticket)PF.fetchTicket()});setInterval(()=>{if(PF.pro&&!PF.pro.trial&&(!PF.ticket||Date.now()-(PF.ticketAt||0)>20*36e5))PF.fetchTicket()},60000);
 PF.lockPro=function(){for(let t=0;t<4;t++)for(const id of Object.keys(PF.skins[t]))if(id!=="basic")delete PF.skins[t][id];PF.pro=null;if(PF.skinRestore){const r=PF.skinRestore;PF.skinSel[r.t]=r.old||"basic";PF.skinRestore=null}};
