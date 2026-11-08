@@ -64,7 +64,7 @@ function main(PF, OPTS) {
         for (let i = 0; i < 6; i++) { const x = ((i * 70 - sx * .3) % (w + 80) + w + 80) % (w + 80) - 40, y = h * .6 + Math.sin(tm * 1.5 + i) * 2; k.o(c, x, y, 22, 5, "#7a5a2a") }
         k.prop(c, ["🌴", "🥥", "🛖", "🌴", "🌿", "🌴"], sx, .6, gy, 54, "xl", 36); k.prop(c, ["🌾", "🌿"], sx, 1, gy, 40, "xl2", 20) } }
   };
-  for (const id in S) { const d = S[id], b = v(d.h); PF.skins[id] = { vl: b.vl, vd: b.vd, deco: d.deco, hero: d.hero, fx: d.fx, rider: d.rider, trail: d.trail, ground: d.ground, road: d.road, bike: d.bike, scene: d.scene, css: "" }; }
+  for (const id in S) { const d = S[id], b = v(d.h); PF.skins[id] = { vl: b.vl, vd: b.vd, deco: d.deco, hero: d.hero, fx: d.fx, rider: d.rider, trail: d.trail, ground: d.ground, road: d.road, bike: d.bike, scene: d.scene, css: ".stats .st{border-color:var(--accent);box-shadow:0 0 3cqw color-mix(in srgb,var(--accent) 35%,transparent)}#cvw canvas{box-shadow:0 0 0 .5cqw var(--accent),0 0 5cqw color-mix(in srgb,var(--accent) 40%,transparent);border-radius:3cqw}" }; }
   PF.pro = { trial: !!OPTS.trial };
 }
 exports.source = function (opts) { return "(" + main.toString() + ")(PF," + JSON.stringify({ trial: !!(opts && opts.trial) }) + ");"; };
