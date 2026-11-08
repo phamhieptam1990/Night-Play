@@ -99,6 +99,10 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .ib2.hot{animation:hotp 1s ease-in-out infinite}@keyframes hotp{50%{transform:scale(1.1);box-shadow:0 0 0 1.4cqw color-mix(in srgb,var(--accent) 30%,transparent)}}
 .cap{margin:0;font-size:3.4cqw;color:var(--muted);font-weight:700}
 @media (prefers-reduced-motion:reduce){.ib2.hot{animation:none}}
+.hwArt{width:100%;display:flex;align-items:center;justify-content:center;gap:2.6cqw;background:var(--panel);border-radius:5cqw;box-shadow:var(--shadow);padding:2.4cqw 3cqw;min-height:20cqw}
+.hwArt .e{font-size:11cqw;line-height:1}.hwArt .ar{font-size:7cqw;color:var(--muted)}.hwArt .gp{display:flex;gap:.8cqw;flex-wrap:wrap;justify-content:center;max-width:30cqw}.hwArt .gp i{font-style:normal;font-size:8.4cqw;line-height:1}
+.hwL.card3{padding:.6cqw 1cqw}.hwL.card3 li{padding:1.9cqw 1.2cqw;font-size:4.1cqw}.hwL.card3 li b{font-size:6.4cqw}.hwL.card3 li span{line-height:1.22}.hwL.card3 li em{font-style:normal;color:var(--accent)}
+.pegArt{display:flex;align-items:flex-end;justify-content:center;gap:4cqw;height:20cqw}.pegArt .pg{position:relative;width:15cqw;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}.pegArt .pg::before{content:"";position:absolute;bottom:0;top:2cqw;width:1.6cqw;border-radius:1cqw;background:rgba(120,80,40,.55)}.pegArt .pg::after{content:"";position:absolute;left:0;right:0;bottom:-1cqw;height:1.8cqw;border-radius:1cqw;background:rgba(120,80,40,.55)}.pegArt .pg u{position:relative;z-index:1;display:block;height:3.6cqw;margin-top:.5cqw;border-radius:1.8cqw;text-decoration:none;background:hsl(var(--h) 82% 58%)}.pegArt .pg s{position:absolute;top:-3cqw;font-size:6cqw;text-decoration:none;z-index:2}
 @media (max-height:520px) and (min-aspect-ratio:11/10){
   :root{--w:calc((100dvh - 16px)*.75)}
   .app{flex-direction:row;align-items:center;justify-content:center;gap:14px}
@@ -134,7 +138,7 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
     <div class="toast" id="toast" role="status"></div>
     <div class="ov" id="ovHow" hidden>
       <h2 id="hwH"></h2><div class="row"><span class="chip" id="hwC"></span></div>
-      <ul class="hwL" id="hwL"></ul>
+      <div class="hwArt" id="hwArt"></div><ul class="hwL card3" id="hwL"></ul>
       <div class="row"><button class="ib2" id="hwBack" type="button">←</button><button class="btnbig" id="hwGo" type="button"></button></div>
     </div>
     <div class="ov" id="ovCh" hidden>
@@ -177,10 +181,10 @@ const LVE=["🌱","🌿","🌳"];
 const I18N={
 vi:{title:"Qua Sông Cùng Bé",docTitle:"Qua Sông Cùng Bé",sound:"Âm thanh",lang:"Ngôn ngữ",home:"Về màn chọn",
  ty:["Cảnh sát & Trộm","Bác nông dân","Cả nhà qua sông","Qua cầu đêm"],lv:["Cấp 1","Cấp 2","Cấp 3"],"lv.pick":"Chọn cấp độ",
- how:[["Chở cảnh sát và trộm qua sông bằng thuyền (thuyền chở được {cap} người).","Bên nào trộm đông hơn cảnh sát (mà có cảnh sát) thì trộm quậy phá, nhớ giữ cân bằng nhé!","Chạm người để lên thuyền, bấm ▶ để chèo. Ít chuyến nhất là giỏi nhất!"],
-  ["Bác nông dân chèo thuyền và chở được 1 thứ mỗi chuyến.","Khi bác không ở cùng, con vật ăn thịt sẽ ăn mất bạn của nó.","Chạm để chở lên thuyền, bấm ▶ để chèo. Chở sao cho không ai bị ăn!"],
-  ["Cả nhà qua sông: chỉ bố, mẹ và cảnh sát biết chèo thuyền (chở {cap} người).","Bố không ở một mình với con gái, mẹ không ở một mình với con trai, trộm không ở cạnh ai nếu thiếu cảnh sát.","Chạm người lên thuyền rồi bấm ▶. Chọn sai chỉ bị nhắc nhẹ thôi!"],
-  ["Đêm tối chỉ có 1 cây đèn pin, mỗi lần qua cầu được 2 người (đi theo người chậm hơn).","Số trên mặt là số phút người đó đi qua cầu. Cần có người mang đèn quay lại đón!","Qua hết cầu trong thời gian ngắn nhất nhé!"]],
+ how:[["Đưa **cả nhóm** qua sông bằng thuyền (chở được **{cap}** người)","Bên nào **trộm đông hơn cảnh sát** thì không được","Chạm người **lên thuyền**, bấm **▶** để chèo. Ít chuyến = giỏi!"],
+  ["Bác nông dân **chèo** và chở được **1 thứ** mỗi chuyến","Bác không ở đó thì con vật **ăn thịt** sẽ ăn bạn của nó","Chạm để chở, bấm **▶** để chèo. Đừng để ai bị **ăn**!"],
+  ["Chỉ **bố, mẹ, cảnh sát** biết chèo (chở **{cap}** người)","**Bố** không ở với con gái nếu thiếu mẹ, **mẹ** không ở với con trai nếu thiếu bố. **Trộm** phải có cảnh sát bên cạnh","Chọn sai chỉ bị **nhắc nhẹ** thôi!"],
+  ["Trời tối, chỉ có **1 đèn pin**. Mỗi lần qua cầu **2 người**","Số trên mặt là **số phút** đi qua cầu, đi theo người **chậm hơn**","Phải có người **mang đèn quay lại**. Qua hết trong thời gian **ngắn nhất**!"]],
  pw:{},go:"Bắt đầu!",moves:"chuyến",mins:"phút",
  "daily.t":"Câu đố hôm nay #{n}","gt.sh":"Để chia sẻ, hỏi người lớn:","sh.btn":"Chia sẻ","txt.copied":"Đã sao chép kết quả!",
  "ch.h":"⚔ Bạn được thách đấu!","ch.p":"Bạn kia được {s} điểm. Cùng câu đố này, bạn làm được không?","ch.win":"Bạn hơn rồi: {k} so với {ck}! 🎉","ch.lose":"Bạn kia nhỉnh hơn: {k} so với {ck}","ch.tie":"Ngang nhau: {k} – {ck}","cd.foot":"Cùng giải câu đố tại","cd.ask":"Bạn có đưa mọi người qua sông nhanh hơn mình không?",
@@ -196,10 +200,10 @@ vi:{title:"Qua Sông Cùng Bé",docTitle:"Qua Sông Cùng Bé",sound:"Âm thanh"
  "sk.3.basic":"Hoàng hôn","sk.3.lava":"Dung nham","sk.3.sky":"Cầu mây","sk.3.ice":"Cầu băng","sk.3.pixel":"8-bit"},
 en:{title:"River Crossing",docTitle:"River Crossing",sound:"Sound",lang:"Language",home:"Back",
  ty:["Cops & Robbers","Farmer's Trip","Family Crossing","Night Bridge"],lv:["Level 1","Level 2","Level 3"],"lv.pick":"Pick a level",
- how:[["Take the cops and robbers across the river by boat (the boat holds {cap}).","If robbers outnumber the cops on a bank (and a cop is there), the robbers cause trouble. Keep it balanced!","Tap people to board, press ▶ to row. Fewest trips wins!"],
-  ["The farmer rows and can carry one thing per trip.","When the farmer is away, the hungry animal eats its friend.","Tap to load, press ▶ to row. Make sure nobody gets eaten!"],
-  ["Only dad, mom and the police officer can row (boat holds {cap}).","Dad can't be alone with the daughters, mom can't be alone with the sons, and the thief can't be near anyone without the police.","Tap people onto the boat then press ▶. Wrong picks only get a gentle reminder!"],
-  ["It's dark and there is only 1 torch. Two people cross at a time (at the slower one's speed).","The number is how many minutes that person needs. Someone must bring the torch back!","Get everyone across in the shortest time!"]],
+ how:[["Take **everyone** across by boat (holds **{cap}**)","**Robbers can't outnumber cops** on a bank","Tap people **onto the boat**, press **▶** to row. Fewer trips = better!"],
+  ["The farmer **rows** and carries **1 thing** per trip","Without the farmer, the **hungry animal** eats its friend","Tap to load, press **▶** to row. Don't let anyone get **eaten**!"],
+  ["Only **dad, mom and the police** can row (holds **{cap}**)","**Dad** can't stay with daughters without mom, **mom** can't stay with sons without dad. The **thief** needs police nearby","Wrong picks only get a **gentle reminder**!"],
+  ["It's dark: only **1 torch**. **2 people** cross at a time","The number is **minutes** needed. You go at the **slower** one's speed","Someone must **bring the torch back**. Be the **fastest**!"]],
  go:"Start!",moves:"trips",mins:"min",
  "daily.t":"Today's puzzle #{n}","gt.sh":"To share, ask a grown-up:","sh.btn":"Share","txt.copied":"Result copied!",
  "ch.h":"⚔ You're challenged!","ch.p":"Your friend scored {s}. Same puzzle, can you beat it?","ch.win":"You win: {k} vs {ck}! 🎉","ch.lose":"They're ahead: {k} vs {ck}","ch.tie":"Tied: {k} – {ck}","cd.foot":"Solve the puzzle at","cd.ask":"Can you get everyone across faster than me?",
@@ -352,7 +356,8 @@ function renderHome(){
 function openHow(t){
   window.__howT=t;const P=makePuzzle(t,LVL,1);
   $("hwH").textContent=TY_ICON[t]+" "+T("ty")[t];$("hwC").textContent=LVE[LVL-1]+" "+T("lv")[LVL-1];
-  $("hwL").innerHTML=T("how")[t].map((s,i)=>"<li><b>"+["🚣","🚫","🎯"][i]+"</b><span>"+s.split("{cap}").join(P.cap)+"</span></li>").join("");
+  $("hwL").innerHTML=T("how")[t].map((s,i)=>"<li><b>"+["🚣","🚫","🎯"][i]+"</b><span>"+s.split("{cap}").join(P.cap).replace(/\*\*([^*]+)\*\*/g,"<em>$1</em>")+"</span></li>").join("");
+  {const sk0=skinOf(t),cast=sk0.cast||{};P.ents.forEach((e,i)=>e._i=i);const seen=[],em=[];for(const e of P.ents){const c=castOf(e,cast);if(!seen.includes(c)){seen.push(c);em.push(c)}}$("hwArt").innerHTML='<span class="gp">'+em.slice(0,6).map(c=>"<i>"+c+"</i>").join("")+'</span><span class="ar">➜</span><span class="e">'+(sk0.boat||"⛵")+'</span><span class="ar">➜</span><span class="e">🏁</span>'}
   $("hwGo").textContent="▶ "+T("go");$("hwGo").onclick=()=>begin(t,{});$("hwBack").setAttribute("aria-label",T("home"));showOv("ovHow");
 }
 $("hwBack").onclick=()=>showOv(null);

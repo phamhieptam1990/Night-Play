@@ -338,8 +338,8 @@ function renderHome(){
 function openHow(t){
   window.__howT=t;
   $("hwH").textContent=TY_ICON[t]+" "+T("ty")[t];$("hwC").textContent=LVE[LVL-1]+" "+T("lv")[LVL-1];
-  $("hwL").innerHTML=T("how")[t].map((s,i)=>"<li><b>"+["🔝","🚫","🎯"][i]+"</b><span>"+s.replace(/\*\*([^*]+)\*\*/g,"<em>$1</em>")+"</span></li>").join("");
-  const P0=makePuzzle(t,LVL,1),sk0=skinOf(t),h5=n=>Math.round(n*(280/Math.max(1,P0.n-1)));let art="";const pegsN=P0.pegs;for(let k=0;k<pegsN;k++){let d="";for(let i=P0.n-1;i>=0;i--)if(P0.start[i]===k)d+='<u style="--h:'+h5(i)+";width:"+(30+62*i/Math.max(1,P0.n-1))+'%"></u>';art+='<div class="pg">'+(k===P0.goal?"<s>"+(sk0.flag||"🏁")+"</s>":"")+d.split("").join("")+"</div>"}$("hwArt").innerHTML='<div class="pegArt">'+art+"</div>";
+  $("hwL").innerHTML=T("how")[t].map((s,i)=>"<li><b>"+["👆","🚫","🎯"][i]+"</b><span>"+s.replace(/\*\*([^*]+)\*\*/g,"<em>$1</em>")+"</span></li>").join("");
+  const P0=makePuzzle(t,LVL,1),sk0=skinOf(t),h5=n=>Math.round(n*(280/Math.max(1,P0.n-1)));let art="";const pegsN=P0.pegs;for(let k=0;k<pegsN;k++){let d="";for(let i=0;i<P0.n;i++)if(P0.start[i]===k)d+='<u style="--h:'+h5(i)+";width:"+(30+62*i/Math.max(1,P0.n-1))+'%"></u>';art+='<div class="pg">'+(k===P0.goal?"<s>"+(sk0.flag||"🏁")+"</s>":"")+d.split("").join("")+"</div>"}$("hwArt").innerHTML='<div class="pegArt">'+art+"</div>";
   $("hwGo").textContent="▶ "+T("go");$("hwGo").onclick=()=>begin(t,{});$("hwBack").setAttribute("aria-label",T("home"));showOv("ovHow");
 }
 $("hwBack").onclick=()=>showOv(null);
