@@ -2,32 +2,32 @@
 module.exports = {
   id: "cat-banh-chung", prefix: "cb", title: { vi: "Cắt Bánh Chưng", en: "Slice It Even" }, maxScore: 5000,
   hero: "🔪🥮", deco: ["🔪", "🥮", "🍉", "🍕"],
-  types: [["🥮", "Cắt đôi", "Cut in half"], ["🍕", "Cắt ba", "Thirds"], ["🌀", "Hình kỳ quặc", "Odd shapes"], ["🍰", "Cắt tư", "Quarters"]],
+  types: [["🥮", "Cắt đôi", "Cut in half"], ["🔄", "Bánh xoay", "Spinning treat"], ["🍕", "Cắt ba", "Thirds"], ["🌫️", "Cắt tư sương mù", "Foggy cut"]],
   catalog: [["basic", "Bếp ngày Tết", "Tet kitchen", "🔪"], ["pizza", "Tiệm pizza Ý", "Pizza parlour", "🍕"], ["ninja", "Võ đường kiếm sĩ", "Ninja dojo", "🥷"], ["lab", "Phòng thí nghiệm laser", "Laser lab", "🔬"], ["candy", "Xưởng kẹo ngọt", "Candy factory", "🍬"]],
   rootCss: `:root{--bg:#FFF1E0;--panel:#ffffff;--ink:#3b1f10;--muted:#7a4a2a;--accent:#c8301e;--on:#ffffff;--good:#2f9e44;--bad:#e03131;--line:#f0cfa6;--pbg:linear-gradient(#ffd9a8,#fff4e6);--field:#fff1dc;--field2:#ffdcb0;
  --display:"Bungee","Arial Black",system-ui,sans-serif;--body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif}
 :root[data-theme="dark"]{--bg:#1c0e08;--panel:#33190d;--ink:#fff0e0;--muted:#e0b48c;--accent:#ff6a50;--on:#2a0800;--good:#51cf66;--bad:#ff6b6b;--line:#5a3320;--pbg:linear-gradient(#3b1a0c,#1c0e08);--field:#2a150a;--field2:#3c1f10}`,
-  extraCss: `canvas#cv{cursor:crosshair}`,
+  extraCss: `canvas#cv{cursor:crosshair}#play[data-ty="1"] canvas#cv{box-shadow:0 0 0 1.4cqw color-mix(in srgb,var(--accent) 30%,transparent),0 0 6cqw color-mix(in srgb,var(--accent) 45%,transparent)}#play[data-ty="2"] canvas#cv{border-style:dashed}#play[data-ty="3"] canvas#cv{border-color:#111;box-shadow:0 0 0 1.2cqw rgba(0,0,0,.35)}`,
   gameHtml: `{{STATS}}
     <div id="cvw"><canvas id="cv"></canvas></div>
     {{HINT}}`,
   consts: `const NICE=3600,CONF=["🔪","⭐","🎉"];`,
   i18n: {
     vi: { sub: "Vuốt một đường để cắt bánh thành các phần bằng nhau nhất. Game hiện tỉ lệ diện tích từng phần!", note: "5 bánh mỗi ván, càng cắt đều điểm càng cao · mỗi ngày cả nước cắt cùng một bộ bánh",
-      sc: "Điểm", rnd: "Bánh", ex: "Tỉ lệ", hint0: "Vuốt một đường thẳng qua bánh để cắt đôi — chia sao cho hai phần bằng nhau.", hint1: "Vuốt HAI đường không cắt nhau trong bánh để chia thành 3 phần bằng nhau.", hint2: "Hình kỳ quặc: ước lượng bằng mắt để cắt đôi cho đều!", hint3: "Vuốt HAI đường cắt nhau trong bánh để chia thành 4 phần bằng nhau.",
+      sc: "Điểm", rnd: "Bánh", ex: "Tỉ lệ", hint0: "Vuốt một đường thẳng qua bánh để cắt đôi — chia sao cho hai phần bằng nhau.", hint1: "Bánh xoay: bánh quay liên tục — canh đúng lúc vuốt để cắt đôi cho đều!", hint2: "Cắt ba: vuốt HAI đường không cắt nhau trong bánh để chia 3 phần bằng nhau.", hint3: "Cắt tư trong sương: chỉ nhìn thấy bánh quanh ngón tay. Vuốt HAI đường cắt nhau để chia 4 phần!",
       end: "Hết bánh rồi!", endS: "Bạn được {n} điểm", rt: ["Dao cùn", "Cắt cũng được", "Tay dao ổn", "Đầu bếp chuẩn", "Thần dao"],
       tx: "🔪 Cắt Bánh Chưng · {t}\nMình được {n} điểm!\n{l}", ask: "Bạn cắt đều hơn mình không?",
-      lockP: "Cắt ba, Hình kỳ quặc, Cắt tư và 4 giao diện (Tiệm pizza Ý, Võ đường kiếm sĩ, Phòng thí nghiệm laser, Xưởng kẹo) với bàn cắt và bố cục riêng là của Night Pass. Dùng thử 1 ván mỗi ngày hoặc mở khoá tất cả.",
+      lockP: "Bánh xoay, Cắt ba, Cắt tư trong sương và 4 giao diện (Tiệm pizza Ý, Võ đường kiếm sĩ, Phòng thí nghiệm laser, Xưởng kẹo) với bàn cắt và bố cục riêng là của Night Pass. Dùng thử 1 ván mỗi ngày hoặc mở khoá tất cả.",
       chP: "Bạn bè được {s} điểm với đúng bộ bánh này. Bạn cắt đều hơn không?", rankHint: "Chơi “Thử thách hôm nay” để lên bảng điểm nhé!",
       tut: "Vuốt một đường qua bánh để cắt — chia thật đều nhé!", tapNext: "Chạm để cắt bánh tiếp", needTwo: "Cắt thêm một đường nữa!", cross: "Hai đường phải KHÔNG cắt nhau trong bánh!", crossNeed: "Hai đường phải CẮT NHAU trong bánh!", miss: "Đường cắt phải đi qua bánh!", short: "Vuốt dài hơn nhé!",
       re: ["Chuẩn như thước kẻ!", "Quá đỉnh!", "Cắt đều phết!", "Cũng tạm!", "Lệch rồi!"],
       kinds: { sq: "Bánh chưng", circle: "Pizza", semi: "Dưa hấu", pent: "Bánh ngũ giác", blob: "Bánh kỳ quặc", L: "Bánh chữ L", star: "Bánh ngôi sao" },
       sk: { basic: ["Bếp ngày Tết", "Tet kitchen"], pizza: ["Tiệm pizza Ý", "Pizza parlour"], ninja: ["Võ đường kiếm sĩ", "Ninja dojo"], lab: ["Laser lab", "Laser lab"], candy: ["Xưởng kẹo", "Candy factory"] } },
     en: { sub: "Swipe a line to cut the treat into the most even pieces. The game shows each piece's area share!", note: "5 treats per round, the more even the better · everyone cuts the same set each day",
-      sc: "Score", rnd: "Treat", ex: "Ratio", hint0: "Swipe a straight line across the treat to cut it in half — make both halves equal.", hint1: "Swipe TWO lines that don't cross inside the treat to make 3 equal pieces.", hint2: "Odd shapes: judge by eye and halve them evenly!", hint3: "Swipe TWO lines that cross inside the treat to make 4 equal pieces.",
+      sc: "Score", rnd: "Treat", ex: "Ratio", hint0: "Swipe a straight line across the treat to cut it in half — make both halves equal.", hint1: "Spinning treat: it never stops turning — time your swipe to halve it evenly!", hint2: "Thirds: swipe TWO lines that don't cross inside the treat to make 3 equal pieces.", hint3: "Foggy quarters: you only see the treat around your finger. Swipe TWO crossing lines for 4 equal pieces!",
       end: "No treats left!", endS: "You scored {n}", rt: ["Blunt knife", "Not bad", "Steady blade", "Proper chef", "Blade master"],
       tx: "🔪 Slice It Even · {t}\nI scored {n}!\n{l}", ask: "Can you cut more evenly than me?",
-      lockP: "Thirds, Odd shapes, Quarters and 4 themes (Pizza parlour, Ninja dojo, Laser lab, Candy factory) with their own cutting tables and layouts are for Night Pass. Try one round a day or unlock everything.",
+      lockP: "Spinning treat, Thirds, Foggy quarters and 4 themes (Pizza parlour, Ninja dojo, Laser lab, Candy factory) with their own cutting tables and layouts are for Night Pass. Try one round a day or unlock everything.",
       chP: "A friend scored {s} on this exact set. Can you cut more evenly?", rankHint: "Play “Today's challenge” to make the leaderboard!",
       tut: "Swipe a line across the treat to cut it — make it even!", tapNext: "Tap for the next treat", needTwo: "Cut one more line!", cross: "The two lines must NOT cross inside the treat!", crossNeed: "The two lines must CROSS inside the treat!", miss: "The cut must pass through the treat!", short: "Swipe longer!",
       re: ["Ruler-perfect!", "Amazing!", "Pretty even!", "So-so!", "Off!"],
@@ -37,7 +37,7 @@ module.exports = {
   sfx: `{cut:()=>{tone(700,.08,"sawtooth",.06);tone(300,.12,"triangle",.07,.04)},ok:()=>{[660,880,1100].forEach((f,i)=>tone(f,.1,"triangle",.09,i*.06))},near:()=>{[520,660].forEach((f,i)=>tone(f,.1,"triangle",.08,i*.07))},bad:()=>tone(170,.25,"sawtooth",.07),end:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.09,i*.09)),combo:n=>{const b=440*Math.pow(1.122,Math.min(n/3,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.1,"triangle",.09,i*.05))}}`,
   gameJs: String.raw`
 let W=360,H=400,SC=1;const ctx=cv.getContext("2d");
-const CFG=[{parts:2,pool:["sq","circle","semi","pent","blob"]},{parts:3,pool:["sq","circle","pent","blob","semi"]},{parts:2,pool:["L","star","blob","blob","star"]},{parts:4,pool:["sq","circle","pent","semi","blob"]}],ROUNDS=5;
+const CFG=[{parts:2,pool:["sq","circle","semi","pent","blob"]},{parts:2,rot:1,pool:["sq","circle","pent","L","star"]},{parts:3,pool:["sq","circle","pent","blob","semi"]},{parts:4,fog:1,pool:["sq","circle","pent","semi","blob"]}],ROUNDS=5;
 const emj="'Apple Color Emoji','Segoe UI Emoji',sans-serif";
 function makeShape(kind,R,cx,cy,r0){const P=[];const rot=R()*6.283,r=r0;
  if(kind==="sq"){const s=r*.92,a=rot;for(let i=0;i<4;i++){const t=a+Math.PI/4+i*Math.PI/2;P.push([cx+Math.cos(t)*s*1.414,cy+Math.sin(t)*s*1.414])}}
@@ -51,7 +51,7 @@ function makeShape(kind,R,cx,cy,r0){const P=[];const rot=R()*6.283,r=r0;
  return P}
 function newGame(seed,mode,t,ch){const C=CFG[t],R=sub(seed,1),W0=360,H0=400,shapes=[];for(let i=0;i<ROUNDS;i++){const kind=C.pool[i%C.pool.length];shapes.push({kind,seed:Math.floor(R()*1e9)})}
  const D={seed,mode,t,C,ch:ch||null,shapes,i:0,res:[],lines:[],pieces:null,st:"cut",over:false,reason:"end",time:0,dur:1e9,beat:false,maxCombo:0,nt:0,drag:null,anim:0,msg:"",poly:null};setPoly(D);return D}
-function setPoly(D){const s=D.shapes[D.i];D.poly=makeShape(s.kind,mulberry32(s.seed),W/2,H/2,Math.min(W,H)*.29);D.lines=[];D.pieces=null;D.st="cut";D.drag=null;D.anim=0}
+function setPoly(D){const s=D.shapes[D.i];D.poly=makeShape(s.kind,mulberry32(s.seed),W/2,H/2,Math.min(W,H)*.29);D.base=D.poly.map(p=>p.slice());D.rot=0;D.lines=[];D.pieces=null;D.st="cut";D.drag=null;D.anim=0}
 const scoreOf=D=>D.res.reduce((a,r)=>a+r.sc,0);
 const rankIdx=n=>{const k=n/(ROUNDS);return k>=900?4:k>=780?3:k>=600?2:k>=300?1:0};
 const SF=n=>n;
@@ -71,7 +71,7 @@ function drCut(D,a,b){const len=Math.hypot(b[0]-a[0],b[1]-a[1]);if(len<26){toast
  if(idx<=2){NPJuice.text($("play"),T("re")[idx],{color:"#ffd24a",top:"24%",size:6});if(idx<=1)burst(14)}
  hud();clearTimeout(D.nt);D.nt=setTimeout(()=>{if(G===D&&D.st==="res")drNext(D)},2600)}
 function drNext(D){clearTimeout(D.nt);D.i++;if(D.i>=ROUNDS){D.over=true;sfx.end();finish(D);return}setPoly(D);hud()}
-function step(D,dt){D.time+=dt;if(D.st==="res")D.anim=Math.min(1,D.anim+dt*2.2)}
+function step(D,dt){D.time+=dt;if(D.st==="res")D.anim=Math.min(1,D.anim+dt*2.2);if(D.C.rot&&D.st==="cut"&&D.base){D.rot+=dt*(.9+D.i*.12);const co=Math.cos(D.rot),si=Math.sin(D.rot);D.poly=D.base.map(p=>{const x=p[0]-W/2,y=p[1]-H/2;return[W/2+x*co-y*si,H/2+x*si+y*co]})}}
 function burst(n){if(!isProSk()&&n<12)return;const host=$("play"),L=(skinOf().deco||["⭐","🔪"]);for(let i=0;i<n;i++){if(host.querySelectorAll(".eb2").length>30)break;const e=document.createElement("i"),a=Math.random()*6.283,d=14+Math.random()*30;e.className="eb2";e.textContent=L[i%L.length];e.style.left="50%";e.style.top="46%";e.style.setProperty("--dx",Math.cos(a)*d+"cqw");e.style.setProperty("--dy",(Math.sin(a)*d*.8-4)+"cqw");e.style.setProperty("--rt",(Math.random()*120-60)+"deg");host.appendChild(e);setTimeout(()=>e.remove(),950)}}
 const fp=x=>(Math.round(x*10)/10).toFixed(1).replace(".",LANG==="vi"?",":".");
 function HUD(D){const last=D.res[D.res.length-1];return[[scoreOf(D),"sc"],[Math.min(D.i+1,ROUNDS)+"/"+ROUNDS,"rnd"],[last?last.ratio.map(fp).join("/"):"—","ex"]]}
@@ -96,11 +96,13 @@ function draw(){if(!ctx||!cv.width)return;const sk=skinOf(),dm=sk.dim||[360,400]
   if(D.msg&&D.lines.length){c.fillStyle=sk.text||(dk?"#fff":"#3b1f10");c.font="800 16px 'Be Vietnam Pro',system-ui";c.textAlign="center";c.fillText(D.msg,W/2,H-14)}}
  else if(D.pieces){const k=D.anim,cxs=W/2,cys=H/2;D.pieces.forEach((p,i)=>{const bb=p.reduce((a,q)=>[a[0]+q[0],a[1]+q[1]],[0,0]),mx=bb[0]/p.length,my=bb[1]/p.length,dx=mx-cxs,dy=my-cys,d=Math.hypot(dx,dy)||1,off=14*k;paintShape(c,p,D.shapes[D.i].kind,sk,dx/d*off,dy/d*off,tm);const r=D.res[D.res.length-1].ratio;const pct=(area(p)/area(D.poly)*100);c.save();c.font="800 20px 'Be Vietnam Pro',system-ui";c.textAlign="center";c.fillStyle="#fff";c.shadowColor="rgba(0,0,0,.6)";c.shadowBlur=6;c.fillText(fp(pct)+"%",mx+dx/d*off,my+dy/d*off+7);c.restore()});
   c.save();c.textAlign="center";c.fillStyle=sk.text||(dk?"#fff":"#3b1f10");c.font="400 34px Bungee,'Arial Black',system-ui";c.shadowColor="rgba(0,0,0,.25)";c.shadowBlur=6;c.fillText("+"+D.res[D.res.length-1].sc,W/2,34);c.font="800 15px 'Be Vietnam Pro',system-ui";c.shadowBlur=0;c.fillText(T("re")[D.reIdx]+" · "+T("tapNext"),W/2,H-14);c.restore()}
+
+ if(D.C.fog&&D.st==="cut"){const hv=D.drag?D.drag.b:(D.hov||[W/2,H/2]),g=c.createRadialGradient(hv[0],hv[1],38,hv[0],hv[1],118);g.addColorStop(0,"rgba(12,14,24,0)");g.addColorStop(1,"rgba(12,14,24,.97)");c.fillStyle=g;c.fillRect(0,0,W,H);c.font="26px "+emj;c.textAlign="center";c.fillStyle="#fff";c.globalAlpha=.5;c.fillText("🌫️",W-26,26);c.globalAlpha=1}
  if(sk.fx)sk.fx(c,W,H,tm,dk)}
 function setPolyKeep(D){const keep=D.st,l=D.lines;if(D.st==="cut")setPoly(D)}
 function pt(e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H]}
 cv.addEventListener("pointerdown",e=>{const D=G;if(!D||D.over||paused)return;if(e.pointerType==="mouse"&&e.button!==0)return;e.preventDefault();if(D.st==="res"){drNext(D);return}const p=pt(e);D.drag={a:p,b:p};try{cv.setPointerCapture(e.pointerId)}catch(x){}});
-cv.addEventListener("pointermove",e=>{const D=G;if(!D||!D.drag)return;D.drag.b=pt(e)});
+cv.addEventListener("pointermove",e=>{const D=G;if(!D)return;D.hov=pt(e);if(!D.drag)return;D.drag.b=pt(e)});
 const endCut=()=>{const D=G;if(!D||!D.drag)return;const d=D.drag;D.drag=null;if(D.st==="cut")drCut(D,d.a,d.b)};
 cv.addEventListener("pointerup",endCut);cv.addEventListener("pointercancel",endCut);
 function onBegin(D){fitCanvas()}
