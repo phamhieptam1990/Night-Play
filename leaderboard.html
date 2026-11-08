@@ -147,7 +147,7 @@ function texts() {
   document.querySelectorAll("#langSeg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.l === root.lang)));
   buildPicker(); $("gname").textContent = (EMO[game] || "🎮") + " " + NPS.gameName(game);
 }
-const EMO = { "gia-cho-viet": "🥬", "doi-doi-2048": "🏠", "ga-me-ban-trung": "🐔", "me-cung-truyen-tay": "🌀", "xin-nghi": "📝", "cho-hang-kieu-viet": "🛵", "xe-ca-phe": "☕", "duong-ray": "🚂", "song-sot-cuoi-thang": "💰", "shipper-sieu-toc": "🛵", "ne-o-ga": "🛵", "noi-mot-net": "✍️", "mat-tinh-khong": "👁️", "cat-banh-chung": "🔪", "ve-mot-net": "✏️", "bao-nhieu-giay": "⏱️", "dap-deadline": "⏰", "cozy-wings": "🐦",
+const EMO = { "gia-cho-viet": "🥬", "doi-doi-2048": "🏠", "ga-me-ban-trung": "🐔", "me-cung-truyen-tay": "🌀", "xin-nghi": "📝", "cho-hang-kieu-viet": "🛵", "xe-ca-phe": "☕", "duong-ray": "🚂", "xay-cau-tre": "🎋", "song-sot-cuoi-thang": "💰", "shipper-sieu-toc": "🛵", "ne-o-ga": "🛵", "noi-mot-net": "✍️", "mat-tinh-khong": "👁️", "cat-banh-chung": "🔪", "ve-mot-net": "✏️", "bao-nhieu-giay": "⏱️", "dap-deadline": "⏰", "cozy-wings": "🐦",
   "pop-fly": "🐦", "ten-lua-cua-be": "🚀", "be-noi-dung-khong": "🎤", "doan-tuoi-nao": "🧠", "bo-me-5-giay": "⏱️", "con-vat-an-so": "🐊", "ve-chu-quai-vat": "👾", "nhay-theo-so": "💃", "be-dau-bo-me": "👶", "qua-song": "🌊", "thap-vong-mau": "🌈", "lang-cua-be": "🏡" };
 
 const DOTS = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="19" cy="12" r="1.9"/></svg>';

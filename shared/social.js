@@ -20,6 +20,7 @@ window.NPS = (function () {
     "cho-hang-kieu-viet": { name: { vi: "Chở Hàng Kiểu Việt", en: "Overloaded Rider" }, url: "cozyplay/games/cho-hang-kieu-viet/index.html", board: true, site: "cozyplay" },
     "xe-ca-phe": { name: { vi: "Xe Cà Phê Của Tôi", en: "My Coffee Cart" }, url: "cozyplay/games/xe-ca-phe/index.html", board: true, site: "cozyplay" },
     "duong-ray": { name: { vi: "Đường Ray", en: "Rail Rush" }, url: "cozyplay/games/duong-ray/index.html", board: true, site: "cozyplay" },
+    "xay-cau-tre": { name: { vi: "Xây Cầu Tre", en: "Bamboo Bridge" }, url: "cozyplay/games/xay-cau-tre/index.html", board: true, site: "cozyplay" },
     "song-sot-cuoi-thang": { name: { vi: "Sống Sót Đến Cuối Tháng", en: "Survive to Payday" }, url: "cozyplay/games/song-sot-cuoi-thang/index.html", board: true, site: "cozyplay" },
     "shipper-sieu-toc": { name: { vi: "Shipper Siêu Tốc", en: "Speedy Shipper" }, url: "cozyplay/games/shipper-sieu-toc/index.html", board: true, site: "cozyplay" },
     "ne-o-ga": { name: { vi: "Né Ổ Gà Mùa Mưa", en: "Dodge the Potholes" }, url: "cozyplay/games/ne-o-ga/index.html", board: true, site: "cozyplay" },
