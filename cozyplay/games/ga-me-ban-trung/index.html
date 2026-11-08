@@ -53,6 +53,7 @@ canvas#cv{border-radius:3cqw;background:linear-gradient(var(--field),var(--field
 @container (max-height:520px){.hero{display:none}.hint{display:none}}
 #bSkin,#bAlb{min-width:44px;min-height:44px}
 .row>.btn.alt.grow{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;padding-left:2.4cqw;padding-right:2.4cqw;font-size:min(3.9cqw,15px)}
+.ty{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:.6cqw}.ty .t{display:flex;align-items:center;justify-content:center;min-height:2.3em;line-height:1.15;overflow-wrap:anywhere}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 <style id="skCss"></style>
@@ -250,7 +251,7 @@ function updHud(){if(!G)return;if(!$("game").hidden&&G)$("ttl").textContent=TYPE
  $("gHint").textContent=G.cfg.shots?T("left",{n:Math.max(0,G.cfg.shots-G.used)}):T("hint0")}
 function renderHome(){const sv=getSave(),k=dayKey(),done=TY?(sv.dayT||{})[k+"|"+TY]:sv.days[k],alb=getAlb(),tot=ANIMS().length;$("ttl").textContent=T("title");$("hSub").textContent=T("sub");$("dN").textContent="#"+dayNo(k);$("dT").textContent=T("daily");$("dS").textContent=done!=null?T("done",{s:done}):T("dS");if(TY)$("dS").textContent+=" · "+TYPES[TY][0]+" "+L2([TYPES[TY][1],TYPES[TY][2]]);$("bFree").textContent=T("free");$("hNote").textContent=T("note");$("bLang").textContent=LANG==="vi"?"EN":"VI";$("bSnd").textContent=snd()?"🔊":"🔇";
  $("hHero").textContent=skinOf().hero||"🐔🥚";renderTypes();$("hChips").innerHTML="";[sv.streak?T("streak",{n:sv.streak}):"",sv.best?T("best",{n:sv.best}):"",T("alb",{a:Object.keys(alb).length,b:tot})].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("hChips").appendChild(c)})}
-function renderTypes(){const b=$("tys");b.innerHTML="";TYPES.forEach((t,i)=>{const e=document.createElement("button");e.type="button";e.className="ty"+(TY===i?" on":"")+(tLocked(i)?" lock":"");e.innerHTML='<span class="e">'+t[0]+"</span>"+L2([t[1],t[2]]);e.onclick=()=>{if(tLocked(i)){openPay(i,null);return}TY=i;LS.set("gm-type",i);renderHome()};b.appendChild(e)})}
+function renderTypes(){const b=$("tys");b.innerHTML="";TYPES.forEach((t,i)=>{const e=document.createElement("button");e.type="button";e.className="ty"+(TY===i?" on":"")+(tLocked(i)?" lock":"");e.innerHTML='<span class="e">'+t[0]+'</span><span class="t">'+L2([t[1],t[2]])+"</span>";e.onclick=()=>{if(tLocked(i)){openPay(i,null);return}TY=i;LS.set("gm-type",i);renderHome()};b.appendChild(e)})}
 const TYRULE=[["",""],["Giải thoát 5 gà con nhốt trong bàn","Free the 5 chicks trapped in the board"],["Trứng bom nổ lan, trứng băng phải làm tan trước","Bomb eggs blast, ice eggs must thaw first"],["60 giây, hàng mới xuống nhanh hơn","60 seconds, new rows drop faster"]];
 function typeBanner(){const t=G.t;if(t>0){NPJuice.text($("play"),TYPES[t][0]+" "+L2([TYPES[t][1],TYPES[t][2]]),{color:"#ffd24a",top:"22%",size:6.4});setTimeout(()=>{if(G&&!G.over)toast(L2(TYRULE[t]),2400)},400)}}
 function begin(seed,mode,t,ch){t=t==null?(mode==="daily"?0:TY):t;if(tLocked(t))t=0;newGame(seed,mode,t,ch);show("game");applySkin();fitCanvas();typeBanner();updHud();window.NP&&NP.start()}

@@ -51,6 +51,7 @@ body{display:flex;justify-content:center}
 @container (max-height:520px){.hero{display:none}.hint{display:none}.tb .ib,.dpad .ib{width:9cqw;height:9cqw;min-width:36px;min-height:36px;font-size:4cqw}.art{max-height:30cqh}}
 #bSkin,#bAlb{min-width:44px;min-height:44px}
 .row>.btn.alt.grow{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;padding-left:2.4cqw;padding-right:2.4cqw;font-size:min(3.9cqw,15px)}
+.ty{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:.6cqw}.ty .t{display:flex;align-items:center;justify-content:center;min-height:2.3em;line-height:1.15;overflow-wrap:anywhere}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 <style id="skCss"></style>
@@ -254,7 +255,7 @@ function updHud(){if(!G)return;if(!$("game").hidden&&G)$("ttl").textContent=TYPE
 setInterval(()=>{if(G&&!G.over&&!$("game").hidden&&G.t0)updHud()},500);
 function renderHome(){const sv=getSave(),k=dayKey(),done=TY?(sv.dayT||{})[k+"|"+TY]:sv.days[k];$("ttl").textContent=T("title");$("hSub").textContent=T("sub");$("dN").textContent="#"+dayNo(k);$("dT").textContent=T("daily");$("dS").textContent=done!=null?T("done",{s:done}):T("dS");if(TY)$("dS").textContent+=" · "+TYPES[TY][0]+" "+L2([TYPES[TY][1],TYPES[TY][2]]);$("bFree").textContent=T("free");$("bMake").textContent=T("make");$("hNote").textContent=T("note");$("bLang").textContent=LANG==="vi"?"EN":"VI";$("bSnd").textContent=snd()?"🔊":"🔇";
  $("hHero").textContent=skinOf().hero||"🧭🌀";syncSize();renderTypes();$("hChips").innerHTML="";[sv.streak?T("streak",{n:sv.streak}):"",sv.best?T("best",{n:sv.best}):"",sv.total?T("tot",{n:sv.total}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("hChips").appendChild(c)})}
-function renderTypes(){const b=$("tys");b.innerHTML="";TYPES.forEach((t,i)=>{const e=document.createElement("button");e.type="button";e.className="ty"+(TY===i?" on":"")+(tLocked(i)?" lock":"");e.innerHTML='<span class="e">'+t[0]+"</span>"+L2([t[1],t[2]]);e.onclick=()=>{if(tLocked(i)){openPay(i,null);return}TY=i;LS.set("mz-type",i);renderHome()};b.appendChild(e)})}
+function renderTypes(){const b=$("tys");b.innerHTML="";TYPES.forEach((t,i)=>{const e=document.createElement("button");e.type="button";e.className="ty"+(TY===i?" on":"")+(tLocked(i)?" lock":"");e.innerHTML='<span class="e">'+t[0]+'</span><span class="t">'+L2([t[1],t[2]])+"</span>";e.onclick=()=>{if(tLocked(i)){openPay(i,null);return}TY=i;LS.set("mz-type",i);renderHome()};b.appendChild(e)})}
 const TYRULE=[["",""],["Chỉ thấy quanh bạn — nghe Nóng/Lạnh","See only nearby — listen for warmer/colder"],["Cứ 7 nước, vài đoạn tường tự hiện hoặc biến mất (viền cam). Luôn còn đường tới 🏁","Every 7 moves a few walls appear or vanish (orange glow). A path to 🏁 always remains"],["Mê cung khổng lồ","Giant maze"]];
 function typeBanner(){const t=G.t;if(t>0){NPJuice.text($("play"),TYPES[t][0]+" "+L2([TYPES[t][1],TYPES[t][2]]),{color:"#ffd24a",top:"22%",size:6.4});setTimeout(()=>{if(G&&!G.over)toast(L2(TYRULE[t]),2400)},400)}}
 function begin(seed,mode,t,ch,custom,nn){t=t==null?(mode==="daily"?0:TY):t;if(tLocked(t))t=0;newGame(seed,mode,t,ch,custom,nn);show("game");applySkin();syncTb();typeBanner();sizeCanvas();updHud();draw();window.NP&&NP.start()}

@@ -56,6 +56,7 @@ body{display:flex;justify-content:center}
 @container (max-height:520px){.hero{font-size:9cqw}.lad{display:none}.st b{font-size:5cqw}}
 #bSkin,#bAlb{min-width:44px;min-height:44px}
 .row>.btn.alt.grow{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;padding-left:2.4cqw;padding-right:2.4cqw;font-size:min(3.9cqw,15px)}
+.ty{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:.6cqw}.ty .t{display:flex;align-items:center;justify-content:center;min-height:2.3em;line-height:1.15;overflow-wrap:anywhere}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -194,7 +195,7 @@ function toast(m,ms){const t=$("toast");t.textContent=m;t.hidden=false;clearTime
 function renderHome(){const sv=getSave(),k=dayKey(),done=TY?(sv.dayT||{})[k+"|"+TY]:sv.days[k];$("ttl").textContent=T("title");$("hSub").textContent=T("sub");$("dN").textContent="#"+dayNo(k);$("dT").textContent=T("daily");$("dS").textContent=done!=null?T("done",{s:done}):T("dS");if(TY)$("dS").textContent+=" · "+TYPES[TY][0]+" "+L2([TYPES[TY][1],TYPES[TY][2]]);$("bFree").textContent=T("free");$("hNote").textContent=T("note");$("bLang").textContent=LANG==="vi"?"EN":"VI";$("bSnd").textContent=snd()?"🔊":"🔇";
  $("hChips").innerHTML="";[sv.streak?T("streak",{n:sv.streak}):"",sv.best?T("best",{n:sv.best}):"",sv.total?T("tot",{n:sv.total}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("hChips").appendChild(c)});
  $("hHero").textContent=lad()[0][0]+"➜"+lad()[10][0];$("hSub").textContent=L2(PF.sub[TY]||PF.sub[0]);renderTypes();$("hLad").innerHTML="";lad().forEach(l=>{const s=document.createElement("i");s.textContent=l[0];s.className="on";$("hLad").appendChild(s)})}
-function renderTypes(){const b=$("tys");b.innerHTML="";PF.types.forEach((t,i)=>{const e=document.createElement("button");e.type="button";e.className="ty"+(TY===i?" on":"")+(tLocked(i)?" lock":"");e.innerHTML='<span class="e">'+t[0]+"</span>"+L2([t[1],t[2]]);e.onclick=()=>{if(tLocked(i)){openPay(i,null);return}TY=i;LS.set("d48-type",i);applySkin();renderHome()};b.appendChild(e)})}
+function renderTypes(){const b=$("tys");b.innerHTML="";PF.types.forEach((t,i)=>{const e=document.createElement("button");e.type="button";e.className="ty"+(TY===i?" on":"")+(tLocked(i)?" lock":"");e.innerHTML='<span class="e">'+t[0]+'</span><span class="t">'+L2([t[1],t[2]])+"</span>";e.onclick=()=>{if(tLocked(i)){openPay(i,null);return}TY=i;LS.set("d48-type",i);applySkin();renderHome()};b.appendChild(e)})}
 function typeBanner(){const t=G.t;if(t>0){NPJuice.text($("play"),TYPES[t][0]+" "+L2([TYPES[t][1],TYPES[t][2]]),{color:"#ffd24a",top:"22%",size:6.4});setTimeout(()=>{if(G&&!G.over)toast(L2(["Thang mới: ","New ladder: "])+lad()[0][0]+" → "+lad()[10][0],2400)},400)}}
 function begin(seed,mode,cap,ch,t){t=t==null?(mode==="daily"?0:TY):t;if(tLocked(t))t=0;newGame(seed,mode,cap,ch,t);show("game");applySkin();buildBoard();render();typeBanner();window.NP&&NP.start()}
 /* ===== KẾT THÚC / CHIA SẺ ===== */
