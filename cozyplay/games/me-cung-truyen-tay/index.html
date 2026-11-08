@@ -38,7 +38,7 @@ body{display:flex;justify-content:center}
 .tgt{display:flex;align-items:center;gap:2cqw;background:var(--panel);border:.5cqw solid var(--line);border-radius:99cqw;padding:.8cqw 3cqw;font:800 3.2cqw var(--body)}.tgt i{flex:1;height:2.2cqw;border-radius:9cqw;background:color-mix(in srgb,var(--ink) 14%,transparent);overflow:hidden;font-style:normal}.tgt b{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffb020,#ff5a3d);transition:width .3s}.tgt.beat{border-color:var(--good);box-shadow:0 0 3cqw color-mix(in srgb,var(--good) 55%,transparent)}.tgt.beat b{background:var(--good)}
 .cvw{flex:1;min-height:0;display:flex;justify-content:center;align-items:center}
 #cv,#mc{border-radius:3cqw;border:.5cqw solid var(--line);touch-action:none;display:block;box-shadow:0 1cqw 0 rgba(0,0,0,.14);background:var(--paper)}
-.hint{text-align:center;margin:0}
+.hint{text-align:center;margin:0}.szr{gap:1.6cqw}.szr input{width:15cqw;height:9cqw;min-height:36px;border:1.5px solid color-mix(in srgb,var(--ink) 38%,transparent);border-radius:3cqw;background:var(--panel);color:var(--ink);font:800 4cqw var(--body);text-align:center;-moz-appearance:textfield}.szr input::-webkit-outer-spin-button,.szr input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}.szr .mut{font-weight:800}
 .big{font:400 11cqw var(--display);color:var(--accent);text-align:center;line-height:1.1}.rk{text-align:center;font:800 4.6cqw var(--body)}
 .art{width:100%;aspect-ratio:1;max-height:36cqh;display:flex;justify-content:center}.art canvas{height:100%;width:auto;max-width:100%}
 .tools{display:flex;gap:2cqw;justify-content:center}
@@ -46,6 +46,7 @@ body{display:flex;justify-content:center}
 .ov h2{margin:0;font:400 6cqw var(--display);color:var(--accent)}.ov p{margin:0;font-size:3.9cqw;line-height:1.35}
 .sk{display:grid;grid-template-columns:1fr 1fr;gap:2.4cqw}.skc{position:relative;border:1.5px solid color-mix(in srgb,var(--ink) 30%,transparent);border-radius:3.4cqw;padding:2.2cqw;background:var(--panel);color:var(--ink);font:800 3.6cqw var(--body);cursor:pointer;min-height:44px}.skc.on{border-color:var(--accent)}.skc .e{font-size:9cqw;display:block}.skc.lock{opacity:.75}.skc.lock::after{content:'🔒';position:absolute;top:1.2cqw;right:2cqw;font-size:4cqw}
 .toast{position:absolute;left:50%;top:15cqw;transform:translateX(-50%);background:#fff;color:#111;padding:1.8cqw 4cqw;border-radius:99cqw;font-weight:800;font-size:3.6cqw;z-index:9;max-width:92%;text-align:center;box-shadow:0 1cqw 3cqw rgba(0,0,0,.3)}
+@container (max-height:700px){#hSub,#hNote{display:none}.hero{font-size:11cqw}}
 @container (max-height:640px){#hSub,#hNote{display:none}.hero{font-size:11cqw}.ty .e{font-size:6cqw}}
 @container (max-height:520px){.hero{display:none}.hint{display:none}.art{max-height:30cqh}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -61,6 +62,7 @@ body{display:flex;justify-content:center}
     <p class="mut" id="hSub" style="text-align:center;margin:0;font-size:3.6cqw"></p>
     <div class="tys" id="tys"></div>
     <button class="btn dbtn" id="bDaily" type="button"><span class="n" id="dN"></span><span class="grow"><b id="dT"></b><br><span id="dS" style="font-size:3.3cqw;opacity:.85"></span></span><span>▶</span></button>
+    <div class="row szr"><span class="mut" id="szL"></span><button class="ib sz" id="szM" type="button" aria-label="-">−</button><input id="szI" type="number" min="5" max="15" inputmode="numeric" aria-label="size"><button class="ib sz" id="szP" type="button" aria-label="+">+</button></div>
     <div class="row"><button class="btn alt grow" id="bFree" type="button"></button><button class="btn alt grow" id="bMake" type="button"></button><button class="ib" id="bSkin" type="button" style="width:12cqw;height:12cqw">🎨</button></div>
     <div class="chips" id="hChips"></div>
     <p class="mut" id="hNote" style="text-align:center;margin:0"></p>
@@ -73,6 +75,7 @@ body{display:flex;justify-content:center}
   </section>
   <section class="scr" id="mk" hidden>
     <p class="mut hint" id="mkHint"></p>
+    <div class="row szr"><span class="mut" id="mkSzL"></span><button class="ib sz" id="mkM" type="button" aria-label="-">−</button><input id="mkI" type="number" min="5" max="12" inputmode="numeric" aria-label="size"><button class="ib sz" id="mkP" type="button" aria-label="+">+</button></div>
     <div class="cvw" id="mcw"><canvas id="mc"></canvas></div>
     <div class="tools"><button class="btn alt" id="mkTool" type="button"></button><button class="btn alt" id="mkRand" type="button">🎲</button><button class="btn alt" id="mkClr" type="button">🧹</button></div>
     <p class="mut hint" id="mkInfo"></p>
@@ -92,17 +95,17 @@ body{display:flex;justify-content:center}
 </div>
 <script>
 "use strict";
-const GID="me-cung-truyen-tay",$=id=>document.getElementById(id),MAXS=1000,N0=8,DAILY_N=9,GIANT_N=13;
+const GID="me-cung-truyen-tay",$=id=>document.getElementById(id),MAXS=1000,N0=8,DAILY_N=9,GIANT_N=13,SZMIN=5,SZMAX=15,MKMAX=12;
 const LS={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const pickLang=()=>{const q=new URLSearchParams(location.search).get("lang");let st=null;try{st=localStorage.getItem("lang")}catch(e){}return [q,st].find(x=>x==="vi"||x==="en")||(/^vi/i.test(navigator.language||"")?"vi":"en")};
 let LANG=pickLang();const L2=a=>LANG==="vi"?a[0]:a[1];
 const TYPES=[["🧭","Cổ điển","Classic"],["🔦","Mê cung tối","Dark maze"],["🌀","Tường dịch chuyển","Shifting"],["🏔️","Khổng lồ","Giant"]];
-const I18={vi:{title:"Mê Cung Truyền Tay",sub:"Tự vẽ mê cung rồi gửi cho bạn bè thoát. Nét đường đi của bạn thành một bức tranh để khoe!",daily:"Mê cung hôm nay",dS:"Cả nước cùng một mê cung",done:"Hôm nay bạn được {s} · chơi lại để cao hơn",free:"🎲 Mê cung mới",make:"✏️ Tự vẽ",streak:"🔥 {n} ngày",best:"🏆 Cao nhất {n}",tot:"🎮 {n} lượt",note:"Vuốt (hoặc phím mũi tên) để trượt tới ngã rẽ. Nhặt 3 sao, tới 🏁!",
+const I18={vi:{title:"Mê Cung Truyền Tay",sub:"Tự vẽ mê cung rồi gửi cho bạn bè thoát. Nét đường đi của bạn thành một bức tranh để khoe!",daily:"Mê cung hôm nay",dS:"Cả nước cùng một mê cung",done:"Hôm nay bạn được {s} · chơi lại để cao hơn",free:"🎲 Mê cung mới",size:"Cỡ mê cung",szN:"{n}×{n} ô",make:"✏️ Tự vẽ",streak:"🔥 {n} ngày",best:"🏆 Cao nhất {n}",tot:"🎮 {n} lượt",note:"Vuốt (hoặc phím mũi tên) để trượt tới ngã rẽ. Nhặt 3 sao, tới 🏁!",
  tm:"Giây",mv:"Nước",st:"Sao",hint:"Vuốt để trượt đến ngã rẽ tiếp theo",endT:"Thoát được rồi!",endTo:"Hết giờ",rkA:["Lạc đường","Mò được","Tìm được đường","Dẫn đường giỏi","Bậc thầy mê cung"],
  tgt:"⚔ Mục tiêu {n}",beat:"Vượt điểm bạn bè rồi! 🎉",rem:"Chạy lại cùng mê cung",cmb:["Hay!","Giỏi!","Tuyệt!","Siêu hạng!"],vsC:"Thách đấu: bạn {a} — người gửi {b}",win:"Bạn thoát nhanh hơn! 🎉",lose:"Chưa bằng, thử lại nhé!",tie:"Hòa!",ch:"Bạn bị thách!",chP:"Bạn bè đạt {s} điểm ở mê cung này. Bạn thoát nhanh hơn không?",chGo:"Vào mê cung",chM:"Mê cung do bạn bè tự vẽ!",
  share:"Mê Cung Truyền Tay",ask:"Bạn thoát nhanh hơn mình không?",copied:"Đã chép — dán cho bạn bè nhé!",skin:"Giao diện",lockP:"Loại mê cung và giao diện này dành cho Night Pass. Dùng thử 1 ván mỗi ngày hoặc mở khoá tất cả.",trial:"🎈 Dùng thử 1 ván",go:"Mở Night Pass",tried:"Hôm nay bạn đã dùng thử rồi",chL:"Mê cung này thuộc loại “{t}” (Night Pass). Dùng thử 1 ván để nhận thách.",
  rankHint:"Chơi “Mê cung hôm nay” để lên bảng điểm nhé!",mkH:"Vẽ lối đi: kéo ngón tay qua các ô để đục tường (⛏) hoặc xây lại tường (🧱).",mkCarve:"⛏ Đục tường",mkWall:"🧱 Xây tường",mkInfo:"Đường ngắn nhất: {n} ô",mkNo:"Chưa có đường từ 🟢 tới 🏁!",mkShort:"Lối đi hơi ngắn, vẽ dài thêm nhé",mkGo:"▶ Chơi thử rồi gửi",hot:"Nóng!",cold:"Lạnh!",shift:"Tường vừa dịch chuyển!"},
- en:{title:"Maze Pass-Along",sub:"Draw your own maze and send it to friends. Your path becomes a piece of art to share!",daily:"Today's maze",dS:"Everyone gets the same maze",done:"Today you scored {s} · play again to beat it",free:"🎲 New maze",make:"✏️ Draw",streak:"🔥 {n} days",best:"🏆 Best {n}",tot:"🎮 {n} runs",note:"Swipe (or arrow keys) to slide to the next junction. Grab 3 stars, reach 🏁!",
+ en:{title:"Maze Pass-Along",sub:"Draw your own maze and send it to friends. Your path becomes a piece of art to share!",daily:"Today's maze",dS:"Everyone gets the same maze",done:"Today you scored {s} · play again to beat it",free:"🎲 New maze",size:"Maze size",szN:"{n}×{n} cells",make:"✏️ Draw",streak:"🔥 {n} days",best:"🏆 Best {n}",tot:"🎮 {n} runs",note:"Swipe (or arrow keys) to slide to the next junction. Grab 3 stars, reach 🏁!",
  tm:"Sec",mv:"Moves",st:"Stars",hint:"Swipe to slide to the next junction",endT:"You escaped!",endTo:"Time's up",rkA:["Lost","Wandering","Found a way","Good guide","Maze master"],
  tgt:"⚔ Target {n}",beat:"You passed your friend! 🎉",rem:"Rerun same maze",cmb:["Nice!","Great!","Awesome!","Legendary!"],vsC:"Challenge: you {a} — sender {b}",win:"You escaped faster! 🎉",lose:"Not quite — try again!",tie:"Tie!",ch:"You're challenged!",chP:"A friend scored {s} in this maze. Can you escape faster?",chGo:"Enter the maze",chM:"A maze drawn by your friend!",
  share:"Maze Pass-Along",ask:"Can you escape faster than me?",copied:"Copied — paste it to a friend!",skin:"Theme",lockP:"This maze type and theme are for Night Pass. Try one run a day or unlock everything.",trial:"🎈 Try 1 run",go:"Get Night Pass",tried:"You already used today's trial",chL:"This maze uses the “{t}” type (Night Pass). Try one run to accept.",
@@ -127,7 +130,8 @@ function bitsOf(m){const out=[];for(let r=0;r<m.n;r++)for(let c=0;c<m.n;c++){if(
 function fromBits(bits,n){const m={n,E:mkGrid(n,true),S:mkGrid(n,true)};let i=0;for(let r=0;r<n;r++)for(let c=0;c<n;c++){if(c<n-1)m.E[r][c]=!!bits[i++];if(r<n-1)m.S[r][c]=!!bits[i++]}return m}
 const bitsToB64=bits=>{const bytes=[];for(let i=0;i<bits.length;i+=8){let v=0;for(let j=0;j<8;j++)v=(v<<1)|(bits[i+j]||0);bytes.push(v)}return btoa(String.fromCharCode(...bytes)).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")};
 const b64ToBits=(s,len)=>{try{let t=s.replace(/-/g,"+").replace(/_/g,"/");while(t.length%4)t+="=";const raw=atob(t),bits=[];for(const ch of raw)for(let j=7;j>=0;j--)bits.push((ch.charCodeAt(0)>>j)&1);return bits.length>=len?bits.slice(0,len):null}catch(e){return null}};
-const EDGES8=2*N0*(N0-1);
+const edgesOf=n=>2*n*(n-1),clampN=(v,a,b)=>Math.max(a,Math.min(b,Math.round(+v)||a));
+let SZ=clampN(LS.get("mz-size",8),SZMIN,SZMAX),MKN=clampN(LS.get("mz-mk",8),SZMIN,MKMAX);
 function bfs(m,tr,tc){const n=m.n,D=mkGrid(n,-1),q=[[tr,tc]];D[tr][tc]=0;for(let i=0;i<q.length;i++){const [r,c]=q[i];for(let d=0;d<4;d++)if(openAt(m,r,c,d)){const rr=r+DIRS[d][0],cc=c+DIRS[d][1];if(D[rr][cc]<0){D[rr][cc]=D[r][c]+1;q.push([rr,cc])}}}return D}
 function pickStars(m,seed,D){const n=m.n,mx=D[0][0],cand=[];for(let r=0;r<n;r++)for(let c=0;c<n;c++){if((r||c)&&!(r===n-1&&c===n-1)&&D[r][c]>=mx*.25&&D[r][c]<=mx*.9)cand.push([r,c])}const R=sub(seed,321),out=[];while(out.length<3&&cand.length){out.push(cand.splice(Math.floor(R()*cand.length),1)[0])}return out}
 /* ===== NIGHT PASS / GIAO DIỆN ===== */
@@ -147,8 +151,8 @@ const sfx={mv:()=>tone(300,.05,"triangle",.05),bump:()=>tone(110,.1,"square",.07
 let G=null,CH=null,lastEnd=0;
 const getSave=()=>LS.get("mz-save",{streak:0,last:"",best:0,total:0,days:{}});
 const newSeed=()=>(Math.random()*4294967296)>>>0;
-const sizeOf=(t,mode)=>mode==="daily"?DAILY_N:t===3?GIANT_N:N0;
-function newGame(seed,mode,t,ch,custom){let m,n;if(custom){n=N0;m=fromBits(custom,n)}else{n=sizeOf(t,mode);m=genMaze(n,seed)}
+const sizeOf=(t,mode)=>mode==="daily"?DAILY_N:t===3?Math.max(GIANT_N,SZ):SZ;
+function newGame(seed,mode,t,ch,custom,nn){let m,n;if(custom){n=nn||(ch&&ch.n)||N0;m=fromBits(custom,n)}else{n=nn||(ch&&ch.n)||sizeOf(t,mode);m=genMaze(n,seed)}
  const D=bfs(m,n-1,n-1);G={seed,mode,t,ch:ch||null,custom:custom||null,n,m,D,stars:pickStars(m,seed,D),got:new Set(),pos:[0,0],path:[[0,0]],visited:new Set(["0,0"]),moves:0,bumps:0,wasted:0,combo:0,maxCombo:0,t0:0,time:0,over:false,beat:false,shiftK:0,flash:[],lastD:D[0][0],hint:"",shortest:D[0][0]}}
 const stateCell=(r,c)=>r+","+c;
 function junction(r,c,from){let k=0;for(let d=0;d<4;d++)if(openAt(G.m,r,c,d))k++;return k!==2}
@@ -172,7 +176,7 @@ function comboFx(){const k=G.combo,tier=Math.min(3,k-3);NPJuice.text($("play"),L
 function shiftWalls(){const R=sub(G.seed,7000+G.shiftK++),n=G.n,m=G.m;let changed=0;for(let tries=0;tries<12&&changed<3;tries++){const r=Math.floor(R()*n),c=Math.floor(R()*n),d=R()<.5?1:2;if(d===1&&c>=n-1)continue;if(d===2&&r>=n-1)continue;const prev=d===1?m.E[r][c]:m.S[r][c];if(d===1)m.E[r][c]=!prev;else m.S[r][c]=!prev;
   const Dg=bfs(m,n-1,n-1),ok=Dg[G.pos[0]][G.pos[1]]>=0&&Dg[0][0]>=0;if(!ok){if(d===1)m.E[r][c]=prev;else m.S[r][c]=prev}else{changed++;G.flash.push({r,c,d,t:1})}}
  if(changed){G.D=bfs(m,n-1,n-1);G.lastD=G.D[G.pos[0]][G.pos[1]];sfx.shift();toast(T("shift"),900);NPJuice.shake($("cvw"))}}
-function scoreNow(){const sec=G.time,sh=G.shortest;const wasted=Math.max(0,G.path.length-1-sh);return Math.max(0,Math.min(MAXS,Math.round(1000-4*sec-3*wasted-10*G.bumps+50*G.got.size)))}
+function scoreNow(){const sec=G.time,sh=G.shortest;const wasted=Math.max(0,G.path.length-1-sh);return Math.max(0,Math.min(MAXS,Math.round(1000-32*sec/G.n-3*wasted-10*G.bumps+50*G.got.size)))}
 function finishRun(){G.time=Math.floor((performance.now()-(G.t0||performance.now()))/1000);G.score=scoreNow();if(G.ch&&G.score>G.ch.sc&&!G.beat)G.beat=true;sfx.win();NPJuice.confetti($("play"),16);if(window.NPFx)NPFx.buzz([40,30,70]);setTimeout(()=>showEnd(),650)}
 /* ===== VẼ ===== */
 const cv=$("cv"),ctx=cv.getContext("2d");
@@ -216,19 +220,19 @@ function updHud(){if(!G)return;const sec=G.t0?Math.floor((performance.now()-G.t0
  $("gHint").textContent=G.hint||T("hint")}
 setInterval(()=>{if(G&&!G.over&&!$("game").hidden&&G.t0)updHud()},500);
 function renderHome(){const sv=getSave(),k=dayKey(),done=sv.days[k];$("ttl").textContent=T("title");$("hSub").textContent=T("sub");$("dN").textContent="#"+dayNo(k);$("dT").textContent=T("daily");$("dS").textContent=done!=null?T("done",{s:done}):T("dS");$("bFree").textContent=T("free");$("bMake").textContent=T("make");$("hNote").textContent=T("note");$("bLang").textContent=LANG==="vi"?"EN":"VI";$("bSnd").textContent=snd()?"🔊":"🔇";
- $("hHero").textContent=skinOf().hero||"🧭🌀";renderTypes();$("hChips").innerHTML="";[sv.streak?T("streak",{n:sv.streak}):"",sv.best?T("best",{n:sv.best}):"",sv.total?T("tot",{n:sv.total}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("hChips").appendChild(c)})}
+ $("hHero").textContent=skinOf().hero||"🧭🌀";syncSize();renderTypes();$("hChips").innerHTML="";[sv.streak?T("streak",{n:sv.streak}):"",sv.best?T("best",{n:sv.best}):"",sv.total?T("tot",{n:sv.total}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("hChips").appendChild(c)})}
 function renderTypes(){const b=$("tys");b.innerHTML="";TYPES.forEach((t,i)=>{const e=document.createElement("button");e.type="button";e.className="ty"+(TY===i?" on":"")+(tLocked(i)?" lock":"");e.innerHTML='<span class="e">'+t[0]+"</span>"+L2([t[1],t[2]]);e.onclick=()=>{if(tLocked(i)){openPay(i,null);return}TY=i;LS.set("mz-type",i);renderHome()};b.appendChild(e)})}
-function begin(seed,mode,t,ch,custom){t=t==null?(mode==="daily"?0:TY):t;if(tLocked(t))t=0;if(mode==="daily")t=0;newGame(seed,mode,t,ch,custom);show("game");applySkin();sizeCanvas();updHud();draw();window.NP&&NP.start()}
+function begin(seed,mode,t,ch,custom,nn){t=t==null?(mode==="daily"?0:TY):t;if(tLocked(t))t=0;if(mode==="daily")t=0;newGame(seed,mode,t,ch,custom,nn);show("game");applySkin();sizeCanvas();updHud();draw();window.NP&&NP.start()}
 function showEnd(){if(!G)return;const sv=getSave();sv.total++;sv.best=Math.max(sv.best,G.score);if(G.mode==="daily"){const k=dayKey();if(sv.days[k]==null||G.score>sv.days[k])sv.days[k]=G.score;if(sv.last!==k){const y=new Date(Date.parse(k+"T00:00:00Z")-864e5).toISOString().slice(0,10);sv.streak=sv.last===y?sv.streak+1:1;sv.last=k}}LS.set("mz-save",sv);lastEnd=performance.now();
  window.NP&&NP.result({score:G.score,extra:{mode:G.mode,t:G.t,time:G.time,ranked:G.mode==="daily",rankHint:T("rankHint")}});show("end");$("eT").textContent=T("endT");$("eSc").textContent=G.score;const ri=G.score>=900?4:G.score>=750?3:G.score>=550?2:G.score>=300?1:0;$("eRk").textContent="🏅 "+L2([I18.vi.rkA[ri],I18.en.rkA[ri]]);
  const art=document.createElement("canvas");art.width=art.height=600;const q=art.getContext("2d");G.over=true;renderMaze(q,600,G,{full:true});$("eArt").innerHTML="";$("eArt").appendChild(art);
  $("eChips").innerHTML="";const chips=[L2([TYPES[G.t][1],TYPES[G.t][2]]),G.mode==="daily"?"📅 #"+dayNo(dayKey()):"","⏱ "+G.time+"s","⭐ "+G.got.size+"/3","🔥 ×"+G.maxCombo,G.mode==="daily"&&sv.streak?T("streak",{n:sv.streak}):""].filter(Boolean);chips.forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("eChips").appendChild(c)});
  $("eVs").textContent=G.ch?T("vsC",{a:G.score,b:G.ch.sc})+" · "+(G.score>G.ch.sc?T("win"):G.score<G.ch.sc?T("lose"):T("tie")):"";$("bRem").hidden=!(G.ch||G.mode==="daily"||G.custom)||!!(window.NP&&NP.helper);if(G.ch&&G.score>G.ch.sc)NPJuice.confetti($("play"),26);
  const helper=!!(window.NP&&NP.helper);$("bShare").hidden=helper;$("bAgain").hidden=helper;$("bBoard").hidden=helper;$("bHome").hidden=helper}
-const rematch=()=>{if(!G)return;const g=G;if(PF.pro&&PF.pro.trial)PF.lockPro();begin(g.seed,g.mode,g.t,g.ch,g.custom)};
+const rematch=()=>{if(!G)return;const g=G;if(PF.pro&&PF.pro.trial)PF.lockPro();begin(g.seed,g.mode,g.t,g.ch,g.custom,g.n)};
 function again(){if(!G)return;const t=G.t;if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",t,null)}
 /* ===== CHIA SẺ ===== */
-function shareLink(){const o={s:G.custom?0:G.seed,sc:G.score,t:G.t};if(G.custom)o.m=bitsToB64(G.custom);return location.origin+"/api/share/"+GID+"?ch="+b64e(o)+(LANG==="en"?"&l=en":"")}
+function shareLink(){const o={s:G.custom?0:G.seed,sc:G.score,t:G.t,n:G.n};if(G.custom)o.m=bitsToB64(G.custom);return location.origin+"/api/share/"+GID+"?ch="+b64e(o)+(LANG==="en"?"&l=en":"")}
 function shareText(){return TYPES[G.t][0]+" "+T("share")+(G.custom?" ✏️":"")+(G.mode==="daily"?" #"+dayNo(dayKey()):"")+"\n⏱ "+G.time+"s · ⭐ "+G.got.size+"/3 · 🏅 "+G.score+(G.maxCombo>2?" · 🔥×"+G.maxCombo:"")+(G.ch?"\n⚔ "+G.score+" vs "+G.ch.sc+(G.score>G.ch.sc?" 🎉":""):"")+"\n"+T("ask")+"\n"+shareLink()}
 function drawCard(){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif";const g=x.createLinearGradient(0,0,1080,1350);g.addColorStop(0,"#4b3fd0");g.addColorStop(1,"#12093a");x.fillStyle=g;x.fillRect(0,0,1080,1350);x.textAlign="center";x.fillStyle="#fff";x.font="800 66px "+F;x.fillText(TYPES[G.t][0]+" "+T("share")+(G.mode==="daily"?" #"+dayNo(dayKey()):""),540,120);
  const art=document.createElement("canvas");art.width=art.height=860;renderMaze(art.getContext("2d"),860,G,{full:true});x.save();x.beginPath();x.roundRect(110,170,860,860,36);x.clip();x.drawImage(art,110,170);x.restore();
@@ -247,32 +251,37 @@ addEventListener("keydown",e=>{const m={ArrowUp:0,ArrowRight:1,ArrowDown:2,Arrow
  if(G&&G.over&&!$("end").hidden&&(e.key===" "||e.key==="Enter")&&!(e.target.closest&&e.target.closest("button"))&&performance.now()-lastEnd>450&&!(window.NP&&NP.helper)){e.preventDefault();(G.ch||G.custom)?rematch():again()}});
 let wa=0,wb=0,wlock=false,wt=0;
 $("play").addEventListener("wheel",e=>{if(e.ctrlKey||$("game").hidden||!G||G.over)return;e.preventDefault();clearTimeout(wt);wt=setTimeout(()=>{wlock=false;wa=wb=0},140);if(wlock)return;wa+=e.deltaX;wb+=e.deltaY;if(Math.max(Math.abs(wa),Math.abs(wb))>=40){move(Math.abs(wa)>Math.abs(wb)?(wa>0?3:1):(wb>0?0:2));wlock=true;wa=wb=0}},{passive:false});
+/* ===== CHỌN CỠ MÊ CUNG (nhập tuỳ ý) ===== */
+function syncSize(){$("szL").textContent=T("size");$("szI").value=SZ;$("szI").setAttribute("min",SZMIN);$("szI").setAttribute("max",SZMAX);$("mkSzL").textContent=T("size");$("mkI").value=MKN}
+function setSize(v,mk){if(mk){MKN=clampN(v,SZMIN,MKMAX);LS.set("mz-mk",MKN);$("mkI").value=MKN;if(MK){MK.n=MKN;MK.m={n:MKN,E:mkGrid(MKN,true),S:mkGrid(MKN,true)};updMk()}}else{SZ=clampN(v,SZMIN,SZMAX);LS.set("mz-size",SZ);$("szI").value=SZ}}
+$("szM").onclick=()=>setSize(SZ-1);$("szP").onclick=()=>setSize(SZ+1);$("szI").onchange=()=>setSize($("szI").value);$("szI").oninput=()=>{const v=+$("szI").value;if(v>=SZMIN&&v<=SZMAX){SZ=v;LS.set("mz-size",SZ)}};
+$("mkM").onclick=()=>setSize(MKN-1,true);$("mkP").onclick=()=>setSize(MKN+1,true);$("mkI").onchange=()=>setSize($("mkI").value,true);
 /* ===== TỰ VẼ MÊ CUNG ===== */
 let MK=null,mkTool="carve",mkLast=null,mkDrag=false;
 const mc=$("mc"),mctx=mc.getContext("2d");
-function openMk(){MK={n:N0,m:{n:N0,E:mkGrid(N0,true),S:mkGrid(N0,true)}};mkTool="carve";show("mk");$("mkHint").textContent=T("mkH");$("mkTool").textContent=T(mkTool==="carve"?"mkCarve":"mkWall");$("mkGo").textContent=T("mkGo");applySkin();sizeCanvas();updMk()}
-function updMk(){const D=bfs(MK.m,N0-1,N0-1),L=D[0][0];MK.len=L;$("mkInfo").textContent=L<0?T("mkNo"):T("mkInfo",{n:L+1});$("mkGo").disabled=L<0||L<10;drawMk()}
-function drawMk(){if(!MK||$("mk").hidden)return;const S=mc.width;if(!S)return;mctx.setTransform(1,0,0,1,0,0);renderMaze(mctx,S,{n:N0,m:MK.m,path:[],stars:[],got:new Set(),pos:[0,0],flash:[],t:0},{full:true})}
-const mcCell=e=>{const r=mc.getBoundingClientRect(),pad=.04,u=(e.clientX-r.left)/r.width,v=(e.clientY-r.top)/r.height,cs=(1-2*pad)/N0,c=Math.floor((u-pad)/cs),rr=Math.floor((v-pad)/cs);return(c>=0&&rr>=0&&c<N0&&rr<N0)?[rr,c]:null};
+function openMk(){MK={n:MKN,m:{n:MKN,E:mkGrid(MKN,true),S:mkGrid(MKN,true)}};mkTool="carve";show("mk");$("mkHint").textContent=T("mkH");$("mkTool").textContent=T(mkTool==="carve"?"mkCarve":"mkWall");$("mkGo").textContent=T("mkGo");syncSize();applySkin();sizeCanvas();updMk()}
+function updMk(){const D=bfs(MK.m,MKN-1,MKN-1),L=D[0][0];MK.len=L;$("mkInfo").textContent=L<0?T("mkNo"):T("mkInfo",{n:L+1});$("mkGo").disabled=L<0||L<Math.min(10,MKN+2);drawMk()}
+function drawMk(){if(!MK||$("mk").hidden)return;const S=mc.width;if(!S)return;mctx.setTransform(1,0,0,1,0,0);renderMaze(mctx,S,{n:MKN,m:MK.m,path:[],stars:[],got:new Set(),pos:[0,0],flash:[],t:0},{full:true})}
+const mcCell=e=>{const r=mc.getBoundingClientRect(),pad=.04,u=(e.clientX-r.left)/r.width,v=(e.clientY-r.top)/r.height,cs=(1-2*pad)/MKN,c=Math.floor((u-pad)/cs),rr=Math.floor((v-pad)/cs);return(c>=0&&rr>=0&&c<MKN&&rr<MKN)?[rr,c]:null};
 function mkStep(a,b){const dr=b[0]-a[0],dc=b[1]-a[1];let d=-1;if(dr===-1&&!dc)d=0;else if(dc===1&&!dr)d=1;else if(dr===1&&!dc)d=2;else if(dc===-1&&!dr)d=3;if(d<0)return;setWall(MK.m,a[0],a[1],d,mkTool==="wall");sfx.mv()}
 mc.addEventListener("pointerdown",e=>{mkDrag=true;mkLast=mcCell(e);try{mc.setPointerCapture(e.pointerId)}catch(_){}});
 mc.addEventListener("pointermove",e=>{if(!mkDrag)return;const c=mcCell(e);if(!c||!mkLast||(c[0]===mkLast[0]&&c[1]===mkLast[1]))return;mkStep(mkLast,c);mkLast=c;updMk()});
 mc.addEventListener("pointerup",()=>{mkDrag=false;mkLast=null});mc.addEventListener("pointercancel",()=>{mkDrag=false});
 $("mkTool").onclick=()=>{mkTool=mkTool==="carve"?"wall":"carve";$("mkTool").textContent=T(mkTool==="carve"?"mkCarve":"mkWall")};
-$("mkRand").onclick=()=>{MK.m=genMaze(N0,newSeed());updMk()};$("mkClr").onclick=()=>{MK.m={n:N0,E:mkGrid(N0,true),S:mkGrid(N0,true)};updMk()};
+$("mkRand").onclick=()=>{MK.m=genMaze(MKN,newSeed());updMk()};$("mkClr").onclick=()=>{MK.m={n:MKN,E:mkGrid(MKN,true),S:mkGrid(MKN,true)};updMk()};
 $("mkBack").onclick=()=>{MK=null;show("home");renderHome()};
-$("mkGo").onclick=()=>{if(!MK||MK.len<10){toast(T("mkShort"),1800);return}const bits=bitsOf(MK.m);begin(0,"free",0,null,bits)};
+$("mkGo").onclick=()=>{if(!MK||MK.len<Math.min(10,MKN+2)){toast(T("mkShort"),1800);return}const bits=bitsOf(MK.m);begin(0,"free",0,null,bits,MKN)};
 /* ===== TRANG CHỦ / THÁCH ĐẤU / NGÔN NGỮ ===== */
 $("bDaily").onclick=()=>begin(fnv("mz|"+dayKey()),"daily",0,null);
 $("bFree").onclick=()=>begin(newSeed(),"free",TY,null);$("bMake").onclick=openMk;
 $("bLang").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}document.documentElement.lang=LANG;if(!$("home").hidden)renderHome();else if(!$("game").hidden)updHud();else if(!$("end").hidden)showEnd();else if(!$("mk").hidden){$("mkHint").textContent=T("mkH");$("mkTool").textContent=T(mkTool==="carve"?"mkCarve":"mkWall");$("mkGo").textContent=T("mkGo");updMk()}};
 $("bSnd").onclick=()=>{if(window.NPAudio)NPAudio.set(!NPAudio.get());$("bSnd").textContent=snd()?"🔊":"🔇"};
 function parseCh(h){try{const mm=/[#&]ch=([A-Za-z0-9_-]{1,260})/.exec(h||"");if(!mm)return null;let t=mm[1].replace(/-/g,"+").replace(/_/g,"/");while(t.length%4)t+="=";const o=JSON.parse(decodeURIComponent(escape(atob(t))));
- if(o&&Number.isInteger(o.s)&&o.s>=0&&o.s<=4294967295&&Number.isInteger(o.sc)&&o.sc>=0&&o.sc<=MAXS){const t2=Number.isInteger(o.t)&&o.t>=0&&o.t<=3?o.t:0;let bits=null;if(typeof o.m==="string"){if(o.m.length>40)return null;bits=b64ToBits(o.m,EDGES8);if(!bits)return null;const mz=fromBits(bits,N0);if(bfs(mz,N0-1,N0-1)[0][0]<0)return null}return{s:o.s,sc:o.sc,t:t2,bits}}return null}catch(e){return null}}
+ if(o&&Number.isInteger(o.s)&&o.s>=0&&o.s<=4294967295&&Number.isInteger(o.sc)&&o.sc>=0&&o.sc<=MAXS){const t2=Number.isInteger(o.t)&&o.t>=0&&o.t<=3?o.t:0;let bits=null;const nn=Number.isInteger(o.n)&&o.n>=SZMIN&&o.n<=(typeof o.m==="string"?MKMAX:SZMAX)?o.n:null;if(typeof o.m==="string"){const n2=nn||N0;if(o.m.length>64)return null;bits=b64ToBits(o.m,edgesOf(n2));if(!bits)return null;const mz=fromBits(bits,n2);if(bfs(mz,n2-1,n2-1)[0][0]<0)return null}return{s:o.s,sc:o.sc,t:t2,bits,n:nn}}return null}catch(e){return null}}
 const openCh=c=>{CH=c;$("chH").textContent="⚔ "+T("ch");$("chP").textContent=(c.bits?T("chM")+"\n":"")+T("chP",{s:c.sc})+(!c.bits&&tLocked(c.t)?"\n"+T("chL",{t:L2([TYPES[c.t][1],TYPES[c.t][2]])}):"");$("chGo").textContent=!c.bits&&tLocked(c.t)?T("trial"):T("chGo");$("ovCh").hidden=false};
 $("chNo").onclick=()=>{$("ovCh").hidden=true;CH=null};
 $("chGo").onclick=async()=>{const c=CH;$("ovCh").hidden=true;if(!c)return;if(!c.bits&&tLocked(c.t)){if(LS.get("mz-trial","")===dayKey()){openPay(c.t,null);return}try{await PF.loadPro(true);LS.set("mz-trial",dayKey());track(GID+"_skin","trial");PF.trialRestore={ty:TY,sk:PF.skinSel};TY=c.t}catch(e){toast(T("tried"),2200);return}}
- begin(c.s,"challenge",c.bits?0:c.t,c,c.bits)};
+ begin(c.s,"challenge",c.bits?0:c.t,c,c.bits,c.n||undefined)};
 /* ===== NIGHT PASS ===== */
 const subUrl=()=>"../../../subscribe.html?from="+encodeURIComponent("cozyplay/index.html#"+GID)+"&plan=month";
 const passToken=()=>{try{const p=JSON.parse(localStorage.getItem("pass"));return p&&p.token}catch(e){return null}};
@@ -300,17 +309,17 @@ window.PF=PF;
 /* ===== CHƠI HỘ: gửi đúng chỗ đang đứng ===== */
 const encPath=()=>G.path.slice(-150).map(p=>(p[0]*G.n+p[1]).toString(36).padStart(2,"0")).join("");
 if(window.NP&&NP.onPause)NP.onPause(()=>{},()=>{});
-if(window.NP&&NP.state)NP.state(()=>{if(!G||G.over)return null;const s={s:G.seed,t:G.t,md:G.mode==="daily"?1:0,mv:G.moves,bp:G.bumps,pa:encPath(),gt:[...G.got].join(""),sk:0,tm:G.t0?Math.floor((performance.now()-G.t0)/1000):0};if(G.custom)s.m=bitsToB64(G.custom);if(PF.pro&&!PF.pro.trial&&PF.ticket){s.tk=PF.ticket;if(PF.skinSel!=="basic"&&PF.skins[PF.skinSel])s.sk=PF.skinSel}return s});
+if(window.NP&&NP.state)NP.state(()=>{if(!G||G.over)return null;const s={n:G.n,s:G.seed,t:G.t,md:G.mode==="daily"?1:0,mv:G.moves,bp:G.bumps,pa:encPath(),gt:[...G.got].join(""),sk:0,tm:G.t0?Math.floor((performance.now()-G.t0)/1000):0};if(G.custom)s.m=bitsToB64(G.custom);if(PF.pro&&!PF.pro.trial&&PF.ticket){s.tk=PF.ticket;if(PF.skinSel!=="basic"&&PF.skins[PF.skinSel])s.sk=PF.skinSel}return s});
 /* ===== KHỞI ĐỘNG ===== */
 applySkin();renderHome();show("home");
 const proP=passToken()&&!(window.NP&&NP.helper)?PF.loadPro(false).catch(()=>{}):Promise.resolve();
 if(window.NP&&NP.helper){const HS=NP.initialState&&typeof NP.initialState==="object"?NP.initialState:{};const seed=Number.isInteger(HS.s)&&HS.s>=0&&HS.s<=4294967295?HS.s:newSeed();const ht=Number.isInteger(HS.t)&&HS.t>=0&&HS.t<=3?HS.t:0;$("bBoard").hidden=true;
- const cu=typeof HS.m==="string"&&HS.m.length<=40?b64ToBits(HS.m,EDGES8):null;
- const go=()=>{begin(seed,HS.md?"daily":"challenge",cu?0:ht,null,cu);if(typeof HS.pa==="string"&&/^[0-9a-z]*$/.test(HS.pa)&&HS.pa.length%2===0&&HS.pa.length<=300){const pts=[];for(let i=0;i<HS.pa.length;i+=2){const v=parseInt(HS.pa.slice(i,i+2),36),r=Math.floor(v/G.n),c=v%G.n;if(r>=G.n||c>=G.n){pts.length=0;break}pts.push([r,c])}
+ const hn=Number.isInteger(HS.n)&&HS.n>=SZMIN&&HS.n<=SZMAX?HS.n:null;const cu=typeof HS.m==="string"&&HS.m.length<=64?b64ToBits(HS.m,edgesOf(hn||N0)):null;
+ const go=()=>{begin(seed,HS.md?"daily":"challenge",cu?0:ht,null,cu,hn||undefined);if(typeof HS.pa==="string"&&/^[0-9a-z]*$/.test(HS.pa)&&HS.pa.length%2===0&&HS.pa.length<=300){const pts=[];for(let i=0;i<HS.pa.length;i+=2){const v=parseInt(HS.pa.slice(i,i+2),36),r=Math.floor(v/G.n),c=v%G.n;if(r>=G.n||c>=G.n){pts.length=0;break}pts.push([r,c])}
    if(pts.length&&pts[0][0]===0&&pts[0][1]===0||pts.length>1){G.path=pts.length?pts:[[0,0]];G.pos=G.path[G.path.length-1].slice();G.visited=new Set(G.path.map(p=>p[0]+","+p[1]));G.moves=Math.max(0,Math.min(500,HS.mv|0));G.bumps=Math.max(0,Math.min(200,HS.bp|0));String(HS.gt||"").split("").forEach(ch=>{const i=+ch;if(i>=0&&i<3)G.got.add(i)});if(HS.tm>0&&HS.tm<900)G.t0=performance.now()-HS.tm*1000;G.lastD=G.D[G.pos[0]][G.pos[1]];updHud();draw()}}};
  if(/^h\.\d{13}\.[A-Za-z0-9_-]{43}$/.test(HS.tk||""))PF.loadPro(false,HS.tk).then(()=>{if(/^[a-z0-9]{3,10}$/.test(HS.sk||"")&&PF.skins[HS.sk])PF.skinSel=HS.sk}).catch(()=>{}).finally(go);else go()}
 else{const c0=parseCh(location.hash);if(c0)proP.then(()=>openCh(c0));else if(location.hash==="#daily")$("bDaily").click()}
-window.MZ={get G(){return G},PF,begin,move,genMaze,bfs,openAt,bitsOf,fromBits,bitsToB64,b64ToBits,parseCh,shareText,shareLink,drawCard,rematch,shiftWalls,scoreNow,showEnd,fnv,dayKey,dayNo,get TY(){return TY},setTY(t){TY=t;LS.set("mz-type",t);renderHome()},T,get MK(){return MK},mkStep,updMk,openMk,finishRun};
+window.MZ={setSize,get SZ(){return SZ},get MKN(){return MKN},get G(){return G},PF,begin,move,genMaze,bfs,openAt,bitsOf,fromBits,bitsToB64,b64ToBits,parseCh,shareText,shareLink,drawCard,rematch,shiftWalls,scoreNow,showEnd,fnv,dayKey,dayNo,get TY(){return TY},setTY(t){TY=t;LS.set("mz-type",t);renderHome()},T,get MK(){return MK},mkStep,updMk,openMk,finishRun};
 </script>
 </body>
 </html>
