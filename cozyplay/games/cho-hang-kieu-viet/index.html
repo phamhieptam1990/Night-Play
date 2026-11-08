@@ -223,9 +223,11 @@ new ResizeObserver(fitCanvas).observe($("cvw"));
 function drawBike(c,sk,th,ry){const b=sk.bike||PF.skins.basic.bike,fx=RX+WB*PX;c.save();c.translate(RX,ry);c.rotate(-th);
  const wheel=(x)=>{c.fillStyle="#222";c.beginPath();c.arc(x,0,RW,0,6.283);c.fill();c.strokeStyle="#bbb";c.lineWidth=2;for(let i=0;i<3;i++){const a=G.spin*1.2+i*1.047;c.beginPath();c.moveTo(x+Math.cos(a)*RW,Math.sin(a)*RW);c.lineTo(x-Math.cos(a)*RW,-Math.sin(a)*RW);c.stroke()}c.fillStyle="#999";c.beginPath();c.arc(x,0,3.5,0,6.283);c.fill()};
  const fl=fx-RX;wheel(0);wheel(fl);
+ if(b.draw){b.draw(c,fl,RW,K,G.spin)}else{
  if(b.cart){K.rr(c,-26,-RW-5,fl*.56,8,2,b.rack);c.fillStyle="#2a1a0a";c.fillRect(-24,-RW-1,fl*.5,3)}
  K.p(c,[[0,-RW+2],[fl*.32,-RW-20],[fl*.62,-RW-24],[fl*.78,-RW-6],[fl,-RW+1]],b.body);K.rr(c,fl*.22,-RW-34,fl*.4,9,4,b.seat);K.rr(c,-14,-RW-38,28,6,2,b.rack);
  c.strokeStyle=b.rack;c.lineWidth=3;c.beginPath();c.moveTo(fl*.82,-RW-6);c.lineTo(fl*.9,-RW-40);c.lineTo(fl*.78,-RW-44);c.stroke();K.o(c,fl*.95,-RW-33,5,4,"#fff3a0");
+ }
  /* người lái */
  c.font="28px 'Apple Color Emoji','Segoe UI Emoji',sans-serif";c.textAlign="center";c.textBaseline="middle";const face=G.hl>.5?"😱":G.hl>.34?"😰":"🙂";c.fillText(sk.rider||"🧑",fl*.45,-RW-52);c.font="14px 'Apple Color Emoji','Segoe UI Emoji',sans-serif";c.fillText(face,fl*.45+12,-RW-60);
  if(b.extra)b.extra(c,fl,K);

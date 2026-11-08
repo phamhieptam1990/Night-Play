@@ -55,7 +55,7 @@ canvas#cv{border-radius:3cqw;background:linear-gradient(var(--field),var(--field
 @container (max-height:640px){#hSub,#hNote{display:none}.hero{font-size:12cqw}.ty .e{font-size:6cqw}}
 @container (max-height:520px){.hero{display:none}.hint{display:none}}
 #bSkin{min-width:44px;min-height:44px}
-.row>.btn.alt.grow{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;padding-left:2.4cqw;padding-right:2.4cqw;font-size:min(3.9cqw,15px)}
+.row>.btn.alt.grow{white-space:normal;min-width:0;line-height:1.15;padding:1.4cqw 2.4cqw;font-size:min(3.8cqw,15px)}
 #dS{display:inline-block;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:top}.dbtn .grow{min-width:0}#dT{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;max-width:100%;vertical-align:top}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
@@ -68,6 +68,14 @@ canvas#cv{border-radius:3cqw;background:linear-gradient(var(--field),var(--field
 .opts{display:grid;grid-template-columns:1fr;gap:2cqw}
 .opt{border:1.5px solid color-mix(in srgb,var(--ink) 34%,transparent);background:var(--panel);color:var(--ink);border-radius:3.4cqw;min-height:46px;padding:2.4cqw 3.4cqw;font:800 4cqw/1.2 var(--body);text-align:left;cursor:pointer;display:flex;align-items:center;gap:2.4cqw;box-shadow:0 .6cqw 0 color-mix(in srgb,var(--ink) 16%,transparent)}
 .opt:active{transform:translateY(.5cqw)}.opt i{font-style:normal;flex:none;width:7cqw;height:7cqw;border-radius:50%;background:color-mix(in srgb,var(--accent) 22%,transparent);display:grid;place-items:center;font:900 3.4cqw var(--body);color:var(--accent)}
+.opts.f-g{grid-template-columns:1fr 1fr;gap:2.4cqw}.opts.f-g .opt{flex-direction:column;justify-content:center;text-align:center;min-height:20cqw;gap:1cqw;font-size:3.6cqw}.opts.f-g .em{font:400 9cqw/1 var(--body)}
+.opts.f-e{grid-template-columns:1fr 1fr 1fr 1fr;gap:1.6cqw}.opts.f-e .opt{flex-direction:column;justify-content:center;text-align:center;min-height:25cqw;padding:2cqw 1cqw;gap:.8cqw;font-size:2.9cqw;border-radius:5cqw}.opts.f-e .em{font:400 9.5cqw/1 var(--body)}
+.opts.f-s .opt{background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 28%,var(--panel)) var(--w),var(--panel) var(--w))}.opts.f-s .em{font:400 5.6cqw/1 var(--body);width:8cqw;text-align:center}
+.qcard.f-g{border-style:solid}.qcard.f-e::before{content:"✨";position:absolute;right:2.4cqw;top:1.4cqw;font-size:4cqw}.qcard.f-s::before{content:"📶";position:absolute;right:2.4cqw;top:1.4cqw;font-size:4cqw}.qcard{position:relative}
+.stg-o{position:absolute;z-index:3;pointer-events:none;font-size:8cqw;line-height:1;font-style:normal;opacity:.9;filter:drop-shadow(0 .6cqw .6cqw rgba(0,0,0,.3));animation:stgf 3s ease-in-out infinite}.stg-o.a{left:-1cqw;top:-3cqw}.stg-o.b{right:-1cqw;top:-3cqw;animation-delay:-1.4s}.stg-o.c{left:-1cqw;bottom:-3cqw;font-size:6cqw;animation-delay:-2.2s}.stg-o.d{right:-1cqw;bottom:-3cqw;font-size:6cqw;animation-delay:-.7s}
+@keyframes stgf{50%{transform:translateY(-1.2cqw) rotate(6deg)}}.eb{position:absolute;z-index:9;pointer-events:none;font-size:8cqw;line-height:1;font-style:normal;left:50%;top:44%;animation:ebur 1s ease-out forwards}@keyframes ebur{to{transform:translate(var(--dx),var(--dy)) rotate(var(--rt));opacity:0}}
+#play.pro .qcard{box-shadow:0 0 0 .5cqw var(--accent),0 0 5cqw color-mix(in srgb,var(--accent) 45%,transparent)}#play.pro .opt.good{box-shadow:0 0 4cqw var(--good)}
+@media (prefers-reduced-motion:reduce){.stg-o{animation:none}.eb{display:none}}
 .opt.good{border-color:var(--good);background:color-mix(in srgb,var(--good) 20%,var(--panel))}.opt.bad{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 18%,var(--panel))}.opt.pick{border-color:var(--accent)}.opt:disabled{cursor:default}
 .who{font:700 3.6cqw var(--body);text-align:center;color:var(--muted);min-height:5cqw}
 .tools{display:flex;gap:2cqw;justify-content:center;flex-wrap:wrap}.tools .btn{min-height:40px;padding:1.6cqw 3.4cqw;font-size:3.5cqw}
@@ -105,7 +113,7 @@ input.tx{width:100%;min-height:44px;border:1.5px solid color-mix(in srgb,var(--i
   </section>
   <section class="scr" id="qs" hidden>
     <div class="qhead"><div class="dots" id="qDots"></div></div>
-    <div class="qcard"><div class="qn" id="qN"></div><div class="qt" id="qT"></div></div>
+    <div class="qcard" id="qcard"><div class="qn" id="qN"></div><div class="qt" id="qT"></div></div>
     <div class="opts" id="qO"></div>
     <div class="who" id="qWho"></div>
     <div class="tools" id="qTools"><button class="btn alt" id="bReroll" type="button"></button><button class="btn alt" id="bWrite" type="button"></button></div>
@@ -168,7 +176,10 @@ const PACK0=[
 ["Mình giỏi nhất việc gì?","What am I best at?",["Nấu ăn","Làm bạn cười","Lắng nghe","Tìm quán ngon"],["Cooking","Making people laugh","Listening","Finding good food"]],
 ["Con vật mình thích nhất?","My favourite animal?",["Chó","Mèo","Thỏ","Rồng (hơi lạ)"],["Dog","Cat","Rabbit","Dragon (weird)"]],
 ["Khi buồn mình sẽ?","When I'm sad I…",["Ăn thật nhiều","Ngủ","Nghe nhạc","Đi dạo một mình"],["Eat a lot","Sleep","Listen to music","Walk alone"]]];
-const I18={vi:{title:"Bạn Có Hiểu Tôi Không?",sub:"Trả lời 10 câu về chính bạn, gửi link cho bạn bè, người yêu, đồng nghiệp rồi xem ai hiểu bạn nhất!",make:"Tạo bộ câu hỏi của bạn",mS:"10 câu · gửi link cho người thân",mkS:"{n} · 10 câu · chế độ {m}",board:"📮 Bảng của tôi",demo:"🎮 Chơi thử bộ mẫu",note:"Bạn trả lời xong thì gửi link. Người nhận đoán, rồi gửi kết quả về cho bạn.",
+/* Dạng câu hỏi: g = thẻ 2×2 có hình lớn, e = 4 ô biểu tượng, s = thang mức độ (giữ nguyên thứ tự). Chỉ đổi cách hiển thị, không đổi dữ liệu đáp án */
+const fq=(pk,i,f,em)=>{if(pk[i]){pk[i]=pk[i].slice(0,4);pk[i][4]=f;if(em)pk[i][5]=em}};
+fq(PACK0,0,"e",["🧅","🌿","🫀","🍈"]);fq(PACK0,1,"g",["🪳","🏔️","🥺","🔋"]);fq(PACK0,2,"g",["🏠","✈️","🏦","🛍️"]);fq(PACK0,3,"e",["😴","☕","🎮","🏍️"]);fq(PACK0,4,"g",["🧋","🧊","💧","🍺"]);fq(PACK0,5,"s",["😇","🙂","😅","😬"]);fq(PACK0,6,"e",["🕊️","👻","🧠","⏸️"]);fq(PACK0,7,"s",["🌅","☀️","⏰","🌤️"]);fq(PACK0,9,"e",["🌸","☀️","🍂","❄️"]);fq(PACK0,10,"g",["🍜","🥢","🍚","🍕"]);fq(PACK0,12,"g",["🏖️","⛰️","🏰","🛋️"]);fq(PACK0,13,"e",["😂","👻","💕","💥"]);fq(PACK0,14,"e",["📘","🎵","💬","▶️"]);fq(PACK0,18,"g",["🐶","🐱","🐰","🐉"]);fq(PACK0,19,"g",["🍽️","😴","🎧","🚶"]);
+const I18={vi:{title:"Bạn Có Hiểu Tôi Không?",sub:"Trả lời 10 câu về chính bạn, gửi link cho bạn bè, người yêu, đồng nghiệp rồi xem ai hiểu bạn nhất!",make:"Tạo bộ câu hỏi của bạn",mS:"10 câu · gửi link cho người thân",mkS:"{n} · 10 câu · chế độ {m}",board:"📮 Bảng của tôi",demo:"🎮 Chơi thử",note:"Bạn trả lời xong thì gửi link. Người nhận đoán, rồi gửi kết quả về cho bạn.",
  chips:{sets:"📮 {n} bộ",ans:"💬 {n} lượt đoán"},nameL:"Tên của bạn",avL:"Ảnh đại diện",nameDef:"Tôi",mkNote:"Bạn trả lời thật lòng nhé — bạn bè sẽ đoán đó! 🤫",start:"Bắt đầu trả lời ▶",
  q:"Câu {i}/{n}",who:"Bạn đang trả lời về chính mình",whoG:"Đoán xem {n} đã chọn gì",reroll:"🔄 Đổi câu ({n})",rerollU:"🔄 Đổi câu",write:"✍️ Tự viết câu hỏi",writeH:"✍️ Câu hỏi của riêng bạn",wq:"Câu hỏi (ví dụ: Mình sợ gì nhất?)",wo:"Lựa chọn {n}",wGo:"Thêm vào bộ",wFill:"Điền đủ câu hỏi và 4 lựa chọn nhé",wMax:"Tối đa {n} câu tự viết",
  lkT:"Bộ câu hỏi của {n} đã sẵn sàng!",lkS:"Gửi link này cho bạn bè — ai đoán đúng nhiều nhất là người hiểu bạn nhất.",send:"📤 Gửi cho bạn bè",copy:"📋",copied:"Đã chép link — dán cho bạn bè nhé!",newSet:"✏️ Tạo bộ khác",
@@ -212,7 +223,7 @@ const cleanTx=(s,n)=>String(s==null?"":s).replace(/[<>&`\\]/g,"").replace(/\s+/g
 const perm=(seed,i)=>{const R=sub(seed,200+i),a=[0,1,2,3];for(let k=3;k>0;k--){const j=Math.floor(R()*(k+1));[a[k],a[j]]=[a[j],a[k]]}return a};
 const I=(v,a,z)=>Number.isInteger(v)&&v>=a&&v<=z;
 /* ===== GÓI CÂU HỎI / NIGHT PASS ===== */
-const PF={pro:null,ticket:null,packs:[PACK0,null,null,null],custom:false,unlimited:false,skins:{basic:{}},skinSel:LS.get("bh-skin","basic")};
+const PF={fq:fq,pro:null,ticket:null,packs:[PACK0,null,null,null],custom:false,unlimited:false,skins:{basic:{}},skinSel:LS.get("bh-skin","basic")};
 let MODE=(()=>{const v=LS.get("bh-mode",0);return Number.isInteger(v)&&v>=0&&v<4?v:0})();
 const tLocked=t=>!PF.packs[t];
 const skinOf=()=>PF.skins[PF.skinSel]||PF.skins.basic;
@@ -253,17 +264,21 @@ $("mkGo").onclick=()=>{const nm=cleanName($("nmI").value)||T("nameDef");LS.set("
  S={screen:"qs",role:"make",p,seed,name:nm,av:S.mk.av,qs:ids.slice(0,NQ),pool:ids.slice(NQ),ans:[],cust:[],i:0,rr:PF.unlimited?99:FREE_REROLL};showQ()};
 function showQ(){const st=S,i=st.i,q=qOf(st.p,st.qs[i],st.cust);show("qs");$("qDots").innerHTML=Array.from({length:NQ},(_,k)=>'<u class="'+(st.role==="make"?(k<i?"on":""):(st.res&&st.res[k]!=null?(st.res[k]?"ok":"no"):""))+(k===i?" cur":"")+'"></u>').join("");
  $("ttl").textContent=(st.role==="make"?AV[st.av]+" ":"")+(st.role==="make"?st.name:AV[st.G.v]+" "+st.G.n);$("qN").textContent=T("q",{i:i+1,n:NQ});$("qT").textContent=id2txt(q,0);
- const order=st.role==="make"?[0,1,2,3]:perm(st.G.s,i),oh=$("qO");oh.innerHTML="";order.forEach((real,j)=>{const b=document.createElement("button");b.type="button";b.className="opt";b.dataset.real=real;b.innerHTML="<i>"+"ABCD"[j]+"</i><span></span>";b.lastChild.textContent=id2txt(q,1)[real];b.onclick=()=>pickOpt(real,b);oh.appendChild(b)});
+ const fm=typeof q[2]==="string"?"":(q[4]||""),em=q[5]||null,order=st.role==="make"||fm==="s"?[0,1,2,3]:perm(st.G.s,i),oh=$("qO");oh.className="opts"+(fm?" f-"+fm:"");oh.innerHTML="";order.forEach((real,j)=>{const b=document.createElement("button");b.type="button";b.className="opt";b.dataset.real=real;b.style.setProperty("--w",(25*(j+1))+"%");const ic=em?'<b class="em">'+em[real]+"</b>":"<i>"+"ABCD"[j]+"</i>";b.innerHTML=ic+"<span></span>";b.lastChild.textContent=id2txt(q,1)[real];b.onclick=()=>pickOpt(real,b);oh.appendChild(b)});
+ $("qcard").className="qcard"+(fm?" f-"+fm:"");dressUp();
  $("qWho").textContent=st.role==="make"?T("who"):T("whoG",{n:st.G.n});
  const mk=st.role==="make";$("qTools").hidden=!mk;if(mk){$("bReroll").textContent=PF.unlimited?T("rerollU"):T("reroll",{n:st.rr});$("bReroll").disabled=!PF.unlimited&&st.rr<=0;$("bWrite").hidden=!PF.custom;$("bWrite").textContent=T("write")}}
 function id2txt(q,k){/* k=0: câu hỏi, k=1: lựa chọn (theo ngôn ngữ; câu tự viết chỉ có một thứ tiếng) */
- if(q.length===5){return k?q.slice(1,5):q[0]}return k?(LANG==="vi"?q[2]:q[3]):(LANG==="vi"?q[0]:q[1])}
+ if(typeof q[2]==="string"){return k?q.slice(1,5):q[0]}return k?(LANG==="vi"?q[2]:q[3]):(LANG==="vi"?q[0]:q[1])}
+const isProSk=()=>{const k=PF.skinSel;return !!PF.skins[k]&&k!=="basic"};
+function dressUp(){const pro=isProSk(),pl=$("play"),c=$("qcard");pl.classList.toggle("pro",pro);c.querySelectorAll(".stg-o").forEach(e=>e.remove());if(!pro)return;const L=(PF.skins[PF.skinSel].deco)||["⭐"];["a","b","c","d"].forEach((k,i)=>{const e=document.createElement("i");e.className="stg-o "+k;e.textContent=L[i%L.length];c.appendChild(e)})}
+function emojiBurst(n){if(!isProSk())return;const host=$("play"),L=PF.skins[PF.skinSel].deco||["⭐"];for(let i=0;i<n;i++){if(host.querySelectorAll(".eb").length>40)break;const e=document.createElement("i"),a=Math.random()*6.283,d=18+Math.random()*34;e.className="eb";e.textContent=L[i%L.length];e.style.setProperty("--dx",Math.cos(a)*d+"cqw");e.style.setProperty("--dy",(Math.sin(a)*d*.8-4)+"cqw");e.style.setProperty("--rt",(Math.random()*120-60)+"deg");host.appendChild(e);setTimeout(()=>e.remove(),1050)}}
 function pickOpt(real,btn){const st=S;sfx.pick();
  if(st.role==="make"){st.ans[st.i]=real;if(st.i<NQ-1){st.i++;showQ()}else finishMake();return}
  /* đoán */
  if(st.lock)return;st.lock=true;const P=st.G,ok=real===P.a[st.i];st.res=st.res||[];st.res[st.i]=ok;if(ok){st.got++;st.mask|=(1<<st.i);st.streak++}else st.streak=0;
  document.querySelectorAll("#qO .opt").forEach(b=>{b.disabled=true;if(+b.dataset.real===P.a[st.i])b.classList.add("good");else if(b===btn)b.classList.add("bad")});
- const q=qOf(P.p,P.q[st.i],P.c);$("qWho").textContent=ok?T("right"):T("wrong",{n:P.n,a:id2txt(q,1)[P.a[st.i]]});ok?sfx.ok():sfx.no();if(window.NPFx)NPFx.buzz(ok?[20,15,20]:40);
+ const q=qOf(P.p,P.q[st.i],P.c);$("qWho").textContent=ok?T("right"):T("wrong",{n:P.n,a:id2txt(q,1)[P.a[st.i]]});ok?sfx.ok():sfx.no();if(ok)emojiBurst(st.streak>=3?14:7);if(window.NPFx)NPFx.buzz(ok?[20,15,20]:40);
  if(ok&&st.streak>=3){const t=["Đọc vị!","Hiểu quá!","Tri kỷ!","Siêu hiểu!"][Math.min(3,st.streak-3)];NPJuice.text($("play"),(LANG==="vi"?t:["Nailed it!","So close!","Soulmate!","Mind reader!"][Math.min(3,st.streak-3)])+" ×"+st.streak,{color:NPJuice.tierColor(Math.min(3,st.streak-3)),top:"22%"});sfx.combo(st.streak)}
  setTimeout(()=>{st.lock=false;if(st.i<NQ-1){st.i++;showQ()}else finishGuess()},ok?850:1500)}
 $("bReroll").onclick=()=>{const st=S;if(st.role!=="make"||(!PF.unlimited&&st.rr<=0))return;if(!st.pool.length)return;st.qs[st.i]=st.pool.shift();st.rr--;showQ()};
