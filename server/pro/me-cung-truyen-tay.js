@@ -16,7 +16,7 @@ function main(PF, OPTS) {
     water: { h: 200, style: "water", path: ["#3d8bff", "#ff5fa0"], deco: ["🎨", "💧", "🌊", "🫧"], hero: "🎨🧭" },
     pixel: { h: 125, style: "pixel", path: ["#2f9e44", "#e8590c"], deco: ["👾", "🕹️", "💾", "🟩"], hero: "👾🧭" }
   };
-  for (const id in S) { const d = S[id], v = mk(d.h); PF.skins[id] = { style: d.style, path: d.path, vl: v.vl, vd: v.vd, deco: d.deco, hero: d.hero, css: id === "neon" ? "canvas{box-shadow:0 0 5cqw rgba(255,61,240,.4)}" : "" }; }
+  for (const id in S) { const d = S[id], v = mk(d.h); PF.skins[id] = { style: d.style, path: d.path, vl: v.vl, vd: v.vd, deco: d.deco, hero: d.hero, css: id === "neon" ? "#cv,#mc{box-shadow:0 0 5cqw rgba(255,61,240,.4)}" : "" }; }
   PF.pro = { trial: !!OPTS.trial };
 }
 exports.source = function (opts) { return "(" + main.toString() + ")(PF," + JSON.stringify({ trial: !!(opts && opts.trial) }) + ");"; };
