@@ -30,7 +30,11 @@ footer>.bars-pop{left:12px;bottom:calc(100% + 8px);transform-origin:bottom left}
 .bars-pop .seg{align-self:stretch;justify-content:center;box-shadow:none;border:1px solid var(--line,#ddd);margin:2px 0}
 .bars-pop nav{display:flex;flex-direction:column;gap:0!important;flex-wrap:nowrap}
 .bars-pop nav a,.bars-pop nav button{display:block;width:100%;padding:13px 12px;border-radius:12px;text-align:left;font-size:15px;font-weight:600;color:inherit;background:none;text-decoration:none;border:0;cursor:pointer}
-.bars-pop nav a+a,.bars-pop nav a+button,.bars-pop nav button+a{border-top:1px solid color-mix(in srgb,var(--line,#ddd) 70%,transparent);border-radius:0}
+/* mọi dòng trong menu cùng một kiểu: đường kẻ mảnh phía trên, trừ dòng đầu tiên */
+.bars-pop nav{display:contents}
+.bars-pop > .ico,.bars-pop > .back,.bars-pop > .pill,.bars-pop > .ns-pill,.bars-pop nav > a,.bars-pop nav > button{border-top:1px solid color-mix(in srgb,var(--line,#ddd) 70%,transparent)!important;border-radius:0!important}
+.bars-pop > :first-child{border-top:0!important}
+.bars-pop #langMenu{border:0!important;margin:6px 0!important;padding:3px;background:color-mix(in srgb,var(--accent,#7C5CFF) 10%,transparent)}
 .bars-pop a[hidden],.bars-pop .bars-sep[hidden]{display:none!important}
 .bars-pop .bars-sep{display:none!important}
 .bars-pop #langMenu + nav,.bars-pop #langMenu + .bars-sep + nav{margin-top:2px}
