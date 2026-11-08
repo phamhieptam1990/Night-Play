@@ -329,7 +329,7 @@ $("mkM").onclick=()=>setSize(MKN-1,true);$("mkP").onclick=()=>setSize(MKN+1,true
 let MK=null,mkTool="carve",mkLast=null,mkDrag=false;
 const mc=$("mc"),mctx=mc.getContext("2d");
 function openMk(){MK={n:MKN,m:{n:MKN,E:mkGrid(MKN,true),S:mkGrid(MKN,true)}};mkTool="carve";show("mk");$("mkHint").textContent=T("mkH");$("mkTool").textContent=T(mkTool==="carve"?"mkCarve":"mkWall");$("mkGo").textContent=T("mkGo");syncSize();applySkin();sizeCanvas();updMk()}
-function updMk(){const D=bfs(MK.m,MKN-1,MKN-1),L=D[0][0];MK.len=L;$("mkInfo").textContent=L<0?T("mkNo"):T("mkInfo",{n:L+1});$("mkGo").disabled=L<0||L<Math.min(10,MKN+2);drawMk()}
+function updMk(){const D=bfs(MK.m,MKN-1,MKN-1),L=D[0][0];MK.len=L;$("mkInfo").textContent=(L<0?T("mkNo"):T("mkInfo",{n:L+1}))+(TY&&!tLocked(TY)?" · "+TYPES[TY][0]+" "+L2([TYPES[TY][1],TYPES[TY][2]]):"");$("mkGo").disabled=L<0||L<Math.min(10,MKN+2);drawMk()}
 function drawMk(){if(!MK||$("mk").hidden)return;const S=mc.width;if(!S)return;mctx.setTransform(1,0,0,1,0,0);renderMaze(mctx,S,{n:MKN,m:MK.m,path:[],stars:[],got:new Set(),pos:[0,0],flash:[],t:0},{full:true})}
 const mcCell=e=>{const r=mc.getBoundingClientRect(),pad=.04,u=(e.clientX-r.left)/r.width,v=(e.clientY-r.top)/r.height,cs=(1-2*pad)/MKN,c=Math.floor((u-pad)/cs),rr=Math.floor((v-pad)/cs);return(c>=0&&rr>=0&&c<MKN&&rr<MKN)?[rr,c]:null};
 function mkStep(a,b){const dr=b[0]-a[0],dc=b[1]-a[1];let d=-1;if(dr===-1&&!dc)d=0;else if(dc===1&&!dr)d=1;else if(dr===1&&!dc)d=2;else if(dc===-1&&!dr)d=3;if(d<0)return;setWall(MK.m,a[0],a[1],d,mkTool==="wall");sfx.mv()}
@@ -339,7 +339,7 @@ mc.addEventListener("pointerup",()=>{mkDrag=false;mkLast=null});mc.addEventListe
 $("mkTool").onclick=()=>{mkTool=mkTool==="carve"?"wall":"carve";$("mkTool").textContent=T(mkTool==="carve"?"mkCarve":"mkWall")};
 $("mkRand").onclick=()=>{MK.m=genMaze(MKN,newSeed());updMk()};$("mkClr").onclick=()=>{MK.m={n:MKN,E:mkGrid(MKN,true),S:mkGrid(MKN,true)};updMk()};
 $("mkBack").onclick=()=>{MK=null;show("home");renderHome()};
-$("mkGo").onclick=()=>{if(!MK||MK.len<Math.min(10,MKN+2)){toast(T("mkShort"),1800);return}const bits=bitsOf(MK.m);begin(0,"free",0,null,bits,MKN)};
+$("mkGo").onclick=()=>{if(!MK||MK.len<Math.min(10,MKN+2)){toast(T("mkShort"),1800);return}const bits=bitsOf(MK.m);begin(0,"free",tLocked(TY)?0:TY,null,bits,MKN)};
 /* ===== TRANG CHỦ / THÁCH ĐẤU / NGÔN NGỮ ===== */
 $("bDaily").onclick=()=>{const dt=tLocked(TY)?0:TY;begin(fnv("mz|"+dayKey()+(dt?"|"+dt:"")),"daily",dt,null)};
 $("bFree").onclick=()=>begin(newSeed(),"free",TY,null);$("bMake").onclick=openMk;
@@ -350,7 +350,7 @@ function parseCh(h){try{const mm=/[#&]ch=([A-Za-z0-9_-]{1,260})/.exec(h||"");if(
 const openCh=c=>{CH=c;$("chH").textContent="⚔ "+T("ch");$("chP").textContent=(c.bits?T("chM")+"\n":"")+T("chP",{s:c.sc})+(!c.bits&&tLocked(c.t)?"\n"+T("chL",{t:L2([TYPES[c.t][1],TYPES[c.t][2]])}):"");$("chGo").textContent=!c.bits&&tLocked(c.t)?T("trial"):T("chGo");$("ovCh").hidden=false};
 $("chNo").onclick=()=>{$("ovCh").hidden=true;CH=null};
 $("chGo").onclick=async()=>{const c=CH;$("ovCh").hidden=true;if(!c)return;if(!c.bits&&tLocked(c.t)){if(LS.get("mz-trial","")===dayKey()){openPay(c.t,null);return}try{await PF.loadPro(true);LS.set("mz-trial",dayKey());track(GID+"_skin","trial");PF.trialRestore={ty:TY,sk:PF.skinSel};TY=c.t}catch(e){toast(T("tried"),2200);return}}
- begin(c.s,"challenge",c.bits?0:c.t,c,c.bits,c.n||undefined)};
+ begin(c.s,"challenge",c.bits?(tLocked(c.t)?0:c.t):c.t,c,c.bits,c.n||undefined)};
 /* ===== NIGHT PASS ===== */
 const subUrl=()=>"../../../subscribe.html?from="+encodeURIComponent("cozyplay/index.html#"+GID)+"&plan=month";
 const passToken=()=>{try{const p=JSON.parse(localStorage.getItem("pass"));return p&&p.token}catch(e){return null}};
