@@ -94,7 +94,8 @@ function drawObj(c,D,o,tm,dk){const sk=skinOf(),v=sk.view||"top",p=proj(D,o.lane
  c.restore()}
 function drawBike(c,D,tm){const sk=skinOf(),v=sk.view||"top",p=proj(D,D.pl,0),blink=D.inv>0&&Math.floor(D.time*14)%2;if(blink)return;c.save();c.translate(p.x,p.y+(v==="persp"?-8:0));const lean=(D.lane-D.pl)*.35;
  if(D.shield){c.strokeStyle="rgba(120,220,255,.85)";c.lineWidth=3;c.fillStyle="rgba(120,220,255,.18)";c.beginPath();c.arc(0,0,34,0,6.283);c.fill();c.stroke()}
- c.font="52px "+emj;c.textAlign="center";c.textBaseline="middle";if(v==="top"){c.rotate(Math.PI/2+lean)}else if(v==="side"){c.scale(-1,1);c.rotate(-lean*.3)}else{c.rotate(Math.PI/2+lean)}c.shadowColor="rgba(0,0,0,.4)";c.shadowBlur=8;c.fillText(sk.bike||"🛵",0,0);c.restore()}
+ if(v==="persp"){c.save();c.globalAlpha=1;const hg=c.createRadialGradient(0,16,4,0,16,46);hg.addColorStop(0,"rgba(255,255,255,.55)");hg.addColorStop(.5,"rgba(255,220,120,.28)");hg.addColorStop(1,"rgba(255,220,120,0)");c.fillStyle=hg;c.beginPath();c.ellipse(0,16,50,26,0,0,6.283);c.fill();c.restore()}
+ c.font=(v==="persp"?"68px ":"52px ")+emj;c.textAlign="center";c.textBaseline="middle";if(v==="top"){c.rotate(Math.PI/2+lean)}else if(v==="side"){c.scale(-1,1);c.rotate(-lean*.3)}else if(v==="persp"){c.rotate(lean*.5)}else{c.rotate(Math.PI/2+lean)}c.shadowColor=v==="persp"?"rgba(255,255,255,.9)":"rgba(0,0,0,.4)";c.shadowBlur=v==="persp"?14:8;c.fillText(sk.bike||"🛵",0,0);c.restore()}
 function draw(){if(!ctx||!cv.width)return;const sk=skinOf(),dm=sk.dim||[360,560];if(W!==dm[0]||H!==dm[1]){W=dm[0];H=dm[1];if(G&&!G.over)G.N=lanesOf();fitCanvas();return}
  const c=ctx,dk=isDark(),D=G,tm=D?D.time:0;c.setTransform(SC,0,0,SC,0,0);c.clearRect(0,0,W,H);
  if(sk.scene)sk.scene(c,W,H,D,dk,tm);else sceneDefault(c,W,H,D,dk,tm);roadDraw(c,D,dk,tm);
