@@ -195,7 +195,7 @@ function renderMaze(x,S,g,opts){opts=opts||{};const n=g.n,m=g.m,sk=skinOf(),st=s
  const cx=(c)=>ox+(c+.5)*cs,cy=(r)=>oy+(r+.5)*cs;
  /* nét đi */
  const P=sk.path||["#5b4be0","#e0661a"];if(g.path.length>1){const len=g.path.length;
-  if(st==="pixel"){for(let i=0;i<len;i++){const [r,c]=g.path[i];x.fillStyle=P[0];x.globalAlpha=.55+.45*i/len;x.fillRect(ox+c*cs+cs*.2,oy+r*cs+cs*.2,cs*.6,cs*.6)}x.globalAlpha=1}
+  if(st==="pixel"){const th=cs*.56;for(let i=0;i<len;i++){const [r,c]=g.path[i];x.fillStyle=mixc(P[0],P[1],i/len);x.fillRect(cx(c)-th/2,cy(r)-th/2,th,th);if(i>0){const [r0,c0]=g.path[i-1];/* khối nối liền giữa hai ô kề nhau: không còn khe hở (nét đứt) */x.fillRect(Math.min(cx(c0),cx(c))-th/2,Math.min(cy(r0),cy(r))-th/2,Math.abs(cx(c)-cx(c0))+th,Math.abs(cy(r)-cy(r0))+th)}}}
   else{x.lineCap="round";x.lineJoin="round";for(let i=1;i<len;i++){const a=g.path[i-1],b=g.path[i],t=i/len;const col=mixc(P[0],P[1],t);x.strokeStyle=col;x.lineWidth=st==="ink"?cs*(.22+.12*Math.sin(i*.9)):st==="water"?cs*.5:st==="neon"?cs*.2:cs*.2;x.globalAlpha=st==="water"?.5:1;if(st==="neon"){x.shadowColor=col;x.shadowBlur=cs*.5}x.beginPath();x.moveTo(cx(a[1]),cy(a[0]));x.lineTo(cx(b[1]),cy(b[0]));x.stroke()}x.globalAlpha=1;x.shadowBlur=0}}
  /* tường */
  x.strokeStyle=wall;x.lineCap=st==="pixel"?"butt":"round";x.lineWidth=st==="ink"?Math.max(2.5,cs*.12):st==="pixel"?Math.max(3,cs*.16):Math.max(2,cs*.09);if(st==="neon"){x.shadowColor=wall;x.shadowBlur=cs*.28}
