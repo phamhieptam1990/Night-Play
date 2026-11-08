@@ -29,6 +29,8 @@ window.NPS = (function () {
     "ve-chu-quai-vat": { name: { vi: "Vẽ Chữ Thành Quái Vật", en: "Letter Monsters" }, url: "popplay/games/ve-chu-quai-vat/index.html", board: true, kids: true, site: "popplay" },
     "nhay-theo-so": { name: { vi: "Nhảy Theo Số", en: "Dance by Numbers" }, url: "popplay/games/nhay-theo-so/index.html", board: true, kids: true, site: "popplay" },
     "be-dau-bo-me": { name: { vi: "Bé Đấu Bố Mẹ", en: "Kid vs Parent" }, url: "popplay/games/be-dau-bo-me/index.html", board: true, kids: true, site: "popplay" },
+    "qua-song": { name: { vi: "Qua Sông Cùng Bé", en: "River Crossing" }, url: "popplay/games/qua-song/index.html", board: true, kids: true, site: "popplay" },
+    "thap-vong-mau": { name: { vi: "Tháp Vòng Màu", en: "Rainbow Rings" }, url: "popplay/games/thap-vong-mau/index.html", board: true, kids: true, site: "popplay" },
     "lang-cua-be": { name: { vi: "Làng Của Bé", en: "Baby's Village" }, url: "popplay/games/lang-cua-be/index.html", board: true, kids: true, site: "popplay" },
   };
 

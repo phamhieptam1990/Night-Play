@@ -89,6 +89,9 @@ button:focus-visible,input:focus-visible{outline:4px solid var(--accent);outline
 #mnNick{width:78%;height:9cqw;border-radius:999px;border:.5cqw solid var(--line);background:var(--panel);color:var(--ink);font:inherit;font-size:4.4cqw;font-weight:800;text-align:center;padding:0 3cqw;-webkit-user-select:text;user-select:text}
 .alt{display:flex;gap:1.6cqw;width:100%;justify-content:center}
 .alt button{flex:1;height:14.6cqw;border-radius:999px;background:var(--panel);color:var(--ink);box-shadow:var(--shadow);font-size:5.4cqw;font-weight:800;position:relative}
+.alt.sv{gap:2.4cqw;flex-wrap:nowrap}.alt.sv button{flex:0 0 21cqw;height:auto;min-height:18cqw;border-radius:4.5cqw;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8cqw;padding:2cqw .8cqw;font-size:3.5cqw;line-height:1.1;border:1.5px solid color-mix(in srgb,currentColor 38%,transparent)}.alt.sv button b{font-size:7.4cqw;line-height:1}.alt.sv button span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tbox canvas{cursor:crosshair}
+@media (hover:hover) and (pointer:fine){.alt button:hover,.ib2:hover,.go:hover{filter:brightness(1.06);transform:translateY(-1px)}.alt button:active,.ib2:active{transform:scale(.96)}.res3 canvas:hover,.mc:hover{transform:scale(1.03)}}
 .alt button.on{background:var(--accent);color:var(--on-accent)}.alt button small{font-size:3.2cqw;margin-left:.6cqw}
 .agrid{flex:1;min-height:0;width:100%;display:grid;grid-template-columns:repeat(var(--c,6),1fr);grid-auto-rows:1fr;gap:1.4cqw;align-content:start}
 .ac{position:relative;border-radius:3cqw;background:var(--panel);box-shadow:var(--shadow);display:grid;place-items:center;overflow:hidden;min-height:0;aspect-ratio:1;padding:0}
@@ -165,7 +168,7 @@ button:focus-visible,input:focus-visible{outline:4px solid var(--accent);outline
       <div class="cbx" id="mnCb"></div><h2 id="mnH"></h2><div class="stars" id="mnR"></div><canvas class="mc" id="mnC" width="560" height="560"></canvas><p id="mnP"></p>
       <input id="mnNick" type="text" maxlength="14" autocomplete="off" hidden><p id="mnL" hidden></p>
       <div class="row" id="mnRow"><button class="ib2" id="mnCry" type="button">🔊</button><button class="ib2" id="mnSave" type="button">💾</button><button class="ib2" id="mnShare" type="button" hidden>📤</button><button class="ib2 main" id="mnNext" type="button">▶</button></div>
-      <div class="alt" id="svRow" hidden><button id="svT" type="button">🖼</button><button id="svW" type="button">📱</button><button id="svP" type="button">🖨</button><button id="svX" type="button">✕</button></div>
+      <div class="alt sv" id="svRow" hidden><button id="svT" type="button"><b>🖼</b><span id="svTl"></span></button><button id="svW" type="button"><b>📱</b><span id="svWl"></span></button><button id="svP" type="button"><b>🖨</b><span id="svPl"></span></button><button id="svX" type="button"><b>✕</b><span id="svXl"></span></button></div>
     </div>
     <div class="ov" id="ovAlb" hidden><div class="dc"></div>
       <h2 id="alH"></h2><div class="alt" id="alTabs"></div><div class="agrid" id="alGrid"></div>
@@ -211,7 +214,7 @@ vi:{title:"Vẽ Chữ Thành Quái Vật",docTitle:"Vẽ Chữ Thành Quái Vậ
  "how.1":"✏️ Tô theo nét chấm. Tô đủ, chữ sẽ sống dậy!","how.2":"🐾 Mỗi lần tô được một quái vật dễ thương, chỉ riêng bé có","how.3":"📖 Sưu tập đủ quái vật vào album nhé!","how.go":"Bắt đầu!",
  hint:"Tô tiếp chỗ có chấm nhấp nháy nhé!","hint.more":"Gần được rồi, tô thêm chút nữa!",
  "mn.new":"Con thứ {n}/{m}!","mn.dup":"Đã có trong album","mn.acc":"Tô chuẩn {a}%","mn.of":"Con thứ {n}/{m} · tô chuẩn {a}%","mn.nick":"Tên bé đặt…","mn.local":"Tên này chỉ lưu trên máy.","mn.cry":"Nghe tiếng kêu",
- rar:["Thường","Hiếm","Rất hiếm","Huyền thoại"],"sv.t":"Ảnh nền trong suốt","sv.w":"Hình nền điện thoại","sv.p":"Bản in A4","sv.x":"Đóng","saved":"Đã lưu ảnh!",
+ rar:["Thường","Hiếm","Rất hiếm","Huyền thoại"],"sv.t":"Ảnh nền trong suốt","sv.w":"Hình nền điện thoại","sv.p":"Bản in A4","sv.x":"Đóng","sv.ts":"Ảnh","sv.ws":"Hình nền","sv.ps":"In A4","sv.xs":"Đóng","kb":"⌨ Z quay lại nét vừa vẽ · H gợi ý · Esc quay về","saved":"Đã lưu ảnh!",
  "alb.t":"Album quái vật","alb.btn":"Album quái vật","alb.n":"{n}/{m}",
  "end.h":"Ván xong!","end.new":"{n} quái vật mới!","end.none":"Tô giỏi lắm! Thử chữ khác nhé.","pts":"điểm",
  "daily.t":"Quái vật hôm nay #{n}","gt.sh":"Để chia sẻ, hỏi người lớn:","sh.btn":"Chia sẻ","txt.copied":"Đã sao chép!","tx.line":"{t} · {l} · {s} điểm","tx.mon":"{i} → {n} {r}",
@@ -230,7 +233,7 @@ en:{title:"Letter Monsters",docTitle:"Letter Monsters",sound:"Sound",lang:"Langu
  "how.1":"✏️ Trace along the dots. Finish it and the shape comes alive!","how.2":"🐾 Every trace makes a cute monster that is yours alone","how.3":"📖 Collect them all in your album!","how.go":"Start!",
  hint:"Keep tracing where the dot blinks!","hint.more":"Almost there, a little more!",
  "mn.new":"Monster {n}/{m}!","mn.dup":"Already in your album","mn.acc":"Traced {a}%","mn.of":"Monster {n}/{m} · traced {a}%","mn.nick":"Name it…","mn.local":"This name stays on this device.","mn.cry":"Hear its cry",
- rar:["Common","Rare","Very rare","Legendary"],"sv.t":"Transparent picture","sv.w":"Phone wallpaper","sv.p":"A4 print","sv.x":"Close","saved":"Picture saved!",
+ rar:["Common","Rare","Very rare","Legendary"],"sv.t":"Transparent picture","sv.w":"Phone wallpaper","sv.p":"A4 print","sv.x":"Close","sv.ts":"Image","sv.ws":"Wallpaper","sv.ps":"Print A4","sv.xs":"Close","kb":"⌨ Z undo last stroke · H hint · Esc back","saved":"Picture saved!",
  "alb.t":"Monster album","alb.btn":"Monster album","alb.n":"{n}/{m}",
  "end.h":"Round done!","end.new":"{n} new monsters!","end.none":"Great tracing! Try other letters.","pts":"points",
  "daily.t":"Today's monster #{n}","gt.sh":"To share, ask a grown-up:","sh.btn":"Share","txt.copied":"Copied!","tx.line":"{t} · {l} · {s} points","tx.mon":"{i} → {n} {r}",
@@ -629,10 +632,13 @@ async function startTrace(){
   const check=()=>{if(state.done||TR!==state)return;const r=measure();$("pbi").style.width=Math.min(100,r.c/lv.need*100)+"%";if(r.c>=lv.need){state.done=true;hd.hidden=true;clearTimeout(hintT);done(r)}};
   state.check=check;
   const pos=e=>{const b=cv.getBoundingClientRect();return[(e.clientX-b.left)/b.width*n,(e.clientY-b.top)/b.height*n]};
-  cv.onpointerdown=e=>{if(state.done||paused)return;e.preventDefault();state.down=true;[state.lx,state.ly]=pos(e);state.last=[state.lx,state.ly];hd.hidden=true;try{cv.setPointerCapture(e.pointerId)}catch(_){}px.beginPath();px.moveTo(state.lx,state.ly);px.lineTo(state.lx+.1,state.ly);px.stroke();draw();arm()};
+  cv.oncontextmenu=e=>e.preventDefault();state.snaps=[];
+  cv.onpointerdown=e=>{if(state.done||paused)return;if(e.pointerType==="mouse"&&e.button!==0)return;e.preventDefault();try{state.snaps.push(px.getImageData(0,0,n,n));if(state.snaps.length>8)state.snaps.shift()}catch(_){}state.down=true;[state.lx,state.ly]=pos(e);state.last=[state.lx,state.ly];hd.hidden=true;try{cv.setPointerCapture(e.pointerId)}catch(_){}px.beginPath();px.moveTo(state.lx,state.ly);px.lineTo(state.lx+.1,state.ly);px.stroke();draw();arm()};
   cv.onpointermove=e=>{if(!state.down||state.done)return;const[a,b]=pos(e);px.beginPath();px.moveTo(state.lx,state.ly);px.lineTo(a,b);px.stroke();state.lx=a;state.ly=b;state.last=[a,b];draw();if(++state.moves%8===0)check()};
   cv.onpointerup=cv.onpointercancel=()=>{if(!state.down)return;state.down=false;check();arm()};
-  $("pbi").style.width="0";state.reset=()=>{px.clearRect(0,0,n,n);state.last=null;draw();$("pbi").style.width="0";nextHint()};
+  $("pbi").style.width="0";state.reset=()=>{px.clearRect(0,0,n,n);state.snaps=[];state.last=null;draw();$("pbi").style.width="0";nextHint()};
+  state.undo=()=>{const sn=state.snaps.pop();if(!sn)return false;px.putImageData(sn,0,0);draw();$("pbi").style.width=Math.min(100,measure().c/lv.need*100)+"%";state.last=null;arm();return true};
+  if(matchMedia("(hover:hover) and (pointer:fine)").matches&&!LS.get("qv-kb",0)){LS.set("qv-kb",1);setTimeout(()=>{if(TR===state&&!state.done)toast(T("kb"),3800)},900)}
   draw();let first=pts[0]||[n/2,n/2];for(const q of pts){if(q[1]+q[0]*.35<first[1]+first[0]*.35)first=q}hintAt(first);arm();
   state.solve=()=>{if(state.done)return;px.fillStyle=colr;for(const q of pts){px.beginPath();px.arc(q[0],q[1],n*lv.w*.45,0,7);px.fill()}draw();check()};
 }
@@ -647,7 +653,7 @@ function done(r){
   setTimeout(()=>{if(G&&G.id===id)showMon({M:M2,mode:"born",acc,isNew,no,cb})},350);
 }
 $("hintBtn").onclick=()=>{if(!TR||TR.done)return;TR.nextHint();toast(T("hint"),1600)};
-$("clrBtn").onclick=()=>{if(TR&&!TR.done)TR.reset()};
+$("clrBtn").onclick=()=>{if(TR&&!TR.done&&!TR.undo())TR.reset()};$("clrBtn").title="↺ (Z)";$("hintBtn").title="💡 (H)";
 
 /* ===== MÀN QUÁI VẬT (mới sinh / xem lại trong album) ===== */
 let bornAnim=0;
@@ -694,7 +700,7 @@ function renderMon(){
   $("mnNick").hidden=born||!rec||HELPER;$("mnL").hidden=$("mnNick").hidden;$("mnL").textContent=T("mn.local");$("mnNick").placeholder=T("mn.nick");$("mnNick").value=rec&&rec.nick||"";
   $("mnShare").hidden=born||HELPER;$("mnCry").setAttribute("aria-label",T("mn.cry"));$("mnSave").setAttribute("aria-label",T("sv.t"));$("mnShare").setAttribute("aria-label",T("sh.btn"));
   $("mnNext").setAttribute("aria-label",born?(G&&G.r>=2?"✓":"▶"):T("home"));$("mnNext").textContent=born?(G&&G.r>=2?"✓":"▶"):"←";$("mnNext").classList.toggle("main",born);
-  [["svT","sv.t"],["svW","sv.w"],["svP","sv.p"],["svX","sv.x"]].forEach(([i,k])=>$(i).setAttribute("aria-label",T(k)));
+  [["svT","sv.t"],["svW","sv.w"],["svP","sv.p"],["svX","sv.x"]].forEach(([i,k])=>{$(i).setAttribute("aria-label",T(k));$(i).title=T(k);$(i+"l").textContent=T(k.replace(/\.(.)$/,".$1s"))});
 }
 $("mnNick").addEventListener("input",()=>{if(!MON)return;const r=albGet()[MON.M.t+":"+MON.M.item];if(r){r.nick=$("mnNick").value.replace(/[<>]/g,"").slice(0,14);albSave();$("mnH").textContent=r.nick||MON.M.name}});
 $("mnC").onclick=()=>{if(!MON)return;const c=$("mnC");c.classList.remove("jump");void c.offsetWidth;c.classList.add("jump");setTimeout(()=>c.classList.remove("jump"),520);cry(MON.M)};
@@ -810,6 +816,15 @@ $("albBtn").onclick=()=>openAlbum(G?G.t:0);
 $("ovEnd").addEventListener("pointerdown",e=>{if(HELPER||e.target.closest("button")||e.target.closest("canvas")||performance.now()-endAt<450)return;again()});
 $("homeBtn2").onclick=goHome;
 $("rankBtn").onclick=()=>{window.NP&&NP.brag&&NP.brag()};
+/* phím tắt khi chơi trên máy tính: Z/Backspace = quay lại nét vừa vẽ, C = xoá hết, H = gợi ý, Enter/Cách = tiếp tục, S = lưu ảnh, Esc = quay về */
+addEventListener("keydown",e=>{if(e.target&&/^(INPUT|TEXTAREA)$/.test(e.target.tagName)||e.ctrlKey&&e.key.toLowerCase()!=="z"||e.altKey||e.metaKey)return;const k=e.key.toLowerCase(),vis=id=>!$(id).hidden;
+  if(!$("ovGate").hidden){if(k==="escape")$("gtX").click();return}
+  if(TR&&!TR.done&&G&&!G.over&&!ovs.some(o=>vis(o))){if(k==="z"||k==="backspace"||k==="delete"){e.preventDefault();$("clrBtn").click();return}if(k==="c"&&TR.reset){e.preventDefault();TR.reset();return}if(k==="h"){e.preventDefault();$("hintBtn").click();return}if(k==="escape"&&!HELPER){e.preventDefault();goHome();return}}
+  if(vis("ovMon")){if(k==="escape"){e.preventDefault();if(vis("svRow"))$("svX").click();else $("mnNext").click();return}
+    if((k==="enter"||k===" ")&&vis("mnRow")&&!e.repeat){e.preventDefault();$("mnNext").click();return}if(k==="s"&&vis("mnRow")){e.preventDefault();$("mnSave").click();return}if(k==="c"){e.preventDefault();$("mnCry").click();return}
+    if(vis("svRow")){const m={"1":"svT","2":"svW","3":"svP"}[k];if(m){e.preventDefault();$(m).click()}}return}
+  if(k==="escape"){const m=[["ovAlb","alBack"],["ovSkin","skBack"],["ovHow","hwBack"],["ovCh","chNo"],["ovPay","pwLater"]].find(([o])=>vis(o));if(m){e.preventDefault();$(m[1]).click()}}
+});
 addEventListener("keydown",e=>{if(G&&G.over&&!HELPER&&(e.key==="Enter"||e.key===" ")&&!e.repeat&&!$("ovEnd").hidden&&performance.now()-endAt>450){e.preventDefault();again()}});
 addEventListener("storage",e=>{if(e.key==="theme")document.documentElement.dataset.theme=e.newValue||"light"});
 
