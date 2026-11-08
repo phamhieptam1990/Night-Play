@@ -1,0 +1,116 @@
+/* Shipper Siêu Tốc — nhận các đơn trên bản đồ, chạm lần lượt để vẽ lộ trình giao hết nhanh nhất. Có đơn gấp, đồ nóng, khách hủy phút chót. Điểm = % so với lời giải tối ưu (game tự tính bằng vét cạn). 3 màn. */
+module.exports = {
+  id: "shipper-sieu-toc", prefix: "ss", title: { vi: "Shipper Siêu Tốc", en: "Speedy Shipper" }, maxScore: 3000,
+  hero: "🛵📦", deco: ["🛵", "📦", "🍜", "🏠"],
+  types: [["🛵", "Cổ điển 5 đơn", "Classic 5 orders"], ["⏰", "Giờ cao điểm", "Rush hour"], ["🔥", "Đồ nóng", "Hot food"], ["🗺️", "Đơn đi xa", "Long haul"]],
+  catalog: [["basic", "Phố ô bàn cờ", "Block city", "🛵"], ["saigon", "Sài Gòn bàn cờ", "Saigon grid", "🌃"], ["hanoi", "Phố cổ đường chéo", "Old quarter", "🏮"], ["mekong", "Sông và cầu miền Tây", "River & bridges", "🌉"], ["tower", "Chung cư nhiều tầng", "High-rise", "🏢"]],
+  rootCss: `:root{--bg:#FFF4E4;--panel:#ffffff;--ink:#3a2410;--muted:#7a5a3a;--accent:#e8590c;--on:#ffffff;--good:#2f9e44;--bad:#e03131;--line:#f1d3a8;--pbg:linear-gradient(#ffe4bd,#fff7ea);--field:#fff1d8;--field2:#ffe0b0;
+ --display:"Bungee","Arial Black",system-ui,sans-serif;--body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif}
+:root[data-theme="dark"]{--bg:#1d1208;--panel:#2e1e10;--ink:#fff2e0;--muted:#d9b48c;--accent:#ff8a3d;--on:#2a1200;--good:#51cf66;--bad:#ff6b6b;--line:#4a3320;--pbg:linear-gradient(#3b2410,#1d1208);--field:#2a1a0c;--field2:#3a2514}`,
+  extraCss: `canvas#cv{touch-action:manipulation}#ssBar{display:flex;gap:2cqw;align-items:center}#ssBar .btn{min-height:44px}#ssGo{flex:1}`,
+  gameHtml: `{{STATS}}
+    <div id="cvw"><canvas id="cv"></canvas></div>
+    <div id="ssBar" class="row"><button class="btn alt" id="ssUndo" type="button">↩</button><button class="btn" id="ssGo" type="button"></button></div>
+    {{HINT}}`,
+  consts: `const NICE=2400,CONF=["🛵","📦","🎉"];`,
+  i18n: {
+    vi: { sub: "Có 5 đơn hàng trên bản đồ. Chạm lần lượt để vẽ lộ trình giao hết nhanh nhất, nhớ đơn gấp, đồ nóng và khách hủy!", note: "3 màn mỗi ván, game tự tính lộ trình tối ưu để chấm điểm · mỗi ngày cả nước giao cùng một bản đồ",
+      sc: "Điểm", tm: "Quy hoạch", ex: "Đơn", hint0: "Chạm vào các nhà theo thứ tự bạn muốn giao. ⚡ đơn gấp, 🔥 đồ nóng, 🚫 khách sắp hủy.", hint1: "Giờ cao điểm: 6 đơn, đơn gấp nhiều và thời gian nghĩ ngắn!", hint2: "Đồ nóng: càng giao muộn càng nguội, mất điểm!", hint3: "Đơn đi xa: 7 đơn, tuyến dài, nghĩ kỹ nhé.",
+      end: "Hết 3 màn!", endS: "Bạn đạt {n} điểm", rt: ["Giao hàng chậm", "Biết đường", "Shipper chuẩn", "Shipper của tháng", "Thần giao hàng"],
+      tx: "🛵 Shipper Siêu Tốc · {t}\nMình đạt {n} điểm, lộ trình tối ưu!\n{l}", ask: "Bạn chọn đường tốt hơn mình không?",
+      lockP: "Loại Giờ cao điểm, Đồ nóng, Đơn đi xa và 4 giao diện (Sài Gòn bàn cờ, Phố cổ đường chéo, Sông và cầu miền Tây, Chung cư nhiều tầng) với cách tính đường đi và bản đồ khác nhau là của Night Pass. Dùng thử 1 ván mỗi ngày hoặc mở khoá tất cả.",
+      chP: "Bạn bè đạt {s} điểm trên đúng bản đồ này. Bạn chọn lộ trình tốt hơn không?", rankHint: "Chơi “Thử thách hôm nay” để lên bảng điểm nhé!",
+      tut: "Chạm vào các nhà theo thứ tự giao hàng, rồi bấm CHẠY! Game sẽ so với lộ trình tối ưu.", go: "▶ CHẠY!", next: "Màn tiếp ▶", done: "Xong ✓", need: "Chọn đủ {n} đơn đã nhé", lvl: "Màn {n}/3", opt: "Tối ưu {t}s", you: "Bạn {t}s", late: "Muộn", cold: "Nguội", cancel: "Khách hủy!", pct: "{p}% tối ưu", urg: "⚡ trước {t}s", hot: "🔥 trong {t}s", can: "🚫 hủy sau {t}s",
+      auto: "Hết giờ! Tự chọn đơn còn lại", sk: { basic: ["Phố ô bàn cờ", "Block city"], saigon: ["Sài Gòn bàn cờ", "Saigon grid"], hanoi: ["Phố cổ đường chéo", "Old quarter"], mekong: ["Sông và cầu", "River & bridges"], tower: ["Chung cư", "High-rise"] } },
+    en: { sub: "5 orders sit on the map. Tap them in order to draw the fastest delivery route — mind urgent orders, hot food and cancelling customers!", note: "3 maps per round, the game computes the optimal route to score you · everyone gets the same maps each day",
+      sc: "Score", tm: "Planning", ex: "Orders", hint0: "Tap the houses in the order you want to deliver. ⚡ urgent, 🔥 hot food, 🚫 about to cancel.", hint1: "Rush hour: 6 orders, many urgent and little thinking time!", hint2: "Hot food: the later you deliver, the colder it gets — lose points!", hint3: "Long haul: 7 orders, long route — think carefully.",
+      end: "3 maps done!", endS: "You scored {n}", rt: ["Slow courier", "Knows the way", "Solid shipper", "Shipper of the month", "Delivery god"],
+      tx: "🛵 Speedy Shipper · {t}\nI scored {n} on the optimal route!\n{l}", ask: "Can you pick a better route than me?",
+      lockP: "Rush hour, Hot food, Long haul and 4 themes (Saigon grid, Old quarter diagonals, River & bridges, High-rise) with different travel rules and maps are for Night Pass. Try one round a day or unlock everything.",
+      chP: "A friend scored {s} on these exact maps. Can you pick a better route?", rankHint: "Play “Today's challenge” to make the leaderboard!",
+      tut: "Tap the houses in delivery order, then press GO! The game compares you to the optimal route.", go: "▶ GO!", next: "Next map ▶", done: "Done ✓", need: "Pick all {n} orders first", lvl: "Map {n}/3", opt: "Best {t}s", you: "You {t}s", late: "Late", cold: "Cold", cancel: "Cancelled!", pct: "{p}% optimal", urg: "⚡ by {t}s", hot: "🔥 within {t}s", can: "🚫 cancels after {t}s",
+      auto: "Time's up! Auto-picking the rest", sk: { basic: ["Block city", "Block city"], saigon: ["Saigon grid", "Saigon grid"], hanoi: ["Old quarter", "Old quarter"], mekong: ["River & bridges", "River & bridges"], tower: ["High-rise", "High-rise"] } }
+  },
+  sfx: `{tap:()=>tone(560,.05,"triangle",.06),ok:()=>{[660,880,1100].forEach((f,i)=>tone(f,.1,"triangle",.09,i*.06))},drop:()=>{tone(800,.06,"square",.05);tone(1200,.08,"square",.05,.05)},bad:()=>tone(170,.25,"sawtooth",.07),go:()=>tone(440,.12,"sawtooth",.06),tick:()=>tone(900,.03,"square",.04),end:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.09,i*.09)),combo:n=>{const b=440*Math.pow(1.122,Math.min(n/3,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.1,"triangle",.09,i*.05))}}`,
+  gameJs: String.raw`
+let W=360,H=420,SC=1;const ctx=cv.getContext("2d");const VEL=70,VIS=3.4;
+const CFG=[{n:5,plan:30,urg:[1,1,1],hot:[0,1,1],can:[0,0,1]},{n:6,plan:22,urg:[1,2,2],hot:[0,1,1],can:[0,1,1]},{n:5,plan:28,urg:[1,1,1],hot:[2,2,3],can:[0,0,1]},{n:7,plan:40,urg:[1,1,2],hot:[1,1,1],can:[0,1,1]}];
+const emj="'Apple Color Emoji','Segoe UI Emoji',sans-serif";
+function dist(M,a,b){const dx=Math.abs(a.x-b.x),dy=Math.abs(a.y-b.y);
+ if(M.kind==="euclid")return Math.hypot(dx,dy);if(M.kind==="weighted")return 1.7*dx+.55*dy;
+ if(M.kind==="river"){if((a.y-M.ry)*(b.y-M.ry)>=0)return Math.hypot(dx,dy);let m=1e9;for(const bx of M.bridges){m=Math.min(m,Math.hypot(a.x-bx,a.y-M.ry)+Math.hypot(bx-b.x,M.ry-b.y))}return m}
+ return dx+dy}
+function legPts(M,a,b){if(M.kind==="euclid")return[[a.x,a.y],[b.x,b.y]];if(M.kind==="weighted"||M.kind==="manh")return[[a.x,a.y],[b.x,a.y],[b.x,b.y]];
+ if((a.y-M.ry)*(b.y-M.ry)>=0)return[[a.x,a.y],[b.x,b.y]];let bi=0,m=1e9;M.bridges.forEach((bx,i)=>{const d=Math.hypot(a.x-bx,a.y-M.ry)+Math.hypot(bx-b.x,M.ry-b.y);if(d<m){m=d;bi=i}});const bx=M.bridges[bi];return[[a.x,a.y],[bx,M.ry],[b.x,b.y]]}
+function costOf(L,perm,detail){let t=0,pos=L.shop,pen=0,ev=[];for(const i of perm){const s=L.stops[i];t+=dist(L.M,pos,s)/VEL;pos=s;let st="ok";
+  if(s.can!=null&&t>s.can){pen+=10;st="cancel"}else{if(s.urg!=null&&t>s.urg){pen+=8;st="late"}if(s.hot!=null&&t>s.hot){pen+=.5*(t-s.hot);st="cold"}}ev.push({i,t,st})}
+ return detail?{total:t+pen,time:t,pen,ev}:t+pen}
+function permsOf(n,fn){const a=[];for(let i=0;i<n;i++)a.push(i);const rec=k=>{if(k===n){fn(a);return}for(let i=k;i<n;i++){let x=a[k];a[k]=a[i];a[i]=x;rec(k+1);x=a[k];a[k]=a[i];a[i]=x}};rec(0)}
+function genLevel(D,l){const R=sub(D.seed,100+l),C=D.C,n=C.n,sk=skinOf(),kind=sk.metric||"manh",snap=sk.snap||0,pts=[],mg=36;let tries=0;
+ const M={kind,ry:H*.5,bridges:[W*.26,W*.74]};
+ while(pts.length<n+1&&tries++<4000){let x=mg+R()*(W-2*mg),y=mg+R()*(H-2*mg);if(snap){x=Math.round(x/snap)*snap;y=Math.round(y/snap)*snap}if(kind==="river"&&Math.abs(y-M.ry)<24)continue;if(pts.every(q=>Math.hypot(q.x-x,q.y-y)>=(n>=7?56:66)))pts.push({x,y})}
+ while(pts.length<n+1)pts.push({x:mg+R()*(W-2*mg),y:mg+R()*(H-2*mg)});
+ const shop=pts[0],stops=pts.slice(1).map((p,i)=>({x:p.x,y:p.y,id:i,emoji:["🏠","🏡","🏘️","🏢","🏬","🏪","🏨"][i%7]})),L={M,shop,stops,n};
+ const p0=[];for(let i=0;i<n;i++)p0.push(i);for(let i=n-1;i>0;i--){const j=Math.floor(R()*(i+1));const x=p0[i];p0[i]=p0[j];p0[j]=x}
+ const det=costOf(L,p0,true),arr={};det.ev.forEach(e=>arr[e.i]=e.t);const order=p0.slice();
+ const li=Math.min(l-1,2),nu=C.urg[li],nh=C.hot[li],nc=C.can[li];let k=0;
+ for(let u=0;u<nu&&k<n;u++,k++){const s=stops[order[k]];s.urg=Math.round((arr[s.id]*1.08+.6)*10)/10}
+ for(let h=0;h<nh&&k<n;h++,k++){const s=stops[order[k]];s.hot=Math.round((arr[s.id]*1.25+1.1)*10)/10}
+ for(let c=0;c<nc&&k<n;c++,k++){const s=stops[order[k]];s.can=Math.round((arr[s.id]*1.18+.9)*10)/10}
+ let best=1e9,bp=null;permsOf(n,a=>{const c=costOf(L,a);if(c<best-1e-9){best=c;bp=a.slice()}});L.best=best;L.bestPerm=bp;return L}
+function newGame(seed,mode,t,ch){const C=CFG[t],D={seed,mode,t,C,ch:ch||null,li:1,res:[],route:[],st:"plan",lv:null,planT:C.plan,runT:0,runPts:null,runLen:0,over:false,reason:"end",time:0,dur:1e9,beat:false,maxCombo:0,combo:0,fx:[],nt:0,tick:0};D.lv=genLevel(D,1);return D}
+const scoreOf=D=>D.res.reduce((a,r)=>a+r.sc,0);
+const rankIdx=n=>{const k=n/3;return k>=950?4:k>=850?3:k>=700?2:k>=450?1:0};
+function pickStop(D,i){if(D.st!=="plan")return;const r=D.route,at=r.indexOf(i);if(at>=0){if(at===r.length-1){r.pop();sfx.tap()}return}r.push(i);sfx.tap();if(window.NPFx)NPFx.buzz(8);hud();updBtn()}
+function undoStop(D){if(D.st!=="plan"||!D.route.length)return;D.route.pop();sfx.tap();hud();updBtn()}
+function autoFill(D){const L=D.lv;let pos=D.route.length?L.stops[D.route[D.route.length-1]]:L.shop;while(D.route.length<L.n){let bi=-1,bd=1e9;for(let i=0;i<L.n;i++){if(D.route.indexOf(i)>=0)continue;const d=dist(L.M,pos,L.stops[i]);if(d<bd){bd=d;bi=i}}D.route.push(bi);pos=L.stops[bi]}}
+function startRun(D,auto){const L=D.lv;if(D.st!=="plan")return;if(D.route.length<L.n){if(auto){toast(T("auto"),1200);autoFill(D)}else{toast(T("need",{n:L.n}),1100);return}}
+ D.st="run";D.runT=0;sfx.go();const pts=[[L.shop.x,L.shop.y]],cum=[0],marks=[];let pos=L.shop;D.route.forEach(i=>{const s=L.stops[i],lp=legPts(L.M,pos,s);for(let k=1;k<lp.length;k++){pts.push(lp[k]);cum.push(cum[cum.length-1]+Math.hypot(lp[k][0]-lp[k-1][0],lp[k][1]-lp[k-1][1]))}marks.push(cum[cum.length-1]);pos=s});
+ D.runPts=pts;D.runCum=cum;D.marks=marks;D.runLen=cum[cum.length-1];D.runDone=0;D.det=costOf(L,D.route,true);updBtn();hud()}
+function finishLevel(D){const L=D.lv,det=D.det,pct=Math.max(0,Math.min(1,L.best/det.total)),sc=Math.round(1000*pct);D.res.push({sc,pct,cost:det.total,best:L.best,time:det.time,perm:D.route.slice(),stops:L.stops.map(s=>({x:s.x,y:s.y,id:s.id,emoji:s.emoji,urg:s.urg,hot:s.hot,can:s.can})),shop:L.shop,M:L.M,bestPerm:L.bestPerm.slice(),legPts:null});
+ D.st="res";if(pct>=.97)D.maxCombo++;(pct>=.9?sfx.ok:pct>=.7?sfx.drop:sfx.bad)();if(window.NPFx)NPFx.buzz(pct>=.9?[20,30,40]:25);
+ if(pct>=.9){NPJuice.text($("play"),T("pct",{p:Math.round(pct*100)}),{color:"#ffd24a",top:"24%",size:6});burst(pct>=.97?14:8)}hud();updBtn();clearTimeout(D.nt);D.nt=setTimeout(()=>{if(G===D&&D.st==="res")nextLevel(D)},6500)}
+function nextLevel(D){clearTimeout(D.nt);if(D.st!=="res")return;if(D.li>=3){D.over=true;sfx.end();finish(D);return}D.li++;D.lv=genLevel(D,D.li);D.route=[];D.st="plan";D.planT=D.C.plan;D.det=null;updBtn();hud()}
+function updBtn(){const D=G,b=$("ssGo"),u=$("ssUndo");if(!D||!b)return;const done=D.route.length>=D.lv.n;b.textContent=D.st==="plan"?T("go")+" ("+D.route.length+"/"+D.lv.n+")":D.st==="res"?(D.li>=3?T("done"):T("next")):"…";b.disabled=D.st==="run";b.style.opacity=D.st==="plan"&&!done?.7:1;u.disabled=D.st!=="plan"||!D.route.length}
+$("ssGo").addEventListener("click",()=>{const D=G;if(!D||D.over||paused)return;if(D.st==="plan")startRun(D,false);else if(D.st==="res")nextLevel(D)});
+$("ssUndo").addEventListener("click",()=>{const D=G;if(D&&!D.over)undoStop(D)});
+function step(D,dt){if(D.over)return;D.time+=dt;
+ if(D.st==="plan"){const was=Math.ceil(D.planT);D.planT-=dt;if(D.planT<=5&&Math.ceil(D.planT)!==was&&D.planT>0)sfx.tick();if(D.planT<=0)startRun(D,true)}
+ else if(D.st==="run"){D.runT+=dt*VEL*VIS;const L=D.lv;while(D.runDone<D.marks.length&&D.runT>=D.marks[D.runDone]){const e=D.det.ev[D.runDone],s=L.stops[e.i];D.fx.push({x:s.x,y:s.y,t:.9,st:e.st});(e.st==="ok"?sfx.drop:sfx.bad)();D.runDone++}if(D.runT>=D.runLen+8)finishLevel(D)}
+ for(const f of D.fx)f.t-=dt;D.fx=D.fx.filter(f=>f.t>0);if(Math.floor(D.time*4)!==D._q){D._q=Math.floor(D.time*4);hud()}}
+function burst(n){if(!isProSk()&&n<12)return;const host=$("play"),L=(skinOf().deco||["⭐","📦"]);for(let i=0;i<n;i++){if(host.querySelectorAll(".eb2").length>30)break;const e=document.createElement("i"),a=Math.random()*6.283,d=14+Math.random()*30;e.className="eb2";e.textContent=L[i%L.length];e.style.left="50%";e.style.top="46%";e.style.setProperty("--dx",Math.cos(a)*d+"cqw");e.style.setProperty("--dy",(Math.sin(a)*d*.8-4)+"cqw");e.style.setProperty("--rt",(Math.random()*120-60)+"deg");host.appendChild(e);setTimeout(()=>e.remove(),950)}}
+function HUD(D){return[[scoreOf(D),"sc"],[D.st==="plan"?Math.ceil(Math.max(0,D.planT))+"s":D.st==="run"?"🛵":"✓","tm"],[D.route.length+"/"+D.lv.n,"ex"]]}
+function endChips(D){const n=scoreOf(D),avg=D.res.length?Math.round(D.res.reduce((a,r)=>a+r.pct,0)/D.res.length*100):0;return[TYPES[D.t][0]+" "+L2([TYPES[D.t][1],TYPES[D.t][2]]),T("pct",{p:avg}),D.maxCombo>0?"🎯×"+D.maxCombo:"",(D.prevBest>0&&n>D.prevBest)?T("rec"):""]}
+const shareT=D=>L2([TYPES[D.t][1],TYPES[D.t][2]]);
+function fitCanvas(){const w=$("cvw");if(!w)return;const aw=w.clientWidth,ah=w.clientHeight;if(!aw||!ah)return;const s=Math.min(aw/W,ah/H),dpr=Math.min(2,devicePixelRatio||1);cv.style.width=Math.floor(W*s)+"px";cv.style.height=Math.floor(H*s)+"px";cv.width=Math.floor(W*s*dpr);cv.height=Math.floor(H*s*dpr);SC=cv.width/W;draw()}
+new ResizeObserver(fitCanvas).observe($("cvw"));
+function bgBasic(c,w,h,dk,M){c.fillStyle=dk?"#2a2118":"#f4ead8";c.fillRect(0,0,w,h);c.fillStyle=dk?"#3a2e22":"#e6d6b8";for(let x=0;x<w;x+=40)for(let y=0;y<h;y+=40){c.fillRect(x+7,y+7,26,26)}c.strokeStyle=dk?"rgba(255,230,190,.12)":"rgba(120,80,30,.14)";c.lineWidth=1}
+function pinDraw(c,s,k,D,tm,dk,state){const sk=skinOf();if(sk.pin){sk.pin(c,s,k,state,tm,dk);return}c.save();c.translate(s.x,s.y);c.font="30px "+emj;c.textAlign="center";c.textBaseline="middle";c.fillText(s.emoji,0,0);c.restore()}
+function badges(c,s,D,dk){const L=D.lv,items=[];if(s.urg!=null)items.push({t:"⚡"+s.urg.toFixed(0),col:"#e8590c"});if(s.hot!=null)items.push({t:"🔥"+s.hot.toFixed(0),col:"#d6336c"});if(s.can!=null)items.push({t:"🚫"+s.can.toFixed(0),col:"#7048e8"});c.font="800 11px 'Be Vietnam Pro',system-ui";c.textAlign="center";items.forEach((it,i)=>{const w=c.measureText(it.t).width+10;c.fillStyle=it.col;c.beginPath();c.roundRect?c.roundRect(s.x-w/2,s.y+17+i*15,w,14,7):c.rect(s.x-w/2,s.y+17+i*15,w,14);c.fill();c.fillStyle="#fff";c.fillText(it.t,s.x,s.y+27.5+i*15)})}
+function drawRoute(c,M,shop,stops,perm,col,w,dash,upto){let pos=shop;c.save();c.lineCap="round";c.lineJoin="round";c.strokeStyle=col;c.lineWidth=w;if(dash)c.setLineDash(dash);c.beginPath();c.moveTo(pos.x,pos.y);perm.forEach((i,k)=>{const s=stops[i],lp=legPts(M,pos,s);for(let j=1;j<lp.length;j++)c.lineTo(lp[j][0],lp[j][1]);pos=s});c.stroke();c.restore()}
+function draw(){if(!ctx||!cv.width)return;const sk=skinOf(),dm=sk.dim||[360,420];if(W!==dm[0]||H!==dm[1]){W=dm[0];H=dm[1];if(G&&!G.over&&G.st==="plan"){G.lv=genLevel(G,G.li);G.route=[]}fitCanvas();return}
+ const c=ctx,dk=isDark(),D=G,tm=D?D.time:0;c.setTransform(SC,0,0,SC,0,0);c.clearRect(0,0,W,H);const M=D&&D.lv?D.lv.M:{kind:sk.metric||"manh",ry:H*.5,bridges:[W*.26,W*.74]};if(sk.bg)sk.bg(c,W,H,tm,dk,M);else bgBasic(c,W,H,dk,M);if(!D||!D.lv)return;
+ const L=D.lv,col=sk.col||(dk?"#ffb066":"#e8590c");
+ if(D.st==="res"){const r=D.res[D.res.length-1];drawRoute(c,L.M,L.shop,L.stops,r.bestPerm,"rgba(47,158,68,.9)",5,[9,8])}
+ if(D.route.length)drawRoute(c,L.M,L.shop,L.stops,D.route,col,6,null);
+ L.stops.forEach((s,i)=>{const at=D.route.indexOf(i);pinDraw(c,s,i,D,tm,dk,at>=0?"on":"off");badges(c,s,D,dk);if(at>=0){c.fillStyle=col;c.beginPath();c.arc(s.x-17,s.y-17,10,0,6.283);c.fill();c.fillStyle="#fff";c.font="800 13px 'Be Vietnam Pro',system-ui";c.textAlign="center";c.textBaseline="middle";c.fillText(at+1,s.x-17,s.y-16.5)}});
+ c.font="34px "+emj;c.textAlign="center";c.textBaseline="middle";c.fillText(sk.shopEm||"🏪",L.shop.x,L.shop.y);
+ if(D.st==="run"&&D.runPts){const T0=Math.min(D.runLen,D.runT);let acc=0,px=D.runPts[0][0],py=D.runPts[0][1],ang=0;for(let k=1;k<D.runPts.length;k++){const a=D.runPts[k-1],b=D.runPts[k],sl=Math.hypot(b[0]-a[0],b[1]-a[1]);if(acc+sl>=T0||k===D.runPts.length-1){const u=sl?Math.min(1,(T0-acc)/sl):1;px=a[0]+(b[0]-a[0])*u;py=a[1]+(b[1]-a[1])*u;ang=Math.atan2(b[1]-a[1],b[0]-a[0]);break}acc+=sl}c.save();c.translate(px,py);c.font="30px "+emj;c.textAlign="center";c.textBaseline="middle";if(Math.cos(ang)>0)c.scale(-1,1);c.fillText(sk.bikeEm||"🛵",0,0);c.restore()}
+ for(const f of D.fx){c.save();c.globalAlpha=Math.min(1,f.t*2);c.font="800 16px 'Be Vietnam Pro',system-ui";c.textAlign="center";c.fillStyle=f.st==="ok"?"#2f9e44":"#e03131";c.fillText(f.st==="ok"?"✓ +":f.st==="cancel"?T("cancel"):f.st==="late"?T("late"):T("cold"),f.x,f.y-24-(.9-f.t)*22);c.restore()}
+ if(D.st==="res"){const r=D.res[D.res.length-1];c.save();c.fillStyle=dk?"rgba(20,12,4,.88)":"rgba(255,250,240,.92)";c.beginPath();c.roundRect?c.roundRect(W/2-132,H-92,264,76,16):c.rect(W/2-132,H-92,264,76);c.fill();c.fillStyle=dk?"#fff":"#3a2410";c.textAlign="center";c.font="400 30px Bungee,'Arial Black',system-ui";c.fillText(Math.round(r.pct*100)+"%",W/2,H-52);c.font="800 14px 'Be Vietnam Pro',system-ui";c.fillText(T("you",{t:r.cost.toFixed(1)})+" · "+T("opt",{t:r.best.toFixed(1)}),W/2,H-28);c.restore()}
+ c.fillStyle=sk.lbl||(dk?"rgba(255,255,255,.8)":"rgba(58,36,16,.75)");c.font="800 14px 'Be Vietnam Pro',system-ui";c.textAlign="left";c.fillText(T("lvl",{n:D.li}),10,18);if(sk.fx)sk.fx(c,W,H,tm,dk)}
+function pt(e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H]}
+cv.addEventListener("pointerdown",e=>{const D=G;if(!D||D.over||paused||D.st!=="plan")return;if(e.pointerType==="mouse"&&e.button!==0)return;e.preventDefault();const p=pt(e);let bi=-1,bd=30;D.lv.stops.forEach((s,i)=>{const d=Math.hypot(s.x-p[0],s.y-p[1]);if(d<bd){bd=d;bi=i}});if(bi>=0)pickStop(D,bi)});
+function onBegin(D){updBtn();fitCanvas()}
+`,
+  drawCard: String.raw`function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#ff9a5a","#b8430a"];
+ const g=x.createLinearGradient(0,0,1080,1350);g.addColorStop(0,cg[0]);g.addColorStop(1,cg[1]);x.fillStyle=g;x.fillRect(0,0,1080,1350);x.textAlign="center";x.fillStyle="#fff";x.font="800 62px "+F;x.fillText((isProSk()?"👑 ":"🛵 ")+T("title"),540,100);
+ const best=D.res.reduce((a,r)=>r.pct>a.pct?r:a,D.res[0]||null),bx=140,by=150,bw=800,bh=700;x.fillStyle="rgba(255,250,240,.94)";x.beginPath();x.roundRect?x.roundRect(bx,by,bw,bh,36):x.rect(bx,by,bw,bh);x.fill();
+ if(best){const sc=Math.min((bw-80)/W,(bh-80)/H),ox=bx+(bw-W*sc)/2,oy=by+(bh-H*sc)/2;x.save();x.translate(ox,oy);x.scale(sc,sc);drawRoute(x,best.M,best.shop,best.stops,best.bestPerm,"rgba(47,158,68,.85)",5,[9,8]);drawRoute(x,best.M,best.shop,best.stops,best.perm,"#e8590c",6,null);
+  best.stops.forEach(s=>{x.font="28px "+emj;x.textAlign="center";x.textBaseline="middle";x.fillText(s.emoji,s.x,s.y)});x.font="32px "+emj;x.fillText("🏪",best.shop.x,best.shop.y);x.restore()}
+ x.fillStyle="#fff";x.font="800 160px "+F;x.fillText(scoreOf(D),540,980);x.font="700 46px "+F;x.fillText("/ 3000 · "+L2([TYPES[D.t][1],TYPES[D.t][2]]),540,1040);x.font="700 40px "+F;x.fillStyle="#ffe9c8";x.fillText(D.res.map(r=>Math.round(r.pct*100)+"%").join("  ·  "),540,1100);x.font="800 54px "+F;x.fillStyle="#ffd24a";x.fillText("🏅 "+T("rt")[rankIdx(scoreOf(D))]+(D.prevBest>0&&scoreOf(D)>D.prevBest?"  "+T("rec"):""),540,1180);x.fillStyle="#fff";x.font="800 50px "+F;x.fillText(T("ask"),540,1255);x.font="800 38px "+F;x.fillStyle="#ffe2b8";x.fillText(location.host,540,1310);return c}`,
+  wire: { dvi: "Nhận 5 đơn hàng trên bản đồ, vẽ lộ trình giao hết nhanh nhất. Có đơn gấp, đồ nóng, khách hủy phút chót. Bạn đạt bao nhiêu % lộ trình tối ưu?", den: "Take 5 orders on the map and plan the fastest delivery route. Urgent orders, hot food, last-minute cancellations. How close to optimal can you get?", c1: "#FFB86B", c2: "#C2410C", emoji: "🛵", artKey: "ship",
+    art: '<g stroke="#fff" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" fill="none" stroke-dasharray="26 22"><path d="M110 400L110 250L250 250L250 120L400 120"/></g><text x="110" y="440" font-size="90" text-anchor="middle">🏪</text><text x="400" y="110" font-size="90" text-anchor="middle">🏠</text><text x="270" y="330" font-size="110" text-anchor="middle">🛵</text>' },
+  test: String.raw`window.SS={get G(){return G},PF,CFG,begin,newGame,scoreOf,parseCh,drawCard,shareText,shareLink,fnv,dayKey,dayNo,finish,genLevel,costOf,dist,permsOf,pickStop,startRun,finishLevel,nextLevel,autoFill,
+ play(D,mode){D=D||G;let k=0;while(!D.over&&k++<10){const L=D.lv;D.route=mode==="best"?L.bestPerm.slice():mode==="rev"?L.bestPerm.slice().reverse():[...Array(L.n).keys()];D.st="plan";startRun(D,false);D.runT=D.runLen+9;step(D,.01);if(D.st==="res"){clearTimeout(D.nt);nextLevel(D)}}return{score:scoreOf(D),over:D.over,res:D.res.map(r=>Math.round(r.pct*100))}}};`
+};
