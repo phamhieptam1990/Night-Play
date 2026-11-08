@@ -77,6 +77,7 @@ txt=txt.replace('PF.types=[true,false,false,false]','PF.types=TYPES.map((_,i)=>i
 txt=txt.replace('HS.t<=3','HS.t<TYPES.length')
 txt=txt.replace('fnv("rail|"','fnv(GID+"|"')
 txt=txt.replace('G.done','scoreOf(G)')
+txt=txt.replace('G=newGame(seed,mode,t,ch);acc=0;','G=newGame(seed,mode,t,ch);$("play").dataset.ty=t;acc=0;')
 txt=txt.replace('fitCanvas();hud();window.NP&&NP.start();recBegin()}','fitCanvas();hud();window.NP&&NP.start();recBegin();if(typeof onBegin==="function")onBegin(G)}')
 txt=txt.replace('t:L2([TYPES[D.t][1],TYPES[D.t][2]]),n:scoreOf(D)','t:(typeof shareT==="function"?shareT(D):L2([TYPES[D.t][1],TYPES[D.t][2]])),n:scoreOf(D)')
 txt=txt.replace('clipReady=!!(window.NPFx&&NPFx.canRec()&&!helper)','clipReady=!!(cv&&window.NPFx&&NPFx.canRec()&&!helper)')
