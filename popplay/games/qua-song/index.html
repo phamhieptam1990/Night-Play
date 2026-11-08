@@ -77,8 +77,9 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .ib2{width:13cqw;height:13cqw;border-radius:50%;background:var(--panel);color:var(--ink);box-shadow:var(--shadow);font-size:6cqw;display:grid;place-items:center;flex:none;min-width:38px;min-height:38px}.ib2.main{width:17cqw;height:17cqw;font-size:8cqw;background:var(--accent);color:var(--on-accent)}
 .ib2:active{transform:scale(.92)}.ib2:disabled{opacity:.4}
 .ib,.ib2{border:1.5px solid color-mix(in srgb,currentColor 42%,transparent)!important}
-.toast{position:absolute;left:50%;top:6cqw;transform:translateX(-50%);z-index:9;padding:1.6cqw 4cqw;border-radius:4cqw;background:var(--panel);color:var(--ink);box-shadow:var(--shadow);font-weight:800;font-size:4cqw;line-height:1.25;opacity:0;transition:opacity .2s;pointer-events:none;text-align:center;max-width:92%;width:max-content}
-.toast.on{opacity:1}
+.toast{position:absolute;left:4cqw;right:4cqw;bottom:24cqw;top:auto;transform:none;width:auto;max-width:none;z-index:9;display:flex;align-items:center;gap:3cqw;padding:2.6cqw 3.6cqw;border-radius:4.5cqw;background:var(--panel);color:var(--ink);border:.7cqw solid color-mix(in srgb,var(--accent) 70%,transparent);box-shadow:0 2cqw 5cqw rgba(0,0,0,.3);font-weight:800;font-size:4.2cqw;line-height:1.25;text-align:left;opacity:0;transform:translateY(2cqw);transition:opacity .2s,transform .2s;pointer-events:none}
+.toast i{font-style:normal;font-size:7cqw;line-height:1;flex:none}.toast span{flex:1;min-width:0}.toast.on{opacity:1;transform:none}
+.toast.warn{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 14%,var(--panel))}.toast.hint{border-color:var(--warn);background:color-mix(in srgb,var(--warn) 16%,var(--panel))}
 .ov{position:absolute;inset:0;z-index:8;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3cqw;padding:4cqw;text-align:center;background:color-mix(in srgb,var(--bg) 84%,transparent);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:var(--ink)}
 .ov h2{margin:0;font-size:7.6cqw;font-weight:800;line-height:1.05}.ov p{margin:0;font-size:4.2cqw;color:var(--muted);font-weight:700}
 .hwL{list-style:none;margin:0;padding:1.4cqw 2cqw;display:flex;flex-direction:column;width:100%;text-align:left;background:var(--panel);border-radius:5cqw;box-shadow:var(--shadow)}
@@ -191,7 +192,7 @@ vi:{title:"Qua Sông Cùng Bé",docTitle:"Qua Sông Cùng Bé",sound:"Âm thanh"
  "end.h":"Qua sông thành công!","end.s3":"Quá đỉnh, đường ngắn nhất! 🎉","end.s2":"Rất giỏi, gần đường ngắn nhất!","end.s1":"Giỏi lắm! Thử lại để ít chuyến hơn nhé.","rank.btn":"Lên bảng điểm",
  "sk.pick":"Chọn giao diện","pw.h":"Giao diện của Night Pass","pw.p":"Mở khoá {name} và 15 giao diện đẹp khác cho cả 4 trò. Phần này dành cho phụ huynh.","pw.go":"Dành cho phụ huynh","pw.trial":"Chơi thử 1 ván","pw.later":"Để sau","pw.tried":"Hôm nay đã chơi thử rồi, mai thử tiếp nhé.",
  "gt.h":"Dành cho phụ huynh","gt.p":"Hỏi người lớn: {a} + {b} = ?","gt.x":"Quay lại",lockedLbl:"{n} (cần Night Pass)",
- "w.row":"Cần người biết chèo thuyền trên thuyền nhé!","w.empty":"Hãy chọn người lên thuyền trước nhé!","w.rule0":"Ôi! Trộm đông hơn cảnh sát ở một bên bờ rồi!","w.eat":"{a} sẽ ăn {b} mất!","w.rule2a":"Bố không được ở với con gái khi thiếu mẹ!","w.rule2b":"Mẹ không được ở với con trai khi thiếu bố!","w.rule2c":"Trộm ở cạnh người khác mà không có cảnh sát!","w.hint":"Thử chở: {n}","w.done":"Hết đường gợi ý rồi!","w.undo":"Chưa có chuyến nào để quay lại.",
+ "w.row":"Cần có người biết chèo thuyền nhé!","w.cap":"Thuyền chỉ chở được {n} người thôi!","w.empty":"Hãy chọn người lên thuyền trước nhé!","w.rule0":"Ôi! Trộm đông hơn cảnh sát ở một bên bờ rồi!","w.eat":"{a} sẽ ăn {b} mất!","w.rule2a":"Bố không được ở với con gái khi thiếu mẹ!","w.rule2b":"Mẹ không được ở với con trai khi thiếu bố!","w.rule2c":"Trộm ở cạnh người khác mà không có cảnh sát!","w.hint":"Thử chở: {n}","w.done":"Hết đường gợi ý rồi!","w.undo":"Chưa có chuyến nào để quay lại.",
  "say.start":"Đưa mọi người qua sông nào!","say.bad":"Ôi, không được rồi!",cmb:["Hay!","Giỏi!","Tuyệt!","Siêu hạng!"],"hook.m":"Qua sông trong {n} chuyến, bạn làm được không?","hook.t":"Qua cầu trong {n} phút, bạn làm được không?",near:"Chỉ thừa {n} {u} nữa là đường ngắn nhất! Thử lại nhé 🔥","leg":"🔁 Thử lại cùng câu đố · ▶ Câu đố mới","retry":"Thử lại cùng câu đố","streak":"🔥 {n} lần 3 sao liên tiếp!","beat":"Vượt người thách rồi!",
  "n.C":"Cảnh sát","n.T":"Trộm","n.F":"Bác nông dân","n.x1":"Sói","n.x2":"Dê","n.x3":"Cải","n.x4":"Gà","n.x5":"Ngô","n.M":"Mẹ","n.S":"Con trai","n.D":"Con gái","n.P":"Cảnh sát","n.Fa":"Bố","n.Tf":"Trộm","n.p":"Bạn","n.x1b":"Sói","n.x2b":"Dê","n.x3b":"Gà",
  "sk.0.basic":"Thành phố","sk.0.neon":"Phố đêm neon","sk.0.pirate":"Cướp biển","sk.0.west":"Miền Tây","sk.0.space":"Vũ trụ",
@@ -210,7 +211,7 @@ en:{title:"River Crossing",docTitle:"River Crossing",sound:"Sound",lang:"Languag
  "end.h":"Everyone crossed!","end.s3":"Perfect, the shortest way! 🎉","end.s2":"Great, almost the shortest!","end.s1":"Well done! Try again for fewer trips.","rank.btn":"Post to leaderboard",
  "sk.pick":"Pick a look","pw.h":"Night Pass looks","pw.p":"Unlock {name} and 15 more beautiful looks for all 4 games. This part is for parents.","pw.go":"For parents","pw.trial":"Try one puzzle","pw.later":"Later","pw.tried":"You already tried today, come back tomorrow.",
  "gt.h":"For parents","gt.p":"Ask a grown-up: {a} + {b} = ?","gt.x":"Back",lockedLbl:"{n} (needs Night Pass)",
- "w.row":"Somebody who can row must be in the boat!","w.empty":"Pick who goes on the boat first!","w.rule0":"Oops! Robbers outnumber the cops on one bank!","w.eat":"{a} would eat {b}!","w.rule2a":"Dad can't stay with the daughters without mom!","w.rule2b":"Mom can't stay with the sons without dad!","w.rule2c":"The thief is next to someone without the police!","w.hint":"Try taking: {n}","w.done":"No hint available!","w.undo":"No trip to undo yet.",
+ "w.row":"Someone who can row must come along!","w.cap":"The boat holds only {n}!","w.empty":"Pick who goes on the boat first!","w.rule0":"Oops! Robbers outnumber the cops on one bank!","w.eat":"{a} would eat {b}!","w.rule2a":"Dad can't stay with the daughters without mom!","w.rule2b":"Mom can't stay with the sons without dad!","w.rule2c":"The thief is next to someone without the police!","w.hint":"Try taking: {n}","w.done":"No hint available!","w.undo":"No trip to undo yet.",
  "say.start":"Let's get everyone across!","say.bad":"Oops, not that!",cmb:["Nice!","Great!","Awesome!","Legendary!"],"hook.m":"Cross the river in {n} trips — can you?","hook.t":"Cross the bridge in {n} minutes — can you?",near:"Only {n} {u} over the shortest way! Try again 🔥","leg":"🔁 Retry same puzzle · ▶ New puzzle","retry":"Retry same puzzle","streak":"🔥 {n} three-star wins in a row!","beat":"You beat the challenge!",
  "n.C":"Cop","n.T":"Robber","n.F":"Farmer","n.x1":"Wolf","n.x2":"Goat","n.x3":"Cabbage","n.x4":"Chicken","n.x5":"Corn","n.M":"Mom","n.S":"Son","n.D":"Daughter","n.P":"Police","n.Fa":"Dad","n.Tf":"Thief","n.p":"Friend","n.x1b":"Wolf","n.x2b":"Goat","n.x3b":"Chicken",
  "sk.0.basic":"City","sk.0.neon":"Neon night","sk.0.pirate":"Pirates","sk.0.west":"Wild west","sk.0.space":"Outer space",
@@ -286,7 +287,7 @@ function audio(){if(!sound)return null;try{ac=ac||new (window.AudioContext||wind
 function tone(f,d,ty,v,dl){const c=audio();if(!c)return;const t0=c.currentTime+(dl||0),o=c.createOscillator(),g=c.createGain();o.type=ty||"sine";o.frequency.value=f;g.gain.setValueAtTime(0,t0);g.gain.linearRampToValueAtTime(v||.1,t0+.02);g.gain.exponentialRampToValueAtTime(.0001,t0+d);o.connect(g);g.connect(c.destination);o.start(t0);o.stop(t0+d+.05)}
 const sfx={pick:()=>tone(620,.07,"triangle",.09),drop:()=>tone(420,.07,"triangle",.08),row:()=>{tone(300,.18,"sine",.1);tone(380,.18,"sine",.1,.2)},no:()=>tone(200,.25,"sine",.12),win:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.2,"triangle",.12,i*.1)),hint:()=>tone(880,.12,"triangle",.1),combo:n=>{const b=440*Math.pow(1.122,Math.min(n,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.12,"triangle",.1,i*.06))}};
 function say(text){if(!sound||!window.speechSynthesis||!text)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang=LANG==="vi"?"vi-VN":"en-US";u.rate=.9;u.pitch=1.15;speechSynthesis.speak(u)}catch(e){}}
-let toastT=0;function toast(m,ms){const e=$("toast");e.textContent=m;e.classList.add("on");clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove("on"),ms||2200)}
+let toastT=0;function toast(m,ms,k){const e=$("toast"),ic={warn:"⚠️",hint:"💡",info:"ℹ️"}[k||"info"];e.className="toast "+(k||"info");e.innerHTML="";const i=document.createElement("i");i.textContent=ic;const s=document.createElement("span");s.textContent=m;e.append(i,s);e.classList.add("on");clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove("on"),ms||2200)}
 
 /* ===== HÔM NAY · THÁCH ĐẤU · CHIA SẺ ===== */
 const DAILY_BASE=Date.UTC(2026,0,1);
@@ -384,15 +385,15 @@ function render(){if(!G)return;const P=G.P,sk=skinOf(G.t),cast=sk.cast||{},bl=$(
 function updHud(){if(!G)return;const P=G.P,unit=P.mode==="time"?"⏱ "+G.used+" "+T("mins"):"🚣 "+G.used+" "+T("moves");$("hl").textContent=unit;$("hr").textContent=(G.combo>=2?"🔥×"+G.combo+" · ":"")+"🎯 "+P.opt}
 function tapEnt(i){if(!G||G.over||paused||G.busy)return;const P=G.P;G.hl=[];
   if(G.load.includes(i)){G.load=G.load.filter(x=>x!==i);sfx.drop();render();return}
-  if(G.side[i]!==G.boat)return;if(G.load.length>=P.cap){toast("🚣 ≤ "+P.cap,1200);return}
+  if(G.side[i]!==G.boat)return;if(G.load.length>=P.cap){toast(T("w.cap",{n:P.cap}),1600,"warn");return}
   G.load.push(i);sfx.pick();render()}
 function why(P,L){return P.why(L)}
 function go(){if(!G||G.over||paused||G.busy)return;const P=G.P;
-  if(!G.load.length){toast(T("w.empty"),1800);return}
-  if(!G.load.some(i=>P.ents[i].row)){toast(T("w.row"),2200);flash(G.load);return}
+  if(!G.load.length){toast(T("w.empty"),2000,"warn");return}
+  if(!G.load.some(i=>P.ents[i].row)){toast(T("w.row"),2400,"warn");flash(G.load);return}
   const nm=mask()^G.load.reduce((a,i)=>a|(1<<i),0);
   if(!stateOk(P,nm)){const [L,Rr]=bankLists(P.ents,nm),badL=P.bad(L),bs=badL?L:Rr,w=why(P,bs);
-    let msg=T(w.k,{a:w.a!=null?nameOf(P.ents[w.a]):"",b:w.b!=null?nameOf(P.ents[w.b]):""});toast(msg,2800);say(T("say.bad"));sfx.no();if(window.NPFx)NPFx.buzz(40);
+    let msg=T(w.k,{a:w.a!=null?nameOf(P.ents[w.a]):"",b:w.b!=null?nameOf(P.ents[w.b]):""});toast(msg,3000,"warn");say(T("say.bad"));sfx.no();if(window.NPFx)NPFx.buzz(40);
     const bank=$(badL?"bkL":"bkR");bank.classList.add("warn");setTimeout(()=>bank.classList.remove("warn"),1200);flash(G.load);G.load=[];setTimeout(render,500);return}
   const sub=G.load.slice(),c=costOf(P,sub);sfx.row();
   $("boat").style.left=G.boat?"0%":"8%";$("hull").style.transform=G.boat?"none":"scaleX(-1)";G.busy=true;
@@ -403,7 +404,7 @@ function flash(ids){document.querySelectorAll(".chip2").forEach(b=>{if(ids.inclu
 function undo(){if(!G||G.over)return;if(!G.mv.length){toast(T("w.undo"),1200);return}const sub=G.mv.pop();const c=costOf(G.P,sub);for(const i of sub)G.side[i]^=1;G.boat^=1;G.load=[];G.hl=[];G.combo=0;const sl=solveFrom(G.P,mask(),G.boat);G.rem=sl?sl.cost:0;/* G.used không giảm: thử lại cũng được tính để công bằng */render();updHud()}
 function resetPuz(){if(!G||G.over)return;G.side.fill(0);G.boat=0;G.load=[];G.mv=[];G.hl=[];G.combo=0;G.rem=G.P.opt;render();updHud()}
 function hint(){if(!G||G.over)return;const P=G.P,m=mask(),sol=solveFrom(P,m,G.boat);if(!sol||!sol.path.length){toast(T("w.done"),1500);return}
-  G.hints++;const sub=sol.path[0];G.hl=sub.slice();G.load=[];sfx.hint();render();toast(T("w.hint",{n:sub.map(i=>castOf(P.ents[i],skinOf(G.t).cast||{})).join(" ")}),2400)}
+  G.hints++;const sub=sol.path[0];G.hl=sub.slice();G.load=[];sfx.hint();render();toast(T("w.hint",{n:sub.map(i=>castOf(P.ents[i],skinOf(G.t).cast||{})).join(" ")}),2600,"hint")}
 function checkWin(){if(!G||G.over)return;if(G.side.every(s=>s===1)&&G.boat===1)finish()}
 function finish(){
   G.over=true;const opt=G.P.opt;G.stars=starsOf(opt,G.used);G.score=scoreOf(opt,G.used,G.hints);
