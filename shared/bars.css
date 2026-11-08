@@ -31,4 +31,6 @@ footer>.bars-pop{left:12px;bottom:calc(100% + 8px);transform-origin:bottom left}
 .bars-pop nav{display:flex;flex-direction:column;gap:0!important;flex-wrap:nowrap}
 .bars-pop nav a,.bars-pop nav button{display:block;width:100%;padding:13px 12px;border-radius:12px;text-align:left;font-size:15px;font-weight:600;color:inherit;background:none;text-decoration:none;border:0;cursor:pointer}
 .bars-pop nav a+a,.bars-pop nav a+button,.bars-pop nav button+a{border-top:1px solid color-mix(in srgb,var(--line,#ddd) 70%,transparent);border-radius:0}
+.bars-pop a[hidden],.bars-pop .bars-sep[hidden]{display:none!important}
+.bars-pop .bars-sep{border:0;border-top:1px solid var(--line,#ddd);margin:4px 6px;width:auto}
 @media print{.bars-more,.bars-pop{display:none}}

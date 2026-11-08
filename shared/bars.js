@@ -53,10 +53,20 @@
   }
   function expandFoot(f) {
     var st = f._bars; if (!st) return;
-    close(); st.btn.remove(); st.pop.remove(); st.navs.forEach(function (n) { n.parent.insertBefore(n.el, n.next); }); f._bars = null;
+    close(); st.btn.remove(); st.pop.remove(); if (st.sep) st.sep.hidden = true; if (st.dups) st.dups.forEach(function (a) { a.hidden = false; }); st.navs.forEach(function (n) { n.parent.insertBefore(n.el, n.next); }); f._bars = null;
   }
   function collapseFoot(f) {
     var navs = $$("nav", f).map(function (el) { return { el: el, parent: el.parentNode, next: el.nextSibling }; }); if (!navs.length) return;
+    /* header đã có menu ⋯ thì gộp liên kết chân trang vào đó, khỏi thêm một nút ⋯ nữa */
+    var hn = document.querySelector("nav.nav"), hb = hn && hn._bars;
+    if (hb && hb.pop) {
+      var sep = document.createElement("hr"); sep.className = "bars-sep"; hb.pop.appendChild(sep);
+      var have = {}, dups = []; $$("a", hb.pop).forEach(function (a) { if (a.getAttribute("href")) have[a.getAttribute("href")] = 1; });
+      navs.forEach(function (n) { $$("a", n.el).forEach(function (a) { var h = a.getAttribute("href"); if (h && h !== "#" && have[h] && !a.hidden) { a.hidden = true; dups.push(a); } }); hb.pop.appendChild(n.el); });
+      var nothing = function () {};
+      f._bars = { btn: { remove: nothing }, pop: { remove: nothing }, navs: navs, sep: sep, dups: dups };
+      return;
+    }
     var m = make(f, "foot-pop"); navs.forEach(function (n) { m.pop.appendChild(n.el); });
     f.insertBefore(m.btn, f.querySelector(".fin") || f.querySelector(".fbar") || f.firstChild.nextSibling || null);
     f._bars = { btn: m.btn, pop: m.pop, navs: navs };

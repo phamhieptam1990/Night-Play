@@ -233,6 +233,15 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
   .foot{justify-content:flex-start}
 }
 @media (max-height:620px){.trust,.hero .desc{display:none}}
+/* Điện thoại: bớt đồ trang trí cho đỡ rối — bỏ chip chữ, bỏ nút trượt (vuốt vẫn chạy, còn chấm trang), bỏ logo lặp ở chân trang */
+@media (max-width:520px),(hover:none){
+  .trust{display:flex!important;flex-wrap:nowrap;justify-content:center;gap:10px!important;margin:18px -50px 0!important}
+  .trust li{background:none!important;border:0!important;box-shadow:none!important;padding:0!important;font-size:10.5px!important;white-space:nowrap;gap:3px!important;transform:none!important}
+  .hero{padding-top:6px;padding-bottom:4px}
+  #gdots .gn{display:none}
+  .foot .fbrand{display:none}
+}
+
 /* Màn hẹp: bỏ đoạn mô tả (trùng ý với 3 chip), chip gọn trên một hàng, chừa chỗ cho nút tìm kiếm nổi bên phải */
 @media (max-width:520px){.hero{padding-left:58px;padding-right:58px}.hero .desc{display:none}.hero h1{font-size:clamp(20px,6vw,26px)}.trust{gap:5px;margin-top:10px;margin-left:-42px;margin-right:-42px}.trust li{padding:4px 9px;font-size:11px;gap:4px;white-space:nowrap}}
 @media (max-height:360px){.nav{padding:4px 16px}.hero{padding:2px 16px}.hero h1{font-size:20px}main{padding-top:2px;padding-bottom:4px}.foot{padding-top:2px;padding-bottom:2px}.foot a,.foot button{padding:4px 0}}
