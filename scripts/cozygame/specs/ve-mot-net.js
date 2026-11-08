@@ -2,31 +2,31 @@
 module.exports = {
   id: "ve-mot-net", prefix: "vn", title: { vi: "Vẽ Một Nét", en: "One Stroke" }, maxScore: 1000,
   hero: "✏️⭕", deco: ["✏️", "📐", "⭕", "🖍️"],
-  types: [["⭕", "Hình tròn", "Circle"], ["⬜", "Hình vuông", "Square"], ["⭐", "Ngôi sao", "Star"], ["🇻🇳", "Bản đồ Việt Nam", "Vietnam map"]],
+  types: [["⭕", "Hình tròn", "Circle"], ["🙈", "Vẽ mù", "Blind draw"], ["👻", "Theo mẫu mờ", "Ghost trace"], ["⏱️", "Vẽ 3 giây", "3-second draw"]],
   catalog: [["basic", "Vở ô li", "Notebook", "✏️"], ["chalk", "Bảng đen phấn", "Chalkboard", "🖍️"], ["brush", "Giấy dó thư pháp", "Ink & paper", "🖌️"], ["neon", "Máy game neon", "Neon arcade", "🕹️"], ["zen", "Vườn cát thiền", "Zen sand garden", "🪨"]],
   rootCss: `:root{--bg:#F3F8EC;--panel:#ffffff;--ink:#1d2b3a;--muted:#5b6b7a;--accent:#2b6fd6;--on:#ffffff;--good:#1a9a55;--bad:#d23b3b;--line:#cfdcc4;--pbg:linear-gradient(#e4f0d6,#f8fbf2);--field:#fffdf4;--field2:#fff4d6;
  --display:"Bungee","Arial Black",system-ui,sans-serif;--body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif}
 :root[data-theme="dark"]{--bg:#0f1a14;--panel:#1a2b21;--ink:#eaf6ee;--muted:#9bbfa9;--accent:#6aa8ff;--on:#001a3a;--good:#3ddc84;--bad:#ff6b6b;--line:#2a4535;--pbg:linear-gradient(#17301f,#0f1a14);--field:#1d2a22;--field2:#26382c}`,
-  extraCss: `#cvw{touch-action:none}canvas#cv{cursor:crosshair}`,
+  extraCss: `#cvw{touch-action:none}canvas#cv{cursor:crosshair}#play[data-ty="1"] canvas#cv{border-style:dashed}#play[data-ty="2"] canvas#cv{box-shadow:0 0 0 1.2cqw color-mix(in srgb,var(--accent) 25%,transparent)}#play[data-ty="3"] canvas#cv{border-color:var(--bad)}`,
   gameHtml: `{{STATS}}
     <div id="cvw"><canvas id="cv"></canvas></div>
     {{HINT}}`,
   consts: `const NICE=900,CONF=["✏️","⭐","🎉"];`,
   i18n: {
     vi: { sub: "Vẽ hình tròn hoàn hảo nhất bằng MỘT nét tay không nhấc. Game chấm độ tròn theo %!", note: "3 lượt, tính lượt tốt nhất · mỗi ngày cả nước vẽ cùng một đề",
-      sc: "Tốt nhất", rnd: "Lượt", ex: "Vừa vẽ", hint0: "Đặt ngón tay xuống và vẽ một vòng tròn thật tròn, thật kín, không nhấc tay.", hint1: "Vẽ hình vuông bằng một nét: bốn cạnh bằng nhau, bốn góc vuông.", hint2: "Vẽ ngôi sao năm cánh bằng một nét, không nhấc tay.", hint3: "Vẽ đường viền bản đồ Việt Nam bằng một nét, chữ S thật mượt.",
+      sc: "Tốt nhất", rnd: "Lượt", ex: "Vừa vẽ", hint0: "Đặt ngón tay xuống và vẽ một vòng tròn thật tròn, thật kín, không nhấc tay.", hint1: "Vẽ mù: nét vẽ BIẾN MẤT khi bạn đang vẽ — chỉ nhìn thấy sau khi nhấc tay. Tin vào cảm giác!", hint2: "Theo mẫu mờ: mỗi lượt một hình (vuông → sao → bản đồ Việt Nam), vẽ chồng lên mẫu.", hint3: "Chỉ 3 giây cho mỗi nét! Hết giờ là tự nhấc bút, kịp vẽ kín vòng nhé.",
       end: "Xong 3 lượt!", endS: "Lượt đẹp nhất của bạn: {n}", rt: ["Tay run", "Nét ngoằn ngoèo", "Tay khá vững", "Tay vẽ thạo", "Compa sống"],
       tx: "✏️ Vẽ Một Nét · {t}\nMình vẽ được {n}!\n{l}", ask: "Bạn vẽ đẹp hơn mình không?",
-      lockP: "Hình vuông, ngôi sao, bản đồ Việt Nam và 4 giao diện (Bảng đen phấn, Giấy dó thư pháp, Máy game neon, Vườn cát thiền) với khung vẽ và bố cục riêng là của Night Pass. Dùng thử 1 ván mỗi ngày hoặc mở khoá tất cả.",
+      lockP: "Vẽ mù, Theo mẫu mờ, Vẽ 3 giây và 4 giao diện (Bảng đen phấn, Giấy dó thư pháp, Máy game neon, Vườn cát thiền) với khung vẽ và bố cục riêng là của Night Pass. Dùng thử 1 ván mỗi ngày hoặc mở khoá tất cả.",
       chP: "Bạn bè vẽ được {s}. Bạn vẽ đẹp hơn không?", rankHint: "Chơi “Thử thách hôm nay” để lên bảng điểm nhé!",
       tut: "Đặt ngón tay xuống và vẽ MỘT nét liền — vòng tròn càng tròn điểm càng cao!", short: "Nét ngắn quá, vẽ lại nhé!", tapNext: "Chạm để vẽ tiếp",
       re: ["Hoàn hảo như compa!", "Quá đỉnh!", "Tròn ra phết!", "Cũng… tròn!", "Quả trứng méo!"], reS: ["Hoàn hảo!", "Quá đỉnh!", "Đẹp đấy!", "Cũng được!", "Hơi méo rồi!"],
       sk: { basic: ["Vở ô li", "Notebook"], chalk: ["Bảng đen phấn", "Chalkboard"], brush: ["Giấy dó thư pháp", "Ink & paper"], neon: ["Máy game neon", "Neon arcade"], zen: ["Vườn cát thiền", "Zen sand garden"] } },
     en: { sub: "Draw the roundest circle you can in ONE stroke without lifting your finger. The game scores roundness in %!", note: "3 tries, best one counts · everyone draws the same shape each day",
-      sc: "Best", rnd: "Try", ex: "Last", hint0: "Put your finger down and draw one round, closed circle without lifting.", hint1: "Draw a square in one stroke: four equal sides, four right angles.", hint2: "Draw a five-point star in one stroke, no lifting.", hint3: "Trace the outline of Vietnam in one stroke, nice smooth S.",
+      sc: "Best", rnd: "Try", ex: "Last", hint0: "Put your finger down and draw one round, closed circle without lifting.", hint1: "Blind draw: your stroke VANISHES while you draw — you only see it after lifting. Trust your hand!", hint2: "Ghost trace: a different shape each try (square → star → Vietnam map), draw over the ghost.", hint3: "Only 3 seconds per stroke! Time is up, the pen lifts itself — close that circle fast.",
       end: "3 tries done!", endS: "Your best try: {n}", rt: ["Shaky hand", "Wobbly line", "Steady hand", "Skilled hand", "Human compass"],
       tx: "✏️ One Stroke · {t}\nI drew {n}!\n{l}", ask: "Can you draw better than me?",
-      lockP: "Square, Star, Vietnam map and 4 themes (Chalkboard, Ink & paper, Neon arcade, Zen sand garden) with their own drawing boards and layouts are for Night Pass. Try one round a day or unlock everything.",
+      lockP: "Blind draw, Ghost trace, 3-second draw and 4 themes (Chalkboard, Ink & paper, Neon arcade, Zen sand garden) with their own drawing boards and layouts are for Night Pass. Try one round a day or unlock everything.",
       chP: "A friend drew {s}. Can you draw better?", rankHint: "Play “Today's challenge” to make the leaderboard!",
       tut: "Put your finger down and draw ONE continuous stroke — the rounder, the higher the score!", short: "Too short — draw again!", tapNext: "Tap to draw again",
       re: ["Perfect as a compass!", "Amazing!", "Pretty round!", "Sort of round!", "A wonky egg!"], reS: ["Perfect!", "Amazing!", "Nice one!", "Not bad!", "A bit off!"],
@@ -38,7 +38,8 @@ let W=360,H=400,SC=1;const ctx=cv.getContext("2d");
 const starPts=()=>{const a=[];for(let i=0;i<10;i++){const r=i%2?.42:1,t=-Math.PI/2+i*Math.PI/5;a.push([Math.cos(t)*r,Math.sin(t)*r])}return a};
 const VNP=[[-.35,-.95],[-.1,-1],[.15,-.9],[.35,-.85],[.3,-.7],[.1,-.62],[.12,-.5],[.3,-.4],[.35,-.25],[.25,-.1],[.28,.05],[.38,.2],[.42,.38],[.3,.5],[.2,.62],[.15,.75],[0,.88],[-.12,.95],[-.25,.85],[-.22,.7],[-.1,.55],[-.12,.4],[-.2,.2],[-.25,0],[-.2,-.15],[-.3,-.3],[-.28,-.45],[-.4,-.6],[-.38,-.8]];
 const SHP=[null,[[-.85,-.85],[.85,-.85],[.85,.85],[-.85,.85]],starPts(),VNP];
-const CFG=[{shape:0},{shape:1},{shape:2},{shape:3}],TRIES=3;
+const CFG=[{shape:0},{shape:0,blind:1},{shapes:[1,2,3],guide:1},{shape:0,limit:3}],TRIES=3;
+const shp=D=>D.C.shapes?D.C.shapes[Math.max(0,Math.min(D.C.shapes.length-1,D.st==="res"?D.res.length-1:D.res.length))]:D.C.shape;
 const SF=n=>(n/10).toFixed(1).replace(".",LANG==="vi"?",":".")+"%";
 function newGame(seed,mode,t,ch){return{seed,mode,t,C:CFG[t],ch:ch||null,res:[],cur:null,st:"draw",over:false,reason:"end",time:0,dur:1e9,beat:false,maxCombo:0,nt:0,fit:null,flash:0}}
 const scoreOf=D=>Math.round(Math.max(0,...D.res.map(r=>r.pct),0)*10);
@@ -60,12 +61,12 @@ function scorePoly(P,ideal){const R=resample(P,96,false),bb=bbox(R),ib=bbox(idea
   const e=(A+B)/(2*R.length)/(((ib.w+ib.h)/4)*s),pct=Math.max(0,Math.min(100,100*(1-3.2*e)));if(!best||pct>best.pct)best={pct,fit:{k:"p",pts:T}}}
  return best}
 function drScore(D,pts){const bb=bbox(pts),len=pts.reduce((a,p,i)=>i?a+dst(pts[i-1],p):0,0);if(pts.length<12||Math.max(bb.w,bb.h)<W*.18||len<W*.4){toast(T("short"),1200);return}
- const r=D.C.shape===0?scoreCircle(pts):scorePoly(pts,SHP[D.C.shape]);D.res.push({pct:r.pct,pts:pts.map(p=>[Math.round(p[0]/W*1000)/1000,Math.round(p[1]/H*1000)/1000]),w:W,h:H});D.fit=r.fit;D.st="res";D.flash=1;
+ const r=shp(D)===0?scoreCircle(pts):scorePoly(pts,SHP[shp(D)]);D.res.push({pct:r.pct,pts:pts.map(p=>[Math.round(p[0]/W*1000)/1000,Math.round(p[1]/H*1000)/1000]),w:W,h:H});D.fit=r.fit;D.st="res";D.flash=1;
  const idx=r.pct>=97?0:r.pct>=92?1:r.pct>=85?2:r.pct>=70?3:4;D.reIdx=idx;(idx<=1?sfx.ok:idx<=3?sfx.near:sfx.bad)();if(window.NPFx)NPFx.buzz(idx<=1?[20,30,40]:25);
- if(idx<=2){NPJuice.text($("play"),T(D.C.shape===0?"re":"reS")[idx],{color:"#ffd24a",top:"26%",size:6});if(idx<=1)burst(14)}
+ if(idx<=2){NPJuice.text($("play"),T(shp(D)===0?"re":"reS")[idx],{color:"#ffd24a",top:"26%",size:6});if(idx<=1)burst(14)}
  hud();clearTimeout(D.nt);D.nt=setTimeout(()=>{if(G===D&&D.st==="res")drNext(D)},2600)}
 function drNext(D){clearTimeout(D.nt);if(D.res.length>=TRIES){D.over=true;sfx.end();finish(D);return}D.st="draw";D.fit=null;D.cur=null;hud()}
-function step(D,dt){D.time+=dt;if(D.flash>0)D.flash=Math.max(0,D.flash-dt*2)}
+function step(D,dt){D.time+=dt;if(D.flash>0)D.flash=Math.max(0,D.flash-dt*2);if(D.st==="draw"&&D.cur&&D.C.limit&&(performance.now()-D.cur0)/1000>D.C.limit)endStroke()}
 function burst(n){if(!isProSk()&&n<12)return;const host=$("play"),L=(skinOf().deco||["⭐","✏️"]);for(let i=0;i<n;i++){if(host.querySelectorAll(".eb2").length>30)break;const e=document.createElement("i"),a=Math.random()*6.283,d=14+Math.random()*30;e.className="eb2";e.textContent=L[i%L.length];e.style.left="50%";e.style.top="46%";e.style.setProperty("--dx",Math.cos(a)*d+"cqw");e.style.setProperty("--dy",(Math.sin(a)*d*.8-4)+"cqw");e.style.setProperty("--rt",(Math.random()*120-60)+"deg");host.appendChild(e);setTimeout(()=>e.remove(),950)}}
 function HUD(D){const last=D.res[D.res.length-1];return[[D.res.length?SF(scoreOf(D)):"—","sc"],[Math.min(D.res.length+(D.st==="draw"?1:0),TRIES)+"/"+TRIES,"rnd"],[last?SF(Math.round(last.pct*10)):"—","ex"]]}
 function endChips(D){const n=scoreOf(D);return[TYPES[D.t][0]+" "+L2([TYPES[D.t][1],TYPES[D.t][2]]),D.res.map(r=>Math.round(r.pct)+"%").join(" · "),(D.prevBest>0&&n>D.prevBest)?T("rec"):""]}
@@ -77,14 +78,17 @@ function bgBasic(c,w,h,dk){c.fillStyle=dk?"#1e2b22":"#fffdf4";c.fillRect(0,0,w,h
 function inkBasic(c,pts,col,w){if(pts.length<2)return;c.lineCap="round";c.lineJoin="round";c.strokeStyle=col;c.lineWidth=w||4;c.beginPath();pts.forEach((p,i)=>i?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1]));c.stroke()}
 function draw(){if(!ctx||!cv.width)return;const sk=skinOf(),dm=sk.dim||[360,400];if(W!==dm[0]||H!==dm[1]){W=dm[0];H=dm[1];fitCanvas();return}
  const c=ctx,dk=isDark(),D=G,tm=D?D.time:0;c.setTransform(SC,0,0,SC,0,0);c.clearRect(0,0,W,H);if(sk.bg)sk.bg(c,W,H,tm,dk);else bgBasic(c,W,H,dk);if(!D)return;
+ if(D.C.blind&&D.st==="draw"){c.fillStyle=dk?"rgba(4,6,10,.93)":"rgba(24,32,48,.93)";c.fillRect(0,0,W,H);c.font="64px "+emj;c.textAlign="center";c.textBaseline="middle";c.globalAlpha=.35;c.fillText("🙈",W/2,H/2);c.globalAlpha=1}
+ if(D.C.guide&&D.st==="draw"){const id=SHP[shp(D)];if(id){const bb=bbox(id),s=Math.min(250/bb.w,290/bb.h);c.save();c.translate(W/2,H/2);c.scale(s,s);c.setLineDash([10/s,8/s]);c.lineWidth=5/s;c.strokeStyle=dk?"rgba(190,220,255,.45)":"rgba(40,90,170,.4)";c.beginPath();id.forEach((p,i)=>i?c.lineTo(p[0]-bb.cx,p[1]-bb.cy):c.moveTo(p[0]-bb.cx,p[1]-bb.cy));c.closePath();c.stroke();c.restore()}}
+ if(D.C.limit&&D.st==="draw"){const k=D.cur?Math.max(0,1-(performance.now()-D.cur0)/1000/D.C.limit):1;c.fillStyle="rgba(120,120,120,.3)";c.fillRect(0,0,W,8);c.fillStyle=k<.35?"#ff4a3d":"#ffb23d";c.fillRect(0,0,W*k,8)}
  if(D.fit){c.save();c.setLineDash([7,6]);c.lineWidth=3;c.strokeStyle=dk?"rgba(120,255,170,.9)":"rgba(20,150,80,.9)";c.beginPath();if(D.fit.k==="c")c.arc(D.fit.cx,D.fit.cy,D.fit.r,0,6.283);else{D.fit.pts.forEach((p,i)=>i?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1]));c.closePath()}c.stroke();c.restore()}
  const pts=D.cur||(D.res.length&&D.st==="res"?D.res[D.res.length-1].pts.map(p=>[p[0]*W,p[1]*H]):null);const col=sk.col||(dk?"#9ec5ff":"#2b6fd6");
- if(pts&&pts.length>1){if(sk.ink)sk.ink(c,pts,tm,D.st==="res");else inkBasic(c,pts,col,4.5)}
+ if(pts&&pts.length>1&&!(D.C.blind&&D.cur)){if(sk.ink)sk.ink(c,pts,tm,D.st==="res");else inkBasic(c,pts,col,4.5)}
  if(D.cur&&D.cur.length){const p=D.cur[D.cur.length-1];c.font="26px "+emj;c.textAlign="left";c.textBaseline="alphabetic";c.fillText(sk.tip||"✏️",p[0]-2,p[1]+2)}
- if(D.st==="res"&&D.res.length){const r=D.res[D.res.length-1],a=Math.min(1,.2+D.flash);c.save();c.textAlign="center";c.textBaseline="middle";const big=sk.bigCol||(dk?"#ffffff":"#1d2b3a");c.fillStyle=big;c.globalAlpha=.92;c.font="400 64px Bungee,'Arial Black',system-ui";c.shadowColor="rgba(0,0,0,.25)";c.shadowBlur=8;c.fillText(SF(Math.round(r.pct*10)),W/2,H*.5);c.shadowBlur=0;c.font="800 17px 'Be Vietnam Pro',system-ui";c.globalAlpha=.95;c.fillText((D.C.shape===0?T("re"):T("reS"))[D.reIdx],W/2,H*.5+46);c.font="26px "+emj;c.fillText(["🤩","😮","😊","😅","😵"][D.reIdx],W/2,H*.5+80);c.font="700 14px 'Be Vietnam Pro',system-ui";c.globalAlpha=.7;c.fillText(T("tapNext"),W/2,H*.5+108);c.restore()}
+ if(D.st==="res"&&D.res.length){const r=D.res[D.res.length-1],a=Math.min(1,.2+D.flash);c.save();c.textAlign="center";c.textBaseline="middle";const big=sk.bigCol||(dk?"#ffffff":"#1d2b3a");c.fillStyle=big;c.globalAlpha=.92;c.font="400 64px Bungee,'Arial Black',system-ui";c.shadowColor="rgba(0,0,0,.25)";c.shadowBlur=8;c.fillText(SF(Math.round(r.pct*10)),W/2,H*.5);c.shadowBlur=0;c.font="800 17px 'Be Vietnam Pro',system-ui";c.globalAlpha=.95;c.fillText((shp(D)===0?T("re"):T("reS"))[D.reIdx],W/2,H*.5+46);c.font="26px "+emj;c.fillText(["🤩","😮","😊","😅","😵"][D.reIdx],W/2,H*.5+80);c.font="700 14px 'Be Vietnam Pro',system-ui";c.globalAlpha=.7;c.fillText(T("tapNext"),W/2,H*.5+108);c.restore()}
  if(sk.fx)sk.fx(c,W,H,tm,dk)}
 function pt(e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H]}
-cv.addEventListener("pointerdown",e=>{const D=G;if(!D||D.over||paused)return;if(e.pointerType==="mouse"&&e.button!==0)return;e.preventDefault();if(D.st==="res"){drNext(D);return}D.cur=[pt(e)];try{cv.setPointerCapture(e.pointerId)}catch(x){}});
+cv.addEventListener("pointerdown",e=>{const D=G;if(!D||D.over||paused)return;if(e.pointerType==="mouse"&&e.button!==0)return;e.preventDefault();if(D.st==="res"){drNext(D);return}D.cur=[pt(e)];D.cur0=performance.now();try{cv.setPointerCapture(e.pointerId)}catch(x){}});
 cv.addEventListener("pointermove",e=>{const D=G;if(!D||!D.cur)return;const p=pt(e),a=D.cur[D.cur.length-1];if(dst(p,a)>=2.5){D.cur.push([Math.max(0,Math.min(W,p[0])),Math.max(0,Math.min(H,p[1]))]);if(D.cur.length%12===0)sfx.draw()}});
 const endStroke=()=>{const D=G;if(!D||!D.cur)return;const p=D.cur;D.cur=null;if(D.st==="draw")drScore(D,p)};
 cv.addEventListener("pointerup",endStroke);cv.addEventListener("pointercancel",endStroke);
