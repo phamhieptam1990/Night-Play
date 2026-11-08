@@ -450,6 +450,7 @@ const COZY_NEW = {   // game mới của Cozy Play (người lớn): 1 loại ×
   "gia-cho-viet": { vi: "Đoán Giá Chợ Việt", en: "Guess the Market Price", max: 500, dvi: "5 món mỗi ngày, cả nước cùng đoán. Bạn đoán sát giá chợ cỡ nào?", den: "5 items a day, everyone guesses the same. How close can you get to the market price?" },
   "doi-doi-2048": { vi: "Đổi Đời 2048", en: "Life Upgrade 2048", max: 20000, dvi: "Ghép đồ từ quả trứng lên biệt thự. Hôm nay cả nước chơi cùng một bàn, bạn lên đời tới đâu?", den: "Merge from an egg up to a villa. Everyone plays the same board today — how far can you go?" },
   "ga-me-ban-trung": { vi: "Gà Mẹ Bắn Trứng", en: "Mama Hen's Egg Pop", max: 30000, dvi: "Bắn trứng cùng màu để nổ cụm, trứng nở ra con vật để sưu tầm. Hôm nay cả nước chơi cùng một bàn!", den: "Shoot matching eggs to pop clusters and hatch animals to collect. Everyone plays the same board today!" },
+  "ban-co-hieu-toi": { vi: "Bạn Có Hiểu Tôi Không?", en: "Do You Really Know Me?", max: 10, quiz: true, dvi: "Trả lời 10 câu về chính bạn, gửi link cho bạn bè, người yêu, đồng nghiệp rồi xem ai hiểu bạn nhất!", den: "Answer 10 questions about yourself, send the link to friends, your partner or coworkers, and see who knows you best!" },
   "cho-hang-kieu-viet": { vi: "Chở Hàng Kiểu Việt", en: "Overloaded Rider", max: 20000, dvi: "Chất cả đống hàng lên xe máy rồi giữ thăng bằng đi tới nơi. Càng chất cao càng nhiều điểm, đổ là mất hết!", den: "Pile a mountain of cargo on a scooter and keep it balanced to the finish. The taller the stack, the higher the score — drop it and it’s gone!" },
   "me-cung-truyen-tay": { vi: "Mê Cung Truyền Tay", en: "Maze Pass-Along", max: 1000, dvi: "Tự vẽ mê cung rồi gửi cho bạn bè thoát. Hôm nay cả nước cùng một mê cung!", den: "Draw your own maze and send it to friends. Everyone gets the same maze today!" },
   "xin-nghi": { vi: "Sếp Ơi Em Xin Nghỉ", en: "Boss, I Need a Day Off", max: 100, dvi: "Nghĩ lý do xin nghỉ thật 'thuyết phục' để qua mặt sếp. Sếp có duyệt không?", den: "Come up with a convincing excuse for a day off. Will the boss approve?" }
@@ -672,6 +673,7 @@ const PRO_MODS = {   // require LITERAL (esbuild của Netlify không gộp đư
   "ga-me-ban-trung": () => require("./pro/ga-me-ban-trung"),
   "me-cung-truyen-tay": () => require("./pro/me-cung-truyen-tay"),
   "cho-hang-kieu-viet": () => require("./pro/cho-hang-kieu-viet"),
+  "ban-co-hieu-toi": () => require("./pro/ban-co-hieu-toi"),
 };
 const NG_IDS = Object.keys(NEW_GAMES).join("|");
 route("GET", new RegExp("^/api/pro/(" + NG_IDS + ")\\.js$"), async ({ m, headers, query, ip }) => {
@@ -716,6 +718,12 @@ route("GET", new RegExp("^/api/share/(" + CZ_IDS + ")$"), async ({ m, query, hea
   const daily = query.get("d") === "1", dn = /^\d{1,4}$/.test(query.get("n") || "") ? query.get("n") : "", ds = /^\d{1,3}$/.test(query.get("s") || "") ? query.get("s") : "";
   let title = name, desc = en ? g.den : g.dvi, img = "home", go = "";
   if (daily) { title = en ? "📅 " + name + " — today #" + dn + (ds ? ": " + ds : "") : "📅 " + name + " — hôm nay #" + dn + (ds ? ": " + ds + " điểm" : ""); desc = en ? "Same challenge for everyone today. Can you beat it?" : "Hôm nay ai cũng chơi cùng một đề. Bạn được bao nhiêu?"; img = "daily"; go = "#daily"; }
+  else if (okCh && g.quiz) {
+    const nm = String(o.n || "").replace(/[^\p{L}\p{N} ._-]/gu, "").trim().slice(0, 14) || "…";
+    if (o.r === 1) { title = en ? "🏆 " + nm + " guessed " + o.sc + "/10 about you!" : "🏆 " + nm + " đoán đúng " + o.sc + "/10 câu về bạn!"; desc = en ? "Open the link to add it to your board." : "Mở link để thêm vào bảng xếp hạng của bạn."; }
+    else { title = en ? "💬 " + nm + " asks: do you really know me?" : "💬 " + nm + " hỏi: bạn có hiểu mình không?"; desc = en ? "Guess my 10 answers — who knows me best?" : "Đoán 10 câu mình đã chọn — ai hiểu mình nhất nào?"; }
+    img = "ch"; go = "#ch=" + String(query.get("ch")).replace(/[^\w-]/g, "");
+  }
   else if (okCh) { title = en ? "⚔ " + name + ": " + o.sc + "! Can you beat it?" : "⚔ " + name + ": " + o.sc + " điểm! Bạn vượt được không?"; desc = en ? "Same round, same challenge — try it now!" : "Cùng một đề, thử ngay nào!"; img = "ch"; go = "#ch=" + String(query.get("ch")).replace(/[^\w-]/g, ""); }
   return out(200, ogPage({ en, title, desc, image: origin + "/cozyplay/games/" + id + "/og/" + img + ".png", target: "/cozyplay/games/" + id + "/index.html" + go, site: "Cozy Play" }), "text/html; charset=utf-8");
 });
