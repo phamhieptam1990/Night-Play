@@ -206,8 +206,13 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 #gdots button{width:30px;height:30px;padding:0;background:none;color:inherit;display:grid;place-items:center;border-radius:50%}
 #gdots button::after{content:"";width:10px;height:10px;border-radius:50%;background:currentColor;opacity:.28;transition:opacity .2s,transform .2s}
 #gdots button[aria-current="true"]::after{opacity:1;transform:scale(1.25)}
-#gdots .gn{width:44px;height:44px;font-size:26px;font-weight:800;line-height:1}#gdots .gn::after{content:none}
-#gdots .gn:disabled{opacity:.3}
+#gdots{gap:6px}
+#gdots .gn{width:44px;height:44px;margin:0 6px;font-size:0;line-height:0;border-radius:50%;background:color-mix(in srgb,var(--accent) 16%,var(--panel));color:var(--accent);border:2px solid var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent),var(--shadow);cursor:pointer;transition:transform .15s,background .15s}
+#gdots .gn::after{content:"";width:11px;height:11px;border:solid currentColor;border-width:0 0 3.4px 3.4px;border-radius:1px;background:none;opacity:1;transform:rotate(45deg);margin-left:4px}
+#gdots .gn:last-child::after{transform:rotate(-135deg);margin-left:-4px}
+#gdots .gn:hover:not(:disabled){background:var(--accent);color:var(--on-accent)}#gdots .gn:active:not(:disabled){transform:scale(.92)}
+#gdots .gn:disabled{opacity:.35;box-shadow:none}
+#gdots .gn:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .tile{min-width:0;width:var(--s);height:var(--s);border-radius:clamp(14px,15%,28px)}
 #sleep,#hleft{flex:none}
 /* Footer gọn một hàng */

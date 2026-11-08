@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<script src="../../../shared/guard.js"></script>
+<script src="../../../shared/bridge.js"></script>
+<script src="../../../shared/fx.js"></script>
+<title>Sống Sót Đến Cuối Tháng</title>
+<title>Đường Ray</title>
+<script>var savedTheme=null;try{savedTheme=localStorage.getItem("theme")}catch(e){}document.documentElement.dataset.theme=savedTheme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Be+Vietnam+Pro:wght@400;600;800&display=swap">
+<style>
+/* Sống Sót Đến Cuối Tháng — game Cozy Play. Luôn vừa một màn hình. */
+:root{--bg:#FFF6DD;--panel:#ffffff;--ink:#33280f;--muted:#7a6a3a;--accent:#d97706;--on:#ffffff;--good:#2f9e44;--bad:#e03131;--line:#f0dba0;--pbg:linear-gradient(#ffe9a8,#fff9e6);--field:#fff4cc;--field2:#ffe59a;
+ --display:"Bungee","Arial Black",system-ui,sans-serif;--body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif}
+:root[data-theme="dark"]{--bg:#1d1806;--panel:#2e2610;--ink:#fff3cc;--muted:#d9c47a;--accent:#ffb020;--on:#2a1c00;--good:#51cf66;--bad:#ff6b6b;--line:#4a3f1c;--pbg:linear-gradient(#3b3010,#1d1806);--field:#2a2209;--field2:#3a3012}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}[hidden]{display:none!important}
+html,body{margin:0;height:100%;background:var(--bg);overflow:hidden;font-family:var(--body);color:var(--ink)}
+body{display:flex;justify-content:center}
+#play{position:relative;height:100dvh;width:min(100vw,62dvh,520px);container-type:size;overflow:hidden;background:var(--pbg);color:var(--ink);touch-action:none;user-select:none;-webkit-user-select:none}
+.deco{position:absolute;inset:0;pointer-events:none;overflow:hidden;opacity:.45}.deco i{position:absolute;font-style:normal;font-size:9cqw;animation:fl 9s ease-in-out infinite}@keyframes fl{50%{transform:translateY(-3cqw) rotate(8deg)}}
+.top{position:absolute;left:3cqw;right:3cqw;top:2.5cqw;height:9cqw;display:flex;align-items:center;gap:2cqw;z-index:3}
+.top h1{margin:0;flex:1;font:400 4.8cqw/1.05 var(--display);color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ib{width:9cqw;height:9cqw;min-width:36px;min-height:36px;border:1.5px solid color-mix(in srgb,var(--ink) 38%,transparent);border-radius:50%;background:var(--panel);color:var(--ink);font:800 3.6cqw var(--body);cursor:pointer;display:grid;place-items:center;box-shadow:0 .5cqw 0 color-mix(in srgb,var(--ink) 18%,transparent)}
+.ib:active{transform:translateY(.5cqw);box-shadow:none}
+.scr{position:absolute;left:4cqw;right:4cqw;top:14cqw;bottom:3cqw;display:flex;flex-direction:column;gap:2.4cqw;z-index:2;justify-content:center}
+.card{background:var(--panel);border:.5cqw solid var(--line);border-radius:4cqw;padding:2.6cqw;box-shadow:0 1.2cqw 0 rgba(0,0,0,.14)}
+.btn{border:0;border-radius:99cqw;min-height:44px;padding:2.4cqw 5cqw;font:800 4.2cqw var(--body);background:var(--accent);color:var(--on);cursor:pointer;box-shadow:0 1cqw 0 rgba(0,0,0,.26)}
+.btn.alt{background:var(--panel);color:var(--ink);border:1.5px solid color-mix(in srgb,var(--ink) 38%,transparent);box-shadow:0 .6cqw 0 color-mix(in srgb,var(--ink) 18%,transparent)}.btn:active{transform:translateY(.6cqw)}
+.row{display:flex;gap:2.2cqw;align-items:center;justify-content:center}.grow{flex:1}.mut{color:color-mix(in srgb,var(--ink) 68%,transparent);font-size:3.3cqw}
+.chips{display:flex;gap:2cqw;justify-content:center;flex-wrap:wrap}.chip{background:var(--panel);border:1px solid color-mix(in srgb,var(--ink) 28%,transparent);border-radius:99cqw;padding:1.2cqw 3cqw;font-size:3.5cqw;font-weight:800}
+.hero{text-align:center;font-size:18cqw;line-height:1.05}
+.dbtn{display:flex;align-items:center;gap:3cqw;text-align:left;width:100%}.dbtn .n{font:400 7cqw var(--display)}
+.tys{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4cqw}.fbox{display:flex;flex-direction:column;gap:1.4cqw;padding:2cqw;border:1.5px dashed color-mix(in srgb,var(--ink) 28%,transparent);border-radius:4cqw}.lvc{font:700 3cqw var(--body);color:var(--muted);text-align:center}.lvs{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4cqw}.lv{border:1.5px solid color-mix(in srgb,var(--ink) 30%,transparent);background:var(--panel);color:var(--ink);border-radius:3cqw;min-height:40px;font:800 3.2cqw var(--body);cursor:pointer}.lv.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 18%,var(--panel))}
+.ty{position:relative;border:1.5px solid color-mix(in srgb,var(--ink) 30%,transparent);background:var(--panel);color:var(--ink);border-radius:3cqw;padding:1.6cqw .6cqw;font:800 2.6cqw var(--body);min-height:44px;cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:.6cqw}.ty .e{display:block;font-size:6.8cqw;line-height:1.1}.ty .t{display:flex;align-items:center;justify-content:center;min-height:2.3em;line-height:1.15;overflow-wrap:anywhere}
+.ty.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 20%,var(--panel));box-shadow:0 0 0 .5cqw color-mix(in srgb,var(--accent) 45%,transparent)}.ty.lock{opacity:.8}.ty.lock::after{content:'🔒';position:absolute;top:.4cqw;right:1cqw;font-size:3.4cqw}
+/* ván chơi */
+#game{gap:1.6cqw;justify-content:flex-start}
+.stats{display:flex;gap:2cqw}.st{flex:1;background:var(--panel);border:.5cqw solid var(--line);border-radius:3cqw;padding:1cqw 2cqw;text-align:center}.st b{display:block;font:400 5.4cqw var(--display);color:var(--accent);line-height:1.1}.st span{font-size:2.8cqw;color:color-mix(in srgb,var(--ink) 65%,transparent);font-weight:800}
+#cvw{flex:1;min-height:0;display:flex;justify-content:center;align-items:center}
+canvas#cv{border-radius:3cqw;background:linear-gradient(var(--field),var(--field2));border:.5cqw solid var(--line);touch-action:none;display:block;box-shadow:0 1cqw 0 rgba(0,0,0,.14)}
+.hint{text-align:center;margin:0}
+/* kết thúc */
+.big{font:400 11cqw var(--display);color:var(--accent);text-align:center;line-height:1.1}.rk{text-align:center;font:800 4.6cqw var(--body)}
+.hat{display:flex;gap:1.4cqw;justify-content:center;flex-wrap:wrap;font-size:7.4cqw;min-height:9cqw}
+.ov{position:absolute;inset:0;background:color-mix(in srgb,var(--panel) 86%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);z-index:7;display:flex;flex-direction:column;justify-content:center;gap:2.4cqw;padding:5cqw;text-align:center}
+.ov h2{margin:0;font:400 6cqw var(--display);color:var(--accent)}.ov p{margin:0;font-size:3.9cqw;line-height:1.35}
+.sk{display:grid;grid-template-columns:1fr 1fr;gap:2.4cqw}.skc{position:relative;border:1.5px solid color-mix(in srgb,var(--ink) 30%,transparent);border-radius:3.4cqw;padding:2.2cqw;background:var(--panel);color:var(--ink);font:800 3.6cqw var(--body);cursor:pointer;min-height:44px}.skc.on{border-color:var(--accent)}.sk .skc{display:flex;align-items:center;gap:2.6cqw;text-align:left;padding:2cqw 2.6cqw}.sk .skc:last-child:nth-child(odd){grid-column:1/-1}.skc .e{font-size:9.5cqw;line-height:1;flex:none}.skc .sx{display:flex;flex-direction:column;gap:.9cqw;min-width:0}.skc .sx b{font:900 3.7cqw/1.15 var(--body)}.skc .sx small{font:700 2.7cqw/1.2 var(--body);opacity:.75}.skc.lock{opacity:.85}.skc.lock::after{content:'🔒';position:absolute;top:1.4cqw;right:2cqw;font-size:3.8cqw}
+.near{margin:0;text-align:center;font:900 4cqw var(--body);color:var(--accent);padding:1.4cqw 3cqw;border-radius:99cqw;border:1.5px solid color-mix(in srgb,var(--accent) 60%,transparent);background:color-mix(in srgb,var(--accent) 12%,transparent)}.btn.hot{animation:hotp 1s ease-in-out infinite}@keyframes hotp{50%{transform:scale(1.07);box-shadow:0 0 0 1.2cqw color-mix(in srgb,var(--accent) 30%,transparent)}}
+.rule{position:absolute;left:50%;top:27%;transform:translateX(-50%);width:86%;max-width:420px;box-sizing:border-box;z-index:8;pointer-events:none;padding:2.6cqw 3.6cqw;border-radius:4cqw;border:1.5px solid color-mix(in srgb,var(--accent) 70%,transparent);background:color-mix(in srgb,var(--panel) 90%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--ink);box-shadow:0 2cqw 6cqw rgba(0,0,0,.35);animation:ruleIn .3s ease-out}.rule h3{margin:0 0 1.4cqw;font:900 4.2cqw var(--body);color:var(--accent)}.rule p{margin:.8cqw 0 0;font:700 3.3cqw/1.35 var(--body)}.rule.out{opacity:0;transition:opacity .35s}@keyframes ruleIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}}
+.toast{position:absolute;left:50%;top:auto;bottom:15cqw;transform:translateX(-50%);background:color-mix(in srgb,var(--panel) 94%,transparent);color:var(--ink);border:.5cqw solid var(--accent);padding:2.2cqw 4cqw;border-radius:4cqw;font:800 3.6cqw/1.3 var(--body);z-index:9;width:max-content;max-width:88%;text-align:center;box-shadow:0 1.4cqw 5cqw rgba(0,0,0,.4),0 0 4cqw color-mix(in srgb,var(--accent) 35%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.tgt{display:flex;align-items:center;gap:2cqw;background:var(--panel);border:.5cqw solid var(--line);border-radius:99cqw;padding:.8cqw 3cqw;font:800 3.2cqw var(--body)}.tgt i{flex:1;height:2.2cqw;border-radius:9cqw;background:color-mix(in srgb,var(--ink) 14%,transparent);overflow:hidden;font-style:normal}.tgt b{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffb020,#ff5a3d);transition:width .3s}.tgt.beat{border-color:var(--good);box-shadow:0 0 3cqw color-mix(in srgb,var(--good) 55%,transparent)}.tgt.beat b{background:var(--good)}
+.st.pulse{animation:stp .35s ease-out}@keyframes stp{40%{transform:scale(1.18);border-color:var(--accent)}}
+@container (max-height:640px){#hSub,#hNote{display:none}.hero{font-size:12cqw}.ty .e{font-size:6cqw}}
+@container (max-height:520px){.hero{display:none}.hint{display:none}}
+#bSkin{min-width:44px;min-height:44px}
+.row>.btn.alt.grow{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;padding-left:2.4cqw;padding-right:2.4cqw;font-size:min(3.9cqw,15px)}
+#dS{display:inline-block;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:top}.dbtn .grow{min-width:0}#dT{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;max-width:100%;vertical-align:top}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.eb2{position:absolute;z-index:9;pointer-events:none;font-size:6.4cqw;line-height:1;font-style:normal;animation:eb2 .9s ease-out forwards}@keyframes eb2{to{transform:translate(var(--dx),var(--dy)) rotate(var(--rt));opacity:0}}#play.pro .stats .st{border-color:var(--accent);box-shadow:0 0 3cqw color-mix(in srgb,var(--accent) 35%,transparent)}@media (prefers-reduced-motion:reduce){.eb2{display:none}}
+/* Dễ dùng trên web: con trỏ tay, rê chuột nổi nút, viền rõ khi bấm Tab */
+.btn,.ib,.ty,.lv,.skc,.opt,button{cursor:pointer}.btn:disabled,button:disabled{cursor:default}
+@media (hover:hover){.btn:not(:disabled):hover{filter:brightness(1.08);transform:translateY(-.4cqw)}.btn.alt:not(:disabled):hover{background:color-mix(in srgb,var(--accent) 12%,var(--panel))}.ib:hover,.ty:hover,.skc:hover,.lv:hover{border-color:var(--accent);filter:brightness(1.06)}}
+.btn:focus-visible,.ib:focus-visible,.ty:focus-visible,.lv:focus-visible,.skc:focus-visible,button:focus-visible{outline:.7cqw solid var(--accent);outline-offset:.5cqw}
+
+
+#sv{flex:1;min-height:0;display:flex;flex-direction:column;gap:2.4cqw;position:relative}
+#svTop{display:flex;align-items:center;justify-content:space-between;gap:2cqw;font:800 3.6cqw var(--body)}
+#svDay{font:400 5.4cqw var(--display);color:var(--accent)}
+#svBars{flex:1;display:flex;flex-direction:column;gap:1.2cqw;max-width:56%}
+.svb{height:3cqw;border-radius:9cqw;background:color-mix(in srgb,var(--ink) 14%,transparent);overflow:hidden}.svb i{display:block;height:100%;width:50%;border-radius:9cqw;transition:width .35s}
+#svM2{background:linear-gradient(90deg,#f59e0b,#22c55e)}#svS2{background:linear-gradient(90deg,#ef4444,#ec4899)}
+#svCal{display:none}
+#svCard{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.4cqw;text-align:center;background:var(--panel);border:.5cqw solid var(--line);border-radius:5cqw;padding:5cqw 4.4cqw;box-shadow:0 1.4cqw 0 rgba(0,0,0,.14);touch-action:pan-y;user-select:none;cursor:grab;position:relative;will-change:transform}
+#svAv{font-size:20cqw;line-height:1}#svTxt{font:800 5.2cqw/1.3 var(--body)}#svTg{font:700 3cqw var(--body);color:var(--muted);min-height:4cqw}
+#svBtns{display:flex;gap:2.4cqw}#svBtns .btn{flex:1;min-height:15cqw;font-size:4.1cqw;line-height:1.15;padding:2cqw 2.4cqw}
+#svNo{background:var(--panel);color:var(--ink);border:1.5px solid color-mix(in srgb,var(--ink) 38%,transparent)}
+#svRes{min-height:6cqw;text-align:center;font:800 4.2cqw var(--body)}
+.svfl{position:absolute;z-index:6;pointer-events:none;font:900 6.4cqw var(--body);left:50%;top:30%;transform:translateX(-50%);animation:svfl 1s ease-out forwards;text-shadow:0 .4cqw 0 rgba(0,0,0,.2)}.svfl.neg{color:var(--bad)}.svfl.pos{color:var(--good)}@keyframes svfl{to{transform:translate(-50%,-14cqw);opacity:0}}
+#sv.lock #svBtns .btn{opacity:.55;pointer-events:none}
+
+</style>
+<style id="skCss"></style>
+</head>
+<body>
+<div id="play">
+  <div class="deco" id="deco"></div>
+  <div class="top"><h1 id="ttl"></h1><button class="ib" id="bRe" type="button" hidden>↻</button><button class="ib" id="bBoard" type="button">🏆</button><button class="ib" id="bSnd" type="button">🔊</button><button class="ib" id="bLang" type="button"></button></div>
+  <section class="scr" id="home">
+    <div class="hero" id="hHero">💰📅</div>
+    <p class="mut" id="hSub" style="text-align:center;margin:0;font-size:3.6cqw"></p>
+    <div class="tys" id="tys"></div>
+    <button class="btn dbtn" id="bDaily" type="button"><span class="n" id="dN"></span><span class="grow"><b id="dT"></b><br><span id="dS" style="font-size:3.3cqw;opacity:.85"></span></span><span>▶</span></button>
+    <div class="row"><button class="btn alt grow" id="bFree" type="button"></button><button class="ib" id="bSkin" type="button" style="width:12cqw;height:12cqw">🎨</button></div>
+    <div class="chips" id="hChips"></div>
+    <p class="mut" id="hNote" style="text-align:center;margin:0"></p>
+  </section>
+  <section class="scr" id="game" hidden>
+<div class="stats"><div class="st"><b id="sSc">0</b><span id="sScL"></span></div><div class="st"><b id="sSh">0</b><span id="sShL"></span></div><div class="st"><b id="sEx">0</b><span id="sExL"></span></div></div><div class="tgt" id="tgt" hidden><span id="tgtT"></span><i><b id="tgtB"></b></i></div>
+    <div id="sv"><div id="svTop"><div id="svDay"></div><div id="svBars"><div class="svb"><i id="svM2"></i></div><div class="svb"><i id="svS2"></i></div></div></div><div id="svCal"></div>
+    <div id="svCard"><div id="svAv"></div><div id="svTxt"></div><div id="svTg"></div></div>
+    <div id="svRes"></div>
+    <div id="svBtns"><button class="btn" id="svNo" type="button"></button><button class="btn" id="svYes" type="button"></button></div></div>
+    <p class="mut hint" id="gHint"></p>
+  </section>
+  <section class="scr" id="end" hidden>
+    <div class="card" style="text-align:center"><div class="mut" id="eT"></div><div class="big" id="eSc"></div><div class="rk" id="eRk"></div></div>
+    <div class="hat" id="eHat"></div>
+    <div class="chips" id="eChips"></div>
+    <p class="mut" id="eVs" style="text-align:center;margin:0"></p>
+    <p class="near" id="eNear" hidden></p>
+    <div class="row"><button class="btn grow" id="bShare" type="button">📤</button><button class="btn alt" id="bClip" type="button" hidden>🎬</button><button class="btn alt" id="bRem" type="button" hidden aria-label="rematch">🔁</button><button class="btn alt" id="bAgain" type="button" aria-label="new">🎲</button><button class="btn alt" id="bHome" type="button">🏠</button></div>
+    <p class="mut" id="eLeg" style="text-align:center;margin:0" hidden></p>
+  </section>
+  <div class="ov" id="ovCh" hidden><h2 id="chH"></h2><p id="chP"></p><div class="row"><button class="btn alt" id="chNo" type="button">✕</button><button class="btn grow" id="chGo" type="button"></button></div></div>
+  <div class="ov" id="ovSkin" hidden><h2 id="skH"></h2><div class="sk" id="skG"></div><button class="btn alt" id="skX" type="button">✕</button></div>
+  <div class="ov" id="ovPay" hidden><h2>👑 Night Pass</h2><p id="pwP"></p><div class="row" style="flex-wrap:wrap"><button class="btn alt" id="pwNo" type="button">✕</button><button class="btn alt" id="pwTrial" type="button"></button><a class="btn grow" id="pwGo" href="#" style="text-decoration:none;text-align:center"></a></div></div>
+  <div class="toast" id="toast" hidden></div>
+  </div>
+<script>
+"use strict";
+const GID="song-sot-cuoi-thang",$=id=>document.getElementById(id),MAXS=5000;const NICE=2600,CONF=["💰","⭐","🎉"];
+const LS={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const pickLang=()=>{const q=new URLSearchParams(location.search).get("lang");let st=null;try{st=localStorage.getItem("lang")}catch(e){}return [q,st].find(x=>x==="vi"||x==="en")||(/^vi/i.test(navigator.language||"")?"vi":"en")};
+let LANG=pickLang();const L2=a=>LANG==="vi"?a[0]:a[1];
+const TYPES=[["💰","Lương 8 triệu","8M salary"],["🧧","Tháng Tết","Tet month"],["🛍️","Mùa Sale 11/11","11/11 sale"],["🎒","Sinh viên","Student"]];
+const I18={"vi":{"daily":"Thử thách hôm nay","dS":"Cả nước cùng một đề","done":"Hôm nay bạn được {s} · chơi lại để cao hơn","free":"🎲 Ván ngẫu nhiên","copied":"Đã chép — dán cho bạn bè nhé!","skin":"Giao diện","trial":"🎈 Dùng thử 1 ván","go":"Mở Night Pass","tried":"Hôm nay bạn đã dùng thử rồi","chL":"Thử thách này dùng loại “{t}” (Night Pass). Dùng thử 1 ván để nhận thách.","ch":"Bạn bị thách!","chGo":"Vào chơi","tgt":"⚔ Mục tiêu {n}","beat":"Vượt bạn bè rồi! 🎉","vsC":"Thách đấu: bạn {a} — người gửi {b}","won":"Sống sót 30 ngày, còn {m}","lose":"Chưa bằng, thử lại nhé!","tie":"Hòa!","rem":"Chơi lại cùng đề","near":"Chỉ thiếu {n} điểm là vượt bạn bè! 🔥","nearB":"Chỉ thiếu {n} điểm là phá kỷ lục! 🔥","nearGo":"Bấm 🔁 chơi lại đúng đề này","cmb":["Hay!","Giỏi!","Tuyệt!","Siêu hạng!"],"clipBusy":"Đang tạo video…","clipNo":"Chưa quay được video trên thiết bị này","rec":"🏆 Kỷ lục mới!","best":"🏆 Kỷ lục {n}","sub":"Bạn có 8 triệu lương và phải sống đủ 30 ngày. Mỗi ngày một tình huống: rủ đi lẩu, xe hỏng, sale 11/11… Chọn CÓ hay KHÔNG?","note":"Mỗi ván khoảng 2 phút · mỗi ngày cả nước gặp cùng một tháng · chia sẻ danh hiệu của bạn","sc":"Ngày qua","tm":"Tiền","ex":"Tinh thần","hint0":"Vuốt thẻ sang phải = CÓ, sang trái = KHÔNG (hoặc bấm nút). Hết tiền hoặc kiệt sức là thua!","hint1":"Tháng Tết: nhiều lì xì và chi tiêu lớn, lương 10 triệu.","hint2":"Mùa Sale 11/11: cám dỗ khắp nơi, giữ ví cho chắc!","hint3":"Sinh viên: chỉ 3,5 triệu cho cả tháng. Tiết kiệm từng đồng!","end":"Hết ván!","endS":"Bạn sống sót {n} ngày","rt":["Cháy túi sớm","Qua tuần đầu","Sống dai","Quản lý ví giỏi","Cao thủ tiết kiệm"],"tx":"💰 Sống Sót Đến Cuối Tháng · {t}\nMình {n} — danh hiệu của mình!\n{l}","ask":"Bạn sống sót được lâu hơn mình không?","lockP":"Loại Tháng Tết, Mùa Sale 11/11, Sinh viên và 4 giao diện (Nhóm chat bạn bè, Tin nhắn ngân hàng, Chợ online, Lịch tháng) với bố cục câu hỏi riêng là của Night Pass. Dùng thử 1 ván mỗi ngày hoặc mở khoá tất cả.","chP":"Bạn bè đạt {s} điểm với đúng tháng tình huống này. Bạn sống sót tốt hơn không?","rankHint":"Chơi “Thử thách hôm nay” để lên bảng điểm nhé!","tut":"Vuốt thẻ phải = CÓ, trái = KHÔNG. Cân bằng giữa tiền và tinh thần nhé!","day":"Ngày {d}/30","money":"💀 Bạn hết tiền!","mood":"😵 Bạn kiệt sức!","win":"🎉 Sống sót đến cuối tháng!","outDay":"Hết tiền ngày {d}","outMood":"Kiệt sức ngày {d}","yes":"CÓ","no":"KHÔNG","ttl":"🏷 {t}","nm":"Không","da":"Ngày","tt":{"lau":"Ma Lẩu","sale":"Thánh Sale","cf":"Nghiện Cà Phê","game":"Cày Game Thâu Đêm","friend":"Ngân Hàng Của Bạn Bè","health":"Bệnh Viện Là Nhà","study":"Mọt Sách Phá Sản","fun":"Chúa Tể Du Lịch","frugal":"Bậc Thầy Tiết Kiệm","burn":"Kiệt Sức Vì Tiết Kiệm","none":"Người Sống Thực Tế"},"sk":{"basic":["Sổ tay chi tiêu","Notebook"],"chat":["Nhóm chat bạn bè","Group chat"],"bank":["Tin nhắn ngân hàng","Bank SMS"],"shop":["Chợ online","Online mall"],"cal":["Lịch tháng","Calendar"]},"title":"Sống Sót Đến Cuối Tháng"},"en":{"daily":"Today's challenge","dS":"Everyone gets the same one","done":"Today you scored {s} · play again to beat it","free":"🎲 Random round","copied":"Copied — paste it to a friend!","skin":"Theme","trial":"🎈 Try 1 round","go":"Get Night Pass","tried":"You already used today's trial","chL":"This challenge uses the “{t}” type (Night Pass). Try one round to accept.","ch":"You're challenged!","chGo":"Play now","tgt":"⚔ Target {n}","beat":"You passed your friend! 🎉","vsC":"Challenge: you {a} — sender {b}","won":"Survived 30 days with {m} left","lose":"Not quite — try again!","tie":"Tie!","rem":"Replay this one","near":"Only {n} points short of beating your friend! 🔥","nearB":"Only {n} points short of your record! 🔥","nearGo":"Tap 🔁 to replay this exact one","cmb":["Nice!","Great!","Awesome!","Legend!"],"clipBusy":"Making your video…","clipNo":"This device can't record video","rec":"🏆 New record!","best":"🏆 Best {n}","sub":"You have an 8M salary and must last 30 days. Each day brings a situation: hotpot invite, broken bike, 11/11 sale… YES or NO?","note":"About 2 minutes a run · everyone gets the same month each day · share your title","sc":"Days","tm":"Money","ex":"Mood","hint0":"Swipe the card right = YES, left = NO (or tap a button). Run out of money or energy and you lose!","hint1":"Tet month: lots of lucky money and big spending, 10M salary.","hint2":"11/11 sale month: temptation everywhere — guard your wallet!","hint3":"Student: only 3.5M for the whole month. Save every dong!","end":"Game over!","endS":"You survived {n} days","rt":["Broke early","Past week one","Tough one","Wallet wizard","Saving master"],"tx":"💰 Survive to Payday · {t}\nI {n} — my title!\n{l}","ask":"Can you survive longer than me?","lockP":"Tet month, 11/11 sale, Student and 4 themes (Friends group chat, Bank SMS, Online mall, Month calendar) with their own layouts are for Night Pass. Try one round a day or unlock everything.","chP":"A friend scored {s} on this exact month of situations. Can you survive better?","rankHint":"Play “Today's challenge” to make the leaderboard!","tut":"Swipe right = YES, left = NO. Balance money and mood!","day":"Day {d}/30","money":"💀 You ran out of money!","mood":"😵 You burned out!","win":"🎉 Survived to payday!","outDay":"Out of money on day {d}","outMood":"Burned out on day {d}","yes":"YES","no":"NO","ttl":"🏷 {t}","nm":"No","da":"Day","tt":{"lau":"Hotpot Ghost","sale":"Sale Saint","cf":"Coffee Addict","game":"All-Night Gamer","friend":"Bank of Friends","health":"Hospital Regular","study":"Broke Bookworm","fun":"Travel Lord","frugal":"Saving Master","burn":"Burned Out Saver","none":"Down-to-earth"},"sk":{"basic":["Notebook","Notebook"],"chat":["Group chat","Group chat"],"bank":["Bank SMS","Bank SMS"],"shop":["Online mall","Online mall"],"cal":["Calendar","Calendar"]},"title":"Survive to Payday"}};
+const T=(k,o)=>{const g=(O,p)=>p.split(".").reduce((a,c)=>a&&a[c],O);let s=g(I18[LANG],k);if(s==null)s=g(I18.vi,k);if(typeof s==="string"&&o)for(const x in o)s=s.split("{"+x+"}").join(o[x]);return s};
+const isDark=()=>document.documentElement.dataset.theme==="dark";
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const fnv=s=>{let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0};
+const sub=(seed,k)=>mulberry32((seed^Math.imul(k+1,2654435761))>>>0);
+const dayKey=()=>new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Ho_Chi_Minh"}).format(new Date());
+const dayNo=k=>Math.floor((Date.parse(k+"T00:00:00Z")-Date.parse("2026-01-01T00:00:00Z"))/864e5)+1;
+const b64e=o=>btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+const newSeed=()=>(Math.random()*4294967296)>>>0;
+function parseCh(h){try{const m=/[#&]ch=([A-Za-z0-9_-]{1,200})/.exec(h||"");if(!m)return null;let t=m[1].replace(/-/g,"+").replace(/_/g,"/");while(t.length%4)t+="=";const o=JSON.parse(decodeURIComponent(escape(atob(t))));
+ if(o&&Number.isInteger(o.s)&&o.s>=0&&o.s<=4294967295&&Number.isInteger(o.sc)&&o.sc>=0&&o.sc<=MAXS){const t2=Number.isInteger(o.t)&&o.t>=0&&o.t<TYPES.length?o.t:0;return{s:o.s,sc:o.sc,t:t2}}return null}catch(e){return null}}
+const PF={pro:null,ticket:null,types:TYPES.map((_,i)=>i===0),skins:{basic:{}},skinSel:LS.get("sv-skin","basic")};
+let TY=(()=>{const v=LS.get("sv-type",0);return Number.isInteger(v)&&v>=0&&v<TYPES.length?v:0})();
+const tLocked=t=>!PF.types[t];
+const skinOf=()=>PF.skins[PF.skinSel]||PF.skins.basic;
+const CATALOG=[["basic","Sổ tay chi tiêu","Spending notebook","📒"],["chat","Nhóm chat bạn bè","Friends group chat","💬"],["bank","Tin nhắn ngân hàng","Bank SMS","🏦"],["shop","Chợ online","Online mall","🛒"],["cal","Lịch tháng","Month calendar","📅"]];
+function applySkin(){const sk=skinOf(),pl=$("play");(pl._v||[]).forEach(k=>pl.style.removeProperty(k));const vv=sk.vl?(isDark()?sk.vd:sk.vl):{};pl._v=Object.keys(vv);for(const k of pl._v)pl.style.setProperty(k,vv[k]);$("skCss").textContent=sk.css||"";
+ const d=$("deco");d.innerHTML="";const Ld=sk.deco||["💰","💸","🍜","☕"],Rr=mulberry32(5);[0,1,2,3,4,5].forEach(i=>{const e=document.createElement("i");e.textContent=Ld[i%Ld.length];e.style.left=(Rr()*90)+"%";e.style.top=(15+Rr()*80)+"%";e.style.animationDelay=(-Rr()*8)+"s";d.appendChild(e)});draw()}
+addEventListener("storage",e=>{if(e.key==="theme"){document.documentElement.dataset.theme=e.newValue||"light";applySkin()}});
+let AC=null;const snd=()=>!window.NPAudio||NPAudio.get();
+function tone(f,d,ty,v,dl){if(!snd())return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();const t0=AC.currentTime+(dl||0),o=AC.createOscillator(),g=AC.createGain();o.type=ty||"sine";o.frequency.value=f;g.gain.setValueAtTime(.0001,t0);g.gain.exponentialRampToValueAtTime(v||.08,t0+.02);g.gain.exponentialRampToValueAtTime(.0001,t0+d);o.connect(g);g.connect(AC.destination);o.start(t0);o.stop(t0+d+.05)}catch(e){}}
+const sfx={yes:()=>{tone(620,.06,"triangle",.07);tone(820,.08,"triangle",.07,.05)},no:()=>tone(260,.1,"sine",.06),cash:()=>{[1200,1500,1900].forEach((f,i)=>tone(f,.07,"square",.04,i*.05))},bad:()=>tone(170,.25,"sawtooth",.07),end:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.09,i*.09)),combo:n=>{const b=440*Math.pow(1.122,Math.min(n/3,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.1,"triangle",.09,i*.05))}};
+function toast(m,ms){const t=$("toast");t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,ms||1500)}
+let G=null,CH=null,lastEnd=0,raf=0,last=0,acc=0,paused=false;
+const cv=$("cv")||null;
+const isProSk=()=>!!PF.skins[PF.skinSel]&&PF.skinSel!=="basic";
+const SF=n=>n;
+
+const CFG=[{m0:8000,cost:115,f:1.45,pool:"c"},{m0:10000,cost:115,f:1.35,pool:"ct"},{m0:8000,cost:115,f:1.5,pool:"cs"},{m0:3500,cost:58,f:1.2,pool:"cu"}];
+/* [nhóm, thẻ danh hiệu, emoji, VN tình huống, VN có, VN không, EN tình huống, EN có, EN không, tiền(có), tinh thần(có), tiền(không), tinh thần(không), cược] — tiền tính bằng nghìn đồng */
+const EV=[
+["c","lau","🍲","Bạn rủ đi ăn lẩu, hết khoảng 300k. Đi không?","Đi lẩu!","Để lần sau","A friend invites you to hotpot, about 300k. Go?","Hotpot time!","Maybe next time",-300,12,0,-6],
+["c","","🛵","Xe máy hỏng giữa đường, thợ báo sửa 500k.","Sửa luôn","Gọi xe ôm tạm","Your bike breaks down, repair quote 500k.","Fix it","Take taxis for now",-500,0,-60,-14],
+["c","sale","🛍️","Sale lớn, giảm sâu! Mua chiếc áo khoác 600k?","Chốt đơn","Lướt qua","Huge sale! Buy a 600k jacket?","Checkout","Scroll past",-600,15,0,-6],
+["c","cf","☕","Cà phê muối quán quen 45k. Uống không?","Một ly","Pha tại nhà","Salted coffee at your usual spot, 45k.","One cup","Brew at home",-45,6,0,-3],
+["c","","🎂","Đồng nghiệp sinh nhật, góp quà 100k?","Góp","Hẹn mừng suông","A coworker's birthday, chip in 100k?","Chip in","Just wish",-100,5,0,-8],
+["c","","🌧️","Mưa to quá, đặt Grab hết 80k?","Đặt Grab","Đội mưa đi bộ","Heavy rain. Book a 80k ride?","Book it","Walk in the rain",-80,4,0,-10],
+["c","","🧑‍💼","Sếp xin bạn làm thêm cuối tuần, trả 400k.","Nhận OT","Từ chối","Boss asks you to work the weekend for 400k.","Take OT","Decline",400,-11,0,5],
+["c","friend","🤝","Bạn thân mượn 500k, hứa trả tháng sau.","Cho mượn","Xin lỗi, hết tiền","A close friend borrows 500k, promises to repay later.","Lend it","Sorry, tight",-500,4,0,-6],
+["c","","📱","Màn hình điện thoại nứt, thay 800k?","Thay màn","Dán băng keo","Your phone screen is cracked, 800k to replace?","Replace","Use tape",-800,8,0,-9],
+["c","cf","🧋","Đồng nghiệp rủ order trà sữa 60k.","Order","Uống nước lọc","Coworkers order bubble tea, 60k.","Order","Drink water",-60,6,0,-3],
+["c","","❄️","Trời nóng quá, bật máy lạnh cả ngày (tốn thêm 70k)?","Bật hết cỡ","Chịu nóng","Too hot — run the AC all day (+70k bill)?","Max cool","Sweat it out",-70,8,0,-7],
+["c","","👩","Mẹ gọi, nhà cần gửi về 1 triệu.","Gửi về","Hẹn tháng sau","Mom calls — home needs 1M.","Send it","Next month",-1000,10,0,-15],
+["c","","🥐","Bữa sáng bánh mì + cà phê 50k hay ăn cơm nhà?","Ăn ngoài","Ăn nhà","Breakfast out for 50k or eat at home?","Eat out","Eat home",-50,4,0,-1],
+["c","health","🦷","Đau răng dữ dội, nha sĩ báo 600k.","Đi khám","Uống thuốc giảm đau","Awful toothache, the dentist says 600k.","See dentist","Take painkillers",-600,5,-40,-13],
+["c","game","🎮","Game ra bản mới, nạp thẻ 200k?","Nạp thẻ","Chơi free","New game update — top up 200k?","Top up","Play free",-200,10,0,-4],
+["c","fun","🎬","Crush rủ xem phim, vé 120k.","Đi xem","Bận rồi","Your crush invites you to a movie, 120k.","Go","Too busy",-120,15,0,-10],
+["c","study","📚","Khoá học online giảm giá, 400k.","Đăng ký","Tự học","Online course on discount, 400k.","Enroll","Self-study",-400,6,0,-2],
+["c","cf","💻","Hàng xóm sửa nhà ồn, ra quán cà phê làm việc 70k.","Ra quán","Đeo tai nghe","Noisy renovation next door — work from a café, 70k.","Go café","Headphones",-70,3,0,-7],
+["c","sale","👕","Áo bị rách, mua cái mới 250k?","Mua mới","Vá lại","Your shirt tore, buy a 250k one?","Buy new","Sew it",-250,7,0,-5],
+["c","lau","🍻","Sếp rủ nhậu sau giờ làm, tốn 400k.","Đi nhậu","Xin phép về","Boss invites you to after-work drinks, 400k.","Join","Excuse yourself",-400,6,0,-12],
+["c","","💵","Nhặt được 500k trên đường. Trả lại người mất?","Trả lại","Cất túi","You find 500k on the street. Return it?","Return","Keep it",0,11,500,-12],
+["c","","🚔","Bị phạt giao thông, nộp 200k hay nhờ vả?","Nộp phạt","Xin xỏ","Traffic fine 200k — pay or plead?","Pay","Plead",-200,-2,-400,-8],
+["c","","🏠","Chủ nhà tăng tiền phòng 300k.","Chấp nhận","Chuyển trọ","Landlord raises rent by 300k.","Accept","Move out",-300,0,-100,-14],
+["c","","🎟️","Mua tờ vé số 20k thử vận may?","Mua 1 tờ","Thôi","Buy a 20k lottery ticket?","Buy","Skip",-20,4,0,-1,[.06,1500]],
+["c","friend","💒","Bạn thân cưới, mừng 500k.","Mừng","Chỉ chúc mừng","A close friend's wedding — gift 500k.","Gift","Just wish",-500,8,0,-13],
+["c","fun","🍽️","Tự thưởng bữa tối nhà hàng 350k.","Đi ăn","Mì gói","Reward yourself with a 350k dinner.","Dine out","Instant noodles",-350,14,0,-5],
+["c","health","🤧","Bị cảm cúm, mua thuốc 150k?","Mua thuốc","Uống nước chanh","Flu — buy medicine for 150k?","Buy","Lemon water",-150,6,-20,-12],
+["c","health","🏋️","Phòng gym khuyến mãi 500k/tháng.","Đăng ký","Chạy bộ miễn phí","Gym promo 500k/month.","Join","Free jogging",-500,8,0,-2],
+["c","sale","📺","Livestream chốt đơn 150k, mua không?","Chốt đơn","Tắt live","A livestream deal at 150k — buy?","Buy","Close live",-150,9,0,-3],
+["c","cf","🥤","Deadline gấp, mua cà phê cho cả team 300k.","Bao team","Mỗi người tự lo","Rush deadline — buy coffee for the whole team, 300k.","Treat team","Everyone pays own",-300,8,0,-6],
+["c","","🌾","Cô bán dạo ế hàng, ủng hộ 50k?","Ủng hộ","Đi tiếp","A street seller is struggling — help with 50k?","Help","Walk on",-50,4,0,-4],
+["c","","📶","Mất wifi, mua gói 4G 100k.","Mua gói","Chờ thợ","Wifi's down — buy a 100k data pack?","Buy","Wait for tech",-100,3,0,-6],
+["c","fun","🏖️","Cuối tuần bạn rủ đi biển, tốn 1 triệu.","Đi biển!","Ở nhà","Weekend beach trip with friends, 1M.","Go!","Stay home",-1000,20,0,-10],
+["c","","🎁","Công ty tổ chức tiệc, góp quà 150k.","Góp quà","Xin vắng","Office party — gift contribution 150k.","Join","Skip",-150,6,0,-7],
+["c","","🧑‍💻","Freelance nhỏ, đồng ý nhận 600k nhưng mất ngủ.","Nhận việc","Từ chối","A small freelance gig pays 600k but costs sleep.","Take it","Decline",600,-14,0,4],
+["c","","🍜","Quán phở ngon, tô đặc biệt 70k.","Ăn tô đặc biệt","Tô thường","Great pho place — special bowl 70k.","Special","Regular",-70,5,-45,0],
+["c","","🚖","Trễ giờ họp, đi taxi 150k?","Đi taxi","Chạy bộ","Late for a meeting — taxi 150k?","Taxi","Run",-150,3,0,-8],
+["c","","🪴","Chợ hoa giảm giá, mua chậu cây 80k.","Mua","Không","Flower market sale — buy a 80k plant?","Buy","No",-80,6,0,-2],
+["c","","📦","Đơn hàng cũ giao nhầm, trả hàng mất 60k ship.","Trả hàng","Giữ luôn","Wrong item delivered — returning costs 60k shipping.","Return","Keep it",-60,3,0,-2],
+["t","","🧧","Lì xì cho các cháu, mỗi đứa 100k, 4 đứa.","Lì xì đủ","Chỉ lì xì ít","Lucky money for four nieces, 100k each.","Give all","Give less",-400,8,-150,-10],
+["t","","🌸","Mua cành đào chưng Tết 500k.","Mua đào","Cắm hoa giả","Buy a 500k peach blossom branch for Tet.","Buy","Fake flowers",-500,10,-50,-6],
+["t","","🚌","Vé xe về quê tăng giá lên 600k.","Mua vé","Ở lại thành phố","Bus ticket home costs 600k at Tet.","Buy","Stay in the city",-600,14,0,-16],
+["t","","🎊","Nhận lì xì từ cô chú 500k!","Nhận","Từ chối khéo","Aunts and uncles give you 500k lucky money!","Accept","Politely refuse",500,8,0,-3],
+["t","lau","🍖","Tất niên bạn bè, mỗi người góp 250k.","Góp tiệc","Vắng mặt","Year-end party with friends, 250k each.","Join","Skip",-250,12,0,-9],
+["t","","🛒","Mua đồ Tết dự trữ 700k.","Mua đủ","Mua ít thôi","Stock up on Tet supplies for 700k.","Stock up","Buy little",-700,9,-250,-6],
+["s","sale","👟","Flash sale giày 700k còn 3 đôi!","Chốt ngay","Bỏ qua","Flash sale sneakers 700k, 3 pairs left!","Buy now","Skip",-700,16,0,-7],
+["s","sale","🎧","Tai nghe giảm 50%, còn 450k.","Mua","Dùng đồ cũ","Headphones 50% off, now 450k.","Buy","Use old ones",-450,12,0,-5],
+["s","sale","📱","Điện thoại mới trả góp 1,5 triệu/tháng.","Trả góp","Giữ máy cũ","New phone on instalments, 1.5M/month.","Instalment","Keep old",-1500,18,0,-7],
+["s","sale","🎫","Săn voucher 11/11, mua combo 300k.","Mua combo","Không","11/11 vouchers — combo for 300k.","Buy combo","No",-300,9,0,-4],
+["s","sale","🧴","Mua sắm skincare giảm 40%, 350k.","Mua","Bỏ qua","Skincare 40% off, 350k.","Buy","Skip",-350,10,0,-5],
+["s","sale","🍕","Voucher pizza đôi 250k.","Đặt pizza","Nấu mì","Double pizza voucher 250k.","Order","Cook noodles",-250,11,0,-3],
+["u","","📝","Photo giáo trình 80k.","Photo","Mượn bạn","Photocopy textbooks, 80k.","Copy","Borrow",-80,2,0,-4],
+["u","","📅","Thi lại một môn mất 300k lệ phí.","Đăng ký thi","Học lại kỳ sau","Re-exam fee 300k.","Register","Retake next term",-300,4,0,-12],
+["u","lau","🍺","Bạn rủ nhậu trà đá bia 150k.","Đi","Ở phòng","Friends invite you to beers, 150k.","Join","Stay in",-150,12,0,-8],
+["u","","🍚","Quán cơm bình dân 30k hay mì gói 8k?","Ăn cơm","Mì gói","Cheap rice meal 30k or instant noodles 8k?","Rice","Noodles",-30,4,-8,-3],
+["u","study","☕","Học nhóm ở quán cà phê 60k.","Học nhóm","Học ở nhà","Group study at a café, 60k.","Join","Study home",-60,5,0,-3],
+["u","","🚌","Vé xe buýt tháng 200k.","Mua vé tháng","Đạp xe","Monthly bus pass 200k.","Buy pass","Cycle",-200,2,0,-6]];
+let W=360,H=400;const fmtM=k=>Math.abs(k)>=1000?(k/1000).toFixed(1).replace(".",LANG==="vi"?",":".")+"tr":Math.round(k)+"k";
+function shuffle(a,R){for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));const x=a[i];a[i]=a[j];a[j]=x}return a}
+function newGame(seed,mode,t,ch){const C=CFG[t],R=sub(seed,1),pool=EV.filter(e=>C.pool.indexOf(e[0])>=0),order=[];while(order.length<30){const idx=shuffle(pool.map((_,i)=>i),R);idx.forEach(i=>{if(order.length<30)order.push(pool[i])})}
+ const D={seed,mode,t,C,ch:ch||null,order,day:1,money:C.m0,mood:70,hist:[C.m0],tags:{},yes:0,cur:order[0],lock:false,over:false,reason:"end",time:0,dur:1e9,beat:false,maxCombo:0,combo:0,won:false,diedDay:0,swipe:null,nt:0};return D}
+const scoreOf=D=>(D.won?30:Math.max(0,D.day-1))*100+(D.won?Math.max(0,Math.floor(D.money/100)):0);
+const rankIdx=n=>n>=3000?4:n>=2200?3:n>=1400?2:n>=700?1:0;
+function titleOf(D){const t=D.tags;let best="",bn=0;for(const k in t)if(t[k]>bn){bn=t[k];best=k}if(D.reason==="mood")return D.yes<=8?"burn":(best||"none");if(D.won&&D.money>3000&&D.yes<=14)return "frugal";return best&&bn>=2?best:"none"}
+function floatFx(txt,cls){const f=document.createElement("div");f.className="svfl "+cls;f.textContent=txt;$("sv").appendChild(f);setTimeout(()=>f.remove(),1050)}
+function choose(D,yes){if(!D||D.over||D.lock||paused)return;D.lock=true;$("sv").classList.add("lock");const e=D.cur;let dm=yes?e[9]:e[11],ds=yes?e[10]:e[12];if(dm<0)dm=Math.round(dm*D.C.f);
+ if(yes&&e[13]){if(sub(D.seed,300+D.day)()<e[13][0]){dm+=e[13][1];floatFx("🎉 +"+fmtM(e[13][1]),"pos")}}
+ if(yes){D.yes++;if(e[1])D.tags[e[1]]=(D.tags[e[1]]||0)+1}
+ D.money+=dm-D.C.cost;D.mood=Math.max(0,Math.min(100,D.mood+ds+1));D.hist.push(D.money);
+ (yes?sfx.yes:sfx.no)();if(dm>0)sfx.cash();if(window.NPFx)NPFx.buzz(yes?12:8);
+ const total=dm-D.C.cost;floatFx((total>0?"+":"")+fmtM(total),total>=0?"pos":"neg");$("svRes").textContent=(yes?"✅ ":"❎ ")+(ds>=0?"😊 +":"😟 ")+ds+" · "+(total>=0?"+":"")+fmtM(total);
+ hud();renderBars();clearTimeout(D.nt);D.nt=setTimeout(()=>{if(G===D)advance(D)},780)}
+function advance(D){if(D.money<=0){endGame(D,"money");return}if(D.mood<=0){endGame(D,"mood");return}
+ if(D.day>=30){D.won=true;endGame(D,"win");return}D.day++;D.cur=D.order[D.day-1];D.lock=false;$("sv").classList.remove("lock");$("svRes").textContent="";render();hud()}
+function endGame(D,why){if(D.over)return;D.over=true;D.reason=why;D.diedDay=D.day;if(why!=="win")D.day=D.day+1-1;D.title=titleOf(D);if(why==="win")sfx.end();else sfx.bad();render();setTimeout(()=>{if(G===D)finish(D)},700)}
+function step(D,dt){D.time+=dt}
+function draw(){}
+function fitCanvas(){}
+function renderBars(){const D=G;if(!D)return;$("svM2").style.width=Math.max(2,Math.min(100,D.money/D.C.m0*100))+"%";$("svS2").style.width=Math.max(2,D.mood)+"%"}
+function render(){const D=G;if(!D||$("game").hidden)return;const e=D.cur;$("svDay").textContent=T("day",{d:Math.min(D.day,30)});$("svAv").textContent=e[2];$("svTxt").textContent=L2([e[3],e[6]]);$("svTg").textContent="";$("svYes").textContent="✅ "+L2([e[4],e[7]]);$("svNo").textContent="❎ "+L2([e[5],e[8]]);$("svCard").style.transform="";$("svCard").style.opacity=1;
+ const cal=$("svCal");if(cal.dataset.n!=="30"){cal.dataset.n="30";cal.innerHTML="";for(let i=1;i<=30;i++){const s=document.createElement("span");s.textContent=i;cal.appendChild(s)}}
+ [...cal.children].forEach((s,i)=>{const d=i+1;s.className=d<D.day?"done":d===D.day?(D.over&&D.reason!=="win"?"dead":"cur"):""});renderBars()}
+function HUD(D){return[[Math.max(0,D.won?30:D.day-1),"sc"],[fmtM(D.money),"tm"],[D.mood+"%","ex"]]}
+function endChips(D){const n=scoreOf(D);return[TYPES[D.t][0]+" "+L2([TYPES[D.t][1],TYPES[D.t][2]]),D.reason==="win"?T("won",{m:fmtM(D.money)}):T(D.reason==="money"?"outDay":"outMood",{d:D.diedDay}),T("ttl",{t:T("tt."+D.title)}),(D.prevBest>0&&n>D.prevBest)?T("rec"):""]}
+const shareT=D=>T("tt."+D.title)+" · "+(D.reason==="win"?T("won",{m:fmtM(D.money)}):T(D.reason==="money"?"outDay":"outMood",{d:D.diedDay}));
+$("svYes").addEventListener("click",()=>choose(G,true));$("svNo").addEventListener("click",()=>choose(G,false));
+/* vuốt thẻ: phải = CÓ, trái = KHÔNG */
+(()=>{const card=$("svCard");let x0=null,dx=0;card.addEventListener("pointerdown",e=>{if(!G||G.over||G.lock||paused)return;x0=e.clientX;dx=0;try{card.setPointerCapture(e.pointerId)}catch(z){}});
+ card.addEventListener("pointermove",e=>{if(x0==null)return;dx=e.clientX-x0;card.style.transform="translateX("+dx+"px) rotate("+dx*.05+"deg)";card.style.opacity=Math.max(.45,1-Math.abs(dx)/320)});
+ const up=()=>{if(x0==null)return;const d=dx;x0=null;dx=0;if(Math.abs(d)>70)choose(G,d>0);else{card.style.transform="";card.style.opacity=1}};card.addEventListener("pointerup",up);card.addEventListener("pointercancel",up)})();
+addEventListener("keydown",e=>{if(!G||G.over||$("game").hidden)return;if(e.key==="ArrowRight"||e.key==="y"){e.preventDefault();choose(G,true)}else if(e.key==="ArrowLeft"||e.key==="n"){e.preventDefault();choose(G,false)}});
+function onBegin(D){$("sv").classList.remove("lock");$("svRes").textContent="";$("svCal").dataset.n="";render()}
+
+/* ===== MÀN HÌNH ===== */
+const SCR=["home","game","end"];
+function show(id){SCR.forEach(s=>$(s).hidden=s!==id);["ovCh","ovSkin","ovPay"].forEach(o=>$(o).hidden=true);if(id==="home")$("ttl").textContent=T("title");if(id==="game")requestAnimationFrame(fitCanvas)}
+const getSave=()=>LS.get("sv-save",{streak:0,last:"",best:0,total:0,days:{},dayT:{}});
+function renderTypes(){const b=$("tys");b.innerHTML="";TYPES.forEach((t,i)=>{const e=document.createElement("button");e.type="button";e.className="ty"+(TY===i?" on":"")+(tLocked(i)?" lock":"");e.innerHTML='<span class="e">'+t[0]+'</span><span class="t">'+L2([t[1],t[2]])+"</span>";e.onclick=()=>{if(tLocked(i)){openPay(i,null);return}TY=i;LS.set("sv-type",i);renderHome()};b.appendChild(e)})}
+function renderHome(){const sv=getSave(),k=dayKey(),done=TY?(sv.dayT||{})[k+"|"+TY]:sv.days[k];$("ttl").textContent=T("title");$("hSub").textContent=T("sub");$("hHero").textContent=skinOf().hero||"💰📅";$("bLang").textContent=LANG==="vi"?"EN":"VI";$("bSnd").textContent=snd()?"🔊":"🔇";renderTypes();
+ $("dN").textContent="#"+dayNo(k);$("dT").textContent=T("daily");$("dS").textContent=done!=null?T("done",{s:SF(done)}):T("dS");$("bFree").textContent=T("free");$("hNote").textContent=T("note");
+ $("hChips").innerHTML="";[sv.streak?"🔥 "+sv.streak:"",sv.best?T("best",{n:SF(sv.best)}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("hChips").appendChild(c)})}
+const hintOf=t=>T("hint"+(t||0));
+function begin(seed,mode,t,ch){t=t==null?(mode==="daily"?0:TY):t;if(tLocked(t))t=0;if(mode==="daily")t=0;G=newGame(seed,mode,t,ch);acc=0;last=performance.now();show("game");applySkin();$("ttl").textContent=(mode==="daily"?"📅 "+T("daily"):TYPES[t][0]+" "+L2([TYPES[t][1],TYPES[t][2]]));$("gHint").textContent=hintOf(t);if(!LS.get("sv-tut",0)){toast(T("tut"),4200)}fitCanvas();hud();window.NP&&NP.start();recBegin();if(typeof onBegin==="function")onBegin(G)}
+let clipReady=false,clipT=0;
+function recBegin(){clipReady=false;clipT=0;if(!cv)return;if(window.NP&&NP.helper)return;if(window.NPFx&&NPFx.canRec()){try{NPFx.recStart(cv,36000)}catch(e){}}}
+function recRoll(){if(!G||G.over||!(window.NPFx&&NPFx.canRec())||(window.NP&&NP.helper))return;if(G.time-clipT>30){clipT=G.time;try{NPFx.recStart(cv,36000)}catch(e){}}}
+$("bClip").onclick=async()=>{if(!G||!G.over)return;toast(T("clipBusy"),1500);let blob=null;try{blob=await NPFx.recStop()}catch(e){}if(!blob){toast(T("clipNo"),2200);return}const ext=/mp4/.test(blob.type)?"mp4":"webm",f=new File([blob],GID+"."+ext,{type:blob.type||"video/webm"});
+ try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],text:shareText(G)});return}}catch(e){if(e&&e.name==="AbortError")return}
+ const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=f.name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},4000)};
+function hud(){const D=G;if(!D||$("game").hidden)return;const h=HUD(D);[["sSc","sScL"],["sSh","sShL"],["sEx","sExL"]].forEach((p,i)=>{if(!h[i])return;$(p[0]).textContent=h[i][0];$(p[1]).textContent=T(h[i][1])});const n=scoreOf(D),tg=$("tgt");if(D.ch){tg.hidden=false;tg.classList.toggle("beat",!!D.beat);$("tgtT").textContent=T("tgt",{n:SF(D.ch.sc)})+" · "+SF(n);$("tgtB").style.width=Math.min(100,Math.round(n/Math.max(1,D.ch.sc)*100))+"%"}else tg.hidden=true}
+function tick(ts){raf=requestAnimationFrame(tick);if(!G||$("game").hidden){last=ts;return}acc+=Math.min(.1,(ts-last)/1000||0);last=ts;if(!paused){recRoll();while(acc>=1/60){step(G,1/60);acc-=1/60}if(G.ch&&!G.beat&&scoreOf(G)>G.ch.sc){G.beat=true;NPJuice.text($("play"),"⚔ "+T("beat"),{color:"#3ddc84",top:"40%",size:6});NPJuice.confetti($("play"),20,CONF);sfx.combo(24)}hud()}draw()}
+/* ===== KẾT THÚC ===== */
+function finish(D){if(G!==D)return;const sv=getSave();D.prevBest=sv.best||0;sv.total++;sv.best=Math.max(sv.best||0,scoreOf(D));if(D.mode==="daily"){const k=dayKey();if(sv.days[k]==null||scoreOf(D)>sv.days[k])sv.days[k]=scoreOf(D);if(sv.last!==k){const y=new Date(Date.parse(k+"T00:00:00Z")-864e5).toISOString().slice(0,10);sv.streak=sv.last===y?sv.streak+1:1;sv.last=k}}
+ LS.set("sv-save",sv);LS.set("sv-tut",1);lastEnd=performance.now();const score=Math.min(MAXS,scoreOf(D));window.NP&&NP.result({score,extra:{mode:D.mode,t:D.t,ranked:D.mode==="daily",rankHint:T("rankHint")}});showEnd(D)}
+function showEnd(D){show("end");const n=scoreOf(D);$("eT").textContent=T(D.reason||"end");$("eSc").textContent=SF(n);$("eRk").textContent="🏅 "+T("rt")[rankIdx(n)];$("eHat").textContent=T("endS",{n:SF(n)});$("eHat").style.cssText="text-align:center;font-weight:800";
+ $("eChips").innerHTML="";endChips(D).filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("eChips").appendChild(c)});
+ const tgt=D.ch?D.ch.sc:(D.mode==="daily"?D.prevBest:0),gap=tgt-n,near=tgt>0&&gap>0&&gap<=Math.max(3,Math.round(tgt*.15));$("eNear").hidden=!near;if(near)$("eNear").textContent=T(D.ch?"near":"nearB",{n:SF(gap)})+" · "+T("nearGo");
+ $("eVs").textContent=D.ch?T("vsC",{a:SF(n),b:SF(D.ch.sc)})+" · "+(n>D.ch.sc?T("won"):n<D.ch.sc?T("lose"):T("tie")):"";
+ const helper=!!(window.NP&&NP.helper);$("bShare").hidden=helper;$("bAgain").hidden=helper;$("bBoard").hidden=helper;$("bHome").hidden=helper;clipReady=!!(cv&&window.NPFx&&NPFx.canRec()&&!helper);$("bClip").hidden=!clipReady;$("bRem").hidden=helper;
+ if(n>(D.prevBest||0)&&D.prevBest>0||n>=NICE)NPJuice.confetti($("play"),20,CONF);if(PF.pro&&PF.pro.trial)setTimeout(()=>PF.lockPro(),0)}
+$("bRem").onclick=()=>{if(!G)return;const g=G;if(PF.pro&&PF.pro.trial)PF.lockPro();begin(g.seed,g.mode,g.t,g.ch)};
+$("bAgain").onclick=()=>{if(PF.pro&&PF.pro.trial)PF.lockPro();if(G&&G.mode==="daily"&&!G.ch)begin(G.seed,"daily",0,null);else begin(newSeed(),"free",TY,null)};
+$("bHome").onclick=()=>{G=null;if(PF.pro&&PF.pro.trial)PF.lockPro();show("home");renderHome()};
+/* ===== CHIA SẺ: bản đồ mạng lưới ===== */
+function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#fbbf24","#92400e"];
+ const g=x.createLinearGradient(0,0,1080,1350);g.addColorStop(0,cg[0]);g.addColorStop(1,cg[1]);x.fillStyle=g;x.fillRect(0,0,1080,1350);x.textAlign="center";x.fillStyle="#fff";x.font="800 60px "+F;x.fillText((isProSk()?"👑 ":"💰 ")+T("title"),540,100);
+ const won=D.reason==="win";x.font="800 84px "+F;x.fillText(won?"🎉":D.reason==="money"?"💀":"😵",540,250);x.font="800 66px "+F;x.fillText(won?T("won",{m:fmtM(D.money)}):T(D.reason==="money"?"outDay":"outMood",{d:D.diedDay}),540,350);
+ x.fillStyle="rgba(255,255,255,.93)";x.beginPath();x.roundRect?x.roundRect(120,400,840,360,32):x.rect(120,400,840,360);x.fill();
+ const h=D.hist,mx=Math.max.apply(null,h.concat([1])),mn=Math.min.apply(null,h.concat([0])),X0=170,X1=910,Y0=450,Y1=720;x.strokeStyle="rgba(0,0,0,.15)";x.lineWidth=2;const zy=Y1-(0-mn)/((mx-mn)||1)*(Y1-Y0);x.beginPath();x.moveTo(X0,zy);x.lineTo(X1,zy);x.stroke();
+ x.lineWidth=7;x.lineJoin="round";x.strokeStyle=won?"#16a34a":"#dc2626";x.beginPath();h.forEach((v,i)=>{const px=X0+(X1-X0)*i/30,py=Y1-(v-mn)/((mx-mn)||1)*(Y1-Y0);i?x.lineTo(px,py):x.moveTo(px,py)});x.stroke();const lx=X0+(X1-X0)*(h.length-1)/30,ly=Y1-(h[h.length-1]-mn)/((mx-mn)||1)*(Y1-Y0);x.fillStyle=won?"#16a34a":"#dc2626";x.beginPath();x.arc(lx,ly,13,0,6.283);x.fill();
+ x.fillStyle="#fff";x.font="800 54px "+F;x.fillText(T("ttl",{t:T("tt."+D.title)}),540,880);x.font="800 140px "+F;x.fillText(scoreOf(D),540,1040);x.font="700 40px "+F;x.fillStyle="#fff3d0";x.fillText(T("endS",{n:won?30:D.diedDay-1}),540,1100);x.font="800 52px "+F;x.fillStyle="#ffe27a";x.fillText("🏅 "+T("rt")[rankIdx(scoreOf(D))]+(D.prevBest>0&&scoreOf(D)>D.prevBest?"  "+T("rec"):""),540,1180);x.fillStyle="#fff";x.font="800 50px "+F;x.fillText(T("ask"),540,1255);x.font="800 38px "+F;x.fillStyle="#ffe9b0";x.fillText(location.host,540,1310);return c}
+const shareLink=D=>location.origin+"/api/share/"+GID+"?ch="+b64e({s:D.seed,sc:Math.min(MAXS,scoreOf(D)),t:D.t})+(LANG==="en"?"&l=en":"");
+const shareText=D=>T("tx",{t:(typeof shareT==="function"?shareT(D):L2([TYPES[D.t][1],TYPES[D.t][2]])),n:SF(scoreOf(D)),l:shareLink(D)})+"\n"+T("ask");
+$("bShare").onclick=async()=>{const D=G;if(!D||!D.over)return;const txt=shareText(D);try{const blob=await new Promise(r=>drawCard(D).toBlob(r,"image/png")),f=blob&&new File([blob],GID+".png",{type:"image/png"});if(f&&navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],text:txt});return}if(navigator.share){await navigator.share({text:txt});return}}catch(e){if(e&&e.name==="AbortError")return}
+ try{await navigator.clipboard.writeText(txt);toast(T("copied"),2200)}catch(e){toast(txt,3000)}};
+$("bBoard").onclick=()=>window.NP&&NP.brag();
+/* ===== THÁCH ĐẤU ===== */
+const openCh=c=>{CH=c;$("chH").textContent="⚔ "+T("ch");$("chP").textContent=T("chP",{s:SF(c.sc)})+(tLocked(c.t)?"\n"+T("chL",{t:L2([TYPES[c.t][1],TYPES[c.t][2]])}):"");$("chGo").textContent=tLocked(c.t)?T("trial"):T("chGo");$("ovCh").hidden=false};
+$("chNo").onclick=()=>{$("ovCh").hidden=true;CH=null};
+$("chGo").onclick=async()=>{const c=CH;$("ovCh").hidden=true;if(!c)return;if(tLocked(c.t)){if(LS.get("sv-trial","")===dayKey()){openPay(c.t,null);return}try{await PF.loadPro(true);LS.set("sv-trial",dayKey());track(GID+"_skin","trial");PF.trialRestore={ty:TY,sk:PF.skinSel}}catch(e){toast(T("tried"),2200);return}}begin(c.s,"challenge",c.t,c)};
+/* ===== NIGHT PASS ===== */
+const subUrl=()=>"../../../subscribe.html?from="+encodeURIComponent("cozyplay/index.html#"+GID)+"&plan=month";
+const passToken=()=>{try{const p=JSON.parse(localStorage.getItem("pass"));return p&&p.token}catch(e){return null}};
+const track=(k,a)=>{try{fetch("/api/paywall",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({f:k,k:a})}).catch(()=>{})}catch(e){}};
+let payFor=null;
+function openSkins(){$("skH").textContent="🎨 "+T("skin");$("skG").innerHTML="";CATALOG.forEach(c=>{const locked=c[0]!=="basic"&&!PF.skins[c[0]],b=document.createElement("button");b.type="button";b.className="skc"+(locked?" lock":"")+(PF.skinSel===c[0]?" on":"");b.innerHTML='<span class="e">'+c[3]+'</span><span class="sx"><b>'+L2([c[1],c[2]])+"</b><small>"+L2(T("sk."+c[0]))+"</small></span>";b.onclick=()=>locked?openPay(0,c[0]):chooseSkin(c[0]);$("skG").appendChild(b)});$("ovSkin").hidden=false}
+function chooseSkin(id){PF.skinSel=id;LS.set("sv-skin",id);$("ovSkin").hidden=true;applySkin();renderHome()}
+function openPay(t,id){payFor={t,id};track(GID+"_skin","view");$("pwP").textContent=T("lockP");$("pwGo").textContent=T("go");$("pwGo").href=subUrl();$("pwTrial").textContent=T("trial");$("pwTrial").hidden=LS.get("sv-trial","")===dayKey();$("ovSkin").hidden=true;$("ovPay").hidden=false}
+$("pwGo").onclick=()=>track(GID+"_skin","click");$("pwNo").onclick=()=>{$("ovPay").hidden=true};
+$("pwTrial").onclick=async()=>{try{await PF.loadPro(true);LS.set("sv-trial",dayKey());track(GID+"_skin","trial");const f=payFor||{t:0,id:null};PF.trialRestore={ty:TY,sk:PF.skinSel};if(f.id)PF.skinSel=f.id;$("ovPay").hidden=true;applySkin();const t=f.t>0?f.t:1;TY=t;begin(newSeed(),"free",t,null)}catch(e){toast(T("tried"),2200);$("ovPay").hidden=true}};
+$("bSkin").onclick=openSkins;$("skX").onclick=()=>$("ovSkin").hidden=true;
+const fetchT=(u,o,ms)=>{const c=new AbortController(),id=setTimeout(()=>c.abort(),ms);return fetch(u,Object.assign({signal:c.signal},o)).finally(()=>clearTimeout(id))};
+PF.loadPro=async function(trial,ticket){const tk=ticket||passToken(),cacheable=!trial&&!ticket;let src=null,r=null;
+ try{r=await fetchT("/api/pro/"+GID+".js"+(trial?"?trial=1":""),{headers:tk?{Authorization:"Bearer "+tk}:{},cache:"no-store"},8000)}catch(e){r=null}
+ if(r&&r.ok){src=await r.text();if(cacheable)LS.set("sv-pro-src",{src})}
+ else{if(r&&r.status>=400&&r.status<500&&r.status!==429){if(r.status===401&&cacheable)try{localStorage.removeItem("sv-pro-src")}catch(e){}throw new Error("pro_"+r.status)}
+  const c=cacheable?LS.get("sv-pro-src",null):null,p=LS.get("pass",null);if(c&&c.src&&p&&p.exp&&new Date(p.exp)>new Date())src=c.src;else throw new Error("pro_offline")}
+ new Function("PF",src)(PF);if(cacheable)PF.fetchTicket();
+ if(cacheable&&PF.pro&&!PF.pro.trial&&!LS.get("sv-auto",0)){LS.set("sv-auto",1);if(PF.skinSel==="basic"){const f=Object.keys(PF.skins).find(i=>i!=="basic");if(f){PF.skinSel=f;LS.set("sv-skin",f)}}}
+ applySkin();if(!$("home").hidden)renderHome()};
+PF.fetchTicket=function(){const t=passToken();if(!t||(window.NP&&NP.helper)||!PF.pro||PF.pro.trial)return;fetchT("/api/pro/ticket",{method:"POST",headers:{Authorization:"Bearer "+t},cache:"no-store"},6000).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.ticket){PF.ticket=j.ticket;PF.ticketAt=Date.now()}}).catch(()=>{})};
+addEventListener("online",()=>{if(!PF.ticket)PF.fetchTicket()});setInterval(()=>{if(PF.pro&&!PF.pro.trial&&(!PF.ticket||Date.now()-(PF.ticketAt||0)>20*36e5))PF.fetchTicket()},60000);
+PF.lockPro=function(){for(const id of Object.keys(PF.skins))if(id!=="basic")delete PF.skins[id];PF.types=TYPES.map((_,i)=>i===0);PF.pro=null;const r=PF.trialRestore;PF.trialRestore=null;if(r){TY=r.ty;PF.skinSel=r.sk}if(tLocked(TY))TY=0;if(!PF.skins[PF.skinSel])PF.skinSel="basic";applySkin();if(!$("home").hidden)renderHome()};
+window.PF=PF;
+if(window.NP&&NP.onPause)NP.onPause(()=>{paused=true},()=>{paused=false;last=performance.now()});
+if(window.NP&&NP.state)NP.state(()=>{if(!G||G.over)return null;const s={seed:G.seed,t:G.t};if(PF.pro&&!PF.pro.trial&&PF.ticket){s.tk=PF.ticket;if(PF.skinSel!=="basic"&&PF.skins[PF.skinSel])s.sk=PF.skinSel}return s});
+$("bLang").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}document.documentElement.lang=LANG;if(!$("home").hidden)renderHome();else if(!$("end").hidden&&G)showEnd(G);else if(G)$("gHint").textContent=hintOf(G.t)};
+$("bSnd").onclick=()=>{if(window.NPAudio)NPAudio.set(!NPAudio.get());$("bSnd").textContent=snd()?"🔊":"🔇"};
+$("bDaily").onclick=()=>begin(fnv(GID+"|"+dayKey()),"daily",0,null);$("bFree").onclick=()=>begin(newSeed(),"free",TY,null);
+applySkin();renderHome();show("home");requestAnimationFrame(tick);
+const proP=passToken()&&!(window.NP&&NP.helper)?PF.loadPro(false).catch(()=>{}):Promise.resolve();
+if(window.NP&&NP.helper){const HS=NP.initialState&&typeof NP.initialState==="object"?NP.initialState:{};const seed=Number.isInteger(HS.seed)&&HS.seed>=0&&HS.seed<=4294967295?HS.seed:newSeed();const ht=Number.isInteger(HS.t)&&HS.t>=0&&HS.t<TYPES.length?HS.t:0;$("bBoard").hidden=true;
+ const go=()=>begin(seed,"challenge",ht,null);if(/^h\.\d{13}\.[A-Za-z0-9_-]{43}$/.test(HS.tk||""))PF.loadPro(false,HS.tk).then(()=>{if(/^[a-z0-9]{3,10}$/.test(HS.sk||"")&&PF.skins[HS.sk])PF.skinSel=HS.sk}).catch(()=>{}).finally(go);else go()}
+else{const c0=parseCh(location.hash);if(c0)proP.then(()=>openCh(c0));else if(location.hash==="#daily")begin(fnv(GID+"|"+dayKey()),"daily",0,null)}
+window.SV={get G(){return G},PF,CFG,EV,begin,newGame,scoreOf,parseCh,drawCard,shareText,shareLink,fnv,dayKey,dayNo,finish,choose,advance,titleOf,
+ run(D,policy){D=D||G;let k=0;while(!D.over&&k++<40){D.lock=false;const e=D.cur;let yes=policy==="yes"?true:policy==="no"?false:policy==="cheap"?(e[9]>-130&&e[10]>=3||e[9]>0&&e[10]>-9):policy==="smart"?(e[9]>=-150||(e[10]/Math.max(1,-e[9]))*100>3.2):Math.random()<.5;choose(D,yes);clearTimeout(D.nt);advance(D)}return{day:D.day,money:D.money,mood:D.mood,reason:D.reason,score:scoreOf(D),title:D.title}}};
+</script>
+</body>
+</html>

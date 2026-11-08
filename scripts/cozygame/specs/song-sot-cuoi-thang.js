@@ -54,7 +54,7 @@ module.exports = {
   },
   sfx: `{yes:()=>{tone(620,.06,"triangle",.07);tone(820,.08,"triangle",.07,.05)},no:()=>tone(260,.1,"sine",.06),cash:()=>{[1200,1500,1900].forEach((f,i)=>tone(f,.07,"square",.04,i*.05))},bad:()=>tone(170,.25,"sawtooth",.07),end:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.09,i*.09)),combo:n=>{const b=440*Math.pow(1.122,Math.min(n/3,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.1,"triangle",.09,i*.05))}}`,
   gameJs: String.raw`
-const CFG=[{m0:8000,cost:60,pool:"c"},{m0:10000,cost:60,pool:"ct"},{m0:8000,cost:60,pool:"cs"},{m0:3500,cost:35,pool:"cu"}];
+const CFG=[{m0:8000,cost:115,f:1.45,pool:"c"},{m0:10000,cost:115,f:1.35,pool:"ct"},{m0:8000,cost:115,f:1.5,pool:"cs"},{m0:3500,cost:58,f:1.2,pool:"cu"}];
 /* [nhóm, thẻ danh hiệu, emoji, VN tình huống, VN có, VN không, EN tình huống, EN có, EN không, tiền(có), tinh thần(có), tiền(không), tinh thần(không), cược] — tiền tính bằng nghìn đồng */
 const EV=[
 ["c","lau","🍲","Bạn rủ đi ăn lẩu, hết khoảng 300k. Đi không?","Đi lẩu!","Để lần sau","A friend invites you to hotpot, about 300k. Go?","Hotpot time!","Maybe next time",-300,12,0,-6],
@@ -122,7 +122,7 @@ const scoreOf=D=>(D.won?30:Math.max(0,D.day-1))*100+(D.won?Math.max(0,Math.floor
 const rankIdx=n=>n>=3000?4:n>=2200?3:n>=1400?2:n>=700?1:0;
 function titleOf(D){const t=D.tags;let best="",bn=0;for(const k in t)if(t[k]>bn){bn=t[k];best=k}if(D.reason==="mood")return D.yes<=8?"burn":(best||"none");if(D.won&&D.money>3000&&D.yes<=14)return "frugal";return best&&bn>=2?best:"none"}
 function floatFx(txt,cls){const f=document.createElement("div");f.className="svfl "+cls;f.textContent=txt;$("sv").appendChild(f);setTimeout(()=>f.remove(),1050)}
-function choose(D,yes){if(!D||D.over||D.lock||paused)return;D.lock=true;$("sv").classList.add("lock");const e=D.cur;let dm=yes?e[9]:e[11],ds=yes?e[10]:e[12];
+function choose(D,yes){if(!D||D.over||D.lock||paused)return;D.lock=true;$("sv").classList.add("lock");const e=D.cur;let dm=yes?e[9]:e[11],ds=yes?e[10]:e[12];if(dm<0)dm=Math.round(dm*D.C.f);
  if(yes&&e[13]){if(sub(D.seed,300+D.day)()<e[13][0]){dm+=e[13][1];floatFx("🎉 +"+fmtM(e[13][1]),"pos")}}
  if(yes){D.yes++;if(e[1])D.tags[e[1]]=(D.tags[e[1]]||0)+1}
  D.money+=dm-D.C.cost;D.mood=Math.max(0,Math.min(100,D.mood+ds+1));D.hist.push(D.money);
