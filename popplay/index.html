@@ -762,6 +762,8 @@ function closeGame(){
   document.documentElement.classList.remove("playing");
   document.title = pageTitle();
   try{ if(document.fullscreenElement) document.exitFullscreen(); }catch(e){}
+  /* về trang chủ: tính lại bố cục lưới (cỡ cửa sổ có thể đã đổi lúc đang chơi) */
+  requestAnimationFrame(() => { try{ fitGrid(); }catch(e){} setTimeout(() => { try{ fitGrid(); }catch(e){} }, 250); });
 }
 function route(){
   const g = games.find(x => x.id === location.hash.slice(1));
