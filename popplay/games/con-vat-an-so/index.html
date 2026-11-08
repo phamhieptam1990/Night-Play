@@ -399,7 +399,11 @@ function stopVoices(){const c=ac;if(c)voices.forEach(v=>fadeVoice(v,c));voices=[
 function cancelSnd(){sTimers.forEach(clearTimeout);sTimers.clear();stopVoices();try{if(window.speechSynthesis)speechSynthesis.cancel()}catch(e){}}
 if(window.NPAudio){const s0=NPAudio.silence;NPAudio.silence=function(){cancelSnd();return s0.apply(this,arguments)}}
 addEventListener("pagehide",cancelSnd);document.addEventListener("visibilitychange",()=>{if(document.hidden)cancelSnd()});
-function say(text){if(!sound||!window.speechSynthesis||!text)return;if(voices.some(v=>v.pri>=3&&v.end>(ac?ac.currentTime:0)))return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang=LANG==="vi"?"vi-VN":"en-US";u.rate=.85;u.pitch=1.15;speechSynthesis.speak(u)}catch(e){}}
+function say(text){if(!sound||!window.speechSynthesis||!text)return;
+  /* đang có tiếng thưởng/thắng quan trọng: ĐỢI nó xong rồi mới đọc (trước đây bỏ luôn nên câu hỏi từ vòng 2 trở đi không được đọc) */
+  const now=ac?ac.currentTime:0,busy=voices.filter(v=>v.pri>=3&&v.end>now).reduce((m,v)=>Math.max(m,v.end-now),0);
+  if(busy>0){const id=G&&G.id,r=G&&G.r;stimer(()=>{if(G&&G.id===id&&G.r===r&&!G.over)say(text)},Math.min(2.5,busy+.08)*1000);return}
+  try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang=LANG==="vi"?"vi-VN":"en-US";u.rate=.85;u.pitch=1.15;speechSynthesis.speak(u)}catch(e){}}
 let toastT=0;function toast(m,ms){const e=$("toast");e.textContent=m;e.classList.add("on");clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove("on"),ms||1500)}
 
 /* ===== HÔM NAY · THÁCH ĐẤU · CHIA SẺ ===== */
@@ -510,7 +514,7 @@ function nextRound(){
   if(sp.flip){toast(T("flipT"),1500);sfx.pop()}else if(sp.bonus)toast(T("bonus"),1400);
   if(G.t===3&&!sp.flip)$("rt").innerHTML+="<small>"+T("r3.pick")+"</small>";
     setAni("");upd();$("tod").style.opacity=(G.r/ROUNDS*.9).toFixed(2);
-  if(G.r===0||sp.flip)say(rule+(G.t===0||G.t===3?" "+sp.ref:""));
+  say(rule+(G.t===0||G.t===3?" "+sp.ref:""));   /* đọc ở MỌI câu (trước chỉ đọc câu đầu và câu đổi luật) */
   armIdle();
 }
 function armIdle(){clearTimeout(G.idleT);const id=G.id,r=G.r;G.idleT=setTimeout(()=>{if(G&&G.id===id&&G.r===r&&!G.over)showHint()},7500*SPD)}
