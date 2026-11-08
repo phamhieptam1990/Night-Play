@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <script src="../../../shared/guard.js"></script>
 <script src="../../../shared/bridge.js"></script>
+<script src="../../../shared/fx.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tháp Vòng Màu</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -87,6 +88,10 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .skc .sw{width:100%;aspect-ratio:4/3;border-radius:3cqw;display:grid;place-items:center;font-size:10cqw}
 .skc.on{outline:.9cqw solid var(--accent)}.skc.lock::after{content:"🔒";position:absolute;right:1.6cqw;top:1.6cqw;font-size:4.4cqw;background:var(--panel);border-radius:50%;padding:.4cqw}
 .nums{display:flex;gap:3cqw;justify-content:center}.nums button{width:19cqw;height:19cqw;border-radius:5cqw;background:var(--panel);color:var(--ink);box-shadow:var(--shadow);font-size:9.5cqw;font-weight:800}
+.near{margin:0;text-align:center;font:800 4.2cqw/1.25 var(--display);color:var(--accent);padding:1.6cqw 4cqw;border-radius:4cqw;border:1.5px solid color-mix(in srgb,var(--accent) 60%,transparent);background:color-mix(in srgb,var(--accent) 12%,var(--panel))}
+.ib2.hot{animation:hotp 1s ease-in-out infinite}@keyframes hotp{50%{transform:scale(1.1);box-shadow:0 0 0 1.4cqw color-mix(in srgb,var(--accent) 30%,transparent)}}
+.cap{margin:0;font-size:3.4cqw;color:var(--muted);font-weight:700}
+@media (prefers-reduced-motion:reduce){.ib2.hot{animation:none}}
 @media (max-height:520px) and (min-aspect-ratio:11/10){
   :root{--w:calc((100dvh - 16px)*.75)}
   .app{flex-direction:row;align-items:center;justify-content:center;gap:14px}
@@ -126,8 +131,9 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
       <div class="row"><button class="ib2" id="chNo" type="button">✕</button><button class="btnbig" id="chGo" type="button"></button></div>
     </div>
     <div class="ov" id="ovEnd" hidden>
-      <h2 id="enH"></h2><div class="vs" id="enV"></div><div class="reward" id="enR"></div><p id="enP"></p>
-      <div class="row"><button class="ib2 main" id="againBtn" type="button">▶</button><button class="ib2" id="shareBtn" type="button" hidden>📤</button><button class="ib2" id="homeBtn2" type="button">🏠</button><button class="ib2" id="rankBtn" type="button" hidden>🏆</button></div>
+      <h2 id="enH"></h2><div class="vs" id="enV"></div><div class="reward" id="enR"></div><p id="enP"></p><p class="near" id="enN" hidden></p>
+      <div class="row"><button class="ib2 main" id="againBtn" type="button">▶</button><button class="ib2" id="retryBtn" type="button" hidden>🔁</button><button class="ib2" id="shareBtn" type="button" hidden>📤</button><button class="ib2" id="homeBtn2" type="button">🏠</button><button class="ib2" id="rankBtn" type="button" hidden>🏆</button></div>
+      <p class="cap" id="enL" hidden></p>
     </div>
     <div class="ov" id="ovSkin" hidden>
       <h2 id="skH"></h2><div class="skgrid" id="skGrid"></div><button class="ghost" id="skBack" type="button"></button>
@@ -171,7 +177,7 @@ vi:{title:"Tháp Vòng Màu",docTitle:"Tháp Vòng Màu",sound:"Âm thanh",lang:
  "sk.pick":"Chọn giao diện","pw.h":"Giao diện của Night Pass","pw.p":"Mở khoá {name} và 15 giao diện đẹp khác cho cả 4 trò. Phần này dành cho phụ huynh.","pw.go":"Dành cho phụ huynh","pw.trial":"Chơi thử 1 ván","pw.later":"Để sau","pw.tried":"Hôm nay đã chơi thử rồi, mai thử tiếp nhé.",
  "gt.h":"Dành cho phụ huynh","gt.p":"Hỏi người lớn: {a} + {b} = ?","gt.x":"Quay lại",lockedLbl:"{n} (cần Night Pass)",
  "w.big":"Vòng to không được đè lên vòng nhỏ!","w.cyc":"Ở tháp này chỉ chuyển theo chiều mũi tên ↻ thôi!","w.none":"Cột này chưa có vòng nào.","w.hint":"Thử chuyển từ cột {a} sang cột {b}","w.done":"Hết đường gợi ý rồi!","w.undo":"Chưa có lần chuyển nào để quay lại.",
- "say.start":"Chuyển các vòng sang cột có cờ nào!","say.bad":"Ôi, không được rồi!",
+ "say.start":"Chuyển các vòng sang cột có cờ nào!","say.bad":"Ôi, không được rồi!",cmb:["Hay!","Giỏi!","Tuyệt!","Siêu hạng!"],hook:"Xếp xong tháp trong {n} lần, bạn làm được không?",near:"Chỉ thừa {n} lần nữa là ít nhất! Thử lại nhé 🔥","leg":"🔁 Thử lại cùng câu đố · ▶ Câu đố mới","retry":"Thử lại cùng câu đố","streak":"🔥 {n} lần 3 sao liên tiếp!","beat":"Vượt người thách rồi!",
  "sk.0.basic":"Cầu vồng","sk.0.cake":"Bánh kem tầng","sk.0.coin":"Xu vàng","sk.0.planet":"Hành tinh","sk.0.candy":"Kẹo ngọt",
  "sk.1.basic":"Cầu vồng","sk.1.pancake":"Bánh kếp","sk.1.castle":"Lâu đài","sk.1.lifebuoy":"Phao biển","sk.1.robot":"Rô-bốt",
  "sk.2.basic":"Cầu vồng","sk.2.magic":"Phép thuật","sk.2.toy":"Đồ chơi gỗ","sk.2.garden":"Vườn hoa","sk.2.night":"Đêm sao",
@@ -189,7 +195,7 @@ en:{title:"Rainbow Rings",docTitle:"Rainbow Rings",sound:"Sound",lang:"Language"
  "sk.pick":"Pick a look","pw.h":"Night Pass looks","pw.p":"Unlock {name} and 15 more beautiful looks for all 4 games. This part is for parents.","pw.go":"For parents","pw.trial":"Try one puzzle","pw.later":"Later","pw.tried":"You already tried today, come back tomorrow.",
  "gt.h":"For parents","gt.p":"Ask a grown-up: {a} + {b} = ?","gt.x":"Back",lockedLbl:"{n} (needs Night Pass)",
  "w.big":"A big ring can't sit on a small one!","w.cyc":"On this tower rings only move along the arrow ↻!","w.none":"This peg has no rings.","w.hint":"Try moving from peg {a} to peg {b}","w.done":"No hint available!","w.undo":"No move to undo yet.",
- "say.start":"Move the rings to the flag peg!","say.bad":"Oops, not that!",
+ "say.start":"Move the rings to the flag peg!","say.bad":"Oops, not that!",cmb:["Nice!","Great!","Awesome!","Legendary!"],hook:"Stack the tower in {n} moves — can you?",near:"Only {n} moves over the fewest! Try again 🔥","leg":"🔁 Retry same puzzle · ▶ New puzzle","retry":"Retry same puzzle","streak":"🔥 {n} three-star wins in a row!","beat":"You beat the challenge!",
  "sk.0.basic":"Rainbow","sk.0.cake":"Layer cake","sk.0.coin":"Gold coins","sk.0.planet":"Planets","sk.0.candy":"Candy",
  "sk.1.basic":"Rainbow","sk.1.pancake":"Pancakes","sk.1.castle":"Castle","sk.1.lifebuoy":"Lifebuoys","sk.1.robot":"Robot",
  "sk.2.basic":"Rainbow","sk.2.magic":"Magic","sk.2.toy":"Wooden toy","sk.2.garden":"Flower garden","sk.2.night":"Starry night",
@@ -248,7 +254,7 @@ const today=()=>new Date().toLocaleDateString("en-CA");
 let ac=null;
 function audio(){if(!sound)return null;try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();if(ac.state==="suspended")ac.resume();return ac}catch(e){return null}}
 function tone(f,d,ty,v,dl){const c=audio();if(!c)return;const t0=c.currentTime+(dl||0),o=c.createOscillator(),g=c.createGain();o.type=ty||"sine";o.frequency.value=f;g.gain.setValueAtTime(0,t0);g.gain.linearRampToValueAtTime(v||.1,t0+.02);g.gain.exponentialRampToValueAtTime(.0001,t0+d);o.connect(g);g.connect(c.destination);o.start(t0);o.stop(t0+d+.05)}
-const sfx={pick:()=>tone(620,.07,"triangle",.09),drop:()=>tone(420,.07,"triangle",.08),row:()=>{tone(300,.18,"sine",.1);tone(380,.18,"sine",.1,.2)},no:()=>tone(200,.25,"sine",.12),win:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.2,"triangle",.12,i*.1)),hint:()=>tone(880,.12,"triangle",.1)};
+const sfx={pick:()=>tone(620,.07,"triangle",.09),drop:()=>tone(420,.07,"triangle",.08),row:()=>{tone(300,.18,"sine",.1);tone(380,.18,"sine",.1,.2)},no:()=>tone(200,.25,"sine",.12),win:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.2,"triangle",.12,i*.1)),hint:()=>tone(880,.12,"triangle",.1),combo:n=>{const b=440*Math.pow(1.122,Math.min(n,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.12,"triangle",.1,i*.06))}};
 function say(text){if(!sound||!window.speechSynthesis||!text)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang=LANG==="vi"?"vi-VN":"en-US";u.rate=.9;u.pitch=1.15;speechSynthesis.speak(u)}catch(e){}}
 let toastT=0;function toast(m,ms){const e=$("toast");e.textContent=m;e.classList.add("on");clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove("on"),ms||2200)}
 
@@ -263,8 +269,10 @@ const b64e=o=>btoa(JSON.stringify(o)).replace(/\+/g,"-").replace(/\//g,"_").repl
 function parseCh(){try{const m=/[#&]ch=([\w-]+)/.exec(location.hash);if(!m)return null;let b=m[1].replace(/-/g,"+").replace(/_/g,"/");b+="===".slice((b.length+3)%4);const o=JSON.parse(atob(b)),I=(v,a,z)=>Number.isInteger(v)&&v>=a&&v<=z;
   return I(o.t,0,3)&&I(o.lv,1,3)&&I(o.s,0,4294967295)&&I(o.sc,0,300)?{t:o.t,lv:o.lv,s:o.s,sc:o.sc}:null}catch(e){return null}}
 function shareLink(){const l=LANG==="en"?"&l=en":"";if(G.daily)return location.origin+"/api/share/thap-vong-mau?d=1&n="+G.daily.n+"&s="+G.score+l;return location.origin+"/api/share/thap-vong-mau?ch="+b64e({t:G.t,lv:G.lv,s:G.seed,sc:G.score})+l}
+const RGB=["🔴","🟠","🟡","🟢","🔵","🟣"];
+function startRow(){const P=G.P;const cols=[];for(let k=0;k<P.pegs;k++){const d=[];for(let i=0;i<P.n;i++)if(P.start[i]===k)d.push(RGB[Math.min(5,Math.round(i*5/Math.max(1,P.n-1)))]);cols.push((d.join("")||"▫️")+(k===P.goal?"🏁":""))}return cols.join(" ┃ ")}
 function shareText(){const st="⭐".repeat(G.stars)+"☆".repeat(3-G.stars);
-  return (G.daily?"📅 "+T("daily.t",{n:G.daily.n}):TY_ICON[G.t]+" "+T("title"))+"\n"+TY_ICON[G.t]+" "+T("ty")[G.t]+" · "+LVE[G.lv-1]+"\n"+st+" "+G.score+" · "+G.used+" "+T("moves")+" ("+G.P.opt+")\n"+T("cd.ask")+"\n"+shareLink()}
+  return (G.daily?"📅 "+T("daily.t",{n:G.daily.n}):TY_ICON[G.t]+" "+T("title"))+"\n"+startRow()+"\n"+T("hook",{n:G.P.opt})+"\n"+TY_ICON[G.t]+" "+T("ty")[G.t]+" · "+LVE[G.lv-1]+" · "+st+" "+G.score+" ("+G.used+"/"+G.P.opt+" "+T("moves")+")\n"+shareLink()}
 function fitText(x,tx,px,font,maxW){let s=px;do{x.font=font.replace("$",s);s-=2}while(x.measureText(tx).width>maxW&&s>20)}
 function rr(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
 function drawCard(){
@@ -272,18 +280,19 @@ function drawCard(){
   const g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,"#b07cff");g.addColorStop(1,"#ff7a9a");x.fillStyle=g;x.fillRect(0,0,W,H);
   x.globalAlpha=.13;x.fillStyle="#fff";for(let i=0;i<16;i++){x.beginPath();x.arc((i*211)%W,(i*397)%H,34+(i%4)*24,0,7);x.fill()}x.globalAlpha=1;
   x.textAlign="center";x.textBaseline="middle";x.fillStyle="#fff";
-  x.font="800 56px "+F;x.fillText(TY_ICON[G.t]+" "+T("title")+(G.daily?" #"+G.daily.n:""),W/2,110);
-  x.fillStyle="#fff";rr(x,80,190,920,640,56);x.fill();
-  const P=G.P,pw=820/P.pegs,n=P.n;
-  for(let k=0;k<P.pegs;k++){const cx=130+pw*(k+.5);x.fillStyle="#b08a5a";rr(x,cx-8,300,16,450,8);x.fill();rr(x,cx-pw*.42,742,pw*.84,22,11);x.fill();
-    const stack=[];for(let i=n-1;i>=0;i--)if(G.pos[i]===k)stack.push(i);
-    stack.forEach((d,j)=>{const w=(pw*.34)+(pw*.54)*(d/Math.max(1,n-1)),h=Math.min(56,400/n);x.fillStyle="hsl("+Math.round(d*(280/Math.max(1,n-1)))+" 82% 58%)";rr(x,cx-w/2,730-(j+1)*(h+6),w,h,18);x.fill()});
-    if(k===P.goal){x.font="64px "+F;x.fillText("🏁",cx,262)}}
-  x.fillStyle="#3b2a1d";x.font="800 46px "+F;x.fillText(TY_ICON[G.t]+" "+T("ty")[G.t]+" · "+LVE[G.lv-1],W/2,810);
-  x.font="800 150px "+F;x.fillStyle="#ffb020";x.fillText("⭐".repeat(G.stars),W/2,930);
-  x.fillStyle="#fff";x.font="800 110px "+F;x.fillText(String(G.score),W/2,1050);
-  x.font="800 56px "+F;fitText(x,T("cd.ask"),56,"800 $px "+F,940);x.fillText(T("cd.ask"),W/2,1160);
-  x.font="800 42px "+F;x.fillText(T("cd.foot")+" "+location.host,W/2,1250);return c}
+  x.font="800 56px "+F;x.fillText(TY_ICON[G.t]+" "+T("title")+(G.daily?" #"+G.daily.n:""),W/2,100);
+  /* CÂU ĐỐ LÚC BẮT ĐẦU — người xem muốn thử ngay */
+  x.fillStyle="#fff";rr(x,70,170,940,560,56);x.fill();
+  const P=G.P,pw=840/P.pegs,n=P.n;
+  for(let k=0;k<P.pegs;k++){const cx=120+pw*(k+.5);x.fillStyle="#b08a5a";rr(x,cx-8,290,16,420,8);x.fill();rr(x,cx-pw*.42,702,pw*.84,22,11);x.fill();
+    const stack=[];for(let i=n-1;i>=0;i--)if(P.start[i]===k)stack.push(i);
+    stack.forEach((d,j)=>{const w=(pw*.34)+(pw*.54)*(d/Math.max(1,n-1)),h=Math.min(54,380/n);x.fillStyle="hsl("+Math.round(d*(280/Math.max(1,n-1)))+" 82% 58%)";rr(x,cx-w/2,692-(j+1)*(h+6),w,h,18);x.fill()});
+    if(k===P.goal){x.font="64px "+F;x.fillText("🏁",cx,246)}}
+  x.fillStyle="#3b2a1d";x.font="800 46px "+F;x.fillText(TY_ICON[G.t]+" "+T("ty")[G.t]+" · "+LVE[G.lv-1],W/2,780);
+  x.fillStyle="#fff";x.font="800 76px "+F;const hk=T("hook",{n:P.opt});fitText(x,hk,76,"800 $px "+F,960);x.fillText(hk,W/2,900);
+  x.fillStyle="#fff3c9";x.font="800 60px "+F;x.fillText("⭐".repeat(G.stars)+"  "+G.score+"  ("+G.used+"/"+P.opt+")",W/2,1030);
+  x.fillStyle="#fff";x.font="800 44px "+F;x.fillText(T("cd.foot")+" "+location.host,W/2,1150);
+  x.globalAlpha=.9;x.font="84px "+F;x.fillText("🔴🟡🟢🔵",W/2,1270);x.globalAlpha=1;return c}
 async function doShare(){
   const tx=shareText();let blob=null;try{blob=await new Promise(r=>drawCard().toBlob(r,"image/png"))}catch(e){}
   if(blob){const file=new File([blob],"thap-vong-mau.png",{type:"image/png"});try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],text:tx});return}}catch(e){if(e&&e.name==="AbortError")return}}
@@ -325,7 +334,7 @@ $("hwBack").onclick=()=>showOv(null);
 /* ===== VÁN CHƠI ===== */
 function begin(t,o){
   o=o||{};if(window.NPAudio)NPAudio.silence();showOv(null);const lv=o.lv||LVL,seed=o.seed!=null?o.seed:Math.floor(MR()*1e9),P=makePuzzle(t,lv,seed);
-  G={t,lv,seed,P,pos:P.start.slice(),sel:-1,mv:[],used:0,hints:0,over:false,daily:o.daily||null,ch:o.ch||null,hl:[]};
+  G={t,lv,seed,P,pos:P.start.slice(),sel:-1,mv:[],used:0,hints:0,over:false,rem:P.opt,combo:0,maxCombo:0,daily:o.daily||null,ch:o.ch||null,hl:[]};
   $("home").hidden=true;$("arena").hidden=false;$("homeBtn").hidden=false;
   const sk=skinOf(t);applyVars($("play"),sk);skCss(sk);fillDeco(sk);render();updHud();window.NP&&NP.start();say(T("say.start"));return G}
 function render(){if(!G)return;const P=G.P,sk=skinOf(G.t),box=$("pegs");box.innerHTML="";
@@ -340,7 +349,7 @@ function render(){if(!G)return;const P=G.P,sk=skinOf(G.t),box=$("pegs");box.inne
     stack.forEach((d,j)=>{const e=document.createElement("span");e.className="disc"+(G.sel===k&&j===0?" up":"");e.style.setProperty("--dhue",Math.round(d*(280/Math.max(1,P.n-1))));e.style.setProperty("--dw",(38+58*d/Math.max(1,P.n-1))+"%");e.style.setProperty("--dh",dh+"cqw");e.textContent=d+1;b.appendChild(e)});
     b.onclick=()=>tapPeg(k);box.appendChild(b)}
   $("undoBtn").disabled=!G.mv.length||G.over;$("hintBtn").disabled=G.over}
-function updHud(){if(!G)return;$("hl").textContent="🔁 "+G.used+" "+T("moves");$("hr").textContent="🎯 "+G.P.opt}
+function updHud(){if(!G)return;$("hl").textContent="🔁 "+G.used+" "+T("moves");$("hr").textContent=(G.combo>=2?"🔥×"+G.combo+" · ":"")+"🎯 "+G.P.opt}
 function flashPeg(k){const e=document.querySelector('.peg[data-k="'+k+'"]');if(e){e.classList.remove("bad");void e.offsetWidth;e.classList.add("bad")}}
 function tapPeg(k){if(!G||G.over||paused)return;G.hl=[];
   if(G.sel<0){const e=legal(G.P,G.pos,k,(k+1)%G.P.pegs);if(tops(G.P,G.pos)[k]<0){toast(T("w.none"),1400);flashPeg(k);return}G.sel=k;sfx.pick();render();return}
@@ -348,18 +357,21 @@ function tapPeg(k){if(!G||G.over||paused)return;G.hl=[];
   const a=G.sel,why=legal(G.P,G.pos,a,k);
   if(why){toast(T(why),2200);say(T("say.bad"));sfx.no();if(window.NPFx)NPFx.buzz(40);G.sel=-1;render();flashPeg(k);return}
   doMove(a,k)}
-function doMove(a,b){const d=tops(G.P,G.pos)[a];G.pos[d]=b;G.sel=-1;G.used++;G.mv.push([a,b]);sfx.drop();render();updHud();if(G.pos.every(x=>x===G.P.goal))finish()}
-function undo(){if(!G||G.over)return;if(!G.mv.length){toast(T("w.undo"),1200);return}const [a,b]=G.mv.pop();const d=tops(G.P,G.pos)[b];G.pos[d]=a;G.sel=-1;G.hl=[];/* G.used không giảm: thử lại cũng được tính để công bằng */render();updHud()}
-function resetPuz(){if(!G||G.over)return;G.pos=G.P.start.slice();G.sel=-1;G.mv=[];G.hl=[];render()}
+function doMove(a,b){const d=tops(G.P,G.pos)[a];G.pos[d]=b;G.sel=-1;G.used++;G.mv.push([a,b]);sfx.drop();const sl=solveFrom(G.P,G.pos),r1=sl?sl.length:0;if(r1===G.rem-1)G.combo++;else G.combo=0;G.rem=r1;G.maxCombo=Math.max(G.maxCombo,G.combo);render();updHud();if(G.combo>=2&&r1>0)comboFx();if(G.pos.every(x=>x===G.P.goal))finish()}
+function comboFx(){const k=G.combo,tier=Math.min(3,k-2);NPJuice.text($("play"),T("cmb")[tier]+" ×"+k,{color:NPJuice.tierColor(tier),top:"22%"});sfx.combo(k);if(window.NPFx)NPFx.buzz(k>=4?[30,20,30]:[20,15]);if(k>=4)NPJuice.flash($("play"))}
+function undo(){if(!G||G.over)return;if(!G.mv.length){toast(T("w.undo"),1200);return}const [a,b]=G.mv.pop();const d=tops(G.P,G.pos)[b];G.pos[d]=a;G.sel=-1;G.hl=[];G.combo=0;const sl=solveFrom(G.P,G.pos);G.rem=sl?sl.length:0;/* G.used không giảm: thử lại cũng được tính để công bằng */render();updHud()}
+function resetPuz(){if(!G||G.over)return;G.pos=G.P.start.slice();G.sel=-1;G.mv=[];G.hl=[];G.combo=0;G.rem=G.P.opt;render();updHud()}
 function hint(){if(!G||G.over)return;const sol=solveFrom(G.P,G.pos);if(!sol||!sol.length){toast(T("w.done"),1500);return}G.hints++;const [a,b]=sol[0];G.hl=[a,b];G.sel=-1;sfx.hint();render();toast(T("w.hint",{a:a+1,b:b+1}),2400)}
 function finish(){
   G.over=true;const opt=G.P.opt;G.stars=starsOf(opt,G.used);G.score=scoreOf(opt,G.used,G.hints);
-  if(!HELPER){prog.solved++;if(G.stars===3)prog.perfect++;saveProg();if(G.daily)dailyDone(G)}
+  if(!HELPER){prog.solved++;if(G.stars===3)prog.perfect++;saveProg();if(G.daily)dailyDone(G);const sk=G.stars===3&&G.hints===0?(LS.get("tv-streak",0)||0)+1:0;LS.set("tv-streak",sk);G.streak=sk}
+  const beat=!!(G.ch&&G.score>G.ch.sc);$("play").querySelectorAll(".npj-t").forEach(e=>e.remove());NPJuice.confetti($("play"),beat?34:G.stars*8+8);if(beat){NPJuice.text($("play"),"⚔ "+T("beat"),{color:"#ff3da0",top:"88%",size:6.4});NPJuice.flash($("play"))}
   endAt=performance.now();sfx.win();renderEnd();window.NP&&NP.result({score:G.score,extra:{t:G.t,lv:G.lv,stars:G.stars}});
   if(PF.pro&&PF.pro.trial)setTimeout(()=>PF.lockPro(),0)}
 function renderEnd(){
   $("enH").textContent=T("end.h");$("enV").innerHTML="⭐ "+G.score;$("enR").textContent="⭐".repeat(G.stars)+"☆".repeat(3-G.stars);
-  let sub=T("end.s"+G.stars)+" ("+G.used+"/"+G.P.opt+")";if(G.ch)sub=T(G.score>G.ch.sc?"ch.win":G.score<G.ch.sc?"ch.lose":"ch.tie",{k:G.score,ck:G.ch.sc});$("enP").textContent=sub;
+  const gap=G.used-G.P.opt,nearOn=!HELPER&&gap>0;$("enN").hidden=!nearOn;if(nearOn)$("enN").textContent=T("near",{n:gap});$("retryBtn").hidden=HELPER||gap<=0;$("retryBtn").classList.toggle("hot",nearOn&&gap<=Math.max(2,Math.round(G.P.opt*.35)));$("retryBtn").setAttribute("aria-label",T("retry"));$("retryBtn").title=T("retry");$("enL").hidden=$("retryBtn").hidden;$("enL").textContent=T("leg");
+  let sub=T("end.s"+G.stars)+" ("+G.used+"/"+G.P.opt+")"+(G.streak>=2?" · "+T("streak",{n:G.streak}):"");if(G.ch)sub=T(G.score>G.ch.sc?"ch.win":G.score<G.ch.sc?"ch.lose":"ch.tie",{k:G.score,ck:G.ch.sc});$("enP").textContent=sub;
   $("againBtn").hidden=HELPER;$("homeBtn2").hidden=HELPER;$("shareBtn").hidden=HELPER;$("shareBtn").setAttribute("aria-label",T("sh.btn"));$("rankBtn").hidden=!(window.NP&&!HELPER&&G.score>0);$("rankBtn").setAttribute("aria-label",T("rank.btn"));showOv("ovEnd")}
 function goHome(){if(window.NPAudio)NPAudio.silence();G=null;paused=false;$("play").classList.remove("paused");$("homeBtn").hidden=true;$("arena").hidden=true;$("home").hidden=false;showOv(null);applyVars($("play"),BASIC[0]);skCss(null);renderHome()}
 $("undoBtn").onclick=undo;$("hintBtn").onclick=hint;$("resetBtn").onclick=resetPuz;
@@ -421,6 +433,8 @@ function syncSound(){$("soundBtn").textContent=sound?"🔊":"🔇"}
 $("soundBtn").onclick=()=>{sound=!sound;if(window.NPAudio)NPAudio.set(sound);else if(!sound&&window.speechSynthesis)speechSynthesis.cancel();syncSound()};
 $("langBtn").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}applyLang()};
 $("homeBtn").onclick=()=>{if(!HELPER)goHome()};
+function retry(){if(!G||HELPER)return;begin(G.t,{lv:G.lv,seed:G.seed,daily:G.daily,ch:G.ch})}
+$("retryBtn").onclick=retry;
 function again(){if(!G)return;if(G.daily)return startDaily();begin(G.t,{lv:G.lv,seed:G.ch?G.seed:undefined,ch:G.ch})}
 $("againBtn").onclick=()=>{if(!G)return;if(G.daily)return startDaily();begin(G.t,{lv:G.lv})};
 $("shareBtn").onclick=()=>openGate(()=>{showOv("ovEnd");doShare()},"ovEnd","gt.sh");
