@@ -14,7 +14,7 @@ module.exports = {
   consts: `const NICE=3600,CONF=["🔪","⭐","🎉"];`,
   i18n: {
     vi: { sub: "Vuốt một đường để cắt bánh thành các phần bằng nhau nhất. Game hiện tỉ lệ diện tích từng phần!", note: "5 bánh mỗi ván, càng cắt đều điểm càng cao · mỗi ngày cả nước cắt cùng một bộ bánh",
-      sc: "Điểm", rnd: "Bánh", ex: "Tỉ lệ", hint0: "Vuốt một đường thẳng qua bánh để cắt đôi — chia sao cho hai phần bằng nhau.", hint1: "Bánh xoay: bánh quay liên tục — canh đúng lúc vuốt để cắt đôi cho đều!", hint2: "Cắt ba: vuốt HAI đường không cắt nhau trong bánh để chia 3 phần bằng nhau.", hint3: "Cắt tư trong sương: chỉ nhìn thấy bánh quanh ngón tay. Vuốt HAI đường cắt nhau để chia 4 phần!",
+      sc: "Điểm", rnd: "Bánh", ex: "Tỉ lệ", hint0: "Vuốt một đường thẳng qua bánh để cắt đôi — chia sao cho hai phần bằng nhau. Trên máy tính: lướt 2 ngón trên bàn di chuột từ chỗ con trỏ.", hint1: "Bánh xoay: bánh quay liên tục — canh đúng lúc vuốt để cắt đôi cho đều!", hint2: "Cắt ba: vuốt HAI đường không cắt nhau trong bánh để chia 3 phần bằng nhau.", hint3: "Cắt tư trong sương: chỉ nhìn thấy bánh quanh ngón tay. Vuốt HAI đường cắt nhau để chia 4 phần!",
       end: "Hết bánh rồi!", endS: "Bạn được {n} điểm", rt: ["Dao cùn", "Cắt cũng được", "Tay dao ổn", "Đầu bếp chuẩn", "Thần dao"],
       tx: "🔪 Cắt Bánh Chưng · {t}\nMình được {n} điểm!\n{l}", ask: "Bạn cắt đều hơn mình không?",
       lockP: "Bánh xoay, Cắt ba, Cắt tư trong sương và 4 giao diện (Tiệm pizza Ý, Võ đường kiếm sĩ, Phòng thí nghiệm laser, Xưởng kẹo) với bàn cắt và bố cục riêng là của Night Pass. Dùng thử 1 ván mỗi ngày hoặc mở khoá tất cả.",
@@ -24,7 +24,7 @@ module.exports = {
       kinds: { sq: "Bánh chưng", circle: "Pizza", semi: "Dưa hấu", pent: "Bánh ngũ giác", blob: "Bánh kỳ quặc", L: "Bánh chữ L", star: "Bánh ngôi sao" },
       sk: { basic: ["Bếp ngày Tết", "Tet kitchen"], pizza: ["Tiệm pizza Ý", "Pizza parlour"], ninja: ["Võ đường kiếm sĩ", "Ninja dojo"], lab: ["Laser lab", "Laser lab"], candy: ["Xưởng kẹo", "Candy factory"] } },
     en: { sub: "Swipe a line to cut the treat into the most even pieces. The game shows each piece's area share!", note: "5 treats per round, the more even the better · everyone cuts the same set each day",
-      sc: "Score", rnd: "Treat", ex: "Ratio", hint0: "Swipe a straight line across the treat to cut it in half — make both halves equal.", hint1: "Spinning treat: it never stops turning — time your swipe to halve it evenly!", hint2: "Thirds: swipe TWO lines that don't cross inside the treat to make 3 equal pieces.", hint3: "Foggy quarters: you only see the treat around your finger. Swipe TWO crossing lines for 4 equal pieces!",
+      sc: "Score", rnd: "Treat", ex: "Ratio", hint0: "Swipe a straight line across the treat to cut it in half — make both halves equal. On a computer: glide 2 fingers on the trackpad from the pointer.", hint1: "Spinning treat: it never stops turning — time your swipe to halve it evenly!", hint2: "Thirds: swipe TWO lines that don't cross inside the treat to make 3 equal pieces.", hint3: "Foggy quarters: you only see the treat around your finger. Swipe TWO crossing lines for 4 equal pieces!",
       end: "No treats left!", endS: "You scored {n}", rt: ["Blunt knife", "Not bad", "Steady blade", "Proper chef", "Blade master"],
       tx: "🔪 Slice It Even · {t}\nI scored {n}!\n{l}", ask: "Can you cut more evenly than me?",
       lockP: "Spinning treat, Thirds, Foggy quarters and 4 themes (Pizza parlour, Ninja dojo, Laser lab, Candy factory) with their own cutting tables and layouts are for Night Pass. Try one round a day or unlock everything.",
@@ -103,6 +103,12 @@ function setPolyKeep(D){const keep=D.st,l=D.lines;if(D.st==="cut")setPoly(D)}
 function pt(e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H]}
 cv.addEventListener("pointerdown",e=>{const D=G;if(!D||D.over||paused)return;if(e.pointerType==="mouse"&&e.button!==0)return;e.preventDefault();if(D.st==="res"){drNext(D);return}const p=pt(e);D.drag={a:p,b:p};try{cv.setPointerCapture(e.pointerId)}catch(x){}});
 cv.addEventListener("pointermove",e=>{const D=G;if(!D)return;D.hov=pt(e);if(!D.drag)return;D.drag.b=pt(e)});
+/* Máy tính: đặt 2 ngón lên bàn di chuột rồi lướt = một nhát cắt (từ chỗ con trỏ), không cần giữ nút */
+let whT=0;
+cv.addEventListener("wheel",e=>{const D=G;if(!D||D.over||paused)return;e.preventDefault();if(D.st==="res"){drNext(D);return}if(D.st!=="cut")return;const r=cv.getBoundingClientRect(),k=(e.deltaMode===1?16:1)*W/r.width*1.6;
+ if(!D.drag){const s=D.hov||[W/2,H/2];D.drag={a:s.slice(),b:s.slice(),wh:1}}if(!D.drag.wh)return;
+ D.drag.b=[Math.max(0,Math.min(W,D.drag.b[0]-e.deltaX*k)),Math.max(0,Math.min(H,D.drag.b[1]-e.deltaY*k))];
+ clearTimeout(whT);whT=setTimeout(()=>{if(G===D&&D.drag&&D.drag.wh)endCut()},260)},{passive:false});
 const endCut=()=>{const D=G;if(!D||!D.drag)return;const d=D.drag;D.drag=null;if(D.st==="cut")drCut(D,d.a,d.b)};
 cv.addEventListener("pointerup",endCut);cv.addEventListener("pointercancel",endCut);
 function onBegin(D){fitCanvas()}
