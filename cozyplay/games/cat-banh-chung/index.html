@@ -205,7 +205,7 @@ cv.addEventListener("pointermove",e=>{const D=G;if(!D)return;D.hov=pt(e);if(!D.d
 /* Máy tính: đặt 2 ngón lên bàn di chuột rồi lướt = một nhát cắt (từ chỗ con trỏ), không cần giữ nút */
 let whT=0;
 cv.addEventListener("wheel",e=>{const D=G;if(!D||D.over||paused)return;e.preventDefault();if(D.st==="res"){drNext(D);return}if(D.st!=="cut")return;const r=cv.getBoundingClientRect(),k=(e.deltaMode===1?16:1)*W/r.width*1.6;
- if(!D.drag){const s=D.hov||[W/2,H/2];D.drag={a:s.slice(),b:s.slice(),wh:1}}if(!D.drag.wh)return;
+ if(!D.drag){const s=pt(e);D.drag={a:s.slice(),b:s.slice(),wh:1}}if(!D.drag.wh)return;
  D.drag.b=[Math.max(0,Math.min(W,D.drag.b[0]-e.deltaX*k)),Math.max(0,Math.min(H,D.drag.b[1]-e.deltaY*k))];
  clearTimeout(whT);whT=setTimeout(()=>{if(G===D&&D.drag&&D.drag.wh)endCut()},260)},{passive:false});
 const endCut=()=>{const D=G;if(!D||!D.drag)return;const d=D.drag;D.drag=null;if(D.st==="cut")drCut(D,d.a,d.b)};

@@ -93,7 +93,7 @@ cv.addEventListener("pointermove",e=>{const D=G;if(D)D.hovp=pt(e);if(!D||!D.cur)
 /* Máy tính: đặt 2 ngón lên bàn di chuột rồi lướt (giống cuộn trang) cũng vẽ được, không cần giữ nút bấm */
 let whT=0;
 cv.addEventListener("wheel",e=>{const D=G;if(!D||D.over||paused||D.st==="res"&&false)return;e.preventDefault();if(D.st==="res"){drNext(D);return}if(D.st!=="draw")return;const r=cv.getBoundingClientRect(),k=(e.deltaMode===1?16:1)*W/r.width;
- if(!D.cur){const s=D.hovp||[W/2,H/2];D.cur=[[Math.max(0,Math.min(W,s[0])),Math.max(0,Math.min(H,s[1]))]];D.cur0=performance.now();D.wh=1}
+ if(!D.cur){const s=pt(e);D.cur=[[Math.max(0,Math.min(W,s[0])),Math.max(0,Math.min(H,s[1]))]];D.cur0=performance.now();D.wh=1}
  if(!D.wh)return;const a=D.cur[D.cur.length-1],nx=Math.max(0,Math.min(W,a[0]-e.deltaX*k*1.15)),ny=Math.max(0,Math.min(H,a[1]-e.deltaY*k*1.15));if(Math.hypot(nx-a[0],ny-a[1])>=1.5){D.cur.push([nx,ny]);if(D.cur.length%12===0)sfx.draw()}
  clearTimeout(whT);whT=setTimeout(()=>{if(G===D&&D.wh){D.wh=0;endStroke()}},280)},{passive:false});
 const endStroke=()=>{const D=G;if(!D||!D.cur)return;const p=D.cur;D.cur=null;if(D.st==="draw")drScore(D,p)};
