@@ -58,14 +58,15 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .peg.sel{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 22%,var(--sp))}
 .peg.hl{animation:hintp .7s ease-in-out infinite;border-color:var(--warn)}
 .peg.bad{animation:shake .4s;border-color:var(--bad)}
-.peg .flag{position:absolute;top:1.4cqw;left:50%;transform:translateX(-50%);font-size:6.4cqw;line-height:1;z-index:2}
-.peg .pole{position:absolute;left:50%;transform:translateX(-50%);bottom:3cqw;top:11cqw;width:2.6cqw;border-radius:2cqw;background:var(--peg,rgba(120,80,40,.55));box-shadow:inset -.5cqw 0 rgba(0,0,0,.18)}
+.peg .flag{position:absolute;top:.6cqw;left:calc(50% - 5.5cqw);width:11cqw;height:11cqw;border-radius:50%;background:var(--sp);border:.7cqw solid var(--accent);box-shadow:var(--sh),0 0 0 .5cqw rgba(255,255,255,.6);display:grid;place-items:center;font-size:7.2cqw;line-height:1;z-index:3;opacity:1}
+.peg.goal{border:.5cqw dashed color-mix(in srgb,var(--accent) 60%,transparent)}
+.peg .pole{position:absolute;left:50%;transform:translateX(-50%);bottom:3cqw;top:12cqw;width:2.6cqw;border-radius:2cqw;background:var(--peg,rgba(120,80,40,.55));box-shadow:inset -.5cqw 0 rgba(0,0,0,.18)}
 .peg .base{position:absolute;left:6%;right:6%;bottom:1.2cqw;height:3cqw;border-radius:2cqw;background:var(--peg,rgba(120,80,40,.55))}
-.peg .cap{position:absolute;top:6.4cqw;left:50%;transform:translateX(-50%);font-size:5.4cqw;line-height:1;z-index:2;pointer-events:none}
-.sky{position:absolute;left:0;right:0;top:1cqw;display:flex;justify-content:space-around;font-size:7cqw;line-height:1;pointer-events:none;z-index:0}.sky i{font-style:normal;animation:floaty 3.2s ease-in-out infinite}.sky i:nth-child(2n){animation-delay:-1.4s}
+.peg .cap{position:absolute;top:12cqw;left:calc(50% - 3.5cqw);width:7cqw;text-align:center;font-size:5.4cqw;line-height:1;z-index:2;pointer-events:none}
+.sky{position:absolute;left:0;right:0;top:2.6cqw;display:flex;justify-content:space-around;font-size:7cqw;line-height:1;pointer-events:none;z-index:0}.sky i{font-style:normal;animation:floaty 3.2s ease-in-out infinite}.sky i:nth-child(2n){animation-delay:-1.4s}
 .gnd{flex:none;display:flex;justify-content:space-around;align-items:flex-end;min-height:0;font-size:6.4cqw;line-height:1;pointer-events:none;margin-top:-1cqw}.gnd:empty{display:none}
 @keyframes floaty{50%{transform:translateY(-1.4cqw)}}
-.bob .flow[hidden]+.pegs{margin-top:6.6cqw}.bob .flow:not([hidden]){margin-top:6.6cqw}
+.bob .flow[hidden]+.pegs{margin-top:8.4cqw}.bob .flow:not([hidden]){margin-top:8.4cqw}
 .bob .disc{animation:jig 2.8s ease-in-out infinite}.bob .disc:nth-child(2n){animation-delay:-1s}@keyframes jig{50%{filter:brightness(1.12);transform:scale(1.02)}}.bob .disc.up{animation:none}
 .bob .peg .flag{animation:floaty 1.8s ease-in-out infinite;filter:drop-shadow(0 0 2cqw var(--sa))}@media (prefers-reduced-motion:reduce){.bob .disc,.sky i,.bob .peg .flag{animation:none}}
 .peg .num{position:absolute;bottom:-.4cqw;left:50%;transform:translateX(-50%);font-size:3.2cqw;font-weight:800;color:var(--si);opacity:.7}
@@ -99,6 +100,10 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .ib2.hot{animation:hotp 1s ease-in-out infinite}@keyframes hotp{50%{transform:scale(1.1);box-shadow:0 0 0 1.4cqw color-mix(in srgb,var(--accent) 30%,transparent)}}
 .cap{margin:0;font-size:3.4cqw;color:var(--muted);font-weight:700}
 @media (prefers-reduced-motion:reduce){.ib2.hot{animation:none}}
+.hwArt{width:100%;display:flex;align-items:center;justify-content:center;gap:2.6cqw;background:var(--panel);border-radius:5cqw;box-shadow:var(--shadow);padding:2.4cqw 3cqw;min-height:20cqw}
+.hwArt .e{font-size:11cqw;line-height:1}.hwArt .ar{font-size:7cqw;color:var(--muted)}.hwArt .gp{display:flex;gap:.8cqw;flex-wrap:wrap;justify-content:center;max-width:30cqw}.hwArt .gp i{font-style:normal;font-size:8.4cqw;line-height:1}
+.hwL.card3{padding:.6cqw 1cqw}.hwL.card3 li{padding:1.9cqw 1.2cqw;font-size:4.1cqw}.hwL.card3 li b{font-size:6.4cqw}.hwL.card3 li span{line-height:1.22}.hwL.card3 li em{font-style:normal;color:var(--accent)}
+.pegArt{display:flex;align-items:flex-end;justify-content:center;gap:4cqw;height:20cqw}.pegArt .pg{position:relative;width:15cqw;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}.pegArt .pg::before{content:"";position:absolute;bottom:0;top:2cqw;width:1.6cqw;border-radius:1cqw;background:rgba(120,80,40,.55)}.pegArt .pg::after{content:"";position:absolute;left:0;right:0;bottom:-1cqw;height:1.8cqw;border-radius:1cqw;background:rgba(120,80,40,.55)}.pegArt .pg u{position:relative;z-index:1;display:block;height:3.6cqw;margin-top:.5cqw;border-radius:1.8cqw;text-decoration:none;background:hsl(var(--h) 82% 58%)}.pegArt .pg s{position:absolute;top:-3cqw;font-size:6cqw;text-decoration:none;z-index:2}
 @media (max-height:520px) and (min-aspect-ratio:11/10){
   :root{--w:calc((100dvh - 16px)*.75)}
   .app{flex-direction:row;align-items:center;justify-content:center;gap:14px}
@@ -130,7 +135,7 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
     <div class="toast" id="toast" role="status"></div>
     <div class="ov" id="ovHow" hidden>
       <h2 id="hwH"></h2><div class="row"><span class="chip" id="hwC"></span></div>
-      <ul class="hwL" id="hwL"></ul>
+      <div class="hwArt" id="hwArt"></div><ul class="hwL card3" id="hwL"></ul>
       <div class="row"><button class="ib2" id="hwBack" type="button">←</button><button class="btnbig" id="hwGo" type="button"></button></div>
     </div>
     <div class="ov" id="ovCh" hidden>
@@ -173,10 +178,10 @@ const LVE=["🌱","🌿","🌳"];
 const I18N={
 vi:{title:"Tháp Vòng Màu",docTitle:"Tháp Vòng Màu",sound:"Âm thanh",lang:"Ngôn ngữ",home:"Về màn chọn",
  ty:["Tháp 3 cột","Tháp 4 cột","Tháp xáo trộn","Tháp vòng tròn"],lv:["Cấp 1","Cấp 2","Cấp 3"],"lv.pick":"Chọn cấp độ",
- how:[["Chuyển tất cả vòng màu sang cột có cờ 🏁, mỗi lần chỉ chuyển 1 vòng ở trên cùng.","Vòng to không được đè lên vòng nhỏ. Cột trống thì đặt vòng nào cũng được.","Chạm cột để nhấc vòng, chạm cột khác để đặt. Ít lần chuyển nhất là giỏi nhất!"],
-  ["Có tới 4 cột! Chuyển tất cả vòng sang cột có cờ 🏁.","Vòng to vẫn không được đè lên vòng nhỏ.","Hai cột phụ giúp bạn đi ít bước hơn, hãy dùng thật khéo nhé!"],
-  ["Các vòng đang nằm lộn xộn trên 3 cột. Gom tất cả sang cột có cờ 🏁.","Vòng to vẫn không được đè lên vòng nhỏ.","Mỗi lần xáo là một câu đố mới. Thử nghĩ trước khi chạm nhé!"],
-  ["Ba cột xếp thành vòng tròn: vòng chỉ được chuyển theo chiều mũi tên ↻ (1 → 2 → 3 → 1).","Vòng to vẫn không được đè lên vòng nhỏ.","Chuyển hết sang cột có cờ 🏁. Có khi phải đi vòng nhiều lần đó!"]],
+ how:[["Chuyển **cả tháp** sang cột có cờ 🏁","Vòng **to** không đè lên vòng **nhỏ**","Chạm cột **nhấc**, chạm cột khác **đặt**. Càng ít lần càng giỏi!"],
+  ["Có **4 cột**! Chuyển cả tháp sang cột có cờ 🏁","Vòng **to** vẫn không đè lên vòng **nhỏ**","Dùng khéo **2 cột phụ** để đi ít lần hơn!"],
+  ["Vòng đang **lộn xộn**. Gom hết sang cột có cờ 🏁","Vòng **to** vẫn không đè lên vòng **nhỏ**","Mỗi lần xáo là **một câu đố mới**. Nghĩ rồi hãy chạm!"],
+  ["Cột xếp **vòng tròn**: chỉ chuyển theo mũi tên **↻**","Vòng **to** vẫn không đè lên vòng **nhỏ**","Chuyển hết sang cột có cờ 🏁. Có khi phải **đi vòng** nhiều lần!"]],
  go:"Bắt đầu!",moves:"lần",
  "daily.t":"Câu đố hôm nay #{n}","gt.sh":"Để chia sẻ, hỏi người lớn:","sh.btn":"Chia sẻ","txt.copied":"Đã sao chép kết quả!",
  "ch.h":"⚔ Bạn được thách đấu!","ch.p":"Bạn kia được {s} điểm. Cùng câu đố này, bạn làm được không?","ch.win":"Bạn hơn rồi: {k} so với {ck}! 🎉","ch.lose":"Bạn kia nhỉnh hơn: {k} so với {ck}","ch.tie":"Ngang nhau: {k} – {ck}","cd.foot":"Cùng xếp tháp tại","cd.ask":"Bạn xếp tháp ít lần hơn mình không?",
@@ -191,10 +196,10 @@ vi:{title:"Tháp Vòng Màu",docTitle:"Tháp Vòng Màu",sound:"Âm thanh",lang:
  "sk.3.basic":"Cầu vồng","sk.3.carousel":"Đu quay","sk.3.galaxy":"Thiên hà","sk.3.clock":"Đồng hồ","sk.3.donut":"Bánh vòng"},
 en:{title:"Rainbow Rings",docTitle:"Rainbow Rings",sound:"Sound",lang:"Language",home:"Back",
  ty:["3 Pegs","4 Pegs","Shuffled Tower","Round Tower"],lv:["Level 1","Level 2","Level 3"],"lv.pick":"Pick a level",
- how:[["Move all the coloured rings to the peg with the flag 🏁, one top ring at a time.","A big ring can never sit on a small one. An empty peg takes any ring.","Tap a peg to lift a ring, tap another peg to drop it. Fewest moves wins!"],
-  ["There are 4 pegs! Move all the rings to the flag peg 🏁.","A big ring still can't sit on a small one.","The extra pegs help you use fewer moves, so use them wisely!"],
-  ["The rings start all mixed up on 3 pegs. Gather them on the flag peg 🏁.","A big ring still can't sit on a small one.","Every shuffle is a new puzzle. Think before you tap!"],
-  ["Three pegs in a circle: rings may only move along the arrow ↻ (1 → 2 → 3 → 1).","A big ring still can't sit on a small one.","Move them all to the flag peg 🏁. You may need to go around many times!"]],
+ how:[["Move **the whole tower** to the flag peg 🏁","A **big** ring never sits on a **small** one","Tap a peg to **lift**, tap another to **drop**. Fewer moves = better!"],
+  ["There are **4 pegs**! Move the tower to the flag 🏁","A **big** ring still can't sit on a **small** one","Use the **2 spare pegs** wisely to save moves!"],
+  ["The rings are **mixed up**. Gather them on the flag peg 🏁","A **big** ring still can't sit on a **small** one","Every shuffle is a **new puzzle**. Think, then tap!"],
+  ["Pegs sit in a **circle**: rings only move along the arrow **↻**","A **big** ring still can't sit on a **small** one","Get them all to the flag 🏁. You may need to **go around**!"]],
  go:"Start!",moves:"moves",
  "daily.t":"Today's puzzle #{n}","gt.sh":"To share, ask a grown-up:","sh.btn":"Share","txt.copied":"Result copied!",
  "ch.h":"⚔ You're challenged!","ch.p":"Your friend scored {s}. Same puzzle, can you beat it?","ch.win":"You win: {k} vs {ck}! 🎉","ch.lose":"They're ahead: {k} vs {ck}","ch.tie":"Tied: {k} – {ck}","cd.foot":"Stack the rings at","cd.ask":"Can you use fewer moves than me?",
@@ -333,7 +338,8 @@ function renderHome(){
 function openHow(t){
   window.__howT=t;
   $("hwH").textContent=TY_ICON[t]+" "+T("ty")[t];$("hwC").textContent=LVE[LVL-1]+" "+T("lv")[LVL-1];
-  $("hwL").innerHTML=T("how")[t].map((s,i)=>"<li><b>"+["🔝","🚫","🎯"][i]+"</b><span>"+s+"</span></li>").join("");
+  $("hwL").innerHTML=T("how")[t].map((s,i)=>"<li><b>"+["🔝","🚫","🎯"][i]+"</b><span>"+s.replace(/\*\*([^*]+)\*\*/g,"<em>$1</em>")+"</span></li>").join("");
+  const P0=makePuzzle(t,LVL,1),sk0=skinOf(t),h5=n=>Math.round(n*(280/Math.max(1,P0.n-1)));let art="";const pegsN=P0.pegs;for(let k=0;k<pegsN;k++){let d="";for(let i=P0.n-1;i>=0;i--)if(P0.start[i]===k)d+='<u style="--h:'+h5(i)+";width:"+(30+62*i/Math.max(1,P0.n-1))+'%"></u>';art+='<div class="pg">'+(k===P0.goal?"<s>"+(sk0.flag||"🏁")+"</s>":"")+d.split("").join("")+"</div>"}$("hwArt").innerHTML='<div class="pegArt">'+art+"</div>";
   $("hwGo").textContent="▶ "+T("go");$("hwGo").onclick=()=>begin(t,{});$("hwBack").setAttribute("aria-label",T("home"));showOv("ovHow");
 }
 $("hwBack").onclick=()=>showOv(null);
@@ -347,7 +353,7 @@ function begin(t,o){
 function render(){if(!G)return;const P=G.P,sk=skinOf(G.t),box=$("pegs");box.innerHTML="";$("sky").innerHTML=(sk.props||[]).slice(0,4).map(e=>"<i>"+e+"</i>").join("");$("gnd").innerHTML=(sk.ground||[]).map(e=>"<i style=\"font-style:normal\">"+e+"</i>").join("");
   $("flow").textContent=P.cyc?"1 ↻ 2 ↻ 3 ↻ 1":"";$("flow").hidden=!P.cyc;
   const top=tops(P,G.pos);
-  for(let k=0;k<P.pegs;k++){const b=document.createElement("button");b.type="button";b.className="peg"+(G.sel===k?" sel":"")+(G.hl.includes(k)?" hl":"");b.dataset.k=k;b.setAttribute("aria-label",(LANG==="vi"?"Cột ":"Peg ")+(k+1));
+  for(let k=0;k<P.pegs;k++){const b=document.createElement("button");b.type="button";b.className="peg"+(k===P.goal?" goal":"")+(G.sel===k?" sel":"")+(G.hl.includes(k)?" hl":"");b.dataset.k=k;b.setAttribute("aria-label",(LANG==="vi"?"Cột ":"Peg ")+(k+1));
     const pole=document.createElement("span");pole.className="pole";b.appendChild(pole);const base=document.createElement("span");base.className="base";b.appendChild(base);
     if(k===P.goal){const f=document.createElement("span");f.className="flag";f.textContent=sk.flag||"🏁";b.appendChild(f)}
     if(sk.cap&&k!==P.goal){const cp=document.createElement("span");cp.className="cap";cp.textContent=sk.cap;b.appendChild(cp)}const nu=document.createElement("span");nu.className="num";nu.textContent=k+1;b.appendChild(nu);
