@@ -2,30 +2,30 @@
 module.exports = {
   id: "mat-tinh-khong", prefix: "mt", title: { vi: "Mắt Tinh Không?", en: "Sharp Eyes?" }, maxScore: 99,
   hero: "👁️🎨", deco: ["👁️", "🎨", "🔍", "🌈"],
-  types: [["🎨", "Khác màu", "Odd colour"], ["🌈", "Khác sắc độ", "Odd hue"], ["❤️", "3 mạng", "3 lives"], ["⚡", "Tốc độ 30 giây", "30 s sprint"]],
+  types: [["🎨", "Khác màu", "Odd colour"], ["🌀", "Xoay sắc", "Spin hue"], ["💡", "Nhấp nháy", "Flicker"], ["🔀", "Đảo ô 30 giây", "30 s shuffle"]],
   catalog: [["basic", "Bảng màu", "Palette", "🎨"], ["hive", "Tổ ong mật", "Honeycomb", "🍯"], ["petri", "Đĩa petri", "Petri dish", "🧫"], ["sky", "Bầu trời sao", "Starry sky", "🌌"], ["wall", "Tường kính màu", "Stained wall", "🧱"]],
   rootCss: `:root{--bg:#F1F0FF;--panel:#ffffff;--ink:#1f1a3d;--muted:#5d5a85;--accent:#6b4ce6;--on:#ffffff;--good:#1a9a55;--bad:#d23b3b;--line:#d3cff5;--pbg:linear-gradient(#e3defd,#f7f5ff);--field:#f4f2ff;--field2:#e0dcfb;
  --display:"Bungee","Arial Black",system-ui,sans-serif;--body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif}
 :root[data-theme="dark"]{--bg:#0f0d22;--panel:#1c1936;--ink:#efeeff;--muted:#a9a6d6;--accent:#9a85ff;--on:#12082e;--good:#3ddc84;--bad:#ff6b6b;--line:#322e5e;--pbg:linear-gradient(#1f1a45,#0f0d22);--field:#171433;--field2:#241f4a}`,
-  extraCss: `canvas#cv{cursor:pointer}`,
+  extraCss: `canvas#cv{cursor:pointer}#play[data-ty="1"] canvas#cv{border-radius:50%}#play[data-ty="2"] canvas#cv{filter:brightness(.8) contrast(1.1);border-style:dotted}#play[data-ty="3"] canvas#cv{border-style:dashed;border-color:var(--bad)}`,
   gameHtml: `{{STATS}}
     <div id="cvw"><canvas id="cv"></canvas></div>
     {{HINT}}`,
   consts: `const NICE=24,CONF=["👁️","⭐","🎉"];`,
   i18n: {
     vi: { sub: "Một lưới ô cùng màu, trong đó có 1 ô hơi khác. Tìm và chạm vào nó — mỗi cấp ô khác càng mờ!", note: "Mỗi ngày cả nước cùng một dãy màu · chia sẻ cấp mắt để rủ bạn bè thử",
-      sc: "Đã qua", tm: "Còn lại", ex: "Độ lệch", hint0: "Tìm ô có màu hơi khác và chạm vào. Chạm sai bị trừ 5 giây!", hint1: "Lần này các ô lệch SẮC ĐỘ (xanh/đỏ/vàng…). Chạm sai bị trừ 5 giây!", hint2: "3 mạng. Mỗi cấp chỉ có 9 giây, chạm sai hoặc hết giờ mất 1 mạng.", hint3: "Chỉ 30 giây! Chạm sai bị trừ 3 giây.",
+      sc: "Đã qua", tm: "Còn lại", ex: "Độ lệch", hint0: "Tìm ô có màu hơi khác và chạm vào. Chạm sai bị trừ 5 giây!", hint1: "Xoay sắc: cả lưới QUAY liên tục và các ô lệch SẮC ĐỘ. Chạm sai bị trừ 5 giây!", hint2: "Nhấp nháy: ô khác màu chỉ hiện ra từng lúc. 3 mạng, mỗi cấp 12 giây.", hint3: "Đảo ô: cứ vài giây các ô lại TRÁO vị trí. Chỉ 30 giây, chạm sai trừ 3 giây!",
       end: "Hết giờ!", endS: "Mắt bạn đạt cấp {n}", rt: ["Mắt lờ đờ", "Mắt tạm ổn", "Mắt tinh", "Mắt diều hâu", "Mắt thần"],
       tx: "👁️ Mắt Tinh Không? · {t}\nMắt mình cấp {n}!\n{l}", ask: "Mắt bạn tinh hơn mình không?",
-      lockP: "Loại Khác sắc độ, 3 mạng, Tốc độ 30 giây và 4 giao diện (Tổ ong mật, Đĩa petri, Bầu trời sao, Tường kính màu) với cách xếp ô và bố cục riêng là của Night Pass. Dùng thử 1 ván mỗi ngày hoặc mở khoá tất cả.",
+      lockP: "Loại Xoay sắc, Nhấp nháy, Đảo ô 30 giây và 4 giao diện (Tổ ong mật, Đĩa petri, Bầu trời sao, Tường kính màu) với cách xếp ô và bố cục riêng là của Night Pass. Dùng thử 1 ván mỗi ngày hoặc mở khoá tất cả.",
       chP: "Bạn bè đạt cấp {s} với đúng dãy màu này. Mắt bạn tinh hơn không?", rankHint: "Chơi “Thử thách hôm nay” để lên bảng điểm nhé!",
       tut: "Tìm ô có màu hơi khác và chạm vào — càng lên cấp càng khó thấy!", pct: "👁 tinh hơn ~{p}% người chơi (ước tính)", lvl: "Cấp {n}", wrong: "Sai rồi! -{n}s", lost: "Mất 1 mạng", late: "Hết giờ cấp này!",
       sk: { basic: ["Bảng màu", "Palette"], hive: ["Tổ ong mật", "Honeycomb"], petri: ["Đĩa petri", "Petri dish"], sky: ["Bầu trời sao", "Starry sky"], wall: ["Tường kính màu", "Stained wall"] } },
     en: { sub: "A grid of same-coloured tiles with one slightly different. Find and tap it — every level the odd one gets fainter!", note: "Everyone gets the same colours each day · share your eye level to dare friends",
-      sc: "Passed", tm: "Left", ex: "Delta", hint0: "Find the slightly different tile and tap it. A wrong tap costs 5 seconds!", hint1: "This time tiles differ in HUE (blue/red/yellow…). A wrong tap costs 5 seconds!", hint2: "3 lives. Each level has only 9 seconds; a wrong tap or timeout costs a life.", hint3: "Only 30 seconds! A wrong tap costs 3 seconds.",
+      sc: "Passed", tm: "Left", ex: "Delta", hint0: "Find the slightly different tile and tap it. A wrong tap costs 5 seconds!", hint1: "Spin hue: the whole grid ROTATES nonstop and tiles differ in HUE. A wrong tap costs 5 seconds!", hint2: "Flicker: the odd tile shows only now and then. 3 lives, 12 seconds a level.", hint3: "Shuffle: every few seconds the tiles SWAP places. Only 30 seconds, a wrong tap costs 3!",
       end: "Time's up!", endS: "Your eyes reached level {n}", rt: ["Sleepy eyes", "Decent eyes", "Sharp eyes", "Hawk eyes", "God eyes"],
       tx: "👁️ Sharp Eyes? · {t}\nMy eyes reached level {n}!\n{l}", ask: "Are your eyes sharper than mine?",
-      lockP: "Odd hue, 3 lives, 30 s sprint and 4 themes (Honeycomb, Petri dish, Starry sky, Stained wall) with their own tile layouts are for Night Pass. Try one round a day or unlock everything.",
+      lockP: "Spin hue, Flicker, 30 s shuffle and 4 themes (Honeycomb, Petri dish, Starry sky, Stained wall) with their own tile layouts are for Night Pass. Try one round a day or unlock everything.",
       chP: "A friend reached level {s} on these exact colours. Are your eyes sharper?", rankHint: "Play “Today's challenge” to make the leaderboard!",
       tut: "Find the slightly different tile and tap it — it gets harder every level!", pct: "👁 sharper than ~{p}% of players (estimate)", lvl: "Level {n}", wrong: "Wrong! -{n}s", lost: "Lost a life", late: "Level timed out!",
       sk: { basic: ["Palette", "Palette"], hive: ["Honeycomb", "Honeycomb"], petri: ["Petri dish", "Petri dish"], sky: ["Starry sky", "Starry sky"], wall: ["Stained wall", "Stained wall"] } }
@@ -33,7 +33,8 @@ module.exports = {
   sfx: `{ok:()=>tone(780,.07,"triangle",.08),bad:()=>tone(160,.25,"sawtooth",.07),end:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.09,i*.09)),combo:n=>{const b=440*Math.pow(1.122,Math.min(n/3,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.1,"triangle",.09,i*.05))},up:()=>{[660,880,1320].forEach((f,i)=>tone(f,.1,"triangle",.09,i*.06))}}`,
   gameJs: String.raw`
 let W=360,H=360,SC=1;const ctx=cv.getContext("2d");
-const CFG=[{mode:"time",dur:60,pen:5,kind:"l"},{mode:"time",dur:60,pen:5,kind:"h"},{mode:"life",lives:3,per:9,kind:"l"},{mode:"time",dur:30,pen:3,kind:"l"}];
+const CFG=[{mode:"time",dur:60,pen:5,kind:"l"},{mode:"time",dur:60,pen:5,kind:"h",spin:1},{mode:"life",lives:3,per:12,kind:"l",flick:1},{mode:"time",dur:30,pen:3,kind:"l",shuf:4}];
+const SPIN=.45;const angOf=D=>D&&D.C.spin?D.time*SPIN:0;
 const colsOf=L=>Math.min(9,2+Math.floor(L/3));
 const pctOf=n=>Math.min(99,Math.round(100*(1-Math.exp(-n/12))));
 function layoutTiles(kind,n,R){const out=[],m=Math.min(W,H);
@@ -56,7 +57,9 @@ function mtTap(D,i){if(D.over||D.lv.rev)return;
  if(D.C.mode==="time"){D.pen+=D.C.pen;toast(T("wrong",{n:D.C.pen}),700);if(remain(D)<=0)endNow(D)}
  else{D.lives--;toast(T("lost"),700);D.lv.rev=.9;if(D.lives<=0){D.lv.rev=.9;setTimeout(()=>{if(G===D)endNow(D)},900)}else setTimeout(()=>{if(G===D&&!D.over){D.lv.rev=null;D.levT=0}},900)}hud()}
 function endNow(D){if(D.over)return;D.over=true;D.reason="end";D.lv.rev=null;sfx.end();setTimeout(()=>{if(G===D)finish(D)},500)}
-function step(D,dt){if(D.over)return;D.time+=dt;D.shake=Math.max(0,D.shake-dt);D.flash=Math.max(0,D.flash-dt*2.5);for(const f of D.fx)f.t-=dt;D.fx=D.fx.filter(f=>f.t>0);
+function step(D,dt){if(D.over)return;D.time+=dt;
+ if(D.lv&&D.lv.tiles){for(const q of D.lv.tiles){if(q.tx!=null){q.x+=(q.tx-q.x)*Math.min(1,dt*9);q.y+=(q.ty-q.y)*Math.min(1,dt*9)}}if(D.C.shuf&&!D.lv.rev){D.shT=(D.shT||0)+dt;if(D.shT>=D.C.shuf){D.shT=0;const ps=D.lv.tiles.map(q=>[q.tx!=null?q.tx:q.x,q.ty!=null?q.ty:q.y]);for(let i=ps.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const x=ps[i];ps[i]=ps[j];ps[j]=x}D.lv.tiles.forEach((q,i)=>{q.tx=ps[i][0];q.ty=ps[i][1]})}}}
+D.shake=Math.max(0,D.shake-dt);D.flash=Math.max(0,D.flash-dt*2.5);for(const f of D.fx)f.t-=dt;D.fx=D.fx.filter(f=>f.t>0);
  if(D.C.mode==="time"){if(remain(D)<=0)endNow(D)}else if(!D.lv.rev){D.levT+=dt;if(D.levT>D.C.per){D.lives--;D.levT=0;D.combo=0;sfx.bad();toast(T("late"),800);if(D.lives<=0){D.lv.rev=.9;setTimeout(()=>{if(G===D)endNow(D)},900)}hud()}}
  if(Math.floor(D.time*4)!==D._q){D._q=Math.floor(D.time*4);hud()}}
 function burst(n){if(!isProSk()&&n<12)return;const host=$("play"),L=(skinOf().deco||["⭐","👁️"]);for(let i=0;i<n;i++){if(host.querySelectorAll(".eb2").length>30)break;const e=document.createElement("i"),a=Math.random()*6.283,d=14+Math.random()*30;e.className="eb2";e.textContent=L[i%L.length];e.style.left="50%";e.style.top="46%";e.style.setProperty("--dx",Math.cos(a)*d+"cqw");e.style.setProperty("--dy",(Math.sin(a)*d*.8-4)+"cqw");e.style.setProperty("--rt",(Math.random()*120-60)+"deg");host.appendChild(e);setTimeout(()=>e.remove(),950)}}
@@ -71,15 +74,15 @@ function tileBasic(c,t,col,odd,tm,dk){c.fillStyle=col;if(t.hex){hexPath(c,t.x,t.
 function bgBasic(c,w,h,dk){const g=c.createLinearGradient(0,0,0,h);g.addColorStop(0,dk?"#1b1740":"#f4f1ff");g.addColorStop(1,dk?"#0f0d22":"#e6e0fc");c.fillStyle=g;c.fillRect(0,0,w,h)}
 function draw(){if(!ctx||!cv.width)return;const sk=skinOf(),dm=sk.dim||[360,360];if(W!==dm[0]||H!==dm[1]){W=dm[0];H=dm[1];if(G&&!G.over)mkLevel(G,G.L);fitCanvas();return}
  const c=ctx,dk=isDark(),D=G,tm=D?D.time:0;c.setTransform(SC,0,0,SC,0,0);c.clearRect(0,0,W,H);if(sk.bg)sk.bg(c,W,H,tm,dk);else bgBasic(c,W,H,dk);if(!D||!D.lv)return;
- const lv=D.lv,k=Math.min(1,.55+(D.time-D.lvStart)*4),sh=D.shake>0?Math.sin(D.time*80)*5*D.shake:0;c.save();c.translate(sh,0);
- lv.tiles.forEach((t,i)=>{const col=i===lv.odd?lv.oc:lv.col,t2=k<1?Object.assign({},t,{r:t.r*k,w:t.w?t.w*k:t.w,h:t.h?t.h*k:t.h,hex:t.hex?t.hex*k:t.hex}):t;(sk.tile||tileBasic)(c,t2,col,i===lv.odd,tm,dk)});
+ const lv=D.lv,k=Math.min(1,.55+(D.time-D.lvStart)*4),sh=D.shake>0?Math.sin(D.time*80)*5*D.shake:0;c.save();c.translate(sh,0);if(D.C.spin){c.translate(W/2,H/2);c.rotate(angOf(D));c.translate(-W/2,-H/2)}
+ lv.tiles.forEach((t,i)=>{const col=i===lv.odd?((D.C.flick&&(D.time%1.4)>.6)?lv.col:lv.oc):lv.col,t2=k<1?Object.assign({},t,{r:t.r*k,w:t.w?t.w*k:t.w,h:t.h?t.h*k:t.h,hex:t.hex?t.hex*k:t.hex}):t;(sk.tile||tileBasic)(c,t2,col,i===lv.odd,tm,dk)});
  if(lv.rev!=null){const t=lv.tiles[lv.odd];c.save();c.lineWidth=4;c.strokeStyle="#ffffff";c.shadowColor="#000";c.shadowBlur=8;c.setLineDash([8,6]);c.beginPath();c.arc(t.x,t.y,t.r*1.12,0,6.283);c.stroke();c.restore()}
  for(const f of D.fx){c.save();c.globalAlpha=Math.max(0,f.t*2);c.strokeStyle=f.c;c.lineWidth=4;c.beginPath();c.arc(f.x,f.y,(.5-f.t)*140+10,0,6.283);c.stroke();c.restore()}
  c.restore();if(D.flash>0){c.fillStyle="rgba(255,60,60,"+D.flash*.28+")";c.fillRect(0,0,W,H)}
  if(D.C.mode==="life"&&!lv.rev){c.fillStyle="rgba(255,255,255,.25)";c.fillRect(0,H-6,W,6);c.fillStyle=D.levT>D.C.per*.7?"#ff4a3d":"#ffb23d";c.fillRect(0,H-6,W*(1-D.levT/D.C.per),6)}
  c.fillStyle=sk.lbl||(dk?"rgba(255,255,255,.8)":"rgba(30,20,60,.75)");c.font="800 15px 'Be Vietnam Pro',system-ui";c.textAlign="left";c.fillText(T("lvl",{n:lv.L}),12,H-12);if(sk.fx)sk.fx(c,W,H,tm,dk)}
 function pt(e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H]}
-cv.addEventListener("pointerdown",e=>{const D=G;if(!D||D.over||paused||!D.lv)return;if(e.pointerType==="mouse"&&e.button!==0)return;e.preventDefault();const p=pt(e);let bi=-1,bd=1e9;D.lv.tiles.forEach((t,i)=>{let ok,d;if(t.w){ok=Math.abs(p[0]-t.x)<=t.w/2+2&&Math.abs(p[1]-t.y)<=t.h/2+2;d=Math.hypot(p[0]-t.x,p[1]-t.y)}else{d=Math.hypot(p[0]-t.x,p[1]-t.y);ok=d<=t.r*1.04}if(ok&&d<bd){bd=d;bi=i}});if(bi>=0)mtTap(D,bi)});
+cv.addEventListener("pointerdown",e=>{const D=G;if(!D||D.over||paused||!D.lv)return;if(e.pointerType==="mouse"&&e.button!==0)return;e.preventDefault();let p=pt(e);if(D.C.spin){const a=-angOf(D),dx=p[0]-W/2,dy=p[1]-H/2;p=[W/2+dx*Math.cos(a)-dy*Math.sin(a),H/2+dx*Math.sin(a)+dy*Math.cos(a)]}let bi=-1,bd=1e9;D.lv.tiles.forEach((t,i)=>{let ok,d;if(t.w){ok=Math.abs(p[0]-t.x)<=t.w/2+2&&Math.abs(p[1]-t.y)<=t.h/2+2;d=Math.hypot(p[0]-t.x,p[1]-t.y)}else{d=Math.hypot(p[0]-t.x,p[1]-t.y);ok=d<=t.r*1.04}if(ok&&d<bd){bd=d;bi=i}});if(bi>=0)mtTap(D,bi)});
 function onBegin(D){fitCanvas()}
 `,
   drawCard: String.raw`function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#9a85ff","#2a1a7a"];
