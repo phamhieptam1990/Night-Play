@@ -154,6 +154,7 @@ body{transition:background .4s,color .4s}
 /* nút biểu tượng luôn có viền cùng màu biểu tượng để nổi trên mọi nền/giao diện */
 .ib,.ib2{border:1.5px solid color-mix(in srgb,currentColor 42%,transparent)!important;box-sizing:border-box}
 .ib:not(:disabled),.ib2:not(:disabled){filter:none}
+/*skgrid-center*/.skgrid{display:flex!important;flex-wrap:wrap;justify-content:center;--n:3;--gg:8px;gap:var(--gg)!important}.skgrid>*{flex:0 0 calc((100% - (var(--n) - 1)*var(--gg))/var(--n))!important;min-width:0;box-sizing:border-box}@media (max-height:520px) and (min-aspect-ratio:11/10){.skgrid{--n:6;--gg:4px}}@media (max-height:640px){.skgrid{--gg:5px}}
 </style>
 <script src="../../../shared/offline.js" defer></script>
 </head>
