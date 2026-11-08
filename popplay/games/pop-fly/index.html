@@ -615,5 +615,6 @@ if(!HELPER&&location.hash==="#daily")startDaily();
 if(HS&&typeof HS.type==="string"){const go=()=>{if(PF.types[HS.type])startRound(HS.type,HS)},okT=HS.tk&&/^h\.\d{13}\.[\w-]{43}$/.test(HS.tk);   /* chơi hộ: nạp bản trả phí bằng vé tạm (loại trả phí + giao diện), rồi vào thẳng ván đang dở */
   if(okT)PF.loadPro(false,HS.tk).then(()=>{if(/^[a-z]{3,10}$/.test(HS.sk||""))PF.skinSel[HS.type]=HS.sk}).catch(()=>{}).finally(go);else go()}
 </script>
+<script src="../../../shared/season.js"></script>
 </body>
 </html>

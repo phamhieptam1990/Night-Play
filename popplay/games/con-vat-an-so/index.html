@@ -678,5 +678,6 @@ window.CV={sfx,cancelSnd,get voices(){return voices.length},drawCard,shareText,s
     if(sp.t===3){const ii=G.items.map((_,i)=>i).filter(i=>!G.items[i].dead);for(const i of ii)for(const j of ii)if(i<j&&!(sp.ok[0][0]===i&&sp.ok[0][1]===j)){await pickItem(i);await pickItem(j);return true}return false}
     if(!bad.length)return false;await pickItem(bad[0]);return true}};
 </script>
+<script src="../../../shared/season.js"></script>
 </body>
 </html>

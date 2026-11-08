@@ -733,5 +733,6 @@ window.TL={drawCard,shareText,shareLink,dailyInfo,parseCh,b64e,startDaily,get CH
  bot(o){o=o||{};if(!G)return null;G.auto=true;let guard=0;while(!G.over&&guard++<4000){const ph=G.W.ph;if(ph==="ask"){if(!G.qOk){if(o.wrongFirst&&G.wrong===0)TL.wrong();else TL.solve()}sim(.1)}else sim(.25)}return{score:G.score,stars:G.stars,first:G.first,dest:G.dest,alt:Math.round(G.alt)}},
  trace(){const W=G.W;return JSON.stringify([G.qi,Math.round(G.alt*100),G.stars,G.hits,W.ents.map(e=>[e.at.toFixed(3),e.lane,e.k].join()).join("|")])}};
 </script>
+<script src="../../../shared/season.js"></script>
 </body>
 </html>

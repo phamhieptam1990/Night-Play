@@ -827,5 +827,6 @@ window.QV={get G(){return G},get TR(){return TR},get MON(){return MON},get CH(){
   setLv(n){LVL=n},solve(){TR&&TR.solve()},finishTrace(){TR&&TR.solve()},
   async bot(t,lv,seed){begin(t,{seed,lv});for(let i=0;i<3;i++){for(let k=0;k<200&&!(TR&&!TR.done&&G&&G.r===i);k++)await sleep(50);TR.solve();for(let k=0;k<200&&$("ovMon").hidden;k++)await sleep(50);await sleep(60);$("mnNext").click()}return G}};
 </script>
+<script src="../../../shared/season.js"></script>
 </body>
 </html>
