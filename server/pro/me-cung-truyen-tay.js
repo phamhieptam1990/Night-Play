@@ -1,11 +1,11 @@
 "use strict";
-/* Mã BẢN TRẢ PHÍ của game Mê Cung Truyền Tay (Cozy Play): 3 LOẠI mê cung Night Pass (Mê cung tối nhìn bằng "nóng/lạnh" + rung,
-   Tường dịch chuyển, Mê cung khổng lồ 13×13) và 4 giao diện nét vẽ nghệ thuật (Mực tàu, Neon, Màu nước, 8-bit; "basic" giấy kẻ ô miễn phí nằm sẵn trong trang).
+/* Mã BẢN TRẢ PHÍ của game Mê Cung Truyền Tay (Cozy Play): 5 LOẠI mê cung Night Pass (Mê cung tối nhìn bằng "nóng/lạnh" + rung,
+   Tường dịch chuyển, Mê cung khổng lồ 13×13, Mực loang, Pha màu) và 4 giao diện nét vẽ nghệ thuật (Mực tàu, Neon, Màu nước, 8-bit; "basic" giấy kẻ ô miễn phí nằm sẵn trong trang).
    Chỉ giao cho người có Night Pass qua GET /api/pro/me-cung-truyen-tay.js (hoặc dùng thử 1 ván / vé chơi hộ), KHÔNG nằm trong thư mục công khai.
    main() chạy trong TRÌNH DUYỆT: không dùng biến ngoài hàm. PF do lõi game cung cấp. */
 function main(PF, OPTS) {
   "use strict";
-  PF.ok[1] = PF.ok[2] = PF.ok[3] = true;
+  PF.ok[1] = PF.ok[2] = PF.ok[3] = PF.ok[4] = PF.ok[5] = true;   // 4 = Mực loang (cặp giao diện Mực tàu), 5 = Pha màu (cặp giao diện Màu nước)
   const mk = (h) => ({
     vl: { "--pbg": "linear-gradient(hsl(" + h + " 70% 92%),hsl(" + h + " 55% 97%))", "--panel": "#ffffff", "--ink": "hsl(" + h + " 45% 14%)", "--muted": "hsl(" + h + " 20% 40%)", "--accent": "hsl(" + h + " 80% 38%)", "--on": "#ffffff", "--line": "hsl(" + h + " 40% 80%)" },
     vd: { "--pbg": "linear-gradient(hsl(" + h + " 45% 17%),hsl(" + h + " 55% 7%))", "--panel": "hsl(" + h + " 32% 22%)", "--ink": "#ffffff", "--muted": "hsl(" + h + " 25% 72%)", "--accent": "hsl(" + h + " 95% 66%)", "--on": "hsl(" + h + " 60% 10%)", "--line": "hsl(" + h + " 30% 34%)" }

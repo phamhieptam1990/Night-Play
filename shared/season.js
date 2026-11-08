@@ -99,6 +99,7 @@
     ".ns-fl{position:fixed;top:-8vh;z-index:3;pointer-events:none;opacity:0;will-change:transform;animation:nsFall linear infinite}" +
     "@keyframes nsFall{0%{transform:translate3d(0,0,0) rotate(0);opacity:0}8%{opacity:.5}92%{opacity:.5}100%{transform:translate3d(var(--dx),112vh,0) rotate(var(--rt));opacity:0}}" +
     ".ns-pill{position:fixed;left:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:5;width:40px;height:40px;border-radius:50%;border:1.5px solid rgba(255,255,255,.35);background:hsla(var(--ns-h),55%,22%,.78);color:#fff;font:20px/1 system-ui,sans-serif;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 3px 10px rgba(0,0,0,.3);padding:0;transition:transform .15s,opacity .25s}" +
+    ".ns-hub{position:relative;font:18px/1 system-ui,sans-serif;cursor:pointer}.ns-hub b{position:absolute;right:-4px;top:-4px;min-width:16px;height:16px;border-radius:8px;background:#ffd24a;color:#3a2400;font:800 10px/16px system-ui,sans-serif;text-align:center;padding:0 3px;box-sizing:border-box}" +
     ".ns-pill:active{transform:scale(.92)}.ns-pill.off{opacity:0;pointer-events:none}.ns-pill b{position:absolute;right:-5px;top:-5px;min-width:17px;height:17px;border-radius:9px;background:#ffd24a;color:#3a2400;font:800 10px/17px system-ui,sans-serif;text-align:center;padding:0 3px;box-sizing:border-box}" +
     ".ns-ov{position:fixed;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(10,6,24,.5);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}" +
     ".ns-card{width:min(92vw,380px);max-height:92vh;overflow:auto;border-radius:22px;padding:18px 16px 14px;background:#fff;color:#1c1533;font-family:'Be Vietnam Pro',system-ui,sans-serif;border:1.5px solid hsl(var(--ns-h),60%,70%);box-shadow:0 14px 50px rgba(0,0,0,.45);text-align:center}" +
@@ -125,7 +126,11 @@
       f.style.cssText = "left:" + left.toFixed(1) + "%;font-size:" + (15 + rnd() * 10).toFixed(0) + "px;animation-duration:" + (15 + rnd() * 12).toFixed(1) + "s;animation-delay:-" + (rnd() * 22).toFixed(1) + "s;--dx:" + ((rnd() - .5) * 40).toFixed(0) + "px;--rt:" + ((rnd() - .5) * 360).toFixed(0) + "deg";
       document.body.appendChild(f);
     }
-    var b = document.createElement("button"); b.type = "button"; b.className = "ns-pill"; b.id = "nsPill"; b.textContent = C.ev.e; b.onclick = openSheet; document.body.appendChild(b);
+    var b = document.createElement("button"); b.type = "button"; b.id = "nsPill"; b.textContent = C.ev.e; b.onclick = openSheet;
+    /* trang chủ có thanh công cụ ở đầu trang: đặt nút sự kiện vào đó (không đè logo/chân trang, tự gom vào menu ⋯ khi chật) */
+    var tools = document.querySelector("nav.nav .tools");
+    if (tools) { b.className = "ico ns-hub"; var th = document.getElementById("themeBtn"); tools.insertBefore(b, th && th.parentNode === tools ? th : tools.firstChild); }
+    else { b.className = "ns-pill"; document.body.appendChild(b); }
     updPill();
   }
   function stickers() { var out = C.ev.s.map(function (s, i) { return { s: s, need: TH[i], got: W.n >= TH[i] }; }); out.push({ s: [C.ev.e, "Tem vàng", "Gold stamp"], need: TH_GOLD, got: W.n >= TH_GOLD && hasPass(), gold: true }); return out; }
