@@ -27,9 +27,9 @@ function main(PF, OPTS) {
     hanoi: { h: 8, sname: ["Cà Phê Phố Cổ", "Old Quarter Café"], cg: ["#c0392b", "#4a1208"], deco: ["🏮", "🛵", "🌸", "🍵"], hero: "🏮☕", avs: ["👵", "👴", "🧑‍🎓", "👨‍💼", "👩‍💼", "🧒", "🛵"],
       css: band("🏮🏮🏮🏮🏮🏮", "linear-gradient(#a8321f22,transparent)") + ".cu{border-radius:1.5cqw;border-top:1cqw solid #c0392b}.ig{border-radius:1.5cqw}.cup{border-radius:0 0 4cqw 4cqw}" },
     dalat: { h: 140, sname: ["Cà Phê Sương Mù", "Misty Café"], cg: ["#2e8b57", "#0e2f22"], deco: ["🌲", "☁️", "🌸", "🧣"], hero: "🌲☕", avs: ["🧣", "🧥", "👩", "👨", "🧑‍🎤", "👵"],
-      css: band("🌲🌫️🌲🌫️🌲🌫️", "linear-gradient(#cfe8d822,transparent)") + ".cu{border-radius:5cqw;backdrop-filter:blur(2px)}.ig{border-radius:50%}.igs{gap:2.4cqw}.cup{border-style:dotted}" },
+      css: band("🌲🌫️🌲🌫️🌲🌫️", "linear-gradient(#cfe8d822,transparent)") + ".cu{border-radius:5cqw;backdrop-filter:blur(2px)}.ig{border-radius:7cqw}.cup{border-style:dotted}" },
     beach: { h: 195, sname: ["Cà Phê Biển Xanh", "Blue Beach Café"], cg: ["#35b6e5", "#0a3a6a"], deco: ["🏖️", "🐚", "🌴", "🍹"], hero: "🏖️☕", avs: ["🧑‍🚒", "🏄", "👙", "🧔", "👩‍🦰", "🤿"],
-      css: band("🌊🌊🌊🌊🌊🌊", "linear-gradient(#35b6e522,transparent)") + ".cu{border-radius:99cqw 99cqw 3cqw 3cqw}.ig{border-radius:99cqw}.cup{border-radius:99cqw}" },
+      css: band("🌊🌊🌊🌊🌊🌊", "linear-gradient(#35b6e522,transparent)") + ".cu{border-radius:7cqw 7cqw 3cqw 3cqw}.ig{border-radius:6cqw}.cup{border-radius:6cqw}" },
     mekong: { h: 85, sname: ["Cà Phê Chợ Nổi", "Floating Café"], cg: ["#8fbf3a", "#3a4a12"], deco: ["🛶", "🥥", "🍍", "🌴"], hero: "🛶☕", avs: ["👩‍🌾", "👨‍🌾", "👵", "🧓", "🧑‍🍳", "👒"],
       css: band("🛶🍍🥥🍌🛶🍉", "linear-gradient(#8fbf3a22,transparent)") + ".cu{border-radius:2cqw;border-bottom:1.2cqw solid #7a5a2a}.ig{border-radius:2cqw;border-bottom:1.2cqw solid #7a5a2a}" }
   };
