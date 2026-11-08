@@ -27,8 +27,8 @@
   /* Điện thoại: từ 3 nút công cụ trở lên (không tính nút Night Pass) thì gom hết vào menu ⋯ ngay, không đợi bị chèn ép */
   function tooManyIcons(tools) {
     if (innerWidth > 520) return false;
-    var n = Array.prototype.slice.call(tools.children).filter(function (el) { return !el.matches("#passBtn,.pill,[data-keep],#langMenu,.bars-more") && el.offsetParent !== null; }).length;
-    return n >= 3;
+    var n = Array.prototype.slice.call(tools.children).filter(function (el) { return !el.matches("#passBtn,.pill,[data-keep],.bars-more") && el.offsetParent !== null; }).length;
+    return n >= 2;
   }
   function navCrowded(nav, tools) {
     var label = nav.querySelector(".mark span:last-child");
@@ -81,6 +81,7 @@
     if (open && key === lastKey) return;
     busy = true; wantForce = false; lastKey = key;
     try {
+      $$("footer").forEach(function (f) { if (f._bars) expandFoot(f); });   /* trả liên kết chân trang về chỗ cũ trước khi dựng lại menu đầu trang */
       $$("nav.nav").forEach(function (nav) {
         var tools = nav.querySelector(".tools"); if (!tools) return;
         expandNav(nav); if (navCrowded(nav, tools)) collapseNav(nav, tools);

@@ -24,13 +24,15 @@ footer>.bars-pop{left:12px;bottom:calc(100% + 8px);transform-origin:bottom left}
 .bars-pop .ns-hub{padding-left:17px;gap:21px;font-size:19px}.bars-pop .ns-hub::after{font-size:15px}
 .bars-pop .ico::after{content:attr(aria-label);font-size:15px}
 .bars-pop .back span,.bars-pop .pill span{display:inline!important}
-.bars-pop #langMenu{position:static;display:none;box-shadow:none;margin:2px 0 6px 52px;padding:4px;border-radius:12px;background:color-mix(in srgb,var(--accent,#7C5CFF) 8%,transparent);min-width:0;top:auto;right:auto}
-.bars-pop #langMenu.on{display:block}
-.bars-pop #langMenu button{padding:10px 12px;font-size:15px;border-radius:9px}
+.bars-pop #langMenu{align-self:stretch;display:flex;justify-content:stretch;margin:4px 0;box-shadow:none;border:1px solid var(--line,#ddd)}
+.bars-pop #langMenu button{flex:1;display:block!important;width:auto!important;height:40px!important;padding:0 12px!important;font-size:15px!important;border-radius:19px!important;background:none;text-align:center}
+.bars-pop #langMenu button[aria-pressed=true]{background:var(--accent,#7C5CFF)!important;color:var(--on-accent,#fff)!important}
 .bars-pop .seg{align-self:stretch;justify-content:center;box-shadow:none;border:1px solid var(--line,#ddd);margin:2px 0}
 .bars-pop nav{display:flex;flex-direction:column;gap:0!important;flex-wrap:nowrap}
 .bars-pop nav a,.bars-pop nav button{display:block;width:100%;padding:13px 12px;border-radius:12px;text-align:left;font-size:15px;font-weight:600;color:inherit;background:none;text-decoration:none;border:0;cursor:pointer}
 .bars-pop nav a+a,.bars-pop nav a+button,.bars-pop nav button+a{border-top:1px solid color-mix(in srgb,var(--line,#ddd) 70%,transparent);border-radius:0}
 .bars-pop a[hidden],.bars-pop .bars-sep[hidden]{display:none!important}
-.bars-pop .bars-sep{border:0;border-top:1px solid var(--line,#ddd);margin:4px 6px;width:auto}
+.bars-pop .bars-sep{display:none!important}
+.bars-pop #langMenu + nav,.bars-pop #langMenu + .bars-sep + nav{margin-top:2px}
+.bars-pop .bars-sep-old{border:0;border-top:1px solid var(--line,#ddd);margin:4px 6px;width:auto}
 @media print{.bars-more,.bars-pop{display:none}}
