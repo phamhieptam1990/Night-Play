@@ -97,7 +97,7 @@ main{max-width:1200px;margin:0 auto;padding:8px 16px 24px}
 .fcol a:hover{color:var(--accent)}
 .fbar{max-width:1200px;margin:0 auto;padding:16px 16px 28px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13px}
 .fbar p{margin:0;opacity:.75}
-#lock{position:relative;width:56px;height:56px;border-radius:50%;background:var(--panel);box-shadow:var(--shadow);display:grid;place-items:center}
+#lock{position:relative;width:56px;height:56px;border-radius:50%;background:color-mix(in srgb,var(--accent) 22%,var(--panel));color:var(--accent);border:2px solid var(--accent);box-sizing:border-box;box-shadow:var(--shadow),0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent);display:grid;place-items:center}
 #lock .ic{width:28px;height:28px}
 #ring{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);pointer-events:none}
 #ring circle{fill:none;stroke:var(--accent);stroke-width:5;stroke-dasharray:163.4;stroke-dashoffset:163.4}
@@ -227,6 +227,8 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
   .foot{justify-content:flex-start}
 }
 @media (max-height:620px){.trust,.hero .desc{display:none}}
+/* Màn hẹp: bỏ đoạn mô tả (trùng ý với 3 chip), chip gọn trên một hàng, chừa chỗ cho nút tìm kiếm nổi bên phải */
+@media (max-width:520px){.hero{padding-left:58px;padding-right:58px}.hero .desc{display:none}.hero h1{font-size:clamp(20px,6vw,26px)}.trust{gap:5px;margin-top:10px;margin-left:-42px;margin-right:-42px}.trust li{padding:4px 9px;font-size:11px;gap:4px;white-space:nowrap}}
 @media (max-height:360px){.nav{padding:4px 16px}.hero{padding:2px 16px}.hero h1{font-size:20px}main{padding-top:2px;padding-bottom:4px}.foot{padding-top:2px;padding-bottom:2px}.foot a,.foot button{padding:4px 0}}
 
 /* ===== Tìm kiếm + lọc game: nút nổi (không chiếm chỗ trong bố cục), bấm mới mở bảng nhỏ ===== */
@@ -250,6 +252,7 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 #noRes{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(86%,320px);text-align:center;font-weight:700;opacity:.7;pointer-events:none}
 #noRes[hidden]{display:none}
 @media (max-height:420px){#findFab{width:40px;height:40px;top:calc(var(--navH,40px) + 4px)}#findPanel{top:calc(var(--navH,40px) + 50px)}}
+@media (max-width:520px){#findFab{width:38px;height:38px;top:calc(var(--navH,64px) + 6px)}#findFab svg{width:19px;height:19px}#findPanel{top:calc(var(--navH,64px) + 50px)}}
 </style>
 <script src="../shared/offline.js" defer></script>
 </head>

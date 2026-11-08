@@ -24,9 +24,15 @@
   document.addEventListener("keydown", function (e) { if (e.key === "Escape" && open) { var b = open.btn; close(); b.focus(); } });
 
   /* ----- HEADER ----- */
+  /* Điện thoại: từ 3 nút công cụ trở lên (không tính nút Night Pass) thì gom hết vào menu ⋯ ngay, không đợi bị chèn ép */
+  function tooManyIcons(tools) {
+    if (innerWidth > 520) return false;
+    var n = Array.prototype.slice.call(tools.children).filter(function (el) { return !el.matches("#passBtn,.pill,[data-keep],#langMenu,.bars-more") && el.offsetParent !== null; }).length;
+    return n >= 3;
+  }
   function navCrowded(nav, tools) {
     var label = nav.querySelector(".mark span:last-child");
-    return nav.scrollWidth > nav.clientWidth + 1 || nav.scrollWidth > document.documentElement.clientWidth + 1 || (label && label.scrollWidth > label.clientWidth + 1) || tools.getBoundingClientRect().height > 60;
+    return tooManyIcons(tools) || nav.scrollWidth > nav.clientWidth + 1 || nav.scrollWidth > document.documentElement.clientWidth + 1 || (label && label.scrollWidth > label.clientWidth + 1) || tools.getBoundingClientRect().height > 60;
   }
   function expandNav(nav) {
     var st = nav._bars; if (!st) return;

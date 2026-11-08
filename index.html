@@ -62,9 +62,15 @@ h1{margin:0;text-align:center;font-size:clamp(26px,min(5vw,6vh),46px);line-heigh
 @media (max-height:680px) and (max-width:700px){.sub{display:none}.nav{padding:6px 16px}main{gap:10px}.cards{gap:10px}.card{padding:10px 14px;gap:4px}.tiles svg{width:38px}.tag{padding:2px 10px;font-size:11px}.card h2{font-size:20px}.go{padding:8px 16px;font-size:15px}.foot{padding:4px 16px 8px}}
 @media (max-height:600px) and (max-width:700px){.tiles{display:none}.card{padding:10px 14px}}
 @media (max-height:480px){.cards{grid-template-columns:1fr 1fr}.sub{display:none}.nav{padding:4px 16px}main{gap:8px;padding-bottom:4px}h1{font-size:22px}.cards{gap:10px}.card{padding:10px 14px;gap:4px}.card p{display:none}.tiles svg{width:40px}.tag{padding:2px 10px;font-size:11px}.card h2{font-size:20px}.go{padding:7px 16px;font-size:15px}.foot{padding:2px 16px 6px}}
-.foot{flex:none;display:flex;justify-content:center;gap:16px;flex-wrap:wrap;padding:8px 16px 12px;font-size:13px;color:var(--muted)}
+.foot{flex:none;display:flex;justify-content:space-between;align-items:center;gap:4px 18px;flex-wrap:wrap;padding:8px 16px;font-size:13px;color:var(--muted);border-top:1px solid var(--line);background:linear-gradient(180deg,transparent,var(--hero1,transparent))}
+.foot #copy{order:1}.foot nav{order:2}.foot .site-upd{order:3;flex:none;width:auto;margin-left:auto;padding:0;font-size:12px}
 .foot nav{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
 .foot a{text-decoration:none;font-weight:600}.foot a:hover{color:var(--ink)}
+/* Footer gọn khi các liên kết đã gom vào menu ⋯: chữ bản quyền + ngày cập nhật xếp dọc bên trái, nút ⋯ bên phải */
+.foot:has(.bars-more){display:grid;grid-template-columns:1fr auto;align-items:center;justify-items:start;gap:0 12px;padding:6px 16px}
+.foot:has(.bars-more) #copy{grid-column:1;grid-row:1;font-size:12.5px}
+.foot:has(.bars-more) .site-upd{grid-column:1;grid-row:2;width:auto;margin:0;text-align:left;padding:0;font-size:11.5px}
+.foot:has(.bars-more) .bars-more{grid-column:2;grid-row:1 / span 2;order:0;width:40px;height:40px}
 @media (prefers-reduced-motion:reduce){.card,.go svg{transition:none}}
 </style>
 <script src="shared/offline.js" defer></script>
@@ -73,7 +79,7 @@ h1{margin:0;text-align:center;font-size:clamp(26px,min(5vw,6vh),46px);line-heigh
 <nav class="nav" aria-label="Main">
   <div class="mark">
     <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#7C5CFF"/><path d="M0 0h32v64H0z" fill="#FF5A1F" clip-path="inset(0 round 18px 0 0 18px)"/><circle cx="32" cy="32" r="13" fill="#fff"/></svg>
-    <span>Play Hub</span>
+    <span>Home</span>
   </div>
   <div class="tools">
     <a id="passBtn" class="pill" href="subscribe.html"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/></svg><span></span></a>

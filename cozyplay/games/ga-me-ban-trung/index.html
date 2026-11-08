@@ -34,7 +34,7 @@ body{display:flex;justify-content:center}
 .tys{display:grid;grid-template-columns:repeat(5,1fr);gap:1.4cqw}.lvs{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4cqw}.lv{border:1.5px solid color-mix(in srgb,var(--ink) 30%,transparent);background:var(--panel);color:var(--ink);border-radius:3cqw;min-height:40px;font:800 3.2cqw var(--body);cursor:pointer}.lv.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 18%,var(--panel))}.lv:disabled{opacity:.5}.ty{position:relative;border:1.5px solid color-mix(in srgb,var(--ink) 30%,transparent);background:var(--panel);color:var(--ink);border-radius:3cqw;padding:1.6cqw .6cqw;font:800 2.8cqw var(--body);min-height:44px;cursor:pointer;text-align:center}.ty{font-size:2.4cqw!important}.ty .e{display:block;font-size:6.4cqw;line-height:1.1}.ty.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 20%,var(--panel));box-shadow:0 0 0 .5cqw color-mix(in srgb,var(--accent) 45%,transparent)}.ty.lock{opacity:.8}.ty.lock::after{content:'🔒';position:absolute;top:.4cqw;right:1cqw;font-size:3.4cqw}
 /* ván chơi */
 #game{gap:1.6cqw;justify-content:flex-start}
-.stats{display:flex;gap:2cqw}.st{flex:1;background:var(--panel);border:.5cqw solid var(--line);border-radius:3cqw;padding:1cqw 2cqw;text-align:center}.st b{display:block;font:400 5.4cqw var(--display);color:var(--accent);line-height:1.1}.st span{font-size:2.8cqw;color:color-mix(in srgb,var(--ink) 65%,transparent);font-weight:800}
+.stats{display:flex;gap:2cqw}.st{flex:1;display:flex;align-items:baseline;justify-content:center;gap:1.4cqw;min-width:0;background:var(--panel);border:.5cqw solid var(--line);border-radius:99cqw;padding:1.2cqw 2cqw;text-align:center;white-space:nowrap}.st b{display:block;font:400 5cqw var(--display);color:var(--accent);line-height:1.1}.st span{font-size:3cqw;color:color-mix(in srgb,var(--ink) 65%,transparent);font-weight:800}
 #cvw{flex:1;min-height:0;display:flex;justify-content:center;align-items:center}
 canvas#cv{border-radius:3cqw;background:linear-gradient(var(--field),var(--field2));border:.5cqw solid var(--line);touch-action:none;display:block;box-shadow:0 1cqw 0 rgba(0,0,0,.14)}
 .hint{text-align:center;margin:0}
@@ -131,7 +131,7 @@ const b64e=o=>btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/
 function parseCh(h){try{const m=/[#&]ch=([A-Za-z0-9_-]{1,200})/.exec(h||"");if(!m)return null;let t=m[1].replace(/-/g,"+").replace(/_/g,"/");while(t.length%4)t+="=";const o=JSON.parse(decodeURIComponent(escape(atob(t))));
  if(o&&Number.isInteger(o.s)&&o.s>=0&&o.s<=4294967295&&Number.isInteger(o.sc)&&o.sc>=0&&o.sc<=MAXS){const sh=Number.isInteger(o.sh)&&o.sh>=5&&o.sh<=200?o.sh:DAILY_SHOTS;const t2=Number.isInteger(o.t)&&o.t>=0&&o.t<=4?o.t:0;const lv=Number.isInteger(o.lv)&&o.lv>=0&&o.lv<=2?o.lv:1;return{s:o.s,sc:o.sc,sh,t:t2,lv}}return null}catch(e){return null}}
 /* ===== HÌNH HỌC LƯỚI LỤC GIÁC ===== */
-const C=9,D=40,R=20,RH=34.64,W=C*D,H=540,TOP=R+6,LOSE_ROW=11,MAXR=16,SX=W/2,SY=H-44;
+const C=9,D=40,R=20,RH=34.64,W=C*D,HMIN=650,HMAX=900,TOP=R+6,LOSE_ROW=14,MAXR=17,SX=W/2;let H=HMIN,SY=H-44;   /* H co giãn theo màn hình (sân luôn kín chiều ngang); luật chơi (hàng thua = 14) không đổi */
 const cols=(r,par)=>((r+par)&1)?C-1:C;
 const cx=(r,c,par)=>(c+(((r+par)&1)?1:.5))*D,cy=r=>TOP+r*RH;
 /* ===== PHÔNG MÀU TRỨNG (5 màu + hoa văn để người mù màu phân biệt) ===== */
@@ -230,7 +230,7 @@ function tick(ts){raf=requestAnimationFrame(tick);if(!G||$("game").hidden){last=
  for(const f of G.fx){f.x+=f.vx*dt;f.y+=f.vy*dt;f.life-=dt}G.fx=G.fx.filter(f=>f.life>0);for(const x of G.txt){x.age+=dt}G.txt=G.txt.filter(x=>x.age<x.life);G.shake=Math.max(0,G.shake-dt);G.flash=Math.max(0,G.flash-dt*1.5);for(const f of G.fall){f.vy+=900*dt;f.x+=f.vx*dt;f.y+=f.vy*dt}G.fall=G.fall.filter(f=>f.y<H+30);draw()}
 /* ===== VẼ ===== */
 const cv=$("cv"),ctx=cv.getContext("2d");let SC=1;
-function fitCanvas(){const w=$("cvw");if(!w)return;const aw=w.clientWidth,ah=w.clientHeight;if(!aw||!ah)return;const s=Math.min(aw/W,ah/H),dpr=Math.min(2,devicePixelRatio||1);cv.style.width=Math.floor(W*s)+"px";cv.style.height=Math.floor(H*s)+"px";cv.width=Math.floor(W*s*dpr);cv.height=Math.floor(H*s*dpr);SC=cv.width/W;draw()}
+function fitCanvas(){const w=$("cvw");if(!w)return;const aw=w.clientWidth,ah=w.clientHeight;if(!aw||!ah)return;let s=aw/W;if(ah/s>=HMIN)H=Math.min(HMAX,ah/s);else{s=ah/HMIN;H=HMIN}SY=H-44;const dpr=Math.min(2,devicePixelRatio||1);cv.style.width=Math.floor(W*s)+"px";cv.style.height=Math.floor(H*s)+"px";cv.width=Math.floor(W*s*dpr);cv.height=Math.floor(H*s*dpr);SC=cv.width/W;draw()}
 new ResizeObserver(fitCanvas).observe($("cvw"));
 function palette(k){const sk=skinOf();const P=sk.pal||BASEPAL;return P[k%5]}
 function eggPath(x,y,rx,ry){ctx.beginPath();ctx.ellipse(x,y+ry*.04,rx,ry,0,0,6.283)}
