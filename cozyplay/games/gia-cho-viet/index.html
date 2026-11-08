@@ -93,7 +93,8 @@ input[type=range]::-moz-range-thumb{width:8cqw;height:8cqw;border-radius:50%;bac
     <div class="sq" id="eSq"></div>
     <div class="chips" id="eChips"></div>
     <p class="mut" style="text-align:center;margin:0" id="eVs"></p>
-    <div class="row"><button class="btn grow" id="bShare" type="button">📤</button><button class="btn alt" id="bRem" type="button" hidden>⚔↻</button><button class="btn alt" id="bAgain" type="button">↻</button><button class="btn alt" id="bHome" type="button">🏠</button></div>
+    <div class="row"><button class="btn grow" id="bShare" type="button">📤</button><button class="btn alt" id="bRem" type="button" hidden aria-label="rematch">🔁</button><button class="btn alt" id="bAgain" type="button" aria-label="new">🎲</button><button class="btn alt" id="bHome" type="button">🏠</button></div>
+    <p class="mut" id="eLeg" style="text-align:center;margin:0" hidden></p>
   </section>
   <div class="ov" id="ovCh" hidden><h2 id="chH"></h2><p id="chP"></p><div class="row"><button class="btn alt" id="chNo" type="button">✕</button><button class="btn grow" id="chGo" type="button"></button></div></div>
   <div class="ov" id="ovSkin" hidden><h2 id="skH"></h2><div class="sk" id="skG"></div><button class="btn alt" id="skX" type="button">✕</button></div>
@@ -253,6 +254,9 @@ if(window.NP&&NP.helper){const HS=NP.initialState&&typeof NP.initialState==="obj
  const go=()=>{begin(seed,"practice",null);if(Array.isArray(st.pts)&&Array.isArray(st.guess)&&st.pts.length===st.guess.length&&st.pts.length<N&&st.pts.every(x=>Number.isInteger(x)&&x>=0&&x<=100)&&st.guess.every(x=>Number.isInteger(x)&&x>0&&x<1e9)){G.pts=st.pts.slice();G.guess=st.guess.slice();G.i=G.pts.length;showQ()}};
  if(/^h\.\d{13}\.[A-Za-z0-9_-]{43}$/.test(st.tk||""))PF.loadPro(false,st.tk).then(()=>{if(/^[a-z]{3,10}$/.test(st.sk||"")&&PF.skins[0][st.sk])PF.skinSel[0]=st.sk}).catch(()=>{}).finally(go);else go()}
 else{const c0=parseCh(location.hash);if(c0)openCh(c0);else if(location.hash==="#daily")$("bDaily").click()}
+
+/* chú thích hai nút: 🔁 cùng màn / 🎲 màn mới */
+{const LEG={vi:"🔁 Đấu lại cùng đề · 🎲 Đề mới",en:"🔁 Rematch same round · 🎲 New round"},sync=()=>{const l=$("eLeg"),r=$("bRem");l.hidden=r.hidden;l.textContent=LEG[LANG]||LEG.vi;r.title=(LANG==="en"?"Rematch same":"Chơi lại cùng màn");$("bAgain").title=(LANG==="en"?"New":"Màn mới")};new MutationObserver(sync).observe($("bRem"),{attributes:true,attributeFilter:["hidden"]});new MutationObserver(sync).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});$("bLang").addEventListener("click",()=>setTimeout(sync,30));sync()}
 
 window.GC={rematch,juice,get G(){return G},begin,finish,again,shareText,shareLink,drawCard,parseCh,genRound,pointsOf,priceAt,fnv,dayKey,dayNo,PF,T,ITEMS};
 </script>

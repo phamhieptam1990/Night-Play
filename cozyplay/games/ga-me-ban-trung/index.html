@@ -81,7 +81,8 @@ canvas#cv{border-radius:3cqw;background:linear-gradient(var(--field),var(--field
     <div class="hat" id="eHat"></div>
     <div class="chips" id="eChips"></div>
     <p class="mut" id="eVs" style="text-align:center;margin:0"></p>
-    <div class="row"><button class="btn grow" id="bShare" type="button">📤</button><button class="btn alt" id="bRem" type="button" hidden>⚔↻</button><button class="btn alt" id="bAgain" type="button">↻</button><button class="btn alt" id="bHome" type="button">🏠</button></div>
+    <div class="row"><button class="btn grow" id="bShare" type="button">📤</button><button class="btn alt" id="bRem" type="button" hidden aria-label="rematch">🔁</button><button class="btn alt" id="bAgain" type="button" aria-label="new">🎲</button><button class="btn alt" id="bHome" type="button">🏠</button></div>
+    <p class="mut" id="eLeg" style="text-align:center;margin:0" hidden></p>
   </section>
   <div class="ov" id="ovCh" hidden><h2 id="chH"></h2><p id="chP"></p><div class="row"><button class="btn alt" id="chNo" type="button">✕</button><button class="btn grow" id="chGo" type="button"></button></div></div>
   <div class="ov" id="ovAlb" hidden><h2 id="alH"></h2><p id="alP"></p><div class="alb" id="alG"></div><button class="btn alt" id="alX" type="button">✕</button></div>
@@ -240,7 +241,7 @@ function draw(){if(!G||$("game").hidden)return;ctx.setTransform(SC,0,0,SC,0,0);c
  for(const x of G.txt){const a=x.age/x.life,sc=a<.15?.6+a/.15*.5:1.1-Math.min(.1,(a-.15)*.2);ctx.save();ctx.globalAlpha=a>.7?Math.max(0,1-(a-.7)/.3):1;ctx.translate(x.x,x.y-a*30);ctx.scale(sc,sc);ctx.font="900 "+x.size+"px 'Be Vietnam Pro',system-ui,sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";ctx.lineWidth=6;ctx.strokeStyle="rgba(60,20,0,.85)";ctx.strokeText(x.txt,0,0);ctx.fillStyle=x.color;ctx.fillText(x.txt,0,0);ctx.restore()}
  ctx.save();ctx.globalAlpha=.95;ctx.translate(W-44,SY+6);ctx.scale(.8,.8);drawEgg2(0,0,G.nxt,0);ctx.restore();ctx.fillStyle="rgba(120,80,30,.8)";if(isDark())ctx.fillStyle="rgba(255,225,160,.85)";ctx.font="800 10px sans-serif";ctx.fillText("⇄",W-44,SY+28)}
 /* ===== HUD / MÀN HÌNH ===== */
-function show(id){["home","game","end"].forEach(s=>$(s).hidden=s!==id);["ovCh","ovAlb","ovSkin","ovPay"].forEach(o=>$(o).hidden=true);$("bRe").hidden=id!=="game"}
+function show(id){if(id!=="game"&&$("ttl"))$("ttl").textContent=T("title");["home","game","end"].forEach(s=>$(s).hidden=s!==id);["ovCh","ovAlb","ovSkin","ovPay"].forEach(o=>$(o).hidden=true);$("bRe").hidden=id!=="game"}
 function toast(m,ms){const t=$("toast");t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,ms||1800)}
 function updHud(){if(!G)return;if(!$("game").hidden&&G)$("ttl").textContent=TYPES[G.t][0]+" "+L2([TYPES[G.t][1],TYPES[G.t][2]]);$("sSc").textContent=G.score;$("sScL").textContent=T("sc");
  if(G.cfg.time){$("sSh").textContent=Math.ceil(G.timeLeft);$("sShL").textContent=T("tm")}else if(G.cfg.shots){$("sSh").textContent=Math.max(0,G.cfg.shots-G.used);$("sShL").textContent=T("sh")}else{$("sSh").textContent=G.used;$("sShL").textContent=T("sh")}
@@ -331,6 +332,9 @@ if(window.NP&&NP.helper){const HS=NP.initialState&&typeof NP.initialState==="obj
  const go=()=>{begin(seed,"challenge",ht,null);const g=decG(HS.g);if(g&&Number.isInteger(HS.u)&&HS.u>=0&&HS.u<=500&&Number.isInteger(HS.sc)&&HS.sc>=0&&HS.sc<=MAXS){G.grid=g;G.par=HS.par===1?1:0;G.used=HS.u;G.score=HS.sc;G.rowsAdded=Math.max(0,Math.min(500,HS.rw|0));G.draw=Math.max(0,Math.min(5000,HS.dr|0));G.hatchIdx=Math.max(0,Math.min(500,HS.hi|0));G.miss=Math.max(0,Math.min(5,HS.ms|0));G.freed=Math.max(0,Math.min(20,HS.fr|0));if(G.cfg.time)G.timeLeft=Math.max(5,Math.min(60,HS.tl|0));if(G.cfg.shots===0&&HS.cap===0){G.cfg.shots=G.used+25}else if(Number.isInteger(HS.cap)&&HS.cap>=5&&HS.cap<=200)G.cfg.shots=HS.cap;G.cur=drawEgg();G.nxt=drawEgg();updHud()}};
  if(/^h\.\d{13}\.[A-Za-z0-9_-]{43}$/.test(HS.tk||""))PF.loadPro(false,HS.tk).then(()=>{if(/^[a-z0-9]{3,10}$/.test(HS.sk||"")&&PF.skins[HS.sk])PF.skinSel=HS.sk}).catch(()=>{}).finally(go);else go()}
 else{const c0=parseCh(location.hash);if(c0)proP.then(()=>openCh(c0));else if(location.hash==="#daily")$("bDaily").click()}
+/* chú thích hai nút: 🔁 cùng màn / 🎲 màn mới */
+{const LEG={vi:"🔁 Đấu lại cùng bàn · 🎲 Bàn mới",en:"🔁 Rematch same board · 🎲 New board"},sync=()=>{const l=$("eLeg"),r=$("bRem");l.hidden=r.hidden;l.textContent=LEG[LANG]||LEG.vi;r.title=(LANG==="en"?"Rematch same":"Chơi lại cùng màn");$("bAgain").title=(LANG==="en"?"New":"Màn mới")};new MutationObserver(sync).observe($("bRem"),{attributes:true,attributeFilter:["hidden"]});new MutationObserver(sync).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});$("bLang").addEventListener("click",()=>setTimeout(sync,30));sync()}
+
 window.GM={rematch,comboFx,beatFx,get G(){return G},PF,begin,fire,settle,simBall,preview,drawCard,shareText,shareLink,parseCh,fnv,dayKey,dayNo,present,cluster,floating,neigh,encG,decG,cols,get TY(){return TY},setTY(t){TY=t;LS.set("gm-type",t);renderHome()},T,endGame,hatch,ANIMS,cx,cy,C,W,H,run(a){if(!fire(a))return false;let n=0;while(G.ball&&n++<4000){const hit=simBall(G.ball,STEP/SPEED);if(hit){settle();break}}return true}};
 </script>
 </body>

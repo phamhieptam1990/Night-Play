@@ -90,7 +90,8 @@ body{display:flex;justify-content:center}
     <div class="art" id="eArt"></div>
     <div class="chips" id="eChips"></div>
     <p class="mut" id="eVs" style="text-align:center;margin:0"></p>
-    <div class="row"><button class="btn grow" id="bShare" type="button">📤</button><button class="btn alt" id="bRem" type="button" hidden>⚔↻</button><button class="btn alt" id="bAgain" type="button">↻</button><button class="btn alt" id="bHome" type="button">🏠</button></div>
+    <div class="row"><button class="btn grow" id="bShare" type="button">📤</button><button class="btn alt" id="bRem" type="button" hidden aria-label="rematch">🔁</button><button class="btn alt" id="bAgain" type="button" aria-label="new">🎲</button><button class="btn alt" id="bHome" type="button">🏠</button></div>
+    <p class="mut" id="eLeg" style="text-align:center;margin:0" hidden></p>
   </section>
   <div class="ov" id="ovCh" hidden><h2 id="chH"></h2><p id="chP"></p><div class="row"><button class="btn alt" id="chNo" type="button">✕</button><button class="btn grow" id="chGo" type="button"></button></div></div>
   <div class="ov" id="ovSkin" hidden><h2 id="skH"></h2><div class="sk" id="skG"></div><button class="btn alt" id="skX" type="button">✕</button></div>
@@ -245,7 +246,7 @@ function mixc(a,b,t){const pa=hex(a),pb=hex(b);return"rgb("+pa.map((v,i)=>Math.r
 function hex(h){h=h.replace("#","");if(h.length===3)h=h.split("").map(c=>c+c).join("");return[0,2,4].map(i=>parseInt(h.slice(i,i+2),16))}
 function draw(){if(!G||$("game").hidden)return;const S=cv.width;if(!S)return;for(const f of G.flash)f.t=Math.max(0,f.t-.02);G.flash=G.flash.filter(f=>f.t>0);ctx.setTransform(1,0,0,1,0,0);renderMaze(ctx,S,G,{fog:true})}
 /* ===== HUD / MÀN HÌNH ===== */
-function show(id){["home","game","mk","end"].forEach(s=>$(s).hidden=s!==id);["ovCh","ovSkin","ovPay"].forEach(o=>$(o).hidden=true);$("bRe").hidden=id!=="game"}
+function show(id){if(id!=="game"&&$("ttl"))$("ttl").textContent=T("title");["home","game","mk","end"].forEach(s=>$(s).hidden=s!==id);["ovCh","ovSkin","ovPay"].forEach(o=>$(o).hidden=true);$("bRe").hidden=id!=="game"}
 function toast(m,ms){const t=$("toast");t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,ms||1800)}
 function updHud(){if(!G)return;if(!$("game").hidden&&G)$("ttl").textContent=TYPES[G.t][0]+" "+L2([TYPES[G.t][1],TYPES[G.t][2]]);const sec=G.t0?Math.floor((performance.now()-G.t0)/1000):0;$("sTm").textContent=sec;$("sTmL").textContent=T("tm");$("sMv").textContent=G.moves;$("sMvL").textContent=T("mv");$("sSt").textContent=G.got.size+"/3";$("sStL").textContent=T("st");
  const tg=$("tgt");if(G.ch){tg.hidden=false;const cur=G.t0?Math.max(0,Math.min(MAXS,Math.round(1000-4*sec-10*G.bumps+50*G.got.size))):1000;tg.classList.toggle("beat",!!G.beat);$("tgtT").textContent=T("tgt",{n:G.ch.sc});$("tgtB").style.width=Math.min(100,Math.round(G.ch.sc/10))+"%"}else tg.hidden=true;
@@ -388,6 +389,9 @@ if(window.NP&&NP.helper){const HS=NP.initialState&&typeof NP.initialState==="obj
    if(pts.length&&pts[0][0]===0&&pts[0][1]===0||pts.length>1){G.path=pts.length?pts:[[0,0]];G.pos=G.path[G.path.length-1].slice();G.visited=new Set(G.path.map(p=>p[0]+","+p[1]));G.moves=Math.max(0,Math.min(500,HS.mv|0));G.bumps=Math.max(0,Math.min(200,HS.bp|0));String(HS.gt||"").split("").forEach(ch=>{const i=+ch;if(i>=0&&i<3)G.got.add(i)});if(HS.tm>0&&HS.tm<900)G.t0=performance.now()-HS.tm*1000;G.lastD=G.D[G.pos[0]][G.pos[1]];updHud();draw()}}};
  if(/^h\.\d{13}\.[A-Za-z0-9_-]{43}$/.test(HS.tk||""))PF.loadPro(false,HS.tk).then(()=>{if(/^[a-z0-9]{3,10}$/.test(HS.sk||"")&&PF.skins[HS.sk])PF.skinSel=HS.sk}).catch(()=>{}).finally(go);else go()}
 else{const c0=parseCh(location.hash);if(c0)proP.then(()=>openCh(c0));else if(location.hash==="#daily")$("bDaily").click()}
+/* chú thích hai nút: 🔁 cùng màn / 🎲 màn mới */
+{const LEG={vi:"🔁 Chạy lại mê cung này · 🎲 Mê cung mới",en:"🔁 Rerun this maze · 🎲 New maze"},sync=()=>{const l=$("eLeg"),r=$("bRem");l.hidden=r.hidden;l.textContent=LEG[LANG]||LEG.vi;r.title=(LANG==="en"?"Rematch same":"Chơi lại cùng màn");$("bAgain").title=(LANG==="en"?"New":"Màn mới")};new MutationObserver(sync).observe($("bRem"),{attributes:true,attributeFilter:["hidden"]});new MutationObserver(sync).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});$("bLang").addEventListener("click",()=>setTimeout(sync,30));sync()}
+
 window.MZ={undo,hintNow,clickMove,planPath,walkPath,toggleMode,togglePad,get STEP(){return STEP_MODE},setSize,get SZ(){return SZ},get MKN(){return MKN},get G(){return G},PF,begin,move,genMaze,bfs,openAt,bitsOf,fromBits,bitsToB64,b64ToBits,parseCh,shareText,shareLink,drawCard,rematch,shiftWalls,scoreNow,showEnd,fnv,dayKey,dayNo,get TY(){return TY},setTY(t){TY=t;LS.set("mz-type",t);renderHome()},T,get MK(){return MK},mkStep,updMk,openMk,finishRun};
 </script>
 </body>
