@@ -11,12 +11,12 @@ function main(PF, OPTS) {
     vd: { "--pbg": "linear-gradient(hsl(" + h + " 45% 17%),hsl(" + h + " 55% 7%))", "--panel": "hsl(" + h + " 32% 22%)", "--ink": "#ffffff", "--muted": "hsl(" + h + " 25% 72%)", "--accent": "hsl(" + h + " 95% 66%)", "--on": "hsl(" + h + " 60% 10%)", "--line": "hsl(" + h + " 30% 34%)" }
   });
   const S = {
-    ink: { h: 30, style: "ink", path: ["#1c1c1c", "#b3261e"], deco: ["🖌️", "🏮", "🐉", "🎋"], hero: "🖌️🧭" },
-    neon: { h: 285, style: "neon", path: ["#ff3df0", "#35f0ff"], deco: ["⚡", "💠", "🔷", "🎮"], hero: "⚡🧭" },
-    water: { h: 200, style: "water", path: ["#3d8bff", "#ff5fa0"], deco: ["🎨", "💧", "🌊", "🫧"], hero: "🎨🧭" },
-    pixel: { h: 125, style: "pixel", path: ["#2f9e44", "#e8590c"], deco: ["👾", "🕹️", "💾", "🟩"], hero: "👾🧭" }
+    ink: { me: "🐲", h: 30, style: "ink", path: ["#1c1c1c", "#b3261e"], deco: ["🖌️", "🏮", "🐉", "🎋"], hero: "🖌️🧭" },
+    neon: { me: "🤖", h: 285, style: "neon", path: ["#ff3df0", "#35f0ff"], deco: ["⚡", "💠", "🔷", "🎮"], hero: "⚡🧭" },
+    water: { me: "🐠", h: 200, style: "water", path: ["#3d8bff", "#ff5fa0"], deco: ["🎨", "💧", "🌊", "🫧"], hero: "🎨🧭" },
+    pixel: { me: "👾", h: 125, style: "pixel", path: ["#2f9e44", "#e8590c"], deco: ["👾", "🕹️", "💾", "🟩"], hero: "👾🧭" }
   };
-  for (const id in S) { const d = S[id], v = mk(d.h); PF.skins[id] = { style: d.style, path: d.path, vl: v.vl, vd: v.vd, deco: d.deco, hero: d.hero, css: id === "neon" ? "#cv,#mc{box-shadow:0 0 5cqw rgba(255,61,240,.4)}" : "" }; }
+  for (const id in S) { const d = S[id], v = mk(d.h); PF.skins[id] = { me: d.me, style: d.style, path: d.path, vl: v.vl, vd: v.vd, deco: d.deco, hero: d.hero, css: id === "neon" ? "#cv,#mc{box-shadow:0 0 5cqw rgba(255,61,240,.4)}" : "" }; }
   PF.pro = { trial: !!OPTS.trial };
 }
 exports.source = function (opts) { return "(" + main.toString() + ")(PF," + JSON.stringify({ trial: !!(opts && opts.trial) }) + ");"; };
