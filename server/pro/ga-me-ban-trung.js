@@ -15,12 +15,12 @@ function main(PF, OPTS) {
     vd: { "--pbg": "linear-gradient(hsl(" + h + " 45% 17%),hsl(" + h + " 55% 7%))", "--panel": "hsl(" + h + " 32% 22%)", "--ink": "#ffffff", "--muted": "hsl(" + h + " 25% 72%)", "--accent": "hsl(" + h + " 95% 62%)", "--on": "hsl(" + h + " 60% 10%)", "--line": "hsl(" + h + " 30% 34%)", "--field": "hsl(" + h + " 35% 15%)", "--field2": "hsl(" + h + " 40% 24%)" }
   });
   const S = {
-    easter: { h: 330, deco: ["🐰", "🌷", "🥕", "🌸"], hero: "🐰🥚", pal: [[340, 85, 70], [50, 95, 66], [150, 65, 60], [200, 85, 68], [280, 70, 72]], glitter: 0, aim: "flower", css: "" },
-    gold: { h: 45, deco: ["👑", "✨", "🪙", "🏆"], hero: "👑🐔", pal: [[44, 100, 52], [30, 95, 50], [52, 90, 62], [18, 90, 52], [60, 80, 46]], glitter: 1, aim: "star", css: "" },
-    jade: { h: 150, deco: ["🍀", "🧧", "🐉", "🌿"], hero: "🍀🥚", pal: [[160, 70, 40], [140, 65, 46], [172, 80, 36], [120, 60, 42], [188, 70, 42]], glitter: 1, aim: "leaf", css: "" },
-    neon: { h: 285, deco: ["⚡", "💠", "🎮", "🔷"], hero: "⚡🥚", pal: [[320, 100, 62], [180, 100, 52], [100, 100, 52], [260, 100, 66], [48, 100, 56]], glitter: 1, aim: "laser", css: "canvas#cv{box-shadow:0 0 5cqw rgba(200,80,255,.5)}" }
+    easter: { h: 330, deco: ["🐰", "🌷", "🥕", "🌸"], hero: "🐰🥚", pal: [[340, 85, 70], [50, 95, 66], [150, 65, 60], [200, 85, 68], [280, 70, 72]], glitter: 0, me: "🐰", bird: "🕊️", aim: "flower", css: "" },
+    gold: { h: 45, deco: ["👑", "✨", "🪙", "🏆"], hero: "👑🐔", pal: [[44, 100, 52], [30, 95, 50], [52, 90, 62], [18, 90, 52], [60, 80, 46]], glitter: 1, me: "🦚", bird: "🦜", aim: "star", css: "" },
+    jade: { h: 150, deco: ["🍀", "🧧", "🐉", "🌿"], hero: "🍀🥚", pal: [[160, 70, 40], [140, 65, 46], [172, 80, 36], [120, 60, 42], [188, 70, 42]], glitter: 1, me: "🐉", bird: "🦢", aim: "leaf", css: "" },
+    neon: { h: 285, deco: ["⚡", "💠", "🎮", "🔷"], hero: "⚡🥚", pal: [[320, 100, 62], [180, 100, 52], [100, 100, 52], [260, 100, 66], [48, 100, 56]], glitter: 1, me: "🤖", bird: "🦇", aim: "laser", css: "canvas#cv{box-shadow:0 0 5cqw rgba(200,80,255,.5)}" }
   };
-  for (const id in S) { const d = S[id], v = mk(d.h); PF.skins[id] = { vl: v.vl, vd: v.vd, deco: d.deco, hero: d.hero, pal: d.pal, glitter: d.glitter, aim: d.aim, css: d.css }; }
+  for (const id in S) { const d = S[id], v = mk(d.h); PF.skins[id] = { vl: v.vl, vd: v.vd, deco: d.deco, hero: d.hero, pal: d.pal, glitter: d.glitter, aim: d.aim, me: d.me, bird: d.bird, css: d.css }; }
   PF.pro = { trial: !!OPTS.trial };
 }
 exports.source = function (opts) { return "(" + main.toString() + ")(PF," + JSON.stringify({ trial: !!(opts && opts.trial) }) + ");"; };
