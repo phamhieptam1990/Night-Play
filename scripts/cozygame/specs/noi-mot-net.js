@@ -2,38 +2,39 @@
 module.exports = {
   id: "noi-mot-net", prefix: "nn", title: { vi: "Nối Một Nét", en: "One Line Link" }, maxScore: 99,
   hero: "✍️🔗", deco: ["✍️", "🔗", "⭐", "💡"],
-  types: [["✍️", "Cổ điển 90 giây", "Classic 90 s"], ["❤️", "3 mạng", "3 lives"], ["⚡", "Tốc độ 45 giây", "45 s sprint"], ["🧩", "Đồ thị lớn", "Big graphs"]],
+  types: [["✍️", "Cổ điển 90 giây", "Classic 90 s"], ["➡️", "Một chiều", "One way"], ["🧠", "Nhớ đường 45 giây", "Memory 45 s"], ["✌️", "Đi hai lần", "Twice over"]],
   catalog: [["basic", "Giấy kẻ ô", "Graph paper", "✍️"], ["metro", "Bản đồ tàu điện", "Metro map", "🚇"], ["star", "Chòm sao", "Constellation", "🌌"], ["circuit", "Mạch điện", "Circuit board", "🔌"], ["lantern", "Phố đèn lồng", "Lantern street", "🏮"]],
   rootCss: `:root{--bg:#EAF6F1;--panel:#ffffff;--ink:#12332b;--muted:#4f7468;--accent:#0f9b7a;--on:#ffffff;--good:#1a9a55;--bad:#d23b3b;--line:#bfe0d4;--pbg:linear-gradient(#d3efe4,#f4fbf8);--field:#f7fffb;--field2:#dcf3ea;
  --display:"Bungee","Arial Black",system-ui,sans-serif;--body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif}
 :root[data-theme="dark"]{--bg:#08201a;--panel:#12352c;--ink:#e6fff7;--muted:#92c9b8;--accent:#3ee0b4;--on:#00261c;--good:#3ddc84;--bad:#ff6b6b;--line:#245444;--pbg:linear-gradient(#10382d,#08201a);--field:#0d2a22;--field2:#163f33}`,
-  extraCss: `canvas#cv{touch-action:none}`,
+  extraCss: `canvas#cv{touch-action:none}#play[data-ty="1"] canvas#cv{border-style:solid;border-color:var(--accent);box-shadow:0 0 0 1.2cqw color-mix(in srgb,var(--accent) 25%,transparent)}#play[data-ty="2"] canvas#cv{filter:brightness(.82)}#play[data-ty="3"] canvas#cv{border-style:double;border-width:1.4cqw}`,
   gameHtml: `{{STATS}}
     <div id="cvw"><canvas id="cv"></canvas></div>
     {{HINT}}`,
   consts: `const NICE=12,CONF=["✍️","⭐","🎉"];`,
   i18n: {
     vi: { sub: "Vẽ MỘT nét liền đi qua tất cả các đoạn nối giữa các điểm. Không nhấc tay, không đi lại đường cũ!", note: "Mỗi ngày cả nước giải cùng dãy màn · chia sẻ màn khó nhất bạn giải được",
-      sc: "Đã giải", tm: "Còn lại", ex: "Đoạn", hint0: "Bấm vào một điểm rồi kéo dọc các đoạn nối. Nhấc tay là làm lại!", hint1: "3 mạng: nhấc tay hoặc kẹt đường cụt mất 1 mạng.", hint2: "Chỉ 45 giây, giải càng nhiều càng tốt!", hint3: "Đồ thị lớn ngay từ đầu, kiên nhẫn nhé!",
+      sc: "Đã giải", tm: "Còn lại", ex: "Đoạn", hint0: "Bấm vào một điểm rồi kéo dọc các đoạn nối. Nhấc tay là làm lại!", hint1: "Một chiều: mỗi đoạn có MŨI TÊN, chỉ đi theo chiều mũi tên, bắt đầu từ ngôi sao ⭐. 3 mạng.", hint2: "Nhớ đường: các đoạn nối MỜ DẦN sau 2,5 giây, hãy nhớ rồi vẽ! Chỉ 45 giây.", hint3: "Đi hai lần: mỗi đoạn phải đi qua ĐÚNG HAI LẦN (con số trên đoạn là số lần còn lại).",
       end: "Xong!", endS: "Bạn giải được {n} màn", rt: ["Mới tập nối", "Biết đường đi", "Giải đố ổn", "Cao thủ một nét", "Thần Euler"],
       tx: "✍️ Nối Một Nét · {t}\nMình giải được {n} màn!\n{l}", ask: "Bạn giải được nhiều hơn mình không?",
-      lockP: "Loại 3 mạng, Tốc độ 45 giây, Đồ thị lớn và 4 giao diện (Bản đồ tàu điện, Chòm sao, Mạch điện, Phố đèn lồng) với cách đặt điểm và bố cục riêng là của Night Pass. Dùng thử 1 ván mỗi ngày hoặc mở khoá tất cả.",
+      lockP: "Loại Một chiều, Nhớ đường 45 giây, Đi hai lần và 4 giao diện (Bản đồ tàu điện, Chòm sao, Mạch điện, Phố đèn lồng) với cách đặt điểm và bố cục riêng là của Night Pass. Dùng thử 1 ván mỗi ngày hoặc mở khoá tất cả.",
       chP: "Bạn bè giải được {s} màn với đúng dãy câu đố này. Bạn giải nhiều hơn không?", rankHint: "Chơi “Thử thách hôm nay” để lên bảng điểm nhé!",
-      tut: "Bấm vào một điểm rồi kéo qua mọi đoạn nối — chỉ một nét, không nhấc tay!", lift: "Nhấc tay rồi! Làm lại nhé", stuck: "Kẹt đường cụt! Làm lại nhé", solved: "Giải xong! +{n}s", lvl: "Màn {n}", edges: "{a}/{b}",
+      tut: "Bấm vào một điểm rồi kéo qua mọi đoạn nối — chỉ một nét, không nhấc tay!", lift: "Nhấc tay rồi! Làm lại nhé", startAt: "Bắt đầu từ ngôi sao ⭐", stuck: "Kẹt đường cụt! Làm lại nhé", solved: "Giải xong! +{n}s", lvl: "Màn {n}", edges: "{a}/{b}",
       pct: "🧠 Màn khó nhất: {n} đoạn", sk: { basic: ["Giấy kẻ ô", "Graph paper"], metro: ["Bản đồ tàu điện", "Metro map"], star: ["Chòm sao", "Constellation"], circuit: ["Mạch điện", "Circuit board"], lantern: ["Phố đèn lồng", "Lantern street"] } },
     en: { sub: "Draw ONE continuous line through every link between the dots. Don't lift your finger or retrace!", note: "Everyone gets the same puzzles each day · share the hardest one you solved",
-      sc: "Solved", tm: "Left", ex: "Links", hint0: "Press a dot, then drag along the links. Lifting restarts the puzzle!", hint1: "3 lives: lifting or hitting a dead end costs a life.", hint2: "Only 45 seconds — solve as many as you can!", hint3: "Big graphs from the start — be patient!",
+      sc: "Solved", tm: "Left", ex: "Links", hint0: "Press a dot, then drag along the links. Lifting restarts the puzzle!", hint1: "One way: every link has an ARROW — only go with it, start at the star ⭐. 3 lives.", hint2: "Memory: the links FADE after 2.5 seconds — remember, then draw! Only 45 seconds.", hint3: "Twice over: every link must be walked EXACTLY TWICE (the number on it is passes left).",
       end: "Done!", endS: "You solved {n} puzzles", rt: ["Just learning", "Knows the way", "Decent solver", "One-line pro", "Euler himself"],
       tx: "✍️ One Line Link · {t}\nI solved {n} puzzles!\n{l}", ask: "Can you solve more than me?",
-      lockP: "3 lives, 45 s sprint, Big graphs and 4 themes (Metro map, Constellation, Circuit board, Lantern street) with their own dot placement and layouts are for Night Pass. Try one round a day or unlock everything.",
+      lockP: "One way, Memory 45 s, Twice over and 4 themes (Metro map, Constellation, Circuit board, Lantern street) with their own dot placement and layouts are for Night Pass. Try one round a day or unlock everything.",
       chP: "A friend solved {s} puzzles on this exact sequence. Can you solve more?", rankHint: "Play “Today's challenge” to make the leaderboard!",
-      tut: "Press a dot and drag through every link — one stroke, no lifting!", lift: "Lifted! Try again", stuck: "Dead end! Try again", solved: "Solved! +{n}s", lvl: "Puzzle {n}", edges: "{a}/{b}",
+      tut: "Press a dot and drag through every link — one stroke, no lifting!", lift: "Lifted! Try again", startAt: "Start from the star ⭐", stuck: "Dead end! Try again", solved: "Solved! +{n}s", lvl: "Puzzle {n}", edges: "{a}/{b}",
       pct: "🧠 Hardest: {n} links", sk: { basic: ["Graph paper", "Graph paper"], metro: ["Metro map", "Metro map"], star: ["Constellation", "Constellation"], circuit: ["Circuit board", "Circuit board"], lantern: ["Lantern street", "Lantern street"] } }
   },
   sfx: `{step:()=>tone(520,.05,"triangle",.05),ok:()=>{[660,880,1100].forEach((f,i)=>tone(f,.1,"triangle",.09,i*.06))},bad:()=>tone(170,.25,"sawtooth",.07),end:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.09,i*.09)),combo:n=>{const b=440*Math.pow(1.122,Math.min(n/3,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.1,"triangle",.09,i*.05))}}`,
   gameJs: String.raw`
 let W=360,H=400,SC=1;const ctx=cv.getContext("2d");
-const CFG=[{dur:90,lives:0,m0:4,mStep:1.15,bonus:5},{dur:0,lives:3,m0:5,mStep:1.4,bonus:0},{dur:45,lives:0,m0:4,mStep:1.2,bonus:3},{dur:120,lives:0,m0:12,mStep:1.0,bonus:8}];
+const CFG=[{dur:90,lives:0,m0:4,mStep:1.15,bonus:5},{dur:0,lives:3,m0:5,mStep:1.3,bonus:0,dir:1},{dur:45,lives:0,m0:4,mStep:1.2,bonus:3,mem:1},{dur:120,lives:0,m0:6,mStep:.9,bonus:8,dbl:1}];
+const needOf=D=>D.puz.edges.length*(D.C.dbl?2:1);
 const segX=(a,b,c,d)=>{const o=(p,q,r)=>(q[0]-p[0])*(r[1]-p[1])-(q[1]-p[1])*(r[0]-p[0]);const d1=o(a,b,c),d2=o(a,b,d),d3=o(c,d,a),d4=o(c,d,b);return d1*d2<-1e-6&&d3*d4<-1e-6};
 const segDist=(p,a,b)=>{const dx=b[0]-a[0],dy=b[1]-a[1],l=dx*dx+dy*dy||1;let u=((p[0]-a[0])*dx+(p[1]-a[1])*dy)/l;u=Math.max(0,Math.min(1,u));return Math.hypot(p[0]-(a[0]+dx*u),p[1]-(a[1]+dy*u))};
 function placeNodes(kind,R,L){const out=[],mg=34;
@@ -53,20 +54,21 @@ function newGame(seed,mode,t,ch){const C=CFG[t],D={seed,mode,t,C,ch:ch||null,L:1
 const scoreOf=D=>D.solved;
 const rankIdx=n=>n>=20?4:n>=14?3:n>=9?2:n>=5?1:0;
 const remain=D=>D.C.dur?Math.max(0,D.C.dur+D.bonusT-D.time):1;
-function unusedAt(D,v){const out=[];D.puz.edges.forEach((e,i)=>{if(D.used.has(i))return;if(e[0]===v)out.push([i,e[1]]);else if(e[1]===v)out.push([i,e[0]])});return out}
+function unusedAt(D,v){const out=[];D.puz.edges.forEach((e,i)=>{let id=i;if(D.C.dbl){id=!D.used.has(i)?i:(!D.used.has(i+1000)?i+1000:-1);if(id<0)return}else if(D.used.has(i))return;if(e[0]===v)out.push([id,e[1]]);else if(!D.C.dir&&e[1]===v)out.push([id,e[0]])});return out}
+function unuse(D,ei){if(D.C.dbl&&D.used.has(ei+1000))D.used.delete(ei+1000);else D.used.delete(ei)}
 function nnFail(D,why){D.path=[];D.used=new Set();D.cur=-1;D.fails++;D.combo=0;D.shake=.35;D.flash=1;sfx.bad();if(window.NPFx)NPFx.buzz([40,30,40]);toast(T(why),900);
  if(D.C.lives){D.lives--;if(D.lives<=0){D.over=true;sfx.end();setTimeout(()=>{if(G===D)finish(D)},600)}}hud()}
 function nnSolved(D){D.solved++;D.combo++;D.maxCombo=Math.max(D.maxCombo,D.combo);D.hardest=Math.max(D.hardest,D.puz.edges.length);D.lastSolved={puz:D.puz,trail:D.path.slice()};sfx.ok();if(window.NPFx)NPFx.buzz([20,30,40]);
  if(D.C.bonus){D.bonusT+=D.C.bonus;toast(T("solved",{n:D.C.bonus}),900)}NPJuice.text($("play"),T("lvl",{n:D.solved}),{color:"#ffd24a",top:"22%",size:6});burst(D.solved%3===0?14:7);D.L++;setPuz(D);hud()}
 function nnMove(D,p,prev){if(D.cur<0)return;let guard=0,moved=true;while(moved&&guard++<4){moved=false;
   const lastE=D.path.length>1?D.eidx[D.path[D.path.length-2]+"-"+D.path[D.path.length-1]]:-1,prevN=D.path.length>1?D.path[D.path.length-2]:-1;
-  if(prevN>=0){const q=D.puz.nodes[prevN];if(segDist([q.x,q.y],prev||p,p)<18&&Math.hypot(p[0]-q.x,p[1]-q.y)<46){D.used.delete(lastE);D.path.pop();D.cur=prevN;sfx.step();moved=true;continue}}
+  if(prevN>=0){const q=D.puz.nodes[prevN];if(segDist([q.x,q.y],prev||p,p)<18&&Math.hypot(p[0]-q.x,p[1]-q.y)<46){unuse(D,lastE);D.path.pop();D.cur=prevN;sfx.step();moved=true;continue}}
   for(const [ei,j] of unusedAt(D,D.cur)){const q=D.puz.nodes[j];if(segDist([q.x,q.y],prev||p,p)<19){D.used.add(ei);D.path.push(j);D.cur=j;sfx.step();if(window.NPFx)NPFx.buzz(6);moved=true;break}}}
- if(D.used.size===D.puz.edges.length){nnSolved(D);return}
+ if(D.used.size===needOf(D)){nnSolved(D);return}
  if(D.cur>=0&&!unusedAt(D,D.cur).length)nnFail(D,"stuck")}
 function step(D,dt){if(D.over)return;D.time+=dt;D.shake=Math.max(0,D.shake-dt);D.flash=Math.max(0,D.flash-dt*2.2);for(const f of D.fx)f.t-=dt;D.fx=D.fx.filter(f=>f.t>0);if(D.C.dur&&remain(D)<=0){D.over=true;sfx.end();setTimeout(()=>{if(G===D)finish(D)},400)}if(Math.floor(D.time*4)!==D._q){D._q=Math.floor(D.time*4);hud()}}
 function burst(n){if(!isProSk()&&n<12)return;const host=$("play"),L=(skinOf().deco||["⭐","✍️"]);for(let i=0;i<n;i++){if(host.querySelectorAll(".eb2").length>30)break;const e=document.createElement("i"),a=Math.random()*6.283,d=14+Math.random()*30;e.className="eb2";e.textContent=L[i%L.length];e.style.left="50%";e.style.top="46%";e.style.setProperty("--dx",Math.cos(a)*d+"cqw");e.style.setProperty("--dy",(Math.sin(a)*d*.8-4)+"cqw");e.style.setProperty("--rt",(Math.random()*120-60)+"deg");host.appendChild(e);setTimeout(()=>e.remove(),950)}}
-function HUD(D){return[[scoreOf(D),"sc"],[D.C.lives?"❤".repeat(Math.max(0,D.lives))||"·":Math.ceil(remain(D))+"s","tm"],[D.puz?T("edges",{a:D.used.size,b:D.puz.edges.length}):"—","ex"]]}
+function HUD(D){return[[scoreOf(D),"sc"],[D.C.lives?"❤".repeat(Math.max(0,D.lives))||"·":Math.ceil(remain(D))+"s","tm"],[D.puz?T("edges",{a:D.used.size,b:needOf(D)}):"—","ex"]]}
 function endChips(D){const n=scoreOf(D);return[TYPES[D.t][0]+" "+L2([TYPES[D.t][1],TYPES[D.t][2]]),D.hardest?T("pct",{n:D.hardest}):"",D.maxCombo>2?"🔥×"+D.maxCombo:"",(D.prevBest>0&&n>D.prevBest)?T("rec"):""]}
 const shareT=D=>L2([TYPES[D.t][1],TYPES[D.t][2]]);
 function fitCanvas(){const w=$("cvw");if(!w)return;const aw=w.clientWidth,ah=w.clientHeight;if(!aw||!ah)return;const s=Math.min(aw/W,ah/H),dpr=Math.min(2,devicePixelRatio||1);cv.style.width=Math.floor(W*s)+"px";cv.style.height=Math.floor(H*s)+"px";cv.width=Math.floor(W*s*dpr);cv.height=Math.floor(H*s*dpr);SC=cv.width/W;draw()}
@@ -78,15 +80,18 @@ function nodeBasic(c,n,state,tm,dk){c.fillStyle=state==="cur"?"#ffd24a":dk?"#e6f
 function draw(){if(!ctx||!cv.width)return;const sk=skinOf(),dm=sk.dim||[360,400];if(W!==dm[0]||H!==dm[1]){W=dm[0];H=dm[1];if(G&&!G.over)setPuz(G);fitCanvas();return}
  const c=ctx,dk=isDark(),D=G,tm=D?D.time:0;c.setTransform(SC,0,0,SC,0,0);c.clearRect(0,0,W,H);if(sk.bg)sk.bg(c,W,H,tm,dk);else bgBasic(c,W,H,dk);if(!D||!D.puz)return;
  const P=D.puz,col=sk.col||(dk?"#3ee0b4":"#0f9b7a"),sh=D.shake>0?Math.sin(D.time*80)*5*D.shake:0;c.save();c.translate(sh,0);
- P.edges.forEach((e,i)=>{(sk.edge||edgeBasic)(c,P.nodes[e[0]],P.nodes[e[1]],D.used.has(i),col,tm,dk)});
+ P.edges.forEach((e,i)=>{const A=P.nodes[e[0]],B=P.nodes[e[1]],u1=D.used.has(i),u2=D.used.has(i+1000);c.save();if(D.C.mem&&!u1&&D.time-D.lvStart>2.5)c.globalAlpha=.07;if(D.C.dbl&&u1&&!u2)c.globalAlpha=.55;(sk.edge||edgeBasic)(c,A,B,D.C.dbl?(u1&&u2):u1,col,tm,dk);c.restore();
+  if(D.C.dir){const mx=(A.x+B.x)/2,my=(A.y+B.y)/2,an=Math.atan2(B.y-A.y,B.x-A.x);c.save();c.translate(mx,my);c.rotate(an);c.fillStyle=u1?"#fff":col;c.globalAlpha=(D.C.mem&&!u1)?.2:1;c.beginPath();c.moveTo(11,0);c.lineTo(-7,-8);c.lineTo(-7,8);c.closePath();c.fill();c.restore()}
+  if(D.C.dbl&&!(u1&&u2)){const mx=(A.x+B.x)/2,my=(A.y+B.y)/2,rem=2-(u1?1:0)-(u2?1:0);c.save();c.fillStyle=dk?"#12332b":"#fff";c.strokeStyle=col;c.lineWidth=2;c.beginPath();c.arc(mx,my,9,0,6.283);c.fill();c.stroke();c.fillStyle=dk?"#e6fff7":"#12332b";c.font="800 12px system-ui";c.textAlign="center";c.textBaseline="middle";c.fillText(rem,mx,my+.5);c.restore()}});
+ if(D.C.dir&&D.path.length===0){const q=P.nodes[P.trail[0]];c.font="26px "+emj;c.textAlign="center";c.fillText("⭐",q.x,q.y-20+Math.sin(D.time*5)*3)}
  if(D.cur>=0&&D.ptr){c.save();c.setLineDash([6,6]);c.strokeStyle=col;c.lineWidth=3;c.globalAlpha=.8;c.beginPath();c.moveTo(P.nodes[D.cur].x,P.nodes[D.cur].y);c.lineTo(D.ptr[0],D.ptr[1]);c.stroke();c.restore()}
  P.nodes.forEach((n,i)=>(sk.node||nodeBasic)(c,n,i===D.cur?"cur":(D.path.indexOf(i)>=0?"on":"off"),tm,dk));c.restore();
  if(D.flash>0){c.fillStyle="rgba(255,60,60,"+D.flash*.25+")";c.fillRect(0,0,W,H)}
  c.fillStyle=sk.lbl||(dk?"rgba(255,255,255,.85)":"rgba(18,51,43,.8)");c.font="800 15px 'Be Vietnam Pro',system-ui";c.textAlign="left";c.fillText(T("lvl",{n:D.solved+1}),12,H-12);if(sk.fx)sk.fx(c,W,H,tm,dk)}
 function pt(e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H]}
-cv.addEventListener("pointerdown",e=>{const D=G;if(!D||D.over||paused||!D.puz)return;if(e.pointerType==="mouse"&&e.button!==0)return;e.preventDefault();const p=pt(e);let bi=-1,bd=30;D.puz.nodes.forEach((n,i)=>{const d=Math.hypot(n.x-p[0],n.y-p[1]);if(d<bd){bd=d;bi=i}});if(bi<0)return;D.path=[bi];D.used=new Set();D.cur=bi;D.ptr=p;D.last=p;try{cv.setPointerCapture(e.pointerId)}catch(x){}sfx.step();hud()});
+cv.addEventListener("pointerdown",e=>{const D=G;if(!D||D.over||paused||!D.puz)return;if(e.pointerType==="mouse"&&e.button!==0)return;e.preventDefault();const p=pt(e);let bi=-1,bd=30;D.puz.nodes.forEach((n,i)=>{const d=Math.hypot(n.x-p[0],n.y-p[1]);if(d<bd){bd=d;bi=i}});if(bi<0)return;if(D.C.dir&&bi!==D.puz.trail[0]){toast(T("startAt"),900);return}D.path=[bi];D.used=new Set();D.cur=bi;D.ptr=p;D.last=p;try{cv.setPointerCapture(e.pointerId)}catch(x){}sfx.step();hud()});
 cv.addEventListener("pointermove",e=>{const D=G;if(!D||D.cur<0||D.over)return;const p=pt(e);D.ptr=p;const pr=D.last||p;D.last=p;nnMove(D,p,pr);hud()});
-const endTouch=()=>{const D=G;if(!D||D.cur<0)return;D.ptr=null;if(D.used.size<D.puz.edges.length&&D.path.length>0&&D.cur>=0)nnFail(D,"lift")};
+const endTouch=()=>{const D=G;if(!D||D.cur<0)return;D.ptr=null;if(D.used.size<needOf(D)&&D.path.length>0&&D.cur>=0)nnFail(D,"lift")};
 cv.addEventListener("pointerup",endTouch);cv.addEventListener("pointercancel",endTouch);
 function onBegin(D){fitCanvas()}
 `,
@@ -99,7 +104,7 @@ function onBegin(D){fitCanvas()}
   wire: { dvi: "Vẽ một nét liền đi qua tất cả các đoạn nối giữa các điểm, không nhấc tay và không đi lại đường cũ. Bạn giải được bao nhiêu màn?", den: "Draw one continuous line through every link between the dots. No lifting, no retracing. How many puzzles can you solve?", c1: "#6EE7C0", c2: "#0f766e", emoji: "✍️", artKey: "line",
     art: '<g stroke="#fff" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M120 380L200 150L330 230L392 100M200 150L120 380M330 230L260 400"/></g><g fill="#0f766e" stroke="#fff" stroke-width="12"><circle cx="120" cy="380" r="26"/><circle cx="200" cy="150" r="26"/><circle cx="330" cy="230" r="26"/><circle cx="392" cy="100" r="26"/><circle cx="260" cy="400" r="26"/></g>' },
   test: String.raw`window.NN={get G(){return G},PF,CFG,begin,newGame,scoreOf,parseCh,drawCard,shareText,shareLink,fnv,dayKey,dayNo,finish,genPuzzle,placeNodes,nnMove,unusedAt,setPuz,
- solve(D){D=D||G;const P=D.puz;if(!P)return;D.path=[P.trail[0]];D.used=new Set();D.cur=P.trail[0];for(let i=1;i<P.trail.length;i++){const a=P.trail[i-1],b=P.trail[i],ei=D.eidx[a+"-"+b];D.used.add(ei);D.path.push(b);D.cur=b}if(D.used.size===P.edges.length)nnSolved(D);return D.solved},
+ solve(D){D=D||G;const P=D.puz;if(!P)return;D.path=[P.trail[0]];D.used=new Set();D.cur=P.trail[0];for(let i=1;i<P.trail.length;i++){const a=P.trail[i-1],b=P.trail[i],ei=D.eidx[a+"-"+b];D.used.add(ei);D.path.push(b);D.cur=b}if(D.C.dbl)for(let i=P.trail.length-2;i>=0;i--){const a=P.trail[i+1],b=P.trail[i],ei=D.eidx[a+"-"+b];D.used.add(ei+1000);D.path.push(b);D.cur=b}if(D.used.size===needOf(D))nnSolved(D);return D.solved},
  trailOk(P){const used=new Set();for(let i=1;i<P.trail.length;i++){const k=P.trail[i-1]+"-"+P.trail[i],k2=P.trail[i]+"-"+P.trail[i-1];const hit=P.edges.findIndex(e=>(e[0]+"-"+e[1])===k||(e[0]+"-"+e[1])===k2);if(hit<0||used.has(hit))return false;used.add(hit)}return used.size===P.edges.length},
  crossFree(P){for(let i=0;i<P.edges.length;i++)for(let j=i+1;j<P.edges.length;j++){const a=P.edges[i],b=P.edges[j];if(a[0]===b[0]||a[0]===b[1]||a[1]===b[0]||a[1]===b[1])continue;if(segX([P.nodes[a[0]].x,P.nodes[a[0]].y],[P.nodes[a[1]].x,P.nodes[a[1]].y],[P.nodes[b[0]].x,P.nodes[b[0]].y],[P.nodes[b[1]].x,P.nodes[b[1]].y]))return false}return true}};`
 };
