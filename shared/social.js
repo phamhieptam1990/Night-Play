@@ -17,6 +17,7 @@ window.NPS = (function () {
     "ga-me-ban-trung": { name: { vi: "Gà Mẹ Bắn Trứng", en: "Mama Hen's Egg Pop" }, url: "cozyplay/games/ga-me-ban-trung/index.html", board: true, site: "cozyplay" },
     "me-cung-truyen-tay": { name: { vi: "Mê Cung Truyền Tay", en: "Maze Pass-Along" }, url: "cozyplay/games/me-cung-truyen-tay/index.html", board: true, site: "cozyplay" },
     "xin-nghi": { name: { vi: "Sếp Ơi Em Xin Nghỉ", en: "Boss, I Need a Day Off" }, url: "cozyplay/games/xin-nghi/index.html", board: true, site: "cozyplay" },
+    "cho-hang-kieu-viet": { name: { vi: "Chở Hàng Kiểu Việt", en: "Overloaded Rider" }, url: "cozyplay/games/cho-hang-kieu-viet/index.html", board: true, site: "cozyplay" },
     "dap-deadline": { name: { vi: "Đập Deadline", en: "Smash the Deadline" }, url: "cozyplay/games/dap-deadline/index.html", board: true, site: "cozyplay" },
     "cozy-wings": { name: { vi: "Cánh Nhỏ Phiêu Lưu", en: "Little Wings" }, url: "cozyplay/games/cozy-wings/index.html", board: true, site: "cozyplay" },
     /* Pop Play (trẻ em): bảng xếp hạng chỉ dùng TÊN VUI CÓ SẴN (kids:true), không cho gõ tay */
