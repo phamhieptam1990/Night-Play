@@ -132,8 +132,8 @@ function show(id){SCR.forEach(s=>$(s).hidden=s!==id);["ovCh","ovSkin","ovPay"].f
 const getSave=()=>LS.get("@@P@@-save",{streak:0,last:"",best:0,total:0,days:{},dayT:{}});
 function renderTypes(){const b=$("tys");b.innerHTML="";TYPES.forEach((t,i)=>{const e=document.createElement("button");e.type="button";e.className="ty"+(TY===i?" on":"")+(tLocked(i)?" lock":"");e.innerHTML='<span class="e">'+t[0]+'</span><span class="t">'+L2([t[1],t[2]])+"</span>";e.onclick=()=>{if(tLocked(i)){openPay(i,null);return}TY=i;LS.set("@@P@@-type",i);renderHome()};b.appendChild(e)})}
 function renderHome(){const sv=getSave(),k=dayKey(),done=TY?(sv.dayT||{})[k+"|"+TY]:sv.days[k];$("ttl").textContent=T("title");$("hSub").textContent=T("sub");$("hHero").textContent=skinOf().hero||"@@HEROTXT@@";$("bLang").textContent=LANG==="vi"?"EN":"VI";$("bSnd").textContent=snd()?"🔊":"🔇";renderTypes();
- $("dN").textContent="#"+dayNo(k);$("dT").textContent=T("daily");$("dS").textContent=done!=null?T("done",{s:done}):T("dS");$("bFree").textContent=T("free");$("hNote").textContent=T("note");
- $("hChips").innerHTML="";[sv.streak?"🔥 "+sv.streak:"",sv.best?T("best",{n:sv.best}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("hChips").appendChild(c)})}
+ $("dN").textContent="#"+dayNo(k);$("dT").textContent=T("daily");$("dS").textContent=done!=null?T("done",{s:SF(done)}):T("dS");$("bFree").textContent=T("free");$("hNote").textContent=T("note");
+ $("hChips").innerHTML="";[sv.streak?"🔥 "+sv.streak:"",sv.best?T("best",{n:SF(sv.best)}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("hChips").appendChild(c)})}
 const hintOf=t=>T("hint"+(t||0));
 function begin(seed,mode,t,ch){t=t==null?(mode==="daily"?0:TY):t;if(tLocked(t))t=0;if(mode==="daily")t=0;G=newGame(seed,mode,t,ch);acc=0;last=performance.now();show("game");applySkin();$("ttl").textContent=(mode==="daily"?"📅 "+T("daily"):TYPES[t][0]+" "+L2([TYPES[t][1],TYPES[t][2]]));$("gHint").textContent=hintOf(t);if(!LS.get("@@P@@-tut",0)){toast(T("tut"),4200)}fitCanvas();hud();window.NP&&NP.start();recBegin();if(typeof onBegin==="function")onBegin(G)}
 let clipReady=false,clipT=0;
@@ -142,15 +142,15 @@ function recRoll(){if(!G||G.over||!(window.NPFx&&NPFx.canRec())||(window.NP&&NP.
 $("bClip").onclick=async()=>{if(!G||!G.over)return;toast(T("clipBusy"),1500);let blob=null;try{blob=await NPFx.recStop()}catch(e){}if(!blob){toast(T("clipNo"),2200);return}const ext=/mp4/.test(blob.type)?"mp4":"webm",f=new File([blob],GID+"."+ext,{type:blob.type||"video/webm"});
  try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],text:shareText(G)});return}}catch(e){if(e&&e.name==="AbortError")return}
  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=f.name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},4000)};
-function hud(){const D=G;if(!D||$("game").hidden)return;const h=HUD(D);[["sSc","sScL"],["sSh","sShL"],["sEx","sExL"]].forEach((p,i)=>{if(!h[i])return;$(p[0]).textContent=h[i][0];$(p[1]).textContent=T(h[i][1])});const n=scoreOf(D),tg=$("tgt");if(D.ch){tg.hidden=false;tg.classList.toggle("beat",!!D.beat);$("tgtT").textContent=T("tgt",{n:D.ch.sc})+" · "+n;$("tgtB").style.width=Math.min(100,Math.round(n/Math.max(1,D.ch.sc)*100))+"%"}else tg.hidden=true}
+function hud(){const D=G;if(!D||$("game").hidden)return;const h=HUD(D);[["sSc","sScL"],["sSh","sShL"],["sEx","sExL"]].forEach((p,i)=>{if(!h[i])return;$(p[0]).textContent=h[i][0];$(p[1]).textContent=T(h[i][1])});const n=scoreOf(D),tg=$("tgt");if(D.ch){tg.hidden=false;tg.classList.toggle("beat",!!D.beat);$("tgtT").textContent=T("tgt",{n:SF(D.ch.sc)})+" · "+SF(n);$("tgtB").style.width=Math.min(100,Math.round(n/Math.max(1,D.ch.sc)*100))+"%"}else tg.hidden=true}
 function tick(ts){raf=requestAnimationFrame(tick);if(!G||$("game").hidden){last=ts;return}acc+=Math.min(.1,(ts-last)/1000||0);last=ts;if(!paused){recRoll();while(acc>=1/60){step(G,1/60);acc-=1/60}if(G.ch&&!G.beat&&scoreOf(G)>G.ch.sc){G.beat=true;NPJuice.text($("play"),"⚔ "+T("beat"),{color:"#3ddc84",top:"40%",size:6});NPJuice.confetti($("play"),20,CONF);sfx.combo(24)}hud()}draw()}
 /* ===== KẾT THÚC ===== */
 function finish(D){if(G!==D)return;const sv=getSave();D.prevBest=sv.best||0;sv.total++;sv.best=Math.max(sv.best||0,scoreOf(D));if(D.mode==="daily"){const k=dayKey();if(sv.days[k]==null||scoreOf(D)>sv.days[k])sv.days[k]=scoreOf(D);if(sv.last!==k){const y=new Date(Date.parse(k+"T00:00:00Z")-864e5).toISOString().slice(0,10);sv.streak=sv.last===y?sv.streak+1:1;sv.last=k}}
  LS.set("@@P@@-save",sv);LS.set("@@P@@-tut",1);lastEnd=performance.now();const score=Math.min(MAXS,scoreOf(D));window.NP&&NP.result({score,extra:{mode:D.mode,t:D.t,ranked:D.mode==="daily",rankHint:T("rankHint")}});showEnd(D)}
-function showEnd(D){show("end");const n=scoreOf(D);$("eT").textContent=T(D.reason||"end");$("eSc").textContent=n;$("eRk").textContent="🏅 "+T("rt")[rankIdx(n)];$("eHat").textContent=T("endS",{n});$("eHat").style.cssText="text-align:center;font-weight:800";
+function showEnd(D){show("end");const n=scoreOf(D);$("eT").textContent=T(D.reason||"end");$("eSc").textContent=SF(n);$("eRk").textContent="🏅 "+T("rt")[rankIdx(n)];$("eHat").textContent=T("endS",{n:SF(n)});$("eHat").style.cssText="text-align:center;font-weight:800";
  $("eChips").innerHTML="";endChips(D).filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("eChips").appendChild(c)});
- const tgt=D.ch?D.ch.sc:(D.mode==="daily"?D.prevBest:0),gap=tgt-n,near=tgt>0&&gap>0&&gap<=Math.max(3,Math.round(tgt*.15));$("eNear").hidden=!near;if(near)$("eNear").textContent=T(D.ch?"near":"nearB",{n:gap})+" · "+T("nearGo");
- $("eVs").textContent=D.ch?T("vsC",{a:n,b:D.ch.sc})+" · "+(n>D.ch.sc?T("won"):n<D.ch.sc?T("lose"):T("tie")):"";
+ const tgt=D.ch?D.ch.sc:(D.mode==="daily"?D.prevBest:0),gap=tgt-n,near=tgt>0&&gap>0&&gap<=Math.max(3,Math.round(tgt*.15));$("eNear").hidden=!near;if(near)$("eNear").textContent=T(D.ch?"near":"nearB",{n:SF(gap)})+" · "+T("nearGo");
+ $("eVs").textContent=D.ch?T("vsC",{a:SF(n),b:SF(D.ch.sc)})+" · "+(n>D.ch.sc?T("won"):n<D.ch.sc?T("lose"):T("tie")):"";
  const helper=!!(window.NP&&NP.helper);$("bShare").hidden=helper;$("bAgain").hidden=helper;$("bBoard").hidden=helper;$("bHome").hidden=helper;clipReady=!!(cv&&window.NPFx&&NPFx.canRec()&&!helper);$("bClip").hidden=!clipReady;$("bRem").hidden=helper;
  if(n>(D.prevBest||0)&&D.prevBest>0||n>=NICE)NPJuice.confetti($("play"),20,CONF);if(PF.pro&&PF.pro.trial)setTimeout(()=>PF.lockPro(),0)}
 $("bRem").onclick=()=>{if(!G)return;const g=G;if(PF.pro&&PF.pro.trial)PF.lockPro();begin(g.seed,g.mode,g.t,g.ch)};
@@ -159,12 +159,12 @@ $("bHome").onclick=()=>{G=null;if(PF.pro&&PF.pro.trial)PF.lockPro();show("home")
 /* ===== CHIA SẺ: bản đồ mạng lưới ===== */
 @@DRAWCARD@@
 const shareLink=D=>location.origin+"/api/share/"+GID+"?ch="+b64e({s:D.seed,sc:Math.min(MAXS,scoreOf(D)),t:D.t})+(LANG==="en"?"&l=en":"");
-const shareText=D=>T("tx",{t:(typeof shareT==="function"?shareT(D):L2([TYPES[D.t][1],TYPES[D.t][2]])),n:scoreOf(D),l:shareLink(D)})+"\n"+T("ask");
+const shareText=D=>T("tx",{t:(typeof shareT==="function"?shareT(D):L2([TYPES[D.t][1],TYPES[D.t][2]])),n:SF(scoreOf(D)),l:shareLink(D)})+"\n"+T("ask");
 $("bShare").onclick=async()=>{const D=G;if(!D||!D.over)return;const txt=shareText(D);try{const blob=await new Promise(r=>drawCard(D).toBlob(r,"image/png")),f=blob&&new File([blob],GID+".png",{type:"image/png"});if(f&&navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],text:txt});return}if(navigator.share){await navigator.share({text:txt});return}}catch(e){if(e&&e.name==="AbortError")return}
  try{await navigator.clipboard.writeText(txt);toast(T("copied"),2200)}catch(e){toast(txt,3000)}};
 $("bBoard").onclick=()=>window.NP&&NP.brag();
 /* ===== THÁCH ĐẤU ===== */
-const openCh=c=>{CH=c;$("chH").textContent="⚔ "+T("ch");$("chP").textContent=T("chP",{s:c.sc})+(tLocked(c.t)?"\n"+T("chL",{t:L2([TYPES[c.t][1],TYPES[c.t][2]])}):"");$("chGo").textContent=tLocked(c.t)?T("trial"):T("chGo");$("ovCh").hidden=false};
+const openCh=c=>{CH=c;$("chH").textContent="⚔ "+T("ch");$("chP").textContent=T("chP",{s:SF(c.sc)})+(tLocked(c.t)?"\n"+T("chL",{t:L2([TYPES[c.t][1],TYPES[c.t][2]])}):"");$("chGo").textContent=tLocked(c.t)?T("trial"):T("chGo");$("ovCh").hidden=false};
 $("chNo").onclick=()=>{$("ovCh").hidden=true;CH=null};
 $("chGo").onclick=async()=>{const c=CH;$("ovCh").hidden=true;if(!c)return;if(tLocked(c.t)){if(LS.get("@@P@@-trial","")===dayKey()){openPay(c.t,null);return}try{await PF.loadPro(true);LS.set("@@P@@-trial",dayKey());track(GID+"_skin","trial");PF.trialRestore={ty:TY,sk:PF.skinSel}}catch(e){toast(T("tried"),2200);return}}begin(c.s,"challenge",c.t,c)};
 /* ===== NIGHT PASS ===== */

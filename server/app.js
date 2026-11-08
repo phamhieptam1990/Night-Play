@@ -454,6 +454,7 @@ const COZY_NEW = {   // game mới của Cozy Play (người lớn): 1 loại ×
   "cho-hang-kieu-viet": { vi: "Chở Hàng Kiểu Việt", en: "Overloaded Rider", max: 20000, dvi: "Chất cả đống hàng lên xe máy rồi giữ thăng bằng đi tới nơi. Càng chất cao càng nhiều điểm, đổ là mất hết!", den: "Pile a mountain of cargo on a scooter and keep it balanced to the finish. The taller the stack, the higher the score — drop it and it’s gone!" },
   "xe-ca-phe": { vi: "Xe Cà Phê Của Tôi", en: "My Coffee Cart", max: 20000, dvi: "Pha đúng công thức, phục vụ khách thật nhanh, cuối ngày nâng cấp xe cà phê thành quán rồi cả chuỗi. Bạn bán được bao nhiêu?", den: "Make the right recipes fast, serve customers, and grow your coffee cart into a café and a whole chain. How much can you sell?" },
   "duong-ray": { vi: "Đường Ray", en: "Rail Rush", max: 500, dvi: "Vẽ đường ray dẫn từng đoàn tàu về đúng ga cùng màu, đừng để hai tàu đâm nhau. Bạn đưa được bao nhiêu chuyến tàu về ga?", den: "Draw rails to bring each train to the station of its colour — and never let two trains collide. How many can you deliver?" },
+  "ve-mot-net": { vi: "Vẽ Một Nét", en: "One Stroke", max: 1000, dvi: "Vẽ hình tròn hoàn hảo nhất bằng một nét tay, game chấm độ tròn theo %. Bạn vẽ được bao nhiêu?", den: "Draw the roundest circle you can in one stroke. The game scores it in %. How close can you get?" },
   "bao-nhieu-giay": { vi: "Bao Nhiêu Giây?", en: "How Many Seconds?", max: 5000, dvi: "Bấm bắt đầu, đồng hồ biến mất, rồi bấm dừng khi nghĩ đã đúng 10 giây. Bạn lệch bao nhiêu?", den: "Tap start, the clock vanishes, then tap stop when you think exactly 10 seconds have passed. How close can you get?" },
   "me-cung-truyen-tay": { vi: "Mê Cung Truyền Tay", en: "Maze Pass-Along", max: 1000, dvi: "Tự vẽ mê cung rồi gửi cho bạn bè thoát. Hôm nay cả nước cùng một mê cung!", den: "Draw your own maze and send it to friends. Everyone gets the same maze today!" },
   "xin-nghi": { vi: "Sếp Ơi Em Xin Nghỉ", en: "Boss, I Need a Day Off", max: 100, dvi: "Nghĩ lý do xin nghỉ thật 'thuyết phục' để qua mặt sếp. Sếp có duyệt không?", den: "Come up with a convincing excuse for a day off. Will the boss approve?" }
@@ -678,6 +679,7 @@ const PRO_MODS = {   // require LITERAL (esbuild của Netlify không gộp đư
   "cho-hang-kieu-viet": () => require("./pro/cho-hang-kieu-viet"),
   "xe-ca-phe": () => require("./pro/xe-ca-phe"),
   "duong-ray": () => require("./pro/duong-ray"),
+  "ve-mot-net": () => require("./pro/ve-mot-net"),
   "bao-nhieu-giay": () => require("./pro/bao-nhieu-giay"),
   "ban-co-hieu-toi": () => require("./pro/ban-co-hieu-toi"),
 };

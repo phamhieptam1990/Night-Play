@@ -80,6 +80,16 @@ txt=txt.replace('fitCanvas();hud();window.NP&&NP.start();recBegin()}','fitCanvas
 txt=txt.replace('t:L2([TYPES[D.t][1],TYPES[D.t][2]]),n:scoreOf(D)','t:(typeof shareT==="function"?shareT(D):L2([TYPES[D.t][1],TYPES[D.t][2]])),n:scoreOf(D)')
 txt=txt.replace('clipReady=!!(window.NPFx&&NPFx.canRec()&&!helper)','clipReady=!!(cv&&window.NPFx&&NPFx.canRec()&&!helper)')
 txt=txt.replace('function recBegin(){clipReady=false;clipT=0;','function recBegin(){clipReady=false;clipT=0;if(!cv)return;')
+
+# ---- SF: hiển thị điểm (mặc định số nguyên; game có thể định nghĩa function SF) ----
+txt=txt.replace('$("eSc").textContent=n;','$("eSc").textContent=SF(n);').replace('T("endS",{n})','T("endS",{n:SF(n)})')
+txt=txt.replace('T("vsC",{a:n,b:D.ch.sc})','T("vsC",{a:SF(n),b:SF(D.ch.sc)})')
+txt=txt.replace('T(D.ch?"near":"nearB",{n:gap})','T(D.ch?"near":"nearB",{n:SF(gap)})')
+txt=txt.replace('$("tgtT").textContent=T("tgt",{n:D.ch.sc})+" · "+n;','$("tgtT").textContent=T("tgt",{n:SF(D.ch.sc)})+" · "+SF(n);')
+txt=txt.replace('T("chP",{s:c.sc})','T("chP",{s:SF(c.sc)})')
+txt=txt.replace('n:scoreOf(D),l:shareLink(D)','n:SF(scoreOf(D)),l:shareLink(D)')
+txt=txt.replace('T("done",{s:done})','T("done",{s:SF(done)})').replace('T("best",{n:sv.best})','T("best",{n:SF(sv.best)})')
+
 # cắt khối bot cuối: giữ tới dòng 'else{const c0=parseCh...' và thêm @@TEST@@
 i=txt.index('/* ===== bot kiểm thử')
 txt=txt[:i]+'@@TEST@@\n</script>\n</body>\n</html>\n'
