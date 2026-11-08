@@ -48,6 +48,16 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .tile .bd{position:absolute;left:2cqw;top:1.6cqw;font-size:4cqw;font-weight:800;opacity:.8}
 /* ---- đấu trường ---- */
 #arena{display:flex;flex-direction:column}
+/* ===== Night Pass: hình giao diện quanh hai nửa, nổ hình theo chủ đề khi có người chạm đúng, phát sáng — bản free không có ===== */
+.half .stg-o{position:absolute;z-index:0;pointer-events:none;font-size:8cqw;line-height:1;font-style:normal;opacity:.9;filter:drop-shadow(0 .6cqw .6cqw rgba(0,0,0,.3));animation:stgf 3s ease-in-out infinite}
+.half .stg-o.a{left:1.6cqw;top:1.4cqw}.half .stg-o.b{right:1.6cqw;top:1.4cqw;animation-delay:-1.4s}
+@keyframes stgf{50%{transform:translateY(-1.4cqw) rotate(6deg)}}
+.eb{position:absolute;z-index:9;pointer-events:none;font-size:8cqw;line-height:1;font-style:normal;left:50%;top:50%;animation:ebur 1s ease-out forwards}
+@keyframes ebur{0%{opacity:1;transform:translate(-50%,-50%) scale(.5)}70%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.3) rotate(var(--rt))}}
+.pro .qcard{box-shadow:var(--sh),0 0 4cqw color-mix(in srgb,var(--sa) 55%,transparent)}.pro .ab{box-shadow:var(--sh),0 0 2.4cqw color-mix(in srgb,var(--sa) 60%,transparent)}
+.pro .mid{box-shadow:0 0 3cqw color-mix(in srgb,var(--sa) 50%,transparent)}
+.tile .tdc{position:absolute;left:2cqw;top:1.8cqw;font-size:5cqw;line-height:1;letter-spacing:.4cqw;pointer-events:none;filter:drop-shadow(0 .4cqw .4cqw rgba(0,0,0,.25))}
+@media (prefers-reduced-motion:reduce){.half .stg-o{animation:none}.eb{display:none}}
 .half{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:2cqw;padding:2.4cqw 3cqw;overflow:hidden}
 .half.kid{background:var(--sb)}.half.par{background:var(--pb);transform:rotate(180deg)}
 .half>*{position:relative;z-index:1}.half>.dc{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
@@ -355,7 +365,7 @@ function renderHome(){
   for(let t=0;t<5;t++){
     const sk=skinOf(t),b=document.createElement("div");b.className="tile";b.setAttribute("role","button");b.tabIndex=0;applyVars(b,sk);b.style.setProperty("--rad","5cqw");   /* màn chọn: hình dạng khung cố định, chỉ đổi màu */
     const prem=PF.skinSel[t]!=="basic"&&PF.skins[t][PF.skinSel[t]];
-    b.innerHTML='<span class="ti">'+TY_ICON[t]+"</span><b>"+T("ty")[t]+'</b><button class="sk" type="button" aria-label="'+T("sk.pick")+'">🎨'+(prem?"<i>★</i>":"")+"</button>";
+    b.innerHTML='<span class="ti">'+TY_ICON[t]+"</span><b>"+T("ty")[t]+'</b><button class="sk" type="button" aria-label="'+T("sk.pick")+'">🎨'+(prem?"<i>★</i>":"")+"</button>"+(prem&&sk.deco?'<span class="tdc">'+sk.deco.slice(0,3).join("")+"</span>":"");
     b.onclick=()=>openHow(t);b.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openHow(t)}};
     b.querySelector(".sk").onclick=e=>{e.stopPropagation();openSkins(t)};g.appendChild(b);
   }
@@ -376,7 +386,7 @@ async function begin(t,o){
   if(!(o.cont&&SR&&!SR.done))SR=o.newSeries&&!o.daily&&!o.ch?{w:{k:0,p:0},n:0,done:false}:null;
   G={t,lv:LVL,r:0,sc:{k:0,p:0},id,open:false,lock:{k:false,p:false},over:false,q:null,seed:o.seed!=null?o.seed:Math.floor(MR()*1e9),daily:o.daily||null,ch:o.ch||null,hist:[]};
   showOv(null);$("home").hidden=true;$("arena").hidden=false;$("homeBtn").hidden=false;
-  const sk=skinOf(t);applyVars($("play"),sk);skCss(sk);fillDeco(sk);$("play").style.setProperty("--rad",sk.vars["--rad"]);
+  const sk=skinOf(t);applyVars($("play"),sk);skCss(sk);fillDeco(sk);$("play").style.setProperty("--rad",sk.vars["--rad"]);dressUp(sk,t);
   ["hk","hp"].forEach(i=>$(i).classList.remove("win","lock"));$("kp").textContent=$("pp").textContent=$("kb").textContent=$("pb").textContent="";$("ak").innerHTML=$("ap").innerHTML="";
   upd();window.NP&&NP.start();
   const c=$("cdn");c.hidden=false;for(const n of ["3","2","1"]){if(G.id!==id)return;c.textContent=n;sfx.tick();await sleep(650)}
@@ -401,7 +411,7 @@ function tap(side,i){
   if(!G||!G.open||G.lock[side]||paused||G.over)return;
   const q=G.q[side],half=$(side==="k"?"hk":"hp"),b=$(side==="k"?"ak":"ap").children[i];if(!b)return;const id=G.id;
   if(i===q.a){
-    G.open=false;clearTimeout(G.toT);clearInterval(G.shT);G.sc[side]++;G.hist.push(side);b.classList.add("good");half.classList.add("win");upd();sfx.good();if(window.NPFx)NPFx.buzz(side==="k"?[30,40,30]:20);
+    G.open=false;clearTimeout(G.toT);clearInterval(G.shT);G.sc[side]++;G.hist.push(side);b.classList.add("good");half.classList.add("win");upd();emojiBurst(side==="k"?14:7);sfx.good();if(window.NPFx)NPFx.buzz(side==="k"?[30,40,30]:20);
     G.r++;G.nxT=setTimeout(()=>{if(G&&G.id===id)nextRound()},1000);
   }else{
     G.lock[side]=true;b.classList.add("bad");half.classList.add("lock");sfx.no();if(window.NPFx)NPFx.buzz(40);
@@ -414,7 +424,7 @@ function finish(){
   if(G.daily&&!HELPER)dailyDone(G);
   if(SR){SR.n++;if(kind==="kid")SR.w.k++;else if(kind==="par")SR.w.p++;if(SR.w.k===2||SR.w.p===2||SR.n===3)SR.done=true}
   endAt=performance.now();
-  const total=k*10+(kind==="kid"?20:kind==="tie"?10:0);G.total=total;G.kind=kind;sfx.win();renderEnd();window.NP&&NP.result({score:total,extra:{t:G.t,lv:G.lv,k,p}});
+  const total=k*10+(kind==="kid"?20:kind==="tie"?10:0);G.total=total;G.kind=kind;sfx.win();renderEnd();emojiBurst(26);window.NP&&NP.result({score:total,extra:{t:G.t,lv:G.lv,k,p}});
   if(PF.pro&&PF.pro.trial)setTimeout(()=>PF.lockPro(),0);
 }
 function renderEnd(){
@@ -425,8 +435,11 @@ function renderEnd(){
   $("enR").textContent=fk==="kid"?"🏆":fk==="tie"?"🤝":"💪";$("enP").textContent=sub;
   $("againBtn").hidden=HELPER;$("homeBtn2").hidden=HELPER;$("shareBtn").hidden=HELPER||G.total<1;$("shareBtn").setAttribute("aria-label",T("sh.btn"));$("rankBtn").hidden=!(window.NP&&!HELPER&&G.total>0);$("rankBtn").setAttribute("aria-label",T("rank.btn"));showOv("ovEnd");
 }
+const isPro=t=>{const m=PF.skins[t];return !!m&&skinOf(t)!==m.basic};
+function dressUp(sk,t){const pl=$("play"),pro=isPro(t);pl.classList.toggle("pro",pro);document.querySelectorAll(".half .stg-o").forEach(e=>e.remove());if(!pro)return;const L=sk.deco||["⭐"];["hp","hk"].forEach((id,h)=>["a","b"].forEach((k,i)=>{const e=document.createElement("i");e.className="stg-o "+k;e.textContent=L[(h*2+i)%L.length];$(id).appendChild(e)}))}
+function emojiBurst(n){if(!G||!isPro(G.t))return;const host=$("play"),L=skinOf(G.t).deco||["⭐"];for(let i=0;i<n;i++){if(host.querySelectorAll(".eb").length>40)break;const e=document.createElement("i"),a=Math.random()*6.283,d=18+Math.random()*34;e.className="eb";e.textContent=L[i%L.length];e.style.setProperty("--dx",Math.cos(a)*d+"cqw");e.style.setProperty("--dy",(Math.sin(a)*d*.8-4)+"cqw");e.style.setProperty("--rt",(Math.random()*120-60)+"deg");host.appendChild(e);setTimeout(()=>e.remove(),1050)}}
 function goHome(){
-  if(window.NPAudio)NPAudio.silence();clearTimers();gid++;G=null;paused=false;$("play").classList.remove("paused");$("homeBtn").hidden=true;$("cdn").hidden=true;
+  $("play").classList.remove("pro");if(window.NPAudio)NPAudio.silence();clearTimers();gid++;G=null;paused=false;$("play").classList.remove("paused");$("homeBtn").hidden=true;$("cdn").hidden=true;
   $("arena").hidden=true;$("home").hidden=false;showOv(null);applyVars($("play"),BASIC[0]);skCss(null);renderHome();
 }
 
