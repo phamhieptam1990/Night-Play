@@ -30,6 +30,15 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .hud{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:34px;padding:2px 14px;border-radius:999px;background:var(--panel);box-shadow:var(--shadow);font-size:22px;font-weight:800}
 .play{position:relative;width:var(--w);aspect-ratio:3/4;border-radius:26px;overflow:hidden;background:var(--bg);box-shadow:var(--shadow);container-type:size;touch-action:none;
   --sb:linear-gradient(#ffe3c2,#ffd1e0);--pb:linear-gradient(#efe6ff,#d9ecff);--sp:#fff;--si:#2d2250;--sa:#7A5CFF;--sa2:#fff;--rad:5cqw;--bd:.8cqw solid rgba(255,255,255,.9);--sh:0 1cqw 3cqw rgba(0,0,0,.18)}
+/* ===== Night Pass: hình giao diện quanh sân khấu, mỗi lần bé nói đúng nổ hình theo chủ đề, phát sáng — bản free không có ===== */
+.stage .stg-o{position:absolute;z-index:3;pointer-events:none;font-size:8cqw;line-height:1;font-style:normal;opacity:.92;filter:drop-shadow(0 .6cqw .6cqw rgba(0,0,0,.3));animation:stgf 3s ease-in-out infinite}
+.stage .stg-o.a{left:1.6cqw;top:1.6cqw}.stage .stg-o.b{right:1.6cqw;bottom:1.6cqw;animation-delay:-1.4s}.stage .stg-o.c{left:1.6cqw;bottom:1.6cqw;font-size:6cqw;animation-delay:-2.2s}
+@keyframes stgf{50%{transform:translateY(-1.4cqw) rotate(6deg)}}
+.eb{position:absolute;z-index:9;pointer-events:none;font-size:8cqw;line-height:1;font-style:normal;left:50%;top:38%;animation:ebur 1s ease-out forwards}
+@keyframes ebur{0%{opacity:1;transform:translate(-50%,-50%) scale(.5)}70%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.3) rotate(var(--rt))}}
+.pro .qcard{box-shadow:var(--sh),0 0 4cqw color-mix(in srgb,var(--sa) 55%,transparent)}.pro .ab{box-shadow:var(--sh),0 0 2.4cqw color-mix(in srgb,var(--sa) 60%,transparent)}.pro .stage{box-shadow:var(--sh),0 0 4cqw color-mix(in srgb,var(--sa) 45%,transparent)}
+.tile .tdc{position:absolute;left:2cqw;top:1.8cqw;font-size:5cqw;line-height:1;letter-spacing:.4cqw;pointer-events:none;filter:drop-shadow(0 .4cqw .4cqw rgba(0,0,0,.25))}
+@media (prefers-reduced-motion:reduce){.stage .stg-o{animation:none}.eb{display:none}}
 #home,#arena{position:absolute;inset:0}
 #home{display:flex;flex-direction:column;gap:2.4cqw;padding:3cqw;background:linear-gradient(#cfe4ff,#f0e6ff)}
 .lvs{display:flex;gap:2cqw;align-items:center;background:rgba(255,255,255,.72);border-radius:999px;padding:1cqw 2cqw;box-shadow:var(--sh)}
@@ -548,7 +557,7 @@ function renderHome(){
   for(let t=0;t<4;t++){
     const sk=skinOf(t),b=document.createElement("div");b.className="tile";b.setAttribute("role","button");b.tabIndex=0;applyVars(b,sk);b.style.setProperty("--rad","5cqw");
     const prem=PF.skinSel[t]!=="basic"&&PF.skins[t][PF.skinSel[t]];
-    b.innerHTML='<span class="op">'+TY_ICON[t]+'</span><span class="ti">'+TY_CH[t]+"</span><b>"+T("ty")[t]+'</b><button class="sk" type="button" aria-label="'+T("sk.pick")+'">🎨'+(prem?"<i>★</i>":"")+"</button>";
+    b.innerHTML='<span class="op">'+TY_ICON[t]+'</span><span class="ti">'+TY_CH[t]+"</span><b>"+T("ty")[t]+'</b><button class="sk" type="button" aria-label="'+T("sk.pick")+'">🎨'+(prem?"<i>★</i>":"")+"</button>"+(prem&&sk.deco?'<span class="tdc">'+sk.deco.slice(0,3).join("")+"</span>":"");
     b.onclick=()=>openHow(t);b.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openHow(t)}};
     b.querySelector(".sk").onclick=e=>{e.stopPropagation();openSkins(t)};g.appendChild(b);
   }
@@ -565,7 +574,7 @@ async function begin(t,o){
   o=o||{};if(window.NPAudio)NPAudio.silence();clearTimers();micStop();const id=++gid,lv=o.lv||LVL;
   G={combo:0,maxCombo:0,t,lv,id,seed:o.seed!=null?o.seed:Math.floor(MR()*1e9),r:o.resume?o.resume.r:0,score:o.resume?o.resume.sc:0,hist:o.resume?o.resume.hist.slice():[],open:false,over:false,q:null,att:[],wrong:0,daily:o.daily||null,ch:o.ch||null,cute:null,iseq:[]};
   showOv(null);$("home").hidden=true;$("arena").hidden=false;$("homeBtn").hidden=false;
-  const sk=skinOf(t);applyVars($("play"),sk);skCss(sk);fillDeco(sk);$("bub").hidden=true;$("qb").innerHTML="";$("qp").textContent="";$("ans").innerHTML="";
+  const sk=skinOf(t);applyVars($("play"),sk);skCss(sk);fillDeco(sk);dressUp(sk,t);$("bub").hidden=true;$("qb").innerHTML="";$("qp").textContent="";$("ans").innerHTML="";
   ST.conf=[];ST.tier=0;$("combo").classList.add("off");$("cpop").hidden=true;ST.dance=ST.shake=0;ST.danceUntil=ST.shakeUntil=0;sizeCv();startLoop();paintMic();upd();window.NP&&NP.start();
   const c=$("cdn");c.hidden=false;for(const n of ["3","2","1"]){if(G.id!==id)return;c.textContent=n;sfx.tick();await sleep(500)}
   if(G.id!==id)return;c.hidden=true;sfx.go();nextRound()}
@@ -609,7 +618,7 @@ function attempt(val,info){
     G.score=Math.min(300,G.score+pts+bonus);G.hist.push(G.wrong?"y":"g");cuteOf();comboFx(bonus);
     const bi=G.q.o.findIndex(v=>ansEq(v,val));if(btns[bi])btns[bi].classList.add("good");
     if(info.via==="tap")showBub(cap(wordOf(val))+"!","ok");
-    dance(2200);confetti(46);upd();sfx.good();if(window.NPFx)NPFx.buzz(G.combo>=5?[30,30,30,30,60]:[30,40,30]);
+    dance(2200);confetti(46);emojiBurst(G.wrong?6:14);upd();sfx.good();if(window.NPFx)NPFx.buzz(G.combo>=5?[30,30,30,30,60]:[30,40,30]);
     const gd=T("b.good");say(wordOf(val)+"! "+gd[(G.r+G.score)%gd.length]);
     G.r++;G.nxT=setTimeout(()=>{if(G&&G.id===id)nextRound()},2300);
   }else{
@@ -633,7 +642,7 @@ function finish(){
   if(!G.cute){G.cute={text:"…",sc:0,q:"? = ?",qa:""}}
   if(!HELPER){prog.played++;prog.best=Math.max(prog.best,G.score);saveProg()}
   if(G.daily&&!HELPER)dailyDone(G);
-  endAt=performance.now();sfx.win();dance(5000);confetti(60);renderEnd();window.NP&&NP.result({score:G.score,extra:{t:G.t,lv:G.lv,first:firsts}});
+  endAt=performance.now();sfx.win();dance(5000);confetti(60);emojiBurst(26);renderEnd();window.NP&&NP.result({score:G.score,extra:{t:G.t,lv:G.lv,first:firsts}});
   if(PF.pro&&PF.pro.trial)setTimeout(()=>PF.lockPro(),0)}
 function renderEnd(){
   const s=G.score;$("enH").textContent=T("end.h"+(s>=240?2:s>=150?1:0));$("enR").textContent=TY_CH[G.t];$("enS").innerHTML="⭐ "+s+"<span> / 300</span>";
@@ -641,8 +650,11 @@ function renderEnd(){
   let sub=T("end.sub",{n:G.firsts});if(G.ch)sub=T(s>G.ch.sc?"ch.win":s<G.ch.sc?"ch.lose":"ch.tie",{s,c:G.ch.sc});
   $("enC").hidden=G.maxCombo<2;$("enC").textContent=T("end.combo",{n:G.maxCombo});$("enP").textContent=sub;$("enN").textContent=T("end.fun");
   $("againBtn").hidden=HELPER;$("homeBtn2").hidden=HELPER;$("clipBtn").hidden=HELPER;$("shareBtn").hidden=HELPER||s<1;$("shareBtn").setAttribute("aria-label",T("sh.btn"));$("clipBtn").setAttribute("aria-label",T("clip.btn"));$("rankBtn").hidden=!(window.NP&&!HELPER&&s>0);$("rankBtn").setAttribute("aria-label",T("rank.btn"));showOv("ovEnd")}
+const isPro=t=>{const m=PF.skins[t];return !!m&&skinOf(t)!==m.basic};
+function dressUp(sk,t){const pl=$("play"),pro=isPro(t);pl.classList.toggle("pro",pro);$("stage").querySelectorAll(".stg-o").forEach(e=>e.remove());if(!pro)return;const L=sk.deco||["⭐"];["a","b","c"].forEach((k,i)=>{const e=document.createElement("i");e.className="stg-o "+k;e.textContent=L[i%L.length];$("stage").appendChild(e)})}
+function emojiBurst(n){if(!G||!isPro(G.t))return;const host=$("play"),L=skinOf(G.t).deco||["⭐"];for(let i=0;i<n;i++){if(host.querySelectorAll(".eb").length>40)break;const e=document.createElement("i"),a=Math.random()*6.283,d=18+Math.random()*34;e.className="eb";e.textContent=L[i%L.length];e.style.setProperty("--dx",Math.cos(a)*d+"cqw");e.style.setProperty("--dy",(Math.sin(a)*d*.8-4)+"cqw");e.style.setProperty("--rt",(Math.random()*120-60)+"deg");host.appendChild(e);setTimeout(()=>e.remove(),1050)}}
 function goHome(){
-  if(window.NPAudio)NPAudio.silence();clearTimers();micStop();clipStop();stopLoop();gid++;G=null;paused=false;$("play").classList.remove("paused");$("homeBtn").hidden=true;$("cdn").hidden=true;
+  $("play").classList.remove("pro");if(window.NPAudio)NPAudio.silence();clearTimers();micStop();clipStop();stopLoop();gid++;G=null;paused=false;$("play").classList.remove("paused");$("homeBtn").hidden=true;$("cdn").hidden=true;
   $("arena").hidden=true;$("home").hidden=false;showOv(null);applyVars($("play"),BASIC[0]);skCss(null);renderHome()}
 
 /* ===== GIAO DIỆN / TRẢ PHÍ ===== */
