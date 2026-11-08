@@ -14,20 +14,20 @@ module.exports = {
   consts: `const NICE=12,CONF=["✍️","⭐","🎉"];`,
   i18n: {
     vi: { sub: "Vẽ MỘT nét liền đi qua tất cả các đoạn nối giữa các điểm. Không nhấc tay, không đi lại đường cũ!", note: "Mỗi ngày cả nước giải cùng dãy màn · chia sẻ màn khó nhất bạn giải được",
-      sc: "Đã giải", tm: "Còn lại", ex: "Đoạn", hint0: "Bấm vào một điểm rồi kéo dọc các đoạn nối. Nhấc tay là làm lại!", hint1: "Một chiều: mỗi đoạn có MŨI TÊN, chỉ đi theo chiều mũi tên, bắt đầu từ ngôi sao ⭐. 3 mạng.", hint2: "Nhớ đường: các đoạn nối MỜ DẦN sau 2,5 giây, hãy nhớ rồi vẽ! Chỉ 45 giây.", hint3: "Đi hai lần: mỗi đoạn phải đi qua ĐÚNG HAI LẦN (con số trên đoạn là số lần còn lại).",
+      sc: "Đã giải", tm: "Còn lại", ex: "Đoạn", hint0: "Kéo từ một điểm dọc các đoạn nối, HOẶC bấm từng điểm kế tiếp (bấm lại điểm trước để lùi). Máy tính: lướt 2 ngón trên bàn di chuột.", hint1: "Một chiều: mỗi đoạn có MŨI TÊN, chỉ đi theo chiều mũi tên, bắt đầu từ ngôi sao ⭐. 3 mạng.", hint2: "Nhớ đường: các đoạn nối MỜ DẦN sau 2,5 giây, hãy nhớ rồi vẽ! Chỉ 45 giây.", hint3: "Đi hai lần: mỗi đoạn phải đi qua ĐÚNG HAI LẦN (con số trên đoạn là số lần còn lại).",
       end: "Xong!", endS: "Bạn giải được {n} màn", rt: ["Mới tập nối", "Biết đường đi", "Giải đố ổn", "Cao thủ một nét", "Thần Euler"],
       tx: "✍️ Nối Một Nét · {t}\nMình giải được {n} màn!\n{l}", ask: "Bạn giải được nhiều hơn mình không?",
       lockP: "Loại Một chiều, Nhớ đường 45 giây, Đi hai lần và 4 giao diện (Bản đồ tàu điện, Chòm sao, Mạch điện, Phố đèn lồng) với cách đặt điểm và bố cục riêng là của Night Pass. Dùng thử 1 ván mỗi ngày hoặc mở khoá tất cả.",
       chP: "Bạn bè giải được {s} màn với đúng dãy câu đố này. Bạn giải nhiều hơn không?", rankHint: "Chơi “Thử thách hôm nay” để lên bảng điểm nhé!",
-      tut: "Bấm vào một điểm rồi kéo qua mọi đoạn nối — chỉ một nét, không nhấc tay!", lift: "Nhấc tay rồi! Làm lại nhé", startAt: "Bắt đầu từ ngôi sao ⭐", stuck: "Kẹt đường cụt! Làm lại nhé", solved: "Giải xong! +{n}s", lvl: "Màn {n}", edges: "{a}/{b}",
+      tut: "Bấm vào một điểm rồi kéo qua mọi đoạn nối — chỉ một nét, không nhấc tay!", lift: "Nhấc tay rồi! Làm lại nhé", noLink: "Không có đoạn nối tới điểm đó", startAt: "Bắt đầu từ ngôi sao ⭐", stuck: "Kẹt đường cụt! Làm lại nhé", solved: "Giải xong! +{n}s", lvl: "Màn {n}", edges: "{a}/{b}",
       pct: "🧠 Màn khó nhất: {n} đoạn", sk: { basic: ["Giấy kẻ ô", "Graph paper"], metro: ["Bản đồ tàu điện", "Metro map"], star: ["Chòm sao", "Constellation"], circuit: ["Mạch điện", "Circuit board"], lantern: ["Phố đèn lồng", "Lantern street"] } },
     en: { sub: "Draw ONE continuous line through every link between the dots. Don't lift your finger or retrace!", note: "Everyone gets the same puzzles each day · share the hardest one you solved",
-      sc: "Solved", tm: "Left", ex: "Links", hint0: "Press a dot, then drag along the links. Lifting restarts the puzzle!", hint1: "One way: every link has an ARROW — only go with it, start at the star ⭐. 3 lives.", hint2: "Memory: the links FADE after 2.5 seconds — remember, then draw! Only 45 seconds.", hint3: "Twice over: every link must be walked EXACTLY TWICE (the number on it is passes left).",
+      sc: "Solved", tm: "Left", ex: "Links", hint0: "Drag from a dot along the links, OR click the next dots one by one (click the previous dot to step back). Computer: glide 2 fingers on the trackpad.", hint1: "One way: every link has an ARROW — only go with it, start at the star ⭐. 3 lives.", hint2: "Memory: the links FADE after 2.5 seconds — remember, then draw! Only 45 seconds.", hint3: "Twice over: every link must be walked EXACTLY TWICE (the number on it is passes left).",
       end: "Done!", endS: "You solved {n} puzzles", rt: ["Just learning", "Knows the way", "Decent solver", "One-line pro", "Euler himself"],
       tx: "✍️ One Line Link · {t}\nI solved {n} puzzles!\n{l}", ask: "Can you solve more than me?",
       lockP: "One way, Memory 45 s, Twice over and 4 themes (Metro map, Constellation, Circuit board, Lantern street) with their own dot placement and layouts are for Night Pass. Try one round a day or unlock everything.",
       chP: "A friend solved {s} puzzles on this exact sequence. Can you solve more?", rankHint: "Play “Today's challenge” to make the leaderboard!",
-      tut: "Press a dot and drag through every link — one stroke, no lifting!", lift: "Lifted! Try again", startAt: "Start from the star ⭐", stuck: "Dead end! Try again", solved: "Solved! +{n}s", lvl: "Puzzle {n}", edges: "{a}/{b}",
+      tut: "Press a dot and drag through every link — one stroke, no lifting!", lift: "Lifted! Try again", noLink: "No link to that dot", startAt: "Start from the star ⭐", stuck: "Dead end! Try again", solved: "Solved! +{n}s", lvl: "Puzzle {n}", edges: "{a}/{b}",
       pct: "🧠 Hardest: {n} links", sk: { basic: ["Graph paper", "Graph paper"], metro: ["Metro map", "Metro map"], star: ["Constellation", "Constellation"], circuit: ["Circuit board", "Circuit board"], lantern: ["Lantern street", "Lantern street"] } }
   },
   sfx: `{step:()=>tone(520,.05,"triangle",.05),ok:()=>{[660,880,1100].forEach((f,i)=>tone(f,.1,"triangle",.09,i*.06))},bad:()=>tone(170,.25,"sawtooth",.07),end:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.09,i*.09)),combo:n=>{const b=440*Math.pow(1.122,Math.min(n/3,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.1,"triangle",.09,i*.05))}}`,
@@ -49,14 +49,14 @@ function genPuzzle(seed,L,kind,C){const R=sub(seed,100+L),mT=Math.min(30,Math.ro
    if(!cand.length)break;const deg=new Set();edges.forEach(e=>{deg.add(e[0]);deg.add(e[1])});const pref=cand.filter(j=>deg.has(j));if(pref.length&&R()<.62)cand=pref;const j=cand[Math.floor(R()*cand.length)];has.add(cur<j?cur+"-"+j:j+"-"+cur);edges.push([cur,j]);cur=j;order.push(cur)}
   if(edges.length>=4&&(!best||edges.length>best.edges.length)){const map={};let k=0;const keep=[];edges.forEach(e=>{[e[0],e[1]].forEach(v=>{if(map[v]==null){map[v]=k++;keep.push(ns[v])}})});best={nodes:keep.map(q=>({x:Math.round(q.x*10)/10,y:Math.round(q.y*10)/10})),edges:edges.map(e=>[map[e[0]],map[e[1]]]),trail:order.map(v=>map[v])}}if(best&&best.edges.length>=mT-2)break}
  if(best)return best;return{nodes:[{x:W*.3,y:H*.7},{x:W*.7,y:H*.7},{x:W*.5,y:H*.3}],edges:[[0,1],[1,2],[2,0]],trail:[0,1,2,0]}}
-function setPuz(D){D.puz=genPuzzle(D.seed,D.L,skinOf().place||"free",D.C);D.used=new Set();D.path=[];D.cur=-1;D.ptr=null;D.eidx={};D.puz.edges.forEach((e,i)=>{D.eidx[e[0]+"-"+e[1]]=i;D.eidx[e[1]+"-"+e[0]]=i});D.lvStart=D.time;D.flash=0}
+function setPuz(D){D.clk=0;D.wvOn=0;D.down=null;D.puz=genPuzzle(D.seed,D.L,skinOf().place||"free",D.C);D.used=new Set();D.path=[];D.cur=-1;D.ptr=null;D.eidx={};D.puz.edges.forEach((e,i)=>{D.eidx[e[0]+"-"+e[1]]=i;D.eidx[e[1]+"-"+e[0]]=i});D.lvStart=D.time;D.flash=0}
 function newGame(seed,mode,t,ch){const C=CFG[t],D={seed,mode,t,C,ch:ch||null,L:1,solved:0,lives:C.lives,bonusT:0,fails:0,hardest:0,over:false,reason:"end",time:0,dur:1e9,beat:false,maxCombo:0,combo:0,puz:null,used:null,path:[],cur:-1,ptr:null,flash:0,fx:[],lastSolved:null,shake:0};setPuz(D);return D}
 const scoreOf=D=>D.solved;
 const rankIdx=n=>n>=20?4:n>=14?3:n>=9?2:n>=5?1:0;
 const remain=D=>D.C.dur?Math.max(0,D.C.dur+D.bonusT-D.time):1;
 function unusedAt(D,v){const out=[];D.puz.edges.forEach((e,i)=>{let id=i;if(D.C.dbl){id=!D.used.has(i)?i:(!D.used.has(i+1000)?i+1000:-1);if(id<0)return}else if(D.used.has(i))return;if(e[0]===v)out.push([id,e[1]]);else if(!D.C.dir&&e[1]===v)out.push([id,e[0]])});return out}
 function unuse(D,ei){if(D.C.dbl&&D.used.has(ei+1000))D.used.delete(ei+1000);else D.used.delete(ei)}
-function nnFail(D,why){D.path=[];D.used=new Set();D.cur=-1;D.fails++;D.combo=0;D.shake=.35;D.flash=1;sfx.bad();if(window.NPFx)NPFx.buzz([40,30,40]);toast(T(why),900);
+function nnFail(D,why){D.clk=0;D.wvOn=0;D.path=[];D.used=new Set();D.cur=-1;D.fails++;D.combo=0;D.shake=.35;D.flash=1;sfx.bad();if(window.NPFx)NPFx.buzz([40,30,40]);toast(T(why),900);
  if(D.C.lives){D.lives--;if(D.lives<=0){D.over=true;sfx.end();setTimeout(()=>{if(G===D)finish(D)},600)}}hud()}
 function nnSolved(D){D.solved++;D.combo++;D.maxCombo=Math.max(D.maxCombo,D.combo);D.hardest=Math.max(D.hardest,D.puz.edges.length);D.lastSolved={puz:D.puz,trail:D.path.slice()};sfx.ok();if(window.NPFx)NPFx.buzz([20,30,40]);
  if(D.C.bonus){D.bonusT+=D.C.bonus;toast(T("solved",{n:D.C.bonus}),900)}NPJuice.text($("play"),T("lvl",{n:D.solved}),{color:"#ffd24a",top:"22%",size:6});burst(D.solved%3===0?14:7);D.L++;setPuz(D);hud()}
@@ -89,10 +89,26 @@ function draw(){if(!ctx||!cv.width)return;const sk=skinOf(),dm=sk.dim||[360,400]
  if(D.flash>0){c.fillStyle="rgba(255,60,60,"+D.flash*.25+")";c.fillRect(0,0,W,H)}
  c.fillStyle=sk.lbl||(dk?"rgba(255,255,255,.85)":"rgba(18,51,43,.8)");c.font="800 15px 'Be Vietnam Pro',system-ui";c.textAlign="left";c.fillText(T("lvl",{n:D.solved+1}),12,H-12);if(sk.fx)sk.fx(c,W,H,tm,dk)}
 function pt(e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H]}
-cv.addEventListener("pointerdown",e=>{const D=G;if(!D||D.over||paused||!D.puz)return;if(e.pointerType==="mouse"&&e.button!==0)return;e.preventDefault();const p=pt(e);let bi=-1,bd=30;D.puz.nodes.forEach((n,i)=>{const d=Math.hypot(n.x-p[0],n.y-p[1]);if(d<bd){bd=d;bi=i}});if(bi<0)return;if(D.C.dir&&bi!==D.puz.trail[0]){toast(T("startAt"),900);return}D.path=[bi];D.used=new Set();D.cur=bi;D.ptr=p;D.last=p;try{cv.setPointerCapture(e.pointerId)}catch(x){}sfx.step();hud()});
-cv.addEventListener("pointermove",e=>{const D=G;if(!D||D.cur<0||D.over)return;const p=pt(e);D.ptr=p;const pr=D.last||p;D.last=p;nnMove(D,p,pr);hud()});
-const endTouch=()=>{const D=G;if(!D||D.cur<0)return;D.ptr=null;if(D.used.size<needOf(D)&&D.path.length>0&&D.cur>=0)nnFail(D,"lift")};
+const nodeNear=(D,p)=>{let bi=-1,bd=30;D.puz.nodes.forEach((n,i)=>{const d=Math.hypot(n.x-p[0],n.y-p[1]);if(d<bd){bd=d;bi=i}});return bi};
+function nnClick(D,bi){/* chế độ chạm/click: bấm điểm kế tiếp nối với điểm hiện tại, bấm lại điểm trước để lùi */
+ const prevN=D.path.length>1?D.path[D.path.length-2]:-1;
+ if(bi===prevN){const le=D.eidx[D.path[D.path.length-2]+"-"+D.path[D.path.length-1]];unuse(D,le);D.path.pop();D.cur=prevN;sfx.step();hud();return}
+ const hit=unusedAt(D,D.cur).find(x=>x[1]===bi);if(!hit){if(bi!==D.cur)toast(T("noLink"),700);return}
+ D.used.add(hit[0]);D.path.push(bi);D.cur=bi;sfx.step();if(window.NPFx)NPFx.buzz(6);
+ if(D.used.size===needOf(D)){nnSolved(D);return}if(!unusedAt(D,D.cur).length)nnFail(D,"stuck");hud()}
+cv.addEventListener("pointerdown",e=>{const D=G;if(!D||D.over||paused||!D.puz)return;if(e.pointerType==="mouse"&&e.button!==0)return;e.preventDefault();const p=pt(e),bi=nodeNear(D,p);
+ if(D.clk&&D.cur>=0){if(bi<0)return;if(bi===D.cur){D.clk=0;D.ptr=p;D.last=p;try{cv.setPointerCapture(e.pointerId)}catch(x){}return}nnClick(D,bi);return}
+ if(bi<0)return;if(D.C.dir&&bi!==D.puz.trail[0]){toast(T("startAt"),900);return}D.path=[bi];D.used=new Set();D.cur=bi;D.ptr=p;D.last=p;D.down=p;D.mv=0;try{cv.setPointerCapture(e.pointerId)}catch(x){}sfx.step();hud()});
+cv.addEventListener("pointermove",e=>{const D=G;if(!D||D.cur<0||D.over||D.clk)return;const p=pt(e);D.ptr=p;if(D.down)D.mv=Math.max(D.mv||0,Math.hypot(p[0]-D.down[0],p[1]-D.down[1]));const pr=D.last||p;D.last=p;nnMove(D,p,pr);hud()});
+const endTouch=()=>{const D=G;if(!D||D.cur<0)return;D.ptr=null;if(D.clk)return;if(D.down&&D.path.length===1&&(D.mv||0)<8&&D.used.size===0){D.down=null;D.clk=1;return}D.down=null;if(D.used.size<needOf(D)&&D.path.length>0&&D.cur>=0)nnFail(D,"lift")};
 cv.addEventListener("pointerup",endTouch);cv.addEventListener("pointercancel",endTouch);
+/* Máy tính: lướt 2 ngón trên bàn di chuột = kéo nét (từ điểm gần con trỏ nhất hoặc tiếp từ điểm hiện tại); dừng tay không mất nét */
+let whT=0;
+cv.addEventListener("wheel",e=>{const D=G;if(!D||D.over||paused||!D.puz)return;e.preventDefault();const r=cv.getBoundingClientRect(),k=(e.deltaMode===1?16:1)*W/r.width*1.6;
+ if(D.cur<0){const s=pt(e),bi=nodeNear(D,s);if(bi<0)return;if(D.C.dir&&bi!==D.puz.trail[0]){toast(T("startAt"),900);return}D.path=[bi];D.used=new Set();D.cur=bi;sfx.step();hud();D.clk=1}
+ if(!D.wvp||!D.wvOn){const n=D.puz.nodes[D.cur];D.wvp=[n.x,n.y];D.wvOn=1}
+ const pr=D.wvp.slice();D.wvp=[Math.max(0,Math.min(W,D.wvp[0]-e.deltaX*k)),Math.max(0,Math.min(H,D.wvp[1]-e.deltaY*k))];D.ptr=D.wvp;nnMove(D,D.wvp,pr);hud();
+ clearTimeout(whT);whT=setTimeout(()=>{D.wvOn=0;D.ptr=null;if(D.cur>=0)D.clk=1},300)},{passive:false});
 function onBegin(D){fitCanvas()}
 `,
   drawCard: String.raw`function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#34d3a8","#063b2f"];
