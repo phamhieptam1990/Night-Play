@@ -452,6 +452,7 @@ const COZY_NEW = {   // game mới của Cozy Play (người lớn): 1 loại ×
   "ga-me-ban-trung": { vi: "Gà Mẹ Bắn Trứng", en: "Mama Hen's Egg Pop", max: 30000, dvi: "Bắn trứng cùng màu để nổ cụm, trứng nở ra con vật để sưu tầm. Hôm nay cả nước chơi cùng một bàn!", den: "Shoot matching eggs to pop clusters and hatch animals to collect. Everyone plays the same board today!" },
   "ban-co-hieu-toi": { vi: "Bạn Có Hiểu Tôi Không?", en: "Do You Really Know Me?", max: 10, quiz: true, dvi: "Trả lời 10 câu về chính bạn, gửi link cho bạn bè, người yêu, đồng nghiệp rồi xem ai hiểu bạn nhất!", den: "Answer 10 questions about yourself, send the link to friends, your partner or coworkers, and see who knows you best!" },
   "cho-hang-kieu-viet": { vi: "Chở Hàng Kiểu Việt", en: "Overloaded Rider", max: 20000, dvi: "Chất cả đống hàng lên xe máy rồi giữ thăng bằng đi tới nơi. Càng chất cao càng nhiều điểm, đổ là mất hết!", den: "Pile a mountain of cargo on a scooter and keep it balanced to the finish. The taller the stack, the higher the score — drop it and it’s gone!" },
+  "xe-ca-phe": { vi: "Xe Cà Phê Của Tôi", en: "My Coffee Cart", max: 20000, dvi: "Pha đúng công thức, phục vụ khách thật nhanh, cuối ngày nâng cấp xe cà phê thành quán rồi cả chuỗi. Bạn bán được bao nhiêu?", den: "Make the right recipes fast, serve customers, and grow your coffee cart into a café and a whole chain. How much can you sell?" },
   "me-cung-truyen-tay": { vi: "Mê Cung Truyền Tay", en: "Maze Pass-Along", max: 1000, dvi: "Tự vẽ mê cung rồi gửi cho bạn bè thoát. Hôm nay cả nước cùng một mê cung!", den: "Draw your own maze and send it to friends. Everyone gets the same maze today!" },
   "xin-nghi": { vi: "Sếp Ơi Em Xin Nghỉ", en: "Boss, I Need a Day Off", max: 100, dvi: "Nghĩ lý do xin nghỉ thật 'thuyết phục' để qua mặt sếp. Sếp có duyệt không?", den: "Come up with a convincing excuse for a day off. Will the boss approve?" }
 };
@@ -673,6 +674,7 @@ const PRO_MODS = {   // require LITERAL (esbuild của Netlify không gộp đư
   "ga-me-ban-trung": () => require("./pro/ga-me-ban-trung"),
   "me-cung-truyen-tay": () => require("./pro/me-cung-truyen-tay"),
   "cho-hang-kieu-viet": () => require("./pro/cho-hang-kieu-viet"),
+  "xe-ca-phe": () => require("./pro/xe-ca-phe"),
   "ban-co-hieu-toi": () => require("./pro/ban-co-hieu-toi"),
 };
 const NG_IDS = Object.keys(NEW_GAMES).join("|");

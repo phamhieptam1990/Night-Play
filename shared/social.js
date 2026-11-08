@@ -18,6 +18,7 @@ window.NPS = (function () {
     "me-cung-truyen-tay": { name: { vi: "Mê Cung Truyền Tay", en: "Maze Pass-Along" }, url: "cozyplay/games/me-cung-truyen-tay/index.html", board: true, site: "cozyplay" },
     "xin-nghi": { name: { vi: "Sếp Ơi Em Xin Nghỉ", en: "Boss, I Need a Day Off" }, url: "cozyplay/games/xin-nghi/index.html", board: true, site: "cozyplay" },
     "cho-hang-kieu-viet": { name: { vi: "Chở Hàng Kiểu Việt", en: "Overloaded Rider" }, url: "cozyplay/games/cho-hang-kieu-viet/index.html", board: true, site: "cozyplay" },
+    "xe-ca-phe": { name: { vi: "Xe Cà Phê Của Tôi", en: "My Coffee Cart" }, url: "cozyplay/games/xe-ca-phe/index.html", board: true, site: "cozyplay" },
     "ban-co-hieu-toi": { name: { vi: "Bạn Có Hiểu Tôi Không?", en: "Do You Really Know Me?" }, url: "cozyplay/games/ban-co-hieu-toi/index.html", board: false, site: "cozyplay" },
     "dap-deadline": { name: { vi: "Đập Deadline", en: "Smash the Deadline" }, url: "cozyplay/games/dap-deadline/index.html", board: true, site: "cozyplay" },
     "cozy-wings": { name: { vi: "Cánh Nhỏ Phiêu Lưu", en: "Little Wings" }, url: "cozyplay/games/cozy-wings/index.html", board: true, site: "cozyplay" },
