@@ -20,6 +20,7 @@ window.NPS = (function () {
     "cho-hang-kieu-viet": { name: { vi: "Chở Hàng Kiểu Việt", en: "Overloaded Rider" }, url: "cozyplay/games/cho-hang-kieu-viet/index.html", board: true, site: "cozyplay" },
     "xe-ca-phe": { name: { vi: "Xe Cà Phê Của Tôi", en: "My Coffee Cart" }, url: "cozyplay/games/xe-ca-phe/index.html", board: true, site: "cozyplay" },
     "duong-ray": { name: { vi: "Đường Ray", en: "Rail Rush" }, url: "cozyplay/games/duong-ray/index.html", board: true, site: "cozyplay" },
+    "bao-nhieu-giay": { name: { vi: "Bao Nhiêu Giây?", en: "How Many Seconds?" }, url: "cozyplay/games/bao-nhieu-giay/index.html", board: true, site: "cozyplay" },
     "ban-co-hieu-toi": { name: { vi: "Bạn Có Hiểu Tôi Không?", en: "Do You Really Know Me?" }, url: "cozyplay/games/ban-co-hieu-toi/index.html", board: false, site: "cozyplay" },
     "dap-deadline": { name: { vi: "Đập Deadline", en: "Smash the Deadline" }, url: "cozyplay/games/dap-deadline/index.html", board: true, site: "cozyplay" },
     "cozy-wings": { name: { vi: "Cánh Nhỏ Phiêu Lưu", en: "Little Wings" }, url: "cozyplay/games/cozy-wings/index.html", board: true, site: "cozyplay" },
@@ -248,6 +249,16 @@ window.NPS = (function () {
       }
     }
   }
+  function isBlank(canvas) {
+    try {
+      var c = canvas.getContext("2d"), n = 16, first = null, diff = 0;
+      for (var i = 0; i < n; i++) for (var j = 0; j < n; j++) {
+        var d = c.getImageData(Math.min(canvas.width - 1, Math.floor((i + .5) * canvas.width / n)), Math.min(canvas.height - 1, Math.floor((j + .5) * canvas.height / n)), 1, 1).data;
+        if (!first) first = d; else if (Math.abs(d[0] - first[0]) + Math.abs(d[1] - first[1]) + Math.abs(d[2] - first[2]) > 24) diff++;
+      }
+      return diff < 3;
+    } catch (e) { return false; }
+  }
   var h2cPromise = null;
   function loadH2C(url) {
     if (window.html2canvas) return Promise.resolve(window.html2canvas);
@@ -368,7 +379,12 @@ window.NPS = (function () {
       loadH2C(h2cUrl).then(function (h2c) {
         try { doc.fonts.forEach(function (ff) { if (ff.status === "loaded") document.fonts.add(ff); }); } catch (e) {}   /* cho html2canvas dùng đúng phông chữ web của game */
         var w = f.clientWidth, h = f.clientHeight, sc = Math.min(2, window.devicePixelRatio || 1), bg = (doc.body && getComputedStyle(doc.body).backgroundColor) || "#0E1020";
-        return h2c(doc.documentElement, { backgroundColor: bg === "rgba(0, 0, 0, 0)" ? "#0E1020" : bg, scale: sc, width: w, height: h, windowWidth: w, windowHeight: h, x: 0, y: 0, useCORS: true, logging: false, onclone: function (cd) { try { fixColors(cd); } catch (e) {} return cd.fonts && cd.fonts.ready ? Promise.race([cd.fonts.ready, new Promise(function (r) { setTimeout(r, 1800); })]) : null; } }).then(function (canvas) { return compose(canvas, sc); });
+        var shoot = function (fo) {
+          return h2c(doc.documentElement, { backgroundColor: bg === "rgba(0, 0, 0, 0)" ? "#0E1020" : bg, scale: sc, width: w, height: h, windowWidth: w, windowHeight: h, x: 0, y: 0, useCORS: true, logging: false, foreignObjectRendering: !!fo, onclone: function (cd) { try { fixColors(cd); } catch (e) {} return cd.fonts && cd.fonts.ready ? Promise.race([cd.fonts.ready, new Promise(function (r) { setTimeout(r, 1800); })]) : null; } });
+        };
+        /* Ảnh chụp trắng/trơn một màu (game dùng hiệu ứng html2canvas không vẽ được): thử lại bằng cách vẽ khác; vẫn trơn thì báo lỗi, không hiện ảnh trắng */
+        return shoot(false).then(function (canvas) { return isBlank(canvas) ? shoot(true) : canvas; })
+          .then(function (canvas) { if (isBlank(canvas)) throw new Error("blank"); return compose(canvas, sc); });
       }).then(showShot).catch(function () { toast(T("shotErr")); }).then(function () { cam.disabled = false; });
     });
 
@@ -378,7 +394,8 @@ window.NPS = (function () {
       if (e.data.type === "start") { hideSheet(); lastScore = 0; }
       else if (e.data.type === "result") { var game = curGame(), ex = e.data.extra || {}; lastScore = e.data.score | 0;
         var ranked = ex.ranked === true ? true : ex.ranked === false ? false : !ex.mode || (ex.mode === "classic" && (!ex.diff || ex.diff === "normal") && (!ex.grid || ex.grid === "g3") && (!ex.pack || ex.pack === "deadline"));   // bảng xếp hạng chỉ nhận chế độ Cổ điển, độ khó Thường (công bằng)
-        lastRanked = ranked; lastHint = typeof ex.rankHint === "string" ? ex.rankHint.slice(0, 120) : ""; }   /* KHÔNG tự bật hộp đăng điểm nữa: chỉ khi người chơi bấm nút "Lên bảng điểm" trong game */
+        lastRanked = ranked; lastHint = typeof ex.rankHint === "string" ? ex.rankHint.slice(0, 120) : "";
+        try { if (window.revealHome) window.revealHome(6000); } catch (x) {} }   /* hết ván: hiện vài giây nút Quay lại / Chia sẻ / Chụp màn hình để người chơi thấy */   /* KHÔNG tự bật hộp đăng điểm nữa: chỉ khi người chơi bấm nút "Lên bảng điểm" trong game */
       else if (e.data.type === "brag") { if (lastRanked) showBrag(curGame(), lastScore); else toast(lastHint ? T("notRankedBase") + " " + lastHint : T("notRanked")); }
     });
     new MutationObserver(function () { if (!stage.classList.contains("on")) { hideSheet(); clearInterval(shareTimer); } }).observe(stage, { attributes: true, attributeFilter: ["class"] });

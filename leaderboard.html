@@ -35,11 +35,34 @@ a{color:var(--accent);font-weight:600}
 .seg{display:inline-flex;background:var(--panel);box-shadow:var(--shadow);border-radius:22px;padding:3px}
 .seg button{background:none;border-radius:19px;height:38px;padding:0 14px;font-weight:700;color:var(--muted)}
 .seg button[aria-pressed=true]{background:var(--accent);color:var(--on-accent)}
-main{flex:1;min-height:0;width:100%;max-width:640px;margin:0 auto;padding:10px 16px 8px;display:flex;flex-direction:column;gap:10px}
+main{flex:1;min-height:0;width:100%;max-width:760px;margin:0 auto;padding:10px 16px 8px;display:flex;flex-direction:column;gap:10px}
 .hero{flex:none;text-align:center}
 .hero h1{margin:4px 0 0;font-size:clamp(22px,min(5vw,5vh),32px);line-height:1.15}
 .hero p{margin:4px 0 0;font-size:14px;color:var(--ink2)}
-.bar{flex:none;display:flex;justify-content:center;gap:8px 10px;flex-wrap:wrap;align-items:center}
+.bar{flex:none;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0}
+/* Chọn game: lưới biểu tượng hiện đủ tất cả (không cuộn), tên game đang chọn nằm ngay dưới */
+.bar{position:relative}
+.picker{display:flex;flex-wrap:nowrap;justify-content:center;gap:8px;width:100%;padding:2px 0;overflow:hidden}
+.picker button{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:var(--panel);box-shadow:var(--shadow);border:2px solid transparent;color:var(--ink);font-size:22px;line-height:1;padding:0}
+.picker button:active{transform:scale(.94)}
+.picker button.more{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 60%,transparent);background:color-mix(in srgb,var(--accent) 14%,var(--panel))}
+.picker button.more svg{width:22px;height:22px;fill:currentColor}
+.gpop{position:absolute;z-index:30;top:56px;left:50%;transform:translateX(-50%);width:min(100%,380px);max-height:min(460px,calc(100dvh - 210px));display:flex;flex-direction:column;gap:6px;padding:10px;background:var(--panel);color:var(--ink);border:1px solid color-mix(in srgb,var(--accent) 30%,var(--line));border-radius:22px;box-shadow:0 18px 50px rgba(0,0,0,.34),0 2px 8px rgba(0,0,0,.14);animation:gIn .16s ease-out}
+@keyframes gIn{from{opacity:0;transform:translateX(-50%) translateY(-6px) scale(.97)}}
+.gpop[hidden]{display:none}
+.gpop input{flex:none;width:100%;height:44px;padding:0 14px;border-radius:14px;border:2px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;font-size:16px;outline:none}
+.gpop input:focus{border-color:var(--accent)}
+#glist{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:2px}
+#glist button{flex:none;display:flex;align-items:center;gap:12px;width:100%;height:48px;padding:0 10px 0 8px;border-radius:12px;background:transparent;color:inherit;font-weight:700;font-size:15px;text-align:left}
+#glist button:hover,#glist button:focus-visible{background:color-mix(in srgb,var(--accent) 13%,transparent)}
+#glist button .e{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:color-mix(in srgb,var(--accent) 16%,transparent);font-size:19px}
+#glist button[aria-current=true]{background:color-mix(in srgb,var(--accent) 20%,transparent);color:var(--accent)}
+#glist button[aria-current=true]::after{content:"✓";margin-left:auto;font-weight:900}
+#glist .none{padding:16px;text-align:center;color:var(--muted);font-size:14px}
+.picker button[aria-pressed=true]{background:var(--accent);border-color:color-mix(in srgb,var(--on-accent) 28%,transparent);box-shadow:0 4px 14px color-mix(in srgb,var(--accent) 45%,transparent)}
+@media (max-width:380px){.picker{gap:6px}.picker button{width:38px;height:38px;font-size:19px;border-radius:12px}.picker button.more svg{width:20px;height:20px}}
+@media (max-height:640px){.hero p{display:none}}
+.gname{font-weight:800;font-size:16px;text-align:center;min-height:22px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .card{flex:1;min-height:0;display:flex;flex-direction:column;background:var(--panel);border-radius:22px;box-shadow:var(--shadow);padding:6px 12px;overflow:hidden}
 #list{flex:1;min-height:0;overflow:hidden}
 .row{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:8px;height:52px;border-bottom:1px solid var(--line)}
@@ -80,7 +103,9 @@ main{flex:1;min-height:0;width:100%;max-width:640px;margin:0 auto;padding:10px 1
 <main>
   <header class="hero"><h1 id="h"></h1><p id="sub"></p></header>
   <div class="bar">
-    <div class="seg" role="group" id="gameSeg" aria-label="Game"></div>
+    <div class="picker" role="group" id="gameSeg" aria-label="Game"></div>
+    <div class="gname" id="gname" aria-live="polite"></div>
+    <div class="gpop" id="gpop" role="dialog" hidden><input id="gq" type="search" autocomplete="off" enterkeyhint="search"><div id="glist" role="listbox"></div></div>
     <div class="seg" role="group" id="period"><button type="button" data-p="day" aria-pressed="false"></button><button type="button" data-p="week" aria-pressed="true"></button><button type="button" data-p="all" aria-pressed="false"></button></div>
   </div>
   <section class="card" aria-live="polite">
@@ -99,10 +124,10 @@ const $ = id => document.getElementById(id), root = document.documentElement;
 const TXT = {
   vi: { back: "Night Play", h: "Bảng xếp hạng", sub: "Chỉ những người chủ động khoe điểm mới có tên ở đây.", day: "Hôm nay", week: "7 ngày", all: "Mọi thời đại", empty: "Chưa ai khoe điểm. Hãy là người đầu tiên!", you: "(bạn)", pts: "điểm",
         best: "Điểm cao nhất của bạn ở", reroll: "Đổi tên vui khác", brag: "Khoe điểm", nick: "Biệt danh", bad: "Biệt danh chưa hợp lệ (2–16 ký tự, không chứa link/email).", slow: "Thao tác quá nhanh, thử lại sau.", err: "Có lỗi, vui lòng thử lại.", ok: "Đã lên bảng xếp hạng!", none: "Bạn chưa có điểm ở game này. Hãy chơi một ván!",
-        home: "Trang chủ", priv: "Quyền riêng tư", help: "Kết quả chơi hộ", rights: "Bảo lưu mọi quyền.", theme: "Sáng / Tối", err2: "Không tải được bảng xếp hạng.", loading: "Đang tải…" },
+        home: "Trang chủ", priv: "Quyền riêng tư", help: "Kết quả chơi hộ", rights: "Bảo lưu mọi quyền.", theme: "Sáng / Tối", gsearch: "Tìm game…", gnone: "Không có game phù hợp", gall: "Tất cả game", err2: "Không tải được bảng xếp hạng.", loading: "Đang tải…" },
   en: { back: "Night Play", h: "Leaderboard", sub: "Only people who chose to show off their score appear here.", day: "Today", week: "7 days", all: "All time", empty: "Nobody has shown off a score yet. Be the first!", you: "(you)", pts: "pts",
         best: "Your best score in", reroll: "New fun name", brag: "Show off", nick: "Nickname", bad: "Invalid nickname (2–16 characters, no links/emails).", slow: "Too many tries, please wait.", err: "Something went wrong, please try again.", ok: "You're on the leaderboard!", none: "No score in this game yet. Play a round!",
-        home: "Home", priv: "Privacy", help: "Shared results", rights: "All rights reserved.", theme: "Light / Dark", err2: "Couldn't load the leaderboard.", loading: "Loading…" }
+        home: "Home", priv: "Privacy", help: "Shared results", rights: "All rights reserved.", theme: "Light / Dark", gsearch: "Search games…", gnone: "No matching game", gall: "All games", err2: "Couldn't load the leaderboard.", loading: "Loading…" }
 };
 const L = () => TXT[root.lang === "en" ? "en" : "vi"];
 const POP = document.documentElement.dataset.app === "popplay", BRAND = POP ? "Pop Play" : "Night Play", HOME = POP ? "popplay/index.html" : "cozyplay/index.html";
@@ -120,10 +145,37 @@ function texts() {
   $("fHome").textContent = t.home; $("fPriv").textContent = t.priv; $("fHelp").textContent = t.help; $("copy").textContent = "© " + new Date().getFullYear() + " " + BRAND + ". " + t.rights;
   $("themeBtn").setAttribute("aria-label", t.theme);
   document.querySelectorAll("#langSeg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.l === root.lang)));
-  $("gameSeg").innerHTML = GAME_IDS.length > 3
-    ? '<select id="gameSel" aria-label="Game">' + GAME_IDS.map(g => '<option value="' + g + '"' + (g === game ? " selected" : "") + ">" + esc(NPS.gameName(g)) + "</option>").join("") + "</select>"
-    : GAME_IDS.map(g => '<button type="button" data-g="' + g + '" aria-pressed="' + (g === game) + '">' + esc(NPS.gameName(g)) + "</button>").join("");
+  buildPicker(); $("gname").textContent = (EMO[game] || "🎮") + " " + NPS.gameName(game);
 }
+const EMO = { "gia-cho-viet": "🥬", "doi-doi-2048": "🏠", "ga-me-ban-trung": "🐔", "me-cung-truyen-tay": "🌀", "xin-nghi": "📝", "cho-hang-kieu-viet": "🛵", "xe-ca-phe": "☕", "duong-ray": "🚂", "bao-nhieu-giay": "⏱️", "dap-deadline": "⏰", "cozy-wings": "🐦",
+  "pop-fly": "🐦", "ten-lua-cua-be": "🚀", "be-noi-dung-khong": "🎤", "doan-tuoi-nao": "🧠", "bo-me-5-giay": "⏱️", "con-vat-an-so": "🐊", "ve-chu-quai-vat": "👾", "nhay-theo-so": "💃", "be-dau-bo-me": "👶", "qua-song": "🌊", "thap-vong-mau": "🌈", "lang-cua-be": "🏡" };
+
+const DOTS = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="19" cy="12" r="1.9"/></svg>';
+/* Một hàng biểu tượng game (vừa bao nhiêu hiện bấy nhiêu, game đang chọn luôn hiện) + nút ⋯ mở danh sách đầy đủ có ô tìm kiếm */
+function buildPicker() {
+  const pk = $("gameSeg"), small = matchMedia("(max-width:380px)").matches, bw = small ? 38 : 44, gap = small ? 6 : 8;
+  const cap = Math.max(2, Math.floor((pk.clientWidth + gap) / (bw + gap))) - 1;   // chừa chỗ cho nút ⋯
+  let ids = GAME_IDS.slice(0, Math.min(cap, GAME_IDS.length));
+  if (!ids.includes(game)) ids[ids.length - 1] = game;
+  pk.innerHTML = ids.map(g => '<button type="button" data-g="' + g + '" aria-pressed="' + (g === game) + '" aria-label="' + esc(NPS.gameName(g)) + '" title="' + esc(NPS.gameName(g)) + '"><span aria-hidden="true">' + (EMO[g] || "🎮") + "</span></button>").join("")
+    + '<button type="button" class="more" id="gmore" aria-haspopup="dialog" aria-expanded="false" aria-label="' + esc(L().gall) + '" title="' + esc(L().gall) + '">' + DOTS + "</button>";
+  $("gq").placeholder = L().gsearch; $("gq").setAttribute("aria-label", L().gsearch);
+}
+const fold = x => String(x).normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").toLowerCase();
+function fillList() {
+  const q = fold($("gq").value.trim()), list = GAME_IDS.filter(g => !q || fold(NPS.gameName(g)).includes(q));
+  $("glist").innerHTML = list.length ? list.map(g => '<button type="button" role="option" data-g="' + g + '"' + (g === game ? ' aria-current="true"' : "") + '><span class="e" aria-hidden="true">' + (EMO[g] || "🎮") + "</span><span>" + esc(NPS.gameName(g)) + "</span></button>").join("") : '<div class="none">' + esc(L().gnone) + "</div>";
+}
+function gOpen(on) {
+  const pop = $("gpop"), m = $("gmore"); if (!on === pop.hidden) return;
+  pop.hidden = !on; if (m) m.setAttribute("aria-expanded", String(on));
+  if (on) { $("gq").value = ""; fillList(); $("gq").focus(); }
+}
+$("gq").addEventListener("input", fillList);
+$("gq").addEventListener("keydown", e => { if (e.key === "Enter") { const f = $("glist").querySelector("button[data-g]"); if (f) f.click(); } });
+$("glist").addEventListener("click", e => { const b = e.target.closest("button[data-g]"); if (!b) return; gOpen(false); if (b.dataset.g !== game) { game = b.dataset.g; last = null; texts(); renderMine(); load(); } });
+document.addEventListener("click", e => { if (e.target.closest("#gmore")) { gOpen($("gpop").hidden); e.stopPropagation(); return; } if (!e.target.closest("#gpop")) gOpen(false); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("gpop").hidden) { gOpen(false); const m = $("gmore"); m && m.focus(); } });
 let kidNick = "";
 function renderMine() {
   const t = L(), b = myBest(), el = $("mine"), kid = NPS.isKid(game);
@@ -155,10 +207,9 @@ function load() {
 function setLang(l, save) { root.lang = l; if (save) try { localStorage.setItem("lang", l); } catch (e) {} texts(); renderMine(); if (last) draw(last); }
 document.querySelectorAll("#langSeg button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.l, true)));
 document.querySelectorAll("#period button").forEach(b => b.addEventListener("click", () => { period = b.dataset.p; texts(); load(); }));
-$("gameSeg").addEventListener("change", e => { if (!e.target.matches("select")) return; game = e.target.value; last = null; texts(); renderMine(); load(); });
 $("gameSeg").addEventListener("click", e => { const b = e.target.closest("button[data-g]"); if (!b || b.dataset.g === game) return; game = b.dataset.g; last = null; texts(); renderMine(); load(); });
 $("themeBtn").addEventListener("click", () => { const n = root.dataset.theme === "dark" ? "light" : "dark"; root.dataset.theme = n; document.querySelector("meta[name=theme-color]").content = n === "dark" ? "#0E1020" : "#F3F0FA"; try { localStorage.setItem("theme", n); } catch (e) {} });
-let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(load, 200); });
+let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { buildPicker(); load(); }, 200); });
 if (POP) { $("mk").href = HOME; $("back").href = HOME; $("mkT").textContent = BRAND; $("mkSvg").innerHTML = '<rect width="64" height="64" rx="18" fill="var(--accent)"/><path d="M25 18l22 14-22 14z" fill="#fff"/>'; document.querySelector("meta[name=theme-color]").content = root.dataset.theme === "dark" ? "#1B2340" : "#FFF6EC"; }
 texts(); renderMine(); requestAnimationFrame(load); if (document.fonts && document.fonts.ready) document.fonts.ready.then(load);
 </script>
