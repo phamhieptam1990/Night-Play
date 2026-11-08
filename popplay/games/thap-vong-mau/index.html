@@ -54,13 +54,20 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .scene{position:relative;flex:1;min-height:0;z-index:1;display:flex;flex-direction:column;padding:2cqw 2cqw 0}
 .flow{flex:none;display:flex;align-items:center;justify-content:center;gap:2cqw;min-height:7cqw;font-size:4.2cqw;font-weight:800;color:var(--si);opacity:.9}
 .pegs{flex:1;min-height:0;display:flex;gap:1.4cqw;align-items:stretch}
-.peg{position:relative;flex:1;min-width:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding:0 0 3cqw;background:color-mix(in srgb,var(--sp) 38%,transparent);border-radius:var(--rad);border:.5cqw solid transparent;cursor:pointer;transition:background .2s}
+.peg{position:relative;flex:1;min-width:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding:0 0 3cqw;background:var(--pegbg,color-mix(in srgb,var(--sp) 38%,transparent));border-radius:var(--rad);border:.5cqw solid transparent;cursor:pointer;transition:background .2s}
 .peg.sel{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 22%,var(--sp))}
 .peg.hl{animation:hintp .7s ease-in-out infinite;border-color:var(--warn)}
 .peg.bad{animation:shake .4s;border-color:var(--bad)}
 .peg .flag{position:absolute;top:1.4cqw;left:50%;transform:translateX(-50%);font-size:6.4cqw;line-height:1;z-index:2}
 .peg .pole{position:absolute;left:50%;transform:translateX(-50%);bottom:3cqw;top:11cqw;width:2.6cqw;border-radius:2cqw;background:var(--peg,rgba(120,80,40,.55));box-shadow:inset -.5cqw 0 rgba(0,0,0,.18)}
 .peg .base{position:absolute;left:6%;right:6%;bottom:1.2cqw;height:3cqw;border-radius:2cqw;background:var(--peg,rgba(120,80,40,.55))}
+.peg .cap{position:absolute;top:6.4cqw;left:50%;transform:translateX(-50%);font-size:5.4cqw;line-height:1;z-index:2;pointer-events:none}
+.sky{position:absolute;left:0;right:0;top:1cqw;display:flex;justify-content:space-around;font-size:7cqw;line-height:1;pointer-events:none;z-index:0}.sky i{font-style:normal;animation:floaty 3.2s ease-in-out infinite}.sky i:nth-child(2n){animation-delay:-1.4s}
+.gnd{flex:none;display:flex;justify-content:space-around;align-items:flex-end;min-height:0;font-size:6.4cqw;line-height:1;pointer-events:none;margin-top:-1cqw}.gnd:empty{display:none}
+@keyframes floaty{50%{transform:translateY(-1.4cqw)}}
+.bob .flow[hidden]+.pegs{margin-top:6.6cqw}.bob .flow:not([hidden]){margin-top:6.6cqw}
+.bob .disc{animation:jig 2.8s ease-in-out infinite}.bob .disc:nth-child(2n){animation-delay:-1s}@keyframes jig{50%{filter:brightness(1.12);transform:scale(1.02)}}.bob .disc.up{animation:none}
+.bob .peg .flag{animation:floaty 1.8s ease-in-out infinite;filter:drop-shadow(0 0 2cqw var(--sa))}@media (prefers-reduced-motion:reduce){.bob .disc,.sky i,.bob .peg .flag{animation:none}}
 .peg .num{position:absolute;bottom:-.4cqw;left:50%;transform:translateX(-50%);font-size:3.2cqw;font-weight:800;color:var(--si);opacity:.7}
 .disc{position:relative;z-index:1;height:var(--dh,8cqw);width:var(--dw,60%);margin-top:.7cqw;border-radius:var(--drad,3cqw);background:hsl(var(--dhue) 82% 58%);border:.5cqw solid rgba(255,255,255,.7);box-shadow:0 .6cqw 0 hsl(var(--dhue) 70% 38%);display:grid;place-items:center;font-size:4cqw;font-weight:800;color:rgba(0,0,0,.45);flex:none;transition:transform .2s}
 .disc.up{transform:translateY(-2.4cqw) scale(1.06);box-shadow:0 1.6cqw 0 hsl(var(--dhue) 70% 38%),0 0 0 .8cqw var(--warn)}
@@ -117,7 +124,7 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
     <div id="home"></div>
     <div id="arena" hidden>
       <div class="dc"></div>
-      <div class="scene" id="scene"><div class="flow" id="flow"></div><div class="pegs" id="pegs"></div></div>
+      <div class="scene" id="scene"><div class="sky" id="sky"></div><div class="flow" id="flow"></div><div class="pegs" id="pegs"></div><div class="gnd" id="gnd"></div></div>
       <div class="ctl"><button class="ib2" id="undoBtn" type="button">↩</button><button class="ib2 main" id="hintBtn" type="button">💡</button><button class="ib2" id="resetBtn" type="button">🔁</button></div>
     </div>
     <div class="toast" id="toast" role="status"></div>
@@ -336,14 +343,14 @@ function begin(t,o){
   o=o||{};if(window.NPAudio)NPAudio.silence();showOv(null);const lv=o.lv||LVL,seed=o.seed!=null?o.seed:Math.floor(MR()*1e9),P=makePuzzle(t,lv,seed);
   G={t,lv,seed,P,pos:P.start.slice(),sel:-1,mv:[],used:0,hints:0,over:false,rem:P.opt,combo:0,maxCombo:0,daily:o.daily||null,ch:o.ch||null,hl:[]};
   $("home").hidden=true;$("arena").hidden=false;$("homeBtn").hidden=false;
-  const sk=skinOf(t);applyVars($("play"),sk);skCss(sk);fillDeco(sk);render();updHud();window.NP&&NP.start();say(T("say.start"));return G}
-function render(){if(!G)return;const P=G.P,sk=skinOf(G.t),box=$("pegs");box.innerHTML="";
+  const sk=skinOf(t);applyVars($("play"),sk);skCss(sk);fillDeco(sk);$("play").classList.toggle("bob",!!sk.props);render();updHud();window.NP&&NP.start();say(T("say.start"));return G}
+function render(){if(!G)return;const P=G.P,sk=skinOf(G.t),box=$("pegs");box.innerHTML="";$("sky").innerHTML=(sk.props||[]).slice(0,4).map(e=>"<i>"+e+"</i>").join("");$("gnd").innerHTML=(sk.ground||[]).map(e=>"<i style=\"font-style:normal\">"+e+"</i>").join("");
   $("flow").textContent=P.cyc?"1 ↻ 2 ↻ 3 ↻ 1":"";$("flow").hidden=!P.cyc;
   const top=tops(P,G.pos);
   for(let k=0;k<P.pegs;k++){const b=document.createElement("button");b.type="button";b.className="peg"+(G.sel===k?" sel":"")+(G.hl.includes(k)?" hl":"");b.dataset.k=k;b.setAttribute("aria-label",(LANG==="vi"?"Cột ":"Peg ")+(k+1));
     const pole=document.createElement("span");pole.className="pole";b.appendChild(pole);const base=document.createElement("span");base.className="base";b.appendChild(base);
     if(k===P.goal){const f=document.createElement("span");f.className="flag";f.textContent=sk.flag||"🏁";b.appendChild(f)}
-    const nu=document.createElement("span");nu.className="num";nu.textContent=k+1;b.appendChild(nu);
+    if(sk.cap&&k!==P.goal){const cp=document.createElement("span");cp.className="cap";cp.textContent=sk.cap;b.appendChild(cp)}const nu=document.createElement("span");nu.className="num";nu.textContent=k+1;b.appendChild(nu);
     const stack=[];for(let i=0;i<P.n;i++)if(G.pos[i]===k)stack.push(i);   /* nhỏ nhất ở trên cùng (phần tử đầu), to nhất nằm dưới đáy */
     const dh=Math.min(8.6,64/P.n);
     stack.forEach((d,j)=>{const e=document.createElement("span");e.className="disc"+(G.sel===k&&j===0?" up":"");e.style.setProperty("--dhue",Math.round(d*(280/Math.max(1,P.n-1))));e.style.setProperty("--dw",(38+58*d/Math.max(1,P.n-1))+"%");e.style.setProperty("--dh",dh+"cqw");e.textContent=d+1;b.appendChild(e)});
@@ -365,7 +372,7 @@ function hint(){if(!G||G.over)return;const sol=solveFrom(G.P,G.pos);if(!sol||!so
 function finish(){
   G.over=true;const opt=G.P.opt;G.stars=starsOf(opt,G.used);G.score=scoreOf(opt,G.used,G.hints);
   if(!HELPER){prog.solved++;if(G.stars===3)prog.perfect++;saveProg();if(G.daily)dailyDone(G);const sk=G.stars===3&&G.hints===0?(LS.get("tv-streak",0)||0)+1:0;LS.set("tv-streak",sk);G.streak=sk}
-  const beat=!!(G.ch&&G.score>G.ch.sc);$("play").querySelectorAll(".npj-t").forEach(e=>e.remove());NPJuice.confetti($("play"),beat?34:G.stars*8+8);if(beat){NPJuice.text($("play"),"⚔ "+T("beat"),{color:"#ff3da0",top:"88%",size:6.4});NPJuice.flash($("play"))}
+  const beat=!!(G.ch&&G.score>G.ch.sc);$("play").querySelectorAll(".npj-t").forEach(e=>e.remove());NPJuice.confetti($("play"),beat?34:G.stars*8+8,skinOf(G.t).fx);if(beat){NPJuice.text($("play"),"⚔ "+T("beat"),{color:"#ff3da0",top:"88%",size:6.4});NPJuice.flash($("play"))}
   endAt=performance.now();sfx.win();renderEnd();window.NP&&NP.result({score:G.score,extra:{t:G.t,lv:G.lv,stars:G.stars}});
   if(PF.pro&&PF.pro.trial)setTimeout(()=>PF.lockPro(),0)}
 function renderEnd(){
@@ -373,7 +380,7 @@ function renderEnd(){
   const gap=G.used-G.P.opt,nearOn=!HELPER&&gap>0;$("enN").hidden=!nearOn;if(nearOn)$("enN").textContent=T("near",{n:gap});$("retryBtn").hidden=HELPER||gap<=0;$("retryBtn").classList.toggle("hot",nearOn&&gap<=Math.max(2,Math.round(G.P.opt*.35)));$("retryBtn").setAttribute("aria-label",T("retry"));$("retryBtn").title=T("retry");$("enL").hidden=$("retryBtn").hidden;$("enL").textContent=T("leg");
   let sub=T("end.s"+G.stars)+" ("+G.used+"/"+G.P.opt+")"+(G.streak>=2?" · "+T("streak",{n:G.streak}):"");if(G.ch)sub=T(G.score>G.ch.sc?"ch.win":G.score<G.ch.sc?"ch.lose":"ch.tie",{k:G.score,ck:G.ch.sc});$("enP").textContent=sub;
   $("againBtn").hidden=HELPER;$("homeBtn2").hidden=HELPER;$("shareBtn").hidden=HELPER;$("shareBtn").setAttribute("aria-label",T("sh.btn"));$("rankBtn").hidden=!(window.NP&&!HELPER&&G.score>0);$("rankBtn").setAttribute("aria-label",T("rank.btn"));showOv("ovEnd")}
-function goHome(){if(window.NPAudio)NPAudio.silence();G=null;paused=false;$("play").classList.remove("paused");$("homeBtn").hidden=true;$("arena").hidden=true;$("home").hidden=false;showOv(null);applyVars($("play"),BASIC[0]);skCss(null);renderHome()}
+function goHome(){if(window.NPAudio)NPAudio.silence();G=null;$("play").classList.remove("bob");paused=false;$("play").classList.remove("paused");$("homeBtn").hidden=true;$("arena").hidden=true;$("home").hidden=false;showOv(null);applyVars($("play"),BASIC[0]);skCss(null);renderHome()}
 $("undoBtn").onclick=undo;$("hintBtn").onclick=hint;$("resetBtn").onclick=resetPuz;
 
 /* ===== GIAO DIỆN / TRẢ PHÍ ===== */

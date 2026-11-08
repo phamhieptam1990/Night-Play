@@ -32,6 +32,26 @@ function main(PF, OPTS) {
       pixel: { vars: v("linear-gradient(#1a2a1a,#2f9e44)", "linear-gradient(#1a1a3a,#0a0a1a)", "rgba(10,30,10,.85)", "#b8ffb8", "#ffdd00", "#1a1a00", "0", ".6cqw solid #b8ffb8", "none"), boat: "🕹️", cast: { p: ["👾", "🤖", "👻", "🐸", "🦖"] }, deco: ["👾", "🕹️", "💾"], css: ".chip2,.skc .sw{border-radius:0!important}.hwL,.ctl{font-family:'Courier New',monospace}" }
     }
   ];
+  /* cảnh vật riêng cho từng giao diện: đồ vật trên hai bờ, kiểu dòng sông / vực, bờ, hình bay khi thắng — bản free không có */
+  const X = [
+    { neon: ["🏙️|🚨|🌃", "🚨|⚡|✨|🕵️", "linear-gradient(#1a0a3a,#3a0a6a)", "repeating-linear-gradient(0deg,rgba(0,229,255,.4) 0 .5cqw,transparent .5cqw 6cqw)"],
+      pirate: ["🏝️|🌴|💎", "🦜|💎|⚓|🏴‍☠️", "linear-gradient(#f6e3a8,#e0b868)", "repeating-linear-gradient(0deg,rgba(255,255,255,.3) 0 .8cqw,transparent .8cqw 8cqw)"],
+      west: ["🌵|🐎|🏜️", "🤠|⭐|🌵|🐴", "linear-gradient(#f4c98a,#d9955a)", "repeating-linear-gradient(0deg,rgba(90,50,20,.25) 0 1cqw,transparent 1cqw 9cqw)"],
+      space: ["🪐|🛸|⭐", "🚀|⭐|🪐|👽", "linear-gradient(#1a2a6a,#0a1040)", "radial-gradient(circle at 20% 30%,rgba(255,255,255,.6) 0 .5cqw,transparent .6cqw),radial-gradient(circle at 70% 60%,rgba(255,255,255,.5) 0 .4cqw,transparent .5cqw),radial-gradient(circle at 40% 85%,rgba(255,255,255,.6) 0 .5cqw,transparent .6cqw)"] },
+    { snow: ["⛄|🌲|❄️", "❄️|⛄|✨", "linear-gradient(#f4faff,#d0e8f8)", "repeating-linear-gradient(60deg,rgba(255,255,255,.45) 0 1cqw,transparent 1cqw 7cqw)"],
+      jungle: ["🌴|🦜|🌿", "🦜|🍌|🌿|🐒", "linear-gradient(#5fbf6a,#2f7a45)", "repeating-linear-gradient(0deg,rgba(0,60,30,.25) 0 .8cqw,transparent .8cqw 6cqw)"],
+      candy: ["🍭|🍬|🧁", "🍭|🍬|🍩|🧁", "linear-gradient(#ffd3ea,#ffb0d6)", "repeating-linear-gradient(0deg,rgba(255,255,255,.4) 0 1.2cqw,transparent 1.2cqw 7cqw)"],
+      ocean: ["🐚|🪸|⚓", "🐠|🫧|🐚|🐳", "linear-gradient(#f6e8c0,#e0c890)", "repeating-linear-gradient(0deg,rgba(255,255,255,.2) 0 .6cqw,transparent .6cqw 6cqw)"] },
+    { camp: ["⛺|🔥|🌲", "🔥|⭐|🌙|🦉", "linear-gradient(#2a4a2a,#1a2a1a)", "repeating-linear-gradient(0deg,rgba(255,255,255,.18) 0 .6cqw,transparent .6cqw 6cqw)"],
+      beach: ["🏖️|🌴|🐚", "🐚|🌴|☀️|🐬", "linear-gradient(#ffe9a8,#f0c878)", "repeating-linear-gradient(0deg,rgba(255,255,255,.3) 0 .8cqw,transparent .8cqw 7cqw)"],
+      mountain: ["🏔️|🌲|⛷️", "❄️|⛷️|🏔️|🦌", "linear-gradient(#f4faff,#b8d4ec)", "repeating-linear-gradient(0deg,rgba(255,255,255,.35) 0 1cqw,transparent 1cqw 8cqw)"],
+      magic: ["🏰|🔮|⭐", "✨|🔮|🦄|🪄", "linear-gradient(#4a1a8a,#8a2aa0)", "repeating-linear-gradient(0deg,rgba(255,213,74,.3) 0 .6cqw,transparent .6cqw 6cqw)"] },
+    { lava: ["🌋|🔥|💀", "🔥|💥|🌋|🧯", "linear-gradient(#2a0a0a,#5a1a0a)", "repeating-linear-gradient(0deg,rgba(255,220,80,.55) 0 1cqw,transparent 1cqw 8cqw)"],
+      sky: ["☁️|🌈|🪁", "🌈|☁️|🎈|🪁", "linear-gradient(#e8f7ff,#b8e0f8)", "repeating-linear-gradient(90deg,rgba(255,255,255,.5) 0 1cqw,transparent 1cqw 6cqw)"],
+      ice: ["🧊|❄️|🐧", "❄️|🧊|🐧|⛸️", "linear-gradient(#e8f4ff,#a8d4f0)", "repeating-linear-gradient(60deg,rgba(255,255,255,.4) 0 .8cqw,transparent .8cqw 6cqw)"],
+      pixel: ["🟩|🟦|⭐", "👾|⭐|🟩|🕹️", "linear-gradient(#1a3a1a,#0a1a0a)", "repeating-linear-gradient(90deg,rgba(184,255,184,.25) 0 1cqw,transparent 1cqw 5cqw)"] }
+  ];
+  for (let t = 0; t < 4; t++) for (const id in X[t]) { const [pr, fx, bank, riv] = X[t][id], sk = S[t][id]; sk.props = pr.split("|"); sk.fx = fx.split("|"); sk.vars["--bank"] = bank; sk.vars["--riv"] = riv; }
   for (let t = 0; t < 4; t++) for (const id in S[t]) PF.skins[t][id] = S[t][id];
   PF.pro = { trial: !!OPTS.trial };
 }

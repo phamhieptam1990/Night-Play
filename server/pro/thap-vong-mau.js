@@ -48,6 +48,26 @@ function main(PF, OPTS) {
         css: ".peg{--peg:#c97a4a}.disc{border-radius:999px;background:radial-gradient(ellipse at 50% 30%,hsl(var(--dhue) 90% 82%) 0 55%,#e8a870 56%);border:.4cqw solid #c97a4a;box-shadow:0 .7cqw 0 #a0522d;color:#5a2a1a}" }
     }
   ];
+  /* cảnh vật riêng cho từng giao diện: đồ vật trên trời + dọc nền đất, nắp cột, nền mỗi cột, hình bay khi thắng — bản free không có */
+  const X = [
+    { cake: ["🍰|🧁|🍓|🍒", "🍓|🍓|🍓|🍓", "🕯️", "linear-gradient(rgba(255,255,255,.55),rgba(255,180,210,.5))", "🍰|🍓|🧁|🎂"],
+      coin: ["💰|🪙|👑|💎", "🪙|🪙|🪙|🪙", "💎", "linear-gradient(rgba(255,215,60,.25),rgba(120,80,0,.4))", "🪙|💰|✨|👑"],
+      planet: ["🪐|🌙|⭐|🛸", "☄️|🌑|☄️|🌑", "⭐", "linear-gradient(rgba(110,231,255,.12),rgba(20,30,80,.5))", "🚀|🪐|⭐|🌟"],
+      candy: ["🍭|🍬|🍩|🧁", "🍬|🍬|🍬|🍬", "🍒", "linear-gradient(rgba(255,255,255,.55),rgba(255,140,190,.4))", "🍭|🍬|🍩|🧁"] },
+    { pancake: ["🥞|🧈|🍓|🥛", "🍓|🫐|🍓|🫐", "🧈", "linear-gradient(rgba(255,240,200,.6),rgba(230,170,80,.35))", "🥞|🍯|🍓|🧈"],
+      castle: ["🏰|🛡️|⚔️|🚩", "🧱|🧱|🧱|🧱", "🚩", "linear-gradient(rgba(220,230,250,.5),rgba(90,110,150,.45))", "🏰|⚔️|👑|✨"],
+      lifebuoy: ["⚓|🌊|🛟|🐚", "🌊|🌊|🌊|🌊", "⚓", "linear-gradient(rgba(255,255,255,.4),rgba(40,120,200,.45))", "🐠|🫧|🌊|🛟"],
+      robot: ["🤖|⚙️|🔩|💡", "⚙️|🔩|⚙️|🔩", "💡", "linear-gradient(rgba(47,230,255,.1),rgba(10,20,50,.6))", "🤖|⚡|⚙️|💡"] },
+    { magic: ["🪄|✨|🔮|🌟", "🍄|🍄|🍄|🍄", "🔮", "linear-gradient(rgba(255,213,74,.12),rgba(80,20,120,.5))", "✨|🔮|🪄|🦄"],
+      toy: ["🧸|🪀|🧩|🎲", "🧩|🧱|🧩|🧱", "🎈", "linear-gradient(rgba(255,245,225,.6),rgba(217,160,102,.4))", "🧸|🎈|🧩|🎲"],
+      garden: ["🦋|🐝|🌼|🐞", "🌷|🌻|🌷|🌻", "🌼", "linear-gradient(rgba(214,245,176,.5),rgba(80,170,70,.35))", "🌷|🦋|🌻|🐝"],
+      night: ["🌙|⭐|✨|🪲", "🌿|🌿|🌿|🌿", "⭐", "linear-gradient(rgba(140,180,255,.1),rgba(10,20,60,.6))", "✨|🌙|⭐|🪲"] },
+    { carousel: ["🎠|🎈|🎪|🍭", "🎠|🎠|🎠|🎠", "🎈", "linear-gradient(rgba(255,255,255,.55),rgba(255,200,80,.35))", "🎠|🎈|🍭|🎪"],
+      galaxy: ["🌌|☄️|⭐|🛸", "🌑|🌕|🌑|🌕", "🌟", "linear-gradient(rgba(176,123,255,.15),rgba(10,5,40,.6))", "🌌|⭐|☄️|🛸"],
+      clock: ["🕰️|⏳|⚙️|⏰", "⚙️|⚙️|⚙️|⚙️", "⏰", "linear-gradient(rgba(255,252,240,.6),rgba(180,140,80,.35))", "⏰|⏳|✨|⚙️"],
+      donut: ["🍩|🧁|☕|🍪", "🍩|🍪|🍩|🍪", "🍒", "linear-gradient(rgba(255,240,235,.6),rgba(255,140,130,.35))", "🍩|🍪|🧁|☕"] }
+  ];
+  for (let t = 0; t < 4; t++) for (const id in X[t]) { const [pr, gr, cap, bg, fx] = X[t][id], sk = S[t][id]; sk.props = pr.split("|"); sk.ground = gr.split("|"); sk.cap = cap; sk.fx = fx.split("|"); sk.vars["--pegbg"] = bg; }
   for (let t = 0; t < 4; t++) for (const id in S[t]) PF.skins[t][id] = S[t][id];
   PF.pro = { trial: !!OPTS.trial };
 }

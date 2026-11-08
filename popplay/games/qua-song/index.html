@@ -52,10 +52,14 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .dc i{position:absolute;font-style:normal;font-size:6cqw;opacity:.24;animation:drift 10s linear infinite}
 @keyframes drift{0%{transform:translateY(-12cqw) rotate(0)}100%{transform:translateY(120cqh) rotate(40deg)}}
 .scene{position:relative;flex:1;min-height:0;display:grid;grid-template-columns:34cqw 1fr 34cqw;z-index:1}
-.bank{display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:1.4cqw;padding:2cqw 1.2cqw;background:color-mix(in srgb,var(--sp) 72%,transparent);transition:background .25s}
+.bank{position:relative;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:1.4cqw;padding:2cqw 1.2cqw;background:var(--bank,color-mix(in srgb,var(--sp) 72%,transparent));transition:background .25s}
+.bank .props{position:absolute;left:0;right:0;bottom:1.2cqw;display:flex;justify-content:space-around;align-items:flex-end;font-size:10cqw;line-height:1;pointer-events:none;filter:drop-shadow(0 .6cqw .4cqw rgba(0,0,0,.25))}.bank .props i{font-style:normal}.bank .props i:nth-child(2){font-size:7cqw}
+/* giao diện Night Pass: nhân vật nhún nhảy, thuyền lắc lư, hào quang quanh thuyền */
+.bob .chip2{animation:bobc 2.6s ease-in-out infinite}.bob .chip2:nth-child(2n){animation-delay:-.9s}.bob .chip2:nth-child(3n){animation-delay:-1.7s}.bob .boat .hull{animation:rock 2.4s ease-in-out infinite;filter:drop-shadow(0 0 3cqw var(--sa))}
+@keyframes bobc{50%{transform:translateY(-1.2cqw)}}@keyframes rock{50%{transform:rotate(5deg) translateY(-1cqw)}}@media (prefers-reduced-motion:reduce){.bob .chip2,.bob .boat .hull{animation:none}}
 .bank.warn{background:color-mix(in srgb,var(--bad) 40%,var(--sp))}
 .river{position:relative;background:var(--pb);overflow:hidden}
-.river::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.16) 0 .6cqw,transparent .6cqw 7cqw);animation:flow 3s linear infinite}
+.river::before{content:"";position:absolute;inset:0;background:var(--riv,repeating-linear-gradient(0deg,rgba(255,255,255,.16) 0 .6cqw,transparent .6cqw 7cqw));animation:flow 3s linear infinite}
 @keyframes flow{to{background-position:0 7cqw}}
 .boat{position:absolute;bottom:34%;width:92%;display:flex;flex-direction:column;align-items:center;gap:0;transition:left .7s ease-in-out;z-index:2}
 .seat .chip2{width:13cqw;height:13cqw;font-size:8cqw}.boat .seat{display:flex;flex-wrap:wrap;justify-content:center;gap:1cqw;min-height:15cqw;width:100%;padding:1cqw 0}
@@ -361,16 +365,17 @@ function begin(t,o){
   o=o||{};if(window.NPAudio)NPAudio.silence();showOv(null);const lv=o.lv||LVL,seed=o.seed!=null?o.seed:Math.floor(MR()*1e9),P=makePuzzle(t,lv,seed);P.ents.forEach((e,i)=>e._i=i);
   G={t,lv,seed,P,side:Array(P.ents.length).fill(0),boat:0,load:[],mv:[],used:0,hints:0,over:false,rem:P.opt,combo:0,maxCombo:0,daily:o.daily||null,ch:o.ch||null,hl:[]};
   $("home").hidden=true;$("arena").hidden=false;$("homeBtn").hidden=false;
-  const sk=skinOf(t);applyVars($("play"),sk);skCss(sk);fillDeco(sk);$("scene").classList.toggle("bridge",P.mode==="time");$("hull").textContent=sk.boat||"⛵";
+  const sk=skinOf(t);applyVars($("play"),sk);skCss(sk);fillDeco(sk);$("play").classList.toggle("bob",!!sk.props);$("scene").classList.toggle("bridge",P.mode==="time");$("hull").textContent=sk.boat||"⛵";
   render();updHud();window.NP&&NP.start();say(T("say.start"));return G}
 function mask(){let m=0;G.side.forEach((s,i)=>{if(s)m|=1<<i});return m}
-function render(){if(!G)return;const P=G.P,cast=skinOf(G.t).cast||{},bl=$("bkL"),br=$("bkR"),seat=$("seat");bl.innerHTML=br.innerHTML=seat.innerHTML="";
+function render(){if(!G)return;const P=G.P,sk=skinOf(G.t),cast=sk.cast||{},bl=$("bkL"),br=$("bkR"),seat=$("seat");bl.innerHTML=br.innerHTML=seat.innerHTML="";
   const mk=(i,where)=>{const e=P.ents[i],b=document.createElement("button");b.type="button";b.className="chip2"+(e.k==="C"?" R1":e.k==="T"?" R2":"")+(G.hl.includes(i)?" hint":"");b.textContent=castOf(e,cast);b.setAttribute("aria-label",nameOf(e));
     if(P.mode==="time"){const s=document.createElement("span");s.className="tm";s.textContent=e.t;b.appendChild(s)}
     b.onclick=()=>tapEnt(i);b.dataset.i=i;return b};
   for(let i=0;i<P.ents.length;i++){if(G.load.includes(i))seat.appendChild(mk(i));else (G.side[i]?br:bl).appendChild(mk(i))}
   $("goBtn").disabled=G.over;$("undoBtn").disabled=!G.mv.length||G.over;$("hintBtn").disabled=G.over;$("goBtn").textContent=P.mode==="time"?"🔦":"▶";
-  $("boat").style.left=G.boat?"8%":"0%";$("hull").style.transform=G.boat?"scaleX(-1)":"none"}
+  $("boat").style.left=G.boat?"8%":"0%";$("hull").style.transform=G.boat?"scaleX(-1)":"none";
+  if(sk.props){[bl,br].forEach(bk=>{const pr=document.createElement("span");pr.className="props";sk.props.slice(0,3).forEach(e=>{const i=document.createElement("i");i.textContent=e;pr.appendChild(i)});bk.appendChild(pr)})}}
 function updHud(){if(!G)return;const P=G.P,unit=P.mode==="time"?"⏱ "+G.used+" "+T("mins"):"🚣 "+G.used+" "+T("moves");$("hl").textContent=unit;$("hr").textContent=(G.combo>=2?"🔥×"+G.combo+" · ":"")+"🎯 "+P.opt}
 function tapEnt(i){if(!G||G.over||paused||G.busy)return;const P=G.P;G.hl=[];
   if(G.load.includes(i)){G.load=G.load.filter(x=>x!==i);sfx.drop();render();return}
@@ -398,7 +403,7 @@ function checkWin(){if(!G||G.over)return;if(G.side.every(s=>s===1)&&G.boat===1)f
 function finish(){
   G.over=true;const opt=G.P.opt;G.stars=starsOf(opt,G.used);G.score=scoreOf(opt,G.used,G.hints);
   if(!HELPER){prog.solved++;if(G.stars===3)prog.perfect++;saveProg();if(G.daily)dailyDone(G);const sk=G.stars===3&&G.hints===0?(LS.get("qs-streak",0)||0)+1:0;LS.set("qs-streak",sk);G.streak=sk}
-  const beat=!!(G.ch&&G.score>G.ch.sc);$("play").querySelectorAll(".npj-t").forEach(e=>e.remove());NPJuice.confetti($("play"),beat?34:G.stars*8+8);if(beat){NPJuice.text($("play"),"⚔ "+T("beat"),{color:"#ff3da0",top:"88%",size:6.4});NPJuice.flash($("play"))}
+  const beat=!!(G.ch&&G.score>G.ch.sc);$("play").querySelectorAll(".npj-t").forEach(e=>e.remove());NPJuice.confetti($("play"),beat?34:G.stars*8+8,skinOf(G.t).fx);if(beat){NPJuice.text($("play"),"⚔ "+T("beat"),{color:"#ff3da0",top:"88%",size:6.4});NPJuice.flash($("play"))}
   endAt=performance.now();sfx.win();renderEnd();window.NP&&NP.result({score:G.score,extra:{t:G.t,lv:G.lv,stars:G.stars}});
   if(PF.pro&&PF.pro.trial)setTimeout(()=>PF.lockPro(),0)}
 function renderEnd(){
@@ -406,7 +411,7 @@ function renderEnd(){
   const gap=G.used-G.P.opt,unit=G.P.mode==="time"?T("mins"):T("moves"),nearOn=!HELPER&&gap>0;$("enN").hidden=!nearOn;if(nearOn)$("enN").textContent=T("near",{n:gap,u:unit});$("retryBtn").hidden=HELPER||gap<=0;$("retryBtn").classList.toggle("hot",nearOn&&gap<=Math.max(2,Math.round(G.P.opt*.35)));$("retryBtn").setAttribute("aria-label",T("retry"));$("retryBtn").title=T("retry");$("enL").hidden=$("retryBtn").hidden;$("enL").textContent=T("leg");
   let sub=T("end.s"+G.stars)+" ("+G.used+"/"+G.P.opt+")"+(G.streak>=2?" · "+T("streak",{n:G.streak}):"");if(G.ch)sub=T(G.score>G.ch.sc?"ch.win":G.score<G.ch.sc?"ch.lose":"ch.tie",{k:G.score,ck:G.ch.sc});$("enP").textContent=sub;
   $("againBtn").hidden=HELPER;$("homeBtn2").hidden=HELPER;$("shareBtn").hidden=HELPER;$("shareBtn").setAttribute("aria-label",T("sh.btn"));$("rankBtn").hidden=!(window.NP&&!HELPER&&G.score>0);$("rankBtn").setAttribute("aria-label",T("rank.btn"));showOv("ovEnd")}
-function goHome(){if(window.NPAudio)NPAudio.silence();G=null;paused=false;$("play").classList.remove("paused");$("homeBtn").hidden=true;$("arena").hidden=true;$("home").hidden=false;showOv(null);applyVars($("play"),BASIC[0]);skCss(null);renderHome()}
+function goHome(){if(window.NPAudio)NPAudio.silence();G=null;$("play").classList.remove("bob");paused=false;$("play").classList.remove("paused");$("homeBtn").hidden=true;$("arena").hidden=true;$("home").hidden=false;showOv(null);applyVars($("play"),BASIC[0]);skCss(null);renderHome()}
 $("goBtn").onclick=go;$("undoBtn").onclick=undo;$("hintBtn").onclick=hint;$("resetBtn").onclick=resetPuz;
 
 /* ===== GIAO DIỆN / TRẢ PHÍ ===== */
