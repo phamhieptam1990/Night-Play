@@ -14,7 +14,7 @@ module.exports = {
   consts: `const NICE=900,CONF=["✏️","⭐","🎉"];`,
   i18n: {
     vi: { sub: "Vẽ hình tròn hoàn hảo nhất bằng MỘT nét tay không nhấc. Game chấm độ tròn theo %!", note: "3 lượt, tính lượt tốt nhất · mỗi ngày cả nước vẽ cùng một đề",
-      sc: "Tốt nhất", rnd: "Lượt", ex: "Vừa vẽ", hint0: "Đặt ngón tay xuống và vẽ một vòng tròn thật tròn, thật kín, không nhấc tay.", hint1: "Vẽ mù: nét vẽ BIẾN MẤT khi bạn đang vẽ — chỉ nhìn thấy sau khi nhấc tay. Tin vào cảm giác!", hint2: "Theo mẫu mờ: mỗi lượt một hình (vuông → sao → bản đồ Việt Nam), vẽ chồng lên mẫu.", hint3: "Chỉ 3 giây cho mỗi nét! Hết giờ là tự nhấc bút, kịp vẽ kín vòng nhé.",
+      sc: "Tốt nhất", rnd: "Lượt", ex: "Vừa vẽ", hint0: "Đặt ngón tay xuống và vẽ một vòng tròn thật tròn, thật kín, không nhấc tay. Trên máy tính: đặt 2 ngón lên bàn di chuột rồi lướt để vẽ.", hint1: "Vẽ mù: nét vẽ BIẾN MẤT khi bạn đang vẽ — chỉ nhìn thấy sau khi nhấc tay. Tin vào cảm giác!", hint2: "Theo mẫu mờ: mỗi lượt một hình (vuông → sao → bản đồ Việt Nam), vẽ chồng lên mẫu.", hint3: "Chỉ 3 giây cho mỗi nét! Hết giờ là tự nhấc bút, kịp vẽ kín vòng nhé.",
       end: "Xong 3 lượt!", endS: "Lượt đẹp nhất của bạn: {n}", rt: ["Tay run", "Nét ngoằn ngoèo", "Tay khá vững", "Tay vẽ thạo", "Compa sống"],
       tx: "✏️ Vẽ Một Nét · {t}\nMình vẽ được {n}!\n{l}", ask: "Bạn vẽ đẹp hơn mình không?",
       lockP: "Vẽ mù, Theo mẫu mờ, Vẽ 3 giây và 4 giao diện (Bảng đen phấn, Giấy dó thư pháp, Máy game neon, Vườn cát thiền) với khung vẽ và bố cục riêng là của Night Pass. Dùng thử 1 ván mỗi ngày hoặc mở khoá tất cả.",
@@ -23,7 +23,7 @@ module.exports = {
       re: ["Hoàn hảo như compa!", "Quá đỉnh!", "Tròn ra phết!", "Cũng… tròn!", "Quả trứng méo!"], reS: ["Hoàn hảo!", "Quá đỉnh!", "Đẹp đấy!", "Cũng được!", "Hơi méo rồi!"],
       sk: { basic: ["Vở ô li", "Notebook"], chalk: ["Bảng đen phấn", "Chalkboard"], brush: ["Giấy dó thư pháp", "Ink & paper"], neon: ["Máy game neon", "Neon arcade"], zen: ["Vườn cát thiền", "Zen sand garden"] } },
     en: { sub: "Draw the roundest circle you can in ONE stroke without lifting your finger. The game scores roundness in %!", note: "3 tries, best one counts · everyone draws the same shape each day",
-      sc: "Best", rnd: "Try", ex: "Last", hint0: "Put your finger down and draw one round, closed circle without lifting.", hint1: "Blind draw: your stroke VANISHES while you draw — you only see it after lifting. Trust your hand!", hint2: "Ghost trace: a different shape each try (square → star → Vietnam map), draw over the ghost.", hint3: "Only 3 seconds per stroke! Time is up, the pen lifts itself — close that circle fast.",
+      sc: "Best", rnd: "Try", ex: "Last", hint0: "Put your finger down and draw one round, closed circle without lifting. On a computer: rest 2 fingers on the trackpad and glide to draw.", hint1: "Blind draw: your stroke VANISHES while you draw — you only see it after lifting. Trust your hand!", hint2: "Ghost trace: a different shape each try (square → star → Vietnam map), draw over the ghost.", hint3: "Only 3 seconds per stroke! Time is up, the pen lifts itself — close that circle fast.",
       end: "3 tries done!", endS: "Your best try: {n}", rt: ["Shaky hand", "Wobbly line", "Steady hand", "Skilled hand", "Human compass"],
       tx: "✏️ One Stroke · {t}\nI drew {n}!\n{l}", ask: "Can you draw better than me?",
       lockP: "Blind draw, Ghost trace, 3-second draw and 4 themes (Chalkboard, Ink & paper, Neon arcade, Zen sand garden) with their own drawing boards and layouts are for Night Pass. Try one round a day or unlock everything.",
@@ -89,7 +89,13 @@ function draw(){if(!ctx||!cv.width)return;const sk=skinOf(),dm=sk.dim||[360,400]
  if(sk.fx)sk.fx(c,W,H,tm,dk)}
 function pt(e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H]}
 cv.addEventListener("pointerdown",e=>{const D=G;if(!D||D.over||paused)return;if(e.pointerType==="mouse"&&e.button!==0)return;e.preventDefault();if(D.st==="res"){drNext(D);return}D.cur=[pt(e)];D.cur0=performance.now();try{cv.setPointerCapture(e.pointerId)}catch(x){}});
-cv.addEventListener("pointermove",e=>{const D=G;if(!D||!D.cur)return;const p=pt(e),a=D.cur[D.cur.length-1];if(dst(p,a)>=2.5){D.cur.push([Math.max(0,Math.min(W,p[0])),Math.max(0,Math.min(H,p[1]))]);if(D.cur.length%12===0)sfx.draw()}});
+cv.addEventListener("pointermove",e=>{const D=G;if(D)D.hovp=pt(e);if(!D||!D.cur)return;const p=pt(e),a=D.cur[D.cur.length-1];if(dst(p,a)>=2.5){D.cur.push([Math.max(0,Math.min(W,p[0])),Math.max(0,Math.min(H,p[1]))]);if(D.cur.length%12===0)sfx.draw()}});
+/* Máy tính: đặt 2 ngón lên bàn di chuột rồi lướt (giống cuộn trang) cũng vẽ được, không cần giữ nút bấm */
+let whT=0;
+cv.addEventListener("wheel",e=>{const D=G;if(!D||D.over||paused||D.st==="res"&&false)return;e.preventDefault();if(D.st==="res"){drNext(D);return}if(D.st!=="draw")return;const r=cv.getBoundingClientRect(),k=(e.deltaMode===1?16:1)*W/r.width;
+ if(!D.cur){const s=D.hovp||[W/2,H/2];D.cur=[[Math.max(0,Math.min(W,s[0])),Math.max(0,Math.min(H,s[1]))]];D.cur0=performance.now();D.wh=1}
+ if(!D.wh)return;const a=D.cur[D.cur.length-1],nx=Math.max(0,Math.min(W,a[0]-e.deltaX*k*1.15)),ny=Math.max(0,Math.min(H,a[1]-e.deltaY*k*1.15));if(Math.hypot(nx-a[0],ny-a[1])>=1.5){D.cur.push([nx,ny]);if(D.cur.length%12===0)sfx.draw()}
+ clearTimeout(whT);whT=setTimeout(()=>{if(G===D&&D.wh){D.wh=0;endStroke()}},280)},{passive:false});
 const endStroke=()=>{const D=G;if(!D||!D.cur)return;const p=D.cur;D.cur=null;if(D.st==="draw")drScore(D,p)};
 cv.addEventListener("pointerup",endStroke);cv.addEventListener("pointercancel",endStroke);
 function onBegin(D){fitCanvas()}
