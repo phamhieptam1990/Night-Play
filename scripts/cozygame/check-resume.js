@@ -3,7 +3,7 @@
    Mặc định chạy nhóm đại diện (6 Cozy sinh tự động + 3 viết tay + 3 Pop Play + Back qua trang cổng); --all = cả 32 game.
    Mỗi game: chơi dở → có bản lưu (np-resume:<id>) → tải lại thấy thẻ "Tiếp tục" → bấm → ván trở lại đúng (seed/loại), NP.helper = false, nút bảng điểm hiện lại
    → kết thúc (np.result) xoá bản lưu. Thêm: bản lưu hết hạn bị bỏ, chơi hộ (?helper=1) và thách đấu (#ch=) không lưu.
-   Back (qua trang cổng): đang chơi → Back = về màn chọn game; Back lần nữa = đóng game; rời màn chơi bằng ← thì lịch sử không phình. */
+   Back (qua trang cổng): đang chơi → Back = popup "Thoát ván này?" (Tiếp tục chơi ở lại / Thoát mới về màn chọn game); Back lần nữa = đóng game; rời màn chơi bằng ← thì lịch sử không phình. */
 const { spawn } = require("child_process"), fs = require("fs"), path = require("path"), puppeteer = require("puppeteer-core");
 const root = path.join(__dirname, "..", ".."), PORT = 8878, O = "http://localhost:" + PORT;
 const ALL = process.argv.includes("--all"), ONLY = (process.argv.find(a => a.startsWith("--only=")) || "").slice(7).split(",").filter(Boolean);
@@ -111,7 +111,15 @@ const TUT = ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "xn", "dd", "
     const ok = await startPlay(pg, fr); note(ok, id, "không bắt đầu được ván qua cổng");
     await pg.mouse.click(3, 420); await sleep(1500);
     const a = await info(); note(a.on && a.play === true, id, "trước khi back: game không ở trạng thái đang chơi " + JSON.stringify(a));
-    await pg.evaluate(() => history.back()); await sleep(1600);
+    /* Back khi đang chơi → popup "Thoát ván này?" (shared/exitconfirm.js): "Tiếp tục chơi" ở lại, "Thoát" mới về màn chọn */
+    const popup = async fr0 => fr0.evaluate(() => { const o = document.getElementById("npxO"); if (!o) return null; return { h: [...o.querySelectorAll("button")].map(b => Math.round(b.getBoundingClientRect().height)), s: o.querySelector(".npxc").scrollHeight > o.querySelector(".npxc").clientHeight + 1 }; }).catch(() => null);
+    await pg.evaluate(() => history.back()); await sleep(1000);
+    fr = pg.frames().find(f => f.url().includes("/games/" + id));
+    const p0 = await popup(fr); note(!!p0 && p0.h.every(x => x >= 48) && !p0.s, id, "Back khi đang chơi phải hiện popup xác nhận (nút >= 48px, không cuộn): " + JSON.stringify(p0));
+    await fr.evaluate(() => document.querySelector("#npxO .npx-go").click()); await sleep(500);
+    const stay = await info(); note(stay.on && stay.play === true && !(await popup(fr)), id, "'Tiếp tục chơi' phải ở lại ván: " + JSON.stringify(stay));
+    await pg.evaluate(() => history.back()); await sleep(1000);
+    await fr.evaluate(() => { const b = document.querySelector("#npxO .npx-out"); b && b.click(); }); await sleep(1600);
     const b1 = await info(); note(b1.on && b1.play === false && b1.hash === "#" + id, id, "Back khi đang chơi phải về MÀN CHỌN (game vẫn mở): " + JSON.stringify(b1));
     await pg.evaluate(() => history.back()); await sleep(1800);
     const b2 = await info(); note(!b2.on && b2.hash === "", id, "Back ở màn chọn phải ĐÓNG game: " + JSON.stringify(b2));
@@ -122,7 +130,8 @@ const TUT = ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "xn", "dd", "
     const fr2 = pg2.frames().find(f => f.url().includes("/games/" + id)); const ok2 = fr2 && await startPlay(pg2, fr2);
     if (ok2) {
       await pg2.mouse.click(3, 420); await sleep(1400);
-      await fr2.evaluate(() => { const e = document.getElementById("bBk") || document.getElementById("homeBtn"); e && e.click(); }); await sleep(1800);
+      await fr2.evaluate(() => { const e = document.getElementById("bBk") || document.getElementById("homeBtn"); e && e.click(); }); await sleep(900);
+      await fr2.evaluate(() => { const b = document.querySelector("#npxO .npx-out"); b && b.click(); }); await sleep(1400);   // ← khi đang chơi cũng hỏi trước
       await pg2.evaluate(() => history.back()); await sleep(1800);
       const c = { hash: await pg2.evaluate(() => location.hash), on: await pg2.evaluate(() => document.getElementById("stage").classList.contains("on")) };
       note(!c.on && c.hash === "", id, "sau khi thoát màn chơi bằng ← / 🏠, một lần Back phải đóng game: " + JSON.stringify(c));

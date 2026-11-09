@@ -1,0 +1,17 @@
+{
+  "name": "Pop Play",
+  "short_name": "Pop Play",
+  "description": "Game vui cho bé, không quảng cáo, không theo dõi cá nhân. Thêm vào Màn hình chính để chơi toàn màn hình.",
+  "id": "/popplay/",
+  "start_url": "/popplay/index.html",
+  "scope": "/popplay/",
+  "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone"],
+  "background_color": "#FFF6EC",
+  "theme_color": "#FFF6EC",
+  "icons": [
+    { "src": "/shared/pop-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/shared/pop-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/shared/pop-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

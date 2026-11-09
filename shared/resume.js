@@ -10,12 +10,17 @@
 (function () {
   "use strict";
   var NP = window.NP; if (!NP || !NP.peek || !NP.gid) return;
+  /* nạp các mô-đun đi kèm (không phải sửa từng game): shared/exitconfirm.js (hỏi trước khi thoát + chống bấm nhầm), shared/inapp.js (banner "Mở bằng trình duyệt" ở trang chơi hộ/thách đấu) */
+  var base = ((document.currentScript && document.currentScript.src) || "").replace(/resume\.js(\?.*)?$/, "");
+  function load(f) { if (!base) return; var sc = document.createElement("script"); sc.src = base + f; sc.async = false; (document.head || document.documentElement).appendChild(sc); }
+  load("exitconfirm.js");
   var gid = NP.gid, RK = "np-resume:" + gid;
   var q = new URLSearchParams(location.search);
   var realHelper = q.get("helper") === "1", challenge = /^#ch=/.test(location.hash);
   /* game chưa có đường khởi tạo từ trạng thái (initialState) thì chỉ dùng Back, không lưu/tiếp tục */
   var NO_RESUME = { "ban-co-hieu-toi": 1, "be-dau-bo-me": 1 };
   var canResume = !realHelper && !NO_RESUME[gid];
+  if (realHelper || challenge) load("inapp.js");
   var vi = function () { return (document.documentElement.lang || "vi") === "vi"; };
   var vnDay = function () { try { return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Ho_Chi_Minh" }).format(new Date()); } catch (e) { return new Date().toISOString().slice(0, 10); } };
   var read = function () {
@@ -64,15 +69,27 @@
   addEventListener("popstate", function () {
     if (ignore > 0) { ignore--; return; }
     if (!pushed) return;
-    pushed = false; saveNow();
+    pushed = false;
+    var X = window.NPExit;
+    if (X && X.open()) { X.dismiss(); doPush(); return; }   // Back lần nữa khi popup đang mở = ở lại chơi tiếp
+    if (X && X.playing()) {                                 // đang chơi: hỏi trước (giữ lại mục lịch sử để Back sau vẫn bắt được)
+      doPush(); saveNow(); X.ask(exitNow); return;
+    }
+    saveNow();
     var h = findHome(); if (h) h();
   });
+  /* thoát thật (người chơi đã chọn "Thoát"): gỡ mục lịch sử đã đẩy, lưu ván, về màn chọn */
+  function exitNow() {
+    leavePlay(); saveNow();
+    var h = findHome(); if (h) { if (window.NPExit) NPExit.bypass(h); else h(); }
+  }
 
   /* ---------- vòng kiểm tra nhẹ (500ms): lịch sử + lưu định kỳ ---------- */
   var bootDone = false;
   addEventListener("load", function () { setTimeout(function () { bootDone = true; }, 500); });
   setInterval(function () {
     var st = NP.peek(); playing = !!st;
+    if (window.NPExit) NPExit.tick(playing);
     if (playing) tryPush(); else if (pushed) leavePlay();
     if (st && Date.now() - lastSave >= 4000) write(st);
   }, 500);
@@ -134,6 +151,8 @@
 
   window.NPResume = {
     flush: saveNow,
+    exitNow: exitNow,
+    canSave: function () { return canResume && !challenge; },
     exitPlay: function () { if (pushed) { try { history.back(); } catch (e) { return false; } return true; } return false; },
     has: function () { return !!read(); }
   };

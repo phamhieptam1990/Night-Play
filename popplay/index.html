@@ -10,6 +10,12 @@
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#FFF6EC" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#1B2340" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Pop Play">
+<link rel="apple-touch-icon" href="../shared/pop-180.png">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Pop Play">
 <meta property="og:description" content="Fun, safe games for little ones.">
@@ -344,6 +350,8 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 }
 </style>
 <script src="../shared/offline.js" defer></script>
+<script src="../shared/inapp.js" defer></script>
+<script src="../shared/kidlock.js" defer></script>
 </head>
 <body>
 <nav class="nav" aria-label="Main">
@@ -638,7 +646,7 @@ function startTimer(){
     usedSec++;
     if(usedSec % 5 === 0) saveUsed();
     updateSleep();
-    if(isTimeUp()) goHome();                       // hết giờ: tự về trang chủ
+    if(isTimeUp()){ try{ frame.contentWindow.NPExit.allow(); }catch(e){} exitOK = Date.now() + 1500; goHome(); }                       // hết giờ: tự về trang chủ
   }, 1000);
 }
 function stopTimer(){ if(timer){ clearInterval(timer); timer = 0; saveUsed(); updateSleep(); } }
@@ -868,13 +876,28 @@ function closeGame(){
   /* về trang chủ: tính lại bố cục lưới (cỡ cửa sổ có thể đã đổi lúc đang chơi) */
   requestAnimationFrame(() => { try{ fitGrid(); }catch(e){} setTimeout(() => { try{ fitGrid(); }catch(e){} }, 250); });
 }
+/* hỏi trước khi thoát ván đang chơi (shared/exitconfirm.js trong game): 🏠 / Back của trình duyệt */
+let exitOK = 0, curId = "";
+function gamePlaying(){ try{ const w = frame && frame.contentWindow; return !!(w && w.NPExit && w.NPExit.playing()); }catch(e){ return false; } }
+function askLeave(go){
+  try{ const w = frame.contentWindow; w.NPExit.ask(() => { try{ w.NPExit.allow(); }catch(e){} exitOK = Date.now() + 1500; go(); }); }
+  catch(e){ exitOK = Date.now() + 1500; go(); }
+}
 function route(){
   const g = games.find(x => x.id === location.hash.slice(1));
+  if(g) curId = g.id;
+  if(!g && frame && Date.now() > exitOK && gamePlaying()){   // Back của trình duyệt khi game không tự giữ mục lịch sử: quay lại mục game rồi hỏi
+    const id = curId; history.forward();
+    setTimeout(() => { if(location.hash.slice(1) !== id) history.pushState(null, "", "#" + id); }, 250);
+    askLeave(() => { history.back(); });
+    return;
+  }
   g && !prefs.off.includes(g.id) && !isTimeUp() ? openGame(g) : closeGame();
 }
 addEventListener("hashchange", route);
 $("fGames").addEventListener("click", e => { e.preventDefault(); grid.scrollIntoView({ behavior: reduceMotion.matches ? "auto" : "smooth", block: "start" }); });
 function goHome(){
+  if(frame && Date.now() > exitOK && gamePlaying()){ askLeave(goHome); return; }
   try{ if(frame && frame.contentWindow.NPResume && frame.contentWindow.NPResume.exitPlay()) return; }catch(e){}   // đang chơi: về màn chọn của game trước, bấm lần nữa mới đóng game
   if(pushed){ pushed = false; history.back(); }
   else{ history.replaceState(null, "", location.pathname + location.search); route(); }

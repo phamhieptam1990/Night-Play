@@ -584,6 +584,7 @@ function restoreStep2(email){
   };
 }
 $("restore").addEventListener("click", restoreStep1);
+if(location.hash === "#restore") setTimeout(restoreStep1, 0);   // từ banner "Khôi phục Night Pass" (shared/inapp.js)
 dlg.addEventListener("click", e => { if(e.target === dlg) closeDlg(); });
 
 /* ===== NGÔN NGỮ + THEME ===== */

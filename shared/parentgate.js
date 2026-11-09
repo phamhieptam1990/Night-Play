@@ -54,10 +54,11 @@
 
   function mmss(ms) { var s = Math.ceil(ms / 1000), m = Math.floor(s / 60); return m + ":" + String(s % 60).padStart(2, "0"); }
 
-  function ask(onOk) {
+  /* ask(onOk, onCancel, opts): onCancel chạy khi đóng cổng mà chưa trả lời đúng; opts.fresh = luôn hỏi mới (bỏ qua "nhớ 10 phút" — dùng cho khoá màn hình chơi của bé) */
+  function ask(onOk, onCancel, opts) {
     if (document.getElementById("pgOv")) return;
     var now = Date.now();
-    if (ls.get(KOK) > now) { onOk(); return; }
+    if (!(opts && opts.fresh) && ls.get(KOK) > now) { onOk(); return; }
     var x = tt(), m = makeMath(), ov = document.createElement("div"), yearNow = new Date().getFullYear(), left = MAXTRY - ls.get(KTR);
     if (left < 1 || left > MAXTRY) left = MAXTRY;
     ov.id = "pgOv"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true");
@@ -67,18 +68,19 @@
       '<p class="pge" id="pgE" role="alert"></p><div class="pgr"><button type="button" id="pgNo">' + x.cancel + '</button><button type="button" class="pri" id="pgGo">' + x.ok + '</button></div></div>';
     document.body.appendChild(ov);
     var E = ov.querySelector("#pgE"), Y = ov.querySelector("#pgY"), A = ov.querySelector("#pgA"), go = ov.querySelector("#pgGo"), timer = 0;
-    var close = function () { clearInterval(timer); ov.remove(); };
+    var settled = false;
+    var close = function (ok) { clearInterval(timer); ov.remove(); if (!ok && !settled && onCancel) { settled = true; try { onCancel(); } catch (e) {} } settled = true; };
     var locked = function () { var u = ls.get(KLK); if (u > Date.now()) { E.textContent = x.lock.replace("{m}", mmss(u - Date.now())); go.disabled = true; Y.disabled = A.disabled = true; return true; } if (u) { ls.del(KLK); ls.del(KTR); } return false; };
     if (locked()) timer = setInterval(function () { if (!locked()) { clearInterval(timer); go.disabled = false; Y.disabled = A.disabled = false; E.textContent = ""; } }, 1000);
-    ov.querySelector("#pgNo").onclick = close;
-    ov.addEventListener("click", function (e) { if (e.target === ov) close(); });
-    ov.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); if (e.key === "Enter") go.click(); });
+    ov.querySelector("#pgNo").onclick = function () { close(false); };
+    ov.addEventListener("click", function (e) { if (e.target === ov) close(false); });
+    ov.addEventListener("keydown", function (e) { if (e.key === "Escape") close(false); if (e.key === "Enter") go.click(); });
     go.onclick = function () {
       if (locked()) return;
       var y = parseInt(Y.value, 10), a = parseInt(String(A.value).replace(/[.,\s]/g, ""), 10);
       if (!Y.value.trim() || isNaN(a)) { E.textContent = x.fill; return; }
       var adult = y >= 1900 && y <= yearNow - 18, right = a === m.ans;
-      if (adult && right) { ls.set(KOK, Date.now() + OK_MS); ls.del(KTR); ls.del(KLK); close(); onOk(); return; }
+      if (adult && right) { ls.set(KOK, Date.now() + OK_MS); ls.del(KTR); ls.del(KLK); close(true); onOk(); return; }
       var tries = ls.get(KTR) + 1; ls.set(KTR, tries);
       if (tries >= MAXTRY) { ls.set(KLK, Date.now() + LOCK_MS); locked(); timer = setInterval(function () { if (!locked()) { clearInterval(timer); go.disabled = false; Y.disabled = A.disabled = false; E.textContent = ""; } }, 1000); return; }
       E.textContent = x.bad.replace("{n}", MAXTRY - tries);   /* một thông báo chung: không để lộ phần nào sai / ngưỡng tuổi */

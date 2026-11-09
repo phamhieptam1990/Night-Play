@@ -160,6 +160,8 @@ window.NP = (function () {
     brag: function () { post({ type: "brag" }); },     // người chơi chủ động bấm "Lên bảng điểm" → trang cha mở hộp đăng điểm (không tự bật sau mỗi ván)
     result: function (r) { r = r || {}; emit("result"); post({ type: "result", score: Math.max(0, Math.floor(+r.score || 0)), extra: r.extra && typeof r.extra === "object" ? r.extra : null }); },
     state: function (fn) { getter = fn; },
-    onPause: function (p, r) { pauseFn = p; resumeFn = r; }
+    onPause: function (p, r) { pauseFn = p; resumeFn = r; },
+    pauseNow: function () { if (pauseFn) try { pauseFn(); } catch (x) {} },     // shared/exitconfirm.js: tạm dừng khi hỏi thoát
+    resumeNow: function () { if (resumeFn) try { resumeFn(); } catch (x) {} }
   };
 })();
