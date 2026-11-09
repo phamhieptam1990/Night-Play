@@ -37,6 +37,34 @@
   function isPro() { var P = window.PF; if (!P) return false; var k = P.skinSel; if (Array.isArray(k)) k = k[0]; return !!k && k !== "basic" && !!(P.skins && (P.skins[k] || (P.skins[0] && P.skins[0][k]))); }
   function pro() { var v = isPro() ? "1" : ""; if ((pl.dataset.pro || "") !== v) { if (v) pl.dataset.pro = v; else delete pl.dataset.pro; } }
   setInterval(pro, 500); pro();
+  /* Nhúng trong trang cổng: gom nút CHỤP ẢNH + CHIA SẺ + QUAY LẠI vào chính thanh trên của game (một hàng, bars.js tự gom ⋯ khi chật),
+     để trang cổng không phải dựng làn riêng/nút nổi che nút của game. Trang cổng thấy cờ __npDock và ẩn các nút nổi của nó. */
+  (function () {
+    var par = null; try { par = window.parent !== window ? window.parent : null; if (par) par.document.getElementById("stage"); } catch (e) { par = null; }
+    if (!par || !par.document.getElementById("stage")) return;
+    var top = document.querySelector(".top"); if (!top) return;
+    var pd = par.document, find = function (sel) { return pd.querySelector(sel); };
+    var mk = function (id, svgOrText, label, target) {
+      var b = document.createElement("button"); b.type = "button"; b.className = "ib"; b.id = id; b.setAttribute("aria-label", label); b.title = label; b.innerHTML = svgOrText;
+      b.addEventListener("click", function () { var e = find(target); if (e) e.click(); }); return b;
+    };
+    var CAM = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l1.6-2.4h6.8L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.6"/></svg>';
+    var SHR = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="6" r="2.6"/><circle cx="18" cy="18" r="2.6"/><path d="M8.3 10.8l7.4-3.6M8.3 13.2l7.4 3.6"/></svg>';
+    var vi = (document.documentElement.lang || "vi") === "vi";
+    var anchor = document.getElementById("bSnd") || null;
+    var cam = mk("bCam", CAM, vi ? "Chụp ảnh" : "Screenshot", ".nps-cam"), shr = mk("bShr", SHR, vi ? "Chia sẻ" : "Share", ".nps-fab:not(.nps-cam)");
+    top.insertBefore(cam, anchor); top.insertBefore(shr, anchor);
+    var short = matchMedia("(orientation:landscape) and (max-height:520px)"), docked = true;   /* màn ngang thấp: hết chỗ xếp cột nút → để trang cổng dùng cột riêng bên trái */
+    function applyDock() { docked = !short.matches; cam.hidden = shr.hidden = !docked; window.__npDock = docked; if (bk && docked && bk.hidden) bk.hidden = false; if (bk && !docked) { var h0 = document.getElementById("home"); bk.hidden = !!(h0 && !h0.hidden); } }
+    /* nút ← luôn hiện: ở màn chọn thì thoát về trang cổng */
+    var bk = document.getElementById("bBk"), home = document.getElementById("home");
+    if (bk) {
+      var keep = function () { if (docked && bk.hidden) bk.hidden = false; };
+      try { new MutationObserver(keep).observe(bk, { attributes: true, attributeFilter: ["hidden"] }); } catch (e) {} keep();
+      bk.addEventListener("click", function (e) { if (docked && home && !home.hidden) { e.stopImmediatePropagation(); e.preventDefault(); var h = find("#stage #home") || find("#home"); if (h) h.click(); } }, true);
+    }
+    applyDock(); try { short.addEventListener("change", applyDock); } catch (e) { try { short.addListener(applyDock); } catch (e2) {} }
+  })();
   var t = 0;
   function wake() { document.body.classList.remove("idle"); clearTimeout(t); t = setTimeout(function () { if (pl.dataset.scr === "game") document.body.classList.add("idle"); }, 2600); }
   ["pointermove", "pointerdown", "keydown", "touchstart", "wheel"].forEach(function (e) { addEventListener(e, wake, { passive: true }); });
