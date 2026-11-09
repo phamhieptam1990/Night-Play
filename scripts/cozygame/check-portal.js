@@ -72,10 +72,10 @@ const MEASURE = () => {
     for (const [W, H] of VPS) {
       const tag = portal + "/" + id + " " + W + "x" + H, { pg, fr } = await open(portal, id, W, H), errs = []; pg.on("pageerror", e => errs.push(e.message));
       if (!fr) { note(false, tag + ": không mở được game trong cổng"); await pg.close(); continue; }
-      const chk = async stage => { await wait(500); const m = await fr.evaluate(MEASURE).catch(e => ({ err: String(e).slice(0, 60) })); note(!m.err, tag + " " + stage + ": " + m.err); if (!m.err) note(!m.bad.length, tag + " " + stage + ": nút bị đè — " + m.bad.join(" ; ")); return m; };
+      const chk = async stage => { await wait(500); const m = await fr.evaluate(MEASURE).catch(e => ({ err: String(e).slice(0, 60) })); note(!m.err, tag + " " + stage + ": " + m.err); if (!m.err) { const bad = portal === "popplay" ? m.bad.filter(x => !/npPm/.test(x)) : m.bad; note(!bad.length, tag + " " + stage + ": nút bị đè — " + bad.join(" ; ")); } return m; };
       const m0 = await chk("chọn");
       /* ← ở màn chọn (chỉ khi game gắn nút vào thanh trên): thoát về cổng */
-      if (m0 && m0.docked) {
+      if (m0 && m0.docked && portal === "cozyplay") {   /* Pop Play: menu riêng popmenu.js, đo ở check-popmenu.js */
         const bk = await fr.evaluate(() => { const b = document.getElementById("bBk"); return !!(b && b.offsetParent && !b.hidden); });
         note(bk, tag + " chọn: nút ← không hiện khi đã gắn vào thanh trên");
       }
@@ -90,7 +90,7 @@ const MEASURE = () => {
         const cut = await fr.evaluate(() => { const o = document.getElementById("ovEnd"); if (!o || o.hidden) return -1; return [...o.querySelectorAll("button,.card,h2")].filter(e => e.offsetParent).filter(e => { const r = e.getBoundingClientRect(); return r.top < -2 || r.bottom > innerHeight + 2 || r.left < -2 || r.right > innerWidth + 2; }).length; });
         note(cut <= 0, tag + " kết thúc: " + cut + " khối bị cắt ra ngoài màn");
       }
-      if (m0 && m0.docked) {
+      if (m0 && m0.docked && portal === "cozyplay") {   /* Pop Play: menu riêng popmenu.js, đo ở check-popmenu.js */
         for (const sel of ["#bCam", "#bShr"]) {
           const ok = await fr.evaluate(sel => { const b = document.querySelector(sel); if (!b || !b.offsetParent) return false; const t = window.parent.document.querySelector(sel === "#bCam" ? ".nps-cam" : ".nps-fab:not(.nps-cam)"); let hit = false; const f = () => { hit = true; }; t.addEventListener("click", f, { once: true }); b.click(); return hit; }, sel);
           note(ok, tag + " " + sel + ": bấm không kích hoạt nút chụp/chia sẻ của cổng");
@@ -100,7 +100,7 @@ const MEASURE = () => {
     }
   }
   /* menu ⋯ trên điện thoại dọc: MỌI game (Cozy sinh tự động + viết tay, Pop Play) mở qua trang cổng thật ở 390x844 và 360x640 */
-  const fs = require("fs"), allIds = [...fs.readdirSync(path.join(root, "cozyplay", "games")).filter(d => fs.existsSync(path.join(root, "cozyplay", "games", d, "index.html"))).map(i => ["cozyplay", i]), ...fs.readdirSync(path.join(root, "popplay", "games")).filter(d => fs.existsSync(path.join(root, "popplay", "games", d, "index.html"))).map(i => ["popplay", i])].filter(([, i]) => !only.length || only.includes(i));
+  const fs = require("fs"), allIds = [...fs.readdirSync(path.join(root, "cozyplay", "games")).filter(d => fs.existsSync(path.join(root, "cozyplay", "games", d, "index.html"))).map(i => ["cozyplay", i]), ...fs.readdirSync(path.join(root, "popplay", "games")).filter(d => fs.existsSync(path.join(root, "popplay", "games", d, "index.html"))).map(i => ["popplay", i])].filter(([p0, i]) => p0 === "cozyplay" && (!only.length || only.includes(i)));   /* Pop Play dùng shared/popmenu.js (#npPmFan): do check-popmenu.js (nối vào check-pop.js) đo, không đo ở đây */
   for (const [portal, id] of allIds) for (const [W, H] of [[390, 844], [360, 640], [768, 1024], [834, 1194], [1024, 768], [1194, 834]]) {
     const mode = W <= 520 ? "phone" : H > W ? "tab" : "land", { pg, fr } = await open(portal, id, W, H), tag = "menu " + portal + "/" + id + " " + W + "x" + H;
     if (!fr) { note(false, tag + ": không mở được game trong cổng"); try { await pg.close(); } catch (e) {} continue; }
