@@ -55,5 +55,18 @@ const note = (ok, msg) => { if (!ok) { fails.push(msg); console.log("  ✗ " + m
       note(!errs.length, tag + ": lỗi JS " + errs.slice(0, 1)); await pg.close();
     }
   }
+  /* Pop Play (12 game .app/.side/.play dùng shared/poplandscape.css): màn chọn ngang — khung #play ở giữa, không tràn, nút thanh trên ~42px, không bị cắt */
+  if (!only.length) for (const id of ["be-dau-bo-me", "be-noi-dung-khong", "bo-me-5-giay", "con-vat-an-so", "doan-tuoi-nao", "lang-cua-be", "nhay-theo-so", "pop-fly", "qua-song", "ten-lua-cua-be", "thap-vong-mau", "ve-chu-quai-vat"]) {
+    console.log("== pop " + id);
+    for (const [W, H] of VPS) {
+      const pg = await br.newPage(); await pg.setViewport({ width: W, height: H, isMobile: true, hasTouch: true }); await pg.evaluateOnNewDocument(() => { localStorage.setItem("np-sound", "0"); localStorage.setItem("theme", "dark"); });
+      await pg.goto("http://localhost:" + PORT + "/popplay/games/" + id + "/index.html?lang=vi"); await new Promise(r => setTimeout(r, 800));
+      const m = await pg.evaluate((W, H) => { const pl = document.getElementById("play").getBoundingClientRect(), bad = []; document.querySelectorAll(".top button,.ib,.hud,.ask,.play,.tile,.dif,.big").forEach(e => { if (!e.offsetParent) return; const r = e.getBoundingClientRect(); if (r.width < 2) return; if (r.left < -2 || r.top < -2 || r.right > W + 2 || r.bottom > H + 2) bad.push((e.id || e.className) + "@" + [r.left, r.top, r.right, r.bottom].map(Math.round)); });
+        return { iw: innerWidth, c: Math.round((pl.left + pl.right) / 2), sc: document.documentElement.scrollWidth > innerWidth + 1 || document.documentElement.scrollHeight > innerHeight + 1, ib: [...document.querySelectorAll(".top .ib")].filter(e => e.offsetParent).map(e => Math.round(e.getBoundingClientRect().height)), bad: bad.slice(0, 3) }; }, W, H);
+      const tag = "pop " + id + " " + W + "x" + H;
+      note(m.iw === W && !m.sc, tag + ": tràn/cuộn hoặc thiếu thẻ viewport"); note(!m.bad.length, tag + ": bị cắt " + m.bad.join(" ")); note(Math.abs(m.c - W / 2) <= W * .08, tag + ": khung chơi lệch tâm (" + m.c + ")"); note(m.ib.every(h => h >= 38 && h <= 46), tag + ": nút thanh trên " + m.ib.join("/") + "px");
+      await pg.close();
+    }
+  }
   await br.close(); srv.kill(); console.log("\n" + (fails.length ? "✗ " + fails.length + " lỗi màn ngang" : "✓ màn ngang đạt")); process.exit(fails.length ? 1 : 0);
 })();

@@ -1,0 +1,14 @@
+/* Màn hình NGANG cho game dạng .app > (.side > .top/.ask/.hud) + .play (Pop Play + Cozy Wings): khung chơi nằm GIỮA màn hình,
+   cột trái = tên + nút + câu hỏi/mục tiêu, cột phải = điểm, tim, combo (đối xứng). Nhúng sau thẻ <style> của game:
+   <link rel="stylesheet" href="../../../shared/poplandscape.css"> */
+@media (min-aspect-ratio:11/10) and (max-height:760px){
+  :root{--w:calc((100dvh - 16px)*.75)}
+  .app{display:grid;grid-template-columns:minmax(0,1fr) var(--w) minmax(0,1fr);grid-template-rows:1fr auto 1fr;align-items:center;justify-items:stretch;column-gap:14px;row-gap:10px;padding:0 max(12px,env(safe-area-inset-right)) 0 max(12px,env(safe-area-inset-left))}
+  .side{display:contents}
+  .top{grid-column:1;grid-row:1;align-self:end;flex-wrap:wrap}
+  .top h1{white-space:normal;flex:1 1 100%;font-size:18px}
+  .top .ib{width:42px;height:42px}
+  .ask{grid-column:1;grid-row:2}
+  .hud{grid-column:3;grid-row:2;flex-direction:column;align-items:flex-start;padding:10px 14px;border-radius:20px;background:var(--panel);box-shadow:var(--shadow);justify-self:start;min-width:110px}
+  .play{grid-column:2;grid-row:1 / 4}
+}
