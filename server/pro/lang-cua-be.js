@@ -11,22 +11,22 @@ function main(PF, OPTS) {
       night: {
         vars: v("linear-gradient(#1a1040,#4b2a7a)", "#2a1a5e", "#fff3c8", "#ffb703", "#2a1a00", "5cqw", ".8cqw solid #ffb703", "0 0 3cqw rgba(255,183,3,.55)"),
         deco: ["🏮", "✨", "🌙"],
-        css: "#act .env b{color:#ffb703;text-shadow:0 0 2cqw #ffb703}#act .house i{filter:hue-rotate(250deg) brightness(.9)}"
+        css: "#act .env b{color:#ffb703;text-shadow:0 0 2cqw #ffb703}#act .house i{font-size:0;filter:none}#act .house i::before{content:'🏰';font-size:27cqw;line-height:1;filter:drop-shadow(0 0 3cqw #ffb70388)}#act .env span{filter:drop-shadow(0 0 2cqw #ffb703)}"
       },
       snow: {
         vars: v("linear-gradient(#e8f4ff,#b9d8f2)", "#fff", "#1f3b57", "#3b82f6", "#fff", "8cqw", ".8cqw solid #fff", "0 1cqw 3cqw rgba(60,110,170,.28)"),
         deco: ["❄️", "⛄", "✨"],
-        css: "#act .house i{filter:saturate(.6) brightness(1.15)}"
+        css: "#act .house i{font-size:0;filter:none}#act .house i::before{content:'⛄';font-size:25cqw;line-height:1}#act .house b{transform:translate(-50%,40%);color:#1f3b57;text-shadow:0 0 1cqw #fff}"
       },
       candy: {
         vars: v("linear-gradient(#ffd3ea,#ffb0d6)", "#fff0f8", "#6b1d4a", "#ff4fa3", "#fff", "9cqw", ".9cqw dashed #fff", "0 1cqw 0 rgba(255,79,163,.45)"),
         deco: ["🍭", "🍬", "🧁"],
-        css: "#act .house i{filter:hue-rotate(300deg) saturate(1.4)}#act .opt,#act .tile,#act .lcard{transform:rotate(-1.5deg)}"
+        css: "#act .house i{font-size:0;filter:none}#act .house i::before{content:'🍰';font-size:25cqw;line-height:1}#act .house b{transform:translate(-50%,10%);color:#fff;text-shadow:0 .6cqw 0 #d44f99}#act .opt,#act .tile,#act .lcard{transform:rotate(-1.5deg)}"
       },
       jungle: {
         vars: v("linear-gradient(#bff0b0,#4fae6a)", "#f4ffe8", "#1f3d1f", "#e07a1f", "#fff", "3cqw", "1cqw solid #2f7a45", "0 1cqw 0 rgba(31,90,50,.5)"),
         deco: ["🌿", "🦜", "🍃"],
-        css: "#act .house i{filter:hue-rotate(80deg)}"
+        css: "#act .house i{font-size:0;filter:none}#act .house i::before{content:'🌳';font-size:27cqw;line-height:1}#act .house b{transform:translate(-50%,10%)}"
       }
     },
     { /* ===== KHU 2: NÔNG TRẠI SỐ ===== */
