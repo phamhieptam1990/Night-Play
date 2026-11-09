@@ -833,7 +833,7 @@ let raf = 0, t0 = 0;
 function holdTick(now){
   const p = Math.min((now - t0) / HOLD_MS, 1);
   ringC.style.strokeDashoffset = 163.4 * (1 - p);
-  if(p >= 1){ stopHold(); renderPrefs(); gate.classList.add("on"); $("gTitle").focus(); }
+  if(p >= 1){ stopHold(); const openGate = () => { renderPrefs(); gate.classList.add("on"); $("gTitle").focus(); }; if(window.ParentGate) ParentGate.ask(openGate); else openGate(); }
   else raf = requestAnimationFrame(holdTick);
 }
 function stopHold(){ cancelAnimationFrame(raf); raf = 0; ringC.style.strokeDashoffset = 163.4; }
@@ -911,3 +911,4 @@ setInterval(sync,600);document.addEventListener("load",sync,true);})();
 <script src="../shared/passwatch.js" defer></script>
 </body>
 </html>
+<script src="../shared/parentgate.js"></script>
