@@ -173,6 +173,44 @@ html.playing,html.playing body{overflow:hidden;height:100%}
 .opt img{display:block;width:100%;aspect-ratio:1;border-radius:14px;border:3px solid transparent;margin-bottom:4px}
 .opt[aria-pressed=true] img{border-color:var(--accent)}
 .opt[aria-pressed=false] img{opacity:.35;filter:grayscale(1)}
+
+/* ===== popup phụ huynh: danh sách game dạng slide + tìm kiếm/lọc, bố cục gọn ===== */
+.box{width:min(520px,100%)}
+.gs{padding:14px}.gs h3{margin:0}
+.gsg .ghd{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+#gCount{font-size:12px;font-weight:800;opacity:.7;white-space:nowrap}
+.gtools{display:flex;gap:8px;margin-bottom:8px}
+#gQ{flex:1;min-width:0;height:44px;border-radius:12px;border:2px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;font-size:15px;padding:0 12px;-webkit-appearance:none;appearance:none}
+#gQ:focus{outline:none;border-color:var(--accent)}
+#gAll{flex:none;min-height:44px;padding:0 12px;border-radius:12px;font-weight:800;font-size:13px}
+.gcats{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:10px;padding-bottom:2px}.gcats::-webkit-scrollbar{display:none}
+.gcats button{flex:none;min-height:36px;padding:0 14px;border-radius:99px;background:var(--panel);border:2px solid var(--line);color:var(--ink);font-weight:700;font-size:13px}
+.gcats button[aria-pressed=true]{background:var(--accent);color:var(--on-accent,#fff);border-color:transparent}
+#gameOpts{display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;gap:0}
+#gameOpts::-webkit-scrollbar{display:none}
+#gameOpts .pg{flex:0 0 100%;min-width:0;scroll-snap-align:start;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:min-content;gap:10px 6px;align-content:start}
+#gameOpts .opt{min-width:0;color:var(--ink)}
+#gameOpts .opt img{width:56px;height:56px;aspect-ratio:auto;margin:0 auto 4px;border-radius:14px}
+#gameOpts .opt span{display:block;font-size:10.5px;line-height:1.15;max-height:2.35em;overflow:hidden;word-break:break-word}
+.gnone{grid-column:1/-1;text-align:center;padding:22px 8px;font-size:14px;opacity:.7}
+#gNav{display:flex;align-items:center;justify-content:center;gap:4px;margin-top:8px;min-height:36px}
+#gNav .gn{width:36px;height:36px;border-radius:50%;background:var(--panel);border:2px solid var(--line);color:var(--ink);font-size:20px;line-height:1;font-weight:800;padding:0}
+#gNav .gn:disabled{opacity:.35}
+#gDots{display:flex;align-items:center;justify-content:center;gap:0;color:var(--accent);min-width:0}
+#gDots button{width:24px;height:24px;padding:0;background:none;border:0;display:grid;place-items:center;color:inherit}
+#gDots button::after{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.28;transition:all .2s}
+#gDots button[aria-current=true]::after{opacity:1;width:18px;border-radius:5px}
+@media (orientation:landscape) and (max-height:520px){.box{width:min(900px,100%)}.gb{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:0 14px;align-items:start}.gb .promo{grid-column:1/-1}.gs{margin-bottom:10px}#gameOpts .opt img{width:48px;height:48px}}
+
+/* gọn: nút thời gian 4 cột, chân popup một hàng, ẩn thông báo sự kiện khi popup mở */
+.gs{margin-bottom:10px;padding:12px}
+#timeOpts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+#timeOpts button{min-height:40px;padding:0 4px;font-size:13px;border-radius:12px;white-space:nowrap}
+.urow{margin-top:8px}.urow .used{font-size:13px;margin:0}
+@media (max-width:520px){.gf{flex-wrap:nowrap;gap:10px 14px;padding-top:8px;padding-bottom:calc(10px + env(safe-area-inset-bottom))}.gf a{font-size:13px;white-space:nowrap}#close{width:auto!important;margin:0 0 0 auto!important;min-height:44px;padding:0 20px;flex:none}}
+body:has(#gate.on) .ns-toast{display:none!important}
+.gcats[hidden],#gNav[hidden]{display:none!important}
+@media (orientation:landscape) and (max-height:520px){.gb .promo{padding:8px 14px;min-height:0}.gs h3{font-size:12px}#gQ{height:38px}#gAll{min-height:38px}.gcats button{min-height:32px}#timeOpts button{min-height:34px}.gsg .ghd{margin-bottom:6px}.gtools,.gcats{margin-bottom:6px}#gNav{margin-top:4px}}
 /* Hết giờ chơi + thanh thời gian còn lại */
 #sleep{display:flex;align-items:center;justify-content:center;gap:14px;margin:0 0 16px;padding:14px 18px;border-radius:24px;background:var(--panel);box-shadow:var(--shadow);font-weight:700}
 #sleep[hidden]{display:none}
@@ -384,13 +422,12 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
         <div class="urow"><p class="used" id="usedTxt"></p><button id="resetT" class="sec" type="button"></button></div>
         <div class="meter" id="meter" hidden><b></b></div>
       </section>
-      <section class="gs">
-        <h3 id="gGamesH"></h3>
+      <section class="gs gsg">
+        <div class="ghd"><h3 id="gGamesH"></h3><span id="gCount"></span></div>
+        <div class="gtools"><input id="gQ" type="search" autocomplete="off" enterkeyhint="search"><button id="gAll" class="sec" type="button"></button></div>
+        <div id="gCats" class="gcats" role="group"></div>
         <div id="gameOpts" class="opts"></div>
-      </section>
-      <section class="gs">
-        <h3 id="gLang"></h3>
-        <select id="langSel" aria-labelledby="gLang"></select>
+        <div id="gNav"><button id="gPrev" type="button" class="gn">‹</button><div id="gDots" role="group"></div><button id="gNext" type="button" class="gn">›</button></div>
       </section>
     </div>
     <div class="gf">
@@ -501,7 +538,6 @@ function applyLang(){
   $("themeBtn").setAttribute("aria-label", t.theme);
   $("home").setAttribute("aria-label", t.home);
   $("gTitle").textContent = t.parents;
-  $("gLang").textContent = t.lang;
   $("close").textContent = t.close; $("gX").setAttribute("aria-label", t.close);
   const u = $("pass"); $("passTxt").textContent = t.upgrade; u.href = "../subscribe.html?from=popplay/index.html&lang=" + lang;
   const m = $("mail"); m.href = "mailto:" + EMAIL; m.textContent = t.contact;
@@ -620,20 +656,54 @@ function renderPrefs(){
   $("usedTxt").textContent = t.usedToday + ": " + Math.floor(usedSec / 60) + (prefs.limit ? " / " + prefs.limit : "") + " " + t.min;
   const mt = $("meter"); mt.hidden = !prefs.limit;
   if(prefs.limit){ const pc = Math.min(1, usedSec / (prefs.limit * 60)); mt.firstChild.style.width = (pc * 100) + "%"; mt.classList.toggle("hot", pc >= .9); }
-  games.forEach(g => {
-    const on = !prefs.off.includes(g.id), b = document.createElement("button");
-    b.type = "button"; b.className = "opt"; b.setAttribute("aria-pressed", on);
-    b.innerHTML = '<img alt="" draggable="false" width="84" height="84"><span></span>';
-    b.firstChild.src = g.thumb; b.lastChild.textContent = gname(g);
-    b.addEventListener("click", () => {
-      const off = prefs.off.includes(g.id);
-      if(!off && enabled().length === 1) return;   // luôn giữ ít nhất 1 game
-      prefs.off = off ? prefs.off.filter(x => x !== g.id) : prefs.off.concat(g.id);
-      savePrefs(); renderGrid(); renderPrefs();
-    });
-    gOpts.appendChild(b);
-  });
+  renderGameOpts();
 }
+/* danh sách game được phép: slide nhiều trang (8 game/trang) + tìm kiếm + lọc thể loại */
+let gQ = "", gCat = "all", gPg = 0;
+const G18 = { vi:{ q:"Tìm game…", all:"Tất cả", on:"Bật tất cả", cnt:"Đã bật {a}/{b}", none:"Không có game nào khớp", prev:"Trang trước", next:"Trang sau", page:"Trang " },
+              en:{ q:"Search games…", all:"All", on:"Enable all", cnt:"{a}/{b} on", none:"No games match", prev:"Previous page", next:"Next page", page:"Page " } };
+function renderGameOpts(){
+  const gl = G18[lang] || G18.vi, box = $("gameOpts"), PER = 8;
+  $("gQ").placeholder = gl.q; $("gQ").setAttribute("aria-label", gl.q); $("gAll").textContent = gl.on;
+  $("gCount").textContent = gl.cnt.replace("{a}", enabled().length).replace("{b}", games.length);
+  const cats = Object.keys(CATS), cc = $("gCats"); cc.textContent = ""; cc.hidden = cats.length < 2;
+  [["all", gl.all]].concat(cats.map(k => [k, CATS[k][lang] || CATS[k][DEFAULT_LANG]])).forEach(([k, label]) => {
+    const b = document.createElement("button"); b.type = "button"; b.textContent = label; b.setAttribute("aria-pressed", String(k === gCat));
+    b.addEventListener("click", () => { gCat = k; gPg = 0; renderGameOpts(); }); cc.appendChild(b);
+  });
+  const q = norm(gQ), list = games.filter(g => (gCat === "all" || g.cat === gCat) && (!q || norm(gname(g)).includes(q)));
+  const pages = Math.max(1, Math.ceil(list.length / PER)); if(gPg > pages - 1) gPg = pages - 1;
+  box.textContent = "";
+  if(!list.length){ const p = document.createElement("div"); p.className = "pg"; p.innerHTML = '<div class="gnone"></div>'; p.firstChild.textContent = gl.none; box.appendChild(p); }
+  for(let i = 0; i < list.length; i += PER){
+    const p = document.createElement("div"); p.className = "pg";
+    list.slice(i, i + PER).forEach(g => {
+      const on = !prefs.off.includes(g.id), b = document.createElement("button");
+      b.type = "button"; b.className = "opt"; b.setAttribute("aria-pressed", on);
+      b.innerHTML = '<img alt="" draggable="false" width="56" height="56"><span></span>';
+      b.firstChild.src = g.thumb; b.lastChild.textContent = gname(g);
+      b.addEventListener("click", () => {
+        const off = prefs.off.includes(g.id);
+        if(!off && enabled().length === 1) return;   // luôn giữ ít nhất 1 game
+        prefs.off = off ? prefs.off.filter(x => x !== g.id) : prefs.off.concat(g.id);
+        savePrefs(); renderGrid(); renderPrefs();
+      });
+      p.appendChild(b);
+    });
+    box.appendChild(p);
+  }
+  const dots = $("gDots"); dots.textContent = ""; $("gNav").hidden = pages < 2;
+  for(let i = 0; i < pages; i++){ const d = document.createElement("button"); d.type = "button"; d.setAttribute("aria-label", gl.page + (i + 1)); d.addEventListener("click", () => goPg(i)); dots.appendChild(d); }
+  $("gPrev").setAttribute("aria-label", gl.prev); $("gNext").setAttribute("aria-label", gl.next);
+  markPg(gPg);
+  requestAnimationFrame(() => { box.style.scrollBehavior = "auto"; box.scrollLeft = gPg * box.clientWidth; box.style.scrollBehavior = ""; });
+}
+function markPg(i){ [...$("gDots").children].forEach((d, k) => d.setAttribute("aria-current", String(k === i))); const n = $("gDots").children.length; $("gPrev").disabled = i <= 0; $("gNext").disabled = i >= n - 1; }
+function goPg(i){ const box = $("gameOpts"), n = $("gDots").children.length; i = Math.max(0, Math.min(n - 1, i)); gPg = i; box.scrollTo({ left: i * box.clientWidth, behavior: "smooth" }); markPg(i); }
+$("gameOpts").addEventListener("scroll", () => { const b = $("gameOpts"); if(!b.clientWidth) return; const i = Math.round(b.scrollLeft / b.clientWidth); if(i !== gPg){ gPg = i; markPg(i); } }, { passive: true });
+$("gPrev").addEventListener("click", () => goPg(gPg - 1)); $("gNext").addEventListener("click", () => goPg(gPg + 1));
+$("gQ").addEventListener("input", e => { gQ = e.target.value; gPg = 0; renderGameOpts(); });
+$("gAll").addEventListener("click", () => { prefs.off = []; savePrefs(); renderGrid(); renderPrefs(); });
 $("resetT").addEventListener("click", () => { usedSec = 0; saveUsed(); updateSleep(); renderPrefs(); });
 
 /* ===== LƯỚI ===== */
@@ -827,15 +897,12 @@ $("close").addEventListener("click", closeGate);
 $("gX").addEventListener("click", closeGate);
 gate.addEventListener("click", e => { if(e.target === gate) closeGate(); });
 addEventListener("keydown", e => { if(e.key === "Escape" && gate.classList.contains("on")) closeGate(); });
-const sel = $("langSel");
-for(const k in i18n){ const o = new Option(i18n[k].name, k); sel.add(o); }
 function setLang(l, save){
-  lang = l; sel.value = l;
+  lang = l;
   if(save) try{ localStorage.setItem("lang", l); }catch(e){}
   applyLang();
   menu.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.l === l)));
 }
-sel.addEventListener("change", () => setLang(sel.value, true));
 
 /* ===== NÚT ĐỔI NGÔN NGỮ ===== */
 const menu = $("langMenu");
