@@ -220,20 +220,102 @@ h1 span{color:var(--accent)}
   body.hud-dim .top,body.hud-dim .shout,body.hud-dim .stats,body.hud-dim .timebar{opacity:.18}
 }
 @media (prefers-reduced-motion: reduce){.note,.note.hit{transition:none}.desk.shake{animation:none}.float{animation-duration:.01s}}
+
+/* ===== MÀN CHỌN (giống các game Cozy khác): chế độ → cấp độ → Chơi; nút thanh trên chuẩn 44px ===== */
+.ib{width:44px;height:44px;min-width:44px;padding:0;border-radius:50%;border:2px solid var(--line);background:var(--panel);color:var(--ink);font:800 16px var(--body);cursor:pointer;display:inline-grid;place-items:center;line-height:0;box-shadow:0 3px 0 rgba(0,0,0,.14)}
+.ib:active{transform:translateY(2px);box-shadow:none}.ib:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+#bLang{font-size:13px!important;letter-spacing:0;line-height:1;padding:0}
+.top .icon-btn{width:44px;height:44px;min-width:44px;padding:0;border-radius:50%;justify-content:center}
+#bBk{margin-right:auto}
+@media not all and (max-height:760px) and (min-aspect-ratio:11/10){.top h1{order:-2}#bBk{order:-1}}   /* dọc: tiêu đề một hàng riêng, ← nằm đầu hàng nút */
+#home{display:none}
+body.at-home #home{display:flex}
+body.at-home .stats,body.at-home .timebar,body.at-home .desk-wrap,body.at-home .shout,body.at-home #leftBox{display:none}
+body.at-home .top{max-width:min(560px,100%)}
+body.at-home .top h1{flex:1 1 0!important;min-width:0}
+#home{flex-direction:column;gap:10px;width:100%;max-width:min(560px,100%);min-height:0}
+.hl,.hr{display:contents}
+.hhero{order:1;text-align:center;font-size:44px;line-height:1.1}
+.hsub{order:2;margin:0;text-align:center;color:var(--muted);font-weight:600;font-size:14px;text-wrap:balance}
+.hdaily{order:3;display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:0;border-radius:18px;padding:8px 16px;min-height:58px;cursor:pointer;color:var(--on-accent);background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 55%,#ff5a8a));box-shadow:0 5px 0 color-mix(in srgb,var(--accent) 50%,#000);font-family:var(--body);position:relative}
+.hdaily .n{font:400 24px var(--display)}.hdaily b{display:block;font-size:16px;line-height:1.2}.hdaily small{display:block;opacity:.88;font-size:12.5px;line-height:1.2}
+.hdaily .go{margin-left:auto;font-size:18px}
+.hdaily:active{transform:translateY(3px);box-shadow:0 2px 0 color-mix(in srgb,var(--accent) 50%,#000)}
+.hdaily.lock{background:repeating-linear-gradient(135deg,var(--panel) 0 10px,color-mix(in srgb,var(--ink) 6%,var(--panel)) 10px 20px);color:var(--ink);border:2px dashed color-mix(in srgb,var(--accent) 55%,transparent);box-shadow:none}
+.hdaily.lock .go{font-size:0}.hdaily.lock .go::before{content:"🔒";font-size:18px}.hdaily.lock::before{content:"👑";position:absolute;left:8px;top:4px;font-size:13px}
+#secModes{order:4}#secLv{order:5}.hmain{order:6}.hrow{order:7}.hchips{order:8}
+.hsec small{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:5px}
+.tys{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.ty{position:relative;min-height:78px;border-radius:16px;padding:8px 4px 6px;border:2px solid var(--line);background:linear-gradient(color-mix(in srgb,var(--accent) 7%,var(--panel)),var(--panel));color:var(--ink);box-shadow:0 4px 0 rgba(0,0,0,.18);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;font-family:var(--body)}
+.ty .e{font-size:28px;line-height:1}.ty .t{font-size:11.5px;font-weight:800;line-height:1.15;text-align:center;text-wrap:balance}
+.ty.pro{border-color:color-mix(in srgb,var(--accent) 55%,transparent)}.ty.pro::before{content:"👑";position:absolute;left:4px;top:2px;font-size:12px;line-height:1}
+.ty.on{border-color:var(--accent);background:linear-gradient(color-mix(in srgb,var(--accent) 34%,var(--panel)),color-mix(in srgb,var(--accent) 14%,var(--panel)));box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 55%,transparent),0 4px 0 rgba(0,0,0,.18)}
+.ty.lock{border-style:dashed;background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--ink) 6%,var(--panel)) 0 8px,var(--panel) 8px 16px)}
+.ty.lock .e{filter:grayscale(.6) opacity(.85)}.ty.lock::after{content:"🔒";position:absolute;right:4px;top:2px;font-size:12px;line-height:1}
+.ty:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.18)}
+html[data-skin] .ty.on{animation:tyGlow 2.4s ease-in-out infinite}
+@keyframes tyGlow{50%{box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 80%,transparent),0 0 18px color-mix(in srgb,var(--accent) 70%,transparent)}}
+.lvs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.lv{min-height:46px;border-radius:14px;border:2px solid var(--line);background:var(--panel);color:var(--ink);font:800 13px var(--body);cursor:pointer;position:relative;padding:4px 2px;box-shadow:0 3px 0 rgba(0,0,0,.14)}
+.lv.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 22%,var(--panel));box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 45%,transparent),0 3px 0 rgba(0,0,0,.14)}
+.lv.lock{border-style:dashed}.lv.dim{opacity:.45}.lv i{font-style:normal;font-size:10px;margin-left:3px}
+.hmain{font-size:22px;min-height:54px;padding:10px 24px;width:100%}
+.hrow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}.hrow .icon-btn{min-height:44px;padding:0 18px;border-radius:999px;width:auto}
+.hchips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}.hchips span{background:var(--panel);border:1.5px solid var(--line);border-radius:99px;padding:3px 12px;font-size:12.5px;font-weight:700}
+@media (max-height:700px){.hhero,.hsub{display:none}#home{gap:8px}}
+@media (max-width:340px){.hdaily{gap:8px;padding:6px 12px}.hdaily .n{font-size:20px}.hdaily b{font-size:14px}.hdaily small{font-size:11.5px}}
+@media (max-height:620px){#modeDesc{display:none}.ty{min-height:68px}.hdaily{min-height:52px;padding:6px 14px}.hmain{min-height:48px;font-size:19px}.hchips{display:none}.hsec small{margin-bottom:3px}}
+/* màn kết thúc: thẻ kết quả nổi bật theo màu nhấn + nút phụ có nhãn */
+.ecard{width:100%;border-radius:20px;padding:12px;color:#fff;text-align:center;background:radial-gradient(120% 90% at 50% -10%,color-mix(in srgb,var(--accent) 80%,#fff) 0,transparent 55%),linear-gradient(160deg,color-mix(in srgb,var(--accent) 62%,#14141f),color-mix(in srgb,var(--accent) 34%,#14141f));box-shadow:0 5px 0 rgba(0,0,0,.28),0 0 26px color-mix(in srgb,var(--accent) 38%,transparent)}
+.overlay .ecard h2{color:#fff;font-size:clamp(15px,4.4vw,20px)}.overlay .ecard h2.chw,.overlay .ecard h2.chl{color:#fff;text-shadow:none}
+.escore{font:400 clamp(44px,15vw,76px)/1 var(--display);color:#fff;text-shadow:0 4px 0 rgba(0,0,0,.28),0 0 22px color-mix(in srgb,var(--accent) 70%,transparent);margin:6px 0;animation:ePop .55s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes ePop{0%{transform:scale(.5);opacity:0}100%{transform:scale(1);opacity:1}}
+.overlay .ecard .rank{display:inline-block;padding:4px 16px;border-radius:99px;background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.45);color:#fff;font-size:clamp(14px,4vw,18px)}
+.erow{display:grid;grid-template-columns:repeat(auto-fit,minmax(88px,1fr));gap:8px;width:100%}
+.ebtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:56px;border-radius:14px;border:2px solid var(--line);background:var(--panel);color:var(--ink);font:800 11.5px var(--body);cursor:pointer;padding:4px 6px;box-shadow:0 3px 0 rgba(0,0,0,.14)}.ebtn span{font-size:20px;line-height:1}
+@media (prefers-reduced-motion:reduce){.escore{animation:none}html[data-skin] .ty.on{animation:none}}
+/* màn ngang: màn chọn hai cột (trái: nút Chơi / thử thách ngày; phải: chế độ + cấp độ) */
+@media (max-height:760px) and (min-aspect-ratio:11/10){
+  body.at-home{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}
+  body.at-home .top{grid-column:1;grid-row:1;flex-direction:row;align-items:center;max-width:none;width:100%;justify-content:flex-end}
+  body.at-home .top h1{font-size:20px}
+  body.at-home #home{grid-column:1;grid-row:2;max-width:none;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);column-gap:16px;align-items:center;align-content:center}
+  body.at-home .hl,body.at-home .hr{display:flex;flex-direction:column;gap:10px;justify-content:center;min-width:0}
+  body.at-home .tys{grid-template-columns:repeat(2,minmax(0,1fr))}body.at-home .ty{min-height:60px;flex-direction:row;gap:8px;padding:6px 8px}
+  body.at-home .ty .t{text-align:left}body.at-home .hhero,body.at-home .hsub,body.at-home #modeDesc,body.at-home .hchips{display:none}
+  .ebtn{min-height:48px}
+}
 </style>
 <script src="../../../shared/offline.js" defer></script>
 </head>
 <body>
 
 <div class="top">
+  <button class="ib" id="bBk" type="button" hidden aria-label="←">←</button>
   <h1><span id="titleTxt"></span><span class="probadge" id="proBadge" hidden></span><span class="probadge chb" id="chBadge" hidden></span></h1>
   <div id="leftBox"><span id="mood" hidden><span id="moodFace" aria-hidden="true">😐</span><span id="moodSay" role="status"></span></span><span id="chTrack" hidden><span class="ct"></span><span class="cb"><i></i></span></span></div>
   <button class="icon-btn" id="pauseBtn" type="button" hidden><span aria-hidden="true" id="pauseIco">⏸</span><span class="bl" id="pauseTxt"></span></button>
   <button class="icon-btn" id="restartBtn" type="button" hidden><span aria-hidden="true">↻</span><span class="bl" id="restartTxt"></span></button>
-  <button class="icon-btn" id="soundBtn" type="button" aria-pressed="true"><span aria-hidden="true" id="soundIco">🔊</span><span class="bl" id="soundTxt"></span></button>
-  <button class="icon-btn" id="setupBtn" type="button" aria-haspopup="dialog"><span aria-hidden="true">⚙</span><span class="bl" id="setupTxt"></span></button>
-  <button class="icon-btn" id="langBtn" type="button"><span aria-hidden="true">🌐</span> <span id="langTxt">VI</span></button>
+  <button class="icon-btn" id="setupBtn" hidden type="button" aria-haspopup="dialog"><span aria-hidden="true">⚙</span><span class="bl" id="setupTxt"></span></button>
+  <button class="ib" id="bBoard" type="button">🏆</button>
+  <button class="ib" id="bSnd" type="button" aria-pressed="true">🔊</button>
+  <button class="ib" id="bLang" type="button">EN</button>
 </div>
+
+<section id="home" hidden aria-label="Home">
+  <div class="hl">
+    <div class="hhero" id="hHero" aria-hidden="true"></div>
+    <p class="hsub" id="hSub"></p>
+    <button class="hdaily" id="bDaily" type="button"><span class="n" id="dN"></span><span class="tx"><b id="dT"></b><small id="dS"></small></span><span class="go" aria-hidden="true">▶</span></button>
+    <button class="big hmain" id="bPlay" type="button"></button>
+    <div class="hrow"><button class="icon-btn" id="bOpts" type="button"></button></div>
+    <div class="hchips" id="hChips"></div>
+  </div>
+  <div class="hr">
+    <div class="hsec" id="secModes"><small data-i="setup.mode"></small><div class="tys" id="tys"></div><p class="sdesc" id="modeDesc"></p></div>
+    <div class="hsec" id="secLv"><small data-i="setup.diff"></small><div class="lvs" id="lvs"></div></div>
+  </div>
+</section>
 
 <div class="stats">
   <div class="stat"><small data-i="score"></small><b id="score">0</b></div>
@@ -251,9 +333,7 @@ h1 span{color:var(--accent)}
 
 <div class="sheet" id="setup" hidden role="dialog" aria-modal="true" aria-labelledby="setupT">
   <div class="sheet-in">
-    <div class="sh-h"><span id="setupT" data-i="setup.t"></span><button class="icon-btn" id="setupX" type="button">✕</button></div>
-    <div class="sec"><small data-i="setup.mode"></small><div class="chips" id="chipModes"></div><p class="sdesc" id="modeDesc"></p></div>
-    <div class="sec"><small data-i="setup.diff"></small><div class="chips" id="chipDiffs"></div></div>
+    <div class="sh-h"><span id="setupT" data-i="opts.t"></span><button class="icon-btn" id="setupX" type="button">✕</button></div>
     <div class="sec"><small data-i="setup.skin"></small><div class="chips" id="chipSkins"></div></div>
     <div class="sec"><small data-i="setup.grid"></small><div class="chips" id="chipGrids"></div></div>
     <div class="sec"><small data-i="setup.pack"></small><div class="chips" id="chipPacks"></div></div>
@@ -350,6 +430,8 @@ en:{
  "pw.b1":"Endless · Daily challenge · Boss deadline","pw.b2":"4 difficulty levels, themes, extra effects","pw.b3":"Stats, day streak, badge on the leaderboard",
  "badge.trial":"Trial","pw.go":"See Night Pass","pw.trial":"Try 1 Endless run today","pw.later":"Maybe later","pw.tried":"You've already tried it today. Get Night Pass to play without limits.","pw.trialSay":"Endless trial: 1 run!"}};
 const pickLang=()=>{const q=new URLSearchParams(location.search).get("lang");let st=null;try{st=localStorage.getItem("lang")}catch(e){}return [q,st].find(x=>x==="vi"||x==="en")||(/^vi/i.test(navigator.language||"")?"vi":"en")};
+Object.assign(I18N.vi,{"home.play":"▶ Chơi","home.daily":"Thử thách hôm nay","home.dailySub":"Cả nước cùng một ván","home.opts":"🎨 Giao diện & tuỳ chọn","opts.t":"Giao diện & tuỳ chọn","home.best":"Kỷ lục","home.endHome":"Đổi chế độ","home.back":"Quay lại"});
+Object.assign(I18N.en,{"home.play":"▶ Play","home.daily":"Today's challenge","home.dailySub":"Same run for everyone","home.opts":"🎨 Skins & options","opts.t":"Skins & options","home.best":"Best","home.endHome":"Change mode","home.back":"Back"});
 let LANG=pickLang();
 const t=(k,pr)=>{let x=(I18N[LANG]&&I18N[LANG][k]);if(x==null)x=I18N.vi[k];if(x==null)x=k;return pr?x.replace(/\{(\w+)\}/g,(_,y)=>pr[y]):x};
 const mv=v=>typeof v==="function"?v():v;
@@ -645,7 +727,7 @@ function start(from){
   score=0;combo=0;best=0;timeLeft=ROUND;running=true;paused=false;lastHit=0;mood=35;moodBand=-1;renderMood();chBeat=false;
   if(from&&typeof from==='object'&&from.timeLeft){score=Math.max(0,from.score|0);combo=Math.max(0,from.combo|0);best=Math.max(0,from.best|0);timeLeft=Math.min(ROUND,Math.max(3,+from.timeLeft||ROUND))}   /* chơi tiếp lượt đang dở của bạn bè */
   mode.init&&mode.init(resumed?from:null);runT0=performance.now();hudPulse(3500);
-  cells.forEach(hide);$("overlay").hidden=true;render();say(t("go"));window.NP&&NP.start();syncPauseBtn();
+  cells.forEach(hide);$("overlay").hidden=true;document.body.classList.remove("at-home");$("home").hidden=true;$("bBk").hidden=!HOME_OK();render();say(t("go"));window.NP&&NP.start();syncPauseBtn();
   clearTimeout(spawnT);spawn();
   clearInterval(tickT);
   tickT=setInterval(tick,100);
@@ -669,17 +751,17 @@ function end(){
   let r=RANKS[0];for(const x of RANKS)if(score>=x[0])r=x;
   const HK=(mode.id==="classic"&&diff.id==="normal"&&grid.id==="g3"&&packId==="deadline")?"dapdeadline-hi":"dd-hi-"+mode.id+"-"+diff.id+(grid.id==="g3"?"":"-"+grid.id)+(packId==="deadline"?"":"-"+packId+(packId==="lover"?partnerId:""));   // kỷ lục riêng cho từng chế độ / độ khó
   let hi=0;try{hi=+localStorage.getItem(HK)||0;if(score>hi)localStorage.setItem(HK,score)}catch(e){}
-  endInfo={r,score,best,hi,mode,newRec:score>hi&&hi>0};ovKind="end";endAtDD=performance.now();
+  endInfo={r,score,best,hi,mode,newRec:score>hi&&hi>0};ovKind="end";endAtDD=performance.now();$("bBk").hidden=!HOME_OK();
   renderEnd();
   window.NP&&NP.result({score:score,extra:{combo:best,mode:mode.id,diff:diff.id,grid:grid.id,pack:packId}});
   DD.hooks.onEnd&&DD.hooks.onEnd({mode:mode.id,diff:diff.id,score:score,combo:best,dur:Math.round((performance.now()-runT0)/1000)});
 }
 function renderEnd(){
   const e=endInfo,ov=$("overlay"),helper=!!(window.NP&&NP.helper),en=LANG==="en";
-  ov.innerHTML='<h2></h2><div class="rank"></div><p class="desc"></p>'+
+  ov.innerHTML='<div class="ecard"><h2></h2><div class="escore">'+e.score+'</div><div class="rank"></div></div><p class="desc"></p>'+
     '<div class="legend"><span>'+t("end.score")+': <b>'+e.score+'</b></span><span>'+t("end.combo")+': <b>×'+e.best+'</b></span>'+
     '<span>'+t("end.rec")+': <b>'+Math.max(e.hi,e.score)+'</b></span></div>'+
-    (helper?'':'<button class="big" id="againBtn">'+t("end.again")+'</button><button class="icon-btn" id="shareBtn" type="button">📤 '+t("share.btn")+'</button>'+(window.NP&&e.score>0?'<button class="icon-btn" id="rankBtn" type="button">🏆 '+t("rank.btn")+'</button>':''))+
+    (helper?'':'<button class="big" id="againBtn">'+t("end.again")+'</button><div class="erow"><button class="ebtn" id="shareBtn" type="button"><span>📤</span>'+t("share.btn")+'</button>'+(window.NP&&e.score>0?'<button class="ebtn" id="rankBtn" type="button"><span>🏆</span>'+t("rank.btn")+'</button>':'')+(HOME_OK()?'<button class="ebtn" id="homeEndBtn" type="button"><span>🏠</span>'+t("home.endHome")+'</button>':'')+'</div>')+
     '<div class="tip"></div>'+(helper?'':'<div class="tip entap"></div>');
   ov.querySelector("h2").textContent=mv(e.mode.title)||pk("end.title");
   if(CH&&!helper){const h=ov.querySelector("h2"),w=e.score>CH.s,l=e.score<CH.s;h.textContent=(w?"🏆 ":l?"😅 ":"🤝 ")+t(w?"ch.winT":l?"ch.loseT":"ch.tieT");h.classList.add(w?"chw":l?"chl":"chw")}ov.querySelector(".rank").textContent=e.r[en?3:1];
@@ -715,7 +797,7 @@ async function go(from){
   if(CH&&!from&&!chCounted){chCounted=true;await countdown()}
   starting=false;if(sb)sb.disabled=false;start(from);
 }
-$("overlay").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.id==="startBtn"){const f=resumeFrom;resumeFrom=null;go(f)}else if(b.id==="againBtn")go(null);else if(b.id==="rankBtn")NP.brag();else if(b.id==="shareBtn")openShare()});
+$("overlay").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.id==="startBtn"){const f=resumeFrom;resumeFrom=null;go(f)}else if(b.id==="againBtn")go(null);else if(b.id==="rankBtn")NP.brag();else if(b.id==="shareBtn")openShare();else if(b.id==="homeEndBtn")showHome()});
 $("pauseBtn").addEventListener("click",()=>{if(paused&&pausedBy==="user")resumeRound("user");else pauseRound("user")});
 $("resumeBtn").addEventListener("click",()=>resumeRound("user"));
 function pauseTxt(q){$("pauseT").textContent=t(q?"restartQ":"pausedT");$("pauseP").textContent=t(q?"restartP":"pausedP")}
@@ -776,6 +858,55 @@ function pickItem(kind,x){
   if(!unlocked(kind,x.id)){DD.paywall(kind==="modes"?x.id:kind==="diffs"?"diff":kind==="grids"?"grid":kind==="packs"?"pack":"skin");return}
   DD.want[KEY[kind]]=x.id;LS.set("dd-sel",DD.want);DD.refresh();
 }
+
+/* ===== MÀN CHỌN: chế độ → cấp độ → Chơi (cùng ngôn ngữ thiết kế với các game Cozy khác) ===== */
+const realHelper=new URLSearchParams(location.search).get("helper")==="1";
+const HOME_OK=()=>!CH&&!realHelper;   /* thách đấu / chơi hộ thật: vào thẳng ván, không qua màn chọn */
+const vnDay=()=>{try{return new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Ho_Chi_Minh"}).format(new Date())}catch(e){return new Date().toISOString().slice(0,10)}};
+const homeDayNo=()=>Math.floor((Date.parse(vnDay()+"T00:00:00Z")-Date.parse("2026-01-01T00:00:00Z"))/864e5)+1;
+function stopRound(){running=false;paused=false;pausedBy=null;$("pauseOv").hidden=true;pauseTxt(false);clearTimeout(hudT);document.body.classList.remove("hud-dim");clearInterval(tickT);clearTimeout(spawnT);cells.forEach(c=>{clearTimeout(c.timer);hide(c)})}
+function showHome(){
+  if(!HOME_OK())return;
+  if(running)stopRound();
+  ovKind="home";document.body.classList.add("at-home");$("home").hidden=false;$("overlay").hidden=true;$("bBk").hidden=true;
+  syncPauseBtn();DD.refresh();
+}
+const hiKey=()=>{const m=DD.modes[DD.sel.mode]||DD.modes.classic,df=m.lockDiff||DD.sel.diff,gr=m.lockGrid||DD.sel.grid,pc=m.lockPack||DD.sel.pack;
+  return (m.id==="classic"&&df==="normal"&&gr==="g3"&&pc==="deadline")?"dapdeadline-hi":"dd-hi-"+m.id+"-"+df+(gr==="g3"?"":"-"+gr)+(pc==="deadline"?"":"-"+pc+(pc==="lover"?(DD.sel.partner==="m"?"m":"f"):""))};
+function renderHome(){
+  const tys=$("tys");if(!tys)return;
+  const hero=curPackId()==="animals"?"🦁🐾":curPackId()==="lover"?"💔💘":"📧⏰";$("hHero").textContent=hero;$("hSub").innerHTML=pk("start.h");
+  tys.textContent="";
+  for(const x of DD.catalog.modes){
+    const lock=!unlocked("modes",x.id),on=DD.sel.mode===x.id,b=document.createElement("button");
+    b.type="button";b.className="ty"+(on?" on":"")+(lock?" lock":"")+(x.free?"":" pro");b.setAttribute("aria-pressed",on);
+    b.innerHTML='<span class="e" aria-hidden="true">'+modeIco("modes",x)+'</span><span class="t">'+escH(catName("modes",x))+'</span>';
+    if(lock)b.setAttribute("aria-label",t("lockedLbl",{n:catName("modes",x)}));
+    b.onclick=()=>pickItem("modes",x);tys.appendChild(b);
+  }
+  const lv=$("lvs"),lockD=DD.modes[DD.sel.mode]&&DD.modes[DD.sel.mode].lockDiff;lv.textContent="";
+  for(const x of DD.catalog.diffs){
+    const lock=!unlocked("diffs",x.id),on=lockD?x.id===lockD:DD.sel.diff===x.id,b=document.createElement("button");
+    b.type="button";b.className="lv"+(on?" on":"")+(lock?" lock":"")+(lockD&&!on?" dim":"");b.setAttribute("aria-pressed",on);
+    b.innerHTML=escH(catName("diffs",x))+(lock?'<i aria-hidden="true">🔒</i>':"");
+    if(lock)b.setAttribute("aria-label",t("lockedLbl",{n:catName("diffs",x)}));
+    b.onclick=()=>{if(lockD){say(t("diffLocked")==="diffLocked"?"":t("diffLocked"));return}pickItem("diffs",x)};lv.appendChild(b);
+  }
+  $("dN").textContent="#"+homeDayNo();$("dT").textContent=t("home.daily");$("dS").textContent=t("home.dailySub");
+  const dl=!unlocked("modes","daily");$("bDaily").classList.toggle("lock",dl);$("bDaily").setAttribute("aria-label",(dl?"🔒 ":"")+t("home.daily"));
+  $("bPlay").textContent=t("home.play");$("bOpts").textContent=t("home.opts");
+  let hi=0;try{hi=+localStorage.getItem(hiKey())||0}catch(e){}
+  $("hChips").innerHTML=hi>0?'<span>🏆 '+escH(t("home.best"))+': <b>'+hi+'</b></span>':"";
+}
+$("bPlay").addEventListener("click",()=>go(null));
+$("bDaily").addEventListener("click",()=>{
+  if(!unlocked("modes","daily")){DD.paywall("daily");return}
+  DD.want=Object.assign(DD.want||{},{mode:"daily"});LS.set("dd-sel",DD.want);DD.refresh();go(null);
+});
+$("bOpts").addEventListener("click",()=>{DD.refresh();openSheet("setup")});
+$("bBk").addEventListener("click",()=>{if(!HOME_OK())return;showHome()});
+$("bBoard").addEventListener("click",()=>{window.NP&&NP.brag&&NP.brag()});
+if(realHelper)$("bBoard").hidden=true;
 DD.refresh=function(){
   const w=DD.want||(DD.want=Object.assign({mode:"classic",diff:"normal",skin:"default"},LS.get("dd-sel",{})));
   for(const kind of ["modes","diffs","skins","grids","packs","partners"]){const k=KEY[kind];DD.sel[k]=unlocked(kind,w[k])?w[k]:(kind==="modes"?"classic":kind==="diffs"?"normal":kind==="grids"?"g3":kind==="packs"?"deadline":kind==="partners"?"f":"default")}
@@ -783,7 +914,7 @@ DD.refresh=function(){
   if(!running){const gm=DD.modes[DD.sel.mode],gn=(DD.grids[gm&&gm.lockGrid?gm.lockGrid:DD.sel.grid]||DD.grids.g3).n;if(!(window.NP&&NP.helper&&resumeFrom))buildGrid(gn)}   /* xem trước bàn chơi đã chọn */
   $("secPartner").hidden=curPackId()!=="lover";
   for(const kind of ["modes","diffs","skins","grids","packs","partners"]){
-    const box=$({modes:"chipModes",diffs:"chipDiffs",skins:"chipSkins",grids:"chipGrids",packs:"chipPacks",partners:"chipPartners"}[kind]);box.textContent="";
+    const box=$({modes:"chipModes",diffs:"chipDiffs",skins:"chipSkins",grids:"chipGrids",packs:"chipPacks",partners:"chipPartners"}[kind]);if(!box)continue;box.textContent="";
     for(const x of DD.catalog[kind]){
       const fg=kind==="grids"?gridForced():kind==="packs"?packForced():null,lock=!unlocked(kind,x.id),on=fg?x.id===fg:DD.sel[KEY[kind]]===x.id,b=document.createElement("button");
       b.type="button";b.className="chip"+(on?" on":"")+(lock?" lock":"")+(fg&&!on?" dim":"");b.setAttribute("aria-pressed",on);
@@ -824,7 +955,7 @@ DD.refresh=function(){
   const pb=$("proBadge");if(pb){pb.hidden=!DD.pro||!!DD.pro.helper;pb.textContent=DD.pro?(DD.pro.trial?"★ "+t("badge.trial"):"★ Night Pass"):"";pb.removeAttribute("data-full");fitTitle()}
   const m=DD.catalog.modes.find(x=>x.id===DD.sel.mode),d=DD.catalog.diffs.find(x=>x.id===DD.sel.diff);
   let desc=catDesc(m);if(DD.sel.mode==="daily"&&DD.dailyInfo)desc+=t("dailyToday",{g:DD.dailyInfo.goal})+(DD.streakInfo&&DD.streakInfo()?t("streak",{n:DD.streakInfo()}):"");
-  $("modeDesc").textContent=desc;
+  $("modeDesc").textContent=desc;renderHome();
   const lockD=DD.modes[DD.sel.mode]&&DD.modes[DD.sel.mode].lockDiff;
   const sl=$("selLine");if(sl)sl.textContent=m.ico+" "+catName("modes",m)+" · "+(lockD?t("d.normal"):catName("diffs",d))+(DD.sel.skin!=="default"?" · "+catName("skins",DD.catalog.skins.find(x=>x.id===DD.sel.skin)):"")+(gridShown().id!=="g3"?" · "+gridShown().n+"×"+gridShown().n:"")+(curPackId()!=="deadline"?" · "+catName("packs",DD.catalog.packs.find(x=>x.id===curPackId()))+(curPackId()==="lover"?" "+DD.catalog.partners.find(x=>x.id===DD.sel.partner).ico:""):"");
   $("proNote").textContent=DD.pro?(DD.pro.trial?t("pro.trial"):t("pro.active")):t("pro.locked");
@@ -910,25 +1041,26 @@ if(CH){   /* mở bằng link thách đấu: chơi đúng ván Cổ điển 45 g
    helperPro=DD.loadPro(false,HS.tk).then(()=>{DD.want=Object.assign(DD.want||{},{mode:HS.mode,diff:HS.diff,skin:HS.skin,grid:HS.grid||"g3",pack:HS.pack||"deadline",partner:HS.partner||"f"});DD.refresh()}).catch(()=>{})}}
 if(!(window.NP&&NP.helper)&&passToken())DD.loadPro(false).catch(()=>{});   /* có Night Pass: mở khóa các chế độ trả phí */
 
-function syncSound(){$("soundIco").textContent=sound?"🔊":"🔇";$("soundTxt").textContent=" "+t("sound")+": "+t(sound?"on":"off");$("soundBtn").setAttribute("aria-pressed",sound);$("soundBtn").setAttribute("aria-label",t("sound")+": "+t(sound?"on":"off"))}
-$("soundBtn").addEventListener("click",()=>{sound=!sound;if(window.NPAudio)NPAudio.set(sound);syncSound()});
+function syncSound(){const b=$("bSnd");b.textContent=sound?"🔊":"🔇";b.setAttribute("aria-pressed",sound);b.setAttribute("aria-label",t("sound")+": "+t(sound?"on":"off"));b.title=t("sound")+": "+t(sound?"on":"off")}
+$("bSnd").addEventListener("click",()=>{sound=!sound;if(window.NPAudio)NPAudio.set(sound);syncSound()});
 function applyLang(){
   document.documentElement.lang=LANG;setTitle();
   document.querySelectorAll("[data-i]").forEach(e=>{e.textContent=t(e.dataset.i)});
-  $("setupTxt").textContent=" "+t("modes");$("setupBtn").setAttribute("aria-label",t("modes"));$("langTxt").textContent=LANG.toUpperCase();$("langBtn").setAttribute("aria-label",t("lang"));$("langBtn").title=t("lang");
+  $("setupTxt").textContent=" "+t("modes");$("setupBtn").setAttribute("aria-label",t("modes"));$("bLang").textContent=LANG==="vi"?"EN":"VI";$("bLang").setAttribute("aria-label",t("lang"));$("bLang").title=t("lang");$("bBk").title=t("home.back");$("bBk").setAttribute("aria-label",t("home.back"));
   for(const id of ["setupX","statsX","payX0"])$(id).setAttribute("aria-label",t("close"));
   $("pauseT").textContent=t("pausedT");$("pauseP").textContent=t("pausedP");$("resumeBtn").textContent="▶ "+t("resume");$("restartOv").textContent="↻ "+t("restart");$("restartBtn").setAttribute("aria-label",t("restart"));$("restartBtn").title=t("restart");
   cells.forEach((c,i)=>c.el.setAttribute("aria-label",t("cell",{n:i+1})));
   syncSound();syncPauseBtn();render();
-  if(!running){if(ovKind==="end"&&endInfo)renderEnd();else renderStart()}
+  if(!running){if(ovKind==="end"&&endInfo)renderEnd();else if(ovKind!=="home")renderStart()}
   DD.refresh();
   if(!$("pay").hidden&&lastPay)DD.paywall(lastPay,true);
   if(!$("statsP").hidden&&DD.openStats)DD.openStats();
 }
 function setLang(l,save){LANG=l;if(save)try{localStorage.setItem("lang",l)}catch(e){}applyLang()}
-$("langBtn").addEventListener("click",()=>setLang(LANG==="vi"?"en":"vi",true));
+$("bLang").addEventListener("click",()=>setLang(LANG==="vi"?"en":"vi",true));
 DD.t=t;DD.addI18n=d=>{for(const l in d)Object.assign(I18N[l]||(I18N[l]={}),d[l])};Object.defineProperty(DD,"lang",{get:()=>LANG});
 applyLang();
+if(HOME_OK()&&!resumeFrom)showHome();
 </script>
 <script src="../../../shared/season.js"></script>
 <script src="../../../shared/icons.js" defer></script><script src="../../../shared/fan.js" defer></script><script src="../../../shared/passwatch.js" defer></script>

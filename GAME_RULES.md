@@ -39,6 +39,13 @@ Dự án có 3 nhóm: **Cozy Play** (`cozyplay/`: 9 game sinh tự động từ 
 - Nhân vật/biểu tượng **không mờ, không chìm vào nền** (nền tối → thêm đĩa sáng/halo phía sau); không bao giờ mờ đến mức không thấy. Nhân vật quay mặt đúng hướng di chuyển (emoji phụ thuộc nền tảng: dùng biểu tượng trung tính hoặc lật bằng `scale(-1,1)`).
 - Bản thân game cũng phải **offline, không lag, không gọi máy chủ lúc chơi, không AI**.
 
+## 1b. Luồng vào của MỌI game: màn chọn trước, người mới thấy ngay lựa chọn (Đập Deadline từng bị bỏ sót)
+- Vào game là thấy **màn chọn (`<section id="home">`)** như các game Cozy khác: tên + hình, thẻ lớn "#N Thử thách hôm nay", **lưới loại chơi/chế độ** (icon + tên, loại trả phí có 👑 và 🔒), **chọn cấp độ**, nút **Chơi** lớn, hàng phụ "Giao diện & tuỳ chọn". Chọn xong bấm Chơi là vào ván; KHÔNG giấu lựa chọn sau nút ⚙/hộp cài đặt, KHÔNG bắt người chơi mở menu để biết có chế độ.
+- Thanh trên chuẩn: ← (`#bBk`: từ màn chơi/kết thúc về màn chọn; shared/resume.js cũng dựa vào `#home` và `#bBk`), 🏆 `#bBoard`, 🔊 `#bSnd`, EN/VI `#bLang` (nút trống chữ để shared/icons.js đổi sang SVG).
+- Thách đấu (`#ch=`) và chơi hộ thật (`?helper=1`) vào thẳng ván, không qua màn chọn.
+- Màn kết thúc: thẻ kết quả gradient theo màu nhấn + nút "Chơi lại" lớn + hàng nút phụ có nhãn (Khoe điểm, Xếp hạng, Đổi chế độ). Game không có container `cqw` (như Đập Deadline) thì viết CSS bằng px/clamp, không dùng shared/endui.css.
+- Kiểm tra: xoá localStorage → mở game → phải thấy chế độ và cấp độ ngay, không cuộn, ở 320x560, 380x760 và ngang 844x390.
+
 ## 2. Điều khiển trên web
 - Chuột (click, kéo, rê), bàn phím (mũi tên, Enter, Esc, Tab), trackpad hai ngón (wheel) và cảm ứng đều chơi được. Game vẽ/kéo thả phải có kiểu "bấm nút → bấm chỗ muốn nối" ngoài kéo.
 - `touch-action` đúng để không cuộn trang khi chơi; `pointercancel` được xử lý.
