@@ -96,6 +96,15 @@ Dự án có 3 nhóm: **Cozy Play** (`cozyplay/`: 9 game sinh tự động từ 
 - Game đổi luật/loại chơi thì cập nhật nội dung "?" cùng lúc. Đừng dùng id `phBtn`/`phOv`/`phCard` trong game. File `shared/pophelp.js` phải có trong `SHELL` của `sw.js`.
 - Kiểm tra: mở từng game ở 390x844, 844x390, 320x568 (VI + EN): nút "?" ≥44px, không đè nút khác, tên game không bị cắt, thẻ không cuộn/tràn, "Đã hiểu" đóng được; chụp ảnh và tự nhìn.
 
+## 5f. Pop Play, điện thoại dọc: ← + tên game + MỘT nút menu ⋯ (`shared/popmenu.js`) — game Pop mới BẮT BUỘC nhúng
+- Nhúng `<script src="../../../shared/popmenu.js" defer></script>` ngay sau `pophelp.js` (và có trong `SHELL` của `sw.js`). Ở ≤520px dọc, module DI CHUYỂN (giữ id + sự kiện) 🔊 `#soundBtn`, EN/VI `#langBtn`, "?" `#phBtn`, ⏸ `#pauseBtn` (nếu có) và 📷/📤 của trang cổng vào bảng 3 cột có nhãn chữ do nút ⋯ (`#npPmFab`, 48px) mở; 🏠 `#homeBtn` bị ẩn vì đã có ←. Màu bảng đọc từ màu thật của game (không nền trắng chữ đen). Màn ngang/rộng: giữ nguyên thanh trên cũ.
+- Bố cục: ← (`#npPmBk`) và ⋯ là nút cố định ở hai góc trên; TÊN GAME vẫn ở trong luồng, cách khung thông tin dưới nó ~8px (game mới đừng chèn khoảng trống giữa `h1#title` và khối kế tiếp). Body được chừa 60px phía trên.
+- Nút ←: đang chơi (🏠/⏸ đang hiện) = về màn chọn của game (bấm `#homeBtn`, không có thì gọi `goHome()`); ở màn chọn = thoát về trang cổng (bấm `#home` của cổng nên vẫn qua hộp "Thoát ván này?").
+- Báo trang cổng: `window.__npDock = true` + `#stage.docked` (popplay/index.html: ẩn ← và nút nổi 📷/📤 của cổng, iframe chiếm toàn khung). Nút khoá `#klock` của cổng nằm ngay bên phải ← (x≈62px).
+- HOOK cho khoá màn (`shared/kidlock.js`): kidlock đặt class `np-locked` lên `<html>` của game → popmenu.js ẩn `#npPmBk` (←) và ô 📷/📤 trong bảng (CSS `html.np-locked #npPmBk,#npPmCam,#npPmShr`). Nếu thêm nút thoát mới vào thanh trên Pop, nhớ ẩn nó theo class này.
+- `#askBtn` (🔊 đọc câu hỏi, trong thẻ `.ask`) KHÔNG gom: nó thuộc ngữ cảnh câu hỏi chứ không phải thanh trên.
+- Kiểm tra: qua trang cổng `http://localhost:8811/popplay/index.html#<id>` ở 390x844, 360x640, 320x568, 844x390 (VI + EN), lúc đóng và mở menu: chỉ 1 ←, 1 ⋯, không nút nổi của cổng, "?" trong bảng mở được thẻ, tên không cắt "…".
+
 ## 6. Dữ liệu, quyền riêng tư
 - Game không thu thập thêm dữ liệu cá nhân. Nếu thêm bất cứ thứ gì lưu trên máy chủ hoặc localStorage mới → cập nhật `privacy.html` (VI + EN) và ngày trong `shared/site.js`.
 - Bảng xếp hạng tự nguyện; game trẻ em không có ô gõ tên.
@@ -117,6 +126,8 @@ Nguyên tắc dự án: game chạy **offline, không lag, không gọi máy ch�
 - [ ] Nút ← về được màn chọn loại; nút "?" mở gợi ý
 - [ ] Không cuộn, không chữ trơn, không nhân vật mờ, không lỗi console
 - [ ] Đã thêm game vào `check.js` và danh sách tải sẵn offline (`sw.js`) nếu cần
+- [ ] **Chụp qua trang cổng ở điện thoại dọc (390×844, 360×640): ←, 📷, 📤 phải ở trong menu ⋯ (← là nút duy nhất bên trái, không còn nút nổi của cổng); tên game nằm SÁT khung thông tin (≤ ~16px, tối đa 2 dòng, không cắt "…")** — `check-portal.js` đo tự động (mục "menu …" và "tên game …") cho MỌI game Cozy và Pop Play
+- [ ] **Game Cozy viết tay (không sinh tự động: Đập Deadline, Cánh Nhỏ Phiêu Lưu…) phải tự nạp `shared/dock.js` (gom 📷/📤/← của cổng vào thanh trên) + `shared/fan.js` (menu ⋯ + tên game sát khung ở chế độ local) + `shared/icons.js`; game có `#play` + `.top` thì nạp `shared/landscape.css/js` như các game sinh tự động. Thanh trên của game viết tay phải là `.top` có `h1`, nút ← là `#bBk`, nút phụ dùng id chuẩn (bSnd/bLang/bHelp/bBoard/restartBtn hoặc soundBtn/langBtn/askBtn).**
 - [ ] Báo cáo trung thực: cái gì đã kiểm tra, cái gì chưa (ví dụ trackpad thật)
 
 ## Bảo vệ chia sẻ Night Pass (token gắn thiết bị)

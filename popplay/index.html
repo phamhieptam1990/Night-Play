@@ -333,6 +333,9 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 #stage #tleft{z-index:3}
 #stage{transition:background-color .3s}
 #stage[data-lum="l"] #home,#stage[data-lum="l"] .nps-fab{background:rgba(32,28,44,.82)!important;border-color:rgba(255,255,255,.55)!important;color:#fff!important}
+/* game đã gom ← + ⋯ (📷/📤 trong menu) vào thanh trên của chính nó (shared/popmenu.js, __npDock): ẩn ← + nút nổi của cổng, iframe chiếm toàn khung */
+#stage.docked #home,#stage.docked .nps-fab{display:none!important}
+@media (orientation:portrait){#stage.docked iframe{top:0!important;height:100%!important;inset:0!important}#stage.docked #tleft{top:auto!important;bottom:calc(env(safe-area-inset-bottom,0px) + 4px)!important}}
 @media (orientation:portrait){
   #stage iframe{top:var(--rail)!important;height:calc(100% - var(--rail))!important;inset:var(--rail) 0 0 0!important}
   #stage #home{top:calc(env(safe-area-inset-top,0px) + 4px)!important;left:max(12px,env(safe-area-inset-left))!important}
@@ -968,7 +971,7 @@ route();
 <script>
 /* làn điều khiển chung ngoài khung game: lấy màu nền của chính game để không thành dải đen xấu */
 (function(){var st=document.getElementById("stage");if(!st)return;
-function sync(){if(!st.classList.contains("on")){st.style.backgroundColor="";return}var f=st.querySelector("iframe");if(!f)return;try{var d=f.contentDocument,c=getComputedStyle(d.body).backgroundColor;if(!c||c==="rgba(0, 0, 0, 0)")c=getComputedStyle(d.documentElement).backgroundColor;if(c&&c!=="rgba(0, 0, 0, 0)"){st.style.backgroundColor=c;var m=c.match(/\d+(\.\d+)?/g)||[];var L=(.299*m[0]+.587*m[1]+.114*m[2])/255;st.dataset.lum=L>.55?"l":"d"}}catch(e){}}
+function sync(){if(!st.classList.contains("on")){st.style.backgroundColor="";st.classList.remove("docked");return}var f=st.querySelector("iframe");if(!f)return;try{st.classList.toggle("docked",!!(f.contentWindow&&f.contentWindow.__npDock));var d=f.contentDocument,c=getComputedStyle(d.body).backgroundColor;if(!c||c==="rgba(0, 0, 0, 0)")c=getComputedStyle(d.documentElement).backgroundColor;if(c&&c!=="rgba(0, 0, 0, 0)"){st.style.backgroundColor=c;var m=c.match(/\d+(\.\d+)?/g)||[];var L=(.299*m[0]+.587*m[1]+.114*m[2])/255;st.dataset.lum=L>.55?"l":"d"}}catch(e){}}
 setInterval(sync,600);document.addEventListener("load",sync,true);})();
 </script>
 <script src="../shared/passwatch.js" defer></script>
