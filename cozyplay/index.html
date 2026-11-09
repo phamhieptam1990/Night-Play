@@ -874,6 +874,7 @@ function silenceGame(f){
 function closeGame(){
   if(!frame) return;
   silenceGame(frame);
+  try{ frame.contentWindow.NPResume && frame.contentWindow.NPResume.flush(); }catch(e){}   // lưu ván dở trước khi gỡ iframe
   window.Track && Track.stop();
   hideHome();
   frame.remove(); frame = null; stopTimer();          // xoá iframe: giải phóng bộ nhớ, dừng âm thanh
@@ -892,6 +893,7 @@ function route(){
 addEventListener("hashchange", route);
 $("fGames").addEventListener("click", e => { e.preventDefault(); grid.scrollIntoView({ behavior: reduceMotion.matches ? "auto" : "smooth", block: "start" }); });
 function goHome(){
+  try{ if(frame && frame.contentWindow.NPResume && frame.contentWindow.NPResume.exitPlay()) return; }catch(e){}   // đang chơi: về màn chọn của game trước, bấm lần nữa mới đóng game
   if(pushed){ pushed = false; history.back(); }
   else{ history.replaceState(null, "", location.pathname + location.search); route(); }
 }

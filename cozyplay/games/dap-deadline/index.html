@@ -285,6 +285,9 @@ html[data-skin] .ty.on{animation:tyGlow 2.4s ease-in-out infinite}
   body.at-home .ty .t{text-align:left}body.at-home .hhero,body.at-home .hsub,body.at-home #modeDesc,body.at-home .hchips{display:none}
   .ebtn{min-height:48px}
 }
+
+/* điện thoại dọc: tiêu đề nhỏ lại khi đang chơi để không bị cắt (← + ⏸ + menu chiếm chỗ) */
+@media (max-width:520px) and (orientation:portrait){body:not(.at-home) .top.npfan h1{font-size:15px}.top.npfan h1.lt{font-size:15px}}
 </style>
 <script src="../../../shared/offline.js" defer></script>
 </head>
@@ -1063,6 +1066,6 @@ applyLang();
 if(HOME_OK()&&!resumeFrom)showHome();
 </script>
 <script src="../../../shared/season.js"></script>
-<script src="../../../shared/icons.js" defer></script><script src="../../../shared/fan.js" defer></script><script src="../../../shared/passwatch.js" defer></script>
+<script src="../../../shared/icons.js" defer></script><script src="../../../shared/resume.js" defer></script><script src="../../../shared/fan.js" defer></script><script src="../../../shared/passwatch.js" defer></script>
 </body>
 </html>

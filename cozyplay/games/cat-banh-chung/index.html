@@ -88,7 +88,7 @@ canvas#cv{cursor:crosshair}#play[data-ty="1"] canvas#cv{box-shadow:0 0 0 1.4cqw 
 </style>
 <style id="skCss"></style>
 <link rel="stylesheet" href="../../../shared/typeui.css">
-<link rel="stylesheet" href="../../../shared/landscape.css"><script src="../../../shared/landscape.js" defer></script><script src="../../../shared/icons.js" defer></script><script src="../../../shared/fan.js" defer></script><script src="../../../shared/passwatch.js" defer></script>
+<link rel="stylesheet" href="../../../shared/landscape.css"><script src="../../../shared/landscape.js" defer></script><script src="../../../shared/icons.js" defer></script><script src="../../../shared/resume.js" defer></script><script src="../../../shared/fan.js" defer></script><script src="../../../shared/passwatch.js" defer></script>
 </head>
 <body>
 <div id="play">
@@ -308,7 +308,7 @@ addEventListener("online",()=>{if(!PF.ticket)PF.fetchTicket()});setInterval(()=>
 PF.lockPro=function(){for(const id of Object.keys(PF.skins))if(id!=="basic")delete PF.skins[id];PF.types=TYPES.map((_,i)=>i===0);PF.pro=null;const r=PF.trialRestore;PF.trialRestore=null;if(r){TY=r.ty;PF.skinSel=r.sk}if(tLocked(TY))TY=0;if(!PF.skins[PF.skinSel])PF.skinSel="basic";applySkin();if(!$("home").hidden)renderHome()};
 window.PF=PF;
 if(window.NP&&NP.onPause)NP.onPause(()=>{paused=true},()=>{paused=false;last=performance.now()});
-if(window.NP&&NP.state)NP.state(()=>{if(!G||G.over)return null;const s={seed:G.seed,t:G.t};try{const pp=snapP(G);if(pp&&JSON.stringify(pp).length<760)s.p=pp}catch(e){}if(PF.pro&&!PF.pro.trial&&PF.ticket){s.tk=PF.ticket;if(PF.skinSel!=="basic"&&PF.skins[PF.skinSel])s.sk=PF.skinSel}return s});
+if(window.NP&&NP.state)NP.state(()=>{if(!G||G.over)return null;const s={seed:G.seed,t:G.t,m:G.mode};try{const pp=snapP(G);if(pp&&JSON.stringify(pp).length<760)s.p=pp}catch(e){}if(PF.pro&&!PF.pro.trial&&PF.ticket){s.tk=PF.ticket;if(PF.skinSel!=="basic"&&PF.skins[PF.skinSel])s.sk=PF.skinSel}return s});
 $("bLang").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}document.documentElement.lang=LANG;if(!$("home").hidden)renderHome();else if(!$("end").hidden&&G)showEnd(G);else if(G)$("gHint").textContent=hintOf(G.t)};
 $("bSnd").onclick=()=>{if(window.NPAudio)NPAudio.set(!NPAudio.get());$("bSnd").textContent=snd()?"🔊":"🔇"};
 $("bDaily").onclick=()=>begin(fnv(GID+"|"+dayKey()),"daily",0,null);$("bFree").onclick=()=>begin(newSeed(),"free",TY,null);

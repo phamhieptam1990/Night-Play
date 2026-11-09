@@ -83,6 +83,10 @@ const b64 = o => Buffer.from(JSON.stringify(o)).toString("base64").replace(/\+/g
     await pg.close();
   }
   await br.close(); srv.kill();
+  /* tiếp tục ván dở + nút Back cho 9 game Cozy sinh tự động (scripts/cozygame/check-resume.js, cổng riêng) */
+  console.log("== tiếp tục ván dở + Back");
+  const rs = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-resume.js"), "--only=" + Object.keys(GAMES).join(",")], { cwd: root, env: process.env, stdio: "inherit" });
+  note(rs.status === 0, "tổng", "check-resume.js báo lỗi (tiếp tục ván dở / Back) — xem log phía trên");
   console.log("\n" + (fails.length ? "✗ " + fails.length + " lỗi" : "✓ tất cả đạt"));
   process.exit(fails.length ? 1 : 0);
 })();

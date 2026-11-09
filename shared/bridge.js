@@ -115,6 +115,16 @@ window.NPFx = (function () {
 window.NP = (function () {
   "use strict";
   var q = new URLSearchParams(location.search), helper = q.get("helper") === "1", getter = null, pauseFn = null, resumeFn = null, initial = null;
+  /* TIẾP TỤC VÁN DỞ (xem shared/resume.js): ?resume=1 nạp trạng thái đã lưu ở localStorage "np-resume:<id game>" qua ĐÚNG đường khởi tạo của chế độ chơi hộ
+     (NP.initialState + nhánh "if (NP.helper)" của từng game). NP.helper chỉ trả true trong lúc game khởi tạo (đến khi trang tải xong), sau đó trả false
+     để các nút (chia sẻ, chơi lại, về trang chủ...) hoạt động bình thường như ván thường. */
+  var gid = (location.pathname.match(/\/games\/([^\/]+)/) || [])[1] || "", RK = "np-resume:" + gid, resumeBoot = false, booted = false;
+  function vnDay() { try { return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Ho_Chi_Minh" }).format(new Date()); } catch (e) { return new Date().toISOString().slice(0, 10); } }
+  function readRec() {
+    try { var r = JSON.parse(localStorage.getItem(RK)); if (!r || !r.state || typeof r.state !== "object") return null;
+      var age = Date.now() - r.ts; if (!(age >= 0 && age < 7 * 864e5)) return null; if (r.daily && r.day !== vnDay()) return null; return r; } catch (e) { return null; }
+  }
+  function emit(n) { try { dispatchEvent(new CustomEvent("np:" + n)); } catch (e) {} }
   function post(m) { try { m.np = 1; parent.postMessage(m, location.origin); } catch (e) {} }
   try {
     var s = q.get("s");
@@ -123,6 +133,14 @@ window.NP = (function () {
       var o = JSON.parse(decodeURIComponent(escape(atob(t)))); if (o && typeof o === "object" && !Array.isArray(o)) initial = o;
     }
   } catch (e) { initial = null; }
+  if (!helper && q.get("resume") === "1" && gid) { var rr = readRec(); if (rr) { initial = rr.state; resumeBoot = true; } }
+  addEventListener("load", function () { setTimeout(function () {
+    booted = true;
+    if (resumeBoot) {   /* nhánh chơi hộ có thể đã ẩn nút bảng điểm: trả lại; bỏ ?resume=1 khỏi địa chỉ để tải lại trang không tự tiếp tục lần nữa */
+      var bb = document.getElementById("bBoard"); if (bb && bb.hidden) bb.hidden = false;
+      try { var u = new URL(location.href); u.searchParams.delete("resume"); history.replaceState(history.state, "", u.pathname + u.search + u.hash); } catch (e) {}
+    }
+  }, 400); });
   addEventListener("message", function (e) {
     if (e.source !== parent || e.origin !== location.origin || !e.data || e.data.np !== 1) return;
     if (e.data.type === "getState") {
@@ -132,11 +150,15 @@ window.NP = (function () {
     else if (e.data.type === "resume" && resumeFn) { try { resumeFn(); } catch (x) {} }
   });
   return {
-    helper: helper,
+    get helper() { return helper || (resumeBoot && !booted); },
     initialState: initial,
-    start: function () { post({ type: "start" }); },
+    gid: gid,
+    resumeBoot: function () { return resumeBoot; },
+    booted: function () { return booted; },
+    peek: function () { try { var st = getter ? getter() : null; if (st && JSON.stringify(st).length > 1200) st = null; return st; } catch (e) { return null; } },
+    start: function () { post({ type: "start" }); emit("start"); },
     brag: function () { post({ type: "brag" }); },     // người chơi chủ động bấm "Lên bảng điểm" → trang cha mở hộp đăng điểm (không tự bật sau mỗi ván)
-    result: function (r) { r = r || {}; post({ type: "result", score: Math.max(0, Math.floor(+r.score || 0)), extra: r.extra && typeof r.extra === "object" ? r.extra : null }); },
+    result: function (r) { r = r || {}; emit("result"); post({ type: "result", score: Math.max(0, Math.floor(+r.score || 0)), extra: r.extra && typeof r.extra === "object" ? r.extra : null }); },
     state: function (fn) { getter = fn; },
     onPause: function (p, r) { pauseFn = p; resumeFn = r; }
   };
