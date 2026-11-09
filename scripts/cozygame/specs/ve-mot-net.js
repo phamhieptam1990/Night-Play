@@ -98,6 +98,8 @@ cv.addEventListener("wheel",e=>{const D=G;if(!D||D.over||paused||D.st==="res"&&f
  clearTimeout(whT);whT=setTimeout(()=>{if(G===D&&D.wh){D.wh=0;endStroke()}},280)},{passive:false});
 const endStroke=()=>{const D=G;if(!D||!D.cur)return;const p=D.cur;D.cur=null;if(D.st==="draw")drScore(D,p)};
 cv.addEventListener("pointerup",endStroke);cv.addEventListener("pointercancel",endStroke);
+function snapP(D){return D.res.length&&D.res.length<TRIES?{r:D.res.map(r=>Math.round(r.pct*10)/10)}:null}
+function restoreP(D,p){if(!Array.isArray(p.r)||p.r.length>=TRIES)return;D.res=p.r.map(v=>({pct:Math.max(0,Math.min(100,+v||0)),pts:[],w:360,h:400}));D.st="draw";D.cur=null;D.fit=null;hud()}
 function onBegin(D){fitCanvas()}
 `,
   drawCard: String.raw`function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#7bb4ff","#1d4e9e"];

@@ -153,6 +153,8 @@ $("svYes").addEventListener("click",()=>choose(G,true));$("svNo").addEventListen
  card.addEventListener("pointermove",e=>{if(x0==null)return;dx=e.clientX-x0;card.style.transform="translateX("+dx+"px) rotate("+dx*.05+"deg)";card.style.opacity=Math.max(.45,1-Math.abs(dx)/320)});
  const up=()=>{if(x0==null)return;const d=dx;x0=null;dx=0;if(Math.abs(d)>70)choose(G,d>0);else{card.style.transform="";card.style.opacity=1}};card.addEventListener("pointerup",up);card.addEventListener("pointercancel",up)})();
 addEventListener("keydown",e=>{if(!G||G.over||$("game").hidden)return;if(e.key==="ArrowRight"||e.key==="y"){e.preventDefault();choose(G,true)}else if(e.key==="ArrowLeft"||e.key==="n"){e.preventDefault();choose(G,false)}});
+function snapP(D){if(D.day<2&&!D.lock)return null;if(D.lock&&D.day>=30)return null;const d=D.lock?D.day+1:D.day;return{d,m:Math.round(D.money),mo:D.mood,s:D.study,y:D.yes,tg:D.tags,h:D.hist.slice(-31)}}
+function restoreP(D,p){D.day=Math.max(1,Math.min(30,+p.d||1));D.cur=D.order[D.day-1];D.money=+p.m||D.money;D.mood=Math.max(1,Math.min(100,+p.mo||70));D.study=+p.s||50;D.yes=+p.y||0;D.tags=(p.tg&&typeof p.tg==="object")?p.tg:{};D.hist=Array.isArray(p.h)?p.h.map(Number):[D.money];D.lock=false;D.dec=D.C.timer||0;render();hud()}
 function onBegin(D){D.dec=D.C.timer||0;$("svEnv").hidden=true;$("sv").classList.remove("lock");$("svRes").textContent="";$("svCal").dataset.n="";render()}
 `,
   drawCard: String.raw`function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#fbbf24","#92400e"];

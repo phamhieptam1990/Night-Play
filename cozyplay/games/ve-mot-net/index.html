@@ -200,6 +200,8 @@ cv.addEventListener("wheel",e=>{const D=G;if(!D||D.over||paused||D.st==="res"&&f
  clearTimeout(whT);whT=setTimeout(()=>{if(G===D&&D.wh){D.wh=0;endStroke()}},280)},{passive:false});
 const endStroke=()=>{const D=G;if(!D||!D.cur)return;const p=D.cur;D.cur=null;if(D.st==="draw")drScore(D,p)};
 cv.addEventListener("pointerup",endStroke);cv.addEventListener("pointercancel",endStroke);
+function snapP(D){return D.res.length&&D.res.length<TRIES?{r:D.res.map(r=>Math.round(r.pct*10)/10)}:null}
+function restoreP(D,p){if(!Array.isArray(p.r)||p.r.length>=TRIES)return;D.res=p.r.map(v=>({pct:Math.max(0,Math.min(100,+v||0)),pts:[],w:360,h:400}));D.st="draw";D.cur=null;D.fit=null;hud()}
 function onBegin(D){fitCanvas()}
 
 /* ===== MÀN HÌNH ===== */
@@ -272,14 +274,14 @@ addEventListener("online",()=>{if(!PF.ticket)PF.fetchTicket()});setInterval(()=>
 PF.lockPro=function(){for(const id of Object.keys(PF.skins))if(id!=="basic")delete PF.skins[id];PF.types=TYPES.map((_,i)=>i===0);PF.pro=null;const r=PF.trialRestore;PF.trialRestore=null;if(r){TY=r.ty;PF.skinSel=r.sk}if(tLocked(TY))TY=0;if(!PF.skins[PF.skinSel])PF.skinSel="basic";applySkin();if(!$("home").hidden)renderHome()};
 window.PF=PF;
 if(window.NP&&NP.onPause)NP.onPause(()=>{paused=true},()=>{paused=false;last=performance.now()});
-if(window.NP&&NP.state)NP.state(()=>{if(!G||G.over)return null;const s={seed:G.seed,t:G.t};if(PF.pro&&!PF.pro.trial&&PF.ticket){s.tk=PF.ticket;if(PF.skinSel!=="basic"&&PF.skins[PF.skinSel])s.sk=PF.skinSel}return s});
+if(window.NP&&NP.state)NP.state(()=>{if(!G||G.over)return null;const s={seed:G.seed,t:G.t};try{const pp=snapP(G);if(pp&&JSON.stringify(pp).length<760)s.p=pp}catch(e){}if(PF.pro&&!PF.pro.trial&&PF.ticket){s.tk=PF.ticket;if(PF.skinSel!=="basic"&&PF.skins[PF.skinSel])s.sk=PF.skinSel}return s});
 $("bLang").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}document.documentElement.lang=LANG;if(!$("home").hidden)renderHome();else if(!$("end").hidden&&G)showEnd(G);else if(G)$("gHint").textContent=hintOf(G.t)};
 $("bSnd").onclick=()=>{if(window.NPAudio)NPAudio.set(!NPAudio.get());$("bSnd").textContent=snd()?"🔊":"🔇"};
 $("bDaily").onclick=()=>begin(fnv(GID+"|"+dayKey()),"daily",0,null);$("bFree").onclick=()=>begin(newSeed(),"free",TY,null);
 applySkin();renderHome();show("home");requestAnimationFrame(tick);
 const proP=passToken()&&!(window.NP&&NP.helper)?PF.loadPro(false).catch(()=>{}):Promise.resolve();
 if(window.NP&&NP.helper){const HS=NP.initialState&&typeof NP.initialState==="object"?NP.initialState:{};const seed=Number.isInteger(HS.seed)&&HS.seed>=0&&HS.seed<=4294967295?HS.seed:newSeed();const ht=Number.isInteger(HS.t)&&HS.t>=0&&HS.t<TYPES.length?HS.t:0;$("bBoard").hidden=true;
- const go=()=>begin(seed,"challenge",ht,null);if(/^h\.\d{13}\.[A-Za-z0-9_-]{43}$/.test(HS.tk||""))PF.loadPro(false,HS.tk).then(()=>{if(/^[a-z0-9]{3,10}$/.test(HS.sk||"")&&PF.skins[HS.sk])PF.skinSel=HS.sk}).catch(()=>{}).finally(go);else go()}
+ const go=()=>{begin(seed,"challenge",ht,null);if(HS.p&&typeof HS.p==="object")try{restoreP(G,HS.p)}catch(e){}};if(/^h\.\d{13}\.[A-Za-z0-9_-]{43}$/.test(HS.tk||""))PF.loadPro(false,HS.tk).then(()=>{if(/^[a-z0-9]{3,10}$/.test(HS.sk||"")&&PF.skins[HS.sk])PF.skinSel=HS.sk}).catch(()=>{}).finally(go);else go()}
 else{const c0=parseCh(location.hash);if(c0)proP.then(()=>openCh(c0));else if(location.hash==="#daily")begin(fnv(GID+"|"+dayKey()),"daily",0,null)}
 window.VN={get G(){return G},PF,CFG,begin,newGame,scoreOf,parseCh,drawCard,shareText,shareLink,fnv,dayKey,dayNo,finish,drScore,drNext,scoreCircle,scorePoly,SHP,
  circlePts(n,r,noise,cx,cy){const a=[];for(let i=0;i<=n;i++){const t=i/n*6.283,rr=r*(1+(Math.random()-.5)*noise);a.push([(cx||180)+Math.cos(t)*rr,(cy||200)+Math.sin(t)*rr])}return a},

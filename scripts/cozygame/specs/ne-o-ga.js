@@ -117,6 +117,8 @@ cv.addEventListener("pointermove",e=>{if(!ptr||!G)return;const dx=e.clientX-ptr.
 cv.addEventListener("pointerup",e=>{if(!ptr||!G)return;const p=ptr;ptr=null;if(p.used)return;const r=cv.getBoundingClientRect(),sk=skinOf();if(sk.view==="side"){move(G,e.clientY<r.top+r.height/2?-1:1)}else move(G,e.clientX<r.left+r.width/2?-1:1)});
 cv.addEventListener("pointercancel",()=>{ptr=null});
 addEventListener("keydown",e=>{const D=G;if(!D||D.over||$("game").hidden)return;const sk=skinOf(),side=sk.view==="side";if(e.key==="ArrowLeft"||e.key==="a"||(side&&(e.key==="ArrowUp"||e.key==="w"))){e.preventDefault();move(D,-1)}else if(e.key==="ArrowRight"||e.key==="d"||(side&&(e.key==="ArrowDown"||e.key==="s"))){e.preventDefault();move(D,1)}});
+function snapP(D){return D.dist>400?{d:Math.round(D.dist),l:D.lives,b:D.bonus,dg:D.dodged,br:D.bread}:null}
+function restoreP(D,p){D.dist=Math.max(0,+p.d||0);D.lives=Math.max(1,Math.min(3,+p.l||3));D.bonus=+p.b||0;D.dodged=+p.dg||0;D.bread=+p.br||0;D.objs=[];D.nextRow=Math.floor(D.dist/ROWGAP)+2;D.inv=1.5;hud()}
 function onBegin(D){fitCanvas()}
 `,
   drawCard: String.raw`function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#5a7a94","#0d1b27"];

@@ -19,7 +19,7 @@ const BASE = {
 function gen(id) {
   const sp = require("./specs/" + id + ".js"), out = path.join(root, "cozyplay", "games", id, "index.html");
   const i18n = { vi: Object.assign({}, BASE.vi, sp.i18n.vi, { title: sp.title.vi }), en: Object.assign({}, BASE.en, sp.i18n.en, { title: sp.title.en }) };
-  const game = (/(function\s+SF\s*\(|const\s+SF\s*=)/.test(sp.gameJs) ? "" : "const SF=n=>n;\n") + (/function\s+fitCanvas/.test(sp.gameJs) ? "" : "function fitCanvas(){}\n") + (/function\s+draw\s*\(/.test(sp.gameJs) ? "" : "function draw(){}\n") + sp.gameJs;
+  const game = (/function\s+snapP\s*\(/.test(sp.gameJs) ? "" : "function snapP(){return null}function restoreP(){}\n") + (/(function\s+SF\s*\(|const\s+SF\s*=)/.test(sp.gameJs) ? "" : "const SF=n=>n;\n") + (/function\s+fitCanvas/.test(sp.gameJs) ? "" : "function fitCanvas(){}\n") + (/function\s+draw\s*\(/.test(sp.gameJs) ? "" : "function draw(){}\n") + sp.gameJs;
   const rep = {
     TITLE: sp.title.vi, ROOT_CSS: sp.rootCss, EXTRA_CSS: sp.extraCss || "", HERO: sp.hero, HEROTXT: sp.heroTxt || sp.hero, GAME_HTML: sp.gameHtml, ID: sp.id, MAXS: String(sp.maxScore), P: sp.prefix,
     CONSTS: sp.consts || "", TYPES_JSON: JSON.stringify(sp.types), I18_JSON: JSON.stringify(i18n), CATALOG_JSON: JSON.stringify(sp.catalog), DECO_JSON: JSON.stringify(sp.deco),

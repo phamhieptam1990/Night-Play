@@ -107,6 +107,8 @@ function burst(n){if(!isProSk()&&n<12)return;const host=$("play"),L=(skinOf().de
 function HUD(D){return[[scoreOf(D),"sc"],[D.bud,"tm"],[D.attempt+"/3","ex"]]}
 function endChips(D){const n=scoreOf(D);return[TYPES[D.t][0]+" "+L2([TYPES[D.t][1],TYPES[D.t][2]]),T("cars",{a:Math.max(D.passedBest,D.passedNow),b:D.vw.length}),T("left",{n:D.bud}),T("tries",{n:D.attempt}),(D.prevBest>0&&n>D.prevBest)?T("rec"):""]}
 const shareT=D=>L2([TYPES[D.t][1],TYPES[D.t][2]])+" · "+Math.max(D.passedBest,D.passedNow)+"/"+D.vw.length+" 🚶";
+function snapP(D){const b=D.st==="build",N=b?D.nodes:D.snap0,M=b?D.mem:D.snapMem;if(!N||!M)return null;if(!M.length&&D.attempt<2)return null;return{a:D.attempt,pb:D.passedBest,m:M.map(e=>[N[e[0]].x,N[e[0]].y,N[e[1]].x,N[e[1]].y])}}
+function restoreP(D,p){initNodes(D);D.attempt=Math.max(1,Math.min(3,+p.a||1));D.passedBest=Math.max(0,+p.pb||0);(Array.isArray(p.m)?p.m:[]).slice(0,40).forEach(q=>{if(D.bud<=0)return;const f=(x,y)=>{let i=nodeAt(D,+x,+y);if(i<0){if(D.nodes.length>=MAXNODE)return -1;D.nodes.push({x:+x,y:+y});i=D.nodes.length-1}return i};const a=f(q[0],q[1]),b=f(q[2],q[3]);if(a>=0&&b>=0&&a!==b&&memAt(D,a,b)<0){D.mem.push([a,b]);D.bud--}});updBtn();hud()}
 function onBegin(D){updBtn();fitCanvas()}
 function fitCanvas(){const w=$("cvw");if(!w)return;const aw=w.clientWidth,ah=w.clientHeight;if(!aw||!ah)return;const s=Math.min(aw/W,ah/H),dpr=Math.min(2,devicePixelRatio||1);cv.style.width=Math.floor(W*s)+"px";cv.style.height=Math.floor(H*s)+"px";cv.width=Math.floor(W*s*dpr);cv.height=Math.floor(H*s*dpr);SC=cv.width/W;draw()}
 new ResizeObserver(fitCanvas).observe($("cvw"));

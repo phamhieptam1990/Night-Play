@@ -111,6 +111,8 @@ cv.addEventListener("wheel",e=>{const D=G;if(!D||D.over||paused)return;e.prevent
  clearTimeout(whT);whT=setTimeout(()=>{if(G===D&&D.drag&&D.drag.wh)endCut()},260)},{passive:false});
 const endCut=()=>{const D=G;if(!D||!D.drag)return;const d=D.drag;D.drag=null;if(D.st==="cut")drCut(D,d.a,d.b)};
 cv.addEventListener("pointerup",endCut);cv.addEventListener("pointercancel",endCut);
+function snapP(D){return D.res.length&&D.res.length<ROUNDS?{r:D.res.map(r=>[r.sc,r.ratio])}:null}
+function restoreP(D,p){if(!Array.isArray(p.r)||p.r.length>=ROUNDS)return;D.res=p.r.map((a,k)=>{const s=D.shapes[k],pl=makeShape(s.kind,mulberry32(s.seed),W/2,H/2,Math.min(W,H)*.29);return{sc:+a[0]||0,ratio:Array.isArray(a[1])?a[1]:[50,50],kind:s.kind,poly:pl,lines:[]}});D.i=D.res.length;setPoly(D);hud()}
 function onBegin(D){fitCanvas()}
 `,
   drawCard: String.raw`function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#ffb36b","#b0301e"];

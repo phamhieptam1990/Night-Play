@@ -109,6 +109,8 @@ cv.addEventListener("wheel",e=>{const D=G;if(!D||D.over||paused||!D.puz)return;e
  if(!D.wvp||!D.wvOn){const n=D.puz.nodes[D.cur];D.wvp=[n.x,n.y];D.wvOn=1}
  const pr=D.wvp.slice();D.wvp=[Math.max(0,Math.min(W,D.wvp[0]-e.deltaX*k)),Math.max(0,Math.min(H,D.wvp[1]-e.deltaY*k))];D.ptr=D.wvp;nnMove(D,D.wvp,pr);hud();
  clearTimeout(whT);whT=setTimeout(()=>{D.wvOn=0;D.ptr=null;if(D.cur>=0)D.clk=1},300)},{passive:false});
+function snapP(D){return D.solved>0?{L:D.L,s:D.solved,t:Math.round(D.time),b:D.bonusT,l:D.lives,h:D.hardest}:null}
+function restoreP(D,p){D.L=Math.max(1,Math.min(200,+p.L||1));D.solved=+p.s||0;D.time=+p.t||0;D.bonusT=+p.b||0;if(D.C.lives)D.lives=Math.max(1,+p.l||D.lives);D.hardest=+p.h||0;setPuz(D);hud()}
 function onBegin(D){fitCanvas()}
 `,
   drawCard: String.raw`function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#34d3a8","#063b2f"];

@@ -92,6 +92,9 @@ txt=txt.replace('T("chP",{s:c.sc})','T("chP",{s:SF(c.sc)})')
 txt=txt.replace('n:scoreOf(D),l:shareLink(D)','n:SF(scoreOf(D)),l:shareLink(D)')
 txt=txt.replace('T("done",{s:done})','T("done",{s:SF(done)})').replace('T("best",{n:sv.best})','T("best",{n:SF(sv.best)})')
 
+
+txt=txt.replace('const s={seed:G.seed,t:G.t};if(PF.pro','const s={seed:G.seed,t:G.t};try{const pp=snapP(G);if(pp&&JSON.stringify(pp).length<760)s.p=pp}catch(e){}if(PF.pro')
+txt=txt.replace('const go=()=>begin(seed,"challenge",ht,null);','const go=()=>{begin(seed,"challenge",ht,null);if(HS.p&&typeof HS.p==="object")try{restoreP(G,HS.p)}catch(e){}};')
 # cắt khối bot cuối: giữ tới dòng 'else{const c0=parseCh...' và thêm @@TEST@@
 i=txt.index('/* ===== bot kiểm thử')
 txt=txt[:i]+'@@TEST@@\n</script>\n</body>\n</html>\n'

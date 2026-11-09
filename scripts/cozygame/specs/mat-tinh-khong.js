@@ -83,6 +83,8 @@ function draw(){if(!ctx||!cv.width)return;const sk=skinOf(),dm=sk.dim||[360,360]
  c.fillStyle=sk.lbl||(dk?"rgba(255,255,255,.8)":"rgba(30,20,60,.75)");c.font="800 15px 'Be Vietnam Pro',system-ui";c.textAlign="left";c.fillText(T("lvl",{n:lv.L}),12,H-12);if(sk.fx)sk.fx(c,W,H,tm,dk)}
 function pt(e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H]}
 cv.addEventListener("pointerdown",e=>{const D=G;if(!D||D.over||paused||!D.lv)return;if(e.pointerType==="mouse"&&e.button!==0)return;e.preventDefault();let p=pt(e);if(D.C.spin){const a=-angOf(D),dx=p[0]-W/2,dy=p[1]-H/2;p=[W/2+dx*Math.cos(a)-dy*Math.sin(a),H/2+dx*Math.sin(a)+dy*Math.cos(a)]}let bi=-1,bd=1e9;D.lv.tiles.forEach((t,i)=>{let ok,d;if(t.w){ok=Math.abs(p[0]-t.x)<=t.w/2+2&&Math.abs(p[1]-t.y)<=t.h/2+2;d=Math.hypot(p[0]-t.x,p[1]-t.y)}else{d=Math.hypot(p[0]-t.x,p[1]-t.y);ok=d<=t.r*1.04}if(ok&&d<bd){bd=d;bi=i}});if(bi>=0)mtTap(D,bi)});
+function snapP(D){return D.L>1?{L:D.L,pn:Math.round(D.pen*10)/10,lv:D.lives,t:Math.round(D.time*10)/10}:null}
+function restoreP(D,p){D.L=Math.max(1,Math.min(200,+p.L||1));D.pen=+p.pn||0;D.lives=Math.max(1,+p.lv||D.lives);D.time=+p.t||0;mkLevel(D,D.L);hud()}
 function onBegin(D){fitCanvas()}
 `,
   drawCard: String.raw`function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#9a85ff","#2a1a7a"];
