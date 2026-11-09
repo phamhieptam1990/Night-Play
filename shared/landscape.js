@@ -10,10 +10,19 @@
     var kids = Array.prototype.slice.call(h.children), hasTys = !!h.querySelector(":scope>.tys,:scope>#tys");
     var L = document.createElement("div"), R = document.createElement("div"); L.className = "hl"; R.className = "hr";
     kids.forEach(function (k) {
-      var left = k.matches("#hHero,.hero,#hSub,.boss,#hChips,#hLad,.lad,#hNote") || (hasTys && k.matches("#bDaily,#bCamp,#bMake"));
+      var left = k.matches("#homeTitle,#hHero,.hero,#hSub,.boss,#hChips,#hLad,.lad,#hNote") || (hasTys && k.matches("#bDaily,#bCamp,#bMake"));
       (left ? L : R).appendChild(k);
     });
     h.appendChild(L); h.appendChild(R);
+  }
+  /* tên game ở màn chọn (màn dọc): bản sao nằm đầu #home để sát khối nội dung ở giữa */
+  var HT = null;
+  (function () { var h = document.getElementById("home"), t0 = document.getElementById("ttl"); if (!h || !t0) return; HT = document.createElement("div"); HT.id = "homeTitle"; HT.className = "hometitle"; HT.setAttribute("aria-hidden", "true"); h.insertBefore(HT, h.firstChild); })();
+  function fitHome() {
+    var t0 = document.getElementById("ttl"); if (!HT || !t0) return; HT.textContent = t0.textContent; HT.style.fontSize = "";
+    if (!HT.offsetParent) return;
+    var fs = parseFloat(getComputedStyle(HT).fontSize) || 24, guard = 0;
+    while (HT.scrollWidth > HT.clientWidth + 1 && fs > 12 && guard++ < 60) { fs -= 0.5; HT.style.fontSize = fs + "px"; }
   }
   wrapHome();
   scr();
@@ -24,4 +33,18 @@
   function wake() { document.body.classList.remove("idle"); clearTimeout(t); t = setTimeout(function () { if (pl.dataset.scr === "game") document.body.classList.add("idle"); }, 2600); }
   ["pointermove", "pointerdown", "keydown", "touchstart", "wheel"].forEach(function (e) { addEventListener(e, wake, { passive: true }); });
   wake();
+  /* tiêu đề game: không xuống dòng và hạn chế dấu “…” — thu nhỏ chữ vừa đủ để nằm trọn một dòng (cả màn dọc lẫn ngang) */
+  var tl = document.getElementById("ttl"), land = matchMedia("(orientation:landscape) and (max-height:700px),(orientation:landscape) and (pointer:coarse) and (max-height:900px)"), fitRaf = 0;
+  function fitTitle() {
+    if (!tl) return; tl.style.fontSize = "";
+    pl.classList.remove("tight");
+    var fs = parseFloat(getComputedStyle(tl).fontSize) || 16, lim = 11, guard = 0;
+    while (tl.scrollWidth > tl.clientWidth + 1 && fs > lim && guard++ < 40) { fs -= 0.5; tl.style.fontSize = fs + "px"; }
+    if (tl.scrollWidth > tl.clientWidth + 1) {   /* vẫn bị cắt ở cỡ chữ nhỏ nhất: thu nhỏ các nút trên cùng để dành chỗ cho tiêu đề */
+      pl.classList.add("tight"); tl.style.fontSize = ""; fs = parseFloat(getComputedStyle(tl).fontSize) || 16; guard = 0;
+      while (tl.scrollWidth > tl.clientWidth + 1 && fs > lim && guard++ < 40) { fs -= 0.5; tl.style.fontSize = fs + "px"; }
+    }
+  }
+  function queueFit() { cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(function () { fitTitle(); fitHome(); }); }
+  if (tl) { try { new MutationObserver(queueFit).observe(tl, { childList: true, characterData: true, subtree: true }); new MutationObserver(queueFit).observe(pl, { attributes: true, attributeFilter: ["data-scr"] }); } catch (e) {} addEventListener("resize", queueFit); addEventListener("orientationchange", function () { setTimeout(queueFit, 200); }); if (document.fonts && document.fonts.ready) document.fonts.ready.then(queueFit); queueFit(); }
 })();

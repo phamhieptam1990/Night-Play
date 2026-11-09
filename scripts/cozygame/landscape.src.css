@@ -11,7 +11,7 @@
 .top>*{pointer-events:auto}
 .top>.ib{grid-column:3;justify-self:end;width:42px;height:42px;min-width:42px;min-height:42px;padding:0;font-size:15px;transition:opacity .35s}
 .top>#bBk{grid-column:1;grid-row:1;justify-self:start}
-.top>h1{grid-column:1;grid-row:2;white-space:normal;overflow:visible;text-overflow:clip;font-size:3.8cqw;line-height:1.12;margin:0;transition:opacity .35s;max-height:9cqw;overflow:hidden}
+.top>h1{grid-column:1;grid-row:2;white-space:nowrap;overflow:visible;text-overflow:clip;font-size:3.8cqw;line-height:1.12;margin:0;transition:opacity .35s;max-height:9cqw;overflow:hidden}
 body.idle #play[data-scr="game"] .top>.ib:not(#bBk),body.idle #play[data-scr="game"] .top>h1{opacity:.22}
 body.idle #play[data-scr="game"] .top>.ib:hover,body.idle #play[data-scr="game"] .top>.ib:focus-visible{opacity:1}
 /* mọi màn: bỏ chừa chỗ cho thanh trên (thanh trên đã ra hai bên) → khung chơi cao tối đa */
@@ -37,7 +37,7 @@ body.idle #play[data-scr="game"] .top>.ib:hover,body.idle #play[data-scr="game"]
 #home>.hl{padding-top:14cqw}
 #home .hero,#home #hHero{display:block!important;font-size:16cqw;text-align:center}
 #home>.hl .btn.dbtn{width:100%}
-#play[data-scr="home"] .top>h1{font-size:6cqw;max-height:none;overflow:visible;white-space:normal}
+#play[data-scr="home"] .top>h1{font-size:6cqw;max-height:none;overflow:visible;white-space:nowrap}
 /* màn kết thúc: thẻ điểm sang trái */
 #end>.card{position:absolute;right:calc(100% + 2.5cqw);top:50%;transform:translateY(-50%);width:calc(var(--cl) - 1cqw)}
 #end>#eLeg{position:absolute;left:calc(100% + 2.5cqw);bottom:0;width:calc(var(--cr) - 1cqw)}
@@ -51,3 +51,5 @@ body.idle #play[data-scr="game"] .top>.ib:hover,body.idle #play[data-scr="game"]
 #play #game>#lad{display:flex;position:absolute;left:calc(100% + 2.5cqw);top:calc(50% + 14cqw);transform:translateY(-50%);flex-direction:column;flex-wrap:nowrap;align-items:center;gap:.2cqw;font-size:3.6cqw;width:calc(var(--cr) - 1cqw);z-index:3}
 /* toast sự kiện theo mùa (shared/season.js): dời xuống góc trái để không che khung chơi */
 .ns-toast{left:calc(var(--sl) + 58px)!important;transform:none!important;bottom:10px!important;max-width:calc(var(--side) - 70px)!important;border-radius:16px!important;white-space:normal!important;animation:none!important}
+/* canvas có viền: tính viền vào kích thước để không vượt khung (giao diện Night Pass có viền dày) */
+#cvw canvas#cv{box-sizing:border-box;max-height:100%}
