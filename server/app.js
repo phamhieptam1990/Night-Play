@@ -75,6 +75,8 @@ function readToken(tok) {
    trên chuỗi `${ts}|${METHOD}|${pathname}` (|giờ máy chủ - ts| <= 120 giây). Khoá riêng nằm trong IndexedDB của trình duyệt (không xuất được),
    nên chép nguyên token sang máy khác vẫn bị từ chối. Token CŨ (không có k) chỉ được chấp nhận đến LEGACY_TOKEN_UNTIL. */
 const MAX_DEVICES = Math.max(1, Math.min(10, Math.floor(+env("MAX_DEVICES", 3)) || 3));
+/* DEVICE_LOCK=off: TẠM TẮT giới hạn thiết bị (không thu hồi thiết bị, không đòi chữ ký, không giới hạn nhận đơn, token cũ dùng mãi). Mặc định bật. */
+const LOCK_OFF = String(env("DEVICE_LOCK", "on")).toLowerCase() === "off";
 const LEGACY_DEFAULT = "2026-11-17T00:00:00Z";
 const LEGACY_UNTIL = (() => { const t = Date.parse(env("LEGACY_TOKEN_UNTIL", LEGACY_DEFAULT)); return Number.isFinite(t) ? t : Date.parse(LEGACY_DEFAULT); })();
 const subtle = () => (globalThis.crypto && globalThis.crypto.subtle) || crypto.webcrypto.subtle;
@@ -86,11 +88,12 @@ const noTable = e => !!e && (e.code === "42P01" || e.code === "42703");   // ch�
 async function registerDevice(userId, jwk) {
   const kid = jwkKid(jwk);
   await db.query("insert into pass_devices(user_id, kid, jwk) values ($1, $2, $3::jsonb) on conflict (user_id, kid) do update set last_seen = now()", [userId, kid, JSON.stringify(jwk)]);
-  await db.query("delete from pass_devices where user_id = $1 and kid in (select kid from pass_devices where user_id = $1 order by last_seen desc, first_seen desc offset $2)", [userId, MAX_DEVICES]);
+  if (!LOCK_OFF) await db.query("delete from pass_devices where user_id = $1 and kid in (select kid from pass_devices where user_id = $1 order by last_seen desc, first_seen desc offset $2)", [userId, MAX_DEVICES]);
   return kid;
 }
 /* Trả "ok" hoặc lý do từ chối. ctx = { sig, method, path } hoặc null (không có chữ ký, vd huy hiệu bảng điểm: chỉ cần thiết bị còn đăng ký) */
 async function deviceVerdict(t, ctx) {
+  if (LOCK_OFF) return "ok";
   if (!t.k) return Date.now() < LEGACY_UNTIL ? "ok" : "legacy_expired";
   let d;
   try { ({ rows: [d] } = await db.query("select jwk, last_seen < now() - interval '10 minutes' as stale from pass_devices where user_id = $1 and kid = $2", [t.u, t.k])); }
@@ -114,7 +117,7 @@ const ctxOf = h => ({ sig: h["x-device-sig"], method: h["x-np-method"], path: h[
 /* Cấp token cho một thiết bị: có khoá công khai → token có k (đăng ký thiết bị, áp giới hạn); không có → token cũ (chỉ trong thời gian ân hạn). */
 async function issueToken(userId, exp, plan, pubHeader) {
   const jwk = parsePub(pubHeader);
-  if (!jwk) return Date.now() < LEGACY_UNTIL ? { token: signToken(userId, exp, plan) } : { token: null, needKey: true };
+  if (!jwk) return LOCK_OFF || Date.now() < LEGACY_UNTIL ? { token: signToken(userId, exp, plan) } : { token: null, needKey: true };
   try { return { token: signToken(userId, exp, plan, await registerDevice(userId, jwk)) }; }
   catch (e) { if (noTable(e)) return { token: signToken(userId, exp, plan) }; throw e; }
 }
@@ -245,7 +248,7 @@ route("GET", /^\/api\/orders\/([a-f0-9]{32})$/, async ({ m, headers }) => {
   if (!o) return out(404, { error: "not_found" });
   if (o.status === "paid") {
     const base = { status: "paid", exp: ms(o.exp), plan: o.plan }, jwk = parsePub(headers["x-device-pub"]);
-    if (jwk) {   // đơn chỉ được MỘT thiết bị nhận token (kid đầu tiên); thiết bị khác phải khôi phục bằng email
+    if (jwk && !LOCK_OFF) {   // đơn chỉ được MỘT thiết bị nhận token (kid đầu tiên); thiết bị khác phải khôi phục bằng email
       try {
         const r = await db.query("update orders set claim_kid = $2 where id = $1 and (claim_kid is null or claim_kid = $2)", [m[1], jwkKid(jwk)]);
         if (!r.rowCount) return out(200, { ...base, token: null, claimed: true });

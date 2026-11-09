@@ -10,6 +10,8 @@
   "keep_vars": true,
   // QUAN TRỌNG: tắt keep_names. Mã Night Pass được tạo bằng main.toString() rồi gửi cho trình duyệt; keep_names chèn __name(...) vào mọi hàm → trình duyệt báo "__name is not defined" và game im lặng giữ ổ khoá.
   "keep_names": false,
+  // Tạm tắt giới hạn thiết bị Night Pass (xoá dòng này hoặc đặt "on" để bật lại)
+  "vars": { "DEVICE_LOCK": "off" },
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
