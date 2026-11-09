@@ -37,9 +37,9 @@ module.exports = {
   gameJs: String.raw`
 let W=360,H=420,SC=1;const ctx=cv.getContext("2d");
 const GR=20,LMAX=60,TC=12,CC=12,LREF=40,MAXNODE=64;
-const VEH=[["🚶","Người đi bộ","Walker",1],["🚲","Xe đạp","Bicycle",1.7],["🛵","Xe máy","Motorbike",2.9],["🐂","Xe bò","Ox cart",4.6]];
+const VEH=[["🧍","Người đi bộ","Walker",1],["🚲","Xe đạp","Bicycle",1.7],["🛵","Xe máy","Motorbike",2.9],["🐂","Xe bò","Ox cart",4.6]];
 const CFG=[{veh:[0,1,2,3],bud:22,cap:1},{veh:[0,1,2,3],bud:26,cap:1,wide:1,pier:1},{veh:[0,1,2,3],bud:22,cap:.88,wind:1},{veh:[2,3,3,3],bud:28,cap:1,heavy:1,wmul:1.3}];
-const RIGHT=["🚶","🚵"];const vEm=i=>(isProSk()&&skinOf().veh&&skinOf().veh[i])||VEH[i][0];
+const RIGHT=["🧍","🚵"];const vEm=i=>(isProSk()&&skinOf().veh&&skinOf().veh[i])||VEH[i][0];
 const emj="'Apple Color Emoji','Segoe UI Emoji',sans-serif";
 function geoOf(D){const sk=skinOf(),g=Object.assign({lx:60,rx:300,ly:220,ry:220},sk.geo||{});if(D&&D.C.wide){g.lx=40;g.rx=320}return g}
 function initNodes(D){const g=geoOf(D);D.g=g;D.nodes=[{x:g.lx,y:g.ly,fix:1},{x:g.lx,y:g.ly+40,fix:1},{x:g.rx,y:g.ry,fix:1},{x:g.rx,y:g.ry+40,fix:1}];if(D.C.pier)D.nodes.push({x:Math.round((g.lx+g.rx)/2/GR)*GR,y:Math.max(g.ly,g.ry)+120,fix:1});D.mem=[];D.bud=D.C.bud;D.hl=-1;D.rat=null;D.sel=null;D.hovEnd=null;D.wv=null}
@@ -141,7 +141,10 @@ function draw(){if(!ctx||!cv.width)return;const sk=skinOf(),dm=sk.dim||[360,420]
  if(D.sel!=null&&D.st==="build"&&D.nodes[D.sel]){const sn=D.nodes[D.sel];c.save();c.strokeStyle=skinOf().drag||"#2f9e44";c.lineWidth=3;c.beginPath();c.arc(sn.x,sn.y,12+Math.sin(tm*6)*1.5,0,6.283);c.stroke();if(D.hovEnd&&!D.drag){c.setLineDash([6,5]);c.lineWidth=5;c.lineCap="round";c.globalAlpha=.7;c.beginPath();c.moveTo(sn.x,sn.y);c.lineTo(D.hovEnd[0],D.hovEnd[1]);c.stroke();c.setLineDash([]);c.globalAlpha=1;c.fillStyle=skinOf().drag||"#2f9e44";c.beginPath();c.arc(D.hovEnd[0],D.hovEnd[1],5,0,6.283);c.fill()}c.restore()}
  if(D.drag){const f=D.nodes[D.drag.from];c.save();c.setLineDash([6,5]);c.strokeStyle=skinOf().drag||"#2f9e44";c.lineWidth=5;c.lineCap="round";c.beginPath();c.moveTo(f.x,f.y);c.lineTo(D.drag.end[0],D.drag.end[1]);c.stroke();c.restore();c.fillStyle="#2f9e44";c.beginPath();c.arc(D.drag.end[0],D.drag.end[1],6,0,6.283);c.fill()}
  if((D.st==="test"||D.st==="fall")&&D.path){const vp=vpos(D,D.st==="fall"?Math.min(D.plen,D.vs):D.vs);c.font="34px "+emj;c.textAlign="center";c.textBaseline="bottom";c.save();c.translate(vp.x,vp.y-4+(D.st==="fall"?D.ft*D.ft*260:0));if(D.st==="fall")c.rotate(D.ft*1.4);const ve=vEm(D.C.veh[Math.min(D.vi,D.C.veh.length-1)]);if(RIGHT.indexOf(ve)<0)c.scale(-1,1);c.fillText(ve,0,0);c.restore()}
- else if(D.st==="build"){c.font="26px "+emj;c.textAlign="center";c.globalAlpha=.7;D.C.veh.forEach((vi,k)=>{const em0=vEm(vi);c.save();c.translate(g.lx-52+k*32,g.ly-18);if(RIGHT.indexOf(em0)<0)c.scale(-1,1);c.fillText(em0,0,0);c.restore()});c.globalAlpha=1}
+ {const done=D.st==="build"?0:(D.vi||0),n=D.C.veh.length,gw=W/ (n+1);c.save();c.fillStyle=dk?"rgba(0,0,0,.35)":"rgba(255,255,255,.55)";c.beginPath();c.roundRect?c.roundRect(8,26,W-16,46,12):c.rect(8,26,W-16,46);c.fill();c.textAlign="center";c.textBaseline="middle";
+  D.C.veh.forEach((vi,k)=>{const em0=vEm(vi),x=gw*(k+1),y=46;c.save();c.translate(x,y);if(k===done&&D.st!=="build"){c.strokeStyle="#ffd24a";c.lineWidth=3;c.beginPath();c.arc(0,-1,17,0,6.283);c.stroke()}if(k<done)c.globalAlpha=.45;c.font="26px "+emj;if(RIGHT.indexOf(em0)<0)c.scale(-1,1);c.fillText(em0,0,0);c.restore();
+   c.save();c.font="800 10px system-ui";c.fillStyle=skinOf().lbl||(dk?"rgba(255,255,255,.95)":"rgba(30,50,20,.95)");c.textAlign="center";c.fillText(k<done?"✓":VEH[vi][3].toFixed(1)+"×",x,68);c.restore();
+   if(k<n-1){c.save();c.fillStyle=dk?"rgba(255,255,255,.5)":"rgba(30,50,20,.5)";c.font="12px system-ui";c.textAlign="center";c.fillText("›",x+gw/2,46);c.restore()}});c.restore()}
  if(D.C.wind&&D.st!=="build"){c.strokeStyle="rgba(200,230,255,.5)";c.lineWidth=1.6;for(let i=0;i<14;i++){const x=(i*61+tm*140)%W,y=(i*83)%H*.8+20;c.beginPath();c.moveTo(x,y);c.lineTo(x+22,y+6);c.stroke()}}
  for(const f of D.fx){c.save();c.globalAlpha=Math.min(1,f.t*2);c.font="800 16px system-ui";c.textAlign="center";c.fillStyle="#2f9e44";c.fillText("✓",f.x,f.y-(.8-f.t)*20);c.restore()}
  c.fillStyle=sk.lbl||(dk?"rgba(255,255,255,.85)":"rgba(30,50,20,.85)");c.font="800 13px 'Be Vietnam Pro',system-ui";c.textAlign="left";c.fillText(T("lvl",{n:D.attempt}),10,18);
