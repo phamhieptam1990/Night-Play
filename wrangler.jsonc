@@ -8,6 +8,8 @@
   "compatibility_flags": ["nodejs_compat"],
   // Giữ nguyên biến môi trường đã nhập trên dashboard khi deploy (mặc định wrangler deploy XOÁ biến kiểu Text không có trong file này)
   "keep_vars": true,
+  // QUAN TRỌNG: tắt keep_names. Mã Night Pass được tạo bằng main.toString() rồi gửi cho trình duyệt; keep_names chèn __name(...) vào mọi hàm → trình duyệt báo "__name is not defined" và game im lặng giữ ổ khoá.
+  "keep_names": false,
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",

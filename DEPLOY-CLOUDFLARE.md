@@ -32,3 +32,8 @@ Kiến trúc: `dist/` (file tĩnh, băng thông không giới hạn) + Worker `w
 - `wrangler deploy` mặc định xoá các biến kiểu **Text** đặt trên dashboard nếu chúng không có trong `wrangler.jsonc`. Đã thêm `"keep_vars": true` để giữ lại.
 - Biến nhạy cảm (`DATABASE_URL`, `TOKEN_SECRET`, `SEPAY_API_KEY`, `ADMIN_KEY`…) nên tạo loại **Secret** (không bị xoá khi deploy, giá trị luôn ẩn, chỉ thấy tên).
 - Có hai nơi khác nhau: **Settings → Variables and Secrets** (biến chạy khi có request, cần cho `/api`) và **Settings → Build → Variables and secrets** (chỉ dùng lúc build, ví dụ `NODE_VERSION`, `SITE_TARGET`). Biến của `/api` phải nằm ở nơi thứ nhất.
+
+## Lỗi "đã mua Night Pass nhưng vẫn còn ổ khoá" (đã gặp)
+- Nguyên nhân: wrangler mặc định `keep_names` chèn `__name(...)` vào mọi hàm. Mã Night Pass (`server/pro/*.js`) được gửi cho trình duyệt bằng `main.toString()`, nên trình duyệt báo `__name is not defined`, game im lặng giữ khoá. Netlify không bị vì không dùng keep_names.
+- Đã sửa bằng `"keep_names": false` trong `wrangler.jsonc` / `wrangler.admin.jsonc`. TRƯỚC KHI deploy chạy `node scripts/check-worker-bundle.js` (phải in ✓).
+- Người chơi tự kiểm tra bằng trang `/passcheck`.
