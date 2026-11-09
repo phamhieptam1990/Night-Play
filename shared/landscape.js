@@ -18,10 +18,10 @@
   /* tên game ở màn chọn (màn dọc): bản sao nằm đầu #home để sát khối nội dung ở giữa */
   var HT = null;
   (function () { var h = document.getElementById("home"), t0 = document.getElementById("ttl"); if (!h || !t0) return; HT = document.createElement("div"); HT.id = "homeTitle"; HT.className = "hometitle"; HT.setAttribute("aria-hidden", "true"); h.insertBefore(HT, h.firstChild); })();
-  /* tên game khi đang chơi (màn dọc): bản sao nằm đầu #game, ngay trên cụm điểm + khung chơi */
-  var GT = null;
-  (function () { var g = document.getElementById("game"), t0 = document.getElementById("ttl"); if (!g || !t0) return; GT = document.createElement("div"); GT.id = "gameTitle"; GT.className = "gametitle"; GT.setAttribute("aria-hidden", "true"); g.insertBefore(GT, g.firstChild); })();
-  function fitGame() { var t0 = document.getElementById("ttl"); if (!GT || !t0) return; GT.textContent = t0.textContent; GT.style.fontSize = ""; if (!GT.offsetParent) return; var fs = parseFloat(getComputedStyle(GT).fontSize) || 18, guard = 0; while (GT.scrollWidth > GT.clientWidth + 1 && fs > 11 && guard++ < 60) { fs -= 0.5; GT.style.fontSize = fs + "px"; } }
+  /* tên game ở MỌI màn không phải màn chọn (đang chơi, kết thúc, câu hỏi...; màn dọc): bản sao nằm đầu mỗi màn, ngay trên cụm nội dung */
+  var GTS = [];
+  (function () { var t0 = document.getElementById("ttl"); if (!t0) return; Array.prototype.slice.call(pl.children).forEach(function (sec) { if (sec.tagName !== "SECTION" || sec.id === "home" || !sec.classList.contains("scr")) return; var d = document.createElement("div"); d.className = "gametitle"; d.setAttribute("aria-hidden", "true"); sec.insertBefore(d, sec.firstChild); GTS.push(d); }); })();
+  function fitGame() { var t0 = document.getElementById("ttl"); if (!t0) return; GTS.forEach(function (GT) { GT.textContent = t0.textContent; GT.style.fontSize = ""; if (!GT.offsetParent) return; var fs = parseFloat(getComputedStyle(GT).fontSize) || 18, guard = 0; while (GT.scrollWidth > GT.clientWidth + 1 && fs > 11 && guard++ < 60) { fs -= 0.5; GT.style.fontSize = fs + "px"; } }); }
   function fitHome() {
     var t0 = document.getElementById("ttl"); if (!HT || !t0) return; HT.textContent = t0.textContent; HT.style.fontSize = "";
     if (!HT.offsetParent) return;
