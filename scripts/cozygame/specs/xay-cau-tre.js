@@ -17,7 +17,7 @@ module.exports = {
   consts: `const NICE=2400,CONF=["🎋","🌉","🎉"];`,
   i18n: {
     vi: { sub: "Dùng số thanh tre có hạn dựng giàn bắc qua kênh. Người, xe đạp, xe máy, xe bò lần lượt đi qua — cầu quá tải là gãy!", note: "Kéo từ một nút để thêm thanh tre · chạm thanh tre để bỏ · mỗi ngày cả nước dựng cùng một khe sông",
-      sc: "Điểm", tm: "Tre", ex: "Lần", hint0: "Kéo từ nút (chấm) sang chấm khác để nối thanh tre. Tam giác là hình vững nhất! Chạm thanh để bỏ.", hint1: "Sông rộng có TRỤ ĐÁ giữa dòng: nối giàn vào trụ để chia nhịp. Nhiều tre hơn nhưng khe cũng rộng hơn.", hint2: "Mưa gió: gió ngang làm cầu rung lắc và tre ướt yếu hơn 12%. Giàn càng cao càng dễ bị đẩy.", hint3: "Hàng nặng: xe máy rồi LIÊN TIẾP xe bò. Cầu phải thật chắc, tre cho nhiều hơn.",
+      sc: "Điểm", tm: "Tre", ex: "Lần", hint0: "Kéo từ nút sang nút để nối thanh tre, HOẶC bấm một nút rồi bấm chỗ muốn nối tới. Máy tính: lướt 2 ngón trên bàn di chuột. Tam giác là vững nhất! Chạm thanh để bỏ.", hint1: "Sông rộng có TRỤ ĐÁ giữa dòng: nối giàn vào trụ để chia nhịp. Nhiều tre hơn nhưng khe cũng rộng hơn.", hint2: "Mưa gió: gió ngang làm cầu rung lắc và tre ướt yếu hơn 12%. Giàn càng cao càng dễ bị đẩy.", hint3: "Hàng nặng: xe máy rồi LIÊN TIẾP xe bò. Cầu phải thật chắc, tre cho nhiều hơn.",
       end: "Xong rồi!", endS: "Bạn đạt {n} điểm", rt: ["Cầu lung lay", "Qua được vài xe", "Kỹ sư làng", "Kỹ sư cầu đường", "Thánh xây cầu"],
       tx: "🎋 Xây Cầu Tre · {t}\nCầu của mình đạt {n} điểm!\n{l}", ask: "Bạn dựng được cầu chắc hơn mình không?",
       lockP: "Loại Sông rộng có trụ, Mưa gió, Hàng nặng và 4 giao diện (Kênh miền Tây, Suối núi cao, Ruộng bậc thang, Kênh Sài Gòn) với địa hình hai bờ khác nhau là của Night Pass. Dùng thử 1 ván mỗi ngày hoặc mở khoá tất cả.",
@@ -25,7 +25,7 @@ module.exports = {
       tut: "Kéo từ chấm này sang chấm khác để nối thanh tre. Dựng xong bấm THỬ CẦU!", go: "▶ THỬ CẦU", link: "Chưa nối hai bờ — dựng thanh tre từ bờ này sang bờ kia nhé", noBud: "Hết tre rồi! Chạm thanh để bỏ bớt", broke: "Thanh tre gãy! Cầu sập", mech: "Cầu bị xô lệch! Thêm thanh chéo (tam giác)", pass: "Qua!", again: "Lần {n}/3 — sửa cầu rồi thử lại", tries: "{n} lần thử", left: "còn {n} tre", cars: "{a}/{b} xe qua", lvl: "Lần {n}/3",
       sk: { basic: ["Kênh quê", "Country canal"], delta: ["Kênh miền Tây", "Mekong canal"], mount: ["Suối núi cao", "Mountain gorge"], paddy: ["Ruộng bậc thang", "Rice terraces"], city: ["Kênh Sài Gòn", "Saigon canal"] } },
     en: { sub: "Use a limited number of bamboo poles to build a truss across the canal. A walker, bicycle, motorbike and ox cart cross in turn — overload and it breaks!", note: "Drag from a node to add a pole · tap a pole to remove it · everyone builds over the same gap each day",
-      sc: "Score", tm: "Poles", ex: "Try", hint0: "Drag from a dot to another dot to join a bamboo pole. Triangles are the strongest shape! Tap a pole to remove it.", hint1: "Wide river with a STONE PIER mid-stream: tie the truss into it to split the span. More poles, but a wider gap.", hint2: "Storm: side wind shakes the bridge and wet bamboo is 12% weaker. Taller trusses get pushed more.", hint3: "Heavy loads: a motorbike then ox carts IN A ROW. Build it really solid — more poles given.",
+      sc: "Score", tm: "Poles", ex: "Try", hint0: "Drag dot to dot to join a pole, OR click a dot then click where to join. Computer: glide 2 fingers on the trackpad. Triangles are strongest! Tap a pole to remove it.", hint1: "Wide river with a STONE PIER mid-stream: tie the truss into it to split the span. More poles, but a wider gap.", hint2: "Storm: side wind shakes the bridge and wet bamboo is 12% weaker. Taller trusses get pushed more.", hint3: "Heavy loads: a motorbike then ox carts IN A ROW. Build it really solid — more poles given.",
       end: "All done!", endS: "You scored {n}", rt: ["Wobbly bridge", "A few got across", "Village engineer", "Bridge engineer", "Bridge master"],
       tx: "🎋 Bamboo Bridge · {t}\nMy bridge scored {n}!\n{l}", ask: "Can you build a stronger bridge than mine?",
       lockP: "Wide river + pier, Storm, Heavy loads and 4 themes (Mekong canal, Mountain gorge, Rice terraces, Saigon canal) with different bank terrain are for Night Pass. Try one round a day or unlock everything.",
@@ -41,7 +41,7 @@ const VEH=[["🚶","Người đi bộ","Walker",1],["🚲","Xe đạp","Bicycle"
 const CFG=[{veh:[0,1,2,3],bud:22,cap:1},{veh:[0,1,2,3],bud:26,cap:1,wide:1,pier:1},{veh:[0,1,2,3],bud:22,cap:.88,wind:1},{veh:[2,3,3,3],bud:28,cap:1,heavy:1,wmul:1.3}];
 const emj="'Apple Color Emoji','Segoe UI Emoji',sans-serif";
 function geoOf(D){const sk=skinOf(),g=Object.assign({lx:60,rx:300,ly:220,ry:220},sk.geo||{});if(D&&D.C.wide){g.lx=40;g.rx=320}return g}
-function initNodes(D){const g=geoOf(D);D.g=g;D.nodes=[{x:g.lx,y:g.ly,fix:1},{x:g.lx,y:g.ly+40,fix:1},{x:g.rx,y:g.ry,fix:1},{x:g.rx,y:g.ry+40,fix:1}];if(D.C.pier)D.nodes.push({x:Math.round((g.lx+g.rx)/2/GR)*GR,y:Math.max(g.ly,g.ry)+120,fix:1});D.mem=[];D.bud=D.C.bud;D.hl=-1;D.rat=null}
+function initNodes(D){const g=geoOf(D);D.g=g;D.nodes=[{x:g.lx,y:g.ly,fix:1},{x:g.lx,y:g.ly+40,fix:1},{x:g.rx,y:g.ry,fix:1},{x:g.rx,y:g.ry+40,fix:1}];if(D.C.pier)D.nodes.push({x:Math.round((g.lx+g.rx)/2/GR)*GR,y:Math.max(g.ly,g.ry)+120,fix:1});D.mem=[];D.bud=D.C.bud;D.hl=-1;D.rat=null;D.sel=null;D.hovEnd=null;D.wv=null}
 function newGame(seed,mode,t,ch){const C=CFG[t],R=sub(seed,1),vw=C.veh.map(i=>VEH[i][3]*(C.wmul||1)*(.92+R()*.16));
  const D={seed,mode,t,C,ch:ch||null,vw,st:"build",attempt:1,passedBest:0,passedNow:0,won:false,over:false,reason:"end",time:0,dur:1e9,beat:false,maxCombo:0,vi:0,vs:0,wait:0,acc:0,drag:null,fx:[],brk:-1,ft:0};initNodes(D);return D}
 const scoreOf=D=>Math.max(0,Math.max(D.passedBest,D.passedNow)*300+(D.won?D.bud*35:0)-(D.attempt-1)*60);
@@ -71,13 +71,25 @@ function removeMember(D,i){D.mem.splice(i,1);D.bud++;sfx.rem();D.hl=-1;hud();upd
 function clampEnd(D,from,p){const g=D.g,f=D.nodes[from];let x=snap(Math.max(g.lx,Math.min(g.rx,p[0]))),y=snap(Math.max(100,Math.min(H-60,p[1])));let guard=0;while(Math.hypot(x-f.x,y-f.y)>LMAX+.5&&guard++<8){if(Math.abs(x-f.x)>=Math.abs(y-f.y))x-=Math.sign(x-f.x)*GR;else y-=Math.sign(y-f.y)*GR}return[x,y]}
 function pt(e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H]}
 const segDist=(p,a,b)=>{const dx=b.x-a.x,dy=b.y-a.y,l=dx*dx+dy*dy||1;let u=((p[0]-a.x)*dx+(p[1]-a.y)*dy)/l;u=Math.max(0,Math.min(1,u));return Math.hypot(p[0]-(a.x+dx*u),p[1]-(a.y+dy*u))};
-cv.addEventListener("pointerdown",e=>{const D=G;if(!D||D.over||paused||D.st!=="build")return;if(e.pointerType==="mouse"&&e.button!==0)return;e.preventDefault();const p=pt(e);let bi=-1,bd=17;D.nodes.forEach((n,i)=>{if(!n.fix&&!used(D,i))return;const d=Math.hypot(n.x-p[0],n.y-p[1]);if(d<bd){bd=d;bi=i}});
- if(bi>=0){D.drag={from:bi,end:[D.nodes[bi].x,D.nodes[bi].y],moved:false};try{cv.setPointerCapture(e.pointerId)}catch(x){}return}
- let mi=-1,md=9;D.mem.forEach((m,i)=>{const d=segDist(p,D.nodes[m[0]],D.nodes[m[1]]);if(d<md){md=d;mi=i}});if(mi>=0)removeMember(D,mi)});
-cv.addEventListener("pointermove",e=>{const D=G;if(!D||!D.drag)return;const p=pt(e);D.drag.end=clampEnd(D,D.drag.from,p);D.drag.moved=true});
-const endDrag=()=>{const D=G;if(!D||!D.drag)return;const d=D.drag;D.drag=null;if(!d.moved)return;const f=D.nodes[d.from];if(d.end[0]===f.x&&d.end[1]===f.y)return;
+const nodeNearB=(D,p)=>{let bi=-1,bd=17;D.nodes.forEach((n,i)=>{if(!n.fix&&!used(D,i))return;const d=Math.hypot(n.x-p[0],n.y-p[1]);if(d<bd){bd=d;bi=i}});return bi};
+function connectTo(D,from,end){if(end[0]===D.nodes[from].x&&end[1]===D.nodes[from].y)return -1;let to=nodeAt(D,end[0],end[1]);if(to<0){if(D.nodes.length>=MAXNODE)return -1;if(D.bud<=0){toast(T("noBud"),1100);return -1}D.nodes.push({x:end[0],y:end[1]});to=D.nodes.length-1}
+ if(D.bud<=0){toast(T("noBud"),1100);return -1}return addMember(D,from,to)?to:-1}
+cv.addEventListener("pointerdown",e=>{const D=G;if(!D||D.over||paused||D.st!=="build")return;if(e.pointerType==="mouse"&&e.button!==0)return;e.preventDefault();const p=pt(e),bi=nodeNearB(D,p);
+ if(bi>=0){if(D.sel!=null&&bi!==D.sel){const to=connectTo(D,D.sel,clampEnd(D,D.sel,[D.nodes[bi].x,D.nodes[bi].y]));if(to>=0)D.sel=to;return}
+  D.drag={from:bi,end:[D.nodes[bi].x,D.nodes[bi].y],moved:false};try{cv.setPointerCapture(e.pointerId)}catch(x){}return}
+ let mi=-1,md=9;D.mem.forEach((m,i)=>{const d=segDist(p,D.nodes[m[0]],D.nodes[m[1]]);if(d<md){md=d;mi=i}});if(mi>=0){removeMember(D,mi);return}
+ if(D.sel!=null){const to=connectTo(D,D.sel,clampEnd(D,D.sel,p));if(to>=0)D.sel=to}});
+cv.addEventListener("pointermove",e=>{const D=G;if(!D)return;const p=pt(e);if(D.sel!=null&&!D.drag)D.hovEnd=clampEnd(D,D.sel,p);if(!D.drag)return;D.drag.end=clampEnd(D,D.drag.from,p);D.drag.moved=true});
+const endDrag=()=>{const D=G;if(!D||!D.drag)return;const d=D.drag;D.drag=null;if(!d.moved){D.sel=(D.sel===d.from)?null:d.from;D.hovEnd=null;return}const f=D.nodes[d.from];if(d.end[0]===f.x&&d.end[1]===f.y)return;
  let to=nodeAt(D,d.end[0],d.end[1]);if(to<0){if(D.nodes.length>=MAXNODE)return;if(D.bud<=0){toast(T("noBud"),1100);return}D.nodes.push({x:d.end[0],y:d.end[1]});to=D.nodes.length-1}
- if(D.bud<=0){toast(T("noBud"),1100);return}addMember(D,d.from,to)};
+ if(D.bud<=0){toast(T("noBud"),1100);return}addMember(D,d.from,to);D.sel=null};
+/* Máy tính: lướt 2 ngón trên bàn di chuột = kéo một thanh tre từ nút gần con trỏ (hoặc nút đang chọn); nhấc ngón thì thanh được nối */
+let whT=0;
+cv.addEventListener("wheel",e=>{const D=G;if(!D||D.over||paused||D.st!=="build")return;e.preventDefault();const r=cv.getBoundingClientRect(),k=(e.deltaMode===1?16:1)*W/r.width*1.5;
+ if(D.sel==null){const bi=nodeNearB(D,pt(e));if(bi<0)return;D.sel=bi}
+ if(!D.wv){const n=D.nodes[D.sel];D.wv=[n.x,n.y]}
+ D.wv=[D.wv[0]-e.deltaX*k,D.wv[1]-e.deltaY*k];D.hovEnd=clampEnd(D,D.sel,D.wv);
+ clearTimeout(whT);whT=setTimeout(()=>{const f=D.sel;D.wv=null;if(f==null||D.st!=="build")return;const to=connectTo(D,f,D.hovEnd||[D.nodes[f].x,D.nodes[f].y]);D.sel=to>=0?to:f;D.hovEnd=null},320)},{passive:false});
 cv.addEventListener("pointerup",endDrag);cv.addEventListener("pointercancel",endDrag);
 $("tbUndo").addEventListener("click",()=>{const D=G;if(D&&D.st==="build"&&!D.over&&D.mem.length)removeMember(D,D.mem.length-1)});
 $("tbClear").addEventListener("click",()=>{const D=G;if(D&&D.st==="build"&&!D.over&&D.mem.length){D.bud+=D.mem.length;D.mem=[];D.hl=-1;sfx.rem();hud();updBtn()}});
@@ -125,6 +137,7 @@ function draw(){if(!ctx||!cv.width)return;const sk=skinOf(),dm=sk.dim||[360,420]
  if(D.C.pier){const pn=D.nodes[4];c.fillStyle=dk?"#7d7d85":"#8f8f98";c.fillRect(pn.x-16,pn.y-6,32,H-pn.y+6);c.fillStyle=dk?"#9a9aa3":"#b0b0ba";c.fillRect(pn.x-20,pn.y-12,40,10)}
  if(D.st==="build"){c.fillStyle=dk?"rgba(255,255,255,.18)":"rgba(40,70,20,.2)";for(let x=g.lx;x<=g.rx;x+=GR)for(let y=Math.min(g.ly,g.ry)-60;y<=H-70;y+=GR){c.beginPath();c.arc(x,y,1.5,0,6.283);c.fill()}}
  drawStruct(c,D.nodes,D.mem,D.rat,D.hl,D.brk,dk);
+ if(D.sel!=null&&D.st==="build"&&D.nodes[D.sel]){const sn=D.nodes[D.sel];c.save();c.strokeStyle=skinOf().drag||"#2f9e44";c.lineWidth=3;c.beginPath();c.arc(sn.x,sn.y,12+Math.sin(tm*6)*1.5,0,6.283);c.stroke();if(D.hovEnd&&!D.drag){c.setLineDash([6,5]);c.lineWidth=5;c.lineCap="round";c.globalAlpha=.7;c.beginPath();c.moveTo(sn.x,sn.y);c.lineTo(D.hovEnd[0],D.hovEnd[1]);c.stroke();c.setLineDash([]);c.globalAlpha=1;c.fillStyle=skinOf().drag||"#2f9e44";c.beginPath();c.arc(D.hovEnd[0],D.hovEnd[1],5,0,6.283);c.fill()}c.restore()}
  if(D.drag){const f=D.nodes[D.drag.from];c.save();c.setLineDash([6,5]);c.strokeStyle=skinOf().drag||"#2f9e44";c.lineWidth=5;c.lineCap="round";c.beginPath();c.moveTo(f.x,f.y);c.lineTo(D.drag.end[0],D.drag.end[1]);c.stroke();c.restore();c.fillStyle="#2f9e44";c.beginPath();c.arc(D.drag.end[0],D.drag.end[1],6,0,6.283);c.fill()}
  if((D.st==="test"||D.st==="fall")&&D.path){const vp=vpos(D,D.st==="fall"?Math.min(D.plen,D.vs):D.vs);c.font="34px "+emj;c.textAlign="center";c.textBaseline="bottom";c.save();c.translate(vp.x,vp.y-4+(D.st==="fall"?D.ft*D.ft*260:0));if(D.st==="fall")c.rotate(D.ft*1.4);c.fillText(VEH[D.C.veh[Math.min(D.vi,D.C.veh.length-1)]][0],0,0);c.restore()}
  else if(D.st==="build"){c.font="26px "+emj;c.textAlign="center";c.globalAlpha=.7;c.fillText(VEH[D.C.veh[0]][0]+VEH[D.C.veh[1]][0]+VEH[D.C.veh[2]][0]+VEH[D.C.veh[3]][0],g.lx-2,g.ly-18);c.globalAlpha=1}
