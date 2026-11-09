@@ -3,6 +3,8 @@
    các thẻ phụ (điểm/lượt/combo, mục tiêu, thanh nút hành động, thẻ điểm cuối ván, huy hiệu) được "kéo" ra HAI BÊN khung bằng position:absolute (cột trái: ←, tên, điểm; cột phải: nút phụ + nút hành động), phần còn lại của màn giữ nguyên bố cục dọc nên game nào cũng chạy được.
    Nút phụ tự mờ khi không chạm (body.idle) để khung chơi nổi bật. File sinh ra từ scripts/cozygame/landscape.src.css bằng mklandscape.py — ĐỪNG sửa tay shared/landscape.css. */
 #home>.hl,#home>.hr{display:contents}
+/* nút 📷/📤 gắn vào thanh trên: biểu tượng luôn chính giữa nút */
+#bCam,#bShr{display:grid!important;place-items:center;padding:0!important;line-height:0}#bCam svg,#bShr svg{display:block;margin:0;width:20px;height:20px;flex:none}
 /* màn rất hẹp (mọi hướng): thu nhỏ nút thanh trên để tiêu đề game không bị cắt “…” */
 #play.tight .top>.ib{width:32px;height:32px;min-width:32px;min-height:32px;font-size:3.2cqw}
 /* màn dọc: tên game được chuyển xuống ngay trên khối nội dung ở giữa màn chọn (bản sao #homeTitle do landscape.js dựng); thanh trên chỉ còn các nút */
