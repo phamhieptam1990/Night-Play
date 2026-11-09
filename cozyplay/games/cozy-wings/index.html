@@ -25,6 +25,8 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .side{width:var(--w);display:flex;flex-direction:column;gap:8px}
 .top{display:flex;align-items:center;gap:8px}
 .top h1{flex:1;margin:0;font-size:clamp(18px,5.4vw,26px);font-weight:800;line-height:1;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
+/* màn rộng/iPad: cột nút hẹp → tên game xuống dòng thay vì cắt '…' */
+@media (min-width:521px){.top h1{white-space:normal;text-overflow:clip;line-height:1.1}}
 /* chơi: ← + ⏸ + menu chiếm chỗ nên tiêu đề thu nhỏ để không bị cắt */
 @media (max-width:520px) and (orientation:portrait){.top:has(#pauseBtn:not([hidden])) h1{font-size:15px}}
 .ib{width:44px;height:44px;border-radius:50%;background:var(--panel);box-shadow:var(--shadow);font-size:20px;display:grid;place-items:center;flex:none}

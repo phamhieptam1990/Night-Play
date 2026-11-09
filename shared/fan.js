@@ -21,7 +21,9 @@
   var play0 = document.getElementById("play"), top = (play0 && play0.querySelector(".top")) || document.querySelector(".top");
   if (!top) return;
   var local = !(play0 && play0.contains(top)), play = local ? top : play0;
-  var mq = matchMedia("(max-width:520px) and (orientation:portrait)");
+  /* ĐIỆN THOẠI dọc: gom tất cả. MÁY TÍNH BẢNG cảm ứng dọc (iPad 768x1024, 834x1194): ← và 🔊 ở NGOÀI menu, còn lại gom vào bảng (ô to hơn). iPad ngang / máy tính (pointer:fine, kể cả cửa sổ hẹp): giữ hàng/cột nút như cũ */
+  var PHONE = "(max-width:520px) and (orientation:portrait)", TAB = "(pointer:coarse) and (orientation:portrait) and (min-width:521px) and (max-width:1100px)";
+  var mq = matchMedia(PHONE + "," + TAB), tab = matchMedia(TAB), mode = "";
   var fab, fan, bd, panel, open = false, moved = false, home = [];   // home: [{el, role, parent}] các nút đã gom
   var vi = function () { return (document.documentElement.lang || "vi").slice(0, 2) !== "en"; };
   var roleOf = function (r) { for (var i = 0; i < ROLES.length; i++) if (ROLES[i][0] === r) return ROLES[i]; };
@@ -30,7 +32,7 @@
   var st = document.createElement("style");
   st.textContent =
     "#npFab,#npFan{display:none}" +
-    "@media (max-width:520px) and (orientation:portrait){" +
+    "@media " + PHONE + "," + TAB + "{" +
     "#play.npfan .top,.top.npfan{padding-right:68px}" +
     "#play.npfan #bBk,.top.npfan #bBk{width:44px;height:44px;min-width:44px;min-height:44px}" +
     "#npFab{display:grid;place-items:center;position:absolute;right:12px;top:8px;width:48px;height:48px;padding:0;border-radius:50%;z-index:31;cursor:pointer;color:var(--npon,var(--on,#fff));background:var(--npacc,var(--accent,#7C5CFF));border:2px solid rgba(255,255,255,.55);box-shadow:0 3px 10px rgba(0,0,0,.32);transition:transform .25s}" +
@@ -48,7 +50,7 @@
     "#npFan .it::after{content:attr(data-l);font:700 10.5px/1.05 system-ui,sans-serif;max-width:60px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.85}" +
     "#npFan .it .bl{display:none!important}#npFan .it>span:first-child{font-size:20px;line-height:1}" +
     /* chế độ local: .top ghim đầu màn hình, một hàng; nút menu + bảng bám vào .top */
-    ".top.npfan{position:fixed;top:0;left:0;right:0;width:auto;max-width:none;margin:0;box-sizing:border-box;flex-wrap:nowrap;align-items:center;gap:8px;z-index:40;padding:8px 68px 8px 12px;min-height:64px}" +
+    ".top.npfan{position:fixed;top:0;left:0;right:0;width:auto!important;max-width:none!important;margin:0;box-sizing:border-box;flex-wrap:nowrap;align-items:center;gap:8px;z-index:40;padding:8px 68px 8px 12px;min-height:64px}" +
     ".top.npfan h1{flex:1 1 auto;min-width:0;max-width:none;overflow:hidden;text-overflow:ellipsis}" +
     ".top.npfan #bBk{order:-3;margin:0}" +                      /* ← luôn ở góc trái, trước tiêu đề */
     ".top.npfan #npFab{right:12px;top:50%;margin-top:-24px}" +
@@ -61,6 +63,14 @@
     "#npTitle{display:none}" +
     ".np-local #npTitle{display:block;flex:none;box-sizing:border-box;width:100%;max-width:100%;margin:0 0 6px;padding:0 8px;text-align:center;white-space:normal;text-wrap:balance;overflow-wrap:anywhere;overflow:visible;font-size:clamp(20px,6.6vw,30px);line-height:1.12;text-shadow:none}" +
     ".np-local #npTitle .probadge,.np-local #npTitle .bl{display:none}" +
+    "}" +
+    "@media " + TAB + "{" +
+    "#play.npfan .top,.top.npfan{padding-right:80px}" +
+    "#npFab{width:56px;height:56px;right:14px;top:8px}#npFab svg{width:28px;height:28px}" +
+    "#npFan .pn{grid-template-columns:repeat(3,92px);gap:10px;padding:12px;top:72px;right:14px}" +
+    "#npFan .it{width:92px!important;height:88px!important;gap:5px;border-radius:16px!important}#npFan .it svg{width:28px!important;height:28px!important}" +
+    "#npFan .it::after{font-size:13px;max-width:88px}#npFan .it>span:first-child{font-size:24px}" +
+    ".top.npfan{padding:10px 80px 10px 16px;min-height:72px}.top.npfan #npFab{right:14px;margin-top:-28px}.top.npfan #npFan .pn{right:14px;top:calc(100% - 2px)}body.np-local{padding-top:72px}" +
     "}" +
     "@media (prefers-reduced-motion:reduce){#npFab,#npFab svg,#npFan .bk,#npFan .pn{transition:none!important}}";
   document.head.appendChild(st);
@@ -137,10 +147,11 @@
   }
   function adopt() {
     if (!mq.matches) return;
-    var c = candidates();
+    var c = candidates().filter(function (x) { return !(tab.matches && x[0] === "snd"); });   // iPad: 🔊 ở ngoài menu nên không tính
     if (c.length < 3 && !moved) return;                         // trang không có đủ nút phụ (Pop Play...): bỏ qua
     build(); moved = true; play.classList.add("npfan"); if (local) { document.body.classList.add("np-local"); buildTitle(); }
     GRID.forEach(function (role) {
+      if (tab.matches && role === "snd") return;                // iPad: giữ nút bật tiếng ngoài menu
       var e = elOf(role); if (!e || e.parentNode === panel) return;
       if (e.parentNode !== top && role !== "help") return;
       home.push({ el: e, role: role, parent: e.parentNode, next: e.nextSibling });
@@ -161,12 +172,16 @@
     });
     home = [];
   }
-  function sync() { if (mq.matches) adopt(); else restore(); }
+  function sync() {
+    var m = !mq.matches ? "" : tab.matches ? "tab" : "phone";
+    if (m !== mode) { mode = m; restore(); }                    // đổi phone ↔ tablet ↔ rộng (xoay màn hình): trả nút về chỗ cũ rồi gom lại theo chế độ mới
+    if (m) adopt();
+  }
 
   try { new MutationObserver(function () { if (mq.matches) adopt(); }).observe(top, { childList: true }); } catch (e) {}
   try { new MutationObserver(labels).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] }); } catch (e) {}
   try { var tmo = new MutationObserver(function () { if (moved) themeSync(); }); [document.documentElement, document.body, play].forEach(function (n) { if (n) tmo.observe(n, { attributes: true, attributeFilter: ["class", "style", "data-theme"] }); }); } catch (e) {}
-  try { mq.addEventListener("change", sync); } catch (e) { try { mq.addListener(sync); } catch (e2) {} }
+  try { mq.addEventListener("change", sync); tab.addEventListener("change", sync); } catch (e) { try { mq.addListener(sync); tab.addListener(sync); } catch (e2) {} }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", sync); else sync();
   setTimeout(sync, 600); setTimeout(sync, 2000);                // nút do script khác gắn muộn
 })();
