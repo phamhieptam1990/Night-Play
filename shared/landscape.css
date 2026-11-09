@@ -7,7 +7,7 @@
 #play.tight .top>.ib{width:32px;height:32px;min-width:32px;min-height:32px;font-size:3.2cqw}
 /* màn dọc: tên game được chuyển xuống ngay trên khối nội dung ở giữa màn chọn (bản sao #homeTitle do landscape.js dựng); thanh trên chỉ còn các nút */
 .hometitle{display:none}
-@media (orientation:portrait){#play[data-scr="home"] .hometitle{display:block;margin:0;text-align:center;white-space:nowrap;overflow:hidden;font:400 7.4cqw/1.15 var(--display);color:var(--accent);letter-spacing:.01em}#play[data-scr="home"] .top>h1{visibility:hidden}}
+@media (orientation:portrait){#play[data-scr="home"] .hometitle{display:block;margin:0;text-align:center;white-space:normal;text-wrap:balance;overflow-wrap:anywhere;font:400 7.4cqw/1.15 var(--display);color:var(--accent);letter-spacing:.01em}#play[data-scr="home"] .top>h1{visibility:hidden}}
 @media (orientation:landscape) and (max-height:700px) and (min-width:560px),(orientation:landscape) and (pointer:coarse) and (max-height:900px) and (min-width:800px){
 :root{--stage:min(100vw,calc(100dvh*.92),520px);--side:calc((100vw - var(--stage))/2);--sl:env(safe-area-inset-left,0px);--sr:env(safe-area-inset-right,0px);--cl:calc(var(--side) - 2.5cqw - var(--sl));--cr:calc(var(--side) - 2.5cqw - var(--sr))}
 #play{width:var(--stage);overflow:visible;background:none}
@@ -22,7 +22,7 @@
 body.idle #play[data-scr="game"] .top>.ib:not(#bBk),body.idle #play[data-scr="game"] .top>h1{opacity:.22}
 body.idle #play[data-scr="game"] .top>.ib:hover,body.idle #play[data-scr="game"] .top>.ib:focus-visible{opacity:1}
 /* mọi màn: bỏ chừa chỗ cho thanh trên (thanh trên đã ra hai bên) → khung chơi cao tối đa */
-.scr{left:2.5cqw;right:2.5cqw;top:2.5cqw;bottom:2.5cqw}
+.scr{left:2.5cqw;right:2.5cqw;top:1.4cqw;bottom:1.4cqw}
 .scr#game{gap:1.6cqw}
 /* cột trái: điểm / lượt / combo + mục tiêu */
 #game>.stats{position:absolute;right:calc(100% + 2.5cqw);top:calc(27cqw - 2.5cqw);width:calc(var(--cl) - 1cqw);flex-direction:column;gap:1.4cqw;z-index:3}
@@ -60,4 +60,8 @@ body.idle #play[data-scr="game"] .top>.ib:hover,body.idle #play[data-scr="game"]
 .ns-toast{left:calc(var(--sl) + 58px)!important;transform:none!important;bottom:10px!important;max-width:calc(var(--side) - 70px)!important;border-radius:16px!important;white-space:normal!important;animation:none!important}
 /* canvas có viền: tính viền vào kích thước để không vượt khung (giao diện Night Pass có viền dày) */
 #cvw canvas#cv{box-sizing:border-box;max-height:100%}
+/* Em Xin Nghỉ: màn kết quả #res (nhiều thẻ xếp dọc) → lưới 2 cột trải ngang, nút hàng dưới */
+#res:not([hidden]){left:calc(50% - 50vw);right:auto;width:100vw;top:0;bottom:0;padding:2.5cqw calc(var(--sr) + 62px) 2.5cqw calc(var(--sl) + 128px);display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:min-content;align-content:center;align-items:start;column-gap:3cqw;row-gap:1.6cqw}
+#res>:nth-child(1){grid-column:1;grid-row:1}#res>:nth-child(2){grid-column:1;grid-row:2}#res>:nth-child(3){grid-column:2;grid-row:1}#res>:nth-child(4){grid-column:2;grid-row:2}#res>:nth-child(5){grid-column:2;grid-row:3}
+#res>:nth-child(6){grid-column:1 / -1;grid-row:4}#res>:nth-child(7){grid-column:1 / -1;grid-row:5}
 }
