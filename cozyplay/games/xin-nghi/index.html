@@ -62,7 +62,7 @@ textarea{width:100%;height:20cqw;border-radius:3cqw;border:.5cqw solid var(--lin
 <body>
 <div id="play">
   <div class="deco" id="deco"></div>
-  <div class="top"><h1 id="ttl"></h1><button class="ib" id="bBoard" type="button">🏆</button><button class="ib" id="bSnd" type="button">🔊</button><button class="ib" id="bLang" type="button">EN</button></div>
+  <div class="top"><button class="ib" id="bBk" type="button" hidden aria-label="←">←</button><h1 id="ttl"></h1><button class="ib" id="bBoard" type="button">🏆</button><button class="ib" id="bSnd" type="button">🔊</button><button class="ib" id="bLang" type="button">EN</button></div>
   <section class="scr" id="home">
     <div class="card boss"><div class="av" id="hAv"></div><div class="bub" id="hBub"></div></div>
     <button class="btn" id="bDaily" type="button" style="text-align:left;display:flex;gap:3cqw;align-items:center"><span id="dN" style="font:400 7cqw var(--display)"></span><span class="grow"><b id="dT"></b><br><span id="dS" style="font-weight:600;font-size:3.3cqw"></span></span><span>▶</span></button>
@@ -277,5 +277,7 @@ else{const c0=parseCh(location.hash);if(c0)openCh(c0);else if(location.hash==="#
 window.XN={rematch,resFx,get G(){return G},begin,finish,again,shareText,shareLink,drawCard,parseCh,genSit,evalReq,holidayNear,fnv,dayKey,dayNo,PF,T,CATS,MODS,BAD,send(ci,di,mods,own){G.ci=ci;G.di=di;G.mods=mods||[];G.own=!!own;if(own)$("own").value=own;$("bSend").click()}};
 </script>
 <script src="../../../shared/season.js"></script>
+<script>(function(){var b=document.getElementById("bBk"),h=document.getElementById("home");if(!b||!h)return;function upd(){b.hidden=!h.hidden}new MutationObserver(upd).observe(h,{attributes:true,attributeFilter:["hidden"]});upd();b.onclick=function(){var e=document.getElementById("bHome")||document.getElementById("sumHome");if(e)e.click()}})();
+</script>
 </body>
 </html>

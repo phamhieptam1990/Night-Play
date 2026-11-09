@@ -71,7 +71,7 @@ canvas#cv{touch-action:none}#play[data-ty="1"] canvas#cv{filter:saturate(.75) co
 <body>
 <div id="play">
   <div class="deco" id="deco"></div>
-  <div class="top"><h1 id="ttl"></h1><button class="ib" id="bRe" type="button" hidden>↻</button><button class="ib" id="bBoard" type="button">🏆</button><button class="ib" id="bSnd" type="button">🔊</button><button class="ib" id="bLang" type="button"></button></div>
+  <div class="top"><button class="ib" id="bBk" type="button" hidden aria-label="←">←</button><h1 id="ttl"></h1><button class="ib" id="bRe" type="button" hidden>↻</button><button class="ib" id="bBoard" type="button">🏆</button><button class="ib" id="bSnd" type="button">🔊</button><button class="ib" id="bLang" type="button"></button></div>
   <section class="scr" id="home">
     <div class="hero" id="hHero">🛵🌧️</div>
     <p class="mut" id="hSub" style="text-align:center;margin:0;font-size:3.6cqw"></p>
@@ -310,6 +310,8 @@ else{const c0=parseCh(location.hash);if(c0)proP.then(()=>openCh(c0));else if(loc
 window.OG={get G(){return G},PF,CFG,begin,newGame,scoreOf,parseCh,drawCard,shareText,shareLink,fnv,dayKey,dayNo,finish,step,move,spawnRow,proj,
  /* bot: né mọi vật cản, nhặt đồ; trả về điểm sau t giây mô phỏng */
  bot(D,secs,dumb){D=D||G;let t=0;while(!D.over&&t<secs){let best=D.lane,score=-1e9;for(let nl=0;nl<D.N;nl++){let sc=0;for(const o of D.objs){if(o.done)continue;const dl=Math.abs(o.lane-nl);if(o.k==="coat"||o.k==="bread"){if(dl<.5&&o.ahead>0&&o.ahead<260)sc+=30-o.ahead/10;continue}if(dl<.7&&o.ahead>-20&&o.ahead<330)sc-=1000-o.ahead}sc-=Math.abs(nl-D.lane)*2;if(sc>score){score=sc;best=nl}}if(!dumb&&best!==D.lane)D.lane+=Math.sign(best-D.lane);step(D,1/60);t+=1/60}return{score:scoreOf(D),over:D.over,lives:D.lives,dodged:D.dodged,bread:D.bread}}};
+</script>
+<script>(function(){var b=document.getElementById("bBk"),h=document.getElementById("home");if(!b||!h)return;function upd(){b.hidden=!h.hidden}new MutationObserver(upd).observe(h,{attributes:true,attributeFilter:["hidden"]});upd();b.onclick=function(){var e=document.getElementById("bHome")||document.getElementById("sumHome");if(e)e.click()}})();
 </script>
 </body>
 </html>

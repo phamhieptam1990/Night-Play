@@ -65,7 +65,7 @@ body{display:flex;justify-content:center}
 <body>
 <div id="play">
   <div class="deco" id="deco"></div>
-  <div class="top"><h1 id="ttl"></h1><button class="ib" id="bBoard" type="button">🏆</button><button class="ib" id="bSnd" type="button">🔊</button><button class="ib" id="bLang" type="button">EN</button></div>
+  <div class="top"><button class="ib" id="bBk" type="button" hidden aria-label="←">←</button><h1 id="ttl"></h1><button class="ib" id="bBoard" type="button">🏆</button><button class="ib" id="bSnd" type="button">🔊</button><button class="ib" id="bLang" type="button">EN</button></div>
   <section class="scr" id="home">
     <div class="hero" id="hHero">🥚➜🏰</div>
     <p class="mut" id="hSub" style="text-align:center;margin:0;font-size:3.6cqw"></p>
@@ -285,5 +285,7 @@ else{const c0=parseCh(location.hash);if(c0)proP.then(()=>openCh(c0));else if(loc
 window.D48={rematch,juice,PF,get TY(){return TY},setTY(t){TY=t;LS.set("d48-type",t);applySkin();renderHome()},get G(){return G},begin,move,finish,again,shareText,shareLink,drawCard,parseCh,fnv,dayKey,dayNo,LADDER,canMove,setBoard(rows){G.tiles=[];rows.forEach((r,ri)=>r.forEach((v,ci)=>{if(v)G.tiles.push({id:++uid,v,r:ri,c:ci})}));G.best=Math.max(1,...G.tiles.map(t=>t.v));buildBoard();els.clear();render()},T};
 </script>
 <script src="../../../shared/season.js"></script>
+<script>(function(){var b=document.getElementById("bBk"),h=document.getElementById("home");if(!b||!h)return;function upd(){b.hidden=!h.hidden}new MutationObserver(upd).observe(h,{attributes:true,attributeFilter:["hidden"]});upd();b.onclick=function(){var e=document.getElementById("bHome")||document.getElementById("sumHome");if(e)e.click()}})();
+</script>
 </body>
 </html>

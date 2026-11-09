@@ -72,7 +72,7 @@ input[type=range]::-moz-range-thumb{width:8cqw;height:8cqw;border-radius:50%;bac
 <body>
 <div id="play">
   <div class="deco" id="deco"></div>
-  <div class="top"><h1 id="ttl"></h1><button class="ib" id="bBoard" type="button" aria-label="🏆">🏆</button><button class="ib" id="bSnd" type="button">🔊</button><button class="ib" id="bLang" type="button">EN</button></div>
+  <div class="top"><button class="ib" id="bBk" type="button" hidden aria-label="←">←</button><h1 id="ttl"></h1><button class="ib" id="bBoard" type="button" aria-label="🏆">🏆</button><button class="ib" id="bSnd" type="button">🔊</button><button class="ib" id="bLang" type="button">EN</button></div>
   <section class="scr" id="home">
     <div class="hero" id="hHero">🧺</div>
     <button class="btn dbtn" id="bDaily" type="button"><span class="n" id="dN"></span><span class="grow"><b id="dT"></b><br><span id="dS" style="font-size:3.3cqw;opacity:.85"></span></span><span>▶</span></button>
@@ -262,5 +262,7 @@ else{const c0=parseCh(location.hash);if(c0)openCh(c0);else if(location.hash==="#
 window.GC={rematch,juice,get G(){return G},begin,finish,again,shareText,shareLink,drawCard,parseCh,genRound,pointsOf,priceAt,fnv,dayKey,dayNo,PF,T,ITEMS};
 </script>
 <script src="../../../shared/season.js"></script>
+<script>(function(){var b=document.getElementById("bBk"),h=document.getElementById("home");if(!b||!h)return;function upd(){b.hidden=!h.hidden}new MutationObserver(upd).observe(h,{attributes:true,attributeFilter:["hidden"]});upd();b.onclick=function(){var e=document.getElementById("bHome")||document.getElementById("sumHome");if(e)e.click()}})();
+</script>
 </body>
 </html>

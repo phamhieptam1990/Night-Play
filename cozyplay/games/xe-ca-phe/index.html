@@ -98,7 +98,7 @@ canvas#cv{border-radius:3cqw;background:linear-gradient(var(--field),var(--field
 <body>
 <div id="play">
   <div class="deco" id="deco"></div>
-  <div class="top"><h1 id="ttl"></h1><button class="ib" id="bBoard" type="button">🏆</button><button class="ib" id="bSnd" type="button">🔊</button><button class="ib" id="bLang" type="button"></button></div>
+  <div class="top"><button class="ib" id="bBk" type="button" hidden aria-label="←">←</button><h1 id="ttl"></h1><button class="ib" id="bBoard" type="button">🏆</button><button class="ib" id="bSnd" type="button">🔊</button><button class="ib" id="bLang" type="button"></button></div>
   <section class="scr" id="home">
     <div class="hero" id="hHero">☕🛒</div>
     <p class="mut" id="hSub" style="text-align:center;margin:0;font-size:3.6cqw"></p>
@@ -407,5 +407,7 @@ window.XC={get G(){return G},get CAMP(){return CAMP},PF,REC,allRec,setup,newDay,
  bot(D,o){o=o||{};D=D||G;const miss=o.miss||0,Rn=mulberry32(o.seed||3);let n=0;while(!D.over&&n++<20000){const c=D.q.slice().sort((a,b)=>a.pat-b.pat)[0];if(c&&Rn()>=miss){const r=allRec()[c.rec];D.cup=[];D.brew=[];for(const i of r[3])addIng(D,i);let g=0;while(D.brew.length&&!D.over&&g++<400)step(D,.05);if(!D.over)serve(D,c.id)}for(let k=0;k<(o.skip||8)&&!D.over;k++)step(D,.1)}return{rev:D.rev,served:D.served,lost:D.lost,stars:D.stars,combo:D.maxCombo}}};
 </script>
 <script src="../../../shared/season.js"></script>
+<script>(function(){var b=document.getElementById("bBk"),h=document.getElementById("home");if(!b||!h)return;function upd(){b.hidden=!h.hidden}new MutationObserver(upd).observe(h,{attributes:true,attributeFilter:["hidden"]});upd();b.onclick=function(){var e=document.getElementById("bHome")||document.getElementById("sumHome");if(e)e.click()}})();
+</script>
 </body>
 </html>

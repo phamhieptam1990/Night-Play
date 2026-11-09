@@ -64,7 +64,7 @@ canvas#cv{border-radius:3cqw;background:linear-gradient(var(--field),var(--field
 <body>
 <div id="play">
   <div class="deco" id="deco"></div>
-  <div class="top"><h1 id="ttl"></h1><button class="ib" id="bRe" type="button" hidden>↻</button><button class="ib" id="bBoard" type="button">🏆</button><button class="ib" id="bSnd" type="button">🔊</button><button class="ib" id="bLang" type="button">EN</button></div>
+  <div class="top"><button class="ib" id="bBk" type="button" hidden aria-label="←">←</button><h1 id="ttl"></h1><button class="ib" id="bRe" type="button" hidden>↻</button><button class="ib" id="bBoard" type="button">🏆</button><button class="ib" id="bSnd" type="button">🔊</button><button class="ib" id="bLang" type="button">EN</button></div>
   <section class="scr" id="home">
     <div class="hero" id="hHero">🐔🥚</div>
     <p class="mut" id="hSub" style="text-align:center;margin:0;font-size:3.6cqw"></p>
@@ -388,5 +388,7 @@ else{const c0=parseCh(location.hash);if(c0)proP.then(()=>openCh(c0));else if(loc
 window.GM={bestShot,pushEff,predict,rematch,comboFx,beatFx,get G(){return G},PF,begin,fire,settle,simBall,preview,drawCard,shareText,shareLink,parseCh,fnv,dayKey,dayNo,present,cluster,floating,neigh,encG,decG,cols,get TY(){return TY},setTY(t){TY=t;LS.set("gm-type",t);renderHome()},T,endGame,hatch,ANIMS,cx,cy,C,W,H,run(a){if(!fire(a))return false;let n=0;while(G.ball&&n++<4000){const hit=simBall(G.ball,STEP/SPEED);if(hit){settle();break}}return true}};
 </script>
 <script src="../../../shared/season.js"></script>
+<script>(function(){var b=document.getElementById("bBk"),h=document.getElementById("home");if(!b||!h)return;function upd(){b.hidden=!h.hidden}new MutationObserver(upd).observe(h,{attributes:true,attributeFilter:["hidden"]});upd();b.onclick=function(){var e=document.getElementById("bHome")||document.getElementById("sumHome");if(e)e.click()}})();
+</script>
 </body>
 </html>

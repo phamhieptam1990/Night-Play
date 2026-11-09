@@ -71,7 +71,7 @@ canvas#cv{touch-action:none}#play[data-ty="1"] canvas#cv{border-style:solid;bord
 <body>
 <div id="play">
   <div class="deco" id="deco"></div>
-  <div class="top"><h1 id="ttl"></h1><button class="ib" id="bRe" type="button" hidden>↻</button><button class="ib" id="bBoard" type="button">🏆</button><button class="ib" id="bSnd" type="button">🔊</button><button class="ib" id="bLang" type="button"></button></div>
+  <div class="top"><button class="ib" id="bBk" type="button" hidden aria-label="←">←</button><h1 id="ttl"></h1><button class="ib" id="bRe" type="button" hidden>↻</button><button class="ib" id="bBoard" type="button">🏆</button><button class="ib" id="bSnd" type="button">🔊</button><button class="ib" id="bLang" type="button"></button></div>
   <section class="scr" id="home">
     <div class="hero" id="hHero">✍️🔗</div>
     <p class="mut" id="hSub" style="text-align:center;margin:0;font-size:3.6cqw"></p>
@@ -302,6 +302,8 @@ window.NN={get G(){return G},PF,CFG,begin,newGame,scoreOf,parseCh,drawCard,share
  solve(D){D=D||G;const P=D.puz;if(!P)return;D.path=[P.trail[0]];D.used=new Set();D.cur=P.trail[0];for(let i=1;i<P.trail.length;i++){const a=P.trail[i-1],b=P.trail[i],ei=D.eidx[a+"-"+b];D.used.add(ei);D.path.push(b);D.cur=b}if(D.C.dbl)for(let i=P.trail.length-2;i>=0;i--){const a=P.trail[i+1],b=P.trail[i],ei=D.eidx[a+"-"+b];D.used.add(ei+1000);D.path.push(b);D.cur=b}if(D.used.size===needOf(D))nnSolved(D);return D.solved},
  trailOk(P){const used=new Set();for(let i=1;i<P.trail.length;i++){const k=P.trail[i-1]+"-"+P.trail[i],k2=P.trail[i]+"-"+P.trail[i-1];const hit=P.edges.findIndex(e=>(e[0]+"-"+e[1])===k||(e[0]+"-"+e[1])===k2);if(hit<0||used.has(hit))return false;used.add(hit)}return used.size===P.edges.length},
  crossFree(P){for(let i=0;i<P.edges.length;i++)for(let j=i+1;j<P.edges.length;j++){const a=P.edges[i],b=P.edges[j];if(a[0]===b[0]||a[0]===b[1]||a[1]===b[0]||a[1]===b[1])continue;if(segX([P.nodes[a[0]].x,P.nodes[a[0]].y],[P.nodes[a[1]].x,P.nodes[a[1]].y],[P.nodes[b[0]].x,P.nodes[b[0]].y],[P.nodes[b[1]].x,P.nodes[b[1]].y]))return false}return true}};
+</script>
+<script>(function(){var b=document.getElementById("bBk"),h=document.getElementById("home");if(!b||!h)return;function upd(){b.hidden=!h.hidden}new MutationObserver(upd).observe(h,{attributes:true,attributeFilter:["hidden"]});upd();b.onclick=function(){var e=document.getElementById("bHome")||document.getElementById("sumHome");if(e)e.click()}})();
 </script>
 </body>
 </html>

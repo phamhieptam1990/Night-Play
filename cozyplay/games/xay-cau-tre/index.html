@@ -72,7 +72,7 @@ canvas#cv{touch-action:none;cursor:crosshair}#tbBar{display:flex;gap:2cqw;align-
 <body>
 <div id="play">
   <div class="deco" id="deco"></div>
-  <div class="top"><h1 id="ttl"></h1><button class="ib" id="bRe" type="button" hidden>↻</button><button class="ib" id="bBoard" type="button">🏆</button><button class="ib" id="bSnd" type="button">🔊</button><button class="ib" id="bLang" type="button"></button></div>
+  <div class="top"><button class="ib" id="bBk" type="button" hidden aria-label="←">←</button><h1 id="ttl"></h1><button class="ib" id="bRe" type="button" hidden>↻</button><button class="ib" id="bBoard" type="button">🏆</button><button class="ib" id="bSnd" type="button">🔊</button><button class="ib" id="bLang" type="button"></button></div>
   <section class="scr" id="home">
     <div class="hero" id="hHero">🎋🌉</div>
     <p class="mut" id="hSub" style="text-align:center;margin:0;font-size:3.6cqw"></p>
@@ -340,6 +340,8 @@ window.TB={get G(){return G},PF,CFG,VEH,begin,newGame,scoreOf,parseCh,drawCard,s
   const link=(a,b)=>{if(D.bud>0&&memAt(D,a,b)<0&&a!==b){D.mem.push([a,b]);D.bud--}};for(let i=0;i<k;i++)link(T[i],T[i+1]);for(let i=0;i<B.length-1;i++)link(B[i],B[i+1]);for(let i=0;i<k;i++){link(T[i],B[Math.min(i,B.length-1)]);link(B[Math.min(i+1,B.length-1)],T[i])}return D.mem.length},
  /* chạy thử đồng bộ: trả {passed,reason} */
  runTest(D){startTest(D);if(D.st!=="test")return{passed:0,reason:"nolink"};let n=0;while(D.st==="test"&&n++<4000)step(D,.05);let k=0;while(D.st==="fall"&&k++<200)step(D,.05);return{passed:Math.max(D.passedNow,D.passedBest),st:D.st,brk:D.brk,mech:D.mechFail,won:D.won}}};
+</script>
+<script>(function(){var b=document.getElementById("bBk"),h=document.getElementById("home");if(!b||!h)return;function upd(){b.hidden=!h.hidden}new MutationObserver(upd).observe(h,{attributes:true,attributeFilter:["hidden"]});upd();b.onclick=function(){var e=document.getElementById("bHome")||document.getElementById("sumHome");if(e)e.click()}})();
 </script>
 </body>
 </html>
