@@ -1,0 +1,17 @@
+{
+  // Cloudflare Workers + file tĩnh (thay cho Netlify). Build: `npm run build` → dist/ ; Deploy: `npx wrangler deploy`.
+  // Xem DEPLOY-CLOUDFLARE.md. Biến bí mật (DATABASE_URL, TOKEN_SECRET...) đặt trong Settings → Variables and Secrets, KHÔNG ghi vào file này.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "night-play",
+  "main": "worker/index.js",
+  "compatibility_date": "2025-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "none",
+    // chỉ /api/* chạy Worker (tốn hạn mức); mọi file tĩnh phục vụ thẳng, không giới hạn
+    "run_worker_first": ["/api/*"]
+  },
+  "observability": { "enabled": true }
+}

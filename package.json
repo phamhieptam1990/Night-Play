@@ -11,6 +11,10 @@
     "pass:dev": "node server/db/dev-pass.js"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^0.10.4",
     "pg": "^8.13.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.47.0"
   }
 }

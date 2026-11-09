@@ -7,3 +7,6 @@ dist/
 Night-Play/
 .claude/
 .DS_Store
+
+.dev.vars
+.wrangler/
