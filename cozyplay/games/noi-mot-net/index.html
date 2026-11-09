@@ -66,6 +66,23 @@ canvas#cv{border-radius:3cqw;background:linear-gradient(var(--field),var(--field
 @media (hover:hover){.btn:not(:disabled):hover{filter:brightness(1.08);transform:translateY(-.4cqw)}.btn.alt:not(:disabled):hover{background:color-mix(in srgb,var(--accent) 12%,var(--panel))}.ib:hover,.ty:hover,.skc:hover,.lv:hover{border-color:var(--accent);filter:brightness(1.06)}}
 .btn:focus-visible,.ib:focus-visible,.ty:focus-visible,.lv:focus-visible,.skc:focus-visible,button:focus-visible{outline:.7cqw solid var(--accent);outline-offset:.5cqw}
 
+/* màn kết thúc: thẻ kết quả nổi bật theo màu giao diện, nút chia sẻ lớn, nút phụ có chữ */
+#end .res{text-align:center;position:relative;overflow:hidden;border:0;padding:6cqw 3cqw 5cqw;border-radius:6cqw;color:#fff;background:radial-gradient(120% 90% at 50% -10%,color-mix(in srgb,var(--accent) 80%,#fff) 0,transparent 55%),linear-gradient(160deg,color-mix(in srgb,var(--accent) 62%,#14141f),color-mix(in srgb,var(--accent) 34%,#14141f));box-shadow:0 1.6cqw 0 rgba(0,0,0,.28),0 0 7cqw color-mix(in srgb,var(--accent) 38%,transparent)}
+#end .res::before{content:"";position:absolute;inset:0;background:repeating-conic-gradient(from 0deg at 50% 62%,rgba(255,255,255,.07) 0 6deg,transparent 6deg 18deg);pointer-events:none}
+#end .res>*{position:relative}
+#end .res .mut{color:rgba(255,255,255,.88);font:800 4.2cqw var(--body);letter-spacing:.02em}
+#end .res .big{color:#fff;font-size:21cqw;line-height:1.02;margin:1.2cqw 0 2.2cqw;text-shadow:0 .8cqw 0 rgba(0,0,0,.28),0 0 5cqw color-mix(in srgb,var(--accent) 70%,transparent);animation:endPop .6s cubic-bezier(.2,1.4,.4,1) both}
+#end .res .rk{display:inline-block;padding:1.4cqw 5cqw;border-radius:99cqw;background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.45);color:#fff;font:800 4.6cqw var(--body)}
+@keyframes endPop{0%{transform:scale(.5);opacity:0}100%{transform:scale(1);opacity:1}}
+@media (prefers-reduced-motion:reduce){#end .res .big{animation:none}}
+#end .hat{display:none}
+#end .chips{gap:2cqw}#end .chip{font-weight:800;padding:1.6cqw 3.4cqw}
+#end>.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(17cqw,1fr));gap:2.4cqw}
+#end>.row #bShare{grid-column:1/-1;min-height:14cqw;font-size:5cqw;border-radius:99cqw;animation:endGlow 2.4s ease-in-out infinite}
+@keyframes endGlow{50%{box-shadow:0 1cqw 0 rgba(0,0,0,.26),0 0 5cqw color-mix(in srgb,var(--accent) 65%,transparent)}}
+@media (prefers-reduced-motion:reduce){#end>.row #bShare{animation:none}}
+#end>.row .btn.alt{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8cqw;padding:2.2cqw 1cqw;border-radius:4.4cqw;font-size:6cqw;line-height:1}
+#end>.row .btn.alt::after{content:attr(data-l);font:800 2.9cqw/1.1 var(--body);letter-spacing:.01em}
 canvas#cv{touch-action:none}#play[data-ty="1"] canvas#cv{border-style:solid;border-color:var(--accent);box-shadow:0 0 0 1.2cqw color-mix(in srgb,var(--accent) 25%,transparent)}#play[data-ty="2"] canvas#cv{filter:brightness(.82)}#play[data-ty="3"] canvas#cv{border-style:double;border-width:1.4cqw}.pfx{position:absolute;left:50%;top:46%;width:14cqw;height:14cqw;margin:-7cqw 0 0 -7cqw;border-radius:50%;border:1.2cqw solid var(--accent);box-shadow:0 0 5cqw var(--accent),inset 0 0 4cqw var(--accent);pointer-events:none;z-index:9;animation:pfx .85s ease-out forwards}.pfx.b{animation-delay:.14s;border-color:#fff}@keyframes pfx{from{transform:scale(.2);opacity:.95}to{transform:scale(4.6);opacity:0}}#play.pglow::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:8;box-shadow:inset 0 0 14cqw var(--accent);animation:pgl .7s ease-out forwards}@keyframes pgl{from{opacity:1}to{opacity:0}}@media (prefers-reduced-motion:reduce){.pfx,#play.pglow::after{display:none}}
 </style>
 <style id="skCss"></style>
@@ -91,7 +108,7 @@ canvas#cv{touch-action:none}#play[data-ty="1"] canvas#cv{border-style:solid;bord
     <p class="mut hint" id="gHint"></p>
   </section>
   <section class="scr" id="end" hidden>
-    <div class="card" style="text-align:center"><div class="mut" id="eT"></div><div class="big" id="eSc"></div><div class="rk" id="eRk"></div></div>
+    <div class="card res" id="eCard"><div class="mut" id="eT"></div><div class="big" id="eSc"></div><div class="rk" id="eRk"></div></div>
     <div class="hat" id="eHat"></div>
     <div class="chips" id="eChips"></div>
     <p class="mut" id="eVs" style="text-align:center;margin:0"></p>
@@ -243,7 +260,7 @@ function tick(ts){raf=requestAnimationFrame(tick);if(!G||$("game").hidden){last=
 /* ===== KẾT THÚC ===== */
 function finish(D){if(G!==D)return;const sv=getSave();D.prevBest=sv.best||0;sv.total++;sv.best=Math.max(sv.best||0,scoreOf(D));if(D.mode==="daily"){const k=dayKey();if(sv.days[k]==null||scoreOf(D)>sv.days[k])sv.days[k]=scoreOf(D);if(sv.last!==k){const y=new Date(Date.parse(k+"T00:00:00Z")-864e5).toISOString().slice(0,10);sv.streak=sv.last===y?sv.streak+1:1;sv.last=k}}
  LS.set("nn-save",sv);LS.set("nn-tut",1);lastEnd=performance.now();const score=Math.min(MAXS,scoreOf(D));window.NP&&NP.result({score,extra:{mode:D.mode,t:D.t,ranked:D.mode==="daily",rankHint:T("rankHint")}});showEnd(D)}
-function showEnd(D){show("end");const n=scoreOf(D);$("eT").textContent=T(D.reason||"end");$("eSc").textContent=SF(n);$("eRk").textContent="🏅 "+T("rt")[rankIdx(n)];$("eHat").textContent=T("endS",{n:SF(n)});$("eHat").style.cssText="text-align:center;font-weight:800";
+function showEnd(D){show("end");{const vi=LANG==="vi";$("bShare").textContent="📤 "+(vi?"Khoe điểm":"Share score");[["bClip",vi?"Quay lại":"Replay"],["bRem",vi?"Đấu lại":"Rematch"],["bAgain",vi?"Ván mới":"New game"],["bHome",vi?"Trang chủ":"Home"]].forEach(([i,t])=>{const e=$(i);if(e)e.dataset.l=t})}const n=scoreOf(D);$("eT").textContent=T(D.reason||"end");$("eSc").textContent=SF(n);$("eRk").textContent="🏅 "+T("rt")[rankIdx(n)];$("eHat").textContent=T("endS",{n:SF(n)});$("eHat").style.cssText="text-align:center;font-weight:800";
  $("eChips").innerHTML="";endChips(D).filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("eChips").appendChild(c)});
  const tgt=D.ch?D.ch.sc:(D.mode==="daily"?D.prevBest:0),gap=tgt-n,near=tgt>0&&gap>0&&gap<=Math.max(3,Math.round(tgt*.15));$("eNear").hidden=!near;if(near)$("eNear").textContent=T(D.ch?"near":"nearB",{n:SF(gap)})+" · "+T("nearGo");
  $("eVs").textContent=D.ch?T("vsC",{a:SF(n),b:SF(D.ch.sc)})+" · "+(n>D.ch.sc?T("won"):n<D.ch.sc?T("lose"):T("tie")):"";
