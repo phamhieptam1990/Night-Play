@@ -204,6 +204,8 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 /* Nhiều game / ô nhỏ hơn 64px: chuyển thành TRƯỢT NGANG theo trang (vuốt, chấm trang, nút ‹ ›) thay vì ép ô nhỏ lại hay cuộn dọc */
 #grid.slide{grid-auto-flow:column;grid-template-columns:none;grid-template-rows:repeat(var(--r,1),var(--s,140px));grid-auto-columns:var(--s,140px);justify-content:start;align-content:center;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;padding:8px var(--pad,0);scroll-padding-inline:var(--pad,0);overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
 #grid.slide::-webkit-scrollbar{display:none}
+/* mỗi trang vừa khít các game: cắt phần đệm hai bên để không bao giờ lộ nửa biểu tượng của trang kế tiếp */
+#grid.slide{clip-path:inset(-10px var(--pad,0) -10px var(--pad,0))}
 #grid.slide .tile{scroll-snap-align:none}#grid.slide .tile.sn{scroll-snap-align:start}
 @media (prefers-reduced-motion:reduce){#grid.slide{scroll-behavior:auto}}
 #gdots{flex:none;display:none;align-items:center;justify-content:center;gap:2px;min-height:44px;color:var(--ink)}
