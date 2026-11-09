@@ -642,6 +642,7 @@ let gPage = { step:0, n:1 };
 function fitGrid(){
   const n = grid.children.length, w = grid.clientWidth, h = grid.clientHeight;
   if(!n || !w || !h) return;
+  const firstTile = gPage.per ? curPage() * gPage.per : 0;   // ô đầu của trang đang xem: giữ nguyên sau khi xoay màn hình
   const g = w >= 600 ? 20 : 12;
   let best = { s:0, c:1 };
   for(let c = 1; c <= n; c++){
@@ -662,8 +663,10 @@ function fitGrid(){
   grid.classList.add("slide");
   grid.style.setProperty("--s", s + "px"); grid.style.setProperty("--r", r); grid.style.setProperty("--pad", Math.max(0, Math.floor((w - pageW) / 2)) + "px");
   [...grid.children].forEach((t, i) => t.classList.toggle("sn", i % per === 0));
-  gPage = { step: c * (s + g), n: pages };
+  gPage = { step: c * (s + g), n: pages, per };
   buildDots();
+  /* xoay ngang ↔ dọc: đặt lại vị trí cuộn theo trang mới (tức thì), nếu không lưới bị lệch phải cuộn tay */
+  const pg = Math.min(pages - 1, Math.floor(firstTile / per)), sb = grid.style.scrollBehavior; grid.style.scrollBehavior = "auto"; grid.scrollLeft = pg * gPage.step; grid.style.scrollBehavior = sb; markDots();
 }
 function buildDots(){
   gdots.textContent = "";
@@ -684,6 +687,7 @@ let gRaf = 0;
 grid.addEventListener("scroll", () => { if(!grid.classList.contains("slide")) return; cancelAnimationFrame(gRaf); gRaf = requestAnimationFrame(markDots); }, { passive:true });
 new ResizeObserver(fitGrid).observe(grid);
 addEventListener("resize", fitGrid);
+addEventListener("orientationchange", () => { setTimeout(fitGrid, 120); setTimeout(fitGrid, 500); });
 document.addEventListener("contextmenu", e => { if(!e.target.closest(".box")) e.preventDefault(); });
 document.addEventListener("dragstart", e => e.preventDefault());
 
