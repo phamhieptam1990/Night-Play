@@ -88,3 +88,10 @@ Nguyên tắc dự án: game chạy **offline, không lag, không gọi máy ch�
 - [ ] Không cuộn, không chữ trơn, không nhân vật mờ, không lỗi console
 - [ ] Đã thêm game vào `check.js` và danh sách tải sẵn offline (`sw.js`) nếu cần
 - [ ] Báo cáo trung thực: cái gì đã kiểm tra, cái gì chưa (ví dụ trackpad thật)
+
+## Bảo vệ chia sẻ Night Pass (token gắn thiết bị)
+- `shared/device.js` (nhúng ở `<head>` NGAY SAU `shared/guard.js` trên MỌI trang) bọc `window.fetch`: tự ký các request cùng nguồn tới `/api/pass*`, `/api/pro/*`, `GET /api/orders/<id>`, `POST /api/restore/verify`. **Game mới không cần làm gì thêm** — nhớ nhúng `device.js` (template `tpl.html` đã có).
+- KHÔNG gọi các API đó bằng `XMLHttpRequest`, `navigator.sendBeacon` hoặc iframe/form: sẽ không có chữ ký → máy chủ từ chối (game giữ khoá). Dùng `fetch`.
+- Không ghi đè `localStorage.pass` bằng bản cũ (đọc lại trước khi ghi, xem `shared/pass.js`): `device.js` có thể vừa nâng cấp token.
+- Nhánh offline của `loadPro` không cần sửa: wrapper trả 401 giả cho máy chưa được xác nhận.
+- Sửa luồng cấp token / `server/app.js` phần thiết bị → chạy `scripts/devtest/devtest.js` (35 kịch bản, DB giả) và kiểm tra bằng DB dev thật nếu được.

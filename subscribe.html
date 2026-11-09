@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <script src="shared/guard.js"></script>
+<script src="shared/device.js"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Night Pass · Night Play</title>
 <meta name="color-scheme" content="light dark">
@@ -521,7 +522,7 @@ function showOrder(o, email){
   pollTimer = setInterval(async () => {
     try{
       const d = await api("/orders/" + o.orderId);
-      if(d.status === "paid"){ stopTimers(); activate(email, d); }
+      if(d.status === "paid"){ stopTimers(); if(!d.token){ restoreStep1(); } else activate(email, d); }   // token null: đơn đã được thiết bị khác nhận (hoặc chưa có khoá thiết bị) → khôi phục bằng email
       else if(d.status === "expired" || Date.now() > o.expiresAt + 60000) expired();
     }catch(e){ /* mạng chập chờn: thử lại ở lần poll sau */ }
   }, 3000);

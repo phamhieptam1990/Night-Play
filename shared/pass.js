@@ -11,7 +11,7 @@ window.NightPass = (() => {
       const r = await fetch(API + "/pass", { headers: { Authorization: "Bearer " + p.token } });
       if (!r.ok) return { active: false };
       const s = await r.json();
-      try { localStorage.setItem("pass", JSON.stringify({ ...p, exp: new Date(s.exp).toISOString() })); } catch (e) {}
+      try { localStorage.setItem("pass", JSON.stringify({ ...(get() || p), exp: new Date(s.exp).toISOString() })); } catch (e) {}   // đọc lại: shared/device.js có thể vừa nâng cấp token
       return s;
     } catch (e) {
       return { active: !!p.exp && new Date(p.exp) > new Date(), offline: true }; // mất mạng: dùng cache tạm

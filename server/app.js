@@ -60,8 +60,8 @@ const newCode = () => "NP" + Array.from(crypto.randomBytes(8), b => ALPHA[b % AL
 const ms = d => (d ? new Date(d).getTime() : 0);
 
 /* Token chỉ để định danh (user id); quyền thật nằm ở bảng passes. */
-function signToken(userId, exp, plan) {
-  const body = b64u(JSON.stringify({ u: userId, x: exp, p: plan }));
+function signToken(userId, exp, plan, kid) {
+  const body = b64u(JSON.stringify(kid ? { u: userId, x: exp, p: plan, k: kid } : { u: userId, x: exp, p: plan }));
   return body + "." + hmac(body);
 }
 function readToken(tok) {
@@ -69,6 +69,54 @@ function readToken(tok) {
   const [body, sig] = tok.split(".");
   if (!body || !sig || !safeEq(sig, hmac(body))) return null;
   try { const t = JSON.parse(Buffer.from(body, "base64url").toString()); return t && t.u ? t : null; } catch { return null; }
+}
+/* ===== THIẾT BỊ (chặn chia sẻ Night Pass) =====
+   Token có trường k = kid của một khoá thiết bị. Mỗi request tới /api/pass, /api/pro/* phải kèm X-Device-Sig = "<ts>.<chữ ký ECDSA P-256/SHA-256 base64url>"
+   trên chuỗi `${ts}|${METHOD}|${pathname}` (|giờ máy chủ - ts| <= 120 giây). Khoá riêng nằm trong IndexedDB của trình duyệt (không xuất được),
+   nên chép nguyên token sang máy khác vẫn bị từ chối. Token CŨ (không có k) chỉ được chấp nhận đến LEGACY_TOKEN_UNTIL. */
+const MAX_DEVICES = Math.max(1, Math.min(10, Math.floor(+env("MAX_DEVICES", 3)) || 3));
+const LEGACY_DEFAULT = "2026-11-17T00:00:00Z";
+const LEGACY_UNTIL = (() => { const t = Date.parse(env("LEGACY_TOKEN_UNTIL", LEGACY_DEFAULT)); return Number.isFinite(t) ? t : Date.parse(LEGACY_DEFAULT); })();
+const subtle = () => (globalThis.crypto && globalThis.crypto.subtle) || crypto.webcrypto.subtle;
+const B64_43 = /^[A-Za-z0-9_-]{43}$/;
+const okJwk = j => !!j && typeof j === "object" && j.kty === "EC" && j.crv === "P-256" && B64_43.test(j.x || "") && B64_43.test(j.y || "");
+const jwkKid = j => crypto.createHash("sha256").update(JSON.stringify({ crv: j.crv, kty: j.kty, x: j.x, y: j.y })).digest("base64url");
+const parsePub = s => { try { s = String(s || ""); if (!s || s.length > 400) return null; const j = JSON.parse(Buffer.from(s, "base64url").toString()); return okJwk(j) ? { kty: "EC", crv: "P-256", x: j.x, y: j.y } : null; } catch { return null; } };
+const noTable = e => !!e && (e.code === "42P01" || e.code === "42703");   // chưa chạy migration 006 → lùi về chế độ cũ (không chặn), không làm hỏng web
+async function registerDevice(userId, jwk) {
+  const kid = jwkKid(jwk);
+  await db.query("insert into pass_devices(user_id, kid, jwk) values ($1, $2, $3::jsonb) on conflict (user_id, kid) do update set last_seen = now()", [userId, kid, JSON.stringify(jwk)]);
+  await db.query("delete from pass_devices where user_id = $1 and kid in (select kid from pass_devices where user_id = $1 order by last_seen desc, first_seen desc offset $2)", [userId, MAX_DEVICES]);
+  return kid;
+}
+/* Trả "ok" hoặc lý do từ chối. ctx = { sig, method, path } hoặc null (không có chữ ký, vd huy hiệu bảng điểm: chỉ cần thiết bị còn đăng ký) */
+async function deviceVerdict(t, ctx) {
+  if (!t.k) return Date.now() < LEGACY_UNTIL ? "ok" : "legacy_expired";
+  let d;
+  try { ({ rows: [d] } = await db.query("select jwk, last_seen < now() - interval '10 minutes' as stale from pass_devices where user_id = $1 and kid = $2", [t.u, t.k])); }
+  catch (e) { if (noTable(e)) return "revoked"; throw e; }
+  if (!d) return "revoked";
+  if (!ctx) return "ok";
+  const m = /^(\d{9,11})\.([A-Za-z0-9_-]{86})$/.exec(String(ctx.sig || ""));
+  if (!m) return "nosig";
+  if (Math.abs(Date.now() / 1000 - +m[1]) > 120) return "skew";
+  let ok = false;
+  try {
+    const key = await subtle().importKey("jwk", d.jwk, { name: "ECDSA", namedCurve: "P-256" }, false, ["verify"]);
+    ok = await subtle().verify({ name: "ECDSA", hash: "SHA-256" }, key, Buffer.from(m[2], "base64url"), new TextEncoder().encode(m[1] + "|" + ctx.method + "|" + ctx.path));
+  } catch { ok = false; }
+  if (!ok) return "badsig";
+  if (d.stale) await db.query("update pass_devices set last_seen = now() where user_id = $1 and kid = $2", [t.u, t.k]).catch(() => {});
+  return "ok";
+}
+const bearerOf = headers => { const m = /^Bearer (.+)$/.exec(headers.authorization || ""); return m ? m[1] : ""; };
+const ctxOf = h => ({ sig: h["x-device-sig"], method: h["x-np-method"], path: h["x-np-path"] });
+/* Cấp token cho một thiết bị: có khoá công khai → token có k (đăng ký thiết bị, áp giới hạn); không có → token cũ (chỉ trong thời gian ân hạn). */
+async function issueToken(userId, exp, plan, pubHeader) {
+  const jwk = parsePub(pubHeader);
+  if (!jwk) return Date.now() < LEGACY_UNTIL ? { token: signToken(userId, exp, plan) } : { token: null, needKey: true };
+  try { return { token: signToken(userId, exp, plan, await registerDevice(userId, jwk)) }; }
+  catch (e) { if (noTable(e)) return { token: signToken(userId, exp, plan) }; throw e; }
 }
 async function passState(userId, q = db) {
   const { rows: [p] } = await q.query("select exp, plan from passes where user_id = $1", [userId]);
@@ -180,10 +228,19 @@ route("POST", /^\/api\/orders$/, async ({ body, ip }) => {
   });
 });
 
-route("GET", /^\/api\/orders\/([a-f0-9]{32})$/, async ({ m }) => {
+route("GET", /^\/api\/orders\/([a-f0-9]{32})$/, async ({ m, headers }) => {
   const { rows: [o] } = await db.query("select user_id, plan, status, exp, expires_at from orders where id = $1", [m[1]]);
   if (!o) return out(404, { error: "not_found" });
-  if (o.status === "paid") return out(200, { status: "paid", exp: ms(o.exp), plan: o.plan, token: signToken(o.user_id, ms(o.exp), o.plan) });
+  if (o.status === "paid") {
+    const base = { status: "paid", exp: ms(o.exp), plan: o.plan }, jwk = parsePub(headers["x-device-pub"]);
+    if (jwk) {   // đơn chỉ được MỘT thiết bị nhận token (kid đầu tiên); thiết bị khác phải khôi phục bằng email
+      try {
+        const r = await db.query("update orders set claim_kid = $2 where id = $1 and (claim_kid is null or claim_kid = $2)", [m[1], jwkKid(jwk)]);
+        if (!r.rowCount) return out(200, { ...base, token: null, claimed: true });
+      } catch (e) { if (!noTable(e)) throw e; }
+    }
+    return out(200, { ...base, ...(await issueToken(o.user_id, ms(o.exp), o.plan, headers["x-device-pub"])) });
+  }
   if (Date.now() > ms(o.expires_at)) return out(200, { status: "expired" });
   return out(200, { status: "pending" });
 });
@@ -221,9 +278,37 @@ route("POST", /^\/api\/webhook\/sepay$/, async ({ headers, body }) => {
 });
 
 route("GET", /^\/api\/pass$/, async ({ headers }) => {
-  const t = readToken(String(headers.authorization || "").replace(/^Bearer /, ""));
-  if (!t) return out(401, { active: false });
-  return out(200, await passState(t.u));
+  const t = readToken(bearerOf(headers));
+  if (!t) return out(401, { active: false, reason: "token" });
+  const v = await deviceVerdict(t, ctxOf(headers));
+  if (v !== "ok") return out(401, { active: false, reason: v, now: Date.now() });
+  const s = await passState(t.u);
+  let devices = null;
+  if (t.k) { try { const { rows: [c] } = await db.query("select count(*)::int as n from pass_devices where user_id = $1", [t.u]); devices = { n: c.n, max: MAX_DEVICES }; } catch (e) { if (!noTable(e)) throw e; } }
+  return out(200, { ...s, devices, legacy: !t.k, legacyUntil: !t.k ? LEGACY_UNTIL : undefined });
+});
+/* Nâng token cũ (không k) lên token gắn thiết bị: chỉ trong thời gian ân hạn, giữ nguyên gói đã mua (không bắt người dùng khôi phục lại). */
+route("POST", /^\/api\/pass\/upgrade$/, async ({ headers, ip }) => {
+  if (await limited("up:" + ip, 20)) return out(429, { error: "rate_limited" });
+  const tok = bearerOf(headers), t = readToken(tok);
+  if (!t) return out(401, { active: false, reason: "token" });
+  if (t.k) return out(200, { token: tok, exp: t.x, plan: t.p, upgraded: false });
+  if (Date.now() >= LEGACY_UNTIL) return out(401, { active: false, reason: "legacy_expired" });
+  const jwk = parsePub(headers["x-device-pub"]); if (!jwk) return out(400, { error: "bad_input" });
+  const s = await passState(t.u); if (!s.active) return out(401, { active: false, reason: "expired" });
+  try { return out(200, { token: signToken(t.u, s.exp, s.plan, await registerDevice(t.u, jwk)), exp: s.exp, plan: s.plan, upgraded: true }); }
+  catch (e) { if (noTable(e)) return out(200, { token: tok, exp: t.x, plan: t.p, upgraded: false }); throw e; }
+});
+/* Đăng xuất mọi thiết bị khác: giữ thiết bị đang gọi (phải có chữ ký hợp lệ). */
+route("POST", /^\/api\/pass\/signout-others$/, async ({ headers, ip }) => {
+  if (await limited("so:" + ip, 10)) return out(429, { error: "rate_limited" });
+  const t = readToken(bearerOf(headers));
+  if (!t) return out(401, { active: false, reason: "token" });
+  if (!t.k) return out(400, { error: "upgrade_required" });
+  const v = await deviceVerdict(t, ctxOf(headers));
+  if (v !== "ok") return out(401, { active: false, reason: v, now: Date.now() });
+  const r = await db.query("delete from pass_devices where user_id = $1 and kid <> $2", [t.u, t.k]);
+  return out(200, { ok: true, removed: r.rowCount });
 });
 
 /* Khôi phục: luôn trả 200 để không lộ email nào đã mua. */
@@ -240,7 +325,7 @@ route("POST", /^\/api\/restore$/, async ({ body, ip }) => {
   }
   return out(200, { ok: true });
 });
-route("POST", /^\/api\/restore\/verify$/, async ({ body, ip }) => {
+route("POST", /^\/api\/restore\/verify$/, async ({ body, ip, headers }) => {
   const email = normEmail(body.email), otp = String(body.otp || "");
   if (await limited("v:" + ip, 10)) return out(429, { error: "rate_limited" });
   /* tăng số lần thử nguyên tử; hết hạn hoặc quá 5 lần thì không còn bản ghi khớp */
@@ -255,7 +340,8 @@ route("POST", /^\/api\/restore\/verify$/, async ({ body, ip }) => {
   });
   if (!userId) return out(400, { error: "invalid" });
   const s = await passState(userId);
-  return out(200, { ...s, token: signToken(userId, s.exp, s.plan) });
+  if (!s.active) return out(200, { ...s, token: null });
+  return out(200, { ...s, ...(await issueToken(userId, s.exp, s.plan, headers["x-device-pub"] || body.pub)) });
 });
 
 const TZ = "Asia/Ho_Chi_Minh";   // ngày thống kê tính theo giờ Việt Nam
@@ -541,24 +627,28 @@ route("POST", new RegExp("^/api/relay/(" + RID + ")/ack$"), async ({ m, body }) 
 
 /* ===== BẢN TRẢ PHÍ CỦA GAME (Night Pass) =====
    Mã chế độ/độ khó/chủ đề/thống kê KHÔNG nằm trong thư mục công khai: chỉ giao khi có token Night Pass còn hạn (hoặc bản dùng thử 1 lượt/ngày). */
-async function passFromToken(tok) {
+const FAIL = new WeakMap();   // headers → lý do từ chối (để trả 401 có reason cho client)
+async function passFromToken(tok, ctx) {
   const t = readToken(tok); if (!t) return null;
-  const p = await passState(t.u); return p.active ? p : null;
+  const p = await passState(t.u); if (!p.active) return null;
+  const v = await deviceVerdict(t, ctx || null); if (v !== "ok") { if (ctx && ctx.h) FAIL.set(ctx.h, v); return null; }
+  return p;
 }
-const authPass = headers => { const m = /^Bearer (.+)$/.exec(headers.authorization || ""); return m ? passFromToken(m[1]) : Promise.resolve(null); };
+const authPass = headers => { const tok = bearerOf(headers); return tok ? passFromToken(tok, { ...ctxOf(headers), h: headers }) : Promise.resolve(null); };
+const passFail = headers => { const reason = FAIL.get(headers); return reason ? { error: "pass_required", reason, now: Date.now() } : { error: "pass_required" }; };
 /* Vé chơi hộ: người có Night Pass cấp một vé ngắn hạn (24 giờ) để bạn bè chơi tiếp đúng chế độ trả phí. Vé KHÔNG phải Night Pass: chỉ mở mã game + thử thách ngày, không có tài khoản, không dùng để đăng ký. */
 const mkTicket = () => { const x = Date.now() + 86400000; return "h." + x + "." + hmac("hticket|" + x); };
 const okTicket = tok => { const m = /^h\.(\d{13})\.([A-Za-z0-9_-]{43})$/.exec(tok || ""); return !!m && +m[1] > Date.now() && safeEq(m[2], hmac("hticket|" + m[1])); };
 const authHelper = headers => { const m = /^Bearer (.+)$/.exec(headers.authorization || ""); return !!m && okTicket(m[1]); };
 route("POST", /^\/api\/pro\/ticket$/, async ({ headers }) => {
-  if (!(await authPass(headers))) return out(401, { error: "pass_required" });
+  if (!(await authPass(headers))) return out(401, passFail(headers));
   return out(200, { ticket: mkTicket() });
 });
 route("GET", /^\/api\/pro\/dap-deadline\.js$/, async ({ headers, query, ip }) => {
   const pass = await authPass(headers); let trial = false;
   if (!pass && authHelper(headers)) return out(200, require("./pro/dap-deadline").source({ helper: true }), "application/javascript; charset=utf-8");
   if (!pass) {
-    if (query.get("trial") !== "1") return out(401, { error: "pass_required" });
+    if (query.get("trial") !== "1") return out(401, passFail(headers));
     if (await limited("pt:" + ipHash(ip), 1, 86400000)) return out(429, { error: "trial_used" });      // dùng thử: 1 lượt mỗi ngày
     trial = true;
     await db.query("insert into paywall_daily(day, key, n) values ((now() at time zone $1)::date, 'endless:trial', 1) on conflict (day, key) do update set n = paywall_daily.n + 1", [TZ]);
@@ -570,7 +660,7 @@ route("GET", /^\/api\/pro\/pop-fly\.js$/, async ({ headers, query, ip }) => {
   const pass = await authPass(headers); let trial = false;
   if (!pass && authHelper(headers)) return out(200, require("./pro/pop-fly").source({ helper: true }), "application/javascript; charset=utf-8");   // vé tạm của người chơi hộ
   if (!pass) {
-    if (query.get("trial") !== "1") return out(401, { error: "pass_required" });
+    if (query.get("trial") !== "1") return out(401, passFail(headers));
     if (await limited("pft:" + ipHash(ip), 1, 86400000)) return out(429, { error: "trial_used" });
     trial = true;
     await db.query("insert into paywall_daily(day, key, n) values ((now() at time zone $1)::date, 'fly_stars:trial', 1) on conflict (day, key) do update set n = paywall_daily.n + 1", [TZ]);
@@ -582,7 +672,7 @@ route("GET", /^\/api\/pro\/be-dau-bo-me\.js$/, async ({ headers, query, ip }) =>
   const pass = await authPass(headers); let trial = false;
   if (!pass && authHelper(headers)) return out(200, require("./pro/be-dau-bo-me").source({ helper: true }) + require("./pro/_premium").code, "application/javascript; charset=utf-8");
   if (!pass) {
-    if (query.get("trial") !== "1") return out(401, { error: "pass_required" });
+    if (query.get("trial") !== "1") return out(401, passFail(headers));
     if (await limited("bdt:" + ipHash(ip), 1, 86400000)) return out(429, { error: "trial_used" });
     trial = true;
     await db.query("insert into paywall_daily(day, key, n) values ((now() at time zone $1)::date, 'duel_skin:trial', 1) on conflict (day, key) do update set n = paywall_daily.n + 1", [TZ]);
@@ -594,7 +684,7 @@ route("GET", /^\/api\/pro\/lang-cua-be\.js$/, async ({ headers, query, ip }) => 
   const pass = await authPass(headers); let trial = false;
   if (!pass && authHelper(headers)) return out(200, require("./pro/lang-cua-be").source({ helper: true }) + require("./pro/_premium").code, "application/javascript; charset=utf-8");
   if (!pass) {
-    if (query.get("trial") !== "1") return out(401, { error: "pass_required" });
+    if (query.get("trial") !== "1") return out(401, passFail(headers));
     if (await limited("lbt:" + ipHash(ip), 1, 86400000)) return out(429, { error: "trial_used" });
     trial = true;
     await db.query("insert into paywall_daily(day, key, n) values ((now() at time zone $1)::date, 'village_skin:trial', 1) on conflict (day, key) do update set n = paywall_daily.n + 1", [TZ]);
@@ -606,7 +696,7 @@ route("GET", /^\/api\/pro\/cozy-wings\.js$/, async ({ headers, query, ip }) => {
   const pass = await authPass(headers); let trial = false;
   if (!pass && authHelper(headers)) return out(200, require("./pro/cozy-wings").source({ helper: true }), "application/javascript; charset=utf-8");   // vé tạm của người thách đấu / chơi hộ
   if (!pass) {
-    if (query.get("trial") !== "1") return out(401, { error: "pass_required" });
+    if (query.get("trial") !== "1") return out(401, passFail(headers));
     if (await limited("cwt:" + ipHash(ip), 1, 86400000)) return out(429, { error: "trial_used" });
     trial = true;
     await db.query("insert into paywall_daily(day, key, n) values ((now() at time zone $1)::date, 'wing_skin:trial', 1) on conflict (day, key) do update set n = paywall_daily.n + 1", [TZ]);
@@ -721,7 +811,7 @@ route("GET", new RegExp("^/api/pro/(" + NG_IDS + ")\\.js$"), async ({ m, headers
   const pass = await authPass(headers); let trial = false;
   if (!pass && authHelper(headers)) return out(200, mod().source({ helper: true }) + require("./pro/_premium").code, js);   // vé tạm của người chơi hộ
   if (!pass) {
-    if (query.get("trial") !== "1") return out(401, { error: "pass_required" });
+    if (query.get("trial") !== "1") return out(401, passFail(headers));
     if (await limited("gt:" + id + ":" + ipHash(ip), 1, 86400000)) return out(429, { error: "trial_used" });   // dùng thử: 1 lượt mỗi ngày
     trial = true;
     await db.query("insert into paywall_daily(day, key, n) values ((now() at time zone $1)::date, $2, 1) on conflict (day, key) do update set n = paywall_daily.n + 1", [TZ, id + "_skin:trial"]);
@@ -745,7 +835,7 @@ route("GET", new RegExp("^/api/pro/(" + CZ_PRO_IDS + ")\\.js$"), async ({ m, hea
   const pass = await authPass(headers); let trial = false;
   if (!pass && authHelper(headers)) return out(200, mod().source({ helper: true }) + pre(), js);
   if (!pass) {
-    if (query.get("trial") !== "1") return out(401, { error: "pass_required" });
+    if (query.get("trial") !== "1") return out(401, passFail(headers));
     if (await limited("gt:" + id + ":" + ipHash(ip), 1, 86400000)) return out(429, { error: "trial_used" });
     trial = true;
     await db.query("insert into paywall_daily(day, key, n) values ((now() at time zone $1)::date, $2, 1) on conflict (day, key) do update set n = paywall_daily.n + 1", [TZ, id + "_skin:trial"]);
@@ -769,7 +859,7 @@ route("GET", new RegExp("^/api/share/(" + CZ_IDS + ")$"), async ({ m, query, hea
 });
 /* Thử thách ngày: hạt giống + mục tiêu do máy chủ quyết định (giờ Việt Nam), chỉ cho người có Night Pass */
 route("GET", /^\/api\/pro\/daily$/, async ({ headers }) => {
-  if (!(await authPass(headers)) && !authHelper(headers)) return out(401, { error: "pass_required" });
+  if (!(await authPass(headers)) && !authHelper(headers)) return out(401, passFail(headers));
   const day = new Intl.DateTimeFormat("en-CA", { timeZone: TZ }).format(new Date());
   const h = crypto.createHmac("sha256", CFG.tokenSecret).update("daily|dap-deadline|" + day).digest();
   return out(200, { day, seed: h.readUInt32BE(0), goal: [300, 350, 400, 450, 500][h[4] % 5] });
@@ -791,6 +881,7 @@ route("GET", /^\/api\/health$/, async () => {
 
 /* ===== ĐIỂM VÀO ===== */
 async function handle({ method, pathname, query = new URLSearchParams(), headers = {}, bodyText = "", ip = "" }) {
+  headers = { ...headers, "x-np-method": method, "x-np-path": pathname };   // ghi đè sau khi sao chép: client không giả được
   for (const r of routes) {
     const m = pathname.match(r.re);
     if (!m || r.method !== method) continue;

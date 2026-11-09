@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="shared/device.js"></script>
 <meta name="robots" content="noindex,nofollow">
 <title>Kiểm tra Night Pass · Night Pass check</title>
 <style>
@@ -34,6 +35,7 @@ button:disabled{opacity:.6}
   <p class="sub" id="sub"></p>
   <div class="verdict" id="verdict" hidden></div>
   <div class="card" id="list"></div>
+  <button id="bSign" class="alt" type="button" hidden></button>
   <button id="bFix" type="button"></button>
   <a class="btn alt" id="bBack" href="/"></a>
 </main>
@@ -53,7 +55,13 @@ const T = {
     vNoTok: "Trình duyệt này chưa có token Night Pass.", vNoTokS: "Hãy mở lại trang đơn hàng của lần mua (đúng trình duyệt và địa chỉ web đã tạo đơn) để nhận token.",
     vExp: "Gói đã hết hạn.", vExpS: "Mua gói mới tại trang Night Pass.",
     vBad: "Máy chủ không công nhận token của bạn.", vBadS: "Hãy gửi cho người hỗ trợ màn hình này (kèm mã đơn, không gửi token). Có thể cần cấp lại gói.",
-    vNet: "Không kết nối được máy chủ.", vNetS: "Kiểm tra mạng rồi thử lại." },
+    vNet: "Không kết nối được máy chủ.", vNetS: "Kiểm tra mạng rồi thử lại.",
+    dev: "Khoá thiết bị", devKeyNo: "Trình duyệt này không tạo được khoá thiết bị (chế độ riêng tư hoặc trình duyệt quá cũ). Hãy mở bằng cửa sổ thường.", devKeyYes: "Có khoá thiết bị trên máy này.",
+    devCount: (n, m) => "Gói đang đăng ký " + n + "/" + m + " thiết bị. Thiết bị thứ " + (m + 1) + " vào thì thiết bị dùng lâu không dùng nhất bị thu hồi.", devLegacy: u => "Token kiểu cũ (chưa gắn thiết bị) — dùng được đến " + u + ", sau đó cần khôi phục bằng email.",
+    signout: "Đăng xuất các thiết bị khác", signing: "Đang đăng xuất…", signedOut: n => "Đã đăng xuất " + n + " thiết bị khác.", signErr: "Không đăng xuất được, thử lại sau.",
+    vDev: "Thiết bị này đã bị thu hồi hoặc chưa đăng ký.", vDevS: "Hãy khôi phục lại bằng email ở trang Night Pass (bấm “Khôi phục gói”). Thiết bị khác đang dùng gói này có thể đã làm thiết bị này bị thu hồi (tối đa vài thiết bị mỗi gói).",
+    vLegacy: "Token kiểu cũ đã hết thời gian ân hạn.", vLegacyS: "Hãy khôi phục lại bằng email ở trang Night Pass để nhận token gắn thiết bị.",
+    vSkew: "Đồng hồ trên máy bị lệch quá nhiều.", vSkewS: "Chỉnh lại ngày giờ tự động của máy rồi thử lại." },
   en: { h: "Night Pass check", sub: "This page checks why games still show the lock 🔒 after you bought a plan.", run: "Checking…", fix: "Refresh cache & reload", back: "← Back to home", fixing: "Refreshing…",
     origin: "Website address", originD: h => "You are on " + h + ". The Night Pass token only exists on the exact address where you bought it.",
     tok: "Browser has a Night Pass token", tokNo: "No token. You may have bought on another address/device, or cleared site data. Reopen the order page of your purchase to receive the token.",
@@ -66,7 +74,13 @@ const T = {
     vNoTok: "This browser has no Night Pass token yet.", vNoTokS: "Reopen the order page of your purchase (same browser and address where you made the order) to receive it.",
     vExp: "The plan has expired.", vExpS: "Buy a new plan on the Night Pass page.",
     vBad: "The server does not accept your token.", vBadS: "Send this screen to support (with your order code, never the token). The plan may need to be re-issued.",
-    vNet: "Cannot reach the server.", vNetS: "Check your connection and try again." }
+    vNet: "Cannot reach the server.", vNetS: "Check your connection and try again.",
+    dev: "Device key", devKeyNo: "This browser could not create a device key (private mode or an old browser). Open the site in a normal window.", devKeyYes: "This device has a device key.",
+    devCount: (n, m) => "The plan has " + n + "/" + m + " devices registered. When device number " + (m + 1) + " joins, the least recently used one is revoked.", devLegacy: u => "Old-style token (not bound to a device) — works until " + u + ", then restore by email.",
+    signout: "Sign out other devices", signing: "Signing out…", signedOut: n => "Signed out " + n + " other device(s).", signErr: "Could not sign out, try again later.",
+    vDev: "This device was revoked or is not registered.", vDevS: "Restore your pass by email on the Night Pass page (tap “Restore pass”). Another device using this plan may have caused this one to be revoked (each plan allows a few devices).",
+    vLegacy: "The old-style token grace period has ended.", vLegacyS: "Restore your pass by email on the Night Pass page to get a device-bound token.",
+    vSkew: "This device's clock is too far off.", vSkewS: "Set the date and time to automatic and try again." }
 };
 const $ = id => document.getElementById(id);
 let L = (() => { try { const s = localStorage.getItem("lang"); if (s === "vi" || s === "en") return s; } catch (e) {} return /^vi/i.test(navigator.language || "") ? "vi" : "en"; })();
@@ -77,23 +91,35 @@ const GAMES = ["xay-cau-tre", "pop-fly"];
 
 async function run() {
   const x = t(); document.documentElement.lang = L;
-  $("h").textContent = x.h; $("sub").textContent = x.sub; $("bFix").textContent = x.fix; $("bBack").textContent = x.back;
+  $("h").textContent = x.h; $("sub").textContent = x.sub; $("bFix").textContent = x.fix; $("bSign").textContent = x.signout; $("bSign").hidden = true; $("bBack").textContent = x.back;
   $("list").innerHTML = row("", x.run, ""); $("verdict").hidden = true;
-  let out = "", verdict = null, vcls = "warn";
+  let out = "", verdict = null, vcls = "warn", verdictDev = false;
   out += row("", x.origin, esc(x.originD(location.host)));
   /* 1) token trong trình duyệt */
   let p = null; try { p = JSON.parse(localStorage.getItem("pass")); } catch (e) {}
   const tk = p && p.token, exp = p && p.exp ? new Date(p.exp) : null, left = exp ? Math.round((exp - Date.now()) / 36e5) : 0;
   if (!tk) { out += row("bad", x.tok, esc(x.tokNo)); verdict = [x.vNoTok, x.vNoTokS]; vcls = "bad"; }
   else out += row(left > 0 ? "ok" : "bad", x.tok, esc(x.tokYes(exp ? exp.toLocaleString(L === "vi" ? "vi-VN" : "en-GB") : "?", left)));
+  /* khoá thiết bị trên máy này */
+  try { const ds = window.NPDevice ? await NPDevice.state() : { hasKey: false }; out += row(ds.hasKey ? "ok" : "bad", t().dev, esc(ds.hasKey ? t().devKeyYes : t().devKeyNo)); } catch (e) {}
   /* 2) máy chủ công nhận token */
   let srvOk = false;
   if (tk) {
     try {
       const r = await fetch("/api/pass", { headers: { Authorization: "Bearer " + tk }, cache: "no-store" });
-      if (r.ok) { const s = await r.json(); srvOk = !!s.active; out += row(srvOk ? "ok" : "bad", x.srv, esc(srvOk ? x.srv200 : x.srvOff)); if (!srvOk) { verdict = [x.vExp, x.vExpS]; vcls = "bad"; } }
-      else if (r.status === 401) { out += row("bad", x.srv, esc(x.srv401)); verdict = [x.vBad, x.vBadS]; vcls = "bad"; }
-      else { out += row("bad", x.srv, esc(x.srvErr(r.status))); verdict = [x.vBad, x.vBadS]; vcls = "bad"; }
+      if (r.ok) {
+        const s = await r.json(); srvOk = !!s.active; out += row(srvOk ? "ok" : "bad", x.srv, esc(srvOk ? x.srv200 : x.srvOff)); if (!srvOk) { verdict = [x.vExp, x.vExpS]; vcls = "bad"; }
+        if (s.devices) { out += row("ok", x.dev, esc(x.devCount(s.devices.n, s.devices.max))); $("bSign").hidden = false; }
+        else if (s.legacy) out += row("warn", x.dev, esc(x.devLegacy(s.legacyUntil ? new Date(s.legacyUntil).toLocaleDateString(L === "vi" ? "vi-VN" : "en-GB") : "?")));
+      } else {
+        let j = {}; try { j = await r.json(); } catch (e) {}
+        const rs = j.reason || "";
+        if (r.status === 401 && ["nosig", "badsig", "revoked"].indexOf(rs) >= 0) { out += row("bad", x.srv, esc(x.srv401)); verdict = [x.vDev, x.vDevS]; vcls = "bad"; }
+        else if (r.status === 401 && rs === "legacy_expired") { out += row("bad", x.srv, esc(x.srv401)); verdict = [x.vLegacy, x.vLegacyS]; vcls = "bad"; }
+        else if (r.status === 401 && rs === "skew") { out += row("bad", x.srv, esc(x.srv401)); verdict = [x.vSkew, x.vSkewS]; vcls = "bad"; }
+        else if (r.status === 401) { out += row("bad", x.srv, esc(x.srv401)); verdict = [x.vBad, x.vBadS]; vcls = "bad"; }
+        else { out += row("bad", x.srv, esc(x.srvErr(r.status))); verdict = [x.vBad, x.vBadS]; vcls = "bad"; }
+      }
     } catch (e) { out += row("bad", x.srv, esc(x.srvNet)); verdict = [x.vNet, x.vNetS]; vcls = "warn"; }
     /* 3) mã Night Pass của game */
     if (srvOk) {
@@ -102,10 +128,10 @@ async function run() {
         try {
           const r = await fetch("/api/pro/" + g + ".js", { headers: { Authorization: "Bearer " + tk }, cache: "no-store" });
           if (r.ok) { const b = await r.text(); out += row("ok", x.pro, esc(x.pro200(g, Math.round(b.length / 1024)))); }
-          else { proOk = false; out += row("bad", x.pro, esc(r.status === 401 ? x.pro401(g) : x.proErr(g, r.status))); }
+          else { proOk = false; let j = {}; try { j = await r.json(); } catch (e) {} out += row("bad", x.pro, esc(r.status === 401 ? x.pro401(g) : x.proErr(g, r.status))); if (r.status === 401 && ["nosig", "badsig", "revoked"].indexOf(j.reason) >= 0) verdictDev = true; }
         } catch (e) { proOk = false; out += row("bad", x.pro, esc(x.proNet(g))); }
       }
-      if (proOk) { verdict = [x.vOk, x.vOkS]; vcls = "ok"; } else { verdict = [x.vBad, x.vBadS]; vcls = "bad"; }
+      if (proOk) { verdict = [x.vOk, x.vOkS]; vcls = "ok"; } else { verdict = verdictDev ? [x.vDev, x.vDevS] : [x.vBad, x.vBadS]; vcls = "bad"; }
     }
   }
   /* 4) service worker + bộ nhớ đệm + mã lưu sẵn */
@@ -126,6 +152,12 @@ async function fix() {
   location.reload();
 }
 $("bFix").onclick = fix;
+$("bSign").onclick = async () => {
+  const b = $("bSign"); b.disabled = true; b.textContent = t().signing;
+  try { const p = JSON.parse(localStorage.getItem("pass")); const r = await fetch("/api/pass/signout-others", { method: "POST", headers: { Authorization: "Bearer " + p.token } }); const j = await r.json(); if (!r.ok) throw 0; alert(t().signedOut(j.removed)); }
+  catch (e) { alert(t().signErr); }
+  b.disabled = false; run();
+};
 $("bVi").onclick = () => { L = "vi"; try { localStorage.setItem("lang", "vi"); } catch (e) {} run(); };
 $("bEn").onclick = () => { L = "en"; try { localStorage.setItem("lang", "en"); } catch (e) {} run(); };
 run();
