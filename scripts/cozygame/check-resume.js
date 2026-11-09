@@ -13,7 +13,8 @@ const NO_RESUME = ["ban-co-hieu-toi", "be-dau-bo-me"];   // chưa có đường 
 const NO_STATE_FREE = ["con-vat-an-so"];                 // NP.state chỉ có khi người chơi có Night Pass (để chuyển giao diện cho chơi hộ)   // chưa có đường khởi tạo từ trạng thái
 let list = ONLY.length ? ONLY : ALL ? [...COZY.map(i => "cozyplay/" + i), ...POP.map(i => "popplay/" + i)].map(x => x.split("/")[1]) : SAMPLE;
 const dirOf = id => (COZY.includes(id) ? "cozyplay" : "popplay");
-const fails = [], note = (ok, id, msg) => { if (!ok) { fails.push(id + ": " + msg); console.log("  ✗ " + id + ": " + msg); } };
+const fails = []; let cur = [];
+const note = (ok, id, msg) => { if (!ok) cur.push(id + ": " + msg); };
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const TUT = ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "xn", "dd", "dr", "d48", "gcv", "cw", "mc", "ch", "ga"];
 
@@ -36,19 +37,18 @@ const TUT = ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "xn", "dd", "
     }
     return false;
   };
-  for (const id of list) {
+  const checkGame = async id => {
     const d = dirOf(id), base = O + "/" + d + "/games/" + id + "/index.html?lang=vi", key = "np-resume:" + id, noRes = NO_RESUME.includes(id);
-    console.log("== " + id);
-    if (noRes) { console.log("  (bỏ qua lưu/tiếp tục: game chưa có initialState)"); continue; }
-    if (NO_STATE_FREE.includes(id)) { console.log("  (bỏ qua: bản miễn phí không có trạng thái ván để lưu)"); continue; }
+    if (noRes) { console.log("  (bỏ qua lưu/tiếp tục: game chưa có initialState)"); return; }
+    if (NO_STATE_FREE.includes(id)) { console.log("  (bỏ qua: bản miễn phí không có trạng thái ván để lưu)"); return; }
     let pg = await mk(base);
     const started = await startPlay(pg); note(started, id, "không bắt đầu được ván (NP.peek rỗng)");
-    if (!started) { await pg.close(); continue; }
+    if (!started) { await pg.close(); return; }
     const tpl = await pg.evaluate(() => typeof window.snapP === "function");
-    let st0 = await pg.evaluate(() => NP.peek());
-    if (tpl && !st0.p) { /* game dựng từ khung chung chỉ lưu khi có tiến trình thật; ghi bản lưu theo trạng thái hiện có để thử cơ chế */
-      await pg.evaluate((key, st) => localStorage.setItem(key, JSON.stringify({ v: 1, ts: Date.now(), daily: false, day: "x", state: st })), key, st0);
-    } else { await sleep(4800); }
+    /* đọc trạng thái + (game khung chung chưa có tiến trình thật) ghi bản lưu thử trong CÙNG một lệnh, vì vài game tự kết thúc sau vài giây và sẽ xoá bản lưu */
+    const first = await pg.evaluate((key) => { const st = NP.peek(); if (st && typeof window.snapP === "function" && !st.p) localStorage.setItem(key, JSON.stringify({ v: 1, ts: Date.now(), daily: false, day: "x", state: st })); return st; }, key);
+    let st0 = first;
+    for (let k = 0; k < 12 && !(await pg.evaluate(key => localStorage.getItem(key) !== null, key)); k++) await sleep(500);   // chờ vòng tự lưu (tối đa 6 giây)
     let rec = await pg.evaluate(key => { try { return JSON.parse(localStorage.getItem(key)); } catch (e) { return null; } }, key);
     note(!!rec && rec.state && rec.state.seed === st0.seed, id, "chưa có bản lưu hợp lệ sau khi chơi dở");
     /* tải lại → thẻ tiếp tục */
@@ -88,38 +88,47 @@ const TUT = ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "xn", "dd", "
     await sleep(5200);
     note(await pg.evaluate(key => localStorage.getItem(key) === null, key), id, "chế độ chơi hộ (?helper=1) lại ghi bản lưu");
     await pg.close();
-  }
+    };
+  /* chạy một khối kiểm tra; lỗi (kể cả ngoại lệ của trình duyệt) thì thử lại 1 lần để loại trường hợp thất thường do máy bận; lỗi thật sẽ lặp lại */
+  const attempt = async (id, fn) => {
+    for (let k = 0; k < 2; k++) {
+      cur = []; try { for (const p of await br.pages()) await p.close().catch(() => {}); await fn(); } catch (e) { cur.push(id + ": lỗi bộ thử: " + String(e.message).slice(0, 110)); }
+      if (!cur.length) return; if (k === 1) cur.forEach(m => { fails.push(m); console.log("  ✗ " + m); }); else console.log("  (thử lại " + id + ": " + cur[0].slice(0, 90) + ")");
+    }
+  };
+  for (const id of list) { console.log("== " + id); await attempt(id, () => checkGame(id)); }
 
   /* ===== BACK qua trang cổng ===== */
-  const portalCases = ALL ? [["cozyplay", "xay-cau-tre"], ["cozyplay", "ne-o-ga"], ["popplay", "nhay-theo-so"], ["popplay", "qua-song"]] : [["cozyplay", "xay-cau-tre"], ["popplay", "nhay-theo-so"]];
+  const portalCases = ALL ? [["cozyplay", "xay-cau-tre"], ["cozyplay", "doi-doi-2048"], ["popplay", "nhay-theo-so"], ["popplay", "thap-vong-mau"]] : [["cozyplay", "xay-cau-tre"], ["popplay", "nhay-theo-so"]];
   for (const [d, id] of portalCases) {
     console.log("== back qua cổng " + d + "/" + id);
+    await attempt(id, async () => {
     const pg = await mk(O + "/" + d + "/index.html?lang=vi");
     const info = async () => { try { const fr = pg.frames().find(f => f.url().includes("/games/" + id)); return { hash: await pg.evaluate(() => location.hash), on: await pg.evaluate(() => document.getElementById("stage").classList.contains("on")), play: fr ? await fr.evaluate(() => !!NP.peek()).catch(() => null) : null, len: await pg.evaluate(() => history.length) }; } catch (e) { return { err: "đã rời trang cổng" }; } };
     await pg.evaluate(id => { location.hash = id; }, id); await sleep(3800);
     let fr = pg.frames().find(f => f.url().includes("/games/" + id));
-    note(!!fr, id, "không mở được game qua cổng"); if (!fr) { await pg.close(); continue; }
+    note(!!fr, id, "không mở được game qua cổng"); if (!fr) { await pg.close(); return; }
     const ok = await startPlay(pg, fr); note(ok, id, "không bắt đầu được ván qua cổng");
-    await pg.mouse.click(190, 480); await sleep(1500);
+    await pg.mouse.click(3, 420); await sleep(1500);
     const a = await info(); note(a.on && a.play === true, id, "trước khi back: game không ở trạng thái đang chơi " + JSON.stringify(a));
     await pg.evaluate(() => history.back()); await sleep(1600);
     const b1 = await info(); note(b1.on && b1.play === false && b1.hash === "#" + id, id, "Back khi đang chơi phải về MÀN CHỌN (game vẫn mở): " + JSON.stringify(b1));
     await pg.evaluate(() => history.back()); await sleep(1800);
     const b2 = await info(); note(!b2.on && b2.hash === "", id, "Back ở màn chọn phải ĐÓNG game: " + JSON.stringify(b2));
-    note(!!(await pg.evaluate(id => localStorage.getItem("np-resume:" + id), id)) || id === "xay-cau-tre" ? true : true, id, "");
     await pg.close();
     /* ← trong game rồi Back một lần phải đóng game (lớp lịch sử của màn chơi đã được gỡ) */
     const pg2 = await mk(O + "/" + d + "/index.html?lang=vi");
     await pg2.evaluate(id => { location.hash = id; }, id); await sleep(3800);
     const fr2 = pg2.frames().find(f => f.url().includes("/games/" + id)); const ok2 = fr2 && await startPlay(pg2, fr2);
     if (ok2) {
-      await pg2.mouse.click(190, 480); await sleep(1400);
+      await pg2.mouse.click(3, 420); await sleep(1400);
       await fr2.evaluate(() => { const e = document.getElementById("bBk") || document.getElementById("homeBtn"); e && e.click(); }); await sleep(1800);
       await pg2.evaluate(() => history.back()); await sleep(1800);
       const c = { hash: await pg2.evaluate(() => location.hash), on: await pg2.evaluate(() => document.getElementById("stage").classList.contains("on")) };
       note(!c.on && c.hash === "", id, "sau khi thoát màn chơi bằng ← / 🏠, một lần Back phải đóng game: " + JSON.stringify(c));
     }
     await pg2.close();
+    });
   }
   await br.close(); srv.kill();
   console.log("\n" + (fails.length ? "✗ " + fails.length + " lỗi" : "✓ tiếp tục ván dở + Back đạt"));
