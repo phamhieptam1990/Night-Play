@@ -110,6 +110,23 @@
     ".ns-st .e{font-size:26px;line-height:1}.ns-st.lk{opacity:.5;filter:grayscale(1)}.ns-st.lk .e{filter:blur(1.5px)}.ns-st.gd{border-color:#ffc83a;background:linear-gradient(180deg,rgba(255,200,58,.25),transparent)}" +
     ".ns-row{display:flex;gap:8px;margin-top:6px}.ns-btn{flex:1;min-height:44px;border-radius:14px;border:1.5px solid rgba(128,128,128,.5);background:transparent;color:inherit;font:800 14px 'Be Vietnam Pro',system-ui,sans-serif;cursor:pointer}.ns-btn.pri{background:hsl(var(--ns-h),80%,50%);border-color:transparent;color:#fff}" +
     ".ns-toast{position:fixed;left:50%;top:calc(var(--navH,52px) + 8px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:60;pointer-events:none;width:max-content;max-width:88vw;box-sizing:border-box;padding:9px 16px;border-radius:99px;background:#1d1630;color:#fff;font:800 13px 'Be Vietnam Pro',system-ui,sans-serif;border:1.5px solid hsl(var(--ns-h),70%,60%);box-shadow:0 6px 22px rgba(0,0,0,.4);text-align:center;animation:nsT .3s ease-out}@keyframes nsT{from{opacity:0;transform:translate(-50%,10px)}}" +
+    
+    /* ---- popup sự kiện kiểu Night Pass: thẻ tối phát sáng theo màu sự kiện, ruy-băng 👑, hero lớn, thanh tiến độ phát sáng, tem vàng nổi bật ---- */
+    ".ns-card{position:relative;overflow:visible;margin-top:14px;padding:34px 16px 16px;border-radius:26px;color:#fff;border:1.5px solid hsl(var(--ns-h),85%,64%);background:radial-gradient(120% 60% at 50% -8%,hsla(var(--ns-h),95%,62%,.38),transparent 62%),linear-gradient(180deg,hsl(var(--ns-h),48%,17%),hsl(var(--ns-h),58%,8%));box-shadow:0 0 0 1px rgba(255,255,255,.07) inset,0 0 34px hsla(var(--ns-h),95%,60%,.5),0 18px 60px rgba(0,0,0,.6);animation:nsPulse 3.2s ease-in-out infinite}" +
+    "@keyframes nsPulse{50%{box-shadow:0 0 0 1px rgba(255,255,255,.07) inset,0 0 52px hsla(var(--ns-h),95%,62%,.7),0 18px 60px rgba(0,0,0,.6)}}" +
+    ".ns-dark .ns-card{background:radial-gradient(120% 60% at 50% -8%,hsla(var(--ns-h),95%,62%,.38),transparent 62%),linear-gradient(180deg,hsl(var(--ns-h),48%,17%),hsl(var(--ns-h),58%,8%));color:#fff;border-color:hsl(var(--ns-h),85%,64%)}" +
+    ".ns-rb{position:absolute;left:50%;top:-15px;transform:translateX(-50%);padding:6px 16px;border-radius:99px;white-space:nowrap;font:900 12px/1 'Be Vietnam Pro',system-ui,sans-serif;letter-spacing:.12em;color:#3a2400;background:linear-gradient(90deg,#ffd24a,#ffb020 50%,#ffe27a);box-shadow:0 0 18px rgba(255,200,58,.75),0 3px 0 rgba(0,0,0,.3)}" +
+    ".ns-hero{width:76px;height:76px;margin:2px auto 6px;border-radius:50%;display:grid;place-items:center;font-size:42px;line-height:1;background:radial-gradient(circle,hsla(var(--ns-h),95%,70%,.45),hsla(var(--ns-h),80%,40%,.15) 70%);border:1.5px solid hsla(var(--ns-h),90%,75%,.6);box-shadow:0 0 28px hsla(var(--ns-h),95%,62%,.65)}" +
+    ".ns-card h2{font-size:22px;font-weight:900;letter-spacing:.01em;background:linear-gradient(90deg,#fff,hsl(var(--ns-h),95%,80%) 50%,#ffe27a);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;text-shadow:none}" +
+    ".ns-card .sub{opacity:.85}" +
+    ".ns-bar{height:12px;border-radius:8px;background:rgba(255,255,255,.12);box-shadow:inset 0 1px 3px rgba(0,0,0,.5)}.ns-bar i{background:linear-gradient(90deg,hsl(var(--ns-h),95%,62%),#ffd24a);box-shadow:0 0 12px hsla(var(--ns-h),95%,62%,.9)}" +
+    ".ns-grid{gap:8px}.ns-st{background:rgba(255,255,255,.06);border:1.5px solid hsla(var(--ns-h),70%,60%,.45);border-radius:16px}" +
+    ".ns-st:not(.lk):not(.gd){border-color:#ffc83a;background:linear-gradient(180deg,rgba(255,200,58,.2),rgba(255,255,255,.04));box-shadow:0 0 14px rgba(255,200,58,.35)}" +
+    ".ns-st.gd{position:relative;border-color:#ffd24a;background:linear-gradient(180deg,rgba(255,210,74,.28),rgba(255,140,40,.12));box-shadow:0 0 18px rgba(255,200,58,.55)}.ns-st.gd::after{content:'👑';position:absolute;right:-4px;top:-9px;font-size:15px;filter:drop-shadow(0 0 4px rgba(255,200,58,.9))}" +
+    ".ns-st.lk{opacity:.55}.ns-st.gd.lk{opacity:.8;filter:none}.ns-st.gd.lk .e{filter:none}" +
+    ".ns-btn{min-height:48px;border-radius:16px;border:1.5px solid rgba(255,255,255,.28);color:#fff}.ns-btn.pri{background:linear-gradient(135deg,hsl(var(--ns-h),90%,58%),hsl(var(--ns-h),85%,42%));border:0;box-shadow:0 0 20px hsla(var(--ns-h),95%,60%,.6),0 3px 0 rgba(0,0,0,.3)}" +
+    "@media (prefers-reduced-motion:reduce){.ns-card{animation:none}}" +
+    "@media (max-height:560px){.ns-ov{padding:8px}.ns-card{width:min(94vw,560px);margin-top:10px;padding:24px 14px 12px}.ns-hero{display:none}.ns-card h2{font-size:18px}.ns-card .sub{margin:2px 0 6px;font-size:12px}.ns-grid{margin:8px 0;gap:6px}.ns-st{min-height:58px;padding:5px 2px}.ns-st .e{font-size:20px}.ns-btn{min-height:42px}}" +
     "@media (prefers-reduced-motion:reduce){.ns-fl{display:none}}";
   document.head.appendChild(css);
 
@@ -155,7 +172,7 @@
     var n4 = C.ev.s.filter(function (s, i) { return W.n >= TH[i]; }).length, left = daysLeft();
     var next = TH.filter(function (t) { return W.n < t; })[0];
     var sub = (isEn() ? (left > 0 ? left + " days left" : "Last day!") : (left > 0 ? "Còn " + left + " ngày" : "Hôm nay là ngày cuối!")) + " · " + (isEn() ? "rounds played: " : "đã chơi: ") + W.n + (next ? "/" + next : "");
-    var h = '<div class="ns-card" role="dialog" aria-modal="true"><h2>' + C.ev.e + " " + nameOf(C.ev) + '</h2><p class="sub">' + sub + '</p>' +
+    var h = '<div class="ns-card" role="dialog" aria-modal="true"><div class="ns-rb">👑 NIGHT EVENT</div><div class="ns-hero">' + C.ev.e + '</div><h2>' + nameOf(C.ev) + '</h2><p class="sub">' + sub + '</p>' +
       '<div class="ns-bar"><i style="width:' + Math.min(100, Math.round(W.n / TH[3] * 100)) + '%"></i></div>' +
       '<p class="sub" style="margin:2px 0 0">' + (isEn() ? "Finish a round in ANY game to unlock stamps" : "Chơi xong 1 ván ở BẤT KỲ game nào để mở tem") + '</p><div class="ns-grid">';
     stickers().forEach(function (o) {
