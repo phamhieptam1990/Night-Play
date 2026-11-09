@@ -70,6 +70,14 @@ Dự án có 3 nhóm: **Cozy Play** (`cozyplay/`: 9 game sinh tự động từ 
 - Game không thu thập thêm dữ liệu cá nhân. Nếu thêm bất cứ thứ gì lưu trên máy chủ hoặc localStorage mới → cập nhật `privacy.html` (VI + EN) và ngày trong `shared/site.js`.
 - Bảng xếp hạng tự nguyện; game trẻ em không có ô gõ tên.
 
+## 6b. Offline & hiệu năng (không lag) — chạy `check-perf.js`
+Nguyên tắc dự án: game chạy **offline, không lag, không gọi máy chủ lúc chơi**. Kiểm tra bằng `NODE_PATH=<thư mục puppeteer-core> node scripts/cozygame/check-perf.js [--offline] [--perf] [--quick] [--only=<chuỗi>]` (mặc định chạy cả hai, ~10 phút; `--quick` ~6 phút).
+- **Offline:** script cài service worker khi còn mạng rồi TẮT HẲN máy chủ (setOfflineMode không áp dụng cho service worker) và mở từng trang/game, chơi tới màn kết thúc, đổi ngôn ngữ. Đạt = không request lỗi (trừ `/api/*`), không lỗi JS. Game/trang/tệp `shared/*` mới **phải được thêm vào `SHELL` trong `sw.js`** (script báo thiếu), ảnh nhỏ cần khi chơi (thumbs) cũng vậy; nâng `CACHE` (np-shell-vN) khi đổi danh sách. Ảnh og (xem trước mạng xã hội) không cần offline.
+- **Phông Google:** thẻ `<link rel="stylesheet" href="https://fonts.googleapis.com/...">` phải để dạng KHÔNG chặn hiển thị: `media="print" onload="this.media='all'"` + `<noscript>` (đã áp dụng cho mọi trang; trang mới phải làm giống). CSS luôn có phông dự phòng (`system-ui`, `Arial Black`).
+- **Lag:** giả lập điện thoại 380×760, CPU chậm 4 lần. Đạt = FPS ≥ 40 khi chơi và ở màn kết thúc (≥ 55 ở CPU thường), không tác vụ dài > 250ms khi chơi, tải xong < 2,5 giây, DOM < 2500 phần tử, heap tăng < 6MB sau 3 ván liên tiếp. Tránh: animation vô hạn trên `box-shadow`/`filter` (dùng `opacity`/`transform` của phần tử phụ), `backdrop-filter` rộng, `setInterval` nhanh thừa, vòng lặp ResizeObserver, canvas quá lớn (giới hạn dpr ≤ 2).
+- **Mất mạng:** `shared/track.js` không gửi khi `navigator.onLine === false`; Night Pass/bảng điểm/chia sẻ khi mất mạng chỉ báo nhẹ, không treo, không văng lỗi.
+- Báo cáo "xong" phải kèm kết quả `check-perf.js` (hoặc nói rõ chưa chạy).
+
 ## 7. Trước khi báo "xong"
 - [ ] `check.js` "✓ tất cả đạt"
 - [ ] `check-landscape.js` "✓ màn ngang đạt" (nếu đụng bố cục/giao diện)
