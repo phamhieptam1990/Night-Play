@@ -1,0 +1,56 @@
+# Quy tắc làm game mới (đọc TRƯỚC khi viết code, chạy kiểm tra TRƯỚC khi commit)
+
+Các mục dưới đây đều là lỗi người dùng đã báo ít nhất một lần. Làm game mới mà phạm lại là lỗi của người làm.
+Nguyên tắc chung: **không báo "xong" khi chưa tự mở trình duyệt thật, chụp ảnh và nhìn.**
+
+## 0. Quy trình bắt buộc
+1. Game Cozy mới: viết `scripts/cozygame/specs/<id>.js` (luật chơi, vẽ, ván mẫu) + `server/pro/<id>.js` (Night Pass). KHÔNG sửa tay file sinh ra `cozyplay/games/<id>/index.html`; sửa spec/`tpl.html` rồi chạy `node scripts/cozygame/gen.js all`.
+2. Thêm game vào bảng `GAMES` trong `scripts/cozygame/check.js` (khung `pre` đưa ván về trạng thái chơi dở).
+3. Chạy `NODE_PATH=<thư mục có puppeteer-core> node scripts/cozygame/check.js` → phải in "✓ tất cả đạt". Commit XONG rồi mới chạy lại (nếu không sẽ báo "file sinh ra khác bản đã commit").
+4. Chụp ảnh thật (puppeteer-core + Chrome, `python3 -m http.server`) ở: 360×640, 380×760, ngang 844×390 và 1200×640; bản free + MỌI giao diện Night Pass; màn home, màn chơi, màn kết thúc, popup. Tự nhìn ảnh.
+5. Commit nhỏ, tiếng Việt. Không push khi chưa được yêu cầu. Không commit `code.md`.
+
+## 1. Bố cục và hiển thị
+- **Một màn hình, không cuộn** ở mọi kích thước (dọc 320–520 rộng, ngang, PC). `#game` không được `scrollHeight > clientHeight`.
+- **Chữ luôn nằm trong thẻ có nền** (panel + viền + bo vừa phải). Không chữ đen trơn trên nền; không thông báo (toast) nền trắng/chữ đen; toast theo màu giao diện hiện tại; không bo tròn quá mức.
+- **Gợi ý/hướng dẫn dài không nằm sẵn trên màn hình**: gom vào nút icon "?" (`shared/help.js`), bấm mới mở. Trên màn chơi chỉ giữ tối đa 1 dòng ngắn.
+- **Có nút ← (`#bBk`) ở thanh trên** để về màn chọn loại chơi từ mọi màn; không bắt người chơi phải đi qua màn kết thúc.
+- **Màn hình ngang** (điện thoại xoay ngang, cửa sổ PC rộng-thấp): khung chơi nằm GIỮA, HUD (điểm, combo, lượt/thời gian, nút) chia hai bên, thông tin phụ tự ẩn; không để cột game hẹp một bên và trống phần còn lại; nút thanh trên kích thước cố định ~40–44px (không tính theo cqw). Dùng `shared/landscape.css`/`landscape.js`; chừa `env(safe-area-inset-*)`.
+- Nút chạm ≥ 44px; cursor tay, viền focus rõ khi bấm Tab.
+- Nhân vật/biểu tượng **không mờ, không chìm vào nền** (nền tối → thêm đĩa sáng/halo phía sau); không bao giờ mờ đến mức không thấy. Nhân vật quay mặt đúng hướng di chuyển (emoji phụ thuộc nền tảng: dùng biểu tượng trung tính hoặc lật bằng `scale(-1,1)`).
+- Bản thân game cũng phải **offline, không lag, không gọi máy chủ lúc chơi, không AI**.
+
+## 2. Điều khiển trên web
+- Chuột (click, kéo, rê), bàn phím (mũi tên, Enter, Esc, Tab), trackpad hai ngón (wheel) và cảm ứng đều chơi được. Game vẽ/kéo thả phải có kiểu "bấm nút → bấm chỗ muốn nối" ngoài kéo.
+- `touch-action` đúng để không cuộn trang khi chơi; `pointercancel` được xử lý.
+
+## 3. Chơi hộ (helper) — tính năng hay bị quên
+- Phải có `snapP(G)` (trả `null` nếu chưa có tiến trình) và `restoreP(G,p)` (khôi phục đúng trạng thái chơi dở) để người chơi hộ TIẾP TỤC từ chỗ đang dở, không bắt đầu lại.
+- `NP.state()` trả `{seed, t, p, ...}`; link `?helper=1&s=<base64url JSON>`.
+- Ở chế độ chơi hộ: ẩn nút chia sẻ/chơi lại/về trang chủ/bảng điểm/quay video (`bShare,bAgain,bHome,bRem,bClip,bBoard`); kết thúc thì gửi kết quả về, không thoát ra menu.
+- Kết quả chơi hộ mã hóa đầu-cuối, máy chủ xoá sau tối đa 24 giờ (không đổi).
+
+## 4. Thách đấu (challenge)
+- Link `#ch=<base64url {s: seed, sc: điểm, t: loại}>` mở hộp thách (`#ovCh`) rồi vào đúng ván/điểm cần vượt; mọi loại chơi, mọi giao diện.
+- Link không chứa dữ liệu nhạy cảm; hạt giống (seed) phải cho ra đúng cùng ván ở mọi máy.
+
+## 5. Night Pass phải KHÁC HẲN bản free (lỗi lặp nhiều nhất)
+- Không chỉ đổi màu: mỗi giao diện đổi **bố cục / hình dạng khối chính / nhân vật / hiệu ứng nền động / vật liệu** riêng (xem `server/pro/xay-cau-tre.js`, `ban-co-hieu-toi.js` làm mẫu). Check tự động: ≥4/5 chữ ký bố cục khác nhau giữa free và 4 giao diện.
+- Mỗi loại chơi Night Pass (type 1–3) mở được, đặt `#play.dataset.ty`; combo/hiệu ứng thắng khác bản free; nhân vật theo giao diện (không dùng chung emoji với free).
+- Giao diện mới không được làm tệ đi các tiêu chí ở mục 1 (chữ trong thẻ, không chìm, không tràn).
+- Popup chọn loại chơi/giao diện: đậm chất Night Pass (viền sáng, 👑, 🔒 + gợi ý cho loại bị khoá). Dùng `shared/typeui.css`.
+- Mã Night Pass chỉ giao qua `/api/pro/<id>.js`; `main(PF,OPTS)` chạy trong trình duyệt, không dùng biến ngoài hàm. Khoá lại (`lockPro`) phải trả giao diện về free.
+
+## 6. Dữ liệu, quyền riêng tư
+- Game không thu thập thêm dữ liệu cá nhân. Nếu thêm bất cứ thứ gì lưu trên máy chủ hoặc localStorage mới → cập nhật `privacy.html` (VI + EN) và ngày trong `shared/site.js`.
+- Bảng xếp hạng tự nguyện; game trẻ em không có ô gõ tên.
+
+## 7. Trước khi báo "xong"
+- [ ] `check.js` "✓ tất cả đạt"
+- [ ] Ảnh free + từng giao diện Night Pass đã tự nhìn (dọc + ngang)
+- [ ] Chơi hộ: mở link `?helper=1`, tiếp tục đúng ván dở, nút bị ẩn
+- [ ] Thách đấu: mở link `#ch=...` được
+- [ ] Nút ← về được màn chọn loại; nút "?" mở gợi ý
+- [ ] Không cuộn, không chữ trơn, không nhân vật mờ, không lỗi console
+- [ ] Đã thêm game vào `check.js` và danh sách tải sẵn offline (`sw.js`) nếu cần
+- [ ] Báo cáo trung thực: cái gì đã kiểm tra, cái gì chưa (ví dụ trackpad thật)
