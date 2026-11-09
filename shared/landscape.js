@@ -18,6 +18,10 @@
   /* tên game ở màn chọn (màn dọc): bản sao nằm đầu #home để sát khối nội dung ở giữa */
   var HT = null;
   (function () { var h = document.getElementById("home"), t0 = document.getElementById("ttl"); if (!h || !t0) return; HT = document.createElement("div"); HT.id = "homeTitle"; HT.className = "hometitle"; HT.setAttribute("aria-hidden", "true"); h.insertBefore(HT, h.firstChild); })();
+  /* tên game khi đang chơi (màn dọc): bản sao nằm đầu #game, ngay trên cụm điểm + khung chơi */
+  var GT = null;
+  (function () { var g = document.getElementById("game"), t0 = document.getElementById("ttl"); if (!g || !t0) return; GT = document.createElement("div"); GT.id = "gameTitle"; GT.className = "gametitle"; GT.setAttribute("aria-hidden", "true"); g.insertBefore(GT, g.firstChild); })();
+  function fitGame() { var t0 = document.getElementById("ttl"); if (!GT || !t0) return; GT.textContent = t0.textContent; GT.style.fontSize = ""; if (!GT.offsetParent) return; var fs = parseFloat(getComputedStyle(GT).fontSize) || 18, guard = 0; while (GT.scrollWidth > GT.clientWidth + 1 && fs > 11 && guard++ < 60) { fs -= 0.5; GT.style.fontSize = fs + "px"; } }
   function fitHome() {
     var t0 = document.getElementById("ttl"); if (!HT || !t0) return; HT.textContent = t0.textContent; HT.style.fontSize = "";
     if (!HT.offsetParent) return;
@@ -49,6 +53,6 @@
       while (tl.scrollWidth > tl.clientWidth + 1 && fs > lim && guard++ < 40) { fs -= 0.5; tl.style.fontSize = fs + "px"; }
     }
   }
-  function queueFit() { cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(function () { fitTitle(); fitHome(); }); }
+  function queueFit() { cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(function () { fitTitle(); fitHome(); fitGame(); }); }
   if (tl) { try { new MutationObserver(queueFit).observe(tl, { childList: true, characterData: true, subtree: true }); new MutationObserver(queueFit).observe(pl, { attributes: true, attributeFilter: ["data-scr"] }); } catch (e) {} addEventListener("resize", queueFit); addEventListener("orientationchange", function () { setTimeout(queueFit, 200); }); if (document.fonts && document.fonts.ready) document.fonts.ready.then(queueFit); queueFit(); }
 })();

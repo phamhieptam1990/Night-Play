@@ -8,6 +8,9 @@
 /* màn dọc: tên game được chuyển xuống ngay trên khối nội dung ở giữa màn chọn (bản sao #homeTitle do landscape.js dựng); thanh trên chỉ còn các nút */
 .hometitle{display:none}
 @media (orientation:portrait){#play[data-scr="home"] .hometitle{display:block;margin:0;text-align:center;white-space:normal;text-wrap:balance;overflow-wrap:anywhere;font:400 7.4cqw/1.15 var(--display);color:var(--accent);letter-spacing:.01em}#play[data-scr="home"] .top>h1{visibility:hidden}}
+/* màn dọc: tên game khi đang chơi nằm ngay trên cụm điểm + khung chơi (bản sao #gameTitle do landscape.js dựng) */
+.gametitle{display:none}
+@media (orientation:portrait){#play[data-scr="game"] .gametitle{display:block;flex:none;margin:0;text-align:center;white-space:normal;text-wrap:balance;overflow-wrap:anywhere;font:400 5.6cqw/1.15 var(--display);color:var(--accent)}#play[data-scr="game"] .top>h1{visibility:hidden}}
 /* màn dọc, khung chơi vuông/ít cao: gom bảng điểm + khung chơi + nút hành động thành một cụm ở giữa màn hình thay vì dính mép trên/dưới (--ar = cao/rộng của canvas, do landscape.js đặt) */
 @media (orientation:portrait){#play #game{justify-content:center;gap:3cqw}#play #cvw{flex:0 1 calc(92cqw*var(--ar,1.1));min-height:0}}
 @media (orientation:landscape) and (max-height:700px) and (min-width:560px),(orientation:landscape) and (pointer:coarse) and (max-height:900px) and (min-width:800px){
