@@ -276,7 +276,7 @@ function renderHome(){const sv=getSave(),k=dayKey(),done=sv.days[k],camp=getCamp
 function renderTypes(){const b=$("tys");b.innerHTML="";TYPES.forEach((t,i)=>{const e=document.createElement("button");e.type="button";e.className="ty"+(TY===i?" on":"")+(tLocked(i)?" lock":"");e.innerHTML='<span class="e">'+t[0]+'</span><span class="t">'+L2([t[1],t[2]])+"</span>";e.onclick=()=>{if(tLocked(i)){openPay(i,null);return}TY=i;LS.set("xc-type",i);renderHome()};b.appendChild(e)})}
 /* ===== BẮT ĐẦU NGÀY ===== */
 function beginDay(mode,t,seed,camp,day,ch){const P=setup(mode,t,camp),ev=pickEvent(seed,day,t);G=newDay(P,seed,day,ev);G.mode=mode;G.type=t;G.ch=ch||(CHW&&mode==="camp"&&CAMP&&CAMP.wch!=null?{s:seed,sc:CAMP.wch,t:0,w:1}:null);if(G.ch&&G.ch.w&&chCur(G)>G.ch.sc)G.beat=true;show("game");applySkin();buildIngs(G);paintFront(G);$("lane")._k="";$("cupIn")._k=null;$("ttl").textContent=(mode==="daily"?"📅 "+T("daily"):mode==="camp"?TYPES[t][0]+" "+T("camp",{d:day,n:t===2?5:DAYS}):TYPES[t][0]+" "+L2([TYPES[t][1],TYPES[t][2]]));
- if(!LS.get("xc-tut",0)&&mode==="camp"&&day===1){toast(T("tut"),4200)}else if(ev!=="none")toast(EVENTS[ev][0]+" "+L2([EVENTS[ev][1],EVENTS[ev][2]]),2600);
+ if(!LS.get("xc-tut",0)&&mode==="camp"&&day===1){toast(T("tut"),4200)}/* sự kiện đã hiện ở dải #evB, không bật thêm toast che lưới nguyên liệu */
  last=performance.now();window.NP&&NP.start();filmStart();render()}
 function startCamp(){CHW=false;if(tLocked(TY))TY=0;const t=TY;if(t===1){startBlitz();return}CAMP=getCamp(t);if(CAMP.day>(t===2?5:DAYS))CAMP=freshCamp();putCamp(t,CAMP);beginDay("camp",t,CAMP.seed,CAMP,CAMP.day)}
 function startBlitz(){CHW=false;const c=BLITZ_SETUP();beginDay("blitz",1,newSeed(),c,1)}

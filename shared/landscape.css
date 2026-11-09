@@ -46,5 +46,11 @@ body.idle #play[data-scr="game"] .top>.ib:hover,body.idle #play[data-scr="game"]
 #play[data-scr="end"] .top>.ib:not(#bBk){opacity:.4}
 /* hộp thoại phủ cả bề ngang, nội dung vẫn nằm giữa */
 .ov{left:calc(50% - 50vw);right:auto;width:100vw;inset-block:0;padding-left:calc((100vw - 100cqw)/2 + 5cqw);padding-right:calc((100vw - 100cqw)/2 + 5cqw)}
-#hlpOv{left:calc(50% - 50vw);right:auto;width:100vw;inset-block:0}
+#play #hlpOv{left:calc(50% - 50vw);right:auto;width:100vw;inset-block:0;box-sizing:border-box}
+#play #hlpCard{width:min(100%,520px);max-height:90%}
+/* Đổi Đời 2048: bàn cờ to nhất có thể ở giữa; thang tiến hoá xếp dọc ở cột phải (khung dọc cũ bị ẩn bởi @container) */
+#play #game>.board{width:min(92cqw,calc(100cqh - 5cqw))}
+#play #game>#lad{display:flex;position:absolute;left:calc(100% + 2.5cqw);top:calc(50% + 14cqw);transform:translateY(-50%);flex-direction:column;flex-wrap:nowrap;align-items:center;gap:.2cqw;font-size:3.6cqw;width:calc(var(--cr) - 1cqw);z-index:3}
+/* toast sự kiện theo mùa (shared/season.js): dời xuống góc trái để không che khung chơi */
+.ns-toast{left:calc(var(--sl) + 58px)!important;transform:none!important;bottom:10px!important;max-width:calc(var(--side) - 70px)!important;border-radius:16px!important;white-space:normal!important;animation:none!important}
 }

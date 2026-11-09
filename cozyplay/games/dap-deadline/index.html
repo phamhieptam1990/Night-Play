@@ -204,7 +204,7 @@ h1 span{color:var(--accent)}
 @media (max-height:640px){.overlay p{display:none}.overlay .legend span{padding:2px 8px;font-size:12px}.overlay .big{font-size:17px;padding:9px 26px}.overlay h2{font-size:clamp(18px,5vw,24px)}.overlay .rank{font-size:clamp(16px,5vw,22px)}}
 @media (max-height:600px){body{gap:8px;padding-top:60px}.top h1{font-size:22px}.icon-btn{padding:4px 12px}.overlay .legend{display:none}.overlay{gap:6px}.stat small{font-size:10px}}
 /* Xoay ngang (màn hình thấp): bàn chơi to nhất, nằm GIỮA; chữ/bảng điểm dạt hai bên và tự mờ đi khi đang chơi, sáng lại khi có điểm hoặc sắp hết giờ */
-@media (max-height:520px) and (min-aspect-ratio:11/10){
+@media (max-height:760px) and (min-aspect-ratio:11/10){
   :root{--w:max(150px,min(100dvh - 16px,100vw - 260px))}
   body{display:grid;grid-template-columns:minmax(0,1fr) var(--w) minmax(0,1fr);grid-template-rows:1fr auto auto 1fr;column-gap:12px;row-gap:8px;padding:8px 12px;align-content:stretch;justify-items:stretch}
   .desk-wrap{grid-column:2;grid-row:1 / span 4;align-self:center;justify-self:center}
@@ -212,7 +212,7 @@ h1 span{color:var(--accent)}
   .shout{grid-column:1;grid-row:3;text-align:left;min-height:18px;font-size:13px}
   .stats{grid-column:3;grid-row:2;max-width:none;grid-template-columns:1fr;gap:5px}
   .timebar{grid-column:3;grid-row:3;max-width:none;align-self:start}
-  .top h1{font-size:17px;line-height:1.15}.icon-btn{padding:4px 10px;font-size:12px}.top .bl{display:none!important}
+  .top h1{font-size:17px;line-height:1.15}.icon-btn{padding:4px 10px;font-size:13px;min-width:40px;min-height:40px}.top .bl{display:none!important}
   .stat{flex-direction:row;align-items:baseline;justify-content:space-between;padding:3px 10px;border-radius:10px}.stat small{font-size:10px}.stat b{font-size:18px}
   .overlay p,.overlay .legend,.overlay .tip{display:none}.overlay h2{font-size:clamp(16px,3.6vh,22px)}.overlay .big{font-size:16px;padding:8px 22px}
   .top,.shout,.stats,.timebar{transition:opacity .45s ease}
