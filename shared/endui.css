@@ -1,0 +1,20 @@
+/* Màn kết thúc dùng chung (game viết tay): thẻ kết quả nổi bật theo màu nhấn giao diện, điểm lớn có hiệu ứng, nút khoe điểm lớn,
+   nút phụ là lưới ô có emoji + nhãn chữ. shared/endui.js gắn class .endui / .endui-card / .endui-share / .endui-row và nhãn vi/en. */
+.endui .endui-card{text-align:center;position:relative;overflow:hidden;border:0;padding:6cqw 3cqw 5cqw;border-radius:6cqw;color:#fff;background:radial-gradient(120% 90% at 50% -10%,color-mix(in srgb,var(--accent) 80%,#fff) 0,transparent 55%),linear-gradient(160deg,color-mix(in srgb,var(--accent) 62%,#14141f),color-mix(in srgb,var(--accent) 34%,#14141f));box-shadow:0 1.6cqw 0 rgba(0,0,0,.28),0 0 7cqw color-mix(in srgb,var(--accent) 38%,transparent)}
+.endui .endui-card::before{content:"";position:absolute;inset:0;background:repeating-conic-gradient(from 0deg at 50% 62%,rgba(255,255,255,.07) 0 6deg,transparent 6deg 18deg);pointer-events:none}
+.endui .endui-card>*{position:relative}
+.endui .endui-card .mut{color:rgba(255,255,255,.88);font:800 4.2cqw var(--body);letter-spacing:.02em}
+.endui .endui-card .big{color:#fff;font-size:21cqw;line-height:1.02;margin:1.2cqw 0 2.2cqw;text-shadow:0 .8cqw 0 rgba(0,0,0,.28),0 0 5cqw color-mix(in srgb,var(--accent) 70%,transparent);animation:enduiPop .6s cubic-bezier(.2,1.4,.4,1) both}
+.endui .endui-card .rk{display:inline-block;padding:1.4cqw 5cqw;border-radius:99cqw;background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.45);color:#fff;font:800 4.6cqw var(--body)}
+@keyframes enduiPop{0%{transform:scale(.5);opacity:0}100%{transform:scale(1);opacity:1}}
+.endui .hat{display:none}
+.endui .chips{gap:2cqw}.endui .chip{font-weight:800;padding:1.6cqw 3.4cqw}
+.endui>.row.endui-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(17cqw,1fr));gap:2.4cqw}
+.endui>.row.endui-row .endui-share{grid-column:1/-1;min-height:14cqw;font-size:5cqw;border-radius:99cqw;animation:enduiGlow 2.4s ease-in-out infinite}
+@keyframes enduiGlow{50%{box-shadow:0 1cqw 0 rgba(0,0,0,.26),0 0 5cqw color-mix(in srgb,var(--accent) 65%,transparent)}}
+.endui>.row.endui-row .btn.alt[data-l]{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8cqw;padding:2.2cqw 1cqw;border-radius:4.4cqw;font-size:6cqw;line-height:1;white-space:normal}
+.endui>.row.endui-row .btn.alt[data-l]::after{content:attr(data-l);font:800 max(10px,2.9cqw)/1.1 var(--body);letter-spacing:0;white-space:nowrap}
+@media (prefers-reduced-motion:reduce){.endui .endui-card .big,.endui>.row.endui-row .endui-share{animation:none}}
+.endui .endui-card .bt{font-size:15cqw}
+.endui .mini{width:30cqw;font-size:5.4cqw}
+.endui .btn.endui-share{font-size:max(4.6cqw,15px);box-shadow:0 1cqw 0 rgba(0,0,0,.26),0 0 5cqw color-mix(in srgb,var(--accent) 55%,transparent)}

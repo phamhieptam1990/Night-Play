@@ -82,7 +82,7 @@ canvas#cv{border-radius:3cqw;background:linear-gradient(var(--field),var(--field
 @keyframes endGlow{50%{box-shadow:0 1cqw 0 rgba(0,0,0,.26),0 0 5cqw color-mix(in srgb,var(--accent) 65%,transparent)}}
 @media (prefers-reduced-motion:reduce){#end>.row #bShare{animation:none}}
 #end>.row .btn.alt{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8cqw;padding:2.2cqw 1cqw;border-radius:4.4cqw;font-size:6cqw;line-height:1}
-#end>.row .btn.alt::after{content:attr(data-l);font:800 2.9cqw/1.1 var(--body);letter-spacing:.01em}
+#end>.row .btn.alt::after{content:attr(data-l);font:800 max(10px,2.9cqw)/1.1 var(--body);letter-spacing:0;white-space:nowrap}
 canvas#cv{touch-action:none;cursor:crosshair}#tbBar{display:flex;gap:2cqw;align-items:center}#tbBar .btn{min-height:44px}#tbGo{flex:1}
 #play[data-ty="1"] canvas#cv{border-color:#0ea5e9}#play[data-ty="2"] canvas#cv{filter:saturate(.8) brightness(.9)}#play[data-ty="3"] canvas#cv{border-color:#b45309;border-width:1.2cqw}.pfx{position:absolute;left:50%;top:46%;width:14cqw;height:14cqw;margin:-7cqw 0 0 -7cqw;border-radius:50%;border:1.2cqw solid var(--accent);box-shadow:0 0 5cqw var(--accent),inset 0 0 4cqw var(--accent);pointer-events:none;z-index:9;animation:pfx .85s ease-out forwards}.pfx.b{animation-delay:.14s;border-color:#fff}@keyframes pfx{from{transform:scale(.2);opacity:.95}to{transform:scale(4.6);opacity:0}}#play.pglow::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:8;box-shadow:inset 0 0 14cqw var(--accent);animation:pgl .7s ease-out forwards}@keyframes pgl{from{opacity:1}to{opacity:0}}@media (prefers-reduced-motion:reduce){.pfx,#play.pglow::after{display:none}}
 </style>
