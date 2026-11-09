@@ -18,9 +18,28 @@
       var t = L[b.id]; if (t && (b.textContent || "").trim().length <= 3) b.dataset.l = t[v ? 0 : 1];
     });
   }
+  /* màn kết thúc dạng lớp phủ (#ovEnd/#ovSum) trong khung thấp (màn ngang): nội dung cao hơn khung thì thu nhỏ đều các khối con (zoom) cho vừa trọn, không bị cắt đầu/đuôi */
+  function fit(el) {
+    if (!/^(ovEnd|ovSum)$/.test(el.id)) return;
+    var kids = Array.prototype.slice.call(el.children).filter(function (c) { return c.offsetParent !== null || getComputedStyle(c).position === "fixed"; });
+    kids.forEach(function (c) { c.style.zoom = ""; });
+    if (el.hidden || !kids.length) return;
+    for (var i = 0; i < 3; i++) {
+      var r = el.getBoundingClientRect(), cs = getComputedStyle(el), padV = (parseFloat(cs.paddingTop) || 0) + (parseFloat(cs.paddingBottom) || 0);
+      var vis = kids.filter(function (c) { return c.offsetParent !== null; }); if (!vis.length) return;
+      var top = Math.min.apply(null, vis.map(function (c) { return c.getBoundingClientRect().top; })), bot = Math.max.apply(null, vis.map(function (c) { return c.getBoundingClientRect().bottom; }));
+      var need = bot - top, avail = r.height - Math.max(8, padV);
+      if (need <= avail + 1) return;
+      var cur = parseFloat(kids[0].style.zoom) || 1, k = Math.max(.5, cur * (avail / need) * .985);
+      kids.forEach(function (c) { c.style.zoom = k.toFixed(3); });
+    }
+  }
+  var fitT = 0; function fitAll() { clearTimeout(fitT); fitT = setTimeout(function () { IDS.forEach(function (id) { var e = document.getElementById(id); if (e) fit(e); }); }, 60); }
+  addEventListener("resize", fitAll); addEventListener("orientationchange", function () { setTimeout(fitAll, 250); });
   IDS.forEach(function (id) {
     var el = document.getElementById(id); if (!el) return;
     dress(el); label(el);
-    try { new MutationObserver(function () { if (!el.hidden) label(el); }).observe(el, { attributes: true, attributeFilter: ["hidden"] }); } catch (e) {}
+    try { new MutationObserver(function () { if (!el.hidden) label(el); fitAll(); }).observe(el, { attributes: true, attributeFilter: ["hidden"], subtree: false }); } catch (e) {}
+    try { new MutationObserver(fitAll).observe(el, { childList: true, subtree: true, characterData: true }); } catch (e) {}
   });
 })();
