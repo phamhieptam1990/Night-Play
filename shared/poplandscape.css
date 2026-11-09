@@ -12,3 +12,6 @@
   .hud{grid-column:3;grid-row:2;flex-direction:column;align-items:flex-start;padding:10px 14px;border-radius:20px;background:var(--panel);box-shadow:var(--shadow);justify-self:start;min-width:110px}
   .play{grid-column:2;grid-row:1 / 4}
 }
+
+/* màn rất hẹp (mọi hướng): popfit.js thêm lớp .tight để nút thanh trên nhỏ lại, nhường chỗ cho tên game */
+.app.tight .top .ib{width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important;font-size:15px}
