@@ -68,6 +68,17 @@ const b64 = o => Buffer.from(JSON.stringify(o)).toString("base64").replace(/\+/g
     /* 5. thách đấu */
     const ch = await mk(380, 760, "#ch=" + b64({ s: 123, sc: 10, t: 0 }), "dark");
     note(await ch.evaluate(() => !document.getElementById("ovCh").hidden), id, "link thách đấu không mở hộp thách"); await ch.close();
+    /* 6. màn NGANG (844x390, 667x375, 1190x640): không tràn, home có 2 cột, khung chơi nằm giữa */
+    for (const [lw, lh] of [[844, 390], [667, 375], [1190, 640]]) {
+      const lp = await mk(lw, lh, "", "dark");
+      const home = await lp.evaluate(() => ({ cols: !!document.querySelector("#home>.hl") && !!document.querySelector("#home>.hr"), over: document.documentElement.scrollWidth > innerWidth + 1 || document.documentElement.scrollHeight > innerHeight + 1 }));
+      note(home.cols && !home.over, id, "màn chọn ngang " + lw + "x" + lh + (home.cols ? " bị tràn" : " thiếu 2 cột"));
+      await lp.evaluate(() => { const e = document.getElementById("bDaily") || document.getElementById("bPractice") || document.getElementById("bMake") || document.querySelector("#home .btn"); e && e.click(); }); await new Promise(r => setTimeout(r, 700));
+      const gm = await lp.evaluate(() => { const st = document.querySelector("#game>#cvw,#game>#bs,#game>#sv,#game>#board,#cvw,#qs,#ask"), r = st && st.getBoundingClientRect(), g = document.querySelector("#play>section:not([hidden])"); return { over: document.documentElement.scrollWidth > innerWidth + 1 || document.documentElement.scrollHeight > innerHeight + 1, cx: r && Math.round(r.left + r.width / 2), W: innerWidth, sc: g && g.id }; });
+      note(!gm.over, id, "màn chơi ngang " + lw + "x" + lh + " bị tràn");
+      note(gm.cx == null || Math.abs(gm.cx - gm.W / 2) <= gm.W * .08, id, "khung chơi ngang " + lw + "x" + lh + " lệch tâm (cx=" + gm.cx + ")");
+      await lp.close();
+    }
     note(!errs.length, id, "lỗi JS: " + errs.slice(0, 2).join(" | "));
     await pg.close();
   }
