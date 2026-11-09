@@ -23,3 +23,7 @@ Kiến trúc: `dist/` (file tĩnh, băng thông không giới hạn) + Worker `w
 - Cổng mã truy cập (`netlify/edge-functions/gate.mjs`) KHÔNG chạy trên Cloudflare; dùng Cloudflare Access nếu cần chặn tạm.
 - Chạy thử cục bộ: tạo `.dev.vars` (đã gitignore) từ `server/.env.development`, rồi `npx wrangler dev --local` (cần Node ≥ 20).
 - Kích thước Worker ~1,1MB (gzip ~240KB), dưới giới hạn gói miễn phí.
+
+## Trang admin và trang game
+- **Cách A (mặc định, đơn giản):** một Worker `night-play`, build `SITE_TARGET=all` (không đặt biến) → trang game ở `/`, admin ở `/admin/` (cần `ADMIN_KEY`; `dist/_headers` đã `noindex`+`no-store`). Có thể thêm Cloudflare Access cho `/admin/*`.
+- **Cách B (tách tên miền):** project Worker thứ hai trỏ cùng repo, Build variable `SITE_TARGET=admin`, Deploy command `npx wrangler deploy -c wrangler.admin.jsonc` (Worker `night-play-admin`); project chính đặt `SITE_TARGET=hub`. Nhập lại các biến môi trường cho project admin (dùng chung database).
