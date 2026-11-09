@@ -24,6 +24,10 @@
     var fs = parseFloat(getComputedStyle(HT).fontSize) || 24, guard = 0;
     while (HT.scrollWidth > HT.clientWidth + 1 && fs > 12 && guard++ < 60) { fs -= 0.5; HT.style.fontSize = fs + "px"; }
   }
+  /* --ar: tỉ lệ cao/rộng của canvas, để CSS biết khung chơi vuông hay dài (màn dọc: gom cụm điểm + khung + nút ra giữa) */
+  (function () { var cv = document.getElementById("cv"); if (!cv) return; var last = "";
+    function ar() { if (!cv.width || !cv.height) return; var v = (cv.height / cv.width).toFixed(3); if (v !== last) { last = v; pl.style.setProperty("--ar", v); } }
+    try { new MutationObserver(ar).observe(cv, { attributes: true, attributeFilter: ["width", "height"] }); } catch (e) {} ar(); })();
   wrapHome();
   scr();
   function isPro() { var P = window.PF; if (!P) return false; var k = P.skinSel; if (Array.isArray(k)) k = k[0]; return !!k && k !== "basic" && !!(P.skins && (P.skins[k] || (P.skins[0] && P.skins[0][k]))); }
