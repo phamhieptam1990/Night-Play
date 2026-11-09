@@ -109,7 +109,7 @@
     ".ns-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin:12px 0}.ns-st{border-radius:14px;padding:8px 2px 6px;border:1.5px solid rgba(128,128,128,.4);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;font-weight:700;line-height:1.15;min-height:74px;justify-content:center}" +
     ".ns-st .e{font-size:26px;line-height:1}.ns-st.lk{opacity:.5;filter:grayscale(1)}.ns-st.lk .e{filter:blur(1.5px)}.ns-st.gd{border-color:#ffc83a;background:linear-gradient(180deg,rgba(255,200,58,.25),transparent)}" +
     ".ns-row{display:flex;gap:8px;margin-top:6px}.ns-btn{flex:1;min-height:44px;border-radius:14px;border:1.5px solid rgba(128,128,128,.5);background:transparent;color:inherit;font:800 14px 'Be Vietnam Pro',system-ui,sans-serif;cursor:pointer}.ns-btn.pri{background:hsl(var(--ns-h),80%,50%);border-color:transparent;color:#fff}" +
-    ".ns-toast{position:fixed;left:50%;bottom:calc(64px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;width:max-content;max-width:88vw;box-sizing:border-box;padding:9px 16px;border-radius:99px;background:#1d1630;color:#fff;font:800 13px 'Be Vietnam Pro',system-ui,sans-serif;border:1.5px solid hsl(var(--ns-h),70%,60%);box-shadow:0 6px 22px rgba(0,0,0,.4);text-align:center;animation:nsT .3s ease-out}@keyframes nsT{from{opacity:0;transform:translate(-50%,10px)}}" +
+    ".ns-toast{position:fixed;left:50%;top:calc(var(--navH,52px) + 8px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:60;pointer-events:none;width:max-content;max-width:88vw;box-sizing:border-box;padding:9px 16px;border-radius:99px;background:#1d1630;color:#fff;font:800 13px 'Be Vietnam Pro',system-ui,sans-serif;border:1.5px solid hsl(var(--ns-h),70%,60%);box-shadow:0 6px 22px rgba(0,0,0,.4);text-align:center;animation:nsT .3s ease-out}@keyframes nsT{from{opacity:0;transform:translate(-50%,10px)}}" +
     "@media (prefers-reduced-motion:reduce){.ns-fl{display:none}}";
   document.head.appendChild(css);
 
@@ -191,7 +191,8 @@
   function init() {
     build(); hook();
     window.addEventListener("pageshow", function () { var p = document.getElementById("nsPill"); if (p) p.classList.remove("off"); });
-    if (S.seen !== C.key) { S.seen = C.key; save(); setTimeout(function () { toast(C.ev.e + " " + (isEn() ? "New event: " : "Sự kiện mới: ") + nameOf(C.ev) + (isEn() ? " — tap the icon!" : " — chạm biểu tượng để xem!")); }, 1200); }
+    if (S.seen !== C.key && /\/games\//.test(location.pathname)) { /* trong game: không bật thông báo che nút; để trang cổng báo */ }
+    else if (S.seen !== C.key) { S.seen = C.key; save(); setTimeout(function () { toast(C.ev.e + " " + (isEn() ? "New event: " : "Sự kiện mới: ") + nameOf(C.ev) + (isEn() ? " — tap the icon!" : " — chạm biểu tượng để xem!")); }, 1200); }
     if (q.get("ev") && !document.getElementById("nsOv") && location.pathname.replace(/index\.html$/, "") === "/") setTimeout(openSheet, 900);
   }
   window.NPSeason = { get: function () { return { id: C.id, key: C.key, from: C.from, to: C.to, today: today, n: W.n, tot: S.tot, stickers: stickers().map(function (o) { return o.got; }) }; }, bump: bump, open: openSheet, current: current, vnToday: vnToday };
