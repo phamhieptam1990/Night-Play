@@ -103,6 +103,7 @@ Dự án có 3 nhóm: **Cozy Play** (`cozyplay/`: 9 game sinh tự động từ 
 - Báo trang cổng: `window.__npDock = true` + `#stage.docked` (popplay/index.html: ẩn ← và nút nổi 📷/📤 của cổng, iframe chiếm toàn khung). Nút khoá `#klock` của cổng nằm ngay bên phải ← (x≈62px).
 - HOOK cho khoá màn (`shared/kidlock.js`): kidlock đặt class `np-locked` lên `<html>` của game → popmenu.js ẩn `#npPmBk` (←) và ô 📷/📤 trong bảng (CSS `html.np-locked #npPmBk,#npPmCam,#npPmShr`). Nếu thêm nút thoát mới vào thanh trên Pop, nhớ ẩn nó theo class này.
 - `#askBtn` (🔊 đọc câu hỏi, trong thẻ `.ask`) KHÔNG gom: nó thuộc ngữ cảnh câu hỏi chứ không phải thanh trên.
+- iPad/máy tính bảng cảm ứng DỌC (pointer:coarse, ≤900px rộng; 768x1024, 834x1194): cũng gom, nhưng ← và 🔊 ở NGOÀI menu (🔊 cố định cạnh ⋯), ô bảng 88px; iPad ngang và máy tính chuột giữ nguyên. Kiểm tra tự động: `node scripts/cozygame/check-popmenu.js [--quick]` (nối vào check-pop.js; `check-pop.js --full` quét đủ).
 - Kiểm tra: qua trang cổng `http://localhost:8811/popplay/index.html#<id>` ở 390x844, 360x640, 320x568, 844x390 (VI + EN), lúc đóng và mở menu: chỉ 1 ←, 1 ⋯, không nút nổi của cổng, "?" trong bảng mở được thẻ, tên không cắt "…".
 
 ## 6. Dữ liệu, quyền riêng tư

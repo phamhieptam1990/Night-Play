@@ -8,11 +8,14 @@
    - HOOK KHOÁ MÀN (shared/kidlock.js): khi khoá, kidlock đặt class "np-locked" lên <html> của game → ẩn #npPmBk (nút ←) và ô 📷/📤 trong bảng (CSS bên dưới).
      Nút khoá (#klock) của cổng nằm ngay bên phải ← (x≈62px); chỉ báo khoá (#klind) chiếm chỗ ← khi đã khoá.
    - Màu bảng lấy theo MÀU THẬT của game (đọc computed style mỗi lần mở: sáng/tối, Night Pass), không nền trắng chữ đen.
+   - iPad/máy tính bảng cảm ứng DỌC (pointer:coarse, ≤900px rộng): như trên nhưng 🔊 và ← ở NGOÀI menu (🔊 cố định cạnh ⋯), ô bảng 88px. iPad ngang / máy tính chuột: không gom.
    Nhúng sau pophelp.js/popfit.js: <script src="../../../shared/popmenu.js" defer></script> */
 (function () {
   "use strict";
   var top = document.querySelector(".top"); if (!top) return;
-  var mq = matchMedia("(max-width:520px) and (orientation:portrait)");
+  var mqP = matchMedia("(max-width:520px) and (orientation:portrait)"), mqT = matchMedia("(pointer:coarse) and (orientation:portrait) and (max-width:900px)"), cur = "";
+  /* "p" = điện thoại dọc (gom cả 🔊); "t" = máy tính bảng cảm ứng dọc (iPad 768/834 rộng): giữ ← và 🔊 ngoài menu, gom phần còn lại; máy tính chuột / màn ngang: "" (không gom) */
+  var mode = function () { return mqP.matches ? "p" : mqT.matches ? "t" : ""; };
   var de = document.documentElement;
   var par = null; try { par = window.parent !== window ? window.parent : null; if (par) par.document.getElementById("stage"); } catch (e) { par = null; }
   if (par && !par.document.getElementById("stage")) par = null;
@@ -34,7 +37,6 @@
   var st = document.createElement("style");
   st.textContent =
     "#npPmBk,#npPmFab,#npPmFan{display:none}" +
-    "@media (max-width:520px) and (orientation:portrait){" +
     "html.np-pm body{padding-top:calc(60px + env(safe-area-inset-top,0px))!important;box-sizing:border-box}html.np-pm .top h1{max-width:100%}html.np-pm #npPmBk{display:grid;position:fixed;z-index:45;left:12px;top:calc(env(safe-area-inset-top,0px) + 8px)}html.np-pm.np-hidebk #npPmBk{display:none}html.np-locked #npPmBk{display:none!important}" +
     "html.np-pm #homeBtn{display:none!important}" +
     "#npPmBk,#npPmFab{place-items:center;width:48px;height:48px;min-width:48px;min-height:48px;padding:0;border-radius:50%;flex:none;cursor:pointer;box-sizing:border-box}" +
@@ -53,7 +55,8 @@
     "#npPmFan .it svg{width:22px!important;height:22px!important;flex:none}" +
     "#npPmFan .it::after{content:attr(data-l);font:700 10.5px/1.05 system-ui,sans-serif;max-width:64px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.88}" +
     "#npPmFan .it[hidden]{display:none!important}html.np-locked #npPmCam,html.np-locked #npPmShr{display:none!important}" +
-    "}" +
+    "html.np-tab #soundBtn{position:fixed!important;z-index:45;right:68px;top:calc(env(safe-area-inset-top,0px) + 8px);width:48px!important;height:48px!important;min-width:48px!important;min-height:48px!important;margin:0!important}" +
+    "html.np-tab #npPmFan .pn{grid-template-columns:repeat(3,88px);gap:10px;padding:12px;top:calc(env(safe-area-inset-top,0px) + 66px)}html.np-tab #npPmFan .it{width:88px!important;height:84px!important}html.np-tab #npPmFan .it svg{width:28px!important;height:28px!important}html.np-tab #npPmFan .it::after{font-size:13px;max-width:84px}" +
     "@media (prefers-reduced-motion:reduce){#npPmFab svg,#npPmFan .bk,#npPmFan .pn{transition:none!important}#npPmFab.nudge{animation:none}}";
   document.head.appendChild(st);
 
@@ -107,11 +110,12 @@
 
   function flag(v) { try { window.__npDock = v; if (pd) { var s = pd.getElementById("stage"); if (s) s.classList.toggle("docked", v); } } catch (e) {} }
   function adopt() {
-    if (!mq.matches) return;
+    var m = mode(); if (!m) return; if (moved && cur !== m) restore();
     build();
-    if (!moved) { moved = true; order = Array.prototype.slice.call(top.children); de.classList.add("np-pm"); flag(true); if (!$("phBtn") || $("phBtn").classList.contains("ph-new")) fab.classList.add("nudge"); }
+    if (!moved) { moved = true; cur = m; de.classList.toggle("np-tab", m === "t"); order = Array.prototype.slice.call(top.children); de.classList.add("np-pm"); flag(true); if (!$("phBtn") || $("phBtn").classList.contains("ph-new")) fab.classList.add("nudge"); }
     if (cam && !cam.parentNode) { cam.className = shr.className = "ib"; }
     ROLES.forEach(function (r) {
+      if (m === "t" && r[0] === "snd") return;
       var e = $(r[1]) || (r[1] === "npPmCam" ? cam : r[1] === "npPmShr" ? shr : null);
       if (!e || e.parentNode === panel) return;
       if (e.parentNode !== top && e !== cam && e !== shr) return;
@@ -122,20 +126,20 @@
   }
   function restore() {
     if (!moved) return;
-    setOpen(false); de.classList.remove("np-pm"); flag(false);
+    setOpen(false); de.classList.remove("np-pm", "np-tab"); flag(false);
     saved.forEach(function (e) { e.classList.remove("it"); e.removeAttribute("data-l"); });
     order.forEach(function (e) { if (saved.indexOf(e) >= 0) top.insertBefore(e, fan); });
     saved.forEach(function (e) { if (e.parentNode === panel) top.insertBefore(e, fan); });
     saved = []; moved = false;
     [cam, shr].forEach(function (e) { if (e && e.parentNode) e.parentNode.removeChild(e); });
   }
-  function sync() { if (mq.matches) adopt(); else restore(); }
+  function sync() { if (mode()) adopt(); else restore(); }
 
-  try { new MutationObserver(function () { if (mq.matches) adopt(); }).observe(top, { childList: true }); } catch (e) {}
+  try { new MutationObserver(function () { if (mode()) adopt(); }).observe(top, { childList: true }); } catch (e) {}
   try { new MutationObserver(function () { if (fab) labels(); }).observe(top, { attributes: true, subtree: true, attributeFilter: ["hidden", "style", "lang"] }); } catch (e) {}
   try { new MutationObserver(function () { if (fab) labels(); }).observe(de, { attributes: true, attributeFilter: ["lang"] }); } catch (e) {}
   try { new MutationObserver(function () { if (moved) themeSync(); }).observe(de, { attributes: true, attributeFilter: ["data-theme", "class", "style"] }); } catch (e) {}
-  try { mq.addEventListener("change", sync); } catch (e) { try { mq.addListener(sync); } catch (e2) {} }
+  [mqP, mqT].forEach(function (q) { try { q.addEventListener("change", sync); } catch (e) { try { q.addListener(sync); } catch (e2) {} } });
   addEventListener("pagehide", function () { flag(false); });
   function init() { sync(); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();

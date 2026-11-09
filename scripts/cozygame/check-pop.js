@@ -29,5 +29,9 @@ const note = (ok, msg) => { if (!ok) { fails.push(msg); console.log("  ✗ " + m
       const tag = pgn + " " + lang + " " + w + "x" + h; note(!r.hs && !r.vs, tag + ": tràn màn"); note(!r.hero, tag + ": slogan bị cắt"); note(!r.nav, tag + ": thanh trên tràn"); note(r.tile >= 64, tag + ": ô game nhỏ hơn 64px (" + r.tile + ")");
       note(!pg._er.length, tag + ": lỗi JS " + pg._er.slice(0, 1)); await pg.close();
     } }
-  await br.close(); srv.kill(); console.log("\n" + (fails.length ? "✗ " + fails.length + " lỗi Pop/cổng" : "✓ Pop Play + trang cổng đạt")); process.exit(fails.length ? 1 : 0);
+  await br.close(); srv.kill();
+  /* menu ⋯ qua trang cổng (shared/popmenu.js): bản nhanh (3 game); thêm --full để quét đủ 12 game × 7 cỡ (rất lâu) */
+  const pm = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-popmenu.js")].concat(process.argv.includes("--full") ? [] : ["--quick"]), { stdio: "inherit", env: process.env });
+  if (pm.status) fails.push("check-popmenu.js không đạt");
+  console.log("\n" + (fails.length ? "✗ " + fails.length + " lỗi Pop/cổng" : "✓ Pop Play + trang cổng đạt")); process.exit(fails.length ? 1 : 0);
 })();
