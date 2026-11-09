@@ -10,6 +10,14 @@ Nguyên tắc chung: **không báo "xong" khi chưa tự mở trình duyệt th�
 4. Chụp ảnh thật (puppeteer-core + Chrome, `python3 -m http.server`) ở: 360×640, 380×760, ngang 844×390 và 1200×640; bản free + MỌI giao diện Night Pass; màn home, màn chơi, màn kết thúc, popup. Tự nhìn ảnh.
 5. Commit nhỏ, tiếng Việt. Không push khi chưa được yêu cầu. Không commit `code.md`.
 
+## 0b. MỘT lỗi/cải tiến giao diện = sửa cho TẤT CẢ các nhóm game (lỗi hay lặp lại)
+Dự án có 3 nhóm: **Cozy Play** (`cozyplay/`: 9 game sinh tự động từ `scripts/cozygame/` + game viết tay), **Pop Play** (`popplay/`: game trẻ em, 12 game) và **trang cổng** (`cozyplay/index.html`, `popplay/index.html`, `index.html`). Từng có lần chỉ sửa Cozy Play rồi người dùng phải báo lại cho Pop Play. Quy tắc:
+- Khi sửa MỘT lỗi hoặc thêm MỘT tính năng giao diện (layout màn ngang/dọc, tên game bị cắt "…", nút ←, nút "?", màn kết thúc, popup chọn loại chơi/giao diện, lưới game, thanh trên, toast, Night Pass…), **tự hỏi: Pop Play và trang cổng kia có lỗi giống vậy không?** Chạy `grep` mẫu code cũ trong `popplay/` và `cozyplay/` (kể cả game viết tay) để tìm mọi chỗ.
+- Ưu tiên đặt mã vào file dùng chung (`shared/*.css|js`, `scripts/cozygame/tpl.html`) và nhúng vào CẢ HAI nhóm; chỉ copy tay khi bắt buộc, và khi copy phải ghi rõ danh sách file đã copy trong commit.
+- Mọi kiểm tra tự động (`check.js`, `check-landscape.js`) và mọi lần chụp ảnh phải gồm ít nhất 2 game Pop Play + 2 game Cozy Play + 2 trang cổng.
+- Báo cáo "xong" phải liệt kê rõ đã áp dụng cho nhóm nào; nhóm nào chưa thì nói thẳng là chưa.
+- Đối chiếu các tính năng đã làm cho Cozy mà Pop Play có thể chưa có: nút ← (`#bBk`), nút "?" (`shared/help.js`), tên game không bị cắt "…" và nằm sát nội dung (dọc), màn ngang (`shared/landscape.css` / `poplandscape.css`), màn kết thúc mới (`shared/endui.css|js`), lưới trang cổng (xoay màn hình không lệch, ô ≥72px, mỗi trang vừa khít), menu ⋯ gom nút ở màn ngang thấp, popup `shared/typeui.css`, thẻ `viewport`.
+
 ## 1. Bố cục và hiển thị
 - **Một màn hình, không cuộn** ở mọi kích thước (dọc 320–520 rộng, ngang, PC). `#game` không được `scrollHeight > clientHeight`.
 - **Chữ luôn nằm trong thẻ có nền** (panel + viền + bo vừa phải). Không chữ đen trơn trên nền; không thông báo (toast) nền trắng/chữ đen; toast theo màu giao diện hiện tại; không bo tròn quá mức.
