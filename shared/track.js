@@ -9,7 +9,7 @@ window.Track = (() => {
   let cur = null, timer = 0;
   const rid = () => Array.from(crypto.getRandomValues(new Uint8Array(12)), b => (b % 36).toString(36)).join("");
   function send(o) {
-    if (off) return;
+    if (off || navigator.onLine === false) return;   // mất mạng: không gửi (khỏi lỗi mạng ồn trong console, game vẫn chạy bình thường)
     try {
       const body = JSON.stringify(o);
       if (navigator.sendBeacon && navigator.sendBeacon(URL, new Blob([body], { type: "text/plain" }))) return;
