@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Kiểm tra Night Pass · Night Pass check</title>
+<style>
+:root{--bg:#F6F4F1;--panel:#fff;--ink:#1c1b22;--muted:#6b6a76;--line:#d9d5ee;--accent:#7C5CFF;--on:#fff;--ok:#16a34a;--bad:#dc2626;--warn:#d97706}
+@media (prefers-color-scheme:dark){:root{--bg:#12141F;--panel:#1c2030;--ink:#f1f2ff;--muted:#a3a6c0;--line:#343a55;--accent:#a58bff;--on:#12141f;--ok:#4ade80;--bad:#f87171;--warn:#fbbf24}}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:16px;display:flex;justify-content:center}
+main{width:min(560px,100%)}
+h1{font-size:22px;margin:8px 0 4px}p.sub{margin:0 0 14px;color:var(--muted);font-size:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:6px 16px;margin:12px 0}
+.row{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.ic{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#fff;font-size:15px;background:var(--muted)}
+.ic.ok{background:var(--ok)}.ic.bad{background:var(--bad)}.ic.warn{background:var(--warn)}
+.t{font-weight:700}.d{color:var(--muted);font-size:14px;margin-top:2px;word-break:break-word}
+.verdict{border-radius:18px;padding:14px 16px;margin:12px 0;font-weight:700;border:2px solid var(--line);background:var(--panel)}
+.verdict.ok{border-color:var(--ok)}.verdict.bad{border-color:var(--bad)}.verdict.warn{border-color:var(--warn)}
+.verdict small{display:block;font-weight:400;color:var(--muted);margin-top:4px;font-size:14px}
+button,a.btn{display:inline-block;width:100%;padding:14px;border:0;border-radius:14px;background:var(--accent);color:var(--on);font:inherit;font-weight:800;text-align:center;text-decoration:none;cursor:pointer;margin-top:8px}
+button.alt,a.btn.alt{background:transparent;color:var(--ink);border:2px solid var(--line)}
+button:disabled{opacity:.6}
+.lang{float:right;font-size:13px}.lang button{width:auto;display:inline-block;padding:4px 10px;margin:0 0 0 6px;font-size:13px;border-radius:99px}
+</style>
+</head>
+<body>
+<main>
+  <div class="lang"><button class="alt" id="bVi" type="button">VI</button><button class="alt" id="bEn" type="button">EN</button></div>
+  <h1 id="h"></h1>
+  <p class="sub" id="sub"></p>
+  <div class="verdict" id="verdict" hidden></div>
+  <div class="card" id="list"></div>
+  <button id="bFix" type="button"></button>
+  <a class="btn alt" id="bBack" href="/"></a>
+</main>
+<script>
+"use strict";
+/* Trang chẩn đoán Night Pass cho người chơi (không cần mở công cụ nhà phát triển). Không hiển thị token; chỉ đọc localStorage của chính trình duyệt này và gọi API của chính trang web này. */
+const T = {
+  vi: { h: "Kiểm tra Night Pass", sub: "Trang này kiểm tra vì sao game vẫn còn ổ khoá 🔒 dù bạn đã mua gói.", run: "Đang kiểm tra…", fix: "Làm mới bộ nhớ đệm & tải lại", back: "← Về trang chủ", fixing: "Đang làm mới…",
+    origin: "Địa chỉ trang web", originD: h => "Bạn đang ở " + h + ". Token Night Pass chỉ có trên đúng địa chỉ bạn đã mua.",
+    tok: "Trình duyệt có token Night Pass", tokNo: "Không có token. Có thể bạn mua ở địa chỉ/thiết bị khác, hoặc đã xoá dữ liệu trang. Hãy mở lại trang đơn hàng của lần mua để nhận token.",
+    tokYes: (e, left) => "Hết hạn: " + e + (left > 0 ? " (còn khoảng " + left + " giờ)" : " — ĐÃ HẾT HẠN"),
+    srv: "Máy chủ công nhận token", srv200: "Token hợp lệ, gói đang hoạt động.", srvOff: "Máy chủ báo gói không hoạt động (đã hết hạn hoặc không tìm thấy).", srv401: "Máy chủ KHÔNG công nhận token (401).", srvErr: c => "Máy chủ trả lỗi " + c + ".", srvNet: "Không gọi được máy chủ (mất mạng?).",
+    pro: "Mở khoá giao diện Night Pass", pro200: (g, k) => g + ": nhận được mã Night Pass (" + k + " KB).", pro401: g => g + ": máy chủ từ chối (cần gói hợp lệ).", proErr: (g, c) => g + ": lỗi " + c + ".", proNet: g => g + ": không tải được.",
+    sw: "Bộ nhớ đệm / Service Worker", swD: (n, c) => (n ? "Đang có " + n + " Service Worker" : "Chưa có Service Worker") + (c.length ? ", bộ nhớ đệm: " + c.join(", ") : ", bộ nhớ đệm trống") + ".",
+    cache: "Mã Night Pass lưu sẵn", cacheD: n => n ? n + " game đã lưu sẵn mã Night Pass (xoá được bằng nút bên dưới)." : "Chưa có mã Night Pass lưu sẵn.",
+    vOk: "Gói của bạn hợp lệ và máy chủ phục vụ bình thường.", vOkS: "Nếu game vẫn khoá: bấm “Làm mới bộ nhớ đệm & tải lại” rồi mở lại game (game chỉ đọc gói một lần lúc mở).",
+    vNoTok: "Trình duyệt này chưa có token Night Pass.", vNoTokS: "Hãy mở lại trang đơn hàng của lần mua (đúng trình duyệt và địa chỉ web đã tạo đơn) để nhận token.",
+    vExp: "Gói đã hết hạn.", vExpS: "Mua gói mới tại trang Night Pass.",
+    vBad: "Máy chủ không công nhận token của bạn.", vBadS: "Hãy gửi cho người hỗ trợ màn hình này (kèm mã đơn, không gửi token). Có thể cần cấp lại gói.",
+    vNet: "Không kết nối được máy chủ.", vNetS: "Kiểm tra mạng rồi thử lại." },
+  en: { h: "Night Pass check", sub: "This page checks why games still show the lock 🔒 after you bought a plan.", run: "Checking…", fix: "Refresh cache & reload", back: "← Back to home", fixing: "Refreshing…",
+    origin: "Website address", originD: h => "You are on " + h + ". The Night Pass token only exists on the exact address where you bought it.",
+    tok: "Browser has a Night Pass token", tokNo: "No token. You may have bought on another address/device, or cleared site data. Reopen the order page of your purchase to receive the token.",
+    tokYes: (e, left) => "Expires: " + e + (left > 0 ? " (about " + left + " h left)" : " — EXPIRED"),
+    srv: "Server accepts the token", srv200: "Token is valid; the plan is active.", srvOff: "Server says the plan is not active (expired or not found).", srv401: "Server does NOT accept the token (401).", srvErr: c => "Server returned error " + c + ".", srvNet: "Could not reach the server (offline?).",
+    pro: "Night Pass skins unlock", pro200: (g, k) => g + ": received the Night Pass code (" + k + " KB).", pro401: g => g + ": server refused (valid plan needed).", proErr: (g, c) => g + ": error " + c + ".", proNet: g => g + ": could not load.",
+    sw: "Cache / Service Worker", swD: (n, c) => (n ? n + " Service Worker(s)" : "No Service Worker") + (c.length ? ", caches: " + c.join(", ") : ", no caches") + ".",
+    cache: "Saved Night Pass code", cacheD: n => n ? n + " game(s) have saved Night Pass code (cleared by the button below)." : "No saved Night Pass code.",
+    vOk: "Your plan is valid and the server is fine.", vOkS: "If games are still locked: tap “Refresh cache & reload”, then reopen the game (games read the plan once, when they open).",
+    vNoTok: "This browser has no Night Pass token yet.", vNoTokS: "Reopen the order page of your purchase (same browser and address where you made the order) to receive it.",
+    vExp: "The plan has expired.", vExpS: "Buy a new plan on the Night Pass page.",
+    vBad: "The server does not accept your token.", vBadS: "Send this screen to support (with your order code, never the token). The plan may need to be re-issued.",
+    vNet: "Cannot reach the server.", vNetS: "Check your connection and try again." }
+};
+const $ = id => document.getElementById(id);
+let L = (() => { try { const s = localStorage.getItem("lang"); if (s === "vi" || s === "en") return s; } catch (e) {} return /^vi/i.test(navigator.language || "") ? "vi" : "en"; })();
+const t = () => T[L];
+const row = (cls, title, desc) => '<div class="row"><div class="ic ' + cls + '">' + (cls === "ok" ? "✓" : cls === "bad" ? "✕" : cls === "warn" ? "!" : "i") + '</div><div><div class="t">' + title + '</div><div class="d">' + desc + '</div></div></div>';
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const GAMES = ["xay-cau-tre", "pop-fly"];
+
+async function run() {
+  const x = t(); document.documentElement.lang = L;
+  $("h").textContent = x.h; $("sub").textContent = x.sub; $("bFix").textContent = x.fix; $("bBack").textContent = x.back;
+  $("list").innerHTML = row("", x.run, ""); $("verdict").hidden = true;
+  let out = "", verdict = null, vcls = "warn";
+  out += row("", x.origin, esc(x.originD(location.host)));
+  /* 1) token trong trình duyệt */
+  let p = null; try { p = JSON.parse(localStorage.getItem("pass")); } catch (e) {}
+  const tk = p && p.token, exp = p && p.exp ? new Date(p.exp) : null, left = exp ? Math.round((exp - Date.now()) / 36e5) : 0;
+  if (!tk) { out += row("bad", x.tok, esc(x.tokNo)); verdict = [x.vNoTok, x.vNoTokS]; vcls = "bad"; }
+  else out += row(left > 0 ? "ok" : "bad", x.tok, esc(x.tokYes(exp ? exp.toLocaleString(L === "vi" ? "vi-VN" : "en-GB") : "?", left)));
+  /* 2) máy chủ công nhận token */
+  let srvOk = false;
+  if (tk) {
+    try {
+      const r = await fetch("/api/pass", { headers: { Authorization: "Bearer " + tk }, cache: "no-store" });
+      if (r.ok) { const s = await r.json(); srvOk = !!s.active; out += row(srvOk ? "ok" : "bad", x.srv, esc(srvOk ? x.srv200 : x.srvOff)); if (!srvOk) { verdict = [x.vExp, x.vExpS]; vcls = "bad"; } }
+      else if (r.status === 401) { out += row("bad", x.srv, esc(x.srv401)); verdict = [x.vBad, x.vBadS]; vcls = "bad"; }
+      else { out += row("bad", x.srv, esc(x.srvErr(r.status))); verdict = [x.vBad, x.vBadS]; vcls = "bad"; }
+    } catch (e) { out += row("bad", x.srv, esc(x.srvNet)); verdict = [x.vNet, x.vNetS]; vcls = "warn"; }
+    /* 3) mã Night Pass của game */
+    if (srvOk) {
+      let proOk = true;
+      for (const g of GAMES) {
+        try {
+          const r = await fetch("/api/pro/" + g + ".js", { headers: { Authorization: "Bearer " + tk }, cache: "no-store" });
+          if (r.ok) { const b = await r.text(); out += row("ok", x.pro, esc(x.pro200(g, Math.round(b.length / 1024)))); }
+          else { proOk = false; out += row("bad", x.pro, esc(r.status === 401 ? x.pro401(g) : x.proErr(g, r.status))); }
+        } catch (e) { proOk = false; out += row("bad", x.pro, esc(x.proNet(g))); }
+      }
+      if (proOk) { verdict = [x.vOk, x.vOkS]; vcls = "ok"; } else { verdict = [x.vBad, x.vBadS]; vcls = "bad"; }
+    }
+  }
+  /* 4) service worker + bộ nhớ đệm + mã lưu sẵn */
+  let nsw = 0, names = []; try { nsw = (await navigator.serviceWorker.getRegistrations()).length; names = await caches.keys(); } catch (e) {}
+  out += row("", x.sw, esc(x.swD(nsw, names)));
+  let nc = 0; try { for (let i = 0; i < localStorage.length; i++) if (/-pro-src$/.test(localStorage.key(i))) nc++; } catch (e) {}
+  out += row("", x.cache, esc(x.cacheD(nc)));
+  $("list").innerHTML = out;
+  const v = $("verdict"); v.className = "verdict " + vcls; v.innerHTML = esc(verdict[0]) + "<small>" + esc(verdict[1]) + "</small>"; v.hidden = false;
+}
+
+/* Làm mới: xoá Service Worker, bộ nhớ đệm và mã Night Pass lưu sẵn (KHÔNG xoá token Night Pass), rồi tải lại. */
+async function fix() {
+  const b = $("bFix"); b.disabled = true; b.textContent = t().fixing;
+  try { for (const r of await navigator.serviceWorker.getRegistrations()) await r.unregister(); } catch (e) {}
+  try { for (const k of await caches.keys()) await caches.delete(k); } catch (e) {}
+  try { const del = []; for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (/-pro-src$/.test(k)) del.push(k); } del.forEach(k => localStorage.removeItem(k)); } catch (e) {}
+  location.reload();
+}
+$("bFix").onclick = fix;
+$("bVi").onclick = () => { L = "vi"; try { localStorage.setItem("lang", "vi"); } catch (e) {} run(); };
+$("bEn").onclick = () => { L = "en"; try { localStorage.setItem("lang", "en"); } catch (e) {} run(); };
+run();
+</script>
+</body>
+</html>
