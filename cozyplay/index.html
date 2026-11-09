@@ -907,5 +907,6 @@ addEventListener("keydown", e => {
 function sync(){if(!st.classList.contains("on")){st.style.backgroundColor="";st.classList.remove("docked");return}var f=st.querySelector("iframe");if(!f)return;try{st.classList.toggle("docked",!!(f.contentWindow&&f.contentWindow.__npDock));var d=f.contentDocument,c=getComputedStyle(d.body).backgroundColor;if(!c||c==="rgba(0, 0, 0, 0)")c=getComputedStyle(d.documentElement).backgroundColor;if(c&&c!=="rgba(0, 0, 0, 0)"){st.style.backgroundColor=c;var m=c.match(/\d+(\.\d+)?/g)||[];var L=(.299*m[0]+.587*m[1]+.114*m[2])/255;st.dataset.lum=L>.55?"l":"d"}}catch(e){}}
 setInterval(sync,600);document.addEventListener("load",sync,true);})();
 </script>
+<script src="../shared/passwatch.js" defer></script>
 </body>
 </html>
