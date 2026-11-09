@@ -189,8 +189,8 @@ h1 span{color:var(--accent)}
 .sdesc{margin:6px 0 0;font-size:13px;color:var(--muted);line-height:1.4}
 .sh-f{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.proNote{font-size:12.5px;color:var(--muted)}
 .pw-in p{margin:0;font-size:14px;line-height:1.45;color:var(--muted)}.pw-in ul{margin:2px 0 0;padding-left:18px;font-size:13.5px;line-height:1.5}
-.pw-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}.pw-row a.big{font-size:16px;padding:10px 22px;text-decoration:none;display:inline-block}
-@media (max-height:620px){.sdesc,.pw-in ul{display:none}.sheet-in{gap:6px;padding:10px 12px}.sec small{margin-bottom:3px}.chip{padding:5px 10px;min-height:32px}.pw-row a.big{padding:8px 18px}}
+.pw-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}.pw-row a.big{font-size:16px;padding:10px 22px;text-decoration:none;display:flex;align-items:center;justify-content:center;flex:1 1 100%;order:-1;min-height:48px;white-space:nowrap;box-sizing:border-box}.pw-row .icon-btn{min-height:44px;flex:1 1 auto;white-space:nowrap}
+@media (max-height:620px){.sdesc,.pw-in ul{display:none}.sheet-in{gap:6px;padding:10px 12px}.sec small{margin-bottom:3px}.chip{padding:5px 10px;min-height:32px}.pw-row a.big{padding:8px 18px;min-height:44px}}
 @media (max-height:420px){.sec small{display:none}.chip{font-size:12px;padding:4px 9px;min-height:28px}.sh-h{font-size:15px}}
 .top .icon-btn{display:inline-flex;align-items:center;gap:4px;min-height:34px}
 .probadge{display:inline-block;margin-left:8px;padding:2px 9px;border-radius:999px;font:700 11px/1.5 var(--body);letter-spacing:.04em;vertical-align:middle;background:var(--accent);color:var(--on-accent);white-space:nowrap}
@@ -300,6 +300,7 @@ html[data-skin] .ty.on{animation:tyGlow 2.4s ease-in-out infinite}
   <button class="icon-btn" id="pauseBtn" type="button" hidden><span aria-hidden="true" id="pauseIco">⏸</span><span class="bl" id="pauseTxt"></span></button>
   <button class="icon-btn" id="restartBtn" type="button" hidden><span aria-hidden="true">↻</span><span class="bl" id="restartTxt"></span></button>
   <button class="icon-btn" id="setupBtn" hidden type="button" aria-haspopup="dialog"><span aria-hidden="true">⚙</span><span class="bl" id="setupTxt"></span></button>
+  <button class="ib" id="bHelp" type="button">?</button>
   <button class="ib" id="bBoard" type="button">🏆</button>
   <button class="ib" id="bSnd" type="button" aria-pressed="true">🔊</button>
   <button class="ib" id="bLang" type="button">EN</button>
@@ -334,6 +335,13 @@ html[data-skin] .ty.on{animation:tyGlow 2.4s ease-in-out infinite}
 </div>
 <div class="shout" id="shout" aria-live="polite"></div>
 
+<div class="sheet" id="howS" hidden role="dialog" aria-modal="true" aria-labelledby="howT">
+  <div class="sheet-in">
+    <div class="sh-h"><span id="howT"></span><button class="icon-btn" id="howX" type="button">✕</button></div>
+    <div id="howB" style="font-size:14px;line-height:1.45"></div>
+    <div class="legend" id="howL" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+  </div>
+</div>
 <div class="sheet" id="setup" hidden role="dialog" aria-modal="true" aria-labelledby="setupT">
   <div class="sheet-in">
     <div class="sh-h"><span id="setupT" data-i="opts.t"></span><button class="icon-btn" id="setupX" type="button">✕</button></div>
@@ -392,7 +400,7 @@ const ROUND=45;
 /* ===== NGÔN NGỮ (vi / en): ?lang= → localStorage "lang" → ngôn ngữ trình duyệt ===== */
 const I18N={vi:{
  title:'Đập <span>Deadline</span>',docTitle:"Đập Deadline",score:"Điểm",combo:"Combo",left:"Còn lại",sound:"Âm thanh",on:"Bật",off:"Tắt",modes:"Chế độ",pause:"Tạm dừng",resume:"Tiếp tục",lang:"Ngôn ngữ",close:"Đóng",
- restart:"Chơi lại",restartQ:"Chơi lại ván này?",restartP:"Ván hiện tại sẽ bị bỏ, không tính điểm.", pausedT:"Tạm dừng",pausedP:"Thời gian đang dừng. Nhấn Tiếp tục để chơi tiếp.",
+ "help.t":"Cách chơi",restart:"Chơi lại",restartQ:"Chơi lại ván này?",restartP:"Ván hiện tại sẽ bị bỏ, không tính điểm.", pausedT:"Tạm dừng",pausedP:"Thời gian đang dừng. Nhấn Tiếp tục để chơi tiếp.",
  "start.h":"Hết giờ làm thì đập nốt deadline","start.p":"Phiền toái văn phòng sẽ ló lên từ bàn làm việc. Chạm thật nhanh để đóng dấu <b>XONG</b>. Gặp ly cà phê thì chạm để được thêm giờ.",
  leg1:"📧 Email gấp",leg2:"📅 Họp",leg3:"📞 Sếp gọi",leg4:"☕ +3 giây","start.btn":"Bắt đầu đập","start.tip":"45 giây · chơi xong nhớ đứng dậy vươn vai · v3",
  "resume.h":"Bạn bè nhờ bạn chơi tiếp!","resume.pl":"Còn {l} mạng, đang {n} điểm. Đập thật nhanh để nâng điểm cho bạn nhé!","resume.p":"Còn {s} giây, đang {n} điểm. Đập thật nhanh để nâng điểm cho bạn nhé!","resume.btn":"Chơi tiếp",go:"Bắt đầu! Đập hết đi!",done:"XONG",
@@ -413,7 +421,7 @@ const I18N={vi:{
  "badge.trial":"Dùng thử","pw.go":"Xem Night Pass","pw.trial":"Dùng thử 1 lượt Vô tận hôm nay","pw.later":"Để sau","pw.tried":"Hôm nay đã dùng thử rồi. Mở Night Pass để chơi không giới hạn.","pw.trialSay":"Chơi thử Vô tận: 1 lượt!"},
 en:{
  title:'Smash <span>Deadline</span>',docTitle:"Smash Deadline",score:"Score",combo:"Combo",left:"Time left",sound:"Sound",on:"On",off:"Off",modes:"Modes",pause:"Pause",resume:"Resume",lang:"Language",close:"Close",
- restart:"Restart",restartQ:"Restart this round?",restartP:"The current round is dropped and not scored.", pausedT:"Paused",pausedP:"The clock is stopped. Press Resume to keep playing.",
+ "help.t":"How to play",restart:"Restart",restartQ:"Restart this round?",restartP:"The current round is dropped and not scored.", pausedT:"Paused",pausedP:"The clock is stopped. Press Resume to keep playing.",
  "start.h":"Smash the last deadlines before clock-out","start.p":"Office hassles pop up from the desk. Tap fast to stamp them <b>DONE</b>. Tap a coffee cup to gain extra time.",
  leg1:"📧 Urgent email",leg2:"📅 Meeting",leg3:"📞 Boss call",leg4:"☕ +3 sec","start.btn":"Start smashing","start.tip":"45 seconds · stand up and stretch when you're done · v3",
  "resume.h":"A friend asked you to continue!","resume.pl":"{l} lives left, {n} points so far. Smash fast to raise their score!","resume.p":"{s} seconds left, {n} points so far. Smash fast to raise their score!","resume.btn":"Continue",go:"Go! Smash them all!",done:"DONE",
@@ -1029,10 +1037,12 @@ DD.lockPro=function(){   /* hết lượt dùng thử: trả về bản miễn p
 };
 $("setupBtn").addEventListener("click",()=>{ if(running){say(t("busy"));return} DD.refresh();openSheet("setup") });
 $("setupX").addEventListener("click",()=>closeSheet("setup"));
+$("bHelp").addEventListener("click",()=>{$("howT").textContent=t("help.t");$("howB").innerHTML="<b>"+t("start.h")+"</b><br>"+t("start.p")+"<br><small style='opacity:.75'>"+t("start.tip")+"</small>";$("howL").innerHTML=[1,2,3,4].map(i=>"<span style='padding:3px 10px;border-radius:99px;border:1.5px solid var(--line)'>"+t("leg"+i)+"</span>").join("");openSheet("howS")});
+$("howX").addEventListener("click",()=>closeSheet("howS"));
 $("statsX").addEventListener("click",()=>closeSheet("statsP"));$("payX0").addEventListener("click",()=>closeSheet("pay"));
 $("statsBtn").addEventListener("click",()=>{ if(DD.pro&&DD.pro.stats&&DD.openStats){DD.openStats();openSheet("statsP")}else DD.paywall("stats") });
 for(const id of ["setup","statsP","pay"])$(id).addEventListener("click",e=>{if(e.target===$(id))closeSheet(id)});
-addEventListener("keydown",e=>{if(e.key==="Escape")for(const id of ["pay","statsP","setup"])if(!$(id).hidden){closeSheet(id);break}});
+addEventListener("keydown",e=>{if(e.key==="Escape")for(const id of ["pay","statsP","setup","howS"])if(!$(id).hidden){closeSheet(id);break}});
 if(window.NP&&NP.helper){$("setupBtn").hidden=true}   /* người chơi hộ chỉ chơi 1 lượt, không tự đổi chế độ */
 let helperPro=null;
 if(CH){   /* mở bằng link thách đấu: chơi đúng ván Cổ điển 45 giây, cùng loại game với người thách, không đổi cài đặt */
@@ -1049,8 +1059,8 @@ $("bSnd").addEventListener("click",()=>{sound=!sound;if(window.NPAudio)NPAudio.s
 function applyLang(){
   document.documentElement.lang=LANG;setTitle();
   document.querySelectorAll("[data-i]").forEach(e=>{e.textContent=t(e.dataset.i)});
-  $("setupTxt").textContent=" "+t("modes");$("setupBtn").setAttribute("aria-label",t("modes"));$("bLang").textContent=LANG==="vi"?"EN":"VI";$("bLang").setAttribute("aria-label",t("lang"));$("bLang").title=t("lang");$("bBk").title=t("home.back");$("bBk").setAttribute("aria-label",t("home.back"));
-  for(const id of ["setupX","statsX","payX0"])$(id).setAttribute("aria-label",t("close"));
+  $("setupTxt").textContent=" "+t("modes");$("setupBtn").setAttribute("aria-label",t("modes"));$("bLang").textContent=LANG==="vi"?"EN":"VI";$("bLang").setAttribute("aria-label",t("lang"));$("bHelp").setAttribute("aria-label",t("help.t"));$("bHelp").title=t("help.t");$("bLang").title=t("lang");$("bBk").title=t("home.back");$("bBk").setAttribute("aria-label",t("home.back"));
+  for(const id of ["setupX","statsX","payX0","howX"])$(id).setAttribute("aria-label",t("close"));
   $("pauseT").textContent=t("pausedT");$("pauseP").textContent=t("pausedP");$("resumeBtn").textContent="▶ "+t("resume");$("restartOv").textContent="↻ "+t("restart");$("restartBtn").setAttribute("aria-label",t("restart"));$("restartBtn").title=t("restart");
   cells.forEach((c,i)=>c.el.setAttribute("aria-label",t("cell",{n:i+1})));
   syncSound();syncPauseBtn();render();

@@ -17,14 +17,14 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 const MEASURE = () => {
   const par = window.parent, ifr = [...par.document.querySelectorAll("#stage iframe")].find(f => f.contentWindow === window); if (!ifr) return { err: "không thấy iframe" };
   const fr = ifr.getBoundingClientRect(), bad = [];
-  const vis = e => { const s = getComputedStyle(e), r = e.getBoundingClientRect(); return e.offsetParent !== null && s.visibility !== "hidden" && +s.opacity > .05 && r.width > 6 && r.height > 6 && !e.closest("[hidden]") && !e.disabled; };
+  const vis = e => { const s = getComputedStyle(e), r = e.getBoundingClientRect(); return e.offsetParent !== null && s.visibility !== "hidden" && +s.opacity > .05 && r.width > 6 && r.height > 6 && !e.closest("[hidden]") && !e.disabled && !(e.closest("#npFan") && !document.getElementById("npFan").classList.contains("open")); };   // nút nằm trong bảng menu ĐANG ĐÓNG (trong suốt, không nhận chạm) không tính; nút menu #npFab thì có tính
   const els = [...document.querySelectorAll("button,a[href],.ib,.btn,.ib2,.icon-btn,.opt,.cat,.ty,.tile")].filter(vis);
   const name = e => (e.id || (e.className + "").split(" ")[0] || e.tagName);
   for (const e of els) {
     const r = e.getBoundingClientRect(); if (r.right < 0 || r.left > innerWidth || r.bottom < 0 || r.top > innerHeight) continue;
     const cx = Math.min(Math.max(r.left + r.width / 2, 1), innerWidth - 2), cy = Math.min(Math.max(r.top + r.height / 2, 1), innerHeight - 2);
     const ph = par.document.elementFromPoint(cx + fr.left, cy + fr.top); if (ph && ph !== ifr) { bad.push("cổng:" + name(ph) + " đè " + name(e)); continue; }
-    const ch = document.elementFromPoint(cx, cy); if (ch && ch !== e && !e.contains(ch) && !ch.contains(e) && !ch.closest(".ov,[id^=ov],#ovEnd,#hlpOv") && !e.closest(".ov,[id^=ov]")) bad.push(name(ch) + " đè " + name(e));
+    const ch = document.elementFromPoint(cx, cy); if (ch && ch !== e && !e.contains(ch) && !ch.contains(e) && !ch.closest(".ov,[id^=ov],#ovEnd,#hlpOv,#pay,#setup,#shareG,#statsP,#pauseOv,#overlay") && !e.closest(".ov,[id^=ov],#pay,#setup,#shareG,#statsP,#pauseOv,#overlay")) bad.push(name(ch) + " đè " + name(e));
   }
   /* nút thanh trên chung nhau */
   return { bad: bad.slice(0, 4), n: els.length, docked: !!window.__npDock, vw: innerWidth, vh: innerHeight };

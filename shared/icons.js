@@ -6,9 +6,10 @@
   var ICON = {
     trophy: "<svg " + A + '><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>',
     snd: "<svg " + A + '><path d="M4 9.5v5h3.6L13 19V5L7.6 9.5z"/><path d="M16.2 9a4.2 4.2 0 0 1 0 6M18.8 6.4a8 8 0 0 1 0 11.2"/></svg>',
-    mute: "<svg " + A + '><path d="M4 9.5v5h3.6L13 19V5L7.6 9.5z"/><path d="M16.5 9.5l5 5M21.5 9.5l-5 5"/></svg>'
+    mute: "<svg " + A + '><path d="M4 9.5v5h3.6L13 19V5L7.6 9.5z"/><path d="M16.5 9.5l5 5M21.5 9.5l-5 5"/></svg>',
+    home: "<svg " + A + '><path d="M3 11.5L12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5v-5h4v5"/></svg>'
   };
-  var MAP = { "🏆": "trophy", "🔊": "snd", "🔉": "snd", "🔈": "snd", "🔇": "mute", "🔕": "mute" };
+  var MAP = { "🏆": "trophy", "🔊": "snd", "🔉": "snd", "🔈": "snd", "🔇": "mute", "🔕": "mute", "🏠": "home" };
   var busy = false;
   function swap(root) {
     var els = (root || document).querySelectorAll(".top button, .tools button, .tools a, header button, #bBoard, #bSnd, #sndBtn, #soundBtn");

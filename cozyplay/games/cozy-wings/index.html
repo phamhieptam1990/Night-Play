@@ -25,6 +25,8 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .side{width:var(--w);display:flex;flex-direction:column;gap:8px}
 .top{display:flex;align-items:center;gap:8px}
 .top h1{flex:1;margin:0;font-size:clamp(18px,5.4vw,26px);font-weight:800;line-height:1;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
+/* chơi: ← + ⏸ + menu chiếm chỗ nên tiêu đề thu nhỏ để không bị cắt */
+@media (max-width:520px) and (orientation:portrait){.top:has(#pauseBtn:not([hidden])) h1{font-size:15px}}
 .ib{width:44px;height:44px;border-radius:50%;background:var(--panel);box-shadow:var(--shadow);font-size:20px;display:grid;place-items:center;flex:none}
 .ib:active{transform:scale(.92)}
 .ib[hidden]{display:none}
@@ -62,7 +64,7 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .sk:active{transform:scale(.96)}
 .big{background:var(--accent);color:var(--on-accent);border-radius:999px;padding:12px 28px;font-size:clamp(18px,5vw,24px);font-weight:800;box-shadow:0 5px 0 color-mix(in srgb,var(--accent) 55%,#000)}
 .ghost{background:var(--panel);color:var(--ink);border-radius:999px;padding:10px 22px;font-size:clamp(15px,4.2vw,19px);font-weight:800;box-shadow:var(--shadow)}
-.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}#ovPay .big,#ovPay .ghost{min-height:44px;white-space:nowrap}
 .stars{font-size:clamp(34px,11vw,56px);letter-spacing:.06em}
 .nums{display:flex;gap:12px;justify-content:center}
 .nums button{width:clamp(64px,20vw,92px);height:clamp(64px,20vw,92px);border-radius:24px;background:var(--panel);box-shadow:var(--shadow);font-size:clamp(30px,9vw,46px);font-weight:800}
@@ -92,7 +94,7 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .ov .cards{gap:7px}.card .main{padding:7px 12px}.card .e{font-size:clamp(26px,8vw,36px)}.card{font-size:clamp(15px,4.5vw,20px)}
 @media (max-height:700px){.ov{gap:8px;padding:12px}.ov h2{font-size:clamp(20px,6vw,28px)}.ov .cards{gap:5px}.card .main{padding:4px 10px}.card .e{font-size:24px}.card small{font-size:.66em}.card .skinBtn{width:38px;height:38px;font-size:18px}.dif{padding:5px 14px}}
 @media (max-height:600px){.card small{display:none}}
-@media (max-height:520px) and (min-aspect-ratio:11/10){#ovPay h2{font-size:17px}#ovPay .big{padding:5px 12px;font-size:13px;line-height:1.1}#ovPay .ghost{padding:4px 10px;font-size:12px}#ovPay .row{gap:5px}#ovStart h2{display:none}.cards{display:flex;flex-direction:column;max-width:none;gap:3px}.card .main{padding:2px 8px;gap:6px}.card .e{font-size:20px}.card .skinBtn{width:28px;height:28px;font-size:13px;margin-right:4px}.card{font-size:13px}.difs .dif{padding:2px 10px;font-size:12px}.ov{gap:3px}.mt{width:56px}}
+@media (max-height:520px) and (min-aspect-ratio:11/10){#ovPay h2{font-size:17px}#ovPay .big{padding:5px 14px;font-size:14px;line-height:1.1;min-height:44px;white-space:nowrap}#ovPay .ghost{padding:4px 12px;font-size:13px;min-height:44px;white-space:nowrap}#ovPay .row{gap:5px}#ovStart h2{display:none}.cards{display:flex;flex-direction:column;max-width:none;gap:3px}.card .main{padding:2px 8px;gap:6px}.card .e{font-size:20px}.card .skinBtn{width:28px;height:28px;font-size:13px;margin-right:4px}.card{font-size:13px}.difs .dif{padding:2px 10px;font-size:12px}.ov{gap:3px}.mt{width:56px}}
 [hidden]{display:none!important}
 /* màu nền đổi theo độ khó: Dễ = bạc hà, Vừa = hổ phách, Khó = đỏ rực trên nền tối */
 body{transition:background .4s,color .4s}
@@ -176,6 +178,7 @@ body{transition:background .4s,color .4s}
 <div class="app">
   <div class="side">
     <div class="top">
+      <button class="ib" id="bBk" type="button" hidden aria-label="←">←</button>
       <h1 id="title"></h1>
       <button class="ib" id="pauseBtn" type="button" hidden>⏸</button>
       <button class="ib" id="soundBtn" type="button">🔊</button>
@@ -237,7 +240,7 @@ let LANG=(()=>{const q=new URLSearchParams(location.search).get("lang");if(q==="
 
 /* ===== NGÔN NGỮ ===== */
 const I18N={
-vi:{title:"Cánh Nhỏ Phiêu Lưu",docTitle:"Cánh Nhỏ Phiêu Lưu",sound:"Âm thanh",lang:"Ngôn ngữ",pause:"Tạm dừng",resume:"Tiếp tục",how:"Cách chơi",
+vi:{back:"Về màn chọn",title:"Cánh Nhỏ Phiêu Lưu",docTitle:"Cánh Nhỏ Phiêu Lưu",sound:"Âm thanh",lang:"Ngôn ngữ",pause:"Tạm dừng",resume:"Tiếp tục",how:"Cách chơi",
  "st.h":"Chọn chuyến bay","st.p":"Chọn một chuyến bay nhé","dif.h":"Độ khó","dif.easy":"Dễ","dif.mid":"Vừa","dif.hard":"Khó","best":"Kỷ lục {n}",
  "ty.bee":"Ong Mật Về Tổ","ty.bee.d":"Né mạng nhện, hái phấn hoa, gió đổi hướng","ty.fish":"Cá Chuồn Vượt Sóng","ty.fish.d":"Chạm để nhảy, giữ tay để lặn","ty.lantern":"Đèn Lồng Trung Thu","ty.lantern.d":"Nhặt nến giữ lửa không tắt","ty.kite":"Diều Giấy","ty.kite.d":"Kéo ngón tay để diều lên xuống","ty.bug":"Bọ Rùa Phiêu Lưu","ty.bug.d":"Giữ tay để lượn, thả tay để rơi",
  "tip.bee":"Chạm để vỗ cánh · gió đang đổi hướng","tip.fish":"Chạm: nhảy lên · Giữ tay: lặn xuống","tip.lantern":"Chạm để bay · nhặt nến giữ lửa","tip.kite":"Kéo ngón tay lên xuống để điều khiển diều","tip.bug":"Giữ tay: lượn lên · Thả tay: rơi xuống",
@@ -250,7 +253,7 @@ vi:{title:"Cánh Nhỏ Phiêu Lưu",docTitle:"Cánh Nhỏ Phiêu Lưu",sound:"Â
  "sk.lantern.default":"Phố đêm","sk.lantern.hoian":"Phố cổ Hội An","sk.lantern.moon":"Rằm Trung Thu","sk.lantern.festival":"Lễ hội hoa đăng","sk.lantern.snow":"Đêm tuyết",
  "sk.kite.default":"Trời xanh","sk.kite.rice":"Đồng lúa chiều","sk.kite.beach":"Bãi biển","sk.kite.alps":"Núi tuyết","sk.kite.dusk":"Hoàng hôn rực",
  "sk.bug.default":"Khu vườn","sk.bug.rain":"Vườn sau mưa","sk.bug.mush":"Rừng nấm","sk.bug.night":"Vườn đêm","sk.bug.autumn":"Mùa thu lá đỏ"},
-en:{title:"Little Wings",docTitle:"Little Wings",sound:"Sound",lang:"Language",pause:"Pause",resume:"Resume",how:"How to play",
+en:{back:"Back to flights",title:"Little Wings",docTitle:"Little Wings",sound:"Sound",lang:"Language",pause:"Pause",resume:"Resume",how:"How to play",
  "st.h":"Pick a flight","st.p":"Pick a flight","dif.h":"Difficulty","dif.easy":"Easy","dif.mid":"Medium","dif.hard":"Hard","best":"Best {n}",
  "ty.bee":"Honey Bee Home","ty.bee.d":"Dodge webs, gather pollen, shifting wind","ty.fish":"Flying Fish","ty.fish.d":"Tap to jump, hold to dive","ty.lantern":"Mid-Autumn Lantern","ty.lantern.d":"Collect candles, keep the flame","ty.kite":"Paper Kite","ty.kite.d":"Drag your finger to steer the kite","ty.bug":"Ladybug Adventure","ty.bug.d":"Hold to glide, release to drop",
  "tip.bee":"Tap to flap · the wind keeps changing","tip.fish":"Tap: jump · Hold: dive","tip.lantern":"Tap to fly · grab candles for flame","tip.kite":"Drag your finger up and down to steer","tip.bug":"Hold: glide up · Release: drop",
@@ -605,7 +608,9 @@ function finishRound(){
 function goHome(){if(window.NPAudio)NPAudio.silence();if(window.NPFx)NPFx.recDrop();applyDiffTheme();$("chTrack").hidden=true;$("cmb").textContent="";applyLayout("classic");running=false;paused=false;PF.S=null;$("pauseBtn").hidden=true;$("sc").textContent="0";$("dots").textContent="";$("askTxt").textContent=t("st.p");showOv("ovStart");renderStart();renderCards();draw()}
 function pauseRound(by){if(!running||paused)return;paused=true;pausedBy=by==="user"?"user":"parent";if(pausedBy==="user")$("ovPause").hidden=false}
 function resumeRound(by){if(!paused)return;if(by==="parent"&&pausedBy==="user")return;paused=false;pausedBy=null;$("ovPause").hidden=true;last=performance.now()}
-$("pauseBtn").addEventListener("click",()=>pauseRound("user"));$("resumeBtn").addEventListener("click",()=>resumeRound("user"));
+$("pauseBtn").addEventListener("click",()=>pauseRound("user"));
+/* ← : đang bay thì về màn chọn chuyến bay (hiện cùng lúc với ⏸); ở màn chọn không có vì nút ← của trang cổng đã thoát game */
+(function(){const bk=$("bBk"),pb=$("pauseBtn");const upd=()=>{bk.hidden=pb.hidden};new MutationObserver(upd).observe(pb,{attributes:true,attributeFilter:["hidden"]});upd();bk.addEventListener("click",()=>{if(!PF.S)return;goHome()})})();$("resumeBtn").addEventListener("click",()=>resumeRound("user"));
 $("homeBtn1").addEventListener("click",goHome);$("homeBtn2").addEventListener("click",goHome);
 $("againBtn").addEventListener("click",retry);
 document.addEventListener("visibilitychange",()=>{if(document.hidden&&running&&!paused)pauseRound("user")});
@@ -698,7 +703,7 @@ PF.lockPro=function(){PF.skins={};PF.pro=null;if(PF.skinRestore){const r=PF.skin
 function applyLang(){
   document.documentElement.lang=LANG;document.title=t("docTitle");$("title").textContent=t("title");$("langBtn").textContent=LANG.toUpperCase();$("langBtn").setAttribute("aria-label",t("lang"));
   renderStart();$("paH").textContent=t("pause");$("resumeBtn").setAttribute("aria-label",t("resume"));$("homeBtn1").setAttribute("aria-label",t("home"));$("skBack").setAttribute("aria-label",t("home"));$("againBtn").setAttribute("aria-label",t("again"));$("homeBtn2").setAttribute("aria-label",t("home"));$("shareBtn").setAttribute("aria-label",t("share.btn"));$("rankBtn").setAttribute("aria-label",t("rank.btn"));$("hwBack").setAttribute("aria-label",t("how.back"));
-  $("pauseBtn").setAttribute("aria-label",t("pause"));$("askBtn").setAttribute("aria-label",t("how"));cv.setAttribute("aria-label",t("title"));syncSound();renderDiff();renderCards();renderStart();
+  $("pauseBtn").setAttribute("aria-label",t("pause"));$("bBk").setAttribute("aria-label",t("back"));$("bBk").title=t("back");$("askBtn").setAttribute("aria-label",t("how"));cv.setAttribute("aria-label",t("title"));syncSound();renderDiff();renderCards();renderStart();
   if(PF.S&&PF.S.ty)$("askTxt").innerHTML=PF.S.ty.hud(PF.S);else $("askTxt").textContent=t("st.p");
 }
 addEventListener("storage",e=>{if(e.key==="theme")document.documentElement.dataset.theme=e.newValue||"light"});

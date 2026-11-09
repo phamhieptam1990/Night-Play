@@ -58,6 +58,8 @@ canvas#cv{border-radius:3cqw;background:linear-gradient(var(--field),var(--field
 @container (max-height:640px){#hSub,#hNote{display:none}.hero{font-size:12cqw}.ty .e{font-size:6cqw}}
 @container (max-height:520px){.hero{display:none}.hint{display:none}}
 #bSkin{min-width:44px;min-height:44px}
+/* popup khoá Night Pass: ✕ + Dùng thử cùng hàng, nút chính "Mở Night Pass" là pill CHỮ NHẬT một dòng, rộng cả hàng, cao ≥48px (không co thành hình tròn) */
+#ovPay .row{flex-wrap:wrap}#ovPay .row>.btn{min-height:44px}#ovPay #pwGo{flex:1 1 100%;order:3;display:flex;align-items:center;justify-content:center;white-space:nowrap;min-height:48px;border-radius:99px;padding-left:5cqw;padding-right:5cqw}
 .row>.btn.alt.grow{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;padding-left:2.4cqw;padding-right:2.4cqw;font-size:min(3.9cqw,15px)}
 #dS{display:inline-block;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:top}.dbtn .grow{min-width:0}#dT{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;max-width:100%;vertical-align:top}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
