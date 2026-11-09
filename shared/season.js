@@ -127,6 +127,7 @@
     ".ns-btn{min-height:48px;border-radius:16px;border:1.5px solid rgba(255,255,255,.28);color:#fff}.ns-btn.pri{background:linear-gradient(135deg,hsl(var(--ns-h),90%,58%),hsl(var(--ns-h),85%,42%));border:0;box-shadow:0 0 20px hsla(var(--ns-h),95%,60%,.6),0 3px 0 rgba(0,0,0,.3)}" +
     "@media (prefers-reduced-motion:reduce){.ns-card{animation:none}}" +
     "@media (max-height:560px){.ns-ov{padding:8px}.ns-card{width:min(94vw,560px);margin-top:10px;padding:24px 14px 12px}.ns-hero{display:none}.ns-card h2{font-size:18px}.ns-card .sub{margin:2px 0 6px;font-size:12px}.ns-grid{margin:8px 0;gap:6px}.ns-st{min-height:58px;padding:5px 2px}.ns-st .e{font-size:20px}.ns-btn{min-height:42px}}" +
+    "html.playing .ns-toast{display:none!important}" +
     ".ns-pop{animation:nsPop 1.1s ease-out 2}@keyframes nsPop{0%,100%{transform:scale(1)}30%{transform:scale(1.35);box-shadow:0 0 0 6px rgba(255,210,74,.55)}60%{transform:scale(.95)}}" +
     "@media (prefers-reduced-motion:reduce){.ns-fl{display:none}}";
   document.head.appendChild(css);
