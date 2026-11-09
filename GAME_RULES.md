@@ -54,6 +54,12 @@ Dự án có 3 nhóm: **Cozy Play** (`cozyplay/`: 9 game sinh tự động từ 
 - Popup chọn loại chơi/giao diện: đậm chất Night Pass (viền sáng, 👑, 🔒 + gợi ý cho loại bị khoá). Dùng `shared/typeui.css`.
 - Mã Night Pass chỉ giao qua `/api/pro/<id>.js`; `main(PF,OPTS)` chạy trong trình duyệt, không dùng biến ngoài hàm. Khoá lại (`lockPro`) phải trả giao diện về free.
 
+## 5b. Màn kết thúc (không để "chán")
+- Màn kết thúc của MỌI game dùng chung thiết kế: thẻ kết quả nền gradient theo `var(--accent)` (chữ trắng, điểm rất lớn có hiệu ứng pop, huy hiệu xếp hạng dạng viên thuốc), bỏ dòng chữ lặp thừa, chip thống kê gọn, nút "Khoe điểm" lớn có chữ, các nút phụ là ô có emoji + nhãn chữ (vi/en) — nút ẩn thì lưới tự co.
+- Game Cozy sinh tự động: CSS `#end .res` / `#end>.row` + hàm `showEnd` trong `scripts/cozygame/tpl.html`.
+- Game viết tay (Cozy + Pop Play): nhúng `shared/endui.css` + `shared/endui.js` (đã có trong `sw.js`); script tự gắn class cho `#end`, `#res`, `#result`, `#ovSum`, `#ovEnd` và đặt nhãn nút theo ID (bShare, bClip, bRem, bAgain, bHome, sumGo/sumShare, againBtn/shareBtn/rankBtn/homeBtn2...). GIỮ NGUYÊN id nút cũ; game mới dùng đúng các id này để được áp dụng tự động, id mới thì thêm vào bảng `L` trong `endui.js`.
+- Phải kiểm tra ảnh màn kết thúc ở dọc 380x760 và ngang 844x390, bản free + 1 giao diện Night Pass; không tràn/cuộn; chơi hộ (`?helper=1`) vẫn ẩn các nút.
+
 ## 6. Dữ liệu, quyền riêng tư
 - Game không thu thập thêm dữ liệu cá nhân. Nếu thêm bất cứ thứ gì lưu trên máy chủ hoặc localStorage mới → cập nhật `privacy.html` (VI + EN) và ngày trong `shared/site.js`.
 - Bảng xếp hạng tự nguyện; game trẻ em không có ô gõ tên.

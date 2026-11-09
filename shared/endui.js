@@ -2,14 +2,14 @@
    Nhãn chữ vi/en được đặt lại mỗi khi màn kết thúc hiện ra. Nút chỉ có emoji (≤3 ký tự) mới bị thay chữ; nút đã có chữ giữ nguyên. */
 (function () {
   "use strict";
-  var IDS = ["end", "res", "result"], SHARE = { bShare: 1, bShareR: 1 };
-  var L = { bClip: ["Quay lại", "Replay"], bRem: ["Đấu lại", "Rematch"], bAgain: ["Ván mới", "New game"], bHome: ["Trang chủ", "Home"], bHomeR: ["Trang chủ", "Home"] };
+  var IDS = ["end", "res", "result", "ovSum", "ovEnd"], SHARE = { bShare: 1, bShareR: 1, sumGo: 1 };
+  var L = { bClip: ["Quay lại", "Replay"], sumShare: ["Khoe điểm", "Share"], againBtn: /cozy-wings|pop-fly/.test(location.pathname) ? ["Bay lại", "Fly again"] : ["Chơi lại", "Play again"], shareBtn: ["Khoe điểm", "Share"], rankBtn: ["Xếp hạng", "Ranks"], clipBtn: ["Quay lại", "Replay"], retryBtn: ["Thử lại", "Retry"], pgBtn2: ["Sổ tay", "Notes"], albBtn: ["Album", "Album"], homeBtn2: ["Chọn khác", "Others"], sumClip: ["Quay lại", "Replay"], sumRem: ["Đấu lại", "Rematch"], sumHome: ["Trang chủ", "Home"], bRem: ["Đấu lại", "Rematch"], bAgain: ["Ván mới", "New game"], bHome: ["Trang chủ", "Home"], bHomeR: ["Trang chủ", "Home"] };
   function vi() { return (document.documentElement.lang || "vi").slice(0, 2) !== "en"; }
   /* màn #result của Hiểu Tôi có nút đã mang chữ riêng: giữ hàng cũ, chỉ làm nổi nút chia sẻ */
   function dress(el) {
     el.classList.add("endui");
     var card = el.querySelector(":scope>.card"); if (card && el.id !== "res") card.classList.add("endui-card");
-    Array.prototype.forEach.call(el.querySelectorAll(":scope>.row"), function (r) { if (el.id !== "result" && r.querySelector("#bShare,#bAgain,#bHome")) r.classList.add("endui-row"); });
+    Array.prototype.forEach.call(el.querySelectorAll(":scope>.row"), function (r) { if (el.id !== "result" && r.querySelector("#bShare,#bAgain,#bHome,#sumGo,#againBtn")) r.classList.add("endui-row"); });
   }
   function label(el) {
     var v = vi();
