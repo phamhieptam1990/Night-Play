@@ -144,12 +144,24 @@ async function sweep() {
    Chọn nhà cung cấp bằng biến môi trường (đặt loại Secret):
      - BREVO_API_KEY  + MAIL_FROM  (Brevo: gói miễn phí ~300 thư/ngày; MAIL_FROM phải là địa chỉ đã xác minh "Sender" trong Brevo, không cần tên miền riêng)
      - RESEND_API_KEY + MAIL_FROM  (Resend: cần xác minh tên miền gửi thư để gửi cho người khác)
+     - GAS_MAIL_URL + GAS_MAIL_SECRET  (Google Apps Script gửi từ Gmail riêng, ~100 thư/ngày; xem scripts/gas-mail.gs; không cần MAIL_FROM)
    MAIL_FROM_NAME (tuỳ chọn, mặc định "Night Play"). Chưa cấu hình: chỉ ghi log tên nhà cung cấp còn thiếu (KHÔNG ghi nội dung/OTP) và trả false.
    Không bao giờ ném lỗi ra ngoài: /api/restore luôn trả 200 để không lộ email nào đã mua. */
 async function sendMail(to, subject, text) {
   if (CFG.devOtp) console.log(`[mail] to=${to} | ${subject} | ${text}`);
   const from = env("MAIL_FROM", ""), name = env("MAIL_FROM_NAME", "Night Play"), brevo = env("BREVO_API_KEY", ""), resend = env("RESEND_API_KEY", "");
-  if (!from || (!brevo && !resend)) { console.error("sendMail: chưa cấu hình (cần MAIL_FROM và BREVO_API_KEY hoặc RESEND_API_KEY)"); return false; }
+  const gasUrl = env("GAS_MAIL_URL", ""), gasSecret = env("GAS_MAIL_SECRET", "");
+  if (gasUrl && gasSecret) {
+    const ac2 = typeof AbortController !== "undefined" ? new AbortController() : null, tm2 = ac2 ? setTimeout(() => ac2.abort(), 15000) : 0;
+    try {
+      const r = await fetch(gasUrl, { method: "POST", redirect: "follow", signal: ac2 && ac2.signal, headers: { "content-type": "text/plain;charset=utf-8" }, body: JSON.stringify({ secret: gasSecret, to, subject, text, name }) });
+      const j = await r.json().catch(() => null);
+      if (!r.ok || !j || !j.ok) { console.error("sendMail gas HTTP " + r.status + " " + String(j && j.error || "").slice(0, 120)); return false; }
+      return true;
+    } catch (e) { console.error("sendMail gas lỗi mạng:", String(e && e.message || e).slice(0, 120)); return false; }
+    finally { clearTimeout(tm2); }
+  }
+  if (!from || (!brevo && !resend)) { console.error("sendMail: chưa cấu hình (cần GAS_MAIL_URL+GAS_MAIL_SECRET, hoặc MAIL_FROM và BREVO_API_KEY/RESEND_API_KEY)"); return false; }
   const html = `<div style="font-family:system-ui,sans-serif;font-size:16px;line-height:1.5">${String(text).replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c])).replace(/\n/g, "<br>")}</div>`;
   const ac = typeof AbortController !== "undefined" ? new AbortController() : null, tm = ac ? setTimeout(() => ac.abort(), 8000) : 0;
   try {
