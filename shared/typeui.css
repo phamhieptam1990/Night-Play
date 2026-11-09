@@ -1,0 +1,30 @@
+/* Giao diện chọn loại chơi + hộp Night Pass/giao diện dùng chung cho game Cozy Play (chỉ CSS, đè lên kiểu cơ bản của từng game). */
+.tys{gap:2cqw}
+.ty{min-height:19cqw;border-radius:4cqw;padding:2.2cqw .8cqw 1.6cqw;background:linear-gradient(color-mix(in srgb,var(--accent) 7%,var(--panel)),var(--panel));box-shadow:0 .8cqw 0 rgba(0,0,0,.22);transition:transform .12s,box-shadow .12s}
+.ty .e{font-size:8cqw;filter:drop-shadow(0 .5cqw .4cqw rgba(0,0,0,.3))}
+.ty .t{font-size:2.8cqw}
+.ty:active{transform:translateY(.6cqw);box-shadow:0 .2cqw 0 rgba(0,0,0,.22)}
+.ty:not(:first-child){border-color:color-mix(in srgb,var(--accent) 55%,transparent)}
+.ty:not(:first-child)::before{content:"👑";position:absolute;left:1cqw;top:.6cqw;font-size:3.2cqw;line-height:1}
+.ty.on{border-color:var(--accent);background:linear-gradient(color-mix(in srgb,var(--accent) 34%,var(--panel)),color-mix(in srgb,var(--accent) 14%,var(--panel)));box-shadow:0 0 0 .6cqw color-mix(in srgb,var(--accent) 55%,transparent),0 0 5cqw color-mix(in srgb,var(--accent) 55%,transparent);transform:translateY(-.6cqw)}
+.ty.lock{opacity:1;border-style:dashed;background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--ink) 6%,var(--panel)) 0 2cqw,var(--panel) 2cqw 4cqw)}
+.ty.lock .e{filter:grayscale(.6) opacity(.8)}
+.ty.lock::after{content:"🔒";top:auto;bottom:.6cqw;right:50%;transform:translateX(50%);font-size:3.6cqw;background:var(--panel);border:1px solid color-mix(in srgb,var(--accent) 55%,transparent);border-radius:99cqw;padding:.2cqw 1.2cqw;line-height:1.3}
+.ty.lock .t{margin-bottom:3.6cqw}
+#play.pro .ty.on{animation:tyGlow 2.4s ease-in-out infinite}
+@keyframes tyGlow{50%{box-shadow:0 0 0 .6cqw color-mix(in srgb,var(--accent) 80%,transparent),0 0 7cqw color-mix(in srgb,var(--accent) 75%,transparent)}}
+/* hộp thoại */
+.ov{background:radial-gradient(circle at 50% -10%,color-mix(in srgb,var(--accent) 38%,transparent),transparent 62%),color-mix(in srgb,var(--panel) 90%,transparent)}
+#ovPay h2{font-size:7.4cqw;color:var(--accent);text-shadow:0 0 4cqw color-mix(in srgb,var(--accent) 70%,transparent)}
+#ovPay h2::after{content:"";display:block;width:24cqw;height:.8cqw;margin:2cqw auto 0;border-radius:9cqw;background:var(--accent);opacity:.7}
+#ovPay p{background:var(--panel);border:.5cqw solid color-mix(in srgb,var(--accent) 50%,transparent);border-radius:4cqw;padding:3.4cqw;box-shadow:0 0 5cqw color-mix(in srgb,var(--accent) 25%,transparent)}
+#pwGo{animation:npPulse 1.8s ease-in-out infinite}
+@keyframes npPulse{50%{box-shadow:0 1cqw 0 rgba(0,0,0,.26),0 0 5cqw var(--accent)}}
+#ovSkin h2{font-size:6.4cqw}
+.sk{gap:2.6cqw}
+.skc{border-radius:4cqw;padding:2.4cqw;background:linear-gradient(color-mix(in srgb,var(--accent) 8%,var(--panel)),var(--panel));box-shadow:0 .8cqw 0 rgba(0,0,0,.2);min-height:16cqw}
+.skc.on{border-color:var(--accent);box-shadow:0 0 0 .6cqw color-mix(in srgb,var(--accent) 55%,transparent),0 0 5cqw color-mix(in srgb,var(--accent) 45%,transparent)}
+.skc.lock{opacity:1;border-style:dashed}.skc.lock .e{filter:grayscale(.6) opacity(.8)}
+.skc.lock::after{background:var(--panel);border:1px solid color-mix(in srgb,var(--accent) 55%,transparent);border-radius:99cqw;padding:.2cqw 1cqw;line-height:1.3}
+@media (prefers-reduced-motion:reduce){#pwGo,#play.pro .ty.on{animation:none}}
+.skc.lock .sx{padding-right:5cqw}
