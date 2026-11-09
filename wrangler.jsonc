@@ -6,6 +6,8 @@
   "main": "worker/index.js",
   "compatibility_date": "2025-09-01",
   "compatibility_flags": ["nodejs_compat"],
+  // Giữ nguyên biến môi trường đã nhập trên dashboard khi deploy (mặc định wrangler deploy XOÁ biến kiểu Text không có trong file này)
+  "keep_vars": true,
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",

@@ -27,3 +27,8 @@ Kiến trúc: `dist/` (file tĩnh, băng thông không giới hạn) + Worker `w
 ## Trang admin và trang game
 - **Cách A (mặc định, đơn giản):** một Worker `night-play`, build `SITE_TARGET=all` (không đặt biến) → trang game ở `/`, admin ở `/admin/` (cần `ADMIN_KEY`; `dist/_headers` đã `noindex`+`no-store`). Có thể thêm Cloudflare Access cho `/admin/*`.
 - **Cách B (tách tên miền):** project Worker thứ hai trỏ cùng repo, Build variable `SITE_TARGET=admin`, Deploy command `npx wrangler deploy -c wrangler.admin.jsonc` (Worker `night-play-admin`); project chính đặt `SITE_TARGET=hub`. Nhập lại các biến môi trường cho project admin (dùng chung database).
+
+## Biến môi trường biến mất sau khi deploy?
+- `wrangler deploy` mặc định xoá các biến kiểu **Text** đặt trên dashboard nếu chúng không có trong `wrangler.jsonc`. Đã thêm `"keep_vars": true` để giữ lại.
+- Biến nhạy cảm (`DATABASE_URL`, `TOKEN_SECRET`, `SEPAY_API_KEY`, `ADMIN_KEY`…) nên tạo loại **Secret** (không bị xoá khi deploy, giá trị luôn ẩn, chỉ thấy tên).
+- Có hai nơi khác nhau: **Settings → Variables and Secrets** (biến chạy khi có request, cần cho `/api`) và **Settings → Build → Variables and secrets** (chỉ dùng lúc build, ví dụ `NODE_VERSION`, `SITE_TARGET`). Biến của `/api` phải nằm ở nơi thứ nhất.
