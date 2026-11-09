@@ -26,7 +26,7 @@
   /* ----- HEADER ----- */
   /* Điện thoại: từ 3 nút công cụ trở lên (không tính nút Night Pass) thì gom hết vào menu ⋯ ngay, không đợi bị chèn ép */
   function tooManyIcons(tools) {
-    if (innerWidth > 520) return false;
+    if (innerWidth > 520 && !(innerWidth > innerHeight && innerHeight <= 520)) return false;   // điện thoại dọc HOẶC màn ngang thấp (cần chừa chỗ cho nội dung)
     var n = Array.prototype.slice.call(tools.children).filter(function (el) { return !el.matches("#passBtn,.pill,[data-keep],.bars-more") && el.offsetParent !== null; }).length;
     return n >= 2;
   }
@@ -76,7 +76,7 @@
   function fit() {
     if (busy) return;
     /* chỉ dựng lại khi chiều rộng/ngôn ngữ đổi (hoặc bị yêu cầu), để menu đang mở không bị đóng khi cuộn/hiện thanh địa chỉ trên điện thoại */
-    var de = document.documentElement, key = innerWidth + "|" + de.lang + "|" + de.getAttribute("data-l");
+    var de = document.documentElement, key = innerWidth + "x" + innerHeight + "|" + de.lang + "|" + de.getAttribute("data-l");
     if (key === lastKey && !wantForce) return;
     if (open && key === lastKey) return;
     busy = true; wantForce = false; lastKey = key;
