@@ -2,7 +2,7 @@
    Chiến lược: mạng trước (luôn lấy bản mới khi có mạng), quá 3,5 giây hoặc lỗi mạng thì dùng bản đã lưu.
    KHÔNG đụng vào /api/* (dữ liệu, thanh toán, Night Pass luôn đi thẳng ra máy chủ). */
 "use strict";
-const CACHE = "np-shell-v2";
+const CACHE = "np-shell-v3";
 const SHELL = ["/", "/index.html", "/cozyplay/index.html", "/popplay/index.html", "/cozyplay/games/dap-deadline/index.html", "/cozyplay/games/cozy-wings/index.html", "/cozyplay/games/gia-cho-viet/index.html", "/cozyplay/games/xin-nghi/index.html", "/cozyplay/games/me-cung-truyen-tay/index.html", "/cozyplay/games/cho-hang-kieu-viet/index.html", "/cozyplay/games/xe-ca-phe/index.html", "/cozyplay/games/duong-ray/index.html", "/cozyplay/games/xay-cau-tre/index.html", "/cozyplay/games/song-sot-cuoi-thang/index.html", "/cozyplay/games/shipper-sieu-toc/index.html", "/cozyplay/games/ne-o-ga/index.html", "/cozyplay/games/noi-mot-net/index.html", "/cozyplay/games/mat-tinh-khong/index.html", "/cozyplay/games/cat-banh-chung/index.html", "/cozyplay/games/ve-mot-net/index.html", "/cozyplay/games/bao-nhieu-giay/index.html", "/cozyplay/games/ban-co-hieu-toi/index.html", "/cozyplay/games/ga-me-ban-trung/index.html", "/cozyplay/games/doi-doi-2048/index.html", "/popplay/games/pop-fly/index.html", "/popplay/games/lang-cua-be/index.html", "/popplay/games/be-dau-bo-me/index.html", "/popplay/games/ten-lua-cua-be/index.html", "/popplay/games/be-noi-dung-khong/index.html", "/popplay/games/doan-tuoi-nao/index.html", "/popplay/games/bo-me-5-giay/index.html", "/popplay/games/con-vat-an-so/index.html", "/popplay/games/ve-chu-quai-vat/index.html", "/popplay/games/nhay-theo-so/index.html", "/popplay/games/qua-song/index.html", "/popplay/games/thap-vong-mau/index.html",
   "/help.html", "/shared.html", "/leaderboard.html", "/subscribe.html", "/privacy.html", "/restricted.html",
   "/shared/theme.css", "/shared/landscape.css", "/shared/endui.css", "/shared/endui.js", "/shared/landscape.js", "/shared/poplandscape.css", "/shared/popfit.js", "/shared/icons.js", "/shared/layout.css", "/shared/bars.css", "/shared/bars.js", "/shared/social.js", "/shared/bridge.js", "/shared/guard.js", "/shared/help.js", "/shared/typeui.css",
@@ -12,8 +12,11 @@ const SHELL = ["/", "/index.html", "/cozyplay/index.html", "/popplay/index.html"
 ];
 const FONTS = ["fonts.googleapis.com", "fonts.gstatic.com"];
 
+/* Host có thể chuyển hướng /x.html → /x/ (Cloudflare): phản hồi "redirected" KHÔNG được dùng để trả lời điều hướng (lỗi mạng khi offline),
+   nên luôn lưu bản sao sạch (redirected = false) của cùng nội dung. */
+const clean = r => (r && r.redirected ? new Response(r.body, { status: r.status, statusText: r.statusText, headers: r.headers }) : r);
 self.addEventListener("install", e => {
-  e.waitUntil(caches.open(CACHE).then(c => Promise.all(SHELL.map(u => c.add(new Request(u, { cache: "reload" })).catch(() => {})))).then(() => self.skipWaiting()));
+  e.waitUntil(caches.open(CACHE).then(c => Promise.all(SHELL.map(u => fetch(new Request(u, { cache: "reload" })).then(r => (r && r.ok ? c.put(u, clean(r)) : null)).catch(() => {})))).then(() => self.skipWaiting()));
 });
 self.addEventListener("activate", e => {
   e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim()));
@@ -31,7 +34,7 @@ self.addEventListener("fetch", e => {
   if (sameOrigin && (u.pathname.startsWith("/api/") || u.pathname.startsWith("/.netlify/") || u.pathname === "/__reload" || u.pathname === "/sw.js")) return;
   e.respondWith((async () => {
     const cache = await caches.open(CACHE), key = sameOrigin ? keyOf(req) : req.url;
-    const save = r => { if (r && (r.ok || r.type === "opaque") && !r.redirected) cache.put(key, r.clone()).catch(() => {}); return r; };
+    const save = r => { if (r && (r.ok || r.type === "opaque")) cache.put(key, r.redirected ? clean(r.clone()) : r.clone()).catch(() => {}); return r; };
     const net = fetch(req).then(save);
     try { return await Promise.race([net, new Promise((_, rej) => setTimeout(() => rej(new Error("slow")), 3500))]); }
     catch (err) {
