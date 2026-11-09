@@ -1,0 +1,43 @@
+/* ===== Màn hình NGANG (điện thoại / máy tính bảng): khung chơi ở GIỮA, HUD hai bên =====
+   Nguyên tắc: #play vẫn là khung chơi "dọc" (mọi đơn vị cqw của game giữ nguyên tỉ lệ) nhưng rộng ~0.92 chiều cao màn hình và nằm giữa;
+   các thẻ phụ (điểm/lượt/combo, mục tiêu, thanh nút hành động, thẻ điểm cuối ván, huy hiệu) được "kéo" ra HAI BÊN khung bằng position:absolute (cột trái: ←, tên, điểm; cột phải: nút phụ + nút hành động), phần còn lại của màn giữ nguyên bố cục dọc nên game nào cũng chạy được.
+   Nút phụ tự mờ khi không chạm (body.idle) để khung chơi nổi bật. File sinh ra từ scripts/cozygame/landscape.src.css bằng mklandscape.py — ĐỪNG sửa tay shared/landscape.css. */
+:root{--stage:min(100vw,calc(100dvh*.92));--side:calc((100vw - var(--stage))/2);--sl:env(safe-area-inset-left,0px);--sr:env(safe-area-inset-right,0px);--cl:calc(var(--side) - 2.5cqw - var(--sl));--cr:calc(var(--side) - 2.5cqw - var(--sr))}
+#play{width:var(--stage);overflow:visible}
+#play::before{content:"";position:absolute;top:0;bottom:0;left:calc(50% - 50vw);width:100vw;background:var(--pbg);z-index:-1}
+.deco{left:calc(50% - 50vw);right:auto;width:100vw}
+/* thanh trên → hai cột HUD */
+.top{left:calc(50% - 50vw);right:auto;width:100vw;top:0;height:100%;padding:2.4cqw calc(2.5cqw + var(--sr)) 2.4cqw calc(2.5cqw + var(--sl));display:grid;grid-template-columns:var(--cl) minmax(0,1fr) var(--cr);grid-auto-rows:min-content;align-content:start;gap:1.8cqw 0;pointer-events:none}
+.top>*{pointer-events:auto}
+.top>.ib{grid-column:3;justify-self:end;width:42px;height:42px;min-width:42px;min-height:42px;padding:0;font-size:15px;transition:opacity .35s}
+.top>#bBk{grid-column:1;grid-row:1;justify-self:start}
+.top>h1{grid-column:1;grid-row:2;white-space:normal;overflow:visible;text-overflow:clip;font-size:3.8cqw;line-height:1.12;margin:0;transition:opacity .35s;max-height:9cqw;overflow:hidden}
+body.idle #play[data-scr="game"] .top>.ib:not(#bBk),body.idle #play[data-scr="game"] .top>h1{opacity:.22}
+body.idle #play[data-scr="game"] .top>.ib:hover,body.idle #play[data-scr="game"] .top>.ib:focus-visible{opacity:1}
+/* mọi màn: bỏ chừa chỗ cho thanh trên (thanh trên đã ra hai bên) → khung chơi cao tối đa */
+.scr{left:2.5cqw;right:2.5cqw;top:2.5cqw;bottom:2.5cqw}
+.scr#game{gap:1.6cqw}
+/* cột trái: điểm / lượt / combo + mục tiêu */
+#game>.stats{position:absolute;right:calc(100% + 2.5cqw);top:calc(27cqw - 2.5cqw);width:calc(var(--cl) - 1cqw);flex-direction:column;gap:1.4cqw;z-index:3}
+#game>.stats .st{display:flex;flex-direction:row-reverse;align-items:center;justify-content:space-between;gap:2cqw;padding:1.1cqw 2.6cqw;border-radius:3cqw;text-align:left}
+#game>.stats .st b{font-size:5.2cqw;display:inline}#game>.stats .st span{font-size:2.9cqw}
+#game>.tgt{position:absolute;right:calc(100% + 2.5cqw);top:calc(62cqw - 2.5cqw);width:calc(var(--cl) - 1cqw);flex-wrap:wrap;justify-content:center;z-index:3}
+#game>.hint,#game>#gHint{display:none}
+/* cột phải: thanh nút hành động xếp dọc, sát đáy */
+#game>#tbBar,#game>#ssBar,#game>#tb{position:absolute;left:calc(100% + 2.5cqw);bottom:0;width:calc(var(--cr) - 1cqw);flex-direction:column;align-items:stretch;gap:1.6cqw;z-index:3}
+#game>#tbBar .btn,#game>#ssBar .btn,#game>#tb .btn{width:100%;min-width:0}
+#game>#tbBar #tbGo,#game>#ssBar #ssGo{order:-1}
+#game>#dpad{position:absolute;right:calc(100% + 2.5cqw);bottom:0;width:calc(var(--cl) - 1cqw);z-index:3}
+/* huy hiệu + khung Night Pass */
+#play[data-pro] #game::after{content:"👑 NIGHT PASS";position:absolute;right:calc(100% + 2.5cqw);bottom:0;font:800 2.8cqw var(--body);letter-spacing:.12em;color:var(--accent);padding:1.2cqw 2.6cqw;border-radius:99cqw;border:.4cqw solid var(--accent);background:color-mix(in srgb,var(--panel) 80%,transparent);box-shadow:0 0 4cqw color-mix(in srgb,var(--accent) 45%,transparent)}
+#play[data-pro]::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;border-left:.5cqw solid color-mix(in srgb,var(--accent) 70%,transparent);border-right:.5cqw solid color-mix(in srgb,var(--accent) 70%,transparent);box-shadow:inset 0 0 14cqw color-mix(in srgb,var(--accent) 22%,transparent),0 0 10cqw color-mix(in srgb,var(--accent) 40%,transparent)}
+/* màn chọn: hero + tên sang trái, chip sang phải */
+#home>.hero,#home>#hHero{position:absolute;right:calc(100% + 2.5cqw);top:50%;transform:translateY(-50%);width:calc(var(--cl) - 1cqw);display:block!important;font-size:15cqw;text-align:center}
+#home>#hChips{position:absolute;left:calc(100% + 2.5cqw);bottom:0;width:calc(var(--cr) - 1cqw);justify-content:flex-end}
+/* màn kết thúc: thẻ điểm sang trái */
+#end>.card{position:absolute;right:calc(100% + 2.5cqw);top:50%;transform:translateY(-50%);width:calc(var(--cl) - 1cqw)}
+#end>#eLeg{position:absolute;left:calc(100% + 2.5cqw);bottom:0;width:calc(var(--cr) - 1cqw)}
+#play[data-scr="end"] .top>.ib:not(#bBk){opacity:.4}
+/* hộp thoại phủ cả bề ngang, nội dung vẫn nằm giữa */
+.ov{left:calc(50% - 50vw);right:auto;width:100vw;inset-block:0;padding-left:calc((100vw - 100cqw)/2 + 5cqw);padding-right:calc((100vw - 100cqw)/2 + 5cqw)}
+#hlpOv{left:calc(50% - 50vw);right:auto;width:100vw;inset-block:0}
