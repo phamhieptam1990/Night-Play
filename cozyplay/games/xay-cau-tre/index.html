@@ -65,7 +65,7 @@ canvas#cv{border-radius:3cqw;background:linear-gradient(var(--field),var(--field
 .btn:focus-visible,.ib:focus-visible,.ty:focus-visible,.lv:focus-visible,.skc:focus-visible,button:focus-visible{outline:.7cqw solid var(--accent);outline-offset:.5cqw}
 
 canvas#cv{touch-action:none;cursor:crosshair}#tbBar{display:flex;gap:2cqw;align-items:center}#tbBar .btn{min-height:44px}#tbGo{flex:1}
-#play[data-ty="1"] canvas#cv{border-color:#0ea5e9}#play[data-ty="2"] canvas#cv{filter:saturate(.8) brightness(.9)}#play[data-ty="3"] canvas#cv{border-color:#b45309;border-width:1.2cqw}
+#play[data-ty="1"] canvas#cv{border-color:#0ea5e9}#play[data-ty="2"] canvas#cv{filter:saturate(.8) brightness(.9)}#play[data-ty="3"] canvas#cv{border-color:#b45309;border-width:1.2cqw}.pfx{position:absolute;left:50%;top:46%;width:14cqw;height:14cqw;margin:-7cqw 0 0 -7cqw;border-radius:50%;border:1.2cqw solid var(--accent);box-shadow:0 0 5cqw var(--accent),inset 0 0 4cqw var(--accent);pointer-events:none;z-index:9;animation:pfx .85s ease-out forwards}.pfx.b{animation-delay:.14s;border-color:#fff}@keyframes pfx{from{transform:scale(.2);opacity:.95}to{transform:scale(4.6);opacity:0}}#play.pglow::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:8;box-shadow:inset 0 0 14cqw var(--accent);animation:pgl .7s ease-out forwards}@keyframes pgl{from{opacity:1}to{opacity:0}}@media (prefers-reduced-motion:reduce){.pfx,#play.pglow::after{display:none}}
 </style>
 <style id="skCss"></style>
 </head>
@@ -136,6 +136,7 @@ function toast(m,ms){const t=$("toast");t.textContent=m;t.hidden=false;clearTime
 let G=null,CH=null,lastEnd=0,raf=0,last=0,acc=0,paused=false;
 const cv=$("cv")||null;
 const isProSk=()=>!!PF.skins[PF.skinSel]&&PF.skinSel!=="basic";
+function proFx(n){const h=$("play");if(!h)return;for(let i=0;i<(n>=12?2:1);i++){const r=document.createElement("i");r.className="pfx"+(i?" b":"");h.appendChild(r);setTimeout(()=>r.remove(),1100)}h.classList.remove("pglow");void h.offsetWidth;h.classList.add("pglow");setTimeout(()=>h.classList.remove("pglow"),800)}
 
 let W=360,H=420,SC=1;const ctx=cv.getContext("2d");
 const GR=20,LMAX=60,TC=12,CC=12,LREF=40,MAXNODE=64;
@@ -205,7 +206,7 @@ function step(D,dt){D.time+=dt;if(D.over)return;
  for(const f of D.fx)f.t-=dt;D.fx=D.fx.filter(f=>f.t>0)}
 function endAttempt(D){D.passedBest=Math.max(D.passedBest,D.passedNow);D.snapEnd={nodes:D.snap0.map((n,i)=>({x:n.x,y:n.y,fix:D.nodes[i]&&D.nodes[i].fix})),mem:D.snapMem.map(e=>e.slice()),g:D.g};D.nodes.forEach((n,i)=>{n.x=D.snap0[i].x;n.y=D.snap0[i].y;delete n.vx;delete n.vy});D.hl=D.brk;
  if(D.attempt>=3){D.over=true;D.reason="end";sfx.end();finish(D);return}D.attempt++;D.st="build";D.vi=0;D.vs=0;D.passedNow=0;D.rat=null;toast(T("again",{n:D.attempt}),1800);updBtn();hud()}
-function burst(n){if(!isProSk()&&n<12)return;const host=$("play"),L=(skinOf().deco||["⭐","🎋"]);for(let i=0;i<n;i++){if(host.querySelectorAll(".eb2").length>30)break;const e=document.createElement("i"),a=Math.random()*6.283,d=14+Math.random()*30;e.className="eb2";e.textContent=L[i%L.length];e.style.left="50%";e.style.top="46%";e.style.setProperty("--dx",Math.cos(a)*d+"cqw");e.style.setProperty("--dy",(Math.sin(a)*d*.8-4)+"cqw");e.style.setProperty("--rt",(Math.random()*120-60)+"deg");host.appendChild(e);setTimeout(()=>e.remove(),950)}}
+function burst(n){if(isProSk())proFx(n);if(!isProSk()&&n<12)return;const host=$("play"),L=(skinOf().deco||["⭐","🎋"]);for(let i=0;i<n;i++){if(host.querySelectorAll(".eb2").length>30)break;const e=document.createElement("i"),a=Math.random()*6.283,d=14+Math.random()*30;e.className="eb2";e.textContent=L[i%L.length];e.style.left="50%";e.style.top="46%";e.style.setProperty("--dx",Math.cos(a)*d+"cqw");e.style.setProperty("--dy",(Math.sin(a)*d*.8-4)+"cqw");e.style.setProperty("--rt",(Math.random()*120-60)+"deg");host.appendChild(e);setTimeout(()=>e.remove(),950)}}
 function HUD(D){return[[scoreOf(D),"sc"],[D.bud,"tm"],[D.attempt+"/3","ex"]]}
 function endChips(D){const n=scoreOf(D);return[TYPES[D.t][0]+" "+L2([TYPES[D.t][1],TYPES[D.t][2]]),T("cars",{a:Math.max(D.passedBest,D.passedNow),b:D.vw.length}),T("left",{n:D.bud}),T("tries",{n:D.attempt}),(D.prevBest>0&&n>D.prevBest)?T("rec"):""]}
 const shareT=D=>L2([TYPES[D.t][1],TYPES[D.t][2]])+" · "+Math.max(D.passedBest,D.passedNow)+"/"+D.vw.length+" 🚶";

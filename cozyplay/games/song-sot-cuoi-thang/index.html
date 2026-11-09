@@ -81,7 +81,7 @@ canvas#cv{border-radius:3cqw;background:linear-gradient(var(--field),var(--field
 #svRes{min-height:6cqw;text-align:center;font:800 4.2cqw var(--body)}
 .svfl{position:absolute;z-index:6;pointer-events:none;font:900 6.4cqw var(--body);left:50%;top:30%;transform:translateX(-50%);animation:svfl 1s ease-out forwards;text-shadow:0 .4cqw 0 rgba(0,0,0,.2)}.svfl.neg{color:var(--bad)}.svfl.pos{color:var(--good)}@keyframes svfl{to{transform:translate(-50%,-14cqw);opacity:0}}
 #sv.lock #svBtns .btn{opacity:.55;pointer-events:none}
-
+.pfx{position:absolute;left:50%;top:46%;width:14cqw;height:14cqw;margin:-7cqw 0 0 -7cqw;border-radius:50%;border:1.2cqw solid var(--accent);box-shadow:0 0 5cqw var(--accent),inset 0 0 4cqw var(--accent);pointer-events:none;z-index:9;animation:pfx .85s ease-out forwards}.pfx.b{animation-delay:.14s;border-color:#fff}@keyframes pfx{from{transform:scale(.2);opacity:.95}to{transform:scale(4.6);opacity:0}}#play.pglow::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:8;box-shadow:inset 0 0 14cqw var(--accent);animation:pgl .7s ease-out forwards}@keyframes pgl{from{opacity:1}to{opacity:0}}@media (prefers-reduced-motion:reduce){.pfx,#play.pglow::after{display:none}}
 </style>
 <style id="skCss"></style>
 </head>
@@ -154,6 +154,7 @@ function toast(m,ms){const t=$("toast");t.textContent=m;t.hidden=false;clearTime
 let G=null,CH=null,lastEnd=0,raf=0,last=0,acc=0,paused=false;
 const cv=$("cv")||null;
 const isProSk=()=>!!PF.skins[PF.skinSel]&&PF.skinSel!=="basic";
+function proFx(n){const h=$("play");if(!h)return;for(let i=0;i<(n>=12?2:1);i++){const r=document.createElement("i");r.className="pfx"+(i?" b":"");h.appendChild(r);setTimeout(()=>r.remove(),1100)}h.classList.remove("pglow");void h.offsetWidth;h.classList.add("pglow");setTimeout(()=>h.classList.remove("pglow"),800)}
 const SF=n=>n;
 
 const CFG=[{m0:8000,cost:115,f:1.45,pool:"c"},{m0:10000,cost:115,f:1.35,pool:"ct",env:1},{m0:8000,cost:115,f:1.5,pool:"cs",timer:6},{m0:3500,cost:58,f:1.2,pool:"cu",study:1}];
@@ -230,9 +231,9 @@ function choose(D,yes){if(!D||D.over||D.lock||paused)return;D.lock=true;$("sv").
  if(D.C.study){const tg=e[1];let d2=0;if(yes&&tg==="study")d2=14;else if(yes&&(tg==="game"||tg==="lau"||tg==="fun"))d2=-7;else if(!yes&&tg==="study")d2=-3;D.study=Math.max(0,Math.min(100,D.study+d2-1))}
  D.money+=dm-D.C.cost;D.mood=Math.max(0,Math.min(100,D.mood+ds+1));D.hist.push(D.money);
  (yes?sfx.yes:sfx.no)();if(dm>0)sfx.cash();if(window.NPFx)NPFx.buzz(yes?12:8);
- const total=dm-D.C.cost;floatFx((total>0?"+":"")+fmtM(total),total>=0?"pos":"neg");$("svRes").textContent=(yes?"✅ ":"❎ ")+(ds>=0?"😊 +":"😟 ")+ds+" · "+(total>=0?"+":"")+fmtM(total);
+ const total=dm-D.C.cost;if(isProSk()&&total>=0)proFx(8);floatFx((total>0?"+":"")+fmtM(total),total>=0?"pos":"neg");$("svRes").textContent=(yes?"✅ ":"❎ ")+(ds>=0?"😊 +":"😟 ")+ds+" · "+(total>=0?"+":"")+fmtM(total);
  hud();renderBars();clearTimeout(D.nt);D.nt=setTimeout(()=>{if(G===D)advance(D)},780)}
-function showEnv(D){const box=$("svEnv"),R=sub(D.seed,800+D.day),vals=[50,200,500];for(let i=2;i>0;i--){const j=Math.floor(R()*(i+1));const x=vals[i];vals[i]=vals[j];vals[j]=x}box.hidden=false;box.innerHTML="<h3>"+T("pick")+"</h3><div class=\"row\">"+vals.map((v,i)=>"<button type=\"button\" data-v=\""+v+"\">🧧</button>").join("")+"</div>";box.querySelectorAll("button").forEach(b=>b.onclick=()=>{const v=+b.dataset.v;box.querySelectorAll("button").forEach(x=>{x.disabled=true;x.classList.add("open");x.textContent="+"+x.dataset.v+"k"});b.style.outline=".8cqw solid #16a34a";D.money+=v;D.mood=Math.min(100,D.mood+4);sfx.cash();floatFx("+"+fmtM(v),"pos");hud();renderBars();setTimeout(()=>{box.hidden=true;D.envDay=D.day;if(G===D)advance(D)},1100)})}
+function showEnv(D){const box=$("svEnv"),R=sub(D.seed,800+D.day),vals=[50,200,500];for(let i=2;i>0;i--){const j=Math.floor(R()*(i+1));const x=vals[i];vals[i]=vals[j];vals[j]=x}box.hidden=false;box.innerHTML="<h3>"+T("pick")+"</h3><div class=\"row\">"+vals.map((v,i)=>"<button type=\"button\" data-v=\""+v+"\">🧧</button>").join("")+"</div>";box.querySelectorAll("button").forEach(b=>b.onclick=()=>{const v=+b.dataset.v;box.querySelectorAll("button").forEach(x=>{x.disabled=true;x.classList.add("open");x.textContent="+"+x.dataset.v+"k"});b.style.outline=".8cqw solid #16a34a";D.money+=v;D.mood=Math.min(100,D.mood+4);sfx.cash();if(isProSk())proFx(14);floatFx("+"+fmtM(v),"pos");hud();renderBars();setTimeout(()=>{box.hidden=true;D.envDay=D.day;if(G===D)advance(D)},1100)})}
 function advance(D){if(D.money<=0){endGame(D,"money");return}if(D.mood<=0){endGame(D,"mood");return}if(D.C.study&&D.study<=0){endGame(D,"study");return}
  if(D.C.env&&D.day<30&&D.envDay!==D.day&&sub(D.seed,700+D.day)()<.4){showEnv(D);return}
  if(D.day>=30){if(D.C.study&&D.study<40){endGame(D,"study");return}D.won=true;endGame(D,"win");return}D.day++;D.cur=D.order[D.day-1];D.lock=false;D.dec=D.C.timer||0;$("sv").classList.remove("lock");$("svRes").textContent="";render();hud()}

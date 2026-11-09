@@ -64,7 +64,7 @@ canvas#cv{border-radius:3cqw;background:linear-gradient(var(--field),var(--field
 @media (hover:hover){.btn:not(:disabled):hover{filter:brightness(1.08);transform:translateY(-.4cqw)}.btn.alt:not(:disabled):hover{background:color-mix(in srgb,var(--accent) 12%,var(--panel))}.ib:hover,.ty:hover,.skc:hover,.lv:hover{border-color:var(--accent);filter:brightness(1.06)}}
 .btn:focus-visible,.ib:focus-visible,.ty:focus-visible,.lv:focus-visible,.skc:focus-visible,button:focus-visible{outline:.7cqw solid var(--accent);outline-offset:.5cqw}
 
-#play[data-ty="1"] canvas#cv{border-color:#22c55e}#play[data-ty="2"] canvas#cv{border-color:#4cc9f0}#play[data-ty="3"] canvas#cv{border-style:dashed}canvas#cv{touch-action:manipulation}#ssBar{display:flex;gap:2cqw;align-items:center}#ssBar .btn{min-height:44px}#ssGo{flex:1}
+#play[data-ty="1"] canvas#cv{border-color:#22c55e}#play[data-ty="2"] canvas#cv{border-color:#4cc9f0}#play[data-ty="3"] canvas#cv{border-style:dashed}canvas#cv{touch-action:manipulation}#ssBar{display:flex;gap:2cqw;align-items:center}#ssBar .btn{min-height:44px}#ssGo{flex:1}.pfx{position:absolute;left:50%;top:46%;width:14cqw;height:14cqw;margin:-7cqw 0 0 -7cqw;border-radius:50%;border:1.2cqw solid var(--accent);box-shadow:0 0 5cqw var(--accent),inset 0 0 4cqw var(--accent);pointer-events:none;z-index:9;animation:pfx .85s ease-out forwards}.pfx.b{animation-delay:.14s;border-color:#fff}@keyframes pfx{from{transform:scale(.2);opacity:.95}to{transform:scale(4.6);opacity:0}}#play.pglow::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:8;box-shadow:inset 0 0 14cqw var(--accent);animation:pgl .7s ease-out forwards}@keyframes pgl{from{opacity:1}to{opacity:0}}@media (prefers-reduced-motion:reduce){.pfx,#play.pglow::after{display:none}}
 </style>
 <style id="skCss"></style>
 </head>
@@ -135,6 +135,7 @@ function toast(m,ms){const t=$("toast");t.textContent=m;t.hidden=false;clearTime
 let G=null,CH=null,lastEnd=0,raf=0,last=0,acc=0,paused=false;
 const cv=$("cv")||null;
 const isProSk=()=>!!PF.skins[PF.skinSel]&&PF.skinSel!=="basic";
+function proFx(n){const h=$("play");if(!h)return;for(let i=0;i<(n>=12?2:1);i++){const r=document.createElement("i");r.className="pfx"+(i?" b":"");h.appendChild(r);setTimeout(()=>r.remove(),1100)}h.classList.remove("pglow");void h.offsetWidth;h.classList.add("pglow");setTimeout(()=>h.classList.remove("pglow"),800)}
 const SF=n=>n;
 
 let W=360,H=420,SC=1;const ctx=cv.getContext("2d");const VEL=70,VIS=3.4;
@@ -185,7 +186,7 @@ function step(D,dt){if(D.over)return;D.time+=dt;
  if(D.st==="plan"){D.lv.stops.forEach(s=>{if(s.at&&!s.sh&&vis(D,s)){s.sh=1;D.fx.push({x:s.x,y:s.y,t:1.1,st:"new"});sfx.tap();if(window.NPFx)NPFx.buzz(10)}});const was=Math.ceil(D.planT);D.planT-=dt;if(D.planT<=5&&Math.ceil(D.planT)!==was&&D.planT>0)sfx.tick();if(D.planT<=0)startRun(D,true)}
  else if(D.st==="run"){D.runT+=dt*VEL*VIS;const L=D.lv;while(D.runDone<D.marks.length&&D.runT>=D.marks[D.runDone]){const e=D.det.ev[D.runDone],s=L.stops[e.i];D.fx.push({x:s.x,y:s.y,t:.9,st:e.st});(e.st==="ok"?sfx.drop:sfx.bad)();D.runDone++}if(D.runT>=D.runLen+8)finishLevel(D)}
  for(const f of D.fx)f.t-=dt;D.fx=D.fx.filter(f=>f.t>0);if(Math.floor(D.time*4)!==D._q){D._q=Math.floor(D.time*4);hud()}}
-function burst(n){if(!isProSk()&&n<12)return;const host=$("play"),L=(skinOf().deco||["⭐","📦"]);for(let i=0;i<n;i++){if(host.querySelectorAll(".eb2").length>30)break;const e=document.createElement("i"),a=Math.random()*6.283,d=14+Math.random()*30;e.className="eb2";e.textContent=L[i%L.length];e.style.left="50%";e.style.top="46%";e.style.setProperty("--dx",Math.cos(a)*d+"cqw");e.style.setProperty("--dy",(Math.sin(a)*d*.8-4)+"cqw");e.style.setProperty("--rt",(Math.random()*120-60)+"deg");host.appendChild(e);setTimeout(()=>e.remove(),950)}}
+function burst(n){if(isProSk())proFx(n);if(!isProSk()&&n<12)return;const host=$("play"),L=(skinOf().deco||["⭐","📦"]);for(let i=0;i<n;i++){if(host.querySelectorAll(".eb2").length>30)break;const e=document.createElement("i"),a=Math.random()*6.283,d=14+Math.random()*30;e.className="eb2";e.textContent=L[i%L.length];e.style.left="50%";e.style.top="46%";e.style.setProperty("--dx",Math.cos(a)*d+"cqw");e.style.setProperty("--dy",(Math.sin(a)*d*.8-4)+"cqw");e.style.setProperty("--rt",(Math.random()*120-60)+"deg");host.appendChild(e);setTimeout(()=>e.remove(),950)}}
 function HUD(D){return[[scoreOf(D),"sc"],[D.st==="plan"?Math.ceil(Math.max(0,D.planT))+"s":D.st==="run"?"🛵":"✓","tm"],[D.route.length+"/"+D.lv.n,"ex"]]}
 function endChips(D){const n=scoreOf(D),avg=D.res.length?Math.round(D.res.reduce((a,r)=>a+r.pct,0)/D.res.length*100):0;return[TYPES[D.t][0]+" "+L2([TYPES[D.t][1],TYPES[D.t][2]]),T("pct",{p:avg}),D.maxCombo>0?"🎯×"+D.maxCombo:"",(D.prevBest>0&&n>D.prevBest)?T("rec"):""]}
 const shareT=D=>L2([TYPES[D.t][1],TYPES[D.t][2]]);

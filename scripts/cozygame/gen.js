@@ -27,6 +27,11 @@ function gen(id) {
   };
   const STATS = '<div class="stats"><div class="st"><b id="sSc">0</b><span id="sScL"></span></div><div class="st"><b id="sSh">0</b><span id="sShL"></span></div><div class="st"><b id="sEx">0</b><span id="sExL"></span></div></div><div class="tgt" id="tgt" hidden><span id="tgtT"></span><i><b id="tgtB"></b></i></div>';
   rep.GAME_HTML = rep.GAME_HTML.split("{{STATS}}").join(STATS).split("{{HINT}}").join('<p class="mut hint" id="gHint"></p>');
+  /* Hiệu ứng mừng RIÊNG của Night Pass: vòng sóng + viền sáng theo màu giao diện (bản free không có) */
+  const PROCSS = ".pfx{position:absolute;left:50%;top:46%;width:14cqw;height:14cqw;margin:-7cqw 0 0 -7cqw;border-radius:50%;border:1.2cqw solid var(--accent);box-shadow:0 0 5cqw var(--accent),inset 0 0 4cqw var(--accent);pointer-events:none;z-index:9;animation:pfx .85s ease-out forwards}.pfx.b{animation-delay:.14s;border-color:#fff}@keyframes pfx{from{transform:scale(.2);opacity:.95}to{transform:scale(4.6);opacity:0}}#play.pglow::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:8;box-shadow:inset 0 0 14cqw var(--accent);animation:pgl .7s ease-out forwards}@keyframes pgl{from{opacity:1}to{opacity:0}}@media (prefers-reduced-motion:reduce){.pfx,#play.pglow::after{display:none}}";
+  const PROJS = "function proFx(n){const h=$(\"play\");if(!h)return;for(let i=0;i<(n>=12?2:1);i++){const r=document.createElement(\"i\");r.className=\"pfx\"+(i?\" b\":\"\");h.appendChild(r);setTimeout(()=>r.remove(),1100)}h.classList.remove(\"pglow\");void h.offsetWidth;h.classList.add(\"pglow\");setTimeout(()=>h.classList.remove(\"pglow\"),800)}\n";
+  rep.EXTRA_CSS = (rep.EXTRA_CSS || "") + PROCSS;
+  rep.GAMEJS = PROJS + rep.GAMEJS.split("function burst(n){if(!isProSk()&&n<12)return;").join("function burst(n){if(isProSk())proFx(n);if(!isProSk()&&n<12)return;");
   let t = tpl;
   for (const k of Object.keys(rep)) t = t.split("@@" + k + "@@").join(rep[k]);
   t = t.replace(/<html lang="vi">/, '<html lang="vi">');
