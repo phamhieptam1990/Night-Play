@@ -15,7 +15,12 @@ Nguyên tắc chung: **không báo "xong" khi chưa tự mở trình duyệt th�
 - **Chữ luôn nằm trong thẻ có nền** (panel + viền + bo vừa phải). Không chữ đen trơn trên nền; không thông báo (toast) nền trắng/chữ đen; toast theo màu giao diện hiện tại; không bo tròn quá mức.
 - **Gợi ý/hướng dẫn dài không nằm sẵn trên màn hình**: gom vào nút icon "?" (`shared/help.js`), bấm mới mở. Trên màn chơi chỉ giữ tối đa 1 dòng ngắn.
 - **Có nút ← (`#bBk`) ở thanh trên** để về màn chọn loại chơi từ mọi màn; không bắt người chơi phải đi qua màn kết thúc.
-- **Màn hình ngang** (điện thoại xoay ngang, cửa sổ PC rộng-thấp): khung chơi nằm GIỮA, HUD (điểm, combo, lượt/thời gian, nút) chia hai bên, thông tin phụ tự ẩn; không để cột game hẹp một bên và trống phần còn lại; nút thanh trên kích thước cố định ~40–44px (không tính theo cqw). Dùng `shared/landscape.css`/`landscape.js`; chừa `env(safe-area-inset-*)`.
+- **Thẻ `<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">` là BẮT BUỘC** trong `<head>` (khung `scripts/cozygame/tpl.html` đã có). Thiếu thẻ này thì điện thoại hiển thị trang ở bề rộng 980px (phóng nhỏ, tràn ngang); `check-landscape.js` giả lập thiết bị di động nên bắt được.
+- **Màn hình ngang** (điện thoại xoay ngang, cửa sổ PC rộng-thấp): khung chơi nằm GIỮA, HUD (điểm, combo, lượt/thời gian, nút) chia hai bên, thông tin phụ tự ẩn; không để cột game hẹp một bên và trống phần còn lại; nút thanh trên cao cố định ~42px (không tính theo cqw).
+  - **Điều kiện kích hoạt** (`shared/landscape.css`): `(orientation:landscape) and (max-height:700px) and (min-width:560px)` hoặc `(orientation:landscape) and (pointer:coarse) and (max-height:900px) and (min-width:800px)`. Game viết riêng bố cục ngang (Cozy Wings, Đập Deadline) dùng `(min-aspect-ratio:11/10) and (max-height:760px)`.
+  - **Cách dùng cho game mới**: nhúng `<link rel="stylesheet" href="../../../shared/landscape.css"><script src="../../../shared/landscape.js" defer></script>` (game Cozy sinh tự động đã có sẵn trong `tpl.html`). `landscape.js` ghi `#play[data-scr]` (màn đang hiện), gom `#home` thành 2 cột `.hl/.hr`, đặt `#play[data-pro]` cho giao diện Night Pass và làm mờ nút phụ khi đang chơi.
+  - **Sửa CSS ngang**: chỉ sửa `scripts/cozygame/landscape.src.css` rồi chạy `python3 scripts/cozygame/mklandscape.py` (sinh ra `shared/landscape.css`, KHÔNG sửa tay). Thẻ phụ riêng của game (stats, tgt, thanh nút `#tbBar/#ssBar/#tb`, `#dpad`, `#lad`, `#end>.card`) được kéo ra hai bên bằng position:absolute; thêm id mới vào danh sách đó nếu game có thẻ phụ khác.
+  - **Kiểm tra**: `NODE_PATH=<puppeteer-core> node scripts/cozygame/check-landscape.js [id,id]` (20 game × 844x390, 667x375, 1190x640 × free/Night Pass × chọn/chơi/kết thúc/popup ?: không tràn, không bị cắt, nút 38–46px, tâm khung chơi ±8%, popup trọn trong màn). Chạy khi sửa bất kỳ thứ gì liên quan bố cục; `check.js` có thêm kiểm tra ngang nhanh cho 9 game sinh tự động.
 - Nút chạm ≥ 44px; cursor tay, viền focus rõ khi bấm Tab.
 - Nhân vật/biểu tượng **không mờ, không chìm vào nền** (nền tối → thêm đĩa sáng/halo phía sau); không bao giờ mờ đến mức không thấy. Nhân vật quay mặt đúng hướng di chuyển (emoji phụ thuộc nền tảng: dùng biểu tượng trung tính hoặc lật bằng `scale(-1,1)`).
 - Bản thân game cũng phải **offline, không lag, không gọi máy chủ lúc chơi, không AI**.
@@ -47,6 +52,7 @@ Nguyên tắc chung: **không báo "xong" khi chưa tự mở trình duyệt th�
 
 ## 7. Trước khi báo "xong"
 - [ ] `check.js` "✓ tất cả đạt"
+- [ ] `check-landscape.js` "✓ màn ngang đạt" (nếu đụng bố cục/giao diện)
 - [ ] Ảnh free + từng giao diện Night Pass đã tự nhìn (dọc + ngang)
 - [ ] Chơi hộ: mở link `?helper=1`, tiếp tục đúng ván dở, nút bị ẩn
 - [ ] Thách đấu: mở link `#ch=...` được
