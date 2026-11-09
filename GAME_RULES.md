@@ -82,6 +82,12 @@ Dự án có 3 nhóm: **Cozy Play** (`cozyplay/`: 9 game sinh tự động từ 
 - **Back**: khi đang chơi, game đẩy thêm 1 mục lịch sử (sau thao tác chạm đầu tiên) → Back/vuốt = về màn chọn của game (và lưu ván); Back lần nữa = đóng game (trang cổng); ← hoặc kết thúc thì mục đó được gỡ. Trang cổng gọi `NPResume.flush()` trước khi gỡ iframe và `NPResume.exitPlay()` khi bấm nút 🏠 của khung. Đừng gọi `history.pushState/back` tuỳ tiện trong game.
 - Kiểm tra: `node scripts/cozygame/check-resume.js [--all]` (đã chạy trong `check.js` cho 9 game Cozy). Thử Back phải dùng `history.back()` ở cửa sổ ngoài (không dùng `page.goBack()`).
 
+## 5e. Pop Play: nút "?" cách chơi (`shared/pophelp.js`) — game Pop mới BẮT BUỘC có
+- Mỗi game Pop Play khai báo nội dung riêng bằng `<script>window.POPHELP={vi:{t:"Cách chơi",s:[["🐊","câu ngắn"],...],n:"nhắc nhỏ (tuỳ chọn)"},en:{...}}</script>` đặt NGAY TRƯỚC `<script src="../../../shared/pophelp.js" defer>` (cạnh `popfit.js`/`icons.js`). Chỉ 2–4 ý, câu ngắn, từ dễ hiểu cho bé và phụ huynh, VI + EN; **đọc code game để mô tả đúng luật thật, không bịa**.
+- Module tự gắn nút "?" (SVG, 44px, id `phBtn`) vào `.top` ngay trước `#soundBtn`, mở thẻ có nền trong `#play` (không cuộn: tự co chữ cho vừa, màu theo theme game, nút lớn "Đã hiểu!/Got it!", nút loa đọc to bằng `speechSynthesis`), tạm dừng game bằng `NP.pauseNow()/resumeNow()` khi mở/đóng. Lần đầu vào game nút "?" chỉ nảy nhẹ vài nhịp (`localStorage pophelp-seen:<id>`), KHÔNG tự bật thẻ để không chặn chơi hộ / thách đấu / check.
+- Game đổi luật/loại chơi thì cập nhật nội dung "?" cùng lúc. Đừng dùng id `phBtn`/`phOv`/`phCard` trong game. File `shared/pophelp.js` phải có trong `SHELL` của `sw.js`.
+- Kiểm tra: mở từng game ở 390x844, 844x390, 320x568 (VI + EN): nút "?" ≥44px, không đè nút khác, tên game không bị cắt, thẻ không cuộn/tràn, "Đã hiểu" đóng được; chụp ảnh và tự nhìn.
+
 ## 6. Dữ liệu, quyền riêng tư
 - Game không thu thập thêm dữ liệu cá nhân. Nếu thêm bất cứ thứ gì lưu trên máy chủ hoặc localStorage mới → cập nhật `privacy.html` (VI + EN) và ngày trong `shared/site.js`.
 - Bảng xếp hạng tự nguyện; game trẻ em không có ô gõ tên.
