@@ -92,10 +92,28 @@ async function sweep() {
   await db.query("delete from relays where expires_at < now()");
 }
 
-/* Gửi email OTP. TODO: nối SMTP/Resend/SES tại đây. */
+/* Gửi email (OTP khôi phục gói). Dùng API HTTP nên chạy được cả trên Node/Netlify lẫn Cloudflare Workers.
+   Chọn nhà cung cấp bằng biến môi trường (đặt loại Secret):
+     - BREVO_API_KEY  + MAIL_FROM  (Brevo: gói miễn phí ~300 thư/ngày; MAIL_FROM phải là địa chỉ đã xác minh "Sender" trong Brevo, không cần tên miền riêng)
+     - RESEND_API_KEY + MAIL_FROM  (Resend: cần xác minh tên miền gửi thư để gửi cho người khác)
+   MAIL_FROM_NAME (tuỳ chọn, mặc định "Night Play"). Chưa cấu hình: chỉ ghi log tên nhà cung cấp còn thiếu (KHÔNG ghi nội dung/OTP) và trả false.
+   Không bao giờ ném lỗi ra ngoài: /api/restore luôn trả 200 để không lộ email nào đã mua. */
 async function sendMail(to, subject, text) {
   if (CFG.devOtp) console.log(`[mail] to=${to} | ${subject} | ${text}`);
-  // ví dụ: await fetch("https://api.resend.com/emails", {...})
+  const from = env("MAIL_FROM", ""), name = env("MAIL_FROM_NAME", "Night Play"), brevo = env("BREVO_API_KEY", ""), resend = env("RESEND_API_KEY", "");
+  if (!from || (!brevo && !resend)) { console.error("sendMail: chưa cấu hình (cần MAIL_FROM và BREVO_API_KEY hoặc RESEND_API_KEY)"); return false; }
+  const html = `<div style="font-family:system-ui,sans-serif;font-size:16px;line-height:1.5">${String(text).replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c])).replace(/\n/g, "<br>")}</div>`;
+  const ac = typeof AbortController !== "undefined" ? new AbortController() : null, tm = ac ? setTimeout(() => ac.abort(), 8000) : 0;
+  try {
+    const r = brevo
+      ? await fetch("https://api.brevo.com/v3/smtp/email", { method: "POST", signal: ac && ac.signal, headers: { "api-key": brevo, "content-type": "application/json", accept: "application/json" },
+          body: JSON.stringify({ sender: { name, email: from }, to: [{ email: to }], subject, textContent: text, htmlContent: html }) })
+      : await fetch("https://api.resend.com/emails", { method: "POST", signal: ac && ac.signal, headers: { authorization: "Bearer " + resend, "content-type": "application/json" },
+          body: JSON.stringify({ from: `${name} <${from}>`, to: [to], subject, text, html }) });
+    if (!r.ok) { const b = await r.text().catch(() => ""); console.error("sendMail " + (brevo ? "brevo" : "resend") + " HTTP " + r.status + " " + String(b).slice(0, 200).replace(/[A-Za-z0-9_\-]{24,}/g, "<ẩn>")); return false; }
+    return true;
+  } catch (e) { console.error("sendMail lỗi mạng:", String(e && e.message || e).slice(0, 120)); return false; }
+  finally { clearTimeout(tm); }
 }
 
 /* ===== NGƯỜI DÙNG / ĐỊNH DANH ===== */

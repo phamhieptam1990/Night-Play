@@ -37,3 +37,11 @@ Kiến trúc: `dist/` (file tĩnh, băng thông không giới hạn) + Worker `w
 - Nguyên nhân: wrangler mặc định `keep_names` chèn `__name(...)` vào mọi hàm. Mã Night Pass (`server/pro/*.js`) được gửi cho trình duyệt bằng `main.toString()`, nên trình duyệt báo `__name is not defined`, game im lặng giữ khoá. Netlify không bị vì không dùng keep_names.
 - Đã sửa bằng `"keep_names": false` trong `wrangler.jsonc` / `wrangler.admin.jsonc`. TRƯỚC KHI deploy chạy `node scripts/check-worker-bundle.js` (phải in ✓).
 - Người chơi tự kiểm tra bằng trang `/passcheck`.
+
+## Email OTP khôi phục gói (/api/restore)
+- Trước đây `sendMail` chỉ là khung rỗng nên không có thư nào được gửi. Nay gửi qua API HTTP của **Brevo** hoặc **Resend** (chạy được trên Cloudflare Workers).
+- **Brevo (không cần tên miền):** đăng ký brevo.com (gói miễn phí ~300 thư/ngày) → Senders, Domains & Dedicated IPs → Senders → thêm và **xác minh** một địa chỉ email gửi → SMTP & API → API Keys → tạo khoá.
+- **Resend:** cần xác minh tên miền gửi thư mới gửi được cho người khác.
+- Đặt trong Worker (Settings → Variables and Secrets, loại **Secret**): `BREVO_API_KEY` (hoặc `RESEND_API_KEY`), `MAIL_FROM` (địa chỉ đã xác minh), tuỳ chọn `MAIL_FROM_NAME`.
+- Gmail cá nhân làm người gửi thường vào Spam; có tên miền riêng thì thiết lập SPF/DKIM theo nhà cung cấp để thư vào hộp thư chính.
+- `/api/restore` luôn trả 200 để không lộ email nào đã mua; lỗi gửi chỉ ghi vào log Worker (Observability), không hiện cho người dùng.
