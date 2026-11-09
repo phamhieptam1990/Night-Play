@@ -10,6 +10,33 @@ const POP = { "bo-me-5-giay": "begin(0,{});setTimeout(()=>{G.p=3;G.j=2;G.bonus=2
   "lang-cua-be": "startSession(0,null,{});setTimeout(()=>{S.good=4;S.score=40;finishSession()},400)", "pop-fly": "startRound(Object.keys(PF.types||{})[0]||0);setTimeout(()=>{const S=PF.S;if(S){S.score=120;S.correct=5}finishRound()},500)",
   "be-dau-bo-me": "", "be-noi-dung-khong": "", "qua-song": "", "ten-lua-cua-be": "", "thap-vong-mau": "", "ve-chu-quai-vat": "" };
 const VPS = [[380, 760], [844, 390], [1000, 536], [820, 600]];
+/* ĐIỆN THOẠI DỌC qua trang cổng: đúng 1 nút ← + 1 nút menu ⋯ (≥44px), 📷/📤 nằm TRONG bảng menu #npFan, không còn nút nổi/← của cổng, tiêu đề không bị cắt, ← và ⋯ không bị đè. Chạy trong khung game. */
+const MENU_MEASURE = () => {
+  const vis = e => { if (!e) return false; const s = getComputedStyle(e), r = e.getBoundingClientRect(); return e.offsetParent !== null && s.visibility !== "hidden" && +s.opacity > .05 && r.width > 6 && r.height > 6 && !e.closest("[hidden]"); };
+  const out = { errs: [] }, par = window.parent.document, fan = document.getElementById("npFan");
+  const backs = ["bBk", "bBack", "homeBtn"].map(i => document.getElementById(i)).filter(e => vis(e) && !(fan && fan.contains(e)));
+  const fabs = [...document.querySelectorAll("#npFab")].filter(vis);
+  if (backs.length !== 1) out.errs.push("có " + backs.length + " nút ← (cần đúng 1)");
+  if (fabs.length !== 1) out.errs.push("có " + fabs.length + " nút menu ⋯ (cần đúng 1)");
+  for (const [n, e] of [["←", backs[0]], ["⋯", fabs[0]]]) if (e) { const r = e.getBoundingClientRect(); if (Math.min(r.width, r.height) < 43.5) out.errs.push("nút " + n + " nhỏ " + Math.round(r.width) + "x" + Math.round(r.height) + " (<44)"); const t = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2); if (t && t !== e && !e.contains(t) && !t.contains(e)) out.errs.push("nút " + n + " bị " + (t.id || t.className || t.tagName) + " đè"); const p = par.elementFromPoint(r.left + r.width / 2 + (window.frameElement ? window.frameElement.getBoundingClientRect().left : 0), r.top + r.height / 2 + (window.frameElement ? window.frameElement.getBoundingClientRect().top : 0)); if (p && p !== window.frameElement) out.errs.push("nút " + n + " bị nút của cổng (" + (p.id || p.className) + ") đè"); }
+  const floats = [...par.querySelectorAll(".nps-cam,.nps-fab")].filter(e => { const s = getComputedStyle(e), r = e.getBoundingClientRect(); return s.display !== "none" && s.visibility !== "hidden" && r.width > 0; });
+  if (floats.length) out.errs.push("còn " + floats.length + " nút nổi rời của cổng (.nps-cam/.nps-fab)");
+  for (const id of ["bCam", "bShr"]) if (!(fan && fan.querySelector("#" + id))) out.errs.push(id + " không nằm trong menu #npFan");
+  const h = document.querySelector(".top h1,#ttl,#title,h1"); if (h && vis(h) && h.scrollWidth > h.clientWidth + 1) out.errs.push("tiêu đề bị cắt (" + h.scrollWidth + ">" + h.clientWidth + ")");
+  return out;
+};
+/* TÊN GAME SÁT KHUNG THÔNG TIN (điện thoại dọc, màn chọn): khoảng cách từ tên game tới khối nội dung ngay dưới ≤ 20px, tối đa 2 dòng, không bị cắt "…". Chạy trong khung game. */
+const TITLE_MEASURE = () => {
+  const vis = e => { const s = getComputedStyle(e), r = e.getBoundingClientRect(); return e.offsetParent !== null && s.visibility !== "hidden" && +s.opacity > .05 && r.width > 6 && r.height > 6 && !e.closest("[hidden]"); };
+  const tv = [...document.querySelectorAll("#npTitle,.hometitle,.gametitle")].find(vis); if (!tv) return { errs: ["không thấy tên game sát khung (#npTitle/.hometitle)"] };
+  const tr = tv.getBoundingClientRect(), errs = []; let best = 1e9;
+  for (const e of document.querySelectorAll("button,canvas,p,h2,h3,img,.card,.cards,.ask,.hdaily,.stat,.stats,.cell,.ty,.hl > *")) { if (!vis(e) || e.closest(".top,#npFan,#npTitle,.hometitle,.gametitle")) continue; const r = e.getBoundingClientRect(); if (r.top >= tr.bottom - 1 && r.bottom > tr.bottom && r.width > 40) best = Math.min(best, r.top - tr.bottom); }
+  const cs = getComputedStyle(tv), lh = parseFloat(cs.lineHeight) || parseFloat(cs.fontSize) * 1.15, lines = Math.round(tr.height / lh);
+  if (best > 20) errs.push("tên game cách khung thông tin " + Math.round(best) + "px (>20)");
+  if (lines > 2) errs.push("tên game " + lines + " dòng (>2)");
+  if (tv.scrollWidth > tv.clientWidth + 1) errs.push("tên game bị cắt");
+  return { errs };
+};
 const only = (process.argv[2] || "").split(",").filter(Boolean), fails = [];
 const note = (ok, msg) => { if (!ok) { fails.push(msg); console.log("  ✗ " + msg); } };
 const wait = ms => new Promise(r => setTimeout(r, ms));
@@ -70,6 +97,16 @@ const MEASURE = () => {
       }
       note(!errs.length, tag + ": lỗi JS " + errs.slice(0, 1)); await pg.close();
     }
+  }
+  /* menu ⋯ trên điện thoại dọc: MỌI game (Cozy sinh tự động + viết tay, Pop Play) mở qua trang cổng thật ở 390x844 và 360x640 */
+  const fs = require("fs"), allIds = [...fs.readdirSync(path.join(root, "cozyplay", "games")).filter(d => fs.existsSync(path.join(root, "cozyplay", "games", d, "index.html"))).map(i => ["cozyplay", i]), ...fs.readdirSync(path.join(root, "popplay", "games")).filter(d => fs.existsSync(path.join(root, "popplay", "games", d, "index.html"))).map(i => ["popplay", i])].filter(([, i]) => !only.length || only.includes(i));
+  for (const [portal, id] of allIds) for (const [W, H] of [[390, 844], [360, 640]]) {
+    const { pg, fr } = await open(portal, id, W, H), tag = "menu " + portal + "/" + id + " " + W + "x" + H;
+    if (!fr) { note(false, tag + ": không mở được game trong cổng"); await pg.close(); continue; }
+    await wait(900); const ev = async (f, what) => { try { return await fr.evaluate(f); } catch (e) { return { errs: ["không đo được " + what + ": " + String(e).slice(0, 60)] }; } }; const m = await ev(MENU_MEASURE, "menu");
+    note(!m.errs.length, tag + ": " + m.errs.join("; "));
+    if (portal === "cozyplay") { const t = await ev(TITLE_MEASURE, "tên game"); note(!t.errs.length, tag.replace("menu ", "tên game ") + ": " + t.errs.join("; ")); }
+    await pg.close();
   }
   /* lưới trang cổng không lệch sau khi thoát game: Vẽ Một Nét (Cozy) / Qua Sông (Pop), ở khung nhỏ (lưới trượt) */
   if (!only.length) for (const [portal, id] of [["cozyplay", "ve-mot-net"], ["popplay", "qua-song"]]) for (const [W, H] of [[323, 603], [380, 760], [603, 323]]) {

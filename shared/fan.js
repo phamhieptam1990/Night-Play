@@ -50,11 +50,17 @@
     /* chế độ local: .top ghim đầu màn hình, một hàng; nút menu + bảng bám vào .top */
     ".top.npfan{position:fixed;top:0;left:0;right:0;width:auto;max-width:none;margin:0;box-sizing:border-box;flex-wrap:nowrap;align-items:center;gap:8px;z-index:40;padding:8px 68px 8px 12px;min-height:64px}" +
     ".top.npfan h1{flex:1 1 auto;min-width:0;max-width:none;overflow:hidden;text-overflow:ellipsis}" +
+    ".top.npfan #bBk{order:-3;margin:0}" +                      /* ← luôn ở góc trái, trước tiêu đề */
     ".top.npfan #npFab{right:12px;top:50%;margin-top:-24px}" +
     ".top.npfan #npFan{position:static;inset:auto}" +
     ".top.npfan #npFan .bk{position:fixed;inset:0}" +
     ".top.npfan #npFan .pn{right:12px;top:calc(100% - 4px)}" +
     "body.np-local{padding-top:64px;box-sizing:border-box}" +
+    /* tên game SÁT khung thông tin: bản sao của h1 nằm ngay chỗ .top cũ trong luồng (nên dính trên khối nội dung), h1 trên thanh ghim chỉ giữ chỗ */
+    ".top.npfan h1{visibility:hidden}" +
+    "#npTitle{display:none}" +
+    ".np-local #npTitle{display:block;flex:none;box-sizing:border-box;width:100%;max-width:100%;margin:0 0 6px;padding:0 8px;text-align:center;white-space:normal;text-wrap:balance;overflow-wrap:anywhere;overflow:visible;font-size:clamp(20px,6.6vw,30px);line-height:1.12;text-shadow:none}" +
+    ".np-local #npTitle .probadge,.np-local #npTitle .bl{display:none}" +
     "}" +
     "@media (prefers-reduced-motion:reduce){#npFab,#npFab svg,#npFan .bk,#npFan .pn{transition:none!important}}";
   document.head.appendChild(st);
@@ -62,6 +68,19 @@
   var DOTS = '<svg class="d" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="19" cy="12" r="2.2"/></svg>';
   var XICO = '<svg class="x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
 
+  var ttl = null, ttlMo = null;
+  function syncTitle() {
+    var h = top.querySelector("h1,#title,#ttl"); if (!h || !ttl) return;
+    var c = h.cloneNode(true); [].slice.call(c.querySelectorAll("[hidden],.probadge,.bl")).forEach(function (e) { e.remove(); }); [].slice.call(c.querySelectorAll("[id]")).forEach(function (e) { e.removeAttribute("id"); }); c.removeAttribute("id");
+    if (ttl.innerHTML !== c.innerHTML) ttl.innerHTML = c.innerHTML;
+    var cs = getComputedStyle(h); ttl.style.fontFamily = cs.fontFamily; ttl.style.fontWeight = cs.fontWeight; ttl.style.color = cs.color; ttl.style.letterSpacing = cs.letterSpacing;
+  }
+  function buildTitle() {
+    if (!local || ttl) return; var h = top.querySelector("h1,#title,#ttl"); if (!h) return;
+    ttl = document.createElement("div"); ttl.id = "npTitle"; ttl.setAttribute("aria-hidden", "true");
+    top.parentNode.insertBefore(ttl, top.nextSibling); syncTitle();
+    try { ttlMo = new MutationObserver(syncTitle); ttlMo.observe(h, { childList: true, characterData: true, subtree: true, attributes: true, attributeFilter: ["style", "class", "hidden"] }); } catch (e) {}
+  }
   function build() {
     if (fab) return;
     fab = document.createElement("button"); fab.type = "button"; fab.id = "npFab"; fab.innerHTML = DOTS + XICO; fab.setAttribute("aria-haspopup", "true"); fab.setAttribute("aria-expanded", "false");
@@ -120,7 +139,7 @@
     if (!mq.matches) return;
     var c = candidates();
     if (c.length < 3 && !moved) return;                         // trang không có đủ nút phụ (Pop Play...): bỏ qua
-    build(); moved = true; play.classList.add("npfan"); if (local) document.body.classList.add("np-local");
+    build(); moved = true; play.classList.add("npfan"); if (local) { document.body.classList.add("np-local"); buildTitle(); }
     GRID.forEach(function (role) {
       var e = elOf(role); if (!e || e.parentNode === panel) return;
       if (e.parentNode !== top && role !== "help") return;

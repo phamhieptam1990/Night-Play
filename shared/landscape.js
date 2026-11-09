@@ -57,7 +57,7 @@
     var short = matchMedia("(orientation:landscape) and (max-height:520px)"), docked = true;   /* màn ngang thấp: hết chỗ xếp cột nút → để trang cổng dùng cột riêng bên trái */
     function applyDock() { docked = !short.matches; cam.hidden = shr.hidden = !docked; window.__npDock = docked; if (bk && docked && bk.hidden) bk.hidden = false; if (bk && !docked) { var h0 = document.getElementById("home"); bk.hidden = !!(h0 && !h0.hidden); } }
     /* nút ← luôn hiện: ở màn chọn thì thoát về trang cổng */
-    var bk = document.getElementById("bBk"), home = document.getElementById("home");
+    var bk = document.getElementById("bBk") || document.getElementById("bBack"), home = document.getElementById("home");   /* Bàn Cờ Hiếu Tối dùng id bBack */
     if (bk) {
       var keep = function () { if (docked && bk.hidden) bk.hidden = false; };
       try { new MutationObserver(keep).observe(bk, { attributes: true, attributeFilter: ["hidden"] }); } catch (e) {} keep();
