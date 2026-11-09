@@ -9,7 +9,7 @@
   var loc = location, host = loc.hostname;
   var local = host === "localhost" || host === "127.0.0.1" || host === "[::1]" || loc.protocol === "file:";
   if (local && !/[?&]guard=1\b/.test(loc.search)) return;
-  if (/\/restricted\.html$/.test(loc.pathname)) return;
+  if (/\/restricted(\.html)?\/?$/.test(loc.pathname)) return;   // Cloudflare rút gọn /restricted.html → /restricted: trang này phải được miễn, nếu không sẽ chuyển tiếp vô hạn
 
   var IN_FRAME = window.top !== window;
 
