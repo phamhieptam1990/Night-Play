@@ -4,5 +4,5 @@
 window.SITE = {
   operator: "[Tên đơn vị vận hành / Operator name]",
   email:    "phamhieptam@gmail.com",
-  updated:  "2026-11-05"
+  updated:  "2026-11-09"
 };
