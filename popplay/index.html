@@ -659,9 +659,11 @@ function fitGrid(){
     grid.style.setProperty("--s", Math.min(260, Math.floor(best.s)) + "px");
     return;
   }
-  /* trượt ngang: mỗi trang r hàng × c cột với ô cỡ thoải mái (~92px) */
-  const room = h - 16, r = Math.max(1, Math.floor((room + g) / (92 + g))), s = Math.max(MIN_TILE, Math.min(140, Math.floor((room - (r - 1) * g) / r)));
-  const c = Math.max(1, Math.floor((w + g) / (s + g))), per = c * r, pages = Math.ceil(n / per), pageW = c * s + (c - 1) * g;
+  /* trượt ngang: xếp NHIỀU game nhất có thể trên một trang (ô tối thiểu 72px), rồi nới ô cho vừa khít khoảng trống */
+  const room = h - 16, MINS = 72;
+  const c = Math.max(1, Math.floor((w + g) / (MINS + g))), r = Math.max(1, Math.floor((room + g) / (MINS + g)));
+  const s = Math.max(MIN_TILE, Math.min(140, Math.floor((w - (c - 1) * g) / c), Math.floor((room - (r - 1) * g) / r)));
+  const per = c * r, pages = Math.ceil(n / per), pageW = c * s + (c - 1) * g;
   grid.classList.add("slide");
   grid.style.setProperty("--s", s + "px"); grid.style.setProperty("--r", r); grid.style.setProperty("--pad", Math.max(0, Math.floor((w - pageW) / 2)) + "px");
   [...grid.children].forEach((t, i) => t.classList.toggle("sn", i % per === 0));
