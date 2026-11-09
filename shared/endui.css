@@ -38,3 +38,6 @@
 #ovEnd.endui .ib2[data-l]::after{font-size:10.5px}
 #ovEnd.endui .ib2.main{min-height:42px;font-size:18px}#ovEnd.endui .ib2.main::after{font-size:15px}
 }
+
+/* không để lại ô thống kê rỗng */
+#end .chip:empty,#res .chip:empty,#result .chip:empty{display:none}

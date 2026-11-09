@@ -286,6 +286,8 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 #stage{--rail:48px;--rw:52px}
 #stage #home,#stage .nps-fab{opacity:1!important;pointer-events:auto!important;transform:none!important;width:40px!important;height:40px!important;z-index:3}
 #stage #tleft{z-index:3}
+#stage{transition:background-color .3s}
+#stage[data-lum="l"] #home,#stage[data-lum="l"] .nps-fab{background:rgba(32,28,44,.82)!important;border-color:rgba(255,255,255,.55)!important;color:#fff!important}
 @media (orientation:portrait){
   #stage iframe{top:var(--rail)!important;height:calc(100% - var(--rail))!important;inset:var(--rail) 0 0 0!important}
   #stage #home{top:calc(env(safe-area-inset-top,0px) + 4px)!important;left:max(12px,env(safe-area-inset-left))!important}
@@ -870,5 +872,11 @@ route();
 <script>NPS.initParent({ helpUrl: "../help.html", sharedUrl: "../shared.html?from=popplay/index.html", leaderboard: true, boardUrl: "../leaderboard.html?from=popplay/index.html", h2cUrl: "../shared/vendor/html2canvas.min.js" });</script>
 <script src="../shared/bars.js"></script>
 <script src="../shared/season.js"></script>
+<script>
+/* làn điều khiển chung ngoài khung game: lấy màu nền của chính game để không thành dải đen xấu */
+(function(){var st=document.getElementById("stage");if(!st)return;
+function sync(){if(!st.classList.contains("on")){st.style.backgroundColor="";return}var f=st.querySelector("iframe");if(!f)return;try{var d=f.contentDocument,c=getComputedStyle(d.body).backgroundColor;if(!c||c==="rgba(0, 0, 0, 0)")c=getComputedStyle(d.documentElement).backgroundColor;if(c&&c!=="rgba(0, 0, 0, 0)"){st.style.backgroundColor=c;var m=c.match(/\d+(\.\d+)?/g)||[];var L=(.299*m[0]+.587*m[1]+.114*m[2])/255;st.dataset.lum=L>.55?"l":"d"}}catch(e){}}
+setInterval(sync,600);document.addEventListener("load",sync,true);})();
+</script>
 </body>
 </html>

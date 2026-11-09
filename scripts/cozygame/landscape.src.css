@@ -42,6 +42,11 @@ body.idle #play[data-scr="game"] .top>.ib:hover,body.idle #play[data-scr="game"]
 /* màn kết thúc: thẻ điểm sang trái */
 #end>.card{position:absolute;right:calc(100% + 2.5cqw);top:50%;transform:translateY(-50%);width:calc(var(--cl) - 1cqw)}
 #end>#eLeg{position:absolute;left:calc(100% + 2.5cqw);bottom:0;width:calc(var(--cr) - 1cqw)}
+/* màn kết thúc NGANG: hai cột cân đối ở giữa màn hình (trái: thẻ kết quả; phải: thông tin + nút), không dồn một bên */
+#end:not([hidden]){left:calc(50% - 50vw);right:auto;width:100vw;top:0;bottom:0;padding:2.5cqw max(calc(var(--sr) + 62px),calc(50vw - 460px)) 2.5cqw max(calc(var(--sl) + 62px),calc(50vw - 460px));display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);grid-auto-rows:min-content;align-content:center;align-items:center;column-gap:4cqw;row-gap:2cqw}
+#end:not([hidden])>.card{position:static;transform:none;width:auto;right:auto;top:auto;grid-column:1;grid-row:1 / span 5}
+#end:not([hidden])>:not(.card){grid-column:2}
+#end:not([hidden])>#eLeg{position:static;width:auto;left:auto;bottom:auto}
 #play[data-scr="end"] .top>.ib:not(#bBk){opacity:.4}
 /* hộp thoại phủ cả bề ngang, nội dung vẫn nằm giữa */
 .ov{left:calc(50% - 50vw);right:auto;width:100vw;inset-block:0;padding-left:calc((100vw - 100cqw)/2 + 5cqw);padding-right:calc((100vw - 100cqw)/2 + 5cqw)}
