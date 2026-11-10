@@ -492,10 +492,8 @@ route("GET", /^\/api\/admin\/stats$/, async ({ headers, ip, query }) => {
   });
 });
 
-/* Danh sách đơn, phân trang phía server: ?page=1&size=10&status=all|paid|pending|expired&q=<email hoặc mã đơn> */
-route("GET", /^\/api\/admin\/orders$/, async ({ headers, ip, query }) => {
-  const denied = await adminGuard(headers, ip); if (denied) return denied;
-  const { size, page, offset } = pageArgs(query);
+/* Bộ lọc đơn (dùng chung cho danh sách và CSV): ?status=all|paid|pending|expired&q=<email hoặc mã đơn> */
+function ordersFilter(query) {
   const where = [], params = [];
   const status = query.get("status") || "all";
   if (status === "paid") where.push("status = 'paid'");
@@ -506,15 +504,22 @@ route("GET", /^\/api\/admin\/orders$/, async ({ headers, ip, query }) => {
     params.push("%" + q.replace(/[\\%_]/g, "\\$&") + "%");
     where.push("(email ilike $" + params.length + " or code ilike $" + params.length + ")");
   }
-  const w = where.length ? "where " + where.join(" and ") : "";
+  return { w: where.length ? "where " + where.join(" and ") : "", params };
+}
+const ORDER_COLS = "id, code, email, plan, amount, status, created_at, expires_at, paid_at";
+const orderRow = r => ({ id: r.id, code: r.code, email: r.email, plan: r.plan, amount: r.amount, status: r.status,
+  createdAt: ms(r.created_at), expiresAt: ms(r.expires_at), paidAt: ms(r.paid_at) });
+/* Danh sách đơn, phân trang phía server: ?page=1&size=10&status=all|paid|pending|expired&q=<email hoặc mã đơn> */
+route("GET", /^\/api\/admin\/orders$/, async ({ headers, ip, query }) => {
+  const denied = await adminGuard(headers, ip); if (denied) return denied;
+  const { size, page, offset } = pageArgs(query);
+  const { w, params } = ordersFilter(query);
   const [{ rows: [c] }, { rows }] = await Promise.all([
     db.query(`select count(*)::int n from orders ${w}`, params),
-    db.query(`select id, code, email, plan, amount, status, created_at, expires_at, paid_at from orders ${w}
+    db.query(`select ${ORDER_COLS} from orders ${w}
               order by created_at desc limit $${params.length + 1} offset $${params.length + 2}`, [...params, size, offset])
   ]);
-  return out(200, { page, size, total: c.n, rows: rows.map(r => ({
-    id: r.id, code: r.code, email: r.email, plan: r.plan, amount: r.amount, status: r.status,
-    createdAt: ms(r.created_at), expiresAt: ms(r.expires_at), paidAt: ms(r.paid_at) })) });
+  return out(200, { page, size, total: c.n, rows: rows.map(orderRow) });
 });
 
 /* Giao dịch cần xử lý, phân trang: ?page=1&size=10&result=all|underpaid|unmatched|wrong_account|duplicate */
@@ -535,6 +540,205 @@ route("GET", /^\/api\/admin\/review$/, async ({ headers, ip, query }) => {
     id: r.id, at: ms(r.at), amount: Number(r.amount), content: r.content, account: r.account, result: r.result,
     code: r.code, email: r.email, orderAmount: r.order_amount })) });
 });
+
+/* ===== ADMIN: QUẢN LÝ NIGHT PASS (tìm, chi tiết, thao tác tay có nhật ký, xuất CSV) =====
+   Mọi endpoint dùng adminGuard (Bearer ADMIN_KEY). Thao tác ghi: bắt buộc lý do, giới hạn tần suất, ghi admin_actions TRONG CÙNG transaction.
+   Bảng admin_actions (migration 007) chưa có: endpoint xem vẫn chạy (rows rỗng, available:false), endpoint ghi trả 503 migration_required.
+   Không ghi email/khoá ra console. */
+const UUID_RE = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
+const iso = d => (d ? new Date(d).toISOString() : "");
+const CSV_MAX = 20000;
+/* CSV: BOM UTF-8 để Excel đọc đúng tiếng Việt; ô chuỗi bắt đầu bằng = + - @ (hoặc tab/CR) thì thêm dấu nháy ở đầu (chống CSV injection) */
+const csvCell = v => {
+  if (v == null) return "";
+  if (typeof v === "number" || typeof v === "bigint") return String(v);
+  let s = String(v);
+  if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
+  return '"' + s.replace(/"/g, '""') + '"';
+};
+const csvOut = (header, rows) => out(200, "﻿" + [header, ...rows].map(r => r.map(csvCell).join(",")).join("\r\n") + "\r\n", "text/csv; charset=utf-8");
+
+/* Bộ lọc pass: ?status=all|active|expiring|expired&q=<email, mã đơn hoặc user id> */
+function passesFilter(query) {
+  const where = [], params = [];
+  const status = query.get("status") || "all";
+  if (status === "active") where.push("p.exp > now()");
+  else if (status === "expiring") where.push("p.exp > now() and p.exp <= now() + interval '3 days'");
+  else if (status === "expired") where.push("p.exp <= now()");
+  const q = String(query.get("q") || "").trim().slice(0, 80);
+  if (q) {
+    params.push("%" + q.replace(/[\\%_]/g, "\\$&") + "%");
+    const n = "$" + params.length;
+    where.push(`(exists (select 1 from identities i where i.user_id = p.user_id and i.email ilike ${n})
+      or exists (select 1 from orders o where o.user_id = p.user_id and o.code ilike ${n}) or p.user_id::text ilike ${n})`);
+  }
+  return { w: where.length ? "where " + where.join(" and ") : "", params };
+}
+async function passesPage(query, limit, offset) {
+  const { w, params } = passesFilter(query);
+  const [{ rows: [c] }, { rows }] = await Promise.all([
+    db.query(`select count(*)::int n from passes p ${w}`, params),
+    db.query(`select p.user_id, p.exp, p.plan,
+        (select i.email from identities i where i.user_id = p.user_id and i.email is not null order by (i.provider = 'email') desc, i.email_verified desc, i.id limit 1) as email,
+        lo.code as last_code, lo.status as last_status, lo.created_at as last_at, lo.plan as last_plan,
+        coalesce(pd.total, 0)::bigint as total_paid, coalesce(pd.n, 0)::int as paid_n
+      from passes p
+      left join lateral (select code, status, created_at, plan from orders o where o.user_id = p.user_id order by created_at desc limit 1) lo on true
+      left join lateral (select sum(amount) as total, count(*) as n from orders o where o.user_id = p.user_id and o.status = 'paid') pd on true
+      ${w} order by p.exp desc, p.user_id limit $${params.length + 1} offset $${params.length + 2}`, [...params, limit, offset])
+  ]);
+  let devs = null;   // chưa có bảng pass_devices (migration 006) → null (giao diện hiện "—")
+  if (rows.length) {
+    try { const { rows: d } = await db.query("select user_id, count(*)::int n from pass_devices where user_id = any($1::uuid[]) group by user_id", [rows.map(r => r.user_id)]); devs = Object.fromEntries(d.map(r => [r.user_id, r.n])); }
+    catch (e) { if (!noTable(e)) throw e; }
+  }
+  return { total: c.n, rows: rows.map(r => ({
+    userId: r.user_id, email: r.email, plan: r.plan, exp: ms(r.exp), active: ms(r.exp) > Date.now(),
+    devices: devs ? devs[r.user_id] || 0 : null, maxDevices: MAX_DEVICES,
+    lastOrder: r.last_code ? { code: r.last_code, status: r.last_status, plan: r.last_plan, at: ms(r.last_at) } : null,
+    totalPaid: Number(r.total_paid), paidOrders: r.paid_n })) };
+}
+route("GET", /^\/api\/admin\/passes$/, async ({ headers, ip, query }) => {
+  const denied = await adminGuard(headers, ip); if (denied) return denied;
+  const { size, page, offset } = pageArgs(query);
+  const d = await passesPage(query, size, offset);
+  return out(200, { page, size, total: d.total, maxDevices: MAX_DEVICES, rows: d.rows });
+});
+route("GET", /^\/api\/admin\/passes\.csv$/, async ({ headers, ip, query }) => {
+  const denied = await adminGuard(headers, ip); if (denied) return denied;
+  const d = await passesPage(query, CSV_MAX, 0);
+  return csvOut(["email", "user_id", "plan", "exp", "active", "devices", "max_devices", "last_order_code", "last_order_status", "last_order_at", "total_paid_vnd", "paid_orders"],
+    d.rows.map(r => [r.email || "", r.userId, r.plan, iso(r.exp), r.active ? "yes" : "no", r.devices == null ? "" : r.devices, r.maxDevices,
+      r.lastOrder ? r.lastOrder.code : "", r.lastOrder ? r.lastOrder.status : "", r.lastOrder ? iso(r.lastOrder.at) : "", r.totalPaid, r.paidOrders]));
+});
+route("GET", /^\/api\/admin\/orders\.csv$/, async ({ headers, ip, query }) => {
+  const denied = await adminGuard(headers, ip); if (denied) return denied;
+  const { w, params } = ordersFilter(query);
+  const { rows } = await db.query(`select ${ORDER_COLS} from orders ${w} order by created_at desc limit ${CSV_MAX}`, params);
+  return csvOut(["created_at", "code", "email", "plan", "amount_vnd", "status", "expires_at", "paid_at"],
+    rows.map(orderRow).map(r => [iso(r.createdAt), r.code, r.email, r.plan, r.amount, r.status === "pending" && r.expiresAt < Date.now() ? "expired" : r.status, iso(r.expiresAt), iso(r.paidAt)]));
+});
+
+const actionRow = r => ({ id: Number(r.id), at: ms(r.at), userId: r.user_id, email: r.email || null, action: r.action, reason: r.reason, before: r.before, after: r.after });
+const ACTION_SQL = `select a.id, a.at, a.user_id, a.action, a.reason, a.before, a.after,
+  (select i.email from identities i where i.user_id = a.user_id and i.email is not null order by (i.provider = 'email') desc, i.id limit 1) as email from admin_actions a`;
+/* Nhật ký thao tác gần đây (toàn hệ thống), phân trang */
+route("GET", /^\/api\/admin\/passes\/actions$/, async ({ headers, ip, query }) => {
+  const denied = await adminGuard(headers, ip); if (denied) return denied;
+  const { size, page, offset } = pageArgs(query);
+  try {
+    const [{ rows: [c] }, { rows }] = await Promise.all([
+      db.query("select count(*)::int n from admin_actions"),
+      db.query(`${ACTION_SQL} order by a.at desc, a.id desc limit $1 offset $2`, [size, offset])
+    ]);
+    return out(200, { available: true, page, size, total: c.n, rows: rows.map(actionRow) });
+  } catch (e) { if (!noTable(e)) throw e; return out(200, { available: false, page, size, total: 0, rows: [] }); }
+});
+/* Chi tiết một pass: danh tính, đơn, giao dịch, thiết bị, nhật ký thao tác */
+route("GET", new RegExp("^/api/admin/passes/(" + UUID_RE + ")$"), async ({ m, headers, ip }) => {
+  const denied = await adminGuard(headers, ip); if (denied) return denied;
+  const uid = m[1];
+  const { rows: [u] } = await db.query("select id, created_at from users where id = $1", [uid]);
+  if (!u) return out(404, { error: "not_found" });
+  const soft = async (sql, params) => { try { return { ok: true, rows: (await db.query(sql, params)).rows }; } catch (e) { if (!noTable(e)) throw e; return { ok: false, rows: [] }; } };
+  const [pass, ids, ord, txs, dev, act] = await Promise.all([
+    db.query("select exp, plan, updated_at from passes where user_id = $1", [uid]),
+    db.query("select provider, email, email_verified, name, created_at from identities where user_id = $1 order by id", [uid]),
+    db.query(`select ${ORDER_COLS} from orders where user_id = $1 order by created_at desc limit 200`, [uid]),
+    db.query(`select t.id, t.at, t.amount, t.content, t.result, o.code from txs t join orders o on o.id = t.order_id or o.tx_id = t.id where o.user_id = $1 order by t.at desc limit 200`, [uid]),
+    soft("select kid, first_seen, last_seen from pass_devices where user_id = $1 order by last_seen desc, first_seen desc", [uid]),
+    soft(`${ACTION_SQL} where a.user_id = $1 order by a.at desc, a.id desc limit 100`, [uid])
+  ]);
+  const p = pass.rows[0];
+  return out(200, {
+    userId: uid, createdAt: ms(u.created_at), maxDevices: MAX_DEVICES,
+    pass: p ? { exp: ms(p.exp), plan: p.plan, active: ms(p.exp) > Date.now(), updatedAt: ms(p.updated_at) } : null,
+    identities: ids.rows.map(r => ({ provider: r.provider, email: r.email, verified: r.email_verified, name: r.name, createdAt: ms(r.created_at) })),
+    orders: ord.rows.map(orderRow),
+    txs: txs.rows.map(r => ({ id: r.id, at: ms(r.at), amount: Number(r.amount), content: r.content, result: r.result, code: r.code })),
+    devicesAvailable: dev.ok, devices: dev.rows.map(r => ({ kid: String(r.kid).slice(0, 12), firstSeen: ms(r.first_seen), lastSeen: ms(r.last_seen) })),
+    actionsAvailable: act.ok, actions: act.rows.map(actionRow)
+  });
+});
+
+/* Thao tác tay. run(c, userId, body) chạy trong transaction, trả { before, after, result } hoặc ném AdminErr. */
+class AdminErr extends Error { constructor(status, code) { super(code); this.status = status; this.code = code; } }
+async function adminAct(ctx, action, run) {
+  const { m, headers, ip, body } = ctx, userId = m[1];
+  const denied = await adminGuard(headers, ip); if (denied) return denied;
+  const reason = String(body.reason == null ? "" : body.reason).trim();   // kiểm tra lý do trước: yêu cầu thiếu lý do không chạm DB
+  if (reason.length < 3) return out(400, { error: "reason_required" });
+  if (reason.length > 300) return out(400, { error: "reason_too_long" });
+  if ((await limited("admact:" + ip, 30)) || (await limited("admact:u:" + userId, 8))) return out(429, { error: "rate_limited" });
+  const { rows: [reg] } = await db.query("select to_regclass('public.admin_actions') as t");
+  if (!reg.t) return out(503, { error: "migration_required" });
+  try {
+    const result = await db.tx(async c => {
+      const { rows: [u] } = await c.query("select id from users where id = $1", [userId]);
+      if (!u) throw new AdminErr(404, "not_found");
+      const { before, after, result } = await run(c, userId, body);
+      await c.query("insert into admin_actions(user_id, action, reason, before, after, ip_hash) values ($1, $2, $3, $4::jsonb, $5::jsonb, $6)",
+        [userId, action, reason, JSON.stringify(before ?? null), JSON.stringify(after ?? null), ipHash(ip)]);
+      return result;
+    });
+    return out(200, { ok: true, ...result });
+  } catch (e) {
+    if (e instanceof AdminErr) return out(e.status, { error: e.code });
+    if (e && e.code === "23505") return out(409, { error: "email_taken" });
+    if (noTable(e)) return out(503, { error: "migration_required" });
+    throw e;
+  }
+}
+const ACT_PATH = suffix => new RegExp("^/api/admin/passes/(" + UUID_RE + ")/" + suffix + "$");
+/* Cấp thêm ngày: cộng dồn như hàm grant(); còn hạn thì GIỮ gói cũ, hết hạn/chưa có thì ghi gói 'admin' (cột passes.plan là text tự do, không ràng buộc) */
+route("POST", ACT_PATH("grant"), ctx => adminAct(ctx, "grant", async (c, userId, body) => {
+  const days = Number(body.days);
+  if (!Number.isInteger(days) || days < 1 || days > 3650) throw new AdminErr(400, "bad_days");
+  const { rows: [b] } = await c.query("select exp, plan from passes where user_id = $1 for update", [userId]);
+  const { rows: [a] } = await c.query(
+    `insert into passes(user_id, exp, plan) values ($1, now() + make_interval(days => $2), 'admin')
+     on conflict (user_id) do update set exp = greatest(now(), passes.exp) + make_interval(days => $2),
+       plan = case when passes.exp > now() then passes.plan else 'admin' end, updated_at = now()
+     returning exp, plan`, [userId, days]);
+  return { before: b ? { exp: iso(b.exp), plan: b.plan } : null, after: { exp: iso(a.exp), plan: a.plan, days }, result: { exp: ms(a.exp), plan: a.plan } };
+}));
+/* Thu hồi: exp = now(). Nguy hiểm → phải gửi confirmEmail (email của pass, hoặc user id nếu chưa có email), giống bước gõ lại trên giao diện */
+route("POST", ACT_PATH("revoke"), ctx => adminAct(ctx, "revoke", async (c, userId, body) => {
+  const { rows: ids } = await c.query("select email from identities where user_id = $1 and email is not null", [userId]);
+  const ok = [userId, ...ids.map(r => normEmail(r.email))], conf = normEmail(body.confirmEmail);
+  if (!conf || !ok.includes(conf)) throw new AdminErr(400, "confirm_mismatch");
+  const { rows: [b] } = await c.query("select exp, plan from passes where user_id = $1 for update", [userId]);
+  if (!b) throw new AdminErr(404, "no_pass");
+  if (ms(b.exp) <= Date.now()) throw new AdminErr(409, "already_expired");
+  const { rows: [a] } = await c.query("update passes set exp = now(), updated_at = now() where user_id = $1 returning exp, plan", [userId]);
+  return { before: { exp: iso(b.exp), plan: b.plan }, after: { exp: iso(a.exp), plan: a.plan }, result: { exp: ms(a.exp) } };
+}));
+/* Xoá thiết bị: kid = tiền tố (>= 8 ký tự, như cột "kid" rút gọn trong chi tiết) hoặc "all". Thiết bị bị xoá phải đăng nhập lại (khôi phục bằng email). */
+route("POST", ACT_PATH("devices/delete"), ctx => adminAct(ctx, "devices_delete", async (c, userId, body) => {
+  const kid = String(body.kid == null ? "" : body.kid);
+  if (kid !== "all" && !/^[A-Za-z0-9_-]{8,43}$/.test(kid)) throw new AdminErr(400, "bad_kid");
+  const { rows } = await c.query("select kid from pass_devices where user_id = $1 order by last_seen desc for update", [userId]);
+  const hit = kid === "all" ? rows : rows.filter(r => r.kid.startsWith(kid));
+  if (!hit.length) throw new AdminErr(404, "device_not_found");
+  if (hit.length > 1 && kid !== "all") throw new AdminErr(400, "kid_ambiguous");
+  await c.query("delete from pass_devices where user_id = $1 and kid = any($2::text[])", [userId, hit.map(r => r.kid)]);
+  const short = r => r.kid.slice(0, 12);
+  return { before: { devices: rows.map(short) }, after: { deleted: hit.map(short), remaining: rows.length - hit.length }, result: { deleted: hit.length, remaining: rows.length - hit.length } };
+}));
+/* Đổi email gắn với pass: sửa identity email của user, chống trùng với user khác, đặt email_verified = false */
+route("POST", ACT_PATH("email"), ctx => adminAct(ctx, "email_change", async (c, userId, body) => {
+  const email = normEmail(body.newEmail);
+  if (!validEmail(email)) throw new AdminErr(400, "bad_email");
+  const { rows: dup } = await c.query(
+    `select user_id from identities where provider = 'email' and provider_uid = $1
+     union all select user_id from identities where email_verified and lower(email) = $1`, [email]);
+  if (dup.some(r => r.user_id !== userId)) throw new AdminErr(409, "email_taken");
+  const { rows: [cur] } = await c.query("select id, email from identities where user_id = $1 and provider = 'email' order by id limit 1 for update", [userId]);
+  if (cur && normEmail(cur.email) === email) throw new AdminErr(400, "same_email");
+  if (cur) await c.query("update identities set provider_uid = $2, email = $2, email_verified = false where id = $1", [cur.id, email]);
+  else await c.query("insert into identities(user_id, provider, provider_uid, email, email_verified) values ($1, 'email', $2, $2, false)", [userId, email]);
+  return { before: { email: cur ? cur.email : null }, after: { email, verified: false }, result: { email, verified: false } };
+}));
 
 /* ===== XÃ HỘI: bảng xếp hạng tự nguyện + chuyển tiếp kết quả "chơi hộ" =====
    Không lưu IP/thiết bị/email. IP chỉ được băm kèm ngày (không đảo ngược được) để giới hạn spam trong vài giờ. */

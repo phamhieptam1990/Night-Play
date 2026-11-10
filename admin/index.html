@@ -157,6 +157,34 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 .pager .btn{padding:4px 10px;min-width:34px}
 .hint{color:var(--muted);font-size:12px}
 
+/* Pass: thanh công cụ, ngăn kéo chi tiết, biểu mẫu thao tác */
+.toolbar .btn.csv{white-space:nowrap;order:5;margin-left:auto}
+.seg button[aria-pressed="true"]:hover{background:var(--accent)}
+.btn.go{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:700}
+.btn.go:hover{background:var(--accent)}
+.btn.danger{background:var(--st-critical);border-color:var(--st-critical);color:#fff}
+.btn.danger:hover{background:var(--st-critical)}
+.link{background:none;border:0;padding:0;color:var(--ink);text-align:left;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-decoration:underline;text-decoration-color:var(--axis);text-underline-offset:3px}
+tr.row-open{cursor:pointer} tr.row-open:hover td{background:var(--hover)}
+#dBack{position:fixed;inset:0;z-index:39;background:rgba(0,0,0,.42)}
+#drawer{position:fixed;top:0;right:0;bottom:0;z-index:40;width:min(580px,100vw);display:flex;flex-direction:column;background:var(--surface);border-left:1px solid var(--border);box-shadow:-8px 0 32px rgba(0,0,0,.25)}
+.dhead{flex:none;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid var(--grid)}
+.dhead h2{font-size:16px;overflow-wrap:anywhere}
+.dbody{flex:1;min-height:0;overflow:auto;padding:12px 16px 20px;display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-content:start}
+.dbody>*{min-width:0}
+.dbody h3{font-size:13px;margin:0 0 6px;font-weight:600;color:var(--ink2)}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px 12px}
+.kv div{min-width:0} .kv small{display:block;color:var(--muted);font-size:12px} .kv b{font-weight:600;overflow-wrap:anywhere}
+.dtbl{max-height:210px;overflow:auto;border:1px solid var(--grid);border-radius:10px}
+.dtbl table{font-size:12.5px} .dtbl td{height:34px} .dtbl th{height:32px;position:sticky;top:0;background:var(--surface)}
+.actbox{border:1px solid var(--border);border-radius:14px;padding:12px;display:grid;gap:10px}
+.actbox label{font-size:12.5px;color:var(--ink2);display:block;margin-bottom:3px}
+.actbox .field{width:100%;border-radius:10px}
+.actbox .seg{flex-wrap:wrap;border-radius:14px}
+.actmsg{min-height:20px;font-size:13px}.actmsg.ok{color:var(--st-good)}.actmsg.bad{color:var(--bad-text)}
+.warnbox{border:1px solid var(--st-warning);border-radius:10px;padding:8px 10px;font-size:13px;color:var(--ink2)}
+@media (max-width:760px),(max-height:640px){#drawer{width:100vw;border-left:0}.dhead{padding:10px 12px}.dbody{padding:10px 12px 16px}}
+
 /* đăng nhập */
 .login{max-width:360px;margin:12vh auto 0}
 .login-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
@@ -196,6 +224,8 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
   .panels[data-p="rev"]>.p-rev,.panels[data-p="traf"]>.p-traf,.panels[data-p="plans"]>.p-plans,.panels[data-p="games"]>.p-games,.panels[data-p="live"]>.p-live{display:flex}
   .toolbar .grow{display:none}
   .field,input.field{min-width:0;flex:1}
+  .toolbar select.field{flex:0 0 auto;max-width:48%}
+  .toolbar input.field{flex:1 1 120px}
   .listcard{padding:0 12px}
   .crow{height:56px;display:grid;grid-template-columns:1fr auto;gap:0 8px;align-content:center;border-bottom:1px solid var(--grid);overflow:hidden}
   .crow>*{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -210,7 +240,8 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 }
 @media (max-width:420px){
   .brand{display:none}
-  .tab{padding:5px 4px;font-size:12px;gap:4px}.count{min-width:16px;padding:0 4px;font-size:11px;line-height:16px}
+  nav.tabs{gap:1px;padding:2px}
+  .tab{flex:1 1 auto;padding:5px 3px;font-size:11.5px;gap:3px}.count{min-width:16px;padding:0 4px;font-size:11px;line-height:16px}
   .tile{padding:4px 10px}.tile .label{font-size:11.5px;line-height:1.3}.tile .val,.tile.hero .val{font-size:17px;line-height:1.25}
   .site-foot nav{gap:0 12px}.site-foot nav a{font-size:12px}
 }
@@ -245,6 +276,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
       <button class="tab" role="tab" id="tab-overview" data-tab="overview" aria-controls="v-overview" aria-selected="true" data-i18n="tabOverview"></button>
       <button class="tab" role="tab" id="tab-review" data-tab="review" aria-controls="v-review" aria-selected="false" tabindex="-1"><span data-i18n="tabReview"></span> <span class="count" id="reviewBadge" hidden></span></button>
       <button class="tab" role="tab" id="tab-orders" data-tab="orders" aria-controls="v-orders" aria-selected="false" tabindex="-1" data-i18n="tabOrders"></button>
+      <button class="tab" role="tab" id="tab-passes" data-tab="passes" aria-controls="v-passes" aria-selected="false" tabindex="-1" data-i18n="tabPasses"></button>
     </nav>
     <button class="btn ico" id="moreBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="tools" data-i18n-attr="aria-label:menu;title:menu"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg></button>
     <div class="tools" id="tools">
@@ -347,14 +379,55 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
         </select>
         <label class="sr" for="oQ" data-i18n="searchLabel"></label>
         <input class="field" id="oQ" type="search" data-i18n-attr="placeholder:searchPh" autocomplete="off">
+        <span class="grow"></span>
+        <button class="btn csv" type="button" data-csv="orders" data-i18n="exportCsv"></button>
       </div>
       <div class="card listcard">
         <div class="tbl" id="oTbl"></div>
         <div class="pager" id="oPager"></div>
       </div>
     </section>
+
+    <!-- Pass / Night Pass -->
+    <section class="view" id="v-passes" role="tabpanel" aria-labelledby="tab-passes" hidden>
+      <div class="toolbar">
+        <div class="seg" role="group" id="pMode" data-i18n-attr="aria-label:pModeLabel">
+          <button type="button" data-m="list" aria-pressed="true" data-i18n="viewList"></button>
+          <button type="button" data-m="log" aria-pressed="false" data-i18n="viewLog"></button>
+        </div>
+        <span id="pFilters" style="display:contents">
+          <label class="sr" for="pStatus" data-i18n="colStatus"></label>
+          <select class="field" id="pStatus">
+            <option value="all" data-i18n="psAll"></option>
+            <option value="active" data-i18n="ps_active"></option>
+            <option value="expiring" data-i18n="ps_expiring"></option>
+            <option value="expired" data-i18n="ps_expired"></option>
+          </select>
+          <label class="sr" for="pQ" data-i18n="psSearchLabel"></label>
+          <input class="field" id="pQ" type="search" data-i18n-attr="placeholder:psSearchPh" autocomplete="off">
+          <span class="grow"></span>
+          <button class="btn csv" type="button" data-csv="passes" data-i18n="exportCsv"></button>
+        </span>
+      </div>
+      <div class="card listcard" id="pCard">
+        <div class="tbl" id="pTbl"></div>
+        <div class="pager" id="pPager"></div>
+      </div>
+      <div class="card listcard" id="lCard" hidden>
+        <div class="tbl" id="lTbl"></div>
+        <div class="pager" id="lPager"></div>
+      </div>
+    </section>
   </main>
 </div>
+<div id="dBack" hidden></div>
+<aside id="drawer" role="dialog" aria-modal="true" aria-labelledby="dTitle" hidden>
+  <div class="dhead">
+    <div><h2 id="dTitle"></h2><div class="sub" id="dSub"></div></div>
+    <button class="btn ico" id="dClose" type="button" data-i18n-attr="aria-label:dClose;title:dClose"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
+  <div class="dbody" id="dBody"></div>
+</aside>
 <footer class="site-foot">
   <div class="mark"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="var(--accent)"/><path d="M42 40A16 16 0 1 1 26 14a13 13 0 0 0 16 26z" fill="var(--on-accent)"/><circle cx="44" cy="20" r="2.5" fill="var(--on-accent)"/></svg><span>Night Play</span></div>
   <nav data-i18n-attr="aria-label:fNav">
@@ -402,7 +475,7 @@ const I18N = {
     perPlay:"{n} ph/lượt", trendNew:"Mới", trendNewTip:"Kỳ trước chưa có lượt chơi", trendTip:"So với {n} ngày liền trước ({p} lượt)",
     siteHome:"Trang chủ", siteSubscribe:"Đăng ký gói",
     issueLabel:"Loại vấn đề", rAll:"Tất cả vấn đề",
-    res_underpaid:"Thiếu tiền", res_underpaid_tip:"Khách chuyển ít hơn giá gói. Liên hệ khách để bù hoặc hoàn.",
+    res_granted:"Đã cấp", res_underpaid:"Thiếu tiền", res_underpaid_tip:"Khách chuyển ít hơn giá gói. Liên hệ khách để bù hoặc hoàn.",
     res_unmatched:"Không khớp đơn", res_unmatched_tip:"Nội dung chuyển khoản không có mã đơn hợp lệ. Tìm đơn của khách rồi cấp tay.",
     res_wrong_account:"Sai tài khoản", res_wrong_account_tip:"Giao dịch của tài khoản khác với tài khoản nhận đã cấu hình. Kiểm tra cấu hình SePay.",
     res_duplicate:"Trả trùng", res_duplicate_tip:"Đơn đã thanh toán trước đó, khoản này là chuyển thừa. Cân nhắc hoàn tiền.",
@@ -412,6 +485,19 @@ const I18N = {
     searchLabel:"Tìm đơn", searchPh:"Tìm email hoặc mã đơn", colCreated:"Tạo lúc", colPlan:"Gói", colPaidAt:"Thanh toán lúc",
     pgShowing:"Hiển thị {a}–{b} / {c}", pgNone:"0 kết quả", pgFirst:"Trang đầu", pgPrev:"Trang trước", pgNext:"Trang sau", pgLast:"Trang cuối",
     pgPrevBtn:"‹ Trước", pgNextBtn:"Sau ›", pgPage:"Trang {p} / {n}", noData:"Không có dữ liệu.",
+    tabPasses:"Pass", pModeLabel:"Chế độ xem", viewList:"Danh sách", viewLog:"Nhật ký",
+    psAll:"Tất cả pass", ps_active:"Đang hoạt động", ps_expiring:"Sắp hết hạn (3 ngày)", ps_expired:"Đã hết hạn", psSearchLabel:"Tìm pass", psSearchPh:"Tìm email, mã đơn hoặc ID",
+    colExp:"Hết hạn", colDevices:"Thiết bị", colLastOrder:"Đơn gần nhất", colPaidTotal:"Đã trả", colWho:"Pass", colAction:"Thao tác", colReason:"Lý do", colChange:"Thay đổi",
+    exportCsv:"Xuất CSV", exportBusy:"Đang tạo…", exportFail:"Không tải được tệp CSV.", logOff:"Chưa có bảng nhật ký: cần chạy migration 007_admin_actions.sql.",
+    dClose:"Đóng", dId:"ID", dCreated:"Tạo lúc", dPlanExp:"Hết hạn", dNoPass:"Chưa có pass", dDevicesN:"Thiết bị", dIdentities:"Danh tính", dDevices:"Thiết bị ({n}/{max})", dOrders:"Đơn hàng", dTxs:"Giao dịch", dLog:"Nhật ký thao tác",
+    dNone:"Không có.", dLoading:"Đang tải…", colProvider:"Nguồn", colVerified:"Xác thực", yes:"Có", no:"Không", colKid:"Mã thiết bị", colFirstSeen:"Lần đầu", colLastSeen:"Lần cuối", colResult:"Kết quả", devOff:"Chưa có bảng thiết bị (migration 006).",
+    aTitle:"Thao tác thủ công", a_grant:"Cấp thêm ngày", a_revoke:"Thu hồi", a_devices:"Xoá thiết bị", a_email:"Đổi email",
+    fDays:"Số ngày cộng thêm (1–3650)", fRevokeWarn:"Thu hồi đặt hạn pass về ngay bây giờ: người dùng mất quyền lập tức.", fConfirm:"Gõ lại “{v}” để xác nhận",
+    fKid:"Thiết bị cần xoá", fKidAll:"Tất cả thiết bị", fNoDev:"Không có thiết bị nào để xoá.", fNewEmail:"Email mới (sẽ chưa xác thực)", fReason:"Lý do (ít nhất 3 ký tự, ghi vào nhật ký)", aGo:"Thực hiện", aBusy:"Đang xử lý…", aDone:"Đã thực hiện và ghi nhật ký.",
+    la_grant:"Cấp thêm ngày", la_revoke:"Thu hồi", la_devices_delete:"Xoá thiết bị", la_email_change:"Đổi email", leftN:"còn {n}",
+    e_reason_required:"Cần nhập lý do (ít nhất 3 ký tự).", e_reason_too_long:"Lý do quá dài (tối đa 300 ký tự).", e_migration_required:"Chưa chạy migration 007 (nhật ký). Chưa thể thao tác.", e_bad_days:"Số ngày phải từ 1 đến 3650.",
+    e_confirm_mismatch:"Email xác nhận không khớp.", e_no_pass:"Người dùng chưa có pass.", e_already_expired:"Pass đã hết hạn.", e_bad_kid:"Mã thiết bị không hợp lệ.", e_device_not_found:"Không thấy thiết bị.", e_kid_ambiguous:"Mã thiết bị trùng nhiều thiết bị.",
+    e_bad_email:"Email không hợp lệ.", e_email_taken:"Email này đã thuộc người dùng khác.", e_same_email:"Email mới trùng email hiện tại.", e_not_found:"Không tìm thấy.", e_rate_limited:"Thao tác quá nhanh, đợi một phút rồi thử lại.",
     fNav:"Liên kết", fHome:"Trang chủ", fPrivacy:"Chính sách quyền riêng tư", fContact:"Liên hệ", rights:"Bảo lưu mọi quyền."
   },
   en: {
@@ -438,7 +524,7 @@ const I18N = {
     perPlay:"{n} min/play", trendNew:"New", trendNewTip:"No plays in the previous period", trendTip:"Vs the previous {n} days ({p} plays)",
     siteHome:"Home", siteSubscribe:"Plans page",
     issueLabel:"Issue type", rAll:"All issues",
-    res_underpaid:"Underpaid", res_underpaid_tip:"The customer paid less than the plan price. Ask them to top up, or refund.",
+    res_granted:"Granted", res_underpaid:"Underpaid", res_underpaid_tip:"The customer paid less than the plan price. Ask them to top up, or refund.",
     res_unmatched:"No matching order", res_unmatched_tip:"The transfer note has no valid order code. Find the customer's order and grant the pass manually.",
     res_wrong_account:"Wrong account", res_wrong_account_tip:"The transaction belongs to an account other than the configured receiving account. Check the SePay setup.",
     res_duplicate:"Duplicate payment", res_duplicate_tip:"The order was already paid; this is an extra transfer. Consider a refund.",
@@ -448,6 +534,19 @@ const I18N = {
     searchLabel:"Search orders", searchPh:"Search email or order code", colCreated:"Created", colPlan:"Plan", colPaidAt:"Paid at",
     pgShowing:"Showing {a}–{b} of {c}", pgNone:"0 results", pgFirst:"First page", pgPrev:"Previous page", pgNext:"Next page", pgLast:"Last page",
     pgPrevBtn:"‹ Prev", pgNextBtn:"Next ›", pgPage:"Page {p} of {n}", noData:"No data.",
+    tabPasses:"Passes", pModeLabel:"View mode", viewList:"List", viewLog:"Audit log",
+    psAll:"All passes", ps_active:"Active", ps_expiring:"Expiring (3 days)", ps_expired:"Expired", psSearchLabel:"Search passes", psSearchPh:"Search email, order code or ID",
+    colExp:"Expires", colDevices:"Devices", colLastOrder:"Latest order", colPaidTotal:"Paid total", colWho:"Pass", colAction:"Action", colReason:"Reason", colChange:"Change",
+    exportCsv:"Export CSV", exportBusy:"Preparing…", exportFail:"Could not download the CSV file.", logOff:"No audit table yet: run migration 007_admin_actions.sql.",
+    dClose:"Close", dId:"ID", dCreated:"Created", dPlanExp:"Expires", dNoPass:"No pass", dDevicesN:"Devices", dIdentities:"Identities", dDevices:"Devices ({n}/{max})", dOrders:"Orders", dTxs:"Transactions", dLog:"Admin actions",
+    dNone:"None.", dLoading:"Loading…", colProvider:"Source", colVerified:"Verified", yes:"Yes", no:"No", colKid:"Device key", colFirstSeen:"First seen", colLastSeen:"Last seen", colResult:"Result", devOff:"No devices table yet (migration 006).",
+    aTitle:"Manual actions", a_grant:"Add days", a_revoke:"Revoke", a_devices:"Remove device", a_email:"Change email",
+    fDays:"Days to add (1–3650)", fRevokeWarn:"Revoking sets the pass expiry to now: the user loses access immediately.", fConfirm:"Type “{v}” to confirm",
+    fKid:"Device to remove", fKidAll:"All devices", fNoDev:"No devices to remove.", fNewEmail:"New email (will be unverified)", fReason:"Reason (at least 3 characters, saved in the log)", aGo:"Apply", aBusy:"Working…", aDone:"Done and logged.",
+    la_grant:"Add days", la_revoke:"Revoke", la_devices_delete:"Remove device", la_email_change:"Change email", leftN:"{n} left",
+    e_reason_required:"A reason is required (at least 3 characters).", e_reason_too_long:"Reason is too long (max 300 characters).", e_migration_required:"Migration 007 (audit log) has not been run. Actions are unavailable.", e_bad_days:"Days must be between 1 and 3650.",
+    e_confirm_mismatch:"Confirmation email does not match.", e_no_pass:"This user has no pass.", e_already_expired:"The pass is already expired.", e_bad_kid:"Invalid device key.", e_device_not_found:"Device not found.", e_kid_ambiguous:"Device key matches several devices.",
+    e_bad_email:"Invalid email.", e_email_taken:"This email already belongs to another user.", e_same_email:"New email equals the current one.", e_not_found:"Not found.", e_rate_limited:"Too many actions, wait a minute and retry.",
     fNav:"Links", fHome:"Home", fPrivacy:"Privacy Policy", fContact:"Contact", rights:"All rights reserved."
   }
 };
@@ -467,6 +566,7 @@ let updatedAt = null, asofErr = null, loginKey = "";
 let nf = new Intl.NumberFormat(t("locale"));
 const money = n => nf.format(Math.round(n)) + " ₫";
 const compact = n => n >= 1e6 ? (n/1e6).toLocaleString(t("locale"),{maximumFractionDigits:1}) + t("unitM") : n >= 1e3 ? (n/1e3).toLocaleString(t("locale"),{maximumFractionDigits:1}) + "K" : String(n);
+const dtY = ms => ms ? new Date(ms).toLocaleString(t("locale"),{year:"numeric",day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit",hour12:false,timeZone:"Asia/Ho_Chi_Minh"}) : "—";
 const dt = ms => ms ? new Date(ms).toLocaleString(t("locale"),{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit",hour12:false,timeZone:"Asia/Ho_Chi_Minh"}) : "—";
 const dayLabel = s => s.slice(8) + "/" + s.slice(5,7);
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -490,18 +590,37 @@ setTheme(document.documentElement.dataset.theme);
 
 /* ---------- gọi API ---------- */
 class AuthError extends Error {}
-async function api(path) {
+async function api(path, post) {
   const key = store.get("adm_key");
   if (!key) { showLogin(); throw new AuthError(); }
   let r;
-  try { r = await fetch("/api/admin/" + path, { headers: { Authorization: "Bearer " + key }, cache: "no-store" }); }
+  try { r = await fetch("/api/admin/" + path, { method: post ? "POST" : "GET", headers: Object.assign({ Authorization: "Bearer " + key }, post ? { "Content-Type": "application/json" } : {}), body: post ? JSON.stringify(post) : undefined, cache: "no-store" }); }
   catch(e){ throw new ApiError("errNet"); }
   if (r.status === 401) { store.del("adm_key"); showLogin("errKey"); throw new AuthError(); }
-  if (r.status === 503) { showLogin("errDisabled"); throw new AuthError(); }
+  let j = null; if (!r.ok) { try { j = await r.json(); } catch(e){} }
+  if (r.status === 503 && !(j && j.error === "migration_required")) { showLogin("errDisabled"); throw new AuthError(); }
+  const code = j && I18N.vi["e_" + j.error] ? "e_" + j.error : "";
+  if (code) throw new ApiError(code);
   if (r.status === 429) throw new ApiError("errRate");
   if (!r.ok) throw new ApiError("errServer", { n: r.status });
   return r.json();
 }
+/* tải CSV theo bộ lọc hiện tại: fetch + blob (khoá chỉ nằm trong header, không nằm trong URL) */
+async function downloadCsv(kind, btn) {
+  const key = store.get("adm_key"); if (!key) return showLogin();
+  const params = kind === "passes" ? { status: $("pStatus").value, q: $("pQ").value.trim() } : { status: $("oStatus").value, q: $("oQ").value.trim() };
+  const old = btn.textContent; btn.disabled = true; btn.textContent = t("exportBusy");
+  try {
+    const r = await fetch("/api/admin/" + kind + ".csv?" + new URLSearchParams(params), { headers: { Authorization: "Bearer " + key }, cache: "no-store" });
+    if (r.status === 401) { store.del("adm_key"); showLogin("errKey"); return; }
+    if (!r.ok) throw new Error("http");
+    const url = URL.createObjectURL(await r.blob()), a = document.createElement("a");
+    a.href = url; a.download = "night-play-" + kind + "-" + new Date().toISOString().slice(0, 10) + ".csv";
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 4000);
+  } catch(e) { alert(t("exportFail")); }
+  finally { btn.disabled = false; btn.textContent = old; }
+}
+document.addEventListener("click", e => { const b = e.target.closest("[data-csv]"); if (b) downloadCsv(b.dataset.csv, b); });
 function showLogin(key){ $("app").hidden = true; $("topbar").hidden = true; $("login").hidden = false; loginKey = key || ""; $("loginErr").textContent = loginKey ? t(loginKey) : ""; $("key").focus(); }
 function showApp(){ $("login").hidden = true; $("app").hidden = false; $("topbar").hidden = false; }
 function renderAsof() {
@@ -530,11 +649,12 @@ function setLang(l, save) {
   applyStatic();
   if (stats) renderOverview();
   for (const name of Object.keys(lists)) rerenderList(name);
+  if (D.data) renderDrawer();
 }
 document.addEventListener("click", e => { const b = e.target.closest("[data-lang]"); if (b) setLang(b.dataset.lang, true); });
 
 /* ---------- tab ---------- */
-const TABS = ["overview", "review", "orders"];
+const TABS = ["overview", "review", "orders", "passes"];
 function selectTab(name, focus) {
   if (!TABS.includes(name)) name = "overview";
   tab = name;
@@ -547,7 +667,7 @@ function selectTab(name, focus) {
   $("range").hidden = name !== "overview";
   if (location.hash.slice(1) !== name) history.replaceState(null, "", "#" + name);
   if (name === "overview") { if (stats) renderOverview(); }
-  else loadList(name);
+  else loadList(curList());
 }
 document.querySelector("nav.tabs").addEventListener("click", e => { const b = e.target.closest(".tab"); if (b) selectTab(b.dataset.tab); });
 document.querySelector("nav.tabs").addEventListener("keydown", e => {
@@ -705,8 +825,12 @@ let liveTimer = setInterval(async () => {
 const ROW_H = 40, HEAD_H = 36;
 const lists = {
   review: { page: 1, size: 10, total: 0, seq: 0, rows: null, tbl: "rTbl", pager: "rPager", path: "review", params: () => ({ result: $("rResult").value }), render: renderReview },
-  orders: { page: 1, size: 10, total: 0, seq: 0, rows: null, tbl: "oTbl", pager: "oPager", path: "orders", params: () => ({ status: $("oStatus").value, q: $("oQ").value.trim() }), render: renderOrders }
+  orders: { page: 1, size: 10, total: 0, seq: 0, rows: null, tbl: "oTbl", pager: "oPager", path: "orders", params: () => ({ status: $("oStatus").value, q: $("oQ").value.trim() }), render: renderOrders },
+  passes: { page: 1, size: 10, total: 0, seq: 0, rows: null, tbl: "pTbl", pager: "pPager", path: "passes", params: () => ({ status: $("pStatus").value, q: $("pQ").value.trim() }), render: renderPasses },
+  plog: { page: 1, size: 10, total: 0, seq: 0, rows: null, tbl: "lTbl", pager: "lPager", path: "passes/actions", params: () => ({}), render: renderLog }
 };
+let passMode = "list";   // tab Pass: "list" (danh sách pass) | "log" (nhật ký thao tác gần đây)
+const curList = () => tab === "passes" ? (passMode === "log" ? "plog" : "passes") : tab;
 /* số dòng vừa khít khung (không cuộn); màn hình nhỏ dùng 10 dòng */
 function fitSize(L) {
   const h = $(L.tbl).clientHeight;
@@ -726,7 +850,7 @@ async function loadList(name, resetPage) {
   try { d = await api(L.path + "?" + qs); }
   catch(e) { if (seq === L.seq && !(e instanceof AuthError)) { box.innerHTML = '<div class="empty">' + esc(errText(e)) + "</div>"; box.removeAttribute("aria-busy"); } return; }
   if (seq !== L.seq) return;                                     // bỏ kết quả cũ nếu đã có yêu cầu mới hơn
-  L.total = d.total;
+  L.total = d.total; L.avail = d.available;
   const pages = Math.max(1, Math.ceil(d.total / L.size));
   if (L.page > pages) { L.page = pages; return loadList(name); }  // trang vượt quá (dữ liệu vừa giảm)
   L.rows = d.rows;
@@ -736,7 +860,7 @@ async function loadList(name, resetPage) {
 /* vẽ lại bảng + thanh phân trang từ dữ liệu đã tải (dùng khi đổi ngôn ngữ, không gọi lại máy chủ) */
 function rerenderList(name) {
   const L = lists[name]; if (!L.rows) return;
-  $(L.tbl).innerHTML = L.rows.length ? L.render(L.rows) : '<div class="empty">' + esc(t("noData")) + "</div>";
+  $(L.tbl).innerHTML = L.rows.length ? L.render(L.rows) : '<div class="empty">' + esc(L.avail === false ? t("logOff") : t("noData")) + "</div>";
   drawPager(name, Math.max(1, Math.ceil(L.total / L.size)));
 }
 function drawPager(name, pages) {
@@ -775,6 +899,122 @@ function renderOrders(rows) {
       return "<tr><td>" + dt(r.createdAt) + "</td><td>" + esc(r.code) + '</td><td title="' + esc(r.email) + '">' + esc(r.email) + "</td><td>" + esc(planName(r.plan)) +
         '</td><td class="num">' + esc(money(r.amount)) + "</td><td>" + badge(STATUS_COLOR[sk] || "var(--muted)", known ? t("st_" + sk) : sk) + "</td><td>" + dt(r.paidAt) + "</td></tr>"; }).join("") + "</tbody></table>";
 }
+const PASS_COLOR = { active: "var(--st-good)", expiring: "var(--st-warning)", expired: "var(--muted)" };
+const passKey = r => !r.active ? "expired" : r.exp - Date.now() <= 3 * 864e5 ? "expiring" : "active";
+const passBadge = r => badge(PASS_COLOR[passKey(r)], t("ps_" + passKey(r)));
+const devTxt = r => r.devices == null ? "—" : r.devices + "/" + r.maxDevices;
+const lastTxt = r => r.lastOrder ? r.lastOrder.code + " · " + (I18N.vi["st_" + r.lastOrder.status] ? t("st_" + r.lastOrder.status) : r.lastOrder.status) : "—";
+function renderPasses(rows) {
+  if (compactMode()) return rows.map(r => '<div class="crow" role="button" tabindex="0" data-open="' + esc(r.userId) + '"><div>' + esc(r.email || r.userId.slice(0, 8)) + '</div><div class="r">' + esc(money(r.totalPaid)) + '</div><div class="c2">' + esc(planName(r.plan) + " · " + dtY(r.exp) + " · " + devTxt(r)) + '</div><div class="c2 r">' + passBadge(r) + "</div></div>").join("");
+  return "<table><thead><tr><th>" + esc(t("colEmail")) + "</th><th>" + esc(t("colPlan")) + "</th><th>" + esc(t("colExp")) + '</th><th class="num">' + esc(t("colDevices")) + "</th><th>" + esc(t("colLastOrder")) + '</th><th class="num">' + esc(t("colPaidTotal")) + "</th></tr></thead><tbody>" +
+    rows.map(r => '<tr class="row-open" data-open="' + esc(r.userId) + '"><td title="' + esc(r.email) + '"><button type="button" class="link" data-open="' + esc(r.userId) + '">' + esc(r.email || r.userId.slice(0, 8)) + "</button></td><td>" + esc(planName(r.plan)) + "</td><td>" + passBadge(r) + " " + esc(dtY(r.exp)) +
+      '</td><td class="num">' + esc(devTxt(r)) + '</td><td title="' + esc(lastTxt(r)) + '">' + esc(lastTxt(r)) + '</td><td class="num">' + esc(money(r.totalPaid)) + "</td></tr>").join("") + "</tbody></table>";
+}
+const actSummary = a => {
+  const b = a.before || {}, x = a.after || {};
+  if (a.action === "grant") return "+" + x.days + " · " + planName(x.plan) + " → " + dtY(Date.parse(x.exp));
+  if (a.action === "revoke") return dtY(Date.parse(b.exp)) + " → " + dtY(Date.parse(x.exp));
+  if (a.action === "devices_delete") return "−" + (x.deleted || []).length + " · " + t("leftN", { n: x.remaining });
+  if (a.action === "email_change") return (b.email || "—") + " → " + x.email;
+  return "";
+};
+const actName = a => I18N.vi["la_" + a] ? t("la_" + a) : a;
+function renderLog(rows) {
+  if (compactMode()) return rows.map(r => '<div class="crow" role="button" tabindex="0" data-open="' + esc(r.userId) + '"><div>' + esc(actName(r.action)) + " · " + esc(r.email || r.userId.slice(0, 8)) + '</div><div class="r c2">' + esc(dt(r.at)) + '</div><div class="c2">' + esc(r.reason) + "</div></div>").join("");
+  return "<table><thead><tr><th>" + esc(t("colTime")) + "</th><th>" + esc(t("colWho")) + "</th><th>" + esc(t("colAction")) + "</th><th>" + esc(t("colReason")) + "</th><th>" + esc(t("colChange")) + "</th></tr></thead><tbody>" +
+    rows.map(r => '<tr class="row-open" data-open="' + esc(r.userId) + '"><td>' + dtY(r.at) + '</td><td title="' + esc(r.email) + '">' + esc(r.email || r.userId.slice(0, 8)) + "</td><td>" + esc(actName(r.action)) + '</td><td title="' + esc(r.reason) + '">' + esc(r.reason) + '</td><td title="' + esc(actSummary(r)) + '">' + esc(actSummary(r)) + "</td></tr>").join("") + "</tbody></table>";
+}
+$("pStatus").addEventListener("change", () => loadList("passes", true));
+let pt; $("pQ").addEventListener("input", () => { clearTimeout(pt); pt = setTimeout(() => loadList("passes", true), 300); });
+$("pMode").addEventListener("click", e => {
+  const b = e.target.closest("button[data-m]"); if (!b) return;
+  passMode = b.dataset.m;
+  $("pMode").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+  $("pFilters").hidden = passMode === "log"; $("pCard").hidden = passMode === "log"; $("lCard").hidden = passMode !== "log";
+  loadList(curList(), true);
+});
+
+/* ---------- ngăn kéo chi tiết một pass + thao tác thủ công ---------- */
+const D = { uid: "", data: null, act: "grant", flash: null, busy: false, opener: null, seq: 0 };
+const primaryEmail = d => { const e = d.identities.find(i => i.email); return e ? e.email : ""; };
+function openDrawer(uid, opener) {
+  D.uid = uid; D.data = null; D.flash = null; D.act = "grant"; D.opener = opener || document.activeElement;
+  $("dBack").hidden = false; $("drawer").hidden = false;
+  $("dTitle").textContent = "…"; $("dSub").textContent = ""; $("dBody").innerHTML = '<div class="empty">' + esc(t("dLoading")) + "</div>";
+  $("dClose").focus(); loadDetail();
+}
+function closeDrawer() { $("dBack").hidden = true; $("drawer").hidden = true; D.data = null; D.uid = ""; if (D.opener && D.opener.isConnected) D.opener.focus(); }
+async function loadDetail() {
+  const seq = ++D.seq; let d;
+  try { d = await api("passes/" + D.uid); }
+  catch(e) { if (seq === D.seq && !(e instanceof AuthError)) $("dBody").innerHTML = '<div class="empty">' + esc(errText(e)) + "</div>"; return; }
+  if (seq !== D.seq) return;
+  D.data = d; renderDrawer();
+}
+const miniTable = (head, rows) => rows.length ? '<div class="dtbl"><table><thead><tr>' + head.map(h => "<th>" + esc(h) + "</th>").join("") + "</tr></thead><tbody>" + rows.join("") + "</tbody></table></div>" : '<div class="hint">' + esc(t("dNone")) + "</div>";
+const td = (v, title) => '<td title="' + esc(title == null ? v : title) + '">' + esc(v) + "</td>";
+function renderDrawer() {
+  const d = D.data; if (!d) return;
+  const em = primaryEmail(d), p = d.pass;
+  $("dTitle").textContent = em || d.userId; $("dSub").textContent = p ? planName(p.plan) + " · " + t("dPlanExp") + " " + dtY(p.exp) : t("dNoPass");
+  const kv = (k, v) => "<div><small>" + esc(k) + "</small><b>" + v + "</b></div>";
+  let h = '<div class="kv">' + kv(t("dId"), esc(d.userId.slice(0, 8))) + kv(t("colPlan"), esc(p ? planName(p.plan) : "—")) +
+    kv(t("dPlanExp"), p ? passBadge({ active: p.active, exp: p.exp }) + " " + esc(dtY(p.exp)) : "—") +
+    kv(t("dDevicesN"), esc(d.devicesAvailable ? d.devices.length + "/" + d.maxDevices : "—")) + kv(t("dCreated"), esc(dtY(d.createdAt))) + "</div>";
+  /* thao tác */
+  const dis = !d.actionsAvailable;
+  const opts = '<option value="all">' + esc(t("fKidAll")) + "</option>" + d.devices.map(x => '<option value="' + esc(x.kid) + '">' + esc(x.kid + " · " + dt(x.lastSeen)) + "</option>").join("");
+  h += '<form class="actbox" id="actForm" autocomplete="off"><h3 style="margin:0">' + esc(t("aTitle")) + '</h3>' +
+    '<div class="seg" role="group" id="actType">' + ["grant", "revoke", "devices", "email"].map(a => '<button type="button" data-a="' + a + '" aria-pressed="' + (D.act === a) + '">' + esc(t("a_" + a)) + "</button>").join("") + "</div>" +
+    '<div data-for="grant"><label for="fDays">' + esc(t("fDays")) + '</label><input class="field" id="fDays" type="number" min="1" max="3650" step="1" value="30" inputmode="numeric"></div>' +
+    '<div data-for="revoke"><div class="warnbox">' + esc(t("fRevokeWarn")) + '</div><label for="fConfirm" style="margin-top:8px">' + esc(t("fConfirm", { v: em || d.userId })) + '</label><input class="field" id="fConfirm" type="text" autocapitalize="off" spellcheck="false"></div>' +
+    '<div data-for="devices">' + (d.devices.length ? '<label for="fKid">' + esc(t("fKid")) + '</label><select class="field" id="fKid">' + opts + "</select>" : '<div class="hint">' + esc(d.devicesAvailable ? t("fNoDev") : t("devOff")) + "</div>") + "</div>" +
+    '<div data-for="email"><label for="fNewEmail">' + esc(t("fNewEmail")) + '</label><input class="field" id="fNewEmail" type="email" autocapitalize="off" spellcheck="false"></div>' +
+    '<div><label for="fReason">' + esc(t("fReason")) + '</label><input class="field" id="fReason" type="text" maxlength="300"></div>' +
+    '<div class="actmsg ' + (D.flash ? D.flash.cls : "") + '" id="actMsg" role="status">' + esc(dis ? t("e_migration_required") : D.flash ? D.flash.text : "") + "</div>" +
+    '<button class="btn go" id="actGo" type="submit" disabled>' + esc(t("aGo")) + "</button></form>";
+  h += "<section><h3>" + esc(t("dIdentities")) + "</h3>" + miniTable([t("colProvider"), t("colEmail"), t("colVerified")], d.identities.map(i => "<tr>" + td(i.provider) + td(i.email || "—") + td(i.verified ? t("yes") : t("no")) + "</tr>")) + "</section>";
+  h += "<section><h3>" + esc(t("dDevices", { n: d.devicesAvailable ? d.devices.length : "—", max: d.maxDevices })) + "</h3>" + (d.devicesAvailable ? miniTable([t("colKid"), t("colFirstSeen"), t("colLastSeen")], d.devices.map(x => "<tr>" + td(x.kid) + td(dtY(x.firstSeen)) + td(dtY(x.lastSeen)) + "</tr>")) : '<div class="hint">' + esc(t("devOff")) + "</div>") + "</section>";
+  h += "<section><h3>" + esc(t("dOrders")) + "</h3>" + miniTable([t("colCode"), t("colPlan"), t("colAmount"), t("colStatus"), t("colCreated")], d.orders.map(o => { const sk = o.status === "pending" && o.expiresAt < Date.now() ? "expired" : o.status;
+    return "<tr>" + td(o.code) + td(planName(o.plan)) + td(money(o.amount)) + td(I18N.vi["st_" + sk] ? t("st_" + sk) : sk) + td(dtY(o.createdAt)) + "</tr>"; })) + "</section>";
+  h += "<section><h3>" + esc(t("dTxs")) + "</h3>" + miniTable([t("colTime"), t("colAmount"), t("colResult"), t("colCode"), t("colNote")], d.txs.map(x => "<tr>" + td(dtY(x.at)) + td(money(x.amount)) + td(I18N.vi["res_" + x.result] ? t("res_" + x.result) : x.result) + td(x.code || "—") + td(x.content || "—") + "</tr>")) + "</section>";
+  h += "<section><h3>" + esc(t("dLog")) + "</h3>" + (d.actionsAvailable ? miniTable([t("colTime"), t("colAction"), t("colReason"), t("colChange")], d.actions.map(a => "<tr>" + td(dtY(a.at)) + td(actName(a.action)) + td(a.reason) + td(actSummary(a)) + "</tr>")) : '<div class="hint">' + esc(t("logOff")) + "</div>") + "</section>";
+  $("dBody").innerHTML = h; syncForm();
+}
+function formState() {
+  const d = D.data, v = id => ($(id) ? $(id).value.trim() : ""), em = primaryEmail(d) || d.userId;
+  const reason = v("fReason"); let ok = reason.length >= 3 && d.actionsAvailable, body = { reason };
+  if (D.act === "grant") { const n = Number(v("fDays")); ok = ok && Number.isInteger(n) && n >= 1 && n <= 3650; body.days = n; }
+  else if (D.act === "revoke") { ok = ok && !!d.pass && d.pass.active && v("fConfirm").toLowerCase() === em.toLowerCase(); body.confirmEmail = v("fConfirm"); }
+  else if (D.act === "devices") { ok = ok && d.devices.length > 0; body.kid = v("fKid") || "all"; }
+  else { ok = ok && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v("fNewEmail")); body.newEmail = v("fNewEmail"); }
+  return { ok, body };
+}
+function syncForm() {
+  document.querySelectorAll("#actForm [data-for]").forEach(el => { el.hidden = el.dataset.for !== D.act; });
+  $("actType").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.a === D.act)));
+  const go = $("actGo"); go.disabled = D.busy || !formState().ok;
+  go.classList.toggle("danger", D.act === "revoke" || (D.act === "devices"));
+}
+$("drawer").addEventListener("input", e => { if (e.target.closest("#actForm")) { D.flash = null; $("actMsg").textContent = ""; syncForm(); } });
+$("drawer").addEventListener("click", e => { const b = e.target.closest("#actType button"); if (b) { D.act = b.dataset.a; D.flash = null; $("actMsg").textContent = ""; syncForm(); } });
+$("drawer").addEventListener("submit", async e => {
+  e.preventDefault(); const st = formState(); if (!st.ok || D.busy) return;
+  const path = { grant: "grant", revoke: "revoke", devices: "devices/delete", email: "email" }[D.act], uid = D.uid;
+  D.busy = true; $("actGo").disabled = true; $("actMsg").className = "actmsg"; $("actMsg").textContent = t("aBusy");
+  try { await api("passes/" + uid + "/" + path, st.body); D.flash = { cls: "ok", text: t("aDone") }; }
+  catch(err) { if (err instanceof AuthError) { D.busy = false; return; } D.flash = { cls: "bad", text: errText(err) }; }
+  D.busy = false;
+  if (D.uid !== uid) return;
+  if (D.flash.cls === "ok") { await loadDetail(); if (lists[curList()].rows) loadList(curList()); }
+  else { $("actMsg").className = "actmsg bad"; $("actMsg").textContent = D.flash.text; syncForm(); }
+});
+$("dClose").addEventListener("click", closeDrawer);
+$("dBack").addEventListener("click", closeDrawer);
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("drawer").hidden) closeDrawer(); });
+document.addEventListener("click", e => { const o = e.target.closest("[data-open]"); if (o && !e.target.closest("#drawer")) openDrawer(o.dataset.open, e.target.closest("button,[data-open]")); });
+document.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target.matches && e.target.matches("[role=button][data-open]")) { e.preventDefault(); openDrawer(e.target.dataset.open, e.target); } });
+
 $("rResult").addEventListener("change", () => loadList("review", true));
 $("oStatus").addEventListener("change", () => loadList("orders", true));
 let qt; $("oQ").addEventListener("input", () => { clearTimeout(qt); qt = setTimeout(() => loadList("orders", true), 300); });
@@ -785,10 +1025,10 @@ async function start() {
   if (await loadStats()) selectTab(location.hash.slice(1) || "overview");
 }
 async function refresh() {
-  if (await loadStats()) { if (tab === "overview") renderOverview(); else loadList(tab); }
+  if (await loadStats()) { if (tab === "overview") renderOverview(); else loadList(curList()); }
 }
 $("loginForm").addEventListener("submit", e => { e.preventDefault(); store.set("adm_key", $("key").value.trim()); $("key").value = ""; start(); });
-$("logout").addEventListener("click", () => { store.del("adm_key"); stats = null; updatedAt = null; showLogin(); });
+$("logout").addEventListener("click", () => { closeDrawer(); store.del("adm_key"); stats = null; updatedAt = null; showLogin(); });
 $("refresh").addEventListener("click", refresh);
 $("range").addEventListener("click", e => {
   const b = e.target.closest("button[data-d]"); if (!b) return;
@@ -804,7 +1044,7 @@ document.querySelectorAll("[data-toggle]").forEach(btn => btn.addEventListener("
   btn.textContent = tv[k] ? t("viewChart") : t("viewTable"); btn.setAttribute("aria-pressed", String(tv[k]));
   if (!tv[k]) drawCharts();
 }));
-let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (!stats) return; if (tab === "overview") { drawPlans(); drawGames(); drawLive(); drawCharts(); } else loadList(tab); }, 150); });
+let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (!stats) return; if (tab === "overview") { drawPlans(); drawGames(); drawLive(); drawCharts(); } else loadList(curList()); }, 150); });
 
 /* màn hình gọn: menu tuỳ chọn + chọn khung hiển thị */
 const tools = $("tools"), more = $("moreBtn");
