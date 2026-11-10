@@ -44,12 +44,13 @@ svg{display:block}
 #more{flex:none;font-weight:800;font-size:12px;color:var(--muted)}
 #perf{flex:none;font-size:12px;font-weight:800;color:var(--warn);display:none;max-width:120px;line-height:1.15}
 #perf.on{display:block}
-#grid{position:relative;flex:1;min-height:0;min-width:0;margin:6px}
+#grid{position:relative;flex:1;min-height:0;min-width:0;margin:6px;display:grid;gap:6px;overflow:hidden}
 #empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--muted);font-weight:700;padding:24px;line-height:1.4}
 #empty[hidden]{display:none}
-.fr{position:absolute;border-radius:14px;overflow:hidden;background:var(--card);box-shadow:0 0 0 1px var(--line);transition:box-shadow .15s}
+.fr{position:relative;min-width:0;min-height:0;border-radius:14px;overflow:hidden;background:var(--card);box-shadow:0 0 0 1px var(--line);transition:box-shadow .15s}
 .fr.hid{display:none}
 .fr.sel{box-shadow:0 0 0 3px var(--accent)}
+.fr.po-open{z-index:5}
 .fr iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#0b0b18;display:block}
 .mi,.hm{position:absolute;top:0;height:44px;min-width:44px;padding:0 9px;display:flex;align-items:center;justify-content:center;gap:4px;opacity:.45;z-index:6;transition:opacity .15s}
 .mi{right:0}.hm{left:0;z-index:9}
@@ -225,17 +226,35 @@ body.side #perf{max-width:50px;font-size:10px}
     if (bare !== was) renderTray();
   }
   function closeHp() { $("hp").classList.remove("on"); $("hm").classList.remove("on"); }
-  function layout() {
-    chrome();
-    var list = slotItems(), a = areaSize(); $("empty").hidden = list.length > 0 || items.length > 0 && false;
-    $("empty").hidden = list.length > 0; $("empty").textContent = t().empty;
-    if (!list.length) return;
-    var p = plan(list.length, a.W, a.H, list), k = 0;
-    p.counts.forEach(function (cnt, r) {
-      var w = (a.W - GAP * (cnt - 1)) / cnt, y = r * (p.h + GAP);
-      for (var c = 0; c < cnt; c++) { var it = list[k++], s = it.el.style; s.left = Math.round(c * (w + GAP)) + "px"; s.top = Math.round(y) + "px"; s.width = Math.round(w) + "px"; s.height = Math.round(p.h) + "px"; }
-    });
+  /* BỐ CỤC bằng CSS GRID tường minh (không toạ độ tuyệt đối bằng JS): mỗi khung là một ô, trình duyệt tự đảm bảo KHÔNG chồng lấn khi thêm/bớt khung.
+     Lưới L cột (L = bội chung nhỏ nhất của số khung mỗi hàng), mỗi khung chiếm L/cnt cột của hàng của nó, hàng 1fr. Sau mỗi lần xếp: ép reflow, rồi kiểm tra bất biến
+     (2 khung chồng nhau > 4px → xếp lại thành một cột + console.warn) và báo kích thước mới cho từng iframe (resize sau 2 rAF và ~250ms) — Safari/iPadOS không luôn áp lại kích thước iframe ngay. */
+  var gcd = function (x, y) { return y ? gcd(y, x % y) : x; }, lcm = function (x, y) { return x * y / gcd(x, y); };
+  function overlaps() {
+    var els = slotItems().map(function (i) { return i.el.getBoundingClientRect(); }), bad = 0;
+    for (var i = 0; i < els.length; i++) for (var j = i + 1; j < els.length; j++) { var ox = Math.min(els[i].right, els[j].right) - Math.max(els[i].left, els[j].left), oy = Math.min(els[i].bottom, els[j].bottom) - Math.max(els[i].top, els[j].top); if (ox > 4 && oy > 4) bad++; }
+    return bad;
   }
+  function ensureSel() { var list = slotItems(); if (list.length && (!sel || sel.where !== "slot" || items.indexOf(sel) < 0)) select(list[0]); }
+  function fixIframes() {   /* iframe có kích thước trong (innerWidth/Height) lệch khung → đánh thức bằng resize */
+    slotItems().forEach(function (it) { try { var f = it.fr, w = f && f.contentWindow; if (!w) return; var r = f.getBoundingClientRect(); if (Math.abs(w.innerWidth - r.width) > 2 || Math.abs(w.innerHeight - r.height) > 2 || true) w.dispatchEvent(new Event("resize")); } catch (e) {} });
+  }
+  var lyT = 0;
+  function layout(single) {
+    chrome();
+    var list = slotItems(), a = areaSize(); $("empty").hidden = list.length > 0; $("empty").textContent = t().empty;
+    if (!list.length) return;
+    var p = single ? { rows: list.length, counts: list.map(function () { return 1; }) } : plan(list.length, a.W, a.H, list), L = 1;
+    p.counts.forEach(function (c) { L = lcm(L, c); });
+    grid.style.gridTemplateColumns = "repeat(" + L + ",minmax(0,1fr))"; grid.style.gridTemplateRows = "repeat(" + p.rows + ",minmax(0,1fr))";
+    var k = 0;
+    p.counts.forEach(function (cnt, r) { var span = L / cnt; for (var c = 0; c < cnt; c++) { var it = list[k++], st = it.el.style; st.gridRow = String(r + 1); st.gridColumn = (c * span + 1) + " / span " + span; } });
+    ensureSel(); void grid.offsetHeight;   /* ép reflow */
+    if (!single && overlaps()) { console.warn("[multi] khung chồng lấn sau layout — xếp lại một cột"); layout(true); return; }
+    clearTimeout(lyT); requestAnimationFrame(function () { requestAnimationFrame(function () { if (overlaps() && !single) { console.warn("[multi] chồng lấn sau 2 rAF"); layout(true); } fixIframes(); }); });
+    lyT = setTimeout(function () { if (overlaps() && !single) { console.warn("[multi] chồng lấn sau 250ms"); layout(true); } fixIframes(); }, 250);
+  }
+
 
   /* ---------- khung game ---------- */
   function buildEl(it) {
@@ -507,13 +526,16 @@ body.side #perf{max-width:50px;font-size:10px}
   $("lkGo").addEventListener("click", function () { location.href = PORTAL_HOME; });
   grid.addEventListener("pointerdown", function (e) { if (!e.target.closest(".pn,.mi,#hp,#hm")) closePanels(); }, true);
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") { if (!$("sheet").hidden) closeSheet(); else closePanels(); return; } if (sel && sel.fr && !e.target.closest("button")) { try { sel.fr.contentWindow.focus(); } catch (x) {} } });
+  try { new ResizeObserver(function () { clearTimeout(onResize.r); onResize.r = setTimeout(layout, 30); }).observe(grid); } catch (e) {}
+  addEventListener("orientationchange", function () { setTimeout(onResize, 120); setTimeout(onResize, 450); });
+  try { if (window.visualViewport) visualViewport.addEventListener("resize", function () { clearTimeout(onResize.t); onResize.t = setTimeout(onResize, 60); }); } catch (e) {}
   addEventListener("resize", function () { clearTimeout(onResize.t); onResize.t = setTimeout(onResize, 60); });
   addEventListener("pagehide", function () { items.forEach(function (it) { try { it.fr.contentWindow.NPResume.flush(); } catch (e) {} }); });
   /* API cho bài đo (scripts/cozygame/check-multi.js) và gỡ lỗi */
   window.NPMulti = { booted: false, caps: function () { return CAP; }, add: addOne, addTray: addTray, switchTo: function (id) { var it = find(id); return it ? switchTo(it) : null; }, select: function (id) { var it = find(id); if (it) select(it); },
     close: function (id) { var it = find(id); if (it) closeItem(it); }, evict: function (id) { var it = find(id); if (it && it.fr) evict(it); }, setSlow: setSlow, isSlow: function () { return slow; },
     items: function () { return items.map(function (i) { var r = i.el.getBoundingClientRect(); return { id: i.id, mode: i.mode, where: i.where, alive: !!i.fr, ready: i.ready, sel: sel === i, paused: !!(i.userPaused || i.autoPaused), sentPaused: i.sentPaused, saved: !!i.saved, hud: i.hud, thumb: !!i.thumb, counting: i.counting, rect: [Math.round(r.left), Math.round(r.top), Math.round(r.width), Math.round(r.height)] }; }); },
-    frame: function (id) { var it = find(id); return it && it.fr; }, alive: function () { return alive().length; }, main: function () { return main && main.id; }, plan: plan, fits: function (ids) { return fits(ids.map(function (i) { return { g: M.flag(i) }; })); } };
+    frame: function (id) { var it = find(id); return it && it.fr; }, alive: function () { return alive().length; }, main: function () { return main && main.id; }, plan: plan, overlaps: overlaps, fits: function (ids) { return fits(ids.map(function (i) { return { g: M.flag(i) }; })); } };
   applyText(); onResize();
   if (isTimeUp()) showLock();
   else {

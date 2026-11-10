@@ -35,10 +35,13 @@ const TUT = ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "xn", "dd", "
   const srv = spawn("python3", ["-m", "http.server", String(PORT)], { cwd: root, stdio: "ignore" }); await wait(1200);
   const br = await puppeteer.launch({ executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", headless: "new", args: ["--mute-audio"], protocolTimeout: 120000 });
   if (shotDir) fs.mkdirSync(shotDir, { recursive: true });
+  const SAMPLE = (ms) => new Promise(res => { const t0 = performance.now(); let n = 0, bad = 0, worst = 0, sizeBad = 0; const chk = () => { const its = NPMulti.items().filter(i => i.where === "slot"); for (let i = 0; i < its.length; i++) for (let j = i + 1; j < its.length; j++) { const a = its[i].rect, b = its[j].rect, ox = Math.min(a[0] + a[2], b[0] + b[2]) - Math.max(a[0], b[0]), oy = Math.min(a[1] + a[3], b[1] + b[3]) - Math.max(a[1], b[1]); if (ox > 4 && oy > 4) { bad++; worst = Math.max(worst, Math.min(ox, oy)); } } n++; };
+    const f = () => { chk(); if (performance.now() - t0 < ms) requestAnimationFrame(f); else { const st = NPMulti.items().filter(i => i.where === "slot" && i.alive).map(i => { const w = NPMulti.frame(i.id).contentWindow; return Math.abs(w.innerWidth - i.rect[2]) > 2 || Math.abs(w.innerHeight - i.rect[3]) > 2 ? i.id + ":" + w.innerWidth + "x" + w.innerHeight + "≠" + i.rect[2] + "x" + i.rect[3] : null; }).filter(Boolean); res({ n, bad, worst, size: st, sel: NPMulti.items().filter(i => i.sel).length, slots: NPMulti.items().filter(i => i.where === "slot").length }); } }; requestAnimationFrame(f); });
   const open = async (q, W, H, pre) => {
     const pg = await br.newPage(); pg._errs = []; pg.on("pageerror", e => pg._errs.push(e.message));
     await pg.setViewport({ width: W, height: H, isMobile: W < 1300, hasTouch: W < 1300 });
     await pg.evaluateOnNewDocument((tut, pre) => { if (!sessionStorage.getItem("__i")) { sessionStorage.setItem("__i", "1"); localStorage.clear(); } localStorage.setItem("lang", "vi"); localStorage.setItem("np-sound", "0"); tut.forEach(k => localStorage.setItem("tut_" + k, "1")); (pre || []).forEach(([k, v]) => localStorage.setItem(k, v)); }, TUT, pre || []);
+    await pg.evaluateOnNewDocument(src => { window.__sample = new Function("return " + src)(); }, SAMPLE.toString());
     await pg.goto(O + "/cozyplay/multi.html?" + q, { waitUntil: "load" }); return pg;
   };
   const ready = async (pg, n, ms) => { for (let i = 0; i < (ms || 60); i++) { const r = await pg.evaluate(n => { const it = window.NPMulti && NPMulti.items(); return !!it && it.filter(x => x.where === "slot" && x.ready).length >= n; }, n).catch(() => false); if (r) return true; await wait(250); } return false; };
@@ -134,6 +137,35 @@ const TUT = ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "xn", "dd", "
     if (pg._errs.length) note(false, tag, "lỗi JS: " + pg._errs[0]);
     if (shotDir) await pg.screenshot({ path: path.join(shotDir, "multi-" + name + ".png") });
     console.log("  " + tag + ": " + slots.length + " khung " + JSON.stringify(caps) + (pg._errs.length ? " (lỗi JS)" : ""));
+    await pg.close();
+  }
+
+  /* ---------- 2a. KHÔNG CHỒNG LẤN khi đóng/thêm/xoay (lỗi iPad Safari: khung phóng to đè khung còn lại) ---------- */
+  const OV_SIZES = (quick ? [[390, 844], [768, 1024], [1194, 834]] : [[390, 844], [844, 390], [768, 1024], [1024, 768], [834, 1194], [1194, 834], [1440, 900]]);
+  for (const [W, H] of OV_SIZES) {
+    const tag = "multi không chồng lấn " + W + "x" + H, pg = await open("games=" + PAR.join(","), W, H); const mx = (await pg.evaluate(() => NPMulti.caps())).slots, ids = PAR.slice(0, mx);
+    note(await ready(pg, mx), tag, "không tải xong " + mx + " khung"); await wait(1000);
+    if (mx > 1) await startPlay(pg, ids[0]);   /* có một khung đang chơi, không chỉ màn chọn */
+    let samples = 0, worstAll = 0;
+    const ns = quick ? [mx] : Array.from({ length: mx - 1 }, (_, k) => k + 2).reverse();
+    for (const n of ns) {
+      while ((await pg.evaluate(() => NPMulti.items().filter(i => i.where === "slot").length)) > n) await pg.evaluate(() => NPMulti.close(NPMulti.items().filter(i => i.where === "slot").pop().id));
+      for (let i = 0; i < n; i++) {
+        const slots = await pg.evaluate(() => NPMulti.items().filter(i => i.where === "slot").map(i => i.id)); if (slots.length < n) { for (const id of ids.filter(x => !slots.includes(x)).slice(0, n - slots.length)) await pg.evaluate(id => NPMulti.add(id), id); await ready(pg, n); await wait(700); }
+        const cur = await pg.evaluate(() => NPMulti.items().filter(i => i.where === "slot").map(i => i.id)), victim = cur[i];
+        const r = await pg.evaluate(async id => { NPMulti.close(id); return await window.__sample(1500); }, victim).catch(async () => null);
+        if (r === null) { /* __sample chưa có: nạp */ }
+        samples += r ? r.n : 0; if (r) { worstAll = Math.max(worstAll, r.worst); note(r.bad === 0, tag + " n=" + n + "→" + (n - 1) + " đóng #" + i, r.bad + " mẫu chồng lấn (tối đa " + r.worst + "px)"); note(r.size.length === 0, tag + " n=" + n + " đóng #" + i, "iframe có kích thước trong lệch khung: " + r.size.join(",")); note(r.sel === 1 || r.slots === 0, tag + " n=" + n + " đóng #" + i, "sau khi đóng phải có đúng 1 khung được chọn (" + r.sel + ")"); }
+        /* trả lại khung vừa đóng để đo tiếp (thêm cũng không được chồng lấn) */
+        await pg.evaluate(id => NPMulti.add(id), victim); const r2 = await pg.evaluate(async () => await window.__sample(900)); if (r2) { note(r2.bad === 0, tag + " thêm lại sau đóng #" + i, r2.bad + " mẫu chồng lấn"); }
+        await ready(pg, n); await wait(400);
+      }
+    }
+    /* xoay màn hình khi đang có nhiều khung */
+    if (mx >= 3) { for (const [w2, h2] of [[H, W], [W, H]]) { await pg.evaluate(() => { window.__p = window.__sample(1800); }); await pg.setViewport({ width: w2, height: h2, isMobile: W < 1300, hasTouch: W < 1300 }); const r = await pg.evaluate(async () => await window.__p); note(r.bad === 0 && r.size.length === 0, tag + " xoay " + w2 + "x" + h2, r.bad + " mẫu chồng lấn; lệch kích thước " + r.size.join(",")); } }
+    console.log("  " + tag + ": " + samples + " mẫu rAF, chồng lấn tối đa " + worstAll + "px");
+    if (pg._errs.length) note(false, tag, "lỗi JS: " + pg._errs[0]);
+    if (shotDir) await pg.screenshot({ path: path.join(shotDir, "multi-overlap-" + W + "x" + H + ".png") });
     await pg.close();
   }
 
