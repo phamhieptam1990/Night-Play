@@ -28,6 +28,7 @@ document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: da
 <link rel="stylesheet" href="../shared/theme.css">
 <link rel="stylesheet" href="../shared/bars.css">
 <link rel="stylesheet" href="../shared/align.css">
+<link rel="stylesheet" href="../shared/rails.css">
 <style>
 /* ===== THEME: đổi màu chủ đạo ở --accent (sáng) và --accent trong khối dark ===== */
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -982,5 +983,18 @@ setInterval(sync,600);document.addEventListener("load",sync,true);})();
 </script>
 <script src="../shared/passwatch.js" defer></script>
 <script src="../shared/parentgate.js"></script>
+<script src="../shared/rails.js"></script>
+<script>
+/* hai cột bên lề khi đang mở game trên màn rộng (shared/rails.js); chọn game khác / ván dở từ cột bên */
+NPRails.init({ portal:"pop", games:games, getLang:function(){ return lang; }, getFrame:function(){ return frame; }, stage:stage,
+  pick:function(g, resume){
+    var go = function(){
+      if(frame && curId === g.id){ if(resume){ try{ frame.contentWindow.NPResume && frame.contentWindow.NPResume.flush(); }catch(e){} const u = new URL(frame.src); u.searchParams.set("resume","1"); frame.src = u.href; } return; }
+      const old = g.url; if(resume) g.url = old + (old.indexOf("?") < 0 ? "?" : "&") + "resume=1";
+      closeGame(); location.hash = g.id; setTimeout(function(){ g.url = old; }, 800);
+    };
+    if(frame && Date.now() > exitOK && gamePlaying()) askLeave(go); else go();
+  } });
+</script>
 </body>
 </html>

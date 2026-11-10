@@ -119,6 +119,13 @@ const b64 = o => Buffer.from(JSON.stringify(o)).toString("base64").replace(/\+/g
   console.log("== admin: tab Pass");
   const ap = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-adminpass.js")].concat(process.argv.includes("--full-adminpass") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });
   note(ap.status === 0, "tổng", "check-adminpass.js báo lỗi (tab Pass của admin) — xem log phía trên");
+  /* màn rộng: khung game phóng to tới 760px + hai cột bên lề của trang cổng (scripts/cozygame/check-widescreen.js, check-rails.js) — bản nhanh, thêm --full-wide để đo đủ */
+  console.log("== màn rộng");
+  const ws = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-widescreen.js")].concat(process.argv.includes("--full-wide") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });
+  note(ws.status === 0, "tổng", "check-widescreen.js báo lỗi (khung game màn rộng) — xem log phía trên");
+  console.log("== cột bên lề trang cổng");
+  const rl = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-rails.js")].concat(process.argv.includes("--full-wide") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });
+  note(rl.status === 0, "tổng", "check-rails.js báo lỗi (cột bên lề trang cổng) — xem log phía trên");
   console.log("\n" + (fails.length ? "✗ " + fails.length + " lỗi" : "✓ tất cả đạt"));
   process.exit(fails.length ? 1 : 0);
 })();

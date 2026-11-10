@@ -3,7 +3,7 @@
    lưới trang cổng không lệch sau khi thoát game (Vẽ Một Nét), màn kết thúc (Pop Play) không bị cắt.
      NODE_PATH=<thư mục có puppeteer-core> node scripts/cozygame/check-portal.js [id,id,...]   (script tự chạy http.server cổng 8879) */
 const { spawn } = require("child_process"), path = require("path"), puppeteer = require("puppeteer-core");
-const root = path.join(__dirname, "..", ".."), PORT = 8879, B = "http://localhost:" + PORT + "/";
+const root = path.join(__dirname, "..", ".."), PORT = +process.env.NP_PORT || 8879, B = "http://localhost:" + PORT + "/";
 const COZY = ["song-sot-cuoi-thang", "xay-cau-tre", "ne-o-ga", "shipper-sieu-toc", "mat-tinh-khong", "ve-mot-net", "xin-nghi", "duong-ray", "cozy-wings", "dap-deadline", "doi-doi-2048", "xe-ca-phe"];
 const POP = { "bo-me-5-giay": "begin(0,{});setTimeout(()=>{G.p=3;G.j=2;G.bonus=20;G.mcp=3;G.mcj=2;finish()},300)", "con-vat-an-so": "begin(0,{});setTimeout(()=>{G.sc=180;G.ok=6;finish()},300)",
   "nhay-theo-so": "begin(0,{});setTimeout(()=>{G.rn=6;G.rs=4;finish()},300)", "doan-tuoi-nao": "begin(0,{});setTimeout(()=>{G.m=5;G.cor=3;G.dsum=10;G.sumT=20;finish()},300)",
@@ -102,7 +102,7 @@ const MEASURE = () => {
   /* menu ⋯ trên điện thoại dọc: MỌI game (Cozy sinh tự động + viết tay, Pop Play) mở qua trang cổng thật ở 390x844 và 360x640 */
   const fs = require("fs"), allIds = [...fs.readdirSync(path.join(root, "cozyplay", "games")).filter(d => fs.existsSync(path.join(root, "cozyplay", "games", d, "index.html"))).map(i => ["cozyplay", i]), ...fs.readdirSync(path.join(root, "popplay", "games")).filter(d => fs.existsSync(path.join(root, "popplay", "games", d, "index.html"))).map(i => ["popplay", i])].filter(([p0, i]) => p0 === "cozyplay" && (!only.length || only.includes(i)));   /* Pop Play dùng shared/popmenu.js (#npPmFan): do check-popmenu.js (nối vào check-pop.js) đo, không đo ở đây */
   for (const [portal, id] of allIds) for (const [W, H] of [[390, 844], [360, 640], [768, 1024], [834, 1194], [1024, 768], [1194, 834]]) {
-    const mode = W <= 520 ? "phone" : H > W ? "tab" : "land", { pg, fr } = await open(portal, id, W, H), tag = "menu " + portal + "/" + id + " " + W + "x" + H;
+    const mode = W <= 520 ? "phone" : H > W || (W >= 1100 && H >= 600) ? "tab" : "land",   /* ≥1100x600: trang cổng có 2 cột bên lề (rails.js) nên khung game hẹp lại, game dùng bố cục kiểu iPad dọc */ { pg, fr } = await open(portal, id, W, H), tag = "menu " + portal + "/" + id + " " + W + "x" + H;
     if (!fr) { note(false, tag + ": không mở được game trong cổng"); try { await pg.close(); } catch (e) {} continue; }
     await wait(900); const ev = async (f, what, arg) => { try { return await fr.evaluate(f, arg); } catch (e) { return { errs: ["không đo được " + what + ": " + String(e).slice(0, 60)] }; } }; const m = await ev(MENU_MEASURE, "menu", mode);
     note(!m.errs.length, tag + ": " + m.errs.join("; "));
