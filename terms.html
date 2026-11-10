@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="vi" data-l="vi" data-app="hub">
+<head>
+<meta charset="utf-8">
+<script src="shared/guard.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#F6F4F1">
+<meta name="description" content="Điều khoản sử dụng và quy chế hoạt động / Terms of Use">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='32' height='64' fill='%23FF5A1F'/%3E%3Crect x='32' width='32' height='64' fill='%237C5CFF'/%3E%3Ccircle cx='32' cy='32' r='14' fill='%23fff'/%3E%3C/svg%3E">
+<title>Điều khoản sử dụng · Play Hub</title>
+<script>
+/* Theme và ngôn ngữ theo chuẩn của dự án: localStorage "theme" / "lang"; chưa chọn thì theo thiết bị. ?lang=vi|en ghi đè. */
+try{var t=localStorage.getItem("theme")}catch(e){}
+document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
+(function(){
+  var q=new URLSearchParams(location.search).get("lang"),s=null;
+  try{s=localStorage.getItem("lang")}catch(e){}
+  var l=[q,s].find(function(x){return x==="vi"||x==="en"})||(/^vi/i.test(navigator.language||"")?"vi":"en");
+  document.documentElement.dataset.l=l; document.documentElement.lang=l;
+})();
+</script>
+<link rel="stylesheet" href="shared/theme.css">
+<link rel="stylesheet" href="shared/layout.css">
+<link rel="stylesheet" href="shared/bars.css">
+<link rel="stylesheet" href="shared/legaldoc.css">
+</head>
+<body>
+<nav class="nav" aria-label="Main">
+  <a class="mark" href="index.html" aria-label="Home">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#7C5CFF"/><path d="M0 0h32v64H0z" fill="#FF5A1F" clip-path="inset(0 round 18px 0 0 18px)"/><circle cx="32" cy="32" r="13" fill="#fff"/></svg>
+    <span>Home</span>
+  </a>
+  <div class="tools">
+    <div class="seg" role="group" aria-label="Language / Ngôn ngữ">
+      <button id="bVi" type="button" lang="vi" aria-label="Tiếng Việt">VI</button>
+      <button id="bEn" type="button" lang="en" aria-label="English">EN</button>
+    </div>
+    <button id="themeBtn" class="ico" type="button" aria-label="Theme">
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+  </div>
+</nav>
+
+
+<div id="src">
+
+<div class="L" lang="vi">
+  <h1>Điều khoản sử dụng và quy chế hoạt động</h1>
+  <p class="meta">Hiệu lực và cập nhật lần cuối: <span data-fill="legalDate"></span> · Áp dụng cho website <span data-fill="domain"></span></p>
+
+  <section class="sum" aria-labelledby="sv">
+    <h2 id="sv">Tóm tắt</h2>
+    <ul>
+      <li>Chơi miễn phí, không cần tài khoản. <b>Night Pass</b> là gói trả phí mở khoá thêm game, chế độ, giao diện và thời gian chơi.</li>
+      <li>Gói <b>1 ngày, 1 tuần, 1 tháng, 1 năm</b>, thanh toán một lần bằng chuyển khoản VietQR, <b>không tự gia hạn</b>.</li>
+      <li>Mỗi gói dùng trên tối đa <b>3 thiết bị</b>; không chia sẻ, bán lại gói.</li>
+      <li>Hoàn tiền khi thanh toán trùng/thừa hoặc đã thanh toán nhưng không kích hoạt được do lỗi của chúng tôi.</li>
+      <li>Khiếu nại gửi <a data-fill="email"></a>; chúng tôi phản hồi trong 03 ngày làm việc.</li>
+    </ul>
+  </section>
+
+  <h2>1. Thông tin chủ website</h2>
+  <div class="tw"><table>
+    <tbody>
+      <tr><td>Chủ website</td><td data-fill="operator"></td></tr>
+      <tr><td>Đại diện</td><td data-fill="represent"></td></tr>
+      <tr><td>Địa chỉ</td><td data-fill="address"></td></tr>
+      <tr><td>Điện thoại</td><td data-fill="phone"></td></tr>
+      <tr><td>Mã số thuế / ĐKKD</td><td data-fill="taxId"></td></tr>
+      <tr><td>Thông báo Bộ Công Thương</td><td data-fill="license"></td></tr>
+      <tr><td>Email hỗ trợ</td><td><a data-fill="email"></a></td></tr>
+      <tr><td>Tên miền</td><td data-fill="domain"></td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>2. Chấp nhận điều khoản và đối tượng sử dụng</h2>
+  <p>Khi truy cập hoặc dùng website, bạn đồng ý với các điều khoản này và <a href="privacy.html">Chính sách bảo mật</a>. Nếu không đồng ý, vui lòng ngừng sử dụng. Trẻ em chỉ nên chơi dưới sự giám sát của cha mẹ hoặc người giám hộ; trẻ em dưới 16 tuổi chỉ được cung cấp dữ liệu cá nhân khi có sự đồng ý của cha mẹ hoặc người giám hộ. Việc mua Night Pass do người từ đủ 18 tuổi thực hiện, hoặc do người dưới 18 tuổi thực hiện với sự đồng ý của người giám hộ.</p>
+
+  <h2>3. Phạm vi dịch vụ</h2>
+  <p>Play Hub là bộ trò chơi giải trí chạy trên trình duyệt gồm <b>Pop Play</b> (game ngắn cho trẻ nhỏ), <b>Night Play</b> (game nhẹ cho người lớn) và gói trả phí <b>Night Pass</b>. Bản miễn phí có giới hạn số game và thời gian chơi mỗi ngày như mô tả trên trang Night Pass tại từng thời điểm. Chúng tôi có thể thêm, sửa, tạm dừng hoặc gỡ game và tính năng, đồng thời nỗ lực bảo đảm các quyền lợi của gói đang hiệu lực không bị giảm đi trong thời hạn đã mua.</p>
+
+  <h2>4. Night Pass: gói và giá</h2>
+  <p>Giá bằng đồng Việt Nam, đã gồm thuế (nếu có), không phụ phí. Gói hiệu lực kể từ khi chúng tôi nhận được tiền; mua thêm khi gói còn hạn thì thời hạn được cộng dồn.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Gói</th><th>Thời hạn</th><th>Giá</th></tr></thead>
+    <tbody>
+      <tr><td>1 ngày</td><td>1 ngày</td><td>9.000đ</td></tr>
+      <tr><td>1 tuần</td><td>7 ngày</td><td>18.000đ</td></tr>
+      <tr><td>1 tháng</td><td>30 ngày</td><td>36.000đ</td></tr>
+      <tr><td>1 năm</td><td>365 ngày</td><td>199.000đ</td></tr>
+    </tbody>
+  </table></div>
+  <p>Quyền lợi: toàn bộ game kể cả game mới, chơi không giới hạn thời gian, chế độ vô tận, thử thách ngày, boss, các độ khó, chủ đề giao diện, thống kê và huy hiệu (chi tiết hiển thị tại trang Night Pass). Hết hạn, bạn quay về bản miễn phí; <b>không tự động gia hạn</b>, không tự động trừ tiền.</p>
+
+  <h2>5. Đặt hàng và thanh toán</h2>
+  <ul>
+    <li>Bạn chọn gói, nhập email (để nhận mã khôi phục và đối chiếu đơn) rồi nhận mã QR VietQR có sẵn số tiền và nội dung chuyển khoản. Đơn được giữ <b>15 phút</b>.</li>
+    <li>Chuyển khoản đúng số tiền và đúng nội dung. Khi ngân hàng báo có tiền, gói được kích hoạt tự động trong thời gian ngắn; bạn có thể kiểm tra và khôi phục gói tại trang Night Pass.</li>
+    <li>Tiền vào sau khi đơn hết hạn vẫn được ghi nhận nếu đúng số tiền và nội dung. Chuyển thiếu tiền, sai nội dung hoặc chuyển trùng thì chúng tôi xử lý thủ công theo mục 7.</li>
+    <li>Chúng tôi không nhận hay lưu số thẻ, mật khẩu ngân hàng. Chi phí chuyển khoản (nếu có) do ngân hàng của bạn quy định. Hoá đơn, chứng từ: gửi yêu cầu tới <a data-fill="email"></a>.</li>
+  </ul>
+
+  <h2>6. Giao nhận dịch vụ</h2>
+  <p>Night Pass là sản phẩm số, được kích hoạt điện tử trên trình duyệt đã nhận gói, không có giao hàng vật lý. Nếu gói không hiện sau khi thanh toán, dùng chức năng “Khôi phục gói” (nhập email, nhận mã OTP 6 số, hiệu lực 10 phút) hoặc liên hệ hỗ trợ kèm mã đơn.</p>
+
+  <h2>7. Hoàn tiền, huỷ gói</h2>
+  <ul>
+    <li><b>Được hoàn tiền:</b> (a) thanh toán trùng hoặc thừa tiền; (b) đã thanh toán nhưng không kích hoạt được gói do lỗi của hệ thống mà chúng tôi không khắc phục được; (c) trường hợp khác do chúng tôi xem xét hoặc pháp luật bảo vệ người tiêu dùng quy định.</li>
+    <li><b>Thường không hoàn:</b> gói đã kích hoạt và sử dụng bình thường; chuyển nhầm gói do người mua chọn sai; vi phạm điều khoản (mục 9, 10). [CẦN XÁC NHẬN: chủ site quyết định có cho hoàn tiền trong N ngày đầu nếu chưa sử dụng nhiều, và N là bao nhiêu].</li>
+    <li><b>Cách yêu cầu:</b> gửi email tới <a data-fill="email"></a> trong vòng [CẦN XÁC NHẬN: số ngày, ví dụ 07] ngày kể từ ngày thanh toán, kèm email đã mua, mã đơn (dạng NP…) hoặc thông tin chuyển khoản.</li>
+    <li><b>Xử lý:</b> chúng tôi phản hồi trong 03 ngày làm việc; khoản được chấp nhận hoàn về đúng tài khoản đã chuyển trong [CẦN XÁC NHẬN: thời hạn hoàn, ví dụ 07] ngày làm việc kể từ khi xác minh xong. Gói bị hoàn tiền sẽ bị thu hồi.</li>
+    <li>Bạn có thể ngừng dùng bất cứ lúc nào; vì không tự gia hạn nên không cần thao tác huỷ.</li>
+  </ul>
+
+  <h2>8. Tài khoản, thiết bị và chia sẻ gói</h2>
+  <p>Chúng tôi không có tài khoản mật khẩu: gói gắn với email đã mua và thiết bị bạn dùng. Mỗi gói dùng đồng thời trên tối đa <b>3 thiết bị</b>; thiết bị thứ 4 vào thì thiết bị dùng lâu nhất bị thu hồi, bạn có thể đăng xuất các thiết bị khác tại trang kiểm tra gói. Không bán lại, cho thuê, công khai mã hay chia sẻ gói ngoài phạm vi hộ gia đình của bạn. Hãy giữ kín email và mã OTP; bạn chịu trách nhiệm với hoạt động trên thiết bị và email của mình.</p>
+
+  <h2>9. Hành vi bị cấm</h2>
+  <ul>
+    <li>Can thiệp, dò quét, tấn công, làm quá tải hệ thống; vượt giới hạn truy cập hoặc cổng phụ huynh bằng phần mềm tự động.</li>
+    <li>Sửa, giả mạo token Night Pass, khoá thiết bị, điểm số, kết quả chơi hộ; dùng công cụ gian lận hoặc bơm số liệu.</li>
+    <li>Dịch ngược, sao chép, phân phối lại mã, hình ảnh, âm thanh của dịch vụ vì mục đích thương mại khi chưa được phép.</li>
+    <li>Đặt biệt danh có nội dung thô tục, thù hằn, vi phạm pháp luật hoặc chứa thông tin cá nhân của người khác.</li>
+    <li>Dùng dịch vụ vào mục đích trái pháp luật Việt Nam, gồm các hành vi bị cấm tại Luật An ninh mạng.</li>
+  </ul>
+  <p>Vi phạm có thể dẫn đến thu hồi gói, xoá điểm trên bảng xếp hạng, chặn truy cập mà không hoàn tiền, và báo cơ quan chức năng khi cần.</p>
+
+  <h2>10. Quyền và nghĩa vụ</h2>
+  <p><b>Người dùng</b> có quyền được cung cấp thông tin trung thực về dịch vụ và giá, được bảo vệ dữ liệu cá nhân (xem Chính sách bảo mật), được khiếu nại, và có nghĩa vụ cung cấp email đúng, thanh toán đúng, tuân thủ điều khoản. <b>Chủ website</b> có quyền từ chối hoặc thu hồi gói khi vi phạm, bảo trì hoặc thay đổi dịch vụ, và có nghĩa vụ cung cấp thông tin rõ ràng, kích hoạt gói sau khi nhận tiền, bảo mật thông tin, giải quyết khiếu nại, hoàn tiền theo mục 7.</p>
+
+  <h2>11. Bảng xếp hạng và nội dung do người dùng</h2>
+  <p>Điểm và biệt danh bạn tự nguyện khoe sẽ hiển thị công khai. Bạn cho phép chúng tôi hiển thị chúng trên bảng xếp hạng; chúng tôi có quyền xoá nội dung vi phạm hoặc không phù hợp. Yêu cầu xoá điểm: gửi tên game và biệt danh tới <a data-fill="email"></a>.</p>
+
+  <h2>12. Sở hữu trí tuệ</h2>
+  <p>Mã nguồn, thiết kế, hình ảnh, âm thanh, tên gọi và nhãn hiệu Play Hub, Pop Play, Night Play, Night Pass thuộc chủ website hoặc bên cấp phép và được pháp luật về sở hữu trí tuệ bảo hộ. Bạn được dùng cá nhân, phi thương mại; ảnh chụp, video ván chơi của bạn được chia sẻ cho mục đích cá nhân kèm ghi nguồn.</p>
+
+  <h2>13. Miễn trừ và giới hạn trách nhiệm</h2>
+  <p>Dịch vụ cung cấp trên cơ sở nỗ lực hợp lý, có thể gián đoạn do bảo trì, lỗi mạng hoặc nhà cung cấp hạ tầng. Game chạy được khi không có mạng nhưng các tính năng cần máy chủ (kiểm tra gói, bảng điểm, chơi hộ) thì không. Trong phạm vi pháp luật cho phép, trách nhiệm của chúng tôi giới hạn ở số tiền bạn đã trả cho gói liên quan; chúng tôi không loại trừ trách nhiệm trong các trường hợp pháp luật không cho phép (như gian dối, lỗi cố ý, quyền không thể từ bỏ của người tiêu dùng). Đây là trò chơi giải trí, không thay thế sự giám sát của phụ huynh đối với thời gian chơi của trẻ.</p>
+
+  <h2>14. Giải quyết khiếu nại và tranh chấp</h2>
+  <ul>
+    <li><b>Tiếp nhận:</b> gửi khiếu nại tới <a data-fill="email"></a> kèm nội dung, email đã mua, mã đơn và bằng chứng (ảnh chuyển khoản). Chúng tôi xác nhận trong 03 ngày làm việc.</li>
+    <li><b>Xử lý:</b> xác minh, trả lời kết quả và phương án (kích hoạt lại, hoàn tiền, bồi hoàn) trong [CẦN XÁC NHẬN: thời hạn giải quyết, ví dụ 15] ngày làm việc kể từ khi nhận đủ thông tin.</li>
+    <li><b>Thương lượng, hoà giải:</b> hai bên ưu tiên thương lượng. Nếu không đạt, bạn có thể gửi khiếu nại tới cơ quan quản lý nhà nước về bảo vệ quyền lợi người tiêu dùng, hoặc tổ chức xã hội bảo vệ người tiêu dùng, hoặc khởi kiện tại Toà án có thẩm quyền tại Việt Nam.</li>
+    <li>Luật áp dụng là pháp luật Việt Nam.</li>
+  </ul>
+
+  <h2>15. Bảo vệ thông tin cá nhân</h2>
+  <p>Việc thu thập, sử dụng, lưu trữ và quyền của bạn đối với dữ liệu cá nhân được quy định tại <a href="privacy.html">Chính sách bảo mật</a>, là một phần của điều khoản này.</p>
+
+  <h2>16. Thay đổi điều khoản và liên hệ</h2>
+  <p>Khi thay đổi quan trọng, chúng tôi cập nhật trang này, ngày hiệu lực ở đầu trang và thông báo trên website; gói đã mua vẫn giữ quyền lợi đã công bố tại thời điểm mua trong thời hạn gói. Liên hệ: <a data-fill="email"></a>.</p>
+  <p class="note">Văn bản này là bản soạn tham khảo, không phải tư vấn pháp lý. Chủ website nên nhờ luật sư hoặc đơn vị tư vấn rà soát trước khi nộp hồ sơ đăng ký, thông báo website.</p>
+</div>
+
+<div class="L" lang="en">
+  <h1>Terms of Use and Operating Rules</h1>
+  <p class="meta">Effective and last updated: <span data-fill="legalDate"></span> · Applies to the website <span data-fill="domain"></span></p>
+
+  <section class="sum" aria-labelledby="se">
+    <h2 id="se">Summary</h2>
+    <ul>
+      <li>Free to play, no account. <b>Night Pass</b> is a paid plan that unlocks more games, modes, skins and play time.</li>
+      <li>Plans of <b>1 day, 1 week, 1 month, 1 year</b>, paid once by VietQR bank transfer, <b>no auto-renewal</b>.</li>
+      <li>Each plan works on up to <b>3 devices</b>; do not share or resell it.</li>
+      <li>Refunds for duplicate/excess payments, or when you paid but we failed to activate the plan.</li>
+      <li>Complaints go to <a data-fill="email"></a>; we reply within 3 working days.</li>
+    </ul>
+  </section>
+
+  <h2>1. Website owner</h2>
+  <div class="tw"><table>
+    <tbody>
+      <tr><td>Website owner</td><td data-fill="operator"></td></tr>
+      <tr><td>Representative</td><td data-fill="represent"></td></tr>
+      <tr><td>Address</td><td data-fill="address"></td></tr>
+      <tr><td>Phone</td><td data-fill="phone"></td></tr>
+      <tr><td>Tax / business ID</td><td data-fill="taxId"></td></tr>
+      <tr><td>Ministry of Industry and Trade notification</td><td data-fill="license"></td></tr>
+      <tr><td>Support email</td><td><a data-fill="email"></a></td></tr>
+      <tr><td>Domain</td><td data-fill="domain"></td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>2. Acceptance and who may use it</h2>
+  <p>By accessing or using the website you agree to these terms and the <a href="privacy.html">Privacy Policy</a>. If you do not agree, please stop using it. Children should play under the supervision of a parent or guardian; children under 16 may provide personal data only with a parent’s or guardian’s consent. Night Pass is bought by people aged 18 or over, or by minors with a guardian’s consent.</p>
+
+  <h2>3. Scope of service</h2>
+  <p>Play Hub is a set of browser entertainment games: <b>Pop Play</b> (short games for young children), <b>Night Play</b> (light games for adults) and the paid <b>Night Pass</b>. The free version limits the number of games and daily play time as described on the Night Pass page from time to time. We may add, change, pause or remove games and features, and will make reasonable efforts not to reduce the benefits of an active plan during the period purchased.</p>
+
+  <h2>4. Night Pass: plans and prices</h2>
+  <p>Prices are in Vietnamese dong, tax included where applicable, with no surcharge. A plan takes effect when we receive the payment; buying more while a plan is active adds to its duration.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Plan</th><th>Duration</th><th>Price</th></tr></thead>
+    <tbody>
+      <tr><td>1 day</td><td>1 day</td><td>9,000 VND</td></tr>
+      <tr><td>1 week</td><td>7 days</td><td>18,000 VND</td></tr>
+      <tr><td>1 month</td><td>30 days</td><td>36,000 VND</td></tr>
+      <tr><td>1 year</td><td>365 days</td><td>199,000 VND</td></tr>
+    </tbody>
+  </table></div>
+  <p>Benefits: every game including new ones, unlimited play time, endless mode, daily challenge, boss, all difficulty levels, themes, statistics and badges (details shown on the Night Pass page). When it expires you return to the free version; <b>no auto-renewal</b>, no automatic charges.</p>
+
+  <h2>5. Ordering and payment</h2>
+  <ul>
+    <li>Choose a plan, enter your email (for restore codes and matching the order), then get a VietQR code with the amount and transfer content pre-filled. The order is held for <b>15 minutes</b>.</li>
+    <li>Transfer the exact amount with the exact content. When the bank reports the funds the plan is activated automatically within a short time; you can check and restore it on the Night Pass page.</li>
+    <li>Money arriving after the order expires is still credited if the amount and content are right. Underpayment, wrong content or duplicate transfers are handled manually under section 7.</li>
+    <li>We never receive or store card numbers or bank passwords. Any transfer fee is set by your bank. For an invoice or receipt, write to <a data-fill="email"></a>.</li>
+  </ul>
+
+  <h2>6. Delivery</h2>
+  <p>Night Pass is a digital product activated electronically in the browser that claimed it; nothing is shipped. If the plan does not appear after payment, use “Restore plan” (enter your email, receive a 6-digit OTP valid for 10 minutes) or contact support with the order code.</p>
+
+  <h2>7. Refunds and cancellation</h2>
+  <ul>
+    <li><b>Refundable:</b> (a) duplicate or excess payments; (b) you paid but the plan could not be activated because of a system fault we could not fix; (c) other cases we accept or that consumer-protection law requires.</li>
+    <li><b>Normally not refundable:</b> a plan that was activated and used normally; the wrong plan chosen by the buyer; breach of these terms (sections 9, 10). [CẦN XÁC NHẬN: owner to decide whether to refund within the first N days if barely used, and the value of N].</li>
+    <li><b>How to ask:</b> email <a data-fill="email"></a> within [CẦN XÁC NHẬN: number of days, e.g. 07] days of payment, with the purchase email, the order code (NP…) or transfer details.</li>
+    <li><b>Handling:</b> we reply within 3 working days; an approved refund goes back to the account that paid within [CẦN XÁC NHẬN: refund time, e.g. 07] working days of verification. A refunded plan is revoked.</li>
+    <li>You may stop any time; since there is no auto-renewal, no cancellation step is needed.</li>
+  </ul>
+
+  <h2>8. Accounts, devices and sharing</h2>
+  <p>There are no password accounts: a plan is tied to the email used to buy it and to your devices. Each plan works on up to <b>3 devices</b> at once; when a 4th joins, the least recently used one is revoked, and you can sign out other devices on the plan check page. Do not resell, rent, publish codes or share a plan beyond your household. Keep your email and OTPs private; you are responsible for activity on your devices and email.</p>
+
+  <h2>9. Prohibited conduct</h2>
+  <ul>
+    <li>Interfering with, scanning, attacking or overloading the system; bypassing access limits or the parental gate with automated tools.</li>
+    <li>Altering or forging Night Pass tokens, device keys, scores or play-for-me results; using cheats or inflating figures.</li>
+    <li>Reverse-engineering, copying or redistributing code, images or sounds for commercial purposes without permission.</li>
+    <li>Nicknames that are vulgar, hateful, unlawful or contain another person’s personal data.</li>
+    <li>Any use that breaks Vietnamese law, including acts banned by the Law on Cybersecurity.</li>
+  </ul>
+  <p>Breaches may lead to plan revocation, removal of leaderboard entries, blocking without refund, and a report to the authorities where needed.</p>
+
+  <h2>10. Rights and obligations</h2>
+  <p><b>Users</b> have the right to truthful information about the service and prices, to personal data protection (see the Privacy Policy) and to complain; they must give a correct email, pay correctly and follow these terms. <b>The owner</b> may refuse or revoke a plan for breaches, maintain or change the service, and must give clear information, activate plans after receiving payment, keep information secure, resolve complaints and refund under section 7.</p>
+
+  <h2>11. Leaderboard and user content</h2>
+  <p>Scores and nicknames you choose to share are shown publicly. You allow us to display them on the leaderboard; we may remove content that breaches these terms or is unsuitable. To remove a score, send the game name and nickname to <a data-fill="email"></a>.</p>
+
+  <h2>12. Intellectual property</h2>
+  <p>The code, design, images, sounds, names and marks of Play Hub, Pop Play, Night Play and Night Pass belong to the owner or its licensors and are protected by intellectual property law. You may use them personally and non-commercially; screenshots and videos of your own rounds may be shared for personal purposes with credit.</p>
+
+  <h2>13. Disclaimer and limits of liability</h2>
+  <p>The service is provided on a reasonable-efforts basis and may be interrupted by maintenance, network faults or infrastructure providers. Games run offline, but features that need the server (plan check, leaderboard, play-for-me) do not. To the extent the law allows, our liability is limited to the amount you paid for the plan concerned; we do not exclude liability where the law does not allow it (such as fraud, wilful misconduct, or non-waivable consumer rights). These are entertainment games and do not replace parents’ supervision of children’s play time.</p>
+
+  <h2>14. Complaints and disputes</h2>
+  <ul>
+    <li><b>Intake:</b> send complaints to <a data-fill="email"></a> with details, the purchase email, order code and evidence (transfer screenshot). We acknowledge within 3 working days.</li>
+    <li><b>Handling:</b> we verify and reply with the outcome and remedy (re-activation, refund, compensation) within [CẦN XÁC NHẬN: resolution time, e.g. 15] working days of receiving complete information.</li>
+    <li><b>Negotiation and mediation:</b> we first seek agreement. Failing that, you may complain to the state consumer-protection authority or a consumer-protection organisation, or sue before a competent court in Vietnam.</li>
+    <li>The governing law is the law of Vietnam.</li>
+  </ul>
+
+  <h2>15. Personal data protection</h2>
+  <p>Collection, use, storage and your rights over personal data are set out in the <a href="privacy.html">Privacy Policy</a>, which forms part of these terms.</p>
+
+  <h2>16. Changes and contact</h2>
+  <p>When something important changes we update this page, the effective date at the top and announce it on the website; plans already bought keep the benefits published when bought for the plan’s duration. Contact: <a data-fill="email"></a>.</p>
+  <p class="note">This text is a reference draft, not legal advice. The website owner should have a lawyer or compliance adviser review it before submitting any website registration or notification.</p>
+</div>
+
+</div>
+
+<!-- Bản đọc theo trang: mỗi màn hình một mục, tự vừa khung nhìn, không cuộn. Nội dung lấy từ #src ở trên. -->
+<main id="pg" aria-label="Terms">
+  <div id="pgHead"><h1 id="pgTitle"></h1></div>
+  <div id="book">
+   <div id="pages">
+    <div id="pgBody" tabindex="0"></div>
+    <button class="bk-ui" id="pgMenu" type="button" aria-haspopup="dialog" aria-controls="thumbs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.2"/></svg></button>
+    <button class="bk-ui" id="pgPrev" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <button class="bk-ui" id="pgNext" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+   </div>
+    <div id="thumbs" role="dialog" aria-modal="false" hidden><div id="thBar"><b id="thTitle"></b><button id="thClose" type="button" aria-label="Close">✕</button></div><div id="thList"></div></div>
+  </div>
+</main>
+
+
+<footer class="site-foot">
+  <div class="mark"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#7C5CFF"/><path d="M0 0h32v64H0z" fill="#FF5A1F" clip-path="inset(0 round 18px 0 0 18px)"/><circle cx="32" cy="32" r="13" fill="#fff"/></svg><span>Home</span></div>
+  <nav>
+    <a href="index.html" id="fHome"></a>
+    <a href="privacy.html" id="fPriv"></a>
+    <a href="terms.html" id="fTerms"></a>
+    <a data-fill="email"></a>
+  </nav>
+  <span id="copy"></span>
+</footer>
+
+<script src="shared/site.js"></script>
+<script>window.LEGAL={vi:{title:"Điều khoản sử dụng · Play Hub"},en:{title:"Terms of Use · Play Hub"}};</script>
+<script src="shared/legaldoc.js"></script>
+<script src="shared/updated.js"></script>
+<script src="shared/bars.js"></script>
+</body>
+</html>

@@ -5,9 +5,9 @@
 <script src="shared/guard.js"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#F6F4F1">
-<meta name="description" content="Chính sách quyền riêng tư / Privacy Policy">
+<meta name="description" content="Chính sách bảo mật thông tin cá nhân / Privacy Policy">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='32' height='64' fill='%23FF5A1F'/%3E%3Crect x='32' width='32' height='64' fill='%237C5CFF'/%3E%3Ccircle cx='32' cy='32' r='14' fill='%23fff'/%3E%3C/svg%3E">
-<title>Chính sách quyền riêng tư · Privacy Policy</title>
+<title>Chính sách bảo mật · Play Hub</title>
 <script>
 /* Theme và ngôn ngữ theo chuẩn của dự án: localStorage "theme" / "lang"; chưa chọn thì theo thiết bị. ?lang=vi|en ghi đè. */
 try{var t=localStorage.getItem("theme")}catch(e){}
@@ -22,113 +22,7 @@ document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: da
 <link rel="stylesheet" href="shared/theme.css">
 <link rel="stylesheet" href="shared/layout.css">
 <link rel="stylesheet" href="shared/bars.css">
-<style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.6}
-body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
-button{font:inherit;color:inherit;border:0;cursor:pointer}
-a{color:var(--accent);text-underline-offset:3px}
-:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
-.nav{max-width:760px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px}
-.mark{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:-.2px;color:var(--ink);text-decoration:none}
-.mark svg{width:34px;height:34px}
-.tools{display:flex;gap:10px;align-items:center}
-.ico{width:44px;height:44px;border-radius:50%;background:var(--panel);box-shadow:var(--shadow);display:grid;place-items:center}
-.ico svg{width:22px;height:22px}
-.sun{display:none}[data-theme=dark] .sun{display:block}[data-theme=dark] .moon{display:none}
-.seg{display:inline-flex;background:var(--panel);box-shadow:var(--shadow);border-radius:22px;padding:3px}
-.seg button{background:none;border-radius:19px;height:38px;padding:0 14px;font-weight:700;color:var(--muted)}
-[data-l=vi] #bVi,[data-l=en] #bEn{background:var(--ink);color:var(--bg)}
-main{max-width:760px;margin:0 auto;padding:8px 16px 48px}
-h1{font-size:clamp(26px,5vw,34px);line-height:1.2;margin:16px 0 4px;letter-spacing:-.3px}
-h2{font-size:20px;margin:36px 0 8px;line-height:1.3}
-h3{font-size:16px;margin:20px 0 4px}
-p,li{font-size:16px}
-ul{padding-left:22px;margin:8px 0}
-li{margin:4px 0}
-.meta{color:var(--muted);font-size:14px;margin:0 0 20px}
-.sum{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px 20px;box-shadow:var(--shadow)}
-.sum h2{margin:0 0 6px;font-size:18px}
-.sum ul{margin:0}
-.note{color:var(--muted);font-size:14px}
-table{width:100%;border-collapse:collapse;margin:8px 0;font-size:15px}
-th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
-th{color:var(--muted);font-weight:600;font-size:14px}
-.tw{overflow-x:auto}
-.L{display:none}
-[data-l=vi] .L[lang=vi],[data-l=en] .L[lang=en]{display:block}
-@media print{.nav .tools{display:none}.sum{box-shadow:none}}
-html,body{height:100%}
-body{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden}
-#src{display:none}
-#pg{flex:1;min-height:0;width:100%;max-width:760px;margin:0 auto;padding:4px 16px 8px;display:flex;flex-direction:column;gap:8px}
-#pgHead{flex:none}
-#pgHead{text-align:center;padding:2px 0 4px}
-#pgHead h1{margin:2px auto 0;display:inline-block;font-family:Georgia,"Iowan Old Style","Times New Roman",serif;font-size:clamp(26px,5.6vw,42px);line-height:1.1;font-weight:800;letter-spacing:-.6px;
-  background:linear-gradient(100deg,var(--accent),#FF5A1F 90%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
-#pgHead h1::after{content:"";display:block;width:64px;height:4px;margin:8px auto 0;border-radius:3px;background:linear-gradient(90deg,var(--accent),#FF5A1F)}
-@media (max-height:760px){#pgHead h1{font-size:clamp(22px,4.6vw,32px)}#pgHead h1::after{margin-top:5px;height:3px;width:48px}}
-@media (max-height:640px){#pgHead h1{font-size:clamp(20px,4vw,26px)}#pgHead h1::after{display:none}}
-html{overscroll-behavior:none}
-#book{flex:1;min-height:0;position:relative;touch-action:pinch-zoom}
-#pages{position:absolute;inset:0;perspective:1800px;transform-origin:0 0;transition:transform .3s ease}
-/* trang giấy: gáy sách bên trái, mép xếp lớp bên phải */
-#pgBody,.leaf{position:absolute;inset:0;overflow:hidden;overflow-wrap:break-word;hyphens:auto;-webkit-hyphens:auto;
-  background:linear-gradient(90deg,rgba(60,40,10,.16),rgba(60,40,10,0) 26px),var(--paper);color:var(--paper-ink);
-  border-radius:4px 14px 14px 4px;padding:18px 22px 34px 30px;font-family:Georgia,"Iowan Old Style","Times New Roman",serif;line-height:1.62;
-  box-shadow:1px 0 0 var(--paper-edge),2px 0 0 var(--paper),3px 0 0 var(--paper-edge),5px 2px 10px rgba(0,0,0,.22)}
-:root{--paper:#FBF7EE;--paper-edge:#E4DAC4;--paper-ink:#2a2418}
-@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--paper:#1F2336;--paper-edge:#343b5a;--paper-ink:#E8E9F5}}
-:root[data-theme=dark]{--paper:#1F2336;--paper-edge:#343b5a;--paper-ink:#E8E9F5}
-@media (min-width:520px){#pgBody,.leaf{text-align:justify}}
-#pgBody:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
-#pgBody h2,.leaf h2{margin:0 0 .5em;font-size:1.22em;line-height:1.3;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;text-align:left}
-#pgBody h2::after,.leaf h2::after{content:"";display:block;width:42px;height:3px;border-radius:2px;background:var(--accent);margin-top:.3em}
-#pgBody h3,.leaf h3{margin:0 0 .4em;font-size:1.06em;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;text-align:left}
-#pgBody p,#pgBody li,.leaf p,.leaf li{font-size:1em;margin:.55em 0}
-#pgBody ul,.leaf ul{margin:.5em 0;padding-left:1.3em}
-#pgBody li::marker,.leaf li::marker{color:var(--accent)}
-#pgBody .meta,.leaf .meta{font-size:.86em;margin:0 0 .8em;color:var(--muted);font-style:italic;text-align:left}
-#pgBody .sum,.leaf .sum{background:none;border:0;box-shadow:none;padding:0}
-#pgBody .sum h2,.leaf .sum h2{font-size:1.12em}
-#pgBody table,.leaf table{font-size:.92em;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;text-align:left}
-#pgBody > :first-child,.leaf > :first-child{margin-top:0}
-#pgBody::after,.leaf::after{content:attr(data-pno);position:absolute;left:30px;right:auto;bottom:9px;text-align:left;font:12px/1 system-ui,sans-serif;color:var(--muted);letter-spacing:.08em;text-align:center}
-/* lật trang */
-.leaf{z-index:3;backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform;pointer-events:none}
-.leaf.next{transform-origin:0 50%;animation:flipNext .62s cubic-bezier(.5,.05,.4,1) forwards}
-.leaf.prev{transform-origin:0 50%;animation:flipPrev .62s cubic-bezier(.5,.05,.4,1) forwards}
-@keyframes flipNext{0%{transform:rotateY(0);filter:brightness(1)}100%{transform:rotateY(-112deg);filter:brightness(.55);opacity:.2}}
-@keyframes flipPrev{0%{transform:rotateY(-112deg);filter:brightness(.55);opacity:.2}100%{transform:rotateY(0);filter:brightness(1);opacity:1}}
-@media (prefers-reduced-motion:reduce){.leaf{animation-duration:.01s!important}}
-/* nút nổi trên trang sách: tự ẩn khi không dùng, hiện lại khi chạm / rê chuột / bấm phím */
-.bk-ui{position:absolute;z-index:6;display:grid;place-items:center;width:44px;height:44px;padding:0;border-radius:50%;cursor:pointer;color:var(--paper-ink);
-  border:1.5px solid color-mix(in srgb,var(--paper-ink) 24%,transparent);background:color-mix(in srgb,var(--paper) 78%,transparent);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
-  box-shadow:0 2px 10px rgba(0,0,0,.28);opacity:0;visibility:hidden;transition:opacity .25s ease,visibility 0s linear .25s}
-.bk-ui.show,.bk-ui:focus-visible{opacity:1;visibility:visible;transition-delay:0s}
-.bk-ui svg{width:22px;height:22px}
-.bk-ui:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
-.bk-ui:disabled{display:none}
-#pgPrev{left:6px;top:50%;margin-top:-22px}#pgNext{right:6px;top:50%;margin-top:-22px}#pgMenu{left:8px;top:8px;width:40px;height:40px}
-/* mục lục: cột ảnh thu nhỏ bên trái (cuộn dọc), trang sách vẫn hiện bên cạnh */
-#thumbs{position:absolute;left:0;top:0;bottom:0;width:var(--sw,128px);z-index:8;display:none;flex-direction:column;padding:8px 4px 8px 8px;border-radius:4px 0 0 4px;
-  background:color-mix(in srgb,var(--paper) 92%,#000 8%);border-right:1px solid var(--paper-edge);box-shadow:4px 0 14px rgba(0,0,0,.22);color:var(--paper-ink)}
-#thumbs.on{display:flex}
-#thBar{flex:none;display:flex;align-items:center;justify-content:space-between;gap:6px;height:32px;margin-bottom:6px;font:800 13px system-ui,sans-serif}
-#thClose{width:30px;height:30px;border-radius:50%;background:transparent;border:1.5px solid color-mix(in srgb,var(--paper-ink) 28%,transparent);color:inherit;font-size:14px;font-weight:800;padding:0}
-#thList{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;gap:10px;padding:2px 6px 8px 2px;scrollbar-width:thin;overscroll-behavior:contain}
-.th{position:relative;display:flex;flex-direction:column;gap:3px;padding:0;background:none;color:inherit;text-align:left;cursor:pointer;min-width:0;flex:none}
-.thp{position:relative;overflow:hidden;border-radius:3px 6px 6px 3px;border:2px solid var(--paper-edge);box-shadow:0 2px 6px rgba(0,0,0,.25)}
-.th[aria-current=true] .thp{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
-.th .leaf{position:absolute;inset:auto;left:0;top:0;width:var(--pw);height:var(--ph);transform:scale(var(--k));transform-origin:0 0;animation:none;box-shadow:none;pointer-events:none;border-radius:0}
-.thn{font:700 11px/1.2 system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.th:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
-@media (prefers-reduced-motion:reduce){#pages{transition:none}}
-@media (max-height:620px),(max-width:360px){#pgBody,.leaf{padding:10px 14px 28px 20px}#pg{gap:6px;padding-bottom:6px}}
-@media (max-height:420px){.nav{padding:3px 16px}.site-foot{padding:2px 16px}.site-foot nav a{padding:2px 0}.site-foot .mark svg{width:20px;height:20px}#pg{padding-bottom:4px;gap:4px}}
-@media (max-height:520px){#pgHead{display:none}.nav{padding:6px 16px}.ico{width:38px;height:38px}.seg button{height:32px}#pg{padding-top:6px}}
-@media print{html,body{height:auto;overflow:visible}#src{display:block;max-width:760px;margin:0 auto}#pg{display:none}}
-</style>
+<link rel="stylesheet" href="shared/legaldoc.css">
 </head>
 <body>
 <nav class="nav" aria-label="Main">
@@ -148,204 +42,307 @@ html{overscroll-behavior:none}
   </div>
 </nav>
 
+
 <div id="src">
 
-<!-- ====================== TIẾNG VIỆT ====================== -->
 <div class="L" lang="vi">
-  <h1>Chính sách quyền riêng tư</h1>
+  <h1>Chính sách bảo mật thông tin cá nhân</h1>
+  <p class="meta">Hiệu lực và cập nhật lần cuối: <span data-fill="legalDate"></span> · Áp dụng cho website <span data-fill="domain"></span></p>
 
   <section class="sum" aria-labelledby="sv">
     <h2 id="sv">Tóm tắt</h2>
     <ul>
-      <li>Chơi game <b>không cần tài khoản</b> và không phải nhập thông tin cá nhân.</li>
-      <li><b>Không quảng cáo</b>, không tải mã theo dõi của bên thứ ba, không dùng cookie theo dõi.</li>
-      <li>Chúng tôi chỉ <b>đếm ẩn danh</b>: có bao nhiêu lượt mở trang, game nào được mở và chơi bao lâu. Số liệu không gắn với bất kỳ ai.</li>
-      <li>Chỉ khi <b>mua Night Pass</b>, chúng tôi mới lưu email và thông tin đơn hàng của người mua.</li>
-      <li><b>Bảng xếp hạng là tự nguyện</b>: chỉ khi bạn bấm “Khoe điểm”, biệt danh bạn tự đặt và điểm số mới được lưu và hiển thị công khai.</li>
-      <li><b>Chơi hộ</b> và <b>thách đấu</b> dùng link chia sẻ; kết quả chơi hộ được mã hóa và xóa sau tối đa 24 giờ.</li>
-      <li>Cài đặt của phụ huynh (game được phép, giới hạn thời gian) nằm <b>trên thiết bị của bạn</b>.</li>
+      <li>Chơi game <b>không cần tài khoản</b>, không phải nhập thông tin cá nhân.</li>
+      <li><b>Không quảng cáo</b>, không cookie theo dõi, không lập hồ sơ quảng cáo, <b>không bán dữ liệu</b>.</li>
+      <li>Chúng tôi chỉ <b>đếm ẩn danh</b> lượt mở trang, game được mở và thời gian chơi.</li>
+      <li>Chỉ khi <b>mua Night Pass</b> chúng tôi mới lưu <b>email</b> và thông tin đơn hàng.</li>
+      <li>Bảng xếp hạng là <b>tự nguyện</b>; game trẻ em không có ô gõ tên.</li>
+      <li>Phần lớn dữ liệu (tiến độ, cài đặt phụ huynh) nằm <b>trên thiết bị của bạn</b>.</li>
+      <li>Bạn có quyền truy cập, sửa, xoá dữ liệu: gửi yêu cầu tới <a data-fill="email"></a>.</li>
     </ul>
   </section>
 
-  <h2>1. Ai chịu trách nhiệm về dữ liệu</h2>
-  <p><span data-fill="operator"></span> (“chúng tôi”) vận hành Play Hub, gồm Pop Play, Night Play và Night Pass. Mọi câu hỏi hoặc yêu cầu về dữ liệu, xin gửi tới <a data-fill="email"></a>.</p>
+  <h2>1. Đơn vị vận hành và thông tin liên hệ</h2>
+  <p>Website Play Hub (gồm Pop Play, Night Play và Night Pass) do đơn vị sau vận hành và là bên kiểm soát dữ liệu cá nhân (“chúng tôi”):</p>
+  <div class="tw"><table>
+    <tbody>
+      <tr><td>Chủ website</td><td data-fill="operator"></td></tr>
+      <tr><td>Đại diện</td><td data-fill="represent"></td></tr>
+      <tr><td>Địa chỉ</td><td data-fill="address"></td></tr>
+      <tr><td>Điện thoại</td><td data-fill="phone"></td></tr>
+      <tr><td>Mã số thuế / ĐKKD</td><td data-fill="taxId"></td></tr>
+      <tr><td>Thông báo Bộ Công Thương</td><td data-fill="license"></td></tr>
+      <tr><td>Email</td><td><a data-fill="email"></a></td></tr>
+      <tr><td>Tên miền</td><td data-fill="domain"></td></tr>
+    </tbody>
+  </table></div>
 
-  <h2>2. Chúng tôi thu thập những gì</h2>
+  <h2>2. Phạm vi và căn cứ pháp lý</h2>
+  <p>Chính sách này áp dụng cho mọi trang của website và giải thích cách chúng tôi xử lý dữ liệu, phù hợp với Nghị định 13/2023/NĐ-CP về bảo vệ dữ liệu cá nhân, Luật Bảo vệ quyền lợi người tiêu dùng 2023, Luật An ninh mạng 2018 và các quy định liên quan về thương mại điện tử và dữ liệu của trẻ em. Khi sử dụng website, bạn xác nhận đã đọc chính sách này; với dữ liệu cá nhân bạn chủ động cung cấp (email khi mua gói, biệt danh khi khoe điểm), việc bạn nhập và gửi đi là sự đồng ý của bạn cho mục đích được nêu ở mục 4.</p>
 
-  <h3>2.1. Khi bạn chơi game (ẩn danh)</h3>
-  <p>Để biết game nào được yêu thích và để cải thiện dịch vụ, trình duyệt gửi cho chúng tôi vài tín hiệu rất nhỏ:</p>
+  <h2>3. Dữ liệu chúng tôi xử lý</h2>
+
+  <h3>3.1. Số liệu ẩn danh khi chơi</h3>
+  <p>Trình duyệt gửi tới máy chủ (API <b>/api/t</b>) các tín hiệu rất nhỏ: có một lượt mở trang (trang chủ, Pop Play, Night Play, trang đăng ký gói); tên game và một lượt chơi khi bạn mở game; mỗi 60 giây một tín hiệu “vẫn đang chơi” (chỉ khi tab đang hiển thị); khi thoát game, bản ghi “đang chơi” bị xoá. Mã phiên chơi là chuỗi ngẫu nhiên nằm trong bộ nhớ của trang, mất khi đóng trang. Ứng dụng của chúng tôi <b>không lưu địa chỉ IP, loại thiết bị hay trình duyệt</b> vào cơ sở dữ liệu số liệu này, không dùng cookie và không thể biết ai đang chơi. Việc đếm lượt gọi theo địa chỉ IP chỉ dùng cho chống lạm dụng (mục 3.5).</p>
+
+  <h3>3.2. Dữ liệu lưu trên thiết bị của bạn</h3>
+  <p>Trình duyệt lưu cục bộ (localStorage, sessionStorage, IndexedDB) các mục sau. Chúng nằm trên thiết bị của bạn, chỉ được gửi lên máy chủ khi ghi rõ ở cột cuối, và bạn xoá được bằng cách xoá dữ liệu trang web trong trình duyệt.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Khoá</th><th>Nội dung</th><th>Gửi lên máy chủ?</th></tr></thead>
+    <tbody>
+      <tr><td>theme, lang</td><td>Giao diện sáng/tối, ngôn ngữ</td><td>Không</td></tr>
+      <tr><td>prefs, usage</td><td>Cài đặt phụ huynh (game được phép, giới hạn thời gian mỗi ngày) và thời gian đã chơi hôm nay</td><td>Không</td></tr>
+      <tr><td>np-pg-ok, np-pg-lock, np-pg-try</td><td>Trạng thái cổng phụ huynh (nhớ đã qua trong 10 phút, đếm lần sai, khoá thử lại). Năm sinh nhập vào cổng chỉ để kiểm tra, không lưu và không gửi đi</td><td>Không</td></tr>
+      <tr><td>np-resume:&lt;game&gt;</td><td>Ván đang chơi dở để bấm “Tiếp tục” (giữ tối đa 7 ngày, xoá khi hết ván)</td><td>Không</td></tr>
+      <tr><td>np-hi-&lt;game&gt; và các khoá riêng của từng game</td><td>Điểm cao, tiến độ, cấp độ, chuỗi ngày chơi, lựa chọn giao diện, ngày dùng thử</td><td>Không</td></tr>
+      <tr><td>np-sound, np-haptic, np-multi-hud:&lt;game&gt;</td><td>Tuỳ chọn âm thanh, rung, ẩn/hiện bảng điểm khi chơi cùng lúc</td><td>Không</td></tr>
+      <tr><td>np_nick</td><td>Biệt danh bạn đã dùng cho bảng xếp hạng (điền sẵn lần sau)</td><td>Chỉ khi bạn bấm “Khoe điểm”</td></tr>
+      <tr><td>np_scoreq, np_shares, np_help_&lt;mã&gt;</td><td>Hàng chờ điểm chưa gửi, danh sách lời nhờ “chơi hộ” gần đây (tối đa 20, giữ 7 ngày) và mã chủ nhân của từng lời nhờ</td><td>Mã chủ nhân băm (SHA-256) gửi lên để nhận kết quả</td></tr>
+      <tr><td>np-season</td><td>Trạng thái các sự kiện theo mùa đã xem</td><td>Không</td></tr>
+      <tr><td>np-inapp-x, np-welcome-seen</td><td>Đã tắt gợi ý “Mở bằng trình duyệt” (1 ngày); đã xem thẻ chào mừng lần đầu</td><td>Không</td></tr>
+      <tr><td>pass (và các khoá *-pro-src, *-pro-rc, *-trial)</td><td>Nếu có Night Pass: gói, ngày hết hạn, email và mã xác thực (token) của gói; bản lưu tạm mã giao diện, ngày dùng thử</td><td>Token gửi kèm khi kiểm tra gói còn hiệu lực</td></tr>
+      <tr><td>IndexedDB (khoá thiết bị) và np-up (sessionStorage)</td><td>Khoá ký ECDSA P-256 tạo trên thiết bị để gắn Night Pass với thiết bị; khoá riêng không xuất được và không rời máy</td><td>Chỉ khoá công khai và chữ ký</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>3.3. Khi bạn mua Night Pass</h3>
+  <p>Việc mua do người lớn thực hiện (API <b>/api/orders</b>, <b>/api/webhook/sepay</b>, <b>/api/pass</b>). Chúng tôi lưu: <b>email</b> bạn nhập (dạng chuẩn hoá chữ thường), một mã người dùng nội bộ ngẫu nhiên, gói đã chọn, số tiền, phương thức, mã đơn và mã nội dung chuyển khoản, thời điểm tạo/hết hạn/thanh toán, thời hạn của gói, mã thiết bị được nhận gói. Thanh toán bằng chuyển khoản ngân hàng (VietQR). Khi có tiền vào, SePay thông báo cho máy chủ của chúng tôi; chúng tôi lưu giao dịch được thông báo (mã giao dịch, số tiền, nội dung chuyển khoản, số tài khoản nhận, kết quả đối chiếu và bản sao dữ liệu thông báo, tối đa 4.000 ký tự). Chúng tôi <b>không nhận và không lưu</b> số thẻ, mật khẩu hay thông tin đăng nhập ngân hàng của bạn. Tên chủ tài khoản chuyển tiền chỉ có trong dữ liệu thông báo nếu ngân hàng đưa vào nội dung chuyển khoản.</p>
+
+  <h3>3.4. Khôi phục gói bằng email (OTP)</h3>
+  <p>API <b>/api/restore</b> và <b>/api/restore/verify</b>: khi bạn khôi phục, chúng tôi gửi mã OTP 6 số tới email đã mua. Mã chỉ lưu dạng băm có khoá (HMAC), hiệu lực <b>10 phút</b>, tối đa 5 lần thử, xoá ngay khi dùng. Máy chủ luôn trả lời giống nhau để không lộ email nào đã mua. Khôi phục thành công thì email được đánh dấu đã xác thực và thiết bị của bạn được đăng ký.</p>
+
+  <h3>3.5. Chống lạm dụng và nhật ký hạ tầng</h3>
+  <p>Ở các chức năng tạo đơn, khôi phục, khoe điểm, chơi hộ và thống kê phễu mua, địa chỉ IP được dùng <b>tạm thời</b> để giới hạn số lần gọi (rate limit). Có chức năng lưu nguyên IP, có chức năng chỉ lưu giá trị băm đổi theo ngày; bản ghi tự hết hạn sau từ vài phút đến vài giờ và không dùng cho mục đích khác. Ngoài ra, nhà cung cấp hạ tầng (Cloudflare) <b>xử lý địa chỉ IP và thông tin yêu cầu</b> của mọi lượt truy cập để phân phối trang và chống tấn công, theo chính sách của họ. Mỗi gói Night Pass lưu tối đa 3 khoá công khai thiết bị cùng thời điểm dùng gần nhất để chặn chia sẻ gói.</p>
+
+  <h3>3.6. Bảng xếp hạng (tự nguyện)</h3>
+  <p>API <b>/api/scores</b>. Chỉ khi bạn bấm “Khoe điểm”, chúng tôi lưu: tên game, <b>biệt danh bạn tự đặt</b>, điểm, ngày (giờ Việt Nam) và việc bạn có Night Pass hay không (huy hiệu; token không được lưu). Thông tin này <b>hiển thị công khai</b>. Đừng dùng tên thật hay thông tin cá nhân làm biệt danh. Không lưu IP hay mã thiết bị cùng bản ghi. Game trẻ em không có ô gõ tên: biệt danh ghép tự động từ danh sách có sẵn (ví dụ “Mèo Vui 42”).</p>
+
+  <h3>3.7. Chơi hộ và thách đấu</h3>
+  <p><b>Chơi hộ</b> (API <b>/api/relay</b>): máy chủ tạo bản ghi tạm có mã ngẫu nhiên và băm mã chủ nhân. Kết quả được <b>mã hoá ngay trên trình duyệt người chơi hộ</b> (AES-GCM) bằng khoá nằm sau dấu # của link, phần này không bao giờ gửi lên máy chủ, nên chúng tôi chỉ giữ dữ liệu không đọc được. Bản ghi bị xoá ngay khi bạn nhận xong hoặc tự hết hạn sau tối đa 24 giờ. <b>Thách đấu</b>: thông tin ván (điểm, mã ván, ở một số game có tên/hình đại diện bạn nhập) nằm trong link bạn gửi; chúng tôi không lưu link. Chỉ gửi link cho người bạn tin tưởng.</p>
+
+  <h3>3.8. Ảnh, video chia sẻ và mã QR</h3>
+  <p>Quay video hoặc tạo ảnh kết quả được xử lý ngay trên thiết bị của bạn, không tải lên máy chủ. Khi hiển thị mã QR thanh toán, trình duyệt tải ảnh trực tiếp từ img.vietqr.io nên dịch vụ này có thể thấy IP của bạn cùng số tiền và nội dung có trong mã. Khi bạn bấm chia sẻ qua ứng dụng khác (ví dụ Zalo, Telegram, WhatsApp), nội dung thuộc chính sách của ứng dụng đó.</p>
+
+  <h3>3.9. Cookie, phông chữ và mã bên thứ ba</h3>
+  <p>Website <b>không đặt cookie</b> (không dùng cookie theo dõi hay quảng cáo), không nhúng mã phân tích hay quảng cáo của bên thứ ba. Một số trang game tải <b>phông chữ từ Google Fonts</b> (fonts.googleapis.com, fonts.gstatic.com): khi đó trình duyệt của bạn kết nối tới Google và Google có thể thấy địa chỉ IP; chúng tôi không truyền thêm dữ liệu nào cho Google. Phông được lưu đệm trên máy để chơi khi không có mạng.</p>
+
+  <h2>4. Mục đích và cơ sở xử lý</h2>
   <ul>
-    <li>Khi mở một trang (trang chủ, Pop Play, Night Play, trang đăng ký gói): đếm thêm một lượt truy cập.</li>
-    <li>Khi mở một game: tên game và đếm thêm một lượt chơi.</li>
-    <li>Trong lúc chơi, mỗi 60 giây có một tín hiệu cho biết game vẫn đang được chơi (chỉ khi tab đang hiển thị), để tính thời gian chơi và số người đang chơi. Khi thoát game, bản ghi “đang chơi” được xóa.</li>
+    <li><b>Cung cấp trò chơi và tính năng</b> (lưu tiến độ, cài đặt, chơi hộ, thách đấu): thực hiện dịch vụ bạn yêu cầu; phần lớn xử lý ngay trên thiết bị.</li>
+    <li><b>Thống kê ẩn danh</b> để biết game nào được yêu thích và cải thiện dịch vụ: lợi ích chính đáng của chúng tôi, dữ liệu không gắn với cá nhân.</li>
+    <li><b>Bán và kích hoạt Night Pass</b>, gửi mã khôi phục, đối soát thanh toán, xử lý khiếu nại, hoàn tiền, thực hiện nghĩa vụ kế toán thuế: thực hiện hợp đồng và nghĩa vụ pháp lý, dựa trên sự đồng ý của bạn khi nhập email.</li>
+    <li><b>Bảng xếp hạng:</b> sự đồng ý của bạn khi bấm “Khoe điểm”.</li>
+    <li><b>An toàn, chống gian lận và lạm dụng, chặn chia sẻ gói trái phép:</b> lợi ích chính đáng và yêu cầu bảo vệ an ninh mạng.</li>
   </ul>
-  <p>Chúng tôi <b>không</b> lưu địa chỉ IP, loại thiết bị hay trình duyệt, không dùng cookie, không lưu mã định danh lâu dài, và không thể biết ai đang chơi. Mã gắn với một lần chơi chỉ là một chuỗi ngẫu nhiên nằm trong bộ nhớ của trang, mất khi bạn đóng trang, nên không thể nối các lần chơi của cùng một người. Nếu trình duyệt bật <b>Do Not Track</b> hoặc <b>Global Privacy Control</b>, chúng tôi không gửi các tín hiệu này. Kết quả chỉ là số tổng hợp theo ngày (ví dụ “game A có 120 lượt chơi hôm nay”).</p>
+  <p>Chúng tôi <b>không bán</b>, không cho thuê dữ liệu cá nhân, không dùng để quảng cáo hay lập hồ sơ hành vi, không ra quyết định tự động có ảnh hưởng pháp lý tới bạn.</p>
 
-  <h3>2.2. Lưu trên thiết bị của bạn</h3>
-  <p>Trình duyệt lưu cục bộ (localStorage) các thông tin sau; chúng nằm trên thiết bị của bạn:</p>
-  <ul>
-    <li>Giao diện sáng/tối và ngôn ngữ đã chọn.</li>
-    <li>Cài đặt của phụ huynh: game được phép chơi và giới hạn thời gian mỗi ngày; thời gian đã chơi hôm nay.</li>
-    <li>Điểm cao và tiến trình của một số game; tùy chọn âm thanh và rung; lựa chọn ẩn/hiện bảng điểm trong chế độ chơi cùng lúc.</li>
-    <li>Biệt danh bạn đã dùng cho bảng xếp hạng (để điền sẵn lần sau).</li>
-    <li>Danh sách các lời nhờ “chơi hộ” gần đây của bạn (tối đa 20, giữ 7 ngày).</li>
-    <li>Ván đang chơi dở (để bấm “Tiếp tục”, giữ tối đa 7 ngày) và việc bạn đã tắt thông báo “Mở bằng trình duyệt” (nhớ 1 ngày).</li>
-    <li>Nếu bạn mua Night Pass: gói, ngày hết hạn, email và mã xác thực của gói trên thiết bị đó.</li>
-  </ul>
-  <p>Bạn có thể xóa tất cả bằng cách xóa dữ liệu trang web trong trình duyệt. Riêng mã xác thực của Night Pass được gửi lên máy chủ khi trang cần kiểm tra gói còn hiệu lực.</p>
+  <h2>5. Dữ liệu của trẻ em</h2>
+  <p>Pop Play dành cho trẻ nhỏ. Các trang dành cho trẻ <b>không có tài khoản, không quảng cáo, không yêu cầu trẻ cung cấp thông tin cá nhân</b>; số liệu ở 3.1 là ẩn danh và không phân biệt trẻ hay người lớn; bảng xếp hạng chỉ dùng tên vui ghép tự động. Cài đặt của phụ huynh (game được phép, giới hạn thời gian mỗi ngày, khoá màn hình) nằm trên thiết bị và được bảo vệ bằng cổng phụ huynh (câu hỏi dành cho người lớn). Việc mua Night Pass và cài đặt do người lớn thực hiện. Trẻ em dưới 16 tuổi chỉ được cung cấp dữ liệu cá nhân khi có sự đồng ý của cha mẹ hoặc người giám hộ. Nếu bạn cho rằng chúng tôi vô tình nhận thông tin của trẻ, hãy liên hệ để chúng tôi xoá trong vòng 72 giờ kể từ khi xác minh yêu cầu.</p>
 
-  <h3>2.3. Khi bạn mua Night Pass</h3>
-  <p>Việc mua do người lớn thực hiện. Chúng tôi lưu: email bạn nhập, gói đã chọn, số tiền, mã đơn, thời điểm tạo và thanh toán, thời hạn của gói. Thanh toán bằng chuyển khoản ngân hàng (mã QR VietQR). Cổng SePay thông báo cho máy chủ của chúng tôi khi có tiền vào; chúng tôi lưu thông tin giao dịch được thông báo (số tiền, nội dung chuyển khoản, mã giao dịch, thời gian), dùng để khớp đơn và đối soát. Nội dung chuyển khoản có thể chứa thông tin bạn tự nhập khi chuyển. Chúng tôi <b>không</b> nhận hay lưu số thẻ; việc chuyển tiền diễn ra giữa bạn và ngân hàng của bạn.</p>
-
-  <h3>2.4. Khôi phục gói bằng email</h3>
-  <p>Khi bạn chọn khôi phục gói, chúng tôi gửi mã OTP 6 số tới email đã mua. Mã chỉ được lưu dưới dạng băm, hiệu lực 10 phút và có giới hạn số lần thử.</p>
-
-  <h3>2.5. Chống lạm dụng</h3>
-  <p>Ở các chức năng tạo đơn và khôi phục gói, địa chỉ IP được dùng <b>tạm thời</b> để giới hạn số lần gọi, nhằm chống spam và dò mã. Bản ghi này tự hết hạn sau thời gian ngắn và không dùng cho mục đích nào khác.</p>
-
-  <h3>2.6. Bảng xếp hạng (tự nguyện)</h3>
-  <p>Chỉ khi bạn chủ động bấm “Khoe điểm”, chúng tôi lưu: tên game, <b>biệt danh bạn tự đặt</b>, điểm số, ngày chơi (giờ Việt Nam) và việc bạn có dùng giao diện Night Pass hay không. Thông tin này hiển thị công khai trên bảng xếp hạng. Vì vậy <b>đừng dùng tên thật hoặc thông tin cá nhân</b> làm biệt danh. Chúng tôi không lưu IP hay mã thiết bị cùng bản ghi này. Ở các game dành cho trẻ em, không có ô gõ tên: biệt danh được ghép tự động từ danh sách có sẵn (ví dụ “Mèo Vui 42”).</p>
-
-  <h3>2.7. Chơi hộ và thách đấu</h3>
-  <p><b>Chơi hộ:</b> khi bạn nhờ người khác chơi hộ, máy chủ tạo một bản ghi tạm có mã ngẫu nhiên. Kết quả được <b>mã hóa ngay trên trình duyệt người chơi hộ</b> bằng khóa nằm trong phần sau dấu # của link (phần này không bao giờ được gửi lên máy chủ), nên chúng tôi chỉ giữ dữ liệu không đọc được. Bản ghi bị xóa ngay khi bạn nhận xong, hoặc tự xóa sau tối đa 24 giờ. <b>Thách đấu:</b> thông tin ván chơi (điểm, mã ván và, ở một số game, tên/hình đại diện bạn nhập) nằm ngay trong link bạn gửi đi; chúng tôi không lưu link này. Hãy chỉ gửi link cho người bạn tin tưởng.</p>
-
-  <h3>2.8. Quay video và ảnh chia sẻ</h3>
-  <p>Khi bạn quay lại ván chơi hoặc tạo ảnh kết quả, việc xử lý diễn ra <b>ngay trên thiết bị của bạn</b>; chúng tôi không tải video hay ảnh lên máy chủ. Nếu bạn chia sẻ qua ứng dụng khác, nội dung đó thuộc chính sách của ứng dụng đó.</p>
-
-  <h2>3. Trẻ em</h2>
-  <p>Pop Play dành cho trẻ nhỏ. Các trang cho trẻ không có tài khoản, không quảng cáo và không tải mã theo dõi của bên thứ ba. Chúng tôi không yêu cầu trẻ cung cấp thông tin cá nhân. Số liệu đếm ở mục 2.1 là ẩn danh, không phân biệt trẻ hay người lớn. Bảng xếp hạng của game trẻ em chỉ dùng tên vui ghép tự động, không cho gõ tên. Việc mua Night Pass và khu vực cài đặt dành cho phụ huynh do người lớn thực hiện. Nếu bạn cho rằng chúng tôi đã vô tình nhận thông tin của trẻ, hãy liên hệ để chúng tôi xóa.</p>
-
-  <h2>4. Dịch vụ của bên thứ ba</h2>
-  <p>Chúng tôi dùng một số nhà cung cấp để vận hành. Họ chỉ xử lý dữ liệu theo mục đích dịch vụ:</p>
+  <h2>6. Bên thứ ba tham gia xử lý</h2>
+  <p>Chúng tôi dùng các nhà cung cấp sau; họ chỉ xử lý dữ liệu theo mục đích dịch vụ:</p>
   <div class="tw"><table>
     <thead><tr><th>Nhà cung cấp</th><th>Vai trò</th><th>Dữ liệu liên quan</th></tr></thead>
     <tbody>
-      <tr><td>Netlify</td><td>Lưu trữ trang web, chạy máy chủ API</td><td>Nhật ký truy cập tiêu chuẩn của hạ tầng (như địa chỉ IP) theo chính sách của họ</td></tr>
-      <tr><td>Neon (AWS, Singapore)</td><td>Cơ sở dữ liệu</td><td>Số liệu ẩn danh ở 2.1; đơn hàng, email, giao dịch ở 2.3 và 2.4</td></tr>
-      <tr><td>SePay</td><td>Thông báo giao dịch chuyển khoản</td><td>Thông tin giao dịch ngân hàng gửi về máy chủ của chúng tôi</td></tr>
-      <tr><td>VietQR (img.vietqr.io)</td><td>Tạo ảnh mã QR thanh toán</td><td>Khi hiển thị mã QR, trình duyệt của bạn tải ảnh trực tiếp từ dịch vụ này nên họ có thể thấy địa chỉ IP của bạn, cùng số tiền và nội dung có trong mã</td></tr>
+      <tr><td>Cloudflare</td><td>Lưu trữ trang web (Workers/assets), CDN, DNS, chuyển thư Email Routing cho hộp thư hỗ trợ</td><td>Mọi yêu cầu truy cập (IP, tiêu đề yêu cầu); thư bạn gửi tới hộp thư hỗ trợ</td></tr>
+      <tr><td>Neon</td><td>Cơ sở dữ liệu PostgreSQL</td><td>Dữ liệu ở mục 3.1, 3.3 đến 3.7 (không có dữ liệu lưu trên thiết bị)</td></tr>
+      <tr><td>Resend</td><td>Gửi email chứa mã OTP</td><td>Email người nhận, nội dung thư OTP</td></tr>
+      <tr><td>SePay và ngân hàng</td><td>Nhận chuyển khoản, thông báo giao dịch</td><td>Thông tin giao dịch ngân hàng gửi về máy chủ của chúng tôi</td></tr>
+      <tr><td>VietQR (img.vietqr.io)</td><td>Tạo ảnh mã QR thanh toán</td><td>IP trình duyệt, số tiền và nội dung trong mã</td></tr>
+      <tr><td>Google Fonts</td><td>Cung cấp phông chữ cho trang game</td><td>IP trình duyệt khi tải phông</td></tr>
+      <tr><td>Mắt Bão</td><td>Nhà đăng ký tên miền nightplay.vn</td><td>Thông tin đăng ký tên miền của chủ site, không có dữ liệu người chơi</td></tr>
     </tbody>
   </table></div>
-  <p>Dữ liệu có thể được xử lý ở ngoài Việt Nam (ví dụ Singapore và các khu vực của Netlify). Chúng tôi không bán dữ liệu và không chia sẻ cho mục đích quảng cáo.</p>
+  <p>Chúng tôi chỉ chia sẻ dữ liệu với các bên trên hoặc khi cơ quan nhà nước có thẩm quyền yêu cầu theo quy định pháp luật.</p>
 
-  <h2>5. Lưu giữ trong bao lâu</h2>
+  <h2>7. Chuyển dữ liệu ra nước ngoài</h2>
+  <p>Cloudflare, Neon, Resend và Google có hệ thống đặt ngoài Việt Nam, nên dữ liệu có thể được xử lý ở nước ngoài. Cơ sở dữ liệu Neon đặt tại khu vực [CẦN XÁC NHẬN: vùng máy chủ Neon đang dùng, ví dụ AWS Singapore]. Chúng tôi chỉ chuyển phần dữ liệu cần thiết để vận hành, yêu cầu nhà cung cấp bảo vệ dữ liệu theo điều khoản của họ, và sẽ thực hiện hồ sơ đánh giá tác động chuyển dữ liệu ra nước ngoài khi pháp luật yêu cầu.</p>
+
+  <h2>8. Thời hạn lưu giữ</h2>
   <ul>
-    <li><b>Số liệu ẩn danh theo ngày:</b> giữ lâu dài vì không thể gắn với cá nhân.</li>
-    <li><b>Bản ghi “đang chơi”:</b> xóa khi bạn thoát game; các bản ghi không còn hoạt động được dọn tự động.</li>
-    <li><b>Mã OTP:</b> hiệu lực 10 phút, sau đó bị dọn.</li>
-    <li><b>Bản ghi chơi hộ:</b> xóa khi bạn nhận kết quả hoặc sau tối đa 24 giờ.</li>
-    <li><b>Điểm và biệt danh trên bảng xếp hạng:</b> giữ cho đến khi bạn yêu cầu xóa.</li>
-    <li><b>Bản ghi giới hạn lượt gọi:</b> vài phút đến vài giờ rồi tự xóa.</li>
-    <li><b>Email, đơn hàng, giao dịch:</b> giữ cho đến khi bạn yêu cầu xóa, trừ phần chúng tôi phải giữ theo quy định pháp luật (ví dụ chứng từ kế toán).</li>
+    <li><b>Số liệu ẩn danh theo ngày:</b> giữ lâu dài vì không gắn với cá nhân.</li>
+    <li><b>Bản ghi “đang chơi”:</b> xoá khi thoát game, tự dọn sau tối đa 1 ngày.</li>
+    <li><b>Mã OTP:</b> 10 phút, xoá ngay khi dùng.</li>
+    <li><b>Bản ghi chơi hộ:</b> xoá khi bạn nhận kết quả hoặc sau tối đa 24 giờ.</li>
+    <li><b>Bản ghi giới hạn lượt gọi (IP hoặc giá trị băm):</b> vài phút đến vài giờ, tự dọn.</li>
+    <li><b>Điểm và biệt danh bảng xếp hạng:</b> đến khi bạn yêu cầu xoá.</li>
+    <li><b>Email, đơn hàng, giao dịch, gói Night Pass:</b> lưu cho đến khi bạn yêu cầu xoá, trừ phần phải giữ theo pháp luật (ví dụ chứng từ kế toán, thuế) [CẦN XÁC NHẬN: chủ site chốt thời hạn lưu tối đa, ví dụ 10 năm cho chứng từ kế toán và xoá email sau X năm không hoạt động].</li>
+    <li><b>Dữ liệu trên thiết bị:</b> do bạn kiểm soát; xoá bất cứ lúc nào.</li>
   </ul>
 
-  <h2>6. Quyền của bạn</h2>
-  <p>Bạn có quyền yêu cầu xem, sửa hoặc xóa dữ liệu gắn với email của mình, và rút lại sự đồng ý đã cho. Hãy gửi yêu cầu tới <a data-fill="email"></a> từ chính email đã dùng khi mua để chúng tôi xác minh. Để xóa điểm khỏi bảng xếp hạng, hãy gửi tên game và biệt danh đã dùng. Chúng tôi sẽ phản hồi trong thời gian sớm nhất. Việc xóa dữ liệu đơn hàng có thể làm mất quyền khôi phục gói đã mua.</p>
+  <h2>9. Quyền của chủ thể dữ liệu</h2>
+  <p>Theo Nghị định 13/2023/NĐ-CP, bạn có quyền: (1) được biết về việc xử lý dữ liệu; (2) đồng ý hoặc không đồng ý, và rút lại sự đồng ý; (3) truy cập, xem dữ liệu của mình; (4) chỉnh sửa dữ liệu; (5) yêu cầu xoá dữ liệu; (6) yêu cầu hạn chế xử lý; (7) yêu cầu cung cấp bản sao dữ liệu; (8) phản đối việc xử lý; (9) khiếu nại, tố cáo, khởi kiện và yêu cầu bồi thường thiệt hại theo quy định pháp luật; (10) tự bảo vệ quyền của mình. Rút lại sự đồng ý hoặc xoá dữ liệu đơn hàng có thể làm mất quyền khôi phục gói đã mua và không làm ảnh hưởng đến việc xử lý đã thực hiện trước đó.</p>
 
-  <h2>7. Bảo mật</h2>
-  <p>Dữ liệu được truyền qua HTTPS. Mã xác thực của gói được ký để chống giả mạo, mã OTP chỉ lưu dạng băm, và khu vực quản trị được bảo vệ bằng khóa riêng. Không hệ thống nào an toàn tuyệt đối; chúng tôi áp dụng các biện pháp hợp lý và sẽ thông báo khi có sự cố ảnh hưởng đến bạn theo quy định.</p>
+  <h2>10. Cách thực hiện quyền và xử lý khiếu nại</h2>
+  <ul>
+    <li>Gửi yêu cầu tới <a data-fill="email"></a> từ chính email đã dùng khi mua để chúng tôi xác minh; nêu rõ quyền muốn thực hiện. Để xoá điểm khỏi bảng xếp hạng, gửi tên game và biệt danh.</li>
+    <li>Chúng tôi xác nhận đã nhận trong vòng 72 giờ và xử lý yêu cầu xoá, chỉnh sửa trong vòng 72 giờ kể từ khi xác minh xong, các yêu cầu khác trong 15 ngày. Quá trình này không thu phí, trừ khi pháp luật cho phép.</li>
+    <li>Có thể từ chối khi pháp luật yêu cầu giữ dữ liệu hoặc không xác minh được người yêu cầu; chúng tôi sẽ nêu lý do.</li>
+    <li>Khiếu nại về dữ liệu cá nhân: gửi cùng địa chỉ email; không đồng ý với kết quả, bạn có thể khiếu nại tới cơ quan quản lý nhà nước có thẩm quyền về bảo vệ dữ liệu cá nhân hoặc khởi kiện theo pháp luật Việt Nam. Khiếu nại về thanh toán xem Điều khoản sử dụng.</li>
+  </ul>
 
-  <h2>8. Thay đổi chính sách</h2>
-  <p>Khi có thay đổi quan trọng, chúng tôi cập nhật trang này và ngày “Cập nhật lần cuối” ở đầu trang.</p>
+  <h2>11. Bảo mật</h2>
+  <p>Dữ liệu truyền qua HTTPS. Token Night Pass được ký HMAC để chống giả mạo và gắn với khoá thiết bị (chữ ký ECDSA P-256, hiệu lực 120 giây); mã OTP chỉ lưu dạng băm; mã chủ nhân chơi hộ chỉ lưu dạng băm SHA-256, kết quả chơi hộ mã hoá đầu-cuối; có giới hạn lượt gọi chống dò mã; khu vực quản trị cần khoá riêng và chỉ người được giao quyền mới truy cập, khoá bí mật nằm trong biến môi trường của nhà cung cấp hạ tầng. Không hệ thống nào an toàn tuyệt đối; nếu xảy ra sự cố ảnh hưởng tới dữ liệu cá nhân, chúng tôi sẽ xử lý, thông báo cho bạn và cơ quan có thẩm quyền theo quy định (trong 72 giờ khi pháp luật yêu cầu).</p>
+
+  <h2>12. Thanh toán và hoàn tiền</h2>
+  <p>Night Pass thanh toán một lần, không tự gia hạn. Giá, điều kiện hoàn tiền và cách giải quyết khiếu nại nằm trong <a href="terms.html">Điều khoản sử dụng</a>. Dữ liệu thanh toán được xử lý như ở mục 3.3.</p>
+
+  <h2>13. Thay đổi chính sách và luật áp dụng</h2>
+  <p>Khi có thay đổi quan trọng, chúng tôi cập nhật trang này và ngày hiệu lực ở đầu trang. Chính sách này được điều chỉnh bởi pháp luật Việt Nam. Tranh chấp được giải quyết thông qua thương lượng, hoà giải; nếu không được, đưa ra Toà án có thẩm quyền tại Việt Nam.</p>
+
+  <h2>14. Liên hệ</h2>
+  <p>Mọi câu hỏi, yêu cầu về dữ liệu cá nhân: <a data-fill="email"></a>. Đơn vị vận hành: xem mục 1.</p>
+  <p class="note">Văn bản này là bản soạn tham khảo, không phải tư vấn pháp lý. Chủ website nên nhờ luật sư hoặc đơn vị tư vấn rà soát trước khi nộp hồ sơ đăng ký, thông báo website.</p>
 </div>
 
-<!-- ====================== ENGLISH ====================== -->
 <div class="L" lang="en">
   <h1>Privacy Policy</h1>
+  <p class="meta">Effective and last updated: <span data-fill="legalDate"></span> · Applies to the website <span data-fill="domain"></span></p>
 
   <section class="sum" aria-labelledby="se">
     <h2 id="se">Summary</h2>
     <ul>
-      <li>You can play <b>without an account</b> and without entering personal information.</li>
-      <li><b>No ads</b>, no third-party trackers, no tracking cookies.</li>
-      <li>We only <b>count anonymously</b>: how many page visits, which games are opened and for how long. The counts are not linked to anyone.</li>
-      <li>Only when you <b>buy Night Pass</b> do we store the buyer’s email and order details.</li>
-      <li><b>Leaderboards are optional</b>: only when you tap “Show off”, the nickname you choose and your score are stored and shown publicly.</li>
-      <li><b>Helper play</b> and <b>challenges</b> use share links; helper results are encrypted and deleted within 24 hours.</li>
-      <li>Parent settings (allowed games, time limits) stay <b>on your device</b>.</li>
+      <li>Playing needs <b>no account</b> and no personal details.</li>
+      <li><b>No ads</b>, no tracking cookies, no advertising profiles, <b>we never sell data</b>.</li>
+      <li>We only <b>count anonymously</b>: page opens, which games are opened and play time.</li>
+      <li>Only when you <b>buy Night Pass</b> do we store your <b>email</b> and order details.</li>
+      <li>Leaderboards are <b>voluntary</b>; children’s games have no name field.</li>
+      <li>Most data (progress, parental settings) stays <b>on your device</b>.</li>
+      <li>You may access, correct or delete your data: write to <a data-fill="email"></a>.</li>
     </ul>
   </section>
 
-  <h2>1. Who is responsible for the data</h2>
-  <p><span data-fill="operator"></span> (“we”) operates Play Hub, including Pop Play, Night Play and Night Pass. Send any question or data request to <a data-fill="email"></a>.</p>
-
-  <h2>2. What we collect</h2>
-
-  <h3>2.1. When you play (anonymous)</h3>
-  <p>To learn which games people enjoy and to improve the service, your browser sends us a few very small signals:</p>
-  <ul>
-    <li>When a page opens (home, Pop Play, Night Play, the plan page): one visit is counted.</li>
-    <li>When a game opens: the game name, and one play is counted.</li>
-    <li>While playing, a signal every 60 seconds says the game is still being played (only while the tab is visible), used to work out play time and how many people are playing now. When you leave the game, the “playing now” record is deleted.</li>
-  </ul>
-  <p>We do <b>not</b> store your IP address, device or browser type, we use no cookies, we keep no long-lived identifier, and we cannot tell who is playing. The code tied to one play session is just a random string held in the page’s memory and lost when you close the page, so separate plays by the same person cannot be linked. If your browser has <b>Do Not Track</b> or <b>Global Privacy Control</b> turned on, we do not send these signals. The result is only daily totals (for example “game A had 120 plays today”).</p>
-
-  <h3>2.2. Stored on your device</h3>
-  <p>Your browser keeps the following locally (localStorage); it stays on your device:</p>
-  <ul>
-    <li>Your light/dark theme and language.</li>
-    <li>Parent settings: allowed games and the daily time limit, and today’s play time.</li>
-    <li>High scores and progress for some games; sound and vibration preferences; whether to hide the in-game score board in play-together mode.</li>
-    <li>The nickname you used for leaderboards (to prefill next time).</li>
-    <li>A list of your recent “helper play” requests (up to 20, kept for 7 days).</li>
-    <li>A game in progress (so you can tap “Resume”, kept up to 7 days) and that you dismissed the “Open in browser” notice (remembered for 1 day).</li>
-    <li>If you buy Night Pass: the plan, expiry date, email and the plan’s verification code on that device.</li>
-  </ul>
-  <p>You can remove all of it by clearing the site’s data in your browser. The Night Pass verification code is sent to our server when a page needs to check that the plan is still valid.</p>
-
-  <h3>2.3. When you buy Night Pass</h3>
-  <p>Purchases are made by adults. We store the email you enter, the chosen plan, the amount, the order code, the times of creation and payment, and the plan’s expiry. Payment is by bank transfer (VietQR code). The SePay gateway notifies our server when money arrives; we store the transaction details it reports (amount, transfer note, transaction ID, time) to match orders and reconcile. The transfer note may contain information you typed when transferring. We do <b>not</b> receive or store card numbers; the transfer happens between you and your bank.</p>
-
-  <h3>2.4. Restoring a plan by email</h3>
-  <p>If you choose to restore a plan, we email a 6-digit one-time code to the purchase email. The code is stored only as a hash, is valid for 10 minutes, and the number of attempts is limited.</p>
-
-  <h3>2.5. Abuse prevention</h3>
-  <p>For creating orders and restoring plans, your IP address is used <b>temporarily</b> to rate-limit requests against spam and code guessing. These records expire after a short time and are used for nothing else.</p>
-
-  <h3>2.6. Leaderboards (optional)</h3>
-  <p>Only when you actively tap “Show off” do we store: the game, <b>the nickname you choose</b>, your score, the play date (Vietnam time) and whether you used a Night Pass skin. This is shown publicly on the leaderboard, so <b>please do not use your real name or personal information</b> as a nickname. We do not store an IP address or device ID with this record. In games for children there is no name field: the nickname is assembled automatically from a fixed list (for example “Happy Cat 42”).</p>
-
-  <h3>2.7. Helper play and challenges</h3>
-  <p><b>Helper play:</b> when you ask someone to play for you, the server creates a temporary record with a random code. The result is <b>encrypted in the helper’s browser</b> with a key placed after the # in the link (that part is never sent to our server), so we only hold unreadable data. The record is deleted as soon as you receive the result, or automatically after at most 24 hours. <b>Challenges:</b> the play details (score, game code and, in some games, a name/avatar you typed) are inside the link you send; we do not store that link. Only send links to people you trust.</p>
-
-  <h3>2.8. Video recording and share images</h3>
-  <p>When you record a play or create a result image, it is processed <b>on your device</b>; we do not upload the video or image. If you share it through another app, that content is covered by that app’s policy.</p>
-
-  <h2>3. Children</h2>
-  <p>Pop Play is for young children. The pages for children have no accounts, no ads and load no third-party tracking code. We do not ask children for personal information. The counts in section 2.1 are anonymous and do not distinguish children from adults. Leaderboards in children’s games only use automatically assembled fun names, with no typing. Buying Night Pass and the parent settings area are for adults. If you believe we have received a child’s information by mistake, contact us and we will delete it.</p>
-
-  <h2>4. Third-party services</h2>
-  <p>We use a few providers to run the service. They process data only for that purpose:</p>
+  <h2>1. Operator and contact details</h2>
+  <p>The Play Hub website (Pop Play, Night Play and Night Pass) is operated by the following party, the controller of personal data (“we”):</p>
   <div class="tw"><table>
-    <thead><tr><th>Provider</th><th>Role</th><th>Related data</th></tr></thead>
     <tbody>
-      <tr><td>Netlify</td><td>Website hosting and API servers</td><td>Standard infrastructure access logs (such as IP address) under their policy</td></tr>
-      <tr><td>Neon (AWS, Singapore)</td><td>Database</td><td>Anonymous counts from 2.1; orders, email and transactions from 2.3 and 2.4</td></tr>
-      <tr><td>SePay</td><td>Bank transfer notifications</td><td>Bank transaction details sent to our server</td></tr>
-      <tr><td>VietQR (img.vietqr.io)</td><td>Generates the payment QR image</td><td>When the QR code is shown, your browser loads the image directly from this service, so it can see your IP address and the amount and note encoded in the code</td></tr>
+      <tr><td>Website owner</td><td data-fill="operator"></td></tr>
+      <tr><td>Representative</td><td data-fill="represent"></td></tr>
+      <tr><td>Address</td><td data-fill="address"></td></tr>
+      <tr><td>Phone</td><td data-fill="phone"></td></tr>
+      <tr><td>Tax / business ID</td><td data-fill="taxId"></td></tr>
+      <tr><td>Ministry of Industry and Trade notification</td><td data-fill="license"></td></tr>
+      <tr><td>Email</td><td><a data-fill="email"></a></td></tr>
+      <tr><td>Domain</td><td data-fill="domain"></td></tr>
     </tbody>
   </table></div>
-  <p>Data may be processed outside Vietnam (for example Singapore and Netlify’s regions). We do not sell data and do not share it for advertising.</p>
 
-  <h2>5. How long we keep it</h2>
+  <h2>2. Scope and legal basis</h2>
+  <p>This policy covers every page of the website and explains how we handle data in line with Vietnam’s Decree 13/2023/ND-CP on personal data protection, the Law on Consumer Protection 2023, the Law on Cybersecurity 2018 and related rules on e-commerce and children’s data. By using the website you confirm you have read this policy; for personal data you choose to provide (email when buying, nickname when posting a score), entering and submitting it is your consent for the purposes in section 4.</p>
+
+  <h2>3. Data we process</h2>
+
+  <h3>3.1. Anonymous play counts</h3>
+  <p>Your browser sends tiny signals to the server (API <b>/api/t</b>): a page open (home, Pop Play, Night Play, plan page); the game name and one play when you open a game; every 60 seconds a “still playing” signal (only while the tab is visible); on exit the “playing” record is deleted. The session code is a random string held in page memory and lost when you close the page. Our application <b>does not store IP address, device or browser type</b> in this statistics database, uses no cookies and cannot tell who is playing. Counting requests per IP is used only for abuse prevention (3.5).</p>
+
+  <h3>3.2. Data stored on your device</h3>
+  <p>The browser stores the following locally (localStorage, sessionStorage, IndexedDB). It stays on your device, is sent to the server only where the last column says so, and you can erase it by clearing the site’s data in your browser.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Key</th><th>Content</th><th>Sent to server?</th></tr></thead>
+    <tbody>
+      <tr><td>theme, lang</td><td>Light/dark theme, language</td><td>No</td></tr>
+      <tr><td>prefs, usage</td><td>Parental settings (allowed games, daily time limit) and time played today</td><td>No</td></tr>
+      <tr><td>np-pg-ok, np-pg-lock, np-pg-try</td><td>Parental gate state (passed for 10 minutes, wrong-answer count, retry lock). The birth year typed into the gate is only checked, never stored or sent</td><td>No</td></tr>
+      <tr><td>np-resume:&lt;game&gt;</td><td>Unfinished round for the “Continue” button (kept up to 7 days, deleted when the round ends)</td><td>No</td></tr>
+      <tr><td>np-hi-&lt;game&gt; and per-game keys</td><td>High scores, progress, levels, day streaks, chosen skins, trial dates</td><td>No</td></tr>
+      <tr><td>np-sound, np-haptic, np-multi-hud:&lt;game&gt;</td><td>Sound, vibration and score-panel options for side-by-side play</td><td>No</td></tr>
+      <tr><td>np_nick</td><td>Nickname you used on the leaderboard (pre-filled next time)</td><td>Only when you tap “Share score”</td></tr>
+      <tr><td>np_scoreq, np_shares, np_help_&lt;code&gt;</td><td>Unsent score queue, recent “play for me” requests (max 20, kept 7 days) and each request’s owner code</td><td>A hash (SHA-256) of the owner code is sent to receive the result</td></tr>
+      <tr><td>np-season</td><td>Seasonal events already seen</td><td>No</td></tr>
+      <tr><td>np-inapp-x, np-welcome-seen</td><td>Dismissed the “Open in browser” hint (1 day); seen the first-visit welcome card</td><td>No</td></tr>
+      <tr><td>pass (and *-pro-src, *-pro-rc, *-trial)</td><td>If you have Night Pass: plan, expiry date, email and the plan’s access token; cached skin code, trial dates</td><td>Token is sent when checking the plan is still valid</td></tr>
+      <tr><td>IndexedDB (device key) and np-up (sessionStorage)</td><td>ECDSA P-256 signing key created on the device to bind Night Pass to it; the private key cannot be exported and never leaves the device</td><td>Only the public key and signatures</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>3.3. When you buy Night Pass</h3>
+  <p>Purchases are made by adults (API <b>/api/orders</b>, <b>/api/webhook/sepay</b>, <b>/api/pass</b>). We store: the <b>email</b> you enter (normalised to lower case), a random internal user ID, the plan, amount, method, order code and transfer-content code, creation/expiry/payment times, the plan’s expiry, and the device that claimed the plan. Payment is by bank transfer (VietQR). When money arrives, SePay notifies our server; we store the notified transaction (transaction ID, amount, transfer content, receiving account number, matching result and a copy of the notification, up to 4,000 characters). We <b>neither receive nor store</b> card numbers, passwords or your banking login. The sender’s account name appears in the notification only if your bank puts it in the transfer content.</p>
+
+  <h3>3.4. Restoring a plan by email (OTP)</h3>
+  <p>APIs <b>/api/restore</b> and <b>/api/restore/verify</b>: when you restore, we email a 6-digit OTP to the purchase email. It is stored only as a keyed hash (HMAC), valid for <b>10 minutes</b>, with at most 5 attempts, and deleted once used. The server always answers the same way so it never reveals which emails bought a plan. On success the email is marked verified and your device is registered.</p>
+
+  <h3>3.5. Abuse prevention and infrastructure logs</h3>
+  <p>For ordering, restoring, posting scores, play-for-me and purchase-funnel counts, the IP address is used <b>temporarily</b> for rate limiting. Some functions store the raw IP, others only a hash that changes daily; records expire after minutes to hours and are used for nothing else. In addition our infrastructure provider (Cloudflare) <b>processes IP addresses and request details</b> of every visit to deliver pages and block attacks, under its own policy. Each Night Pass plan keeps at most 3 device public keys with last-use time to stop plan sharing.</p>
+
+  <h3>3.6. Leaderboard (voluntary)</h3>
+  <p>API <b>/api/scores</b>. Only when you tap “Share score” do we store: game name, the <b>nickname you choose</b>, score, date (Vietnam time) and whether you hold Night Pass (a badge; the token is not stored). This is <b>shown publicly</b>. Do not use your real name or personal details as a nickname. No IP or device ID is stored with it. Children’s games have no name field: nicknames are generated from a fixed list (for example “Happy Cat 42”).</p>
+
+  <h3>3.7. Play-for-me and challenges</h3>
+  <p><b>Play-for-me</b> (API <b>/api/relay</b>): the server creates a temporary record with a random ID and a hash of the owner code. The result is <b>encrypted in the helper’s browser</b> (AES-GCM) with a key placed after the # in the link, which is never sent to the server, so we hold only unreadable data. The record is deleted when you collect the result, or expires within 24 hours. <b>Challenges</b>: round details (score, seed and, in some games, a name/avatar you typed) are inside the link you send; we do not store the link. Only send links to people you trust.</p>
+
+  <h3>3.8. Shared photos, videos and QR codes</h3>
+  <p>Recording video or creating result images happens on your device and is not uploaded. When a payment QR is shown, your browser loads the image directly from img.vietqr.io, so that service can see your IP and the amount and content encoded in the QR. When you share through another app (for example Zalo, Telegram, WhatsApp), that content falls under that app’s policy.</p>
+
+  <h3>3.9. Cookies, fonts and third-party code</h3>
+  <p>The website <b>sets no cookies</b> (no tracking or advertising cookies) and embeds no third-party analytics or ad code. Some game pages load <b>fonts from Google Fonts</b> (fonts.googleapis.com, fonts.gstatic.com): your browser then connects to Google, which can see your IP address; we pass no other data to Google. Fonts are cached so games work offline.</p>
+
+  <h2>4. Purposes and legal basis</h2>
   <ul>
-    <li><b>Anonymous daily counts:</b> kept long-term because they cannot be linked to a person.</li>
-    <li><b>“Playing now” records:</b> deleted when you leave the game; inactive ones are cleaned up automatically.</li>
-    <li><b>One-time codes:</b> valid for 10 minutes, then cleaned up.</li>
-    <li><b>Helper-play records:</b> deleted when you receive the result or after at most 24 hours.</li>
-    <li><b>Leaderboard scores and nicknames:</b> kept until you ask us to delete them.</li>
-    <li><b>Rate-limit records:</b> minutes to hours, then deleted automatically.</li>
-    <li><b>Email, orders, transactions:</b> kept until you ask us to delete them, except what we must keep by law (for example accounting records).</li>
+    <li><b>Providing games and features</b> (saving progress, settings, play-for-me, challenges): performing the service you request; mostly processed on your device.</li>
+    <li><b>Anonymous statistics</b> to learn which games are liked and improve the service: our legitimate interest, data not tied to a person.</li>
+    <li><b>Selling and activating Night Pass</b>, sending restore codes, reconciling payments, handling complaints and refunds, meeting accounting and tax duties: contract and legal obligation, based on your consent when you enter your email.</li>
+    <li><b>Leaderboard:</b> your consent when you tap “Share score”.</li>
+    <li><b>Security, fraud and abuse prevention, blocking unauthorised plan sharing:</b> legitimate interest and cybersecurity requirements.</li>
+  </ul>
+  <p>We <b>do not sell</b> or rent personal data, do not use it for advertising or behavioural profiling, and make no automated decisions with legal effect on you.</p>
+
+  <h2>5. Children’s data</h2>
+  <p>Pop Play is for young children. Children’s pages have <b>no accounts, no ads and do not ask children for personal data</b>; the counts in 3.1 are anonymous and do not distinguish children from adults; leaderboards use auto-generated fun names only. Parental settings (allowed games, daily time limit, screen lock) live on the device behind a parental gate (a question for adults). Buying Night Pass and changing settings is done by adults. Children under 16 may provide personal data only with the consent of a parent or guardian. If you believe we received a child’s data by mistake, contact us and we will delete it within 72 hours of verifying the request.</p>
+
+  <h2>6. Third parties involved</h2>
+  <p>We use these providers; they process data only for the service:</p>
+  <div class="tw"><table>
+    <thead><tr><th>Provider</th><th>Role</th><th>Data involved</th></tr></thead>
+    <tbody>
+      <tr><td>Cloudflare</td><td>Website hosting (Workers/assets), CDN, DNS, Email Routing for the support mailbox</td><td>All requests (IP, request headers); mail you send to the support mailbox</td></tr>
+      <tr><td>Neon</td><td>PostgreSQL database</td><td>Data in 3.1 and 3.3 to 3.7 (not on-device data)</td></tr>
+      <tr><td>Resend</td><td>Sends OTP emails</td><td>Recipient email, OTP message</td></tr>
+      <tr><td>SePay and banks</td><td>Receive transfers, notify transactions</td><td>Bank transaction details sent to our server</td></tr>
+      <tr><td>VietQR (img.vietqr.io)</td><td>Generates payment QR images</td><td>Browser IP, amount and content in the code</td></tr>
+      <tr><td>Google Fonts</td><td>Serves fonts to game pages</td><td>Browser IP when fonts load</td></tr>
+      <tr><td>Mat Bao</td><td>Registrar of the domain nightplay.vn</td><td>The owner’s domain registration details, no player data</td></tr>
+    </tbody>
+  </table></div>
+  <p>We share data only with the parties above or when a competent state authority requires it by law.</p>
+
+  <h2>7. Transfers abroad</h2>
+  <p>Cloudflare, Neon, Resend and Google run systems outside Vietnam, so data may be processed abroad. The Neon database is located in [CẦN XÁC NHẬN: Neon region in use, e.g. AWS Singapore]. We transfer only what is needed to operate, require providers to protect data under their terms, and will prepare a cross-border transfer impact assessment where the law requires it.</p>
+
+  <h2>8. Retention</h2>
+  <ul>
+    <li><b>Daily anonymous counts:</b> kept long-term since they are not tied to anyone.</li>
+    <li><b>“Playing” records:</b> deleted on exit, swept after at most 1 day.</li>
+    <li><b>OTP codes:</b> 10 minutes, deleted on use.</li>
+    <li><b>Play-for-me records:</b> deleted when you collect the result or after at most 24 hours.</li>
+    <li><b>Rate-limit records (IP or hash):</b> minutes to hours, swept automatically.</li>
+    <li><b>Leaderboard scores and nicknames:</b> until you ask for deletion.</li>
+    <li><b>Email, orders, transactions, Night Pass records:</b> kept until you ask for deletion, except what we must keep by law (for example accounting and tax records) [CẦN XÁC NHẬN: owner to set the maximum retention, e.g. 10 years for accounting records and email deletion after X years of inactivity].</li>
+    <li><b>On-device data:</b> under your control; erase it any time.</li>
   </ul>
 
-  <h2>6. Your rights</h2>
-  <p>You may ask to see, correct or delete the data linked to your email, and withdraw consent you have given. Send your request to <a data-fill="email"></a> from the email address used for the purchase so we can verify it. To remove a leaderboard score, send the game name and the nickname you used. We will reply as soon as we can. Deleting order data may remove your ability to restore a plan you bought.</p>
+  <h2>9. Your rights as a data subject</h2>
+  <p>Under Decree 13/2023/ND-CP you may: (1) be informed about processing; (2) consent or refuse, and withdraw consent; (3) access your data; (4) correct it; (5) request deletion; (6) request restriction of processing; (7) request a copy; (8) object to processing; (9) complain, denounce, sue and claim damages under the law; (10) protect your own rights. Withdrawing consent or deleting order data may cost you the ability to restore a purchased plan and does not affect processing carried out earlier.</p>
 
-  <h2>7. Security</h2>
-  <p>Data is sent over HTTPS. Plan verification codes are signed to prevent forgery, one-time codes are stored only as hashes, and the admin area is protected by a private key. No system is perfectly secure; we apply reasonable measures and will notify you of incidents affecting you as required.</p>
+  <h2>10. How to exercise rights and complaints</h2>
+  <ul>
+    <li>Email <a data-fill="email"></a> from the address used for the purchase so we can verify you, stating which right you want to exercise. To remove a leaderboard score, send the game name and nickname.</li>
+    <li>We acknowledge within 72 hours and handle deletion and correction requests within 72 hours of completing verification, other requests within 15 days. This is free of charge unless the law allows otherwise.</li>
+    <li>We may refuse where the law requires us to keep data or we cannot verify the requester; we will explain why.</li>
+    <li>Personal-data complaints: send them to the same address; if you disagree with the outcome you may complain to the competent state authority on personal data protection or sue under Vietnamese law. For payment complaints see the Terms of Use.</li>
+  </ul>
 
-  <h2>8. Changes to this policy</h2>
-  <p>When something important changes, we update this page and the “Last updated” date at the top.</p>
+  <h2>11. Security</h2>
+  <p>Data travels over HTTPS. Night Pass tokens are HMAC-signed against forgery and bound to a device key (ECDSA P-256 signatures valid for 120 seconds); OTPs are stored only as hashes; the play-for-me owner code is stored only as a SHA-256 hash and results are end-to-end encrypted; rate limits stop code guessing; the admin area needs a private key, is limited to authorised persons, and secret keys sit in the infrastructure provider’s environment variables. No system is perfectly secure; if an incident affects personal data we will respond and notify you and the authorities as required (within 72 hours where the law demands).</p>
+
+  <h2>12. Payments and refunds</h2>
+  <p>Night Pass is a one-off payment with no auto-renewal. Prices, refund conditions and how complaints are resolved are in the <a href="terms.html">Terms of Use</a>. Payment data is processed as described in 3.3.</p>
+
+  <h2>13. Changes and governing law</h2>
+  <p>When something important changes we update this page and the effective date at the top. This policy is governed by the laws of Vietnam. Disputes are settled through negotiation and mediation; failing that, before a competent court in Vietnam.</p>
+
+  <h2>14. Contact</h2>
+  <p>Any question or request about personal data: <a data-fill="email"></a>. Operator: see section 1.</p>
+  <p class="note">This text is a reference draft, not legal advice. The website owner should have a lawyer or compliance adviser review it before submitting any website registration or notification.</p>
 </div>
 
 </div>
@@ -364,208 +361,21 @@ html{overscroll-behavior:none}
   </div>
 </main>
 
+
 <footer class="site-foot">
   <div class="mark"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#7C5CFF"/><path d="M0 0h32v64H0z" fill="#FF5A1F" clip-path="inset(0 round 18px 0 0 18px)"/><circle cx="32" cy="32" r="13" fill="#fff"/></svg><span>Home</span></div>
   <nav>
     <a href="index.html" id="fHome"></a>
+    <a href="privacy.html" id="fPriv"></a>
+    <a href="terms.html" id="fTerms"></a>
     <a data-fill="email"></a>
   </nav>
   <span id="copy"></span>
 </footer>
 
 <script src="shared/site.js"></script>
-<script>
-"use strict";
-/* Thông tin liên hệ lấy từ shared/site.js (operator, email, updated). */
-const INFO = window.SITE;
-
-const $ = id => document.getElementById(id);
-const root = document.documentElement;
-document.querySelectorAll("[data-fill]").forEach(el => {
-  const k = el.dataset.fill;
-  el.textContent = INFO[k];
-  if (k === "email") el.href = "mailto:" + INFO.email;
-});
-
-function setLang(l, save) {
-  root.dataset.l = l; root.lang = l;
-  document.title = l === "vi" ? "Chính sách quyền riêng tư · Play Hub" : "Privacy Policy · Play Hub";
-  $("fHome").textContent = l === "vi" ? "← Về trang chủ" : "← Back to home";
-  $("copy").textContent = "© " + new Date().getFullYear() + " Play Hub. " + (l === "vi" ? "Bảo lưu mọi quyền." : "All rights reserved.");
-  $("themeBtn").setAttribute("aria-label", l === "vi" ? "Sáng / Tối" : "Light / Dark");
-  $("bVi").setAttribute("aria-pressed", String(l === "vi")); $("bEn").setAttribute("aria-pressed", String(l === "en"));
-  if (save) try { localStorage.setItem("lang", l); } catch (e) {}
-  if (window.__pgReady) layoutPages();
-}
-$("bVi").addEventListener("click", () => setLang("vi", true));
-$("bEn").addEventListener("click", () => setLang("en", true));
-setLang(root.dataset.l);
-
-const THEME_COLOR = { light: "#F6F4F1", dark: "#12141F" };
-function setTheme(t, save) {
-  root.dataset.theme = t;
-  document.querySelector("meta[name=theme-color]").content = THEME_COLOR[t];
-  if (save) try { localStorage.setItem("theme", t); } catch (e) {}
-}
-$("themeBtn").addEventListener("click", () => setTheme(root.dataset.theme === "dark" ? "light" : "dark", true));
-setTheme(root.dataset.theme);
-
-/* ===== Đọc theo trang: không cuộn, tự co chữ cho vừa; mục quá dài thì tách thành nhiều màn hình ===== */
-const body = $("pgBody"), pg = { screens: [], i: 0 };
-/* Dàn trang kiểu sách: gom các khối liên tiếp (tiêu đề, đoạn, danh sách...) vào cùng một trang cho tới khi đầy.
-   Tiêu đề không bao giờ nằm cuối trang; khối quá dài thì tách theo mục danh sách / hàng bảng. */
-function blocks(L) {
-  const out = []; let h1 = "", meta = null;
-  for (const k of [...L.children]) {
-    if (k.tagName === "H1") { h1 = k.textContent; continue; }
-    if (k.classList.contains("meta")) { meta = k; continue; }
-    out.push(k);
-  }
-  if (meta) out.unshift(meta);
-  return { h1, out };
-}
-const tableUnits = n => { const t = n.tagName === "TABLE" ? n : n.querySelector("table"); if (!t) return null;
-  const head = t.tHead ? t.tHead.cloneNode(true) : null, rows = [...t.querySelectorAll("tbody tr")]; if (rows.length < 2) return null;
-  return rows.map(r => { const tb = t.cloneNode(false), bd = document.createElement("tbody"); bd.appendChild(r.cloneNode(true)); if (head) tb.appendChild(head.cloneNode(true)); tb.appendChild(bd);
-    if (n.tagName === "TABLE") return tb; const w = n.cloneNode(false); w.appendChild(tb); return w; }); };
-const units = n => tableUnits(n) || (n.tagName === "SECTION" ? [...n.children].flatMap(units) : n.tagName === "UL" ? [...n.children].map(li => { const u = n.cloneNode(false); u.appendChild(li.cloneNode(true)); return u; }) : [n]);
-function fits(nodes, list) {
-  body.replaceChildren(...nodes.map(n => n.cloneNode(true)));
-  for (const fs of list) { body.style.fontSize = fs + "px"; if (body.scrollHeight <= body.clientHeight + 1) return fs; }
-  return 0;
-}
-const isHead = n => n.tagName === "H2" || n.tagName === "H3";
-function layoutPages() {
-  const l = root.dataset.l, L = document.querySelector('#src .L[lang="' + l + '"]'); if (!L) return;
-  const FS = innerWidth < 500 ? [15, 14, 13, 12, 11] : [17, 16, 15, 14, 13, 12, 11], B = blocks(L), keep = pg.screens.length ? pg.i / pg.screens.length : 0;
-  $("pgTitle").textContent = B.h1; pg.screens = [];
-  let chunk = [];
-  const flush = () => {
-    if (!chunk.length) return;
-    const tail = [];                                        // tiêu đề ở cuối trang → chuyển sang trang sau
-    while (chunk.length > 1 && isHead(chunk[chunk.length - 1])) tail.unshift(chunk.pop());
-    pg.screens.push({ nodes: chunk, fs: fits(chunk, FS) || FS[FS.length - 1] }); chunk = tail;
-  };
-  const BASE = innerWidth < 500 ? 14 : 16;                 // cỡ chữ dễ đọc: xếp trang theo cỡ này; chỉ co nhỏ khi một khối đơn lẻ quá dài
-  const fitBase = nodes => fits(nodes, [BASE]);
-  const add = (list) => { for (const n of list) {
-    if (fitBase([...chunk, n])) { chunk.push(n); continue; }
-    if (chunk.length) { flush(); if (fitBase([...chunk, n])) { chunk.push(n); continue; } }
-    if (fits([...chunk, n], FS) || units(n).length < 2) { chunk.push(n); continue; }   // co chữ cho vừa, hoặc không tách được nữa
-    add(units(n));
-  } };
-  add(B.out); flush();
-  let lastHead = "";
-  pg.screens.forEach(x => { const hs = x.nodes.filter(isHead); if (hs.length) { x.title = hs[0].textContent; lastHead = hs[hs.length - 1].textContent; } else x.title = lastHead + (l === "vi" ? " (tiếp)" : " (cont.)"); });
-  $("pgPrev").setAttribute("aria-label", l === "vi" ? "Trang trước" : "Previous page"); $("pgNext").setAttribute("aria-label", l === "vi" ? "Trang sau" : "Next page");
-  $("pgMenu").setAttribute("aria-label", l === "vi" ? "Mục lục các trang" : "Page thumbnails"); $("pgMenu").title = $("pgMenu").getAttribute("aria-label"); $("thTitle").textContent = l === "vi" ? "Mục lục" : "Pages"; $("thClose").setAttribute("aria-label", l === "vi" ? "Đóng" : "Close");
-  if (thumbsOpen) { buildThumbs(); applyPageShift(); }
-  show(Math.min(pg.screens.length - 1, Math.round(keep * pg.screens.length)));
-}
-let flipping = null;
-const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
-function endFlip() { if (flipping) { flipping.leaf.remove(); flipping.done && flipping.done(); flipping = null; } }
-function show(i, dir) {
-  endFlip();
-  const prev = pg.i, old = body.cloneNode(true);
-  pg.i = Math.max(0, Math.min(pg.screens.length - 1, i)); const s = pg.screens[pg.i]; if (!s) return;
-  const animate = dir && !reduceMotion.matches && pg.i !== prev;
-  body.replaceChildren(...s.nodes.map(n => n.cloneNode(true))); body.style.fontSize = s.fs + "px"; body.scrollTop = 0;
-  body.querySelectorAll("[data-fill]").forEach(el => { const k = el.dataset.fill; el.textContent = INFO[k]; if (k === "email") el.href = "mailto:" + INFO.email; });
-  body.dataset.pno = (pg.i + 1) + " / " + pg.screens.length;
-  if (animate) {
-    /* tiến: trang cũ lật đi để lộ trang mới; lùi: trang mới lật đè lên trang cũ */
-    const leaf = document.createElement("div"); leaf.className = "leaf " + (dir > 0 ? "next" : "prev"); leaf.style.fontSize = (dir > 0 ? pg.screens[prev] : s).fs + "px";
-    const src = dir > 0 ? old : body; leaf.dataset.pno = src.dataset.pno; [...src.childNodes].forEach(n => leaf.appendChild(n.cloneNode(true)));
-    if (dir < 0) { body.replaceChildren(...old.childNodes); body.style.fontSize = pg.screens[prev].fs + "px"; body.dataset.pno = old.dataset.pno; }
-    $("pages").appendChild(leaf);
-    const after = () => { if (dir < 0) { body.replaceChildren(...s.nodes.map(n => n.cloneNode(true))); body.style.fontSize = s.fs + "px"; body.dataset.pno = (pg.i + 1) + " / " + pg.screens.length;
-      body.querySelectorAll("[data-fill]").forEach(el => { const k = el.dataset.fill; el.textContent = INFO[k]; if (k === "email") el.href = "mailto:" + INFO.email; }); } };
-    flipping = { leaf, done: after }; leaf.addEventListener("animationend", endFlip, { once: true }); setTimeout(endFlip, 900);
-  }
-  $("pgPrev").disabled = pg.i === 0; $("pgNext").disabled = pg.i === pg.screens.length - 1;
-  if (typeof markCurrent === "function" && thumbsOpen) markCurrent();
-}
-$("pgPrev").addEventListener("click", () => show(pg.i - 1, -1));
-$("pgNext").addEventListener("click", () => show(pg.i + 1, 1));
-
-/* ----- nút tự ẩn thông minh: hiện khi chạm/rê chuột/bấm phím, tự ẩn sau vài giây, giữ nguyên khi đang trỏ vào nút ----- */
-let thumbsOpen = false, hideT = 0;
-const ui = [$("pgMenu"), $("pgPrev"), $("pgNext")];
-function hideUI() {
-  if (ui.some(b => b.matches(":hover") || b === document.activeElement)) { hideT = setTimeout(hideUI, 1200); return; }
-  ui.forEach(b => b.classList.remove("show"));
-}
-function showUI(ms) { ui.forEach(b => b.classList.add("show")); clearTimeout(hideT); hideT = setTimeout(hideUI, ms || 2600); }
-let lastMove = 0;
-$("book").addEventListener("pointermove", () => { const n = Date.now(); if (n - lastMove > 120) { lastMove = n; showUI(); } });
-$("book").addEventListener("pointerdown", () => showUI());
-$("book").addEventListener("touchstart", () => showUI(), { passive: true });
-document.addEventListener("keydown", e => { if (e.key === "Tab") showUI(4000); });
-ui.forEach(b => b.addEventListener("focus", () => b.classList.add("show")));
-
-/* ----- mục lục: cột ảnh thu nhỏ bên trái, trang sách thu nhỏ lại nhưng vẫn hiện bên cạnh ----- */
-const swFor = () => (innerWidth < 600 ? 96 : 136);
-function buildThumbs() {
-  const list = $("thList"), n = pg.screens.length, pw = body.clientWidth, ph = body.clientHeight; if (!n || !pw || !ph) return;
-  $("thumbs").style.setProperty("--sw", swFor() + "px");
-  const tw = Math.max(40, swFor() - 8 - 4 - 8 - 4), a = ph / pw, th = Math.round(tw * a), k = tw / pw, keep = list.scrollTop;
-  list.replaceChildren(...pg.screens.map((sc, i) => {
-    const b = document.createElement("button"); b.type = "button"; b.className = "th"; b.setAttribute("aria-label", (i + 1) + ". " + sc.title); if (i === pg.i) b.setAttribute("aria-current", "true");
-    const box = document.createElement("div"); box.className = "thp"; box.style.cssText = "width:" + tw + "px;height:" + th + "px";
-    const leaf = document.createElement("div"); leaf.className = "leaf"; leaf.style.cssText = "--pw:" + pw + "px;--ph:" + ph + "px;--k:" + k + ";font-size:" + sc.fs + "px"; leaf.dataset.pno = (i + 1) + " / " + n;
-    sc.nodes.forEach(nd => leaf.appendChild(nd.cloneNode(true))); box.appendChild(leaf);
-    const lb = document.createElement("span"); lb.className = "thn"; lb.textContent = (i + 1) + " · " + sc.title;
-    b.append(box, lb);
-    b.onclick = () => { const d = Math.sign(i - pg.i); show(i, d); if (innerWidth < 600) closeThumbs(); };   // điện thoại: chọn xong đóng để đọc cho rộng
-    return b;
-  }));
-  list.scrollTop = keep;
-}
-function markCurrent() {
-  const list = $("thList"); let cur = null;
-  list.querySelectorAll(".th").forEach((b, i) => { const on = i === pg.i; if (on) { b.setAttribute("aria-current", "true"); cur = b; } else b.removeAttribute("aria-current"); });
-  const top = cur ? cur.offsetTop - list.offsetTop : 0; if (cur && (top < list.scrollTop || top + cur.offsetHeight > list.scrollTop + list.clientHeight)) list.scrollTop = top - (list.clientHeight - cur.offsetHeight) / 2;
-}
-function applyPageShift() {
-  const bk = $("book"), bw = bk.clientWidth, bh = bk.clientHeight;
-  if (!thumbsOpen) { $("pages").style.transform = ""; return; }
-  const sw = $("thumbs").offsetWidth + 8, k = Math.max(0.3, (bw - sw) / bw);
-  $("pages").style.transform = "translate(" + sw + "px," + Math.round(bh * (1 - k) / 2) + "px) scale(" + k + ")";
-}
-function openThumbs() {
-  thumbsOpen = true; $("thumbs").hidden = false; $("thumbs").classList.add("on"); $("pgMenu").setAttribute("aria-expanded", "true");
-  buildThumbs(); applyPageShift(); const cur = $("thList").querySelector("[aria-current]"); if (cur) $("thList").scrollTop = Math.max(0, cur.offsetTop - $("thList").offsetTop - ($("thList").clientHeight - cur.offsetHeight) / 2);
-  (cur || $("thClose")).focus({ preventScroll: true });
-}
-function closeThumbs() { if (!thumbsOpen) return; thumbsOpen = false; $("thumbs").classList.remove("on"); $("thumbs").hidden = true; $("pgMenu").setAttribute("aria-expanded", "false"); applyPageShift(); $("pgMenu").focus({ preventScroll: true }); showUI(1800); }
-$("pgMenu").addEventListener("click", () => (thumbsOpen ? closeThumbs() : openThumbs()));
-$("thClose").addEventListener("click", closeThumbs);
-document.addEventListener("keydown", e => { if (e.key === "Escape") closeThumbs(); });
-
-/* ----- lật trang: vuốt LÊN = trang sau, vuốt XUỐNG = trang trước (vuốt ngang vẫn dùng được) ----- */
-const turn = d => show(pg.i + d, d);
-let wheelAt = 0;
-$("pages").addEventListener("wheel", e => {
-  if (Date.now() - wheelAt < 600) return;
-  const ay = Math.abs(e.deltaY), ax = Math.abs(e.deltaX);
-  if (ay > 40 && ay >= ax) { wheelAt = Date.now(); e.preventDefault(); turn(e.deltaY > 0 ? 1 : -1); }      // lăn xuống / vuốt lên trên bàn di chuột = trang sau
-  else if (ax > 40 && ax > ay * 1.5) { wheelAt = Date.now(); e.preventDefault(); turn(e.deltaX > 0 ? 1 : -1); }
-}, { passive: false });
-addEventListener("keydown", e => {
-  if (e.target.closest && e.target.closest("select,input")) return;
-  if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === "ArrowRight") turn(1); else if (e.key === "ArrowUp" || e.key === "PageUp" || e.key === "ArrowLeft") turn(-1);
-});
-let tx = null;
-body.addEventListener("touchstart", e => { tx = e.touches.length === 1 ? [e.touches[0].clientX, e.touches[0].clientY] : null; }, { passive: true });
-body.addEventListener("touchend", e => {
-  if (!tx) return; const t = e.changedTouches[0], dx = t.clientX - tx[0], dy = t.clientY - tx[1]; tx = null;
-  if (Math.abs(dy) > 60 && Math.abs(dy) > Math.abs(dx) * 1.3) turn(dy < 0 ? 1 : -1);
-  else if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) turn(dx < 0 ? 1 : -1);
-}, { passive: true });
-let rz = 0; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { layoutPages(); applyPageShift(); }, 120); });
-window.__pgReady = true; layoutPages(); showUI(4200); if (document.fonts && document.fonts.ready) document.fonts.ready.then(layoutPages);
-</script>
+<script>window.LEGAL={vi:{title:"Chính sách bảo mật · Play Hub"},en:{title:"Privacy Policy · Play Hub"}};</script>
+<script src="shared/legaldoc.js"></script>
 <script src="shared/updated.js"></script>
 <script src="shared/bars.js"></script>
 </body>
