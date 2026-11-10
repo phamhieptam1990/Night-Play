@@ -127,6 +127,12 @@ html.playing,html.playing body{overflow:hidden;height:100%}
   display:grid;place-items:center;box-shadow:0 2px 10px rgba(0,0,0,.35),0 0 0 1px rgba(0,0,0,.12)}
 #home svg{width:24px;height:24px;filter:drop-shadow(0 0 1px rgba(0,0,0,.95)) drop-shadow(0 0 1.5px rgba(0,0,0,.8)) drop-shadow(0 1px 3px rgba(0,0,0,.5))}
 #home:hover{background:rgba(255,255,255,.4)}
+/* máy tính (màn rộng): các nút ‹ / 📷 / 📤 / 🔒 ở cột trái cùng kiểu với ? / 🔊 / ngôn ngữ trong game: tròn trắng, biểu tượng đậm, bóng nhẹ */
+@media (min-width:900px) and (min-aspect-ratio:13/10){
+  #stage #home,#stage .nps-fab,#stage #klock{background:var(--panel,#fff);color:var(--ink,#2b2118);border:1.5px solid color-mix(in srgb,var(--ink,#2b2118) 22%,transparent);box-shadow:var(--shadow,0 3px 10px rgba(0,0,0,.18));-webkit-backdrop-filter:none;backdrop-filter:none}
+  #stage #home svg,#stage .nps-fab svg,#stage #klock svg{filter:none}
+  #stage #home:hover,#stage .nps-fab:hover,#stage #klock:hover{background:color-mix(in srgb,var(--accent,#ff5a1f) 12%,var(--panel,#fff))}
+}
 #home:focus-visible{outline:3px solid #fff;outline-offset:3px}
 /* Ẩn khi đang chơi; chỉ hiện khi người dùng vuốt (cảm ứng) hoặc đưa chuột lên mép trên */
 #home{opacity:0;pointer-events:none;transform:translateY(-10px);transition:opacity .25s ease,transform .25s ease}
