@@ -14,26 +14,105 @@
    Quy ước điểm cao lưu trên máy: localStorage "np-hi-<id game>".
    Trang cha (shared/social.js, help.html) chỉ nhận tin từ đúng iframe của mình và cùng origin. */
 /* ÂM THANH: mọi game dùng chung một "công tắc" — khi rời game / đổi trò / ẩn tab thì TẮT HẲN tiếng
-   (giọng đọc, bộ tạo âm Web Audio, thẻ audio/video) rồi mới sang trò khác; bật/tắt được nhớ giữa các game. */
+   (giọng đọc, bộ tạo âm Web Audio, thẻ audio/video) rồi mới sang trò khác; bật/tắt được nhớ giữa các game ("np-sound", chưa từng chọn = BẬT).
+   MỞ KHOÁ ÂM THANH (lỗi "vào game không có tiếng"), làm ở đây để MỌI game được hưởng, game không phải tự lo:
+   1) Chính sách autoplay: AudioContext tạo trước lần chạm đầu bị treo (suspended) → resume() ngay trong lần chạm/bấm/phím đầu (và mọi lần sau nếu bị treo lại);
+      ctx tạo SAU khi đã chạm thì resume ngay; quay lại từ tab ẩn (visibilitychange/pageshow) cũng resume. Không resume khi người dùng đã tắt tiếng.
+   2) iPhone gạt công tắc im lặng: navigator.audioSession.type="playback" (Safari 16.4+) + thẻ <audio> im lặng lặp lại, bật ở lần chạm đầu → Web Audio vẫn ra tiếng.
+   3) Nút loa (#bSnd / #soundBtn): hiện icon (gạch chéo khi tắt) theo NPAudio.get() ngay từ lúc vào, aria-pressed + nhãn đúng.
+   4) Trình duyệt trong app (Zalo/TikTok/Facebook…) mà sau lần chạm vẫn không có tiếng: nhắc nhỏ "Mở bằng Chrome/Safari để nghe tiếng" (một lần, không đè layout).
+   Đo tự động: scripts/cozygame/check-audio.js (AudioContext.state === "running" sau lần chạm đầu). window.NPAudio.state() trả trạng thái các context. */
 (function () {
   "use strict";
-  var ctxs = [];
+  var ctxs = [], gestured = false, primed = null, keep = null, hinted = false;
+  var on = function () { try { return localStorage.getItem("np-sound") !== "0"; } catch (e) { return true; } };
+  var vi = function () { return (document.documentElement.lang || "vi").slice(0, 2) !== "en"; };
+  var live = function (c) { return c && c.state !== "closed"; };
+  var down = function (c) { return c.state === "suspended" || c.state === "interrupted"; };
+  function resumeOne(c) { try { if (live(c) && down(c)) { var p = c.resume(); if (p && p.catch) p.catch(function () {}); } } catch (e) {} }
+  function resumeAll() { if (on()) ctxs.forEach(resumeOne); }
   ["AudioContext", "webkitAudioContext"].forEach(function (n) {
     var C = window[n]; if (!C) return;
-    var W = function (o) { var c = new C(o); ctxs.push(c); return c; };
+    var W = function (o) { var c = new C(o); ctxs.push(c); if (gestured && on()) resumeOne(c); return c; };
     W.prototype = C.prototype; window[n] = W;
   });
+  /* iOS: âm thanh ra theo kênh "phát nhạc" (không bị công tắc im lặng chặn) */
+  try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) {}
+  function silentWav() {   // 0,25 giây PCM 8-bit 8kHz toàn im lặng (tạo lúc chạy, không cần tệp)
+    var n = 2000, b = "RIFF" + String.fromCharCode((36 + n) & 255, ((36 + n) >> 8) & 255, 0, 0) + "WAVEfmt " + String.fromCharCode(16, 0, 0, 0, 1, 0, 1, 0, 64, 31, 0, 0, 64, 31, 0, 0, 1, 0, 8, 0) + "data" + String.fromCharCode(n & 255, (n >> 8) & 255, 0, 0), s = "";
+    for (var i = 0; i < n; i++) s += "\x80"; return "data:audio/wav;base64," + btoa(b + s);
+  }
+  function keepAlive() {
+    if (!on() || document.hidden) return;
+    try {
+      if (!keep) { keep = new Audio(silentWav()); keep.loop = true; keep.preload = "auto"; keep.setAttribute("playsinline", ""); keep.volume = 1; }
+      if (keep.paused) { var p = keep.play(); if (p && p.catch) p.catch(function () {}); }
+    } catch (e) {}
+  }
+  function prime() {   // chưa có context nào (game tạo muộn): tạo sẵn một cái ngay trong lần chạm, phát 1 mẫu im lặng — mở khoá cả trang
+    if (primed || ctxs.length || !on()) return;
+    var C = window.AudioContext || window.webkitAudioContext; if (!C) return;
+    try { primed = new C(); var b = primed.createBuffer(1, 1, 22050), s = primed.createBufferSource(); s.buffer = b; s.connect(primed.destination); s.start(0); resumeOne(primed); } catch (e) { primed = null; }
+  }
+  function hint() {   // webview của app mà vẫn không ra tiếng
+    if (hinted || !on()) return;
+    var ua = navigator.userAgent || "";
+    if (!/FBAN|FBAV|FB_IAB|FBIOS|Zalo|musical_ly|BytedanceWebview|TikTok|Instagram|Messenger|(^|[\s;(])Line\//i.test(ua)) return;
+    if (!ctxs.some(function (c) { return live(c) && c.state !== "running"; })) return;
+    hinted = true;
+    var d = document.createElement("div"); d.setAttribute("role", "status");
+    d.style.cssText = "position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:2147483000;max-width:92vw;box-sizing:border-box;padding:8px 14px;border-radius:999px;background:rgba(20,18,30,.88);color:#fff;font:700 13px/1.25 system-ui,sans-serif;text-align:center;pointer-events:none";
+    d.textContent = vi() ? "🔇 Mở bằng Chrome/Safari để nghe tiếng" : "🔇 Open in Chrome/Safari to hear sound";
+    (document.body || document.documentElement).appendChild(d); setTimeout(function () { d.remove(); }, 7000);
+  }
+  function unlock() {
+    gestured = true;
+    if (!on()) return;
+    prime(); resumeAll(); keepAlive();
+    if (!hinted) setTimeout(hint, 900);
+  }
+  ["pointerdown", "pointerup", "touchend", "mouseup", "click", "keydown"].forEach(function (t) { addEventListener(t, unlock, { capture: true, passive: true }); });
+  function revive() { if (document.hidden) return; if (gestured || (navigator.userActivation && navigator.userActivation.hasBeenActive)) { gestured = true; resumeAll(); keepAlive(); } }
+  document.addEventListener("visibilitychange", revive); addEventListener("pageshow", revive); addEventListener("focus", revive);
   function stop(close) {
     try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {}
     ctxs.forEach(function (c) { try { close ? c.close() : c.suspend(); } catch (e) {} });
     if (close) ctxs.length = 0;
     try { document.querySelectorAll("audio,video").forEach(function (m) { m.pause(); }); } catch (e) {}
+    try { if (keep) keep.pause(); } catch (e) {}
   }
+  /* nút loa: icon luôn khớp trạng thái thật (🔊 / 🔇 gạch chéo; shared/icons.js đổi emoji sang SVG) + aria-pressed + nhãn */
+  var btns = [];
+  function syncBtn(b) {
+    var s = on() ? "on" : "off", lb = (vi() ? "Âm thanh: " + (s === "on" ? "bật" : "tắt") : "Sound: " + s);
+    if (b.getAttribute("data-npsnd") !== s) b.setAttribute("data-npsnd", s);
+    var shown = b.children.length ? (/l5 5/.test(b.innerHTML) ? "off" : "on") : (/🔇|🔕/.test(b.textContent) ? "off" : "on");   /* icon đang hiện (emoji hoặc SVG do shared/icons.js đổi) */
+    if (shown !== s) b.textContent = s === "on" ? "🔊" : "🔇";                                                                 /* lệch (game chưa kịp vẽ lại): đặt đúng, icons.js đổi sang SVG gạch chéo */
+    if (b.getAttribute("aria-pressed") !== String(s === "on")) b.setAttribute("aria-pressed", String(s === "on"));
+    if (b.getAttribute("aria-label") !== lb) { b.setAttribute("aria-label", lb); b.title = lb; }
+  }
+  function syncBtns() { btns.forEach(syncBtn); }
+  function wireBtns() {
+    ["bSnd", "soundBtn"].forEach(function (id) {
+      var b = document.getElementById(id); if (!b || btns.indexOf(b) >= 0) return;
+      btns.push(b); syncBtn(b);
+      b.addEventListener("click", function () { setTimeout(syncBtns, 0); setTimeout(syncBtns, 120); }, true);
+      try { new MutationObserver(function () { syncBtn(b); }).observe(b, { childList: true, characterData: true, subtree: true }); } catch (e) {}
+    });
+  }
+  function ui() {
+    wireBtns(); setTimeout(wireBtns, 600); setTimeout(wireBtns, 2000);
+    try { new MutationObserver(syncBtns).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] }); } catch (e) {}
+    addEventListener("storage", function (e) { if (e.key === "np-sound") syncBtns(); });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", ui); else ui();
   window.NPAudio = {
     silence: function () { stop(false); },
     kill: function () { stop(true); },
-    get: function () { try { return localStorage.getItem("np-sound") !== "0"; } catch (e) { return true; } },
-    set: function (on) { try { localStorage.setItem("np-sound", on ? "1" : "0"); } catch (e) {} if (!on) stop(false); }
+    get: on,
+    set: function (v) { try { localStorage.setItem("np-sound", v ? "1" : "0"); } catch (e) {} if (!v) stop(false); else { resumeAll(); keepAlive(); } syncBtns(); },
+    unlock: unlock,
+    state: function () { return ctxs.concat(primed && ctxs.indexOf(primed) < 0 ? [primed] : []).map(function (c) { return c.state; }); }
   };
   addEventListener("pagehide", function () { stop(true); });
   document.addEventListener("visibilitychange", function () { if (document.hidden) stop(false); });
