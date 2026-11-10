@@ -128,7 +128,8 @@ const TUT = ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "xn", "dd", "
       const c = await clk(pg, id0); await wait(700); const d = await clk(pg, id0);
       note(d.t - c.t <= 5 && d.raf - c.raf <= 1, tag, "tạm dừng mà đồng hồ/rAF vẫn chạy: " + JSON.stringify([c, d]));
       note(d.dn - c.dn <= 5, tag, "tạm dừng mà Date.now() vẫn chạy: " + (d.dn - c.dn) + "ms"); note(d.real && c.real, tag, "new Date() không còn là giờ thật");
-      await pg.evaluate(id => document.querySelector('.fr[data-id="' + id + '"] .pn [data-a=pz]').click(), id0); await wait(500);
+      await pg.evaluate(id => document.querySelector('.fr[data-id="' + id + '"] .pn [data-a=pz]').click(), id0); await wait(300);
+      await pg.evaluate(() => document.getElementById("grid").dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }))); await wait(300);   /* panel đang mở = tạm dừng theo menu: đóng panel mới chạy lại */
       const e = await clk(pg, id0); await wait(500); const f = await clk(pg, id0);
       note(f.t - e.t >= 300 && f.raf > e.raf, tag, "tiếp tục mà đồng hồ/rAF không chạy lại: " + JSON.stringify([e, f]));
       note(f.dn - e.dn >= 300 && e.dn - d.dn < 1500, tag, "Date.now() không chạy lại / nhảy vọt sau tiếp tục");
@@ -188,6 +189,74 @@ const TUT = ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "xn", "dd", "
     await pg.evaluate(() => document.querySelector('.fr[data-id="doi-doi-2048"] .pn .sw').click()); await wait(1000); note(!(await shown("doi-doi-2048")), tag, "bật lại công tắc mà ô Điểm vẫn hiện");
     if (shotDir) { await pg.keyboard.press("Escape"); await wait(200); await pg.screenshot({ path: path.join(shotDir, "multi-hud-hidden.png") }); }
     await pg.close();
+  }
+
+  /* ---------- 2c. KHAY THUMBNAIL: ảnh chụp thật không đen/trống, hiển thị đúng ở các layout, nhãn thời gian ---------- */
+  const THUMB_GAMES = ["ne-o-ga", "xay-cau-tre", "cozy-wings", "cho-hang-kieu-viet", "ga-me-ban-trung"];
+  for (const [W, H] of (quick ? [[390, 844], [1194, 834]] : [[390, 844], [768, 1024], [1194, 834]])) {
+    const tag = "multi khay thumbnail " + W + "x" + H, pg = await open("", W, H);
+    await pg.evaluate(() => document.getElementById("shX").click()); let real = 0;
+    const ana = url => pg.evaluate(u => new Promise(res => { if (!u) return res(null); const im = new Image(); im.onload = () => { const c = document.createElement("canvas"); c.width = im.naturalWidth; c.height = im.naturalHeight; const x = c.getContext("2d"); x.drawImage(im, 0, 0); const d = x.getImageData(0, 0, c.width, c.height).data; let black = 0; for (let i = 0; i < d.length; i += 4) if (d[i + 3] < 16 || (d[i] < 6 && d[i + 1] < 6 && d[i + 2] < 6)) black++; res({ w: c.width, h: c.height, black: black / (d.length / 4) }); }; im.onerror = () => res({ err: 1 }); im.src = u; }), url);
+    for (const id of THUMB_GAMES) {
+      await pg.evaluate(id => NPMulti.add(id), id); note(await ready(pg, 1), tag, id + " không tải xong"); await wait(700);
+      const ok = await startPlay(pg, id); await wait(1200);
+      const nxt = THUMB_GAMES[(THUMB_GAMES.indexOf(id) + 1) % THUMB_GAMES.length];
+      await pg.evaluate(id => NPMulti.add(id), nxt); await wait(1300);
+      const url = await pg.evaluate(id => NPMulti.thumb(id) ? (document.querySelector('.tc[data-id="' + id + '"] img') || {}).src || "" : "", id), th = await pg.evaluate(id => NPMulti.items().find(i => i.id === id), id);
+      const stt = await ana(url || await pg.evaluate(id => { const it = NPMulti.items().find(i => i.id === id); return it && it.thumb ? "x" : null; }, id));
+      if (url) { real++; const a = await ana(url); note(a && !a.err && a.black <= 0.3, tag + " " + id, "ảnh chụp đen/trống " + JSON.stringify(a)); note(a && a.w === a.h, tag + " " + id, "ảnh chụp không vuông " + JSON.stringify(a)); }
+      await pg.evaluate(id => NPMulti.close(id), nxt); await pg.evaluate(id => NPMulti.close(id), id); await wait(300);
+    }
+    note(real >= 1, tag, "không game canvas nào cho ảnh chụp thật (cả " + THUMB_GAMES.length + " game rơi về icon)");
+    /* khay hiển thị: ảnh thật + icon, ở menu chung; nhãn thời gian cho game có đếm ngược */
+    await pg.evaluate(() => NPMulti.add("dap-deadline")); await ready(pg, 1); await wait(700); await startPlay(pg, "dap-deadline"); await wait(1500);
+    await pg.evaluate(() => NPMulti.add("ne-o-ga")); await wait(1500);
+    await pg.evaluate(() => document.getElementById("hm").click()); await wait(200);
+    const tr = await pg.evaluate(() => { const hp = document.getElementById("hp").getBoundingClientRect(); return [...document.querySelectorAll("#hpTray .tc")].map(c => { const r = c.getBoundingClientRect(), tm = c.querySelector(".tm"), im = c.querySelector("img"), tr = tm && tm.getBoundingClientRect(), box = (c.querySelector(".im") || c).getBoundingClientRect(); return { id: c.dataset.id, inside: r.left >= hp.left - 1 && r.right <= hp.right + 1 && r.bottom <= innerHeight, tm: tm ? tm.textContent : null, tmFrac: tr ? tr.height / box.height : 0, img: im ? im.naturalWidth > 0 : null, fit: im ? getComputedStyle(im).objectFit : null, label: c.getAttribute("aria-label"), h: r.height }; }); });
+    note(tr.length >= 1 && tr.every(x => x.inside && x.h >= 40), tag, "khay không hiển thị/tràn: " + JSON.stringify(tr));
+    const dd = tr.find(x => x.id === "dap-deadline"); note(dd && /^⏸ \d+:\d\d$/.test(dd.tm || "") && dd.tmFrac <= 0.3 && /(còn|left)/.test(dd.label || ""), tag, "game có đếm ngược phải có nhãn thời gian ≤ 1/4 ô + aria-label: " + JSON.stringify(dd));
+    tr.forEach(x => note(x.fit === null || x.fit === "contain", tag, "thumbnail phải object-fit:contain " + x.fit));
+    if (shotDir) await pg.screenshot({ path: path.join(shotDir, "multi-tray-" + W + ".png") });
+    if (pg._errs.length) note(false, tag, "lỗi JS: " + pg._errs[0]);
+    console.log("  " + tag + ": " + real + "/" + THUMB_GAMES.length + " game có ảnh chụp thật; khay " + JSON.stringify(tr.map(x => [x.id, x.tm, x.img])));
+    await pg.close();
+  }
+
+  /* ---------- 2d. MỞ MENU = TẠM DỪNG (menu chung #hm dừng tất cả; panel ⋯ chỉ dừng khung của nó; userPaused được giữ) ---------- */
+  {
+    const tag = "multi menu tạm dừng 390x844", pg = await open("games=ne-o-ga,noi-mot-net", 390, 844); note(await ready(pg, 2), tag, "không tải xong"); await wait(800);
+    note(await startPlay(pg, "ne-o-ga"), tag, "không bắt đầu được ne-o-ga"); await wait(1200);
+    await hookRaf(pg, "ne-o-ga"); await hookRaf(pg, "noi-mot-net"); await wait(300);
+    const adv = async id => { const a = await clk(pg, id); await wait(600); const b = await clk(pg, id); return { dt: b.t - a.t, dn: b.dn - a.dn, raf: b.raf - a.raf }; };
+    const running = r => r.dt >= 350 && r.raf > 2, frozen = r => r.dt <= 5 && r.dn <= 5 && r.raf <= 1;
+    /* a) menu chung: tất cả dừng; đóng → chạy lại (game thời gian thực có đếm 3-2-1) */
+    await pg.evaluate(() => document.getElementById("hm").click()); await wait(300);
+    let a = await adv("ne-o-ga"), b = await adv("noi-mot-net"); note(frozen(a) && frozen(b), tag, "mở menu chung mà game vẫn chạy " + JSON.stringify([a, b]));
+    await pg.evaluate(() => document.getElementById("hm").click()); await wait(250);
+    const cnt = await pg.evaluate(() => NPMulti.items().find(i => i.id === "ne-o-ga").counting); note(cnt, tag, "đóng menu chung: game thời gian thực đang chơi phải đếm 3-2-1");
+    note(!(await pg.evaluate(() => NPMulti.items().find(i => i.id === "noi-mot-net").counting)), tag, "game theo lượt không được đếm ngược");
+    await wait(3000); a = await adv("ne-o-ga"); b = await adv("noi-mot-net"); note(running(a) && running(b), tag, "đóng menu chung mà game không chạy lại " + JSON.stringify([a, b]));
+    /* b) panel ⋯ của khung B (parallel): chỉ B dừng, A chạy; đóng → B chạy lại ngay */
+    await pg.evaluate(() => document.querySelector('.fr[data-id="noi-mot-net"] .mi').click()); await wait(300);
+    a = await adv("ne-o-ga"); b = await adv("noi-mot-net"); note(running(a) && frozen(b), tag, "panel khung B: chỉ B được dừng " + JSON.stringify([a, b]));
+    await pg.keyboard.press("Escape"); await wait(200);
+    await pg.evaluate(() => document.getElementById("grid").dispatchEvent(new PointerEvent("pointerdown", { bubbles: true })));
+    await wait(300); b = await adv("noi-mot-net"); note(running(b), tag, "đóng panel mà khung B không chạy lại " + JSON.stringify(b));
+    /* c) userPaused được giữ qua một lần mở/đóng menu */
+    await pg.evaluate(() => document.querySelector('.fr[data-id="noi-mot-net"] .mi').click()); await wait(150);
+    await pg.evaluate(() => document.querySelector('.fr[data-id="noi-mot-net"] .pn [data-a=pz]').click()); await wait(300);
+    await pg.evaluate(() => document.getElementById("grid").dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }))); await wait(300);
+    b = await adv("noi-mot-net"); note(frozen(b), tag, "đã chủ động Tạm dừng mà đóng panel lại chạy tiếp " + JSON.stringify(b));
+    note(await pg.evaluate(() => { const i = NPMulti.items().find(i => i.id === "noi-mot-net"); return i.paused && !i.menuPaused; }), tag, "cờ userPaused/menuPaused sai sau khi đóng panel");
+    await pg.evaluate(() => document.querySelector('.fr[data-id="noi-mot-net"] .po').click()); await wait(400); b = await adv("noi-mot-net"); note(running(b), tag, "bỏ Tạm dừng mà khung không chạy lại");
+    /* d) chạm vào game khi menu mở = đóng menu */
+    await pg.evaluate(() => document.getElementById("hm").click()); await wait(250);
+    const box = await pg.evaluate(() => { const r = document.querySelector('.fr[data-id="noi-mot-net"]').getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height * 0.9]; });
+    await pg.mouse.click(box[0], box[1]); await wait(500);
+    note(!(await pg.evaluate(() => document.getElementById("hp").classList.contains("on"))), tag, "chạm vào khung game khi menu chung mở không đóng menu");
+    await wait(3000); a = await adv("ne-o-ga"); note(running(a), tag, "sau khi chạm đóng menu, game không chạy lại " + JSON.stringify(a));
+    if (pg._errs.length) note(false, tag, "lỗi JS: " + pg._errs[0]);
+    console.log("  " + tag + " xong"); await pg.close();
   }
 
   /* ---------- 3. FOCUS + LRU + nạp lại ván ---------- */

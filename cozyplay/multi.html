@@ -35,7 +35,8 @@ svg{display:block}
 #ttl{flex:none;font-weight:800;font-size:15px;white-space:nowrap}
 #tray{flex:1;min-width:0;display:flex;align-items:center;gap:6px;overflow:hidden}
 .tc{flex:none;position:relative;width:52px;height:48px;border-radius:12px;background:var(--card);border:1px solid var(--line);overflow:hidden;display:grid;place-items:center;font-size:22px;padding:0}
-.tc img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tc img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:var(--card)}
+.tc .tm{position:absolute;left:2px;top:2px;max-width:calc(100% - 4px);background:rgba(10,8,25,.88);color:#fff;font:800 9px/12px system-ui;padding:0 4px;border-radius:6px;white-space:nowrap;font-variant-numeric:tabular-nums}
 .tc .sc{position:absolute;left:0;right:0;bottom:0;background:rgba(10,8,25,.72);color:#fff;font:800 10px/14px system-ui;text-align:center}
 .tc .pz{position:absolute;right:2px;top:1px;font-size:10px}
 .tc.wide{width:auto;min-width:104px;max-width:150px;grid-template-columns:48px 1fr;justify-items:start;text-align:left;padding:0 8px 0 0}
@@ -151,12 +152,12 @@ body.side #perf{max-width:50px;font-size:10px}
     vi: { title: "Chơi cùng lúc", add: "Thêm game", back: "Về trang chủ", pick: "Chọn game để chơi cùng lúc", start: "▶ Bắt đầu", all: "Tất cả", par: "Cùng lúc", foc: "Tập trung", parTag: "chạy song song", focTag: "tập trung", open: "đang mở",
       empty: "Bấm dấu + để chọn game.\nGame “cùng lúc” chạy song song; game “tập trung” chỉ một khung chạy, các game khác chờ ở khay.", pause: "Tạm dừng", play: "Tiếp tục", snd: "Tiếng", close: "Đóng game", move: "Đổi chỗ", menu: "Menu khung",
       hud: "Ẩn bảng điểm của game", score: "Điểm", combo: "Combo", moves: "Lượt", st: { idle: "Chờ bắt đầu", playing: "Đang chơi", over: "Đã xong", paused: "Tạm dừng" }, tap: "⏸ Tạm dừng\nChạm để tiếp tục", loading: "Đang tải…",
-      resumeTag: "đang chơi dở", saved: "đã lưu ván", full: "Chỉ chơi tối đa {n} game cùng lúc trên máy này.", nofit: "Màn hình không đủ chỗ cho thêm khung nữa.", slow: "⚠ Máy hơi chậm: đã tạm dừng khung phụ", slowAdd: "Máy đang chậm, tạm thời chưa thêm khung được.",
+      resumeTag: "đang chơi dở", left: "còn {t}", saved: "đã lưu ván", full: "Chỉ chơi tối đa {n} game cùng lúc trên máy này.", nofit: "Màn hình không đủ chỗ cho thêm khung nữa.", slow: "⚠ Máy hơi chậm: đã tạm dừng khung phụ", slowAdd: "Máy đang chậm, tạm thời chưa thêm khung được.",
       selMax: "Hết chỗ: bỏ bớt game đã chọn.", timeH: "Hết giờ chơi hôm nay", timeP: "Đã đến giới hạn thời gian do phụ huynh đặt. Hẹn ngày mai nhé!", home: "Về trang chủ", sel: "Đã chọn", page: "Trang", min: "ph" },
     en: { title: "Play together", add: "Add game", back: "Back home", pick: "Pick games to play at once", start: "▶ Start", all: "All", par: "Together", foc: "Focus", parTag: "runs together", focTag: "focus", open: "open",
       empty: "Tap + to pick games.\n“Together” games run side by side; “Focus” games run one at a time and wait in the tray.", pause: "Pause", play: "Resume", snd: "Sound", close: "Close game", move: "Swap", menu: "Frame menu",
       hud: "Hide the game's score board", score: "Score", combo: "Combo", moves: "Moves", st: { idle: "Ready", playing: "Playing", over: "Finished", paused: "Paused" }, tap: "⏸ Paused\nTap to resume", loading: "Loading…",
-      resumeTag: "in progress", saved: "game saved", full: "This device can run up to {n} games at once.", nofit: "No room for another frame on this screen.", slow: "⚠ Device is slow: side frames paused", slowAdd: "Device is slow, can't add a frame right now.",
+      resumeTag: "in progress", left: "{t} left", saved: "game saved", full: "This device can run up to {n} games at once.", nofit: "No room for another frame on this screen.", slow: "⚠ Device is slow: side frames paused", slowAdd: "Device is slow, can't add a frame right now.",
       selMax: "No room: unselect a game.", timeH: "Time's up for today", timeP: "The time limit set by a parent has been reached. See you tomorrow!", home: "Back home", sel: "Selected", page: "Page", min: "min" }
   };
   var t = function () { return T[LANG]; };
@@ -296,16 +297,25 @@ body.side #perf{max-width:50px;font-size:10px}
   function togglePanel(it) {
     var open = !it.el.classList.contains("po-open");
     closePanels();
-    if (open) { it.el.classList.add("po-open"); select(it); render(it); }
+    if (open) { it.el.classList.add("po-open"); select(it); it.menuPaused = true; sync(it); render(it); }
   }
-  function closePanels() { items.forEach(function (o) { if (o.el) o.el.classList.remove("po-open"); }); closeHp(); }
+  /* MỞ MENU = TẠM DỪNG: panel ⋯ của một khung dừng khung đó (khung khác vẫn chạy); menu chung #hm / bảng chọn game dừng TẤT CẢ khung đang chạy. Cờ riêng it.menuPaused (không đè it.userPaused: người dùng đã chủ động dừng thì đóng menu vẫn dừng).
+     Đóng menu (bấm lại, ra ngoài, Esc, chạm vào game) → chạy tiếp: game thời gian thực đang chơi đếm 3-2-1, game theo lượt chạy ngay. */
+  function pauseAllMenu() { items.forEach(function (o) { if (o.where === "slot" && o.fr) { o.menuPaused = true; sync(o); } }); }
+  function resumeMenu() {
+    items.forEach(function (o) {
+      if (!o.menuPaused) return; o.menuPaused = false;
+      if (o.where === "slot" && o.fr && o.ready && o.g.realtime && o.wasPlaying && !o.userPaused && !o.autoPaused && !o.counting) runCountdown(o); else sync(o);
+    });
+  }
+  function closePanels() { items.forEach(function (o) { if (o.el) o.el.classList.remove("po-open"); }); closeHp(); resumeMenu(); }
 
   /* ---------- giao thức ---------- */
   function send(it, cmd) { try { if (it.fr && it.fr.contentWindow) it.fr.contentWindow.postMessage({ np: 1, type: "np-cmd", cmd: cmd }, location.origin); } catch (e) {} }
   /* khung phải tạm dừng khi: người dùng/máy chậm tạm dừng, đang ở khay (đóng băng), đang đếm ngược 3-2-1 */
   function sync(it) {
     if (!it.fr || !it.ready) return;
-    var want = !!(it.userPaused || it.autoPaused || it.where === "tray" || it.counting);
+    var want = !!(it.userPaused || it.autoPaused || it.menuPaused || it.where === "tray" || it.counting);
     if (want && !it.sentPaused) { it.sentPaused = true; send(it, "pause"); }
     else if (!want && it.sentPaused) { it.sentPaused = false; send(it, "resume"); }
     render(it);
@@ -328,14 +338,14 @@ body.side #perf{max-width:50px;font-size:10px}
     else if (d.type === "np-hud") { it.hud = d; if (d.state === "playing") { it.wasPlaying = true; it.lastPlay = now(); } else if (d.state === "over" || d.state === "idle") it.wasPlaying = false; render(it); renderTrayLater(); }
     else if (d.type === "np-snap") { if (it._snap) { var r = it._snap; it._snap = null; r(d.dataUrl || null); } }
     else if (d.type === "np-key") { if (d.key === "Escape") closePanels(); }
-    else if (d.type === "np-focus") { if (sel !== it && it.where === "slot") select(it); }
+    else if (d.type === "np-focus") { var menuOpen = $("hp").classList.contains("on") || items.some(function (o) { return o.el && o.el.classList.contains("po-open"); }); if (menuOpen) closePanels(); if (sel !== it && it.where === "slot") select(it); }
   });
   function snapshot(it) {
     return new Promise(function (res) { if (!it.fr || !it.ready) return res(null); var done = false, f = function (v) { if (!done) { done = true; res(v); } }; it._snap = f; send(it, "snapshot"); setTimeout(function () { f(null); }, 500); });
   }
 
   /* ---------- vòng đời khung ---------- */
-  function newItem(id) { var g = M.flag(id); var it = { id: id, g: g, mode: g.mode, where: "tray", fr: null, el: null, hud: null, thumb: null, ready: false, sentPaused: false, userPaused: false, autoPaused: false, userMuted: false, counting: false, wasPlaying: false, lastUsed: now(), lastPlay: 0, firstAt: now() }; items.push(it); it.el = buildEl(it); it.el.classList.add("hid"); return it; }
+  function newItem(id) { var g = M.flag(id); var it = { id: id, g: g, mode: g.mode, where: "tray", fr: null, el: null, hud: null, thumb: null, ready: false, sentPaused: false, userPaused: false, autoPaused: false, menuPaused: false, userMuted: false, counting: false, wasPlaying: false, lastUsed: now(), lastPlay: 0, firstAt: now() }; items.push(it); it.el = buildEl(it); it.el.classList.add("hid"); return it; }
   function makeFrame(it) {
     var resume = hasSave(it.id), fr = document.createElement("iframe");
     fr.setAttribute("allow", "autoplay; microphone"); fr.title = gname(it.id); fr.src = gameUrl(it.id, resume && it.g.resumable);
@@ -429,9 +439,11 @@ body.side #perf{max-width:50px;font-size:10px}
       var label = gname(it.id) + (it.wasPlaying ? " — " + t().resumeTag : "") + (sc != null ? " · " + sc : "");
       b.setAttribute("aria-label", label); b.title = label;
       var im = it.thumb ? '<img alt="" src="' + it.thumb + '">' : '<span>' + it.g.icon + '</span>';
-      if (wide) { b.innerHTML = '<span class="im">' + im + '</span><span class="tx"><b></b><span></span></span>'; b.querySelector("b").textContent = gname(it.id); b.querySelector(".tx span").textContent = (it.wasPlaying ? t().resumeTag : t().saved) + (sc != null ? " · " + sc : ""); }
-      else { b.innerHTML = im + (sc != null ? '<span class="sc">' + sc + '</span>' : "") + (it.wasPlaying ? '<span class="pz">⏸</span>' : ""); }
-      b.addEventListener("click", function () { closeHp(); switchTo(it); }); tr.appendChild(b);
+      var tl = it.g.realtime && h.time != null && h.time >= 0 && it.wasPlaying ? "⏸ " + Math.floor(h.time / 60) + ":" + String(Math.floor(h.time % 60)).padStart(2, "0") : "";   /* game có đếm ngược: còn bao nhiêu giây khi bị đóng băng */
+      if (tl) { label += " — " + t().left.replace("{t}", tl.slice(2)); b.setAttribute("aria-label", label); b.title = label; }
+      if (wide) { b.innerHTML = '<span class="im">' + im + (tl ? '<span class="tm">' + tl + '</span>' : "") + '</span><span class="tx"><b></b><span></span></span>'; b.querySelector("b").textContent = gname(it.id); b.querySelector(".tx span").textContent = (it.wasPlaying ? t().resumeTag : t().saved) + (sc != null ? " · " + sc : "") + (tl ? " · " + tl : ""); }
+      else { b.innerHTML = im + (tl ? '<span class="tm">' + tl + '</span>' : (it.wasPlaying ? '<span class="pz">⏸</span>' : "")) + (sc != null && !tl ? '<span class="sc">' + sc + '</span>' : ""); }
+      b.addEventListener("click", function () { if (main) main.menuPaused = false; closeHp(); resumeMenu(); switchTo(it); }); tr.appendChild(b);
     });
     if (list.length > shown.length) { var m = document.createElement("span"); m.id = "more"; m.textContent = "+" + (list.length - shown.length); tr.appendChild(m); }
   }
@@ -445,12 +457,12 @@ body.side #perf{max-width:50px;font-size:10px}
     return list.length <= CAP.slots && fits(list);
   }
   function openSheet() {
-    closePanels(); sheetSel = []; page = 0; $("shT").textContent = t().pick; $("bStart").textContent = t().start; $("sheet").hidden = false;
+    items.forEach(function (o) { if (o.el) o.el.classList.remove("po-open"); }); closeHp(); pauseAllMenu(); sheetSel = []; page = 0; $("shT").textContent = t().pick; $("bStart").textContent = t().start; $("sheet").hidden = false;
     var box = $("flt"); box.textContent = "";
     [["all", t().all], ["parallel", t().par], ["focus", t().foc]].forEach(function (d) { var b = document.createElement("button"); b.type = "button"; b.textContent = d[1]; b.dataset.f = d[0]; b.setAttribute("aria-pressed", String(flt === d[0])); b.addEventListener("click", function () { flt = d[0]; page = 0; renderSheet(); }); box.appendChild(b); });
     renderSheet();
   }
-  function closeSheet() { $("sheet").hidden = true; }
+  function closeSheet() { $("sheet").hidden = true; resumeMenu(); }
   function renderSheet() {
     $("flt").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.f === flt)); });
     var ids = pool().filter(function (i) { return flt === "all" || M.flag(i).mode === flt; }), box = $("tiles"), r = box.getBoundingClientRect();
@@ -518,8 +530,8 @@ body.side #perf{max-width:50px;font-size:10px}
     layout(); renderTray(); if (!$("sheet").hidden) renderSheet();
   }
   $("bBack").addEventListener("click", function () { location.href = PORTAL_HOME; });
-  $("hm").addEventListener("click", function (e) { e.stopPropagation(); var open = !$("hp").classList.contains("on"); closePanels(); if (open) { $("hp").classList.add("on"); $("hm").classList.add("on"); } });
-  $("hHome").addEventListener("click", function () { location.href = PORTAL_HOME; }); $("hAdd").addEventListener("click", function () { closeHp(); openSheet(); });
+  $("hm").addEventListener("click", function (e) { e.stopPropagation(); var open = !$("hp").classList.contains("on"); closePanels(); if (open) { $("hp").classList.add("on"); $("hm").classList.add("on"); pauseAllMenu(); } });
+  $("hHome").addEventListener("click", function () { location.href = PORTAL_HOME; }); $("hAdd").addEventListener("click", function () { closeHp(); openSheet(); });   /* menuPaused giữ nguyên: bảng chọn mở thì game vẫn dừng, closeSheet mới chạy tiếp */
   $("bAdd").addEventListener("click", openSheet); $("shX").addEventListener("click", closeSheet); $("bStart").addEventListener("click", startSelected);
   $("sheet").addEventListener("click", function (e) { if (e.target === $("sheet")) closeSheet(); });
   $("pgPrev").addEventListener("click", function () { page--; renderSheet(); }); $("pgNext").addEventListener("click", function () { page++; renderSheet(); });
@@ -534,8 +546,8 @@ body.side #perf{max-width:50px;font-size:10px}
   /* API cho bài đo (scripts/cozygame/check-multi.js) và gỡ lỗi */
   window.NPMulti = { booted: false, caps: function () { return CAP; }, add: addOne, addTray: addTray, switchTo: function (id) { var it = find(id); return it ? switchTo(it) : null; }, select: function (id) { var it = find(id); if (it) select(it); },
     close: function (id) { var it = find(id); if (it) closeItem(it); }, evict: function (id) { var it = find(id); if (it && it.fr) evict(it); }, setSlow: setSlow, isSlow: function () { return slow; },
-    items: function () { return items.map(function (i) { var r = i.el.getBoundingClientRect(); return { id: i.id, mode: i.mode, where: i.where, alive: !!i.fr, ready: i.ready, sel: sel === i, paused: !!(i.userPaused || i.autoPaused), sentPaused: i.sentPaused, saved: !!i.saved, hud: i.hud, thumb: !!i.thumb, counting: i.counting, rect: [Math.round(r.left), Math.round(r.top), Math.round(r.width), Math.round(r.height)] }; }); },
-    frame: function (id) { var it = find(id); return it && it.fr; }, alive: function () { return alive().length; }, main: function () { return main && main.id; }, plan: plan, overlaps: overlaps, fits: function (ids) { return fits(ids.map(function (i) { return { g: M.flag(i) }; })); } };
+    items: function () { return items.map(function (i) { var r = i.el.getBoundingClientRect(); return { id: i.id, mode: i.mode, where: i.where, alive: !!i.fr, ready: i.ready, sel: sel === i, paused: !!(i.userPaused || i.autoPaused), menuPaused: !!i.menuPaused, sentPaused: i.sentPaused, saved: !!i.saved, hud: i.hud, thumb: !!i.thumb, counting: i.counting, rect: [Math.round(r.left), Math.round(r.top), Math.round(r.width), Math.round(r.height)] }; }); },
+    thumb: function (id) { var it = find(id); return it && it.thumb; }, frame: function (id) { var it = find(id); return it && it.fr; }, alive: function () { return alive().length; }, main: function () { return main && main.id; }, plan: plan, overlaps: overlaps, fits: function (ids) { return fits(ids.map(function (i) { return { g: M.flag(i) }; })); } };
   applyText(); onResize();
   if (isTimeUp()) showLock();
   else {

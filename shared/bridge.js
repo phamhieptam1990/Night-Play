@@ -286,7 +286,7 @@ window.NP = (function () {
       };
     })();
     ["pointerdown", "mousedown", "touchstart", "click", "keydown", "keyup", "wheel"].forEach(function (n) {   /* đang tạm dừng: nuốt thao tác (host cũng phủ lớp chắn) */
-      addEventListener(n, function (e) { if (mPaused) { e.stopImmediatePropagation(); if (e.cancelable) e.preventDefault(); } }, { capture: true, passive: false });
+      addEventListener(n, function (e) { if (mPaused) { if (n === "pointerdown") post({ type: "np-focus" }); if (n === "keydown" && e.key === "Escape") post({ type: "np-key", key: "Escape" }); e.stopImmediatePropagation(); if (e.cancelable) e.preventDefault(); } }, { capture: true, passive: false });
     });
     addEventListener("pointerdown", function () { post({ type: "np-focus" }); }, true);
     addEventListener("keydown", function (e) { if (e.key === "Escape") post({ type: "np-key", key: "Escape" }); }, true);   /* phím trong iframe không nổi lên host: chuyển Esc để host đóng panel */
@@ -309,9 +309,17 @@ window.NP = (function () {
     if (score == null) { var h = document.querySelector(".hud"); if (h && h.offsetParent !== null) score = numOf(h.textContent); }
     var combo = o.combo != null ? o.combo : g("combo") != null ? g("combo") : g("streak") != null ? g("streak") : domNum(["combo", "pgStreak"]);
     var moves = o.moves != null ? o.moves : g("mv") != null ? g("mv") : g("moves") != null ? g("moves") : domNum(["sMv", "mv"]);
+    /* thời gian còn lại (giây) cho game có đồng hồ đếm ngược: state timeLeft/tl, hoặc ô DOM đếm NGƯỢC (#time Đập Deadline, #tm Đoán Tuổi, #svTimer Sống Sót). KHÔNG đoán từ nhãn "Giây" (nhiều game đó là thời gian ĐÃ qua) */
+    var time = o.time != null ? o.time : g("timeLeft") != null ? g("timeLeft") : g("tl") != null ? g("tl") : domNum(["time", "tm", "svTimer"]);
     var playing = !!st; if (playing) mOver = false;
     var best = null; try { best = numOf(localStorage.getItem("np-hi-" + gid)); } catch (e) {}
-    return { type: "np-hud", id: gid, hc: hudScan(), score: score, combo: combo, moves: moves, best: best, state: mPaused ? "paused" : playing ? "playing" : mOver ? "over" : "idle" };
+    return { type: "np-hud", id: gid, hc: hudScan(), time: time, score: score, combo: combo, moves: moves, best: best, state: mPaused ? "paused" : playing ? "playing" : mOver ? "over" : "idle" };
+  }
+  /* ẢNH CHỤP cho khay thumbnail: vuông 128px, nền ĐẶC (màu nền thật của game), canvas vẽ "contain" giữa ô — không cắt, không để lộ vùng trong suốt/đen.
+     Canvas trong suốt (game vẽ trên nền CSS) khi lưu JPEG sẽ thành ĐEN → nếu > 30% điểm ảnh là trong suốt hoặc đen thuần thì trả null (host dùng icon). Host chụp TRƯỚC khi ẩn khung. */
+  function solidBg(el) {
+    for (var n = el; n; n = n.parentElement) { var c = getComputedStyle(n).backgroundColor, m = /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/.exec(c); if (m && (m[4] == null || +m[4] > 0.9)) return c; }
+    return "#1c1833";
   }
   function snapCanvas() {
     var best = null, ba = 0, cs = document.querySelectorAll("canvas");
@@ -321,11 +329,21 @@ window.NP = (function () {
     }
     if (!best || ba < 4000) return null;
     try {
-      var k = Math.min(1, 160 / Math.max(best.width, best.height)), t = document.createElement("canvas"); t.width = Math.max(1, Math.round(best.width * k)); t.height = Math.max(1, Math.round(best.height * k));
-      var x = t.getContext("2d"); x.fillStyle = "#1c1833"; x.fillRect(0, 0, t.width, t.height); x.drawImage(best, 0, 0, t.width, t.height);
-      return t.toDataURL("image/jpeg", 0.6);
+      var S = 128, P = 64, p = document.createElement("canvas"); p.width = P; p.height = P; var px = p.getContext("2d"); px.drawImage(best, 0, 0, P, P);   /* thăm dò 64x64 */
+      var d = px.getImageData(0, 0, P, P).data, x0 = P, y0 = P, x1 = -1, y1 = -1, ne = 0;
+      for (var yy = 0; yy < P; yy++) for (var xx = 0; xx < P; xx++) { var o = (yy * P + xx) * 4; if (d[o + 3] >= 16 && (d[o] >= 6 || d[o + 1] >= 6 || d[o + 2] >= 6)) { ne++; if (xx < x0) x0 = xx; if (xx > x1) x1 = xx; if (yy < y0) y0 = yy; if (yy > y1) y1 = yy; } }
+      if (ne < P * P * 0.05 || x1 < x0) return null;                    /* quá trống / đen: dùng icon */
+      /* hộp nội dung (bỏ vùng trong suốt/đen ở rìa), rồi cắt VUÔNG GIỮA hộp đó (cover, không để lộ nền) */
+      var kx = best.width / P, ky = best.height / P, sx = x0 * kx, sy = y0 * ky, sw = (x1 - x0 + 1) * kx, sh = (y1 - y0 + 1) * ky, side = Math.min(sw, sh);
+      sx += (sw - side) / 2; sy += (sh - side) / 2;
+      var t = document.createElement("canvas"); t.width = S; t.height = S; var x = t.getContext("2d"); x.fillStyle = solidBg(best.parentElement || document.body); x.fillRect(0, 0, S, S);
+      x.drawImage(best, sx, sy, side, side, 0, 0, S, S);
+      var f = x.getImageData(0, 0, S, S).data, bad = 0, n = 0; for (var q = 0; q < f.length; q += 16) { n++; if (f[q] < 6 && f[q + 1] < 6 && f[q + 2] < 6) bad++; }   /* sau khi dựng: > 30% đen thuần → bỏ */
+      if (bad / n > 0.3) return null;
+      return t.toDataURL("image/jpeg", 0.72);
     } catch (e) { return null; }
   }
+
   /* Pop Play dọc: khung chơi .play (3:4) rộng --w; mặc định chừa ~150px cho thanh trên + hàng điểm. Trong ?multi=1 thanh trên đã ẩn nên đo lại phần .side còn lại và tính --w cho vừa khung */
   function fitPop() {
     try {
