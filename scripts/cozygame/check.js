@@ -107,6 +107,10 @@ const b64 = o => Buffer.from(JSON.stringify(o)).toString("base64").replace(/\+/g
   console.log("== skin Night Pass");
   const sk = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-skins.js")].concat(process.argv.includes("--full-skins") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });
   note(sk.status === 0, "tổng", "check-skins.js báo lỗi (skin Night Pass bóp thẻ/nút, tương phản, nền) — xem log phía trên");
+  /* nền ngoài cột theo chủ đề game/skin (shared/widebg.js, scripts/cozygame/check-widebg.js) — bản nhanh, thêm --full-widebg để quét mọi game/skin × 3 cỡ */
+  console.log("== nền ngoài cột");
+  const wb = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-widebg.js")].concat(process.argv.includes("--full-widebg") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });
+  note(wb.status === 0, "tổng", "check-widebg.js báo lỗi (nền ngoài cột thiếu/giống free/giống skin khác/che nút) — xem log phía trên");
   /* trang landing giới thiệu (scripts/cozygame/check-landing.js) — bản nhanh, bỏ --quick bằng --full-landing */
   console.log("== landing giới thiệu");
   const ld = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-landing.js")].concat(process.argv.includes("--full-landing") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });

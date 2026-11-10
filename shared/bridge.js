@@ -401,3 +401,11 @@ window.NP = (function () {
     resumeNow: function () { if (resumeFn) try { resumeFn(); } catch (x) {} }
   };
 })();
+
+/* nền ngoài cột theo chủ đề game / skin (màn rộng): nạp shared/widebg.js cạnh file này */
+(function () {
+  try {
+    var cs = document.currentScript, src = cs && cs.src; if (!src || window.NPWide) return;
+    var j = document.createElement("script"); j.src = src.replace(/bridge\.js(\?.*)?$/, "widebg.js$1"); j.async = false; document.head.appendChild(j);
+  } catch (e) {}
+})();

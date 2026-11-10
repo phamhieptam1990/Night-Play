@@ -371,7 +371,7 @@ function applyLayout(l){PF.safe=l==="full"?{top:112,bottom:64,pad:34}:l==="windo
 PF.applyLayout=applyLayout;
 function startRound(type,resume,opts){
   if(!PF.types[type])return;audio();
-  PF.S=newState(type,opts);applyLayout(PF.S.skin?PF.S.skin.layout:"classic");PF.cur=type;running=true;paused=false;pausedBy=null;showOv(null);$("pauseBtn").hidden=false;$("sc").textContent="0";renderDots();
+  PF.S=newState(type,opts);applyLayout(PF.S.skin?PF.S.skin.layout:"classic");window.NPWide&&NPWide.skin(PF.S.skin,type+":"+(PF.skinSel[type]||"default"));PF.cur=type;running=true;paused=false;pausedBy=null;showOv(null);$("pauseBtn").hidden=false;$("sc").textContent="0";renderDots();
   const ty=PF.types[type];if(ty.init)ty.init(PF.S);
   if(!ty.custom){$("askTxt").textContent="";}else setAsk(t("ask.stars"),t("ask.stars"),"");
   if(resume){const S=PF.S;S.score=Math.max(0,Math.min(1500,resume.score|0));S.correct=resume.correct|0;S.wrong=resume.wrong|0;S.streak=resume.streak|0;S.done=resume.done|0;S.spawned=resume.done|0;   /* cổng đang bay lúc chuyển giao không được mang theo: sinh lại, kẻo kẹt không còn cổng nào */
@@ -408,7 +408,7 @@ function shareText(info){const em=info.dots.map(d=>d===1?"🟩":d===2?"🟥":"�
 async function doShareText(){const tx=shareText(endInfo);if(navigator.share){try{await navigator.share({text:tx});return}catch(e){if(e&&e.name==="AbortError")return}}try{await navigator.clipboard.writeText(tx);toast(t("txt.copied"),1600)}catch(e){toast(tx,4000)}}
 function retry(){if(HELPER||!endInfo)return;if(endInfo.daily)startDaily();else startRound(endInfo.type)}
 
-function goHome(){if(window.NPAudio)NPAudio.silence();else if(window.speechSynthesis)speechSynthesis.cancel();applyLayout("classic");running=false;paused=false;PF.S=null;$("pauseBtn").hidden=true;$("sc").textContent="0";renderDots();setAsk("","","");$("askTxt").textContent=t("st.p");showOv("ovStart");renderCards();draw()}
+function goHome(){if(window.NPAudio)NPAudio.silence();else if(window.speechSynthesis)speechSynthesis.cancel();applyLayout("classic");window.NPWide&&NPWide.skin(null);running=false;paused=false;PF.S=null;$("pauseBtn").hidden=true;$("sc").textContent="0";renderDots();setAsk("","","");$("askTxt").textContent=t("st.p");showOv("ovStart");renderCards();draw()}
 
 function pauseRound(by){if(!running||paused)return;paused=true;pausedBy=by==="user"?"user":"parent";if(window.speechSynthesis)speechSynthesis.cancel();if(pausedBy==="user"){$("ovPause").hidden=false}}
 function resumeRound(by){if(!paused)return;if(by==="parent"&&pausedBy==="user")return;paused=false;pausedBy=null;$("ovPause").hidden=true;last=performance.now()}

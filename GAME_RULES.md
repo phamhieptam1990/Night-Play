@@ -83,6 +83,7 @@ Dự án có 3 nhóm: **Cozy Play** (`cozyplay/`: 9 game sinh tự động từ 
 - **CSS của giao diện Night Pass KHÔNG được dùng selector rộng** như `#play .btn{border-radius:50%;width:15cqw;height:15cqw}` (lỗi Sếp Ơi Em Xin Nghỉ, skin zen: thẻ "Tình huống hôm nay" #bDaily cũng là `.btn` nên bị bóp thành vòng tròn 59px, chữ chạy dọc, chữ trắng trên nền pastel). Muốn nút tròn thì nhắm đúng id/class của nút nhỏ đó; thẻ daily/nút Chơi lớn (#bDaily, #startBtn, #bPlay) phải rộng ≥55% khung chơi, cao ≥44px, tương phản ≥4.5:1, không đặt `width/height` cố định trên `.btn` chung.
 - Nền skin ở màn ngang/desktop là `#play::before` (z-index -1) → `#play` phải có `isolation:isolate` (đã có trong `landscape.css`), nếu không nền body che mất nền skin ngoài cột game.
 - **Mọi game/skin Night Pass phải qua `scripts/cozygame/check-skins.js`** (bản nhanh nằm trong check.js; chạy đủ: `node scripts/cozygame/check-skins.js`, hoặc `check-skins.js <id>`; `--shots=<thư mục>` để chụp ảnh).
+- **NỀN NGOÀI CỘT (màn rộng: máy tính, iPad ngang) theo chủ đề game/skin** (`shared/widebg.js`, nạp tự động bởi `shared/bridge.js`): khi cửa sổ rộng hơn cột game, hai bên hiện nền riêng = gradient của chính khung chơi (`--pbg` / `--sb`) + họa tiết emoji theo chủ đề + một kiểu vân (sọc/chấm/lưới/vòng/dải) chọn theo "hạt giống" của skin. Mỗi skin Night Pass PHẢI có `deco:[...]` (3–5 emoji ĐÚNG chủ đề skin: Triết Lý = 🍃🪷☯️🪨, Cà Phê = ☕🥐🫘, Thể Thao = ⚽🏅💪…) và `--pbg`/`--sb` riêng, vì nền ngoài cột lấy từ đó; muốn riêng hơn thì khai báo biến CSS `--wide-emoji:"🪷 ☯️"` và/hoặc `--wide-bg:<giá trị background đầy đủ>` trong vars của skin. Bản free dùng deco của game (hoặc bảng `TH` trong widebg.js — game MỚI phải thêm một dòng chủ đề vào bảng đó). KHÔNG tải ảnh, KHÔNG animation, lớp `#npWide` là `position:fixed;z-index:-1;pointer-events:none`, ẩn dưới 700px (điện thoại không đổi). Khi `#play::before` phủ cả bề ngang (màn ngang, `landscape.css`) lớp cố định bị che nên họa tiết đặt lên `.deco` (lớp `html.npw-cover`). **Game/skin mới phải qua `scripts/cozygame/check-widebg.js`** (nền khác free + khác mọi skin khác, không che nút, không cuộn; bản nhanh nằm trong check.js, đủ: `check-widebg.js` hoặc `check-widebg.js <id>`, `--shots=<thư mục>` để chụp ảnh).
 - Mã Night Pass chỉ giao qua `/api/pro/<id>.js`; `main(PF,OPTS)` chạy trong trình duyệt, không dùng biến ngoài hàm. Khoá lại (`lockPro`) phải trả giao diện về free.
 
 ## 5b. Màn kết thúc (không để "chán")
@@ -185,6 +186,7 @@ Nguyên tắc dự án: game chạy **offline, không lag, không gọi máy ch�
 - [ ] `check.js` "✓ tất cả đạt"
 - [ ] `check-landscape.js` "✓ màn ngang đạt" (nếu đụng bố cục/giao diện)
 - [ ] `check-skins.js` "✓ skin Night Pass đạt" (nếu đụng `server/pro/*.js` hoặc CSS dùng chung)
+- [ ] `check-widebg.js` "✓ nền ngoài cột đạt" (game/skin mới: có deco đúng chủ đề + dòng chủ đề trong `shared/widebg.js`)
 - [ ] Ảnh free + từng giao diện Night Pass đã tự nhìn (dọc + ngang)
 - [ ] Chơi hộ: mở link `?helper=1`, tiếp tục đúng ván dở, nút bị ẩn
 - [ ] Thách đấu: mở link `#ch=...` được
