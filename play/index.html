@@ -2,27 +2,27 @@
 <html lang="vi" data-app="hub">
 <head>
 <meta charset="utf-8">
-<script src="shared/guard.js"></script>
-<script src="shared/device.js"></script>
+<script src="../shared/guard.js"></script>
+<script src="../shared/device.js"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Pop Play · Night Play</title>
 <meta name="description" content="Chọn thế giới của bạn: Pop Play cho bé, Night Play cho người lớn.">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#F6F4F1">
-<link rel="manifest" href="manifest.webmanifest">
+<link rel="manifest" href="../manifest.webmanifest">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Play Hub">
-<link rel="apple-touch-icon" href="shared/app-180.png">
+<link rel="apple-touch-icon" href="../shared/app-180.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='32' height='64' fill='%23FF5A1F'/%3E%3Crect x='32' width='32' height='64' fill='%237C5CFF'/%3E%3Ccircle cx='32' cy='32' r='14' fill='%23fff'/%3E%3C/svg%3E">
 <script>
 try{var t=localStorage.getItem("theme")}catch(e){}
 document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
 </script>
-<link rel="stylesheet" href="shared/theme.css">
-<link rel="stylesheet" href="shared/bars.css">
-<link rel="stylesheet" href="shared/align.css">
+<link rel="stylesheet" href="../shared/theme.css">
+<link rel="stylesheet" href="../shared/bars.css">
+<link rel="stylesheet" href="../shared/align.css">
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.4}
@@ -86,8 +86,8 @@ h1{margin:0;text-align:center;font-size:clamp(26px,min(5vw,6vh),46px);line-heigh
 .foot:has(.bars-more) .bars-more{grid-column:2;grid-row:1 / span 2;order:0}
 @media (prefers-reduced-motion:reduce){.card,.go svg{transition:none}}
 </style>
-<script src="shared/offline.js" defer></script>
-<script src="shared/inapp.js" defer></script>
+<script src="../shared/offline.js" defer></script>
+<script src="../shared/inapp.js" defer></script>
 </head>
 <body>
 <nav class="nav" aria-label="Main">
@@ -96,7 +96,7 @@ h1{margin:0;text-align:center;font-size:clamp(26px,min(5vw,6vh),46px);line-heigh
     <span>Home</span>
   </div>
   <div class="tools">
-    <a id="passBtn" class="pill" href="subscribe.html"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/></svg><span></span></a>
+    <a id="passBtn" class="pill" href="../subscribe.html"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/></svg><span></span></a>
     <button id="themeBtn" class="ico" type="button" aria-label="Theme">
       <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
       <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
@@ -109,7 +109,7 @@ h1{margin:0;text-align:center;font-size:clamp(26px,min(5vw,6vh),46px);line-heigh
   <h1 id="h1"></h1>
   <p class="sub" id="sub"></p>
   <div class="cards">
-    <a class="card pop" id="aPop" href="popplay/index.html">
+    <a class="card pop" id="aPop" href="../popplay/index.html">
       <div class="tiles" aria-hidden="true">
         <svg viewBox="0 0 512 512"><defs><linearGradient id="p1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7EC8FF"/><stop offset="1" stop-color="#4D8DFF"/></linearGradient></defs><rect width="512" height="512" fill="url(#p1)"/><path d="M120 200l20-110 90 60zM392 200l-20-110-90 60z" fill="#FFB347"/><circle cx="256" cy="290" r="150" fill="#FFB347"/><circle cx="200" cy="270" r="26" fill="#fff"/><circle cx="312" cy="270" r="26" fill="#fff"/><circle cx="205" cy="274" r="13" fill="#222"/><circle cx="307" cy="274" r="13" fill="#222"/><path d="M215 340q41 40 82 0" stroke="#222" stroke-width="12" fill="none" stroke-linecap="round"/></svg>
         <svg viewBox="0 0 512 512"><defs><linearGradient id="p2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#C6F0C2"/><stop offset="1" stop-color="#6FD08C"/></linearGradient></defs><rect width="512" height="512" fill="url(#p2)"/><ellipse cx="190" cy="120" rx="34" ry="100" fill="#F8C8DC"/><ellipse cx="322" cy="120" rx="34" ry="100" fill="#F8C8DC"/><circle cx="256" cy="300" r="140" fill="#FFE4EE"/><circle cx="200" cy="280" r="26" fill="#fff"/><circle cx="312" cy="280" r="26" fill="#fff"/><circle cx="205" cy="284" r="13" fill="#222"/><circle cx="307" cy="284" r="13" fill="#222"/><path d="M215 350q41 40 82 0" stroke="#222" stroke-width="12" fill="none" stroke-linecap="round"/></svg>
@@ -121,7 +121,7 @@ h1{margin:0;text-align:center;font-size:clamp(26px,min(5vw,6vh),46px);line-heigh
       <span class="go"><span id="gPop"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
     </a>
 
-    <a class="card night" id="aNight" href="cozyplay/index.html">
+    <a class="card night" id="aNight" href="../cozyplay/index.html">
       <div class="tiles" aria-hidden="true">
         <svg viewBox="0 0 512 512"><defs><linearGradient id="n1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6A48F0"/><stop offset="1" stop-color="#2B1B8A"/></linearGradient></defs><rect width="512" height="512" fill="url(#n1)"/><rect x="130" y="110" width="200" height="290" rx="26" fill="#fff" transform="rotate(-12 230 255)"/><rect x="190" y="110" width="200" height="290" rx="26" fill="#fff" transform="rotate(10 290 255)"/><path d="M290 190c-30 40-70 60-70 100 0 30 40 38 70 10 30 28 70 20 70-10 0-40-40-60-70-100z" fill="#E5484D" transform="rotate(10 290 255)"/></svg>
         <svg viewBox="0 0 512 512"><defs><linearGradient id="n2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E5484D"/><stop offset="1" stop-color="#7A1020"/></linearGradient></defs><rect width="512" height="512" fill="url(#n2)"/><rect x="110" y="110" width="292" height="292" rx="56" fill="#fff"/><g fill="#1C1833"><circle cx="190" cy="190" r="26"/><circle cx="322" cy="190" r="26"/><circle cx="256" cy="256" r="26"/><circle cx="190" cy="322" r="26"/><circle cx="322" cy="322" r="26"/></g></svg>
@@ -137,11 +137,12 @@ h1{margin:0;text-align:center;font-size:clamp(26px,min(5vw,6vh),46px);line-heigh
 
 <footer class="foot">
   <span id="copy"></span>
-  <nav><a id="priv" href="privacy.html" target="_blank" rel="noopener"></a>
+  <nav><a id="priv" href="../privacy.html" target="_blank" rel="noopener"></a>
+  <a id="terms" href="../terms.html" target="_blank" rel="noopener"></a>
   <a id="mail" href="mailto:support@nightplay.vn"></a></nav>
 </footer>
 
-<script src="shared/track.js"></script>
+<script src="../shared/track.js"></script>
 <script>window.Track&&Track.view("home")</script>
 <script>
 const i18n = {
@@ -164,12 +165,12 @@ function applyLang(){
   const t = i18n[lang];
   document.documentElement.lang = lang;
   ["h1","sub","tPop","dPop","gPop","tNight","dNight","gNight"].forEach(k => { $(k).textContent = t[k]; });
-  $("priv").textContent = t.privacy; $("mail").textContent = t.contact;
+  $("priv").textContent = t.privacy; $("terms").textContent = lang === "vi" ? "Điều khoản" : "Terms"; $("mail").textContent = t.contact;
   $("copy").textContent = "© " + new Date().getFullYear() + " Play Hub. " + t.rights;
-  $("passBtn").href = "subscribe.html?from=index.html&lang=" + lang; $("passBtn").lastChild.textContent = t.pass; $("passBtn").setAttribute("aria-label", t.upgrade);
+  $("passBtn").href = "../subscribe.html?from=play/index.html&lang=" + lang; $("passBtn").lastChild.textContent = t.pass; $("passBtn").setAttribute("aria-label", t.upgrade);
   $("themeBtn").setAttribute("aria-label", t.theme);
   /* Truyền ngôn ngữ sang landing để khớp */
-  $("aPop").href = "popplay/index.html"; $("aNight").href = "cozyplay/index.html";
+  $("aPop").href = "../popplay/index.html"; $("aNight").href = "../cozyplay/index.html";
   menu.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.l === lang)));
 }
 const menu = $("langMenu");
@@ -202,9 +203,9 @@ addEventListener("resize", balance); addEventListener("load", balance);
 if(document.fonts && document.fonts.ready) document.fonts.ready.then(balance);
 applyLang();
 </script>
-<script src="shared/updated.js"></script>
-<script src="shared/bars.js"></script>
-<script src="shared/season.js"></script>
-<script src="shared/passwatch.js" defer></script>
+<script src="../shared/updated.js"></script>
+<script src="../shared/bars.js"></script>
+<script src="../shared/season.js"></script>
+<script src="../shared/passwatch.js" defer></script>
 </body>
 </html>

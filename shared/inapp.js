@@ -88,7 +88,7 @@
       var y = tt(); tx.textContent = y.msg; act.textContent = android ? y.chrome : y.copy; xb.setAttribute("aria-label", y.close); xb.title = y.close;
       q$(".g").textContent = y.guide + " " + y.paste; cb.textContent = y.copy; ob.textContent = y.chrome; ob.style.display = android ? "" : "none";
       q$(".rt").textContent = y.rest; q$(".rb").textContent = y.restBtn; q$(".niu").value = curUrl();
-      var path = location.pathname.replace(/[^/]*$/, ""); q$(".rb").setAttribute("href", (location.pathname.indexOf("/games/") > 0 ? "../../../" : /\/(cozyplay|popplay)\//.test(location.pathname) ? "../" : "") + "subscribe.html#restore");
+      var path = location.pathname.replace(/[^/]*$/, ""); q$(".rb").setAttribute("href", (location.pathname.indexOf("/games/") > 0 ? "../../../" : /\/(cozyplay|popplay|play)\//.test(location.pathname) ? "../" : "") + "subscribe.html#restore");
     }
     label(); new MutationObserver(label).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
     var toggle = function (on) { bar.classList.toggle("open", on === undefined ? !bar.classList.contains("open") : on); q$(".nire").classList.toggle("on", !isPass()); };

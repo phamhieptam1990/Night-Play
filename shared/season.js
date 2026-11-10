@@ -192,7 +192,7 @@
     ov.addEventListener("click", function (e) { if (e.target === ov) close(); });
     document.getElementById("nsClose").onclick = close;
     document.getElementById("nsShare").onclick = function () {
-      var url = location.origin + "/?ev=" + C.id, txt = shareText(n4);
+      var url = location.origin + "/play/?ev=" + C.id, txt = shareText(n4);
       if (navigator.share) { navigator.share({ text: txt, url: url }).catch(function () {}); return; }
       var full = txt + " " + url;
       (navigator.clipboard && navigator.clipboard.writeText(full).then(function () { toast(isEn() ? "Copied — paste it to a friend!" : "Đã chép — dán gửi bạn nhé!"); }, function () { toast(full); })) || toast(full);
@@ -218,7 +218,7 @@
     window.addEventListener("pageshow", function () { var p = document.getElementById("nsPill"); if (p) p.classList.remove("off"); });
     if (S.seen !== C.key && /\/games\//.test(location.pathname)) { /* trong game: không bật thông báo che nút; để trang cổng báo */ }
     else if (S.seen !== C.key) { S.seen = C.key; save(); setTimeout(function () { toast(C.ev.e + " " + (isEn() ? "New event: " : "Sự kiện mới: ") + nameOf(C.ev) + (isEn() ? " — tap the icon!" : " — chạm biểu tượng để xem!")); }, 1200); }
-    if (q.get("ev") && !document.getElementById("nsOv") && location.pathname.replace(/index\.html$/, "") === "/") setTimeout(openSheet, 900);
+    if (q.get("ev") && !document.getElementById("nsOv") && /^\/(play\/)?$/.test(location.pathname.replace(/index\.html$/, ""))) setTimeout(openSheet, 900);
   }
   window.NPSeason = { get: function () { return { id: C.id, key: C.key, from: C.from, to: C.to, today: today, n: W.n, tot: S.tot, stickers: stickers().map(function (o) { return o.got; }) }; }, bump: bump, open: openSheet, current: current, vnToday: vnToday };
   if (document.body) init(); else document.addEventListener("DOMContentLoaded", init);

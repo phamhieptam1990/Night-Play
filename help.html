@@ -67,7 +67,7 @@ ul.how b{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-i
 </head>
 <body>
 <nav class="nav" aria-label="Main">
-  <a class="mark" href="index.html"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#7C5CFF"/><path d="M0 0h32v64H0z" fill="#FF5A1F" clip-path="inset(0 round 18px 0 0 18px)"/><circle cx="32" cy="32" r="13" fill="#fff"/></svg><span>Home</span></a>
+  <a class="mark" href="play/index.html"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#7C5CFF"/><path d="M0 0h32v64H0z" fill="#FF5A1F" clip-path="inset(0 round 18px 0 0 18px)"/><circle cx="32" cy="32" r="13" fill="#fff"/></svg><span>Home</span></a>
   <div class="tools">
     <div class="seg" role="group" id="langSeg"><button type="button" data-l="vi" lang="vi" aria-label="Tiếng Việt">VI</button><button type="button" data-l="en" lang="en" aria-label="English">EN</button></div>
     <button id="themeBtn" class="ico" type="button" aria-label="Theme">
@@ -77,7 +77,7 @@ ul.how b{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-i
   </div>
 </nav>
 <main><section class="card" id="card" aria-live="polite"></section></main>
-<footer class="foot"><a id="fHome" href="index.html"></a><a id="fPriv" href="privacy.html"></a></footer>
+<footer class="foot"><a id="fHome" href="play/index.html"></a><a id="fPriv" href="privacy.html"></a></footer>
 
 <div id="stage" role="dialog" aria-modal="true">
   <div id="tag"></div>
@@ -117,8 +117,8 @@ let result = null, stage = "intro";
 function view() {
   const t = L(), card = $("card"); document.title = t.title; $("fHome").textContent = t.home; $("fPriv").textContent = t.priv; $("themeBtn").setAttribute("aria-label", t.theme);
   document.querySelectorAll("#langSeg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.l === root.lang)));
-  if (!valid) { card.innerHTML = WARN + "<h1>" + esc(t.bad) + "</h1><p>" + esc(t.badP) + '</p><a href="index.html">' + esc(t.more) + "</a>"; return; }
-  if (stage === "used") { card.innerHTML = WARN + "<h1>" + esc(t.used) + "</h1><p>" + esc(t.usedP) + '</p><a href="index.html">' + esc(t.more) + "</a>"; return; }
+  if (!valid) { card.innerHTML = WARN + "<h1>" + esc(t.bad) + "</h1><p>" + esc(t.badP) + '</p><a href="play/index.html">' + esc(t.more) + "</a>"; return; }
+  if (stage === "used") { card.innerHTML = WARN + "<h1>" + esc(t.used) + "</h1><p>" + esc(t.usedP) + '</p><a href="play/index.html">' + esc(t.more) + "</a>"; return; }
   if (stage === "done") { card.innerHTML = ICON + "<h1>" + esc(t.doneT) + '</h1><div class="big">' + (result.score | 0) + "</div><p>" + esc(t.pts) + " · " + esc(GN()) + "</p><p>" + esc(t.doneP) + '</p><button class="cta" id="more" type="button">' + esc(t.more) + "</button>"; $("more").onclick = () => { location.href = "index.html"; }; return; }
   card.innerHTML = ICON + "<h1>" + esc(t.t) + '</h1><p class="game">' + esc(GN()) + "</p><p>" + esc(t.p) + '</p>' + (rstate ? '<p class="game" style="font-size:15px">' + esc(t.resumeP) + '</p>' : '') + '<ul class="how"><li><b>1</b><span>' + esc(t.s1) + "</span></li><li><b>2</b><span>" + esc(t.s2) + "</span></li><li><b>3</b><span>" + esc(t.s3) + '</span></li></ul><button class="cta" id="go" type="button">' + esc(getTok() ? t.resume : t.start) + '</button><p class="err" id="err" role="alert"></p><p class="small">' + esc(t.privacy) + "</p>";
   $("go").onclick = start;

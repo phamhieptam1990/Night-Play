@@ -77,3 +77,8 @@ Thứ tự làm (bước 1–3 bạn làm trên trang web của nhà đăng ký/
 5. **Gắn tên miền vào Worker:** Workers & Pages → `night-play` → Settings → Domains & Routes → Add → Custom domain `nightplay.vn` (và `www.nightplay.vn` chuyển hướng về `nightplay.vn`). Sau đó cập nhật **SePay webhook** thành `https://nightplay.vn/api/sepay-webhook` (đường dẫn như đang dùng) và kiểm tra `/passcheck`.
 6. **Đổi email liên hệ công khai** từ Gmail cá nhân sang `support@nightplay.vn` (shared/site.js, index.html, subscribe.html, popplay/index.html, cozyplay/index.html, privacy.html) — CHỈ làm sau khi bước 2 chạy (gửi thử thư tới `support@` thấy về Gmail).
 Kiểm tra mail không vào spam: gửi thử OTP tới Gmail + một hộp thư khác, xem "Show original" có SPF/DKIM/DMARC = PASS.
+
+## Cấu trúc trang: `/` là landing, hub ở `/play/`
+- `https://nightplay.vn/` = landing (VI), `/en/` = landing EN, `/play/` = hub hai thẻ Pop Play / Night Play (PWA `start_url`). Nguồn landing ở `landing/` (build copy lên gốc `dist/`, tài nguyên ở `/lp/`).
+- `/gioi-thieu/` và `/gioi-thieu/en/` chuyển 301 về `/` và `/en/` (`dist/_redirects` do `scripts/build.js` ghi; `run_worker_first` vẫn chỉ `/api/*`, redirect của assets chạy ở lớp file tĩnh).
+- Sau deploy: purge cache Cloudflare cho `/`, `/index.html`, `/sw.js`, `/manifest.webmanifest`; gửi lại sitemap trong Search Console (đổi trang chủ, hreflang, canonical); người đã cài PWA nên gỡ và cài lại để nhận `start_url` mới (bản cũ vẫn mở được: `/` tự chuyển sang `/play/` khi chạy ở chế độ ứng dụng).

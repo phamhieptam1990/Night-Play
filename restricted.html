@@ -32,7 +32,7 @@ a,button{flex:1;display:inline-flex;align-items:center;justify-content:center;he
 <main role="alert">
   <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17.5v.01"/></svg>
   <h1 id="h"></h1><p id="p"></p>
-  <div class="row"><a class="s" id="home" href="index.html"></a><button class="p" id="re" type="button"></button></div>
+  <div class="row"><a class="s" id="home" href="play/index.html"></a><button class="p" id="re" type="button"></button></div>
 </main>
 <script src="shared/guard.js"></script>
 <script>
@@ -47,7 +47,7 @@ document.getElementById("re").textContent = vi ? "Tải lại trang" : "Reload p
 /* quay lại đúng trang đang xem (chỉ nhận đường dẫn tương đối, an toàn) */
 const from = new URLSearchParams(location.search).get("from") || "";
 const ok = /^\/[\w\-./]*(\?[\w\-./=&%]*)?$/.test(from) && !from.startsWith("//") && !/restricted\.html/.test(from);
-document.getElementById("re").addEventListener("click", () => { location.href = ok ? from : "index.html"; });
+document.getElementById("re").addEventListener("click", () => { location.href = ok ? from : "play/index.html"; });
 </script>
 <script src="shared/updated.js"></script>
 </body>

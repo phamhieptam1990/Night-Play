@@ -43,7 +43,9 @@ const MIME = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".
 function serveStatic(req, res, pathname) {
   let rel; try { rel = decodeURIComponent(pathname); } catch { return send(res, 400, { error: "bad_path" }); }
   if (rel.endsWith("/")) rel += "index.html";
-  const file = path.resolve(STATIC_ROOT, "." + rel);
+  let file = path.resolve(STATIC_ROOT, "." + rel);
+  /* Landing giới thiệu: nguồn nằm ở landing/ nhưng triển khai lên gốc (/, /en/, /lp/...; xem scripts/build.js) → bản dev tìm thêm ở landing/ */
+  if (!fs.existsSync(file) && !rel.startsWith("/landing/")) { const alt = path.resolve(STATIC_ROOT, "landing", "." + rel); if (alt.startsWith(path.join(STATIC_ROOT, "landing") + path.sep) && fs.existsSync(alt)) file = alt; }
   const inRoot = file.startsWith(STATIC_ROOT + path.sep);
   const hidden = path.relative(STATIC_ROOT, file).split(path.sep).some(s => s.startsWith(".") || s === "server" || s === "node_modules" || s === "netlify" || s === "scripts");
   if (!inRoot || hidden) return send(res, 404, { error: "not_found" });

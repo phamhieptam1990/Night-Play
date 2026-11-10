@@ -111,6 +111,21 @@ const b64 = o => Buffer.from(JSON.stringify(o)).toString("base64").replace(/\+/g
   console.log("== nền ngoài cột");
   const wb = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-widebg.js")].concat(process.argv.includes("--full-widebg") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });
   note(wb.status === 0, "tổng", "check-widebg.js báo lỗi (nền ngoài cột thiếu/giống free/giống skin khác/che nút) — xem log phía trên");
+  /* thẻ chào mừng lần đầu ở 2 trang cổng (scripts/cozygame/check-welcome.js) — bản nhanh, thêm --full-welcome để đo cả 5 cỡ màn hình */
+  console.log("== thẻ chào mừng");
+  const wl = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-welcome.js")].concat(process.argv.includes("--full-welcome") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });
+  note(wl.status === 0, "tổng", "check-welcome.js báo lỗi (thẻ chào mừng lần đầu) — xem log phía trên");
+  /* trang pháp lý privacy.html + terms.html (scripts/cozygame/check-legal.js) — bản nhanh, thêm --full-legal để đo đủ cỡ màn hình */
+  console.log("== trang pháp lý");
+  const lg = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-legal.js")].concat(process.argv.includes("--full-legal") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });
+  note(lg.status === 0, "tổng", "check-legal.js báo lỗi (privacy/terms) — xem log phía trên");
+  /* màn rộng: khung game phóng to tới 760px + hai cột bên lề của trang cổng (scripts/cozygame/check-widescreen.js, check-rails.js) — bản nhanh, thêm --full-wide để đo đủ */
+  console.log("== màn rộng");
+  const ws = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-widescreen.js")].concat(process.argv.includes("--full-wide") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });
+  note(ws.status === 0, "tổng", "check-widescreen.js báo lỗi (khung game màn rộng) — xem log phía trên");
+  console.log("== cột bên lề trang cổng");
+  const rl = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-rails.js")].concat(process.argv.includes("--full-wide") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });
+  note(rl.status === 0, "tổng", "check-rails.js báo lỗi (cột bên lề trang cổng) — xem log phía trên");
   /* trang landing giới thiệu (scripts/cozygame/check-landing.js) — bản nhanh, bỏ --quick bằng --full-landing */
   console.log("== landing giới thiệu");
   const ld = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-landing.js")].concat(process.argv.includes("--full-landing") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });
@@ -119,13 +134,6 @@ const b64 = o => Buffer.from(JSON.stringify(o)).toString("base64").replace(/\+/g
   console.log("== admin: tab Pass");
   const ap = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-adminpass.js")].concat(process.argv.includes("--full-adminpass") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });
   note(ap.status === 0, "tổng", "check-adminpass.js báo lỗi (tab Pass của admin) — xem log phía trên");
-  /* màn rộng: khung game phóng to tới 760px + hai cột bên lề của trang cổng (scripts/cozygame/check-widescreen.js, check-rails.js) — bản nhanh, thêm --full-wide để đo đủ */
-  console.log("== màn rộng");
-  const ws = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-widescreen.js")].concat(process.argv.includes("--full-wide") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });
-  note(ws.status === 0, "tổng", "check-widescreen.js báo lỗi (khung game màn rộng) — xem log phía trên");
-  console.log("== cột bên lề trang cổng");
-  const rl = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-rails.js")].concat(process.argv.includes("--full-wide") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });
-  note(rl.status === 0, "tổng", "check-rails.js báo lỗi (cột bên lề trang cổng) — xem log phía trên");
   console.log("\n" + (fails.length ? "✗ " + fails.length + " lỗi" : "✓ tất cả đạt"));
   process.exit(fails.length ? 1 : 0);
 })();

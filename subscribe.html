@@ -306,6 +306,7 @@ html[data-dens="4"] #s2 input[type=email]{padding:9px 12px}
     <button id="restore" type="button"></button>
     <a id="fMail" href="#"></a>
     <a id="fPriv" href="#" target="_blank" rel="noopener"></a>
+    <a id="fTerms" href="terms.html" target="_blank" rel="noopener"></a>
   </nav>
   <p id="madeBy"></p>
 </footer>
@@ -473,6 +474,7 @@ function applyLang(){
   $("fHome").textContent = T("home"); $("restore").textContent = T("restore");
   const fm = $("fMail"); fm.href = "mailto:" + EMAIL; fm.textContent = T("contact");
   const fp = $("fPriv"); fp.href = PRIVACY_URL; fp.textContent = T("privacy");
+  $("fTerms").textContent = lang === "vi" ? "Điều khoản" : "Terms";
   $("madeBy").textContent = "© " + new Date().getFullYear() + " " + APP.brand + ". " + T("rights");
   renderPlans(); renderNext(); renderCmp(); renderMethods(); renderSum(); renderStatus();
   if(window.fitSoon) fitSoon();

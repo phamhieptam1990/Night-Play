@@ -1,8 +1,8 @@
-/* Kiểm tra trang landing giới thiệu (landing/gioi-thieu, docs/LANDING-PAGE-BRIEF.md). Chạy:
+/* Kiểm tra trang landing giới thiệu (landing/ = gốc "/" và "/en/", hub ở /play/; docs/LANDING-PAGE-BRIEF.md). Chạy:
      NODE_PATH=<thư mục có puppeteer-core> node scripts/cozygame/check-landing.js [--quick] [--shots=<thư mục ảnh>]
    Tự chạy build (DIST_DIR tạm, SITE_TARGET=hub) rồi serve bản dist đó qua http.server cổng trống tự chọn: kiểm tra đúng thứ sẽ được triển khai.
    Điều kiện:
-     - dist có /gioi-thieu/, /gioi-thieu/en/, landing.css/js, img/og.png (1200x630), sitemap.xml (đủ URL, hết __BUILD_DATE__), robots.txt; /shared/theme.css với tới được;
+     - dist có / (landing VI), /en/, /lp/landing.css+js, /lp/img/og.png (1200x630), /play/ (hub), _redirects + trang dự phòng /gioi-thieu/ → / và /en/, sitemap.xml (đủ URL, hết __BUILD_DATE__), robots.txt; /shared/theme.css với tới được;
      - HTML: không còn "[CẦN", không nhúng tên miền ngoài, một <h1>, lang đúng, canonical/hreflang/OG/Twitter đủ, title <= 60 ký tự, description 140-160;
      - JSON-LD parse được, đủ Organization/WebSite/VideoGame x2/FAQPage, FAQ khớp chữ hiển thị; giá khớp server/app.js PLANS;
      - mọi liên kết nội bộ trả 200, #id của game có trong shared/multi-games.js, neo #id tồn tại; mailto đúng;
@@ -16,7 +16,7 @@ const quick = process.argv.includes("--quick");
 const shotDir = (process.argv.find(a => a.startsWith("--shots=")) || "").slice(8);
 const note = (ok, tag, msg) => { if (!ok) { fails.push(tag + ": " + msg); console.log("  ✗ " + tag + ": " + msg); } };
 const wait = ms => new Promise(r => setTimeout(r, ms));
-const PAGES = { vi: "/gioi-thieu/", en: "/gioi-thieu/en/" };
+const PAGES = { vi: "/", en: "/en/" };
 const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360, 640], [390, 844], [768, 1024], [1024, 768], [1440, 900]];
 
 (async () => {
@@ -25,15 +25,26 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
   note(bd.status === 0, "build", "scripts/build.js lỗi: " + (bd.stderr || "").slice(0, 200));
   const R = f => path.join(dist, f);
   /* 1) file trong dist */
-  for (const f of ["gioi-thieu/index.html", "gioi-thieu/en/index.html", "gioi-thieu/landing.css", "gioi-thieu/landing.js", "gioi-thieu/img/og.png", "gioi-thieu/img/logo.svg", "sitemap.xml", "robots.txt", "shared/theme.css", "shared/track.js", "shared/site.js", "index.html", "sw.js"])
+  for (const f of ["index.html", "en/index.html", "lp/landing.css", "lp/landing.js", "lp/img/og.png", "lp/img/logo.svg", "sitemap.xml", "robots.txt", "shared/theme.css", "shared/track.js", "shared/site.js", "play/index.html", "sw.js", "manifest.webmanifest", "_redirects", "gioi-thieu/index.html", "gioi-thieu/en/index.html"])
     note(fs.existsSync(R(f)), "dist", "thiếu " + f);
-  try { const b = fs.readFileSync(R("gioi-thieu/img/og.png")); note(b.readUInt32BE(16) === 1200 && b.readUInt32BE(20) === 630, "og.png", "phải 1200x630"); note(b.length <= 120 * 1024, "og.png", "nặng " + b.length + " > 120KB"); } catch (e) {}
+  try { const b = fs.readFileSync(R("lp/img/og.png")); note(b.readUInt32BE(16) === 1200 && b.readUInt32BE(20) === 630, "og.png", "phải 1200x630"); note(b.length <= 120 * 1024, "og.png", "nặng " + b.length + " > 120KB"); } catch (e) {}
   const sm = fs.existsSync(R("sitemap.xml")) ? fs.readFileSync(R("sitemap.xml"), "utf8") : "";
   note(!/__BUILD_DATE__/.test(sm) && /<lastmod>\d{4}-\d\d-\d\d<\/lastmod>/.test(sm), "sitemap", "chưa thay ngày build");
-  for (const u of ["/", "/gioi-thieu/", "/gioi-thieu/en/", "/popplay/", "/cozyplay/", "/subscribe.html", "/privacy.html", "/terms.html"]) note(sm.includes("<loc>https://nightplay.vn" + u + "</loc>"), "sitemap", "thiếu " + u);
+  for (const u of ["/", "/en/", "/play/", "/popplay/", "/cozyplay/", "/subscribe.html", "/privacy.html", "/terms.html"]) note(sm.includes("<loc>https://nightplay.vn" + u + "</loc>"), "sitemap", "thiếu " + u);
   note((sm.match(/<urlset/g) || []).length === 1 && (sm.match(/<url>/g) || []).length === (sm.match(/<\/url>/g) || []).length, "sitemap", "XML hỏng");
   const rb = fs.existsSync(R("robots.txt")) ? fs.readFileSync(R("robots.txt"), "utf8") : "";
   for (const l of ["User-agent: *", "Allow: /", "Disallow: /admin/", "Disallow: /api/", "Sitemap: https://nightplay.vn/sitemap.xml"]) note(rb.includes(l), "robots", "thiếu dòng: " + l);
+
+  /* 1b) cấu trúc "/ = landing, /play/ = hub": chuyển hướng địa chỉ cũ, manifest, sw.js */
+  const rd = fs.existsSync(R("_redirects")) ? fs.readFileSync(R("_redirects"), "utf8") : "";
+  for (const l of ["/gioi-thieu/  /  301", "/gioi-thieu  /  301", "/gioi-thieu/en/  /en/  301", "/gioi-thieu/en  /en/  301"]) note(rd.includes(l), "_redirects", "thiếu dòng: " + l);
+  for (const [f, to] of [["gioi-thieu/index.html", "/"], ["gioi-thieu/en/index.html", "/en/"]]) { const h = fs.existsSync(R(f)) ? fs.readFileSync(R(f), "utf8") : ""; note(h.includes('http-equiv="refresh" content="0;url=' + to + '"') && h.includes('<link rel="canonical" href="https://nightplay.vn' + to + '">'), "dự phòng " + f, "thiếu meta refresh/canonical về " + to); }
+  try { const mf = JSON.parse(fs.readFileSync(R("manifest.webmanifest"), "utf8")); note(mf.start_url === "/play/" && mf.scope === "/" && mf.id === "/" && mf.display === "standalone", "manifest", "start_url/scope/id/display sai: " + [mf.start_url, mf.scope, mf.id, mf.display]); for (const i of mf.icons) note(fs.existsSync(R(i.src.replace(/^\//, ""))), "manifest", "thiếu icon " + i.src); } catch (e) { note(false, "manifest", "không đọc được: " + e.message); }
+  { const swt = fs.existsSync(R("sw.js")) ? fs.readFileSync(R("sw.js"), "utf8") : ""; const sh = (swt.match(/const SHELL = (\[[\s\S]*?\]);/) || [])[1]; let SH = []; try { SH = eval(sh); } catch (e) {}
+    note(SH.includes("/play/index.html") && !SH.includes("/") && !SH.includes("/index.html"), "sw.js", "SHELL phải có /play/index.html và KHÔNG có / hoặc /index.html (landing không offline)");
+    note(/new URL\("\/play\/index\.html"/.test(swt), "sw.js", "điều hướng offline phải rơi về /play/index.html");
+    for (const u of SH) note(fs.existsSync(R(u.replace(/^\//, ""))), "sw.js", "SHELL liệt kê file không có trong dist: " + u); }
+  { const hub = fs.existsSync(R("play/index.html")) ? fs.readFileSync(R("play/index.html"), "utf8") : ""; note(/href="\.\.\/popplay\/index\.html"/.test(hub) && /href="\.\.\/cozyplay\/index\.html"/.test(hub) && !/(src|href)="shared\//.test(hub), "hub /play/", "đường dẫn tương đối của hub sai (cần ../popplay, ../cozyplay, ../shared)"); }
 
   /* 2) nội dung HTML tĩnh */
   const src = {}; let plans = {};
@@ -43,7 +54,7 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
   note(gameIds.size >= 32, "game", "đọc multi-games.js chỉ được " + gameIds.size + " game");
   const fmtVi = n => n.toLocaleString("de-DE") + "đ", fmtEn = n => n.toLocaleString("en-US") + " VND";
   for (const l of ["vi", "en"]) {
-    const f = path.join("gioi-thieu", l === "en" ? "en" : "", "index.html"), h = fs.existsSync(R(f)) ? fs.readFileSync(R(f), "utf8") : ""; src[l] = h;
+    const f = path.join(l === "en" ? "en" : "", "index.html"), h = fs.existsSync(R(f)) ? fs.readFileSync(R(f), "utf8") : ""; src[l] = h;
     const tg = "html " + l;
     note(!/\[CẦN/.test(h), tg, "còn placeholder [CẦN ...] trong HTML");
     note(!/phamhieptam/.test(h), tg, "còn email cũ");
@@ -51,14 +62,14 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
     note(new RegExp('<html lang="' + l + '"').test(h), tg, "lang sai");
     const title = (h.match(/<title>([^<]*)<\/title>/) || [])[1] || ""; note(title && [...title].length <= 60, tg, "title rỗng hoặc > 60 ký tự (" + [...title].length + ")");
     const desc = ((h.match(/<meta name="description" content="([^"]*)"/) || [])[1] || "").replace(/&amp;/g, "&"); note([...desc].length >= 140 && [...desc].length <= 160, tg, "description " + [...desc].length + " ký tự (cần 140-160)");
-    const canon = l === "vi" ? "https://nightplay.vn/gioi-thieu/" : "https://nightplay.vn/gioi-thieu/en/";
+    const canon = l === "vi" ? "https://nightplay.vn/" : "https://nightplay.vn/en/";
     note(h.includes('<link rel="canonical" href="' + canon + '">'), tg, "canonical sai");
-    for (const x of ['hreflang="vi" href="https://nightplay.vn/gioi-thieu/"', 'hreflang="en" href="https://nightplay.vn/gioi-thieu/en/"', 'hreflang="x-default" href="https://nightplay.vn/gioi-thieu/"', 'property="og:image" content="https://nightplay.vn/gioi-thieu/img/og.png"', 'property="og:locale" content="' + (l === "vi" ? "vi_VN" : "en_US") + '"', 'property="og:locale:alternate"', 'name="twitter:card" content="summary_large_image"', 'name="twitter:image"', 'property="og:url" content="' + canon + '"', 'name="theme-color"', 'rel="icon"']) note(h.includes(x), tg, "thiếu meta: " + x);
-    note(!/cookie\s*=/.test(h + fs.readFileSync(R("gioi-thieu/landing.js"), "utf8")), tg, "mã có ghi cookie");
+    for (const x of ['hreflang="vi" href="https://nightplay.vn/"', 'hreflang="en" href="https://nightplay.vn/en/"', 'hreflang="x-default" href="https://nightplay.vn/"', 'property="og:image" content="https://nightplay.vn/lp/img/og.png"', 'property="og:locale" content="' + (l === "vi" ? "vi_VN" : "en_US") + '"', 'property="og:locale:alternate"', 'name="twitter:card" content="summary_large_image"', 'name="twitter:image"', 'property="og:url" content="' + canon + '"', 'name="theme-color"', 'rel="icon"']) note(h.includes(x), tg, "thiếu meta: " + x);
+    note(!/cookie\s*=/.test(h + fs.readFileSync(R("lp/landing.js"), "utf8")), tg, "mã có ghi cookie");
     /* tên miền ngoài trong src/href/url() (trừ canonical/og/hreflang/JSON-LD và liên kết thông tin) */
     const bad = [...h.matchAll(/<(?:script|link|img|iframe|source|video)\b[^>]*\b(?:src|href)="(https?:)?\/\/[^"]*"/g)].filter(m => !/rel="(canonical|alternate)"/.test(m[0]));
     note(!bad.length, tg, "nhúng tài nguyên ngoài: " + bad.map(m => m[0].slice(0, 80)).join(" | "));
-    note(!/url\(\s*["']?https?:/.test(fs.readFileSync(R("gioi-thieu/landing.css"), "utf8")), tg, "CSS tải tài nguyên ngoài");
+    note(!/url\(\s*["']?https?:/.test(fs.readFileSync(R("lp/landing.css"), "utf8")), tg, "CSS tải tài nguyên ngoài");
     for (const k of Object.keys(plans)) { const v = l === "vi" ? fmtVi(plans[k].amount) : fmtEn(plans[k].amount); note(h.includes(v), tg, "bảng giá thiếu " + v + " (gói " + k + ")"); }
     for (const k of Object.keys(plans)) note(h.includes(">" + plans[k].days + (l === "vi" ? " ngày" : plans[k].days === 1 ? " day" : " days") + "<") || (plans[k].days === 1 && h.includes(">1 " + (l === "vi" ? "ngày" : "day") + "<")), tg, "thời hạn gói " + k + " (" + plans[k].days + ")");
     /* JSON-LD */
@@ -104,6 +115,17 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
       }
       await pg.close();
     }
+    /* nút "Chơi ngay" trỏ hub /play/, KHÔNG về "/" */
+    for (const l of ["vi", "en"]) { const pg = await br.newPage(); await pg.goto(B + PAGES[l], { waitUntil: "load" }); const c = await pg.evaluate(() => [...document.querySelectorAll("#heroCta, .btn.sm, .sticky a, .btn.big")].filter(a => /Chơi ngay|Play now/.test(a.textContent)).map(a => a.getAttribute("href"))); note(c.length >= 3 && c.every(h => h === "/play/"), "CTA " + l, "nút Chơi ngay phải trỏ /play/: " + c.join(","));
+      await pg.click("#heroCta"); await pg.waitForFunction(() => location.pathname === "/play/", { timeout: 8000 }).catch(() => {}); note(await pg.evaluate(() => location.pathname === "/play/" && !!document.getElementById("aPop")), "CTA " + l, "bấm Chơi ngay không tới hub /play/ (" + (await pg.evaluate(() => location.pathname)) + ")"); await pg.close(); }
+    /* hub /play/: mọi liên kết nội bộ + tài nguyên trả 200 (không 404 do đổi đường dẫn), nút ← ở trang cổng về /play/ */
+    { const pg = await br.newPage(); const bad = []; pg.on("response", r => { if (r.url().startsWith(B) && r.status() >= 400 && !/\/api\//.test(r.url())) bad.push(r.status() + " " + r.url()); });
+      await pg.goto(B + "/play/", { waitUntil: "networkidle0" }); await wait(300); note(!bad.length, "hub /play/", "tài nguyên lỗi: " + bad.slice(0, 3).join(" | "));
+      const hs = await pg.evaluate(() => [...document.querySelectorAll("a[href]")].map(a => a.href));
+      for (const h of new Set(hs)) { if (/^mailto:/.test(h)) continue; if (!h.startsWith(B)) { note(false, "hub /play/", "liên kết ngoài origin: " + h); continue; } const rs = await fetch(h.split("#")[0]); note(rs.status === 200, "hub /play/", h + " → " + rs.status); }
+      const mh = await pg.evaluate(() => (document.querySelector('link[rel=manifest]') || {}).href); note(mh === B + "/manifest.webmanifest", "hub /play/", "manifest link sai: " + mh);
+      await pg.close();
+      for (const portal of ["popplay", "cozyplay"]) { const p2 = await br.newPage(); await p2.goto(B + "/" + portal + "/index.html", { waitUntil: "load" }); const hh = await p2.evaluate(() => ["hubBtn", "hubLink", "fHub"].map(i => { const e = document.getElementById(i); return e ? e.href : "" })); note(hh.every(h => h === B + "/play/index.html"), "cổng " + portal, "nút Home/hub phải về /play/index.html: " + hh.join(" ")); await p2.close(); } }
     let weight = 0;
     const matrix = []; for (const l of ["vi", "en"]) for (const [w, h] of SIZES) for (const th of ["light", "dark"]) { if (quick && l === "en" && (w !== 390 || th !== "light")) continue; matrix.push([l, w, h, th]); }
     for (const [l, w, h, th] of matrix) {

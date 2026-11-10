@@ -1,6 +1,6 @@
 /* Kiểm tra CĂN LỀ + KÍCH THƯỚC ICON ở mép màn hình (lỗi "icon lệch" trên iPhone thật; GAME_RULES 0a-12). Chạy:
      NODE_PATH=<thư mục có puppeteer-core> node scripts/cozygame/check-align.js [--shots=<thư mục ảnh>]   (tự chạy http.server cổng 8878)
-   Trang: cozyplay/index, popplay/index, index (hub), cozyplay/multi (+ ?portal=pop; màn trống + popup chọn game) ở 320x568, 375x667, 390x844, 430x932, 768x1024.
+   Trang: cozyplay/index, popplay/index, play/index (hub), cozyplay/multi (+ ?portal=pop; màn trống + popup chọn game) ở 320x568, 375x667, 390x844, 430x932, 768x1024.
    Điều kiện (sai số 1px, dùng getBoundingClientRect):
      - mép phải của nút cuối header (⋯/Night Pass), #findFab, #lock = vw - 16 (--gutter); mép trái logo = 16; mọi nút icon xếp dọc ở mép phải CÙNG tâm X;
      - mép phải của ô game ngoài cùng = vw - 16 và mép trái = 16 (lưới thẳng lề với icon) ở điện thoại dọc;
@@ -12,7 +12,7 @@ const { spawn } = require("child_process"), fs = require("fs"), path = require("
 const root = path.join(__dirname, "..", ".."), PORT = 8878, B = "http://localhost:" + PORT + "/", fails = [];
 const shotDir = (process.argv.find(a => a.startsWith("--shots=")) || "").slice(8);
 const VPS = [[320, 568], [375, 667], [390, 844], [430, 932], [768, 1024]];
-const PAGES = [["cozyplay/index.html", "cozy"], ["popplay/index.html", "pop"], ["index.html", "hub"], ["cozyplay/multi.html?lang=en", "multi"], ["cozyplay/multi.html?portal=pop&lang=vi", "multi"]];
+const PAGES = [["cozyplay/index.html", "cozy"], ["popplay/index.html", "pop"], ["play/index.html", "hub"], ["cozyplay/multi.html?lang=en", "multi"], ["cozyplay/multi.html?portal=pop&lang=vi", "multi"]];
 const note = (ok, tag, msg) => { if (!ok) { fails.push(tag + ": " + msg); console.log("  ✗ " + tag + ": " + msg); } };
 const wait = ms => new Promise(r => setTimeout(r, ms));
 /* chạy trong trang: trả về hộp của các phần tử theo selector (chỉ phần tử đang hiện) */
@@ -37,6 +37,12 @@ const near = (a, b, t = 1) => Math.abs(a - b) <= t;
       const pg = await br.newPage(); await pg.setViewport({ width: w, height: h, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
       await pg.evaluateOnNewDocument(() => { try { localStorage.setItem("lang", "en"); } catch (e) {} });
       await pg.goto(B + url, { waitUntil: "load" }); await wait(900);
+      /* nút đổi giao diện: mỗi nút chỉ hiện MỘT biểu tượng (sun/moon), cả sáng lẫn tối (lỗi lặp: .ico svg{display:block} đè .sun{display:none}) */
+      for (const th of ["light", "dark"]) {
+        const n = await pg.evaluate(t => { document.documentElement.setAttribute("data-theme", t); return [...document.querySelectorAll("button,a")].filter(b => b.querySelector(".sun") && b.querySelector(".moon")).map(b => [...b.querySelectorAll(".sun,.moon")].filter(s => getComputedStyle(s).display !== "none").length); }, th);
+        note(n.every(x => x === 1), tag, "nút đổi giao diện hiện " + n.join("/") + " biểu tượng (" + th + "), phải đúng 1");
+      }
+      await pg.evaluate(() => document.documentElement.removeAttribute("data-theme"));
       const shot = async n => { if (shotDir) { fs.mkdirSync(shotDir, { recursive: true }); await pg.screenshot({ path: path.join(shotDir, n.replace(/[^\w.-]+/g, "_") + ".png") }); } };
       if (kind !== "multi") {
         const bx = await pg.evaluate(BOXES, { navBtn: "nav.nav .tools > :is(.pill,.bars-more,.ico,button,a)", mark: "nav.nav .mark", fab: "#findFab", lock: "#lock", tile: "#grid .tile" });

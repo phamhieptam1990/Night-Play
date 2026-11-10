@@ -361,11 +361,11 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 </head>
 <body>
 <nav class="nav" aria-label="Main">
-  <a class="mark" id="hubLink" href="../index.html"><svg class="mk" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="var(--accent)"/><path d="M25 18l22 14-22 14z" fill="#fff"/></svg><span id="hName"></span></a>
+  <a class="mark" id="hubLink" href="../play/index.html"><svg class="mk" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="var(--accent)"/><path d="M25 18l22 14-22 14z" fill="#fff"/></svg><span id="hName"></span></a>
   <div class="tools">
     <a id="multiBtn" class="ico" href="../cozyplay/multi.html?portal=pop" aria-label="Play together" title="Play together"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="8" height="16" rx="2"/><rect x="13" y="4" width="8" height="16" rx="2"/></svg></a>
     <a id="rankBtn" class="ico" href="../leaderboard.html?from=popplay/index.html" aria-label="Leaderboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg></a>
-    <a id="hubBtn" class="ico" href="../index.html" aria-label="Home"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3L2 12h3v8h5v-5h4v5h5v-8h3z"/></svg></a>
+    <a id="hubBtn" class="ico" href="../play/index.html" aria-label="Home"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3L2 12h3v8h5v-5h4v5h5v-8h3z"/></svg></a>
     <a id="passBtn" class="pill" href="#"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/></svg><span></span></a>
     <button id="themeBtn" class="ico" type="button" aria-label="Theme">
       <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
@@ -397,8 +397,8 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 <footer class="foot">
   <div class="fin">
     <div class="fbrand"><div class="mark"><svg class="mk" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="var(--accent)"/><path d="M25 18l22 14-22 14z" fill="#fff"/></svg><span id="fName"></span></div><p id="fTag"></p></div>
-    <nav class="fcol" aria-labelledby="fH1"><h4 id="fH1"></h4><a id="fHub" href="../index.html"></a><a id="fRank" href="../leaderboard.html?from=popplay/index.html"></a><a id="fHelp" href="../shared.html?from=popplay/index.html"></a><a id="fGames" href="#grid"></a><a id="fPass" href="#"></a></nav>
-    <nav class="fcol" aria-labelledby="fH2"><h4 id="fH2"></h4><a id="fMail" href="#"></a><a id="fPriv" href="#" target="_blank" rel="noopener"></a></nav>
+    <nav class="fcol" aria-labelledby="fH1"><h4 id="fH1"></h4><a id="fHub" href="../play/index.html"></a><a id="fRank" href="../leaderboard.html?from=popplay/index.html"></a><a id="fHelp" href="../shared.html?from=popplay/index.html"></a><a id="fGames" href="#grid"></a><a id="fPass" href="#"></a></nav>
+    <nav class="fcol" aria-labelledby="fH2"><h4 id="fH2"></h4><a id="fMail" href="#"></a><a id="fPriv" href="#" target="_blank" rel="noopener"></a><a id="fTerms" href="#" target="_blank" rel="noopener"></a></nav>
   </div>
   <div class="fbar"><p id="madeBy"></p>
   <button id="lock" type="button" aria-label="Parents">
@@ -545,6 +545,7 @@ function applyLang(){
   $("hubBtn").setAttribute("aria-label", t.hub); $("hubBtn").title = t.hub; $("hubLink").setAttribute("aria-label", t.hub + " – " + BRAND);
   const fm = $("fMail"); fm.href = "mailto:" + EMAIL; fm.textContent = t.contact;
   const fp = $("fPriv"); fp.href = PRIVACY_URL; fp.textContent = t.privacy;
+  const ft = $("fTerms"); ft.href = "../terms.html"; ft.textContent = /^vi/i.test(document.documentElement.lang || "vi") ? "Điều khoản" : "Terms";
   const SUB = "../subscribe.html?from=popplay/index.html&lang=" + lang;
   $("passBtn").href = SUB; $("passBtn").lastChild.textContent = t.pass; $("passBtn").setAttribute("aria-label", t.upgrade);
   $("fPass").href = SUB; $("fPass").textContent = t.pass;
@@ -975,14 +976,13 @@ route();
 <script>NPS.initParent({ helpUrl: "../help.html", sharedUrl: "../shared.html?from=popplay/index.html", leaderboard: true, boardUrl: "../leaderboard.html?from=popplay/index.html", h2cUrl: "../shared/vendor/html2canvas.min.js" });</script>
 <script src="../shared/bars.js"></script>
 <script src="../shared/season.js"></script>
+<script src="../shared/welcome.js"></script>
 <script>
 /* làn điều khiển chung ngoài khung game: lấy màu nền của chính game để không thành dải đen xấu */
 (function(){var st=document.getElementById("stage");if(!st)return;
 function sync(){if(!st.classList.contains("on")){st.style.backgroundColor="";st.classList.remove("docked");return}var f=st.querySelector("iframe");if(!f)return;try{st.classList.toggle("docked",!!(f.contentWindow&&f.contentWindow.__npDock));var d=f.contentDocument,c=getComputedStyle(d.body).backgroundColor;if(!c||c==="rgba(0, 0, 0, 0)")c=getComputedStyle(d.documentElement).backgroundColor;if(c&&c!=="rgba(0, 0, 0, 0)"){st.style.backgroundColor=c;var m=c.match(/\d+(\.\d+)?/g)||[];var L=(.299*m[0]+.587*m[1]+.114*m[2])/255;st.dataset.lum=L>.55?"l":"d"}}catch(e){}}
 setInterval(sync,600);document.addEventListener("load",sync,true);})();
 </script>
-<script src="../shared/passwatch.js" defer></script>
-<script src="../shared/parentgate.js"></script>
 <script src="../shared/rails.js"></script>
 <script>
 /* hai cột bên lề khi đang mở game trên màn rộng (shared/rails.js); chọn game khác / ván dở từ cột bên */
@@ -996,5 +996,7 @@ NPRails.init({ portal:"pop", games:games, getLang:function(){ return lang; }, ge
     if(frame && Date.now() > exitOK && gamePlaying()) askLeave(go); else go();
   } });
 </script>
+<script src="../shared/passwatch.js" defer></script>
+<script src="../shared/parentgate.js"></script>
 </body>
 </html>

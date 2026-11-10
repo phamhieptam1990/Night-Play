@@ -31,7 +31,7 @@ async function shellCheck() {
   const need = [];
   for (const d of ["cozyplay/games", "popplay/games"]) for (const g of fs.readdirSync(path.join(root, d))) need.push("/" + d + "/" + g + "/index.html");
   for (const f of fs.readdirSync(path.join(root, "shared"))) if (/\.(css|js)$/.test(f)) need.push("/shared/" + f);
-  for (const f of ["index.html", "cozyplay/index.html", "popplay/index.html", "help.html", "shared.html", "leaderboard.html", "subscribe.html", "privacy.html"]) need.push("/" + f);
+  for (const f of ["play/index.html", "cozyplay/index.html", "popplay/index.html", "help.html", "shared.html", "leaderboard.html", "subscribe.html", "privacy.html"]) need.push("/" + f);
   for (const d of ["cozyplay/games/cozy-wings/thumbs", "popplay/games/pop-fly/thumbs"]) for (const f of fs.readdirSync(path.join(root, d))) need.push("/" + d + "/" + f);
   const miss = need.filter(n => !SH.includes(n));
   if (miss.length) bad("sw.js", "thiếu trong SHELL (mất mạng sẽ lỗi): " + miss.slice(0, 6).join(", "));
