@@ -67,3 +67,13 @@ Kiến trúc: `dist/` (file tĩnh, băng thông không giới hạn) + Worker `w
 - Ai kiểm soát một thiết bị đã đăng ký (kể cả mã độc trên máy đó) dùng được khoá của máy đó; khoá không xuất được nhưng vẫn ký được.
 - Chữ ký chỉ chống phát lại trong 120 giây; HTTPS bảo vệ trên đường truyền.
 - Xoá dữ liệu trang (IndexedDB) = mất khoá thiết bị → phải khôi phục bằng email (và chiếm thêm một chỗ thiết bị cho tới khi thiết bị cũ bị đẩy ra).
+
+## Tên miền riêng `nightplay.vn` + email (`support@`, `noreply@`)
+Thứ tự làm (bước 1–3 bạn làm trên trang web của nhà đăng ký/Cloudflare/Resend; tôi không có quyền vào các tài khoản đó):
+1. **Đưa tên miền về Cloudflare:** Cloudflare → Add a domain → `nightplay.vn` (gói Free) → chép 2 nameserver Cloudflare đưa vào trang quản lý tên miền ở nhà đăng ký (thay nameserver cũ). Chờ trạng thái "Active".
+2. **Nhận thư `support@`:** Cloudflare → Email → Email Routing → bật, tạo địa chỉ `support@nightplay.vn` chuyển về Gmail của bạn (xác minh Gmail đích); thêm `admin@` tương tự. Cloudflare tự thêm bản ghi MX/SPF cần thiết (chấp nhận khi được hỏi).
+3. **Gửi OTP bằng Resend:** resend.com → Domains → Add `nightplay.vn` → thêm các bản ghi DNS Resend đưa (DKIM TXT, SPF, MX bounce `send.`) vào Cloudflare DNS (DNS only, không proxy) → Verify. Thêm bản ghi DMARC: TXT `_dmarc` = `v=DMARC1; p=none; rua=mailto:admin@nightplay.vn`. Tạo API key (quyền gửi thư).
+4. **Biến môi trường trên Worker** (Settings → Variables and Secrets): `RESEND_API_KEY` (Secret), `MAIL_FROM=noreply@nightplay.vn`, `MAIL_FROM_NAME=Night Play`, `MAIL_REPLY_TO=support@nightplay.vn`. Muốn bỏ Apps Script thì xoá `GAS_MAIL_URL`/`GAS_MAIL_SECRET` (nếu còn, Apps Script được ưu tiên dùng trước).
+5. **Gắn tên miền vào Worker:** Workers & Pages → `night-play` → Settings → Domains & Routes → Add → Custom domain `nightplay.vn` (và `www.nightplay.vn` chuyển hướng về `nightplay.vn`). Sau đó cập nhật **SePay webhook** thành `https://nightplay.vn/api/sepay-webhook` (đường dẫn như đang dùng) và kiểm tra `/passcheck`.
+6. **Đổi email liên hệ công khai** từ Gmail cá nhân sang `support@nightplay.vn` (shared/site.js, index.html, subscribe.html, popplay/index.html, cozyplay/index.html, privacy.html) — CHỈ làm sau khi bước 2 chạy (gửi thử thư tới `support@` thấy về Gmail).
+Kiểm tra mail không vào spam: gửi thử OTP tới Gmail + một hộp thư khác, xem "Show original" có SPF/DKIM/DMARC = PASS.

@@ -148,11 +148,12 @@ async function sweep() {
      - BREVO_API_KEY  + MAIL_FROM  (Brevo: gói miễn phí ~300 thư/ngày; MAIL_FROM phải là địa chỉ đã xác minh "Sender" trong Brevo, không cần tên miền riêng)
      - RESEND_API_KEY + MAIL_FROM  (Resend: cần xác minh tên miền gửi thư để gửi cho người khác)
      - GAS_MAIL_URL + GAS_MAIL_SECRET  (Google Apps Script gửi từ Gmail riêng, ~100 thư/ngày; xem scripts/gas-mail.gs; không cần MAIL_FROM)
-   MAIL_FROM_NAME (tuỳ chọn, mặc định "Night Play"). Chưa cấu hình: chỉ ghi log tên nhà cung cấp còn thiếu (KHÔNG ghi nội dung/OTP) và trả false.
+   MAIL_FROM_NAME (tuỳ chọn, mặc định "Night Play"). MAIL_REPLY_TO (tuỳ chọn, vd support@nightplay.vn). Chưa cấu hình: chỉ ghi log tên nhà cung cấp còn thiếu (KHÔNG ghi nội dung/OTP) và trả false.
    Không bao giờ ném lỗi ra ngoài: /api/restore luôn trả 200 để không lộ email nào đã mua. */
 async function sendMail(to, subject, text) {
   if (CFG.devOtp) console.log(`[mail] to=${to} | ${subject} | ${text}`);
   const from = env("MAIL_FROM", ""), name = env("MAIL_FROM_NAME", "Night Play"), brevo = env("BREVO_API_KEY", ""), resend = env("RESEND_API_KEY", "");
+  const replyTo = env("MAIL_REPLY_TO", "");   // vd support@nightplay.vn: khách bấm Trả lời thì thư đến hộp hỗ trợ (noreply@ chỉ để gửi)
   const gasUrl = env("GAS_MAIL_URL", ""), gasSecret = env("GAS_MAIL_SECRET", "");
   if (gasUrl && gasSecret) {
     const ac2 = typeof AbortController !== "undefined" ? new AbortController() : null, tm2 = ac2 ? setTimeout(() => ac2.abort(), 15000) : 0;
@@ -170,9 +171,9 @@ async function sendMail(to, subject, text) {
   try {
     const r = brevo
       ? await fetch("https://api.brevo.com/v3/smtp/email", { method: "POST", signal: ac && ac.signal, headers: { "api-key": brevo, "content-type": "application/json", accept: "application/json" },
-          body: JSON.stringify({ sender: { name, email: from }, to: [{ email: to }], subject, textContent: text, htmlContent: html }) })
+          body: JSON.stringify({ sender: { name, email: from }, to: [{ email: to }], subject, textContent: text, htmlContent: html, ...(replyTo ? { replyTo: { email: replyTo } } : {}) }) })
       : await fetch("https://api.resend.com/emails", { method: "POST", signal: ac && ac.signal, headers: { authorization: "Bearer " + resend, "content-type": "application/json" },
-          body: JSON.stringify({ from: `${name} <${from}>`, to: [to], subject, text, html }) });
+          body: JSON.stringify({ from: `${name} <${from}>`, to: [to], subject, text, html, ...(replyTo ? { reply_to: [replyTo] } : {}) }) });
     if (!r.ok) { const b = await r.text().catch(() => ""); console.error("sendMail " + (brevo ? "brevo" : "resend") + " HTTP " + r.status + " " + String(b).slice(0, 200).replace(/[A-Za-z0-9_\-]{24,}/g, "<ẩn>")); return false; }
     return true;
   } catch (e) { console.error("sendMail lỗi mạng:", String(e && e.message || e).slice(0, 120)); return false; }
