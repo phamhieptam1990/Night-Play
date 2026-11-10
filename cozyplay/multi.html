@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="vi" data-app="cozyplay">
+<head>
+<meta charset="utf-8">
+<script src="../shared/guard.js"></script>
+<script src="../shared/device.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Chơi cùng lúc · Night Play</title>
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#0E1020">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%237C5CFF'/%3E%3Crect x='12' y='14' width='18' height='36' rx='5' fill='%23fff'/%3E%3Crect x='34' y='14' width='18' height='36' rx='5' fill='%23fff' opacity='.6'/%3E%3C/svg%3E">
+<script>
+/* Chạy trước khi vẽ: theme/ngôn ngữ đã lưu của trang cổng; ?portal=pop dùng bảng màu Pop Play */
+(function () {
+  var q = new URLSearchParams(location.search), pop = q.get("portal") === "pop", de = document.documentElement, t, l;
+  try { t = localStorage.getItem("theme"); l = localStorage.getItem("lang"); } catch (e) {}
+  l = q.get("lang") || l || ((navigator.language || "vi").slice(0, 2) === "vi" ? "vi" : "en"); if (l !== "vi" && l !== "en") l = "vi";
+  de.lang = l; de.dataset.app = pop ? "popplay" : "cozyplay"; de.dataset.theme = t || (pop ? "light" : "dark");
+})();
+</script>
+<link rel="stylesheet" href="../shared/theme.css">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overscroll-behavior:none;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulation;background:none}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+svg{display:block}
+#app{position:fixed;inset:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);display:flex;flex-direction:column}
+/* thanh trên (dọc/máy tính) hoặc cột bên trái (điện thoại ngang): ← | tên | khay thumbnail game tập trung đang chơi dở | + */
+#rail{flex:none;display:flex;align-items:center;gap:8px;padding:6px 8px;min-height:60px;background:var(--panel);border-bottom:1px solid var(--line)}
+.rb{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.rb.go{background:var(--accent);color:var(--on-accent);border-color:transparent}
+#ttl{flex:none;font-weight:800;font-size:15px;white-space:nowrap}
+#tray{flex:1;min-width:0;display:flex;align-items:center;gap:6px;overflow:hidden}
+.tc{flex:none;position:relative;width:52px;height:48px;border-radius:12px;background:var(--card);border:1px solid var(--line);overflow:hidden;display:grid;place-items:center;font-size:22px;padding:0}
+.tc img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tc .sc{position:absolute;left:0;right:0;bottom:0;background:rgba(10,8,25,.72);color:#fff;font:800 10px/14px system-ui;text-align:center}
+.tc .pz{position:absolute;right:2px;top:1px;font-size:10px}
+.tc.wide{width:auto;min-width:104px;max-width:150px;grid-template-columns:48px 1fr;justify-items:start;text-align:left;padding:0 8px 0 0}
+.tc.wide .im{position:relative;width:48px;height:100%;display:grid;place-items:center}
+.tc.wide .tx{min-width:0;font-size:11px;line-height:1.2;padding-left:2px;overflow:hidden}.tc.wide .tx b{display:block;font-size:12px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+#more{flex:none;font-weight:800;font-size:12px;color:var(--muted)}
+#perf{flex:none;font-size:12px;font-weight:800;color:var(--warn);display:none;max-width:120px;line-height:1.15}
+#perf.on{display:block}
+#grid{position:relative;flex:1;min-height:0;min-width:0;margin:6px}
+#empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--muted);font-weight:700;padding:24px;line-height:1.4}
+#empty[hidden]{display:none}
+.fr{position:absolute;border-radius:14px;overflow:hidden;background:var(--card);box-shadow:0 0 0 1px var(--line);transition:box-shadow .15s}
+.fr.hid{display:none}
+.fr.sel{box-shadow:0 0 0 3px var(--accent)}
+.fr iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#0b0b18;display:block}
+.mi{position:absolute;top:0;right:0;width:44px;height:44px;display:grid;place-items:center;opacity:.45;z-index:6;transition:opacity .15s}
+.mi i{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:rgba(14,12,32,.72);color:#fff;border:1px solid rgba(255,255,255,.35)}
+.mi:hover,.mi:focus-visible,.fr.po-open .mi{opacity:1}
+.mi svg{width:16px;height:16px}
+.pn{position:absolute;z-index:7;top:40px;right:6px;width:min(212px,calc(100% - 12px));padding:10px;border-radius:16px;background:var(--panel);color:var(--ink);border:1px solid var(--line);box-shadow:var(--shadow);display:none;font-size:13px}
+.fr.po-open .pn{display:block}
+.pn .pt{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:6px}.pn .pt b{font-size:14px;line-height:1.15}.pn .pt span{font-size:11px;color:var(--muted);font-weight:800;white-space:nowrap}
+.pn .pr{display:flex;justify-content:space-between;padding:2px 0;color:var(--ink2)}.pn .pr b{color:var(--ink);font-variant-numeric:tabular-nums}
+.pn .pb{display:flex;gap:6px;margin-top:8px}
+.pn .pb button{flex:1;min-width:0;height:44px;border-radius:12px;background:var(--card);border:1px solid var(--line);display:grid;place-items:center}
+.pn .pb button.x{background:var(--warn);color:#fff;border-color:transparent}
+.pn .pb svg{width:20px;height:20px}
+.po{position:absolute;inset:0;z-index:4;display:none;place-items:center;text-align:center;background:rgba(10,8,25,.55);color:#fff;font-weight:800;padding:20px;cursor:pointer;line-height:1.35}
+.fr.paused .po{display:grid}
+.cd{position:absolute;inset:0;z-index:5;display:none;place-items:center;background:rgba(10,8,25,.55);color:#fff;font:900 min(34vmin,120px)/1 system-ui;text-shadow:0 4px 20px rgba(0,0,0,.5)}
+.fr.counting .cd{display:grid}
+.ld{position:absolute;inset:0;z-index:3;display:grid;place-items:center;color:var(--muted);font-weight:700;background:var(--card);pointer-events:none}
+.fr.ready .ld{display:none}
+#sheet{position:fixed;inset:0;z-index:30;background:rgba(6,5,16,.62);display:flex;align-items:center;justify-content:center;padding:max(8px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom))}
+#sheet[hidden]{display:none}
+.sh{width:min(720px,100%);height:min(560px,100%);display:flex;flex-direction:column;gap:8px;padding:12px;border-radius:20px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow)}
+.sh header{flex:none;display:flex;align-items:center;gap:8px}.sh header h2{flex:1;margin:0;font-size:17px}
+.chips{flex:none;display:flex;gap:6px;flex-wrap:wrap}
+.chips button{min-height:36px;padding:0 12px;border-radius:99px;background:var(--card);border:1px solid var(--line);font-weight:700;font-size:13px}
+.chips button[aria-pressed=true]{background:var(--accent);color:var(--on-accent);border-color:transparent}
+#tiles{flex:1;min-height:0;display:grid;gap:8px;align-content:start}
+.tile{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 4px;border-radius:14px;background:var(--card);border:2px solid transparent;text-align:center;min-height:0}
+.tile .ti{font-size:26px;line-height:1}.tile b{font-size:12px;line-height:1.15;max-height:2.3em;overflow:hidden}.tile i{font-style:normal;font-size:10px;color:var(--muted);font-weight:700}
+.tile[aria-pressed=true]{border-color:var(--accent)}
+.tile[aria-pressed=true]::after{content:"✓";position:absolute;top:3px;right:6px;font-weight:900;color:var(--accent)}
+.tile.open{opacity:.7}
+.tile .tg{position:absolute;left:4px;top:2px;font-size:10px}
+.sh footer{flex:none;display:flex;align-items:center;gap:8px}
+#pg{flex:1;text-align:center;font-weight:800;color:var(--muted);font-size:13px}
+.btn{min-height:44px;padding:0 18px;border-radius:99px;background:var(--accent);color:var(--on-accent);font-weight:800}
+.btn.alt{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.btn[disabled]{opacity:.45}
+#toast{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:40;max-width:min(92vw,420px);padding:8px 14px;border-radius:99px;background:rgba(20,18,30,.92);color:#fff;font:700 13px/1.3 system-ui;text-align:center;pointer-events:none;opacity:0;transition:opacity .2s}
+#toast.on{opacity:1}
+#lock{position:fixed;inset:0;z-index:50;background:var(--bg);display:grid;place-items:center;text-align:center;padding:24px}
+#lock[hidden]{display:none}
+#lock div{max-width:340px;display:flex;flex-direction:column;gap:14px;align-items:center}#lock h1{margin:0;font-size:22px}#lock p{margin:0;color:var(--ink2)}
+/* điện thoại ngang / màn thấp: cột bên trái thay cho thanh trên (khung game cần chiều cao) */
+body.side #app{flex-direction:row}
+body.side #rail{flex-direction:column;border-bottom:0;border-right:1px solid var(--line);padding:6px;min-height:0;width:60px;justify-content:flex-start}
+body.side #ttl{display:none}
+body.side #tray{flex-direction:column;justify-content:flex-start;width:100%}
+body.side .tc{width:46px;height:44px}
+body.side #perf{max-width:50px;font-size:10px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app">
+  <header id="rail">
+    <button class="rb" id="bBack" type="button" aria-label="Back"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <b id="ttl"></b>
+    <div id="tray" role="list"></div>
+    <span id="perf" role="status"></span>
+    <button class="rb go" id="bAdd" type="button" aria-label="Add game"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+  </header>
+  <main id="grid"><div id="empty" hidden></div></main>
+</div>
+<div id="sheet" hidden role="dialog" aria-modal="true">
+  <div class="sh">
+    <header><h2 id="shT"></h2><button class="rb" id="shX" type="button" aria-label="Close"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></header>
+    <div class="chips" id="flt" role="group"></div>
+    <div id="tiles"></div>
+    <footer><button class="btn alt" id="pgPrev" type="button">‹</button><span id="pg"></span><button class="btn alt" id="pgNext" type="button">›</button><button class="btn" id="bStart" type="button"></button></footer>
+  </div>
+</div>
+<div id="toast" role="status"></div>
+<div id="lock" hidden><div><h1 id="lkH"></h1><p id="lkP"></p><button class="btn" id="lkGo" type="button"></button></div></div>
+<script src="../shared/multi-games.js"></script>
+<script>
+"use strict";
+/* CHƠI CÙNG LÚC — trang host (xem GAME_RULES.md mục 5h). Mỗi khung = iframe game ?multi=1 (shared/bridge.js lo giao thức np-hud / np-cmd / np-snap).
+   - parallel: chạy cùng lúc, mỗi game một khung.  focus: chỉ MỘT khung chính chạy, game focus khác nằm ở khay (thumbnail + điểm), đổi qua = chụp khung hình + đóng băng, rồi đếm 3-2-1.
+   - Giữ sống tối đa caps().alive iframe; vượt thì đẩy game focus cũ nhất (LRU) ra sau khi NPResume.flush() lưu ván, nạp lại bằng ?resume=1 khi chọn lại.
+   - Chỉ khung được chọn có tiếng; bàn phím chỉ vào khung được chọn (iframe.focus()). Máy chậm (rAF > 24ms kéo dài) → tạm dừng khung phụ + không thêm khung.
+   - Giới hạn thời gian phụ huynh ("prefs"/"usage" của trang cổng): đếm giây khi có khung mở, hết giờ → đóng tất cả khung + màn khoá. Night Pass: dùng chung localStorage "pass" (game tự đọc).
+   Không có localStorage riêng: chỉ ĐỌC theme/lang/prefs/pass, GHI usage + np-resume:<id> (do game). */
+(function () {
+  var M = window.NPMultiGames, Q = new URLSearchParams(location.search), $ = function (id) { return document.getElementById(id); };
+  var POP = Q.get("portal") === "pop", ALL = Q.get("portal") === "all";
+  var LANG = document.documentElement.lang === "en" ? "en" : "vi";
+  var T = {
+    vi: { title: "Chơi cùng lúc", add: "Thêm game", back: "Về trang chủ", pick: "Chọn game để chơi cùng lúc", start: "▶ Bắt đầu", all: "Tất cả", par: "Cùng lúc", foc: "Tập trung", parTag: "chạy song song", focTag: "tập trung", open: "đang mở",
+      empty: "Bấm dấu + để chọn game.\nGame “cùng lúc” chạy song song; game “tập trung” chỉ một khung chạy, các game khác chờ ở khay.", pause: "Tạm dừng", play: "Tiếp tục", snd: "Tiếng", close: "Đóng game", move: "Đổi chỗ", menu: "Menu khung",
+      score: "Điểm", combo: "Combo", moves: "Lượt", st: { idle: "Chờ bắt đầu", playing: "Đang chơi", over: "Đã xong", paused: "Tạm dừng" }, tap: "⏸ Tạm dừng\nChạm để tiếp tục", loading: "Đang tải…",
+      resumeTag: "đang chơi dở", saved: "đã lưu ván", full: "Chỉ chơi tối đa {n} game cùng lúc trên máy này.", nofit: "Màn hình không đủ chỗ cho thêm khung nữa.", slow: "⚠ Máy hơi chậm: đã tạm dừng khung phụ", slowAdd: "Máy đang chậm, tạm thời chưa thêm khung được.",
+      selMax: "Hết chỗ: bỏ bớt game đã chọn.", timeH: "Hết giờ chơi hôm nay", timeP: "Đã đến giới hạn thời gian do phụ huynh đặt. Hẹn ngày mai nhé!", home: "Về trang chủ", sel: "Đã chọn", page: "Trang", min: "ph" },
+    en: { title: "Play together", add: "Add game", back: "Back home", pick: "Pick games to play at once", start: "▶ Start", all: "All", par: "Together", foc: "Focus", parTag: "runs together", focTag: "focus", open: "open",
+      empty: "Tap + to pick games.\n“Together” games run side by side; “Focus” games run one at a time and wait in the tray.", pause: "Pause", play: "Resume", snd: "Sound", close: "Close game", move: "Swap", menu: "Frame menu",
+      score: "Score", combo: "Combo", moves: "Moves", st: { idle: "Ready", playing: "Playing", over: "Finished", paused: "Paused" }, tap: "⏸ Paused\nTap to resume", loading: "Loading…",
+      resumeTag: "in progress", saved: "game saved", full: "This device can run up to {n} games at once.", nofit: "No room for another frame on this screen.", slow: "⚠ Device is slow: side frames paused", slowAdd: "Device is slow, can't add a frame right now.",
+      selMax: "No room: unselect a game.", timeH: "Time's up for today", timeP: "The time limit set by a parent has been reached. See you tomorrow!", home: "Back home", sel: "Selected", page: "Page", min: "min" }
+  };
+  var t = function () { return T[LANG]; };
+  var PORTAL_HOME = POP ? "../popplay/index.html" : "index.html";
+  var gname = function (id) { var g = M.flag(id); return g[LANG] || g.vi; };
+  var ICON = {
+    dots: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="19" cy="12" r="2.2"/></svg>',
+    pause: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1.2"/><rect x="14" y="5" width="4" height="14" rx="1.2"/></svg>',
+    play: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l12-7.5z"/></svg>',
+    snd: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z" fill="currentColor"/><path d="M15.5 9a4 4 0 010 6M18 6.5a8 8 0 010 11"/></svg>',
+    mute: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z" fill="currentColor"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>',
+    swap: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4L3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/></svg>',
+    x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>'
+  };
+
+  /* ---------- ngân sách theo thiết bị ---------- */
+  function caps() {
+    var W = innerWidth, H = innerHeight, mn = Math.min(W, H), coarse = false, o;
+    try { coarse = matchMedia("(pointer:coarse)").matches; } catch (e) {}
+    var mem = navigator.deviceMemory || 4, cores = navigator.hardwareConcurrency || 4;
+    if (mn < 600) o = { kind: "phone", slots: 2, alive: 2 };
+    else if (coarse && mn < 1100) o = (mem <= 3 || cores <= 4) ? { kind: "tablet", slots: 3, alive: 3 } : { kind: "tablet", slots: 4, alive: 4 };
+    else o = (mem <= 4 || cores <= 4) ? { kind: "desktop", slots: 4, alive: 5 } : { kind: "desktop", slots: 6, alive: 8 };
+    var qs = +Q.get("slots"), qa = +Q.get("alive"); if (qs > 0) o.slots = qs; if (qa > 0) o.alive = qa;
+    return o;
+  }
+  var CAP = caps();
+
+  /* ---------- giới hạn thời gian phụ huynh ---------- */
+  var prefs = { limit: 0, off: [] }; try { Object.assign(prefs, JSON.parse(localStorage.getItem("prefs")) || {}); } catch (e) {}
+  var today = function () { return new Date().toLocaleDateString("sv"); }, usedSec = 0, day = today();
+  try { var u = JSON.parse(localStorage.getItem("usage")); if (u && u.d === day) usedSec = u.s; } catch (e) {}
+  var isTimeUp = function () { return prefs.limit > 0 && usedSec >= prefs.limit * 60; };
+
+  /* ---------- trạng thái ---------- */
+  var items = [], main = null, sel = null, switching = false, slow = false, forceSlow = Q.get("perf") === "slow", sheetSel = [], flt = "all", page = 0;
+  var grid = $("grid"), tray = $("tray"), now = function () { return Date.now(); };
+  var slotItems = function () { return items.filter(function (i) { return i.where === "slot"; }); };
+  var trayItems = function () { return items.filter(function (i) { return i.where === "tray"; }); };
+  var alive = function () { return items.filter(function (i) { return i.fr; }); };
+  var find = function (id) { for (var i = 0; i < items.length; i++) if (items[i].id === id) return items[i]; return null; };
+  function toast(m) { var e = $("toast"); e.textContent = m; e.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(function () { e.classList.remove("on"); }, 2600); }
+  var hasSave = function (id) { try { var r = JSON.parse(localStorage.getItem("np-resume:" + id)); return !!(r && r.state); } catch (e) { return false; } };
+  var gameUrl = function (id, resume) { var g = M.flag(id); return (g.portal === "popplay" ? "../popplay/games/" : "games/") + id + "/index.html?multi=1&lang=" + LANG + (resume ? "&resume=1" : ""); };
+
+  /* ---------- bố cục: chọn số hàng sao cho khung lớn nhất mà vẫn ≥ minW/minH ---------- */
+  var GAP = 6;
+  function plan(n, W, H, mw, mh) {
+    var best = null;
+    for (var rows = 1; rows <= n; rows++) {
+      var counts = [], base = Math.floor(n / rows), extra = n % rows;
+      for (var r = 0; r < rows; r++) counts.push(base + (r < extra ? 1 : 0));
+      var h = (H - GAP * (rows - 1)) / rows, minRatio = 1e9;
+      counts.forEach(function (k) { var w = (W - GAP * (k - 1)) / k; minRatio = Math.min(minRatio, w / mw, h / mh); });
+      if (!best || minRatio > best.ratio + 1e-6) best = { rows: rows, counts: counts, ratio: minRatio, h: h };
+    }
+    return best;
+  }
+  function areaSize() { var r = grid.getBoundingClientRect(); return { W: Math.max(0, r.width), H: Math.max(0, r.height) }; }
+  function needMin(list) { var mw = 0, mh = 0; list.forEach(function (i) { mw = Math.max(mw, i.g.minW); mh = Math.max(mh, i.g.minH); }); return { mw: mw || 280, mh: mh || 320 }; }
+  function fits(list) { if (!list.length) return true; var a = areaSize(), m = needMin(list), p = plan(list.length, a.W, a.H, m.mw, m.mh); return p.ratio >= 0.999; }
+  function layout() {
+    var list = slotItems(), a = areaSize(); $("empty").hidden = list.length > 0 || items.length > 0 && false;
+    $("empty").hidden = list.length > 0; $("empty").textContent = t().empty;
+    if (!list.length) return;
+    var m = needMin(list), p = plan(list.length, a.W, a.H, m.mw, m.mh), k = 0;
+    p.counts.forEach(function (cnt, r) {
+      var w = (a.W - GAP * (cnt - 1)) / cnt, y = r * (p.h + GAP);
+      for (var c = 0; c < cnt; c++) { var it = list[k++], s = it.el.style; s.left = Math.round(c * (w + GAP)) + "px"; s.top = Math.round(y) + "px"; s.width = Math.round(w) + "px"; s.height = Math.round(p.h) + "px"; }
+    });
+  }
+
+  /* ---------- khung game ---------- */
+  function buildEl(it) {
+    var el = document.createElement("div"); el.className = "fr"; el.dataset.id = it.id;
+    el.innerHTML = '<div class="ld"></div><div class="po"></div><div class="cd"></div><button class="mi" type="button" aria-haspopup="true"><i>' + ICON.dots + '</i></button><div class="pn" role="group"></div>';
+    el.querySelector(".ld").textContent = t().loading; el.querySelector(".po").textContent = t().tap; el.querySelector(".mi").setAttribute("aria-label", t().menu + ": " + gname(it.id));
+    el.querySelector(".po").addEventListener("click", function () { it.userPaused = false; it.autoPaused = false; sync(it); render(it); });
+    el.querySelector(".mi").addEventListener("click", function (e) { e.stopPropagation(); togglePanel(it); });
+    el.addEventListener("pointerdown", function () { if (sel !== it) select(it); }, true);
+    var pn = el.querySelector(".pn");
+    pn.innerHTML = '<div class="pt"><b></b><span data-k="st"></span></div><div class="pr"><span data-l="score"></span><b data-k="score">–</b></div><div class="pr"><span data-l="cc"></span><b data-k="cc">–</b></div><div class="pb"></div>';
+    var pb = pn.querySelector(".pb");
+    [["pz", ICON.pause, function () { it.userPaused = !it.userPaused; if (!it.userPaused) it.autoPaused = false; sync(it); render(it); }],
+     ["sn", ICON.snd, function () { it.userMuted = !it.userMuted; send(it, it.userMuted ? "mute" : "unmute"); render(it); }],
+     ["mv", ICON.swap, function () { moveEarlier(it); }],
+     ["x", ICON.x, function () { closeItem(it); }]].forEach(function (d) {
+      var b = document.createElement("button"); b.type = "button"; b.dataset.a = d[0]; if (d[0] === "x") b.className = "x"; b.innerHTML = d[1]; b.addEventListener("click", function (e) { e.stopPropagation(); d[2](); }); pb.appendChild(b);
+    });
+    grid.appendChild(el); return el;
+  }
+  function render(it) {
+    if (!it.el) return; var el = it.el, h = it.hud || {}, T_ = t();
+    var paused = it.userPaused || it.autoPaused;
+    el.classList.toggle("paused", paused); el.classList.toggle("sel", sel === it); el.classList.toggle("counting", !!it.counting); el.classList.toggle("ready", !!it.ready);
+    var pn = el.querySelector(".pn");
+    pn.querySelector("b").textContent = gname(it.id); pn.querySelector('[data-k=st]').textContent = T_.st[paused ? "paused" : (h.state || "idle")] || "";
+    pn.querySelector('[data-l=score]').textContent = T_.score; pn.querySelector('[data-k=score]').textContent = h.score != null ? h.score : "–";
+    var hasCombo = h.combo != null; pn.querySelector('[data-l=cc]').textContent = hasCombo ? T_.combo : T_.moves; pn.querySelector('[data-k=cc]').textContent = hasCombo ? h.combo : (h.moves != null ? h.moves : "–");
+    var bz = pn.querySelector('[data-a=pz]'), bs = pn.querySelector('[data-a=sn]'), bm = pn.querySelector('[data-a=mv]'), bx = pn.querySelector('[data-a=x]');
+    bz.innerHTML = paused ? ICON.play : ICON.pause; bz.setAttribute("aria-label", paused ? T_.play : T_.pause); bz.title = bz.getAttribute("aria-label");
+    bs.innerHTML = it.userMuted ? ICON.mute : ICON.snd; bs.setAttribute("aria-label", T_.snd); bs.setAttribute("aria-pressed", String(!it.userMuted)); bs.title = T_.snd;
+    bm.setAttribute("aria-label", T_.move); bm.title = T_.move; bm.hidden = slotItems().length < 2 || it.where !== "slot";
+    bx.setAttribute("aria-label", T_.close); bx.title = T_.close;
+  }
+  function togglePanel(it) {
+    var open = !it.el.classList.contains("po-open");
+    items.forEach(function (o) { if (o.el) o.el.classList.remove("po-open"); });
+    if (open) { it.el.classList.add("po-open"); select(it); render(it); }
+  }
+  function closePanels() { items.forEach(function (o) { if (o.el) o.el.classList.remove("po-open"); }); }
+
+  /* ---------- giao thức ---------- */
+  function send(it, cmd) { try { if (it.fr && it.fr.contentWindow) it.fr.contentWindow.postMessage({ np: 1, type: "np-cmd", cmd: cmd }, location.origin); } catch (e) {} }
+  /* khung phải tạm dừng khi: người dùng/máy chậm tạm dừng, đang ở khay (đóng băng), đang đếm ngược 3-2-1 */
+  function sync(it) {
+    if (!it.fr || !it.ready) return;
+    var want = !!(it.userPaused || it.autoPaused || it.where === "tray" || it.counting);
+    if (want && !it.sentPaused) { it.sentPaused = true; send(it, "pause"); }
+    else if (!want && it.sentPaused) { it.sentPaused = false; send(it, "resume"); }
+    render(it);
+  }
+  function applyAudio() { items.forEach(function (it) { if (!it.fr || !it.ready) return; send(it, sel === it && it.where === "slot" ? "focus" : "blur"); send(it, it.userMuted ? "mute" : "unmute"); }); }
+  function select(it) {
+    if (!it || it.where !== "slot") return; sel = it; it.lastUsed = now();
+    items.forEach(function (o) { if (o.el) o.el.classList.toggle("sel", o === it); });
+    applyAudio(); try { it.fr.focus(); it.fr.contentWindow.focus(); } catch (e) {}
+  }
+  addEventListener("message", function (e) {
+    if (e.origin !== location.origin || !e.data || e.data.np !== 1) return;
+    var it = null; for (var i = 0; i < items.length; i++) if (items[i].fr && items[i].fr.contentWindow === e.source) { it = items[i]; break; }
+    if (!it) return; var d = e.data;
+    if (d.type === "np-hello") { it.ready = true; it.el.classList.add("ready"); if (it._hello) it._hello(); sync(it); applyAudio(); render(it); }
+    else if (d.type === "np-hud") { it.hud = d; if (d.state === "playing") { it.wasPlaying = true; it.lastPlay = now(); } else if (d.state === "over" || d.state === "idle") it.wasPlaying = false; render(it); renderTrayLater(); }
+    else if (d.type === "np-snap") { if (it._snap) { var r = it._snap; it._snap = null; r(d.dataUrl || null); } }
+    else if (d.type === "np-key") { if (d.key === "Escape") closePanels(); }
+    else if (d.type === "np-focus") { if (sel !== it && it.where === "slot") select(it); }
+  });
+  function snapshot(it) {
+    return new Promise(function (res) { if (!it.fr || !it.ready) return res(null); var done = false, f = function (v) { if (!done) { done = true; res(v); } }; it._snap = f; send(it, "snapshot"); setTimeout(function () { f(null); }, 500); });
+  }
+
+  /* ---------- vòng đời khung ---------- */
+  function newItem(id) { var g = M.flag(id); var it = { id: id, g: g, mode: g.mode, where: "tray", fr: null, el: null, hud: null, thumb: null, ready: false, sentPaused: false, userPaused: false, autoPaused: false, userMuted: false, counting: false, wasPlaying: false, lastUsed: now(), lastPlay: 0, firstAt: now() }; items.push(it); it.el = buildEl(it); it.el.classList.add("hid"); return it; }
+  function makeFrame(it) {
+    var resume = hasSave(it.id), fr = document.createElement("iframe");
+    fr.setAttribute("allow", "autoplay; microphone"); fr.title = gname(it.id); fr.src = gameUrl(it.id, resume && it.g.resumable);
+    it.el.insertBefore(fr, it.el.firstChild); it.fr = fr; it.ready = false; it.sentPaused = false; it.el.classList.remove("ready"); it.lastUsed = now();
+    it.fresh = false; return fr;
+  }
+  function evictable(it) { return it.where === "tray" && it.fr && (it.g.resumable || !it.wasPlaying); }
+  function evict(it) {
+    try { var w = it.fr.contentWindow; if (w && w.NPResume) w.NPResume.flush(); } catch (e) {}
+    it.fr.remove(); it.fr = null; it.ready = false; it.sentPaused = false; it.saved = true; render(it); renderTray();
+  }
+  function roomFor(extra, ignore) {   /* đảm bảo còn chỗ cho thêm `extra` iframe: đẩy game focus cũ nhất (LRU) ra; false nếu không đẩy được */
+    var guard = 20;
+    while (alive().length + extra > CAP.alive && guard-- > 0) {
+      var c = items.filter(function (i) { return evictable(i) && i !== ignore; }).sort(function (a, b) { return a.lastUsed - b.lastUsed; })[0];
+      if (!c) return false; evict(c);
+    }
+    return alive().length + extra <= CAP.alive;
+  }
+  function canEvictCount() { return items.filter(evictable).length; }
+  function closeItem(it) {
+    try { if (it.fr && it.fr.contentWindow && it.fr.contentWindow.NPResume) it.fr.contentWindow.NPResume.flush(); } catch (e) {}
+    if (it.fr) it.fr.remove(); it.el.remove(); items.splice(items.indexOf(it), 1);
+    if (main === it) main = null; if (sel === it) { sel = null; var s = slotItems()[0]; if (s) select(s); }
+    layout(); renderTray(); applyAudio();
+  }
+  function moveEarlier(it) {
+    var list = slotItems(), i = list.indexOf(it); if (i < 0 || list.length < 2) return; var j = (i + list.length - 1) % list.length, other = list[j];
+    var a = items.indexOf(it), b = items.indexOf(other); items[a] = other; items[b] = it; layout(); closePanels();
+  }
+  function runCountdown(it) {
+    return new Promise(function (res) {
+      var n = 3, cd = it.el.querySelector(".cd"); it.counting = true; sync(it); cd.textContent = n; it.el.classList.add("counting");
+      (function tick() { setTimeout(function () { n--; if (n > 0) { cd.textContent = n; tick(); } else { it.counting = false; it.el.classList.remove("counting"); sync(it); res(); } }, 700); })();
+    });
+  }
+  async function freeze(it) {
+    if (!it || !it.fr) { it.where = "tray"; renderTray(); return; }
+    var s = await snapshot(it); if (s) it.thumb = s;
+    it.where = "tray"; it.frozenAt = now(); it.el.classList.add("hid"); it.el.classList.remove("po-open"); sync(it); send(it, "blur"); if (sel === it) sel = null;
+  }
+  function slotFree(extraItem, replacing) {
+    var list = slotItems().filter(function (i) { return i !== replacing; });
+    if (list.length + 1 > CAP.slots) return "full";
+    if (!fits(list.concat([extraItem]))) return "nofit";
+    return "";
+  }
+  function startTimer() { /* đếm giờ bắt đầu khi có khung đầu tiên (xem tick) */ }
+  async function addOne(id, asMain) {
+    var ex = find(id); if (ex) { if (ex.where === "tray") return switchTo(ex); select(ex); return ex; }
+    if (isTimeUp()) { showLock(); return null; }
+    if (slow) { toast(t().slowAdd); return null; }
+    var g = M.flag(id), probe = { g: g };
+    if (g.mode === "focus") {
+      if (main) {   /* thay khung chính: số khung hiển thị không đổi, nhưng iframe cũ có thể cần đẩy ra */
+        var f = slotFree(probe, main); if (f === "nofit") { toast(t().nofit); return null; }
+        if (alive().length + 1 > CAP.alive && canEvictCount() + (main.g.resumable || !main.wasPlaying ? 1 : 0) === 0) { toast(t().full.replace("{n}", CAP.alive)); return null; }
+      } else { var f2 = slotFree(probe); if (f2) { toast(f2 === "full" ? t().full.replace("{n}", CAP.slots) : t().nofit); return null; } }
+      var old = main; if (old) { await freeze(old); main = null; }
+      if (!roomFor(1)) { toast(t().full.replace("{n}", CAP.alive)); if (old) { old.where = "slot"; old.el.classList.remove("hid"); main = old; sync(old); layout(); } return null; }
+      var it = newItem(id); it.where = "slot"; main = it; it.el.classList.remove("hid"); makeFrame(it); layout(); renderTray(); select(it); return it;
+    }
+    var f3 = slotFree(probe); if (f3) { toast(f3 === "full" ? t().full.replace("{n}", CAP.slots) : t().nofit); return null; }
+    if (!roomFor(1)) { toast(t().full.replace("{n}", CAP.alive)); return null; }
+    var p = newItem(id); p.where = "slot"; p.el.classList.remove("hid"); makeFrame(p); layout(); renderTray(); select(p); return p;
+  }
+  async function switchTo(it) {
+    if (switching || !it || it.where !== "tray") return it; switching = true;
+    try {
+      var old = main; if (old && old !== it) { await freeze(old); main = null; }
+      if (!it.fr) { if (!roomFor(1, it)) { toast(t().full.replace("{n}", CAP.alive)); if (old) { old.where = "slot"; old.el.classList.remove("hid"); main = old; sync(old); layout(); } return it; } makeFrame(it); it.saved = false; }
+      it.where = "slot"; main = it; it.lastUsed = now(); it.el.classList.remove("hid"); layout(); renderTray();
+      var cd = it.wasPlaying; select(it); if (cd) { await runCountdown(it); } else sync(it);
+    } finally { switching = false; }
+    return it;
+  }
+  async function addTray(id) {   /* game focus thêm vào khay mà không tải iframe (chỉ tải khi chọn) */
+    if (find(id)) return; var it = newItem(id); it.fresh = true; it.where = "tray"; renderTray(); return it;
+  }
+
+  /* ---------- khay thumbnail ---------- */
+  var trayT = 0; function renderTrayLater() { clearTimeout(trayT); trayT = setTimeout(renderTray, 150); }
+  function renderTray() {
+    var list = trayItems(), side = document.body.classList.contains("side"), wide = !side && innerWidth >= 700; tray.textContent = "";
+    var cap = Math.max(1, Math.floor(((side ? tray.clientHeight : tray.clientWidth) || 200) / (side ? 50 : wide ? 112 : 58))), shown = list.slice(0, cap);
+    shown.forEach(function (it) {
+      var b = document.createElement("button"); b.type = "button"; b.className = "tc" + (wide ? " wide" : ""); b.dataset.id = it.id; b.setAttribute("role", "listitem");
+      var h = it.hud || {}, sc = h.score != null ? h.score : null, mins = it.lastPlay ? Math.max(1, Math.round((now() - it.firstAt) / 60000)) : 0;
+      var label = gname(it.id) + (it.wasPlaying ? " — " + t().resumeTag : "") + (sc != null ? " · " + sc : "");
+      b.setAttribute("aria-label", label); b.title = label;
+      var im = it.thumb ? '<img alt="" src="' + it.thumb + '">' : '<span>' + it.g.icon + '</span>';
+      if (wide) { b.innerHTML = '<span class="im">' + im + '</span><span class="tx"><b></b><span></span></span>'; b.querySelector("b").textContent = gname(it.id); b.querySelector(".tx span").textContent = (it.wasPlaying ? t().resumeTag : t().saved) + (sc != null ? " · " + sc : ""); }
+      else { b.innerHTML = im + (sc != null ? '<span class="sc">' + sc + '</span>' : "") + (it.wasPlaying ? '<span class="pz">⏸</span>' : ""); }
+      b.addEventListener("click", function () { switchTo(it); }); tray.appendChild(b);
+    });
+    if (list.length > shown.length) { var m = document.createElement("span"); m.id = "more"; m.textContent = "+" + (list.length - shown.length); tray.appendChild(m); }
+  }
+
+  /* ---------- chọn game (bảng chọn có phân trang, không cuộn) ---------- */
+  var pool = function () { return M.ids().filter(function (id) { var g = M.get(id); return (ALL || (POP ? g.portal === "popplay" : g.portal === "cozyplay")) && prefs.off.indexOf(id) < 0; }); };
+  function selFits(ids) {
+    var par = ids.filter(function (i) { return M.flag(i).mode === "parallel"; }), foc = ids.filter(function (i) { return M.flag(i).mode === "focus"; });
+    var slots = slotItems().filter(function (i) { return !(main && i === main && foc.length); });   /* khung chính sẽ bị thay */
+    var list = slots.concat(par.map(function (i) { return { g: M.flag(i) }; })).concat(foc.length ? [{ g: M.flag(foc[0]) }] : []);
+    return list.length <= CAP.slots && fits(list);
+  }
+  function openSheet() {
+    closePanels(); sheetSel = []; page = 0; $("shT").textContent = t().pick; $("bStart").textContent = t().start; $("sheet").hidden = false;
+    var box = $("flt"); box.textContent = "";
+    [["all", t().all], ["parallel", t().par], ["focus", t().foc]].forEach(function (d) { var b = document.createElement("button"); b.type = "button"; b.textContent = d[1]; b.dataset.f = d[0]; b.setAttribute("aria-pressed", String(flt === d[0])); b.addEventListener("click", function () { flt = d[0]; page = 0; renderSheet(); }); box.appendChild(b); });
+    renderSheet();
+  }
+  function closeSheet() { $("sheet").hidden = true; }
+  function renderSheet() {
+    $("flt").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.f === flt)); });
+    var ids = pool().filter(function (i) { return flt === "all" || M.flag(i).mode === flt; }), box = $("tiles"), r = box.getBoundingClientRect();
+    var cols = Math.max(2, Math.floor((r.width + 8) / 112)), rows = Math.max(1, Math.floor((r.height + 8) / 92)), per = cols * rows, pages = Math.max(1, Math.ceil(ids.length / per));
+    page = Math.min(page, pages - 1); box.style.gridTemplateColumns = "repeat(" + cols + ",1fr)"; box.style.gridAutoRows = "84px"; box.textContent = "";
+    ids.slice(page * per, page * per + per).forEach(function (id) {
+      var g = M.flag(id), b = document.createElement("button"), open = !!find(id); b.type = "button"; b.className = "tile" + (open ? " open" : ""); b.dataset.id = id;
+      b.innerHTML = '<span class="ti"></span><b></b><i></i>'; b.querySelector(".ti").textContent = g.icon; b.querySelector("b").textContent = gname(id);
+      b.querySelector("i").textContent = open ? t().open : g.mode === "parallel" ? t().parTag : t().focTag;
+      b.setAttribute("aria-pressed", String(sheetSel.indexOf(id) >= 0)); b.title = g.why;
+      b.addEventListener("click", function () {
+        if (open) { closeSheet(); var it = find(id); if (it.where === "tray") switchTo(it); else select(it); return; }
+        var k = sheetSel.indexOf(id); if (k >= 0) sheetSel.splice(k, 1); else { var next = sheetSel.concat([id]); if (!selFits(next)) { toast(t().selMax); return; } sheetSel = next; }
+        renderSheet();
+      });
+      box.appendChild(b);
+    });
+    $("pg").textContent = t().page + " " + (page + 1) + "/" + pages + (sheetSel.length ? " · " + t().sel + " " + sheetSel.length : "");
+    $("pgPrev").disabled = page <= 0; $("pgNext").disabled = page >= pages - 1; $("bStart").disabled = !sheetSel.length;
+  }
+  async function startSelected() {
+    var ids = sheetSel.slice(); closeSheet(); sheetSel = [];
+    var par = ids.filter(function (i) { return M.flag(i).mode === "parallel"; }), foc = ids.filter(function (i) { return M.flag(i).mode === "focus"; });
+    for (var i = 0; i < par.length; i++) await addOne(par[i]);
+    if (foc.length) { await addOne(foc[0]); for (var j = 1; j < foc.length; j++) await addTray(foc[j]); }
+    renderTray();
+  }
+
+  /* ---------- hết giờ / máy chậm ---------- */
+  function showLock() { items.slice().forEach(function (it) { if (it.fr) it.fr.remove(); it.el.remove(); }); items = []; main = sel = null; closeSheet(); renderTray(); $("lkH").textContent = t().timeH; $("lkP").textContent = t().timeP; $("lkGo").textContent = t().home; $("lock").hidden = false; }
+  setInterval(function () {
+    if (document.hidden || !alive().length) return;
+    if (today() !== day) { day = today(); usedSec = 0; }
+    usedSec++; if (usedSec % 5 === 0) { try { localStorage.setItem("usage", JSON.stringify({ d: day, s: usedSec })); } catch (e) {} }
+    if (isTimeUp()) { try { localStorage.setItem("usage", JSON.stringify({ d: day, s: usedSec })); } catch (e) {} showLock(); }
+  }, 1000);
+  /* đo thời gian khung hình của host: > 24ms kéo dài ~4 giây → tạm dừng khung phụ; < 20ms kéo dài ~8 giây → cho thêm khung lại (khung đã tạm dừng chờ người chơi bấm tiếp) */
+  var bad = 0, good = 0;
+  (function () {
+    var last = performance.now(), ema = 16;
+    function f(ts) {
+      var dt = ts - last; last = ts; if (dt > 0 && dt < 500 && !document.hidden) ema = ema * 0.9 + dt * 0.1; var fake = forceSlow;
+      if (ema > 24 || fake) { bad++; good = 0; } else { good++; bad = 0; }
+      if (!slow && bad > 4 * 50) setSlow(true);
+      if (slow && !forceSlow && good > 8 * 50) setSlow(false);
+      requestAnimationFrame(f);
+    }
+    requestAnimationFrame(f);
+    window.__npPerfTick = function (n) { if (n) bad = 4 * 50 + 1; };
+  })();
+  function setSlow(on) {
+    slow = on; bad = good = 0; $("perf").classList.toggle("on", on); $("perf").textContent = on ? t().slow : "";
+    if (on) items.forEach(function (it) { if (it.where === "slot" && it !== sel && !it.userPaused) { it.autoPaused = true; sync(it); } });
+  }
+
+  /* ---------- khởi động ---------- */
+  function applyText() {
+    $("ttl").textContent = t().title; $("bBack").setAttribute("aria-label", t().back); $("bAdd").setAttribute("aria-label", t().add); $("bAdd").title = t().add; $("bBack").title = t().back; $("shX").setAttribute("aria-label", "×");
+    document.title = t().title + " · " + (POP ? "Pop Play" : "Night Play");
+  }
+  function onResize() {
+    document.body.classList.toggle("side", innerWidth > innerHeight && innerHeight <= 640);
+    $("ttl").style.display = innerWidth < 520 && !document.body.classList.contains("side") ? "none" : "";
+    layout(); renderTray(); if (!$("sheet").hidden) renderSheet();
+  }
+  $("bBack").addEventListener("click", function () { location.href = PORTAL_HOME; });
+  $("bAdd").addEventListener("click", openSheet); $("shX").addEventListener("click", closeSheet); $("bStart").addEventListener("click", startSelected);
+  $("sheet").addEventListener("click", function (e) { if (e.target === $("sheet")) closeSheet(); });
+  $("pgPrev").addEventListener("click", function () { page--; renderSheet(); }); $("pgNext").addEventListener("click", function () { page++; renderSheet(); });
+  $("lkGo").addEventListener("click", function () { location.href = PORTAL_HOME; });
+  grid.addEventListener("pointerdown", function (e) { if (!e.target.closest(".pn,.mi")) closePanels(); }, true);
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") { if (!$("sheet").hidden) closeSheet(); else closePanels(); return; } if (sel && sel.fr && !e.target.closest("button")) { try { sel.fr.contentWindow.focus(); } catch (x) {} } });
+  addEventListener("resize", function () { clearTimeout(onResize.t); onResize.t = setTimeout(onResize, 60); });
+  addEventListener("pagehide", function () { items.forEach(function (it) { try { it.fr.contentWindow.NPResume.flush(); } catch (e) {} }); });
+  /* API cho bài đo (scripts/cozygame/check-multi.js) và gỡ lỗi */
+  window.NPMulti = { booted: false, caps: function () { return CAP; }, add: addOne, addTray: addTray, switchTo: function (id) { var it = find(id); return it ? switchTo(it) : null; }, select: function (id) { var it = find(id); if (it) select(it); },
+    close: function (id) { var it = find(id); if (it) closeItem(it); }, evict: function (id) { var it = find(id); if (it && it.fr) evict(it); }, setSlow: setSlow, isSlow: function () { return slow; },
+    items: function () { return items.map(function (i) { var r = i.el.getBoundingClientRect(); return { id: i.id, mode: i.mode, where: i.where, alive: !!i.fr, ready: i.ready, sel: sel === i, paused: !!(i.userPaused || i.autoPaused), sentPaused: i.sentPaused, saved: !!i.saved, hud: i.hud, thumb: !!i.thumb, counting: i.counting, rect: [Math.round(r.left), Math.round(r.top), Math.round(r.width), Math.round(r.height)] }; }); },
+    frame: function (id) { var it = find(id); return it && it.fr; }, alive: function () { return alive().length; }, main: function () { return main && main.id; }, plan: plan, fits: function (ids) { return fits(ids.map(function (i) { return { g: M.flag(i) }; })); } };
+  applyText(); onResize();
+  if (isTimeUp()) showLock();
+  else {
+    var pre = (Q.get("games") || "").split(",").filter(function (i) { return i && M.get(i); });
+    if (pre.length) (async function () { for (var i = 0; i < pre.length; i++) { var g = M.flag(pre[i]); if (g.mode === "focus" && main) await addTray(pre[i]); else await addOne(pre[i]); } window.NPMulti.booted = true; })();
+    else { openSheet(); window.NPMulti.booted = true; }
+  }
+})();
+</script>
+</body>
+</html>

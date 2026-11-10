@@ -87,6 +87,10 @@ const b64 = o => Buffer.from(JSON.stringify(o)).toString("base64").replace(/\+/g
   console.log("== tiếp tục ván dở + Back");
   const rs = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-resume.js"), "--only=" + Object.keys(GAMES).join(",")], { cwd: root, env: process.env, stdio: "inherit" });
   note(rs.status === 0, "tổng", "check-resume.js báo lỗi (tiếp tục ván dở / Back) — xem log phía trên");
+  /* chơi cùng lúc: cờ multi của mọi game + host cozyplay/multi.html (scripts/cozygame/check-multi.js) — bản nhanh, thêm --full-multi để đo cả 5 cỡ màn hình */
+  note(true, "tổng", "");
+  const mu = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-multi.js")].concat(process.argv.includes("--full-multi") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });
+  note(mu.status === 0, "tổng", "check-multi.js báo lỗi (chơi cùng lúc / thiếu cờ multi) — xem log phía trên");
   /* âm thanh: AudioContext "running" sau lần chạm đầu, nút loa/mute (scripts/cozygame/check-audio.js) — bản nhanh, thêm --full-audio để quét cả 32 game */
   console.log("== âm thanh");
   const au = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-audio.js")].concat(process.argv.includes("--full-audio") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });
