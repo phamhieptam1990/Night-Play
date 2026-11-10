@@ -209,7 +209,8 @@ h1 span{color:var(--accent)}
   :root{--w:max(150px,min(100dvh - 16px,100vw - 260px))}
   body{display:grid;grid-template-columns:minmax(0,1fr) var(--w) minmax(0,1fr);grid-template-rows:1fr auto auto 1fr;column-gap:12px;row-gap:8px;padding:8px 12px;align-content:stretch;justify-items:stretch}
   .desk-wrap{grid-column:2;grid-row:1 / span 4;align-self:center;justify-self:center}
-  .top{grid-column:1;grid-row:2;max-width:none;flex-direction:column;align-items:flex-start;gap:6px}
+  .top{grid-column:1;grid-row:2;max-width:none;flex-direction:row;flex-wrap:wrap;align-items:center;align-content:center;justify-content:flex-start;gap:6px}   /* hàng nút xếp ngang tự xuống dòng: cột trái KHÔNG cao hơn màn hình (trước: cột dọc 376px kéo giãn lưới, bàn bị cắt đáy) */
+  .top h1{order:-2;flex:1 0 100%;white-space:normal;overflow:visible;text-overflow:clip;min-width:0}#bBk{margin-right:0}#leftBox{flex:1 0 100%;min-width:0}
   .shout{grid-column:1;grid-row:3;text-align:left;min-height:18px;font-size:13px}
   .stats{grid-column:3;grid-row:2;max-width:none;grid-template-columns:1fr;gap:5px}
   .timebar{grid-column:3;grid-row:3;max-width:none;align-self:start}
@@ -285,6 +286,8 @@ html[data-skin] .ty.on{animation:tyGlow 2.4s ease-in-out infinite}
   body.at-home .ty .t{text-align:left}body.at-home .hhero,body.at-home .hsub,body.at-home #modeDesc,body.at-home .hchips{display:none}
   .ebtn{min-height:48px}
 }
+/* landscape rất thấp (≤360px: 640x360, 568x320): màn chọn gọn lại để không tràn đáy (bài đo siết bắt bOpts bị cắt) */
+@media (max-height:360px) and (min-aspect-ratio:11/10){body.at-home{padding-top:4px;padding-bottom:4px;row-gap:4px}body.at-home #home{row-gap:6px}body.at-home .hl,body.at-home .hr{gap:6px}body.at-home .ty{min-height:46px;padding:3px 6px}body.at-home #dS{display:none}body.at-home .top h1{font-size:18px}}
 
 /* điện thoại dọc: tiêu đề nhỏ lại khi đang chơi để không bị cắt (← + ⏸ + menu chiếm chỗ) */
 @media (max-width:520px) and (orientation:portrait){body:not(.at-home) .top.npfan h1{font-size:15px}.top.npfan h1.lt{font-size:15px}}

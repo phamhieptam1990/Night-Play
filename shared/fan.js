@@ -141,6 +141,8 @@
       n.style.setProperty("--npacc", css(acc, 1)); n.style.setProperty("--npon", css(on, 1));
     });
   }
+  /* độ khó đổi (shared/difficulty.js ghi html[data-dif]) → màu nhấn đổi: cập nhật ngay màu nút ⋯ + bảng menu */
+  try { new MutationObserver(function () { setTimeout(themeSync, 150); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-dif"] }); } catch (e) {}
   function setOpen(v) { if (v) themeSync(); open = v; fan.classList.toggle("open", v); fab.classList.toggle("open", v); fab.setAttribute("aria-expanded", String(v)); labels(); }
 
   /* nút nào được phép gom: đang ở thanh trên, hoặc là nút "hướng dẫn" nằm ngoài thanh (askBtn) */

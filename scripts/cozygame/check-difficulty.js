@@ -40,6 +40,7 @@ const MEASURE = () => {
   const D = document.documentElement, cs = getComputedStyle(D), b = document.getElementById("npDifBadge"), out = { dif: D.dataset.dif || null, accent: cs.getPropertyValue("--accent").trim(), dark: D.dataset.theme === "dark" };
   out.scroll = D.scrollHeight > innerHeight + 1 || D.scrollWidth > innerWidth + 1;
   if (b) { const r = b.getBoundingClientRect(), s = getComputedStyle(b); out.badge = { shown: b.classList.contains("show") && s.display !== "none" && r.width > 10 && +s.opacity > .5 && r.left >= 0 && r.top >= 0 && r.right <= innerWidth + .5 && r.bottom <= innerHeight + .5, free: b.dataset.free, text: b.textContent, cr: +cr(s.backgroundColor, s.color).toFixed(2), w: Math.round(r.width), h: Math.round(r.height) }; }
+  const fb = document.querySelector("#npFab,#npPmFab"); if (fb && fb.getClientRects().length) out.fab = getComputedStyle(fb).backgroundColor;   /* nút ⋯ (fan.js / popmenu.js) phải theo màu độ khó */
   const chip = document.querySelector(":is(.lvs,#lvs,#diffs)>.on,:is(.lvs,#lvs,#diffs)>[aria-pressed=true]");
   if (chip) { const s = getComputedStyle(chip); out.chip = { cr: +cr(s.backgroundColor, s.color).toFixed(2), bg: s.backgroundColor, dt: chip.dataset.dt || null }; }
   return out;
@@ -57,7 +58,7 @@ const LABEL = { vi: ["Dễ", "Thường", "Khó", "Rất khó", "Cực khó"], e
   for (const [g, [W, H], theme, lang] of combos) {
     if (g.id !== lastId) { console.log("== " + g.id); lastId = g.id; }
     const tag = g.id + " " + W + "x" + H + " " + theme + "/" + lang;
-    let N = g.size ? g.size.length : null; const accents = [], doms = [];
+    let N = g.size ? g.size.length : null; const accents = [], doms = [], fabs = [];
     for (let i = 0; ; i++) {
       const pg = await br.newPage(), errs = []; pg.on("pageerror", e => errs.push(e.message));
       await pg.setViewport({ width: W, height: H, isMobile: true, hasTouch: true });
@@ -76,7 +77,7 @@ const LABEL = { vi: ["Dễ", "Thường", "Khó", "Rất khó", "Cực khó"], e
       if (h.chip) { note(h.chip.cr >= 4.5, t2 + " chọn: chữ trên chip đang chọn tương phản " + h.chip.cr + " (<4.5)"); note(h.chip.dt === exp, t2 + " chọn: chip chưa gắn data-dt=" + exp); }
       else note(!!g.size, t2 + " chọn: không tìm thấy chip đang chọn");
       note(!h.scroll, t2 + " chọn: trang bị cuộn/tràn");
-      accents.push(h.accent); doms.push(h.dif);
+      accents.push(h.accent); doms.push(h.dif); if (h.fab) fabs.push(h.fab);
       if (SHOTS) await pg.screenshot({ path: path.join(SHOTS, [g.id, W + "x" + H, theme, lang, "c" + (i + 1), "chon"].join("-") + ".png") });
       await pg.evaluate(g.start); await wait(1400);
       const p = await pg.evaluate(MEASURE);
@@ -96,6 +97,7 @@ const LABEL = { vi: ["Dễ", "Thường", "Khó", "Rất khó", "Cực khó"], e
       await pg.close();
     }
     note(new Set(accents).size === accents.length && accents.length >= 2, tag + ": --accent phải KHÁC NHAU giữa các độ khó, đo được " + accents.join(" / "));
+    if (fabs.length) note(fabs.length === accents.length && new Set(fabs).size === fabs.length, tag + ": nút ⋯ phải đổi màu theo độ khó, đo được " + fabs.join(" / "));
     console.log("  " + doms.join(" → ") + " · accent " + accents.join(" "));
   }
   /* Skin Night Pass Pop (đặt --accent trên #play bằng JS): skin THẮNG ở màu nhấn trong khung chơi, còn chip + huy hiệu + data-dif vẫn đổi theo độ khó */

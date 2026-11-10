@@ -110,6 +110,8 @@
     var acc = resolve(getComputedStyle(de).getPropertyValue("--accent").trim()) || ink, on = lum(acc) > 0.6 ? { r: 20, g: 18, b: 31, a: 1 } : { r: 255, g: 255, b: 255, a: 1 };
     [fan, fab].forEach(function (n) { n.style.setProperty("--npbg", css(bg, 1)); n.style.setProperty("--npink", css(ink, 1)); n.style.setProperty("--npline", css(line, 0.35)); n.style.setProperty("--npacc", css(acc, 1)); n.style.setProperty("--npon", css(on, 1)); });
   }
+  /* độ khó đổi (shared/difficulty.js ghi html[data-dif]) → màu nhấn đổi: cập nhật ngay màu nút ⋯ + bảng menu */
+  try { new MutationObserver(function () { setTimeout(themeSync, 150); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-dif"] }); } catch (e) {}
   function setOpen(v) { if (v) themeSync(); open = v; fan.classList.toggle("open", v); fab.classList.toggle("open", v); fab.classList.remove("nudge"); fab.setAttribute("aria-expanded", String(v)); labels(); }
 
   function flag(v) { try { window.__npDock = v; if (pd) { var s = pd.getElementById("stage"); if (s) s.classList.toggle("docked", v); } } catch (e) {} }
