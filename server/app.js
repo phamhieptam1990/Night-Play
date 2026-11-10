@@ -337,7 +337,8 @@ route("POST", /^\/api\/restore$/, async ({ body, ip }) => {
     await db.query(
       `insert into otps(email, hash, exp, tries) values ($1, $2, now() + interval '10 minutes', 0)
        on conflict (email) do update set hash = $2, exp = now() + interval '10 minutes', tries = 0`, [email, hmac(email + otp)]);
-    await sendMail(email, "Mã khôi phục Night Play", `Mã của bạn: ${otp} (hiệu lực 10 phút)`);
+    await sendMail(email, `Mã xác nhận Night Play: ${otp}`,
+      `Mã xác nhận Night Play của bạn là ${otp}.\nMã có hiệu lực trong 10 phút. Nhập mã này vào trang khôi phục Night Pass.\n\nNếu bạn không yêu cầu, hãy bỏ qua thư này, tài khoản của bạn vẫn an toàn.\n\nYour Night Play verification code is ${otp}. It is valid for 10 minutes. If you did not request it, you can ignore this email.\n\nNight Play - nightplay.vn - support@nightplay.vn`);
   }
   return out(200, { ok: true });
 });
