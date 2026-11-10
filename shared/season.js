@@ -128,6 +128,7 @@
     "@media (prefers-reduced-motion:reduce){.ns-card{animation:none}}" +
     "@media (max-height:560px){.ns-ov{padding:8px}.ns-card{width:min(94vw,560px);margin-top:10px;padding:24px 14px 12px}.ns-hero{display:none}.ns-card h2{font-size:18px}.ns-card .sub{margin:2px 0 6px;font-size:12px}.ns-grid{margin:8px 0;gap:6px}.ns-st{min-height:58px;padding:5px 2px}.ns-st .e{font-size:20px}.ns-btn{min-height:42px}}" +
     "html.playing .ns-toast{display:none!important}" +
+    "body:has(.bars-pop:not([hidden])) .ns-toast{display:none!important}" +   /* menu ⋯ đang mở thì thông báo sự kiện không che menu */
     ".ns-pop{animation:nsPop 1.1s ease-out 2}@keyframes nsPop{0%,100%{transform:scale(1)}30%{transform:scale(1.35);box-shadow:0 0 0 6px rgba(255,210,74,.55)}60%{transform:scale(.95)}}" +
     "@media (prefers-reduced-motion:reduce){.ns-fl{display:none}}";
   document.head.appendChild(css);
