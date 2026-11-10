@@ -10,6 +10,18 @@ Nguyên tắc chung: **không báo "xong" khi chưa tự mở trình duyệt th�
 4. Chụp ảnh thật (puppeteer-core + Chrome, `python3 -m http.server`) ở: 360×640, 380×760, ngang 844×390 và 1200×640; bản free + MỌI giao diện Night Pass; màn home, màn chơi, màn kết thúc, popup. Tự nhìn ảnh.
 5. Commit nhỏ, tiếng Việt. Không push khi chưa được yêu cầu. Không commit `code.md`.
 
+## 0a. LỖI NGƯỜI DÙNG BÁO LẶP LẠI — đọc kỹ, kiểm tra từng dòng trước khi báo "xong"
+1. **Sửa MỘT chỗ = sửa cho TẤT CẢ nhóm**: Cozy sinh tự động, Cozy viết tay (Đập Deadline, Cánh Nhỏ Phiêu Lưu…), Pop Play, các trang cổng, VÀ cả điện thoại dọc, điện thoại ngang, iPad dọc/ngang. Game viết tay không tự hưởng thay đổi của `tpl.html`: phải nạp tay `shared/dock.js`, `fan.js`, `icons.js`… (từng bỏ sót hai game này nhiều lần).
+2. **Kiểm tra qua TRANG CỔNG thật** (`cozyplay/index.html#id`, `popplay/index.html#id`), không chỉ mở game riêng: nút nổi 📷/📤/← của cổng chỉ xuất hiện ở đó (từng báo "xong" mà qua cổng vẫn rời rạc).
+3. **Mỗi quy tắc phải có bài đo tự động** (`check.js`, `check-portal.js`, `check-popmenu.js`, `check-audio.js`…). Quy tắc chỉ ghi chữ thì sẽ bị quên; sửa giao diện xong mà bài đo cũ báo sai thì sửa bài đo CHO ĐÚNG, không tắt.
+4. **Đừng tin báo cáo "đã làm" của Agent**: người điều phối tự mở vài game qua cổng, chụp ảnh và nhìn trước khi báo người dùng.
+5. **Thanh trên điện thoại dọc**: ← | tên game | 🔊 | ⋯ (menu 3×2 có nhãn); các icon khác (?, xếp hạng, 📷, 📤, ngôn ngữ, khoá trẻ em…) nằm TRONG menu; màu bảng menu/popup lấy theo giao diện của chính game (không nền trắng chữ đen).
+6. **Tên game nằm SÁT khung thông tin** (≤ ~16px), không cắt "…", tối đa 2 dòng; ở màn chọn, màn chơi và màn kết thúc.
+7. **Popup/thông báo/thẻ hướng dẫn KHÔNG ĐƯỢC che khu vực chơi** (từng che trứng ở Gà Mẹ làm khó bắn): thông báo trong ván nằm ngoài vùng chơi (hàng điểm số), không chặn chạm (`pointer-events:none`), ngắn (≤ ~1,5 giây); thẻ hướng dẫn tự ẩn nhanh và biến mất ngay khi người chơi chạm vào khung chơi.
+8. **Popup luôn nằm trọn trong màn hình**: `box-sizing:border-box`, lề ≥16px hai bên, nút ≥44px, chữ nằm trong thẻ có nền (từng cắt viền ở Đập Deadline).
+9. **Nút phải đủ lớn và không đè nhau**: ≥44px, nút chính "Mở Night Pass" là nút chữ nhật một dòng (không tròn nhiều dòng).
+10. **Không bao giờ deploy/push/chạy migration khi chưa được người dùng cho phép rõ ràng** (khi được phép thì chỉ deploy từ bản sạch của commit đã qua `check.js`).
+
 ## 0b. MỘT lỗi/cải tiến giao diện = sửa cho TẤT CẢ các nhóm game (lỗi hay lặp lại)
 Dự án có 3 nhóm: **Cozy Play** (`cozyplay/`: 9 game sinh tự động từ `scripts/cozygame/` + game viết tay), **Pop Play** (`popplay/`: game trẻ em, 12 game) và **trang cổng** (`cozyplay/index.html`, `popplay/index.html`, `index.html`). Từng có lần chỉ sửa Cozy Play rồi người dùng phải báo lại cho Pop Play. Quy tắc:
 - Khi sửa MỘT lỗi hoặc thêm MỘT tính năng giao diện (layout màn ngang/dọc, tên game bị cắt "…", nút ←, nút "?", màn kết thúc, popup chọn loại chơi/giao diện, lưới game, thanh trên, toast, Night Pass…), **tự hỏi: Pop Play và trang cổng kia có lỗi giống vậy không?** Chạy `grep` mẫu code cũ trong `popplay/` và `cozyplay/` (kể cả game viết tay) để tìm mọi chỗ.
