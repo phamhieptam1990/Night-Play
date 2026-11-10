@@ -2,7 +2,7 @@
 "use strict";
 const fs = require("fs"), path = require("path");
 const root = path.join(__dirname, "..");
-const dist = path.join(root, "dist");
+const dist = process.env.DIST_DIR ? path.resolve(process.env.DIST_DIR) : path.join(root, "dist");   // DIST_DIR: thư mục đích khác (bài đo check-landing.js)
 /* SITE_TARGET: "hub" = site công khai (không có admin) · "admin" = chỉ trang quản trị · bỏ trống = tất cả (chạy 1 site) */
 const TARGET = process.env.SITE_TARGET || "all";
 const HUB = ["sw.js", "manifest.webmanifest", "index.html", "subscribe.html", "privacy.html", "restricted.html", "help.html", "shared.html", "leaderboard.html", "passcheck.html", "cozyplay", "popplay", "shared"];   // thêm mục mới ở đây
@@ -13,6 +13,17 @@ for (const p of PUBLIC) {
   const src = path.join(root, p);
   if (!fs.existsSync(src)) { console.warn("bỏ qua (không tồn tại): " + p); continue; }
   fs.cpSync(src, path.join(dist, p), { recursive: true, filter: s => !path.basename(s).startsWith(".") });
+}
+/* Landing giới thiệu (landing/*): mỗi mục con được copy lên GỐC dist (/gioi-thieu/, /sitemap.xml, /robots.txt); chỉ site công khai, không có ở admin */
+if (TARGET !== "admin") {
+  const land = path.join(root, "landing");
+  if (fs.existsSync(land)) for (const e of fs.readdirSync(land)) {
+    if (e.startsWith(".")) continue;
+    fs.cpSync(path.join(land, e), path.join(dist, e), { recursive: true, filter: s => !path.basename(s).startsWith(".") });
+  }
+  const day = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Ho_Chi_Minh" }).format(new Date());
+  const sm = path.join(dist, "sitemap.xml");
+  if (fs.existsSync(sm)) fs.writeFileSync(sm, fs.readFileSync(sm, "utf8").replace(/__BUILD_DATE__/g, day));
 }
 /* Ghi ngày build (giờ Việt Nam) để hiển thị "Cập nhật lần cuối" ở cuối mỗi trang */
 const upd = path.join(dist, "shared", "updated.js");
