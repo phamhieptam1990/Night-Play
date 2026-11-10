@@ -95,6 +95,10 @@ const b64 = o => Buffer.from(JSON.stringify(o)).toString("base64").replace(/\+/g
   console.log("== âm thanh");
   const au = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-audio.js")].concat(process.argv.includes("--full-audio") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });
   note(au.status === 0, "tổng", "check-audio.js báo lỗi (âm thanh bị treo / nút loa) — xem log phía trên");
+  /* theme theo độ khó (scripts/cozygame/check-difficulty.js) — bản nhanh 5 game, thêm --full-difficulty để quét cả 15 game */
+  console.log("== theme theo độ khó");
+  const df = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-difficulty.js")].concat(process.argv.includes("--full-difficulty") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });
+  note(df.status === 0, "tổng", "check-difficulty.js báo lỗi (độ khó không đổi theme / huy hiệu) — xem log phía trên");
   console.log("\n" + (fails.length ? "✗ " + fails.length + " lỗi" : "✓ tất cả đạt"));
   process.exit(fails.length ? 1 : 0);
 })();

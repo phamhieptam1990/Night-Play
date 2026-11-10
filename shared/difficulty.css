@@ -1,0 +1,43 @@
+/* Bảng màu ĐỘ KHÓ dùng chung cho mọi game có chọn độ khó/cấp (shared/difficulty.js ghi html[data-dif]).
+   Dễ = xanh lá · Thường = xanh dương · Khó = cam đỏ · Rất khó = tím · Cực khó = đỏ đậm (thang liên tục).
+   Chữ trên màu độ khó (--dif-ink / --ci) luôn đạt tương phản ≥ 4.5:1 (check-difficulty.js đo). */
+:root{
+  --dif-easy:#0B7A4F;--dif-easy-i:#fff;--dif-normal:#2563EB;--dif-normal-i:#fff;--dif-hard:#C2410C;--dif-hard-i:#fff;
+  --dif-extreme:#7E22CE;--dif-extreme-i:#fff;--dif-insane:#B01040;--dif-insane-i:#fff
+}
+:root[data-theme=dark]{
+  --dif-easy:#34D399;--dif-easy-i:#06281b;--dif-normal:#60A5FA;--dif-normal-i:#071a33;--dif-hard:#FB923C;--dif-hard-i:#2a1204;
+  --dif-extreme:#C084FC;--dif-extreme-i:#1d0838;--dif-insane:#FB7185;--dif-insane-i:#33060f
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme]){
+    --dif-easy:#34D399;--dif-easy-i:#06281b;--dif-normal:#60A5FA;--dif-normal-i:#071a33;--dif-hard:#FB923C;--dif-hard-i:#2a1204;
+    --dif-extreme:#C084FC;--dif-extreme-i:#1d0838;--dif-insane:#FB7185;--dif-insane-i:#33060f
+  }
+}
+:root[data-dif=easy],[data-dt=easy]{--dif:var(--dif-easy);--dif-ink:var(--dif-easy-i);--c:var(--dif-easy);--ci:var(--dif-easy-i)}
+:root[data-dif=normal],[data-dt=normal]{--dif:var(--dif-normal);--dif-ink:var(--dif-normal-i);--c:var(--dif-normal);--ci:var(--dif-normal-i)}
+:root[data-dif=hard],[data-dt=hard]{--dif:var(--dif-hard);--dif-ink:var(--dif-hard-i);--c:var(--dif-hard);--ci:var(--dif-hard-i)}
+:root[data-dif=extreme],[data-dt=extreme]{--dif:var(--dif-extreme);--dif-ink:var(--dif-extreme-i);--c:var(--dif-extreme);--ci:var(--dif-extreme-i)}
+:root[data-dif=insane],[data-dt=insane]{--dif:var(--dif-insane);--dif-ink:var(--dif-insane-i);--c:var(--dif-insane);--ci:var(--dif-insane-i)}
+
+/* (b) màu nhấn của game đổi theo độ khó (nút Chơi lớn, thẻ kết thúc, chip...). Giao diện Night Pass (#play[data-pro]) giữ màu nhấn của skin:
+   chỉ chip, viền khung và huy hiệu đổi (bên dưới). */
+:root[data-dif][data-dif]:not(:has([data-pro])){--accent:var(--dif);--on-accent:var(--dif-ink)}
+
+/* chip độ khó: mỗi chip có gạch chân đúng màu của nó, chip đang chọn đổ màu đặc */
+:root[data-dif] :is(.lvs,#lvs,#diffs)>[data-dt]{box-shadow:inset 0 -3px 0 var(--c)}
+:root[data-dif] :is(.lvs,#lvs,#diffs)>[data-dt].on,:root[data-dif] :is(.lvs,#lvs,#diffs)>[data-dt][aria-pressed=true]{background:var(--c);border-color:var(--c);color:var(--ci);box-shadow:0 2px 0 color-mix(in srgb,var(--c) 55%,#000)}
+
+/* viền khung chơi theo độ khó (giữ nguyên nền của skin) */
+:root[data-dif] :is(#play,.play)::after{content:"";position:absolute;inset:0;z-index:30;border:3px solid color-mix(in srgb,var(--dif) 85%,transparent);border-radius:inherit;box-sizing:border-box;pointer-events:none}
+
+/* Cozy màn ngang: #play[data-scr] chỉ là cột giữa, các thẻ HUD kéo ra hai bên → viền sẽ cắt ngang bố cục, bỏ viền (vẫn còn màu nhấn + chip + huy hiệu) */
+@media (orientation:landscape) and (max-height:700px) and (min-width:560px){:root[data-dif] #play[data-scr]::after{display:none}}
+@media (orientation:landscape) and (pointer:coarse) and (max-height:900px) and (min-width:800px){:root[data-dif] #play[data-scr]::after{display:none}}
+
+/* (c) huy hiệu độ khó ở màn chơi + màn kết thúc (shared/difficulty.js tự tìm chỗ trống, không chặn chạm) */
+#npDifBadge{position:fixed;left:0;top:0;z-index:2147482000;display:none;align-items:center;gap:5px;box-sizing:border-box;height:26px;padding:0 11px 0 8px;border-radius:999px;background:var(--dif);color:var(--dif-ink);font:800 12px/1 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.2px;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.28),0 0 0 2px color-mix(in srgb,var(--dif-ink) 22%,transparent);pointer-events:none;user-select:none}
+#npDifBadge.show{display:inline-flex}
+#npDifBadge i{font-style:normal;font-size:13px}
+html.np-multi #npDifBadge{display:none!important}

@@ -143,6 +143,27 @@ Dự án có 3 nhóm: **Cozy Play** (`cozyplay/`: 9 game sinh tự động từ 
 - `Date.now()` cũng theo đồng hồ ảo (đóng băng khi pause); `new Date()` vẫn là giờ thật (ngày, hạn pass, giới hạn phụ huynh). `?portal=all` ghép Cozy + Pop (đã đo trong check-multi.js).
 - Khoá localStorage mới duy nhất: `np-multi-hud:<id>` (lựa chọn ẩn bảng điểm); ngoài ra không thêm khoá (chỉ đọc theme/lang/prefs/pass, ghi usage và np-resume:<id> như bình thường) nên privacy.html không đổi.
 
+## 5i. ĐỘ KHÓ phải ĐỔI THEME (`shared/difficulty.css|js`, đo bằng `scripts/cozygame/check-difficulty.js`) — game có chọn độ khó/cấp BẮT BUỘC
+Người dùng báo: "game chọn độ khó nhớ đổi theme theo để dễ nhận biết". Quy ước chung cho CẢ HAI cổng, game viết tay lẫn sinh tự động:
+- **Bảng màu chung** (thang liên tục, theo SỐ cấp của game: 2 cấp = Dễ/Khó, 3 = Dễ/Thường/Khó, 4 = +Rất khó, 5 = +Cực khó): 🌱 Dễ = xanh lá · 🌿 Thường = xanh dương · 🔥 Khó = cam đỏ · ⚡ Rất khó = tím · 💀 Cực khó = đỏ đậm. Mỗi màu có bản sáng/tối và màu chữ riêng (`--dif-*`, `--dif-*-i`), chữ trên màu độ khó luôn ≥ 4.5:1.
+- **`shared/difficulty.js` do `shared/resume.js` nạp tự động — game KHÔNG phải nhúng/copy gì.** Nó tìm bộ chọn (mặc định `.lvs`, `#lvs`, `#diffs`; con là nút, nút đang chọn có class `on` hoặc `aria-pressed=true`), ghi `html[data-dif=easy|normal|hard|extreme|insane]` và `data-dt` lên từng chip. `difficulty.css` rồi đổi: (a) chip đang chọn đổ màu độ khó, chip còn lại có gạch chân đúng màu của nó; (b) `--accent`/`--on-accent` của game (nút Chơi/Bắt đầu, thẻ kết thúc gradient, nút chính…) — KHÔNG đổi khi đang dùng giao diện Night Pass (`#play[data-pro]`, giữ nền/màu skin; chỉ chip + viền + huy hiệu đổi); (c) viền 3px quanh khung chơi `#play/.play::after`; (d) HUY HIỆU `#npDifBadge` ("🌱 Dễ"/"🔥 Hard", cùng màu) ở màn chơi và màn kết thúc, tự tìm chỗ trống (không đè nút/chữ/khung chơi, `pointer-events:none`, ẩn ở màn chọn và trong `?multi=1`).
+- **Độ khó của VÁN đang chơi lấy từ `NP.state()`** (trường `lv`; thách đấu/tiếp tục có thể khác chip), nên thách đấu vẫn hiện đúng theme của độ khó thách đấu; lựa chọn vẫn lưu như cũ (không đổi luật chơi).
+- **Game có cách chọn khác** khai báo TRƯỚC `resume.js`: `<script>window.NPDIF={sel:"#abc"}</script>` (bộ chọn chip khác), `{base:0}` (trường `lv` trong `NP.state()` đếm từ 0 như Gà Mẹ/Chở Hàng; mặc định đếm từ 1 như Pop Play), hoặc `{input:"#szI",tiers:[5,8,11,14],key:"n"}` (chọn bằng ô số: mốc bắt đầu mỗi bậc, `key` = trường kích cỡ trong `NP.state()`, như Mê Cung). Game có nhiều chiều (chế độ + độ khó) chỉ đổi theo trục độ khó.
+- **Game MỚI có độ khó phải**: dùng bộ chọn dạng trên (hoặc khai báo NPDIF), thêm vào bảng `GAMES` của `check-difficulty.js` (cách chọn, lệnh bắt đầu, lệnh kết thúc), và `check-difficulty.js` phải "✓". Không tự đặt màu độ khó riêng (Cánh Nhỏ từng có bảng riêng, đã chuyển về bảng chung; chỉ giữ tông nền nhẹ).
+- Bài đo: `node scripts/cozygame/check-difficulty.js [--quick] [--full] [--shots=<thư mục>] [id,id]` — mỗi độ khó: `data-dif` đúng bậc, `--accent` KHÁC NHAU giữa các độ khó, chip/huy hiệu tương phản ≥ 4.5, huy hiệu hiện ở màn chơi + kết thúc và không đè nút/chữ, không cuộn. `--quick` (5 game) nối vào `check.js`.
+- Bảng game có độ khó (trước → sau): "Trước" chỉ Cánh Nhỏ đổi theme; "Sau" tất cả đều đổi.
+
+| Game | Bộ chọn | Số cấp | Trước | Sau |
+|---|---|---|---|---|
+| Qua Sông, Tháp Vòng Màu, Vẽ Chữ Quái Vật, Tên Lửa Của Bé, Bé Nói Đúng Không, Bố Mẹ 5 Giây, Đoán Tuổi Nào, Nhảy Theo Số, Con Vật Ăn Số | `.lvs > button.on` (Pop) | 3 | chưa | đã |
+| Bé Đấu Bố Mẹ | `.lvs > button.on` | 4 (🌱🌿🌳🔥) | chưa | đã |
+| Gà Mẹ Bắn Trứng, Chở Hàng Kiểu Việt | `#lvs > .lv.on` + `NPDIF={base:0}` | 3 | chưa | đã |
+| Đập Deadline | `#lvs > .lv.on` (Dễ/Thường/Khó/Sếp nổi giận; Dễ/Khó/Sếp thuộc Night Pass; state có `diff`) | 4 | chưa | đã |
+| Cánh Nhỏ Phiêu Lưu | `#diffs > .dif.on` (+ `data-diff` đổi tông nền; state có `diff`, thử thách hằng ngày luôn "Thường") | 3 | có (bảng màu riêng) | đã (bảng chung) |
+| Mê Cung Truyền Tay | ô số `#szI` (5–15) → bậc 5/8/11/14 | 4 | chưa | đã |
+| Làng Của Bé, Chim Bay Học Vui | cấp tự tăng theo tiến độ, không có bộ chọn | — | — | không áp dụng |
+| 9 game Cozy sinh tự động + Đổi Đổi 2048, Đường Ray, Giả Chó Việt, Xin Nghỉ, Xe Cà Phê, Bàn Cờ Hiểu Tôi | không có chọn độ khó (loại chơi/cấp tự tăng) | — | — | không áp dụng; nếu thêm chọn độ khó thì phải theo mục này |
+
 ## 6. Dữ liệu, quyền riêng tư
 - Game không thu thập thêm dữ liệu cá nhân. Nếu thêm bất cứ thứ gì lưu trên máy chủ hoặc localStorage mới → cập nhật `privacy.html` (VI + EN) và ngày trong `shared/site.js`.
 - Bảng xếp hạng tự nguyện; game trẻ em không có ô gõ tên.
@@ -162,6 +183,7 @@ Nguyên tắc dự án: game chạy **offline, không lag, không gọi máy ch�
 - [ ] Chơi hộ: mở link `?helper=1`, tiếp tục đúng ván dở, nút bị ẩn
 - [ ] Thách đấu: mở link `#ch=...` được
 - [ ] Nút ← về được màn chọn loại; nút "?" mở gợi ý
+- [ ] Game có chọn độ khó: đổi theme theo độ khó (mục 5i), `check-difficulty.js` "✓"
 - [ ] Không cuộn, không chữ trơn, không nhân vật mờ, không lỗi console
 - [ ] Đã thêm game vào `check.js` và danh sách tải sẵn offline (`sw.js`) nếu cần
 - [ ] **Chụp qua trang cổng ở điện thoại dọc (390×844, 360×640): ←, 📷, 📤 phải ở trong menu ⋯ (← là nút duy nhất bên trái, không còn nút nổi của cổng); tên game nằm SÁT khung thông tin (≤ ~16px, tối đa 2 dòng, không cắt "…")** — `check-portal.js` đo tự động (mục "menu …" và "tên game …") cho MỌI game Cozy và Pop Play

@@ -14,7 +14,7 @@
   var base = ((document.currentScript && document.currentScript.src) || "").replace(/resume\.js(\?.*)?$/, "");
   function load(f) { if (!base) return; var sc = document.createElement("script"); sc.src = base + f; sc.async = false; (document.head || document.documentElement).appendChild(sc); }
   var MULTI = NP.multi === true;   /* ?multi=1 (chơi cùng lúc, xem bridge.js): host lo nút thoát/Back/tiếp tục; vẫn LƯU ván để host đẩy/nạp lại khung */
-  if (!MULTI) load("exitconfirm.js"); load("endguard.js");   /* endguard.js: cú chạm nối tiếp ngay sau khi hết ván không được tự chơi lại / làm mất màn kết thúc */
+  if (!MULTI) load("exitconfirm.js"); load("endguard.js"); load("difficulty.js");   /* endguard.js: cú chạm nối tiếp ngay sau khi hết ván không được tự chơi lại / làm mất màn kết thúc */
   var gid = NP.gid, RK = "np-resume:" + gid;
   var q = new URLSearchParams(location.search);
   var realHelper = q.get("helper") === "1", challenge = /^#ch=/.test(location.hash);
