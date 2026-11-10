@@ -99,6 +99,10 @@ const b64 = o => Buffer.from(JSON.stringify(o)).toString("base64").replace(/\+/g
   console.log("== theme theo độ khó");
   const df = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-difficulty.js")].concat(process.argv.includes("--full-difficulty") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });
   note(df.status === 0, "tổng", "check-difficulty.js báo lỗi (độ khó không đổi theme / huy hiệu) — xem log phía trên");
+  /* căn lề + cỡ icon ở mép màn hình (scripts/cozygame/check-align.js) */
+  console.log("== căn lề icon");
+  const al = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-align.js")], { cwd: root, env: process.env, stdio: "inherit" });
+  note(al.status === 0, "tổng", "check-align.js báo lỗi (icon lệch mép / lề / cỡ nút) — xem log phía trên");
   console.log("\n" + (fails.length ? "✗ " + fails.length + " lỗi" : "✓ tất cả đạt"));
   process.exit(fails.length ? 1 : 0);
 })();

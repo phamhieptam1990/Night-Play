@@ -20,6 +20,7 @@
 })();
 </script>
 <link rel="stylesheet" href="../shared/theme.css">
+<link rel="stylesheet" href="../shared/align.css">
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overscroll-behavior:none;touch-action:manipulation;-webkit-user-select:none;user-select:none}
@@ -29,7 +30,7 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 svg{display:block}
 #app{position:fixed;inset:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);display:flex;flex-direction:column}
 /* thanh trên (dọc/máy tính) hoặc cột bên trái (điện thoại ngang): ← | tên | khay thumbnail game tập trung đang chơi dở | + */
-#rail{flex:none;display:flex;align-items:center;gap:8px;padding:6px 8px;min-height:60px;background:var(--panel);border-bottom:1px solid var(--line)}
+#rail{flex:none;display:flex;align-items:center;gap:8px;padding:6px var(--gutter);min-height:60px;background:var(--panel);border-bottom:1px solid var(--line)}
 .rb{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--card);color:var(--ink);border:1px solid var(--line)}
 .rb.go{background:var(--accent);color:var(--on-accent);border-color:transparent}
 #ttl{flex:none;font-weight:800;font-size:15px;white-space:nowrap}
@@ -80,7 +81,7 @@ body.bare #rail{display:none}
 .fr.counting .cd{display:grid}
 .ld{position:absolute;inset:0;z-index:3;display:grid;place-items:center;color:var(--muted);font-weight:700;background:var(--card);pointer-events:none}
 .fr.ready .ld{display:none}
-#sheet{position:fixed;inset:0;z-index:30;background:rgba(6,5,16,.62);display:flex;align-items:center;justify-content:center;padding:max(8px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom))}
+#sheet{position:fixed;inset:0;z-index:30;background:rgba(6,5,16,.62);display:flex;align-items:center;justify-content:center;padding:max(8px,env(safe-area-inset-top)) var(--gutter) max(8px,env(safe-area-inset-bottom))}
 #sheet[hidden]{display:none}
 .sh{width:min(720px,100%);height:min(560px,100%);display:flex;flex-direction:column;gap:8px;padding:12px;border-radius:20px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow)}
 .sh header{flex:none;display:flex;align-items:center;gap:8px}.sh header h2{flex:1;margin:0;font-size:17px}

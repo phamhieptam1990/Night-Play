@@ -1,11 +1,11 @@
 /* Header/footer tự chuyển thành menu (xem shared/bars.js) khi chữ hoặc icon bị chèn ép */
 :where(nav.nav,footer.foot,footer.site-foot){position:relative}
 .bars-more{flex:none;width:44px;height:44px;border-radius:50%;border:0;padding:0;display:inline-grid;place-items:center;cursor:pointer;
-  background:color-mix(in srgb,var(--accent,#7C5CFF) 22%,var(--panel,var(--surface,#fff)));color:var(--accent,#7C5CFF);border:2px solid var(--accent,#7C5CFF);box-sizing:border-box;box-shadow:var(--shadow,0 2px 8px rgba(0,0,0,.15)),0 0 0 3px color-mix(in srgb,var(--accent,#7C5CFF) 22%,transparent)}
+  background:color-mix(in srgb,var(--accent,#7C5CFF) 22%,var(--panel,var(--surface,#fff)));color:var(--accent,#7C5CFF);border:2px solid var(--accent,#7C5CFF);box-sizing:border-box;box-shadow:var(--shadow,0 2px 8px rgba(0,0,0,.15)),inset 0 0 0 3px color-mix(in srgb,var(--accent,#7C5CFF) 22%,transparent)}
 .bars-more:active{transform:scale(.94)}
 .bars-more svg{width:24px;height:24px;fill:currentColor;display:block}
 .bars-more:focus-visible{outline:3px solid var(--accent,#7C5CFF);outline-offset:3px}
-footer .bars-more{order:2;width:40px;height:40px}
+footer .bars-more{order:2}
 .bars-pop{position:absolute;z-index:60;min-width:244px;max-width:calc(100vw - 24px);max-height:calc(100dvh - 90px);overflow:hidden;padding:8px;
   display:flex;flex-direction:column;gap:2px;background:var(--panel,var(--surface,#fff));color:var(--ink,#222);
   border:1px solid color-mix(in srgb,var(--accent,#7C5CFF) 28%,var(--line,var(--border,#ddd)));border-radius:22px;

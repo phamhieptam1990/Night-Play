@@ -27,6 +27,7 @@ document.documentElement.dataset.theme=t||"dark";
 </script>
 <link rel="stylesheet" href="../shared/theme.css">
 <link rel="stylesheet" href="../shared/bars.css">
+<link rel="stylesheet" href="../shared/align.css">
 <style>
 /* ===== THEME: đổi màu chủ đạo ở --accent (sáng) và --accent trong khối dark ===== */
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -49,7 +50,7 @@ a.mark{color:inherit;text-decoration:none}
 .pill{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 18px;border-radius:999px;background:var(--accent);color:var(--on-accent);font-weight:800;font-size:15px;text-decoration:none;box-shadow:var(--shadow);white-space:nowrap}
 .pill svg{width:20px;height:20px;flex:none}
 @media (max-width:520px){.pill{width:44px;padding:0}.pill span{display:none}}
-.ico{width:48px;height:48px;border-radius:50%;background:var(--panel);box-shadow:var(--shadow);display:grid;place-items:center}
+.ico{width:var(--tap);height:var(--tap);border-radius:50%;background:var(--panel);box-shadow:var(--shadow);display:grid;place-items:center}
 .ico svg{width:26px;height:26px}
 .sun{display:none}
 [data-theme=dark] .sun{display:block}
@@ -109,7 +110,7 @@ main{max-width:1200px;margin:0 auto;padding:8px 16px 24px}
 .fcol a:hover{color:var(--accent)}
 .fbar{max-width:1200px;margin:0 auto;padding:16px 16px 28px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13px}
 .fbar p{margin:0;opacity:.75}
-#lock{position:relative;width:56px;height:56px;border-radius:50%;background:color-mix(in srgb,var(--accent) 22%,var(--panel));color:var(--accent);border:2px solid var(--accent);box-sizing:border-box;box-shadow:var(--shadow),0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent);display:grid;place-items:center}
+#lock{position:relative;width:56px;height:56px;border-radius:50%;background:color-mix(in srgb,var(--accent) 22%,var(--panel));color:var(--accent);border:2px solid var(--accent);box-sizing:border-box;box-shadow:var(--shadow),inset 0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent);display:grid;place-items:center}
 #lock .ic{width:28px;height:28px}
 #ring{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);pointer-events:none}
 #ring circle{fill:none;stroke:var(--accent);stroke-width:5;stroke-dasharray:163.4;stroke-dashoffset:163.4}
@@ -247,7 +248,7 @@ body{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidd
 main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction:column;padding:8px 16px 12px;overflow-y:auto}
 #grid{flex:1;min-height:0;display:grid;gap:var(--g,16px);grid-template-columns:repeat(var(--c,3),var(--s,140px));grid-auto-rows:var(--s,140px);justify-content:center;align-content:center}
 /* Nhiều game / ô nhỏ hơn 64px: chuyển thành TRƯỢT NGANG theo trang (vuốt, chấm trang, nút ‹ ›) thay vì ép ô nhỏ lại hay cuộn dọc */
-#grid.slide{grid-auto-flow:column;grid-template-columns:none;grid-template-rows:repeat(var(--r,1),var(--s,140px));grid-auto-columns:var(--s,140px);justify-content:start;align-content:center;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;padding:8px var(--pad,0);scroll-padding-inline:var(--pad,0);overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
+#grid.slide{column-gap:var(--cg,var(--g,16px));grid-auto-flow:column;grid-template-columns:none;grid-template-rows:repeat(var(--r,1),var(--s,140px));grid-auto-columns:var(--s,140px);justify-content:start;align-content:center;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;padding:8px var(--pad,0);scroll-padding-inline:var(--pad,0);overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
 #grid.slide::-webkit-scrollbar{display:none}
 /* mỗi trang vừa khít các game: cắt phần đệm hai bên để không bao giờ lộ nửa biểu tượng của trang kế tiếp */
 #grid.slide{clip-path:inset(-10px var(--pad,0) -10px var(--pad,0))}
@@ -277,7 +278,7 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 .fcol{order:2;display:flex;flex-wrap:wrap;gap:0 14px}
 .fcol a{padding:8px 0;font-size:14px}
 .fbar p{order:3;font-size:12px;margin-left:auto}
-#lock{order:4;width:44px;height:44px}
+#lock{order:4;width:var(--tap);height:var(--tap)}
 #lock .ic{width:22px;height:22px}
 @media (max-width:640px){
   .fbar p{display:none}
@@ -295,7 +296,7 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
   .hero .desc{display:none}
   .trust{display:flex!important;flex-wrap:wrap;justify-content:flex-start;gap:2px 12px!important;margin:6px 0 0!important}
   .trust li{background:none!important;border:0!important;box-shadow:none!important;padding:0!important;font-size:11.5px!important;font-weight:700;white-space:nowrap;gap:4px!important;transform:none!important;opacity:.85}
-  #findFab{top:calc(var(--navH,64px) + 8px);right:16px}
+  #findFab{top:calc(var(--edge-t) + var(--navH,64px) + 6px);right:var(--edge-r)}
 }
   .foot .fbrand{display:none}
 }
@@ -304,11 +305,11 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 @media (max-height:360px){.nav{padding:4px 16px}.hero{padding:2px 16px}.hero h1{font-size:20px}main{padding-top:2px;padding-bottom:4px}.foot{padding-top:2px;padding-bottom:2px}.foot a,.foot button{padding:4px 0}}
 
 /* ===== Tìm kiếm + lọc game: nút nổi (không chiếm chỗ trong bố cục), bấm mới mở bảng nhỏ ===== */
-#findFab{position:fixed;right:14px;top:calc(var(--navH,64px) + 10px);z-index:4;width:46px;height:46px;border-radius:50%;background:var(--panel);color:var(--ink);box-shadow:var(--shadow);display:grid;place-items:center;border:1px solid var(--line);opacity:.92}
+#findFab{position:fixed;right:var(--edge-r);top:calc(var(--edge-t) + var(--navH,64px) + 10px);z-index:4;width:var(--tap);height:var(--tap);border-radius:50%;background:var(--panel);color:var(--ink);box-shadow:var(--shadow);display:grid;place-items:center;border:1px solid var(--line);opacity:.92}
 #findFab svg{width:22px;height:22px}
 #findFab.on{background:var(--accent);color:var(--on-accent);border-color:transparent}
 #findFab:active{transform:scale(.94)}
-#findPanel{position:fixed;right:12px;top:calc(var(--navH,64px) + 64px);z-index:6;width:min(calc(100vw - 24px),360px);padding:12px;border-radius:22px;background:var(--panel);color:var(--ink);box-shadow:0 14px 40px rgba(0,0,0,.35);border:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+#findPanel{position:fixed;right:max(12px,env(safe-area-inset-right));top:calc(var(--navH,64px) + 64px);z-index:6;width:min(calc(100vw - 24px),360px);padding:12px;border-radius:22px;background:var(--panel);color:var(--ink);box-shadow:0 14px 40px rgba(0,0,0,.35);border:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
 #findPanel[hidden]{display:none}
 #qWrap{position:relative}
 #qWrap svg{position:absolute;left:13px;top:50%;width:18px;height:18px;transform:translateY(-50%);opacity:.6;pointer-events:none}
@@ -325,7 +326,7 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 #noRes[hidden]{display:none}
 @media (max-height:420px){#findFab{width:40px;height:40px;top:calc(var(--navH,40px) + 4px)}#findPanel{top:calc(var(--navH,40px) + 50px)}}
 /* nút tìm kiếm cùng cỡ (44px) và cùng mép phải (16px) với các nút header để thẳng hàng với nút ⋯ */
-@media (max-width:520px){#findFab{width:44px;height:44px;right:16px;top:calc(var(--navH,64px) + 6px)}#findFab svg{width:21px;height:21px}#findPanel{top:calc(var(--navH,64px) + 56px)}.hero h1{padding-right:64px}}
+@media (max-width:520px){#findFab{width:var(--tap);height:var(--tap);right:var(--edge-r);top:calc(var(--edge-t) + var(--navH,64px) + 6px)}#grid:not(.slide){justify-content:space-between}#findFab svg{width:21px;height:21px}#findPanel{top:calc(var(--navH,64px) + 56px)}.hero h1{padding-right:64px}}
 /* Màn ngang: bỏ phần giới thiệu + cột liên kết chân trang, thu gọn chấm trang để dành chỗ cho NHIỀU hàng game */
 @media (orientation:landscape) and (max-height:520px){.hero{display:block;text-align:center;padding:2px 16px 0;margin:0}.hero h1{font-size:clamp(17px,3.1vw,22px);line-height:1.2;margin:0;padding:0}.hero{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:0 16px}.hero .desc{display:none!important}.trust{display:flex!important;flex-wrap:nowrap;justify-content:center;gap:0 12px!important;margin:0!important;padding:0}.trust li{background:none!important;border:0!important;box-shadow:none!important;padding:0!important;font-size:13px!important;font-weight:700;white-space:nowrap;gap:4px!important;transform:none!important;opacity:.9}.fin{display:none}.foot{padding-top:2px;padding-bottom:calc(2px + env(safe-area-inset-bottom))}.nav{padding-top:5px;padding-bottom:5px}main{padding-top:4px;padding-bottom:2px}#gdots{min-height:26px}#gdots button{width:26px;height:26px}#gdots button::after{width:8px;height:8px}}
 /* Thanh điều khiển chung (quay lại cổng, chụp ảnh, chia sẻ): nằm trong LÀN RIÊNG ngoài khung game — màn dọc: dải trên 48px; màn ngang: cột trái 52px — nên không bao giờ đè lên nút của game, không cần rê chuột lên mép để hiện */
@@ -774,7 +775,7 @@ function fitGrid(){
   }
   grid.style.setProperty("--g", g + "px");
   if(best.s >= MIN_TILE){
-    grid.classList.remove("slide"); grid.style.removeProperty("--r"); grid.style.removeProperty("--pad"); grid.scrollLeft = 0;
+    grid.classList.remove("slide"); grid.style.removeProperty("--cg"); grid.style.removeProperty("--r"); grid.style.removeProperty("--pad"); grid.scrollLeft = 0;
     grid.querySelectorAll(".sn").forEach(t => t.classList.remove("sn")); gdots.textContent = "";
     grid.style.setProperty("--c", best.c);
     grid.style.setProperty("--s", Math.min(260, Math.floor(best.s)) + "px");
@@ -784,11 +785,14 @@ function fitGrid(){
   const room = h - 16, MINS = 72;
   const c = Math.max(1, Math.floor((w + g) / (MINS + g))), r = Math.max(1, Math.floor((room + g) / (MINS + g)));
   const s = Math.max(MIN_TILE, Math.min(140, Math.floor((w - (c - 1) * g) / c), Math.floor((room - (r - 1) * g) / r)));
-  const per = c * r, pages = Math.ceil(n / per), pageW = c * s + (c - 1) * g;
+  /* khoảng thừa chia vào khe GIỮA các cột để ô ngoài cùng thẳng lề trái/phải (16px) với icon thanh trên (GAME_RULES 0a-12) */
+  const gx = c > 1 ? Math.max(g, (w - c * s) / (c - 1)) : g;
+  const per = c * r, pages = Math.ceil(n / per), pageW = c * s + (c - 1) * gx;
   grid.classList.add("slide");
+  grid.style.setProperty("--cg", gx + "px");
   grid.style.setProperty("--s", s + "px"); grid.style.setProperty("--r", r); grid.style.setProperty("--pad", Math.max(0, Math.floor((w - pageW) / 2)) + "px");
   [...grid.children].forEach((t, i) => t.classList.toggle("sn", i % per === 0));
-  gPage = { step: c * (s + g), n: pages, per };
+  gPage = { step: c * (s + gx), n: pages, per };
   buildDots();
   /* xoay ngang ↔ dọc: đặt lại vị trí cuộn theo trang mới (tức thì), nếu không lưới bị lệch phải cuộn tay */
   const pg = Math.min(pages - 1, Math.floor(firstTile / per)), sb = grid.style.scrollBehavior; grid.style.scrollBehavior = "auto"; grid.scrollLeft = pg * gPage.step; grid.style.scrollBehavior = sb; markDots();
