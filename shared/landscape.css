@@ -17,7 +17,7 @@
 @media (orientation:portrait){#play #game{justify-content:center;gap:3cqw}#play #cvw{flex:0 1 calc(92cqw*var(--ar,1.1));min-height:0}}
 @media (orientation:landscape) and (max-height:700px) and (min-width:560px),(orientation:landscape) and (pointer:coarse) and (max-height:900px) and (min-width:800px){
 :root{--stage:min(100vw,calc(100dvh*.92),520px);--side:calc((100vw - var(--stage))/2);--sl:env(safe-area-inset-left,0px);--sr:env(safe-area-inset-right,0px);--cl:calc(var(--side) - 2.5cqw - var(--sl));--cr:calc(var(--side) - 2.5cqw - var(--sr))}
-#play{width:var(--stage);overflow:visible;background:none}
+#play{width:var(--stage);overflow:visible;background:none;isolation:isolate}
 #play::before{content:"";position:absolute;top:0;bottom:0;left:calc(50% - 50vw);width:100vw;background:var(--pbg);z-index:-1}
 .deco{left:calc(50% - 50vw);right:auto;width:100vw}
 /* thanh trên → hai cột HUD */

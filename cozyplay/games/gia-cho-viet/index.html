@@ -152,7 +152,7 @@ const PF={pro:null,ticket:null,
  catalog:[[{id:"basic",vi:"Cơ bản",en:"Basic",e:"🧺"},{id:"market",vi:"Chợ truyền thống",en:"Wet market",e:"🛖"},{id:"super",vi:"Siêu thị",en:"Supermarket",e:"🛒"},{id:"street",vi:"Quán vỉa hè đêm",en:"Night street food",e:"🍜"},{id:"tet",vi:"Chợ Tết",en:"Tet market",e:"🧧"}]],
  skinSel:[LS.get("gcv-skin","basic")]};
 const skinOf=()=>PF.skins[0][PF.skinSel[0]]||PF.skins[0].basic;
-function applySkin(){const sk=skinOf(),pl=$("play");(pl._v||[]).forEach(k=>pl.style.removeProperty(k));const vv=themed(sk.vars||{},sk.dark);pl._v=Object.keys(vv);for(const k of pl._v)pl.style.setProperty(k,vv[k]);$("skCss").textContent=sk.css||"";
+function applySkin(){const sk=skinOf(),pl=$("play");(pl._v||[]).forEach(k=>pl.style.removeProperty(k));const vv=Object.assign({},themed(sk.vars||{},sk.dark));if(/^#[0-9a-f]{6}$/i.test(vv["--accent"]||"")){const L=lum(vv["--accent"]);vv["--on"]=1.05/(L+.05)>=(L+.05)/.055?"#ffffff":"#14101e"}/* chữ trên nút nhấn luôn tương phản ≥4.5 với màu nhấn (check-skins.js) */pl._v=Object.keys(vv);for(const k of pl._v)pl.style.setProperty(k,vv[k]);$("skCss").textContent=sk.css||"";
  const d=$("deco");d.innerHTML="";const L=sk.deco||["🧺"],R=mulberry32(7);for(let i=0;i<8;i++){const e=document.createElement("i");e.textContent=L[i%L.length];e.style.left=(R()*90)+"%";e.style.top=(15+R()*80)+"%";e.style.animationDelay=(-R()*8)+"s";d.appendChild(e)}}
 /* ===== ÂM THANH ===== */
 let AC=null;const snd=()=>!window.NPAudio||NPAudio.get();

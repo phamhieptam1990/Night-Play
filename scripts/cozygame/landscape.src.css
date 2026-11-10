@@ -3,7 +3,7 @@
    các thẻ phụ (điểm/lượt/combo, mục tiêu, thanh nút hành động, thẻ điểm cuối ván, huy hiệu) được "kéo" ra HAI BÊN khung bằng position:absolute (cột trái: ←, tên, điểm; cột phải: nút phụ + nút hành động), phần còn lại của màn giữ nguyên bố cục dọc nên game nào cũng chạy được.
    Nút phụ tự mờ khi không chạm (body.idle) để khung chơi nổi bật. File sinh ra từ scripts/cozygame/landscape.src.css bằng mklandscape.py — ĐỪNG sửa tay shared/landscape.css. */
 :root{--stage:min(100vw,calc(100dvh*.92),520px);--side:calc((100vw - var(--stage))/2);--sl:env(safe-area-inset-left,0px);--sr:env(safe-area-inset-right,0px);--cl:calc(var(--side) - 2.5cqw - var(--sl));--cr:calc(var(--side) - 2.5cqw - var(--sr))}
-#play{width:var(--stage);overflow:visible;background:none}
+#play{width:var(--stage);overflow:visible;background:none;isolation:isolate}
 #play::before{content:"";position:absolute;top:0;bottom:0;left:calc(50% - 50vw);width:100vw;background:var(--pbg);z-index:-1}
 .deco{left:calc(50% - 50vw);right:auto;width:100vw}
 /* thanh trên → hai cột HUD */

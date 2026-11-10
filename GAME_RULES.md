@@ -80,6 +80,9 @@ Dự án có 3 nhóm: **Cozy Play** (`cozyplay/`: 9 game sinh tự động từ 
 - Mỗi loại chơi Night Pass (type 1–3) mở được, đặt `#play.dataset.ty`; combo/hiệu ứng thắng khác bản free; nhân vật theo giao diện (không dùng chung emoji với free).
 - Giao diện mới không được làm tệ đi các tiêu chí ở mục 1 (chữ trong thẻ, không chìm, không tràn).
 - Popup chọn loại chơi/giao diện: đậm chất Night Pass (viền sáng, 👑, 🔒 + gợi ý cho loại bị khoá). Dùng `shared/typeui.css`.
+- **CSS của giao diện Night Pass KHÔNG được dùng selector rộng** như `#play .btn{border-radius:50%;width:15cqw;height:15cqw}` (lỗi Sếp Ơi Em Xin Nghỉ, skin zen: thẻ "Tình huống hôm nay" #bDaily cũng là `.btn` nên bị bóp thành vòng tròn 59px, chữ chạy dọc, chữ trắng trên nền pastel). Muốn nút tròn thì nhắm đúng id/class của nút nhỏ đó; thẻ daily/nút Chơi lớn (#bDaily, #startBtn, #bPlay) phải rộng ≥55% khung chơi, cao ≥44px, tương phản ≥4.5:1, không đặt `width/height` cố định trên `.btn` chung.
+- Nền skin ở màn ngang/desktop là `#play::before` (z-index -1) → `#play` phải có `isolation:isolate` (đã có trong `landscape.css`), nếu không nền body che mất nền skin ngoài cột game.
+- **Mọi game/skin Night Pass phải qua `scripts/cozygame/check-skins.js`** (bản nhanh nằm trong check.js; chạy đủ: `node scripts/cozygame/check-skins.js`, hoặc `check-skins.js <id>`; `--shots=<thư mục>` để chụp ảnh).
 - Mã Night Pass chỉ giao qua `/api/pro/<id>.js`; `main(PF,OPTS)` chạy trong trình duyệt, không dùng biến ngoài hàm. Khoá lại (`lockPro`) phải trả giao diện về free.
 
 ## 5b. Màn kết thúc (không để "chán")
@@ -181,6 +184,7 @@ Nguyên tắc dự án: game chạy **offline, không lag, không gọi máy ch�
 ## 7. Trước khi báo "xong"
 - [ ] `check.js` "✓ tất cả đạt"
 - [ ] `check-landscape.js` "✓ màn ngang đạt" (nếu đụng bố cục/giao diện)
+- [ ] `check-skins.js` "✓ skin Night Pass đạt" (nếu đụng `server/pro/*.js` hoặc CSS dùng chung)
 - [ ] Ảnh free + từng giao diện Night Pass đã tự nhìn (dọc + ngang)
 - [ ] Chơi hộ: mở link `?helper=1`, tiếp tục đúng ván dở, nút bị ẩn
 - [ ] Thách đấu: mở link `#ch=...` được

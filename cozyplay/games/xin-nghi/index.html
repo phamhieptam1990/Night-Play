@@ -167,8 +167,8 @@ const PF={pro:null,
  catalog:[[{id:"basic",vi:"Sếp Hùng",en:"Boss Hung",e:"🧑‍💼"},{id:"coffee",vi:"Sếp Cà Phê",en:"Coffee Boss",e:"☕"},{id:"sport",vi:"Sếp Thể Thao",en:"Sporty Boss",e:"🏃"},{id:"zen",vi:"Sếp Triết Lý",en:"Zen Boss",e:"🧘"},{id:"startup",vi:"Sếp Startup",en:"Startup Boss",e:"🚀"}]],
  skinSel:[LS.get("xn-skin","basic")]};
 const skinOf=()=>PF.skins[0][PF.skinSel[0]]||PF.skins[0].basic;
-function applySkin(){const sk=skinOf(),pl=$("play");(pl._v||[]).forEach(k=>pl.style.removeProperty(k));const vv=themed(sk.vars||{},sk.dark);pl._v=Object.keys(vv);for(const k of pl._v)pl.style.setProperty(k,vv[k]);$("skCss").textContent=sk.css||"";
- const d=$("deco");d.innerHTML="";const L=sk.deco||["📝"],R=mulberry32(11);for(let i=0;i<8;i++){const e=document.createElement("i");e.textContent=L[i%L.length];e.style.left=(R()*90)+"%";e.style.top=(15+R()*80)+"%";e.style.animationDelay=(-R()*8)+"s";d.appendChild(e)}}
+function applySkin(){const sk=skinOf(),pl=$("play");(pl._v||[]).forEach(k=>pl.style.removeProperty(k));const vv=Object.assign({},themed(sk.vars||{},sk.dark));if(/^#[0-9a-f]{6}$/i.test(vv["--accent"]||"")){const L=lum(vv["--accent"]);vv["--on"]=1.05/(L+.05)>=(L+.05)/.055?"#ffffff":"#14101e"}/* chữ trên nút nhấn luôn tương phản ≥4.5 với màu nhấn (check-skins.js) */pl._v=Object.keys(vv);for(const k of pl._v)pl.style.setProperty(k,vv[k]);$("skCss").textContent=sk.css||"";
+ const d=$("deco");d.innerHTML="";const L=sk.deco||["📝"],R=mulberry32(11);for(let i=0;i<8;i++){const e=document.createElement("i");e.textContent=L[i%L.length];e.style.left=(R()*90)+"%";e.style.top=(26+R()*70)+"%";e.style.animationDelay=(-R()*8)+"s";d.appendChild(e)}}
 const replyOf=(out,pick)=>{const sk=skinOf(),pool=(sk.reply&&sk.reply[out])||BASIC_REPLY[out];return L2(pool[pick%pool.length])};
 /* ===== ÂM THANH ===== */
 let AC=null;const snd=()=>!window.NPAudio||NPAudio.get();

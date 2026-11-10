@@ -103,6 +103,10 @@ const b64 = o => Buffer.from(JSON.stringify(o)).toString("base64").replace(/\+/g
   console.log("== căn lề icon");
   const al = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-align.js")], { cwd: root, env: process.env, stdio: "inherit" });
   note(al.status === 0, "tổng", "check-align.js báo lỗi (icon lệch mép / lề / cỡ nút) — xem log phía trên");
+  /* giao diện Night Pass: thẻ daily/CTA không bị bóp méo (scripts/cozygame/check-skins.js) — bản nhanh, thêm --full-skins để quét mọi game/skin */
+  console.log("== skin Night Pass");
+  const sk = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-skins.js")].concat(process.argv.includes("--full-skins") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });
+  note(sk.status === 0, "tổng", "check-skins.js báo lỗi (skin Night Pass bóp thẻ/nút, tương phản, nền) — xem log phía trên");
   console.log("\n" + (fails.length ? "✗ " + fails.length + " lỗi" : "✓ tất cả đạt"));
   process.exit(fails.length ? 1 : 0);
 })();
