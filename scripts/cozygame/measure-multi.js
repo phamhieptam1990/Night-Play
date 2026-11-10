@@ -8,7 +8,7 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 const ids = (process.argv.slice(2).find(a => !a.startsWith("--")) || "").split(",").filter(Boolean);
 const jsonOut = (process.argv.find(a => a.startsWith("--json=")) || "").slice(7);
 const M = require(path.join(root, "shared", "multi-games.js"));
-const FRAMES = process.argv.includes("--frames"), FRAME_SIZES = [[378, 383], [394, 390], [378, 470], [590, 395], [470, 440], [300, 340]];
+const FRAMES = process.argv.includes("--frames"), FRAME_SIZES = process.env.FRAME_LIST ? process.env.FRAME_LIST.split(",").map(x => x.split("x").map(Number)) : [[390, 420], [422, 390], [512, 500], [600, 500], [378, 383], [394, 390], [470, 440], [378, 470]];
 const WS = [260, 280, 300, 320, 340, 360, 390, 420, 512], HS = [300, 320, 340, 360, 380, 420, 460, 500];
 /* trả về danh sách vi phạm ở cỡ hiện tại (chạy trong trang game) */
 const AUDIT = () => {

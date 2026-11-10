@@ -246,7 +246,7 @@ window.NP = (function () {
   var multi = q.get("multi") === "1", mPaused = false, mBlur = true, mUser = false, mOver = false, mPausedByUs = false, mBase = ((document.currentScript && document.currentScript.src) || "").replace(/bridge\.js(\?.*)?$/, "");
   var vt = { off: 0, at: 0 }, held = {}, heldT = {}, alias = {};
   if (multi) {
-    document.documentElement.classList.add("np-multi");
+    document.documentElement.classList.add("np-multi"); if (gid) document.documentElement.classList.add("np-g-" + gid);   /* np-g-<id game>: để multi.css chỉnh riêng một game khi cần */
     try { var lk = document.createElement("link"); lk.rel = "stylesheet"; lk.href = mBase + "multi.css"; (document.head || document.documentElement).appendChild(lk); } catch (e) {}
     try { if (window.NPAudio) NPAudio.mute(true); } catch (e) {}
     (function () {   /* đồng hồ ảo */
@@ -254,6 +254,9 @@ window.NP = (function () {
           rST = window.setTimeout.bind(window), rCT = window.clearTimeout.bind(window), rSI = window.setInterval.bind(window);
       var vnow = function () { return (vt.at || rPN()) - vt.off; };
       try { performance.now = vnow; } catch (e) {}
+      /* Date.now() cũng chạy theo đồng hồ ảo (đóng băng khi pause). CHỈ Date.now: new Date() / Date() vẫn là GIỜ THẬT nên dayKey, ván theo ngày, hạn Night Pass (new Date(exp) > new Date()), giới hạn phụ huynh không bị lệch.
+         Hệ quả duy nhất: tuổi vé chơi hộ (Date.now()-ticketAt, 20 giờ) trẻ hơn đúng bằng thời gian đã tạm dừng — vô hại. */
+      try { var rDN = Date.now.bind(Date); Date.now = function () { return rDN() - vt.off - (vt.at ? rPN() - vt.at : 0); }; } catch (e) {}
       window.requestAnimationFrame = function (cb) {
         var id = rRAF(function (ts) { if (vt.at) { held[id] = cb; return; } cb(ts - vt.off); });
         return id;

@@ -43,7 +43,7 @@ const TUT = ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "xn", "dd", "
   };
   const ready = async (pg, n, ms) => { for (let i = 0; i < (ms || 60); i++) { const r = await pg.evaluate(n => { const it = window.NPMulti && NPMulti.items(); return !!it && it.filter(x => x.where === "slot" && x.ready).length >= n; }, n).catch(() => false); if (r) return true; await wait(250); } return false; };
   /* chạy trong frame game: trạng thái đồng hồ ảo */
-  const clk = (pg, id) => pg.evaluate(id => { const f = NPMulti.frame(id), w = f && f.contentWindow; if (!w) return null; return { t: Math.round(w.performance.now()), raf: w.__rafN || 0 }; }, id);
+  const clk = (pg, id) => pg.evaluate(id => { const f = NPMulti.frame(id), w = f && f.contentWindow; if (!w) return null; return { t: Math.round(w.performance.now()), raf: w.__rafN || 0, dn: w.Date.now(), real: Math.abs(new w.Date().getTime() - Date.now()) < 3000 }; }, id);
   const hookRaf = (pg, id) => pg.evaluate(id => { const w = NPMulti.frame(id).contentWindow; if (w.__rafN != null) return; w.__rafN = 0; const f = () => { w.__rafN++; w.requestAnimationFrame(f); }; w.requestAnimationFrame(f); }, id);
   const startPlay = async (pg, id) => {   /* bắt đầu ván trong khung của game */
     for (const sel of ["#bDaily", "#bPlay", "#home .tile", ".main", ".band", ".dbar", "#bPractice", "#bCamp"]) {
@@ -70,7 +70,7 @@ const TUT = ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "xn", "dd", "
     note(info.host.sh <= info.host.ch + 1 && info.host.sw <= info.host.cw + 1, tag, "trang host bị cuộn: " + info.host.sh + ">" + info.host.ch);
     for (const it of slots) {
       const g = M.get(it.id), t2 = tag + " " + it.id;
-      note(it.rect[2] >= g.minW && it.rect[3] >= g.minH, t2, "khung " + it.rect[2] + "x" + it.rect[3] + " nhỏ hơn minW/minH " + g.minW + "x" + g.minH);
+      const land = it.rect[2] > it.rect[3] && g.landH; note(it.rect[2] >= (land ? g.landW || g.minW : g.minW) && it.rect[3] >= (land ? g.landH : g.minH), t2, "khung " + it.rect[2] + "x" + it.rect[3] + " nhỏ hơn minW/minH " + g.minW + "x" + g.minH);
       const q = await pg.evaluate(id => {
         const f = NPMulti.frame(id), d = f.contentDocument, w = f.contentWindow, de = d.documentElement, vis = e => { if (!e) return false; const r = e.getBoundingClientRect(), cs = w.getComputedStyle(e); return cs.display !== "none" && r.width > 0 && r.height > 0; };
         const fr = f.getBoundingClientRect(), mi = f.parentNode.querySelector(".mi").getBoundingClientRect();
@@ -111,9 +111,11 @@ const TUT = ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "xn", "dd", "
       await pg.evaluate(id => document.querySelector('.fr[data-id="' + id + '"] .pn [data-a=pz]').click(), id0); await wait(300);
       const c = await clk(pg, id0); await wait(700); const d = await clk(pg, id0);
       note(d.t - c.t <= 5 && d.raf - c.raf <= 1, tag, "tạm dừng mà đồng hồ/rAF vẫn chạy: " + JSON.stringify([c, d]));
+      note(d.dn - c.dn <= 5, tag, "tạm dừng mà Date.now() vẫn chạy: " + (d.dn - c.dn) + "ms"); note(d.real && c.real, tag, "new Date() không còn là giờ thật");
       await pg.evaluate(id => document.querySelector('.fr[data-id="' + id + '"] .pn [data-a=pz]').click(), id0); await wait(500);
       const e = await clk(pg, id0); await wait(500); const f = await clk(pg, id0);
       note(f.t - e.t >= 300 && f.raf > e.raf, tag, "tiếp tục mà đồng hồ/rAF không chạy lại: " + JSON.stringify([e, f]));
+      note(f.dn - e.dn >= 300 && e.dn - d.dn < 1500, tag, "Date.now() không chạy lại / nhảy vọt sau tiếp tục");
       note(e.t - d.t < 1500, tag, "đồng hồ ảo nhảy vọt sau khi tiếp tục (" + (e.t - d.t) + "ms)");
     }
     if (pg._errs.length) note(false, tag, "lỗi JS: " + pg._errs[0]);
@@ -183,6 +185,23 @@ const TUT = ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "xn", "dd", "
     pi.forEach(x => { note(x.multi, "multi pop " + x.id, "không có np-multi"); note(x.sy <= x.ih + 1 && x.sx <= x.iw + 1, "multi pop " + x.id, "bị cuộn"); note(x.w >= M.get(x.id).minW && x.h >= M.get(x.id).minH, "multi pop " + x.id, "khung nhỏ hơn minW/minH"); });
     if (shotDir) await pp.screenshot({ path: path.join(shotDir, "multi-pop.png") });
     await pp.close();
+  }
+  /* ---------- 5. ?portal=all: Cozy + Pop cạnh nhau ---------- */
+  for (const [W, H, games] of [[390, 844, "doi-doi-2048,lang-cua-be"], [1194, 834, "doi-doi-2048,lang-cua-be,ten-lua-cua-be"]]) {
+    const tag = "multi all " + W + "x" + H, pg = await open("portal=all&games=" + games, W, H), n = games.split(",").length;
+    note(await ready(pg, Math.min(n, (await pg.evaluate(() => NPMulti.caps())).slots)), tag, "khung Cozy+Pop không tải xong"); await wait(1500);
+    const r = await pg.evaluate(() => ({ items: NPMulti.items(), theme: document.documentElement.dataset.app, tiles: (() => { document.getElementById("bAdd").click(); return document.querySelectorAll(".tile").length; })(), sh: document.documentElement.scrollHeight, ih: innerHeight,
+      urls: NPMulti.items().map(i => NPMulti.frame(i.id) && NPMulti.frame(i.id).src), docs: NPMulti.items().map(i => { const f = NPMulti.frame(i.id); return f && f.contentDocument.documentElement.classList.contains("np-multi"); }),
+      snd: NPMulti.items().filter(i => i.where === "slot").map(i => NPMulti.frame(i.id).contentWindow.NPAudio.muted()), tags: (() => { const all = new Set(); for (let k = 0; k < 8; k++) { document.querySelectorAll(".tile .tg").forEach(x => all.add(x.textContent)); const nx = document.getElementById("pgNext"); if (nx.disabled) break; nx.click(); } return [...all]; })() }));
+    await pg.evaluate(() => document.getElementById("shX").click());
+    note(r.urls.some(u => /\/popplay\/games\/lang-cua-be\//.test(u || "")) && r.urls.some(u => /\/cozyplay\/games\/doi-doi-2048\//.test(u || "")), tag, "URL game sai portal: " + JSON.stringify(r.urls));
+    note(r.docs.every(Boolean), tag, "có khung thiếu np-multi"); note(r.snd.filter(x => !x).length === 1, tag, "phải đúng 1 khung có tiếng " + JSON.stringify(r.snd));
+    note(r.tiles >= 4 && r.tags.includes("Pop") && r.tags.includes("Night"), tag, "bảng chọn thiếu game của một portal: " + JSON.stringify(r.tags.slice(0, 3)));
+    note(r.sh <= r.ih + 1, tag, "host bị cuộn");
+    r.items.filter(i => i.where === "slot").forEach(i => { const g = M.get(i.id), land = i.rect[2] > i.rect[3] && g.landH; note(i.rect[2] >= (land ? g.landW || g.minW : g.minW) && i.rect[3] >= (land ? g.landH : g.minH), tag + " " + i.id, "khung " + i.rect[2] + "x" + i.rect[3] + " nhỏ hơn minW/minH"); });
+    if (shotDir) await pg.screenshot({ path: path.join(shotDir, "multi-all-" + W + ".png") });
+    if (pg._errs.length) note(false, tag, "lỗi JS: " + pg._errs[0]);
+    console.log("  " + tag + ": " + r.items.map(i => i.id + ":" + i.where).join(" ")); await pg.close();
   }
   await br.close(); srv.kill();
   if (fails.length) { console.log("\n✗ " + fails.length + " lỗi chơi cùng lúc"); process.exit(1); }

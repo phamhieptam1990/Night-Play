@@ -4,6 +4,7 @@
      "parallel" = chạy cùng lúc trong nhiều khung: chơi theo lượt / tự nhịp / thư giãn, KHÔNG phạt khi người chơi đang nhìn khung khác (không đồng hồ đếm ngược, không vật rơi).
      "focus"    = thời gian thực (đồng hồ đếm ngược, vật bay/rơi, nhịp, micro): chỉ MỘT khung chính chạy; khung khác đóng băng, đổi qua khay thumbnail rồi đếm 3-2-1. MẶC ĐỊNH nếu phân vân.
    realtime  : có đồng hồ/hoạt ảnh chạy theo thời gian (dùng để chọn khung nào cần đo hiệu năng).
+   landH/landW: (tuỳ chọn) kích thước tối thiểu RIÊNG khi khung dạng NGANG (w > h), nếu khác minW/minH.
    minW/minH : kích thước khung (CSS px) tối thiểu để chơi được không cuộn/không cắt (đo bằng check-multi.js --measure); host không ghép khung nhỏ hơn.
    resumable : false khi game chưa lưu được ván (NP.state trả null / chưa có initialState): host KHÔNG đẩy khung này ra (LRU) vì sẽ mất ván.
    why       : lý do phân loại. */
@@ -11,8 +12,8 @@
   "use strict";
   var G = {
     /* ===== COZY / Night Play ===== */
-    "cozy-wings":         { portal: "cozyplay", icon: "🐝", vi: "Cánh Nhỏ Phiêu Lưu", en: "Little Wings", mode: "focus", realtime: true, minW: 300, minH: 400, resumable: true, why: "Bay né chướng ngại liên tục, 1 chạm trễ là mất mạng" },
-    "dap-deadline":       { portal: "cozyplay", icon: "⏰", vi: "Đập Deadline", en: "Smash Deadline", mode: "focus", realtime: true, minW: 300, minH: 400, resumable: true, why: "Đếm ngược thời gian + combo, đập liên tục" },
+    "cozy-wings":         { portal: "cozyplay", icon: "🐝", vi: "Cánh Nhỏ Phiêu Lưu", en: "Little Wings", mode: "focus", realtime: true, minW: 300, minH: 380, landH: 400, resumable: true, why: "Bay né chướng ngại liên tục, 1 chạm trễ là mất mạng" },
+    "dap-deadline":       { portal: "cozyplay", icon: "⏰", vi: "Đập Deadline", en: "Smash Deadline", mode: "focus", realtime: true, minW: 300, minH: 360, resumable: true, why: "Đếm ngược thời gian + combo, đập liên tục" },
     "gia-cho-viet":       { portal: "cozyplay", icon: "🛒", vi: "Đoán Giá Chợ Việt", en: "Guess the Market Price", mode: "parallel", realtime: false, minW: 280, minH: 320, resumable: true, why: "Đố giá theo lượt, không đồng hồ" },
     "xin-nghi":           { portal: "cozyplay", icon: "📝", vi: "Sếp Ơi Em Xin Nghỉ", en: "Boss, I Need a Day Off", mode: "parallel", realtime: false, minW: 280, minH: 320, resumable: true, why: "Chọn lời xin nghỉ theo lượt, không đồng hồ" },
     "doi-doi-2048":       { portal: "cozyplay", icon: "🪜", vi: "Đổi Đời 2048", en: "Life Upgrade 2048", mode: "parallel", realtime: false, minW: 280, minH: 320, resumable: true, why: "Xếp ô kiểu 2048, theo lượt, tự nhịp" },
@@ -43,7 +44,7 @@
     "qua-song":           { portal: "popplay", icon: "⛵", vi: "Qua Sông Cùng Bé", en: "River Crossing", mode: "parallel", realtime: false, minW: 300, minH: 340, resumable: true, why: "Đố qua sông theo lượt, không đồng hồ, không bao giờ thua" },
     "thap-vong-mau":      { portal: "popplay", icon: "🌈", vi: "Tháp Vòng Màu", en: "Rainbow Rings", mode: "parallel", realtime: false, minW: 300, minH: 340, resumable: true, why: "Xếp vòng theo lượt, không đồng hồ" },
     "lang-cua-be":        { portal: "popplay", icon: "🏘️", vi: "Làng Của Bé", en: "Baby's Village", mode: "parallel", realtime: false, minW: 300, minH: 340, resumable: true, why: "Đố chữ/số tự nhịp, không bao giờ thua" },
-    "pop-fly":            { portal: "popplay", icon: "🐦", vi: "Chim Bay Học Vui", en: "Fly & Learn", mode: "focus", realtime: true, minW: 340, minH: 460, resumable: true, why: "Bay và nhặt chữ liên tục" }
+    "pop-fly":            { portal: "popplay", icon: "🐦", vi: "Chim Bay Học Vui", en: "Fly & Learn", mode: "focus", realtime: true, minW: 340, minH: 400, resumable: true, why: "Bay và nhặt chữ liên tục" }
   };
   var API = { games: G, ids: function () { return Object.keys(G); }, get: function (id) { return G[id] || null; },
     /* game thiếu cờ → tự coi là "focus" (an toàn nhất); bài đo vẫn báo ✗ để người làm khai báo */

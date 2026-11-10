@@ -9,3 +9,14 @@ html.np-multi .nps-fab, html.np-multi #bCam, html.np-multi #bShr, html.np-multi 
 html.np-multi, html.np-multi body { overflow: hidden !important; overscroll-behavior: none; }
 /* đang tạm dừng bởi host: hoạt ảnh CSS cũng dừng */
 html.np-multi.np-mpaused *, html.np-multi.np-mpaused *::before, html.np-multi.np-mpaused *::after { animation-play-state: paused !important; }
+/* Chim Bay Học Vui (pop-fly): màn chọn chế độ có 5+ thẻ cao — trong khung nhỏ thu gọn thẻ cho vừa khung chơi, không cuộn */
+html.np-multi .cards{gap:4px}
+html.np-multi .cards .card{font-size:12px}
+html.np-multi .cards .card .main{padding:1px 8px;gap:5px}
+html.np-multi .cards .card .e{font-size:18px}
+html.np-multi .cards .card small{display:none}
+html.np-multi .cards .card .skinBtn{width:28px;height:28px;font-size:13px;margin-right:4px}
+html.np-multi .cards{gap:3px}
+html.np-multi .cards .card{min-height:0}
+/* Đập Deadline: body chừa 64px trên cho nút Home của cổng — trong khung multi thanh đó đã ẩn */
+html.np-g-dap-deadline body{padding-top:14px}

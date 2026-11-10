@@ -194,25 +194,26 @@ body.side #perf{max-width:50px;font-size:10px}
 
   /* ---------- bố cục: chọn số hàng sao cho khung lớn nhất mà vẫn ≥ minW/minH ---------- */
   var GAP = 6;
-  function plan(n, W, H, mw, mh) {
+  /* cờ minW/minH áp cho khung dạng dọc (h >= w); khung dạng ngang (w > h) dùng landW/landH nếu game khai báo (vài game ngang thấp bị cắt dù dọc cùng chiều cao vẫn vừa) */
+  function needOf(it, w, h) { var g = it.g; return w > h && g.landH ? [g.landW || g.minW, g.landH] : [g.minW, g.minH]; }
+  function plan(n, W, H, list) {
     var best = null;
     for (var rows = 1; rows <= n; rows++) {
       var counts = [], base = Math.floor(n / rows), extra = n % rows;
       for (var r = 0; r < rows; r++) counts.push(base + (r < extra ? 1 : 0));
-      var h = (H - GAP * (rows - 1)) / rows, minRatio = 1e9;
-      counts.forEach(function (k) { var w = (W - GAP * (k - 1)) / k; minRatio = Math.min(minRatio, w / mw, h / mh); });
+      var h = (H - GAP * (rows - 1)) / rows, minRatio = 1e9, k = 0;
+      counts.forEach(function (cnt) { var w = (W - GAP * (cnt - 1)) / cnt; for (var c = 0; c < cnt; c++) { var nd = needOf(list[k++] || { g: { minW: 280, minH: 320 } }, w, h); minRatio = Math.min(minRatio, w / nd[0], h / nd[1]); } });
       if (!best || minRatio > best.ratio + 1e-6) best = { rows: rows, counts: counts, ratio: minRatio, h: h };
     }
     return best;
   }
   function areaSize() { var r = grid.getBoundingClientRect(); return { W: Math.max(0, r.width), H: Math.max(0, r.height) }; }
-  function needMin(list) { var mw = 0, mh = 0; list.forEach(function (i) { mw = Math.max(mw, i.g.minW); mh = Math.max(mh, i.g.minH); }); return { mw: mw || 280, mh: mh || 320 }; }
-  function fits(list) { if (!list.length) return true; var a = areaSize(), m = needMin(list), p = plan(list.length, a.W, a.H, m.mw, m.mh); return p.ratio >= 0.999; }
+  function fits(list) { if (!list.length) return true; var a = areaSize(), p = plan(list.length, a.W, a.H, list); return p.ratio >= 0.999; }
   function layout() {
     var list = slotItems(), a = areaSize(); $("empty").hidden = list.length > 0 || items.length > 0 && false;
     $("empty").hidden = list.length > 0; $("empty").textContent = t().empty;
     if (!list.length) return;
-    var m = needMin(list), p = plan(list.length, a.W, a.H, m.mw, m.mh), k = 0;
+    var p = plan(list.length, a.W, a.H, list), k = 0;
     p.counts.forEach(function (cnt, r) {
       var w = (a.W - GAP * (cnt - 1)) / cnt, y = r * (p.h + GAP);
       for (var c = 0; c < cnt; c++) { var it = list[k++], s = it.el.style; s.left = Math.round(c * (w + GAP)) + "px"; s.top = Math.round(y) + "px"; s.width = Math.round(w) + "px"; s.height = Math.round(p.h) + "px"; }
@@ -413,6 +414,7 @@ body.side #perf{max-width:50px;font-size:10px}
       var g = M.flag(id), b = document.createElement("button"), open = !!find(id); b.type = "button"; b.className = "tile" + (open ? " open" : ""); b.dataset.id = id;
       b.innerHTML = '<span class="ti"></span><b></b><i></i>'; b.querySelector(".ti").textContent = g.icon; b.querySelector("b").textContent = gname(id);
       b.querySelector("i").textContent = open ? t().open : g.mode === "parallel" ? t().parTag : t().focTag;
+      if (ALL) { var tg = document.createElement("span"); tg.className = "tg"; tg.textContent = g.portal === "popplay" ? "Pop" : "Night"; b.appendChild(tg); }
       b.setAttribute("aria-pressed", String(sheetSel.indexOf(id) >= 0)); b.title = g.why;
       b.addEventListener("click", function () {
         if (open) { closeSheet(); var it = find(id); if (it.where === "tray") switchTo(it); else select(it); return; }
