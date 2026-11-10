@@ -67,7 +67,7 @@ svg{display:block}
 .pn .sw{width:100%;margin-top:6px;min-height:44px;border-radius:12px;background:var(--card);border:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 10px;font-weight:700;font-size:12px;text-align:left}.pn .sw[hidden]{display:none}.pn .sw::after{content:"";flex:none;width:34px;height:20px;border-radius:99px;background:var(--line);box-shadow:inset 0 0 0 2px transparent}.pn .sw[aria-pressed=true]::after{background:var(--accent)}
 body.bare #rail{display:none}
 .pn{position:absolute;z-index:7;top:40px;right:6px;width:min(212px,calc(100% - 12px));padding:10px;border-radius:16px;background:var(--panel);color:var(--ink);border:1px solid var(--line);box-shadow:var(--shadow);display:none;font-size:13px}
-.fr.po-open .pn{display:block}
+
 .pn .pt{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:6px}.pn .pt b{font-size:14px;line-height:1.15}.pn .pt span{font-size:11px;color:var(--muted);font-weight:800;white-space:nowrap}
 .pn .pr{display:flex;justify-content:space-between;padding:2px 0;color:var(--ink2)}.pn .pr b{color:var(--ink);font-variant-numeric:tabular-nums}
 .pn .pb{display:flex;gap:6px;margin-top:8px}
@@ -112,6 +112,65 @@ body.side #tray{flex-direction:column;justify-content:flex-start;width:100%}
 body.side .tc{width:46px;height:44px}
 body.side #perf{max-width:50px;font-size:10px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ===== Giao diện popup kiểu Night Pass: thẻ có nền, viền + bóng màu nhấn, bo góc lớn, nút ≥48px có nhãn; màu theo theme host (tối/sáng, Pop) ===== */
+:root{--np-bd:color-mix(in srgb,var(--accent) 45%,var(--line));--np-card:linear-gradient(180deg,color-mix(in srgb,var(--accent) 16%,var(--panel)),var(--panel) 42%);--np-glow:0 16px 44px rgba(0,0,0,.42),0 0 0 1px color-mix(in srgb,var(--accent) 30%,transparent),0 0 26px color-mix(in srgb,var(--accent) 28%,transparent)}
+.pill{display:inline-flex;align-items:center;min-height:24px;padding:0 10px;border-radius:99px;background:color-mix(in srgb,var(--accent) 22%,var(--card));color:var(--ink);font:800 12px/1 system-ui;white-space:nowrap}
+.pn,#hp{background:var(--np-card);border:2px solid var(--np-bd);border-radius:22px;box-shadow:var(--np-glow);color:var(--ink);display:flex;flex-direction:column;gap:8px;padding:12px;visibility:hidden;opacity:0;transform:translateY(-4px);pointer-events:none;transition:opacity .14s,transform .14s,visibility 0s .14s}
+.fr.po-open .pn,#hp.on{visibility:visible;opacity:1;transform:none;pointer-events:auto;transition:opacity .14s,transform .14s}
+.pn{width:min(272px,calc(100% - 12px));max-height:calc(100% - 48px);right:6px;top:42px;font-size:13px}
+.pn .pt{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0}.pn .pt b{font-size:17px;line-height:1.15;font-weight:900;min-width:0}
+.pn .pt span{flex:none;padding:3px 9px;border-radius:99px;background:color-mix(in srgb,var(--accent) 24%,var(--card));font-size:11px;font-weight:800;color:var(--ink)}
+.pn .ps{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pn .sc{border-radius:16px;background:var(--card);border:1px solid var(--line);padding:6px 10px;display:flex;flex-direction:column;gap:0}.pn .sc i{font-style:normal;font-size:11px;font-weight:700;color:var(--muted)}.pn .sc b{font-size:24px;line-height:1.1;font-weight:900;font-variant-numeric:tabular-nums;color:var(--ink)}
+.pn .pb{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0}
+.pn .pb button,.pn .sw{margin:0;width:auto;min-height:62px;border-radius:16px;background:var(--card);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:6px 2px;font-size:11px;font-weight:800;line-height:1.1;text-align:center;color:var(--ink)}
+.pn .pb button span,.pn .sw span{max-width:100%;overflow-wrap:anywhere}
+.pn .pb button svg{width:22px;height:22px}
+.pn .pb button[aria-pressed=true]:not(.sw){background:color-mix(in srgb,var(--accent) 24%,var(--card));border-color:var(--np-bd)}
+.pn .pb .sw[aria-pressed=true]{background:color-mix(in srgb,var(--accent) 24%,var(--card));border-color:var(--np-bd)}
+.pn .sw::after{display:none}
+.pn .pb button.x{background:color-mix(in srgb,var(--warn) 85%,#000);color:#fff;border-color:transparent}
+.pn .pb button[hidden],.pn .sw[hidden]{display:none}
+#hp{left:6px;top:44px;width:min(310px,calc(100% - 12px));gap:10px;max-height:calc(100% - 52px);overflow:hidden}
+#hp .hh{display:flex;align-items:center;justify-content:space-between;gap:8px}#hp .hh b{font-size:18px;font-weight:900}
+#hp .hr{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.hbtn{min-height:52px;border-radius:16px;background:var(--card);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;gap:8px;font-weight:800;font-size:14px;padding:0 10px;color:var(--ink)}
+.hbtn.go{background:var(--accent);color:var(--on-accent);border-color:transparent;box-shadow:0 4px 14px color-mix(in srgb,var(--accent) 45%,transparent)}
+#hp .hs{font-size:12px;font-weight:800;color:var(--muted);text-transform:none}
+#hpTray{display:flex;flex-direction:column;gap:8px}
+.tc.wide{display:grid;grid-template-columns:64px 1fr;align-items:center;gap:10px;width:100%;max-width:none;min-height:72px;height:auto;padding:4px 10px 4px 4px;border-radius:18px;background:var(--card);border:1px solid var(--line);text-align:left}
+.tc.wide .im{position:relative;width:64px;height:64px;border-radius:14px;overflow:hidden;background:var(--panel);display:grid;place-items:center;font-size:30px}
+.tc.wide .tx{padding:0;font-size:12px;line-height:1.25;color:var(--ink2)}.tc.wide .tx b{font-size:14px;white-space:normal;max-height:2.5em;overflow:hidden;color:var(--ink)}
+.hpg{display:flex;align-items:center;justify-content:space-between;gap:8px}.hpg[hidden]{display:none}#hpPgT{font-weight:800;font-size:12px;color:var(--muted)}
+.hm i,.mi i{width:28px;height:28px}
+/* bảng chọn game */
+#sheet{background:rgba(6,5,16,.7)}
+.sh{width:min(760px,100%);height:min(620px,100%);gap:10px;padding:14px;border-radius:26px;background:var(--np-card);border:2px solid var(--np-bd);box-shadow:var(--np-glow)}
+.sh header h2{font-size:20px;font-weight:900}
+.srow{flex:none;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.srch{flex:1 1 200px;min-width:0;display:flex;align-items:center;gap:8px;min-height:46px;padding:0 12px;border-radius:99px;background:var(--card);border:2px solid var(--line);color:var(--muted)}
+.srch:focus-within{border-color:var(--accent)}
+.srch input{flex:1;min-width:0;border:0;outline:0;background:none;color:var(--ink);font:700 15px system-ui;-webkit-user-select:text;user-select:text}
+.srch input::-webkit-search-cancel-button{display:none}
+.srch button{width:34px;height:34px;border-radius:50%;background:var(--line);font-size:18px;font-weight:900;line-height:1;color:var(--ink)}.srch button[hidden]{display:none}
+.chips button{min-height:44px}
+#shInfo{flex:none;font-size:12px;font-weight:700;color:var(--muted);line-height:1.3}
+#slides{flex:1;min-height:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;touch-action:pan-x;border-radius:16px}
+#slides::-webkit-scrollbar{display:none}
+.sp{flex:0 0 100%;min-width:0;scroll-snap-align:start;display:grid;gap:8px;align-content:start}
+.tile{min-width:0;padding:6px 4px;border-radius:18px;border:2px solid transparent;gap:3px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line)}
+.tile .ti{font-size:26px;line-height:1}.tile b{font-size:11.5px;line-height:1.15;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-height:none}
+.tile .bg{font:800 10px/1 system-ui;padding:3px 7px;border-radius:99px;color:var(--ink);white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.tile .bg.par{background:color-mix(in srgb,var(--ok) 28%,var(--panel))}.tile .bg.foc{background:color-mix(in srgb,var(--accent) 30%,var(--panel))}
+.tile .tg{position:absolute;left:6px;top:4px;font:800 9px/1 system-ui;color:var(--muted)}
+.tile.no{opacity:.45}.tile.no .bg{background:var(--line)}
+.tile[aria-pressed=true]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 18%,var(--card))}
+.sh footer{gap:8px}#dots{flex:1;display:flex;justify-content:center;align-items:center;gap:6px;min-width:0}#dots i{width:8px;height:8px;border-radius:50%;background:var(--line)}#dots i.on{background:var(--accent);width:18px;border-radius:99px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+#bStart{min-height:52px;padding:0 22px;font-size:16px;box-shadow:0 4px 14px color-mix(in srgb,var(--accent) 45%,transparent)}
+@media (max-height:520px){.sh{gap:6px;padding:10px}.sh header h2{font-size:17px}#shInfo{display:none}.srch{min-height:44px}#bStart{min-height:44px}}
+@media (max-width:420px){#bStart{padding:0 14px;font-size:14px}}
 </style>
 </head>
 <body>
@@ -123,14 +182,15 @@ body.side #perf{max-width:50px;font-size:10px}
     <span id="perf" role="status"></span>
     <button class="rb go" id="bAdd" type="button" aria-label="Add game"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
   </header>
-  <main id="grid"><div id="empty" hidden></div><button class="hm" id="hm" type="button" aria-haspopup="true" hidden><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M5 7h14M5 12h14M5 17h14"/></svg></i><b class="bd" id="hmBd"></b></button><div id="hp" role="group"><div class="hr"><button class="rb" id="hHome" type="button"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><button class="rb go" id="hAdd" type="button"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div><div id="hpTray" role="list"></div><span id="hpPerf" role="status"></span></div></main>
+  <main id="grid"><div id="empty" hidden></div><button class="hm" id="hm" type="button" aria-haspopup="true" hidden><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M5 7h14M5 12h14M5 17h14"/></svg></i><b class="bd" id="hmBd"></b></button><div id="hp" role="dialog" aria-modal="false"><div class="hh"><b id="hpT"></b><span class="pill" id="hpCnt"></span></div><div class="hr"><button class="hbtn" id="hHome" type="button"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg><span id="hHomeT"></span></button><button class="hbtn go" id="hAdd" type="button"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span id="hAddT"></span></button></div><div class="hs" id="hpSec"></div><div id="hpTray" role="list"></div><div class="hpg" id="hpPg" hidden><button class="rb" id="hpPrev" type="button" aria-label="‹">‹</button><span id="hpPgT"></span><button class="rb" id="hpNext" type="button" aria-label="›">›</button></div><span id="hpPerf" role="status"></span></div></div></main>
 </div>
 <div id="sheet" hidden role="dialog" aria-modal="true">
   <div class="sh">
-    <header><h2 id="shT"></h2><button class="rb" id="shX" type="button" aria-label="Close"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></header>
-    <div class="chips" id="flt" role="group"></div>
-    <div id="tiles"></div>
-    <footer><button class="btn alt" id="pgPrev" type="button">‹</button><span id="pg"></span><button class="btn alt" id="pgNext" type="button">›</button><button class="btn" id="bStart" type="button"></button></footer>
+    <header><h2 id="shT"></h2><span class="pill" id="shCnt"></span><button class="rb" id="shX" type="button" aria-label="Close"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></header>
+    <div class="srow"><label class="srch"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><input id="q" type="search" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search"><button id="qx" type="button" hidden aria-label="×">×</button></label><div class="chips" id="flt" role="group"></div></div>
+    <div id="shInfo"></div>
+    <div id="slides"></div>
+    <footer><button class="rb" id="pgPrev" type="button" aria-label="‹">‹</button><div id="dots" aria-hidden="true"></div><span id="pg" class="sr"></span><button class="rb" id="pgNext" type="button" aria-label="›">›</button><button class="btn" id="bStart" type="button"></button></footer>
   </div>
 </div>
 <div id="toast" role="status"></div>
@@ -149,14 +209,14 @@ body.side #perf{max-width:50px;font-size:10px}
   var POP = Q.get("portal") === "pop", ALL = Q.get("portal") === "all";
   var LANG = document.documentElement.lang === "en" ? "en" : "vi";
   var T = {
-    vi: { title: "Chơi cùng lúc", add: "Thêm game", back: "Về trang chủ", pick: "Chọn game để chơi cùng lúc", start: "▶ Bắt đầu", all: "Tất cả", par: "Cùng lúc", foc: "Tập trung", parTag: "chạy song song", focTag: "tập trung", open: "đang mở",
+    vi: { title: "Chơi cùng lúc", add: "Thêm game", back: "Về trang chủ", pick: "Chọn game để chơi cùng lúc", start: "▶ Bắt đầu", all: "Tất cả", par: "Cùng lúc", foc: "Tập trung", parTag: "cùng lúc", focTag: "tập trung", open: "đang mở",
       empty: "Bấm dấu + để chọn game.\nGame “cùng lúc” chạy song song; game “tập trung” chỉ một khung chạy, các game khác chờ ở khay.", pause: "Tạm dừng", play: "Tiếp tục", snd: "Tiếng", close: "Đóng game", move: "Đổi chỗ", menu: "Menu khung",
-      hud: "Ẩn bảng điểm của game", score: "Điểm", combo: "Combo", moves: "Lượt", st: { idle: "Chờ bắt đầu", playing: "Đang chơi", over: "Đã xong", paused: "Tạm dừng" }, tap: "⏸ Tạm dừng\nChạm để tiếp tục", loading: "Đang tải…",
+      hud: "Ẩn bảng điểm", hudShow: "Hiện bảng điểm", hpT: "Chơi cùng lúc", hpSec: "Game đang chơi dở", hpNone: "Chưa có game nào chờ ở khay.", search: "Tìm game…", pickInfo: "Tối đa {n} khung cùng lúc trên máy này · bấm để chọn nhiều game", noRes: "Không thấy game nào. Thử từ khoá khác nhé.", full2: "hết chỗ", pn: "Night Play", pp: "Pop Play", score: "Điểm", combo: "Combo", moves: "Lượt", st: { idle: "Chờ bắt đầu", playing: "Đang chơi", over: "Đã xong", paused: "Tạm dừng" }, tap: "⏸ Tạm dừng\nChạm để tiếp tục", loading: "Đang tải…",
       resumeTag: "đang chơi dở", left: "còn {t}", saved: "đã lưu ván", full: "Chỉ chơi tối đa {n} game cùng lúc trên máy này.", nofit: "Màn hình không đủ chỗ cho thêm khung nữa.", slow: "⚠ Máy hơi chậm: đã tạm dừng khung phụ", slowAdd: "Máy đang chậm, tạm thời chưa thêm khung được.",
       selMax: "Hết chỗ: bỏ bớt game đã chọn.", timeH: "Hết giờ chơi hôm nay", timeP: "Đã đến giới hạn thời gian do phụ huynh đặt. Hẹn ngày mai nhé!", home: "Về trang chủ", sel: "Đã chọn", page: "Trang", min: "ph" },
     en: { title: "Play together", add: "Add game", back: "Back home", pick: "Pick games to play at once", start: "▶ Start", all: "All", par: "Together", foc: "Focus", parTag: "runs together", focTag: "focus", open: "open",
       empty: "Tap + to pick games.\n“Together” games run side by side; “Focus” games run one at a time and wait in the tray.", pause: "Pause", play: "Resume", snd: "Sound", close: "Close game", move: "Swap", menu: "Frame menu",
-      hud: "Hide the game's score board", score: "Score", combo: "Combo", moves: "Moves", st: { idle: "Ready", playing: "Playing", over: "Finished", paused: "Paused" }, tap: "⏸ Paused\nTap to resume", loading: "Loading…",
+      hud: "Hide score board", hudShow: "Show score board", hpT: "Play together", hpSec: "Games in progress", hpNone: "No game is waiting in the tray.", search: "Search games…", pickInfo: "Up to {n} frames at once on this device · tap to pick several games", noRes: "No games found. Try another word.", full2: "no room", pn: "Night Play", pp: "Pop Play", score: "Score", combo: "Combo", moves: "Moves", st: { idle: "Ready", playing: "Playing", over: "Finished", paused: "Paused" }, tap: "⏸ Paused\nTap to resume", loading: "Loading…",
       resumeTag: "in progress", left: "{t} left", saved: "game saved", full: "This device can run up to {n} games at once.", nofit: "No room for another frame on this screen.", slow: "⚠ Device is slow: side frames paused", slowAdd: "Device is slow, can't add a frame right now.",
       selMax: "No room: unselect a game.", timeH: "Time's up for today", timeP: "The time limit set by a parent has been reached. See you tomorrow!", home: "Back home", sel: "Selected", page: "Page", min: "min" }
   };
@@ -170,7 +230,8 @@ body.side #perf{max-width:50px;font-size:10px}
     snd: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z" fill="currentColor"/><path d="M15.5 9a4 4 0 010 6M18 6.5a8 8 0 010 11"/></svg>',
     mute: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z" fill="currentColor"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>',
     swap: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4L3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/></svg>',
-    x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>'
+    x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+    hud: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="14" rx="3"/><path d="M8 15v-3M12 15V9M16 15v-2"/></svg>'
   };
 
   /* ---------- ngân sách theo thiết bị ---------- */
@@ -193,7 +254,7 @@ body.side #perf{max-width:50px;font-size:10px}
   var isTimeUp = function () { return prefs.limit > 0 && usedSec >= prefs.limit * 60; };
 
   /* ---------- trạng thái ---------- */
-  var items = [], main = null, sel = null, switching = false, slow = false, forceSlow = Q.get("perf") === "slow", sheetSel = [], flt = "all", page = 0;
+  var items = [], main = null, sel = null, switching = false, slow = false, forceSlow = Q.get("perf") === "slow", sheetSel = [], flt = "all";
   var grid = $("grid"), tray = $("tray"), now = function () { return Date.now(); };
   var slotItems = function () { return items.filter(function (i) { return i.where === "slot"; }); };
   var trayItems = function () { return items.filter(function (i) { return i.where === "tray"; }); };
@@ -225,6 +286,10 @@ body.side #perf{max-width:50px;font-size:10px}
     var bare = items.length > 0, was = document.body.classList.contains("bare");
     document.body.classList.toggle("bare", bare); $("hm").hidden = !bare; if (!bare) closeHp();
     if (bare !== was) renderTray();
+  }
+  function trapTab(e, root) {
+    if (e.key !== "Tab") return; var f = [].filter.call(root.querySelectorAll("button,input,[tabindex]"), function (x) { return !x.hidden && !x.disabled && x.getClientRects().length; }); if (!f.length) return;
+    var first = f[0], last = f[f.length - 1]; if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); } else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   }
   function closeHp() { $("hp").classList.remove("on"); $("hm").classList.remove("on"); }
   /* BỐ CỤC bằng CSS GRID tường minh (không toạ độ tuyệt đối bằng JS): mỗi khung là một ô, trình duyệt tự đảm bảo KHÔNG chồng lấn khi thêm/bớt khung.
@@ -266,15 +331,17 @@ body.side #perf{max-width:50px;font-size:10px}
     el.querySelector(".mi").addEventListener("click", function (e) { e.stopPropagation(); togglePanel(it); });
     el.addEventListener("pointerdown", function () { if (sel !== it) select(it); }, true);
     var pn = el.querySelector(".pn");
-    pn.innerHTML = '<div class="pt"><b></b><span data-k="st"></span></div><div class="pr"><span data-l="score"></span><b data-k="score">–</b></div><div class="pr"><span data-l="cc"></span><b data-k="cc">–</b></div><div class="pb"></div><button class="sw" type="button" data-a="hud" hidden aria-pressed="false"></button>';
+    pn.setAttribute("role", "dialog"); pn.setAttribute("aria-label", gname(it.id));
+    pn.innerHTML = '<div class="pt"><b></b><span data-k="st"></span></div><div class="ps"><div class="sc"><i data-l="score"></i><b data-k="score">–</b></div><div class="sc"><i data-l="cc"></i><b data-k="cc">–</b></div></div><div class="pb"></div>';
     var pb = pn.querySelector(".pb");
     [["pz", ICON.pause, function () { it.userPaused = !it.userPaused; if (!it.userPaused) it.autoPaused = false; sync(it); render(it); }],
      ["sn", ICON.snd, function () { it.userMuted = !it.userMuted; send(it, it.userMuted ? "mute" : "unmute"); render(it); }],
      ["mv", ICON.swap, function () { moveEarlier(it); }],
+     ["hud", ICON.hud, function () { setHudHide(it, !hudHide(it)); render(it); }],
      ["x", ICON.x, function () { closeItem(it); }]].forEach(function (d) {
-      var b = document.createElement("button"); b.type = "button"; b.dataset.a = d[0]; if (d[0] === "x") b.className = "x"; b.innerHTML = d[1]; b.addEventListener("click", function (e) { e.stopPropagation(); d[2](); }); pb.appendChild(b);
+      var b = document.createElement("button"); b.type = "button"; b.dataset.a = d[0]; b.className = d[0] === "x" ? "x" : d[0] === "hud" ? "sw" : ""; if (d[0] === "hud") b.hidden = true; b.innerHTML = d[1] + "<span></span>"; b.addEventListener("click", function (e) { e.stopPropagation(); d[2](); }); pb.appendChild(b);
     });
-    var sw = pn.querySelector(".sw"); sw.addEventListener("click", function (e) { e.stopPropagation(); setHudHide(it, !hudHide(it)); render(it); });
+    pn.addEventListener("keydown", function (e) { trapTab(e, pn); });
     grid.appendChild(el); return el;
   }
   function render(it) {
@@ -287,17 +354,18 @@ body.side #perf{max-width:50px;font-size:10px}
     var hasCombo = h.combo != null; pn.querySelector('[data-l=cc]').textContent = hasCombo ? T_.combo : T_.moves; pn.querySelector('[data-k=cc]').textContent = hasCombo ? h.combo : (h.moves != null ? h.moves : "–");
     var bd = el.querySelector(".mi .bd"), btxt = h.score != null ? String(h.score) : h.moves != null ? String(h.moves) : ""; if (h.combo > 1) btxt += (btxt ? " " : "") + "×" + h.combo;
     bd.textContent = btxt; bd.classList.toggle("on", !!btxt && it.where === "slot");
-    var swb = pn.querySelector(".sw"); swb.hidden = !(h.hc > 0); swb.textContent = T_.hud; swb.setAttribute("aria-pressed", String(hudHide(it)));
+    var tile = function (btn, icon, label, aria) { btn.innerHTML = icon + "<span></span>"; btn.lastChild.textContent = label; btn.setAttribute("aria-label", aria || label); btn.title = aria || label; };
+    var swb = pn.querySelector(".sw"); swb.hidden = !(h.hc > 0); tile(swb, ICON.hud, hudHide(it) ? T_.hudShow : T_.hud); swb.setAttribute("aria-pressed", String(hudHide(it)));
     var bz = pn.querySelector('[data-a=pz]'), bs = pn.querySelector('[data-a=sn]'), bm = pn.querySelector('[data-a=mv]'), bx = pn.querySelector('[data-a=x]');
-    bz.innerHTML = paused ? ICON.play : ICON.pause; bz.setAttribute("aria-label", paused ? T_.play : T_.pause); bz.title = bz.getAttribute("aria-label");
-    bs.innerHTML = it.userMuted ? ICON.mute : ICON.snd; bs.setAttribute("aria-label", T_.snd); bs.setAttribute("aria-pressed", String(!it.userMuted)); bs.title = T_.snd;
-    bm.setAttribute("aria-label", T_.move); bm.title = T_.move; bm.hidden = slotItems().length < 2 || it.where !== "slot";
-    bx.setAttribute("aria-label", T_.close); bx.title = T_.close;
+    tile(bz, paused ? ICON.play : ICON.pause, paused ? T_.play : T_.pause);
+    tile(bs, it.userMuted ? ICON.mute : ICON.snd, T_.snd); bs.setAttribute("aria-pressed", String(!it.userMuted));
+    tile(bm, ICON.swap, T_.move); bm.hidden = slotItems().length < 2 || it.where !== "slot";
+    tile(bx, ICON.x, T_.close);
   }
   function togglePanel(it) {
     var open = !it.el.classList.contains("po-open");
     closePanels();
-    if (open) { it.el.classList.add("po-open"); select(it); it.menuPaused = true; sync(it); render(it); }
+    if (open) { it.el.classList.add("po-open"); select(it); it.menuPaused = true; sync(it); render(it); var fb = it.el.querySelector(".pn button:not([hidden])"); if (fb) try { fb.focus({ preventScroll: true }); } catch (e) {} }
   }
   /* MỞ MENU = TẠM DỪNG: panel ⋯ của một khung dừng khung đó (khung khác vẫn chạy); menu chung #hm / bảng chọn game dừng TẤT CẢ khung đang chạy. Cờ riêng it.menuPaused (không đè it.userPaused: người dùng đã chủ động dừng thì đóng menu vẫn dừng).
      Đóng menu (bấm lại, ra ngoài, Esc, chạm vào game) → chạy tiếp: game thời gian thực đang chơi đếm 3-2-1, game theo lượt chạy ngay. */
@@ -428,25 +496,30 @@ body.side #perf{max-width:50px;font-size:10px}
 
   /* ---------- khay thumbnail ---------- */
   var trayT = 0; function renderTrayLater() { clearTimeout(trayT); trayT = setTimeout(renderTray, 150); }
+  var hpPage = 0;
   function renderTray() {
     var bare = document.body.classList.contains("bare"), tr = bare ? $("hpTray") : tray; tray.textContent = ""; $("hpTray").textContent = "";
     var list = trayItems(), side = !bare && document.body.classList.contains("side"), wide = bare || (!side && innerWidth >= 700);
-    var cap = bare ? 8 : Math.max(1, Math.floor(((side ? tray.clientHeight : tray.clientWidth) || 200) / (side ? 50 : wide ? 112 : 58))), shown = list.slice(0, cap);
+    var per = bare ? Math.max(1, Math.min(4, Math.floor((innerHeight - 250) / 82))) : 0, pages = bare ? Math.max(1, Math.ceil(list.length / per)) : 1; hpPage = Math.min(hpPage, pages - 1);
+    var cap = bare ? per : Math.max(1, Math.floor(((side ? tray.clientHeight : tray.clientWidth) || 200) / (side ? 50 : wide ? 112 : 58))), shown = bare ? list.slice(hpPage * per, hpPage * per + per) : list.slice(0, cap);
     $("hmBd").textContent = list.length ? String(list.length) : ""; $("hmBd").classList.toggle("on", list.length > 0);
+    $("hpT").textContent = t().hpT; $("hpCnt").textContent = items.length + " / " + CAP.slots; $("hHomeT").textContent = t().home; $("hAddT").textContent = t().add;
+    $("hpSec").textContent = list.length ? t().hpSec + " (" + list.length + ")" : t().hpNone; $("hpPg").hidden = pages <= 1; $("hpPgT").textContent = (hpPage + 1) + "/" + pages; $("hpPrev").disabled = hpPage <= 0; $("hpNext").disabled = hpPage >= pages - 1;
     shown.forEach(function (it) {
       var b = document.createElement("button"); b.type = "button"; b.className = "tc" + (wide ? " wide" : ""); b.dataset.id = it.id; b.setAttribute("role", "listitem");
-      var h = it.hud || {}, sc = h.score != null ? h.score : null, mins = it.lastPlay ? Math.max(1, Math.round((now() - it.firstAt) / 60000)) : 0;
+      var h = it.hud || {}, sc = h.score != null ? h.score : null;
       var label = gname(it.id) + (it.wasPlaying ? " — " + t().resumeTag : "") + (sc != null ? " · " + sc : "");
-      b.setAttribute("aria-label", label); b.title = label;
       var im = it.thumb ? '<img alt="" src="' + it.thumb + '">' : '<span>' + it.g.icon + '</span>';
       var tl = it.g.realtime && h.time != null && h.time >= 0 && it.wasPlaying ? "⏸ " + Math.floor(h.time / 60) + ":" + String(Math.floor(h.time % 60)).padStart(2, "0") : "";   /* game có đếm ngược: còn bao nhiêu giây khi bị đóng băng */
-      if (tl) { label += " — " + t().left.replace("{t}", tl.slice(2)); b.setAttribute("aria-label", label); b.title = label; }
-      if (wide) { b.innerHTML = '<span class="im">' + im + (tl ? '<span class="tm">' + tl + '</span>' : "") + '</span><span class="tx"><b></b><span></span></span>'; b.querySelector("b").textContent = gname(it.id); b.querySelector(".tx span").textContent = (it.wasPlaying ? t().resumeTag : t().saved) + (sc != null ? " · " + sc : "") + (tl ? " · " + tl : ""); }
+      if (tl) label += " — " + t().left.replace("{t}", tl.slice(2));
+      b.setAttribute("aria-label", label); b.title = label;
+      if (wide) { b.innerHTML = '<span class="im">' + im + (tl ? '<span class="tm">' + tl + '</span>' : "") + '</span><span class="tx"><b></b><span></span></span>'; b.querySelector("b").textContent = gname(it.id); b.querySelector(".tx span").textContent = (it.wasPlaying ? t().resumeTag : t().saved) + (sc != null ? " · " + sc : "") + (tl ? " · " + t().left.replace("{t}", tl.slice(2)) : ""); }
       else { b.innerHTML = im + (tl ? '<span class="tm">' + tl + '</span>' : (it.wasPlaying ? '<span class="pz">⏸</span>' : "")) + (sc != null && !tl ? '<span class="sc">' + sc + '</span>' : ""); }
       b.addEventListener("click", function () { if (main) main.menuPaused = false; closeHp(); resumeMenu(); switchTo(it); }); tr.appendChild(b);
     });
-    if (list.length > shown.length) { var m = document.createElement("span"); m.id = "more"; m.textContent = "+" + (list.length - shown.length); tr.appendChild(m); }
+    if (!bare && list.length > shown.length) { var m = document.createElement("span"); m.id = "more"; m.textContent = "+" + (list.length - shown.length); tr.appendChild(m); }
   }
+
 
   /* ---------- chọn game (bảng chọn có phân trang, không cuộn) ---------- */
   var pool = function () { return M.ids().filter(function (id) { var g = M.get(id); return (ALL || (POP ? g.portal === "popplay" : g.portal === "cozyplay")) && prefs.off.indexOf(id) < 0; }); };
@@ -456,33 +529,55 @@ body.side #perf{max-width:50px;font-size:10px}
     var list = slots.concat(par.map(function (i) { return { g: M.flag(i) }; })).concat(foc.length ? [{ g: M.flag(foc[0]) }] : []);
     return list.length <= CAP.slots && fits(list);
   }
+  var q = "", pf = "all", spage = 0, sper = 1, spages = 1;
+  var normS = function (x) { return String(x || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d"); };
+  function filtered() {
+    var nq = normS(q.trim());
+    return pool().filter(function (id) { var g = M.flag(id); return (flt === "all" || g.mode === flt) && (pf === "all" || g.portal === pf) && (!nq || [g.vi, g.en].some(function (x) { return normS(x).indexOf(nq) >= 0; })); });
+  }
   function openSheet() {
-    items.forEach(function (o) { if (o.el) o.el.classList.remove("po-open"); }); closeHp(); pauseAllMenu(); sheetSel = []; page = 0; $("shT").textContent = t().pick; $("bStart").textContent = t().start; $("sheet").hidden = false;
+    items.forEach(function (o) { if (o.el) o.el.classList.remove("po-open"); }); closeHp(); pauseAllMenu(); sheetSel = []; spage = 0; q = ""; $("q").value = ""; $("qx").hidden = true;
+    $("shT").textContent = t().pick; $("bStart").textContent = t().start; $("q").placeholder = t().search; $("q").setAttribute("aria-label", t().search); $("sheet").hidden = false;
     var box = $("flt"); box.textContent = "";
-    [["all", t().all], ["parallel", t().par], ["focus", t().foc]].forEach(function (d) { var b = document.createElement("button"); b.type = "button"; b.textContent = d[1]; b.dataset.f = d[0]; b.setAttribute("aria-pressed", String(flt === d[0])); b.addEventListener("click", function () { flt = d[0]; page = 0; renderSheet(); }); box.appendChild(b); });
-    renderSheet();
+    var chips = [["all", t().all, "m"], ["parallel", t().par, "m"], ["focus", t().foc, "m"]]; if (ALL) chips = chips.concat([["cozyplay", t().pn, "p"], ["popplay", t().pp, "p"]]);
+    chips.forEach(function (d) { var b = document.createElement("button"); b.type = "button"; b.textContent = d[1]; b.dataset.f = d[0]; b.dataset.k = d[2]; b.addEventListener("click", function () { if (d[2] === "m") flt = d[0]; else pf = pf === d[0] ? "all" : d[0]; spage = 0; renderSheet(); }); box.appendChild(b); });
+    renderSheet(); setTimeout(function () { try { $("q").focus({ preventScroll: true }); } catch (e) {} }, 60);
   }
   function closeSheet() { $("sheet").hidden = true; resumeMenu(); }
+  function goPage(n) { var box = $("slides"); n = Math.max(0, Math.min(spages - 1, n)); box.scrollTo({ left: n * box.clientWidth, behavior: matchMedia("(prefers-reduced-motion:reduce)").matches ? "auto" : "smooth" }); }
+  function syncPage() {
+    var box = $("slides"), w = box.clientWidth || 1; spage = Math.max(0, Math.min(spages - 1, Math.round(box.scrollLeft / w)));
+    $("dots").querySelectorAll("i").forEach(function (d, i) { d.classList.toggle("on", i === spage); });
+    $("pg").textContent = t().page + " " + (spage + 1) + "/" + spages; $("pgPrev").disabled = spage <= 0; $("pgNext").disabled = spage >= spages - 1;
+  }
   function renderSheet() {
-    $("flt").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.f === flt)); });
-    var ids = pool().filter(function (i) { return flt === "all" || M.flag(i).mode === flt; }), box = $("tiles"), r = box.getBoundingClientRect();
-    var cols = Math.max(2, Math.floor((r.width + 8) / 112)), rows = Math.max(1, Math.floor((r.height + 8) / 92)), per = cols * rows, pages = Math.max(1, Math.ceil(ids.length / per));
-    page = Math.min(page, pages - 1); box.style.gridTemplateColumns = "repeat(" + cols + ",1fr)"; box.style.gridAutoRows = "84px"; box.textContent = "";
-    ids.slice(page * per, page * per + per).forEach(function (id) {
-      var g = M.flag(id), b = document.createElement("button"), open = !!find(id); b.type = "button"; b.className = "tile" + (open ? " open" : ""); b.dataset.id = id;
-      b.innerHTML = '<span class="ti"></span><b></b><i></i>'; b.querySelector(".ti").textContent = g.icon; b.querySelector("b").textContent = gname(id);
-      b.querySelector("i").textContent = open ? t().open : g.mode === "parallel" ? t().parTag : t().focTag;
-      if (ALL) { var tg = document.createElement("span"); tg.className = "tg"; tg.textContent = g.portal === "popplay" ? "Pop" : "Night"; b.appendChild(tg); }
-      b.setAttribute("aria-pressed", String(sheetSel.indexOf(id) >= 0)); b.title = g.why;
-      b.addEventListener("click", function () {
-        if (open) { closeSheet(); var it = find(id); if (it.where === "tray") switchTo(it); else select(it); return; }
-        var k = sheetSel.indexOf(id); if (k >= 0) sheetSel.splice(k, 1); else { var next = sheetSel.concat([id]); if (!selFits(next)) { toast(t().selMax); return; } sheetSel = next; }
-        renderSheet();
-      });
-      box.appendChild(b);
+    $("flt").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.k === "m" ? b.dataset.f === flt : b.dataset.f === pf)); });
+    var ids = filtered(), box = $("slides"), W = box.clientWidth, H = box.clientHeight, TW = 88, TH = 104, G = 8;
+    var cols = Math.max(2, Math.floor((W + G) / (TW + G))), rows = Math.max(1, Math.floor((H + G) / (TH + G))), rh = Math.floor((H - G * (rows - 1)) / rows);
+    sper = cols * rows; spages = Math.max(1, Math.ceil(ids.length / sper)); spage = Math.min(spage, spages - 1); box.textContent = "";
+    $("shCnt").textContent = (sheetSel.length ? t().sel + " " + sheetSel.length : "") || (pool().length + ""); $("shInfo").textContent = t().pickInfo.replace("{n}", CAP.slots);
+    if (!ids.length) { var em = document.createElement("div"); em.className = "sp"; em.style.cssText = "place-items:center;color:var(--muted);font-weight:700;text-align:center"; em.textContent = t().noRes; box.appendChild(em); }
+    for (var p = 0; p < (ids.length ? spages : 0); p++) {
+      var pgEl = document.createElement("div"); pgEl.className = "sp"; pgEl.style.gridTemplateColumns = "repeat(" + cols + ",minmax(0,1fr))"; pgEl.style.gridAutoRows = rh + "px";
+      ids.slice(p * sper, p * sper + sper).forEach(function (id) { pgEl.appendChild(tileEl(id)); }); box.appendChild(pgEl);
+    }
+    var dots = $("dots"); dots.textContent = ""; for (var d = 0; d < spages; d++) dots.appendChild(document.createElement("i"));
+    box.scrollLeft = spage * (box.clientWidth || 0); syncPage(); $("bStart").disabled = !sheetSel.length;
+    $("bStart").textContent = t().start + (sheetSel.length ? " (" + sheetSel.length + ")" : "");
+  }
+  function tileEl(id) {
+    var g = M.flag(id), b = document.createElement("button"), open = !!find(id), on = sheetSel.indexOf(id) >= 0, blocked = !open && !on && !selFits(sheetSel.concat([id]));
+    b.type = "button"; b.className = "tile" + (open ? " open" : "") + (blocked ? " no" : ""); b.dataset.id = id;
+    b.innerHTML = '<span class="ti"></span><b></b><span class="bg"></span>'; b.querySelector(".ti").textContent = g.icon; b.querySelector("b").textContent = gname(id);
+    var bg = b.querySelector(".bg"); bg.classList.add(g.mode === "parallel" ? "par" : "foc"); bg.textContent = blocked ? t().full2 : open ? t().open : g.mode === "parallel" ? t().parTag : t().focTag;
+    if (ALL) { var tg = document.createElement("span"); tg.className = "tg"; tg.textContent = g.portal === "popplay" ? "Pop" : "Night"; b.appendChild(tg); }
+    b.setAttribute("aria-pressed", String(on)); b.title = blocked ? t().selMax : g.why; b.setAttribute("aria-label", gname(id) + " — " + bg.textContent);
+    b.addEventListener("click", function () {
+      if (open) { closeSheet(); var it = find(id); if (it.where === "tray") switchTo(it); else select(it); return; }
+      var k = sheetSel.indexOf(id); if (k >= 0) sheetSel.splice(k, 1); else { var next = sheetSel.concat([id]); if (!selFits(next)) { toast(t().selMax); return; } sheetSel = next; }
+      renderSheet();
     });
-    $("pg").textContent = t().page + " " + (page + 1) + "/" + pages + (sheetSel.length ? " · " + t().sel + " " + sheetSel.length : "");
-    $("pgPrev").disabled = page <= 0; $("pgNext").disabled = page >= pages - 1; $("bStart").disabled = !sheetSel.length;
+    return b;
   }
   async function startSelected() {
     var ids = sheetSel.slice(); closeSheet(); sheetSel = [];
@@ -530,11 +625,16 @@ body.side #perf{max-width:50px;font-size:10px}
     layout(); renderTray(); if (!$("sheet").hidden) renderSheet();
   }
   $("bBack").addEventListener("click", function () { location.href = PORTAL_HOME; });
-  $("hm").addEventListener("click", function (e) { e.stopPropagation(); var open = !$("hp").classList.contains("on"); closePanels(); if (open) { $("hp").classList.add("on"); $("hm").classList.add("on"); pauseAllMenu(); } });
+  $("hm").addEventListener("click", function (e) { e.stopPropagation(); var open = !$("hp").classList.contains("on"); closePanels(); if (open) { $("hp").classList.add("on"); $("hm").classList.add("on"); pauseAllMenu(); renderTray(); var fb = $("hAdd"); try { fb.focus({ preventScroll: true }); } catch (e) {} } });
+  $("hpPrev").addEventListener("click", function (e) { e.stopPropagation(); hpPage--; renderTray(); }); $("hpNext").addEventListener("click", function (e) { e.stopPropagation(); hpPage++; renderTray(); });
+  $("hp").addEventListener("keydown", function (e) { trapTab(e, $("hp")); });
   $("hHome").addEventListener("click", function () { location.href = PORTAL_HOME; }); $("hAdd").addEventListener("click", function () { closeHp(); openSheet(); });   /* menuPaused giữ nguyên: bảng chọn mở thì game vẫn dừng, closeSheet mới chạy tiếp */
   $("bAdd").addEventListener("click", openSheet); $("shX").addEventListener("click", closeSheet); $("bStart").addEventListener("click", startSelected);
   $("sheet").addEventListener("click", function (e) { if (e.target === $("sheet")) closeSheet(); });
-  $("pgPrev").addEventListener("click", function () { page--; renderSheet(); }); $("pgNext").addEventListener("click", function () { page++; renderSheet(); });
+  $("pgPrev").addEventListener("click", function () { goPage(spage - 1); }); $("pgNext").addEventListener("click", function () { goPage(spage + 1); });
+  $("slides").addEventListener("scroll", function () { clearTimeout(syncPage.t); syncPage.t = setTimeout(syncPage, 60); }, { passive: true });
+  $("q").addEventListener("input", function () { q = $("q").value; $("qx").hidden = !q; spage = 0; renderSheet(); }); $("qx").addEventListener("click", function () { $("q").value = ""; q = ""; $("qx").hidden = true; spage = 0; renderSheet(); $("q").focus(); });
+  $("sheet").addEventListener("keydown", function (e) { trapTab(e, $("sheet").querySelector(".sh")); });
   $("lkGo").addEventListener("click", function () { location.href = PORTAL_HOME; });
   grid.addEventListener("pointerdown", function (e) { if (!e.target.closest(".pn,.mi,#hp,#hm")) closePanels(); }, true);
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") { if (!$("sheet").hidden) closeSheet(); else closePanels(); return; } if (sel && sel.fr && !e.target.closest("button")) { try { sel.fr.contentWindow.focus(); } catch (x) {} } });

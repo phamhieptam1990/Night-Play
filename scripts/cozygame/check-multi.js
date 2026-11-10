@@ -109,7 +109,7 @@ const TUT = ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "xn", "dd", "
     note(!ch.railVisible, tag, "thanh trên host vẫn hiện khi đang có game"); note(ch.gh >= ch.ih - 14, tag, "khung game chưa chiếm gần toàn màn (" + ch.gh + "/" + ch.ih + ")");
     note(!ch.hidden && ch.hm[0] >= 44 && ch.hm[1] >= 44, tag, "icon menu chung nhỏ hơn 44px " + ch.hm.join("x")); note(ch.hmTop, tag, "icon menu chung bị che"); note(ch.over.length === 0, tag, "icon menu chung đè nút của game: " + ch.over.join(","));
     await pg.evaluate(() => document.getElementById("hm").click()); await wait(150);
-    const hp = await pg.evaluate(() => { const p = document.getElementById("hp"), r = p.getBoundingClientRect(), b = [...p.querySelectorAll("button")].map(x => Math.min(x.getBoundingClientRect().width, x.getBoundingClientRect().height)); return { on: p.classList.contains("on"), inside: r.left >= 0 && r.right <= innerWidth && r.bottom <= innerHeight, b }; });
+    const hp = await pg.evaluate(() => { const p = document.getElementById("hp"), r = p.getBoundingClientRect(), b = [...p.querySelectorAll("button")].filter(x => x.getClientRects().length).map(x => Math.min(x.getBoundingClientRect().width, x.getBoundingClientRect().height)); return { on: p.classList.contains("on"), inside: r.left >= 0 && r.right <= innerWidth && r.bottom <= innerHeight, b }; });
     note(hp.on && hp.inside && hp.b.length >= 2 && hp.b.every(x => x >= 43), tag, "menu chung: mở/vừa màn hình/nút ≥44px " + JSON.stringify(hp));
     if (shotDir) await pg.screenshot({ path: path.join(shotDir, "multi-" + name + "-hostmenu.png") });
     await pg.keyboard.press("Escape"); await pg.evaluate(() => document.getElementById("grid").dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }))); await wait(150);
@@ -257,6 +257,51 @@ const TUT = ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "xn", "dd", "
     await wait(3000); a = await adv("ne-o-ga"); note(running(a), tag, "sau khi chạm đóng menu, game không chạy lại " + JSON.stringify(a));
     if (pg._errs.length) note(false, tag, "lỗi JS: " + pg._errs[0]);
     console.log("  " + tag + " xong"); await pg.close();
+  }
+
+  /* ---------- 2e. 3 POPUP (menu trái #hp, panel phải .pn, bảng chọn #sheet): trọn màn hình, nút ≥44px, không cuộn, tìm kiếm, slide ---------- */
+  const POP_SIZES = quick ? [[390, 844, "vi", "dark"], [1194, 834, "en", "light"]] : [[390, 844, "vi", "dark"], [844, 390, "vi", "dark"], [768, 1024, "vi", "dark"], [1194, 834, "vi", "dark"], [1440, 900, "vi", "dark"], [390, 844, "en", "light"], [1194, 834, "en", "light"]];
+  for (const [W, H, lang, theme] of POP_SIZES) {
+    const tag = "multi popup " + W + "x" + H + " " + lang + "/" + theme, pg = await open("lang=" + lang, W, H, [["lang", lang], ["theme", theme]]);
+    await pg.evaluate(() => document.getElementById("shX").click());
+    await pg.evaluate(() => NPMulti.add("ne-o-ga")); await ready(pg, 1); await wait(600); await startPlay(pg, "ne-o-ga"); await wait(900);
+    await pg.evaluate(() => NPMulti.add("xay-cau-tre")); await wait(1500);
+    const box = sel2 => pg.evaluate(sel2 => { const e = document.querySelector(sel2); if (!e) return null; const r = e.getBoundingClientRect(), bs = [...e.querySelectorAll("button,input")].filter(b => b.getClientRects().length && !b.hidden).map(b => { const q = b.getBoundingClientRect(); return [b.id || b.dataset.a || b.className, Math.round(Math.min(q.width, q.height))]; });
+      return { inside: r.left >= -1 && r.right <= innerWidth + 1 && r.top >= -1 && r.bottom <= innerHeight + 1, rect: [Math.round(r.left), Math.round(r.top), Math.round(r.right), Math.round(r.bottom)], noScroll: e.scrollHeight <= e.clientHeight + 1, small: bs.filter(b => b[1] < 43 && !/^(q|qx|dots)$/.test(b[0])), page: [document.documentElement.scrollHeight <= innerHeight + 1] }; }, sel2);
+    /* menu trái */
+    await pg.evaluate(() => document.getElementById("hm").click()); await wait(350);
+    let b = await box("#hp"); note(b && b.inside && b.noScroll && b.small.length === 0, tag + " menu trái", "không trọn màn/cuộn/nút nhỏ " + JSON.stringify(b));
+    const cards = await pg.evaluate(() => [...document.querySelectorAll("#hpTray .tc.wide")].map(c => { const r = c.getBoundingClientRect(), im = c.querySelector(".im").getBoundingClientRect(); return [Math.round(r.height), Math.round(im.width)]; }));
+    note(cards.length >= 1 && cards.every(c => c[0] >= 64 && c[1] >= 56), tag + " menu trái", "thẻ game dở nhỏ hơn 64px/ảnh 56px " + JSON.stringify(cards));
+    if (shotDir) await pg.screenshot({ path: path.join(shotDir, "popup-left-" + W + "x" + H + "-" + lang + "-" + theme + ".png") });
+    await pg.keyboard.press("Escape"); await wait(300);
+    note(!(await pg.evaluate(() => document.getElementById("hp").classList.contains("on"))), tag + " menu trái", "Esc không đóng");
+    /* panel phải */
+    const mid = await pg.evaluate(() => NPMulti.items().find(i => i.where === "slot").id);
+    await pg.evaluate(id => document.querySelector('.fr[data-id="' + id + '"] .mi').click(), mid); await wait(350);
+    b = await box('.fr[data-id="' + mid + '"] .pn'); note(b && b.inside && b.noScroll && b.small.length === 0, tag + " panel phải", "không trọn màn/cuộn/nút nhỏ " + JSON.stringify(b));
+    const lab = await pg.evaluate(id => [...document.querySelectorAll('.fr[data-id="' + id + '"] .pn .pb button')].filter(x => x.getClientRects().length).map(x => (x.textContent || "").trim()), mid);
+    note(lab.length >= 3 && lab.every(x => x.length > 1), tag + " panel phải", "nút phải có nhãn chữ " + JSON.stringify(lab));
+    if (shotDir) await pg.screenshot({ path: path.join(shotDir, "popup-right-" + W + "x" + H + "-" + lang + "-" + theme + ".png") });
+    await pg.keyboard.press("Escape"); await wait(300);
+    /* bảng chọn game: tìm kiếm + slide */
+    await pg.evaluate(() => { document.getElementById("hm").click(); document.getElementById("hAdd").click(); }); await wait(500);
+    b = await box(".sh"); note(b && b.inside && b.noScroll && b.small.length === 0, tag + " bảng chọn", "không trọn màn/cuộn/nút nhỏ " + JSON.stringify(b));
+    const pages = await pg.evaluate(() => document.querySelectorAll("#slides .sp").length), cut = await pg.evaluate(() => { const sl = document.getElementById("slides").getBoundingClientRect(); return [...document.querySelectorAll("#slides .sp:first-child .tile")].filter(t => { const r = t.getBoundingClientRect(); return r.left < sl.left - 1 || r.right > sl.right + 1 || r.bottom > sl.bottom + 1 || r.top < sl.top - 1 || r.width < 72 || r.height < 72; }).length; });
+    note(cut === 0, tag + " bảng chọn", cut + " tile bị cắt / nhỏ hơn 72px trên trang 1");
+    note(pages >= 2 || W >= 700, tag + " bảng chọn", "màn hẹp phải có nhiều trang slide (32 game), có " + pages);
+    if (pages >= 2) { await pg.evaluate(() => document.getElementById("pgNext").click()); await wait(700); const t2 = await pg.evaluate(() => document.getElementById("pg").textContent); note(/2\//.test(t2), tag + " bảng chọn", "bấm › không sang trang 2: " + t2); await pg.evaluate(() => document.getElementById("pgPrev").click()); await wait(600); }
+    const find = async term => { await pg.evaluate(v => { const i = document.getElementById("q"); i.value = v; i.dispatchEvent(new Event("input", { bubbles: true })); }, term); await wait(200); return pg.evaluate(() => [...document.querySelectorAll("#slides .tile")].map(t => t.dataset.id)); };
+    let r1 = await find("2048"); note(r1.includes("doi-doi-2048") && r1.length <= 2, tag + " tìm kiếm", "gõ 2048: " + JSON.stringify(r1));
+    r1 = await find("doi doi"); note(r1.includes("doi-doi-2048"), tag + " tìm kiếm", "gõ không dấu 'doi doi': " + JSON.stringify(r1));
+    r1 = await find("zzzzqq"); note(r1.length === 0 && (await pg.evaluate(() => document.getElementById("slides").textContent.length > 5)), tag + " tìm kiếm", "không có kết quả phải báo");
+    r1 = await find(""); note(r1.length >= 10, tag + " tìm kiếm", "xoá ô tìm: phải hiện lại danh sách (" + r1.length + ")");
+    await pg.evaluate(() => document.querySelector("#slides .tile:not(.no)").click()); await wait(250);
+    note(await pg.evaluate(() => !document.getElementById("bStart").disabled && /\(1\)/.test(document.getElementById("bStart").textContent)), tag + " bảng chọn", "chọn 1 game: nút Bắt đầu phải bật và hiện (1)");
+    if (shotDir) await pg.screenshot({ path: path.join(shotDir, "popup-sheet-" + W + "x" + H + "-" + lang + "-" + theme + ".png") });
+    note(await pg.evaluate(() => document.documentElement.scrollHeight <= innerHeight + 1), tag, "trang host bị cuộn");
+    if (pg._errs.length) note(false, tag, "lỗi JS: " + pg._errs[0]);
+    console.log("  " + tag + ": " + pages + " trang slide"); await pg.close();
   }
 
   /* ---------- 3. FOCUS + LRU + nạp lại ván ---------- */
