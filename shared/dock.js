@@ -3,6 +3,7 @@
    trang cổng thấy cờ __npDock và ẩn nút nổi + nút ← của nó, nên chỉ còn MỘT nút ← (của game: ở màn chọn thì thoát về cổng). Mở trực tiếp (không iframe): không làm gì. */
 (function () {
   "use strict";
+  if (document.documentElement.classList.contains("np-multi")) return;   /* chế độ chơi cùng lúc (?multi=1): host lo các nút */
   var par = null; try { par = window.parent !== window ? window.parent : null; if (par) par.document.getElementById("stage"); } catch (e) { par = null; }
   if (!par || !par.document.getElementById("stage")) return;
   function init() {

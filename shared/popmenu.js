@@ -12,6 +12,7 @@
    Nhúng sau pophelp.js/popfit.js: <script src="../../../shared/popmenu.js" defer></script> */
 (function () {
   "use strict";
+  if (document.documentElement.classList.contains("np-multi")) return;   /* chế độ chơi cùng lúc (?multi=1): host lo các nút */
   var top = document.querySelector(".top"); if (!top) return;
   var mqP = matchMedia("(max-width:520px) and (orientation:portrait)"), mqT = matchMedia("(pointer:coarse) and (orientation:portrait) and (max-width:900px)"), cur = "";
   /* "p" = điện thoại dọc (gom cả 🔊); "t" = máy tính bảng cảm ứng dọc (iPad 768/834 rộng): giữ ← và 🔊 ngoài menu, gom phần còn lại; máy tính chuột / màn ngang: "" (không gom) */

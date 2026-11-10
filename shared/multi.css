@@ -1,0 +1,11 @@
+/* CHẾ ĐỘ "CHƠI CÙNG LÚC" (?multi=1): game chạy trong một KHUNG NHỎ của trang host (cozyplay/multi.html).
+   shared/bridge.js đặt class np-multi lên <html> và tự nạp tệp này. Host lo các nút (đóng, tạm dừng, tiếng, chọn khung), nên trong khung game chỉ còn
+   khu vực chơi + HUD điểm của chính game. Ẩn: thanh trên (←, tên, 🔊, ⋯, ngôn ngữ...), nút gom của fan.js/popmenu.js, thẻ "Tiếp tục ván dở",
+   hộp hỏi thoát, banner "mở bằng trình duyệt", nút nổi. KHÔNG sửa tay từng game: chỉ thêm selector vào đây khi có thành phần mới. */
+html.np-multi .top,
+html.np-multi #npFab, html.np-multi #npFan, html.np-multi #npPmFab, html.np-multi #npPmFan, html.np-multi #npPmBk, html.np-multi #npPmShr, html.np-multi #npPmCam, html.np-multi #npPmLock,
+html.np-multi #npResume, html.np-multi #npxO, html.np-multi #npInApp, html.np-multi #npTitle,
+html.np-multi .nps-fab, html.np-multi #bCam, html.np-multi #bShr, html.np-multi #nsPill { display: none !important; }   /* #nsPill: nút nổi Night Pass (mua gói ở trang cổng) */
+html.np-multi, html.np-multi body { overflow: hidden !important; overscroll-behavior: none; }
+/* đang tạm dừng bởi host: hoạt ảnh CSS cũng dừng */
+html.np-multi.np-mpaused *, html.np-multi.np-mpaused *::before, html.np-multi.np-mpaused *::after { animation-play-state: paused !important; }

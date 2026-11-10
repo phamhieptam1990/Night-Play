@@ -13,14 +13,15 @@
   /* nạp các mô-đun đi kèm (không phải sửa từng game): shared/exitconfirm.js (hỏi trước khi thoát + chống bấm nhầm), shared/inapp.js (banner "Mở bằng trình duyệt" ở trang chơi hộ/thách đấu) */
   var base = ((document.currentScript && document.currentScript.src) || "").replace(/resume\.js(\?.*)?$/, "");
   function load(f) { if (!base) return; var sc = document.createElement("script"); sc.src = base + f; sc.async = false; (document.head || document.documentElement).appendChild(sc); }
-  load("exitconfirm.js"); load("endguard.js");   /* endguard.js: cú chạm nối tiếp ngay sau khi hết ván không được tự chơi lại / làm mất màn kết thúc */
+  var MULTI = NP.multi === true;   /* ?multi=1 (chơi cùng lúc, xem bridge.js): host lo nút thoát/Back/tiếp tục; vẫn LƯU ván để host đẩy/nạp lại khung */
+  if (!MULTI) load("exitconfirm.js"); load("endguard.js");   /* endguard.js: cú chạm nối tiếp ngay sau khi hết ván không được tự chơi lại / làm mất màn kết thúc */
   var gid = NP.gid, RK = "np-resume:" + gid;
   var q = new URLSearchParams(location.search);
   var realHelper = q.get("helper") === "1", challenge = /^#ch=/.test(location.hash);
   /* game chưa có đường khởi tạo từ trạng thái (initialState) thì chỉ dùng Back, không lưu/tiếp tục */
   var NO_RESUME = { "ban-co-hieu-toi": 1, "be-dau-bo-me": 1 };
   var canResume = !realHelper && !NO_RESUME[gid];
-  if (realHelper || challenge) load("inapp.js");
+  if ((realHelper || challenge) && !MULTI) load("inapp.js");
   var vi = function () { return (document.documentElement.lang || "vi") === "vi"; };
   var vnDay = function () { try { return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Ho_Chi_Minh" }).format(new Date()); } catch (e) { return new Date().toISOString().slice(0, 10); } };
   var read = function () {
@@ -51,7 +52,7 @@
   var pushed = false, ignore = 0, ignoreT = 0, waiting = false, playing = false;
   function doPush() { if (pushed) return; try { history.pushState({ npPlay: 1 }, ""); pushed = true; } catch (e) {} }
   function tryPush() {
-    if (pushed || !findHome()) return;
+    if (MULTI || pushed || !findHome()) return;
     /* Chrome bỏ qua mục lịch sử thêm khi chưa có thao tác người dùng: chờ chạm/phím đầu tiên rồi mới đẩy */
     if (navigator.userActivation && !navigator.userActivation.hasBeenActive) {
       if (waiting) return; waiting = true;
@@ -133,7 +134,7 @@
     return host && host !== document.body ? { el: host, home: false } : null;
   }
   function ensure() {
-    var h = canResume && !challenge && !NP.resumeBoot() ? selectHost() : null, rec = h ? read() : null;
+    var h = canResume && !challenge && !MULTI && !NP.resumeBoot() ? selectHost() : null, rec = h ? read() : null;
     if (!rec || !h) { if (card && card.parentNode) card.remove(); if (!rec && !canResume) card = null; if (!read()) card = null; return; }
     if (!card) card = build(rec);
     var host = (h.home && h.el.querySelector(":scope>.hl")) || h.el;

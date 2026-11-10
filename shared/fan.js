@@ -7,6 +7,7 @@
    - Nút xuất hiện muộn (📷/📤 do landscape.js gắn, ? do help.js) được tự gom vào. Không làm gì nếu trang có ít hơn 3 nút phụ (game Pop Play). */
 (function () {
   "use strict";
+  if (document.documentElement.classList.contains("np-multi")) return;   /* chế độ chơi cùng lúc (?multi=1): host lo các nút */
   /* vai trò theo thứ tự cũ trên thanh trên: [vai trò, [các id có thể có], [nhãn vi, en]] */
   var ROLES = [
     ["help", ["bHelp", "askBtn"], ["Hướng dẫn", "Help"]],
