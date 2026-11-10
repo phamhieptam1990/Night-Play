@@ -1,5 +1,5 @@
 /* Bài đo THEME THEO ĐỘ KHÓ (GAME_RULES mục 5i; shared/difficulty.js + difficulty.css). Chạy:
-     NODE_PATH=<thư mục có puppeteer-core> node scripts/cozygame/check-difficulty.js [--quick] [--full] [--land] [--shots=<thư mục>] [id,id]
+     NODE_PATH=<thư mục có puppeteer-core> node scripts/cozygame/check-difficulty.js [--quick] [--full] [--land] [--vp=WxH,...] [--shots=<thư mục>] [id,id]
    Với MỖI game có chọn độ khó, chọn TỪNG độ khó rồi đo:
    - html[data-dif] đúng bậc (Dễ/Thường/Khó/Rất khó/Cực khó), biến --accent của game đổi và KHÁC NHAU giữa các độ khó;
    - chip đang chọn dùng màu độ khó, chữ trên chip/huy hiệu tương phản ≥ 4.5:1;
@@ -12,6 +12,7 @@ const root = path.join(__dirname, "..", ".."), PORT = 8879, BASE = "http://local
 const args = process.argv.slice(2), QUICK = args.includes("--quick"), FULL = args.includes("--full");
 const SHOTS = (args.find(a => a.startsWith("--shots=")) || "").slice(8), only = (args.find(a => !a.startsWith("--")) || "").split(",").filter(Boolean);
 const LAND = args.includes("--land");   /* chỉ màn ngang 844x390, tối/vi + sáng/en */
+const VPARG = (args.find(a => a.startsWith("--vp=")) || "").slice(5);   /* --vp=667x375,844x390,1024x768 (kèm --land: tối/vi + sáng/en) */
 const NAMES = ["easy", "normal", "hard", "extreme", "insane"];
 const map = (n, i) => n <= 5 ? [[0, 2], [0, 1, 2], [0, 1, 2, 3], [0, 1, 2, 3, 4]][n - 2][i] : Math.round(i * 4 / (n - 1));
 const POPEND = "try{finish()}catch(e){try{endRun()}catch(e2){}}";
@@ -50,8 +51,8 @@ const LABEL = { vi: ["Dễ", "Thường", "Khó", "Rất khó", "Cực khó"], e
   const br = await puppeteer.launch({ executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", headless: "new", args: ["--mute-audio"] });
   if (SHOTS) fs.mkdirSync(SHOTS, { recursive: true });
   const combos = [];
-  const VPS = LAND ? [[844, 390]] : FULL ? [[390, 844], [844, 390]] : [[390, 844]];
-  list.forEach((g, gi) => { if (LAND) for (const [th, lg] of [["dark", "vi"], ["light", "en"]]) combos.push([g, VPS[0], th, lg]); else if (FULL) for (const vp of VPS) for (const th of ["dark", "light"]) for (const lg of ["vi", "en"]) combos.push([g, vp, th, lg]); else combos.push([g, VPS[0], gi % 2 ? "light" : "dark", gi % 3 === 1 ? "en" : "vi"]); });
+  const VPS = VPARG ? VPARG.split(",").map(v => v.split("x").map(Number)) : LAND ? [[844, 390]] : FULL ? [[390, 844], [844, 390]] : [[390, 844]];
+  list.forEach((g, gi) => { if (LAND || VPARG) { for (const vp of VPS) for (const [th, lg] of (VPARG ? [["dark", "vi"], ["dark", "en"], ["light", "vi"], ["light", "en"]] : [["dark", "vi"], ["light", "en"]])) combos.push([g, vp, th, lg]); } else if (FULL) for (const vp of VPS) for (const th of ["dark", "light"]) for (const lg of ["vi", "en"]) combos.push([g, vp, th, lg]); else combos.push([g, VPS[0], gi % 2 ? "light" : "dark", gi % 3 === 1 ? "en" : "vi"]); });
   let lastId = "";
   for (const [g, [W, H], theme, lang] of combos) {
     if (g.id !== lastId) { console.log("== " + g.id); lastId = g.id; }
@@ -96,6 +97,28 @@ const LABEL = { vi: ["Dễ", "Thường", "Khó", "Rất khó", "Cực khó"], e
     }
     note(new Set(accents).size === accents.length && accents.length >= 2, tag + ": --accent phải KHÁC NHAU giữa các độ khó, đo được " + accents.join(" / "));
     console.log("  " + doms.join(" → ") + " · accent " + accents.join(" "));
+  }
+  /* Skin Night Pass Pop (đặt --accent trên #play bằng JS): skin THẮNG ở màu nhấn trong khung chơi, còn chip + huy hiệu + data-dif vẫn đổi theo độ khó */
+  if (!only.length || only.includes("qua-song")) {
+    console.log("== skin Night Pass Pop (qua-song)");
+    let proSrc = ""; try { proSrc = require("child_process").execSync("node -e \"process.stdout.write(require('./server/pro/qua-song.js').source({}))\"", { cwd: root, stdio: ["ignore", "pipe", "ignore"] }).toString(); } catch (e) {}
+    note(!!proSrc, "qua-song: không đọc được server/pro/qua-song.js");
+    for (const [theme, lang] of [["dark", "vi"], ["light", "en"]]) for (let i = 0; proSrc && i < 3; i++) {
+      const pg = await br.newPage(), t2 = "qua-song skin neon " + theme + "/" + lang + " cấp " + (i + 1);
+      await pg.setViewport({ width: 390, height: 844, isMobile: true, hasTouch: true });
+      await pg.evaluateOnNewDocument((th, lg) => { try { localStorage.clear(); localStorage.setItem("np-sound", "0"); localStorage.setItem("theme", th); localStorage.setItem("lang", lg); } catch (e) {} }, theme, lang);
+      await pg.goto(BASE + "popplay/games/qua-song/index.html?lang=" + lang); await wait(900);
+      await pg.evaluate((s, k) => document.querySelectorAll(s)[k].click(), ".lvs>button", i); await wait(400);
+      await pg.evaluate(src => { (0, eval)(src); PF.skinSel[0] = Object.keys(PF.skins[0]).filter(x => x !== "basic")[0]; begin(0, {}); }, proSrc); await wait(1300);
+      const r = await pg.evaluate(() => { const pl = document.getElementById("play"), b = document.getElementById("npDifBadge"), bs = b && getComputedStyle(b); return { skinBg: pl.style.getPropertyValue("--sb").trim(), skinAcc: getComputedStyle(pl).getPropertyValue("--accent").trim(), rootAcc: getComputedStyle(document.documentElement).getPropertyValue("--accent").trim(), dif: document.documentElement.dataset.dif, badge: b && b.classList.contains("show"), bg: bs && bs.backgroundColor, text: b && b.textContent, free: b && b.dataset.free, skin: PF.skinSel[0] }; });
+      note(r.skin && r.skin !== "basic", t2 + ": không gắn được skin Night Pass");
+      note(r.dif === NAMES[i], t2 + ": data-dif=" + r.dif + " (cần " + NAMES[i] + ")");
+      note(/gradient/.test(r.skinBg), t2 + ": nền của skin (--sb trên #play) phải được giữ, đo được '" + r.skinBg + "'");   /* skin Pop chỉ đặt --sb/--pb/--sa..., KHÔNG đặt --accent → màu nhấn theo độ khó, nền skin giữ nguyên */
+      note(r.skinAcc === r.rootAcc, t2 + ": --accent trong #play phải theo độ khó (" + r.skinAcc + " vs " + r.rootAcc + ")");
+      note(r.badge && r.free === "1", t2 + ": huy hiệu không hiện/đè nút (" + r.text + ")");
+      if (SHOTS) await pg.screenshot({ path: path.join(SHOTS, ["qua-song-skin", theme, lang, "c" + (i + 1)].join("-") + ".png") });
+      await pg.close();
+    }
   }
   await br.close(); srv.kill();
   console.log(fails.length ? "\n✗ " + fails.length + " lỗi theme theo độ khó" : "\n✓ theme theo độ khó đạt (" + list.length + " game)");
