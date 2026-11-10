@@ -34,7 +34,7 @@
   var coarse = window.matchMedia && matchMedia("(pointer:coarse)").matches;   // điện thoại/máy tính bảng: bỏ qua phép đo kích thước
   var hits = 0;
   function openBySize() {
-    if (coarse) return false;
+    if (coarse || IN_FRAME) return false;   // trong iframe (game ở khung nhỏ của "Chơi cùng lúc", game trong trang cổng) innerWidth = cỡ KHUNG, luôn nhỏ hơn outerWidth của cửa sổ → đo nhầm là DevTools; trang cha tự đo cỡ cửa sổ thật
     var dw = outerWidth - innerWidth, dh = outerHeight - innerHeight;
     return dw > 220 || dh > 260;                                              // DevTools gắn cạnh/đáy cửa sổ
   }
