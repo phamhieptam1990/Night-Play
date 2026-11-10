@@ -3,6 +3,6 @@
    (Các trang game vẫn có hằng EMAIL riêng ở đầu script của từng trang.) */
 window.SITE = {
   operator: "[Tên đơn vị vận hành / Operator name]",
-  email:    "phamhieptam@gmail.com",
+  email:    "support@nightplay.vn",
   updated:  "2026-11-09"
 };
