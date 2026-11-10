@@ -46,12 +46,12 @@ svg{display:block}
 #perf{flex:none;font-size:12px;font-weight:800;color:var(--warn);display:none;max-width:120px;line-height:1.15}
 #perf.on{display:block}
 #grid{position:relative;flex:1;min-height:0;min-width:0;margin:6px;display:grid;gap:6px;overflow:hidden}
-#empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--muted);font-weight:700;padding:24px;line-height:1.4}
+#empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--ink);padding:16px;overflow:hidden}
 #empty[hidden]{display:none}
 .fr{position:relative;min-width:0;min-height:0;border-radius:14px;overflow:hidden;background:var(--card);box-shadow:0 0 0 1px var(--line);transition:box-shadow .15s}
 .fr.hid{display:none}
 .fr.sel{box-shadow:0 0 0 3px var(--accent)}
-.fr.po-open{z-index:5}
+.fr{z-index:0;contain:layout paint;isolation:isolate}   /* mọi khung cùng z-index; chỉ popup/panel nổi (panel nằm TRONG khung) */
 .fr iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#0b0b18;display:block}
 .mi,.hm{position:absolute;top:0;height:44px;min-width:44px;padding:0 9px;display:flex;align-items:center;justify-content:center;gap:4px;opacity:.45;z-index:6;transition:opacity .15s}
 .mi{right:0}.hm{left:0;z-index:9}
@@ -171,6 +171,13 @@ body.side #perf{max-width:50px;font-size:10px}
 #bStart{min-height:52px;padding:0 22px;font-size:16px;box-shadow:0 4px 14px color-mix(in srgb,var(--accent) 45%,transparent)}
 @media (max-height:520px){.sh{gap:6px;padding:10px}.sh header h2{font-size:17px}#shInfo{display:none}.srch{min-height:44px}#bStart{min-height:44px}}
 @media (max-width:420px){#bStart{padding:0 14px;font-size:14px}}
+
+/* màn trống kiểu Night Pass (khi không còn khung nào) */
+.em{width:min(420px,100%);max-height:100%;display:flex;flex-direction:column;align-items:stretch;gap:10px;padding:16px;border-radius:26px;background:var(--np-card);border:2px solid var(--np-bd);box-shadow:var(--np-glow);text-align:center}
+.em .ei{font-size:40px;line-height:1}.em h2{margin:0;font-size:20px;font-weight:900}.em p{margin:0;color:var(--ink2);font-size:13px;line-height:1.4}
+.em .btn{min-height:52px;font-size:16px;box-shadow:0 4px 14px color-mix(in srgb,var(--accent) 45%,transparent)}.em .btn.alt{box-shadow:none}
+.em .hs{font-size:12px;font-weight:800;color:var(--muted);text-align:left}#emTray{display:flex;flex-direction:column;gap:8px}
+@media (max-height:520px){.em{flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;padding:10px}.em .ei{display:none}.em h2{flex:1 1 100%;font-size:17px}.em p{flex:1 1 100%;font-size:12px}.em .btn{flex:1 1 40%;min-height:46px}.em .hs,#emTray{flex:1 1 100%}}
 </style>
 </head>
 <body>
@@ -182,7 +189,7 @@ body.side #perf{max-width:50px;font-size:10px}
     <span id="perf" role="status"></span>
     <button class="rb go" id="bAdd" type="button" aria-label="Add game"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
   </header>
-  <main id="grid"><div id="empty" hidden></div><button class="hm" id="hm" type="button" aria-haspopup="true" hidden><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M5 7h14M5 12h14M5 17h14"/></svg></i><b class="bd" id="hmBd"></b></button><div id="hp" role="dialog" aria-modal="false"><div class="hh"><b id="hpT"></b><span class="pill" id="hpCnt"></span></div><div class="hr"><button class="hbtn" id="hHome" type="button"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg><span id="hHomeT"></span></button><button class="hbtn go" id="hAdd" type="button"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span id="hAddT"></span></button></div><div class="hs" id="hpSec"></div><div id="hpTray" role="list"></div><div class="hpg" id="hpPg" hidden><button class="rb" id="hpPrev" type="button" aria-label="‹">‹</button><span id="hpPgT"></span><button class="rb" id="hpNext" type="button" aria-label="›">›</button></div><span id="hpPerf" role="status"></span></div></div></main>
+  <main id="grid"><div id="empty" hidden><div class="em" role="group"><div class="ei">🎮</div><h2 id="emT"></h2><p id="emP"></p><button class="btn" id="emPick" type="button"></button><div class="hs" id="emSec" hidden></div><div id="emTray" role="list"></div><button class="btn alt" id="emHome" type="button"></button></div></div><button class="hm" id="hm" type="button" aria-haspopup="true" hidden><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M5 7h14M5 12h14M5 17h14"/></svg></i><b class="bd" id="hmBd"></b></button><div id="hp" role="dialog" aria-modal="false"><div class="hh"><b id="hpT"></b><span class="pill" id="hpCnt"></span></div><div class="hr"><button class="hbtn" id="hHome" type="button"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg><span id="hHomeT"></span></button><button class="hbtn go" id="hAdd" type="button"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span id="hAddT"></span></button></div><div class="hs" id="hpSec"></div><div id="hpTray" role="list"></div><div class="hpg" id="hpPg" hidden><button class="rb" id="hpPrev" type="button" aria-label="‹">‹</button><span id="hpPgT"></span><button class="rb" id="hpNext" type="button" aria-label="›">›</button></div><span id="hpPerf" role="status"></span></div></div></main>
 </div>
 <div id="sheet" hidden role="dialog" aria-modal="true">
   <div class="sh">
@@ -211,12 +218,12 @@ body.side #perf{max-width:50px;font-size:10px}
   var T = {
     vi: { title: "Chơi cùng lúc", add: "Thêm game", back: "Về trang chủ", pick: "Chọn game để chơi cùng lúc", start: "▶ Bắt đầu", all: "Tất cả", par: "Cùng lúc", foc: "Tập trung", parTag: "cùng lúc", focTag: "tập trung", open: "đang mở",
       empty: "Bấm dấu + để chọn game.\nGame “cùng lúc” chạy song song; game “tập trung” chỉ một khung chạy, các game khác chờ ở khay.", pause: "Tạm dừng", play: "Tiếp tục", snd: "Tiếng", close: "Đóng game", move: "Đổi chỗ", menu: "Menu khung",
-      hud: "Ẩn bảng điểm", hudShow: "Hiện bảng điểm", hpT: "Chơi cùng lúc", hpSec: "Game đang chơi dở", hpNone: "Chưa có game nào chờ ở khay.", search: "Tìm game…", pickInfo: "Tối đa {n} khung cùng lúc trên máy này · bấm để chọn nhiều game", noRes: "Không thấy game nào. Thử từ khoá khác nhé.", full2: "hết chỗ", pn: "Night Play", pp: "Pop Play", score: "Điểm", combo: "Combo", moves: "Lượt", st: { idle: "Chờ bắt đầu", playing: "Đang chơi", over: "Đã xong", paused: "Tạm dừng" }, tap: "⏸ Tạm dừng\nChạm để tiếp tục", loading: "Đang tải…",
+      hud: "Ẩn bảng điểm", hudShow: "Hiện bảng điểm", emT: "Chưa có game nào đang chạy", emP: "Chọn game để chơi cùng lúc, hoặc quay lại ván đang chơi dở.", emPick: "Chọn game", emSec: "Tiếp tục ván dở", hint: "Có {n} game dở ở khay (☰).", hpT: "Chơi cùng lúc", hpSec: "Game đang chơi dở", hpNone: "Chưa có game nào chờ ở khay.", search: "Tìm game…", pickInfo: "Tối đa {n} khung cùng lúc trên máy này · bấm để chọn nhiều game", noRes: "Không thấy game nào. Thử từ khoá khác nhé.", full2: "hết chỗ", pn: "Night Play", pp: "Pop Play", score: "Điểm", combo: "Combo", moves: "Lượt", st: { idle: "Chờ bắt đầu", playing: "Đang chơi", over: "Đã xong", paused: "Tạm dừng" }, tap: "⏸ Tạm dừng\nChạm để tiếp tục", loading: "Đang tải…",
       resumeTag: "đang chơi dở", left: "còn {t}", saved: "đã lưu ván", full: "Chỉ chơi tối đa {n} game cùng lúc trên máy này.", nofit: "Màn hình không đủ chỗ cho thêm khung nữa.", slow: "⚠ Máy hơi chậm: đã tạm dừng khung phụ", slowAdd: "Máy đang chậm, tạm thời chưa thêm khung được.",
       selMax: "Hết chỗ: bỏ bớt game đã chọn.", timeH: "Hết giờ chơi hôm nay", timeP: "Đã đến giới hạn thời gian do phụ huynh đặt. Hẹn ngày mai nhé!", home: "Về trang chủ", sel: "Đã chọn", page: "Trang", min: "ph" },
     en: { title: "Play together", add: "Add game", back: "Back home", pick: "Pick games to play at once", start: "▶ Start", all: "All", par: "Together", foc: "Focus", parTag: "runs together", focTag: "focus", open: "open",
       empty: "Tap + to pick games.\n“Together” games run side by side; “Focus” games run one at a time and wait in the tray.", pause: "Pause", play: "Resume", snd: "Sound", close: "Close game", move: "Swap", menu: "Frame menu",
-      hud: "Hide score board", hudShow: "Show score board", hpT: "Play together", hpSec: "Games in progress", hpNone: "No game is waiting in the tray.", search: "Search games…", pickInfo: "Up to {n} frames at once on this device · tap to pick several games", noRes: "No games found. Try another word.", full2: "no room", pn: "Night Play", pp: "Pop Play", score: "Score", combo: "Combo", moves: "Moves", st: { idle: "Ready", playing: "Playing", over: "Finished", paused: "Paused" }, tap: "⏸ Paused\nTap to resume", loading: "Loading…",
+      hud: "Hide score board", hudShow: "Show score board", emT: "No game is running", emP: "Pick games to play together, or go back to a game in progress.", emPick: "Pick games", emSec: "Resume a game", hint: "{n} game(s) in progress in the tray (☰).", hpT: "Play together", hpSec: "Games in progress", hpNone: "No game is waiting in the tray.", search: "Search games…", pickInfo: "Up to {n} frames at once on this device · tap to pick several games", noRes: "No games found. Try another word.", full2: "no room", pn: "Night Play", pp: "Pop Play", score: "Score", combo: "Combo", moves: "Moves", st: { idle: "Ready", playing: "Playing", over: "Finished", paused: "Paused" }, tap: "⏸ Paused\nTap to resume", loading: "Loading…",
       resumeTag: "in progress", left: "{t} left", saved: "game saved", full: "This device can run up to {n} games at once.", nofit: "No room for another frame on this screen.", slow: "⚠ Device is slow: side frames paused", slowAdd: "Device is slow, can't add a frame right now.",
       selMax: "No room: unselect a game.", timeH: "Time's up for today", timeP: "The time limit set by a parent has been reached. See you tomorrow!", home: "Back home", sel: "Selected", page: "Page", min: "min" }
   };
@@ -283,7 +290,7 @@ body.side #perf{max-width:50px;font-size:10px}
   function fits(list) { if (!list.length) return true; var a = areaSize(), p = plan(list.length, a.W, a.H, list); return p.ratio >= 0.999; }
   /* khi đã có game: thanh trên ẩn hẳn (khung game chiếm toàn màn); ← / + / khay game dở nằm trong menu nhỏ mờ ở góc trái (#hm). Màn trống / bảng chọn: thanh trên hiện */
   function chrome() {
-    var bare = items.length > 0, was = document.body.classList.contains("bare");
+    var bare = slotItems().length > 0, was = document.body.classList.contains("bare");
     document.body.classList.toggle("bare", bare); $("hm").hidden = !bare; if (!bare) closeHp();
     if (bare !== was) renderTray();
   }
@@ -305,21 +312,51 @@ body.side #perf{max-width:50px;font-size:10px}
   function fixIframes() {   /* iframe có kích thước trong (innerWidth/Height) lệch khung → đánh thức bằng resize */
     slotItems().forEach(function (it) { try { var f = it.fr, w = f && f.contentWindow; if (!w) return; var r = f.getBoundingClientRect(); if (Math.abs(w.innerWidth - r.width) > 2 || Math.abs(w.innerHeight - r.height) > 2 || true) w.dispatchEvent(new Event("resize")); } catch (e) {} });
   }
-  var lyT = 0;
+  var lyT = 0, lastRects = {};
+  var RESET = ["left", "top", "right", "bottom", "width", "height", "transform", "z-index", "grid-area", "grid-row", "grid-column", "position", "margin", "inset"];
+  /* khung nào bị PHẦN TỬ KHÔNG THUỘC NÓ phủ lên (tâm + 4 góc)? — phòng lỗi vẽ lại của Safari/iPadOS khi khung đổi chỗ */
+  function covered() {
+    if (!$("sheet").hidden || !$("lock").hidden) return [];
+    var bad = [];
+    slotItems().forEach(function (it) {
+      var r = it.el.getBoundingClientRect(); if (r.width < 20 || r.height < 20) return;
+      var pts = [[r.left + r.width / 2, r.top + r.height / 2], [r.left + 10, r.top + 10], [r.right - 10, r.top + 10], [r.left + 10, r.bottom - 10], [r.right - 10, r.bottom - 10]];
+      for (var k = 0; k < pts.length; k++) { var e = document.elementFromPoint(pts[k][0], pts[k][1]); if (!e) continue; if (it.el.contains(e) || (e.closest && e.closest("#hp,#hm,#toast"))) continue; bad.push(it.id); break; }
+    });
+    return bad;
+  }
+  function repaintMoved() {   /* khung đã đổi chỗ/kích thước: buộc vẽ lại lớp của iframe (Safari có thể giữ lớp cũ) */
+    slotItems().forEach(function (it) {
+      var r = it.el.getBoundingClientRect(), key = [Math.round(r.left), Math.round(r.top), Math.round(r.width), Math.round(r.height)].join(), f = it.fr;
+      if (f && lastRects[it.id] !== key) { f.style.visibility = "hidden"; requestAnimationFrame(function () { f.style.visibility = ""; }); }
+      lastRects[it.id] = key;
+    });
+  }
   function layout(single) {
     chrome();
-    var list = slotItems(), a = areaSize(); $("empty").hidden = list.length > 0; $("empty").textContent = t().empty;
+    var list = slotItems(), a = areaSize(); $("empty").hidden = list.length > 0; renderEmpty();
     if (!list.length) return;
+    /* đặt lại TOÀN BỘ style inline vị trí của mọi khung (còn sót từ lần trước) rồi mới gán ô lưới mới */
+    items.forEach(function (it) { RESET.forEach(function (pn) { it.el.style.removeProperty(pn); }); });
     var p = single ? { rows: list.length, counts: list.map(function () { return 1; }) } : plan(list.length, a.W, a.H, list), L = 1;
     p.counts.forEach(function (c) { L = lcm(L, c); });
     grid.style.gridTemplateColumns = "repeat(" + L + ",minmax(0,1fr))"; grid.style.gridTemplateRows = "repeat(" + p.rows + ",minmax(0,1fr))";
     var k = 0;
     p.counts.forEach(function (cnt, r) { var span = L / cnt; for (var c = 0; c < cnt; c++) { var it = list[k++], st = it.el.style; st.gridRow = String(r + 1); st.gridColumn = (c * span + 1) + " / span " + span; } });
     ensureSel(); void grid.offsetHeight;   /* ép reflow */
-    if (!single && overlaps()) { console.warn("[multi] khung chồng lấn sau layout — xếp lại một cột"); layout(true); return; }
-    clearTimeout(lyT); requestAnimationFrame(function () { requestAnimationFrame(function () { if (overlaps() && !single) { console.warn("[multi] chồng lấn sau 2 rAF"); layout(true); } fixIframes(); }); });
-    lyT = setTimeout(function () { if (overlaps() && !single) { console.warn("[multi] chồng lấn sau 250ms"); layout(true); } fixIframes(); }, 250);
+    var cov = covered();
+    if (!single && (overlaps() || cov.length)) { console.warn("[multi] khung chồng lấn/bị phủ (" + (cov.join(",") || "overlap") + ") — xếp lại từ đầu"); layout(true); return; }
+    repaintMoved();
+    clearTimeout(lyT); requestAnimationFrame(function () { requestAnimationFrame(function () { if (!single && (overlaps() || covered().length)) { console.warn("[multi] chồng lấn/bị phủ sau 2 rAF"); layout(true); return; } fixIframes(); }); });
+    lyT = setTimeout(function () { if (!single && (overlaps() || covered().length)) { console.warn("[multi] chồng lấn/bị phủ sau 250ms"); layout(true); return; } fixIframes(); }, 250);
   }
+  /* màn trống (không còn khung nào): thẻ Night Pass với "Chọn game", game dở ở khay, ← */
+  function renderEmpty() {
+    var em = $("empty"); if (em.hidden) return; var T_ = t(); $("emT").textContent = T_.emT; $("emP").textContent = T_.emP; $("emPick").textContent = T_.emPick; $("emHome").textContent = T_.home;
+    var tl = trayItems(); $("emSec").hidden = !tl.length; $("emSec").textContent = T_.emSec + " (" + tl.length + ")";
+    var box = $("emTray"); box.textContent = ""; tl.slice().sort(function (x, y) { return y.lastUsed - x.lastUsed; }).slice(0, innerHeight < 520 ? 2 : 3).forEach(function (it) { box.appendChild(chip(it, true, function () { switchTo(it); })); });
+  }
+
 
 
   /* ---------- khung game ---------- */
@@ -436,10 +473,19 @@ body.side #perf{max-width:50px;font-size:10px}
   function canEvictCount() { return items.filter(evictable).length; }
   function closeItem(it) {
     try { if (it.fr && it.fr.contentWindow && it.fr.contentWindow.NPResume) it.fr.contentWindow.NPResume.flush(); } catch (e) {}
-    if (it.fr) it.fr.remove(); it.el.remove(); items.splice(items.indexOf(it), 1);
-    if (main === it) main = null; if (sel === it) { sel = null; var s = slotItems()[0]; if (s) select(s); }
+    /* gỡ HẲN khỏi DOM (không chỉ ẩn): iframe về about:blank rồi remove, phần tử khung remove, bỏ khỏi danh sách */
+    if (it.fr) { try { it.fr.src = "about:blank"; } catch (e) {} it.fr.remove(); it.fr = null; } it.el.remove(); items.splice(items.indexOf(it), 1); delete lastRects[it.id];
+    var wasMain = main === it; if (main === it) main = null; if (sel === it) { sel = null; var s = slotItems()[0]; if (s) select(s); }
     layout(); renderTray(); applyAudio();
+    afterClose(wasMain);
   }
+  /* không để trang TRẮNG: hết khung → có game dở thì màn trống hiện thẻ "Tiếp tục ván dở", không thì mở thẳng bảng chọn game; còn khung khác mà khay có game dở → gợi ý nhỏ */
+  function afterClose(wasMain) {
+    var slots = slotItems().length, tl = trayItems().length;
+    if (!slots) { if (!tl) setTimeout(function () { if (!slotItems().length && $("sheet").hidden) openSheet(); }, 80); }
+    else if (wasMain && tl) toast(t().hint.replace("{n}", tl));
+  }
+
   function moveEarlier(it) {
     var list = slotItems(), i = list.indexOf(it); if (i < 0 || list.length < 2) return; var j = (i + list.length - 1) % list.length, other = list[j];
     var a = items.indexOf(it), b = items.indexOf(other); items[a] = other; items[b] = it; layout(); closePanels();
@@ -496,6 +542,18 @@ body.side #perf{max-width:50px;font-size:10px}
 
   /* ---------- khay thumbnail ---------- */
   var trayT = 0; function renderTrayLater() { clearTimeout(trayT); trayT = setTimeout(renderTray, 150); }
+  function chip(it, wide, onClick) {
+    var b = document.createElement("button"); b.type = "button"; b.className = "tc" + (wide ? " wide" : ""); b.dataset.id = it.id; b.setAttribute("role", "listitem");
+    var h = it.hud || {}, sc = h.score != null ? h.score : null;
+    var label = gname(it.id) + (it.wasPlaying ? " — " + t().resumeTag : "") + (sc != null ? " · " + sc : "");
+    var im = it.thumb ? '<img alt="" src="' + it.thumb + '">' : '<span>' + it.g.icon + '</span>';
+    var tl = it.g.realtime && h.time != null && h.time >= 0 && it.wasPlaying ? "⏸ " + Math.floor(h.time / 60) + ":" + String(Math.floor(h.time % 60)).padStart(2, "0") : "";   /* game có đếm ngược: còn bao nhiêu giây khi bị đóng băng */
+    if (tl) label += " — " + t().left.replace("{t}", tl.slice(2));
+    b.setAttribute("aria-label", label); b.title = label;
+    if (wide) { b.innerHTML = '<span class="im">' + im + (tl ? '<span class="tm">' + tl + '</span>' : "") + '</span><span class="tx"><b></b><span></span></span>'; b.querySelector("b").textContent = gname(it.id); b.querySelector(".tx span").textContent = (it.wasPlaying ? t().resumeTag : t().saved) + (sc != null ? " · " + sc : "") + (tl ? " · " + t().left.replace("{t}", tl.slice(2)) : ""); }
+    else { b.innerHTML = im + (tl ? '<span class="tm">' + tl + '</span>' : (it.wasPlaying ? '<span class="pz">⏸</span>' : "")) + (sc != null && !tl ? '<span class="sc">' + sc + '</span>' : ""); }
+    b.addEventListener("click", onClick); return b;
+  }
   var hpPage = 0;
   function renderTray() {
     var bare = document.body.classList.contains("bare"), tr = bare ? $("hpTray") : tray; tray.textContent = ""; $("hpTray").textContent = "";
@@ -505,18 +563,7 @@ body.side #perf{max-width:50px;font-size:10px}
     $("hmBd").textContent = list.length ? String(list.length) : ""; $("hmBd").classList.toggle("on", list.length > 0);
     $("hpT").textContent = t().hpT; $("hpCnt").textContent = items.length + " / " + CAP.slots; $("hHomeT").textContent = t().home; $("hAddT").textContent = t().add;
     $("hpSec").textContent = list.length ? t().hpSec + " (" + list.length + ")" : t().hpNone; $("hpPg").hidden = pages <= 1; $("hpPgT").textContent = (hpPage + 1) + "/" + pages; $("hpPrev").disabled = hpPage <= 0; $("hpNext").disabled = hpPage >= pages - 1;
-    shown.forEach(function (it) {
-      var b = document.createElement("button"); b.type = "button"; b.className = "tc" + (wide ? " wide" : ""); b.dataset.id = it.id; b.setAttribute("role", "listitem");
-      var h = it.hud || {}, sc = h.score != null ? h.score : null;
-      var label = gname(it.id) + (it.wasPlaying ? " — " + t().resumeTag : "") + (sc != null ? " · " + sc : "");
-      var im = it.thumb ? '<img alt="" src="' + it.thumb + '">' : '<span>' + it.g.icon + '</span>';
-      var tl = it.g.realtime && h.time != null && h.time >= 0 && it.wasPlaying ? "⏸ " + Math.floor(h.time / 60) + ":" + String(Math.floor(h.time % 60)).padStart(2, "0") : "";   /* game có đếm ngược: còn bao nhiêu giây khi bị đóng băng */
-      if (tl) label += " — " + t().left.replace("{t}", tl.slice(2));
-      b.setAttribute("aria-label", label); b.title = label;
-      if (wide) { b.innerHTML = '<span class="im">' + im + (tl ? '<span class="tm">' + tl + '</span>' : "") + '</span><span class="tx"><b></b><span></span></span>'; b.querySelector("b").textContent = gname(it.id); b.querySelector(".tx span").textContent = (it.wasPlaying ? t().resumeTag : t().saved) + (sc != null ? " · " + sc : "") + (tl ? " · " + t().left.replace("{t}", tl.slice(2)) : ""); }
-      else { b.innerHTML = im + (tl ? '<span class="tm">' + tl + '</span>' : (it.wasPlaying ? '<span class="pz">⏸</span>' : "")) + (sc != null && !tl ? '<span class="sc">' + sc + '</span>' : ""); }
-      b.addEventListener("click", function () { if (main) main.menuPaused = false; closeHp(); resumeMenu(); switchTo(it); }); tr.appendChild(b);
-    });
+    shown.forEach(function (it) { tr.appendChild(chip(it, wide, function () { if (main) main.menuPaused = false; closeHp(); resumeMenu(); switchTo(it); })); });
     if (!bare && list.length > shown.length) { var m = document.createElement("span"); m.id = "more"; m.textContent = "+" + (list.length - shown.length); tr.appendChild(m); }
   }
 
@@ -543,7 +590,7 @@ body.side #perf{max-width:50px;font-size:10px}
     chips.forEach(function (d) { var b = document.createElement("button"); b.type = "button"; b.textContent = d[1]; b.dataset.f = d[0]; b.dataset.k = d[2]; b.addEventListener("click", function () { if (d[2] === "m") flt = d[0]; else pf = pf === d[0] ? "all" : d[0]; spage = 0; renderSheet(); }); box.appendChild(b); });
     renderSheet(); setTimeout(function () { try { $("q").focus({ preventScroll: true }); } catch (e) {} }, 60);
   }
-  function closeSheet() { $("sheet").hidden = true; resumeMenu(); }
+  function closeSheet() { $("sheet").hidden = true; resumeMenu(); if (!slotItems().length) layout(); }
   function goPage(n) { var box = $("slides"); n = Math.max(0, Math.min(spages - 1, n)); box.scrollTo({ left: n * box.clientWidth, behavior: matchMedia("(prefers-reduced-motion:reduce)").matches ? "auto" : "smooth" }); }
   function syncPage() {
     var box = $("slides"), w = box.clientWidth || 1; spage = Math.max(0, Math.min(spages - 1, Math.round(box.scrollLeft / w)));
@@ -629,6 +676,7 @@ body.side #perf{max-width:50px;font-size:10px}
   $("hpPrev").addEventListener("click", function (e) { e.stopPropagation(); hpPage--; renderTray(); }); $("hpNext").addEventListener("click", function (e) { e.stopPropagation(); hpPage++; renderTray(); });
   $("hp").addEventListener("keydown", function (e) { trapTab(e, $("hp")); });
   $("hHome").addEventListener("click", function () { location.href = PORTAL_HOME; }); $("hAdd").addEventListener("click", function () { closeHp(); openSheet(); });   /* menuPaused giữ nguyên: bảng chọn mở thì game vẫn dừng, closeSheet mới chạy tiếp */
+  $("emPick").addEventListener("click", openSheet); $("emHome").addEventListener("click", function () { location.href = PORTAL_HOME; });
   $("bAdd").addEventListener("click", openSheet); $("shX").addEventListener("click", closeSheet); $("bStart").addEventListener("click", startSelected);
   $("sheet").addEventListener("click", function (e) { if (e.target === $("sheet")) closeSheet(); });
   $("pgPrev").addEventListener("click", function () { goPage(spage - 1); }); $("pgNext").addEventListener("click", function () { goPage(spage + 1); });
@@ -638,7 +686,7 @@ body.side #perf{max-width:50px;font-size:10px}
   $("lkGo").addEventListener("click", function () { location.href = PORTAL_HOME; });
   grid.addEventListener("pointerdown", function (e) { if (!e.target.closest(".pn,.mi,#hp,#hm")) closePanels(); }, true);
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") { if (!$("sheet").hidden) closeSheet(); else closePanels(); return; } if (sel && sel.fr && !e.target.closest("button")) { try { sel.fr.contentWindow.focus(); } catch (x) {} } });
-  try { new ResizeObserver(function () { clearTimeout(onResize.r); onResize.r = setTimeout(layout, 30); }).observe(grid); } catch (e) {}
+  try { new ResizeObserver(function () { cancelAnimationFrame(onResize.r); onResize.r = requestAnimationFrame(function () { layout(); }); }).observe(grid); } catch (e) {}
   addEventListener("orientationchange", function () { setTimeout(onResize, 120); setTimeout(onResize, 450); });
   try { if (window.visualViewport) visualViewport.addEventListener("resize", function () { clearTimeout(onResize.t); onResize.t = setTimeout(onResize, 60); }); } catch (e) {}
   addEventListener("resize", function () { clearTimeout(onResize.t); onResize.t = setTimeout(onResize, 60); });
@@ -647,7 +695,7 @@ body.side #perf{max-width:50px;font-size:10px}
   window.NPMulti = { booted: false, caps: function () { return CAP; }, add: addOne, addTray: addTray, switchTo: function (id) { var it = find(id); return it ? switchTo(it) : null; }, select: function (id) { var it = find(id); if (it) select(it); },
     close: function (id) { var it = find(id); if (it) closeItem(it); }, evict: function (id) { var it = find(id); if (it && it.fr) evict(it); }, setSlow: setSlow, isSlow: function () { return slow; },
     items: function () { return items.map(function (i) { var r = i.el.getBoundingClientRect(); return { id: i.id, mode: i.mode, where: i.where, alive: !!i.fr, ready: i.ready, sel: sel === i, paused: !!(i.userPaused || i.autoPaused), menuPaused: !!i.menuPaused, sentPaused: i.sentPaused, saved: !!i.saved, hud: i.hud, thumb: !!i.thumb, counting: i.counting, rect: [Math.round(r.left), Math.round(r.top), Math.round(r.width), Math.round(r.height)] }; }); },
-    thumb: function (id) { var it = find(id); return it && it.thumb; }, frame: function (id) { var it = find(id); return it && it.fr; }, alive: function () { return alive().length; }, main: function () { return main && main.id; }, plan: plan, overlaps: overlaps, fits: function (ids) { return fits(ids.map(function (i) { return { g: M.flag(i) }; })); } };
+    thumb: function (id) { var it = find(id); return it && it.thumb; }, frame: function (id) { var it = find(id); return it && it.fr; }, alive: function () { return alive().length; }, main: function () { return main && main.id; }, plan: plan, overlaps: overlaps, covered: covered, afterClose: afterClose, fits: function (ids) { return fits(ids.map(function (i) { return { g: M.flag(i) }; })); } };
   applyText(); onResize();
   if (isTimeUp()) showLock();
   else {

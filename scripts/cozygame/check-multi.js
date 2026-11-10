@@ -35,8 +35,8 @@ const TUT = ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "xn", "dd", "
   const srv = spawn("python3", ["-m", "http.server", String(PORT)], { cwd: root, stdio: "ignore" }); await wait(1200);
   const br = await puppeteer.launch({ executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", headless: "new", args: ["--mute-audio"], protocolTimeout: 120000 });
   if (shotDir) fs.mkdirSync(shotDir, { recursive: true });
-  const SAMPLE = (ms) => new Promise(res => { const t0 = performance.now(); let n = 0, bad = 0, worst = 0, sizeBad = 0; const chk = () => { const its = NPMulti.items().filter(i => i.where === "slot"); for (let i = 0; i < its.length; i++) for (let j = i + 1; j < its.length; j++) { const a = its[i].rect, b = its[j].rect, ox = Math.min(a[0] + a[2], b[0] + b[2]) - Math.max(a[0], b[0]), oy = Math.min(a[1] + a[3], b[1] + b[3]) - Math.max(a[1], b[1]); if (ox > 4 && oy > 4) { bad++; worst = Math.max(worst, Math.min(ox, oy)); } } n++; };
-    const f = () => { chk(); if (performance.now() - t0 < ms) requestAnimationFrame(f); else { const st = NPMulti.items().filter(i => i.where === "slot" && i.alive).map(i => { const w = NPMulti.frame(i.id).contentWindow; return Math.abs(w.innerWidth - i.rect[2]) > 2 || Math.abs(w.innerHeight - i.rect[3]) > 2 ? i.id + ":" + w.innerWidth + "x" + w.innerHeight + "≠" + i.rect[2] + "x" + i.rect[3] : null; }).filter(Boolean); res({ n, bad, worst, size: st, sel: NPMulti.items().filter(i => i.sel).length, slots: NPMulti.items().filter(i => i.where === "slot").length }); } }; requestAnimationFrame(f); });
+  const SAMPLE = (ms) => new Promise(res => { const t0 = performance.now(); let n = 0, bad = 0, worst = 0, sizeBad = 0, cov = 0; const chk = () => { const its = NPMulti.items().filter(i => i.where === "slot"); for (let i = 0; i < its.length; i++) for (let j = i + 1; j < its.length; j++) { const a = its[i].rect, b = its[j].rect, ox = Math.min(a[0] + a[2], b[0] + b[2]) - Math.max(a[0], b[0]), oy = Math.min(a[1] + a[3], b[1] + b[3]) - Math.max(a[1], b[1]); if (ox > 4 && oy > 4) { bad++; worst = Math.max(worst, Math.min(ox, oy)); } } n++; try { cov += NPMulti.covered().length; } catch (e) {} };
+    const f = () => { chk(); if (performance.now() - t0 < ms) requestAnimationFrame(f); else { const st = NPMulti.items().filter(i => i.where === "slot" && i.alive).map(i => { const w = NPMulti.frame(i.id).contentWindow; return Math.abs(w.innerWidth - i.rect[2]) > 2 || Math.abs(w.innerHeight - i.rect[3]) > 2 ? i.id + ":" + w.innerWidth + "x" + w.innerHeight + "≠" + i.rect[2] + "x" + i.rect[3] : null; }).filter(Boolean); res({ n, bad, worst, cov, size: st, sel: NPMulti.items().filter(i => i.sel).length, slots: NPMulti.items().filter(i => i.where === "slot").length }); } }; requestAnimationFrame(f); });
   const open = async (q, W, H, pre) => {
     const pg = await br.newPage(); pg._errs = []; pg.on("pageerror", e => pg._errs.push(e.message));
     await pg.setViewport({ width: W, height: H, isMobile: W < 1300, hasTouch: W < 1300 });
@@ -156,7 +156,7 @@ const TUT = ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "xn", "dd", "
         const cur = await pg.evaluate(() => NPMulti.items().filter(i => i.where === "slot").map(i => i.id)), victim = cur[i];
         const r = await pg.evaluate(async id => { NPMulti.close(id); return await window.__sample(1500); }, victim).catch(async () => null);
         if (r === null) { /* __sample chưa có: nạp */ }
-        samples += r ? r.n : 0; if (r) { worstAll = Math.max(worstAll, r.worst); note(r.bad === 0, tag + " n=" + n + "→" + (n - 1) + " đóng #" + i, r.bad + " mẫu chồng lấn (tối đa " + r.worst + "px)"); note(r.size.length === 0, tag + " n=" + n + " đóng #" + i, "iframe có kích thước trong lệch khung: " + r.size.join(",")); note(r.sel === 1 || r.slots === 0, tag + " n=" + n + " đóng #" + i, "sau khi đóng phải có đúng 1 khung được chọn (" + r.sel + ")"); }
+        samples += r ? r.n : 0; if (r) { worstAll = Math.max(worstAll, r.worst); note(r.bad === 0 && r.cov === 0, tag + " n=" + n + "→" + (n - 1) + " đóng #" + i, r.bad + " mẫu chồng lấn (tối đa " + r.worst + "px), " + r.cov + " mẫu bị phần tử khác phủ"); note(r.size.length === 0, tag + " n=" + n + " đóng #" + i, "iframe có kích thước trong lệch khung: " + r.size.join(",")); note(r.sel === 1 || r.slots === 0, tag + " n=" + n + " đóng #" + i, "sau khi đóng phải có đúng 1 khung được chọn (" + r.sel + ")"); }
         /* trả lại khung vừa đóng để đo tiếp (thêm cũng không được chồng lấn) */
         await pg.evaluate(id => NPMulti.add(id), victim); const r2 = await pg.evaluate(async () => await window.__sample(900)); if (r2) { note(r2.bad === 0, tag + " thêm lại sau đóng #" + i, r2.bad + " mẫu chồng lấn"); }
         await ready(pg, n); await wait(400);
@@ -168,6 +168,50 @@ const TUT = ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "xn", "dd", "
     if (pg._errs.length) note(false, tag, "lỗi JS: " + pg._errs[0]);
     if (shotDir) await pg.screenshot({ path: path.join(shotDir, "multi-overlap-" + W + "x" + H + ".png") });
     await pg.close();
+  }
+
+  /* ---------- 2a2. ĐÓNG 3→2 ở mọi chỉ số khi các game ĐANG CHƠI, có CPU throttle (thiết bị chậm): 0 khung bị phủ (elementFromPoint 5 điểm) ---------- */
+  for (const [W, H, thr] of (quick ? [[768, 1024, 4], [1194, 834, 4]] : [[768, 1024, 4], [834, 1194, 4], [1024, 768, 4], [1194, 834, 6]])) {
+    const tag = "multi đóng 3→2 đang chơi " + W + "x" + H + " CPU×" + thr, pg = await open("games=noi-mot-net,ve-mot-net,ne-o-ga", W, H);
+    note(await ready(pg, 3), tag, "không tải xong 3 khung"); await wait(900);
+    for (const id of ["noi-mot-net", "ve-mot-net", "ne-o-ga"]) await startPlay(pg, id);
+    const cdp = await pg.createCDPSession(); await cdp.send("Emulation.setCPUThrottlingRate", { rate: thr });
+    let worst = 0, cov = 0, samples = 0;
+    for (let i = 0; i < 3; i++) {
+      const cur = await pg.evaluate(() => NPMulti.items().filter(i => i.where === "slot").map(i => i.id)); const victim = cur[i];
+      const r = await pg.evaluate(async id => { NPMulti.close(id); return await window.__sample(1500); }, victim);
+      samples += r.n; worst = Math.max(worst, r.worst); cov += r.cov;
+      note(r.bad === 0 && r.cov === 0 && r.size.length === 0, tag + " đóng #" + i + " (" + victim + ")", r.bad + " mẫu chồng lấn, " + r.cov + " mẫu bị phủ, lệch cỡ " + r.size.join(","));
+      note(await pg.evaluate(id => !document.querySelector('.fr[data-id="' + id + '"]') && ![...document.querySelectorAll("iframe")].some(f => f.src.includes("/" + id + "/")), victim), tag + " đóng #" + i, "khung/iframe đã đóng chưa được gỡ hẳn khỏi DOM");
+      note(await pg.evaluate(() => NPMulti.items().filter(i => i.sel).length === 1), tag + " đóng #" + i, "phải có đúng 1 khung được chọn");
+      await pg.evaluate(id => NPMulti.add(id), victim); await ready(pg, 3, 90); await wait(1500);
+    }
+    if (shotDir) await pg.screenshot({ path: path.join(shotDir, "multi-close32-" + W + "x" + H + ".png") });
+    console.log("  " + tag + ": " + samples + " mẫu, chồng lấn tối đa " + worst + "px, bị phủ " + cov); await pg.close();
+  }
+
+  /* ---------- 2a3. KHÔNG TRANG TRẮNG: đóng hết khung → bảng chọn / màn trống (+ game dở) ---------- */
+  for (const [W, H] of (quick ? [[390, 844], [1194, 834]] : [[390, 844], [844, 390], [768, 1024], [1194, 834], [1440, 900]])) {
+    const tag = "multi không trắng " + W + "x" + H, pg = await open("games=noi-mot-net,ve-mot-net", W, H);
+    await ready(pg, Math.min(2, (await pg.evaluate(() => NPMulti.caps())).slots)); await wait(800);
+    await pg.evaluate(() => { NPMulti.items().filter(i => i.where === "slot").forEach(i => NPMulti.close(i.id)); }); await wait(500);
+    note(await pg.evaluate(() => !document.getElementById("sheet").hidden), tag, "đóng hết khung (không có game dở) phải tự mở bảng chọn game");
+    await pg.keyboard.press("Escape"); await wait(300);
+    const e = await pg.evaluate(() => { const em = document.getElementById("empty"), r = em.getBoundingClientRect(), c = document.querySelector("#empty .em").getBoundingClientRect(), bs = [...em.querySelectorAll("button")].filter(b => b.getClientRects().length).map(b => Math.round(Math.min(b.getBoundingClientRect().width, b.getBoundingClientRect().height)));
+      return { vis: !em.hidden && r.height > 100, inside: c.left >= 0 && c.right <= innerWidth && c.top >= 0 && c.bottom <= innerHeight, noScroll: document.documentElement.scrollHeight <= innerHeight + 1 && em.scrollHeight <= em.clientHeight + 1 && document.querySelector("#empty .em").scrollHeight <= document.querySelector("#empty .em").clientHeight + 1, bs, rail: document.getElementById("rail").offsetParent !== null }; });
+    note(e.vis && e.inside && e.noScroll && e.bs.length >= 2 && e.bs.every(x => x >= 44), tag, "đóng bảng chọn mà vẫn trống phải hiện màn trống đẹp (nút ≥44px, trọn màn, không cuộn) " + JSON.stringify(e));
+    if (shotDir) await pg.screenshot({ path: path.join(shotDir, "multi-empty-" + W + "x" + H + ".png") });
+    /* có game dở trong khay: màn trống hiện thẻ "Tiếp tục ván dở", bấm là mở lại */
+    await pg.evaluate(() => NPMulti.add("ne-o-ga")); await ready(pg, 1); await wait(700); await startPlay(pg, "ne-o-ga"); await wait(900);
+    await pg.evaluate(() => NPMulti.add("xay-cau-tre")); await wait(1500);
+    await pg.evaluate(() => NPMulti.close("xay-cau-tre")); await wait(600);
+    const t2 = await pg.evaluate(() => ({ sheet: !document.getElementById("sheet").hidden, empty: !document.getElementById("empty").hidden, cards: document.querySelectorAll("#emTray .tc").length }));
+    note(!t2.sheet && t2.empty && t2.cards >= 1, tag, "còn game dở trong khay: phải hiện màn trống có thẻ game dở (không tự bật bảng chọn) " + JSON.stringify(t2));
+    if (shotDir) await pg.screenshot({ path: path.join(shotDir, "multi-empty-resume-" + W + "x" + H + ".png") });
+    await pg.evaluate(() => document.querySelector("#emTray .tc").click()); await wait(1200);
+    note(await pg.evaluate(() => NPMulti.items().some(i => i.id === "ne-o-ga" && i.where === "slot")), tag, "bấm thẻ game dở không mở lại game");
+    if (pg._errs.length) note(false, tag, "lỗi JS: " + pg._errs[0]);
+    console.log("  " + tag + " xong"); await pg.close();
   }
 
   /* ---------- 2b. huy hiệu điểm + công tắc ẩn bảng điểm của game ---------- */
