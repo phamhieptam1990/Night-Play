@@ -21,6 +21,7 @@ Nguyên tắc chung: **không báo "xong" khi chưa tự mở trình duyệt th�
 8. **Popup luôn nằm trọn trong màn hình**: `box-sizing:border-box`, lề ≥16px hai bên, nút ≥44px, chữ nằm trong thẻ có nền (từng cắt viền ở Đập Deadline).
 9. **Nút phải đủ lớn và không đè nhau**: ≥44px, nút chính "Mở Night Pass" là nút chữ nhật một dòng (không tròn nhiều dòng).
 10. **Không bao giờ deploy/push/chạy migration khi chưa được người dùng cho phép rõ ràng** (khi được phép thì chỉ deploy từ bản sạch của commit đã qua `check.js`).
+11. **Màn kết thúc không được biến mất vì cú chạm nối tiếp** (Đổi Đổi 2048 và ~18 game từng tự "chơi lại" khi người chơi đang chạm nhanh, mất cơ hội xem điểm/khoe/chụp ảnh): `shared/endguard.js` (nạp tự động từ `shared/resume.js`) chặn chạm/phím vào vùng trống của màn kết thúc trong 1,8 giây đầu và khi chuỗi chạm còn nhanh (<0,5 giây giữa các lần, trong 6 giây đầu). Màn kết thúc dùng id `end`/`ovEnd`/`res`/`overlay`; game mới dùng id khác phải thêm vào `IDS`. Không viết thêm kiểu "chạm bất kỳ = chơi lại" không có khoảng trễ. Bài đo: `scripts/cozygame/check-endguard.js`.
 
 ## 0b. MỘT lỗi/cải tiến giao diện = sửa cho TẤT CẢ các nhóm game (lỗi hay lặp lại)
 Dự án có 3 nhóm: **Cozy Play** (`cozyplay/`: 9 game sinh tự động từ `scripts/cozygame/` + game viết tay), **Pop Play** (`popplay/`: game trẻ em, 12 game) và **trang cổng** (`cozyplay/index.html`, `popplay/index.html`, `index.html`). Từng có lần chỉ sửa Cozy Play rồi người dùng phải báo lại cho Pop Play. Quy tắc:

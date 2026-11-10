@@ -13,7 +13,7 @@
   /* nạp các mô-đun đi kèm (không phải sửa từng game): shared/exitconfirm.js (hỏi trước khi thoát + chống bấm nhầm), shared/inapp.js (banner "Mở bằng trình duyệt" ở trang chơi hộ/thách đấu) */
   var base = ((document.currentScript && document.currentScript.src) || "").replace(/resume\.js(\?.*)?$/, "");
   function load(f) { if (!base) return; var sc = document.createElement("script"); sc.src = base + f; sc.async = false; (document.head || document.documentElement).appendChild(sc); }
-  load("exitconfirm.js");
+  load("exitconfirm.js"); load("endguard.js");   /* endguard.js: cú chạm nối tiếp ngay sau khi hết ván không được tự chơi lại / làm mất màn kết thúc */
   var gid = NP.gid, RK = "np-resume:" + gid;
   var q = new URLSearchParams(location.search);
   var realHelper = q.get("helper") === "1", challenge = /^#ch=/.test(location.hash);
