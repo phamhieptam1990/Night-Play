@@ -30,6 +30,8 @@ const freePort = () => new Promise(r => { const s = net.createServer().listen(0,
   const { Client } = require("pg"), puppeteer = require("puppeteer-core");
   const pg = new Client({ connectionString: devUrl }); await pg.connect();
   const q = (sql, p) => pg.query(sql, p);
+  await q("select pg_advisory_lock(7461001)");   // hai lần chạy cùng lúc dùng chung DB dev (trigger, bộ đếm tần suất) sẽ đạp nhau: xếp hàng cho lần trước xong
+  await q("drop trigger if exists chk_fail on admin_actions").catch(() => {});
 
   const RUN = crypto.randomBytes(3).toString("hex"), TAG = "chk-ap-" + RUN, em = n => TAG + "-" + n + "@check.local";
   const made = { users: [], orders: [], txs: [] };
