@@ -334,7 +334,7 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 #stage{transition:background-color .3s}
 #stage[data-lum="l"] #home,#stage[data-lum="l"] .nps-fab{background:rgba(32,28,44,.82)!important;border-color:rgba(255,255,255,.55)!important;color:#fff!important}
 /* game đã gom ← + ⋯ (📷/📤 trong menu) vào thanh trên của chính nó (shared/popmenu.js, __npDock): ẩn ← + nút nổi của cổng, iframe chiếm toàn khung */
-#stage.docked #home,#stage.docked .nps-fab{display:none!important}
+#stage.docked #home,#stage.docked #klock,#stage.docked .nps-fab{display:none!important}
 @media (orientation:portrait){#stage.docked iframe{top:0!important;height:100%!important;inset:0!important}#stage.docked #tleft{top:auto!important;bottom:calc(env(safe-area-inset-bottom,0px) + 4px)!important}}
 @media (orientation:portrait){
   #stage iframe{top:var(--rail)!important;height:calc(100% - var(--rail))!important;inset:var(--rail) 0 0 0!important}

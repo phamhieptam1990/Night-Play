@@ -33,7 +33,10 @@
   st.textContent =
     "#npFab,#npFan{display:none}" +
     "@media " + PHONE + "," + TAB + "{" +
-    "#play.npfan .top,.top.npfan{padding-right:68px}" +
+    "#play.npfan .top,.top.npfan{padding-right:76px}" +
+    "#play.npfan #bSnd,#play.npfan #soundBtn,.top.npfan #bSnd,.top.npfan #soundBtn{flex:none;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;display:grid;place-items:center;margin-left:auto!important;margin-right:0!important}" +
+    "#play.npfan #bBk,.top.npfan #bBk{margin-right:0!important}#play.npfan #bSnd svg,#play.npfan #soundBtn svg,.top.npfan #bSnd svg,.top.npfan #soundBtn svg{width:24px;height:24px}" +
+    "#play.npfan .top h1,.top.npfan h1{flex:1 1 auto;min-width:0;white-space:normal;text-wrap:balance;overflow:hidden;overflow-wrap:anywhere;font-size:clamp(15px,4.6vw,21px)!important;line-height:1.1!important;max-height:2.3em;text-overflow:clip}" +
     "#play.npfan #bBk,.top.npfan #bBk{width:44px;height:44px;min-width:44px;min-height:44px}" +
     "#npFab{display:grid;place-items:center;position:absolute;right:12px;top:8px;width:48px;height:48px;padding:0;border-radius:50%;z-index:31;cursor:pointer;color:var(--npon,var(--on,#fff));background:var(--npacc,var(--accent,#7C5CFF));border:2px solid rgba(255,255,255,.55);box-shadow:0 3px 10px rgba(0,0,0,.32);transition:transform .25s}" +
     "#npFab svg{width:24px;height:24px;display:block;grid-area:1/1;transition:opacity .2s,transform .25s}#npFab .x{opacity:0;transform:rotate(-90deg) scale(.6)}" +
@@ -50,7 +53,7 @@
     "#npFan .it::after{content:attr(data-l);font:700 10.5px/1.05 system-ui,sans-serif;max-width:60px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.85}" +
     "#npFan .it .bl{display:none!important}#npFan .it>span:first-child{font-size:20px;line-height:1}" +
     /* chế độ local: .top ghim đầu màn hình, một hàng; nút menu + bảng bám vào .top */
-    ".top.npfan{position:fixed;top:0;left:0;right:0;width:auto!important;max-width:none!important;margin:0;box-sizing:border-box;flex-wrap:nowrap;align-items:center;gap:8px;z-index:40;padding:8px 68px 8px 12px;min-height:64px}" +
+    ".top.npfan{position:fixed;top:0;left:0;right:0;width:auto!important;max-width:none!important;margin:0;box-sizing:border-box;flex-wrap:nowrap;align-items:center;gap:8px;z-index:40;padding:8px 76px 8px 12px;min-height:64px}" +
     ".top.npfan h1{flex:1 1 auto;min-width:0;max-width:none;overflow:hidden;text-overflow:ellipsis}" +
     ".top.npfan #bBk{order:-3;margin:0}" +                      /* ← luôn ở góc trái, trước tiêu đề */
     ".top.npfan #npFab{right:12px;top:50%;margin-top:-24px}" +
@@ -147,11 +150,11 @@
   }
   function adopt() {
     if (!mq.matches) return;
-    var c = candidates().filter(function (x) { return !(tab.matches && x[0] === "snd"); });   // iPad: 🔊 ở ngoài menu nên không tính
+    var c = candidates().filter(function (x) { return x[0] !== "snd"; });   // 🔊 luôn ở ngoài menu (điện thoại + iPad) nên không tính
     if (c.length < 3 && !moved) return;                         // trang không có đủ nút phụ (Pop Play...): bỏ qua
     build(); moved = true; play.classList.add("npfan"); if (local) { document.body.classList.add("np-local"); buildTitle(); }
     GRID.forEach(function (role) {
-      if (tab.matches && role === "snd") return;                // iPad: giữ nút bật tiếng ngoài menu
+      if (role === "snd") return;                               // giữ nút bật/tắt tiếng ngoài menu
       var e = elOf(role); if (!e || e.parentNode === panel) return;
       if (e.parentNode !== top && role !== "help") return;
       home.push({ el: e, role: role, parent: e.parentNode, next: e.nextSibling });

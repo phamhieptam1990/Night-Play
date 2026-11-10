@@ -29,10 +29,11 @@
     back: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block"><path d="M15 5l-7 7 7 7"/></svg>',
     dots: '<svg class="d" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="19" cy="12" r="2.2"/></svg>',
     x: '<svg class="x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+    lock: "<svg " + S + '><rect x="5" y="11" width="14" height="10" rx="2.2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
     pause: "<svg " + S + '><path d="M8 5v14M16 5v14"/></svg>'
   };
   /* thứ tự trong bảng: [vai trò, id nút, nhãn vi, nhãn en] */
-  var ROLES = [["snd", "soundBtn", "Âm thanh", "Sound"], ["lang", "langBtn", "Ngôn ngữ", "Language"], ["help", "phBtn", "Hướng dẫn", "Help"], ["pause", "pauseBtn", "Tạm dừng", "Pause"], ["cam", "npPmCam", "Chụp ảnh", "Photo"], ["shr", "npPmShr", "Chia sẻ", "Share"]];
+  var ROLES = [["snd", "soundBtn", "Âm thanh", "Sound"], ["lang", "langBtn", "Ngôn ngữ", "Language"], ["help", "phBtn", "Hướng dẫn", "Help"], ["pause", "pauseBtn", "Tạm dừng", "Pause"], ["lock", "npPmLock", "Khoá màn", "Lock"], ["cam", "npPmCam", "Chụp ảnh", "Photo"], ["shr", "npPmShr", "Chia sẻ", "Share"]];
 
   var st = document.createElement("style");
   st.textContent =
@@ -54,13 +55,13 @@
     "font-size:15px!important;font-weight:800;line-height:1;box-shadow:none!important;transform:none!important;animation:none!important;opacity:1!important;color:var(--npink,inherit)!important;background:color-mix(in srgb,var(--npink,#888) 9%,var(--npbg,transparent))!important;border:1.5px solid var(--npline,rgba(128,128,128,.4))!important}" +
     "#npPmFan .it svg{width:22px!important;height:22px!important;flex:none}" +
     "#npPmFan .it::after{content:attr(data-l);font:700 10.5px/1.05 system-ui,sans-serif;max-width:64px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.88}" +
-    "#npPmFan .it[hidden]{display:none!important}html.np-locked #npPmCam,html.np-locked #npPmShr{display:none!important}" +
-    "html.np-tab #soundBtn{position:fixed!important;z-index:45;right:68px;top:calc(env(safe-area-inset-top,0px) + 8px);width:48px!important;height:48px!important;min-width:48px!important;min-height:48px!important;margin:0!important}" +
+    "#npPmFan .it[hidden]{display:none!important}html.np-locked #npPmCam,html.np-locked #npPmShr,html.np-locked #npPmLock,html.np-locked #npPmFab,html.np-locked #npPmFan{display:none!important}" +
+    "html.np-pm #soundBtn{position:fixed!important;z-index:45;right:68px;top:calc(env(safe-area-inset-top,0px) + 8px);width:48px!important;height:48px!important;min-width:48px!important;min-height:48px!important;margin:0!important}" +
     "html.np-tab #npPmFan .pn{grid-template-columns:repeat(3,88px);gap:10px;padding:12px;top:calc(env(safe-area-inset-top,0px) + 66px)}html.np-tab #npPmFan .it{width:88px!important;height:84px!important}html.np-tab #npPmFan .it svg{width:28px!important;height:28px!important}html.np-tab #npPmFan .it::after{font-size:13px;max-width:84px}" +
     "@media (prefers-reduced-motion:reduce){#npPmFab svg,#npPmFan .bk,#npPmFan .pn{transition:none!important}#npPmFab.nudge{animation:none}}";
   document.head.appendChild(st);
 
-  var bk, fab, fan, panel, cam, shr, probe, open = false, moved = false, saved = [], order = [];
+  var bk, fab, fan, panel, cam, shr, lck, probe, open = false, moved = false, saved = [], order = [];
   function mk(tag, id, cls) { var e = document.createElement(tag); if (id) e.id = id; if (cls) e.className = cls; if (tag === "button") e.type = "button"; return e; }
   function build() {
     if (fab) return;
@@ -70,6 +71,7 @@
     if (pd) {   /* 📷 / 📤 bấm hộ nút nổi của trang cổng */
       var click = function (sel) { return function () { var e = pd.querySelector(sel); if (e && !e.disabled) e.click(); }; };
       cam = mk("button", "npPmCam"); cam.innerHTML = ICO.cam; cam.addEventListener("click", click(".nps-cam"));
+      lck = mk("button", "npPmLock"); lck.innerHTML = ICO.lock; lck.addEventListener("click", click("#klock"));
       shr = mk("button", "npPmShr"); shr.innerHTML = ICO.shr; shr.addEventListener("click", click(".nps-fab:not(.nps-cam)"));
     }
     top.insertBefore(bk, top.firstChild); top.appendChild(fan); top.appendChild(fab);
@@ -88,7 +90,8 @@
     if (!fab) return; var v = vi(), t = v ? (open ? "Đóng menu" : "Mở menu") : (open ? "Close menu" : "Open menu");
     fab.setAttribute("aria-label", t); fab.title = t;
     var b = playing() ? (v ? "Về màn chọn" : "Back to menu") : (v ? "Thoát" : "Exit"); bk.setAttribute("aria-label", b); bk.title = b;
-    ROLES.forEach(function (r) { var e = $(r[1]); if (e && e.parentNode === panel) { e.setAttribute("data-l", v ? r[2] : r[3]); if (r[0] === "cam" || r[0] === "shr") { e.setAttribute("aria-label", v ? r[2] : r[3]); e.title = v ? r[2] : r[3]; } } });
+    ROLES.forEach(function (r) { var e = $(r[1]); if (e && e.parentNode === panel) { e.setAttribute("data-l", v ? r[2] : r[3]); if (r[0] === "cam" || r[0] === "shr" || r[0] === "lock") { e.setAttribute("aria-label", v ? r[2] : r[3]); e.title = v ? r[2] : r[3]; } } });
+    if (lck) { var kl = pd && pd.getElementById("klock"); lck.hidden = !kl || kl.hidden; }   /* webview app / Night Play: kidlock ẩn nút thì ô khoá cũng ẩn */
     de.classList.toggle("np-hidebk", !pd && !playing());   /* mở trực tiếp ở màn chọn: không có chỗ để thoát */
   }
   /* màu THẬT của game (như shared/fan.js): chữ, nền, viền, màu nhấn */
@@ -113,12 +116,12 @@
     var m = mode(); if (!m) return; if (moved && cur !== m) restore();
     build();
     if (!moved) { moved = true; cur = m; de.classList.toggle("np-tab", m === "t"); order = Array.prototype.slice.call(top.children); de.classList.add("np-pm"); flag(true); if (!$("phBtn") || $("phBtn").classList.contains("ph-new")) fab.classList.add("nudge"); }
-    if (cam && !cam.parentNode) { cam.className = shr.className = "ib"; }
+    if (cam && !cam.parentNode) { cam.className = shr.className = lck.className = "ib"; }
     ROLES.forEach(function (r) {
-      if (m === "t" && r[0] === "snd") return;
-      var e = $(r[1]) || (r[1] === "npPmCam" ? cam : r[1] === "npPmShr" ? shr : null);
+      if (r[0] === "snd") return;   /* 🔊 luôn ở NGOÀI menu, cố định cạnh ⋯ */
+      var e = $(r[1]) || (r[1] === "npPmCam" ? cam : r[1] === "npPmShr" ? shr : r[1] === "npPmLock" ? lck : null);
       if (!e || e.parentNode === panel) return;
-      if (e.parentNode !== top && e !== cam && e !== shr) return;
+      if (e.parentNode !== top && e !== cam && e !== shr && e !== lck) return;
       if (e.parentNode === top) saved.push(e);
       e.classList.add("it"); panel.appendChild(e);
     });
@@ -131,7 +134,7 @@
     order.forEach(function (e) { if (saved.indexOf(e) >= 0) top.insertBefore(e, fan); });
     saved.forEach(function (e) { if (e.parentNode === panel) top.insertBefore(e, fan); });
     saved = []; moved = false;
-    [cam, shr].forEach(function (e) { if (e && e.parentNode) e.parentNode.removeChild(e); });
+    [cam, shr, lck].forEach(function (e) { if (e && e.parentNode) e.parentNode.removeChild(e); });
   }
   function sync() { if (mode()) adopt(); else restore(); }
 
