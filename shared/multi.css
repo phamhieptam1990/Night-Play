@@ -20,3 +20,5 @@ html.np-multi .cards{gap:3px}
 html.np-multi .cards .card{min-height:0}
 /* Đập Deadline: body chừa 64px trên cho nút Home của cổng — trong khung multi thanh đó đã ẩn */
 html.np-g-dap-deadline body{padding-top:14px}
+/* ẩn ô điểm/combo trùng với panel host (bridge.js hudScan đặt data-nohud) */
+html.np-nohud [data-nohud], html.np-nohud .stats.np-allhid { display: none !important; }

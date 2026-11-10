@@ -292,8 +292,16 @@ window.NP = (function () {
     addEventListener("keydown", function (e) { if (e.key === "Escape") post({ type: "np-key", key: "Escape" }); }, true);   /* phím trong iframe không nổi lên host: chuyển Esc để host đóng panel */
   }
   var numOf = function (t) { var m = String(t == null ? "" : t).replace(/(\d)[.,\s](?=\d{3}\b)/g, "$1").match(/-?\d+(\.\d+)?/); return m ? Math.floor(+m[0]) : null; };
-  var domNum = function (ids) { for (var i = 0; i < ids.length; i++) { var e = document.getElementById(ids[i]); if (e && e.offsetParent !== null) { var n = numOf(e.textContent); if (n != null) return n; } } return null; };
+  var domNum = function (ids) { for (var i = 0; i < ids.length; i++) { var e = document.getElementById(ids[i]); if (e && !e.closest("[hidden]") && (e.offsetParent !== null || e.closest("[data-nohud]"))) { var n = numOf(e.textContent); if (n != null) return n; } } return null; };
   var hudFn = null;
+  /* ẨN BẢNG ĐIỂM CỦA GAME (lệnh hud-hide/hud-show): chỉ các ô .stats .st có nhãn trùng thông tin đã có ở panel host (Điểm / Tốt nhất / Cao nhất / Combo); ô cần để chơi (mạng, giờ, lượt còn, tiền...) KHÔNG ẩn */
+  var HUDRE = /^(điểm|score|tốt nhất|best|cao nhất|kỷ lục|kỉ lục|điểm cao|combo)$/i, mHudHide = false;
+  function hudScan() {
+    var n = 0;
+    document.querySelectorAll(".stats .st").forEach(function (st) { var lb = st.querySelector("span"), m = !!(lb && HUDRE.test(lb.textContent.trim())); if (m) n++; if (m && mHudHide) st.setAttribute("data-nohud", ""); else st.removeAttribute("data-nohud"); });
+    document.querySelectorAll(".stats").forEach(function (r) { var all = r.querySelectorAll(".st").length, hid = r.querySelectorAll(".st[data-nohud]").length; r.classList.toggle("np-allhid", all > 0 && all === hid); });
+    return n;
+  }
   function readHud() {
     var st = null; try { st = getter ? getter() : null; } catch (e) {}
     var o = hudFn ? (function () { try { return hudFn() || {}; } catch (e) { return {}; } })() : {}, g = function (k) { return st && typeof st[k] === "number" ? st[k] : null; };
@@ -303,7 +311,7 @@ window.NP = (function () {
     var moves = o.moves != null ? o.moves : g("mv") != null ? g("mv") : g("moves") != null ? g("moves") : domNum(["sMv", "mv"]);
     var playing = !!st; if (playing) mOver = false;
     var best = null; try { best = numOf(localStorage.getItem("np-hi-" + gid)); } catch (e) {}
-    return { type: "np-hud", id: gid, score: score, combo: combo, moves: moves, best: best, state: mPaused ? "paused" : playing ? "playing" : mOver ? "over" : "idle" };
+    return { type: "np-hud", id: gid, hc: hudScan(), score: score, combo: combo, moves: moves, best: best, state: mPaused ? "paused" : playing ? "playing" : mOver ? "over" : "idle" };
   }
   function snapCanvas() {
     var best = null, ba = 0, cs = document.querySelectorAll("canvas");
@@ -344,6 +352,8 @@ window.NP = (function () {
     else if (c === "unmute") { mUser = false; applyMute(); }
     else if (c === "focus") { mBlur = false; applyMute(); try { window.focus(); } catch (x) {} }
     else if (c === "blur") { mBlur = true; applyMute(); }
+    else if (c === "hud-hide") { mHudHide = true; document.documentElement.classList.add("np-nohud"); }
+    else if (c === "hud-show") { mHudHide = false; document.documentElement.classList.remove("np-nohud"); }
     else if (c === "snapshot") { post({ type: "np-snap", id: gid, dataUrl: snapCanvas() }); return; }
     post(readHud());
   }

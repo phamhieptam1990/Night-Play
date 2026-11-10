@@ -51,10 +51,19 @@ svg{display:block}
 .fr.hid{display:none}
 .fr.sel{box-shadow:0 0 0 3px var(--accent)}
 .fr iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#0b0b18;display:block}
-.mi{position:absolute;top:0;right:0;width:44px;height:44px;display:grid;place-items:center;opacity:.45;z-index:6;transition:opacity .15s}
-.mi i{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:rgba(14,12,32,.72);color:#fff;border:1px solid rgba(255,255,255,.35)}
+.mi,.hm{position:absolute;top:0;height:44px;min-width:44px;padding:0 9px;display:flex;align-items:center;justify-content:center;gap:4px;opacity:.45;z-index:6;transition:opacity .15s}
+.mi{right:0}.hm{left:0;z-index:9}
+.hm[hidden]{display:none}
+.hm:hover,.hm:focus-visible,.hm.on{opacity:1}
+.bd{display:none;font:800 11px/18px system-ui;padding:0 6px;border-radius:9px;background:rgba(14,12,32,.72);color:#fff;border:1px solid rgba(255,255,255,.35);font-variant-numeric:tabular-nums;white-space:nowrap}.bd.on{display:block}
+.fr.po-open .bd{display:none}
+.mi i,.hm i{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:rgba(14,12,32,.72);color:#fff;border:1px solid rgba(255,255,255,.35)}
 .mi:hover,.mi:focus-visible,.fr.po-open .mi{opacity:1}
-.mi svg{width:16px;height:16px}
+.mi svg,.hm svg{width:16px;height:16px}
+#hp{position:absolute;z-index:10;left:6px;top:40px;width:min(230px,calc(100% - 12px));padding:10px;border-radius:16px;background:var(--panel);color:var(--ink);border:1px solid var(--line);box-shadow:var(--shadow);display:none;flex-direction:column;gap:8px}
+#hp.on{display:flex}#hp .hr{display:flex;gap:8px}#hp .hr .rb{flex:1;border-radius:12px;width:auto}#hpTray{display:flex;flex-direction:column;gap:6px}#hpTray .tc.wide{width:100%;max-width:none}#hpPerf{font-size:12px;font-weight:800;color:var(--warn)}
+.pn .sw{width:100%;margin-top:6px;min-height:44px;border-radius:12px;background:var(--card);border:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 10px;font-weight:700;font-size:12px;text-align:left}.pn .sw[hidden]{display:none}.pn .sw::after{content:"";flex:none;width:34px;height:20px;border-radius:99px;background:var(--line);box-shadow:inset 0 0 0 2px transparent}.pn .sw[aria-pressed=true]::after{background:var(--accent)}
+body.bare #rail{display:none}
 .pn{position:absolute;z-index:7;top:40px;right:6px;width:min(212px,calc(100% - 12px));padding:10px;border-radius:16px;background:var(--panel);color:var(--ink);border:1px solid var(--line);box-shadow:var(--shadow);display:none;font-size:13px}
 .fr.po-open .pn{display:block}
 .pn .pt{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:6px}.pn .pt b{font-size:14px;line-height:1.15}.pn .pt span{font-size:11px;color:var(--muted);font-weight:800;white-space:nowrap}
@@ -112,7 +121,7 @@ body.side #perf{max-width:50px;font-size:10px}
     <span id="perf" role="status"></span>
     <button class="rb go" id="bAdd" type="button" aria-label="Add game"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
   </header>
-  <main id="grid"><div id="empty" hidden></div></main>
+  <main id="grid"><div id="empty" hidden></div><button class="hm" id="hm" type="button" aria-haspopup="true" hidden><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M5 7h14M5 12h14M5 17h14"/></svg></i><b class="bd" id="hmBd"></b></button><div id="hp" role="group"><div class="hr"><button class="rb" id="hHome" type="button"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><button class="rb go" id="hAdd" type="button"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div><div id="hpTray" role="list"></div><span id="hpPerf" role="status"></span></div></main>
 </div>
 <div id="sheet" hidden role="dialog" aria-modal="true">
   <div class="sh">
@@ -140,12 +149,12 @@ body.side #perf{max-width:50px;font-size:10px}
   var T = {
     vi: { title: "Chơi cùng lúc", add: "Thêm game", back: "Về trang chủ", pick: "Chọn game để chơi cùng lúc", start: "▶ Bắt đầu", all: "Tất cả", par: "Cùng lúc", foc: "Tập trung", parTag: "chạy song song", focTag: "tập trung", open: "đang mở",
       empty: "Bấm dấu + để chọn game.\nGame “cùng lúc” chạy song song; game “tập trung” chỉ một khung chạy, các game khác chờ ở khay.", pause: "Tạm dừng", play: "Tiếp tục", snd: "Tiếng", close: "Đóng game", move: "Đổi chỗ", menu: "Menu khung",
-      score: "Điểm", combo: "Combo", moves: "Lượt", st: { idle: "Chờ bắt đầu", playing: "Đang chơi", over: "Đã xong", paused: "Tạm dừng" }, tap: "⏸ Tạm dừng\nChạm để tiếp tục", loading: "Đang tải…",
+      hud: "Ẩn bảng điểm của game", score: "Điểm", combo: "Combo", moves: "Lượt", st: { idle: "Chờ bắt đầu", playing: "Đang chơi", over: "Đã xong", paused: "Tạm dừng" }, tap: "⏸ Tạm dừng\nChạm để tiếp tục", loading: "Đang tải…",
       resumeTag: "đang chơi dở", saved: "đã lưu ván", full: "Chỉ chơi tối đa {n} game cùng lúc trên máy này.", nofit: "Màn hình không đủ chỗ cho thêm khung nữa.", slow: "⚠ Máy hơi chậm: đã tạm dừng khung phụ", slowAdd: "Máy đang chậm, tạm thời chưa thêm khung được.",
       selMax: "Hết chỗ: bỏ bớt game đã chọn.", timeH: "Hết giờ chơi hôm nay", timeP: "Đã đến giới hạn thời gian do phụ huynh đặt. Hẹn ngày mai nhé!", home: "Về trang chủ", sel: "Đã chọn", page: "Trang", min: "ph" },
     en: { title: "Play together", add: "Add game", back: "Back home", pick: "Pick games to play at once", start: "▶ Start", all: "All", par: "Together", foc: "Focus", parTag: "runs together", focTag: "focus", open: "open",
       empty: "Tap + to pick games.\n“Together” games run side by side; “Focus” games run one at a time and wait in the tray.", pause: "Pause", play: "Resume", snd: "Sound", close: "Close game", move: "Swap", menu: "Frame menu",
-      score: "Score", combo: "Combo", moves: "Moves", st: { idle: "Ready", playing: "Playing", over: "Finished", paused: "Paused" }, tap: "⏸ Paused\nTap to resume", loading: "Loading…",
+      hud: "Hide the game's score board", score: "Score", combo: "Combo", moves: "Moves", st: { idle: "Ready", playing: "Playing", over: "Finished", paused: "Paused" }, tap: "⏸ Paused\nTap to resume", loading: "Loading…",
       resumeTag: "in progress", saved: "game saved", full: "This device can run up to {n} games at once.", nofit: "No room for another frame on this screen.", slow: "⚠ Device is slow: side frames paused", slowAdd: "Device is slow, can't add a frame right now.",
       selMax: "No room: unselect a game.", timeH: "Time's up for today", timeP: "The time limit set by a parent has been reached. See you tomorrow!", home: "Back home", sel: "Selected", page: "Page", min: "min" }
   };
@@ -209,7 +218,15 @@ body.side #perf{max-width:50px;font-size:10px}
   }
   function areaSize() { var r = grid.getBoundingClientRect(); return { W: Math.max(0, r.width), H: Math.max(0, r.height) }; }
   function fits(list) { if (!list.length) return true; var a = areaSize(), p = plan(list.length, a.W, a.H, list); return p.ratio >= 0.999; }
+  /* khi đã có game: thanh trên ẩn hẳn (khung game chiếm toàn màn); ← / + / khay game dở nằm trong menu nhỏ mờ ở góc trái (#hm). Màn trống / bảng chọn: thanh trên hiện */
+  function chrome() {
+    var bare = items.length > 0, was = document.body.classList.contains("bare");
+    document.body.classList.toggle("bare", bare); $("hm").hidden = !bare; if (!bare) closeHp();
+    if (bare !== was) renderTray();
+  }
+  function closeHp() { $("hp").classList.remove("on"); $("hm").classList.remove("on"); }
   function layout() {
+    chrome();
     var list = slotItems(), a = areaSize(); $("empty").hidden = list.length > 0 || items.length > 0 && false;
     $("empty").hidden = list.length > 0; $("empty").textContent = t().empty;
     if (!list.length) return;
@@ -223,13 +240,13 @@ body.side #perf{max-width:50px;font-size:10px}
   /* ---------- khung game ---------- */
   function buildEl(it) {
     var el = document.createElement("div"); el.className = "fr"; el.dataset.id = it.id;
-    el.innerHTML = '<div class="ld"></div><div class="po"></div><div class="cd"></div><button class="mi" type="button" aria-haspopup="true"><i>' + ICON.dots + '</i></button><div class="pn" role="group"></div>';
+    el.innerHTML = '<div class="ld"></div><div class="po"></div><div class="cd"></div><button class="mi" type="button" aria-haspopup="true"><b class="bd"></b><i>' + ICON.dots + '</i></button><div class="pn" role="group"></div>';
     el.querySelector(".ld").textContent = t().loading; el.querySelector(".po").textContent = t().tap; el.querySelector(".mi").setAttribute("aria-label", t().menu + ": " + gname(it.id));
     el.querySelector(".po").addEventListener("click", function () { it.userPaused = false; it.autoPaused = false; sync(it); render(it); });
     el.querySelector(".mi").addEventListener("click", function (e) { e.stopPropagation(); togglePanel(it); });
     el.addEventListener("pointerdown", function () { if (sel !== it) select(it); }, true);
     var pn = el.querySelector(".pn");
-    pn.innerHTML = '<div class="pt"><b></b><span data-k="st"></span></div><div class="pr"><span data-l="score"></span><b data-k="score">–</b></div><div class="pr"><span data-l="cc"></span><b data-k="cc">–</b></div><div class="pb"></div>';
+    pn.innerHTML = '<div class="pt"><b></b><span data-k="st"></span></div><div class="pr"><span data-l="score"></span><b data-k="score">–</b></div><div class="pr"><span data-l="cc"></span><b data-k="cc">–</b></div><div class="pb"></div><button class="sw" type="button" data-a="hud" hidden aria-pressed="false"></button>';
     var pb = pn.querySelector(".pb");
     [["pz", ICON.pause, function () { it.userPaused = !it.userPaused; if (!it.userPaused) it.autoPaused = false; sync(it); render(it); }],
      ["sn", ICON.snd, function () { it.userMuted = !it.userMuted; send(it, it.userMuted ? "mute" : "unmute"); render(it); }],
@@ -237,6 +254,7 @@ body.side #perf{max-width:50px;font-size:10px}
      ["x", ICON.x, function () { closeItem(it); }]].forEach(function (d) {
       var b = document.createElement("button"); b.type = "button"; b.dataset.a = d[0]; if (d[0] === "x") b.className = "x"; b.innerHTML = d[1]; b.addEventListener("click", function (e) { e.stopPropagation(); d[2](); }); pb.appendChild(b);
     });
+    var sw = pn.querySelector(".sw"); sw.addEventListener("click", function (e) { e.stopPropagation(); setHudHide(it, !hudHide(it)); render(it); });
     grid.appendChild(el); return el;
   }
   function render(it) {
@@ -247,6 +265,9 @@ body.side #perf{max-width:50px;font-size:10px}
     pn.querySelector("b").textContent = gname(it.id); pn.querySelector('[data-k=st]').textContent = T_.st[paused ? "paused" : (h.state || "idle")] || "";
     pn.querySelector('[data-l=score]').textContent = T_.score; pn.querySelector('[data-k=score]').textContent = h.score != null ? h.score : "–";
     var hasCombo = h.combo != null; pn.querySelector('[data-l=cc]').textContent = hasCombo ? T_.combo : T_.moves; pn.querySelector('[data-k=cc]').textContent = hasCombo ? h.combo : (h.moves != null ? h.moves : "–");
+    var bd = el.querySelector(".mi .bd"), btxt = h.score != null ? String(h.score) : h.moves != null ? String(h.moves) : ""; if (h.combo > 1) btxt += (btxt ? " " : "") + "×" + h.combo;
+    bd.textContent = btxt; bd.classList.toggle("on", !!btxt && it.where === "slot");
+    var swb = pn.querySelector(".sw"); swb.hidden = !(h.hc > 0); swb.textContent = T_.hud; swb.setAttribute("aria-pressed", String(hudHide(it)));
     var bz = pn.querySelector('[data-a=pz]'), bs = pn.querySelector('[data-a=sn]'), bm = pn.querySelector('[data-a=mv]'), bx = pn.querySelector('[data-a=x]');
     bz.innerHTML = paused ? ICON.play : ICON.pause; bz.setAttribute("aria-label", paused ? T_.play : T_.pause); bz.title = bz.getAttribute("aria-label");
     bs.innerHTML = it.userMuted ? ICON.mute : ICON.snd; bs.setAttribute("aria-label", T_.snd); bs.setAttribute("aria-pressed", String(!it.userMuted)); bs.title = T_.snd;
@@ -255,10 +276,10 @@ body.side #perf{max-width:50px;font-size:10px}
   }
   function togglePanel(it) {
     var open = !it.el.classList.contains("po-open");
-    items.forEach(function (o) { if (o.el) o.el.classList.remove("po-open"); });
+    closePanels();
     if (open) { it.el.classList.add("po-open"); select(it); render(it); }
   }
-  function closePanels() { items.forEach(function (o) { if (o.el) o.el.classList.remove("po-open"); }); }
+  function closePanels() { items.forEach(function (o) { if (o.el) o.el.classList.remove("po-open"); }); closeHp(); }
 
   /* ---------- giao thức ---------- */
   function send(it, cmd) { try { if (it.fr && it.fr.contentWindow) it.fr.contentWindow.postMessage({ np: 1, type: "np-cmd", cmd: cmd }, location.origin); } catch (e) {} }
@@ -270,6 +291,10 @@ body.side #perf{max-width:50px;font-size:10px}
     else if (!want && it.sentPaused) { it.sentPaused = false; send(it, "resume"); }
     render(it);
   }
+  /* ẩn bảng điểm của chính game (chỉ các ô trùng với điểm/combo trong panel; game báo số ô ẩn được ở np-hud.hc) — nhớ theo từng game */
+  function hudHide(it) { try { return localStorage.getItem("np-multi-hud:" + it.id) !== "0"; } catch (e) { return true; } }
+  function setHudHide(it, v) { try { localStorage.setItem("np-multi-hud:" + it.id, v ? "1" : "0"); } catch (e) {} applyHud(it); }
+  function applyHud(it) { if (it.fr && it.ready) send(it, hudHide(it) ? "hud-hide" : "hud-show"); }
   function applyAudio() { items.forEach(function (it) { if (!it.fr || !it.ready) return; send(it, sel === it && it.where === "slot" ? "focus" : "blur"); send(it, it.userMuted ? "mute" : "unmute"); }); }
   function select(it) {
     if (!it || it.where !== "slot") return; sel = it; it.lastUsed = now();
@@ -280,7 +305,7 @@ body.side #perf{max-width:50px;font-size:10px}
     if (e.origin !== location.origin || !e.data || e.data.np !== 1) return;
     var it = null; for (var i = 0; i < items.length; i++) if (items[i].fr && items[i].fr.contentWindow === e.source) { it = items[i]; break; }
     if (!it) return; var d = e.data;
-    if (d.type === "np-hello") { it.ready = true; it.el.classList.add("ready"); if (it._hello) it._hello(); sync(it); applyAudio(); render(it); }
+    if (d.type === "np-hello") { it.ready = true; it.el.classList.add("ready"); if (it._hello) it._hello(); sync(it); applyAudio(); applyHud(it); render(it); }
     else if (d.type === "np-hud") { it.hud = d; if (d.state === "playing") { it.wasPlaying = true; it.lastPlay = now(); } else if (d.state === "over" || d.state === "idle") it.wasPlaying = false; render(it); renderTrayLater(); }
     else if (d.type === "np-snap") { if (it._snap) { var r = it._snap; it._snap = null; r(d.dataUrl || null); } }
     else if (d.type === "np-key") { if (d.key === "Escape") closePanels(); }
@@ -375,8 +400,10 @@ body.side #perf{max-width:50px;font-size:10px}
   /* ---------- khay thumbnail ---------- */
   var trayT = 0; function renderTrayLater() { clearTimeout(trayT); trayT = setTimeout(renderTray, 150); }
   function renderTray() {
-    var list = trayItems(), side = document.body.classList.contains("side"), wide = !side && innerWidth >= 700; tray.textContent = "";
-    var cap = Math.max(1, Math.floor(((side ? tray.clientHeight : tray.clientWidth) || 200) / (side ? 50 : wide ? 112 : 58))), shown = list.slice(0, cap);
+    var bare = document.body.classList.contains("bare"), tr = bare ? $("hpTray") : tray; tray.textContent = ""; $("hpTray").textContent = "";
+    var list = trayItems(), side = !bare && document.body.classList.contains("side"), wide = bare || (!side && innerWidth >= 700);
+    var cap = bare ? 8 : Math.max(1, Math.floor(((side ? tray.clientHeight : tray.clientWidth) || 200) / (side ? 50 : wide ? 112 : 58))), shown = list.slice(0, cap);
+    $("hmBd").textContent = list.length ? String(list.length) : ""; $("hmBd").classList.toggle("on", list.length > 0);
     shown.forEach(function (it) {
       var b = document.createElement("button"); b.type = "button"; b.className = "tc" + (wide ? " wide" : ""); b.dataset.id = it.id; b.setAttribute("role", "listitem");
       var h = it.hud || {}, sc = h.score != null ? h.score : null, mins = it.lastPlay ? Math.max(1, Math.round((now() - it.firstAt) / 60000)) : 0;
@@ -385,9 +412,9 @@ body.side #perf{max-width:50px;font-size:10px}
       var im = it.thumb ? '<img alt="" src="' + it.thumb + '">' : '<span>' + it.g.icon + '</span>';
       if (wide) { b.innerHTML = '<span class="im">' + im + '</span><span class="tx"><b></b><span></span></span>'; b.querySelector("b").textContent = gname(it.id); b.querySelector(".tx span").textContent = (it.wasPlaying ? t().resumeTag : t().saved) + (sc != null ? " · " + sc : ""); }
       else { b.innerHTML = im + (sc != null ? '<span class="sc">' + sc + '</span>' : "") + (it.wasPlaying ? '<span class="pz">⏸</span>' : ""); }
-      b.addEventListener("click", function () { switchTo(it); }); tray.appendChild(b);
+      b.addEventListener("click", function () { closeHp(); switchTo(it); }); tr.appendChild(b);
     });
-    if (list.length > shown.length) { var m = document.createElement("span"); m.id = "more"; m.textContent = "+" + (list.length - shown.length); tray.appendChild(m); }
+    if (list.length > shown.length) { var m = document.createElement("span"); m.id = "more"; m.textContent = "+" + (list.length - shown.length); tr.appendChild(m); }
   }
 
   /* ---------- chọn game (bảng chọn có phân trang, không cuộn) ---------- */
@@ -457,7 +484,7 @@ body.side #perf{max-width:50px;font-size:10px}
     window.__npPerfTick = function (n) { if (n) bad = 4 * 50 + 1; };
   })();
   function setSlow(on) {
-    slow = on; bad = good = 0; $("perf").classList.toggle("on", on); $("perf").textContent = on ? t().slow : "";
+    slow = on; bad = good = 0; $("perf").classList.toggle("on", on); $("perf").textContent = on ? t().slow : ""; $("hpPerf").textContent = on ? t().slow : ""; if (on) toast(t().slow);
     if (on) items.forEach(function (it) { if (it.where === "slot" && it !== sel && !it.userPaused) { it.autoPaused = true; sync(it); } });
   }
 
@@ -472,11 +499,13 @@ body.side #perf{max-width:50px;font-size:10px}
     layout(); renderTray(); if (!$("sheet").hidden) renderSheet();
   }
   $("bBack").addEventListener("click", function () { location.href = PORTAL_HOME; });
+  $("hm").addEventListener("click", function (e) { e.stopPropagation(); var open = !$("hp").classList.contains("on"); closePanels(); if (open) { $("hp").classList.add("on"); $("hm").classList.add("on"); } });
+  $("hHome").addEventListener("click", function () { location.href = PORTAL_HOME; }); $("hAdd").addEventListener("click", function () { closeHp(); openSheet(); });
   $("bAdd").addEventListener("click", openSheet); $("shX").addEventListener("click", closeSheet); $("bStart").addEventListener("click", startSelected);
   $("sheet").addEventListener("click", function (e) { if (e.target === $("sheet")) closeSheet(); });
   $("pgPrev").addEventListener("click", function () { page--; renderSheet(); }); $("pgNext").addEventListener("click", function () { page++; renderSheet(); });
   $("lkGo").addEventListener("click", function () { location.href = PORTAL_HOME; });
-  grid.addEventListener("pointerdown", function (e) { if (!e.target.closest(".pn,.mi")) closePanels(); }, true);
+  grid.addEventListener("pointerdown", function (e) { if (!e.target.closest(".pn,.mi,#hp,#hm")) closePanels(); }, true);
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") { if (!$("sheet").hidden) closeSheet(); else closePanels(); return; } if (sel && sel.fr && !e.target.closest("button")) { try { sel.fr.contentWindow.focus(); } catch (x) {} } });
   addEventListener("resize", function () { clearTimeout(onResize.t); onResize.t = setTimeout(onResize, 60); });
   addEventListener("pagehide", function () { items.forEach(function (it) { try { it.fr.contentWindow.NPResume.flush(); } catch (e) {} }); });

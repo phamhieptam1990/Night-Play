@@ -98,6 +98,19 @@ const TUT = ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "xn", "dd", "
       await pg.evaluate(id => document.querySelector('.fr[data-id="' + id + '"] .mi').click(), id0); await wait(150); await pg.evaluate(id => document.querySelector('.fr[data-id="' + id + '"] .mi').click(), id0); await wait(150);
       note(!(await pg.evaluate(id => document.querySelector('.fr[data-id="' + id + '"]').classList.contains("po-open"), id0)), tag, "bấm icon lần 2 không đóng panel");
     }
+    /* chỉ còn khung chơi + icon nhỏ: thanh trên host ẩn khi có game; ← / + / khay nằm trong menu #hm */
+    const ch = await pg.evaluate(() => { const rail = document.getElementById("rail"), g = document.getElementById("grid").getBoundingClientRect(), hm = document.getElementById("hm"), r = hm.getBoundingClientRect(), top = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+      const fr = NPMulti.items().find(i => i.where === "slot"), f = NPMulti.frame(fr.id), d = f.contentDocument, fb = f.getBoundingClientRect(), over = [];
+      d.querySelectorAll("button,a[href],input,select,[role=button]").forEach(e => { const q = e.getBoundingClientRect(); if (!q.width || e.closest("[hidden]") || d.defaultView.getComputedStyle(e).display === "none") return; const L = q.left + fb.left, T = q.top + fb.top; if (L + q.width > r.left && L < r.right && T + q.height > r.top && T < r.bottom) over.push((e.id || e.className || e.tagName).toString().slice(0, 20)); });
+      return { railVisible: rail.offsetParent !== null, gh: g.height, ih: innerHeight, hm: [Math.round(r.width), Math.round(r.height)], hmTop: !!(top && top.closest("#hm")), over, hidden: hm.hidden }; });
+    note(!ch.railVisible, tag, "thanh trên host vẫn hiện khi đang có game"); note(ch.gh >= ch.ih - 14, tag, "khung game chưa chiếm gần toàn màn (" + ch.gh + "/" + ch.ih + ")");
+    note(!ch.hidden && ch.hm[0] >= 44 && ch.hm[1] >= 44, tag, "icon menu chung nhỏ hơn 44px " + ch.hm.join("x")); note(ch.hmTop, tag, "icon menu chung bị che"); note(ch.over.length === 0, tag, "icon menu chung đè nút của game: " + ch.over.join(","));
+    await pg.evaluate(() => document.getElementById("hm").click()); await wait(150);
+    const hp = await pg.evaluate(() => { const p = document.getElementById("hp"), r = p.getBoundingClientRect(), b = [...p.querySelectorAll("button")].map(x => Math.min(x.getBoundingClientRect().width, x.getBoundingClientRect().height)); return { on: p.classList.contains("on"), inside: r.left >= 0 && r.right <= innerWidth && r.bottom <= innerHeight, b }; });
+    note(hp.on && hp.inside && hp.b.length >= 2 && hp.b.every(x => x >= 43), tag, "menu chung: mở/vừa màn hình/nút ≥44px " + JSON.stringify(hp));
+    if (shotDir) await pg.screenshot({ path: path.join(shotDir, "multi-" + name + "-hostmenu.png") });
+    await pg.keyboard.press("Escape"); await pg.evaluate(() => document.getElementById("grid").dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }))); await wait(150);
+    note(!(await pg.evaluate(() => document.getElementById("hp").classList.contains("on"))), tag, "menu chung không đóng khi bấm ra ngoài");
     /* chỉ 1 khung có tiếng */
     const snd = () => pg.evaluate(() => NPMulti.items().filter(i => i.where === "slot").map(i => ({ id: i.id, sel: i.sel, muted: NPMulti.frame(i.id).contentWindow.NPAudio.muted() })));
     await wait(300); let s1 = await snd(); note(s1.filter(x => !x.muted).length === 1 && s1.filter(x => x.sel).length === 1 && s1.every(x => x.sel === !x.muted), tag, "phải đúng 1 khung được chọn và có tiếng: " + JSON.stringify(s1));
@@ -124,6 +137,27 @@ const TUT = ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "xn", "dd", "
     await pg.close();
   }
 
+  /* ---------- 2b. huy hiệu điểm + công tắc ẩn bảng điểm của game ---------- */
+  {
+    const tag = "multi hud 390x844", pg = await open("games=doi-doi-2048,xin-nghi", 390, 844); await ready(pg, 2); await wait(1200);
+    const played = await startPlay(pg, "doi-doi-2048"); note(played, tag, "không bắt đầu được ván 2048"); await wait(900);
+    const shown = id => pg.evaluate(id => { const d = NPMulti.frame(id).contentDocument, e = d.getElementById("sSc"); return !!(e && e.offsetParent !== null); }, id);
+    const hud = await pg.evaluate(() => NPMulti.items().find(i => i.id === "doi-doi-2048").hud);
+    note(hud && hud.hc > 0, tag, "game không báo ô bảng điểm ẩn được (hc) " + JSON.stringify(hud));
+    note(!(await shown("doi-doi-2048")), tag, "mặc định phải ẩn ô Điểm của game");
+    const bd = await pg.evaluate(() => { const b = document.querySelector('.fr[data-id="doi-doi-2048"] .mi .bd'), r = b.getBoundingClientRect(), fr = document.querySelector('.fr[data-id="doi-doi-2048"]').getBoundingClientRect(); return { on: b.classList.contains("on"), txt: b.textContent, inFrame: r.right <= fr.right + 1 && r.top >= fr.top - 1, h: r.height }; });
+    note(bd.on && bd.txt !== "" && bd.inFrame, tag, "huy hiệu điểm không hiện/tràn khung " + JSON.stringify(bd));
+    await pg.evaluate(() => document.querySelector('.fr[data-id="doi-doi-2048"] .mi').click()); await wait(150);
+    const sw = await pg.evaluate(() => { const b = document.querySelector('.fr[data-id="doi-doi-2048"] .pn .sw'), r = b.getBoundingClientRect(), p = document.querySelector('.fr[data-id="doi-doi-2048"] .pn').getBoundingClientRect(); return { vis: !b.hidden, h: r.height, pressed: b.getAttribute("aria-pressed"), inside: r.bottom <= p.bottom + 1 }; });
+    note(sw.vis && sw.h >= 43 && sw.pressed === "true" && sw.inside, tag, "công tắc ẩn bảng điểm " + JSON.stringify(sw));
+    await pg.evaluate(() => document.querySelector('.fr[data-id="doi-doi-2048"] .pn .sw').click()); await wait(1000);
+    note(await shown("doi-doi-2048"), tag, "tắt công tắc mà ô Điểm không hiện lại");
+    note(await pg.evaluate(() => localStorage.getItem("np-multi-hud:doi-doi-2048")) === "0", tag, "không nhớ lựa chọn theo game");
+    await pg.evaluate(() => document.querySelector('.fr[data-id="doi-doi-2048"] .pn .sw').click()); await wait(1000); note(!(await shown("doi-doi-2048")), tag, "bật lại công tắc mà ô Điểm vẫn hiện");
+    if (shotDir) { await pg.keyboard.press("Escape"); await wait(200); await pg.screenshot({ path: path.join(shotDir, "multi-hud-hidden.png") }); }
+    await pg.close();
+  }
+
   /* ---------- 3. FOCUS + LRU + nạp lại ván ---------- */
   {
     const tag = "multi focus 390x844", pg = await open("", 390, 844);
@@ -137,7 +171,7 @@ const TUT = ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "xn", "dd", "
     note(A && A.where === "tray" && A.sentPaused, tag, "game focus cũ không bị đóng băng/đưa vào khay: " + JSON.stringify(A));
     note(B && B.where === "slot" && B.sel, tag, "game focus mới không thành khung chính");
     note(A && A.thumb, tag, "game canvas không có thumbnail khi rời");
-    note(await pg.evaluate(() => document.querySelectorAll("#tray .tc").length === 1), tag, "khay không hiện thumbnail game dở");
+    note(await pg.evaluate(() => document.querySelectorAll(".tc").length === 1), tag, "khay không hiện thumbnail game dở");
     if (A && A.alive) {   /* còn sống trong khay: đồng hồ đứng yên */
       const c = await clk(pg, "ne-o-ga"); await wait(700); const d = await clk(pg, "ne-o-ga"); note(d && c && d.t - c.t <= 5, tag, "game ở khay mà đồng hồ vẫn chạy");
       const stA2 = await pg.evaluate(() => JSON.stringify(NPMulti.frame("ne-o-ga").contentWindow.NP.peek())); note(stA2 === stA || /"d":/.test(stA2), tag, "ván game ở khay bị đổi");
@@ -148,7 +182,7 @@ const TUT = ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "xn", "dd", "
     const rec = await pg.evaluate(() => localStorage.getItem("np-resume:ne-o-ga")); note(!!rec, tag, "game bị đẩy ra không lưu ván (np-resume:ne-o-ga)");
     if (shotDir) await pg.screenshot({ path: path.join(shotDir, "multi-focus-tray.png") });
     /* chọn lại từ khay: nạp đúng ván đã lưu + đếm 3-2-1 */
-    await pg.evaluate(() => document.querySelector('#tray .tc[data-id="ne-o-ga"]').click());
+    await pg.evaluate(() => document.querySelector('.tc[data-id="ne-o-ga"]').click());
     let sawCount = false; for (let i = 0; i < 20; i++) { await wait(200); if (await pg.evaluate(() => NPMulti.items().some(x => x.id === "ne-o-ga" && x.counting))) { sawCount = true; break; } }
     note(sawCount, tag, "chọn lại game dở không có đếm ngược 3-2-1");
     if (sawCount && shotDir) await pg.screenshot({ path: path.join(shotDir, "multi-focus-countdown.png") });
