@@ -1,0 +1,73 @@
+/* GIAO DIỆN CHUNG HAI TRANG CỔNG: Night Play (cozyplay/index.html, người lớn) và Pop Play (popplay/index.html, trẻ nhỏ).
+   Nạp SAU thẻ <style> của trang (ghi đè bằng độ ưu tiên cao hơn). CHỈ đổi nền/viền/bóng/hover/focus, KHÔNG đổi kích thước hộp của bố cục
+   (lưới fitGrid, HUD, rails, backpos giữ nguyên). Sáng/tối theo theme; không ép tối.
+   Night Play: nền đêm sao tĩnh (cùng ngôn ngữ shared/nightpass-ui.css + landing), thẻ kính mờ, glow nhẹ.
+   Pop Play: giữ kem/cam tươi, glow vừa phải, ô bo tròn, viền trắng dày.
+   Hover & focus giống khối "Hover & focus" của landing/lp/landing.css: hover chỉ khi có chuột thật; transform/box-shadow/border/background;
+   focus-visible luôn có (viền 3px, tối: trắng); giảm chuyển động thì bỏ transform. Không animation chạy khi nghỉ (check-still.js).
+   Bài đo: scripts/cozygame/check-portalui.js. GAME_RULES.md mục 0a-17. */
+
+:root[data-app=cozyplay]{--pu-grad:linear-gradient(90deg,#6A48F0,#C2410C);--pu-glow:rgba(106,72,240,.30);--pu-glass:color-mix(in srgb,var(--panel) 72%,transparent)}
+:root[data-app=cozyplay][data-theme=dark]{--pu-grad:linear-gradient(90deg,#9B83FF,#FF9A6B);--pu-glow:rgba(124,92,255,.45);--pu-glass:rgba(27,30,47,.62)}
+:root[data-app=popplay]{--pu-glow:rgba(255,90,31,.28);--pu-glass:var(--panel)}
+:root[data-app=popplay][data-theme=dark]{--pu-glow:rgba(255,122,69,.34)}
+
+/* ---------- nền: đêm sao tĩnh (tối) / oải hương nhạt (sáng); vẽ trên <html>, body trong suốt ---------- */
+html[data-app=cozyplay]{background:
+  radial-gradient(620px 360px at 90% -8%,color-mix(in srgb,#7C5CFF 18%,transparent),transparent),
+  radial-gradient(480px 300px at 0% 100%,color-mix(in srgb,#FFC85A 14%,transparent),transparent),
+  linear-gradient(180deg,#F3F0FA,#E9E3FA);background-color:var(--bg)}
+html[data-app=cozyplay][data-theme=dark]{background:
+  radial-gradient(1.4px 1.4px at 12% 22%,rgba(255,255,255,.85),transparent),radial-gradient(1.4px 1.4px at 78% 14%,rgba(255,233,168,.85),transparent),
+  radial-gradient(1px 1px at 40% 70%,rgba(255,255,255,.7),transparent),radial-gradient(1.4px 1.4px at 90% 62%,rgba(255,255,255,.8),transparent),
+  radial-gradient(1px 1px at 24% 88%,rgba(255,233,168,.7),transparent),radial-gradient(1px 1px at 60% 36%,rgba(255,255,255,.7),transparent),
+  radial-gradient(1px 1px at 5% 55%,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 52% 8%,rgba(255,255,255,.6),transparent),
+  radial-gradient(1px 1px at 37px 61px,rgba(255,255,255,.5),transparent) 0 0/211px 193px,radial-gradient(1px 1px at 120px 20px,rgba(255,233,168,.5),transparent) 0 0/173px 257px,radial-gradient(1.2px 1.2px at 80px 140px,rgba(255,255,255,.55),transparent) 0 0/283px 229px,
+  radial-gradient(700px 420px at 85% -10%,rgba(124,92,255,.30),transparent),radial-gradient(520px 320px at 0% 100%,rgba(255,200,90,.10),transparent),
+  linear-gradient(180deg,#0E1020 0,#161433 55%,#0E1020 100%);background-color:#0E1020}
+html[data-app=cozyplay] body{background:transparent}
+
+/* ---------- thanh trên, tiêu đề, chip cam kết, chân trang: kính mờ ---------- */
+html[data-app=cozyplay] .nav{background:color-mix(in srgb,var(--bg) 62%,transparent);border-bottom-color:color-mix(in srgb,var(--accent) 22%,var(--line))}
+html[data-app=cozyplay] .foot{border-top-color:color-mix(in srgb,var(--accent) 18%,var(--line));background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--hero1) 70%,transparent))}
+html[data-app=cozyplay] .hero{background:radial-gradient(700px 260px at 50% 0,color-mix(in srgb,var(--accent) 16%,transparent),transparent 70%)}
+html[data-app=cozyplay] .hero h1{font-family:Georgia,"Times New Roman",serif}
+html[data-app=cozyplay] .trust li{background:var(--pu-glass);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-color:color-mix(in srgb,var(--accent) 24%,var(--line))}
+@media (max-width:520px){html[data-app=cozyplay] .trust li{background:none;-webkit-backdrop-filter:none;backdrop-filter:none}}
+
+/* nút tròn thanh trên: kính + viền mảnh (không đổi kích thước, không vòng sáng NGOÀI: align.css) */
+html[data-app=cozyplay] .nav .tools>.ico,html[data-app=cozyplay] #langMenu{background:var(--pu-glass);border:1px solid color-mix(in srgb,var(--accent) 24%,var(--line));-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+html[data-app=cozyplay] .nav .tools>.ico,html[data-app=cozyplay] .pill,html[data-app=popplay] .nav .tools>.ico{transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,background-color .18s ease}
+html[data-app=cozyplay] .pill{background:var(--pu-grad);background-size:160% 100%;background-position:0 0;color:var(--on-accent);transition:transform .18s ease,box-shadow .18s ease,background-position .25s ease}
+html[data-app=cozyplay] .pill svg{filter:drop-shadow(0 0 6px color-mix(in srgb,#FFD66B 60%,transparent))}
+
+/* ---------- ô game ---------- */
+.tile{position:relative;box-shadow:0 6px 16px rgba(0,0,0,.18),0 0 0 1px color-mix(in srgb,var(--accent) 16%,transparent);
+  transition:transform .18s ease,box-shadow .18s ease,filter .18s ease;will-change:auto}
+html[data-app=cozyplay][data-theme=dark] .tile{box-shadow:0 8px 22px rgba(0,0,0,.45),0 0 18px color-mix(in srgb,var(--accent) 14%,transparent),0 0 0 1px rgba(255,255,255,.10)}
+/* lớp kính: vạch sáng mảnh ở mép trên + viền trong (không chặn chạm) */
+.tile::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.22),inset 0 1px 0 rgba(255,255,255,.38);background:linear-gradient(180deg,rgba(255,255,255,.14),transparent 38%)}
+html[data-app=popplay] .tile{border-radius:clamp(18px,20%,34px);box-shadow:0 6px 14px rgba(120,70,20,.18),0 0 0 3px rgba(255,255,255,.7)}
+html[data-app=popplay][data-theme=dark] .tile{box-shadow:0 6px 16px rgba(0,0,0,.4),0 0 0 3px rgba(255,255,255,.16)}
+html[data-app=popplay] .tile::after{box-shadow:inset 0 0 0 2px rgba(255,255,255,.28),inset 0 2px 0 rgba(255,255,255,.45)}
+
+.tile:focus-visible{transform:none;outline:3px solid var(--accent);outline-offset:2px}
+html[data-app=popplay] .tile:focus-visible{outline-width:4px;outline-offset:3px}
+html[data-theme=dark] .tile:focus-visible{outline-color:#fff}
+.tile:active{transform:scale(.96);box-shadow:0 2px 8px rgba(0,0,0,.25)}
+@media (hover:hover) and (pointer:fine){
+  .tile:hover{transform:translateY(-3px) scale(1.04);animation:none;filter:none;
+    box-shadow:0 12px 28px color-mix(in srgb,var(--accent) 34%,transparent),0 0 22px 2px var(--pu-glow),0 0 0 1px color-mix(in srgb,var(--accent) 60%,transparent)}
+  html[data-app=popplay] .tile:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 10px 24px color-mix(in srgb,var(--accent) 34%,transparent),0 0 16px 1px var(--pu-glow),0 0 0 3px rgba(255,255,255,.85)}
+  html[data-app=cozyplay] .nav .tools>.ico:hover{border-color:var(--accent);background-color:color-mix(in srgb,var(--accent) 12%,var(--panel));transform:translateY(-1px)}
+  html[data-app=popplay] .nav .tools>.ico:hover{transform:translateY(-1px);box-shadow:var(--shadow),0 0 14px color-mix(in srgb,var(--accent) 30%,transparent)}
+  html[data-app=cozyplay] .pill:hover{transform:translateY(-2px);background-position:100% 0;box-shadow:0 10px 30px color-mix(in srgb,var(--accent) 50%,transparent),0 4px 18px rgba(255,90,31,.30)}
+}
+:where(.nav a,.nav button,.foot a,#lock,#findFab,#gdots button):focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+html[data-theme=dark] :where(.nav a,.nav button,.foot a,#lock,#findFab,#gdots button):focus-visible{outline-color:#fff}
+@media (prefers-reduced-motion:reduce){
+  .tile:hover,.tile:active,.nav .tools>.ico:hover,html[data-app=cozyplay] .pill:hover{transform:none!important}
+  .tile,.nav .tools>.ico,.pill{transition:none}
+}
+
