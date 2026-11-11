@@ -3,6 +3,16 @@
    Nút chính (⋯ mở menu) = gradient tím-cam, icon trắng. Cỡ nút = --tap-lg (56px), icon 26-28px. :active co 0.94. Chỉ ~4 phần tử dùng backdrop-filter (nhẹ).
    Pop Play (trẻ em): cùng kiểu nhưng viền dày hơn + quầng màu nhấn của game (--accent) thay tím. Bài đo: scripts/cozygame/check-glass.js. */
 :root{--tap-lg:56px;--gl-bg:rgba(22,17,48,.72);--gl-bd:rgba(255,255,255,.2);--gl-ink:#fff;--gl-glow:rgba(124,92,255,.3);--gl-main:linear-gradient(135deg,#6C4BF2,#C2410C)}
+
+/* MỌI CỠ (điện thoại, iPad, máy tính) + sáng/tối: nút icon trong game cùng kiểu kính tối, icon trắng (GAME_RULES 0a-18). Cỡ chỉ đổi ở khối điện thoại dọc bên dưới. */
+:is(.top .ib,.top .icon-btn,#bBk,#bBack,#homeBtn,#bSkin,#bBoard,#bRe,#restartBtn,#bSnd,#soundBtn,#bHelp,#phBtn,#bLang,#langBtn,#bCam,#bShr,#pauseBtn,#undoBtn,#resetBtn,.skinBtn,button.sk,#hlpX):not(.it){
+  background:var(--gl-bg)!important;background-image:none!important;color:var(--gl-ink)!important;border:1px solid var(--gl-bd)!important;
+  box-shadow:0 4px 14px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 14px var(--gl-glow)!important;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);text-shadow:none!important}
+:is(.top .ib,.top .icon-btn,#bSkin,#bBoard,#bRe,#restartBtn,#bHelp,#phBtn,#pauseBtn,#undoBtn,#resetBtn,.skinBtn,button.sk,#bBk,#bBack,#homeBtn) svg{color:var(--gl-ink)!important}
+button.sk.on,button.sk[aria-pressed=true],button.sk.sel{border-color:#fff!important;box-shadow:0 0 0 2px var(--accent,#7C5CFF),0 4px 14px rgba(0,0,0,.38)!important}
+:is(.top .ib,.top .icon-btn,#bSkin,#bBoard,#bRe,#restartBtn,#pauseBtn,#undoBtn,#resetBtn,.skinBtn,button.sk):disabled{opacity:.5}
+/* nút chính nổi (Hỏi/đọc to): gradient tím-cam */
+#askBtn{background:var(--gl-main)!important;background-image:var(--gl-main)!important;color:#fff!important;border:1px solid rgba(255,255,255,.4)!important;box-shadow:0 5px 16px rgba(108,75,242,.5),0 2px 6px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.3)!important}
 @media (max-width:520px) and (orientation:portrait){
   .top button:not(.it):not(.chip):not(.pill),#bBk,#bBack,#homeBtn,#npPmBk,#npFab,#npPmFab,#bSnd,#soundBtn,#hlpX{
     box-sizing:border-box!important;width:var(--tap-lg)!important;height:var(--tap-lg)!important;min-width:var(--tap-lg)!important;min-height:var(--tap-lg)!important;padding:0!important;border-radius:50%!important;
