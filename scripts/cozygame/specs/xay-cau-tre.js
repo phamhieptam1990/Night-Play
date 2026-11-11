@@ -6,7 +6,7 @@ module.exports = {
   types: [["🎋", "Cầu tre", "Bamboo bridge"], ["🏝️", "Sông rộng có trụ", "Wide river + pier"], ["🌧️", "Mưa gió", "Storm"], ["🐂", "Hàng nặng", "Heavy loads"]],
   catalog: [["basic", "Kênh quê", "Country canal", "🎋"], ["delta", "Kênh miền Tây", "Mekong canal", "🛶"], ["mount", "Suối núi cao", "Mountain gorge", "⛰️"], ["paddy", "Ruộng bậc thang", "Rice terraces", "🌾"], ["city", "Kênh Sài Gòn", "Saigon canal", "🏙️"]],
   rootCss: `:root{--bg:#EAF5E4;--panel:#ffffff;--ink:#1f3320;--muted:#587055;--accent:#2f9e44;--on:#ffffff;--good:#2f9e44;--bad:#d9480f;--line:#c4dcb9;--pbg:linear-gradient(#d6efc9,#f4fbef);--field:#f0faea;--field2:#d9eccf;
- --display:"Bungee","Arial Black",system-ui,sans-serif;--body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif}
+ --display:var(--font);--body:var(--font)}
 :root[data-theme="dark"]{--bg:#0d1a0f;--panel:#17291a;--ink:#e8fbe6;--muted:#9bc79a;--accent:#5ee07a;--on:#00210a;--good:#5ee07a;--bad:#ff8a4d;--line:#294a2d;--pbg:linear-gradient(#173a1e,#0d1a0f);--field:#112214;--field2:#1c3a20}`,
   extraCss: `canvas#cv{touch-action:none;cursor:crosshair}#tbBar{display:flex;gap:2cqw;align-items:center}#tbBar .btn{min-height:44px}#tbGo{flex:1}
 #play[data-ty="1"] canvas#cv{border-color:#0ea5e9}#play[data-ty="2"] canvas#cv{filter:saturate(.8) brightness(.9)}#play[data-ty="3"] canvas#cv{border-color:#b45309;border-width:1.2cqw}`,
@@ -145,14 +145,14 @@ function draw(){if(!ctx||!cv.width)return;const sk=skinOf(),dm=sk.dim||[360,420]
  if(sk.fg)sk.fg(c,W,H,g,dk,tm,D);
  {const done=D.st==="build"?0:(D.vi||0),n=D.C.veh.length,gw=W/ (n+1);c.save();c.fillStyle=dk?"rgba(0,0,0,.35)":"rgba(255,255,255,.55)";c.beginPath();c.roundRect?c.roundRect(8,26,W-16,46,12):c.rect(8,26,W-16,46);c.fill();c.textAlign="center";c.textBaseline="middle";
   D.C.veh.forEach((vi,k)=>{const em0=vEm(vi),x=gw*(k+1),y=46;c.save();c.translate(x,y);c.globalAlpha=k<done?.5:1;c.fillStyle="#fff7e0";c.beginPath();c.arc(0,-1,17,0,6.283);c.fill();c.globalAlpha=1;if(k===done&&D.st!=="build"){c.strokeStyle="#ffd24a";c.lineWidth=3;c.beginPath();c.arc(0,-1,17,0,6.283);c.stroke()}if(k<done)c.globalAlpha=.45;c.font="26px "+emj;if(RIGHT.indexOf(em0)<0)c.scale(-1,1);c.fillText(em0,0,0);c.restore();
-   c.save();c.font="800 10px system-ui";c.fillStyle=skinOf().lbl||(dk?"rgba(255,255,255,.95)":"rgba(30,50,20,.95)");c.textAlign="center";c.fillText(k<done?"✓":VEH[vi][3].toFixed(1)+"×",x,68);c.restore();
-   if(k<n-1){c.save();c.fillStyle=dk?"rgba(255,255,255,.5)":"rgba(30,50,20,.5)";c.font="12px system-ui";c.textAlign="center";c.fillText("›",x+gw/2,46);c.restore()}});c.restore()}
+   c.save();c.font="800 10px Inter,system-ui,sans-serif";c.fillStyle=skinOf().lbl||(dk?"rgba(255,255,255,.95)":"rgba(30,50,20,.95)");c.textAlign="center";c.fillText(k<done?"✓":VEH[vi][3].toFixed(1)+"×",x,68);c.restore();
+   if(k<n-1){c.save();c.fillStyle=dk?"rgba(255,255,255,.5)":"rgba(30,50,20,.5)";c.font="12px Inter,system-ui,sans-serif";c.textAlign="center";c.fillText("›",x+gw/2,46);c.restore()}});c.restore()}
  if(D.C.wind&&D.st!=="build"){c.strokeStyle="rgba(200,230,255,.5)";c.lineWidth=1.6;for(let i=0;i<14;i++){const x=(i*61+tm*140)%W,y=(i*83)%H*.8+20;c.beginPath();c.moveTo(x,y);c.lineTo(x+22,y+6);c.stroke()}}
- for(const f of D.fx){c.save();c.globalAlpha=Math.min(1,f.t*2);c.font="800 16px system-ui";c.textAlign="center";c.fillStyle="#2f9e44";c.fillText("✓",f.x,f.y-(.8-f.t)*20);c.restore()}
- c.fillStyle=sk.lbl||(dk?"rgba(255,255,255,.85)":"rgba(30,50,20,.85)");c.font="800 13px 'Be Vietnam Pro',system-ui";c.textAlign="left";c.fillText(T("lvl",{n:D.attempt}),10,18);
+ for(const f of D.fx){c.save();c.globalAlpha=Math.min(1,f.t*2);c.font="800 16px Inter,system-ui,sans-serif";c.textAlign="center";c.fillStyle="#2f9e44";c.fillText("✓",f.x,f.y-(.8-f.t)*20);c.restore()}
+ c.fillStyle=sk.lbl||(dk?"rgba(255,255,255,.85)":"rgba(30,50,20,.85)");c.font="800 13px Inter,system-ui,sans-serif";c.textAlign="left";c.fillText(T("lvl",{n:D.attempt}),10,18);
  if(sk.fx)sk.fx(c,W,H,tm,dk)}
 `,
-  drawCard: String.raw`function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#7bd88f","#14532d"];
+  drawCard: String.raw`function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="Inter,system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#7bd88f","#14532d"];
  const g=x.createLinearGradient(0,0,1080,1350);g.addColorStop(0,cg[0]);g.addColorStop(1,cg[1]);x.fillStyle=g;x.fillRect(0,0,1080,1350);x.textAlign="center";x.fillStyle="#fff";x.font="800 62px "+F;x.fillText((isProSk()?"👑 ":"🎋 ")+T("title"),540,100);
  const bx=100,by=150,bw=880,bh=640;x.fillStyle="rgba(214,239,255,.95)";x.beginPath();x.roundRect?x.roundRect(bx,by,bw,bh,36):x.rect(bx,by,bw,bh);x.fill();
  const sn=D.snapEnd||{nodes:D.nodes,mem:D.mem,g:D.g};if(sn&&sn.g){const gg=sn.g,sc=Math.min((bw-60)/(gg.rx-gg.lx+120),(bh-60)/260),ox=bx+bw/2-((gg.lx+gg.rx)/2)*sc,oy=by+bh/2-(Math.min(gg.ly,gg.ry)+50)*sc;x.save();x.beginPath();x.rect(bx,by,bw,bh);x.clip();x.translate(ox,oy);x.scale(sc,sc);x.fillStyle="#4fb6dd";x.fillRect(gg.lx,Math.max(gg.ly,gg.ry)+70,gg.rx-gg.lx,200);x.fillStyle="#7cc05a";x.fillRect(gg.lx-200,gg.ly,200,300);x.fillRect(gg.rx,gg.ry,200,300);drawStruct(x,sn.nodes,sn.mem,null,-1,-1,false);x.restore()}

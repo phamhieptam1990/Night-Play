@@ -5,7 +5,7 @@ module.exports = {
   types: [["🌦️", "Mưa phùn", "Drizzle"], ["⛈️", "Bão gió giật", "Gale storm"], ["🚗", "Xe ngược chiều", "Oncoming"], ["🔦", "Đêm pin yếu", "Dying torch"]],
   catalog: [["basic", "Phố mưa", "Rainy street", "🌧️"], ["saigon", "Sài Gòn đêm mưa", "Saigon rain night", "🌃"], ["hanoi", "Phố cổ Hà Nội", "Hanoi old quarter", "🏮"], ["mekong", "Cầu khỉ miền Tây", "Mekong bridge", "🛶"], ["dalat", "Đèo Đà Lạt sương", "Misty Da Lat pass", "🌲"]],
   rootCss: `:root{--bg:#E6EEF4;--panel:#ffffff;--ink:#14283a;--muted:#587186;--accent:#1c7ed6;--on:#ffffff;--good:#1a9a55;--bad:#d23b3b;--line:#bcd0e0;--pbg:linear-gradient(#c9dbe9,#eef5fa);--field:#eaf2f8;--field2:#d3e2ee;
- --display:"Bungee","Arial Black",system-ui,sans-serif;--body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif}
+ --display:var(--font);--body:var(--font)}
 :root[data-theme="dark"]{--bg:#0b141c;--panel:#16252f;--ink:#e8f4ff;--muted:#9bb6ca;--accent:#58b4ff;--on:#00213a;--good:#3ddc84;--bad:#ff6b6b;--line:#27414f;--pbg:linear-gradient(#17303f,#0b141c);--field:#0f1c26;--field2:#1a2f3d}`,
   extraCss: `canvas#cv{touch-action:none}#play[data-ty="1"] canvas#cv{filter:saturate(.75) contrast(1.05)}#play[data-ty="2"] canvas#cv{border-color:#ffd24a;box-shadow:0 0 0 1.2cqw rgba(255,210,74,.25)}#play[data-ty="3"] canvas#cv{border-color:#000;box-shadow:0 0 0 1.2cqw rgba(0,0,0,.4)}`,
   gameHtml: `{{STATS}}
@@ -108,7 +108,7 @@ function draw(){if(!ctx||!cv.width)return;const sk=skinOf(),dm=sk.dim||[360,560]
  if(D.C.storm||D.C.night){c.fillStyle="rgba(5,10,25,"+(D.C.night?0:.22)+")";c.fillRect(0,0,W,H)}
  if(D.C.night){const p=proj(D,D.pl,0),RR=230*(D.C.batt?D.light:1),g=c.createRadialGradient(p.x,p.y-90,18,p.x,p.y-90,RR);g.addColorStop(0,"rgba(0,0,10,0)");g.addColorStop(1,"rgba(0,0,10,.95)");c.fillStyle=g;c.fillRect(0,0,W,H)}
  if(D.C.fog){const ph=(D.time%2.8)/2.8,a=ph<.12?0:Math.min(.5,(ph-.12)*.62);c.fillStyle="rgba(205,220,235,"+a+")";c.fillRect(0,0,W,H);if(ph<.14){const sx=(ph/.14)*W;c.strokeStyle="rgba(255,255,255,.7)";c.lineWidth=5;c.beginPath();c.moveTo(sx,0);c.lineTo(sx-40,H);c.stroke()}}
- if(D.gust){c.save();c.globalAlpha=.6+.4*Math.sin(D.time*20);c.font="46px "+emj;c.textAlign="center";const gx=D.gustDir<0?W*.2:W*.8;c.fillText("💨",gx,H*.4);c.font="800 30px system-ui";c.fillStyle="#fff";c.fillText(D.gustDir<0?"◀":"▶",gx,H*.4+46);c.restore()}
+ if(D.gust){c.save();c.globalAlpha=.6+.4*Math.sin(D.time*20);c.font="46px "+emj;c.textAlign="center";const gx=D.gustDir<0?W*.2:W*.8;c.fillText("💨",gx,H*.4);c.font="800 30px Inter,system-ui,sans-serif";c.fillStyle="#fff";c.fillText(D.gustDir<0?"◀":"▶",gx,H*.4+46);c.restore()}
  if(D.splash>0){c.fillStyle="rgba(90,120,150,"+Math.min(.5,D.splash*.6)+")";for(let i=0;i<7;i++){c.beginPath();c.ellipse((i*83+tm*20)%W,(i*131)%H*.8+30,40+i*6,22,0,0,6.283);c.fill()}}
  if(D.flash>0){c.fillStyle="rgba(255,60,60,"+D.flash*.3+")";c.fillRect(0,0,W,H)}}
 /* ===== nhập liệu: vuốt hoặc chạm hai bên ===== */
@@ -122,7 +122,7 @@ function snapP(D){return D.dist>400?{d:Math.round(D.dist),l:D.lives,b:D.bonus,dg
 function restoreP(D,p){D.dist=Math.max(0,+p.d||0);D.lives=Math.max(1,Math.min(3,+p.l||3));D.bonus=+p.b||0;D.dodged=+p.dg||0;D.bread=+p.br||0;D.objs=[];D.nextRow=Math.floor(D.dist/ROWGAP)+2;D.inv=1.5;hud()}
 function onBegin(D){fitCanvas()}
 `,
-  drawCard: String.raw`function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#5a7a94","#0d1b27"];
+  drawCard: String.raw`function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="Inter,system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#5a7a94","#0d1b27"];
  const g=x.createLinearGradient(0,0,1080,1350);g.addColorStop(0,cg[0]);g.addColorStop(1,cg[1]);x.fillStyle=g;x.fillRect(0,0,1080,1350);x.strokeStyle="rgba(200,225,255,.35)";x.lineWidth=3;for(let i=0;i<70;i++){const a=(i*157)%1080,b=(i*233)%1300;x.beginPath();x.moveTo(a,b);x.lineTo(a-14,b+44);x.stroke()}
  x.textAlign="center";x.fillStyle="#fff";x.font="800 62px "+F;x.fillText((isProSk()?"👑 ":"🛵 ")+T("title"),540,100);
  x.fillStyle="rgba(20,30,40,.72)";x.beginPath();x.roundRect?x.roundRect(250,170,580,560,40):x.rect(250,170,580,560);x.fill();x.strokeStyle="#fff";x.setLineDash([40,34]);x.lineWidth=7;x.beginPath();x.moveTo(445,190);x.lineTo(445,710);x.moveTo(635,190);x.lineTo(635,710);x.stroke();x.setLineDash([]);

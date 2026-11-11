@@ -5,7 +5,7 @@ module.exports = {
   types: [["✍️", "Cổ điển 90 giây", "Classic 90 s"], ["➡️", "Một chiều", "One way"], ["🧠", "Nhớ đường 45 giây", "Memory 45 s"], ["✌️", "Đi hai lần", "Twice over"]],
   catalog: [["basic", "Giấy kẻ ô", "Graph paper", "✍️"], ["metro", "Bản đồ tàu điện", "Metro map", "🚇"], ["star", "Chòm sao", "Constellation", "🌌"], ["circuit", "Mạch điện", "Circuit board", "🔌"], ["lantern", "Phố đèn lồng", "Lantern street", "🏮"]],
   rootCss: `:root{--bg:#EAF6F1;--panel:#ffffff;--ink:#12332b;--muted:#4f7468;--accent:#0f9b7a;--on:#ffffff;--good:#1a9a55;--bad:#d23b3b;--line:#bfe0d4;--pbg:linear-gradient(#d3efe4,#f4fbf8);--field:#f7fffb;--field2:#dcf3ea;
- --display:"Bungee","Arial Black",system-ui,sans-serif;--body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif}
+ --display:var(--font);--body:var(--font)}
 :root[data-theme="dark"]{--bg:#08201a;--panel:#12352c;--ink:#e6fff7;--muted:#92c9b8;--accent:#3ee0b4;--on:#00261c;--good:#3ddc84;--bad:#ff6b6b;--line:#245444;--pbg:linear-gradient(#10382d,#08201a);--field:#0d2a22;--field2:#163f33}`,
   extraCss: `canvas#cv{touch-action:none}#play[data-ty="1"] canvas#cv{border-style:solid;border-color:var(--accent);box-shadow:0 0 0 1.2cqw color-mix(in srgb,var(--accent) 25%,transparent)}#play[data-ty="2"] canvas#cv{filter:brightness(.82)}#play[data-ty="3"] canvas#cv{border-style:double;border-width:1.4cqw}`,
   gameHtml: `{{STATS}}
@@ -82,12 +82,12 @@ function draw(){if(!ctx||!cv.width)return;const sk=skinOf(),dm=sk.dim||[360,400]
  const P=D.puz,col=sk.col||(dk?"#3ee0b4":"#0f9b7a"),sh=D.shake>0?Math.sin(D.time*80)*5*D.shake:0;c.save();c.translate(sh,0);
  P.edges.forEach((e,i)=>{const A=P.nodes[e[0]],B=P.nodes[e[1]],u1=D.used.has(i),u2=D.used.has(i+1000);c.save();if(D.C.mem&&!u1&&D.time-D.lvStart>2.5)c.globalAlpha=.07;if(D.C.dbl&&u1&&!u2)c.globalAlpha=.55;(sk.edge||edgeBasic)(c,A,B,D.C.dbl?(u1&&u2):u1,col,tm,dk);c.restore();
   if(D.C.dir){const mx=(A.x+B.x)/2,my=(A.y+B.y)/2,an=Math.atan2(B.y-A.y,B.x-A.x);c.save();c.translate(mx,my);c.rotate(an);c.fillStyle=u1?"#fff":col;c.globalAlpha=(D.C.mem&&!u1)?.2:1;c.beginPath();c.moveTo(11,0);c.lineTo(-7,-8);c.lineTo(-7,8);c.closePath();c.fill();c.restore()}
-  if(D.C.dbl&&!(u1&&u2)){const mx=(A.x+B.x)/2,my=(A.y+B.y)/2,rem=2-(u1?1:0)-(u2?1:0);c.save();c.fillStyle=dk?"#12332b":"#fff";c.strokeStyle=col;c.lineWidth=2;c.beginPath();c.arc(mx,my,9,0,6.283);c.fill();c.stroke();c.fillStyle=dk?"#e6fff7":"#12332b";c.font="800 12px system-ui";c.textAlign="center";c.textBaseline="middle";c.fillText(rem,mx,my+.5);c.restore()}});
+  if(D.C.dbl&&!(u1&&u2)){const mx=(A.x+B.x)/2,my=(A.y+B.y)/2,rem=2-(u1?1:0)-(u2?1:0);c.save();c.fillStyle=dk?"#12332b":"#fff";c.strokeStyle=col;c.lineWidth=2;c.beginPath();c.arc(mx,my,9,0,6.283);c.fill();c.stroke();c.fillStyle=dk?"#e6fff7":"#12332b";c.font="800 12px Inter,system-ui,sans-serif";c.textAlign="center";c.textBaseline="middle";c.fillText(rem,mx,my+.5);c.restore()}});
  if(D.C.dir&&D.path.length===0){const q=P.nodes[P.trail[0]];c.font="26px "+emj;c.textAlign="center";c.fillText("⭐",q.x,q.y-20+Math.sin(D.time*5)*3)}
  if(D.cur>=0&&D.ptr){c.save();c.setLineDash([6,6]);c.strokeStyle=col;c.lineWidth=3;c.globalAlpha=.8;c.beginPath();c.moveTo(P.nodes[D.cur].x,P.nodes[D.cur].y);c.lineTo(D.ptr[0],D.ptr[1]);c.stroke();c.restore()}
  P.nodes.forEach((n,i)=>(sk.node||nodeBasic)(c,n,i===D.cur?"cur":(D.path.indexOf(i)>=0?"on":"off"),tm,dk));c.restore();
  if(D.flash>0){c.fillStyle="rgba(255,60,60,"+D.flash*.25+")";c.fillRect(0,0,W,H)}
- c.fillStyle=sk.lbl||(dk?"rgba(255,255,255,.85)":"rgba(18,51,43,.8)");c.font="800 15px 'Be Vietnam Pro',system-ui";c.textAlign="left";c.fillText(T("lvl",{n:D.solved+1}),12,H-12);if(sk.fx)sk.fx(c,W,H,tm,dk)}
+ c.fillStyle=sk.lbl||(dk?"rgba(255,255,255,.85)":"rgba(18,51,43,.8)");c.font="800 15px Inter,system-ui,sans-serif";c.textAlign="left";c.fillText(T("lvl",{n:D.solved+1}),12,H-12);if(sk.fx)sk.fx(c,W,H,tm,dk)}
 function pt(e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H]}
 const nodeNear=(D,p)=>{let bi=-1,bd=30;D.puz.nodes.forEach((n,i)=>{const d=Math.hypot(n.x-p[0],n.y-p[1]);if(d<bd){bd=d;bi=i}});return bi};
 function nnClick(D,bi){/* chế độ chạm/click: bấm điểm kế tiếp nối với điểm hiện tại, bấm lại điểm trước để lùi */
@@ -113,7 +113,7 @@ function snapP(D){return D.solved>0?{L:D.L,s:D.solved,t:Math.round(D.time),b:D.b
 function restoreP(D,p){D.L=Math.max(1,Math.min(200,+p.L||1));D.solved=+p.s||0;D.time=+p.t||0;D.bonusT=+p.b||0;if(D.C.lives)D.lives=Math.max(1,+p.l||D.lives);D.hardest=+p.h||0;setPuz(D);hud()}
 function onBegin(D){fitCanvas()}
 `,
-  drawCard: String.raw`function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#34d3a8","#063b2f"];
+  drawCard: String.raw`function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="Inter,system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#34d3a8","#063b2f"];
  const g=x.createLinearGradient(0,0,1080,1350);g.addColorStop(0,cg[0]);g.addColorStop(1,cg[1]);x.fillStyle=g;x.fillRect(0,0,1080,1350);x.textAlign="center";x.fillStyle="#fff";x.font="800 62px "+F;x.fillText((isProSk()?"👑 ":"✍️ ")+T("title"),540,100);
  const bx=150,by=150,bw=780,bh=680;x.fillStyle="rgba(255,255,255,.93)";x.beginPath();x.roundRect?x.roundRect(bx,by,bw,bh,36):x.rect(bx,by,bw,bh);x.fill();
  const ls=D.lastSolved;if(ls){const P=ls.puz,sc=Math.min((bw-80)/W,(bh-80)/H),ox=bx+(bw-W*sc)/2,oy=by+(bh-H*sc)/2;x.save();x.translate(ox,oy);x.scale(sc,sc);x.lineCap="round";x.lineJoin="round";P.edges.forEach(e=>{x.strokeStyle="rgba(40,90,75,.25)";x.lineWidth=4;x.beginPath();x.moveTo(P.nodes[e[0]].x,P.nodes[e[0]].y);x.lineTo(P.nodes[e[1]].x,P.nodes[e[1]].y);x.stroke()});

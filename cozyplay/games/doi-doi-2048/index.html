@@ -10,18 +10,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Đổi Đời 2048</title>
 <script>var savedTheme=null;try{savedTheme=localStorage.getItem("theme")}catch(e){}document.documentElement.dataset.theme=savedTheme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Be+Vietnam+Pro:wght@400;600;800&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Be+Vietnam+Pro:wght@400;600;800&display=swap"></noscript>
+<link rel="preload" href="../../../shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../../shared/fonts.css">
 <style>
 :root{--bg:#F3F0FA;--panel:#ffffff;--ink:#1C1833;--muted:#6B6488;--accent:#d96a00;--on:#ffffff;--good:#1a9a55;--bad:#d23b3b;--line:#d7cfee;--pbg:linear-gradient(#ece6ff,#F7F4FC);--board:#d9d0f0;--cell:#c8bde8;
- --display:"Bungee","Arial Black",system-ui,sans-serif;--body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif}
+ --display:var(--font);--body:var(--font)}
 :root[data-theme="dark"]{--bg:#0E1020;--panel:#1b2040;--ink:#f3f0ff;--muted:#a9a3c9;--accent:#ffb020;--on:#2a1a00;--good:#3ddc84;--bad:#ff6b6b;--line:#323a70;--pbg:linear-gradient(#1d2250,#0E1020);--board:#272c5a;--cell:#1b2040}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}[hidden]{display:none!important}
 html,body{margin:0;height:100%;background:var(--bg);overflow:hidden;font-family:var(--body);color:var(--ink)}
 body{display:flex;justify-content:center}
 #play{position:relative;height:100dvh;width:min(100vw,62dvh,760px);container-type:size;overflow:hidden;background:var(--pbg);color:var(--ink);touch-action:none;user-select:none;-webkit-user-select:none}
 .top{position:absolute;left:3cqw;right:3cqw;top:2.5cqw;height:9cqw;display:flex;align-items:center;gap:2cqw;z-index:2}
-.top h1{margin:0;flex:1;font:400 4.8cqw/1.05 var(--display);color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top h1{margin:0;flex:1;font:800 4.8cqw/1.05 var(--font);color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ib{width:9cqw;height:9cqw;min-width:36px;min-height:36px;border:1.5px solid color-mix(in srgb,var(--ink) 38%,transparent);border-radius:50%;background:var(--panel);color:var(--ink);font:800 3.6cqw var(--body);cursor:pointer;display:grid;place-items:center;box-shadow:0 .5cqw 0 color-mix(in srgb,var(--ink) 18%,transparent)}
 .ib:active{transform:translateY(.5cqw);box-shadow:none}
 .scr{position:absolute;left:4cqw;right:4cqw;top:14cqw;bottom:3cqw;display:flex;flex-direction:column;gap:2.4cqw;z-index:1;justify-content:center}
@@ -31,10 +31,10 @@ body{display:flex;justify-content:center}
 .row{display:flex;gap:2.2cqw;align-items:center;justify-content:center}.grow{flex:1}.mut{color:color-mix(in srgb,var(--ink) 68%,transparent);font-size:3.3cqw}
 .chips{display:flex;gap:2cqw;justify-content:center;flex-wrap:wrap}.chip{background:var(--panel);border:1px solid color-mix(in srgb,var(--ink) 28%,transparent);border-radius:99cqw;padding:1.2cqw 3cqw;font-size:3.5cqw;font-weight:800}
 .hero{text-align:center;font-size:19cqw;line-height:1.05}
-.dbtn{display:flex;align-items:center;gap:3cqw;text-align:left;width:100%}.dbtn .n{font:400 7cqw var(--display)}
+.dbtn{display:flex;align-items:center;gap:3cqw;text-align:left;width:100%}.dbtn .n{font:800 7cqw var(--font)}
 /* ván chơi */
 #game{gap:2cqw}
-.stats{display:flex;gap:2cqw}.st{flex:1;background:var(--panel);border:.5cqw solid var(--line);border-radius:3cqw;padding:1.4cqw 2cqw;text-align:center}.st b{display:block;font:400 6cqw var(--display);color:var(--accent);line-height:1.1}.st span{font-size:2.9cqw;color:color-mix(in srgb,var(--ink) 65%,transparent);font-weight:800}
+.stats{display:flex;gap:2cqw}.st{flex:1;background:var(--panel);border:.5cqw solid var(--line);border-radius:3cqw;padding:1.4cqw 2cqw;text-align:center}.st b{display:block;font:800 6cqw var(--font);color:var(--accent);line-height:1.1}.st span{font-size:2.9cqw;color:color-mix(in srgb,var(--ink) 65%,transparent);font-weight:800}
 .board{position:relative;align-self:center;width:min(92cqw,calc(100cqh - 66cqw));aspect-ratio:1;background:var(--board);border-radius:3.4cqw;container-type:size;box-shadow:0 1.2cqw 0 rgba(0,0,0,.2)}
 .cell{position:absolute;width:22.5%;height:22.5%;border-radius:12%;background:var(--cell);opacity:.8}
 .tile{position:absolute;width:22.5%;height:22.5%;border-radius:12%;display:grid;place-items:center;left:calc(var(--c)*25% + 1.25%);top:calc(var(--r)*25% + 1.25%);transition:left .11s ease,top .11s ease;font-size:15cqw;line-height:1;background:linear-gradient(145deg,hsl(var(--h) 85% 82%),hsl(var(--h) 75% 62%));box-shadow:0 .8cqw 0 hsl(var(--h) 60% 42%);color:#222}
@@ -49,10 +49,10 @@ body{display:flex;justify-content:center}
 .lad{display:flex;justify-content:center;gap:1cqw;flex-wrap:wrap;font-size:5.4cqw}.lad i{font-style:normal;opacity:.28;filter:grayscale(1)}.lad i.on{opacity:1;filter:none}.lad i.cur{transform:scale(1.35);filter:drop-shadow(0 0 1.2cqw var(--accent))}
 .hint{text-align:center}
 /* kết thúc */
-.big{font:400 11cqw var(--display);color:var(--accent);text-align:center;line-height:1.1}.bt{font-size:26cqw;text-align:center;line-height:1}.rk{text-align:center;font:800 5cqw var(--body)}
+.big{font:800 11cqw var(--font);color:var(--accent);text-align:center;line-height:1.1}.bt{font-size:26cqw;text-align:center;line-height:1}.rk{text-align:center;font:800 5cqw var(--body)}
 .mini{display:grid;grid-template-columns:repeat(4,1fr);gap:1cqw;width:36cqw;margin:0 auto;font-size:7cqw;text-align:center;line-height:1.1}.mini span{background:var(--cell);border-radius:1.6cqw;min-height:8cqw}
 .ov{position:absolute;inset:0;background:color-mix(in srgb,var(--panel) 86%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);z-index:7;display:flex;flex-direction:column;justify-content:center;gap:2.6cqw;padding:5cqw;text-align:center}
-.ov h2{margin:0;font:400 6cqw var(--display);color:var(--accent)}.ov p{margin:0;font-size:4cqw;line-height:1.35}
+.ov h2{margin:0;font:800 6cqw var(--font);color:var(--accent)}.ov p{margin:0;font-size:4cqw;line-height:1.35}
 .toast{position:absolute;left:50%;bottom:6cqw;transform:translateX(-50%);background:#fff;color:#111;padding:2cqw 4cqw;border-radius:99cqw;font-weight:800;font-size:3.6cqw;z-index:9;max-width:92%;text-align:center}
 @container (max-height:640px){#hSub,#hNote,#hLad{display:none}.hero{font-size:13cqw}.ty .e{font-size:6cqw}}
 @container (max-height:520px){.hero{font-size:9cqw}.lad{display:none}.st b{font-size:5cqw}}
@@ -221,7 +221,7 @@ const newSeed=()=>(Math.random()*4294967296)>>>0;
 function again(){if(!G)return;const tt=G.t;if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",0,null,tt)}
 function shareLink(){return location.origin+"/api/share/"+GID+"?ch="+b64e({s:G.seed,sc:Math.min(MAXS,G.score),mv:Math.max(5,Math.min(500,G.moves)),t:G.t})+(LANG==="en"?"&l=en":"")}
 function shareText(){const rows=boardRows().map(r=>r.map(v=>v?lad()[v-1][0]:"⬜").join("")).join("\n");return PF.types[G.t][0]+" "+T("share")+(G.t?" · "+L2([PF.types[G.t][1],PF.types[G.t][2]]):"")+(G.mode==="daily"?" #"+dayNo(dayKey()):"")+"\n"+rows+"\n"+T("reached")+" "+lad()[G.best-1][0]+" "+nm(G.best)+" · "+G.score+" · "+T("moves",{n:G.moves})+(G.ch?"\n⚔ "+G.score+" vs "+G.ch.sc+(G.score>G.ch.sc?" 🎉":""):"")+"\n"+T("ask")+"\n"+shareLink()}
-function drawCard(){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif";
+function drawCard(){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="Inter,system-ui,sans-serif";
  const g=x.createLinearGradient(0,0,1080,1350);g.addColorStop(0,"#3a2a7a");g.addColorStop(1,"#0E1020");x.fillStyle=g;x.fillRect(0,0,1080,1350);x.textAlign="center";
  x.fillStyle="#ffb020";x.font="800 68px "+F;x.fillText(PF.types[G.t][0]+" "+T("share")+(G.t?" · "+L2([PF.types[G.t][1],PF.types[G.t][2]]):"")+(G.mode==="daily"?" #"+dayNo(dayKey()):""),540,120);
  const S=700,ox=190,oy=190;x.fillStyle="rgba(255,255,255,.12)";x.beginPath();x.roundRect(ox,oy,S,S,36);x.fill();const cs=S/4;

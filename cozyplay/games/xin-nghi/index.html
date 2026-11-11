@@ -9,11 +9,11 @@
 <script src="../../../shared/fx.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sếp Ơi Em Xin Nghỉ</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <script>var savedTheme=null;try{savedTheme=localStorage.getItem("theme")}catch(e){}document.documentElement.dataset.theme=savedTheme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");</script>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Be+Vietnam+Pro:wght@400;600;800&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Be+Vietnam+Pro:wght@400;600;800&display=swap"></noscript>
+<link rel="preload" href="../../../shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../../shared/fonts.css">
 <style>
-:root{--bg:#F3F0FA;--panel:#ffffff;--ink:#1C1833;--muted:#6B6488;--accent:#e0661a;--on:#ffffff;--good:#1a9a55;--bad:#d23b3b;--line:#d7cfee;--pbg:linear-gradient(#fff0e2,#F7F4FC);--display:"Bungee","Arial Black",system-ui,sans-serif;--body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif}
+:root{--bg:#F3F0FA;--panel:#ffffff;--ink:#1C1833;--muted:#6B6488;--accent:#e0661a;--on:#ffffff;--good:#1a9a55;--bad:#d23b3b;--line:#d7cfee;--pbg:linear-gradient(#fff0e2,#F7F4FC);--display:var(--font);--body:var(--font)}
 :root[data-theme="dark"]{--bg:#0E1020;--panel:#1d2147;--ink:#f3f0ff;--muted:#a9a3c9;--accent:#ff8a3d;--on:#2a1200;--good:#3ddc84;--bad:#ff5c6c;--line:#343b73;--pbg:linear-gradient(#2a2160,#0E1020)}
 
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}[hidden]{display:none!important}
@@ -22,7 +22,7 @@ body{display:flex;justify-content:center}
 #play{position:relative;height:100dvh;width:min(100vw,66dvh,760px);container-type:size;overflow:hidden;background:var(--pbg);color:var(--ink)}
 .deco{position:absolute;inset:0;pointer-events:none;overflow:hidden;opacity:.45}.deco i{position:absolute;font-style:normal;font-size:9cqw;animation:fl 9s ease-in-out infinite}@keyframes fl{50%{transform:translateY(-3cqw) rotate(8deg)}}
 .top{position:absolute;left:3cqw;right:3cqw;top:2.5cqw;height:9cqw;display:flex;align-items:center;gap:2cqw;z-index:2}
-.top h1{margin:0;flex:1;font:400 4.3cqw/1.05 var(--display);color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top h1{margin:0;flex:1;font:800 4.3cqw/1.05 var(--font);color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ib{width:9cqw;height:9cqw;min-width:36px;min-height:36px;border:0;border-radius:50%;background:color-mix(in srgb,var(--ink) 12%,transparent);color:var(--ink);font:800 3.6cqw var(--body);cursor:pointer;display:grid;place-items:center}
 .scr{position:absolute;left:4cqw;right:4cqw;top:14cqw;bottom:3cqw;display:flex;flex-direction:column;gap:2.2cqw;z-index:1}
 .card{background:var(--panel);border:.5cqw solid var(--line);border-radius:4cqw;padding:2.6cqw;box-shadow:0 1.2cqw 0 rgba(0,0,0,.25)}
@@ -36,13 +36,13 @@ body{display:flex;justify-content:center}
 .opt{display:block;width:100%;text-align:left;border:.5cqw solid var(--line);background:var(--panel);color:var(--ink);border-radius:3cqw;padding:2.2cqw 3cqw;font:600 3.7cqw/1.3 var(--body);min-height:44px;cursor:pointer;margin-bottom:1.8cqw}.opt.on{border-color:var(--accent);background:color-mix(in srgb,var(--ink) 1400%,transparent)}
 .mods{display:flex;gap:2cqw}.mod{flex:1;border:.5cqw solid var(--line);background:transparent;color:var(--ink);border-radius:3cqw;min-height:44px;font:800 3.3cqw var(--body);cursor:pointer;padding:1cqw}.mod.on{border-color:var(--accent);background:color-mix(in srgb,var(--ink) 1600%,transparent)}
 textarea{width:100%;height:20cqw;border-radius:3cqw;border:.5cqw solid var(--line);background:var(--panel);color:var(--ink);font:600 3.8cqw var(--body);padding:2cqw;resize:none}
-.stamp{font:400 11cqw var(--display);border:1.2cqw solid;padding:.6cqw 3cqw;border-radius:2cqw;transform:rotate(-8deg);display:inline-block;animation:st .35s cubic-bezier(.2,1.6,.4,1) both}@keyframes st{from{transform:rotate(-8deg) scale(2.4);opacity:0}}
+.stamp{font:800 11cqw var(--font);border:1.2cqw solid;padding:.6cqw 3cqw;border-radius:2cqw;transform:rotate(-8deg);display:inline-block;animation:st .35s cubic-bezier(.2,1.6,.4,1) both}@keyframes st{from{transform:rotate(-8deg) scale(2.4);opacity:0}}
 .stamp.ok{color:var(--good);border-color:var(--good)}.stamp.no{color:var(--bad);border-color:var(--bad)}.stamp.half{color:#ffd24a;border-color:#ffd24a}
 .quote{font-style:italic;font-size:3.8cqw;line-height:1.35}.meter{height:3.6cqw;border-radius:9cqw;background:color-mix(in srgb,var(--ink) 1400%,transparent);overflow:hidden}.meter b{display:block;height:100%;background:linear-gradient(90deg,var(--bad),#ffd24a,var(--good));width:0;transition:width .7s}
 .chips{display:flex;gap:2cqw;justify-content:center;flex-wrap:wrap}.chip{background:color-mix(in srgb,var(--ink) 1200%,transparent);border-radius:99cqw;padding:1.2cqw 3cqw;font-size:3.5cqw;font-weight:800}
 
 .ov{position:absolute;inset:0;background:color-mix(in srgb,var(--panel) 86%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);z-index:7;display:flex;flex-direction:column;justify-content:center;gap:2.6cqw;padding:5cqw;text-align:center}
-.ov h2{margin:0;font:400 6cqw var(--display);color:var(--accent)}.ov .btn.alt,.ov .skc{background:var(--panel)}.ov p{margin:0;font-size:4cqw;line-height:1.35}
+.ov h2{margin:0;font:800 6cqw var(--font);color:var(--accent)}.ov .btn.alt,.ov .skc{background:var(--panel)}.ov p{margin:0;font-size:4cqw;line-height:1.35}
 .sk{display:grid;grid-template-columns:1fr 1fr;gap:2.4cqw}.skc{position:relative;border:.5cqw solid var(--line);border-radius:3.4cqw;padding:2.2cqw;background:var(--panel);color:var(--ink);font:800 3.6cqw var(--body);cursor:pointer;min-height:44px}.skc.on{border-color:var(--accent)}.skc .e{font-size:9cqw;display:block}.skc.lock{opacity:.7}.skc.lock::after{content:"🔒";position:absolute;top:1.2cqw;right:2cqw;font-size:4cqw}
 .toast{position:absolute;left:50%;bottom:6cqw;transform:translateX(-50%);background:#fff;color:#111;padding:2cqw 4cqw;border-radius:99cqw;font-weight:800;font-size:3.6cqw;z-index:9;max-width:92%;text-align:center}
 #home,#ask,#res{justify-content:center}
@@ -69,7 +69,7 @@ textarea{width:100%;height:20cqw;border-radius:3cqw;border:.5cqw solid var(--lin
   <div class="top"><button class="ib" id="bBk" type="button" hidden aria-label="←">←</button><h1 id="ttl"></h1><button class="ib" id="bBoard" type="button">🏆</button><button class="ib" id="bSnd" type="button">🔊</button><button class="ib" id="bLang" type="button">EN</button></div>
   <section class="scr" id="home">
     <div class="card boss"><div class="av" id="hAv"></div><div class="bub" id="hBub"></div></div>
-    <button class="btn" id="bDaily" type="button" style="text-align:left;display:flex;gap:3cqw;align-items:center"><span id="dN" style="font:400 7cqw var(--display)"></span><span class="grow"><b id="dT"></b><br><span id="dS" style="font-weight:600;font-size:3.3cqw"></span></span><span>▶</span></button>
+    <button class="btn" id="bDaily" type="button" style="text-align:left;display:flex;gap:3cqw;align-items:center"><span id="dN" style="font:800 7cqw var(--font)"></span><span class="grow"><b id="dT"></b><br><span id="dS" style="font-weight:600;font-size:3.3cqw"></span></span><span>▶</span></button>
     <div class="row"><button class="btn alt grow" id="bPractice" type="button"></button><button class="ib" id="bSkin" type="button" style="width:12cqw;height:12cqw">🎨</button></div>
     <div class="chips" id="hChips"></div>
     <p class="mut" style="text-align:center;margin:0" id="hNote"></p>
@@ -88,7 +88,7 @@ textarea{width:100%;height:20cqw;border-radius:3cqw;border:.5cqw solid var(--lin
   <section class="scr" id="res" hidden>
     <div class="card" style="text-align:center"><div class="boss" style="justify-content:center"><div class="av" id="rAv"></div><div class="stamp" id="rSt"></div></div><div class="bub" id="rBub" style="margin-top:2.4cqw;text-align:left"></div></div>
     <div class="card"><div class="mut" id="rQT"></div><div class="quote" id="rQ"></div></div>
-    <div class="card"><div class="row" style="justify-content:space-between"><span class="mut" id="rMT"></span><b id="rPct" style="font:400 7cqw var(--display);color:var(--accent)"></b></div><div class="meter"><b id="rBar"></b></div></div>
+    <div class="card"><div class="row" style="justify-content:space-between"><span class="mut" id="rMT"></span><b id="rPct" style="font:800 7cqw var(--font);color:var(--accent)"></b></div><div class="meter"><b id="rBar"></b></div></div>
     <div class="chips" id="rChips"></div><p class="mut" style="text-align:center;margin:0" id="rVs"></p>
     <div class="row"><button class="btn grow" id="bShare" type="button">📤</button><button class="btn alt" id="bRem" type="button" hidden aria-label="rematch">🔁</button><button class="btn alt" id="bAgain" type="button" aria-label="new">🎲</button><button class="btn alt" id="bHome" type="button">🏠</button></div>
     <p class="mut" id="eLeg" style="text-align:center;margin:0" hidden></p>
@@ -219,7 +219,7 @@ const outTxt=()=>T(G.out==="ok"?"stampOk":G.out==="half"?"stampHalf":"stampNo");
 function shareLink(){return location.origin+"/api/share/"+GID+"?ch="+b64e({s:G.seed,sc:G.p})+(LANG==="en"?"&l=en":"")}
 function shareText(){return "📝 "+T("share")+(G.mode==="daily"?" #"+dayNo(dayKey()):"")+"\n“"+G.reason+"”\n"+(G.out==="ok"?"✅":G.out==="half"?"🌓":"❌")+" "+outTxt()+" · "+G.p+"%"+(G.ch?" · ⚔ "+G.p+" vs "+G.ch.sc+(G.p>G.ch.sc?" 🎉":""):"")+(G.run>=2?" · 🔥×"+G.run:"")+"\n💬 “"+G.reply+"”\n"+T("ask")+"\n"+shareLink()}
 function wrap(x,t,mx,lh,x0,y0){const w=t.split(" ");let l="",y=y0;for(const s of w){const tt=l?l+" "+s:s;if(x.measureText(tt).width>mx&&l){x.fillText(l,x0,y);y+=lh;l=s}else l=tt}x.fillText(l,x0,y);return y}
-function drawCard(){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif";
+function drawCard(){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="Inter,system-ui,sans-serif";
  const g=x.createLinearGradient(0,0,1080,1350);g.addColorStop(0,"#2a2160");g.addColorStop(1,"#0E1020");x.fillStyle=g;x.fillRect(0,0,1080,1350);
  x.fillStyle="#fffdf5";x.beginPath();x.roundRect(80,170,920,900,36);x.fill();x.textAlign="center";x.fillStyle="#1c1833";x.font="800 64px "+F;x.fillText("📝 "+T("share").toUpperCase(),540,270);
  x.textAlign="left";x.font="600 50px "+F;x.fillStyle="#333";wrap(x,"“"+G.reason+"”",800,66,140,380);

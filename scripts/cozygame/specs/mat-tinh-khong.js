@@ -5,7 +5,7 @@ module.exports = {
   types: [["🎨", "Khác màu", "Odd colour"], ["🌀", "Xoay sắc", "Spin hue"], ["💡", "Nhấp nháy", "Flicker"], ["🔀", "Đảo ô 30 giây", "30 s shuffle"]],
   catalog: [["basic", "Bảng màu", "Palette", "🎨"], ["hive", "Tổ ong mật", "Honeycomb", "🍯"], ["petri", "Đĩa petri", "Petri dish", "🧫"], ["sky", "Bầu trời sao", "Starry sky", "🌌"], ["wall", "Tường kính màu", "Stained wall", "🧱"]],
   rootCss: `:root{--bg:#F1F0FF;--panel:#ffffff;--ink:#1f1a3d;--muted:#5d5a85;--accent:#6b4ce6;--on:#ffffff;--good:#1a9a55;--bad:#d23b3b;--line:#d3cff5;--pbg:linear-gradient(#e3defd,#f7f5ff);--field:#f4f2ff;--field2:#e0dcfb;
- --display:"Bungee","Arial Black",system-ui,sans-serif;--body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif}
+ --display:var(--font);--body:var(--font)}
 :root[data-theme="dark"]{--bg:#0f0d22;--panel:#1c1936;--ink:#efeeff;--muted:#a9a6d6;--accent:#9a85ff;--on:#12082e;--good:#3ddc84;--bad:#ff6b6b;--line:#322e5e;--pbg:linear-gradient(#1f1a45,#0f0d22);--field:#171433;--field2:#241f4a}`,
   extraCss: `canvas#cv{cursor:pointer}#play[data-ty="1"] canvas#cv{border-radius:50%}#play[data-ty="2"] canvas#cv{filter:brightness(.8) contrast(1.1);border-style:dotted}#play[data-ty="3"] canvas#cv{border-style:dashed;border-color:var(--bad)}`,
   gameHtml: `{{STATS}}
@@ -80,14 +80,14 @@ function draw(){if(!ctx||!cv.width)return;const sk=skinOf(),dm=sk.dim||[360,360]
  for(const f of D.fx){c.save();c.globalAlpha=Math.max(0,f.t*2);c.strokeStyle=f.c;c.lineWidth=4;c.beginPath();c.arc(f.x,f.y,(.5-f.t)*140+10,0,6.283);c.stroke();c.restore()}
  c.restore();if(D.flash>0){c.fillStyle="rgba(255,60,60,"+D.flash*.28+")";c.fillRect(0,0,W,H)}
  if(D.C.mode==="life"&&!lv.rev){c.fillStyle="rgba(255,255,255,.25)";c.fillRect(0,H-6,W,6);c.fillStyle=D.levT>D.C.per*.7?"#ff4a3d":"#ffb23d";c.fillRect(0,H-6,W*(1-D.levT/D.C.per),6)}
- c.fillStyle=sk.lbl||(dk?"rgba(255,255,255,.8)":"rgba(30,20,60,.75)");c.font="800 15px 'Be Vietnam Pro',system-ui";c.textAlign="left";c.fillText(T("lvl",{n:lv.L}),12,H-12);if(sk.fx)sk.fx(c,W,H,tm,dk)}
+ c.fillStyle=sk.lbl||(dk?"rgba(255,255,255,.8)":"rgba(30,20,60,.75)");c.font="800 15px Inter,system-ui,sans-serif";c.textAlign="left";c.fillText(T("lvl",{n:lv.L}),12,H-12);if(sk.fx)sk.fx(c,W,H,tm,dk)}
 function pt(e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H]}
 cv.addEventListener("pointerdown",e=>{const D=G;if(!D||D.over||paused||!D.lv)return;if(e.pointerType==="mouse"&&e.button!==0)return;e.preventDefault();let p=pt(e);if(D.C.spin){const a=-angOf(D),dx=p[0]-W/2,dy=p[1]-H/2;p=[W/2+dx*Math.cos(a)-dy*Math.sin(a),H/2+dx*Math.sin(a)+dy*Math.cos(a)]}let bi=-1,bd=1e9;D.lv.tiles.forEach((t,i)=>{let ok,d;if(t.w){ok=Math.abs(p[0]-t.x)<=t.w/2+2&&Math.abs(p[1]-t.y)<=t.h/2+2;d=Math.hypot(p[0]-t.x,p[1]-t.y)}else{d=Math.hypot(p[0]-t.x,p[1]-t.y);ok=d<=t.r*1.04}if(ok&&d<bd){bd=d;bi=i}});if(bi>=0)mtTap(D,bi)});
 function snapP(D){return D.L>1?{L:D.L,pn:Math.round(D.pen*10)/10,lv:D.lives,t:Math.round(D.time*10)/10}:null}
 function restoreP(D,p){D.L=Math.max(1,Math.min(200,+p.L||1));D.pen=+p.pn||0;D.lives=Math.max(1,+p.lv||D.lives);D.time=+p.t||0;mkLevel(D,D.L);hud()}
 function onBegin(D){fitCanvas()}
 `,
-  drawCard: String.raw`function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#9a85ff","#2a1a7a"];
+  drawCard: String.raw`function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="Inter,system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#9a85ff","#2a1a7a"];
  const g=x.createLinearGradient(0,0,1080,1350);g.addColorStop(0,cg[0]);g.addColorStop(1,cg[1]);x.fillStyle=g;x.fillRect(0,0,1080,1350);x.textAlign="center";x.fillStyle="#fff";x.font="800 62px "+F;x.fillText((isProSk()?"👑 ":"👁️ ")+T("title"),540,100);
  const lv=D.lv,bx=170,by=150,bw=740,bh=640;x.fillStyle="rgba(255,255,255,.16)";x.beginPath();x.roundRect?x.roundRect(bx,by,bw,bh,36):x.rect(bx,by,bw,bh);x.fill();
  if(lv){const sc=Math.min((bw-60)/W,(bh-60)/H),ox=bx+(bw-W*sc)/2,oy=by+(bh-H*sc)/2;x.save();x.translate(ox,oy);x.scale(sc,sc);lv.tiles.forEach((t,i)=>{(sk.tile||tileBasic)(x,t,i===lv.odd?lv.oc:lv.col,i===lv.odd,3,false)});const t=lv.tiles[lv.odd];x.lineWidth=5;x.strokeStyle="#fff";x.shadowColor="#000";x.shadowBlur=10;x.setLineDash([10,8]);x.beginPath();x.arc(t.x,t.y,t.r*1.15,0,6.283);x.stroke();x.restore()}

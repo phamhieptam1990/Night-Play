@@ -5,12 +5,12 @@ module.exports = {
   types: [["💰", "Lương 8 triệu", "8M salary"], ["🧧", "Tết lì xì", "Tet envelopes"], ["⏳", "Sale đếm ngược", "Sale countdown"], ["🎓", "Học bổng", "Scholar"]],
   catalog: [["basic", "Sổ tay chi tiêu", "Spending notebook", "📒"], ["chat", "Nhóm chat bạn bè", "Friends group chat", "💬"], ["bank", "Tin nhắn ngân hàng", "Bank SMS", "🏦"], ["shop", "Chợ online", "Online mall", "🛒"], ["cal", "Lịch tháng", "Month calendar", "📅"]],
   rootCss: `:root{--bg:#FFF6DD;--panel:#ffffff;--ink:#33280f;--muted:#7a6a3a;--accent:#d97706;--on:#ffffff;--good:#2f9e44;--bad:#e03131;--line:#f0dba0;--pbg:linear-gradient(#ffe9a8,#fff9e6);--field:#fff4cc;--field2:#ffe59a;
- --display:"Bungee","Arial Black",system-ui,sans-serif;--body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif}
+ --display:var(--font);--body:var(--font)}
 :root[data-theme="dark"]{--bg:#1d1806;--panel:#2e2610;--ink:#fff3cc;--muted:#d9c47a;--accent:#ffb020;--on:#2a1c00;--good:#51cf66;--bad:#ff6b6b;--line:#4a3f1c;--pbg:linear-gradient(#3b3010,#1d1806);--field:#2a2209;--field2:#3a3012}`,
   extraCss: `
 #sv{flex:1;min-height:0;display:flex;flex-direction:column;gap:2.4cqw;position:relative}
 #svTop{display:flex;align-items:center;justify-content:space-between;gap:2cqw;font:800 3.6cqw var(--body)}
-#svDay{font:400 5.4cqw var(--display);color:var(--accent)}
+#svDay{font:800 5.4cqw var(--font);color:var(--accent)}
 #svBars{flex:1;display:flex;flex-direction:column;gap:1.2cqw;max-width:56%}
 .svb{height:3cqw;border-radius:9cqw;background:color-mix(in srgb,var(--ink) 14%,transparent);overflow:hidden}.svb i{display:block;height:100%;width:50%;border-radius:9cqw;transition:width .35s}
 #svM2{background:linear-gradient(90deg,#f59e0b,#22c55e)}#svS2{background:linear-gradient(90deg,#ef4444,#ec4899)}
@@ -157,7 +157,7 @@ function snapP(D){if(D.day<2&&!D.lock)return null;if(D.lock&&D.day>=30)return nu
 function restoreP(D,p){D.day=Math.max(1,Math.min(30,+p.d||1));D.cur=D.order[D.day-1];D.money=+p.m||D.money;D.mood=Math.max(1,Math.min(100,+p.mo||70));D.study=+p.s||50;D.yes=+p.y||0;D.tags=(p.tg&&typeof p.tg==="object")?p.tg:{};D.hist=Array.isArray(p.h)?p.h.map(Number):[D.money];D.lock=false;D.dec=D.C.timer||0;render();hud()}
 function onBegin(D){D.dec=D.C.timer||0;$("svEnv").hidden=true;$("sv").classList.remove("lock");$("svRes").textContent="";$("svCal").dataset.n="";render()}
 `,
-  drawCard: String.raw`function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#fbbf24","#92400e"];
+  drawCard: String.raw`function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="Inter,system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#fbbf24","#92400e"];
  const g=x.createLinearGradient(0,0,1080,1350);g.addColorStop(0,cg[0]);g.addColorStop(1,cg[1]);x.fillStyle=g;x.fillRect(0,0,1080,1350);x.textAlign="center";x.fillStyle="#fff";x.font="800 60px "+F;x.fillText((isProSk()?"👑 ":"💰 ")+T("title"),540,100);
  const won=D.reason==="win";x.font="800 84px "+F;x.fillText(won?"🎉":D.reason==="money"?"💀":"😵",540,250);x.font="800 66px "+F;x.fillText(won?T("won",{m:fmtM(D.money)}):T(D.reason==="money"?"outDay":D.reason==="study"?"outStudy":"outMood",{d:D.diedDay}),540,350);
  x.fillStyle="rgba(255,255,255,.93)";x.beginPath();x.roundRect?x.roundRect(120,400,840,360,32):x.rect(120,400,840,360);x.fill();

@@ -9,11 +9,11 @@
 <script src="../../../shared/fx.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Đoán Giá Chợ Việt</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <script>var savedTheme=null;try{savedTheme=localStorage.getItem("theme")}catch(e){}document.documentElement.dataset.theme=savedTheme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");</script>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Be+Vietnam+Pro:wght@400;600;800&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Be+Vietnam+Pro:wght@400;600;800&display=swap"></noscript>
+<link rel="preload" href="../../../shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../../shared/fonts.css">
 <style>
-:root{--bg:#F3F0FA;--panel:#ffffff;--ink:#1C1833;--muted:#6B6488;--accent:#d96a00;--on:#ffffff;--good:#1a9a55;--bad:#d23b3b;--line:#d7cfee;--pbg:linear-gradient(#ece6ff,#F7F4FC);--display:"Bungee","Arial Black",system-ui,sans-serif;--body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif}
+:root{--bg:#F3F0FA;--panel:#ffffff;--ink:#1C1833;--muted:#6B6488;--accent:#d96a00;--on:#ffffff;--good:#1a9a55;--bad:#d23b3b;--line:#d7cfee;--pbg:linear-gradient(#ece6ff,#F7F4FC);--display:var(--font);--body:var(--font)}
 :root[data-theme="dark"]{--bg:#0E1020;--panel:#1b2040;--ink:#f3f0ff;--muted:#a9a3c9;--accent:#ffb020;--on:#2a1a00;--good:#3ddc84;--bad:#ff6b6b;--line:#323a70;--pbg:linear-gradient(#1d2250,#0E1020)}
 
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}[hidden]{display:none!important}
@@ -22,29 +22,29 @@ body{display:flex;justify-content:center}
 #play{position:relative;height:100dvh;width:min(100vw,66dvh,760px);container-type:size;overflow:hidden;background:var(--pbg);color:var(--ink);transition:background .3s}
 .deco{position:absolute;inset:0;pointer-events:none;overflow:hidden;opacity:.5}.deco i{position:absolute;font-style:normal;font-size:9cqw;animation:fl 9s ease-in-out infinite}@keyframes fl{50%{transform:translateY(-3cqw) rotate(8deg)}}
 .top{position:absolute;left:3cqw;right:3cqw;top:2.5cqw;height:9cqw;display:flex;align-items:center;gap:2cqw;z-index:2}
-.top h1{margin:0;flex:1;font:400 4.6cqw/1.05 var(--display);letter-spacing:.2cqw;color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top h1{margin:0;flex:1;font:800 4.6cqw/1.05 var(--font);letter-spacing:.2cqw;color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ib{width:9cqw;height:9cqw;min-width:36px;min-height:36px;border:0;border-radius:50%;background:color-mix(in srgb,var(--ink) 12%,transparent);color:var(--ink);font:800 3.6cqw var(--body);cursor:pointer;display:grid;place-items:center}
 .scr{position:absolute;left:4cqw;right:4cqw;top:14cqw;bottom:3cqw;display:flex;flex-direction:column;gap:2.4cqw;z-index:1}
 .card{background:var(--panel);border:.5cqw solid var(--line);border-radius:4cqw;padding:3cqw;box-shadow:0 1.2cqw 0 rgba(0,0,0,.25)}
 .btn{border:0;border-radius:99cqw;min-height:44px;padding:2.6cqw 5cqw;font:800 4.4cqw var(--body);background:var(--accent);color:var(--on);cursor:pointer;box-shadow:0 1cqw 0 rgba(0,0,0,.3)}
 .btn.alt{background:color-mix(in srgb,var(--ink) 12%,transparent);color:var(--ink);box-shadow:none}.btn:active{transform:translateY(.6cqw)}
-.big{font:400 9cqw var(--display);color:var(--accent)}
+.big{font:800 9cqw var(--font);color:var(--accent)}
 .row{display:flex;gap:2.4cqw;align-items:center;justify-content:center}.grow{flex:1}
 .mut{color:var(--muted);font-size:3.4cqw}
 /* trang chủ */
 #home,#round,#end{justify-content:center}#home .hero{text-align:center;font-size:20cqw;line-height:1}
-.dbtn{display:flex;align-items:center;gap:3cqw;text-align:left;width:100%}.dbtn .n{font:400 7cqw var(--display)}
+.dbtn{display:flex;align-items:center;gap:3cqw;text-align:left;width:100%}.dbtn .n{font:800 7cqw var(--font)}
 /* vòng chơi */
 .dots{display:flex;gap:2cqw;justify-content:center}.dots i{width:5cqw;height:5cqw;border-radius:50%;background:color-mix(in srgb,var(--ink) 1800%,transparent);display:grid;place-items:center;font-size:3cqw;font-style:normal}.dots i.on{background:var(--accent)}
 .item{text-align:center;padding:3cqw}.item .em{font-size:22cqw;line-height:1.05}.item .nm{font:800 6.4cqw/1.15 var(--body)}.item .un{color:var(--muted);font-size:4cqw}
-.price{text-align:center;font:400 10.5cqw var(--display);color:var(--accent);min-height:13cqw}
+.price{text-align:center;font:800 10.5cqw var(--font);color:var(--accent);min-height:13cqw}
 input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:11cqw;background:transparent;margin:0}
 input[type=range]::-webkit-slider-runnable-track{height:3.2cqw;border-radius:9cqw;background:linear-gradient(90deg,var(--good),#ffd24a,var(--bad))}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:10cqw;height:10cqw;margin-top:-3.4cqw;border-radius:50%;background:#fff;border:1cqw solid var(--accent);box-shadow:0 .8cqw 0 rgba(0,0,0,.35)}
 input[type=range]::-moz-range-track{height:3.2cqw;border-radius:9cqw;background:linear-gradient(90deg,var(--good),#ffd24a,var(--bad))}
 input[type=range]::-moz-range-thumb{width:8cqw;height:8cqw;border-radius:50%;background:#fff;border:1cqw solid var(--accent)}
 .rng{display:flex;justify-content:space-between;color:var(--muted);font-size:3.2cqw;margin-top:-1cqw}
-.rev{text-align:center}.rev .real{font:400 8cqw var(--display);color:var(--good)}.rev .pts{font:800 5.4cqw var(--body)}
+.rev{text-align:center}.rev .real{font:800 8cqw var(--font);color:var(--good)}.rev .pts{font:800 5.4cqw var(--body)}
 .bar{height:3.4cqw;border-radius:9cqw;background:color-mix(in srgb,var(--ink) 1400%,transparent);overflow:hidden;margin-top:1.4cqw}.bar b{display:block;height:100%;background:var(--accent);width:0;transition:width .6s}
 /* kết thúc */
 .sq{font-size:9cqw;letter-spacing:.8cqw;text-align:center}.rk{text-align:center;font:800 5cqw var(--body)}
@@ -52,7 +52,7 @@ input[type=range]::-moz-range-thumb{width:8cqw;height:8cqw;border-radius:50%;bac
 /* lớp phủ */
 
 .ov{position:absolute;inset:0;background:color-mix(in srgb,var(--panel) 86%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);z-index:7;display:flex;flex-direction:column;justify-content:center;gap:2.6cqw;padding:5cqw;text-align:center}
-.ov h2{margin:0;font:400 6cqw var(--display);color:var(--accent)}.ov .btn.alt,.ov .skc{background:var(--panel)}.ov p{margin:0;color:var(--ink);font-size:4cqw;line-height:1.35}
+.ov h2{margin:0;font:800 6cqw var(--font);color:var(--accent)}.ov .btn.alt,.ov .skc{background:var(--panel)}.ov p{margin:0;color:var(--ink);font-size:4cqw;line-height:1.35}
 .sk{display:grid;grid-template-columns:1fr 1fr;gap:2.4cqw}.skc{position:relative;border:.5cqw solid var(--line);border-radius:3.4cqw;padding:2.4cqw;background:var(--panel);color:var(--ink);font:800 3.8cqw var(--body);cursor:pointer;min-height:44px}.skc.on{border-color:var(--accent)}.skc .e{font-size:9cqw;display:block}.skc.lock{opacity:.7}.skc.lock::after{content:"🔒";position:absolute;top:1.2cqw;right:2cqw;font-size:4cqw}
 .toast{position:absolute;left:50%;bottom:6cqw;transform:translateX(-50%);background:#fff;color:#111;padding:2cqw 4cqw;border-radius:99cqw;font-weight:800;font-size:3.8cqw;z-index:9;white-space:nowrap}
 @container (max-height:780px){.rv .rng{display:none}.rv .item .em{font-size:14cqw}}
@@ -202,7 +202,7 @@ function again(){if(!G)return;G.mode==="daily"||G.ch?begin(G.mode==="daily"?G.se
 /* ===== CHIA SẺ ===== */
 function shareLink(){const o={s:G.seed,sc:G.score};return location.origin+"/api/share/"+GID+"?ch="+b64e(o)+(LANG==="en"?"&l=en":"")}
 function shareText(){const day=G.mode==="daily"?" #"+dayNo(dayKey()):"";return "💰 "+T("share")+day+"\n"+G.pts.map(sqOf).join("")+" "+G.score+"/"+MAXS+(G.ch?"\n⚔ "+G.score+" vs "+G.ch.sc+(G.score>G.ch.sc?" 🎉":""):"")+"\n"+T("ask")+"\n"+shareLink()}
-function drawCard(){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif";
+function drawCard(){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="Inter,system-ui,sans-serif";
  const g=x.createLinearGradient(0,0,1080,1350);g.addColorStop(0,"#2b1f6b");g.addColorStop(1,"#0E1020");x.fillStyle=g;x.fillRect(0,0,1080,1350);
  x.textAlign="center";x.fillStyle="#ffb020";x.font="800 70px "+F;x.fillText("💰 "+T("share")+(G.mode==="daily"?" #"+dayNo(dayKey()):""),540,120);
  x.font="280px "+F;x.fillText(G.q[0].it.e,540,470);x.fillStyle="#fff";x.font="800 190px "+F;x.fillText(G.score+"/"+MAXS,540,720);

@@ -10,12 +10,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Đường Ray</title>
 <script>var savedTheme=null;try{savedTheme=localStorage.getItem("theme")}catch(e){}document.documentElement.dataset.theme=savedTheme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Be+Vietnam+Pro:wght@400;600;800&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Be+Vietnam+Pro:wght@400;600;800&display=swap"></noscript>
+<link rel="preload" href="../../../shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../../shared/fonts.css">
 <style>
 /* Đường Ray — vẽ đường ray dẫn từng đoàn tàu về đúng ga cùng màu, đừng để hai tàu đâm nhau. Luôn vừa một màn hình. */
 :root{--bg:#E8F1F8;--panel:#ffffff;--ink:#12283a;--muted:#4a6478;--accent:#1c78c8;--on:#ffffff;--good:#1a9a55;--bad:#d23b3b;--line:#b9d0e2;--pbg:linear-gradient(#cfe4f4,#eef6fc);--field:#e4f0fa;--field2:#c9dff0;
- --display:"Bungee","Arial Black",system-ui,sans-serif;--body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif}
+ --display:var(--font);--body:var(--font)}
 :root[data-theme="dark"]{--bg:#0a141f;--panel:#162536;--ink:#eaf4ff;--muted:#9ab8d0;--accent:#4db3ff;--on:#001a2e;--good:#3ddc84;--bad:#ff6b6b;--line:#27425a;--pbg:linear-gradient(#183048,#0a141f);--field:#0f1d2c;--field2:#1a3045}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}[hidden]{display:none!important}
 html,body{margin:0;height:100%;background:var(--bg);overflow:hidden;font-family:var(--body);color:var(--ink)}
@@ -23,7 +23,7 @@ body{display:flex;justify-content:center}
 #play{position:relative;height:100dvh;width:min(100vw,62dvh,760px);container-type:size;overflow:hidden;background:var(--pbg);color:var(--ink);touch-action:none;user-select:none;-webkit-user-select:none}
 .deco{position:absolute;inset:0;pointer-events:none;overflow:hidden;opacity:.45}.deco i{position:absolute;font-style:normal;font-size:9cqw;animation:fl 9s ease-in-out infinite}@keyframes fl{50%{transform:translateY(-3cqw) rotate(8deg)}}
 .top{position:absolute;left:3cqw;right:3cqw;top:2.5cqw;height:9cqw;display:flex;align-items:center;gap:2cqw;z-index:3}
-.top h1{margin:0;flex:1;font:400 4.8cqw/1.05 var(--display);color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top h1{margin:0;flex:1;font:800 4.8cqw/1.05 var(--font);color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ib{width:9cqw;height:9cqw;min-width:36px;min-height:36px;border:1.5px solid color-mix(in srgb,var(--ink) 38%,transparent);border-radius:50%;background:var(--panel);color:var(--ink);font:800 3.6cqw var(--body);cursor:pointer;display:grid;place-items:center;box-shadow:0 .5cqw 0 color-mix(in srgb,var(--ink) 18%,transparent)}
 .ib:active{transform:translateY(.5cqw);box-shadow:none}
 .scr{position:absolute;left:4cqw;right:4cqw;top:14cqw;bottom:3cqw;display:flex;flex-direction:column;gap:2.4cqw;z-index:2;justify-content:center}
@@ -33,21 +33,21 @@ body{display:flex;justify-content:center}
 .row{display:flex;gap:2.2cqw;align-items:center;justify-content:center}.grow{flex:1}.mut{color:color-mix(in srgb,var(--ink) 68%,transparent);font-size:3.3cqw}
 .chips{display:flex;gap:2cqw;justify-content:center;flex-wrap:wrap}.chip{background:var(--panel);border:1px solid color-mix(in srgb,var(--ink) 28%,transparent);border-radius:99cqw;padding:1.2cqw 3cqw;font-size:3.5cqw;font-weight:800}
 .hero{text-align:center;font-size:18cqw;line-height:1.05}
-.dbtn{display:flex;align-items:center;gap:3cqw;text-align:left;width:100%}.dbtn .n{font:400 7cqw var(--display)}
+.dbtn{display:flex;align-items:center;gap:3cqw;text-align:left;width:100%}.dbtn .n{font:800 7cqw var(--font)}
 .tys{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4cqw}.fbox{display:flex;flex-direction:column;gap:1.4cqw;padding:2cqw;border:1.5px dashed color-mix(in srgb,var(--ink) 28%,transparent);border-radius:4cqw}.lvc{font:700 3cqw var(--body);color:var(--muted);text-align:center}.lvs{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4cqw}.lv{border:1.5px solid color-mix(in srgb,var(--ink) 30%,transparent);background:var(--panel);color:var(--ink);border-radius:3cqw;min-height:40px;font:800 3.2cqw var(--body);cursor:pointer}.lv.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 18%,var(--panel))}
 .ty{position:relative;border:1.5px solid color-mix(in srgb,var(--ink) 30%,transparent);background:var(--panel);color:var(--ink);border-radius:3cqw;padding:1.6cqw .6cqw;font:800 2.6cqw var(--body);min-height:44px;cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:.6cqw}.ty .e{display:block;font-size:6.8cqw;line-height:1.1}.ty .t{display:flex;align-items:center;justify-content:center;min-height:2.3em;line-height:1.15;overflow-wrap:anywhere}
 .ty.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 20%,var(--panel));box-shadow:0 0 0 .5cqw color-mix(in srgb,var(--accent) 45%,transparent)}.ty.lock{opacity:.8}.ty.lock::after{content:'🔒';position:absolute;top:.4cqw;right:1cqw;font-size:3.4cqw}
 /* ván chơi */
 #game{gap:1.6cqw;justify-content:flex-start}
-.stats{display:flex;gap:2cqw}.st{flex:1;background:var(--panel);border:.5cqw solid var(--line);border-radius:3cqw;padding:1cqw 2cqw;text-align:center}.st b{display:block;font:400 5.4cqw var(--display);color:var(--accent);line-height:1.1}.st span{font-size:2.8cqw;color:color-mix(in srgb,var(--ink) 65%,transparent);font-weight:800}
+.stats{display:flex;gap:2cqw}.st{flex:1;background:var(--panel);border:.5cqw solid var(--line);border-radius:3cqw;padding:1cqw 2cqw;text-align:center}.st b{display:block;font:800 5.4cqw var(--font);color:var(--accent);line-height:1.1}.st span{font-size:2.8cqw;color:color-mix(in srgb,var(--ink) 65%,transparent);font-weight:800}
 #cvw{flex:1;min-height:0;display:flex;justify-content:center;align-items:center}
 canvas#cv{border-radius:3cqw;background:linear-gradient(var(--field),var(--field2));border:.5cqw solid var(--line);touch-action:none;display:block;box-shadow:0 1cqw 0 rgba(0,0,0,.14)}
 .hint{text-align:center;margin:0}
 /* kết thúc */
-.big{font:400 11cqw var(--display);color:var(--accent);text-align:center;line-height:1.1}.rk{text-align:center;font:800 4.6cqw var(--body)}
+.big{font:800 11cqw var(--font);color:var(--accent);text-align:center;line-height:1.1}.rk{text-align:center;font:800 4.6cqw var(--body)}
 .hat{display:flex;gap:1.4cqw;justify-content:center;flex-wrap:wrap;font-size:7.4cqw;min-height:9cqw}
 .ov{position:absolute;inset:0;background:color-mix(in srgb,var(--panel) 86%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);z-index:7;display:flex;flex-direction:column;justify-content:center;gap:2.4cqw;padding:5cqw;text-align:center}
-.ov h2{margin:0;font:400 6cqw var(--display);color:var(--accent)}.ov p{margin:0;font-size:3.9cqw;line-height:1.35}
+.ov h2{margin:0;font:800 6cqw var(--font);color:var(--accent)}.ov p{margin:0;font-size:3.9cqw;line-height:1.35}
 .sk{display:grid;grid-template-columns:1fr 1fr;gap:2.4cqw}.skc{position:relative;border:1.5px solid color-mix(in srgb,var(--ink) 30%,transparent);border-radius:3.4cqw;padding:2.2cqw;background:var(--panel);color:var(--ink);font:800 3.6cqw var(--body);cursor:pointer;min-height:44px}.skc.on{border-color:var(--accent)}.sk .skc{display:flex;align-items:center;gap:2.6cqw;text-align:left;padding:2cqw 2.6cqw}.sk .skc:last-child:nth-child(odd){grid-column:1/-1}.skc .e{font-size:9.5cqw;line-height:1;flex:none}.skc .sx{display:flex;flex-direction:column;gap:.9cqw;min-width:0}.skc .sx b{font:900 3.7cqw/1.15 var(--body)}.skc .sx small{font:700 2.7cqw/1.2 var(--body);opacity:.75}.skc.lock{opacity:.85}.skc.lock::after{content:'🔒';position:absolute;top:1.4cqw;right:2cqw;font-size:3.8cqw}
 .near{margin:0;text-align:center;font:900 4cqw var(--body);color:var(--accent);padding:1.4cqw 3cqw;border-radius:99cqw;border:1.5px solid color-mix(in srgb,var(--accent) 60%,transparent);background:color-mix(in srgb,var(--accent) 12%,transparent)}.btn.hot{animation:hotp 1s ease-in-out infinite}@keyframes hotp{50%{transform:scale(1.07);box-shadow:0 0 0 1.2cqw color-mix(in srgb,var(--accent) 30%,transparent)}}
 .rule{position:absolute;left:50%;top:27%;transform:translateX(-50%);width:86%;max-width:420px;box-sizing:border-box;z-index:8;pointer-events:none;padding:2.6cqw 3.6cqw;border-radius:4cqw;border:1.5px solid color-mix(in srgb,var(--accent) 70%,transparent);background:color-mix(in srgb,var(--panel) 90%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--ink);box-shadow:0 2cqw 6cqw rgba(0,0,0,.35);animation:ruleIn .3s ease-out}.rule h3{margin:0 0 1.4cqw;font:900 4.2cqw var(--body);color:var(--accent)}.rule p{margin:.8cqw 0 0;font:700 3.3cqw/1.35 var(--body)}.rule.out{opacity:0;transition:opacity .35s}@keyframes ruleIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}}
@@ -196,18 +196,18 @@ const emj="'Apple Color Emoji','Segoe UI Emoji',sans-serif";
 function bgBasic(c,dk){const g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,dk?"#10202f":"#eaf4fb");g.addColorStop(1,dk?"#0a1520":"#cfe3f2");c.fillStyle=g;c.fillRect(0,0,W,H);c.strokeStyle=dk?"rgba(255,255,255,.05)":"rgba(0,40,80,.06)";c.lineWidth=1;for(let x=0;x<W;x+=30){c.beginPath();c.moveTo(x,0);c.lineTo(x,H);c.stroke()}for(let y=0;y<H;y+=30){c.beginPath();c.moveTo(0,y);c.lineTo(W,y);c.stroke()}}
 function railBasic(c,r,col,dk,on){c.lineCap="round";c.lineJoin="round";c.beginPath();r.pts.forEach((p,i)=>i?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1]));c.strokeStyle=dk?"rgba(255,255,255,.25)":"rgba(0,30,60,.25)";c.lineWidth=6;c.stroke();c.strokeStyle=col;c.globalAlpha=on?1:.35;c.lineWidth=3.2;c.stroke();c.globalAlpha=1}
 function trainBasic(c,t,col){const p=t.pos;c.save();c.translate(p[0],p[1]);c.rotate(p[2]);rr(c,-8,-5,16,10,3,col);c.fillStyle="rgba(255,255,255,.85)";c.fillRect(1,-3,4,6);c.restore()}
-function stationDraw(c,s,dk){const col=COLS[s.col],sg=skinOf().sg;if(sg){c.font="15px "+emj;c.textAlign="center";c.textBaseline="middle";c.fillText(sg,s.x,s.y-24)}c.beginPath();c.arc(s.x,s.y,14+(s.pulse>0?4:0),0,6.283);c.fillStyle=dk?"#162536":"#fff";c.fill();c.lineWidth=4;c.strokeStyle=col;c.stroke();c.fillStyle=col;c.font="800 15px system-ui";c.textAlign="center";c.textBaseline="middle";c.fillText(SHP[s.col],s.x,s.y+1)}
-function depotDraw(c,d,dk,sk,D){const col=COLS[d.col];rr(c,d.x-10,d.y-10,20,20,4,col);c.fillStyle="#fff";c.font="800 11px system-ui";c.textAlign="center";c.textBaseline="middle";c.fillText(SHP[d.col],d.x,d.y+1);for(let i=0;i<d.q;i++){c.beginPath();c.arc(d.x-9+i*6,d.y+(d.y<40?18:-18),2.6,0,6.283);c.fillStyle=col;c.fill()}}
+function stationDraw(c,s,dk){const col=COLS[s.col],sg=skinOf().sg;if(sg){c.font="15px "+emj;c.textAlign="center";c.textBaseline="middle";c.fillText(sg,s.x,s.y-24)}c.beginPath();c.arc(s.x,s.y,14+(s.pulse>0?4:0),0,6.283);c.fillStyle=dk?"#162536":"#fff";c.fill();c.lineWidth=4;c.strokeStyle=col;c.stroke();c.fillStyle=col;c.font="800 15px Inter,system-ui,sans-serif";c.textAlign="center";c.textBaseline="middle";c.fillText(SHP[s.col],s.x,s.y+1)}
+function depotDraw(c,d,dk,sk,D){const col=COLS[d.col];rr(c,d.x-10,d.y-10,20,20,4,col);c.fillStyle="#fff";c.font="800 11px Inter,system-ui,sans-serif";c.textAlign="center";c.textBaseline="middle";c.fillText(SHP[d.col],d.x,d.y+1);for(let i=0;i<d.q;i++){c.beginPath();c.arc(d.x-9+i*6,d.y+(d.y<40?18:-18),2.6,0,6.283);c.fillStyle=col;c.fill()}}
 function draw(){if(!ctx||!cv.width)return;const c=ctx,dk=isDark(),sk=skinOf(),D=G;c.setTransform(SC,0,0,SC,0,0);c.clearRect(0,0,W,H);
  if(sk.scene)sk.scene(c,W,H,D?D.time:0,dk);else bgBasic(c,dk);
  if(!D)return;
  for(const d of D.dp)d.routes.forEach((r,i)=>{if(!r)return;const on=D.C.br!==2||d.act===i;if(sk.rail)sk.rail(c,r,COLS[d.col],on,D.time);else railBasic(c,r,COLS[d.col],dk,on)});
  if(D.draw&&D.draw.pts.length>1){const r={pts:D.draw.pts};c.setLineDash([6,5]);railBasic(c,r,COLS[D.dp[D.draw.di].col],dk,true);c.setLineDash([])}
  for(const s of D.st)stationDraw(c,s,dk);for(const d of D.dp)depotDraw(c,d,dk,sk,D);
- if(D.C.br===2)for(const d of D.dp)if(d.routes[0]&&d.routes[1]){c.font="700 11px system-ui";c.fillStyle=dk?"#fff":"#12283a";c.textAlign="center";c.fillText("⇄"+(d.act+1),d.x,d.y+(d.y<40?26:-26))}
+ if(D.C.br===2)for(const d of D.dp)if(d.routes[0]&&d.routes[1]){c.font="700 11px Inter,system-ui,sans-serif";c.fillStyle=dk?"#fff":"#12283a";c.textAlign="center";c.fillText("⇄"+(d.act+1),d.x,d.y+(d.y<40?26:-26))}
  for(const t of D.tr){const col=COLS[t.col];if(sk.trail)sk.trail(c,t,col,D.time);if(sk.train)sk.train(c,t,col);else trainBasic(c,t,col);if(t.ex){c.font="10px "+emj;c.textAlign="center";c.fillText("⚡",t.pos[0],t.pos[1]-11)}if(t.hold>0){c.font="10px "+emj;c.fillText("⏸",t.pos[0],t.pos[1]-11)}}
  if(sk.fx)sk.fx(c,W,H,D.time,dk);
- for(const f of D.fx){if(f.k==="p"){c.strokeStyle=f.c;c.lineWidth=3;c.beginPath();c.arc(f.x,f.y,10+(.7-f.t)*40,0,6.283);c.globalAlpha=Math.max(0,f.t/.7);c.stroke();c.globalAlpha=1}else if(f.k==="x"){c.font="22px "+emj;c.textAlign="center";c.fillText("❌",f.x,f.y-20)}else if(f.k==="t"){c.font="800 15px system-ui";c.textAlign="center";c.fillStyle=dk?"#fff":"#12283a";c.fillText(f.m,W/2,52)}}
+ for(const f of D.fx){if(f.k==="p"){c.strokeStyle=f.c;c.lineWidth=3;c.beginPath();c.arc(f.x,f.y,10+(.7-f.t)*40,0,6.283);c.globalAlpha=Math.max(0,f.t/.7);c.stroke();c.globalAlpha=1}else if(f.k==="x"){c.font="22px "+emj;c.textAlign="center";c.fillText("❌",f.x,f.y-20)}else if(f.k==="t"){c.font="800 15px Inter,system-ui,sans-serif";c.textAlign="center";c.fillStyle=dk?"#fff":"#12283a";c.fillText(f.m,W/2,52)}}
  if(D.boom){const b=D.boom;c.font="44px "+emj;c.textAlign="center";c.textBaseline="middle";c.fillText("💥",b[0],b[1])}
  if(D.C.storm&&D.stormT>0){c.fillStyle="rgba(20,30,60,.25)";c.fillRect(0,0,W,H);for(let i=0;i<40;i++){const x=(i*47+D.time*180)%W,y=(i*83+D.time*420)%H;c.strokeStyle="rgba(180,200,255,.5)";c.beginPath();c.moveTo(x,y);c.lineTo(x-3,y+9);c.stroke()}}}
 /* ===== NHẬP LIỆU ===== */
@@ -250,7 +250,7 @@ $("bRem").onclick=()=>{if(!G)return;const g=G;if(PF.pro&&PF.pro.trial)PF.lockPro
 $("bAgain").onclick=()=>{if(PF.pro&&PF.pro.trial)PF.lockPro();if(G&&G.mode==="daily"&&!G.ch)begin(G.seed,"daily",0,null);else begin(newSeed(),"free",TY,null)};
 $("bHome").onclick=()=>{G=null;if(PF.pro&&PF.pro.trial)PF.lockPro();show("home");renderHome()};
 /* ===== CHIA SẺ: bản đồ mạng lưới ===== */
-function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif",sk=skinOf();x.fillStyle="#0e1d2b";x.fillRect(0,0,1080,1350);x.textAlign="center";x.fillStyle="#fff";x.font="800 62px "+F;x.fillText("🚂 "+T("title"),540,96);
+function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="Inter,system-ui,sans-serif",sk=skinOf();x.fillStyle="#0e1d2b";x.fillRect(0,0,1080,1350);x.textAlign="center";x.fillStyle="#fff";x.font="800 62px "+F;x.fillText("🚂 "+T("title"),540,96);
  const S2=1.9,ox=(1080-W*S2)/2,oy=130,mh=H*S2;x.save();x.beginPath();x.rect(ox,oy,W*S2,mh);x.clip();x.translate(ox,oy);x.scale(S2,S2);
  x.fillStyle="#13293d";x.fillRect(0,0,W,H);if(sk.scene)try{sk.scene(x,W,H,3,true)}catch(e){}
  for(const d of D.dp)d.routes.forEach(r=>{if(!r)return;if(sk.rail)sk.rail(x,r,COLS[d.col],true,3);else railBasic(x,r,COLS[d.col],true,true)});for(const s of D.st)stationDraw(x,s,true);for(const d of D.dp)depotDraw(x,d,true,sk,{C:{br:1}});x.restore();

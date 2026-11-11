@@ -11,12 +11,12 @@
 <title>Xây Cầu Tre</title>
 <title>Đường Ray</title>
 <script>var savedTheme=null;try{savedTheme=localStorage.getItem("theme")}catch(e){}document.documentElement.dataset.theme=savedTheme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Be+Vietnam+Pro:wght@400;600;800&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Be+Vietnam+Pro:wght@400;600;800&display=swap"></noscript>
+<link rel="preload" href="../../../shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../../shared/fonts.css">
 <style>
 /* Xây Cầu Tre — game Cozy Play. Luôn vừa một màn hình. */
 :root{--bg:#EAF5E4;--panel:#ffffff;--ink:#1f3320;--muted:#587055;--accent:#2f9e44;--on:#ffffff;--good:#2f9e44;--bad:#d9480f;--line:#c4dcb9;--pbg:linear-gradient(#d6efc9,#f4fbef);--field:#f0faea;--field2:#d9eccf;
- --display:"Bungee","Arial Black",system-ui,sans-serif;--body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif}
+ --display:var(--font);--body:var(--font)}
 :root[data-theme="dark"]{--bg:#0d1a0f;--panel:#17291a;--ink:#e8fbe6;--muted:#9bc79a;--accent:#5ee07a;--on:#00210a;--good:#5ee07a;--bad:#ff8a4d;--line:#294a2d;--pbg:linear-gradient(#173a1e,#0d1a0f);--field:#112214;--field2:#1c3a20}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}[hidden]{display:none!important}
 html,body{margin:0;height:100%;background:var(--bg);overflow:hidden;font-family:var(--body);color:var(--ink)}
@@ -24,7 +24,7 @@ body{display:flex;justify-content:center}
 #play{position:relative;height:100dvh;width:min(100vw,62dvh,760px);container-type:size;overflow:hidden;background:var(--pbg);color:var(--ink);touch-action:none;user-select:none;-webkit-user-select:none}
 .deco{position:absolute;inset:0;pointer-events:none;overflow:hidden;opacity:.45}.deco i{position:absolute;font-style:normal;font-size:9cqw;animation:fl 9s ease-in-out infinite}@keyframes fl{50%{transform:translateY(-3cqw) rotate(8deg)}}
 .top{position:absolute;left:3cqw;right:3cqw;top:2.5cqw;height:9cqw;display:flex;align-items:center;gap:2cqw;z-index:3}
-.top h1{margin:0;flex:1;font:400 4.8cqw/1.05 var(--display);color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top h1{margin:0;flex:1;font:800 4.8cqw/1.05 var(--font);color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ib{width:9cqw;height:9cqw;min-width:36px;min-height:36px;border:1.5px solid color-mix(in srgb,var(--ink) 38%,transparent);border-radius:50%;background:var(--panel);color:var(--ink);font:800 3.6cqw var(--body);cursor:pointer;display:grid;place-items:center;box-shadow:0 .5cqw 0 color-mix(in srgb,var(--ink) 18%,transparent)}
 .ib:active{transform:translateY(.5cqw);box-shadow:none}
 .scr{position:absolute;left:4cqw;right:4cqw;top:14cqw;bottom:3cqw;display:flex;flex-direction:column;gap:2.4cqw;z-index:2;justify-content:center}
@@ -34,21 +34,21 @@ body{display:flex;justify-content:center}
 .row{display:flex;gap:2.2cqw;align-items:center;justify-content:center}.grow{flex:1}.mut{color:color-mix(in srgb,var(--ink) 68%,transparent);font-size:3.3cqw}
 .chips{display:flex;gap:2cqw;justify-content:center;flex-wrap:wrap}.chip{background:var(--panel);border:1px solid color-mix(in srgb,var(--ink) 28%,transparent);border-radius:99cqw;padding:1.2cqw 3cqw;font-size:3.5cqw;font-weight:800}
 .hero{text-align:center;font-size:18cqw;line-height:1.05}
-.dbtn{display:flex;align-items:center;gap:3cqw;text-align:left;width:100%}.dbtn .n{font:400 7cqw var(--display)}
+.dbtn{display:flex;align-items:center;gap:3cqw;text-align:left;width:100%}.dbtn .n{font:800 7cqw var(--font)}
 .tys{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4cqw}.fbox{display:flex;flex-direction:column;gap:1.4cqw;padding:2cqw;border:1.5px dashed color-mix(in srgb,var(--ink) 28%,transparent);border-radius:4cqw}.lvc{font:700 3cqw var(--body);color:var(--muted);text-align:center}.lvs{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4cqw}.lv{border:1.5px solid color-mix(in srgb,var(--ink) 30%,transparent);background:var(--panel);color:var(--ink);border-radius:3cqw;min-height:40px;font:800 3.2cqw var(--body);cursor:pointer}.lv.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 18%,var(--panel))}
 .ty{position:relative;border:1.5px solid color-mix(in srgb,var(--ink) 30%,transparent);background:var(--panel);color:var(--ink);border-radius:3cqw;padding:1.6cqw .6cqw;font:800 2.6cqw var(--body);min-height:44px;cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:.6cqw}.ty .e{display:block;font-size:6.8cqw;line-height:1.1}.ty .t{display:flex;align-items:center;justify-content:center;min-height:2.3em;line-height:1.15;overflow-wrap:anywhere}
 .ty.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 20%,var(--panel));box-shadow:0 0 0 .5cqw color-mix(in srgb,var(--accent) 45%,transparent)}.ty.lock{opacity:.8}.ty.lock::after{content:'🔒';position:absolute;top:.4cqw;right:1cqw;font-size:3.4cqw}
 /* ván chơi */
 #game{gap:1.6cqw;justify-content:flex-start}
-.stats{display:flex;gap:2cqw}.st{flex:1;background:var(--panel);border:.5cqw solid var(--line);border-radius:3cqw;padding:1cqw 2cqw;text-align:center}.st b{display:block;font:400 5.4cqw var(--display);color:var(--accent);line-height:1.1}.st span{font-size:2.8cqw;color:color-mix(in srgb,var(--ink) 65%,transparent);font-weight:800}
+.stats{display:flex;gap:2cqw}.st{flex:1;background:var(--panel);border:.5cqw solid var(--line);border-radius:3cqw;padding:1cqw 2cqw;text-align:center}.st b{display:block;font:800 5.4cqw var(--font);color:var(--accent);line-height:1.1}.st span{font-size:2.8cqw;color:color-mix(in srgb,var(--ink) 65%,transparent);font-weight:800}
 #cvw{flex:1;min-height:0;display:flex;justify-content:center;align-items:center}
 canvas#cv{border-radius:3cqw;background:linear-gradient(var(--field),var(--field2));border:.5cqw solid var(--line);touch-action:none;display:block;box-shadow:0 1cqw 0 rgba(0,0,0,.14)}
 .hint{text-align:center;margin:0;background:var(--panel);border:.5cqw solid var(--line);border-radius:99cqw;padding:1.2cqw 3.4cqw;justify-self:center;align-self:center;max-width:100%}
 /* kết thúc */
-.big{font:400 11cqw var(--display);color:var(--accent);text-align:center;line-height:1.1}.rk{text-align:center;font:800 4.6cqw var(--body)}
+.big{font:800 11cqw var(--font);color:var(--accent);text-align:center;line-height:1.1}.rk{text-align:center;font:800 4.6cqw var(--body)}
 .hat{display:flex;gap:1.4cqw;justify-content:center;flex-wrap:wrap;font-size:7.4cqw;min-height:9cqw}
 .ov{position:absolute;inset:0;background:color-mix(in srgb,var(--panel) 86%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);z-index:7;display:flex;flex-direction:column;justify-content:center;gap:2.4cqw;padding:5cqw;text-align:center}
-.ov h2{margin:0;font:400 6cqw var(--display);color:var(--accent)}.ov p{margin:0;font-size:3.9cqw;line-height:1.35}
+.ov h2{margin:0;font:800 6cqw var(--font);color:var(--accent)}.ov p{margin:0;font-size:3.9cqw;line-height:1.35}
 .sk{display:grid;grid-template-columns:1fr 1fr;gap:2.4cqw}.skc{position:relative;border:1.5px solid color-mix(in srgb,var(--ink) 30%,transparent);border-radius:3.4cqw;padding:2.2cqw;background:var(--panel);color:var(--ink);font:800 3.6cqw var(--body);cursor:pointer;min-height:44px}.skc.on{border-color:var(--accent)}.sk .skc{display:flex;align-items:center;gap:2.6cqw;text-align:left;padding:2cqw 2.6cqw}.sk .skc:last-child:nth-child(odd){grid-column:1/-1}.skc .e{font-size:9.5cqw;line-height:1;flex:none}.skc .sx{display:flex;flex-direction:column;gap:.9cqw;min-width:0}.skc .sx b{font:900 3.7cqw/1.15 var(--body)}.skc .sx small{font:700 2.7cqw/1.2 var(--body);opacity:.75}.skc.lock{opacity:.85}.skc.lock::after{content:'🔒';position:absolute;top:1.4cqw;right:2cqw;font-size:3.8cqw}
 .near{margin:0;text-align:center;font:900 4cqw var(--body);color:var(--accent);padding:1.4cqw 3cqw;border-radius:99cqw;border:1.5px solid color-mix(in srgb,var(--accent) 60%,transparent);background:color-mix(in srgb,var(--accent) 12%,transparent)}.btn.hot{animation:hotp 1s ease-in-out infinite}@keyframes hotp{50%{transform:scale(1.07);box-shadow:0 0 0 1.2cqw color-mix(in srgb,var(--accent) 30%,transparent)}}
 .rule{position:absolute;left:50%;top:27%;transform:translateX(-50%);width:86%;max-width:420px;box-sizing:border-box;z-index:8;pointer-events:none;padding:2.6cqw 3.6cqw;border-radius:4cqw;border:1.5px solid color-mix(in srgb,var(--accent) 70%,transparent);background:color-mix(in srgb,var(--panel) 90%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--ink);box-shadow:0 2cqw 6cqw rgba(0,0,0,.35);animation:ruleIn .3s ease-out}.rule h3{margin:0 0 1.4cqw;font:900 4.2cqw var(--body);color:var(--accent)}.rule p{margin:.8cqw 0 0;font:700 3.3cqw/1.35 var(--body)}.rule.out{opacity:0;transition:opacity .35s}@keyframes ruleIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}}
@@ -272,11 +272,11 @@ function draw(){if(!ctx||!cv.width)return;const sk=skinOf(),dm=sk.dim||[360,420]
  if(sk.fg)sk.fg(c,W,H,g,dk,tm,D);
  {const done=D.st==="build"?0:(D.vi||0),n=D.C.veh.length,gw=W/ (n+1);c.save();c.fillStyle=dk?"rgba(0,0,0,.35)":"rgba(255,255,255,.55)";c.beginPath();c.roundRect?c.roundRect(8,26,W-16,46,12):c.rect(8,26,W-16,46);c.fill();c.textAlign="center";c.textBaseline="middle";
   D.C.veh.forEach((vi,k)=>{const em0=vEm(vi),x=gw*(k+1),y=46;c.save();c.translate(x,y);c.globalAlpha=k<done?.5:1;c.fillStyle="#fff7e0";c.beginPath();c.arc(0,-1,17,0,6.283);c.fill();c.globalAlpha=1;if(k===done&&D.st!=="build"){c.strokeStyle="#ffd24a";c.lineWidth=3;c.beginPath();c.arc(0,-1,17,0,6.283);c.stroke()}if(k<done)c.globalAlpha=.45;c.font="26px "+emj;if(RIGHT.indexOf(em0)<0)c.scale(-1,1);c.fillText(em0,0,0);c.restore();
-   c.save();c.font="800 10px system-ui";c.fillStyle=skinOf().lbl||(dk?"rgba(255,255,255,.95)":"rgba(30,50,20,.95)");c.textAlign="center";c.fillText(k<done?"✓":VEH[vi][3].toFixed(1)+"×",x,68);c.restore();
-   if(k<n-1){c.save();c.fillStyle=dk?"rgba(255,255,255,.5)":"rgba(30,50,20,.5)";c.font="12px system-ui";c.textAlign="center";c.fillText("›",x+gw/2,46);c.restore()}});c.restore()}
+   c.save();c.font="800 10px Inter,system-ui,sans-serif";c.fillStyle=skinOf().lbl||(dk?"rgba(255,255,255,.95)":"rgba(30,50,20,.95)");c.textAlign="center";c.fillText(k<done?"✓":VEH[vi][3].toFixed(1)+"×",x,68);c.restore();
+   if(k<n-1){c.save();c.fillStyle=dk?"rgba(255,255,255,.5)":"rgba(30,50,20,.5)";c.font="12px Inter,system-ui,sans-serif";c.textAlign="center";c.fillText("›",x+gw/2,46);c.restore()}});c.restore()}
  if(D.C.wind&&D.st!=="build"){c.strokeStyle="rgba(200,230,255,.5)";c.lineWidth=1.6;for(let i=0;i<14;i++){const x=(i*61+tm*140)%W,y=(i*83)%H*.8+20;c.beginPath();c.moveTo(x,y);c.lineTo(x+22,y+6);c.stroke()}}
- for(const f of D.fx){c.save();c.globalAlpha=Math.min(1,f.t*2);c.font="800 16px system-ui";c.textAlign="center";c.fillStyle="#2f9e44";c.fillText("✓",f.x,f.y-(.8-f.t)*20);c.restore()}
- c.fillStyle=sk.lbl||(dk?"rgba(255,255,255,.85)":"rgba(30,50,20,.85)");c.font="800 13px 'Be Vietnam Pro',system-ui";c.textAlign="left";c.fillText(T("lvl",{n:D.attempt}),10,18);
+ for(const f of D.fx){c.save();c.globalAlpha=Math.min(1,f.t*2);c.font="800 16px Inter,system-ui,sans-serif";c.textAlign="center";c.fillStyle="#2f9e44";c.fillText("✓",f.x,f.y-(.8-f.t)*20);c.restore()}
+ c.fillStyle=sk.lbl||(dk?"rgba(255,255,255,.85)":"rgba(30,50,20,.85)");c.font="800 13px Inter,system-ui,sans-serif";c.textAlign="left";c.fillText(T("lvl",{n:D.attempt}),10,18);
  if(sk.fx)sk.fx(c,W,H,tm,dk)}
 
 /* ===== MÀN HÌNH ===== */
@@ -310,7 +310,7 @@ $("bRem").onclick=()=>{if(!G)return;const g=G;if(PF.pro&&PF.pro.trial)PF.lockPro
 $("bAgain").onclick=()=>{if(PF.pro&&PF.pro.trial)PF.lockPro();if(G&&G.mode==="daily"&&!G.ch)begin(G.seed,"daily",0,null);else begin(newSeed(),"free",TY,null)};
 $("bHome").onclick=()=>{G=null;if(PF.pro&&PF.pro.trial)PF.lockPro();show("home");renderHome()};
 /* ===== CHIA SẺ: bản đồ mạng lưới ===== */
-function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#7bd88f","#14532d"];
+function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="Inter,system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#7bd88f","#14532d"];
  const g=x.createLinearGradient(0,0,1080,1350);g.addColorStop(0,cg[0]);g.addColorStop(1,cg[1]);x.fillStyle=g;x.fillRect(0,0,1080,1350);x.textAlign="center";x.fillStyle="#fff";x.font="800 62px "+F;x.fillText((isProSk()?"👑 ":"🎋 ")+T("title"),540,100);
  const bx=100,by=150,bw=880,bh=640;x.fillStyle="rgba(214,239,255,.95)";x.beginPath();x.roundRect?x.roundRect(bx,by,bw,bh,36):x.rect(bx,by,bw,bh);x.fill();
  const sn=D.snapEnd||{nodes:D.nodes,mem:D.mem,g:D.g};if(sn&&sn.g){const gg=sn.g,sc=Math.min((bw-60)/(gg.rx-gg.lx+120),(bh-60)/260),ox=bx+bw/2-((gg.lx+gg.rx)/2)*sc,oy=by+bh/2-(Math.min(gg.ly,gg.ry)+50)*sc;x.save();x.beginPath();x.rect(bx,by,bw,bh);x.clip();x.translate(ox,oy);x.scale(sc,sc);x.fillStyle="#4fb6dd";x.fillRect(gg.lx,Math.max(gg.ly,gg.ry)+70,gg.rx-gg.lx,200);x.fillStyle="#7cc05a";x.fillRect(gg.lx-200,gg.ly,200,300);x.fillRect(gg.rx,gg.ry,200,300);drawStruct(x,sn.nodes,sn.mem,null,-1,-1,false);x.restore()}

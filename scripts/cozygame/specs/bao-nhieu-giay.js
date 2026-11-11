@@ -5,13 +5,13 @@ module.exports = {
   types: [["⏱️", "Cổ điển 10 giây", "Classic 10 s"], ["🎵", "Đếm nhịp", "Metronome"], ["🎲", "Mốc ngẫu nhiên", "Random marks"], ["🏃", "Marathon 30 giây", "30 s marathon"]],
   catalog: [["basic", "Đồng hồ rùa", "Turtle watch", "🐢"], ["sand", "Đồng hồ cát sa mạc", "Desert hourglass", "⏳"], ["bomb", "Gỡ bom hẹn giờ", "Defuse the bomb", "💣"], ["rocket", "Phóng tên lửa", "Rocket launch", "🚀"], ["oven", "Lò bánh tiệm xưa", "Old bakery oven", "🥐"]],
   rootCss: `:root{--bg:#FFF3DF;--panel:#ffffff;--ink:#3a2410;--muted:#7a5a3a;--accent:#e8590c;--on:#ffffff;--good:#2f9e44;--bad:#e03131;--line:#f1d3a8;--pbg:linear-gradient(#ffe4bd,#fff7ea);--field:#fff1d8;--field2:#ffe0b0;
- --display:"Bungee","Arial Black",system-ui,sans-serif;--body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif}
+ --display:var(--font);--body:var(--font)}
 :root[data-theme="dark"]{--bg:#1d1208;--panel:#2e1e10;--ink:#fff2e0;--muted:#d9b48c;--accent:#ff8a3d;--on:#2a1200;--good:#51cf66;--bad:#ff6b6b;--line:#4a3320;--pbg:linear-gradient(#3b2410,#1d1208);--field:#2a1a0c;--field2:#3a2514}`,
   extraCss: `
 #bs{flex:1;min-height:0;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:2cqw;padding:1cqw 0}
 #bsScene{position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:4cqw}
 #bsTop{position:relative;z-index:1;text-align:center;width:100%}
-#bsTarget{font:400 7cqw/1.1 var(--display);color:var(--accent)}
+#bsTarget{font:800 7cqw/1.1 var(--font);color:var(--accent)}
 #bsDots{display:flex;gap:2cqw;justify-content:center;margin-top:1.6cqw;min-height:4cqw}
 #bsDots i{width:4cqw;height:4cqw;border-radius:50%;background:color-mix(in srgb,var(--ink) 16%,transparent);border:.4cqw solid transparent}
 #bsDots i.on{background:var(--accent)}#bsDots i.ok{background:var(--good)}#bsDots i.no{background:var(--bad)}#bsDots i.cur{border-color:var(--accent);background:transparent}
@@ -19,7 +19,7 @@ module.exports = {
 #bsFace::before{content:"";position:absolute;inset:2.4cqw;border-radius:50%;background:repeating-conic-gradient(from -1deg,color-mix(in srgb,var(--ink) 38%,transparent) 0 2deg,transparent 2deg 30deg);-webkit-mask:radial-gradient(circle,transparent 86%,#000 87%);mask:radial-gradient(circle,transparent 86%,#000 87%);pointer-events:none}
 #bsMasc{font-size:15cqw;line-height:1;transition:transform .2s}
 #bs.run #bsMasc{animation:bob 1.2s ease-in-out infinite}@keyframes bob{50%{transform:translateY(-1.4cqw) rotate(-4deg)}}
-#bsBig{font:400 12.5cqw/1 var(--display);color:var(--ink);font-variant-numeric:tabular-nums}
+#bsBig{font:800 12.5cqw/1 var(--font);color:var(--ink);font-variant-numeric:tabular-nums}
 #bsSub{font:800 3.6cqw/1.2 var(--body);color:var(--muted);max-width:80%}
 #bsBtn{position:relative;z-index:1;width:100%;min-height:16cqw;font:800 6cqw var(--body);touch-action:manipulation}
 #bs.run #bsBtn{background:var(--bad);color:#fff}
@@ -122,7 +122,7 @@ function snapP(D){return D.res.length&&D.res.length<D.tg.length?{r:D.res.map(r=>
 function restoreP(D,p){if(!Array.isArray(p.r)||p.r.length>=D.tg.length)return;D.res=p.r.map(a=>{const e=+a[0]||0,tg=+a[1]||10,err=Math.abs(e-tg);return{e,err,sc:Math.max(0,Math.round(1000*(1-2*err/tg))),tg}});D.i=D.res.length;D.st="ready";bsRender();hud()}
 function onBegin(D){bsRender()}
 `,
-  drawCard: String.raw`function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#ff9a5a","#b8430a"];
+  drawCard: String.raw`function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="Inter,system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#ff9a5a","#b8430a"];
  const g=x.createLinearGradient(0,0,1080,1350);g.addColorStop(0,cg[0]);g.addColorStop(1,cg[1]);x.fillStyle=g;x.fillRect(0,0,1080,1350);x.textAlign="center";x.fillStyle="#fff";x.font="800 62px "+F;x.fillText((isProSk()?"👑 ":"⏱️ ")+T("title"),540,100);
  const best=D.res.reduce((a,r)=>r.err<a.err?r:a,D.res[0]||{e:0,err:0,tg:10});x.fillStyle="rgba(255,255,255,.95)";x.beginPath();x.arc(540,470,290,0,6.283);x.fill();x.lineWidth=18;x.strokeStyle="rgba(0,0,0,.18)";x.stroke();
  x.fillStyle="#3a2410";x.font="140px "+F;x.fillText(sk.masc||"🐢",540,400);x.font="800 130px "+F;x.fillText(fmt(best.e)+"s",540,540);x.font="700 44px "+F;x.fillStyle="#7a5a3a";x.fillText((LANG==="vi"?"mục tiêu ":"target ")+fmt(best.tg)+"s · "+(LANG==="vi"?"lệch ":"off ")+fmt(best.err)+"s",540,610);

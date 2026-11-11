@@ -11,12 +11,12 @@
 <title>Né Ổ Gà Mùa Mưa</title>
 <title>Đường Ray</title>
 <script>var savedTheme=null;try{savedTheme=localStorage.getItem("theme")}catch(e){}document.documentElement.dataset.theme=savedTheme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Be+Vietnam+Pro:wght@400;600;800&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Be+Vietnam+Pro:wght@400;600;800&display=swap"></noscript>
+<link rel="preload" href="../../../shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../../shared/fonts.css">
 <style>
 /* Né Ổ Gà Mùa Mưa — game Cozy Play. Luôn vừa một màn hình. */
 :root{--bg:#E6EEF4;--panel:#ffffff;--ink:#14283a;--muted:#587186;--accent:#1c7ed6;--on:#ffffff;--good:#1a9a55;--bad:#d23b3b;--line:#bcd0e0;--pbg:linear-gradient(#c9dbe9,#eef5fa);--field:#eaf2f8;--field2:#d3e2ee;
- --display:"Bungee","Arial Black",system-ui,sans-serif;--body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif}
+ --display:var(--font);--body:var(--font)}
 :root[data-theme="dark"]{--bg:#0b141c;--panel:#16252f;--ink:#e8f4ff;--muted:#9bb6ca;--accent:#58b4ff;--on:#00213a;--good:#3ddc84;--bad:#ff6b6b;--line:#27414f;--pbg:linear-gradient(#17303f,#0b141c);--field:#0f1c26;--field2:#1a2f3d}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}[hidden]{display:none!important}
 html,body{margin:0;height:100%;background:var(--bg);overflow:hidden;font-family:var(--body);color:var(--ink)}
@@ -24,7 +24,7 @@ body{display:flex;justify-content:center}
 #play{position:relative;height:100dvh;width:min(100vw,62dvh,760px);container-type:size;overflow:hidden;background:var(--pbg);color:var(--ink);touch-action:none;user-select:none;-webkit-user-select:none}
 .deco{position:absolute;inset:0;pointer-events:none;overflow:hidden;opacity:.45}.deco i{position:absolute;font-style:normal;font-size:9cqw;animation:fl 9s ease-in-out infinite}@keyframes fl{50%{transform:translateY(-3cqw) rotate(8deg)}}
 .top{position:absolute;left:3cqw;right:3cqw;top:2.5cqw;height:9cqw;display:flex;align-items:center;gap:2cqw;z-index:3}
-.top h1{margin:0;flex:1;font:400 4.8cqw/1.05 var(--display);color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top h1{margin:0;flex:1;font:800 4.8cqw/1.05 var(--font);color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ib{width:9cqw;height:9cqw;min-width:36px;min-height:36px;border:1.5px solid color-mix(in srgb,var(--ink) 38%,transparent);border-radius:50%;background:var(--panel);color:var(--ink);font:800 3.6cqw var(--body);cursor:pointer;display:grid;place-items:center;box-shadow:0 .5cqw 0 color-mix(in srgb,var(--ink) 18%,transparent)}
 .ib:active{transform:translateY(.5cqw);box-shadow:none}
 .scr{position:absolute;left:4cqw;right:4cqw;top:14cqw;bottom:3cqw;display:flex;flex-direction:column;gap:2.4cqw;z-index:2;justify-content:center}
@@ -34,21 +34,21 @@ body{display:flex;justify-content:center}
 .row{display:flex;gap:2.2cqw;align-items:center;justify-content:center}.grow{flex:1}.mut{color:color-mix(in srgb,var(--ink) 68%,transparent);font-size:3.3cqw}
 .chips{display:flex;gap:2cqw;justify-content:center;flex-wrap:wrap}.chip{background:var(--panel);border:1px solid color-mix(in srgb,var(--ink) 28%,transparent);border-radius:99cqw;padding:1.2cqw 3cqw;font-size:3.5cqw;font-weight:800}
 .hero{text-align:center;font-size:18cqw;line-height:1.05}
-.dbtn{display:flex;align-items:center;gap:3cqw;text-align:left;width:100%}.dbtn .n{font:400 7cqw var(--display)}
+.dbtn{display:flex;align-items:center;gap:3cqw;text-align:left;width:100%}.dbtn .n{font:800 7cqw var(--font)}
 .tys{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4cqw}.fbox{display:flex;flex-direction:column;gap:1.4cqw;padding:2cqw;border:1.5px dashed color-mix(in srgb,var(--ink) 28%,transparent);border-radius:4cqw}.lvc{font:700 3cqw var(--body);color:var(--muted);text-align:center}.lvs{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4cqw}.lv{border:1.5px solid color-mix(in srgb,var(--ink) 30%,transparent);background:var(--panel);color:var(--ink);border-radius:3cqw;min-height:40px;font:800 3.2cqw var(--body);cursor:pointer}.lv.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 18%,var(--panel))}
 .ty{position:relative;border:1.5px solid color-mix(in srgb,var(--ink) 30%,transparent);background:var(--panel);color:var(--ink);border-radius:3cqw;padding:1.6cqw .6cqw;font:800 2.6cqw var(--body);min-height:44px;cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:.6cqw}.ty .e{display:block;font-size:6.8cqw;line-height:1.1}.ty .t{display:flex;align-items:center;justify-content:center;min-height:2.3em;line-height:1.15;overflow-wrap:anywhere}
 .ty.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 20%,var(--panel));box-shadow:0 0 0 .5cqw color-mix(in srgb,var(--accent) 45%,transparent)}.ty.lock{opacity:.8}.ty.lock::after{content:'🔒';position:absolute;top:.4cqw;right:1cqw;font-size:3.4cqw}
 /* ván chơi */
 #game{gap:1.6cqw;justify-content:flex-start}
-.stats{display:flex;gap:2cqw}.st{flex:1;background:var(--panel);border:.5cqw solid var(--line);border-radius:3cqw;padding:1cqw 2cqw;text-align:center}.st b{display:block;font:400 5.4cqw var(--display);color:var(--accent);line-height:1.1}.st span{font-size:2.8cqw;color:color-mix(in srgb,var(--ink) 65%,transparent);font-weight:800}
+.stats{display:flex;gap:2cqw}.st{flex:1;background:var(--panel);border:.5cqw solid var(--line);border-radius:3cqw;padding:1cqw 2cqw;text-align:center}.st b{display:block;font:800 5.4cqw var(--font);color:var(--accent);line-height:1.1}.st span{font-size:2.8cqw;color:color-mix(in srgb,var(--ink) 65%,transparent);font-weight:800}
 #cvw{flex:1;min-height:0;display:flex;justify-content:center;align-items:center}
 canvas#cv{border-radius:3cqw;background:linear-gradient(var(--field),var(--field2));border:.5cqw solid var(--line);touch-action:none;display:block;box-shadow:0 1cqw 0 rgba(0,0,0,.14)}
 .hint{text-align:center;margin:0;background:var(--panel);border:.5cqw solid var(--line);border-radius:99cqw;padding:1.2cqw 3.4cqw;justify-self:center;align-self:center;max-width:100%}
 /* kết thúc */
-.big{font:400 11cqw var(--display);color:var(--accent);text-align:center;line-height:1.1}.rk{text-align:center;font:800 4.6cqw var(--body)}
+.big{font:800 11cqw var(--font);color:var(--accent);text-align:center;line-height:1.1}.rk{text-align:center;font:800 4.6cqw var(--body)}
 .hat{display:flex;gap:1.4cqw;justify-content:center;flex-wrap:wrap;font-size:7.4cqw;min-height:9cqw}
 .ov{position:absolute;inset:0;background:color-mix(in srgb,var(--panel) 86%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);z-index:7;display:flex;flex-direction:column;justify-content:center;gap:2.4cqw;padding:5cqw;text-align:center}
-.ov h2{margin:0;font:400 6cqw var(--display);color:var(--accent)}.ov p{margin:0;font-size:3.9cqw;line-height:1.35}
+.ov h2{margin:0;font:800 6cqw var(--font);color:var(--accent)}.ov p{margin:0;font-size:3.9cqw;line-height:1.35}
 .sk{display:grid;grid-template-columns:1fr 1fr;gap:2.4cqw}.skc{position:relative;border:1.5px solid color-mix(in srgb,var(--ink) 30%,transparent);border-radius:3.4cqw;padding:2.2cqw;background:var(--panel);color:var(--ink);font:800 3.6cqw var(--body);cursor:pointer;min-height:44px}.skc.on{border-color:var(--accent)}.sk .skc{display:flex;align-items:center;gap:2.6cqw;text-align:left;padding:2cqw 2.6cqw}.sk .skc:last-child:nth-child(odd){grid-column:1/-1}.skc .e{font-size:9.5cqw;line-height:1;flex:none}.skc .sx{display:flex;flex-direction:column;gap:.9cqw;min-width:0}.skc .sx b{font:900 3.7cqw/1.15 var(--body)}.skc .sx small{font:700 2.7cqw/1.2 var(--body);opacity:.75}.skc.lock{opacity:.85}.skc.lock::after{content:'🔒';position:absolute;top:1.4cqw;right:2cqw;font-size:3.8cqw}
 .near{margin:0;text-align:center;font:900 4cqw var(--body);color:var(--accent);padding:1.4cqw 3cqw;border-radius:99cqw;border:1.5px solid color-mix(in srgb,var(--accent) 60%,transparent);background:color-mix(in srgb,var(--accent) 12%,transparent)}.btn.hot{animation:hotp 1s ease-in-out infinite}@keyframes hotp{50%{transform:scale(1.07);box-shadow:0 0 0 1.2cqw color-mix(in srgb,var(--accent) 30%,transparent)}}
 .rule{position:absolute;left:50%;top:27%;transform:translateX(-50%);width:86%;max-width:420px;box-sizing:border-box;z-index:8;pointer-events:none;padding:2.6cqw 3.6cqw;border-radius:4cqw;border:1.5px solid color-mix(in srgb,var(--accent) 70%,transparent);background:color-mix(in srgb,var(--panel) 90%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--ink);box-shadow:0 2cqw 6cqw rgba(0,0,0,.35);animation:ruleIn .3s ease-out}.rule h3{margin:0 0 1.4cqw;font:900 4.2cqw var(--body);color:var(--accent)}.rule p{margin:.8cqw 0 0;font:700 3.3cqw/1.35 var(--body)}.rule.out{opacity:0;transition:opacity .35s}@keyframes ruleIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}}
@@ -237,7 +237,7 @@ function draw(){if(!ctx||!cv.width)return;const sk=skinOf(),dm=sk.dim||[360,560]
  if(D.C.storm||D.C.night){c.fillStyle="rgba(5,10,25,"+(D.C.night?0:.22)+")";c.fillRect(0,0,W,H)}
  if(D.C.night){const p=proj(D,D.pl,0),RR=230*(D.C.batt?D.light:1),g=c.createRadialGradient(p.x,p.y-90,18,p.x,p.y-90,RR);g.addColorStop(0,"rgba(0,0,10,0)");g.addColorStop(1,"rgba(0,0,10,.95)");c.fillStyle=g;c.fillRect(0,0,W,H)}
  if(D.C.fog){const ph=(D.time%2.8)/2.8,a=ph<.12?0:Math.min(.5,(ph-.12)*.62);c.fillStyle="rgba(205,220,235,"+a+")";c.fillRect(0,0,W,H);if(ph<.14){const sx=(ph/.14)*W;c.strokeStyle="rgba(255,255,255,.7)";c.lineWidth=5;c.beginPath();c.moveTo(sx,0);c.lineTo(sx-40,H);c.stroke()}}
- if(D.gust){c.save();c.globalAlpha=.6+.4*Math.sin(D.time*20);c.font="46px "+emj;c.textAlign="center";const gx=D.gustDir<0?W*.2:W*.8;c.fillText("💨",gx,H*.4);c.font="800 30px system-ui";c.fillStyle="#fff";c.fillText(D.gustDir<0?"◀":"▶",gx,H*.4+46);c.restore()}
+ if(D.gust){c.save();c.globalAlpha=.6+.4*Math.sin(D.time*20);c.font="46px "+emj;c.textAlign="center";const gx=D.gustDir<0?W*.2:W*.8;c.fillText("💨",gx,H*.4);c.font="800 30px Inter,system-ui,sans-serif";c.fillStyle="#fff";c.fillText(D.gustDir<0?"◀":"▶",gx,H*.4+46);c.restore()}
  if(D.splash>0){c.fillStyle="rgba(90,120,150,"+Math.min(.5,D.splash*.6)+")";for(let i=0;i<7;i++){c.beginPath();c.ellipse((i*83+tm*20)%W,(i*131)%H*.8+30,40+i*6,22,0,0,6.283);c.fill()}}
  if(D.flash>0){c.fillStyle="rgba(255,60,60,"+D.flash*.3+")";c.fillRect(0,0,W,H)}}
 /* ===== nhập liệu: vuốt hoặc chạm hai bên ===== */
@@ -282,7 +282,7 @@ $("bRem").onclick=()=>{if(!G)return;const g=G;if(PF.pro&&PF.pro.trial)PF.lockPro
 $("bAgain").onclick=()=>{if(PF.pro&&PF.pro.trial)PF.lockPro();if(G&&G.mode==="daily"&&!G.ch)begin(G.seed,"daily",0,null);else begin(newSeed(),"free",TY,null)};
 $("bHome").onclick=()=>{G=null;if(PF.pro&&PF.pro.trial)PF.lockPro();show("home");renderHome()};
 /* ===== CHIA SẺ: bản đồ mạng lưới ===== */
-function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="'Be Vietnam Pro',system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#5a7a94","#0d1b27"];
+function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="Inter,system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#5a7a94","#0d1b27"];
  const g=x.createLinearGradient(0,0,1080,1350);g.addColorStop(0,cg[0]);g.addColorStop(1,cg[1]);x.fillStyle=g;x.fillRect(0,0,1080,1350);x.strokeStyle="rgba(200,225,255,.35)";x.lineWidth=3;for(let i=0;i<70;i++){const a=(i*157)%1080,b=(i*233)%1300;x.beginPath();x.moveTo(a,b);x.lineTo(a-14,b+44);x.stroke()}
  x.textAlign="center";x.fillStyle="#fff";x.font="800 62px "+F;x.fillText((isProSk()?"👑 ":"🛵 ")+T("title"),540,100);
  x.fillStyle="rgba(20,30,40,.72)";x.beginPath();x.roundRect?x.roundRect(250,170,580,560,40):x.rect(250,170,580,560);x.fill();x.strokeStyle="#fff";x.setLineDash([40,34]);x.lineWidth=7;x.beginPath();x.moveTo(445,190);x.lineTo(445,710);x.moveTo(635,190);x.lineTo(635,710);x.stroke();x.setLineDash([]);
