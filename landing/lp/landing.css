@@ -217,7 +217,7 @@ html[data-theme=dark] .top{background:rgba(18,20,31,.85)}
 /* ===== Menu icon (header + chân trang) ===== */
 .mbtn{display:none;align-items:center;justify-content:center;min-width:44px;min-height:44px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer;padding:0}
 .mbtn:hover{border-color:var(--accent)}
-@media (min-width:400px) and (max-width:999px){.top .mbtn{display:inline-flex}}
+@media (min-width:340px) and (max-width:999px){.top .mbtn{display:inline-flex}}
 @media (max-width:999px){
  .links.open{display:grid;position:absolute;top:58px;right:16px;margin:0;gap:2px;padding:8px;min-width:200px;background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:0 14px 40px rgba(0,0,0,.35);z-index:60}
 }
@@ -230,7 +230,7 @@ html[data-theme=dark] .top{background:rgba(18,20,31,.85)}
 .flinks{flex-wrap:wrap;gap:0 4px;justify-content:flex-end}
 .flinks a{padding:0 8px;font-size:14px;font-weight:600;text-decoration:none;border-radius:99px}
 .flinks a:hover{background:var(--card)}
-@media (max-width:899px){
+@media (max-width:999px){
  .foot .mbtn{display:inline-flex}
  .foot.js-menu .flinks{display:none}
  .foot.js-menu .flinks.open{display:grid;position:absolute;right:0;bottom:calc(100% + 8px);gap:2px;padding:8px;min-width:230px;background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:0 14px 40px rgba(0,0,0,.35);z-index:60}
@@ -280,3 +280,19 @@ html[data-theme=dark] .top{background:rgba(18,20,31,.85)}
 .pcta{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:18px!important}
 html[data-theme=dark] .pcard{background:rgba(27,30,47,.72)}
 @media (min-width:900px){.pgrid{grid-template-columns:1.1fr .9fr}.pshots .dev{width:min(46%,250px)}}
+
+/* mục phụ của menu header: chỉ hiện trong popover ở điện thoại rất hẹp (<340px), nơi EN/theme không còn chỗ ở thanh trên */
+.links .xtra{display:none}
+@media (max-width:339px){
+ .top .tools>.lang,.top #themeBtn{display:none}
+ .links.open .xtra{display:flex;align-items:center;min-height:44px;padding:0 12px;border:0;background:none;color:var(--ink2);font:600 17px system-ui,sans-serif;border-radius:12px;text-align:left;cursor:pointer;text-decoration:none}
+ .top .mbtn{display:inline-flex}
+}
+@media (max-width:360px){.top .mbtn{min-width:44px}}
+/* điện thoại: MỘT máy ló lên dưới huy hiệu (ảnh giữa, không chip), thay dải emoji */
+@media (max-width:899px){
+ .mosaic{display:none}
+ .hero-in>.phones{display:block;justify-self:center;width:min(220px,62vw);margin:10px auto 0}
+ .pfx .dev.l,.pfx .dev.r,.fchip{display:none}
+ .pfx .c{position:relative;width:100%}
+}

@@ -3,11 +3,12 @@
   var d = document, root = d.documentElement, lang = d.body.getAttribute("data-lang");
   var $ = function (id) { return d.getElementById(id); };
   /* theme: cùng khoá "theme" với phần còn lại của site */
-  var tb = $("themeBtn");
-  if (tb) tb.addEventListener("click", function () {
-    var t = root.dataset.theme === "dark" ? "light" : "dark";
-    root.dataset.theme = t;
-    try { localStorage.setItem("theme", t); } catch (e) {}
+  Array.prototype.forEach.call(d.querySelectorAll("#themeBtn,[data-theme-toggle]"), function (tb) {
+    tb.addEventListener("click", function () {
+      var t = root.dataset.theme === "dark" ? "light" : "dark";
+      root.dataset.theme = t;
+      try { localStorage.setItem("theme", t); } catch (e) {}
+    });
   });
   /* các khối cùng thứ tự ở hai bản VI/EN: main > section, rồi chân trang */
   function blocks() { return Array.prototype.slice.call(d.querySelectorAll("main > section")).concat(Array.prototype.slice.call(d.querySelectorAll("footer.foot"))); }

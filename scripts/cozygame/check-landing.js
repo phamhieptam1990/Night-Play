@@ -139,7 +139,7 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
       await pg.evaluateOnNewDocument(() => { Object.defineProperty(window, "localStorage", { get() { throw new Error("blocked"); } }); });
       await pg.goto(B + PAGES.vi, { waitUntil: "load" }); note((await pg.$eval("#heroCta", e => e.textContent.trim())) === "Chơi ngay" && !errs.length, "chơi-tiếp storage chặn", "phải giữ 'Chơi ngay', không lỗi: " + errs[0]); await pg.close(); }
     /* bố cục: thẻ lối vào bằng nhau + không xuống dòng, thẻ giá đều + không cắt chữ, không phần tử nào cuộn ngang/bị cắt, hero liền mạch dưới thanh trên */
-    for (const l of ["vi", "en"]) for (const th of ["light", "dark"]) for (const sz of [[320, 568], [360, 640], [390, 844], [430, 932], [768, 1024], [1024, 768], [1440, 900]]) {
+    for (const l of ["vi", "en"]) for (const th of ["light", "dark"]) for (const sz of [[320, 568], [360, 640], [390, 844], [430, 932], [768, 1024], [900, 700], [960, 700], [1024, 768], [1440, 900]]) {
       const pg = await br.newPage(); await pg.setViewport({ width: sz[0], height: sz[1] });
       await pg.evaluateOnNewDocument(t => { try { localStorage.setItem("theme", t); } catch (e) {} }, th);
       await pg.goto(B + PAGES[l], { waitUntil: "load" }); await wait(250);
@@ -185,7 +185,7 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
       const pg = await br.newPage(); await pg.setViewport({ width: sz[0], height: sz[1] }); const errs = []; pg.on("pageerror", e => errs.push(String(e)));
       await pg.evaluateOnNewDocument(t => { try { localStorage.clear(); localStorage.setItem("theme", t); } catch (e) {} }, th);
       await pg.goto(B + PAGES[l], { waitUntil: "load" }); await wait(250);
-      const tag = "chân-trang " + l + " " + sz.join("x") + " " + th, narrow = sz[0] < 900;
+      const tag = "chân-trang " + l + " " + sz.join("x") + " " + th, narrow = sz[0] < 1000;
       await pg.evaluate(() => document.querySelector("footer.foot").scrollIntoView({ behavior: "instant", block: "end" })); await wait(150);
       const r = await pg.evaluate(() => { const f = document.querySelector("footer.foot"), b = f.querySelector(".mbtn"), nv = document.getElementById("flinks"), bb = b && b.getBoundingClientRect();
         const links = [...nv.querySelectorAll("a")].map(a => a.getAttribute("href")), ah = [...nv.querySelectorAll("a")].filter(a => a.offsetParent).map(a => a.getBoundingClientRect().height);
@@ -202,9 +202,9 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
         await pg.keyboard.press("Escape"); await wait(100); note(await pg.evaluate(() => document.getElementById("flinks").offsetParent === null), tag, "Esc không đóng menu");
         await pg.focus("footer .mbtn"); await pg.keyboard.press("Enter"); await wait(100); note(await pg.evaluate(() => document.getElementById("flinks").offsetParent !== null), tag, "Enter không mở menu");
         await pg.mouse.click(5, 5); await wait(100); note(await pg.evaluate(() => document.getElementById("flinks").offsetParent === null), tag, "bấm ngoài không đóng menu");
-        if (sz[0] >= 400) { await pg.evaluate(() => scrollTo({ top: 0, behavior: "instant" })); await wait(100); const hb = await pg.$(".top .mbtn"); const bx = hb && await hb.boundingBox();
-          note(!!bx && bx.width >= 44 && bx.height >= 44, tag, "thiếu nút menu header >= 44px"); if (hb) { await hb.click(); await wait(150); const h = await pg.evaluate(() => { const n = document.getElementById("hlinks"), q = n.getBoundingClientRect(), c = document.querySelector(".top .btn").getBoundingClientRect(); return { vis: n.offsetParent !== null, in: q.right <= innerWidth && q.left >= 0, cta: c.width >= 80 && c.height >= 44, n: n.querySelectorAll("a").length }; });
-            note(h.vis && h.in && h.cta && h.n === 5, tag, "menu header sai " + JSON.stringify(h)); await pg.keyboard.press("Escape"); } }
+        if (sz[0] >= 320) { await pg.evaluate(() => scrollTo({ top: 0, behavior: "instant" })); await wait(100); const hb = await pg.$(".top .mbtn"); const bx = hb && await hb.boundingBox();
+          note(!!bx && bx.width >= 44 && bx.height >= 44, tag, "thiếu nút menu header >= 44px"); if (hb) { await hb.click(); await wait(150); const h = await pg.evaluate(SZ0 => { const n = document.getElementById("hlinks"), q = n.getBoundingClientRect(), c = document.querySelector(".top .btn").getBoundingClientRect(); return { vis: n.offsetParent !== null, in: q.right <= innerWidth && q.left >= 0, cta: c.width >= 80 && c.height >= 44, n: n.querySelectorAll("a:not(.xtra)").length, x: SZ0 < 340 ? [...n.querySelectorAll(".xtra")].every(e => e.getBoundingClientRect().height >= 44) && !document.querySelector(".top .tools>.lang").offsetParent : true }; }, sz[0]);
+            note(h.vis && h.in && h.cta && h.x && h.n === 5, tag, "menu header sai " + JSON.stringify(h)); await pg.keyboard.press("Escape"); } }
       } else if (sz[0] >= 1000) note(await pg.evaluate(() => document.getElementById("hlinks").offsetParent !== null), tag, "liên kết neo header phải hiện");
       note(!errs.length, tag, "lỗi: " + errs[0]); await pg.close(); }
     /* mục phụ huynh + ảnh chụp thật: có id trong menu neo, ảnh tải được có width/height + alt, CTA/chính sách đúng, không CLS */
@@ -275,7 +275,7 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
       /* hero một màn hình ở 360x640 */
       if (w === 360 && h === 640) {
         const hh = await pg.evaluate(() => { const g = s => document.querySelector(s).getBoundingClientRect(); const hero = g(".hero"); return { top: hero.top, bottom: hero.bottom, cta: g("#heroCta").bottom, badges: g(".badges").bottom, g2: g(".cta .night").bottom, ih: innerHeight }; });
-        note(hh.bottom <= hh.ih + 1, tag, "hero cao quá một màn hình (bottom " + Math.round(hh.bottom) + " > " + hh.ih + ")");
+        note(Math.max(hh.cta, hh.g2) <= hh.ih && hh.badges <= hh.ih, tag, "CTA/thẻ lối vào/huy hiệu ra ngoài màn đầu (" + Math.round(hh.cta) + "/" + Math.round(hh.g2) + "/" + Math.round(hh.badges) + " > " + hh.ih + "); điện thoại minh hoạ được phép ló xuống dưới");
         note(hh.cta <= hh.ih && hh.g2 <= hh.ih && hh.badges <= hh.ih, tag, "CTA/huy hiệu nằm ngoài màn hình đầu");
       }
       if (shotDir && ((w === 390 && h === 844) || (w === 1440 && h === 900))) { fs.mkdirSync(shotDir, { recursive: true }); await pg.screenshot({ path: path.join(shotDir, `landing-${l}-${w}-${th}-top.png`) }); await pg.screenshot({ path: path.join(shotDir, `landing-${l}-${w}-${th}-full.png`), fullPage: true }); }
