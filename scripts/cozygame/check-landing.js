@@ -25,12 +25,12 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
   note(bd.status === 0, "build", "scripts/build.js lỗi: " + (bd.stderr || "").slice(0, 200));
   const R = f => path.join(dist, f);
   /* 1) file trong dist */
-  for (const f of ["index.html", "en/index.html", "lp/landing.css", "lp/landing.js", "lp/img/og.png", "lp/img/logo.svg", "sitemap.xml", "robots.txt", "shared/theme.css", "shared/track.js", "shared/site.js", "play/index.html", "sw.js", "manifest.webmanifest", "_redirects", "gioi-thieu/index.html", "gioi-thieu/en/index.html"])
+  for (const f of ["index.html", "en/index.html", "lp/landing.css", "lp/landing.js", "lp/orbit.js", "lp/img/og.png", "lp/img/logo.svg", "sitemap.xml", "robots.txt", "shared/theme.css", "shared/track.js", "shared/site.js", "play/index.html", "sw.js", "manifest.webmanifest", "_redirects", "gioi-thieu/index.html", "gioi-thieu/en/index.html"])
     note(fs.existsSync(R(f)), "dist", "thiếu " + f);
   try { const b = fs.readFileSync(R("lp/img/og.png")); note(b.readUInt32BE(16) === 1200 && b.readUInt32BE(20) === 630, "og.png", "phải 1200x630"); note(b.length <= 120 * 1024, "og.png", "nặng " + b.length + " > 120KB"); } catch (e) {}
   const sm = fs.existsSync(R("sitemap.xml")) ? fs.readFileSync(R("sitemap.xml"), "utf8") : "";
   note(!/__BUILD_DATE__/.test(sm) && /<lastmod>\d{4}-\d\d-\d\d<\/lastmod>/.test(sm), "sitemap", "chưa thay ngày build");
-  for (const u of ["/", "/en/", "/play/", "/popplay/", "/cozyplay/", "/subscribe.html", "/privacy.html", "/terms.html"]) note(sm.includes("<loc>https://nightplay.vn" + u + "</loc>"), "sitemap", "thiếu " + u);
+  for (const u of ["/", "/en/", "/play/", "/popplay/", "/cozyplay/", "/subscribe", "/privacy", "/terms"]) note(sm.includes("<loc>https://nightplay.vn" + u + "</loc>"), "sitemap", "thiếu " + u);
   note((sm.match(/<urlset/g) || []).length === 1 && (sm.match(/<url>/g) || []).length === (sm.match(/<\/url>/g) || []).length, "sitemap", "XML hỏng");
   const rb = fs.existsSync(R("robots.txt")) ? fs.readFileSync(R("robots.txt"), "utf8") : "";
   for (const l of ["User-agent: *", "Allow: /", "Disallow: /admin/", "Disallow: /api/", "Sitemap: https://nightplay.vn/sitemap.xml"]) note(rb.includes(l), "robots", "thiếu dòng: " + l);
@@ -253,7 +253,7 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
           if (r.height < 43.5 || r.width < 43.5) out.small.push((e.className || e.tagName) + ":" + Math.round(r.width) + "x" + Math.round(r.height) + " " + (e.textContent || "").trim().slice(0, 20));
         }
         const parse = s => { const m = s.match(/rgba?\(([^)]+)\)/); if (!m) return null; const p = m[1].split(/[ ,\/]+/).map(Number); return { c: p.slice(0, 3), a: p.length > 3 ? p[3] : 1 }; };
-        const bgOf = el => { for (let e = el; e; e = e.parentElement) { if (e.classList.contains("world") || e.classList.contains("sticky")) return "skip"; const p = parse(getComputedStyle(e).backgroundColor); if (p && p.a > .9) return p.c; } return [255, 255, 255]; };
+        const bgOf = el => { for (let e = el; e; e = e.parentElement) { if (e.classList.contains("world") || e.classList.contains("sticky") || e.classList.contains("orbstage")) return "skip"; const p = parse(getComputedStyle(e).backgroundColor); if (p && p.a > .9) return p.c; } return [255, 255, 255]; };
         const seen = new Set();
         const wk = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
         for (let n; (n = wk.nextNode());) {
@@ -289,6 +289,97 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
         note(await pg.evaluate(() => document.getElementById("sticky").classList.contains("on")), tag, "thanh CTA dính không hiện sau khi cuộn");
       }
       await pg.close(); await cx.close();
+    }
+    /* hệ quỹ đạo "Chọn thế giới của bạn": HTML tĩnh, bố cục, chuyển động, tương tác, âm thanh (mức trạng thái; không nghe được tiếng thật) */
+    for (const l of ["vi", "en"]) {
+      const tg = "quỹ đạo " + l, h = src[l], sec = (h.match(/<section class="sec alt orbit"[\s\S]*?<\/section>/) || [""])[0];
+      note(!!sec && /<h2 id="hWorlds">/.test(sec), tg, "thiếu mục quỹ đạo hoặc h2#hWorlds");
+      note(/<article class="world pop">[\s\S]*?<a class="btn white" href="\/popplay\/">/.test(sec) && /<article class="world night">[\s\S]*?<a class="btn white" href="\/cozyplay\/">/.test(sec), tg, "hai thẻ chi tiết phải là <a href=/popplay/> và <a href=/cozyplay/> trong HTML tĩnh");
+      note(sec.includes(l === "vi" ? "12 game ngắn học chữ, số, màu, nhịp" : "12 short games for letters") && sec.includes(l === "vi" ? "20 game giải toả" : "20 relaxing games"), tg, "thiếu mô tả hai thế giới");
+      const ms = fs.readFileSync(path.join(root, "shared", "multi-games.js"), "utf8"), cnt = p => [...ms.matchAll(new RegExp('^\\s*"[a-z0-9-]+":\\s*\\{\\s*portal: "' + p + '"', "gm"))].length;
+      note(cnt("popplay") === 12 && cnt("cozyplay") === 20, tg, "số game thật đã đổi (" + cnt("popplay") + "/" + cnt("cozyplay") + "): sửa chữ '12'/'20' ở mục này");
+      const st = [...sec.matchAll(/<a class="sat (pop|night)"[^>]*href="\/(popplay|cozyplay)\/#([a-z0-9-]+)" aria-label="([^"]+)"/g)];
+      note(st.length === 12 && st.filter(m => m[1] === "pop").length === 6, tg, "cần 6 icon Pop + 6 icon Night có aria-label (đang " + st.length + ")");
+      for (const m of st) { note(gameIds.has(m[3]), tg, "icon trỏ id lạ " + m[3]); note((m[1] === "pop") === (m[2] === "popplay"), tg, "icon " + m[3] + " sai cổng"); }
+      note(/<button class="orbsnd"[^>]*aria-pressed="false"[^>]*aria-label="[^"]+"/.test(sec), tg, "thiếu nút âm thanh aria-pressed=false + aria-label");
+    }
+    for (const sz of quick ? [[360, 640], [1440, 900]] : [[320, 568], [360, 640], [390, 844], [768, 1024], [1024, 768], [1440, 900]]) for (const l of ["vi", "en"]) for (const th of ["light", "dark"]) {
+      const tag = "quỹ đạo " + l + " " + sz.join("x") + " " + th, pg = await br.newPage(); await pg.setViewport({ width: sz[0], height: sz[1] });
+      const errs = []; pg.on("console", m => { if (m.type() === "error" && !/status of (501|404)/.test(m.text())) errs.push(m.text()); }); pg.on("pageerror", e => errs.push(String(e)));
+      await pg.evaluateOnNewDocument(t => { try { localStorage.setItem("theme", t); } catch (e) {} window.__cls = 0; window.__acs = 0; const A = window.AudioContext; if (A) { window.AudioContext = function () { window.__acs++; return new A(); }; } try { new PerformanceObserver(li => { for (const e of li.getEntries()) if (!e.hadRecentInput) window.__cls += e.value; }).observe({ type: "layout-shift", buffered: true }); } catch (e) {} }, th);
+      await pg.goto(B + PAGES[l] + "?debug", { waitUntil: "load" }); await pg.evaluate(() => document.getElementById("orbsys").scrollIntoView({ block: "center" })); await wait(700);
+      const m = await pg.evaluate(() => { const q = s => [...document.querySelectorAll(s)], bx = e => e.getBoundingClientRect(), stg = document.querySelector(".orbstage"), s = bx(stg);
+        const wd = q(".world").map(e => bx(e)); return { sw: document.documentElement.scrollWidth, iw: innerWidth, th: document.documentElement.dataset.theme, sh: s.height, sw2: s.width, sats: q(".sat").map(e => { const r = bx(e); return Math.min(r.width, r.height); }), snd: (() => { const b = document.querySelector(".orbsnd"), r = bx(b); return { w: r.width, h: r.height, p: b.getAttribute("aria-pressed"), hid: b.hidden, l: b.getAttribute("aria-label") }; })(),
+          ctx0: window.__acs, st0: window.__npOrbit && window.__npOrbit.ctxCount, anim: document.getAnimations().filter(a => a.effect && a.effect.target && a.effect.target.closest && a.effect.target.closest('#orbsys')).length, cls: window.__cls, moving: q(".sat, .planet, .orbsnd").filter(e => e.matches(".sat")).length,
+          cards: wd.map(r => Math.round(r.left) + ":" + Math.round(r.right)), cardsVisible: wd.every(r => r.width > 100), inside: q(".sat").every(e => { const r = bx(e); return r.left >= s.left - 1 && r.right <= s.right + 1 && r.top >= s.top - 1 && r.bottom <= s.bottom + 1; }) }; });
+      note(m.sw <= m.iw, tag, "tràn ngang " + m.sw + " > " + m.iw); note(m.th === th, tag, "theme " + m.th);
+      note(m.sats.every(v => v >= 43.5), tag, "icon quỹ đạo < 44px (" + Math.min(...m.sats).toFixed(1) + ")"); note(m.snd.w >= 43.5 && m.snd.h >= 43.5 && !m.snd.hid, tag, "nút âm thanh thiếu/ < 44px");
+      note(m.snd.p === "false" && m.ctx0 === 0 && m.st0 === 0, tag, "âm thanh phải tắt mặc định, chưa có AudioContext (aria-pressed=" + m.snd.p + ", ctx=" + m.ctx0 + ")");
+      note(m.cls < 0.05, tag, "CLS " + m.cls.toFixed(3)); note(m.moving <= 12, tag, "phần tử chuyển động " + m.moving + " > 12"); note(m.anim === 0, tag, "còn CSS animation/transition đang chạy: " + m.anim);
+      if (sz[0] <= 700) note(m.sh <= 301, tag, "quỹ đạo cao " + Math.round(m.sh) + " > 300 ở điện thoại");
+      note(m.cardsVisible, tag, "hai thẻ chi tiết phải luôn hiện"); note(!errs.length, tag, "lỗi console: " + errs[0]);
+      if (shotDir && ((sz[0] === 390 && sz[1] === 844) || (sz[0] === 1440 && sz[1] === 900))) { fs.mkdirSync(shotDir, { recursive: true }); await pg.screenshot({ path: path.join(shotDir, `orbit-${l}-${sz[0]}-${th}.png`) }); }
+      await pg.close();
+    }
+    /* hành vi: chuyển động, rê dừng, bàn phím, kéo, âm thanh, giảm chuyển động, chạm (điện thoại) */
+    for (const l of ["vi", "en"]) {
+      const tag = "quỹ đạo hành vi " + l, pg = await br.newPage(); await pg.setViewport({ width: 1440, height: 900 }); const errs = []; pg.on("pageerror", e => errs.push(String(e))); pg.on("console", m => { if (m.type() === "error" && !/status of (501|404)/.test(m.text())) errs.push(m.text()); });
+      await pg.goto(B + PAGES[l] + "?debug", { waitUntil: "load" }); await pg.evaluate(() => document.getElementById("orbsys").scrollIntoView({ block: "center" })); await wait(600);
+      const pos = w => pg.evaluate(w => [...document.querySelectorAll(".sat." + w)].map(e => e.style.transform).join("|"), "");
+      const posW = w => pg.evaluate(w => [...document.querySelectorAll(".sat." + w)].map(e => e.style.transform).join("|"), w);
+      const a0 = await posW("pop"), b0 = await posW("night"); await wait(600); const a1 = await posW("pop"), b1 = await posW("night");
+      note(a0 !== a1 && b0 !== b1, tag, "quỹ đạo không tự quay");
+      const dir = await pg.evaluate(() => window.__npOrbit.vel); note(dir.pop > 0 && dir.night < 0, tag, "hai quỹ đạo phải quay ngược chiều (" + dir.pop.toFixed(2) + "/" + dir.night.toFixed(2) + ")");
+      /* rê vào icon Pop: Pop dừng + thẻ Pop sáng, Night vẫn quay */
+      const sp = await pg.$(".sat.pop"), bb = await sp.boundingBox(); await pg.mouse.move(bb.x + bb.width / 2, bb.y + bb.height / 2); await wait(900);
+      const hv = await pg.evaluate(() => ({ p: window.__npOrbit.paused, hot: window.__npOrbit.hot, pop: document.querySelector(".world.pop").classList.contains("on"), night: document.querySelector(".world.night").classList.contains("on") }));
+      note(hv.p.pop && !hv.p.night && hv.hot === "pop" && hv.pop && !hv.night, tag, "rê vào icon Pop phải dừng Pop + sáng thẻ Pop: " + JSON.stringify(hv));
+      const h1 = await posW("pop"); await wait(300); note(h1 === await posW("pop"), tag, "Pop chưa đứng yên khi rê");
+      await pg.mouse.move(5, 5); await wait(800); note(!(await pg.evaluate(() => window.__npOrbit.paused.pop)), tag, "bỏ rê mà Pop vẫn dừng");
+      /* rê vào thẻ Night */
+      const nc = await (await pg.$(".world.night")).boundingBox(); await pg.mouse.move(nc.x + 20, nc.y + 20); await wait(700);
+      note(await pg.evaluate(() => window.__npOrbit.paused.night && document.querySelector(".world.night").classList.contains("on")), tag, "rê vào thẻ Night phải dừng quỹ đạo Night"); await pg.mouse.move(5, 5);
+      /* bàn phím: Tab đi qua hai thẻ rồi các icon; Enter/liên kết; mũi tên xoay */
+      await pg.evaluate(() => document.querySelector(".world.pop a").focus()); const seq = [];
+      for (let i = 0; i < 4; i++) { await pg.keyboard.press("Tab"); seq.push(await pg.evaluate(() => (document.activeElement.getAttribute("href") || document.activeElement.className))); }
+      note(seq[0] === "/cozyplay/" && /^\/(popplay|cozyplay)\/#/.test(seq[1]) && /^\/(popplay|cozyplay)\/#/.test(seq[3]), tag, "thứ tự Tab: " + seq.join(" > "));
+      await pg.evaluate(() => document.querySelector(".sat.pop").focus()); await wait(500); const k0 = await posW("pop"); await pg.keyboard.press("ArrowRight"); await wait(700); const k1 = await posW("pop");
+      note(k0 !== k1, tag, "← → không xoay quỹ đạo khi icon được focus"); note(await pg.evaluate(() => window.__npOrbit.paused.pop && document.querySelector(".world.pop").classList.contains("on")), tag, "focus icon phải dừng + sáng thẻ");
+      await pg.evaluate(() => document.activeElement.blur()); await wait(300);
+      /* kéo nhanh quỹ đạo Night */
+      const pt = await pg.evaluate(() => { const r = document.querySelector(".orbstage").getBoundingClientRect(), U = r.width / 600, th = 18 * Math.PI / 180, f = ph => { const ex = 262 * Math.cos(ph), ey = 140 * Math.sin(ph); return [r.left + (300 + ex * Math.cos(th) - ey * Math.sin(th)) * U, r.top + (250 + ex * Math.sin(th) + ey * Math.cos(th)) * U]; }; return [0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5].map(f); });
+      /* điểm kéo phải ở trên vành Night và không đè icon: dùng góc giữa hai icon (icon cách nhau 60°, bắt đầu 50°) */
+      await pg.mouse.move(pt[0][0], pt[0][1]); await pg.mouse.down(); for (const p of pt.slice(1)) { await pg.mouse.move(p[0], p[1]); await wait(16); }
+      const dv = await pg.evaluate(() => ({ v: window.__npOrbit.vel.night, d: document.querySelector(".orbstage").classList.contains("drag") })); await pg.mouse.up(); await wait(150);
+      note(Math.abs(dv.v) > 1.5, tag, "kéo nhanh mà vận tốc Night chỉ " + dv.v.toFixed(2)); await pg.mouse.move(5, 5); await wait(4500);
+      const dv2 = await pg.evaluate(() => window.__npOrbit.vel.night); note(Math.abs(dv2) < 0.6 && dv2 < 0, tag, "sau khi thả, Night phải về tốc độ tự động (" + dv2.toFixed(2) + ")");
+      /* âm thanh */
+      const s0 = await pg.evaluate(() => { const b = document.querySelector(".orbsnd"); return { p: b.getAttribute("aria-pressed"), c: window.__npOrbit.ctxCount, s: window.__npOrbit.state() }; });
+      note(s0.p === "false" && s0.c === 0 && s0.s === "none", tag, "trước khi bấm: " + JSON.stringify(s0));
+      await pg.click(".orbsnd"); await wait(300);
+      const s1 = await pg.evaluate(() => { const b = document.querySelector(".orbsnd"); return { p: b.getAttribute("aria-pressed"), c: window.__npOrbit.ctxCount, s: window.__npOrbit.state(), l: b.getAttribute("aria-label"), t: b.textContent }; });
+      note(s1.p === "true" && s1.c === 1 && /running/.test(s1.s) && s1.t === "🔊" && s1.l === (l === "vi" ? "Tắt âm thanh quỹ đạo" : "Turn orbit sound off"), tag, "sau khi bấm: " + JSON.stringify(s1));
+      await pg.evaluate(() => { window.__npOrbit.ticks = 0; window.__npOrbit.dropped = 0; window.__npOrbit.maxPerSec = 0; }); await wait(3000);
+      const slow = await pg.evaluate(() => window.__npOrbit.ticks);
+      await pg.evaluate(() => { window.__npOrbit.ticks = 0; });
+      const pt2 = pt.concat(pt.slice().reverse()).concat(pt).concat(pt.slice().reverse()); await pg.mouse.move(pt2[0][0], pt2[0][1]); await pg.mouse.down(); const t0 = Date.now(); for (const p of pt2.slice(1)) { await pg.mouse.move(p[0], p[1]); await wait(14); } const el = (Date.now() - t0) / 1000; const fast = await pg.evaluate(() => ({ t: window.__npOrbit.ticks, m: window.__npOrbit.maxPerSec, dr: window.__npOrbit.dropped })); await pg.mouse.up();
+      note(fast.t / el > slow / 3 && fast.t >= 4, tag, "kéo nhanh phải tick dày hơn quay tự động: nhanh " + (fast.t / el).toFixed(1) + "/s so với " + (slow / 3).toFixed(1) + "/s");
+      note(fast.m <= 13, tag, "vượt giới hạn tick/giây: " + fast.m);
+      await pg.click(".orbsnd"); await wait(400); const s2 = await pg.evaluate(() => ({ p: document.querySelector(".orbsnd").getAttribute("aria-pressed"), a: window.__npOrbit.audio })); note(s2.p === "false" && !s2.a, tag, "bấm lần hai phải tắt âm");
+      note(!errs.length, tag, "lỗi: " + errs[0]);
+      if (shotDir && l === "vi") { await pg.mouse.move(bb.x + bb.width / 2, bb.y + bb.height / 2); await wait(700); await pg.screenshot({ path: path.join(shotDir, "orbit-hover-pop-1440.png") }); const n2 = await (await pg.$(".sat.night")).boundingBox(); await pg.mouse.move(n2.x + 20, n2.y + 20); await wait(700); await pg.screenshot({ path: path.join(shotDir, "orbit-hover-night-1440.png") }); }
+      await pg.close();
+      /* giảm chuyển động: không tự quay, không CSS animation */
+      const pr = await br.newPage(); await pr.setViewport({ width: 390, height: 844 }); await pr.emulateMediaFeatures([{ name: "prefers-reduced-motion", value: "reduce" }]);
+      await pr.goto(B + PAGES[l] + "?debug", { waitUntil: "load" }); await pr.evaluate(() => document.getElementById("orbsys").scrollIntoView({ block: "center" })); await wait(500);
+      const r0 = await pr.evaluate(() => [...document.querySelectorAll(".sat")].map(e => e.style.transform).join("|")); await wait(900); const r1 = await pr.evaluate(() => [...document.querySelectorAll(".sat")].map(e => e.style.transform).join("|"));
+      note(r0 === r1, tag + " reduced", "vẫn tự quay khi prefers-reduced-motion"); note(await pr.evaluate(() => document.getAnimations().length === 0 && window.__npOrbit.reduced && window.__npOrbit.frames < 5 && !!document.querySelector(".orbsnd") && !document.querySelector(".orbsnd").hidden), tag + " reduced", "phải không animation, vòng lặp ngủ, vẫn có nút âm thanh");
+      if (shotDir) await pr.screenshot({ path: path.join(shotDir, `orbit-reduced-${l}-390.png`) }); await pr.close();
+      /* điện thoại: chạm vệ tinh -> thẻ sáng + cuộn tới thẻ, chưa mở game */
+      const mp = await br.newPage(); await mp.setViewport({ width: 390, height: 844, isMobile: true, hasTouch: true }); await mp.goto(B + PAGES[l] + "?debug", { waitUntil: "load" }); await mp.evaluate(() => document.getElementById("orbsys").scrollIntoView({ block: "start" })); await wait(500);
+      const y0 = await mp.evaluate(() => scrollY); const ns = await mp.$(".sat.night"); const nb = await ns.boundingBox(); await mp.touchscreen.tap(nb.x + nb.width / 2, nb.y + nb.height / 2); await wait(1200);
+      const tp = await mp.evaluate(() => ({ on: document.querySelector(".world.night").classList.contains("on"), path: location.pathname, y: scrollY, inView: (r => r.top < innerHeight && r.bottom > 0)(document.querySelector(".world.night").getBoundingClientRect()) }));
+      note(tp.on && tp.path === PAGES[l] && tp.inView && tp.y > y0, tag + " chạm", "chạm vệ tinh Night phải nhấn mạnh + cuộn tới thẻ, chưa mở game: " + JSON.stringify(tp)); if (shotDir) await mp.screenshot({ path: path.join(shotDir, `orbit-tap-night-${l}-390.png`) }); await mp.close();
     }
     note(weight > 0 && weight < 300 * 1024, "trọng lượng", "tải trang đầu " + Math.round(weight / 1024) + " KB (cần < 300 KB; chưa nén)");
     console.log("  trọng lượng trang VI 390 (chưa nén, gồm shared/theme+site+track): " + Math.round(weight / 1024) + " KB");

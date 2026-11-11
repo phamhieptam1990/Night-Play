@@ -298,3 +298,43 @@ html[data-theme=dark] .pcard{background:rgba(27,30,47,.72)}
  .pfx .dev.l,.pfx .dev.r,.fchip{display:none}
  .pfx .c{position:relative;width:100%}
 }
+
+/* ===== Hệ quỹ đạo "Chọn thế giới của bạn" (landing/lp/orbit.js điều khiển chuyển động; không JS vẫn là bố cục tĩnh đẹp) ===== */
+.orbsys{display:grid;gap:16px;grid-template-areas:"stage" "pop" "night";align-items:stretch}
+.orbsys .world.pop{grid-area:pop}.orbsys .world.night{grid-area:night}
+.orbsys .world{padding:24px 22px;transition:transform .25s,box-shadow .25s;position:relative}
+.orbsys .world .btn{font-size:17px;min-height:48px}
+.orbsys .world.on{transform:scale(1.035);z-index:2;outline:3px solid #fff;outline-offset:-3px}
+.orbsys .world.pop.on{box-shadow:0 0 0 3px #FF8A55,0 14px 44px rgba(255,90,31,.55)}
+.orbsys .world.night.on{box-shadow:0 0 0 3px #A18BFF,0 14px 44px rgba(124,92,255,.6)}
+.orbstage{grid-area:stage;container-type:inline-size;position:relative;width:min(100%,360px);aspect-ratio:6/5;margin:0 auto;border-radius:28px;overflow:hidden;color:#fff;
+ background:radial-gradient(circle at 50% 50%,rgba(124,92,255,.35),transparent 55%),
+ radial-gradient(1.4px 1.4px at 8% 14%,#fff,transparent),radial-gradient(1px 1px at 21% 72%,#fff,transparent),radial-gradient(1.6px 1.6px at 33% 9%,#fff,transparent),radial-gradient(1px 1px at 47% 88%,#fff,transparent),radial-gradient(1.3px 1.3px at 58% 18%,#fff,transparent),radial-gradient(1px 1px at 70% 80%,#fff,transparent),radial-gradient(1.5px 1.5px at 84% 12%,#fff,transparent),radial-gradient(1px 1px at 92% 58%,#fff,transparent),radial-gradient(1.2px 1.2px at 4% 52%,#fff,transparent),radial-gradient(1px 1px at 63% 50%,#fff,transparent),radial-gradient(1.2px 1.2px at 38% 40%,#fff,transparent),radial-gradient(1px 1px at 78% 36%,#fff,transparent),
+ linear-gradient(160deg,#0B0C1E,#1A1445 70%,#261a5c);
+ border:1px solid #3A3380;box-shadow:var(--shadow);touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.orbsvg{position:absolute;inset:0;width:100%;height:100%}
+.ring{fill:none;stroke-width:2;stroke-dasharray:3 7;stroke-linecap:round}
+.ring.pop{stroke:#FF8A55}.ring.night{stroke:#A18BFF}
+.hit{fill:none;stroke:transparent;stroke-width:44;pointer-events:stroke;cursor:grab}
+.orbstage.drag .hit,.orbstage.drag .sat{cursor:grabbing}
+.planet{position:absolute;left:50%;top:50%;width:17%;aspect-ratio:1;margin:-8.5% 0 0 -8.5%;border-radius:50%;box-shadow:0 0 0 6px rgba(255,255,255,.08),0 0 28px 8px rgba(255,90,31,.35),0 0 44px 14px rgba(124,92,255,.45);pointer-events:none}
+.sat{position:absolute;left:50%;top:50%;width:44px;height:44px;margin:-22px 0 0 -22px;display:grid;place-items:center;border-radius:50%;font-size:24px;line-height:1;text-decoration:none;color:#fff;background:#0E0C28;border:2px solid;will-change:transform,opacity;touch-action:pan-y;cursor:pointer;
+ --u:calc(100cqw / 600);transform:translate(calc(var(--x) * var(--u)),calc(var(--y) * var(--u)))}
+.sat.pop{border-color:#FF8A55;box-shadow:0 0 14px rgba(255,90,31,.55)}
+.sat.night{border-color:#A18BFF;box-shadow:0 0 14px rgba(124,92,255,.65)}
+.sat:focus-visible{outline:3px solid #fff;outline-offset:3px;z-index:3}
+.sat:hover{z-index:3;filter:brightness(1.25)}
+.orbsnd{position:absolute;right:8px;top:8px;width:44px;height:44px;border-radius:50%;border:2px solid #A18BFF;background:rgba(14,12,40,.9);color:#fff;font-size:20px;cursor:pointer;display:grid;place-items:center;padding:0;z-index:4}
+.orbsnd[hidden]{display:none}
+.orbsnd[aria-pressed=true]{background:#5B3FD6;border-color:#fff}
+.orbsnd:focus-visible{outline:3px solid #fff;outline-offset:3px}
+@media (min-width:700px){
+ .orbsys{grid-template-columns:1fr 1fr;grid-template-areas:"stage stage" "pop night"}
+ .orbstage{width:min(100%,520px)}
+ .sat{width:52px;height:52px;margin:-26px 0 0 -26px;font-size:28px}
+}
+@media (min-width:1000px){
+ .orbsys{grid-template-columns:minmax(0,1fr) 520px minmax(0,1fr);grid-template-areas:"pop stage night";gap:24px;align-items:center}
+ .orbsys .world{padding:22px}
+}
+@media (prefers-reduced-motion:reduce){.orbsys .world.on{transform:none}}

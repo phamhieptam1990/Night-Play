@@ -65,12 +65,18 @@ try{if(!/[?&]landing=1(&|$)/.test(location.search)&&(matchMedia("(display-mode: 
  </div>
 </section>
 
-<section class="sec alt" aria-labelledby="hWorlds">
+<section class="sec alt orbit" aria-labelledby="hWorlds">
  <div class="wrap">
   <h2 id="hWorlds">Chọn thế giới của bạn</h2>
-  <div class="worlds">
+  <div class="orbsys" id="orbsys" data-lang="vi">
    <article class="world pop"><p class="kick">Cho bé và cả nhà</p><h3>Pop Play</h3><p>12 game ngắn học chữ, số, màu, nhịp; bố mẹ đặt giờ chơi và khoá màn hình.</p><a class="btn white" href="/popplay/">Vào Pop Play</a></article>
    <article class="world night"><p class="kick">Cho người lớn</p><h3>Night Play</h3><p>20 game giải toả đậm chất Việt: deadline, lương cuối tháng, shipper, ổ gà.</p><a class="btn white" href="/cozyplay/">Vào Night Play</a></article>
+   <div class="orbstage" role="group" aria-label="Hai quỹ đạo game: kéo để xoay, rê vào để dừng">
+    <svg class="orbsvg" viewBox="0 0 600 500" aria-hidden="true" focusable="false"><ellipse class="ring night" cx="300" cy="250" rx="262" ry="140" transform="rotate(18 300 250)"/><ellipse class="ring pop" cx="300" cy="250" rx="165" ry="92" transform="rotate(-18 300 250)"/><ellipse class="hit" data-orbit="night" cx="300" cy="250" rx="262" ry="140" transform="rotate(18 300 250)"/><ellipse class="hit" data-orbit="pop" cx="300" cy="250" rx="165" ry="92" transform="rotate(-18 300 250)"/></svg>
+    <svg class="planet" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><defs><clipPath id="plc"><circle cx="32" cy="32" r="30"/></clipPath></defs><g clip-path="url(#plc)"><rect width="64" height="64" fill="#7C5CFF"/><rect width="32" height="64" fill="#FF5A1F"/></g><circle cx="32" cy="32" r="12" fill="#fff"/></svg>
+    <a class="sat night" data-orbit="night" data-a="50" style="--x:127;--y:154" href="/cozyplay/#dap-deadline" aria-label="Chơi Đập Deadline" title="Đập Deadline"><span aria-hidden="true">⏰</span></a><a class="sat night" data-orbit="night" data-a="110" style="--x:-125.9;--y:97.4" href="/cozyplay/#gia-cho-viet" aria-label="Chơi Đoán Giá Chợ Việt" title="Đoán Giá Chợ Việt"><span aria-hidden="true">🛒</span></a><a class="sat night" data-orbit="night" data-a="170" style="--x:-252.9;--y:-56.6" href="/cozyplay/#cozy-wings" aria-label="Chơi Cánh Nhỏ Phiêu Lưu" title="Cánh Nhỏ Phiêu Lưu"><span aria-hidden="true">🐝</span></a><a class="sat night" data-orbit="night" data-a="230" style="--x:-127;--y:-154" href="/cozyplay/#xin-nghi" aria-label="Chơi Sếp Ơi Em Xin Nghỉ" title="Sếp Ơi Em Xin Nghỉ"><span aria-hidden="true">📝</span></a><a class="sat night" data-orbit="night" data-a="290" style="--x:125.9;--y:-97.4" href="/cozyplay/#song-sot-cuoi-thang" aria-label="Chơi Sống Sót Đến Cuối Tháng" title="Sống Sót Đến Cuối Tháng"><span aria-hidden="true">💸</span></a><a class="sat night" data-orbit="night" data-a="350" style="--x:252.9;--y:56.6" href="/cozyplay/#cho-hang-kieu-viet" aria-label="Chơi Chở Hàng Kiểu Việt" title="Chở Hàng Kiểu Việt"><span aria-hidden="true">🛵</span></a><a class="sat pop" data-orbit="pop" data-a="20" style="--x:157.2;--y:-18" href="/popplay/#ten-lua-cua-be" aria-label="Chơi Tên Lửa Của Bé" title="Tên Lửa Của Bé"><span aria-hidden="true">🚀</span></a><a class="sat pop" data-orbit="pop" data-a="80" style="--x:55.2;--y:77.3" href="/popplay/#con-vat-an-so" aria-label="Chơi Con Vật Ăn Số" title="Con Vật Ăn Số"><span aria-hidden="true">🐊</span></a><a class="sat pop" data-orbit="pop" data-a="140" style="--x:-101.9;--y:95.3" href="/popplay/#ve-chu-quai-vat" aria-label="Chơi Vẽ Chữ Thành Quái Vật" title="Vẽ Chữ Thành Quái Vật"><span aria-hidden="true">🔤</span></a><a class="sat pop" data-orbit="pop" data-a="200" style="--x:-157.2;--y:18" href="/popplay/#nhay-theo-so" aria-label="Chơi Nhảy Theo Số" title="Nhảy Theo Số"><span aria-hidden="true">💃</span></a><a class="sat pop" data-orbit="pop" data-a="260" style="--x:-55.2;--y:-77.3" href="/popplay/#thap-vong-mau" aria-label="Chơi Tháp Vòng Màu" title="Tháp Vòng Màu"><span aria-hidden="true">🌈</span></a><a class="sat pop" data-orbit="pop" data-a="320" style="--x:101.9;--y:-95.3" href="/popplay/#lang-cua-be" aria-label="Chơi Làng Của Bé" title="Làng Của Bé"><span aria-hidden="true">🏘️</span></a>
+    <button class="orbsnd" type="button" hidden aria-pressed="false" aria-label="Bật âm thanh quỹ đạo"><span aria-hidden="true">🔇</span></button>
+   </div>
   </div>
  </div>
 </section>
@@ -175,5 +181,6 @@ if(resume){var cta=document.querySelector(".hero .cta");if(cta){var n=document.c
 <script src="/shared/site.js" defer></script>
 <script src="/shared/track.js" defer></script>
 <script src="/lp/landing.js" defer></script>
+<script src="/lp/orbit.js" defer></script>
 </body>
 </html>
