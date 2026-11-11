@@ -29,7 +29,7 @@ const bad = [];
         const pn = document.querySelector("#npPmFan .pn");
         return { fab: R(q("npPmFab")), bk: R(q("npPmBk")), t: R(t), cut: t.scrollWidth > t.clientWidth + 1, lines: Math.round(tb.height / lh), gap: nb.top - tb.bottom,
           items: [...document.querySelectorAll("#npPmFan .it")].filter(e => getComputedStyle(e).display !== "none").map(e => { const b = e.getBoundingClientRect(); return { id: e.id, w: b.width, h: b.height }; }),
-          snd: R(q("soundBtn")), sndPressed: !!(q("soundBtn") && q("soundBtn").hasAttribute("aria-pressed")), klockShown: (() => { const k = parent.document.getElementById("klock"); return !!(k && getComputedStyle(k).display !== "none" && k.getBoundingClientRect().width > 0); })(), lockItem: (() => { const it = q("npPmLock"); if (!it) return "không có"; if (!it.closest("#npPmFan")) return "không nằm trong menu"; if (it.hidden) return "ẩn"; const b = it.getBoundingClientRect(); return b.width < 44 || b.height < 44 ? "nhỏ <44px" : "ok"; })(), sndIn: !!(q("soundBtn") && q("soundBtn").closest("#npPmFan")), lang: R(q("langBtn")), hs: document.documentElement.scrollWidth > innerWidth + 1, vs: document.documentElement.scrollHeight > innerHeight + 1,
+          snd: R(q("soundBtn")), hudSnd: !!parent.document.querySelector('#npHudc [data-k="snd"]:not([hidden]),#npHud [data-k="snd"]:not([hidden])'), sndPressed: !!(q("soundBtn") && q("soundBtn").hasAttribute("aria-pressed")), klockShown: (() => { const k = parent.document.getElementById("klock"); return !!(k && getComputedStyle(k).display !== "none" && k.getBoundingClientRect().width > 0); })(), lockItem: (() => { const it = q("npPmLock"); if (!it) return "không có"; if (!it.closest("#npPmFan")) return "không nằm trong menu"; if (it.hidden) return "ẩn"; const b = it.getBoundingClientRect(); return b.width < 44 || b.height < 44 ? "nhỏ <44px" : "ok"; })(), sndIn: !!(q("soundBtn") && q("soundBtn").closest("#npPmFan")), lang: R(q("langBtn")), hs: document.documentElement.scrollWidth > innerWidth + 1, vs: document.documentElement.scrollHeight > innerHeight + 1,
           dock: !!window.__npDock, sd: parent.document.getElementById("stage").classList.contains("docked"), nps: [...parent.document.querySelectorAll("#stage .nps-fab,#stage #home")].map(e => getComputedStyle(e).display) };
       });
       const n = m => bad.push(tag + " " + st + ": " + m);
@@ -45,7 +45,7 @@ const bad = [];
         if (o(r.t, r.bk) || o(r.t, r.fab) || o(r.t, r.snd)) n("tên đè nút");
         if (r.cut) n("tên bị cắt “…”"); if (r.lines > 2) n("tên " + r.lines + " dòng"); if (r.gap > 16.5 || r.gap < -1) n("tên cách khung " + Math.round(r.gap) + "px (cần ≤16)");
       } else {
-        if (r.fab && r.fab.vis) n("⋯ hiện ở màn ngang"); if (r.dock || r.sd) n("dock ở màn ngang"); if (!(r.snd && r.snd.vis)) n("🔊 mất ở màn ngang");
+        if (r.fab && r.fab.vis) n("⋯ hiện ở màn ngang"); if (r.dock || r.sd) n("dock ở màn ngang"); if (!(r.snd && r.snd.vis) && !r.hudSnd) n("🔊 mất ở màn ngang (không còn nút gốc và cũng không có bản trong khối HUD — GAME_RULES 5l)");
       }
       if (r.hs || r.vs) n("tràn/cuộn " + r.hs + "/" + r.vs);
     };
