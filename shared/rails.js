@@ -102,7 +102,16 @@
     var d = gdoc(); if (!d || !d.documentElement) return;
     try { if (on === d.documentElement.classList.contains("np-rhud") && (!on || d.getElementById("npRhudCss"))) return; if (on && !d.getElementById("npRhudCss")) { var st = d.createElement("style"); st.id = "npRhudCss"; st.textContent = HIDECSS; (d.head || d.documentElement).appendChild(st); } d.documentElement.classList.toggle("np-rhud", !!on); } catch (e) {}
   }
+  /* màu theo game/skin (Night Pass đổi --accent của khung chơi): đưa màu nhấn hiện hành của game ra #stage (--rail-tint) để nền hai cột + sân khấu pha màu game; chỉ ghi khi đổi */
+  function syncTint() {
+    var d = gdoc(), st = O.stage || document.getElementById("stage"); if (!d || !st || !d.documentElement) return;
+    try {
+      var w = d.defaultView, pl = d.getElementById("play") || d.querySelector(".play") || d.documentElement, c = w.getComputedStyle(pl).getPropertyValue("--accent").trim() || w.getComputedStyle(d.documentElement).getPropertyValue("--accent").trim();
+      if (c && st.style.getPropertyValue("--rail-tint") !== c) st.style.setProperty("--rail-tint", c);
+    } catch (e) {}
+  }
   function syncHud() {
+    syncTint();
     var hud = document.getElementById("npHud"); if (!hud) return;
     var setA = function (e, k, v) { if (e.getAttribute(k) !== v) e.setAttribute(k, v); };
     [["help", HUDI.help], ["snd", HUDI.snd], ["lang", HUDI.lang]].forEach(function (x) {
