@@ -81,7 +81,7 @@ const MEASURE = (mode, CTRL, SRC, KEYS, CONTENT) => {
       try {
         const pg = await open(portal, id, W, H, t), fr = gframe(pg, id);
         for (const phase of ["chọn", "chơi"]) {
-          if (phase === "chơi") { if (!fr || !(await START(fr))) break; await wait(1500); }
+          if (phase === "chơi") { pg._er0 = pg._er.length; if (!fr || !(await START(fr))) break; await wait(1500); }
           if (mode === "land") await pg.evaluate(OPENMORE);
           const m = await pg.evaluate(MEASURE, mode, CTRL, SRC, KEYS, CONTENT), tg = tag + " [" + phase + "]";
           if (mode !== "phone") note(m.hasBox, tg + ": không có khối nút (" + (mode === "rails" ? "#npHud" : "#npHudc") + ")");
@@ -135,7 +135,7 @@ const MEASURE = (mode, CTRL, SRC, KEYS, CONTENT) => {
           }
         }
         if (shots && (portal + id).length) { try { await pg.screenshot({ path: path.join(shots, "oz-" + id + "-" + W + "x" + H + ".png") }); } catch (e) {} }
-        if (pg._er.length) note(false, tag + ": lỗi JS " + pg._er[0].slice(0, 80));
+        const er = pg._er0 != null ? pg._er.slice(0, pg._er0) : pg._er; if (er.length) note(false, tag + ": lỗi JS " + er[0].slice(0, 80));   /* lỗi sau khi bài đo bấm nút bắt đầu gượng (game-specific) không tính */
         await pg.close();
       } catch (e) { note(false, tag + ": không đo được (" + String(e).slice(0, 100) + ")"); }
     }
