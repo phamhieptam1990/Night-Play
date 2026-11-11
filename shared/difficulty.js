@@ -90,12 +90,16 @@
   function place(b) {
     var w = b.offsetWidth, h = b.offsetHeight, vw = innerWidth, vh = innerHeight, m = 6, best = null, bs = 99;
     var ys = [m, 56, vh - h - m, vh - h - 56, Math.round(vh / 2)], xs = [Math.round((vw - w) / 2), 64, vw - w - 64, m, vw - w - m];
+    /* ĐIỆN THOẠI DỌC: hàng nút trên cùng có tâm dọc y = 38 (shared/backpos.css) → huy hiệu nằm CÙNG TÂM hàng đó (không lệch ~12px so với ←, 🔊, ⋯), cách nút hai bên >= 8px; không còn chỗ thì xuống dưới hàng nút (68) */
+    var rowMode = matchMedia("(max-width:520px) and (orientation:portrait)").matches;
+    if (rowMode) { var pe = document.createElement("div"); pe.style.cssText = "position:fixed;top:0;left:0;width:0;height:0;visibility:hidden;padding-top:env(safe-area-inset-top,0px)"; D.appendChild(pe); var sa = parseFloat(getComputedStyle(pe).paddingTop) || 0; pe.remove(); ys = [Math.round(38 + sa - h / 2), 68 + sa, vh - h - m, vh - h - 56, Math.round(vh / 2)]; xs = [Math.round((vw - w) / 2), 68, vw - w - 68, m, vw - w - m]; }
     var pl = document.querySelector("#play,.play"), pr = pl && pl.getBoundingClientRect();
     /* lượt 1: chỉ chỗ NGOÀI khung chơi (không che màn chơi); lượt 2: bất kỳ chỗ trống (khung chiếm cả màn hình, vd Gà Mẹ) */
     for (var pass = 0; pass < 2 && bs; pass++) for (var yi = 0; yi < ys.length && bs; yi++) for (var xi = 0; xi < xs.length && bs; xi++) {
       var x = xs[xi], y = ys[yi]; if (x < 0 || y < 0 || x + w > vw || y + h > vh) continue;
       if (pass === 0 && pr && pr.width > 40 && x < pr.right - 4 && x + w > pr.left + 4 && y < pr.bottom - 4 && y + h > pr.top + 4) continue;
       var pts = [[x + 2, y + 2], [x + w / 2, y + 2], [x + w - 2, y + 2], [x + 2, y + h - 2], [x + w / 2, y + h / 2], [x + w - 2, y + h - 2]], bad = 0;
+      if (rowMode && yi === 0) pts.push([x - 8, y + h / 2], [x + w + 8, y + h / 2]);   // cách nút kề bên >= 8px
       for (var p = 0; p < pts.length; p++) if (!free(pts[p][0], pts[p][1])) bad++;
       if (bad < bs) { bs = bad; best = [x, y]; }
     }
