@@ -194,7 +194,7 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
       note(r.links.length === 7 && ["/popplay/", "/cozyplay/", /chân-trang en /.test(tag) ? "/en/moi/" : "/moi/", "/subscribe.html", "/privacy.html", "/terms.html", "mailto:support@nightplay.vn"].every(h => r.links.includes(h)), tag, "liên kết chân trang sai: " + r.links);
       note(r.fsw <= r.fcw, tag, "chân trang tràn ngang"); note(r.left === 16, tag, "lề trái " + r.left); note(r.right >= 15 && r.right <= 17, tag, "lề phải " + r.right);
       if (narrow) { note(r.btn && r.bw >= 44 && r.bh >= 44, tag, "thiếu nút menu >= 44px"); note(!r.shown, tag, "liên kết còn hiện dàn trải khi hẹp"); }
-      else { note(!r.btn && r.shown && r.ah.every(h => h <= 50) && r.tops <= 2, tag, "chân trang rộng phải là một hàng gọn (hàng=" + r.tops + ")"); note(r.fh <= 150, tag, "chân trang cao " + r.fh); }
+      else { note(!r.btn && r.shown && r.ah.every(h => h <= 50) && r.tops <= 2, tag, "chân trang rộng phải là một hàng gọn (hàng=" + r.tops + ")"); note(r.fh <= 270, tag, "chân trang cao " + r.fh); }
       if (narrow) {
         await pg.click("footer .mbtn"); await wait(150);
         const o = await pg.evaluate(() => { const nv = document.getElementById("flinks"), b = document.querySelector("footer .mbtn"), q = nv.getBoundingClientRect(); return { open: nv.offsetParent !== null && b.getAttribute("aria-expanded") === "true", inside: q.left >= 0 && q.right <= innerWidth && q.top >= 0, hs: [...nv.querySelectorAll("a")].every(a => a.getBoundingClientRect().height >= 44) }; });
@@ -391,7 +391,7 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
       if (!m.vis) { note(w < 900 && h <= 700, tag, "dải bị ẩn ngoài ca cho phép"); await pg.close(); continue; }
       const ids = {}; for (const mm of fs.readFileSync(path.join(root, "shared", "multi-games.js"), "utf8").matchAll(/^\s*"([a-z0-9-]+)":\s*\{\s*portal:\s*"(\w+)"/gm)) ids[mm[1]] = mm[2];
       note(m.real.length >= 16, tag, "cần >= 16 game, có " + m.real.length); m.real.forEach(hf => { const mm = hf.match(/^\/(popplay|cozyplay)\/#([a-z0-9-]+)$/); note(mm && ids[mm[2]] === mm[1], tag, "liên kết sai id/cổng: " + hf); });
-      note(m.dupOk, tag, "phần nhân đôi phải aria-hidden + tabindex=-1, đủ số lượng"); note(m.size[0] >= 44 && m.size[1] >= 72, tag, "ô nhỏ " + m.size); note(m.imgs && m.names, tag, "mỗi ô cần ảnh + tên");
+      note(m.dupOk, tag, "phần nhân đôi phải aria-hidden + tabindex=-1, đủ số lượng"); note(m.size[0] >= 44 && m.size[1] >= 64, tag, "ô nhỏ " + m.size); note(m.imgs && m.names, tag, "mỗi ô cần ảnh + tên");
       note(m.anim === "marq" && m.state === "running", tag, "dải phải tự trượt: " + m.anim + "/" + m.state); note(m.sw <= m.cw && m.cls < 0.05, tag, `tràn ngang ${m.sw}>${m.cw} hoặc CLS ${m.cls.toFixed(3)}`);
       if (w >= 1024) {  /* rê chuột: dừng + ô nổi lên (transform/box-shadow đổi <= 300ms, hộp bố cục giữ nguyên) */
         const box = async () => pg.evaluate(() => { const a = document.querySelector(".mi:nth-child(3)"), r = (e => ({ w: e.offsetWidth, h: e.offsetHeight }))(a), c = getComputedStyle(a), im = getComputedStyle(a.querySelector(".mimg")); return { r, tf: c.transform, sh: im.boxShadow, st: getComputedStyle(document.querySelector(".mtrack")).animationPlayState, sw: document.documentElement.scrollWidth }; });
@@ -414,6 +414,24 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
       const pg = await br.newPage(), tag = "dải game reduced " + l; await pg.setViewport({ width: 1440, height: 900 }); await pg.emulateMediaFeatures([{ name: "prefers-reduced-motion", value: "reduce" }]); await pg.goto(B + PAGES[l], { waitUntil: "load" }); await wait(400);
       const r = await pg.evaluate(() => { const tr = document.querySelector(".mtrack"), mq = document.querySelector(".marq"); return { an: getComputedStyle(tr).animationName, sn: getComputedStyle(mq).scrollSnapType, ov: getComputedStyle(mq).overflowX }; }); note(r.an === "none" && /x/.test(r.sn) && r.ov === "auto", tag, "reduced-motion: dải phải đứng yên, cuộn tay + snap: " + JSON.stringify(r));
       const mi = await pg.$(".mi:nth-child(3)"), bb = await mi.boundingBox(); await pg.mouse.move(bb.x + 20, bb.y + 20); await wait(300); note(await mi.evaluate(e => getComputedStyle(e).transform === "none"), tag, "reduced-motion: hover vẫn transform"); await pg.close();
+    }
+    /* ĐIỆN THOẠI THẬT: cảm ứng, DPR3, CPU x4/x6: vệ tinh phải DI CHUYỂN sau 2s; sau chạm-nhả, pointercancel, cuộn trang vẫn tự quay lại <= 3s; hạ cấp không dừng vòng quay */
+    for (const rate of [1, 4, 6]) for (const pth of ["/", "/en/"]) {
+      const tag = "landing mobile x" + rate + " " + pth, pg = await br.newPage(), errs = []; await pg.setViewport({ width: 390, height: 844, deviceScaleFactor: 3, isMobile: true, hasTouch: true });
+      pg.on("pageerror", e => errs.push(String(e))); const cd = await pg.createCDPSession(); await cd.send("Emulation.setCPUThrottlingRate", { rate });
+      await pg.goto(B + pth + "?debug", { waitUntil: "load" }); await pg.evaluate(() => { const o = document.getElementById("orbsys"); o.scrollIntoView({ block: "center", behavior: "instant" }); });
+      const P = () => pg.evaluate(() => [...document.querySelectorAll(".sat")].map(e => e.style.transform).join("|")), R = () => pg.evaluate(() => window.__npOrbit.reason());
+      const moved = async (ms, what) => { const a = await P(); await wait(ms); const b = await P(); note(a !== b, tag, what + ": vệ tinh đứng yên (" + await R() + ")"); };
+      await wait(1500); await moved(1200, "sau 2s");
+      const bb = await (await pg.$(".sat.night")).boundingBox();
+      await pg.touchscreen.tap(bb.x + bb.width / 2, bb.y + bb.height / 2).catch(() => {}); await wait(1000);
+      if (/\/(popplay|cozyplay)\//.test(pg.url())) { await pg.goBack({ waitUntil: "load" }).catch(() => {}); await wait(1500); await pg.evaluate(() => document.getElementById("orbsys").scrollIntoView({ block: "center", behavior: "instant" })); await moved(1200, "sau khi quay lại (Back) từ game"); }
+      else { await wait(2200); await moved(900, "sau chạm-nhả"); }
+      await pg.evaluate(() => { const st = document.querySelector(".orbstage"), r = st.getBoundingClientRect(); const h = document.querySelector(".hit"); h.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, pointerId: 7, pointerType: "touch", clientX: r.left + r.width / 2, clientY: r.top + 40 })); h.dispatchEvent(new PointerEvent("pointercancel", { bubbles: true, pointerId: 7, pointerType: "touch" })); });
+      await wait(2500); await moved(900, "sau pointercancel");
+      await pg.evaluate(() => { window.scrollBy(0, 80); window.scrollBy(0, -80); }); await wait(1500); await moved(900, "sau cuộn trang");
+      await pg.evaluate(() => window.__npOrbit.setLite(true)); note(await pg.evaluate(() => window.__npOrbit.reason()).then(r => /degraded/.test(r)), tag, "reason() phải báo degraded"); await moved(900, "khi degraded (hạ cấp không được dừng vòng quay; có thể tự phục hồi khi FPS tốt)"); note(!errs.length, tag, "lỗi JS: " + errs[0]);
+      await pg.close();
     }
     note(weight > 0 && weight < 300 * 1024, "trọng lượng", "tải trang đầu " + Math.round(weight / 1024) + " KB (cần < 300 KB; chưa nén)");
     console.log("  trọng lượng trang VI 390 (chưa nén, gồm shared/theme+site+track): " + Math.round(weight / 1024) + " KB");

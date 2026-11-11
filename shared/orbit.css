@@ -61,3 +61,7 @@
 /* hạ cấp tự động khi FPS thấp: bỏ đuôi, cực quang đứng yên, không parallax */
 .lite .sat::before{display:none}.lite .orbstage::before,.lite .orbstage::after{animation:none}.lite .orbstage::after{display:none}
 @media (prefers-reduced-motion:reduce){.orbstage::before{animation:none}.orbstage::after{display:none}.sat::before{display:none}.orbstage,.sat span,.planet.pulse{transition:none;animation:none}.warp .orbstage{transform:none;opacity:1}}
+.orbplay{position:absolute;left:8px;bottom:8px;min-height:44px;padding:0 16px;border-radius:99px;border:2px solid #A18BFF;background:rgba(14,12,40,.92);color:#fff;font:800 14px/1 system-ui,sans-serif;cursor:pointer;z-index:5}
+.orbplay[hidden]{display:none}.orbplay:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.orbdbg{position:absolute;left:0;right:0;bottom:0;z-index:6;padding:2px 6px;font:11px/1.3 monospace;color:#9f9;background:rgba(0,0,0,.7);pointer-events:none}
+@media (prefers-reduced-motion:reduce){.orbplay{transition:none}}

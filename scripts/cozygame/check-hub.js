@@ -143,6 +143,24 @@ const freePort = () => new Promise(res => { const s = net.createServer(); s.list
       const f = await pg.evaluate(() => new Promise(res => { let n = 0, t0 = performance.now(); const tick = t => { n++; if (t - t0 < 2500) requestAnimationFrame(tick); else res({ fps: n / ((t - t0) / 1000), lt: window.__lt, lite: window.__npOrbit.lite }); }; requestAnimationFrame(tick); }));
       note(f.fps >= minFps, tag, `FPS ${f.fps.toFixed(1)} < ${minFps} (lite=${f.lite})`); if (rate === 1) note(f.lt <= 100, tag, "long task " + f.lt.toFixed(0) + "ms > 100"); await pg.close();
     }
+    /* ĐIỆN THOẠI THẬT: cảm ứng, DPR3, CPU x4/x6: vệ tinh phải DI CHUYỂN sau 2s; sau chạm-nhả, pointercancel, cuộn trang vẫn tự quay lại <= 3s; hạ cấp không dừng vòng quay */
+    for (const rate of [1, 4, 6]) for (const pth of ["/play/index.html"]) {
+      const tag = "hub mobile x" + rate + " " + pth, pg = await br.newPage(), errs = []; await pg.setViewport({ width: 390, height: 844, deviceScaleFactor: 3, isMobile: true, hasTouch: true });
+      pg.on("pageerror", e => errs.push(String(e))); const cd = await pg.createCDPSession(); await cd.send("Emulation.setCPUThrottlingRate", { rate });
+      await pg.goto(B + pth + "?debug", { waitUntil: "load" }); await pg.evaluate(() => { const o = document.getElementById("orbsys"); o.scrollIntoView({ block: "center", behavior: "instant" }); });
+      const P = () => pg.evaluate(() => [...document.querySelectorAll(".sat")].map(e => e.style.transform).join("|")), R = () => pg.evaluate(() => window.__npOrbit.reason());
+      const moved = async (ms, what) => { const a = await P(); await wait(ms); const b = await P(); note(a !== b, tag, what + ": vệ tinh đứng yên (" + await R() + ")"); };
+      await wait(1500); await moved(1200, "sau 2s");
+      const bb = await (await pg.$(".sat.night")).boundingBox();
+      await pg.touchscreen.tap(bb.x + bb.width / 2, bb.y + bb.height / 2).catch(() => {}); await wait(1000);
+      if (/\/(popplay|cozyplay)\//.test(pg.url())) { await pg.goBack({ waitUntil: "load" }).catch(() => {}); await wait(1500); await pg.evaluate(() => document.getElementById("orbsys").scrollIntoView({ block: "center", behavior: "instant" })); await moved(1200, "sau khi quay lại (Back) từ game"); }
+      else { await wait(2200); await moved(900, "sau chạm-nhả"); }
+      await pg.evaluate(() => { const st = document.querySelector(".orbstage"), r = st.getBoundingClientRect(); const h = document.querySelector(".hit"); h.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, pointerId: 7, pointerType: "touch", clientX: r.left + r.width / 2, clientY: r.top + 40 })); h.dispatchEvent(new PointerEvent("pointercancel", { bubbles: true, pointerId: 7, pointerType: "touch" })); });
+      await wait(2500); await moved(900, "sau pointercancel");
+      await pg.evaluate(() => { window.scrollBy(0, 80); window.scrollBy(0, -80); }); await wait(1500); await moved(900, "sau cuộn trang");
+      await pg.evaluate(() => window.__npOrbit.setLite(true)); note(await pg.evaluate(() => window.__npOrbit.reason()).then(r => /degraded/.test(r)), tag, "reason() phải báo degraded"); await moved(900, "khi degraded (hạ cấp không được dừng vòng quay; có thể tự phục hồi khi FPS tốt)"); note(!errs.length, tag, "lỗi JS: " + errs[0]);
+      await pg.close();
+    }
     /* reduced-motion: một lượt ở 390x844 và 1440x900 */
     for (const [w, h] of [[390, 844], [1440, 900]]) {
       const tag = `hub reduced ${w}x${h}`, pg = await br.newPage(); await pg.setViewport({ width: w, height: h });
@@ -150,6 +168,7 @@ const freePort = () => new Promise(res => { const s = net.createServer(); s.list
       await pg.goto(B + "/play/index.html?debug", { waitUntil: "load" }); await wait(400);
       const a = await pg.evaluate(() => [...document.querySelectorAll(".sat")].map(e => e.style.transform).join("|")); await wait(900);
       const b = await pg.evaluate(() => ({ t: [...document.querySelectorAll(".sat")].map(e => e.style.transform).join("|"), an: document.getAnimations().length, fr: window.__npOrbit.frames, red: window.__npOrbit.reduced, tr: getComputedStyle(document.getElementById("aPop")).transitionDuration }));
+      note(await pg.evaluate(() => { const b = document.querySelector(".orbplay"); return !!b && !b.hidden && b.offsetHeight >= 44; }), tag, "reduced-motion phải có nút ▶ Chạy hiệu ứng (>=44px)");
       note(a === b.t && b.an === 0 && b.red && b.fr < 5 && /^0s/.test(b.tr), tag, "giảm chuyển động nhưng vẫn động: " + JSON.stringify({ same: a === b.t, an: b.an, fr: b.fr, red: b.red, tr: b.tr }));
       await pg.close();
     }

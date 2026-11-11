@@ -29,8 +29,8 @@
   var hint = d.createElement("div"); hint.className = "orbhint"; hint.setAttribute("aria-hidden", "true"); hint.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V5a1.5 1.5 0 0 1 3 0v5m0-1a1.5 1.5 0 0 1 3 0v2m0-1a1.5 1.5 0 0 1 3 0v4a6 6 0 0 1-6 6h-1a6 6 0 0 1-5-3l-2-3a1.5 1.5 0 0 1 2.5-1.6L9 15"/></svg><span></span>'; stage.appendChild(hint);
   new MutationObserver(labels).observe(sys, { attributes: true, attributeFilter: ["data-lang"] }); labels();
 
-  var mqR = window.matchMedia("(prefers-reduced-motion: reduce)"), reduced = mqR.matches, mqN = window.matchMedia("(max-width:699px)");
-  var fpsN = 0, fpsT = 0, onScreen = true, tabOn = !d.hidden, raf = 0, last = 0, U = stage.clientWidth / 600;
+  var mqR = window.matchMedia("(prefers-reduced-motion: reduce)"), reduced = mqR.matches, force = false, mqN = window.matchMedia("(max-width:699px)");
+  var t00 = performance.now(), last0 = 0, fpsN = 0, fpsT = 0, onScreen = true, tabOn = !d.hidden, raf = 0, last = 0, U = stage.clientWidth / 600;
   var DB = /[?&]debug(=|&|$)/.test(location.search) ? (window.__npOrbit = { ticks: 0, marks: 0, dropped: 0, maxPerSec: 0, audio: false, hot: "", vel: { pop: 0, night: 0 }, paused: { pop: false, night: false }, reduced: reduced, frames: 0, ctxCount: 0 }) : null;
 
   var P = 1000;   /* khoảng cách phối cảnh (đơn vị khung 600): vệ tinh phía trước to ~1,9x phía sau */
@@ -53,8 +53,9 @@
     if (!LITE && !reduced) stage.style.setProperty("--px", px.toFixed(3)), stage.style.setProperty("--py", py.toFixed(3));
     if (frontPass.length) { var n = performance.now(); if (soundOn && ctx && ctx.state === "running" && n - lastWhoosh > 260) { lastWhoosh = n; whoosh(frontPass[0]); } if (navigator.vibrate && (soundOn || userActive) && !reduced && n - lastVib > 400) { lastVib = n; try { navigator.vibrate(7); } catch (e) {} } frontPass.length = 0; }
   }
+  function still() { return reduced && !force; }
   function paused(o) { return o.drag || o.hover > 0 || o.focus > 0; }
-  function active() { if (!LITE && !reduced && (Math.abs(tx - px) > 0.002 || Math.abs(ty - py) > 0.002)) return true; return ["pop", "night"].some(function (w) { var o = O[w]; return Math.abs(o.vel) > 0.003 || o.pend !== 0 || o.drag || (!reduced && !paused(o)); }); }
+  function active() { if (!LITE && !reduced && (Math.abs(tx - px) > 0.002 || Math.abs(ty - py) > 0.002)) return true; return ["pop", "night"].some(function (w) { var o = O[w]; return Math.abs(o.vel) > 0.003 || o.pend !== 0 || o.drag || (!still() && !paused(o)); }); }
   function setLite(v) { LITE = v; sys.classList.toggle("lite", v); if (DB) DB.lite = v; }
   function wake() { if (!raf && onScreen && tabOn) { last = 0; raf = requestAnimationFrame(frame); } }
 
@@ -62,9 +63,10 @@
     raf = 0; var dt = last ? Math.min(0.05, (t - last) / 1000) : 0.016; last = t;
     U = stage.clientWidth / 600; var maxV = 0;
     px += (tx - px) * (1 - Math.exp(-dt * 6)); py += (ty - py) * (1 - Math.exp(-dt * 6));
-    if (!LITE && !reduced && dt > 0) { fpsN++; fpsT += dt; if (fpsN === 100) { if (fpsT / fpsN > 0.028) setLite(true); fpsN = 0; fpsT = 0; } }
+    /* đo FPS sau 1,5s đầu (bỏ qua lúc tải/giải mã ảnh) và bỏ khung > 100ms (đổi tab): chậm thì chỉ tắt hiệu ứng phụ (đuôi, parallax, cực quang), KHÔNG dừng vòng quay; nhanh trở lại thì bật lại */
+    if (!reduced && dt > 0 && t - t00 > 1500 && (t - last0) < 100) { fpsN++; fpsT += dt; if (fpsN === 120) { var av = fpsT / fpsN; if (!LITE && av > 0.034) setLite(true); else if (LITE && av < 0.021) setLite(false); fpsN = 0; fpsT = 0; } } last0 = t;
     ["pop", "night"].forEach(function (w) {
-      var o = O[w], target = (reduced || paused(o)) ? 0 : o.g.auto * o.g.dir;
+      var o = O[w], target = (still() || paused(o)) ? 0 : o.g.auto * o.g.dir;
       if (!o.drag) {
         var k = target === 0 ? 7 : (Math.abs(o.vel) > Math.abs(target) ? 1.5 : 3);
         o.vel += (target - o.vel) * (1 - Math.exp(-dt * k));
@@ -77,6 +79,7 @@
       var m = Math.floor(o.phi / MARK); if (m !== o.mark) { o.mark = m; marks(w, sp); }
       if (DB) { DB.vel[w] = o.vel; DB.paused[w] = paused(o); }
     });
+    ["pop", "night"].forEach(function (w) { var o = O[w]; if (o.drag && !dr) o.drag = false; if (o.hover > 0 && !stage.matches(":hover") && !cards[w].matches(":hover")) o.hover = 0; });
     audioFrame(maxV); render(); if (DB) DB.frames++;
     if (onScreen && tabOn && active()) raf = requestAnimationFrame(frame); else { last = 0; audioFrame(0); }
   }
@@ -172,6 +175,10 @@
     if (moved) { hint.classList.add("off"); stage._noclick = true; setTimeout(function () { stage._noclick = false; }, 80); } refresh();
   }
   stage.addEventListener("pointerup", endDrag); stage.addEventListener("pointercancel", endDrag);
+  /* chống kẹt trạng thái "đang kéo/đang dừng" trên cảm ứng: nhả/huỷ ở bất kỳ đâu (kể cả ngoài sân khấu, sau khi trình duyệt chiếm cử chỉ cuộn) đều giải phóng */
+  function release(e) { if (dr && (!e.pointerId || e.pointerId === dr.id)) endDrag({ pointerId: dr.id }); ["pop", "night"].forEach(function (w) { if (O[w].drag && !dr) { O[w].drag = false; } }); stage.classList.remove("drag"); refresh(); }
+  ["pointerup", "pointercancel", "touchend", "touchcancel", "lostpointercapture"].forEach(function (ev) { d.addEventListener(ev, release, true); });
+  addEventListener("blur", release); addEventListener("scroll", function () { if (dr && !dr.moved) release({}); }, { passive: true });
   stage.addEventListener("dragstart", function (e) { e.preventDefault(); });
 
   /* ===== bấm icon: máy tính mở thẳng game; điện thoại chạm lần đầu thì nhấn mạnh + cuộn tới thẻ, chạm lần hai mở game ===== */
@@ -223,10 +230,20 @@
   });
   addEventListener("pageshow", function () { clearTimeout(warpT); sys.classList.remove("warp"); stage.style.transformOrigin = ""; });
 
+  /* ===== giảm chuyển động của hệ điều hành (Android "Xoá hiệu ứng"/tiết kiệm pin, iOS "Giảm chuyển động"): mặc định đứng yên theo cài đặt, nhưng có nút ▶ rõ ràng để người dùng tự chạy ===== */
+  var pl = d.createElement("button"); pl.type = "button"; pl.className = "orbplay"; pl.hidden = !reduced; pl.setAttribute("aria-pressed", "false");
+  function plLabel() { var vi = isVi(); pl.textContent = force ? "⏸ " + (vi ? "Dừng" : "Pause") : "▶ " + (vi ? "Chạy hiệu ứng" : "Play motion"); pl.setAttribute("aria-label", force ? (vi ? "Dừng chuyển động quỹ đạo" : "Pause orbit motion") : (vi ? "Chạy chuyển động quỹ đạo" : "Play orbit motion")); pl.setAttribute("aria-pressed", force ? "true" : "false"); }
+  pl.addEventListener("click", function () { force = !force; plLabel(); wake(); refresh(); }); plLabel(); stage.appendChild(pl);
+  new MutationObserver(plLabel).observe(sys, { attributes: true, attributeFilter: ["data-lang"] });
+  /* ?debug: lý do trạng thái hiện tại (trên iPhone mở /?debug hoặc /play/?debug, góc dưới sân khấu) */
+  function reason() { var r = []; if (reduced) r.push(force ? "reduced+forced" : "reduced"); if (!onScreen) r.push("paused:offscreen"); if (!tabOn) r.push("paused:hidden"); ["pop", "night"].forEach(function (w) { var o = O[w]; if (o.drag) r.push("paused:touch-" + w); else if (o.hover > 0) r.push("paused:hover-" + w); else if (o.focus > 0) r.push("paused:focus-" + w); }); if (LITE) r.push("degraded"); return r.length ? r.join(" ") : "auto"; }
+  if (DB) { var dbg = d.createElement("div"); dbg.className = "orbdbg"; stage.appendChild(dbg); DB.reason = reason; setInterval(function () { dbg.textContent = reason() + " raf=" + (raf ? 1 : 0) + " f=" + DB.frames; }, 400); }
+  mqR.addEventListener && mqR.addEventListener("change", function () { pl.hidden = !mqR.matches; });
+
   /* ===== tạm dừng khi ngoài màn hình / tab ẩn ===== */
   if ("IntersectionObserver" in window) new IntersectionObserver(function (en) { onScreen = en[en.length - 1].isIntersecting; syncCtx(); if (onScreen) wake(); else { cancelAnimationFrame(raf); raf = 0; } }).observe(stage);
   d.addEventListener("visibilitychange", function () { tabOn = !d.hidden; syncCtx(); if (tabOn) wake(); else { cancelAnimationFrame(raf); raf = 0; } });
-  if (mqR.addEventListener) mqR.addEventListener("change", function () { reduced = mqR.matches; if (DB) DB.reduced = reduced; wake(); });
+  if (mqR.addEventListener) mqR.addEventListener("change", function () { reduced = mqR.matches; if (DB) DB.reduced = reduced; if (!reduced) force = false; wake(); });
   window.addEventListener("resize", function () { U = stage.clientWidth / 600; render(); });
   render(); wake();
   if (DB) { DB.setPhi = function (w, v) { O[w].phi = v; render(); }; DB.sound = setSound; DB.setLite = setLite; DB.sats = function () { return allSats.map(function (a) { var r = a.getBoundingClientRect(); return { w: r.width, z: +a.style.zIndex, k: a.k, cls: a.className, o: +a.style.opacity }; }); }; DB.state = function () { return ctx ? ctx.state : "none"; }; }
