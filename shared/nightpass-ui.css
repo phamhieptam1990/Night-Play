@@ -1,0 +1,165 @@
+/* Giao diện NIGHT PASS (subscribe.html + mọi hộp thoại của nó): tím đêm -> #12141F, ánh sáng tím/vàng nhẹ, thẻ kính mờ viền mảnh,
+   vương miện làm điểm nhấn, CTA gradient tím-cam, tiêu đề serif như landing (landing/lp/landing.css).
+   Chỉ có tác dụng khi <html data-np> (do subscribe.html đặt); các trang khác dùng theme.css không bị ảnh hưởng.
+   Nạp SAU <style> của trang để ghi đè màu/viền/bóng; KHÔNG đổi padding/kích thước của hệ data-dens (không cuộn) trừ min-height cho vùng chạm 44px.
+   Sáng/tối: token --bg/--panel/--ink... bên dưới; mọi chữ >= 4.5:1 (bài đo scripts/cozygame/check-subscribe.js). */
+
+/* ---------- token: cùng một bảng "đêm" cho cả Night Play lẫn Pop Play (đừng ép tối: có bản sáng) ---------- */
+html[data-np][data-app]:not([data-theme=dark]){
+  --bg:#F3F0FA; --card:#E8E2FA; --ink:#1C1833; --ink2:#4B4568; --muted:#5E5780;
+  --accent:#6A48F0; --on-accent:#fff; --hero1:#E2DBF8; --panel:#fff; --line:#CFC6EA;
+  --shadow:0 6px 18px rgba(60,40,140,.14); --ok:#0B7A3B; --warn:#C62828;
+  --np-grad:linear-gradient(90deg,#6A48F0,#C2410C); --np-on:#fff; --np-glow:rgba(106,72,240,.32); --np-gold:#B7791F;
+}
+html[data-np][data-app][data-theme=dark]{
+  --bg:#12141F; --card:#1B1E2F; --ink:#F1F2FF; --ink2:#C9CCF0; --muted:#A9AEDA;
+  --accent:#9B83FF; --on-accent:#12141F; --hero1:#1A1640; --panel:#1B1E2F; --line:rgba(167,150,255,.28);
+  --shadow:0 6px 22px rgba(0,0,0,.45); --ok:#3ddc84; --warn:#FF8F94;
+  --np-grad:linear-gradient(90deg,#9B83FF,#FF9A6B); --np-on:#12141F; --np-glow:rgba(124,92,255,.45); --np-gold:#FFD66B;
+}
+html[data-np]{--np-serif:Georgia,"Times New Roman",serif;--np-glass:rgba(27,30,47,.72)}
+
+/* ---------- nền: tím sâu -> #12141F, vầng sáng tím + vàng, sao tĩnh (tối); oải hương nhạt (sáng) ---------- */
+html[data-np] body{background:
+  radial-gradient(620px 360px at 90% -8%,color-mix(in srgb,#7C5CFF 20%,transparent),transparent),
+  radial-gradient(480px 300px at 0% 100%,color-mix(in srgb,#FFC85A 16%,transparent),transparent),
+  linear-gradient(180deg,#F3F0FA,#E9E3FA)}
+html[data-np][data-theme=dark] body{background:
+  radial-gradient(1.5px 1.5px at 12% 22%,#fff,transparent),radial-gradient(1.5px 1.5px at 78% 14%,#FFE9A8,transparent),radial-gradient(1px 1px at 40% 70%,#fff,transparent),radial-gradient(1.5px 1.5px at 90% 62%,#fff,transparent),radial-gradient(1px 1px at 24% 88%,#FFE9A8,transparent),radial-gradient(1px 1px at 60% 36%,#fff,transparent),
+  radial-gradient(700px 420px at 85% -10%,rgba(124,92,255,.34),transparent),radial-gradient(520px 320px at 0% 100%,rgba(255,200,90,.12),transparent),
+  linear-gradient(180deg,#12141F 0,#1A1640 55%,#12141F 100%)}
+
+/* ---------- thanh trên / chân trang ---------- */
+html[data-np] .nav{background:color-mix(in srgb,var(--bg) 66%,transparent)}
+html[data-np] .mark{font-family:var(--np-serif);min-height:44px}
+html[data-np] .site-upd{opacity:1;color:var(--muted)}
+html[data-np] .s2top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+html[data-np] .s2top .linkbtn{margin:0;padding:8px 6px}
+html[data-np] .ico,html[data-np] .back,html[data-np] #langMenu{border:1px solid var(--line);box-shadow:none;background:color-mix(in srgb,var(--panel) 80%,transparent)}
+html[data-np] .back,html[data-np] .nav .ico{min-height:44px;height:44px}
+html[data-np] .nav .ico{width:44px;min-width:44px}
+html[data-np] .nav{padding-top:6px;padding-bottom:6px}
+/* công tắc VI|EN: mỗi nút cao/rộng >= 44px */
+html[data-np] #langMenu{padding:0;gap:0;border-radius:22px;overflow:hidden;height:44px}
+html[data-np] #langMenu button{min-width:44px;height:44px;padding:0 10px;border-radius:0;font-size:15px;color:var(--ink2)}
+html[data-np] #langMenu button[aria-pressed=true]{background:var(--np-grad);color:var(--np-on)}
+html[data-np] .foot{background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--hero1) 80%,transparent))}
+html[data-np] .fcol a,html[data-np] .fcol button{min-height:44px;min-width:44px;display:inline-flex;align-items:center;color:var(--ink2)}
+html[data-np] .fcol a:hover,html[data-np] .fcol button:hover{color:var(--accent)}
+html[data-np] .foot p{opacity:1;color:var(--muted)}
+html[data-np] .fcol a{font-weight:600}
+
+/* ---------- tiêu đề: serif + vương miện ---------- */
+html[data-np] h1,html[data-np] h2,html[data-np] h3{font-family:var(--np-serif)}
+html[data-np] .hero h1::before{content:"👑";display:inline-block;margin-right:.3em;font-size:.78em;filter:drop-shadow(0 0 10px color-mix(in srgb,var(--np-gold) 70%,transparent))}
+html[data-np] .hero p{opacity:1;color:var(--ink2)}
+
+/* ---------- trạng thái gói (popup/biểu ngữ) ---------- */
+html[data-np] .status{border:1px solid var(--line);background:color-mix(in srgb,var(--panel) 85%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font-family:system-ui,sans-serif;box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 22%,transparent),0 8px 28px var(--np-glow)}
+html[data-np] .status.on{border:1px solid var(--ok)}
+html[data-np] .status.on::before{content:"👑 "}
+html[data-np] .status .ex{display:block;margin-top:2px;font-size:13px;font-weight:600;color:var(--ink2)}
+html[data-np] .status{padding:10px 16px;margin-bottom:10px}
+
+/* ---------- các bước ---------- */
+html[data-np] .steps li b{border:1px solid var(--line)}
+html[data-np] .steps li.on b{background:var(--np-grad);border-color:transparent;color:var(--np-on)}
+html[data-np] .steps li.done b{color:#fff;background:#0B7A3B;border-color:transparent}
+html[data-np][data-theme=dark] .steps li.done b{background:var(--ok);color:#12141F}
+html[data-np] .steps li.bar{background:linear-gradient(90deg,var(--accent),var(--line))}
+
+/* ---------- thẻ gói (kiểu thẻ giá của landing) ---------- */
+html[data-np] .plan{border:2px solid var(--line);border-radius:24px;background:var(--panel);box-shadow:var(--shadow)}
+html[data-np][data-theme=dark] .plan,html[data-np][data-theme=dark] .card,html[data-np][data-theme=dark] table{background:var(--np-glass);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+html[data-np] .plan:hover{border-color:color-mix(in srgb,var(--accent) 60%,var(--line))}
+html[data-np] .plan[aria-checked=true]{border-color:var(--accent);background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 18%,var(--panel)),var(--panel));box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 40%,transparent),0 10px 34px var(--np-glow)}
+html[data-np][data-theme=dark] .plan[aria-checked=true]{background:linear-gradient(160deg,rgba(124,92,255,.28),rgba(27,30,47,.82))}
+/* "Phổ biến nhất" luôn phát sáng nhẹ, kể cả khi chưa chọn */
+html[data-np] .plan.best:not([aria-checked=true]){border-color:color-mix(in srgb,var(--accent) 65%,var(--line));box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 25%,transparent),0 6px 26px color-mix(in srgb,var(--np-glow) 70%,transparent)}
+html[data-np] .plan h3{font-family:system-ui,sans-serif;font-weight:700;color:var(--ink2)}
+html[data-np] .price{font-family:var(--np-serif);color:var(--ink)}
+html[data-np] .price small{font-family:system-ui,sans-serif;opacity:1;color:var(--ink2)}
+html[data-np] .per,html[data-np] .valid{color:var(--muted)}
+html[data-np] .valid{font-weight:600}
+html[data-np] .desc{opacity:1;color:var(--ink2)}
+html[data-np] .save{color:var(--ok)}
+html[data-np] .badge{background-image:var(--np-grad);background-color:var(--accent);color:var(--np-on);padding:4px 12px;white-space:nowrap}
+html[data-np] .badge::before{content:"👑 "}
+html[data-np] .rd{border-color:var(--ink2)}
+html[data-np] .plan[aria-checked=true] .rd{border-color:var(--accent);background:var(--accent)}
+html[data-np] .inc{border-top-color:var(--line)}
+html[data-np] .ck{background:#0B7A3B;color:#fff}
+html[data-np][data-theme=dark] .ck{background:var(--ok);color:#12141F}
+
+/* ---------- bảng so sánh ---------- */
+html[data-np] table{border:1px solid var(--line);box-shadow:var(--shadow)}
+html[data-np] th{opacity:1;color:var(--ink2)}
+html[data-np] th.pro{background:var(--np-grad);color:var(--np-on)}
+html[data-np] td.fr{opacity:1;color:var(--ink2)}
+html[data-np] td.fr .ck{background:var(--line);color:var(--ink)}
+html[data-np] td.pro{background:color-mix(in srgb,var(--accent) 12%,transparent)}
+
+/* ---------- thẻ thanh toán / đơn hàng ---------- */
+html[data-np] .card{border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow)}
+html[data-np] .card.order{border:1px solid color-mix(in srgb,var(--accent) 55%,var(--line));box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 22%,transparent),0 12px 40px var(--np-glow)}
+html[data-np] .card.order h2{opacity:1;color:var(--ink2)}
+html[data-np] .sum li>span:first-child{opacity:1;color:var(--ink2)}
+html[data-np] .sum .hd>span:first-child{color:var(--ink)}
+html[data-np] .sum .hd>span:first-child::before{content:"👑 "}
+html[data-np] .sum .chip{background-image:var(--np-grad);background-color:var(--accent);color:var(--np-on)}
+html[data-np] .sum li.t>span:last-child{font-family:var(--np-serif);color:var(--ink)}
+html[data-np] .fine{opacity:1;color:var(--ink2)}
+html[data-np] .fine a{white-space:nowrap}
+html[data-np] .err{color:var(--warn);font-weight:600}
+
+/* ---------- ô nhập: viền sáng khi focus ---------- */
+html[data-np] input[type=email],html[data-np] .dlg input{min-height:44px;border:2px solid var(--line);border-radius:14px;background:color-mix(in srgb,var(--bg) 70%,var(--panel));color:var(--ink);transition:border-color .15s,box-shadow .15s}
+html[data-np] input[type=email]::placeholder,html[data-np] .dlg input::placeholder{color:var(--muted);opacity:1}
+html[data-np] input[type=email]:focus,html[data-np] .dlg input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 30%,transparent),0 0 18px var(--np-glow)}
+html[data-np] input[type=email][aria-invalid=true]{border-color:var(--warn)}
+html[data-np] .dlg .err{color:var(--warn)}
+
+/* ---------- phương thức thanh toán ---------- */
+html[data-np] .m{min-height:44px;border:2px solid var(--line);border-radius:16px;background:color-mix(in srgb,var(--bg) 60%,var(--panel));color:var(--ink)}
+html[data-np] .m[aria-checked=true]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 16%,var(--panel));box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 35%,transparent),0 4px 18px var(--np-glow)}
+
+/* ---------- nút: chính (gradient tím-cam), phụ (ghost), liên kết ---------- */
+html[data-np] .cta,html[data-np] .p{background-color:var(--accent);background-image:var(--np-grad);color:var(--np-on);border:0;border-radius:999px;min-height:48px;font-weight:800;box-shadow:0 6px 24px var(--np-glow);transition:transform .15s,box-shadow .15s}
+html[data-np] .cta:hover:not(:disabled),html[data-np] .p:hover:not(:disabled){transform:translateY(-2px)}
+html[data-np] .cta:active:not(:disabled),html[data-np] .p:active:not(:disabled){transform:scale(.98)}
+html[data-np] .cta:disabled,html[data-np] .p:disabled{opacity:.55;box-shadow:none}
+html[data-np] .s{background:transparent;color:var(--ink);border:2px solid color-mix(in srgb,var(--accent) 55%,var(--line))!important;border-radius:999px;min-height:48px}
+html[data-np] .s:hover{background:color-mix(in srgb,var(--accent) 12%,transparent)}
+html[data-np] .linkbtn{min-height:44px;color:var(--accent)}
+html[data-np] .cp{min-height:44px;min-width:56px;border:1px solid color-mix(in srgb,var(--accent) 55%,var(--line));color:var(--ink);border-radius:999px;padding:0 12px;margin:-6px 0}
+html[data-np] :focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+
+/* ---------- hộp thoại: kính tối + quầng sáng tím ---------- */
+html[data-np] dialog{border:1px solid color-mix(in srgb,var(--accent) 45%,var(--line));border-radius:28px;background:var(--panel);color:var(--ink);
+  box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 18%,transparent),0 24px 80px var(--np-glow),0 16px 50px rgba(0,0,0,.4);
+  max-height:calc(var(--vvh,100dvh) - 24px);overflow:auto;overscroll-behavior:contain}
+html[data-np][data-theme=dark] dialog{background:linear-gradient(160deg,rgba(44,36,104,.97),rgba(22,24,42,.97))}
+html[data-np] dialog::backdrop{background:radial-gradient(640px 420px at 50% 30%,rgba(124,92,255,.3),transparent),rgba(8,9,18,.7);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+html[data-np] dialog.kb{top:calc(var(--vvt,0px) + 12px);bottom:auto;margin-top:0}
+html[data-np] .dlg h3{font-size:22px}
+html[data-np] .dlg .ic{background:radial-gradient(circle at 50% 35%,color-mix(in srgb,var(--np-gold) 30%,transparent),color-mix(in srgb,var(--accent) 16%,var(--panel)));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent) 45%,transparent),0 0 26px var(--np-glow)}
+html[data-np] .dlg .sub,html[data-np] .kv span,html[data-np] .mut{opacity:1;color:var(--ink2)}
+html[data-np] .dlg .fld{opacity:1;color:var(--ink2)}
+html[data-np] .dlg p{margin:0 0 8px}
+html[data-np] .dlg .note{margin:0 0 12px;padding:10px 12px;border-radius:14px;background:color-mix(in srgb,var(--accent) 14%,transparent);border:1px solid color-mix(in srgb,var(--accent) 35%,var(--line));font-size:14px;text-align:left;color:var(--ink)}
+html[data-np] .kv{border-bottom-color:var(--line)}
+html[data-np] .qrimg{display:block;margin:8px auto;border-radius:16px;background:#fff;padding:6px;box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 40%,transparent),0 0 30px var(--np-glow);width:clamp(120px,calc(var(--vvh,100dvh) - 500px),220px);height:auto;aspect-ratio:1}
+html[data-np] .qr{opacity:.9;border-color:#fff;background:repeating-conic-gradient(#12141F 0 25%,#fff 0 50%) 0 0/24px 24px;box-shadow:0 0 30px var(--np-glow);width:clamp(120px,calc(var(--vvh,100dvh) - 500px),200px);height:auto;aspect-ratio:1}
+html[data-np] .demo{background:#FFD66B;color:#3a2e00;border:1px solid #E5B300;border-radius:14px}
+html[data-np] .dlg .row button{min-height:48px}
+@media (max-height:600px){html[data-np] .dlg h3 + .mut{display:none}html[data-np] .dlg{padding:12px 16px}html[data-np] .kv{padding:0}html[data-np] .dlg .row{margin-top:6px}html[data-np] .dlg .mut{margin:2px 0}}
+@media (max-height:640px){html[data-np] .dlg{padding:16px}html[data-np] .dlg .ic{width:44px;height:44px;font-size:22px;margin-bottom:8px}html[data-np] .dlg h3{font-size:19px;margin-bottom:4px}html[data-np] .dlg .row{margin-top:8px}}
+
+/* ---------- vừa một màn hình: trạng thái gói gọn dần theo data-dens ---------- */
+html[data-dens="3"][data-np] .status .ex,html[data-dens="4"][data-np] .status .ex{display:none}
+html[data-dens="3"][data-np] .status,html[data-dens="4"][data-np] .status{padding:6px 12px;margin-bottom:6px;font-size:14px}
+html[data-dens="4"][data-np] .status{font-size:13px}
+
+html[data-np] .next{background:none}
+html[data-np] .kv b{word-break:normal;overflow-wrap:anywhere;min-width:0}
+html[data-np] .cp{border:0;background:color-mix(in srgb,var(--accent) 16%,transparent);flex:none}

@@ -7,17 +7,17 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Night Pass · Night Play</title>
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#0E1020">
+<meta name="theme-color" content="#12141F">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%237C5CFF'/%3E%3Cpath d='M40 40A16 16 0 1 1 26 16a13 13 0 0 0 14 24z' fill='%23fff'/%3E%3C/svg%3E">
 <script>
 /* Xác định app gọi tới (?from=popplay/index.html) để dùng đúng thương hiệu + màu; chạy trước khi vẽ nên không nháy màu */
 const DEFAULT_HOME = "cozyplay/index.html";
 const MOON = '<path d="M42 40A16 16 0 1 1 26 14a13 13 0 0 0 16 26z" fill="#fff"/><circle cx="44" cy="20" r="2.5" fill="#fff"/>';
 const PLAY = '<path d="M25 18l22 14-22 14z" fill="#fff"/>';
-const logo = p => '<svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="var(--accent)"/>' + p + '</svg>';
+const logo = (p, c) => '<svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="' + c + '"/>' + p + '</svg>';
 const APPS = {
-  cozyplay:{ brand:"Night Play", theme:"dark", color:{ light:"#F3F0FA", dark:"#0E1020" }, logo:logo(MOON) },
-  popplay: { brand:"Pop Play",   theme:null,   color:{ light:"#FFF6EC", dark:"#1B2340" }, logo:logo(PLAY) }
+  cozyplay:{ brand:"Night Play", theme:"dark", color:{ light:"#F3F0FA", dark:"#12141F" }, logo:logo(MOON, "#7C5CFF") },
+  popplay: { brand:"Pop Play",   theme:null,   color:{ light:"#F3F0FA", dark:"#12141F" }, logo:logo(PLAY, "#FF5A1F") }
 };
 /* Trang quay về: ?from= (đường dẫn tương đối, an toàn) → referrer cùng origin → mặc định */
 const HOME = (() => {
@@ -36,6 +36,7 @@ const HOME = (() => {
 const APPKEY = APPS[HOME.split("/")[0]] ? HOME.split("/")[0] : "cozyplay", APP = APPS[APPKEY];
 try{var t=localStorage.getItem("theme")}catch(e){}
 document.documentElement.dataset.app = APPKEY;
+document.documentElement.dataset.np = "";   /* bật giao diện Night Pass (shared/nightpass-ui.css) */
 document.documentElement.dataset.theme = t || APP.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 </script>
 <link rel="stylesheet" href="shared/theme.css">
@@ -252,6 +253,7 @@ html[data-dens="4"] #s2 input[type=email]{padding:9px 12px}
 @media (prefers-reduced-motion:reduce){.plan{transition:none}}
 @media (max-width:640px){.hero p{font-size:14px}.card{padding:16px}}
 </style>
+<link rel="stylesheet" href="shared/nightpass-ui.css">
 <script src="shared/offline.js" defer></script>
 </head>
 <body>
@@ -289,7 +291,7 @@ html[data-dens="4"] #s2 input[type=email]{padding:9px 12px}
   </section>
 
   <section id="s2" class="step" tabindex="-1" aria-label="2" hidden>
-    <div class="s2top"><button class="linkbtn" id="prev" type="button"><span aria-hidden="true">←</span><span data-t="change"></span></button></div>
+    <div class="s2top"><button class="linkbtn" id="prev" type="button"><span aria-hidden="true">←</span><span data-t="change"></span></button><button class="linkbtn" id="restore2" type="button"><span aria-hidden="true">🔑</span><span data-t="restore"></span></button></div>
     <section class="pay" aria-label="Checkout">
       <div class="card">
         <h2 data-t="acctH"></h2>
@@ -303,7 +305,7 @@ html[data-dens="4"] #s2 input[type=email]{padding:9px 12px}
         <h2 data-t="orderH"></h2>
         <ul class="sum" id="sum"></ul>
         <button class="cta" id="buy" type="button"></button>
-        <p class="fine" data-t="fine"></p>
+        <p class="fine" id="fine"></p>
       </div>
     </section>
   </section>
@@ -342,7 +344,7 @@ const METHODS = [
   { id:"momo",  name:"MoMo",           c:"#A50064", tag:"M"  },
   { id:"zalo",  name:"ZaloPay",        c:"#0068FF", tag:"Z"  },
   { id:"vnpay", name:"VNPay QR",       c:"#1B4DB1", tag:"VN" },
-  { id:"bank",  name:"VietQR / Bank",  c:"#1F8A5B", tag:"QR" }
+  { id:"bank",  name:"VietQR / Bank",  c:"#17734C", tag:"QR" }
 ];
 
 const i18n = {
@@ -354,8 +356,8 @@ const i18n = {
   f1:"Số game", f1a:"3 game", f1b:"Tất cả + game mới", f2:"Thời gian chơi", f2a:"30 phút/ngày", f2b:"Không giới hạn", f3:"Hẹn giờ đi ngủ tự đặt", f5:"Chế độ & độ khó", f5a:"Cổ điển", f5b:"Vô tận, Thử thách ngày, Boss, 4 độ khó", f6:"Chủ đề, thống kê, huy hiệu", f6a:"Không", f6b:"Có", f4:"Quảng cáo / theo dõi", f4v:"Không",
   acctH:"Tài khoản", email:"Email (để nhận hoá đơn và khôi phục gói)", emailBad:"Vui lòng nhập email hợp lệ.",
   methodH:"Phương thức thanh toán", orderH:"Đơn hàng", plan:"Gói", dur:"Thời hạn", expires:"Hết hạn", total:"Tổng cộng", days:"ngày",
-  buy:"Xác nhận thanh toán", toPay:"Thanh toán", change:"Đổi gói", step1:"Chọn gói", step2:"Thanh toán", stepsL:"Các bước", inc1:"Tất cả game, cả game mới", inc2:"Chơi không giới hạn thời gian", inc3:"Không quảng cáo, không theo dõi cá nhân", valid:"Hiệu lực {n} ngày · không tự gia hạn", perDayAbout:"≈ {p}/ngày", descDay:"Dùng thử Night Pass trong 24 giờ, phù hợp để trải nghiệm trước khi quyết định.", descWeek:"Một tuần thoải mái cho kỳ nghỉ cuối tuần hoặc một đợt chơi ngắn.", descMonth:"Lựa chọn phổ biến nhất: đủ dài để chơi đều mỗi ngày với giá dễ chịu.", descYear:"Dùng cả năm với giá tốt nhất, rẻ hơn mua theo tháng.", fine:"Không tự động gia hạn. Hết hạn bạn quay về gói Free, chúng tôi sẽ nhắc trước 1 ngày. Giá đã gồm thuế (nếu có).",
-  have:"Đã mua rồi?", restore:"Khôi phục gói",
+  buy:"Xác nhận thanh toán", toPay:"Thanh toán", change:"Đổi gói", step1:"Chọn gói", step2:"Thanh toán", stepsL:"Các bước", inc1:"Tất cả game, cả game mới", inc2:"Chơi không giới hạn thời gian", inc3:"Không quảng cáo, không theo dõi cá nhân", valid:"Hiệu lực {n} ngày · không tự gia hạn", perDayAbout:"≈ {p}/ngày", descDay:"Dùng thử Night Pass trong 24 giờ, phù hợp để trải nghiệm trước khi quyết định.", descWeek:"Một tuần thoải mái cho kỳ nghỉ cuối tuần hoặc một đợt chơi ngắn.", descMonth:"Lựa chọn phổ biến nhất: đủ dài để chơi đều mỗi ngày với giá dễ chịu.", descYear:"Dùng cả năm với giá tốt nhất, rẻ hơn mua theo tháng.", fine:"Không tự động gia hạn. Hết hạn bạn quay về gói Free. Giá đã gồm thuế (nếu có).",
+  have:"Đã mua rồi?", restore:"Khôi phục gói", renew:"Gia hạn", extra:"Mua thêm sẽ được cộng dồn vào hạn hiện tại.", devices:"Thiết bị: {n}/{max}", terms2:"Điều khoản & hoàn tiền", paidOther:"Đã nhận tiền cho đơn này. Gói được cấp cho thiết bị đã mở đơn; để dùng trên máy này, nhập email để khôi phục.",
   payTitle:"Quét mã để thanh toán", payWith:"Thanh toán", via:"qua", demo:"CHẾ ĐỘ DEMO: chưa kết nối cổng thanh toán, không có giao dịch thật.", paid:"Tôi đã thanh toán (demo)", cancel:"Huỷ",
   okTitle:"Thanh toán thành công", okTxt:"Night Pass của bạn có hiệu lực đến", play:"Chơi ngay",
   active:"Night Pass đang hoạt động đến", expired:"Night Pass đã hết hạn. Gia hạn để tiếp tục chơi không giới hạn.",
@@ -368,8 +370,8 @@ const i18n = {
   f1:"Games", f1a:"3 games", f1b:"All + new releases", f2:"Play time", f2a:"30 min/day", f2b:"Unlimited", f3:"Custom bedtime timer", f5:"Modes & difficulty", f5a:"Classic", f5b:"Endless, Daily challenge, Boss, 4 difficulties", f6:"Themes, stats, badge", f6a:"No", f6b:"Yes", f4:"Ads / tracking", f4v:"None",
   acctH:"Account", email:"Email (for receipt and restoring your pass)", emailBad:"Please enter a valid email.",
   methodH:"Payment method", orderH:"Order", plan:"Plan", dur:"Duration", expires:"Expires", total:"Total", days:"days",
-  buy:"Confirm payment", toPay:"Pay", change:"Change plan", step1:"Choose plan", step2:"Payment", stepsL:"Steps", inc1:"Every game, including new ones", inc2:"Unlimited play time", inc3:"No ads, no personal tracking", valid:"Valid for {n} days · no auto-renewal", perDayAbout:"≈ {p}/day", descDay:"Try Night Pass for 24 hours. A good way to see it before you decide.", descWeek:"A comfortable week for a weekend break or a short play streak.", descMonth:"The most popular choice: long enough to play daily at an easy price.", descYear:"The whole year at the best price, cheaper than paying monthly.", fine:"No auto-renewal. When it ends you return to Free; we remind you 1 day before. Prices include tax where applicable.",
-  have:"Already purchased?", restore:"Restore pass",
+  buy:"Confirm payment", toPay:"Pay", change:"Change plan", step1:"Choose plan", step2:"Payment", stepsL:"Steps", inc1:"Every game, including new ones", inc2:"Unlimited play time", inc3:"No ads, no personal tracking", valid:"Valid for {n} days · no auto-renewal", perDayAbout:"≈ {p}/day", descDay:"Try Night Pass for 24 hours. A good way to see it before you decide.", descWeek:"A comfortable week for a weekend break or a short play streak.", descMonth:"The most popular choice: long enough to play daily at an easy price.", descYear:"The whole year at the best price, cheaper than paying monthly.", fine:"No auto-renewal. When it ends you return to Free. Prices include tax where applicable.",
+  have:"Already purchased?", restore:"Restore pass", renew:"Extend", extra:"Buying more adds to your current expiry.", devices:"Devices: {n}/{max}", terms2:"Terms & refunds", paidOther:"We received payment for this order. The pass went to the device that opened it; to use it here, enter your email to restore.",
   payTitle:"Scan to pay", payWith:"Pay", via:"via", demo:"DEMO MODE: no payment gateway connected, no real charge.", paid:"I have paid (demo)", cancel:"Cancel",
   okTitle:"Payment successful", okTxt:"Your Night Pass is active until", play:"Play now",
   active:"Night Pass active until", expired:"Your Night Pass has expired. Renew to keep playing without limits.",
@@ -405,7 +407,7 @@ function renderPlans(){
   const monthly = PLANS.find(p=>p.id==="month").price;
   PLANS.forEach(p => {
     const b = document.createElement("button");
-    b.type="button"; b.className="plan"; b.setAttribute("role","radio"); b.setAttribute("aria-checked", p.id===planId);
+    b.type="button"; b.className="plan" + (p.best ? " best" : ""); b.setAttribute("role","radio"); b.setAttribute("aria-checked", p.id===planId);
     const per = {day:"perDay",week:"perWeek",month:"perMonth",year:"perYear"}[p.id];
     const cap = p.id[0].toUpperCase() + p.id.slice(1);
     const save = p.id==="year" ? `<span class="save">${T("save")} ${Math.round((1 - p.price/(monthly*12))*100)}%</span>` : "";
@@ -465,14 +467,29 @@ function renderSum(){
     <li class="pm"><span>${T("payWith")}</span><span><i style="background:${method().c}">${method().tag}</i>${method().name}</span></li>
     <li class="t"><span>${T("total")}</span><span>${vnd(p.price)}</span></li>`;
   $("buy").innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span></span>';
-  $("buy").lastChild.textContent = T("buy") + " " + vnd(p.price);
+  $("buy").lastChild.textContent = T(isActive(getPass()) ? "renew" : "buy") + " " + vnd(p.price);
 }
 function renderStatus(){
   const s = $("status"), p = getPass();
   if(!p){ s.className="status"; return; }
   s.className = "status on";
   s.style.borderColor = isActive(p) ? "var(--ok)" : "var(--warn)";
-  s.textContent = isActive(p) ? T("active") + " " + fmtDate(p.exp) : T("expired");
+  if(!isActive(p)){ s.textContent = T("expired"); return; }
+  s.textContent = T("active") + " " + fmtDate(p.exp);
+  const ex = document.createElement("span"); ex.className = "ex"; ex.id = "stEx"; ex.textContent = T("extra"); s.appendChild(ex);
+  loadDevices();
+}
+/* Số thiết bị đang dùng gói (GET /api/pass có sẵn; lỗi/mất mạng thì bỏ qua, không báo lỗi) */
+let devQ = 0;
+async function loadDevices(){
+  const p = getPass(); if(!PAY_API || !p || !p.token || !isActive(p)) return;
+  const my = ++devQ;
+  try{
+    const r = await fetch(PAY_API + "/pass", { headers: { Authorization: "Bearer " + p.token } });
+    if(!r.ok || my !== devQ) return;
+    const d = await r.json(), ex = $("stEx");
+    if(d && d.devices && ex){ ex.textContent = fill("devices", d.devices) + " · " + T("extra"); fitSoon(); }
+  }catch(e){}
 }
 function applyLang(){
   document.documentElement.lang = lang;
@@ -486,13 +503,14 @@ function applyLang(){
   const fp = $("fPriv"); fp.href = PRIVACY_URL; fp.textContent = T("privacy");
   $("fTerms").textContent = lang === "vi" ? "Điều khoản" : "Terms";
   $("madeBy").textContent = "© " + new Date().getFullYear() + " " + APP.brand + ". " + T("rights");
+  $("fine").innerHTML = esc(T("fine")) + ' <a href="terms.html" target="_blank" rel="noopener">' + esc(T("terms2")) + "</a>";
   renderPlans(); renderNext(); renderCmp(); renderMethods(); renderSum(); renderStatus();
   if(window.fitSoon) fitSoon();
 }
 
 /* ===== THANH TOÁN ===== */
 const dlg = $("dlg"), body = $("dlgBody");
-const openDlg = html => { body.innerHTML = html; if(!dlg.open) dlg.showModal(); };
+const openDlg = html => { body.innerHTML = html; const h = body.querySelector("h3"); if(h){ h.id = "dlgT"; dlg.setAttribute("aria-labelledby", "dlgT"); } if(!dlg.open) dlg.showModal(); };
 const closeDlg = () => { if(dlg.open) dlg.close(); };
 const validEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
 
@@ -501,7 +519,7 @@ function activate(email, server){
   const p = plan(), exp = server ? new Date(server.exp) : expiryFor(p);
   store.set("pass", { plan: server ? server.plan : p.id, exp: exp.toISOString(), email, token: server ? server.token : undefined });
   renderStatus(); renderSum();
-  openDlg(`<h3>✅ ${T("okTitle")}</h3><p>${T("okTxt")} <b>${fmtDate(exp)}</b></p>
+  openDlg(`<div class="ic" aria-hidden="true">👑</div><h3>${T("okTitle")}</h3><p>${T("okTxt")} <b>${fmtDate(exp)}</b></p>
     <div class="row"><button class="p" id="goPlay">${T("play")}</button></div>`);
   $("goPlay").onclick = () => { location.href = HOME; };
 }
@@ -515,26 +533,27 @@ let pollTimer = null, tickTimer = null;
 const stopTimers = () => { clearInterval(pollTimer); clearInterval(tickTimer); };
 dlg.addEventListener("close", stopTimers);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const errDlg = e => { openDlg(`<h3>${T(e && e.status === 429 ? "slow" : "err")}</h3><div class="row"><button class="p" id="x">${T("close")}</button></div>`); $("x").onclick = closeDlg; };
+const errDlg = e => { openDlg(`<div class="ic" aria-hidden="true">⚠️</div><h3>${T(e && e.status === 429 ? "slow" : "err")}</h3><div class="row"><button class="p" id="x">${T("close")}</button></div>`); $("x").onclick = closeDlg; };
 
 function showOrder(o, email){
   const row = (l, v, cp) => `<div class="kv"><span>${T(l)}</span><b>${esc(v)}</b>${cp ? `<button type="button" class="cp" data-c="${esc(v)}">${T("copy")}</button>` : ""}</div>`;
   openDlg(`<h3>${T("payTitle")}</h3><p class="mut">${T("scanTxt")}</p>
-    <img alt="QR" src="${esc(o.qr)}" width="220" height="220" style="margin:10px auto;display:block;border-radius:14px;background:#fff">
+    <img class="qrimg" alt="QR" src="${esc(o.qr)}" width="220" height="220">
     ${o.bank.name ? row("bankL", o.bank.name) : ""}${row("accL", o.bank.account, 1)}${o.bank.holder ? row("holdL", o.bank.holder) : ""}
     ${row("amtL", String(o.amount), 1).replace(esc(String(o.amount)), esc(vnd(o.amount)))}${row("codeL", o.code, 1)}
     <p class="mut" style="font-size:12px">${T("keep")}</p>
     <p id="st" role="status" style="font-weight:700">${T("waiting")} <span id="left"></span></p>
     <div class="row"><button class="s" id="x">${T("cancel")}</button></div>`);
   $("x").onclick = closeDlg;
+  const qi = body.querySelector(".qrimg"); if(qi) qi.onerror = () => qi.remove();   // không tải được ảnh QR: vẫn còn số tài khoản + nội dung để chuyển tay
   body.querySelectorAll(".cp").forEach(b => b.onclick = async () => { try{ await navigator.clipboard.writeText(b.dataset.c); b.textContent = T("copied"); setTimeout(()=>b.textContent=T("copy"),1200);}catch(e){} });
   const tick = () => { const s = Math.max(0, Math.round((o.expiresAt - Date.now())/1000)); $("left").textContent = T("left") + " " + Math.floor(s/60) + ":" + String(s%60).padStart(2,"0"); };
   tick(); tickTimer = setInterval(tick, 1000);
-  const expired = () => { stopTimers(); openDlg(`<h3>${T("orderExp")}</h3><div class="row"><button class="s" id="x">${T("close")}</button><button class="p" id="again">${T("again")}</button></div>`); $("x").onclick = closeDlg; $("again").onclick = startPay; };
+  const expired = () => { stopTimers(); openDlg(`<div class="ic" aria-hidden="true">⏳</div><h3>${T("orderExp")}</h3><div class="row"><button class="s" id="x">${T("close")}</button><button class="p" id="again">${T("again")}</button></div>`); $("x").onclick = closeDlg; $("again").onclick = startPay; };
   pollTimer = setInterval(async () => {
     try{
       const d = await api("/orders/" + o.orderId);
-      if(d.status === "paid"){ stopTimers(); if(!d.token){ restoreStep1(); } else activate(email, d); }   // token null: đơn đã được thiết bị khác nhận (hoặc chưa có khoá thiết bị) → khôi phục bằng email
+      if(d.status === "paid"){ stopTimers(); if(!d.token){ restoreStep1("paidOther"); } else activate(email, d); }   // token null: đơn đã được thiết bị khác nhận (hoặc chưa có khoá thiết bị) → khôi phục bằng email
       else if(d.status === "expired" || Date.now() > o.expiresAt + 60000) expired();
     }catch(e){ /* mạng chập chờn: thử lại ở lần poll sau */ }
   }, 3000);
@@ -568,12 +587,13 @@ $("prev").addEventListener("click", () => { if(history.state && history.state.s 
 addEventListener("popstate", () => go(history.state && history.state.s === 2 ? 2 : 1));
 $("email").addEventListener("input", () => { $("email").removeAttribute("aria-invalid"); $("emailErr").textContent = ""; });
 
-function restoreStep1(){
+function restoreStep1(note){
   if(!PAY_API){ openDlg(`<h3>${T("rTitle")}</h3><p>${T("rNone")}</p><div class="row"><button class="p" id="x">${T("close")}</button></div>`); $("x").onclick = closeDlg; return; }
-  openDlg(`<div class="ic" aria-hidden="true">🔑</div><h3>${T("rTitle")}</h3><p class="sub">${T("rEmail")}</p>
+  openDlg(`<div class="ic" aria-hidden="true">🔑</div><h3>${T("rTitle")}</h3>${note ? `<p class="note" role="status">${T(note)}</p>` : ""}<p class="sub">${T("rEmail")}</p>
     <label class="fld" for="rE">Email</label><input id="rE" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" value="${esc($("email").value.trim())}">
     <p class="err" id="rErr" role="alert"></p><div class="row"><button class="s" id="x">${T("cancel")}</button><button class="p" id="go">${T("rSend")}</button></div>`);
   $("x").onclick = closeDlg;
+  $("rE").addEventListener("keydown", e => { if(e.key === "Enter") $("go").click(); });
   $("go").onclick = async () => {
     const email = $("rE").value.trim();
     if(!validEmail(email)){ $("rErr").textContent = T("emailBad"); return; }
@@ -587,17 +607,22 @@ function restoreStep2(email){
     <label class="fld" for="rO">${T("rCode")}</label><input id="rO" class="otp" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="••••••"><p class="err" id="rErr" role="alert"></p>
     <div class="row"><button class="s" id="x">${T("cancel")}</button><button class="p" id="go">${T("rOk")}</button></div>`);
   $("x").onclick = closeDlg;
+  const otp = $("rO"); otp.addEventListener("input", () => { otp.value = otp.value.replace(/\D/g, "").slice(0, 6); $("rErr").textContent = ""; });
+  otp.addEventListener("keydown", e => { if(e.key === "Enter") $("go").click(); });
   $("go").onclick = async () => {
+    if($("go").disabled) return;
+    $("go").disabled = true;
     try{
       const d = await api("/restore/verify", { method:"POST", body: JSON.stringify({ email, otp: $("rO").value.trim() }) });
-      if(!d.active){ $("rErr").textContent = T("rNo"); return; }
+      if(!d.active || !d.token){ $("rErr").textContent = T("rNo"); $("go").disabled = false; return; }
       store.set("pass", { plan: d.plan, exp: new Date(d.exp).toISOString(), email, token: d.token });
       renderStatus(); renderSum(); closeDlg();
-    }catch(e){ if(e.status === 429) errDlg(e); else $("rErr").textContent = T("rBad"); }
+    }catch(e){ if(e.status === 429) errDlg(e); else { $("rErr").textContent = T(e.status ? "rBad" : "err"); $("go").disabled = false; } }
   };
 }
-$("restore").addEventListener("click", restoreStep1);
-if(location.hash === "#restore") setTimeout(restoreStep1, 0);   // từ banner "Khôi phục Night Pass" (shared/inapp.js)
+$("restore").addEventListener("click", () => restoreStep1());
+$("restore2").addEventListener("click", () => restoreStep1());
+if(location.hash === "#restore") setTimeout(() => restoreStep1(), 0);   // từ banner "Khôi phục Night Pass" (shared/inapp.js)
 dlg.addEventListener("click", e => { if(e.target === dlg) closeDlg(); });
 
 /* ===== NGÔN NGỮ + THEME ===== */
@@ -627,6 +652,17 @@ const ps = new URLSearchParams(location.search).get("plan");
 if(ps && PLANS.some(p => p.id === ps)) planId = ps;
 const em = (getPass()||{}).email; if(em) $("email").value = em;
 setLang(lang);
+try{ history.replaceState(null, ""); }catch(e){}   // tải lại ở bước 2: trạng thái cũ {s:2} còn trong lịch sử làm nút "Đổi gói" kẹt ở bước 2
+
+/* Bàn phím ảo (iOS/Android): hộp thoại bám theo vùng nhìn thấy, ô nhập đang gõ luôn nằm trong tầm mắt */
+if(window.visualViewport){
+  const vv = visualViewport, upd = () => {
+    const r = document.documentElement.style; r.setProperty("--vvh", vv.height + "px"); r.setProperty("--vvt", vv.offsetTop + "px");
+    dlg.classList.toggle("kb", vv.height < innerHeight * .8);
+  };
+  vv.addEventListener("resize", upd); vv.addEventListener("scroll", upd);
+}
+document.addEventListener("focusin", e => { if(e.target.matches && e.target.matches("input")) setTimeout(() => { try{ e.target.scrollIntoView({ block:"center" }); }catch(_){} }, 300); });
 
 /* Không cuộn: tăng mức thu gọn (0→4) cho tới khi nội dung vừa khung nhìn */
 let densQ = 0;

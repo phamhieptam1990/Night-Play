@@ -139,6 +139,7 @@ const b64 = o => Buffer.from(JSON.stringify(o)).toString("base64").replace(/\+/g
   const bp = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-backpos.js")].concat(process.argv.includes("--full-back") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });
   note(bp.status === 0, "tổng", "check-backpos.js báo lỗi (nút ← lệch góc trên-trái / cột nút nổi / thẻ nhắc việc) — xem log phía trên");
   { const mo = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-moi.js"), "--quick"], { cwd: root, env: process.env, stdio: "inherit" }); note(mo.status === 0, "tổng", "check-moi.js báo lỗi (trang tin ra mắt /moi/) — xem log phía trên"); }   // trang /moi/
+  { const ns = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-subscribe.js"), "--quick"], { cwd: root, env: process.env, stdio: "inherit" }); note(ns.status === 0, "tổng", "check-subscribe.js báo lỗi (trang Night Pass / hộp thoại) — xem log phía trên"); }
   console.log("\n" + (fails.length ? "✗ " + fails.length + " lỗi" : "✓ tất cả đạt"));
   process.exit(fails.length ? 1 : 0);
 })();
