@@ -117,7 +117,7 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
     }
     /* nút "Chơi ngay" trỏ hub /play/, KHÔNG về "/" */
     for (const l of ["vi", "en"]) { const pg = await br.newPage(); await pg.goto(B + PAGES[l], { waitUntil: "load" }); const c = await pg.evaluate(() => [...document.querySelectorAll("#heroCta, .btn.sm, .sticky a, .btn.big")].filter(a => /Chơi ngay|Play now/.test(a.textContent)).map(a => a.getAttribute("href"))); note(c.length >= 3 && c.every(h => h === "/play/"), "CTA " + l, "nút Chơi ngay phải trỏ /play/: " + c.join(","));
-      await pg.click("#heroCta"); await pg.waitForFunction(() => location.pathname === "/play/", { timeout: 8000 }).catch(() => {}); note(await pg.evaluate(() => location.pathname === "/play/" && !!document.getElementById("aPop")), "CTA " + l, "bấm Chơi ngay không tới hub /play/ (" + (await pg.evaluate(() => location.pathname)) + ")"); await pg.close(); }
+      await pg.click("#heroCta"); await pg.waitForFunction(() => location.pathname === "/play/", { timeout: 8000 }).catch(() => {}); await pg.waitForSelector("#aPop", { timeout: 5000 }).catch(() => {}); note(await pg.evaluate(() => location.pathname === "/play/" && !!document.getElementById("aPop")), "CTA " + l, "bấm Chơi ngay không tới hub /play/ (" + (await pg.evaluate(() => location.pathname)) + ")"); await pg.close(); }
     /* "Chơi tiếp" cho người đã từng chơi: chỉ đọc khoá có sẵn; HTML tĩnh vẫn "Chơi ngay"; không lỗi console, không request ngoài, không dịch chuyển bố cục, hero vừa 360x640 */
     { const T = { vi: ["Chơi ngay", "Chơi tiếp", "Có ván đang chơi dở"], en: ["Play now", "Continue playing", "You have a game in progress"] };
       const st = { none: [], played: [["np-hi-pop-fly", "5"]], resume: [["np-resume:pop-fly", JSON.stringify({ ts: Date.now(), state: { t: 1 } })]], stale: [["np-resume:pop-fly", "{khong-phai-json"]] };
@@ -138,6 +138,48 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
       const pg = await br.newPage(); const errs = []; pg.on("pageerror", e => errs.push(String(e)));
       await pg.evaluateOnNewDocument(() => { Object.defineProperty(window, "localStorage", { get() { throw new Error("blocked"); } }); });
       await pg.goto(B + PAGES.vi, { waitUntil: "load" }); note((await pg.$eval("#heroCta", e => e.textContent.trim())) === "Chơi ngay" && !errs.length, "chơi-tiếp storage chặn", "phải giữ 'Chơi ngay', không lỗi: " + errs[0]); await pg.close(); }
+    /* bố cục: thẻ lối vào bằng nhau + không xuống dòng, thẻ giá đều + không cắt chữ, không phần tử nào cuộn ngang/bị cắt, hero liền mạch dưới thanh trên */
+    for (const l of ["vi", "en"]) for (const th of ["light", "dark"]) for (const sz of [[320, 568], [360, 640], [390, 844], [430, 932], [768, 1024], [1024, 768], [1440, 900]]) {
+      const pg = await br.newPage(); await pg.setViewport({ width: sz[0], height: sz[1] });
+      await pg.evaluateOnNewDocument(t => { try { localStorage.setItem("theme", t); } catch (e) {} }, th);
+      await pg.goto(B + PAGES[l], { waitUntil: "load" }); await wait(250);
+      const r = await pg.evaluate(() => {
+        const q = s => [...document.querySelectorAll(s)], bx = e => e.getBoundingClientRect();
+        const doors = q(".door").map(e => { const b = bx(e); return { w: Math.round(b.width), h: Math.round(b.height), clip: [...e.querySelectorAll("b,small")].some(x => x.scrollWidth > x.clientWidth + 1), lines: [...e.querySelectorAll("b,small")].map(x => Math.round(bx(x).height / parseFloat(getComputedStyle(x).lineHeight === "normal" ? parseFloat(getComputedStyle(x).fontSize) * 1.2 : getComputedStyle(x).lineHeight))) }; });
+        const plans = q(".plan").map(e => { const b = bx(e); return { w: Math.round(b.width), h: Math.round(b.height), top: Math.round(b.top), clip: [...e.querySelectorAll("*")].some(x => x.scrollWidth > x.clientWidth + 1), badgeH: e.querySelector(".badge") ? Math.round(bx(e.querySelector(".badge")).height) : 0, price: e.querySelector(".pp").textContent }; });
+        const over = q("body *").filter(e => { const cs = getComputedStyle(e); return cs.display !== "inline" && cs.display !== "contents" && e.clientWidth > 1 && e.scrollWidth > e.clientWidth + 1 && !/^(svg|path)$/i.test(e.tagName) && !e.closest(".sr,.skip") && cs.position !== "absolute" || (e.clientWidth > 1 && cs.overflowX !== "visible" && e.scrollWidth > e.clientWidth + 1); }).slice(0, 3).map(e => e.tagName + "." + e.className);
+        const top = bx(document.querySelector(".top")).bottom, h1 = bx(document.querySelector("h1")).top, cta = bx(document.getElementById("heroCta")), dr = q(".door").map(e => bx(e).bottom);
+        return { doors, plans, over, gap: Math.round(h1 - top), ctaBot: Math.round(cta.bottom), doorBot: Math.round(Math.max(...dr)), sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth };
+      });
+      const tag = "bố cục " + l + " " + sz.join("x") + " " + th;
+      note(r.doors.length === 2 && r.doors[0].h === r.doors[1].h && Math.abs(r.doors[0].w - r.doors[1].w) <= 1 || (r.doors.length === 2 && sz[0] < 380), tag, "hai thẻ lối vào không bằng nhau " + JSON.stringify(r.doors.map(d => [d.w, d.h])));
+      note(r.doors.every(d => !d.clip && d.lines.every(n => n <= 1)), tag, "thẻ lối vào bị cắt/xuống dòng " + JSON.stringify(r.doors));
+      note(r.plans.length === 4 && new Set(r.plans.map(p => p.top > 0 ? p.w : 0)).size === 1, tag, "thẻ giá không đều rộng " + JSON.stringify(r.plans.map(p => p.w)));
+      note(r.plans.every(p => !p.clip) && r.plans.every(p => !p.badgeH || p.badgeH <= 30), tag, "thẻ giá bị cắt chữ hoặc nhãn hai dòng");
+      note(r.plans.map(p => p.price.replace(/\D/g, "")).join() === "9000,18000,36000,199000", tag, "giá thẻ không khớp PLANS: " + r.plans.map(p => p.price));
+      note(!r.over.length, tag, "phần tử cuộn ngang/bị cắt: " + r.over.join(", ")); note(r.sw <= r.cw, tag, "trang tràn ngang");
+      if (sz[0] <= 430) note(r.gap <= 64, tag, "khoảng trống trên h1 " + r.gap + "px (>64)");
+      if (sz[0] === 360 && sz[1] === 640) note(r.ctaBot <= 640 && r.doorBot <= 640, tag, "CTA/thẻ lối vào không nằm trọn màn đầu (" + r.ctaBot + "/" + r.doorBot + ")");
+      if (shotDir && [[360, 640], [390, 844], [430, 932], [1440, 900]].some(x => x[0] === sz[0])) await pg.screenshot({ path: path.join(shotDir, "design-" + l + "-" + th + "-" + sz[0] + ".png") });
+      await pg.close(); }
+    /* đổi ngôn ngữ giữ vị trí cuộn + câu FAQ đang mở (VI <-> EN), kể cả ?landing=1 */
+    for (const sz of [[390, 844], [1440, 900]]) for (const q of ["", "?landing=1"]) for (const sel of [".top a.lang", "footer a.lang"]) {
+      const pg = await br.newPage(); const errs = []; pg.on("pageerror", e => errs.push(String(e))); pg.on("console", m => { if (m.type() === "error" && !/status of 501/.test(m.text())) errs.push(m.text()); });
+      await pg.setViewport({ width: sz[0], height: sz[1] }); await pg.evaluateOnNewDocument(() => { try { if (!sessionStorage.getItem("np-t")) { localStorage.clear(); sessionStorage.setItem("np-t", "1"); } } catch (e) {} });
+      await pg.goto(B + "/" + q, { waitUntil: "load" }); await wait(200);
+      const tag = "đổi-ngữ " + sz.join("x") + " " + q + " " + sel;
+      let cur = "vi";
+      for (const step of ["en", "vi"]) {
+        const pos = await pg.evaluate(() => { document.getElementById("nightpass").scrollIntoView({ behavior: "instant" }); const d = document.querySelectorAll(".faq details"); return d.length; });
+        await pg.evaluate(() => { window.scrollTo({ top: document.getElementById("nightpass").getBoundingClientRect().top + scrollY + 100, behavior: "instant" }); document.querySelectorAll(".faq details")[1].open = true; document.querySelectorAll(".faq details")[1].scrollIntoView({ behavior: "instant", block: "center" }); });
+        const before = await pg.evaluate(() => scrollY);
+        await Promise.all([pg.waitForNavigation({ waitUntil: "load" }), pg.evaluate(s => document.querySelector(s).click(), sel)]); await wait(400);
+        const r = await pg.evaluate(() => { const d = document.querySelectorAll(".faq details")[1], f = d.getBoundingClientRect(); return { path: location.pathname, search: location.search, y: scrollY, open: d.open, inView: f.bottom > 0 && f.top < innerHeight, lang: document.documentElement.lang }; });
+        note(r.path === (step === "en" ? "/en/" : "/") && r.lang === step, tag, "chưa sang " + step + ": " + r.path);
+        note(!q || /landing=1/.test(r.search), tag, "mất ?landing=1: " + r.search);
+        note(r.y > 300, tag, "mất vị trí cuộn (y=" + r.y + ", trước " + before + ")"); note(r.open, tag, "câu FAQ không mở lại ở " + step); note(r.inView, tag, "câu FAQ ra ngoài màn hình ở " + step);
+        cur = step; }
+      note(!errs.length, tag, "lỗi console: " + errs[0]); await pg.close(); }
     /* hub /play/: mọi liên kết nội bộ + tài nguyên trả 200 (không 404 do đổi đường dẫn), nút ← ở trang cổng về /play/ */
     { const pg = await br.newPage(); const bad = []; pg.on("response", r => { if (r.url().startsWith(B) && r.status() >= 400 && !/\/api\//.test(r.url())) bad.push(r.status() + " " + r.url()); });
       await pg.goto(B + "/play/", { waitUntil: "networkidle0" }); await wait(300); note(!bad.length, "hub /play/", "tài nguyên lỗi: " + bad.slice(0, 3).join(" | "));

@@ -143,7 +143,8 @@ p{margin:0}
  .steps li{padding-left:80px}
  .fcols{grid-template-columns:auto 1fr;align-items:center;gap:30px}
 }
-@media (min-width:900px){.links{display:flex}.tools{margin-left:0}}
+@media (min-width:1000px){.links{display:flex}.tools{margin-left:0}}
+@media (max-width:360px){.bar{gap:6px}.tools{gap:6px}.btn.sm{padding:0 12px;font-size:16px}}
 @media (min-width:1100px){
  .games{grid-template-columns:repeat(6,1fr)}
  .feats{grid-template-columns:repeat(3,1fr)}
@@ -157,3 +158,71 @@ p{margin:0}
 }
 
 .resume-note{margin:8px 0 0;font-size:13.5px;font-weight:600;opacity:.8}
+
+/* ===== Thẻ lối vào Pop / Night (hero) ===== */
+.doors{display:grid;grid-template-columns:1fr;gap:10px;width:100%}
+.door{display:flex;align-items:center;gap:12px;min-height:64px;padding:10px 16px 10px 12px;border-radius:20px;text-decoration:none;color:var(--ink);background:var(--panel);border:2px solid transparent;box-shadow:var(--shadow);transition:transform .15s,box-shadow .15s}
+.door:hover{transform:translateY(-2px)}
+.door:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.door .di{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:23px;line-height:1}
+.door .dt{display:grid;gap:1px;min-width:0}
+.door b{font-size:19px;line-height:1.15;white-space:nowrap}
+.door small{font-size:13.5px;color:var(--ink2);white-space:nowrap}
+.door.pop{border-color:#FF5A1F;background:linear-gradient(135deg,color-mix(in srgb,#FF5A1F 14%,var(--panel)),var(--panel))}
+.door.pop .di{background:linear-gradient(135deg,#FF8A4C,#FF5A1F)}
+.door.pop:hover{box-shadow:0 8px 24px color-mix(in srgb,#FF5A1F 40%,transparent)}
+.door.night{border-color:#7C5CFF;background:linear-gradient(135deg,color-mix(in srgb,#7C5CFF 16%,var(--panel)),var(--panel))}
+.door.night .di{background:linear-gradient(135deg,#9B83FF,#5B3FD6)}
+.door.night:hover{box-shadow:0 8px 24px color-mix(in srgb,#7C5CFF 45%,transparent)}
+@media (min-width:380px){.doors{grid-template-columns:1fr 1fr}.door{padding-right:10px;gap:9px}.door b{font-size:17px}.door small{font-size:12.5px}}
+@media (min-width:700px){.doors{width:auto;grid-template-columns:repeat(2,minmax(230px,1fr))}.door b{font-size:19px}.door small{font-size:13.5px}}
+
+/* ===== Thẻ giá Night Pass ===== */
+.plans{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr;gap:14px}
+.plan{position:relative;display:grid;gap:4px;align-content:start;padding:22px 20px 18px;border-radius:24px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow);min-width:0}
+.plan h3{font-family:system-ui,sans-serif;font-size:16px;font-weight:700;color:var(--ink2)}
+.plan .pp{font:800 clamp(26px,2.6vw,34px)/1.1 Georgia,serif;color:var(--ink);white-space:nowrap}
+.plan .pd{font-weight:700;color:var(--ink2)}
+.plan .pn{font-size:15px;color:var(--muted)}
+.plan.best{border:2px solid var(--accent);background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 18%,var(--panel)),var(--panel));box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 40%,transparent),0 10px 36px color-mix(in srgb,var(--accent) 38%,transparent);padding-top:30px}
+.plan .badge{position:absolute;top:-13px;left:20px;white-space:nowrap;font-size:13px;font-weight:800;line-height:1;background-color:#6A48F0;background-image:linear-gradient(90deg,#6A48F0,#C2410C);color:#fff;padding:7px 12px;border-radius:99px}
+@media (min-width:600px){.plans{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:1000px){.plans{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+/* ===== Giao diện đêm kiểu Night Pass ===== */
+.btn.big,.btn.sm{background-color:var(--accent);background-image:linear-gradient(90deg,var(--accent),#C2410C);border-color:transparent;color:#fff}
+html[data-theme=dark] .btn.big,html[data-theme=dark] .btn.sm{color:#12141F;background-image:linear-gradient(90deg,var(--accent),#FF9A6B)}
+html[data-theme=dark] .btn.big{box-shadow:0 6px 28px rgba(124,92,255,.45)}
+.btn.ghost{background:transparent;background-image:none}
+.btn.white{background:#fff;background-image:none;color:#1F1B18}
+html[data-theme=dark] body{background:#12141F linear-gradient(180deg,#12141F 0,#1A1640 55%,#12141F 100%) fixed}
+html[data-theme=dark] .hero{background:
+ radial-gradient(1.5px 1.5px at 12% 22%,#fff,transparent),radial-gradient(1.5px 1.5px at 78% 14%,#FFE9A8,transparent),radial-gradient(1px 1px at 40% 70%,#fff,transparent),radial-gradient(1.5px 1.5px at 90% 62%,#fff,transparent),radial-gradient(1px 1px at 24% 88%,#FFE9A8,transparent),radial-gradient(1px 1px at 60% 36%,#fff,transparent),
+ radial-gradient(700px 420px at 85% -10%,rgba(124,92,255,.38),transparent),radial-gradient(520px 320px at 0% 100%,rgba(255,200,90,.14),transparent)}
+html[data-theme=dark] .sec.alt{background:rgba(255,255,255,.035)}
+html[data-theme=dark] .plan,html[data-theme=dark] .feat,html[data-theme=dark] .gcard,html[data-theme=dark] .faq details,html[data-theme=dark] .steps li{background:rgba(27,30,47,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+html[data-theme=dark] .plan.best{background:linear-gradient(160deg,rgba(124,92,255,.28),rgba(27,30,47,.8))}
+html[data-theme=dark] .door{background:rgba(27,30,47,.78)}
+html[data-theme=dark] .top{background:rgba(18,20,31,.85)}
+#nightpass h2::before{content:"👑";display:block;font-size:34px;margin-bottom:6px}
+.perks.pp2{margin-top:30px}
+
+/* mockup điện thoại (CSS thuần) */
+.phone{display:none}
+@media (min-width:900px){
+ .hero-in{grid-template-columns:minmax(0,1fr) 300px;column-gap:48px;align-items:center}
+ .hero-in>*{grid-column:1}
+ .hero-in>.phone{grid-column:2;grid-row:1 / span 6;display:block;position:relative;width:260px;height:500px;justify-self:center;border-radius:40px;padding:14px;background:linear-gradient(160deg,#2D3250,#14162A);border:2px solid color-mix(in srgb,var(--accent) 55%,#fff 0);box-shadow:0 0 60px rgba(124,92,255,.35),0 24px 50px rgba(0,0,0,.35);transform:rotate(3deg)}
+ .ph-top{width:70px;height:6px;border-radius:9px;background:#0b0c16;margin:2px auto 14px}
+ .ph-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+ .ph-grid span{aspect-ratio:1;border-radius:22px;display:grid;place-items:center;font-size:44px;background:linear-gradient(135deg,#3B2A9E,#7C5CFF)}
+ .ph-grid span:nth-child(2n){background:linear-gradient(135deg,#C2410C,#FF8A4C)}
+ .ph-grid span:nth-child(3n){background:linear-gradient(135deg,#0E7490,#38BDF8)}
+ .ph-btn{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);width:62px;height:62px;border-radius:50%;display:grid;place-items:center;font-size:30px;background:linear-gradient(135deg,#FFD66B,#FF7A45);box-shadow:0 0 30px rgba(255,200,90,.55)}
+}
+
+/* hero căn từ trên, liền mạch dưới thanh trên */
+.hero{min-height:0;align-items:flex-start}
+.hero-in{padding-top:28px;padding-bottom:28px}
+@media (min-width:900px){.hero{min-height:calc(100svh - 56px);align-items:center}}
+@media (max-height:700px){.hero-in{padding-top:18px;gap:12px}}

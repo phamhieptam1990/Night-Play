@@ -9,10 +9,29 @@
     root.dataset.theme = t;
     try { localStorage.setItem("theme", t); } catch (e) {}
   });
+  /* các khối cùng thứ tự ở hai bản VI/EN: main > section, rồi chân trang */
+  function blocks() { return Array.prototype.slice.call(d.querySelectorAll("main > section")).concat(Array.prototype.slice.call(d.querySelectorAll("footer.foot"))); }
+  try {
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    var sv = JSON.parse(sessionStorage.getItem("np-lsw") || "null"); sessionStorage.removeItem("np-lsw");
+    if (sv && Date.now() - sv.t < 15000) {
+      var fq = d.querySelectorAll(".faq details"); (sv.f || []).forEach(function (n) { if (fq[n]) fq[n].open = true; });
+      var bl = blocks(), tg = bl[sv.i];
+      if (tg) { var go = function () { var r = tg.getBoundingClientRect(); window.scrollTo({ top: Math.max(0, window.scrollY + r.top + sv.o * r.height - 70), behavior: "instant" }); }; go(); window.addEventListener("load", go); }
+    }
+  } catch (e) {}
   /* ngôn ngữ: bấm công tắc thì nhớ lựa chọn; lần đầu vào bản khác với lựa chọn đã lưu thì chuyển sang bản đó (không với ?nolang) */
   Array.prototype.forEach.call(d.querySelectorAll("[data-set-lang]"), function (a) {
     a.addEventListener("click", function () {
       try { localStorage.setItem("lang", a.getAttribute("data-set-lang")); sessionStorage.setItem("lsel", "1"); } catch (e) {}
+      /* giữ ?landing=1 (app PWA không bị chuyển về /play/) và vị trí cuộn + câu FAQ đang mở sang bản ngôn ngữ kia */
+      if (/[?&]landing=1(&|$)/.test(location.search)) a.href = a.getAttribute("href").split("?")[0] + "?landing=1";
+      try {
+        var secs = blocks(), line = 70, idx = secs.length - 1, off = 0;
+        for (var i = 0; i < secs.length; i++) { var r = secs[i].getBoundingClientRect(); if (r.bottom > line) { idx = i; off = Math.max(0, Math.min(1, (line - r.top) / Math.max(1, r.height))); break; } }
+        var open = []; Array.prototype.forEach.call(d.querySelectorAll(".faq details"), function (x, n) { if (x.open) open.push(n); });
+        sessionStorage.setItem("np-lsw", JSON.stringify({ i: idx, o: off, f: open, t: Date.now() }));
+      } catch (e) {}
     });
   });
   try {

@@ -259,3 +259,11 @@ theo ĐÚNG tài liệu docs/LANDING-PAGE-BRIEF.md (đính kèm toàn văn). Yê
 7. Cuối cùng tự chạy Lighthouse mobile (>= 90 cả bốn mục), chụp ảnh 390x844 và 1440x900 sáng + tối,
    tự nhìn và liệt kê từng mục checklist nghiệm thu (mục 12) đạt/chưa đạt.
 ```
+
+## Cập nhật thiết kế (đợt "đậm chất Night Pass")
+- Hero căn từ TRÊN (không dùng min-height:100svh ở điện thoại), cách h1 <= 64px dưới thanh trên; CTA chính + hai THẺ LỐI VÀO (Pop Play cam #FF5A1F, Night Play tím #7C5CFF; bằng nhau, một dòng, cao >= 56px) nằm trọn màn đầu ở 360x640. Máy tính >= 900px có khung điện thoại CSS thuần bên phải.
+- Bảng giá Night Pass đổi thành 4 THẺ GIÁ (`ul.plans`): 1 cột <600px, 2 cột >=600px, 4 cột >=1000px; thẻ "Phổ biến nhất" (1 tháng) viền/phát sáng tím, nhãn một dòng. Không còn bảng/khối cuộn ngang nào trên landing.
+- Giao diện tối kiểu đêm (nền #12141F -> tím sâu, sao CSS tĩnh, thẻ kính mờ, CTA gradient tím-cam, vương miện ở mục Night Pass). Mặc định vẫn theo prefers-color-scheme / theme đã lưu (không ép tối) -- LỆCH brief "mặc định tối" vì trình duyệt không phân biệt "không chọn" với "sáng".
+- Nút "Chơi tiếp" cho người đã chơi (chỉ đọc np-resume:*, np-hi-*, np-rails-played, xx-save), đổi chữ trước khi vẽ; HTML tĩnh vẫn "Chơi ngay".
+- Đổi ngôn ngữ giữ vị trí cuộn + câu FAQ đang mở (sessionStorage tạm "np-lsw", hai bản cùng thứ tự `main > section`), giữ ?landing=1. Không dùng cách fetch thay <main> (giữ 2 trang tĩnh cho SEO).
+- Liên kết từ app về landing: `/?landing=1` và `/en/?landing=1` (script chuyển hướng PWA bỏ qua tham số này; canonical/sitemap không chứa tham số).
