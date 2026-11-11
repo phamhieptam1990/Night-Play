@@ -1,18 +1,23 @@
 /* Nút ← (về màn chọn / thoát) LUÔN ở góc TRÊN-TRÁI, cùng toạ độ ở MỌI game (GAME_RULES.md 0a-14):
-     NODE_PATH=<thư mục có puppeteer-core> node scripts/cozygame/check-backpos.js [--quick] [--dump] [id,id,...]   (script tự chạy http.server cổng 8887)
+     NODE_PATH=<thư mục có puppeteer-core> node scripts/cozygame/check-backpos.js [--quick] [--phones (chỉ 7 cỡ điện thoại dọc)] [--dump] [id,id,...]   (script tự chạy http.server cổng 8887)
    Mở game QUA TRANG CỔNG (như người chơi thật) ở các cỡ 390x844, 844x390, 667x375, 768x1024, 1194x834, 1271x684, 1440x900, 1920x1080, đo ở màn chọn và màn chơi:
    tâm nút ← (của game hoặc của cổng) nằm trong góc trên-trái (x < 25% rộng, y < 25% cao), nút ≥ 38px, KHÔNG bị che (elementFromPoint),
-   và cùng cỡ màn hình thì tâm ← giống nhau giữa các game ±2px (một "nguồn" toạ độ chung --back-x/--back-y trong shared/align.css). --dump: in toạ độ từng game. */
+   và cùng cỡ màn hình thì tâm ← giống nhau giữa các game ±2px (một "nguồn" toạ độ chung --back-x/--back-y trong shared/align.css). --dump: in toạ độ từng game.
+   HÀNG NÚT TRÊN CÙNG ở ĐIỆN THOẠI DỌC (320x568 360x640 375x667 390x844 393x852 414x896 430x932; GAME_RULES 0a-14): MỌI nút (←, ⏸, 🔊, ⋯, chip độ khó) cùng tâm dọc 38±1px, nút cùng cỡ 44±1px (chip độ khó chỉ cần cùng tâm),
+   lề trái ← = lề phải ⋯ = 16±1px, ← là nút đầu bên trái và ⋯ bên phải, khoảng cách các nút bên phải đều 8±1.5px, không chồng lấn nút/chữ, chữ (tên game, HUD) cách hàng nút >= 8px, trang không cuộn.
+   Bản WebKit thật (Playwright): scripts/cozygame/check-backpos-webkit.js (cùng phép đo, chạy riêng nếu có Playwright WebKit). */
 const { spawn } = require("child_process"), fs = require("fs"), path = require("path"), puppeteer = require("puppeteer-core");
 const root = path.join(__dirname, "..", ".."), PORT = +process.env.NP_PORT || 8887, B = "http://localhost:" + PORT + "/";
 const args = process.argv.slice(2), quick = args.includes("--quick"), dump = args.includes("--dump"), only = (args.find(a => !a.startsWith("--")) || "").split(",").filter(Boolean);
+const { ROW } = require("./toprow.js");
 const wait = ms => new Promise(r => setTimeout(r, ms)), fails = [], note = (ok, m) => { if (!ok) { fails.push(m); console.log("  ✗ " + m); } };
 const COZY = fs.readdirSync(path.join(root, "cozyplay/games")).filter(d => fs.existsSync(path.join(root, "cozyplay/games", d, "index.html"))), POP = fs.readdirSync(path.join(root, "popplay/games"));
 let list = [...COZY.map(i => ["cozyplay", i]), ...POP.map(i => ["popplay", i])];
 if (quick) list = [["cozyplay", "bao-nhieu-giay"], ["cozyplay", "ban-co-hieu-toi"], ["cozyplay", "dap-deadline"], ["cozyplay", "cozy-wings"], ["popplay", "pop-fly"], ["popplay", "bo-me-5-giay"]];
 if (only.length) list = list.filter(([, i]) => only.includes(i));
+const PH = [[320, 568], [360, 640], [375, 667], [393, 852], [414, 896], [430, 932]];   /* điện thoại dọc: hàng nút trên cùng (390x844 đã có ở ALL) */
 const ALL = [[390, 844, 1], [844, 390, 1], [667, 375, 1], [568, 320, 1], [768, 1024, 1], [1194, 834, 1], [1271, 684, 0], [1440, 900, 0], [1920, 1080, 0], [484, 694, 0], [520, 700, 0], [600, 700, 0], [700, 700, 0], [800, 700, 0]];
-const SIZES = quick ? [ALL[0], ALL[1], ALL[5], ALL[7], ALL[9], ALL[13]] : ALL;
+const SIZES = args.includes("--phones") ? [ALL[0], ...PH.map(a => [...a, 1])] : quick ? [ALL[0], ALL[1], ALL[5], ALL[7], ALL[9], ALL[13], [375, 667, 1], [414, 896, 1], [320, 568, 1]] : [...ALL, ...PH.map(a => [...a, 1])];
 /* cột nút nổi của cổng (← 📷 📤 🔒): cùng cỡ, cùng trục (ngang: cùng tâm X; dọc: cùng tâm Y), cùng kiểu nền */
 const FLOATS = () => {
   const st = document.getElementById("stage"); if (!st || !st.classList.contains("on")) return null;
@@ -60,6 +65,7 @@ const FIND = () => {   /* chạy trong trang cổng: tìm nút ← đang hiện 
               else { const ys = it.filter(a => a.n === "home" || a.n === "klock" || /fab/.test(a.n)).map(a => a.y); note(Math.max(...ys) - Math.min(...ys) <= 1, tag + ": nút nổi lệch hàng (trục Y)"); } }
             const gf = pg.frames().find(f => f.url().includes("/games/" + id + "/")), ak = gf ? await gf.evaluate(ASK).catch(() => null) : null; if (ak) { note(ak.lines <= 3, tag + ": thẻ nhắc việc " + ak.lines + " dòng (>3)"); note(ak.w >= 140 || W < 900, tag + ": thẻ nhắc việc rộng " + Math.round(ak.w) + "px (<140)"); note(ak.bw <= ak.w * 0.4, tag + ": nút loa " + Math.round(ak.bw) + "px chiếm >40% thẻ " + Math.round(ak.w)); note(!ak.cut, tag + ": chữ thẻ nhắc việc bị cắt"); }
           }
+          if (W <= 520 && H > W && t) { const rw = await pg.evaluate(ROW).catch(e => ({ err: String(e).slice(0, 60) })); if (dump) console.log("    hàng nút: " + (rw.items || rw.err)); if (rw.err) note(false, tag + ": hàng nút không đo được: " + rw.err); else for (const m of rw.E) note(false, tag + ": hàng nút trên cùng: " + m); }
           if (!r.cand.length) { if (name === "chọn") note(false, tag + ": không thấy nút ← nào"); continue; }
           const c = r.cand[0]; if (dump) console.log("  " + tag + " " + c.id + " (" + Math.round(c.x) + "," + Math.round(c.y) + ") " + Math.round(c.w) + "x" + Math.round(c.h));
           note(Math.abs(c.x - 38) <= 2.5 && Math.abs(c.y - 38) <= 2.5, tag + ": nút ← (" + c.id + ") tâm (" + Math.round(c.x) + "," + Math.round(c.y) + ") ≠ chuẩn (38,38) = góc trên-trái, lề 16px");
