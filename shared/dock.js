@@ -20,11 +20,14 @@
     var anchor = document.getElementById("bSnd") || document.getElementById("soundBtn"); if (anchor && anchor.parentNode !== top) anchor = null;
     var cam = mk("bCam", CAM, vi ? "Chụp ảnh" : "Screenshot", ".nps-cam"), shr = mk("bShr", SHR, vi ? "Chia sẻ" : "Share", ".nps-fab:not(.nps-cam)");
     top.insertBefore(cam, anchor); top.insertBefore(shr, anchor);
+    var lck = mk("bLock", '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>', vi ? "Khoá màn" : "Lock", "#klock"); lck.hidden = true; top.insertBefore(lck, anchor);
     var bk = document.getElementById("bBk"), home = document.getElementById("home") || document.getElementById("ovStart");   /* "màn chọn": #home (Đập Deadline) hoặc #ovStart (Cánh Nhỏ) */
     var atHome = function () { return !!(home && !home.hidden); };
-    var short = matchMedia("(orientation:landscape) and (max-height:520px)"), docked = true;   /* màn ngang thấp: để trang cổng dùng cột riêng */
+    var short = (par.matchMedia ? par : window).matchMedia("(orientation:landscape)")   /* hướng của CỔNG (không phải của iframe: iframe hẹp hơn cao sẽ tự báo "dọc" rồi dao động dock ↔ không dock) */, docked = true;   /* màn NGANG (mọi cỡ, GAME_RULES 0a-20: một nơi chứa nút): để trang cổng dùng cột riêng */
+    function syncLk() { var k = find("#klock"), h = !docked || !k || k.hidden; if (lck.hidden !== h) lck.hidden = h; }
+    setInterval(syncLk, 700);
     function applyDock() {
-      docked = !short.matches; cam.hidden = shr.hidden = !docked; window.__npDock = docked;
+      docked = !short.matches; cam.hidden = shr.hidden = !docked; syncLk(); window.__npDock = docked;
       if (bk && docked && bk.hidden) bk.hidden = false;
       if (bk && !docked && atHome()) bk.hidden = true;                  /* ngang thấp: ở màn chọn ẩn ← (cổng có nút riêng) */
     }

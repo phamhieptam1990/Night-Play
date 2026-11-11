@@ -34,7 +34,7 @@
     pause: "<svg " + S + '><path d="M8 5v14M16 5v14"/></svg>'
   };
   /* thứ tự trong bảng: [vai trò, id nút, nhãn vi, nhãn en] */
-  var ROLES = [["snd", "soundBtn", "Âm thanh", "Sound"], ["lang", "langBtn", "Ngôn ngữ", "Language"], ["help", "phBtn", "Hướng dẫn", "Help"], ["pause", "pauseBtn", "Tạm dừng", "Pause"], ["lock", "npPmLock", "Khoá màn", "Lock"], ["cam", "npPmCam", "Chụp ảnh", "Photo"], ["shr", "npPmShr", "Chia sẻ", "Share"]];
+  var ROLES = [["snd", "soundBtn", "Âm thanh", "Sound"], ["lang", "langBtn", "Ngôn ngữ", "Language"], ["help", "phBtn", "Hướng dẫn", "Help"], ["pause", "pauseBtn", "Tạm dừng", "Pause"], ["lock", "npPmLock", "Khoá màn", "Lock"], ["cam", "npPmCam", "Chụp ảnh", "Photo"], ["shr", "npPmShr", "Chia sẻ", "Share"], ["pass", "nsPill", "Sự kiện", "Event"]];
 
   var st = document.createElement("style");
   st.textContent =
@@ -68,7 +68,7 @@
     "@media (prefers-reduced-motion:reduce){#npPmFab svg,#npPmFan .bk,#npPmFan .pn{transition:none!important}#npPmFab.nudge{animation:none}}";
   document.head.appendChild(st);
 
-  var bk, fab, fan, panel, cam, shr, lck, probe, open = false, moved = false, saved = [], order = [];
+  var passHome = null, bk, fab, fan, panel, cam, shr, lck, probe, open = false, moved = false, saved = [], order = [];
   function mk(tag, id, cls) { var e = document.createElement(tag); if (id) e.id = id; if (cls) e.className = cls; if (tag === "button") e.type = "button"; return e; }
   function build() {
     if (fab) return;
@@ -136,8 +136,8 @@
       if (r[0] === "snd") return;   /* 🔊 luôn ở NGOÀI menu, cố định cạnh ⋯ */
       var e = $(r[1]) || (r[1] === "npPmCam" ? cam : r[1] === "npPmShr" ? shr : r[1] === "npPmLock" ? lck : null);
       if (!e || e.parentNode === panel) return;
-      if (e.parentNode !== top && e !== cam && e !== shr && e !== lck) return;
-      if (e.parentNode === top) saved.push(e);
+      if (e.parentNode !== top && e !== cam && e !== shr && e !== lck && r[0] !== "pass") return;
+      if (e.parentNode === top) saved.push(e); else if (r[0] === "pass") { passHome = { el: e, parent: e.parentNode, next: e.nextSibling }; }
       e.classList.add("it"); panel.appendChild(e);
     });
     labels(); themeSync();
@@ -148,6 +148,7 @@
     saved.forEach(function (e) { e.classList.remove("it"); e.removeAttribute("data-l"); });
     order.forEach(function (e) { if (saved.indexOf(e) >= 0) top.insertBefore(e, fan); });
     saved.forEach(function (e) { if (e.parentNode === panel) top.insertBefore(e, fan); });
+    if (passHome && passHome.el.parentNode === panel) { passHome.el.classList.remove("it"); passHome.el.removeAttribute("data-l"); if (passHome.next && passHome.next.parentNode === passHome.parent) passHome.parent.insertBefore(passHome.el, passHome.next); else passHome.parent.appendChild(passHome.el); } passHome = null;
     saved = []; moved = false;
     [cam, shr, lck].forEach(function (e) { if (e && e.parentNode) e.parentNode.removeChild(e); });
   }

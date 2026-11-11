@@ -15,10 +15,12 @@
     ["board", ["bBoard"], ["Xếp hạng", "Ranking"]],
     ["cam", ["bCam"], ["Chụp ảnh", "Photo"]],
     ["shr", ["bShr"], ["Chia sẻ", "Share"]],
+    ["lock", ["bLock"], ["Khoá màn", "Lock"]],
+    ["pass", ["nsPill"], ["Sự kiện", "Event"]],
     ["snd", ["bSnd", "soundBtn"], ["Âm thanh", "Sound"]],
     ["lang", ["bLang", "langBtn"], ["Ngôn ngữ", "Language"]]
   ];
-  var GRID = ["snd", "lang", "restart", "help", "board", "cam", "shr"];   // thứ tự trong bảng (hay dùng nhất ở trên cùng)
+  var GRID = ["snd", "lang", "restart", "help", "board", "cam", "shr", "lock", "pass"];   // thứ tự trong bảng (hay dùng nhất ở trên cùng)
   var play0 = document.getElementById("play"), top = (play0 && play0.querySelector(".top")) || document.querySelector(".top");
   if (!top) return;
   var local = !(play0 && play0.contains(top)), play = local ? top : play0;
@@ -171,7 +173,7 @@
   /* nút nào được phép gom: đang ở thanh trên, hoặc là nút "hướng dẫn" nằm ngoài thanh (askBtn) */
   function candidates() {
     var out = [];
-    ROLES.forEach(function (r) { var e = elOf(r[0]); if (e && (e.parentNode === top || (panel && e.parentNode === panel) || r[0] === "help")) out.push([r[0], e]); });
+    ROLES.forEach(function (r) { var e = elOf(r[0]); if (e && (e.parentNode === top || (panel && e.parentNode === panel) || r[0] === "help" || r[0] === "pass")) out.push([r[0], e]); });
     return out;
   }
   function adopt() {
@@ -182,7 +184,7 @@
     GRID.forEach(function (role) {
       if (role === "snd") return;                               // giữ nút bật/tắt tiếng ngoài menu
       var e = elOf(role); if (!e || e.parentNode === panel) return;
-      if (e.parentNode !== top && role !== "help") return;
+      if (e.parentNode !== top && role !== "help" && role !== "pass") return;
       home.push({ el: e, role: role, parent: e.parentNode, next: e.nextSibling });
       e.classList.add("it"); panel.appendChild(e);
     });
