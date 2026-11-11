@@ -32,6 +32,7 @@ document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: da
 <link rel="stylesheet" href="../shared/align.css">
 <link rel="stylesheet" href="../shared/rails.css">
 <link rel="stylesheet" href="../shared/hud.css">
+<link rel="stylesheet" href="../shared/poptitle.css">
 <style>
 /* ===== THEME: đổi màu chủ đạo ở --accent (sáng) và --accent trong khối dark ===== */
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -1010,6 +1011,7 @@ setInterval(sync,600);document.addEventListener("load",sync,true);})();
 </script>
 <script src="../shared/rails.js"></script>
 <script src="../shared/hud.js"></script>
+<script src="../shared/poptitle.js" defer></script>
 <script>
 /* hai cột bên lề khi đang mở game trên màn rộng (shared/rails.js); chọn game khác / ván dở từ cột bên */
 NPRails.init({ portal:"pop", games:games, getLang:function(){ return lang; }, getFrame:function(){ return frame; }, stage:stage,

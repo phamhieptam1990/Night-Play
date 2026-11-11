@@ -1,0 +1,48 @@
+/* Pop Play: tên game dạng NHÃN DÁN cho bé (một nguồn dùng chung, GAME_RULES 0a/6c): vẫn Inter 900 (var(--font)), tạo nổi bằng TRÌNH BÀY:
+   chữ tô gradient dọc theo màu chủ đề, viền trắng dày (chuỗi drop-shadow), bóng đổ màu lệch xuống (3D), nghiêng −2°, icon nhỏ đầu tên.
+   Mỗi game chỉ thêm: <h1 id="title" class="pt-title" data-pt="<id game>"> + link css + script defer poptitle.js. Màu/icon từng game khai báo ở cuối file này.
+   Hiệu ứng vào MỘT lần (từng chữ nảy ~400ms, poptitle.js), sau đó đứng yên; không animation vô hạn; tắt hẳn khi prefers-reduced-motion. */
+.pt-title{
+  --pt-a:#ffb347;--pt-b:#f0452a;--pt-shadow:#9c2a12;--pt-ic:"";
+  --pt-o:.1em;                                   /* độ dày viền trắng */
+  font-family:var(--font)!important;font-weight:900!important;letter-spacing:.012em;line-height:1.14!important;
+  white-space:normal;text-overflow:clip!important;overflow:visible!important;min-width:0;
+  padding:.1em .12em;margin:-.1em 0!important;box-sizing:border-box;
+  -webkit-text-fill-color:transparent;color:transparent;
+  filter:drop-shadow(var(--pt-o) 0 0 #fff) drop-shadow(calc(var(--pt-o) * -1) 0 0 #fff) drop-shadow(0 var(--pt-o) 0 #fff) drop-shadow(0 calc(var(--pt-o) * -1) 0 #fff)
+         drop-shadow(0 .11em 0 var(--pt-shadow)) drop-shadow(0 .05em .12em rgba(0,0,0,.28));
+  -webkit-font-smoothing:antialiased;
+}
+.pt-title:not(.pt-on){background:linear-gradient(180deg,var(--pt-a),var(--pt-b));-webkit-background-clip:text;background-clip:text}
+.pt-title::before,.pt-title .pi::before{content:var(--pt-ic);display:inline-block;margin-right:.22em;font-size:.86em;line-height:1;-webkit-text-fill-color:initial;color:initial;vertical-align:-.04em;letter-spacing:0}
+.pt-title:not([data-pt])::before,.pt-title[data-pt=""]::before,.pt-title.pt-on::before,.pt-title:not([data-pt]) .pi::before{display:none}
+/* nghiêng −2° đặt ở lớp trong (.pi) để khung h1 giữ nguyên (khoảng cách tới khối kế dưới không bị phình theo góc nghiêng) */
+.pt-title .pi{display:block;transform:translateY(2px) rotate(-2deg);transform-origin:center}
+.pt-title .pw{display:inline-block;white-space:nowrap}
+.pt-title .pl{display:inline-block;position:relative;top:0;background:linear-gradient(180deg,var(--pt-a),var(--pt-b));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+/* vào MỘT lần: từng chữ nảy lên (dùng top thay vì transform để không tạo lớp riêng làm chữ nền gradient nhấp nháy trên Safari) */
+.pt-title.pt-anim .pl{animation:pt-pop .42s cubic-bezier(.34,1.56,.64,1) both;animation-delay:var(--d,0ms)}
+@keyframes pt-pop{0%{top:.55em;opacity:0}55%{top:-.14em;opacity:1}100%{top:0;opacity:1}}
+@media (prefers-reduced-motion:reduce){.pt-title.pt-anim .pl{animation:none}}
+
+/* cỡ chữ: dọc lớn hơn, ngang nhỏ lại (cột trái hẹp); popfit.js vẫn co/xuống tối đa 2 dòng khi tên dài */
+@media (max-aspect-ratio:109/100){.top h1.pt-title{font-size:clamp(23px,7.2vw,34px)}}
+@media (min-aspect-ratio:11/10) and (max-height:760px),(min-aspect-ratio:13/10) and (min-width:900px){.top h1.pt-title{font-size:21px}}
+@media (min-aspect-ratio:11/10) and (max-height:420px){.top h1.pt-title{font-size:15px}}
+/* tên ở cột HUD của cổng (rails.js: h2.np-gname; poptitle.js gắn data-pt theo game đang mở) */
+.np-gname.pt-title{font-size:18px;flex:1 1 auto;margin:3px 0 3px 2px!important;padding:.16em .1em;display:block!important}
+.np-gname.pt-title .pi{transform:rotate(-1.5deg)}
+
+/* ===== màu + icon từng game (lấy theo màu chủ đề của chính game) ===== */
+.pt-title[data-pt="ten-lua-cua-be"]{--pt-a:#ffb347;--pt-b:#f0382a;--pt-shadow:#9c2a12;--pt-ic:"🚀"}          /* cam đỏ */
+.pt-title[data-pt="con-vat-an-so"]{--pt-a:#9be85a;--pt-b:#1fa53f;--pt-shadow:#126a28;--pt-ic:"🐸"}          /* xanh lá */
+.pt-title[data-pt="qua-song"]{--pt-a:#5ccbff;--pt-b:#1f63dc;--pt-shadow:#143f96;--pt-ic:"⛵"}               /* xanh dương */
+.pt-title[data-pt="lang-cua-be"]{--pt-a:#ffd83d;--pt-b:#25b058;--pt-shadow:#17783a;--pt-ic:"🏡"}            /* vàng → xanh lá */
+.pt-title[data-pt="pop-fly"]{--pt-a:#4fe0f0;--pt-b:#2f84f2;--pt-shadow:#1a559f;--pt-ic:"🐦"}               /* trời xanh */
+.pt-title[data-pt="be-dau-bo-me"]{--pt-a:#ff9a5c;--pt-b:#e8366a;--pt-shadow:#932448;--pt-ic:"🥊"}           /* cam → hồng đỏ */
+.pt-title[data-pt="be-noi-dung-khong"]{--pt-a:#ffd84a;--pt-b:#ff8a1c;--pt-shadow:#a35400;--pt-ic:"🎤"}      /* vàng cam */
+.pt-title[data-pt="bo-me-5-giay"]{--pt-a:#46e8c0;--pt-b:#10a08a;--pt-shadow:#0a6659;--pt-ic:"⏱️"}           /* ngọc */
+.pt-title[data-pt="doan-tuoi-nao"]{--pt-a:#ff9cc6;--pt-b:#ee4a97;--pt-shadow:#992660;--pt-ic:"🎂"}          /* hồng */
+.pt-title[data-pt="nhay-theo-so"]{--pt-a:#ffbf4d;--pt-b:#ee4c7c;--pt-shadow:#9b2850;--pt-ic:"💃"}           /* vàng → hồng */
+.pt-title[data-pt="thap-vong-mau"]{--pt-a:#ff86b8;--pt-b:#6f5ce8;--pt-shadow:#3c2d9c;--pt-ic:"🌈"}          /* hồng → tím */
+.pt-title[data-pt="ve-chu-quai-vat"]{--pt-a:#b985ff;--pt-b:#5b36d8;--pt-shadow:#361e92;--pt-ic:"👾"}        /* tím */
