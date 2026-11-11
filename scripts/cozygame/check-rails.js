@@ -31,6 +31,9 @@ const MEASURE = () => {
     for (const e of r.querySelectorAll(".np-g img,.np-ico")) { if (!e.offsetParent) continue; const b = e.getBoundingClientRect(); if (b.width < 55.5) o.errs.push("icon game nhỏ " + Math.round(b.width)); }
     const cut = [...r.querySelectorAll("*")].filter(e => e.offsetParent && e.getBoundingClientRect().right > rr.right + 1 && e.getBoundingClientRect().width > 0).length; if (cut) o.errs.push(cut + " phần tử tràn ngang cột " + n);
   }
+  const hud = $("#npHud"); o.hud = hud ? [...hud.querySelectorAll("button")].filter(b => b.offsetParent).length : 0; o.hudName = hud ? Math.round(hud.querySelector(".np-gname").getBoundingClientRect().height / (parseFloat(getComputedStyle(hud.querySelector(".np-gname")).lineHeight) || 19)) : 0;
+  o.floats = [...document.querySelectorAll("#stage .nps-fab,#stage #home,#stage #klock")].filter(e => getComputedStyle(e).display !== "none" && e.getBoundingClientRect().width > 0).length;
+  try { const d = f.contentDocument; o.gameBtns = [...d.querySelectorAll("#bHelp,#phBtn,#bSnd,#soundBtn,#bLang,#langBtn,#bBk,#bBack,#npPmBk,#npPmFab,#npFab,#homeBtn,#bCam,#bShr")].filter(e => getComputedStyle(e).display !== "none").length; } catch (e) { o.gameBtns = -1; }
   o.res = !!$("#npRes"); o.resTxt = $("#npRes") ? $("#npRes").textContent : ""; o.sug = [...document.querySelectorAll("#npSug .np-g")].filter(e => e.offsetParent).length;
   o.top = $("#npTop") && !$("#npTop").hidden ? ($("#npTop").querySelector(".np-note") || {}).textContent + "|" + $("#npTop").querySelectorAll("li").length : "";
   o.multi = $("#npMulti") ? $("#npMulti").getAttribute("href") : ""; o.btns = [...document.querySelectorAll("#npRailL .np-acts button")].length;
@@ -56,6 +59,7 @@ const INNER = () => {   /* chạy trong khung game */
       const tag = portal + "/" + id + " " + W + "x" + H, pg = await open(portal, id, resId, W, H, t, id), m = await pg.evaluate(MEASURE);
       note(m.L && m.R, tag + ": hai cột phải hiện (trái=" + m.L + ", phải=" + m.R + ")"); note(!m.scroll, tag + ": trang bị cuộn/tràn");
       m.errs.forEach(e => note(false, tag + ": " + e)); note(m.res && /Ván dở/.test(m.resTxt), tag + ": không thấy mục ván dở (np-resume giả)");
+      if (m.L) { note(m.hud >= 3 && m.hudName <= 2, tag + ": khối HUD cột trái thiếu nút (" + m.hud + ") hoặc tên game >2 dòng (" + m.hudName + ")"); note(m.floats === 0, tag + ": còn " + m.floats + " nút nổi của cổng thấy được khi cột bên lề hiện"); note(m.gameBtns === 0, tag + ": còn " + m.gameBtns + " nút gốc (? 🔊 ngôn ngữ ← 📷 📤) trong game khi đã có khối HUD"); }
       note(m.sug >= 2, tag + ": ít hơn 2 game gợi ý (" + m.sug + ")"); note(/^Chưa tải được|^\|?$|Chưa có|\|2$|đã lưu/.test(m.top) || m.top.includes("|"), tag + ": top 5 không có thông báo/bản đã lưu (" + m.top + ")");
       note(m.btns === 2 && !!m.multi && /multi\.html/.test(m.multi) && (portal === "popplay" ? /portal=pop/.test(m.multi) : true), tag + ": thiếu nút Chụp/Chia sẻ hoặc 'Chơi cùng lúc' (" + m.multi + ")");
       const fr = pg.frames().find(f => f.url().includes("/games/" + id + "/")); if (fr) { const i = await fr.evaluate(INNER).catch(() => null); if (i) { note(!i.scroll, tag + " trong game: trang bị cuộn"); note(!i.cut.length, tag + " trong game: bị cắt " + i.cut.join(" ")); } } else note(false, tag + ": không thấy khung game");

@@ -31,8 +31,9 @@ const FIND = () => {   /* chạy trong trang cổng: tìm nút ← đang hiện 
   const cand = [], st = document.getElementById("stage"), f = st && st.querySelector("iframe"), fr = f ? f.getBoundingClientRect() : { left: 0, top: 0 };
   let d = null; try { d = f && f.contentDocument; } catch (e) {}
   if (d) for (const id of ["bBk", "bBack", "homeBtn", "bHome", "npPmBk"]) { const e = d.getElementById(id); if (vis(e) && getComputedStyle(e).pointerEvents !== "none") { const r = e.getBoundingClientRect(); cand.push({ id, x: r.left + r.width / 2, y: r.top + r.height / 2, ax: r.left + r.width / 2 + fr.left, ay: r.top + r.height / 2 + fr.top, w: r.width, h: r.height, own: "game" }); } }
+  const hb = document.querySelector('#npHud [data-k="back"]'); if (vis(hb)) { const r = hb.getBoundingClientRect(); cand.unshift({ id: "npHud←", x: r.left + r.width / 2, y: r.top + r.height / 2, ax: r.left + r.width / 2, ay: r.top + r.height / 2, w: r.width, h: r.height, own: "hud" }); }
   const ph = document.getElementById("home"); if (vis(ph) && st && st.classList.contains("on")) { const r = ph.getBoundingClientRect(); if (+getComputedStyle(ph).opacity > .5) { const rl = parseFloat(st.style.getPropertyValue("--rl")) || 0; cand.push({ id: "portal#home", x: r.left + r.width / 2 - rl, y: r.top + r.height / 2, ax: r.left + r.width / 2, ay: r.top + r.height / 2, w: r.width, h: r.height, own: "portal", el: 1 }); } }
-  for (const c of cand) { const t = document.elementFromPoint(c.ax, c.ay); c.covered = !!t && t !== f && !(ph && ph.contains(t)) && t.tagName !== "IFRAME"; c.by = t ? (t.tagName + "#" + t.id + "." + t.className) : ""; }
+  for (const c of cand) { const t = document.elementFromPoint(c.ax, c.ay); c.covered = !!t && t !== f && !(ph && ph.contains(t)) && !(hb && hb.contains(t)) && t.tagName !== "IFRAME"; c.by = t ? (t.tagName + "#" + t.id + "." + t.className) : ""; }
   return { cand, W: innerWidth, H: innerHeight };
 };
 (async () => {

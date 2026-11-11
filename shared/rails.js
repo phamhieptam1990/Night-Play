@@ -18,6 +18,9 @@
     play: '<path d="M8 5.5v13l11-6.5z" fill="currentColor"/>',
     users: '<circle cx="9" cy="8.5" r="3.2"/><path d="M3 19c.4-3.4 3-5 6-5s5.6 1.6 6 5"/><circle cx="17.5" cy="9.5" r="2.5"/><path d="M17 14c2.4 0 4 1.3 4.3 4"/>',
     side: '<rect x="3.5" y="4.5" width="17" height="15" rx="3"/><path d="M9 4.5v15"/>',
+    help: '<path d="M9.2 9.2a2.9 2.9 0 1 1 4.6 2.3c-1 .8-1.8 1.3-1.8 2.7"/><path d="M12 18v.2"/>',
+    lock: '<rect x="5" y="11" width="14" height="9" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+    back: '<path d="M15 5l-7 7 7 7"/>',
     home: '<path d="M3 11.5L12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5v-5h4v5"/>',
     cal: '<rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/>'
   };
@@ -25,8 +28,8 @@
   function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
   function html(tag, cls, h) { var e = el(tag, cls); e.innerHTML = h; return e; }
   var T = {
-    vi: { today: "Hôm nay", next: "Chơi tiếp", daily: "Thử thách hằng ngày", done: "Đã chơi", todo: "Chưa chơi hôm nay", streak: "ngày liên tiếp", best: "Điểm cao nhất", top: "Top 5 tuần này", all: "Xem tất cả", off: "Chưa tải được bảng xếp hạng", saved: "bản đã lưu", empty: "Chưa có ai trong tuần này", cam: "Chụp ảnh", shr: "Chia sẻ", resume: "Ván dở", cont: "Tiếp tục", sug: "Gợi ý cho bạn", multi: "Chơi cùng lúc", how: "Cách chơi", hide: "Ẩn cột bên", about: "Về Play Hub", show: "Hiện cột bên", ago: ["vừa xong", " phút trước", " giờ trước", " ngày trước"], pts: " điểm" },
-    en: { today: "Today", next: "Play next", daily: "Daily challenge", done: "Played", todo: "Not played today", streak: "day streak", best: "Your best", top: "Top 5 this week", all: "See all", off: "Couldn't load the leaderboard", saved: "saved copy", empty: "No scores this week yet", cam: "Screenshot", shr: "Share", resume: "Unfinished game", cont: "Continue", sug: "Suggested for you", multi: "Play together", how: "How to play", hide: "Hide side panels", about: "About Play Hub", show: "Show side panels", ago: ["just now", " min ago", " h ago", " d ago"], pts: " pts" }
+    vi: { today: "Hôm nay", next: "Chơi tiếp", daily: "Thử thách hằng ngày", done: "Đã chơi", todo: "Chưa chơi hôm nay", streak: "ngày liên tiếp", best: "Điểm cao nhất", top: "Top 5 tuần này", all: "Xem tất cả", off: "Chưa tải được bảng xếp hạng", saved: "bản đã lưu", empty: "Chưa có ai trong tuần này", cam: "Chụp ảnh", shr: "Chia sẻ", resume: "Ván dở", cont: "Tiếp tục", sug: "Gợi ý cho bạn", multi: "Chơi cùng lúc", how: "Cách chơi", back: "Quay lại", hide: "Ẩn cột bên", about: "Về Play Hub", show: "Hiện cột bên", ago: ["vừa xong", " phút trước", " giờ trước", " ngày trước"], pts: " điểm" },
+    en: { today: "Today", next: "Play next", daily: "Daily challenge", done: "Played", todo: "Not played today", streak: "day streak", best: "Your best", top: "Top 5 this week", all: "See all", off: "Couldn't load the leaderboard", saved: "saved copy", empty: "No scores this week yet", cam: "Screenshot", shr: "Share", resume: "Unfinished game", cont: "Continue", sug: "Suggested for you", multi: "Play together", how: "How to play", back: "Back", hide: "Hide side panels", about: "About Play Hub", show: "Show side panels", ago: ["just now", " min ago", " h ago", " d ago"], pts: " pts" }
   };
   var SAVE = { "bao-nhieu-giay": "bg-save", "cat-banh-chung": "cb-save", "mat-tinh-khong": "mt-save", "ne-o-ga": "og-save", "noi-mot-net": "nn-save", "shipper-sieu-toc": "ss-save", "song-sot-cuoi-thang": "sv-save", "ve-mot-net": "vn-save", "xay-cau-tre": "xc-save",
     "cho-hang-kieu-viet": "ch-save", "doi-doi-2048": "d48-save", "duong-ray": "dr-save", "ga-me-ban-trung": "gm-save", "gia-cho-viet": "gcv-save", "me-cung-truyen-tay": "mz-save", "xin-nghi": "xn-save", "xe-ca-phe": "xcp-save", "cozy-wings": "cw-best" };
@@ -90,16 +93,49 @@
   function gameById(id) { for (var i = 0; i < O.games.length; i++) if (O.games[i].id === id) return O.games[i]; return null; }
   function curGame() { var id = (location.hash || "").slice(1); return gameById(id); }
 
+
+  /* ---------- KHỐI HUD ở đầu cột trái: ← + tên game, rồi dải icon ? 🔊 ngôn ngữ 🔒 (nút thật nằm trong game: bấm hộ; nút gốc trong game ẩn bằng CSS khi cột hiện) ---------- */
+  var HUDI = { help: ["bHelp", "phBtn"], snd: ["bSnd", "soundBtn"], lang: ["bLang", "langBtn"] }, HIDECSS = "html.np-rhud #bHelp,html.np-rhud #phBtn,html.np-rhud #bSnd,html.np-rhud #soundBtn,html.np-rhud #bLang,html.np-rhud #langBtn,html.np-rhud #bBk,html.np-rhud #bBack,html.np-rhud #npPmBk,html.np-rhud #npPmFab,html.np-rhud #npFab,html.np-rhud #homeBtn,html.np-rhud #bCam,html.np-rhud #bShr,html.np-rhud .top h1,html.np-rhud #title,html.np-rhud #ttl,html.np-rhud .hometitle,html.np-rhud .gametitle{display:none!important}";
+  function gdoc() { try { var f = O.getFrame(); return f && f.contentDocument; } catch (e) { return null; } }
+  function gel(ids) { var d = gdoc(); if (!d) return null; for (var i = 0; i < ids.length; i++) { var e = d.getElementById(ids[i]); if (e) return e; } return null; }
+  function hideInGame(on) {
+    var d = gdoc(); if (!d || !d.documentElement) return;
+    try { if (on && !d.getElementById("npRhudCss")) { var st = d.createElement("style"); st.id = "npRhudCss"; st.textContent = HIDECSS; (d.head || d.documentElement).appendChild(st); } d.documentElement.classList.toggle("np-rhud", !!on); } catch (e) {}
+  }
+  function syncHud() {
+    var hud = document.getElementById("npHud"); if (!hud) return;
+    [["help", HUDI.help], ["snd", HUDI.snd], ["lang", HUDI.lang]].forEach(function (x) {
+      var b = hud.querySelector('[data-k="' + x[0] + '"]'), src = gel(x[1]); if (!b) return;
+      b.hidden = !src; if (src && x[0] !== "help" && src.innerHTML.trim() && b.innerHTML !== src.innerHTML) b.innerHTML = src.innerHTML; else if (src && !b.innerHTML.trim()) b.innerHTML = x[0] === "snd" ? ico("snd") : b.innerHTML;
+      if (src) { b.setAttribute("aria-label", src.getAttribute("aria-label") || src.title || x[0]); if (src.hasAttribute("aria-pressed")) b.setAttribute("aria-pressed", src.getAttribute("aria-pressed")); }
+    });
+    var k = document.getElementById("klock"), lb = hud.querySelector('[data-k="lock"]'); if (lb) lb.hidden = !k || k.hidden;
+  }
+  function buildHud(g) {
+    var t = tt(), hud = el("div", "np-hud"); hud.id = "npHud";
+    var r1 = el("div", "np-hrow"), bk = el("button", "np-hb"); bk.type = "button"; bk.innerHTML = ico("back"); bk.dataset.k = "back"; bk.setAttribute("aria-label", t.back);
+    bk.addEventListener("click", function () { var h = document.getElementById("home"); if (h) h.click(); });
+    r1.appendChild(bk); r1.appendChild(el("h2", "np-gname", gname(g))); hud.appendChild(r1);
+    var r2 = el("div", "np-hstrip");
+    [["help", "help"], ["snd", "snd"], ["lang", null], ["lock", "lock"]].forEach(function (x) {
+      var b = el("button", "np-hb"); b.type = "button"; b.dataset.k = x[0]; if (x[1]) b.innerHTML = ico(x[1]); else b.textContent = lg().toUpperCase() === "VI" ? "EN" : "VI";
+      b.addEventListener("click", function () { var el2 = x[0] === "lock" ? document.getElementById("klock") : gel(HUDI[x[0]]); if (el2) el2.click(); setTimeout(syncHud, 120); });
+      r2.appendChild(b);
+    });
+    hud.appendChild(r2); return hud;
+  }
+
   function renderLeft(g) {
     var t = tt(); L.textContent = "";
+    L.appendChild(buildHud(g));
     var head = el("div", "np-head"); head.appendChild(el("h3", "", t.today));
     var hb = el("button", "np-btn np-hide"); hb.type = "button"; hb.innerHTML = ico("side"); hb.setAttribute("aria-label", t.hide); hb.title = t.hide;
     hb.addEventListener("click", function () { enabled = false; lsSet("np-rails", "0"); update(); });
     head.appendChild(hb); L.appendChild(head);
     var sv = saveOf(g.id), day = vnDay(), isCozy = O.portal === "cozy";
     var card = el("div", "np-c"), row = el("div", "np-row"), img = el("img", "np-ico"); img.src = g.thumb; img.alt = ""; img.width = 56; img.height = 56; row.appendChild(img);
-    var tx = el("div", "np-t"); tx.appendChild(el("b", "", gname(g)));
-    if (isCozy) { var sm = el("small", "", t.daily + " #" + dayNo(day)); tx.appendChild(sm); }
+    var tx = el("div", "np-t");
+    if (isCozy) { tx.appendChild(el("b", "", t.daily)); tx.appendChild(el("small", "", "#" + dayNo(day))); } else tx.appendChild(el("b", "", t.today));
     row.appendChild(tx); card.appendChild(row);
     var chips = el("div", "np-chips"); chips.style.marginTop = "10px";
     if (isCozy && sv.daily !== null) { var c1 = html("span", "np-chip" + (sv.daily !== false ? " np-ok" : ""), ico("cal")); c1.appendChild(document.createTextNode(sv.daily !== false ? t.done + (typeof sv.daily === "number" ? ": " + fmtN(sv.daily) : "") : t.todo)); chips.appendChild(c1); }
@@ -194,15 +230,16 @@
     if (wantL && !wantR && vw - rw < need) wantL = false;   /* thiếu chỗ: ưu tiên khung game */
     st.style.setProperty("--rl", wantL ? rw + "px" : "0px"); st.style.setProperty("--rr", wantR ? rw + "px" : "0px");
     st.classList.toggle("np-rails-l", wantL); st.classList.toggle("np-rails-r", wantR); st.classList.toggle("np-rails", wantL || wantR);
-    var was = on; on = wantL || wantR;
+    var was = on; on = wantL || wantR; hideInGame(wantL);
     if (on) { var g = curGame(); if (g && (!was || !cur || cur.id !== g.id)) { cur = g; played(g.id); render(); } else if (!was) render(); startTimer(); }
     else { stopTimer(); if (!st.classList.contains("on")) cur = null; }
   }
   function render() { var g = cur || curGame(); if (!g) return; cur = g; renderLeft(g); renderRight(g); fit(); }
   var lastSig = "";
   function sig() { var g = cur; if (!g) return ""; var s = saveOf(g.id), best = ""; O.games.forEach(function (x) { var r = resumeRec(x.id); if (r) best += x.id + r.ts; }); return JSON.stringify(s) + best + lg(); }
-  function startTimer() { if (timer) return; timer = setInterval(function () { if (document.hidden || !on) return; var s = sig(); if (s !== lastSig) { lastSig = s; render(); } }, 4000); lastSig = sig(); }
-  function stopTimer() { clearInterval(timer); timer = 0; }
+  var hudT = 0;
+  function startTimer() { if (!hudT) hudT = setInterval(function () { if (on) { hideInGame(true); syncHud(); } }, 500); if (timer) return; timer = setInterval(function () { if (document.hidden || !on) return; var s = sig(); if (s !== lastSig) { lastSig = s; render(); } }, 4000); lastSig = sig(); }
+  function stopTimer() { clearInterval(timer); timer = 0; clearInterval(hudT); hudT = 0; hideInGame(false); }
 
   window.NPRails = {
     init: function (o) {
