@@ -40,12 +40,22 @@ function readBody(req, limit = 10240) {
   });
 }
 const MIME = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".webp": "image/webp", ".json": "application/json", ".ico": "image/x-icon", ".woff2": "font/woff2" };
+/* Trang tin ra mắt /moi/, /en/moi/ (+ trang riêng) được SINH lúc build (scripts/build-moi.js) nên bản dev cục bộ không có sẵn:
+   sinh vào thư mục tạm khi khởi động (và khi launches.json đổi, khởi động lại là có) để localhost:PORT/moi/ không bị 404. */
+let MOI_DEV = null;
+try {
+  const d = path.join(require("os").tmpdir(), "np-moi-dev-" + process.pid);
+  fs.rmSync(d, { recursive: true, force: true }); fs.mkdirSync(d, { recursive: true });
+  require("../scripts/build-moi.js").build(d); MOI_DEV = d;
+  process.on("exit", () => { try { fs.rmSync(d, { recursive: true, force: true }); } catch (e) {} });
+} catch (e) { console.warn("[dev] không sinh được /moi/ cục bộ:", e.message); }
 function serveStatic(req, res, pathname) {
   let rel; try { rel = decodeURIComponent(pathname); } catch { return send(res, 400, { error: "bad_path" }); }
   if (rel.endsWith("/")) rel += "index.html";
   let file = path.resolve(STATIC_ROOT, "." + rel);
   /* Landing giới thiệu: nguồn nằm ở landing/ nhưng triển khai lên gốc (/, /en/, /lp/...; xem scripts/build.js) → bản dev tìm thêm ở landing/ */
   if (!fs.existsSync(file) && !rel.startsWith("/landing/")) { const alt = path.resolve(STATIC_ROOT, "landing", "." + rel); if (alt.startsWith(path.join(STATIC_ROOT, "landing") + path.sep) && fs.existsSync(alt)) file = alt; }
+  if (!fs.existsSync(file) && MOI_DEV && /^\/(en\/)?moi\//.test(rel)) { const m = path.resolve(MOI_DEV, "." + rel); if (m.startsWith(MOI_DEV + path.sep) && fs.existsSync(m)) { fs.readFile(m, (err, buf) => { if (err) return send(res, 404, { error: "not_found" }); res.writeHead(200, { "Content-Type": MIME[path.extname(m)] || "text/html; charset=utf-8", "X-Content-Type-Options": "nosniff" }); res.end(buf); }); return; } }
   const inRoot = file.startsWith(STATIC_ROOT + path.sep);
   const hidden = path.relative(STATIC_ROOT, file).split(path.sep).some(s => s.startsWith(".") || s === "server" || s === "node_modules" || s === "netlify" || s === "scripts");
   if (!inRoot || hidden) return send(res, 404, { error: "not_found" });
