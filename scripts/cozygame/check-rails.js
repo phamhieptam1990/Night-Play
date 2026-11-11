@@ -74,7 +74,7 @@ const INNER = () => {   /* chạy trong khung game */
     note(await pg.evaluate(rid => { const h = location.hash.slice(1), f = document.querySelector("#stage iframe"); return h && h !== rid && f && f.src.includes("/" + h + "/"); }, resId), portal + "/" + id + ": bấm game gợi ý không mở game đó");
     await pg.click("#npRes"); await wait(2500);
     note(await pg.evaluate(rid => location.hash.slice(1) === rid && !!document.querySelector("#stage iframe") && /resume=1/.test(document.querySelector("#stage iframe").src), resId), portal + "/" + id + ": bấm ván dở không mở đúng game với ?resume=1");
-    await pg.click("#npRailL .np-hide"); await wait(500); m = await pg.evaluate(MEASURE); note(!m.L && !m.R && m.fw >= 1355, portal + "/" + id + ": nút ẩn cột bên không trả khung game full (fw=" + m.fw + ")");
+    await pg.click("#npRailL .np-hide"); await wait(500); m = await pg.evaluate(MEASURE); note(!m.L && !m.R && m.fw >= 1365, portal + "/" + id + ": nút ẩn cột bên không trả khung game full (fw=" + m.fw + ")");
     await pg.click(".np-tab"); await wait(500); m = await pg.evaluate(MEASURE); note(m.L && m.R, portal + "/" + id + ": nút hiện lại cột bên không hoạt động"); await pg.close();
     if (!quick || portal === "cozyplay") for (const [W, H, t] of NARROW) {
       pg = await open(portal, id, resId, W, H, t, id); m = await pg.evaluate(MEASURE);
