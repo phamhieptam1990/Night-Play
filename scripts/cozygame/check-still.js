@@ -26,12 +26,13 @@ const INF = (ids) => {
 };
 (async () => {
   const srv = spawn("python3", ["-m", "http.server", String(PORT)], { cwd: root, stdio: "ignore" }); await wait(1200);
-  const br = await puppeteer.launch({ executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", headless: "new", args: ["--mute-audio"] });
+  const launch = () => puppeteer.launch({ executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", headless: "new", args: ["--mute-audio"] });
+  let br = await launch();   /* Chrome có thể chết khi máy tải nặng: dựng lại trình duyệt, không bỏ cả lượt đo */
   for (const [portal, id] of list) {
     console.log("== " + portal + "/" + id);
     for (const [W, H, t] of SIZES) {
       let pg; try {
-        pg = await br.newPage(); await pg.setViewport({ width: W, height: H, isMobile: !!t, hasTouch: !!t });
+        if (!br.connected) { try { await br.close(); } catch (e) {} br = await launch(); } pg = await br.newPage(); await pg.setViewport({ width: W, height: H, isMobile: !!t, hasTouch: !!t });
         await pg.evaluateOnNewDocument(() => { localStorage.setItem("lang", "vi"); localStorage.setItem("np-sound", "0"); localStorage.setItem("np-welcome-seen", "1"); localStorage.setItem("np-rails", "1"); localStorage.setItem("pophelp-seen:" + location.pathname.split("/").slice(-2)[0], "1"); });
         await pg.goto(B + portal + "/index.html?lang=vi#" + id); await wait(2800);
         await pg.evaluate(INSTALL, IDS); await wait(4000);
