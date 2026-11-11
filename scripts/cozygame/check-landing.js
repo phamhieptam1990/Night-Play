@@ -118,6 +118,26 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
     /* nút "Chơi ngay" trỏ hub /play/, KHÔNG về "/" */
     for (const l of ["vi", "en"]) { const pg = await br.newPage(); await pg.goto(B + PAGES[l], { waitUntil: "load" }); const c = await pg.evaluate(() => [...document.querySelectorAll("#heroCta, .btn.sm, .sticky a, .btn.big")].filter(a => /Chơi ngay|Play now/.test(a.textContent)).map(a => a.getAttribute("href"))); note(c.length >= 3 && c.every(h => h === "/play/"), "CTA " + l, "nút Chơi ngay phải trỏ /play/: " + c.join(","));
       await pg.click("#heroCta"); await pg.waitForFunction(() => location.pathname === "/play/", { timeout: 8000 }).catch(() => {}); note(await pg.evaluate(() => location.pathname === "/play/" && !!document.getElementById("aPop")), "CTA " + l, "bấm Chơi ngay không tới hub /play/ (" + (await pg.evaluate(() => location.pathname)) + ")"); await pg.close(); }
+    /* "Chơi tiếp" cho người đã từng chơi: chỉ đọc khoá có sẵn; HTML tĩnh vẫn "Chơi ngay"; không lỗi console, không request ngoài, không dịch chuyển bố cục, hero vừa 360x640 */
+    { const T = { vi: ["Chơi ngay", "Chơi tiếp", "Có ván đang chơi dở"], en: ["Play now", "Continue playing", "You have a game in progress"] };
+      const st = { none: [], played: [["np-hi-pop-fly", "5"]], resume: [["np-resume:pop-fly", JSON.stringify({ ts: Date.now(), state: { t: 1 } })]], stale: [["np-resume:pop-fly", "{khong-phai-json"]] };
+      for (const l of ["vi", "en"]) for (const k of Object.keys(st)) for (const sz of [[360, 640], [390, 844], [1440, 900]]) {
+        const pg = await br.newPage(); const errs = [], ext = []; await pg.setViewport({ width: sz[0], height: sz[1] });
+        pg.on("console", m => { if (m.type() === "error" && !/status of 501/.test(m.text())) errs.push(m.text()); }); pg.on("pageerror", e => errs.push(String(e))); pg.on("request", r => { if (!r.url().startsWith(B) && !/^data:|^blob:/.test(r.url())) ext.push(r.url()); });
+        await pg.evaluateOnNewDocument(kv => { try { localStorage.clear(); for (const [a, b] of kv) localStorage.setItem(a, b); } catch (e) {} window.__cls = 0; try { new PerformanceObserver(li => { for (const e of li.getEntries()) if (!e.hadRecentInput) window.__cls += e.value; }).observe({ type: "layout-shift", buffered: true }); } catch (e) {} }, st[k]);
+        await pg.goto(B + PAGES[l], { waitUntil: "load" }); await wait(300);
+        const r = await pg.evaluate(() => { const h = document.getElementById("heroCta"), n = document.querySelector(".resume-note"); const b = h.getBoundingClientRect(); return { t: h.textContent.trim(), href: h.getAttribute("href"), h: b.height, bot: Math.max(b.bottom, n ? n.getBoundingClientRect().bottom : 0), note: n ? n.textContent : "", cls: window.__cls, ls: Object.keys(localStorage).sort().join() }; });
+        const played = k !== "none", resume = k === "resume", tag = "chơi-tiếp " + l + "/" + k + "/" + sz.join("x");
+        note(r.t === T[l][played ? 1 : 0], tag, "chữ nút '" + r.t + "'"); note(r.href === "/play/", tag, "href " + r.href); note(r.h >= 44, tag, "nút cao " + r.h);
+        note(resume ? r.note === T[l][2] : !r.note, tag, "ghi chú '" + r.note + "'"); note(!errs.length, tag, "lỗi console: " + errs[0]); note(!ext.length, tag, "request ngoài: " + ext[0]);
+        note(r.cls < 0.01, tag, "CLS " + r.cls); if (sz[1] === 640) note(r.bot <= 640, tag, "hero tràn màn 360x640 (đáy " + Math.round(r.bot) + ")");
+        note(!/np-(hi|resume)/.test(r.ls.replace(/np-hi-pop-fly|np-resume:pop-fly/g, "")), tag, "landing không được ghi khoá mới: " + r.ls);
+        if (sz[0] === 390 && k !== "stale" && k !== "played" && l === "vi" || (sz[0] === 1440 && k === "resume" && l === "en")) if (shotDir) await pg.screenshot({ path: path.join(shotDir, "playing-" + l + "-" + k + "-" + sz[0] + ".png") });
+        await pg.close(); }
+      /* storage không đọc được: giữ bản người mới, không lỗi */
+      const pg = await br.newPage(); const errs = []; pg.on("pageerror", e => errs.push(String(e)));
+      await pg.evaluateOnNewDocument(() => { Object.defineProperty(window, "localStorage", { get() { throw new Error("blocked"); } }); });
+      await pg.goto(B + PAGES.vi, { waitUntil: "load" }); note((await pg.$eval("#heroCta", e => e.textContent.trim())) === "Chơi ngay" && !errs.length, "chơi-tiếp storage chặn", "phải giữ 'Chơi ngay', không lỗi: " + errs[0]); await pg.close(); }
     /* hub /play/: mọi liên kết nội bộ + tài nguyên trả 200 (không 404 do đổi đường dẫn), nút ← ở trang cổng về /play/ */
     { const pg = await br.newPage(); const bad = []; pg.on("response", r => { if (r.url().startsWith(B) && r.status() >= 400 && !/\/api\//.test(r.url())) bad.push(r.status() + " " + r.url()); });
       await pg.goto(B + "/play/", { waitUntil: "networkidle0" }); await wait(300); note(!bad.length, "hub /play/", "tài nguyên lỗi: " + bad.slice(0, 3).join(" | "));

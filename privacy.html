@@ -94,7 +94,7 @@ document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: da
       <tr><td>prefs, usage</td><td>Cài đặt phụ huynh (game được phép, giới hạn thời gian mỗi ngày) và thời gian đã chơi hôm nay</td><td>Không</td></tr>
       <tr><td>np-pg-ok, np-pg-lock, np-pg-try</td><td>Trạng thái cổng phụ huynh (nhớ đã qua trong 10 phút, đếm lần sai, khoá thử lại). Năm sinh nhập vào cổng chỉ để kiểm tra, không lưu và không gửi đi</td><td>Không</td></tr>
       <tr><td>np-resume:&lt;game&gt;</td><td>Ván đang chơi dở để bấm “Tiếp tục” (giữ tối đa 7 ngày, xoá khi hết ván)</td><td>Không</td></tr>
-      <tr><td>np-hi-&lt;game&gt; và các khoá riêng của từng game</td><td>Điểm cao, tiến độ, cấp độ, chuỗi ngày chơi, lựa chọn giao diện, ngày dùng thử</td><td>Không</td></tr>
+      <tr><td>np-hi-&lt;game&gt; và các khoá riêng của từng game</td><td>Điểm cao, tiến độ, cấp độ, chuỗi ngày chơi, lựa chọn giao diện, ngày dùng thử (trang giới thiệu chỉ đọc các khoá này trên máy để đổi nút thành “Chơi tiếp”, không ghi, không gửi đi)</td><td>Không</td></tr>
       <tr><td>np-sound, np-haptic, np-multi-hud:&lt;game&gt;</td><td>Tuỳ chọn âm thanh, rung, ẩn/hiện bảng điểm khi chơi cùng lúc</td><td>Không</td></tr>
       <tr><td>np_nick</td><td>Biệt danh bạn đã dùng cho bảng xếp hạng (điền sẵn lần sau)</td><td>Chỉ khi bạn bấm “Khoe điểm”</td></tr>
       <tr><td>np_scoreq, np_shares, np_help_&lt;mã&gt;</td><td>Hàng chờ điểm chưa gửi, danh sách lời nhờ “chơi hộ” gần đây (tối đa 20, giữ 7 ngày) và mã chủ nhân của từng lời nhờ</td><td>Mã chủ nhân băm (SHA-256) gửi lên để nhận kết quả</td></tr>
@@ -244,7 +244,7 @@ document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: da
       <tr><td>prefs, usage</td><td>Parental settings (allowed games, daily time limit) and time played today</td><td>No</td></tr>
       <tr><td>np-pg-ok, np-pg-lock, np-pg-try</td><td>Parental gate state (passed for 10 minutes, wrong-answer count, retry lock). The birth year typed into the gate is only checked, never stored or sent</td><td>No</td></tr>
       <tr><td>np-resume:&lt;game&gt;</td><td>Unfinished round for the “Continue” button (kept up to 7 days, deleted when the round ends)</td><td>No</td></tr>
-      <tr><td>np-hi-&lt;game&gt; and per-game keys</td><td>High scores, progress, levels, day streaks, chosen skins, trial dates</td><td>No</td></tr>
+      <tr><td>np-hi-&lt;game&gt; and per-game keys</td><td>High scores, progress, levels, day streaks, chosen skins, trial dates (the intro page only reads these on your device to switch its button to “Continue playing”; it writes and sends nothing)</td><td>No</td></tr>
       <tr><td>np-sound, np-haptic, np-multi-hud:&lt;game&gt;</td><td>Sound, vibration and score-panel options for side-by-side play</td><td>No</td></tr>
       <tr><td>np_nick</td><td>Nickname you used on the leaderboard (pre-filled next time)</td><td>Only when you tap “Share score”</td></tr>
       <tr><td>np_scoreq, np_shares, np_help_&lt;code&gt;</td><td>Unsent score queue, recent “play for me” requests (max 20, kept 7 days) and each request’s owner code</td><td>A hash (SHA-256) of the owner code is sent to receive the result</td></tr>

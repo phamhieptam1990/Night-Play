@@ -33,6 +33,7 @@ a{color:inherit}
 .nav{flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px}
 .mark{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:-.2px}
 .mark svg{width:34px;height:34px}
+a.mark{min-height:44px;text-decoration:none;color:inherit}a.mark:hover span{text-decoration:underline}
 .tools{position:relative;display:flex;gap:10px;align-items:center}
 .ico{width:44px;height:44px;border-radius:50%;background:var(--panel);box-shadow:var(--shadow);display:grid;place-items:center}
 .ico svg{width:22px;height:22px}
@@ -91,10 +92,10 @@ h1{margin:0;text-align:center;font-size:clamp(26px,min(5vw,6vh),46px);line-heigh
 </head>
 <body>
 <nav class="nav" aria-label="Main">
-  <div class="mark">
+  <a class="mark" id="aboutLink" href="/?landing=1">
     <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#7C5CFF"/><path d="M0 0h32v64H0z" fill="#FF5A1F" clip-path="inset(0 round 18px 0 0 18px)"/><circle cx="32" cy="32" r="13" fill="#fff"/></svg>
-    <span>Home</span>
-  </div>
+    <span id="aboutTxt">Giới thiệu</span>
+  </a>
   <div class="tools">
     <a id="passBtn" class="pill" href="../subscribe.html"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/></svg><span></span></a>
     <button id="themeBtn" class="ico" type="button" aria-label="Theme">
@@ -137,7 +138,8 @@ h1{margin:0;text-align:center;font-size:clamp(26px,min(5vw,6vh),46px);line-heigh
 
 <footer class="foot">
   <span id="copy"></span>
-  <nav><a id="priv" href="../privacy.html" target="_blank" rel="noopener"></a>
+  <nav><a id="about" href="/?landing=1"></a>
+  <a id="priv" href="../privacy.html" target="_blank" rel="noopener"></a>
   <a id="terms" href="../terms.html" target="_blank" rel="noopener"></a>
   <a id="mail" href="mailto:support@nightplay.vn"></a></nav>
 </footer>
@@ -165,6 +167,9 @@ function applyLang(){
   const t = i18n[lang];
   document.documentElement.lang = lang;
   ["h1","sub","tPop","dPop","gPop","tNight","dNight","gNight"].forEach(k => { $(k).textContent = t[k]; });
+  { const at = lang === "vi" ? "Giới thiệu" : "About", ah = lang === "vi" ? "/?landing=1" : "/en/?landing=1";
+    $("aboutTxt").textContent = at; $("about").textContent = at; $("aboutLink").href = ah; $("about").href = ah;
+    $("aboutLink").setAttribute("aria-label", lang === "vi" ? "Giới thiệu Play Hub" : "About Play Hub"); }
   $("priv").textContent = t.privacy; $("terms").textContent = lang === "vi" ? "Điều khoản" : "Terms"; $("mail").textContent = t.contact;
   $("copy").textContent = "© " + new Date().getFullYear() + " Play Hub. " + t.rights;
   $("passBtn").href = "../subscribe.html?from=play/index.html&lang=" + lang; $("passBtn").lastChild.textContent = t.pass; $("passBtn").setAttribute("aria-label", t.upgrade);

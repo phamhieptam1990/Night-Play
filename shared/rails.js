@@ -24,8 +24,8 @@
   function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
   function html(tag, cls, h) { var e = el(tag, cls); e.innerHTML = h; return e; }
   var T = {
-    vi: { today: "Hôm nay", next: "Chơi tiếp", daily: "Thử thách hằng ngày", done: "Đã chơi", todo: "Chưa chơi hôm nay", streak: "ngày liên tiếp", best: "Điểm cao nhất", top: "Top 5 tuần này", all: "Xem tất cả", off: "Chưa tải được bảng xếp hạng", saved: "bản đã lưu", empty: "Chưa có ai trong tuần này", cam: "Chụp ảnh", shr: "Chia sẻ", resume: "Ván dở", cont: "Tiếp tục", sug: "Gợi ý cho bạn", multi: "Chơi cùng lúc", how: "Cách chơi", hide: "Ẩn cột bên", show: "Hiện cột bên", ago: ["vừa xong", " phút trước", " giờ trước", " ngày trước"], pts: " điểm" },
-    en: { today: "Today", next: "Play next", daily: "Daily challenge", done: "Played", todo: "Not played today", streak: "day streak", best: "Your best", top: "Top 5 this week", all: "See all", off: "Couldn't load the leaderboard", saved: "saved copy", empty: "No scores this week yet", cam: "Screenshot", shr: "Share", resume: "Unfinished game", cont: "Continue", sug: "Suggested for you", multi: "Play together", how: "How to play", hide: "Hide side panels", show: "Show side panels", ago: ["just now", " min ago", " h ago", " d ago"], pts: " pts" }
+    vi: { today: "Hôm nay", next: "Chơi tiếp", daily: "Thử thách hằng ngày", done: "Đã chơi", todo: "Chưa chơi hôm nay", streak: "ngày liên tiếp", best: "Điểm cao nhất", top: "Top 5 tuần này", all: "Xem tất cả", off: "Chưa tải được bảng xếp hạng", saved: "bản đã lưu", empty: "Chưa có ai trong tuần này", cam: "Chụp ảnh", shr: "Chia sẻ", resume: "Ván dở", cont: "Tiếp tục", sug: "Gợi ý cho bạn", multi: "Chơi cùng lúc", how: "Cách chơi", hide: "Ẩn cột bên", about: "Về Play Hub", show: "Hiện cột bên", ago: ["vừa xong", " phút trước", " giờ trước", " ngày trước"], pts: " điểm" },
+    en: { today: "Today", next: "Play next", daily: "Daily challenge", done: "Played", todo: "Not played today", streak: "day streak", best: "Your best", top: "Top 5 this week", all: "See all", off: "Couldn't load the leaderboard", saved: "saved copy", empty: "No scores this week yet", cam: "Screenshot", shr: "Share", resume: "Unfinished game", cont: "Continue", sug: "Suggested for you", multi: "Play together", how: "How to play", hide: "Hide side panels", about: "About Play Hub", show: "Show side panels", ago: ["just now", " min ago", " h ago", " d ago"], pts: " pts" }
   };
   var SAVE = { "bao-nhieu-giay": "bg-save", "cat-banh-chung": "cb-save", "mat-tinh-khong": "mt-save", "ne-o-ga": "og-save", "noi-mot-net": "nn-save", "shipper-sieu-toc": "ss-save", "song-sot-cuoi-thang": "sv-save", "ve-mot-net": "vn-save", "xay-cau-tre": "xc-save",
     "cho-hang-kieu-viet": "ch-save", "doi-doi-2048": "d48-save", "duong-ray": "dr-save", "ga-me-ban-trung": "gm-save", "gia-cho-viet": "gcv-save", "me-cung-truyen-tay": "mz-save", "xin-nghi": "xn-save", "xe-ca-phe": "xcp-save", "cozy-wings": "cw-best" };
@@ -126,6 +126,8 @@
       acts.appendChild(b);
     });
     L.appendChild(acts);
+    /* Liên kết nhỏ về landing giới thiệu (?landing=1 để app PWA không bị chuyển lại về /play/); ẩn nếu cột không đủ chỗ */
+    var ab = el("a", "np-about", t.about); ab.id = "npAbout"; ab.href = (lg() === "en" ? "/en/" : "/") + "?landing=1"; L.appendChild(ab);
   }
 
   function suggestions(g, n) {
@@ -168,6 +170,7 @@
       var all = sg ? [].slice.call(sg.children) : []; all.forEach(function (c) { c.hidden = false; }); if (sg) sg.hidden = false; if (how) how.hidden = false; if (res) res.hidden = false;
       var rows = top ? [].slice.call(top.querySelectorAll("li")) : []; rows.forEach(function (c) { c.hidden = false; }); var tl = top && top.querySelector(".np-link"), nt = top && top.querySelector(".np-note"); if (tl) tl.hidden = false;
       var cl = L.querySelector(".np-chips"); if (cl) cl.hidden = false;
+      var ab = document.getElementById("npAbout"); if (ab) { ab.hidden = false; if (over(L)) ab.hidden = true; }
       /* phải: bỏ Cách chơi → 6 → 4 → 2 → 0 game gợi ý → ván dở (không bao giờ bỏ nút Chơi cùng lúc) */
       if (over(R) && how) how.hidden = true;
       [4, 2, 0].forEach(function (n) { if (over(R) && sg) { all.forEach(function (c, i) { c.hidden = i >= n; }); if (!n) sg.hidden = true; } });
@@ -175,6 +178,7 @@
       /* trái: top 5 → 3 dòng → 1 dòng → bỏ top (giữ thẻ game + 2 nút) */
       [3, 1, 0].forEach(function (n) { if (over(L) && top && !top.hidden) { rows.forEach(function (c, i) { c.hidden = i >= n; }); if (!n) top.hidden = true; } });
       if (over(L) && cl) cl.hidden = true;
+      if (ab && ab.hidden) { ab.hidden = false; if (over(L)) ab.hidden = true; }
     });
   }
 

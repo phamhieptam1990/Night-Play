@@ -396,7 +396,7 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 <footer class="foot">
   <div class="fin">
     <div class="fbrand"><div class="mark"><svg class="mk" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="var(--accent)"/><path d="M42 40A16 16 0 1 1 26 14a13 13 0 0 0 16 26z" fill="#fff"/><circle cx="44" cy="20" r="2.5" fill="#fff"/></svg><span id="fName"></span></div><p id="fTag"></p></div>
-    <nav class="fcol" aria-labelledby="fH1"><h4 id="fH1"></h4><a id="fHub" href="../play/index.html"></a><a id="fRank" href="../leaderboard.html"></a><a id="fHelp" href="../shared.html"></a><a id="fGames" href="#grid"></a><a id="fPass" href="#"></a></nav>
+    <nav class="fcol" aria-labelledby="fH1"><h4 id="fH1"></h4><a id="fHub" href="../play/index.html"></a><a id="fAbout" href="/?landing=1"></a><a id="fRank" href="../leaderboard.html"></a><a id="fHelp" href="../shared.html"></a><a id="fGames" href="#grid"></a><a id="fPass" href="#"></a></nav>
     <nav class="fcol" aria-labelledby="fH2"><h4 id="fH2"></h4><a id="fMail" href="#"></a><a id="fPriv" href="#" target="_blank" rel="noopener"></a><a id="fTerms" href="#" target="_blank" rel="noopener"></a></nav>
   </div>
   <div class="fbar"><p id="madeBy"></p>
@@ -447,6 +447,7 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
     <div class="gf">
       <a id="mail"></a>
       <a id="priv" target="_blank" rel="noopener"></a>
+      <a id="about"></a>
       <button id="close" type="button"></button>
     </div>
   </div>
@@ -558,6 +559,8 @@ function applyLang(){
   $("rankBtn").setAttribute("aria-label", t.rank); $("rankBtn").title = t.rank; { const ml = /^vi/i.test(document.documentElement.lang || "vi") ? "Chơi cùng lúc" : "Play together"; $("multiBtn").setAttribute("aria-label", ml); $("multiBtn").title = ml; }
   $("hubBtn").setAttribute("aria-label", t.hub); $("hubBtn").title = t.hub; $("hubLink").setAttribute("aria-label", t.hub + " – " + BRAND);
   const fm = $("fMail"); fm.href = "mailto:" + EMAIL; fm.textContent = t.contact;
+  { const vi = /^vi/i.test(document.documentElement.lang || "vi"), ah = vi ? "/?landing=1" : "/en/?landing=1", at = vi ? "Giới thiệu Play Hub" : "About Play Hub";
+    $("fAbout").href = ah; $("fAbout").textContent = at; $("about").href = ah; $("about").textContent = vi ? "Giới thiệu" : "About"; }
   const fp = $("fPriv"); fp.href = PRIVACY_URL; fp.textContent = t.privacy;
   const ft = $("fTerms"); ft.href = "../terms.html"; ft.textContent = /^vi/i.test(document.documentElement.lang || "vi") ? "Điều khoản" : "Terms";
   const SUB = "../subscribe.html?from=cozyplay/index.html&lang=" + lang;
