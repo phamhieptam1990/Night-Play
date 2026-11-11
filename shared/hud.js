@@ -1,4 +1,4 @@
-/* HUD GỌN của trang cổng khi KHÔNG có cột bên lề (GAME_RULES 0a-15). Nạp sau rails.js ở cozyplay/index.html + popplay/index.html: <script src="../shared/hud.js"></script> + <link rel="stylesheet" href="../shared/hud.css">.
+/* HUD GỌN của trang cổng khi KHÔNG có cột bên lề (GAME_RULES 0a-16). Nạp sau rails.js ở cozyplay/index.html + popplay/index.html: <script src="../shared/hud.js"></script> + <link rel="stylesheet" href="../shared/hud.css">.
    Bật khi: đang mở game (#stage.on), màn NGANG, KHÔNG có cột bên lề (.np-rails), game chưa tự gom nút vào thanh trên (.docked), và game có ít nhất một nút ? / 🔊 / ngôn ngữ.
    Điện thoại/iPad DỌC không đổi (thanh trên 68px + menu ⋯ của game). Nút ? 🔊 ngôn ngữ là nút thật trong game (cùng gốc, cùng id như khối HUD cột bên: bấm hộ), nút gốc ẩn bằng CSS chèn vào game (html.np-hudg).
    Cao >= 480px: 6 nút dọc dưới ← (? 🔊 VI 📷 📤 🔒). Thấp hơn: chỉ nút ⋯ mở thẻ nhỏ 3x2 bên phải cột nút (đóng khi chạm ngoài / Esc / chọn nút). Bài đo: scripts/cozygame/check-hud.js. */
@@ -15,7 +15,7 @@
   };
   function ico(n) { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + SVG[n] + "</svg>"; }
   var GAMEIDS = { help: ["bHelp", "phBtn"], snd: ["bSnd", "soundBtn"], lang: ["bLang", "langBtn"] };
-  var HIDECSS = "html.np-hudg #bHelp,html.np-hudg #phBtn,html.np-hudg #bSnd,html.np-hudg #soundBtn,html.np-hudg #bLang,html.np-hudg #langBtn{display:none!important}";
+  var HIDECSS = "html.np-hudg #bHelp,html.np-hudg #phBtn,html.np-hudg #bSnd,html.np-hudg #soundBtn,html.np-hudg #bLang,html.np-hudg #langBtn,html.np-hudg #bCam,html.np-hudg #bShr{display:none!important}";
   var stage = null, box = null, pn = null, more = null, btns = {}, active = false, small = false, tick = 0, hooked = null;
   var lab = { vi: { help: "Cách chơi", snd: "Âm thanh", lang: "Ngôn ngữ", cam: "Chụp ảnh", shr: "Chia sẻ", lock: "Khoá màn hình", more: "Thêm" }, en: { help: "How to play", snd: "Sound", lang: "Language", cam: "Screenshot", shr: "Share", lock: "Lock screen", more: "More" } };
   function lg() { return ((document.documentElement.lang || "vi") + "").slice(0, 2) === "en" ? "en" : "vi"; }

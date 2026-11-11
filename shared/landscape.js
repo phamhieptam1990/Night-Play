@@ -80,6 +80,12 @@
       pl.classList.add("tight"); tl.style.fontSize = ""; fs = parseFloat(getComputedStyle(tl).fontSize) || 16; guard = 0;
       while (tl.scrollWidth > tl.clientWidth + 1 && fs > lim && guard++ < 40) { fs -= 0.5; tl.style.fontSize = fs + "px"; }
     }
+    /* màn NGANG vẫn bị cắt “…” ở cỡ chữ nhỏ nhất (tên dài / nhãn thử thách hôm nay): cho xuống tối đa 2 dòng (lớp wrap2) thay vì cắt */
+    tl.classList.remove("wrap2");
+    if (tl.scrollWidth > tl.clientWidth + 1 && matchMedia("(orientation:landscape)").matches) {
+      tl.classList.add("wrap2"); tl.style.fontSize = ""; fs = parseFloat(getComputedStyle(tl).fontSize) || 16; guard = 0;
+      while ((tl.scrollHeight > tl.clientHeight + 1 || tl.scrollWidth > tl.clientWidth + 1) && fs > lim && guard++ < 40) { fs -= 0.5; tl.style.fontSize = fs + "px"; }
+    }
   }
   function queueFit() { cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(function () { fitTitle(); fitHome(); fitGame(); }); }
   if (tl) { try { new MutationObserver(queueFit).observe(tl, { childList: true, characterData: true, subtree: true }); new MutationObserver(queueFit).observe(pl, { attributes: true, attributeFilter: ["data-scr"] }); } catch (e) {} addEventListener("resize", queueFit); addEventListener("orientationchange", function () { setTimeout(queueFit, 200); }); if (document.fonts && document.fonts.ready) document.fonts.ready.then(queueFit); queueFit(); }
