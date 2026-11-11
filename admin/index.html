@@ -19,6 +19,8 @@ document.documentElement.dataset.theme=savedTheme||(matchMedia("(prefers-color-s
   document.documentElement.lang=l;
 })();
 </script>
+<link rel="preload" href="../shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../shared/fonts.css">
 <link rel="stylesheet" href="../shared/theme.css">
 <link rel="stylesheet" href="../shared/layout.css">
 <link rel="stylesheet" href="../shared/bars.css">
@@ -41,7 +43,7 @@ document.documentElement.dataset.theme=savedTheme||(matchMedia("(prefers-color-s
 *{box-sizing:border-box}
 html,body{height:100%}
 html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--page);color:var(--ink);font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;overflow:hidden;display:flex;flex-direction:column;height:100dvh}
+body{margin:0;background:var(--page);color:var(--ink);font:14px/1.5 var(--font);overflow:hidden;display:flex;flex-direction:column;height:100dvh}
 button,input,select{font:inherit;color:inherit}
 button{cursor:pointer}
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px}

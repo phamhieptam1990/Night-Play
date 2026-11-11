@@ -5,11 +5,13 @@
      (privacy.html, terms.html, shared/site.js) thì PHẢI chạy lại script này rồi commit các PDF + legal/pdf-info.js.
    - Số trang ở mục lục lấy bằng cách dựng 2 lượt và đọc lại PDF bằng pdfjs-dist (cài tạm: npm i --no-save pdfjs-dist@3.11.174 vào thư mục có NODE_PATH).
      Không có pdfjs-dist thì mục lục vẫn có liên kết bấm được nhưng không có số trang.
-   - A4 dọc, lề 21mm, chữ serif 10.5pt, có mục lục, tiêu đề/chân trang, đánh dấu (outline), PDF gắn thẻ (tagged), bảng không tách hàng và lặp tiêu đề cột,
+   - A4 dọc, lề 21mm, chữ Inter 10.5pt, có mục lục, tiêu đề/chân trang, đánh dấu (outline), PDF gắn thẻ (tagged), bảng không tách hàng và lặp tiêu đề cột,
      chỗ còn "[CẦN ĐIỀN: ...]" hiện thành ô trống để điền. */
 "use strict";
 const fs = require("fs"), path = require("path"), http = require("http"), puppeteer = require("puppeteer-core");
 const root = path.join(__dirname, ".."), outDir = path.join(root, "legal"), PORT = 8882;
+/* PDF nhúng Inter dạng tĩnh 400/500/700 (cắt từ phông variable bằng fonttools instancer): Chrome nhúng phông variable thành Type3 rất to, bản tĩnh chỉ nhúng đúng các glyph dùng. */
+const FONT_FACE = [400, 500, 700].map(w => "@font-face{font-family:Inter;font-weight:" + w + ";font-style:normal;src:url(data:font/woff2;base64," + fs.readFileSync(path.join(root, "scripts", "fonts-pdf", "inter-" + w + ".woff2")).toString("base64") + ") format(\"woff2\")}").join("");
 const CHROME = process.env.CHROME || "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 let pdfjs = null; try { pdfjs = require("pdfjs-dist/legacy/build/pdf.js"); } catch (e) { console.log("(không có pdfjs-dist: mục lục không có số trang)"); }
 const MIME = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".svg": "image/svg+xml", ".png": "image/png" };
@@ -56,36 +58,37 @@ function build(kind, l, d, pages) {
   const note = d.note.replace(/\[CẦN[^\]]*\]/g, "");
   const toc = d.heads.map(h => '<li class="l' + h.lvl + '"><a href="#' + h.id + '"><span class="t">' + esc(h.text) + '</span><span class="dots"></span><span class="n">' + (pages ? pages[h.id] || "" : "") + "</span></a></li>").join("");
   return `<!doctype html><html lang="${l}"><head><meta charset="utf-8"><title>${esc(d.h1)} · Play Hub</title><style>
+${FONT_FACE}
 @page{size:A4}
 *{box-sizing:border-box}
-html{font:10.5pt/1.5 Georgia,"Times New Roman","Liberation Serif","DejaVu Serif",serif;color:#1d1b26;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+html{font:10.5pt/1.5 Inter,sans-serif;color:#1d1b26;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 body{margin:0}
 .cover{break-after:page;padding-top:6mm}
-.brand{font:700 9pt/1 Arial,"Liberation Sans","Helvetica Neue",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#7C5CFF;margin:0 0 6mm}
+.brand{font:700 9pt/1 Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#7C5CFF;margin:0 0 6mm}
 .brand i{display:inline-block;width:4mm;height:4mm;border-radius:1.2mm;background:linear-gradient(90deg,#FF5A1F 50%,#7C5CFF 50%);vertical-align:-.8mm;margin-right:2mm}
-h1.doc{font:700 27pt/1.12 Georgia,"Times New Roman",serif;color:#2f2760;margin:0 0 3mm;letter-spacing:-.3pt}
-.sub{font:500 10pt/1.4 Arial,"Liberation Sans",sans-serif;color:#6b6788;margin:0 0 7mm}
-.metabox{background:#f4f2fb;border-left:1.2mm solid #7C5CFF;padding:3.5mm 5mm;margin:0 0 8mm;font:9.5pt/1.6 Arial,"Liberation Sans",sans-serif;color:#37334f}
+h1.doc{font:700 27pt/1.12 Inter,sans-serif;color:#2f2760;margin:0 0 3mm;letter-spacing:-.3pt}
+.sub{font:500 10pt/1.4 Inter,sans-serif;color:#6b6788;margin:0 0 7mm}
+.metabox{background:#f4f2fb;border-left:1.2mm solid #7C5CFF;padding:3.5mm 5mm;margin:0 0 8mm;font:9.5pt/1.6 Inter,sans-serif;color:#37334f}
 .metabox b{color:#2f2760}
-.tochd{font:700 12pt/1 Georgia,serif;color:#2f2760;margin:0 0 3mm;padding-bottom:2mm;border-bottom:.6pt solid #cfc9e6}
-.toc{list-style:none;margin:0;padding:0;font:9.5pt/1.5 Georgia,"Times New Roman",serif}
+.tochd{font:700 12pt/1 Inter,sans-serif;color:#2f2760;margin:0 0 3mm;padding-bottom:2mm;border-bottom:.6pt solid #cfc9e6}
+.toc{list-style:none;margin:0;padding:0;font:9.5pt/1.5 Inter,sans-serif}
 .toc li{margin:0}.toc li.l3{padding-left:6mm;font-size:8.8pt;color:#4a4670}.toc li.l2{margin-top:1.2mm;font-weight:700}
 .toc a{display:flex;align-items:baseline;gap:2mm;color:inherit;text-decoration:none}
 .toc .dots{flex:1;border-bottom:.6pt dotted #9a96b8;transform:translateY(-1.2pt)}
 .toc .n{min-width:6mm;text-align:right;font-variant-numeric:tabular-nums}
-.content h2{font:700 14pt/1.25 Georgia,"Times New Roman",serif;color:#2f2760;margin:7mm 0 2.5mm;padding-bottom:1.5mm;border-bottom:.6pt solid #cfc9e6;break-after:avoid;break-inside:avoid}
-.content h3{font:700 11.2pt/1.3 Georgia,"Times New Roman",serif;color:#4a4670;margin:4.5mm 0 1.5mm;break-after:avoid;break-inside:avoid}
+.content h2{font:700 14pt/1.25 Inter,sans-serif;color:#2f2760;margin:7mm 0 2.5mm;padding-bottom:1.5mm;border-bottom:.6pt solid #cfc9e6;break-after:avoid;break-inside:avoid}
+.content h3{font:700 11.2pt/1.3 Inter,sans-serif;color:#4a4670;margin:4.5mm 0 1.5mm;break-after:avoid;break-inside:avoid}
 .content > h2:first-child{margin-top:0}
 p{margin:0 0 2.6mm;text-align:justify;orphans:3;widows:3;hyphens:manual}
 ul{margin:0 0 3mm;padding-left:5.5mm}li{margin:0 0 1.3mm;orphans:2;widows:2}
 li::marker{color:#7C5CFF}
 a{color:#3d33a8;text-decoration:none;border-bottom:.4pt solid #b9b3e6}
-a[href^="http"]::after{content:" (" attr(href) ")";font:7.5pt Arial,"Liberation Sans",sans-serif;color:#7a7696;border:0}
+a[href^="http"]::after{content:" (" attr(href) ")";font:7.5pt Inter,sans-serif;color:#7a7696;border:0}
 a[href^="mailto"]{border:0}
 section.sum{background:#f4f2fb;border:.6pt solid #d6d1ec;border-radius:2mm;padding:3mm 5mm 1mm;margin:0 0 5mm;break-inside:avoid}
 section.sum h2{margin:0 0 2mm;border:0;padding:0;font-size:12.5pt}
 section.sum ul{margin-bottom:2mm}
-table{width:100%;border-collapse:collapse;margin:1mm 0 4mm;font:9pt/1.4 Arial,"Liberation Sans","Helvetica Neue",sans-serif;color:#1d1b26;break-inside:auto}
+table{width:100%;border-collapse:collapse;margin:1mm 0 4mm;font:9pt/1.4 Inter,sans-serif;color:#1d1b26;break-inside:auto}
 thead{display:table-header-group}tr{break-inside:avoid;page-break-inside:avoid}
 th{background:#ebe8f6;color:#2f2760;text-align:left;font-weight:700;padding:2mm 2.5mm;border-bottom:.8pt solid #b9b3e0;font-size:8.6pt}
 td{padding:1.8mm 2.5mm;border-bottom:.5pt solid #ddd9ee;vertical-align:top;overflow-wrap:anywhere}
@@ -94,10 +97,10 @@ table.grid td:first-child{font-weight:700;width:26%}
 table.kv td:first-child{width:34%;font-weight:700;color:#2f2760;background:#faf9fd}
 code{font:700 8.4pt ui-monospace,Menlo,Consolas,"DejaVu Sans Mono",monospace;overflow-wrap:anywhere}
 .blank{display:inline-block;min-width:52mm;max-width:100%;border-bottom:.9pt dotted #444;background:#fffbe4;padding:0 1.5mm;line-height:1.35;vertical-align:baseline}
-.blank .hint{font:italic 7.4pt Arial,"Liberation Sans",sans-serif;color:#8d7a2a}
+.blank .hint{font:7.4pt Inter,sans-serif;color:#8d7a2a}
 .blank.confirm{background:#fff0d1;border:.6pt dashed #c58a00;min-width:0;display:inline}
 .blank.confirm .hint{color:#8a5a00}
-.note{font:italic 8.8pt/1.45 Georgia,serif;color:#5b5873;border-top:.6pt solid #cfc9e6;margin-top:7mm;padding-top:2.5mm;text-align:left}
+.note{font:8.8pt/1.45 Inter,sans-serif;color:#5b5873;border-top:.6pt solid #cfc9e6;margin-top:7mm;padding-top:2.5mm;text-align:left}
 </style></head><body>
 <div class="cover"><p class="brand"><i></i>Play Hub</p><h1 class="doc">${esc(d.h1)}</h1><p class="sub">${esc(t.sub)}</p>
 <div class="metabox"><div><b>${t.apply}:</b> ${esc(S.domain)}</div><div><b>${t.eff}:</b> ${esc(S.legalDate)}</div><div><b>${t.ver}:</b> 1.0</div><div><b>Email:</b> ${esc(S.email)}</div></div>
@@ -105,8 +108,8 @@ code{font:700 8.4pt ui-monospace,Menlo,Consolas,"DejaVu Sans Mono",monospace;ove
 <div class="content">${body}${note ? note : '<p class="note">' + t.disc + "</p>"}</div></body></html>`;
 }
 
-const hdr = (l, title) => `<div style="width:100%;padding:0 21mm;font:8pt Georgia,'Times New Roman',serif;color:#7a7696;display:flex;justify-content:space-between"><span>Play Hub</span><span>${esc(title)}</span></div>`;
-const ftr = (l, S) => `<div style="width:100%;padding:0 21mm;font:8pt Georgia,'Times New Roman',serif;color:#7a7696;display:flex;justify-content:space-between"><span>${esc(S.domain)} · ${esc(S.email)}</span><span>${T[l].page} <span class="pageNumber"></span> / <span class="totalPages"></span></span></div>`;
+const hdr = (l, title) => `<style>${FONT_FACE}</style><div style="width:100%;padding:0 21mm;font:8pt Inter,sans-serif;color:#7a7696;display:flex;justify-content:space-between"><span>Play Hub</span><span>${esc(title)}</span></div>`;
+const ftr = (l, S) => `<style>${FONT_FACE}</style><div style="width:100%;padding:0 21mm;font:8pt Inter,sans-serif;color:#7a7696;display:flex;justify-content:space-between"><span>${esc(S.domain)} · ${esc(S.email)}</span><span>${T[l].page} <span class="pageNumber"></span> / <span class="totalPages"></span></span></div>`;
 
 async function pageOf(buf, heads) {
   const doc = await pdfjs.getDocument({ data: new Uint8Array(buf), useSystemFonts: true, verbosity: 0 }).promise, bigs = [];

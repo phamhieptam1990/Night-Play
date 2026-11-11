@@ -39,12 +39,14 @@ document.documentElement.dataset.app = APPKEY;
 document.documentElement.dataset.np = "";   /* bật giao diện Night Pass (shared/nightpass-ui.css) */
 document.documentElement.dataset.theme = t || APP.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 </script>
+<link rel="preload" href="shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="shared/fonts.css">
 <link rel="stylesheet" href="shared/theme.css">
 <link rel="stylesheet" href="shared/bars.css">
 <style>
 /* Bảng màu theo từng app: cozyplay (tím đêm) / popplay (cam) */
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.45}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.45}
 body{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
 button,input{font:inherit;color:inherit}
 button{border:0;cursor:pointer}

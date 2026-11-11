@@ -38,7 +38,7 @@ html[data-theme=dark] .mfeat,html[data-theme=dark] .mcard{background:rgba(27,30,
 .mcard{display:grid;grid-template-columns:96px minmax(0,1fr);gap:14px;align-items:start;padding:14px;border-radius:22px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow);scroll-margin-top:72px}
 .mcard .mshot{width:96px;border-width:4px;border-radius:18px;box-shadow:0 10px 24px rgba(0,0,0,.3)}
 .mcard .mtxt{gap:7px}
-.mcard h3{font-family:Georgia,"Times New Roman",serif;font-size:19px;line-height:1.2}
+.mcard h3{font-family:var(--font);font-size:19px;line-height:1.2}
 .mcard h3 a{display:inline-flex;align-items:center;min-height:44px;text-decoration:none}
 .mcard h3 a:hover{text-decoration:underline}
 .mcard .tg{font-size:15px;font-weight:600;color:var(--ink2)}

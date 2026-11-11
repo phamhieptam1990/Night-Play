@@ -5,7 +5,7 @@
   "use strict";
   var reduce = false; try { reduce = matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
   var st = document.createElement("style");
-  st.textContent = ".npj-t{position:absolute;left:50%;top:38%;z-index:8;pointer-events:none;white-space:nowrap;font:900 8cqw/1 'Be Vietnam Pro',system-ui,sans-serif;-webkit-text-stroke:.9cqw rgba(60,20,0,.85);paint-order:stroke fill;transform:translate(-50%,-50%) scale(.5);animation:npjt 1.15s ease-out forwards}" +
+  st.textContent = ".npj-t{position:absolute;left:50%;top:38%;z-index:8;pointer-events:none;white-space:nowrap;font:900 8cqw/1 var(--font);-webkit-text-stroke:.9cqw rgba(60,20,0,.85);paint-order:stroke fill;transform:translate(-50%,-50%) scale(.5);animation:npjt 1.15s ease-out forwards}" +
     "@keyframes npjt{14%{transform:translate(-50%,-50%) scale(1.15)}22%{transform:translate(-50%,-50%) scale(1)}78%{opacity:1}100%{transform:translate(-50%,-135%) scale(1);opacity:0}}" +
     ".npj-c{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:7}.npj-c i{position:absolute;top:-8cqw;font-style:normal;animation:npjc 2.2s ease-in forwards}@keyframes npjc{to{transform:translateY(125cqh) rotate(540deg);opacity:.2}}" +
     ".npj-f{position:absolute;inset:0;pointer-events:none;z-index:6;animation:npjf .45s ease-out forwards}@keyframes npjf{from{opacity:.55}to{opacity:0}}" +

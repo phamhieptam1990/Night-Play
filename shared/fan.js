@@ -52,7 +52,7 @@
     "font-size:15px!important;font-weight:800;line-height:1;box-shadow:none!important;transform:none!important;opacity:1!important;color:var(--npink,inherit)!important;background:color-mix(in srgb,var(--npink,#888) 9%,var(--npbg,transparent))!important;border:1.5px solid var(--npline,rgba(128,128,128,.4))!important}" +
     "#npFan .it[hidden]{display:none!important}" +   /* nút gom đang ẩn (vd ↻ khi chưa chơi) không hiện trong bảng */
     "#npFan .it svg{width:22px!important;height:22px!important;flex:none}" +
-    "#npFan .it::after{content:attr(data-l);font:700 10.5px/1.05 system-ui,sans-serif;max-width:60px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.85}" +
+    "#npFan .it::after{content:attr(data-l);font:700 10.5px/1.05 var(--font);max-width:60px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.85}" +
     "#npFan .it .bl{display:none!important}#npFan .it>span:first-child{font-size:20px;line-height:1}" +
     /* chế độ local: .top ghim đầu màn hình, một hàng; nút menu + bảng bám vào .top */
     ".top.npfan{position:fixed;top:0;left:0;right:0;width:auto!important;max-width:none!important;margin:0;box-sizing:border-box;flex-wrap:nowrap;align-items:center;gap:8px;z-index:40;padding:8px 76px 8px 12px;min-height:64px}" +
@@ -77,7 +77,7 @@
     "#play.npfan .scr{top:max(14cqw,calc(68px + env(safe-area-inset-top,0px)))}" +   /* nội dung (tên game, HUD) bắt đầu >= 8px dưới hàng nút (60px) */
     ".top.npfan{padding:calc(16px + env(safe-area-inset-top,0px)) calc(68px + env(safe-area-inset-right,0px)) 0 calc(16px + env(safe-area-inset-left,0px));min-height:calc(60px + env(safe-area-inset-top,0px));gap:8px}" +
     ".top.npfan #npFab{right:calc(16px + env(safe-area-inset-right,0px));top:calc(16px + env(safe-area-inset-top,0px));margin-top:0}" +
-    ".top.npfan #npFan{position:absolute;inset:auto;width:0;height:0}" +   /* ra khỏi luồng flex (không chiếm thêm khoảng cách 8px giữa 🔊 và ⋯) */
+    ".top.npfan #npFan{display:contents}" +   /* ra khỏi luồng flex (không chiếm thêm khoảng cách 8px giữa 🔊 và ⋯) */
     ".top.npfan #npFan .pn{right:calc(16px + env(safe-area-inset-right,0px));top:calc(100% + 4px)}" +
     "body.np-local{padding-top:calc(68px + env(safe-area-inset-top,0px))}" +
     "}" +

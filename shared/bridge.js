@@ -62,7 +62,7 @@
     if (!ctxs.some(function (c) { return live(c) && c.state !== "running"; })) return;
     hinted = true;
     var d = document.createElement("div"); d.setAttribute("role", "status");
-    d.style.cssText = "position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:2147483000;max-width:92vw;box-sizing:border-box;padding:8px 14px;border-radius:999px;background:rgba(20,18,30,.88);color:#fff;font:700 13px/1.25 system-ui,sans-serif;text-align:center;pointer-events:none";
+    d.style.cssText = "position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:2147483000;max-width:92vw;box-sizing:border-box;padding:8px 14px;border-radius:999px;background:rgba(20,18,30,.88);color:#fff;font:700 13px/1.25 var(--font);text-align:center;pointer-events:none";
     d.textContent = vi() ? "🔇 Mở bằng Chrome/Safari để nghe tiếng" : "🔇 Open in Chrome/Safari to hear sound";
     (document.body || document.documentElement).appendChild(d); setTimeout(function () { d.remove(); }, 7000);
   }

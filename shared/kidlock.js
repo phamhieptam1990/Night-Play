@@ -38,12 +38,12 @@
     "#klock svg{width:22px;height:22px}#klock:focus-visible{outline:3px solid #fff;outline-offset:2px}" +
     "@media (orientation:landscape){#klock{top:calc(env(safe-area-inset-top,0px) + 157px);left:4px}}" +
     "html.np-locked #stage #home,html.np-locked #stage #klock,html.np-locked #stage .nps-fab,html.np-locked #stage .nps-cam{display:none!important}" +
-    "#klind{position:absolute;z-index:3;display:none;align-items:center;gap:6px;height:30px;padding:0 12px 0 9px;border-radius:99px;pointer-events:none;color:#fff;background:rgba(32,28,44,.82);border:1.5px solid rgba(255,255,255,.5);font:800 13px/1 system-ui,sans-serif;top:calc(env(safe-area-inset-top,0px) + 9px);left:max(12px,env(safe-area-inset-left))}" +
+    "#klind{position:absolute;z-index:3;display:none;align-items:center;gap:6px;height:30px;padding:0 12px 0 9px;border-radius:99px;pointer-events:none;color:#fff;background:rgba(32,28,44,.82);border:1.5px solid rgba(255,255,255,.5);font:800 13px/1 var(--font);top:calc(env(safe-area-inset-top,0px) + 9px);left:max(12px,env(safe-area-inset-left))}" +
     "#klind svg{width:15px;height:15px}html.np-locked #klind{display:flex}" +
     "@media (orientation:landscape){#klind{top:calc(env(safe-area-inset-top,0px) + 12px);left:6px;width:40px;height:40px;padding:0;justify-content:center}#klind span{display:none}#klind svg{width:20px;height:20px}}" +
     "#klO{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:14px;background:rgba(14,10,30,.94);font-family:inherit}" +
     "#klO .klc{box-sizing:border-box;width:min(380px,100%);max-height:100%;border-radius:22px;padding:18px 16px 14px;text-align:center;background:var(--panel,#fff);color:var(--ink,#1c1b22);border:2px solid var(--accent,#FF5A1F);box-shadow:0 18px 50px rgba(0,0,0,.5)}" +
-    "#klO h2{margin:6px 0 6px;font-family:var(--display,inherit);font-weight:800;font-size:clamp(20px,5.6vw,24px);line-height:1.2}#klO p{margin:0 0 12px;font-family:inherit;font-weight:600;font-size:14px;line-height:1.45;opacity:.88}" +
+    "#klO h2{margin:6px 0 6px;font-family:var(--font);font-weight:800;font-size:clamp(20px,5.6vw,24px);line-height:1.2}#klO p{margin:0 0 12px;font-family:inherit;font-weight:600;font-size:14px;line-height:1.45;opacity:.88}" +
     "#klO .kli{width:44px;height:44px;margin:0 auto;color:var(--accent,#FF5A1F)}#klO .kli svg{width:100%;height:100%}" +
     "#klO .klt{font-size:13px;text-align:left;padding:9px 11px;border-radius:12px;background:color-mix(in srgb,var(--accent,#FF5A1F) 12%,transparent);margin-bottom:12px}" +
     "#klO button{display:block;width:100%;box-sizing:border-box;border-radius:16px;font-family:inherit;font-weight:800;font-size:17px;line-height:1.2;cursor:pointer;padding:0 14px;min-height:52px}" +

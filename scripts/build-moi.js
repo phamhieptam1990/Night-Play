@@ -101,6 +101,8 @@ function head(l, o) {
 try{var t=localStorage.getItem("theme")}catch(e){}
 document.documentElement.dataset.theme=t==="dark"||t==="light"?t:(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
 </script>
+<link rel="preload" href="/shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/shared/fonts.css">
 <link rel="stylesheet" href="/shared/theme.css">
 <link rel="stylesheet" href="/lp/landing.css">
 <link rel="stylesheet" href="/lp/moi.css">

@@ -3,10 +3,10 @@
 html[data-app=hub]:not([data-theme=dark]){--accent:#6A48F0}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:68px;-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:hidden}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.55 var(--font);overflow-x:hidden}
 img,svg{display:block;max-width:100%}
 a{color:inherit}
-h1,h2,h3{font-family:Georgia,"Times New Roman",serif;font-weight:800;line-height:1.15;margin:0}
+h1,h2,h3{font-family:var(--font);font-weight:800;line-height:1.15;margin:0}
 p{margin:0}
 .wrap{width:100%;max-width:1100px;margin:0 auto;padding:0 16px}
 .narrow{max-width:760px}
@@ -27,7 +27,7 @@ p{margin:0}
 .links a{min-width:44px;justify-content:center}
 .tools{display:flex;align-items:center;gap:8px;margin-left:auto}
 .links+.tools{margin-left:0}
-.lang,.ico{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:700 14px/1 system-ui,sans-serif;text-decoration:none;cursor:pointer;padding:0}
+.lang,.ico{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:700 14px/1 var(--font);text-decoration:none;cursor:pointer;padding:0}
 .ico svg{width:22px;height:22px}
 .foot .lang{min-width:0;min-height:44px;border:0;background:none;border-radius:8px;padding:0 4px;font-size:inherit;font-weight:600;text-decoration:underline}
 
@@ -86,7 +86,7 @@ p{margin:0}
 .feat p{color:var(--ink2)}
 .steps{list-style:none;counter-reset:s;margin:0;padding:0;display:grid;gap:14px;max-width:760px;margin-inline:auto}
 .steps li{counter-increment:s;position:relative;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:18px 18px 18px 72px;box-shadow:var(--shadow);min-height:72px}
-.steps li::before{content:counter(s);position:absolute;left:18px;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font:800 20px/1 Georgia,serif}
+.steps li::before{content:counter(s);position:absolute;left:18px;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font:800 20px/1 var(--font)}
 .tblw{overflow-x:auto;border-radius:22px;box-shadow:var(--shadow)}
 .price{width:100%;border-collapse:collapse;background:var(--panel);min-width:520px}
 .price th,.price td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--line)}
@@ -181,8 +181,8 @@ p{margin:0}
 /* ===== Thẻ giá Night Pass ===== */
 .plans{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr;gap:14px}
 .plan{position:relative;display:grid;gap:4px;align-content:start;padding:22px 20px 18px;border-radius:24px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow);min-width:0}
-.plan h3{font-family:system-ui,sans-serif;font-size:16px;font-weight:700;color:var(--ink2)}
-.plan .pp{font:800 clamp(26px,2.6vw,34px)/1.1 Georgia,serif;color:var(--ink);white-space:nowrap}
+.plan h3{font-family:var(--font);font-size:16px;font-weight:700;color:var(--ink2)}
+.plan .pp{font:800 clamp(26px,2.6vw,34px)/1.1 var(--font);color:var(--ink);white-space:nowrap}
 .plan .pd{font-weight:700;color:var(--ink2)}
 .plan .pn{font-size:15px;color:var(--muted)}
 .plan.best{border:2px solid var(--accent);background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 18%,var(--panel)),var(--panel));box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 40%,transparent),0 10px 36px color-mix(in srgb,var(--accent) 38%,transparent);padding-top:30px}
@@ -250,7 +250,7 @@ html[data-theme=dark] .top{background:rgba(18,20,31,.85)}
 .scr img{display:block;width:100%;height:100%;object-position:top;object-fit:cover;max-width:none}
 .scr::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.16),transparent 32%,transparent 70%,rgba(255,255,255,.05));pointer-events:none}
 .isl{position:absolute;z-index:3;top:1.6%;left:50%;transform:translateX(-50%);width:26%;height:3%;border-radius:99px;background:#000}
-.sb{position:absolute;z-index:2;top:1.7%;left:8%;right:8%;display:flex;justify-content:space-between;align-items:center;color:#fff;font:700 10px/1 system-ui,sans-serif;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.sb{position:absolute;z-index:2;top:1.7%;left:8%;right:8%;display:flex;justify-content:space-between;align-items:center;color:#fff;font:700 10px/1 var(--font);text-shadow:0 1px 2px rgba(0,0,0,.6)}
 .sb .sg{width:14px;height:8px;margin-left:auto;margin-right:6px;background:linear-gradient(90deg,#fff 20%,transparent 20% 30%,#fff 30% 50%,transparent 50% 60%,#fff 60% 80%,transparent 80% 90%,#fff 90%);clip-path:polygon(0 100%,0 75%,25% 75%,25% 50%,50% 50%,50% 25%,75% 25%,75% 0,100% 0,100% 100%)}
 .sb .bt{width:20px;height:9px;border-radius:3px;border:1px solid #fff;background:linear-gradient(90deg,#fff 80%,transparent 80%)}
 .phones{display:none}
@@ -278,7 +278,7 @@ html[data-theme=dark] .top{background:rgba(18,20,31,.85)}
 .pcards{display:grid;gap:12px}
 .pcard{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:22px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow)}
 .pi{flex:none;width:52px;height:52px;border-radius:16px;display:grid;place-items:center;font-size:28px;background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 35%,var(--panel)),var(--panel));border:1px solid var(--line)}
-.pcard h3{font-family:system-ui,sans-serif;font-size:18px;margin-bottom:3px}
+.pcard h3{font-family:var(--font);font-size:18px;margin-bottom:3px}
 .pcard p{color:var(--ink2);font-size:16px}
 .pcta{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:18px!important}
 html[data-theme=dark] .pcard{background:rgba(27,30,47,.72)}
@@ -288,7 +288,7 @@ html[data-theme=dark] .pcard{background:rgba(27,30,47,.72)}
 .links .xtra{display:none}
 @media (max-width:339px){
  .top .tools>.lang,.top #themeBtn{display:none}
- .links.open .xtra{display:flex;align-items:center;min-height:44px;padding:0 12px;border:0;background:none;color:var(--ink2);font:600 17px system-ui,sans-serif;border-radius:12px;text-align:left;cursor:pointer;text-decoration:none}
+ .links.open .xtra{display:flex;align-items:center;min-height:44px;padding:0 12px;border:0;background:none;color:var(--ink2);font:600 17px var(--font);border-radius:12px;text-align:left;cursor:pointer;text-decoration:none}
  .top .mbtn{display:inline-flex}
 }
 @media (max-width:360px){.top .mbtn{min-width:44px}}

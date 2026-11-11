@@ -31,7 +31,7 @@ html[data-app=cozyplay] body{background:transparent}
 html[data-app=cozyplay] .nav{background:color-mix(in srgb,var(--bg) 62%,transparent);border-bottom-color:color-mix(in srgb,var(--accent) 22%,var(--line))}
 html[data-app=cozyplay] .foot{border-top-color:color-mix(in srgb,var(--accent) 18%,var(--line));background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--hero1) 70%,transparent))}
 html[data-app=cozyplay] .hero{background:radial-gradient(700px 260px at 50% 0,color-mix(in srgb,var(--accent) 16%,transparent),transparent 70%)}
-html[data-app=cozyplay] .hero h1{font-family:Georgia,"Times New Roman",serif}
+html[data-app=cozyplay] .hero h1{font-family:var(--font)}
 html[data-app=cozyplay] .trust li{background:var(--pu-glass);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-color:color-mix(in srgb,var(--accent) 24%,var(--line))}
 @media (max-width:520px){html[data-app=cozyplay] .trust li{background:none;-webkit-backdrop-filter:none;backdrop-filter:none}}
 

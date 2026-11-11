@@ -25,6 +25,8 @@
 try{var t=localStorage.getItem("theme")}catch(e){}
 document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
 </script>
+<link rel="preload" href="../shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../shared/fonts.css">
 <link rel="stylesheet" href="../shared/theme.css">
 <link rel="stylesheet" href="../shared/bars.css">
 <link rel="stylesheet" href="../shared/align.css">
@@ -34,7 +36,7 @@ document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: da
 /* ===== THEME: đổi màu chủ đạo ở --accent (sáng) và --accent trong khối dark ===== */
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);
-  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-family:var(--font);
   overscroll-behavior:none;touch-action:manipulation;
   -webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
@@ -321,7 +323,7 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 #findPanel[hidden]{display:none}
 #qWrap{position:relative}
 #qWrap svg{position:absolute;left:13px;top:50%;width:18px;height:18px;transform:translateY(-50%);opacity:.6;pointer-events:none}
-#q{width:100%;height:42px;padding:0 38px 0 40px;border-radius:999px;border:2px solid var(--line);background:var(--bg);color:var(--ink);font:600 15px/1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-user-select:text;user-select:text;-webkit-appearance:none;appearance:none}
+#q{width:100%;height:42px;padding:0 38px 0 40px;border-radius:999px;border:2px solid var(--line);background:var(--bg);color:var(--ink);font:600 15px/1 var(--font);-webkit-user-select:text;user-select:text;-webkit-appearance:none;appearance:none}
 #q::placeholder{color:var(--ink);opacity:.5}
 #q::-webkit-search-cancel-button,#q::-webkit-search-decoration{-webkit-appearance:none;display:none}
 #q:focus{outline:none;border-color:var(--accent)}
@@ -488,7 +490,7 @@ const face = (c1, c2, art) => "data:image/svg+xml," + encodeURIComponent(
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs><rect width="512" height="512" fill="url(#g)"/>${art}</svg>`);
 const eyes = '<circle cx="200" cy="270" r="26" fill="#fff"/><circle cx="312" cy="270" r="26" fill="#fff"/><circle cx="205" cy="274" r="13" fill="#222"/><circle cx="307" cy="274" r="13" fill="#222"/><path d="M215 340q41 40 82 0" stroke="#222" stroke-width="12" fill="none" stroke-linecap="round"/>';
 const art = {
-  fly:  `<circle cx="140" cy="120" r="26" fill="#fff" opacity=".85"/><circle cx="175" cy="132" r="20" fill="#fff" opacity=".85"/><circle cx="400" cy="400" r="30" fill="#fff" opacity=".8"/><circle cx="352" cy="256" r="104" fill="#fff" stroke="#FF8FB1" stroke-width="22"/><text x="352" y="296" text-anchor="middle" font-size="130" font-weight="800" font-family="Arial Black,sans-serif" fill="#3B2A1D">A</text><ellipse cx="150" cy="300" rx="82" ry="72" fill="#FFD93D"/><circle cx="190" cy="270" r="13" fill="#3B2A1D"/><circle cx="194" cy="266" r="4" fill="#fff"/><path d="M226 296l44 14-44 14z" fill="#FF8A3D"/><path d="M90 300c-10-44 38-70 54-40-18 6-34 18-54 40z" fill="#F4B800"/><path d="M110 372l-8 24M150 376l-4 26" stroke="#FF8A3D" stroke-width="10" stroke-linecap="round"/>`,
+  fly:  `<circle cx="140" cy="120" r="26" fill="#fff" opacity=".85"/><circle cx="175" cy="132" r="20" fill="#fff" opacity=".85"/><circle cx="400" cy="400" r="30" fill="#fff" opacity=".8"/><circle cx="352" cy="256" r="104" fill="#fff" stroke="#FF8FB1" stroke-width="22"/><text x="352" y="296" text-anchor="middle" font-size="130" font-weight="800" font-family="Inter,sans-serif" fill="#3B2A1D">A</text><ellipse cx="150" cy="300" rx="82" ry="72" fill="#FFD93D"/><circle cx="190" cy="270" r="13" fill="#3B2A1D"/><circle cx="194" cy="266" r="4" fill="#fff"/><path d="M226 296l44 14-44 14z" fill="#FF8A3D"/><path d="M90 300c-10-44 38-70 54-40-18 6-34 18-54 40z" fill="#F4B800"/><path d="M110 372l-8 24M150 376l-4 26" stroke="#FF8A3D" stroke-width="10" stroke-linecap="round"/>`,
   cat:  `<path d="M120 200l20-110 90 60zM392 200l-20-110-90 60z" fill="#FFB347"/><circle cx="256" cy="290" r="150" fill="#FFB347"/>${eyes}`,
   bear: `<circle cx="140" cy="150" r="48" fill="#A9743F"/><circle cx="372" cy="150" r="48" fill="#A9743F"/><circle cx="256" cy="290" r="150" fill="#C28A50"/>${eyes}`,
   bunny:`<ellipse cx="190" cy="120" rx="34" ry="100" fill="#F8C8DC"/><ellipse cx="322" cy="120" rx="34" ry="100" fill="#F8C8DC"/><circle cx="256" cy="300" r="140" fill="#FFE4EE"/>${eyes}`,
@@ -505,7 +507,7 @@ const art = {
   g6:`<text x="256" y="350" font-size="250" text-anchor="middle">💃</text>`,
   river:`<text x="256" y="350" font-size="250" text-anchor="middle">⛵</text>`,
   rings:`<text x="256" y="350" font-size="250" text-anchor="middle">🗼</text>`,
-  duel:`<rect x="70" y="60" width="372" height="170" rx="40" fill="#C6E4FF"/><rect x="70" y="282" width="372" height="170" rx="40" fill="#FFE3C2"/><rect x="40" y="232" width="432" height="48" rx="24" fill="#3A2A5A"/><text x="256" y="266" font-size="40" font-weight="800" text-anchor="middle" fill="#fff" font-family="system-ui">VS</text><text x="256" y="190" font-size="110" text-anchor="middle" transform="rotate(180 256 145)">🧑</text><text x="256" y="410" font-size="110" text-anchor="middle">👶</text>`,
+  duel:`<rect x="70" y="60" width="372" height="170" rx="40" fill="#C6E4FF"/><rect x="70" y="282" width="372" height="170" rx="40" fill="#FFE3C2"/><rect x="40" y="232" width="432" height="48" rx="24" fill="#3A2A5A"/><text x="256" y="266" font-size="40" font-weight="800" text-anchor="middle" fill="#fff" font-family="Inter,sans-serif">VS</text><text x="256" y="190" font-size="110" text-anchor="middle" transform="rotate(180 256 145)">🧑</text><text x="256" y="410" font-size="110" text-anchor="middle">👶</text>`,
   village:`<path d="M60 330l196-130 196 130v110H60z" fill="#FF8A5C"/><path d="M40 340L256 190l216 150" fill="none" stroke="#C44A2A" stroke-width="30" stroke-linecap="round"/><rect x="214" y="290" width="84" height="150" rx="14" fill="#FFE08A"/><rect x="100" y="340" width="70" height="60" rx="10" fill="#fff"/><rect x="342" y="340" width="70" height="60" rx="10" fill="#fff"/><circle cx="400" cy="110" r="46" fill="#FFD93D"/>`,
   sun:  `<g stroke="#FFF3B0" stroke-width="22" stroke-linecap="round"><path d="M256 40v60M256 412v60M40 256h60M412 256h60M104 104l42 42M366 366l42 42M408 104l-42 42M146 366l-42 42"/></g><circle cx="256" cy="256" r="125" fill="#FFD93D"/>${eyes}`
 };

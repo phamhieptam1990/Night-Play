@@ -1,5 +1,5 @@
 /* Giao diện NIGHT PASS (subscribe.html + mọi hộp thoại của nó): tím đêm -> #12141F, ánh sáng tím/vàng nhẹ, thẻ kính mờ viền mảnh,
-   vương miện làm điểm nhấn, CTA gradient tím-cam, tiêu đề serif như landing (landing/lp/landing.css).
+   vương miện làm điểm nhấn, CTA gradient tím-cam, tiêu đề dùng Inter như mọi trang (landing/lp/landing.css).
    Chỉ có tác dụng khi <html data-np> (do subscribe.html đặt); các trang khác dùng theme.css không bị ảnh hưởng.
    Nạp SAU <style> của trang để ghi đè màu/viền/bóng; KHÔNG đổi padding/kích thước của hệ data-dens (không cuộn) trừ min-height cho vùng chạm 44px.
    Sáng/tối: token --bg/--panel/--ink... bên dưới; mọi chữ >= 4.5:1 (bài đo scripts/cozygame/check-subscribe.js). */
@@ -17,7 +17,7 @@ html[data-np][data-app][data-theme=dark]{
   --shadow:0 6px 22px rgba(0,0,0,.45); --ok:#3ddc84; --warn:#FF8F94;
   --np-grad:linear-gradient(90deg,#9B83FF,#FF9A6B); --np-on:#12141F; --np-glow:rgba(124,92,255,.45); --np-gold:#FFD66B;
 }
-html[data-np]{--np-serif:Georgia,"Times New Roman",serif;--np-glass:rgba(27,30,47,.72)}
+html[data-np]{--np-serif:var(--font);--np-glass:rgba(27,30,47,.72)}
 
 /* ---------- nền: tím sâu -> #12141F, vầng sáng tím + vàng, sao tĩnh (tối); oải hương nhạt (sáng) ---------- */
 html[data-np] body{background:
@@ -49,13 +49,13 @@ html[data-np] .fcol a:hover,html[data-np] .fcol button:hover{color:var(--accent)
 html[data-np] .foot p{opacity:1;color:var(--muted)}
 html[data-np] .fcol a{font-weight:600}
 
-/* ---------- tiêu đề: serif + vương miện ---------- */
+/* ---------- tiêu đề + vương miện ---------- */
 html[data-np] h1,html[data-np] h2,html[data-np] h3{font-family:var(--np-serif)}
 html[data-np] .hero h1::before{content:"👑";display:inline-block;margin-right:.3em;font-size:.78em;filter:drop-shadow(0 0 10px color-mix(in srgb,var(--np-gold) 70%,transparent))}
 html[data-np] .hero p{opacity:1;color:var(--ink2)}
 
 /* ---------- trạng thái gói (popup/biểu ngữ) ---------- */
-html[data-np] .status{border:1px solid var(--line);background:color-mix(in srgb,var(--panel) 85%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font-family:system-ui,sans-serif;box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 22%,transparent),0 8px 28px var(--np-glow)}
+html[data-np] .status{border:1px solid var(--line);background:color-mix(in srgb,var(--panel) 85%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font-family:var(--font);box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 22%,transparent),0 8px 28px var(--np-glow)}
 html[data-np] .status.on{border:1px solid var(--ok)}
 html[data-np] .status.on::before{content:"👑 "}
 html[data-np] .status .ex{display:block;margin-top:2px;font-size:13px;font-weight:600;color:var(--ink2)}
@@ -76,9 +76,9 @@ html[data-np] .plan[aria-checked=true]{border-color:var(--accent);background:lin
 html[data-np][data-theme=dark] .plan[aria-checked=true]{background:linear-gradient(160deg,rgba(124,92,255,.28),rgba(27,30,47,.82))}
 /* "Phổ biến nhất" luôn phát sáng nhẹ, kể cả khi chưa chọn */
 html[data-np] .plan.best:not([aria-checked=true]){border-color:color-mix(in srgb,var(--accent) 65%,var(--line));box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 25%,transparent),0 6px 26px color-mix(in srgb,var(--np-glow) 70%,transparent)}
-html[data-np] .plan h3{font-family:system-ui,sans-serif;font-weight:700;color:var(--ink2)}
+html[data-np] .plan h3{font-family:var(--font);font-weight:700;color:var(--ink2)}
 html[data-np] .price{font-family:var(--np-serif);color:var(--ink)}
-html[data-np] .price small{font-family:system-ui,sans-serif;opacity:1;color:var(--ink2)}
+html[data-np] .price small{font-family:var(--font);opacity:1;color:var(--ink2)}
 html[data-np] .per,html[data-np] .valid{color:var(--muted)}
 html[data-np] .valid{font-weight:600}
 html[data-np] .desc{opacity:1;color:var(--ink2)}

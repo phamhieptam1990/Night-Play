@@ -43,12 +43,12 @@
       st = document.createElement("style"); st.id = "npWelcomeCss";
       st.textContent =
         "#npWelcome{position:fixed;inset:0;z-index:80;display:flex;align-items:flex-end;justify-content:center;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));background:rgba(8,8,20,.38);overflow:hidden}" +
-        "#npWelcome .nw-card{box-sizing:border-box;width:min(100%,440px);max-height:100%;overflow:hidden;background:var(--panel,#fff);color:var(--ink,#1b1b2b);border:1px solid var(--line,rgba(0,0,0,.12));border-radius:22px;box-shadow:0 18px 50px rgba(0,0,0,.35);padding:18px 18px 16px;display:flex;flex-direction:column;gap:10px;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}" +
+        "#npWelcome .nw-card{box-sizing:border-box;width:min(100%,440px);max-height:100%;overflow:hidden;background:var(--panel,#fff);color:var(--ink,#1b1b2b);border:1px solid var(--line,rgba(0,0,0,.12));border-radius:22px;box-shadow:0 18px 50px rgba(0,0,0,.35);padding:18px 18px 16px;display:flex;flex-direction:column;gap:10px;font-family:var(--font)}" +
         "#npWelcome h2{margin:0;font-size:20px;line-height:1.25;font-weight:800}" +
         "#npWelcome ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;counter-reset:s}" +
         "#npWelcome li{counter-increment:s;display:flex;align-items:center;gap:10px;font-size:15.5px;line-height:1.35}" +
         "#npWelcome li::before{content:counter(s);flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--accent,#7C5CFF);color:var(--on-accent,#fff);font-weight:800;font-size:14px}" +
-        "#npWelcome button{min-height:48px;margin-top:2px;border:0;border-radius:14px;background:var(--accent,#7C5CFF);color:var(--on-accent,#fff);font:800 17px/1 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;cursor:pointer}" +
+        "#npWelcome button{min-height:48px;margin-top:2px;border:0;border-radius:14px;background:var(--accent,#7C5CFF);color:var(--on-accent,#fff);font:800 17px/1 var(--font);cursor:pointer}" +
         "#npWelcome button:focus-visible{outline:3px solid var(--ink,#000);outline-offset:3px}" +
         "#npWelcomeRing{position:fixed;z-index:81;display:none;pointer-events:none;border-radius:30px;border:3px solid var(--accent,#7C5CFF);box-shadow:0 0 0 4px rgba(255,255,255,.55);animation:nwPulse 1.4s ease-in-out infinite}" +
         "#npWelcomeRing::after{content:'👆';position:absolute;left:50%;top:100%;margin:2px 0 0 -14px;font-size:28px;line-height:1;animation:nwBob 1.4s ease-in-out infinite}" +

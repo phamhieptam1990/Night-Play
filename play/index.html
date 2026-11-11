@@ -21,15 +21,17 @@ try{var t=localStorage.getItem("theme")}catch(e){}
 document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
 </script>
 <style>html.pre body{visibility:hidden}</style>
-<script>document.documentElement.classList.add("pre");setTimeout(function(){document.documentElement.classList.remove("pre")},3000)</script>
+<script>/* chỉ ẩn nội dung khi ngôn ngữ KHÔNG phải tiếng Việt (HTML tĩnh là tiếng Việt: người dùng VI thấy chữ ngay, không có màn trống); tối đa 1,2 giây */(function(){var l;try{l=localStorage.getItem("lang")}catch(e){}if(l!=="vi"&&l!=="en"){l="vi";var a=navigator.languages||[navigator.language||""];for(var i=0;i<a.length;i++){var c=String(a[i]).split("-")[0].toLowerCase();if(c==="vi"||c==="en"){l=c;break}}}if(l!=="vi"){var h=document.documentElement;h.classList.add("pre");setTimeout(function(){h.classList.remove("pre")},1200)}})()</script>
 <noscript><style>html.pre body{visibility:visible}</style></noscript>
+<link rel="preload" href="../shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../shared/fonts.css">
 <link rel="stylesheet" href="../shared/theme.css">
 <link rel="stylesheet" href="../shared/bars.css">
 <link rel="stylesheet" href="../shared/align.css">
 <link rel="stylesheet" href="../shared/orbit.css">
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.4}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.4}
 body{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
 button{font:inherit;color:inherit;border:0;cursor:pointer}
 a{color:inherit}

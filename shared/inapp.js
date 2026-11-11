@@ -34,7 +34,7 @@
   var bar = null, panel = null;
 
   var CSS =
-    "#npInApp{position:relative;flex:none;z-index:400;box-sizing:border-box;width:100%;font-family:var(--body,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif);color:var(--ink,#1c1b22);background:var(--panel,#fff);border-bottom:2px solid var(--accent,#FF5A1F)}" +
+    "#npInApp{position:relative;flex:none;z-index:400;box-sizing:border-box;width:100%;font-family:var(--font);color:var(--ink,#1c1b22);background:var(--panel,#fff);border-bottom:2px solid var(--accent,#FF5A1F)}" +
     "#npInApp.fx{position:fixed;top:0;left:0;right:0}" +
     "html.playing #npInApp{display:none}" +
     "#npInApp .nib{display:flex;align-items:center;gap:6px;min-height:46px;padding:2px max(8px,env(safe-area-inset-right)) 2px max(10px,env(safe-area-inset-left))}" +

@@ -9,7 +9,7 @@
   var date = m[3] + "/" + m[2] + "/" + m[1];
 
   var st = document.createElement("style");
-  st.textContent = ".site-upd{flex:0 0 100%;order:99;width:100%;box-sizing:border-box;text-align:right;margin:0;padding:0 2px;font:500 10.5px/12px system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:var(--muted,#777);opacity:.85;white-space:nowrap;user-select:none;-webkit-user-select:none}" +
+  st.textContent = ".site-upd{flex:0 0 100%;order:99;width:100%;box-sizing:border-box;text-align:right;margin:0;padding:0 2px;font:500 10.5px/12px var(--font);color:var(--muted,#777);opacity:.85;white-space:nowrap;user-select:none;-webkit-user-select:none}" +
     ".site-upd.fixed{position:fixed;right:10px;bottom:calc(6px + env(safe-area-inset-bottom));width:auto;flex:none;z-index:30;pointer-events:none}.site-upd.inbook{position:absolute;right:20px;bottom:9px;width:auto;flex:none;z-index:5;font-size:11px;letter-spacing:.02em;color:var(--paper-ink,#444);opacity:.62;pointer-events:none}@media print{.site-upd{display:none}}";
   document.head.appendChild(st);
 
