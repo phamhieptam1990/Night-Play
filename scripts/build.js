@@ -34,10 +34,35 @@ if (fs.existsSync(upd)) {
 }
 /* Huy hiệu "Mới" của hai trang cổng: sinh lại shared/newbadge.js từ landing/moi/launches.json (cổng chạy offline, không fetch) */
 if (TARGET !== "admin" && fs.existsSync(path.join(dist, "shared"))) require("./gen-newbadge.js").write(path.join(dist, "shared", "newbadge.js"));
+/* CSS nội tuyến cho trang đầu (landing VI/EN và /play/): thay các <link rel=stylesheet> cục bộ bằng <style> ngay lúc build (nguồn không đổi) -> bỏ 4-5 request + 1 vòng RTT chặn vẽ,
+   không có FOUC (CSS có sẵn trong HTML). Chỉ dist; url() tương đối được đổi thành tuyệt đối. Tắt bằng NO_INLINE_CSS=1. */
+if (TARGET !== "admin" && !process.env.NO_INLINE_CSS) for (const f of ["index.html", "en/index.html", "play/index.html"]) {
+  const hp = path.join(dist, f); if (!fs.existsSync(hp)) continue;
+  const dirUrl = "/" + path.posix.dirname(f).replace(/^\.$/, "");
+  let html = fs.readFileSync(hp, "utf8");
+  html = html.replace(/<link rel="stylesheet" href="([^"]+)">/g, (m, href) => {
+    if (/^(https?:)?\/\//.test(href)) return m;
+    const abs = href.startsWith("/") ? href : path.posix.normalize(path.posix.join(dirUrl, href));
+    const cp = path.join(dist, abs); if (!fs.existsSync(cp)) return m;
+    const cdir = path.posix.dirname(abs);
+    const css = fs.readFileSync(cp, "utf8").replace(/url\((["']?)(?!data:|https?:|\/|#)([^"')]+)\1\)/g, (u, q, r) => "url(" + q + path.posix.normalize(path.posix.join(cdir, r)) + q + ")");
+    return "<style>" + css.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\n\s*/g, "\n") + "</style>";
+  });
+  fs.writeFileSync(hp, html);
+}
 /* Tiêu đề phản hồi cho file tĩnh (Cloudflare Workers assets đọc dist/_headers; tương đương netlify.toml) */
 fs.writeFileSync(path.join(dist, "_headers"), [
   "/admin/*", "  X-Robots-Tag: noindex, nofollow", "  Cache-Control: no-store", "",
-  "/sw.js", "  Cache-Control: no-cache", ""
+  "/sw.js", "  Cache-Control: no-cache", "",
+  "/shared/fonts/*", "  Cache-Control: public, max-age=31536000, immutable", "",
+  /* Cache (các mẫu KHÔNG chồng nhau: Cloudflare nối giá trị khi nhiều mẫu cùng khớp). Cập nhật phía người dùng vẫn qua sw.js (mạng-trước) + CACHE version.
+     Ảnh ít đổi: 7 ngày. CSS/JS không có hash: 5 phút + stale-while-revalidate (lần mở thứ hai không phải hỏi lại máy chủ cho từng tệp). HTML giữ mặc định (luôn kiểm tra lại). */
+  "/shared/orbit-icons/*", "  Cache-Control: public, max-age=604800", "",
+  "/lp/img/*", "  Cache-Control: public, max-age=604800", "",
+  "/shared/*.js", "  Cache-Control: public, max-age=300, stale-while-revalidate=86400", "",
+  "/shared/*.css", "  Cache-Control: public, max-age=300, stale-while-revalidate=86400", "",
+  "/lp/*.css", "  Cache-Control: public, max-age=300, stale-while-revalidate=86400", "",
+  "/lp/*.js", "  Cache-Control: public, max-age=300, stale-while-revalidate=86400", ""
 ].join("\n"));
 /* Địa chỉ cũ của landing (/gioi-thieu/, /gioi-thieu/en/) chuyển vĩnh viễn về / và /en/: _redirects (Cloudflare assets/Netlify) + trang tĩnh dự phòng (meta refresh + canonical) cho host không đọc _redirects */
 if (TARGET !== "admin") {
