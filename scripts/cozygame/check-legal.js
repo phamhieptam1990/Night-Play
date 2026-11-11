@@ -40,6 +40,18 @@ const VPS = quick ? [[320, 568], [667, 375], [1440, 900]] : [[320, 568], [390, 8
   } };
   walk(root);
   note(!stale.length, "chuỗi cũ", "còn 'phamhieptam@gmail.com' trong: " + stale.join(", "));
+  /* số CCCD đầy đủ (12 chữ số bắt đầu 087) KHÔNG được xuất hiện ở bất kỳ file công khai nào; chỉ dạng che "087•••••0154" */
+  const leaks = [];
+  const walk2 = d => { for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+    if (/^(node_modules|dist|\.git)$/.test(e.name) || e.name === "code.md") continue;
+    const p = path.join(d, e.name);
+    if (e.isDirectory()) walk2(p); else if (/\.(html|js|css|md|json|mjs|jsonc|txt|xml|webmanifest|pdf)$/.test(e.name)) { try { if (/(?<!\d)087\d{9}(?!\d)/.test(fs.readFileSync(p, "latin1"))) leaks.push(path.relative(root, p)); } catch (e2) {} }
+  } };
+  walk2(root);
+  note(!leaks.length, "CCCD", "có chuỗi 12 chữ số dạng CCCD đầy đủ trong: " + leaks.join(", "));
+  const SITEJS = fs.readFileSync(path.join(root, "shared", "site.js"), "utf8");
+  note(/taxId:\s*"CCCD: 087•••••\d{4}"/.test(SITEJS), "site.js", "taxId phải ở dạng che 'CCCD: 087•••••XXXX'");
+  const lic = (SITEJS.match(/license:\s*"([^"]*)"/) || [])[1] || "";
 
   const srv = spawn("python3", ["-m", "http.server", String(PORT)], { cwd: root, stdio: "ignore" }); await wait(1200);
   const br = await puppeteer.launch({ executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", headless: "new", args: ["--mute-audio"] });
@@ -155,6 +167,15 @@ const VPS = quick ? [[320, 568], [667, 375], [1440, 900]] : [[320, 568], [390, 8
         await p.close();
       }
     }
+    /* neo terms.html#hoan-tien mở đúng trang sách chứa mục Hoàn tiền (VI + EN, điện thoại + máy tính) */
+    for (const lang of ["vi", "en"]) for (const [w, h] of [[390, 844], [1440, 900]]) {
+      const p = await br.newPage(); await p.setViewport({ width: w, height: h, isMobile: w < 600, hasTouch: w < 600 });
+      await p.evaluateOnNewDocument(l => { try { localStorage.setItem("lang", l); } catch (e) {} }, lang);
+      await p.goto(B + "terms.html#hoan-tien", { waitUntil: "load" }); await wait(2200);
+      const ok = await p.evaluate(() => { const hd = document.querySelector("#pgBody h2[data-anchor=hoan-tien]"); return !!hd && hd.getBoundingClientRect().top < innerHeight; });
+      note(ok, "neo #hoan-tien " + lang + " " + w, "không mở đúng trang chứa mục Hoàn tiền");
+      await p.close();
+    }
     /* 3) chân trang các trang cổng */
     for (const [u, a] of [["play/index.html", "#priv"], ["popplay/index.html", "#fPriv"], ["cozyplay/index.html", "#fPriv"], ["subscribe.html", "#fPriv"]]) {
       const p = await br.newPage(); await p.setViewport({ width: 1280, height: 800 });
@@ -168,6 +189,7 @@ const VPS = quick ? [[320, 568], [667, 375], [1440, 900]] : [[320, 568], [390, 8
   /* báo cáo placeholder cho chủ site */
   const list = [...holes.entries()];
   console.log("\n== Placeholder còn lại cho chủ site điền/xác nhận: " + list.length + " mục khác nhau");
+  if (!/^\d{6,}/.test(lic.trim())) console.log("   ! Số xác nhận thông báo Bộ Công Thương CHƯA có: đang hiển thị trạng thái \"đang làm thủ tục\". Khi được cấp, điền số vào shared/site.js (license), chạy lại node scripts/build-legal-pdf.js.");
   list.forEach(([k, n]) => console.log("   - " + k + (n > 1 ? " (x" + n + ")" : "")));
   console.log("\n" + (fails.length ? "✗ " + fails.length + " lỗi" : "✓ trang pháp lý đạt"));
   process.exit(fails.length ? 1 : 0);

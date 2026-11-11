@@ -82,3 +82,9 @@ Kiểm tra mail không vào spam: gửi thử OTP tới Gmail + một hộp thư
 - `https://nightplay.vn/` = landing (VI), `/en/` = landing EN, `/play/` = hub hai thẻ Pop Play / Night Play (PWA `start_url`). Nguồn landing ở `landing/` (build copy lên gốc `dist/`, tài nguyên ở `/lp/`).
 - `/gioi-thieu/` và `/gioi-thieu/en/` chuyển 301 về `/` và `/en/` (`dist/_redirects` do `scripts/build.js` ghi; `run_worker_first` vẫn chỉ `/api/*`, redirect của assets chạy ở lớp file tĩnh).
 - Sau deploy: purge cache Cloudflare cho `/`, `/index.html`, `/sw.js`, `/manifest.webmanifest`; gửi lại sitemap trong Search Console (đổi trang chủ, hreflang, canonical); người đã cài PWA nên gỡ và cài lại để nhận `start_url` mới (bản cũ vẫn mở được: `/` tự chuyển sang `/play/` khi chạy ở chế độ ứng dụng).
+
+## PDF pháp lý (Chính sách bảo mật, Điều khoản)
+- 4 file `legal/privacy-vi.pdf`, `legal/privacy-en.pdf`, `legal/terms-vi.pdf`, `legal/terms-en.pdf` + `legal/pdf-info.js` (dung lượng/ngày hiện trên nút "Tải PDF") được **commit sẵn vào repo** vì Cloudflare build không có Chrome. `scripts/build.js` chỉ copy thư mục `legal/` ra `dist/`.
+- **Khi sửa nội dung pháp lý** (`privacy.html`, `terms.html`, `shared/site.js`): chạy lại `NODE_PATH=<thư mục có puppeteer-core và pdfjs-dist> node scripts/build-legal-pdf.js` (cài tạm: `npm i --no-save pdfjs-dist@3.11.174`), rồi `node scripts/cozygame/check-legalpdf.js`, rồi commit 4 PDF + `legal/pdf-info.js`. Có số xác nhận Bộ Công Thương thì điền `license` trong `shared/site.js` trước khi dựng lại.
+- Số CCCD đầy đủ không bao giờ được ghi vào file công khai (`check-legal.js` quét); chỉ nhập vào hồ sơ đăng ký Bộ Công Thương.
+- Sitemap/robots: không chặn `/legal/` (robots hiện không chặn); thêm các URL PDF vào `landing/sitemap.xml` nếu muốn lập chỉ mục.

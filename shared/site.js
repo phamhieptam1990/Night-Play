@@ -1,14 +1,14 @@
 /* Thông tin chủ website dùng chung cho các trang chính sách (privacy.html, terms.html) và trang quản trị.
    Sửa các giá trị dưới đây rồi lưu: các trang tự cập nhật.
-   Chỗ nào còn "[CẦN ĐIỀN: ...]" là chủ site PHẢI điền thông tin thật trước khi nộp hồ sơ đăng ký website (scripts/cozygame/check-legal.js đếm số chỗ còn thiếu).
+   Chỗ nào còn "[CẦN ĐIỀN: ...]" là chủ site phải điền (scripts/cozygame/check-legal.js đếm). Mục license: thay bằng số xác nhận khi Bộ Công Thương cấp.
    (Các trang game vẫn có hằng EMAIL riêng ở đầu script của từng trang.) */
 window.SITE = {
-  operator:  "[CẦN ĐIỀN: tên cá nhân / tổ chức chủ website]",
-  represent: "[CẦN ĐIỀN: người đại diện theo pháp luật / chủ hộ kinh doanh]",
-  address:   "[CẦN ĐIỀN: địa chỉ trụ sở / nơi cư trú]",
-  phone:     "[CẦN ĐIỀN: số điện thoại liên hệ]",
-  taxId:     "[CẦN ĐIỀN: mã số thuế / số ĐKKD / số CCCD (nếu là cá nhân)]",
-  license:   "[CẦN ĐIỀN: số xác nhận thông báo website TMĐT với Bộ Công Thương (sau khi được cấp)]",
+  operator:  "Phạm Hiệp Tam",
+  represent: "Phạm Hiệp Tam (cá nhân sở hữu website / individual owner)",
+  address:   "B2.09.06 Chung cư 4S Linh Đông, Linh Đông, Thủ Đức, Hồ Chí Minh",
+  phone:     "0906315080",
+  taxId:     "CCCD: 087•••••0154",     // CHỈ dạng che. Số đầy đủ chỉ nhập vào hồ sơ đăng ký Bộ Công Thương, KHÔNG ghi vào file công khai nào (check-legal.js quét)
+  license:   "Đang làm thủ tục thông báo với Bộ Công Thương / Notification with the Ministry of Industry and Trade in progress",   // có số xác nhận thì thay bằng số
   email:     "support@nightplay.vn",
   domain:    "nightplay.vn",
   updated:   "2026-11-10",       // ngày hiển thị ở chân trang (fallback)

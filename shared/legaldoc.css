@@ -148,3 +148,11 @@ html{overscroll-behavior:none}
 #pgBody ul.cards,.leaf ul.cards{padding:0;margin:.5em 0}
 .card.kv .d{min-width:0;overflow-wrap:anywhere}
 .card{align-content:flex-start}
+
+/* nút Tải PDF dưới tiêu đề (ẩn khi màn thấp; vẫn có liên kết PDF ở chân trang) */
+.pdf-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;margin:6px 0 2px;border-radius:22px;background:var(--panel);box-shadow:var(--shadow);color:var(--ink);font:700 14px/1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;text-decoration:none}
+.pdf-btn svg{width:18px;height:18px;flex:none;color:var(--accent)}
+.pdf-btn:hover{color:var(--accent)}
+@media (max-height:699px){#pdfBtn{display:none}}
+@media print{.pdf-btn{display:none}}
+.card.kv .k{flex:0 0 auto;max-width:46%;overflow-wrap:break-word}

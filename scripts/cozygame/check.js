@@ -119,6 +119,10 @@ const b64 = o => Buffer.from(JSON.stringify(o)).toString("base64").replace(/\+/g
   console.log("== trang pháp lý");
   const lg = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-legal.js")].concat(process.argv.includes("--full-legal") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });
   note(lg.status === 0, "tổng", "check-legal.js báo lỗi (privacy/terms) — xem log phía trên");
+  /* 4 file PDF pháp lý đã commit + nút Tải PDF (scripts/cozygame/check-legalpdf.js; cần pdfjs-dist để kiểm nội dung, không có thì chỉ cảnh báo) */
+  console.log("== PDF pháp lý");
+  const lp = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-legalpdf.js")], { cwd: root, env: process.env, stdio: "inherit" });
+  note(lp.status === 0, "tổng", "check-legalpdf.js báo lỗi (PDF pháp lý lỗi thời/thiếu, nút Tải PDF) — chạy: node scripts/build-legal-pdf.js");
   /* màn rộng: khung game phóng to tới 760px + hai cột bên lề của trang cổng (scripts/cozygame/check-widescreen.js, check-rails.js) — bản nhanh, thêm --full-wide để đo đủ */
   console.log("== màn rộng");
   const ws = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-widescreen.js")].concat(process.argv.includes("--full-wide") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });

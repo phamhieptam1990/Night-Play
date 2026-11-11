@@ -5,7 +5,7 @@ const root = path.join(__dirname, "..");
 const dist = process.env.DIST_DIR ? path.resolve(process.env.DIST_DIR) : path.join(root, "dist");   // DIST_DIR: thư mục đích khác (bài đo check-landing.js)
 /* SITE_TARGET: "hub" = site công khai (không có admin) · "admin" = chỉ trang quản trị · bỏ trống = tất cả (chạy 1 site) */
 const TARGET = process.env.SITE_TARGET || "all";
-const HUB = ["sw.js", "manifest.webmanifest", "play", "subscribe.html", "privacy.html", "terms.html", "restricted.html", "help.html", "shared.html", "leaderboard.html", "passcheck.html", "cozyplay", "popplay", "shared"];   // thêm mục mới ở đây (hub hai thẻ Pop/Night nằm ở play/; gốc "/" là landing, xem landing/ bên dưới)
+const HUB = ["sw.js", "manifest.webmanifest", "play", "subscribe.html", "privacy.html", "terms.html", "legal", "restricted.html", "help.html", "shared.html", "leaderboard.html", "passcheck.html", "cozyplay", "popplay", "shared"];   // thêm mục mới ở đây (hub hai thẻ Pop/Night nằm ở play/; gốc "/" là landing, xem landing/ bên dưới)
 const PUBLIC = TARGET === "hub" ? HUB : TARGET === "admin" ? ["admin", "shared", "restricted.html"] : [...HUB, "admin"];
 fs.rmSync(dist, { recursive: true, force: true });
 fs.mkdirSync(dist, { recursive: true });

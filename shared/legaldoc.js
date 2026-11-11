@@ -17,6 +17,11 @@ function setLang(l, save) {
   $("fHome").textContent = l === "vi" ? "← Về trang chủ" : "← Back to home";
   if ($("fPriv")) $("fPriv").textContent = l === "vi" ? "Quyền riêng tư" : "Privacy";
   if ($("fTerms")) $("fTerms").textContent = l === "vi" ? "Điều khoản" : "Terms";
+  if (window.LEGAL.pdf) {   // nút Tải PDF: đúng ngôn ngữ đang xem, kèm dung lượng + ngày (legal/pdf-info.js do scripts/build-legal-pdf.js sinh)
+    const k = window.LEGAL.pdf + "-" + l, f = "legal/" + k + ".pdf", i = (window.LEGALPDF || {})[k], sz = i ? " · " + i.kb + " KB" : "", full = (l === "vi" ? "Tải PDF" : "Download PDF") + (i ? " (PDF" + sz + " · " + i.date + ")" : "");
+    [$("pdfBtn"), $("fPdf")].forEach(a => { if (a) { a.href = f; a.setAttribute("download", k + ".pdf"); a.title = full; a.setAttribute("aria-label", full); } });
+    $("pdfTxt").textContent = (l === "vi" ? "Tải PDF" : "Download PDF") + sz; $("fPdf").textContent = "PDF";
+  }
   $("copy").textContent = "© " + new Date().getFullYear() + " Play Hub. " + (l === "vi" ? "Bảo lưu mọi quyền." : "All rights reserved.");
   $("themeBtn").setAttribute("aria-label", l === "vi" ? "Sáng / Tối" : "Light / Dark");
   $("bVi").setAttribute("aria-pressed", String(l === "vi")); $("bEn").setAttribute("aria-pressed", String(l === "en"));
@@ -211,4 +216,7 @@ body.addEventListener("touchend", e => {
   else if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) turn(dx < 0 ? 1 : -1);
 }, { passive: true });
 let rz = 0; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { layoutPages(); applyPageShift(); }, 120); });
-window.__pgReady = true; layoutPages(); showUI(4200); if (document.fonts && document.fonts.ready) document.fonts.ready.then(layoutPages);
+/* neo #hoan-tien...: mở đúng trang sách chứa tiêu đề có data-anchor trùng (cả VI và EN dùng cùng tên neo) */
+function gotoHash() { const h = decodeURIComponent(location.hash.slice(1)); if (!h) return; const i = pg.screens.findIndex(s => s.nodes.some(n => n.dataset && n.dataset.anchor === h)); if (i >= 0) show(i, i > pg.i ? 1 : -1); }
+addEventListener("hashchange", gotoHash);
+window.__pgReady = true; layoutPages(); gotoHash(); showUI(4200); if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { layoutPages(); gotoHash(); });
