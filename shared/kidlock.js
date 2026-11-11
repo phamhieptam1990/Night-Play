@@ -34,7 +34,7 @@
 
   var css = document.createElement("style");
   css.textContent =
-    "#klock{position:absolute;z-index:3;width:44px;height:44px;border-radius:50%;padding:0;display:grid;place-items:center;cursor:pointer;color:#fff;background:rgba(32,28,44,.82);border:1.5px solid rgba(255,255,255,.55);box-shadow:0 2px 10px rgba(0,0,0,.35);top:calc(env(safe-area-inset-top,0px) + 2px);left:calc(max(12px,env(safe-area-inset-left)) + 50px)}" +
+    "#klock{position:absolute;z-index:3;width:44px;height:44px;border-radius:50%;padding:0;display:grid;place-items:center;cursor:pointer;color:#fff;background:rgba(22,17,48,.72);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);box-shadow:0 4px 14px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 14px rgba(124,92,255,.3);top:calc(env(safe-area-inset-top,0px) + 2px);left:calc(max(12px,env(safe-area-inset-left)) + 50px)}" +
     "#klock svg{width:22px;height:22px}#klock:focus-visible{outline:3px solid #fff;outline-offset:2px}" +
     "@media (orientation:landscape){#klock{top:calc(env(safe-area-inset-top,0px) + 157px);left:4px}}" +
     "html.np-locked #stage #home,html.np-locked #stage #klock,html.np-locked #stage .nps-fab,html.np-locked #stage .nps-cam{display:none!important}" +
