@@ -7,9 +7,16 @@
 #npHudc .np-hb[hidden]{display:none!important}
 #npHudc .np-hmore{display:none}
 #npHudc .np-hpn{display:flex;flex-direction:column;gap:8px}
+/* trong khối HUD đầu cột trái (có cột bên lề): lưới 4 cột đều, cùng thứ tự */
+#npHudc.inrail{position:static;display:block;left:auto;top:auto}
+#npHudc.inrail .np-hpn{display:grid;grid-template-columns:repeat(4,44px);justify-content:space-between;gap:10px 0}
+#stage.np-rails-l #npHudc:not(.inrail){display:none!important}
 #stage.np-hudc-sm #npHudc .np-hmore{display:grid}
 #stage.np-hudc-sm #npHudc .np-hpn{display:none;position:absolute;left:calc(100% + 12px);top:0;display:none;grid-template-columns:repeat(3,44px);gap:8px;padding:8px;border-radius:20px;background:rgba(22,17,48,.9);border:1px solid rgba(255,255,255,.22);box-shadow:0 14px 36px rgba(0,0,0,.5),inset 0 0 18px rgba(124,92,255,.18);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
 #stage.np-hudc-sm #npHudc.open .np-hpn{display:grid}
 /* cổng đang có nút nổi riêng: khi HUD bật thì ẩn (HUD bấm hộ; display:none vẫn click được bằng JS) */
 #stage.np-hudc .nps-fab,#stage.np-hudc #klock{display:none!important}
 html.np-locked #npHudc{display:none!important}
+
+/* điện thoại/iPad dọc: game đã gom nút vào hàng trên + menu ⋯ (kể cả 🔒 qua #bLock) → nút khoá nổi của cổng ẩn (một nơi duy nhất) */
+#stage.docked #klock{display:none!important}

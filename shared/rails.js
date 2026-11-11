@@ -110,41 +110,23 @@
       if (c && st.style.getPropertyValue("--rail-tint") !== c) st.style.setProperty("--rail-tint", c);
     } catch (e) {}
   }
-  function syncHud() {
-    syncTint();
-    var hud = document.getElementById("npHud"); if (!hud) return;
-    var setA = function (e, k, v) { if (e.getAttribute(k) !== v) e.setAttribute(k, v); };
-    [["help", HUDI.help], ["snd", HUDI.snd], ["lang", HUDI.lang]].forEach(function (x) {
-      var b = hud.querySelector('[data-k="' + x[0] + '"]'), src = gel(x[1]); if (!b) return;
-      if (b.hidden !== !src) b.hidden = !src;
-      var h = src ? src.innerHTML.trim() : "";
-      if (src && x[0] !== "help" && h) { if (b.__h !== h) { b.__h = h; b.innerHTML = src.innerHTML; } }
-      else if (src && !b.innerHTML.trim()) b.innerHTML = x[0] === "snd" ? ico("snd") : b.innerHTML;
-      if (src) { setA(b, "aria-label", src.getAttribute("aria-label") || src.title || x[0]); if (src.hasAttribute("aria-pressed")) setA(b, "aria-pressed", src.getAttribute("aria-pressed")); }
-    });
-    var k = document.getElementById("klock"), lb = hud.querySelector('[data-k="lock"]'); if (lb) { var hh = !k || k.hidden; if (lb.hidden !== hh) lb.hidden = hh; }
-  }
+  function syncHud() { syncTint(); }   /* các nút ? 🔊 ngôn ngữ ↻ ⏸ 🏆 📷 📤 🔒 🍜 do shared/hud.js dựng và phản chiếu (khối #npHudc nằm trong #npHslot) */
   function buildHud(g) {
     var t = tt(), hud = el("div", "np-hud"); hud.id = "npHud";
+    /* hàng 1: ← và nút THU GỌN CỘT cạnh nhau ở góc TRÊN-TRÁI (nút thu gọn luôn cùng một toạ độ với nút mở lại .np-tab khi cột đã thu); hàng 2: tên game; hàng 3: khối nút điều khiển (hud.js) */
     var r1 = el("div", "np-hrow"), bk = el("button", "np-hb"); bk.type = "button"; bk.innerHTML = ico("back"); bk.dataset.k = "back"; bk.setAttribute("aria-label", t.back);
     bk.addEventListener("click", function () { var h = document.getElementById("home"); if (h) h.click(); });
-    r1.appendChild(bk); r1.appendChild(el("h2", "np-gname", gname(g))); hud.appendChild(r1);
-    var r2 = el("div", "np-hstrip");
-    [["help", "help"], ["snd", "snd"], ["lang", null], ["lock", "lock"]].forEach(function (x) {
-      var b = el("button", "np-hb"); b.type = "button"; b.dataset.k = x[0]; if (x[1]) b.innerHTML = ico(x[1]); else b.textContent = lg().toUpperCase() === "VI" ? "EN" : "VI";
-      b.addEventListener("click", function () { var el2 = x[0] === "lock" ? document.getElementById("klock") : gel(HUDI[x[0]]); if (el2) el2.click(); setTimeout(syncHud, 120); });
-      r2.appendChild(b);
-    });
-    hud.appendChild(r2); return hud;
+    var hb = el("button", "np-hb np-hide"); hb.type = "button"; hb.innerHTML = ico("side"); hb.dataset.k = "collapse"; hb.setAttribute("aria-label", t.hide); hb.title = t.hide;
+    hb.addEventListener("click", function () { enabled = false; lsSet("np-rails", "0"); update(); });
+    r1.appendChild(bk); r1.appendChild(hb); hud.appendChild(r1);
+    hud.appendChild(el("h2", "np-gname", gname(g)));
+    var slot = el("div", "np-hslot"); slot.id = "npHslot"; hud.appendChild(slot); return hud;
   }
 
   function renderLeft(g) {
-    var t = tt(); L.textContent = "";
+    var t = tt(); if (window.NPHud) NPHud.park(); L.textContent = "";
     L.appendChild(buildHud(g));
-    var head = el("div", "np-head"); head.appendChild(el("h3", "", t.today));
-    var hb = el("button", "np-btn np-hide"); hb.type = "button"; hb.innerHTML = ico("side"); hb.setAttribute("aria-label", t.hide); hb.title = t.hide;
-    hb.addEventListener("click", function () { enabled = false; lsSet("np-rails", "0"); update(); });
-    head.appendChild(hb); L.appendChild(head);
+    var head = el("div", "np-head"); head.appendChild(el("h3", "", t.today)); L.appendChild(head);
     var sv = saveOf(g.id), day = vnDay(), isCozy = O.portal === "cozy";
     var card = el("div", "np-c"), row = el("div", "np-row"), img = el("img", "np-ico"); img.src = g.thumb; img.alt = ""; img.width = 56; img.height = 56; row.appendChild(img);
     var tx = el("div", "np-t");
@@ -169,13 +151,6 @@
       note.textContent = rows && rows.length ? (offline ? t.off + " (" + t.saved + ")" : "") : (offline ? t.off : t.empty); note.hidden = !note.textContent; ol.hidden = !(rows && rows.length);
       fit();
     });
-    var acts = el("div", "np-acts");
-    [["cam", t.cam], ["shr", t.shr]].forEach(function (x) {
-      var b = el("button", "np-btn"); b.type = "button"; b.innerHTML = ico(x[0]); b.appendChild(el("span", "", x[1])); b.dataset.k = x[0];
-      b.addEventListener("click", function () { var s = x[0] === "cam" ? ".nps-cam" : ".nps-fab:not(.nps-cam)", e = document.querySelector(s); if (e) e.click(); });
-      acts.appendChild(b);
-    });
-    L.appendChild(acts);
     /* Liên kết nhỏ về landing giới thiệu (?landing=1 để app PWA không bị chuyển lại về /play/); ẩn nếu cột không đủ chỗ */
     var ab = html("a", "np-about", ico("home")); ab.appendChild(el("span", "", t.about)); ab.id = "npAbout"; ab.href = (lg() === "en" ? "/en/" : "/") + "?landing=1"; L.appendChild(ab);
   }
@@ -247,7 +222,7 @@
     if (on) { var g = curGame(); if (g && (!was || !cur || cur.id !== g.id)) { cur = g; played(g.id); render(); } else if (!was) render(); startTimer(); }
     else { stopTimer(); if (!st.classList.contains("on")) cur = null; }
   }
-  function render() { var g = cur || curGame(); if (!g) return; cur = g; renderLeft(g); renderRight(g); fit(); }
+  function render() { var g = cur || curGame(); if (!g) return; cur = g; renderLeft(g); renderRight(g); if (window.NPHud) NPHud.update(); fit(); }
   var lastSig = "";
   function sig() { var g = cur; if (!g) return ""; var s = saveOf(g.id), best = ""; O.games.forEach(function (x) { var r = resumeRec(x.id); if (r) best += x.id + r.ts; }); return JSON.stringify(s) + best + lg(); }
   var hudT = 0;
@@ -257,7 +232,7 @@
   window.NPRails = {
     init: function (o) {
       if (O) return; O = o; if (!O.stage) return; enabled = lsGet("np-rails") !== "0"; build();
-      try { new MutationObserver(function () { cur = null; update(); }).observe(O.stage, { attributes: true, attributeFilter: ["class"], childList: true }); } catch (e) {}
+      try { new MutationObserver(function (recs) { if (recs.every(function (r) { return r.type === "childList" && [].concat([].slice.call(r.addedNodes), [].slice.call(r.removedNodes)).every(function (n) { return n.id === "npHudc"; }); })) return; cur = null; update(); }).observe(O.stage, { attributes: true, attributeFilter: ["class"], childList: true }); } catch (e) {}
       var f = null, lastFrame = null;
       /* game mới mở / đổi: dựng lại sau khi iframe tải xong (đọc Cách chơi) */
       setInterval(function () { var fr = O.getFrame(); if (fr !== lastFrame) { lastFrame = fr; cur = null; if (fr) { var again = function () { cur = null; update(); setTimeout(function () { if (on) render(); }, 250); }; fr.addEventListener("load", again); } update(); } }, 400);

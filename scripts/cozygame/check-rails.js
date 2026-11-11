@@ -61,7 +61,7 @@ const INNER = () => {   /* chạy trong khung game */
       m.errs.forEach(e => note(false, tag + ": " + e)); note(m.res && /Ván dở/.test(m.resTxt), tag + ": không thấy mục ván dở (np-resume giả)");
       if (m.L) { note(m.hud >= 3 && m.hudName <= 2, tag + ": khối HUD cột trái thiếu nút (" + m.hud + ") hoặc tên game >2 dòng (" + m.hudName + ")"); note(m.floats === 0, tag + ": còn " + m.floats + " nút nổi của cổng thấy được khi cột bên lề hiện"); note(m.gameBtns === 0, tag + ": còn " + m.gameBtns + " nút gốc (? 🔊 ngôn ngữ ← 📷 📤) trong game khi đã có khối HUD"); }
       note(m.sug >= 2, tag + ": ít hơn 2 game gợi ý (" + m.sug + ")"); note(/^Chưa tải được|^\|?$|Chưa có|\|2$|đã lưu/.test(m.top) || m.top.includes("|"), tag + ": top 5 không có thông báo/bản đã lưu (" + m.top + ")");
-      note(m.btns === 2 && !!m.multi && /multi\.html/.test(m.multi) && (portal === "popplay" ? /portal=pop/.test(m.multi) : true), tag + ": thiếu nút Chụp/Chia sẻ hoặc 'Chơi cùng lúc' (" + m.multi + ")");
+      note(!!m.multi && /multi\.html/.test(m.multi) && (portal === "popplay" ? /portal=pop/.test(m.multi) : true), tag + ": thiếu nút 'Chơi cùng lúc' (" + m.multi + ")");
       const fr = pg.frames().find(f => f.url().includes("/games/" + id + "/")); if (fr) { const i = await fr.evaluate(INNER).catch(() => null); if (i) { note(!i.scroll, tag + " trong game: trang bị cuộn"); note(!i.cut.length, tag + " trong game: bị cắt " + i.cut.join(" ")); } } else note(false, tag + ": không thấy khung game");
       if (!pg._er.length === false) note(false, tag + ": lỗi JS " + pg._er[0]);
       if (shots) await pg.screenshot({ path: path.join(shots, "rails-" + id + "-" + W + ".png") });
