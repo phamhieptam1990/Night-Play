@@ -46,6 +46,8 @@
 
   /* ----- FOOTER ----- */
   function footCrowded(f) {
+    /* hai trang cổng trên điện thoại: LUÔN gom chân trang vào menu (quyết định không phụ thuộc bề rộng chữ của phông → không gom muộn sau khi Inter tải xong, lưới game không nhảy) */
+    var app = document.documentElement.getAttribute("data-app"); if (innerWidth <= 520 && (app === "cozyplay" || app === "popplay")) return true;
     if ($$("nav", f).some(function (n) { return n.getBoundingClientRect().height > 50; })) return true;
     var tops = $$(".mark,nav,p,#lock,#copy,#madeBy", f).filter(function (e) { return e.offsetParent !== null && (e.matches("nav") || !e.closest("nav")); })
       .map(function (e) { return Math.round(e.getBoundingClientRect().top); });
@@ -99,5 +101,6 @@
   addEventListener("load", function () { schedule(true); });
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { schedule(true); });
   new MutationObserver(function () { schedule(true); }).observe(document.documentElement, { attributes: true, attributeFilter: ["lang", "data-l"] });
+  wantForce = true; try { fit(); } catch (e) {}   /* đo + gom menu NGAY (đồng bộ, trước lần vẽ đầu) để chân trang/thanh trên không đổi chiều cao sau khi trang đã vẽ → lưới game không nhảy */
   if (document.readyState !== "loading") schedule(true); else document.addEventListener("DOMContentLoaded", function () { schedule(true); });
 })();

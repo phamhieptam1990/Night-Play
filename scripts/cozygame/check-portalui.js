@@ -136,6 +136,18 @@ const MEASURE = kind => {
       const n = await pg.evaluate(() => document.querySelectorAll("#grid .tile").length); note(n === 17, "ẩn 3 game Công sở: còn " + n + " ô (cần 17)"); await pg.close();
       const pg2 = await open("cozyplay/index.html", 390, 844, { ls: [] }); await pg2.evaluate(() => { document.querySelector('#topics button[data-k="work"]').click(); const q = document.getElementById("q"); q.value = "mat tinh"; q.dispatchEvent(new Event("input")); }); await wait(300);
       const m = await pg2.evaluate(() => ({ n: document.querySelectorAll("#grid .tile").length, none: !document.getElementById("noRes").hidden })); note(m.n === 1 && !m.none, "tìm 'mat tinh' khi đang ở nhóm Công sở: " + JSON.stringify(m)); await pg2.close(); }
+    /* 1c) KHÔNG GIẬT lần đầu: cache trống + CPU x4, đo CLS (layout-shift) và số lần dàn lưới (--s đổi): CLS > 0.1 ✗ (> 0.05 cảnh báo), dàn lưới > 2 lần ✗ */
+    for (const kind of ["cozy", "pop"]) for (const [w, h] of (quick ? [[320, 568], [390, 844], [1194, 834]] : [[320, 568], [360, 640], [375, 667], [414, 896], [430, 932], [768, 1024], [1194, 834], [1440, 900]])) {
+      const pg = await br.newPage(); await pg.setCacheEnabled(false); await pg.setViewport({ width: w, height: h, deviceScaleFactor: 2, isMobile: w < 900, hasTouch: w < 900 });
+      const cdp = await pg.target().createCDPSession(); await cdp.send("Emulation.setCPUThrottlingRate", { rate: 4 });
+      await pg.evaluateOnNewDocument(() => { try { localStorage.setItem("np-welcome-seen", "1"); localStorage.setItem("lang", "vi"); } catch (e) {} window.__cls = 0; window.__grid = 0;
+        new PerformanceObserver(l => { for (const e of l.getEntries()) if (!e.hadRecentInput) window.__cls += e.value; }).observe({ type: "layout-shift", buffered: true });
+        const t = setInterval(() => { const g = document.getElementById("grid"); if (!g) return; clearInterval(t); let last = ""; new MutationObserver(() => { const k = g.style.getPropertyValue("--s") + g.className; if (k !== last) { last = k; window.__grid++; } }).observe(g, { attributes: true, attributeFilter: ["style", "class"] }); }, 1); });
+      await pg.goto(B + kind + "play/index.html?season=off", { waitUntil: "load" }); await wait(2500);
+      const r = await pg.evaluate(() => ({ cls: window.__cls, grid: window.__grid })), tag = "CLS " + kind + " " + w + "x" + h;
+      note(r.cls <= 0.1, tag + ": " + r.cls.toFixed(3) + " > 0.1 (bố cục giật lúc tải)"); if (r.cls > 0.05 && r.cls <= 0.1) console.log("  ! cảnh báo " + tag + ": " + r.cls.toFixed(3) + " > 0.05");
+      note(r.grid <= 2, tag + ": lưới dàn lại " + r.grid + " lần lúc tải (cần ≤ 2)"); await pg.close();
+    }
     /* 2) Chơi tiếp: chỉ khi hợp lệ */
     const resCase = async (name, ls, want) => { const pg = await open("cozyplay/index.html", 390, 844, { ls }); const v = await pg.evaluate(() => { const x = document.getElementById("puResume"); return !!x && !x.hidden && x.offsetParent !== null; }); note(v === want, "Chơi tiếp [" + name + "]: hiện=" + v + " (cần " + want + ")"); await pg.close(); };
     await resCase("không có bản lưu", [], false);

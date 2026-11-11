@@ -365,6 +365,7 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 }
 </style>
 <link rel="stylesheet" href="../shared/portalui.css">
+<style>html:not(.npr) body{visibility:hidden}</style><script>setTimeout(function(){document.documentElement.classList.add("npr")},400)</script>   <!-- không vẽ khung nửa chừng: hiện khi mọi script cuối trang chạy xong (tối đa 400ms) -> không giật bố cục lần đầu -->
 <script src="../shared/offline.js" defer></script>
 <script src="../shared/inapp.js" defer></script>
 <script src="../shared/kidlock.js" defer></script>
@@ -465,6 +466,8 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 </div>
 
 <script src="../shared/track.js"></script>
+<script src="../shared/updated.js"></script>
+<script src="../shared/bars.js"></script>
 <script src="../shared/newbadge.js"></script>
 <script src="../shared/portalui.js"></script>
 <script>window.Track&&Track.view("popplay")</script>
@@ -819,8 +822,10 @@ function markDots(){
 }
 let gRaf = 0;
 grid.addEventListener("scroll", () => { if(!grid.classList.contains("slide")) return; cancelAnimationFrame(gRaf); gRaf = requestAnimationFrame(markDots); }, { passive:true });
-new ResizeObserver(fitGrid).observe(grid);
-addEventListener("resize", fitGrid);
+/* gộp mọi sự kiện (đổi cỡ lưới, cửa sổ, phông, ảnh) vào MỘT lần dàn lưới mỗi khung hình: không dàn nhiều lần liên tiếp làm ô nhảy cỡ */
+let fitRaf = 0; const fitSoon = () => { if(fitRaf) return; fitRaf = requestAnimationFrame(() => { fitRaf = 0; fitGrid(); }); };
+new ResizeObserver(fitSoon).observe(grid);
+addEventListener("resize", fitSoon);
 addEventListener("orientationchange", () => { setTimeout(fitGrid, 120); setTimeout(fitGrid, 500); });
 document.addEventListener("contextmenu", e => { if(!e.target.closest(".box")) e.preventDefault(); });
 document.addEventListener("dragstart", e => e.preventDefault());
@@ -986,16 +991,14 @@ NPPortalUI.init({ portal:"pop", games:games, getLang:() => lang, enabled, open:(
 
 /* ===== KHỞI ĐỘNG ===== */
 lang = detectLang();
-renderGrid();
 updateSleep();
 setTheme(document.documentElement.dataset.theme);
-setLang(lang);
+setLang(lang);   // chữ hero/chân trang có TRƯỚC khi dàn lưới (nếu không lưới dàn lúc chữ còn trống rồi nhảy lại)
+renderGrid();
 route();
 </script>
-<script src="../shared/updated.js"></script>
 <script src="../shared/social.js"></script>
 <script>NPS.initParent({ helpUrl: "../help.html", sharedUrl: "../shared.html?from=popplay/index.html", leaderboard: true, boardUrl: "../leaderboard.html?from=popplay/index.html", h2cUrl: "../shared/vendor/html2canvas.min.js" });</script>
-<script src="../shared/bars.js"></script>
 <script src="../shared/season.js"></script>
 <script src="../shared/welcome.js"></script>
 <script>
@@ -1020,5 +1023,6 @@ NPRails.init({ portal:"pop", games:games, getLang:function(){ return lang; }, ge
 </script>
 <script src="../shared/passwatch.js" defer></script>
 <script src="../shared/parentgate.js"></script>
+<script>document.documentElement.classList.add("npr")</script>
 </body>
 </html>
