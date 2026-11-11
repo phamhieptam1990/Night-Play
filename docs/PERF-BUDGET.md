@@ -21,7 +21,7 @@ Ngân sách (Slow 4G, CPU x4): FCP <= 1,8s · LCP <= 3s · TBT <= 200ms · CLS <
 | SW cài nhẹ (`np-shell-v24`) | install chỉ lưu CORE (play + theme.css + manifest) và chép từ cache cũ sang; phần còn lại tải nền khi trang gửi `{np:"precache"}` (offline.js: load + 3s + rảnh; bỏ qua nếu `saveData` hoặc 2G), `priority:"low"`, 3 luồng | Bấm vào game ngay sau cổng (tap-pop): **319KB -> 82KB** tải, load game **1756ms -> 1075ms**; tap-cozy 237 -> 82KB, 1631 -> 1027ms |
 | Cache headers (`dist/_headers`) | ảnh 7 ngày; shared/*.js,css và lp/*.css,js 5 phút + stale-while-revalidate; phông immutable (mẫu không chồng nhau) | lần mở thứ hai không còn request kiểm tra lại cho các tệp tĩnh (đo bằng trình duyệt thật chỉ ở mức header; xác nhận sau khi deploy) |
 | CSS nội tuyến lúc build cho landing VI/EN và /play/ (`scripts/build.js`, nguồn không đổi, tắt bằng `NO_INLINE_CSS=1`) | thay `<link rel=stylesheet>` cục bộ bằng `<style>`, url() đổi tuyệt đối | landing: FCP **920-1128ms -> 600-692ms** (3 lần đo mỗi bên), 24 -> 20 request, không FOUC |
-| Landing `content-visibility:auto` cho section dưới màn đầu | `landing.css` cuối tệp | giảm layout/paint ban đầu; chữ vẫn trong HTML (SEO) |
+| Landing `content-visibility:auto` (đã thử, ĐÃ GỠ) | `.sec:not(.orbit),.foot` | làm check-landing báo 6 lỗi "câu FAQ ra ngoài màn hình khi đổi ngôn ngữ" (chiều cao ước lượng làm lệch vị trí cuộn) — chỉ áp lại cùng chỉnh `landing.js` giữ vị trí |
 | Bài đo `check-load.js` | + DOM/ảnh/script ban đầu, kịch bản "bấm game ngay sau cổng" | nối vào `check.js` bản --quick |
 
 Bảng cuối (sau tất cả; Slow 4G, CPU x4; DOM(ẩn) img scr req):
