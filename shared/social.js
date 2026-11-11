@@ -8,6 +8,7 @@
    Thư viện dùng chung cho: trang game (initParent), help.html (người chơi hộ), shared.html (kết quả), leaderboard.html. */
 window.NPS = (function () {
   "use strict";
+  var SELF = document.currentScript && document.currentScript.src;   /* nạp shared/lang.js (đổi ngôn ngữ cổng <-> game) cạnh file này */
   var API = "/api", TTL = 24 * 3600 * 1000;
 
   /* Danh sách game hỗ trợ. Thêm game mới ở đây (và SCORE_GAMES ở server/app.js nếu có bảng xếp hạng). */
@@ -277,6 +278,7 @@ window.NPS = (function () {
     opts = opts || {};
     var base = opts.helpUrl || "help.html", sharedUrl = opts.sharedUrl || "shared.html", boardUrl = opts.boardUrl || "leaderboard.html", leaderboard = opts.leaderboard !== false;
     var stage = document.getElementById("stage"), home = document.getElementById("home"); if (!stage) return;
+    if (SELF && !window.NPLang && !document.getElementById("npLangJs")) { var lj = document.createElement("script"); lj.id = "npLangJs"; lj.src = SELF.replace(/social\.js(\?.*)?$/, "lang.js$1"); document.head.appendChild(lj); }
     var st = document.createElement("style"); st.textContent = CSS; document.head.appendChild(st);
     var curGame = function () { return location.hash.slice(1); };
     var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };

@@ -50,9 +50,9 @@
     if (lastN < 2 || k < 0 || k >= lastN) return null;
     return map(lastN, k);
   }
-  function lang() {
-    var q = ""; try { q = new URLSearchParams(location.search).get("lang") || localStorage.getItem("lang") || ""; } catch (e) {}
-    if (q !== "vi" && q !== "en") q = (D.lang || "vi").slice(0, 2);
+  function lang() {   /* <html lang> là ngôn ngữ thật đang hiện (bridge.js đặt từ đầu, nút đổi ngôn ngữ cập nhật); ?lang= trong URL chỉ là giá trị lúc mở nên KHÔNG được ưu tiên (đổi ngôn ngữ giữa ván thì nhãn mới đổi theo) */
+    var q = (D.lang || "").slice(0, 2);
+    if (q !== "vi" && q !== "en") { try { q = new URLSearchParams(location.search).get("lang") || localStorage.getItem("lang") || ""; } catch (e) {} }
     return q === "en" ? EN : VI;
   }
 

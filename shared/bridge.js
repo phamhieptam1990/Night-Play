@@ -22,6 +22,9 @@
    3) Nút loa (#bSnd / #soundBtn): hiện icon (gạch chéo khi tắt) theo NPAudio.get() ngay từ lúc vào, aria-pressed + nhãn đúng.
    4) Trình duyệt trong app (Zalo/TikTok/Facebook…) mà sau lần chạm vẫn không có tiếng: nhắc nhỏ "Mở bằng Chrome/Safari để nghe tiếng" (một lần, không đè layout).
    Đo tự động: scripts/cozygame/check-audio.js (AudioContext.state === "running" sau lần chạm đầu). window.NPAudio.state() trả trạng thái các context. */
+/* <html lang> phải LUÔN là ngôn ngữ thật đang hiện (nguồn sự thật cho fan.js/popmenu.js/resume.js/bars.js và shared/lang.js). Nhiều game chỉ đặt nó trong nút đổi ngôn ngữ nên lúc mở với ?lang=en nó vẫn "vi":
+   đặt NGAY từ đầu theo đúng thứ tự mà mọi game dùng (?lang= trước, rồi localStorage "lang"); game nào đặt lại sau đó vẫn ghi đè cùng giá trị. */
+try { var _q = new URLSearchParams(location.search).get("lang"), _s = null; try { _s = localStorage.getItem("lang"); } catch (e) {} var _l = [_q, _s].filter(function (x) { return x === "vi" || x === "en"; })[0]; if (_l && document.documentElement.lang !== _l) document.documentElement.lang = _l; } catch (e) {}
 (function () {
   "use strict";
   var ctxs = [], gestured = false, primed = null, keep = null, hinted = false;
@@ -425,5 +428,13 @@ window.NP = (function () {
     var cs = document.currentScript, src = cs && cs.src; if (!src || document.getElementById("npPopCss")) return;
     var l = document.createElement("link"); l.id = "npPopCss"; l.rel = "stylesheet"; l.href = src.replace(/bridge\.js(\?.*)?$/, "nppopup.css$1"); document.head.appendChild(l);
     var j = document.createElement("script"); j.src = src.replace(/bridge\.js(\?.*)?$/, "nppopup.js$1"); j.async = false; document.head.appendChild(j);
+  } catch (e) {}
+})();
+
+/* đổi ngôn ngữ trong màn chơi: đồng bộ hai chiều với cổng, một nguồn sự thật (shared/lang.js cạnh file này, GAME_RULES 0a-19) */
+(function () {
+  try {
+    var cs = document.currentScript, src = cs && cs.src; if (!src || window.NPLang) return;
+    var j = document.createElement("script"); j.src = src.replace(/bridge\.js(\?.*)?$/, "lang.js$1"); j.async = false; document.head.appendChild(j);
   } catch (e) {}
 })();
