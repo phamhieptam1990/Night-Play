@@ -125,3 +125,26 @@ html{overscroll-behavior:none}
 @media (min-width:700px) and (max-height:620px),(min-width:560px) and (max-height:520px){#pgBody,.leaf{padding:10px 58px 28px 58px}}
 /* điện thoại hẹp: bảng gọn hơn để mỗi hàng dài vẫn vừa một trang */
 @media (max-width:520px){#pgBody table,.leaf table{font-size:.86em}#pgBody th,#pgBody td,.leaf th,.leaf td{padding:4px 5px;overflow-wrap:break-word}}
+
+/* ===== Bảng → thẻ (mỗi hàng bảng là một thẻ, lưới cột cố định để mọi trang giống nhau) ===== */
+.cards{list-style:none;margin:.5em 0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:8px;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;text-align:left}
+@media (min-width:760px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.card{display:flex;flex-wrap:wrap;align-items:baseline;gap:3px 8px;padding:8px 11px;border:1px solid var(--paper-edge);border-radius:11px;background:color-mix(in srgb,var(--paper-ink) 5%,transparent);font-size:.92em;line-height:1.4;overflow-wrap:break-word;min-width:0}
+#pgBody li.card,.leaf li.card{margin:0}
+.card .k{flex:1 0 100%;font-weight:800;overflow-wrap:anywhere}
+.card .k code{font:700 .95em ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow-wrap:anywhere;word-break:break-word}
+.card .d{flex:1 1 100%}
+.card.kv{flex-wrap:nowrap;gap:10px}.card.kv .k{flex:0 0 38%}.card.kv .d{flex:1 1 auto}
+.card .f{flex:1 0 100%;display:flex;gap:6px}.card .f i{flex:none;font-style:normal;color:var(--muted);font-size:.9em}.card .f .v{flex:1;min-width:0}
+.card .chip{flex:none;display:inline-block;padding:1px 9px;border-radius:999px;font-weight:800;font-size:.82em}
+.card .chip.no{background:rgba(30,150,80,.16);color:#17703d}
+.card .chip.yes{background:rgba(255,140,40,.22);color:#9a4300}
+[data-theme=dark] .card .chip.no{background:rgba(95,224,143,.16);color:#7be8a4}
+[data-theme=dark] .card .chip.yes{background:rgba(255,176,102,.18);color:#ffb878}
+.card .why{flex:1 1 60%;color:var(--muted);font-size:.92em}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.cont{margin:0 0 .4em;font:700 .8em system-ui,sans-serif;color:var(--muted);letter-spacing:.02em}
+@media print{.cards{display:block}.card{break-inside:avoid;margin:0 0 6px}}
+#pgBody ul.cards,.leaf ul.cards{padding:0;margin:.5em 0}
+.card.kv .d{min-width:0;overflow-wrap:anywhere}
+.card{align-content:flex-start}

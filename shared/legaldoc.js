@@ -60,9 +60,23 @@ const pUnits = n => { const parts = n.innerHTML.split(/(?<=[.;])\s+(?=[A-ZĐÀ-�
   parts.forEach(t => { cur += (cur ? " " : "") + t; len += t.length; if (len >= 120) { out.push(cur); cur = ""; len = 0; } });
   if (cur) { if (out.length && cur.length < 60) out[out.length - 1] += " " + cur; else out.push(cur); }
   return out.map(h => { const u = n.cloneNode(false); u.innerHTML = h; return u; }); };
+/* đưa các khối của một trang vào host: các danh sách thẻ (ul.cards) liền nhau gộp thành MỘT lưới (đều cột giữa các trang);
+   trang bắt đầu bằng thẻ (bảng kéo sang trang kế, không có tiêu đề) thì thêm nhãn nhỏ "(tiếp theo)" */
+function put(host, nodes) {
+  host.replaceChildren(); let last = null;
+  nodes.forEach((n, i) => {
+    const c = n.cloneNode(true), cards = c.tagName === "UL" && c.classList.contains("cards");
+    if (cards) {
+      if (i === 0) { const p = document.createElement("p"); p.className = "cont"; p.textContent = root.dataset.l === "vi" ? "(tiếp theo)" : "(continued)"; host.appendChild(p); }
+      if (last) { while (c.firstChild) last.appendChild(c.firstChild); return; }
+      last = c;
+    } else last = null;
+    host.appendChild(c);
+  });
+}
 const units = n => tableUnits(n) || (n.tagName === "SECTION" ? [...n.children].flatMap(units) : n.tagName === "UL" ? [...n.children].map(li => { const u = n.cloneNode(false); u.appendChild(li.cloneNode(true)); return u; }) : n.tagName === "P" ? pUnits(n) : [n]);
 function fits(nodes, list) {
-  body.replaceChildren(...nodes.map(n => n.cloneNode(true)));
+  put(body, nodes);
   for (const fs of list) { body.style.fontSize = fs + "px"; if (body.scrollHeight <= body.clientHeight + 1) return fs; }
   return 0;
 }
@@ -82,6 +96,7 @@ function layoutPages() {
   const fitBase = nodes => fits(nodes, [BASE]);
   const add = (list) => { for (const n of list) {
     if (fitBase([...chunk, n])) { chunk.push(n); continue; }
+    if (chunk.length && !isHead(n) && units(n).length >= 2) { add(units(n)); continue; }   // khối tách được (đoạn dài, danh sách, bảng thẻ): lấp đầy trang hiện tại rồi mới sang trang sau
     if (chunk.length) { flush(); if (fitBase([...chunk, n])) { chunk.push(n); continue; } }
     if (fits([...chunk, n], FS) || units(n).length < 2) { chunk.push(n); continue; }   // co chữ cho vừa, hoặc không tách được nữa
     add(units(n));
@@ -102,7 +117,7 @@ function show(i, dir) {
   const prev = pg.i, old = body.cloneNode(true);
   pg.i = Math.max(0, Math.min(pg.screens.length - 1, i)); const s = pg.screens[pg.i]; if (!s) return;
   const animate = dir && !reduceMotion.matches && pg.i !== prev;
-  body.replaceChildren(...s.nodes.map(n => n.cloneNode(true))); body.style.fontSize = s.fs + "px"; body.scrollTop = 0;
+  put(body, s.nodes); body.style.fontSize = s.fs + "px"; body.scrollTop = 0;
   body.querySelectorAll("[data-fill]").forEach(el => { const k = el.dataset.fill; el.textContent = INFO[k]; if (k === "email") el.href = "mailto:" + INFO.email; });
   body.dataset.pno = (pg.i + 1) + " / " + pg.screens.length;
   if (animate) {
@@ -111,7 +126,7 @@ function show(i, dir) {
     const src = dir > 0 ? old : body; leaf.dataset.pno = src.dataset.pno; [...src.childNodes].forEach(n => leaf.appendChild(n.cloneNode(true)));
     if (dir < 0) { body.replaceChildren(...old.childNodes); body.style.fontSize = pg.screens[prev].fs + "px"; body.dataset.pno = old.dataset.pno; }
     $("pages").appendChild(leaf);
-    const after = () => { if (dir < 0) { body.replaceChildren(...s.nodes.map(n => n.cloneNode(true))); body.style.fontSize = s.fs + "px"; body.dataset.pno = (pg.i + 1) + " / " + pg.screens.length;
+    const after = () => { if (dir < 0) { put(body, s.nodes); body.style.fontSize = s.fs + "px"; body.dataset.pno = (pg.i + 1) + " / " + pg.screens.length;
       body.querySelectorAll("[data-fill]").forEach(el => { const k = el.dataset.fill; el.textContent = INFO[k]; if (k === "email") el.href = "mailto:" + INFO.email; }); } };
     flipping = { leaf, done: after }; leaf.addEventListener("animationend", endFlip, { once: true }); setTimeout(endFlip, 900);
   }
@@ -146,7 +161,7 @@ function buildThumbs() {
     const b = document.createElement("button"); b.type = "button"; b.className = "th"; b.setAttribute("aria-label", (i + 1) + ". " + sc.title); if (i === pg.i) b.setAttribute("aria-current", "true");
     const box = document.createElement("div"); box.className = "thp"; box.style.cssText = "width:" + tw + "px;height:" + th + "px";
     const leaf = document.createElement("div"); leaf.className = "leaf"; leaf.style.cssText = "--pw:" + pw + "px;--ph:" + ph + "px;--k:" + k + ";font-size:" + sc.fs + "px"; leaf.dataset.pno = (i + 1) + " / " + n;
-    sc.nodes.forEach(nd => leaf.appendChild(nd.cloneNode(true))); box.appendChild(leaf);
+    put(leaf, sc.nodes); box.appendChild(leaf);
     const lb = document.createElement("span"); lb.className = "thn"; lb.textContent = (i + 1) + " · " + sc.title;
     b.append(box, lb);
     b.onclick = () => { const d = Math.sign(i - pg.i); show(i, d); if (innerWidth < 600) closeThumbs(); };   // điện thoại: chọn xong đóng để đọc cho rộng

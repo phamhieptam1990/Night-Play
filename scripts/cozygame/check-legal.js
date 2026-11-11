@@ -119,7 +119,7 @@ const VPS = quick ? [[320, 568], [667, 375], [1440, 900]] : [[320, 568], [390, 8
         {
           /* MỌI trang: không cắt chữ; nút điều khiển (☰, ‹, ›) không giao với chữ; mục đánh số 1..N đúng một lần, đúng thứ tự */
           const r = await p.evaluate((n) => {
-            const b = document.getElementById("pgBody"), out = { cut: [], hit: [], nums: [] };
+            const b = document.getElementById("pgBody"), out = { cut: [], hit: [], nums: [], tbl: [], w: [], xo: [], lone: [] };
             const btns = ["pgMenu", "pgPrev", "pgNext"].map(id => document.getElementById(id));
             for (let i = 0; i < n; i++) {
               show(i);
@@ -131,6 +131,12 @@ const VPS = quick ? [[320, 568], [667, 375], [1440, 900]] : [[320, 568], [390, 8
                 if (q.width < 43.5 || q.height < 43.5) out.hit.push("trang " + (i + 1) + " " + e.id + " nhỏ " + q.width + "x" + q.height);
                 for (const t of rects) if (q.left < t.right - 1 && q.right > t.left + 1 && q.top < t.bottom - 1 && q.bottom > t.top + 1) { out.hit.push("trang " + (i + 1) + " " + e.id + " đè chữ"); break; }
               }
+              /* thẻ (bảng): không còn <table>/<th> lặp, cùng cỡ giữa các trang, không tràn ngang/cắt chữ, trang chỉ có 1 thẻ lẻ là bất thường */
+              if (b.querySelector("table,th")) out.tbl.push(i + 1);
+              const cs = [...b.querySelectorAll("li.card")];
+              cs.forEach(c => { out.w.push(Math.round(c.getBoundingClientRect().width)); if (c.scrollWidth > c.clientWidth + 1) out.xo.push((i + 1) + ":" + c.textContent.slice(0, 20)); });
+              if (b.scrollWidth > b.clientWidth + 1) out.xo.push((i + 1) + ":trang");
+              if (cs.length === 1 && [...b.children].filter(e => !e.classList.contains("cont")).length === 1) out.lone.push(i + 1);
               b.querySelectorAll("h2").forEach(h => { const m = /^(\d+)\./.exec(h.textContent.trim()); if (m) out.nums.push(+m[1]); });
             }
             return out;
@@ -138,6 +144,10 @@ const VPS = quick ? [[320, 568], [667, 375], [1440, 900]] : [[320, 568], [390, 8
           note(!r.cut.length, tag, "trang bị cắt chữ (trang:px) " + r.cut.join(", "));
           note(!r.hit.length, tag, "nút điều khiển: " + r.hit.slice(0, 4).join("; "));
           note(r.nums.length >= 10 && r.nums.every((v, k) => v === k + 1), tag, "mục đánh số không đúng 1..N một lần theo thứ tự: " + r.nums.join(","));
+          note(!r.tbl.length, tag, "còn <table>/<th> (tiêu đề cột lặp) ở trang " + r.tbl.join(","));
+          note(!r.xo.length, tag, "thẻ/trang tràn ngang hoặc cắt chữ: " + r.xo.slice(0, 3).join("; "));
+          note(r.w.length >= 10 && Math.max(...r.w) - Math.min(...r.w) <= 2, tag, "độ rộng thẻ không đều giữa các trang: " + [...new Set(r.w)].join("/"));
+          note(!r.lone.length || h < 760, tag, "trang chỉ có MỘT thẻ lẻ: " + r.lone.join(","));
           await p.evaluate(() => show(0));
         }
         if (shotDir) { fs.mkdirSync(shotDir, { recursive: true }); await p.screenshot({ path: path.join(shotDir, `${kind}-${lang}-${theme}-${w}x${h}.png`) }); }

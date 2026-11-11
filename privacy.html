@@ -64,18 +64,7 @@ document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: da
 
   <h2>1. Đơn vị vận hành và thông tin liên hệ</h2>
   <p>Website Play Hub (gồm Pop Play, Night Play và Night Pass) do đơn vị sau vận hành và là bên kiểm soát dữ liệu cá nhân (“chúng tôi”):</p>
-  <div class="tw"><table>
-    <tbody>
-      <tr><td>Chủ website</td><td data-fill="operator"></td></tr>
-      <tr><td>Đại diện</td><td data-fill="represent"></td></tr>
-      <tr><td>Địa chỉ</td><td data-fill="address"></td></tr>
-      <tr><td>Điện thoại</td><td data-fill="phone"></td></tr>
-      <tr><td>Mã số thuế / ĐKKD</td><td data-fill="taxId"></td></tr>
-      <tr><td>Thông báo Bộ Công Thương</td><td data-fill="license"></td></tr>
-      <tr><td>Email</td><td><a data-fill="email"></a></td></tr>
-      <tr><td>Tên miền</td><td data-fill="domain"></td></tr>
-    </tbody>
-  </table></div>
+  <ul class="cards" role="list"><li class="card kv"><b class="k">Chủ website</b><span class="d" data-fill="operator"></span></li><li class="card kv"><b class="k">Đại diện</b><span class="d" data-fill="represent"></span></li><li class="card kv"><b class="k">Địa chỉ</b><span class="d" data-fill="address"></span></li><li class="card kv"><b class="k">Điện thoại</b><span class="d" data-fill="phone"></span></li><li class="card kv"><b class="k">Mã số thuế / ĐKKD</b><span class="d" data-fill="taxId"></span></li><li class="card kv"><b class="k">Thông báo Bộ Công Thương</b><span class="d" data-fill="license"></span></li><li class="card kv"><b class="k">Email</b><span class="d"><a data-fill="email"></a></span></li><li class="card kv"><b class="k">Tên miền</b><span class="d" data-fill="domain"></span></li></ul>
 
   <h2>2. Phạm vi và căn cứ pháp lý</h2>
   <p>Chính sách này áp dụng cho mọi trang của website và giải thích cách chúng tôi xử lý dữ liệu, phù hợp với Nghị định 13/2023/NĐ-CP về bảo vệ dữ liệu cá nhân, Luật Bảo vệ quyền lợi người tiêu dùng 2023, Luật An ninh mạng 2018 và các quy định liên quan về thương mại điện tử và dữ liệu của trẻ em. Khi sử dụng website, bạn xác nhận đã đọc chính sách này; với dữ liệu cá nhân bạn chủ động cung cấp (email khi mua gói, biệt danh khi khoe điểm), việc bạn nhập và gửi đi là sự đồng ý của bạn cho mục đích được nêu ở mục 4.</p>
@@ -87,23 +76,7 @@ document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: da
 
   <h3>3.2. Dữ liệu lưu trên thiết bị của bạn</h3>
   <p>Trình duyệt lưu cục bộ (localStorage, sessionStorage, IndexedDB) các mục sau. Chúng nằm trên thiết bị của bạn, chỉ được gửi lên máy chủ khi ghi rõ ở cột cuối, và bạn xoá được bằng cách xoá dữ liệu trang web trong trình duyệt.</p>
-  <div class="tw"><table>
-    <thead><tr><th>Khoá</th><th>Nội dung</th><th>Gửi lên máy chủ?</th></tr></thead>
-    <tbody>
-      <tr><td>theme, lang</td><td>Giao diện sáng/tối, ngôn ngữ</td><td>Không</td></tr>
-      <tr><td>prefs, usage</td><td>Cài đặt phụ huynh (game được phép, giới hạn thời gian mỗi ngày) và thời gian đã chơi hôm nay</td><td>Không</td></tr>
-      <tr><td>np-pg-ok, np-pg-lock, np-pg-try</td><td>Trạng thái cổng phụ huynh (nhớ đã qua trong 10 phút, đếm lần sai, khoá thử lại). Năm sinh nhập vào cổng chỉ để kiểm tra, không lưu và không gửi đi</td><td>Không</td></tr>
-      <tr><td>np-resume:&lt;game&gt;</td><td>Ván đang chơi dở để bấm “Tiếp tục” (giữ tối đa 7 ngày, xoá khi hết ván)</td><td>Không</td></tr>
-      <tr><td>np-hi-&lt;game&gt; và các khoá riêng của từng game</td><td>Điểm cao, tiến độ, cấp độ, chuỗi ngày chơi, lựa chọn giao diện, ngày dùng thử (trang giới thiệu chỉ đọc các khoá này trên máy để đổi nút thành “Chơi tiếp”, không ghi, không gửi đi)</td><td>Không</td></tr>
-      <tr><td>np-sound, np-haptic, np-multi-hud:&lt;game&gt;</td><td>Tuỳ chọn âm thanh, rung, ẩn/hiện bảng điểm khi chơi cùng lúc</td><td>Không</td></tr>
-      <tr><td>np_nick</td><td>Biệt danh bạn đã dùng cho bảng xếp hạng (điền sẵn lần sau)</td><td>Chỉ khi bạn bấm “Khoe điểm”</td></tr>
-      <tr><td>np_scoreq, np_shares, np_help_&lt;mã&gt;</td><td>Hàng chờ điểm chưa gửi, danh sách lời nhờ “chơi hộ” gần đây (tối đa 20, giữ 7 ngày) và mã chủ nhân của từng lời nhờ</td><td>Mã chủ nhân băm (SHA-256) gửi lên để nhận kết quả</td></tr>
-      <tr><td>np-season</td><td>Trạng thái các sự kiện theo mùa đã xem</td><td>Không</td></tr>
-      <tr><td>np-inapp-x, np-welcome-seen</td><td>Đã tắt gợi ý “Mở bằng trình duyệt” (1 ngày); đã xem thẻ chào mừng lần đầu</td><td>Không</td></tr>
-      <tr><td>pass (và các khoá *-pro-src, *-pro-rc, *-trial)</td><td>Nếu có Night Pass: gói, ngày hết hạn, email và mã xác thực (token) của gói; bản lưu tạm mã giao diện, ngày dùng thử</td><td>Token gửi kèm khi kiểm tra gói còn hiệu lực</td></tr>
-      <tr><td>IndexedDB (khoá thiết bị) và np-up (sessionStorage)</td><td>Khoá ký ECDSA P-256 tạo trên thiết bị để gắn Night Pass với thiết bị; khoá riêng không xuất được và không rời máy</td><td>Chỉ khoá công khai và chữ ký</td></tr>
-    </tbody>
-  </table></div>
+  <ul class="cards" role="list"><li class="card"><b class="k"><code>theme, lang</code></b><span class="d">Giao diện sáng/tối, ngôn ngữ</span><span class="chip no"><span class="sr">Gửi lên máy chủ?: </span>Không</span></li><li class="card"><b class="k"><code>prefs, usage</code></b><span class="d">Cài đặt phụ huynh (game được phép, giới hạn thời gian mỗi ngày) và thời gian đã chơi hôm nay</span><span class="chip no"><span class="sr">Gửi lên máy chủ?: </span>Không</span></li><li class="card"><b class="k"><code>np-pg-ok, np-pg-lock, np-pg-try</code></b><span class="d">Trạng thái cổng phụ huynh (nhớ đã qua trong 10 phút, đếm lần sai, khoá thử lại). Năm sinh nhập vào cổng chỉ để kiểm tra, không lưu và không gửi đi</span><span class="chip no"><span class="sr">Gửi lên máy chủ?: </span>Không</span></li><li class="card"><b class="k"><code>np-resume:&lt;game&gt;</code></b><span class="d">Ván đang chơi dở để bấm “Tiếp tục” (giữ tối đa 7 ngày, xoá khi hết ván)</span><span class="chip no"><span class="sr">Gửi lên máy chủ?: </span>Không</span></li><li class="card"><b class="k"><code>np-hi-&lt;game&gt; và các khoá riêng của từng game</code></b><span class="d">Điểm cao, tiến độ, cấp độ, chuỗi ngày chơi, lựa chọn giao diện, ngày dùng thử (trang giới thiệu chỉ đọc các khoá này trên máy để đổi nút thành “Chơi tiếp”, không ghi, không gửi đi)</span><span class="chip no"><span class="sr">Gửi lên máy chủ?: </span>Không</span></li><li class="card"><b class="k"><code>np-sound, np-haptic, np-multi-hud:&lt;game&gt;</code></b><span class="d">Tuỳ chọn âm thanh, rung, ẩn/hiện bảng điểm khi chơi cùng lúc</span><span class="chip no"><span class="sr">Gửi lên máy chủ?: </span>Không</span></li><li class="card"><b class="k"><code>np_nick</code></b><span class="d">Biệt danh bạn đã dùng cho bảng xếp hạng (điền sẵn lần sau)</span><span class="chip yes"><span class="sr">Gửi lên máy chủ?: </span>Có</span><span class="why">Chỉ khi bạn bấm “Khoe điểm”</span></li><li class="card"><b class="k"><code>np_scoreq, np_shares, np_help_&lt;mã&gt;</code></b><span class="d">Hàng chờ điểm chưa gửi, danh sách lời nhờ “chơi hộ” gần đây (tối đa 20, giữ 7 ngày) và mã chủ nhân của từng lời nhờ</span><span class="chip yes"><span class="sr">Gửi lên máy chủ?: </span>Có</span><span class="why">Mã chủ nhân băm (SHA-256) gửi lên để nhận kết quả</span></li><li class="card"><b class="k"><code>np-season</code></b><span class="d">Trạng thái các sự kiện theo mùa đã xem</span><span class="chip no"><span class="sr">Gửi lên máy chủ?: </span>Không</span></li><li class="card"><b class="k"><code>np-inapp-x, np-welcome-seen</code></b><span class="d">Đã tắt gợi ý “Mở bằng trình duyệt” (1 ngày); đã xem thẻ chào mừng lần đầu</span><span class="chip no"><span class="sr">Gửi lên máy chủ?: </span>Không</span></li><li class="card"><b class="k"><code>pass (và các khoá *-pro-src, *-pro-rc, *-trial)</code></b><span class="d">Nếu có Night Pass: gói, ngày hết hạn, email và mã xác thực (token) của gói; bản lưu tạm mã giao diện, ngày dùng thử</span><span class="chip yes"><span class="sr">Gửi lên máy chủ?: </span>Có</span><span class="why">Token gửi kèm khi kiểm tra gói còn hiệu lực</span></li><li class="card"><b class="k"><code>IndexedDB (khoá thiết bị) và np-up (sessionStorage)</code></b><span class="d">Khoá ký ECDSA P-256 tạo trên thiết bị để gắn Night Pass với thiết bị; khoá riêng không xuất được và không rời máy</span><span class="chip yes"><span class="sr">Gửi lên máy chủ?: </span>Có</span><span class="why">Chỉ khoá công khai và chữ ký</span></li></ul>
 
   <h3>3.3. Khi bạn mua Night Pass</h3>
   <p>Việc mua do người lớn thực hiện (API <b>/api/orders</b>, <b>/api/webhook/sepay</b>, <b>/api/pass</b>). Chúng tôi lưu: <b>email</b> bạn nhập (dạng chuẩn hoá chữ thường), một mã người dùng nội bộ ngẫu nhiên, gói đã chọn, số tiền, phương thức, mã đơn và mã nội dung chuyển khoản, thời điểm tạo/hết hạn/thanh toán, thời hạn của gói, mã thiết bị được nhận gói. Thanh toán bằng chuyển khoản ngân hàng (VietQR). Khi có tiền vào, SePay thông báo cho máy chủ của chúng tôi; chúng tôi lưu giao dịch được thông báo (mã giao dịch, số tiền, nội dung chuyển khoản, số tài khoản nhận, kết quả đối chiếu và bản sao dữ liệu thông báo, tối đa 4.000 ký tự). Chúng tôi <b>không nhận và không lưu</b> số thẻ, mật khẩu hay thông tin đăng nhập ngân hàng của bạn. Tên chủ tài khoản chuyển tiền chỉ có trong dữ liệu thông báo nếu ngân hàng đưa vào nội dung chuyển khoản.</p>
@@ -141,18 +114,7 @@ document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: da
 
   <h2>6. Bên thứ ba tham gia xử lý</h2>
   <p>Chúng tôi dùng các nhà cung cấp sau; họ chỉ xử lý dữ liệu theo mục đích dịch vụ:</p>
-  <div class="tw"><table>
-    <thead><tr><th>Nhà cung cấp</th><th>Vai trò</th><th>Dữ liệu liên quan</th></tr></thead>
-    <tbody>
-      <tr><td>Cloudflare</td><td>Lưu trữ trang web (Workers/assets), CDN, DNS, chuyển thư Email Routing cho hộp thư hỗ trợ</td><td>Mọi yêu cầu truy cập (IP, tiêu đề yêu cầu); thư bạn gửi tới hộp thư hỗ trợ</td></tr>
-      <tr><td>Neon</td><td>Cơ sở dữ liệu PostgreSQL</td><td>Dữ liệu ở mục 3.1, 3.3 đến 3.7 (không có dữ liệu lưu trên thiết bị)</td></tr>
-      <tr><td>Resend</td><td>Gửi email chứa mã OTP</td><td>Email người nhận, nội dung thư OTP</td></tr>
-      <tr><td>SePay và ngân hàng</td><td>Nhận chuyển khoản, thông báo giao dịch</td><td>Thông tin giao dịch ngân hàng gửi về máy chủ của chúng tôi</td></tr>
-      <tr><td>VietQR (img.vietqr.io)</td><td>Tạo ảnh mã QR thanh toán</td><td>IP trình duyệt, số tiền và nội dung trong mã</td></tr>
-      <tr><td>Google Fonts</td><td>Cung cấp phông chữ cho trang game</td><td>IP trình duyệt khi tải phông</td></tr>
-      <tr><td>Mắt Bão</td><td>Nhà đăng ký tên miền nightplay.vn</td><td>Thông tin đăng ký tên miền của chủ site, không có dữ liệu người chơi</td></tr>
-    </tbody>
-  </table></div>
+  <ul class="cards" role="list"><li class="card"><b class="k">Cloudflare</b><span class="f"><i>Vai trò</i><span class="v">Lưu trữ trang web (Workers/assets), CDN, DNS, chuyển thư Email Routing cho hộp thư hỗ trợ</span></span><span class="f"><i>Dữ liệu liên quan</i><span class="v">Mọi yêu cầu truy cập (IP, tiêu đề yêu cầu); thư bạn gửi tới hộp thư hỗ trợ</span></span></li><li class="card"><b class="k">Neon</b><span class="f"><i>Vai trò</i><span class="v">Cơ sở dữ liệu PostgreSQL</span></span><span class="f"><i>Dữ liệu liên quan</i><span class="v">Dữ liệu ở mục 3.1, 3.3 đến 3.7 (không có dữ liệu lưu trên thiết bị)</span></span></li><li class="card"><b class="k">Resend</b><span class="f"><i>Vai trò</i><span class="v">Gửi email chứa mã OTP</span></span><span class="f"><i>Dữ liệu liên quan</i><span class="v">Email người nhận, nội dung thư OTP</span></span></li><li class="card"><b class="k">SePay và ngân hàng</b><span class="f"><i>Vai trò</i><span class="v">Nhận chuyển khoản, thông báo giao dịch</span></span><span class="f"><i>Dữ liệu liên quan</i><span class="v">Thông tin giao dịch ngân hàng gửi về máy chủ của chúng tôi</span></span></li><li class="card"><b class="k">VietQR (img.vietqr.io)</b><span class="f"><i>Vai trò</i><span class="v">Tạo ảnh mã QR thanh toán</span></span><span class="f"><i>Dữ liệu liên quan</i><span class="v">IP trình duyệt, số tiền và nội dung trong mã</span></span></li><li class="card"><b class="k">Google Fonts</b><span class="f"><i>Vai trò</i><span class="v">Cung cấp phông chữ cho trang game</span></span><span class="f"><i>Dữ liệu liên quan</i><span class="v">IP trình duyệt khi tải phông</span></span></li><li class="card"><b class="k">Mắt Bão</b><span class="f"><i>Vai trò</i><span class="v">Nhà đăng ký tên miền nightplay.vn</span></span><span class="f"><i>Dữ liệu liên quan</i><span class="v">Thông tin đăng ký tên miền của chủ site, không có dữ liệu người chơi</span></span></li></ul>
   <p>Chúng tôi chỉ chia sẻ dữ liệu với các bên trên hoặc khi cơ quan nhà nước có thẩm quyền yêu cầu theo quy định pháp luật.</p>
 
   <h2>7. Chuyển dữ liệu ra nước ngoài</h2>
@@ -214,18 +176,7 @@ document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: da
 
   <h2>1. Operator and contact details</h2>
   <p>The Play Hub website (Pop Play, Night Play and Night Pass) is operated by the following party, the controller of personal data (“we”):</p>
-  <div class="tw"><table>
-    <tbody>
-      <tr><td>Website owner</td><td data-fill="operator"></td></tr>
-      <tr><td>Representative</td><td data-fill="represent"></td></tr>
-      <tr><td>Address</td><td data-fill="address"></td></tr>
-      <tr><td>Phone</td><td data-fill="phone"></td></tr>
-      <tr><td>Tax / business ID</td><td data-fill="taxId"></td></tr>
-      <tr><td>Ministry of Industry and Trade notification</td><td data-fill="license"></td></tr>
-      <tr><td>Email</td><td><a data-fill="email"></a></td></tr>
-      <tr><td>Domain</td><td data-fill="domain"></td></tr>
-    </tbody>
-  </table></div>
+  <ul class="cards" role="list"><li class="card kv"><b class="k">Website owner</b><span class="d" data-fill="operator"></span></li><li class="card kv"><b class="k">Representative</b><span class="d" data-fill="represent"></span></li><li class="card kv"><b class="k">Address</b><span class="d" data-fill="address"></span></li><li class="card kv"><b class="k">Phone</b><span class="d" data-fill="phone"></span></li><li class="card kv"><b class="k">Tax / business ID</b><span class="d" data-fill="taxId"></span></li><li class="card kv"><b class="k">Ministry of Industry and Trade notification</b><span class="d" data-fill="license"></span></li><li class="card kv"><b class="k">Email</b><span class="d"><a data-fill="email"></a></span></li><li class="card kv"><b class="k">Domain</b><span class="d" data-fill="domain"></span></li></ul>
 
   <h2>2. Scope and legal basis</h2>
   <p>This policy covers every page of the website and explains how we handle data in line with Vietnam’s Decree 13/2023/ND-CP on personal data protection, the Law on Consumer Protection 2023, the Law on Cybersecurity 2018 and related rules on e-commerce and children’s data. By using the website you confirm you have read this policy; for personal data you choose to provide (email when buying, nickname when posting a score), entering and submitting it is your consent for the purposes in section 4.</p>
@@ -237,23 +188,7 @@ document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: da
 
   <h3>3.2. Data stored on your device</h3>
   <p>The browser stores the following locally (localStorage, sessionStorage, IndexedDB). It stays on your device, is sent to the server only where the last column says so, and you can erase it by clearing the site’s data in your browser.</p>
-  <div class="tw"><table>
-    <thead><tr><th>Key</th><th>Content</th><th>Sent to server?</th></tr></thead>
-    <tbody>
-      <tr><td>theme, lang</td><td>Light/dark theme, language</td><td>No</td></tr>
-      <tr><td>prefs, usage</td><td>Parental settings (allowed games, daily time limit) and time played today</td><td>No</td></tr>
-      <tr><td>np-pg-ok, np-pg-lock, np-pg-try</td><td>Parental gate state (passed for 10 minutes, wrong-answer count, retry lock). The birth year typed into the gate is only checked, never stored or sent</td><td>No</td></tr>
-      <tr><td>np-resume:&lt;game&gt;</td><td>Unfinished round for the “Continue” button (kept up to 7 days, deleted when the round ends)</td><td>No</td></tr>
-      <tr><td>np-hi-&lt;game&gt; and per-game keys</td><td>High scores, progress, levels, day streaks, chosen skins, trial dates (the intro page only reads these on your device to switch its button to “Continue playing”; it writes and sends nothing)</td><td>No</td></tr>
-      <tr><td>np-sound, np-haptic, np-multi-hud:&lt;game&gt;</td><td>Sound, vibration and score-panel options for side-by-side play</td><td>No</td></tr>
-      <tr><td>np_nick</td><td>Nickname you used on the leaderboard (pre-filled next time)</td><td>Only when you tap “Share score”</td></tr>
-      <tr><td>np_scoreq, np_shares, np_help_&lt;code&gt;</td><td>Unsent score queue, recent “play for me” requests (max 20, kept 7 days) and each request’s owner code</td><td>A hash (SHA-256) of the owner code is sent to receive the result</td></tr>
-      <tr><td>np-season</td><td>Seasonal events already seen</td><td>No</td></tr>
-      <tr><td>np-inapp-x, np-welcome-seen</td><td>Dismissed the “Open in browser” hint (1 day); seen the first-visit welcome card</td><td>No</td></tr>
-      <tr><td>pass (and *-pro-src, *-pro-rc, *-trial)</td><td>If you have Night Pass: plan, expiry date, email and the plan’s access token; cached skin code, trial dates</td><td>Token is sent when checking the plan is still valid</td></tr>
-      <tr><td>IndexedDB (device key) and np-up (sessionStorage)</td><td>ECDSA P-256 signing key created on the device to bind Night Pass to it; the private key cannot be exported and never leaves the device</td><td>Only the public key and signatures</td></tr>
-    </tbody>
-  </table></div>
+  <ul class="cards" role="list"><li class="card"><b class="k"><code>theme, lang</code></b><span class="d">Light/dark theme, language</span><span class="chip no"><span class="sr">Sent to server?: </span>No</span></li><li class="card"><b class="k"><code>prefs, usage</code></b><span class="d">Parental settings (allowed games, daily time limit) and time played today</span><span class="chip no"><span class="sr">Sent to server?: </span>No</span></li><li class="card"><b class="k"><code>np-pg-ok, np-pg-lock, np-pg-try</code></b><span class="d">Parental gate state (passed for 10 minutes, wrong-answer count, retry lock). The birth year typed into the gate is only checked, never stored or sent</span><span class="chip no"><span class="sr">Sent to server?: </span>No</span></li><li class="card"><b class="k"><code>np-resume:&lt;game&gt;</code></b><span class="d">Unfinished round for the “Continue” button (kept up to 7 days, deleted when the round ends)</span><span class="chip no"><span class="sr">Sent to server?: </span>No</span></li><li class="card"><b class="k"><code>np-hi-&lt;game&gt; and per-game keys</code></b><span class="d">High scores, progress, levels, day streaks, chosen skins, trial dates (the intro page only reads these on your device to switch its button to “Continue playing”; it writes and sends nothing)</span><span class="chip no"><span class="sr">Sent to server?: </span>No</span></li><li class="card"><b class="k"><code>np-sound, np-haptic, np-multi-hud:&lt;game&gt;</code></b><span class="d">Sound, vibration and score-panel options for side-by-side play</span><span class="chip no"><span class="sr">Sent to server?: </span>No</span></li><li class="card"><b class="k"><code>np_nick</code></b><span class="d">Nickname you used on the leaderboard (pre-filled next time)</span><span class="chip yes"><span class="sr">Sent to server?: </span>Yes</span><span class="why">Only when you tap “Share score”</span></li><li class="card"><b class="k"><code>np_scoreq, np_shares, np_help_&lt;code&gt;</code></b><span class="d">Unsent score queue, recent “play for me” requests (max 20, kept 7 days) and each request’s owner code</span><span class="chip yes"><span class="sr">Sent to server?: </span>Yes</span><span class="why">A hash (SHA-256) of the owner code is sent to receive the result</span></li><li class="card"><b class="k"><code>np-season</code></b><span class="d">Seasonal events already seen</span><span class="chip no"><span class="sr">Sent to server?: </span>No</span></li><li class="card"><b class="k"><code>np-inapp-x, np-welcome-seen</code></b><span class="d">Dismissed the “Open in browser” hint (1 day); seen the first-visit welcome card</span><span class="chip no"><span class="sr">Sent to server?: </span>No</span></li><li class="card"><b class="k"><code>pass (and *-pro-src, *-pro-rc, *-trial)</code></b><span class="d">If you have Night Pass: plan, expiry date, email and the plan’s access token; cached skin code, trial dates</span><span class="chip yes"><span class="sr">Sent to server?: </span>Yes</span><span class="why">Token is sent when checking the plan is still valid</span></li><li class="card"><b class="k"><code>IndexedDB (device key) and np-up (sessionStorage)</code></b><span class="d">ECDSA P-256 signing key created on the device to bind Night Pass to it; the private key cannot be exported and never leaves the device</span><span class="chip yes"><span class="sr">Sent to server?: </span>Yes</span><span class="why">Only the public key and signatures</span></li></ul>
 
   <h3>3.3. When you buy Night Pass</h3>
   <p>Purchases are made by adults (API <b>/api/orders</b>, <b>/api/webhook/sepay</b>, <b>/api/pass</b>). We store: the <b>email</b> you enter (normalised to lower case), a random internal user ID, the plan, amount, method, order code and transfer-content code, creation/expiry/payment times, the plan’s expiry, and the device that claimed the plan. Payment is by bank transfer (VietQR). When money arrives, SePay notifies our server; we store the notified transaction (transaction ID, amount, transfer content, receiving account number, matching result and a copy of the notification, up to 4,000 characters). We <b>neither receive nor store</b> card numbers, passwords or your banking login. The sender’s account name appears in the notification only if your bank puts it in the transfer content.</p>
@@ -291,18 +226,7 @@ document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: da
 
   <h2>6. Third parties involved</h2>
   <p>We use these providers; they process data only for the service:</p>
-  <div class="tw"><table>
-    <thead><tr><th>Provider</th><th>Role</th><th>Data involved</th></tr></thead>
-    <tbody>
-      <tr><td>Cloudflare</td><td>Website hosting (Workers/assets), CDN, DNS, Email Routing for the support mailbox</td><td>All requests (IP, request headers); mail you send to the support mailbox</td></tr>
-      <tr><td>Neon</td><td>PostgreSQL database</td><td>Data in 3.1 and 3.3 to 3.7 (not on-device data)</td></tr>
-      <tr><td>Resend</td><td>Sends OTP emails</td><td>Recipient email, OTP message</td></tr>
-      <tr><td>SePay and banks</td><td>Receive transfers, notify transactions</td><td>Bank transaction details sent to our server</td></tr>
-      <tr><td>VietQR (img.vietqr.io)</td><td>Generates payment QR images</td><td>Browser IP, amount and content in the code</td></tr>
-      <tr><td>Google Fonts</td><td>Serves fonts to game pages</td><td>Browser IP when fonts load</td></tr>
-      <tr><td>Mat Bao</td><td>Registrar of the domain nightplay.vn</td><td>The owner’s domain registration details, no player data</td></tr>
-    </tbody>
-  </table></div>
+  <ul class="cards" role="list"><li class="card"><b class="k">Cloudflare</b><span class="f"><i>Role</i><span class="v">Website hosting (Workers/assets), CDN, DNS, Email Routing for the support mailbox</span></span><span class="f"><i>Data involved</i><span class="v">All requests (IP, request headers); mail you send to the support mailbox</span></span></li><li class="card"><b class="k">Neon</b><span class="f"><i>Role</i><span class="v">PostgreSQL database</span></span><span class="f"><i>Data involved</i><span class="v">Data in 3.1 and 3.3 to 3.7 (not on-device data)</span></span></li><li class="card"><b class="k">Resend</b><span class="f"><i>Role</i><span class="v">Sends OTP emails</span></span><span class="f"><i>Data involved</i><span class="v">Recipient email, OTP message</span></span></li><li class="card"><b class="k">SePay and banks</b><span class="f"><i>Role</i><span class="v">Receive transfers, notify transactions</span></span><span class="f"><i>Data involved</i><span class="v">Bank transaction details sent to our server</span></span></li><li class="card"><b class="k">VietQR (img.vietqr.io)</b><span class="f"><i>Role</i><span class="v">Generates payment QR images</span></span><span class="f"><i>Data involved</i><span class="v">Browser IP, amount and content in the code</span></span></li><li class="card"><b class="k">Google Fonts</b><span class="f"><i>Role</i><span class="v">Serves fonts to game pages</span></span><span class="f"><i>Data involved</i><span class="v">Browser IP when fonts load</span></span></li><li class="card"><b class="k">Mat Bao</b><span class="f"><i>Role</i><span class="v">Registrar of the domain nightplay.vn</span></span><span class="f"><i>Data involved</i><span class="v">The owner’s domain registration details, no player data</span></span></li></ul>
   <p>We share data only with the parties above or when a competent state authority requires it by law.</p>
 
   <h2>7. Transfers abroad</h2>
