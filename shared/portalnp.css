@@ -85,3 +85,11 @@ html[data-app] .nav{z-index:var(--z-pop)}
 /* WebKit: ô game được compositing riêng (transform/backdrop) có thể vẽ ĐÈ lên popup trong thanh trên dù z-index thấp hơn -> ép thanh trên + popup lên lớp compositing riêng ở trên cùng của trang */
 html[data-app] .nav,html[data-app] .bars-pop,#findPanel{-webkit-transform:translateZ(0);transform:translateZ(0)}
 html[data-app] .bars-pop{z-index:var(--z-pop)}
+
+/* ---------- Night Play gọn như Pop: hero tối giản (khẩu hiệu + 3 chip một hàng), tên ngắn dưới icon ---------- */
+.pu-n{background:var(--np-glass);-webkit-backdrop-filter:none;backdrop-filter:none;color:var(--ink);background-color:var(--panel)}
+@media (max-width:520px){
+  html[data-app] .trust{flex-wrap:nowrap!important;gap:6px!important;overflow:hidden}
+  html[data-app] .trust li{font-size:10.5px!important;gap:3px!important}
+}
+@media (max-width:374px){html[data-app] .trust li:nth-child(3){display:none}}

@@ -113,7 +113,7 @@ html[data-app=popplay] .pu-pro{display:none}
 /* Pop Play: tên ngắn một dòng ở dải dưới ô (chỉ khi ô đủ rộng, nếu không thì ảnh tràn ô) */
 .pu-n{display:none;position:absolute;left:0;right:0;bottom:0;height:24%;z-index:1;align-items:center;justify-content:center;padding:0 4px;white-space:nowrap;overflow:hidden;
   background:var(--panel);color:var(--ink);font:800 clamp(11px,13cqw,18px)/1 var(--font);pointer-events:none}
-@container (min-width:88px){html[data-app=popplay] .pu-n{display:flex}html[data-app=popplay] .tile img{position:absolute;left:0;top:0;height:76%}}
+@container (min-width:88px){.pu-n{display:flex}.tile img{position:absolute;left:0;top:0;height:76%}}
 
 /* Pop Play: KHÔNG hiện số phút còn lại ở cổng/trong khung chơi (chỉ phụ huynh thấy trong khu vực khoá: #gate) */
 html[data-app=popplay] #hleft,html[data-app=popplay] #tleft{display:none!important}

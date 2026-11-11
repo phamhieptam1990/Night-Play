@@ -25,6 +25,7 @@ const WANT_CAT = /id="topics"/.test(fs.readFileSync(path.join(root, "cozyplay/in
   const proFiles = fs.readdirSync(path.join(root, "server/pro")).filter(f => /\.js$/.test(f) && !f.startsWith("_")).map(f => f.replace(/\.js$/, ""));
   for (const id of COZY) {
     const f = MG.get(id);
+    note(f.short && f.short.vi && f.short.en && f.short.vi.length <= 12 && f.short.en.length <= 12, id + ": thiếu/quá dài tên ngắn short {vi,en} (<= 12 ký tự) trong shared/multi-games.js");
     note(f.pro === proFiles.includes(id), id + ": cờ pro (" + f.pro + ") lệch server/pro/" + id + ".js (" + proFiles.includes(id) + ")");
     if (WANT_CAT) note(CATS.includes(f.cat), id + ": thiếu/sai cờ cat trong shared/multi-games.js (cần " + CATS.join("|") + "): game Cozy mới BẮT BUỘC có cat");
   }
@@ -65,7 +66,9 @@ const MEASURE = kind => {
   for (const c of chips) { const r = c.getBoundingClientRect(); if (r.height < 43.5 || r.width < 43.5) out.errs.push("chip " + c.textContent + " nhỏ " + Math.round(r.width) + "x" + Math.round(r.height)); }
   if (ph && chips.length) { const row = document.getElementById("topics").getBoundingClientRect(); if (Math.abs(row.left - 16) > 1.5) out.errs.push("hàng chip lệch lề trái " + row.left.toFixed(1)); const rows = new Set(chips.map(c => Math.round(c.getBoundingClientRect().top))); if (rows.size > 1) out.errs.push("chip xuống dòng (" + rows.size + " hàng): phải cuộn ngang"); }
   const tiles = [...document.querySelectorAll("#grid .tile")].filter(vis);
-  for (const t of tiles) { const r = t.getBoundingClientRect(); if (r.left > -1 && r.right < vw + 1 && (r.width < 63.5 || r.height < 63.5)) out.errs.push("ô game nhỏ " + Math.round(r.width)); }
+  for (const t of tiles) { const r = t.getBoundingClientRect(), mn = kind === "cozy" ? 87.5 : 63.5; if (r.left > -1 && r.right < vw + 1 && (r.width < mn || r.height < mn)) out.errs.push("ô game nhỏ " + Math.round(r.width) + " (< " + Math.ceil(mn) + ")"); }
+  if (ph) { const li = [...document.querySelectorAll(".trust li")].filter(vis); if (new Set(li.map(e => Math.round(e.getBoundingClientRect().top))).size > 1) out.errs.push("chip cam kết xuống dòng (hero phải gọn một hàng)"); const d = document.querySelector(".hero .desc"); if (d && vis(d) && d.getBoundingClientRect().height > 2 * 24) out.errs.push("hero có đoạn mô tả > 2 dòng"); }
+  if (kind === "cozy") { const lbl = tiles.filter(t => t.querySelector(".pu-n")); if (tiles.length && lbl.length !== tiles.length) out.errs.push("ô thiếu tên ngắn (.pu-n): " + lbl.length + "/" + tiles.length); }
   /* huy hiệu nằm trong ô; nhãn tên Pop một dòng không cắt */
   for (const t of tiles) { const r = t.getBoundingClientRect(); t.querySelectorAll(".pu-b,.pu-n").forEach(x => { if (vis(x) || x.classList.contains("pu-n")) { if (getComputedStyle(x).display === "none") return; inside(x, r, "huy hiệu/nhãn " + (t.dataset.id || "")); } }); const n = t.querySelector(".pu-n"); if (n && getComputedStyle(n).display !== "none" && n.scrollWidth > n.clientWidth + 1) out.errs.push("nhãn Pop bị cắt: " + n.textContent); }
   out.tiles = tiles.length; out.dots = [...document.querySelectorAll("#gdots button")].filter(e => !e.classList.contains("gn")).length; out.slide = document.getElementById("grid").classList.contains("slide");

@@ -780,7 +780,7 @@ function renderGrid(){
 }
 /* Chọn số cột + cỡ ô lớn nhất để toàn bộ game nằm gọn trong khung, không cuộn.
    Nếu ô vẫn nhỏ hơn 64px (quá nhiều game / màn hình thấp) thì chuyển sang TRƯỢT NGANG theo trang. */
-const gdots = $("gdots"), MIN_TILE = 64;
+const gdots = $("gdots"), MIN_TILE = 88;   // ô tối thiểu 88px để hiện tên ngắn dưới icon (như Pop Play); không đủ chỗ thì chia TRANG
 let gPage = { step:0, n:1 };
 function fitGrid(){
   const n = grid.children.length, w = grid.clientWidth, h = grid.clientHeight;
@@ -801,7 +801,7 @@ function fitGrid(){
     return;
   }
   /* trượt ngang: xếp NHIỀU game nhất có thể trên một trang (ô tối thiểu 72px), rồi nới ô cho vừa khít khoảng trống */
-  const room = h - 16, MINS = 72;
+  const room = h - 16, MINS = 88;
   const c = Math.max(1, Math.floor((w + g) / (MINS + g))), r = Math.max(1, Math.floor((room + g) / (MINS + g)));
   const s = Math.max(MIN_TILE, Math.min(140, Math.floor((w - (c - 1) * g) / c), Math.floor((room - (r - 1) * g) / r)));
   /* khoảng thừa chia vào khe GIỮA các cột để ô ngoài cùng thẳng lề trái/phải (16px) với icon thanh trên (GAME_RULES 0a-12) */
