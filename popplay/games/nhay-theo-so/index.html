@@ -7,14 +7,14 @@
 <script src="../../../shared/bridge.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Nhảy Theo Số</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap"></noscript>
+<link rel="preload" href="../../../shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../../shared/fonts.css">
 <script>var savedTheme=null;try{savedTheme=localStorage.getItem("theme")}catch(e){}document.documentElement.dataset.theme=savedTheme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")</script>
 <style>
 /* Nhảy Theo Số — màn hình hiện phép tính "3 + 2", nhạc vang lên, bé nhảy / vỗ tay / dậm chân / vẫy tay đúng 5 lần.
    Đếm bằng nút to (luôn có) hoặc bằng camera (chỉ khi phụ huynh đồng ý; xử lý 100% trên máy, không ghi/lưu/gửi hình). Luôn vừa một màn hình. */
 :root{--bg:#FFF3F8;--ink:#3b1d2e;--muted:#8a5c72;--panel:#fff;--line:#f3d3e2;--accent:#FF4F8B;--on-accent:#fff;--good:#2fbf71;--bad:#e5484d;--warn:#ffb020;--shadow:0 8px 24px rgba(140,40,90,.16);
-  --display:"Baloo 2","Nunito","Segoe UI",system-ui,sans-serif;--w:min(calc(100vw - 24px),calc((100dvh - 158px)*.75),760px)}
+  --display:var(--font);--w:min(calc(100vw - 24px),calc((100dvh - 158px)*.75),760px)}
 :root[data-theme="dark"]{--bg:#2a1033;--ink:#FFF0F7;--muted:#d6a9c4;--panel:#40204f;--line:#5b3470;--accent:#FF6FA3;--on-accent:#2a0a18;--shadow:0 8px 24px rgba(0,0,0,.4)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;margin:0;overflow:hidden}
@@ -383,10 +383,10 @@ function drawScene(c,w,h,tm,S){
   if(p.clap){c.save();c.globalAlpha=.9;const my=fy-fs*(.56+p.lift);K.star(c,px,my,fs*.1,"#ffe14f",tm*3);K.star(c,px,my,fs*.06,"#fff",0);c.restore()}
   const dt=.016;if(S.parts){c.textAlign="center";c.textBaseline="middle";for(const q of S.parts){q.x+=q.vx*dt;q.y+=q.vy*dt;q.vy+=h*1.6*dt;q.l-=dt*.9;if(q.l>0){c.globalAlpha=Math.max(0,Math.min(1,q.l*1.4));c.font=q.s+"px system-ui,'Apple Color Emoji','Segoe UI Emoji',sans-serif";c.fillText(q.ch,q.x,q.y)}}c.globalAlpha=1;S.parts=S.parts.filter(q=>q.l>0)}
   /* số lần đã đếm: bong bóng nảy lên mỗi nhịp */
-  if(cb>=2&&S.showCnt!==false){const r=Math.min(w,h)*.11,pp=RM?1:1+.35*Math.max(0,1-S.u*2.5),bx=r*1.35,by=r*1.3;c.save();c.translate(bx,by);c.scale(pp,pp);K.o(c,0,0,r,r,["","#ffb020","#ff6a2a","#d43bff"][tier]||"#ffb020");K.ar(c,0,0,r,0,7,"#fff",r*.1);c.fillStyle="#fff";c.textAlign="center";c.textBaseline="middle";c.font="800 "+r*.95+"px 'Baloo 2','Nunito',system-ui,sans-serif";c.fillText("×"+cb,0,r*.06);c.font=r*.5+"px system-ui,'Apple Color Emoji','Segoe UI Emoji',sans-serif";c.fillText("🔥",0,-r*.78);c.restore()}
-  if(S.word){const age=tm-S.word.t0;if(age>=0&&age<1.6){c.save();c.globalAlpha=Math.min(1,(1.6-age)*2);const sc=RM?1:1+.5*Math.max(0,1-age*5);c.translate(w/2,h*.17-(RM?0:age*h*.03));c.scale(sc,sc);c.textAlign="center";c.textBaseline="middle";fitText(c,S.word.txt,Math.min(w,h)*.14,"800 $px 'Baloo 2','Nunito',system-ui,sans-serif",w*.37);c.lineWidth=Math.min(w,h)*.022;c.strokeStyle="#7a1a6a";c.strokeText(S.word.txt,0,0);c.fillStyle="#ffe14f";c.fillText(S.word.txt,0,0);c.restore()}}
+  if(cb>=2&&S.showCnt!==false){const r=Math.min(w,h)*.11,pp=RM?1:1+.35*Math.max(0,1-S.u*2.5),bx=r*1.35,by=r*1.3;c.save();c.translate(bx,by);c.scale(pp,pp);K.o(c,0,0,r,r,["","#ffb020","#ff6a2a","#d43bff"][tier]||"#ffb020");K.ar(c,0,0,r,0,7,"#fff",r*.1);c.fillStyle="#fff";c.textAlign="center";c.textBaseline="middle";c.font="800 "+r*.95+"px Inter,system-ui,sans-serif";c.fillText("×"+cb,0,r*.06);c.font=r*.5+"px system-ui,'Apple Color Emoji','Segoe UI Emoji',sans-serif";c.fillText("🔥",0,-r*.78);c.restore()}
+  if(S.word){const age=tm-S.word.t0;if(age>=0&&age<1.6){c.save();c.globalAlpha=Math.min(1,(1.6-age)*2);const sc=RM?1:1+.5*Math.max(0,1-age*5);c.translate(w/2,h*.17-(RM?0:age*h*.03));c.scale(sc,sc);c.textAlign="center";c.textBaseline="middle";fitText(c,S.word.txt,Math.min(w,h)*.14,"800 $px Inter,system-ui,sans-serif",w*.37);c.lineWidth=Math.min(w,h)*.022;c.strokeStyle="#7a1a6a";c.strokeText(S.word.txt,0,0);c.fillStyle="#ffe14f";c.fillText(S.word.txt,0,0);c.restore()}}
   if(S.showCnt!==false){const r=Math.min(w,h)*.14,pop=1+.45*Math.max(0,1-S.u*3.2),bx=w-r*1.35,by=r*1.3;c.save();c.translate(bx,by);c.scale(pop,pop);K.o(c,0,0,r,r,S.over?"#e5484d":"rgba(255,255,255,.92)");K.ar(c,0,0,r,0,7,sk.pal?sk.pal[0]:"#ff4f8b",r*.1);
-    c.fillStyle=S.over?"#fff":"#3b1d2e";c.textAlign="center";c.textBaseline="middle";c.font="800 "+r*1.15+"px 'Baloo 2','Nunito',system-ui,sans-serif";c.fillText(S.cnt,0,r*.06);c.restore()}
+    c.fillStyle=S.over?"#fff":"#3b1d2e";c.textAlign="center";c.textBaseline="middle";c.font="800 "+r*1.15+"px Inter,system-ui,sans-serif";c.fillText(S.cnt,0,r*.06);c.restore()}
   c.restore();
 }
 
@@ -500,7 +500,7 @@ function shareLink(){const l=LANG==="en"?"&l=en":"";if(G.daily)return location.o
 function shareText(){const em=G.hist.map(h=>h==="1"?"🟩":h==="2"?"🟨":"⬜").join("");
   return (G.daily?"📅 "+T("daily.t",{n:G.daily.n}):"💃 "+T("title"))+"\n"+T("tx.line",{t:TY_ICON[G.t]+" "+T("ty")[G.t],l:LV_ICON[G.lv-1],s:G.total})+"\n"+em+(G.maxC>=2?" 🔥×"+G.maxC:"")+"\n"+T("cd.ask")+"\n"+shareLink()}
 function fitText(x,tx,px,font,maxW){let s=px;do{x.font=font.replace("$",s);s-=2}while(x.measureText(tx).width>maxW&&s>20)}
-const FONT="'Baloo 2','Nunito',system-ui,-apple-system,'Segoe UI','Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";
+const FONT="Inter,system-ui,-apple-system,'Segoe UI','Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";
 function drawCard(){
   const W=1080,H=1350,c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d"),sk=skinOf(G.t),pal=sk.pal||["#ff4f8b","#ffc2d9"];
   const g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,pal[0]);g.addColorStop(1,pal[1]);x.fillStyle=g;x.fillRect(0,0,W,H);

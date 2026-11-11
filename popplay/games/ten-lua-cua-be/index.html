@@ -7,13 +7,13 @@
 <script src="../../../shared/bridge.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tên Lửa Của Bé</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap"></noscript>
+<link rel="preload" href="../../../shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../../shared/fonts.css">
 <script>var savedTheme=null;try{savedTheme=localStorage.getItem("theme")}catch(e){}document.documentElement.dataset.theme=savedTheme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")</script>
 <style>
 /* Tên Lửa Của Bé — chạy 10 giây, hết nhiên liệu thì trả lời câu hỏi để chạy tiếp. Bé không bao giờ thua. 4 loại: tên lửa / cá con / tàu hỏa / khủng long. Luôn vừa một màn hình. */
 :root{--bg:#EAF6FF;--ink:#1f2f4a;--muted:#5d7090;--panel:#fff;--line:#cfe3f5;--accent:#FF5A4D;--on-accent:#fff;--good:#2fbf71;--bad:#e5484d;--warn:#ffb020;--shadow:0 8px 24px rgba(30,60,110,.16);
-  --display:"Baloo 2","Nunito","Segoe UI",system-ui,sans-serif;--w:min(calc(100vw - 24px),calc((100dvh - 158px)*.75),760px)}
+  --display:var(--font);--w:min(calc(100vw - 24px),calc((100dvh - 158px)*.75),760px)}
 :root[data-theme="dark"]{--bg:#141b38;--ink:#F2F4FF;--muted:#a9b2d8;--panel:#26305a;--line:#38437a;--accent:#FF7A6B;--on-accent:#2a0a06;--shadow:0 8px 24px rgba(0,0,0,.4)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;margin:0;overflow:hidden}
@@ -376,7 +376,7 @@ function fitText(x,tx,px,font,maxW){let s=px;do{x.font=font.replace("$",s);s-=2}
 function rr(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
 function drawCard(){
   const W=1080,H=1350,c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
-  const F="'Baloo 2','Nunito',system-ui,-apple-system,'Segoe UI','Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif",sk=skinOf(G.t);
+  const F="Inter,system-ui,-apple-system,'Segoe UI','Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif",sk=skinOf(G.t);
   const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,sk.bg[0]);g.addColorStop(1,G.t===0?"#1b2f7a":sk.bg[1]);x.fillStyle=g;x.fillRect(0,0,W,H);x.fillStyle="rgba(15,25,70,.42)";x.fillRect(0,0,W,H);
   x.globalAlpha=.16;x.fillStyle="#fff";for(let i=0;i<18;i++){x.beginPath();x.arc((i*211)%W,(i*397)%H,30+(i%4)*22,0,7);x.fill()}x.globalAlpha=1;
   x.textAlign="center";x.textBaseline="middle";x.fillStyle="#fff";x.shadowColor="rgba(0,0,0,.25)";x.shadowBlur=14;
@@ -534,7 +534,7 @@ function updHud(){if(!G)return;$("hl").textContent="⭐ "+G.stars;$("hr").textCo
   $("fi").textContent=FUELI[G.t];$("ff").style.width=(G.W.fuel*100)+"%"}
 
 /* ===== VẼ ===== */
-function drawEm(c,e,x,y,s,rot){c.save();c.translate(x,y);if(rot)c.rotate(rot);c.font=s+"px 'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',serif";c.textAlign="center";c.textBaseline="middle";c.fillText(e,0,0);c.restore()}
+function drawEm(c,e,x,y,s,rot){c.save();c.translate(x,y);if(rot)c.rotate(rot);c.font=s+"px 'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";c.textAlign="center";c.textBaseline="middle";c.fillText(e,0,0);c.restore()}
 function coal(c,x,y,s){c.fillStyle="#222";c.beginPath();c.moveTo(x-s*.5,y+s*.2);c.lineTo(x-s*.3,y-s*.4);c.lineTo(x+s*.2,y-s*.5);c.lineTo(x+s*.55,y);c.lineTo(x+s*.3,y+s*.45);c.lineTo(x-s*.3,y+s*.45);c.closePath();c.fill();c.fillStyle="rgba(255,255,255,.55)";c.beginPath();c.moveTo(x-s*.2,y-s*.25);c.lineTo(x+s*.05,y-s*.35);c.lineTo(x-s*.05,y-s*.1);c.closePath();c.fill()}
 function render(){
   if(!G||$("run").hidden||!cv.width)return;const W=G.W,sk=skinOf(G.t),C=CFG[G.t],c=cx;c.setTransform(CK,0,0,CK,0,0);
@@ -561,13 +561,13 @@ function render(){
     const r=G.t===3?27:25;c.shadowBlur=0;c.shadowOffsetY=0;c.fillStyle="rgba(120,10,20,.72)";c.beginPath();c.arc(x,y,r,0,7);c.fill();
     c.strokeStyle="#ff4d4d";c.lineWidth=3;c.setLineDash([6,4]);c.lineDashOffset=-W.tt*20;c.beginPath();c.arc(x,y,r,0,7);c.stroke();c.setLineDash([]);
     c.shadowColor="rgba(0,0,0,.45)";c.shadowBlur=8;drawEm(c,sk.obs[e.v%sk.obs.length],x,y,G.t===3?36:30,G.t===0?W.tt*2+e.at:0);
-    c.shadowBlur=0;c.fillStyle="#ff4d4d";c.beginPath();c.arc(x+r*.72,y-r*.72,9,0,7);c.fill();c.fillStyle="#fff";c.font="800 12px sans-serif";c.textAlign="center";c.textBaseline="middle";c.fillText("✖",x+r*.72,y-r*.72+1)}
+    c.shadowBlur=0;c.fillStyle="#ff4d4d";c.beginPath();c.arc(x+r*.72,y-r*.72,9,0,7);c.fill();c.fillStyle="#fff";c.font="800 12px Inter,sans-serif";c.textAlign="center";c.textBaseline="middle";c.fillText("✖",x+r*.72,y-r*.72+1)}
    else{/* ĐỒ ĂN/SAO: quầng vàng sáng nhấp nháy + viền trắng ⇒ nhìn là biết "ăn" */
     const pu=1+.12*Math.sin(W.tt*6+e.at),r=22*pu,yy=y+Math.sin(W.tt*5+e.at)*2;c.shadowBlur=0;c.shadowOffsetY=0;
     const g=c.createRadialGradient(x,yy,2,x,yy,r+8);g.addColorStop(0,"rgba(255,244,150,.95)");g.addColorStop(.7,"rgba(255,214,60,.55)");g.addColorStop(1,"rgba(255,214,60,0)");c.fillStyle=g;c.beginPath();c.arc(x,yy,r+8,0,7);c.fill();
     c.strokeStyle="#fff";c.lineWidth=2.5;c.beginPath();c.arc(x,yy,r,0,7);c.stroke();
     if(sk.star==="coal")coal(c,x,yy,20+3*Math.sin(W.tt*6+e.at));else drawEm(c,sk.star,x,yy,24);
-    c.fillStyle="#fff";c.font="14px sans-serif";c.textAlign="center";c.textBaseline="middle";c.fillText("✦",x+r*.85,yy-r*.85)}
+    c.fillStyle="#fff";c.font="14px Inter,sans-serif";c.textAlign="center";c.textBaseline="middle";c.fillText("✦",x+r*.85,yy-r*.85)}
    c.shadowBlur=0;c.shadowOffsetY=0}
   /* nhân vật */
   {const hg=c.createRadialGradient(hp.x,hp.y,6,hp.x,hp.y,64);hg.addColorStop(0,"rgba(255,255,255,.55)");hg.addColorStop(.55,"rgba(255,255,255,.18)");hg.addColorStop(1,"rgba(255,255,255,0)");c.fillStyle=hg;c.beginPath();c.arc(hp.x,hp.y,64,0,7);c.fill()}   /* quầng sáng sau nhân vật: nổi trên mọi nền */

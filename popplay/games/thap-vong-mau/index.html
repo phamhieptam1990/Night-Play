@@ -8,14 +8,14 @@
 <script src="../../../shared/fx.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tháp Vòng Màu</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap"></noscript>
+<link rel="preload" href="../../../shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../../shared/fonts.css">
 <script>var savedTheme=null;try{savedTheme=localStorage.getItem("theme")}catch(e){}document.documentElement.dataset.theme=savedTheme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")</script>
 <style>
 /* Tháp Vòng Màu — chuyển các vòng màu to nhỏ giữa 3 hoặc 4 cột (vòng to không được đè lên vòng nhỏ).
    Chọn sai chỉ bị nhắc nhẹ, vòng tự về chỗ cũ, không bao giờ "thua". Luôn vừa một màn hình. */
 :root{--bg:#FFF6EC;--ink:#3b2a1d;--muted:#8a6f5a;--panel:#fff;--line:#f0d9c0;--accent:#FF5A1F;--on-accent:#fff;--good:#2fbf71;--bad:#e5484d;--warn:#ffb020;--shadow:0 8px 24px rgba(120,70,20,.16);
-  --display:"Baloo 2","Nunito","Segoe UI",system-ui,sans-serif;--w:min(calc(100vw - 24px),calc((100dvh - 158px)*.75),760px)}
+  --display:var(--font);--w:min(calc(100vw - 24px),calc((100dvh - 158px)*.75),760px)}
 :root[data-theme="dark"]{--bg:#1B2340;--ink:#F2F4FF;--muted:#a9b2d8;--panel:#26305a;--line:#38437a;--accent:#FF7A45;--on-accent:#2a1204;--shadow:0 8px 24px rgba(0,0,0,.4)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;margin:0;overflow:hidden}
@@ -292,7 +292,7 @@ function shareText(){const st="⭐".repeat(G.stars)+"☆".repeat(3-G.stars);
 function fitText(x,tx,px,font,maxW){let s=px;do{x.font=font.replace("$",s);s-=2}while(x.measureText(tx).width>maxW&&s>20)}
 function rr(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
 function drawCard(){
-  const W=1080,H=1350,c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d"),F="'Baloo 2','Nunito',system-ui,-apple-system,'Segoe UI','Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";
+  const W=1080,H=1350,c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d"),F="Inter,system-ui,-apple-system,'Segoe UI','Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";
   const g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,"#b07cff");g.addColorStop(1,"#ff7a9a");x.fillStyle=g;x.fillRect(0,0,W,H);
   x.globalAlpha=.13;x.fillStyle="#fff";for(let i=0;i<16;i++){x.beginPath();x.arc((i*211)%W,(i*397)%H,34+(i%4)*24,0,7);x.fill()}x.globalAlpha=1;
   x.textAlign="center";x.textBaseline="middle";x.fillStyle="#fff";

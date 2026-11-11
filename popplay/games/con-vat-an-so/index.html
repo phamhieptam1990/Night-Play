@@ -7,14 +7,14 @@
 <script src="../../../shared/bridge.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Con Vật Ăn Số</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap"></noscript>
+<link rel="preload" href="../../../shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../../shared/fonts.css">
 <script>var savedTheme=null;try{savedTheme=localStorage.getItem("theme")}catch(e){}document.documentElement.dataset.theme=savedTheme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")</script>
 <style>
 /* Con Vật Ăn Số — một con vật to há miệng ở đáy màn hình, số trôi / rơi / đung đưa trên màn. Bé chạm số đúng để cho ăn;
    chạm sai thì con vật ợ một tiếng thật to và nhả ra (không bao giờ thua). Luôn vừa một màn hình. */
 :root{--bg:#EFFAE6;--ink:#2a3b1d;--muted:#6b7f58;--panel:#fff;--line:#d4e8c0;--accent:#2fae4a;--on-accent:#fff;--good:#2fbf71;--bad:#e5484d;--shadow:0 8px 24px rgba(40,90,20,.16);
-  --display:"Baloo 2","Nunito","Segoe UI",system-ui,sans-serif;--w:min(calc(100vw - 24px),calc((100dvh - 158px)*.75),760px)}
+  --display:var(--font);--w:min(calc(100vw - 24px),calc((100dvh - 158px)*.75),760px)}
 :root[data-theme="dark"]{--bg:#16301f;--ink:#EAF8E6;--muted:#a3c7a0;--panel:#22442d;--line:#335c40;--accent:#4fd06a;--on-accent:#06240e;--shadow:0 8px 24px rgba(0,0,0,.4)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;margin:0;overflow:hidden}
@@ -428,7 +428,7 @@ function fitText(x,tx,px,font,maxW){let s=px;do{x.font=font.replace("$",s);s-=2}
 function rr(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
 function drawCard(){
   const W=1080,H=1350,c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
-  const F="'Baloo 2','Nunito',system-ui,-apple-system,'Segoe UI','Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif",pal=[["#7ddc6a","#1f9e6a"],["#a8a4ff","#5a4de0"],["#b6f06a","#2fae4a"],["#ffe08a","#2f9e8a"]][G.t];
+  const F="Inter,system-ui,-apple-system,'Segoe UI','Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif",pal=[["#7ddc6a","#1f9e6a"],["#a8a4ff","#5a4de0"],["#b6f06a","#2fae4a"],["#ffe08a","#2f9e8a"]][G.t];
   const g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,pal[0]);g.addColorStop(1,pal[1]);x.fillStyle=g;x.fillRect(0,0,W,H);
   x.globalAlpha=.14;x.fillStyle="#fff";for(let i=0;i<16;i++){x.beginPath();x.arc((i*211)%W,(i*397)%H,34+(i%4)*24,0,7);x.fill()}x.globalAlpha=1;
   x.textAlign="center";x.textBaseline="middle";x.fillStyle="#fff";

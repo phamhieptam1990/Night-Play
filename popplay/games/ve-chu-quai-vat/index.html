@@ -7,14 +7,14 @@
 <script src="../../../shared/bridge.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Vẽ Chữ Thành Quái Vật</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap"></noscript>
+<link rel="preload" href="../../../shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../../shared/fonts.css">
 <script>var savedTheme=null;try{savedTheme=localStorage.getItem("theme")}catch(e){}document.documentElement.dataset.theme=savedTheme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")</script>
 <style>
 /* Vẽ Chữ Thành Quái Vật — bé TÔ một chữ / số / hình, nét tô biến nó thành một con quái vật dễ thương dựng từ hạt giống (thân = chính chữ đó),
    có tên vui và tiếng kêu riêng. Quái vật vào album sưu tập. Luôn vừa một màn hình, không cuộn. */
 :root{--bg:#F4F0FF;--ink:#2d2150;--muted:#7a6aa8;--panel:#fff;--line:#e0d6ff;--accent:#8a5cf6;--on-accent:#fff;--good:#2fbf71;--bad:#e5484d;--shadow:0 8px 24px rgba(80,50,140,.16);
-  --display:"Baloo 2","Nunito","Segoe UI",system-ui,sans-serif;--w:min(calc(100vw - 24px),calc((100dvh - 158px)*.75),760px)}
+  --display:var(--font);--w:min(calc(100vw - 24px),calc((100dvh - 158px)*.75),760px)}
 :root[data-theme="dark"]{--bg:#1B1740;--ink:#F2F0FF;--muted:#b4abe0;--panel:#2a2460;--line:#3d3580;--accent:#a98bff;--on-accent:#1a1040;--shadow:0 8px 24px rgba(0,0,0,.4)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;margin:0;overflow:hidden}
@@ -267,7 +267,7 @@ function makePlan(t,lv,seed,bias){
 }
 
 /* ===== BỘ ĐỒ HOẠ CHỮ / HÌNH ===== */
-const FONT=n=>'800 '+n+'px "Baloo 2","Nunito",system-ui,sans-serif';
+const FONT=n=>'800 '+n+'px Inter,system-ui,sans-serif';
 const _mc=document.createElement("canvas").getContext("2d");
 const SHAPES={
  circle:(x,a,b,r)=>{x.beginPath();x.arc(a,b,r,0,7)},
@@ -510,7 +510,7 @@ function shareLink(){const l=LANG==="en"?"&l=en":"";if(G.daily)return location.o
   return location.origin+"/api/share/ve-chu-quai-vat?ch="+b64e({t:G.t,lv:G.lv,s:G.seed,sc:G.total})+l}
 function shareText(){const rs=G.res,best=rs.slice().sort((a,b)=>b.M.rar-a.M.rar)[0];
   return (G.daily?"📅 "+T("daily.t",{n:G.daily.n}):TYI[G.t]+" "+T("title"))+"\n"+T("tx.line",{t:T("ty")[G.t],l:["🌱","🌿","🌳"][G.lv-1],s:G.total})+"\n"+rs.map(r=>T("tx.mon",{i:labelOf(G.t,r.item),n:r.M.name,r:"✨".repeat(r.M.rar+1)})).join("\n")+(G.maxCombo>=2?"\n🔥 "+T("cb.best",{n:G.maxCombo}):"")+(best?"\n"+T("cd.no",{n:albCount(G.t),m:ITEMS[G.t].length}):"")+"\n"+T("cd.ask")+"\n"+shareLink()}
-const F="'Baloo 2','Nunito',system-ui,-apple-system,'Segoe UI','Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";
+const F="Inter,system-ui,-apple-system,'Segoe UI','Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";
 function fitText(x,tx,px,font,maxW){let s=px;do{x.font=font.replace("$",s);s-=2}while(x.measureText(tx).width>maxW&&s>20)}
 function rr(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
 const RAR_PAL=[["#8a5cf6","#4d6bff"],["#2fbfa0","#3b82f6"],["#ff8a5a","#e0408a"],["#ffb703","#ff5a1f"]];

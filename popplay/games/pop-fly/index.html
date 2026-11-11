@@ -7,13 +7,13 @@
 <script src="../../../shared/bridge.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Chim Bay Học Vui</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap"></noscript>
+<link rel="preload" href="../../../shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../../shared/fonts.css">
 <script>var savedTheme=null;try{savedTheme=localStorage.getItem("theme")}catch(e){}document.documentElement.dataset.theme=savedTheme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");</script>
 <style>
 /* Chim Bay Học Vui — game bay cho bé: bay qua cổng đúng chữ / số, không có "chết", sai chỉ chậm lại. Luôn vừa một màn hình. */
 :root{--bg:#FFF6EC;--ink:#3b2a1d;--muted:#8a6f5a;--panel:#fff;--line:#f0d9c0;--accent:#FF5A1F;--on-accent:#fff;--sky1:#bfe8ff;--sky2:#eefaff;--good:#2fbf71;--warn:#ffb020;--shadow:0 8px 24px rgba(120,70,20,.18);
-  --display:"Baloo 2","Nunito","Segoe UI",system-ui,sans-serif;--w:min(calc(100vw - 24px),calc((100dvh - 204px)*.75),760px)}
+  --display:var(--font);--w:min(calc(100vw - 24px),calc((100dvh - 204px)*.75),760px)}
 :root[data-theme="dark"]{--bg:#1B2340;--ink:#F2F4FF;--muted:#a9b2d8;--panel:#26305a;--line:#38437a;--accent:#FF7A45;--on-accent:#2a1204;--sky1:#243a7a;--sky2:#3b57a6;--shadow:0 8px 24px rgba(0,0,0,.4)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;margin:0;overflow:hidden}
@@ -356,7 +356,7 @@ function draw(){
     w.rings.forEach((r,i)=>{const pul=(w.hintT>0&&r.ok)?1+.08*Math.sin(S.t*14):1;ctx.save();ctx.translate(w.x,r.y);ctx.scale(pul,pul);
       if(sk&&sk.gate){sk.gate(ctx,r,i,w.hintT>0&&r.ok,S);ctx.restore();return}
       ctx.fillStyle=(w.hintT>0&&r.ok)?"rgba(255,235,120,.95)":"rgba(255,255,255,.88)";ctx.strokeStyle=RING[i%3];ctx.lineWidth=7;ctx.beginPath();ctx.arc(0,0,R,0,7);ctx.fill();ctx.stroke();
-      ctx.fillStyle="#3b2a1d";ctx.font='800 '+(String(r.label).length>2?34:46)+'px "Baloo 2",system-ui,sans-serif';ctx.fillText(r.label,0,3);ctx.restore()});
+      ctx.fillStyle="#3b2a1d";ctx.font='800 '+(String(r.label).length>2?34:46)+'px Inter,system-ui,sans-serif';ctx.fillText(r.label,0,3);ctx.restore()});
   }
   if(S.ty.draw)S.ty.draw(ctx,S);
   /* nhân vật */
@@ -555,7 +555,7 @@ $("pgShare").addEventListener("click",()=>{gateBack="ovProg";openGate(()=>{showO
 function fitText(x,txt,max,font,min){let sz=max;do{x.font=font.replace("$",sz);if(x.measureText(txt).width<=min||sz<=22)break;sz-=2}while(true);return sz}
 function drawCard(){
   const p=Prog.load(),st=Prog.stats(p),W2=1080,H2=1080,cv2=document.createElement("canvas");cv2.width=W2;cv2.height=H2;const x=cv2.getContext("2d");
-  const F="'Baloo 2','Nunito',system-ui,-apple-system,'Segoe UI','Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif",E="";
+  const F="Inter,system-ui,-apple-system,'Segoe UI','Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif",E="";
   const g=x.createLinearGradient(0,0,W2,H2);g.addColorStop(0,"#ff9a4a");g.addColorStop(1,"#ff5a1f");x.fillStyle=g;x.fillRect(0,0,W2,H2);
   x.globalAlpha=.12;x.fillStyle="#fff";for(let i=0;i<14;i++){x.beginPath();x.arc((i*173)%W2,(i*331)%H2,30+(i%4)*22,0,7);x.fill()}x.globalAlpha=1;
   x.textAlign="center";x.textBaseline="middle";x.fillStyle="#fff";

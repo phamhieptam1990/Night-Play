@@ -7,14 +7,14 @@
 <script src="../../../shared/bridge.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Bé Nói Đúng Không?</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap"></noscript>
+<link rel="preload" href="../../../shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../../shared/fonts.css">
 <script>var savedTheme=null;try{savedTheme=localStorage.getItem("theme")}catch(e){}document.documentElement.dataset.theme=savedTheme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")</script>
 <style>
 /* Bé Nói Đúng Không? — game hỏi "2 + 3 = ?", bé NÓI TO đáp án (hoặc chạm 1 trong 3 nút to). Nhân vật nghe, nhảy múa khi đúng.
    Micro chỉ bật sau khi phụ huynh đồng ý; game KHÔNG ghi / lưu / gửi âm thanh. Thẻ & clip khoe chỉ dựng từ CHỮ phiên âm trong bộ nhớ ván chơi. Luôn vừa một màn hình. */
 :root{--bg:#F4F0FF;--ink:#2d2250;--muted:#7a6fa6;--panel:#fff;--line:#e0d8fb;--accent:#7A5CFF;--on-accent:#fff;--good:#2fbf71;--bad:#e5484d;--warn:#ffb020;--shadow:0 8px 24px rgba(70,40,160,.16);
-  --display:"Baloo 2","Nunito","Segoe UI",system-ui,sans-serif;--w:min(calc(100vw - 24px),calc((100dvh - 158px)*.75),760px)}
+  --display:var(--font);--w:min(calc(100vw - 24px),calc((100dvh - 158px)*.75),760px)}
 :root[data-theme="dark"]{--bg:#1B1740;--ink:#F2F0FF;--muted:#b3acdc;--panel:#2a2562;--line:#3b3580;--accent:#9a82ff;--on-accent:#150a40;--shadow:0 8px 24px rgba(0,0,0,.4)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;margin:0;overflow:hidden}
@@ -440,7 +440,7 @@ function sizeCv(){const cv=$("cv"),r=cv.getBoundingClientRect(),d=Math.min(2,win
 function renderStage(){
  const cv=$("cv");if(!G||$("arena").hidden)return;if(cv.width<2||ST.W<2)sizeCv();if(!ST.W)return;const x=cv.getContext("2d"),W=ST.W,H=ST.H,sk=skinOf(G.t);
  x.setTransform(ST.d,0,0,ST.d,0,0);x.clearRect(0,0,W,H);const pg=Math.min(1,G.r/ROUNDS);try{sk.bg&&sk.bg(x,W,H,ST.t,pg)}catch(e){}
- {const L=sk.deco||["⭐"],n=3+Math.min(G.r,9);x.font="16px sans-serif";x.textAlign="center";for(let i=0;i<n;i++){const sz=10+(i%3)*6;x.globalAlpha=.22+(i%3)*.1;x.font=sz+"px sans-serif";x.fillText(L[i%L.length],(i*61%100)/100*W+Math.sin(ST.t*.5+i)*10,((ST.t*(8+(i%3)*7)+i*37)%(H+20))-6)}x.globalAlpha=1;
+ {const L=sk.deco||["⭐"],n=3+Math.min(G.r,9);x.font="16px Inter,sans-serif";x.textAlign="center";for(let i=0;i<n;i++){const sz=10+(i%3)*6;x.globalAlpha=.22+(i%3)*.1;x.font=sz+"px Inter,sans-serif";x.fillText(L[i%L.length],(i*61%100)/100*W+Math.sin(ST.t*.5+i)*10,((ST.t*(8+(i%3)*7)+i*37)%(H+20))-6)}x.globalAlpha=1;
   x.fillStyle=pg<.5?"rgba(255,235,170,"+(pg*.14)+")":"rgba(255,120,90,"+((pg-.5)*.2)+")";x.fillRect(0,0,W,H)}
  if(ST.tier>=2)HL.rays(x,W,H,ST.t,W/2,H*.55,ST.tier>=3?10:7,ST.tier>=3?"rgba(255,240,140,.2)":"rgba(255,160,230,.14)");
  const s=H*.74;x.save();x.translate(W/2,H*.95);x.scale(s/100,s/100);drawChar(x,KINDS[G.t],ST,sk);x.restore();
@@ -475,7 +475,7 @@ function shareText(){const em=G.hist.map(h=>h==="g"?"🟩":h==="y"?"🟨":"🟥"
 function wrapLines(x,text,maxW){const w=text.split(" "),L=[];let cur="";for(const a of w){const tt=cur?cur+" "+a:a;if(x.measureText(tt).width>maxW&&cur){L.push(cur);cur=a}else cur=tt}if(cur)L.push(cur);return L}
 function fitWrap(x,text,font,maxW,maxLines,px){let s=px,L;do{x.font=font.replace("$",s);L=wrapLines(x,text,maxW);s-=4}while(L.length>maxLines&&s>26);return{L,s:s+4}}
 const CARDPAL=[["#6ea8ff","#7a5cff"],["#ffb36b","#ff6fa8"],["#c9a27a","#ff9a4a"],["#ffe36a","#4fd0c0"]];
-const F="'Baloo 2','Nunito',system-ui,-apple-system,'Segoe UI','Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";
+const F="Inter,system-ui,-apple-system,'Segoe UI','Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";
 function drawBubble(x,cx,cy,w,h,fill,tailX){const a=cx-w/2,b=cy-h/2;rrp(x,a,b,w,h,h>200?60:44,fill);x.fillStyle=fill;x.beginPath();x.moveTo(tailX-34,b+h-4);x.lineTo(tailX,b+h+58);x.lineTo(tailX+34,b+h-4);x.fill()}
 function drawCard(){
   const W=1080,H=1350,c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d"),pal=CARDPAL[G.t],sk=skinOf(G.t);
