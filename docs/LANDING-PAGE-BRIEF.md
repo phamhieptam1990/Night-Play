@@ -267,3 +267,8 @@ theo ĐÚNG tài liệu docs/LANDING-PAGE-BRIEF.md (đính kèm toàn văn). Yê
 - Nút "Chơi tiếp" cho người đã chơi (chỉ đọc np-resume:*, np-hi-*, np-rails-played, xx-save), đổi chữ trước khi vẽ; HTML tĩnh vẫn "Chơi ngay".
 - Đổi ngôn ngữ giữ vị trí cuộn + câu FAQ đang mở (sessionStorage tạm "np-lsw", hai bản cùng thứ tự `main > section`), giữ ?landing=1. Không dùng cách fetch thay <main> (giữ 2 trang tĩnh cho SEO).
 - Liên kết từ app về landing: `/?landing=1` và `/en/?landing=1` (script chuyển hướng PWA bỏ qua tham số này; canonical/sitemap không chứa tham số).
+
+## Tài sản ảnh và mục phụ huynh (đợt mockup + khoá trẻ em)
+- Ảnh chụp màn hình THẬT (390x844, DSF 1.5, WebP <= 45KB/ảnh) trong `landing/lp/img/shots/`: `hero-cafe|nghi|wings.webp` (3 máy ở hero, >= 900px; ảnh giữa `fetchpriority=high`, hai ảnh bên lazy) và `parent-settings|timeup.webp` (mục phụ huynh). Tạo lại bằng `node scripts/cozygame/shots-landing.js`. Khung máy (viền titan, dynamic island, thanh trạng thái, nút bên, phản chiếu kính) dựng bằng CSS (`.dev`); chip nổi `.fchip` trôi nhẹ, tắt khi `prefers-reduced-motion`.
+- LỆCH brief: ảnh hero là màn chọn của game (skin mặc định, tối), chưa chụp skin Night Pass riêng; dưới 900px ẩn các máy để CTA + thẻ lối vào luôn nằm trong màn đầu (không có bản "1 máy" cho điện thoại).
+- Mục `#phuhuynh` (ngay sau "Chọn thế giới", có trong menu neo, VI + EN): chỉ nêu tính năng có thật trong `popplay/index.html` + `shared/kidlock.js` + `shared/parentgate.js` (hẹn giờ 15-120 phút/ngày, khoá màn hình chơi, bật/tắt game, cổng giữ nút 3 giây + câu hỏi người lớn). Các tính năng này MIỄN PHÍ (không bị khoá bởi Night Pass). Có thêm huy hiệu ở hero, thẻ tính năng, câu FAQ + JSON-LD (10 câu).

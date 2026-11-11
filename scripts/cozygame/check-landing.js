@@ -83,7 +83,7 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
       const unesc = s => s.replace(/&quot;/g, '"').replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
       const vis = [...h.matchAll(/<details><summary>([\s\S]*?)<\/summary><p>([\s\S]*?)<\/p><\/details>/g)].map(m => [unesc(m[1]), unesc(m[2])]);
       const me = (ty("FAQPage")[0] || {}).mainEntity || [];
-      note(vis.length === 9 && me.length === 9 && me.every((q, i) => q.name === vis[i][0] && q.acceptedAnswer.text === vis[i][1]), tg, "FAQPage không khớp 9 câu hiển thị");
+      note(vis.length === 10 && me.length === 10 && me.every((q, i) => q.name === vis[i][0] && q.acceptedAnswer.text === vis[i][1]), tg, "FAQPage không khớp 10 câu hiển thị");
       for (const v of ty("VideoGame")) note(v.offers && v.offers.price === "0" && v.offers.priceCurrency === "VND" && /^https:\/\/nightplay\.vn\/(popplay|cozyplay)\/$/.test(v.url), tg, "VideoGame sai url/offers: " + v.name);
     }
     /* game: 12 thẻ, #id có thật */
@@ -204,9 +204,24 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
         await pg.mouse.click(5, 5); await wait(100); note(await pg.evaluate(() => document.getElementById("flinks").offsetParent === null), tag, "bấm ngoài không đóng menu");
         if (sz[0] >= 400) { await pg.evaluate(() => scrollTo({ top: 0, behavior: "instant" })); await wait(100); const hb = await pg.$(".top .mbtn"); const bx = hb && await hb.boundingBox();
           note(!!bx && bx.width >= 44 && bx.height >= 44, tag, "thiếu nút menu header >= 44px"); if (hb) { await hb.click(); await wait(150); const h = await pg.evaluate(() => { const n = document.getElementById("hlinks"), q = n.getBoundingClientRect(), c = document.querySelector(".top .btn").getBoundingClientRect(); return { vis: n.offsetParent !== null, in: q.right <= innerWidth && q.left >= 0, cta: c.width >= 80 && c.height >= 44, n: n.querySelectorAll("a").length }; });
-            note(h.vis && h.in && h.cta && h.n === 4, tag, "menu header sai " + JSON.stringify(h)); await pg.keyboard.press("Escape"); } }
+            note(h.vis && h.in && h.cta && h.n === 5, tag, "menu header sai " + JSON.stringify(h)); await pg.keyboard.press("Escape"); } }
       } else if (sz[0] >= 1000) note(await pg.evaluate(() => document.getElementById("hlinks").offsetParent !== null), tag, "liên kết neo header phải hiện");
       note(!errs.length, tag, "lỗi: " + errs[0]); await pg.close(); }
+    /* mục phụ huynh + ảnh chụp thật: có id trong menu neo, ảnh tải được có width/height + alt, CTA/chính sách đúng, không CLS */
+    for (const l of ["vi", "en"]) for (const th of ["light", "dark"]) for (const sz of [[390, 844], [1440, 900]]) {
+      const pg = await br.newPage(); await pg.setViewport({ width: sz[0], height: sz[1] }); const errs = [];
+      pg.on("console", m => { if (m.type() === "error" && !/status of 501/.test(m.text())) errs.push(m.text()); });
+      await pg.evaluateOnNewDocument(t => { try { localStorage.setItem("theme", t); } catch (e) {} window.__cls = 0; try { new PerformanceObserver(li => { for (const e of li.getEntries()) if (!e.hadRecentInput) window.__cls += e.value; }).observe({ type: "layout-shift", buffered: true }); } catch (e) {} }, th);
+      await pg.goto(B + PAGES[l], { waitUntil: "load" }); const tag = "phụ-huynh " + l + " " + sz.join("x") + " " + th;
+      await pg.evaluate(async () => { for (let y = 0; y < document.body.scrollHeight; y += 500) { scrollTo(0, y); await new Promise(r => setTimeout(r, 60)); } });
+      await wait(600);
+      const r = await pg.evaluate(() => { const sec = document.getElementById("phuhuynh"), im = [...document.querySelectorAll(".scr img")].filter(i => i.offsetParent);
+        return { sec: !!sec, nav: !!document.querySelector('#hlinks a[href="#phuhuynh"]'), h2: sec && sec.querySelector("h2").textContent.length, cta: sec && sec.querySelector('a[href="/popplay/"]') && sec.querySelector('a[href="/privacy.html"]') ? 1 : 0, cards: sec ? sec.querySelectorAll(".pcard").length : 0,
+          imgs: im.length, bad: im.filter(i => !i.complete || !i.naturalWidth || !i.getAttribute("width") || !i.getAttribute("height") || (i.alt || "").length < 10).map(i => i.src.split("/").pop()), cls: window.__cls, sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth, over: sec ? sec.scrollWidth > sec.clientWidth : 0 }; });
+      note(r.sec && r.nav && r.h2 > 10 && r.cta && r.cards === 4, tag, "mục phụ huynh thiếu thành phần " + JSON.stringify(r)); note(r.imgs >= 2 && !r.bad.length, tag, "ảnh lỗi/thiếu kích thước/alt: " + r.bad + " (" + r.imgs + ")");
+      note(r.cls < 0.02, tag, "CLS " + r.cls); note(r.sw <= r.cw && !r.over, tag, "tràn ngang"); note(!errs.length, tag, "lỗi console " + errs[0]);
+      if (shotDir) { await pg.evaluate(() => document.getElementById("phuhuynh").scrollIntoView({ behavior: "instant" })); await wait(300); await pg.screenshot({ path: path.join(shotDir, "parents-" + l + "-" + th + "-" + sz[0] + ".png") }); await pg.evaluate(() => scrollTo(0, 0)); await wait(300); await pg.screenshot({ path: path.join(shotDir, "hero-" + l + "-" + th + "-" + sz[0] + ".png") }); }
+      await pg.close(); }
     /* hub /play/: mọi liên kết nội bộ + tài nguyên trả 200 (không 404 do đổi đường dẫn), nút ← ở trang cổng về /play/ */
     { const pg = await br.newPage(); const bad = []; pg.on("response", r => { if (r.url().startsWith(B) && r.status() >= 400 && !/\/api\//.test(r.url())) bad.push(r.status() + " " + r.url()); });
       await pg.goto(B + "/play/", { waitUntil: "networkidle0" }); await wait(300); note(!bad.length, "hub /play/", "tài nguyên lỗi: " + bad.slice(0, 3).join(" | "));
