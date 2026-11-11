@@ -17,7 +17,8 @@ const quick = process.argv.includes("--quick");
 const shotDir = (process.argv.find(a => a.startsWith("--shots=")) || "").slice(8);
 const note = (ok, tag, msg) => { if (!ok) { fails.push(tag + ": " + msg); console.log("  ✗ " + tag + ": " + msg); } };
 const wait = ms => new Promise(r => setTimeout(r, ms));
-const SIZES = quick ? [[360, 640], [390, 844], [1440, 900], [667, 375]] : [[320, 568], [360, 640], [390, 844], [430, 932], [768, 1024], [1024, 768], [1194, 834], [1440, 900], [667, 375], [844, 390]];
+const orbitGeom = require("./orbit-geom.js");
+const SIZES = quick ? [[360, 640], [455, 700], [1440, 900], [667, 375]] : [[320, 568], [360, 640], [390, 844], [430, 932], [455, 900], [455, 700], [600, 900], [768, 1024], [1024, 768], [1194, 834], [1440, 900], [667, 375], [844, 390]];
 const COMBOS = quick ? [["light", "vi"], ["dark", "en"]] : [["light", "vi"], ["light", "en"], ["dark", "vi"], ["dark", "en"]];
 const freePort = () => new Promise(res => { const s = net.createServer(); s.listen(0, () => { const p = s.address().port; s.close(() => res(p)); }); });
 
@@ -97,6 +98,7 @@ const freePort = () => new Promise(res => { const s = net.createServer(); s.list
       }
       note(m.acs === 0 && m.dbAcs === 0, tag, `AudioContext đã tạo trước khi bấm (${m.acs}/${m.dbAcs})`);
       note(m.keys.every(k => k === "theme" || k === "lang" || /^np[-_]/.test(k)), tag, "localStorage có khoá lạ: " + m.keys);
+      await orbitGeom(pg, tag + " hình học quỹ đạo", note, { hub: true });
       note(m.h1.length > 3, tag, "thiếu h1 (có thể ẩn bằng CSS nhưng phải có chữ)");
       if (th === "light" && lang === "vi" || shotDir) { /* không đo màu nữa: chỉ chụp ảnh */ }
       if (shotDir) { fs.mkdirSync(shotDir, { recursive: true }); await pg.screenshot({ path: path.join(shotDir, `hub-${w}x${h}-${th}-${lang}.png`) }); }

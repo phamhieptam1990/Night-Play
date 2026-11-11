@@ -65,7 +65,7 @@ html[data-theme=dark] body::before{background:
 main{flex:1;min-height:0;display:flex;padding:0 16px;overflow:hidden}
 .hubsys{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:clamp(8px,1.6dvh,18px);width:100%;max-width:1180px;margin:0 auto}
 .orbwrap{flex:none;container-type:size;width:100%;height:min(43dvh,calc((100vw - 32px) * .8333),420px);display:grid;place-items:center}
-.hubsys .orbstage{width:min(100cqw,120cqh);touch-action:none;border-radius:26px}
+.hubsys .orbstage{grid-area:auto;margin:0;justify-self:center;align-self:center;width:min(100cqw,120cqh);touch-action:none;border-radius:26px}
 .hubsys .sat{touch-action:none}
 html[data-theme=dark] .hubsys .orbstage{background:radial-gradient(circle at 50% 50%,rgba(124,92,255,.28),transparent 62%);border-color:rgba(124,92,255,.28);box-shadow:none}
 .side{flex:none;width:100%;min-width:0;max-width:560px;display:grid;gap:clamp(6px,1.4dvh,14px);justify-items:center;text-align:center}

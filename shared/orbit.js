@@ -34,22 +34,58 @@
   var DB = /[?&]debug(=|&|$)/.test(location.search) ? (window.__npOrbit = { ticks: 0, marks: 0, dropped: 0, maxPerSec: 0, audio: false, hot: "", vel: { pop: 0, night: 0 }, paused: { pop: false, night: false }, reduced: reduced, frames: 0, ctxCount: 0 }) : null;
 
   var P = 1000;   /* khoảng cách phối cảnh (đơn vị khung 600): vệ tinh phía trước to ~1,9x phía sau */
+  /* Kích thước THẬT của khối (không dùng viewport): W/H sân khấu, ss = hệ số thu nhỏ vệ tinh khi khối nhỏ (điện thoại hẹp), half = nửa kích thước bong bóng trước khi phóng.
+     Mọi vệ tinh (kể cả phóng to ở phía trước) bị kẹp TRỌN trong hộp; chỉ MỘT nhãn tên (vệ tinh trước nhất hoặc đang rê/focus) đặt trong hộp, tránh vệ tinh khác. */
+  var W = 600, H = 500, SS = 1, HALF = 23, hot = null, lab = d.createElement("div"), labFor = null, labW = 0, labH = 0, MARGIN = 3;
+  lab.className = "orblab"; lab.setAttribute("aria-hidden", "true"); stage.appendChild(lab);
+  function measure() {
+    W = stage.clientWidth; H = stage.clientHeight; U = W / 600; SS = Math.max(0.72, Math.min(1, U / 0.7));
+    stage.style.setProperty("--ss", SS.toFixed(3)); var sp = allSats[0] && allSats[0].querySelector("span"); HALF = sp ? sp.offsetWidth / 2 * 1.1 : 25; labFor = null;
+  }
+  function obstacles() {
+    var o = []; [hint, stage.querySelector(".orbsnd"), pl].forEach(function (e) { if (e && !e.hidden && !e.classList.contains("off") && e.offsetWidth) o.push({ x0: e.offsetLeft, y0: e.offsetTop, x1: e.offsetLeft + e.offsetWidth, y1: e.offsetTop + e.offsetHeight }); });
+    var pr = W * 0.095; o.push({ x0: W / 2 - pr, y0: H / 2 - pr, x1: W / 2 + pr, y1: H / 2 + pr }); return o;   /* hành tinh cũng là vật cản của nhãn */
+  }
+  function overlap(a, b) { var w = Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0), h = Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0); return w > 0 && h > 0 ? w * h : 0; }
+  function placeLabel(vis, target) {
+    if (!target) { lab.classList.remove("on"); labFor = null; return; }
+    if (labFor !== target) { labFor = target; lab.textContent = target.getAttribute("title") || ""; lab.style.borderColor = ""; lab.className = "orblab " + (target.classList.contains("pop") ? "pop" : "night"); labW = lab.offsetWidth; labH = lab.offsetHeight; }
+    var v = vis[target._i], ob = obstacles(), best = null, cl = function (n, lo, hi) { return Math.max(lo, Math.min(hi, n)); }, cx = v.cx, cy = v.cy, r = v.r, own = { x0: cx - r, y0: cy - r, x1: cx + r, y1: cy + r };
+    /* ứng viên: 16 hướng quanh vệ tinh x 2 khoảng cách (đầu tiên = dưới, giữa); chọn vị trí ít chồng nhất, ưu tiên gần + giữ lựa chọn cũ cho khỏi giật */
+    var cands = [], k, g, th, ox, oy, gaps = [4, 4 + labH * 0.9, 4 + labH * 1.8];
+    for (g = 0; g < 3; g++) for (k = 0; k < 16; k++) { th = Math.PI / 2 + k * Math.PI / 8; ox = Math.cos(th) * (r + gaps[g] + labW / 2 * Math.abs(Math.cos(th))); oy = Math.sin(th) * (r + gaps[g] + labH / 2 * Math.abs(Math.sin(th))); cands.push([cx + ox - labW / 2, cy + oy - labH / 2, g * 16 + k]); }
+    cands.forEach(function (c) {
+      var x = cl(c[0], MARGIN, W - MARGIN - labW), y = cl(c[1], MARGIN, H - MARGIN - labH), box = { x0: x, y0: y, x1: x + labW, y1: y + labH }, sc = (Math.abs(x - c[0]) + Math.abs(y - c[1])) * 30 + overlap(box, own) * 40 + (c[2] >= 16 ? 25 : 0) + (c[2] >= 32 ? 25 : 0) + (c[2] % 16 === 0 ? 0 : 3) - (labFor === target && target._ci === c[2] ? 20 : 0);
+      var ov = overlap(box, own);
+      vis.forEach(function (u, j) { if (j !== target._i) ov += overlap(box, { x0: u.cx - u.r, y0: u.cy - u.r, x1: u.cx + u.r, y1: u.cy + u.r }); });
+      ob.forEach(function (q) { ov += overlap(box, q); });
+      sc += ov * 4;
+      if (!best || sc < best.sc) best = { sc: sc, x: x, y: y, i: c[2], ov: ov };
+    });
+    target._ci = best.i;
+    lab.style.translate = best.x.toFixed(1) + "px " + best.y.toFixed(1) + "px"; lab.classList.toggle("on", best.ov < 8);   /* không có chỗ trống (hộp quá nhỏ): ẩn nhãn thay vì đè lên vệ tinh khác */
+  }
   function render() {
-    var front = { pop: null, night: null }, parx = LITE || reduced ? 0 : px, pary = LITE || reduced ? 0 : py;
+    var front = null, fk = -2, parx = LITE || reduced ? 0 : px, pary = LITE || reduced ? 0 : py, vis = [], hw = W / 2 - MARGIN, hh = H / 2 - MARGIN;
     ["pop", "night"].forEach(function (w) {
-      var o = O[w], g = o.g, ct = Math.cos(o.th), st = Math.sin(o.th), dir = (Math.abs(o.vel) > 0.01 ? Math.sign(o.vel) : Math.abs(o.kv) > 0.01 ? Math.sign(o.kv) : g.dir), sp = Math.min(1, Math.max(Math.abs(o.vel), Math.abs(o.kv)) / 2.2), best = -2;
+      var o = O[w], g = o.g, ct = Math.cos(o.th), st = Math.sin(o.th), dir = (Math.abs(o.vel) > 0.01 ? Math.sign(o.vel) : Math.abs(o.kv) > 0.01 ? Math.sign(o.kv) : g.dir), sp = Math.min(1, Math.max(Math.abs(o.vel), Math.abs(o.kv)) / 2.2);
       for (var i = 0; i < o.sats.length; i++) {
         var f = o.base[i] + o.phi, sf = Math.sin(f), cf = Math.cos(f), ex = g.a * cf, ey = g.b * sf, t = (sf + 1) / 2, el = o.sats[i], gold = el.classList.contains("gold");
         var zz = g.a * 0.9 * sf, sc = P / (P - zz) * (gold ? 1.16 : 1), sx = (ex * ct - ey * st + parx * 14 * t) * U, sy = (ey * ct + ex * st + pary * 9 * t) * U;
+        /* kẹp: bong bóng sau khi phóng phải nằm trọn trong hộp (tâm hộp = tâm hành tinh = W/2,H/2) */
+        var room = Math.min(hw - Math.abs(sx), hh - Math.abs(sy)) / HALF; if (sc > room) sc = Math.max(0.5, room);
         /* hướng bay trên màn hình (đạo hàm của elip đã nghiêng) -> đuôi sao chổi ngược hướng */
         var dx = (-g.a * sf * ct - g.b * cf * st) * dir, dy = (g.b * cf * ct - g.a * sf * st) * dir, rot = Math.atan2(dy, dx) * 180 / Math.PI + 180;
         el.style.cssText = "transform:translate(" + sx.toFixed(1) + "px," + sy.toFixed(1) + "px) scale(" + sc.toFixed(3) + ");opacity:" + (0.66 + 0.34 * t).toFixed(3) + ";z-index:" + (sf > 0 ? 6 + Math.round(t * 3) : 1) + ";--b:" + (0.7 + 0.3 * t).toFixed(2) + ";--r:" + rot.toFixed(0) + "deg;--tl:" + (LITE ? 0 : (sp * (0.25 + 0.75 * t))).toFixed(2);
-        el.k = sf; if (sf > best) { best = sf; front[w] = el; }
+        el.k = sf; el._i = vis.length; vis.push({ cx: W / 2 + sx, cy: H / 2 + sy, r: HALF * sc + 2 }); if (sf > fk) { fk = sf; front = el; }
         if (el.prevK < 0.96 && sf >= 0.96 && el.prevK > -1) frontPass.push(w);
         el.prevK = sf;
       }
     });
-    ["pop", "night"].forEach(function (w) { O[w].sats.forEach(function (el) { var on = el === front[w] && el.k > 0.55; if (on !== !!el._lab) { el._lab = on; el.classList.toggle("lab", on); } }); });
+    /* đúng MỘT nhãn: vệ tinh đang rê/focus, nếu không thì vệ tinh trước nhất của cả hai quỹ đạo */
+    var tgt = hot || (front && fk > 0.55 ? front : null);
+    allSats.forEach(function (el) { var on = el === tgt; if (on !== !!el._lab) { el._lab = on; el.classList.toggle("lab", on); } });
+    placeLabel(vis, tgt);
     if (!LITE && !reduced) stage.style.setProperty("--px", px.toFixed(3)), stage.style.setProperty("--py", py.toFixed(3));
     if (frontPass.length) { var n = performance.now(); if (soundOn && ctx && ctx.state === "running" && n - lastWhoosh > 260) { lastWhoosh = n; whoosh(frontPass[0]); } if (navigator.vibrate && (soundOn || userActive) && !reduced && n - lastVib > 400) { lastVib = n; try { navigator.vibrate(7); } catch (e) {} } frontPass.length = 0; }
   }
@@ -61,7 +97,7 @@
 
   function frame(t) {
     raf = 0; var dt = last ? Math.min(0.05, (t - last) / 1000) : 0.016; last = t;
-    U = stage.clientWidth / 600; var maxV = 0;
+    if (stage.clientWidth !== W || stage.clientHeight !== H) measure(); var maxV = 0;
     px += (tx - px) * (1 - Math.exp(-dt * 6)); py += (ty - py) * (1 - Math.exp(-dt * 6));
     /* đo FPS sau 1,5s đầu (bỏ qua lúc tải/giải mã ảnh) và bỏ khung > 100ms (đổi tab): chậm thì chỉ tắt hiệu ứng phụ (đuôi, parallax, cực quang), KHÔNG dừng vòng quay; nhanh trở lại thì bật lại */
     if (!reduced && dt > 0 && t - t00 > 1500 && (t - last0) < 100) { fpsN++; fpsT += dt; if (fpsN === 120) { var av = fpsT / fpsN; if (!LITE && av > 0.034) setLite(true); else if (LITE && av < 0.021) setLite(false); fpsN = 0; fpsT = 0; } } last0 = t;
@@ -244,7 +280,12 @@
   if ("IntersectionObserver" in window) new IntersectionObserver(function (en) { onScreen = en[en.length - 1].isIntersecting; syncCtx(); if (onScreen) wake(); else { cancelAnimationFrame(raf); raf = 0; } }).observe(stage);
   d.addEventListener("visibilitychange", function () { tabOn = !d.hidden; syncCtx(); if (tabOn) wake(); else { cancelAnimationFrame(raf); raf = 0; } });
   if (mqR.addEventListener) mqR.addEventListener("change", function () { reduced = mqR.matches; if (DB) DB.reduced = reduced; if (!reduced) force = false; wake(); });
-  window.addEventListener("resize", function () { U = stage.clientWidth / 600; render(); });
-  render(); wake();
+  window.addEventListener("resize", function () { measure(); render(); });
+  if (window.ResizeObserver) new ResizeObserver(function () { if (stage.clientWidth !== W || stage.clientHeight !== H) { measure(); render(); } }).observe(stage);
+  stage.addEventListener("pointerover", function (e) { if (e.pointerType !== "mouse") return; var a = e.target.closest && e.target.closest("a.sat"); if (a && hot !== a) { hot = a; render(); } });
+  stage.addEventListener("pointerout", function (e) { if (e.pointerType !== "mouse") return; var a = e.target.closest && e.target.closest("a.sat"); if (a && a === hot && !(e.relatedTarget && a.contains(e.relatedTarget))) { hot = null; render(); } });
+  stage.addEventListener("focusin", function (e) { var a = e.target.closest && e.target.closest("a.sat"), v = true; try { v = e.target.matches(":focus-visible"); } catch (x) {} if (a && v) { hot = a; render(); } });
+  stage.addEventListener("focusout", function (e) { if (hot) { hot = null; render(); } });
+  measure(); render(); wake();
   if (DB) { DB.setPhi = function (w, v) { O[w].phi = v; render(); }; DB.sound = setSound; DB.setLite = setLite; DB.sats = function () { return allSats.map(function (a) { var r = a.getBoundingClientRect(); return { w: r.width, z: +a.style.zIndex, k: a.k, cls: a.className, o: +a.style.opacity }; }); }; DB.state = function () { return ctx ? ctx.state : "none"; }; }
 })();

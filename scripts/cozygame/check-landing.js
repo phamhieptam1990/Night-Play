@@ -12,7 +12,7 @@
 const { spawn, spawnSync } = require("child_process"), fs = require("fs"), os = require("os"), path = require("path"), puppeteer = require("puppeteer-core");
 const root = path.join(__dirname, "..", ".."), fails = [];
 let PORT = 0, B = "";   // cổng trống do hệ điều hành chọn (tránh đụng http.server của bài đo khác)
-const quick = process.argv.includes("--quick");
+const quick = process.argv.includes("--quick"), orbitGeom = require("./orbit-geom.js");
 const shotDir = (process.argv.find(a => a.startsWith("--shots=")) || "").slice(8);
 const note = (ok, tag, msg) => { if (!ok) { fails.push(tag + ": " + msg); console.log("  ✗ " + tag + ": " + msg); } };
 const wait = ms => new Promise(r => setTimeout(r, ms));
@@ -303,7 +303,7 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
       for (const m of st) { note(gameIds.has(m[3]), tg, "icon trỏ id lạ " + m[3]); note((m[1] === "pop") === (m[2] === "popplay"), tg, "icon " + m[3] + " sai cổng"); }
       note(/<button class="orbsnd"[^>]*aria-pressed="false"[^>]*aria-label="[^"]+"/.test(sec), tg, "thiếu nút âm thanh aria-pressed=false + aria-label");
     }
-    for (const sz of quick ? [[360, 640], [1440, 900]] : [[320, 568], [360, 640], [390, 844], [768, 1024], [1024, 768], [1440, 900]]) for (const l of ["vi", "en"]) for (const th of ["light", "dark"]) {
+    for (const sz of quick ? [[360, 640], [455, 900], [1440, 900]] : [[320, 568], [360, 640], [390, 844], [430, 932], [455, 900], [600, 900], [768, 1024], [1024, 768], [1440, 900]]) for (const l of ["vi", "en"]) for (const th of ["light", "dark"]) {
       const tag = "quỹ đạo " + l + " " + sz.join("x") + " " + th, pg = await br.newPage(); await pg.setViewport({ width: sz[0], height: sz[1] });
       const errs = []; pg.on("console", m => { if (m.type() === "error" && !/status of (501|404)/.test(m.text())) errs.push(m.text()); }); pg.on("pageerror", e => errs.push(String(e)));
       await pg.evaluateOnNewDocument(t => { try { localStorage.setItem("theme", t); } catch (e) {} window.__cls = 0; window.__acs = 0; const A = window.AudioContext; if (A) { window.AudioContext = function () { window.__acs++; return new A(); }; } try { new PerformanceObserver(li => { for (const e of li.getEntries()) if (!e.hadRecentInput) window.__cls += e.value; }).observe({ type: "layout-shift", buffered: true }); } catch (e) {} }, th);
@@ -312,6 +312,7 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
         const wd = q(".world").map(e => bx(e)); return { sw: document.documentElement.scrollWidth, iw: innerWidth, th: document.documentElement.dataset.theme, sh: s.height, sw2: s.width, sats: q(".sat").map(e => { const r = bx(e); return Math.min(r.width, r.height); }), snd: (() => { const b = document.querySelector(".orbsnd"), r = bx(b); return { w: r.width, h: r.height, p: b.getAttribute("aria-pressed"), hid: b.hidden, l: b.getAttribute("aria-label") }; })(),
           ctx0: window.__acs, st0: window.__npOrbit && window.__npOrbit.ctxCount, anim: document.getAnimations().filter(a => a instanceof CSSAnimation && a.effect && a.effect.target && a.effect.target.closest && a.effect.target.closest('#orbsys')).length, cls: window.__cls, moving: q(".sat, .planet, .orbsnd").filter(e => e.matches(".sat")).length,
           cards: wd.map(r => Math.round(r.left) + ":" + Math.round(r.right)), cardsVisible: wd.every(r => r.width > 100), inside: q(".sat").every(e => { const r = bx(e); return r.left >= s.left - 1 && r.right <= s.right + 1 && r.top >= s.top - 1 && r.bottom <= s.bottom + 1; }) }; });
+      await orbitGeom(pg, tag + " hình học", note, { hub: false });
       note(m.sw <= m.iw, tag, "tràn ngang " + m.sw + " > " + m.iw); note(m.th === th, tag, "theme " + m.th);
       note(m.sats.every(v => v >= 43.5), tag, "icon quỹ đạo < 44px (" + Math.min(...m.sats).toFixed(1) + ")"); note(m.snd.w >= 43.5 && m.snd.h >= 43.5 && !m.snd.hid, tag, "nút âm thanh thiếu/ < 44px");
       note(m.snd.p === "false" && m.ctx0 === 0 && m.st0 === 0, tag, "âm thanh phải tắt mặc định, chưa có AudioContext (aria-pressed=" + m.snd.p + ", ctx=" + m.ctx0 + ")");
