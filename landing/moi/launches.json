@@ -1,0 +1,278 @@
+[
+  {
+    "id": "xay-cau-tre",
+    "date": "2026-11-09",
+    "type": "game",
+    "group": "cozy",
+    "gameId": "xay-cau-tre",
+    "name": {
+      "vi": "Xây Cầu Tre",
+      "en": "Bamboo Bridge"
+    },
+    "tagline": {
+      "vi": "Dựng cầu tre cho xe qua sông, tre yếu là cầu gãy thật.",
+      "en": "Build a bamboo bridge for every vehicle to cross, and watch weak joints really snap."
+    },
+    "body": {
+      "vi": "Bạn dựng giàn tre có số thanh giới hạn, rồi xe người, xe đạp, xe máy và xe bò lần lượt đi qua; game tính lực lên từng thanh nên cầu quá tải sẽ gãy. Mỗi ván có tối đa 3 lần thử. Bản miễn phí chơi loại Cầu tre; Night Pass mở thêm ba loại (sông rộng có trụ giữa, mưa gió, hàng nặng) và bốn giao diện đổi địa hình hai bờ.",
+      "en": "You build a bamboo truss with a limited number of struts, then a pedestrian, a bicycle, a motorbike and an ox cart cross in turn. The game works out the load on every strut, so an overloaded bridge breaks. Each round gives you up to 3 tries. The free version plays the Bamboo Bridge mode; Night Pass adds three modes (wide river with a pier, wind and rain, heavy load) and four looks that reshape the two banks."
+    },
+    "facts": {
+      "vi": [
+        "Giàn tre có số thanh giới hạn, quá tải là gãy",
+        "Bốn xe lần lượt qua: người, xe đạp, xe máy, xe bò",
+        "Bốn giao diện: miền Tây, núi cao, ruộng bậc thang, kênh Sài Gòn"
+      ],
+      "en": [
+        "The truss has a limited number of struts, and overload breaks it",
+        "Four vehicles cross in turn: pedestrian, bicycle, motorbike, ox cart",
+        "Four looks: Mekong Delta, high mountains, rice terraces, Saigon canal"
+      ]
+    },
+    "image": "/moi/img/xay-cau-tre.webp",
+    "og": "/moi/img/og-xay-cau-tre.png",
+    "cta": {
+      "href": "/cozyplay/#xay-cau-tre",
+      "label": {
+        "vi": "Chơi ngay",
+        "en": "Play now"
+      }
+    },
+    "nightPass": true,
+    "shot": {
+      "skin": "delta",
+      "js": "document.getElementById('bDaily').click()"
+    }
+  },
+  {
+    "id": "ve-chu-quai-vat-giao-dien",
+    "date": "2026-11-09",
+    "type": "skin",
+    "group": "pop",
+    "gameId": "ve-chu-quai-vat",
+    "name": {
+      "vi": "Vẽ Chữ Thành Quái Vật: 16 giao diện Night Pass đổi bố cục",
+      "en": "Letter Monsters: 16 Night Pass looks with new layouts"
+    },
+    "tagline": {
+      "vi": "Mỗi giao diện một khung vẽ, một thanh nút, một kiểu hiệu ứng.",
+      "en": "Each look has its own drawing frame, button bar and effects."
+    },
+    "body": {
+      "vi": "Cả 16 giao diện Night Pass của Vẽ Chữ Thành Quái Vật được làm lại bố cục: thanh tiêu đề, khay vẽ, thanh nút, thanh tiến độ và hiệu ứng đổi theo từng chủ đề. Có kẹo, pixel, phù thủy, tàu biển, neon, vũ trụ, cơ khí, đồ chơi, mây, ma, thạch, trăng, dung nham, băng, rừng và vàng. Giao diện cơ bản vẫn miễn phí.",
+      "en": "All 16 Night Pass looks of Letter Monsters got new layouts: the title bar, drawing tray, button bar, progress bar and effects change with each theme. They are candy, pixel, wizard, ship, neon, space, gears, toy, cloud, ghost, jelly, moon, lava, ice, forest and gold. The basic look stays free."
+    },
+    "image": "/moi/img/ve-chu-quai-vat-giao-dien.webp",
+    "og": "/moi/img/og-ve-chu-quai-vat-giao-dien.png",
+    "cta": {
+      "href": "/popplay/#ve-chu-quai-vat",
+      "label": {
+        "vi": "Chơi ngay",
+        "en": "Play now"
+      }
+    },
+    "nightPass": true,
+    "shot": {
+      "skin": "candy",
+      "js": "document.querySelectorAll('.sk')[0].click()"
+    }
+  },
+  {
+    "id": "lang-cua-be-giao-dien",
+    "date": "2026-11-09",
+    "type": "skin",
+    "group": "pop",
+    "gameId": "lang-cua-be",
+    "name": {
+      "vi": "Làng Của Bé: 12 giao diện Night Pass mới",
+      "en": "Baby's Village: 12 new Night Pass looks"
+    },
+    "tagline": {
+      "vi": "Ngôi nhà, cảnh nền và ô đáp án đổi theo từng giao diện.",
+      "en": "The house, the backdrop and the answer tiles change with each look."
+    },
+    "body": {
+      "vi": "Làng Của Bé có 12 giao diện Night Pass, bốn cho mỗi khu (Bưu Điện Chữ Cái, Nông Trại Số, Chợ Phép Tính). Ngôi nhà đổi thành lâu đài, người tuyết, bánh, cây; cảnh nền của Nông Trại Số và Chợ Phép Tính đổi thành đồng lúa, vườn hoa, đảo dừa, trăng sao, hội chợ, chợ nổi, tiệm bánh và vũ trụ. Hình giỏ và ô đáp án cũng đổi theo giao diện.",
+      "en": "Baby's Village has 12 Night Pass looks, four for each area (Letter Post Office, Number Farm, Math Market). The house becomes a castle, a snowman, a cake or a tree; the backdrops of Number Farm and Math Market become wheat fields, a flower garden, a coconut island, moon and stars, a fair, a floating market, a bakery and outer space. The basket and the answer tiles change with the look too."
+    },
+    "image": "/moi/img/lang-cua-be-giao-dien.webp",
+    "og": "/moi/img/og-lang-cua-be-giao-dien.png",
+    "cta": {
+      "href": "/popplay/#lang-cua-be",
+      "label": {
+        "vi": "Chơi ngay",
+        "en": "Play now"
+      }
+    },
+    "nightPass": true,
+    "shot": {
+      "skin": "night",
+      "js": "document.querySelectorAll('.sk')[0].click()"
+    }
+  },
+  {
+    "id": "song-sot-cuoi-thang",
+    "date": "2026-11-08",
+    "type": "game",
+    "group": "cozy",
+    "gameId": "song-sot-cuoi-thang",
+    "name": {
+      "vi": "Sống Sót Đến Cuối Tháng",
+      "en": "Survive to Payday"
+    },
+    "tagline": {
+      "vi": "8 triệu, 30 ngày, và những lựa chọn Có hay Không.",
+      "en": "8 million dong, 30 days, and a string of Yes or No choices."
+    },
+    "body": {
+      "vi": "Bạn có 8 triệu đồng cho 30 ngày; mỗi tình huống bạn chọn Có hoặc Không trước khi đồng hồ đếm ngược hết, bằng cách vuốt thẻ hoặc bấm phím mũi tên. Cuối ván bạn nhận danh hiệu theo kiểu chi tiêu và thẻ chia sẻ có biểu đồ tiền. Night Pass thêm bốn giao diện bố cục khác hẳn: nhóm chat, tin nhắn ngân hàng, chợ online và lịch tháng.",
+      "en": "You get 8 million dong for 30 days; in each situation you pick Yes or No before the countdown ends, by swiping the card or pressing an arrow key. At the end you earn a title based on how you spent, and the share card carries a money chart. Night Pass adds four looks with completely different layouts: a group chat, bank messages, an online market and a monthly calendar."
+    },
+    "image": "/moi/img/song-sot-cuoi-thang.webp",
+    "og": "/moi/img/og-song-sot-cuoi-thang.png",
+    "cta": {
+      "href": "/cozyplay/#song-sot-cuoi-thang",
+      "label": {
+        "vi": "Chơi ngay",
+        "en": "Play now"
+      }
+    },
+    "nightPass": true,
+    "shot": {
+      "skin": "chat",
+      "js": "document.getElementById('bDaily').click()"
+    }
+  },
+  {
+    "id": "shipper-sieu-toc",
+    "date": "2026-11-08",
+    "type": "game",
+    "group": "cozy",
+    "gameId": "shipper-sieu-toc",
+    "name": {
+      "vi": "Shipper Siêu Tốc",
+      "en": "Speedy Shipper"
+    },
+    "tagline": {
+      "vi": "Chạm các nhà để vẽ lộ trình giao hàng ngắn nhất.",
+      "en": "Tap the houses to draw the shortest delivery route."
+    },
+    "body": {
+      "vi": "Bạn chạm các nhà để vẽ lộ trình giao hàng, có đơn gấp, đồ nóng và khách hủy đơn. Game tự tính lộ trình tối ưu bằng cách thử hết mọi thứ tự, chấm phần trăm cho bạn và hiện đường tối ưu. Night Pass thêm bốn giao diện đổi luật tính đường: ô bàn cờ, đường chéo, sông có 2 cầu, chung cư đi ngang chậm.",
+      "en": "You tap the houses to draw a delivery route, with rush orders, hot food and customers who cancel. The game tries every possible order to find the best route, scores you as a percentage and shows the optimal path. Night Pass adds four looks that change the routing rules: a chessboard grid, diagonals, a river with 2 bridges and an apartment block you cross slowly sideways."
+    },
+    "image": "/moi/img/shipper-sieu-toc.webp",
+    "og": "/moi/img/og-shipper-sieu-toc.png",
+    "cta": {
+      "href": "/cozyplay/#shipper-sieu-toc",
+      "label": {
+        "vi": "Chơi ngay",
+        "en": "Play now"
+      }
+    },
+    "nightPass": true,
+    "shot": {
+      "skin": "saigon",
+      "js": "document.getElementById('bDaily').click()"
+    }
+  },
+  {
+    "id": "thap-vong-mau",
+    "date": "2026-11-08",
+    "type": "game",
+    "group": "pop",
+    "gameId": "thap-vong-mau",
+    "name": {
+      "vi": "Tháp Vòng Màu",
+      "en": "Rainbow Rings"
+    },
+    "tagline": {
+      "vi": "Chuyển cả tháp vòng sang cột có cờ, vòng to không đè vòng nhỏ.",
+      "en": "Move the whole tower to the flag column; a big ring never goes on a small one."
+    },
+    "body": {
+      "vi": "Bé chạm một cột để nhấc vòng, chạm cột khác để đặt, và chuyển cả tháp sang cột có cờ; vòng to không được đè lên vòng nhỏ. Có bốn loại (tháp 3 cột, 4 cột, xáo trộn, vòng tròn), mỗi loại ba cấp. Chọn sai chỉ bị nhắc nhẹ, bé không bao giờ thua. Night Pass mở thêm 16 giao diện.",
+      "en": "Tap a column to lift a ring, tap another to put it down, and move the whole tower to the flag column; a big ring can never sit on a small one. There are four modes (3-column, 4-column, scrambled and circular towers), each with three levels. A wrong move only gets a gentle nudge, so the child never loses. Night Pass adds 16 looks."
+    },
+    "image": "/moi/img/thap-vong-mau.webp",
+    "og": "/moi/img/og-thap-vong-mau.png",
+    "cta": {
+      "href": "/popplay/#thap-vong-mau",
+      "label": {
+        "vi": "Chơi ngay",
+        "en": "Play now"
+      }
+    },
+    "nightPass": true,
+    "shot": {
+      "skin": "cake",
+      "js": "document.querySelector('.dbar').click()"
+    }
+  },
+  {
+    "id": "qua-song",
+    "date": "2026-11-08",
+    "type": "game",
+    "group": "pop",
+    "gameId": "qua-song",
+    "name": {
+      "vi": "Qua Sông Cùng Bé",
+      "en": "River Crossing"
+    },
+    "tagline": {
+      "vi": "Đố qua sông cùng bé: cảnh sát và trộm, bác nông dân, cả nhà.",
+      "en": "River-crossing puzzles for kids: police and thief, the farmer, the whole family."
+    },
+    "body": {
+      "vi": "Bé giúp mọi người qua sông theo từng lượt, không có đồng hồ và không bao giờ thua. Có bốn loại: cảnh sát và trộm, bác nông dân, cả nhà, qua cầu đêm; mỗi loại ba cấp. Có đề hôm nay, thách đấu và chia sẻ kết quả. Night Pass mở thêm 16 giao diện.",
+      "en": "The child helps everyone cross the river turn by turn, with no clock and no losing. There are four modes: police and thief, the farmer, the whole family and crossing the bridge at night; each has three levels. There is a daily puzzle, challenges and result sharing. Night Pass adds 16 looks."
+    },
+    "image": "/moi/img/qua-song.webp",
+    "og": "/moi/img/og-qua-song.png",
+    "cta": {
+      "href": "/popplay/#qua-song",
+      "label": {
+        "vi": "Chơi ngay",
+        "en": "Play now"
+      }
+    },
+    "nightPass": true,
+    "shot": {
+      "skin": "neon",
+      "js": "document.querySelector('.dbar').click()"
+    }
+  },
+  {
+    "id": "ten-lua-cua-be",
+    "date": "2026-11-07",
+    "type": "game",
+    "group": "pop",
+    "gameId": "ten-lua-cua-be",
+    "name": {
+      "vi": "Tên Lửa Của Bé",
+      "en": "Baby Rocket"
+    },
+    "tagline": {
+      "vi": "Chạy 10 giây, hết nhiên liệu thì trả lời câu hỏi để bay tiếp.",
+      "en": "Run for 10 seconds, and when the fuel runs out, answer a question to keep going."
+    },
+    "body": {
+      "vi": "Bé chạy né chướng ngại trong khoảng 10 giây; hết nhiên liệu thì trả lời một câu hỏi để chạy tiếp, và không bao giờ thua. Có bốn loại: tên lửa, cá con, tàu hỏa, khủng long. Night Pass mở thêm 16 giao diện.",
+      "en": "The child dodges obstacles for about 10 seconds; when the fuel runs out, answering a question keeps the run going, and there is no losing. There are four modes: rocket, little fish, train and dinosaur. Night Pass adds 16 looks."
+    },
+    "image": "/moi/img/ten-lua-cua-be.webp",
+    "og": "/moi/img/og-ten-lua-cua-be.png",
+    "cta": {
+      "href": "/popplay/#ten-lua-cua-be",
+      "label": {
+        "vi": "Chơi ngay",
+        "en": "Play now"
+      }
+    },
+    "nightPass": true,
+    "shot": {
+      "skin": "ship",
+      "js": "document.querySelector('.dbar').click()"
+    }
+  }
+]

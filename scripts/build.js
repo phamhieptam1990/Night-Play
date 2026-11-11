@@ -21,6 +21,7 @@ if (TARGET !== "admin") {
     if (e.startsWith(".")) continue;
     fs.cpSync(path.join(land, e), path.join(dist, e), { recursive: true, filter: s => !path.basename(s).startsWith(".") });
   }
+  require("./build-moi.js").build(dist);   // trang tin ra mắt /moi/, /en/moi/ (+ trang riêng) sinh từ landing/moi/launches.json, điền <!--MOI--> trong sitemap
   const day = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Ho_Chi_Minh" }).format(new Date());
   const sm = path.join(dist, "sitemap.xml");
   if (fs.existsSync(sm)) fs.writeFileSync(sm, fs.readFileSync(sm, "utf8").replace(/__BUILD_DATE__/g, day));

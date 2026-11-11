@@ -24,6 +24,7 @@ p{margin:0}
 .links{display:none;margin-left:auto;gap:4px}
 .links a{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;border-radius:12px;text-decoration:none;font-weight:600;color:var(--ink2)}
 .links a:hover{background:var(--card)}
+.links a{min-width:44px;justify-content:center}
 .tools{display:flex;align-items:center;gap:8px;margin-left:auto}
 .links+.tools{margin-left:0}
 .lang,.ico{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:700 14px/1 system-ui,sans-serif;text-decoration:none;cursor:pointer;padding:0}
@@ -230,6 +231,7 @@ html[data-theme=dark] .top{background:rgba(18,20,31,.85)}
 .flinks{flex-wrap:wrap;gap:0 4px;justify-content:flex-end}
 .flinks a{padding:0 8px;font-size:14px;font-weight:600;text-decoration:none;border-radius:99px}
 .flinks a:hover{background:var(--card)}
+.flinks a{min-width:44px;justify-content:center}
 @media (max-width:999px){
  .foot .mbtn{display:inline-flex}
  .foot.js-menu .flinks{display:none}

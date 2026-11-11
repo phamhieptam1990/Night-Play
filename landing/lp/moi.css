@@ -1,0 +1,56 @@
+/* Trang tin ra mắt /moi/: bổ sung nhỏ cho landing.css (cùng giao diện đêm Night Pass). */
+.links a[aria-current=page]{background:var(--card);color:var(--ink)}
+.moihero{padding:28px 0 40px;background:radial-gradient(900px 420px at 85% -10%,color-mix(in srgb,var(--accent) 22%,transparent),transparent),radial-gradient(700px 360px at 0% 100%,color-mix(in srgb,#FF5A1F 14%,transparent),transparent)}
+html[data-theme=dark] .moihero{background:radial-gradient(700px 420px at 85% -10%,rgba(124,92,255,.38),transparent),radial-gradient(520px 320px at 0% 100%,rgba(255,200,90,.12),transparent)}
+.moihero h1{font-size:clamp(30px,8.4vw,52px);letter-spacing:-.01em}
+.moihero .lead{margin:10px 0 22px}
+.crumb{margin:0 0 12px}
+.crumb a{display:inline-flex;align-items:center;min-height:44px;font-weight:700;text-decoration:none;color:var(--ink2);padding-right:12px}
+.crumb a:hover{color:var(--ink);text-decoration:underline}
+/* mục nổi bật */
+.mfeat{display:grid;gap:20px;grid-template-columns:minmax(0,1fr);padding:22px 18px;border-radius:26px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow);scroll-margin-top:72px}
+html[data-theme=dark] .mfeat,html[data-theme=dark] .mcard{background:rgba(27,30,47,.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.mfeat h1,.mfeat h2{font-size:clamp(26px,6.8vw,40px)}
+.mtxt{display:grid;gap:10px;align-content:start;justify-items:start;min-width:0}
+.tg{font-size:clamp(17px,4.4vw,21px);font-weight:700;color:var(--ink)}
+.bd{color:var(--ink2)}
+.mcta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:6px!important}
+.mcta.c{justify-content:center}
+.mfeat .mcta .btn.big{flex:1 1 200px}
+.mfeat .btn.ghost{flex:0 1 auto;min-height:52px;padding:0 24px}
+.mshot{justify-self:center;width:min(236px,66vw);aspect-ratio:480/624;border-radius:28px;overflow:hidden;border:6px solid #2b2e40;background:#0b0c16;box-shadow:0 24px 50px rgba(0,0,0,.4),0 0 56px color-mix(in srgb,var(--accent) 32%,transparent)}
+.mshot img{width:100%;height:100%;object-fit:cover;object-position:top}
+@media (min-width:760px){
+ .mfeat{grid-template-columns:minmax(0,1fr) 260px;gap:34px;padding:32px;align-items:center}
+ .mfeat .mshot{width:260px}
+ .moihero{padding:44px 0 56px}
+}
+/* chip */
+.mchips{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
+.chip{display:inline-flex;align-items:center;min-height:26px;padding:0 11px;border-radius:99px;font-size:13px;font-weight:800;line-height:1;white-space:nowrap;border:1px solid var(--line);color:var(--ink)}
+.chip.new{background:#FFC857;border-color:#FFC857;color:#1B1E2F}
+.chip.pop{background:color-mix(in srgb,#FF5A1F 18%,var(--panel));border-color:#C2410C}
+.chip.cozy{background:color-mix(in srgb,#7C5CFF 20%,var(--panel));border-color:#7C5CFF}
+.chip.np{background-color:#6A48F0;background-image:linear-gradient(90deg,#6A48F0,#C2410C);border-color:transparent;color:#fff}
+.mchips time{font-size:14px;font-weight:600;color:var(--ink2)}
+/* thẻ các mục cũ */
+.mgrid{display:grid;gap:14px;grid-template-columns:minmax(0,1fr)}
+.mcard{display:grid;grid-template-columns:96px minmax(0,1fr);gap:14px;align-items:start;padding:14px;border-radius:22px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow);scroll-margin-top:72px}
+.mcard .mshot{width:96px;border-width:4px;border-radius:18px;box-shadow:0 10px 24px rgba(0,0,0,.3)}
+.mcard .mtxt{gap:7px}
+.mcard h3{font-family:Georgia,"Times New Roman",serif;font-size:19px;line-height:1.2}
+.mcard h3 a{display:inline-flex;align-items:center;min-height:44px;text-decoration:none}
+.mcard h3 a:hover{text-decoration:underline}
+.mcard .tg{font-size:15px;font-weight:600;color:var(--ink2)}
+.mcard .btn.sm{min-height:44px;font-size:16px;padding:0 18px}
+.more{display:inline-flex;align-items:center;min-height:44px;padding:0 6px;font-weight:700;color:var(--ink2)}
+.more:hover{color:var(--ink)}
+@media (min-width:760px){.mgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.mcard{grid-template-columns:120px minmax(0,1fr);padding:16px}.mcard .mshot{width:120px}}
+@media (min-width:1100px){.mgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.mfacts{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.mfacts li{position:relative;padding:14px 16px 14px 46px;border-radius:18px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow)}
+.mfacts li::before{content:"";position:absolute;left:16px;top:18px;width:16px;height:16px;border-radius:50%;background:var(--ok)}
+html[data-theme=dark] .mfacts li{background:rgba(27,30,47,.72)}
+.sec .narrow .fine{text-align:center}
+.endcta .mcta .btn.ghost{min-height:52px}
+@media (max-width:339px){.mfeat{padding:18px 14px}.chip{padding:0 9px}}
