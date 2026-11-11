@@ -1,0 +1,15 @@
+/* HUD GỌN của trang cổng ở các cỡ KHÔNG có cột bên lề (shared/hud.js, GAME_RULES 0a-15): cửa sổ ngang < 1100x600, iPad ngang, điện thoại ngang.
+   Cùng giao diện nút với khối HUD ở cột bên lề (.np-hb: 44px, tròn, màu theo theme). Nằm trong CỘT NÚT 64px của cổng (ngoài khung game) nên KHÔNG che vùng chơi.
+   Đủ cao (>=480px): ? 🔊 VI 📷 📤 🔒 xếp dọc dưới ←. Thấp hơn: chỉ ← + MỘT nút ⋯ mở thẻ nhỏ chứa các nút. Nút gốc trong game (? 🔊 VI) và nút nổi của cổng ẩn khi HUD bật. */
+#npHudc{position:absolute;z-index:4;left:var(--bx);top:calc(var(--by) + 52px);display:none;flex-direction:column;gap:8px}
+#stage.np-hudc #npHudc{display:flex}
+#npHudc .np-hb{box-sizing:border-box}
+#npHudc .np-hb[hidden]{display:none!important}
+#npHudc .np-hmore{display:none}
+#npHudc .np-hpn{display:flex;flex-direction:column;gap:8px}
+#stage.np-hudc-sm #npHudc .np-hmore{display:grid}
+#stage.np-hudc-sm #npHudc .np-hpn{display:none;position:absolute;left:calc(100% + 12px);top:0;display:none;grid-template-columns:repeat(3,44px);gap:8px;padding:8px;border-radius:20px;background:var(--bg);border:2px solid color-mix(in srgb,var(--accent) 42%,var(--line));box-shadow:var(--shadow,0 4px 16px rgba(0,0,0,.3))}
+#stage.np-hudc-sm #npHudc.open .np-hpn{display:grid}
+/* cổng đang có nút nổi riêng: khi HUD bật thì ẩn (HUD bấm hộ; display:none vẫn click được bằng JS) */
+#stage.np-hudc .nps-fab,#stage.np-hudc #klock{display:none!important}
+html.np-locked #npHudc{display:none!important}
