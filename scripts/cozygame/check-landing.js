@@ -25,7 +25,7 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
   note(bd.status === 0, "build", "scripts/build.js lỗi: " + (bd.stderr || "").slice(0, 200));
   const R = f => path.join(dist, f);
   /* 1) file trong dist */
-  for (const f of ["index.html", "en/index.html", "lp/landing.css", "lp/landing.js", "lp/orbit.js", "lp/img/og.png", "lp/img/logo.svg", "sitemap.xml", "robots.txt", "shared/theme.css", "shared/track.js", "shared/site.js", "play/index.html", "sw.js", "manifest.webmanifest", "_redirects", "gioi-thieu/index.html", "gioi-thieu/en/index.html"])
+  for (const f of ["index.html", "en/index.html", "lp/landing.css", "lp/landing.js", "shared/orbit.js", "shared/orbit.css", "lp/img/og.png", "lp/img/logo.svg", "sitemap.xml", "robots.txt", "shared/theme.css", "shared/track.js", "shared/site.js", "play/index.html", "sw.js", "manifest.webmanifest", "_redirects", "gioi-thieu/index.html", "gioi-thieu/en/index.html"])
     note(fs.existsSync(R(f)), "dist", "thiếu " + f);
   try { const b = fs.readFileSync(R("lp/img/og.png")); note(b.readUInt32BE(16) === 1200 && b.readUInt32BE(20) === 630, "og.png", "phải 1200x630"); note(b.length <= 120 * 1024, "og.png", "nặng " + b.length + " > 120KB"); } catch (e) {}
   const sm = fs.existsSync(R("sitemap.xml")) ? fs.readFileSync(R("sitemap.xml"), "utf8") : "";
