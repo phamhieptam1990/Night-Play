@@ -7,7 +7,7 @@ window.SITE = {
   represent: "Phạm Hiệp Tam (cá nhân sở hữu website / individual owner)",
   address:   "B2.09.06 Chung cư 4S Linh Đông, Linh Đông, Thủ Đức, Hồ Chí Minh",
   phone:     "0906315080",
-  taxId:     "CCCD: 087•••••0154",     // CHỈ dạng che. Số đầy đủ chỉ nhập vào hồ sơ đăng ký Bộ Công Thương, KHÔNG ghi vào file công khai nào (check-legal.js quét)
+  taxId:     "Cung cấp cho cơ quan nhà nước có thẩm quyền khi được yêu cầu / Provided to competent state authorities upon request",   // KHÔNG ghi số định danh/CCCD vào file công khai (check-legal.js quét); số thật chỉ nhập trong hồ sơ đăng ký Bộ Công Thương
   license:   "Đang làm thủ tục thông báo với Bộ Công Thương / Notification with the Ministry of Industry and Trade in progress",   // có số xác nhận thì thay bằng số
   email:     "support@nightplay.vn",
   domain:    "nightplay.vn",

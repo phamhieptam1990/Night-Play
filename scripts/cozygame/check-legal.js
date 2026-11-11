@@ -40,17 +40,18 @@ const VPS = quick ? [[320, 568], [667, 375], [1440, 900]] : [[320, 568], [390, 8
   } };
   walk(root);
   note(!stale.length, "chuỗi cũ", "còn 'phamhieptam@gmail.com' trong: " + stale.join(", "));
-  /* số CCCD đầy đủ (12 chữ số bắt đầu 087) KHÔNG được xuất hiện ở bất kỳ file công khai nào; chỉ dạng che "087•••••0154" */
-  const leaks = [];
+  /* KHÔNG lộ chữ số nào của số định danh/CCCD ở bất kỳ file công khai nào: không chuỗi 12 số bắt đầu bằng 3 số đầu, không "3 số đầu + che + 4 số cuối", không "CCCD:" kèm số.
+     (mẫu ghép từ mảnh để chính file này không khớp) */
+  const leaks = [], pre = "08" + "7", suf = "01" + "54", reLeak = new RegExp("(?<!\\d)" + pre + "\\d{9}(?!\\d)|" + pre + "[•*xX.\\s\\-]{2,12}" + suf + "|CCCD:?\\s*\\d");
   const walk2 = d => { for (const e of fs.readdirSync(d, { withFileTypes: true })) {
     if (/^(node_modules|dist|\.git)$/.test(e.name) || e.name === "code.md") continue;
     const p = path.join(d, e.name);
-    if (e.isDirectory()) walk2(p); else if (/\.(html|js|css|md|json|mjs|jsonc|txt|xml|webmanifest|pdf)$/.test(e.name)) { try { if (/(?<!\d)087\d{9}(?!\d)/.test(fs.readFileSync(p, "latin1"))) leaks.push(path.relative(root, p)); } catch (e2) {} }
+    if (e.isDirectory()) walk2(p); else if (/\.(html|js|css|md|json|mjs|jsonc|txt|xml|webmanifest|pdf)$/.test(e.name)) { try { if (reLeak.test(fs.readFileSync(p, "latin1"))) leaks.push(path.relative(root, p)); } catch (e2) {} }
   } };
   walk2(root);
-  note(!leaks.length, "CCCD", "có chuỗi 12 chữ số dạng CCCD đầy đủ trong: " + leaks.join(", "));
+  note(!leaks.length, "số định danh", "còn chữ số/che một phần của số định danh trong: " + leaks.join(", "));
   const SITEJS = fs.readFileSync(path.join(root, "shared", "site.js"), "utf8");
-  note(/taxId:\s*"CCCD: 087•••••\d{4}"/.test(SITEJS), "site.js", "taxId phải ở dạng che 'CCCD: 087•••••XXXX'");
+  note(/taxId:\s*"Cung cấp cho cơ quan nhà nước có thẩm quyền khi được yêu cầu \/ Provided to competent state authorities upon request"/.test(SITEJS) && !/taxId:[^\n]*\d{3}/.test(SITEJS.split("//")[0] + (SITEJS.match(/taxId:\s*"[^"]*"/) || [""])[0]), "site.js", "taxId phải là câu không chứa chữ số");
   const lic = (SITEJS.match(/license:\s*"([^"]*)"/) || [])[1] || "";
 
   const srv = spawn("python3", ["-m", "http.server", String(PORT)], { cwd: root, stdio: "ignore" }); await wait(1200);

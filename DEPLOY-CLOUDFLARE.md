@@ -86,5 +86,5 @@ Kiểm tra mail không vào spam: gửi thử OTP tới Gmail + một hộp thư
 ## PDF pháp lý (Chính sách bảo mật, Điều khoản)
 - 4 file `legal/privacy-vi.pdf`, `legal/privacy-en.pdf`, `legal/terms-vi.pdf`, `legal/terms-en.pdf` + `legal/pdf-info.js` (dung lượng/ngày hiện trên nút "Tải PDF") được **commit sẵn vào repo** vì Cloudflare build không có Chrome. `scripts/build.js` chỉ copy thư mục `legal/` ra `dist/`.
 - **Khi sửa nội dung pháp lý** (`privacy.html`, `terms.html`, `shared/site.js`): chạy lại `NODE_PATH=<thư mục có puppeteer-core và pdfjs-dist> node scripts/build-legal-pdf.js` (cài tạm: `npm i --no-save pdfjs-dist@3.11.174`), rồi `node scripts/cozygame/check-legalpdf.js`, rồi commit 4 PDF + `legal/pdf-info.js`. Có số xác nhận Bộ Công Thương thì điền `license` trong `shared/site.js` trước khi dựng lại.
-- Số CCCD đầy đủ không bao giờ được ghi vào file công khai (`check-legal.js` quét); chỉ nhập vào hồ sơ đăng ký Bộ Công Thương.
+- Không ghi chữ số nào của số định danh/CCCD vào file công khai, kể cả dạng che (`check-legal.js` quét); số thật chỉ nhập vào hồ sơ đăng ký Bộ Công Thương.
 - Sitemap/robots: không chặn `/legal/` (robots hiện không chặn); thêm các URL PDF vào `landing/sitemap.xml` nếu muốn lập chỉ mục.

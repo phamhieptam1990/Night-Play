@@ -215,8 +215,9 @@ body.addEventListener("touchend", e => {
   if (Math.abs(dy) > 60 && Math.abs(dy) > Math.abs(dx) * 1.3) turn(dy < 0 ? 1 : -1);
   else if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) turn(dx < 0 ? 1 : -1);
 }, { passive: true });
-let rz = 0; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { layoutPages(); applyPageShift(); }, 120); });
+let rz = 0; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { const onAnchor = hashScreen() === pg.i && pg.i >= 0; layoutPages(); applyPageShift(); if (onAnchor) gotoHash(); }, 120); });
 /* neo #hoan-tien...: mở đúng trang sách chứa tiêu đề có data-anchor trùng (cả VI và EN dùng cùng tên neo) */
-function gotoHash() { const h = decodeURIComponent(location.hash.slice(1)); if (!h) return; const i = pg.screens.findIndex(s => s.nodes.some(n => n.dataset && n.dataset.anchor === h)); if (i >= 0) show(i, i > pg.i ? 1 : -1); }
+const hashScreen = () => { const h = decodeURIComponent(location.hash.slice(1)); return h ? pg.screens.findIndex(s => s.nodes.some(n => n.dataset && n.dataset.anchor === h)) : -1; };
+function gotoHash() { const i = hashScreen(); if (i >= 0) show(i, i > pg.i ? 1 : -1); }
 addEventListener("hashchange", gotoHash);
-window.__pgReady = true; layoutPages(); gotoHash(); showUI(4200); if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { layoutPages(); gotoHash(); });
+window.__pgReady = true; layoutPages(); gotoHash(); showUI(4200); if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { const onAnchor = hashScreen() === pg.i && pg.i >= 0; layoutPages(); if (onAnchor) gotoHash(); });

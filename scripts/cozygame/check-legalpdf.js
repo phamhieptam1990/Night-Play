@@ -5,7 +5,7 @@
      - tồn tại, bắt đầu bằng %PDF, dung lượng 20KB..700KB (cảnh báo > 500KB), có /Title, gắn thẻ (/StructTreeRoot) và outline (/Outlines);
      - (cần pdfjs-dist, nếu không có thì chỉ in cảnh báo) >= 4 trang, có tiêu đề mọi mục h2/h3 đang có trên trang web (PDF không lỗi thời so với nội dung),
        mục đánh số 1..N đủ, có ký tự tiếng Việt có dấu đúng (VI), có email, ngày hiệu lực, chân trang "Trang X / Y", KHÔNG còn "[CẦN" chưa thành ô trống,
-       KHÔNG có số CCCD đầy đủ, có thông tin chủ website (tên, địa chỉ);
+       KHÔNG lộ chữ số nào của số định danh/CCCD, có thông tin chủ website (tên, địa chỉ);
      - nút Tải PDF (#pdfBtn, chân trang #fPdf) trỏ đúng file theo ngôn ngữ đang xem, có thuộc tính download, ≥ 44px khi hiện, HTTP 200 + application/pdf;
        <link rel="alternate" type="application/pdf"> có trong head. */
 const { spawn, spawnSync } = require("child_process"), fs = require("fs"), path = require("path"), http = require("http"), puppeteer = require("puppeteer-core");
@@ -47,7 +47,7 @@ const get = u => new Promise(res => http.get(u, r => { const c = []; r.on("data"
         note(t.includes("support@nightplay.vn") && t.includes(web.site.legalDate), tag, "thiếu email hoặc ngày hiệu lực");
         note(/Trang \d+ \/ \d+|Page \d+ \/ \d+/.test(t), tag, "thiếu chân trang 'Trang X / Y'");
         note(!t.includes("[CẦN"), tag, "còn '[CẦN' chưa thành ô trống");
-        note(!/(?<!\d)087\d{9}(?!\d)/.test(t), tag, "có số CCCD đầy đủ trong PDF");
+        { const pre = "08" + "7", suf = "01" + "54"; note(!new RegExp(pre + "\\s*\\d{9}|" + pre + "[•*xX.\\s\\-]{2,12}" + suf + "|CCCD:?\\s*\\d").test(t.replace(/\s+/g, " ")), tag, "PDF lộ chữ số của số định danh/CCCD"); }
         note(t.includes(norm(web.site.operator)) && t.includes("Linh Đông"), tag, "thiếu thông tin chủ website (tên/địa chỉ)");
         note(t.includes(lang === "vi" ? "Mục lục" : "Contents"), tag, "thiếu mục lục");
       }
