@@ -218,9 +218,27 @@ html[data-theme=dark] .top{background:rgba(18,20,31,.85)}
 /* ===== Menu icon (header + chân trang) ===== */
 .mbtn{display:none;align-items:center;justify-content:center;min-width:44px;min-height:44px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer;padding:0}
 .mbtn:hover{border-color:var(--accent)}
+/* icon trong mục menu: chỉ hiện khi menu mở dạng popover */
+.mic{display:none}
+/* Menu mở (header + chân trang): MỘT thẻ kính tối kiểu Night Pass ở cả giao diện sáng và tối (một box-shadow mềm duy nhất, không viền/bóng thứ hai);
+   hàng phẳng căn trái cùng trục: icon + chữ, cao >=48px, kẻ mảnh giữa hàng. Chữ vẫn là liên kết tĩnh trong HTML (tắt JS vẫn dùng được). */
+@media (max-width:999px){
+ .links.open,.foot.js-menu .flinks.open{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;position:fixed;right:16px;left:auto;margin:0;gap:0;padding:6px;box-sizing:border-box;width:min(88vw,320px);max-height:70dvh;overflow-y:auto;overscroll-behavior:contain;background:rgba(22,17,48,.97);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(165,139,255,.35);border-radius:20px;box-shadow:0 12px 32px rgba(8,6,24,.38);color:#F1F2FA;z-index:60}
+ .links.open{top:62px}
+ .foot.js-menu .flinks.open{bottom:calc(82px + env(safe-area-inset-bottom,0px))}
+ .links.open a,.links.open .xtra,.foot.js-menu .flinks.open a{display:flex;align-items:center;justify-content:flex-start;gap:12px;min-width:0;width:100%;min-height:48px;box-sizing:border-box;padding:8px 12px;margin:0;border:0;border-radius:12px;background:none;background-image:none;color:#F1F2FA;font:600 16px/1.3 var(--font);text-align:left;text-decoration:none;overflow-wrap:anywhere;cursor:pointer}
+ .links.open a+a,.links.open a+.xtra,.links.open .xtra+.xtra,.foot.js-menu .flinks.open a+a{border-top:1px solid rgba(165,139,255,.2);border-radius:0}
+ .links.open>:first-child,.foot.js-menu .flinks.open>:first-child{border-radius:14px 14px 0 0}.links.open>:last-child,.foot.js-menu .flinks.open>:last-child{border-radius:0 0 14px 14px}
+ .links.open a:hover,.links.open .xtra:hover,.foot.js-menu .flinks.open a:hover{background:rgba(155,131,255,.22);background-image:none}
+ .links.open a:focus-visible,.links.open .xtra:focus-visible,.foot.js-menu .flinks.open a:focus-visible{outline:2px solid #C9BBFF;outline-offset:-2px}
+ .links.open .mic,.foot.js-menu .flinks.open .mic{display:block;flex:none;width:24px;text-align:center;font-size:18px;line-height:1}
+ .links.open,.foot.js-menu .flinks.open{scrollbar-width:thin}
+}
+@media (min-width:340px){.links.open .xtra{display:none}}
+@media (min-width:700px) and (max-width:999px){.foot.js-menu .flinks.open{position:absolute;right:0;bottom:calc(100% + 10px)}}
 @media (min-width:340px) and (max-width:999px){.top .mbtn{display:inline-flex}}
 @media (max-width:999px){
- .links.open{display:grid;position:absolute;top:58px;right:16px;margin:0;gap:2px;padding:8px;min-width:200px;background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:0 14px 40px rgba(0,0,0,.35);z-index:60}
+ .links.open{display:flex}
 }
 /* chân trang gọn: logo + © trái, liên kết phải; <900px gom vào nút ☰ */
 .fcols{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px}
@@ -235,9 +253,7 @@ html[data-theme=dark] .top{background:rgba(18,20,31,.85)}
 @media (max-width:999px){
  .foot .mbtn{display:inline-flex}
  .foot.js-menu .flinks{display:none}
- .foot.js-menu .flinks.open{display:grid;position:absolute;right:0;bottom:calc(100% + 8px);gap:2px;padding:8px;min-width:230px;background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:0 14px 40px rgba(0,0,0,.35);z-index:60}
- .foot.js-menu .flinks.open a{padding:0 12px;border-radius:12px}
- @media (max-width:999px){.foot.js-menu .flinks.open{position:fixed;left:16px;right:16px;bottom:calc(84px + env(safe-area-inset-bottom,0px));min-width:0;max-height:calc(100dvh - 150px);overflow-y:auto;overscroll-behavior:contain}}
+ .foot.js-menu .flinks.open{display:flex}
  .fcols{flex-wrap:nowrap}
 }
 @media (max-width:699px){.foot{padding-bottom:90px}}
@@ -288,7 +304,7 @@ html[data-theme=dark] .pcard{background:rgba(27,30,47,.72)}
 .links .xtra{display:none}
 @media (max-width:339px){
  .top .tools>.lang,.top #themeBtn{display:none}
- .links.open .xtra{display:flex;align-items:center;min-height:44px;padding:0 12px;border:0;background:none;color:var(--ink2);font:600 17px var(--font);border-radius:12px;text-align:left;cursor:pointer;text-decoration:none}
+ .links.open .xtra{display:flex}
  .top .mbtn{display:inline-flex}
 }
 @media (max-width:360px){.top .mbtn{min-width:44px}}

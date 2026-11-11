@@ -48,6 +48,12 @@
     var b = d.createElement("button"); b.type = "button"; b.className = "mbtn"; b.setAttribute("aria-label", "Menu"); b.setAttribute("aria-expanded", "false"); b.setAttribute("aria-controls", panel.id);
     b.innerHTML = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';
     btnHost.insertBefore(b, before);
+    var IC = [[/popplay/, "🎈"], [/cozyplay/, "🌙"], [/moi/, "✨"], [/subscribe|nightpass/, "⭐"], [/privacy/, "🔒"], [/terms/, "📄"], [/^mailto/, "✉️"], [/#game/, "🎮"], [/#tinhnang/, "🧩"], [/#phuhuynh/, "👨‍👩‍👧"], [/#hoi/, "❓"], [/^\/(en\/)?$/, "🌐"]];
+    [].forEach.call(panel.querySelectorAll("a,button.xtra"), function (a) {
+      var h = a.getAttribute("href") || "", ic = a.tagName === "BUTTON" ? "🌓" : "•";
+      for (var i = 0; i < IC.length; i++) if (IC[i][0].test(h)) { ic = IC[i][1]; break; }
+      var s = d.createElement("span"); s.className = "mic"; s.setAttribute("aria-hidden", "true"); s.textContent = ic; a.insertBefore(s, a.firstChild);
+    });
     function set(o) { panel.classList.toggle("open", o); b.setAttribute("aria-expanded", o ? "true" : "false"); }
     b.addEventListener("click", function (e) { e.stopPropagation(); set(!panel.classList.contains("open")); });
     d.addEventListener("click", function (e) { if (panel.classList.contains("open") && !panel.contains(e.target) && e.target !== b) set(false); });

@@ -434,6 +434,60 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
       await pg.evaluate(() => window.__npOrbit.setLite(true)); note(await pg.evaluate(() => window.__npOrbit.reason()).then(r => /degraded/.test(r)), tag, "reason() phải báo degraded"); await moved(900, "khi degraded (hạ cấp không được dừng vòng quay; có thể tự phục hồi khi FPS tốt)"); note(!errs.length, tag, "lỗi JS: " + errs[0]);
       await pg.close();
     }
+
+    /* ===== menu ☰ mở (chân trang + thanh trên), điện thoại/máy tính bảng: MỘT thẻ, hàng phẳng căn trái cùng trục, >=48px, trong màn hình, không đè thanh CTA, Esc/bấm ngoài đóng ===== */
+    for (const l of ["vi", "en"]) for (const th of ["light", "dark"]) for (const [w, h] of (quick ? [[360, 640], [390, 844]] : [[320, 568], [360, 640], [375, 667], [390, 844], [430, 932], [768, 1024], [1024, 768]])) for (const which of ["foot", "top"]) {
+      const tag = `menu ${which} ${l} ${w}x${h} ${th}`, pg = await br.newPage(); await pg.setViewport({ width: w, height: h, deviceScaleFactor: 1, isMobile: w < 1000, hasTouch: w < 1000 });
+      await pg.evaluateOnNewDocument(t => { try { localStorage.setItem("theme", t); } catch (e) {} }, th);
+      await pg.goto(B + PAGES[l], { waitUntil: "load" }); await wait(300);
+      if (which === "foot") { await pg.evaluate(() => window.scrollTo(0, document.body.scrollHeight)); await wait(500); }
+      const bsel = which === "foot" ? "footer .mbtn" : ".top .mbtn", psel = which === "foot" ? "#flinks" : "#hlinks";
+      const vis = await pg.evaluate(s => { const b = document.querySelector(s); return !!b && getComputedStyle(b).display !== "none"; }, bsel);
+      if (w >= 1000) { note(!vis, tag, "máy tính (>=1000) không được hiện nút ☰"); await pg.close(); continue; }
+      note(vis, tag, "thiếu nút ☰"); if (!vis) { await pg.close(); continue; }
+      const att = await pg.evaluate((b, p) => { const x = document.querySelector(b); return [x.getAttribute("aria-expanded"), x.getAttribute("aria-controls") === p.slice(1)]; }, bsel, psel); note(att[0] === "false" && att[1], tag, "aria-expanded/controls lúc đóng: " + att);
+      const clsBefore = await pg.evaluate(() => { window.__cl = 0; try { new PerformanceObserver(x => { for (const e of x.getEntries()) if (!e.hadRecentInput) window.__cl += e.value; }).observe({ type: "layout-shift", buffered: true }); } catch (e) {} return 0; });
+      await pg.click(bsel); await wait(350);
+      const m = await pg.evaluate((p, bsel) => {
+        const P = document.querySelector(p), r = P.getBoundingClientRect(), cs = getComputedStyle(P), items = [...P.children].filter(e => getComputedStyle(e).display !== "none");
+        const parse = c => (c.match(/[\d.]+/g) || []).map(Number), alpha = c => { const a = parse(c); return a.length === 4 ? a[3] : (c === "transparent" ? 0 : 1); };
+        const layers = []; for (let e = P.parentElement; e && e !== document.body && !/^(HEADER|FOOTER)$/.test(e.tagName); e = e.parentElement) { const c = getComputedStyle(e); if (alpha(c.backgroundColor) > 0 || c.boxShadow !== "none" || c.backgroundImage !== "none" || parseFloat(c.borderTopWidth) > 0 && e.getBoundingClientRect().height < innerHeight * .9 && /^(fr|fl|tools|bar)$/.test(e.className.split(" ")[0])) layers.push((e.className || e.tagName) + ":bg"); if (e.className && /^(fr|tools|bar)$/.test(e.className)) { for (const ps of ["::before", "::after"]) { const q = getComputedStyle(e, ps); if (q.content !== "none" && q.content !== "normal") layers.push(e.className + ps); } } }
+        for (const ps of ["::before", "::after"]) { const q = getComputedStyle(P, ps); if (q.content !== "none" && q.content !== "normal" && (alpha(q.backgroundColor) > 0 || q.boxShadow !== "none")) layers.push("panel" + ps); }
+        const inner = []; for (const e of P.querySelectorAll("*")) { const c = getComputedStyle(e); if (c.boxShadow !== "none" || (alpha(c.backgroundColor) > .05 && e.getBoundingClientRect().width * e.getBoundingClientRect().height > r.width * r.height * .5)) inner.push(e.tagName); }
+        const sticky = document.getElementById("sticky"), sr = sticky && getComputedStyle(sticky).display !== "none" ? sticky.getBoundingClientRect() : null;
+        const ic = items.map(a => { const q = a.querySelector(".mic"); return !!q && getComputedStyle(q).display !== "none" && q.textContent.trim().length > 0; });
+        return { r: [r.left, r.top, r.right, r.bottom], bg: cs.backgroundColor, sh: cs.boxShadow, pos: cs.position, rad: parseFloat(cs.borderTopLeftRadius), mh: cs.maxHeight, ov: cs.overflowY, sch: P.scrollHeight, ch: P.clientHeight, layers, inner,
+          sticky: sr && sr.top < innerHeight && sr.bottom > 0 ? sr.top : null, exp: document.querySelector(bsel).getAttribute("aria-expanded"), cls: window.__cl,
+          rows: items.map(a => { const b = a.getBoundingClientRect(), c = getComputedStyle(a), tx = a.querySelector(".mic"), rg = document.createRange(); const tn = [...a.childNodes].find(n => n.nodeType === 3 && n.textContent.trim()); let tl = null; if (tn) { rg.selectNodeContents(tn); tl = rg.getBoundingClientRect().left; } return { l: b.left, w: b.width, h: b.height, ta: c.textAlign, jc: c.justifyContent, col: c.color, tl, il: tx ? tx.getBoundingClientRect().left : null, sw: a.scrollWidth, cw: a.clientWidth }; }), ic, n: items.length, open: P.classList.contains("open") };
+      }, psel, bsel);
+      const bgc = (m.bg.match(/[\d.]+/g) || []).map(Number), al = bgc[3] === undefined ? 1 : bgc[3];
+      note(m.open && m.exp === "true", tag, "chưa mở / aria-expanded=" + m.exp);
+      note(m.n >= (which === "foot" ? 7 : 6), tag, "thiếu mục: " + m.n);
+      note(m.rows.every(x => Math.abs(x.l - m.rows[0].l) <= 1 && Math.abs(x.w - m.rows[0].w) <= 1), tag, "các mục không cùng left/width: " + m.rows.map(x => Math.round(x.l) + "/" + Math.round(x.w)).join(" "));
+      note(m.rows.every(x => /^(left|start)$/.test(x.ta) && /(flex-start|start|normal)/.test(x.jc)), tag, "mục không căn trái: " + [...new Set(m.rows.map(x => x.ta + "/" + x.jc))]);
+      note(m.rows.every(x => x.tl !== null && Math.abs(x.tl - m.rows[0].tl) <= 1) && m.rows.every(x => x.il !== null && Math.abs(x.il - m.rows[0].il) <= 1), tag, "trục icon/chữ lệch: " + m.rows.map(x => Math.round(x.il) + "/" + Math.round(x.tl)).join(" "));
+      note(m.rows.every(x => x.h >= 46 && x.h <= m.rows[0].h + 60) && m.rows.every(x => x.h >= 48 - 2), tag, "hàng thấp < 48: " + m.rows.map(x => Math.round(x.h)).join(","));
+      note(m.ic.every(Boolean), tag, "thiếu icon ở một số mục");
+      note(m.rows.every(x => x.sw <= x.cw + 1), tag, "chữ tràn khỏi hàng (đẩy lệch trục)");
+      note(m.layers.length === 0, tag, "còn lớp thẻ/bóng thứ hai (cha/pseudo): " + m.layers); note(m.inner.length === 0, tag, "phần tử con có bóng/nền cỡ thẻ: " + m.inner);
+      note(al >= .9 && /0\.\d+ 0px|0px/.test(m.sh) && m.sh.split(/\),/).length === 1 && m.sh !== "none", tag, "thẻ cần nền kính gần đặc + đúng MỘT box-shadow: " + m.bg + " | " + m.sh);
+      note(m.rad >= 18 && m.rad <= 22, tag, "bo góc " + m.rad + " ngoài 18-22");
+      note(m.r[0] >= 0 && m.r[2] <= w && m.r[1] >= 0 && m.r[3] <= h, tag, "thẻ ra ngoài viewport " + m.r.map(Math.round));
+      note(m.r[2] - m.r[0] <= 321 && m.r[2] - m.r[0] >= Math.min(.88 * w, 320) - 2 - (w < 340 ? 0 : 0), tag, "bề rộng thẻ " + Math.round(m.r[2] - m.r[0]) + " ≠ min(88vw,320)");
+      note(m.r[3] - m.r[1] <= .7 * h + 1 || (m.ov === "auto" || m.ov === "scroll"), tag, "thẻ cao quá 70dvh và không cuộn trong: " + Math.round(m.r[3] - m.r[1]));
+      if (m.sticky !== null && which === "foot") note(m.r[3] <= m.sticky - 8, tag, `thẻ đè thanh CTA: đáy ${Math.round(m.r[3])} > đỉnh CTA ${Math.round(m.sticky)} - 8`);
+      /* tương phản chữ so với nền thẻ (xấu nhất: trộn trên trắng / đen) */
+      const worst = Math.min(...m.rows.map(x => { const t = (x.col.match(/[\d.]+/g) || []).slice(0, 3).map(Number); return Math.min(cr(t, bgc.slice(0, 3).map((v, i) => Math.round(v * al + 255 * (1 - al)))), cr(t, bgc.slice(0, 3).map(v => Math.round(v * al)))); }));
+      note(worst >= 4.5, tag, "tương phản chữ " + worst.toFixed(2) + " < 4.5");
+      note(m.cls < .01, tag, "CLS khi mở menu " + m.cls);
+      if (shotDir) await pg.screenshot({ path: path.join(shotDir, `menu-${which}-${l}-${w}x${h}-${th}.png`) });
+      /* Esc đóng, bấm ngoài đóng, chọn mục đóng (mục đầu của menu trên là neo #) */
+      await pg.keyboard.press("Escape"); await wait(150); note(await pg.evaluate((p, b) => !document.querySelector(p).classList.contains("open") && document.querySelector(b).getAttribute("aria-expanded") === "false", psel, bsel), tag, "Esc không đóng menu");
+      await pg.click(bsel); await wait(200); await pg.mouse.click(w / 2, which === "foot" ? 2 : h - 2); await wait(200);
+      note(await pg.evaluate(p => !document.querySelector(p).classList.contains("open"), psel), tag, "bấm ngoài không đóng menu");
+      if (which === "top") { await pg.click(bsel); await wait(200); await pg.evaluate(p => document.querySelector(p + ' a[href^="#"]').click(), psel); await wait(200); note(await pg.evaluate(p => !document.querySelector(p).classList.contains("open"), psel), tag, "chọn mục không đóng menu"); }
+      await pg.close();
+    }
     note(weight > 0 && weight < 300 * 1024, "trọng lượng", "tải trang đầu " + Math.round(weight / 1024) + " KB (cần < 300 KB; chưa nén)");
     console.log("  trọng lượng trang VI 390 (chưa nén, gồm shared/theme+site+track): " + Math.round(weight / 1024) + " KB");
   } finally { await br.close(); srv.kill(); fs.rmSync(dist, { recursive: true, force: true }); }
