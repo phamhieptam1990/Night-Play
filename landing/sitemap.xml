@@ -32,17 +32,17 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://nightplay.vn/subscribe.html</loc>
+    <loc>https://nightplay.vn/subscribe</loc>
     <lastmod>__BUILD_DATE__</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://nightplay.vn/privacy.html</loc>
+    <loc>https://nightplay.vn/privacy</loc>
     <lastmod>__BUILD_DATE__</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://nightplay.vn/terms.html</loc>
+    <loc>https://nightplay.vn/terms</loc>
     <lastmod>__BUILD_DATE__</lastmod>
     <priority>0.3</priority>
   </url>
