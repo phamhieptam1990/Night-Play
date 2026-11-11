@@ -311,7 +311,6 @@ html[data-theme=dark] .pcard{background:rgba(27,30,47,.72)}
 @media (min-width:700px){
  .orbsys{grid-template-columns:1fr 1fr;grid-template-areas:"stage stage" "pop night"}
  .orbstage{width:min(100%,520px)}
- .sat{width:52px;height:52px;margin:-26px 0 0 -26px;font-size:28px}
 }
 @media (min-width:1000px){
  .orbsys{grid-template-columns:minmax(0,1fr) 520px minmax(0,1fr);grid-template-areas:"pop stage night";gap:24px;align-items:center}

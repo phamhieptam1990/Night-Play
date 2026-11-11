@@ -28,9 +28,10 @@ const freePort = () => new Promise(res => { const s = net.createServer(); s.list
 
   /* 0) offline: SHELL của sw.js phải có mọi tài nguyên cục bộ của hub */
   const sw = fs.readFileSync(path.join(root, "sw.js"), "utf8"), SH = (() => { try { return eval((sw.match(/const SHELL = (\[[\s\S]*?\]);/) || [])[1]); } catch (e) { return []; } })();
-  const cv = +((sw.match(/const CACHE = "np-shell-v(\d+)"/) || [])[1] || 0); note(cv >= 17, "sw.js", "CACHE phải >= np-shell-v17 (đang v" + cv + ")");
+  const cv = +((sw.match(/const CACHE = "np-shell-v(\d+)"/) || [])[1] || 0); note(cv >= 18, "sw.js", "CACHE phải >= np-shell-v18 (đang v" + cv + ")");
   const html = fs.readFileSync(path.join(root, "play", "index.html"), "utf8");
   const local = new Set(); for (const m of html.matchAll(/(?:src|href)="(\.\.\/(?:shared|manifest)[^"?#]*)"/g)) local.add("/" + m[1].replace(/^\.\.\//, ""));
+  for (const m of html.matchAll(/class="sat \w+"[^>]*href="\.\.\/\w+\/index\.html#([a-z0-9-]+)"/g)) { local.add("/shared/orbit-icons/" + m[1] + ".svg"); note(fs.existsSync(path.join(root, "shared", "orbit-icons", m[1] + ".svg")), "icon", "thiếu ảnh shared/orbit-icons/" + m[1] + ".svg (chạy scripts/gen-orbit-icons.js)"); }
   local.add("/play/index.html"); local.add("/cozyplay/index.html"); local.add("/popplay/index.html");
   for (const f of local) if (!/manifest|app-180/.test(f)) note(SH.includes(f), "offline", "SHELL của sw.js thiếu " + f);
   note(!/(src|href)="https?:\/\//.test(html.replace(/xmlns='[^']*'/g, "")), "hub", "hub nhúng tài nguyên ngoài");
@@ -67,7 +68,7 @@ const freePort = () => new Promise(res => { const s = net.createServer(); s.list
           snd: (() => { const b = document.querySelector(".orbsnd"); return Object.assign(bx(b), { hid: b.hidden, p: b.getAttribute("aria-pressed"), l: b.getAttribute("aria-label"), hit: hit(b) }); })(),
           links: { about: q("#aboutLink")[0] && q("#aboutLink")[0].getAttribute("href"), priv: !!q('a[href$="privacy.html"]').length, terms: !!q('a[href$="terms.html"]').length, pass: !!q('a[href*="subscribe.html"]').length, mail: !!q('a[href^="mailto:"]').length },
           flink: q(".foot a, .foot .bars-more").filter(vis).map(e => Object.assign(bx(e), { id: e.id || e.className, hit: hit(e) })),
-          moving: q("[style*=transform]").length, anims: document.getAnimations().filter(a => a.effect && a.effect.target && a.effect.target.closest && a.effect.target.closest("#orbsys,.world")).length, cls: window.__cls, acs: window.__acs, dbAcs: window.__npOrbit && window.__npOrbit.ctxCount,
+          moving: q("[style*=transform]").length, anims: document.getAnimations().filter(a => a instanceof CSSAnimation && a.effect && a.effect.target && a.effect.target.closest && a.effect.target.closest("#orbsys,.world")).length, cls: window.__cls, acs: window.__acs, dbAcs: window.__npOrbit && window.__npOrbit.ctxCount,
           keys: Object.keys(localStorage), h1: txt(document.getElementById("h1")), ph: document.querySelector(".world.pop .tag").textContent
         };
       });
@@ -86,8 +87,14 @@ const freePort = () => new Promise(res => { const s = net.createServer(); s.list
       note(!m.snd.hid && m.snd.w >= 44 && m.snd.p === "false" && m.snd.hit, tag, "nút âm thanh: " + JSON.stringify(m.snd));
       note(m.snd.l === (lang === "vi" ? "Bật âm thanh quỹ đạo" : "Turn orbit sound on"), tag, "nhãn nút âm thanh: " + m.snd.l);
       note(m.links.about === (lang === "vi" ? "/?landing=1" : "/en/?landing=1") && m.links.priv && m.links.terms && m.links.pass && m.links.mail, tag, "thiếu liên kết: " + JSON.stringify(m.links));
-      note(m.moving <= 12 && m.anims === 0, tag, `chuyển động: ${m.moving} phần tử transform (<=12), ${m.anims} CSS animation (=0)`);
+      note(m.moving <= 14 && m.anims <= 2, tag, `chuyển động: ${m.moving} phần tử transform + ${m.anims} CSS animation giả (tổng phải <= 14, animation <= 2: cực quang + sao băng)`); note(m.moving + m.anims <= 14, tag, `tổng phần tử chuyển động ${m.moving + m.anims} > 14`);
       note(m.cls < 0.02, tag, "CLS " + m.cls.toFixed(3));
+      { /* 3D: phía trước to hơn phía sau >= 1.25x, z-index đúng thứ tự so với hành tinh (z 3), có nhãn tên cho vệ tinh trước nhất, có gợi ý kéo, có vệ tinh vàng "hôm nay" */
+        const dp = await pg.evaluate(() => { const S = window.__npOrbit.sats(), pz = +getComputedStyle(document.querySelector(".planet")).zIndex, hint = document.querySelector(".orbhint"), gold = document.querySelectorAll(".sat.gold").length, lab = document.querySelectorAll(".sat.lab").length, bdg = (document.querySelector(".sat.gold .bdg") || {}).textContent;
+          const fr = S.filter(s => s.k > 0.6), bk = S.filter(s => s.k < -0.6); return { pz, ratio: fr.length && bk.length ? (fr.reduce((a, s) => a + s.w, 0) / fr.length) / (bk.reduce((a, s) => a + s.w, 0) / bk.length) : 0, badZ: S.filter(s => (s.k > 0 && s.z <= pz) || (s.k < 0 && s.z >= pz)).length, hint: !!hint && hint.textContent.trim(), gold, lab, bdg }; });
+        note(dp.ratio >= 1.25, tag, "vệ tinh phía trước phải lớn hơn phía sau >= 1.25x, đang " + dp.ratio.toFixed(2)); note(dp.badZ === 0, tag, dp.badZ + " vệ tinh sai thứ tự lớp so với hành tinh (sau phải dưới, trước phải trên)");
+        note(dp.hint === (lang === "vi" ? "Kéo để xoay · Chạm để chơi" : "Drag to spin · Tap to play"), tag, "gợi ý kéo: " + dp.hint); note(dp.gold === 1 && dp.bdg === (lang === "vi" ? "Hôm nay" : "Today"), tag, "vệ tinh vàng hôm nay: " + JSON.stringify(dp)); note(dp.lab >= 1, tag, "không có nhãn tên cho vệ tinh phía trước");
+      }
       note(m.acs === 0 && m.dbAcs === 0, tag, `AudioContext đã tạo trước khi bấm (${m.acs}/${m.dbAcs})`);
       note(m.keys.every(k => k === "theme" || k === "lang" || /^np[-_]/.test(k)), tag, "localStorage có khoá lạ: " + m.keys);
       note(m.h1.length > 3, tag, "thiếu h1 (có thể ẩn bằng CSS nhưng phải có chữ)");
@@ -128,6 +135,14 @@ const freePort = () => new Promise(res => { const s = net.createServer(); s.list
       await pg.close();
     }
 
+    /* FPS: máy tính >= 50fps và không long task > 100ms; giả lập CPU x4 vẫn >= 24fps (hạ cấp tự động nếu chậm) */
+    for (const [rate, minFps] of [[1, 50], [4, 24]]) {
+      const tag = "hub fps x" + rate, pg = await br.newPage(); await pg.setViewport({ width: 1440, height: 900 }); const cd = await pg.createCDPSession(); await cd.send("Emulation.setCPUThrottlingRate", { rate });
+      await pg.evaluateOnNewDocument(() => { window.__lt = 0; try { new PerformanceObserver(l => { for (const e of l.getEntries()) window.__lt = Math.max(window.__lt, e.duration); }).observe({ type: "longtask", buffered: true }); } catch (e) {} });
+      await pg.goto(B + "/play/index.html?debug", { waitUntil: "load" }); await wait(800);
+      const f = await pg.evaluate(() => new Promise(res => { let n = 0, t0 = performance.now(); const tick = t => { n++; if (t - t0 < 2500) requestAnimationFrame(tick); else res({ fps: n / ((t - t0) / 1000), lt: window.__lt, lite: window.__npOrbit.lite }); }; requestAnimationFrame(tick); }));
+      note(f.fps >= minFps, tag, `FPS ${f.fps.toFixed(1)} < ${minFps} (lite=${f.lite})`); if (rate === 1) note(f.lt <= 100, tag, "long task " + f.lt.toFixed(0) + "ms > 100"); await pg.close();
+    }
     /* reduced-motion: một lượt ở 390x844 và 1440x900 */
     for (const [w, h] of [[390, 844], [1440, 900]]) {
       const tag = `hub reduced ${w}x${h}`, pg = await br.newPage(); await pg.setViewport({ width: w, height: h });

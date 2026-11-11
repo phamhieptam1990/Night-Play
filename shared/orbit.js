@@ -10,27 +10,59 @@
     O[w] = { g: g, sats: sats, phi: 0, vel: 0, pend: 0, kv: 0, drag: false, hover: 0, focus: 0, mark: 0, th: g.t * Math.PI / 180 };
     O[w].base = sats.map(function (s) { return parseFloat(s.getAttribute("data-a")) * Math.PI / 180; });
   });
+  /* ===== nâng cấp 3D: ảnh game thật trong bong bóng kính, chiều sâu (trước/sau hành tinh), đuôi sao chổi, parallax, nhãn tên, gợi ý kéo, game của hôm nay, warp khi mở game ===== */
+  var SRC = (d.currentScript && d.currentScript.src) || "", ICON_DIR = SRC.replace(/orbit\.js(\?.*)?$/, "orbit-icons/");
+  var isVi = function () { return sys.getAttribute("data-lang") === "vi"; };
+  var LITE = false, userActive = false, px = 0, py = 0, tx = 0, ty = 0, frontPass = [], lastWhoosh = 0, lastVib = 0;
+  var allSats = [].slice.call(stage.querySelectorAll(".sat"));
+  allSats.forEach(function (a) {
+    var id = (a.getAttribute("href") || "").split("#")[1], sp = a.querySelector("span"); a.k = 0; a.prevK = -1;
+    if (id && ICON_DIR && sp) { var im = new Image(); im.alt = ""; im.width = 46; im.height = 46; im.decoding = "async"; im.loading = "lazy"; im.draggable = false; im.onload = function () { sp.classList.add("img"); }; im.src = ICON_DIR + id + ".svg"; sp.appendChild(im); }
+  });
+  /* game của hôm nay: một vệ tinh Night đổi theo ngày (giờ Việt Nam), nổi bật vàng + huy hiệu */
+  (function () {
+    var day = 0; try { day = Math.floor((Date.parse(new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Ho_Chi_Minh" }).format(new Date()) + "T00:00:00Z") - Date.parse("2026-01-01T00:00:00Z")) / 864e5) + 1; } catch (e) {}
+    var nights = allSats.filter(function (a) { return a.classList.contains("night"); }); if (!nights.length) return;
+    var g = nights[((day % nights.length) + nights.length) % nights.length]; g.classList.add("gold"); var b = d.createElement("i"); b.className = "bdg"; b.setAttribute("aria-hidden", "true"); g.appendChild(b); g._day = day;
+  })();
+  function labels() { var vi = isVi(); allSats.forEach(function (a) { var b = a.querySelector(".bdg"); if (b) b.textContent = vi ? "Hôm nay" : "Today"; }); if (hint) hint.lastChild.textContent = vi ? "Kéo để xoay · Chạm để chơi" : "Drag to spin · Tap to play"; }
+  var hint = d.createElement("div"); hint.className = "orbhint"; hint.setAttribute("aria-hidden", "true"); hint.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V5a1.5 1.5 0 0 1 3 0v5m0-1a1.5 1.5 0 0 1 3 0v2m0-1a1.5 1.5 0 0 1 3 0v4a6 6 0 0 1-6 6h-1a6 6 0 0 1-5-3l-2-3a1.5 1.5 0 0 1 2.5-1.6L9 15"/></svg><span></span>'; stage.appendChild(hint);
+  new MutationObserver(labels).observe(sys, { attributes: true, attributeFilter: ["data-lang"] }); labels();
+
   var mqR = window.matchMedia("(prefers-reduced-motion: reduce)"), reduced = mqR.matches, mqN = window.matchMedia("(max-width:699px)");
-  var onScreen = true, tabOn = !d.hidden, raf = 0, last = 0, U = stage.clientWidth / 600;
+  var fpsN = 0, fpsT = 0, onScreen = true, tabOn = !d.hidden, raf = 0, last = 0, U = stage.clientWidth / 600;
   var DB = /[?&]debug(=|&|$)/.test(location.search) ? (window.__npOrbit = { ticks: 0, marks: 0, dropped: 0, maxPerSec: 0, audio: false, hot: "", vel: { pop: 0, night: 0 }, paused: { pop: false, night: false }, reduced: reduced, frames: 0, ctxCount: 0 }) : null;
 
+  var P = 1000;   /* khoảng cách phối cảnh (đơn vị khung 600): vệ tinh phía trước to ~1,9x phía sau */
   function render() {
+    var front = { pop: null, night: null }, parx = LITE || reduced ? 0 : px, pary = LITE || reduced ? 0 : py;
     ["pop", "night"].forEach(function (w) {
-      var o = O[w], g = o.g, ct = Math.cos(o.th), st = Math.sin(o.th);
+      var o = O[w], g = o.g, ct = Math.cos(o.th), st = Math.sin(o.th), dir = (Math.abs(o.vel) > 0.01 ? Math.sign(o.vel) : Math.abs(o.kv) > 0.01 ? Math.sign(o.kv) : g.dir), sp = Math.min(1, Math.max(Math.abs(o.vel), Math.abs(o.kv)) / 2.2), best = -2;
       for (var i = 0; i < o.sats.length; i++) {
-        var f = o.base[i] + o.phi, ex = g.a * Math.cos(f), ey = g.b * Math.sin(f), k = (Math.sin(f) + 1) / 2, el = o.sats[i];
-        el.style.transform = "translate(" + ((ex * ct - ey * st) * U).toFixed(2) + "px," + ((ex * st + ey * ct) * U).toFixed(2) + "px) scale(" + (1 + 0.12 * k).toFixed(3) + ")";
-        el.style.opacity = (0.72 + 0.28 * k).toFixed(3); el.style.zIndex = k > 0.5 ? 2 : 1;
+        var f = o.base[i] + o.phi, sf = Math.sin(f), cf = Math.cos(f), ex = g.a * cf, ey = g.b * sf, t = (sf + 1) / 2, el = o.sats[i], gold = el.classList.contains("gold");
+        var zz = g.a * 0.9 * sf, sc = P / (P - zz) * (gold ? 1.16 : 1), sx = (ex * ct - ey * st + parx * 14 * t) * U, sy = (ey * ct + ex * st + pary * 9 * t) * U;
+        /* hướng bay trên màn hình (đạo hàm của elip đã nghiêng) -> đuôi sao chổi ngược hướng */
+        var dx = (-g.a * sf * ct - g.b * cf * st) * dir, dy = (g.b * cf * ct - g.a * sf * st) * dir, rot = Math.atan2(dy, dx) * 180 / Math.PI + 180;
+        el.style.cssText = "transform:translate(" + sx.toFixed(1) + "px," + sy.toFixed(1) + "px) scale(" + sc.toFixed(3) + ");opacity:" + (0.66 + 0.34 * t).toFixed(3) + ";z-index:" + (sf > 0 ? 6 + Math.round(t * 3) : 1) + ";--b:" + (0.7 + 0.3 * t).toFixed(2) + ";--r:" + rot.toFixed(0) + "deg;--tl:" + (LITE ? 0 : (sp * (0.25 + 0.75 * t))).toFixed(2);
+        el.k = sf; if (sf > best) { best = sf; front[w] = el; }
+        if (el.prevK < 0.96 && sf >= 0.96 && el.prevK > -1) frontPass.push(w);
+        el.prevK = sf;
       }
     });
+    ["pop", "night"].forEach(function (w) { O[w].sats.forEach(function (el) { var on = el === front[w] && el.k > 0.55; if (on !== !!el._lab) { el._lab = on; el.classList.toggle("lab", on); } }); });
+    if (!LITE && !reduced) stage.style.setProperty("--px", px.toFixed(3)), stage.style.setProperty("--py", py.toFixed(3));
+    if (frontPass.length) { var n = performance.now(); if (soundOn && ctx && ctx.state === "running" && n - lastWhoosh > 260) { lastWhoosh = n; whoosh(frontPass[0]); } if (navigator.vibrate && (soundOn || userActive) && !reduced && n - lastVib > 400) { lastVib = n; try { navigator.vibrate(7); } catch (e) {} } frontPass.length = 0; }
   }
   function paused(o) { return o.drag || o.hover > 0 || o.focus > 0; }
-  function active() { return ["pop", "night"].some(function (w) { var o = O[w]; return Math.abs(o.vel) > 0.003 || o.pend !== 0 || o.drag || (!reduced && !paused(o)); }); }
+  function active() { if (!LITE && !reduced && (Math.abs(tx - px) > 0.002 || Math.abs(ty - py) > 0.002)) return true; return ["pop", "night"].some(function (w) { var o = O[w]; return Math.abs(o.vel) > 0.003 || o.pend !== 0 || o.drag || (!reduced && !paused(o)); }); }
+  function setLite(v) { LITE = v; sys.classList.toggle("lite", v); if (DB) DB.lite = v; }
   function wake() { if (!raf && onScreen && tabOn) { last = 0; raf = requestAnimationFrame(frame); } }
 
   function frame(t) {
     raf = 0; var dt = last ? Math.min(0.05, (t - last) / 1000) : 0.016; last = t;
     U = stage.clientWidth / 600; var maxV = 0;
+    px += (tx - px) * (1 - Math.exp(-dt * 6)); py += (ty - py) * (1 - Math.exp(-dt * 6));
+    if (!LITE && !reduced && dt > 0) { fpsN++; fpsT += dt; if (fpsN === 100) { if (fpsT / fpsN > 0.028) setLite(true); fpsN = 0; fpsT = 0; } }
     ["pop", "night"].forEach(function (w) {
       var o = O[w], target = (reduced || paused(o)) ? 0 : o.g.auto * o.g.dir;
       if (!o.drag) {
@@ -70,6 +102,10 @@
       os.onended = function () { try { os.disconnect(); pg.disconnect(); if (--n === 0) g.disconnect(); } catch (e) {} };
     });
   }
+  function whoosh(w) {
+    var t0 = ctx.currentTime, o = ctx.createOscillator(), g = ctx.createGain(); o.type = "sine"; o.frequency.setValueAtTime(w === "pop" ? 520 : 260, t0); o.frequency.exponentialRampToValueAtTime(w === "pop" ? 180 : 90, t0 + 0.22);
+    g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(0.05, t0 + 0.03); g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.24); o.connect(g); g.connect(comp); o.start(t0); o.stop(t0 + 0.26); o.onended = function () { try { o.disconnect(); g.disconnect(); } catch (e) {} };
+  }
   function audioFrame(v) {
     if (!soundOn || !ctx || !noiseG) return;
     var t = ctx.currentTime; noiseG.gain.setTargetAtTime(Math.max(0, Math.min(1, (v - 0.8) / 10)) * 0.09, t, 0.05); noiseF.frequency.setTargetAtTime(300 + Math.min(v, 14) * 160, t, 0.05);
@@ -92,7 +128,7 @@
       soundOn = true;
     } else { soundOn = false; if (ctx && noiseG) noiseG.gain.setTargetAtTime(0, ctx.currentTime, 0.03); if (ctx) setTimeout(function () { if (!soundOn && ctx) ctx.suspend(); }, 150); }
     b.setAttribute("aria-pressed", on ? "true" : "false"); b.firstChild.textContent = on ? "🔊" : "🔇";
-    b.setAttribute("aria-label", sys.getAttribute("data-lang") === "vi" ? (on ? "Tắt âm thanh quỹ đạo" : "Bật âm thanh quỹ đạo") : (on ? "Turn orbit sound off" : "Turn orbit sound on"));
+    b.setAttribute("aria-label", isVi() ? (on ? "Tắt âm thanh quỹ đạo" : "Bật âm thanh quỹ đạo") : (on ? "Turn orbit sound off" : "Turn orbit sound on"));
     if (DB) DB.audio = soundOn;
   }
   function syncCtx() { if (!ctx) return; if (soundOn && onScreen && tabOn) ctx.resume(); else if (ctx.state === "running") ctx.suspend(); }
@@ -133,7 +169,7 @@
   });
   function endDrag(e) {
     if (!dr || e.pointerId !== dr.id) return; var o = O[dr.w], moved = dr.moved; o.drag = false; if (!moved) o.vel = 0; dr = null; stage.classList.remove("drag");
-    if (moved) { stage._noclick = true; setTimeout(function () { stage._noclick = false; }, 80); } refresh();
+    if (moved) { hint.classList.add("off"); stage._noclick = true; setTimeout(function () { stage._noclick = false; }, 80); } refresh();
   }
   stage.addEventListener("pointerup", endDrag); stage.addEventListener("pointercancel", endDrag);
   stage.addEventListener("dragstart", function (e) { e.preventDefault(); });
@@ -157,11 +193,41 @@
     e.preventDefault(); O[w].pend += (e.key === "ArrowRight" ? 1 : -1) * TAU / 6; wake();
   });
 
+  /* ===== parallax: nghiêng theo con trỏ (máy tính) hoặc cảm biến nghiêng (điện thoại; iOS chỉ xin quyền khi bấm nút 🔊, mặc định không bật) ===== */
+  var clamp = function (v) { return Math.max(-1, Math.min(1, v)); };
+  sys.addEventListener("pointermove", function (e) { if (e.pointerType !== "mouse" || reduced) return; var r = stage.getBoundingClientRect(); tx = clamp(((e.clientX - r.left) / r.width - 0.5) * 2); ty = clamp(((e.clientY - r.top) / r.height - 0.5) * 2); wake(); });
+  sys.addEventListener("pointerleave", function (e) { if (e.pointerType === "mouse") { tx = 0; ty = 0; wake(); } });
+  var oriOn = false;
+  function onOri(e) { if (reduced || e.gamma == null) return; tx = clamp(e.gamma / 28); ty = clamp(((e.beta || 45) - 45) / 28); wake(); }
+  function startOri() {
+    if (oriOn || !("DeviceOrientationEvent" in window)) return;
+    var D = window.DeviceOrientationEvent; if (typeof D.requestPermission === "function") { D.requestPermission().then(function (r) { if (r === "granted") { oriOn = true; addEventListener("deviceorientation", onOri); } }).catch(function () {}); }
+  }
+  if ("DeviceOrientationEvent" in window && typeof window.DeviceOrientationEvent.requestPermission !== "function" && mqN.matches) { oriOn = true; addEventListener("deviceorientation", onOri); }
+  sys.addEventListener("pointerdown", function () { userActive = true; }, true);
+  sys.querySelector(".orbsnd") && sys.querySelector(".orbsnd").addEventListener("click", startOri);
+
+  /* ===== hành tinh: bấm để pulse ===== */
+  var planet = stage.querySelector(".planet");
+  if (planet) planet.innerHTML = '<defs><clipPath id="plc2"><circle cx="32" cy="32" r="30"/></clipPath><radialGradient id="plsh" cx=".34" cy=".28" r=".85"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#05030f" stop-opacity=".62"/></radialGradient><linearGradient id="plrim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".5" stop-color="#C9B8FF" stop-opacity=".25"/><stop offset="1" stop-color="#FF8A4C" stop-opacity=".75"/></linearGradient></defs><g clip-path="url(#plc2)"><rect width="64" height="64" fill="#7C5CFF"/><rect width="32" height="64" fill="#FF5A1F"/><circle cx="32" cy="32" r="12" fill="#fff"/><circle cx="32" cy="32" r="30" fill="url(#plsh)"/></g><circle cx="32" cy="32" r="30" fill="none" stroke="url(#plrim)" stroke-width="2"/>';
+  if (planet) { planet.style.pointerEvents = "auto"; planet.style.cursor = "pointer"; planet.addEventListener("click", function () { planet.classList.remove("pulse"); void planet.offsetWidth; planet.classList.add("pulse"); if (soundOn && ctx && ctx.state === "running") whoosh("night"); }); }
+
+  /* ===== warp: bấm game/thế giới thì cảnh zoom vào ~450ms rồi mới điều hướng (giảm chuyển động / phím tắt / chuột phải: đi ngay) ===== */
+  var warpT = 0;
+  sys.addEventListener("click", function (e) {
+    if (e.defaultPrevented || reduced || e.button > 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target.closest ? e.target.closest("a.sat, a.world, .world a") : null; if (!a || !a.href || a.target === "_blank") return;
+    e.preventDefault(); var r = stage.getBoundingClientRect(), b = a.getBoundingClientRect(), sat = a.classList.contains("sat");
+    stage.style.transformOrigin = sat ? ((b.left + b.width / 2 - r.left) / r.width * 100).toFixed(0) + "% " + ((b.top + b.height / 2 - r.top) / r.height * 100).toFixed(0) + "%" : "50% 50%";
+    sys.classList.add("warp"); clearTimeout(warpT); warpT = setTimeout(function () { location.href = a.href; }, 450);
+  });
+  addEventListener("pageshow", function () { clearTimeout(warpT); sys.classList.remove("warp"); stage.style.transformOrigin = ""; });
+
   /* ===== tạm dừng khi ngoài màn hình / tab ẩn ===== */
   if ("IntersectionObserver" in window) new IntersectionObserver(function (en) { onScreen = en[en.length - 1].isIntersecting; syncCtx(); if (onScreen) wake(); else { cancelAnimationFrame(raf); raf = 0; } }).observe(stage);
   d.addEventListener("visibilitychange", function () { tabOn = !d.hidden; syncCtx(); if (tabOn) wake(); else { cancelAnimationFrame(raf); raf = 0; } });
   if (mqR.addEventListener) mqR.addEventListener("change", function () { reduced = mqR.matches; if (DB) DB.reduced = reduced; wake(); });
   window.addEventListener("resize", function () { U = stage.clientWidth / 600; render(); });
   render(); wake();
-  if (DB) { DB.setPhi = function (w, v) { O[w].phi = v; render(); }; DB.sound = setSound; DB.state = function () { return ctx ? ctx.state : "none"; }; }
+  if (DB) { DB.setPhi = function (w, v) { O[w].phi = v; render(); }; DB.sound = setSound; DB.setLite = setLite; DB.sats = function () { return allSats.map(function (a) { var r = a.getBoundingClientRect(); return { w: r.width, z: +a.style.zIndex, k: a.k, cls: a.className, o: +a.style.opacity }; }); }; DB.state = function () { return ctx ? ctx.state : "none"; }; }
 })();

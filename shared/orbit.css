@@ -9,14 +9,55 @@
 .ring.pop{stroke:#FF8A55}.ring.night{stroke:#A18BFF}
 .hit{fill:none;stroke:transparent;stroke-width:44;pointer-events:stroke;cursor:grab}
 .orbstage.drag .hit,.orbstage.drag .sat{cursor:grabbing}
-.planet{position:absolute;left:50%;top:50%;width:17%;aspect-ratio:1;margin:-8.5% 0 0 -8.5%;border-radius:50%;box-shadow:0 0 0 6px rgba(255,255,255,.08),0 0 28px 8px rgba(255,90,31,.35),0 0 44px 14px rgba(124,92,255,.45);pointer-events:none}
-.sat{position:absolute;left:50%;top:50%;width:44px;height:44px;margin:-22px 0 0 -22px;display:grid;place-items:center;border-radius:50%;font-size:24px;line-height:1;text-decoration:none;color:#fff;background:#0E0C28;border:2px solid;will-change:transform,opacity;touch-action:pan-y;cursor:pointer;
- --u:calc(100cqw / 600);transform:translate(calc(var(--x) * var(--u)),calc(var(--y) * var(--u)))}
-.sat.pop{border-color:#FF8A55;box-shadow:0 0 14px rgba(255,90,31,.55)}
-.sat.night{border-color:#A18BFF;box-shadow:0 0 14px rgba(124,92,255,.65)}
-.sat:focus-visible{outline:3px solid #fff;outline-offset:3px;z-index:3}
-.sat:hover{z-index:3;filter:brightness(1.25)}
-.orbsnd{position:absolute;right:8px;top:8px;width:44px;height:44px;border-radius:50%;border:2px solid #A18BFF;background:rgba(14,12,40,.9);color:#fff;font-size:20px;cursor:pointer;display:grid;place-items:center;padding:0;z-index:4}
+.orbstage{isolation:isolate}
+/* cực quang tím-cam xoay rất chậm (1 phần tử giả, chỉ transform) + sao băng thỉnh thoảng vút qua (1 phần tử giả) */
+.orbstage::before{content:"";position:absolute;inset:-25%;z-index:0;pointer-events:none;translate:calc(var(--px,0) * -16px) calc(var(--py,0) * -10px);
+ background:radial-gradient(40% 35% at 30% 40%,rgba(124,92,255,.55),transparent 70%),radial-gradient(35% 30% at 72% 62%,rgba(255,90,31,.38),transparent 70%),radial-gradient(30% 28% at 55% 22%,rgba(0,200,255,.18),transparent 70%);animation:orbaur 70s linear infinite}
+.orbstage::after{content:"";position:absolute;top:12%;left:64%;width:96px;height:2px;z-index:0;pointer-events:none;background:linear-gradient(270deg,#fff,rgba(255,255,255,0));transform-origin:0 50%;opacity:0;animation:orbshoot 12s linear infinite 3s}
+@keyframes orbaur{to{transform:rotate(360deg)}}
+@keyframes orbshoot{0%{opacity:0;transform:translate(0,0) rotate(-30deg)}2%{opacity:1}8%{opacity:0;transform:translate(-280px,162px) rotate(-30deg)}100%{opacity:0}}
+.orbsvg{z-index:1}
+.planet{position:absolute;left:50%;top:50%;width:19%;aspect-ratio:1;margin:-9.5% 0 0 -9.5%;z-index:3;border-radius:50%;box-shadow:0 0 0 5px rgba(255,255,255,.07),0 0 26px 8px rgba(255,90,31,.38),0 0 52px 16px rgba(124,92,255,.5),0 14px 18px -4px rgba(0,0,0,.55)}
+.planet.pulse{animation:orbpulse .55s ease-out}
+@keyframes orbpulse{40%{transform:scale(1.2)}100%{transform:scale(1)}}
+.ring{fill:none;stroke-width:2;stroke-dasharray:3 7;stroke-linecap:round;filter:drop-shadow(0 0 3px currentColor)}
+.ring.pop{stroke:#FF8A55;color:#FF5A1F}.ring.night{stroke:#A18BFF;color:#7C5CFF}
+.hit{fill:none;stroke:transparent;stroke-width:44;pointer-events:stroke;cursor:grab}
+.orbstage.drag .hit,.orbstage.drag .sat{cursor:grabbing}
+/* vệ tinh = bong bóng kính chứa ảnh game thật; .sat là vùng chạm 64px (>=46px ngay cả khi ở phía sau, nhỏ nhất), vòng kính 46px */
+.sat{position:absolute;left:50%;top:50%;width:64px;height:64px;margin:-32px 0 0 -32px;display:grid;place-items:center;border-radius:50%;font-size:24px;line-height:1;text-decoration:none;color:#fff;will-change:transform,opacity;touch-action:none;cursor:pointer;-webkit-tap-highlight-color:transparent;
+ --u:calc(100cqw / 600);--tc:rgba(255,255,255,.7);transform:translate(calc(var(--x) * var(--u)),calc(var(--y) * var(--u)))}
+.sat.pop{--tc:rgba(255,150,90,.85);--gl:rgba(255,90,31,.7);--bd:#FF9A63;--bg1:#FF8A4C;--bg2:#B83A09}
+.sat.night{--tc:rgba(170,150,255,.85);--gl:rgba(124,92,255,.75);--bd:#B7A5FF;--bg1:#8A6BFF;--bg2:#2B1B8A}
+.sat span{position:relative;display:grid;place-items:center;width:46px;height:46px;border-radius:50%;overflow:hidden;font-size:24px;filter:brightness(var(--b,1));transition:transform .2s;
+ background:radial-gradient(circle at 50% 100%,var(--bg1),var(--bg2));border:1.5px solid var(--bd);box-shadow:inset 0 -7px 12px rgba(0,0,0,.4),inset 0 2px 5px rgba(255,255,255,.55),0 0 16px var(--gl),0 10px 12px -7px rgba(0,0,0,.65)}
+.sat span img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .3s}
+.sat span.img{font-size:0}.sat span.img img{opacity:1}
+.sat span::after{content:"";position:absolute;left:12%;right:12%;top:5%;height:42%;border-radius:50%;background:linear-gradient(180deg,rgba(255,255,255,.6),rgba(255,255,255,0));pointer-events:none}
+/* đuôi sao chổi (ngược hướng bay), độ dài/độ mờ theo tốc độ (--tl) và độ gần (phía trước rõ hơn) */
+.sat::before{content:"";position:absolute;left:50%;top:50%;width:92px;height:26px;margin-top:-13px;z-index:-1;pointer-events:none;transform-origin:0 50%;transform:rotate(var(--r,180deg)) scaleX(calc(.4 + var(--tl,0) * .9));opacity:calc(var(--tl,0) * .9);
+ background:linear-gradient(90deg,var(--tc),rgba(255,255,255,0));clip-path:polygon(0 12%,100% 50%,0 88%)}
+.sat:hover span,.sat:focus-visible span{transform:scale(1.14)}
+.sat:hover{z-index:20!important}
+.sat:focus-visible{outline:none;z-index:20!important}.sat:focus-visible span{outline:3px solid #fff;outline-offset:3px}
+/* nhãn tên game: hiện cho vệ tinh phía trước nhất của mỗi quỹ đạo + khi rê/focus */
+.sat::after{content:attr(title);position:absolute;left:50%;top:calc(100% - 6px);transform:translateX(-50%);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:3px 10px;border-radius:99px;background:rgba(10,8,30,.9);border:1px solid var(--bd);color:#fff;font:700 11.5px/1.25 system-ui,sans-serif;opacity:0;transition:opacity .2s;pointer-events:none}
+.sat.lab::after,.sat:hover::after,.sat:focus-visible::after{opacity:1}
+/* game của hôm nay: vàng, to hơn, phát sáng + huy hiệu */
+.sat.gold{--bd:#FFE27A;--gl:rgba(255,200,60,.95);--bg1:#FFD43B;--bg2:#E8590C;--tc:rgba(255,215,90,.9)}
+.sat.gold span{box-shadow:inset 0 -7px 12px rgba(120,40,0,.4),inset 0 2px 5px rgba(255,255,255,.7),0 0 22px 5px var(--gl),0 10px 12px -7px rgba(0,0,0,.65);border-width:2px}
+.bdg{position:absolute;top:-3px;left:50%;transform:translateX(-50%);padding:2px 8px;border-radius:99px;background:#FFD43B;color:#3A2400;font:800 10px/1.3 system-ui,sans-serif;white-space:nowrap;pointer-events:none;z-index:2;box-shadow:0 2px 6px rgba(0,0,0,.4)}
+.orbhint{position:absolute;left:8px;top:10px;max-width:calc(100% - 64px);display:flex;align-items:center;gap:5px;padding:5px 10px 5px 8px;border-radius:99px;background:rgba(10,8,30,.78);border:1px solid rgba(161,139,255,.55);color:#fff;font:700 11px/1.2 system-ui,sans-serif;pointer-events:none;z-index:4;transition:opacity .5s}
+.orbhint span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.orbhint svg{flex:none}.orbhint.off{opacity:0}
+.orbsnd{position:absolute;right:8px;top:8px;width:44px;height:44px;border-radius:50%;border:2px solid #A18BFF;background:rgba(14,12,40,.9);color:#fff;font-size:20px;cursor:pointer;display:grid;place-items:center;padding:0;z-index:5}
 .orbsnd[hidden]{display:none}
 .orbsnd[aria-pressed=true]{background:#5B3FD6;border-color:#fff}
 .orbsnd:focus-visible{outline:3px solid #fff;outline-offset:3px}
+@media (min-width:700px) and (min-height:640px){.sat{width:76px;height:76px;margin:-38px 0 0 -38px}.sat span{width:56px;height:56px}.sat::before{width:110px}}
+/* warp: zoom vào điểm bấm rồi mới điều hướng */
+.orbstage{transition:transform .45s cubic-bezier(.55,0,.9,.35),opacity .45s}
+.warp .orbstage{transform:scale(2.7);opacity:0}
+.warp .side,.warp .world{opacity:0;transition:opacity .4s}
+/* hạ cấp tự động khi FPS thấp: bỏ đuôi, cực quang đứng yên, không parallax */
+.lite .sat::before{display:none}.lite .orbstage::before,.lite .orbstage::after{animation:none}.lite .orbstage::after{display:none}
+@media (prefers-reduced-motion:reduce){.orbstage::before{animation:none}.orbstage::after{display:none}.sat::before{display:none}.orbstage,.sat span,.planet.pulse{transition:none;animation:none}.warp .orbstage{transform:none;opacity:1}}
