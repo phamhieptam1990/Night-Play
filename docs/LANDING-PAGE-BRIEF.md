@@ -15,8 +15,8 @@ Sáu ý bắt buộc xuất hiện (đúng với code, không hứa thêm):
 1. **Game ngắn, một màn hình**: mỗi ván vài chục giây đến vài phút, không cuộn trang, như một ứng dụng.
 2. **Không quảng cáo, không theo dõi cá nhân**: chỉ đếm ẩn danh (lượt mở, game nào được chơi); không cookie; không tài khoản.
 3. **Chạy offline, không cần cài đặt**: mở bằng trình duyệt, thêm vào màn hình chính như ứng dụng (PWA); đã mở một lần thì chơi được khi mất mạng.
-4. **Miễn phí để chơi** (có giới hạn bản Free) và **Night Pass** (mua một lần theo gói, không tự gia hạn) mở khoá chế độ, giao diện, cấp độ đặc biệt và chơi không giới hạn thời gian.
-5. **Chơi cùng lúc** (2–4 game trên một màn hình), **chơi hộ** (bạn chơi tiếp ván dở của mình qua link), **thách đấu** (gửi link, bạn đấu cùng ván).
+4. **Miễn phí để chơi** (mọi game đều chơi được, không giới hạn thời gian, ở chế độ và giao diện cơ bản) và **Night Pass** (mua theo gói, không tự gia hạn) mở thêm chế độ, độ khó và giao diện đặc biệt của từng game. Nguồn sự thật: `docs/FREE-VS-NIGHTPASS.md`.
+5. **Chơi cùng lúc** (2 game trên điện thoại, tới 4–6 game trên máy tính bảng/máy tính, một màn hình), **chơi hộ** (bạn chơi tiếp ván dở của mình qua link), **thách đấu** (gửi link, bạn đấu cùng ván).
 6. **An toàn cho trẻ** (Pop Play): cổng phụ huynh, giới hạn thời gian do bố mẹ đặt, khoá màn hình, không ô gõ tên, không quảng cáo.
 
 Tránh: "an toàn tuyệt đối", "không thu thập dữ liệu nào" (có đếm ẩn danh), "miễn phí hoàn toàn" (có Night Pass), "tuân thủ COPPA/GDPR" (không tuyên bố khi chưa kiểm định).
@@ -103,13 +103,22 @@ Hai thẻ lớn (gradient cam cho Pop, tím tối cho Night, y như hub):
 - Bài đo: `scripts/cozygame/check-landing.js` (mục "quỹ đạo"); thêm `?debug` vào URL để có `window.__npOrbit` (ticks, marks, dropped, maxPerSec, vel, paused, state()).
 - Tự nghe thử: mở `/?debug` hoặc `/` trên máy có loa, cuộn tới "Chọn thế giới của bạn", bấm 🔇 (đổi thành 🔊), rồi kéo nhanh quỹ đạo cam (nốt trong, sáng) và quỹ đạo tím (nốt trầm, ngân); thả tay thì tick thưa dần, rê vào để dừng thì im.
 
+**8.2b Nâng cấp "bay" 3D + hub /play/ + dải game + hover (đã làm)**
+- Dùng chung `shared/orbit.js` + `shared/orbit.css` cho landing và hub `/play/` (hub: `data-tap="open"`, chạm icon mở thẳng game). Ảnh game thật trong bong bóng kính: `shared/orbit-icons/<id>.svg` (32 file, ~18KB, sinh bởi `scripts/gen-orbit-icons.js` từ mảng `games` của hai cổng; chạy lại khi thêm game).
+- Chiều sâu: vệ tinh phía trước to ~1,9x/sáng/lớp trên hành tinh, phía sau nhỏ/tối/lớp dưới hành tinh (z-index 1 dưới, 6..9 trên, hành tinh z 3); đuôi sao chổi theo hướng bay; vùng chạm 64px (46px khi ở sau); nhãn tên cho vệ tinh trước nhất mỗi quỹ đạo + khi rê/focus; vệ tinh VÀNG "Hôm nay/Today" (đổi theo ngày VN); gợi ý "Kéo để xoay · Chạm để chơi" tự mờ sau lần kéo đầu; bấm hành tinh = pulse; cực quang + sao băng (2 animation CSS trên phần tử giả); tổng chuyển động <= 14 (12 vệ tinh + 2).
+- Parallax: nghiêng theo chuột; điện thoại theo DeviceOrientation (Android tự bật; iOS chỉ xin quyền khi bấm nút 🔊). Âm: tick (đã có) + whoosh nhỏ khi vệ tinh qua chính giữa phía trước; rung 7ms (chỉ khi đã chạm/bật âm). Warp: bấm game/thế giới thì zoom 450ms rồi điều hướng (giảm chuyển động: đi ngay; `pageshow` huỷ). Chưa làm: vương miện Night Pass trên vệ tinh (chưa có dữ liệu game nào thuộc Pass), ánh chớp khi hai vệ tinh vượt nhau.
+- **Điều kiện hạ cấp tự động**: đo 100 khung đầu; nếu trung bình > 28ms/khung (< ~36fps) thì thêm class `lite` (tắt đuôi sao chổi, parallax, cực quang đứng yên). Giảm chuyển động: không tự quay/không parallax/không warp; tab ẩn hoặc ngoài màn hình: vòng rAF ngủ. Bài đo: FPS >= 50 (máy tính) và >= 24 với CPU x4, không long task > 100ms.
+- Hub `/play/` (`play/index.html`, bài đo `scripts/cozygame/check-hub.js`, nối vào `check.js`): MỘT màn hình không cuộn ở 10 cỡ x sáng/tối x VI/EN; dọc: quỹ đạo nửa trên (<= 46% màn điện thoại), hai thẻ >= 56px bên dưới; ngang: quỹ đạo trái, thẻ phải; chữ VI có sẵn trong HTML (không CLS); chip "Chơi tiếp" từ `np-resume:*` (ẩn nếu làm tràn). Offline: `sw.js` np-shell-v18 có orbit.js/css + 12 ảnh vệ tinh. Dải game tự trượt KHÔNG đặt ở hub (hết chỗ trong một màn hình, ưu tiên quỹ đạo).
+- Landing hero: dải game `.marq` (16 game xen Pop/Night, liên kết thật `/popplay/#id` `/cozyplay/#id`, ảnh thật + tên, nhân đôi aria-hidden/tabindex -1, CSS translateX 52s/vòng, dừng khi rê/focus/chạm giữ 4s/tab ẩn/ngoài màn hình, cuộn tay được; giảm chuyển động: không chạy, scroll-snap; ẩn ở điện thoại thấp <=700px để hero không tràn).
+- Hover & focus: khối `/* Hover & focus */` cuối `landing.css` (chỉ `@media (hover:hover) and (pointer:fine)`; focus-visible luôn có; chỉ transform/box-shadow/border/background; giảm chuyển động bỏ transform). `check-landing.js` đo hover đổi style trong 300ms mà không đổi hộp bố cục, dải game, reduced-motion.
+
 ### 8.3 Lưới game đại diện
 Tiêu đề: **Chọn một game, chơi liền** / *Pick a game, play instantly*. Hiển thị 12 game (6 Pop, 6 Night) dạng thẻ: emoji lớn (hoặc SVG icon thật nếu có) + tên VI/EN + một dòng mô tả; chạm mở `/cozyplay/#id` hoặc `/popplay/#id`. Nút **Xem tất cả game** → trang cổng. Danh sách đầy đủ ở mục 13.
 
 ### 8.4 Tính năng nổi bật (6 thẻ, icon + 1–2 câu)
 1. ⚡ **Vào là chơi** / *Instant play*: không tài khoản, không tải về; thêm vào màn hình chính như ứng dụng. / *No account, no download; add to your home screen like an app.*
 2. 📴 **Chạy cả khi mất mạng** / *Works offline*: mở một lần, lần sau chơi không cần Internet. / *Open once, play without Internet next time.*
-3. 👥 **Chơi cùng lúc** / *Play together*: 2–4 game trên cùng một màn hình, dùng cho cả nhà hoặc bạn bè. / *2–4 games on one screen for family or friends.*
+3. 👥 **Chơi cùng lúc** / *Play together*: 2 game trên điện thoại, tới 4–6 game trên máy tính bảng và máy tính, cùng một màn hình, dùng cho cả nhà hoặc bạn bè. / *2 games on a phone, up to 4–6 on a tablet or computer, on one screen for family or friends.*
 4. 🤝 **Chơi hộ và thách đấu** / *Play-for-me and challenges*: gửi link để bạn chơi tiếp ván dở của bạn, hoặc đấu cùng một ván với điểm của bạn. / *Send a link so a friend continues your round, or beats your score on the same round.*
 5. ▶️ **Tiếp tục ván dở** / *Resume*: thoát giữa chừng, quay lại vẫn còn ván (giữ 7 ngày). / *Leave mid-round and pick up later (kept 7 days).*
 6. 🏆 **Bảng xếp hạng tự nguyện** / *Voluntary leaderboard*: chỉ lên bảng khi bạn bấm "Khoe điểm". / *You appear only when you tap "Share score".*
@@ -120,7 +129,7 @@ Tiêu đề: **Chọn một game, chơi liền** / *Pick a game, play instantly*
 3. **Chơi, rồi** khoe điểm, thách bạn hoặc thoát bằng nút ← (ván dở được giữ). / *Play, then share your score, challenge a friend, or leave with ← (your round is kept).*
 
 ### 8.6 Night Pass và bảng giá
-Tiêu đề: **Night Pass: mở khoá mọi thứ, trả một lần, không tự gia hạn** / *Night Pass: unlock everything, pay once, no auto-renewal*.
+Tiêu đề: **Night Pass: mở thêm chế độ và giao diện, trả một lần, không tự gia hạn** / *Night Pass: unlock extra modes and looks, pay once, no auto-renewal*.
 
 Bảng giá (đọc từ `server/app.js` `PLANS` và `subscribe.html`; KHÔNG bịa; đơn vị VND, đã gồm thuế nếu có):
 | Gói / Plan | Thời hạn / Duration | Giá / Price | Ghi chú / Note |
@@ -130,7 +139,7 @@ Bảng giá (đọc từ `server/app.js` `PLANS` và `subscribe.html`; KHÔNG b�
 | 1 tháng / 1 month | 30 ngày | 36.000đ | **Phổ biến nhất**, "Rẻ hơn ly cà phê" |
 | 1 năm / 1 year | 365 ngày | 199.000đ | ≈ 16.600đ/tháng, tiết kiệm nhất |
 
-Quyền lợi (từ bảng so sánh ở `subscribe.html`): tất cả game kể cả game mới · chơi không giới hạn thời gian · hẹn giờ đi ngủ tự đặt · chế độ Vô tận, Thử thách ngày, Boss, 4 độ khó · chủ đề giao diện, thống kê, huy hiệu · vẫn không quảng cáo, không theo dõi cá nhân. Bản Free: số game và thời gian chơi mỗi ngày có giới hạn (đọc con số hiện hành ở `subscribe.html`, khoá `f1a`, `f2a`, không hard-code khác).
+Quyền lợi (khớp bảng so sánh ở `subscribe.html` và `docs/FREE-VS-NIGHTPASS.md`): thêm chế độ và độ khó riêng của từng game · giao diện đặc biệt cho từng game (mỗi game có 1 bản cơ bản miễn phí) · ở Đập Deadline: Vô tận, Thử thách ngày, Boss, 4 độ khó, bàn lớn, thống kê · vẫn không quảng cáo, không theo dõi cá nhân. Bản Free: chơi được TẤT CẢ game, không giới hạn thời gian (phụ huynh tự đặt hẹn giờ nếu muốn), ở chế độ và giao diện cơ bản; dùng thử mỗi game 1 lượt mỗi ngày. KHÔNG ghi "3 game", "30 phút/ngày", "chơi không giới hạn thời gian" như quyền lợi riêng của Night Pass (sai thực tế).
 
 Chữ nhỏ bắt buộc: **Hiệu lực theo số ngày của gói, không tự gia hạn, hết hạn quay về Free. Thanh toán chuyển khoản VietQR. Xem Điều khoản.** CTA **Xem gói Night Pass** → `/subscribe.html`. Bảng giá nên được sinh lúc build từ một nguồn duy nhất (hoặc kiểm tay mỗi lần đổi giá) để không lệch.
 
@@ -144,7 +153,7 @@ Tiêu đề: **Nói thẳng về dữ liệu của bạn và của con** / *Plai
 Liên kết: **Đọc Chính sách bảo mật** → `/privacy.html`.
 
 ### 8.8 Câu hỏi thường gặp (dùng chung cho FAQPage JSON-LD)
-1. **Chơi có mất tiền không?** — Chơi miễn phí, không cần tài khoản. Night Pass là gói tuỳ chọn mở thêm chế độ, giao diện, cấp độ và thời gian chơi. / *Is it free?* — Free to play, no account. Night Pass is an optional plan unlocking extra modes, skins, levels and play time.
+1. **Chơi có mất tiền không?** — Chơi miễn phí, không cần tài khoản. Chơi miễn phí tất cả game, không cần tài khoản. Night Pass là gói tuỳ chọn mở thêm chế độ, độ khó và giao diện đặc biệt cho từng game. / *Is it free?* — Free to play every game, no account. Night Pass is an optional plan unlocking extra modes, difficulties and special looks in each game.
 2. **Cần cài ứng dụng không?** — Không. Mở trình duyệt, vào nightplay.vn. Có thể thêm vào màn hình chính. / *Do I need to install anything?* — No. Open nightplay.vn in your browser; you can add it to the home screen.
 3. **Mất mạng có chơi được không?** — Được, sau khi bạn đã mở trang một lần có mạng. Các tính năng cần máy chủ (kiểm tra Night Pass, bảng xếp hạng, chơi hộ) thì cần mạng. / *Does it work offline?* — Yes, after one online visit. Server features (Night Pass check, leaderboard, play-for-me) need a connection.
 4. **Có an toàn cho bé không?** — Pop Play không có tài khoản, quảng cáo hay ô gõ tên; bố mẹ đặt giờ chơi và khoá màn hình. Hãy luôn ngồi cùng bé khi bé còn nhỏ. / *Is it safe for my child?* — Pop Play has no accounts, ads or name fields; parents set time limits and lock the screen. Please stay with young children.

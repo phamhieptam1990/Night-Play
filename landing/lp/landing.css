@@ -317,3 +317,53 @@ html[data-theme=dark] .pcard{background:rgba(27,30,47,.72)}
  .orbsys .world{padding:22px}
 }
 @media (prefers-reduced-motion:reduce){.orbsys .world.on{transform:none}}
+
+/* ===== Dải game tự trượt (hero): liên kết thật tới /popplay/#id, /cozyplay/#id; nội dung nhân đôi để lặp; kéo/vuốt ngang tay được ===== */
+.marq{width:100%;height:96px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);padding:6px 0}
+.marq::-webkit-scrollbar{display:none}
+.mtrack{display:flex;gap:12px;width:max-content;animation:marq 52s linear infinite}
+.marq:hover .mtrack,.marq:focus-within .mtrack,.marq.hold .mtrack{animation-play-state:paused}
+@keyframes marq{to{transform:translateX(calc(-50% - 6px))}}
+.mi{position:relative;flex:none;width:132px;height:84px;display:grid;grid-template-rows:56px auto;justify-items:center;align-content:start;gap:4px;text-decoration:none;color:var(--ink);border-radius:18px;padding:0 4px}
+.mimg{position:relative;display:grid;place-items:center;width:56px;height:56px;border-radius:50%;overflow:hidden;font-size:28px;line-height:1;border:2px solid #FF8A55;background:#0E0C28;box-shadow:0 0 14px rgba(255,90,31,.35)}
+.mi.night .mimg{border-color:#A18BFF;box-shadow:0 0 14px rgba(124,92,255,.45)}
+.mimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.mn{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;font-weight:700;line-height:1.3;padding:1px 8px;border-radius:99px;background:var(--panel);border:1px solid var(--line);color:var(--ink)}
+.mi:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+@media (max-width:899px) and (max-height:700px){.marq{display:none}}
+@media (prefers-reduced-motion:reduce){.mtrack{animation:none}.marq{scroll-snap-type:x proximity}.mi{scroll-snap-align:start}}
+
+/* ===== Hover & focus (Night Pass): chỉ hover khi có chuột thật; focus-visible luôn có; chỉ transform/opacity/box-shadow/border-color/background; không đổi kích thước hộp ===== */
+:where(a,button,summary,.btn,.door,.gcard,.feat,.plan,.pcard,.mi,.lang,.ico,.mbtn){-webkit-tap-highlight-color:transparent}
+:where(a,button,summary):focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+html[data-theme=dark] :where(a,button,summary):focus-visible{outline-color:#fff}
+.btn,.door,.gcard,.feat,.plan,.pcard,.mi,.mimg,.lang,.ico,.mbtn,.faq details,.links a,.flinks a{transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,background-color .18s ease,background-position .25s ease,opacity .18s ease}
+.btn.big,.btn.sm{background-size:160% 100%;background-position:0 0}
+.faq summary::after{transition:transform .2s ease}
+main p a:not(.btn){transition:color .18s ease,text-decoration-color .18s ease}
+.flinks a{background:linear-gradient(currentColor,currentColor) 50% calc(100% - 9px)/0 2px no-repeat;transition:background-size .2s ease,background-color .18s ease}
+@media (hover:hover) and (pointer:fine){
+ .btn:hover{transform:translateY(-2px)}
+ .btn.big:hover,.btn.sm:hover{background-position:100% 0;box-shadow:0 10px 30px color-mix(in srgb,var(--accent) 55%,transparent),0 4px 18px rgba(255,90,31,.35)}
+ .btn.ghost:hover{border-color:var(--accent);background-color:color-mix(in srgb,var(--accent) 12%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 50%,transparent)}
+ .btn.white:hover{box-shadow:0 8px 26px rgba(255,255,255,.35)}
+ .door.pop:hover{border-color:#FF8A55}.door.night:hover{border-color:#A18BFF}
+ .door:hover .di{transform:rotate(-8deg) scale(1.1)}.door .di{transition:transform .2s ease}
+ .gcard:hover,.feat:hover,.pcard:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--accent) 60%,var(--line));box-shadow:0 12px 30px color-mix(in srgb,var(--accent) 28%,transparent)}
+ .plan:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--accent) 60%,var(--line));box-shadow:0 12px 30px color-mix(in srgb,var(--accent) 28%,transparent)}
+ .plan.best:hover{box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 60%,transparent),0 16px 48px color-mix(in srgb,var(--accent) 60%,transparent)}
+ .faq details:hover{background-color:color-mix(in srgb,var(--accent) 8%,var(--panel));border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+ .faq summary:hover::after{transform:rotate(90deg)}.faq details[open] summary:hover::after{transform:rotate(180deg)}
+ .mi:hover{transform:translateY(-4px) scale(1.06);z-index:2}
+ .mi.pop:hover .mimg{box-shadow:0 0 22px 4px rgba(255,90,31,.7)}.mi.night:hover .mimg{box-shadow:0 0 22px 4px rgba(124,92,255,.8)}
+ .mi:hover .mn{border-color:var(--accent);background:var(--card);box-shadow:0 2px 8px rgba(0,0,0,.25)}
+ .links a:hover{background-color:color-mix(in srgb,var(--accent) 14%,transparent)}
+ .lang:hover,.ico:hover,.mbtn:hover{border-color:var(--accent);background-color:color-mix(in srgb,var(--accent) 12%,var(--panel));transform:translateY(-1px)}
+ main p a:not(.btn):hover{color:var(--accent);text-decoration-thickness:2px}
+ html[data-theme=dark] main p a:not(.btn):hover{color:#C9B8FF}
+ .flinks a:hover{background-size:calc(100% - 16px) 2px}
+}
+@media (prefers-reduced-motion:reduce){
+ .btn:hover,.door:hover .di,.gcard:hover,.feat:hover,.pcard:hover,.plan:hover,.mi:hover,.lang:hover,.ico:hover,.mbtn:hover{transform:none!important}
+ .faq summary::after{transition:none}
+}

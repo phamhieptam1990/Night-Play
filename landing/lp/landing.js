@@ -79,3 +79,13 @@
   var y = $("yr"); if (y) y.textContent = new Date().getFullYear();
   if (window.Track) Track.view("home");
 })();
+
+/* dải game tự trượt: chạm giữ / kéo ngang thì tạm dừng vài giây (CSS đã dừng khi rê chuột/focus), tab ẩn thì dừng */
+(function () {
+  var m = document.querySelector(".marq"); if (!m) return; var tm = 0;
+  function hold() { m.classList.add("hold"); clearTimeout(tm); tm = setTimeout(function () { m.classList.remove("hold"); }, 4000); }
+  ["pointerdown", "touchstart", "wheel", "scroll"].forEach(function (ev) { m.addEventListener(ev, hold, { passive: true }); });
+  var tr = m.querySelector(".mtrack");
+  document.addEventListener("visibilitychange", function () { tr.style.animationPlayState = document.hidden ? "paused" : ""; });
+  if ("IntersectionObserver" in window) new IntersectionObserver(function (e) { tr.style.animationPlayState = e[e.length - 1].isIntersecting && !document.hidden ? "" : "paused"; }).observe(m);
+})();

@@ -147,7 +147,7 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
         const q = s => [...document.querySelectorAll(s)], bx = e => e.getBoundingClientRect();
         const doors = q(".door").map(e => { const b = bx(e); return { w: Math.round(b.width), h: Math.round(b.height), clip: [...e.querySelectorAll("b,small")].some(x => x.scrollWidth > x.clientWidth + 1), lines: [...e.querySelectorAll("b,small")].map(x => Math.round(bx(x).height / parseFloat(getComputedStyle(x).lineHeight === "normal" ? parseFloat(getComputedStyle(x).fontSize) * 1.2 : getComputedStyle(x).lineHeight))) }; });
         const plans = q(".plan").map(e => { const b = bx(e); return { w: Math.round(b.width), h: Math.round(b.height), top: Math.round(b.top), clip: [...e.querySelectorAll("*")].some(x => x.scrollWidth > x.clientWidth + 1), badgeH: e.querySelector(".badge") ? Math.round(bx(e.querySelector(".badge")).height) : 0, price: e.querySelector(".pp").textContent }; });
-        const over = q("body *").filter(e => { const cs = getComputedStyle(e); return cs.display !== "inline" && cs.display !== "contents" && e.clientWidth > 1 && e.scrollWidth > e.clientWidth + 1 && !/^(svg|path)$/i.test(e.tagName) && !e.closest(".sr,.skip") && !e.matches(".orbstage,.orbstage *") && cs.position !== "absolute" || (e.clientWidth > 1 && !e.matches(".orbstage") && cs.overflowX !== "visible" && e.scrollWidth > e.clientWidth + 1); }).slice(0, 3).map(e => e.tagName + "." + e.className);
+        const over = q("body *").filter(e => { const cs = getComputedStyle(e); return cs.display !== "inline" && cs.display !== "contents" && e.clientWidth > 1 && e.scrollWidth > e.clientWidth + 1 && !/^(svg|path)$/i.test(e.tagName) && !e.closest(".sr,.skip") && !e.matches(".orbstage,.orbstage *,.marq,.marq *") && cs.position !== "absolute" || (e.clientWidth > 1 && !e.matches(".orbstage,.marq,.marq *") && cs.overflowX !== "visible" && e.scrollWidth > e.clientWidth + 1); }).slice(0, 3).map(e => e.tagName + "." + e.className);
         const top = bx(document.querySelector(".top")).bottom, h1 = bx(document.querySelector("h1")).top, cta = bx(document.getElementById("heroCta")), dr = q(".door").map(e => bx(e).bottom);
         return { doors, plans, over, gap: Math.round(h1 - top), ctaBot: Math.round(cta.bottom), doorBot: Math.round(Math.max(...dr)), sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth };
       });
@@ -253,7 +253,7 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
           if (r.height < 43.5 || r.width < 43.5) out.small.push((e.className || e.tagName) + ":" + Math.round(r.width) + "x" + Math.round(r.height) + " " + (e.textContent || "").trim().slice(0, 20));
         }
         const parse = s => { const m = s.match(/rgba?\(([^)]+)\)/); if (!m) return null; const p = m[1].split(/[ ,\/]+/).map(Number); return { c: p.slice(0, 3), a: p.length > 3 ? p[3] : 1 }; };
-        const bgOf = el => { for (let e = el; e; e = e.parentElement) { if (e.classList.contains("world") || e.classList.contains("sticky") || e.classList.contains("orbstage")) return "skip"; const p = parse(getComputedStyle(e).backgroundColor); if (p && p.a > .9) return p.c; } return [255, 255, 255]; };
+        const bgOf = el => { for (let e = el; e; e = e.parentElement) { if (e.classList.contains("world") || e.classList.contains("sticky") || e.classList.contains("orbstage") || e.classList.contains("mimg")) return "skip"; const p = parse(getComputedStyle(e).backgroundColor); if (p && p.a > .9) return p.c; } return [255, 255, 255]; };
         const seen = new Set();
         const wk = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
         for (let n; (n = wk.nextNode());) {
@@ -380,6 +380,40 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
       const y0 = await mp.evaluate(() => scrollY); const ns = await mp.$(".sat.night"); const nb = await ns.boundingBox(); await mp.touchscreen.tap(nb.x + nb.width / 2, nb.y + nb.height / 2); await wait(1200);
       const tp = await mp.evaluate(() => ({ on: document.querySelector(".world.night").classList.contains("on"), path: location.pathname, y: scrollY, inView: (r => r.top < innerHeight && r.bottom > 0)(document.querySelector(".world.night").getBoundingClientRect()) }));
       note(tp.on && tp.path === PAGES[l] && tp.inView && tp.y > y0, tag + " chạm", "chạm vệ tinh Night phải nhấn mạnh + cuộn tới thẻ, chưa mở game: " + JSON.stringify(tp)); if (shotDir) await mp.screenshot({ path: path.join(shotDir, `orbit-tap-night-${l}-390.png`) }); await mp.close();
+    }
+    /* ===== dải game tự trượt + hover/focus (hero) ===== */
+    for (const l of ["vi", "en"]) for (const [w, h, th] of (quick ? [[1440, 900, "dark"], [1440, 900, "light"], [390, 844, "light"]] : [[320, 568, "dark"], [390, 844, "light"], [768, 1024, "dark"], [1024, 768, "light"], [1440, 900, "dark"], [1440, 900, "light"]])) {
+      const tag = `dải game ${l} ${w}x${h} ${th}`, pg = await br.newPage(); await pg.setViewport({ width: w, height: h, deviceScaleFactor: 1 });
+      await pg.evaluateOnNewDocument((t) => { try { localStorage.setItem("theme", t); } catch (e) {} window.__cls = 0; try { new PerformanceObserver(x => { for (const e of x.getEntries()) if (!e.hadRecentInput) window.__cls += e.value; }).observe({ type: "layout-shift", buffered: true }); } catch (e) {} }, th);
+      await pg.goto(B + PAGES[l], { waitUntil: "load" }); await wait(500);
+      const m = await pg.evaluate(() => { const mq = document.querySelector(".marq"), vis = mq && getComputedStyle(mq).display !== "none", all = [...document.querySelectorAll(".mi")], real = all.filter(a => !a.hasAttribute("aria-hidden")), dup = all.filter(a => a.hasAttribute("aria-hidden"));
+        const tr = mq && mq.querySelector(".mtrack"), cs = tr && getComputedStyle(tr); return { vis, real: real.map(a => a.getAttribute("href")), dupOk: dup.length === real.length && dup.every(a => a.tabIndex === -1), size: real[0] && [real[0].offsetWidth, real[0].offsetHeight], anim: cs && cs.animationName, state: cs && cs.animationPlayState, sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth, cls: window.__cls, imgs: real.every(a => a.querySelector("img")), names: real.every(a => a.querySelector(".mn").textContent.trim().length > 2) }; });
+      if (!m.vis) { note(w < 900 && h <= 700, tag, "dải bị ẩn ngoài ca cho phép"); await pg.close(); continue; }
+      const ids = {}; for (const mm of fs.readFileSync(path.join(root, "shared", "multi-games.js"), "utf8").matchAll(/^\s*"([a-z0-9-]+)":\s*\{\s*portal:\s*"(\w+)"/gm)) ids[mm[1]] = mm[2];
+      note(m.real.length >= 16, tag, "cần >= 16 game, có " + m.real.length); m.real.forEach(hf => { const mm = hf.match(/^\/(popplay|cozyplay)\/#([a-z0-9-]+)$/); note(mm && ids[mm[2]] === mm[1], tag, "liên kết sai id/cổng: " + hf); });
+      note(m.dupOk, tag, "phần nhân đôi phải aria-hidden + tabindex=-1, đủ số lượng"); note(m.size[0] >= 44 && m.size[1] >= 72, tag, "ô nhỏ " + m.size); note(m.imgs && m.names, tag, "mỗi ô cần ảnh + tên");
+      note(m.anim === "marq" && m.state === "running", tag, "dải phải tự trượt: " + m.anim + "/" + m.state); note(m.sw <= m.cw && m.cls < 0.05, tag, `tràn ngang ${m.sw}>${m.cw} hoặc CLS ${m.cls.toFixed(3)}`);
+      if (w >= 1024) {  /* rê chuột: dừng + ô nổi lên (transform/box-shadow đổi <= 300ms, hộp bố cục giữ nguyên) */
+        const box = async () => pg.evaluate(() => { const a = document.querySelector(".mi:nth-child(3)"), r = (e => ({ w: e.offsetWidth, h: e.offsetHeight }))(a), c = getComputedStyle(a), im = getComputedStyle(a.querySelector(".mimg")); return { r, tf: c.transform, sh: im.boxShadow, st: getComputedStyle(document.querySelector(".mtrack")).animationPlayState, sw: document.documentElement.scrollWidth }; });
+        const b0 = await box(); const bb = await (await pg.$(".mi:nth-child(3)")).boundingBox(); await pg.mouse.move(bb.x + bb.width / 2, bb.y + 20); await wait(300); const b1 = await box();
+        note(b1.st === "paused", tag, "rê chuột mà dải không dừng"); note(b1.sh !== b0.sh, tag, "hover ô game không đổi box-shadow"); note(b1.r.w === b0.r.w && b1.r.h === b0.r.h && b1.sw === b0.sw, tag, "hover đổi kích thước hộp bố cục");
+        /* 8 phần tử chủ chốt: hover đổi style trong 300ms, không đổi hộp */
+        for (const sel of [".btn.big", ".door.pop", ".door.night", ".gcard", ".feat", ".plan.best", ".faq details", ".lang", ".links a"]) {
+          const el = await pg.$(sel); if (!el) continue; await el.evaluate(e => e.scrollIntoView({ block: "center", behavior: "instant" })); await pg.mouse.move(2, 2); await wait(300);
+          const g = () => el.evaluate(e => { const c = getComputedStyle(e); return { t: c.transform, s: c.boxShadow, b: c.borderColor, bg: c.backgroundColor + c.backgroundPosition, w: e.offsetWidth, h: e.offsetHeight, sw: document.documentElement.scrollWidth }; });
+          const a0 = await g(); const rb = await el.boundingBox(); if (!rb || rb.width < 4) continue; await pg.mouse.move(rb.x + rb.width / 2, rb.y + rb.height / 2); await wait(300); const a1 = await g();
+          note(a0.t !== a1.t || a0.s !== a1.s || a0.b !== a1.b || a0.bg !== a1.bg, tag, `hover ${sel} không đổi style`); note(a0.w === a1.w && a0.h === a1.h && a0.sw === a1.sw, tag, `hover ${sel} đổi hộp bố cục ${a0.w}x${a0.h}->${a1.w}x${a1.h}`);
+        }
+        /* focus-visible: outline >= 2px */
+        await pg.mouse.move(2, 2); await pg.keyboard.press("Tab"); for (let i = 0; i < 3; i++) await pg.keyboard.press("Tab");
+        const fo = await pg.evaluate(() => { const c = getComputedStyle(document.activeElement); return { w: parseFloat(c.outlineWidth), st: c.outlineStyle }; }); note(fo.w >= 2 && fo.st !== "none", tag, "focus-visible thiếu outline >= 2px: " + JSON.stringify(fo));
+      }
+      await pg.close();
+    }
+    for (const l of ["vi", "en"]) {   /* giảm chuyển động: dải không tự chạy, cuộn tay có snap, hover không transform; (hover:none): không áp hover */
+      const pg = await br.newPage(), tag = "dải game reduced " + l; await pg.setViewport({ width: 1440, height: 900 }); await pg.emulateMediaFeatures([{ name: "prefers-reduced-motion", value: "reduce" }]); await pg.goto(B + PAGES[l], { waitUntil: "load" }); await wait(400);
+      const r = await pg.evaluate(() => { const tr = document.querySelector(".mtrack"), mq = document.querySelector(".marq"); return { an: getComputedStyle(tr).animationName, sn: getComputedStyle(mq).scrollSnapType, ov: getComputedStyle(mq).overflowX }; }); note(r.an === "none" && /x/.test(r.sn) && r.ov === "auto", tag, "reduced-motion: dải phải đứng yên, cuộn tay + snap: " + JSON.stringify(r));
+      const mi = await pg.$(".mi:nth-child(3)"), bb = await mi.boundingBox(); await pg.mouse.move(bb.x + 20, bb.y + 20); await wait(300); note(await mi.evaluate(e => getComputedStyle(e).transform === "none"), tag, "reduced-motion: hover vẫn transform"); await pg.close();
     }
     note(weight > 0 && weight < 300 * 1024, "trọng lượng", "tải trang đầu " + Math.round(weight / 1024) + " KB (cần < 300 KB; chưa nén)");
     console.log("  trọng lượng trang VI 390 (chưa nén, gồm shared/theme+site+track): " + Math.round(weight / 1024) + " KB");
