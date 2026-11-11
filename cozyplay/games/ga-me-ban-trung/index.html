@@ -179,7 +179,7 @@ function present(){const s=new Set();for(let r=0;r<MAXR;r++)for(const e of G.gri
 function drawEgg(){const p=present();if(!p.length)return 0;const R_=sub(G.seed,G.draw++);return p[Math.floor(R_()*p.length)]}
 function neigh(r,c){const par=G.par,xh=2*c+(((r+par)&1)?1:0),out=[];if(c>0)out.push([r,c-1]);if(c<cols(r,par)-1)out.push([r,c+1]);for(const rr of[r-1,r+1]){if(rr<0||rr>=MAXR)continue;const o2=(rr+par)&1;for(const xx of[xh-1,xh+1]){const cc=(xx-o2)/2;if(Number.isInteger(cc)&&cc>=0&&cc<cols(rr,par))out.push([rr,cc])}}return out}
 /* ---- bắn: mô phỏng cố định bước (xác định) ---- */
-const STEP=6,SPEED=900;
+const STEP=6,SPEED=1550,RM=matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
 function simBall(b,dt){let rem=SPEED*dt;while(rem>0){const st=Math.min(STEP,rem);rem-=st;b.x+=b.vx*st;b.y+=b.vy*st;if(b.x<R){b.x=R+(R-b.x);b.vx=-b.vx}else if(b.x>W-R){b.x=(W-R)-(b.x-(W-R));b.vx=-b.vx}
   if(b.y<=TOP)return"stick";for(let r=0;r<MAXR;r++){const y=cy(r);if(Math.abs(y-b.y)>D)continue;for(let c=0;c<cols(r,G.par);c++){const e=G.grid[r][c];if(!e)continue;const dx=cx(r,c,G.par)-b.x,dy=y-b.y;if(dx*dx+dy*dy<(D*.86)*(D*.86))return"stick"}}}return""}
 function landing(b){let best=null,bd=1e9;for(let r=0;r<MAXR;r++){const y=cy(r);if(Math.abs(y-b.y)>D*1.6)continue;for(let c=0;c<cols(r,G.par);c++){if(G.grid[r][c])continue;let ok=r===0;if(!ok)for(const [rr,cc] of neigh(r,c))if(G.grid[rr][cc]){ok=true;break}if(!ok)continue;const dx=cx(r,c,G.par)-b.x,dy=y-b.y,d=dx*dx+dy*dy;if(d<bd){bd=d;best=[r,c]}}}return best}
@@ -189,7 +189,7 @@ function preview(a){const pts=[],b=Object.assign({x:SX,y:SY},aimDir(a));for(let 
 /* ô mà trứng sẽ gắn vào nếu bắn theo góc a (dùng đúng bộ mô phỏng khi bắn thật nên khớp 100%) */
 function predict(a){const b=Object.assign({x:SX,y:SY},aimDir(Math.max(-1.42,Math.min(1.42,a))));for(let i=0;i<4000;i++){if(simBall(b,STEP/SPEED))break}return landing(b)}
 /* ---- giải quyết một lượt ---- */
-function settle(){const b=G.ball;G.ball=null;const pos=landing(b);if(!pos){G.over=true;G.why="lose";return endGame()}
+function settle(){const b=G.ball;G.ball=null;if(skinOf().trail&&!RM)for(let i=0;i<10;i++){const a=i/10*6.283;G.fx.push({x:b.x,y:b.y,vx:Math.cos(a)*170,vy:Math.sin(a)*170,life:.45,k:b.k+i})}const pos=landing(b);if(!pos){G.over=true;G.why="lose";return endGame()}
  const [r,c]=pos;G.lastLand=[r,c];if(G.tut){G.tut--;if(!G.tut)LS.set("gm-tut",1)}if(r>=MAXR){G.over=true;G.why="lose";return endGame()}G.grid[r][c]={k:b.k,s:0};G.used++;sfx.stick();
  const cl=cluster(r,c);let popped=0,dropped=0,freed=0,thaw=new Set();
  if(cl.length>=3){const kill=new Set(cl.map(p=>p[0]+","+p[1]));for(const [pr,pc] of cl){const e=G.grid[pr][pc];if(e&&e.s===1)for(const [nr,nc] of neigh(pr,pc))if(G.grid[nr][nc])kill.add(nr+","+nc)}
@@ -225,14 +225,14 @@ function fxPop(r,c,k){const x=cx(r,c,G.par),y=cy(r);for(let i=0;i<7;i++){const a
 /* ===== VÒNG LẶP ===== */
 let last=0,acc=0;
 function tick(ts){raf=requestAnimationFrame(tick);if(!G||$("game").hidden){last=ts;return}const dt=Math.min(.05,(ts-last)/1000||0);last=ts;
- if(G.ball){acc+=dt;const sd=STEP/SPEED;let n=0;while(acc>=sd&&G.ball&&n++<8){acc-=sd;const hit=simBall(G.ball,sd);if(hit){settle();acc=0;break}}}
+ if(G.ball){acc+=dt;const sd=STEP/SPEED;let n=0;while(acc>=sd&&G.ball&&n++<16){acc-=sd;const hit=simBall(G.ball,sd);const tk=skinOf().trail;if(tk&&!RM&&(n&1)){(G.trail||(G.trail=[])).push({x:G.ball.x,y:G.ball.y,a:0,k:G.ball.k});if(G.trail.length>24)G.trail.shift()}if(hit){settle();acc=0;break}}}
  if(G.cfg.time&&!G.over){G.timeLeft-=dt;if(G.timeLeft<=0){G.timeLeft=0;G.over=true;G.why="time";endGame()}updHud()}
  if(G.cfg.push&&!G.over){G.age+=dt;G.birdT-=dt;if(!G.bird&&G.birdT<=0){startBird();G.birdT=Math.max(4,11-G.age/18)}
   const b=G.bird;if(b){b.x+=b.vx*dt;b.ph+=dt*6;if(G.ball&&Math.hypot(G.ball.x-b.x,G.ball.y-(b.y+8))<30)birdShot(b);else if(b.x<-30||b.x>W+30){G.bonus=b.egg;G.bird=null}}
   if(G.bonus!=null&&!G.ball){placeBonus(G.bonus);G.bonus=null;for(let rr=LOSE_ROW;rr<MAXR;rr++)for(const e of G.grid[rr])if(e&&!G.over){G.over=true;G.why="lose";endGame()}}
   G.pushT+=dt;if(G.pushT>=pushEff()&&!G.ball){G.pushT=0;addRow();sfx.row();G.shake=.3;for(let rr=LOSE_ROW;rr<MAXR;rr++)for(const e of G.grid[rr])if(e&&!G.over){G.over=true;G.why="lose";endGame()}}const sl=Math.ceil(pushEff()-G.pushT);if(sl!==G.pushS){G.pushS=sl;updHud()}}
  G.slide=Math.max(0,(G.slide||0)-dt*4);
- for(const f of G.fx){f.x+=f.vx*dt;f.y+=f.vy*dt;f.life-=dt}G.fx=G.fx.filter(f=>f.life>0);for(const x of G.txt){x.age+=dt}G.txt=G.txt.filter(x=>x.age<x.life);G.shake=Math.max(0,G.shake-dt);G.flash=Math.max(0,G.flash-dt*1.5);for(const f of G.fall){f.vy+=900*dt;f.x+=f.vx*dt;f.y+=f.vy*dt}G.fall=G.fall.filter(f=>f.y<H+30);draw()}
+ if(G.trail){for(const t of G.trail)t.a+=dt;G.trail=G.trail.filter(t=>t.a<.3);if(!G.trail.length)G.trail=null}for(const f of G.fx){f.x+=f.vx*dt;f.y+=f.vy*dt;f.life-=dt}G.fx=G.fx.filter(f=>f.life>0);for(const x of G.txt){x.age+=dt}G.txt=G.txt.filter(x=>x.age<x.life);G.shake=Math.max(0,G.shake-dt);G.flash=Math.max(0,G.flash-dt*1.5);for(const f of G.fall){f.vy+=900*dt;f.x+=f.vx*dt;f.y+=f.vy*dt}G.fall=G.fall.filter(f=>f.y<H+30);draw()}
 /* ===== VẼ ===== */
 const cv=$("cv"),ctx=cv.getContext("2d");let SC=1;
 function fitCanvas(){const w=$("cvw");if(!w)return;const aw=w.clientWidth,ah=w.clientHeight;if(!aw||!ah)return;let s=aw/W;if(ah/s>=HMIN)H=Math.min(HMAX,ah/s);else{s=ah/HMIN;H=HMIN}SY=H-44;const dpr=Math.min(2,devicePixelRatio||1);cv.style.width=Math.floor(W*s)+"px";cv.style.height=Math.floor(H*s)+"px";cv.width=Math.floor(W*s*dpr);cv.height=Math.floor(H*s*dpr);SC=cv.width/W;draw()}
@@ -262,6 +262,10 @@ function drawAim(pts){const sk=skinOf(),st=sk.aim||"dots",tm=performance.now()/1
  else if(st==="flower"){for(let i=3;i<n;i+=5){const p=pts[i],z=2.6+i/n*2.2,rot=tm*1.6+i;ctx.globalAlpha=fade(i);for(let k=0;k<5;k++){const a=rot+k*1.2566;ctx.fillStyle=i%10===3?"hsl(340 85% 76%)":"hsl(50 95% 72%)";ctx.beginPath();ctx.arc(p[0]+Math.cos(a)*z,p[1]+Math.sin(a)*z,z*.8,0,6.283);ctx.fill()}ctx.fillStyle="#fff7c2";ctx.beginPath();ctx.arc(p[0],p[1],z*.6,0,6.283);ctx.fill()}}
  else{const col=isDark()?"255,225,160":"120,80,30";pts.forEach((p,i)=>{if(i%2===0){ctx.fillStyle="rgba("+col+","+Math.max(.2,.8-i/n*.6)+")";ctx.beginPath();ctx.arc(p[0],p[1],i<6?1.6:2.6,0,6.283);ctx.fill()}})}
  ctx.restore()}
+function drawTrail(){const st=skinOf().trail,T=G.trail,tm=performance.now()/1000;ctx.save();ctx.textAlign='center';ctx.textBaseline='middle';
+ if(st==='neon'){ctx.lineCap='round';for(let i=1;i<T.length;i++){const a=1-T[i].a/.3;ctx.globalAlpha=Math.max(0,a*.9);ctx.strokeStyle=i%2?'#35f0ff':'#ff2fd0';ctx.lineWidth=2+a*5;ctx.beginPath();ctx.moveTo(T[i-1].x,T[i-1].y);ctx.lineTo(T[i].x,T[i].y);ctx.stroke()}}
+ else for(let i=0;i<T.length;i++){const t=T[i],a=Math.max(0,1-t.a/.3);ctx.globalAlpha=a;if(st==='star'){ctx.fillStyle=i%2?'#fff4b0':'#ffd24a';ctx.save();ctx.translate(t.x,t.y);ctx.rotate(tm*6+i);const r=2+a*4;ctx.beginPath();for(let j=0;j<8;j++){const q=j%2?r*.4:r,an=j*Math.PI/4;ctx.lineTo(Math.cos(an)*q,Math.sin(an)*q)}ctx.fill();ctx.restore()}else{ctx.font=(8+a*8)+'px Inter,sans-serif';ctx.fillText(st==='leaf'?'🍃':'🌸',t.x+Math.sin(i*2+tm*9)*3,t.y)}}
+ ctx.restore()}
 function draw(){if(!G||$("game").hidden)return;ctx.setTransform(SC,0,0,SC,0,0);ctx.clearRect(0,0,W,H);if(G.shake>0){const m=G.shake*18;ctx.translate((Math.random()-.5)*m,(Math.random()-.5)*m)}
  /* đường báo thua */
  ctx.strokeStyle="rgba(220,60,60,.35)";ctx.setLineDash([6,6]);ctx.beginPath();const ly=cy(LOSE_ROW)-R;ctx.moveTo(0,ly);ctx.lineTo(W,ly);ctx.stroke();ctx.setLineDash([]);
@@ -276,7 +280,7 @@ function draw(){if(!G||$("game").hidden)return;ctx.setTransform(SC,0,0,SC,0,0);c
   const lp=predict(G.aim);if(lp){const lx=cx(lp[0],lp[1],G.par),ly=cy(lp[0]),[h,sa,l]=palette(G.cur),rc=skinOf().aim?"hsl("+h+" "+sa+"% "+Math.min(l,60)+"%)":(isDark()?"rgba(255,225,160,.9)":"rgba(120,80,30,.9)");ctx.strokeStyle=rc;ctx.lineWidth=2;ctx.setLineDash([4,3]);ctx.beginPath();ctx.arc(lx,ly,R*.86,0,6.283);ctx.stroke();ctx.setLineDash([]);ctx.globalAlpha=.35;ctx.fillStyle="hsl("+h+" "+sa+"% "+l+"%)";ctx.beginPath();ctx.arc(lx,ly,R*.8,0,6.283);ctx.fill();ctx.globalAlpha=1}}
  /* người bắn: gà mẹ + trứng nạp + trứng kế tiếp */
  ctx.font="34px Inter,sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";ctx.save();ctx.translate(SX,SY+14+Math.sin(performance.now()/420)*1.5);ctx.font="58px Inter,sans-serif";ctx.fillText(skinOf().me||"🐔",0,0);ctx.restore();
- if(!G.ball&&!G.over)drawEgg2(SX,SY-4,G.cur,0);if(G.ball)drawEgg2(G.ball.x,G.ball.y,G.ball.k,0);
+ if(!G.ball&&!G.over)drawEgg2(SX,SY-4,G.cur,0);if(G.trail)drawTrail();if(G.ball)drawEgg2(G.ball.x,G.ball.y,G.ball.k,0);
  if(G.flash>0){ctx.fillStyle="rgba(255,230,140,"+G.flash+")";ctx.fillRect(0,0,W,H)}
  for(const x of G.txt){const a=x.age/x.life,sc=a<.15?.6+a/.15*.5:1.1-Math.min(.1,(a-.15)*.2);ctx.save();ctx.globalAlpha=a>.7?Math.max(0,1-(a-.7)/.3):1;ctx.translate(x.x,x.y-a*30);ctx.scale(sc,sc);ctx.font="900 "+x.size+"px Inter,system-ui,sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";ctx.lineWidth=6;ctx.strokeStyle="rgba(60,20,0,.85)";ctx.strokeText(x.txt,0,0);ctx.fillStyle=x.color;ctx.fillText(x.txt,0,0);ctx.restore()}
  ctx.save();ctx.globalAlpha=.95;ctx.translate(W-44,SY+6);ctx.scale(.8,.8);drawEgg2(0,0,G.nxt,0);ctx.restore();ctx.fillStyle="rgba(120,80,30,.8)";if(isDark())ctx.fillStyle="rgba(255,225,160,.85)";ctx.font="800 10px Inter,sans-serif";ctx.fillText("⇄",W-44,SY+28)}
