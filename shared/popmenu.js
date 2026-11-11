@@ -89,11 +89,12 @@
   }
   function labels() {
     if (!fab) return; var v = vi(), t = v ? (open ? "Đóng menu" : "Mở menu") : (open ? "Close menu" : "Open menu");
-    fab.setAttribute("aria-label", t); fab.title = t;
-    var b = playing() ? (v ? "Về màn chọn" : "Back to menu") : (v ? "Thoát" : "Exit"); bk.setAttribute("aria-label", b); bk.title = b;
-    ROLES.forEach(function (r) { var e = $(r[1]); if (e && e.parentNode === panel) { e.setAttribute("data-l", v ? r[2] : r[3]); if (r[0] === "cam" || r[0] === "shr" || r[0] === "lock") { e.setAttribute("aria-label", v ? r[2] : r[3]); e.title = v ? r[2] : r[3]; } } });
-    if (lck) { var kl = pd && pd.getElementById("klock"); lck.hidden = !kl || kl.hidden; }   /* webview app / Night Play: kidlock ẩn nút thì ô khoá cũng ẩn */
-    de.classList.toggle("np-hidebk", !pd && !playing());   /* mở trực tiếp ở màn chọn: không có chỗ để thoát */
+    var sA = function (e, k, x) { if (e.getAttribute(k) !== x) e.setAttribute(k, x); };   /* chỉ ghi khi đổi (tránh vòng MutationObserver ↔ labels) */
+    sA(fab, "aria-label", t); if (fab.title !== t) fab.title = t;
+    var b = playing() ? (v ? "Về màn chọn" : "Back to menu") : (v ? "Thoát" : "Exit"); sA(bk, "aria-label", b); if (bk.title !== b) bk.title = b;
+    ROLES.forEach(function (r) { var e = $(r[1]); if (e && e.parentNode === panel) { sA(e, "data-l", v ? r[2] : r[3]); if (r[0] === "cam" || r[0] === "shr" || r[0] === "lock") { sA(e, "aria-label", v ? r[2] : r[3]); if (e.title !== (v ? r[2] : r[3])) e.title = v ? r[2] : r[3]; } } });
+    if (lck) { var kl = pd && pd.getElementById("klock"), hh = !kl || kl.hidden; if (lck.hidden !== hh) lck.hidden = hh; }   /* webview app / Night Play: kidlock ẩn nút thì ô khoá cũng ẩn */
+    { var hb = !pd && !playing(); if (de.classList.contains("np-hidebk") !== hb) de.classList.toggle("np-hidebk", hb); }   /* mở trực tiếp ở màn chọn: không có chỗ để thoát */
   }
   /* màu THẬT của game (như shared/fan.js): chữ, nền, viền, màu nhấn */
   function rgba(s) { var m = s && s.match(/rgba?\(([^)]+)\)/); if (!m) return null; var q = m[1].split(/[ ,\/]+/).filter(Boolean).map(parseFloat); return { r: q[0], g: q[1], b: q[2], a: q.length > 3 && !isNaN(q[3]) ? q[3] : 1 }; }

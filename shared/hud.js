@@ -18,6 +18,7 @@
   var HIDECSS = "html.np-hudg #bHelp,html.np-hudg #phBtn,html.np-hudg #bSnd,html.np-hudg #soundBtn,html.np-hudg #bLang,html.np-hudg #langBtn,html.np-hudg #bCam,html.np-hudg #bShr{display:none!important}";
   var stage = null, box = null, pn = null, more = null, btns = {}, active = false, small = false, tick = 0, hooked = null;
   var lab = { vi: { help: "Cách chơi", snd: "Âm thanh", lang: "Ngôn ngữ", cam: "Chụp ảnh", shr: "Chia sẻ", lock: "Khoá màn hình", more: "Thêm" }, en: { help: "How to play", snd: "Sound", lang: "Language", cam: "Screenshot", shr: "Share", lock: "Lock screen", more: "More" } };
+  function setA(e, k, v) { if (e.getAttribute(k) !== v) e.setAttribute(k, v); }
   function lg() { return ((document.documentElement.lang || "vi") + "").slice(0, 2) === "en" ? "en" : "vi"; }
   function gdoc() { try { var f = stage && stage.querySelector("iframe"); return f && f.contentDocument; } catch (e) { return null; } }
   function gel(ids) { var d = gdoc(); if (!d) return null; for (var i = 0; i < ids.length; i++) { var e = d.getElementById(ids[i]); if (e) return e; } return null; }
@@ -45,21 +46,21 @@
   function close() { if (!box) return; box.classList.remove("open"); more.setAttribute("aria-expanded", "false"); }
   function hideNative(on) {
     var d = gdoc(); if (!d || !d.documentElement) return;
-    try { if (on && !d.getElementById("npHudgCss")) { var st = d.createElement("style"); st.id = "npHudgCss"; st.textContent = HIDECSS; (d.head || d.documentElement).appendChild(st); } d.documentElement.classList.toggle("np-hudg", !!on); } catch (e) {}
+    try { if (on === d.documentElement.classList.contains("np-hudg") && (!on || d.getElementById("npHudgCss"))) return; if (on && !d.getElementById("npHudgCss")) { var st = d.createElement("style"); st.id = "npHudgCss"; st.textContent = HIDECSS; (d.head || d.documentElement).appendChild(st); } d.documentElement.classList.toggle("np-hudg", !!on); } catch (e) {}
   }
   function sync() {
     if (!box) return;
     var L = lab[lg()], vis = 0;
     ["help", "snd", "lang", "cam", "shr", "lock"].forEach(function (k) {
       var b = btns[k], src = real(k), shown = !!src && !(k === "lock" && src.hidden);
-      if (shown && (k === "cam" || k === "shr") && src.disabled) shown = true;
-      b.hidden = !shown; if (shown) vis++; if (!src) return;
-      if (k === "snd" || k === "lang") { var h = src.innerHTML.trim(); if (h && b.innerHTML !== src.innerHTML) b.innerHTML = src.innerHTML; }
-      b.setAttribute("aria-label", src.getAttribute("aria-label") || src.title || L[k]);
-      if (src.hasAttribute("aria-pressed")) b.setAttribute("aria-pressed", src.getAttribute("aria-pressed")); else b.removeAttribute("aria-pressed");
+      if (b.hidden === shown) b.hidden = !shown;
+      if (shown) vis++; if (!src) return;
+      if (k === "snd" || k === "lang") { var h = src.innerHTML.trim(); if (h && b.__h !== h) { b.__h = h; b.innerHTML = src.innerHTML; } }
+      setA(b, "aria-label", src.getAttribute("aria-label") || src.title || L[k]);
+      if (src.hasAttribute("aria-pressed")) setA(b, "aria-pressed", src.getAttribute("aria-pressed")); else if (b.hasAttribute("aria-pressed")) b.removeAttribute("aria-pressed");
     });
-    more.setAttribute("aria-label", L.more); more.title = L.more;
-    box.dataset.n = vis;
+    setA(more, "aria-label", L.more); if (more.title !== L.more) more.title = L.more;
+    if (box.dataset.n !== String(vis)) box.dataset.n = vis;
   }
   function hook() {   /* chạm vào trong game (iframe không nổi bọt lên cổng) → đóng thẻ */
     var d = gdoc(); if (!d || hooked === d) return; hooked = d;
@@ -74,8 +75,8 @@
     if (!stage) return;
     var w = want(); if (w && !box) build();
     if (w !== active) { active = w; stage.classList.toggle("np-hudc", w); hideNative(w); if (!w) { close(); hooked = null; } }
-    if (!w) { stage.classList.remove("np-hudc-sm"); return; }
-    var sm = innerHeight < 480; if (sm !== small) { small = sm; close(); } stage.classList.toggle("np-hudc-sm", small);
+    if (!w) { if (stage.classList.contains("np-hudc-sm")) stage.classList.remove("np-hudc-sm"); return; }
+    var sm = innerHeight < 480; if (sm !== small) { small = sm; close(); } if (stage.classList.contains("np-hudc-sm") !== small) stage.classList.toggle("np-hudc-sm", small);
     hideNative(true); hook(); sync();
   }
   function init() {

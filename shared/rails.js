@@ -100,16 +100,20 @@
   function gel(ids) { var d = gdoc(); if (!d) return null; for (var i = 0; i < ids.length; i++) { var e = d.getElementById(ids[i]); if (e) return e; } return null; }
   function hideInGame(on) {
     var d = gdoc(); if (!d || !d.documentElement) return;
-    try { if (on && !d.getElementById("npRhudCss")) { var st = d.createElement("style"); st.id = "npRhudCss"; st.textContent = HIDECSS; (d.head || d.documentElement).appendChild(st); } d.documentElement.classList.toggle("np-rhud", !!on); } catch (e) {}
+    try { if (on === d.documentElement.classList.contains("np-rhud") && (!on || d.getElementById("npRhudCss"))) return; if (on && !d.getElementById("npRhudCss")) { var st = d.createElement("style"); st.id = "npRhudCss"; st.textContent = HIDECSS; (d.head || d.documentElement).appendChild(st); } d.documentElement.classList.toggle("np-rhud", !!on); } catch (e) {}
   }
   function syncHud() {
     var hud = document.getElementById("npHud"); if (!hud) return;
+    var setA = function (e, k, v) { if (e.getAttribute(k) !== v) e.setAttribute(k, v); };
     [["help", HUDI.help], ["snd", HUDI.snd], ["lang", HUDI.lang]].forEach(function (x) {
       var b = hud.querySelector('[data-k="' + x[0] + '"]'), src = gel(x[1]); if (!b) return;
-      b.hidden = !src; if (src && x[0] !== "help" && src.innerHTML.trim() && b.innerHTML !== src.innerHTML) b.innerHTML = src.innerHTML; else if (src && !b.innerHTML.trim()) b.innerHTML = x[0] === "snd" ? ico("snd") : b.innerHTML;
-      if (src) { b.setAttribute("aria-label", src.getAttribute("aria-label") || src.title || x[0]); if (src.hasAttribute("aria-pressed")) b.setAttribute("aria-pressed", src.getAttribute("aria-pressed")); }
+      if (b.hidden !== !src) b.hidden = !src;
+      var h = src ? src.innerHTML.trim() : "";
+      if (src && x[0] !== "help" && h) { if (b.__h !== h) { b.__h = h; b.innerHTML = src.innerHTML; } }
+      else if (src && !b.innerHTML.trim()) b.innerHTML = x[0] === "snd" ? ico("snd") : b.innerHTML;
+      if (src) { setA(b, "aria-label", src.getAttribute("aria-label") || src.title || x[0]); if (src.hasAttribute("aria-pressed")) setA(b, "aria-pressed", src.getAttribute("aria-pressed")); }
     });
-    var k = document.getElementById("klock"), lb = hud.querySelector('[data-k="lock"]'); if (lb) lb.hidden = !k || k.hidden;
+    var k = document.getElementById("klock"), lb = hud.querySelector('[data-k="lock"]'); if (lb) { var hh = !k || k.hidden; if (lb.hidden !== hh) lb.hidden = hh; }
   }
   function buildHud(g) {
     var t = tt(), hud = el("div", "np-hud"); hud.id = "npHud";

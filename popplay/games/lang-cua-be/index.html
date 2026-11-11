@@ -65,6 +65,7 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .opt:active{transform:scale(.94)}.opt.good,.good{background:var(--good)!important;color:#fff!important}
 .hint{animation:hint .6s ease-in-out infinite;outline:1cqw solid var(--sa);outline-offset:.5cqw}
 @keyframes hint{50%{transform:scale(1.08)}}
+@keyframes spkp{50%{transform:translateX(-50%) scale(1.08)}}   /* loa to: nhấp 3 lần khi mới hiện rồi đứng yên; giữ translateX(-50%) để không nhảy ngang */
 .shake{animation:shake .35s}
 @keyframes shake{20%{transform:translateX(-2cqw)}40%{transform:translateX(2cqw)}60%{transform:translateX(-1.4cqw)}80%{transform:translateX(1.4cqw)}}
 .card3{background:var(--sp);color:var(--si);border:var(--bd);box-shadow:var(--sh);border-radius:var(--rad)}
@@ -74,7 +75,7 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .house{flex:1;position:relative;display:grid;place-items:center;background:none;height:42cqw}
 .house i{font-style:normal;font-size:27cqw;line-height:1}.house b{position:absolute;top:50%;left:50%;transform:translate(-50%,-6%);font-size:12.5cqw;color:#fff;text-shadow:0 .6cqw 0 rgba(0,0,0,.45);line-height:1}
 .house:active{transform:scale(.95)}
-.spk{position:absolute;left:50%;top:8%;transform:translateX(-50%);width:32cqw;height:32cqw;border-radius:50%;display:grid;place-items:center;font-size:17cqw;background:var(--sa);color:var(--sa2);box-shadow:var(--sh);animation:hint 1.2s ease-in-out infinite}
+.spk{position:absolute;left:50%;top:8%;transform:translateX(-50%);width:32cqw;height:32cqw;border-radius:50%;display:grid;place-items:center;font-size:17cqw;background:var(--sa);color:var(--sa2);box-shadow:var(--sh);animation:spkp 1.2s ease-in-out 3}
 .lrow{position:absolute;left:4cqw;right:4cqw;bottom:6cqw;display:flex;gap:3cqw}
 .lcard{flex:1;height:34cqw;border-radius:var(--rad);background:var(--sp);color:var(--si);border:var(--bd);box-shadow:var(--sh);font-size:21cqw;font-weight:800;line-height:1}
 .lcard:active{transform:scale(.94)}
@@ -121,7 +122,7 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .qa .eq{position:static;width:100%}.qa .eq.num{font-size:24cqw}
 .qa .plate{position:static;transform:none;width:72cqw}
 .qa .cat{top:auto;bottom:25cqw;right:2cqw;font-size:15cqw;z-index:2}
-.qa .spk{position:static;transform:none}.qa .lrow{position:static;width:100%}
+.qa .spk{position:static;transform:none;animation:hint 1.2s ease-in-out 3}.qa .lrow{position:static;width:100%}
 .qa .scale{position:relative;top:auto;left:auto;right:auto;width:100%;height:50cqw}
 .plate{position:absolute;left:50%;top:40%;transform:translateX(-50%);width:76cqw;text-align:center}
 .plate .cakes{font-size:13cqw;line-height:1.1;min-height:15cqw;letter-spacing:.4cqw}

@@ -109,8 +109,8 @@
     labels();
   }
   function labels() {
-    if (!fab) return; var t = vi() ? (open ? "Đóng menu" : "Mở menu") : (open ? "Close menu" : "Open menu"); fab.setAttribute("aria-label", t); fab.title = t;
-    home.forEach(function (h) { h.el.setAttribute("data-l", roleOf(h.role)[2][vi() ? 0 : 1]); });
+    if (!fab) return; var t = vi() ? (open ? "Đóng menu" : "Mở menu") : (open ? "Close menu" : "Open menu"); if (fab.getAttribute("aria-label") !== t) fab.setAttribute("aria-label", t); if (fab.title !== t) fab.title = t;
+    home.forEach(function (h) { var dl = roleOf(h.role)[2][vi() ? 0 : 1]; if (h.el.getAttribute("data-l") !== dl) h.el.setAttribute("data-l", dl); });
   }
   /* màu THẬT của game: chữ/biểu tượng, nền, viền, màu nhấn (đọc lại mỗi lần mở, nên theo cả giao diện Night Pass và sáng/tối giữa chừng) */
   var probe;
@@ -122,8 +122,12 @@
     if (!color) return null; if (!probe) { probe = document.createElement("i"); probe.style.cssText = "position:absolute;width:0;height:0;visibility:hidden;pointer-events:none"; fan.appendChild(probe); }
     probe.style.color = ""; probe.style.color = color; return rgba(getComputedStyle(probe).color);
   }
-  function themeSync() {
+  var lastSig = "";
+  function themeSync(force) {
     if (!fan) return;
+    /* chỉ tính lại khi giao diện thật sự đổi (themeSync tháo/gắn lớp .it của nút → ghi DOM mỗi lần; GAME_RULES: nút ? 🔊 VI đứng yên khi để yên, check-still.js) */
+    var de0 = document.documentElement, sig = [de0.className, de0.getAttribute("data-theme"), de0.getAttribute("data-dif"), document.body.className, play.className, getComputedStyle(document.body).color, getComputedStyle(play).getPropertyValue("--accent")].join("|");
+    if (force !== true && sig === lastSig) return; lastSig = sig;
     var ref = panel.querySelector(".it") || top.querySelector("button") || document.body, wasIt = ref.classList && ref.classList.contains("it");
     if (wasIt) ref.classList.remove("it");                                   // đọc màu GỐC của nút (không phải màu đã bị luật .it ghi đè)
     var cs0 = getComputedStyle(ref), cs = { color: cs0.color, backgroundColor: cs0.backgroundColor, borderTopColor: cs0.borderTopColor, borderTopWidth: cs0.borderTopWidth };
@@ -143,7 +147,7 @@
   }
   /* độ khó đổi (shared/difficulty.js ghi html[data-dif]) → màu nhấn đổi: cập nhật ngay màu nút ⋯ + bảng menu */
   try { new MutationObserver(function () { setTimeout(themeSync, 150); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-dif"] }); } catch (e) {}
-  function setOpen(v) { if (v) themeSync(); open = v; fan.classList.toggle("open", v); fab.classList.toggle("open", v); fab.setAttribute("aria-expanded", String(v)); labels(); }
+  function setOpen(v) { if (v) themeSync(true); open = v; fan.classList.toggle("open", v); fab.classList.toggle("open", v); fab.setAttribute("aria-expanded", String(v)); labels(); }
 
   /* nút nào được phép gom: đang ở thanh trên, hoặc là nút "hướng dẫn" nằm ngoài thanh (askBtn) */
   function candidates() {
