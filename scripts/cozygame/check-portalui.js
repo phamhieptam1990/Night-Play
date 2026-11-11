@@ -93,7 +93,7 @@ const MEASURE = kind => {
         const t = await pg.evaluate(() => { const c = document.getElementById("puToday"), x = document.getElementById("puResume"), v = e => !!e && !e.hidden && e.offsetParent !== null; return { today: v(c), txt: c && c.textContent, res: v(x), pro: document.querySelectorAll("#grid .tile .pu-pro").length, tiles: document.querySelectorAll("#grid .tile").length }; });
         note(t.today, tag + ": thẻ Hôm nay không hiện"); note(t.res, tag + ": thẻ Chơi tiếp không hiện dù có np-resume hợp lệ");
         if (w >= 360) note(/#\d+/.test(t.txt || ""), tag + ": thẻ Hôm nay thiếu số #N (" + t.txt + ")");
-        note(t.pro === COZY.filter(i => MG.get(i).pro).length && t.tiles === 20, tag + ": 👑 " + t.pro + " / ô " + t.tiles);
+        note(t.pro === 0 && t.tiles === 20, tag + ": 👑 trên ô phải BỎ (" + t.pro + ") / ô " + t.tiles);
         const ch = await pg.evaluate(() => [...document.querySelectorAll("#topics button")].map(b => b.textContent));
         note(ch.length === 4 && ch[0] === (lang === "vi" ? "Tất cả" : "All"), tag + ": chip lọc " + JSON.stringify(ch));
       } else {

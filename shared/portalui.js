@@ -55,13 +55,13 @@
   function isNew(g) { return !!(window.NPNew && NPNew.isNew(g.id, today())); }
   function isPro(g) { var f = flag(g.id); return O.portal === "cozy" && !!(f && f.pro); }
   function label(g) {
-    var t = tt(), s = gname(g); if (isNew(g)) s += ", " + t.newb; if (isPro(g)) s += ", " + t.pro; return s;
+    var t = tt(), s = gname(g); if (isNew(g)) s += ", " + t.newb; return s;
   }
   function decorate(b, g) {
     var t = tt();
     [].slice.call(b.querySelectorAll(".pu-b,.pu-n")).forEach(function (e) { e.remove(); });
     if (isNew(g)) { var n = el("span", "pu-b pu-new", t.newb); n.setAttribute("aria-hidden", "true"); b.appendChild(n); }
-    if (isPro(g)) { var p = el("span", "pu-b pu-pro"); p.innerHTML = CROWN; p.setAttribute("aria-hidden", "true"); p.title = t.pro; b.appendChild(p); }
+    /* 👑 trên ô game đã BỎ theo chủ site (cả 20 game Cozy đều có phần Night Pass nên rối); cờ pro vẫn giữ trong multi-games.js, không đụng 👑/ổ khoá bên trong game */
     if (O.portal === "pop" && g.short) { var s = el("span", "pu-n", g.short[lg()] || g.short.vi); s.setAttribute("aria-hidden", "true"); b.appendChild(s); }
     b.setAttribute("aria-label", label(g)); b.title = gname(g);
   }
