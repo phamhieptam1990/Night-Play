@@ -180,6 +180,33 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
         note(r.y > 300, tag, "mất vị trí cuộn (y=" + r.y + ", trước " + before + ")"); note(r.open, tag, "câu FAQ không mở lại ở " + step); note(r.inView, tag, "câu FAQ ra ngoài màn hình ở " + step);
         cur = step; }
       note(!errs.length, tag, "lỗi console: " + errs[0]); await pg.close(); }
+    /* chân trang + menu icon: gọn, không tràn/xuống dòng lộn xộn, nút >= 44px, chuột/phím/Esc, đúng đích */
+    for (const l of ["vi", "en"]) for (const th of ["light", "dark"]) for (const sz of [[320, 568], [360, 640], [390, 844], [768, 1024], [1024, 768], [1440, 900]]) {
+      const pg = await br.newPage(); await pg.setViewport({ width: sz[0], height: sz[1] }); const errs = []; pg.on("pageerror", e => errs.push(String(e)));
+      await pg.evaluateOnNewDocument(t => { try { localStorage.clear(); localStorage.setItem("theme", t); } catch (e) {} }, th);
+      await pg.goto(B + PAGES[l], { waitUntil: "load" }); await wait(250);
+      const tag = "chân-trang " + l + " " + sz.join("x") + " " + th, narrow = sz[0] < 900;
+      await pg.evaluate(() => document.querySelector("footer.foot").scrollIntoView({ behavior: "instant", block: "end" })); await wait(150);
+      const r = await pg.evaluate(() => { const f = document.querySelector("footer.foot"), b = f.querySelector(".mbtn"), nv = document.getElementById("flinks"), bb = b && b.getBoundingClientRect();
+        const links = [...nv.querySelectorAll("a")].map(a => a.getAttribute("href")), ah = [...nv.querySelectorAll("a")].filter(a => a.offsetParent).map(a => a.getBoundingClientRect().height);
+        const lines = [...nv.querySelectorAll("a")].filter(a => a.offsetParent).map(a => a.getBoundingClientRect().top);
+        return { btn: !!b && b.offsetParent !== null, bw: bb ? bb.width : 0, bh: bb ? bb.height : 0, links, shown: nv.offsetParent !== null, ah, fh: Math.round(f.getBoundingClientRect().height), fsw: f.scrollWidth, fcw: f.clientWidth, left: Math.round(f.querySelector(".brand").getBoundingClientRect().left - f.querySelector(".wrap").getBoundingClientRect().left), right: Math.round(f.querySelector(".wrap").getBoundingClientRect().right - (b && b.offsetParent ? bb.right : nv.getBoundingClientRect().right)), tops: new Set(lines.map(Math.round)).size }; });
+      note(r.links.length === 6 && ["/popplay/", "/cozyplay/", "/subscribe.html", "/privacy.html", "/terms.html", "mailto:support@nightplay.vn"].every(h => r.links.includes(h)), tag, "liên kết chân trang sai: " + r.links);
+      note(r.fsw <= r.fcw, tag, "chân trang tràn ngang"); note(r.left === 16, tag, "lề trái " + r.left); note(r.right >= 15 && r.right <= 17, tag, "lề phải " + r.right);
+      if (narrow) { note(r.btn && r.bw >= 44 && r.bh >= 44, tag, "thiếu nút menu >= 44px"); note(!r.shown, tag, "liên kết còn hiện dàn trải khi hẹp"); }
+      else { note(!r.btn && r.shown && r.ah.every(h => h <= 50) && r.tops <= 2, tag, "chân trang rộng phải là một hàng gọn (hàng=" + r.tops + ")"); note(r.fh <= 150, tag, "chân trang cao " + r.fh); }
+      if (narrow) {
+        await pg.click("footer .mbtn"); await wait(150);
+        const o = await pg.evaluate(() => { const nv = document.getElementById("flinks"), b = document.querySelector("footer .mbtn"), q = nv.getBoundingClientRect(); return { open: nv.offsetParent !== null && b.getAttribute("aria-expanded") === "true", inside: q.left >= 0 && q.right <= innerWidth && q.top >= 0, hs: [...nv.querySelectorAll("a")].every(a => a.getBoundingClientRect().height >= 44) }; });
+        note(o.open && o.inside && o.hs, tag, "menu mở sai: " + JSON.stringify(o)); if (shotDir && (sz[0] === 390 || sz[0] === 1440)) await pg.screenshot({ path: path.join(shotDir, "foot-" + l + "-" + th + "-" + sz[0] + ".png") });
+        await pg.keyboard.press("Escape"); await wait(100); note(await pg.evaluate(() => document.getElementById("flinks").offsetParent === null), tag, "Esc không đóng menu");
+        await pg.focus("footer .mbtn"); await pg.keyboard.press("Enter"); await wait(100); note(await pg.evaluate(() => document.getElementById("flinks").offsetParent !== null), tag, "Enter không mở menu");
+        await pg.mouse.click(5, 5); await wait(100); note(await pg.evaluate(() => document.getElementById("flinks").offsetParent === null), tag, "bấm ngoài không đóng menu");
+        if (sz[0] >= 400) { await pg.evaluate(() => scrollTo({ top: 0, behavior: "instant" })); await wait(100); const hb = await pg.$(".top .mbtn"); const bx = hb && await hb.boundingBox();
+          note(!!bx && bx.width >= 44 && bx.height >= 44, tag, "thiếu nút menu header >= 44px"); if (hb) { await hb.click(); await wait(150); const h = await pg.evaluate(() => { const n = document.getElementById("hlinks"), q = n.getBoundingClientRect(), c = document.querySelector(".top .btn").getBoundingClientRect(); return { vis: n.offsetParent !== null, in: q.right <= innerWidth && q.left >= 0, cta: c.width >= 80 && c.height >= 44, n: n.querySelectorAll("a").length }; });
+            note(h.vis && h.in && h.cta && h.n === 4, tag, "menu header sai " + JSON.stringify(h)); await pg.keyboard.press("Escape"); } }
+      } else if (sz[0] >= 1000) note(await pg.evaluate(() => document.getElementById("hlinks").offsetParent !== null), tag, "liên kết neo header phải hiện");
+      note(!errs.length, tag, "lỗi: " + errs[0]); await pg.close(); }
     /* hub /play/: mọi liên kết nội bộ + tài nguyên trả 200 (không 404 do đổi đường dẫn), nút ← ở trang cổng về /play/ */
     { const pg = await br.newPage(); const bad = []; pg.on("response", r => { if (r.url().startsWith(B) && r.status() >= 400 && !/\/api\//.test(r.url())) bad.push(r.status() + " " + r.url()); });
       await pg.goto(B + "/play/", { waitUntil: "networkidle0" }); await wait(300); note(!bad.length, "hub /play/", "tài nguyên lỗi: " + bad.slice(0, 3).join(" | "));

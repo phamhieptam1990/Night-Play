@@ -41,6 +41,22 @@
       var o = d.querySelector("a.lang"); if (o) location.replace(o.getAttribute("href"));
     }
   } catch (e) {}
+  /* menu icon: liên kết vẫn nằm sẵn trong HTML (không cần JS); JS chỉ gom chúng vào nút ☰ khi chật (CSS quyết định bằng media query) */
+  function popMenu(btnHost, panel, before) {
+    if (!panel) return;
+    var b = d.createElement("button"); b.type = "button"; b.className = "mbtn"; b.setAttribute("aria-label", "Menu"); b.setAttribute("aria-expanded", "false"); b.setAttribute("aria-controls", panel.id);
+    b.innerHTML = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';
+    btnHost.insertBefore(b, before);
+    function set(o) { panel.classList.toggle("open", o); b.setAttribute("aria-expanded", o ? "true" : "false"); }
+    b.addEventListener("click", function (e) { e.stopPropagation(); set(!panel.classList.contains("open")); });
+    d.addEventListener("click", function (e) { if (panel.classList.contains("open") && !panel.contains(e.target) && e.target !== b) set(false); });
+    d.addEventListener("keydown", function (e) { if (e.key === "Escape" && panel.classList.contains("open")) { set(false); b.focus(); } });
+    panel.addEventListener("click", function (e) { if (e.target.closest("a")) set(false); });
+    return b;
+  }
+  var hl = $("hlinks"), tl = d.querySelector(".top .tools");
+  if (hl && tl) { popMenu(tl, hl, tl.querySelector(".btn")); }
+  var fl = $("flinks"); if (fl) { d.querySelector("footer.foot").classList.add("js-menu"); popMenu(fl.parentNode, fl, fl); }
   /* thanh CTA dính trên mobile: chỉ hiện sau khi cuộn qua hero */
   var st = $("sticky"), hero = $("top");
   if (st && hero && "IntersectionObserver" in window) {
