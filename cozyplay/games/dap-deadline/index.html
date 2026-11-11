@@ -520,7 +520,7 @@ function fitLbl(lb,note){   /* chữ trên giấy luôn nằm TRỌN trong tờ 
   lb.style.display="none";
 }
 function show(st,item,stay){
-  st.item=item;st.up=true;
+  st.item=item;st.last=item;st.up=true;
   st.note.className="note"+(item.hot?" hot":"")+(item.coffee?" coffee":"");
   st.note.querySelector(".ico").textContent=item.ico;
   {const lb=st.note.querySelector(".lbl"),tx=(LANG==="en"&&item.en)||item.lbl;lb.textContent=tx;lb.classList.toggle("long",tx.length>16);fitLbl(lb,st.note)}   /* nhãn dài: thu nhỏ chữ + tối đa 2 dòng, biểu tượng không bị đẩy lên */
@@ -1071,7 +1071,8 @@ function applyLang(){
   $("pauseT").textContent=t("pausedT");$("pauseP").textContent=t("pausedP");$("resumeBtn").textContent="▶ "+t("resume");$("restartOv").textContent="↻ "+t("restart");$("restartBtn").setAttribute("aria-label",t("restart"));$("restartBtn").title=t("restart");
   cells.forEach((c,i)=>c.el.setAttribute("aria-label",t("cell",{n:i+1})));
   syncSound();syncPauseBtn();render();
-  cells.forEach(st=>{if(!st.item)return;const lb=st.note.querySelector(".lbl"),tx=(LANG==="en"&&st.item.en)||st.item.lbl;lb.textContent=tx;lb.classList.toggle("long",tx.length>16);try{fitLbl(lb,st.note)}catch(e){}});   /* thẻ đang hiện trên bàn đổi chữ tại chỗ */
+  cells.forEach(st=>{const it=st.item||st.last;if(!it)return;const lb=st.note.querySelector(".lbl"),tx=(LANG==="en"&&it.en)||it.lbl;   /* cả thẻ vừa bị đập/đang tụt xuống (st.item đã null nhưng chữ còn trong DOM) */
+  lb.textContent=tx;lb.classList.toggle("long",tx.length>16);try{fitLbl(lb,st.note)}catch(e){}});   /* thẻ đang hiện trên bàn đổi chữ tại chỗ */
   if(!running){if(ovKind==="end"&&endInfo)renderEnd();else if(ovKind!=="home")renderStart()}
   DD.refresh();
   if(!$("pay").hidden&&lastPay)DD.paywall(lastPay,true);

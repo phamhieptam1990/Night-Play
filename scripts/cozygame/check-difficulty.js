@@ -40,7 +40,7 @@ const MEASURE = () => {
   const D = document.documentElement, cs = getComputedStyle(D), b = document.getElementById("npDifBadge"), out = { dif: D.dataset.dif || null, accent: cs.getPropertyValue("--accent").trim(), dark: D.dataset.theme === "dark" };
   out.scroll = D.scrollHeight > innerHeight + 1 || D.scrollWidth > innerWidth + 1;
   if (b) { const r = b.getBoundingClientRect(), s = getComputedStyle(b); out.badge = { shown: b.classList.contains("show") && s.display !== "none" && r.width > 10 && +s.opacity > .5 && r.left >= 0 && r.top >= 0 && r.right <= innerWidth + .5 && r.bottom <= innerHeight + .5, free: b.dataset.free, text: b.textContent, cr: +cr(s.backgroundColor, s.color).toFixed(2), w: Math.round(r.width), h: Math.round(r.height) }; }
-  const fb = document.querySelector("#npFab,#npPmFab"); if (fb && fb.getClientRects().length) out.fab = getComputedStyle(fb).backgroundColor;   /* nút ⋯ (fan.js / popmenu.js) phải theo màu độ khó */
+  const fb = document.querySelector("#npFab,#npPmFab"); if (fb && fb.getClientRects().length) out.fab = getComputedStyle(fb).backgroundImage;   /* nút ⋯ (fan.js / popmenu.js): LUÔN gradient tím–cam kiểu Night Pass ở mọi độ khó (GAME_RULES 0a-18, shared/glass.css) — trước 0a-18 nút này đổi màu theo độ khó */
   const chip = document.querySelector(":is(.lvs,#lvs,#diffs)>.on,:is(.lvs,#lvs,#diffs)>[aria-pressed=true]");
   if (chip) { const s = getComputedStyle(chip); out.chip = { cr: +cr(s.backgroundColor, s.color).toFixed(2), bg: s.backgroundColor, dt: chip.dataset.dt || null }; }
   return out;
@@ -97,7 +97,7 @@ const LABEL = { vi: ["Dễ", "Thường", "Khó", "Rất khó", "Cực khó"], e
       await pg.close();
     }
     note(new Set(accents).size === accents.length && accents.length >= 2, tag + ": --accent phải KHÁC NHAU giữa các độ khó, đo được " + accents.join(" / "));
-    if (fabs.length) note(fabs.length === accents.length && new Set(fabs).size === fabs.length, tag + ": nút ⋯ phải đổi màu theo độ khó, đo được " + fabs.join(" / "));
+    if (fabs.length) note(fabs.length === accents.length && fabs.every(x => /linear-gradient/.test(x) && /108, 75, 242/.test(x)), tag + ": nút ⋯ phải là gradient tím–cam Night Pass ở mọi độ khó (0a-18), đo được " + fabs.join(" / ").slice(0, 160));
     console.log("  " + doms.join(" → ") + " · accent " + accents.join(" "));
   }
   /* Skin Night Pass Pop (đặt --accent trên #play bằng JS): skin THẮNG ở màu nhấn trong khung chơi, còn chip + huy hiệu + data-dif vẫn đổi theo độ khó */
