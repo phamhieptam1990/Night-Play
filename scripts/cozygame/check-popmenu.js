@@ -34,9 +34,9 @@ const bad = [];
       });
       const n = m => bad.push(tag + " " + st + ": " + m);
       if (mode) {
-        if (!r.dock || !r.sd) n("chưa docked"); if (!r.fab || !r.fab.vis || r.fab.w < 44) n("thiếu ⋯ ≥44px"); if (!r.bk || !r.bk.vis || r.bk.w < 44) n("thiếu ← ≥44px");
+        if (!r.dock || !r.sd) n("chưa docked"); if (!r.fab || !r.fab.vis || r.fab.w < (mode === "p" ? 55.5 : 44)) n(mode === "p" ? "thiếu ⋯ ≥56px (--tap-lg)" : "thiếu ⋯ ≥44px"); if (!r.bk || !r.bk.vis || r.bk.w < (mode === "p" ? 55.5 : 44)) n(mode === "p" ? "thiếu ← ≥56px (--tap-lg)" : "thiếu ← ≥44px");
         if (r.nps.some(d => d !== "none")) n("nút nổi của cổng còn hiện " + r.nps);
-        if (!r.snd || !r.snd.vis || r.sndIn || r.snd.w < 43.5 || r.snd.h < 43.5) n("🔊 phải ở NGOÀI menu, ≥44px (điện thoại + iPad dọc)");
+        if (!r.snd || !r.snd.vis || r.sndIn || r.snd.w < (mode === "p" ? 55.5 : 43.5) || r.snd.h < (mode === "p" ? 55.5 : 43.5)) n("🔊 phải ở NGOÀI menu, ≥44px (iPad dọc) / ≥56px = --tap-lg (điện thoại dọc)");
         if (r.snd && r.fab && r.snd.x + r.snd.w > r.fab.x + 0.5) n("🔊 chồng lên ⋯"); if (r.snd && r.bk && r.snd.x < r.bk.x + r.bk.w) n("🔊 chồng lên ←"); if (r.snd && !r.sndPressed) n("🔊 thiếu aria-pressed");
         if (r.klockShown) n("còn nút khoá #klock rời trên thanh điều khiển (phải gom vào menu)"); if (r.lockItem !== "ok") n("ô khoá màn chơi trong menu: " + r.lockItem);
         if (r.items.length < (mode === "p" ? 4 : 3)) n("bảng thiếu ô " + JSON.stringify(r.items));

@@ -1,7 +1,7 @@
 /* Popup "?" (gợi ý / cách chơi) và nút ✕ của nó (GAME_RULES.md 0a-14):
      NODE_PATH=<thư mục có playwright> node scripts/cozygame/check-helppopup.js [--quick] [--chrome-only|--webkit-only] [id,id,...]
    Mọi game Cozy (shared/help.js: #hlpOv/#hlpCard/#hlpX) + Pop (shared/pophelp.js: #phOv/#phCard/#phGo) × điện thoại dọc 320x568 … 430x932 + ngang 844x390 + máy tính 1280x800 × (WebKit thật + Chrome):
-   mở popup bằng nút ? → thẻ nằm trong khung nhìn; nút đóng nằm TRONG thẻ, cỡ >=44px, (✕ của Cozy) ở góc trên-phải cách mép trong của thẻ >=12px (phải và trên), không đè chữ tiêu đề/nội dung,
+   mở popup bằng nút ? → thẻ nằm trong khung nhìn; nút đóng nằm TRONG thẻ, cỡ >=44px (✕ Cozy ở điện thoại dọc >= 56px = --tap-lg), (✕ của Cozy) ở góc trên-phải cách mép trong của thẻ >=12px (phải và trên), không đè chữ tiêu đề/nội dung,
    elementFromPoint ở tâm nút trả về chính nó, bấm nút đóng được, Esc đóng được (Cozy). Game không có nút ? → bỏ qua. Không có Playwright → bỏ qua (exit 0). */
 const { spawn } = require("child_process"), fs = require("fs"), path = require("path");
 let pw; try { pw = require("playwright"); } catch (e) { try { pw = require("playwright-core"); } catch (e2) { console.log("⚠ Không có Playwright → bỏ qua check-helppopup"); process.exit(0); } }
@@ -19,7 +19,8 @@ const MEASURE = () => {
   const W = innerWidth, H = innerHeight, c = card.getBoundingClientRect(), r = x.getBoundingClientRect(), bw = parseFloat(getComputedStyle(card).borderLeftWidth) || 0;
   if (c.left < -0.5 || c.right > W + 0.5 || c.top < -0.5 || c.bottom > H + 0.5) E.push("thẻ ra ngoài khung nhìn [" + [c.left, c.top, c.right, c.bottom].map(Math.round) + "] trong " + W + "x" + H);
   if (r.left < c.left - 0.5 || r.right > c.right + 0.5 || r.top < c.top - 0.5 || r.bottom > c.bottom + 0.5) E.push("nút đóng ra ngoài thẻ");
-  if (r.width < 43.5 || r.height < 43.5) E.push("nút đóng nhỏ " + Math.round(r.width) + "x" + Math.round(r.height));
+  const need = cozy && W <= 520 && H > W ? 55.5 : 43.5;   /* điện thoại dọc: ✕ cỡ --tap-lg 56px (GAME_RULES 0a-17) */
+  if (r.width < need || r.height < need) E.push("nút đóng nhỏ " + Math.round(r.width) + "x" + Math.round(r.height) + " (cần >= " + Math.round(need) + ")");
   if (cozy) {
     const mr = c.right - bw - r.right, mt = r.top - (c.top + bw);
     if (mr < 11.5) E.push("✕ cách mép phải thẻ " + mr.toFixed(1) + "px (< 12)"); if (mt < 11.5) E.push("✕ cách mép trên thẻ " + mt.toFixed(1) + "px (< 12)");
