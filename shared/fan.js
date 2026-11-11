@@ -118,6 +118,7 @@
     fab.addEventListener("click", function (e) { e.stopPropagation(); setOpen(!open); });
     bd.addEventListener("click", function () { setOpen(false); });
     panel.addEventListener("click", function (e) { var b = e.target.closest && e.target.closest(".it"); if (b) setTimeout(function () { setOpen(false); }, 0); });
+    document.addEventListener("pointerdown", function (e) { if (open && !(fan.contains(e.target) || fab.contains(e.target))) setOpen(false); }, true);   // bấm ra ngoài đóng menu (không phụ thuộc nền mờ .bk)
     document.addEventListener("keydown", function (e) { if (e.key === "Escape" && open) { setOpen(false); fab.focus(); } });
     labels();
   }
