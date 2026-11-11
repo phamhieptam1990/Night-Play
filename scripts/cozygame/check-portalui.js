@@ -158,6 +158,40 @@ const MEASURE = kind => {
       note(r.cls <= 0.1, tag + ": " + r.cls.toFixed(3) + " > 0.1 (bố cục giật lúc tải)"); if (r.cls > 0.05 && r.cls <= 0.1) console.log("  ! cảnh báo " + tag + ": " + r.cls.toFixed(3) + " > 0.05");
       note(r.grid <= 2, tag + ": lưới dàn lại " + r.grid + " lần lúc tải (cần ≤ 2)"); await pg.close();
     }
+    /* 1d) HOVER thấy rõ (sáng + tối) và popup nằm TRÊN huy hiệu/ô: chuột thật (không cảm ứng) 1280x800 */
+    const HOVSEL = { cozy: [[".trust li", 3], ["#topics button:not([aria-pressed=true])", 1], ["#puToday", 1], [".nav .pill", 1], [".nav .tools>.ico", 1], ["#lock", 1], ["#grid .tile", 1]], pop: [[".trust li", 3], [".nav .pill", 1], [".nav .tools>.ico", 1], ["#lock", 1], ["#grid .tile", 1]] };
+    const STYLE = (sel, n) => { const q = [...document.querySelectorAll(sel)].filter(x => x.offsetParent !== null), e = q[n || 0]; if (!e) return null; const cs = getComputedStyle(e), de = getComputedStyle(document.documentElement);
+      const parse = c => { const m = String(c).match(/[\d.]+(?:e-?\d+)?/g); if (!m) return [0, 0, 0, 0]; let v = m.map(Number); if (/^color\(/.test(c)) { v = v.slice(0, 3).map(x => x * 255).concat(v[3] == null ? 1 : v[3]); } return [v[0], v[1], v[2], v.length > 3 ? v[3] : 1]; };
+      const lum = ([r, g, b]) => { const f = x => { x /= 255; return x <= .03928 ? x / 12.92 : Math.pow((x + .055) / 1.055, 2.4); }; return .2126 * f(r) + .7152 * f(g) + .0722 * f(b); };
+      const page = parse(de.backgroundColor), over = c => { const a = c[3]; return [0, 1, 2].map(i => c[i] * a + page[i] * (1 - a)); };
+      const bg = over(parse(cs.backgroundColor)), bd = over(parse(cs.borderTopColor)), fg = parse(cs.color), L = x => lum(x);
+      const cr = (a, b) => (Math.max(L(a), L(b)) + .05) / (Math.min(L(a), L(b)) + .05);
+      return { bgL: L(bg), bdL: L(bd), pageL: L(page), shadow: cs.boxShadow, filter: cs.filter, img: cs.backgroundImage, pos: cs.backgroundPosition, tr: cs.transform, cr: cr(fg, bg), alpha: parse(cs.backgroundColor)[3] }; };
+    for (const kind of ["cozy", "pop"]) for (const theme of ["light", "dark"]) {
+      const pg = await open(kind + "play/index.html", 1280, 800, { theme, lang: "vi" });
+      for (const [sel, nth] of HOVSEL[kind]) for (let i = 0; i < nth; i++) {
+        const tag = "hover " + kind + " " + theme + " " + sel + (nth > 1 ? "#" + i : "");
+        const h = await pg.evaluateHandle((s, i2) => [...document.querySelectorAll(s)].filter(x => x.offsetParent !== null)[i2], sel, i); if (!h.asElement()) { note(false, tag + ": không có phần tử"); continue; }
+        await pg.mouse.move(2, 2); await wait(260); const a = await pg.evaluate(STYLE, sel, i);
+        await h.asElement().hover(); await wait(320); const b = await pg.evaluate(STYLE, sel, i);
+        const isTile = /tile$/.test(sel), gradient = /gradient/.test(b.img) && b.img === a.img;
+        const dBg = Math.abs(b.bgL - a.bgL), dBd = Math.abs(b.bdL - a.bdL), shadow = a.shadow !== b.shadow, moved = a.tr !== b.tr || a.filter !== b.filter || a.pos !== b.pos;
+        const ok = isTile ? shadow && moved : (gradient ? (shadow || a.filter !== b.filter) && moved : (dBg >= .06 || dBd >= .15 || a.img !== b.img || (dBg >= .03 && shadow)));
+        note(ok, tag + ": hover không đủ rõ (ΔL nền " + dBg.toFixed(3) + ", ΔL viền " + dBd.toFixed(3) + ", bóng đổi " + shadow + ", chuyển động " + moved + ")");
+        note(b.cr >= 4.5 || /pill|ico|tile|lock/.test(sel), tag + ": tương phản chữ khi hover " + b.cr.toFixed(2) + " < 4.5");
+      }
+      await pg.close();
+    }
+    for (const kind of ["cozy", "pop"]) for (const [w, h] of (quick ? [[390, 844], [1280, 800]] : [[375, 667], [390, 844], [768, 1024], [1280, 800], [1440, 900]])) for (const what of ["menu", "find"]) {
+      const pg = await open(kind + "play/index.html", w, h, { lang: "vi" }); const tag = "popup " + what + " " + kind + " " + w + "x" + h;
+      const btn = what === "menu" ? await pg.$(".bars-more") : await pg.$("#findFab"); if (!btn) { await pg.close(); continue; }
+      await btn.click(); await wait(300);
+      const sel = what === "menu" ? ".bars-pop:not([hidden])" : "#findPanel", box = await pg.evaluate(s => { const p = document.querySelector(s); if (!p) return null; const r = p.getBoundingClientRect(); return [r.left, r.top, r.width, r.height]; }, sel);
+      if (!box) { note(false, tag + ": popup không mở"); await pg.close(); continue; }
+      let bad = 0, first = ""; for (let i = 0; i <= 3; i++) for (let j = 0; j <= 3; j++) { const x = box[0] + 8 + (box[2] - 16) * i / 3, y = box[1] + 8 + (box[3] - 16) * j / 3; await pg.mouse.move(x, y);
+        const e = await pg.evaluate((x2, y2, s2) => { const el = document.elementFromPoint(x2, y2); return el && el.closest(s2) ? "" : (el ? (el.className || el.tagName) + "" : "null"); }, x, y, sel); if (e) { bad++; first = first || e; } }
+      note(bad === 0, tag + ": " + bad + "/16 điểm trong popup bị phần tử khác (" + first + ") nằm trên (huy hiệu/ô phải nằm DƯỚI popup)"); await pg.close();
+    }
     /* 2) Chơi tiếp: chỉ khi hợp lệ */
     const resCase = async (name, ls, want) => { const pg = await open("cozyplay/index.html", 390, 844, { ls }); const v = await pg.evaluate(() => { const x = document.getElementById("puResume"); return !!x && !x.hidden && x.offsetParent !== null; }); note(v === want, "Chơi tiếp [" + name + "]: hiện=" + v + " (cần " + want + ")"); await pg.close(); };
     await resCase("không có bản lưu", [], false);
