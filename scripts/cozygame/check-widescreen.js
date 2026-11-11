@@ -9,7 +9,7 @@
 const { spawn } = require("child_process"), path = require("path"), puppeteer = require("puppeteer-core");
 const root = path.join(__dirname, "..", ".."), PORT = 8885, B = "http://localhost:" + PORT + "/";
 const args = process.argv.slice(2), quick = args.includes("--quick"), ids = (args.find(a => !a.startsWith("--")) || "").split(",").filter(Boolean);
-const COZY = ["bao-nhieu-giay", "ve-mot-net", "dap-deadline", "xin-nghi", "gia-cho-viet", "me-cung-truyen-tay", "cho-hang-kieu-viet", "doi-doi-2048"], POP = ["pop-fly", "bo-me-5-giay", "lang-cua-be", "thap-vong-mau"];
+const COZY = ["cozy-wings", "bao-nhieu-giay", "ve-mot-net", "dap-deadline", "xin-nghi", "gia-cho-viet", "me-cung-truyen-tay", "cho-hang-kieu-viet", "doi-doi-2048"], POP = ["pop-fly", "bo-me-5-giay", "lang-cua-be", "thap-vong-mau"];
 let list = [...COZY.map(i => ["cozyplay", i]), ...POP.map(i => ["popplay", i])];
 if (quick) list = [["cozyplay", "bao-nhieu-giay"], ["cozyplay", "dap-deadline"], ["popplay", "pop-fly"]];
 if (ids.length) list = list.filter(([, i]) => ids.includes(i));
@@ -30,6 +30,24 @@ const MEASURE = (W, H) => {
   for (const e of document.querySelectorAll(".btn,.big,.dbtn,#bPlay,#bDaily,#startBtn")) if (/^(BUTTON|A)$/.test(e.tagName) && vis(e) && !e.closest(".top,.ov,.overlay") && e.getBoundingClientRect().height < 43.5) out.small.push(name(e) + "=" + Math.round(e.getBoundingClientRect().height));
   for (const e of document.querySelectorAll(".top .ib,.top .icon-btn,.top>button")) if (vis(e) && Math.min(e.getBoundingClientRect().width, e.getBoundingClientRect().height) < 37.5) out.small.push(name(e) + "=" + Math.round(Math.min(e.getBoundingClientRect().width, e.getBoundingClientRect().height)));
   out.cut = out.cut.slice(0, 4); out.small = out.small.slice(0, 4); return out;
+};
+/* MÀN CHỌN của Pop Play + Cánh Nhỏ (ô/thẻ trong hộp .ov): ô co giãn theo khung (≥22% bề rộng khung cho lưới 3 cột, thẻ danh sách ≥70%), không chồng lấn/so le lệch,
+   cụm nút chiếm ≥55% chiều cao khung (không lọt thỏm giữa khung rộng) */
+const HOME = () => {
+  const col = document.querySelector(".play"); if (!col) return null; const c = col.getBoundingClientRect(), out = { errs: [] };
+  const ov = [...document.querySelectorAll(".ov")].find(e => !e.hidden && e.offsetParent && e.querySelector("button")); if (!ov) return null;
+  const tiles = [...ov.querySelectorAll(".tiles .tile:not(.daily),.cards .card:not(.daily),.cards .tile:not(.daily)")].filter(e => e.offsetParent && e.getBoundingClientRect().width > 20);
+  const rs = tiles.map(e => e.getBoundingClientRect());
+  if (!rs.length) return null;
+  const grid = !!ov.querySelector(".tiles"), minW = Math.min(...rs.map(r => r.width)) / c.width;
+  if (grid && minW < 0.22) out.errs.push("ô chọn rộng " + Math.round(minW * 100) + "% khung (<22%)");
+  if (!grid && minW < 0.7) out.errs.push("thẻ chọn rộng " + Math.round(minW * 100) + "% khung (<70%)");
+  for (let i = 0; i < rs.length; i++) for (let j = i + 1; j < rs.length; j++) { const a = rs[i], b = rs[j]; if (a.left < b.right - 1 && b.left < a.right - 1 && a.top < b.bottom - 1 && b.top < a.bottom - 1) out.errs.push("ô " + i + " chồng lấn ô " + j); }
+  const bs = [...ov.querySelectorAll("button")].filter(e => e.offsetParent && e.getBoundingClientRect().width > 20).map(e => e.getBoundingClientRect());
+  const top = Math.min(...bs.map(r => r.top)), bot = Math.max(...bs.map(r => r.bottom)), fill = (bot - top) / c.height;
+  if (fill < 0.55) out.errs.push("cụm nút chỉ chiếm " + Math.round(fill * 100) + "% chiều cao khung (<55%)");
+  if (bs.some(r => r.left < c.left - 2 || r.right > c.right + 2 || r.top < c.top - 2 || r.bottom > c.bottom + 2)) out.errs.push("nút tràn khỏi khung chơi");
+  out.minW = Math.round(minW * 100); out.fill = Math.round(fill * 100); return out;
 };
 (async () => {
   const srv = spawn("python3", ["-m", "http.server", String(PORT)], { cwd: root, stdio: "ignore" }); await wait(1200);
@@ -54,6 +72,7 @@ const MEASURE = (W, H) => {
         }
         if (shotDir && name) await pg.screenshot({ path: path.join(shotDir, "ws-" + id + "-" + W + "-" + name.replace(/ /g, "") + ".png") }); };
       await step("chọn");
+      if ((portal === "popplay" || id === "cozy-wings") && W >= 700 && H >= 600) { await wait(500); const h = await pg.evaluate(HOME).catch(() => null); if (h) h.errs.forEach(e => note(false, tag + " màn chọn: " + e)); }
       if (portal === "cozyplay") {
         await pg.evaluate(() => { const e = document.getElementById("bPlay") || document.getElementById("bDaily") || document.getElementById("startBtn") || document.getElementById("bPractice") || document.getElementById("bMake") || document.querySelector("#home .btn"); e && e.click(); });
         await step("chơi");

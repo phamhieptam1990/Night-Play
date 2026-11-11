@@ -119,6 +119,21 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 <script src="../../../shared/offline.js" defer></script>
 <link rel="stylesheet" href="../../../shared/poplandscape.css">
 <link rel="stylesheet" href="../../../shared/endui.css"><script src="../../../shared/endui.js" defer></script>
+<style>
+/* MÀN RỘNG (máy tính, iPad ngang): màn chọn co giãn theo bề rộng khung chơi (cqw), không còn ô/thẻ cỡ px cố định lọt thỏm giữa khung 520-760px. Điện thoại và màn thấp giữ nguyên. GAME_RULES 5k. */
+@media (min-width:700px) and (min-height:600px){
+.play{container-type:size}
+.ov{gap:2.4cqw;padding:3cqw}.ov h2{font-size:7.4cqw}.ov p{font-size:3.6cqw}
+.cards{max-width:90cqw;gap:2.2cqw}.ov .cards{gap:2.2cqw}
+.card{font-size:4.8cqw}.card .main{padding:2.4cqw 3.2cqw;gap:3cqw}.card .e{font-size:9cqw}.card small{font-size:.62em;display:block}
+.card .skinBtn{width:10cqw;height:10cqw;font-size:5cqw;margin-right:2.4cqw}
+.tiles{max-width:92cqw;gap:2cqw}.tile{border-radius:4cqw}
+.tile .tb{width:8cqw;height:8cqw;font-size:4.6cqw;left:1.4cqw;top:1.4cqw}.tile .skinBtn{width:9cqw;height:9cqw;font-size:4.8cqw;right:1.2cqw;bottom:1.2cqw}.tile .best{font-size:3cqw;padding:.4cqw 2cqw}
+.tile.daily{font-size:4.6cqw;padding:2cqw 3.4cqw}.tile.daily .de{font-size:7.4cqw}.tile.daily .dm,.tile.daily .df{font-size:3.8cqw}
+.difs{gap:2cqw}.dif{width:11cqw;height:11cqw;font-size:5cqw}
+.ov .big{font-size:4.8cqw}.ov .ghost{font-size:3.8cqw}
+}
+</style>
 </head>
 <body>
 <div class="app">
