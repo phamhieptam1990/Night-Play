@@ -28,3 +28,20 @@ html[data-app] .hero h1{font-family:var(--font);font-weight:800;letter-spacing:-
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
 .pu-card.today{background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 20%,transparent),var(--np-glass) 70%);box-shadow:0 8px 26px var(--pu-glow)}
 @media (hover:hover) and (pointer:fine){.pu-card:hover{border-color:transparent;box-shadow:0 12px 32px var(--pu-glow)}}
+
+/* ---------- ô game: bo lớn, viền sáng + bóng màu THEO GAME (--gc do portalui.js đặt từ thumb) khi hover/focus ---------- */
+.tile{border-radius:clamp(18px,20%,30px);box-shadow:0 8px 20px color-mix(in srgb,var(--gc,#6A48F0) 38%,transparent),0 0 0 1px rgba(255,255,255,.14)}
+html[data-app=popplay] .tile{border-radius:clamp(20px,24%,34px);box-shadow:0 8px 18px color-mix(in srgb,var(--gc,#FF5A1F) 45%,transparent),0 0 0 3px rgba(255,255,255,.7)}
+html[data-app=popplay][data-theme=dark] .tile{box-shadow:0 8px 20px color-mix(in srgb,var(--gc,#FF5A1F) 40%,transparent),0 0 0 3px rgba(255,255,255,.2)}
+@media (hover:hover) and (pointer:fine){
+  .tile:hover{box-shadow:0 14px 30px color-mix(in srgb,var(--gc,#6A48F0) 60%,transparent),0 0 24px 2px color-mix(in srgb,var(--gc,#6A48F0) 45%,transparent),0 0 0 2px rgba(255,255,255,.75)}
+  html[data-app=popplay] .tile:hover{box-shadow:0 12px 26px color-mix(in srgb,var(--gc,#FF5A1F) 60%,transparent),0 0 0 4px rgba(255,255,255,.9)}
+}
+.tile:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+html[data-theme=dark] .tile:focus-visible{outline-color:#fff}
+.tile:active{box-shadow:0 3px 10px color-mix(in srgb,var(--gc,#6A48F0) 40%,transparent)}
+
+/* ---------- chip lọc: viên kính, viền sáng mảnh, chip chọn = gradient tím–cam + glow ---------- */
+.pu-chip{border-color:color-mix(in srgb,var(--accent) 34%,var(--line));font-weight:700}
+.pu-chip[aria-pressed=true]{background:var(--np-edge);color:#fff;box-shadow:0 4px 18px var(--pu-glow),inset 0 0 0 1px rgba(255,255,255,.35)}
+:root[data-theme=dark] .pu-chip[aria-pressed=true]{color:#12141F}

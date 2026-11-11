@@ -63,6 +63,8 @@
     if (isNew(g)) { var n = el("span", "pu-b pu-new", t.newb); n.setAttribute("aria-hidden", "true"); b.appendChild(n); }
     /* 👑 trên ô game đã BỎ theo chủ site (cả 20 game Cozy đều có phần Night Pass nên rối); cờ pro vẫn giữ trong multi-games.js, không đụng 👑/ổ khoá bên trong game */
     if (O.portal === "pop" && g.short) { var s = el("span", "pu-n", g.short[lg()] || g.short.vi); s.setAttribute("aria-hidden", "true"); b.appendChild(s); }
+    /* màu của game (điểm dừng thứ hai của gradient trong thumb) -> bóng/glow theo game ở portalnp.css */
+    var cm = (decodeURIComponent(String(g.thumb)).match(/stop-color="(#[0-9A-Fa-f]{6})"/g) || []); if (cm.length) b.style.setProperty("--gc", cm[cm.length - 1].slice(12, 19));
     b.setAttribute("aria-label", label(g)); b.title = gname(g);
   }
   function retag() { [].forEach.call(document.querySelectorAll("#grid .tile"), function (b) { var g = byId(b.dataset.id); if (g) decorate(b, g); }); }
