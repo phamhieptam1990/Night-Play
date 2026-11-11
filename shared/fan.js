@@ -11,7 +11,7 @@
   /* vai trò theo thứ tự cũ trên thanh trên: [vai trò, [các id có thể có], [nhãn vi, en]] */
   var ROLES = [
     ["help", ["bHelp", "askBtn"], ["Hướng dẫn", "Help"]],
-    ["restart", ["restartBtn"], ["Chơi lại", "Restart"]],
+    ["restart", ["restartBtn", "bRe"], ["Chơi lại", "Restart"]],
     ["board", ["bBoard"], ["Xếp hạng", "Ranking"]],
     ["cam", ["bCam"], ["Chụp ảnh", "Photo"]],
     ["shr", ["bShr"], ["Chia sẻ", "Share"]],
@@ -50,6 +50,7 @@
     "#npFan.open .pn{opacity:1;transform:scale(1)}" +
     "#npFan .it{position:static!important;width:64px!important;height:60px!important;min-width:0!important;min-height:0!important;margin:0!important;padding:4px 2px!important;border-radius:14px!important;display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:3px;" +
     "font-size:15px!important;font-weight:800;line-height:1;box-shadow:none!important;transform:none!important;opacity:1!important;color:var(--npink,inherit)!important;background:color-mix(in srgb,var(--npink,#888) 9%,var(--npbg,transparent))!important;border:1.5px solid var(--npline,rgba(128,128,128,.4))!important}" +
+    "#npFan .it[hidden]{display:none!important}" +   /* nút gom đang ẩn (vd ↻ khi chưa chơi) không hiện trong bảng */
     "#npFan .it svg{width:22px!important;height:22px!important;flex:none}" +
     "#npFan .it::after{content:attr(data-l);font:700 10.5px/1.05 system-ui,sans-serif;max-width:60px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.85}" +
     "#npFan .it .bl{display:none!important}#npFan .it>span:first-child{font-size:20px;line-height:1}" +
@@ -67,6 +68,18 @@
     "#npTitle{display:none}" +
     ".np-local #npTitle{display:block;flex:none;box-sizing:border-box;width:100%;max-width:100%;margin:0 0 6px;padding:0 8px;text-align:center;white-space:normal;text-wrap:balance;overflow-wrap:anywhere;overflow:visible;font-size:clamp(20px,6.6vw,30px);line-height:1.12;text-shadow:none}" +
     ".np-local #npTitle .probadge,.np-local #npTitle .bl{display:none}" +
+    "}" +
+    /* ĐIỆN THOẠI DỌC: MỌI nút hàng trên cùng (← | tên | ⏸ | 🔊 | ⋯) cùng cỡ 44px, cùng tâm dọc y = 16 + 22 (= toạ độ chuẩn của ← trong backpos.css, GAME_RULES 0a-14), lề trái ← = lề phải ⋯ = 16px (+ safe-area), khoảng cách đều 8px; hàng cao 60px nên tên game / HUD bên dưới cách >= 8px */
+    "@media " + PHONE + "{" +
+    "#npFab{position:absolute;box-sizing:border-box;right:calc(16px + env(safe-area-inset-right,0px));top:calc(16px + env(safe-area-inset-top,0px));width:44px;height:44px;margin:0}" +
+    "#npFan .pn{right:calc(16px + env(safe-area-inset-right,0px));top:calc(64px + env(safe-area-inset-top,0px))}" +
+    "#play.npfan .top{left:calc(16px + env(safe-area-inset-left,0px));right:calc(68px + env(safe-area-inset-right,0px));top:calc(16px + env(safe-area-inset-top,0px));height:44px;padding:0;gap:8px}" +
+    "#play.npfan .scr{top:max(14cqw,calc(68px + env(safe-area-inset-top,0px)))}" +   /* nội dung (tên game, HUD) bắt đầu >= 8px dưới hàng nút (60px) */
+    ".top.npfan{padding:calc(16px + env(safe-area-inset-top,0px)) calc(68px + env(safe-area-inset-right,0px)) 0 calc(16px + env(safe-area-inset-left,0px));min-height:calc(60px + env(safe-area-inset-top,0px));gap:8px}" +
+    ".top.npfan #npFab{right:calc(16px + env(safe-area-inset-right,0px));top:calc(16px + env(safe-area-inset-top,0px));margin-top:0}" +
+    ".top.npfan #npFan{position:absolute;inset:auto;width:0;height:0}" +   /* ra khỏi luồng flex (không chiếm thêm khoảng cách 8px giữa 🔊 và ⋯) */
+    ".top.npfan #npFan .pn{right:calc(16px + env(safe-area-inset-right,0px));top:calc(100% + 4px)}" +
+    "body.np-local{padding-top:calc(68px + env(safe-area-inset-top,0px))}" +
     "}" +
     "@media " + TAB + "{" +
     "#play.npfan .top,.top.npfan{padding-right:80px}" +
