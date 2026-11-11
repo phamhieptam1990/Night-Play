@@ -418,3 +418,12 @@ window.NP = (function () {
     var j = document.createElement("script"); j.src = src.replace(/bridge\.js(\?.*)?$/, "backpos.js$1"); j.async = false; document.head.appendChild(j);
   } catch (e) {}
 })();
+
+/* popup mời Night Pass + chọn giao diện: kính tối, quầng tím, ✕ trong thẻ (shared/nppopup.css + nppopup.js cạnh file này) */
+(function () {
+  try {
+    var cs = document.currentScript, src = cs && cs.src; if (!src || document.getElementById("npPopCss")) return;
+    var l = document.createElement("link"); l.id = "npPopCss"; l.rel = "stylesheet"; l.href = src.replace(/bridge\.js(\?.*)?$/, "nppopup.css$1"); document.head.appendChild(l);
+    var j = document.createElement("script"); j.src = src.replace(/bridge\.js(\?.*)?$/, "nppopup.js$1"); j.async = false; document.head.appendChild(j);
+  } catch (e) {}
+})();
