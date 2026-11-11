@@ -672,7 +672,7 @@ addEventListener("storage",e=>{if(e.key==="theme")document.documentElement.datas
 
 /* ===== CẦU NỐI VỚI TRANG CHA ===== */
 if(window.NP){
-  NP.state(()=>{if(PF.pro&&!PF.pro.trial&&PF.ticket){const t=G?G.t:0,sk=PF.skinSel[t],st={t,tk:PF.ticket};if(sk&&sk!=="basic"&&PF.skins[t][sk])st.sk=sk;return st}return null});   /* chơi hộ thấy đúng giao diện */
+  NP.state(()=>{if(!G||G.over)return null;if(!(PF.pro&&!PF.pro.trial&&PF.ticket))return{t:G.t};/* bản free cũng phải báo "đang chơi" để ‹/Back về màn chọn thay vì thoát luôn */{const t=G.t,sk=PF.skinSel[t],st={t,tk:PF.ticket};if(sk&&sk!=="basic"&&PF.skins[t][sk])st.sk=sk;return st}return null});   /* chơi hộ thấy đúng giao diện */
   NP.onPause(()=>{paused=true;cancelSnd();$("play").classList.add("paused");if(window.speechSynthesis)speechSynthesis.cancel()},()=>{paused=false;$("play").classList.remove("paused")});
 }
 if(passToken()&&!HELPER)PF.loadPro(false).catch(()=>{});

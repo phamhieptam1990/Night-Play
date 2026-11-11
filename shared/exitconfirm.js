@@ -16,6 +16,8 @@
     en: { h: "Leave this game?", saved: "Your game is saved — tap “Resume” next time.", unsaved: "This game won’t be saved.", go: "Keep playing", out: "Leave" }
   };
   var vi = function () { return (document.documentElement.lang || "vi").slice(0, 2) !== "en"; };
+  /* màn chọn hiện (#home) thì không phải đang chơi, dù game còn trả NP.peek() (xem resume.js atSelect) */
+  var peek = function () { try { var h = document.getElementById("home"); if (h && !h.hidden && h.offsetParent !== null) return null; return NP.peek(); } catch (e) { return null; } };
   var playing = false, ov = null, onLeave = null, allowUntil = 0, skipClick = false;
 
   /* ---------- chống bấm nhầm ---------- */
@@ -85,14 +87,14 @@
   function ask(onExit) {
     if (Date.now() < allowUntil) { allowUntil = 0; onExit(); return; }
     var kl = lockedParent(); if (kl) { kl.requestExit(); return; }   // đang khoá (Pop Play): cổng phụ huynh thay cho popup này
-    if (!NP.peek()) { onExit(); return; }                              // không đang chơi: không hỏi
+    if (!peek()) { onExit(); return; }                              // không đang chơi: không hỏi
     askNow(onExit);
   }
 
   /* ← trên header (và nút về màn chọn) khi đang chơi: hỏi trước. Bấm xác nhận → flush ván rồi bấm lại nút (bỏ qua chốt này). */
   document.addEventListener("click", function (e) {
     if (skipClick || !playing) return;
-    var b = e.target && e.target.closest && e.target.closest("#bBk,#bBack,#homeBtn"); if (!b || !NP.peek()) return;
+    var b = e.target && e.target.closest && e.target.closest("#bBk,#bBack,#homeBtn"); if (!b || !peek()) return;
     e.preventDefault(); e.stopImmediatePropagation();
     ask(function () { try { window.NPResume && NPResume.flush(); } catch (x) {} skipClick = true; try { b.click(); } finally { skipClick = false; } });
   }, true);
@@ -100,13 +102,13 @@
     if (e.key !== "Escape" || !playing || ov || e.defaultPrevented) return;
     var os = document.querySelectorAll(".ov.on,.overlay.on,dialog[open],#ovEnd.on,[role=dialog]:not([hidden]),[aria-modal=true]:not([hidden])");   // đang có hộp thoại HIỆN của game: Esc để game xử lý
     for (var i = 0; i < os.length; i++) { var r = os[i].getBoundingClientRect(), c = getComputedStyle(os[i]); if (r.width > 0 && r.height > 0 && c.display !== "none" && c.visibility !== "hidden" && +c.opacity > 0.05 && os[i].id !== "npxO") return; }
-    if (!NP.peek()) return;
+    if (!peek()) return;
     e.preventDefault(); ask(function () { window.NPResume && NPResume.exitNow && NPResume.exitNow(); });
   });
 
   window.NPExit = {
     ask: ask,
-    playing: function () { try { return !!NP.peek(); } catch (e) { return false; } },
+    playing: function () { return !!peek(); },
     open: function () { return !!ov; },
     dismiss: function () { close(true); },
     bypass: function (f) { skipClick = true; try { f(); } finally { skipClick = false; } },   // chạy f (bấm nút về màn chọn) mà không bị chốt click chặn
