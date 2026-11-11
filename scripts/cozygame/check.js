@@ -143,6 +143,11 @@ const b64 = o => Buffer.from(JSON.stringify(o)).toString("base64").replace(/\+/g
   console.log("== vị trí nút ←");
   const bp = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-backpos.js")].concat(process.argv.includes("--full-back") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });
   note(bp.status === 0, "tổng", "check-backpos.js báo lỗi (nút ← lệch góc trên-trái / cột nút nổi / thẻ nhắc việc) — xem log phía trên");
+  /* hàng nút trên cùng ở điện thoại dọc, đo bằng WebKit thật (Safari iPhone); không có Playwright thì tự bỏ qua — bản nhanh, --full-back-wk để đo mọi game */
+  { const wk = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-backpos-webkit.js")].concat(process.argv.includes("--full-back-wk") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" }); note(wk.status === 0, "tổng", "check-backpos-webkit.js báo lỗi (hàng nút trên cùng, WebKit) — xem log phía trên"); }
+  /* HUD gọn của cổng ở cỡ không có cột bên lề (check-hud.js) — bản nhanh, thêm --full-hud để đo mọi game */
+  console.log("== HUD gọn");
+  { const hd = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-hud.js")].concat(process.argv.includes("--full-hud") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" }); note(hd.status === 0, "tổng", "check-hud.js báo lỗi (HUD gọn của cổng) — xem log phía trên"); }
   { const mo = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-moi.js"), "--quick"], { cwd: root, env: process.env, stdio: "inherit" }); note(mo.status === 0, "tổng", "check-moi.js báo lỗi (trang tin ra mắt /moi/) — xem log phía trên"); }   // trang /moi/
   { const ns = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-subscribe.js"), "--quick"], { cwd: root, env: process.env, stdio: "inherit" }); note(ns.status === 0, "tổng", "check-subscribe.js báo lỗi (trang Night Pass / hộp thoại) — xem log phía trên"); }
   console.log("\n" + (fails.length ? "✗ " + fails.length + " lỗi" : "✓ tất cả đạt"));
