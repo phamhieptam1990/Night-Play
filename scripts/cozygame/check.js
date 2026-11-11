@@ -145,6 +145,8 @@ const b64 = o => Buffer.from(JSON.stringify(o)).toString("base64").replace(/\+/g
   note(bp.status === 0, "tổng", "check-backpos.js báo lỗi (nút ← lệch góc trên-trái / cột nút nổi / thẻ nhắc việc) — xem log phía trên");
   /* hàng nút trên cùng ở điện thoại dọc, đo bằng WebKit thật (Safari iPhone); không có Playwright thì tự bỏ qua — bản nhanh, --full-back-wk để đo mọi game */
   { const wk = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-backpos-webkit.js")].concat(process.argv.includes("--full-back-wk") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" }); note(wk.status === 0, "tổng", "check-backpos-webkit.js báo lỗi (hàng nút trên cùng, WebKit) — xem log phía trên"); }
+  /* menu ⋯ mở trọn trong màn hình + popup ? và nút ✕ (WebKit thật + Chrome; cần Playwright, không có thì tự bỏ qua) — bản nhanh, --full-menu để đo mọi game */
+  for (const [f, fl] of [["check-fanmenu.js", "--full-menu"], ["check-helppopup.js", "--full-menu"]]) { const r = require("child_process").spawnSync(process.execPath, [path.join(__dirname, f)].concat(process.argv.includes(fl) ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" }); note(r.status === 0, "tổng", f + " báo lỗi — xem log phía trên"); }
   /* HUD gọn của cổng ở cỡ không có cột bên lề (check-hud.js) — bản nhanh, thêm --full-hud để đo mọi game */
   console.log("== HUD gọn");
   { const hd = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-hud.js")].concat(process.argv.includes("--full-hud") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" }); note(hd.status === 0, "tổng", "check-hud.js báo lỗi (HUD gọn của cổng) — xem log phía trên"); }
