@@ -7,16 +7,18 @@
    (b) thứ tự các nút trong khối = KEYS (? 🔊 ngôn ngữ ↻ ⏸ 🏆 📷 📤 🔒 🍜) và vị trí tăng dần theo thứ tự đó (giống nhau giữa các game);
    (c) rails: nút thu gọn cột ở góc TRÊN-TRÁI (cạnh ←), nút mở lại (.np-tab) sau khi thu NẰM ĐÚNG CÙNG toạ độ, không bao giờ ở nửa dưới màn hình;
    (d) mỗi chức năng điều khiển mà game có (nút gốc không hidden) có ĐÚNG MỘT nút hiện, bấm được trong khối; bấm hộ đúng nút thật (đếm click); 🔊 và ngôn ngữ phản chiếu trạng thái đúng.
-   --quick: 3 game đại diện × 5 chế độ (nối vào check.js). --all-games: cả 32 game × 5 chế độ. Không cờ: 32 game × 9 chế độ. Thoát mã 1 nếu có lỗi. */
+   --games=id,id: chỉ các game đó; --port=N: cổng http (chạy song song nhiều tiến trình). --quick: 3 game đại diện × 5 chế độ (nối vào check.js). --all-games: cả 32 game × 5 chế độ. Không cờ: 32 game × 9 chế độ. Thoát mã 1 nếu có lỗi. */
 const { spawn } = require("child_process"), path = require("path"), fs = require("fs"), puppeteer = require("puppeteer-core");
 const args = process.argv.slice(2), quick = args.includes("--quick"), verbose = args.includes("--verbose");
 const root = (args.find(a => a.startsWith("--root=")) || "").slice(7) || path.join(__dirname, "..", ".."), shots = (args.find(a => a.startsWith("--shots=")) || "").slice(8);
-const PORT = 8887 + (quick ? 0 : 1) + (args.some(a => a.startsWith("--root=")) ? 5 : 0), B = "http://localhost:" + PORT + "/";
+const PORT = +((args.find(a => a.startsWith("--port=")) || "").slice(7)) || 8887 , B = "http://localhost:" + PORT + "/";
 const wait = ms => new Promise(r => setTimeout(r, ms)), fails = [], note = (ok, m) => { if (!ok) { fails.push(m); console.log("  ✗ " + m); } };
 const KEYS = ["help", "snd", "lang", "restart", "pause", "board", "cam", "shr", "lock", "pass"];
 const COZY = fs.readdirSync(path.join(root, "cozyplay", "games")).sort(), POP = fs.readdirSync(path.join(root, "popplay", "games")).sort();
 const allG = args.includes("--all-games");
 const GAMES = quick && !allG ? [["cozyplay", "ga-me-ban-trung"], ["cozyplay", "dap-deadline"], ["popplay", "pop-fly"]] : COZY.map(g => ["cozyplay", g]).concat(POP.map(g => ["popplay", g]));
+const only = ((args.find(a => a.startsWith("--games=")) || "").slice(8)).split(",").filter(Boolean);
+const GAMES2 = only.length ? GAMES.filter(g => only.includes(g[1])) : GAMES;
 const MODES = (quick || allG ? [[1271, 684, 0, "rails"], [1194, 834, 1, "rails"], [1024, 768, 0, "land"], [844, 390, 1, "land"], [390, 844, 1, "phone"]]
   : [[1100, 600, 0, "rails"], [1194, 834, 1, "rails"], [1271, 684, 0, "rails"], [1440, 900, 0, "rails"], [1920, 1080, 0, "rails"], [1024, 768, 0, "land"], [844, 390, 1, "land"], [667, 375, 1, "land"], [390, 844, 1, "phone"]]);
 const SEED = () => { localStorage.setItem("lang", "vi"); localStorage.setItem("np-sound", "1"); localStorage.setItem("theme", "dark"); localStorage.setItem("np-welcome-seen", "1"); localStorage.removeItem("np-rails"); };
@@ -72,7 +74,7 @@ const MEASURE = (mode, CTRL, SRC, KEYS, CONTENT) => {
   const gframe = (pg, id) => pg.frames().find(f => f.url().includes("/games/" + id + "/"));
   const OPENMORE = () => { const m = document.querySelector("#npHudc .np-hmore"); if (m && m.offsetParent && !m.parentNode.classList.contains("open")) m.click(); };
   const START = fr => fr.evaluate(() => { const s = document.querySelector("#bFree,#bStart,#bPlay,#start,#goBtn,.big,.tile:not(.lock):not([disabled]),.card"); if (s) { s.click(); return true; } return false; }).catch(() => false);
-  for (const [portal, id] of GAMES) {
+  for (const [portal, id] of GAMES2) {
     console.log("== " + portal + "/" + id);
     for (const [W, H, t, mode] of MODES) {
       const tag = id + " " + W + "x" + H, row = (table[id] = table[id] || {});
