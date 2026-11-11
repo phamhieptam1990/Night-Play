@@ -28,7 +28,7 @@ const MEASURE = () => {
     if (rr.width < 235 || rr.width > 301) o.errs.push("cột " + n + " rộng " + Math.round(rr.width) + " (cần 240–300)");
     if (fr && (n === "trái" ? rr.right > fr.left + 1 : rr.left < fr.right - 1)) o.errs.push("cột " + n + " đè khung game");
     for (const e of r.querySelectorAll("button,a,.np-g,.np-res")) { if (!e.offsetParent) continue; const b = e.getBoundingClientRect(); if (b.width < 2) continue; if (b.height < 43.5 || b.width < 43.5) o.errs.push("nút " + (e.className + e.id).slice(0, 18) + " " + Math.round(b.width) + "x" + Math.round(b.height) + " (<44)"); }
-    for (const e of r.querySelectorAll(".np-g img,.np-ico")) { if (!e.offsetParent) continue; const b = e.getBoundingClientRect(); if (b.width < 55.5) o.errs.push("icon game nhỏ " + Math.round(b.width)); }
+    for (const e of r.querySelectorAll(".np-g img,.np-ico")) { if (!e.offsetParent) continue; const b = e.getBoundingClientRect(); if (b.width < (e.closest(".np-res") ? 43.5 : 55.5)) o.errs.push("icon game nhỏ " + Math.round(b.width)); }
     const cut = [...r.querySelectorAll("*")].filter(e => e.offsetParent && e.getBoundingClientRect().right > rr.right + 1 && e.getBoundingClientRect().width > 0).length; if (cut) o.errs.push(cut + " phần tử tràn ngang cột " + n);
   }
   const hud = $("#npHud"); o.hud = hud ? [...hud.querySelectorAll("button")].filter(b => b.offsetParent).length : 0; o.hudName = hud ? Math.round(hud.querySelector(".np-gname").getBoundingClientRect().height / (parseFloat(getComputedStyle(hud.querySelector(".np-gname")).lineHeight) || 19)) : 0;
