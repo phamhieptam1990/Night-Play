@@ -88,6 +88,16 @@ const MEASURE = kind => {
       const tag = kind + " " + theme + " " + lang + " " + w + "x" + h;
       const pg = await open(kind + "play/index.html", w, h, { theme, lang, ls: kind === "cozy" ? [RES] : [] });
       const r = await pg.evaluate(MEASURE, kind); r.errs.forEach(e => note(false, tag + ": " + e));
+      { const st = await pg.evaluate(() => {
+          const px = c => { const m = c.match(/[\d.]+/g).map(Number); return m.slice(0, 3); }, lum = ([r, g, b]) => { const f = v => { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }; return .2126 * f(r) + .7152 * f(g) + .0722 * f(b); }, cr = (a, b) => { const x = lum(px(a)), y = lum(px(b)); return (Math.max(x, y) + .05) / (Math.min(x, y) + .05); };
+          const cs = e => getComputedStyle(e), de = document.documentElement, h1 = document.querySelector(".hero h1"), card = document.querySelector(".pu-card"), pill = document.querySelector(".nav .pill"), bgc = cs(de).backgroundColor, o = {};
+          o.bg = cs(de).backgroundImage; o.grads = (o.bg.match(/gradient/g) || []).length; o.h1 = cr(cs(h1).color, bgc);
+          if (card) { o.glass = cs(card).backdropFilter || cs(card).webkitBackdropFilter; o.edge = getComputedStyle(card, "::before").backgroundImage.includes("gradient"); o.name = cr(cs(card.querySelector(".pu-t b")).color, bgc); }
+          if (pill) { o.pill = cs(pill).backgroundImage.includes("gradient"); o.pillc = cr(cs(pill).color, getComputedStyle(pill).backgroundColor.includes("0, 0, 0, 0") ? "rgb(106,72,240)" : cs(pill).backgroundColor); }
+          const t = document.querySelector("#grid .tile"); o.tileShadow = cs(t).boxShadow !== "none"; return o; });
+        note(st.grads >= 3, tag + ": nền cổng phẳng (" + st.grads + " lớp gradient, cần quầng/sao)"); note(st.h1 >= 4.5, tag + ": tương phản tiêu đề " + st.h1.toFixed(2) + " < 4.5");
+        if (kind === "cozy") { note(/blur/.test(st.glass || ""), tag + ": thẻ Hôm nay không có kính mờ (backdrop-filter)"); note(st.edge, tag + ": thẻ thiếu viền gradient"); note(st.name >= 4.5, tag + ": tương phản tên game trong thẻ " + st.name.toFixed(2)); note(st.pill, tag + ": nút Night Pass không gradient"); }
+        note(st.tileShadow, tag + ": ô game không có bóng/glow"); }
       if (w === 390 || w === 1280) { const dup = await pg.evaluate(() => { const c = {}; document.querySelectorAll("[id]").forEach(e => { c[e.id] = (c[e.id] || 0) + 1; }); return Object.keys(c).filter(k => c[k] > 1); }); note(!dup.length, tag + ": id trùng " + JSON.stringify(dup) + " (từng trùng #npTop với shared/rails.js làm ẩn nhầm khối của trang)"); }
       if (kind === "cozy") {
         const t = await pg.evaluate(() => { const c = document.getElementById("puToday"), x = document.getElementById("puResume"), v = e => !!e && !e.hidden && e.offsetParent !== null; return { today: v(c), txt: c && c.textContent, res: v(x), pro: document.querySelectorAll("#grid .tile .pu-pro").length, tiles: document.querySelectorAll("#grid .tile").length }; });

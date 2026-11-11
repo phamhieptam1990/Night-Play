@@ -1,0 +1,30 @@
+/* THIẾT KẾ NIGHT PASS cho hai cổng (cozyplay/index.html, popplay/index.html): cùng "họ" với landing, /play/ và subscribe. Nạp SAU shared/portalui.css.
+   Chỉ nền/màu/viền/bóng/hover/focus; KHÔNG đổi kích thước bố cục (lưới fitGrid, nút icon --tap, HUD, rails giữ nguyên); phông chỉ var(--font) (Inter).
+   Sáng/tối theo theme (không ép tối): tối = đêm tím sâu #12141F -> #1A1640, sao tĩnh, quầng tím/vàng; sáng = oải hương nhạt + kính trắng.
+   Night Play: nhấn tím #7C5CFF; Pop Play: nhấn cam #FF5A1F trên CÙNG nền đêm để vẫn tươi. backdrop-filter <= 12px và chỉ vài phần tử.
+   Bài đo: scripts/cozygame/check-portalui.js (nền không phẳng, thẻ kính/viền, tương phản, Pop không 👑/số phút). */
+
+/* ---------- token: Pop Play dùng cùng nền đêm/oải hương, giữ nhấn cam ---------- */
+:root[data-app=popplay]{--bg:#F3F0FA;--card:#E8E2FA;--hero1:#E2DBF8;--panel:#fff;--line:#CFC6EA;--ink:#241B3A;--ink2:#4B4568;--muted:#5E5780;--accent:#E4501A;--pu-glow:rgba(255,90,31,.30)}
+:root[data-app=popplay][data-theme=dark]{--bg:#12141F;--card:#1B1E2F;--hero1:#1A1640;--panel:#1B1E2F;--line:rgba(167,150,255,.28);--ink:#F1F2FF;--ink2:#C9CCF0;--muted:#A9AEDA;--accent:#FF7A45;--on-accent:#1B1006;--pu-glow:rgba(255,122,69,.40)}
+:root[data-app]{--np-edge:linear-gradient(135deg,#6A48F0,#C2410C);--np-glass:rgba(255,255,255,.66)}
+:root[data-app][data-theme=dark]{--np-edge:linear-gradient(135deg,#9B83FF,#FF9A6B);--np-glass:rgba(27,30,47,.62)}
+
+/* ---------- nền: đêm tím sâu + sao tĩnh + quầng sáng (tối) / oải hương nhạt (sáng) ---------- */
+html[data-app=popplay]{background:radial-gradient(620px 360px at 90% -8%,color-mix(in srgb,#FF8A55 16%,transparent),transparent),radial-gradient(480px 300px at 0% 100%,color-mix(in srgb,#7C5CFF 14%,transparent),transparent),linear-gradient(180deg,#F3F0FA,#E9E3FA);background-color:var(--bg)}
+html[data-app=popplay][data-theme=dark]{background:
+  radial-gradient(1.4px 1.4px at 12% 22%,rgba(255,255,255,.85),transparent),radial-gradient(1.4px 1.4px at 78% 14%,rgba(255,233,168,.85),transparent),
+  radial-gradient(1px 1px at 40% 70%,rgba(255,255,255,.7),transparent),radial-gradient(1.4px 1.4px at 90% 62%,rgba(255,255,255,.8),transparent),
+  radial-gradient(1px 1px at 24% 88%,rgba(255,233,168,.7),transparent),radial-gradient(1px 1px at 60% 36%,rgba(255,255,255,.7),transparent),
+  radial-gradient(1px 1px at 37px 61px,rgba(255,255,255,.5),transparent) 0 0/211px 193px,radial-gradient(1.2px 1.2px at 80px 140px,rgba(255,255,255,.55),transparent) 0 0/283px 229px,
+  radial-gradient(700px 420px at 85% -10%,rgba(255,122,69,.26),transparent),radial-gradient(520px 320px at 0% 100%,rgba(124,92,255,.22),transparent),
+  linear-gradient(180deg,#12141F 0,#1A1640 55%,#12141F 100%);background-color:#12141F}
+html[data-app=popplay] body{background:transparent}
+html[data-app] .hero h1{font-family:var(--font);font-weight:800;letter-spacing:-.01em}
+
+/* ---------- thẻ Hôm nay / Chơi tiếp: kiểu thẻ giá của landing (viền gradient tím–cam mảnh, kính, glow nhẹ) ---------- */
+.pu-card{border-color:transparent;background:var(--np-glass);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.pu-card::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:var(--np-edge);pointer-events:none;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+.pu-card.today{background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 20%,transparent),var(--np-glass) 70%);box-shadow:0 8px 26px var(--pu-glow)}
+@media (hover:hover) and (pointer:fine){.pu-card:hover{border-color:transparent;box-shadow:0 12px 32px var(--pu-glow)}}
