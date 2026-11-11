@@ -1,10 +1,10 @@
 /* Căn lề + kích thước icon dùng chung (trang cổng Cozy/Pop/hub + trang "Chơi cùng lúc").
    - --gutter: lề trái/phải của MỌI thứ ở mép (thanh trên, nút tìm kiếm, nút khoá, lưới game, thanh ‹ +, popup).
-   - --tap: cỡ nút icon (44px). Nút tròn KHÔNG vẽ vòng phát sáng ra NGOÀI khung (box-shadow spread > 0 làm nút trông to hơn 3px mỗi bên,
+   - --tap: cỡ nút icon thường (44px). --tap-lg: cỡ nút icon CHÍNH trên ĐIỆN THOẠI dọc (56px, như nút đèn pin/máy ảnh ở màn khoá iPhone): ←, ⏸, 🔊, ⋯, ✕ popup, nút nổi của cổng (GAME_RULES 0a-14/0a-17). Nút tròn KHÔNG vẽ vòng phát sáng ra NGOÀI khung (box-shadow spread > 0 làm nút trông to hơn 3px mỗi bên,
      lệch mép phải so với nút khác); vòng nhấn dùng inset để cỡ nhìn thấy = cỡ khung.
    - Phần tử position:fixed không nằm trong padding safe-area của body → phải cộng env(safe-area-inset-*) qua --edge-l/--edge-r/--edge-t.
    Bài đo: scripts/cozygame/check-align.js (GAME_RULES.md 0a-12). */
-:root{--gutter:16px;--tap:44px;
+:root{--gutter:16px;--tap:44px;--tap-lg:56px;
   --edge-l:calc(var(--gutter) + env(safe-area-inset-left,0px));
   --edge-r:calc(var(--gutter) + env(safe-area-inset-right,0px));
   --edge-t:env(safe-area-inset-top,0px)}
