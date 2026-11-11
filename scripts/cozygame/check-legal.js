@@ -28,7 +28,7 @@ const REQ = {
   }
 };
 const TITLE = { privacy: { vi: "Chính sách bảo mật thông tin cá nhân", en: "Privacy Policy" }, terms: { vi: "Điều khoản sử dụng và quy chế hoạt động", en: "Terms of Use and Operating Rules" } };
-const VPS = quick ? [[320, 568], [1440, 900]] : [[320, 568], [390, 844], [768, 1024], [1440, 900]];
+const VPS = quick ? [[320, 568], [667, 375], [1440, 900]] : [[320, 568], [390, 844], [768, 1024], [1024, 768], [1440, 900], [667, 375]];
 
 (async () => {
   /* chuỗi cũ không được còn ở bất kỳ file nguồn nào */
@@ -115,8 +115,30 @@ const VPS = quick ? [[320, 568], [1440, 900]] : [[320, 568], [390, 844], [768, 1
           const pv = await p.evaluate(() => document.getElementById("pgBody").dataset.pno);
           note(/^(5|1) \//.test(pv), tag, "nút Trang trước không chuyển: " + pv);
           /* trang cuối: mọi trang đều vừa khung (duyệt toàn bộ) */
-          const bad = await p.evaluate((n) => { const b = document.getElementById("pgBody"), out = []; for (let i = 0; i < n; i++) { show(i); if (b.scrollHeight - b.clientHeight > 1) out.push((i + 1) + ":" + (b.scrollHeight - b.clientHeight)); } return out; }, total);
-          note(!bad.length, tag, "trang bị cắt chữ (trang:px) " + bad.join(", "));
+        }
+        {
+          /* MỌI trang: không cắt chữ; nút điều khiển (☰, ‹, ›) không giao với chữ; mục đánh số 1..N đúng một lần, đúng thứ tự */
+          const r = await p.evaluate((n) => {
+            const b = document.getElementById("pgBody"), out = { cut: [], hit: [], nums: [] };
+            const btns = ["pgMenu", "pgPrev", "pgNext"].map(id => document.getElementById(id));
+            for (let i = 0; i < n; i++) {
+              show(i);
+              if (b.scrollHeight - b.clientHeight > 1) out.cut.push((i + 1) + ":" + (b.scrollHeight - b.clientHeight));
+              const rects = []; const tw = document.createTreeWalker(b, NodeFilter.SHOW_TEXT);
+              for (let t = tw.nextNode(); t; t = tw.nextNode()) { if (!t.nodeValue.trim()) continue; const rg = document.createRange(); rg.selectNodeContents(t); for (const q of rg.getClientRects()) if (q.width > 1 && q.height > 1) rects.push(q); }
+              for (const e of btns) {
+                if (!e || getComputedStyle(e).display === "none") continue; const q = e.getBoundingClientRect();
+                if (q.width < 43.5 || q.height < 43.5) out.hit.push("trang " + (i + 1) + " " + e.id + " nhỏ " + q.width + "x" + q.height);
+                for (const t of rects) if (q.left < t.right - 1 && q.right > t.left + 1 && q.top < t.bottom - 1 && q.bottom > t.top + 1) { out.hit.push("trang " + (i + 1) + " " + e.id + " đè chữ"); break; }
+              }
+              b.querySelectorAll("h2").forEach(h => { const m = /^(\d+)\./.exec(h.textContent.trim()); if (m) out.nums.push(+m[1]); });
+            }
+            return out;
+          }, total);
+          note(!r.cut.length, tag, "trang bị cắt chữ (trang:px) " + r.cut.join(", "));
+          note(!r.hit.length, tag, "nút điều khiển: " + r.hit.slice(0, 4).join("; "));
+          note(r.nums.length >= 10 && r.nums.every((v, k) => v === k + 1), tag, "mục đánh số không đúng 1..N một lần theo thứ tự: " + r.nums.join(","));
+          await p.evaluate(() => show(0));
         }
         if (shotDir) { fs.mkdirSync(shotDir, { recursive: true }); await p.screenshot({ path: path.join(shotDir, `${kind}-${lang}-${theme}-${w}x${h}.png`) }); }
         note(!e2.length, tag, "lỗi JS: " + e2.join(" | "));

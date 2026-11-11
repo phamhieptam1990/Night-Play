@@ -54,7 +54,13 @@ const tableUnits = n => { const t = n.tagName === "TABLE" ? n : n.querySelector(
   const head = t.tHead ? t.tHead.cloneNode(true) : null, rows = [...t.querySelectorAll("tbody tr")]; if (rows.length < 2) return null;
   return rows.map(r => { const tb = t.cloneNode(false), bd = document.createElement("tbody"); bd.appendChild(r.cloneNode(true)); if (head) tb.appendChild(head.cloneNode(true)); tb.appendChild(bd);
     if (n.tagName === "TABLE") return tb; const w = n.cloneNode(false); w.appendChild(tb); return w; }); };
-const units = n => tableUnits(n) || (n.tagName === "SECTION" ? [...n.children].flatMap(units) : n.tagName === "UL" ? [...n.children].map(li => { const u = n.cloneNode(false); u.appendChild(li.cloneNode(true)); return u; }) : [n]);
+/* đoạn văn quá dài: tách theo câu (sau dấu chấm + khoảng trắng, trước chữ hoa/thẻ) để mỗi trang chứa vừa */
+const pUnits = n => { const parts = n.innerHTML.split(/(?<=[.;])\s+(?=[A-ZĐÀ-Ỹ(“<])/); if (parts.length < 2) return [n];
+  const out = []; let cur = "", len = 0;
+  parts.forEach(t => { cur += (cur ? " " : "") + t; len += t.length; if (len >= 120) { out.push(cur); cur = ""; len = 0; } });
+  if (cur) { if (out.length && cur.length < 60) out[out.length - 1] += " " + cur; else out.push(cur); }
+  return out.map(h => { const u = n.cloneNode(false); u.innerHTML = h; return u; }); };
+const units = n => tableUnits(n) || (n.tagName === "SECTION" ? [...n.children].flatMap(units) : n.tagName === "UL" ? [...n.children].map(li => { const u = n.cloneNode(false); u.appendChild(li.cloneNode(true)); return u; }) : n.tagName === "P" ? pUnits(n) : [n]);
 function fits(nodes, list) {
   body.replaceChildren(...nodes.map(n => n.cloneNode(true)));
   for (const fs of list) { body.style.fontSize = fs + "px"; if (body.scrollHeight <= body.clientHeight + 1) return fs; }
