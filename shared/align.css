@@ -16,14 +16,14 @@ button.ico,.bars-more,#lock,#findFab,.rb{padding:0;line-height:0}
 [data-theme=dark] .ico svg.sun{display:block}
 [data-theme=dark] .ico svg.moon{display:none}
 
-/* NÚT ICON KÍNH TỐI Night Pass cho trang cổng / hub /play/ / Chơi cùng lúc, MỌI cỡ, sáng + tối (GAME_RULES 0a-18; game: shared/glass.css). Không đổi cỡ/căn lề; icon trắng (cả thẻ <a> không còn xanh liên kết). */
+/* CHỈ nút icon tròn/vuông; MỤC MENU ⋯ (.bars-pop *) bị loại bằng :not(.bars-pop *) — kiểu mục menu nằm ở bars.css (GAME_RULES 0a-18). NÚT ICON KÍNH TỐI Night Pass cho trang cổng / hub /play/ / Chơi cùng lúc, MỌI cỡ, sáng + tối (GAME_RULES 0a-18; game: shared/glass.css). Không đổi cỡ/căn lề; icon trắng (cả thẻ <a> không còn xanh liên kết). */
 :root{--gl-bg:rgba(22,17,48,.72);--gl-bd:rgba(255,255,255,.2);--gl-glow:rgba(124,92,255,.3);--gl-main:linear-gradient(135deg,#6C4BF2,#C2410C)}
-:is(.ico,a.ico,button.ico,#findFab,#lock,.rb,.np-btn,#nsPill,#passBtn):not(.pri):not(.on){
+:is(.ico,a.ico,button.ico,#findFab,#lock,.rb,.np-btn,#nsPill,#passBtn):not(.pri):not(.on):not(.bars-pop *){
   background:var(--gl-bg)!important;background-image:none!important;color:#fff!important;border:1px solid var(--gl-bd)!important;
   box-shadow:0 4px 14px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 14px var(--gl-glow)!important;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);text-shadow:none}
-:is(.ico,a.ico,button.ico,#findFab,#lock,.rb,.np-btn) svg{color:#fff}
-.np-btn svg{color:#fff!important}
-:is(.np-btn.pri,#findFab.on,#nsPill,#passBtn){background:var(--gl-main)!important;background-image:var(--gl-main)!important;color:#fff!important;border:1px solid rgba(255,255,255,.4)!important;box-shadow:0 5px 16px rgba(108,75,242,.5),0 2px 6px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.3)!important}
+:is(.ico,a.ico,button.ico,#findFab,#lock,.rb,.np-btn):not(.bars-pop *) svg{color:#fff}
+.np-btn:not(.bars-pop *) svg{color:#fff!important}
+:is(.np-btn.pri,#findFab.on,#nsPill,#passBtn):not(.bars-pop *){background:var(--gl-main)!important;background-image:var(--gl-main)!important;color:#fff!important;border:1px solid rgba(255,255,255,.4)!important;box-shadow:0 5px 16px rgba(108,75,242,.5),0 2px 6px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.3)!important}
 .np-btn.pri svg{color:#fff!important}
-.np-btn:hover,.np-btn:focus-visible,.ico:hover{filter:brightness(1.15)}
+.np-btn:hover,.np-btn:focus-visible,.ico:not(.bars-pop *):hover{filter:brightness(1.15)}
 .ico:active,.rb:active,.np-btn:active{transform:scale(.94)}
