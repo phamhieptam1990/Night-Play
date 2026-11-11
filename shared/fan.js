@@ -71,15 +71,20 @@
     "}" +
     /* ĐIỆN THOẠI DỌC: MỌI nút hàng trên cùng (← | tên | ⏸ | 🔊 | ⋯) cùng cỡ 44px, cùng tâm dọc y = 16 + 22 (= toạ độ chuẩn của ← trong backpos.css, GAME_RULES 0a-14), lề trái ← = lề phải ⋯ = 16px (+ safe-area), khoảng cách đều 8px; hàng cao 60px nên tên game / HUD bên dưới cách >= 8px */
     "@media " + PHONE + "{" +
-    "#npFab{position:absolute;box-sizing:border-box;right:calc(16px + env(safe-area-inset-right,0px));top:calc(16px + env(safe-area-inset-top,0px));width:44px;height:44px;margin:0}" +
-    "#npFan .pn{right:calc(16px + env(safe-area-inset-right,0px));top:calc(64px + env(safe-area-inset-top,0px))}" +
-    "#play.npfan .top{left:calc(16px + env(safe-area-inset-left,0px));right:calc(68px + env(safe-area-inset-right,0px));top:calc(16px + env(safe-area-inset-top,0px));height:44px;padding:0;gap:8px}" +
-    "#play.npfan .scr{top:max(14cqw,calc(68px + env(safe-area-inset-top,0px)))}" +   /* nội dung (tên game, HUD) bắt đầu >= 8px dưới hàng nút (60px) */
-    ".top.npfan{padding:calc(16px + env(safe-area-inset-top,0px)) calc(68px + env(safe-area-inset-right,0px)) 0 calc(16px + env(safe-area-inset-left,0px));min-height:calc(60px + env(safe-area-inset-top,0px));gap:8px}" +
+    "#npFab{position:absolute;box-sizing:border-box;right:calc(16px + env(safe-area-inset-right,0px));top:calc(16px + env(safe-area-inset-top,0px));width:var(--tap-lg,56px);height:var(--tap-lg,56px);margin:0}#npFab svg{width:28px;height:28px}" +
+    "#npFan .pn{right:calc(16px + env(safe-area-inset-right,0px));top:calc(80px + env(safe-area-inset-top,0px))}" +
+    "#play.npfan .top{left:calc(16px + env(safe-area-inset-left,0px));right:calc(80px + env(safe-area-inset-right,0px));top:calc(16px + env(safe-area-inset-top,0px));height:var(--tap-lg,56px);padding:0;gap:8px}" +
+    "#play.npfan .top .ib,#play.npfan .top button:not(.chip),#play.npfan #bBk,#play.npfan #bSnd,#play.npfan #soundBtn{width:var(--tap-lg,56px)!important;height:var(--tap-lg,56px)!important;min-width:var(--tap-lg,56px)!important;min-height:var(--tap-lg,56px)!important}" +
+    "#play.npfan #bSnd svg,#play.npfan #soundBtn svg{width:28px;height:28px}" +
+    "#play.npfan .scr{top:max(14cqw,calc(84px + env(safe-area-inset-top,0px)))}" +   /* nội dung (tên game, HUD) bắt đầu >= 12px dưới hàng nút (72px) */
+    ".top.npfan{padding:calc(16px + env(safe-area-inset-top,0px)) calc(80px + env(safe-area-inset-right,0px)) 0 calc(16px + env(safe-area-inset-left,0px));min-height:calc(72px + env(safe-area-inset-top,0px));gap:8px}" +
+    ".top.npfan #bBk,.top.npfan #bSnd,.top.npfan #soundBtn{width:var(--tap-lg,56px)!important;height:var(--tap-lg,56px)!important;min-width:var(--tap-lg,56px)!important;min-height:var(--tap-lg,56px)!important}" +
     ".top.npfan #npFab{right:calc(16px + env(safe-area-inset-right,0px));top:calc(16px + env(safe-area-inset-top,0px));margin-top:0}" +
     ".top.npfan #npFan{display:contents}" +   /* ra khỏi luồng flex (không chiếm thêm khoảng cách 8px giữa 🔊 và ⋯) */
     ".top.npfan #npFan .pn{right:calc(16px + env(safe-area-inset-right,0px));top:calc(100% + 4px)}" +
-    "body.np-local{padding-top:calc(68px + env(safe-area-inset-top,0px))}" +
+    "body.np-local{padding-top:calc(84px + env(safe-area-inset-top,0px))}" +
+    "#npFan .pn{grid-template-columns:repeat(3,76px);background:rgba(22,17,48,.9)!important;color:#fff!important;border:1px solid rgba(255,255,255,.22)!important;box-shadow:0 14px 36px rgba(0,0,0,.5),inset 0 0 18px rgba(124,92,255,.18)!important;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);padding:10px;border-radius:24px}" +
+    "#npFan .it{width:76px!important;height:72px!important;gap:4px!important;border-radius:18px!important;color:#fff!important;background:rgba(255,255,255,.1)!important;border:1px solid rgba(255,255,255,.16)!important}#npFan .it svg{width:26px!important;height:26px!important}#npFan .it::after{max-width:72px;font-size:11px;opacity:.92}#npFan .it>span:first-child{font-size:24px}" +
     "}" +
     "@media " + TAB + "{" +
     "#play.npfan .top,.top.npfan{padding-right:80px}" +
@@ -124,7 +129,7 @@
   }
   function labels() {
     if (!fab) return; var t = vi() ? (open ? "Đóng menu" : "Mở menu") : (open ? "Close menu" : "Open menu"); if (fab.getAttribute("aria-label") !== t) fab.setAttribute("aria-label", t); if (fab.title !== t) fab.title = t;
-    home.forEach(function (h) { var dl = roleOf(h.role)[2][vi() ? 0 : 1]; if (h.el.getAttribute("data-l") !== dl) h.el.setAttribute("data-l", dl); });
+    home.forEach(function (h) { var rr = roleOf(h.role), dl = rr ? rr[2][vi() ? 0 : 1] : (h.el.getAttribute("aria-label") || h.el.title || (h.el.textContent || "").replace(/\s+/g, " ").trim().slice(0, 12)); if (h.el.getAttribute("data-l") !== dl) h.el.setAttribute("data-l", dl); });
   }
   /* màu THẬT của game: chữ/biểu tượng, nền, viền, màu nhấn (đọc lại mỗi lần mở, nên theo cả giao diện Night Pass và sáng/tối giữa chừng) */
   var probe;
@@ -181,6 +186,13 @@
       home.push({ el: e, role: role, parent: e.parentNode, next: e.nextSibling });
       e.classList.add("it"); panel.appendChild(e);
     });
+    /* nút lạ (không thuộc vai trò nào, vd ⚙ cài đặt của Đập Deadline) nằm trong hàng nút: hàng chỉ đủ chỗ cho ← ⏸ 🔊 ⋯ (4 nút --tap-lg ở 320px) nên gom vào menu */
+    var KEEP = { bBk: 1, bBack: 1, bSnd: 1, soundBtn: 1, pauseBtn: 1, npFab: 1, homeBtn: 1 };
+    [].slice.call(top.children).forEach(function (e) {
+      if (e.tagName !== "BUTTON" || KEEP[e.id] || e.classList.contains("it") || e.parentNode !== top) return;
+      home.push({ el: e, role: "x:" + (e.id || home.length), parent: e.parentNode, next: e.nextSibling });
+      e.classList.add("it"); panel.appendChild(e);
+    });
     labels(); themeSync();
   }
   /* màn rộng/ngang: trả nút về thanh trên theo thứ tự cũ (nút ngoài thanh trên về đúng chỗ gốc) */
@@ -189,6 +201,7 @@
     setOpen(false); play.classList.remove("npfan"); document.body.classList.remove("np-local");
     var keep = [];
     ROLES.forEach(function (r) { home.forEach(function (h) { if (h.role === r[0]) keep.push(h); }); });
+    home.forEach(function (h) { if (!roleOf(h.role)) keep.push(h); });
     keep.forEach(function (h) {
       h.el.classList.remove("it"); h.el.removeAttribute("data-l");
       if (h.parent === top) top.appendChild(h.el);

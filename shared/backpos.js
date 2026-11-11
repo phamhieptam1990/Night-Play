@@ -23,6 +23,8 @@
     });
   }
   var raf = 0; function queue() { cancelAnimationFrame(raf); raf = requestAnimationFrame(place); }
+  /* nút kính tối cho điện thoại dọc (shared/glass.css, GAME_RULES 0a-17): nạp cạnh file này */
+  try { var cs0 = document.currentScript, s0 = cs0 && cs0.src; if (s0 && !document.getElementById("npGlassCss")) { var gl = document.createElement("link"); gl.id = "npGlassCss"; gl.rel = "stylesheet"; gl.href = s0.replace(/backpos\.js(\?.*)?$/, "glass.css$1"); document.head.appendChild(gl); } } catch (e) {}
   window.NPBack = { place: place };
   addEventListener("resize", queue); addEventListener("orientationchange", function () { setTimeout(queue, 250); });
   document.addEventListener("click", function () { setTimeout(queue, 60); setTimeout(queue, 400); }, true);

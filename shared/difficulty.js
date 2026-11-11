@@ -90,9 +90,9 @@
   function place(b) {
     var w = b.offsetWidth, h = b.offsetHeight, vw = innerWidth, vh = innerHeight, m = 6, best = null, bs = 99;
     var ys = [m, 56, vh - h - m, vh - h - 56, Math.round(vh / 2)], xs = [Math.round((vw - w) / 2), 64, vw - w - 64, m, vw - w - m];
-    /* ĐIỆN THOẠI DỌC: hàng nút trên cùng có tâm dọc y = 38 (shared/backpos.css) → huy hiệu nằm CÙNG TÂM hàng đó (không lệch ~12px so với ←, 🔊, ⋯), cách nút hai bên >= 8px; không còn chỗ thì xuống dưới hàng nút (68) */
+    /* ĐIỆN THOẠI DỌC: hàng nút trên cùng (nút --tap-lg 56px) có tâm dọc y = 44 (shared/backpos.css) → huy hiệu nằm CÙNG TÂM hàng đó (không lệch ~12px so với ←, 🔊, ⋯), cách nút hai bên >= 8px; không còn chỗ thì xuống dưới hàng nút (80) */
     var rowMode = matchMedia("(max-width:520px) and (orientation:portrait)").matches;
-    if (rowMode) { var pe = document.createElement("div"); pe.style.cssText = "position:fixed;top:0;left:0;width:0;height:0;visibility:hidden;padding-top:env(safe-area-inset-top,0px)"; D.appendChild(pe); var sa = parseFloat(getComputedStyle(pe).paddingTop) || 0; pe.remove(); ys = [Math.round(38 + sa - h / 2), 68 + sa, vh - h - m, vh - h - 56, Math.round(vh / 2)]; xs = [Math.round((vw - w) / 2), 68, vw - w - 68, m, vw - w - m]; }
+    if (rowMode) { var pe = document.createElement("div"); pe.style.cssText = "position:fixed;top:0;left:0;width:0;height:0;visibility:hidden;padding-top:env(safe-area-inset-top,0px)"; D.appendChild(pe); var sa = parseFloat(getComputedStyle(pe).paddingTop) || 0; pe.remove(); ys = [Math.round(44 + sa - h / 2), 80 + sa, vh - h - m, vh - h - 56, Math.round(vh / 2)]; xs = [Math.round((vw - w) / 2), 80, vw - w - 80, m, vw - w - m]; }
     var pl = document.querySelector("#play,.play"), pr = pl && pl.getBoundingClientRect();
     /* lượt 1: chỉ chỗ NGOÀI khung chơi (không che màn chơi); lượt 2: bất kỳ chỗ trống (khung chiếm cả màn hình, vd Gà Mẹ) */
     for (var pass = 0; pass < 2 && bs; pass++) for (var yi = 0; yi < ys.length && bs; yi++) for (var xi = 0; xi < xs.length && bs; xi++) {

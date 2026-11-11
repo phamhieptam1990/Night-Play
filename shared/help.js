@@ -13,6 +13,7 @@
     "#hlpCard h3{margin:0 56px 2.2cqw 0;min-height:44px;display:flex;align-items:center;font:800 4.4cqw var(--font);color:var(--accent,#ffb020)}" +
     "#hlpCard p{margin:0 0 2cqw;font:600 3.8cqw/1.45 var(--font);color:var(--ink,#fff)}#hlpCard p:last-of-type{margin:0}" +
     "#hlpX{position:absolute;right:12px;top:12px;width:44px;height:44px;min-width:44px;min-height:44px;box-sizing:border-box;display:grid;place-items:center;padding:0;line-height:1;border-radius:50%;border:1.5px solid color-mix(in srgb,var(--ink,#fff) 38%,transparent);background:var(--field,transparent);color:var(--ink,#fff);font:800 18px var(--font);cursor:pointer}" +
+    "@media (max-width:520px) and (orientation:portrait){#hlpCard h3{margin-right:68px;min-height:56px}#hlpCard{padding-top:12px}#hlpX{right:12px;top:12px;width:var(--tap-lg,56px);height:var(--tap-lg,56px)}}" +
     "@media (prefers-reduced-motion:reduce){#hlpCard{animation:none}}";
   document.head.appendChild(css);
   function texts() {

@@ -1,0 +1,25 @@
+/* NÚT ICON KIỂU KÍNH TỐI (Night Pass) cho ĐIỆN THOẠI DỌC (<=520px) — GAME_RULES.md 0a-17. Nạp bởi shared/backpos.js (cùng bridge.js) nên có ở MỌI game (Cozy sinh tự động, viết tay, Pop).
+   Không còn nền TRẮNG + icon ĐEN: vòng tròn kính tối bán trong suốt (rgba(22,17,48,.72) + blur 10px + viền sáng mảnh + bóng + quầng tím trong), icon TRẮNG, ở CẢ giao diện sáng lẫn tối.
+   Nút chính (⋯ mở menu) = gradient tím-cam, icon trắng. Cỡ nút = --tap-lg (56px), icon 26-28px. :active co 0.94. Chỉ ~4 phần tử dùng backdrop-filter (nhẹ).
+   Pop Play (trẻ em): cùng kiểu nhưng viền dày hơn + quầng màu nhấn của game (--accent) thay tím. Bài đo: scripts/cozygame/check-glass.js. */
+:root{--tap-lg:56px;--gl-bg:rgba(22,17,48,.72);--gl-bd:rgba(255,255,255,.2);--gl-ink:#fff;--gl-glow:rgba(124,92,255,.3);--gl-main:linear-gradient(135deg,#6C4BF2,#C2410C)}
+@media (max-width:520px) and (orientation:portrait){
+  .top button:not(.it):not(.chip):not(.pill),#bBk,#bBack,#homeBtn,#npPmBk,#npFab,#npPmFab,#bSnd,#soundBtn,#hlpX{
+    box-sizing:border-box!important;width:var(--tap-lg)!important;height:var(--tap-lg)!important;min-width:var(--tap-lg)!important;min-height:var(--tap-lg)!important;padding:0!important;border-radius:50%!important;
+    background:var(--gl-bg)!important;background-image:none!important;color:var(--gl-ink)!important;border:1px solid var(--gl-bd)!important;
+    box-shadow:0 4px 14px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 14px var(--gl-glow)!important;
+    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+    display:grid!important;place-items:center;font-size:26px!important;line-height:1!important;font-weight:800;text-shadow:none!important;filter:none!important;transform:none;transition:transform .12s}
+  .top button:not(.it):not(.chip):not(.pill):active,#bBk:active,#bBack:active,#homeBtn:active,#npPmBk:active,#npFab:active,#npPmFab:active,#hlpX:active{transform:scale(.94)!important}
+  .top button svg,#bBk svg,#bBack svg,#npPmBk svg,#hlpX svg{width:28px!important;height:28px!important;stroke-width:2.4;color:var(--gl-ink)!important;filter:none!important}
+  /* nút chính nổi: gradient tím-cam */
+  #npFab,#npPmFab{background:var(--gl-main)!important;border-color:rgba(255,255,255,.4)!important;box-shadow:0 5px 16px rgba(108,75,242,.5),0 2px 6px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.3)!important}
+  #npFab svg,#npPmFab svg{width:28px!important;height:28px!important}
+  /* âm thanh tắt: icon mờ 60% */
+  #bSnd.off,#soundBtn.off,#bSnd[aria-pressed=false],#soundBtn[aria-pressed=false],#soundBtn[aria-label$="(off)"]{opacity:.6}
+  /* ✕ đóng popup ? : kính tối, trong thẻ */
+  #hlpX{font-size:22px!important;right:12px;top:12px}
+  /* Pop Play: tròn trịa, tươi hơn - viền dày, quầng theo màu nhấn của game */
+  html.np-pm{--gl-glow:color-mix(in srgb,var(--accent,#7C5CFF) 45%,transparent);--gl-bd:rgba(255,255,255,.34)}
+  html.np-pm .top button:not(.it),html.np-pm #npPmBk,html.np-pm #soundBtn{border-width:2px!important}
+}
