@@ -39,7 +39,9 @@ async function shellCheck() {
 }
 
 async function runOffline(br, srv) {
-  const p0 = await br.newPage(); await p0.goto(B + "/cozyplay/index.html"); await p0.evaluate(() => navigator.serviceWorker.ready.then(() => 1)); await sleep(5000);
+  const p0 = await br.newPage(); await p0.goto(B + "/cozyplay/index.html"); await p0.evaluate(() => navigator.serviceWorker.ready.then(() => 1));
+  /* sw.js v24 cài nhẹ, phần còn lại tải nền sau load+3s: đợi tới khi cache đủ (tối đa 30s) */
+  for (let i = 0; i < 60; i++) { await sleep(500); const n = await p0.evaluate(async () => { let n = 0; for (const k of await caches.keys()) n += (await (await caches.open(k)).keys()).length; return n; }); if (n >= 155) break; }
   const nk = await p0.evaluate(async () => { const ks = await caches.keys(); let n = 0; for (const k of ks) n += (await (await caches.open(k)).keys()).length; return n; });
   if (nk < 60) bad("sw.js", "service worker chỉ cache " + nk + " tệp");
   srv.kill(); await sleep(800);     /* máy chủ tắt hẳn = mất mạng thật (setOfflineMode không áp dụng cho service worker) */
