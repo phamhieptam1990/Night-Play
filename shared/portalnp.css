@@ -45,3 +45,11 @@ html[data-theme=dark] .tile:focus-visible{outline-color:#fff}
 .pu-chip{border-color:color-mix(in srgb,var(--accent) 34%,var(--line));font-weight:700}
 .pu-chip[aria-pressed=true]{background:var(--np-edge);color:#fff;box-shadow:0 4px 18px var(--pu-glow),inset 0 0 0 1px rgba(255,255,255,.35)}
 :root[data-theme=dark] .pu-chip[aria-pressed=true]{color:#12141F}
+
+/* ---------- chân trang kính tối + nút chính ---------- */
+.foot{-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--hero1) 78%,transparent));border-top:1px solid transparent;border-image:linear-gradient(90deg,transparent,color-mix(in srgb,var(--accent) 45%,transparent),transparent) 1}
+#lock{background:color-mix(in srgb,var(--accent) 16%,var(--np-glass))}
+/* nút chính "Night Pass" (thanh trên, màn >520px): gradient tím–cam, cao >= 48px; điện thoại giữ nút tròn --tap */
+@media (min-width:521px){.nav .pill{min-height:48px}}
+html[data-app=popplay] .nav .pill{background-image:linear-gradient(90deg,#E4501A,#FF8A55);color:#1B1006}
+html[data-app=popplay][data-theme=dark] .nav .pill{background-image:linear-gradient(90deg,#FF7A45,#FFA874)}
