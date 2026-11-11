@@ -176,6 +176,16 @@ dialog{border:0;border-radius:24px;padding:0;background:var(--panel);color:var(-
 dialog::backdrop{background:rgba(0,0,0,.6)}
 .dlg{padding:22px;text-align:center}
 .dlg h3{margin:0 0 8px;font-size:20px}
+/* Hộp Khôi phục gói: biểu tượng + tiêu đề + mô tả + ô nhập có nhãn + dòng lỗi giữ chỗ + hai nút cùng cỡ */
+.dlg .ic{width:56px;height:56px;margin:0 auto 12px;border-radius:50%;display:grid;place-items:center;font-size:26px;background:color-mix(in srgb,var(--accent) 16%,var(--panel));box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--accent) 35%,transparent)}
+.dlg h3{margin-bottom:6px}
+.dlg .sub{margin:0 0 16px;font-size:14px;line-height:1.45;opacity:.75}
+.dlg .fld{display:block;text-align:left;margin:0 0 6px;font-size:13px;font-weight:700;opacity:.8}
+.dlg input{display:block;margin:0;text-align:left}
+.dlg input.otp{text-align:center;font-size:26px;font-weight:800;letter-spacing:.5em;padding:12px 12px 12px calc(12px + .5em);font-variant-numeric:tabular-nums}
+.dlg .err{min-height:20px;margin:8px 0 0;font-size:13px;font-weight:600;text-align:left;color:#d6336c}
+.dlg .row{margin-top:10px}
+.dlg .row button{min-height:48px}
 .qr{width:200px;height:200px;margin:12px auto;border-radius:16px;background:repeating-conic-gradient(var(--ink) 0 25%,var(--panel) 0 50%) 0 0/24px 24px;opacity:.15;border:6px solid var(--panel)}
 .kv{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px}.kv span{opacity:.7;flex:0 0 auto}.kv b{margin-left:auto;text-align:right;word-break:break-all}.cp{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:8px;padding:3px 8px;font:inherit;font-size:12px;cursor:pointer}.mut{opacity:.7;font-size:13px;margin:4px 0}
 .demo{margin:8px 0;padding:10px;border-radius:12px;background:#FFD93D;color:#3a2e00;font-size:13px;font-weight:700}
@@ -560,7 +570,8 @@ $("email").addEventListener("input", () => { $("email").removeAttribute("aria-in
 
 function restoreStep1(){
   if(!PAY_API){ openDlg(`<h3>${T("rTitle")}</h3><p>${T("rNone")}</p><div class="row"><button class="p" id="x">${T("close")}</button></div>`); $("x").onclick = closeDlg; return; }
-  openDlg(`<h3>${T("rTitle")}</h3><label class="mut" for="rE">${T("rEmail")}</label><input id="rE" type="email" autocomplete="email" inputmode="email" value="${esc($("email").value.trim())}">
+  openDlg(`<div class="ic" aria-hidden="true">🔑</div><h3>${T("rTitle")}</h3><p class="sub">${T("rEmail")}</p>
+    <label class="fld" for="rE">Email</label><input id="rE" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" value="${esc($("email").value.trim())}">
     <p class="err" id="rErr" role="alert"></p><div class="row"><button class="s" id="x">${T("cancel")}</button><button class="p" id="go">${T("rSend")}</button></div>`);
   $("x").onclick = closeDlg;
   $("go").onclick = async () => {
@@ -572,8 +583,8 @@ function restoreStep1(){
   };
 }
 function restoreStep2(email){
-  openDlg(`<h3>${T("rTitle")}</h3><p class="mut">${T("rSent")}</p><label class="mut" for="rO">${T("rCode")}</label>
-    <input id="rO" inputmode="numeric" maxlength="6" autocomplete="one-time-code"><p class="err" id="rErr" role="alert"></p>
+  openDlg(`<div class="ic" aria-hidden="true">✉️</div><h3>${T("rTitle")}</h3><p class="sub">${T("rSent")}</p>
+    <label class="fld" for="rO">${T("rCode")}</label><input id="rO" class="otp" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="••••••"><p class="err" id="rErr" role="alert"></p>
     <div class="row"><button class="s" id="x">${T("cancel")}</button><button class="p" id="go">${T("rOk")}</button></div>`);
   $("x").onclick = closeDlg;
   $("go").onclick = async () => {
