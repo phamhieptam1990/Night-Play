@@ -30,8 +30,8 @@ Quy ước: câu ngắn, từ dễ hiểu, VI + EN luôn đi đôi. Sửa chữ 
 - **Xem thêm game:** vuốt ngang (hoặc chạm hai chấm/mũi tên ‹ › bên dưới lưới). / *Swipe sideways (or tap the dots / ‹ › arrows under the grid).*
 - **Tìm game:** chạm nút 🔍 ở góc, gõ tên hoặc chọn nhóm game. / *Tap 🔍 in the corner, type a name or pick a category.*
 - **Menu ⋯ (điện thoại):** gom nút Chơi cùng lúc, bảng xếp hạng, về trang chủ, đổi giao diện sáng/tối, đổi ngôn ngữ. Trên máy tính các nút này nằm sẵn ở thanh trên. / *Menu ⋯ (phone): play together, leaderboard, home, light/dark, language. On desktop these sit in the top bar.*
-- **Chơi cùng lúc:** nút hai ô cạnh nhau trên thanh trên; chọn 2–4 game để chơi song song trên cùng một màn hình. / *Play together: the two-panel button in the top bar; pick 2–4 games to play side by side.*
-- **Night Pass:** nút vương miện. Mở thêm chế độ, giao diện, cấp độ đặc biệt và chơi không giới hạn thời gian. Không tự gia hạn. / *Night Pass: the crown button. Unlocks extra modes, skins, levels and unlimited play time. No auto-renewal.*
+- **Chơi cùng lúc:** nút hai ô cạnh nhau trên thanh trên; chọn game để chơi song song trên cùng một màn hình (2 game trên điện thoại, tới 4–6 trên máy tính bảng/máy tính). / *Play together: the two-panel button in the top bar; pick games to play side by side (2 on a phone, up to 4–6 on a tablet or computer).*
+- **Night Pass:** nút vương miện. Mở thêm chế độ, độ khó và giao diện đặc biệt của từng game (mọi game vẫn chơi được miễn phí ở chế độ cơ bản). Không tự gia hạn. / *Night Pass: the crown button. Unlocks extra modes, difficulties and special looks in each game (every game stays free to play in its basic mode). No auto-renewal.*
 - **Khoá phụ huynh (Pop Play):** nút ổ khoá 🔒 ở góc dưới. Phải trả lời câu hỏi dành cho người lớn mới vào được. Bố mẹ đặt thời gian chơi mỗi ngày, chọn game được phép, khoá màn hình khi bé đang chơi. / *Parental lock (Pop Play): the 🔒 button at the bottom. An adult question must be answered to enter. Parents set daily play time, choose allowed games and lock the screen while the child plays.*
 
 ### B. Trong một game
