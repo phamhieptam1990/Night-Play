@@ -409,3 +409,12 @@ window.NP = (function () {
     var j = document.createElement("script"); j.src = src.replace(/bridge\.js(\?.*)?$/, "widebg.js$1"); j.async = false; document.head.appendChild(j);
   } catch (e) {}
 })();
+
+/* nút ← luôn ở góc trên-trái, cùng toạ độ ở mọi game: nạp shared/backpos.css + backpos.js cạnh file này (GAME_RULES 0a-14) */
+(function () {
+  try {
+    var cs = document.currentScript, src = cs && cs.src; if (!src || window.NPBack || document.getElementById("npBackCss")) return;
+    var l = document.createElement("link"); l.id = "npBackCss"; l.rel = "stylesheet"; l.href = src.replace(/bridge\.js(\?.*)?$/, "backpos.css$1"); document.head.appendChild(l);
+    var j = document.createElement("script"); j.src = src.replace(/bridge\.js(\?.*)?$/, "backpos.js$1"); j.async = false; document.head.appendChild(j);
+  } catch (e) {}
+})();

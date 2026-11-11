@@ -18,6 +18,7 @@
     play: '<path d="M8 5.5v13l11-6.5z" fill="currentColor"/>',
     users: '<circle cx="9" cy="8.5" r="3.2"/><path d="M3 19c.4-3.4 3-5 6-5s5.6 1.6 6 5"/><circle cx="17.5" cy="9.5" r="2.5"/><path d="M17 14c2.4 0 4 1.3 4.3 4"/>',
     side: '<rect x="3.5" y="4.5" width="17" height="15" rx="3"/><path d="M9 4.5v15"/>',
+    home: '<path d="M3 11.5L12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5v-5h4v5"/>',
     cal: '<rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/>'
   };
   function ico(n) { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + SVG[n] + "</svg>"; }
@@ -127,7 +128,7 @@
     });
     L.appendChild(acts);
     /* Liên kết nhỏ về landing giới thiệu (?landing=1 để app PWA không bị chuyển lại về /play/); ẩn nếu cột không đủ chỗ */
-    var ab = el("a", "np-about", t.about); ab.id = "npAbout"; ab.href = (lg() === "en" ? "/en/" : "/") + "?landing=1"; L.appendChild(ab);
+    var ab = html("a", "np-about", ico("home")); ab.appendChild(el("span", "", t.about)); ab.id = "npAbout"; ab.href = (lg() === "en" ? "/en/" : "/") + "?landing=1"; L.appendChild(ab);
   }
 
   function suggestions(g, n) {
@@ -178,6 +179,7 @@
       /* trái: top 5 → 3 dòng → 1 dòng → bỏ top (giữ thẻ game + 2 nút) */
       [3, 1, 0].forEach(function (n) { if (over(L) && top && !top.hidden) { rows.forEach(function (c, i) { c.hidden = i >= n; }); if (!n) top.hidden = true; } });
       if (over(L) && cl) cl.hidden = true;
+      var ab = document.getElementById("npAbout"); if (ab) ab.hidden = false; if (over(L) && ab) ab.hidden = true;
       if (ab && ab.hidden) { ab.hidden = false; if (over(L)) ab.hidden = true; }
     });
   }

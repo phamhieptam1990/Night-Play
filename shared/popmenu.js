@@ -39,11 +39,11 @@
   var st = document.createElement("style");
   st.textContent =
     "#npPmBk,#npPmFab,#npPmFan{display:none}" +
-    "html.np-pm body{padding-top:calc(60px + env(safe-area-inset-top,0px))!important;box-sizing:border-box}html.np-pm .top h1{max-width:100%}html.np-pm #npPmBk{display:grid;position:fixed;z-index:45;left:12px;top:calc(env(safe-area-inset-top,0px) + 8px)}html.np-pm.np-hidebk #npPmBk{display:none}html.np-locked #npPmBk{display:none!important}" +
+    "html.np-pm body{padding-top:calc(68px + env(safe-area-inset-top,0px))!important;box-sizing:border-box}html.np-pm .top h1{max-width:100%}html.np-pm #npPmBk{display:grid;position:fixed;z-index:45;left:calc(var(--back-x,16px) + env(safe-area-inset-left,0px));top:calc(env(safe-area-inset-top,0px) + var(--back-y,16px))}html.np-pm.np-hidebk #npPmBk{display:none}html.np-locked #npPmBk{display:none!important}" +
     "html.np-pm #homeBtn{display:none!important}" +
-    "#npPmBk,#npPmFab{place-items:center;width:48px;height:48px;min-width:48px;min-height:48px;padding:0;border-radius:50%;flex:none;cursor:pointer;box-sizing:border-box}" +
+    "#npPmBk,#npPmFab{place-items:center;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;border-radius:50%;flex:none;cursor:pointer;box-sizing:border-box}" +
     "#npPmBk{background:var(--panel,#fff);color:var(--ink,#222);border:1.5px solid color-mix(in srgb,currentColor 42%,transparent);box-shadow:var(--shadow,0 3px 10px rgba(0,0,0,.25))}" +
-    "html.np-pm #npPmFab{display:grid;position:fixed;z-index:45;right:12px;top:calc(env(safe-area-inset-top,0px) + 8px);color:var(--npon,var(--on-accent,#fff));background:var(--npacc,var(--accent,#7C5CFF));border:2px solid rgba(255,255,255,.55);box-shadow:0 3px 10px rgba(0,0,0,.32)}" +
+    "html.np-pm #npPmFab{display:grid;position:fixed;z-index:45;right:calc(var(--back-x,16px) + env(safe-area-inset-right,0px));top:calc(env(safe-area-inset-top,0px) + var(--back-y,16px));color:var(--npon,var(--on-accent,#fff));background:var(--npacc,var(--accent,#7C5CFF));border:2px solid rgba(255,255,255,.55);box-shadow:0 3px 10px rgba(0,0,0,.32)}" +
     "#npPmFab svg{width:24px;height:24px;display:block;grid-area:1/1;transition:opacity .2s,transform .25s}#npPmFab .x{opacity:0;transform:rotate(-90deg) scale(.6)}" +
     "#npPmFab.open .d{opacity:0;transform:scale(.6)}#npPmFab.open .x{opacity:1;transform:none}" +
     "#npPmFab.nudge{animation:npPmNudge 1.1s ease-in-out 4}@keyframes npPmNudge{0%,100%{transform:scale(1)}40%{transform:scale(1.16)}}" +

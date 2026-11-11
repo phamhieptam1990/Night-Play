@@ -134,6 +134,11 @@ const b64 = o => Buffer.from(JSON.stringify(o)).toString("base64").replace(/\+/g
   console.log("== admin: tab Pass");
   const ap = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-adminpass.js")].concat(process.argv.includes("--full-adminpass") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });
   note(ap.status === 0, "tổng", "check-adminpass.js báo lỗi (tab Pass của admin) — xem log phía trên");
+  /* nút ← luôn góc trên-trái, cùng toạ độ ở mọi game; cột nút nổi cùng cỡ/trục; thẻ nhắc việc không bị bóp (scripts/cozygame/check-backpos.js) — bản nhanh, thêm --full-back để đo cả 32 game × 14 cỡ */
+  console.log("== vị trí nút ←");
+  const bp = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-backpos.js")].concat(process.argv.includes("--full-back") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });
+  note(bp.status === 0, "tổng", "check-backpos.js báo lỗi (nút ← lệch góc trên-trái / cột nút nổi / thẻ nhắc việc) — xem log phía trên");
+  { const mo = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-moi.js"), "--quick"], { cwd: root, env: process.env, stdio: "inherit" }); note(mo.status === 0, "tổng", "check-moi.js báo lỗi (trang tin ra mắt /moi/) — xem log phía trên"); }   // trang /moi/
   console.log("\n" + (fails.length ? "✗ " + fails.length + " lỗi" : "✓ tất cả đạt"));
   process.exit(fails.length ? 1 : 0);
 })();

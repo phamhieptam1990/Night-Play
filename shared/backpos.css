@@ -1,0 +1,6 @@
+/* Nút ← (về màn chọn / thoát) LUÔN ở GÓC TRÊN-TRÁI khung hiển thị, cùng toạ độ ở MỌI game (shared/backpos.js tính độ dời, GAME_RULES.md 0a-14).
+   Chuẩn: tâm ở (--back-x + 22px, --back-y + 22px + safe-area) tính từ mép trái/trên của cửa sổ game; nút 44px. */
+:root{--back-x:16px;--back-y:16px}
+#bBk,#bBack,#npPmBk,#homeBtn{order:-9!important;width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;box-sizing:border-box;z-index:60}
+/* cột game hẹp hơn cửa sổ (máy tính, iPad): để ← ra tới góc cửa sổ thì khung không được cắt phần nhô ra (nền .deco đã tự cắt) */
+#play{overflow:visible!important}

@@ -13,7 +13,7 @@
 <style>
 /* Cánh Nhỏ Phiêu Lưu (Cozy Play) — 5 chuyến bay nhẹ nhàng, mỗi chuyến một cách điều khiển riêng, 3 độ khó. Luôn vừa một màn hình. */
 :root{--bg:#FFF6EC;--ink:#3b2a1d;--muted:#8a6f5a;--panel:#fff;--line:#f0d9c0;--accent:#FF5A1F;--on-accent:#fff;--sky1:#bfe8ff;--sky2:#eefaff;--good:#2fbf71;--warn:#ffb020;--shadow:0 8px 24px rgba(120,70,20,.18);
-  --display:"Baloo 2","Nunito","Segoe UI",system-ui,sans-serif;--w:min(calc(100vw - 24px),calc((100dvh - 196px)*.75),760px)}
+  --display:"Baloo 2","Nunito","Segoe UI",system-ui,sans-serif;--w:min(calc(100vw - 24px),calc((100dvh - 204px)*.75),760px)}
 :root[data-theme="dark"]{--bg:#1B2340;--ink:#F2F4FF;--muted:#a9b2d8;--panel:#26305a;--line:#38437a;--accent:#FF7A45;--on-accent:#2a1204;--sky1:#243a7a;--sky2:#3b57a6;--shadow:0 8px 24px rgba(0,0,0,.4)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;margin:0;overflow:hidden}
@@ -190,6 +190,7 @@ body{transition:background .4s,color .4s}
 .ov .big{font-size:4.8cqw}.ov .ghost{font-size:3.8cqw}
 .tile:nth-child(4){grid-column:1/span 3}.tile:nth-child(5){grid-column:4/span 3}.tile:nth-child(4) img,.tile:nth-child(5) img{aspect-ratio:3/2}   /* hàng 2: hai ô rộng lấp đầy khung thay vì 3+2 so le */
 }
+@media (min-aspect-ratio:11/10){.ask{gap:8px;padding:6px 10px;min-width:0;flex-wrap:nowrap}.ask .ib{flex:none;width:40px;height:40px;min-width:40px;min-height:40px}#askTxt{min-width:0;flex:1 1 0;font-size:clamp(12px,1.7vw,20px);line-height:1.15;overflow-wrap:normal;word-break:normal}.side{flex:none;min-width:min(180px,28vw)}}   /* thẻ nhắc việc ở cột trái hẹp: không bóp thành cột 106px / xuống từng chữ */
 </style>
 </head>
 <body>

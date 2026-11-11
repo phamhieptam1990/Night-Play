@@ -18,7 +18,8 @@ const bad = [];
     await pg.setViewport({ width: w, height: h, isMobile: true, hasTouch: true });
     await pg.evaluateOnNewDocument(l => { localStorage.setItem("np-sound", "0"); localStorage.setItem("lang", l); localStorage.setItem("pophelp-seen:x", "1"); }, lang);
     await pg.goto("http://localhost:" + PORT + "/popplay/index.html?lang=" + lang + "#" + id); await new Promise(r => setTimeout(r, 1700));
-    const fr = pg.frames().find(f => f !== pg.mainFrame()), tag = id + " " + lang + " " + w + "x" + h, mode = h > w ? (w <= 520 ? "p" : "t") : "";
+    /* ≥1100x600 ngang: trang cổng có hai cột bên lề → khung game hẹp và dọc, nên dùng menu ⋯ như iPad dọc (rails.js) */
+    const fr = pg.frames().find(f => f !== pg.mainFrame()), tag = id + " " + lang + " " + w + "x" + h, mode = h > w ? (w <= 520 ? "p" : "t") : (w >= 1100 && h >= 600 ? "t" : "");
     if (!fr) { bad.push(tag + ": không có iframe"); await pg.close(); continue; }
     const meas = async st => {
       const r = await fr.evaluate(() => {

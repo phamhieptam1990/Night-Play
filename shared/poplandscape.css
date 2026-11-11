@@ -9,6 +9,10 @@
   .top h1{white-space:normal;flex:1 1 100%;font-size:18px}
   .top .ib{width:42px;height:42px}
   .ask{grid-column:1;grid-row:2}
+  /* thẻ nhắc việc ở cột trái hẹp: nút loa cố định 40px, chữ co theo cột (không xuống dòng từng chữ), thẻ không cao hơn cột */
+  .app .ask{gap:8px;padding:6px 10px;min-width:0;flex-wrap:nowrap}
+  .app .ask .ib{flex:none;width:40px;height:40px;min-width:40px;min-height:40px;max-width:40px}
+  .app #askTxt{min-width:0;flex:1 1 0;font-size:clamp(12px,1.7vw,20px);line-height:1.15;overflow-wrap:normal;word-break:normal;hyphens:none}
   .hud{grid-column:3;grid-row:2;flex-direction:column;align-items:flex-start;padding:10px 14px;border-radius:20px;background:var(--panel);box-shadow:var(--shadow);justify-self:start;min-width:110px}
   .play{grid-column:2;grid-row:1 / 4}
 }
