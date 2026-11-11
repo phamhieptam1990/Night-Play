@@ -34,4 +34,9 @@ const ROW = () => {
   const de = d.documentElement; if (de.scrollHeight > de.clientHeight + 1 || de.scrollWidth > de.clientWidth + 1) E.push("trang cuộn được (" + de.scrollWidth + "x" + de.scrollHeight + " > " + de.clientWidth + "x" + de.clientHeight + ")");
   return { E, items: bt.map(b => b.n + "[" + Math.round(b.x) + "," + b.cy.toFixed(0) + "," + Math.round(b.w) + "x" + Math.round(b.h) + "]").join(" ") };
 };
-module.exports = { ROW };
+/* ROWDOC: cùng phép đo nhưng chạy THẲNG trong trang game (không qua cổng/iframe) - dùng trong shots-*.js để chặn chụp ảnh khi hàng nút lệch */
+const ROWDOC = new Function("return (" + ROW.toString().replace(/const st = document[^\n]*\n\s*if \(!d\)[^\n]*\n/, "const d = document;\n") + ")()");
+const guardRow = async (pg, name) => { const r = await pg.evaluate(ROWDOC); if (r.err || r.E.length) { console.log("  ✗ HÀNG NÚT LỆCH " + name + ": " + (r.err || r.E.join("; ")) + " | " + r.items); process.exitCode = 1; return false; } console.log("  hàng nút " + name + " OK: " + r.items); return true; };
+/* ảnh chụp ở khung ngắn (400x520): cột game hẹp hơn màn hình nên lề trái/phải so với MÀN HÌNH không phải 16 -> bỏ qua lỗi "lề", giữ phần còn lại (tâm dọc, cỡ, khoảng cách, chồng lấn, chữ đè nút) */
+const guardPortal = async (pg, name) => { const r = await pg.evaluate(ROW); if (r.E) r.E = r.E.filter(e => !/^lề /.test(e)); if (r.err || r.E.length) { console.log("  ✗ HÀNG NÚT LỆCH " + name + ": " + (r.err || r.E.join("; ")) + " | " + r.items); process.exitCode = 1; return false; } console.log("  hàng nút " + name + " OK: " + r.items); return true; };
+module.exports = { ROW, ROWDOC, guardRow, guardPortal };

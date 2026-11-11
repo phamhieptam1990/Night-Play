@@ -2,6 +2,7 @@
    Chạy lại: NODE_PATH=<thư mục puppeteer-core> node scripts/cozygame/shots-landing.js */
 const { spawn, execSync } = require("child_process"), fs = require("fs"), path = require("path"), puppeteer = require("puppeteer-core");
 const root = path.join(__dirname, "..", ".."), out = path.join(root, "landing", "lp", "img", "shots"), wait = ms => new Promise(r => setTimeout(r, ms));
+const { guardPortal } = require("./toprow.js");
 const MAX = 45 * 1024;
 const today = () => new Date().toLocaleDateString("sv");
 const SHOTS = [
@@ -20,12 +21,15 @@ const SHOTS = [
   for (const s of SHOTS) {
     const pg = await br.newPage(); const vp = s.vp || [390, 844, 1.5]; await pg.setViewport({ width: vp[0], height: vp[1], deviceScaleFactor: vp[2], isMobile: true, hasTouch: true });
     await pg.evaluateOnNewDocument(o => { try { localStorage.setItem("theme", "dark"); localStorage.setItem("lang", "vi"); localStorage.setItem("np-welcome-seen", "1"); localStorage.setItem("pophelp-seen:x", "1"); for (const k in o) localStorage.setItem(k, o[k]); } catch (e) {} }, s.ls || {});
-    await pg.goto("http://127.0.0.1:" + PORT + "/" + s.url, { waitUntil: "load" }); await wait(1600);
+    const cozy = s.url.startsWith("cozyplay/games/"), gid = cozy && s.url.split("/")[2];   /* Cozy: qua cổng (iframe) như người chơi thấy */
+    await pg.goto("http://127.0.0.1:" + PORT + "/" + (cozy ? "cozyplay/index.html?lang=vi#" + gid : s.url), { waitUntil: "load" }); await wait(cozy ? 3300 : 1600);
+    const cx = cozy ? pg.frames().find(f => f.url().includes("/games/" + gid + "/")) : pg;
     if (s.skin) {
       const src = execSync("node -e \"process.stdout.write(require('./server/pro/" + s.skin[0] + ".js').source({}))\"", { cwd: root }).toString();
-      await pg.evaluate((src, k) => { (0, eval)(src); const A = Array.isArray(PF.skinSel), S = A ? PF.skins : [PF.skins]; S.forEach((m, t) => { if (m && m[k]) { if (A) PF.skinSel[t] = k; else PF.skinSel = k; } }); try { applySkin(); } catch (e) {} try { renderHome(); } catch (e) {} }, src, s.skin[1]); await wait(600);
+      await cx.evaluate((src, k) => { (0, eval)(src); const A = Array.isArray(PF.skinSel), S = A ? PF.skins : [PF.skins]; S.forEach((m, t) => { if (m && m[k]) { if (A) PF.skinSel[t] = k; else PF.skinSel = k; } }); try { applySkin(); } catch (e) {} try { renderHome(); } catch (e) {} }, src, s.skin[1]); await wait(600);
     }
     if (s.js) { await pg.evaluate(s.js); await wait(500); }
+    if (s.skin && !(await guardPortal(pg, s.f))) { await pg.close(); continue; }
     let q = 70, buf;
     do { buf = await pg.screenshot({ type: "webp", quality: q }); q -= 6; } while (buf.length > MAX && q > 20);
     fs.writeFileSync(path.join(out, s.f + ".webp"), buf); console.log(s.f, buf.length + " bytes (q" + (q + 6) + ")"); await pg.close();
