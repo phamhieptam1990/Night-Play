@@ -121,6 +121,7 @@ const rnd2=x=>Math.round(x*100)/100;
 function snapP(D){return D.res.length&&D.res.length<D.tg.length?{r:D.res.map(r=>[rnd2(r.e),r.tg])}:null}
 function restoreP(D,p){if(!Array.isArray(p.r)||p.r.length>=D.tg.length)return;D.res=p.r.map(a=>{const e=+a[0]||0,tg=+a[1]||10,err=Math.abs(e-tg);return{e,err,sc:Math.max(0,Math.round(1000*(1-2*err/tg))),tg}});D.i=D.res.length;D.st="ready";bsRender();hud()}
 function onBegin(D){bsRender()}
+function onLang(D){bsRender()}
 `,
   drawCard: String.raw`function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="Inter,system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#ff9a5a","#b8430a"];
  const g=x.createLinearGradient(0,0,1080,1350);g.addColorStop(0,cg[0]);g.addColorStop(1,cg[1]);x.fillStyle=g;x.fillRect(0,0,1080,1350);x.textAlign="center";x.fillStyle="#fff";x.font="800 62px "+F;x.fillText((isProSk()?"👑 ":"⏱️ ")+T("title"),540,100);

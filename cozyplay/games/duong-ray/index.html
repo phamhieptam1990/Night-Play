@@ -290,7 +290,7 @@ PF.lockPro=function(){for(const id of Object.keys(PF.skins))if(id!=="basic")dele
 window.PF=PF;
 if(window.NP&&NP.onPause)NP.onPause(()=>{paused=true},()=>{paused=false;last=performance.now()});
 if(window.NP&&NP.state)NP.state(()=>{if(!G||G.over)return null;const s={seed:G.seed,t:G.t};if(PF.pro&&!PF.pro.trial&&PF.ticket){s.tk=PF.ticket;if(PF.skinSel!=="basic"&&PF.skins[PF.skinSel])s.sk=PF.skinSel}return s});
-$("bLang").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}document.documentElement.lang=LANG;if(!$("home").hidden)renderHome();else if(!$("end").hidden&&G)showEnd(G);else if(G)$("gHint").textContent=hintOf(G.t)};
+$("bLang").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}document.documentElement.lang=LANG;if(!$("home").hidden)renderHome();else if(!$("end").hidden&&G)showEnd(G);else if(G){$("ttl").textContent=(G.mode==="daily"?"📅 "+T("daily"):TYPES[G.t][0]+" "+L2([TYPES[G.t][1],TYPES[G.t][2]]));$("gHint").textContent=hintOf(G.t)}};
 $("bSnd").onclick=()=>{if(window.NPAudio)NPAudio.set(!NPAudio.get());$("bSnd").textContent=snd()?"🔊":"🔇"};
 $("bDaily").onclick=()=>begin(fnv("rail|"+dayKey()),"daily",0,null);$("bFree").onclick=()=>begin(newSeed(),"free",TY,null);
 applySkin();renderHome();show("home");requestAnimationFrame(tick);

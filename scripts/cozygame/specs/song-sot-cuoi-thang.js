@@ -156,6 +156,7 @@ addEventListener("keydown",e=>{if(!G||G.over||$("game").hidden)return;if(e.key==
 function snapP(D){if(D.day<2&&!D.lock)return null;if(D.lock&&D.day>=30)return null;const d=D.lock?D.day+1:D.day;return{d,m:Math.round(D.money),mo:D.mood,s:D.study,y:D.yes,tg:D.tags,h:D.hist.slice(-31)}}
 function restoreP(D,p){D.day=Math.max(1,Math.min(30,+p.d||1));D.cur=D.order[D.day-1];D.money=+p.m||D.money;D.mood=Math.max(1,Math.min(100,+p.mo||70));D.study=+p.s||50;D.yes=+p.y||0;D.tags=(p.tg&&typeof p.tg==="object")?p.tg:{};D.hist=Array.isArray(p.h)?p.h.map(Number):[D.money];D.lock=false;D.dec=D.C.timer||0;render();hud()}
 function onBegin(D){D.dec=D.C.timer||0;$("svEnv").hidden=true;$("sv").classList.remove("lock");$("svRes").textContent="";$("svCal").dataset.n="";render()}
+function onLang(D){render()}
 `,
   drawCard: String.raw`function drawCard(D){const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="Inter,system-ui,sans-serif",sk=skinOf(),cg=sk.cg||["#fbbf24","#92400e"];
  const g=x.createLinearGradient(0,0,1080,1350);g.addColorStop(0,cg[0]);g.addColorStop(1,cg[1]);x.fillStyle=g;x.fillRect(0,0,1080,1350);x.textAlign="center";x.fillStyle="#fff";x.font="800 60px "+F;x.fillText((isProSk()?"👑 ":"💰 ")+T("title"),540,100);

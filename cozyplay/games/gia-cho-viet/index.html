@@ -219,7 +219,7 @@ $("end").addEventListener("click",instant);addEventListener("keydown",e=>{if(G&&
 /* ===== TRANG CHỦ / THÁCH ĐẤU ===== */
 $("bDaily").onclick=()=>begin(fnv("gcv|"+dayKey()),"daily",null);
 $("bPractice").onclick=()=>begin((Math.random()*4294967296)>>>0,"practice",null);
-$("bLang").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}document.documentElement.lang=LANG;if(G&&!G.done&&!$("round").hidden){const r=G.rev;showQ0()}else if(!$("home").hidden)renderHome();else if(G&&G.done)finish2()};
+$("bLang").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}document.documentElement.lang=LANG;$("ttl").textContent=T("hdr");if(G&&!G.done&&!$("round").hidden){const r=G.rev;showQ0()}else if(!$("home").hidden)renderHome();else if(G&&G.done)finish2()};
 function showQ0(){const q=G.q[G.i],it=q.it;$("iNm").textContent=LANG==="vi"?it.vi:it.en;$("iUn").textContent=LANG==="vi"?it.uv:it.ue;$("rLo").textContent=money(nice(q.lo));$("rHi").textContent=money(nice(q.hi));updPrice();$("bGo").textContent=G.rev?(G.i===N-1?T("see"):T("next")):T("guess");if(G.rev){const g=G.guess[G.i],p=q.it.p;$("rvT").textContent=T("you")+": "+money(g);$("rvR").textContent=T("real")+": "+money(p);$("rvP").textContent=T("pts",{n:G.pts[G.i]})}}
 function finish2(){$("eT").textContent=T("endT");$("eR").textContent="🏅 "+T("rank")[rankOf(G.score)]}
 $("bSnd").onclick=()=>{if(window.NPAudio)NPAudio.set(!NPAudio.get());$("bSnd").textContent=snd()?"🔊":"🔇"};

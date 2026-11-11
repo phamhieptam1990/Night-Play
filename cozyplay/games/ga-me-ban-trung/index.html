@@ -352,7 +352,7 @@ addEventListener("keydown",e=>{if(G&&!G.over&&!$("game").hidden){const stp=e.rep
 /* ===== TRANG CHỦ / ALBUM / THÁCH ĐẤU / NGÔN NGỮ ===== */
 $("bDaily").onclick=()=>{const dt=tLocked(TY)?0:TY;begin(fnv("egg|"+dayKey()+(dt?"|"+dt:"")),"daily",dt,null)};
 $("bFree").onclick=()=>begin(newSeed(),"free",TY,null);
-$("bLang").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}document.documentElement.lang=LANG;if(!$("home").hidden)renderHome();else if(!$("game").hidden)updHud();else if(!$("end").hidden)showEnd()};
+$("bLang").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}document.documentElement.lang=LANG;try{if($("rule")&&!$("rule").hidden&&G&&G.t!=null){if(RULES[G.t])showRule(G.t);else showTut()}}catch(e){}if(!$("home").hidden)renderHome();else if(!$("game").hidden)updHud();else if(!$("end").hidden)showEnd()};
 $("bSnd").onclick=()=>{if(window.NPAudio)NPAudio.set(!NPAudio.get());$("bSnd").textContent=snd()?"🔊":"🔇"};
 function openAlbum(){const alb=getAlb(),all=ANIMS().concat(PF.anim2?[]:SPEC);$("alH").textContent=T("alH");$("alP").textContent=T("alP");$("alG").innerHTML="";all.forEach(a=>{const own=alb[a[0]]||0,d=document.createElement("div");d.className="an r"+a[3]+(own?"":" no");d.innerHTML=(own||a[0]!=="…"?a[0]:"❔")+"<small>"+(own||a[0]!=="…"?L2([a[1],a[2]]):"???")+"</small>"+(own?'<span class="c">×'+own+"</span>":"");$("alG").appendChild(d)});$("ovAlb").hidden=false}
 $("bAlb").onclick=openAlbum;$("alX").onclick=()=>$("ovAlb").hidden=true;

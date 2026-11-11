@@ -334,7 +334,7 @@ addEventListener("blur",()=>{held.clear();keyL=keyR=false;setInp()});
 /* ===== TRANG CHỦ / THÁCH ĐẤU / NGÔN NGỮ ===== */
 $("bDaily").onclick=()=>{const dt=tLocked(TY)?0:TY;begin(fnv("ship|"+dayKey()+(dt?"|"+dt:"")),"daily",dt,null)};
 $("bFree").onclick=()=>begin(newSeed(),"free",TY,null);
-$("bLang").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}document.documentElement.lang=LANG;if(!$("home").hidden)renderHome();else if(!$("game").hidden)updHud();else if(!$("end").hidden)showEnd()};
+$("bLang").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}document.documentElement.lang=LANG;try{if($("rule")&&!$("rule").hidden&&G&&G.t!=null)showRule(G.t)}catch(e){}if(!$("home").hidden)renderHome();else if(!$("game").hidden)updHud();else if(!$("end").hidden)showEnd()};
 $("bSnd").onclick=()=>{if(window.NPAudio)NPAudio.set(!NPAudio.get());$("bSnd").textContent=snd()?"🔊":"🔇"};
 const openCh=c=>{CH=c;$("chH").textContent="⚔ "+T("ch");$("chP").textContent=T("chP",{s:c.sc})+(tLocked(c.t)?"\n"+T("chL",{t:L2([TYPES[c.t][1],TYPES[c.t][2]])}):"");$("chGo").textContent=tLocked(c.t)?T("trial"):T("chGo");$("ovCh").hidden=false};
 $("chNo").onclick=()=>{$("ovCh").hidden=true;CH=null};

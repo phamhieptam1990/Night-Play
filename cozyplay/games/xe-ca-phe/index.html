@@ -396,7 +396,7 @@ window.PF=PF;
 if(window.NP&&NP.onPause)NP.onPause(()=>{paused=true},()=>{paused=false;last=performance.now()});
 if(window.NP&&NP.state)NP.state(()=>{if(!G||G.over||G.mode==="camp")return null;const s={t:G.type,m:G.mode==="blitz"?1:0,seed:G.seed};if(PF.pro&&!PF.pro.trial&&PF.ticket){s.tk=PF.ticket;if(PF.skinSel!=="basic"&&PF.skins[PF.skinSel])s.sk=PF.skinSel}return s});
 /* ===== NGÔN NGỮ ===== */
-$("bLang").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}document.documentElement.lang=LANG;if(!$("home").hidden)renderHome();else if(!$("game").hidden){$("lane")._k="";buildIngs(G);render()}else if(!$("shop2").hidden)openShop();if(!$("ovSum").hidden&&G){$("rcpt").innerHTML=receipt(G,G.runEnd?T("sumRun"):T("sumT",{d:G.day}))}};
+$("bLang").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}document.documentElement.lang=LANG;if(!$("home").hidden)renderHome();else if(!$("game").hidden){$("lane")._k="";buildIngs(G);paintFront(G);$("ttl").textContent=(G.mode==="daily"?"📅 "+T("daily"):G.mode==="camp"?TYPES[G.type][0]+" "+T("camp",{d:G.day,n:G.type===2?5:DAYS}):TYPES[G.type][0]+" "+L2([TYPES[G.type][1],TYPES[G.type][2]]));render()}else if(!$("shop2").hidden)openShop();if(!$("ovSum").hidden&&G){$("rcpt").innerHTML=receipt(G,G.runEnd?T("sumRun"):T("sumT",{d:G.day}))}};
 $("bSnd").onclick=()=>{if(window.NPAudio)NPAudio.set(!NPAudio.get());$("bSnd").textContent=snd()?"🔊":"🔇"};
 $("bCamp").onclick=startCamp;$("bDaily").onclick=startDaily;
 /* ===== KHỞI ĐỘNG ===== */

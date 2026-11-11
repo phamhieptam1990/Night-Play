@@ -125,7 +125,7 @@ canvas#cv{border-radius:3cqw;background:linear-gradient(var(--field),var(--field
 const GID="@@ID@@",$=id=>document.getElementById(id),MAXS=@@MAXS@@;@@CONSTS@@
 const LS={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const pickLang=()=>{const q=new URLSearchParams(location.search).get("lang");let st=null;try{st=localStorage.getItem("lang")}catch(e){}return [q,st].find(x=>x==="vi"||x==="en")||(/^vi/i.test(navigator.language||"")?"vi":"en")};
-let LANG=pickLang();const L2=a=>LANG==="vi"?a[0]:a[1];
+let LANG=pickLang();document.documentElement.lang=LANG;const L2=a=>LANG==="vi"?a[0]:a[1];
 const TYPES=@@TYPES_JSON@@;
 const I18=@@I18_JSON@@;
 const T=(k,o)=>{const g=(O,p)=>p.split(".").reduce((a,c)=>a&&a[c],O);let s=g(I18[LANG],k);if(s==null)s=g(I18.vi,k);if(typeof s==="string"&&o)for(const x in o)s=s.split("{"+x+"}").join(o[x]);return s};
@@ -164,6 +164,7 @@ function renderHome(){const sv=getSave(),k=dayKey(),done=TY?(sv.dayT||{})[k+"|"+
  $("dN").textContent="#"+dayNo(k);$("dT").textContent=T("daily");$("dS").textContent=done!=null?T("done",{s:SF(done)}):T("dS");$("bFree").textContent=T("free");$("hNote").textContent=T("note");
  $("hChips").innerHTML="";[sv.streak?"🔥 "+sv.streak:"",sv.best?T("best",{n:SF(sv.best)}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("hChips").appendChild(c)})}
 const hintOf=t=>T("hint"+(t||0));
+const ttlOf=D=>D.mode==="daily"?"📅 "+T("daily"):TYPES[D.t][0]+" "+L2([TYPES[D.t][1],TYPES[D.t][2]]);
 function begin(seed,mode,t,ch){t=t==null?(mode==="daily"?0:TY):t;if(tLocked(t))t=0;if(mode==="daily")t=0;G=newGame(seed,mode,t,ch);$("play").dataset.ty=t;acc=0;last=performance.now();show("game");applySkin();$("ttl").textContent=(mode==="daily"?"📅 "+T("daily"):TYPES[t][0]+" "+L2([TYPES[t][1],TYPES[t][2]]));$("gHint").textContent=hintOf(t);if(!LS.get("@@P@@-tut",0)){toast(T("tut"),4200)}fitCanvas();hud();window.NP&&NP.start();recBegin();if(typeof onBegin==="function")onBegin(G)}
 let clipReady=false,clipT=0;
 function recBegin(){clipReady=false;clipT=0;if(!cv)return;if(window.NP&&NP.helper)return;if(window.NPFx&&NPFx.canRec()){try{NPFx.recStart(cv,36000)}catch(e){}}}
@@ -222,7 +223,7 @@ PF.lockPro=function(){for(const id of Object.keys(PF.skins))if(id!=="basic")dele
 window.PF=PF;
 if(window.NP&&NP.onPause)NP.onPause(()=>{paused=true},()=>{paused=false;last=performance.now()});
 if(window.NP&&NP.state)NP.state(()=>{if(!G||G.over)return null;const s={seed:G.seed,t:G.t,m:G.mode};try{const pp=snapP(G);if(pp&&JSON.stringify(pp).length<760)s.p=pp}catch(e){}if(PF.pro&&!PF.pro.trial&&PF.ticket){s.tk=PF.ticket;if(PF.skinSel!=="basic"&&PF.skins[PF.skinSel])s.sk=PF.skinSel}return s});
-$("bLang").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}document.documentElement.lang=LANG;if(!$("home").hidden)renderHome();else if(!$("end").hidden&&G)showEnd(G);else if(G)$("gHint").textContent=hintOf(G.t)};
+$("bLang").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}document.documentElement.lang=LANG;if(!$("home").hidden)renderHome();else if(!$("end").hidden&&G)showEnd(G);else if(G){$("ttl").textContent=ttlOf(G);$("gHint").textContent=hintOf(G.t);hud();if(typeof onLang==="function")onLang(G)}};
 $("bSnd").onclick=()=>{if(window.NPAudio)NPAudio.set(!NPAudio.get());$("bSnd").textContent=snd()?"🔊":"🔇"};
 $("bDaily").onclick=()=>begin(fnv(GID+"|"+dayKey()),"daily",0,null);$("bFree").onclick=()=>begin(newSeed(),"free",TY,null);
 applySkin();renderHome();show("home");requestAnimationFrame(tick);

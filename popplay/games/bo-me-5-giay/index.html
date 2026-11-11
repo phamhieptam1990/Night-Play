@@ -617,7 +617,7 @@ function applyLang(){
 }
 function syncSound(){$("soundBtn").textContent=sound?"🔊":"🔇"}
 $("soundBtn").onclick=()=>{sound=!sound;if(window.NPAudio)NPAudio.set(sound);else if(!sound&&window.speechSynthesis)speechSynthesis.cancel();syncSound()};
-$("langBtn").onclick=()=>{const mid=G&&!G.over;LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}applyLang();if(mid)begin(G.t,{seed:G.seed,daily:G.daily,ch:G.ch,lv:G.lv})};   /* chữ cái vi/en khác nhau → làm lại ván bằng bộ chữ mới */
+$("langBtn").onclick=()=>{const mid=G&&!G.over;LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}applyLang();if(mid)begin(G.t,{seed:G.seed,daily:G.daily,ch:G.ch,lv:G.lv});try{$("jl1").textContent="✔ "+T("j.ok");$("jl2").textContent=OPPE[OPP]+" "+T("j.pk",{o:oppName()});$("jyt").textContent=T("j.y");$("jnt").textContent=T("j.n")}catch(e){}};   /* chữ cái vi/en khác nhau → làm lại ván bằng bộ chữ mới */
 $("homeBtn").onclick=()=>{if(!HELPER)goHome()};
 function again(){if(!G)return;if(G.daily)return startDaily();begin(G.t,{lv:G.ch?LVL:G.lv})}
 $("againBtn").onclick=again;
