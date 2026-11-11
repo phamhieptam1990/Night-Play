@@ -463,6 +463,8 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 </div>
 
 <script src="../shared/track.js"></script>
+<script src="../shared/newbadge.js"></script>
+<script src="../shared/portalui.js"></script>
 <script>window.Track&&Track.view("popplay")</script>
 <script>
 /* ===== CẤU HÌNH ===== */
@@ -510,18 +512,18 @@ const art = {
 
 /* ===== DANH SÁCH GAME: thêm game mới = thêm 1 object vào mảng ===== */
 const games = [
-  { id:"ten-lua-cua-be", cat:"learn", name:{vi:"Tên Lửa Của Bé",en:"Baby Rocket"}, thumb:face("#FFB3A0","#FF5A4D",art.g0), url:"games/ten-lua-cua-be/index.html" },
-  { id:"be-noi-dung-khong", cat:"learn", name:{vi:"Bé Nói Đúng Không?",en:"Did Baby Say It Right?"}, thumb:face("#C9B6FF","#7A5CFF",art.g1), url:"games/be-noi-dung-khong/index.html" },
-  { id:"doan-tuoi-nao", cat:"learn", name:{vi:"Đoán Xem Bé Mấy Tuổi",en:"Guess Baby's Brain Age"}, thumb:face("#FFD98A","#FFA21F",art.g2), url:"games/doan-tuoi-nao/index.html" },
-  { id:"bo-me-5-giay", cat:"learn", name:{vi:"Bố Mẹ Thử Thách 5 Giây",en:"Parents' 5-Second Challenge"}, thumb:face("#B8F0E8","#2FB8A5",art.g3), url:"games/bo-me-5-giay/index.html" },
-  { id:"con-vat-an-so", cat:"learn", name:{vi:"Con Vật Ăn Số",en:"Number Munchers"}, thumb:face("#B8E8A0","#3AA655",art.g4), url:"games/con-vat-an-so/index.html" },
-  { id:"ve-chu-quai-vat", cat:"learn", name:{vi:"Vẽ Chữ Thành Quái Vật",en:"Letter Monsters"}, thumb:face("#E3C9FF","#B07CFF",art.g5), url:"games/ve-chu-quai-vat/index.html" },
-  { id:"nhay-theo-so", cat:"learn", name:{vi:"Nhảy Theo Số",en:"Dance by Numbers"}, thumb:face("#FFC2D9","#FF6F91",art.g6), url:"games/nhay-theo-so/index.html" },
-  { id:"be-dau-bo-me", cat:"learn", name:{vi:"Bé Đấu Bố Mẹ",en:"Kid vs Parent"}, thumb:face("#FFC98A","#FF7A59",art.duel), url:"games/be-dau-bo-me/index.html" },
-  { id:"qua-song", cat:"learn", name:{vi:"Qua Sông Cùng Bé",en:"River Crossing"}, thumb:face("#9AD8FF","#3D95E6",art.river), url:"games/qua-song/index.html" },
-  { id:"thap-vong-mau", cat:"learn", name:{vi:"Tháp Vòng Màu",en:"Rainbow Rings"}, thumb:face("#FFD1E8","#B07CFF",art.rings), url:"games/thap-vong-mau/index.html" },
-  { id:"lang-cua-be", cat:"learn", name:{vi:"Làng Của Bé",en:"Baby's Village"}, thumb:face("#B8E8A0","#58B86A",art.village), url:"games/lang-cua-be/index.html" },
-  { id:"pop-fly", cat:"learn", name:{vi:"Chim Bay Học Vui",en:"Fly & Learn"}, thumb:face("#9AD8FF","#4D9BFF",art.fly), url:"games/pop-fly/index.html" },
+  { id:"ten-lua-cua-be", cat:"learn", short:{vi:"Tên Lửa",en:"Rocket"}, name:{vi:"Tên Lửa Của Bé",en:"Baby Rocket"}, thumb:face("#FFB3A0","#FF5A4D",art.g0), url:"games/ten-lua-cua-be/index.html" },
+  { id:"be-noi-dung-khong", cat:"learn", short:{vi:"Bé Nói",en:"Say It"}, name:{vi:"Bé Nói Đúng Không?",en:"Did Baby Say It Right?"}, thumb:face("#C9B6FF","#7A5CFF",art.g1), url:"games/be-noi-dung-khong/index.html" },
+  { id:"doan-tuoi-nao", cat:"learn", short:{vi:"Đoán Tuổi",en:"Brain Age"}, name:{vi:"Đoán Xem Bé Mấy Tuổi",en:"Guess Baby's Brain Age"}, thumb:face("#FFD98A","#FFA21F",art.g2), url:"games/doan-tuoi-nao/index.html" },
+  { id:"bo-me-5-giay", cat:"learn", short:{vi:"5 Giây",en:"5 Seconds"}, name:{vi:"Bố Mẹ Thử Thách 5 Giây",en:"Parents' 5-Second Challenge"}, thumb:face("#B8F0E8","#2FB8A5",art.g3), url:"games/bo-me-5-giay/index.html" },
+  { id:"con-vat-an-so", cat:"learn", short:{vi:"Ăn Số",en:"Munchers"}, name:{vi:"Con Vật Ăn Số",en:"Number Munchers"}, thumb:face("#B8E8A0","#3AA655",art.g4), url:"games/con-vat-an-so/index.html" },
+  { id:"ve-chu-quai-vat", cat:"learn", short:{vi:"Quái Vật",en:"Monsters"}, name:{vi:"Vẽ Chữ Thành Quái Vật",en:"Letter Monsters"}, thumb:face("#E3C9FF","#B07CFF",art.g5), url:"games/ve-chu-quai-vat/index.html" },
+  { id:"nhay-theo-so", cat:"learn", short:{vi:"Nhảy Số",en:"Dance"}, name:{vi:"Nhảy Theo Số",en:"Dance by Numbers"}, thumb:face("#FFC2D9","#FF6F91",art.g6), url:"games/nhay-theo-so/index.html" },
+  { id:"be-dau-bo-me", cat:"learn", short:{vi:"Đấu Bố Mẹ",en:"Face Off"}, name:{vi:"Bé Đấu Bố Mẹ",en:"Kid vs Parent"}, thumb:face("#FFC98A","#FF7A59",art.duel), url:"games/be-dau-bo-me/index.html" },
+  { id:"qua-song", cat:"learn", short:{vi:"Qua Sông",en:"River"}, name:{vi:"Qua Sông Cùng Bé",en:"River Crossing"}, thumb:face("#9AD8FF","#3D95E6",art.river), url:"games/qua-song/index.html" },
+  { id:"thap-vong-mau", cat:"learn", short:{vi:"Tháp Màu",en:"Rainbow"}, name:{vi:"Tháp Vòng Màu",en:"Rainbow Rings"}, thumb:face("#FFD1E8","#B07CFF",art.rings), url:"games/thap-vong-mau/index.html" },
+  { id:"lang-cua-be", cat:"learn", short:{vi:"Làng Bé",en:"Village"}, name:{vi:"Làng Của Bé",en:"Baby's Village"}, thumb:face("#B8E8A0","#58B86A",art.village), url:"games/lang-cua-be/index.html" },
+  { id:"pop-fly", cat:"learn", short:{vi:"Chim Bay",en:"Fly"}, name:{vi:"Chim Bay Học Vui",en:"Fly & Learn"}, thumb:face("#9AD8FF","#4D9BFF",art.fly), url:"games/pop-fly/index.html" },
 ];
 
 /* ===== NGÔN NGỮ ===== */
@@ -575,6 +577,7 @@ function applyLang(){
   $("sleepTxt").textContent = t.timesUp;
   updateSleep();
   setTileLabels();
+  window.NPPortalUI && NPPortalUI.refresh();
   renderPrefs();
 }
 
@@ -654,7 +657,7 @@ function updateSleep(){
     e.classList.toggle("low", rem <= 60);          // còn dưới 1 phút: chuyển đỏ
     e.lastChild.textContent = txt;
   });
-  $("hleft").setAttribute("aria-label", i18n[lang].left + " " + txt);
+  /* Pop Play: số phút còn lại KHÔNG hiện ở cổng (chỉ phụ huynh thấy trong khu vực khoá #gate); #hleft/#tleft bị ẩn bằng CSS, cũng không có aria-label chứa số phút */
   bar.firstChild.style.transform = "scaleX(" + (prefs.limit > 0 ? Math.max(0, 1 - usedSec / (prefs.limit * 60)) : 1) + ")";
 }
 function startTimer(){
@@ -736,7 +739,7 @@ $("resetT").addEventListener("click", () => { usedSec = 0; saveUsed(); updateSle
 /* ===== LƯỚI ===== */
 const grid = $("grid");
 function setTileLabels(){
-  grid.querySelectorAll(".tile").forEach(b => b.setAttribute("aria-label", gname(games.find(g => g.id === b.dataset.id))));
+  grid.querySelectorAll(".tile").forEach(b => { const g = games.find(g => g.id === b.dataset.id); b.setAttribute("aria-label", window.NPPortalUI ? NPPortalUI.label(g) : gname(g)); });
 }
 function renderGrid(){
   grid.textContent = "";
@@ -748,6 +751,7 @@ function renderGrid(){
     img.decoding = "async";
     if(i >= EAGER) img.loading = "lazy";
     b.appendChild(img);
+    window.NPPortalUI && NPPortalUI.decorate(b, g);          // huy hiệu "Mới" + nhãn tên ngắn (shared/portalui.js)
     b.addEventListener("click", () => {
       if(isTimeUp()) return;                       // hết giờ: không mở game
       pop();
@@ -897,6 +901,7 @@ function closeGame(){
   try{ if(document.fullscreenElement) document.exitFullscreen(); }catch(e){}
   /* về trang chủ: tính lại bố cục lưới (cỡ cửa sổ có thể đã đổi lúc đang chơi) */
   requestAnimationFrame(() => { try{ fitGrid(); }catch(e){} setTimeout(() => { try{ fitGrid(); }catch(e){} }, 250); });
+  try{ window.NPPortalUI && NPPortalUI.refresh(); }catch(e){}
 }
 /* hỏi trước khi thoát ván đang chơi (shared/exitconfirm.js trong game): 🏠 / Back của trình duyệt */
 let exitOK = 0, curId = "";
@@ -973,6 +978,9 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e => {
   try{ if(localStorage.getItem("theme")) return; }catch(x){}
   setTheme(e.matches ? "dark" : "light");
 });
+
+/* ===== HUY HIỆU "MỚI" + NHÃN TÊN NGẮN (shared/portalui.js); Pop Play: KHÔNG 👑, KHÔNG bộ lọc, KHÔNG số phút còn lại ===== */
+NPPortalUI.init({ portal:"pop", games:games, getLang:() => lang, enabled, open:() => {} });
 
 /* ===== KHỞI ĐỘNG ===== */
 lang = detectLang();

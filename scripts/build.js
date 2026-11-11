@@ -32,6 +32,8 @@ if (fs.existsSync(upd)) {
   const day = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Ho_Chi_Minh" }).format(new Date());
   fs.writeFileSync(upd, 'window.SITE_BUILD = "' + day + '";\n' + fs.readFileSync(upd, "utf8"));
 }
+/* Huy hiệu "Mới" của hai trang cổng: sinh lại shared/newbadge.js từ landing/moi/launches.json (cổng chạy offline, không fetch) */
+if (TARGET !== "admin" && fs.existsSync(path.join(dist, "shared"))) require("./gen-newbadge.js").write(path.join(dist, "shared", "newbadge.js"));
 /* Tiêu đề phản hồi cho file tĩnh (Cloudflare Workers assets đọc dist/_headers; tương đương netlify.toml) */
 fs.writeFileSync(path.join(dist, "_headers"), [
   "/admin/*", "  X-Robots-Tag: noindex, nofollow", "  Cache-Control: no-store", "",

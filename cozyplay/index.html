@@ -386,6 +386,7 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
     <span id="sleepTxt"></span>
   </div>
   <div id="hleft" class="left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg><span></span></div>
+  <section id="npTop" aria-label="Today"><div id="npInfo"></div></section>
   <div id="grid"></div>
   <div id="gdots" role="group"></div>
   <div id="noRes" hidden></div>
@@ -457,6 +458,9 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 
 <script src="../shared/track.js"></script>
 <script>window.Track&&Track.view("cozyplay")</script>
+<script src="../shared/newbadge.js"></script>
+<script src="../shared/multi-games.js"></script>
+<script src="../shared/portalui.js"></script>
 <script>
 /* ===== CẤU HÌNH ===== */
 const HOLD_MS = 3000;            // Thời gian giữ nút phụ huynh (mili-giây)
@@ -583,6 +587,7 @@ function applyLang(){
   $("sleepTxt").textContent = t.timesUp;
   updateSleep();
   setTileLabels();
+  window.NPPortalUI && NPPortalUI.refresh();
   renderPrefs();
 }
 
@@ -744,7 +749,7 @@ $("resetT").addEventListener("click", () => { usedSec = 0; saveUsed(); updateSle
 /* ===== LƯỚI ===== */
 const grid = $("grid");
 function setTileLabels(){
-  grid.querySelectorAll(".tile").forEach(b => b.setAttribute("aria-label", gname(games.find(g => g.id === b.dataset.id))));
+  grid.querySelectorAll(".tile").forEach(b => { const g = games.find(g => g.id === b.dataset.id); b.setAttribute("aria-label", window.NPPortalUI ? NPPortalUI.label(g) : gname(g)); });
 }
 function renderGrid(){
   grid.textContent = "";
@@ -756,6 +761,7 @@ function renderGrid(){
     img.decoding = "async";
     if(i >= EAGER) img.loading = "lazy";
     b.appendChild(img);
+    window.NPPortalUI && NPPortalUI.decorate(b, g);          // huy hiệu Mới / 👑 (shared/portalui.js)
     b.addEventListener("click", () => {
       if(isTimeUp()) return;                       // hết giờ: không mở game
       pop();
@@ -905,6 +911,7 @@ function closeGame(){
   try{ if(document.fullscreenElement) document.exitFullscreen(); }catch(e){}
   /* về trang chủ: tính lại bố cục lưới (cỡ cửa sổ có thể đã đổi lúc đang chơi) */
   requestAnimationFrame(() => { try{ fitGrid(); }catch(e){} setTimeout(() => { try{ fitGrid(); }catch(e){} }, 250); });
+  try{ window.NPPortalUI && NPPortalUI.refresh(); }catch(e){}   // ván dở vừa lưu -> thẻ "Chơi tiếp"
 }
 /* hỏi trước khi thoát ván đang chơi (shared/exitconfirm.js trong game): 🏠 / Back của trình duyệt */
 let exitOK = 0, curId = "";
@@ -981,6 +988,15 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e => {
   try{ if(localStorage.getItem("theme")) return; }catch(x){}
   setTheme(e.matches ? "dark" : "light");
 });
+
+/* ===== THẺ HÔM NAY / CHƠI TIẾP + HUY HIỆU (shared/portalui.js) ===== */
+function openFromPortal(g, resume){
+  if(frame || isTimeUp() || prefs.off.includes(g.id)) return;
+  pop();
+  const old = g.url; if(resume) g.url = old + (old.indexOf("?") < 0 ? "?" : "&") + "resume=1";   // cùng cách rails.js mở ván dở
+  pushed = true; location.hash = g.id; setTimeout(() => { g.url = old; }, 800);
+}
+NPPortalUI.init({ portal:"cozy", games:games, getLang:() => lang, enabled, open:openFromPortal });
 
 /* ===== KHỞI ĐỘNG ===== */
 lang = detectLang();
