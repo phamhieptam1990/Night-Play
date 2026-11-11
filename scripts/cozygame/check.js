@@ -134,6 +134,7 @@ const b64 = o => Buffer.from(JSON.stringify(o)).toString("base64").replace(/\+/g
   console.log("== landing giới thiệu");
   const ld = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-landing.js")].concat(process.argv.includes("--full-landing") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });
   note(ld.status === 0, "tổng", "check-landing.js báo lỗi (landing giới thiệu) — xem log phía trên");
+  { const hb = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-hub.js")].concat(process.argv.includes("--full-hub") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" }); note(hb.status === 0, "tổng", "check-hub.js báo lỗi (hub /play/: hệ quỹ đạo + hai thẻ) — xem log phía trên"); }
   /* tab Pass của trang admin (scripts/cozygame/check-adminpass.js): chỉ dùng DB dev; bản nhanh, thêm --full-adminpass để đo đủ 3 cỡ x sáng/tối */
   console.log("== admin: tab Pass");
   const ap = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-adminpass.js")].concat(process.argv.includes("--full-adminpass") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" });

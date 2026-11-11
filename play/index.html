@@ -23,6 +23,7 @@ document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: da
 <link rel="stylesheet" href="../shared/theme.css">
 <link rel="stylesheet" href="../shared/bars.css">
 <link rel="stylesheet" href="../shared/align.css">
+<link rel="stylesheet" href="../shared/orbit.css">
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.4}
@@ -50,32 +51,57 @@ a.mark{min-height:44px;text-decoration:none;color:inherit}a.mark:hover span{text
 #langMenu button{display:inline-block;width:auto;height:38px;padding:0 14px;border-radius:19px;background:none;color:var(--muted);font-size:15px;font-weight:800;text-align:center}
 #langMenu button[aria-pressed=true]{background:var(--accent);color:var(--on-accent)}
 @media (max-width:520px){#langMenu button{padding:0 11px;height:34px;font-size:14px}}
-main{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(10px,2.6vh,28px);padding:0 16px;overflow-y:auto}
-h1{margin:0;text-align:center;font-size:clamp(26px,min(5vw,6vh),46px);line-height:1.1;letter-spacing:-.8px;font-weight:800}
-.sub{margin:-6px 0 0;text-align:center;color:var(--muted);font-size:clamp(14px,2vh,17px)}
-.cards{width:100%;max-width:1000px;display:grid;gap:clamp(12px,2.5vw,24px);grid-template-columns:1fr 1fr}
-@media (max-width:700px){.cards{grid-template-columns:1fr}}
-.card{position:relative;display:flex;flex-direction:column;gap:clamp(6px,1.4vh,12px);padding:clamp(14px,2.6vh,26px);border-radius:28px;text-decoration:none;box-shadow:var(--shadow);overflow:hidden;transition:transform .18s ease,box-shadow .18s ease}
-.card:hover{transform:translateY(-4px)}
-.card:active{transform:scale(.985)}
-.pop{background:linear-gradient(145deg,#FFE1C4,#FF9A5A);color:#2B1708}
-.night{background:linear-gradient(145deg,#2A2160,#0E1020);color:#F1F2FF}
-.tiles{display:flex;gap:10px}
-.tiles svg{width:clamp(52px,min(11vw,11vh),96px);aspect-ratio:1;border-radius:clamp(12px,2vh,20px);box-shadow:0 4px 10px rgba(0,0,0,.2);flex:none}
-.tag{align-self:flex-start;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
-.pop .tag{background:rgba(255,255,255,.65)}
-.night .tag{background:rgba(155,131,255,.25);color:#CFC4FF}
-.card h2{margin:0;font-size:clamp(22px,min(3.6vw,4.4vh),34px);line-height:1.1;font-weight:800;letter-spacing:-.4px}
-.card p{margin:0;font-size:clamp(13.5px,1.9vh,16px);opacity:.85;max-width:34ch}
-.go{margin-top:auto;display:inline-flex;align-items:center;gap:8px;align-self:flex-start;padding:11px 20px;border-radius:999px;font-weight:800;font-size:16px}
-.pop .go{background:#FF5A1F;color:#fff}
-.night .go{background:#9B83FF;color:#0E0A24}
-.go svg{width:18px;height:18px;transition:transform .18s}
-.card:hover .go svg{transform:translateX(4px)}
-@media (max-height:720px) and (max-width:700px){.card p{display:none}.tiles svg{width:48px}}
-@media (max-height:680px) and (max-width:700px){.sub{display:none}.nav{padding:6px 16px}main{gap:10px}.cards{gap:10px}.card{padding:10px 14px;gap:4px}.tiles svg{width:38px}.tag{padding:2px 10px;font-size:11px}.card h2{font-size:20px}.go{padding:8px 16px;font-size:15px}.foot{padding:4px 16px 8px}}
-@media (max-height:600px) and (max-width:700px){.tiles{display:none}.card{padding:10px 14px}}
-@media (max-height:480px){.cards{grid-template-columns:1fr 1fr}.sub{display:none}.nav{padding:4px 16px}main{gap:8px;padding-bottom:4px}h1{font-size:22px}.cards{gap:10px}.card{padding:10px 14px;gap:4px}.card p{display:none}.tiles svg{width:40px}.tag{padding:2px 10px;font-size:11px}.card h2{font-size:20px}.go{padding:7px 16px;font-size:15px}.foot{padding:2px 16px 6px}}
+/* ===== HUB = ỨNG DỤNG, KHÔNG PHẢI LANDING: một màn hình, không cuộn (GAME_RULES 0a). Hệ quỹ đạo dùng chung với landing (shared/orbit.css + shared/orbit.js). ===== */
+html,body{background:var(--bg)}body{background:transparent}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(60% 50% at 30% 40%,color-mix(in srgb,#7C5CFF 14%,transparent),transparent),radial-gradient(45% 40% at 85% 90%,color-mix(in srgb,#FF5A1F 10%,transparent),transparent)}
+html[data-theme=dark] body::before{background:
+ radial-gradient(1.5px 1.5px at 12% 22%,#fff,transparent),radial-gradient(1.5px 1.5px at 78% 14%,#FFE9A8,transparent),radial-gradient(1px 1px at 40% 70%,#fff,transparent),radial-gradient(1.5px 1.5px at 90% 62%,#fff,transparent),radial-gradient(1px 1px at 24% 88%,#FFE9A8,transparent),radial-gradient(1px 1px at 60% 36%,#fff,transparent),radial-gradient(1px 1px at 5% 55%,#fff,transparent),radial-gradient(1.3px 1.3px at 66% 92%,#fff,transparent),
+ radial-gradient(55% 55% at 32% 42%,rgba(124,92,255,.34),transparent),radial-gradient(40% 35% at 88% 100%,rgba(255,138,76,.16),transparent),linear-gradient(180deg,#12141F 0,#1A1640 55%,#12141F 100%)}
+main{flex:1;min-height:0;display:flex;padding:0 16px;overflow:hidden}
+.hubsys{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:clamp(8px,1.6dvh,18px);width:100%;max-width:1180px;margin:0 auto}
+.orbwrap{flex:none;container-type:size;width:100%;height:min(43dvh,calc((100vw - 32px) * .8333),420px);display:grid;place-items:center}
+.hubsys .orbstage{width:min(100cqw,120cqh);touch-action:none;border-radius:26px}
+.hubsys .sat{touch-action:none}
+html[data-theme=dark] .hubsys .orbstage{background:radial-gradient(circle at 50% 50%,rgba(124,92,255,.28),transparent 62%);border-color:rgba(124,92,255,.28);box-shadow:none}
+.side{flex:none;width:100%;min-width:0;max-width:560px;display:grid;gap:clamp(6px,1.4dvh,14px);justify-items:center;text-align:center}
+h1{margin:0;font-size:clamp(22px,min(6vw,3.8dvh),44px);line-height:1.1;letter-spacing:-.6px;font-weight:800}
+.sub{margin:0;color:var(--ink2);font-size:clamp(14px,2dvh,17px);max-width:34em}
+.resume{display:none;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:999px;background:var(--panel);box-shadow:var(--shadow);border:1px solid var(--line);font-weight:700;font-size:14.5px;text-decoration:none}
+.resume.on{display:inline-flex}.resume b{font-weight:800}.resume .ri{font-size:20px;line-height:1}
+.doors{display:grid;gap:10px;width:100%;grid-template-columns:1fr}
+.world{position:relative;display:flex;align-items:center;gap:12px;min-height:60px;padding:8px 12px 8px 10px;border-radius:20px;text-decoration:none;color:#fff;box-shadow:var(--shadow);text-align:left;transition:transform .2s,box-shadow .2s}
+.world.pop{background:linear-gradient(135deg,#B83A09,#C2410C)}
+.world.night{background:linear-gradient(135deg,#3B2A9E,#5B3FD6)}
+.world .di{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:23px;line-height:1;background:rgba(255,255,255,.2)}
+.world .dt{display:grid;gap:1px;min-width:0;flex:1}
+.world .tag{font-size:12px;font-weight:700;letter-spacing:.03em;opacity:.92;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.world h2{margin:0;font-size:20px;line-height:1.15;font-weight:800}
+.world .dsc{display:none;margin:2px 0 0;font-size:13.5px;opacity:.9;line-height:1.35}
+.world .go{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 14px;border-radius:999px;background:#fff;font-weight:800;font-size:15px;color:#1F1B18;white-space:nowrap}
+.world .go svg{width:18px;height:18px;transition:transform .18s}
+.world:hover .go svg{transform:translateX(3px)}
+.world.on{transform:scale(1.03);z-index:2;outline:3px solid #fff;outline-offset:-3px}
+.world.pop.on{box-shadow:0 0 0 3px #FF8A55,0 12px 36px rgba(255,90,31,.5)}
+.world.night.on{box-shadow:0 0 0 3px #A18BFF,0 12px 36px rgba(124,92,255,.55)}
+.world:focus-visible{outline:4px solid var(--ink);outline-offset:3px}
+@media (max-width:380px){.world .go span{display:none}.world .go{padding:0;width:44px;justify-content:center}}
+@media (max-height:640px) and (max-width:700px){.sub{display:none}.world{min-height:56px;padding-top:6px;padding-bottom:6px}.nav{padding:6px 16px}.foot{padding:4px 16px 6px}}
+@media (max-height:560px) and (max-width:700px){h1{display:none}}
+@media (min-width:700px) and (min-aspect-ratio:1/1) and (min-height:500px),(min-width:700px) and (max-aspect-ratio:1/1){.doors{grid-template-columns:1fr 1fr}.world .dsc{display:block}.world{align-items:flex-start;flex-wrap:wrap}.world .dt{flex-basis:calc(100% - 60px)}.world .go{margin-left:56px}.world .tag{white-space:normal}}
+@media (min-width:700px) and (min-height:640px){.hubsys .sat{width:52px;height:52px;margin:-26px 0 0 -26px;font-size:28px}}
+/* ngang (rộng hơn cao): quỹ đạo bên trái, thẻ bên phải; vẫn một màn hình */
+@media (min-aspect-ratio:11/10){
+ .hubsys{flex-direction:row;gap:clamp(16px,3vw,48px)}
+ .orbwrap{flex:1 1 55%;width:auto;min-width:0;height:100%;max-height:none}
+ .side{flex:0 1 45%;max-width:480px;min-width:0;text-align:left;justify-items:stretch}
+ h1{font-size:clamp(20px,min(3.4vw,5.4dvh),46px)}
+ .sub{font-size:clamp(14px,2.4dvh,17px)}
+ .resume{justify-self:start}
+ .doors{grid-template-columns:1fr}
+}
+@media (min-aspect-ratio:11/10) and (max-height:480px){.side{flex-basis:50%}.world .go span{display:none}.world .go{padding:0;width:44px;justify-content:center}.world .tag{display:none}.world h2{white-space:nowrap}.sub{display:none}.world{min-height:56px;padding-top:4px;padding-bottom:4px}.world .dsc{display:none}.world h2{font-size:18px}.nav{padding:4px 16px}.foot{padding:2px 16px 6px}.doors{gap:8px}}
+@media (min-aspect-ratio:11/10) and (min-height:481px) and (max-width:1000px){.world .dsc{display:none}.world{align-items:center;flex-wrap:nowrap}.world .dt{flex-basis:auto}.world .go{margin-left:0}}
+@media (min-aspect-ratio:11/10) and (min-width:1001px) and (min-height:600px){.world{flex-wrap:nowrap;align-items:center;min-height:96px;padding:12px 16px 12px 12px;border-radius:24px}.world .dt{flex-basis:auto}.world .dsc{display:block}.world .go{margin-left:0}.world h2{font-size:24px}.world .di{width:56px;height:56px;font-size:29px}.doors{gap:14px}}
 .foot{flex:none;display:flex;justify-content:space-between;align-items:center;gap:4px 18px;flex-wrap:wrap;padding:8px 16px;font-size:13px;color:var(--muted);border-top:1px solid var(--line);background:linear-gradient(180deg,transparent,var(--hero1,transparent))}
 .foot #copy{order:1}.foot nav{order:2}.foot .site-upd{order:3;flex:none;width:auto;margin-left:auto;padding:0;font-size:12px}
 .foot nav{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
@@ -85,10 +111,11 @@ h1{margin:0;text-align:center;font-size:clamp(26px,min(5vw,6vh),46px);line-heigh
 .foot:has(.bars-more) #copy{grid-column:1;grid-row:1;font-size:12.5px}
 .foot:has(.bars-more) .site-upd{grid-column:1;grid-row:2;width:auto;margin:0;text-align:left;padding:0;font-size:11.5px}
 .foot:has(.bars-more) .bars-more{grid-column:2;grid-row:1 / span 2;order:0}
-@media (prefers-reduced-motion:reduce){.card,.go svg{transition:none}}
+@media (prefers-reduced-motion:reduce){.world,.go svg,.world .go svg{transition:none}.world.on{transform:none}}
 </style>
 <script src="../shared/offline.js" defer></script>
 <script src="../shared/inapp.js" defer></script>
+<script src="../shared/orbit.js" defer></script>
 </head>
 <body>
 <nav class="nav" aria-label="Main">
@@ -107,55 +134,49 @@ h1{margin:0;text-align:center;font-size:clamp(26px,min(5vw,6vh),46px);line-heigh
 </nav>
 
 <main>
-  <h1 id="h1"></h1>
-  <p class="sub" id="sub"></p>
-  <div class="cards">
-    <a class="card pop" id="aPop" href="../popplay/index.html">
-      <div class="tiles" aria-hidden="true">
-        <svg viewBox="0 0 512 512"><defs><linearGradient id="p1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7EC8FF"/><stop offset="1" stop-color="#4D8DFF"/></linearGradient></defs><rect width="512" height="512" fill="url(#p1)"/><path d="M120 200l20-110 90 60zM392 200l-20-110-90 60z" fill="#FFB347"/><circle cx="256" cy="290" r="150" fill="#FFB347"/><circle cx="200" cy="270" r="26" fill="#fff"/><circle cx="312" cy="270" r="26" fill="#fff"/><circle cx="205" cy="274" r="13" fill="#222"/><circle cx="307" cy="274" r="13" fill="#222"/><path d="M215 340q41 40 82 0" stroke="#222" stroke-width="12" fill="none" stroke-linecap="round"/></svg>
-        <svg viewBox="0 0 512 512"><defs><linearGradient id="p2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#C6F0C2"/><stop offset="1" stop-color="#6FD08C"/></linearGradient></defs><rect width="512" height="512" fill="url(#p2)"/><ellipse cx="190" cy="120" rx="34" ry="100" fill="#F8C8DC"/><ellipse cx="322" cy="120" rx="34" ry="100" fill="#F8C8DC"/><circle cx="256" cy="300" r="140" fill="#FFE4EE"/><circle cx="200" cy="280" r="26" fill="#fff"/><circle cx="312" cy="280" r="26" fill="#fff"/><circle cx="205" cy="284" r="13" fill="#222"/><circle cx="307" cy="284" r="13" fill="#222"/><path d="M215 350q41 40 82 0" stroke="#222" stroke-width="12" fill="none" stroke-linecap="round"/></svg>
-        <svg viewBox="0 0 512 512"><defs><linearGradient id="p3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFB3C7"/><stop offset="1" stop-color="#FF6F91"/></linearGradient></defs><rect width="512" height="512" fill="url(#p3)"/><path d="M256 60l60 130 140 18-103 96 27 140-124-70-124 70 27-140L56 208l140-18z" fill="#FFD93D"/><circle cx="220" cy="270" r="14" fill="#222"/><circle cx="292" cy="270" r="14" fill="#222"/><path d="M226 310q30 30 60 0" stroke="#222" stroke-width="10" fill="none" stroke-linecap="round"/></svg>
+  <div class="orbsys hubsys" id="orbsys" data-lang="vi" data-tap="open">
+    <div class="orbwrap">
+   <div class="orbstage" id="stage" role="group" aria-label="Hai quỹ đạo game: kéo để xoay, rê vào để dừng">
+    <svg class="orbsvg" viewBox="0 0 600 500" aria-hidden="true" focusable="false"><ellipse class="ring night" cx="300" cy="250" rx="262" ry="140" transform="rotate(18 300 250)"/><ellipse class="ring pop" cx="300" cy="250" rx="165" ry="92" transform="rotate(-18 300 250)"/><ellipse class="hit" data-orbit="night" cx="300" cy="250" rx="262" ry="140" transform="rotate(18 300 250)"/><ellipse class="hit" data-orbit="pop" cx="300" cy="250" rx="165" ry="92" transform="rotate(-18 300 250)"/></svg>
+    <svg class="planet" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><defs><clipPath id="plc"><circle cx="32" cy="32" r="30"/></clipPath></defs><g clip-path="url(#plc)"><rect width="64" height="64" fill="#7C5CFF"/><rect width="32" height="64" fill="#FF5A1F"/></g><circle cx="32" cy="32" r="12" fill="#fff"/></svg>
+    <a class="sat night" data-orbit="night" data-a="50" style="--x:127;--y:154" href="../cozyplay/index.html#dap-deadline" aria-label="Chơi Đập Deadline" title="Đập Deadline"><span aria-hidden="true">⏰</span></a><a class="sat night" data-orbit="night" data-a="110" style="--x:-125.9;--y:97.4" href="../cozyplay/index.html#gia-cho-viet" aria-label="Chơi Đoán Giá Chợ Việt" title="Đoán Giá Chợ Việt"><span aria-hidden="true">🛒</span></a><a class="sat night" data-orbit="night" data-a="170" style="--x:-252.9;--y:-56.6" href="../cozyplay/index.html#cozy-wings" aria-label="Chơi Cánh Nhỏ Phiêu Lưu" title="Cánh Nhỏ Phiêu Lưu"><span aria-hidden="true">🐝</span></a><a class="sat night" data-orbit="night" data-a="230" style="--x:-127;--y:-154" href="../cozyplay/index.html#xin-nghi" aria-label="Chơi Sếp Ơi Em Xin Nghỉ" title="Sếp Ơi Em Xin Nghỉ"><span aria-hidden="true">📝</span></a><a class="sat night" data-orbit="night" data-a="290" style="--x:125.9;--y:-97.4" href="../cozyplay/index.html#song-sot-cuoi-thang" aria-label="Chơi Sống Sót Đến Cuối Tháng" title="Sống Sót Đến Cuối Tháng"><span aria-hidden="true">💸</span></a><a class="sat night" data-orbit="night" data-a="350" style="--x:252.9;--y:56.6" href="../cozyplay/index.html#cho-hang-kieu-viet" aria-label="Chơi Chở Hàng Kiểu Việt" title="Chở Hàng Kiểu Việt"><span aria-hidden="true">🛵</span></a><a class="sat pop" data-orbit="pop" data-a="20" style="--x:157.2;--y:-18" href="../popplay/index.html#ten-lua-cua-be" aria-label="Chơi Tên Lửa Của Bé" title="Tên Lửa Của Bé"><span aria-hidden="true">🚀</span></a><a class="sat pop" data-orbit="pop" data-a="80" style="--x:55.2;--y:77.3" href="../popplay/index.html#con-vat-an-so" aria-label="Chơi Con Vật Ăn Số" title="Con Vật Ăn Số"><span aria-hidden="true">🐊</span></a><a class="sat pop" data-orbit="pop" data-a="140" style="--x:-101.9;--y:95.3" href="../popplay/index.html#ve-chu-quai-vat" aria-label="Chơi Vẽ Chữ Thành Quái Vật" title="Vẽ Chữ Thành Quái Vật"><span aria-hidden="true">🔤</span></a><a class="sat pop" data-orbit="pop" data-a="200" style="--x:-157.2;--y:18" href="../popplay/index.html#nhay-theo-so" aria-label="Chơi Nhảy Theo Số" title="Nhảy Theo Số"><span aria-hidden="true">💃</span></a><a class="sat pop" data-orbit="pop" data-a="260" style="--x:-55.2;--y:-77.3" href="../popplay/index.html#thap-vong-mau" aria-label="Chơi Tháp Vòng Màu" title="Tháp Vòng Màu"><span aria-hidden="true">🌈</span></a><a class="sat pop" data-orbit="pop" data-a="320" style="--x:101.9;--y:-95.3" href="../popplay/index.html#lang-cua-be" aria-label="Chơi Làng Của Bé" title="Làng Của Bé"><span aria-hidden="true">🏘️</span></a>
+    <button class="orbsnd" type="button" hidden aria-pressed="false" aria-label="Bật âm thanh quỹ đạo"><span aria-hidden="true">🔇</span></button>
+   </div>
+    </div>
+    <div class="side">
+      <h1 id="h1"></h1>
+      <p class="sub" id="sub"></p>
+      <a class="resume" id="resume" href="../popplay/index.html"><span class="ri" aria-hidden="true">▶️</span><span><span id="rtx"></span> <b id="rname"></b></span></a>
+      <div class="doors">
+        <a class="world pop" id="aPop" href="../popplay/index.html"><span class="di" aria-hidden="true">🎈</span><span class="dt"><span class="tag" id="tPop"></span><h2>Pop Play</h2><span class="dsc" id="dPop"></span></span><span class="go"><span id="gPop"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+        <a class="world night" id="aNight" href="../cozyplay/index.html"><span class="di" aria-hidden="true">🌙</span><span class="dt"><span class="tag" id="tNight"></span><h2>Night Play</h2><span class="dsc" id="dNight"></span></span><span class="go"><span id="gNight"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
       </div>
-      <span class="tag" id="tPop"></span>
-      <h2>Pop Play</h2>
-      <p id="dPop"></p>
-      <span class="go"><span id="gPop"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-    </a>
-
-    <a class="card night" id="aNight" href="../cozyplay/index.html">
-      <div class="tiles" aria-hidden="true">
-        <svg viewBox="0 0 512 512"><defs><linearGradient id="n1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6A48F0"/><stop offset="1" stop-color="#2B1B8A"/></linearGradient></defs><rect width="512" height="512" fill="url(#n1)"/><rect x="130" y="110" width="200" height="290" rx="26" fill="#fff" transform="rotate(-12 230 255)"/><rect x="190" y="110" width="200" height="290" rx="26" fill="#fff" transform="rotate(10 290 255)"/><path d="M290 190c-30 40-70 60-70 100 0 30 40 38 70 10 30 28 70 20 70-10 0-40-40-60-70-100z" fill="#E5484D" transform="rotate(10 290 255)"/></svg>
-        <svg viewBox="0 0 512 512"><defs><linearGradient id="n2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E5484D"/><stop offset="1" stop-color="#7A1020"/></linearGradient></defs><rect width="512" height="512" fill="url(#n2)"/><rect x="110" y="110" width="292" height="292" rx="56" fill="#fff"/><g fill="#1C1833"><circle cx="190" cy="190" r="26"/><circle cx="322" cy="190" r="26"/><circle cx="256" cy="256" r="26"/><circle cx="190" cy="322" r="26"/><circle cx="322" cy="322" r="26"/></g></svg>
-        <svg viewBox="0 0 512 512"><defs><linearGradient id="n3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#DFE7EE"/><stop offset="1" stop-color="#8FA6BC"/></linearGradient></defs><rect width="512" height="512" fill="url(#n3)"/><g transform="rotate(-8 256 270)"><rect x="96" y="96" width="320" height="320" rx="20" fill="#FFE25C"/><rect x="96" y="96" width="320" height="52" rx="20" fill="#F5CB2E"/><circle cx="196" cy="236" r="46" fill="#fff" stroke="#1d2a36" stroke-width="12"/><path d="M196 208v30l22 14" stroke="#1d2a36" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M280 214h96M280 250h70M136 332h240M136 366h170" stroke="#1d2a36" stroke-opacity=".45" stroke-width="14" stroke-linecap="round"/></g><g transform="rotate(-14 330 380)"><rect x="210" y="330" width="240" height="96" rx="16" fill="none" stroke="#D7263D" stroke-width="14"/><text x="330" y="402" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="68" fill="#D7263D">XONG</text></g></svg>
-      </div>
-      <span class="tag" id="tNight"></span>
-      <h2>Night Play</h2>
-      <p id="dNight"></p>
-      <span class="go"><span id="gNight"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-    </a>
+    </div>
   </div>
 </main>
 
 <footer class="foot">
   <span id="copy"></span>
   <nav><a id="about" href="/?landing=1"></a>
+  <a id="pass2" href="../subscribe.html"></a>
   <a id="priv" href="../privacy.html" target="_blank" rel="noopener"></a>
   <a id="terms" href="../terms.html" target="_blank" rel="noopener"></a>
   <a id="mail" href="mailto:support@nightplay.vn"></a></nav>
 </footer>
 
 <script src="../shared/track.js"></script>
+<script src="../shared/multi-games.js"></script>
 <script>window.Track&&Track.view("home")</script>
 <script>
 const i18n = {
-  vi:{ name:"Tiếng Việt", h1:"Chọn thế giới của bạn", sub:"Hai nơi chơi game riêng, không quảng cáo, không theo dõi cá nhân.",
+  vi:{ name:"Tiếng Việt", h1:"Chọn thế giới của bạn", sub:"Hai nơi chơi game riêng, không quảng cáo, không theo dõi cá nhân. Chạm một game hoặc một thế giới.",
        tPop:"Dành cho bé", dPop:"Game vui, an toàn, màu sắc tươi sáng cho các bé.", gPop:"Vào Pop Play",
        tNight:"Dành cho người lớn", dNight:"Game thư giãn buổi tối: bài, cờ, xếp hình và hơn thế nữa.", gNight:"Vào Night Play",
-       pass:"Night Pass", upgrade:"Night Pass: mở tất cả game", theme:"Sáng / Tối", lang:"Ngôn ngữ", privacy:"Quyền riêng tư", contact:"Liên hệ", rights:"Bảo lưu mọi quyền." },
-  en:{ name:"English", h1:"Choose your world", sub:"Two separate play spaces. No ads, no personal tracking.",
+       pass:"Night Pass", upgrade:"Night Pass: mở tất cả game", theme:"Sáng / Tối", lang:"Ngôn ngữ", privacy:"Quyền riêng tư", contact:"Liên hệ", rights:"Bảo lưu mọi quyền.", resume:"Chơi tiếp:", stage:"Hai quỹ đạo game: kéo để xoay, rê vào để dừng", play:"Chơi " },
+  en:{ name:"English", h1:"Choose your world", sub:"Two separate play spaces. No ads, no personal tracking. Tap a game or a world.",
        tPop:"For kids", dPop:"Fun, safe, brightly colored games made for little ones.", gPop:"Enter Pop Play",
        tNight:"For grown-ups", dNight:"Evening unwind games: cards, chess, puzzles and more.", gNight:"Enter Night Play",
-       pass:"Night Pass", upgrade:"Night Pass: unlock all games", theme:"Light / Dark", lang:"Language", privacy:"Privacy", contact:"Contact", rights:"All rights reserved." }
+       pass:"Night Pass", upgrade:"Night Pass: unlock all games", theme:"Light / Dark", lang:"Language", privacy:"Privacy", contact:"Contact", rights:"All rights reserved.", resume:"Continue:", stage:"Two game orbits: drag to spin, hover to pause", play:"Play " }
 };
 const $ = id => document.getElementById(id);
 let lang = (() => {
@@ -174,8 +195,15 @@ function applyLang(){
   $("copy").textContent = "© " + new Date().getFullYear() + " Play Hub. " + t.rights;
   $("passBtn").href = "../subscribe.html?from=play/index.html&lang=" + lang; $("passBtn").lastChild.textContent = t.pass; $("passBtn").setAttribute("aria-label", t.upgrade);
   $("themeBtn").setAttribute("aria-label", t.theme);
-  /* Truyền ngôn ngữ sang landing để khớp */
+  $("pass2").textContent = t.pass; $("pass2").href = $("passBtn").href;
   $("aPop").href = "../popplay/index.html"; $("aNight").href = "../cozyplay/index.html";
+  /* quỹ đạo: nhãn game theo ngôn ngữ (nguồn tên = shared/multi-games.js), nhãn sân khấu + nút âm thanh */
+  $("orbsys").setAttribute("data-lang", lang); $("stage").setAttribute("aria-label", t.stage);
+  const MG = window.NPMultiGames;
+  document.querySelectorAll("a.sat").forEach(a => { const id = (a.getAttribute("href").split("#")[1] || ""), g = MG && MG.get(id); if(g){ const n = g[lang] || g.vi; a.setAttribute("aria-label", t.play + n); a.title = n; } });
+  { const sb = document.querySelector(".orbsnd"), on = sb.getAttribute("aria-pressed") === "true";
+    sb.setAttribute("aria-label", lang === "vi" ? (on ? "Tắt âm thanh quỹ đạo" : "Bật âm thanh quỹ đạo") : (on ? "Turn orbit sound off" : "Turn orbit sound on")); }
+  showResume();
   menu.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.l === lang)));
 }
 const menu = $("langMenu");
@@ -193,19 +221,27 @@ function setTheme(t, save){
 }
 $("themeBtn").addEventListener("click", () => setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark", true));
 setTheme(document.documentElement.dataset.theme);
-/* Căn giữa theo CHIỀU CAO MÀN HÌNH, lấy HAI CARD làm tâm (tiêu đề nằm phía trên, không tính vào),
-   vì chữ ở trên làm mắt thấy cả khối bị trôi xuống. Bù bằng padding, chỉ khi còn dư chỗ (không làm nội dung bị cuộn). */
-function balance(){
-  const main = document.querySelector("main"), n = document.querySelector(".nav").offsetHeight, f = document.querySelector(".foot").offsetHeight;
-  main.style.paddingTop = main.style.paddingBottom = "0px";
-  const h1 = document.getElementById("h1").getBoundingClientRect(), c = document.querySelector(".cards").getBoundingClientRect();
-  const above = c.top - h1.top, slack = Math.max(0, main.clientHeight - (c.bottom - h1.top));
-  const want = (n - f) + above, pad = Math.floor(Math.min(Math.abs(want), Math.max(0, slack - 28)));   // chừa >= 14px phía trên tiêu đề
-  if(want >= 0) main.style.paddingBottom = pad + "px"; else main.style.paddingTop = pad + "px";
+/* Ván dở (np-resume:<id>, giữ 7 ngày): chip "Chơi tiếp" thay cho dòng phụ; nếu làm tràn màn hình thì ẩn đi (hub không bao giờ cuộn) */
+function showResume(){
+  const chip = $("resume"), MG = window.NPMultiGames; let best = null;
+  try{
+    for(let i = 0; i < localStorage.length; i++){
+      const k = localStorage.key(i); if(!k || k.indexOf("np-resume:") !== 0) continue;
+      const id = k.slice(10), g = MG && MG.get(id), r = JSON.parse(localStorage.getItem(k) || "null");
+      if(!g || !r || !r.state || typeof r.state !== "object" || r.daily) continue;
+      const age = Date.now() - r.ts; if(!(age >= 0 && age < 7 * 864e5)) continue;
+      if(!best || r.ts > best.ts) best = { id, g, ts: r.ts };
+    }
+  }catch(e){}
+  chip.classList.remove("on"); $("sub").hidden = false;
+  if(!best) return;
+  const t = i18n[lang];
+  $("rtx").textContent = t.resume; $("rname").textContent = (best.g.icon || "") + " " + (best.g[lang] || best.g.vi);
+  chip.href = "../" + best.g.portal + "/index.html#" + best.id; chip.classList.add("on");
+  const m = document.querySelector("main");
+  if(m.scrollHeight > m.clientHeight + 1){ chip.classList.remove("on"); }
 }
-const _apply = applyLang; applyLang = function(){ _apply(); balance(); };
-addEventListener("resize", balance); addEventListener("load", balance);
-if(document.fonts && document.fonts.ready) document.fonts.ready.then(balance);
+addEventListener("resize", showResume);
 applyLang();
 </script>
 <script src="../shared/updated.js"></script>
