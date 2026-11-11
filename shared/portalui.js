@@ -1,5 +1,5 @@
 /* THÀNH PHẦN CHUNG HAI TRANG CỔNG (cozyplay/index.html, popplay/index.html). Nạp SAU shared/newbadge.js (và shared/multi-games.js ở Night Play).
-   Night Play (portal:"cozy"): thẻ "Hôm nay" (#npToday), thẻ "Chơi tiếp" (#npResume, chỉ khi có np-resume:<id> hợp lệ), huy hiệu "Mới" + 👑 trên ô game.
+   Night Play (portal:"cozy"): chip lọc theo CHỦ ĐỀ (#topics: Tất cả / Công sở / Đời sống / Trí tuệ — cờ cat trong shared/multi-games.js, nhớ trong phiên bằng sessionStorage "np-topic"), thẻ "Hôm nay" (#puToday), thẻ "Chơi tiếp" (#puResume, chỉ khi có np-resume:<id> hợp lệ), huy hiệu "Mới" + 👑 trên ô game.
    Pop Play (portal:"pop"): CHỈ huy hiệu "Mới" nhỏ + nhãn tên ngắn một dòng (CSS portalui.css). KHÔNG 👑/Night Pass, KHÔNG bộ lọc, KHÔNG số phút còn lại.
    Chạy offline: không fetch, không timer (chỉ cập nhật theo sự kiện: đổi ngôn ngữ, về từ game, storage, tab hiện lại) nên không ghi DOM khi nghỉ.
    Thử ngày khác: ?day=YYYY-MM-DD (cùng tham số với shared/season.js).
@@ -10,8 +10,8 @@
   if (window.NPPortalUI) return;
   var O = null, $ = function (id) { return document.getElementById(id); };
   var T = {
-    vi: { today: "Hôm nay", daily: "Thử thách hằng ngày", done: "Đã chơi", todo: "Chưa chơi hôm nay", resume: "Chơi tiếp", ago: ["vừa xong", " phút trước", " giờ trước", " ngày trước"], newb: "Mới", pro: "Có phần Night Pass", play: "Chơi" },
-    en: { today: "Today", daily: "Daily challenge", done: "Played", todo: "Not played today", resume: "Continue", ago: ["just now", " min ago", " h ago", " d ago"], newb: "New", pro: "Has Night Pass extras", play: "Play" }
+    vi: { today: "Hôm nay", daily: "Thử thách hằng ngày", done: "Đã chơi", todo: "Chưa chơi hôm nay", resume: "Chơi tiếp", ago: ["vừa xong", " phút trước", " giờ trước", " ngày trước"], newb: "Mới", pro: "Có phần Night Pass", play: "Chơi", topics: { all: "Tất cả", work: "Công sở", life: "Đời sống", mind: "Trí tuệ" }, topicL: "Chủ đề", games: "game" },
+    en: { today: "Today", daily: "Daily challenge", done: "Played", todo: "Not played today", resume: "Continue", ago: ["just now", " min ago", " h ago", " d ago"], newb: "New", pro: "Has Night Pass extras", play: "Play", topics: { all: "All", work: "Work", life: "Daily life", mind: "Brain" }, topicL: "Topic", games: "games" }
   };
   /* Thử thách hằng ngày của Đập Deadline bị khoá ở bản Free (docs/FREE-VS-NIGHTPASS.md 3.1): không chọn làm "Hôm nay" */
   var NO_FREE_DAILY = { "dap-deadline": 1 };
@@ -80,10 +80,10 @@
     if (extra) b.appendChild(extra);
   }
   function renderInfo() {
-    var box = $("npInfo"); if (!box || O.portal !== "cozy") return;
-    var t = tt(), day = today(), g = pickToday(day), a = $("npToday"), r = $("npResume");
-    if (!a) { a = card("npToday", "today"); box.appendChild(a); a.addEventListener("click", function () { var id = a.dataset.id, x = id && byId(id); if (x) O.open(x, false); }); }
-    if (!r) { r = card("npResume", "resume"); box.appendChild(r); r.addEventListener("click", function () { var id = r.dataset.id, x = id && byId(id); if (x) O.open(x, true); }); }
+    var box = $("puInfo"); if (!box || O.portal !== "cozy") return;
+    var t = tt(), day = today(), g = pickToday(day), a = $("puToday"), r = $("puResume");
+    if (!a) { a = card("puToday", "today"); box.appendChild(a); a.addEventListener("click", function () { var id = a.dataset.id, x = id && byId(id); if (x) O.open(x, false); }); }
+    if (!r) { r = card("puResume", "resume"); box.appendChild(r); r.addEventListener("click", function () { var id = r.dataset.id, x = id && byId(id); if (x) O.open(x, true); }); }
     a.hidden = !g;
     if (g) {
       var d = dailyOf(g.id, day), played = d !== false, chk = null;
@@ -99,16 +99,55 @@
     box.dataset.n = String((a.hidden ? 0 : 1) + (r.hidden ? 0 : 1));
   }
 
-  function refresh() { if (!O) return; renderInfo(); retag(); }
+  /* ---------- chip lọc chủ đề (Night Play) ---------- */
+  var TOPICS = ["work", "life", "mind"], topic = "all";
+  function topicOf(g) { var f = flag(g.id); return (f && f.cat) || null; }
+  function counts() { var c = { all: 0, work: 0, life: 0, mind: 0 }; enabledGames().forEach(function (g) { c.all++; var k = topicOf(g); if (c[k] != null) c[k]++; }); return c; }
+  function readTopic() { try { var v = sessionStorage.getItem("np-topic"); return v && /^(all|work|life|mind)$/.test(v) ? v : "all"; } catch (e) { return "all"; } }
+  function saveTopic() { try { sessionStorage.setItem("np-topic", topic); } catch (e) {} }
+  function pressChips() { var box = $("topics"), gr = $("grid"); if (gr && gr.dataset.topic !== topic) gr.dataset.topic = topic; if (!box) return; [].forEach.call(box.children, function (b) { var on = b.dataset.k === topic; if (b.getAttribute("aria-pressed") !== String(on)) b.setAttribute("aria-pressed", String(on)); }); }
+  function revealChip() {
+    var box = $("topics"); if (!box || box.scrollWidth <= box.clientWidth + 1) return;
+    var b = box.querySelector('[aria-pressed="true"]'); if (!b) return;
+    var l = b.offsetLeft - box.offsetLeft, to = l - (box.clientWidth - b.offsetWidth) / 2;
+    box.scrollLeft = Math.max(0, Math.min(box.scrollWidth - box.clientWidth, to));   /* tự cuộn ngang (không scrollIntoView: tránh cuộn cả trang) */
+  }
+  function validTopic() { var c = counts(); if (topic !== "all" && !c[topic]) { topic = "all"; saveTopic(); } return c; }
+  function renderTopics() {
+    var box = $("topics"); if (!box || O.portal !== "cozy") return;
+    var c = validTopic(), t = tt(), sig = lg() + "|" + TOPICS.map(function (k) { return k + (c[k] ? 1 : 0); }).join("");
+    if (box.dataset.sig !== sig) {
+      box.dataset.sig = sig; box.textContent = ""; box.setAttribute("aria-label", t.topicL);
+      ["all"].concat(TOPICS).forEach(function (k) {
+        if (k !== "all" && !c[k]) return;   /* nhóm không còn game nào (phụ huynh ẩn hết): bỏ chip, không bao giờ ra lưới rỗng */
+        var b = el("button", "pu-chip", t.topics[k]); b.type = "button"; b.dataset.k = k;
+        b.setAttribute("aria-label", t.topics[k] + (k === "all" ? "" : ", " + c[k] + " " + t.games));
+        b.addEventListener("click", function () { setTopic(k); }); box.appendChild(b);
+      });
+    }
+    box.hidden = c.all === 0;
+    pressChips();
+  }
+  function setTopic(k) {
+    if (k === topic) { saveTopic(); return; } topic = k; saveTopic(); pressChips(); revealChip();
+    if (O.onTopic) O.onTopic(k);
+  }
+  /* trang gọi mỗi lần dựng lại lưới: nhóm hiện tại hết game (phụ huynh ẩn) thì về "Tất cả"; chip đổi theo số game còn bật */
+  function syncTopics() { if (!O) return; renderTopics(); }
+
+  function refresh() { if (!O) return; renderInfo(); renderTopics(); retag(); revealChip(); }
   window.NPPortalUI = {
     init: function (o) {
-      O = o;
+      O = o; topic = readTopic();
       refresh();
       addEventListener("storage", function (e) { if (!e.key || /^np-resume:|-save$|^np-hi-/.test(e.key)) refresh(); });
       document.addEventListener("visibilitychange", function () { if (!document.hidden) refresh(); });
     },
     decorate: function (b, g) { if (O) decorate(b, g); },
-    refresh: refresh, label: function (g) { return O ? label(g) : gname(g); },
+    refresh: refresh, syncTopics: syncTopics, topic: function () { return topic; }, topicOf: topicOf,
+    /* ô game thuộc nhóm đang chọn? ("Tất cả" -> mọi ô) */
+    filter: function (g) { return topic === "all" || topicOf(g) === topic; },
+    label: function (g) { return O ? label(g) : gname(g); },
     _debug: { pickToday: pickToday, resumeRec: resumeRec, SAVE: SAVE, NO_FREE_DAILY: NO_FREE_DAILY }
   };
 })();

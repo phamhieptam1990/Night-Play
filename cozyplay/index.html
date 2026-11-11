@@ -388,7 +388,7 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
     <span id="sleepTxt"></span>
   </div>
   <div id="hleft" class="left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg><span></span></div>
-  <section id="npTop" aria-label="Today"><div id="npInfo"></div></section>
+  <section id="puTop"><div id="puInfo"></div><div id="topics" role="group"></div></section>
   <div id="grid"></div>
   <div id="gdots" role="group"></div>
   <div id="noRes" hidden></div>
@@ -396,7 +396,6 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 <button id="findFab" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="findPanel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button>
 <div id="findPanel" role="search" hidden>
   <div id="qWrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" enterkeyhint="search" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="40"><button id="qClear" type="button" tabindex="-1">✕</button></div>
-  <div id="catChips" role="group"></div>
 </div>
 <footer class="foot">
   <div class="fin">
@@ -627,20 +626,20 @@ const CATS = { reflex:{ vi:"Phản xạ", en:"Reflex" }, daily:{ vi:"Hằng ngà
 const FIND_T = { vi:{ ph:"Tìm game…", all:"Tất cả", none:"Không thấy game nào. Thử từ khoá khác nhé.", clear:"Xoá", catL:"Nhóm game" }, en:{ ph:"Search games…", all:"All", none:"No games found. Try another word.", clear:"Clear", catL:"Game type" } };
 let fq = "", fcat = "all";
 const norm = s => String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d");
-const visible = () => enabled().filter(g => (fcat === "all" || g.cat === fcat) && (!fq || [g.name.vi, g.name.en, (CATS[g.cat] || {}).vi, (CATS[g.cat] || {}).en].some(x => norm(x).includes(fq))));
+/* tìm kiếm theo chữ + chip chủ đề (shared/portalui.js: Công sở / Đời sống / Trí tuệ); tìm chữ mà nhóm đang chọn không có kết quả thì tìm trong "Tất cả": lưới không bao giờ rỗng vì chip */
+const visible = () => {
+  const hit = g => !fq || [g.name.vi, g.name.en, (CATS[g.cat] || {}).vi, (CATS[g.cat] || {}).en].some(x => norm(x).includes(fq));
+  const all = enabled().filter(hit), inTopic = window.NPPortalUI ? all.filter(NPPortalUI.filter) : all;
+  return inTopic.length ? inTopic : all;
+};
 function renderFind(){
-  const T = FIND_T[lang] || FIND_T.en, q = $("q"), box = $("catChips");
-  q.placeholder = T.ph; q.setAttribute("aria-label", T.ph); $("qClear").setAttribute("aria-label", T.clear); $("findFab").setAttribute("aria-label", T.ph); $("findFab").title = T.ph; box.setAttribute("aria-label", T.catL);
-  box.textContent = "";
-  [["all", T.all]].concat(Object.keys(CATS).map(k => [k, CATS[k][lang] || CATS[k].en])).forEach(([v, l]) => {
-    const b = document.createElement("button"); b.type = "button"; b.textContent = l; b.setAttribute("aria-pressed", String(v === fcat));
-    b.addEventListener("click", () => { fcat = v; applyFind(); }); box.appendChild(b); });
+  const T = FIND_T[lang] || FIND_T.en, q = $("q");
+  q.placeholder = T.ph; q.setAttribute("aria-label", T.ph); $("qClear").setAttribute("aria-label", T.clear); $("findFab").setAttribute("aria-label", T.ph); $("findFab").title = T.ph;
   $("noRes").textContent = T.none;
 }
 function applyFind(){
   fq = norm($("q").value.trim()); $("qWrap").classList.toggle("has", !!$("q").value);
-  $("catChips").querySelectorAll("button").forEach((b, i) => b.setAttribute("aria-pressed", String((i === 0 ? "all" : Object.keys(CATS)[i - 1]) === fcat)));
-  $("findFab").classList.toggle("on", !!fq || fcat !== "all");
+  $("findFab").classList.toggle("on", !!fq);
   renderGrid(); $("noRes").hidden = grid.children.length > 0;
 }
 function setFind(open){
@@ -754,6 +753,7 @@ function setTileLabels(){
   grid.querySelectorAll(".tile").forEach(b => { const g = games.find(g => g.id === b.dataset.id); b.setAttribute("aria-label", window.NPPortalUI ? NPPortalUI.label(g) : gname(g)); });
 }
 function renderGrid(){
+  window.NPPortalUI && NPPortalUI.syncTopics();   // nhóm chủ đề nào hết game (phụ huynh ẩn) thì về "Tất cả"
   grid.textContent = "";
   visible().forEach((g, i) => {
     const b = document.createElement("button");
@@ -998,7 +998,8 @@ function openFromPortal(g, resume){
   const old = g.url; if(resume) g.url = old + (old.indexOf("?") < 0 ? "?" : "&") + "resume=1";   // cùng cách rails.js mở ván dở
   pushed = true; location.hash = g.id; setTimeout(() => { g.url = old; }, 800);
 }
-NPPortalUI.init({ portal:"cozy", games:games, getLang:() => lang, enabled, open:openFromPortal });
+NPPortalUI.init({ portal:"cozy", games:games, getLang:() => lang, enabled, open:openFromPortal,
+  onTopic:() => { renderGrid(); $("noRes").hidden = grid.children.length > 0; } });   // chip chủ đề: dựng lại lưới (fitGrid dàn lại một màn hình, chỉ số trang cập nhật)
 
 /* ===== KHỞI ĐỘNG ===== */
 lang = detectLang();

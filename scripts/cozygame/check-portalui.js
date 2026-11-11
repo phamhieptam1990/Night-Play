@@ -35,9 +35,12 @@ const WANT_CAT = /id="topics"/.test(fs.readFileSync(path.join(root, "cozyplay/in
   note(Object.keys(b).length > 10 && JSON.stringify(Object.entries(a).sort()) === JSON.stringify(Object.entries(b).sort()), "bảng SAVE của portalui.js lệch rails.js");
   const html = fs.readFileSync(path.join(root, "cozyplay/index.html"), "utf8"), ids = [...html.matchAll(/\{ id:"([\w-]+)", cat:/g)].map(m => m[1]);
   note(JSON.stringify(ids.slice().sort()) === JSON.stringify(COZY.slice().sort()), "id game ở cozyplay/index.html lệch shared/multi-games.js: " + ids.length + " vs " + COZY.length);
+  /* id do shared/rails.js|hud.js tạo ra khi mở game (vd. #npTop) KHÔNG được trùng id có sẵn trong HTML hai cổng (từng trùng #npTop: rails ẩn nhầm khối của trang) */
+  const made = new Set(); for (const f of ["shared/rails.js", "shared/hud.js"]) { const src = fs.readFileSync(path.join(root, f), "utf8"); src.replace(/\.id\s*=\s*"([\w-]+)"/g, (_, i) => made.add(i)); src.replace(/id="([\w-]+)"/g, (_, i) => made.add(i)); }
+  for (const pg of ["cozyplay/index.html", "popplay/index.html"]) { const h = fs.readFileSync(path.join(root, pg), "utf8"); for (const i of made) note(!new RegExp('\\bid="' + i + '"').test(h), pg + ': id="' + i + '" trùng id do shared/rails.js|hud.js tạo ra'); }
   const popHtml = fs.readFileSync(path.join(root, "popplay/index.html"), "utf8");
   note(!/Night Pass|👑|crown/i.test((popHtml.match(/<main>[\s\S]*?<\/main>/) || [""])[0]), "popplay/index.html: <main> không được nhắc Night Pass/👑");
-  note(!/id="topics"|id="npTop"/.test(popHtml), "popplay/index.html: Pop Play KHÔNG có bộ lọc / thẻ Hôm nay");
+  note(!/id="topics"|id="puTop"/.test(popHtml), "popplay/index.html: Pop Play KHÔNG có bộ lọc / thẻ Hôm nay");
 })();
 
 const SIZES = quick ? [[320, 568], [360, 640], [390, 844], [768, 1024], [844, 390], [1280, 800]]
@@ -85,11 +88,14 @@ const MEASURE = kind => {
       const tag = kind + " " + theme + " " + lang + " " + w + "x" + h;
       const pg = await open(kind + "play/index.html", w, h, { theme, lang, ls: kind === "cozy" ? [RES] : [] });
       const r = await pg.evaluate(MEASURE, kind); r.errs.forEach(e => note(false, tag + ": " + e));
+      if (w === 390 || w === 1280) { const dup = await pg.evaluate(() => { const c = {}; document.querySelectorAll("[id]").forEach(e => { c[e.id] = (c[e.id] || 0) + 1; }); return Object.keys(c).filter(k => c[k] > 1); }); note(!dup.length, tag + ": id trùng " + JSON.stringify(dup) + " (từng trùng #npTop với shared/rails.js làm ẩn nhầm khối của trang)"); }
       if (kind === "cozy") {
-        const t = await pg.evaluate(() => { const c = document.getElementById("npToday"), x = document.getElementById("npResume"), v = e => !!e && !e.hidden && e.offsetParent !== null; return { today: v(c), txt: c && c.textContent, res: v(x), pro: document.querySelectorAll("#grid .tile .pu-pro").length, tiles: document.querySelectorAll("#grid .tile").length }; });
+        const t = await pg.evaluate(() => { const c = document.getElementById("puToday"), x = document.getElementById("puResume"), v = e => !!e && !e.hidden && e.offsetParent !== null; return { today: v(c), txt: c && c.textContent, res: v(x), pro: document.querySelectorAll("#grid .tile .pu-pro").length, tiles: document.querySelectorAll("#grid .tile").length }; });
         note(t.today, tag + ": thẻ Hôm nay không hiện"); note(t.res, tag + ": thẻ Chơi tiếp không hiện dù có np-resume hợp lệ");
         if (w >= 360) note(/#\d+/.test(t.txt || ""), tag + ": thẻ Hôm nay thiếu số #N (" + t.txt + ")");
         note(t.pro === COZY.filter(i => MG.get(i).pro).length && t.tiles === 20, tag + ": 👑 " + t.pro + " / ô " + t.tiles);
+        const ch = await pg.evaluate(() => [...document.querySelectorAll("#topics button")].map(b => b.textContent));
+        note(ch.length === 4 && ch[0] === (lang === "vi" ? "Tất cả" : "All"), tag + ": chip lọc " + JSON.stringify(ch));
       } else {
         const t = await pg.evaluate(() => ({ chips: !!document.getElementById("topics"), crown: document.querySelectorAll(".pu-pro").length, lock: (() => { const e = document.getElementById("lock"); if (!e) return null; const r = e.getBoundingClientRect(); return { w: r.width, h: r.height, in: r.top >= 0 && r.bottom <= innerHeight + 1 && r.left >= 0 && r.right <= innerWidth + 1, vis: getComputedStyle(e).display !== "none" }; })(), tiles: document.querySelectorAll("#grid .tile").length, hl: ["hleft", "tleft"].map(i => getComputedStyle(document.getElementById(i)).display) }));
         note(!t.chips && t.crown === 0, tag + ": Pop có chip/👑"); note(t.tiles === 12, tag + ": Pop " + t.tiles + " ô (cần 12)");
@@ -100,8 +106,38 @@ const MEASURE = kind => {
       if ((w === 390 && h === 844) || (w === 1280 && lang === "vi") || (w === 320 && lang === "en")) await shot(pg, "portalui-" + tag);
       await pg.close();
     }
+    /* 1b) chip lọc chủ đề: số game mỗi nhóm đúng bảng cat, tổng = 20, vẫn một màn hình, chỉ số trang cập nhật, nhớ trong phiên, không bao giờ rỗng */
+    const WANT = { work: COZY.filter(i => MG.get(i).cat === "work"), life: COZY.filter(i => MG.get(i).cat === "life"), mind: COZY.filter(i => MG.get(i).cat === "mind") };
+    note(WANT.work.length + WANT.life.length + WANT.mind.length === 20 && COZY.length === 20, "tổng ba nhóm " + (WANT.work.length + WANT.life.length + WANT.mind.length) + " ≠ 20 game Cozy");
+    for (const [w, h] of (quick ? [[320, 568], [390, 844], [844, 390], [1280, 800]] : [[320, 568], [375, 667], [390, 844], [768, 1024], [844, 390], [1280, 800]])) for (const lang of ["vi", "en"]) {
+      const pg = await open("cozyplay/index.html", w, h, { lang, theme: lang === "vi" ? "dark" : "light" }), seen = {};
+      for (const k of ["all", "work", "life", "mind", "all"]) {
+        const tag = "chip " + k + " " + lang + " " + w + "x" + h;
+        await pg.evaluate(k2 => document.querySelector('#topics button[data-k="' + k2 + '"]').click(), k); await wait(350);
+        const r = await pg.evaluate(MEASURE, "cozy"); r.errs.forEach(e => note(false, tag + ": " + e));
+        const st = await pg.evaluate(() => ({ ids: [...document.querySelectorAll("#grid .tile")].map(t => t.dataset.id), pressed: [...document.querySelectorAll("#topics button")].filter(b => b.getAttribute("aria-pressed") === "true").map(b => b.dataset.k), ss: sessionStorage.getItem("np-topic"), ls: localStorage.getItem("np-topic"), per: typeof gPage !== "undefined" ? gPage.n : -1, slide: document.getElementById("grid").classList.contains("slide"), dots: [...document.querySelectorAll("#gdots button:not(.gn)")].length, active: [...document.querySelectorAll("#gdots button[aria-current=true]")].length, none: !document.getElementById("noRes").hidden }));
+        const want = k === "all" ? COZY : WANT[k];
+        note(JSON.stringify(st.ids.slice().sort()) === JSON.stringify(want.slice().sort()), tag + ": ô " + st.ids.length + " ≠ " + want.length);
+        note(st.pressed.length === 1 && st.pressed[0] === k && st.ss === k && st.ls === null, tag + ": trạng thái chip/sessionStorage " + JSON.stringify({ p: st.pressed, ss: st.ss, ls: st.ls }));
+        note(st.slide ? st.dots === st.per && st.active === 1 : st.dots === 0, tag + ": chỉ số trang lệch (slide=" + st.slide + ", chấm=" + st.dots + ", trang=" + st.per + ", đang=" + st.active + ")");
+        note(!st.none && st.ids.length > 0, tag + ": lưới rỗng"); seen[k] = st.ids;
+        if (k !== "all" && w === 390 && lang === "vi") await shot(pg, "portalui-chip-" + k + "-" + w + "x" + h);
+      }
+      const u = [].concat(seen.work, seen.life, seen.mind); note(new Set(u).size === 20 && u.length === 20, "ba nhóm không phủ đúng 20 game, mỗi game một nhóm duy nhất (" + u.length + "/" + new Set(u).size + ")");
+      /* nhớ trong phiên: tải lại vẫn giữ nhóm */
+      await pg.evaluate(() => document.querySelector('#topics button[data-k="mind"]').click()); await wait(200); await pg.reload({ waitUntil: "load" }); await wait(600);
+      const rl = await pg.evaluate(() => ({ n: document.querySelectorAll("#grid .tile").length, p: [...document.querySelectorAll("#topics button")].filter(b => b.getAttribute("aria-pressed") === "true").map(b => b.dataset.k) }));
+      note(rl.n === WANT.mind.length && rl.p[0] === "mind", "chip lọc không nhớ sau tải lại: " + JSON.stringify(rl));
+      await pg.close();
+    }
+    { /* không bao giờ rỗng: phụ huynh ẩn hết một nhóm -> chip biến mất, lưới vẫn đầy; tìm chữ ngoài nhóm đang chọn -> vẫn có kết quả */
+      const pg = await open("cozyplay/index.html", 390, 844, { ls: [["prefs", JSON.stringify({ limit: 0, off: WANT.work })]] });
+      const ch = await pg.evaluate(() => [...document.querySelectorAll("#topics button")].map(b => b.dataset.k)); note(JSON.stringify(ch) === '["all","life","mind"]', "ẩn hết nhóm Công sở: chip còn " + JSON.stringify(ch));
+      const n = await pg.evaluate(() => document.querySelectorAll("#grid .tile").length); note(n === 17, "ẩn 3 game Công sở: còn " + n + " ô (cần 17)"); await pg.close();
+      const pg2 = await open("cozyplay/index.html", 390, 844, { ls: [] }); await pg2.evaluate(() => { document.querySelector('#topics button[data-k="work"]').click(); const q = document.getElementById("q"); q.value = "mat tinh"; q.dispatchEvent(new Event("input")); }); await wait(300);
+      const m = await pg2.evaluate(() => ({ n: document.querySelectorAll("#grid .tile").length, none: !document.getElementById("noRes").hidden })); note(m.n === 1 && !m.none, "tìm 'mat tinh' khi đang ở nhóm Công sở: " + JSON.stringify(m)); await pg2.close(); }
     /* 2) Chơi tiếp: chỉ khi hợp lệ */
-    const resCase = async (name, ls, want) => { const pg = await open("cozyplay/index.html", 390, 844, { ls }); const v = await pg.evaluate(() => { const x = document.getElementById("npResume"); return !!x && !x.hidden && x.offsetParent !== null; }); note(v === want, "Chơi tiếp [" + name + "]: hiện=" + v + " (cần " + want + ")"); await pg.close(); };
+    const resCase = async (name, ls, want) => { const pg = await open("cozyplay/index.html", 390, 844, { ls }); const v = await pg.evaluate(() => { const x = document.getElementById("puResume"); return !!x && !x.hidden && x.offsetParent !== null; }); note(v === want, "Chơi tiếp [" + name + "]: hiện=" + v + " (cần " + want + ")"); await pg.close(); };
     await resCase("không có bản lưu", [], false);
     await resCase("hợp lệ", [RES], true);
     await resCase("quá 7 ngày", [["np-resume:xay-cau-tre", JSON.stringify({ v: 1, ts: Date.now() - 8 * 864e5, state: { t: 1 } })]], false);
@@ -109,16 +145,16 @@ const MEASURE = kind => {
     await resCase("ván hôm nay của ngày cũ", [["np-resume:xay-cau-tre", JSON.stringify({ v: 1, ts: Date.now(), daily: true, day: "2020-01-01", state: { t: 1 } })]], false);
     await resCase("JSON hỏng", [["np-resume:xay-cau-tre", "{không phải json"]], false);
     await resCase("game không có trong cổng", [["np-resume:khong-ton-tai", JSON.stringify({ v: 1, ts: Date.now(), state: { t: 1 } })]], false);
-    { const pg = await open("cozyplay/index.html", 390, 844, { ls: [RES] }); await pg.click("#npResume"); await wait(900);
+    { const pg = await open("cozyplay/index.html", 390, 844, { ls: [RES] }); await pg.click("#puResume"); await wait(900);
       const r = await pg.evaluate(() => { const f = document.querySelector("#stage iframe"); return { hash: location.hash, src: f && f.src }; });
       note(r.hash === "#xay-cau-tre" && /[?&]resume=1/.test(r.src || ""), "bấm Chơi tiếp phải mở xay-cau-tre với ?resume=1: " + JSON.stringify(r)); await pg.close(); }
-    { const pg = await open("cozyplay/index.html", 390, 844, {}); const id = await pg.evaluate(() => document.getElementById("npToday").dataset.id); await pg.click("#npToday"); await wait(900);
+    { const pg = await open("cozyplay/index.html", 390, 844, {}); const id = await pg.evaluate(() => document.getElementById("puToday").dataset.id); await pg.click("#puToday"); await wait(900);
       const r = await pg.evaluate(() => ({ hash: location.hash, src: (document.querySelector("#stage iframe") || {}).src }));
       note(r.hash === "#" + id && !/resume=1/.test(r.src || ""), "bấm Hôm nay phải mở game " + id + " (không resume): " + JSON.stringify(r)); await pg.close(); }
     /* 3) Hôm nay: đã chơi hôm nay -> dấu ✓ + "Đã chơi" */
-    { const pg = await open("cozyplay/index.html?day=2026-11-11", 390, 844, {}); const id = await pg.evaluate(() => document.getElementById("npToday").dataset.id), SV = await pg.evaluate(() => NPPortalUI._debug.SAVE[document.getElementById("npToday").dataset.id]);
+    { const pg = await open("cozyplay/index.html?day=2026-11-11", 390, 844, {}); const id = await pg.evaluate(() => document.getElementById("puToday").dataset.id), SV = await pg.evaluate(() => NPPortalUI._debug.SAVE[document.getElementById("puToday").dataset.id]);
       const pg2 = await open("cozyplay/index.html", 390, 844, { day: "2026-11-11", ls: SV ? [[SV, JSON.stringify({ days: { "2026-11-11": 1234 } })]] : [] });
-      const d = await pg2.evaluate(() => ({ ok: !!document.querySelector("#npToday .pu-ok"), al: document.getElementById("npToday").getAttribute("aria-label") }));
+      const d = await pg2.evaluate(() => ({ ok: !!document.querySelector("#puToday .pu-ok"), al: document.getElementById("puToday").getAttribute("aria-label") }));
       note(!SV || (d.ok && /1[.,]?234/.test(d.al)), "Hôm nay đã chơi (" + id + "): thiếu ✓/điểm: " + JSON.stringify(d)); await pg.close(); await pg2.close(); }
     /* 4) huy hiệu Mới đúng ngày (14 ngày, D..D+13) */
     const L = JSON.parse(fs.readFileSync(path.join(root, "landing/moi/launches.json"), "utf8")).filter(x => x.type === "game");

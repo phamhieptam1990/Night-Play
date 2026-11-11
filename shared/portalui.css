@@ -72,11 +72,11 @@ html[data-theme=dark] :where(.nav a,.nav button,.foot a,#lock,#findFab,#gdots bu
 }
 
 /* ======================= BƯỚC 2: thẻ Hôm nay / Chơi tiếp, huy hiệu Mới / 👑, nhãn tên Pop (shared/portalui.js) ======================= */
-#npTop{flex:none;display:flex;flex-direction:column;gap:8px;margin:0 0 8px;min-width:0}
-#npTop[hidden]{display:none}
-#npInfo{display:flex;gap:8px;justify-content:center;min-width:0}
-#npInfo[hidden]{display:none}
-.pu-card{position:relative;flex:1 1 0;min-width:0;max-width:380px;display:flex;align-items:center;gap:10px;min-height:56px;padding:6px 12px 6px 6px;border-radius:18px;text-align:left;color:var(--ink);
+#puTop{flex:none;display:flex;flex-direction:column;gap:8px;margin:0 0 8px;min-width:0}
+#puTop[hidden]{display:none}
+#puInfo{display:flex;gap:8px;justify-content:center;min-width:0}
+#puInfo[hidden]{display:none}
+.pu-card{container-type:inline-size;position:relative;flex:1 1 0;min-width:0;max-width:380px;display:flex;align-items:center;gap:10px;min-height:56px;padding:6px 12px 6px 6px;border-radius:18px;text-align:left;color:var(--ink);
   background:var(--pu-glass);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid color-mix(in srgb,var(--accent) 30%,var(--line));
   box-shadow:0 6px 18px rgba(0,0,0,.16),0 0 20px color-mix(in srgb,var(--accent) 14%,transparent);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,background-color .18s ease}
 .pu-card[hidden]{display:none}
@@ -87,12 +87,15 @@ html[data-theme=dark] :where(.nav a,.nav button,.foot a,#lock,#findFab,#gdots bu
 .pu-t b{font-size:13.5px;line-height:1.18;font-weight:800;color:var(--ink);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;word-break:break-word}
 .pu-go{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--pu-grad,var(--accent));color:var(--on-accent)}
 .pu-go svg{width:16px;height:16px}
-.pu-ok{position:absolute;left:34px;bottom:5px;width:17px;height:17px;border-radius:50%;background:var(--ok);color:#fff;font:900 11px/17px system-ui,sans-serif;text-align:center;font-style:normal;box-shadow:0 0 0 2px var(--panel)}
+.pu-ok{position:absolute;left:34px;bottom:5px;width:17px;height:17px;border-radius:50%;background:var(--ok);color:#fff;font:900 11px/17px var(--font);text-align:center;font-style:normal;box-shadow:0 0 0 2px var(--panel)}
 :root[data-theme=dark] .pu-ok{color:#0E1020}
-@media (max-width:520px){#npInfo[data-n="2"] .pu-go{display:none}#npInfo[data-n="2"] .pu-x.ag{display:none}}
-@media (max-width:400px){#npInfo[data-n="2"] .pu-card{gap:8px;padding-right:8px}#npInfo[data-n="2"] .pu-ico{width:40px;height:40px}#npInfo[data-n="2"] .pu-ok{left:30px}#npInfo[data-n="2"] .pu-t small{letter-spacing:0}}
-@media (max-width:359px){.pu-card{gap:8px;padding-right:8px}.pu-ico{width:36px;height:36px;border-radius:10px}.pu-ok{left:26px}.pu-t small .pu-x{display:none}.pu-t b{font-size:13px}}
+@media (max-width:400px){#puInfo[data-n="2"] .pu-card{gap:8px;padding-right:8px}#puInfo[data-n="2"] .pu-ico{width:40px;height:40px}#puInfo[data-n="2"] .pu-ok{left:30px}#puInfo[data-n="2"] .pu-t small{letter-spacing:0}}
+@media (max-width:359px){.pu-card{gap:8px;padding-right:8px}.pu-ico{width:36px;height:36px;border-radius:10px}.pu-ok{left:26px}.pu-t b{font-size:13px}}
 @media (hover:hover) and (pointer:fine){.pu-card:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 10px 26px color-mix(in srgb,var(--accent) 32%,transparent),0 0 0 1px color-mix(in srgb,var(--accent) 50%,transparent)}}
+/* phần phụ của nhãn tự ẩn theo bề rộng THẬT của thẻ (không theo cỡ màn hình): "7 phút trước" cần ~180px, "#315" cần ~128px */
+@container (max-width:229px){.pu-go{display:none}}
+@container (max-width:179px){.pu-x.ag{display:none}}
+@container (max-width:127px){.pu-x{display:none}}
 .pu-card:active{transform:scale(.98)}
 .pu-card:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 html[data-theme=dark] .pu-card:focus-visible{outline-color:#fff}
@@ -101,7 +104,7 @@ html[data-theme=dark] .pu-card:focus-visible{outline-color:#fff}
 /* huy hiệu trên ô game: "Mới" (trái) và 👑 (phải); co lại theo bề rộng ô */
 .tile{container-type:size}
 .pu-b{position:absolute;z-index:2;pointer-events:none}
-.pu-new{top:5%;left:5%;padding:2px 7px;border-radius:99px;font:800 11px/1.3 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.01em;background:#FFD66B;color:#3A2A00;box-shadow:0 1px 5px rgba(0,0,0,.35)}
+.pu-new{top:5%;left:5%;padding:2px 7px;border-radius:99px;font:800 11px/1.3 var(--font);letter-spacing:.01em;background:#FFD66B;color:#3A2A00;box-shadow:0 1px 5px rgba(0,0,0,.35)}
 .pu-pro{top:5%;right:5%;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:rgba(20,16,50,.74);color:#FFD66B;box-shadow:0 1px 5px rgba(0,0,0,.35),inset 0 0 0 1px rgba(255,214,107,.45)}
 .pu-pro svg{width:13px;height:13px}
 @container (max-width:84px){.pu-new{font-size:9.5px;padding:1px 5px}.pu-pro{width:18px;height:18px}.pu-pro svg{width:11px;height:11px}}
@@ -109,8 +112,32 @@ html[data-app=popplay] .pu-new{font-size:10.5px;padding:2px 7px;background:#FFE1
 html[data-app=popplay] .pu-pro{display:none}
 /* Pop Play: tên ngắn một dòng ở dải dưới ô (chỉ khi ô đủ rộng, nếu không thì ảnh tràn ô) */
 .pu-n{display:none;position:absolute;left:0;right:0;bottom:0;height:24%;z-index:1;align-items:center;justify-content:center;padding:0 4px;white-space:nowrap;overflow:hidden;
-  background:var(--panel);color:var(--ink);font:800 clamp(11px,13cqw,18px)/1 system-ui,-apple-system,"Segoe UI",sans-serif;pointer-events:none}
+  background:var(--panel);color:var(--ink);font:800 clamp(11px,13cqw,18px)/1 var(--font);pointer-events:none}
 @container (min-width:88px){html[data-app=popplay] .pu-n{display:flex}html[data-app=popplay] .tile img{position:absolute;left:0;top:0;height:76%}}
 
 /* Pop Play: KHÔNG hiện số phút còn lại ở cổng/trong khung chơi (chỉ phụ huynh thấy trong khu vực khoá: #gate) */
 html[data-app=popplay] #hleft,html[data-app=popplay] #tleft{display:none!important}
+
+/* ======================= BƯỚC 3: chip lọc chủ đề (Night Play) ======================= */
+#puTop{flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 12px}
+#puInfo{flex:1 1 440px}
+#topics{flex:0 1 auto;max-width:100%;min-width:0;display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;padding:2px 0}
+#topics::-webkit-scrollbar{display:none}
+#topics[hidden]{display:none}
+#topics>:first-child{margin-left:auto}#topics>:last-child{margin-right:auto}   /* căn giữa an toàn: tràn thì cuộn được từ chip đầu */
+.pu-chip{flex:none;min-height:44px;min-width:44px;padding:0 14px;border-radius:99px;font-weight:700;font-size:14px;line-height:1;white-space:nowrap;color:var(--ink);cursor:pointer;
+  background:var(--pu-glass);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid color-mix(in srgb,var(--accent) 30%,var(--line));
+  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,background-color .18s ease}
+.pu-chip[aria-pressed=true]{background:var(--pu-grad);color:var(--on-accent);border-color:transparent;box-shadow:0 4px 16px var(--pu-glow)}
+.pu-chip:active{transform:scale(.97)}
+.pu-chip:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+html[data-theme=dark] .pu-chip:focus-visible{outline-color:#fff}
+@media (hover:hover) and (pointer:fine){.pu-chip:hover{transform:translateY(-1px);border-color:var(--accent);background-color:color-mix(in srgb,var(--accent) 14%,var(--panel))}.pu-chip[aria-pressed=true]:hover{background:var(--pu-grad);box-shadow:0 8px 24px var(--pu-glow)}}
+@media (prefers-reduced-motion:reduce){.pu-chip{transition:none}.pu-chip:hover,.pu-chip:active{transform:none!important}}
+@media (max-width:520px){#puTop{gap:8px}#puInfo,#topics{flex:0 0 100%}#puInfo{flex-basis:100%}#topics>:first-child{margin-left:0}#topics>:last-child{margin-right:0}.pu-chip{padding:0 12px}}
+/* lọc còn ít game: khối lưới nằm giữa (lưới đầy đủ vẫn thẳng lề 16px) */
+#grid[data-topic]:not([data-topic=all]):not(.slide){justify-content:center}
+/* điện thoại thấp (320x568, 360x640): bỏ ba dòng cam kết, thẻ + chip gọn để lưới còn >= 2 hàng ô */
+@media (max-width:520px) and (max-height:700px){html[data-app=cozyplay] .trust{display:none!important}.pu-card{min-height:50px;padding-top:3px;padding-bottom:3px}.pu-ico{width:38px;height:38px}#puTop{gap:6px;margin-bottom:6px}}
+/* màn ngang thấp: thẻ + chip gọn */
+@media (orientation:landscape) and (max-height:520px){.pu-card{min-height:48px;padding-top:4px;padding-bottom:4px}.pu-ico{width:38px;height:38px}#puTop{margin-bottom:4px}}
