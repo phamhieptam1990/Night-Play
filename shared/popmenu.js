@@ -100,7 +100,7 @@
     var sA = function (e, k, x) { if (e.getAttribute(k) !== x) e.setAttribute(k, x); };   /* chỉ ghi khi đổi (tránh vòng MutationObserver ↔ labels) */
     sA(fab, "aria-label", t); if (fab.title !== t) fab.title = t;
     var b = playing() ? (v ? "Về màn chọn" : "Back to menu") : (v ? "Thoát" : "Exit"); sA(bk, "aria-label", b); if (bk.title !== b) bk.title = b;
-    ROLES.forEach(function (r) { var e = $(r[1]); if (e && e.parentNode === panel) { sA(e, "data-l", v ? r[2] : r[3]); if (r[0] === "cam" || r[0] === "shr" || r[0] === "lock") { sA(e, "aria-label", v ? r[2] : r[3]); if (e.title !== (v ? r[2] : r[3])) e.title = v ? r[2] : r[3]; } } });
+    ROLES.forEach(function (r) { var e = $(r[1]); if (e && e.parentNode === panel) { sA(e, "data-l", r[0] === "pause" && /^(Tiếp tục|Chơi tiếp|Resume|Continue|Play on)/i.test(e.getAttribute("aria-label") || "") ? e.getAttribute("aria-label") : v ? r[2] : r[3]); if (r[0] === "cam" || r[0] === "shr" || r[0] === "lock") { sA(e, "aria-label", v ? r[2] : r[3]); if (e.title !== (v ? r[2] : r[3])) e.title = v ? r[2] : r[3]; } } });
     if (lck) { var kl = pd && pd.getElementById("klock"), hh = !kl || kl.hidden; if (lck.hidden !== hh) lck.hidden = hh; }   /* webview app / Night Play: kidlock ẩn nút thì ô khoá cũng ẩn */
     { var hb = !pd && !playing(); if (de.classList.contains("np-hidebk") !== hb) de.classList.toggle("np-hidebk", hb); }   /* mở trực tiếp ở màn chọn: không có chỗ để thoát */
   }
