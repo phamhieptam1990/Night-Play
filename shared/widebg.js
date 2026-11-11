@@ -117,6 +117,8 @@
       if (pl) mo.observe(pl, { attributes: true, attributeFilter: ["style", "class", "data-pro", "data-scr", "data-ty", "data-layout"] });
       mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
       document.querySelectorAll(".deco,.dc").forEach(function (d) { mo.observe(d, { childList: true }); });
+      /* màn chọn hiện/ẩn (Pop: popnp.css đổi --pbg theo màn chọn) -> vẽ lại */
+      document.querySelectorAll("#play > #home,#play > #village,#play > #ovStart").forEach(function (d) { mo.observe(d, { attributes: true, attributeFilter: ["hidden"] }); });
     } catch (e) {}
     addEventListener("storage", soon); addEventListener("resize", soon); setTimeout(apply, 600); setTimeout(apply, 1800);
   }

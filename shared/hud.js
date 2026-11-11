@@ -3,7 +3,7 @@
    Điện thoại/iPad DỌC không đổi (thanh trên 68px + menu ⋯ của game). Nút ? 🔊 ngôn ngữ là nút thật trong game (cùng gốc, cùng id như khối HUD cột bên: bấm hộ), nút gốc ẩn bằng CSS chèn vào game (html.np-hudg).
    MỘT NƠI DUY NHẤT chứa nút điều khiển (GAME_RULES 0a-20): khối #npHudc này dùng CHUNG cho hai chế độ — (1) có cột bên lề: nằm trong khối HUD đầu cột trái (#npHslot do rails.js dựng), (3) không có cột: cột nút bên trái khung.
    THỨ TỰ cố định: ? 🔊 ngôn ngữ ↻ ⏸ 🏆 📷 📤 🔒 🍜 (← và tên game ở trên, nút thu gọn cột cạnh ←). Nút thật nằm trong game: bấm hộ, trạng thái phản chiếu CHỈ khi đổi; nút gốc trong game ẩn bằng CSS (html.np-hudg).
-   Cao >= 620px: các nút dọc dưới ←. Thấp hơn: chỉ nút ⋯ mở thẻ nhỏ 3 cột bên phải cột nút (đóng khi chạm ngoài / Esc / chọn nút). Bài đo: scripts/cozygame/check-hud.js, check-onezone.js. */
+   Cao >= 620px: các nút dọc dưới ←. Thấp hơn: chỉ nút ⋯ mở thẻ nhỏ lưới 5 cột Ô ICON TO 60px (không chữ nhãn) bên phải cột nút (đóng khi chạm ngoài / Esc / chọn nút). Bài đo: scripts/cozygame/check-hud.js, check-onezone.js. */
 (function () {
   "use strict";
   if (window.NPHud) return;
@@ -15,6 +15,7 @@
     lock: '<rect x="5" y="11" width="14" height="9" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
     rst: '<path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v5h-5"/>',
     pause: '<path d="M8 5v14M16 5v14"/>',
+    play: '<path d="M8 5.5v13l11-6.5z" fill="currentColor"/>',
     board: '<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/>',
     more: '<circle cx="5.5" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="18.5" cy="12" r="1.6" fill="currentColor"/>'
   };
@@ -64,7 +65,8 @@
       if (b.hidden === shown) b.hidden = !shown;
       if (shown) vis++; if (!src) return;
       if (MIRROR[k]) { var h = src.innerHTML.trim(); if (h && b.__h !== h) { b.__h = h; b.innerHTML = src.innerHTML; } }
-      setA(b, "aria-label", src.getAttribute("aria-label") || src.title || L[k]);
+      var al = src.getAttribute("aria-label") || src.title || L[k]; setA(b, "aria-label", al); if (b.title !== al) b.title = al;   /* ô icon: KHÔNG chữ nhãn, tên = aria-label + title */
+      if (k === "pause") { var rs = /^(Tiếp tục|Chơi tiếp|Resume|Continue|Play on)/i.test(al) ? "play" : "pause"; if (b.__ic !== rs) { b.__ic = rs; b.innerHTML = ico(rs); } }   /* ⏸ ↔ ▶ theo trạng thái */
       if (src.hasAttribute("aria-pressed")) setA(b, "aria-pressed", src.getAttribute("aria-pressed")); else if (b.hasAttribute("aria-pressed")) b.removeAttribute("aria-pressed");
     });
     setA(more, "aria-label", L.more); if (more.title !== L.more) more.title = L.more;

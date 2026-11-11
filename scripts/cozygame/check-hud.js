@@ -3,7 +3,7 @@
    Mọi game (Cozy + Pop) mở QUA TRANG CỔNG, màn chọn + màn chơi, ở các cỡ ngang không có cột bên (568x320, 667x375, 844x390, 932x430, 724x700, 800x700, 1000x560, 1024x768)
    + cỡ dọc để chắc chắn KHÔNG đổi (390x844, 484x694, 768x1024: không có #npHudc). Đo:
    - HUD bật => #npHudc hiện; nút ←(cổng hoặc game) ở (38,38)±2.5; mọi nút HUD (và ⋯) 44x44±1, CÙNG trục X với ←, nằm trong khung nhìn, KHÔNG chồng nhau, elementFromPoint = chính nút, nằm ngoài khung game (không che vùng chơi);
-   - cỡ thấp (<480px): chỉ ⋯ nhìn thấy trong cột; bấm ⋯ mở thẻ: thẻ trong khung nhìn, nút 44px, đóng được; cỡ cao: tất cả nút hiện trực tiếp;
+   - cỡ thấp (<480px): chỉ ⋯ nhìn thấy trong cột; bấm ⋯ mở thẻ: thẻ trong khung nhìn (cao <=60% màn), lưới Ô ICON TO >=56px không chữ nhãn (trừ VI/EN + huy hiệu), aria-label + title, đóng được; cỡ cao: tất cả nút hiện trực tiếp;
    - nút gốc ? 🔊 VI trong game đã ẩn khi HUD bật; tên game ≤2 dòng và không bị cắt; thẻ nhắc việc (.ask): ≤3 dòng, rộng >=140px hoặc dạng gọn xếp dọc, loa <=44px, chữ không bị cắt;
    - một màn hình: không cuộn dọc/ngang ở cổng và trong game. */
 const { spawn } = require("child_process"), fs = require("fs"), path = require("path"), puppeteer = require("puppeteer-core");
@@ -46,7 +46,11 @@ const MEASURE = (gid) => {
 const POPOVER = () => {
   const hb = document.getElementById("npHudc"), pn = hb && hb.querySelector(".np-hpn"); if (!pn) return null;
   const vis = e => { const s = getComputedStyle(e), r = e.getBoundingClientRect(); return s.display !== "none" && r.width > 3; };
-  const items = [...pn.querySelectorAll(".np-hb")].filter(vis).map(e => { const r = e.getBoundingClientRect(); return { w: r.width, h: r.height, l: r.left, t: r.top, r: r.right, b: r.bottom }; });
+  const items = [...pn.querySelectorAll(".np-hb")].filter(vis).map(e => {
+    const r = e.getBoundingClientRect(), tw = document.createTreeWalker(e, NodeFilter.SHOW_TEXT); let txt = "", tn; while ((tn = tw.nextNode())) { if (tn.parentElement.closest("b,svg,[hidden]")) continue; txt += tn.nodeValue; } txt = txt.replace(/\s+/g, "");
+    const sv = e.querySelector("svg"), b = e.querySelector("b"), br = b && b.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2, t = document.elementFromPoint(cx, cy), cs = getComputedStyle(e);
+    return { k: e.dataset.k, w: r.width, h: r.height, l: r.left, t: r.top, r: r.right, b: r.bottom, txt, aria: (e.getAttribute("aria-label") || "").trim(), title: (e.title || "").trim(), svg: sv ? sv.getBoundingClientRect().width : 0, fs: parseFloat(cs.fontSize), fw: +cs.fontWeight,
+      aft: getComputedStyle(e, "::after").content, bef: getComputedStyle(e, "::before").content, hit: t === e || e.contains(t), bw: br ? br.width : 0, bh: br ? br.height : 0, bcut: br ? (br.left < r.left - .5 || br.right > r.right + .5 || br.top < r.top - .5 || br.bottom > r.bottom + .5) : false }; });
   const pr = pn.getBoundingClientRect(); return { open: hb.classList.contains("open") && vis(pn), items, l: pr.left, t: pr.top, r: pr.right, b: pr.bottom, W: innerWidth, H: innerHeight };
 };
 const inter = (a, b) => a.l < b.r - 1 && a.r > b.l + 1 && a.t < b.b - 1 && a.b > b.t + 1;
@@ -93,7 +97,15 @@ const inter = (a, b) => a.l < b.r - 1 && a.r > b.l + 1 && a.t < b.b - 1 && a.b >
           for (let i = 0; i < bt.length; i++) for (let j = i + 1; j < bt.length; j++) note(!inter(bt[i], bt[j]), tag + ": nút " + bt[i].k + " chồng " + bt[j].k);
           if (r.sm && name === "chọn") {
             await pg.tap("#npHudc .np-hmore").catch(() => {}); await wait(200); const p = await pg.evaluate(POPOVER);
-            if (p) { note(p.open, tag + ": bấm ⋯ không mở thẻ"); if (p.open) { note(p.items.length >= 2, tag + ": thẻ ⋯ chỉ có " + p.items.length + " nút"); note(p.l >= 0 && p.t >= 0 && p.r <= p.W && p.b <= p.H, tag + ": thẻ ⋯ ngoài khung nhìn"); for (const it of p.items) note(it.w >= 43 && it.h >= 43, tag + ": nút trong thẻ ⋯ nhỏ " + Math.round(it.w)); if (shots) await pg.screenshot({ path: path.join(shots, id + "-" + W + "x" + H + "-menu.png") }); }
+            if (p) { note(p.open, tag + ": bấm ⋯ không mở thẻ"); if (p.open) { note(p.items.length >= 2, tag + ": thẻ ⋯ chỉ có " + p.items.length + " nút"); note(p.l >= 0 && p.t >= 0 && p.r <= p.W && p.b <= p.H, tag + ": thẻ ⋯ ngoài khung nhìn"); note(p.b - p.t <= H * 0.6 + 0.5, tag + ": thẻ ⋯ cao " + Math.round(p.b - p.t) + "px > 60% màn");
+              for (const it of p.items) {   /* Ô ICON TO: >=56px, không chữ hiển thị (trừ VI/EN + huy hiệu số), aria-label + title, icon >=30px, bấm trúng chính ô */
+                note(it.w >= 55.5 && it.h >= 55.5, tag + ": ô " + it.k + " trong thẻ ⋯ nhỏ " + Math.round(it.w) + "x" + Math.round(it.h) + " (<56)");
+                note(it.k === "lang" ? /^[A-Za-z]{2,3}$/.test(it.txt) : !/\p{L}/u.test(it.txt), tag + ": ô " + it.k + " còn chữ hiển thị “" + it.txt + "”");
+                note((!it.aft || /^(none|normal)$/.test(it.aft)) && (!it.bef || /^(none|normal)$/.test(it.bef)), tag + ": ô " + it.k + " còn nhãn chữ giả " + it.aft + it.bef);
+                note(!!it.aria, tag + ": ô " + it.k + " thiếu aria-label"); note(!!it.title, tag + ": ô " + it.k + " thiếu title");
+                if (it.k === "lang") note(it.fs >= 19.5 && it.fw >= 700, tag + ": chữ VI/EN nhỏ/mảnh " + it.fs); else if (it.svg) note(it.svg >= 29.5, tag + ": icon ô " + it.k + " nhỏ " + Math.round(it.svg) + "px"); else note(it.fs >= 27.5, tag + ": emoji ô " + it.k + " nhỏ " + it.fs);
+                note(it.hit, tag + ": tâm ô " + it.k + " bị che"); if (it.bw) { note(it.bw >= 17.5 && it.bh >= 17.5, tag + ": huy hiệu nhỏ " + Math.round(it.bw)); note(!it.bcut, tag + ": huy hiệu bị cắt"); }
+              } if (shots) await pg.screenshot({ path: path.join(shots, id + "-" + W + "x" + H + "-menu.png") }); }
               await pg.tap("#npHudc .np-hmore").catch(() => {}); await wait(150); const q = await pg.evaluate(POPOVER); note(!q.open, tag + ": bấm ⋯ lần nữa không đóng thẻ"); }
           }
         }

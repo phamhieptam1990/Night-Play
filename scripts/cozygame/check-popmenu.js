@@ -7,7 +7,7 @@ const { spawn } = require("child_process"), fs = require("fs"), path = require("
 const root = path.join(__dirname, "..", ".."), PORT = 8877, args = process.argv.slice(2);
 const quick = args.includes("--quick"), shots = (args.find(a => a.startsWith("--shots=")) || "").slice(8), only = args.find(a => !a.startsWith("--"));
 let ids = fs.readdirSync(path.join(root, "popplay/games")); if (only) ids = only.split(","); else if (quick) ids = ids.slice(0, 3);
-const SIZES = quick ? [[390, 844], [768, 1024], [844, 390], [1024, 768]] : [[390, 844], [320, 568], [768, 1024], [834, 1194], [844, 390], [1024, 768], [1194, 834]];
+const SIZES = quick ? [[390, 844], [320, 568], [768, 1024], [844, 390], [1024, 768]] : [[390, 844], [320, 568], [360, 640], [414, 896], [768, 1024], [834, 1194], [844, 390], [667, 375], [1024, 768], [1194, 834]];
 const bad = [];
 (async () => {
   const srv = spawn("python3", ["-m", "http.server", String(PORT)], { cwd: root, stdio: "ignore" }); await new Promise(r => setTimeout(r, 1200));
@@ -40,7 +40,7 @@ const bad = [];
         if (r.snd && r.fab && r.snd.x + r.snd.w > r.fab.x + 0.5) n("🔊 chồng lên ⋯"); if (r.snd && r.bk && r.snd.x < r.bk.x + r.bk.w) n("🔊 chồng lên ←"); if (r.snd && !r.sndPressed) n("🔊 thiếu aria-pressed");
         if (r.klockShown) n("còn nút khoá #klock rời trên thanh điều khiển (phải gom vào menu)"); if (r.lockItem !== "ok") n("ô khoá màn chơi trong menu: " + r.lockItem);
         if (r.items.length < (mode === "p" ? 4 : 3)) n("bảng thiếu ô " + JSON.stringify(r.items));
-        if (r.items.some(i => i.w < 44 || i.h < 44)) n("ô trong bảng <44px");
+        /* cỡ ô >= 56px đo ở khối "Ô ICON TO" bên dưới khi menu đã mở (đóng thì bảng scale .7) */
         const o = (a, b) => a && b && a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
         if (o(r.t, r.bk) || o(r.t, r.fab) || o(r.t, r.snd)) n("tên đè nút");
         if (r.cut) n("tên bị cắt “…”"); if (r.lines > 2) n("tên " + r.lines + " dòng"); if (r.gap > 16.5 || r.gap < -1) n("tên cách khung " + Math.round(r.gap) + "px (cần ≤16)");
@@ -56,6 +56,23 @@ const bad = [];
       if (shots && (w === 390 || w === 768)) await pg.screenshot({ path: path.join(shots, `${id}-${lang}-${w}x${h}-menu.png`) });
       const pr = await fr.evaluate(() => { const p = document.querySelector("#npPmFan .pn").getBoundingClientRect(); return p.left < 0 || p.right > innerWidth || p.bottom > innerHeight; });
       if (pr) bad.push(tag + ": panel tràn màn");
+      const st0 = "menu";
+      /* Ô ICON TO: mỗi ô >=56px, không chữ hiển thị (trừ VI/EN + huy hiệu số), aria-label + title, icon to, tâm ô bấm trúng chính ô, thẻ <= 60% màn */
+      const TI = await fr.evaluate(() => {
+        const pn = document.querySelector("#npPmFan .pn"), pr = pn.getBoundingClientRect(), E = []; if (pr.height > innerHeight * 0.6 + 0.5) E.push("thẻ cao " + Math.round(pr.height) + " > 60% màn");
+        for (const it of [...pn.children].filter(e => !e.hidden && getComputedStyle(e).display !== "none")) {
+          const r = it.getBoundingClientRect(), n = it.id || it.className, tw = document.createTreeWalker(it, NodeFilter.SHOW_TEXT); let txt = "", tn; while ((tn = tw.nextNode())) { if (tn.parentElement.closest("b,svg,.bl,[hidden]")) continue; txt += tn.nodeValue; } txt = txt.replace(/\s+/g, "");
+          const lang = it.getAttribute("data-r") === "lang", cs = getComputedStyle(it);
+          if (r.width < 55.5 || r.height < 55.5) E.push(n + " nhỏ " + Math.round(r.width) + "x" + Math.round(r.height));
+          if (lang ? !/^[A-Za-z]{2,3}$/.test(txt) : /\p{L}/u.test(txt)) E.push(n + " còn chữ “" + txt + "”");
+          for (const ps of ["::after", "::before"]) { const c = getComputedStyle(it, ps).content; if (c && c !== "none" && c !== "normal" && !(ps === "::before" && it.classList.contains("rs"))) E.push(n + " còn nhãn " + ps + " " + c); }
+          if (!(it.getAttribute("aria-label") || "").trim()) E.push(n + " thiếu aria-label"); if (!(it.title || "").trim()) E.push(n + " thiếu title");
+          const sv = it.querySelector("svg"); if (sv) { if (sv.getBoundingClientRect().width < 29.5) E.push(n + " icon <30px"); } else if (lang) { if (parseFloat(cs.fontSize) < 19.5) E.push(n + " chữ VI/EN <20px"); } else if (parseFloat(cs.fontSize) < 27.5) E.push(n + " emoji <28px");
+          const b = it.querySelector("b"); if (b) { const br = b.getBoundingClientRect(); if (br.width < 17.5 || br.height < 17.5) E.push(n + " huy hiệu nhỏ"); if (br.left < r.left - .5 || br.right > r.right + .5 || br.top < r.top - .5 || br.bottom > r.bottom + .5) E.push(n + " huy hiệu bị cắt"); }
+          const t = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2); if (!(t === it || it.contains(t))) E.push(n + " bị che");
+        }
+        return E; });
+      for (const m of TI) bad.push(tag + " " + st0 + ": ô icon: " + m);
       if (w === 390 || w === 768) {   /* luồng khoá: bấm ô khoá → menu đóng + hộp xác nhận của kidlock; "Thôi" đóng; khoá → np-locked (ẩn ⋯, hiện chỉ báo); release() mở lại */
         const L = await fr.evaluate(async () => {
           const P = parent, w = ms => new Promise(r => setTimeout(r, ms)), out = {}; document.getElementById("npPmLock").click(); await w(500);

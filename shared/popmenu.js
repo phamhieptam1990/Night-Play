@@ -1,5 +1,5 @@
 /* Pop Play, điện thoại DỌC (<=520px): gom các nút rời trên thanh trên (🔊 âm thanh, EN/VI, "?" cách chơi, ⏸ tạm dừng) + 📷 chụp ảnh + 📤 chia sẻ của TRANG CỔNG
-   vào MỘT nút menu ⋯ (48px); bấm mở bảng 3 cột có nhãn chữ. Thanh trên chỉ còn: nút ← (một nút duy nhất) | tên game | ⋯.
+   vào MỘT nút menu ⋯ (48px); bấm mở bảng 3 cột các Ô ICON TO (68px, không chữ nhãn: tên là aria-label + title; ô ngôn ngữ hiện VI/EN; ⏸ đổi ▶ khi đang tạm dừng). Thanh trên chỉ còn: nút ← (một nút duy nhất) | tên game | ⋯.
    - Không tạo chức năng mới: chỉ DI CHUYỂN các nút có sẵn (giữ id + sự kiện) vào bảng; 📷/📤 bấm hộ nút nổi của trang cổng (.nps-cam / .nps-fab).
    - Bố cục: ← và ⋯ là nút CỐ ĐỊNH ở hai góc trên; TÊN GAME (h1) vẫn nằm trong luồng ngay trên khung nội dung (sát khung thông tin), không nằm trong thanh trên.
    - Nút ←: đang chơi (🏠 #homeBtn hoặc ⏸ #pauseBtn đang hiện) = về màn chọn của game (bấm #homeBtn, hoặc goHome() nếu game không có); đang ở màn chọn = thoát về trang cổng
@@ -34,11 +34,24 @@
     pause: "<svg " + S + '><path d="M8 5v14M16 5v14"/></svg>'
   };
   /* thứ tự trong bảng: [vai trò, id nút, nhãn vi, nhãn en] */
-  var ROLES = [["snd", "soundBtn", "Âm thanh", "Sound"], ["lang", "langBtn", "Ngôn ngữ", "Language"], ["help", "phBtn", "Hướng dẫn", "Help"], ["pause", "pauseBtn", "Tạm dừng", "Pause"], ["lock", "npPmLock", "Khoá màn", "Lock"], ["cam", "npPmCam", "Chụp ảnh", "Photo"], ["shr", "npPmShr", "Chia sẻ", "Share"], ["pass", "nsPill", "Sự kiện", "Event"]];
+  var ROLES = [["help", "phBtn", "Hướng dẫn", "Help"], ["snd", "soundBtn", "Âm thanh", "Sound"], ["lang", "langBtn", "Ngôn ngữ", "Language"], ["pause", "pauseBtn", "Tạm dừng", "Pause"], ["cam", "npPmCam", "Chụp ảnh", "Photo"], ["shr", "npPmShr", "Chia sẻ", "Share"], ["lock", "npPmLock", "Khoá màn", "Lock"], ["pass", "nsPill", "Sự kiện", "Event"]];
 
+  /* Ô ICON TO (chủ site: "thích icon to hơn icon có chữ"): ô vuông kính tối s×s, icon svg v px nét dày, emoji e px, chữ ngôn ngữ (VI/EN) l px đậm; KHÔNG chữ nhãn; nút bật = viền + quầng màu nhấn; huy hiệu số 20px ở góc. pre = tiền tố chọn (iPad: "html.np-tab ") */
+  function TILE(s, v, e, l, pre) {
+    var F = pre + "#npPmFan ";
+    return F + ".it{width:" + s + "px!important;height:" + s + "px!important;gap:0!important;padding:0!important;position:relative!important;inset:auto!important;border-radius:" + Math.round(s * 0.3) + "px!important;color:#fff!important;background:rgba(255,255,255,.08)!important;border:1px solid rgba(255,255,255,.16)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.14)!important;font-size:" + e + "px!important;line-height:1!important;touch-action:manipulation;pointer-events:auto!important}" +
+      F + ".it svg{width:" + v + "px!important;height:" + v + "px!important;stroke-width:2.4;display:block}" +
+      F + ".it[data-r=lang]," + F + ".it[data-r=lang]>span{font-size:" + l + "px!important;font-weight:800!important;letter-spacing:.02em}" +
+      F + ".it[data-r=lang]," + F + ".it[aria-pressed=true]," + F + ".it.on{border:1.5px solid transparent!important;background:linear-gradient(#2B2566,#2B2566) padding-box,linear-gradient(135deg,#9B83FF,#FF9A6B) border-box!important;box-shadow:0 0 14px rgba(155,131,255,.6)!important}" +
+      F + ".it[data-r=snd].off," + F + ".it[data-r=snd][aria-pressed=false]{opacity:.6!important}" +
+      /* ⏸ → ▶ khi đang tạm dừng (nút có aria-label Tiếp tục...): ẩn nội dung gốc, vẽ ▶ */
+      F + ".it[data-r=pause].rs{font-size:0!important}" + F + ".it[data-r=pause].rs svg{display:none!important}" + F + ".it[data-r=pause].rs::before{content:'\\25B6';font-size:" + e + "px;line-height:1}" +
+      F + ".it:focus-visible{outline:3px solid var(--acc);outline-offset:2px}" +
+      F + ".it b{position:absolute!important;right:3px;top:3px;left:auto;bottom:auto;margin:0;min-width:20px;height:20px;box-sizing:border-box;padding:0 5px;border-radius:10px;background:#ffd24a;color:#3a2400;font:800 12px/20px var(--font);text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.4)}";
+  }
   var st = document.createElement("style");
   st.textContent =
-    "#npPmBk,#npPmFab,#npPmFan{display:none}" +
+    "#npPmBk,#npPmFab,#npPmFan{display:none}#npPmFan{--acc:color-mix(in srgb,var(--npacc,#7C5CFF) 55%,#fff)}" +
     "html.np-pm body{padding-top:calc(76px + env(safe-area-inset-top,0px))!important;box-sizing:border-box}html.np-pm .top h1{max-width:100%}html.np-pm #npPmBk{display:grid;position:fixed;z-index:45;left:calc(var(--back-x,16px) + env(safe-area-inset-left,0px));top:calc(env(safe-area-inset-top,0px) + var(--back-y,16px))}html.np-pm.np-hidebk #npPmBk{display:none}html.np-locked #npPmBk{display:none!important}" +
     "html.np-pm #homeBtn{display:none!important}" +
     "#npPmBk,#npPmFab{place-items:center;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;border-radius:50%;flex:none;cursor:pointer;box-sizing:border-box}" +
@@ -50,20 +63,21 @@
     "#npPmBk:active,#npPmFab:active{filter:brightness(.92)}#npPmBk:focus-visible,#npPmFab:focus-visible{outline:3px solid var(--accent,#fff);outline-offset:3px}" +
     "html.np-pm #npPmFan{display:block;position:static}" +
     "#npPmFan .bk{position:fixed;inset:0;z-index:60;background:rgba(12,8,28,.38);opacity:0;pointer-events:none;transition:opacity .2s}#npPmFan.open .bk{opacity:1;pointer-events:auto}" +
-    "#npPmFan .pn{position:fixed;z-index:61;right:calc(var(--back-x,16px) + env(safe-area-inset-right,0px));top:calc(env(safe-area-inset-top,0px) + 64px);display:grid;grid-template-columns:repeat(3,68px);gap:8px;padding:10px;border-radius:18px;background:var(--npbg,var(--panel,#fff));color:var(--npink,inherit);border:1.5px solid var(--npacc,var(--accent,#7C5CFF));box-shadow:0 10px 30px rgba(0,0,0,.4);transform-origin:top right;opacity:0;transform:scale(.7);pointer-events:none;transition:transform .22s cubic-bezier(.2,1.3,.4,1),opacity .15s}" +
-    "#npPmFan.open .pn{opacity:1;transform:scale(1);pointer-events:auto}" +
+    "#npPmFan .pn{position:fixed;z-index:61;right:calc(var(--back-x,16px) + env(safe-area-inset-right,0px));top:calc(env(safe-area-inset-top,0px) + 64px);display:grid;grid-template-columns:repeat(3,68px);gap:8px;padding:10px;border-radius:18px;background:var(--npbg,var(--panel,#fff));color:var(--npink,inherit);border:1.5px solid var(--npacc,var(--accent,#7C5CFF));box-shadow:0 10px 30px rgba(0,0,0,.4);transform-origin:top right;opacity:0;transform:scale(.7);pointer-events:none;visibility:hidden;transition:transform .22s cubic-bezier(.2,1.3,.4,1),opacity .15s,visibility 0s .22s}" +
+    "#npPmFan.open .pn{opacity:1;transform:scale(1);pointer-events:auto;visibility:visible;transition-delay:0s}" +
     "#npPmFan .it{position:static!important;display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:3px;width:68px!important;height:64px!important;min-width:0!important;min-height:0!important;margin:0!important;padding:4px 2px!important;border-radius:14px!important;" +
     "font-size:15px!important;font-weight:800;line-height:1;box-shadow:none!important;transform:none!important;animation:none!important;opacity:1!important;color:var(--npink,inherit)!important;background:color-mix(in srgb,var(--npink,#888) 9%,var(--npbg,transparent))!important;border:1.5px solid var(--npline,rgba(128,128,128,.4))!important}" +
     "#npPmFan .it svg{width:22px!important;height:22px!important;flex:none}" +
-    "#npPmFan .it::after{content:attr(data-l);font:700 10.5px/1.05 var(--font);max-width:64px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.88}" +
+    "#npPmFan .it::after{content:none!important;display:none!important}" +   /* KHÔNG chữ trong ô (aria-label + title thay) */
     "#npPmFan .it[hidden]{display:none!important}html.np-locked #npPmCam,html.np-locked #npPmShr,html.np-locked #npPmLock,html.np-locked #npPmFab,html.np-locked #npPmFan{display:none!important}" +
     "html.np-pm #soundBtn{position:fixed!important;z-index:45;right:calc(var(--back-x,16px) + 52px + env(safe-area-inset-right,0px));top:calc(env(safe-area-inset-top,0px) + var(--back-y,16px));width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;margin:0!important}" +
-    "html.np-tab #npPmFan .pn{grid-template-columns:repeat(3,88px);gap:10px;padding:12px;top:calc(env(safe-area-inset-top,0px) + 66px)}html.np-tab #npPmFan .it{width:88px!important;height:84px!important}html.np-tab #npPmFan .it svg{width:28px!important;height:28px!important}html.np-tab #npPmFan .it::after{font-size:13px;max-width:84px}" +
+    "html.np-tab #npPmFan .pn{grid-template-columns:repeat(3,76px);gap:12px;padding:14px;top:calc(env(safe-area-inset-top,0px) + 66px)}" + TILE(76, 36, 34, 24, "html.np-tab ") +
     "@media (max-width:520px) and (orientation:portrait){" +
-    "html.np-pm body{padding-top:calc(94px + env(safe-area-inset-top,0px))!important}" +
+    /* GAME_RULES 0a-23: cả khối (tên game + thanh điểm + khung chơi) NEO LÊN SÁT hàng nút, không căn giữa phần màn hình còn lại (tên game từng cách hàng nút ~120px, khung chơi lệch xuống dưới) */
+    "html.np-pm body{padding-top:calc(88px + env(safe-area-inset-top,0px))!important;align-items:flex-start!important}" +
     "html.np-pm #soundBtn{right:calc(var(--back-x,16px) + 64px + env(safe-area-inset-right,0px))!important;width:var(--tap-lg,56px)!important;height:var(--tap-lg,56px)!important;min-width:var(--tap-lg,56px)!important;min-height:var(--tap-lg,56px)!important}" +
-    "#npPmFan .pn{top:calc(env(safe-area-inset-top,0px) + 80px);grid-template-columns:repeat(3,76px);background:rgba(22,17,48,.9)!important;color:#fff!important;border:1px solid rgba(255,255,255,.22)!important;box-shadow:0 14px 36px rgba(0,0,0,.5),inset 0 0 18px rgba(124,92,255,.18)!important;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);padding:10px;border-radius:24px}" +
-    "#npPmFan .it{width:76px!important;height:72px!important;gap:4px!important;border-radius:18px!important;color:#fff!important;background:rgba(255,255,255,.1)!important;border:1px solid rgba(255,255,255,.16)!important}#npPmFan .it svg{width:26px!important;height:26px!important}#npPmFan .it::after{max-width:72px;font-size:11px;opacity:.92}" +
+    "#npPmFan .pn{top:calc(env(safe-area-inset-top,0px) + 80px);grid-template-columns:repeat(3,68px);gap:10px;padding:12px;background:linear-gradient(160deg,#211C52,#14152A) padding-box,linear-gradient(135deg,#9B83FF,#FF9A6B) border-box!important;color:#fff!important;border:1.5px solid transparent!important;box-shadow:0 14px 36px rgba(0,0,0,.5),0 0 26px rgba(124,92,255,.32)!important;border-radius:26px}" +
+    TILE(68, 32, 30, 21, "") +
     "}" +
     "@media (prefers-reduced-motion:reduce){#npPmFab svg,#npPmFan .bk,#npPmFan .pn{transition:none!important}#npPmFab.nudge{animation:none}}";
   document.head.appendChild(st);
@@ -100,7 +114,15 @@
     var sA = function (e, k, x) { if (e.getAttribute(k) !== x) e.setAttribute(k, x); };   /* chỉ ghi khi đổi (tránh vòng MutationObserver ↔ labels) */
     sA(fab, "aria-label", t); if (fab.title !== t) fab.title = t;
     var b = playing() ? (v ? "Về màn chọn" : "Back to menu") : (v ? "Thoát" : "Exit"); sA(bk, "aria-label", b); if (bk.title !== b) bk.title = b;
-    ROLES.forEach(function (r) { var e = $(r[1]); if (e && e.parentNode === panel) { sA(e, "data-l", r[0] === "pause" && /^(Tiếp tục|Chơi tiếp|Resume|Continue|Play on)/i.test(e.getAttribute("aria-label") || "") ? e.getAttribute("aria-label") : v ? r[2] : r[3]); if (r[0] === "cam" || r[0] === "shr" || r[0] === "lock") { sA(e, "aria-label", v ? r[2] : r[3]); if (e.title !== (v ? r[2] : r[3])) e.title = v ? r[2] : r[3]; } } });
+    ROLES.forEach(function (r) {
+      var e = $(r[1]) || (r[1] === "npPmCam" ? cam : r[1] === "npPmShr" ? shr : r[1] === "npPmLock" ? lck : null); if (!(e && e.parentNode === panel)) return;
+      var dl = v ? r[2] : r[3], ga = e.getAttribute("aria-label") || "", resume = r[0] === "pause" && /^(Tiếp tục|Chơi tiếp|Resume|Continue|Play on)/i.test(ga);
+      sA(e, "data-l", resume ? ga : dl);
+      /* ô icon KHÔNG có chữ nhãn: tên nằm ở aria-label (nếu game chưa đặt; ô do popmenu tự dựng luôn đặt) + title (chú thích khi rê/giữ) */
+      if (!ga || e.getAttribute("data-al") === "1" || e === cam || e === shr || e === lck) { sA(e, "aria-label", dl); sA(e, "data-al", "1"); ga = dl; }
+      if (e.title !== ga) e.title = ga;
+      if (r[0] === "pause" && e.classList.contains("rs") !== resume) e.classList.toggle("rs", resume);   /* ⏸ ↔ ▶ theo trạng thái */
+    });
     if (lck) { var kl = pd && pd.getElementById("klock"), hh = !kl || kl.hidden; if (lck.hidden !== hh) lck.hidden = hh; }   /* webview app / Night Play: kidlock ẩn nút thì ô khoá cũng ẩn */
     { var hb = !pd && !playing(); if (de.classList.contains("np-hidebk") !== hb) de.classList.toggle("np-hidebk", hb); }   /* mở trực tiếp ở màn chọn: không có chỗ để thoát */
   }
@@ -138,24 +160,25 @@
       if (!e || e.parentNode === panel) return;
       if (e.parentNode !== top && e !== cam && e !== shr && e !== lck && r[0] !== "pass") return;
       if (e.parentNode === top) saved.push(e); else if (r[0] === "pass") { passHome = { el: e, parent: e.parentNode, next: e.nextSibling }; }
-      e.classList.add("it"); panel.appendChild(e);
+      e.setAttribute("data-r", r[0]); e.classList.add("it"); panel.appendChild(e);
     });
     labels(); themeSync();
   }
   function restore() {
     if (!moved) return;
     setOpen(false); de.classList.remove("np-pm", "np-tab"); unfitW(); flag(false);
-    saved.forEach(function (e) { e.classList.remove("it"); e.removeAttribute("data-l"); });
+    var unlab = function (e) { e.classList.remove("it", "rs"); e.removeAttribute("data-l"); e.removeAttribute("data-r"); if (e.getAttribute("data-al") === "1") { e.removeAttribute("aria-label"); e.removeAttribute("data-al"); e.removeAttribute("title"); } };
+    saved.forEach(unlab);
     order.forEach(function (e) { if (saved.indexOf(e) >= 0) top.insertBefore(e, fan); });
     saved.forEach(function (e) { if (e.parentNode === panel) top.insertBefore(e, fan); });
-    if (passHome && passHome.el.parentNode === panel) { passHome.el.classList.remove("it"); passHome.el.removeAttribute("data-l"); if (passHome.next && passHome.next.parentNode === passHome.parent) passHome.parent.insertBefore(passHome.el, passHome.next); else passHome.parent.appendChild(passHome.el); } passHome = null;
+    if (passHome && passHome.el.parentNode === panel) { unlab(passHome.el); if (passHome.next && passHome.next.parentNode === passHome.parent) passHome.parent.insertBefore(passHome.el, passHome.next); else passHome.parent.appendChild(passHome.el); } passHome = null;
     saved = []; moved = false;
     [cam, shr, lck].forEach(function (e) { if (e && e.parentNode) e.parentNode.removeChild(e); });
   }
   function sync() { if (mode()) adopt(); else restore(); }
 
   try { new MutationObserver(function () { if (mode()) adopt(); }).observe(top, { childList: true }); } catch (e) {}
-  try { new MutationObserver(function () { if (fab) labels(); }).observe(top, { attributes: true, subtree: true, attributeFilter: ["hidden", "style", "lang"] }); } catch (e) {}
+  try { new MutationObserver(function () { if (fab) labels(); }).observe(top, { attributes: true, subtree: true, attributeFilter: ["hidden", "style", "lang", "aria-label"] }); } catch (e) {}
   try { new MutationObserver(function () { if (fab) labels(); }).observe(de, { attributes: true, attributeFilter: ["lang"] }); } catch (e) {}
   try { new MutationObserver(function () { if (moved) themeSync(); }).observe(de, { attributes: true, attributeFilter: ["data-theme", "class", "style"] }); } catch (e) {}
   [mqP, mqT].forEach(function (q) { try { q.addEventListener("change", sync); } catch (e) { try { q.addListener(sync); } catch (e2) {} } });
