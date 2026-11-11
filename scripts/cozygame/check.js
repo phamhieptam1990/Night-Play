@@ -150,6 +150,7 @@ const b64 = o => Buffer.from(JSON.stringify(o)).toString("base64").replace(/\+/g
   { const hd = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-hud.js")].concat(process.argv.includes("--full-hud") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" }); note(hd.status === 0, "tổng", "check-hud.js báo lỗi (HUD gọn của cổng) — xem log phía trên"); }
   { const mo = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-moi.js"), "--quick"], { cwd: root, env: process.env, stdio: "inherit" }); note(mo.status === 0, "tổng", "check-moi.js báo lỗi (trang tin ra mắt /moi/) — xem log phía trên"); }   // trang /moi/
   { const ns = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-subscribe.js"), "--quick"], { cwd: root, env: process.env, stdio: "inherit" }); note(ns.status === 0, "tổng", "check-subscribe.js báo lỗi (trang Night Pass / hộp thoại) — xem log phía trên"); }
+  { console.log("== ngân sách tải lần đầu"); const ld2 = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-load.js"), "--quick"], { cwd: root, env: process.env, stdio: "inherit" }); note(ld2.status === 0, "tổng", "check-load.js vượt ngân sách tải >30% — xem log phía trên"); }
   console.log("\n" + (fails.length ? "✗ " + fails.length + " lỗi" : "✓ tất cả đạt"));
   process.exit(fails.length ? 1 : 0);
 })();
