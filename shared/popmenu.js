@@ -80,6 +80,8 @@
     fab.addEventListener("click", function (e) { e.stopPropagation(); setOpen(!open); });
     d.addEventListener("click", function () { setOpen(false); });
     panel.addEventListener("click", function (e) { var b = e.target.closest && e.target.closest(".it"); if (b) setTimeout(function () { setOpen(false); }, 0); });
+    /* bấm ra ngoài đóng menu (không phụ thuộc nền mờ .bk: tổ tiên có transform làm position:fixed chỉ phủ một phần) */
+    document.addEventListener("pointerdown", function (e) { if (open && !(fan.contains(e.target) || fab.contains(e.target))) setOpen(false); }, true);
     addEventListener("keydown", function (e) { if (e.key === "Escape" && open) { e.stopPropagation(); setOpen(false); fab.focus(); } }, true);
   }
   function playing() { var h = $("homeBtn"), p = $("pauseBtn"); return !!((h && !h.hidden) || (p && !p.hidden)); }
