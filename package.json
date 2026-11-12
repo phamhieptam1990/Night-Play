@@ -1,7 +1,7 @@
 {
   "name": "night-play",
   "private": true,
-  "version": "2026.11.12-6",
+  "version": "2026.11.12-7",
   "scripts": {
     "build": "node scripts/build.js",
     "dev": "DEV_RELOAD=1 node server/server.js",

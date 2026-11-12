@@ -4,6 +4,7 @@ html[data-app=hub]:not([data-theme=dark]){--accent:#6A48F0}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:68px;-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.55 var(--font);overflow-x:hidden}
+@supports (overflow:clip){body{overflow-x:clip}}   /* clip KHÔNG biến body thành vùng cuộn riêng (hidden làm iOS cuộn chập chờn/kẹt trên trang giới thiệu + Mới) */
 img,svg{display:block;max-width:100%}
 a{color:inherit}
 h1,h2,h3{font-family:var(--font);font-weight:800;line-height:1.15;margin:0}

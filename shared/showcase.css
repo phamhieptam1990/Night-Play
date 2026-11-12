@@ -52,6 +52,7 @@ main.sc-tiny #show{display:none!important}
 }
 html[data-app=popplay]{--sc-gmin:250px;--gnd:var(--h3)}
 html[data-app=cozyplay]{--sc-gmin:204px;--gnd:var(--b3)}
+@media (max-width:520px) and (min-height:600px){html[data-app=popplay]{--sc-gmin:178px}}   /* điện thoại dọc: lưới Pop chỉ 2 hàng (trượt ngang xem thêm) để sân khấu cao hơn */
 @media (max-width:520px) and (min-height:760px){html[data-app=cozyplay]{--sc-gmin:260px}}   /* điện thoại dọc cao: lưới Night đủ 3 hàng ô ~76px (4 cột như Pop) */
 
 /* ---------- khung ---------- */
@@ -160,7 +161,7 @@ html[data-app=popplay] .sc-play{background:linear-gradient(90deg,#FF5A1F,#FF9A2E
 /* ---------- ĐIỆN THOẠI DỌC (khung hẹp <= 520px) ----------
    Cao > 200px: chồng thẻ CHÍNH GIỮA trọn bề ngang (dưới nhãn góc trên-trái), cảnh nền lộ ra, tên game + nút Chơi gom thành MỘT thanh ở đáy
    (chủ site: bản thẻ chữ bên trái đè lên chồng thẻ "không đạt"). Thẻ giữa không chạm nhãn, không bị thanh đáy đè. */
-@container (max-width: 520px) and (min-aspect-ratio: 1/1) and (min-height: 200.1px){
+@container (max-width: 520px) and (min-aspect-ratio: 1/1){
   .sc-box{--bar:68px;--cs:min(calc(100cqh - var(--bar) - 64px),58cqw)}
   .sc-deck{left:0;right:0;top:38px;bottom:calc(var(--bar) + 14px)}
   .sc-info{left:8px;right:8px;top:auto;bottom:8px;transform:none;width:auto;height:calc(var(--bar) - 8px);max-height:none;flex-direction:row;align-items:center;justify-content:space-between;gap:10px;padding:6px 6px 6px 14px;border-radius:16px}
@@ -170,14 +171,14 @@ html[data-app=popplay] .sc-play{background:linear-gradient(90deg,#FF5A1F,#FF9A2E
   .sc-tag:not(.day):not(.new){background:rgba(18,13,42,.7)}
   .sc-dots{left:0;right:0;bottom:calc(var(--bar) + 3px)}
 }
-/* Thấp <= 200px (điện thoại cao ~640-670px): thẻ game TO trong ô riêng bên trái (thẻ hai bên ló ra, cắt gọn ở mép ô), thẻ chữ bên phải — không phần nào đè lên nhau */
+/* Thấp <= 200px (điện thoại cao ~640-670px): CÙNG bố cục thanh đáy nhưng thanh mỏng hơn, chồng thẻ nhỏ lại, bỏ chấm */
 @container (max-width: 520px) and (min-aspect-ratio: 1/1) and (max-height: 200px){
-  .sc-box{--cs:min(calc(100cqh - 30px),36cqw)}
-  .sc-deck{left:0;right:auto;width:44%;top:0;bottom:0;overflow:hidden}
-  .sc-deck::after{display:none}
-  .sc-info{left:calc(44% + 2px);right:8px;width:auto;max-height:calc(100% - 12px);align-items:stretch;gap:5px;padding:8px 10px;border-radius:16px}
-  .sc-tag{align-self:flex-start;font-size:11px;min-height:20px}
-  .sc-play{min-height:44px;padding:0 10px;font-size:16px}
+  .sc-box{--bar:56px;--cs:min(calc(100cqh - var(--bar) - 46px),50cqw)}
+  .sc-deck{top:30px;bottom:calc(var(--bar) + 6px)}
+  .sc-info{padding:4px 5px 4px 12px;gap:8px}
+  .sc-play{min-height:44px;padding:0 16px;font-size:16px}
+  .sc-name{font-size:15px;line-height:1.15}
+  .sc-tag{bottom:calc(100cqh - 8px - 8px - 22px);min-height:22px;font-size:11px}
   .sc-dots{display:none}
 }
 /* dải rất thấp: bỏ chấm, thẻ chữ sát hơn */
