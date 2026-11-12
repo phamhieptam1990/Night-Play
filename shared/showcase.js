@@ -151,15 +151,18 @@
     [].forEach.call(dotsEl.children, function (d, i) { d.classList.toggle("on", i === cur); });
   }
   function fitName() {
-    var cs = box.getBoundingClientRect(); if (!cs.height) return;
-    var info = nameEl.parentNode, tall = cs.width <= cs.height, fs = Math.round(tall ? Math.min(30, cs.width * .075) : Math.min(28, Math.max(15, cs.height * .15)));
+    var cs = box.getBoundingClientRect(); if (!cs.height) return true;
+    var info = nameEl.parentNode, tall = cs.width <= cs.height, bar = getComputedStyle(info).flexDirection === "row";   /* bar = điện thoại dọc: tên + nút Chơi một hàng ở đáy */
+    var fs = Math.round(tall ? Math.min(30, cs.width * .075) : bar ? 20 : Math.min(28, Math.max(15, cs.height * (cs.width <= 520 ? .12 : .15))));
+    var ok = function () {
+      if (nameEl.scrollWidth > nameEl.clientWidth + 1 || nameEl.getBoundingClientRect().height > fs * 1.14 * 2 + 2) return false;
+      if (bar) return nameEl.getBoundingClientRect().height <= info.clientHeight - 8 && playEl.getBoundingClientRect().right <= info.getBoundingClientRect().right;
+      return info.scrollHeight <= info.clientHeight + 1 && info.offsetHeight <= cs.height - 12;
+    };
     nameEl.style.setProperty("--sc-fs", fs + "px");
     /* tên tối đa 2 dòng, không cắt “…”, thẻ chữ không tràn khỏi sân khấu: co cỡ chữ từng px */
-    for (var k = 0; k < 16 && fs > 13; k++) {
-      if (nameEl.scrollHeight <= fs * 1.14 * 2 + 2 && nameEl.scrollWidth <= nameEl.clientWidth + 1 && info.scrollHeight <= info.clientHeight + 1 && info.offsetHeight <= cs.height - 12) break;
-      fs -= 1; nameEl.style.setProperty("--sc-fs", fs + "px");
-    }
-    return k < 16 && fs >= 13 && nameEl.scrollHeight <= fs * 1.14 * 2 + 2 && nameEl.scrollWidth <= nameEl.clientWidth + 1 && info.scrollHeight <= info.clientHeight + 1;
+    for (var k = 0; k < 16 && fs > 13 && !ok(); k++) { fs -= 1; nameEl.style.setProperty("--sc-fs", fs + "px"); }
+    return ok();
   }
   /* tên đầy đủ không vừa 2 dòng ở cỡ chữ nhỏ nhất (dải hẹp, tên tiếng Anh dài): dùng tên ngắn của ô game */
   function shortOf(g) { var f = (window.NPMultiGames && NPMultiGames.get && NPMultiGames.get(g.id)) || null, sh = g.short || (f && f.short); return sh ? (sh[lg()] || sh.vi) : ""; }
@@ -200,7 +203,9 @@
         used += c.getBoundingClientRect().height + px(cc.marginTop) + px(cc.marginBottom);
       });
       var gmin = px(getComputedStyle(document.documentElement).getPropertyValue("--sc-gmin")) || 210;
-      h = Math.min(px(getComputedStyle(host).maxHeight) || 9999, main.clientHeight - used - gmin - 44);
+      /* hàng chấm trang: Pop <= 12 game luôn vừa một trang ở --sc-gmin nên không cần trừ; tính theo TỔNG game đang bật (không theo kết quả lọc) để ổn định */
+      var dots = O.portal === "pop" && ((O.all ? O.all() : list) || []).length <= 12 ? 0 : 44;
+      h = Math.min(px(getComputedStyle(host).maxHeight) || 9999, main.clientHeight - used - gmin - dots);
     }
     if (h < 128 || host.clientWidth < 250) main.classList.add("sc-tiny");
   }

@@ -32,8 +32,10 @@ const MEASURE = kind => {
   if (box.height < 126) out.errs.push("sân khấu quá thấp " + Math.round(box.height));
   const inside = (e, what, pad) => { const r = e.getBoundingClientRect(); if (r.left < box.left - 1 + (pad || 0) || r.right > box.right + 1 || r.top < box.top - 1 || r.bottom > box.bottom + 1) out.errs.push(what + " tràn khỏi sân khấu"); return r; };
   const info = host.querySelector(".sc-info"), play = document.getElementById("scPlay"), name = document.getElementById("scName"), tag = host.querySelector(".sc-tag"), mid = host.querySelector('.sc-card[data-o="0"]');
-  const ir = inside(info, "thẻ chữ"); if (info.scrollHeight > info.clientHeight + 1) out.errs.push("thẻ chữ bị cắt");
-  for (const [e, w] of [[play, "nút Chơi"], [name, "tên game"], [tag, "nhãn"]]) { const r = e.getBoundingClientRect(); if (r.left < ir.left - 1 || r.right > ir.right + 1 || r.top < ir.top - 1 || r.bottom > ir.bottom + 1) out.errs.push(w + " tràn khỏi thẻ chữ"); }
+  const ir = inside(info, "thẻ chữ"); if (getComputedStyle(info).flexDirection !== "row" && info.scrollHeight > info.clientHeight + 1) out.errs.push("thẻ chữ bị cắt");
+  const bar = getComputedStyle(info).flexDirection === "row"; out.bar = bar;   /* điện thoại dọc: thanh đáy (tên + nút Chơi), nhãn ở góc trên-trái của sân khấu, chồng thẻ chính giữa */
+  if (bar) { inside(tag, "nhãn"); if (mid) { const r = mid.getBoundingClientRect(); if (Math.abs((r.left + r.right) / 2 - (box.left + box.right) / 2) > 3) out.errs.push("thẻ giữa không nằm chính giữa sân khấu"); if (r.bottom > ir.top + 1) out.errs.push("thẻ giữa bị thanh chữ đè " + Math.round(r.bottom - ir.top) + "px"); const tr = tag.getBoundingClientRect(); if (!(tr.right < r.left + 1 || tr.bottom < r.top + 1)) out.errs.push("nhãn đè lên thẻ giữa"); } }
+  for (const [e, w] of [[play, "nút Chơi"], [name, "tên game"]].concat(bar ? [] : [[tag, "nhãn"]])) { const r = e.getBoundingClientRect(); if (r.left < ir.left - 1 || r.right > ir.right + 1 || r.top < ir.top - 1 || r.bottom > ir.bottom + 1) out.errs.push(w + " tràn khỏi thẻ chữ"); }
   const pr = play.getBoundingClientRect(); if (pr.height < 43.5 || pr.width < 80) out.errs.push("nút Chơi nhỏ " + Math.round(pr.width) + "x" + Math.round(pr.height));
   if (!mid) out.errs.push("không có thẻ giữa"); else { const r = inside(mid, "thẻ giữa"); if (r.width < 70) out.errs.push("thẻ giữa nhỏ " + Math.round(r.width)); const c = document.elementFromPoint(r.left + r.width * .7, r.top + r.height / 2); if (!c || !c.closest(".sc-card,.sc-nav")) out.errs.push("thẻ giữa bị che"); }
   if (tag.scrollWidth > tag.clientWidth + 1) out.errs.push("nhãn bị cắt (" + tag.textContent + ")");
@@ -41,7 +43,7 @@ const MEASURE = kind => {
   /* tên của MỌI game: <= 2 dòng, không tràn */
   const cur = NPShow.current(), all = [...host.querySelectorAll(".sc-card")].map(c => c.dataset.id); out.cards = all.length;
   for (let i = 0; i < all.length; i++) { NPShow.go(i); const fs = parseFloat(getComputedStyle(name).fontSize), lines = Math.round(name.getBoundingClientRect().height / (fs * 1.14));
-    if (lines > 2 || name.scrollWidth > name.clientWidth + 1 || info.scrollHeight > info.clientHeight + 1 || fs < 13) out.errs.push("tên game không vừa: " + name.textContent + " (" + lines + " dòng, " + fs + "px)"); if (!name.textContent.trim()) out.errs.push("tên game trống");
+    if (lines > 2 || name.scrollWidth > name.clientWidth + 1 || (!bar && info.scrollHeight > info.clientHeight + 1) || name.getBoundingClientRect().bottom > info.getBoundingClientRect().bottom + 1 || name.getBoundingClientRect().top < info.getBoundingClientRect().top - 1 || fs < 13) out.errs.push("tên game không vừa: " + name.textContent + " (" + lines + " dòng, " + fs + "px)"); if (!name.textContent.trim()) out.errs.push("tên game trống");
     const r2 = info.getBoundingClientRect(); if (r2.top < box.top - 1 || r2.bottom > box.bottom + 1) out.errs.push("thẻ chữ tràn dọc với tên " + name.textContent); }
   NPShow.go(all.indexOf(cur.id));
   if (kind === "pop" && /night pass|👑/i.test(host.textContent)) out.errs.push("sân khấu Pop nhắc Night Pass/👑");
