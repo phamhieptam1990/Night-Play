@@ -30,7 +30,10 @@ if (TARGET !== "admin") {
 const upd = path.join(dist, "shared", "updated.js");
 if (fs.existsSync(upd)) {
   const day = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Ho_Chi_Minh" }).format(new Date());
-  fs.writeFileSync(upd, 'window.SITE_BUILD = "' + day + '";\n' + fs.readFileSync(upd, "utf8"));
+  /* PHIÊN BẢN: "version" trong package.json (đặt theo ngày phát hành: 2026.11.12, cùng ngày phát hành lần hai thì 2026.11.12-2) + mã commit ngắn; hiện cạnh "Cập nhật lần cuối" và trùng tên tag git vX */
+  let ver = ""; try { ver = require("../package.json").version || ""; } catch (e) {}
+  let sha = ""; try { sha = require("child_process").execSync("git rev-parse --short HEAD", { cwd: path.join(__dirname, ".."), stdio: ["ignore", "pipe", "ignore"] }).toString().trim(); } catch (e) {}
+  fs.writeFileSync(upd, 'window.SITE_BUILD = "' + day + '";window.SITE_VER = "' + ver + '";window.SITE_SHA = "' + sha + '";\n' + fs.readFileSync(upd, "utf8"));
 }
 /* Huy hiệu "Mới" của hai trang cổng: sinh lại shared/newbadge.js từ landing/moi/launches.json (cổng chạy offline, không fetch) */
 if (TARGET !== "admin" && fs.existsSync(path.join(dist, "shared"))) require("./gen-newbadge.js").write(path.join(dist, "shared", "newbadge.js"));

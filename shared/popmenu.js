@@ -8,13 +8,13 @@
    - HOOK KHOÁ MÀN (shared/kidlock.js): khi khoá, kidlock đặt class "np-locked" lên <html> của game → ẩn #npPmBk (nút ←) và ô 📷/📤 trong bảng (CSS bên dưới).
      Nút khoá (#klock) của cổng nằm ngay bên phải ← (x≈62px); chỉ báo khoá (#klind) chiếm chỗ ← khi đã khoá.
    - Màu bảng lấy theo MÀU THẬT của game (đọc computed style mỗi lần mở: sáng/tối, Night Pass), không nền trắng chữ đen.
-   - iPad/máy tính bảng cảm ứng DỌC (pointer:coarse, ≤900px rộng): như trên nhưng 🔊 và ← ở NGOÀI menu (🔊 cố định cạnh ⋯), ô bảng 88px. iPad ngang / máy tính chuột: không gom.
+   - iPad/máy tính bảng cảm ứng DỌC (pointer:coarse, ≤1100px rộng: iPad mini 744 … iPad Pro 13 1032): như trên nhưng 🔊 và ← ở NGOÀI menu (🔊 cố định cạnh ⋯), ô bảng 88px. iPad ngang / máy tính chuột: không gom.
    Nhúng sau pophelp.js/popfit.js: <script src="../../../shared/popmenu.js" defer></script> */
 (function () {
   "use strict";
   if (document.documentElement.classList.contains("np-multi")) return;   /* chế độ chơi cùng lúc (?multi=1): host lo các nút */
   var top = document.querySelector(".top"); if (!top) return;
-  var mqP = matchMedia("(max-width:520px) and (orientation:portrait)"), mqT = matchMedia("(pointer:coarse) and (orientation:portrait) and (max-width:900px)"), cur = "";
+  var mqP = matchMedia("(max-width:520px) and (orientation:portrait)"), mqT = matchMedia("(pointer:coarse) and (orientation:portrait) and (max-width:1100px)")   /* tới 1100px như fan.js: iPad Pro 13 dọc rộng 1032px từng lọt ra ngoài -> nút nằm 3 nơi (dải trên của cổng, hàng nút trong game, góc dưới) */, cur = "";
   /* "p" = điện thoại dọc (gom cả 🔊); "t" = máy tính bảng cảm ứng dọc (iPad 768/834 rộng): giữ ← và 🔊 ngoài menu, gom phần còn lại; máy tính chuột / màn ngang: "" (không gom) */
   var mode = function () { return mqP.matches ? "p" : mqT.matches ? "t" : ""; };
   var de = document.documentElement;
@@ -42,7 +42,7 @@
     return F + ".it{width:" + s + "px!important;height:" + s + "px!important;gap:0!important;padding:0!important;position:relative!important;inset:auto!important;border-radius:" + Math.round(s * 0.3) + "px!important;color:#fff!important;background:rgba(255,255,255,.08)!important;border:1px solid rgba(255,255,255,.16)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.14)!important;font-size:" + e + "px!important;line-height:1!important;touch-action:manipulation;pointer-events:auto!important}" +
       F + ".it svg{width:" + v + "px!important;height:" + v + "px!important;stroke-width:2.4;display:block}" +
       F + ".it[data-r=lang]," + F + ".it[data-r=lang]>span{font-size:" + l + "px!important;font-weight:800!important;letter-spacing:.02em}" +
-      F + ".it[data-r=lang]," + F + ".it[aria-pressed=true]," + F + ".it.on{border:1.5px solid transparent!important;background:linear-gradient(#2B2566,#2B2566) padding-box,linear-gradient(135deg,#9B83FF,#FF9A6B) border-box!important;box-shadow:0 0 14px rgba(155,131,255,.6)!important}" +
+      /* KHÔNG kiểu viền/quầng riêng cho ô "đang bật" (chủ site: "không hover/focus mà icon lại có viền khác các icon còn lại"): mọi ô giống nhau, trạng thái thể hiện bằng icon (loa gạch + mờ khi tắt, chữ VI/EN) */
       F + ".it[data-r=snd].off," + F + ".it[data-r=snd][aria-pressed=false]{opacity:.6!important}" +
       /* ⏸ → ▶ khi đang tạm dừng (nút có aria-label Tiếp tục...): ẩn nội dung gốc, vẽ ▶ */
       F + ".it[data-r=pause].rs{font-size:0!important}" + F + ".it[data-r=pause].rs svg{display:none!important}" + F + ".it[data-r=pause].rs::before{content:'\\25B6';font-size:" + e + "px;line-height:1}" +
@@ -52,7 +52,7 @@
   var st = document.createElement("style");
   st.textContent =
     "#npPmBk,#npPmFab,#npPmFan{display:none}#npPmFan{--acc:color-mix(in srgb,var(--npacc,#7C5CFF) 55%,#fff)}" +
-    "html.np-pm body{padding-top:calc(76px + env(safe-area-inset-top,0px))!important;box-sizing:border-box}html.np-pm .top h1{max-width:100%}html.np-pm #npPmBk{display:grid;position:fixed;z-index:45;left:calc(var(--back-x,16px) + env(safe-area-inset-left,0px));top:calc(env(safe-area-inset-top,0px) + var(--back-y,16px))}html.np-pm.np-hidebk #npPmBk{display:none}html.np-locked #npPmBk{display:none!important}" +
+    "html.np-pm body{padding-top:calc(76px + env(safe-area-inset-top,0px))!important;box-sizing:border-box;align-items:flex-start!important}html.np-pm .top h1{max-width:100%}html.np-pm #npPmBk{display:grid;position:fixed;z-index:45;left:calc(var(--back-x,16px) + env(safe-area-inset-left,0px));top:calc(env(safe-area-inset-top,0px) + var(--back-y,16px))}html.np-pm.np-hidebk #npPmBk{display:none}html.np-locked #npPmBk{display:none!important}" +
     "html.np-pm #homeBtn{display:none!important}" +
     "#npPmBk,#npPmFab{place-items:center;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;border-radius:50%;flex:none;cursor:pointer;box-sizing:border-box}" +
     "#npPmBk{background:var(--panel,#fff);color:var(--ink,#222);border:1.5px solid color-mix(in srgb,currentColor 42%,transparent);box-shadow:var(--shadow,0 3px 10px rgba(0,0,0,.25))}" +
@@ -62,7 +62,8 @@
     "#npPmFab.nudge{animation:npPmNudge 1.1s ease-in-out 4}@keyframes npPmNudge{0%,100%{transform:scale(1)}40%{transform:scale(1.16)}}" +
     "#npPmBk:active,#npPmFab:active{filter:brightness(.92)}#npPmBk:focus-visible,#npPmFab:focus-visible{outline:3px solid var(--accent,#fff);outline-offset:3px}" +
     "html.np-pm #npPmFan{display:block;position:static}" +
-    "#npPmFan .bk{position:fixed;inset:0;z-index:60;background:rgba(12,8,28,.38);opacity:0;pointer-events:none;transition:opacity .2s}#npPmFan.open .bk{opacity:1;pointer-events:auto}" +
+    /* nền mờ PHỦ TRỌN màn hình: khoá cứng hình dạng vì game có thể có lớp .bk riêng (Chim Bay: .bk{aspect-ratio:1;border-radius:14px;box-shadow} là ô huy hiệu -> nền mờ từng thành Ô VUÔNG bo góc chỉ phủ nửa màn) */
+    "#npPmFan .bk{position:fixed!important;inset:0!important;width:auto!important;height:auto!important;aspect-ratio:auto!important;border-radius:0!important;box-shadow:none!important;outline:0!important;display:block!important;font-size:0!important;z-index:60;background:rgba(12,8,28,.38)!important;opacity:0;pointer-events:none;transition:opacity .2s}#npPmFan.open .bk{opacity:1;pointer-events:auto}" +
     "#npPmFan .pn{position:fixed;z-index:61;right:calc(var(--back-x,16px) + env(safe-area-inset-right,0px));top:calc(env(safe-area-inset-top,0px) + 64px);display:grid;grid-template-columns:repeat(3,68px);gap:8px;padding:10px;border-radius:18px;background:var(--npbg,var(--panel,#fff));color:var(--npink,inherit);border:1.5px solid var(--npacc,var(--accent,#7C5CFF));box-shadow:0 10px 30px rgba(0,0,0,.4);transform-origin:top right;opacity:0;transform:scale(.7);pointer-events:none;visibility:hidden;transition:transform .22s cubic-bezier(.2,1.3,.4,1),opacity .15s,visibility 0s .22s}" +
     "#npPmFan.open .pn{opacity:1;transform:scale(1);pointer-events:auto;visibility:visible;transition-delay:0s}" +
     "#npPmFan .it{position:static!important;display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:3px;width:68px!important;height:64px!important;min-width:0!important;min-height:0!important;margin:0!important;padding:4px 2px!important;border-radius:14px!important;" +

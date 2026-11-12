@@ -13,11 +13,10 @@
 #stage.np-rails-l #npHudc:not(.inrail){display:none!important}
 #stage.np-hudc-sm #npHudc .np-hmore{display:grid}
 #stage.np-hudc-sm #npHudc .np-hpn{display:none;position:absolute;left:calc(100% + 12px);top:0;grid-template-columns:repeat(5,60px);gap:10px;padding:12px;border-radius:26px;background:linear-gradient(160deg,#211C52,#14152A) padding-box,linear-gradient(135deg,#9B83FF,#FF9A6B) border-box;border:1.5px solid transparent;box-shadow:0 14px 36px rgba(0,0,0,.5),0 0 26px rgba(124,92,255,.32)}
-/* thẻ ⋯: Ô ICON TO 60px (>= --tap-lg 56px), icon 30px nét dày, chữ ngôn ngữ VI/EN 20px đậm, KHÔNG chữ nhãn (tên = aria-label + title); bật = viền + quầng accent; huy hiệu số 20px ở góc */
+/* thẻ ⋯: Ô ICON TO 60px (>= --tap-lg 56px), icon 30px nét dày, chữ ngôn ngữ VI/EN 20px đậm, KHÔNG chữ nhãn (tên = aria-label + title); mọi ô cùng kiểu (không viền/quầng riêng cho ô đang bật); huy hiệu số 20px ở góc */
 #stage.np-hudc-sm #npHudc .np-hpn .np-hb{position:relative;width:60px;height:60px;min-width:60px;min-height:60px;border-radius:18px;font-size:28px;line-height:1;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.14)}
 #stage.np-hudc-sm #npHudc .np-hpn .np-hb svg{width:30px;height:30px;stroke-width:2.4}
 #stage.np-hudc-sm #npHudc .np-hpn .np-hb[data-k=lang]{font-size:20px;font-weight:800;letter-spacing:.02em}
-#stage.np-hudc-sm #npHudc .np-hpn .np-hb[data-k=lang],#stage.np-hudc-sm #npHudc .np-hpn .np-hb[aria-pressed=true]{border:1.5px solid transparent;background:linear-gradient(#2B2566,#2B2566) padding-box,linear-gradient(135deg,#9B83FF,#FF9A6B) border-box;box-shadow:0 0 14px rgba(155,131,255,.6)}
 #stage.np-hudc-sm #npHudc .np-hpn .np-hb[data-k=snd][aria-pressed=false]{opacity:.6}
 #stage.np-hudc-sm #npHudc .np-hpn .np-hb:focus-visible{outline:3px solid #b9a8ff;outline-offset:2px}
 #npHudc .np-hb b{position:absolute;right:-2px;top:-2px;min-width:20px;height:20px;box-sizing:border-box;padding:0 5px;border-radius:10px;background:#ffd24a;color:#3a2400;font:800 12px/20px var(--font);text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.4)}

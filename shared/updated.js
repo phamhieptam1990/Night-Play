@@ -14,7 +14,7 @@
   document.head.appendChild(st);
 
   var el = document.createElement("div"); el.className = "site-upd";
-  function text() { el.textContent = (document.documentElement.lang === "en" ? "Last updated: " : "Cập nhật lần cuối: ") + date; el.setAttribute("title", iso); }
+  function text() { el.textContent = (document.documentElement.lang === "en" ? "Last updated: " : "Cập nhật lần cuối: ") + date + (window.SITE_VER ? " · v" + window.SITE_VER : ""); el.setAttribute("title", iso + (window.SITE_SHA ? " · " + window.SITE_SHA : "")); }   /* phiên bản + mã commit do scripts/build.js ghi lúc build */
   text();
   new MutationObserver(text).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
 

@@ -24,7 +24,9 @@
   st.textContent = "#npWide{position:fixed;left:0;top:0;right:0;bottom:0;z-index:-1;pointer-events:none;display:none;contain:strict}" +
     "@media (min-width:700px){html.npw #npWide{display:block}html.npw body{background:transparent!important}}" +
     /* khi #play phủ cả bề ngang bằng ::before (màn ngang: shared/landscape.css) thì lớp cố định bị che → họa tiết đặt lên .deco (trải 100vw) */
-    "html.npw-cover .deco{background-image:var(--np-pat,none);background-size:var(--np-size,auto)}";
+    "html.npw-cover .deco{background-image:var(--np-pat,none);background-size:var(--np-size,auto)}" +
+    /* MÀN DỌC mà cột game hẹp hơn cửa sổ (iPad dọc): chỉ MỘT lớp nền liền mạch (chủ site: "sao có 2 lớp background trên 1 screen") -> cột #play trong suốt, lớp #npWide (cùng gradient của chính khung chơi) phủ cả cửa sổ, không có dải tối hai bên */
+    "html.npw-one #play{background:transparent!important}html.npw-one #play::after{display:none!important}";   /* bỏ cả viền màu độ khó bao quanh cột (chip + màu nhấn + huy hiệu vẫn báo độ khó) */
   (document.head || document.documentElement).appendChild(st);
 
   var el = null, last = "", timer = 0, cur = null, ext = null;
@@ -56,6 +58,10 @@
     } catch (e) { return ""; }
   }
   function read() {
+    var root0 = document.documentElement, one0 = root0.classList.contains("npw-one"); if (one0) root0.classList.remove("npw-one");   /* đọc nền THẬT của #play (đang bị làm trong suốt ở chế độ một lớp nền) */
+    try { return read0(); } finally { if (one0) root0.classList.add("npw-one"); }
+  }
+  function read0() {
     var pl = document.getElementById("play"), cs = pl ? getComputedStyle(pl) : null, bcs = getComputedStyle(document.body);
     var g = function (k) { return cs ? cs.getPropertyValue(k).trim() : ""; };
     var base = g("--pbg") || g("--sb") || g("--sky"), pb = g("--pb") || g("--gnd");
@@ -86,8 +92,11 @@
   }
   function apply() {
     timer = 0; if (!document.body) return;
-    var s = read(), cov = covered(); s.key += "|" + cov; if (s.key === last) return; last = s.key;
-    document.documentElement.classList.toggle("npw-cover", cov);
+    var s = read(), cov = covered(), pl1 = document.getElementById("play");
+    /* một lớp nền: màn dọc, có #play kiểu cột Cozy (không phải khung thẻ .play của Pop/Cánh Nhỏ) và cột hẹp hơn cửa sổ */
+    var one = !cov && !!pl1 && !pl1.classList.contains("play") && innerHeight > innerWidth && innerWidth >= 700 && pl1.clientWidth < innerWidth - 8;
+    s.key += "|" + cov + "|" + one; if (s.key === last) return; last = s.key;
+    document.documentElement.classList.toggle("npw-cover", cov); document.documentElement.classList.toggle("npw-one", one);
     if (!el) { el = document.createElement("div"); el.id = "npWide"; el.setAttribute("aria-hidden", "true"); document.body.insertBefore(el, document.body.firstChild); document.documentElement.classList.add("npw"); }
     var seed = hash(s.base + s.em.join("")), v = seed % 5, dark = lum(s.bc) < .35;
     var A = rgba(s.ac, dark ? .08 : .09), A2 = rgba(s.ac, dark ? .26 : .22), ex = rgba(s.ac, dark ? .30 : .26), veil = dark ? "rgba(0,0,0,.34)" : "rgba(255,255,255,.34)";
@@ -99,7 +108,7 @@
     else if (v === 2) { imgs.push("linear-gradient(" + A + " 1px,transparent 1px)", "linear-gradient(90deg," + A + " 1px,transparent 1px)"); sizes.push("44px 44px", "44px 44px"); }
     else if (v === 3) { imgs.push("repeating-radial-gradient(circle at 50% 50%," + A + " 0 2px,transparent 2px 52px)"); sizes.push("auto"); }
     else { imgs.push("repeating-linear-gradient(0deg," + A + " 0 16px,transparent 16px 64px)"); sizes.push("auto"); }
-    imgs.push("radial-gradient(60vmax 46vmax at 0% 0%," + ex + ",transparent 70%)", "radial-gradient(60vmax 46vmax at 100% 100%," + ex + ",transparent 70%)", "linear-gradient(90deg," + veil + ",transparent 32%,transparent 68%," + veil + ")");
+    imgs.push("radial-gradient(60vmax 46vmax at 0% 0%," + ex + ",transparent 70%)", "radial-gradient(60vmax 46vmax at 100% 100%," + ex + ",transparent 70%)", (one ? "linear-gradient(transparent,transparent)" : "linear-gradient(90deg," + veil + ",transparent 32%,transparent 68%," + veil + ")"));
     sizes.push("auto", "auto", "auto");
     imgs.push(/gradient\(/.test(s.base) ? s.base : "linear-gradient(" + s.base + "," + s.base + ")"); sizes.push("100% 100%");
     el.style.backgroundImage = imgs.join(","); el.style.backgroundSize = sizes.join(",");

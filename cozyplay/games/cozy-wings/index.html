@@ -109,7 +109,12 @@ body{transition:background .4s,color .4s}
 /* màn chọn chuyến bay: ô ảnh lớn, không chữ */
 .tiles{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;width:100%;max-width:340px}
 .tile{position:relative;grid-column:span 2;border-radius:18px;overflow:hidden;background:var(--panel);box-shadow:var(--shadow)}
-.tile:nth-child(4){grid-column:2/span 2}.tile:nth-child(5){grid-column:4/span 2}
+/* đếm theo .tile (":nth-child(n of .tile)") vì shared/resume.js chèn thẻ "Tiếp tục ván dở" (#npResume) vào ĐẦU lưới: đếm theo vị trí con thì ô 4-5 lệch cột, lưới vỡ và tràn khung */
+.tile:nth-child(4 of .tile){grid-column:2/span 2}.tile:nth-child(5 of .tile){grid-column:4/span 2}
+/* có thẻ ván dở (thêm một hàng 56px): ô ảnh vuông thay vì 3:4 để cả màn chọn vẫn nằm trọn trong khung */
+.tiles:has(#npResume) .tile img{aspect-ratio:1/1}
+/* điện thoại/iPad dọc (fan.js chế độ local: hàng nút 72px + tên game + thẻ nhắc + điểm nằm trên khung, neo sát hàng nút): khung chơi trừ đủ phần phía trên để KHÔNG tràn đáy màn hình */
+body.np-local{--w:min(calc(100vw - 24px),calc((100dvh - 240px)*.75),760px)}
 .tile .main{display:block;width:100%;padding:0;background:none;border-radius:inherit}
 .tile img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;background:var(--line)}
 .tile.daily{grid-column:1/-1;order:-1;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 14px;background:linear-gradient(90deg,var(--accent),#7a5cff);color:#fff;font-weight:800;font-size:18px}
@@ -121,7 +126,7 @@ body{transition:background .4s,color .4s}
 .tile:active{transform:scale(.97)}
 .dif{width:48px;height:48px;padding:0;border-radius:50%;font-size:22px;display:grid;place-items:center}
 @media (max-height:700px){.tile img{aspect-ratio:1/1}.tile .tb{width:28px;height:28px;font-size:16px}.dif{width:40px;height:40px;font-size:18px}.tiles{gap:6px}}
-@media (max-height:520px) and (min-aspect-ratio:11/10){.tiles{grid-template-columns:repeat(5,1fr);gap:4px}.tile,.tile:nth-child(4),.tile:nth-child(5){grid-column:auto}.tile img{aspect-ratio:3/4}.tile .tb,.tile .skinBtn{width:22px;height:22px;font-size:12px}.tile .best{display:none}.dif{width:30px;height:30px;font-size:14px}}   /* thuộc tính hidden luôn thắng display:flex của từng lớp */
+@media (max-height:520px) and (min-aspect-ratio:11/10){.tiles{grid-template-columns:repeat(5,1fr);gap:4px}.tile,.tile:nth-child(4 of .tile),.tile:nth-child(5 of .tile){grid-column:auto}.tile img{aspect-ratio:3/4}.tile .tb,.tile .skinBtn{width:22px;height:22px;font-size:12px}.tile .best{display:none}.dif{width:30px;height:30px;font-size:14px}}   /* thuộc tính hidden luôn thắng display:flex của từng lớp */
 /* --- màn giải thích cách chơi trước khi bắt đầu --- */
 #ovHow{background:color-mix(in srgb,var(--bg) 60%,transparent);padding:10px;-webkit-backdrop-filter:none;backdrop-filter:none}#ovHow h2{background:var(--panel);color:var(--ink);padding:4px 16px;border-radius:999px;box-shadow:var(--shadow);font-size:clamp(20px,6vw,28px)}
 .hwE{display:none}
@@ -177,7 +182,7 @@ body{transition:background .4s,color .4s}
 .tile.daily{font-size:4.6cqw;padding:2cqw 3.4cqw}.tile.daily .de{font-size:7.4cqw}.tile.daily .dm,.tile.daily .df{font-size:3.8cqw}
 .difs{gap:2cqw}.dif{width:11cqw;height:11cqw;font-size:5cqw}
 .ov .big{font-size:4.8cqw}.ov .ghost{font-size:3.8cqw}
-.tile:nth-child(4){grid-column:1/span 3}.tile:nth-child(5){grid-column:4/span 3}.tile:nth-child(4) img,.tile:nth-child(5) img{aspect-ratio:3/2}   /* hàng 2: hai ô rộng lấp đầy khung thay vì 3+2 so le */
+.tile:nth-child(4 of .tile){grid-column:1/span 3}.tile:nth-child(5 of .tile){grid-column:4/span 3}.tile:nth-child(4 of .tile) img,.tile:nth-child(5 of .tile) img{aspect-ratio:3/2}   /* hàng 2: hai ô rộng lấp đầy khung thay vì 3+2 so le */
 }
 @media (min-aspect-ratio:11/10){.ask{gap:8px;padding:6px 10px;min-width:0;flex-wrap:nowrap}.ask .ib{flex:none;width:40px;height:40px;min-width:40px;min-height:40px}#askTxt{min-width:0;flex:1 1 0;font-size:clamp(12px,1.7vw,20px);line-height:1.15;overflow-wrap:normal;word-break:normal}.side{flex:none;min-width:min(180px,28vw)}}   /* thẻ nhắc việc ở cột trái hẹp: không bóp thành cột 106px / xuống từng chữ */
 </style>

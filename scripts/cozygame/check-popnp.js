@@ -6,7 +6,7 @@
    - thanh điểm (.hud) / thẻ câu hỏi (.ask) có nền: tương phản chữ/nền >= 4.5; chip cấp độ chưa chọn tương phản >= 4.5 với nền thanh;
    - popnp.css KHÔNG khai báo --accent (màu nhấn vẫn là của game/độ khó); không cuộn; không lỗi JS;
    - màn rộng (>= 700px) ở màn chọn: nền ngoài cột (#npWide của widebg.js) là nền đêm/oải hương (lớp gradient cuối tối < 0.12 / sáng > 0.6);
-   - thẻ menu ⋯ (#npPmFan .pn): viền gradient tím–cam (border-box), nền tối. */
+   - thẻ menu ⋯ (#npPmFan .pn): viền gradient tím–cam (border-box), nền tối; nền mờ .bk phủ TRỌN màn hình, không bo góc (Chim Bay từng thành ô vuông vì trùng tên lớp .bk). */
 const { spawn } = require("child_process"), fs = require("fs"), path = require("path"), puppeteer = require("puppeteer-core");
 const root = path.join(__dirname, "..", ".."), args = process.argv.slice(2), quick = args.includes("--quick"), PORT = +process.env.NP_PORT || 8947;
 const shots = (args.find(a => a.startsWith("--shots=")) || "").slice(8), only = (args.find(a => !a.startsWith("--")) || "").split(",").filter(Boolean);
@@ -43,6 +43,7 @@ const MEASURE = () => {
   if (lv) { const p = lv.closest(".lvs"), hb = home ? lastStops(cs(home).backgroundImage) : [], under = hb.length ? over(hb[hb.length - 1], base) : base; o.lvb = cr(L(num(cs(lv).color)), L(over(num(cs(p).backgroundColor), under))); }
   const wd = document.getElementById("npWide"); if (wd && innerWidth >= 700 && cs(wd).display !== "none") { const st = lastStops(cs(wd).backgroundImage); o.wideL = st.length ? Math.max(...st.map(c => L(over(c, base)))) : -1; o.wideMin = st.length ? Math.min(...st.map(c => L(over(c, base)))) : -1; }
   const pn = document.querySelector("#npPmFan .pn");
+  const bk = document.querySelector("#npPmFan .bk"); if (bk) { const r = bk.getBoundingClientRect(); o.bk = [r.left, r.top, innerWidth - r.right, innerHeight - r.bottom].map(Math.round); o.bkR = parseFloat(cs(bk).borderTopLeftRadius) || 0; }
   if (pn) { const b = cs(pn).backgroundImage; o.menu = { edge: /rgb\(155, 131, 255\)/.test(b) && /rgb\(255, 154, 107\)/.test(b), dark: Math.max(...(b.split("),")[0].match(/rgba?\([^)]*\)/g) || []).map(c => L(num(c))), 0) < .12 }; }
   return o;
 };
@@ -74,7 +75,7 @@ const MEASURE = () => {
       if (m.lvb !== undefined && m.lvb < 4.5) bad(`chip cấp độ tương phản ${m.lvb.toFixed(2)} < 4.5`);
       if (W === 390) {
         const has = await fr.evaluate(() => { const f = document.querySelector("#npPmFab"); if (!f) return false; f.click(); return true; }); await wait(350);
-        if (!has) bad("không có nút ⋯"); else { const mm = (await fr.evaluate(MEASURE)).menu; if (!mm || !mm.edge) bad("thẻ menu ⋯ thiếu viền gradient tím–cam"); else if (!mm.dark) bad("thẻ menu ⋯ nền không tối"); }
+        if (!has) bad("không có nút ⋯"); else { const mm = (await fr.evaluate(MEASURE)).menu; if (!mm || !mm.edge) bad("thẻ menu ⋯ thiếu viền gradient tím–cam"); else if (!mm.dark) bad("thẻ menu ⋯ nền không tối"); const m2 = await fr.evaluate(MEASURE); if (!m2.bk || m2.bk.some(v => Math.abs(v) > 1) || m2.bkR) bad("nền mờ của menu ⋯ không phủ trọn màn hình (lề " + (m2.bk || []).join("/") + ", bo " + m2.bkR + ")"); }
         if (shots) await pg.screenshot({ path: path.join(shots, `${id}-${th}-${via}-menu.png`) });
       } else if (shots) await pg.screenshot({ path: path.join(shots, `${id}-${th}-${W}x${H}.png`) });
       if (errs.length) bad("lỗi JS: " + [...new Set(errs)].join(" | "));

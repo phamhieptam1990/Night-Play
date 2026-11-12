@@ -37,7 +37,7 @@
     return "#npFan .it{width:" + s + "px!important;height:" + s + "px!important;gap:0!important;padding:0!important;position:relative!important;inset:auto!important;border-radius:" + Math.round(s * 0.3) + "px!important;color:#fff!important;background:rgba(255,255,255,.08)!important;border:1px solid rgba(255,255,255,.16)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.14)!important;font-size:" + e + "px!important;line-height:1!important;touch-action:manipulation;pointer-events:auto!important}" +
       "#npFan .it svg{width:" + v + "px!important;height:" + v + "px!important;stroke-width:2.4;display:block}#npFan .it>span:first-child{font-size:" + e + "px;line-height:1}" +
       "#npFan .it[data-r=lang],#npFan .it[data-r=lang]>span:first-child{font-size:" + l + "px!important;font-weight:800!important;letter-spacing:.02em}" +
-      "#npFan .it[data-r=lang],#npFan .it[aria-pressed=true],#npFan .it.on{border:1.5px solid transparent!important;background:linear-gradient(#2B2566,#2B2566) padding-box,linear-gradient(135deg,#9B83FF,#FF9A6B) border-box!important;box-shadow:0 0 14px rgba(155,131,255,.6)!important}" +
+      /* KHÔNG kiểu viền/quầng riêng cho ô "đang bật": mọi ô giống nhau (GAME_RULES 0a-21) */
       "#npFan .it[data-r=snd].off,#npFan .it[data-r=snd][aria-pressed=false]{opacity:.6!important}" +
       "#npFan .it:focus-visible{outline:3px solid var(--acc);outline-offset:2px}" +
       "#npFan .it b{position:absolute!important;right:3px;top:3px;left:auto;bottom:auto;margin:0;min-width:20px;height:20px;box-sizing:border-box;padding:0 5px;border-radius:10px;background:#ffd24a;color:#3a2400;font:800 12px/20px var(--font);text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.4)}";
@@ -47,8 +47,15 @@
     "#npFab,#npFan{display:none}" +
     "@media " + PHONE + "," + TAB + "{" +
     /* GAME_RULES 0a-23: nội dung (tên game, HUD, khung chơi) NEO LÊN SÁT hàng nút thay vì căn giữa phần còn lại (tên game từng cách hàng nút ~210px ở màn chọn); màn kết thúc giữ căn giữa */
+    /* popup phủ trong cột (#play > .ov: chọn giao diện/loại chơi, kết thúc…; #hlpOv: popup ?) phải làm mờ TRỌN CỬA SỔ khi cột game hẹp hơn cửa sổ (iPad dọc: từng chỉ mờ cột giữa):
+       hai dải ::before/::after cùng nền + cùng blur nối ra hai bên, rộng (100vw - 100cqw)/2 (= 0 trên điện thoại); hộp popup giữ nguyên kích thước nên nội dung không đổi */
+    "#play.npfan>.ov::before,#play.npfan>.ov::after,#play.npfan>#hlpOv::before,#play.npfan>#hlpOv::after{content:'';position:absolute;top:0;bottom:0;width:calc((100vw - 100cqw) / 2);background:inherit;-webkit-backdrop-filter:inherit;backdrop-filter:inherit}" +
+    /* popup đang mở: nút ⋯ nằm DƯỚI lớp mờ như ← và 🔊 (trước đây z-index 31 nên ⋯ vẫn sáng nổi trên popup) */
+    "#play.npfan:has(>.ov:not([hidden]),>#hlpOv:not([hidden])) #npFab:not(.open){z-index:2}" +
+    "#play.npfan>.ov::before,#play.npfan>#hlpOv::before{right:100%}#play.npfan>.ov::after,#play.npfan>#hlpOv::after{left:100%}" +
     "#play.npfan .scr:not(#end):not(#res){justify-content:flex-start!important}" +
-    "body.np-local{align-items:flex-start!important;justify-content:flex-start}" +
+    /* body xếp HÀNG (Cánh Nhỏ): chiều dọc = align-items; body xếp CỘT (Đập Deadline): chiều dọc = justify-content. Chỉ đổi đúng trục DỌC, không đụng căn giữa ngang (từng làm Đập Deadline dồn sang trái ở iPad) */
+    "body.np-local.np-lrow{align-items:flex-start!important}body.np-local.np-lcol{justify-content:flex-start!important}" +
     "#play.npfan .top,.top.npfan{padding-right:76px}" +
     "#play.npfan #bSnd,#play.npfan #soundBtn,.top.npfan #bSnd,.top.npfan #soundBtn{flex:none;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;display:grid;place-items:center;margin-left:auto!important;margin-right:0!important}" +
     "#play.npfan #bBk,.top.npfan #bBk{margin-right:0!important}#play.npfan #bSnd svg,#play.npfan #soundBtn svg,.top.npfan #bSnd svg,.top.npfan #soundBtn svg{width:24px;height:24px}" +
@@ -59,7 +66,8 @@
     "#npFab.open .d{opacity:0;transform:scale(.6)}#npFab.open .x{opacity:1;transform:rotate(0) scale(1)}" +
     "#npFab:active{filter:brightness(.92)}#npFab:focus-visible{outline:3px solid #fff;outline-offset:3px}" +
     "#npFan{display:block;position:absolute;inset:0;z-index:30;pointer-events:none}#npFan.open{pointer-events:auto}" +
-    "#npFan .bk{position:absolute;inset:0;background:rgba(12,8,28,.38);opacity:0;transition:opacity .2s}#npFan.open .bk{opacity:1}" +
+    /* nền mờ phủ TRỌN CỬA SỔ kể cả khi cột game hẹp hơn cửa sổ (iPad dọc: từng chỉ che cột giữa, hai dải bên vẫn sáng): nới trái/phải ra (100vw - 100cqw)/2 */
+    "#npFan .bk{position:absolute;top:0!important;bottom:0!important;left:calc((100cqw - 100vw) / 2)!important;right:calc((100cqw - 100vw) / 2)!important;width:auto!important;height:auto!important;aspect-ratio:auto!important;border-radius:0!important;box-shadow:none!important;outline:0!important;display:block!important;font-size:0!important;background:rgba(12,8,28,.38)!important;opacity:0;transition:opacity .2s}#npFan.open .bk{opacity:1}" +
     "#npFan .pn{position:absolute;right:12px;top:64px;display:grid;grid-template-columns:repeat(3,64px);gap:8px;padding:10px;border-radius:18px;background:var(--npbg,var(--panel,#fff));color:var(--npink,inherit);border:1.5px solid var(--npacc,var(--accent,#7C5CFF));box-shadow:0 10px 30px rgba(0,0,0,.4);" +
     "transform-origin:top right;opacity:0;transform:scale(.7);visibility:hidden;transition:transform .22s cubic-bezier(.2,1.3,.4,1),opacity .15s,visibility 0s .22s}" +
     "#npFan.open .pn{opacity:1;transform:scale(1);visibility:visible;transition-delay:0s}" +
@@ -75,7 +83,7 @@
     ".top.npfan #bBk{order:-3;margin:0}" +                      /* ← luôn ở góc trái, trước tiêu đề */
     ".top.npfan #npFab{right:12px;top:50%;margin-top:-24px}" +
     ".top.npfan #npFan{position:static;inset:auto}" +
-    ".top.npfan #npFan .bk{position:fixed;inset:0}" +
+    ".top.npfan #npFan .bk{position:fixed;left:0!important;right:0!important}" +
     ".top.npfan #npFan .pn{right:12px;top:calc(100% - 4px)}" +
     "body.np-local{padding-top:64px;box-sizing:border-box}" +
     /* tên game SÁT khung thông tin: bản sao của h1 nằm ngay chỗ .top cũ trong luồng (nên dính trên khối nội dung), h1 trên thanh ghim chỉ giữ chỗ */
@@ -104,10 +112,19 @@
     "}" +
     "@media " + TAB + "{" +
     "#play.npfan .top,.top.npfan{padding-right:80px}" +
-    "#npFab{width:56px;height:56px;right:14px;top:8px}#npFab svg{width:28px;height:28px}" +
+    "#npFab{width:44px;height:44px;right:14px;top:8px}#npFab svg{width:24px;height:24px}" +
+    /* iPad dọc, game có #play: hàng nút (← | ⏸ 🔊 | ⋯) CÙNG CỠ 44px (như Pop), CÙNG tâm dọc y = 38 (= tâm nút ← 44px ở 16/16 của backpos.css), lề phải ⋯ = lề trái ← = 16px, cách nhau 8px.
+       Trước đây .top đặt theo cqw (top 2.5cqw, cao 9cqw) nên 🔊 thấp hơn ⋯ ~24px và lệch trục (chủ site báo "lệch icon") */
+    /* cột game hẹp hơn cửa sổ (62dvh): ⋯ và 🔊 ra SÁT MÉP PHẢI CỬA SỔ (lề 16px) cho đối xứng với ← ở mép trái cửa sổ (backpos.css); 100cqw = bề rộng #play */
+    "#play.npfan #npFab{right:calc(16px + env(safe-area-inset-right,0px) - (100vw - 100cqw) / 2);top:calc(16px + env(safe-area-inset-top,0px))}" +
+    "#play.npfan .top{left:calc(16px + env(safe-area-inset-left,0px));right:calc(68px + env(safe-area-inset-right,0px) - (100vw - 100cqw) / 2);top:calc(16px + env(safe-area-inset-top,0px));height:44px;padding:0;gap:8px}" +
+    "#play.npfan .top .ib,#play.npfan .top button:not(.chip),#play.npfan #bSnd,#play.npfan #soundBtn{width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important}" +
+    "#play.npfan #npFan .pn{right:calc(16px + env(safe-area-inset-right,0px) - (100vw - 100cqw) / 2);top:calc(68px + env(safe-area-inset-top,0px))}" +
     "#npFan .pn{grid-template-columns:repeat(3,76px);gap:12px;padding:14px;top:72px;right:14px}" +
     TILE(76, 36, 34, 24) +
-    ".top.npfan{padding:10px 80px 10px 16px;min-height:72px}.top.npfan #npFab{right:14px;margin-top:-28px}.top.npfan #npFan .pn{right:14px;top:calc(100% - 2px)}body.np-local{padding-top:72px}" +
+    ".top.npfan{padding:16px 60px 16px 16px;min-height:76px}.top.npfan #npFab{right:16px;margin-top:-22px}.top.npfan #npFan .pn{right:16px;top:calc(100% - 4px)}body.np-local{padding-top:76px}" +
+    /* iPad dọc: .scr vốn bắt đầu ở 14cqw (iPad Pro 13: ~120px) -> tên game cách hàng nút ~100px; neo cố định ngay dưới hàng nút (GAME_RULES 0a-23) */
+    "#play.npfan .scr{top:calc(88px + env(safe-area-inset-top,0px))}" +
     "}" +
     "@media (prefers-reduced-motion:reduce){#npFab,#npFab svg,#npFan .bk,#npFan .pn{transition:none!important}}";
   document.head.appendChild(st);
@@ -197,7 +214,7 @@
     if (!mq.matches) return;
     var c = candidates().filter(function (x) { return x[0] !== "snd"; });   // 🔊 luôn ở ngoài menu (điện thoại + iPad) nên không tính
     if (c.length < 3 && !moved) return;                         // trang không có đủ nút phụ (Pop Play...): bỏ qua
-    build(); moved = true; play.classList.add("npfan"); if (local) { document.body.classList.add("np-local"); buildTitle(); }
+    build(); moved = true; play.classList.add("npfan"); if (local) { var bfd = ""; try { bfd = getComputedStyle(document.body).flexDirection || ""; } catch (e) {} document.body.classList.add("np-local", bfd.indexOf("column") === 0 ? "np-lcol" : "np-lrow"); buildTitle(); }
     GRID.forEach(function (role) {
       if (role === "snd") return;                               // giữ nút bật/tắt tiếng ngoài menu
       var e = elOf(role); if (!e || e.parentNode === panel) return;
@@ -217,7 +234,7 @@
   /* màn rộng/ngang: trả nút về thanh trên theo thứ tự cũ (nút ngoài thanh trên về đúng chỗ gốc) */
   function restore() {
     if (!moved) return;
-    setOpen(false); play.classList.remove("npfan"); document.body.classList.remove("np-local");
+    setOpen(false); play.classList.remove("npfan"); document.body.classList.remove("np-local", "np-lcol", "np-lrow");
     var keep = [];
     ROLES.forEach(function (r) { home.forEach(function (h) { if (h.role === r[0]) keep.push(h); }); });
     home.forEach(function (h) { if (!roleOf(h.role)) keep.push(h); });
