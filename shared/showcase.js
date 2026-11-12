@@ -182,8 +182,9 @@
     playEl.disabled = !!(O.canPlay && !O.canPlay());
     prevEl.setAttribute("aria-label", t.prev); nextEl.setAttribute("aria-label", t.next);
     $("show").setAttribute("aria-label", t.feat);
-    var c = colorOf(g); if (c) box.style.setProperty("--sc-glow", "color-mix(in srgb," + c + " 55%,transparent)"); else box.style.removeProperty("--sc-glow");
-    place(); if (!fitName()) { var sn = shortOf(g); if (sn) { nameEl.textContent = sn; fitName(); } }
+    var c = colorOf(g); if (c) { box.style.setProperty("--sc-glow", "color-mix(in srgb," + c + " 55%,transparent)"); box.style.setProperty("--sc-c", c); document.documentElement.style.setProperty("--np-c", c); } else { box.style.removeProperty("--sc-glow"); box.style.removeProperty("--sc-c"); document.documentElement.style.removeProperty("--np-c"); }
+    place(); playEl.classList.remove("ico"); if (!fitName()) { playEl.classList.add("ico"); }
+    if (playEl.classList.contains("ico") && !fitName()) { var sn = shortOf(g); if (sn) { nameEl.textContent = sn; fitName(); } }
   }
   function go(i) { var n = list.length; if (!n) return; cur = ((i % n) + n) % n; paint(); }
 
@@ -204,7 +205,7 @@
       });
       var gmin = px(getComputedStyle(document.documentElement).getPropertyValue("--sc-gmin")) || 210;
       /* hàng chấm trang: Pop <= 12 game luôn vừa một trang ở --sc-gmin nên không cần trừ; tính theo TỔNG game đang bật (không theo kết quả lọc) để ổn định */
-      var dots = O.portal === "pop" && ((O.all ? O.all() : list) || []).length <= 12 ? 0 : 44;
+      var dots = (O.portal === "pop" && ((O.all ? O.all() : list) || []).length <= 12) || (innerWidth <= 520 && innerHeight > innerWidth) ? 0 : 44;
       h = Math.min(px(getComputedStyle(host).maxHeight) || 9999, main.clientHeight - used - gmin - dots);
     }
     if (h < 128 || host.clientWidth < 250) main.classList.add("sc-tiny");
@@ -247,6 +248,23 @@
     setTimeout(function () { de.classList.remove("sc-intro"); }, 1900);
   }
 
+  /* TỰ CHẠY: mỗi ~4,5 giây sang game kế. Dừng khi: sân khấu không hiện, tab ẩn, đang chơi game, máy bật giảm chuyển động, người dùng vừa chạm/rê chuột/bấm phím
+     trên sân khấu (nghỉ 9 giây). Trình duyệt tự động (webdriver, bài đo) không chạy trừ ?auto=1. */
+  function autoRun() {
+    var reduce = false; try { reduce = matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
+    if (reduce || (navigator.webdriver && !/[?&]auto=1/.test(location.search))) return;
+    var idle = 0, hover = false, de = document.documentElement;
+    var touch = function () { idle = Date.now(); };
+    box.addEventListener("pointerdown", touch); box.addEventListener("keydown", touch); box.addEventListener("focusin", touch);
+    box.addEventListener("pointerenter", function (e) { if (e.pointerType === "mouse") hover = true; }); box.addEventListener("pointerleave", function () { hover = false; touch(); });
+    setInterval(function () {
+      if (document.hidden || hover || de.classList.contains("playing") || list.length < 2) return;
+      if (Date.now() - idle < 9000 || box.getBoundingClientRect().height < 40 || !$("show").offsetParent) return;
+      if (document.activeElement && box.contains(document.activeElement)) return;
+      go(cur + 1);
+    }, 4500);
+  }
+
   window.NPShow = {
     init: function (o) {
       O = o; if (!build()) { O = null; return; }
@@ -257,6 +275,7 @@
       /* chiều cao sân khấu đổi sau lần dựng đầu (phông tải xong, thanh trên đổi cao, thẻ Chơi tiếp hiện): xét lại có đủ chỗ không */
       if (window.ResizeObserver) { var ro = 0; new ResizeObserver(function () { cancelAnimationFrame(ro); ro = requestAnimationFrame(function () { var m = $("show").parentNode, was = m.classList.contains("sc-tiny"); fitBox(); if (was !== m.classList.contains("sc-tiny") || !was) paint(); }); }).observe($("show")); }
       if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (box) paint(); });
+      autoRun();
     },
     refresh: refresh, intro: intro, go: go,
     current: function () { return list[cur] || null; }

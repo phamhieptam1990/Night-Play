@@ -14,14 +14,14 @@ const wait = ms => new Promise(r => setTimeout(r, ms)), fails = []; let n = 0;
 const note = (ok, m) => { n++; if (!ok) { fails.push(m); console.log("  ✗ " + m); } };
 const SIZES = quick ? [[390, 844], [390, 664], [768, 1024], [844, 390], [1280, 800]]
   : [[320, 568], [360, 640], [390, 664], [390, 844], [430, 932], [768, 1024], [1032, 1376], [1024, 768], [844, 390], [667, 375], [1000, 536], [1280, 800], [1440, 900], [1920, 1080]];
-const expectOn = (w, h) => (h >= 600 && !(w >= 900 && w > h)) || (w >= 900 && w > h && h >= 560);
+const expectOn = (w, h) => (h >= 600 && !(w >= 900 && w > h)) || (w >= 900 && w > h && h >= 560) || (w > h && w >= 560 && h < 560);   /* điện thoại ngang: sân khấu 50/50 */
 const MEASURE = kind => {
   const de = document.documentElement, main = document.querySelector("main"), host = document.getElementById("show"), out = { errs: [] }, vw = de.clientWidth, vh = innerHeight;
   const vis = e => !!e && e.offsetParent !== null && e.getBoundingClientRect().width > 4;
   if (de.scrollHeight > vh + 1 || de.scrollWidth > vw + 1) out.errs.push("trang cuộn/tràn");
   if (main.scrollHeight > main.clientHeight + 1) out.errs.push("main cuộn " + main.scrollHeight + ">" + main.clientHeight);
   out.on = vis(host); out.tiny = main.classList.contains("sc-tiny");
-  const tiles = [...document.querySelectorAll("#grid .tile")].filter(vis), mn = kind === "cozy" ? 87.5 : 63.5;
+  const tiles = [...document.querySelectorAll("#grid .tile")].filter(vis), mn = kind === "cozy" ? (vw <= 520 && vh >= 760 ? 71.5 : (vw > vh && vh < 560 ? 63.5 : 87.5)) : (vw > vh && vh < 560 ? 59.5 : 63.5);
   for (const t of tiles) { const r = t.getBoundingClientRect(); if (r.left > -1 && r.right < vw + 1 && (r.width < mn || r.height < mn)) { out.errs.push("ô game nhỏ " + Math.round(r.width)); break; } }
   if (!tiles.length) out.errs.push("lưới rỗng");
   const pt = document.getElementById("puToday"); out.puToday = vis(pt);
@@ -36,8 +36,8 @@ const MEASURE = kind => {
   const bar = getComputedStyle(info).flexDirection === "row"; out.bar = bar;   /* điện thoại dọc: thanh đáy (tên + nút Chơi), nhãn ở góc trên-trái của sân khấu, chồng thẻ chính giữa */
   if (bar) { inside(tag, "nhãn"); if (mid) { const r = mid.getBoundingClientRect(); if (Math.abs((r.left + r.right) / 2 - (box.left + box.right) / 2) > 3) out.errs.push("thẻ giữa không nằm chính giữa sân khấu"); if (r.bottom > ir.top + 1) out.errs.push("thẻ giữa bị thanh chữ đè " + Math.round(r.bottom - ir.top) + "px"); const tr = tag.getBoundingClientRect(); if (!(tr.right < r.left + 1 || tr.bottom < r.top + 1)) out.errs.push("nhãn đè lên thẻ giữa"); } }
   for (const [e, w] of [[play, "nút Chơi"], [name, "tên game"]].concat(bar ? [] : [[tag, "nhãn"]])) { const r = e.getBoundingClientRect(); if (r.left < ir.left - 1 || r.right > ir.right + 1 || r.top < ir.top - 1 || r.bottom > ir.bottom + 1) out.errs.push(w + " tràn khỏi thẻ chữ"); }
-  const pr = play.getBoundingClientRect(); if (pr.height < 43.5 || pr.width < 80) out.errs.push("nút Chơi nhỏ " + Math.round(pr.width) + "x" + Math.round(pr.height));
-  if (!mid) out.errs.push("không có thẻ giữa"); else { const r = inside(mid, "thẻ giữa"); if (r.width < 70) out.errs.push("thẻ giữa nhỏ " + Math.round(r.width)); const c = document.elementFromPoint(r.left + r.width * .7, r.top + r.height / 2); if (!c || !c.closest(".sc-card,.sc-nav")) out.errs.push("thẻ giữa bị che"); }
+  const pr = play.getBoundingClientRect(); if (pr.height < 43.5 || pr.width < (play.classList.contains("ico") ? 43.5 : 80)) out.errs.push("nút Chơi nhỏ " + Math.round(pr.width) + "x" + Math.round(pr.height));
+  if (!mid) out.errs.push("không có thẻ giữa"); else { const r = inside(mid, "thẻ giữa"); if (r.width < (vw > vh && vh < 560 ? 60 : 70)) out.errs.push("thẻ giữa nhỏ " + Math.round(r.width)); const c = document.elementFromPoint(r.left + r.width * .7, r.top + r.height / 2); if (!c || !c.closest(".sc-card,.sc-nav")) out.errs.push("thẻ giữa bị che"); }
   if (tag.scrollWidth > tag.clientWidth + 1) out.errs.push("nhãn bị cắt (" + tag.textContent + ")");
   out.tag = tag.textContent; out.name = name.textContent; out.day = tag.classList.contains("day");
   /* tên của MỌI game: <= 2 dòng, không tràn */

@@ -41,7 +41,7 @@ const WANT_CAT = /id="topics"/.test(fs.readFileSync(path.join(root, "cozyplay/in
   for (const pg of ["cozyplay/index.html", "popplay/index.html"]) { const h = fs.readFileSync(path.join(root, pg), "utf8"); for (const i of made) note(!new RegExp('\\bid="' + i + '"').test(h), pg + ': id="' + i + '" trùng id do shared/rails.js|hud.js tạo ra'); }
   const popHtml = fs.readFileSync(path.join(root, "popplay/index.html"), "utf8");
   note(!/Night Pass|👑|crown/i.test((popHtml.match(/<main>[\s\S]*?<\/main>/) || [""])[0]), "popplay/index.html: <main> không được nhắc Night Pass/👑");
-  note(!/id="topics"|id="puTop"/.test(popHtml), "popplay/index.html: Pop Play KHÔNG có bộ lọc / thẻ Hôm nay");
+  note(!/id="topics"|id="puToday"/.test(popHtml), "popplay/index.html: Pop Play KHÔNG có bộ lọc / thẻ Hôm nay (chỉ thẻ Chơi tiếp)");
 })();
 
 const SIZES = quick ? [[320, 568], [360, 640], [390, 844], [768, 1024], [844, 390], [1280, 800]]
@@ -61,12 +61,12 @@ const MEASURE = kind => {
     const b = c.querySelector(".pu-t b"); if (b && b.scrollHeight > b.clientHeight + 1) out.errs.push(c.id + ": tên game bị cắt (" + b.textContent + ")");
     const s = c.querySelector(".pu-t small"); if (s && s.scrollWidth > s.clientWidth + 1) out.errs.push(c.id + ": nhãn bị cắt “…” (" + s.textContent + ")");
   }
-  if (ph && cards.length) { const L = Math.min(...cards.map(c => c.getBoundingClientRect().left)), R = Math.max(...cards.map(c => c.getBoundingClientRect().right)); if (Math.abs(L - 16) > 1.5 || Math.abs(vw - R - 16) > 1.5) out.errs.push("thẻ lệch lề 16px: trái " + L.toFixed(1) + ", phải " + (vw - R).toFixed(1)); }
+  if (ph && cards.length) { const L = Math.min(...cards.map(c => c.getBoundingClientRect().left)), R = Math.max(...cards.map(c => c.getBoundingClientRect().right).concat((f => f && getComputedStyle(f).position === "static" ? [f.getBoundingClientRect().right] : [])(document.getElementById("findFab")))); if (Math.abs(L - 16) > 1.5 || Math.abs(vw - R - 16) > 1.5) out.errs.push("thẻ lệch lề 16px: trái " + L.toFixed(1) + ", phải " + (vw - R).toFixed(1)); }
   const chips = [...document.querySelectorAll("#topics button")].filter(vis);
   for (const c of chips) { const r = c.getBoundingClientRect(); if (r.height < 43.5 || r.width < 43.5) out.errs.push("chip " + c.textContent + " nhỏ " + Math.round(r.width) + "x" + Math.round(r.height)); }
   if (ph && chips.length) { const row = document.getElementById("topics").getBoundingClientRect(); if (Math.abs(row.left - 16) > 1.5) out.errs.push("hàng chip lệch lề trái " + row.left.toFixed(1)); const rows = new Set(chips.map(c => Math.round(c.getBoundingClientRect().top))); if (rows.size > 1) out.errs.push("chip xuống dòng (" + rows.size + " hàng): phải cuộn ngang"); }
   const tiles = [...document.querySelectorAll("#grid .tile")].filter(vis);
-  for (const t of tiles) { const r = t.getBoundingClientRect(), mn = kind === "cozy" ? 87.5 : 63.5; if (r.left > -1 && r.right < vw + 1 && (r.width < mn || r.height < mn)) out.errs.push("ô game nhỏ " + Math.round(r.width) + " (< " + Math.ceil(mn) + ")"); }
+  for (const t of tiles) { const r = t.getBoundingClientRect(), mn = kind === "cozy" ? (vw <= 520 && vh >= 760 ? 71.5 : (vw > vh && vh < 560 && vw >= 560 ? 63.5 : 87.5)) : (vw > vh && vh < 560 && vw >= 560 ? 59.5 : 63.5); if (r.left > -1 && r.right < vw + 1 && (r.width < mn || r.height < mn)) out.errs.push("ô game nhỏ " + Math.round(r.width) + " (< " + Math.ceil(mn) + ")"); }
   if (ph) { const li = [...document.querySelectorAll(".trust li")].filter(vis); if (new Set(li.map(e => Math.round(e.getBoundingClientRect().top))).size > 1) out.errs.push("chip cam kết xuống dòng (hero phải gọn một hàng)"); const d = document.querySelector(".hero .desc"); if (d && vis(d) && d.getBoundingClientRect().height > 2 * 24) out.errs.push("hero có đoạn mô tả > 2 dòng"); }
   if (kind === "cozy") { const lbl = tiles.filter(t => t.querySelector(".pu-n")); if (tiles.length && lbl.length !== tiles.length) out.errs.push("ô thiếu tên ngắn (.pu-n): " + lbl.length + "/" + tiles.length); }
   /* huy hiệu nằm trong ô; nhãn tên Pop một dòng không cắt */
@@ -93,12 +93,12 @@ const MEASURE = kind => {
       const r = await pg.evaluate(MEASURE, kind); r.errs.forEach(e => note(false, tag + ": " + e));
       { const st = await pg.evaluate(() => {
           const px = c => { const m = c.match(/[\d.]+/g).map(Number); return m.slice(0, 3); }, lum = ([r, g, b]) => { const f = v => { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }; return .2126 * f(r) + .7152 * f(g) + .0722 * f(b); }, cr = (a, b) => { const x = lum(px(a)), y = lum(px(b)); return (Math.max(x, y) + .05) / (Math.min(x, y) + .05); };
-          const cs = e => getComputedStyle(e), de = document.documentElement, h1 = document.querySelector(".hero h1"), card = document.querySelector(".pu-card"), pill = document.querySelector(".nav .pill"), bgc = cs(de).backgroundColor, o = {};
-          o.bg = cs(de).backgroundImage; o.grads = (o.bg.match(/gradient/g) || []).length; o.h1 = cr(cs(h1).color, bgc);
+          const cs = e => getComputedStyle(e), de = document.documentElement, h1 = document.querySelector(".hero h1"), card = document.querySelector(".pu-card:not([hidden])"), pill = document.querySelector(".nav .pill"), bgc = cs(de).backgroundColor, o = {};
+          o.bg = cs(de).backgroundImage; o.grads = (o.bg.match(/gradient/g) || []).length; o.gr = /rgba\(0, 0, 0, 0\)|transparent/.test(cs(h1).color); o.h1 = /rgba\(0, 0, 0, 0\)|transparent/.test(cs(h1).color) ? Math.min(...((cs(h1).backgroundImage.match(/#[0-9A-Fa-f]{6}/g) || []).map(x => cr("rgb(" + [1, 3, 5].map(i => parseInt(x.substr(i, 2), 16)).join(",") + ")", bgc)).concat([21]))) : cr(cs(h1).color, bgc);
           if (card) { o.glass = cs(card).backdropFilter || cs(card).webkitBackdropFilter; o.edge = getComputedStyle(card, "::before").backgroundImage.includes("gradient"); o.name = cr(cs(card.querySelector(".pu-t b")).color, bgc); }
           if (pill) { o.pill = cs(pill).backgroundImage.includes("gradient"); o.pillc = cr(cs(pill).color, getComputedStyle(pill).backgroundColor.includes("0, 0, 0, 0") ? "rgb(106,72,240)" : cs(pill).backgroundColor); }
           const t = document.querySelector("#grid .tile"); o.tileShadow = cs(t).boxShadow !== "none"; return o; });
-        note(st.grads >= 3, tag + ": nền cổng phẳng (" + st.grads + " lớp gradient, cần quầng/sao)"); note(st.h1 >= 4.5, tag + ": tương phản tiêu đề " + st.h1.toFixed(2) + " < 4.5");
+        note(st.grads >= 3, tag + ": nền cổng phẳng (" + st.grads + " lớp gradient, cần quầng/sao)"); note(st.h1 >= (st.gr ? 3 : 4.5), tag + ": tương phản tiêu đề " + st.h1.toFixed(2) + " < " + (st.gr ? 3 : 4.5) + "");
         if (kind === "cozy") { note(/blur/.test(st.glass || ""), tag + ": thẻ Hôm nay không có kính mờ (backdrop-filter)"); note(st.edge, tag + ": thẻ thiếu viền gradient"); note(st.name >= 4.5, tag + ": tương phản tên game trong thẻ " + st.name.toFixed(2)); note(st.pill, tag + ": nút Night Pass không gradient"); }
         note(st.tileShadow, tag + ": ô game không có bóng/glow"); }
       if (w === 390 || w === 1280) { const dup = await pg.evaluate(() => { const c = {}; document.querySelectorAll("[id]").forEach(e => { c[e.id] = (c[e.id] || 0) + 1; }); return Object.keys(c).filter(k => c[k] > 1); }); note(!dup.length, tag + ": id trùng " + JSON.stringify(dup) + " (từng trùng #npTop với shared/rails.js làm ẩn nhầm khối của trang)"); }
@@ -173,6 +173,7 @@ const MEASURE = kind => {
     for (const kind of ["cozy", "pop"]) for (const theme of ["light", "dark"]) {
       const pg = await open(kind + "play/index.html", 1280, 800, { theme, lang: "vi" });
       for (const [sel, nth] of HOVSEL[kind]) for (let i = 0; i < nth; i++) {
+        if (/#topics/.test(sel)) await pg.evaluate(() => { const f = document.getElementById("findFab"); if (f && document.getElementById("findPanel").hidden) f.click(); }); /* chip chủ đề nằm trong bảng tìm kiếm (ẩn đến khi bấm kính lúp) */
         const tag = "hover " + kind + " " + theme + " " + sel + (nth > 1 ? "#" + i : "");
         const h = await pg.evaluateHandle((s, i2) => [...document.querySelectorAll(s)].filter(x => x.offsetParent !== null)[i2], sel, i); if (!h.asElement()) { note(false, tag + ": không có phần tử"); continue; }
         await pg.mouse.move(2, 2); await wait(260); const a = await pg.evaluate(STYLE, sel, i);

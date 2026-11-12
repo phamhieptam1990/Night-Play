@@ -344,6 +344,7 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 #stage #home,#stage .nps-fab{opacity:1!important;pointer-events:auto!important;transform:none!important;width:40px!important;height:40px!important;z-index:3}
 #stage #tleft{z-index:3}
 #stage{transition:background-color .3s}
+#stage.loading #home,#stage.loading .nps-fab,#stage.loading .nps-cam,#stage.loading #klock{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
 #stage[data-lum="l"] #home,#stage[data-lum="l"] .nps-fab{background:rgba(32,28,44,.82)!important;border-color:rgba(255,255,255,.55)!important;color:#fff!important}
 /* game đã gom ← + ⋯ (📷/📤 trong menu) vào thanh trên của chính nó (shared/popmenu.js, __npDock): ẩn ← + nút nổi của cổng, iframe chiếm toàn khung */
 #stage.docked #home,#stage.docked #klock,#stage.docked .nps-fab{display:none!important}
@@ -399,11 +400,11 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
   </div>
   <div id="hleft" class="left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg><span></span></div>
   <section id="show"></section>
+  <section id="puTop"><div id="puInfo"></div><button id="findFab" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="findPanel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button></section>
   <div id="grid"></div>
   <div id="gdots" role="group"></div>
   <div id="noRes" hidden></div>
 </main>
-<button id="findFab" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="findPanel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button>
 <div id="findPanel" role="search" hidden>
   <div id="qWrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" enterkeyhint="search" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="40"><button id="qClear" type="button" tabindex="-1">✕</button></div>
   <div id="catChips" role="group"></div>
@@ -777,9 +778,11 @@ function renderGrid(){
 }
 /* Chọn số cột + cỡ ô lớn nhất để toàn bộ game nằm gọn trong khung, không cuộn.
    Nếu ô vẫn nhỏ hơn 64px (quá nhiều game / màn hình thấp) thì chuyển sang TRƯỢT NGANG theo trang. */
-const gdots = $("gdots"), MIN_TILE = 64;
+const gdots = $("gdots"); let MIN_TILE = 64, MINS = 72;   // điện thoại ngang (sân khấu 50/50): ô nhỏ hơn (60) để lưới hiện 2 hàng
+const tileMins = () => { const ls = innerWidth > innerHeight && innerHeight < 560 && innerWidth >= 560; MIN_TILE = ls ? 60 : 64; MINS = ls ? 60 : 72; };
 let gPage = { step:0, n:1 };
 function fitGrid(){
+  tileMins();
   const n = grid.children.length, w = grid.clientWidth, h = grid.clientHeight;
   if(!n || !w || !h) return;
   const firstTile = gPage.per ? curPage() * gPage.per : 0;   // ô đầu của trang đang xem: giữ nguyên sau khi xoay màn hình
@@ -798,7 +801,7 @@ function fitGrid(){
     return;
   }
   /* trượt ngang: xếp NHIỀU game nhất có thể trên một trang (ô tối thiểu 72px), rồi nới ô cho vừa khít khoảng trống */
-  const room = h - 16, MINS = 72;
+  const room = h - 16;
   const c = Math.max(1, Math.floor((w + g) / (MINS + g))), r = Math.max(1, Math.floor((room + g) / (MINS + g)));
   const s = Math.max(MIN_TILE, Math.min(140, Math.floor((w - (c - 1) * g) / c), Math.floor((room - (r - 1) * g) / r)));
   /* khoảng thừa chia vào khe GIỮA các cột để ô ngoài cùng thẳng lề trái/phải (16px) với icon thanh trên (GAME_RULES 0a-12) */
@@ -872,7 +875,7 @@ function openGame(g){
   f.title = g.name[lang] || g.name[DEFAULT_LANG];
   loader.classList.remove("off");
   stage.appendChild(f);
-  stage.classList.add("on");
+  stage.classList.add("on","loading");   // đang tải: giấu nút nổi của cổng (tránh nháy hiện rồi biến mất khi game gom nút vào làn của nó)
   document.documentElement.classList.add("playing");   // khoá cuộn trang nền
   startTimer(); revealHome(3500);
   document.title = f.title;
@@ -881,7 +884,7 @@ function openGame(g){
   f.addEventListener("load", () => {
     try{ if(f.contentDocument){ watchSwipe(f.contentDocument); stage.classList.remove("edge"); } else stage.classList.add("edge"); }
     catch(e){ stage.classList.add("edge"); }   // game khác domain: dùng dải cảm ứng ở mép trên
-    setTimeout(() => { if(frame !== f) return; f.classList.add("show"); loader.classList.add("off"); },
+    setTimeout(() => { if(frame !== f) return; try{ stage.classList.toggle("docked", !!(f.contentWindow && f.contentWindow.__npDock)); }catch(e){} stage.classList.remove("loading"); f.classList.add("show"); loader.classList.add("off"); },
       Math.max(0, MIN_LOAD - (performance.now() - t0)));
   });
   // Đợi chuyển fullscreen xong rồi mới tải game, tránh giật vì 2 việc nặng chạy cùng lúc
@@ -910,7 +913,7 @@ function closeGame(){
   hideHome();
   frame.remove(); frame = null; stopTimer();          // xoá iframe: giải phóng bộ nhớ, dừng âm thanh
   try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}   // giọng đọc có thể còn trong hàng đợi của tab
-  stage.classList.remove("on");
+  stage.classList.remove("on","loading");
   document.documentElement.classList.remove("playing");
   document.title = pageTitle();
   try{ if(document.fullscreenElement) document.exitFullscreen(); }catch(e){}
@@ -1000,7 +1003,13 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e => {
 });
 
 /* ===== HUY HIỆU "MỚI" + NHÃN TÊN NGẮN (shared/portalui.js); Pop Play: KHÔNG 👑, KHÔNG bộ lọc, KHÔNG số phút còn lại ===== */
-NPPortalUI.init({ portal:"pop", games:games, getLang:() => lang, enabled, open:() => {} });
+function openFromPortal(g, resume){
+  if(frame || isTimeUp() || prefs.off.includes(g.id)) return;
+  pop();
+  const old = g.url; if(resume) g.url = old + (old.indexOf("?") < 0 ? "?" : "&") + "resume=1";   // cùng cách rails.js mở ván dở
+  pushed = true; location.hash = g.id; setTimeout(() => { g.url = old; }, 800);
+}
+NPPortalUI.init({ portal:"pop", games:games, getLang:() => lang, enabled, open:openFromPortal });
 
 /* ===== SÂN KHẤU: game hôm nay + chồng thẻ 3D + cảnh nền (shared/showcase.js, GAME_RULES 0a-29) ===== */
 NPShow.init({ portal:"pop", getLang:() => lang, list:() => visible(), all:enabled, canPlay:() => !isTimeUp(),

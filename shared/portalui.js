@@ -82,12 +82,13 @@
     if (extra) b.appendChild(extra);
   }
   function renderInfo() {
-    var box = $("puInfo"); if (!box || O.portal !== "cozy") return;
+    var box = $("puInfo"); if (!box) return;
+    var pop = O.portal === "pop";   /* Pop Play: CHỈ thẻ "Chơi tiếp" (game hôm nay đã có trên sân khấu) */
     var t = tt(), day = today(), g = pickToday(day), a = $("puToday"), r = $("puResume");
-    if (!a) { a = card("puToday", "today"); box.appendChild(a); a.addEventListener("click", function () { var id = a.dataset.id, x = id && byId(id); if (x) O.open(x, false); }); }
+    if (!pop && !a) { a = card("puToday", "today"); box.appendChild(a); a.addEventListener("click", function () { var id = a.dataset.id, x = id && byId(id); if (x) O.open(x, false); }); }
     if (!r) { r = card("puResume", "resume"); box.appendChild(r); r.addEventListener("click", function () { var id = r.dataset.id, x = id && byId(id); if (x) O.open(x, true); }); }
-    a.hidden = !g;
-    if (g) {
+    if (a) a.hidden = !g;
+    if (a && g) {
       var d = dailyOf(g.id, day), played = d !== false, chk = null;
       if (played) { chk = el("i", "pu-ok", "✓"); chk.setAttribute("aria-hidden", "true"); }
       fillCard(a, g, [t.today, "#" + dayNo(day)], chk, "");
@@ -97,8 +98,8 @@
     var best = null; enabledGames().forEach(function (x) { var rc = resumeRec(x.id); if (rc && (!best || rc.ts > best.r.ts)) best = { g: x, r: rc }; });
     r.hidden = !best;
     if (best) { fillCard(r, best.g, [t.resume, ago(Date.now() - best.r.ts)], null, " ag"); r.setAttribute("aria-label", t.resume + ": " + gname(best.g)); }
-    box.hidden = a.hidden && r.hidden;
-    box.dataset.n = String((a.hidden ? 0 : 1) + (r.hidden ? 0 : 1));
+    box.hidden = (!a || a.hidden) && r.hidden;
+    box.dataset.n = String((!a || a.hidden ? 0 : 1) + (r.hidden ? 0 : 1));
   }
 
   /* ---------- chip lọc chủ đề (Night Play) ---------- */
@@ -142,6 +143,18 @@
     init: function (o) {
       O = o; topic = readTopic();
       refresh();
+      /* Pop Play: thỉnh thoảng MỘT ô game rung lắc + sáng lên (CSS .wob); dừng khi đang chơi / tab ẩn / giảm chuyển động */
+      if (o.portal === "pop" && !(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches)) {
+        var last = -1;
+        setInterval(function () {
+          if (document.hidden || document.documentElement.classList.contains("playing")) return;
+          var gr = $("grid"); if (gr && gr.matches(":hover")) return; var ts = gr ? [].filter.call(gr.querySelectorAll(".tile"), function (t) { var r = t.getBoundingClientRect(); return r.width > 4 && r.left >= -1 && r.right <= innerWidth + 1 && r.bottom <= innerHeight + 1 && r.top >= 0; }) : [];
+          if (!ts.length) return;
+          var i = Math.floor(Math.random() * ts.length); if (ts.length > 1 && i === last) i = (i + 1) % ts.length; last = i;
+          var t = ts[i]; t.classList.remove("wob"); void t.offsetWidth; t.classList.add("wob");
+          setTimeout(function () { t.classList.remove("wob"); }, 1100);
+        }, 3200);
+      }
       addEventListener("storage", function (e) { if (!e.key || /^np-resume:|-save$|^np-hi-/.test(e.key)) refresh(); });
       document.addEventListener("visibilitychange", function () { if (!document.hidden) refresh(); });
     },

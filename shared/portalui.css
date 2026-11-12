@@ -134,10 +134,48 @@ html[data-app=popplay] #hleft,html[data-app=popplay] #tleft{display:none!importa
 html[data-theme=dark] .pu-chip:focus-visible{outline-color:#fff}
 @media (hover:hover) and (pointer:fine){.pu-chip:hover{transform:translateY(-1px);border-color:var(--accent);background-color:color-mix(in srgb,var(--accent) 14%,var(--panel))}.pu-chip[aria-pressed=true]:hover{background:var(--pu-grad);box-shadow:0 8px 24px var(--pu-glow)}}
 @media (prefers-reduced-motion:reduce){.pu-chip{transition:none}.pu-chip:hover,.pu-chip:active{transform:none!important}}
-@media (max-width:520px){#puTop{gap:8px}#puInfo,#topics{flex:0 0 100%}#puInfo{flex-basis:100%}#topics>:first-child{margin-left:0}#topics>:last-child{margin-right:0}.pu-chip{padding:0 12px}}
+@media (max-width:520px){#puTop{gap:8px}#puInfo{flex:0 0 100%}#topics{flex:0 0 100%}#topics>:first-child{margin-left:0}#topics>:last-child{margin-right:0}.pu-chip{padding:0 10px;font-size:13.5px}}
 /* lọc còn ít game: khối lưới nằm giữa (lưới đầy đủ vẫn thẳng lề 16px) */
 #grid[data-topic]:not([data-topic=all]):not(.slide){justify-content:center}
 /* điện thoại thấp (320x568, 360x640): bỏ ba dòng cam kết, thẻ + chip gọn để lưới còn >= 2 hàng ô */
 @media (max-width:520px) and (max-height:700px){html[data-app=cozyplay] .trust{display:none!important}.pu-card{min-height:50px;padding-top:3px;padding-bottom:3px}.pu-ico{width:38px;height:38px}#puTop{gap:6px;margin-bottom:6px}}
 /* màn ngang thấp: thẻ + chip gọn */
 @media (orientation:landscape) and (max-height:520px){.pu-card{min-height:48px;padding-top:4px;padding-bottom:4px}.pu-ico{width:38px;height:38px}#puTop{margin-bottom:4px}}
+
+/* Điện thoại dọc: bỏ hàng chấm trang dưới lưới (vuốt ngang vẫn đổi trang) để sân khấu/lưới cao hơn; slogan to hơn tên trang, màu nổi bật */
+@media (max-width:520px) and (orientation:portrait){
+  #grid.slide ~ #gdots{display:none!important}
+  html[data-app] .hero h1{font-size:clamp(21px,6.5vw,26px)!important;line-height:1.12;font-weight:800;letter-spacing:-.01em;
+    background:linear-gradient(90deg,#FFD84D 0%,#FF9A4D 55%,#FF6B9A 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;text-shadow:none}
+  html[data-app][data-theme=light] .hero h1,html[data-app]:not([data-theme=dark]) .hero h1{background-image:linear-gradient(90deg,#6A3CFF 0%,#D6338A 55%,#FF5A1F 100%)}
+  html[data-app][data-theme=dark] .hero h1{background-image:linear-gradient(90deg,#FFD84D 0%,#FF9A4D 55%,#FF6B9A 100%)}
+}
+
+/* Hai cổng, điện thoại dọc: nút tìm kiếm nằm CÙNG HÀNG với thẻ "Chơi tiếp" khi hàng đó chỉ có một thẻ (có sân khấu: cao >= 600px, thẻ Hôm nay ẩn; thấp hơn mà có cả Hôm nay + Chơi tiếp thì nút vẫn nổi góc). Chưa có thẻ thì nút nổi góc trên, đã dịch lên để không che slogan */
+@media (max-width:520px) and (orientation:portrait){
+  html[data-app] #puTop:has(#puInfo[data-n="1"] #puResume:not([hidden])){flex-direction:row;flex-wrap:nowrap;align-items:center;gap:8px}
+  html[data-app] #puTop:has(#puInfo[data-n="1"] #puResume:not([hidden])) #puInfo{flex:1 1 0;min-width:0}
+  html[data-app] #puTop:has(#puInfo[data-n="1"] #puResume:not([hidden])) #findFab{position:static;flex:none}
+  html[data-app] #findFab{top:calc(var(--edge-t) + var(--navH,64px) - 2px)}
+}
+@media (max-width:520px) and (orientation:portrait) and (min-height:600px){
+  html.sc-ok main:not(.sc-tiny) #puTop:has(#puResume:not([hidden])){flex-direction:row;flex-wrap:nowrap;align-items:center;gap:8px}
+  html.sc-ok main:not(.sc-tiny) #puTop:has(#puResume:not([hidden])) #puInfo{flex:1 1 0;min-width:0}
+  html.sc-ok main:not(.sc-tiny) #puTop:has(#puResume:not([hidden])) #findFab{position:static;flex:none}
+}
+
+/* ===== Pop Play: giao diện trẻ em — tiêu đề nhiều màu bút sáp, nghiêng nhẹ + nhún; icon game nhún nhảy lệch pha ===== */
+html[data-app=popplay] .hero h1{font-family:ui-rounded,"Nunito","Baloo 2","Fredoka",var(--font);font-weight:900;letter-spacing:.01em;
+  background-image:linear-gradient(90deg,#E5322D 0 22%,#E8710A 22% 46%,#1FA14F 46% 70%,#1E7FE0 70% 86%,#8A3FE0 86%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;text-shadow:none;transform:rotate(-1.5deg);transform-origin:left center}
+html[data-app=popplay][data-theme=dark] .hero h1{background-image:linear-gradient(90deg,#FF6B6B 0 22%,#FFC83D 22% 46%,#5BE07F 46% 70%,#5CC2FF 70% 86%,#C58BFF 86%)}
+@media (min-width:521px){html[data-app=popplay] .hero h1{transform-origin:center}}
+@media (max-width:520px) and (orientation:portrait){html[data-app=popplay] .hero h1{font-size:clamp(24px,7.4vw,30px)!important;line-height:1.12}}
+@media (prefers-reduced-motion:no-preference){
+  html[data-app=popplay] .hero h1{animation:kidWiggle 4.5s ease-in-out infinite}
+  html.playing[data-app=popplay] .hero h1{animation-play-state:paused!important}
+  /* mỗi lần chỉ MỘT ô rung lắc + sáng lên (portalui.js gắn .wob ~1 giây, rồi chuyển sang ô khác) */
+  html[data-app=popplay] #grid .tile.wob{animation:tileWob 1s ease-in-out 1;z-index:2;box-shadow:0 0 0 3px #fff,0 0 20px 4px color-mix(in srgb,var(--gc,#FF9A2E) 75%,#fff)!important}
+}
+@keyframes tileWob{0%,100%{translate:0 0;rotate:0deg;filter:none}12%{translate:0 -4px;rotate:-5deg;filter:brightness(1.2) saturate(1.15)}30%{rotate:5deg;filter:brightness(1.25) saturate(1.2)}48%{translate:0 -3px;rotate:-4deg;filter:brightness(1.2) saturate(1.15)}66%{rotate:3deg}82%{translate:0 0;rotate:-1deg;filter:brightness(1.1)}}
+@keyframes kidWiggle{0%,100%{rotate:0deg}50%{rotate:1.2deg}}
