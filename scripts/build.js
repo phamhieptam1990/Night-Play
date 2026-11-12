@@ -35,6 +35,16 @@ if (fs.existsSync(upd)) {
   let sha = ""; try { sha = require("child_process").execSync("git rev-parse --short HEAD", { cwd: path.join(__dirname, ".."), stdio: ["ignore", "pipe", "ignore"] }).toString().trim(); } catch (e) {}
   fs.writeFileSync(upd, 'window.SITE_BUILD = "' + day + '";window.SITE_VER = "' + ver + '";window.SITE_SHA = "' + sha + '";\n' + fs.readFileSync(upd, "utf8"));
 }
+let BUILD_ID = "";
+/* Mã bản build: ghi vào dist/version.json và vào đầu shared/offline.js (NP_BUILD) để trang đang mở so sánh và nhắc tải lại khi có bản mới */
+if (TARGET !== "admin") {
+  let v = ""; try { v = require("../package.json").version || ""; } catch (e) {}
+  let h = ""; try { h = require("child_process").execSync("git rev-parse --short HEAD", { cwd: root, stdio: ["ignore", "pipe", "ignore"] }).toString().trim(); } catch (e) {}
+  const id = BUILD_ID = [v, h, Date.now().toString(36)].filter(Boolean).join(".");
+  fs.writeFileSync(path.join(dist, "version.json"), JSON.stringify({ id, ver: v, sha: h }) + "\n");
+  const off = path.join(dist, "shared", "offline.js");
+  if (fs.existsSync(off)) fs.writeFileSync(off, 'var NP_BUILD = "' + id + '";\n' + fs.readFileSync(off, "utf8"));
+}
 /* Huy hiệu "Mới" của hai trang cổng: sinh lại shared/newbadge.js từ landing/moi/launches.json (cổng chạy offline, không fetch) */
 if (TARGET !== "admin" && fs.existsSync(path.join(dist, "shared"))) require("./gen-newbadge.js").write(path.join(dist, "shared", "newbadge.js"));
 /* CSS nội tuyến cho trang đầu (landing VI/EN và /play/): thay các <link rel=stylesheet> cục bộ bằng <style> ngay lúc build (nguồn không đổi) -> bỏ 4-5 request + 1 vòng RTT chặn vẽ,
@@ -53,19 +63,31 @@ if (TARGET !== "admin" && !process.env.NO_INLINE_CSS) for (const f of ["index.ht
   });
   fs.writeFileSync(hp, html);
 }
+/* Gắn ?v=<mã bản> vào mọi <script src>/<link href> .js/.css cục bộ trong HTML của dist: tên tệp không có hash nên trình duyệt (nhất là WebKit/iOS) giữ bản cũ trong bộ nhớ đệm HTTP
+   dù reload; địa chỉ đổi mỗi lần build thì chắc chắn phải tải lại. HTML luôn được kiểm tra lại (must-revalidate). Service worker bỏ phần ?query khi lưu cache nên không ảnh hưởng offline. */
+if (BUILD_ID) {
+  const walk = d => { for (const e of fs.readdirSync(d, { withFileTypes: true })) { const f = path.join(d, e.name); if (e.isDirectory()) walk(f); else if (e.name.endsWith(".html")) ver(f); } };
+  const ver = f => {
+    const a = fs.readFileSync(f, "utf8");
+    const b = a.replace(/(<script\b[^>]*?\bsrc=|<link\b[^>]*?\bhref=)"([^"#?]+\.(?:js|css))"/g, (m, pre, u) => /^(?:[a-z]+:)?\/\//i.test(u) || /^data:/i.test(u) ? m : pre + '"' + u + "?v=" + BUILD_ID + '"');
+    if (b !== a) fs.writeFileSync(f, b);
+  };
+  walk(dist);
+}
 /* Tiêu đề phản hồi cho file tĩnh (Cloudflare Workers assets đọc dist/_headers; tương đương netlify.toml) */
 fs.writeFileSync(path.join(dist, "_headers"), [
   "/admin/*", "  X-Robots-Tag: noindex, nofollow", "  Cache-Control: no-store", "",
   "/sw.js", "  Cache-Control: no-cache", "",
+  "/version.json", "  Cache-Control: no-store", "",
   "/shared/fonts/*", "  Cache-Control: public, max-age=31536000, immutable", "",
   /* Cache (các mẫu KHÔNG chồng nhau: Cloudflare nối giá trị khi nhiều mẫu cùng khớp). Cập nhật phía người dùng vẫn qua sw.js (mạng-trước) + CACHE version.
-     Ảnh ít đổi: 7 ngày. CSS/JS không có hash: 5 phút + stale-while-revalidate (lần mở thứ hai không phải hỏi lại máy chủ cho từng tệp). HTML giữ mặc định (luôn kiểm tra lại). */
+     Ảnh ít đổi: 7 ngày. CSS/JS không có hash: no-cache (luôn hỏi lại, 304 rất nhẹ) — trước đây max-age=300 + stale-while-revalidate=86400 khiến bản cũ "dính" tới 1 ngày kể cả sau khi reload. HTML giữ mặc định (luôn kiểm tra lại). */
   "/shared/orbit-icons/*", "  Cache-Control: public, max-age=604800", "",
   "/lp/img/*", "  Cache-Control: public, max-age=604800", "",
-  "/shared/*.js", "  Cache-Control: public, max-age=300, stale-while-revalidate=86400", "",
-  "/shared/*.css", "  Cache-Control: public, max-age=300, stale-while-revalidate=86400", "",
-  "/lp/*.css", "  Cache-Control: public, max-age=300, stale-while-revalidate=86400", "",
-  "/lp/*.js", "  Cache-Control: public, max-age=300, stale-while-revalidate=86400", ""
+  "/shared/*.js", "  Cache-Control: no-cache", "",
+  "/shared/*.css", "  Cache-Control: no-cache", "",
+  "/lp/*.css", "  Cache-Control: no-cache", "",
+  "/lp/*.js", "  Cache-Control: no-cache", ""
 ].join("\n"));
 /* Địa chỉ cũ của landing (/gioi-thieu/, /gioi-thieu/en/) chuyển vĩnh viễn về / và /en/: _redirects (Cloudflare assets/Netlify) + trang tĩnh dự phòng (meta refresh + canonical) cho host không đọc _redirects */
 if (TARGET !== "admin") {
