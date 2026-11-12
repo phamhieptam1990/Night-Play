@@ -570,8 +570,8 @@ $("chGo").addEventListener("click",()=>{if(CH.sk&&CH.sk!=="default"&&PF.skins[CH
 
 /* ===== THỬ THÁCH HÔM NAY: cả nước cùng một chặng (cùng chuyến bay, cùng độ khó Vừa, cùng hạt giống) ===== */
 const DAILY_BASE=Date.UTC(2026,10,1);
-function dailyInfo(){const k=new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Ho_Chi_Minh"}).format(new Date()),[y,m,d]=k.split("-").map(Number),n=Math.round((Date.UTC(y,m-1,d)-DAILY_BASE)/864e5)+1;let h=2166136261;for(const ch of "cw"+k){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)>>>0}return{key:k,n,seed:h>>>0,type:TYPES[h%TYPES.length]}}
-const dayBefore=k=>{const[y,m,d]=k.split("-").map(Number);return new Intl.DateTimeFormat("en-CA",{timeZone:"UTC"}).format(new Date(Date.UTC(y,m-1,d-1)))};
+function dailyInfo(){const k=new Date(Date.now() + 252e5).toISOString().slice(0, 10),[y,m,d]=k.split("-").map(Number),n=Math.round((Date.UTC(y,m-1,d)-DAILY_BASE)/864e5)+1;let h=2166136261;for(const ch of "cw"+k){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)>>>0}return{key:k,n,seed:h>>>0,type:TYPES[h%TYPES.length]}}
+const dayBefore=k=>{const[y,m,d]=k.split("-").map(Number);return new Date(Date.UTC(y,m-1,d-1)).toISOString().slice(0,10)};
 function dailyStore(){return Object.assign({streak:0,last:"",best:{}},LS.get("cw-daily",{}))}
 function dailyDone(S){const di=dailyInfo(),st=dailyStore();if(st.last!==di.key){st.streak=st.last===dayBefore(di.key)?st.streak+1:1;st.last=di.key}st.best[di.key]=Math.max(st.best[di.key]||0,S.score);const ks=Object.keys(st.best).sort().slice(-14),nb={};ks.forEach(x=>nb[x]=st.best[x]);st.best=nb;LS.set("cw-daily",st);return st}
 function startDaily(){const di=dailyInfo();chBeat=false;startRound(di.type,null,{daily:di})}
@@ -686,13 +686,13 @@ $("skBack").addEventListener("click",()=>showOv("ovStart"));
 function openPay(ty,id){
   payFor={ty,id};track("wing_skin","view");
   $("pwH").textContent=t("pw.h");$("pwP").textContent=t("pw.p",{name:t("sk."+ty+"."+id)});$("pwGo").textContent="🔐 "+t("pw.go");$("pwLater").textContent=t("pw.later");
-  const tried=LS.get("cw-trial","")===new Date().toLocaleDateString("en-CA");
+  const tried=LS.get("cw-trial","")===new Date(Date.now()+252e5).toISOString().slice(0,10);
   $("pwTrial").hidden=tried;$("pwTrial").textContent="🎈 "+t("pw.trial");showOv("ovPay");
 }
 $("pwLater").addEventListener("click",()=>skFor?openSkins(skFor):showOv("ovStart"));
 $("pwGo").addEventListener("click",()=>{track("wing_skin","click");window.top.location.href=subUrl()});
 $("pwTrial").addEventListener("click",async()=>{
-  try{await PF.loadPro(true);LS.set("cw-trial",new Date().toLocaleDateString("en-CA"));track("wing_skin","trial");const f=payFor;const old=PF.skinSel[f.ty];PF.skinSel[f.ty]=f.id;PF.skinRestore={ty:f.ty,old};renderCards();openHow(f.ty)}
+  try{await PF.loadPro(true);LS.set("cw-trial",new Date(Date.now()+252e5).toISOString().slice(0,10));track("wing_skin","trial");const f=payFor;const old=PF.skinSel[f.ty];PF.skinSel[f.ty]=f.id;PF.skinRestore={ty:f.ty,old};renderCards();openHow(f.ty)}
   catch(e){toast(t("pw.tried"),2200);showOv("ovStart")}
 });
 

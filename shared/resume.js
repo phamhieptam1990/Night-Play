@@ -23,7 +23,7 @@
   var canResume = !realHelper && !NO_RESUME[gid];
   if ((realHelper || challenge) && !MULTI) load("inapp.js");
   var vi = function () { return (document.documentElement.lang || "vi") === "vi"; };
-  var vnDay = function () { try { return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Ho_Chi_Minh" }).format(new Date()); } catch (e) { return new Date().toISOString().slice(0, 10); } };
+  var vnDay = function () { try { return new Date(Date.now() + 252e5).toISOString().slice(0, 10); } catch (e) { return new Date().toISOString().slice(0, 10); } };
   var read = function () {
     try { var r = JSON.parse(localStorage.getItem(RK)); if (!r || !r.state || typeof r.state !== "object") return null;
       var age = Date.now() - r.ts; if (!(age >= 0 && age < 7 * 864e5)) return null; if (r.daily && r.day !== vnDay()) return null; return r; } catch (e) { return null; }

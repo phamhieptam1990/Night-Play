@@ -361,7 +361,7 @@ let payFor=null;
 function openSkins(){$("skH").textContent="🎨 "+T("skin");$("skG").innerHTML="";CATALOG.forEach(c=>{const locked=c[0]!=="basic"&&!PF.skins[c[0]],b=document.createElement("button");b.type="button";b.className="skc"+(locked?" lock":"")+(PF.skinSel===c[0]?" on":"");b.innerHTML='<span class="e">'+c[3]+'</span><span class="sx"><b>'+L2([c[1],c[2]])+"</b><small>"+L2(SKP[c[0]])+"</small></span>";b.onclick=()=>locked?openPay(MODE,c[0]):chooseSkin(c[0]);$("skG").appendChild(b)});$("ovSkin").hidden=false}
 function chooseSkin(id){PF.skinSel=id;LS.set("bh-skin",id);$("ovSkin").hidden=true;applySkin();renderHome()}
 function openPay(t,id){payFor={t,id};track(GID+"_skin","view");$("pwP").textContent=T("lockP");$("pwGo").textContent=T("go");$("pwGo").href=subUrl();$("pwTrial").textContent=T("trial");$("pwTrial").hidden=LS.get("bh-trial","")===dayKey();$("ovSkin").hidden=true;$("ovPay").hidden=false}
-const dayKey=()=>new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Ho_Chi_Minh"}).format(new Date());
+const dayKey=()=>new Date(Date.now() + 252e5).toISOString().slice(0, 10);
 $("pwGo").onclick=()=>track(GID+"_skin","click");$("pwNo").onclick=()=>{$("ovPay").hidden=true};
 $("pwTrial").onclick=async()=>{try{await PF.loadPro(true);LS.set("bh-trial",dayKey());track(GID+"_skin","trial");const f=payFor||{t:0,id:null};PF.trialRestore={mode:MODE,sk:PF.skinSel};if(f.t>0)MODE=f.t;if(f.id)PF.skinSel=f.id;$("ovPay").hidden=true;renderHome();toast(T("tryA"),3200);applySkin()}catch(e){toast(T("tried"),2200);$("ovPay").hidden=true}};
 $("bSkin").onclick=openSkins;$("skX").onclick=()=>$("ovSkin").hidden=true;

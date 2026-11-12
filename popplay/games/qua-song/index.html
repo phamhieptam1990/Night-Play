@@ -284,7 +284,7 @@ let prog=Object.assign({solved:0,perfect:0},LS.get("qs-prog",{}));
 const saveProg=()=>{if(!HELPER)LS.set("qs-prog",prog)};
 let LVL=Math.min(3,Math.max(1,+LS.get("qs-lv",1)||1)),G=null,CH=null,paused=false,sound=true,payFor=null,skFor=0,gateBack="ovPay",endAt=0;
 sound=!(window.NPAudio&&!NPAudio.get());
-const today=()=>new Date().toLocaleDateString("en-CA");
+const today=()=>new Date(Date.now()+252e5).toISOString().slice(0,10);
 
 /* ===== ÂM THANH ===== */
 let ac=null;
@@ -296,8 +296,8 @@ let toastT=0;function toast(m,ms,k){const e=$("toast"),ic={warn:"⚠️",hint:"�
 
 /* ===== HÔM NAY · THÁCH ĐẤU · CHIA SẺ ===== */
 const DAILY_BASE=Date.UTC(2026,0,1);
-function dailyInfo(){const k=new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Ho_Chi_Minh"}).format(new Date()),[y,m,d]=k.split("-").map(Number),n=Math.round((Date.UTC(y,m-1,d)-DAILY_BASE)/864e5)+1;let h=2166136261;for(const ch of "qs"+k){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)>>>0}return{key:k,n,seed:h>>>0,t:h%4,lv:2}}
-const dayBefore=k=>{const[y,m,d]=k.split("-").map(Number);return new Intl.DateTimeFormat("en-CA",{timeZone:"UTC"}).format(new Date(Date.UTC(y,m-1,d-1)))};
+function dailyInfo(){const k=new Date(Date.now() + 252e5).toISOString().slice(0, 10),[y,m,d]=k.split("-").map(Number),n=Math.round((Date.UTC(y,m-1,d)-DAILY_BASE)/864e5)+1;let h=2166136261;for(const ch of "qs"+k){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)>>>0}return{key:k,n,seed:h>>>0,t:h%4,lv:2}}
+const dayBefore=k=>{const[y,m,d]=k.split("-").map(Number);return new Date(Date.UTC(y,m-1,d-1)).toISOString().slice(0,10)};
 const dailyStore=()=>Object.assign({streak:0,last:"",best:{}},LS.get("qs-daily",{}));
 function dailyDone(g){const di=g.daily,st=dailyStore();if(st.last!==di.key){st.streak=st.last===dayBefore(di.key)?st.streak+1:1;st.last=di.key}st.best[di.key]=Math.max(st.best[di.key]||0,g.score);const ks=Object.keys(st.best).sort().slice(-14),nb={};ks.forEach(x=>nb[x]=st.best[x]);st.best=nb;LS.set("qs-daily",st)}
 const startDaily=()=>{const di=dailyInfo();begin(di.t,{seed:di.seed,daily:di,lv:di.lv})};

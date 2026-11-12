@@ -26,7 +26,7 @@
   var gname = function (g) { return (g.name && (g.name[lg()] || g.name.vi || g.name.en)) || g.id; };
   var lsGet = function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } };
   var jget = function (k) { try { return JSON.parse(lsGet(k)); } catch (e) { return null; } };
-  function vnDay() { try { return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Ho_Chi_Minh" }).format(new Date()); } catch (e) { return new Date().toISOString().slice(0, 10); } }
+  function vnDay() { try { return new Date(Date.now() + 252e5).toISOString().slice(0, 10); } catch (e) { return new Date().toISOString().slice(0, 10); } }
   var today = function () { return (window.NPNew && NPNew.today) ? NPNew.today() : vnDay(); };
   var dayNo = function (k) { return Math.floor((Date.parse(k + "T00:00:00Z") - Date.parse("2026-01-01T00:00:00Z")) / 864e5) + 1; };
   var fmtN = function (n) { try { return Number(n).toLocaleString(lg() === "en" ? "en-US" : "vi-VN"); } catch (e) { return String(n); } };

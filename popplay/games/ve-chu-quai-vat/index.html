@@ -492,7 +492,7 @@ let prog=Object.assign({best:0,played:0},LS.get("qv-prog",{}));
 const saveProg=()=>{if(!HELPER)LS.set("qv-prog",prog)};
 let LVL=Math.min(3,Math.max(1,+LS.get("qv-lv",1)||1)),G=null,paused=false,sound=true,payFor=null,skFor=0,gateBack="ovPay",gid=0,CH=null,endAt=0,MON=null;
 sound=!(window.NPAudio&&!NPAudio.get());
-const today=()=>new Date().toLocaleDateString("en-CA");
+const today=()=>new Date(Date.now()+252e5).toISOString().slice(0,10);
 let ALB=null;
 function albGet(){if(!ALB){const v=LS.get("qv-alb",{});ALB=v&&typeof v==="object"&&!Array.isArray(v)?v:{}}return ALB}
 const albSave=()=>{if(!HELPER)LS.set("qv-alb",ALB)};
@@ -501,8 +501,8 @@ const albTotal=()=>[0,1,2,3].reduce((s,t)=>s+albCount(t),0);
 
 /* ===== HÔM NAY · THÁCH ĐẤU ===== */
 const DAILY_BASE=Date.UTC(2026,0,1);
-function dailyInfo(){const k=new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Ho_Chi_Minh"}).format(new Date()),[y,m,d]=k.split("-").map(Number),n=Math.round((Date.UTC(y,m-1,d)-DAILY_BASE)/864e5)+1;let h=2166136261;for(const ch of "qv"+k){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)>>>0}return{key:k,n,seed:h>>>0,t:h%4,lv:2}}
-const dayBefore=k=>{const[y,m,d]=k.split("-").map(Number);return new Intl.DateTimeFormat("en-CA",{timeZone:"UTC"}).format(new Date(Date.UTC(y,m-1,d-1)))};
+function dailyInfo(){const k=new Date(Date.now() + 252e5).toISOString().slice(0, 10),[y,m,d]=k.split("-").map(Number),n=Math.round((Date.UTC(y,m-1,d)-DAILY_BASE)/864e5)+1;let h=2166136261;for(const ch of "qv"+k){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)>>>0}return{key:k,n,seed:h>>>0,t:h%4,lv:2}}
+const dayBefore=k=>{const[y,m,d]=k.split("-").map(Number);return new Date(Date.UTC(y,m-1,d-1)).toISOString().slice(0,10)};
 const dailyStore=()=>Object.assign({streak:0,last:"",best:{}},LS.get("qv-daily",{}));
 function dailyDone(g){const di=g.daily,st=dailyStore();if(st.last!==di.key){st.streak=st.last===dayBefore(di.key)?st.streak+1:1;st.last=di.key}st.best[di.key]=Math.max(st.best[di.key]||0,g.total);const ks=Object.keys(st.best).sort().slice(-14),nb={};ks.forEach(x=>nb[x]=st.best[x]);st.best=nb;LS.set("qv-daily",st)}
 const startDaily=()=>{const di=dailyInfo();begin(di.t,{seed:di.seed,daily:di,lv:di.lv})};

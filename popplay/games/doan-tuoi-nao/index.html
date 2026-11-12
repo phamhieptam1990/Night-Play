@@ -360,7 +360,7 @@ const nm=()=>NAME||T("kid");
 const RM=(()=>{try{return matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){return false}})(),tierOf=c=>c>=8?3:c>=5?2:c>=3?1:0;
 let LVL=Math.min(3,Math.max(1,+LS.get("dt-lv",2)||2)),G=null,CH=null,paused=false,sound=true,payFor=null,skFor=0,gateBack="ovPay",gid=0,endAt=0,afterProf=null;
 sound=!(window.NPAudio&&!NPAudio.get());
-const today=()=>new Date().toLocaleDateString("en-CA");
+const today=()=>new Date(Date.now()+252e5).toISOString().slice(0,10);
 
 /* ===== ÂM THANH ===== */
 let ac=null;
@@ -373,8 +373,8 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 
 /* ===== HÔM NAY · THÁCH ĐẤU · CHIA SẺ ===== */
 const DAILY_BASE=Date.UTC(2026,0,1);
-function dailyInfo(){const k=new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Ho_Chi_Minh"}).format(new Date()),[y,m,d]=k.split("-").map(Number),n=Math.round((Date.UTC(y,m-1,d)-DAILY_BASE)/864e5)+1;let h=2166136261;for(const ch of "dt"+k){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)>>>0}return{key:k,n,seed:h>>>0,t:h%4,lv:2}}
-const dayBefore=k=>{const[y,m,d]=k.split("-").map(Number);return new Intl.DateTimeFormat("en-CA",{timeZone:"UTC"}).format(new Date(Date.UTC(y,m-1,d-1)))};
+function dailyInfo(){const k=new Date(Date.now() + 252e5).toISOString().slice(0, 10),[y,m,d]=k.split("-").map(Number),n=Math.round((Date.UTC(y,m-1,d)-DAILY_BASE)/864e5)+1;let h=2166136261;for(const ch of "dt"+k){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)>>>0}return{key:k,n,seed:h>>>0,t:h%4,lv:2}}
+const dayBefore=k=>{const[y,m,d]=k.split("-").map(Number);return new Date(Date.UTC(y,m-1,d-1)).toISOString().slice(0,10)};
 const dailyStore=()=>Object.assign({streak:0,last:"",best:{}},LS.get("dt-daily",{}));
 function dailyDone(g){const di=g.daily,st=dailyStore();if(st.last!==di.key){st.streak=st.last===dayBefore(di.key)?st.streak+1:1;st.last=di.key}st.best[di.key]=Math.max(st.best[di.key]||0,g.res.score);const ks=Object.keys(st.best).sort().slice(-14),nb={};ks.forEach(x=>nb[x]=st.best[x]);st.best=nb;LS.set("dt-daily",st)}
 const startDaily=()=>needProfile(()=>{const di=dailyInfo();begin(di.t,{seed:di.seed,daily:di,lv:2})});

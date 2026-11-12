@@ -208,7 +208,7 @@ window.NP = (function () {
      (NP.initialState + nhánh "if (NP.helper)" của từng game). NP.helper chỉ trả true trong lúc game khởi tạo (đến khi trang tải xong), sau đó trả false
      để các nút (chia sẻ, chơi lại, về trang chủ...) hoạt động bình thường như ván thường. */
   var gid = (location.pathname.match(/\/games\/([^\/]+)/) || [])[1] || "", RK = "np-resume:" + gid, resumeBoot = false, booted = false;
-  function vnDay() { try { return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Ho_Chi_Minh" }).format(new Date()); } catch (e) { return new Date().toISOString().slice(0, 10); } }
+  function vnDay() { try { return new Date(Date.now() + 252e5).toISOString().slice(0, 10); } catch (e) { return new Date().toISOString().slice(0, 10); } }
   function readRec() {
     try { var r = JSON.parse(localStorage.getItem(RK)); if (!r || !r.state || typeof r.state !== "object") return null;
       var age = Date.now() - r.ts; if (!(age >= 0 && age < 7 * 864e5)) return null; if (r.daily && r.day !== vnDay()) return null; return r; } catch (e) { return null; }

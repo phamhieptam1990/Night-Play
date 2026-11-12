@@ -414,8 +414,8 @@ PF.finishRound=finishRound;
 
 /* ===== BÀI HỌC HÔM NAY: cả nhà cùng một bài (cùng trò, cùng câu hỏi) · chơi lại tức thì · chia sẻ kết quả bằng chữ + emoji (qua cổng phụ huynh) ===== */
 const DAILY_BASE=Date.UTC(2026,10,1),dailyPool=()=>[].concat(...TIERS[LANG].slice(0,3));
-function dailyInfo(){const k=new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Ho_Chi_Minh"}).format(new Date()),[y,m,d]=k.split("-").map(Number),n=Math.round((Date.UTC(y,m-1,d)-DAILY_BASE)/864e5)+1;let h=2166136261;for(const ch of "pf"+k){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)>>>0}return{key:k,n,seed:h>>>0,type:PF.order[h%PF.order.length]}}
-const dayBefore=k=>{const[y,m,d]=k.split("-").map(Number);return new Intl.DateTimeFormat("en-CA",{timeZone:"UTC"}).format(new Date(Date.UTC(y,m-1,d-1)))};
+function dailyInfo(){const k=new Date(Date.now() + 252e5).toISOString().slice(0, 10),[y,m,d]=k.split("-").map(Number),n=Math.round((Date.UTC(y,m-1,d)-DAILY_BASE)/864e5)+1;let h=2166136261;for(const ch of "pf"+k){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)>>>0}return{key:k,n,seed:h>>>0,type:PF.order[h%PF.order.length]}}
+const dayBefore=k=>{const[y,m,d]=k.split("-").map(Number);return new Date(Date.UTC(y,m-1,d-1)).toISOString().slice(0,10)};
 const dailyStore=()=>Object.assign({streak:0,last:"",best:{}},LS.get("pf-daily",{}));
 function dailyDone(S){const di=S.daily,st=dailyStore();if(st.last!==di.key){st.streak=st.last===dayBefore(di.key)?st.streak+1:1;st.last=di.key}st.best[di.key]=Math.max(st.best[di.key]||0,S.score);const ks=Object.keys(st.best).sort().slice(-14),nb={};ks.forEach(x=>nb[x]=st.best[x]);st.best=nb;LS.set("pf-daily",st)}
 const startDaily=()=>{const di=dailyInfo();startRound(di.type,null,{daily:di})};
@@ -484,13 +484,13 @@ $("skBack").addEventListener("click",()=>showOv("ovStart"));
 function openPay(ty,id){
   payFor={ty,id};track("fly_skin","view");
   $("pwH").textContent=t("pw.h");$("pwP").textContent=t("pw.p",{name:t("sk."+ty+"."+id)});$("pwGo").textContent="🔐 "+t("pw.go");$("pwLater").textContent=t("pw.later");
-  const tried=LS.get("pf-trial","")===new Date().toLocaleDateString("en-CA");
+  const tried=LS.get("pf-trial","")===new Date(Date.now()+252e5).toISOString().slice(0,10);
   $("pwTrial").hidden=tried;$("pwTrial").textContent="🎈 "+t("pw.trial");showOv("ovPay");
 }
 $("pwLater").addEventListener("click",()=>skFor?openSkins(skFor):showOv("ovStart"));
 $("pwGo").addEventListener("click",()=>{track("fly_skin","click");gateBack="ovPay";openGate()});
 $("pwTrial").addEventListener("click",async()=>{
-  try{await PF.loadPro(true);LS.set("pf-trial",new Date().toLocaleDateString("en-CA"));track("fly_skin","trial");const f=payFor;PF.trialSkin=f.id;const old=PF.skinSel[f.ty];PF.skinSel[f.ty]=f.id;PF.skinRestore={ty:f.ty,old};renderCards();startRound(f.ty)}
+  try{await PF.loadPro(true);LS.set("pf-trial",new Date(Date.now()+252e5).toISOString().slice(0,10));track("fly_skin","trial");const f=payFor;PF.trialSkin=f.id;const old=PF.skinSel[f.ty];PF.skinSel[f.ty]=f.id;PF.skinRestore={ty:f.ty,old};renderCards();startRound(f.ty)}
   catch(e){toast(t("pw.tried"),2200);showOv("ovStart")}
 });
 function openGate(cb,back,msg){   /* cổng phụ huynh: câu hỏi người lớn trước khi sang trang thanh toán / chia sẻ */

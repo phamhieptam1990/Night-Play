@@ -885,7 +885,7 @@ function pickItem(kind,x){
 /* ===== MÀN CHỌN: chế độ → cấp độ → Chơi (cùng ngôn ngữ thiết kế với các game Cozy khác) ===== */
 const realHelper=new URLSearchParams(location.search).get("helper")==="1";
 const HOME_OK=()=>!CH&&!realHelper;   /* thách đấu / chơi hộ thật: vào thẳng ván, không qua màn chọn */
-const vnDay=()=>{try{return new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Ho_Chi_Minh"}).format(new Date())}catch(e){return new Date().toISOString().slice(0,10)}};
+const vnDay=()=>{try{return new Date(Date.now() + 252e5).toISOString().slice(0, 10)}catch(e){return new Date().toISOString().slice(0,10)}};
 const homeDayNo=()=>Math.floor((Date.parse(vnDay()+"T00:00:00Z")-Date.parse("2026-01-01T00:00:00Z"))/864e5)+1;
 function stopRound(){running=false;paused=false;pausedBy=null;$("pauseOv").hidden=true;pauseTxt(false);clearTimeout(hudT);document.body.classList.remove("hud-dim");clearInterval(tickT);clearTimeout(spawnT);cells.forEach(c=>{clearTimeout(c.timer);hide(c)})}
 function showHome(){
@@ -1011,7 +1011,7 @@ const subUrl=()=>"../../../subscribe.html?from="+encodeURIComponent("cozyplay/in
 let lastPay=null;
 DD.paywall=function(f,silent){
   lastPay=f;if(!silent)track(f,"view");
-  const today=new Date().toLocaleDateString("en-CA"),trial=f==="endless"&&LS.get("dd-trial","")!==today;
+  const today=new Date(Date.now()+252e5).toISOString().slice(0,10),trial=f==="endless"&&LS.get("dd-trial","")!==today;
   $("payT").textContent=t("pw."+f+".t");
   $("payBody").innerHTML='<p>'+escH(t("pw."+f+".d"))+'</p><ul><li>'+t("pw.b1")+'</li><li>'+t("pw.b2")+'</li><li>'+t("pw.b3")+'</li></ul>'+
     '<div class="pw-row"><a class="big" id="payGo" target="_top" href="'+subUrl()+'">'+t("pw.go")+'</a>'+(trial?'<button class="icon-btn" id="payTrial" type="button">'+t("pw.trial")+'</button>':'')+'<button class="icon-btn" id="payX" type="button">'+t("pw.later")+'</button></div>';

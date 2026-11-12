@@ -367,7 +367,7 @@ let prog=Object.assign({fed:0,played:0,best:0},LS.get("cv-prog",{}));
 const saveProg=()=>{if(!HELPER)LS.set("cv-prog",prog)};
 let LVL=Math.min(3,Math.max(1,+LS.get("cv-lv",1)||1)),G=null,CH=null,paused=false,sound=true,payFor=null,skFor=0,gateBack="ovPay",gid=0,endAt=0;
 sound=!(window.NPAudio&&!NPAudio.get());
-const today=()=>new Date().toLocaleDateString("en-CA");
+const today=()=>new Date(Date.now()+252e5).toISOString().slice(0,10);
 
 /* ===== ÂM THANH: MỘT bộ điều phối (master gain, kênh, ưu tiên, giới hạn số giọng; tiếng mới cùng kênh làm nhỏ dần tiếng cũ) ===== */
 let ac=null,MG=null,voices=[];const MAXVOICE=4,sTimers=new Set();
@@ -413,8 +413,8 @@ let toastT=0;function toast(m,ms){const e=$("toast");e.textContent=m;e.classList
 
 /* ===== HÔM NAY · THÁCH ĐẤU · CHIA SẺ ===== */
 const DAILY_BASE=Date.UTC(2026,0,1);
-function dailyInfo(){const k=new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Ho_Chi_Minh"}).format(new Date()),[y,m,d]=k.split("-").map(Number),n=Math.round((Date.UTC(y,m-1,d)-DAILY_BASE)/864e5)+1;let h=2166136261;for(const ch of "cv"+k){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)>>>0}return{key:k,n,seed:h>>>0,t:h%4,lv:2}}
-const dayBefore=k=>{const[y,m,d]=k.split("-").map(Number);return new Intl.DateTimeFormat("en-CA",{timeZone:"UTC"}).format(new Date(Date.UTC(y,m-1,d-1)))};
+function dailyInfo(){const k=new Date(Date.now() + 252e5).toISOString().slice(0, 10),[y,m,d]=k.split("-").map(Number),n=Math.round((Date.UTC(y,m-1,d)-DAILY_BASE)/864e5)+1;let h=2166136261;for(const ch of "cv"+k){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)>>>0}return{key:k,n,seed:h>>>0,t:h%4,lv:2}}
+const dayBefore=k=>{const[y,m,d]=k.split("-").map(Number);return new Date(Date.UTC(y,m-1,d-1)).toISOString().slice(0,10)};
 const dailyStore=()=>Object.assign({streak:0,last:"",best:{}},LS.get("cv-daily",{}));
 function dailyDone(g){const di=g.daily,st=dailyStore();if(st.last!==di.key){st.streak=st.last===dayBefore(di.key)?st.streak+1:1;st.last=di.key}st.best[di.key]=Math.max(st.best[di.key]||0,g.total);const ks=Object.keys(st.best).sort().slice(-14),nb={};ks.forEach(x=>nb[x]=st.best[x]);st.best=nb;LS.set("cv-daily",st)}
 const startDaily=()=>{const di=dailyInfo(),keep=LVL;LVL=2;begin(di.t,{seed:di.seed,daily:di});LVL=keep};

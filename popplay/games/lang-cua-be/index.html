@@ -290,7 +290,7 @@ let prog=Object.assign(defProg(),LS.get("lc-prog",{}));
 const saveProg=()=>{if(!HELPER)LS.set("lc-prog",prog)};
 let S=null,R={done:true},paused=false,sound=true,lessonOn=false,payFor=null,skFor=0,gateBack="ovPay";
 sound=!(window.NPAudio&&!NPAudio.get());
-const today=()=>new Date().toLocaleDateString("en-CA");
+const today=()=>new Date(Date.now()+252e5).toISOString().slice(0,10);
 const lvOf=z=>S&&S.lvOv!=null&&S.z===z?S.lvOv:prog.lv[z];
 
 /* ===== ÂM THANH ===== */
@@ -434,8 +434,8 @@ const ACT={mail,listen,trace,spell,count,harvest,order,compare,sale,cake,balance
 /* ===== BÀI HỌC HÔM NAY · THÁCH ĐẤU · CHIA SẺ ===== */
 let endAt=0,CH=null;
 const DAILY_BASE=Date.UTC(2026,0,1);
-function dailyInfo(){const k=new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Ho_Chi_Minh"}).format(new Date()),[y,m,d]=k.split("-").map(Number),n=Math.round((Date.UTC(y,m-1,d)-DAILY_BASE)/864e5)+1;let h=2166136261;for(const ch of "lc"+k){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)>>>0}return{key:k,n,seed:h>>>0,z:h%3}}
-const dayBefore=k=>{const[y,m,d]=k.split("-").map(Number);return new Intl.DateTimeFormat("en-CA",{timeZone:"UTC"}).format(new Date(Date.UTC(y,m-1,d-1)))};
+function dailyInfo(){const k=new Date(Date.now() + 252e5).toISOString().slice(0, 10),[y,m,d]=k.split("-").map(Number),n=Math.round((Date.UTC(y,m-1,d)-DAILY_BASE)/864e5)+1;let h=2166136261;for(const ch of "lc"+k){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)>>>0}return{key:k,n,seed:h>>>0,z:h%3}}
+const dayBefore=k=>{const[y,m,d]=k.split("-").map(Number);return new Date(Date.UTC(y,m-1,d-1)).toISOString().slice(0,10)};
 const dailyStore=()=>Object.assign({streak:0,last:"",best:{}},LS.get("lc-daily",{}));
 function dailyDone(g){const di=g.daily,st=dailyStore();if(st.last!==di.key){st.streak=st.last===dayBefore(di.key)?st.streak+1:1;st.last=di.key}st.best[di.key]=Math.max(st.best[di.key]||0,g.score);const ks=Object.keys(st.best).sort().slice(-14),nb={};ks.forEach(x=>nb[x]=st.best[x]);st.best=nb;LS.set("lc-daily",st)}
 const startDaily=()=>{const di=dailyInfo();startSession(di.z,null,{seed:di.seed,daily:di,lv:2})};   /* cấp cố định = 2 để mọi nhà cùng một bài */

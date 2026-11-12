@@ -21,9 +21,9 @@
   });
   /* game của hôm nay: một vệ tinh Night đổi theo ngày (giờ Việt Nam), nổi bật vàng + huy hiệu */
   (function () {
-    var day = 0; try { day = Math.floor((Date.parse(new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Ho_Chi_Minh" }).format(new Date()) + "T00:00:00Z") - Date.parse("2026-01-01T00:00:00Z")) / 864e5) + 1; } catch (e) {}
+    var day = 0; try { day = Math.floor((Date.parse(new Date(Date.now() + 252e5).toISOString().slice(0, 10) + "T00:00:00Z") - Date.parse("2026-01-01T00:00:00Z")) / 864e5) + 1; } catch (e) {}
     var nights = allSats.filter(function (a) { return a.classList.contains("night"); }); if (!nights.length) return;
-    var g = nights[((day % nights.length) + nights.length) % nights.length]; g.classList.add("gold"); var b = d.createElement("i"); b.className = "bdg"; b.setAttribute("aria-hidden", "true"); g.appendChild(b); g._day = day;
+    if (!(day > 0)) day = 1; var g = nights[((day % nights.length) + nights.length) % nights.length]; if (!g) return; g.classList.add("gold"); var b = d.createElement("i"); b.className = "bdg"; b.setAttribute("aria-hidden", "true"); g.appendChild(b); g._day = day;
   })();
   function labels() { var vi = isVi(); allSats.forEach(function (a) { var b = a.querySelector(".bdg"); if (b) b.textContent = vi ? "Hôm nay" : "Today"; }); if (hint) hint.lastChild.textContent = vi ? "Kéo để xoay · Chạm để chơi" : "Drag to spin · Tap to play"; }
   var hint = d.createElement("div"); hint.className = "orbhint"; hint.setAttribute("aria-hidden", "true"); hint.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V5a1.5 1.5 0 0 1 3 0v5m0-1a1.5 1.5 0 0 1 3 0v2m0-1a1.5 1.5 0 0 1 3 0v4a6 6 0 0 1-6 6h-1a6 6 0 0 1-5-3l-2-3a1.5 1.5 0 0 1 2.5-1.6L9 15"/></svg><span></span>'; stage.appendChild(hint);
