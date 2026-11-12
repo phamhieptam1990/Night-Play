@@ -362,11 +362,15 @@ window.NPS = (function () {
     /* Chụp màn hình game (iframe cùng domain): vẽ lại bằng html2canvas (tải khi cần), thêm dải tên game ở dưới. */
     var shotDlg = document.createElement("dialog"); shotDlg.className = "nps-dlg"; document.body.appendChild(shotDlg);
     var shotUrl = null; shotDlg.addEventListener("close", function () { if (shotUrl) { URL.revokeObjectURL(shotUrl); shotUrl = null; } });
-    function compose(canvas, sc) {
+    function loadLogo() {   // logo chung của site cho dải chữ ký; lỗi tải thì bỏ qua (ảnh vẫn ra, chỉ không có logo)
+      return new Promise(function (res) { var im = new Image(); im.onload = function () { res(im); }; im.onerror = function () { res(null); }; im.src = opts.logoUrl || h2cUrl.replace(/vendor\/[^\/]*$/, "favicon.svg"); });
+    }
+    function compose(canvas, sc, logo) {
       var band = Math.round(48 * sc), out = document.createElement("canvas"); out.width = canvas.width; out.height = canvas.height + band;
       var c = out.getContext("2d"); c.drawImage(canvas, 0, 0); c.fillStyle = "#0E1020"; c.fillRect(0, canvas.height, out.width, band);
-      var pad = Math.round(16 * sc), y = canvas.height + band / 2; c.textBaseline = "middle"; c.fillStyle = "#FFFFFF"; c.font = "800 " + Math.round(17 * sc) + 'px Inter,system-ui,sans-serif';
-      var left = brandOf(curGame()) + " · " + gameName(curGame()) + (lastScore ? " · " + lastScore + " " + T("points") : ""); c.textAlign = "left"; c.fillText(left, pad, y, out.width * 0.72);
+      var pad = Math.round(16 * sc), y = canvas.height + band / 2; c.textBaseline = "middle"; c.fillStyle = "#FFFFFF";
+      var ls = Math.round(28 * sc), lx = pad; if (logo) { c.drawImage(logo, pad, canvas.height + (band - ls) / 2, ls, ls); lx = pad + ls + Math.round(8 * sc); } c.font = "800 " + Math.round(17 * sc) + 'px Inter,system-ui,sans-serif';
+      var left = brandOf(curGame()) + " · " + gameName(curGame()) + (lastScore ? " · " + lastScore + " " + T("points") : ""); c.textAlign = "left"; c.fillText(left, lx, y, out.width * 0.72 - (lx - pad));
       c.fillStyle = GAMES[curGame()] && GAMES[curGame()].site === "popplay" ? "#FFB27A" : "#A58BFF"; c.font = "600 " + Math.round(13 * sc) + "px Inter,system-ui,sans-serif"; c.textAlign = "right"; c.fillText(location.host, out.width - pad, y, out.width * 0.26);
       return new Promise(function (res, rej) { out.toBlob(function (b) { b ? res(b) : rej(new Error("blob")); }, "image/png"); });
     }
@@ -394,7 +398,7 @@ window.NPS = (function () {
         };
         /* Ảnh chụp trắng/trơn một màu (game dùng hiệu ứng html2canvas không vẽ được): thử lại bằng cách vẽ khác; vẫn trơn thì báo lỗi, không hiện ảnh trắng */
         return shoot(false).then(function (canvas) { return isBlank(canvas) ? shoot(true) : canvas; })
-          .then(function (canvas) { if (isBlank(canvas)) throw new Error("blank"); return compose(canvas, sc); });
+          .then(function (canvas) { if (isBlank(canvas)) throw new Error("blank"); return loadLogo().then(function (lg) { return compose(canvas, sc, lg); }); });
       }).then(showShot).catch(function () { toast(T("shotErr")); }).then(function () { cam.disabled = false; });
     });
 

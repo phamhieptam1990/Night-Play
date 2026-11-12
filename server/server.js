@@ -80,6 +80,7 @@ const server = http.createServer(async (req, res) => {
     if (req.method === "OPTIONS") { res.writeHead(204); return res.end(); }
   }
   res.setHeader("Referrer-Policy", "no-referrer");
+  res.setHeader("Content-Security-Policy", "frame-ancestors 'self'"); res.setHeader("X-Frame-Options", "SAMEORIGIN");   // chống nhúng iframe từ domain khác
   if (DEV && url.pathname === "/__reload") {
     res.writeHead(200, { "Content-Type": "text/event-stream", "Cache-Control": "no-store", Connection: "keep-alive" });
     res.write(": ok\n\n"); clients.add(res); req.on("close", () => clients.delete(res)); return;

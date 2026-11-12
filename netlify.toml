@@ -19,6 +19,12 @@
 
 # Trang admin không để công cụ tìm kiếm lập chỉ mục (truy cập vẫn cần ADMIN_KEY)
 [[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "frame-ancestors 'self'"
+    X-Frame-Options = "SAMEORIGIN"
+
+[[headers]]
   for = "/admin/*"
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"

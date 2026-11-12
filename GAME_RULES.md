@@ -250,3 +250,7 @@ Nguyên tắc dự án: game chạy **offline, không lag, không gọi máy ch�
 - Không ghi đè `localStorage.pass` bằng bản cũ (đọc lại trước khi ghi, xem `shared/pass.js`): `device.js` có thể vừa nâng cấp token.
 - Nhánh offline của `loadPro` không cần sửa: wrapper trả 401 giả cho máy chưa được xác nhận.
 - Sửa luồng cấp token / `server/app.js` phần thiết bị → chạy `scripts/devtest/devtest.js` (35 kịch bản, DB giả) và kiểm tra bằng DB dev thật nếu được.
+
+## Chữ ký màn chơi + chống nhúng (`shared/guard.js`, `scripts/build.js` → `_headers`, `netlify.toml`, `server/server.js`)
+- **Chữ ký**: logo (`shared/favicon.svg`) + chữ "nightplay.vn" nhỏ mờ giữa mép dưới, tự gắn ở mọi trang `/games/` (không cần sửa từng game); `position:fixed`, `pointer-events:none`, bỏ qua khung < 300px (ô "Chơi cùng lúc"), bị gỡ thì tự gắn lại. Game mới đừng đặt nút/chữ ở sát giữa mép dưới (≤ 16px).
+- **Chống nhúng**: máy chủ gửi `frame-ancestors 'self'` + `X-Frame-Options: SAMEORIGIN` (cổng nhúng game cùng origin vẫn chạy; mở link trực tiếp trong Zalo/Messenger không ảnh hưởng). guard.js là lớp dự phòng khi file bị chép sang host khác: trang nằm trong iframe khác origin → `window.stop()` + thông báo + nút mở bản gốc. Muốn cho đối tác nhúng: thêm domain vào `frame-ancestors` (cả build.js và netlify.toml).

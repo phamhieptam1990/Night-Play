@@ -76,6 +76,8 @@ if (BUILD_ID) {
 }
 /* Tiêu đề phản hồi cho file tĩnh (Cloudflare Workers assets đọc dist/_headers; tương đương netlify.toml) */
 fs.writeFileSync(path.join(dist, "_headers"), [
+  /* Chống nhúng: chỉ cho chính domain mình đặt trang trong iframe (cổng nhúng game cùng origin). Mở link trực tiếp (Zalo, Messenger…) không bị ảnh hưởng. */
+  "/*", "  Content-Security-Policy: frame-ancestors 'self'", "  X-Frame-Options: SAMEORIGIN", "",
   "/admin/*", "  X-Robots-Tag: noindex, nofollow", "  Cache-Control: no-store", "",
   "/sw.js", "  Cache-Control: no-cache", "",
   "/version.json", "  Cache-Control: no-store", "",
