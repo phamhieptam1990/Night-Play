@@ -146,7 +146,7 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
       <button class="ib" id="soundBtn" type="button">🔊</button>
       <button class="ib" id="langBtn" type="button" style="font-size:14px;font-weight:800">VI</button>
     </div>
-    <div class="ask"><button class="ib" id="askBtn" type="button">🔊</button><b id="askTxt" aria-live="polite"></b></div>
+    <div class="ask"><button class="ib" id="askBtn" type="button"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z" fill="currentColor"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/></svg></button><b id="askTxt" aria-live="polite"></b></div>
     <div class="hud"><span class="sc">⭐ <b id="sc">0</b></span><span class="dots" id="dots"></span></div>
   </div>
   <div class="play" id="play">
@@ -461,7 +461,7 @@ function renderCards(){
     const c=document.createElement("div");c.className="card";
     const ico={letters:"🐤",stars:"⭐",math:"✈️"}[id];
     const m=document.createElement("button");m.type="button";m.className="main";m.innerHTML='<span class="e" aria-hidden="true">'+ico+'</span><span>'+t("ty."+id)+'<small>'+t("ty."+id+".d")+'</small></span>';m.setAttribute("aria-label",t("ty."+id));m.onclick=()=>startRound(id);
-    const k=document.createElement("button");k.type="button";k.className="skinBtn";k.innerHTML='🎨'+(prem?"<i>★</i>":"");k.setAttribute("aria-label",t("sk.pick"));k.onclick=()=>openSkins(id);
+    const k=document.createElement("button");k.type="button";k.className="skinBtn";k.innerHTML='<svg viewBox="0 0 24 24" width="1.3em" height="1.3em" aria-hidden="true" style="display:block"><path d="M12 3C6.5 3 2.5 7 2.5 11.8c0 4.7 3.8 8.2 8.2 8.2 1.3 0 2-.8 2-1.7 0-.5-.2-.9-.5-1.3-.3-.4-.5-.8-.5-1.3 0-1 .8-1.8 1.8-1.8H17c2.5 0 4.5-2 4.5-4.5C21.5 6.6 17.4 3 12 3z" fill="#f5c26b" stroke="#a86a2b" stroke-width="1.2" stroke-linejoin="round"/><circle cx="7.6" cy="10.4" r="1.5" fill="#ef4444"/><circle cx="11.2" cy="7.2" r="1.5" fill="#3b82f6"/><circle cx="15.8" cy="7.9" r="1.5" fill="#22c55e"/><circle cx="6.9" cy="14.6" r="1.4" fill="#a855f7"/></svg>'+(prem?"<i>★</i>":"");k.setAttribute("aria-label",t("sk.pick"));k.onclick=()=>openSkins(id);
     c.appendChild(m);c.appendChild(k);box.appendChild(c);
   }
   if(dailyEl)box.appendChild(dailyEl);

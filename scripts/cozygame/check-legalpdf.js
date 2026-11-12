@@ -57,6 +57,7 @@ const get = u => new Promise(res => http.get(u, r => { const c = []; r.on("data"
       const tag = "nút PDF " + kind + " " + lang + " " + w, p = await br.newPage(); await p.setViewport({ width: w, height: h, isMobile: w < 600, hasTouch: w < 600 });
       await p.evaluateOnNewDocument(l => { try { localStorage.setItem("lang", l); } catch (e) {} }, lang);
       await p.goto(B + kind + ".html", { waitUntil: "load" }); await wait(900);
+      await p.evaluate(() => document.getElementById("tabPdf").click()); await wait(500);   // nút Tải PDF nằm trong tab "Xem PDF" (thanh trên cùng)
       const r = await p.evaluate(() => { const g = id => { const e = document.getElementById(id); if (!e) return null; const b = e.getBoundingClientRect(); return { href: e.getAttribute("href"), dl: e.hasAttribute("download"), txt: e.textContent.trim(), w: b.width, h: b.height, shown: b.width > 0 && getComputedStyle(e).visibility !== "hidden" }; }; return { btn: g("pdfBtn"), foot: g("fPdf"), sw: document.documentElement.scrollWidth, vw: document.documentElement.clientWidth }; });
       const want = "legal/" + kind + "-" + lang + ".pdf";
       note(r.btn && r.btn.href === want && r.btn.dl, tag, "nút #pdfBtn sai href/download: " + JSON.stringify(r.btn));

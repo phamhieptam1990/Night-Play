@@ -602,7 +602,7 @@ function renderHome(){
   for(let t=0;t<4;t++){
     const sk=skinOf(t),b=document.createElement("div");b.className="tile";b.setAttribute("role","button");b.tabIndex=0;applyVars(b,sk);b.style.setProperty("--rad","5cqw");b.style.setProperty("--bd",".8cqw solid rgba(255,255,255,.9)");   /* màn chọn: hình dạng khung cố định, chỉ đổi màu */
     const prem=PF.skinSel[t]!=="basic"&&PF.skins[t][PF.skinSel[t]];
-    b.innerHTML='<span class="ti">'+TY_ICON[t]+"</span><b>"+T("ty")[t]+'</b><button class="sk" type="button" aria-label="'+T("sk.pick")+'">🎨'+(prem?"<i>★</i>":"")+"</button>"+(prem&&sk.deco?'<span class="tdc">'+sk.deco.slice(0,3).join("")+"</span>":"");
+    b.innerHTML='<span class="ti">'+TY_ICON[t]+"</span><b>"+T("ty")[t]+'</b><button class="sk" type="button" aria-label="'+T("sk.pick")+'"><svg viewBox="0 0 24 24" width="1.3em" height="1.3em" aria-hidden="true" style="display:block"><path d="M12 3C6.5 3 2.5 7 2.5 11.8c0 4.7 3.8 8.2 8.2 8.2 1.3 0 2-.8 2-1.7 0-.5-.2-.9-.5-1.3-.3-.4-.5-.8-.5-1.3 0-1 .8-1.8 1.8-1.8H17c2.5 0 4.5-2 4.5-4.5C21.5 6.6 17.4 3 12 3z" fill="#f5c26b" stroke="#a86a2b" stroke-width="1.2" stroke-linejoin="round"/><circle cx="7.6" cy="10.4" r="1.5" fill="#ef4444"/><circle cx="11.2" cy="7.2" r="1.5" fill="#3b82f6"/><circle cx="15.8" cy="7.9" r="1.5" fill="#22c55e"/><circle cx="6.9" cy="14.6" r="1.4" fill="#a855f7"/></svg>'+(prem?"<i>★</i>":"")+"</button>"+(prem&&sk.deco?'<span class="tdc">'+sk.deco.slice(0,3).join("")+"</span>":"");
     b.onclick=()=>openHow(t);b.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openHow(t)}};
     b.querySelector(".sk").onclick=e=>{e.stopPropagation();openSkins(t)};g.appendChild(b);
   }
@@ -613,7 +613,7 @@ let howT=0;
 function openHow(t){
   howT=t;
   $("hwH").textContent=TY_ICON[t]+" "+T("ty")[t];$("hwC").textContent=LV_ICON[LVL-1]+" "+T("lv")[LVL-1];
-  $("hwL").innerHTML=[["🔢",T("how.a")[t]],["🎥",T("how.b")[t]],["👆",T("how.c")]].map(a=>"<li><b>"+a[0]+"</b><span>"+a[1]+"</span></li>").join("");
+  $("hwL").innerHTML=[["🧮",T("how.a")[t]],["🎥",T("how.b")[t]],["👆",T("how.c")]].map(a=>"<li><b>"+a[0]+"</b><span>"+a[1]+"</span></li>").join("");
   paintCamChip();$("hwCam").hidden=!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia);
   $("hwCam").onclick=()=>{if(wantCam){wantCam=false;paintCamChip();return}openGate(async()=>{showOv("ovHow");await askCam();paintCamChip()},"ovHow","","cam.note")};
   $("hwGo").textContent="▶ "+T("how.go");$("hwGo").onclick=()=>begin(t);$("hwBack").setAttribute("aria-label",T("home"));showOv("ovHow");
@@ -804,6 +804,6 @@ window.NH={Counter,CPAR,drawCard,drawScene,rig,shareText,shareLink,dailyInfo,par
   get prog(){return prog},audioKill,hush,freezeTimers,get V(){return V},MAXV,get SC(){return SC},setLv(n){LVL=n},openClip,makeClip,setCam(v){wantCam=!!v},bpmOf};
 </script>
 <script src="../../../shared/season.js"></script>
-<script>window.POPHELP={"vi":{"t":"Cách chơi","s":[["🔢","Màn hình hiện một phép tính, ví dụ «3 + 2». Nhạc vang lên!"],["💃","Bé nhảy (hoặc vỗ tay, dậm chân, vẫy tay) đúng bấy nhiêu lần."],["👆","Mỗi lần làm, bấm nút to một cái để đếm. Hoặc người lớn bật camera đếm giúp."],["🎉","Đủ số lần thì được khen!"]]},"en":{"t":"How to play","s":[["🔢","The screen shows a sum like “3 + 2”. Music plays!"],["💃","Jump (or clap, stomp, wave) exactly that many times."],["👆","Tap the big button once for each move. Or a grown-up turns on the counting camera."],["🎉","Reach the number to get cheered!"]]}}</script><script src="../../../shared/pophelp.js" defer></script><script src="../../../shared/popmenu.js" defer></script><script src="../../../shared/popfit.js" defer></script><script src="../../../shared/icons.js" defer></script><script src="../../../shared/resume.js" defer></script><script src="../../../shared/passwatch.js" defer></script>
+<script>window.POPHELP={"vi":{"t":"Cách chơi","s":[["🧮","Màn hình hiện một phép tính, ví dụ «3 + 2». Nhạc vang lên!"],["💃","Bé nhảy (hoặc vỗ tay, dậm chân, vẫy tay) đúng bấy nhiêu lần."],["👆","Mỗi lần làm, bấm nút to một cái để đếm. Hoặc người lớn bật camera đếm giúp."],["🎉","Đủ số lần thì được khen!"]]},"en":{"t":"How to play","s":[["🧮","The screen shows a sum like “3 + 2”. Music plays!"],["💃","Jump (or clap, stomp, wave) exactly that many times."],["👆","Tap the big button once for each move. Or a grown-up turns on the counting camera."],["🎉","Reach the number to get cheered!"]]}}</script><script src="../../../shared/pophelp.js" defer></script><script src="../../../shared/popmenu.js" defer></script><script src="../../../shared/popfit.js" defer></script><script src="../../../shared/icons.js" defer></script><script src="../../../shared/resume.js" defer></script><script src="../../../shared/passwatch.js" defer></script>
 </body>
 </html>

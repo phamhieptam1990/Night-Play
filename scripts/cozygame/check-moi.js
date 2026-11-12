@@ -54,7 +54,7 @@ const O = "https://nightplay.vn";
     note(h.includes('<link rel="canonical" href="' + url + '">'), tg, "canonical sai (cần " + url + ")");
     const other = url.replace(l === "vi" ? O + "/" : O + "/en/", l === "vi" ? O + "/en/" : O + "/");
     const vi = l === "vi" ? url : other, en = l === "en" ? url : other;
-    for (const s of ['hreflang="vi" href="' + vi + '"', 'hreflang="en" href="' + en + '"', 'hreflang="x-default" href="' + vi + '"', 'property="og:locale" content="' + (l === "vi" ? "vi_VN" : "en_US") + '"', 'property="og:locale:alternate"', 'name="twitter:card" content="summary_large_image"', 'name="twitter:image"', 'property="og:url" content="' + url + '"', 'property="og:image:width" content="1200"', 'name="theme-color"', 'rel="icon"', 'src="/shared/site.js"', 'data-set-lang="' + alt + '"']) note(h.includes(s), tg, "thiếu: " + s);
+    for (const s of ['hreflang="vi" href="' + vi + '"', 'hreflang="en" href="' + en + '"', 'hreflang="x-default" href="' + vi + '"', 'property="og:locale" content="' + (l === "vi" ? "vi_VN" : "en_US") + '"', 'property="og:locale:alternate"', 'name="twitter:card" content="summary_large_image"', 'name="twitter:image"', 'property="og:url" content="' + url + '"', 'property="og:image:width" content="1200"', 'name="theme-color"', 'rel="icon"', 'src="/shared/site.js', 'data-set-lang="' + alt + '"']) note(h.includes(s), tg, "thiếu: " + s);
     const og = (h.match(/property="og:image" content="([^"]*)"/) || [])[1] || ""; note(og.startsWith(O + "/") && fs.existsSync(R(og.slice(O.length))), tg, "og:image không trỏ tới file có thật: " + og);
     if (kind === "detail") note(og === O + x.og, tg, "og:image phải là og riêng của mục (" + x.og + ")"); else note(/og-moi\.png$/.test(og), tg, "og trang danh sách");
     note(!/cookie\s*=/.test(h), tg, "ghi cookie"); note(!/track\.js/.test(h), tg, "không đo lượt xem /moi/ (không có điểm Track phù hợp)");
@@ -113,7 +113,7 @@ const O = "https://nightplay.vn";
         pg.on("requestfailed", r => bad.push("failed " + r.url())); pg.on("response", r => { if (r.status() >= 400) bad.push(r.status() + " " + r.url()); if (!r.url().startsWith(B)) bad.push("ngoài origin " + r.url()); const cl = +r.headers()["content-length"] || 0; sizes.push([r.url(), cl]); });
         await pg.goto(B + f, { waitUntil: "load" }); await wait(500);
         const w0 = sizes.reduce((a, s) => a + s[1], 0);
-        if (kind === "list" && l === "vi" && theme === "light" && W === 390) note(w0 < 200 * 1024, tag, "tải đầu " + Math.round(w0 / 1024) + "KB >= 200KB");
+        if (kind === "list" && l === "vi" && theme === "light" && W === 390) note(w0 < 220 * 1024, tag, "tải đầu " + Math.round(w0 / 1024) + "KB >= 220KB");   // 200KB → 220KB: thêm slide card (JS/CSS) ở trang danh sách
         note(!errs.length, tag, "lỗi console: " + errs[0]); note(!bad.length, tag, "request lỗi: " + bad[0]);
         const m = await pg.evaluate(() => {
           const vis = e => { const r = e.getBoundingClientRect(), cs = getComputedStyle(e); return r.width > 0 && r.height > 0 && cs.visibility !== "hidden" && !e.closest("[hidden]"); };

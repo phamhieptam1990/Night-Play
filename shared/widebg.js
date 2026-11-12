@@ -16,9 +16,9 @@
     "ga-me-ban-trung": "🥚 🐔 🌾 🐥", "gia-cho-viet": "🧺 🥬 🍅 🛒", "mat-tinh-khong": "👁️ 🎨 🔍 🌈", "me-cung-truyen-tay": "🧭 🌀 ⭐ 🗺️",
     "ne-o-ga": "🌧️ 🛵 ☔ 🕳️", "noi-mot-net": "✍️ 🔗 ⭐ 💡", "shipper-sieu-toc": "🛵 📦 🍜 🏠", "song-sot-cuoi-thang": "💰 💸 🍜 ☕",
     "ve-mot-net": "✏️ 📐 ⭕ 🖍️", "xay-cau-tre": "🎋 🌉 🛶 🌾", "xe-ca-phe": "☕ 🧋 🛵 🫘", "xin-nghi": "📝 🗂️ ☕ 🗓️",
-    "be-dau-bo-me": "🧸 🍼 🎈 ⭐", "be-noi-dung-khong": "🙅 🙆 🎈 ❓", "bo-me-5-giay": "⏱️ 🧸 👨‍👩‍👧 🎈", "con-vat-an-so": "🐊 🔢 🍎 🐘",
-    "doan-tuoi-nao": "🎂 🎈 🎁 👶", "lang-cua-be": "🏡 🌳 🐶 🎈", "nhay-theo-so": "💃 🔢 🎵 🪩", "pop-fly": "🐦 ☁️ 🌈 ⭐",
-    "qua-song": "🛶 🌊 ⭐ 🌉", "ten-lua-cua-be": "🚀 ⭐ 🌙 🪐", "thap-vong-mau": "🔴 🟡 🔵 🌈", "ve-chu-quai-vat": "👾 ✏️ 🔤 🐙"
+    "be-dau-bo-me": "🧸 🍼 🎈 ⭐", "be-noi-dung-khong": "🙅 🙆 🎈 ❓", "bo-me-5-giay": "⏱️ 🧸 👨‍👩‍👧 🎈", "con-vat-an-so": "🐊 🧮 🍎 🐘",
+    "doan-tuoi-nao": "🎂 🎈 🎁 👶", "lang-cua-be": "🏡 🌳 🐶 🎈", "nhay-theo-so": "💃 🧮 🎵 🪩", "pop-fly": "🐦 ☁️ 🌈 ⭐",
+    "qua-song": "🛶 🌊 ⭐ 🌉", "ten-lua-cua-be": "🚀 ⭐ 🌙 🪐", "thap-vong-mau": "🔴 🟡 🔵 🌈", "ve-chu-quai-vat": "👾 ✏️ 🍎 🐙"
   };
   var st = document.createElement("style");
   st.textContent = "#npWide{position:fixed;left:0;top:0;right:0;bottom:0;z-index:-1;pointer-events:none;display:none;contain:strict}" +

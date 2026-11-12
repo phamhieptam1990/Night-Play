@@ -15,7 +15,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Play Hub">
 <link rel="apple-touch-icon" href="../shared/app-180.png">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='32' height='64' fill='%23FF5A1F'/%3E%3Crect x='32' width='32' height='64' fill='%237C5CFF'/%3E%3Ccircle cx='32' cy='32' r='14' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" sizes="any" href="/shared/favicon.svg">
 <script>
 try{var t=localStorage.getItem("theme")}catch(e){}
 document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
@@ -39,7 +39,7 @@ a{color:inherit}
 .nav{flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px}
 .mark{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:-.2px}
 .mark svg{width:34px;height:34px}
-a.mark{min-height:44px;text-decoration:none;color:inherit}a.mark:hover span{text-decoration:underline}
+a.mark{min-height:44px;text-decoration:none;color:inherit}a.mark:hover span{color:var(--accent)}
 .tools{position:relative;display:flex;gap:10px;align-items:center}
 .ico{width:44px;height:44px;border-radius:50%;background:var(--panel);box-shadow:var(--shadow);display:grid;place-items:center}
 .ico svg{width:22px;height:22px}
@@ -71,8 +71,14 @@ html[data-theme=dark] .hubsys .orbstage{background:radial-gradient(circle at 50%
 .side{flex:none;width:100%;min-width:0;max-width:560px;display:grid;gap:clamp(6px,1.4dvh,14px);justify-items:center;text-align:center}
 h1{margin:0;font-size:clamp(22px,min(6vw,3.8dvh),44px);line-height:1.1;letter-spacing:-.6px;font-weight:800}
 .sub{margin:0;color:var(--ink2);font-size:clamp(14px,2dvh,17px);max-width:34em}
-.resume{display:none;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:999px;background:var(--panel);box-shadow:var(--shadow);border:1px solid var(--line);font-weight:700;font-size:14.5px;text-decoration:none}
-.resume.on{display:inline-flex}.resume b{font-weight:800}.resume .ri{font-size:20px;line-height:1}
+.resume{display:none;align-items:center;gap:10px;min-height:48px;padding:6px 10px 6px 8px;border-radius:18px;box-sizing:border-box;width:100%;text-align:left;color:var(--ink);text-decoration:none;font-weight:700;font-size:14.5px;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 14%,var(--panel)),var(--panel));border:1.5px solid color-mix(in srgb,var(--accent) 42%,var(--line));box-shadow:0 6px 18px color-mix(in srgb,var(--accent) 16%,transparent);transition:border-color .18s ease,box-shadow .18s ease}
+.resume.on{display:flex}.resume b{font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.resume .ri{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,#7C5CFF,#FF5A1F);box-shadow:0 3px 10px rgba(124,92,255,.4)}.resume .ri svg{width:16px;height:16px;margin-left:2px}
+.resume .rt{display:flex;align-items:baseline;gap:6px;min-width:0;flex:1}.resume #rtx{flex:none;color:var(--muted);font-size:12.5px;font-weight:700}
+.resume .rch{flex:none;width:18px;height:18px;color:var(--muted);transition:color .18s ease,transform .18s ease}
+@media (hover:hover) and (pointer:fine){.resume:hover{border-color:var(--accent)}.resume:hover .rch{color:var(--accent);transform:translateX(2px)}}
+.resume:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .doors{display:grid;gap:10px;width:100%;grid-template-columns:1fr}
 .world{position:relative;display:flex;align-items:center;gap:12px;min-height:60px;padding:8px 12px 8px 10px;border-radius:20px;text-decoration:none;color:#fff;box-shadow:var(--shadow);text-align:left;transition:transform .2s,box-shadow .2s}
 .world.pop{background:linear-gradient(135deg,#B83A09,#C2410C)}
@@ -101,7 +107,7 @@ h1{margin:0;font-size:clamp(22px,min(6vw,3.8dvh),44px);line-height:1.1;letter-sp
  .side{flex:0 1 45%;max-width:480px;min-width:0;text-align:left;justify-items:stretch}
  h1{font-size:clamp(20px,min(3.4vw,5.4dvh),46px)}
  .sub{font-size:clamp(14px,2.4dvh,17px)}
- .resume{justify-self:start}
+ .resume{justify-self:stretch}
  .doors{grid-template-columns:1fr}
 }
 @media (min-aspect-ratio:11/10) and (max-height:480px){.side{flex-basis:50%}.world .go span{display:none}.world .go{padding:0;width:44px;justify-content:center}.world .tag{display:none}.world h2{white-space:nowrap}.sub{display:none}.world{min-height:56px;padding-top:4px;padding-bottom:4px}.world .dsc{display:none}.world h2{font-size:18px}.nav{padding:4px 16px}.foot{padding:2px 16px 6px}.doors{gap:8px}}
@@ -110,7 +116,7 @@ h1{margin:0;font-size:clamp(22px,min(6vw,3.8dvh),44px);line-height:1.1;letter-sp
 .foot{flex:none;display:flex;justify-content:space-between;align-items:center;gap:4px 18px;flex-wrap:wrap;padding:8px 16px;font-size:13px;color:var(--muted);border-top:1px solid var(--line);background:linear-gradient(180deg,transparent,var(--hero1,transparent))}
 .foot #copy{order:1}.foot nav{order:2}.foot .site-upd{order:3;flex:none;width:auto;margin-left:auto;padding:0;font-size:12px}
 .foot nav{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
-.foot a{text-decoration:none;font-weight:600}.foot a:hover{color:var(--ink)}
+.foot a{text-decoration:none;font-weight:600}.foot a:hover{color:var(--accent)}
 /* Footer gọn khi các liên kết đã gom vào menu ⋯: chữ bản quyền + ngày cập nhật xếp dọc bên trái, nút ⋯ bên phải */
 .foot:has(.bars-more){display:grid;grid-template-columns:1fr auto;align-items:center;justify-items:start;gap:0 12px;padding:6px 16px}
 .foot:has(.bars-more) #copy{grid-column:1;grid-row:1;font-size:12.5px}
@@ -135,7 +141,7 @@ h1{margin:0;font-size:clamp(22px,min(6vw,3.8dvh),44px);line-height:1.1;letter-sp
 <body>
 <nav class="nav" aria-label="Main">
   <a class="mark" id="aboutLink" href="/?landing=1">
-    <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#7C5CFF"/><path d="M0 0h32v64H0z" fill="#FF5A1F" clip-path="inset(0 round 18px 0 0 18px)"/><circle cx="32" cy="32" r="13" fill="#fff"/></svg>
+    <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="15" fill="#1D1650"/><g transform="rotate(-24 32 32)"><ellipse cx="32" cy="32" rx="27" ry="10.5" fill="none" stroke="#A18BFF" stroke-width="2.6"/><circle cx="10" cy="26.6" r="3.8" fill="#7C5CFF" stroke="#fff" stroke-width="1.3"/></g><circle cx="32" cy="32" r="15" fill="#2F7DE6"/><g transform="translate(32 32) scale(.93) translate(-32 -32)"><path d="M20 22c3-3 8-3 10 0 1 2-1 4-2 5 2 2 3 4 2 7-1 2-3 4-3 6-3-2-5-6-4-10-3-2-4-6-3-8z" fill="#43C673"/><path d="M36 21c3-2 8-1 10 3 1 2-1 4-3 4 2 3 1 6-1 8-2 1-2 4-4 6-3-3-3-7-2-10-2-2-3-5-2-8 0-2 1-3 2-3z" fill="#34A85E"/></g><g transform="rotate(-24 32 32)"><path d="M5 32A27 10.5 0 0 0 59 32" fill="none" stroke="#A18BFF" stroke-width="2.6" stroke-linecap="round"/><circle cx="57.5" cy="35.2" r="4.2" fill="#FF5A1F" stroke="#fff" stroke-width="1.4"/></g></svg>
     <span id="aboutTxt">Giới thiệu</span>
   </a>
   <div class="tools">
@@ -153,15 +159,15 @@ h1{margin:0;font-size:clamp(22px,min(6vw,3.8dvh),44px);line-height:1.1;letter-sp
     <div class="orbwrap">
    <div class="orbstage" id="stage" role="group" aria-label="Hai quỹ đạo game: kéo để xoay, rê vào để dừng">
     <svg class="orbsvg" viewBox="0 0 600 500" aria-hidden="true" focusable="false"><ellipse class="ring night" cx="300" cy="250" rx="262" ry="140" transform="rotate(18 300 250)"/><ellipse class="ring pop" cx="300" cy="250" rx="165" ry="92" transform="rotate(-18 300 250)"/><ellipse class="hit" data-orbit="night" cx="300" cy="250" rx="262" ry="140" transform="rotate(18 300 250)"/><ellipse class="hit" data-orbit="pop" cx="300" cy="250" rx="165" ry="92" transform="rotate(-18 300 250)"/></svg>
-    <svg class="planet" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><defs><clipPath id="plc"><circle cx="32" cy="32" r="30"/></clipPath></defs><g clip-path="url(#plc)"><rect width="64" height="64" fill="#7C5CFF"/><rect width="32" height="64" fill="#FF5A1F"/></g><circle cx="32" cy="32" r="12" fill="#fff"/></svg>
-    <a class="sat night" data-orbit="night" data-a="50" style="--x:127;--y:154" href="../cozyplay/index.html#dap-deadline" aria-label="Chơi Đập Deadline" title="Đập Deadline"><span aria-hidden="true">⏰</span></a><a class="sat night" data-orbit="night" data-a="110" style="--x:-125.9;--y:97.4" href="../cozyplay/index.html#gia-cho-viet" aria-label="Chơi Đoán Giá Chợ Việt" title="Đoán Giá Chợ Việt"><span aria-hidden="true">🛒</span></a><a class="sat night" data-orbit="night" data-a="170" style="--x:-252.9;--y:-56.6" href="../cozyplay/index.html#cozy-wings" aria-label="Chơi Cánh Nhỏ Phiêu Lưu" title="Cánh Nhỏ Phiêu Lưu"><span aria-hidden="true">🐝</span></a><a class="sat night" data-orbit="night" data-a="230" style="--x:-127;--y:-154" href="../cozyplay/index.html#xin-nghi" aria-label="Chơi Sếp Ơi Em Xin Nghỉ" title="Sếp Ơi Em Xin Nghỉ"><span aria-hidden="true">📝</span></a><a class="sat night" data-orbit="night" data-a="290" style="--x:125.9;--y:-97.4" href="../cozyplay/index.html#song-sot-cuoi-thang" aria-label="Chơi Sống Sót Đến Cuối Tháng" title="Sống Sót Đến Cuối Tháng"><span aria-hidden="true">💸</span></a><a class="sat night" data-orbit="night" data-a="350" style="--x:252.9;--y:56.6" href="../cozyplay/index.html#cho-hang-kieu-viet" aria-label="Chơi Chở Hàng Kiểu Việt" title="Chở Hàng Kiểu Việt"><span aria-hidden="true">🛵</span></a><a class="sat pop" data-orbit="pop" data-a="20" style="--x:157.2;--y:-18" href="../popplay/index.html#ten-lua-cua-be" aria-label="Chơi Tên Lửa Của Bé" title="Tên Lửa Của Bé"><span aria-hidden="true">🚀</span></a><a class="sat pop" data-orbit="pop" data-a="80" style="--x:55.2;--y:77.3" href="../popplay/index.html#con-vat-an-so" aria-label="Chơi Con Vật Ăn Số" title="Con Vật Ăn Số"><span aria-hidden="true">🐊</span></a><a class="sat pop" data-orbit="pop" data-a="140" style="--x:-101.9;--y:95.3" href="../popplay/index.html#ve-chu-quai-vat" aria-label="Chơi Vẽ Chữ Thành Quái Vật" title="Vẽ Chữ Thành Quái Vật"><span aria-hidden="true">🔤</span></a><a class="sat pop" data-orbit="pop" data-a="200" style="--x:-157.2;--y:18" href="../popplay/index.html#nhay-theo-so" aria-label="Chơi Nhảy Theo Số" title="Nhảy Theo Số"><span aria-hidden="true">💃</span></a><a class="sat pop" data-orbit="pop" data-a="260" style="--x:-55.2;--y:-77.3" href="../popplay/index.html#thap-vong-mau" aria-label="Chơi Tháp Vòng Màu" title="Tháp Vòng Màu"><span aria-hidden="true">🌈</span></a><a class="sat pop" data-orbit="pop" data-a="320" style="--x:101.9;--y:-95.3" href="../popplay/index.html#lang-cua-be" aria-label="Chơi Làng Của Bé" title="Làng Của Bé"><span aria-hidden="true">🏘️</span></a>
+    <svg class="planet" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><defs><clipPath id="plc"><circle cx="32" cy="32" r="30"/></clipPath><radialGradient id="pleo" cx=".38" cy=".32" r=".9"><stop offset="0" stop-color="#5BB8FF"/><stop offset=".55" stop-color="#1F6FE0"/><stop offset="1" stop-color="#0A2F86"/></radialGradient></defs><g clip-path="url(#plc)"><rect width="64" height="64" fill="url(#pleo)"/><path d="M12 15c4-4 10-4 13 0 2 3-1 5-3 7 3 2 5 6 3 10-1 3-4 5-5 9-4-3-6-9-4-14-4-3-6-8-4-12z" fill="#3DBE6A"/><path d="M36 11c5-3 11-1 14 4 2 3-1 6-4 6 3 4 2 9-2 12-3 2-3 7-6 10-4-4-4-10-2-15-3-3-5-7-3-11-1-3 0-5 3-6z" fill="#34A85E"/><path d="M47 40c3-1 6 1 6 4s-3 5-6 4c-2-1-3-5 0-8z" fill="#3DBE6A"/><path d="M20 47c3-1 6 0 6 2s-3 3-6 2c-1-1-1-3 0-4z" fill="#34A85E"/><g fill="#fff" opacity=".78"><ellipse cx="22" cy="20" rx="8" ry="2.2"/><ellipse cx="44" cy="30" rx="9" ry="2.4"/><ellipse cx="30" cy="42" rx="9" ry="2.2"/><ellipse cx="14" cy="34" rx="5" ry="1.7"/></g></g></svg>
+    <a class="sat night" data-orbit="night" data-a="50" style="--x:127;--y:154" href="../cozyplay/index.html#dap-deadline" aria-label="Chơi Đập Deadline" title="Đập Deadline"><span aria-hidden="true">⏰</span></a><a class="sat night" data-orbit="night" data-a="110" style="--x:-125.9;--y:97.4" href="../cozyplay/index.html#gia-cho-viet" aria-label="Chơi Đoán Giá Chợ Việt" title="Đoán Giá Chợ Việt"><span aria-hidden="true">🛒</span></a><a class="sat night" data-orbit="night" data-a="170" style="--x:-252.9;--y:-56.6" href="../cozyplay/index.html#cozy-wings" aria-label="Chơi Cánh Nhỏ Phiêu Lưu" title="Cánh Nhỏ Phiêu Lưu"><span aria-hidden="true">🐝</span></a><a class="sat night" data-orbit="night" data-a="230" style="--x:-127;--y:-154" href="../cozyplay/index.html#xin-nghi" aria-label="Chơi Sếp Ơi Em Xin Nghỉ" title="Sếp Ơi Em Xin Nghỉ"><span aria-hidden="true">📝</span></a><a class="sat night" data-orbit="night" data-a="290" style="--x:125.9;--y:-97.4" href="../cozyplay/index.html#song-sot-cuoi-thang" aria-label="Chơi Sống Sót Đến Cuối Tháng" title="Sống Sót Đến Cuối Tháng"><span aria-hidden="true">💸</span></a><a class="sat night" data-orbit="night" data-a="350" style="--x:252.9;--y:56.6" href="../cozyplay/index.html#cho-hang-kieu-viet" aria-label="Chơi Chở Hàng Kiểu Việt" title="Chở Hàng Kiểu Việt"><span aria-hidden="true">🛵</span></a><a class="sat pop" data-orbit="pop" data-a="20" style="--x:157.2;--y:-18" href="../popplay/index.html#ten-lua-cua-be" aria-label="Chơi Tên Lửa Của Bé" title="Tên Lửa Của Bé"><span aria-hidden="true">🚀</span></a><a class="sat pop" data-orbit="pop" data-a="80" style="--x:55.2;--y:77.3" href="../popplay/index.html#con-vat-an-so" aria-label="Chơi Con Vật Ăn Số" title="Con Vật Ăn Số"><span aria-hidden="true">🐊</span></a><a class="sat pop" data-orbit="pop" data-a="140" style="--x:-101.9;--y:95.3" href="../popplay/index.html#ve-chu-quai-vat" aria-label="Chơi Vẽ Chữ Thành Quái Vật" title="Vẽ Chữ Thành Quái Vật"><span aria-hidden="true">🍎</span></a><a class="sat pop" data-orbit="pop" data-a="200" style="--x:-157.2;--y:18" href="../popplay/index.html#nhay-theo-so" aria-label="Chơi Nhảy Theo Số" title="Nhảy Theo Số"><span aria-hidden="true">💃</span></a><a class="sat pop" data-orbit="pop" data-a="260" style="--x:-55.2;--y:-77.3" href="../popplay/index.html#thap-vong-mau" aria-label="Chơi Tháp Vòng Màu" title="Tháp Vòng Màu"><span aria-hidden="true">🌈</span></a><a class="sat pop" data-orbit="pop" data-a="320" style="--x:101.9;--y:-95.3" href="../popplay/index.html#lang-cua-be" aria-label="Chơi Làng Của Bé" title="Làng Của Bé"><span aria-hidden="true">🏘️</span></a>
     <button class="orbsnd" type="button" hidden aria-pressed="false" aria-label="Bật âm thanh quỹ đạo"><span aria-hidden="true">🔇</span></button>
    </div>
     </div>
     <div class="side">
       <h1 id="h1">Chọn thế giới của bạn</h1>
       <p class="sub" id="sub">Hai nơi chơi game riêng, không quảng cáo, không theo dõi cá nhân. Chạm một game hoặc một thế giới.</p>
-      <a class="resume" id="resume" href="../popplay/index.html"><span class="ri" aria-hidden="true">▶️</span><span><span id="rtx"></span> <b id="rname"></b></span></a>
+      <a class="resume" id="resume" href="../popplay/index.html"><span class="ri" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.6v14.8a1 1 0 0 0 1.5.86l12-7.4a1 1 0 0 0 0-1.72l-12-7.4A1 1 0 0 0 7 4.6z"/></svg></span><span class="rt"><span id="rtx"></span><b id="rname"></b></span><svg class="rch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></a>
       <div class="doors">
         <a class="world pop" id="aPop" href="../popplay/index.html"><span class="di" aria-hidden="true">🎈</span><span class="dt"><span class="tag" id="tPop">Dành cho bé</span><h2>Pop Play</h2><span class="dsc" id="dPop">Game vui, an toàn, màu sắc tươi sáng cho các bé.</span></span><span class="go"><span id="gPop">Vào Pop Play</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
         <a class="world night" id="aNight" href="../cozyplay/index.html"><span class="di" aria-hidden="true">🌙</span><span class="dt"><span class="tag" id="tNight">Dành cho người lớn</span><h2>Night Play</h2><span class="dsc" id="dNight">Game thư giãn buổi tối: bài, cờ, xếp hình và hơn thế nữa.</span></span><span class="go"><span id="gNight">Vào Night Play</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
@@ -253,10 +259,14 @@ function showResume(){
   const t = i18n[lang];
   $("rtx").textContent = t.resume; $("rname").textContent = (best.g.icon || "") + " " + (best.g[lang] || best.g.vi);
   chip.href = "../" + best.g.portal + "/index.html#" + best.id; chip.classList.add("on");
-  const m = document.querySelector("main");
-  if(m.scrollHeight > m.clientHeight + 1){ chip.classList.remove("on"); }
+  const m = document.querySelector("main"), over = () => m.scrollHeight > m.clientHeight + 1;
+  if(over()) $("sub").hidden = true;                                   // chip thay cho dòng phụ khi không đủ chỗ
+  if(over()){ chip.classList.remove("on"); $("sub").hidden = false; }   // vẫn tràn thì bỏ chip (hub không bao giờ cuộn)
 }
 addEventListener("resize", showResume);
+addEventListener("load", showResume);
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(showResume);
+setTimeout(showResume, 800);
 applyLang();
 document.documentElement.classList.remove("pre");
 </script>

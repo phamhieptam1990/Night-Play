@@ -39,7 +39,7 @@ function readBody(req, limit = 10240) {
     req.on("error", reject);
   });
 }
-const MIME = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".webp": "image/webp", ".json": "application/json", ".ico": "image/x-icon", ".woff2": "font/woff2" };
+const MIME = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".webp": "image/webp", ".json": "application/json", ".ico": "image/x-icon", ".woff2": "font/woff2", ".pdf": "application/pdf" };   // thiếu .pdf thì trình duyệt tải xuống thay vì mở (nút "Mở tab mới" ở trang Điều khoản/Riêng tư)
 /* Trang tin ra mắt /moi/, /en/moi/ (+ trang riêng) được SINH lúc build (scripts/build-moi.js) nên bản dev cục bộ không có sẵn:
    sinh vào thư mục tạm khi khởi động (và khi launches.json đổi, khởi động lại là có) để localhost:PORT/moi/ không bị 404. */
 let MOI_DEV = null;

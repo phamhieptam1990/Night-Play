@@ -95,3 +95,77 @@
   document.addEventListener("visibilitychange", function () { tr.style.animationPlayState = document.hidden ? "paused" : ""; });
   if ("IntersectionObserver" in window) new IntersectionObserver(function (e) { tr.style.animationPlayState = e[e.length - 1].isIntersecting && !document.hidden ? "" : "paused"; }).observe(m);
 })();
+
+/* ===== Slide 3 điện thoại ở phần đầu trang: tự luân phiên (máy bên phải lên giữa), bấm máy bên cạnh để đưa vào giữa; dừng khi rê chuột / tab ẩn / ngoài màn hình / giảm chuyển động ===== */
+(function () {
+  var pfx = document.querySelector(".phones .pfx"); if (!pfx) return;
+  var devs = Array.prototype.slice.call(pfx.querySelectorAll(".dev")); if (devs.length !== 3) return;
+  var NEXT = { r: "c", c: "l", l: "r" }, rm = window.matchMedia("(prefers-reduced-motion: reduce)"), tm = 0, hold = false, vis = true;
+  var role = function (d) { return d.classList.contains("c") ? "c" : d.classList.contains("l") ? "l" : "r"; };
+  function rot() { var rs = devs.map(role); devs.forEach(function (d, i) { d.classList.remove(rs[i]); d.classList.add(NEXT[rs[i]]); }); }
+  function stop() { clearInterval(tm); tm = 0; }
+  var wide = window.matchMedia("(min-width: 0px)");   // điện thoại chỉ có MỘT máy ở giữa: không tự đổi (đổi ảnh liên tục gây nhấp nháy, mỏi mắt)
+  function start() { stop(); if (rm.matches || hold || !vis || document.hidden || !wide.matches) return; tm = setInterval(rot, 5000); }
+  devs.forEach(function (d) { d.addEventListener("click", function () { var n = 0; while (!d.classList.contains("c") && n++ < 2) rot(); start(); }); });
+  pfx.addEventListener("mouseenter", function () { hold = true; stop(); });
+  pfx.addEventListener("mouseleave", function () { hold = false; start(); });
+  document.addEventListener("visibilitychange", start);
+  if (rm.addEventListener) rm.addEventListener("change", start);
+  if (wide.addEventListener) wide.addEventListener("change", start);
+  if ("IntersectionObserver" in window) new IntersectionObserver(function (e) { vis = e[e.length - 1].isIntersecting; start(); }).observe(pfx);
+  start();
+})();
+
+/* ===== Thẻ Night Pass bấm được: thẻ gói (1 ngày/tuần/tháng/năm) → subscribe.html?plan=<gói> đúng gói; thẻ tính năng → subscribe.html (giữ ngôn ngữ trang) ===== */
+(function () {
+  var en = location.pathname.indexOf("/en/") === 0, lang = en ? "&lang=en" : "&lang=vi";
+  var ids = ["day", "week", "month", "year"];
+  function go(url) { location.href = url; }
+  function wire(el, url, label) {
+    el.setAttribute("role", "link"); el.setAttribute("tabindex", "0"); el.style.cursor = "pointer"; if (label) el.setAttribute("aria-label", label);
+    el.addEventListener("click", function (e) { if (e.target.closest("a")) return; go(url); });
+    el.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(url); } });
+  }
+  Array.prototype.forEach.call(document.querySelectorAll(".plans .plan"), function (li, i) {
+    var h = li.querySelector("h3"), p = li.querySelector(".pp");
+    wire(li, "/subscribe.html?plan=" + ids[i] + lang, (h ? h.textContent : "") + (p ? " · " + p.textContent : ""));
+  });
+  Array.prototype.forEach.call(document.querySelectorAll(".feats .feat"), function (a) {
+    var h = a.querySelector("h3"); wire(a, "/subscribe.html" + (lang ? "?" + lang.slice(1) : ""), h ? h.textContent : "");
+  });
+})();
+
+/* ===== Nhãn tên game khi hover/focus icon trong dải icon ===== */
+(function () {
+  var m = document.querySelector(".marq"); if (!m) return;
+  var tip = document.createElement("div"); tip.id = "mtip"; tip.setAttribute("aria-hidden", "true"); document.body.appendChild(tip);
+  function show(a) {
+    var n = a.querySelector(".mn"); if (!n) return; tip.textContent = n.textContent;
+    var r = a.querySelector(".mimg").getBoundingClientRect(), x = r.left + r.width / 2, half = Math.min(tip.offsetWidth || 120, 260) / 2 + 8;
+    tip.style.left = Math.max(half, Math.min(innerWidth - half, x)) + "px"; tip.style.top = Math.max(4, r.top - r.height * 0.2 - 40) + "px"; tip.classList.add("on");
+  }
+  function hide() { tip.classList.remove("on"); }
+  m.addEventListener("mouseover", function (e) { var a = e.target.closest(".mi"); if (a) show(a); });
+  m.addEventListener("mouseout", function (e) { if (e.target.closest(".mi")) hide(); });
+  m.addEventListener("focusin", function (e) { var a = e.target.closest(".mi"); if (a) show(a); });
+  m.addEventListener("focusout", hide); m.addEventListener("scroll", hide, { passive: true });
+})();
+
+/* ===== Slide cho lưới card (.mgrid) ở trang Mới: vuốt ngang / nút ‹ › / phím; không JS thì vẫn là lưới tĩnh ===== */
+(function () {
+  var en = document.documentElement.lang === "en";
+  Array.prototype.forEach.call(document.querySelectorAll(".mgrid"), function (g) {
+    if (g.children.length < 2) return;
+    var wrap = document.createElement("div"); wrap.className = "mslider"; g.parentNode.insertBefore(wrap, g); wrap.appendChild(g); g.classList.add("mslide");
+    function mk(c, t, d) { var b = document.createElement("button"); b.type = "button"; b.className = "msb " + c; b.textContent = d; b.setAttribute("aria-label", t); wrap.appendChild(b); return b; }
+    var pv = mk("prev", en ? "Previous" : "Trước", "‹"), nx = mk("next", en ? "Next" : "Sau", "›");
+    function step() { var c = g.children[0], w = c.getBoundingClientRect().width + 14; return Math.max(w, g.clientWidth * 0.8); }
+    function upd() { pv.disabled = g.scrollLeft < 4; nx.disabled = g.scrollLeft + g.clientWidth >= g.scrollWidth - 4; }
+    pv.addEventListener("click", function () { g.scrollBy({ left: -step(), behavior: "smooth" }); });
+    nx.addEventListener("click", function () { g.scrollBy({ left: step(), behavior: "smooth" }); });
+    g.addEventListener("scroll", upd, { passive: true }); addEventListener("resize", upd); upd();
+    addEventListener("load", function () { setTimeout(function () { Array.prototype.forEach.call(g.querySelectorAll("img[loading=lazy]"), function (i) { i.loading = "eager"; }); }, 1500); });   // ảnh card ngoài tầm nhìn ngang tải ngầm sau khi trang xong, vuốt tới là có ngay
+    g.tabIndex = 0; g.setAttribute("role", "region"); g.setAttribute("aria-label", (g.parentNode.parentNode.querySelector("h2") || {}).textContent || "");
+    g.addEventListener("keydown", function (e) { if (e.key === "ArrowRight") { e.preventDefault(); nx.click(); } else if (e.key === "ArrowLeft") { e.preventDefault(); pv.click(); } });
+  });
+})();

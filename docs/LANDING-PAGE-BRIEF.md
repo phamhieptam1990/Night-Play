@@ -95,7 +95,7 @@ Hai thẻ lớn (gradient cam cho Pop, tím tối cho Night, y như hub):
 - **Night Play · Cho người lớn.** 20 game giải toả đậm chất Việt: deadline, lương cuối tháng, shipper, ổ gà. Nút **Vào Night Play**. / *20 relaxing games with a Vietnamese twist: deadlines, payday, delivery rides, potholes. Button: Enter Night Play.*
 
 **Thiết kế (hướng 1, đã làm): hệ quỹ đạo tương tác** (`landing/lp/orbit.js` + khối `.orbsys` trong `landing.css`; chữ trên là phần tĩnh để SEO):
-- Giữa là "hành tinh" = logo Play Hub (nửa cam #FF5A1F, nửa tím #7C5CFF, chấm trắng) có quầng sáng trên nền sao tĩnh tối (cả giao diện sáng lẫn tối). Quỹ đạo cam (Pop) mang 6 icon 🚀 🐊 🔤 💃 🌈 🏘️ quay xuôi chiều kim đồng hồ; quỹ đạo tím (Night) mang 6 icon ⏰ 🛒 🐝 📝 💸 🛵 quay ngược chiều, tốc độ khác nhau, nghiêng ±18° kiểu elip (icon xa nhỏ/mờ hơn, gần to/rõ hơn).
+- Giữa là "hành tinh" = Trái Đất (đại dương xanh, lục địa xanh lá, mây trắng; vẽ SVG trong shared/orbit.js + bản tĩnh trong HTML) có quầng sáng xanh trên nền sao tĩnh tối (cả giao diện sáng lẫn tối). Quỹ đạo cam (Pop) mang 6 icon 🚀 🐊 🍎 💃 🌈 🏘️ quay xuôi chiều kim đồng hồ; quỹ đạo tím (Night) mang 6 icon ⏰ 🛒 🐝 📝 💸 🛵 quay ngược chiều, tốc độ khác nhau, nghiêng ±18° kiểu elip (icon xa nhỏ/mờ hơn, gần to/rõ hơn).
 - HTML tĩnh luôn có: hai thẻ chi tiết là liên kết thật `<a href="/popplay/">` và `<a href="/cozyplay/">` (đủ dùng khi tắt JS), 12 icon là `<a href="/popplay/#id">` / `/cozyplay/#id` có `aria-label` ("Chơi <tên game>" / "Play <name>"). Không JS hoặc giảm chuyển động: hai vòng đứng yên ở vị trí đã ghi sẵn (`--x/--y`). Thứ tự Tab: thẻ Pop, thẻ Night, rồi 12 icon.
 - Chuyển động do JS điều khiển (không CSS animation): đúng 12 phần tử chuyển động, chỉ `transform`/`opacity`, `will-change`; vòng lặp rAF tự ngủ khi ngoài màn hình (IntersectionObserver), tab ẩn, hoặc đang đứng yên với giảm chuyển động.
 - Tương tác: rê chuột / chạm giữ / focus vào quỹ đạo hoặc icon thì quỹ đạo đó dừng, thẻ thế giới tương ứng sáng viền và phóng to 3,5%; bấm icon mở thẳng game. Kéo/vuốt trên quỹ đạo để xoay (quán tính, thả ra thì về tốc độ tự động; mỗi quỹ đạo độc lập; vuốt dọc vẫn cuộn trang); bàn phím: ← → xoay một nấc 60° khi một icon của quỹ đạo đang focus. Điện thoại (≤699px): khối quỹ đạo cao tối đa 300px nằm trên cùng, hai thẻ xếp dọc ngay dưới (luôn thấy); chạm một vệ tinh lần đầu thì thẻ tương ứng sáng viền và cuộn mượt tới thẻ, chạm lần hai mở game. Vùng chạm icon 44px (52px từ 700px); khối cố định `aspect-ratio: 6/5` nên không CLS.
@@ -189,7 +189,7 @@ Logo · Game (Pop Play, Night Play) · Night Pass · **Chính sách bảo mật*
 | `hero.webp` (+ `hero@2x`) | 640×480 / 1280×960 | WebP ≤ 60 KB | ảnh ghép game, `fetchpriority=high` |
 | `game-*.svg` / `.webp` ×12 | 160×160 (hiển thị 80–120) | SVG hoặc WebP ≤ 8 KB | icon thật của game nếu có; không thì emoji |
 | `phone-pop.webp`, `phone-night.webp` | 360×720 | WebP ≤ 50 KB | ảnh chụp điện thoại thật (tuỳ chọn) |
-| `logo.svg` | vector | SVG | nửa cam nửa tím, chấm trắng |
+| `logo.svg` | vector | SVG | Trái Đất + vòng quỹ đạo + 2 vệ tinh cam/tím (cùng hình shared/favicon.svg) |
 | `favicon` | SVG data URI | | như hub |
 | Icon PWA | 180/192/512 | PNG | có sẵn `shared/app-*.png`, `shared/pop-*.png` |
 Chụp màn hình thật bằng puppeteer ở 390×844 (không dựng giả). Mọi ảnh có `width/height`; tổng ảnh trước khi cuộn < 120 KB.
@@ -241,7 +241,7 @@ Chụp màn hình thật bằng puppeteer ở 390×844 (không dựng giả). M�
 | doan-tuoi-nao | 🧠 Đoán Xem Bé Mấy Tuổi | Guess Baby's Brain Age |
 | bo-me-5-giay | 🖐️ Bố Mẹ Thử Thách 5 Giây | Parents' 5-Second Challenge |
 | con-vat-an-so | 🐊 Con Vật Ăn Số | Number Munchers |
-| ve-chu-quai-vat | 🔤 Vẽ Chữ Thành Quái Vật | Letter Monsters |
+| ve-chu-quai-vat | 🍎 Vẽ Chữ Thành Quái Vật | Letter Monsters |
 | nhay-theo-so | 💃 Nhảy Theo Số | Dance by Numbers |
 | be-dau-bo-me | ⚔️ Bé Đấu Bố Mẹ | Kid vs Parent |
 | qua-song | ⛵ Qua Sông Cùng Bé | River Crossing |

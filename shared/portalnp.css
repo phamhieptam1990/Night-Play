@@ -58,15 +58,14 @@ html[data-app=popplay][data-theme=dark] .nav .pill{background-image:linear-gradi
    Nguyên nhân gốc: rule nền kính của portalui.css (html[data-app] .trust li, độ ưu tiên cao hơn) đè rule .trust li:hover của trang -> hover = nền thường.
    Mỗi phần tử: nền đậm/sáng hơn một nấc (accent 20–26% trộn panel), viền accent, bóng; chữ giữ var(--ink) (tương phản >= 4.5). Bài đo: check-portalui.js (hover). */
 @media (hover:hover) and (pointer:fine){
-  html[data-app] .trust li:hover{background:color-mix(in srgb,var(--accent) 24%,var(--panel));border-color:var(--accent);color:var(--ink);transform:translateY(-1px);box-shadow:0 6px 16px var(--pu-glow)}
-  html[data-app] .trust li:hover:before{color:var(--accent)}
+  html[data-app] .trust li:hover{background-image:linear-gradient(color-mix(in srgb,var(--accent) 14%,transparent),color-mix(in srgb,var(--accent) 14%,transparent));transform:none;box-shadow:none}   /* chip chỉ là thông tin: cùng kiểu hover với menu (nền accent 14%), không nhích lên / đổ bóng / đổi màu chữ */
   .pu-card:hover,.pu-card.today:hover{background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 34%,var(--panel)),color-mix(in srgb,var(--accent) 18%,var(--panel)))}
   .pu-chip:not([aria-pressed=true]):hover{background:color-mix(in srgb,var(--accent) 26%,var(--panel));border-color:var(--accent);color:var(--ink);box-shadow:0 4px 14px var(--pu-glow)}
   html[data-app] .nav .tools>.ico:hover,html[data-app] #langMenu button:not([aria-pressed=true]):hover{background:color-mix(in srgb,var(--accent) 26%,var(--panel));border-color:var(--accent);box-shadow:0 4px 14px var(--pu-glow)}
   html[data-app] .nav .pill:hover{filter:brightness(1.14) saturate(1.1)}
   #lock:hover{background:color-mix(in srgb,var(--accent) 44%,var(--panel));box-shadow:0 4px 14px var(--pu-glow)}
+  /* menu chân trang (Pop Play, Night Play, giới thiệu): hover chỉ đổi màu chữ sang màu accent, không nền / gạch chân */
   .foot a:hover{color:var(--accent);text-decoration:none}
-  html[data-theme=dark] .foot a:hover{color:#fff}
   #gdots .gn:hover:not(:disabled){background:var(--accent);color:var(--on-accent)}
 }
 .pu-card:active,.pu-chip:active{filter:brightness(1.1)}
@@ -93,3 +92,20 @@ html[data-app] .bars-pop{z-index:var(--z-pop)}
   html[data-app] .trust li{font-size:10.5px!important;gap:3px!important}
 }
 @media (max-width:374px){html[data-app] .trust li:nth-child(3){display:none}}
+
+/* ===== Nút khoá phụ huynh/cài đặt (#lock) nổi bật: nút đặc gradient tím–cam, khoá trắng dày, quầng sáng + viền trắng; KHÔNG đổi kích thước, không animation ===== */
+html[data-app] button#lock:not(.pri):not(.on){background:linear-gradient(135deg,#7C5CFF,#FF5A1F)!important;background-image:linear-gradient(135deg,#7C5CFF,#FF5A1F)!important;color:#fff!important;border:2px solid rgba(255,255,255,.9)!important;box-shadow:0 4px 14px rgba(124,92,255,.55),0 0 0 4px rgba(124,92,255,.22),0 0 18px rgba(255,90,31,.35)!important;-webkit-backdrop-filter:none;backdrop-filter:none}
+html[data-app] #lock .ic{stroke-width:2.6;filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
+html[data-app] #lock #ring circle{stroke:#fff}
+@media (hover:hover) and (pointer:fine){html[data-app] button#lock:not(.pri):not(.on):hover{background:linear-gradient(135deg,#8B6DFF,#FF6A33)!important;background-image:linear-gradient(135deg,#8B6DFF,#FF6A33)!important;border-color:#fff!important;box-shadow:0 6px 18px rgba(124,92,255,.65),0 0 0 5px rgba(124,92,255,.3),0 0 22px rgba(255,90,31,.45)!important}}
+
+/* ===== Đếm ngược khi giữ nút khoá (3 → 2 → 1): số trong nút (thay biểu tượng khoá) + bong bóng nổi phía trên để ngón tay không che ===== */
+#lockNum{display:none;position:absolute;inset:0;place-items:center;font:900 20px/1 var(--font);color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+#lock.holding #lockNum{display:grid}#lock.holding .ic{opacity:0}
+#lockTip{display:none;position:absolute;right:50%;bottom:calc(100% + 14px);transform:translateX(50%);min-width:56px;height:56px;padding:0 6px;box-sizing:border-box;border-radius:50%;place-items:center;font:900 30px/1 var(--font);color:#fff;pointer-events:none;z-index:5;
+ background:linear-gradient(135deg,#7C5CFF,#FF5A1F);border:3px solid #fff;box-shadow:0 8px 24px rgba(124,92,255,.6)}
+#lock.holding #lockTip{display:grid}
+#lockTip.pop{animation:lockpop .45s ease-out}
+@keyframes lockpop{0%{transform:translateX(50%) scale(1.5);opacity:.4}100%{transform:translateX(50%) scale(1);opacity:1}}
+html[data-app] #ring circle{stroke-width:6}
+@media (prefers-reduced-motion:reduce){#lockTip.pop{animation:none}}

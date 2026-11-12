@@ -16,6 +16,10 @@
       var x = d.createElement("button"); x.type = "button"; x.className = "npx"; x.textContent = "✕"; x.setAttribute("aria-label", vi ? "Đóng" : "Close");
       x.addEventListener("click", function () { var c = closer(id); if (c) c.click(); else ov.hidden = true; });
       card.appendChild(x); ov.appendChild(card);
+      if (id === "ovSkin" && h && h.id === "skH" && d.getElementById("skBack")) {   /* Pop Play + Cánh Nhỏ (có #skBack): tiêu đề cố định "Theme", không kèm tên loại chơi */
+        var tt = "🎨 " + (vi ? "Giao diện" : "Theme"), fix = function () { if (h.textContent !== tt) h.textContent = tt; };
+        new MutationObserver(fix).observe(h, { childList: true, characterData: true, subtree: true }); fix();
+      }
     });
     d.addEventListener("keydown", function (e) {
       if (e.key !== "Escape") return;

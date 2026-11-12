@@ -8,7 +8,7 @@
 <meta name="description" content="Điều khoản sử dụng và quy chế hoạt động / Terms of Use">
 <link rel="alternate" type="application/pdf" hreflang="vi" href="legal/terms-vi.pdf">
 <link rel="alternate" type="application/pdf" hreflang="en" href="legal/terms-en.pdf">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='32' height='64' fill='%23FF5A1F'/%3E%3Crect x='32' width='32' height='64' fill='%237C5CFF'/%3E%3Ccircle cx='32' cy='32' r='14' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" sizes="any" href="/shared/favicon.svg">
 <title>Điều khoản sử dụng · Play Hub</title>
 <script>
 /* Theme và ngôn ngữ theo chuẩn của dự án: localStorage "theme" / "lang"; chưa chọn thì theo thiết bị. ?lang=vi|en ghi đè. */
@@ -31,10 +31,11 @@ document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: da
 <body>
 <nav class="nav" aria-label="Main">
   <a class="mark" href="index.html" aria-label="Home">
-    <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#7C5CFF"/><path d="M0 0h32v64H0z" fill="#FF5A1F" clip-path="inset(0 round 18px 0 0 18px)"/><circle cx="32" cy="32" r="13" fill="#fff"/></svg>
+    <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="15" fill="#1D1650"/><g transform="rotate(-24 32 32)"><ellipse cx="32" cy="32" rx="27" ry="10.5" fill="none" stroke="#A18BFF" stroke-width="2.6"/><circle cx="10" cy="26.6" r="3.8" fill="#7C5CFF" stroke="#fff" stroke-width="1.3"/></g><circle cx="32" cy="32" r="15" fill="#2F7DE6"/><g transform="translate(32 32) scale(.93) translate(-32 -32)"><path d="M20 22c3-3 8-3 10 0 1 2-1 4-2 5 2 2 3 4 2 7-1 2-3 4-3 6-3-2-5-6-4-10-3-2-4-6-3-8z" fill="#43C673"/><path d="M36 21c3-2 8-1 10 3 1 2-1 4-3 4 2 3 1 6-1 8-2 1-2 4-4 6-3-3-3-7-2-10-2-2-3-5-2-8 0-2 1-3 2-3z" fill="#34A85E"/></g><g transform="rotate(-24 32 32)"><path d="M5 32A27 10.5 0 0 0 59 32" fill="none" stroke="#A18BFF" stroke-width="2.6" stroke-linecap="round"/><circle cx="57.5" cy="35.2" r="4.2" fill="#FF5A1F" stroke="#fff" stroke-width="1.4"/></g></svg>
     <span>Home</span>
   </a>
   <div class="tools">
+    <div id="pgTabs" role="tablist" data-keep><button id="tabRead" role="tab" type="button" aria-selected="true" aria-controls="book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/></svg><span id="tabReadTxt"></span></button><button id="tabPdf" role="tab" type="button" aria-selected="false" aria-controls="pdfView"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg><span id="tabPdfTxt"></span></button></div>
     <div class="seg" role="group" aria-label="Language / Ngôn ngữ">
       <button id="bVi" type="button" lang="vi" aria-label="Tiếng Việt">VI</button>
       <button id="bEn" type="button" lang="en" aria-label="English">EN</button>
@@ -235,7 +236,7 @@ document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: da
 
 <!-- Bản đọc theo trang: mỗi màn hình một mục, tự vừa khung nhìn, không cuộn. Nội dung lấy từ #src ở trên. -->
 <main id="pg" aria-label="Terms">
-  <div id="pgHead"><h1 id="pgTitle"></h1><a id="pdfBtn" class="pdf-btn" href="legal/terms-vi.pdf" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v10m0 0l-4-4m4 4l4-4M5 19h14"/></svg><span id="pdfTxt"></span></a></div>
+  <div id="pgHead"><h1 id="pgTitle"></h1></div>
   <div id="book">
    <div id="pages">
     <div id="pgBody" tabindex="0"></div>
@@ -245,11 +246,15 @@ document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: da
    </div>
     <div id="thumbs" role="dialog" aria-modal="false" hidden><div id="thBar"><b id="thTitle"></b><button id="thClose" type="button" aria-label="Close">✕</button></div><div id="thList"></div></div>
   </div>
+  <div id="pdfView" role="tabpanel" aria-labelledby="tabPdf" hidden>
+    <div id="pdfBar"><span id="pdfName"></span><span class="pdf-acts"><a id="pdfOpen" class="pdf-btn" href="legal/terms-vi.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg><span id="pdfOpenTxt"></span></a><a id="pdfBtn" class="pdf-btn" href="legal/terms-vi.pdf" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v10m0 0l-4-4m4 4l4-4M5 19h14"/></svg><span id="pdfTxt"></span></a></span></div>
+    <div id="pdfFrame"></div>
+  </div>
 </main>
 
 
 <footer class="site-foot">
-  <div class="mark"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#7C5CFF"/><path d="M0 0h32v64H0z" fill="#FF5A1F" clip-path="inset(0 round 18px 0 0 18px)"/><circle cx="32" cy="32" r="13" fill="#fff"/></svg><span>Home</span></div>
+  <div class="mark"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="15" fill="#1D1650"/><g transform="rotate(-24 32 32)"><ellipse cx="32" cy="32" rx="27" ry="10.5" fill="none" stroke="#A18BFF" stroke-width="2.6"/><circle cx="10" cy="26.6" r="3.8" fill="#7C5CFF" stroke="#fff" stroke-width="1.3"/></g><circle cx="32" cy="32" r="15" fill="#2F7DE6"/><g transform="translate(32 32) scale(.93) translate(-32 -32)"><path d="M20 22c3-3 8-3 10 0 1 2-1 4-2 5 2 2 3 4 2 7-1 2-3 4-3 6-3-2-5-6-4-10-3-2-4-6-3-8z" fill="#43C673"/><path d="M36 21c3-2 8-1 10 3 1 2-1 4-3 4 2 3 1 6-1 8-2 1-2 4-4 6-3-3-3-7-2-10-2-2-3-5-2-8 0-2 1-3 2-3z" fill="#34A85E"/></g><g transform="rotate(-24 32 32)"><path d="M5 32A27 10.5 0 0 0 59 32" fill="none" stroke="#A18BFF" stroke-width="2.6" stroke-linecap="round"/><circle cx="57.5" cy="35.2" r="4.2" fill="#FF5A1F" stroke="#fff" stroke-width="1.4"/></g></svg><span>Home</span></div>
   <nav>
     <a href="index.html" id="fHome"></a>
     <a href="privacy.html" id="fPriv"></a>

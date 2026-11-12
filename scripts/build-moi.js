@@ -19,7 +19,7 @@ const T = {
     title: "Mới trên Play Hub: game mới và giao diện Night Pass mới",
     desc: "Game mới và giao diện Night Pass mới của Play Hub: xem ảnh chụp thật, ngày ra mắt, cách chơi và chơi ngay trên trình duyệt, không quảng cáo, không cài đặt.",
     h1: "Mới trên Play Hub", lead: "Game mới và giao diện Night Pass mới, kèm ảnh chụp thật từ game đang chạy.",
-    older: "Các lần ra mắt trước", fresh: "Mới", game: "Game mới", skin: "Giao diện mới", np: "👑 Night Pass", all: "Xem tất cả", detail: "Xem chi tiết", play: "Chơi ngay",
+    older: "Các lần ra mắt trước", skins: "Giao diện mới", fresh: "Mới", game: "Game mới", skin: "Giao diện mới", np: "👑 Night Pass", all: "Xem tất cả", detail: "Xem chi tiết", play: "Chơi ngay",
     facts: "Có gì trong lần ra mắt này", more: "Các lần ra mắt khác", ready: "Sẵn sàng chơi một ván?", back: "← Xem tất cả", crumbHome: "Trang chủ", crumbNew: "Mới",
     alt: n => "Ảnh chụp màn hình " + n, brand: "Play Hub", skip: "Bỏ qua tới nội dung", mainNav: "Chính", footNav: "Footer", themeLbl: "Đổi giao diện sáng/tối", themeTxt: "Giao diện sáng/tối",
     navHome: "Trang chủ", navGame: "Game", navNew: "Mới", navNP: "Night Pass", langName: "English", langShort: "EN", langAria: "English", langAttr: "en",
@@ -31,7 +31,7 @@ const T = {
     title: "New on Play Hub: new games and new Night Pass looks",
     desc: "New games and new Night Pass looks on Play Hub: real screenshots, launch dates, how each one plays, and play now in your browser with no ads and no install.",
     h1: "New on Play Hub", lead: "New games and new Night Pass looks, with real screenshots from the running game.",
-    older: "Earlier launches", fresh: "New", game: "New game", skin: "New look", np: "👑 Night Pass", all: "See all", detail: "Read more", play: "Play now",
+    older: "Earlier launches", skins: "New looks", fresh: "New", game: "New game", skin: "New look", np: "👑 Night Pass", all: "See all", detail: "Read more", play: "Play now",
     facts: "What is in this launch", more: "More launches", ready: "Ready for a round?", back: "← See all", crumbHome: "Home", crumbNew: "New",
     alt: n => "Screenshot of " + n, brand: "Play Hub", skip: "Skip to content", mainNav: "Main", footNav: "Footer", themeLbl: "Toggle light/dark theme", themeTxt: "Light / Dark",
     navHome: "Home", navGame: "Games", navNew: "New", navNP: "Night Pass", langName: "Tiếng Việt", langShort: "VI", langAria: "Tiếng Việt", langAttr: "vi",
@@ -201,12 +201,23 @@ function listPage(L, l, today) {
  </div>
 </section>
 `;
-  if (rest.length) h += `
+  const restGames = rest.filter(x => x.type !== "skin"), restSkins = rest.filter(x => x.type === "skin");   // game tách riêng khỏi bản cập nhật giao diện (mỗi nhóm một hàng slide)
+  if (restGames.length) h += `
 <section class="sec alt" aria-labelledby="hOlder">
  <div class="wrap">
   <h2 id="hOlder">${t.older}</h2>
   <div class="mgrid">
-   ${rest.map(x => card(x, l, today)).join("\n   ")}
+   ${restGames.map(x => card(x, l, today)).join("\n   ")}
+  </div>
+ </div>
+</section>
+`;
+  if (restSkins.length) h += `
+<section class="sec" aria-labelledby="hSkins">
+ <div class="wrap">
+  <h2 id="hSkins">${t.skins}</h2>
+  <div class="mgrid">
+   ${restSkins.map(x => card(x, l, today)).join("\n   ")}
   </div>
  </div>
 </section>

@@ -43,8 +43,9 @@ button:focus-visible,input:focus-visible{outline:4px solid var(--accent);outline
 .tiles{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:2.4cqw}
 .tile{position:relative;border-radius:var(--rad);background:var(--sb);color:var(--si);border:var(--bd);box-shadow:var(--sh);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6cqw;padding:1cqw;overflow:hidden;text-align:center;cursor:pointer}
 .tile:active{transform:scale(.97)}
-.tile .ti{font-size:17cqw;line-height:1}.tile b{font-size:5.2cqw;line-height:1.05;font-weight:800}
-.tile .cn{font-size:4cqw;font-weight:800;opacity:.75}
+.tile .ti{font-size:13cqw;line-height:1;flex:0 1 auto;min-height:0;margin-top:3cqw}.tile b{font-size:4.8cqw;line-height:1.05;font-weight:800}
+.tile .cn{font-size:3.8cqw;font-weight:800;opacity:.75}
+@media (max-height:700px){.tile .ti{font-size:11cqw;margin-top:4cqw}.tile b{font-size:4.4cqw}.tile .cn{font-size:3.5cqw}}
 .tile .sk{position:absolute;right:1.6cqw;top:1.6cqw;width:13.8cqw;height:13.8cqw;border-radius:50%;background:var(--sp);font-size:6.4cqw;display:grid;place-items:center;box-shadow:var(--sh)}
 .tile .sk i{position:absolute;right:-.8cqw;top:-.8cqw;font-size:3cqw;font-style:normal;background:var(--sp);border-radius:50%;line-height:1;padding:.2cqw}
 /* ---- xưởng vẽ ---- */
@@ -256,7 +257,7 @@ const T=(k,v)=>{let s=(I18N[LANG][k]!=null?I18N[LANG][k]:I18N.vi[k]!=null?I18N.v
 
 /* ===== DỮ LIỆU: 4 loại · bộ sưu tập ===== */
 const VI=Array.from("AĂÂBCDĐEÊGHIKLMNOÔƠPQRSTUƯVXY"),EN=Array.from("ABCDEFGHIJKLMNOPQRSTUVWXYZ"),NU=Array.from("0123456789"),SH=["circle","square","triangle","star","heart","diamond","rect","moon","cross","hex"];
-const ITEMS=[VI,EN,NU,SH],TYI=["🔤","🔠","🔢","🔷"],FAMI=["🫧","🤖","👻","🐉"];
+const ITEMS=[VI,EN,NU,SH],TYI=["🍎","🐝","🧮","🔷"],FAMI=["🫧","🤖","👻","🐉"];
 const POOLS=[[Array.from("ILTVUOCXHE"),Array.from("ILTVUOCXHEANMYKPDĐRS"),VI],[Array.from("ILTVUOCXHE"),Array.from("ILTVUOCXHEANMYKPDFJZW"),EN],[Array.from("013475"),Array.from("0123456789").filter(x=>x!=="8"),NU],[["circle","square","triangle","heart","star"],["circle","square","triangle","heart","star","diamond","rect","moon"],SH]];
 const LV=[{w:.115,need:.62,tol:.07},{w:.092,need:.67,tol:.055},{w:.074,need:.71,tol:.045}];   /* w: bề dày nét bút · need: tô phủ bao nhiêu thì xong · tol: dung sai */
 const RARB=[8,15,24,30],COMBO_ACC=80;
@@ -577,7 +578,7 @@ function renderHome(){
   for(let t=0;t<4;t++){
     const sk=skinOf(t),b=document.createElement("div");b.className="tile";b.setAttribute("role","button");b.tabIndex=0;applyVars(b,sk);b.style.setProperty("--rad","5cqw");
     const prem=PF.skinSel[t]!=="basic"&&PF.skins[t][PF.skinSel[t]];
-    b.innerHTML='<span class="ti">'+TYI[t]+"</span><b>"+T("ty")[t]+'</b><span class="cn">'+FAMI[t]+" "+albCount(t)+"/"+ITEMS[t].length+'</span><button class="sk" type="button" aria-label="'+T("sk.pick")+'">🎨'+(prem?"<i>★</i>":"")+"</button>";
+    b.innerHTML='<span class="ti">'+TYI[t]+"</span><b>"+T("ty")[t]+'</b><span class="cn">'+FAMI[t]+" "+albCount(t)+"/"+ITEMS[t].length+'</span><button class="sk" type="button" aria-label="'+T("sk.pick")+'"><svg viewBox="0 0 24 24" width="1.3em" height="1.3em" aria-hidden="true" style="display:block"><path d="M12 3C6.5 3 2.5 7 2.5 11.8c0 4.7 3.8 8.2 8.2 8.2 1.3 0 2-.8 2-1.7 0-.5-.2-.9-.5-1.3-.3-.4-.5-.8-.5-1.3 0-1 .8-1.8 1.8-1.8H17c2.5 0 4.5-2 4.5-4.5C21.5 6.6 17.4 3 12 3z" fill="#f5c26b" stroke="#a86a2b" stroke-width="1.2" stroke-linejoin="round"/><circle cx="7.6" cy="10.4" r="1.5" fill="#ef4444"/><circle cx="11.2" cy="7.2" r="1.5" fill="#3b82f6"/><circle cx="15.8" cy="7.9" r="1.5" fill="#22c55e"/><circle cx="6.9" cy="14.6" r="1.4" fill="#a855f7"/></svg>'+(prem?"<i>★</i>":"")+"</button>";
     b.onclick=()=>openHow(t);b.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openHow(t)}};
     b.querySelector(".sk").onclick=e=>{e.stopPropagation();openSkins(t)};g.appendChild(b);
   }

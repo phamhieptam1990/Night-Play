@@ -21,7 +21,12 @@ function setLang(l, save) {
     const k = window.LEGAL.pdf + "-" + l, f = "legal/" + k + ".pdf", i = (window.LEGALPDF || {})[k], sz = i ? " · " + i.kb + " KB" : "", full = (l === "vi" ? "Tải PDF" : "Download PDF") + (i ? " (PDF" + sz + " · " + i.date + ")" : "");
     [$("pdfBtn"), $("fPdf")].forEach(a => { if (a) { a.href = f; a.setAttribute("download", k + ".pdf"); a.title = full; a.setAttribute("aria-label", full); } });
     $("pdfTxt").textContent = (l === "vi" ? "Tải PDF" : "Download PDF") + sz; $("fPdf").textContent = "PDF";
+    $("pdfOpen").href = f; $("pdfOpenTxt").textContent = l === "vi" ? "Mở tab mới" : "Open in tab"; $("pdfOpen").title = $("pdfOpenTxt").textContent; $("pdfOpen").setAttribute("aria-label", $("pdfOpenTxt").textContent);
+    $("pdfName").textContent = k + ".pdf" + (i ? " · " + i.kb + " KB · " + i.date : "");
+    window.__pdfSrc = f; renderPdf();
   }
+  $("tabReadTxt").textContent = l === "vi" ? "Đọc" : "Read"; $("tabPdfTxt").textContent = "PDF";
+  { const rl = l === "vi" ? "Đọc theo trang" : "Read page by page", pl = l === "vi" ? "Xem PDF" : "View PDF"; $("tabRead").setAttribute("aria-label", rl); $("tabRead").title = rl; $("tabPdf").setAttribute("aria-label", pl); $("tabPdf").title = pl; }
   $("copy").textContent = "© " + new Date().getFullYear() + " Play Hub. " + (l === "vi" ? "Bảo lưu mọi quyền." : "All rights reserved.");
   $("themeBtn").setAttribute("aria-label", l === "vi" ? "Sáng / Tối" : "Light / Dark");
   $("bVi").setAttribute("aria-pressed", String(l === "vi")); $("bEn").setAttribute("aria-pressed", String(l === "en"));
@@ -31,6 +36,55 @@ function setLang(l, save) {
 $("bVi").addEventListener("click", () => setLang("vi", true));
 $("bEn").addEventListener("click", () => setLang("en", true));
 setLang(root.dataset.l);
+
+/* ===== Hai tab: "Đọc theo trang" (cuốn sách) và "Xem PDF" (bản PDF nhúng; trình duyệt không hiển thị được PDF nhúng thì hiện thẻ mở/tải) ===== */
+/* PDF vẽ bằng PDF.js (vendor tại shared/vendor/pdfjs, chỉ nạp khi mở tab) — không phụ thuộc trình duyệt có xem PDF nhúng hay không (iOS, Android, Zalo/Facebook in-app… hay tự tải xuống) */
+let pdfjsP = null;
+function loadPdfjs() {
+  if (!pdfjsP) pdfjsP = new Promise((res, rej) => {
+    if (window.pdfjsLib) return res(window.pdfjsLib);
+    const sc = document.createElement("script"); sc.src = "shared/vendor/pdfjs/pdf.min.js";
+    sc.onload = () => { try { window.pdfjsLib.GlobalWorkerOptions.workerSrc = "shared/vendor/pdfjs/pdf.worker.min.js"; res(window.pdfjsLib); } catch (e) { rej(e); } };
+    sc.onerror = () => { pdfjsP = null; rej(new Error("pdfjs")); }; document.head.appendChild(sc);
+  });
+  return pdfjsP;
+}
+function pdfFallback(box, f, vi) {
+  box.replaceChildren(); const c = document.createElement("div"); c.className = "pdf-fallback";
+  c.innerHTML = '<b>' + (vi ? "Không hiển thị được PDF trong trang" : "Can't show the PDF here") + '</b><span>' + (vi ? "Mở PDF ở tab mới hoặc tải về để đọc." : "Open the PDF in a new tab or download it to read.") + '</span>';
+  const a = document.createElement("a"); a.className = "pdf-btn"; a.href = f; a.target = "_blank"; a.rel = "noopener"; a.textContent = vi ? "Mở PDF" : "Open PDF"; c.appendChild(a); box.appendChild(c);
+}
+function renderPdf() {
+  const box = $("pdfFrame"), f = window.__pdfSrc; if (!box || !f || root.dataset.tab !== "pdf") return;
+  const w = box.clientWidth; if (!w) return;
+  const key = f + "|" + root.dataset.l + "|" + Math.round(w / 40); if (box.dataset.k === key) return; box.dataset.k = key;
+  const vi = root.dataset.l === "vi", tok = (box.__tok = (box.__tok || 0) + 1);
+  box.replaceChildren(); const msg = document.createElement("div"); msg.className = "pdf-load"; msg.textContent = vi ? "Đang tải PDF…" : "Loading PDF…"; box.appendChild(msg);
+  loadPdfjs().then(lib => lib.getDocument({ url: f }).promise).then(doc => {
+    if (box.__tok !== tok) return;
+    return doc.getPage(1).then(p1 => {
+      if (box.__tok !== tok) return;
+      const sc = document.createElement("div"); sc.className = "pdf-scroll"; box.replaceChildren(sc);
+      const cw = sc.clientWidth - 24, v1 = p1.getViewport({ scale: 1 }), k = Math.max(0.3, cw / v1.width), dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const io = new IntersectionObserver(es => es.forEach(e => {
+        if (!e.isIntersecting) return; const el = e.target; io.unobserve(el);
+        doc.getPage(+el.dataset.n).then(pg => { if (box.__tok !== tok) return; const vp = pg.getViewport({ scale: k * dpr }), cv = document.createElement("canvas"); cv.width = Math.floor(vp.width); cv.height = Math.floor(vp.height);
+          cv.style.width = "100%"; cv.style.height = "auto"; el.appendChild(cv); return pg.render({ canvasContext: cv.getContext("2d"), viewport: vp }).promise; });
+      }), { root: sc, rootMargin: "600px 0px" });
+      for (let n = 1; n <= doc.numPages; n++) { const el = document.createElement("div"); el.className = "pdf-page"; el.dataset.n = n; el.style.aspectRatio = v1.width + " / " + v1.height; el.setAttribute("aria-label", (vi ? "Trang " : "Page ") + n + "/" + doc.numPages); sc.appendChild(el); io.observe(el); }
+    });
+  }).catch(() => { if (box.__tok === tok) pdfFallback(box, f, vi); });
+}
+function setTab(t, save) {
+  root.dataset.tab = t;
+  $("tabRead").setAttribute("aria-selected", String(t === "read")); $("tabPdf").setAttribute("aria-selected", String(t === "pdf"));
+  $("book").hidden = t === "pdf"; $("pdfView").hidden = t !== "pdf";
+  if (t === "pdf") { if (typeof closeThumbs === "function") closeThumbs(); renderPdf(); } else if (window.__pgReady) layoutPages();
+  if (save) try { const u = new URL(location.href); if (t === "pdf") u.searchParams.set("tab", "pdf"); else u.searchParams.delete("tab"); history.replaceState(null, "", u); } catch (e) {}
+}
+$("tabRead").addEventListener("click", () => setTab("read", true));
+$("tabPdf").addEventListener("click", () => setTab("pdf", true));
+root.dataset.tab = "read";
 
 const THEME_COLOR = { light: "#F6F4F1", dark: "#12141F" };
 function setTheme(t, save) {
@@ -196,7 +250,7 @@ $("thClose").addEventListener("click", closeThumbs);
 document.addEventListener("keydown", e => { if (e.key === "Escape") closeThumbs(); });
 
 /* ----- lật trang: vuốt LÊN = trang sau, vuốt XUỐNG = trang trước (vuốt ngang vẫn dùng được) ----- */
-const turn = d => show(pg.i + d, d);
+const turn = d => { if (root.dataset.tab === "pdf") return; show(pg.i + d, d); };
 let wheelAt = 0;
 $("pages").addEventListener("wheel", e => {
   if (Date.now() - wheelAt < 600) return;
@@ -215,9 +269,10 @@ body.addEventListener("touchend", e => {
   if (Math.abs(dy) > 60 && Math.abs(dy) > Math.abs(dx) * 1.3) turn(dy < 0 ? 1 : -1);
   else if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) turn(dx < 0 ? 1 : -1);
 }, { passive: true });
-let rz = 0; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { const onAnchor = hashScreen() === pg.i && pg.i >= 0; layoutPages(); applyPageShift(); if (onAnchor) gotoHash(); }, 120); });
+let rz = 0; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (root.dataset.tab === "pdf") { renderPdf(); return; } const onAnchor = hashScreen() === pg.i && pg.i >= 0; layoutPages(); applyPageShift(); if (onAnchor) gotoHash(); }, 120); });
 /* neo #hoan-tien...: mở đúng trang sách chứa tiêu đề có data-anchor trùng (cả VI và EN dùng cùng tên neo) */
 const hashScreen = () => { const h = decodeURIComponent(location.hash.slice(1)); return h ? pg.screens.findIndex(s => s.nodes.some(n => n.dataset && n.dataset.anchor === h)) : -1; };
 function gotoHash() { const i = hashScreen(); if (i >= 0) show(i, i > pg.i ? 1 : -1); }
 addEventListener("hashchange", gotoHash);
 window.__pgReady = true; layoutPages(); gotoHash(); showUI(4200); if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { const onAnchor = hashScreen() === pg.i && pg.i >= 0; layoutPages(); if (onAnchor) gotoHash(); });
+if (new URLSearchParams(location.search).get("tab") === "pdf") setTab("pdf");
