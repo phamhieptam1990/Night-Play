@@ -2,6 +2,13 @@
 <html lang="en" data-app="hub">
 <head>
 <meta charset="utf-8">
+<script>/* chẩn đoán: mở /?dbg=1 -> bảng lỗi JS + cấu hình máy ở góc trên (chỉ khi có ?dbg) */
+if(/[?&]dbg=1/.test(location.search)){(function(){var L=[];addEventListener("error",function(e){L.push("ERR "+e.message+" @"+String(e.filename||"").split("/").pop()+":"+e.lineno+":"+e.colno)},true);addEventListener("unhandledrejection",function(e){L.push("REJ "+(e.reason&&e.reason.message||e.reason))});
+addEventListener("load",function(){setTimeout(function(){var o=window.__npOrbit,mm=function(q){try{return matchMedia(q).matches}catch(x){return"?"}};
+var f=["ERR:"+(L.length?"":"không có"),L.join("\n"),"UA "+navigator.userAgent,"AC "+!!(window.AudioContext||window.webkitAudioContext)+" IO "+("IntersectionObserver" in window)+" RO "+("ResizeObserver" in window)+" PE "+("PointerEvent" in window),"reduce "+mm("(prefers-reduced-motion: reduce)")+" dpr "+devicePixelRatio+" "+innerWidth+"x"+innerHeight,"hint "+!!document.querySelector(".orbhint")+" snd "+!!document.querySelector(".orbsnd")+" cel "+!!document.querySelector(".orbcel")+" bdg "+!!document.querySelector(".sat .bdg"),"orbsys.lite "+(document.getElementById("orbsys")||{className:"?"}).className].join("\n");
+var p=document.createElement("pre");p.textContent=f;p.style.cssText="position:fixed;left:4px;right:4px;top:4px;z-index:2147483647;margin:0;padding:8px;background:rgba(0,0,0,.88);color:#7CFF9B;font:11px/1.35 monospace;white-space:pre-wrap;word-break:break-all;max-height:60vh;overflow:auto;border-radius:8px";p.onclick=function(){p.remove()};document.body.appendChild(p)},3500)})})();}
+</script>
+
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Play Hub: short, ad-free games for kids and grown-ups</title>
 <meta name="description" content="Play Hub: short one-screen games with no ads. Pop Play for kids, Night Play for grown-ups. Play right in your browser, with nothing to install.">
