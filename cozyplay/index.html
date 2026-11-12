@@ -360,6 +360,7 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 </style>
 <link rel="stylesheet" href="../shared/portalui.css">
 <link rel="stylesheet" href="../shared/portalnp.css">
+<link rel="stylesheet" href="../shared/showcase.css">
 <style>html:not(.npr) body{visibility:hidden}</style><script>setTimeout(function(){document.documentElement.classList.add("npr")},1000)</script>   <!-- không vẽ khung nửa chừng: hiện khi mọi script cuối trang chạy xong (tối đa 1 giây) -> không giật bố cục lần đầu -->
 <script src="../shared/offline.js" defer></script>
 <script src="../shared/inapp.js" defer></script>
@@ -390,6 +391,7 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
     <span id="sleepTxt"></span>
   </div>
   <div id="hleft" class="left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg><span></span></div>
+  <section id="show"></section>
   <section id="puTop"><div id="puInfo"></div><div id="topics" role="group"></div></section>
   <div id="grid"></div>
   <div id="gdots" role="group"></div>
@@ -466,6 +468,7 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 <script src="../shared/newbadge.js"></script>
 <script src="../shared/multi-games.js"></script>
 <script src="../shared/portalui.js"></script>
+<script src="../shared/showcase.js"></script>
 <script>
 /* ===== CẤU HÌNH ===== */
 const HOLD_MS = 3000;            // Thời gian giữ nút phụ huynh (mili-giây)
@@ -593,6 +596,7 @@ function applyLang(){
   updateSleep();
   setTileLabels();
   window.NPPortalUI && NPPortalUI.refresh();
+  window.NPShow && NPShow.refresh();
   renderPrefs();
 }
 
@@ -776,6 +780,7 @@ function renderGrid(){
     });
     grid.appendChild(b);
   });
+  window.NPShow && NPShow.refresh();   // sân khấu (shared/showcase.js): cùng danh sách game với lưới
   setTileLabels(); fitGrid();
 }
 /* Chọn số cột + cỡ ô lớn nhất để toàn bộ game nằm gọn trong khung, không cuộn.
@@ -919,6 +924,7 @@ function closeGame(){
   try{ if(document.fullscreenElement) document.exitFullscreen(); }catch(e){}
   /* về trang chủ: tính lại bố cục lưới (cỡ cửa sổ có thể đã đổi lúc đang chơi) */
   requestAnimationFrame(() => { try{ fitGrid(); }catch(e){} setTimeout(() => { try{ fitGrid(); }catch(e){} }, 250); });
+  try{ window.NPShow && NPShow.refresh(); }catch(e){}
   try{ window.NPPortalUI && NPPortalUI.refresh(); }catch(e){}   // ván dở vừa lưu -> thẻ "Chơi tiếp"
 }
 /* hỏi trước khi thoát ván đang chơi (shared/exitconfirm.js trong game): 🏠 / Back của trình duyệt */
@@ -1007,12 +1013,17 @@ function openFromPortal(g, resume){
 NPPortalUI.init({ portal:"cozy", games:games, getLang:() => lang, enabled, open:openFromPortal,
   onTopic:() => { renderGrid(); $("noRes").hidden = grid.children.length > 0; } });   // chip chủ đề: dựng lại lưới (fitGrid dàn lại một màn hình, chỉ số trang cập nhật)
 
+/* ===== SÂN KHẤU: game hôm nay + chồng thẻ 3D + cảnh nền (shared/showcase.js, GAME_RULES 0a-29) ===== */
+NPShow.init({ portal:"cozy", getLang:() => lang, list:() => visible(), all:enabled, canPlay:() => !isTimeUp(),
+  open:g => { if(frame || isTimeUp() || prefs.off.includes(g.id)) return; pop(); pushed = true; location.hash = g.id; } });
+
 /* ===== KHỞI ĐỘNG ===== */
 lang = detectLang();
 updateSleep();
 setTheme(document.documentElement.dataset.theme);
 setLang(lang);   // chữ hero/chân trang có TRƯỚC khi dàn lưới (nếu không lưới dàn lúc chữ còn trống rồi nhảy lại)
 renderGrid();
+NPShow.intro();
 route();
 
 /* ===== CHẶN MỞ DEVTOOLS (chỉ cản người dùng thường; không phải bảo mật thật) ===== */

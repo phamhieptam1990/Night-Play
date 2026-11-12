@@ -103,7 +103,7 @@ const MEASURE = kind => {
         note(st.tileShadow, tag + ": ô game không có bóng/glow"); }
       if (w === 390 || w === 1280) { const dup = await pg.evaluate(() => { const c = {}; document.querySelectorAll("[id]").forEach(e => { c[e.id] = (c[e.id] || 0) + 1; }); return Object.keys(c).filter(k => c[k] > 1); }); note(!dup.length, tag + ": id trùng " + JSON.stringify(dup) + " (từng trùng #npTop với shared/rails.js làm ẩn nhầm khối của trang)"); }
       if (kind === "cozy") {
-        const t = await pg.evaluate(() => { const c = document.getElementById("puToday"), x = document.getElementById("puResume"), v = e => !!e && !e.hidden && e.offsetParent !== null; return { today: v(c), txt: c && c.textContent, res: v(x), pro: document.querySelectorAll("#grid .tile .pu-pro").length, tiles: document.querySelectorAll("#grid .tile").length }; });
+        const t = await pg.evaluate(() => { /* thẻ Hôm nay: thẻ nhỏ #puToday (màn thấp) HOẶC nhãn "Hôm nay · #N" trên sân khấu #show (shared/showcase.js, GAME_RULES 0a-29) */ const c = document.getElementById("puToday"), x = document.getElementById("puResume"), v = e => !!e && !e.hidden && e.offsetParent !== null, sc = document.querySelector("#show .sc-tag.day"), on = v(c) ? c : (v(sc) ? sc : null); return { today: !!on, txt: on && on.textContent, res: v(x), pro: document.querySelectorAll("#grid .tile .pu-pro").length, tiles: document.querySelectorAll("#grid .tile").length }; });
         note(t.today, tag + ": thẻ Hôm nay không hiện"); note(t.res, tag + ": thẻ Chơi tiếp không hiện dù có np-resume hợp lệ");
         if (w >= 360) note(/#\d+/.test(t.txt || ""), tag + ": thẻ Hôm nay thiếu số #N (" + t.txt + ")");
         note(t.pro === 0 && t.tiles === 20, tag + ": 👑 trên ô phải BỎ (" + t.pro + ") / ô " + t.tiles);
@@ -162,7 +162,7 @@ const MEASURE = kind => {
       note(r.grid <= 2, tag + ": lưới dàn lại " + r.grid + " lần lúc tải (cần ≤ 2)"); await pg.close();
     }
     /* 1d) HOVER thấy rõ (sáng + tối) và popup nằm TRÊN huy hiệu/ô: chuột thật (không cảm ứng) 1280x800 */
-    const HOVSEL = { cozy: [[".trust li", 3], ["#topics button:not([aria-pressed=true])", 1], ["#puToday", 1], [".nav .pill", 1], [".nav .tools>.ico", 1], ["#lock", 1], ["#grid .tile", 1]], pop: [[".trust li", 3], [".nav .pill", 1], [".nav .tools>.ico", 1], ["#lock", 1], ["#grid .tile", 1]] };
+    const HOVSEL = { cozy: [[".trust li", 3], ["#topics button:not([aria-pressed=true])", 1], ["#scPlay", 1], [".nav .pill", 1], [".nav .tools>.ico", 1], ["#lock", 1], ["#grid .tile", 1]], pop: [[".trust li", 3], ["#scPlay", 1], [".nav .pill", 1], [".nav .tools>.ico", 1], ["#lock", 1], ["#grid .tile", 1]] };
     const STYLE = (sel, n) => { const q = [...document.querySelectorAll(sel)].filter(x => x.offsetParent !== null), e = q[n || 0]; if (!e) return null; const cs = getComputedStyle(e), de = getComputedStyle(document.documentElement);
       const parse = c => { const m = String(c).match(/[\d.]+(?:e-?\d+)?/g); if (!m) return [0, 0, 0, 0]; let v = m.map(Number); if (/^color\(/.test(c)) { v = v.slice(0, 3).map(x => x * 255).concat(v[3] == null ? 1 : v[3]); } return [v[0], v[1], v[2], v.length > 3 ? v[3] : 1]; };
       const lum = ([r, g, b]) => { const f = x => { x /= 255; return x <= .03928 ? x / 12.92 : Math.pow((x + .055) / 1.055, 2.4); }; return .2126 * f(r) + .7152 * f(g) + .0722 * f(b); };
@@ -181,7 +181,7 @@ const MEASURE = kind => {
         const dBg = Math.abs(b.bgL - a.bgL), dBd = Math.abs(b.bdL - a.bdL), shadow = a.shadow !== b.shadow, moved = a.tr !== b.tr || a.filter !== b.filter || a.pos !== b.pos;
         const ok = isTile ? shadow && moved : (gradient ? (shadow || a.filter !== b.filter) && moved : (dBg >= .06 || dBd >= .15 || a.img !== b.img || (dBg >= .03 && shadow)));
         note(ok, tag + ": hover không đủ rõ (ΔL nền " + dBg.toFixed(3) + ", ΔL viền " + dBd.toFixed(3) + ", bóng đổi " + shadow + ", chuyển động " + moved + ")");
-        note(b.cr >= 4.5 || /pill|ico|tile|lock/.test(sel), tag + ": tương phản chữ khi hover " + b.cr.toFixed(2) + " < 4.5");
+        note(b.cr >= 4.5 || /pill|ico|tile|lock|scPlay/.test(sel), tag + ": tương phản chữ khi hover " + b.cr.toFixed(2) + " < 4.5");
       }
       await pg.close();
     }
@@ -207,7 +207,7 @@ const MEASURE = kind => {
     { const pg = await open("cozyplay/index.html", 390, 844, { ls: [RES] }); await pg.click("#puResume"); await wait(900);
       const r = await pg.evaluate(() => { const f = document.querySelector("#stage iframe"); return { hash: location.hash, src: f && f.src }; });
       note(r.hash === "#xay-cau-tre" && /[?&]resume=1/.test(r.src || ""), "bấm Chơi tiếp phải mở xay-cau-tre với ?resume=1: " + JSON.stringify(r)); await pg.close(); }
-    { const pg = await open("cozyplay/index.html", 390, 844, {}); const id = await pg.evaluate(() => document.getElementById("puToday").dataset.id); await pg.click("#puToday"); await wait(900);
+    { const pg = await open("cozyplay/index.html", 390, 844, {}); const id = await pg.evaluate(() => document.getElementById("puToday").dataset.id); await pg.click((await pg.evaluate(() => document.getElementById("puToday").offsetParent !== null)) ? "#puToday" : "#scPlay"); await wait(900);
       const r = await pg.evaluate(() => ({ hash: location.hash, src: (document.querySelector("#stage iframe") || {}).src }));
       note(r.hash === "#" + id && !/resume=1/.test(r.src || ""), "bấm Hôm nay phải mở game " + id + " (không resume): " + JSON.stringify(r)); await pg.close(); }
     /* 3) Hôm nay: đã chơi hôm nay -> dấu ✓ + "Đã chơi" */

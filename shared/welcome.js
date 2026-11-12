@@ -42,7 +42,7 @@
     if (!st) {
       st = document.createElement("style"); st.id = "npWelcomeCss";
       st.textContent =
-        "#npWelcome{position:fixed;inset:0;z-index:80;display:flex;align-items:flex-end;justify-content:center;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));background:rgba(8,8,20,.38);overflow:hidden}" +
+        "#npWelcome{position:fixed;inset:0;z-index:80;display:flex;align-items:flex-end;justify-content:center;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,rgba(8,8,20,.5),rgba(8,8,20,0) 62%);overflow:hidden}" +
         "#npWelcome .nw-card{box-sizing:border-box;width:min(100%,440px);max-height:100%;overflow:hidden;background:var(--panel,#fff);color:var(--ink,#1b1b2b);border:1px solid var(--line,rgba(0,0,0,.12));border-radius:22px;box-shadow:0 18px 50px rgba(0,0,0,.35);padding:18px 18px 16px;display:flex;flex-direction:column;gap:10px;font-family:var(--font)}" +
         "#npWelcome h2{margin:0;font-size:20px;line-height:1.25;font-weight:800}" +
         "#npWelcome ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;counter-reset:s}" +
@@ -78,6 +78,6 @@
     return true;
   }
   window.NPWelcome = { show: show, close: close, key: KEY };
-  function start() { setTimeout(function () { if (ok()) show(); }, 1300); }
+  function start() { setTimeout(function () { if (ok()) show(); }, 1700); }
   if (document.readyState === "complete") start(); else addEventListener("load", start);
 })();

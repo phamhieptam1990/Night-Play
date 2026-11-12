@@ -1,0 +1,164 @@
+/* SÂN KHẤU của hai trang cổng (cozyplay/index.html, popplay/index.html): shared/showcase.js dựng nội dung trong <section id="show">.
+   Nạp SAU portalnp.css. GAME_RULES.md mục 0a-29. Bài đo: scripts/cozygame/check-showcase.js.
+   - Chế độ A (dọc / hẹp, cao >= 600px): sân khấu nằm TRÊN lưới game (dải ngang: thẻ chữ trái, chồng thẻ 3D phải).
+   - Chế độ B (ngang, rộng >= 900px, cao >= 560px): sân khấu là Ô TO bên trái, lưới game bên phải (bento).
+   - Màn thấp hơn (điện thoại ngang, cửa sổ lùn): KHÔNG có sân khấu, cổng như cũ (thẻ Hôm nay nhỏ vẫn hiện).
+   Hai thế giới: Pop = đồi cỏ, mặt trời, cầu vồng, khinh khí cầu (tối: hoàng hôn); Night = thành phố đêm, trăng, cửa sổ sáng đèn, sao băng (sáng: bình minh oải hương).
+   Chỉ animate transform/opacity; dừng khi đang chơi (html.playing) và khi máy bật "giảm chuyển động". Một màn hình, không cuộn. */
+#show{display:none;min-width:0;min-height:0}
+main.sc-tiny #show{display:none!important}
+
+/* ---------- bố cục ---------- */
+@media (min-height:600px){
+  html.sc-ok #show{display:block;flex:1.15 1 0;max-height:min(340px,36vh);margin:0 0 10px;container-type:size}
+  html.sc-ok main:not(.sc-tiny) #grid{min-height:var(--sc-gmin,210px)}
+  html.sc-ok main:not(.sc-tiny) #puToday{display:none}
+  html.sc-ok main:not(.sc-tiny) #puInfo:has(#puResume[hidden]){display:none}
+}
+@media (min-width:900px) and (min-height:560px) and (orientation:landscape){
+  html.sc-ok main:not(.sc-tiny){display:grid;grid-template-columns:clamp(300px,36%,440px) minmax(0,1fr);grid-template-rows:auto auto auto minmax(0,1fr) auto;column-gap:24px}
+  html.sc-ok main:not(.sc-tiny) #show{display:block;grid-column:1;grid-row:1/-1;max-height:none;height:auto;margin:0;container-type:size}
+  html.sc-ok main:not(.sc-tiny) #sleep{grid-column:2;grid-row:1}
+  html.sc-ok main:not(.sc-tiny) #hleft{grid-column:2;grid-row:2}
+  html.sc-ok main:not(.sc-tiny) #puTop{grid-column:2;grid-row:3;min-width:0}
+  html.sc-ok main:not(.sc-tiny) #grid{grid-column:2;grid-row:4;min-width:0;min-height:0}
+  html.sc-ok main:not(.sc-tiny) #gdots{grid-column:2;grid-row:5}
+  html.sc-ok main:not(.sc-tiny) #puToday{display:none}
+  html.sc-ok main:not(.sc-tiny) #puInfo:has(#puResume[hidden]){display:none}
+  /* hero gọn lại: chỗ dành cho ô to + lưới */
+  html.sc-ok .hero{padding-top:clamp(6px,1.6vh,18px);padding-bottom:clamp(4px,1vh,10px)}
+  html.sc-ok .hero h1{font-size:clamp(24px,min(3.4vw,4.6vh),40px)}
+  html.sc-ok .hero .desc{display:none}
+  html.sc-ok .trust{margin-top:clamp(6px,1.2vh,12px)}
+}
+html[data-app=popplay]{--sc-gmin:250px;--gnd:var(--h3)}
+html[data-app=cozyplay]{--sc-gmin:210px;--gnd:var(--b3)}
+
+/* ---------- khung ---------- */
+.sc-box{position:relative;width:100%;height:100%;border-radius:26px;overflow:hidden;isolation:isolate;
+  border:1.5px solid rgba(255,255,255,.28);
+  box-shadow:0 6px 10px -4px rgba(10,6,30,.4),0 0 0 1px rgba(0,0,0,.12),0 0 9px var(--sc-glow,rgba(124,92,255,.35));
+  background:var(--sk2,#2a2350);--cs:min(72cqh,34cqw);
+  -webkit-user-select:none;user-select:none;touch-action:pan-y}
+html[data-app=popplay] .sc-box{--sc-glow:rgba(255,138,61,.34);border-width:3px;border-color:rgba(255,255,255,.7)}
+.sc-sky{position:absolute;inset:0;z-index:0;pointer-events:none}
+.sc-sky svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+/* ---------- màu cảnh theo trang + theme ---------- */
+html[data-app=popplay]{--sk1:#5EC2FF;--sk2:#A8E2FF;--sk3:#FFF1C9;--sun:#FFD93D;--ray:#FFE98A;--cl:#fff;--h1:#8FD67A;--h2:#57B85B;--h3:#3E9A4B;--tree:#2F8A45;--bow:.85;--star:0}
+html[data-app=popplay][data-theme=dark]{--sk1:#3B2A7A;--sk2:#B4578F;--sk3:#FFB36B;--sun:#FFE2A0;--ray:#FFC27A;--cl:#F7B5D2;--h1:#5A4B9E;--h2:#3B3380;--h3:#2A2564;--tree:#1F1C52;--bow:.3;--star:.9}
+html[data-app=cozyplay]{--sk1:#B9A9F5;--sk2:#E5C9EE;--sk3:#FFD9B8;--moon:#FFFFFF;--b1:#A08FDB;--b2:#6E5BC2;--b3:#4A3A9A;--win:#FFE9A8;--star:.5;--neon:#FF9A6B}
+html[data-app=cozyplay][data-theme=dark]{--sk1:#0E0B2A;--sk2:#241B5C;--sk3:#5B3A8E;--moon:#FFF3C4;--b1:#2B2466;--b2:#1A1546;--b3:#0F0C2E;--win:#FFD36B;--star:1;--neon:#9B83FF}
+
+/* ---------- chuyển động cảnh ---------- */
+.sc-sky .ly{transform:translate3d(calc(var(--px,0) * var(--d,0) * 1px),calc(var(--py,0) * var(--d,0) * .5px),0);transition:transform .25s ease-out}
+.sc-sky .c1{animation:scDrift 46s ease-in-out infinite alternate}
+.sc-sky .c2{animation:scDrift 62s ease-in-out infinite alternate-reverse}
+.sc-sky .c3{animation:scDrift 38s ease-in-out infinite alternate}
+.sc-sky .rays{transform-box:fill-box;transform-origin:center;animation:scSpin 60s linear infinite}
+.sc-sky .bal{animation:scBob 6s ease-in-out infinite}
+.sc-sky .tw{animation:scTw 3.6s ease-in-out infinite}
+.sc-sky .tw:nth-of-type(3n){animation-duration:5.2s;animation-delay:-1.4s}
+.sc-sky .tw:nth-of-type(3n+1){animation-duration:4.4s;animation-delay:-2.6s}
+.sc-sky .shoot{opacity:0;animation:scShoot 11s linear infinite 2s}
+.sc-sky .stars{opacity:var(--star,1)}
+.sc-sky .bow{opacity:var(--bow,1)}
+@keyframes scDrift{from{transform:translate3d(-26px,0,0)}to{transform:translate3d(34px,0,0)}}
+@keyframes scSpin{to{transform:rotate(360deg)}}
+@keyframes scBob{50%{transform:translate3d(0,-10px,0)}}
+@keyframes scTw{50%{opacity:.25}}
+@keyframes scShoot{0%{opacity:0;transform:translate3d(0,0,0)}2%{opacity:1}9%{opacity:0;transform:translate3d(-260px,120px,0)}100%{opacity:0;transform:translate3d(-260px,120px,0)}}
+
+/* ---------- chồng thẻ 3D ---------- */
+.sc-deck{position:absolute;z-index:1;top:0;bottom:0;right:0;left:46%;perspective:900px;perspective-origin:50% 46%}
+.sc-card{position:absolute;left:50%;top:50%;width:var(--cs);height:var(--cs);margin:calc(var(--cs) / -2) 0 0 calc(var(--cs) / -2);padding:0;border:0;background:none;border-radius:22%;cursor:pointer;
+  opacity:0;visibility:hidden;pointer-events:none;transform:translate3d(0,0,0) scale(.4);
+  transition:transform .55s cubic-bezier(.2,.8,.2,1),opacity .4s ease,visibility 0s linear .4s;-webkit-tap-highlight-color:transparent}
+.sc-card .f{display:block;width:100%;height:100%;border-radius:inherit;overflow:hidden;position:relative;border:3px solid rgba(255,255,255,.9);box-sizing:border-box;
+  box-shadow:0 16px 34px rgba(8,4,26,.5),0 0 26px color-mix(in srgb,var(--gc,#7C5CFF) 60%,transparent);background:var(--gc,#7C5CFF)}
+.sc-card img{display:block;width:100%;height:100%;object-fit:cover;pointer-events:none}
+.sc-card[data-o]{opacity:1;visibility:visible;pointer-events:auto;transition:transform .55s cubic-bezier(.2,.8,.2,1),opacity .4s ease,visibility 0s}
+.sc-card[data-o="0"]{z-index:5;transform:translate3d(0,0,0) rotateX(calc(var(--ty,0) * 1deg)) rotateY(calc(var(--tx,0) * 1deg)) scale(1)}
+.sc-card[data-o="1"]{z-index:4;transform:translate3d(72%,2%,0) rotateY(-42deg) scale(.72);opacity:.92}
+.sc-card[data-o="-1"]{z-index:4;transform:translate3d(-72%,2%,0) rotateY(42deg) scale(.72);opacity:.92}
+.sc-card[data-o="2"]{z-index:3;transform:translate3d(122%,4%,0) rotateY(-56deg) scale(.52);opacity:.55}
+.sc-card[data-o="-2"]{z-index:3;transform:translate3d(-122%,4%,0) rotateY(56deg) scale(.52);opacity:.55}
+.sc-card[data-o="0"] .f{animation:scFloat 4.6s ease-in-out infinite}
+.sc-card[data-o="0"] .f::after{content:"";position:absolute;top:-20%;bottom:-20%;left:-60%;width:38%;transform:skewX(-18deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);animation:scShine 5.5s ease-in-out infinite 1.2s}
+.sc-card:focus-visible .f{outline:3px solid #fff;outline-offset:3px}
+@keyframes scFloat{50%{transform:translate3d(0,-5px,0)}}
+@keyframes scShine{0%,62%{transform:translate3d(0,0,0) skewX(-18deg)}100%{transform:translate3d(520%,0,0) skewX(-18deg)}}
+/* bóng đổ dưới thẻ giữa */
+.sc-deck::after{content:"";position:absolute;left:50%;top:calc(50% + var(--cs) / 2 + 2px);width:calc(var(--cs) * .8);height:calc(var(--cs) * .1);margin-left:calc(var(--cs) * -.4);border-radius:50%;background:radial-gradient(closest-side,rgba(6,3,22,.45),transparent);pointer-events:none}
+
+/* ---------- thẻ chữ (kính tối: chữ luôn nằm trên nền) ---------- */
+.sc-info{position:absolute;z-index:2;left:12px;top:50%;transform:translateY(-50%);max-height:calc(100% - 16px);width:calc(46% - 12px);box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:clamp(4px,3cqh,10px);
+  padding:clamp(8px,5cqh,16px) clamp(8px,2.6cqw,18px);border-radius:18px;background:rgba(18,13,42,.62);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.22);color:#fff;min-width:0}
+.sc-tag{display:inline-flex;align-items:center;gap:5px;max-width:100%;min-height:22px;padding:2px 9px;border-radius:8px;background:rgba(255,255,255,.18);color:#fff;font:800 clamp(10.5px,6.5cqh,12.5px)/1.2 var(--font);letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+.sc-tag.day{background:linear-gradient(90deg,#7C5CFF,#FF8A4D)}
+html[data-app=popplay] .sc-tag.day{background:linear-gradient(90deg,#FF7A1F,#FFB020);color:#2B1500}
+.sc-tag.new{background:#FFD23F;color:#2B1D00}
+.sc-tag i{font-style:normal}
+.sc-name{margin:0;width:100%;font:800 var(--sc-fs,22px)/1.14 var(--font);letter-spacing:-.01em;color:#fff;overflow-wrap:break-word;text-wrap:balance}
+.sc-play{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;max-width:100%;padding:0 clamp(14px,5cqw,26px);border-radius:14px;border:0;cursor:pointer;
+  font:800 clamp(15px,8cqh,18px)/1 var(--font);color:#fff;background:linear-gradient(90deg,#7C5CFF,#FF8A4D);box-shadow:0 8px 20px rgba(124,92,255,.45),inset 0 1px 0 rgba(255,255,255,.35);white-space:nowrap;
+  transition:transform .18s ease,box-shadow .18s ease,filter .18s ease}
+html[data-app=popplay] .sc-play{background:linear-gradient(90deg,#FF5A1F,#FF9A2E);box-shadow:0 8px 20px rgba(255,90,31,.5),inset 0 1px 0 rgba(255,255,255,.4)}
+.sc-play svg{width:20px;height:20px;flex:none}
+.sc-play:active{transform:scale(.96)}
+.sc-play:focus-visible,.sc-nav:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.sc-play:disabled{opacity:.5;cursor:default}
+@media (hover:hover){
+  .sc-play:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.1);box-shadow:0 12px 26px rgba(124,92,255,.6),inset 0 1px 0 rgba(255,255,255,.35)}
+  html[data-app=popplay] .sc-play:hover:not(:disabled){box-shadow:0 12px 26px rgba(255,90,31,.62),inset 0 1px 0 rgba(255,255,255,.4)}
+  .sc-nav:hover{background:rgba(60,44,130,.9);border-color:rgba(255,255,255,.6)}
+}
+/* mũi tên đổi game: chỉ khi có chuột (cảm ứng vuốt ngang trên sân khấu) */
+.sc-nav{position:absolute;z-index:3;top:50%;width:44px;height:44px;margin-top:-22px;padding:0;border-radius:50%;display:none;place-items:center;cursor:pointer;color:#fff;
+  background:rgba(22,17,48,.72);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.28);box-shadow:0 4px 14px rgba(0,0,0,.35)}
+.sc-nav svg{width:22px;height:22px}
+.sc-prev{left:calc(46% + 8px)}.sc-next{right:10px}
+@media (hover:hover) and (pointer:fine){.sc-nav{display:grid}}
+/* chấm vị trí */
+.sc-dots{position:absolute;z-index:2;left:46%;right:0;bottom:6px;display:flex;justify-content:center;gap:5px;pointer-events:none}
+.sc-dots i{width:6px;height:6px;border-radius:50%;background:#fff;opacity:.4;box-shadow:0 0 0 1px rgba(0,0,0,.25)}
+.sc-dots i.on{opacity:1;width:16px;border-radius:4px}
+
+/* ---------- khung CAO (ô to bên trái ở màn rộng): cảnh nền + chồng thẻ ở trên, thẻ chữ đứng trên "mặt đất" bên dưới ---------- */
+@container (max-aspect-ratio: 1/1){
+  .sc-box{--cs:min(42cqh,54cqw);background:var(--gnd,#14103a)}
+  .sc-sky{bottom:30%}
+  .sc-deck{left:0;bottom:36%}
+  .sc-info{left:12px;right:12px;top:auto;bottom:12px;transform:none;width:auto;min-height:calc(30% - 12px);max-height:calc(40% - 12px);align-items:center;text-align:center;gap:clamp(6px,1.6cqh,12px)}
+  .sc-tag{font-size:12.5px}
+  .sc-play{font-size:18px;min-height:52px;padding:0 34px}
+  .sc-prev{left:10px}.sc-nav{top:32%}
+  .sc-dots{left:0;bottom:calc(36% + 2px)}
+}
+/* dải rất thấp: bỏ chấm, thẻ chữ sát hơn */
+@container (max-height: 170px){
+  .sc-dots{display:none}
+  .sc-info{left:8px;gap:4px;padding:6px 10px}
+  .sc-play{min-height:44px}
+}
+
+/* ---------- đang chơi / tab ẩn / giảm chuyển động: đứng yên ---------- */
+html.playing #show *,html.sc-still #show *{animation-play-state:paused!important}
+@media (prefers-reduced-motion:reduce){
+  #show *,#show *::after{animation:none!important;transition:none!important}
+  .sc-card[data-o="0"] .f::after{display:none}
+}
+
+/* ---------- màn mở đầu (một lần mỗi ngày; showcase.js gắn html.sc-intro ~1,6 giây) ---------- */
+@media (prefers-reduced-motion:no-preference){
+  html.sc-intro .sc-box{animation:scIn .7s cubic-bezier(.2,.9,.25,1.15) backwards}
+  html.sc-intro .sc-info{animation:scInO .6s ease-out .35s backwards}
+  html.sc-intro .sc-deck{animation:scInD .8s cubic-bezier(.2,.9,.25,1.2) .2s backwards}
+  html.sc-intro #grid .tile{animation:scInT .5s cubic-bezier(.2,.9,.3,1.3) backwards;animation-delay:calc(var(--sci,0) * 45ms + 350ms)}
+  html.sc-intro .hero h1{animation:scInH .6s ease-out backwards}
+}
+@keyframes scIn{from{opacity:0;transform:scale(.9)}}
+@keyframes scInO{from{opacity:0}}
+@keyframes scInD{from{opacity:0;transform:translate3d(60px,0,0) scale(.7)}}
+@keyframes scInT{from{opacity:0;transform:translate3d(0,26px,0) scale(.6)}}
+@keyframes scInH{from{opacity:0;transform:translate3d(0,-12px,0)}}
