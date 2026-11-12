@@ -358,7 +358,7 @@ html[data-theme=dark] :where(a,button,summary):focus-visible{outline-color:#fff}
 .btn.big,.btn.sm{background-size:160% 100%;background-position:0 0}
 .faq summary::after{transition:transform .2s ease}
 main p a:not(.btn){transition:color .18s ease,text-decoration-color .18s ease}
-.flinks a{background:linear-gradient(currentColor,currentColor) 50% calc(100% - 9px)/0 2px no-repeat;transition:background-size .2s ease,background-color .18s ease}
+.flinks a{transition:background-color .18s ease,color .18s ease}
 @media (hover:hover) and (pointer:fine){
  .btn:hover{transform:translateY(-2px)}
  .btn.big:hover,.btn.sm:hover{background-position:100% 0;box-shadow:0 10px 30px color-mix(in srgb,var(--accent) 55%,transparent),0 4px 18px rgba(255,90,31,.35)}
@@ -378,7 +378,7 @@ main p a:not(.btn){transition:color .18s ease,text-decoration-color .18s ease}
  .lang:hover,.ico:hover,.mbtn:hover{border-color:var(--accent);background-color:color-mix(in srgb,var(--accent) 12%,var(--panel));transform:translateY(-1px)}
  main p a:not(.btn):hover{color:var(--accent);text-decoration-thickness:2px}
  html[data-theme=dark] main p a:not(.btn):hover{color:#C9B8FF}
- .flinks a:hover{background-size:calc(100% - 16px) 2px}
+ .flinks a:hover{background-color:color-mix(in srgb,var(--accent) 14%,transparent);text-decoration:none}
 }
 @media (prefers-reduced-motion:reduce){
  .btn:hover,.door:hover .di,.gcard:hover,.feat:hover,.pcard:hover,.plan:hover,.mi:hover,.lang:hover,.ico:hover,.mbtn:hover{transform:none!important}
