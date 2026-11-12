@@ -184,12 +184,25 @@
   }
   function go(i) { var n = list.length; if (!n) return; cur = ((i % n) + n) % n; paint(); }
 
-  /* sân khấu quá thấp (cửa sổ lùn, nhiều thẻ phía trên): bỏ hẳn, lưới game lấy lại chỗ và thẻ Hôm nay nhỏ hiện lại */
+  /* sân khấu quá thấp (cửa sổ lùn, nhiều thẻ phía trên): bỏ hẳn, lưới game lấy lại chỗ và thẻ Hôm nay nhỏ hiện lại.
+     Quyết định KHÔNG phụ thuộc trạng thái lưới (có/không chấm trang, số game sau khi lọc) để không nhấp nháy qua lại:
+     dải trên lưới tính theo trường hợp xấu nhất = chiều cao main - các khối cố định - lưới tối thiểu (--sc-gmin) - hàng chấm trang 44px. */
   function fitBox() {
     var host = $("show"), main = host && host.parentNode; if (!main) return;
     main.classList.remove("sc-tiny");
     if (getComputedStyle(host).display === "none") return;
-    if (host.clientHeight < 150 || host.clientWidth < 250) main.classList.add("sc-tiny");
+    var h = host.clientHeight, cm = getComputedStyle(main);
+    if (cm.display !== "grid") {
+      var px = function (v) { return parseFloat(v) || 0; }, used = px(cm.paddingTop) + px(cm.paddingBottom) + px(getComputedStyle(host).marginBottom);
+      [].forEach.call(main.children, function (c) {
+        if (c === host || c.id === "grid" || c.id === "gdots" || c.id === "noRes") return;
+        var cc = getComputedStyle(c); if (cc.display === "none" || cc.position === "absolute" || cc.position === "fixed") return;
+        used += c.getBoundingClientRect().height + px(cc.marginTop) + px(cc.marginBottom);
+      });
+      var gmin = px(getComputedStyle(document.documentElement).getPropertyValue("--sc-gmin")) || 210;
+      h = Math.min(px(getComputedStyle(host).maxHeight) || 9999, main.clientHeight - used - gmin - 44);
+    }
+    if (h < 128 || host.clientWidth < 250) main.classList.add("sc-tiny");
   }
 
   function refresh() {

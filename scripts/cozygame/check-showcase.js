@@ -29,7 +29,7 @@ const MEASURE = kind => {
   const box = host.querySelector(".sc-box").getBoundingClientRect();
   out.box = [Math.round(box.width), Math.round(box.height)];
   if (box.left < -1 || box.right > vw + 1 || box.top < 0 || box.bottom > vh + 1) out.errs.push("sân khấu tràn màn hình");
-  if (box.height < 148) out.errs.push("sân khấu quá thấp " + Math.round(box.height));
+  if (box.height < 126) out.errs.push("sân khấu quá thấp " + Math.round(box.height));
   const inside = (e, what, pad) => { const r = e.getBoundingClientRect(); if (r.left < box.left - 1 + (pad || 0) || r.right > box.right + 1 || r.top < box.top - 1 || r.bottom > box.bottom + 1) out.errs.push(what + " tràn khỏi sân khấu"); return r; };
   const info = host.querySelector(".sc-info"), play = document.getElementById("scPlay"), name = document.getElementById("scName"), tag = host.querySelector(".sc-tag"), mid = host.querySelector('.sc-card[data-o="0"]');
   const ir = inside(info, "thẻ chữ"); if (info.scrollHeight > info.clientHeight + 1) out.errs.push("thẻ chữ bị cắt");

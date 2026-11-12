@@ -15,6 +15,8 @@ main.sc-tiny #show{display:none!important}
   html.sc-ok main:not(.sc-tiny) #puToday{display:none}
   html.sc-ok main:not(.sc-tiny) #puInfo:has(#puResume[hidden]){display:none}
 }
+/* điện thoại: chỉ còn thẻ Chơi tiếp thì thẻ rộng trọn hàng, thẳng lề 16px với lưới */
+@media (min-height:600px) and (max-width:520px){html.sc-ok main:not(.sc-tiny) #puResume{max-width:none}}
 @media (min-width:900px) and (min-height:560px) and (orientation:landscape){
   html.sc-ok main:not(.sc-tiny){display:grid;grid-template-columns:clamp(300px,36%,440px) minmax(0,1fr);grid-template-rows:auto auto auto minmax(0,1fr) auto;column-gap:24px}
   html.sc-ok main:not(.sc-tiny) #show{display:block;grid-column:1;grid-row:1/-1;max-height:none;height:auto;margin:0;container-type:size}
@@ -32,7 +34,7 @@ main.sc-tiny #show{display:none!important}
   html.sc-ok .trust{margin-top:clamp(6px,1.2vh,12px)}
 }
 html[data-app=popplay]{--sc-gmin:250px;--gnd:var(--h3)}
-html[data-app=cozyplay]{--sc-gmin:210px;--gnd:var(--b3)}
+html[data-app=cozyplay]{--sc-gmin:204px;--gnd:var(--b3)}
 
 /* ---------- khung ---------- */
 .sc-box{position:relative;width:100%;height:100%;border-radius:26px;overflow:hidden;isolation:isolate;
