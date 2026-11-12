@@ -281,3 +281,31 @@
     current: function () { return list[cur] || null; }
   };
 })();
+
+/* Điện thoại ngang: nút ⓘ cạnh nút khoá mở bảng thông tin chân trang (bản quyền, ngày cập nhật, liên kết) — dựng bằng cách chép nội dung footer lúc bấm (đúng ngôn ngữ đang chọn) */
+(function () {
+  var foot = document.querySelector("footer.foot"), lock = document.getElementById("lock");
+  if (!foot || !lock || document.getElementById("fInfo")) return;
+  var b = document.createElement("button"); b.id = "fInfo"; b.type = "button"; b.setAttribute("aria-haspopup", "dialog"); b.setAttribute("aria-expanded", "false");
+  b.setAttribute("aria-label", document.documentElement.lang === "en" ? "Info" : "Thông tin");
+  b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><circle cx="12" cy="7.6" r=".6" fill="currentColor"/></svg>';
+  lock.parentNode.insertBefore(b, lock);
+  var pop = document.createElement("div"); pop.id = "fPop"; pop.hidden = true; pop.setAttribute("role", "dialog"); document.body.appendChild(pop);
+  function close() { pop.hidden = true; b.setAttribute("aria-expanded", "false"); }
+  function fill() {
+    pop.textContent = "";
+    var mb = document.getElementById("madeBy"), up = foot.querySelector(".site-upd");
+    if (mb && mb.textContent) { var p = document.createElement("p"); p.textContent = mb.textContent; pop.appendChild(p); }
+    if (up && up.textContent) { var u = document.createElement("p"); u.className = "fpu"; u.textContent = up.textContent; pop.appendChild(u); }
+    [].forEach.call(foot.querySelectorAll(".fcol a"), function (a) {
+      if (!a.textContent.trim() || a.id === "fGames") return;
+      var c = document.createElement("a"); c.textContent = a.textContent; c.href = a.getAttribute("href") || "#"; if (a.target) { c.target = a.target; c.rel = "noopener"; }
+      c.addEventListener("click", function (e) { if (a.getAttribute("href") === "#") { e.preventDefault(); a.click(); } close(); });
+      pop.appendChild(c);
+    });
+  }
+  b.addEventListener("click", function (e) { e.stopPropagation(); if (!pop.hidden) { close(); return; } fill(); pop.hidden = false; b.setAttribute("aria-expanded", "true"); });
+  document.addEventListener("click", function (e) { if (!pop.hidden && !pop.contains(e.target)) close(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+  addEventListener("resize", close);
+})();
