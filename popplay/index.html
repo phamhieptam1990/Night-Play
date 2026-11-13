@@ -319,11 +319,19 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 #findFab svg{width:22px;height:22px}
 #findFab.on{background:var(--accent);color:var(--on-accent);border-color:transparent}
 #findFab:active{transform:scale(.94)}
-#findPanel{position:fixed;right:max(12px,env(safe-area-inset-right));top:calc(var(--navH,64px) + 64px);z-index:6;width:min(calc(100vw - 24px),360px);padding:12px;border-radius:22px;background:var(--panel);color:var(--ink);box-shadow:0 14px 40px rgba(0,0,0,.35);border:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+#findPanel{position:fixed;left:max(12px,env(safe-area-inset-left));right:max(12px,env(safe-area-inset-right));bottom:calc(var(--kb,0px) + 10px + env(safe-area-inset-bottom));z-index:60;max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:8px}
 #findPanel[hidden]{display:none}
-#qWrap{position:relative}
+#fpRow{display:flex;align-items:center;gap:8px;padding:8px;border-radius:999px;background:var(--panel);color:var(--ink);box-shadow:0 8px 30px rgba(0,0,0,.4);border:1px solid var(--line)}
+.fpBtn{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--bg);color:var(--ink);border:2px solid var(--line);padding:0}
+.fpBtn svg{width:21px;height:21px}
+.fpBtn.on,#fpGo{background:var(--accent);color:var(--on-accent);border-color:transparent}
+.fpBtn:active{transform:scale(.94)}
+#fpList{align-self:flex-end;max-width:100%;padding:12px;border-radius:22px;background:var(--panel);color:var(--ink);box-shadow:0 14px 40px rgba(0,0,0,.4);border:1px solid var(--line)}
+#fpList[hidden]{display:none}
+#fpList #topics{max-width:none;flex-wrap:wrap;overflow:visible;padding:0;gap:6px;justify-content:flex-end}#fpList #topics>:first-child,#fpList #topics>:last-child{margin:0}#fpList .pu-chip{min-height:44px;font-size:15px;padding:0 16px}
+#qWrap{position:relative;flex:1;min-width:0}
 #qWrap svg{position:absolute;left:13px;top:50%;width:18px;height:18px;transform:translateY(-50%);opacity:.6;pointer-events:none}
-#q{width:100%;height:42px;padding:0 38px 0 40px;border-radius:999px;border:2px solid var(--line);background:var(--bg);color:var(--ink);font:600 15px/1 var(--font);-webkit-user-select:text;user-select:text;-webkit-appearance:none;appearance:none}
+#q{width:100%;height:44px;padding:0 38px 0 40px;border-radius:999px;border:2px solid var(--line);background:var(--bg);color:var(--ink);font:600 16px/1 var(--font);-webkit-user-select:text;user-select:text;-webkit-appearance:none;appearance:none}
 #q::placeholder{color:var(--ink);opacity:.5}
 #q::-webkit-search-cancel-button,#q::-webkit-search-decoration{-webkit-appearance:none;display:none}
 #q:focus{outline:none;border-color:var(--accent)}
@@ -332,11 +340,27 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 #catChips{display:flex;flex-wrap:wrap;gap:6px}
 #catChips button{padding:7px 13px;border-radius:999px;background:var(--bg);border:2px solid var(--line);font-weight:700;font-size:13.5px;color:var(--ink)}
 #catChips button[aria-pressed=true]{background:var(--accent);color:var(--on-accent);border-color:transparent}
+/* Night Pass: kính tối + icon trắng ở cả giao diện sáng lẫn tối (GAME_RULES 0a-18) */
+#findPanel{--fg-bg:rgba(22,17,48,.82);--fg-bd:rgba(255,255,255,.2);--fg-ink:#fff;--fg-glow:rgba(124,92,255,.3)}
+#fpRow,#fpList{background:var(--fg-bg);color:var(--fg-ink);border:1px solid var(--fg-bd);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 10px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 18px var(--fg-glow)}
+.fpBtn{background:rgba(255,255,255,.1);color:#fff;border:1px solid var(--fg-bd);box-shadow:inset 0 1px 0 rgba(255,255,255,.16)}
+.fpBtn.on{background:rgba(255,255,255,.22);border-color:#fff}
+#fpGo{background:var(--gl-main,linear-gradient(135deg,#6C4BF2,#C2410C));color:#fff;border-color:rgba(255,255,255,.4);box-shadow:0 5px 16px rgba(108,75,242,.5),inset 0 1px 0 rgba(255,255,255,.3)}
+#q{background:rgba(255,255,255,.1);color:#fff;border-color:var(--fg-bd)}#q::placeholder{color:#fff;opacity:.55}#q:focus{border-color:#fff}
+#qWrap svg,#qClear{color:#fff}
+#fpList .pu-chip,#fpList #catChips button{background:rgba(255,255,255,.1);color:#fff;border:1px solid var(--fg-bd);box-shadow:none}
+#fpList .pu-chip[aria-pressed=true],#fpList #catChips button[aria-pressed=true]{background:var(--gl-main,linear-gradient(135deg,#6C4BF2,#C2410C));color:#fff;border-color:rgba(255,255,255,.4);box-shadow:0 4px 14px rgba(108,75,242,.5)}
+/* danh sách lọc = menu dọc neo trên nút lọc; nhiều mục thì cuộn trong khung */
+#fpList{width:min(240px,100%);max-height:min(46dvh,320px);overflow-y:auto;overscroll-behavior:contain;padding:6px;border-radius:22px;-webkit-overflow-scrolling:touch}
+#fpList #topics,#fpList #catChips{display:flex;flex-direction:column;flex-wrap:nowrap;gap:2px;overflow:visible;justify-content:flex-start;align-items:stretch}
+#fpList .pu-chip,#fpList #catChips button{width:100%;min-height:46px;padding:0 14px;border-radius:16px;text-align:left;justify-content:flex-start;display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700;background:transparent!important;background-image:none!important;border-color:transparent!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;white-space:normal}
+#fpList .pu-chip[aria-pressed=true],#fpList #catChips button[aria-pressed=true]{background:rgba(255,255,255,.16)!important;border-color:rgba(255,255,255,.35)!important}
+#fpList .pu-chip[aria-pressed=true]::after,#fpList #catChips button[aria-pressed=true]::after{content:"✓";margin-left:auto;font-weight:900;color:#fff}
 #noRes{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(86%,320px);text-align:center;font-weight:700;opacity:.7;pointer-events:none}
 #noRes[hidden]{display:none}
-@media (max-height:420px){#findFab{width:40px;height:40px;top:calc(var(--navH,40px) + 4px)}#findPanel{top:calc(var(--navH,40px) + 50px)}}
+@media (max-height:420px){#findFab{width:40px;height:40px;top:calc(var(--navH,40px) + 4px)}}
 /* nút tìm kiếm cùng cỡ (44px) và cùng mép phải (16px) với các nút header để thẳng hàng với nút ⋯ */
-@media (max-width:520px){#findFab{width:var(--tap);height:var(--tap);right:var(--edge-r);top:calc(var(--edge-t) + var(--navH,64px) + 6px)}#grid:not(.slide){justify-content:space-between}#findFab svg{width:21px;height:21px}#findPanel{top:calc(var(--navH,64px) + 56px)}.hero h1{padding-right:64px}}
+@media (max-width:520px){#findFab{width:var(--tap);height:var(--tap);right:var(--edge-r);top:calc(var(--edge-t) + var(--navH,64px) + 6px)}#grid:not(.slide){justify-content:space-between}#findFab svg{width:21px;height:21px}.hero h1{padding-right:64px}}
 /* Màn ngang: bỏ phần giới thiệu + cột liên kết chân trang, thu gọn chấm trang để dành chỗ cho NHIỀU hàng game */
 @media (orientation:landscape) and (max-height:520px){.hero{display:block;text-align:center;padding:2px 16px 0;margin:0}.hero h1{font-size:clamp(17px,3.1vw,22px);line-height:1.2;margin:0;padding:0}.hero{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:0 16px}.hero .desc{display:none!important}.trust{display:flex!important;flex-wrap:nowrap;justify-content:center;gap:0 12px!important;margin:0!important;padding:0}.trust li{background:none!important;border:0!important;box-shadow:none!important;padding:0!important;font-size:13px!important;font-weight:700;white-space:nowrap;gap:4px!important;transform:none!important;opacity:.9}.fin{display:none}.foot{padding-top:2px;padding-bottom:calc(2px + env(safe-area-inset-bottom))}.nav{padding-top:5px;padding-bottom:5px}main{padding-top:4px;padding-bottom:2px}#gdots{min-height:26px}#gdots button{width:26px;height:26px}#gdots button::after{width:8px;height:8px}}
 /* Thanh điều khiển chung (quay lại cổng, chụp ảnh, chia sẻ): nằm trong LÀN RIÊNG ngoài khung game — màn dọc: dải trên 48px; màn ngang: cột trái 52px — nên không bao giờ đè lên nút của game, không cần rê chuột lên mép để hiện */
@@ -406,8 +430,8 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
   <div id="noRes" hidden></div>
 </main>
 <div id="findPanel" role="search" hidden>
-  <div id="qWrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" enterkeyhint="search" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="40"><button id="qClear" type="button" tabindex="-1">✕</button></div>
-  <div id="catChips" role="group"></div>
+  <div id="fpList" hidden><div id="catChips" role="group"></div></div>
+  <div id="fpRow"><div id="qWrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" enterkeyhint="search" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="40"><button id="qClear" type="button" tabindex="-1">✕</button></div><button id="fpFlt" class="fpBtn" type="button" aria-haspopup="listbox" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg></button><button id="fpGo" class="fpBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button></div>
 </div>
 <footer class="foot">
   <div class="fin">
@@ -490,13 +514,15 @@ const EAGER = 6;                 // Số ô đầu tiên không lazy-load
 const i18n = {
   en: { slogan:"Play, learn, smile!", desc:"Fun, safe games made for little ones. No ads, no personal tracking.", madeBy:"Made with love by", parents:"Parents", home:"Back", theme:"Light / Dark", timeH:"Play time limit (per day)", off:"Off", min:"min", usedToday:"Played today", reset:"Reset today", gamesH:"Games your child can play", left:"Time left", timesUp:"Time to rest! Come back tomorrow.",
         lang:"Language", hub:"Home", rank:"Leaderboard", helpRes:"Shared results", contact:"Contact", privacy:"Privacy Policy", games:"Games", product:"Explore", support:"Support", pass:"Night Pass", noAds:"No ads", noTrack:"No personal tracking", free:"Free to play", rights:"All rights reserved.", close:"Close", upgrade:"Night Pass: extra modes & looks", name:"English" },
-  vi: { slogan:"Chơi vui, học giỏi, cười tươi!", desc:"Trò chơi vui, an toàn dành cho các bé. Không quảng cáo, không theo dõi cá nhân.", madeBy:"Được tạo với tình yêu bởi", parents:"Phụ huynh", home:"Quay lại", theme:"Sáng / Tối", timeH:"Giới hạn thời gian chơi (mỗi ngày)", off:"Tắt", min:"phút", usedToday:"Đã chơi hôm nay", reset:"Đặt lại hôm nay", gamesH:"Game cho bé chơi", left:"Thời gian còn lại", timesUp:"Đến giờ nghỉ rồi! Mai chơi tiếp nhé.",
+  vi: { slogan:"Chơi vui, học giỏi!", desc:"Trò chơi vui, an toàn dành cho các bé. Không quảng cáo, không theo dõi cá nhân.", madeBy:"Được tạo với tình yêu bởi", parents:"Phụ huynh", home:"Quay lại", theme:"Sáng / Tối", timeH:"Giới hạn thời gian chơi (mỗi ngày)", off:"Tắt", min:"phút", usedToday:"Đã chơi hôm nay", reset:"Đặt lại hôm nay", gamesH:"Game cho bé chơi", left:"Thời gian còn lại", timesUp:"Đến giờ nghỉ rồi! Mai chơi tiếp nhé.",
         lang:"Ngôn ngữ", hub:"Trang chủ", rank:"Bảng xếp hạng", helpRes:"Kết quả chơi hộ", contact:"Liên hệ", privacy:"Chính sách quyền riêng tư", games:"Game", product:"Khám phá", support:"Hỗ trợ", pass:"Night Pass", noAds:"Không quảng cáo", noTrack:"Không theo dõi cá nhân", free:"Chơi miễn phí", rights:"Bảo lưu mọi quyền.", close:"Đóng", upgrade:"Night Pass: thêm chế độ & giao diện", name:"Tiếng Việt" }
 };
 
 /* ===== THUMBNAIL MẪU (SVG data URI) — khi có ảnh thật chỉ cần ghi thumb:"thumbs/game1.webp" ===== */
-const face = (c1, c2, art) => "data:image/svg+xml," + encodeURIComponent(
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs><rect width="512" height="512" fill="url(#g)"/>${art}</svg>`);
+/* CHUẨN HOÁ CỠ BIỂU TƯỢNG: [tỉ lệ, tâm x, tâm y] đo từ khung nội dung thật của từng ảnh → mọi ô game có hình cùng cỡ (~290/512) và cùng tâm (chủ site: "không thống nhất kích thước icon nhìn hài hài"). Thêm game mới: chạy lại phép đo, hoặc để mặc định (không chuẩn hoá). */
+const NORM = {"ten-lua-cua-be":[1.174,255.5,259.5],"be-noi-dung-khong":[1.184,253.5,256.5],"doan-tuoi-nao":[1.169,256,260],"bo-me-5-giay":[0.73,256,260.5],"con-vat-an-so":[1.193,253,255.5],"ve-chu-quai-vat":[1.2,255.5,260],"nhay-theo-so":[1.165,258,255.5],"be-dau-bo-me":[0.673,255.5,255.5],"qua-song":[1.179,248.5,254],"thap-vong-mau":[1.169,254.5,255],"lang-cua-be":[0.629,255.5,251.5],"pop-fly":[0.729,267,261.5]};
+const face = (c1, c2, art, k) => "data:image/svg+xml," + encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs><rect width="512" height="512" fill="url(#g)"/>${k ? `<g transform="translate(256 256) scale(${k[0]}) translate(${-k[1]} ${-k[2]})">${art}</g>` : art}</svg>`);
 const eyes = '<circle cx="200" cy="270" r="26" fill="#fff"/><circle cx="312" cy="270" r="26" fill="#fff"/><circle cx="205" cy="274" r="13" fill="#222"/><circle cx="307" cy="274" r="13" fill="#222"/><path d="M215 340q41 40 82 0" stroke="#222" stroke-width="12" fill="none" stroke-linecap="round"/>';
 const art = {
   fly:  `<circle cx="140" cy="120" r="26" fill="#fff" opacity=".85"/><circle cx="175" cy="132" r="20" fill="#fff" opacity=".85"/><circle cx="400" cy="400" r="30" fill="#fff" opacity=".8"/><circle cx="352" cy="256" r="104" fill="#fff" stroke="#FF8FB1" stroke-width="22"/><text x="352" y="296" text-anchor="middle" font-size="130" font-weight="800" font-family="Inter,sans-serif" fill="#3B2A1D">A</text><ellipse cx="150" cy="300" rx="82" ry="72" fill="#FFD93D"/><circle cx="190" cy="270" r="13" fill="#3B2A1D"/><circle cx="194" cy="266" r="4" fill="#fff"/><path d="M226 296l44 14-44 14z" fill="#FF8A3D"/><path d="M90 300c-10-44 38-70 54-40-18 6-34 18-54 40z" fill="#F4B800"/><path d="M110 372l-8 24M150 376l-4 26" stroke="#FF8A3D" stroke-width="10" stroke-linecap="round"/>`,
@@ -524,18 +550,18 @@ const art = {
 
 /* ===== DANH SÁCH GAME: thêm game mới = thêm 1 object vào mảng ===== */
 const games = [
-  { id:"ten-lua-cua-be", cat:"learn", short:{vi:"Tên Lửa",en:"Rocket"}, name:{vi:"Tên Lửa Của Bé",en:"Baby Rocket"}, thumb:face("#FFB3A0","#FF5A4D",art.g0), url:"games/ten-lua-cua-be/index.html" },
-  { id:"be-noi-dung-khong", cat:"learn", short:{vi:"Bé Nói",en:"Say It"}, name:{vi:"Bé Nói Đúng Không?",en:"Did Baby Say It Right?"}, thumb:face("#C9B6FF","#7A5CFF",art.g1), url:"games/be-noi-dung-khong/index.html" },
-  { id:"doan-tuoi-nao", cat:"learn", short:{vi:"Đoán Tuổi",en:"Brain Age"}, name:{vi:"Đoán Xem Bé Mấy Tuổi",en:"Guess Baby's Brain Age"}, thumb:face("#FFD98A","#FFA21F",art.g2), url:"games/doan-tuoi-nao/index.html" },
-  { id:"bo-me-5-giay", cat:"learn", short:{vi:"5 Giây",en:"5 Seconds"}, name:{vi:"Bố Mẹ Thử Thách 5 Giây",en:"Parents' 5-Second Challenge"}, thumb:face("#B8F0E8","#2FB8A5",art.g3), url:"games/bo-me-5-giay/index.html" },
-  { id:"con-vat-an-so", cat:"learn", short:{vi:"Ăn Số",en:"Munchers"}, name:{vi:"Con Vật Ăn Số",en:"Number Munchers"}, thumb:face("#B8E8A0","#3AA655",art.g4), url:"games/con-vat-an-so/index.html" },
-  { id:"ve-chu-quai-vat", cat:"learn", short:{vi:"Quái Vật",en:"Monsters"}, name:{vi:"Vẽ Chữ Thành Quái Vật",en:"Letter Monsters"}, thumb:face("#E3C9FF","#B07CFF",art.g5), url:"games/ve-chu-quai-vat/index.html" },
-  { id:"nhay-theo-so", cat:"learn", short:{vi:"Nhảy Số",en:"Dance"}, name:{vi:"Nhảy Theo Số",en:"Dance by Numbers"}, thumb:face("#FFC2D9","#FF6F91",art.g6), url:"games/nhay-theo-so/index.html" },
-  { id:"be-dau-bo-me", cat:"learn", short:{vi:"Đấu Bố Mẹ",en:"Face Off"}, name:{vi:"Bé Đấu Bố Mẹ",en:"Kid vs Parent"}, thumb:face("#FFC98A","#FF7A59",art.duel), url:"games/be-dau-bo-me/index.html" },
-  { id:"qua-song", cat:"learn", short:{vi:"Qua Sông",en:"River"}, name:{vi:"Qua Sông Cùng Bé",en:"River Crossing"}, thumb:face("#9AD8FF","#3D95E6",art.river), url:"games/qua-song/index.html" },
-  { id:"thap-vong-mau", cat:"learn", short:{vi:"Tháp Màu",en:"Rainbow"}, name:{vi:"Tháp Vòng Màu",en:"Rainbow Rings"}, thumb:face("#FFD1E8","#B07CFF",art.rings), url:"games/thap-vong-mau/index.html" },
-  { id:"lang-cua-be", cat:"learn", short:{vi:"Làng Bé",en:"Village"}, name:{vi:"Làng Của Bé",en:"Baby's Village"}, thumb:face("#B8E8A0","#58B86A",art.village), url:"games/lang-cua-be/index.html" },
-  { id:"pop-fly", cat:"learn", short:{vi:"Chim Bay",en:"Fly"}, name:{vi:"Chim Bay Học Vui",en:"Fly & Learn"}, thumb:face("#9AD8FF","#4D9BFF",art.fly), url:"games/pop-fly/index.html" },
+  { id:"ten-lua-cua-be", cat:"learn", short:{vi:"Tên Lửa",en:"Rocket"}, name:{vi:"Tên Lửa Của Bé",en:"Baby Rocket"}, thumb:face("#FFB3A0","#FF5A4D",art.g0,NORM["ten-lua-cua-be"]), url:"games/ten-lua-cua-be/index.html" },
+  { id:"be-noi-dung-khong", cat:"learn", short:{vi:"Bé Nói",en:"Say It"}, name:{vi:"Bé Nói Đúng Không?",en:"Did Baby Say It Right?"}, thumb:face("#C9B6FF","#7A5CFF",art.g1,NORM["be-noi-dung-khong"]), url:"games/be-noi-dung-khong/index.html" },
+  { id:"doan-tuoi-nao", cat:"learn", short:{vi:"Đoán Tuổi",en:"Brain Age"}, name:{vi:"Đoán Xem Bé Mấy Tuổi",en:"Guess Baby's Brain Age"}, thumb:face("#FFD98A","#FFA21F",art.g2,NORM["doan-tuoi-nao"]), url:"games/doan-tuoi-nao/index.html" },
+  { id:"bo-me-5-giay", cat:"learn", short:{vi:"5 Giây",en:"5 Seconds"}, name:{vi:"Bố Mẹ Thử Thách 5 Giây",en:"Parents' 5-Second Challenge"}, thumb:face("#B8F0E8","#2FB8A5",art.g3,NORM["bo-me-5-giay"]), url:"games/bo-me-5-giay/index.html" },
+  { id:"con-vat-an-so", cat:"learn", short:{vi:"Ăn Số",en:"Munchers"}, name:{vi:"Con Vật Ăn Số",en:"Number Munchers"}, thumb:face("#B8E8A0","#3AA655",art.g4,NORM["con-vat-an-so"]), url:"games/con-vat-an-so/index.html" },
+  { id:"ve-chu-quai-vat", cat:"learn", short:{vi:"Quái Vật",en:"Monsters"}, name:{vi:"Vẽ Chữ Thành Quái Vật",en:"Letter Monsters"}, thumb:face("#E3C9FF","#B07CFF",art.g5,NORM["ve-chu-quai-vat"]), url:"games/ve-chu-quai-vat/index.html" },
+  { id:"nhay-theo-so", cat:"learn", short:{vi:"Nhảy Số",en:"Dance"}, name:{vi:"Nhảy Theo Số",en:"Dance by Numbers"}, thumb:face("#FFC2D9","#FF6F91",art.g6,NORM["nhay-theo-so"]), url:"games/nhay-theo-so/index.html" },
+  { id:"be-dau-bo-me", cat:"learn", short:{vi:"Đấu Bố Mẹ",en:"Face Off"}, name:{vi:"Bé Đấu Bố Mẹ",en:"Kid vs Parent"}, thumb:face("#FFC98A","#FF7A59",art.duel,NORM["be-dau-bo-me"]), url:"games/be-dau-bo-me/index.html" },
+  { id:"qua-song", cat:"learn", short:{vi:"Qua Sông",en:"River"}, name:{vi:"Qua Sông Cùng Bé",en:"River Crossing"}, thumb:face("#9AD8FF","#3D95E6",art.river,NORM["qua-song"]), url:"games/qua-song/index.html" },
+  { id:"thap-vong-mau", cat:"learn", short:{vi:"Tháp Màu",en:"Rainbow"}, name:{vi:"Tháp Vòng Màu",en:"Rainbow Rings"}, thumb:face("#FFD1E8","#B07CFF",art.rings,NORM["thap-vong-mau"]), url:"games/thap-vong-mau/index.html" },
+  { id:"lang-cua-be", cat:"learn", short:{vi:"Làng Bé",en:"Village"}, name:{vi:"Làng Của Bé",en:"Baby's Village"}, thumb:face("#B8E8A0","#58B86A",art.village,NORM["lang-cua-be"]), url:"games/lang-cua-be/index.html" },
+  { id:"pop-fly", cat:"learn", short:{vi:"Chim Bay",en:"Fly"}, name:{vi:"Chim Bay Học Vui",en:"Fly & Learn"}, thumb:face("#9AD8FF","#4D9BFF",art.fly,NORM["pop-fly"]), url:"games/pop-fly/index.html" },
 ];
 
 /* ===== NGÔN NGỮ ===== */
@@ -645,13 +671,22 @@ function applyFind(){
   renderGrid(); $("noRes").hidden = grid.children.length > 0;
 }
 function setFind(open){
-  $("findPanel").hidden = !open; $("findFab").setAttribute("aria-expanded", String(open));
-  if(open){ placeFind(); $("q").focus({ preventScroll:true }); }
+  $("findPanel").hidden = !open; $("findFab").setAttribute("aria-expanded", String(open)); $("fpList").hidden = true; $("fpFlt").setAttribute("aria-expanded", "false"); $("fpFlt").classList.remove("on");
+  if(open){ placeKb(); $("q").focus({ preventScroll:true }); } else { $("q").blur(); }
 }
+/* bảng tìm kiếm dính sát trên bàn phím: --kb = phần bàn phím che (visualViewport) */
+function placeKb(){ const v = window.visualViewport; const kb = v ? Math.max(0, Math.round(innerHeight - v.height - v.offsetTop)) : 0; document.documentElement.style.setProperty("--kb", kb + "px"); }
+if(window.visualViewport){ visualViewport.addEventListener("resize", placeKb); visualViewport.addEventListener("scroll", placeKb); }
 function placeFind(){ const n = document.querySelector(".nav"); document.documentElement.style.setProperty("--navH", (n ? n.getBoundingClientRect().height : 64) + "px"); }
 placeFind(); addEventListener("resize", placeFind);
+/* nút lọc: giữ bàn phím, mở danh sách lọc; chọn xong chạy lọc luôn + đóng bàn phím + đóng bảng */
+const keepFocus = e => e.preventDefault();
+["pointerdown","mousedown"].forEach(ev => { $("fpFlt").addEventListener(ev, keepFocus); $("fpGo").addEventListener(ev, keepFocus); $("fpList").addEventListener(ev, keepFocus); });
+$("fpFlt").addEventListener("click", e => { e.stopPropagation(); const l = $("fpList"); l.hidden = !l.hidden; $("fpFlt").setAttribute("aria-expanded", String(!l.hidden)); $("fpFlt").classList.toggle("on", !l.hidden); });
+$("fpList").addEventListener("click", e => { if(e.target.closest("button")) setTimeout(() => setFind(false), 0); });
+$("fpGo").addEventListener("click", e => { e.stopPropagation(); applyFind(); setFind(false); });
 $("findFab").addEventListener("click", e => { e.stopPropagation(); setFind($("findPanel").hidden); });
-document.addEventListener("click", e => { if(!$("findPanel").hidden && !e.target.closest("#findPanel") && !e.target.closest("#findFab")) setFind(false); });
+["pointerdown","click","focusin"].forEach(ev => document.addEventListener(ev, e => { if(!$("findPanel").hidden && !e.target.closest("#findPanel") && !e.target.closest("#findFab")) setFind(false); }, true));
 $("q").addEventListener("input", applyFind);
 $("qClear").addEventListener("click", () => { $("q").value = ""; applyFind(); $("q").focus(); });
 addEventListener("keydown", e => { if(e.key === "Escape" && !$("findPanel").hidden){ setFind(false); $("findFab").focus(); } });
@@ -782,6 +817,7 @@ const gdots = $("gdots"); let MIN_TILE = 64, MINS = 72;   // điện thoại nga
 const tileMins = () => { const ls = innerWidth > innerHeight && innerHeight < 560 && innerWidth >= 560; MIN_TILE = ls ? 60 : 64; MINS = ls ? 60 : 72; };
 let gPage = { step:0, n:1 };
 function fitGrid(){
+  document.documentElement.style.removeProperty("--gcw"); document.documentElement.style.removeProperty("--gch");   // đo lưới ở trạng thái cột co giãn (1fr), xong mới chốt bề rộng thật vào --gcw (showcase.css: sân khấu + lưới căn giữa, lề đều)
   tileMins();
   const n = grid.children.length, w = grid.clientWidth, h = grid.clientHeight;
   if(!n || !w || !h) return;
@@ -798,6 +834,8 @@ function fitGrid(){
     grid.querySelectorAll(".sn").forEach(t => t.classList.remove("sn")); gdots.textContent = "";
     grid.style.setProperty("--c", best.c);
     grid.style.setProperty("--s", Math.min(260, Math.floor(best.s)) + "px");
+    document.documentElement.style.setProperty("--gcw", (best.c * Math.min(260, Math.floor(best.s)) + (best.c - 1) * g) + "px");
+    { const s0 = Math.min(260, Math.floor(best.s)), r0 = Math.ceil(n / best.c); document.documentElement.style.setProperty("--gch", (r0 * s0 + (r0 - 1) * g) + "px"); }
     return;
   }
   /* trượt ngang: xếp NHIỀU game nhất có thể trên một trang (ô tối thiểu 72px), rồi nới ô cho vừa khít khoảng trống */
@@ -809,6 +847,7 @@ function fitGrid(){
   const per = c * r, pages = Math.ceil(n / per), pageW = c * s + (c - 1) * gx;
   grid.classList.add("slide");
   grid.style.setProperty("--cg", gx + "px");
+  document.documentElement.style.setProperty("--gcw", w + "px"); document.documentElement.style.setProperty("--gch", (r * s + (r - 1) * g) + "px");
   grid.style.setProperty("--s", s + "px"); grid.style.setProperty("--r", r); grid.style.setProperty("--pad", Math.max(0, Math.floor((w - pageW) / 2)) + "px");
   [...grid.children].forEach((t, i) => t.classList.toggle("sn", i % per === 0));
   gPage = { step: c * (s + gx), n: pages, per };

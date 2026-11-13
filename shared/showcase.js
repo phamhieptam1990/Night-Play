@@ -183,8 +183,11 @@
     prevEl.setAttribute("aria-label", t.prev); nextEl.setAttribute("aria-label", t.next);
     $("show").setAttribute("aria-label", t.feat);
     var c = colorOf(g); if (c) { box.style.setProperty("--sc-glow", "color-mix(in srgb," + c + " 55%,transparent)"); box.style.setProperty("--sc-c", c); document.documentElement.style.setProperty("--np-c", c); } else { box.style.removeProperty("--sc-glow"); box.style.removeProperty("--sc-c"); document.documentElement.style.removeProperty("--np-c"); }
-    place(); playEl.classList.remove("ico"); if (!fitName()) { playEl.classList.add("ico"); }
-    if (playEl.classList.contains("ico") && !fitName()) { var sn = shortOf(g); if (sn) { nameEl.textContent = sn; fitName(); } }
+    place(); playEl.classList.remove("sc-ic");
+    /* thanh đáy điện thoại: tên xuống 2 hàng thì BỎ chữ trên nút Chơi (chỉ còn icon) để tên rộng ra, thường vừa 1 hàng */
+    function wraps() { var inf = nameEl.parentNode; if (getComputedStyle(inf).flexDirection !== "row") return false; var f = parseFloat(getComputedStyle(nameEl).fontSize) || 16; return nameEl.getBoundingClientRect().height > f * 1.14 * 1.5; }
+    if (!fitName() || wraps()) { playEl.classList.add("sc-ic"); fitName(); }
+    if (playEl.classList.contains("sc-ic") && !fitName()) { var sn = shortOf(g); if (sn) { nameEl.textContent = sn; fitName(); } }
   }
   function go(i) { var n = list.length; if (!n) return; cur = ((i % n) + n) % n; paint(); }
 
@@ -309,3 +312,42 @@
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
   addEventListener("resize", close);
 })();
+
+/* Điện thoại dọc nhỏ/thấp: ⓘ + khoá gom vào MỘT nút nổi (#fFab) ở góc dưới phải; bấm thì bung ra (CSS: html.foot-open), bấm ra ngoài / Esc / xoay màn hình thì thu lại */
+(function () {
+  var lock = document.getElementById("lock");
+  if (!lock || document.getElementById("fFab")) return;
+  var f = document.createElement("button"); f.id = "fFab"; f.type = "button"; f.setAttribute("aria-expanded", "false");
+  f.setAttribute("aria-label", document.documentElement.lang === "en" ? "More" : "Thêm");
+  f.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
+  lock.parentNode.insertBefore(f, lock);
+  var root = document.documentElement;
+  function set(on) { root.classList.toggle("foot-open", on); f.setAttribute("aria-expanded", on ? "true" : "false"); if (!on) { var pp = document.getElementById("fPop"); if (pp) pp.hidden = true; } }
+  f.addEventListener("click", function (e) { e.stopPropagation(); set(!root.classList.contains("foot-open")); });
+  document.addEventListener("click", function (e) { if (root.classList.contains("foot-open") && !e.target.closest("#fFab,#fInfo,#lock,#fPop")) set(false); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") set(false); });
+  addEventListener("resize", function () { set(false); });
+})();
+
+/* NỀN ĐỘNG của trang cổng: vài vật nhẹ trôi chậm ngang màn hình phía sau nội dung (Pop: bóng bay, mây, bướm...; Night: trăng, sao, đom đóm...).
+   Chỉ animate transform (không gây layout), ít phần tử, dừng khi đang chơi game / tab ẩn / máy bật "giảm chuyển động". */
+(function () {
+  var root = document.documentElement, app = root.getAttribute("data-app");
+  if (!document.body || document.getElementById("npFly")) return;
+  try { if (matchMedia("(prefers-reduced-motion:reduce)").matches) return; } catch (e) {}
+  var SET = {
+    popplay: ["🎈", "☁️", "🦋", "⭐", "🪁", "🐥", "🌈", "🎈"],
+    cozyplay: ["🌙", "✨", "⭐", "🪐", "☁️", "✨", "🦉", "🛸"]
+  }[app];
+  if (!SET) return;
+  var wrap = document.createElement("div"); wrap.id = "npFly"; wrap.setAttribute("aria-hidden", "true");
+  var n = innerWidth < 600 ? 5 : 8;
+  for (var i = 0; i < n; i++) {
+    var e = document.createElement("i"), dur = 34 + ((i * 17) % 30), size = 20 + ((i * 11) % 18);
+    e.textContent = SET[i % SET.length];
+    e.style.cssText = "top:" + (6 + ((i * 37) % 84)) + "%;font-size:" + size + "px;--fd:" + dur + "s;--fl:-" + ((i * 9.7) % dur).toFixed(1) + "s;--fy:" + (((i % 2) ? 1 : -1) * (30 + (i * 13) % 60)) + "px;--fr:" + (((i % 3) - 1) * 18) + "deg;" + (i % 2 ? "animation-direction:reverse;" : "");
+    wrap.appendChild(e);
+  }
+  document.body.insertBefore(wrap, document.body.firstChild);
+})();
+
