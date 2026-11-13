@@ -2,7 +2,7 @@
      NODE_PATH=<thư mục có puppeteer-core> node scripts/cozygame/check-anchor.js [--quick] [--shots=<thư mục>] [id,id,...]   (tự chạy http.server cổng NP_PORT hoặc 8949)
    Mọi game Cozy + Pop, mở trực tiếp ở 390x844, 430x932 (bản đủ thêm 320x568, 768x1024, 1032x1376 = iPad Pro 13), màn chọn:
    - phần tử nội dung đầu tiên bên dưới hàng nút (đáy hàng nút = 72px) bắt đầu trong khoảng 8..40px dưới hàng nút (trước đây 60–250px);
-   - khoảng trống phía trên nội dung <= khoảng trống phía dưới (khung không lệch xuống dưới; bỏ qua khi màn đã kín, trống trên <= 24px);
+   - khoảng trống phía trên nội dung <= khoảng trống phía dưới (khung không lệch xuống dưới; bỏ qua khi màn đã kín: trống trên <= 24px, hoặc nội dung đã chạm đáy — màn chọn dọc cao: linh vật to giữa, cụm nút ở đáy);
    - khối nội dung nằm giữa theo chiều ngang (lệch <= 4% bề rộng);
    - không cuộn. */
 const { spawn } = require("child_process"), fs = require("fs"), path = require("path"), puppeteer = require("puppeteer-core");
@@ -44,7 +44,7 @@ const MEASURE = () => {
         if (!m.row) bad("không thấy hàng nút trên cùng");
         else if (gap < 4) bad(`nội dung đè hàng nút (cách ${gap}px)`);
         else if (gap > 40) bad(`nội dung cách hàng nút ${gap}px > 40px (chưa neo lên trên)`);
-        if (m.row && gap > 24 && gap > (m.H - m.bot) + 2) bad(`khối nội dung lệch xuống dưới (trống trên ${gap}px > trống dưới ${m.H - m.bot}px)`);
+        if (m.row && gap > 24 && (m.H - m.bot) > 24 && gap > (m.H - m.bot) + 2) bad(`khối nội dung lệch xuống dưới (trống trên ${gap}px > trống dưới ${m.H - m.bot}px)`);
         if (Math.abs(m.off) > Math.max(24, W * .04)) bad(`khối nội dung lệch ngang ${m.off}px so với giữa màn`);
         if (m.scroll) bad("trang bị cuộn");
         if (shots) await pg.screenshot({ path: path.join(shots, `${id}-${W}x${H}.png`) });

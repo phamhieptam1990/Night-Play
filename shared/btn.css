@@ -1,0 +1,36 @@
+/* NÚT DUY NHẤT của toàn ứng dụng (Night Play + Pop Play): một kiểu, theme gán bằng data-nb, icon gán bằng data-ic.
+   <button class="nb" data-nb="ok" data-ic="check"></button>  /  <button class="nb" data-ic="play">Chơi</button>
+   data-nb: (mặc định) tím–cam Night Pass · ok xanh · danger đỏ · ghost kính trong · skin (màu --sa của game Pop) · warn vàng
+   .round = nút tròn chỉ icon · .fill = giãn đầy ô cha · data-sz="s|m|l" (cao 40/48/64px).
+   Nút cũ (button.btn, button.btn.alt, button.big, .okb, .tap) dùng CHUNG kiểu này qua cùng một khối luật bên dưới — kích thước/bố cục do từng game giữ.
+   Nạp bởi shared/bridge.js cùng btn.js (chèn icon). */
+:root{--nb-1:#6C4BF2;--nb-2:#C2410C;--nb-ink:#fff;--nb-glow:rgba(108,75,242,.5)}
+:is(.nb,button.btn,a.btn,button.big,button.cta,button.go,button.bgo,button.btnbig,button.main,.okb,.tap){
+  box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;gap:.45em;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  min-height:44px;border-radius:999px;font-weight:800;letter-spacing:0;text-shadow:none;
+  background:linear-gradient(135deg,var(--nb-1),var(--nb-2))!important;color:var(--nb-ink)!important;
+  border:1px solid rgba(255,255,255,.42)!important;
+  box-shadow:0 6px 18px var(--nb-glow),0 2px 6px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.35)!important;
+  -webkit-backdrop-filter:none;backdrop-filter:none;transition:transform .12s,filter .12s}
+:is(.nb,button.btn,a.btn,button.big,button.cta,button.go,button.bgo,button.btnbig,button.main,.okb,.tap):active{transform:scale(.96)!important;filter:brightness(1.08)}
+:is(.nb,button.btn,a.btn,button.big,button.cta,button.go,button.bgo,button.btnbig,button.main,.okb,.tap):disabled{opacity:.5;filter:saturate(.6)}
+:is(.nb,button.btn,a.btn,button.big,button.cta,button.go,button.bgo,button.btnbig,button.main,.okb,.tap):focus-visible{outline:3px solid #fff;outline-offset:2px}
+/* phụ / kính trong */
+:is(.nb[data-nb=ghost],button.btn.alt,button.sec,button.ghost,button.alt){
+  --nb-glow:rgba(124,92,255,.3);background:rgba(255,255,255,.1)!important;border-color:rgba(255,255,255,.3)!important;color:#fff!important;
+  box-shadow:0 4px 14px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 14px rgba(124,92,255,.25)!important;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+/* theme màu */
+:is(.nb[data-nb=ok],.okb){--nb-1:#3DDC84;--nb-2:#14935A;--nb-glow:rgba(40,200,120,.5)}
+.nb[data-nb=danger]{--nb-1:#FF6B6B;--nb-2:#C81E4B;--nb-glow:rgba(230,60,90,.5)}
+.nb[data-nb=warn]{--nb-1:#FFC94D;--nb-2:#F08A1A;--nb-ink:#2B1A00;--nb-glow:rgba(255,170,40,.5)}
+:is(.nb[data-nb=skin],.tap){--nb-1:var(--sa,#7C5CFF);--nb-2:color-mix(in srgb,var(--sa,#7C5CFF) 62%,#000);--nb-ink:var(--sa2,#fff);--nb-glow:color-mix(in srgb,var(--sa,#7C5CFF) 50%,transparent)}
+/* hình dạng + cỡ */
+.nb.round,.okb{border-radius:50%;padding:0;aspect-ratio:1}
+.nb:not(.round){padding:0 1.3em}
+.nb.fill{width:100%;height:100%}
+.nb[data-sz=s]{min-height:40px;font-size:14px}.nb[data-sz=m]{min-height:48px;font-size:16px}.nb[data-sz=l]{min-height:64px;font-size:20px}
+.nb.round[data-sz=s]{width:40px}.nb.round[data-sz=m]{width:48px}.nb.round[data-sz=l]{width:64px}.nb.round:not([data-sz]){width:44px}
+/* icon chèn bởi btn.js (SVG currentColor) */
+.nb-i{flex:none;width:1.25em;height:1.25em;display:block}.okb .nb-i{width:56%;height:56%}
+.nb.round .nb-i{width:52%;height:52%}
+@media (prefers-reduced-motion:reduce){:is(.nb,button.btn,a.btn,button.big,button.cta,button.go,button.bgo,button.btnbig,button.main,.okb,.tap){transition:none}}

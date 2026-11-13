@@ -111,3 +111,41 @@ html #stage.np-rails-l:not(.docked) #npRailL,html #stage.np-rails-l #npRailL{pad
   html #stage #klock{left:calc(var(--bx) + var(--tap-lg) + 8px)!important}
   html #stage #tleft{top:calc(var(--by) + 15px)!important}
 }
+
+/* THẺ CỘT BÊN: KÍNH TRONG SUỐT THEO GIAO DIỆN (chủ site: "không nền trắng chữ đen", "nền xuyên thấu theo giao diện", "không cần nổi bật"): thẻ/nút/chip không còn nền đặc; nền = màu chữ của giao diện pha 6–9% (sáng → hơi tối, tối → hơi sáng) + blur nhẹ, viền 1px mờ, KHÔNG quầng/bóng/viền màu nhấn dày. Chữ giữ --ink của giao diện. */
+.np-rail{--panel:transparent;--card:color-mix(in srgb,var(--ink) 10%,transparent)}
+.np-rail :is(.np-c,.np-g,.np-res){background:color-mix(in srgb,var(--ink) 7%,transparent)!important;border:1px solid color-mix(in srgb,var(--ink) 15%,transparent)!important;box-shadow:none!important;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.np-rail :is(.np-g,.np-res):hover,.np-rail :is(.np-g,.np-res):focus-visible{background:color-mix(in srgb,var(--ink) 12%,transparent)!important}
+.np-rail .np-btn:not(.pri){background:color-mix(in srgb,var(--ink) 6%,transparent);border:1px solid color-mix(in srgb,var(--ink) 20%,transparent);box-shadow:none}
+.np-rail .np-btn:not(.pri):hover,.np-rail .np-btn:not(.pri):focus-visible{background:color-mix(in srgb,var(--ink) 12%,transparent)}
+.np-rail .np-chip{background:color-mix(in srgb,var(--ink) 8%,transparent);border:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}
+.np-rail .np-link{border-color:transparent}
+.np-rail .np-about{border:1px solid color-mix(in srgb,var(--ink) 20%,transparent);background:color-mix(in srgb,var(--ink) 6%,transparent)}
+/* TÊN GAME ở cột trái (chủ site: "title khung rộng nhìn chán", "đen thui nằm khuất dưới nút back"): to hơn, màu nhấn của game (như tên trong game) chuyển nhẹ sang sáng hơn, cách hàng nút 12px; Pop giữ kiểu poptitle riêng */
+.np-gname:not(.pt-title){margin:12px 0 2px;padding-bottom:.08em;font:800 25px/1.12 var(--font);letter-spacing:.005em;text-wrap:balance;color:var(--rail-tint,var(--accent));background:linear-gradient(90deg,var(--rail-tint,var(--accent)),color-mix(in srgb,var(--rail-tint,var(--accent)) 65%,var(--ink)));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+/* HOVER ở cột bên: nút/thẻ/tên game phóng to nhẹ + lắc nhẹ (cùng kiểu glass.css) */
+@keyframes npWiggle{0%{transform:scale(1) rotate(0)}22%{transform:scale(1.07) rotate(-2.6deg)}48%{transform:scale(1.07) rotate(2.4deg)}74%{transform:scale(1.07) rotate(-1.4deg)}100%{transform:scale(1.06) rotate(0)}}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+.np-rail :is(.np-btn,.np-g,.np-res,.np-hb,.np-link,.np-about):hover:not(:active),.np-tab:hover:not(:active){animation:npWiggle .55s ease-in-out forwards}
+.np-gname:hover{animation:npWiggle .6s ease-in-out forwards}
+}
+/* TIÊU ĐỀ KHỐI Ở CỘT BÊN (CHƠI TIẾP / HÔM NAY / CÁCH CHƠI): chủ site: "cho nó nổi bật lên" → to hơn, màu nhấn của game (--rail-tint) + thanh nhấn trước chữ */
+.np-rail h3{display:flex;align-items:center;gap:9px;font:900 17px/1.2 var(--font);letter-spacing:.07em;color:var(--rail-tint,var(--accent));margin:2px 0 0}
+.np-rail h3::before{content:"";flex:none;width:5px;height:20px;border-radius:3px;background:linear-gradient(180deg,var(--rail-tint,var(--accent)),color-mix(in srgb,var(--rail-tint,var(--accent)) 45%,transparent))}
+/* "TOP 5 TUẦN NÀY" + "XEM TẤT CẢ" (chủ site: "cho nổi bật"): chip tiêu đề to, đậm, màu nhấn của game; "Xem tất cả" là nút có nền + viền màu game */
+.np-rail .np-top .np-chip{padding:7px 14px;gap:8px;font:900 15px/1.1 var(--font);color:var(--rail-tint,var(--accent));background:color-mix(in srgb,var(--rail-tint,var(--accent)) 20%,transparent);border:1.5px solid color-mix(in srgb,var(--rail-tint,var(--accent)) 60%,transparent)}
+.np-rail .np-top .np-chip svg{width:19px;height:19px;color:var(--rail-tint,var(--accent))}
+.np-rail .np-top .np-link{min-height:44px;margin-top:10px;font:800 14px/1 var(--font);color:var(--ink);background:color-mix(in srgb,var(--rail-tint,var(--accent)) 22%,transparent);border:1.5px solid color-mix(in srgb,var(--rail-tint,var(--accent)) 65%,transparent)}
+.np-rail .np-top .np-link:hover,.np-rail .np-top .np-link:focus-visible{background:color-mix(in srgb,var(--rail-tint,var(--accent)) 34%,transparent)}
+/* THẺ "THỬ THÁCH HẰNG NGÀY" (cột trái, chủ site: "cho nổi bật"): viền + nền pha màu game, tên to đậm màu game, mã #số rõ, chip trạng thái màu game */
+.np-rail .np-daily{background:linear-gradient(145deg,color-mix(in srgb,var(--rail-tint,var(--accent)) 22%,transparent),color-mix(in srgb,var(--ink) 5%,transparent))!important;border:1.5px solid color-mix(in srgb,var(--rail-tint,var(--accent)) 60%,transparent)!important}
+.np-rail .np-daily .np-ico{width:60px;height:60px;border-radius:17px}
+.np-rail .np-daily .np-t b{font-size:18px;font-weight:900;line-height:1.15;color:var(--rail-tint,var(--accent))}
+.np-rail .np-daily .np-t small{margin-top:3px;font:900 16px/1.1 var(--font);color:var(--ink)}
+.np-rail .np-daily .np-chip{font-weight:800;border-color:color-mix(in srgb,var(--rail-tint,var(--accent)) 50%,transparent)}
+/* THẺ "VÁN DỞ" (cột phải, chủ site: "tên game nổi bật lên"): tên game to đậm màu game, nhãn rõ, viền + nền pha màu game */
+.np-rail .np-res{max-height:96px;background:linear-gradient(145deg,color-mix(in srgb,var(--rail-tint,var(--accent)) 22%,transparent),color-mix(in srgb,var(--ink) 5%,transparent))!important;border:1.5px solid color-mix(in srgb,var(--rail-tint,var(--accent)) 60%,transparent)!important}
+.np-rail .np-res .np-ico{width:48px;height:48px;border-radius:14px}
+.np-rail .np-res .np-t b{font-size:17px;font-weight:900;line-height:1.15;color:var(--rail-tint,var(--accent))}
+.np-rail .np-res .np-t small{font-size:11.5px;font-weight:700;letter-spacing:-.01em;color:var(--ink);margin-bottom:3px}

@@ -179,3 +179,9 @@ html[data-app=popplay][data-theme=dark] .hero h1{background-image:linear-gradien
 }
 @keyframes tileWob{0%,100%{translate:0 0;rotate:0deg;filter:none}12%{translate:0 -4px;rotate:-5deg;filter:brightness(1.2) saturate(1.15)}30%{rotate:5deg;filter:brightness(1.25) saturate(1.2)}48%{translate:0 -3px;rotate:-4deg;filter:brightness(1.2) saturate(1.15)}66%{rotate:3deg}82%{translate:0 0;rotate:-1deg;filter:brightness(1.1)}}
 @keyframes kidWiggle{0%,100%{rotate:0deg}50%{rotate:1.2deg}}
+
+/* Popup của trang cổng (menu ⋯, popup Phụ huynh, ngủ…) cũng nền tím tối Night Pass, không nền trắng ở giao diện sáng */
+html:not([data-theme=dark]) :is(.bars-pop,#gate,#sleep){
+  --panel:#1d1745;--panel2:#262058;--ink:#fff;--text:#fff;--muted:rgba(255,255,255,.72);--bg:#171236;--field:rgba(255,255,255,.1);--line:rgba(170,150,255,.42);--card:#262058;
+  color:#fff;color-scheme:dark}
+html:not([data-theme=dark]) .bars-pop{background:linear-gradient(165deg,#2b2064,#171236 70%)!important;border-color:rgba(170,150,255,.55)!important}

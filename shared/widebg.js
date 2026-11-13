@@ -94,7 +94,9 @@
     timer = 0; if (!document.body) return;
     var s = read(), cov = covered(), pl1 = document.getElementById("play");
     /* một lớp nền: màn dọc, có #play kiểu cột Cozy (không phải khung thẻ .play của Pop/Cánh Nhỏ) và cột hẹp hơn cửa sổ */
-    var one = !cov && !!pl1 && !pl1.classList.contains("play") && innerHeight > innerWidth && innerWidth >= 700 && pl1.clientWidth < innerWidth - 8;
+    /* cũng bật ở cửa sổ NGANG (khung game trong cổng có hai cột bên: iframe ngang nhưng #play vẫn là cột dọc giữa) — trừ lưới 2 cột của điện thoại/iPad ngang, nơi #play::before đã tự vẽ MỘT lớp nền phủ trọn cửa sổ */
+    var grid = false; try { grid = matchMedia("(orientation:landscape) and (max-height:700px) and (min-width:560px),(orientation:landscape) and (pointer:coarse) and (max-height:900px) and (min-width:800px),(orientation:landscape) and (min-width:900px) and (min-aspect-ratio:13/10)").matches; } catch (e) {}
+    var one = !cov && !!pl1 && !pl1.classList.contains("play") && !grid && innerWidth >= 700 && pl1.clientWidth < innerWidth - 8;
     s.key += "|" + cov + "|" + one; if (s.key === last) return; last = s.key;
     document.documentElement.classList.toggle("npw-cover", cov); document.documentElement.classList.toggle("npw-one", one);
     if (!el) { el = document.createElement("div"); el.id = "npWide"; el.setAttribute("aria-hidden", "true"); document.body.insertBefore(el, document.body.firstChild); document.documentElement.classList.add("npw"); }

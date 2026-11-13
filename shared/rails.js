@@ -102,6 +102,7 @@
     var d = gdoc(); if (!d || !d.documentElement) return;
     try { if (on === d.documentElement.classList.contains("np-rhud") && (!on || d.getElementById("npRhudCss"))) return; if (on && !d.getElementById("npRhudCss")) { var st = d.createElement("style"); st.id = "npRhudCss"; st.textContent = HIDECSS; (d.head || d.documentElement).appendChild(st); } d.documentElement.classList.toggle("np-rhud", !!on); } catch (e) {}
   }
+  function tabInGame(on) { var d = gdoc(); if (!d || !d.documentElement) return; try { d.documentElement.classList.toggle("np-tabon", !!on); } catch (e) {} }
   /* màu theo game/skin (Night Pass đổi --accent của khung chơi): đưa màu nhấn hiện hành của game ra #stage (--rail-tint) để nền hai cột + sân khấu pha màu game; chỉ ghi khi đổi */
   function syncTint() {
     var d = gdoc(), st = O.stage || document.getElementById("stage"); if (!d || !st || !d.documentElement) return;
@@ -128,7 +129,7 @@
     L.appendChild(buildHud(g));
     var head = el("div", "np-head"); head.appendChild(el("h3", "", t.today)); L.appendChild(head);
     var sv = saveOf(g.id), day = vnDay(), isCozy = O.portal === "cozy";
-    var card = el("div", "np-c"), row = el("div", "np-row"), img = el("img", "np-ico"); img.src = g.thumb; img.alt = ""; img.width = 56; img.height = 56; row.appendChild(img);
+    var card = el("div", "np-c np-daily"), row = el("div", "np-row"), img = el("img", "np-ico"); img.src = g.thumb; img.alt = ""; img.width = 56; img.height = 56; row.appendChild(img);
     var tx = el("div", "np-t");
     if (isCozy) { tx.appendChild(el("b", "", t.daily)); tx.appendChild(el("small", "", "#" + dayNo(day))); } else tx.appendChild(el("b", "", t.today));
     row.appendChild(tx); card.appendChild(row);
@@ -219,6 +220,7 @@
     st.style.setProperty("--rl", wantL ? rw + "px" : "0px"); st.style.setProperty("--rr", wantR ? rw + "px" : "0px");
     st.classList.toggle("np-rails-l", wantL); st.classList.toggle("np-rails-r", wantR); st.classList.toggle("np-rails", wantL || wantR);
     var was = on; on = wantL || wantR; hideInGame(wantL);
+    tabInGame(can && !(wantL || wantR));   /* nút mở lại cột (.np-tab) đang hiện ở góc trên-trái khung game → game né tên khỏi chỗ đó (html.np-tabon) */
     if (on) { var g = curGame(); if (g && (!was || !cur || cur.id !== g.id)) { cur = g; played(g.id); render(); } else if (!was) render(); startTimer(); }
     else { stopTimer(); if (!st.classList.contains("on")) cur = null; }
   }

@@ -7,13 +7,12 @@
   --npi:#1C1833;--nps:#4B4568;--npl:#CFC6EA;--npa:#6A48F0;--npcard:#fff;--npon:#fff;--npglow:rgba(106,72,240,.32);--npgold:#B7791F;
   --npg:linear-gradient(90deg,#6A48F0,#C2410C);--npbg:linear-gradient(160deg,#FFFFFF,#EEE8FF);--npdim:rgba(40,28,90,.46);
 }
-html[data-theme=dark] .npc{
+.npc,html[data-theme=dark] .npc{
   --npi:#F1F2FF;--nps:#C9CCF0;--npl:rgba(167,150,255,.4);--npa:#9B83FF;--npcard:rgba(27,30,47,.72);--npon:#12141F;--npglow:rgba(124,92,255,.45);--npgold:#FFD66B;
   --npg:linear-gradient(90deg,#9B83FF,#FF9A6B);--npbg:linear-gradient(160deg,rgba(44,36,104,.97),rgba(22,24,42,.97));--npdim:rgba(8,9,18,.7);
 }
 /* lớp mờ phía sau thẻ: quầng tím + nền tối */
 html #ovPay,html #ovSkin{background:radial-gradient(560px 360px at 50% 18%,rgba(124,92,255,.34),transparent),var(--npdim,rgba(8,9,18,.66))!important;-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)}
-html:not([data-theme=dark]) #ovPay,html:not([data-theme=dark]) #ovSkin{--npdim:rgba(40,28,90,.46)}
 html[data-theme=dark] #ovPay,html[data-theme=dark] #ovSkin{--npdim:rgba(8,9,18,.7)}
 html #ovPay{padding:12px;align-items:center;justify-content:center}
 html #ovSkin{padding:12px;align-items:center;justify-content:center}
@@ -25,7 +24,7 @@ html .npc{position:relative;box-sizing:border-box;display:flex;flex-direction:co
   box-shadow:0 0 0 1px color-mix(in srgb,var(--npa) 18%,transparent),0 18px 60px var(--npglow),0 10px 36px rgba(0,0,0,.35)}
 html #ovPay>.npc{width:min(100%,420px);max-height:100%;border-radius:28px;padding:18px 20px 18px}
 /* thẻ rộng theo cột trên màn lớn (iPad dọc: cột 635-760px mà thẻ từng khoá 460px trong khi chữ/icon phóng theo cqw -> tên giao diện bị bóp xuống 3 dòng); chữ + icon trong ô có trần px */
-html #ovSkin>.npc{flex:0 1 auto;width:min(100%,max(460px,86cqw));max-height:100%;border-radius:28px;padding:14px 14px 14px}
+html #ovSkin>.npc{flex:0 1 auto;width:min(100%,max(460px,86cqw));max-height:100%;border-radius:28px;padding:20px 20px 22px}
 html #ovSkin .npc .skc .e{font-size:min(9.5cqw,52px)}html #ovSkin .npc .skc .sx b{font-size:min(3.7cqw,21px)}html #ovSkin .npc .skc .sx small{font-size:min(2.7cqw,15px)}
 html #ovPay .npc h2,html #ovSkin .npc h2{margin:0;padding:0 52px;font:800 clamp(21px,6vw,28px)/1.15 "Inter",system-ui,sans-serif;letter-spacing:-.01em;color:var(--npi);text-shadow:none}
 html #ovPay .npc h2::after,html #ovSkin .npc h2::after{display:none}
@@ -63,7 +62,7 @@ html.npp-kid #ovPay .npc #pwGo{order:2;background:transparent;color:var(--npi);b
 }
 html .npc button:focus-visible,html .npc a:focus-visible{outline:3px solid var(--npa);outline-offset:3px}
 /* ✕ 44px: góc trên-phải trong thẻ */
-html .npc .npx{position:absolute;top:8px;right:8px;z-index:3;width:44px;height:44px;min-width:44px;min-height:44px;margin:0;padding:0;display:grid;place-items:center;border-radius:50%;
+html .npc .npx{position:absolute;top:14px;right:14px;z-index:3;width:44px;height:44px;min-width:44px;min-height:44px;margin:0;padding:0;display:grid;place-items:center;border-radius:50%;
   font:700 20px/1 "Inter",system-ui,sans-serif;color:var(--npi);background:color-mix(in srgb,var(--npa) 14%,transparent);border:1px solid color-mix(in srgb,var(--npa) 50%,var(--npl));box-shadow:none;cursor:pointer;animation:none;filter:none}
 @media (hover:hover){html .npc .npx:hover{background:color-mix(in srgb,var(--npa) 28%,transparent)}}
 /* popup chọn giao diện */
@@ -107,20 +106,27 @@ html #ovSkin .npc .ghost,html #ovSkin .npc .ib2{color:var(--npi);border:2px soli
 /* ---------- Đập Deadline: hộp Night Pass (#pay) ---------- */
 html #pay .sheet-in{border-radius:28px;font-family:"Inter",system-ui,sans-serif;border:1px solid color-mix(in srgb,#6A48F0 50%,var(--line));
   background:linear-gradient(160deg,#FFFFFF,#EEE8FF);color:#1C1833;box-shadow:0 0 0 1px rgba(106,72,240,.18),0 18px 60px rgba(106,72,240,.32),0 10px 36px rgba(0,0,0,.35)}
-html[data-theme=dark] #pay .sheet-in{background:linear-gradient(160deg,rgba(44,36,104,.97),rgba(22,24,42,.97));color:#F1F2FF;box-shadow:0 0 0 1px rgba(155,131,255,.18),0 18px 60px rgba(124,92,255,.45),0 10px 36px rgba(0,0,0,.35)}
+html #pay .sheet-in,html[data-theme=dark] #pay .sheet-in{background:linear-gradient(160deg,rgba(44,36,104,.97),rgba(22,24,42,.97));color:#F1F2FF;box-shadow:0 0 0 1px rgba(155,131,255,.18),0 18px 60px rgba(124,92,255,.45),0 10px 36px rgba(0,0,0,.35)}
 html #pay{background:radial-gradient(560px 360px at 50% 18%,rgba(124,92,255,.34),transparent),rgba(40,28,90,.46)}
-html[data-theme=dark] #pay{background:radial-gradient(560px 360px at 50% 18%,rgba(124,92,255,.34),transparent),rgba(8,9,18,.7)}
+html #pay,html[data-theme=dark] #pay{background:radial-gradient(560px 360px at 50% 18%,rgba(124,92,255,.34),transparent),rgba(8,9,18,.7)}
 html #pay .sh-h{font:800 clamp(20px,5.6vw,26px)/1.15 "Inter",system-ui,sans-serif;border-bottom:0;padding:0 0 4px;align-items:flex-start}
 html #pay .sh-h #payT::before{content:"👑 ";filter:drop-shadow(0 0 8px rgba(255,214,107,.7))}
-html #pay #payX0{width:44px;height:44px;min-width:44px;padding:0;border-radius:50%;font:700 20px/1 "Inter",system-ui,sans-serif;display:grid;place-items:center;flex:none;color:inherit;background:rgba(106,72,240,.14);border:1px solid rgba(106,72,240,.5)}
+html #pay #payX0{width:44px;height:44px;min-width:44px;padding:0;border-radius:50%;font:700 20px/1 "Inter",system-ui,sans-serif;display:grid;place-items:center;flex:none;color:inherit;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.28)}
 html #pay #payBody p{font:500 15px/1.4 "Inter",system-ui,sans-serif}
 html #pay .pw-row a.big{background:linear-gradient(90deg,#6A48F0,#C2410C);color:#fff;border:0;border-radius:999px;min-height:48px;font:800 16px/1.15 "Inter",system-ui,sans-serif;box-shadow:0 6px 22px rgba(106,72,240,.32);animation:none}
-html[data-theme=dark] #pay .pw-row a.big{background:linear-gradient(90deg,#9B83FF,#FF9A6B);color:#12141F;box-shadow:0 6px 22px rgba(124,92,255,.45)}
+html #pay .pw-row a.big,html[data-theme=dark] #pay .pw-row a.big{background:linear-gradient(90deg,#9B83FF,#FF9A6B);color:#12141F;box-shadow:0 6px 22px rgba(124,92,255,.45)}
 html #pay .pw-row .icon-btn{min-height:44px;background:transparent;color:inherit;border:2px solid rgba(106,72,240,.55);font:800 15px/1.15 "Inter",system-ui,sans-serif}
-html[data-theme=dark] #pay .pw-row .icon-btn{border-color:rgba(167,150,255,.45)}
+html #pay .pw-row .icon-btn,html[data-theme=dark] #pay .pw-row .icon-btn{border-color:rgba(167,150,255,.45)}
 @media (prefers-reduced-motion:reduce){html .npc *{transition:none!important;animation:none!important}}
 
 /* Pop Play: popup Giao diện mở thì ẩn nút ← góc trái (đóng bằng ✕) */
 html.npp-kid:has(#ovSkin:not([hidden])) #npPmBk{visibility:hidden}
 /* Popup Giao diện: nút ←/Back (#skBack) thừa vì đã có ✕ (✕ vẫn bấm hộ #skBack) — Cánh Nhỏ + 12 game Pop Play */
 html #ovSkin .npc #skBack{display:none}
+
+/* MỌI popup/lớp phủ (.ov, ?, hướng dẫn, thống kê, tạm dừng, cổng phụ huynh…) dùng nền tím tối Night Pass, KHÔNG nền trắng, kể cả giao diện sáng:
+   đặt lại biến màu trong phạm vi popup (thẻ nào dùng var(--panel)/var(--ink)/var(--line) tự thành tối + chữ trắng). */
+html:not([data-theme=dark]) :is(.ov,#hlpOv,#phOv,#pay,#howS,#statsP,#setup,#pauseOv,#shareG,#klO,#pgOv,#npInApp,#npWelcome,#nsOv,.nps-sheet,.nps-dlg,#npResume,#npxO){
+  --panel:#1d1745;--panel2:#262058;--ink:#fff;--text:#fff;--muted:rgba(255,255,255,.72);--bg:#171236;--field:rgba(255,255,255,.1);--line:rgba(170,150,255,.42);--card:#262058;
+  color:#fff;color-scheme:dark}
+html:not([data-theme=dark]) :is(.nps-sheet,.nps-dlg,#pgOv>*,#klO>*,#npInApp>*,#npWelcome>*,#nsOv>*){background-color:#1d1745;background-image:linear-gradient(165deg,#2b2064,#171236 70%);color:#fff;border-color:rgba(170,150,255,.55)}

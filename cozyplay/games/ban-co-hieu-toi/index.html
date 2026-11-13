@@ -95,6 +95,8 @@ input.tx{width:100%;min-height:44px;border:1.5px solid color-mix(in srgb,var(--i
 <style id="skCss"></style>
 <link rel="stylesheet" href="../../../shared/typeui.css">
 <link rel="stylesheet" href="../../../shared/landscape.css"><script src="../../../shared/landscape.js" defer></script><script src="../../../shared/offline.js" defer></script><script src="../../../shared/icons.js" defer></script><script src="../../../shared/resume.js" defer></script><script src="../../../shared/fan.js" defer></script><script src="../../../shared/passwatch.js" defer></script><link rel="stylesheet" href="../../../shared/endui.css"><script src="../../../shared/endui.js" defer></script>
+<style>/* khung rộng (lưới 2 cột): màn câu hỏi/tạo bộ cao hơn game khác → cột game hẹp lại theo chiều cao để không tràn (nội dung dùng cqw nên co theo bề rộng) */
+@media (orientation:landscape) and (max-height:700px) and (min-width:560px),(orientation:landscape) and (pointer:coarse) and (max-height:900px) and (min-width:800px),(orientation:landscape) and (min-width:900px) and (min-aspect-ratio:13/10){:root{--stage:min(100vw,calc(100dvh*.6),52vw,760px)}}</style>
 </head>
 <body>
 <div id="play">

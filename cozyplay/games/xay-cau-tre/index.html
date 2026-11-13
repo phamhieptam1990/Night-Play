@@ -80,8 +80,9 @@ canvas#cv{border-radius:3cqw;background:linear-gradient(var(--field),var(--field
 @media (prefers-reduced-motion:reduce){#end .res .big{animation:none}}
 #end .hat{display:none}
 #end .chips{gap:2cqw}#end .chip{font-weight:800;padding:1.6cqw 3.4cqw}
-#end>.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(17cqw,1fr));gap:2.4cqw}
-#end>.row #bShare{grid-column:1/-1;min-height:14cqw;font-size:5cqw;border-radius:99cqw;animation:endGlow 2.4s ease-in-out infinite}
+#end>.row{display:flex;flex-wrap:wrap;justify-content:center;gap:2.4cqw}   /* "Khoe điểm" một hàng riêng; các nút phụ (2–4 nút) cùng hàng dưới, căn GIỮA, không rớt lẻ */
+#end>.row .btn.alt{flex:0 1 min(22%,120px);min-width:0}
+#end>.row #bShare{flex:1 1 100%;min-height:14cqw;font-size:5cqw;border-radius:99cqw;animation:endGlow 2.4s ease-in-out infinite}
 @keyframes endGlow{50%{box-shadow:0 1cqw 0 rgba(0,0,0,.26),0 0 5cqw color-mix(in srgb,var(--accent) 65%,transparent)}}
 @media (prefers-reduced-motion:reduce){#end>.row #bShare{animation:none}}
 #end>.row .btn.alt{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8cqw;padding:2.2cqw 1cqw;border-radius:4.4cqw;font-size:6cqw;line-height:1}

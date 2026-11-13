@@ -32,8 +32,8 @@
     "#npxO h2{margin:0 0 6px;font-family:var(--font);font-weight:800;font-size:clamp(19px,5.4vw,23px);line-height:1.2;color:var(--npx-ink)}" +
     "#npxO p{margin:0 0 14px;font-family:inherit;font-weight:600;font-size:clamp(13px,3.8vw,15px);line-height:1.4;color:var(--npx-ink);opacity:.85}" +
     "#npxO button{display:block;width:100%;box-sizing:border-box;border-radius:16px;font-family:inherit;font-weight:800;font-size:17px;line-height:1.2;cursor:pointer;padding:0 14px}" +
-    "#npxO .npx-go{min-height:56px;border:0;background:var(--npx-acc);color:var(--npx-on);box-shadow:0 4px 0 rgba(0,0,0,.25)}" +
-    "#npxO .npx-out{min-height:48px;margin-top:10px;background:transparent;color:var(--npx-ink);border:2px solid var(--npx-line);font-size:16px}" +
+    "#npxO .npx-go{min-height:56px;background:var(--npx-acc);color:var(--npx-on);border:1px solid rgba(255,255,255,.4);box-shadow:0 6px 18px rgba(108,75,242,.5),inset 0 1px 0 rgba(255,255,255,.3)}" +
+    "#npxO .npx-out{min-height:48px;margin-top:10px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.3);font-size:16px}" +
     "#npxO button:focus-visible{outline:3px solid var(--npx-ink);outline-offset:2px}" +
     "@media (max-height:420px){#npxO .npxc{padding:10px 14px 10px;width:min(440px,100%)}#npxO p{margin-bottom:8px}#npxO .npx-row{display:flex;gap:10px}#npxO .npx-out{margin-top:0}#npxO .npx-go{flex:1.4}#npxO .npx-out{flex:1}}";
   document.head.appendChild(st);
@@ -59,7 +59,8 @@
     var acc = null; k = ["--accent", "--pri", "--primary"]; for (i = 0; i < k.length && !acc; i++) { x = v(k[i]); if (x) acc = rgb(x); }
     if (!acc) acc = [255, 90, 31];
     var on = lum(acc) > 0.6 ? [25, 20, 35] : [255, 255, 255];
-    return { bg: css(panel), ink: css(ink), acc: css(acc), on: css(on), line: css(acc) };
+    /* Night Pass: popup luôn tím tối, chữ trắng, nút gradient tím–cam — không nền trắng theo màu game */
+    return { bg: "linear-gradient(165deg,#2b2064,#171236 62%,#120e2b)", ink: "#fff", acc: "linear-gradient(135deg,#6C4BF2,#C2410C)", on: "#fff", line: "rgba(170,150,255,.6)" };
   }
 
   /* ---------- popup ---------- */

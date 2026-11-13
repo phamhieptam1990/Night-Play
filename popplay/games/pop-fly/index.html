@@ -13,7 +13,7 @@
 <style>
 /* Chim Bay Học Vui — game bay cho bé: bay qua cổng đúng chữ / số, không có "chết", sai chỉ chậm lại. Luôn vừa một màn hình. */
 :root{--bg:#FFF6EC;--ink:#3b2a1d;--muted:#8a6f5a;--panel:#fff;--line:#f0d9c0;--accent:#FF5A1F;--on-accent:#fff;--sky1:#bfe8ff;--sky2:#eefaff;--good:#2fbf71;--warn:#ffb020;--shadow:0 8px 24px rgba(120,70,20,.18);
-  --display:var(--font);--w:min(calc(100vw - 24px),calc((100dvh - 222px)*.75),760px)}
+  --display:var(--font);--w:min(calc(100vw - 24px),calc((100dvh - 252px)*.75),760px)}
 :root[data-theme="dark"]{--bg:#1B2340;--ink:#F2F4FF;--muted:#a9b2d8;--panel:#26305a;--line:#38437a;--accent:#FF7A45;--on-accent:#2a1204;--sky1:#243a7a;--sky2:#3b57a6;--shadow:0 8px 24px rgba(0,0,0,.4)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;margin:0;overflow:hidden}
@@ -303,7 +303,7 @@ PF.addScore=addScore;
 function markDot(i,st){const S=PF.S;S.dots[i]=st;renderDots()}
 PF.markDot=markDot;
 function renderDots(){const S=PF.S;$("dots").innerHTML=S?S.dots.map(d=>'<i class="'+(d===1?"ok":d===2?"miss":"")+'"></i>').join(""):""}
-function setAsk(html,plain,speak){const S=PF.S;if(S){S.ask=html;S.askPlain=plain||html.replace(/<[^>]*>/g,"");S.speak=speak||""}$("askTxt").innerHTML=html;if(speak)say(speak)}
+function setAsk(html,plain,speak){const S=PF.S;if(S){S.ask=html;S.askPlain=plain||html.replace(/<[^>]*>/g,"");S.speak=speak||""}$("askTxt").innerHTML=html;if(speak){clearTimeout(setAsk.t);setAsk.t=setTimeout(()=>say(speak),160)}}   /* đọc to chậm 160ms: speechSynthesis.cancel/speak chạy ngay lúc bay qua chữ làm khựng khung hình trên iPhone */
 PF.setAsk=setAsk;
 
 /* ===== VẬT LÝ NHẸ NHÀNG (không có thua) ===== */
@@ -322,7 +322,7 @@ function spawnWave(S){
 }
 function evalWave(S,w){
   const b=S.bird,hit=w.rings.find(r=>Math.abs(r.y-b.y)<R+10);w.done=true;
-  if(w.item)Prog.rec(w.item,!!(hit&&hit.ok));
+  if(w.item){const it=w.item,okk=!!(hit&&hit.ok);setTimeout(()=>Prog.rec(it,okk),0)}   /* ghi localStorage ngoài khung hình đang vẽ */
   if(hit&&hit.ok){w.res="ok";S.correct++;S.streak++;addScore(10+(S.streak>=3?5:0));markDot(w.idx,1);sfx.good();burst(BX,b.y,pickOf(["⭐","✨","🌟"]),12);toast(pickOf(t("right")),1100);S.celebrate=.4}
   else{w.res=hit?"wrong":"miss";S.wrong++;S.streak=0;markDot(w.idx,2);sfx.bad();S.slow=1.1;b.wob=.9;toast(hit?pickOf(t("wrong")):t("miss"),1500);
     const ok=w.rings.find(r=>r.ok);if(ok){w.hintT=1.6;if(w.hint)setTimeout(()=>{if(running&&!paused)say(w.hint)},350)}}

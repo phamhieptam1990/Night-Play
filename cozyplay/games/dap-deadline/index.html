@@ -269,6 +269,10 @@ html[data-skin] .ty.on{animation:tyGlow 2.4s ease-in-out infinite}
 .hrow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}.hrow .icon-btn{min-height:44px;padding:0 18px;border-radius:999px;width:auto}
 .hchips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}.hchips span{background:var(--panel);border:1.5px solid var(--line);border-radius:99px;padding:3px 12px;font-size:12.5px;font-weight:700}
 @media (max-height:700px){.hhero,.hsub{display:none}#home{gap:8px}}
+/* điện thoại/iPad DỌC đủ cao: linh vật to dần theo chiều cao màn hình, nhún nhảy (phần trống dưới màn chọn dùng cho linh vật, không để trống) */
+@media (orientation:portrait) and (min-height:701px){.hhero{font-size:clamp(44px,calc(44px + (100dvh - 700px)*.85),150px);line-height:1.05;white-space:nowrap;transform-origin:50% 100%;animation:ddBob 2.8s ease-in-out infinite}}
+@keyframes ddBob{0%,100%{transform:translateY(0) scale(1,1)}30%{transform:translateY(-6px) scale(.97,1.04)}55%{transform:translateY(0) scale(1.04,.96)}}
+@media (prefers-reduced-motion:reduce){.hhero{animation:none!important}}
 @media (max-width:340px){.hdaily{gap:8px;padding:6px 12px}.hdaily .n{font-size:20px}.hdaily b{font-size:14px}.hdaily small{font-size:11.5px}}
 @media (max-height:620px){#modeDesc{display:none}.ty{min-height:68px}.hdaily{min-height:52px;padding:6px 14px}.hmain{min-height:48px;font-size:19px}.hchips{display:none}.hsec small{margin-bottom:3px}}
 /* màn kết thúc: thẻ kết quả nổi bật theo màu nhấn + nút phụ có nhãn */

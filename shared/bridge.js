@@ -110,6 +110,20 @@ try { var _q = new URLSearchParams(location.search).get("lang"), _s = null; try 
     addEventListener("storage", function (e) { if (e.key === "np-sound") syncBtns(); });
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", ui); else ui();
+  /* iOS/Safari chặn speechSynthesis.speak() nếu lần speak ĐẦU TIÊN không nằm trong cử chỉ chạm: game đọc to bằng hẹn giờ (đáp án, đề bài) im lặng cho tới khi bé bấm loa trong thẻ "?" (đó là lần speak đầu trong cử chỉ).
+     Mở khoá sớm: ở lần chạm/phím đầu tiên của trang, đọc một khoảng trắng âm lượng 0 trong chính cử chỉ đó. Không nghe thấy gì, không đụng tới trạng thái bật/tắt tiếng của game. */
+  (function () {
+    var done = false;
+    function unlock() {
+      if (done) return;
+      try {
+        var ss = window.speechSynthesis; if (!ss || typeof SpeechSynthesisUtterance === "undefined") { done = true; return; }
+        var u = new SpeechSynthesisUtterance(" "); u.volume = 0; u.rate = 2; ss.speak(u); done = true;
+      } catch (e) { done = true; }
+      ["touchend", "click", "keydown", "pointerup"].forEach(function (n) { removeEventListener(n, unlock, true); });
+    }
+    ["touchend", "click", "keydown", "pointerup"].forEach(function (n) { addEventListener(n, unlock, { capture: true, passive: true }); });
+  })();
   window.NPAudio = {
     silence: function () { stop(false); },
     kill: function () { stop(true); },
@@ -316,7 +330,7 @@ window.NP = (function () {
     var time = o.time != null ? o.time : g("timeLeft") != null ? g("timeLeft") : g("tl") != null ? g("tl") : domNum(["time", "tm", "svTimer"]);
     var playing = !!st; if (playing) mOver = false;
     var best = null; try { best = numOf(localStorage.getItem("np-hi-" + gid)); } catch (e) {}
-    return { type: "np-hud", id: gid, hc: hudScan(), time: time, score: score, combo: combo, moves: moves, best: best, state: mPaused ? "paused" : playing ? "playing" : mOver ? "over" : "idle" };
+    return { type: "np-hud", id: gid, hc: hudScan(), hp: document.getElementById("phBtn") ? 1 : 0, time: time, score: score, combo: combo, moves: moves, best: best, state: mPaused ? "paused" : playing ? "playing" : mOver ? "over" : "idle" };
   }
   /* ẢNH CHỤP cho khay thumbnail: vuông 128px, nền ĐẶC (màu nền thật của game), canvas vẽ "contain" giữa ô — không cắt, không để lộ vùng trong suốt/đen.
      Canvas trong suốt (game vẽ trên nền CSS) khi lưu JPEG sẽ thành ĐEN → nếu > 30% điểm ảnh là trong suốt hoặc đen thuần thì trả null (host dùng icon). Host chụp TRƯỚC khi ẩn khung. */
@@ -375,6 +389,7 @@ window.NP = (function () {
     else if (c === "blur") { mBlur = true; applyMute(); }
     else if (c === "hud-hide") { mHudHide = true; document.documentElement.classList.add("np-nohud"); }
     else if (c === "hud-show") { mHudHide = false; document.documentElement.classList.remove("np-nohud"); }
+    else if (c === "help") { var hb = document.getElementById("phBtn"); if (hb) hb.click(); }
     else if (c === "snapshot") { post({ type: "np-snap", id: gid, dataUrl: snapCanvas() }); return; }
     post(readHud());
   }
@@ -428,6 +443,23 @@ window.NP = (function () {
     var cs = document.currentScript, src = cs && cs.src; if (!src || document.getElementById("npPopCss")) return;
     var l = document.createElement("link"); l.id = "npPopCss"; l.rel = "stylesheet"; l.href = src.replace(/bridge\.js(\?.*)?$/, "nppopup.css$1"); document.head.appendChild(l);
     var j = document.createElement("script"); j.src = src.replace(/bridge\.js(\?.*)?$/, "nppopup.js$1"); j.async = false; document.head.appendChild(j);
+  } catch (e) {}
+})();
+
+/* nút duy nhất của toàn app (shared/btn.css + btn.js cạnh file này): một kiểu, theme data-nb, icon data-ic */
+(function () {
+  try {
+    var cs = document.currentScript, src = cs && cs.src; if (!src || document.getElementById("npBtnCss")) return;
+    var l = document.createElement("link"); l.id = "npBtnCss"; l.rel = "stylesheet"; l.href = src.replace(/bridge\.js(\?.*)?$/, "btn.css$1"); document.head.appendChild(l);
+    var j = document.createElement("script"); j.src = src.replace(/bridge\.js(\?.*)?$/, "btn.js$1"); j.async = false; document.head.appendChild(j);
+  } catch (e) {}
+})();
+
+/* Pop Play: màn chính không đủ chỗ cho nút 56px thì gom mục phụ vào popup (shared/homefit.js cạnh file này) */
+(function () {
+  try {
+    var cs = document.currentScript, src = cs && cs.src; if (!src || !/\/popplay\//.test(location.pathname) || document.getElementById("npHomeFit")) return;
+    var j = document.createElement("script"); j.id = "npHomeFit"; j.src = src.replace(/bridge\.js(\?.*)?$/, "homefit.js$1"); j.async = false; document.head.appendChild(j);
   } catch (e) {}
 })();
 

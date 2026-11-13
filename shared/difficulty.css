@@ -31,10 +31,14 @@
 
 /* viền khung chơi theo độ khó (giữ nguyên nền của skin) */
 :root[data-dif] :is(#play,.play)::after{content:"";position:absolute;inset:0;z-index:30;border:3px solid color-mix(in srgb,var(--dif) 85%,transparent);border-radius:inherit;box-sizing:border-box;pointer-events:none}
+/* màn CHỌN (home) không viền: màu độ khó đã có ở nút Dễ/Vừa/Khó + chip, viền chỉ làm rối khung giữa (chủ site: "border này làm rối quá"); viền vẫn có khi đang chơi/kết thúc */
+:root[data-dif] #play[data-scr="home"]::after{display:none}
 
 /* Cozy màn ngang: #play[data-scr] chỉ là cột giữa, các thẻ HUD kéo ra hai bên → viền sẽ cắt ngang bố cục, bỏ viền (vẫn còn màu nhấn + chip + huy hiệu) */
 @media (orientation:landscape) and (max-height:700px) and (min-width:560px){:root[data-dif] #play[data-scr]::after{display:none}}
 @media (orientation:landscape) and (pointer:coarse) and (max-height:900px) and (min-width:800px){:root[data-dif] #play[data-scr]::after{display:none}}
+/* máy tính rộng (cùng điều kiện lưới 2 cột của landscape.css): #play chỉ là cột giữa, viền sẽ cắt ngang bố cục */
+@media (orientation:landscape) and (min-width:900px) and (min-aspect-ratio:13/10){:root[data-dif] #play[data-scr]::after{display:none}}
 
 /* (c) huy hiệu độ khó ở màn chơi + màn kết thúc (shared/difficulty.js tự tìm chỗ trống, không chặn chạm) */
 #npDifBadge{position:fixed;left:0;top:0;z-index:2147482000;display:none;align-items:center;gap:5px;box-sizing:border-box;height:26px;padding:0 11px 0 8px;border-radius:999px;background:var(--dif);color:var(--dif-ink);font:800 12px/1 var(--font);letter-spacing:.2px;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.28),0 0 0 2px color-mix(in srgb,var(--dif-ink) 22%,transparent);pointer-events:none;user-select:none}

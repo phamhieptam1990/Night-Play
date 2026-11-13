@@ -9,8 +9,9 @@
 @keyframes enduiPop{0%{transform:scale(.5);opacity:0}100%{transform:scale(1);opacity:1}}
 .endui .hat{display:none}
 .endui .chips{gap:2cqw}.endui .chip{font-weight:800;padding:1.6cqw 3.4cqw}
-.endui>.row.endui-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(17cqw,1fr));gap:2.4cqw}
-.endui>.row.endui-row .endui-share{grid-column:1/-1;min-height:14cqw;font-size:5cqw;border-radius:99cqw;animation:enduiGlow 2.4s ease-in-out infinite}
+.endui>.row.endui-row{display:flex;flex-wrap:wrap;justify-content:center;gap:2.4cqw}   /* nút phụ dưới "Khoe điểm": căn GIỮA hàng (trước: lưới auto-fit nên dồn trái ở khung rộng) */
+.endui>.row.endui-row .btn.alt[data-l]{flex:0 1 min(30%,200px);min-width:0}
+.endui>.row.endui-row .endui-share{flex:1 1 100%;min-height:14cqw;font-size:5cqw;border-radius:99cqw;animation:enduiGlow 2.4s ease-in-out infinite}
 @keyframes enduiGlow{50%{box-shadow:0 1cqw 0 rgba(0,0,0,.26),0 0 5cqw color-mix(in srgb,var(--accent) 65%,transparent)}}
 .endui>.row.endui-row .btn.alt[data-l]{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8cqw;padding:2.2cqw 1cqw;border-radius:4.4cqw;font-size:6cqw;line-height:1;white-space:normal}
 .endui>.row.endui-row .btn.alt[data-l]::after{content:attr(data-l);font:800 max(10px,2.9cqw)/1.1 var(--body);letter-spacing:0;white-space:nowrap}
