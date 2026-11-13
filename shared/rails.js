@@ -95,7 +95,7 @@
 
 
   /* ---------- KHỐI HUD ở đầu cột trái: ← + tên game, rồi dải icon ? 🔊 ngôn ngữ 🔒 (nút thật nằm trong game: bấm hộ; nút gốc trong game ẩn bằng CSS khi cột hiện) ---------- */
-  var HUDI = { help: ["bHelp", "phBtn"], snd: ["bSnd", "soundBtn"], lang: ["bLang", "langBtn"] }, HIDECSS = "html.np-rhud #bHelp,html.np-rhud #phBtn,html.np-rhud #bSnd,html.np-rhud #soundBtn,html.np-rhud #bLang,html.np-rhud #langBtn,html.np-rhud #bBk,html.np-rhud #bBack,html.np-rhud #npPmBk,html.np-rhud #npPmFab,html.np-rhud #npFab,html.np-rhud #homeBtn,html.np-rhud #bCam,html.np-rhud #bShr,html.np-rhud .top h1,html.np-rhud #title,html.np-rhud #ttl,html.np-rhud .hometitle,html.np-rhud .gametitle{display:none!important}";
+  var HUDI = { help: ["bHelp", "phBtn"], snd: ["bSnd", "soundBtn"], lang: ["bLang", "langBtn"] }, HIDECSS = "html.np-rhud #bHelp,html.np-rhud #phBtn,html.np-rhud #bSnd,html.np-rhud #soundBtn,html.np-rhud #bLang,html.np-rhud #langBtn,html.np-rhud #themeBtn2,html.np-rhud #bBk,html.np-rhud #bBack,html.np-rhud #npPmBk,html.np-rhud #npPmFab,html.np-rhud #npFab,html.np-rhud #homeBtn,html.np-rhud #bCam,html.np-rhud #bShr,html.np-rhud .top h1,html.np-rhud #title,html.np-rhud #ttl,html.np-rhud .hometitle,html.np-rhud .gametitle{display:none!important}";
   function gdoc() { try { var f = O.getFrame(); return f && f.contentDocument; } catch (e) { return null; } }
   function gel(ids) { var d = gdoc(); if (!d) return null; for (var i = 0; i < ids.length; i++) { var e = d.getElementById(ids[i]); if (e) return e; } return null; }
   function hideInGame(on) {

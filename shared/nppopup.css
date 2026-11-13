@@ -126,7 +126,7 @@ html #ovSkin .npc #skBack{display:none}
 
 /* MỌI popup/lớp phủ (.ov, ?, hướng dẫn, thống kê, tạm dừng, cổng phụ huynh…) dùng nền tím tối Night Pass, KHÔNG nền trắng, kể cả giao diện sáng:
    đặt lại biến màu trong phạm vi popup (thẻ nào dùng var(--panel)/var(--ink)/var(--line) tự thành tối + chữ trắng). */
-html:not([data-theme=dark]) :is(.ov,#hlpOv,#phOv,#pay,#howS,#statsP,#setup,#pauseOv,#shareG,#klO,#pgOv,#npInApp,#npWelcome,#nsOv,.nps-sheet,.nps-dlg,#npResume,#npxO){
+html:not([data-theme=dark]) :is(.ov:not(#ovStart),#hlpOv,#phOv,#pay,#howS,#statsP,#setup,#pauseOv,#shareG,#klO,#pgOv,#npInApp,#npWelcome,#nsOv,.nps-sheet,.nps-dlg,#npResume,#npxO){
   --panel:#1d1745;--panel2:#262058;--ink:#fff;--text:#fff;--muted:rgba(255,255,255,.72);--bg:#171236;--field:rgba(255,255,255,.1);--line:rgba(170,150,255,.42);--card:#262058;
   color:#fff;color-scheme:dark}
 html:not([data-theme=dark]) :is(.nps-sheet,.nps-dlg,#pgOv>*,#klO>*,#npInApp>*,#npWelcome>*,#nsOv>*){background-color:#1d1745;background-image:linear-gradient(165deg,#2b2064,#171236 70%);color:#fff;border-color:rgba(170,150,255,.55)}

@@ -17,14 +17,15 @@
     pause: '<path d="M8 5v14M16 5v14"/>',
     play: '<path d="M8 5.5v13l11-6.5z" fill="currentColor"/>',
     board: '<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/>',
+    theme: '<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/>',
     more: '<circle cx="5.5" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="18.5" cy="12" r="1.6" fill="currentColor"/>'
   };
   function ico(n) { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + SVG[n] + "</svg>"; }
-  var GAMEIDS = { help: ["bHelp", "phBtn"], snd: ["bSnd", "soundBtn"], lang: ["bLang", "langBtn"], restart: ["restartBtn", "bRe"], pause: ["pauseBtn"], board: ["bBoard"], pass: ["nsPill"] };
-  var KEYS = ["help", "snd", "lang", "restart", "pause", "board", "cam", "shr", "lock", "pass"];
-  var HIDECSS = "html.np-hudg #bHelp,html.np-hudg #phBtn,html.np-hudg #bSnd,html.np-hudg #soundBtn,html.np-hudg #bLang,html.np-hudg #langBtn,html.np-hudg #bCam,html.np-hudg #bShr,html.np-hudg #bRe,html.np-hudg #restartBtn,html.np-hudg #pauseBtn,html.np-hudg #bBoard,html.np-hudg #nsPill,html.np-hudg #bLock,html.np-hudg #bBk,html.np-hudg #bBack,html.np-hudg #homeBtn,html.np-hudg #npPmBk{display:none!important}";
+  var GAMEIDS = { help: ["bHelp", "phBtn"], snd: ["bSnd", "soundBtn"], lang: ["bLang", "langBtn"], theme: ["themeBtn2"], restart: ["restartBtn", "bRe"], pause: ["pauseBtn"], board: ["bBoard"], pass: ["nsPill"] };
+  var KEYS = ["help", "snd", "lang", "theme", "restart", "pause", "board", "cam", "shr", "lock", "pass"];
+  var HIDECSS = "html.np-hudg #bHelp,html.np-hudg #phBtn,html.np-hudg #bSnd,html.np-hudg #soundBtn,html.np-hudg #bLang,html.np-hudg #langBtn,html.np-hudg #themeBtn2,html.np-hudg #bCam,html.np-hudg #bShr,html.np-hudg #bRe,html.np-hudg #restartBtn,html.np-hudg #pauseBtn,html.np-hudg #bBoard,html.np-hudg #nsPill,html.np-hudg #bLock,html.np-hudg #bBk,html.np-hudg #bBack,html.np-hudg #homeBtn,html.np-hudg #npPmBk{display:none!important}";
   var stage = null, box = null, pn = null, more = null, btns = {}, active = false, small = false, tick = 0, hooked = null;
-  var lab = { vi: { restart: "Chơi lại", pause: "Tạm dừng", board: "Bảng xếp hạng", pass: "Sự kiện", help: "Cách chơi", snd: "Âm thanh", lang: "Ngôn ngữ", cam: "Chụp ảnh", shr: "Chia sẻ", lock: "Khoá màn hình", more: "Thêm" }, en: { restart: "Restart", pause: "Pause", board: "Leaderboard", pass: "Event", help: "How to play", snd: "Sound", lang: "Language", cam: "Screenshot", shr: "Share", lock: "Lock screen", more: "More" } };
+  var lab = { vi: { restart: "Chơi lại", pause: "Tạm dừng", board: "Bảng xếp hạng", pass: "Sự kiện", help: "Cách chơi", snd: "Âm thanh", lang: "Ngôn ngữ", theme: "Sáng / Tối", cam: "Chụp ảnh", shr: "Chia sẻ", lock: "Khoá màn hình", more: "Thêm" }, en: { restart: "Restart", pause: "Pause", board: "Leaderboard", pass: "Event", help: "How to play", snd: "Sound", lang: "Language", theme: "Light / Dark", cam: "Screenshot", shr: "Share", lock: "Lock screen", more: "More" } };
   function setA(e, k, v) { if (e.getAttribute(k) !== v) e.setAttribute(k, v); }
   function lg() { return ((document.documentElement.lang || "vi") + "").slice(0, 2) === "en" ? "en" : "vi"; }
   function gdoc() { try { var f = stage && stage.querySelector("iframe"); return f && f.contentDocument; } catch (e) { return null; } }
@@ -36,7 +37,7 @@
     return gel(GAMEIDS[k]);
   }
   function usable(k, src) { if (!src) return false; if (k === "lock") return !src.hidden; try { return !src.hidden && !src.closest("[hidden]"); } catch (e) { return true; } }
-  var MIRROR = { snd: 1, lang: 1, pass: 1 };
+  var MIRROR = { snd: 1, lang: 1, pass: 1, theme: 1 };
   function mk(k) {
     var b = document.createElement("button"); b.type = "button"; b.className = "np-hb"; b.dataset.k = k; b.hidden = true;
     if (k === "lang") b.textContent = "VI"; else if (k === "pass") b.textContent = "🍜"; else b.innerHTML = ico(k === "restart" ? "rst" : k);

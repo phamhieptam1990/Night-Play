@@ -455,6 +455,14 @@ window.NP = (function () {
   } catch (e) {}
 })();
 
+/* nút Sáng/Tối trong khung game (shared/themebtn.js cạnh file này) */
+(function () {
+  try {
+    var cs = document.currentScript, src = cs && cs.src; if (!src || document.getElementById("npThemeBtnJs")) return;
+    var j = document.createElement("script"); j.id = "npThemeBtnJs"; j.src = src.replace(/bridge\.js(\?.*)?$/, "themebtn.js$1"); j.async = false; document.head.appendChild(j);
+  } catch (e) {}
+})();
+
 /* Pop Play: màn chính không đủ chỗ cho nút 56px thì gom mục phụ vào popup (shared/homefit.js cạnh file này) */
 (function () {
   try {

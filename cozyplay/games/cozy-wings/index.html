@@ -131,6 +131,19 @@ body.np-local{--w:min(calc(100vw - 24px),calc((100dvh - 240px)*.75),760px)}
 .dif{width:48px;height:48px;padding:0;border-radius:50%;font-size:22px;display:grid;place-items:center}
 @media (max-height:700px){.tile img{aspect-ratio:1/1}.tile .tb{width:28px;height:28px;font-size:16px}.dif{width:40px;height:40px;font-size:18px}.tiles{gap:6px}}
 @media (max-height:520px) and (min-aspect-ratio:11/10){.tiles{grid-template-columns:repeat(5,1fr);gap:4px}.tile,.tile:nth-child(4 of .tile),.tile:nth-child(5 of .tile){grid-column:auto}.tile img{aspect-ratio:3/4}.tile .tb,.tile .skinBtn{width:22px;height:22px;font-size:12px}.tile .best{display:none}.dif{width:30px;height:30px;font-size:14px}}   /* thuộc tính hidden luôn thắng display:flex của từng lớp */
+/* ===== MÀN CHỌN CÓ HÌNH (Night Pass): thẻ ảnh ĐỀU NHAU 2 cột (thẻ lẻ cuối rộng hết hàng), nút 🎨 kính ở GÓC TRÊN-PHẢI (không che hình/điểm), điểm cao + icon con vật làm huy hiệu kính; chữ ít ===== */
+@media not all and (max-height:520px) and (min-aspect-ratio:11/10){
+  #ovStart .tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:100%;align-content:start}
+  #ovStart .tile:not(.daily){grid-column:auto!important;border-radius:20px;overflow:hidden;border:1px solid rgba(170,150,255,.55);box-shadow:0 6px 18px rgba(0,0,0,.35)}
+  #ovStart .tile:not(.daily):has(+ .tile.daily):nth-child(odd of .tile:not(.daily)){grid-column:1 / -1!important}
+  #ovStart .tile:not(.daily) img{aspect-ratio:2/1;height:auto;object-fit:cover}
+  #ovStart .tile:not(.daily):has(+ .tile.daily):nth-child(odd of .tile:not(.daily)) img{aspect-ratio:4/1}
+  #ovStart .tile .tb{left:8px;top:8px;width:auto;height:auto;font-size:22px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.6))}
+  #ovStart .tile .best{left:8px;bottom:8px;padding:3px 10px;font-size:13px;background:linear-gradient(165deg,rgba(43,32,100,.92),rgba(23,18,54,.92));border:1px solid rgba(170,150,255,.5)}
+  #ovStart .tile .skinBtn{right:8px;top:8px;bottom:auto;width:44px;height:44px;background:rgba(22,17,48,.78)!important;border:1px solid rgba(255,255,255,.35);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 4px 12px rgba(0,0,0,.4)}
+}
+/* thanh trên màn chọn: tên game một dòng riêng, không cắt "…" */
+@media (max-width:520px){.top{flex-wrap:wrap}.top h1{order:9;flex:1 1 100%;white-space:normal;overflow:visible;text-overflow:clip;line-height:1.1}}
 /* --- màn giải thích cách chơi trước khi bắt đầu --- */
 #ovHow{background:color-mix(in srgb,var(--bg) 60%,transparent);padding:10px;-webkit-backdrop-filter:none;backdrop-filter:none}#ovHow h2{background:var(--panel);color:var(--ink);padding:4px 16px;border-radius:999px;box-shadow:var(--shadow);font-size:clamp(20px,6vw,28px)}
 .hwE{display:none}

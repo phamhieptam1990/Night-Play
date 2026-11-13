@@ -40,13 +40,16 @@
       if (moved.length && !moved[0].mk.isConnected) { moved = []; if (more) { more.remove(); more = null; } var l0 = document.getElementById("nfList"); if (l0) l0.textContent = ""; }
       restore();
       if (!over(c)) return;
-      var items = [].filter.call(c.querySelectorAll(SEC), function (e) { return e.parentNode === c; });
-      if (!items.length) return;
+      var kids = function (sel) { return [].filter.call(c.querySelectorAll(sel), function (e) { return e.parentNode === c; }); };
+      var items = kids(SEC); if (!items.length) return;
       var o = popup(c), list = o.querySelector("#nfList"); list.textContent = "";
-      items.forEach(function (el) { var mk = document.createComment("nf"); el.parentNode.insertBefore(mk, el); list.appendChild(el); moved.push({ el: el, mk: mk }); });
+      var take = function (el) { var mk = document.createComment("nf"); el.parentNode.insertBefore(mk, el); list.appendChild(el); moved.push({ el: el, mk: mk }); };
       more = document.createElement("button"); more.id = "nfMore"; more.type = "button"; more.innerHTML = DOTS; more.setAttribute("aria-label", "…"); more.setAttribute("aria-haspopup", "dialog");
       more.onclick = function () { o.hidden = false; };
       c.insertBefore(more, c.firstChild);
+      items.forEach(take);
+      /* vẫn tràn sau khi gom mục phụ → gom cả hàng chọn cấp độ (.lvs) vào popup nữa */
+      if (over(c)) kids(".lvs").forEach(take);
     } finally { busy = false; if (obs) try { obs.observe(document.body, OPT); } catch (e) {} }
   }
   function sched() { if (!raf) raf = requestAnimationFrame(fit); }

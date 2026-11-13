@@ -34,7 +34,7 @@
     pause: "<svg " + S + '><path d="M8 5v14M16 5v14"/></svg>'
   };
   /* thứ tự trong bảng: [vai trò, id nút, nhãn vi, nhãn en] */
-  var ROLES = [["help", "phBtn", "Hướng dẫn", "Help"], ["snd", "soundBtn", "Âm thanh", "Sound"], ["lang", "langBtn", "Ngôn ngữ", "Language"], ["pause", "pauseBtn", "Tạm dừng", "Pause"], ["cam", "npPmCam", "Chụp ảnh", "Photo"], ["shr", "npPmShr", "Chia sẻ", "Share"], ["lock", "npPmLock", "Khoá màn", "Lock"], ["pass", "nsPill", "Sự kiện", "Event"]];
+  var ROLES = [["help", "phBtn", "Hướng dẫn", "Help"], ["snd", "soundBtn", "Âm thanh", "Sound"], ["lang", "langBtn", "Ngôn ngữ", "Language"], ["theme", "themeBtn2", "Sáng / Tối", "Light / Dark"], ["pause", "pauseBtn", "Tạm dừng", "Pause"], ["cam", "npPmCam", "Chụp ảnh", "Photo"], ["shr", "npPmShr", "Chia sẻ", "Share"], ["lock", "npPmLock", "Khoá màn", "Lock"], ["pass", "nsPill", "Sự kiện", "Event"]];
 
   /* Ô ICON TO (chủ site: "thích icon to hơn icon có chữ"): ô vuông kính tối s×s, icon svg v px nét dày, emoji e px, chữ ngôn ngữ (VI/EN) l px đậm; KHÔNG chữ nhãn; nút bật = viền + quầng màu nhấn; huy hiệu số 20px ở góc. pre = tiền tố chọn (iPad: "html.np-tab ") */
   function TILE(s, v, e, l, pre) {

@@ -1036,6 +1036,8 @@ function setTheme(t, save){
 }
 $("themeBtn").addEventListener("click", () =>
   setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark", true));
+/* nút Sáng/Tối trong khung game (shared/themebtn.js) ghi localStorage "theme" từ iframe: cổng đổi theo */
+addEventListener("storage", e => { if(e.key === "theme" && (e.newValue === "dark" || e.newValue === "light") && document.documentElement.dataset.theme !== e.newValue) setTheme(e.newValue, false); });
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e => {
   try{ if(localStorage.getItem("theme")) return; }catch(x){}
   setTheme(e.matches ? "dark" : "light");
