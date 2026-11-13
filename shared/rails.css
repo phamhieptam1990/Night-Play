@@ -42,7 +42,14 @@
 .np-res .np-t small{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
 .np-res .np-play{display:none}   /* cả thẻ là vùng bấm; bỏ nút ▶ riêng để chữ không bị bóp (cột 240px) */
 .np-play{flex:none;width:44px;height:44px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center}.np-play svg{width:20px;height:20px}
-.np-sug{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.np-sug{display:block;position:relative}
+.np-sl-track{display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;touch-action:pan-x;border-radius:18px}
+.np-sl-track::-webkit-scrollbar{display:none}
+.np-sl-page{flex:0 0 100%;min-width:0;scroll-snap-align:start;display:grid;grid-template-columns:1fr 1fr;gap:8px;align-content:start}
+.np-sl-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px}
+.np-sl-btn{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;padding:0;color:var(--ink);cursor:pointer;background:color-mix(in srgb,var(--ink) 8%,transparent);border:1px solid color-mix(in srgb,var(--ink) 20%,transparent)}
+.np-sl-btn svg{width:22px;height:22px}.np-sl-btn:active{transform:scale(.92)}
+.np-sl-dots{display:flex;align-items:center;gap:6px;min-width:0}.np-sl-dots i{width:8px;height:8px;border-radius:99px;background:color-mix(in srgb,var(--ink) 28%,transparent);transition:width .25s,background .25s}.np-sl-dots i.on{width:22px;background:var(--accent)}
 .np-g{display:flex;flex-direction:column;align-items:center;gap:6px;min-height:104px;padding:10px 6px 8px;border-radius:18px;background:var(--panel);border:2px solid color-mix(in srgb,var(--accent) 35%,var(--line));color:var(--ink);cursor:pointer;font:inherit;-webkit-appearance:none;appearance:none;margin:0;min-width:0}
 .np-g:hover,.np-g:focus-visible{background:color-mix(in srgb,var(--accent) 12%,var(--panel));outline:none}
 .np-g img{width:64px;height:64px;border-radius:18px;object-fit:cover;display:block}

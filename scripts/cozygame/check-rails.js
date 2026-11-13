@@ -29,7 +29,9 @@ const MEASURE = () => {
     if (fr && (n === "trái" ? rr.right > fr.left + 1 : rr.left < fr.right - 1)) o.errs.push("cột " + n + " đè khung game");
     for (const e of r.querySelectorAll("button,a,.np-g,.np-res")) { if (!e.offsetParent) continue; const b = e.getBoundingClientRect(); if (b.width < 2) continue; if (b.height < 43.5 || b.width < 43.5) o.errs.push("nút " + (e.className + e.id).slice(0, 18) + " " + Math.round(b.width) + "x" + Math.round(b.height) + " (<44)"); }
     for (const e of r.querySelectorAll(".np-g img,.np-ico")) { if (!e.offsetParent) continue; const b = e.getBoundingClientRect(); if (b.width < (e.closest(".np-res") ? 43.5 : 55.5)) o.errs.push("icon game nhỏ " + Math.round(b.width)); }
-    const cut = [...r.querySelectorAll("*")].filter(e => e.offsetParent && e.getBoundingClientRect().right > rr.right + 1 && e.getBoundingClientRect().width > 0).length; if (cut) o.errs.push(cut + " phần tử tràn ngang cột " + n);
+    /* phần tử trong trang slide (.np-sl-track) nằm ngoài khung nhìn là bị CẮT có chủ ý (cuộn ngang), không phải tràn: bỏ qua nếu tổ tiên cắt .np-sl-track che hết nó */
+    const clipped = e => { const t = e.closest(".np-sl-track"); if (!t) return false; const tb = t.getBoundingClientRect(), eb = e.getBoundingClientRect(); return eb.left >= tb.right - 1 || eb.right <= tb.left + 1 || eb.right > rr.right + 1 && e.closest(".np-sl-page") && eb.left >= tb.left + tb.width - 2; };
+    const cut = [...r.querySelectorAll("*")].filter(e => e.offsetParent && e.getBoundingClientRect().right > rr.right + 1 && e.getBoundingClientRect().width > 0 && !clipped(e)).length; if (cut) o.errs.push(cut + " phần tử tràn ngang cột " + n);
   }
   const hud = $("#npHud"); o.hud = hud ? [...hud.querySelectorAll("button")].filter(b => b.offsetParent).length : 0; o.hudName = hud ? Math.round(hud.querySelector(".np-gname").getBoundingClientRect().height / (parseFloat(getComputedStyle(hud.querySelector(".np-gname")).lineHeight) || 19)) : 0;
   o.floats = [...document.querySelectorAll("#stage .nps-fab,#stage #home,#stage #klock")].filter(e => getComputedStyle(e).display !== "none" && e.getBoundingClientRect().width > 0).length;

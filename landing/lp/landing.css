@@ -431,3 +431,5 @@ main p a:not(.btn){transition:color .18s ease,text-decoration-color .18s ease}
 
 /* Khối Trái Đất kéo-để-xoay (shared/orbit.js): vuốt DỌC phải cuộn được trang kể cả khi ngón tay đặt lên vệ tinh/hành tinh (trước đây trang kẹt, 0px); vuốt NGANG vẫn để JS xoay */
 .orbsys,.orbsys *{touch-action:pan-y}
+/* …nhưng vệ tinh + vòng quỹ đạo phải KÉO được theo mọi hướng (quỹ đạo tròn: hai bên là vuốt dọc, pan-y làm trình duyệt huỷ cử chỉ → kéo "không ăn" trên điện thoại) */
+.orbsys .sat,.orbsys .hit{touch-action:none}

@@ -28,8 +28,8 @@
   function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
   function html(tag, cls, h) { var e = el(tag, cls); e.innerHTML = h; return e; }
   var T = {
-    vi: { today: "Hôm nay", next: "Chơi tiếp", daily: "Thử thách hằng ngày", done: "Đã chơi", todo: "Chưa chơi hôm nay", streak: "ngày liên tiếp", best: "Điểm cao nhất", top: "Top 5 tuần này", all: "Xem tất cả", off: "Chưa tải được bảng xếp hạng", saved: "bản đã lưu", empty: "Chưa có ai trong tuần này", cam: "Chụp ảnh", shr: "Chia sẻ", resume: "Ván dở", cont: "Tiếp tục", sug: "Gợi ý cho bạn", multi: "Chơi cùng lúc", how: "Cách chơi", back: "Quay lại", hide: "Ẩn cột bên", about: "Về Play Hub", show: "Hiện cột bên", ago: ["vừa xong", " phút trước", " giờ trước", " ngày trước"], pts: " điểm" },
-    en: { today: "Today", next: "Play next", daily: "Daily challenge", done: "Played", todo: "Not played today", streak: "day streak", best: "Your best", top: "Top 5 this week", all: "See all", off: "Couldn't load the leaderboard", saved: "saved copy", empty: "No scores this week yet", cam: "Screenshot", shr: "Share", resume: "Unfinished", cont: "Continue", sug: "Suggested for you", multi: "Play together", how: "How to play", back: "Back", hide: "Hide side panels", about: "About Play Hub", show: "Show side panels", ago: ["just now", " min ago", " h ago", " d ago"], pts: " pts" }
+    vi: { today: "Hôm nay", next: "Chơi tiếp", prev: "Trang trước", nextp: "Trang sau", daily: "Thử thách hằng ngày", done: "Đã chơi", todo: "Chưa chơi hôm nay", streak: "ngày liên tiếp", best: "Điểm cao nhất", top: "Top 5 tuần này", all: "Xem tất cả", off: "Chưa tải được bảng xếp hạng", saved: "bản đã lưu", empty: "Chưa có ai trong tuần này", cam: "Chụp ảnh", shr: "Chia sẻ", resume: "Ván dở", cont: "Tiếp tục", sug: "Gợi ý cho bạn", multi: "Chơi cùng lúc", how: "Cách chơi", back: "Quay lại", hide: "Ẩn cột bên", about: "Về Play Hub", show: "Hiện cột bên", ago: ["vừa xong", " phút trước", " giờ trước", " ngày trước"], pts: " điểm" },
+    en: { today: "Today", next: "Play next", prev: "Previous page", nextp: "Next page", daily: "Daily challenge", done: "Played", todo: "Not played today", streak: "day streak", best: "Your best", top: "Top 5 this week", all: "See all", off: "Couldn't load the leaderboard", saved: "saved copy", empty: "No scores this week yet", cam: "Screenshot", shr: "Share", resume: "Unfinished", cont: "Continue", sug: "Suggested for you", multi: "Play together", how: "How to play", back: "Back", hide: "Hide side panels", about: "About Play Hub", show: "Show side panels", ago: ["just now", " min ago", " h ago", " d ago"], pts: " pts" }
   };
   var SAVE = { "bao-nhieu-giay": "bg-save", "cat-banh-chung": "cb-save", "mat-tinh-khong": "mt-save", "ne-o-ga": "og-save", "noi-mot-net": "nn-save", "shipper-sieu-toc": "ss-save", "song-sot-cuoi-thang": "sv-save", "ve-mot-net": "vn-save", "xay-cau-tre": "xc-save",
     "cho-hang-kieu-viet": "ch-save", "doi-doi-2048": "d48-save", "duong-ray": "dr-save", "ga-me-ban-trung": "gm-save", "gia-cho-viet": "gcv-save", "me-cung-truyen-tay": "mz-save", "xin-nghi": "xn-save", "xe-ca-phe": "xcp-save", "cozy-wings": "cw-best" };
@@ -163,6 +163,36 @@
     var score = function (x) { return (x.cat === g.cat ? 0 : 2) + (pl[x.id] ? 1 : 0); };
     return pool.map(function (x, i) { return { x: x, s: score(x) + i / 100 }; }).sort(function (a, b) { return a.s - b.s; }).slice(0, n).map(function (o) { return o.x; });
   }
+  /* ---------- DANH SÁCH GAME = SLIDE: mỗi trang 6/4/2 ô (2 cột), vuốt/cuộn ngang, nút ‹ ›, chấm trang, tự lướt chậm (dừng khi rê chuột/chạm/ẩn tab) ---------- */
+  var sugList = [], sugPs = 6, sugPage = 0, sugTimer = 0, sugMQ = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)");
+  function buildSug(sg) {
+    sg.textContent = ""; clearInterval(sugTimer); sugTimer = 0;
+    var pages = Math.max(1, Math.ceil(sugList.length / sugPs)); sugPage = Math.min(sugPage, pages - 1);
+    var vp = el("div", "np-sl-track"); vp.setAttribute("role", "group");
+    for (var p = 0; p < pages; p++) {
+      var pg = el("div", "np-sl-page"); pg.dataset.p = p;
+      sugList.slice(p * sugPs, p * sugPs + sugPs).forEach(function (x) {
+        var b = el("button", "np-g"); b.type = "button"; b.dataset.id = x.id; var im = el("img"); im.src = x.thumb; im.alt = ""; im.width = 64; im.height = 64; b.appendChild(im); b.appendChild(el("span", "", gname(x)));
+        b.addEventListener("click", function () { O.pick(x, false); }); pg.appendChild(b);
+      });
+      vp.appendChild(pg);
+    }
+    sg.appendChild(vp);
+    if (pages < 2) return;
+    var nav = el("div", "np-sl-nav"), pv = el("button", "np-sl-btn"), nx = el("button", "np-sl-btn"), dots = el("div", "np-sl-dots");
+    pv.type = nx.type = "button"; pv.innerHTML = ico("back"); nx.innerHTML = '<span style="display:block;transform:scaleX(-1);line-height:0">' + ico("back") + "</span>";
+    var T = tt(); pv.setAttribute("aria-label", T.prev || "Trước"); nx.setAttribute("aria-label", T.nextp || "Sau");
+    for (var d = 0; d < pages; d++) { var dt = el("i"); dots.appendChild(dt); }
+    nav.appendChild(pv); nav.appendChild(dots); nav.appendChild(nx); sg.appendChild(nav);
+    var go = function (i, smooth) { sugPage = (i + pages) % pages; vp.scrollTo({ left: sugPage * vp.clientWidth, behavior: smooth === false ? "auto" : "smooth" }); mark(); };
+    var mark = function () { [].forEach.call(dots.children, function (c, i) { c.className = i === sugPage ? "on" : ""; }); };
+    pv.addEventListener("click", function () { go(sugPage - 1); }); nx.addEventListener("click", function () { go(sugPage + 1); });
+    var st = 0; vp.addEventListener("scroll", function () { clearTimeout(st); st = setTimeout(function () { var i = Math.round(vp.scrollLeft / Math.max(1, vp.clientWidth)); if (i !== sugPage) { sugPage = i; mark(); } }, 80); });
+    var hold = false; ["mouseenter", "focusin", "touchstart", "pointerdown"].forEach(function (ev) { sg.addEventListener(ev, function () { hold = true; }); });
+    ["mouseleave", "focusout"].forEach(function (ev) { sg.addEventListener(ev, function () { hold = false; }); });
+    if (!(sugMQ && sugMQ.matches)) sugTimer = setInterval(function () { if (!hold && !document.hidden && document.contains(sg)) go(sugPage + 1); }, 7000);
+    mark(); if (sugPage) requestAnimationFrame(function () { go(sugPage, false); });
+  }
   function renderRight(g) {
     var t = tt(); R.textContent = "";
     R.appendChild(el("h3", "", t.next));
@@ -176,12 +206,8 @@
       b.addEventListener("click", function () { O.pick(best.g, true); });
       R.appendChild(b);
     }
-    var sg = el("div", "np-sug"); sg.id = "npSug";
-    suggestions(g, 6).forEach(function (x) {
-      var b = el("button", "np-g"); b.type = "button"; b.dataset.id = x.id; var im = el("img"); im.src = x.thumb; im.alt = ""; im.width = 64; im.height = 64; b.appendChild(im); b.appendChild(el("span", "", gname(x)));
-      b.addEventListener("click", function () { O.pick(x, false); }); sg.appendChild(b);
-    });
-    R.appendChild(sg);
+    var sg = el("div", "np-sug"); sg.id = "npSug"; sugList = suggestions(g, 40); sugPs = 6; sugPage = 0;
+    buildSug(sg); R.appendChild(sg);
     var mb = document.getElementById("multiBtn"), m = el("a", "np-btn pri"); m.id = "npMulti"; m.innerHTML = ico("users"); m.appendChild(el("span", "", t.multi)); m.href = mb ? mb.href : "multi.html"; R.appendChild(m);
     var hp = helpOf();
     if (hp.length) { var hw = el("div", "np-c np-how"); hw.id = "npHow"; hw.appendChild(el("h3", "", t.how)); var ul = el("ul"); hp.forEach(function (s) { ul.appendChild(el("li", "", s)); }); hw.appendChild(ul); R.appendChild(hw); }
@@ -193,13 +219,13 @@
     cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(function () {
       if (!on) return;
       var sg = document.getElementById("npSug"), how = document.getElementById("npHow"), top = document.getElementById("npTop"), res = document.getElementById("npRes");
-      var all = sg ? [].slice.call(sg.children) : []; all.forEach(function (c) { c.hidden = false; }); if (sg) sg.hidden = false; if (how) how.hidden = false; if (res) res.hidden = false;
+      if (sg) sg.hidden = false; if (how) how.hidden = false; if (res) res.hidden = false;
       var rows = top ? [].slice.call(top.querySelectorAll("li")) : []; rows.forEach(function (c) { c.hidden = false; }); var tl = top && top.querySelector(".np-link"), nt = top && top.querySelector(".np-note"); if (tl) tl.hidden = false;
       var cl = L.querySelector(".np-chips"); if (cl) cl.hidden = false;
       var ab = document.getElementById("npAbout"); if (ab) { ab.hidden = false; if (over(L)) ab.hidden = true; }
       /* phải: bỏ Cách chơi → 6 → 4 → 2 → 0 game gợi ý → ván dở (không bao giờ bỏ nút Chơi cùng lúc) */
       if (over(R) && how) how.hidden = true;
-      [4, 2, 0].forEach(function (n) { if (over(R) && sg) { all.forEach(function (c, i) { c.hidden = i >= n; }); if (!n) sg.hidden = true; } });
+      if (sg && sugList.length) { [6, 4, 2].forEach(function (n) { if (sugPs !== n && (n === 6 ? true : over(R))) { sugPs = n; buildSug(sg); } }); if (over(R)) sg.hidden = true; }
       if (over(R) && res) res.hidden = true;
       /* trái: top 5 → 3 dòng → 1 dòng → bỏ top (giữ thẻ game + 2 nút) */
       [3, 1, 0].forEach(function (n) { if (over(L) && top && !top.hidden) { rows.forEach(function (c, i) { c.hidden = i >= n; }); if (!n) top.hidden = true; } });

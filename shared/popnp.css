@@ -104,7 +104,7 @@ html.npp-kid .tile:nth-child(2n):has(>.sk)::after{animation-delay:1.5s}html.npp-
 html.npp-kid .tile:has(>.sk):active{transform:scale(.96);filter:brightness(1.15)}
 html.npp-kid .tile:has(>.sk)>.pgb{grid-column:2;grid-row:2;align-self:start;width:70%;height:7px;margin-top:3px;border-radius:99px;background:rgba(255,255,255,.18);overflow:hidden;display:block}
 html.npp-kid .tile:has(>.sk)>.pgb i{display:block;height:100%;min-width:7px;border-radius:99px;background:linear-gradient(90deg,#FFD66B,#FF9A6B);box-shadow:0 0 8px #FFD66B}
-html.npp-kid .tile:has(>.sk)>b{grid-row:1;align-self:end}
+html.npp-kid .tile:has(>.sk):has(>.pgb)>b{grid-row:1;align-self:end}   /* chỉ ô CÓ thanh tiến độ mới chừa hàng dưới; ô không có thì tên nằm GIỮA */
 @media (prefers-reduced-motion:reduce){html.npp-kid .tile:has(>.sk)>.ti,html.npp-kid .tile:has(>.sk)::after{animation:none}}
 html.npp-kid :is(.dbar,.abar){animation:kidGlow 3s ease-in-out infinite}
 @keyframes kidGlow{50%{filter:brightness(1.15) saturate(1.1)}}

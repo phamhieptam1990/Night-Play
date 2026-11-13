@@ -194,8 +194,15 @@
     var r = stage.getBoundingClientRect(), o = O[w], g = o.g, px = (e.clientX - r.left) / U - 300, py = (e.clientY - r.top) / U - 250, c = Math.cos(-o.th), s = Math.sin(-o.th);
     return Math.atan2((px * s + py * c) / g.b, (px * c - py * s) / g.a);
   }
+  function nearOrbit(e) {
+    var r = stage.getBoundingClientRect(), x = (e.clientX - r.left) / U - 300, y = (e.clientY - r.top) / U - 250, best = null, bd = 1e9;
+    ["pop", "night"].forEach(function (w) { var g = O[w].g, th = O[w].th, c = Math.cos(-th), s = Math.sin(-th), q = Math.hypot((x * c - y * s) / g.a, (x * s + y * c) / g.b), dd = Math.abs(q - 1) * Math.min(g.a, g.b); if (dd < bd) { bd = dd; best = w; } });
+    return best;
+  }
   stage.addEventListener("pointerdown", function (e) {
-    if (e.button > 0 || !e.target.closest("[data-orbit]")) return; var w = worldOf(e.target), o = O[w];
+    if (e.button > 0 || e.target.closest("button,.orbsnd,.orbhint")) return;
+    /* kéo ở BẤT KỲ đâu trong sân khấu: lấy quỹ đạo gần điểm chạm nhất (trước đây chỉ kéo được khi trúng đúng vòng/vệ tinh nhỏ → cảm giác "không ăn") */
+    var w = e.target.closest("[data-orbit]") ? worldOf(e.target) : nearOrbit(e), o = O[w]; if (!w) return;
     dr = { w: w, id: e.pointerId, x: e.clientX, y: e.clientY, moved: false, a: ang(w, e), t: e.timeStamp, v: 0 }; o.drag = true; o.vel = 0; stage.classList.add("drag"); refresh();
   });
   stage.addEventListener("pointermove", function (e) {
@@ -213,7 +220,9 @@
   stage.addEventListener("pointerup", endDrag); stage.addEventListener("pointercancel", endDrag);
   /* chống kẹt trạng thái "đang kéo/đang dừng" trên cảm ứng: nhả/huỷ ở bất kỳ đâu (kể cả ngoài sân khấu, sau khi trình duyệt chiếm cử chỉ cuộn) đều giải phóng */
   function release(e) { if (dr && (!e.pointerId || e.pointerId === dr.id)) endDrag({ pointerId: dr.id }); ["pop", "night"].forEach(function (w) { if (O[w].drag && !dr) { O[w].drag = false; } }); stage.classList.remove("drag"); refresh(); }
-  ["pointerup", "pointercancel", "touchend", "touchcancel", "lostpointercapture"].forEach(function (ev) { d.addEventListener(ev, release, true); });
+  ["pointerup", "pointercancel", "touchend", "touchcancel"].forEach(function (ev) { d.addEventListener(ev, release, true); });
+  /* lostpointercapture: chỉ tính khi mất capture của CHÍNH sân khấu. Cảm ứng tự "bám" vào phần tử đầu tiên chạm; khi ta gọi stage.setPointerCapture, sự kiện mất-capture của phần tử cũ bắn ra và (trước đây) bị coi là nhả tay → kéo bị huỷ ngay nhịp đầu trên điện thoại */
+  d.addEventListener("lostpointercapture", function (e) { if (e.target === stage) release(e); }, true);
   addEventListener("blur", release); addEventListener("scroll", function () { if (dr && !dr.moved) release({}); }, { passive: true });
   stage.addEventListener("dragstart", function (e) { e.preventDefault(); });
 

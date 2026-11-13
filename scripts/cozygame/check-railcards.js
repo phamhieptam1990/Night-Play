@@ -17,6 +17,7 @@ const MEASURE = () => {
   const RULES = [[".np-res .np-t b", 2], [".np-res .np-t small", 1], [".np-gname:not(.pt-title)", 2], [".np-g span", 3], [".np-c:not(.np-res):not(.np-top):not(.np-how) .np-t b", 2], [".np-t small", 1], [".np-top li span", 1], [".np-how li", 99], [".np-btn span", 1], [".np-about span", 1], [".np-chip", 1], [".np-note", 2], [".np-link", 1], ["h3", 1]];
   for (const r of rails) { const rr = r.getBoundingClientRect();
     for (const [sel, max] of RULES) for (const e of r.querySelectorAll(sel)) { if (!e.offsetParent) continue; const b = e.getBoundingClientRect(); if (b.width < 2) continue;
+      { const tr = e.closest(".np-sl-track"); if (tr) { const tb = tr.getBoundingClientRect(); if (b.left >= tb.right - 1 || b.right <= tb.left + 1) continue; } }   /* trang slide đang nằm ngoài khung nhìn (cuộn ngang có chủ ý): chỉ đo trang đang hiện */
       const n = lines(e), cs = getComputedStyle(e), sp = split(e);
       if (n > max && !(cs.textOverflow === "ellipsis" && cs.whiteSpace === "nowrap")) out.push(sel + " " + n + " dòng (>" + max + ") rộng " + Math.round(b.width) + ": " + e.textContent.trim().slice(0, 40));
       if (sp.length) out.push(sel + " tách từ giữa chừng: " + sp.join(","));
