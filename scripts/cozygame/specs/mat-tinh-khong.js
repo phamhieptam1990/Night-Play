@@ -2,7 +2,7 @@
 module.exports = {
   id: "mat-tinh-khong", prefix: "mt", title: { vi: "Mắt Tinh Không?", en: "Sharp Eyes?" }, maxScore: 99,
   hero: "👁️🎨", deco: ["👁️", "🎨", "🔍", "🌈"],
-  types: [["🎨", "Khác màu", "Odd colour"], ["🌀", "Xoay sắc", "Spin hue"], ["💡", "Nhấp nháy", "Flicker"], ["🔀", "Đảo ô 30 giây", "30 s shuffle"]],
+  types: [["🎨", "Khác màu", "Odd colour"], ["🌀", "Xoay sắc", "Spin hue"], ["💡", "Nhấp nháy", "Flicker"], ["🌪️", "Đảo ô 30 giây", "30 s shuffle"]],
   catalog: [["basic", "Bảng màu", "Palette", "🎨"], ["hive", "Tổ ong mật", "Honeycomb", "🍯"], ["petri", "Đĩa petri", "Petri dish", "🧫"], ["sky", "Bầu trời sao", "Starry sky", "🌌"], ["wall", "Tường kính màu", "Stained wall", "🧱"]],
   rootCss: `:root{--bg:#F1F0FF;--panel:#ffffff;--ink:#1f1a3d;--muted:#5d5a85;--accent:#6b4ce6;--on:#ffffff;--good:#1a9a55;--bad:#d23b3b;--line:#d3cff5;--pbg:linear-gradient(#e3defd,#f7f5ff);--field:#f4f2ff;--field2:#e0dcfb;
  --display:var(--font);--body:var(--font)}

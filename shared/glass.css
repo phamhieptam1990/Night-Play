@@ -71,3 +71,7 @@ button.sk.on,button.sk[aria-pressed=true],button.sk.sel{border-color:#fff!import
   box-shadow:0 4px 14px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 14px color-mix(in srgb,var(--accent,#7C5CFF) 45%,transparent)!important}
 .ib2.main:not([data-l]){background:linear-gradient(135deg,var(--accent,#7C5CFF),color-mix(in srgb,var(--accent,#7C5CFF) 62%,#000))!important;border-color:rgba(255,255,255,.45)!important;
   box-shadow:0 5px 16px color-mix(in srgb,var(--accent,#7C5CFF) 55%,transparent),0 2px 6px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.3)!important}
+
+/* Hàng nút cuối ván (Quay lại / Đấu lại / Ván mới / Trang chủ): MỌI game Cozy (kể cả viết tay) — 4 nút CÙNG CAO, thẳng hàng; icon SVG (↻ thay 🔁) cùng cỡ emoji */
+.row:has(>#bRem),.row:has(>#bAgain){align-items:stretch}
+:is(#bClip,#bRem,#bAgain,#bHome)>svg{width:1.23em!important;height:1.23em!important;display:block;flex:none;margin:0!important}   /* 1.23em = cao bằng dòng emoji → nhãn thẳng hàng */

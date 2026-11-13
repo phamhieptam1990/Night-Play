@@ -12,7 +12,7 @@ function main(PF, OPTS) {
   });
   const S = {
     ink: { me: "🐲", h: 30, style: "ink", path: ["#1c1c1c", "#b3261e"], deco: ["🖌️", "🏮", "🐉", "🎋"], hero: "🖌️🧭" },
-    neon: { me: "🤖", h: 285, style: "neon", path: ["#ff3df0", "#35f0ff"], deco: ["⚡", "💠", "🔷", "🎮"], hero: "⚡🧭" },
+    neon: { me: "👾", h: 285, style: "neon", path: ["#ff3df0", "#35f0ff"], deco: ["⚡", "💠", "🔷", "🎮"], hero: "⚡🧭" },
     water: { me: "🐠", h: 200, style: "water", path: ["#3d8bff", "#ff5fa0"], deco: ["🎨", "💧", "🌊", "🫧"], hero: "🎨🧭" },
     pixel: { me: "👾", h: 125, style: "pixel", path: ["#2f9e44", "#e8590c"], deco: ["👾", "🕹️", "💾", "🟩"], hero: "👾🧭" }
   };

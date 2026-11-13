@@ -84,6 +84,7 @@ canvas#cv{border-radius:3cqw;background:linear-gradient(var(--field),var(--field
 @keyframes endGlow{50%{box-shadow:0 1cqw 0 rgba(0,0,0,.26),0 0 5cqw color-mix(in srgb,var(--accent) 65%,transparent)}}
 @media (prefers-reduced-motion:reduce){#end>.row #bShare{animation:none}}
 #end>.row .btn.alt{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8cqw;padding:2.2cqw 1cqw;border-radius:4.4cqw;font-size:6cqw;line-height:1}
+#end>.row{align-items:stretch}#end>.row .btn.alt>svg{width:1.23em;height:1.23em;display:block;flex:none;margin:0}   /* icon SVG (↻ thay ↻) cùng cỡ với emoji → 4 nút cùng cao, thẳng hàng */
 #end>.row .btn.alt::after{content:attr(data-l);font:800 max(10px,2.9cqw)/1.1 var(--body);letter-spacing:0;white-space:nowrap}
 @@EXTRA_CSS@@
 </style>
@@ -113,7 +114,7 @@ canvas#cv{border-radius:3cqw;background:linear-gradient(var(--field),var(--field
     <div class="chips" id="eChips"></div>
     <p class="mut" id="eVs" style="text-align:center;margin:0"></p>
     <p class="near" id="eNear" hidden></p>
-    <div class="row"><button class="btn grow" id="bShare" type="button">📤</button><button class="btn alt" id="bClip" type="button" hidden>🎬</button><button class="btn alt" id="bRem" type="button" hidden aria-label="rematch">🔁</button><button class="btn alt" id="bAgain" type="button" aria-label="new">🎲</button><button class="btn alt" id="bHome" type="button">🏠</button></div>
+    <div class="row"><button class="btn grow" id="bShare" type="button">📤</button><button class="btn alt" id="bClip" type="button" hidden>🎬</button><button class="btn alt" id="bRem" type="button" hidden aria-label="rematch">↻</button><button class="btn alt" id="bAgain" type="button" aria-label="new">🎲</button><button class="btn alt" id="bHome" type="button">🏠</button></div>
     <p class="mut" id="eLeg" style="text-align:center;margin:0" hidden></p>
   </section>
   <div class="ov" id="ovCh" hidden><h2 id="chH"></h2><p id="chP"></p><div class="row"><button class="btn alt" id="chNo" type="button">✕</button><button class="btn grow" id="chGo" type="button"></button></div></div>

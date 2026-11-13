@@ -8,3 +8,6 @@
 #play.play>:is(#home,#village,#ovStart,.ov,canvas){border-radius:inherit}
 :root{--tap-lg:56px}
 @media (max-width:520px) and (orientation:portrait){#bBk,#bBack,#npPmBk,#homeBtn{width:var(--tap-lg)!important;height:var(--tap-lg)!important;min-width:var(--tap-lg)!important;min-height:var(--tap-lg)!important}}
+/* ← nằm TRONG một hàng nút (vd. Xin Nghỉ: [←][✍][Gửi đơn]) đã được dời lên góc trên-trái bằng transform nhưng vẫn chiếm ô trong hàng → bỏ ô đó khỏi dòng chảy để các nút còn lại căn giữa / full width */
+.row>#bBack{margin-inline:0 -64px;flex:none}
+.row:has(>#bBack)>.btn.grow{flex:1 1 0;min-width:0}

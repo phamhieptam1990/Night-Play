@@ -90,7 +90,7 @@ textarea{width:100%;height:20cqw;border-radius:3cqw;border:.5cqw solid var(--lin
     <div class="card"><div class="mut" id="rQT"></div><div class="quote" id="rQ"></div></div>
     <div class="card"><div class="row" style="justify-content:space-between"><span class="mut" id="rMT"></span><b id="rPct" style="font:800 7cqw var(--font);color:var(--accent)"></b></div><div class="meter"><b id="rBar"></b></div></div>
     <div class="chips" id="rChips"></div><p class="mut" style="text-align:center;margin:0" id="rVs"></p>
-    <div class="row"><button class="btn grow" id="bShare" type="button">📤</button><button class="btn alt" id="bRem" type="button" hidden aria-label="rematch">🔁</button><button class="btn alt" id="bAgain" type="button" aria-label="new">🎲</button><button class="btn alt" id="bHome" type="button">🏠</button></div>
+    <div class="row"><button class="btn grow" id="bShare" type="button">📤</button><button class="btn alt" id="bRem" type="button" hidden aria-label="rematch">↻</button><button class="btn alt" id="bAgain" type="button" aria-label="new">🎲</button><button class="btn alt" id="bHome" type="button">🏠</button></div>
     <p class="mut" id="eLeg" style="text-align:center;margin:0" hidden></p>
   </section>
   <div class="ov" id="ovCh" hidden><h2 id="chH"></h2><p id="chP"></p><div class="row"><button class="btn alt" id="chNo" type="button">✕</button><button class="btn grow" id="chGo" type="button"></button></div></div>
@@ -275,8 +275,8 @@ if(window.NP&&NP.helper){const HS=NP.initialState&&typeof NP.initialState==="obj
  if(/^h\.\d{13}\.[A-Za-z0-9_-]{43}$/.test(st.tk||""))PF.loadPro(false,st.tk).then(()=>{if(/^[a-z]{3,10}$/.test(st.sk||"")&&PF.skins[0][st.sk])PF.skinSel[0]=st.sk}).catch(()=>{}).finally(go);else go()}
 else{const c0=parseCh(location.hash);if(c0)openCh(c0);else if(location.hash==="#daily")$("bDaily").click()}
 
-/* chú thích hai nút: 🔁 cùng màn / 🎲 màn mới */
-{const LEG={vi:"🔁 Xin lại cùng tình huống · 🎲 Tình huống mới",en:"🔁 Retry same situation · 🎲 New situation"},sync=()=>{const l=$("eLeg"),r=$("bRem");l.hidden=r.hidden;l.textContent=LEG[LANG]||LEG.vi;r.title=(LANG==="en"?"Rematch same":"Chơi lại cùng màn");$("bAgain").title=(LANG==="en"?"New":"Màn mới")};new MutationObserver(sync).observe($("bRem"),{attributes:true,attributeFilter:["hidden"]});new MutationObserver(sync).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});$("bLang").addEventListener("click",()=>setTimeout(sync,30));sync()}
+/* chú thích hai nút: ↻ cùng màn / 🎲 màn mới */
+{const LEG={vi:"↻ Xin lại cùng tình huống · 🎲 Tình huống mới",en:"↻ Retry same situation · 🎲 New situation"},sync=()=>{const l=$("eLeg"),r=$("bRem");l.hidden=r.hidden;l.textContent=LEG[LANG]||LEG.vi;r.title=(LANG==="en"?"Rematch same":"Chơi lại cùng màn");$("bAgain").title=(LANG==="en"?"New":"Màn mới")};new MutationObserver(sync).observe($("bRem"),{attributes:true,attributeFilter:["hidden"]});new MutationObserver(sync).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});$("bLang").addEventListener("click",()=>setTimeout(sync,30));sync()}
 
 window.XN={rematch,resFx,get G(){return G},begin,finish,again,shareText,shareLink,drawCard,parseCh,genSit,evalReq,holidayNear,fnv,dayKey,dayNo,PF,T,CATS,MODS,BAD,send(ci,di,mods,own){G.ci=ci;G.di=di;G.mods=mods||[];G.own=!!own;if(own)$("own").value=own;$("bSend").click()}};
 </script>

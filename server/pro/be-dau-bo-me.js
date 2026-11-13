@@ -33,7 +33,7 @@ function main(PF, OPTS) {
     },
     { /* ===== 4 · DÃY SỐ BÍ ẨN ===== */
       race: { vars: v("linear-gradient(#555,#222)", "linear-gradient(#666,#2a2a2a)", "#1a1a1a", "#fff", "#ffdd00", "#1a1a00", "2cqw", ".7cqw solid #ffdd00", "0 0 2cqw rgba(255,221,0,.35)"), deco: ["🏎️", "🏁", "🛞"], css: ".qb{letter-spacing:.3cqw}" },
-      robot: { vars: v("linear-gradient(#cfd8e8,#8fa0c0)", "linear-gradient(#dde4f0,#a0b0d0)", "#f4f7fc", "#1f2f4a", "#2f7bff", "#fff", "1.5cqw", ".8cqw solid #5a6a8a", "0 1cqw 0 rgba(40,60,100,.4)"), deco: ["🤖", "⚙️", "🔩"], css: ".qb{font-family:'Courier New',monospace}" },
+      robot: { vars: v("linear-gradient(#cfd8e8,#8fa0c0)", "linear-gradient(#dde4f0,#a0b0d0)", "#f4f7fc", "#1f2f4a", "#2f7bff", "#fff", "1.5cqw", ".8cqw solid #5a6a8a", "0 1cqw 0 rgba(40,60,100,.4)"), deco: ["👾", "⚙️", "🔩"], css: ".qb{font-family:'Courier New',monospace}" },
       magic: { vars: v("linear-gradient(#3a1a6a,#9a3aa0)", "linear-gradient(#4a2a7a,#b04ab0)", "#2a1050", "#f8e8ff", "#ffd54a", "#2a1a00", "6cqw", ".7cqw solid #ffd54a", "0 0 3.5cqw rgba(255,213,74,.5)"), deco: ["🪄", "✨", "🔮"], css: ".qb{text-shadow:0 0 2cqw #ffd54a}" },
       rail: { vars: v("linear-gradient(#d9c9a8,#8a7a5a)", "linear-gradient(#e6d8b8,#9a8a6a)", "#fffaf0", "#3a2a14", "#c0392b", "#fff", "3cqw", "1cqw solid #5a4a2a", "0 1cqw 0 rgba(60,40,10,.4)"), deco: ["🚂", "🚉", "🛤️"], css: "" }
     }

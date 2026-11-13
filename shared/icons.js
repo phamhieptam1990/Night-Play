@@ -44,7 +44,7 @@
       var b = all[j]; if (b.children.length) continue;
       var t2 = (b.textContent || "").replace(/\uFE0F/g, "").trim(), ib2 = b.classList.contains("ib2"), k2 = MAP2[t2] || (ib2 && MAP3[t2]); if (!k2) continue;
       b.innerHTML = ICON[k2];
-      if (ib2 || b.hasAttribute("data-l")) continue;   /* .ib2 và nút có nhãn ::after (data-l) tự dàn bằng CSS của chúng (glass.css/endui.css): không ép grid/padding 0 */
+      if (ib2 || b.hasAttribute("data-l") || /^(bClip|bRem|bAgain|bHome)$/.test(b.id)) continue;   /* nút cuối ván có nhãn: giữ padding/bố cục của CSS (không ép padding 0 → hàng 4 nút cùng cao) */   /* .ib2 và nút có nhãn ::after (data-l) tự dàn bằng CSS của chúng (glass.css/endui.css): không ép grid/padding 0 */
       b.style.display = b.style.display || "grid"; b.style.placeItems = "center"; b.style.padding = "0"; b.style.lineHeight = "0";
     }
     busy = false;

@@ -258,7 +258,7 @@ const T=(k,v)=>{let s=(I18N[LANG][k]!=null?I18N[LANG][k]:I18N.vi[k]!=null?I18N.v
 
 /* ===== DỮ LIỆU: 4 loại · bộ sưu tập ===== */
 const VI=Array.from("AĂÂBCDĐEÊGHIKLMNOÔƠPQRSTUƯVXY"),EN=Array.from("ABCDEFGHIJKLMNOPQRSTUVWXYZ"),NU=Array.from("0123456789"),SH=["circle","square","triangle","star","heart","diamond","rect","moon","cross","hex"];
-const ITEMS=[VI,EN,NU,SH],TYI=["🍎","🐝","🧮","🔷"],FAMI=["🫧","🤖","👻","🐉"];
+const ITEMS=[VI,EN,NU,SH],TYI=["🍎","🐝","🧮","🔷"],FAMI=["🫧","👾","👻","🐉"];
 const POOLS=[[Array.from("ILTVUOCXHE"),Array.from("ILTVUOCXHEANMYKPDĐRS"),VI],[Array.from("ILTVUOCXHE"),Array.from("ILTVUOCXHEANMYKPDFJZW"),EN],[Array.from("013475"),Array.from("0123456789").filter(x=>x!=="8"),NU],[["circle","square","triangle","heart","star"],["circle","square","triangle","heart","star","diamond","rect","moon"],SH]];
 const LV=[{w:.115,need:.62,tol:.07},{w:.092,need:.67,tol:.055},{w:.074,need:.71,tol:.045}];   /* w: bề dày nét bút · need: tô phủ bao nhiêu thì xong · tol: dung sai */
 const RARB=[8,15,24,30],COMBO_ACC=80;
@@ -477,7 +477,7 @@ const BASIC=[
  {vars:mkv("linear-gradient(#ffe3c2,#ffd1c2)","#fff","#5a2a14","#ff5a1f"),deco:["🔥","⭐"],look:{}}];
 const PF=window.PF={pro:null,mkv,skins:BASIC.map(b=>({basic:b})),
   catalog:[[["basic","linear-gradient(#d8f5c4,#c4f0e0)","🫧"],["candy","linear-gradient(#ffd3ea,#ffb0d6)","🍭"],["pixel","linear-gradient(#222,#4a4a6a)","👾"],["magic","linear-gradient(#3a1a6a,#9a3aa0)","🪄"],["ocean","linear-gradient(#aef0ff,#3a8fd0)","🐠"]],
-   [["basic","linear-gradient(#cfe9ff,#e8f5ff)","🤖"],["neon","linear-gradient(#10002b,#3c096c)","💡"],["space","linear-gradient(#050b2a,#1b2f7a)","🚀"],["gear","linear-gradient(#d9c9a8,#8a7a5a)","⚙️"],["toy","linear-gradient(#ffe56a,#ff8a5a)","🧸"]],
+   [["basic","linear-gradient(#cfe9ff,#e8f5ff)","👾"],["neon","linear-gradient(#10002b,#3c096c)","💡"],["space","linear-gradient(#050b2a,#1b2f7a)","🚀"],["gear","linear-gradient(#d9c9a8,#8a7a5a)","⚙️"],["toy","linear-gradient(#ffe56a,#ff8a5a)","🧸"]],
    [["basic","linear-gradient(#e6d9ff,#f4e8ff)","👻"],["cloud","linear-gradient(#bfe6ff,#f4fbff)","☁️"],["night","linear-gradient(#1a0b2e,#3b1d5a)","🎃"],["jelly","linear-gradient(#ffd1f0,#ffe9a0)","🍬"],["moon","linear-gradient(#0e1b3d,#3a4f88)","🌙"]],
    [["basic","linear-gradient(#ffe3c2,#ffd1c2)","🐉"],["lava","linear-gradient(#3a0e0e,#c8401a)","🌋"],["ice","linear-gradient(#e8f4ff,#9fd0f2)","🧊"],["forest","linear-gradient(#bff0b0,#4fae6a)","🌲"],["gold","linear-gradient(#fff2b0,#e0a020)","👑"]]],
   skinSel:(()=>{const v=LS.get("qv-skin",[]);return Array.from({length:4},(_,i)=>Array.isArray(v)&&typeof v[i]==="string"?v[i]:"basic")})()};

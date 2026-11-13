@@ -12,7 +12,7 @@ function main(PF, OPTS) {
     { /* ===== 0 · CÁ SẤU ===== */
       robot: { /* rô-bốt: thân kim loại, ăng-ten, ốc vít, mắt vuông đỏ */
         vars: v("linear-gradient(#cfd8e8,#8fa0c0)", "#6a7a98", "#1f2f4a", "#e8f0ff", "#f4f7fc", "#1f2f4a", ".8cqw solid #5a6a8a", "1.5cqw", "0 1cqw 0 rgba(40,60,100,.45)", "#1f2f4a", "#ff4d4d"),
-        food: ["🔩", "⚙️", "🔋"], deco: ["🤖", "⚙️", "🔩"], css: ".itm{font-family:'Courier New',monospace}",
+        food: ["🔩", "⚙️", "🔋"], deco: ["👾", "⚙️", "🔩"], css: ".itm{font-family:'Courier New',monospace}",
         col: { a: "#9fb3cf", b: "#4a5b78", c: "#e3ebf7", m: "#14202e" },
         acc: '<line x1="100" y1="16" x2="100" y2="-6" stroke="#4a5b78" stroke-width="4"/><circle cx="100" cy="-8" r="6" fill="#ff4d4d" stroke="#4a5b78" stroke-width="2"/><rect x="42" y="8" width="24" height="22" rx="3" fill="#ff4d4d" opacity=".85"/><rect x="134" y="8" width="24" height="22" rx="3" fill="#ff4d4d" opacity=".85"/><circle cx="26" cy="52" r="5" fill="#cfd8e8" stroke="#4a5b78" stroke-width="2"/><circle cx="174" cy="52" r="5" fill="#cfd8e8" stroke="#4a5b78" stroke-width="2"/><rect x="70" y="44" width="60" height="6" rx="3" fill="#4a5b78" opacity=".6"/>',
         scene: sc('<rect x="0" y="250" width="300" height="150" fill="#7a8aa8"/><rect x="20" y="170" width="50" height="90" fill="#9fb0cc"/><rect x="240" y="150" width="46" height="110" fill="#9fb0cc"/><circle cx="60" cy="100" r="26" fill="none" stroke="#b8c6de" stroke-width="8" stroke-dasharray="8 6"/><circle cx="240" cy="70" r="18" fill="none" stroke="#b8c6de" stroke-width="6" stroke-dasharray="6 5"/>')

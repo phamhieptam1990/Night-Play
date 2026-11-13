@@ -24,7 +24,7 @@ function main(PF, OPTS) {
         css: ".peg{--peg:#5a6a8a}.disc{border-radius:.8cqw;background:repeating-linear-gradient(90deg,hsl(var(--dhue) 55% 62%) 0 5cqw,hsl(var(--dhue) 55% 46%) 5cqw 5.6cqw);border:.5cqw solid #3a4a6a;box-shadow:0 .7cqw 0 #2a3a5a;color:#fff}" },
       lifebuoy: { vars: v("linear-gradient(#aef0ff,#3a8fd0)", "#fff", "rgba(240,251,255,.88)", "#0b3a5a", "#ff7a59", "#fff", "7cqw", ".9cqw solid #fff", "0 1cqw 3cqw rgba(11,58,90,.3)"), flag: "⚓", deco: ["🛟", "🌊", "🐠"],
         css: ".peg{--peg:#c0392b}.disc{border-radius:999px;background:repeating-linear-gradient(90deg,#fff 0 3.2cqw,hsl(var(--dhue) 85% 52%) 3.2cqw 6.4cqw);border:.5cqw solid #fff;box-shadow:0 .7cqw 0 rgba(0,0,0,.25);color:#0b3a5a}" },
-      robot:    { vars: v("linear-gradient(#3a4a6a,#1a2a4a)", "#fff", "rgba(30,45,80,.7)", "#e0ecff", "#2fe6ff", "#02202a", "2cqw", ".6cqw solid #2fe6ff", "0 0 3cqw rgba(47,230,255,.4)"), flag: "🔋", deco: ["🤖", "⚙️", "🔩"],
+      robot:    { vars: v("linear-gradient(#3a4a6a,#1a2a4a)", "#fff", "rgba(30,45,80,.7)", "#e0ecff", "#2fe6ff", "#02202a", "2cqw", ".6cqw solid #2fe6ff", "0 0 3cqw rgba(47,230,255,.4)"), flag: "🔋", deco: ["👾", "⚙️", "🔩"],
         css: ".peg{--peg:#2fe6ff}.disc{border-radius:1cqw;background:linear-gradient(hsl(var(--dhue) 25% 80%),hsl(var(--dhue) 30% 56%));border:.5cqw solid #5a6a8a;box-shadow:0 .7cqw 0 #2a3a5a;color:#12213a;font-family:'Courier New',monospace}.disc::before,.disc::after{content:'';position:absolute;top:50%;width:1.5cqw;height:1.5cqw;border-radius:50%;background:#5a6a8a;transform:translateY(-50%)}.disc::before{left:1.4cqw}.disc::after{right:1.4cqw}" }
     },
     { /* ===== 2 · THÁP XÁO TRỘN ===== */
@@ -57,7 +57,7 @@ function main(PF, OPTS) {
     { pancake: ["🥞|🧈|🍓|🥛", "🍓|🫐|🍓|🫐", "🧈", "linear-gradient(rgba(255,240,200,.6),rgba(230,170,80,.35))", "🥞|🍯|🍓|🧈"],
       castle: ["🏰|🛡️|⚔️|🚩", "🧱|🧱|🧱|🧱", "🛡️", "linear-gradient(rgba(220,230,250,.5),rgba(90,110,150,.45))", "🏰|⚔️|👑|✨"],
       lifebuoy: ["⚓|🌊|🛟|🐚", "🌊|🌊|🌊|🌊", "⚓", "linear-gradient(rgba(255,255,255,.4),rgba(40,120,200,.45))", "🐠|🫧|🌊|🛟"],
-      robot: ["🤖|⚙️|🔩|💡", "⚙️|🔩|⚙️|🔩", "💡", "linear-gradient(rgba(47,230,255,.1),rgba(10,20,50,.6))", "🤖|⚡|⚙️|💡"] },
+      robot: ["👾|⚙️|🔩|💡", "⚙️|🔩|⚙️|🔩", "💡", "linear-gradient(rgba(47,230,255,.1),rgba(10,20,50,.6))", "👾|⚡|⚙️|💡"] },
     { magic: ["🪄|✨|🔮|🌟", "🍄|🍄|🍄|🍄", "🔮", "linear-gradient(rgba(255,213,74,.12),rgba(80,20,120,.5))", "✨|🔮|🪄|🦄"],
       toy: ["🧸|🪀|🧩|🎲", "🧩|🧱|🧩|🧱", "🎈", "linear-gradient(rgba(255,245,225,.6),rgba(217,160,102,.4))", "🧸|🎈|🧩|🎲"],
       garden: ["🦋|🐝|🌼|🐞", "🌷|🌻|🌷|🌻", "🌼", "linear-gradient(rgba(214,245,176,.5),rgba(80,170,70,.35))", "🌷|🦋|🌻|🐝"],

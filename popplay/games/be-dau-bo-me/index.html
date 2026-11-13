@@ -283,7 +283,7 @@ const PF=window.PF={pro:null,mkv,skins:BASIC.map(b=>({basic:b})),
    [["basic","linear-gradient(#cfe9ff,#e8f5ff)","🔍"],["lantern","linear-gradient(#1a1040,#4b2a7a)","🏮"],["jungle","linear-gradient(#bff0b0,#4fae6a)","🌿"],["ocean","linear-gradient(#aef0ff,#3a8fd0)","🌊"],["book","linear-gradient(#fff2d6,#e8c99a)","📖"]],
    [["basic","linear-gradient(#d8f5c4,#fff6cc)","🌾"],["farm","linear-gradient(#ffe9a8,#9ad07a)","🚜"],["zoo","linear-gradient(#ffd9a0,#8fc98a)","🦁"],["sea","linear-gradient(#0a3a6a,#031a3a)","🐙"],["firefly","linear-gradient(#0e1b3d,#2c3f78)","✨"]],
    [["basic","linear-gradient(#e6d9ff,#d3e6ff)","⚖️"],["snow","linear-gradient(#e8f4ff,#b9d8f2)","⛄"],["desert","linear-gradient(#ffe0a0,#e8a860)","🏜️"],["volcano","linear-gradient(#3a0e0e,#c8401a)","🌋"],["sky","linear-gradient(#9ad8ff,#e8f7ff)","☁️"]],
-   [["basic","linear-gradient(#c9f2ec,#d5f5c8)","🧩"],["race","linear-gradient(#555,#222)","🏎️"],["robot","linear-gradient(#cfd8e8,#8fa0c0)","🤖"],["magic","linear-gradient(#3a1a6a,#9a3aa0)","🪄"],["rail","linear-gradient(#d9c9a8,#8a7a5a)","🚂"]]],
+   [["basic","linear-gradient(#c9f2ec,#d5f5c8)","🧩"],["race","linear-gradient(#555,#222)","🏎️"],["robot","linear-gradient(#cfd8e8,#8fa0c0)","👾"],["magic","linear-gradient(#3a1a6a,#9a3aa0)","🪄"],["rail","linear-gradient(#d9c9a8,#8a7a5a)","🚂"]]],
   skinSel:(()=>{const v=LS.get("bd-skin",[]);return Array.from({length:5},(_,i)=>Array.isArray(v)&&typeof v[i]==="string"?v[i]:"basic")})()};
 const skinOf=t=>{const m=PF.skins[t],id=PF.skinSel[t];return (m&&m[id])||m.basic};
 const skLocked=(t,id)=>id!=="basic"&&!PF.skins[t][id];

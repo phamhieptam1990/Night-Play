@@ -412,7 +412,7 @@ const BASIC=[
 const PF=window.PF={pro:null,mkv,K,skins:BASIC.map(b=>({basic:b})),
   catalog:[[["basic","linear-gradient(#ffe9f2,#ffd0e4)","🐰"],["disco","linear-gradient(#1a0b3a,#7a2a9a)","🪩"],["space","linear-gradient(#050b2a,#1b2f7a)","👽"],["ocean","linear-gradient(#0a3a6a,#2fb4e8)","🐙"],["festival","linear-gradient(#2a0a3a,#d0402a)","🏮"]],
    [["basic","linear-gradient(#2a1a4a,#5a2a7a)","🎤"],["jungle","linear-gradient(#bff0b0,#2f7a45)","🐵"],["candy","linear-gradient(#ffd3ea,#ffb0d6)","🍭"],["snow","linear-gradient(#e8f4ff,#9fc8ea)","🐧"],["circus","linear-gradient(#e63946,#fff1f1)","🤡"]],
-   [["basic","linear-gradient(#bfe8ff,#fff1c9)","🐻"],["desert","linear-gradient(#ffe0a0,#e8a860)","🦖"],["volcano","linear-gradient(#3a0e0e,#c8401a)","🤖"],["city","linear-gradient(#0e1b3d,#3a4f88)","😎"],["farm","linear-gradient(#ffe9a8,#9ad07a)","🐸"]],
+   [["basic","linear-gradient(#bfe8ff,#fff1c9)","🐻"],["desert","linear-gradient(#ffe0a0,#e8a860)","🦖"],["volcano","linear-gradient(#3a0e0e,#c8401a)","👾"],["city","linear-gradient(#0e1b3d,#3a4f88)","😎"],["farm","linear-gradient(#ffe9a8,#9ad07a)","🐸"]],
    [["basic","linear-gradient(#ffe0a8,#ffb27a)","🏖️"],["sky","linear-gradient(#9ad8ff,#ffd9f0)","👻"],["garden","linear-gradient(#d8f5c4,#ffd0e8)","🐝"],["castle","linear-gradient(#b9a8ff,#6a5aaa)","🦄"],["aurora","linear-gradient(#06182e,#2aa88a)","🐻‍❄️"]]],
   skinSel:(()=>{const v=LS.get("nt-skin",[]);return Array.from({length:4},(_,i)=>Array.isArray(v)&&typeof v[i]==="string"&&/^[a-z]{3,10}$/.test(v[i])?v[i]:"basic")})()};
 const skinOf=t=>{const m=PF.skins[t],id=PF.skinSel[t];return (m&&m[id])||m.basic};

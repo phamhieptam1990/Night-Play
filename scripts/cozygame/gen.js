@@ -8,12 +8,12 @@ const BASE = {
   vi: { daily: "Thử thách hôm nay", dS: "Cả nước cùng một đề", done: "Hôm nay bạn được {s} · chơi lại để cao hơn", free: "🎲 Ván ngẫu nhiên", copied: "Đã chép — dán cho bạn bè nhé!", skin: "Giao diện",
     trial: "🎈 Dùng thử 1 ván", go: "Mở Night Pass", tried: "Hôm nay bạn đã dùng thử rồi", chL: "Thử thách này dùng loại “{t}” (Night Pass). Dùng thử 1 ván để nhận thách.", ch: "Bạn bị thách!", chGo: "Vào chơi",
     tgt: "⚔ Mục tiêu {n}", beat: "Vượt bạn bè rồi! 🎉", vsC: "Thách đấu: bạn {a} — người gửi {b}", won: "Bạn giỏi hơn! 🎉", lose: "Chưa bằng, thử lại nhé!", tie: "Hòa!", rem: "Chơi lại cùng đề",
-    near: "Chỉ thiếu {n} điểm là vượt bạn bè! 🔥", nearB: "Chỉ thiếu {n} điểm là phá kỷ lục! 🔥", nearGo: "Bấm 🔁 chơi lại đúng đề này", cmb: ["Hay!", "Giỏi!", "Tuyệt!", "Siêu hạng!"],
+    near: "Chỉ thiếu {n} điểm là vượt bạn bè! 🔥", nearB: "Chỉ thiếu {n} điểm là phá kỷ lục! 🔥", nearGo: "Bấm ↻ chơi lại đúng đề này", cmb: ["Hay!", "Giỏi!", "Tuyệt!", "Siêu hạng!"],
     clipBusy: "Đang tạo video…", clipNo: "Chưa quay được video trên thiết bị này", rec: "🏆 Kỷ lục mới!", best: "🏆 Kỷ lục {n}" },
   en: { daily: "Today's challenge", dS: "Everyone gets the same one", done: "Today you scored {s} · play again to beat it", free: "🎲 Random round", copied: "Copied — paste it to a friend!", skin: "Theme",
     trial: "🎈 Try 1 round", go: "Get Night Pass", tried: "You already used today's trial", chL: "This challenge uses the “{t}” type (Night Pass). Try one round to accept.", ch: "You're challenged!", chGo: "Play now",
     tgt: "⚔ Target {n}", beat: "You passed your friend! 🎉", vsC: "Challenge: you {a} — sender {b}", won: "You did better! 🎉", lose: "Not quite — try again!", tie: "Tie!", rem: "Replay this one",
-    near: "Only {n} points short of beating your friend! 🔥", nearB: "Only {n} points short of your record! 🔥", nearGo: "Tap 🔁 to replay this exact one", cmb: ["Nice!", "Great!", "Awesome!", "Legend!"],
+    near: "Only {n} points short of beating your friend! 🔥", nearB: "Only {n} points short of your record! 🔥", nearGo: "Tap ↻ to replay this exact one", cmb: ["Nice!", "Great!", "Awesome!", "Legend!"],
     clipBusy: "Making your video…", clipNo: "This device can't record video", rec: "🏆 New record!", best: "🏆 Best {n}" }
 };
 function gen(id) {

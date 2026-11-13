@@ -136,7 +136,7 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
     <div id="arena" hidden>
       <div class="dc"></div>
       <div class="scene" id="scene"><div class="sky" id="sky"></div><div class="flow" id="flow"></div><div class="pegs" id="pegs"></div><div class="gnd" id="gnd"></div></div>
-      <div class="ctl"><button class="ib2" id="undoBtn" type="button">↩</button><button class="ib2 main" id="hintBtn" type="button">💡</button><button class="ib2" id="resetBtn" type="button">🔁</button></div>
+      <div class="ctl"><button class="ib2" id="undoBtn" type="button">↩</button><button class="ib2 main" id="hintBtn" type="button">💡</button><button class="ib2" id="resetBtn" type="button">↻</button></div>
     </div>
     <div class="toast" id="toast" role="status"></div>
     <div class="ov" id="ovHow" hidden>
@@ -150,7 +150,7 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
     </div>
     <div class="ov" id="ovEnd" hidden>
       <h2 id="enH"></h2><div class="vs" id="enV"></div><div class="reward" id="enR"></div><p id="enP"></p><p class="near" id="enN" hidden></p>
-      <div class="row"><button class="ib2 main" id="againBtn" type="button">▶</button><button class="ib2" id="retryBtn" type="button" hidden>🔁</button><button class="ib2" id="shareBtn" type="button" hidden>📤</button><button class="ib2" id="homeBtn2" type="button">🏠</button><button class="ib2" id="rankBtn" type="button" hidden>🏆</button></div>
+      <div class="row"><button class="ib2 main" id="againBtn" type="button">▶</button><button class="ib2" id="retryBtn" type="button" hidden>↻</button><button class="ib2" id="shareBtn" type="button" hidden>📤</button><button class="ib2" id="homeBtn2" type="button">🏠</button><button class="ib2" id="rankBtn" type="button" hidden>🏆</button></div>
       <p class="cap" id="enL" hidden></p>
     </div>
     <div class="ov" id="ovSkin" hidden>
@@ -195,7 +195,7 @@ vi:{title:"Tháp Vòng Màu",docTitle:"Tháp Vòng Màu",sound:"Âm thanh",lang:
  "sk.pick":"Chọn giao diện","pw.h":"Giao diện của Night Pass","pw.p":"Mở khoá {name} và 15 giao diện đẹp khác cho cả 4 trò. Phần này dành cho phụ huynh.","pw.go":"Dành cho phụ huynh","pw.trial":"Chơi thử 1 ván","pw.later":"Để sau","pw.tried":"Hôm nay đã chơi thử rồi, mai thử tiếp nhé.",
  "gt.h":"Dành cho phụ huynh","gt.p":"Hỏi người lớn: {a} + {b} = ?","gt.x":"Quay lại",lockedLbl:"{n} (cần Night Pass)",
  "w.big":"Vòng to không được đè lên vòng nhỏ!","w.cyc":"Ở tháp này chỉ chuyển theo chiều mũi tên ↻ thôi!","w.none":"Cột này chưa có vòng nào.","w.hint":"Thử chuyển từ cột {a} sang cột {b}","w.done":"Hết đường gợi ý rồi!","w.undo":"Chưa có lần chuyển nào để quay lại.",
- "say.start":"Chuyển các vòng sang cột có cờ nào!","say.bad":"Ôi, không được rồi!",cmb:["Hay!","Giỏi!","Tuyệt!","Siêu hạng!"],hook:"Xếp xong tháp trong {n} lần, bạn làm được không?",near:"Chỉ thừa {n} lần nữa là ít nhất! Thử lại nhé 🔥","leg":"🔁 Thử lại cùng câu đố · ▶ Câu đố mới","retry":"Thử lại cùng câu đố","streak":"🔥 {n} lần 3 sao liên tiếp!","beat":"Vượt người thách rồi!",
+ "say.start":"Chuyển các vòng sang cột có cờ nào!","say.bad":"Ôi, không được rồi!",cmb:["Hay!","Giỏi!","Tuyệt!","Siêu hạng!"],hook:"Xếp xong tháp trong {n} lần, bạn làm được không?",near:"Chỉ thừa {n} lần nữa là ít nhất! Thử lại nhé 🔥","leg":"↻ Thử lại cùng câu đố · ▶ Câu đố mới","retry":"Thử lại cùng câu đố","streak":"🔥 {n} lần 3 sao liên tiếp!","beat":"Vượt người thách rồi!",
  "sk.0.basic":"Cầu vồng","sk.0.cake":"Bánh kem tầng","sk.0.coin":"Xu vàng","sk.0.planet":"Hành tinh","sk.0.candy":"Kẹo ngọt",
  "sk.1.basic":"Cầu vồng","sk.1.pancake":"Bánh kếp","sk.1.castle":"Lâu đài","sk.1.lifebuoy":"Phao biển","sk.1.robot":"Rô-bốt",
  "sk.2.basic":"Cầu vồng","sk.2.magic":"Phép thuật","sk.2.toy":"Đồ chơi gỗ","sk.2.garden":"Vườn hoa","sk.2.night":"Đêm sao",
@@ -213,7 +213,7 @@ en:{title:"Rainbow Rings",docTitle:"Rainbow Rings",sound:"Sound",lang:"Language"
  "sk.pick":"Pick a look","pw.h":"Night Pass looks","pw.p":"Unlock {name} and 15 more beautiful looks for all 4 games. This part is for parents.","pw.go":"For parents","pw.trial":"Try one puzzle","pw.later":"Later","pw.tried":"You already tried today, come back tomorrow.",
  "gt.h":"For parents","gt.p":"Ask a grown-up: {a} + {b} = ?","gt.x":"Back",lockedLbl:"{n} (needs Night Pass)",
  "w.big":"A big ring can't sit on a small one!","w.cyc":"On this tower rings only move along the arrow ↻!","w.none":"This peg has no rings.","w.hint":"Try moving from peg {a} to peg {b}","w.done":"No hint available!","w.undo":"No move to undo yet.",
- "say.start":"Move the rings to the flag peg!","say.bad":"Oops, not that!",cmb:["Nice!","Great!","Awesome!","Legendary!"],hook:"Stack the tower in {n} moves — can you?",near:"Only {n} moves over the fewest! Try again 🔥","leg":"🔁 Retry same puzzle · ▶ New puzzle","retry":"Retry same puzzle","streak":"🔥 {n} three-star wins in a row!","beat":"You beat the challenge!",
+ "say.start":"Move the rings to the flag peg!","say.bad":"Oops, not that!",cmb:["Nice!","Great!","Awesome!","Legendary!"],hook:"Stack the tower in {n} moves — can you?",near:"Only {n} moves over the fewest! Try again 🔥","leg":"↻ Retry same puzzle · ▶ New puzzle","retry":"Retry same puzzle","streak":"🔥 {n} three-star wins in a row!","beat":"You beat the challenge!",
  "sk.0.basic":"Rainbow","sk.0.cake":"Layer cake","sk.0.coin":"Gold coins","sk.0.planet":"Planets","sk.0.candy":"Candy",
  "sk.1.basic":"Rainbow","sk.1.pancake":"Pancakes","sk.1.castle":"Castle","sk.1.lifebuoy":"Lifebuoys","sk.1.robot":"Robot",
  "sk.2.basic":"Rainbow","sk.2.magic":"Magic","sk.2.toy":"Wooden toy","sk.2.garden":"Flower garden","sk.2.night":"Starry night",
@@ -246,11 +246,11 @@ const mkv=(sb,pb,sp,si,sa,sa2,rad,bd,sh)=>({"--sb":sb,"--pb":pb,"--sp":sp,"--si"
 const BASIC=[
  {vars:mkv("linear-gradient(#bfe8ff,#e6f6d8)","#fff","#fff","#1f3b57","#3b82f6"),deco:["☁️","⭐"],flag:"🏁"},
  {vars:mkv("linear-gradient(#e6d9ff,#d3e6ff)","#fff","#fff","#3a2a5a","#8a5cf6"),deco:["🔷","✨"],flag:"🏁"},
- {vars:mkv("linear-gradient(#c9f2ec,#d5f5c8)","#fff","#fff","#14423d","#12a49a"),deco:["🔀","💡"],flag:"🏁"},
+ {vars:mkv("linear-gradient(#c9f2ec,#d5f5c8)","#fff","#fff","#14423d","#12a49a"),deco:["🌪️","💡"],flag:"🏁"},
  {vars:mkv("linear-gradient(#ffe3c2,#ffd1e0)","#fff","#fff","#3b2a1d","#ff5a1f"),deco:["🎡","🎈"],flag:"🏁"}];
 const PF=window.PF={pro:null,mkv,skins:BASIC.map(b=>({basic:b})),
   catalog:[[["basic","linear-gradient(#bfe8ff,#e6f6d8)","🗼"],["cake","linear-gradient(#ffd3ea,#fff0f8)","🍰"],["coin","linear-gradient(#3a2a0a,#b8860b)","🪙"],["planet","linear-gradient(#050b2a,#1b2f7a)","🪐"],["candy","linear-gradient(#ffd3ea,#ffb0d6)","🍭"]],
-   [["basic","linear-gradient(#e6d9ff,#d3e6ff)","🏯"],["pancake","linear-gradient(#ffe9c2,#f4c06a)","🥞"],["castle","linear-gradient(#cfd8e8,#8fa0c0)","🏰"],["lifebuoy","linear-gradient(#aef0ff,#3a8fd0)","🛟"],["robot","linear-gradient(#3a4a6a,#1a2a4a)","🤖"]],
+   [["basic","linear-gradient(#e6d9ff,#d3e6ff)","🏯"],["pancake","linear-gradient(#ffe9c2,#f4c06a)","🥞"],["castle","linear-gradient(#cfd8e8,#8fa0c0)","🏰"],["lifebuoy","linear-gradient(#aef0ff,#3a8fd0)","🛟"],["robot","linear-gradient(#3a4a6a,#1a2a4a)","👾"]],
    [["basic","linear-gradient(#c9f2ec,#d5f5c8)","🌀"],["magic","linear-gradient(#3a1a6a,#9a3aa0)","🪄"],["toy","linear-gradient(#f4d9a8,#d9a066)","🧸"],["garden","linear-gradient(#d6f5b0,#8fcf6a)","🌷"],["night","linear-gradient(#0e1b3d,#2c3f78)","🌙"]],
    [["basic","linear-gradient(#ffe3c2,#ffd1e0)","🎡"],["carousel","linear-gradient(#ffd3ea,#ffe9a8)","🎠"],["galaxy","linear-gradient(#0a0a2a,#4a1a8a)","🌌"],["clock","linear-gradient(#f4f1de,#d9c9a8)","🕰️"],["donut","linear-gradient(#ffd3ea,#ffb0a0)","🍩"]]],
   skinSel:(()=>{const v=LS.get("tv-skin",[]);return Array.from({length:4},(_,i)=>Array.isArray(v)&&typeof v[i]==="string"?v[i]:"basic")})()};
@@ -368,7 +368,7 @@ function render(){if(!G)return;const P=G.P,sk=skinOf(G.t),box=$("pegs");box.inne
     stack.forEach((d,j)=>{const e=document.createElement("span");e.className="disc"+(G.sel===k&&j===0?" up":"");e.style.setProperty("--dhue",Math.round(d*(280/Math.max(1,P.n-1))));e.style.setProperty("--dw",(38+58*d/Math.max(1,P.n-1))+"%");e.style.setProperty("--dh",dh+"cqw");e.textContent=d+1;b.appendChild(e)});
     b.onclick=()=>tapPeg(k);box.appendChild(b)}
   $("undoBtn").disabled=!G.mv.length||G.over;$("hintBtn").disabled=G.over}
-function updHud(){if(!G)return;$("hl").textContent="🔁 "+G.used+" "+T("moves");$("hr").textContent=(G.combo>=2?"🔥×"+G.combo+" · ":"")+"🎯 "+G.P.opt}
+function updHud(){if(!G)return;$("hl").textContent="↻ "+G.used+" "+T("moves");$("hr").textContent=(G.combo>=2?"🔥×"+G.combo+" · ":"")+"🎯 "+G.P.opt}
 function flashPeg(k){const e=document.querySelector('.peg[data-k="'+k+'"]');if(e){e.classList.remove("bad");void e.offsetWidth;e.classList.add("bad")}}
 function tapPeg(k){if(!G||G.over||paused)return;G.hl=[];
   if(G.sel<0){const e=legal(G.P,G.pos,k,(k+1)%G.P.pegs);if(tops(G.P,G.pos)[k]<0){toast(T("w.none"),1600,"warn");flashPeg(k);return}G.sel=k;sfx.pick();render();return}
@@ -445,7 +445,7 @@ addEventListener("online",()=>{if(!PF.ticket)PF.fetchTicket()});setInterval(()=>
 function applyLang(){
   document.documentElement.lang=LANG;document.title=T("docTitle");$("title").textContent=T("title");$("langBtn").textContent=LANG.toUpperCase();$("langBtn").setAttribute("aria-label",T("lang"));
   $("soundBtn").setAttribute("aria-label",T("sound"));$("homeBtn").setAttribute("aria-label",T("home"));$("homeBtn2").setAttribute("aria-label",T("home"));$("rankBtn").setAttribute("aria-label",T("rank.btn"));
-  $("undoBtn").setAttribute("aria-label","↩");$("hintBtn").setAttribute("aria-label","💡");$("resetBtn").setAttribute("aria-label","🔁");syncSound();
+  $("undoBtn").setAttribute("aria-label","↩");$("hintBtn").setAttribute("aria-label","💡");$("resetBtn").setAttribute("aria-label","↻");syncSound();
   if(!G)renderHome();else{render();updHud();if(G.over)renderEnd()}
 }
 function syncSound(){$("soundBtn").textContent=sound?"🔊":"🔇"}

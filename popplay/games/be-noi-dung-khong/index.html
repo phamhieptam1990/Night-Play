@@ -306,7 +306,7 @@ const Q=[
  lv=>{const A=LANG==="vi"?(lv===1?"ABCDE":lv===2?"ABCDEGHIKLMNO":"AĂÂBCDĐEÊGHIKLMNOÔƠPQRSTUƯVXY"):(lv===1?"ABCDE":lv===2?"ABCDEFGHIJKLM":"ABCDEFGHIJKLMNOPQRSTUVWXYZ"),P=Array.from(A),t=pick(P),o=shuffle([t].concat(shuffle(P.filter(x=>x!==t)).slice(0,2)));
   return{pr:T("q.let"),body:t,ans:t,o,lab:null,say:T("q.let"),qtxt:t+" = ?",let:true}}
 ];
-const TY_ICON=["➕","➖","🧮","🍎"],TY_CH=["🤖","🐱","🐻","🦆"],LV_E=["🌱","🌿","🌳"];
+const TY_ICON=["➕","➖","🧮","🍎"],TY_CH=["👾","🐱","🐻","🦆"],LV_E=["🌱","🌿","🌳"];
 
 /* ===== NHÂN VẬT (canvas): robot · mèo · gấu · vịt ===== */
 const ell=(x,cx,cy,rx,ry,f)=>{x.fillStyle=f;x.beginPath();x.ellipse(cx,cy,rx,ry,0,0,7);x.fill()};
