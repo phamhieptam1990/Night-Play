@@ -123,6 +123,9 @@ body.np-local{--w:min(calc(100vw - 24px),calc((100dvh - 240px)*.75),760px)}
 .tile .tb{background:none!important;box-shadow:none!important;border:0!important;border-radius:0;filter:drop-shadow(0 1px 3px rgba(0,0,0,.45));pointer-events:none}   /* biểu tượng con vật không còn nền tròn → không giống nút (chỉ nút 🎨 là nút thật) */
 .tile .best{position:absolute;left:6px;bottom:6px;padding:1px 8px;border-radius:999px;background:rgba(0,0,0,.55);color:#fff;font-weight:800;font-size:12px}
 .tile .skinBtn{position:absolute;right:5px;bottom:5px;width:34px;height:34px;margin:0;border-radius:50%;background:var(--panel);font-size:17px;display:grid;place-items:center}
+/* Nút 🎨 chọn giao diện (mọi ô/thẻ): icon SVG căn giữa bằng vị trí tuyệt đối, đặt ở CSS chính của game để không phụ thuộc glass.css nạp muộn (lệch "đôi lúc") */
+.skinBtn,.tile>button.sk,.bh>button.sk{padding:0!important}
+.skinBtn>svg,.tile>button.sk>svg,.bh>button.sk>svg{position:absolute!important;left:50%!important;top:50%!important;margin:0!important;transform:translate(-50%,-50%)!important}
 .tile .skinBtn i{position:absolute;right:-3px;top:-3px;font-size:11px;font-style:normal;background:var(--panel);border-radius:50%;padding:1px}
 .tile:active{transform:scale(.97)}
 .dif{width:48px;height:48px;padding:0;border-radius:50%;font-size:22px;display:grid;place-items:center}

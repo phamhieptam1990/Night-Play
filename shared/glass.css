@@ -33,3 +33,41 @@ button.sk.on,button.sk[aria-pressed=true],button.sk.sel{border-color:#fff!import
   html.np-pm{--gl-glow:color-mix(in srgb,var(--accent,#7C5CFF) 45%,transparent);--gl-bd:rgba(255,255,255,.34)}
   html.np-pm .top button:not(.it),html.np-pm #npPmBk,html.np-pm #soundBtn{border-width:2px!important}
 }
+
+/* THẺ Ở MÀN CHỌN (chủ site: "không thích nền trắng chữ đen, làm giống Night Pass"): thẻ chế độ (.ty), nút phụ (.btn.alt), chip, nút cấp độ (.lv) = kính tối + chữ TRẮNG ở CẢ giao diện sáng lẫn tối; thẻ đang chọn pha màu nhấn của game. Nút chính (nền màu nhấn) giữ nguyên. */
+#home :is(.ty,.btn.alt,.chip,.lv):not(.on){background:linear-gradient(145deg,rgba(60,44,130,.62),rgba(22,16,52,.58))!important;color:var(--gl-ink)!important;border-color:var(--gl-bd)!important;box-shadow:0 4px 14px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.14)!important;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);text-shadow:none!important}
+#home .ty.on{background:color-mix(in srgb,var(--accent) 30%,rgba(22,17,48,.78))!important;color:var(--gl-ink)!important;border-color:var(--accent)!important;box-shadow:0 0 0 .5cqw color-mix(in srgb,var(--accent) 45%,transparent),0 4px 14px rgba(0,0,0,.3)!important}
+#home :is(.ty,.lv) .t,#home .ty .e{color:inherit}
+#home .fbox{border-color:var(--gl-bd)!important}
+
+/* HOVER: nút/thẻ/tên game phóng to nhẹ + lắc nhẹ một lần (chỉ thiết bị có chuột; tắt khi bật giảm chuyển động; không đè lên trạng thái :active/:disabled). Chỉ dùng transform nên không lag. */
+@keyframes npWiggle{0%{transform:scale(1) rotate(0)}22%{transform:scale(1.07) rotate(-2.6deg)}48%{transform:scale(1.07) rotate(2.4deg)}74%{transform:scale(1.07) rotate(-1.4deg)}100%{transform:scale(1.06) rotate(0)}}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+:is(#home .btn,#home .ty,#home .lv,#home .tile,#home .chip,.top button,.top .ib,.skinBtn,#bSkin):hover:not(:active):not(:disabled){animation:npWiggle .55s ease-in-out forwards}
+:is(.hometitle,.gametitle,.top>h1,.pt-title):hover{animation:npWiggle .6s ease-in-out forwards}
+}
+
+/* Nút ← đứng cạnh MỘT nút chính (Bắt đầu / Chơi / Xong) trong popup hoặc màn chuẩn bị: bỏ (thoát bằng ← trên thanh trên hoặc Back); nút chính chiếm trọn hàng. Cozy Wings (cách chơi), Mê Cung Truyền Tay (màn tạo mê cung). */
+#hwBack,#mkBack{display:none!important}
+
+/* NÚT 🎨 CHỌN GIAO DIỆN (.skinBtn trong thẻ/ô, button.sk trong ô Pop): icon SVG căn giữa bằng vị trí tuyệt đối + padding 0, không dựa vào display:grid/padding mặc định của <button>
+   (Safari iPhone lệch icon xuống-phải, nhất là khi trang nạp từ bộ nhớ đệm offline). Trước đây chỉ popnp.css lo và chỉ cho .card>.skinBtn, nên .tile>.skinBtn (Cánh Nhỏ, Pop Fly...) vẫn lệch. */
+.skinBtn,.tile>button.sk,.bh>button.sk{padding:0!important}
+.skinBtn>svg,.tile>button.sk>svg,.bh>button.sk>svg{position:absolute!important;left:50%!important;top:50%!important;margin:0!important;transform:translate(-50%,-50%)!important}
+
+/* NÚT TRÒN ICON Ở MÀN KẾT QUẢ/POPUP (.ib2: ← ✕ 📤 💾 ▶ 🏠 🏆 🔊 💡 ↩ 🔁 ...): CÙNG KIỂU với nút ← và ⋯ của khung game — vòng tròn kính tối, icon SVG TRẮNG (icons.js đổi emoji thành SVG), nút chính (.main) gradient như nút ⋯.
+   Căn giữa bằng flex + padding 0 (không dựa vào display:grid/padding mặc định của <button>: Safari iPhone lệch emoji). Bỏ qua nút có nhãn dưới icon (data-l: endui.css tự dàn cột).
+   !important để thắng style inline display:grid và các rule .ib2 riêng từng game. */
+.ib2:not([data-l]){padding:0!important;display:flex!important;align-items:center;justify-content:center;text-align:center;line-height:1;box-sizing:border-box;
+  background:var(--gl-bg)!important;background-image:none!important;color:var(--gl-ink)!important;border:1px solid var(--gl-bd)!important;
+  box-shadow:0 4px 14px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 14px var(--gl-glow)!important;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);text-shadow:none!important;text-decoration:none}
+.ib2.main:not([data-l]){background:var(--gl-main)!important;border-color:rgba(255,255,255,.4)!important;box-shadow:0 5px 16px rgba(108,75,242,.5),0 2px 6px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.3)!important}
+.ib2:not([data-l])>svg{display:block;margin:0;flex:none;color:var(--gl-ink)!important;stroke-width:2.4}
+.ib2:not([data-l]):disabled{opacity:.5}
+
+/* MÀU THEO GIAO DIỆN (free + mọi giao diện Night Pass): viền, quầng sáng và nền nút chính của nút tròn .ib2 / 🎨 lấy từ --accent của game/skin đang dùng (không còn tím cố định). Nút ← ⋯ giữ kiểu chung. */
+.ib2:not([data-l]),.skinBtn,.tile>button.sk,.bh>button.sk{
+  border-color:color-mix(in srgb,var(--accent,#7C5CFF) 55%,rgba(255,255,255,.35))!important;
+  box-shadow:0 4px 14px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 14px color-mix(in srgb,var(--accent,#7C5CFF) 45%,transparent)!important}
+.ib2.main:not([data-l]){background:linear-gradient(135deg,var(--accent,#7C5CFF),color-mix(in srgb,var(--accent,#7C5CFF) 62%,#000))!important;border-color:rgba(255,255,255,.45)!important;
+  box-shadow:0 5px 16px color-mix(in srgb,var(--accent,#7C5CFF) 55%,transparent),0 2px 6px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.3)!important}

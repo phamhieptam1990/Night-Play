@@ -51,3 +51,30 @@ html:root .play .dbar{background:var(--pn-cta);color:#fff;box-shadow:0 1cqw 3.4c
 /* ---------- màn rộng: ở MÀN CHỌN nền ngoài cột (widebg.js đọc --pbg của #play) cũng là đêm tím / oải hương + họa tiết emoji của game ---------- */
 html:root .play:has(> :is(#home,#village,#ovStart):not([hidden])){--pbg:linear-gradient(180deg,#F3F0FA,#E2DBF8)}
 html:root[data-theme=dark] .play:has(> :is(#home,#village,#ovStart):not([hidden])){--pbg:linear-gradient(180deg,#12141F,#1A1640 55%,#12141F)}
+
+/* Popup "cách chơi": bỏ nút ← cạnh nút Bắt đầu (thoát bằng nút Back của game/trình duyệt hoặc Esc); nút Bắt đầu chiếm cả hàng */
+#hwBack,#prBack{display:none!important}
+
+/* Nút chọn giao diện 🎨 ở ô chọn: icon căn giữa bằng vị trí tuyệt đối (Safari iPhone lệch về góc dưới-phải khi dựa vào display:grid của <button>) */
+.tile>button.sk,.bh>button.sk,.card>.skinBtn{padding:0}
+.tile>button.sk>svg,.bh>button.sk>svg,.card>.skinBtn>svg{position:absolute;left:50%;top:50%;margin:0;transform:translate(-50%,-50%)}
+
+/* Nút chữ số (chọn tuổi, bàn phím số): chữ số căn giữa chắc chắn trên iPhone (WebKit lệch ~6px sang phải khi dựa vào padding mặc định của <button>) */
+.ages button,.nums button{-webkit-appearance:none;appearance:none;padding:0;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1}
+
+/* Nút 🎨 chọn giao diện (mọi ô/thẻ): icon SVG căn giữa bằng vị trí tuyệt đối, đặt ở CSS chính của game để không phụ thuộc glass.css nạp muộn (lệch "đôi lúc") */
+.skinBtn,.tile>button.sk,.bh>button.sk{padding:0!important}
+.skinBtn>svg,.tile>button.sk>svg,.bh>button.sk>svg{position:absolute!important;left:50%!important;top:50%!important;margin:0!important;transform:translate(-50%,-50%)!important}
+
+/* ===== POP PLAY: MỌI NÚT >= 56px (bằng nút mở khoá iPhone = --tap-lg), ở MỌI cỡ màn hình + mọi game (chủ site: "nút Pop Play tối thiểu bằng nút mở khoá iPhone, nhỏ hơn thì layout lại theo Night Pass") =====
+   Bài đo: scripts/cozygame/check-popbtn.js. Nút icon = tròn 56px kính tối (glass.css); nút chữ/thanh = cao >= 56px; khi cột trái màn ngang hẹp thì nút XUỐNG HÀNG (flex-wrap) thay vì co nhỏ. */
+html.npp-kid{--pb:56px}
+html.npp-kid :is(.top .ib,.app .ask .ib,#phBtn,#soundBtn,#langBtn,#homeBtn,#profBtn,#skinBtn,#undoBtn,#hintBtn,#resetBtn,#micBtn,#pgBtn,#askBtn,#clrBtn,#goBtn,button.sk,.app.tight .top .ib){
+  box-sizing:border-box!important;width:var(--pb)!important;height:var(--pb)!important;min-width:var(--pb)!important;min-height:var(--pb)!important;max-width:none!important;max-height:none!important;flex:none}
+html.npp-kid .app .top{gap:8px;flex-wrap:wrap}
+html.npp-kid :is(.dbar,.lvb,.ab,.abar,.jy,.jn,.chip2,#prOk,.main,.npr-x,.abar button){min-height:var(--pb)!important}
+html.npp-kid .npr-x{min-width:var(--pb)!important}
+/* nút 🎨 chọn giao diện trong thẻ khu (Làng Của Bé): 56px, thẻ khu cao hơn một chút */
+html.npp-kid .band .bh{min-height:var(--pb)}
+html.npp-kid .band .bh .sk{width:var(--pb);height:var(--pb);font-size:26px}
+html.npp-kid .band .bh .sk svg{width:28px;height:28px}

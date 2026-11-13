@@ -4,5 +4,7 @@
 #bBk,#bBack,#npPmBk,#homeBtn{order:-9!important;width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;box-sizing:border-box;z-index:60}
 /* cột game hẹp hơn cửa sổ (máy tính, iPad): để ← ra tới góc cửa sổ thì khung không được cắt phần nhô ra (nền .deco đã tự cắt) */
 #play{overflow:visible!important}
+/* #play không cắt nữa → lớp phủ toàn khung (nền chấm sao #home, #village, ô bắt đầu .ov) lòi góc VUÔNG ra ngoài viền bo tròn: cho chúng bo góc theo khung */
+#play.play>:is(#home,#village,#ovStart,.ov,canvas){border-radius:inherit}
 :root{--tap-lg:56px}
 @media (max-width:520px) and (orientation:portrait){#bBk,#bBack,#npPmBk,#homeBtn{width:var(--tap-lg)!important;height:var(--tap-lg)!important;min-width:var(--tap-lg)!important;min-height:var(--tap-lg)!important}}

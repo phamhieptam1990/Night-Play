@@ -6,10 +6,12 @@
 .bars-more svg{width:24px;height:24px;fill:currentColor;display:block}
 .bars-more:focus-visible{outline:3px solid var(--accent,#7C5CFF);outline-offset:3px}
 footer .bars-more{order:2}
-.bars-pop{position:absolute;z-index:60;min-width:244px;max-width:calc(100vw - 24px);max-height:calc(100dvh - 90px);overflow:hidden;padding:8px;
+.bars-pop{position:absolute;z-index:60;min-width:244px;max-width:calc(100vw - 24px);max-height:calc(100dvh - 90px);overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:8px;
   display:flex;flex-direction:column;gap:2px;background:var(--panel,var(--surface,#fff));color:var(--ink,#222);
   border:1px solid color-mix(in srgb,var(--accent,#7C5CFF) 28%,var(--line,var(--border,#ddd)));border-radius:22px;
   box-shadow:0 18px 50px rgba(0,0,0,.34),0 2px 8px rgba(0,0,0,.14);transform-origin:top right;animation:barsIn .16s ease-out}
+/* menu dài hơn màn hình: CUỘN trong menu, không ép/co các mục lại (flex-shrink:0) */
+.bars-pop>*{flex-shrink:0}
 @keyframes barsIn{from{opacity:0;transform:translateY(-6px) scale(.97)}}
 @media (prefers-reduced-motion:reduce){.bars-pop{animation:none}}
 .bars-pop[hidden]{display:none}
