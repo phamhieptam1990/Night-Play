@@ -11,10 +11,10 @@
 @media (orientation:landscape){#play .top>h1.wrap2{white-space:normal;text-overflow:clip;overflow-wrap:anywhere;line-height:1.05;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}}
 /* màn dọc: tên game được chuyển xuống ngay trên khối nội dung ở giữa màn chọn (bản sao #homeTitle do landscape.js dựng); thanh trên chỉ còn các nút */
 .hometitle{display:none}
-@media (orientation:portrait){#play[data-scr="home"] .hometitle{display:block;margin:0;text-align:center;white-space:normal;text-wrap:balance;overflow-wrap:anywhere;font:800 7.4cqw/1.15 var(--font);color:var(--accent);letter-spacing:.01em}#play[data-scr="home"] .top>h1{visibility:hidden}}
+@media (orientation:portrait){#play[data-scr="home"] .hometitle{display:block;margin:0;text-align:center;white-space:normal;text-wrap:balance;overflow-wrap:anywhere;font:400 7.4cqw/1.15 var(--display);color:var(--accent);letter-spacing:.01em}#play[data-scr="home"] .top>h1{visibility:hidden}}
 /* màn dọc: tên game khi đang chơi nằm ngay trên cụm điểm + khung chơi (bản sao #gameTitle do landscape.js dựng) */
 .gametitle{display:none}
-@media (orientation:portrait){#play:not([data-scr="home"]) .scr:not([hidden])>.gametitle{display:block;flex:none;margin:0;text-align:center;white-space:normal;text-wrap:balance;overflow-wrap:anywhere;font:800 5.6cqw/1.15 var(--font);color:var(--accent)}#play:not([data-scr="home"]) .top>h1{visibility:hidden}}
+@media (orientation:portrait){#play:not([data-scr="home"]) .scr:not([hidden])>.gametitle{display:block;flex:none;margin:0;text-align:center;white-space:normal;text-wrap:balance;overflow-wrap:anywhere;font:400 5.6cqw/1.15 var(--display);color:var(--accent)}#play:not([data-scr="home"]) .top>h1{visibility:hidden}}
 /* màn dọc, khung chơi vuông/ít cao: gom bảng điểm + khung chơi + nút hành động thành một cụm ở giữa màn hình thay vì dính mép trên/dưới (--ar = cao/rộng của canvas, do landscape.js đặt) */
 @media (orientation:portrait){#play #game{justify-content:center;gap:3cqw}#play #cvw{flex:0 1 calc(92cqw*var(--ar,1.1));min-height:0}}
 /* màn chọn ở MỌI cỡ màn hình: thứ tự TÊN → LINH VẬT → "Tiếp tục ván dở" → nút chơi (order, vì .hl/.hr là display:contents; ở lưới 2 cột của điện thoại ngang order áp trong cột .hl); linh vật (#hHero) to theo ô trống còn lại, nhún nhảy, nằm SÁT cụm bên dưới; tên game vẫn neo sát hàng nút (0a-23). Lưới 2 cột (điện thoại ngang thấp) đặt lại ở cuối file. */
@@ -99,5 +99,5 @@ body.idle #play[data-scr="game"] .top>.ib:hover,body.idle #play[data-scr="game"]
 #play[data-pro] #cvw::after,#play[data-pro] #cvw::before{display:none!important}#play[data-pro] #cvw{padding:0!important}
 /* Giá Chợ Việt: thẻ món hàng thấp hơn để nút Chốt giá không bị cắt ở màn thấp */
 #play #game .item .em{font-size:14cqw}
-#play #home #hHero{flex:none;display:block!important;font-size:16cqw;white-space:normal;animation:none}#play #home #hHero[data-stack="1"]{padding-inline:0}#play #home{margin-bottom:0}   /* lưới 2 cột: linh vật cỡ cũ, không phình */
+#play #home #hHero{flex:none;display:flex!important;align-items:center;justify-content:center;height:min(36cqh,40cqw);font-size:min(30cqh,34cqw);line-height:1;white-space:nowrap;transform-origin:50% 100%;animation:npHeroBob 2.8s ease-in-out infinite}#play #home #hHero[data-stack="1"]{white-space:normal;padding-inline:0;line-height:.98}#play #home{margin-bottom:0}   /* lưới 2 cột (điện thoại ngang): linh vật to theo chiều cao khung (trước ghim 16cqw ≈ 57px, "nhỏ xíu") */
 }

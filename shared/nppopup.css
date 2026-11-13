@@ -130,3 +130,32 @@ html:not([data-theme=dark]) :is(.ov:not(#ovStart),#hlpOv,#phOv,#pay,#howS,#stats
   --panel:#1d1745;--panel2:#262058;--ink:#fff;--text:#fff;--muted:rgba(255,255,255,.72);--bg:#171236;--field:rgba(255,255,255,.1);--line:rgba(170,150,255,.42);--card:#262058;
   color:#fff;color-scheme:dark}
 html:not([data-theme=dark]) :is(.nps-sheet,.nps-dlg,#pgOv>*,#klO>*,#npInApp>*,#npWelcome>*,#nsOv>*){background-color:#1d1745;background-image:linear-gradient(165deg,#2b2064,#171236 70%);color:#fff;border-color:rgba(170,150,255,.55)}
+
+/* ✕ ĐÓNG: nền màu nhấn ĐẶC + icon trắng (trước: trong suốt chìm vào thẻ tối), tách khỏi tiêu đề; Pop = cam vàng */
+html .npc .npx{background:#7050F2!important;color:#fff!important;border:2px solid rgba(255,255,255,.7)!important;box-shadow:0 3px 10px rgba(0,0,0,.35)!important;top:12px;right:12px}
+html.npp-kid .npc .npx{background:#F2701D!important}
+@media (hover:hover){html .npc .npx:hover{filter:brightness(1.1)}}
+html .npc h2{padding-right:60px!important;padding-left:60px!important;box-sizing:border-box}
+/* điện thoại NGANG (thấp): thẻ giao diện rộng ra, tiêu đề một dòng, lưới ô gọn */
+@media (max-height:520px) and (min-aspect-ratio:11/10){
+  html #ovSkin>.npc{width:min(94%,620px)!important;padding:10px 12px 12px;gap:6px}
+  html #ovSkin .npc h2{font-size:19px!important;white-space:nowrap;min-height:44px;display:flex;align-items:center;justify-content:center}
+  html #ovSkin .npc .sk{gap:8px}
+}
+
+/* POPUP GIAO DIỆN COZY, ĐIỆN THOẠI DỌC: ô cao 76px, icon 40px, tên 15px (hai dòng thoải mái), khe 10px — trước đây ô 53px, icon nhỏ bị nén */
+@media (max-width:520px) and (orientation:portrait){
+  html:not(.npp-kid) #ovSkin>.npc{padding:18px 14px 16px!important}
+  html:not(.npp-kid) #ovSkin .npc .sk{gap:10px!important}
+  html:not(.npp-kid) #ovSkin .npc .skc{min-height:76px!important;padding:8px 10px!important;gap:10px!important}
+  html:not(.npp-kid) #ovSkin .npc .skc .e{font-size:40px!important;width:48px;height:48px;display:grid;place-items:center;flex:none}
+  html:not(.npp-kid) #ovSkin .npc .skc .e img{width:44px;height:44px}
+  html:not(.npp-kid) #ovSkin .npc .skc .sx b{font-size:15px!important;line-height:1.15}
+  html:not(.npp-kid) #ovSkin .npc .skc .sx small{font-size:12px!important}
+}
+@media (max-width:520px) and (orientation:portrait){
+  html:not(.npp-kid) #ovSkin .npc .sk{grid-template-columns:1fr!important}
+  html:not(.npp-kid) #ovSkin .npc .skc{min-height:64px!important;grid-column:auto!important}
+}
+/* ✕ cùng cỡ cho Cozy ở điện thoại dọc */
+@media (max-width:520px) and (orientation:portrait){html:not(.npp-kid) .npc .npx{width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;top:8px!important;right:8px!important;font-size:18px!important}}

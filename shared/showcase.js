@@ -152,7 +152,7 @@
   }
   function fitName() {
     var cs = box.getBoundingClientRect(); if (!cs.height) return true;
-    var info = nameEl.parentNode, tall = cs.width <= cs.height, bar = getComputedStyle(info).flexDirection === "row";   /* bar = điện thoại dọc: tên + nút Chơi một hàng ở đáy */
+    var info = nameEl.parentNode, bar = getComputedStyle(info).flexDirection === "row", tall = !bar && cs.width <= cs.height;   /* bar = điện thoại dọc: tên + nút Chơi một hàng ở đáy */
     var fs = Math.round(tall ? Math.min(30, cs.width * .075) : bar ? 20 : Math.min(28, Math.max(15, cs.height * (cs.width <= 520 ? .12 : .15))));
     var ok = function () {
       if (nameEl.scrollWidth > nameEl.clientWidth + 1 || nameEl.getBoundingClientRect().height > fs * 1.14 * 2 + 2) return false;

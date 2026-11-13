@@ -3,6 +3,7 @@
    Chỉ chạy khi khung thật sự tràn (scrollHeight > clientHeight); đủ chỗ thì mọi thứ ở nguyên chỗ. Chỉ Pop Play (đường dẫn /popplay/). */
 (function () {
   "use strict";
+  var NOFIT = true;
   if (window.NPHomeFit || !/\/popplay\//.test(location.pathname)) return;
   var SEC = "#npResume,.dbar,.abar", moved = [], more = null, ov = null, busy = false, raf = 0, obs = null, OPT = { childList: true, subtree: true, attributes: true, attributeFilter: ["hidden"] };
   var css = document.createElement("style");
@@ -33,7 +34,8 @@
     return ov;
   }
   function fit() {
-    raf = 0; if (busy || (ov && !ov.hidden)) return; busy = true; if (obs) obs.disconnect();   /* không tự kích hoạt lại bởi chính thay đổi DOM của mình */
+    raf = 0; if (NOFIT) { if (moved.length || more) restore(); return; }   /* chủ site: BỎ popup ⋯ (không gom mục phụ nữa; màn ngang mở rộng khung + hàng gọn để vừa) */
+    if (busy || (ov && !ov.hidden)) return; busy = true; if (obs) obs.disconnect();   /* không tự kích hoạt lại bởi chính thay đổi DOM của mình */
     try {
       var c = box(); if (!c) { restore(); return; }
       /* các mục đã chuyển nhưng màn bị dựng lại (marker rời khỏi khung) → bỏ danh sách cũ */

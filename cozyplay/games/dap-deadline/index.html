@@ -249,7 +249,7 @@ body.at-home .top h1{flex:1 1 0!important;min-width:0}
 .hdaily:active{transform:translateY(3px);box-shadow:0 2px 0 color-mix(in srgb,var(--accent) 50%,#000)}
 .hdaily.lock{background:repeating-linear-gradient(135deg,var(--panel) 0 10px,color-mix(in srgb,var(--ink) 6%,var(--panel)) 10px 20px);color:var(--ink);border:2px dashed color-mix(in srgb,var(--accent) 55%,transparent);box-shadow:none}
 .hdaily.lock .go{font-size:0}.hdaily.lock .go::before{content:"🔒";font-size:18px}.hdaily.lock::before{content:"👑";position:absolute;left:8px;top:4px;font-size:13px}
-#secModes{order:4}#secLv{order:5}.hmain{order:6}.hrow{order:7}.hchips{order:8}
+#secModes{order:4}#secLv{order:5}.hplay{order:6}.hchips{order:8}
 .hsec small{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:5px}
 .tys{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .ty{position:relative;min-height:78px;border-radius:16px;padding:8px 4px 6px;border:2px solid var(--line);background:linear-gradient(color-mix(in srgb,var(--accent) 7%,var(--panel)),var(--panel));color:var(--ink);box-shadow:0 4px 0 rgba(0,0,0,.18);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;font-family:var(--body)}
@@ -265,12 +265,16 @@ html[data-skin] .ty.on{animation:tyGlow 2.4s ease-in-out infinite}
 .lv{min-height:46px;border-radius:14px;border:2px solid var(--line);background:var(--panel);color:var(--ink);font:800 13px var(--body);cursor:pointer;position:relative;padding:4px 2px;box-shadow:0 3px 0 rgba(0,0,0,.14)}
 .lv.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 22%,var(--panel));box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 45%,transparent),0 3px 0 rgba(0,0,0,.14)}
 .lv.lock{border-style:dashed}.lv.dim{opacity:.45}.lv i{font-style:normal;font-size:10px;margin-left:3px}
-.hmain{font-size:22px;min-height:54px;padding:10px 24px;width:100%}
+.hplay{display:flex;gap:10px;align-items:center;width:100%}.hplay .hmain{flex:1 1 0;min-width:0;width:auto}.hplay #bOpts{flex:none;width:56px;height:56px;min-height:56px;padding:0;border-radius:50%;display:grid;place-items:center}
+#bDaily.hdaily{min-height:50px;padding-block:4px}.hchips{margin-top:2px}
+.hmain{font-size:22px;min-height:54px;padding:10px 24px}
 .hrow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}.hrow .icon-btn{min-height:44px;padding:0 18px;border-radius:999px;width:auto}
 .hchips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}.hchips span{background:var(--panel);border:1.5px solid var(--line);border-radius:99px;padding:3px 12px;font-size:12.5px;font-weight:700}
-@media (max-height:700px){.hhero,.hsub{display:none}#home{gap:8px}}
+@media (max-height:560px){.hhero,.hsub{display:none}}
+@media (max-height:700px){#home{gap:8px}}
+@media (max-height:700px) and (min-height:561px) and (orientation:portrait){.hhero{font-size:clamp(56px,15.5dvh,min(34vw,112px))}.hsub{display:none}}   /* linh vật ⏰ vẫn hiện ở điện thoại cao 561-700px (trước đây ẩn hết, đáy màn trống) */
 /* điện thoại/iPad DỌC đủ cao: linh vật to dần theo chiều cao màn hình, nhún nhảy (phần trống dưới màn chọn dùng cho linh vật, không để trống) */
-@media (orientation:portrait) and (min-height:701px){.hhero{font-size:clamp(44px,calc(44px + (100dvh - 700px)*.85),150px);line-height:1.05;white-space:nowrap;transform-origin:50% 100%;animation:ddBob 2.8s ease-in-out infinite}}
+@media (orientation:portrait) and (min-height:701px){.hhero{font-size:clamp(44px,calc(44px + (100dvh - 700px)*.85),min(40vw,200px));line-height:1.05;white-space:nowrap;transform-origin:50% 100%;animation:ddBob 2.8s ease-in-out infinite}}
 @keyframes ddBob{0%,100%{transform:translateY(0) scale(1,1)}30%{transform:translateY(-6px) scale(.97,1.04)}55%{transform:translateY(0) scale(1.04,.96)}}
 @media (prefers-reduced-motion:reduce){.hhero{animation:none!important}}
 @media (max-width:340px){.hdaily{gap:8px;padding:6px 12px}.hdaily .n{font-size:20px}.hdaily b{font-size:14px}.hdaily small{font-size:11.5px}}
@@ -295,6 +299,9 @@ html[data-skin] .ty.on{animation:tyGlow 2.4s ease-in-out infinite}
   body.at-home .ty .t{text-align:left}body.at-home .hhero,body.at-home .hsub,body.at-home #modeDesc,body.at-home .hchips{display:none}
   .ebtn{min-height:48px}
 }
+/* WEB / màn ngang: linh vật ⏰ không còn nhỏ xíu hay bị ẩn (các game Cozy khác ~180-230px): to theo chiều cao + chiều rộng cửa sổ, ẩn khi quá thấp */
+@media (orientation:landscape) and (min-height:561px){body.at-home .hhero{display:block!important;font-size:clamp(64px,min(24vh,18vw),170px);line-height:1.05;white-space:nowrap;transform-origin:50% 100%;animation:ddBob 2.8s ease-in-out infinite}}
+@media (prefers-reduced-motion:reduce){body.at-home .hhero{animation:none!important}}
 /* landscape rất thấp (≤360px: 640x360, 568x320): màn chọn gọn lại để không tràn đáy (bài đo siết bắt bOpts bị cắt) */
 @media (max-height:360px) and (min-aspect-ratio:11/10){body.at-home{padding-top:4px;padding-bottom:4px;row-gap:4px}body.at-home #home{row-gap:6px}body.at-home .hl,body.at-home .hr{gap:6px}body.at-home .ty{min-height:46px;padding:3px 6px}body.at-home #dS{display:none}body.at-home .top h1{font-size:18px}}
 
@@ -313,7 +320,7 @@ html[data-skin] .ty.on{animation:tyGlow 2.4s ease-in-out infinite}
   <button class="ib" id="bBk" type="button" hidden aria-label="←">←</button>
   <h1><span id="titleTxt"></span><span class="probadge" id="proBadge" hidden></span><span class="probadge chb" id="chBadge" hidden></span></h1>
   <div id="leftBox"><span id="mood" hidden><span id="moodFace" aria-hidden="true">😐</span><span id="moodSay" role="status"></span></span><span id="chTrack" hidden><span class="ct"></span><span class="cb"><i></i></span></span></div>
-  <button class="icon-btn" id="pauseBtn" type="button" hidden><span aria-hidden="true" id="pauseIco">⏸</span><span class="bl" id="pauseTxt"></span></button>
+  <button class="icon-btn" id="pauseBtn" type="button" hidden><span aria-hidden="true" id="pauseIco" style="display:grid;place-items:center"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1.3"/><rect x="14" y="5" width="4" height="14" rx="1.3"/></svg></span><span class="bl" id="pauseTxt"></span></button>
   <button class="icon-btn" id="restartBtn" type="button" hidden><span aria-hidden="true">↻</span><span class="bl" id="restartTxt"></span></button>
   <button class="icon-btn" id="setupBtn" hidden type="button" aria-haspopup="dialog"><span aria-hidden="true">⚙</span><span class="bl" id="setupTxt"></span></button>
   <button class="ib" id="bHelp" type="button">?</button>
@@ -327,8 +334,7 @@ html[data-skin] .ty.on{animation:tyGlow 2.4s ease-in-out infinite}
     <div class="hhero" id="hHero" aria-hidden="true"></div>
     <p class="hsub" id="hSub"></p>
     <button class="hdaily" id="bDaily" type="button"><span class="n" id="dN"></span><span class="tx"><b id="dT"></b><small id="dS"></small></span><span class="go" aria-hidden="true">▶</span></button>
-    <button class="big hmain" id="bPlay" type="button"></button>
-    <div class="hrow"><button class="icon-btn" id="bOpts" type="button"></button></div>
+    <div class="hplay"><button class="big hmain" id="bPlay" type="button"></button><button class="icon-btn" id="bOpts" type="button"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" style="display:block"><path d="M12 3C6.5 3 2.5 7 2.5 11.8c0 4.7 3.8 8.2 8.2 8.2 1.3 0 2-.8 2-1.7 0-.5-.2-.9-.5-1.3-.3-.4-.5-.8-.5-1.3 0-1 .8-1.8 1.8-1.8H17c2.5 0 4.5-2 4.5-4.5C21.5 6.6 17.4 3 12 3z" fill="#f5c26b" stroke="#a86a2b" stroke-width="1.2" stroke-linejoin="round"/><circle cx="7.6" cy="10.4" r="1.5" fill="#ef4444"/><circle cx="11.2" cy="7.2" r="1.5" fill="#3b82f6"/><circle cx="15.8" cy="7.9" r="1.5" fill="#22c55e"/><circle cx="6.9" cy="14.6" r="1.4" fill="#a855f7"/></svg></button></div>
     <div class="hchips" id="hChips"></div>
   </div>
   <div class="hr">
@@ -761,7 +767,7 @@ function start(from){
 }
 function tick(){mode.tick();render();comboMeter()}
 let pausedBy=null,pauseT=0;
-function syncPauseBtn(){const rb=$("restartBtn");rb.hidden=!running||!!(window.NP&&NP.helper);const b=$("pauseBtn");b.hidden=!running;$("pauseIco").textContent=paused&&pausedBy==="user"?"▶":"⏸";$("pauseTxt").textContent=" "+t(paused&&pausedBy==="user"?"resume":"pause");b.setAttribute("aria-label",t(paused&&pausedBy==="user"?"resume":"pause"))}
+function syncPauseBtn(){const rb=$("restartBtn");rb.hidden=!running||!!(window.NP&&NP.helper);const b=$("pauseBtn");b.hidden=!running;$("pauseIco").innerHTML=paused&&pausedBy==="user"?"<svg viewBox='0 0 24 24' width='22' height='22' fill='currentColor' aria-hidden='true'><path d='M8 5.2v13.6a1 1 0 0 0 1.5.9l10.6-6.8a1 1 0 0 0 0-1.7L9.5 4.3A1 1 0 0 0 8 5.2z'/></svg>":"<svg viewBox='0 0 24 24' width='22' height='22' fill='currentColor' aria-hidden='true'><rect x='6' y='5' width='4' height='14' rx='1.3'/><rect x='14' y='5' width='4' height='14' rx='1.3'/></svg>";$("pauseTxt").textContent=" "+t(paused&&pausedBy==="user"?"resume":"pause");b.setAttribute("aria-label",t(paused&&pausedBy==="user"?"resume":"pause"))}
 function pauseRound(by){   /* by="user": nút Tạm dừng / phím P / chuyển tab; mặc định (trang cha mở bảng chia sẻ) */
   if(!running||paused)return;paused=true;pausedBy=by==="user"?"user":"parent";pauseT=performance.now();clearInterval(tickT);clearTimeout(spawnT);clearTimeout(hudT);document.body.classList.remove("hud-dim");
   if(pausedBy==="user"){pauseTxt(false);$("pauseOv").hidden=false;$("resumeBtn").focus({preventScroll:true})}
@@ -921,7 +927,7 @@ function renderHome(){
   }
   $("dN").textContent="#"+homeDayNo();$("dT").textContent=t("home.daily");$("dS").textContent=t("home.dailySub");
   const dl=!unlocked("modes","daily");$("bDaily").classList.toggle("lock",dl);$("bDaily").setAttribute("aria-label",(dl?"🔒 ":"")+t("home.daily"));
-  $("bPlay").textContent=t("home.play");$("bOpts").textContent=t("home.opts");
+  $("bPlay").textContent=t("home.play");$("bOpts").setAttribute("aria-label",t("home.opts").replace(/^\S+\s/,""));$("bOpts").title=$("bOpts").getAttribute("aria-label");
   let hi=0;try{hi=+localStorage.getItem(hiKey())||0}catch(e){}
   $("hChips").innerHTML=hi>0?'<span>🏆 '+escH(t("home.best"))+': <b>'+hi+'</b></span>':"";
 }

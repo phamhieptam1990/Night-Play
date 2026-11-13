@@ -205,7 +205,7 @@ window.NPS = (function () {
   var getScores = function (game, period, limit) { return call("GET", "/scores?game=" + encodeURIComponent(game) + "&period=" + period + "&limit=" + limit); };
 
   /* ---------- giao diện trên trang có game (Night Play) ---------- */
-  var CSS = ".nps-fab{position:absolute;top:max(12px,env(safe-area-inset-top));right:var(--nps-r,max(12px,env(safe-area-inset-right)));z-index:2;width:44px;height:44px;border-radius:50%;padding:0;color:#fff;background:rgba(22,17,48,.72);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);display:grid;place-items:center;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 14px rgba(124,92,255,.3);opacity:0;pointer-events:none;transform:translateY(-10px);transition:opacity .25s,transform .25s}" +
+  var CSS = ".nps-fab{position:absolute;top:max(12px,env(safe-area-inset-top));right:var(--nps-r,max(12px,env(safe-area-inset-right)));z-index:2;width:44px;height:44px;border-radius:50%;padding:0;color:var(--gl-ink,#fff);background:var(--gl-bg,rgba(22,17,48,.72));-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);display:grid;place-items:center;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 14px rgba(124,92,255,.3);opacity:0;pointer-events:none;transform:translateY(-10px);transition:opacity .25s,transform .25s}" +
     ".nps-fab.show,.nps-fab:focus-visible{opacity:1;pointer-events:auto;transform:none}.nps-fab svg{width:22px;height:22px;filter:drop-shadow(0 0 1px rgba(0,0,0,.95)) drop-shadow(0 1px 3px rgba(0,0,0,.5))}.nps-fab:focus-visible{outline:3px solid #fff;outline-offset:3px}" +
     ".nps-sheet{position:absolute;left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom));z-index:3;margin:0 auto;max-width:420px;padding:16px;border-radius:20px;background:var(--panel,#fff);color:var(--ink,#222);box-shadow:0 12px 40px rgba(0,0,0,.45);font:15px/1.45 var(--font)}" +
     ".nps-sheet[hidden]{display:none}.nps-sheet h3{margin:0 0 4px;font-size:18px}.nps-sheet p{margin:0 0 10px;opacity:.85;font-size:14px}" +
@@ -214,6 +214,12 @@ window.NPS = (function () {
     ".nps-p{background:var(--accent,#7C5CFF);color:var(--on-accent,#fff)}.nps-s{background:var(--bg,#eee);color:inherit;border:2px solid var(--line,#ccc)!important}" +
     ".nps-note{font-size:12.5px;opacity:.75;margin:10px 0 0}.nps-err{color:var(--warn,#c2410c);min-height:18px;font-size:13px;margin:6px 0 0}.nps-st{font-weight:700;margin:10px 0 0;font-size:14px}" +
     ".nps-dlg{border:0;border-radius:22px;padding:22px;max-width:min(380px,calc(100vw - 32px));width:100%;background:var(--panel,#fff);color:var(--ink,#222);box-shadow:0 20px 60px rgba(0,0,0,.5);text-align:center;font:15px/1.45 var(--font)}" +
+    ".nps-dlg.nps-got{border:1px solid rgba(167,150,255,.5);border-radius:28px;padding:24px 20px 20px;background:linear-gradient(160deg,rgba(44,36,104,.97),rgba(22,24,42,.97));color:#F1F2FF;font-family:Inter,system-ui,-apple-system,sans-serif;box-shadow:0 0 0 1px rgba(124,92,255,.18),0 18px 60px rgba(124,92,255,.45),0 10px 36px rgba(0,0,0,.35)}" +
+    ".nps-got h3{margin:0 0 4px;font-size:22px;font-weight:800;letter-spacing:-.01em;color:#F1F2FF}.nps-got h3::before{content:'\\1F451 ';filter:drop-shadow(0 0 8px rgba(255,214,107,.7))}" +
+    ".nps-got p{margin:2px 0;color:#C9CCF0}.nps-got .nps-big{margin:10px 0 2px;font-size:60px;font-weight:800;line-height:1.05;background:linear-gradient(90deg,#9B83FF,#FF9A6B);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}" +
+    ".nps-got .nps-row{gap:10px;margin-top:16px}.nps-got .nps-row button{height:48px;border-radius:999px}.nps-got .nps-p{background:linear-gradient(135deg,#6C4BF2,#C2410C);color:#fff;border:1px solid rgba(255,255,255,.4)!important;box-shadow:0 5px 16px rgba(108,75,242,.5),inset 0 1px 0 rgba(255,255,255,.3)}" +
+    ".nps-got button:focus-visible{outline:2px solid #fff;outline-offset:2px}" +
+    ".nps-got .nps-s{background:transparent;color:#F1F2FF;border:1px solid rgba(167,150,255,.45)!important}" +
     ".nps-dlg::backdrop{background:rgba(8,9,20,.66);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}" +
     ".nps-bd{position:absolute;inset:0;z-index:2;background:rgba(8,9,20,.66);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .22s}.nps-bd.on{opacity:1;pointer-events:auto}" +
     ".nps-dlg h3{margin:0 0 6px;font-size:20px}.nps-big{font-size:44px;font-weight:800;line-height:1.1;margin:8px 0;color:var(--accent,#7C5CFF)}" +
@@ -418,6 +424,7 @@ window.NPS = (function () {
     var dlg = document.createElement("dialog"); dlg.className = "nps-dlg"; document.body.appendChild(dlg);
     onResult(function (list) {
       var s = list[list.length - 1], r = s.result || {};
+      dlg.className = "nps-dlg nps-got";
       dlg.innerHTML = '<h3>' + esc(T("gotT")) + '</h3><p>' + esc(gameName(s.game, (r && r.extra && r.extra.pack) || packOf(s.st))) + '</p><div class="nps-big">' + (r.score | 0) + '</div><p>' + esc(T("points")) + '</p>' +
         '<div class="nps-row"><button class="nps-s" id="npsX" type="button">' + esc(T("close")) + '</button><button class="nps-p" id="npsGo" type="button">' + esc(T("view")) + '</button></div>';
       if (!dlg.open) dlg.showModal();

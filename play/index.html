@@ -116,6 +116,7 @@ h1{margin:0;font-size:clamp(22px,min(6vw,3.8dvh),44px);line-height:1.1;letter-sp
 .foot{flex:none;display:flex;justify-content:space-between;align-items:center;gap:4px 18px;flex-wrap:wrap;padding:8px 16px;font-size:13px;color:var(--muted);border-top:1px solid var(--line);background:linear-gradient(180deg,transparent,var(--hero1,transparent))}
 .foot #copy{order:1}.foot nav{order:2}.foot .site-upd{order:3;flex:none;width:auto;margin-left:auto;padding:0;font-size:12px}
 .foot nav{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+@media (max-width:700px){.foot #copy,.foot .site-upd{flex:1 0 100%;margin:0;text-align:left}}   /* màn dọc: hai dòng (bản quyền + ngày cập nhật) thẳng mép trái, không so le */
 .foot a{text-decoration:none;font-weight:600}.foot a:hover{color:var(--accent)}
 /* Footer gọn khi các liên kết đã gom vào menu ⋯: chữ bản quyền + ngày cập nhật xếp dọc bên trái, nút ⋯ bên phải */
 .foot:has(.bars-more){display:grid;grid-template-columns:1fr auto;align-items:center;justify-items:start;gap:0 12px;padding:6px 16px}

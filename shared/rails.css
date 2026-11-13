@@ -57,7 +57,7 @@
 .np-how ul{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:5px}
 .np-how li{font-size:13px;font-weight:600;line-height:1.3;color:var(--ink2,var(--ink));overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow-wrap:break-word;word-break:normal}
 .np-how li:before{content:"•";color:var(--accent);margin-right:6px;font-weight:900}
-.np-tab{position:absolute;left:calc(var(--bx) + 56px);top:var(--by);z-index:5;width:44px;height:44px;border-radius:50%;display:none;place-items:center;border:1px solid var(--gl-bd,rgba(255,255,255,.2));background:var(--gl-bg,rgba(22,17,48,.72));color:#fff;cursor:pointer;padding:0;margin:0;line-height:0;-webkit-appearance:none;appearance:none;box-sizing:border-box;box-shadow:0 4px 14px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.16)}
+.np-tab{position:absolute;left:calc(var(--bx) + 56px);top:var(--by);z-index:5;width:44px;height:44px;border-radius:50%;display:none;place-items:center;border:1px solid var(--gl-bd,rgba(255,255,255,.2));background:var(--gl-bg,rgba(22,17,48,.72));color:var(--gl-ink,#fff);cursor:pointer;padding:0;margin:0;line-height:0;-webkit-appearance:none;appearance:none;box-sizing:border-box;box-shadow:0 4px 14px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.16)}
 .np-tab:hover,.np-tab:focus-visible{background:rgba(52,40,110,.88);outline:none}
 .np-tab svg{width:22px;height:22px;display:block}
 #stage.np-rails-can:not(.np-rails) .np-tab{display:grid}
@@ -70,9 +70,12 @@ html #stage #home{left:calc(var(--rl,0px) + 16px + env(safe-area-inset-left,0px)
 
 /* NÚT KÍNH TỐI (GAME_RULES 0a-17): vòng tròn kính tối bán trong suốt + icon trắng ở MỌI giao diện (không còn nền trắng icon đen); điện thoại dọc: cỡ --tap-lg 56px (khối cuối file). */
 :root{--tap-lg:56px;--gl-bg:rgba(22,17,48,.72);--gl-bd:rgba(255,255,255,.2)}
+/* THEME SÁNG: nút icon tròn của cổng/cột nút ngang = màu ĐẶC tươi + icon trắng (cùng bộ màu shared/glass.css): Night = violet, Pop = cam vàng */
+html[data-theme=light]{--gl-bg:#7050F2;--gl-bd:rgba(255,255,255,.55);--gl-ink:#fff}
+html[data-app=popplay][data-theme=light]{--gl-bg:#F2701D;--gl-bd:rgba(255,255,255,.6);--gl-ink:#fff}
 /* Cột nút nổi của cổng (game không gom nút vào thanh trên): ← 📷 📤 🔒 CÙNG cỡ 44px, CÙNG trục X (= trục của ← trong game), CÙNG kiểu (tròn theo theme như ? 🔊 VI), xếp dọc cách đều 8px (GAME_RULES 0a-14) */
 html #stage,html #stage[data-lum]{--bx:calc(var(--rl,0px) + 16px + env(safe-area-inset-left,0px));--by:calc(16px + env(safe-area-inset-top,0px))}
-html #stage #home,html #stage[data-lum] #home,html #stage .nps-fab,html #stage[data-lum] .nps-fab,html #stage #klock,html #stage[data-lum] #klock{width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;border-radius:50%!important;background:var(--gl-bg,rgba(22,17,48,.72))!important;color:#fff!important;border:1px solid var(--gl-bd,rgba(255,255,255,.2))!important;box-shadow:0 4px 14px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 14px rgba(124,92,255,.3)!important;-webkit-backdrop-filter:blur(10px)!important;backdrop-filter:blur(10px)!important}
+html #stage #home,html #stage[data-lum] #home,html #stage .nps-fab,html #stage[data-lum] .nps-fab,html #stage #klock,html #stage[data-lum] #klock{width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;border-radius:50%!important;background:var(--gl-bg,rgba(22,17,48,.72))!important;color:var(--gl-ink,#fff)!important;border:1px solid var(--gl-bd,rgba(255,255,255,.2))!important;box-shadow:0 4px 14px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 14px rgba(124,92,255,.3)!important;-webkit-backdrop-filter:blur(10px)!important;backdrop-filter:blur(10px)!important}
 html #stage .nps-fab svg,html #stage #home svg,html #stage #klock svg{filter:none!important;width:22px!important;height:22px!important}
 @media (orientation:landscape){
   html #stage{--rw:64px}
@@ -103,7 +106,7 @@ html #stage.np-rails-l:not(.docked) #npRailL,html #stage.np-rails-l #npRailL{pad
 .np-hrow{display:flex;align-items:center;gap:12px;min-width:0}   /* ← (x=16) rồi nút thu gọn (x=72): CÙNG toạ độ với .np-tab khi cột đã thu */
 .np-gname{margin:0;min-width:0;flex:1;font:800 16px/1.2 var(--font);color:var(--ink);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow-wrap:break-word;word-break:normal}
 .np-hslot:empty{display:none}
-.np-hb{display:grid;place-items:center;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;margin:0;border-radius:50%;border:1px solid var(--gl-bd,rgba(255,255,255,.2));background:var(--gl-bg,rgba(22,17,48,.72));color:#fff;font:800 13px/1 var(--font);cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 14px rgba(124,92,255,.3);-webkit-appearance:none;appearance:none;box-sizing:border-box}
+.np-hb{display:grid;place-items:center;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;margin:0;border-radius:50%;border:1px solid var(--gl-bd,rgba(255,255,255,.2));background:var(--gl-bg,rgba(22,17,48,.72));color:var(--gl-ink,#fff);font:800 13px/1 var(--font);cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 14px rgba(124,92,255,.3);-webkit-appearance:none;appearance:none;box-sizing:border-box}
 .np-hb svg{width:22px;height:22px;display:block;flex:none}
 .np-hb:hover,.np-hb:focus-visible{background:rgba(52,40,110,.88);outline:none}.np-hb:active{transform:scale(.94)}
 .np-hb[hidden]{display:none!important}

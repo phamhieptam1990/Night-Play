@@ -87,3 +87,8 @@ html[data-theme=light] .orbsnd:focus-visible{outline-color:#7C5CFF}
 html[data-theme=light] .orbcel .moon{display:none}html[data-theme=light] .orbcel .sun{display:block}
 .orbcel .moon{filter:drop-shadow(0 0 8px rgba(205,195,255,.55))}
 .orbcel .sun{filter:drop-shadow(0 0 10px rgba(255,170,40,.55))}
+
+/* ĐIỆN THOẠI NGANG (thấp): khung bị giới hạn theo chiều cao nên bong bóng vệ tinh chỉ còn ~38px; phóng lên ~47px+ (dễ chạm, dễ nhìn) */
+@media (orientation:landscape) and (max-height:520px){
+ .sat span{width:calc(58px * var(--ss,1));height:calc(58px * var(--ss,1));font-size:calc(30px * var(--ss,1))}
+}

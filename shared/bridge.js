@@ -447,6 +447,11 @@ window.NP = (function () {
 })();
 
 /* nút duy nhất của toàn app (shared/btn.css + btn.js cạnh file này): một kiểu, theme data-nb, icon data-ic */
+/* combo tự ẩn sau ~1,6 giây (shared/combohide.js): không đứng yên che khung chơi */
+(function () {
+  try { var cs = document.currentScript, src = cs && cs.src; if (!src) return;
+    var j = document.createElement("script"); j.src = src.replace(/bridge\.js(\?.*)?$/, "combohide.js$1"); j.async = false; document.head.appendChild(j); } catch (e) {}
+})();
 (function () {
   try {
     var cs = document.currentScript, src = cs && cs.src; if (!src || document.getElementById("npBtnCss")) return;

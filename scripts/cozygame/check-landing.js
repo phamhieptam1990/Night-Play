@@ -129,7 +129,7 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
         const r = await pg.evaluate(() => { const h = document.getElementById("heroCta"), n = document.querySelector(".resume-note"); const b = h.getBoundingClientRect(); return { t: h.textContent.trim(), href: h.getAttribute("href"), h: b.height, bot: Math.max(b.bottom, n ? n.getBoundingClientRect().bottom : 0), note: n ? n.textContent : "", cls: window.__cls, ls: Object.keys(localStorage).sort().join() }; });
         const played = k !== "none", resume = k === "resume", tag = "chơi-tiếp " + l + "/" + k + "/" + sz.join("x");
         note(r.t === T[l][played ? 1 : 0], tag, "chữ nút '" + r.t + "'"); note(r.href === "/play/", tag, "href " + r.href); note(r.h >= 44, tag, "nút cao " + r.h);
-        note(resume ? r.note === T[l][2] : !r.note, tag, "ghi chú '" + r.note + "'"); note(!errs.length, tag, "lỗi console: " + errs[0]); note(!ext.length, tag, "request ngoài: " + ext[0]);
+        note(!r.note, tag, "không còn dòng ghi chú ván dở (đã bỏ theo yêu cầu): '" + r.note + "'"); note(!errs.length, tag, "lỗi console: " + errs[0]); note(!ext.length, tag, "request ngoài: " + ext[0]);
         note(r.cls < 0.01, tag, "CLS " + r.cls); if (sz[1] === 640) note(r.bot <= 640, tag, "hero tràn màn 360x640 (đáy " + Math.round(r.bot) + ")");
         note(!/np-(hi|resume)/.test(r.ls.replace(/np-hi-pop-fly|np-resume:pop-fly/g, "")), tag, "landing không được ghi khoá mới: " + r.ls);
         if (sz[0] === 390 && k !== "stale" && k !== "played" && l === "vi" || (sz[0] === 1440 && k === "resume" && l === "en")) if (shotDir) await pg.screenshot({ path: path.join(shotDir, "playing-" + l + "-" + k + "-" + sz[0] + ".png") });
@@ -204,7 +204,7 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
         await pg.mouse.click(5, 5); await wait(100); note(await pg.evaluate(() => getComputedStyle(document.getElementById("flinks")).display === "none"), tag, "bấm ngoài không đóng menu");
         if (sz[0] >= 320) { await pg.evaluate(() => scrollTo({ top: 0, behavior: "instant" })); await wait(100); const hb = await pg.$(".top .mbtn"); const bx = hb && await hb.boundingBox();
           note(!!bx && bx.width >= 44 && bx.height >= 44, tag, "thiếu nút menu header >= 44px"); if (hb) { await hb.click(); await wait(150); const h = await pg.evaluate(SZ0 => { const n = document.getElementById("hlinks"), q = n.getBoundingClientRect(), c = document.querySelector(".top .btn").getBoundingClientRect(); return { vis: n.offsetParent !== null, in: q.right <= innerWidth && q.left >= 0, cta: c.width >= 80 && c.height >= 44, n: n.querySelectorAll("a:not(.xtra)").length, x: SZ0 < 340 ? [...n.querySelectorAll(".xtra")].every(e => e.getBoundingClientRect().height >= 44) && !document.querySelector(".top .tools>.lang").offsetParent : true }; }, sz[0]);
-            note(h.vis && h.in && h.cta && h.x && h.n === 6, tag, "menu header sai " + JSON.stringify(h)); await pg.keyboard.press("Escape"); } }
+            note(h.vis && h.in && h.cta && h.x && h.n === 9, tag, "menu header sai (9 mục: 6 cũ + Hai thế giới, Cách chơi, Riêng tư) " + JSON.stringify(h)); await pg.keyboard.press("Escape"); } }
       } else if (sz[0] >= 1000) note(await pg.evaluate(() => document.getElementById("hlinks").offsetParent !== null), tag, "liên kết neo header phải hiện");
       note(!errs.length, tag, "lỗi: " + errs[0]); await pg.close(); }
     /* mục phụ huynh + ảnh chụp thật: có id trong menu neo, ảnh tải được có width/height + alt, CTA/chính sách đúng, không CLS */
@@ -283,10 +283,8 @@ const SIZES = quick ? [[360, 640], [390, 844], [1440, 900]] : [[320, 568], [360,
       if (l === "vi" && w === 390 && th === "light") {
         await pg.evaluate(() => document.querySelector(".faq summary").focus()); await pg.keyboard.press("Enter");
         note(await pg.evaluate(() => document.querySelector(".faq details").open), tag, "FAQ không mở bằng phím Enter");
-        await pg.click("#themeBtn"); note(await pg.evaluate(() => document.documentElement.dataset.theme === "dark" && localStorage.getItem("theme") === "dark"), tag, "nút theme không đổi/ghi localStorage");
-        const sticky0 = await pg.evaluate(() => document.getElementById("sticky").classList.contains("on")); note(!sticky0, tag, "thanh CTA dính hiện khi chưa cuộn");
-        await pg.evaluate(() => scrollTo(0, 1500)); await wait(400);
-        note(await pg.evaluate(() => document.getElementById("sticky").classList.contains("on")), tag, "thanh CTA dính không hiện sau khi cuộn");
+        await pg.evaluate(() => document.getElementById("themeBtn").click()); note(await pg.evaluate(() => document.documentElement.dataset.theme === "dark" && localStorage.getItem("theme") === "dark"), tag, "nút theme không đổi/ghi localStorage");
+        note(!(await pg.evaluate(() => !!document.getElementById("sticky"))), tag, "thanh CTA dính ở đáy phải được bỏ (đã có nút Chơi ngay ở header)");
       }
       await pg.close(); await cx.close();
     }

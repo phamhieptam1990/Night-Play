@@ -37,6 +37,13 @@ button.sk.on,button.sk[aria-pressed=true],button.sk.sel{border-color:#fff!import
 /* THẺ Ở MÀN CHỌN (chủ site: "không thích nền trắng chữ đen, làm giống Night Pass"): thẻ chế độ (.ty), nút phụ (.btn.alt), chip, nút cấp độ (.lv) = kính tối + chữ TRẮNG ở CẢ giao diện sáng lẫn tối; thẻ đang chọn pha màu nhấn của game. Nút chính (nền màu nhấn) giữ nguyên. */
 #home :is(.ty,.btn.alt,.chip,.lv):not(.on){background:linear-gradient(145deg,rgba(60,44,130,.62),rgba(22,16,52,.58))!important;color:var(--gl-ink)!important;border-color:var(--gl-bd)!important;box-shadow:0 4px 14px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.14)!important;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);text-shadow:none!important}
 #home .ty.on{background:color-mix(in srgb,var(--accent) 30%,rgba(22,17,48,.78))!important;color:var(--gl-ink)!important;border-color:var(--accent)!important;box-shadow:0 0 0 .5cqw color-mix(in srgb,var(--accent) 45%,transparent),0 4px 14px rgba(0,0,0,.3)!important}
+/* THEME SÁNG (chủ site: "màu button theme light xấu dã man, ghét màu xám"): kính tối TRONG SUỐT trên nền kem/trắng ra màu XÁM-TÍM đục. Ở theme sáng: thẻ/nút/chip màn chọn = nền sáng pha màu nhấn của game + chữ tối + viền màu nhấn (không xám); nút icon tròn = tím indigo ĐẶC (không trong suốt). Theme tối giữ nguyên. */
+/* nút icon tròn ở theme SÁNG: màu ĐẶC tươi (không kính tối xám) + icon trắng. Cozy = violet #7050F2, Pop = cam vàng #F2701D (chủ site chốt). Theme tối giữ kính tối. */
+html[data-theme=light]{--gl-bg:#7050F2;--gl-bd:rgba(255,255,255,.55);--gl-ink:#fff;--gl-glow:rgba(112,80,242,.35)}
+html.npp-kid[data-theme=light]{--gl-bg:#F2701D;--gl-bd:rgba(255,255,255,.6);--gl-ink:#fff;--gl-glow:rgba(242,112,29,.35)}
+html[data-theme=light] #home :is(.ty,.btn.alt,.chip,.lv):not(.on){background:color-mix(in srgb,var(--accent) 9%,#fff)!important;color:var(--ink)!important;border-color:color-mix(in srgb,var(--accent) 48%,transparent)!important;box-shadow:0 3px 0 color-mix(in srgb,var(--accent) 24%,transparent),0 8px 16px rgba(80,50,20,.10)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html[data-theme=light] #home .ty.on{background:color-mix(in srgb,var(--accent) 24%,#fff)!important;color:var(--ink)!important;border-color:var(--accent)!important;box-shadow:0 0 0 .5cqw color-mix(in srgb,var(--accent) 40%,transparent),0 4px 12px rgba(80,50,20,.14)!important}
+html[data-theme=light] #home .ty.lock:not(.on){background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--accent) 7%,#fff) 0 2cqw,color-mix(in srgb,var(--accent) 12%,#fff) 2cqw 4cqw)!important}
 #home :is(.ty,.lv) .t,#home .ty .e{color:inherit}
 #home .fbox{border-color:var(--gl-bd)!important}
 
@@ -75,3 +82,13 @@ button.sk.on,button.sk[aria-pressed=true],button.sk.sel{border-color:#fff!import
 /* Hàng nút cuối ván (Quay lại / Đấu lại / Ván mới / Trang chủ): MỌI game Cozy (kể cả viết tay) — 4 nút CÙNG CAO, thẳng hàng; icon SVG (↻ thay 🔁) cùng cỡ emoji */
 .row:has(>#bRem),.row:has(>#bAgain){align-items:stretch}
 :is(#bClip,#bRem,#bAgain,#bHome)>svg{width:1.23em!important;height:1.23em!important;display:block;flex:none;margin:0!important}   /* 1.23em = cao bằng dòng emoji → nhãn thẳng hàng */
+
+/* MÀN CHỌN GAME (Pop + Cozy, mọi cỡ): BỎ mọi viền/vòng sáng bao quanh khung (khung độ khó #play::after, vòng box-shadow của .play) — chủ site: "remove hết border của màn chọn game" */
+#play:has(#home:not([hidden])),.play:has(#home:not([hidden])),#play:has(#ovStart:not([hidden])),.play:has(#ovStart:not([hidden])){border:0!important;box-shadow:none!important;outline:0!important}
+#play:has(#home:not([hidden]))::after,.play:has(#home:not([hidden]))::after,#play:has(#ovStart:not([hidden]))::after,.play:has(#ovStart:not([hidden]))::after,#play:has(#home:not([hidden]))::before,.play:has(#home:not([hidden]))::before{display:none!important}
+
+/* NỀN MÀN CHỌN ĐỔI THEO CẤP ĐỘ (Pop + Cozy): bấm cấp 1/2/3 → cả màn hình pha tông xanh lá / xanh dương / cam đỏ (cùng màu nút cấp độ). Thuần CSS (:has) + một lớp phủ cố định không bắt chạm, chuyển mượt 0.5s. */
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;opacity:0;transition:opacity .5s,background .5s;background:none}
+body:has(#home:not([hidden]) .lvs :is(.lvb,.lv):nth-child(1).on)::after{opacity:1;background:radial-gradient(120% 70% at 50% 0%,rgba(11,154,95,.38),transparent 70%)}
+body:has(#home:not([hidden]) .lvs :is(.lvb,.lv):nth-child(2).on)::after{opacity:1;background:radial-gradient(120% 70% at 50% 0%,rgba(37,99,235,.45),transparent 70%)}
+body:has(#home:not([hidden]) .lvs :is(.lvb,.lv):nth-child(3).on)::after{opacity:1;background:radial-gradient(120% 70% at 50% 0%,rgba(228,80,26,.32),transparent 70%)}

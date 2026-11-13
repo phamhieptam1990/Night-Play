@@ -38,3 +38,46 @@
   .app .ask{justify-self:start;width:auto;padding:4px;min-height:0;border-radius:50%}
   .app #askTxt{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 }
+
+/* MÀN NGANG, MÀN CHỌN: mở RỘNG khung ra (không còn cột 3:4 hẹp ~280px): rộng tới 620px, cao hết màn; chơi thì khung trả về 3:4 như cũ */
+@media (min-aspect-ratio:11/10) and (max-height:760px){
+  .app:has(#home:not([hidden])){grid-template-columns:minmax(0,1fr) min(calc(100vw - 340px),640px) minmax(0,1fr)}
+  .app:has(#home:not([hidden])) .play{width:auto;aspect-ratio:auto;height:calc(100dvh - 30px);max-height:none}
+}
+
+/* MÀN NGANG: popup chọn giao diện / Night Pass mở ra thì khung chơi rộng ra (như màn chọn) để thẻ không bị gò trong cột ~280px */
+@media (min-aspect-ratio:11/10) and (max-height:760px){
+  .app:has(#ovSkin:not([hidden])),.app:has(#ovPay:not([hidden])){grid-template-columns:minmax(0,1fr) min(calc(100vw - 340px),640px) minmax(0,1fr)}
+  .app:has(#ovSkin:not([hidden])) .play,.app:has(#ovPay:not([hidden])) .play{width:auto;aspect-ratio:auto;height:calc(100dvh - 30px);max-height:none}
+}
+/* popup giao diện ở màn ngang: 5 ô một hàng, hình thu nhỏ có trần px (cqw phóng theo khung rộng → ô phình to) */
+@media (min-aspect-ratio:11/10) and (max-height:520px){
+  #ovSkin .skgrid{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:8px!important}
+  #ovSkin .skc{font-size:12px!important;padding:6px!important;gap:4px!important;border-radius:14px!important;grid-column:auto!important}
+  #ovSkin .skc img,#ovSkin .skc .th,#ovSkin .skc>span:first-child{max-height:min(22vh,80px);width:100%;object-fit:cover;border-radius:10px}
+  #ovSkin h2{font-size:18px!important}
+}
+
+/* màn ngang thấp: cột nút trái KHÔNG đè tên game — tên tối đa 3 dòng cỡ 12px, không bị cắt; nút xếp bên dưới cách 8px, đều 52px */
+@media (min-aspect-ratio:11/10) and (max-height:520px){
+  .app .top{align-content:flex-start;row-gap:8px;column-gap:6px}
+  .app .top h1,.app .top h1.pt-title{font-size:12px!important;line-height:1.12!important;max-height:none!important;overflow:visible!important;-webkit-line-clamp:unset!important;display:block!important;flex:1 1 100%;margin:0 0 2px}
+  .app .top .ib,.app .top #phBtn{width:52px!important;height:52px!important;min-width:52px!important;min-height:52px!important;max-width:52px!important}
+}
+
+/* POPUP GIAO DIỆN / NIGHT PASS — ĐIỆN THOẠI NGANG: bỏ khung bo tròn thứ hai phía sau, ✕ 40px sát góc thẻ (không phình), ô giao diện gọn, thẻ nằm giữa */
+@media (min-aspect-ratio:11/10) and (max-height:520px){
+  .app:has(#ovSkin:not([hidden])) .play,.app:has(#ovPay:not([hidden])) .play{background:none!important;box-shadow:none!important;border-radius:0!important}
+  #ovSkin:not([hidden]),#ovPay:not([hidden]){background:rgba(8,6,24,.55)!important;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);align-items:center;justify-content:center}
+  #ovSkin .npc .npx,#ovPay .npc .npx{width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;top:8px!important;right:8px!important;font-size:18px!important}
+  #ovSkin>.npc{width:min(94%,600px)!important;padding:8px 12px 10px!important;max-height:calc(100% - 8px)}
+  #ovSkin .npc h2{padding:0 52px!important;min-height:40px;font-size:17px!important;margin:0!important}
+  #ovSkin .skgrid{gap:6px!important}
+  #ovSkin .skc{font-size:11px!important;padding:5px 4px!important;line-height:1.1}
+  #ovSkin .skc .sw{aspect-ratio:3/2!important;font-size:28px!important}
+}
+
+/* màn ngang thấp ≤520px (vd 932x430): hàng 1/3 của lưới KHÔNG phình theo nội dung (Bố Mẹ 5 Giây: khung cao hơn màn 24px) — như luật ≤420px */
+@media (min-aspect-ratio:11/10) and (max-height:520px){
+  .app{grid-template-rows:minmax(0,1fr) auto minmax(0,1fr)!important;height:calc(100dvh - 30px)}
+}

@@ -52,7 +52,7 @@ try{if(!/[?&]landing=1(&|$)/.test(location.search)&&(matchMedia("(display-mode: 
 <header class="top">
  <div class="wrap bar">
   <a class="brand" href="/en/" aria-label="Play Hub"><img src="/lp/img/logo.svg" width="34" height="34" alt=""><span>Play Hub</span></a>
-  <nav class="links" id="hlinks" aria-label="Main"><a href="#game">Games</a><a href="/en/moi/">New</a><a href="#tinhnang">Features</a><a href="#phuhuynh">Parents</a><a href="#nightpass">Night Pass</a><a href="#hoi">FAQ</a><a class="xtra" href="/" hreflang="vi" lang="vi" data-set-lang="vi">Tiếng Việt</a><button class="xtra" type="button" data-theme-toggle>Light / Dark</button></nav>
+  <nav class="links" id="hlinks" aria-label="Main"><a class="mx sx" href="#thegioi">Two worlds</a><a href="/play/">Games</a><a href="/en/moi/">New</a><a class="sx" href="#tinhnang">Features</a><a class="sx" href="#phuhuynh">Parents</a><a class="sx" href="#nightpass">Night Pass</a><a class="mx sx" href="#cachchoi">How to play</a><a class="sx" href="#hoi">FAQ</a><a class="xtra" href="/" hreflang="vi" lang="vi" data-set-lang="vi">Tiếng Việt</a><button class="xtra" type="button" data-theme-toggle>Light / Dark</button><a class="xtra" href="/privacy.html">Privacy</a></nav>
   <div class="tools">
    <a class="lang" href="/" hreflang="vi" lang="vi" data-set-lang="vi" aria-label="Tiếng Việt">VI</a>
    <button class="ico" id="themeBtn" type="button" aria-label="Toggle light/dark theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></button>
@@ -180,12 +180,11 @@ try{if(!/[?&]landing=1(&|$)/.test(location.search)&&(matchMedia("(display-mode: 
   <div id="operator" class="op" hidden></div>
  </div>
 </footer>
-<div class="sticky" id="sticky" aria-hidden="true"><a class="btn big" href="/play/" tabindex="-1">Play now</a></div>
 <script>/* Người đã từng chơi: chỉ ĐỌC khoá localStorage có sẵn (np-resume:*, np-hi-*, np-rails-played, xx-save), không ghi, không gửi đi; không đọc được thì giữ bản người mới. HTML tĩnh vẫn là "Play now" cho Google. */
 try{var ks=[],played=0,resume=0;for(var i=0;i<localStorage.length;i++)ks.push(localStorage.key(i)||"");
 for(i=0;i<ks.length;i++){var k=ks[i];if(/^np-resume:/.test(k)){played=1;try{var r=JSON.parse(localStorage.getItem(k));if(r&&r.state&&typeof r.state==="object"&&Date.now()-r.ts<6048e5&&Date.now()-r.ts>=0)resume=1}catch(e){}}else if(/^np-hi-/.test(k)||k==="np-rails-played"||/^[a-z]{2}-save$/.test(k))played=1}
 if(played){document.documentElement.setAttribute("data-played","1");var as=document.querySelectorAll('a.btn[href="/play/"]');for(i=0;i<as.length;i++)as[i].textContent="Continue playing";var hb=document.querySelector(".top .btn.sm");if(hb)hb.textContent="Continue";
-if(resume){var cta=document.querySelector(".hero .cta");if(cta){var n=document.createElement("p");n.className="resume-note";n.textContent="You have a game in progress";cta.parentNode.insertBefore(n,cta.nextSibling)}}}}catch(e){}
+if(resume){}}}catch(e){}
 </script>
 <script>window.LANDING_OP={"operator":"Website owner","address":"Address","taxId":"Tax / business ID","license":"Ministry of Industry and Trade notice"}</script>
 <script src="/shared/site.js" defer></script>

@@ -75,6 +75,9 @@ html.npp-kid .app .top{gap:8px;flex-wrap:wrap}
 html.npp-kid :is(.dbar,.lvb,.ab,.abar,.jy,.jn,.chip2,#prOk,.main,.npr-x,.abar button,#pgBtn,#profBtn){min-height:var(--pop-btn)!important;box-sizing:border-box}
 html.npp-kid .npr-x{min-width:var(--pop-btn)!important}
 /* nút 🎨 chọn giao diện trong thẻ khu (Làng Của Bé): 56px, thẻ khu cao hơn một chút */
+/* nút 🎨 trong HÀNG chọn trò chơi (.tile cao ~54-62px): 56px lồi ra khỏi hàng và lệch → 44px, căn GIỮA theo chiều dọc, cách mép phải 10px (10 game Pop dùng chung) */
+html.npp-kid .tile>button.sk{width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;top:50%!important;bottom:auto!important;right:10px!important;transform:translateY(-50%)!important;font-size:22px!important}
+html.npp-kid .tile>button.sk svg{width:24px!important;height:24px!important}
 html.npp-kid .band .bh{min-height:var(--pop-btn)}
 html.npp-kid .band .bh .sk{width:var(--pop-btn);height:var(--pop-btn);font-size:26px}
 html.npp-kid .band .bh .sk svg{width:28px;height:28px}
@@ -124,3 +127,114 @@ html:not([data-theme=dark]) #ovStart #stH{color:#2b2064}
 
 /* màn chọn thấp: khung gọn hơn (đệm + khoảng cách nhỏ) để 4-5 ô 56px vừa */
 @media (max-height:520px){html.npp-kid #home{gap:4px!important;padding:3px 6px!important}html.npp-kid .tiles:has(>.tile>.sk){grid-auto-rows:minmax(var(--pop-btn),1fr)!important}}
+
+/* ĐIỆN THOẠI NGANG (khung chơi chỉ ~270-310px cao ~360-415px): hàng 44px thay vì 56px để "Hôm nay", độ khó, các trò chơi VỪA một màn, không phải gom vào popup ⋯ (homefit.js chỉ gom khi vẫn tràn) */
+@media (min-aspect-ratio:11/10) and (max-height:520px){
+  html.npp-kid :is(.dbar,.lvb,.ab,.abar,#profBtn,.pbar,.lvs button,.lv){min-height:40px!important;height:auto}
+  html.npp-kid .lvs{gap:6px}
+  html.npp-kid #home .tile,html.npp-kid .tile{min-height:44px!important;padding-block:4px!important}
+  html.npp-kid .tile .ti,html.npp-kid .tile>.ti{font-size:26px!important;width:34px;height:34px}
+  html.npp-kid .tile small{display:none!important}
+  html.npp-kid .tile>button.sk{width:36px!important;height:36px!important;min-width:36px!important;min-height:36px!important;right:8px!important}
+  html.npp-kid .tile>button.sk svg{width:20px!important;height:20px!important}
+  html.npp-kid #home{gap:5px!important}
+  html.npp-kid #home .tile{height:48px!important;min-height:0!important;flex:none}
+  html.npp-kid #home .tiles{gap:5px!important}
+  html.npp-kid #home .tile b{font-size:15px!important}
+}
+
+/* HÀNG CHỌN ĐỘ KHÓ (Pop): BỎ khung viền/nền bao quanh và gạch màu dưới từng nút; 3 nút rời nhau, nền nhạt, nút đang chọn = màu nhấn đặc */
+html:root #home .lvs,html:root .lvs{background:none!important;box-shadow:none!important;border:0!important;padding:0!important;gap:8px!important}
+html:root .lvs .lvb,html:root .lvs .lv{border:0!important;border-bottom:0!important;box-shadow:none!important;background:rgba(255,255,255,.14)!important;-webkit-backdrop-filter:none;backdrop-filter:none;border-radius:999px}
+html:root .lvs .lvb.on,html:root .lvs .lv.on{background:var(--accent)!important;color:var(--on-accent,#fff)!important}
+html[data-theme=light]:root .lvs .lvb:not(.on){background:rgba(255,255,255,.85)!important}
+
+/* NÚT 🎨 CHỌN GIAO DIỆN trong thẻ Pop: nền TRẮNG KEM + viền violet (nền cam chọi với thẻ cam/nâu → xấu); ở cả theme sáng lẫn tối */
+html.npp-kid .tile>button.sk,html.npp-kid .bh>button.sk,html.npp-kid .card>.skinBtn,html.npp-kid .skinBtn{background:#FFF6EA!important;border:2px solid #7050F2!important;box-shadow:0 3px 8px rgba(0,0,0,.3)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html.npp-kid #play .tile>button.sk,html.npp-kid #play .bh>button.sk,html.npp-kid #play .card>.skinBtn,html.npp-kid #play .skinBtn{background:#FFF6EA!important;background-image:none!important;border:2px solid #7050F2!important;box-shadow:0 3px 8px rgba(0,0,0,.3)!important}
+
+/* màn ngang RẤT thấp (≤400px: 667x375, 844x390): hàng trò chơi 42px, nút 🎨 34px, bỏ khe thừa → không tràn đáy */
+@media (min-aspect-ratio:11/10) and (max-height:400px){
+  html.npp-kid #home .tile{height:42px!important}
+  html.npp-kid #home .tiles{gap:3px!important}
+  html.npp-kid #home{gap:3px!important}
+  html.npp-kid #home .tile .ti{font-size:22px!important;width:28px;height:28px}
+  html.npp-kid #play .tile>button.sk{width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important}
+  html.npp-kid #home .lvs .lvb,html.npp-kid #home .dbar,html.npp-kid #home #profBtn{min-height:34px!important;height:34px!important}
+}
+
+/* màn ngang (mọi game Pop): hàng không bị kéo giãn cho đầy khung (Vẽ Chữ Quái Vật: khe 50px giữa các trò chơi, nút Hôm nay/Album to 56px) */
+@media (min-aspect-ratio:11/10) and (max-height:520px){
+  html.npp-kid #home{align-content:flex-start!important;justify-content:flex-start!important}
+  html.npp-kid #home .tiles{flex:none!important;align-content:flex-start}
+  html.npp-kid #home .dbar,html.npp-kid #home .abar{height:44px!important;min-height:44px!important}
+}
+html.npp-kid #home .tiles{width:100%!important;flex:1 1 100%!important}
+
+/* màn ngang: các thẻ trò chơi ĐỀU NHAU — hàng cao bằng nhau, khe bằng nhau (6px), xếp từ trên xuống, không bị lưới 1fr kéo giãn (Đoán Tuổi: khe thẻ đầu 0, các thẻ sau 17px) */
+@media (min-aspect-ratio:11/10) and (max-height:520px){
+  html.npp-kid #home .tiles{grid-template-rows:none!important;grid-auto-rows:max-content!important;align-content:start!important;align-items:start!important;gap:6px!important;flex:none!important;margin-top:2px}
+  html.npp-kid #home .tiles .tile{margin:0!important}
+}
+
+/* NÚT CẤP ĐỘ đang chọn: MỖI CẤP MỘT MÀU thể hiện độ khó, cố định ở mọi game Pop (1 xanh lá, 2 xanh dương, 3 cam đỏ), chữ trắng, viền trắng mảnh + bóng nhẹ */
+html.npp-kid:root .lvs .lvb.on,html.npp-kid:root .lvs .lv.on{color:#fff!important;border:2px solid rgba(255,255,255,.85)!important}
+html.npp-kid:root .lvs .lvb.on *{color:#fff!important}
+html.npp-kid:root .lvs :is(.lvb,.lv):nth-child(1).on{background:#0B9A5F!important;box-shadow:0 3px 10px rgba(11,154,95,.5)!important}
+html.npp-kid:root .lvs :is(.lvb,.lv):nth-child(2).on{background:#2563EB!important;box-shadow:0 3px 10px rgba(37,99,235,.5)!important}
+html.npp-kid:root .lvs :is(.lvb,.lv):nth-child(3).on{background:#E4501A!important;box-shadow:0 3px 10px rgba(228,80,26,.5)!important}
+
+/* thẻ "Hôm nay"/Album gọn lại: 56px → 46px (chủ site: "card hôm nay bự") */
+html.npp-kid #play :is(.dbar,.abar){height:46px!important;min-height:46px!important}
+html.npp-kid #play .card.daily,html.npp-kid #play .tile.daily{min-height:0!important;height:auto;padding-block:6px!important}
+
+/* 3 NÚT CẤP ĐỘ: khe giữa các nút 14px + cách thẻ phía dưới 10px (chủ site: "padding xa 3 cái button ra") */
+html:root #home .lvs,html:root .lvs{gap:6px!important;margin-bottom:10px!important}
+html:root .lvs .lvb,html:root .lvs .lv{flex:1 1 0!important;min-width:0}
+html.npp-kid #play .card.daily .main{min-height:46px!important;padding-block:4px!important}
+
+/* POPUP GIAO DIỆN, ĐIỆN THOẠI DỌC: 2 cột ô TO (thumbnail 100% rộng ô, chữ 15px) thay vì 3 ô nhỏ bị nén; thẻ rộng sát lề 16px */
+@media (max-width:520px) and (orientation:portrait){
+  html.npp-kid #ovSkin>.npc{width:calc(100% - 8px)!important;padding:14px 12px 12px!important;max-height:calc(100% - 16px);overflow:auto}
+  html.npp-kid #ovSkin .npc h2{margin-bottom:4px!important}
+  html.npp-kid #ovSkin .skgrid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+  html.npp-kid #ovSkin .skc{font-size:14px!important;padding:6px!important;gap:4px!important;border-radius:18px!important;grid-column:auto!important;min-height:0}
+  html.npp-kid #ovSkin .skc .sw{aspect-ratio:2/1!important;font-size:34px!important}
+  html.npp-kid #ovSkin .skc img,html.npp-kid #ovSkin .skc .th{width:100%!important;height:auto!important;aspect-ratio:2/1;object-fit:cover;border-radius:12px}
+  html.npp-kid #ovSkin .skc:last-child:nth-child(odd){grid-column:1/-1!important;justify-self:center;width:calc(50% - 6px)}
+}
+
+/* màn ngang: tên trò chơi dài (Tàu hỏa chạy mãi, Khủng long chạy…) hiện đủ 2 dòng 13px trong hàng 42-48px: ẩn thanh tiến độ nhỏ, không cắt chữ */
+@media (min-aspect-ratio:11/10) and (max-height:520px){
+  html.npp-kid #home .tile b{font-size:13px!important;line-height:1.08!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-height:2.2em;text-align:left}
+  html.npp-kid #home .tile .pgb{display:none!important}
+  html.npp-kid #home .tile .bd{display:none}
+}
+
+/* tên trò chơi căn giữa dọc trong hàng (màn ngang) */
+@media (min-aspect-ratio:11/10) and (max-height:520px){html.npp-kid #home .tile b{align-self:center}html.npp-kid #home .tile{align-items:center!important}}
+
+/* POPUP GIAO DIỆN, ĐIỆN THOẠI DỌC: ✕ 40px nằm TRONG thẻ (cách mép 8px, không lồi ra góc, không phình theo cqw) + bỏ khung bo tròn thứ hai phía sau */
+@media (max-width:520px) and (orientation:portrait){
+  html.npp-kid #ovSkin .npc .npx,html.npp-kid #ovPay .npc .npx{width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;top:8px!important;right:8px!important;font-size:18px!important}
+  html.npp-kid #play:has(#ovSkin:not([hidden])),html.npp-kid #play:has(#ovPay:not([hidden])){background:none!important;box-shadow:none!important}
+}
+
+/* máy ngang RẤT thấp (≤340px, vd 568x320): hàng 34px, nút/thanh 30px, khe 2px, thẻ Pop Fly xếp từ trên xuống → vừa một màn */
+@media (min-aspect-ratio:11/10) and (max-height:340px){
+  html.npp-kid #home .tile{height:34px!important}
+  html.npp-kid #home .tile .ti{font-size:18px!important;width:22px;height:22px}
+  html.npp-kid #home .tile b{font-size:12px!important}
+  html.npp-kid #play .tile>button.sk{width:28px!important;height:28px!important;min-width:28px!important;min-height:28px!important}
+  html.npp-kid #home .lvs .lvb,html.npp-kid #home .dbar,html.npp-kid #home .abar,html.npp-kid #home #profBtn{height:28px!important;min-height:28px!important}
+  html.npp-kid #home .tiles,html.npp-kid #home{gap:2px!important}
+  html.npp-kid #home .cards{justify-content:flex-start!important;align-content:flex-start!important}
+  html.npp-kid #home .card.daily .main{min-height:30px!important}
+}
+
+/* HÀNG CẤP ĐỘ nằm TRÊN thẻ "Tiếp tục ván dở" (chủ site: thẻ đó làm màn giật khi đổi cấp độ): cấp độ luôn đứng yên ở trên cùng khối nút */
+html.npp-kid #home .lvs{order:-5!important}
+html.npp-kid #home #npResume{order:-4!important}
+
+/* KHÔNG GIẬT khi đổi cấp: mọi nút cấp độ luôn có viền 2px (trong suốt khi chưa chọn) nên nút đang chọn không đổi kích thước/đẩy chữ; không transition kích thước */
+html:root .lvs .lvb,html:root .lvs .lv{border:2px solid transparent!important;box-sizing:border-box;transition:background-color .2s,box-shadow .2s!important;transform:none!important}

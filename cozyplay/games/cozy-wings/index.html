@@ -140,8 +140,89 @@ body.np-local{--w:min(calc(100vw - 24px),calc((100dvh - 240px)*.75),760px)}
   #ovStart .tile:not(.daily):has(+ .tile.daily):nth-child(odd of .tile:not(.daily)) img{aspect-ratio:4/1}
   #ovStart .tile .tb{left:8px;top:8px;width:auto;height:auto;font-size:22px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.6))}
   #ovStart .tile .best{left:8px;bottom:8px;padding:3px 10px;font-size:13px;background:linear-gradient(165deg,rgba(43,32,100,.92),rgba(23,18,54,.92));border:1px solid rgba(170,150,255,.5)}
-  #ovStart .tile .skinBtn{right:8px;top:8px;bottom:auto;width:44px;height:44px;background:rgba(22,17,48,.78)!important;border:1px solid rgba(255,255,255,.35);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 4px 12px rgba(0,0,0,.4)}
+  #ovStart .tile .skinBtn{right:8px;top:8px;bottom:auto;width:44px;height:44px;background:var(--gl-bg,rgba(22,17,48,.78))!important;border:1px solid rgba(255,255,255,.35);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 4px 12px rgba(0,0,0,.4)}
 }
+/* ⏸ + 🔊 dồn sang PHẢI sát nút ⋯ (như mọi game khác), không dính nút ← ở trái */
+@media (max-width:520px) and (orientation:portrait){.top.npfan #soundBtn,.top.npfan #pauseBtn{position:absolute!important;top:calc(16px + env(safe-area-inset-top,0px));margin:0!important}.top.npfan #soundBtn{right:calc(80px + env(safe-area-inset-right,0px))}.top.npfan #pauseBtn{right:calc(144px + env(safe-area-inset-right,0px))}}   /* sát ⋯ (56px + 8px + 16px lề), không dính ← */
+/* THẺ GIỐNG CÁC GAME COZY KHÁC (chủ site: "bỏ hình, làm thẻ card giống game khác"): kính tối, emoji + tên, 🏆 nhỏ, nút 🎨 góc phải trên; KHÔNG ảnh nền */
+@media not all and (max-height:520px) and (min-aspect-ratio:11/10){
+  #ovStart .tile:not(.daily){display:flex;overflow:visible;background:linear-gradient(145deg,rgba(60,44,130,.62),rgba(22,16,52,.58));border:1px solid rgba(170,150,255,.5);color:#fff;box-shadow:0 4px 14px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.14)}
+  #ovStart .tile:not(.daily) .main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:68px;padding:10px 6px 6px;color:inherit;border-radius:inherit;background:none!important;border:0!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  #ovStart .tile:not(.daily) .main img{display:none}
+  #ovStart .tile:not(.daily) .tb{position:static;display:block;width:auto;height:auto;font-size:26px;line-height:1.1;filter:none}
+  #ovStart .tile:not(.daily) .nm{font-size:13px;font-weight:800;line-height:1.12;text-align:center;max-width:100%}
+  #ovStart .tile:not(.daily) .best{position:static;padding:1px 8px;font-size:11px}
+  #ovStart .tile:not(.daily) .skinBtn{right:6px;top:6px;width:40px;height:40px;min-width:40px;min-height:40px}
+}
+/* GỌN, bớt "trẻ con" (chủ site): màn chọn chuyến bay KHÔNG hiện thanh "Pick a flight" + ⭐ điểm (chỉ cần khi đang bay); cụm độ khó nhỏ lại, phẳng */
+@media (max-width:520px) and (orientation:portrait){
+  body:has(#ovStart:not([hidden])) .side .ask,body:has(#ovStart:not([hidden])) .side .hud{display:none!important}
+  #ovStart .difs{gap:8px}#ovStart .dif{width:38px;height:38px;min-width:38px;min-height:38px;font-size:17px;box-shadow:none}
+}
+/* BỐ CỤC MÀN CHỌN GIỐNG CÁC GAME COZY KHÁC (điện thoại dọc): tiêu đề → linh vật lớn (chiếm phần còn lại) → thẻ hôm nay → thẻ chuyến bay → độ khó; không viền khung, nền trong */
+.cwHero{display:none}
+@media (max-width:520px) and (orientation:portrait){
+  #play:has(#ovStart:not([hidden])){background:none!important;box-shadow:none!important}#play:has(#ovStart:not([hidden]))::after{display:none!important}
+  #ovStart{justify-content:flex-start;gap:8px;padding:4px 8px 10px;background:none!important;-webkit-backdrop-filter:none;backdrop-filter:none}
+  #ovStart .cwHero{order:0;flex:1 1 0;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;font-size:clamp(48px,min(22vw,13vh),120px);line-height:1;white-space:nowrap;overflow:hidden;transform-origin:50% 100%;animation:cwBob 2.8s ease-in-out infinite}
+  #ovStart #stH{order:0}#ovStart .tiles{order:2;flex:none}#ovStart .difs{order:1}#ovStart #vsBox{order:2}#ovStart #chGo{order:4}
+  #ovStart .tile.daily{order:-1}
+}
+@media (max-height:799px){#ovStart .cwHero{display:none!important}}   /* khung thấp (máy nhỏ/ngắn): bỏ linh vật để thẻ không tràn */
+@media (orientation:landscape) and (min-height:600px){#ovStart{justify-content:flex-start}#ovStart .cwHero{order:0;flex:1 1 0;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;font-size:clamp(56px,13vh,120px);line-height:1;white-space:nowrap;overflow:hidden;animation:cwBob 2.8s ease-in-out infinite}#ovStart #stH{order:0}#ovStart .tiles{order:2;flex:none}#ovStart .difs{order:1}}
+@keyframes cwBob{0%,100%{transform:translateY(0) scale(1,1)}30%{transform:translateY(-2.4cqw) scale(.97,1.04)}55%{transform:translateY(0) scale(1.04,.96)}}
+@media (prefers-reduced-motion:reduce){.cwHero{animation:none!important}}
+/* ĐIỆN THOẠI NGANG (thấp): khung chỉ ~280px rộng → 5 ô KHÔNG xếp một hàng; mỗi chuyến bay là MỘT HÀNG gọn (emoji | tên | 🎨), cùng kiểu thẻ kính các game Cozy */
+@media (max-height:520px) and (min-aspect-ratio:11/10){
+  #ovStart{justify-content:center;gap:5px;padding:6px 8px}
+  #ovStart .tiles{display:grid!important;grid-template-columns:1fr!important;gap:4px!important;width:100%;max-width:none}
+  #ovStart .tile{grid-column:auto!important;border-radius:12px;overflow:visible}
+  #ovStart .tile:not(.daily){display:flex;background:linear-gradient(145deg,rgba(60,44,130,.62),rgba(22,16,52,.58));border:1px solid rgba(170,150,255,.5);color:#fff}
+  #ovStart .tile:not(.daily) .main{flex:1;display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:8px;min-height:36px;padding:2px 44px 2px 10px;color:inherit;border-radius:inherit;background:none!important;border:0!important;box-shadow:none!important;text-align:left}
+  #ovStart .tile:not(.daily) .tb{position:static;display:block;width:auto;height:auto;font-size:20px;line-height:1;filter:none}
+  #ovStart .tile:not(.daily) .nm{font-size:13px;font-weight:800;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #ovStart .tile:not(.daily) .best{display:none}
+  #ovStart .tile:not(.daily) .skinBtn{right:2px;top:50%;bottom:auto;transform:translateY(-50%);width:34px;height:34px;min-width:34px;min-height:34px;font-size:15px}
+  #ovStart .tile.daily{padding:4px 12px;font-size:15px;min-height:34px}#ovStart .tile.daily .de{font-size:22px}
+  #ovStart .difs{gap:6px}#ovStart .dif{width:32px;height:32px;min-width:32px;min-height:32px;font-size:15px}
+}
+/* ĐIỆN THOẠI NGANG: màn chọn 2 CỘT trên toàn màn hình (khung 3:4 quá nhỏ: thêm thẻ "Tiếp tục ván dở" là tràn cả hai đầu). Trái: hôm nay + tiếp tục + độ khó; phải: 5 chuyến bay một hàng gọn. */
+@media (max-height:520px) and (min-aspect-ratio:11/10){
+  #play:has(#ovStart:not([hidden])){background:none!important;box-shadow:none!important}#play:has(#ovStart:not([hidden]))::after{display:none!important}
+  body:has(#ovStart:not([hidden])) .side .ask,body:has(#ovStart:not([hidden])) .side .hud{display:none!important}
+  #ovStart:not([hidden]){position:fixed!important;left:72px;right:72px;top:44px;bottom:6px;width:auto!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);grid-auto-rows:max-content;column-gap:14px;row-gap:6px;align-content:center;align-items:center;justify-items:stretch;padding:0;background:none!important;-webkit-backdrop-filter:none;backdrop-filter:none}
+  #ovStart .cwHero,#ovStart #stH:not(:empty):not([hidden]){display:none}
+  #ovStart .tiles{display:contents!important}
+  #ovStart .tile.daily{grid-column:1;grid-row:1;order:0}
+  #ovStart #npResume{grid-column:1;grid-row:3;margin:0}
+  #ovStart:not([hidden]){align-content:start!important;padding-top:4px!important}
+  #ovStart .difs{grid-column:1;grid-row:2;justify-self:center}
+  #ovStart .tile:not(.daily){grid-column:2!important}
+  #ovStart #npResume{height:48px}#ovStart #npResume .npr-go{height:48px;min-height:0;padding:0 14px;font-size:14px}#ovStart #npResume .npr-x{width:40px;height:40px}
+}
+/* THEME SÁNG: thẻ chuyến bay nền sáng pha màu nhấn + chữ tối (kính tối trong suốt ra màu xám-tím trên nền sáng) */
+html[data-theme=light] #ovStart .tile:not(.daily){background:color-mix(in srgb,var(--accent) 9%,#fff)!important;border-color:color-mix(in srgb,var(--accent) 48%,transparent)!important;color:var(--ink)!important;box-shadow:0 3px 0 color-mix(in srgb,var(--accent) 24%,transparent),0 8px 16px rgba(80,50,20,.10)!important}
+html[data-theme=light] #ovStart .tile:not(.daily) .main,html[data-theme=light] #ovStart .tile:not(.daily) .nm{color:var(--ink)!important}
+/* 3 nút ĐỘ KHÓ: bỏ viền/gạch màu cong ở đáy, nền phẳng; nút đang chọn = màu nhấn đặc */
+#ovStart .difs .dif{border:0!important;box-shadow:none!important;background:color-mix(in srgb,var(--panel) 80%,transparent)}#ovStart .difs .dif.on{background:var(--accent)!important}
+/* DANH SÁCH MỘT CỘT (chủ site: "không thích dạng lưới 2 cột"): mỗi chuyến bay MỘT HÀNG phẳng: emoji | tên | 🎨 (giống Pop/Đập Deadline), mọi cỡ trừ điện thoại ngang (đã có bố cục 2 cột toàn màn riêng) */
+@media not all and (max-height:520px) and (min-aspect-ratio:11/10){
+  #ovStart .tiles{display:flex!important;flex-direction:column;gap:8px!important;width:100%;max-width:none}
+  #ovStart .tile:not(.daily){width:100%;grid-column:auto!important;border-radius:18px}
+  #ovStart .tile:not(.daily) .main{flex-direction:row!important;justify-content:flex-start!important;align-items:center;gap:12px!important;min-height:56px!important;padding:8px 56px 8px 12px!important;text-align:left}
+  #ovStart .tile:not(.daily) .tb{font-size:30px!important}
+  #ovStart .tile:not(.daily) .nm{font-size:15px!important;text-align:left;white-space:normal;line-height:1.15;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  #ovStart .tile:not(.daily) .skinBtn{right:8px!important;top:50%!important;transform:translateY(-50%)!important;width:40px!important;height:40px!important}
+}
+/* MÀN CHỌN: bỏ thẻ "Chọn một chuyến bay nhé" + ⭐ điểm ở MỌI cỡ (web/iPad/điện thoại); hai thứ này chỉ cần khi đang bay */
+body:has(#ovStart:not([hidden])) .side .ask,body:has(#ovStart:not([hidden])) .side .hud{display:none!important}
+/* MÀN CHỌN (mọi cỡ): bỏ khung viền xanh + nền hộp bao quanh, căn nội dung GIỮA khung */
+#play:has(#ovStart:not([hidden])){background:none!important;box-shadow:none!important;border:0!important}
+#play:has(#ovStart:not([hidden]))::after{display:none!important}
+@media not all and (max-height:520px) and (min-aspect-ratio:11/10){#ovStart:not([hidden]){justify-content:center!important}#ovStart .cwHero{flex:none!important;min-height:120px;margin-top:34px}}
+#ovStart:not([hidden]){background:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+/* màn chọn neo TRÊN (không căn giữa): thẻ "Tiếp tục ván dở" hiện muộn không làm cả khối nhảy lên xuống khi đổi cấp độ */
+#ovStart:not([hidden]){justify-content:flex-start!important;padding-top:6px}
 /* thanh trên màn chọn: tên game một dòng riêng, không cắt "…" */
 @media (max-width:520px){.top{flex-wrap:wrap}.top h1{order:9;flex:1 1 100%;white-space:normal;overflow:visible;text-overflow:clip;line-height:1.1}}
 /* --- màn giải thích cách chơi trước khi bắt đầu --- */
@@ -210,7 +291,7 @@ body.np-local{--w:min(calc(100vw - 24px),calc((100dvh - 240px)*.75),760px)}
     <div class="top">
       <button class="ib" id="bBk" type="button" hidden aria-label="←">←</button>
       <h1 id="title"></h1>
-      <button class="ib" id="pauseBtn" type="button" hidden>⏸</button>
+      <button class="ib" id="pauseBtn" type="button" hidden><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1.3"/><rect x="14" y="5" width="4" height="14" rx="1.3"/></svg></button>
       <button class="ib" id="soundBtn" type="button">🔊</button>
       <button class="ib" id="langBtn" type="button" style="font-size:14px;font-weight:800">VI</button>
     </div>
@@ -222,6 +303,7 @@ body.np-local{--w:min(calc(100vw - 24px),calc((100dvh - 240px)*.75),760px)}
     <div class="toast" id="toast" role="status"></div>
 
     <div class="ov" id="ovStart">
+      <div class="cwHero" id="cwHero" aria-hidden="true">🐝🐟</div>
       <h2 id="stH"></h2>
       <div class="difs" id="diffs"></div>
       <div class="tiles" id="cards"></div>
@@ -678,7 +760,7 @@ function renderCards(){
   for(const id of PF.order){
     const sel=PF.skinSel[id],prem=sel&&sel!=="default"&&PF.skins[id]&&PF.skins[id][sel],bs=best[id+":"+diff],tid=prem?sel:"default";
     const c=document.createElement("div");c.className="tile";
-    const m=document.createElement("button");m.type="button";m.className="main";m.innerHTML='<img alt="" src="thumbs/'+id+'-'+tid+'.jpg" loading="lazy" onerror="this.style.visibility=\'hidden\'"><span class="tb" aria-hidden="true">'+ICO[id]+'</span>'+(bs?'<span class="best">🏆 '+bs+'</span>':'');m.setAttribute("aria-label",t("ty."+id)+" — "+t("ty."+id+".d"));m.onclick=()=>openHow(id);
+    const m=document.createElement("button");m.type="button";m.className="main";m.innerHTML='<span class="tb" aria-hidden="true">'+ICO[id]+'</span><span class="nm">'+t("ty."+id)+'</span>'+(bs?'<span class="best">🏆 '+bs+'</span>':'');m.setAttribute("aria-label",t("ty."+id)+" — "+t("ty."+id+".d"));m.onclick=()=>openHow(id);
     const k=document.createElement("button");k.type="button";k.className="skinBtn";k.innerHTML='<svg viewBox="0 0 24 24" width="1.3em" height="1.3em" aria-hidden="true" style="display:block"><path d="M12 3C6.5 3 2.5 7 2.5 11.8c0 4.7 3.8 8.2 8.2 8.2 1.3 0 2-.8 2-1.7 0-.5-.2-.9-.5-1.3-.3-.4-.5-.8-.5-1.3 0-1 .8-1.8 1.8-1.8H17c2.5 0 4.5-2 4.5-4.5C21.5 6.6 17.4 3 12 3z" fill="#f5c26b" stroke="#a86a2b" stroke-width="1.2" stroke-linejoin="round"/><circle cx="7.6" cy="10.4" r="1.5" fill="#ef4444"/><circle cx="11.2" cy="7.2" r="1.5" fill="#3b82f6"/><circle cx="15.8" cy="7.9" r="1.5" fill="#22c55e"/><circle cx="6.9" cy="14.6" r="1.4" fill="#a855f7"/></svg>'+(prem?"<i>★</i>":"");k.setAttribute("aria-label",t("sk.pick"));k.onclick=()=>openSkins(id);
     c.appendChild(m);c.appendChild(k);box.appendChild(c);
   }

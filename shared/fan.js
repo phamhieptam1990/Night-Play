@@ -144,6 +144,9 @@
     if (!local || ttl) return; var h = top.querySelector("h1,#title,#ttl"); if (!h) return;
     ttl = document.createElement("div"); ttl.id = "npTitle"; ttl.setAttribute("aria-hidden", "true");
     top.parentNode.insertBefore(ttl, top.nextSibling); syncTitle();
+    /* ĐỔI THEME sáng/tối lúc đang mở game: màu/phông tiêu đề h1 đổi nhưng h1 không bị "đột biến" → bản sao #npTitle giữ màu cũ (chữ trắng trên nền sáng, "title bị bug khi switch theme"). Đồng bộ lại ngay + sau khi h1 chạy xong transition màu. */
+    try { new MutationObserver(function () { syncTitle(); setTimeout(syncTitle, 120); setTimeout(syncTitle, 520); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "lang"] }); } catch (e) {}
+    addEventListener("storage", function (e) { if (!e.key || e.key === "theme") { setTimeout(syncTitle, 60); setTimeout(syncTitle, 520); } });
     try { ttlMo = new MutationObserver(syncTitle); ttlMo.observe(h, { childList: true, characterData: true, subtree: true, attributes: true, attributeFilter: ["style", "class", "hidden"] }); } catch (e) {}
   }
   function build() {

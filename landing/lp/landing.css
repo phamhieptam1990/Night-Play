@@ -121,13 +121,9 @@ p{margin:0}
 .copy{margin-top:12px;font-size:14px;color:var(--muted)}
 .copy a{color:var(--ink2)}
 
-/* thanh CTA dính (chỉ mobile, hiện sau khi cuộn qua hero) */
-.sticky{display:none}
+/* (đã bỏ thanh CTA dính ở đáy: nút Chơi ngay đã có ở thanh trên cùng) */
 @media (max-width:699px){
- .sticky{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:40;padding:8px 16px calc(8px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--bg) 94%,transparent);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .2s}
- .sticky.on{transform:none}
- .sticky .btn{width:100%}
- .foot{padding-bottom:90px}
+ .foot{padding-bottom:24px}
 }
 @media (min-width:700px){
  body{font-size:18px}
@@ -433,3 +429,80 @@ main p a:not(.btn){transition:color .18s ease,text-decoration-color .18s ease}
 .orbsys,.orbsys *{touch-action:pan-y}
 /* …nhưng vệ tinh + vòng quỹ đạo phải KÉO được theo mọi hướng (quỹ đạo tròn: hai bên là vuốt dọc, pan-y làm trình duyệt huỷ cử chỉ → kéo "không ăn" trên điện thoại) */
 .orbsys .sat,.orbsys .hit{touch-action:none}
+
+/* ===== Tính năng nổi bật (7 thẻ): gọn padding, thẻ ngang icon-trái trên điện thoại, thẻ thứ 7 trải đầy hàng (không lẻ) ===== */
+.sec{padding:40px 0}.sec h2{margin-bottom:18px}
+.feats{gap:10px}
+.feat{display:grid;grid-template-columns:44px 1fr;column-gap:12px;align-items:center;padding:14px 16px;border-radius:20px}
+.feat .fi{grid-row:1/3;font-size:30px;margin:0;text-align:center}
+.feat h3{font-size:17px;margin:0 0 2px;line-height:1.25}
+.feat p{font-size:14.5px;line-height:1.4;margin:0}
+.feat:last-child{grid-column:1/-1}
+@media (min-width:700px){
+ .sec{padding:56px 0}.sec h2{margin-bottom:24px}
+ .feats{gap:14px}
+ .feat{padding:18px 20px}
+ .feat .fi{font-size:34px}.feat h3{font-size:19px}.feat p{font-size:15.5px}
+}
+@media (min-width:1100px){
+ .sec{padding:72px 0}
+ .feats{grid-template-columns:repeat(6,1fr)}
+ .feat{grid-column:span 2}
+ .feat:last-child{grid-column:1/-1}
+}
+.feat{align-content:center}.feat .fi{align-self:center}.feat h3,.feat p{align-self:start}
+
+/* ===== ĐIỆN THOẠI: trang gọn lại (trước đây ~9.500px, kéo mỏi tay mà chưa hết). Lưới 2-3 cột thay vì xếp dọc từng thẻ ===== */
+@media (max-width:699px){
+ .sec{padding:26px 0}.sec h2{font-size:clamp(21px,5.8vw,25px);line-height:1.2;margin-bottom:14px}
+ .sec .center{margin-top:16px}
+ .feats{grid-template-columns:1fr 1fr;gap:8px}
+ .feat{display:block;padding:12px;border-radius:16px;text-align:left}
+ .feat .fi{font-size:26px;margin:0 0 4px;text-align:left}.feat h3{font-size:15px;margin:0 0 2px}.feat p{font-size:13px;line-height:1.35}
+ .feat:last-child{grid-column:1/-1}
+ .games{grid-template-columns:repeat(3,1fr);gap:8px}
+ .gcard{padding:10px 4px;gap:4px;border-radius:16px;min-height:0}.gcard .gi{font-size:30px}.gcard .gt b{font-size:13px;line-height:1.2}.gcard .gt small{display:none}
+ .pcards{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+ .pcard{flex-direction:column;align-items:flex-start;gap:6px;padding:12px;border-radius:16px}.pcard .pi{width:36px;height:36px;font-size:20px}.pcard h3{font-size:15px}.pcard p{font-size:13px;line-height:1.35}
+ .plans{grid-template-columns:1fr 1fr;gap:10px}
+ .plan{padding:16px 12px 12px;border-radius:18px}.plan .pp{font-size:22px}.plan .pn{font-size:12.5px}.plan .badge{left:12px}
+ .steps{gap:8px}.steps li{padding:12px 12px 12px 58px;min-height:0;border-radius:16px;font-size:15px}.steps li::before{left:12px;width:34px;height:34px}
+ .faq{gap:8px}.faq summary{min-height:48px;padding:10px 14px}
+ .worlds{gap:10px}
+}
+@media (max-width:699px){.pshots{display:none}.pgrid{gap:0}}
+@media (max-width:389px){.plans{grid-template-columns:1fr}.plan .badge{font-size:12px}}
+.links a{white-space:nowrap}
+@media (min-width:1000px){.links .mx{display:none}}   /* máy tính: menu ngang gọn như cũ; các mục thêm chỉ nằm trong menu ☰ */
+
+/* ĐIỆN THOẠI / MÁY TÍNH BẢNG: thanh trên cùng = logo (bấm để sổ menu) + nút menu ☰ + Chơi ngay bên phải; EN và Sáng/Tối nằm trong menu */
+@media (max-width:999px){
+ .top .tools .lang,.top #themeBtn{display:none}
+ .top .tools{margin-left:auto}
+ .top .tools .btn{order:1}.top .tools .mbtn{order:2}   /* Chơi ngay rồi nút menu ☰ ở ngoài cùng bên phải (bấm logo bên trái cũng sổ cùng menu) */
+ .top .brand{min-height:44px;cursor:pointer}
+ .top .brand:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+ .links.open .xtra{display:flex}
+ .links.open .sx{display:none}   /* ☰ chỉ giữ Game, Mới, Ngôn ngữ, Giao diện, Quyền riêng tư; các thẻ nội dung nằm ở menu logo */
+ .lmenu.open{display:flex;left:16px;right:auto}
+ .lmenu.open .sx{display:flex}
+}
+.lmenu{display:none}
+@media (min-width:1000px){.lmenu,.lmenu.open{display:none!important}}
+
+/* ===== Hàng ưu điểm ở đầu trang: thẻ nhỏ gọn (chấm tròn xanh + chữ đậm), xếp ngang tự ngắt dòng để tiết kiệm chiều cao ===== */
+.badges{display:flex;flex-wrap:wrap;gap:6px;font-size:13.5px}
+.badges li{gap:6px;min-height:34px;padding:4px 11px 4px 5px;border-radius:99px;font-weight:800;line-height:1.15;color:var(--ink);background:color-mix(in srgb,var(--ok) 13%,var(--panel));border:1.5px solid color-mix(in srgb,var(--ok) 42%,transparent)}
+.badges svg{flex:none;width:22px;height:22px;padding:3.5px;box-sizing:border-box;border-radius:50%;background:var(--ok);color:#fff}
+@media (min-width:700px){.badges{gap:8px;font-size:15px}.badges li{min-height:38px;padding:5px 14px 5px 6px}}
+/* điện thoại dọc: lưới 2 cột thẳng hàng (thẻ cuối trải đầy hàng), gọn chiều cao */
+@media (max-width:520px){
+ .badges{display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:13px}
+ .badges li{border-radius:12px;min-height:38px;padding:4px 8px 4px 5px;gap:6px}
+ .badges li:last-child:nth-child(odd){grid-column:1/-1}
+}
+/* điện thoại ngang: khung vệ tinh rộng bằng máy tính bảng (trước đây chỉ 360px dù màn 667–932px) */
+@media (orientation:landscape) and (max-height:520px){.orbstage{width:min(100%,520px)}}
+/* chân trang: menu bên phải căn thẳng hàng với logo bên trái (trước đây căn giữa theo cột logo + dòng bản quyền nên thấp hơn ~23px) */
+.fcols{align-items:flex-start}
+.foot .fr{min-height:44px}
