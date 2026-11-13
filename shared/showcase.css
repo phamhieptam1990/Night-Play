@@ -270,3 +270,17 @@ html.playing #fInfo,html.playing #fPop{display:none!important}   /* đang mở g
 html.playing #npFly,html:not(.sc-ok) #npFly{display:none}
 @media (prefers-reduced-motion:reduce){#npFly{display:none}}
 
+
+/* ---------- CỤM NÚT GÓC PHẢI (ⓘ + khoá + dấu +): cùng cỡ 44px, cùng trục, KHÔNG quầng sáng dày làm lệch; nằm trong một viên thuốc nền mờ để không "chọi" với hình ô game phía sau (sáng và tối) ---------- */
+@media (orientation:portrait) and (max-width:520px) and (max-height:719px){
+  html.sc-ok #fFab{width:44px;height:44px;opacity:1}
+  html.foot-open.sc-ok .foot{padding:6px!important;gap:8px!important;border-radius:28px;background:color-mix(in srgb,var(--panel,#1c1740) 86%,transparent)!important;-webkit-backdrop-filter:blur(10px)!important;backdrop-filter:blur(10px)!important;box-shadow:0 6px 20px rgba(0,0,0,.28)!important;border:1px solid color-mix(in srgb,var(--ink,#fff) 16%,transparent)!important;bottom:calc(4px + env(safe-area-inset-bottom))}
+  html.sc-ok #fFab,html.foot-open.sc-ok #fInfo,html.foot-open.sc-ok #lock{margin:0!important;flex:none}
+  html[data-app].sc-ok .foot button#lock:not(.pri):not(.on){box-shadow:0 2px 8px rgba(0,0,0,.3)!important}
+  html.sc-ok .ns-toast{bottom:auto!important;top:calc(env(safe-area-inset-top,0px) + 76px)!important}   /* thông báo sự kiện lên dưới thanh đầu, không đè cụm nút góc dưới phải */
+}
+@media (orientation:landscape) and (max-height:520px){
+  html.sc-ok .foot{padding:6px!important;gap:8px!important;border-radius:28px;background:color-mix(in srgb,var(--panel,#1c1740) 86%,transparent)!important;-webkit-backdrop-filter:blur(10px)!important;backdrop-filter:blur(10px)!important;box-shadow:0 6px 20px rgba(0,0,0,.28)!important;border:1px solid color-mix(in srgb,var(--ink,#fff) 16%,transparent)!important}
+  html.sc-ok #fInfo,html.sc-ok #lock{margin:0!important;flex:none}
+  html[data-app].sc-ok .foot button#lock:not(.pri):not(.on){box-shadow:0 2px 8px rgba(0,0,0,.3)!important}
+}

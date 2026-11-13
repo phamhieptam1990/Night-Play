@@ -168,4 +168,37 @@
     g.tabIndex = 0; g.setAttribute("role", "region"); g.setAttribute("aria-label", (g.parentNode.parentNode.querySelector("h2") || {}).textContent || "");
     g.addEventListener("keydown", function (e) { if (e.key === "ArrowRight") { e.preventDefault(); nx.click(); } else if (e.key === "ArrowLeft") { e.preventDefault(); pv.click(); } });
   });
+
+
+  /* ===== KHUNG NỘI DUNG: màn 1 = hero; màn 2 = MỘT khung cao đúng 1 màn hình, có tab + vuốt ngang để đổi nội dung (mỗi nội dung vừa một màn hình, không cuộn dài). Không có JS thì trang vẫn là các khối nối nhau. ===== */
+  (function () {
+    var d = document, $ = function (id) { return d.getElementById(id); }, lang = d.body.getAttribute("data-lang");
+    var main = $("main"); if (!main || !main.querySelector(".hero")) return;
+    var vi = lang !== "en", ORDER = [["game", vi ? "Game" : "Games"], ["thegioi", vi ? "Hai thế giới" : "Two worlds"], ["tinhnang", vi ? "Tính năng" : "Features"], ["phuhuynh", vi ? "Phụ huynh" : "Parents"], ["cachchoi", vi ? "Cách chơi" : "How to play"], ["nightpass", "Night Pass"], ["riengtu", vi ? "Riêng tư" : "Privacy"], ["hoi", vi ? "Hỏi đáp" : "FAQ"]];
+    var secs = ORDER.map(function (o) { return d.getElementById(o[0]); }); if (secs.some(function (x) { return !x; })) return;
+    var deck = d.createElement("section"), tabs = d.createElement("div"), pan = d.createElement("div"), cur = 0;
+    deck.className = "deck"; deck.id = "deck"; tabs.className = "dtabs"; tabs.setAttribute("role", "tablist"); pan.className = "dpanels";
+    main.insertBefore(deck, main.querySelector(".hero").nextElementSibling); deck.appendChild(tabs); deck.appendChild(pan);
+    ORDER.forEach(function (o, i) {
+      var b = d.createElement("button"); b.type = "button"; b.className = "dtab"; b.setAttribute("role", "tab"); b.textContent = o[1]; b.dataset.i = i; tabs.appendChild(b);
+      secs[i].classList.add("dpanel"); pan.appendChild(secs[i]);
+    });
+    function go(i, scroll) {
+      i = Math.max(0, Math.min(ORDER.length - 1, i)); cur = i;
+      secs.forEach(function (sx, k) { sx.classList.toggle("on", k === i); sx.hidden = k !== i; });
+      [].forEach.call(tabs.children, function (b, k) { b.classList.toggle("on", k === i); b.setAttribute("aria-selected", k === i ? "true" : "false"); if (k === i) tabs.scrollTo({ left: b.offsetLeft - (tabs.clientWidth - b.offsetWidth) / 2, behavior: "smooth" }); });
+      secs[i].scrollTop = 0; window.dispatchEvent(new Event("resize"));
+      if (scroll) deck.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    tabs.addEventListener("click", function (e) { var b = e.target.closest(".dtab"); if (b) go(+b.dataset.i, false); });
+    /* vuốt ngang trên khung = đổi nội dung (chỉ khi vuốt ngang rõ ràng; vuốt dọc vẫn cuộn nội dung/trang; không bắt khi bắt đầu trên quỹ đạo kéo-xoay) */
+    var sx0 = 0, sy0 = 0, track = false;
+    pan.addEventListener("touchstart", function (e) { var t = e.touches[0]; sx0 = t.clientX; sy0 = t.clientY; track = e.touches.length === 1 && !e.target.closest(".orbstage,.marq,input,textarea"); }, { passive: true });
+    pan.addEventListener("touchend", function (e) { if (!track) return; var t = e.changedTouches[0], dx = t.clientX - sx0, dy = t.clientY - sy0; if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 1.6) go(cur + (dx < 0 ? 1 : -1), false); track = false; }, { passive: true });
+    /* liên kết #id của menu/chân trang: mở đúng tab rồi cuộn tới khung */
+    function fromHash() { var h = (location.hash || "").slice(1), i = ORDER.findIndex(function (o) { return o[0] === h; }); if (i >= 0) { go(i, true); return true; } return false; }
+    d.addEventListener("click", function (e) { var a = e.target.closest && e.target.closest('a[href^="#"]'); if (!a) return; var i = ORDER.findIndex(function (o) { return "#" + o[0] === a.getAttribute("href"); }); if (i >= 0) { e.preventDefault(); go(i, true); } });
+    addEventListener("hashchange", fromHash);
+    deck.classList.add("on"); main.classList.add("deck-on"); if (!fromHash()) go(0, false);
+  })();
 })();

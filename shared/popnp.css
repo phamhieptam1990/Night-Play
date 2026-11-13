@@ -90,7 +90,7 @@ html.npp-kid .tile:has(>.sk)>.ti{grid-column:1;grid-row:1 / 3;margin:0!important
 html.npp-kid .tile:has(>.sk)>b{grid-column:2;grid-row:1 / 3;align-self:center;color:#fff!important;font-size:clamp(14px,4.2vh,18px)!important;line-height:1.1;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;max-width:100%}
 html.npp-kid .tile:has(>.sk)>:is(.cn,.bd){display:none!important}   /* bé nhỏ: bỏ dòng chữ tiến độ, chỉ icon to + tên ngắn */
 html.npp-kid .tile:has(>.sk)>.cn.__unused{grid-column:2;grid-row:2;align-self:start;color:rgba(255,255,255,.72)!important;opacity:1!important;font-size:clamp(11px,3.1vh,13px)!important;line-height:1.2}
-html.npp-kid .tile:has(>.sk)>.sk{position:static!important;grid-column:3;grid-row:1 / 3;width:var(--pop-btn)!important;height:var(--pop-btn)!important;margin:0;transform:none;background:rgba(255,255,255,.12)!important;border:1px solid rgba(255,255,255,.32)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.2)!important;color:#fff}
+html.npp-kid .tile:has(>.sk)>.sk{position:relative!important;grid-column:3;grid-row:1 / 3;width:var(--pop-btn)!important;height:var(--pop-btn)!important;margin:0;transform:none;background:rgba(255,255,255,.12)!important;border:1px solid rgba(255,255,255,.32)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.2)!important;color:#fff}
 html.npp-kid .tile:has(>.sk)>.sk i{background:#7C5CFF!important;color:#fff}
 
 /* hiệu ứng cho bé: icon to nảy nhẹ có quầng màu, thanh tiến độ màu, ánh sáng quét, nhấn co lại — không chữ thừa */
