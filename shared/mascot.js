@@ -233,9 +233,11 @@
 
   /* ---------- Pop Play, điện thoại dọc thấp: cỡ linh vật = PHẦN TRỐNG thật còn lại (như landscape.js fitHero của Cozy) ----------
      ::before là ô flex co giãn (flex:1 1 0, không phụ thuộc cỡ chữ → không vòng lặp); đo bằng phần tử dò cùng ô, rồi đặt --np-hs lên host; CSS (poplandscape.css) dùng font-size:var(--np-hs) */
-  var mqShort = null; try { mqShort = matchMedia("(max-aspect-ratio:11/10) and (max-height:719px) and (max-width:520px)"); } catch (e) {}
+  var mqShort = null, mqTall = null; try { mqShort = matchMedia("(max-aspect-ratio:11/10) and (max-height:719px) and (max-width:520px)"); mqTall = matchMedia("(max-aspect-ratio:11/10) and (min-height:720px) and (max-height:899px) and (max-width:520px)"); } catch (e) {}
+  /* chế độ thanh trượt: máy dọc thấp (<=719px) luôn; máy dọc cao (720–899px) chỉ khi có thẻ "Tiếp tục ván dở" (thêm 56px làm danh sách tràn đáy). Đặt html.np-strip cho CSS. */
+  function stripOn() { var on = !!(mqShort && mqShort.matches) || !!(mqTall && mqTall.matches && document.getElementById("npResume")); try { document.documentElement.classList.toggle("np-strip", on); } catch (e) {} return on; }
   function slotFit() {
-    if (!mqShort || !mqShort.matches) { var all = document.querySelectorAll(PS_SEL), k; for (k = 0; k < all.length; k++) all[k].style.removeProperty("--np-hs"); return; }
+    if (!stripOn()) { var all = document.querySelectorAll(PS_SEL), k; for (k = 0; k < all.length; k++) all[k].style.removeProperty("--np-hs"); return; }
     var hs = document.querySelectorAll(PS_SEL), i, h, cs, p, r, W, H, fs;
     for (i = 0; i < hs.length; i++) {
       h = hs[i]; if (!shown(h)) continue; cs = getComputedStyle(h, "::before"); if (!cs.content || cs.content === "none" || cs.display === "none") continue;
@@ -250,7 +252,7 @@
   try { if (/\/popplay\//.test(location.pathname)) {
     addEventListener("resize", slotSoon); addEventListener("load", slotSoon); document.addEventListener("DOMContentLoaded", slotSoon);
     new MutationObserver(slotSoon).observe(document.documentElement, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ["hidden", "class", "lang"] });
-    if (mqShort && mqShort.addEventListener) mqShort.addEventListener("change", slotSoon);
+    if (mqShort && mqShort.addEventListener) { mqShort.addEventListener("change", slotSoon); mqTall.addEventListener("change", slotSoon); }
     slotSoon();
   } } catch (e) {}
 
@@ -260,7 +262,7 @@
   var autoPause = 0;
   function autoStrip() { return document.querySelector("#home .tiles,#ovStart .cards"); }
   function autoTick() {
-    if (reduce || document.hidden || Date.now() < autoPause || !mqShort || !mqShort.matches) return;
+    if (reduce || document.hidden || Date.now() < autoPause || !stripOn()) return;
     var el = autoStrip(); if (!el || !shown(el) || el.scrollWidth <= el.clientWidth + 4) return;
     var k = el.children, step = k.length > 1 ? k[1].offsetLeft - k[0].offsetLeft : el.clientWidth * 0.5, max = el.scrollWidth - el.clientWidth;
     if (el.scrollLeft >= max - 2) el.scrollTo({ left: 0, behavior: "smooth" }); else el.scrollTo({ left: Math.min(max, el.scrollLeft + step), behavior: "smooth" });

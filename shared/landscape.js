@@ -16,6 +16,12 @@
     var stack = col > row * 1.15, fs = Math.max(24, Math.floor(stack ? col : row));
     h.style.setProperty("--hs", fs + "px");
     if (stack) { h.style.setProperty("--hp", Math.max(0, Math.floor((W - fs * 1.2) / 2)) + "px"); h.setAttribute("data-stack", "1"); } else { h.removeAttribute("data-stack"); h.style.removeProperty("--hp"); }
+    /* kiểm tra TRÀN THẬT (khung hẹp: 2 emoji không xuống dòng dù đã xếp chồng → tràn hai mép, bị cắt): nếu rộng hơn khung thì thu về cỡ một hàng vừa khung */
+    if (h.scrollWidth > h.clientWidth + 2) {
+      var safe = Math.max(24, Math.floor(Math.min(row, (W - 8) / (1.25 * n))));
+      h.removeAttribute("data-stack"); h.style.removeProperty("--hp"); h.style.setProperty("--hs", safe + "px");
+      for (var g = 0; g < 6 && h.scrollWidth > h.clientWidth + 2 && safe > 24; g++) { safe = Math.max(24, Math.floor(safe * 0.88)); h.style.setProperty("--hs", safe + "px"); }
+    }
   }
   function watchHero() {
     var h = document.getElementById("hHero"); if (!h || h === heroEl) return; heroEl = h;
