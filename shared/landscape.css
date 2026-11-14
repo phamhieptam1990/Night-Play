@@ -11,7 +11,7 @@
 @media (orientation:landscape){#play .top>h1.wrap2{white-space:normal;text-overflow:clip;overflow-wrap:anywhere;line-height:1.05;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}}
 /* màn dọc: tên game được chuyển xuống ngay trên khối nội dung ở giữa màn chọn (bản sao #homeTitle do landscape.js dựng); thanh trên chỉ còn các nút */
 .hometitle{display:none}
-@media (orientation:portrait){#play[data-scr="home"] .hometitle{display:block;margin:0;text-align:center;white-space:normal;text-wrap:balance;overflow-wrap:anywhere;font:400 7.4cqw/1.15 var(--display);color:var(--accent);letter-spacing:.01em}#play[data-scr="home"] .top>h1{visibility:hidden}}
+@media (orientation:portrait){#play[data-scr="home"] .hometitle{display:block;margin:0;text-align:center;white-space:normal;text-wrap:balance;overflow-wrap:anywhere;font:800 8.4cqw/1.1 var(--display);color:var(--accent);letter-spacing:.005em;text-shadow:0 2px 14px color-mix(in srgb,var(--accent) 38%,transparent)}#play[data-scr="home"] .top>h1{visibility:hidden}}
 /* màn dọc: tên game khi đang chơi nằm ngay trên cụm điểm + khung chơi (bản sao #gameTitle do landscape.js dựng) */
 .gametitle{display:none}
 @media (orientation:portrait){#play:not([data-scr="home"]) .scr:not([hidden])>.gametitle{display:block;flex:none;margin:0;text-align:center;white-space:normal;text-wrap:balance;overflow-wrap:anywhere;font:400 5.6cqw/1.15 var(--display);color:var(--accent)}#play:not([data-scr="home"]) .top>h1{visibility:hidden}}

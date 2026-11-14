@@ -168,7 +168,9 @@ body.np-local{--w:min(calc(100vw - 24px),calc((100dvh - 240px)*.75),760px)}
   #ovStart #stH{order:0}#ovStart .tiles{order:2;flex:none}#ovStart .difs{order:1}#ovStart #vsBox{order:2}#ovStart #chGo{order:4}
   #ovStart .tile.daily{order:-1}
 }
-@media (max-height:799px){#ovStart .cwHero{display:none!important}}   /* khung thấp (máy nhỏ/ngắn): bỏ linh vật để thẻ không tràn */
+/* khung thấp (iPhone SE…): KHÔNG ẩn linh vật; nó là phần tử co giãn (flex:1 1 0) nên chỉ lấy phần trống còn lại, cỡ chữ do fitCwHero() tính theo ô trống (như landscape.js fitHero) */
+#ovStart .cwHero[data-fit="0"]{visibility:hidden}
+#ovStart .cwHero{font-size:var(--cwfs,clamp(48px,min(22vw,13vh),120px))!important}
 @media (orientation:landscape) and (min-height:600px){#ovStart{justify-content:flex-start}#ovStart .cwHero{order:0;flex:1 1 0;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;font-size:clamp(56px,13vh,120px);line-height:1;white-space:nowrap;overflow:hidden;animation:cwBob 2.8s ease-in-out infinite}#ovStart #stH{order:0}#ovStart .tiles{order:2;flex:none}#ovStart .difs{order:1}}
 @keyframes cwBob{0%,100%{transform:translateY(0) scale(1,1)}30%{transform:translateY(-2.4cqw) scale(.97,1.04)}55%{transform:translateY(0) scale(1.04,.96)}}
 @media (prefers-reduced-motion:reduce){.cwHero{animation:none!important}}
@@ -220,6 +222,23 @@ body:has(#ovStart:not([hidden])) .side .ask,body:has(#ovStart:not([hidden])) .si
 #play:has(#ovStart:not([hidden])){box-shadow:none!important;border:0!important}
 #play:has(#ovStart:not([hidden]))::after{display:none!important}
 @media not all and (max-height:380px) and (min-aspect-ratio:11/10){#ovStart:not([hidden]){justify-content:center!important}#ovStart .cwHero{flex:none!important;min-height:120px;margin-top:34px}}
+/* Nền NGOÀI cột ở màn rộng (shared/widebg.js đọc --pbg của khung chơi): màn chọn có nền riêng theo giao diện thay vì trải bầu trời SÁNG của skin ong (giao diện tối trông chói + nhạt màu) */
+:root[data-theme="dark"] .play:has(> #ovStart:not([hidden])){--pbg:linear-gradient(180deg,#0d2b2c 0%,#12182e 55%,#0a141f 100%)}
+:root:not([data-theme="dark"]) .play:has(> #ovStart:not([hidden])){--pbg:linear-gradient(180deg,#eaf7f0 0%,#dcefff 100%)}
+/* Giao diện TỐI: nền hàng game + nút độ khó gần như đặc (trước: alpha .6-.8 đặt trên nền trời SÁNG của màn rộng → xám đục) */
+:root[data-theme="dark"] #ovStart .tile:not(.daily){background:linear-gradient(145deg,rgba(66,48,142,.96),rgba(26,19,62,.96))!important}
+:root[data-theme="dark"] #ovStart .dif:not(.on){background:linear-gradient(var(--panel),var(--panel)),#0f1a2a!important;border:1px solid rgba(255,255,255,.18)}
+/* Điện thoại dọc: linh vật là phần tử CO GIÃN lấp phần trống giữa hàng nút và danh sách (cỡ chữ do script cuối trang tính theo ô trống); màn thấp (iPhone SE…) thu gọn hàng game để linh vật còn chỗ lớn */
+@media (max-width:520px) and (orientation:portrait){#ovStart .cwHero{flex:1 1 0!important;min-height:0!important;margin-top:0!important}
+  /* iPhone cao: màn chọn dùng HẾT chiều cao còn lại (đúng ngân sách của --w: 100dvh - 204px) thay vì khung 3:4 theo bề ngang → linh vật phình theo phần dư, đáy không trống; trong ván vẫn 3:4 */
+  .app:has(#ovStart:not([hidden])) .play{aspect-ratio:auto;height:calc(100dvh - 204px)}}
+@media (max-width:520px) and (orientation:portrait) and (max-height:780px){
+  #ovStart{gap:6px}#ovStart .tiles{gap:5px!important}
+  #ovStart .tile:not(.daily) .main{min-height:44px!important;padding:3px 52px 3px 12px!important;gap:10px!important}
+  #ovStart .tile:not(.daily) .tb{font-size:24px}
+  #ovStart .tile:not(.daily) .skinBtn{width:40px;height:40px;min-width:40px;min-height:40px;top:50%;transform:translateY(-50%)}
+  #ovStart .tile.daily{padding:3px 14px;min-height:40px}#ovStart .tile.daily .de{font-size:24px}
+}
 #ovStart:not([hidden]){background:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
 /* màn chọn neo TRÊN (không căn giữa): thẻ "Tiếp tục ván dở" hiện muộn không làm cả khối nhảy lên xuống khi đổi cấp độ */
 #ovStart:not([hidden]){justify-content:flex-start!important;padding-top:6px}
@@ -273,6 +292,19 @@ body:has(#ovStart:not([hidden])) .side .ask,body:has(#ovStart:not([hidden])) .si
 /* màn ngang 381-520px cao: linh vật căn GIỮA DỌC bên trái danh sách */
 @media (min-aspect-ratio:11/10) and (min-height:381px) and (max-height:520px) and (min-width:700px){
   html.np-hudg #ovStart .cwHero{top:auto!important;bottom:3%!important;height:36%!important;align-items:center}
+}
+/* WEB / ngang 381-760px cao (cửa sổ máy tính thấp, iPad ngang): KHUNG GIỮA CHIA 2 CỘT như các game Cozy khác (landscape.css): TRÁI = linh vật (co giãn theo ô trống) + độ khó; PHẢI = danh sách chuyến bay. Khung 3:4 không còn bó màn chọn. */
+@media (min-aspect-ratio:11/10) and (min-height:381px) and (max-height:760px) and (min-width:560px),(min-width:900px) and (min-aspect-ratio:13/10) and (min-height:381px){
+  html.np-hudg #play:has(#ovStart:not([hidden])){background:none!important;box-shadow:none!important;border:0!important}
+  html.np-hudg #play:has(#ovStart:not([hidden]))::after{display:none!important}
+  html.np-hudg #ovStart:not([hidden]){position:fixed!important;inset:12px 28px 12px 28px!important;width:auto!important;height:auto!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);grid-template-rows:auto auto;column-gap:28px;row-gap:10px;align-content:center!important;align-items:center;justify-content:stretch!important;padding:0!important;background:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  html.np-hudg #ovStart .cwHero{display:flex!important;position:static!important;grid-column:1;grid-row:1;align-self:end;width:100%!important;height:min(48vh,420px)!important;font-size:var(--cwfs,clamp(56px,22vh,170px))!important;min-height:0!important;max-height:none!important;margin:0!important;flex:none!important;contain:size;overflow:hidden;transform-origin:50% 100%}
+  html.np-hudg #ovStart .difs{grid-column:1;grid-row:2;justify-self:center}
+  html.np-hudg #ovStart #stH{display:none!important}
+  html.np-hudg #ovStart .tiles{grid-column:2;grid-row:1 / span 2;display:grid!important;grid-template-columns:1fr!important;gap:6px!important;width:100%;max-width:none!important;align-self:center;order:0}
+  html.np-hudg #ovStart .tile{grid-column:auto!important}
+  html.np-hudg #ovStart .tile.daily{min-height:44px}
+  html.np-hudg #ovStart .tile:not(.daily) .main{min-height:46px!important}
 }
 /* máy ngang thấp: không vẽ khung chơi 3:4 nền xanh phía sau màn chọn 2 cột */
 @media (max-height:380px) and (min-aspect-ratio:11/10){#play:has(#ovStart:not([hidden])){background:none!important}}
@@ -950,5 +982,12 @@ if(HS&&TYPES.includes(HS.type)&&DIFF[HS.diff]){   /* chơi hộ: vào thẳng đ
 </script>
 <script src="../../../shared/season.js"></script>
 <script src="../../../shared/dock.js" defer></script><script src="../../../shared/icons.js" defer></script><script src="../../../shared/resume.js" defer></script><script src="../../../shared/fan.js" defer></script><script src="../../../shared/passwatch.js" defer></script>
+<script>
+/* linh vật màn chọn: phình theo ô trống còn lại (ô flex:1 1 0 nên cỡ ô không phụ thuộc chữ → không vòng lặp); trần 300px vì emoji bitmap phóng quá to bị vỡ hạt */
+(function(){var h=document.getElementById("cwHero");if(!h)return;
+function fit(){var H=h.clientHeight,W=h.clientWidth;if(getComputedStyle(h).display==="none")return;if(H<44||W<40){h.dataset.fit="0";h.style.removeProperty("--cwfs");return}
+h.dataset.fit="1";var fs=Math.floor(Math.min(H*.92,W*.8/(1.12*2),300));h.style.setProperty("--cwfs",Math.max(32,fs)+"px")}
+try{new ResizeObserver(fit).observe(h)}catch(e){}addEventListener("resize",fit);addEventListener("load",fit);fit()})();
+</script>
 </body>
 </html>

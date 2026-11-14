@@ -189,7 +189,22 @@ h1 span{color:var(--accent)}
 .sdesc{margin:6px 0 0;font-size:13px;color:var(--muted);line-height:1.4}
 .sh-f{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.proNote{font-size:12.5px;color:var(--muted)}
 /* Popup Giao diện/tuỳ chọn: chip chia lưới đều (không xuống dòng lệch), footer xếp dọc giữa */
-#setup .chips{display:grid;gap:8px;grid-template-columns:repeat(3,1fr)}
+#setup .chips{display:grid;gap:10px;grid-template-columns:repeat(3,1fr)}
+/* THẺ lựa chọn (hình xem trước + tên): ≥76px cao, dễ chạm; 🔒 cạnh tên; đang chọn = viền + quầng màu nhấn + dấu ✓ (không đổ nguyên khối màu) */
+#setup .chip{position:relative;flex-direction:column!important;justify-content:center;gap:7px!important;min-height:80px;padding:10px 6px 9px!important;border-radius:16px;white-space:normal!important;line-height:1.1;background:color-mix(in srgb,var(--panel) 90%,var(--ink) 10%);border:2px solid color-mix(in srgb,var(--line) 85%,transparent);color:var(--ink)}
+#setup .chip b{font:800 13px var(--body);display:block;text-align:center}
+#setup .chip .pv{display:grid;place-items:center;width:38px;height:34px;font-size:26px;line-height:1}
+#setup .chip .sw{width:100%;max-width:84px;height:32px;border-radius:10px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.3),0 2px 6px rgba(0,0,0,.3)}
+#setup .chip .gr{display:grid;place-items:stretch;align-items:stretch;justify-items:stretch;grid-template-columns:repeat(var(--n),1fr);grid-template-rows:repeat(var(--n),1fr);gap:2px;width:32px;height:32px;font-size:0}
+#setup .chip .gr s{display:block;background:currentColor;opacity:.75;border-radius:2px;text-decoration:none}
+#setup .chip .lk{position:static;display:inline;width:auto;height:auto;margin-left:2px;font-style:normal;font-size:11px;background:none;box-shadow:none;border-radius:0}
+#setup .chip.on{background:color-mix(in srgb,var(--accent) 20%,var(--panel));border-color:var(--accent);color:var(--ink);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 32%,transparent),0 4px 14px color-mix(in srgb,var(--accent) 30%,transparent)}
+#setup .chip.on::after{content:"✓";position:absolute;top:-7px;right:-7px;width:22px;height:22px;display:grid;place-items:center;border-radius:50%;background:var(--accent);color:var(--on-accent);font:900 13px var(--body);box-shadow:0 2px 6px rgba(0,0,0,.35)}
+#setup .chip.lock .pv{opacity:.8}
+/* hàng Theme có 5 mục: 3 + 2 ô lấp đầy hàng (không để ô lẻ) */
+#setup #chipSkins{grid-template-columns:repeat(6,1fr)}#setup #chipSkins .chip{grid-column:span 2}#setup #chipSkins .chip:nth-child(n+4){grid-column:span 3}
+@media (max-height:700px){#setup .chip{min-height:60px;padding:6px 4px!important;gap:3px!important}#setup .chip .pv{height:26px;font-size:20px}#setup .chip .sw{height:22px}#setup .chip .gr{width:24px;height:24px}#setup .chips{gap:7px}}
+@media (max-height:480px){#setup .chip .pv{display:none}#setup .chip{min-height:34px}}
 #setup #chipGrids{grid-template-columns:repeat(4,1fr)}#setup #chipPartners{grid-template-columns:repeat(2,1fr)}
 #setup .chip{width:100%;min-width:0;padding:7px 6px;display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap;text-align:center}
 #setup .sh-f{flex-direction:column;align-items:stretch;gap:8px}#setup .sh-f .icon-btn{width:100%;justify-content:center}#setup .proNote{text-align:center}
@@ -288,9 +303,9 @@ html[data-skin] .ty.on{animation:tyGlow 2.4s ease-in-out infinite}
 .erow{display:grid;grid-template-columns:repeat(auto-fit,minmax(88px,1fr));gap:8px;width:100%}
 .ebtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:56px;border-radius:14px;border:2px solid var(--line);background:var(--panel);color:var(--ink);font:800 11.5px var(--body);cursor:pointer;padding:4px 6px;box-shadow:0 3px 0 rgba(0,0,0,.14)}.ebtn span{font-size:20px;line-height:1}
 @media (prefers-reduced-motion:reduce){.escore{animation:none}html[data-skin] .ty.on{animation:none}}
-/* màn ngang: màn chọn hai cột (trái: nút Chơi / thử thách ngày; phải: chế độ + cấp độ) */
-@media (max-height:760px) and (min-aspect-ratio:11/10){
-  body.at-home{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}
+/* màn ngang: màn chọn hai cột (trái: nút Chơi / thử thách ngày; phải: chế độ + cấp độ). Cùng điều kiện "rộng" với các game Cozy khác (landscape.css): thêm nhánh khung ≥900px & tỉ lệ ≥13:10 (bấm mở rộng tối đa trên web) */
+@media (max-height:760px) and (min-aspect-ratio:11/10),(min-width:900px) and (min-aspect-ratio:13/10){
+  body.at-home{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);align-content:stretch;justify-items:stretch;row-gap:8px}   /* display:grid cũng cần ở nhánh khung rộng (khối ≤760px mới đặt body là lưới) — thiếu thì tiêu đề bị căn giữa dọc, trôi xuống */
   body.at-home .top{grid-column:1;grid-row:1;flex-direction:row;align-items:center;max-width:none;width:100%;justify-content:flex-end}
   body.at-home .top h1{font-size:20px}
   body.at-home #home{grid-column:1;grid-row:2;max-width:none;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);column-gap:16px;align-items:center;align-content:center}
@@ -302,6 +317,8 @@ html[data-skin] .ty.on{animation:tyGlow 2.4s ease-in-out infinite}
 /* WEB / màn ngang: linh vật ⏰ không còn nhỏ xíu hay bị ẩn (các game Cozy khác ~180-230px): to theo chiều cao + chiều rộng cửa sổ, ẩn khi quá thấp */
 @media (orientation:landscape) and (min-height:561px){body.at-home .hhero{display:block!important;font-size:clamp(64px,min(24vh,18vw),170px);line-height:1.05;white-space:nowrap;transform-origin:50% 100%;animation:ddBob 2.8s ease-in-out infinite}}
 @media (prefers-reduced-motion:reduce){body.at-home .hhero{animation:none!important}}
+/* khung rộng (bấm mở rộng tối đa trên web): tên game LỚN như các game Cozy khác (trước 20px, nhỏ xíu), né nút thu gọn cột ở góc trái */
+@media (min-width:900px) and (min-aspect-ratio:13/10) and (min-height:761px){body.at-home .top h1{font-size:clamp(28px,2.8vw,40px);line-height:1.1;font-weight:800}html.np-tabon body.at-home .top h1{margin-left:56px}}
 /* landscape rất thấp (≤360px: 640x360, 568x320): màn chọn gọn lại để không tràn đáy (bài đo siết bắt bOpts bị cắt) */
 @media (max-height:360px) and (min-aspect-ratio:11/10){body.at-home{padding-top:4px;padding-bottom:4px;row-gap:4px}body.at-home #home{row-gap:6px}body.at-home .hl,body.at-home .hr{gap:6px}body.at-home .ty{min-height:46px;padding:3px 6px}body.at-home #dS{display:none}body.at-home .top h1{font-size:18px}}
 
@@ -868,6 +885,9 @@ const PFX={modes:"m.",diffs:"d.",skins:"s.",packs:"k.",partners:"pt."};
 const catName=(kind,x)=>kind==="grids"?x.n+"×"+x.n:(kind==="modes"||kind==="diffs"?pk:t)(PFX[kind]+x.id+(kind==="modes"?".name":""));   /* tên chế độ / độ khó đổi theo loại game (vd. "Sếp nổi giận" → "Giận cực độ") */
 const modeIco=(kind,x)=>{if(kind!=="modes"||x.id!=="boss")return x.ico;const id=curPackId();return id==="animals"?"🦁":id==="lover"?"💢":x.ico};   /* biểu tượng Boss hợp loại game */
 const catDesc=x=>pk("m."+x.id+".desc");
+/* popup Giao diện: mỗi lựa chọn là một THẺ có hình xem trước (màu mẫu / lưới nhỏ / biểu tượng) thay vì chip chữ */
+const SKW={default:"linear-gradient(135deg,#4f7cff,#1d2b6b)",cafe:"linear-gradient(135deg,#e0a96d,#6b3f1d)",retro:"linear-gradient(135deg,#ff9f43,#1fa2a6)",neon:"linear-gradient(135deg,#ff2bd6,#18f0ff)",sakura:"linear-gradient(135deg,#ffd0de,#ff7aa2)"};
+function cardPv(kind,x){if(kind==="skins")return '<span class="pv sw" style="background:'+(SKW[x.id]||SKW.default)+'"></span>';if(kind==="grids"){let c="";for(let i=0;i<x.n*x.n;i++)c+="<s></s>";return '<span class="pv gr" style="--n:'+x.n+'">'+c+"</span>"}return '<span class="pv ic">'+(modeIco(kind,x)||"")+"</span>"}
 const LS={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const escH=t=>String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const unlocked=(kind,id)=>{const c=DD.catalog[kind].find(x=>x.id===id);return !!(c&&c.free)||!!DD[kind][id]};
@@ -951,7 +971,7 @@ DD.refresh=function(){
     for(const x of DD.catalog[kind]){
       const fg=kind==="grids"?gridForced():kind==="packs"?packForced():null,lock=!unlocked(kind,x.id),on=fg?x.id===fg:DD.sel[KEY[kind]]===x.id,b=document.createElement("button");
       b.type="button";b.className="chip"+(on?" on":"")+(lock?" lock":"")+(fg&&!on?" dim":"");b.setAttribute("aria-pressed",on);
-      b.innerHTML=(x.ico?modeIco(kind,x)+" ":"")+escH(catName(kind,x))+(lock?' <i aria-hidden="true">🔒</i>':"");
+      b.innerHTML=cardPv(kind,x)+"<b>"+escH(catName(kind,x))+(lock?' <em class="lk" aria-hidden="true">🔒</em>':"")+"</b>";
       if(lock)b.setAttribute("aria-label",t("lockedLbl",{n:catName(kind,x)}));
       b.onclick=()=>pickItem(kind,x);
       box.appendChild(b);
