@@ -240,6 +240,7 @@
     for (i = 0; i < hs.length; i++) {
       h = hs[i]; if (!shown(h)) continue; cs = getComputedStyle(h, "::before"); if (!cs.content || cs.content === "none" || cs.display === "none") continue;
       p = document.createElement("i"); p.style.cssText = "display:flex!important;flex:1 1 0!important;min-height:0!important;height:auto!important;width:100%!important;font-size:0!important;visibility:hidden!important;pointer-events:none!important;margin:0!important;padding:0!important;order:" + (cs.order || 0) + "!important";
+      ["grid-column-start", "grid-column-end", "grid-row-start", "grid-row-end", "align-self", "justify-self"].forEach(function (k) { p.style.setProperty(k, cs.getPropertyValue(k), "important"); });   /* nhà dùng lưới (Vẽ Chữ Thành Quái Vật): phần tử dò phải nằm đúng ô lưới của ::before */
       h.classList.add("npmx-probe"); h.insertBefore(p, h.firstChild); r = p.getBoundingClientRect(); W = r.width; H = r.height; h.removeChild(p); h.classList.remove("npmx-probe");
       fs = H < 44 ? 0 : Math.floor(Math.min(H * 0.86, W * 0.7, 220));
       h.style.setProperty("--np-hs", fs + "px");
