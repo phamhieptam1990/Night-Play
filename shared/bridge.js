@@ -483,3 +483,19 @@ window.NP = (function () {
     var j = document.createElement("script"); j.src = src.replace(/bridge\.js(\?.*)?$/, "lang.js$1"); j.async = false; document.head.appendChild(j);
   } catch (e) {}
 })();
+
+/* linh vật phản ứng ở màn chọn (rê chuột nghiêng theo, chạm nhún, giữ phình rồi pop): shared/mascot.js cạnh file này */
+(function () {
+  try {
+    var cs = document.currentScript, src = cs && cs.src; if (!src || window.NPMascot || document.getElementById("npMascotJs")) return;
+    var j = document.createElement("script"); j.id = "npMascotJs"; j.src = src.replace(/bridge\.js(\?.*)?$/, "mascot.js$1"); j.async = false; document.head.appendChild(j);
+  } catch (e) {}
+})();
+
+/* Pop Play: thẻ "cách chơi" luôn vừa khung ở màn rộng-thấp/ngang (shared/howfit.js cạnh file này) */
+(function () {
+  try {
+    var cs = document.currentScript, src = cs && cs.src; if (!src || !/\/popplay\//.test(location.pathname) || document.getElementById("npHowFit")) return;
+    var j = document.createElement("script"); j.id = "npHowFit"; j.src = src.replace(/bridge\.js(\?.*)?$/, "howfit.js$1"); j.async = false; document.head.appendChild(j);
+  } catch (e) {}
+})();

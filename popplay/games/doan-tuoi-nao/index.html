@@ -441,7 +441,6 @@ function renderHome(){
   h.appendChild(lv);
   const di=dailyInfo(),ds=dailyStore(),db=document.createElement("button");db.type="button";db.className="dbar";
   db.innerHTML="<span>📅 "+T("daily.t",{n:di.n})+"</span><span>"+(ds.streak&&(ds.last===di.key||ds.last===dayBefore(di.key))?"🔥 "+ds.streak+" ":"")+(ds.best[di.key]!=null?"✓ "+ds.best[di.key]:"▶")+"</span>";db.onclick=startDaily;h.appendChild(db);
-  const pb=document.createElement("button");pb.type="button";pb.className="pbar";pb.id="profBtn";pb.innerHTML="<span>"+profLbl()+"</span>";pb.onclick=()=>openProf(null);h.appendChild(pb);
   const g=document.createElement("div");g.className="tiles";
   for(let t=0;t<4;t++){
     const sk=skinOf(t),b=document.createElement("div");b.className="tile";b.setAttribute("role","button");b.tabIndex=0;applyVars(b,sk);b.style.setProperty("--rad","5cqw");   /* màn chọn: hình dạng khung cố định, chỉ đổi màu */
@@ -450,7 +449,7 @@ function renderHome(){
     b.onclick=()=>needProfile(()=>openHow(t));b.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();needProfile(()=>openHow(t))}};
     b.querySelector(".sk").onclick=e=>{e.stopPropagation();openSkins(t)};g.appendChild(b);
   }
-  h.appendChild(g);$("hl").textContent="🏆 "+prog.best;$("hr").textContent=AGE!=null?"👶 "+T("pr.age",{n:AGE}):"";
+  h.appendChild(g);$("hl").textContent="🏆 "+prog.best;$("hr").textContent="👶 "+(AGE!=null?T("pr.age",{n:AGE}):"?")+" ✏️";$("hr").onclick=()=>openProf(null);$("hr").setAttribute("role","button");$("hr").tabIndex=0;$("hr").style.cursor="pointer";
 }
 function openHow(t){
   $("hwH").textContent=TY_ICON[t]+" "+T("ty")[t];$("hwC").textContent=LV_ICON[LVL-1]+" "+T("lv")[LVL-1];$("hwP").textContent=profLbl();$("hwP").onclick=()=>openProf(()=>openHow(t));

@@ -50,12 +50,19 @@
   .app:has(#ovSkin:not([hidden])),.app:has(#ovPay:not([hidden])){grid-template-columns:minmax(0,1fr) min(calc(100vw - 340px),640px) minmax(0,1fr)}
   .app:has(#ovSkin:not([hidden])) .play,.app:has(#ovPay:not([hidden])) .play{width:auto;aspect-ratio:auto;height:calc(100dvh - 30px);max-height:none}
 }
-/* popup giao diện ở màn ngang: 5 ô một hàng, hình thu nhỏ có trần px (cqw phóng theo khung rộng → ô phình to) */
+/* popup giao diện ở màn ngang (Pop): thẻ rộng tới 760px (không bó theo cột dọc), 5 ô một hàng với hình cao tới 92px; màn ngang HẸP (<=700px) xếp 3 + 2 để ô rộng, không bị nén */
 @media (min-aspect-ratio:11/10) and (max-height:520px){
-  #ovSkin .skgrid{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:8px!important}
-  #ovSkin .skc{font-size:12px!important;padding:6px!important;gap:4px!important;border-radius:14px!important;grid-column:auto!important}
-  #ovSkin .skc img,#ovSkin .skc .th,#ovSkin .skc>span:first-child{max-height:min(22vh,80px);width:100%;object-fit:cover;border-radius:10px}
+  html.npp-kid #ovSkin>.npc{width:min(100%,760px)!important}
+  #ovSkin .skgrid{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:10px!important}
+  #ovSkin .skc{font-size:13px!important;padding:7px!important;gap:6px!important;border-radius:16px!important;grid-column:auto!important}
+  #ovSkin .skc .sw{height:min(24vh,92px)!important;aspect-ratio:auto!important;font-size:min(9vh,40px)!important;border-radius:11px}
+  #ovSkin .skc span{font-size:13px;font-weight:800}
   #ovSkin h2{font-size:18px!important}
+}
+@media (min-aspect-ratio:11/10) and (max-height:520px) and (max-width:700px){
+  #ovSkin .skgrid{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+  #ovSkin .skc{grid-column:span 2!important}#ovSkin .skc:nth-child(n+4){grid-column:span 3!important}
+  #ovSkin .skc .sw{height:min(16vh,62px)!important}
 }
 
 /* màn ngang thấp: cột nút trái KHÔNG đè tên game — tên tối đa 3 dòng cỡ 12px, không bị cắt; nút xếp bên dưới cách 8px, đều 52px */
@@ -642,8 +649,8 @@ html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home::before{grid-row:1!im
 /* POPUP (Giao diện / mua giao diện) — WEB + iPad (trong cổng, game Pop): lớp mờ phủ TOÀN MÀN HÌNH, không chỉ cột giữa (bố cục mới trải rộng hơn cột) */
 @media (min-height:521px){
   html.np-hudg .app:has(h1[data-pt]) .play .ov:not([hidden]){position:fixed!important;padding-inline:max(16px,calc((100vw - 640px)/2))!important;box-sizing:border-box!important;inset:0!important;width:auto!important;height:auto!important;border-radius:0!important;background:rgba(8,6,24,.62)!important;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);align-items:center;justify-content:center;z-index:30}
-  html.np-hudg .app:has(h1[data-pt]) #ovHow:not([hidden]) #hwBack{display:grid!important;place-items:center;position:fixed!important;top:16px!important;right:16px!important;left:auto!important;width:48px!important;height:48px!important;min-width:48px!important;min-height:48px!important;padding:0!important;margin:0!important;border-radius:50%!important;font-size:0!important;background:rgba(255,255,255,.14)!important;border:1px solid rgba(255,255,255,.4)!important;color:#fff!important;z-index:31;cursor:pointer}
-  html.np-hudg .app:has(h1[data-pt]) #ovHow:not([hidden]) #hwBack::after{content:"✕";font-size:20px;line-height:1;font-weight:800}
+  html.np-hudg .app:has(h1[data-pt]) #ovHow:not([hidden]) #hwBack{display:flex!important;align-items:center;justify-content:center;position:fixed!important;top:16px!important;right:16px!important;left:auto!important;width:48px!important;height:48px!important;min-width:48px!important;min-height:48px!important;padding:0!important;margin:0!important;border-radius:50%!important;font-size:0!important;background:rgba(255,255,255,.14)!important;border:1px solid rgba(255,255,255,.4)!important;color:#fff!important;z-index:31;cursor:pointer}
+  html.np-hudg .app:has(h1[data-pt]) #ovHow:not([hidden]) #hwBack::after{content:"";display:block;width:20px;height:20px;background:linear-gradient(45deg,transparent calc(50% - 1.5px),#fff calc(50% - 1.5px),#fff calc(50% + 1.5px),transparent calc(50% + 1.5px)),linear-gradient(-45deg,transparent calc(50% - 1.5px),#fff calc(50% - 1.5px),#fff calc(50% + 1.5px),transparent calc(50% + 1.5px));border-radius:2px}   /* dấu ✕ vẽ bằng CSS: ký tự ✕ lệch ~6px xuống dưới tâm nút ở nhiều font */
   html.np-hudg .app:has(h1[data-pt]):has(#ovSkin:not([hidden])) .play,html.np-hudg .app:has(h1[data-pt]):has(#ovPay:not([hidden])) .play{background:none!important;box-shadow:none!important;border:0!important;border-radius:0!important}
   html.np-hudg .app:has(h1[data-pt]):has(#ovSkin:not([hidden])) .play::after,html.np-hudg .app:has(h1[data-pt]):has(#ovPay:not([hidden])) .play::after{display:none!important}
 }
@@ -1044,8 +1051,8 @@ html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home::before{grid-row:1!im
 /* POPUP (Giao diện / mua giao diện) — WEB + iPad (trong cổng, game Pop): lớp mờ phủ TOÀN MÀN HÌNH, không chỉ cột giữa (bố cục mới trải rộng hơn cột) */
 @media (min-height:521px){
   .app:has(h1[data-pt]) .play .ov:not([hidden]){position:fixed!important;padding-inline:max(16px,calc((100vw - 640px)/2))!important;box-sizing:border-box!important;inset:0!important;width:auto!important;height:auto!important;border-radius:0!important;background:rgba(8,6,24,.62)!important;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);align-items:center;justify-content:center;z-index:30}
-  .app:has(h1[data-pt]) #ovHow:not([hidden]) #hwBack{display:grid!important;place-items:center;position:fixed!important;top:16px!important;right:16px!important;left:auto!important;width:48px!important;height:48px!important;min-width:48px!important;min-height:48px!important;padding:0!important;margin:0!important;border-radius:50%!important;font-size:0!important;background:rgba(255,255,255,.14)!important;border:1px solid rgba(255,255,255,.4)!important;color:#fff!important;z-index:31;cursor:pointer}
-  .app:has(h1[data-pt]) #ovHow:not([hidden]) #hwBack::after{content:"✕";font-size:20px;line-height:1;font-weight:800}
+  .app:has(h1[data-pt]) #ovHow:not([hidden]) #hwBack{display:flex!important;align-items:center;justify-content:center;position:fixed!important;top:16px!important;right:16px!important;left:auto!important;width:48px!important;height:48px!important;min-width:48px!important;min-height:48px!important;padding:0!important;margin:0!important;border-radius:50%!important;font-size:0!important;background:rgba(255,255,255,.14)!important;border:1px solid rgba(255,255,255,.4)!important;color:#fff!important;z-index:31;cursor:pointer}
+  .app:has(h1[data-pt]) #ovHow:not([hidden]) #hwBack::after{content:"";display:block;width:20px;height:20px;background:linear-gradient(45deg,transparent calc(50% - 1.5px),#fff calc(50% - 1.5px),#fff calc(50% + 1.5px),transparent calc(50% + 1.5px)),linear-gradient(-45deg,transparent calc(50% - 1.5px),#fff calc(50% - 1.5px),#fff calc(50% + 1.5px),transparent calc(50% + 1.5px));border-radius:2px}   /* dấu ✕ vẽ bằng CSS: ký tự ✕ lệch ~6px xuống dưới tâm nút ở nhiều font */
   .app:has(h1[data-pt]):has(#ovSkin:not([hidden])) .play,.app:has(h1[data-pt]):has(#ovPay:not([hidden])) .play{background:none!important;box-shadow:none!important;border:0!important;border-radius:0!important}
   .app:has(h1[data-pt]):has(#ovSkin:not([hidden])) .play::after,.app:has(h1[data-pt]):has(#ovPay:not([hidden])) .play::after{display:none!important}
 }
@@ -1169,3 +1176,46 @@ html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home::before{grid-row:1!im
 
 /* GIAO DIỆN SÁNG: màn chọn Pop có nền sáng Night Pass (bài đo check-popnp: --bg sáng); chỉ giao diện TỐI mới để trong suốt cho nền đêm lộ ra */
 html[data-theme="light"] .app:has(h1[data-pt]) #home:not([hidden]),html[data-theme="light"] .app:has(h1[data-pt]) #village:not([hidden]),html[data-theme="light"] .app:has(h1[data-pt]) #ovStart:not([hidden]){background:linear-gradient(165deg,#F3F0FA,#ECE6FB)!important}
+
+/* ĐIỆN THOẠI DỌC THẤP (iPhone SE…, <=719px cao): danh sách game thành THANH TRƯỢT NGANG (vuốt, ô kế bên ló ra gợi ý) để nhường chỗ dọc cho LINH VẬT hiện lại (trước đó linh vật bị ẩn vì danh sách dọc chiếm hết màn). Áp dụng 10 game dùng #home .tiles + Chim Bay (#ovStart .cards); Làng Của Bé (#village) giữ nguyên. */
+@media (max-aspect-ratio:11/10) and (max-height:719px) and (max-width:520px){
+  .app:has(h1[data-pt]) #home::before,
+  .app:has(h1[data-pt]) #ovStart::before{display:flex!important;flex:1 1 0!important;align-items:center!important;justify-content:center!important;width:100%!important;height:auto!important;min-height:0!important;flex:1 1 0!important;font-size:var(--np-hs,calc(clamp(0px,calc(100dvh - 520px),140px)*.78))!important;line-height:1!important;overflow:visible}
+  .app:has(h1[data-pt]) #home .tiles,
+  .app:has(h1[data-pt]) #ovStart .cards{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;gap:10px!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;touch-action:pan-x;scrollbar-width:none;overscroll-behavior-x:contain;width:calc(100% + 16px)!important;margin-inline:-8px!important;padding:6px 8px 10px!important;grid-auto-rows:unset!important;grid-template-columns:none!important;flex:none!important;min-height:0!important;max-width:none!important}
+  .app:has(h1[data-pt]) #home .tiles::-webkit-scrollbar,
+  .app:has(h1[data-pt]) #ovStart .cards::-webkit-scrollbar{display:none}
+  .app:has(h1[data-pt]) #home .tiles>.tile{display:flex!important;grid-template-columns:none!important;flex:0 0 min(42%,150px)!important;width:auto!important;height:104px!important;min-height:0!important;scroll-snap-align:start;flex-direction:column!important;justify-content:center!important;align-items:center!important;gap:4px!important;padding:8px 6px!important;text-align:center!important;position:relative}
+  .app:has(h1[data-pt]) #home .tiles>.tile .ti{font-size:34px!important;line-height:1!important;margin:0!important}
+  .app:has(h1[data-pt]) #home .tiles>.tile>b{font-size:14px!important;line-height:1.1!important;max-width:100%;width:100%!important;flex:none!important;text-overflow:clip;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;white-space:normal!important}
+  .app:has(h1[data-pt]) #home .tiles>.tile>button.sk{position:absolute!important;top:4px!important;right:4px!important;left:auto!important;bottom:auto!important;width:30px!important;height:30px!important;min-width:30px!important;min-height:30px!important;transform:none!important}
+  .app:has(h1[data-pt]) #ovStart .cards>.card{flex:0 0 min(42%,150px)!important;width:auto!important;height:104px!important;min-height:0!important;scroll-snap-align:start;position:relative;display:flex!important;flex-direction:column!important;padding:0!important;background:none!important;border:0!important;box-shadow:none!important}
+  .app:has(h1[data-pt]) #ovStart .cards>.card>.main{width:100%!important;height:100%!important;box-sizing:border-box!important}
+  .app:has(h1[data-pt]) #ovStart .cards>.card>.main{flex:1!important;display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;gap:4px!important;padding:8px 6px!important;text-align:center!important;min-height:0!important}
+  .app:has(h1[data-pt]) #ovStart .cards>.card .e{font-size:32px!important;line-height:1!important;margin:0!important}
+  .app:has(h1[data-pt]) #ovStart .cards>.card>.main span:not(.e){font-size:13px!important;line-height:1.1!important}
+  .app:has(h1[data-pt]) #ovStart .cards>.card small{display:none!important}
+  .app:has(h1[data-pt]) #ovStart .cards>.card>.skinBtn{position:absolute!important;top:4px!important;right:4px!important;left:auto!important;bottom:auto!important;width:30px!important;height:30px!important;min-width:30px!important;min-height:30px!important}
+}
+@media (max-height:520px) and (max-aspect-ratio:11/10){.app:has(h1[data-pt]) #home::before,.app:has(h1[data-pt]) #ovStart::before{display:none!important}}
+
+/* THẺ "CÁCH CHƠI" (#ovHow) Ở MÀN NGANG / WEB THẤP: bỏ cột dọc hẹp → khung rộng như popup Giao diện; HAI CỘT (trái: tên + hình + nhãn; phải: danh sách ý + nút Bắt đầu); con của thẻ có zoom:var(--hz) do shared/howfit.js tính cho vừa khung */
+@media (min-aspect-ratio:11/10) and (max-height:800px){
+  .app:has(#ovHow:not([hidden])){grid-template-columns:minmax(0,1fr) min(calc(100vw - 340px),760px) minmax(0,1fr)}
+  .app:has(#ovHow:not([hidden])) .play{width:auto;aspect-ratio:auto;height:calc(100dvh - 30px);max-height:none}
+  .app:has(h1[data-pt]) #ovHow:not([hidden]){display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);column-gap:24px;row-gap:8px;align-content:center!important;align-items:center;justify-items:center;justify-content:stretch;padding:14px 76px 14px 20px!important;box-sizing:border-box;overflow:hidden}
+  .app:has(h1[data-pt]) #ovHow:not([hidden])>*{grid-column:1;zoom:var(--hz,1);max-width:100%}
+  .app:has(h1[data-pt]) #ovHow:not([hidden])>ul,
+  .app:has(h1[data-pt]) #ovHow:not([hidden])>.hwL{grid-column:2;grid-row:1 / span 6;width:100%;align-self:center}
+  .app:has(h1[data-pt]) #ovHow:not([hidden])>.row:last-child{grid-column:2;grid-row:7}
+}
+
+/* THẺ "CÁCH CHƠI" — ĐIỆN THOẠI NGANG (<=520px cao): phủ TOÀN KHUNG như popup Giao diện (trước bó trong khung chơi 440px, chữ bị zoom nhỏ xíu) + nút ✕ ở góc trên-phải khung */
+@media (min-aspect-ratio:11/10) and (max-height:520px){
+  .app:has(#ovHow:not([hidden])) .play{background:none!important;box-shadow:none!important;border-radius:0!important}
+  .app:has(#ovHow:not([hidden])) .play::after{display:none!important}
+  #ovHow:not([hidden]){position:fixed!important;inset:0!important;width:auto!important;height:auto!important;background:rgba(8,6,24,.66)!important;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);z-index:30}
+  .app:has(h1[data-pt]) #ovHow:not([hidden]){padding:10px 64px 10px 16px!important}
+  .app:has(h1[data-pt]) #ovHow:not([hidden]) #hwBack{display:flex!important;align-items:center;justify-content:center;position:fixed!important;top:8px!important;right:10px!important;left:auto!important;width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;padding:0!important;margin:0!important;border-radius:50%!important;font-size:0!important;background:rgba(255,255,255,.14)!important;border:1px solid rgba(255,255,255,.4)!important;color:#fff!important;z-index:31;cursor:pointer}
+  .app:has(h1[data-pt]) #ovHow:not([hidden]) #hwBack::after{content:"";display:block;width:18px;height:18px;background:linear-gradient(45deg,transparent calc(50% - 1.5px),#fff calc(50% - 1.5px),#fff calc(50% + 1.5px),transparent calc(50% + 1.5px)),linear-gradient(-45deg,transparent calc(50% - 1.5px),#fff calc(50% - 1.5px),#fff calc(50% + 1.5px),transparent calc(50% + 1.5px))}
+}

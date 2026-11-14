@@ -68,6 +68,7 @@ textarea{width:100%;height:20cqw;border-radius:3cqw;border:.5cqw solid var(--lin
   <div class="deco" id="deco"></div>
   <div class="top"><button class="ib" id="bBk" type="button" hidden aria-label="←">←</button><h1 id="ttl"></h1><button class="ib" id="bBoard" type="button">🏆</button><button class="ib" id="bSnd" type="button">🔊</button><button class="ib" id="bLang" type="button">EN</button></div>
   <section class="scr" id="home">
+    <div class="hero" id="hHero" aria-hidden="true"></div>
     <div class="card boss"><div class="av" id="hAv"></div><div class="bub" id="hBub"></div></div>
     <button class="btn" id="bDaily" type="button" style="text-align:left;display:flex;gap:3cqw;align-items:center"><span id="dN" style="font:800 7cqw var(--font)"></span><span class="grow"><b id="dT"></b><br><span id="dS" style="font-weight:600;font-size:3.3cqw"></span></span><span>▶</span></button>
     <div class="row"><button class="btn alt grow" id="bPractice" type="button"></button><button class="ib" id="bSkin" type="button" style="width:12cqw;height:12cqw">🎨</button></div>
@@ -181,7 +182,7 @@ function show(id){["home","ask","res"].forEach(s=>$(s).hidden=s!==id);["ovCh","o
 function toast(m,ms){const t=$("toast");t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,ms||1800)}
 const sitText=s=>MOODS[s.mood].e+" "+L2([MOODS[s.mood].vi,MOODS[s.mood].en]);
 function renderHome(){const sv=getSave(),k=dayKey(),done=sv.days[k],h=holidayNear(k),sk=skinOf();$("ttl").textContent=T("hdr");$("dN").textContent="#"+dayNo(k);$("dT").textContent=T("daily");$("dS").textContent=done!=null?T("done",{s:done}):T("dS");$("bPractice").textContent=T("practice");$("hNote").textContent=T("note");$("bLang").textContent=LANG==="vi"?"EN":"VI";$("bSnd").textContent=snd()?"🔊":"🔇";
- $("hAv").textContent=sk.face||"🧑‍💼";$("hBub").textContent=h?T("holi",{h:LANG==="vi"?h[1]:h[2]})+" 🎊 "+L2(sk.name||PF.skins[0].basic.name)+":\n“…”":L2(sk.name||PF.skins[0].basic.name)+": “…”";
+ $("hAv").textContent=sk.face||"🧑‍💼";$("hHero").textContent=(sk.face||"🧑‍💼")+"🏖️";$("hBub").textContent=h?T("holi",{h:LANG==="vi"?h[1]:h[2]})+" 🎊 "+L2(sk.name||PF.skins[0].basic.name)+":\n“…”":L2(sk.name||PF.skins[0].basic.name)+": “…”";
  $("hChips").innerHTML="";[sv.streak?T("streak",{n:sv.streak}):"",sv.best?T("best",{n:sv.best}):"",sv.total?T("tot",{n:sv.total}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("hChips").appendChild(c)})}
 function begin(seed,mode,ch){const hol=mode==="daily"?holidayNear(dayKey()):null;G={seed,mode,ch:ch||null,sit:genSit(seed,hol),ci:-1,di:0,mods:[],own:false,done:false};applySkin();show("ask");(function(){const tg=$("tgt");if(G.ch){tg.hidden=false;$("tgtT").textContent=T("tgt",{n:G.ch.sc});$("tgtB").style.width=Math.min(100,G.ch.sc)+"%"}else tg.hidden=true})();window.NP&&NP.start();renderAsk()}
 function renderAsk(){const s=G.sit,sk=skinOf(),di=dayInfo(s);$("aAv").innerHTML=(sk.face||"🧑‍💼")+"<small>"+MOODS[s.mood].e+"</small>";

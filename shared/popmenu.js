@@ -106,7 +106,11 @@
     addEventListener("keydown", function (e) { if (e.key === "Escape" && open) { e.stopPropagation(); setOpen(false); fab.focus(); } }, true);
   }
   function playing() { var h = $("homeBtn"), p = $("pauseBtn"); return !!((h && !h.hidden) || (p && !p.hidden)); }
+  /* thẻ "cách chơi" (#ovHow) mở trước khi vào ván: nút ← riêng của thẻ (#hwBack) bị ẩn ở điện thoại dọc nên ← trên thanh trên phải ĐÓNG thẻ (về màn danh sách game), không thoát thẳng ra cổng */
+  function howBtn() { var ids = ["hwBack", "prBack"], i, b, o; for (i = 0; i < ids.length; i++) { b = $(ids[i]); o = b && b.closest(".ov"); if (o && !o.hidden) return b; } return null; }   /* #prBack: thẻ chọn tuổi của Đoán Tuổi Nào */
+  function howOpen() { return !!howBtn(); }
   function back() {
+    var hb0 = howBtn(); if (hb0) { hb0.click(); return; }
     if (playing()) { var h = $("homeBtn"); if (h) h.click(); else if (typeof window.goHome === "function") window.goHome(); }
     else if (pd) { var e = pd.getElementById("home"); if (e) e.click(); }
   }
@@ -114,7 +118,7 @@
     if (!fab) return; var v = vi(), t = v ? (open ? "Đóng menu" : "Mở menu") : (open ? "Close menu" : "Open menu");
     var sA = function (e, k, x) { if (e.getAttribute(k) !== x) e.setAttribute(k, x); };   /* chỉ ghi khi đổi (tránh vòng MutationObserver ↔ labels) */
     sA(fab, "aria-label", t); if (fab.title !== t) fab.title = t;
-    var b = playing() ? (v ? "Về màn chọn" : "Back to menu") : (v ? "Thoát" : "Exit"); sA(bk, "aria-label", b); if (bk.title !== b) bk.title = b;
+    var b = howOpen() ? (v ? "Đóng" : "Close") : playing() ? (v ? "Về màn chọn" : "Back to menu") : (v ? "Thoát" : "Exit"); sA(bk, "aria-label", b); if (bk.title !== b) bk.title = b;
     ROLES.forEach(function (r) {
       var e = $(r[1]) || (r[1] === "npPmCam" ? cam : r[1] === "npPmShr" ? shr : r[1] === "npPmLock" ? lck : null); if (!(e && e.parentNode === panel)) return;
       var dl = v ? r[2] : r[3], ga = e.getAttribute("aria-label") || "", resume = r[0] === "pause" && /^(Tiếp tục|Chơi tiếp|Resume|Continue|Play on)/i.test(ga);
@@ -125,7 +129,7 @@
       if (r[0] === "pause" && e.classList.contains("rs") !== resume) e.classList.toggle("rs", resume);   /* ⏸ ↔ ▶ theo trạng thái */
     });
     if (lck) { var kl = pd && pd.getElementById("klock"), hh = !kl || kl.hidden; if (lck.hidden !== hh) lck.hidden = hh; }   /* webview app / Night Play: kidlock ẩn nút thì ô khoá cũng ẩn */
-    { var hb = !pd && !playing(); if (de.classList.contains("np-hidebk") !== hb) de.classList.toggle("np-hidebk", hb); }   /* mở trực tiếp ở màn chọn: không có chỗ để thoát */
+    { var hb = !pd && !playing() && !howOpen(); if (de.classList.contains("np-hidebk") !== hb) de.classList.toggle("np-hidebk", hb); }   /* mở trực tiếp ở màn chọn: không có chỗ để thoát */
   }
   /* màu THẬT của game (như shared/fan.js): chữ, nền, viền, màu nhấn */
   function rgba(s) { var m = s && s.match(/rgba?\(([^)]+)\)/); if (!m) return null; var q = m[1].split(/[ ,\/]+/).filter(Boolean).map(parseFloat); return { r: q[0], g: q[1], b: q[2], a: q.length > 3 && !isNaN(q[3]) ? q[3] : 1 }; }
