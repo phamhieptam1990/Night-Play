@@ -235,7 +235,7 @@ html[data-app] #findFab:not(.on):not(.pri):not(.bars-pop *){background:color-mix
   html.sc-ok #fFab svg{width:20px;height:20px;display:block}
   html.sc-ok #fFab[aria-expanded=true]{background:var(--accent);color:#fff}
   html.sc-ok #lock,html.sc-ok #fInfo{display:none}
-  html.foot-open.sc-ok #lock{order:1;display:block;margin:0;width:44px;height:44px}
+  html.foot-open.sc-ok #lock{order:1;display:grid;place-items:center;padding:0;margin:0;width:44px;height:44px}
   html.foot-open.sc-ok #fInfo{order:2;display:grid;place-items:center;position:relative;width:44px;height:44px;padding:0;border-radius:50%;box-sizing:border-box;cursor:pointer;background:color-mix(in srgb,var(--accent) 22%,var(--panel));color:var(--accent);border:2px solid var(--accent);box-shadow:var(--shadow)}
   html.sc-ok #fInfo svg{width:22px;height:22px;display:block}
   html.sc-ok #fPop{position:fixed;right:calc(max(10px,env(safe-area-inset-right)) + 54px);bottom:calc(6px + env(safe-area-inset-bottom));z-index:60;max-width:min(300px,calc(100vw - 80px));max-height:calc(100vh - 16px);overflow:auto;box-sizing:border-box;padding:12px 14px;border-radius:16px;background:var(--panel,#1c1740);color:var(--ink,#fff);border:1px solid var(--line,rgba(255,255,255,.2));box-shadow:0 10px 30px rgba(0,0,0,.45);font:600 13px/1.4 var(--font,system-ui,sans-serif)}

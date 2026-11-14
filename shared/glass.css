@@ -59,8 +59,8 @@ html[data-theme=light] #home .ty.lock:not(.on){background:repeating-linear-gradi
 
 /* NÚT 🎨 CHỌN GIAO DIỆN (.skinBtn trong thẻ/ô, button.sk trong ô Pop): icon SVG căn giữa bằng vị trí tuyệt đối + padding 0, không dựa vào display:grid/padding mặc định của <button>
    (Safari iPhone lệch icon xuống-phải, nhất là khi trang nạp từ bộ nhớ đệm offline). Trước đây chỉ popnp.css lo và chỉ cho .card>.skinBtn, nên .tile>.skinBtn (Cánh Nhỏ, Pop Fly...) vẫn lệch. */
-.skinBtn,.tile>button.sk,.bh>button.sk{padding:0!important}
-.skinBtn>svg,.tile>button.sk>svg,.bh>button.sk>svg{position:absolute!important;left:50%!important;top:50%!important;margin:0!important;transform:translate(-50%,-50%)!important}
+.skinBtn,.tile>button.sk,.bh>button.sk,#bSkin{padding:0!important;position:relative}
+.skinBtn>svg,.tile>button.sk>svg,.bh>button.sk>svg,#bSkin>svg{position:absolute!important;left:50%!important;top:50%!important;margin:0!important;transform:translate(-50%,-50%)!important}
 
 /* NÚT TRÒN ICON Ở MÀN KẾT QUẢ/POPUP (.ib2: ← ✕ 📤 💾 ▶ 🏠 🏆 🔊 💡 ↩ 🔁 ...): CÙNG KIỂU với nút ← và ⋯ của khung game — vòng tròn kính tối, icon SVG TRẮNG (icons.js đổi emoji thành SVG), nút chính (.main) gradient như nút ⋯.
    Căn giữa bằng flex + padding 0 (không dựa vào display:grid/padding mặc định của <button>: Safari iPhone lệch emoji). Bỏ qua nút có nhãn dưới icon (data-l: endui.css tự dàn cột).
