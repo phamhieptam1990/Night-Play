@@ -14,7 +14,7 @@ if (only.length) list = list.filter(([, i]) => only.includes(i));
 const SIZES = quick ? [[320, 568, 1], [390, 844, 1], [844, 390, 1], [1280, 800, 0]] : [[320, 568, 1], [360, 640, 1], [375, 667, 1], [390, 844, 1], [414, 896, 1], [430, 932, 1], [844, 390, 1], [1280, 800, 0]];
 const OPEN = () => { const b = document.getElementById("bHelp") || document.getElementById("phBtn"); if (!b || !(document.getElementById("hlpOv") || document.getElementById("phOv"))) return "none";   /* game có popup ? riêng (Đập Deadline) không thuộc help.js/pophelp.js → bỏ qua */ b.click(); return "ok"; };
 const MEASURE = () => {
-  const E = [], cozy = !!document.getElementById("hlpCard"), card = document.getElementById(cozy ? "hlpCard" : "phCard"), x = document.getElementById(cozy ? "hlpX" : "phGo"), ov = document.getElementById(cozy ? "hlpOv" : "phOv");
+  const E = [], cozy = !!document.getElementById("hlpCard"), card = document.getElementById(cozy ? "hlpCard" : "phCard"), x = document.getElementById(cozy ? "hlpX" : "phX"), ov = document.getElementById(cozy ? "hlpOv" : "phOv");
   if (!card || !x || !ov) return { E: ["không có thẻ/nút đóng"] }; if (ov.hidden) return { E: ["bấm ? nhưng popup không mở"] };
   const W = innerWidth, H = innerHeight, c = card.getBoundingClientRect(), r = x.getBoundingClientRect(), bw = parseFloat(getComputedStyle(card).borderLeftWidth) || 0;
   if (c.left < -0.5 || c.right > W + 0.5 || c.top < -0.5 || c.bottom > H + 0.5) E.push("thẻ ra ngoài khung nhìn [" + [c.left, c.top, c.right, c.bottom].map(Math.round) + "] trong " + W + "x" + H);

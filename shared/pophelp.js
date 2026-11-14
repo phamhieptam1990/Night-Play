@@ -16,6 +16,8 @@
   var ICO_Q = "<svg " + A + '><path d="M9.2 9.2a2.9 2.9 0 1 1 4.6 2.3c-1 .8-1.8 1.3-1.8 2.7"/><path d="M12 18v.2"/></svg>';
   var ICO_SND = "<svg " + A + '><path d="M4 9.5v5h3.6L13 19V5L7.6 9.5z"/><path d="M16.2 9a4.2 4.2 0 0 1 0 6M18.8 6.4a8 8 0 0 1 0 11.2"/></svg>';
 
+  var ICO_X = "<svg " + A + '><path d="M6 6l12 12M18 6L6 18"/></svg>';
+
   var css = document.createElement("style");
   css.textContent =
     "#phBtn{color:var(--ink,inherit)}#phBtn.ph-new{animation:phNudge 1.1s ease-in-out 4}" +
@@ -27,6 +29,7 @@
     "#phHd{display:flex;align-items:center;gap:calc(var(--f,16px)*.6)}" +
     "#phTt{flex:1;min-width:0;margin:0;font-size:calc(var(--f,16px)*1.35);line-height:1.1;font-weight:800;color:#fff}" +
     "#phSay{flex:none;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;padding:0;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.28)!important;box-sizing:border-box}" +
+    "#phX{flex:none;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;padding:0;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.28)!important;box-sizing:border-box;outline:none}#phX:focus-visible{outline:2px solid #fff;outline-offset:3px}#phX:active{transform:scale(.94)}" +
     "#phSay.on{background:rgba(255,255,255,.28);border-color:#fff!important}" +
     "#phLs{display:flex;flex-direction:column;gap:calc(var(--f,16px)*.5);margin:0;padding:0;list-style:none}" +
     "#phLs li{display:flex;align-items:center;gap:calc(var(--f,16px)*.7);padding:calc(var(--f,16px)*.55) calc(var(--f,16px)*.75);border-radius:calc(var(--f,16px)*1.1);background:rgba(124,92,255,.2);border:1px solid rgba(170,150,255,.42);box-shadow:inset 0 0 14px rgba(124,92,255,.14)}" +
@@ -70,6 +73,7 @@
     var nt = card.querySelector("#phNt"); nt.textContent = d.n || ""; nt.hidden = !d.n;
     card.querySelector("#phGo").textContent = vi ? "Đã hiểu!" : "Got it!";
     var sy = card.querySelector("#phSay"); sy.setAttribute("aria-label", vi ? "Đọc to" : "Read aloud");
+    card.querySelector("#phX").setAttribute("aria-label", vi ? "Đóng" : "Close");
     sy.hidden = !(window.speechSynthesis && window.SpeechSynthesisUtterance);
     btn.setAttribute("aria-label", vi ? "Cách chơi" : "How to play");
     btn.setAttribute("title", vi ? "Cách chơi" : "How to play");
@@ -98,11 +102,12 @@
     if (ref && ref.parentNode === top) top.insertBefore(btn, ref); else top.appendChild(btn);
     if (!seen()) btn.classList.add("ph-new");
     ov = document.createElement("div"); ov.id = "phOv"; ov.hidden = true;
-    ov.innerHTML = '<div id="phCard" role="dialog" aria-modal="true"><div id="phHd"><h2 id="phTt"></h2><button id="phSay" type="button">' + ICO_SND + '</button></div><ul id="phLs"></ul><p id="phNt"></p><button id="phGo" type="button"></button></div>';
+    ov.innerHTML = '<div id="phCard" role="dialog" aria-modal="true"><div id="phHd"><h2 id="phTt"></h2><button id="phSay" type="button">' + ICO_SND + '</button><button id="phX" type="button">' + ICO_X + '</button></div><ul id="phLs"></ul><p id="phNt"></p><button id="phGo" type="button"></button></div>';
     play.appendChild(ov); card = ov.firstChild;
     btn.onclick = open;
     ov.querySelector("#phGo").onclick = close;
     ov.querySelector("#phSay").onclick = say;
+    ov.querySelector("#phX").onclick = close;
     ov.addEventListener("click", function (e) { if (e.target === ov) close(); });
     addEventListener("keydown", function (e) { if (e.key === "Escape" && !ov.hidden) { e.stopPropagation(); close(); } }, true);
     addEventListener("resize", function () { if (!ov.hidden) fit(); });
