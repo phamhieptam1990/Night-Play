@@ -81,3 +81,9 @@
 @media (min-aspect-ratio:11/10) and (max-height:520px){
   .app{grid-template-rows:minmax(0,1fr) auto minmax(0,1fr)!important;height:calc(100dvh - 30px)}
 }
+
+/* màn ngang thấp: tên game to hơn bản 12px trước đó. Trong cổng (html.np-hudg, nút điều khiển đã ra rail) có chỗ cho 1 dòng 18px; trang game trực tiếp 15px tối đa 2 dòng */
+@media (min-aspect-ratio:11/10) and (max-height:520px){
+  .app .top h1,.app .top h1.pt-title{font-size:15px!important}
+  html.np-hudg .app .top h1,html.np-hudg .app .top h1.pt-title{font-size:18px!important;white-space:nowrap!important;line-height:1.15!important}
+}

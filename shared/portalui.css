@@ -185,3 +185,6 @@ html:not([data-theme=dark]) :is(.bars-pop,#gate,#sleep){
   --panel:#1d1745;--panel2:#262058;--ink:#fff;--text:#fff;--muted:rgba(255,255,255,.72);--bg:#171236;--field:rgba(255,255,255,.1);--line:rgba(170,150,255,.42);--card:#262058;
   color:#fff;color-scheme:dark}
 html:not([data-theme=dark]) .bars-pop{background:linear-gradient(165deg,#2b2064,#171236 70%)!important;border-color:rgba(170,150,255,.55)!important}
+
+/* game đang mở (html.playing): thẻ "Chơi tiếp"/thông tin của CỔNG phải ẩn hẳn (từng lòi ra sau khung game ở màn ngang thành "tiêu đề thứ hai" mờ) */
+html.playing #puInfo,html.playing #puResume,html.playing #puTop{visibility:hidden!important;pointer-events:none!important}

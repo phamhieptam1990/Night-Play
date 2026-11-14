@@ -159,3 +159,15 @@ html #stage.np-rails-l:not(.docked) #npRailL,html #stage.np-rails-l #npRailL{pad
 .np-rail .np-res .np-ico{width:48px;height:48px;border-radius:14px}
 .np-rail .np-res .np-t b{font-size:17px;font-weight:900;line-height:1.15;color:var(--rail-tint,var(--accent))}
 .np-rail .np-res .np-t small{font-size:11.5px;font-weight:700;letter-spacing:-.01em;color:var(--ink);margin-bottom:3px}
+
+/* đang ở TRONG game: thẻ "Chơi tiếp" của chính game này ở cột phải bị ẩn (tên game đã có ở cột trái + màn chọn đã có "Tiếp tục ván dở") → không còn hai tiêu đề trùng */
+#stage.on #npRes{display:none!important}
+
+/* THẺ "TOP 5 TUẦN NÀY" (cột trái, web): bố cục lại — nền thẻ sáng/tối rõ (không đục xám-xanh), tiêu đề 🏆 là dòng chữ (không viền thuốc), dòng "chưa có ai" căn giữa và đủ tương phản, nút "Xem tất cả" là nút ĐẶC màu nhấn, chữ trắng */
+.np-rail .np-c.np-top{padding:14px 14px 12px;border-radius:20px;background:color-mix(in srgb,var(--panel) 92%,var(--rail-tint,var(--accent)));border:1.5px solid color-mix(in srgb,var(--rail-tint,var(--accent)) 40%,var(--line));box-shadow:0 6px 18px rgba(0,0,0,.14)}
+.np-rail .np-top>.np-row .np-chip{padding:0;border:0;background:none;border-radius:0;font:900 16px/1.2 var(--font);letter-spacing:.02em;color:var(--ink);gap:8px}
+.np-rail .np-top>.np-row .np-chip svg{width:22px;height:22px;color:var(--rail-tint,var(--accent))}
+.np-rail .np-top .np-note{margin:8px 0 2px;padding:10px 8px;text-align:center;border-radius:12px;background:color-mix(in srgb,var(--ink) 6%,transparent);color:color-mix(in srgb,var(--ink) 72%,transparent);font:700 13px/1.35 var(--font)}
+.np-rail .np-top .np-link{min-height:46px;margin-top:10px;border:0!important;background:var(--rail-tint,var(--accent))!important;color:#fff!important;font:800 15px/1 var(--font);box-shadow:0 4px 12px color-mix(in srgb,var(--rail-tint,var(--accent)) 45%,transparent)}
+.np-rail .np-top .np-link:hover,.np-rail .np-top .np-link:focus-visible{filter:brightness(1.08);outline:3px solid color-mix(in srgb,var(--rail-tint,var(--accent)) 40%,transparent);outline-offset:2px}
+.np-rail .np-top li{font-size:14px;min-height:32px}

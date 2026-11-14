@@ -159,3 +159,16 @@ html .npc h2{padding-right:60px!important;padding-left:60px!important;box-sizing
 }
 /* ✕ cùng cỡ cho Cozy ở điện thoại dọc */
 @media (max-width:520px) and (orientation:portrait){html:not(.npp-kid) .npc .npx{width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;top:8px!important;right:8px!important;font-size:18px!important}}
+/* popup Cozy dọc thấp (≤680px): ô thấp hơn để nút "quay lại" không lòi đáy */
+@media (max-width:520px) and (orientation:portrait) and (max-height:680px){
+  html:not(.npp-kid) #ovSkin>.npc{padding:12px 12px 10px!important;gap:6px!important}
+  html:not(.npp-kid) #ovSkin .npc .sk{gap:6px!important}
+  html:not(.npp-kid) #ovSkin .npc .skc{min-height:50px!important;padding:4px 10px!important}
+  html:not(.npp-kid) #ovSkin .npc .skc .e{font-size:30px!important;width:36px;height:36px}
+  html:not(.npp-kid) #ovSkin .npc .skc .e img{width:34px;height:34px}
+  html:not(.npp-kid) #ovSkin .npc h2{font-size:18px!important}
+}
+@media (max-width:520px) and (orientation:portrait) and (max-height:620px){html:not(.npp-kid) #ovSkin .npc .skc{min-height:44px!important}html:not(.npp-kid) #ovSkin>.npc{padding:10px 12px 8px!important}}
+
+/* popup GIAO DIỆN: bỏ nút ← "quay lại" ở đáy (đã có ✕ ở góc; ✕ vẫn bấm hộ #skBack nên hành vi đóng không đổi) */
+html #ovSkin .npc #skBack{display:none!important}

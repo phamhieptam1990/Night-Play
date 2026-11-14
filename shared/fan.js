@@ -90,8 +90,9 @@
     /* tên game SÁT khung thông tin: bản sao của h1 nằm ngay chỗ .top cũ trong luồng (nên dính trên khối nội dung), h1 trên thanh ghim chỉ giữ chỗ */
     ".top.npfan h1{visibility:hidden}" +
     "#npTitle{display:none}" +
-    ".np-local #npTitle{display:block;flex:none;box-sizing:border-box;width:100%;max-width:100%;margin:0 0 6px;padding:0 8px;text-align:center;white-space:normal;text-wrap:balance;overflow-wrap:anywhere;overflow:visible;font-size:clamp(20px,6.6vw,30px);line-height:1.12;text-shadow:none}" +
+    ".np-local .top.npfan+#npTitle{display:block;flex:none;box-sizing:border-box;width:100%;max-width:100%;margin:0 0 6px;padding:0 8px;text-align:center;white-space:normal;text-wrap:balance;overflow-wrap:anywhere;overflow:visible;font-size:clamp(20px,6.6vw,30px);line-height:1.12;text-shadow:none}" +
     ".np-local #npTitle .probadge,.np-local #npTitle .bl{display:none}" +
+    "#npTitle{display:none}.top:not(.npfan)+#npTitle{display:none!important}" +
     "}" +
     /* ĐIỆN THOẠI DỌC: MỌI nút hàng trên cùng (← | tên | ⏸ | 🔊 | ⋯) cùng cỡ 44px, cùng tâm dọc y = 16 + 22 (= toạ độ chuẩn của ← trong backpos.css, GAME_RULES 0a-14), lề trái ← = lề phải ⋯ = 16px (+ safe-area), khoảng cách đều 8px; hàng cao 60px nên tên game / HUD bên dưới cách >= 8px */
     "@media " + PHONE + "{" +
@@ -239,6 +240,8 @@
   function restore() {
     if (!moved) return;
     setOpen(false); play.classList.remove("npfan"); document.body.classList.remove("np-local", "np-lcol", "np-lrow");
+    /* gỡ luôn bản sao tiêu đề (#npTitle): CSS của nó bị gỡ cùng lúc nên nếu để lại sẽ hiện mặc định → tiêu đề lặp sau khi xoay dọc→ngang */
+    if (ttl) { try { if (ttlMo) ttlMo.disconnect(); } catch (e) {} if (ttl.parentNode) ttl.parentNode.removeChild(ttl); ttl = null; ttlMo = null; }
     var keep = [];
     ROLES.forEach(function (r) { home.forEach(function (h) { if (h.role === r[0]) keep.push(h); }); });
     home.forEach(function (h) { if (!roleOf(h.role)) keep.push(h); });

@@ -238,3 +238,24 @@ html.npp-kid #home #npResume{order:-4!important}
 
 /* KHÔNG GIẬT khi đổi cấp: mọi nút cấp độ luôn có viền 2px (trong suốt khi chưa chọn) nên nút đang chọn không đổi kích thước/đẩy chữ; không transition kích thước */
 html:root .lvs .lvb,html:root .lvs .lv{border:2px solid transparent!important;box-sizing:border-box;transition:background-color .2s,box-shadow .2s!important;transform:none!important}
+
+/* ĐIỆN THOẠI DỌC THẤP (≤700px): màn chọn Pop Fly vừa một màn (nút Tiến độ không lòi đáy) + popup giao diện thu thumbnail */
+@media (max-width:520px) and (orientation:portrait) and (max-height:700px){
+  html.npp-kid #ovStart{gap:6px!important;padding-block:8px!important}
+  html.npp-kid #ovStart .card .main{padding-block:2px!important}
+  html.npp-kid #ovStart h2{font-size:20px!important}
+  html.npp-kid #ovStart #pgBtn{min-height:44px!important;padding-block:4px!important}
+  html.npp-kid #ovSkin .skc .sw{aspect-ratio:3/1!important}
+  html.npp-kid #ovSkin .skc{padding:4px!important}
+  html.npp-kid #ovSkin .npc h2{font-size:17px!important}
+}
+/* máy ngang rất thấp: thẻ chế độ xếp từ trên xuống, không tràn mép trên */
+@media (min-aspect-ratio:11/10) and (max-height:520px){html.npp-kid #ovStart .cards{justify-content:flex-start!important;margin-top:0!important}html.npp-kid #ovStart{justify-content:flex-start!important;padding-top:6px!important;gap:4px!important}}
+/* máy ngang cực thấp (≤340px): thẻ chế độ Pop Fly gọn (hàng 40px, bỏ dòng phụ) để 5 thẻ vừa một màn */
+@media (min-aspect-ratio:11/10) and (max-height:340px){
+  html.npp-kid #ovStart .cards{gap:3px!important}
+  html.npp-kid #ovStart .card .main{min-height:0!important;height:40px!important;padding-block:0!important}
+  html.npp-kid #ovStart .card small,html.npp-kid #ovStart .card .e{font-size:12px!important}
+  html.npp-kid #ovStart .card .skinBtn{width:30px!important;height:30px!important;min-width:30px!important;min-height:30px!important}
+  html.npp-kid #ovStart #pgBtn{display:none}
+}

@@ -96,7 +96,7 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .ov .cards{gap:7px}.card .main{padding:7px 12px}.card .e{font-size:clamp(26px,8vw,36px)}.card{font-size:clamp(15px,4.5vw,20px)}
 @media (max-height:700px){.ov{gap:8px;padding:12px}.ov h2{font-size:clamp(20px,6vw,28px)}.ov .cards{gap:5px}.card .main{padding:4px 10px}.card .e{font-size:24px}.card small{font-size:.66em}.card .skinBtn{width:38px;height:38px;font-size:18px}.dif{padding:5px 14px}}
 @media (max-height:600px){.card small{display:none}}
-@media (max-height:520px) and (min-aspect-ratio:11/10){#ovPay h2{font-size:17px}#ovPay .big{padding:5px 14px;font-size:14px;line-height:1.1;min-height:44px;white-space:nowrap}#ovPay .ghost{padding:4px 12px;font-size:13px;min-height:44px;white-space:nowrap}#ovPay .row{gap:5px}#ovStart h2{display:none}.cards{display:flex;flex-direction:column;max-width:none;gap:3px}.card .main{padding:2px 8px;gap:6px}.card .e{font-size:20px}.card .skinBtn{width:28px;height:28px;font-size:13px;margin-right:4px}.card{font-size:13px}.difs .dif{padding:2px 10px;font-size:12px}.ov{gap:3px}.mt{width:56px}}
+@media (max-height:380px) and (min-aspect-ratio:11/10){#ovPay h2{font-size:17px}#ovPay .big{padding:5px 14px;font-size:14px;line-height:1.1;min-height:44px;white-space:nowrap}#ovPay .ghost{padding:4px 12px;font-size:13px;min-height:44px;white-space:nowrap}#ovPay .row{gap:5px}#ovStart h2{display:none}.cards{display:flex;flex-direction:column;max-width:none;gap:3px}.card .main{padding:2px 8px;gap:6px}.card .e{font-size:20px}.card .skinBtn{width:28px;height:28px;font-size:13px;margin-right:4px}.card{font-size:13px}.difs .dif{padding:2px 10px;font-size:12px}.ov{gap:3px}.mt{width:56px}}
 [hidden]{display:none!important}
 /* nền đổi nhẹ theo độ khó; MÀU NHẤN + viền khung + huy hiệu lấy từ bảng chung shared/difficulty.css (Dễ xanh lá, Thường xanh dương, Khó cam) */
 body{transition:background .4s,color .4s}
@@ -130,9 +130,9 @@ body.np-local{--w:min(calc(100vw - 24px),calc((100dvh - 240px)*.75),760px)}
 .tile:active{transform:scale(.97)}
 .dif{width:48px;height:48px;padding:0;border-radius:50%;font-size:22px;display:grid;place-items:center}
 @media (max-height:700px){.tile img{aspect-ratio:1/1}.tile .tb{width:28px;height:28px;font-size:16px}.dif{width:40px;height:40px;font-size:18px}.tiles{gap:6px}}
-@media (max-height:520px) and (min-aspect-ratio:11/10){.tiles{grid-template-columns:repeat(5,1fr);gap:4px}.tile,.tile:nth-child(4 of .tile),.tile:nth-child(5 of .tile){grid-column:auto}.tile img{aspect-ratio:3/4}.tile .tb,.tile .skinBtn{width:22px;height:22px;font-size:12px}.tile .best{display:none}.dif{width:30px;height:30px;font-size:14px}}   /* thuộc tính hidden luôn thắng display:flex của từng lớp */
+@media (max-height:380px) and (min-aspect-ratio:11/10){.tiles{grid-template-columns:repeat(5,1fr);gap:4px}.tile,.tile:nth-child(4 of .tile),.tile:nth-child(5 of .tile){grid-column:auto}.tile img{aspect-ratio:3/4}.tile .tb,.tile .skinBtn{width:22px;height:22px;font-size:12px}.tile .best{display:none}.dif{width:30px;height:30px;font-size:14px}}   /* thuộc tính hidden luôn thắng display:flex của từng lớp */
 /* ===== MÀN CHỌN CÓ HÌNH (Night Pass): thẻ ảnh ĐỀU NHAU 2 cột (thẻ lẻ cuối rộng hết hàng), nút 🎨 kính ở GÓC TRÊN-PHẢI (không che hình/điểm), điểm cao + icon con vật làm huy hiệu kính; chữ ít ===== */
-@media not all and (max-height:520px) and (min-aspect-ratio:11/10){
+@media not all and (max-height:380px) and (min-aspect-ratio:11/10){
   #ovStart .tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:100%;align-content:start}
   #ovStart .tile:not(.daily){grid-column:auto!important;border-radius:20px;overflow:hidden;border:1px solid rgba(170,150,255,.55);box-shadow:0 6px 18px rgba(0,0,0,.35)}
   #ovStart .tile:not(.daily):has(+ .tile.daily):nth-child(odd of .tile:not(.daily)){grid-column:1 / -1!important}
@@ -145,7 +145,7 @@ body.np-local{--w:min(calc(100vw - 24px),calc((100dvh - 240px)*.75),760px)}
 /* ⏸ + 🔊 dồn sang PHẢI sát nút ⋯ (như mọi game khác), không dính nút ← ở trái */
 @media (max-width:520px) and (orientation:portrait){.top.npfan #soundBtn,.top.npfan #pauseBtn{position:absolute!important;top:calc(16px + env(safe-area-inset-top,0px));margin:0!important}.top.npfan #soundBtn{right:calc(80px + env(safe-area-inset-right,0px))}.top.npfan #pauseBtn{right:calc(144px + env(safe-area-inset-right,0px))}}   /* sát ⋯ (56px + 8px + 16px lề), không dính ← */
 /* THẺ GIỐNG CÁC GAME COZY KHÁC (chủ site: "bỏ hình, làm thẻ card giống game khác"): kính tối, emoji + tên, 🏆 nhỏ, nút 🎨 góc phải trên; KHÔNG ảnh nền */
-@media not all and (max-height:520px) and (min-aspect-ratio:11/10){
+@media not all and (max-height:380px) and (min-aspect-ratio:11/10){
   #ovStart .tile:not(.daily){display:flex;overflow:visible;background:linear-gradient(145deg,rgba(60,44,130,.62),rgba(22,16,52,.58));border:1px solid rgba(170,150,255,.5);color:#fff;box-shadow:0 4px 14px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.14)}
   #ovStart .tile:not(.daily) .main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:68px;padding:10px 6px 6px;color:inherit;border-radius:inherit;background:none!important;border:0!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
   #ovStart .tile:not(.daily) .main img{display:none}
@@ -156,13 +156,13 @@ body.np-local{--w:min(calc(100vw - 24px),calc((100dvh - 240px)*.75),760px)}
 }
 /* GỌN, bớt "trẻ con" (chủ site): màn chọn chuyến bay KHÔNG hiện thanh "Pick a flight" + ⭐ điểm (chỉ cần khi đang bay); cụm độ khó nhỏ lại, phẳng */
 @media (max-width:520px) and (orientation:portrait){
-  body:has(#ovStart:not([hidden])) .side .ask,body:has(#ovStart:not([hidden])) .side .hud{display:none!important}
+  body:has(#ovStart:not([hidden])) .side .ask,body:has(#ovStart:not([hidden])) .side .hud,body:has(#ovSkin:not([hidden])) .side .ask,body:has(#ovSkin:not([hidden])) .side .hud,body:has(#ovPay:not([hidden])) .side .ask,body:has(#ovPay:not([hidden])) .side .hud{display:none!important}
   #ovStart .difs{gap:8px}#ovStart .dif{width:38px;height:38px;min-width:38px;min-height:38px;font-size:17px;box-shadow:none}
 }
 /* BỐ CỤC MÀN CHỌN GIỐNG CÁC GAME COZY KHÁC (điện thoại dọc): tiêu đề → linh vật lớn (chiếm phần còn lại) → thẻ hôm nay → thẻ chuyến bay → độ khó; không viền khung, nền trong */
 .cwHero{display:none}
 @media (max-width:520px) and (orientation:portrait){
-  #play:has(#ovStart:not([hidden])){background:none!important;box-shadow:none!important}#play:has(#ovStart:not([hidden]))::after{display:none!important}
+  #play:has(#ovStart:not([hidden])){box-shadow:none!important}#play:has(#ovStart:not([hidden]))::after{display:none!important}
   #ovStart{justify-content:flex-start;gap:8px;padding:4px 8px 10px;background:none!important;-webkit-backdrop-filter:none;backdrop-filter:none}
   #ovStart .cwHero{order:0;flex:1 1 0;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;font-size:clamp(48px,min(22vw,13vh),120px);line-height:1;white-space:nowrap;overflow:hidden;transform-origin:50% 100%;animation:cwBob 2.8s ease-in-out infinite}
   #ovStart #stH{order:0}#ovStart .tiles{order:2;flex:none}#ovStart .difs{order:1}#ovStart #vsBox{order:2}#ovStart #chGo{order:4}
@@ -173,7 +173,7 @@ body.np-local{--w:min(calc(100vw - 24px),calc((100dvh - 240px)*.75),760px)}
 @keyframes cwBob{0%,100%{transform:translateY(0) scale(1,1)}30%{transform:translateY(-2.4cqw) scale(.97,1.04)}55%{transform:translateY(0) scale(1.04,.96)}}
 @media (prefers-reduced-motion:reduce){.cwHero{animation:none!important}}
 /* ĐIỆN THOẠI NGANG (thấp): khung chỉ ~280px rộng → 5 ô KHÔNG xếp một hàng; mỗi chuyến bay là MỘT HÀNG gọn (emoji | tên | 🎨), cùng kiểu thẻ kính các game Cozy */
-@media (max-height:520px) and (min-aspect-ratio:11/10){
+@media (max-height:380px) and (min-aspect-ratio:11/10){
   #ovStart{justify-content:center;gap:5px;padding:6px 8px}
   #ovStart .tiles{display:grid!important;grid-template-columns:1fr!important;gap:4px!important;width:100%;max-width:none}
   #ovStart .tile{grid-column:auto!important;border-radius:12px;overflow:visible}
@@ -187,16 +187,16 @@ body.np-local{--w:min(calc(100vw - 24px),calc((100dvh - 240px)*.75),760px)}
   #ovStart .difs{gap:6px}#ovStart .dif{width:32px;height:32px;min-width:32px;min-height:32px;font-size:15px}
 }
 /* ĐIỆN THOẠI NGANG: màn chọn 2 CỘT trên toàn màn hình (khung 3:4 quá nhỏ: thêm thẻ "Tiếp tục ván dở" là tràn cả hai đầu). Trái: hôm nay + tiếp tục + độ khó; phải: 5 chuyến bay một hàng gọn. */
-@media (max-height:520px) and (min-aspect-ratio:11/10){
-  #play:has(#ovStart:not([hidden])){background:none!important;box-shadow:none!important}#play:has(#ovStart:not([hidden]))::after{display:none!important}
-  body:has(#ovStart:not([hidden])) .side .ask,body:has(#ovStart:not([hidden])) .side .hud{display:none!important}
-  #ovStart:not([hidden]){position:fixed!important;left:72px;right:72px;top:44px;bottom:6px;width:auto!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);grid-auto-rows:max-content;column-gap:14px;row-gap:6px;align-content:center;align-items:center;justify-items:stretch;padding:0;background:none!important;-webkit-backdrop-filter:none;backdrop-filter:none}
+@media (max-height:380px) and (min-aspect-ratio:11/10){
+  #play:has(#ovStart:not([hidden])){box-shadow:none!important}#play:has(#ovStart:not([hidden]))::after{display:none!important}
+  body:has(#ovStart:not([hidden])) .side .ask,body:has(#ovStart:not([hidden])) .side .hud,body:has(#ovSkin:not([hidden])) .side .ask,body:has(#ovSkin:not([hidden])) .side .hud,body:has(#ovPay:not([hidden])) .side .ask,body:has(#ovPay:not([hidden])) .side .hud{display:none!important}
+  #ovStart:not([hidden]){position:fixed!important;left:150px;right:24px;padding-inline:calc((100% - min(100%,560px))/2)!important;top:8px;bottom:6px;width:auto!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);grid-auto-rows:max-content;column-gap:14px;row-gap:6px;align-content:center;align-items:center;justify-items:stretch;padding:0;background:none!important;-webkit-backdrop-filter:none;backdrop-filter:none}
   #ovStart .cwHero,#ovStart #stH:not(:empty):not([hidden]){display:none}
   #ovStart .tiles{display:contents!important}
-  #ovStart .tile.daily{grid-column:1;grid-row:1;order:0}
-  #ovStart #npResume{grid-column:1;grid-row:3;margin:0}
+  #ovStart .tile.daily{grid-column:1;grid-row:3;order:0}
+  #ovStart #npResume{grid-column:1;grid-row:5;margin:0}
   #ovStart:not([hidden]){align-content:start!important;padding-top:4px!important}
-  #ovStart .difs{grid-column:1;grid-row:2;justify-self:center}
+  #ovStart .difs{grid-column:1;grid-row:4;justify-self:center}
   #ovStart .tile:not(.daily){grid-column:2!important}
   #ovStart #npResume{height:48px}#ovStart #npResume .npr-go{height:48px;min-height:0;padding:0 14px;font-size:14px}#ovStart #npResume .npr-x{width:40px;height:40px}
 }
@@ -206,7 +206,7 @@ html[data-theme=light] #ovStart .tile:not(.daily) .main,html[data-theme=light] #
 /* 3 nút ĐỘ KHÓ: bỏ viền/gạch màu cong ở đáy, nền phẳng; nút đang chọn = màu nhấn đặc */
 #ovStart .difs .dif{border:0!important;box-shadow:none!important;background:color-mix(in srgb,var(--panel) 80%,transparent)}#ovStart .difs .dif.on{background:var(--accent)!important}
 /* DANH SÁCH MỘT CỘT (chủ site: "không thích dạng lưới 2 cột"): mỗi chuyến bay MỘT HÀNG phẳng: emoji | tên | 🎨 (giống Pop/Đập Deadline), mọi cỡ trừ điện thoại ngang (đã có bố cục 2 cột toàn màn riêng) */
-@media not all and (max-height:520px) and (min-aspect-ratio:11/10){
+@media not all and (max-height:380px) and (min-aspect-ratio:11/10){
   #ovStart .tiles{display:flex!important;flex-direction:column;gap:8px!important;width:100%;max-width:none}
   #ovStart .tile:not(.daily){width:100%;grid-column:auto!important;border-radius:18px}
   #ovStart .tile:not(.daily) .main{flex-direction:row!important;justify-content:flex-start!important;align-items:center;gap:12px!important;min-height:56px!important;padding:8px 56px 8px 12px!important;text-align:left}
@@ -215,16 +215,97 @@ html[data-theme=light] #ovStart .tile:not(.daily) .main,html[data-theme=light] #
   #ovStart .tile:not(.daily) .skinBtn{right:8px!important;top:50%!important;transform:translateY(-50%)!important;width:40px!important;height:40px!important}
 }
 /* MÀN CHỌN: bỏ thẻ "Chọn một chuyến bay nhé" + ⭐ điểm ở MỌI cỡ (web/iPad/điện thoại); hai thứ này chỉ cần khi đang bay */
-body:has(#ovStart:not([hidden])) .side .ask,body:has(#ovStart:not([hidden])) .side .hud{display:none!important}
+body:has(#ovStart:not([hidden])) .side .ask,body:has(#ovStart:not([hidden])) .side .hud,body:has(#ovSkin:not([hidden])) .side .ask,body:has(#ovSkin:not([hidden])) .side .hud,body:has(#ovPay:not([hidden])) .side .ask,body:has(#ovPay:not([hidden])) .side .hud{display:none!important}
 /* MÀN CHỌN (mọi cỡ): bỏ khung viền xanh + nền hộp bao quanh, căn nội dung GIỮA khung */
-#play:has(#ovStart:not([hidden])){background:none!important;box-shadow:none!important;border:0!important}
+#play:has(#ovStart:not([hidden])){box-shadow:none!important;border:0!important}
 #play:has(#ovStart:not([hidden]))::after{display:none!important}
-@media not all and (max-height:520px) and (min-aspect-ratio:11/10){#ovStart:not([hidden]){justify-content:center!important}#ovStart .cwHero{flex:none!important;min-height:120px;margin-top:34px}}
+@media not all and (max-height:380px) and (min-aspect-ratio:11/10){#ovStart:not([hidden]){justify-content:center!important}#ovStart .cwHero{flex:none!important;min-height:120px;margin-top:34px}}
 #ovStart:not([hidden]){background:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
 /* màn chọn neo TRÊN (không căn giữa): thẻ "Tiếp tục ván dở" hiện muộn không làm cả khối nhảy lên xuống khi đổi cấp độ */
 #ovStart:not([hidden]){justify-content:flex-start!important;padding-top:6px}
+/* popup giao diện Cánh Nhỏ ở điện thoại dọc thấp: ảnh ô thấp lại để nút quay lại nằm trong thẻ */
+@media (max-width:520px) and (orientation:portrait) and (max-height:700px){#ovSkin .skgrid .sk img{aspect-ratio:2/1!important;height:auto!important;max-height:56px;object-fit:cover}#ovSkin .skgrid .sk{padding:4px!important;gap:2px!important}#ovSkin .skgrid{gap:6px!important}#ovSkin h2{font-size:17px!important}}
+@media (max-width:520px) and (orientation:portrait) and (max-height:640px){#ovSkin h2{display:none!important}#ovSkin .skgrid .sk img{max-height:38px!important}#ovSkin>.npc{padding-top:10px!important}#ovSkin #skBack{min-height:44px!important;height:44px!important}}
+/* ĐIỆN THOẠI NGANG cao 381-520px: GIỮ BỐ CỤC CỦA MÀN DỌC (một cột, ở giữa, các hàng đều nhau) nhưng gọn: hàng 38px, khe 6px, không linh vật (chủ site: "để dọc sao đó xoay ngang") */
+@media (max-height:520px) and (min-height:381px) and (min-aspect-ratio:11/10){
+  #ovStart:not([hidden]){justify-content:center!important;gap:6px!important;padding:6px 8px!important}
+  #ovStart .cwHero{display:none!important}
+  #ovStart .tiles{gap:6px!important;max-width:520px;margin-inline:auto}
+  #ovStart .tile.daily{min-height:38px;padding:3px 12px;font-size:15px}#ovStart .tile.daily .de{font-size:20px}
+  #ovStart .tile:not(.daily) .main{min-height:38px!important;padding:3px 50px 3px 12px!important;gap:10px!important}
+  #ovStart .tile:not(.daily) .tb{font-size:22px!important}
+  #ovStart .tile:not(.daily) .nm{font-size:14px!important}
+  #ovStart .tile:not(.daily) .skinBtn{width:30px!important;height:30px!important;min-width:30px!important;min-height:30px!important;right:6px!important}
+  #ovStart .difs .dif{width:32px;height:32px;min-width:32px;min-height:32px;font-size:15px}
+  #ovStart #npResume{height:44px}#ovStart #npResume .npr-go{height:44px;min-height:0;font-size:14px}#ovStart #npResume .npr-x{width:38px;height:38px}
+}
+/* máy RẤT thấp (≤380px, 2 cột): hàng đều nhau cố định 40px */
+@media (max-height:380px) and (min-aspect-ratio:11/10){
+  #ovStart:not([hidden]){grid-template-rows:repeat(5,40px)!important;grid-auto-rows:40px!important;row-gap:6px!important;align-content:center!important}
+  #ovStart .tile:not(.daily){height:40px;align-self:center}#ovStart .tile:not(.daily) .main{min-height:0!important;height:100%}
+  #ovStart .tile.daily{height:34px;min-height:0;align-self:center}#ovStart #npResume{height:40px}#ovStart #npResume .npr-go{height:40px}
+}
+@media (max-height:340px) and (min-aspect-ratio:11/10){#ovStart .tile:not(.daily) .nm{font-size:11px!important;letter-spacing:-.2px}#ovStart .tile:not(.daily) .main{padding-right:40px!important;gap:6px!important}#ovStart .tile:not(.daily) .skinBtn{width:28px!important;height:28px!important;min-width:28px!important;min-height:28px!important}#ovStart #npResume .npr-go{font-size:12px!important;padding:0 8px!important}}
+/* TRONG CỔNG (html.np-hudg: nút điều khiển nằm ở rail của cổng, không chiếm cột trái trong khung): khối 2 cột căn GIỮA khung, tính từ dưới dòng tên game, không bị ép sang phải */
+@media (max-height:380px) and (min-aspect-ratio:11/10){html.np-hudg #ovStart:not([hidden]){left:12px!important;right:12px!important;top:44px!important;padding-inline:calc((100% - min(100%,620px))/2)!important}}
+/* LINH VẬT MÀN NGANG (chủ site: "màn ngang không có linh vật"): trong CỔNG (html.np-hudg) cao 381-799px → linh vật to nằm NGOÀI, bên TRÁI khối danh sách (danh sách giữ một cột như màn dọc) */
+@media (min-aspect-ratio:11/10) and (min-height:381px) and (max-height:799px) and (min-width:700px){
+  html.np-hudg #ovStart .cwHero{display:flex!important;position:absolute;right:calc(100% + 6px);left:auto;top:auto;bottom:3%;height:48%;width:min(30vw,250px);align-items:center;justify-content:center;font-size:clamp(56px,17vh,110px);line-height:1;white-space:nowrap;overflow:visible;animation:cwBob 2.8s ease-in-out infinite;margin:0;pointer-events:none}
+}
+/* máy ≤380px (2 cột sẵn): linh vật nằm cột trái dưới cùng (hàng 4-5, trống) */
+@media (min-aspect-ratio:11/10) and (max-height:380px){
+  #ovStart .cwHero{display:flex!important;grid-column:1;grid-row:1 / span 2;align-items:center;justify-content:center;font-size:clamp(44px,22vh,80px);line-height:1;white-space:nowrap;overflow:hidden;min-height:0;animation:cwBob 2.8s ease-in-out infinite}
+}
+/* HÀNG CHUYẾN BAY KHI CÓ ĐIỂM CAO: huy hiệu 🏆 một dòng, không bị bóp; tên chiếm phần còn lại (tối đa 1 dòng, cắt …), hàng cao đều → không đẩy hàng cuối ra đáy */
+#ovStart .tile:not(.daily) .main{flex-wrap:nowrap!important}
+#ovStart .tile:not(.daily) .nm{flex:1 1 auto;min-width:0;white-space:nowrap!important;overflow:hidden;text-overflow:ellipsis;display:block!important;-webkit-line-clamp:unset!important}
+#ovStart .tile:not(.daily) .best{display:inline-flex!important;flex:none;align-items:center;white-space:nowrap;margin-left:auto;padding:1px 6px!important;font-size:11px!important;line-height:1.5;min-width:0;width:auto;height:auto}
+/* màn ngang trong cổng: linh vật + danh sách thành MỘT CỤM căn giữa (linh vật sát bên trái danh sách) */
+@media (min-aspect-ratio:11/10) and (min-height:99999px) and (min-width:700px){
+  html.np-hudg #ovStart .cwHero{right:calc(100% + 24px)!important;width:min(22vw,200px)!important}
+}
+@media (max-height:380px) and (min-aspect-ratio:11/10){#ovStart .tile:not(.daily) .best{display:none!important}}
+/* WEB / MÀN NGANG TỪ 521px CAO (trong cổng): linh vật LÊN TOP, căn GIỮA phía trên danh sách (chủ site: "linh vật lệch, center hoặc để lên top") */
+@media (min-aspect-ratio:11/10) and (min-height:521px) and (min-width:700px){
+  html.np-hudg #ovStart .cwHero{display:flex!important;position:static!important;order:-9;width:100%!important;height:auto!important;min-height:0;flex:none!important;justify-content:center;align-items:center;margin:0 0 4px!important;font-size:clamp(72px,21vh,170px)!important;line-height:1.05;right:auto!important;bottom:auto!important;overflow:visible}
+  html.np-hudg #ovStart:not([hidden]){justify-content:center!important}
+}
+/* màn ngang 381-520px cao: linh vật căn GIỮA DỌC bên trái danh sách */
+@media (min-aspect-ratio:11/10) and (min-height:381px) and (max-height:520px) and (min-width:700px){
+  html.np-hudg #ovStart .cwHero{top:auto!important;bottom:3%!important;height:36%!important;align-items:center}
+}
+/* máy ngang thấp: không vẽ khung chơi 3:4 nền xanh phía sau màn chọn 2 cột */
+@media (max-height:380px) and (min-aspect-ratio:11/10){#play:has(#ovStart:not([hidden])){background:none!important}}
+/* POPUP GIAO DIỆN, MÀN NGANG THẤP: phủ mờ cả màn (không lộ khung 3:4 viền xanh), 5 ô căn GIỮA có tên */
+@media (max-height:520px) and (min-aspect-ratio:11/10){
+  #play:has(#ovSkin:not([hidden]))::after,#play:has(#ovPay:not([hidden]))::after{display:none!important}
+  #ovSkin:not([hidden]){position:fixed!important;inset:0!important;width:auto!important;height:auto!important;background:rgba(8,6,24,.62)!important;-webkit-backdrop-filter:blur(3px)!important;backdrop-filter:blur(3px)!important;align-items:center;justify-content:center;padding:8px!important}
+  #ovSkin .skgrid{display:flex!important;flex-wrap:nowrap!important;justify-content:center!important;gap:8px!important;max-width:none!important}
+  #ovSkin .skgrid .sk{flex:0 0 92px;width:92px;padding:5px 4px!important}
+  #ovSkin .skgrid .sk span{display:block!important;font-size:11px;line-height:1.1;text-align:center;margin-top:3px}
+  #ovSkin .skgrid .sk img{width:100%!important;height:auto!important;aspect-ratio:3/4;max-height:92px;object-fit:cover}
+}
 /* thanh trên màn chọn: tên game một dòng riêng, không cắt "…" */
 @media (max-width:520px){.top{flex-wrap:wrap}.top h1{order:9;flex:1 1 100%;white-space:normal;overflow:visible;text-overflow:clip;line-height:1.1}}
+/* ===== MÀN CHỌN — MÀN NGANG ≤520px CAO: ĐÚNG BỐ CỤC CÁC GAME COZY KHÁC (đối chiếu Gà Mẹ 956x440 + 667x375) =====
+   2 CỘT: TRÁI = linh vật to + thẻ hôm nay (+ tiếp tục ván dở); PHẢI = hàng cấp độ ở trên, rồi 5 chuyến bay. Khối này đặt SAU mọi luật vá trước nên thắng tất cả. */
+@media (max-height:520px) and (min-aspect-ratio:11/10){
+  html #ovStart:not([hidden]){position:fixed!important;left:84px!important;right:16px!important;top:46px!important;bottom:8px!important;width:auto!important;height:auto!important;padding:0!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)!important;grid-template-rows:repeat(6,minmax(0,1fr))!important;grid-auto-rows:minmax(0,1fr)!important;column-gap:18px!important;row-gap:6px!important;align-content:stretch!important;align-items:center!important;justify-content:stretch!important;background:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  html.np-hudg #ovStart:not([hidden]){left:12px!important;right:12px!important;top:44px!important}
+  html #ovStart #stH{display:none!important}
+  html #ovStart .cwHero{display:flex!important;position:static!important;grid-column:1!important;grid-row:1 / span 3!important;width:auto!important;height:auto!important;align-self:stretch!important;align-items:center;justify-content:center;margin:0!important;font-size:clamp(52px,21vh,104px)!important;line-height:1;white-space:nowrap;overflow:hidden;animation:cwBob 2.8s ease-in-out infinite;pointer-events:none;padding-top:10px}
+  html #ovStart #cards{display:contents!important}
+  html #ovStart .tile.daily{grid-column:1!important;grid-row:4!important;align-self:center;height:auto!important;min-height:36px!important;order:0}
+  html #ovStart #npResume{grid-column:1!important;grid-row:5 / span 2!important;align-self:start;margin:0!important;height:44px}
+  html #ovStart #npResume .npr-go{height:44px!important;min-height:0!important;font-size:14px!important}html #ovStart #npResume .npr-x{width:38px!important;height:38px!important}
+  html #ovStart .difs{grid-column:2!important;grid-row:1!important;justify-self:center;align-self:center;order:0}
+  html #ovStart .tile:not(.daily){grid-column:2!important;grid-row:auto!important;height:100%!important;min-height:0!important;max-height:44px;align-self:center}
+  html #ovStart .tile:not(.daily) .main{height:100%!important;min-height:0!important;padding-block:2px!important}
+  html #ovStart #vsBox,html #ovStart #chGo{grid-column:1!important}
+  html body #ovStart #cards .tile:not(.daily):nth-child(n of .tile){grid-column:2!important;grid-row:auto!important}   /* thắng luật "thẻ lẻ cuối rộng hết hàng" */
+  html.np-hudg .app .top{position:fixed!important;top:8px!important;left:76px!important;width:auto!important;max-width:calc(100vw - 150px)!important;margin:0!important;padding:0!important;z-index:6}
+  html.np-hudg .app .top h1{font-size:18px!important;white-space:nowrap!important}
+}
 /* --- màn giải thích cách chơi trước khi bắt đầu --- */
 #ovHow{background:color-mix(in srgb,var(--bg) 60%,transparent);padding:10px;-webkit-backdrop-filter:none;backdrop-filter:none}#ovHow h2{background:var(--panel);color:var(--ink);padding:4px 16px;border-radius:999px;box-shadow:var(--shadow);font-size:clamp(20px,6vw,28px)}
 .hwE{display:none}
