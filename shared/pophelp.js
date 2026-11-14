@@ -22,7 +22,7 @@
   css.textContent =
     "#phBtn{color:var(--ink,inherit)}#phBtn.ph-new{animation:phNudge 1.1s ease-in-out 4}" +
     "@keyframes phNudge{0%,100%{transform:scale(1)}40%{transform:scale(1.18)}}" +
-    "#phOv{position:absolute;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;padding:calc(var(--u,4px)*4);box-sizing:border-box;background:rgba(8,6,22,.72);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);font-family:var(--font);color:var(--ink,#222);-webkit-user-select:none;user-select:none}" +
+    "#phOv{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:calc(var(--u,4px)*4);box-sizing:border-box;background:rgba(8,6,22,.72);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);font-family:var(--font);color:var(--ink,#222);-webkit-user-select:none;user-select:none}" +
     "#phOv[hidden]{display:none!important}" +
     "#phCard{position:relative;display:flex;flex-direction:column;gap:calc(var(--f,16px)*.55);width:100%;max-width:100%;max-height:100%;box-sizing:border-box;overflow:hidden;padding:calc(var(--f,16px)*.9);border-radius:calc(var(--f,16px)*1.5);background:linear-gradient(165deg,#2b2064,#171236 62%,#120e2b);color:#fff;border:calc(var(--f,16px)*.16) solid rgba(170,150,255,.6);box-shadow:0 10px 36px rgba(0,0,0,.55),0 0 28px rgba(124,92,255,.38),inset 0 1px 0 rgba(255,255,255,.18);animation:phIn .18s ease-out}" +
     "@keyframes phIn{from{transform:scale(.92);opacity:0}}" +
@@ -59,7 +59,10 @@
   function stopSay() { try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {} speaking = false; var s = document.getElementById("phSay"); if (s) s.classList.remove("on"); }
 
   function fit() {
-    var w = ov.clientWidth, h = ov.clientHeight; if (!w || !h) return;
+    /* lớp mờ phủ TRỌN cửa sổ; thẻ vẫn nằm trong khung #play (cột game) */
+    var pr = document.getElementById("play").getBoundingClientRect(), W = innerWidth, H = innerHeight, w = pr.width, h = pr.height; if (!w || !h) return;
+    var pd = w / 100 * 4;
+    ov.style.padding = Math.max(0, pr.top + pd) + "px " + Math.max(0, W - pr.right + pd) + "px " + Math.max(0, H - pr.bottom + pd) + "px " + Math.max(0, pr.left + pd) + "px";
     ov.style.setProperty("--u", (w / 100) + "px");
     var f = Math.max(13, Math.min(26, w / 17)), g = 0;
     card.style.setProperty("--f", f + "px");
@@ -103,7 +106,7 @@
     if (!seen()) btn.classList.add("ph-new");
     ov = document.createElement("div"); ov.id = "phOv"; ov.hidden = true;
     ov.innerHTML = '<div id="phCard" role="dialog" aria-modal="true"><div id="phHd"><h2 id="phTt"></h2><button id="phSay" type="button">' + ICO_SND + '</button><button id="phX" type="button">' + ICO_X + '</button></div><ul id="phLs"></ul><p id="phNt"></p><button id="phGo" type="button"></button></div>';
-    play.appendChild(ov); card = ov.firstChild;
+    document.body.appendChild(ov); card = ov.firstChild;
     btn.onclick = open;
     ov.querySelector("#phGo").onclick = close;
     ov.querySelector("#phSay").onclick = say;
