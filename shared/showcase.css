@@ -300,3 +300,18 @@ html.playing.sc-ok .foot,html.playing #fFab,html.playing #fInfo,html.playing #fP
 /* nút khoá trẻ em ở chân trang bản web: cùng kiểu với cụm nút di động (không viền trắng dày + quầng sáng rộng làm nhìn to và lệch so với chữ "Last updated") */
 html[data-app] button#lock:not(.pri):not(.on){background:linear-gradient(135deg,#7C3AED 0%,#C026D3 50%,#F0561A 100%)!important;background-image:linear-gradient(135deg,#7C3AED 0%,#C026D3 50%,#F0561A 100%)!important;color:#fff!important;border:2px solid rgba(255,255,255,.75)!important;box-shadow:0 4px 14px rgba(192,38,211,.5),0 2px 6px rgba(0,0,0,.3)!important;box-sizing:border-box;padding:0}
 html[data-app] #lock .ic{color:#fff;stroke-width:2.5;filter:none}
+
+/* Popup ⓘ (bản quyền, ngày cập nhật, liên kết): KÍNH ĐÊM Night Pass ở cả sáng lẫn tối — nền tím đêm, viền gradient tím–cam, quầng tím, chữ sáng, liên kết tím nhạt có vạch ngăn, "Night Pass" nổi màu gradient. */
+html:root.sc-ok #fPop{border:1.5px solid transparent;background:linear-gradient(160deg,#2A2270,#14152A) padding-box,linear-gradient(135deg,#9B83FF,#FF9A6B) border-box;color:#F1F2FF;box-shadow:0 14px 36px rgba(0,0,0,.5),0 0 26px rgba(124,92,255,.35);border-radius:20px;padding:14px 16px}
+html:root.sc-ok #fPop p{color:#F1F2FF}
+html:root.sc-ok #fPop .fpu{color:#C9CCF0;opacity:.85;padding-bottom:8px;margin-bottom:6px;border-bottom:1px solid rgba(167,150,255,.28)}
+html:root.sc-ok #fPop a{color:#CFC2FF;padding:9px 2px;border-bottom:1px solid rgba(167,150,255,.14)}
+html:root.sc-ok #fPop a:last-child{border-bottom:0}
+html:root.sc-ok #fPop a:hover,html:root.sc-ok #fPop a:focus-visible{color:#FFB48A;outline:0}
+/* Giao diện SÁNG: cùng bố cục Night Pass nhưng nền oải hương sáng + chữ tối (không còn hộp tối giữa trang sáng). */
+html:root[data-theme=light].sc-ok #fPop{background:linear-gradient(160deg,#FFFFFF,#EEE9FF) padding-box,linear-gradient(135deg,#9B83FF,#FF9A6B) border-box;color:#241B3A;box-shadow:0 14px 32px rgba(80,50,160,.22),0 0 22px rgba(124,92,255,.22)}
+html:root[data-theme=light].sc-ok #fPop p{color:#241B3A}
+html:root[data-theme=light].sc-ok #fPop .fpu{color:#5B5575;border-bottom-color:rgba(112,80,242,.22)}
+html:root[data-theme=light].sc-ok #fPop a{color:#5B3FD6;border-bottom-color:rgba(112,80,242,.14)}
+html:root[data-theme=light].sc-ok #fPop a:last-child{border-bottom:0}
+html:root[data-theme=light].sc-ok #fPop a:hover,html:root[data-theme=light].sc-ok #fPop a:focus-visible{color:#E4571F}

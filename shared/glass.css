@@ -45,6 +45,11 @@ html[data-theme=light] #home :is(.ty,.btn.alt,.chip,.lv):not(.on){background:col
 html[data-theme=light] #home .ty.on{background:color-mix(in srgb,var(--accent) 24%,#fff)!important;color:var(--ink)!important;border-color:var(--accent)!important;box-shadow:0 0 0 .5cqw color-mix(in srgb,var(--accent) 40%,transparent),0 4px 12px rgba(80,50,20,.14)!important}
 html[data-theme=light] #home .ty.lock:not(.on){background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--accent) 7%,#fff) 0 2cqw,color-mix(in srgb,var(--accent) 12%,#fff) 2cqw 4cqw)!important}
 #home :is(.ty,.lv) .t,#home .ty .e{color:inherit}
+/* THẺ LOẠI CHƠI (.ty) = bố cục Night Pass ở CẢ sáng lẫn tối (chủ site: "layout dạng night pass cho các thẻ này"): nền tím đêm ĐẶC (không xám), VIỀN GRADIENT tím–cam, quầng tím, chữ sáng, 👑 trái + 🔒 phải trên. Thẻ đang chọn sáng hơn + quầng mạnh; thẻ khoá tối hơn, viền nhạt. */
+html:root #home .ty.ty:not(.on){border:2px solid transparent!important;background:linear-gradient(160deg,#2A2270,#171638) padding-box,linear-gradient(135deg,#9B83FF,#FF9A6B) border-box!important;color:#F1F2FF!important;box-shadow:0 3px 0 rgba(8,9,18,.4),0 0 14px rgba(124,92,255,.32)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html:root #home .ty.ty.on{border:2px solid transparent!important;background:linear-gradient(160deg,#4A3BB0,#251E66) padding-box,linear-gradient(135deg,#B8A6FF,#FFB48A) border-box!important;color:#fff!important;box-shadow:0 0 0 3px rgba(155,131,255,.5),0 0 22px rgba(124,92,255,.7)!important}
+html:root #home .ty.ty.lock:not(.on){background:linear-gradient(160deg,#1E1B4A,#12132A) padding-box,linear-gradient(135deg,rgba(155,131,255,.6),rgba(255,154,107,.6)) border-box!important;color:#C9CCF0!important;box-shadow:0 3px 0 rgba(8,9,18,.4)!important}
+html:root #home .ty.ty.lock .e{filter:grayscale(.45) opacity(.85)}
 #home .fbox{border-color:var(--gl-bd)!important}
 
 /* HOVER: nút/thẻ/tên game phóng to nhẹ + lắc nhẹ một lần (chỉ thiết bị có chuột; tắt khi bật giảm chuyển động; không đè lên trạng thái :active/:disabled). Chỉ dùng transform nên không lag. */

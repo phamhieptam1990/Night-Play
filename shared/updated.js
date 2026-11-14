@@ -10,7 +10,9 @@
 
   var st = document.createElement("style");
   st.textContent = ".site-upd{flex:0 0 100%;order:99;width:100%;box-sizing:border-box;text-align:right;margin:0;padding:0 2px;font:500 10.5px/12px var(--font);color:var(--muted,#777);opacity:.85;white-space:nowrap;user-select:none;-webkit-user-select:none}" +
-    ".site-upd.fixed{position:fixed;right:10px;bottom:calc(6px + env(safe-area-inset-bottom));width:auto;flex:none;z-index:30;pointer-events:none}.site-upd.inbook{position:absolute;right:20px;bottom:9px;width:auto;flex:none;z-index:5;font-size:11px;letter-spacing:.02em;color:var(--paper-ink,#444);opacity:.62;pointer-events:none}@media print{.site-upd{display:none}}";
+    ".site-upd.fixed{position:fixed;right:10px;bottom:calc(6px + env(safe-area-inset-bottom));width:auto;flex:none;z-index:30;pointer-events:none}.site-upd.inbook{position:absolute;right:20px;bottom:9px;width:auto;flex:none;z-index:5;font-size:11px;letter-spacing:.02em;color:var(--paper-ink,#444);opacity:.62;pointer-events:none}@media print{.site-upd{display:none}}" +
+    /* Điện thoại: chân trang cổng = MỘT hàng ngang — "Cập nhật lần cuối" bên trái, nút khoá bên phải (trước: nút khoá một hàng, chữ hàng dưới, trái trống) */
+    "@media (max-width:640px){.foot>.site-upd{flex:1 1 0;order:0;width:auto;min-width:0;text-align:left;white-space:normal;font-size:12px;line-height:1.25;padding:0 2px 0 0;align-self:center}}";
   document.head.appendChild(st);
 
   var el = document.createElement("div"); el.className = "site-upd";

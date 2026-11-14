@@ -1343,3 +1343,76 @@ html[data-theme="light"] .app:has(h1[data-pt]) #home:not([hidden]),html[data-the
   html.np-strip .app:has(h1[data-pt]) #home .tiles>.tile>b{font-size:16px!important}
   html.np-strip .app:has(h1[data-pt]) #ovStart .cards>.card>.main span:not(.e){font-size:15px!important;font-weight:800!important}
 }
+
+/* Vẽ Chữ Thành Quái Vật, màn dọc thấp/có thanh trượt: nút Album chỉ còn ICON 📖 (vuông 56px) để nút "Quái vật hôm nay" bên trái dài ra. */
+@media (max-aspect-ratio:11/10) and (max-width:520px) and (max-height:719px){
+  html:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home{grid-template-columns:minmax(0,1fr) 56px!important}
+  html:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.abar{width:56px!important;min-width:56px!important;padding:0!important;justify-content:center!important}
+  html:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.abar>span+span{display:none!important}
+  html:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.abar>span:first-child{font-size:0!important}
+  html:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.abar>span:first-child::first-letter{font-size:26px!important}
+}
+@media (max-aspect-ratio:11/10) and (min-height:720px) and (max-height:899px) and (max-width:520px){
+  html.np-strip:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home{grid-template-columns:minmax(0,1fr) 56px!important}
+  html.np-strip:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.abar{width:56px!important;min-width:56px!important;padding:0!important;justify-content:center!important}
+  html.np-strip:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.abar>span+span{display:none!important}
+  html.np-strip:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.abar>span:first-child{font-size:0!important}
+  html.np-strip:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.abar>span:first-child::first-letter{font-size:26px!important}
+}
+/* Màn chọn ẩn thì ẨN THẬT: các luật display:grid!important ở trên đè thuộc tính hidden → linh vật (#home::before) lộ trong khung đang chơi. */
+html:root:root:root:root .app #home[hidden],html:root:root:root:root .app #village[hidden],html:root:root:root:root .app #ovStart[hidden]{display:none!important}
+
+/* NÚT CẤP ĐỘ (.lvb) kiểu NIGHT PASS ở cả sáng lẫn tối: chưa chọn = kính tím đêm đặc + VIỀN GRADIENT tím–cam + quầng tím + icon sáng; đang chọn giữ màu độ khó nhưng thêm vòng sáng tím + quầng mạnh. */
+html:root:root:root #home .lvs .lvb:not(.on){border:2px solid transparent!important;background:linear-gradient(160deg,#2A2270,#171638) padding-box,linear-gradient(135deg,#9B83FF,#FF9A6B) border-box!important;color:#F1F2FF!important;box-shadow:0 0 12px rgba(124,92,255,.35),0 2px 0 rgba(8,9,18,.45)!important}
+html:root:root:root #home .lvs .lvb.on{border:2px solid #FFB48A!important;box-shadow:0 0 0 3px rgba(155,131,255,.65),0 0 20px rgba(124,92,255,.8)!important}
+
+/* Vẽ Chữ Thành Quái Vật, màn rộng/ngang: hàng chọn cấp độ nằm NGAY DƯỚI quái vật (trên nút "Quái vật hôm nay"); giao diện sáng: màn chọn trong suốt để lộ nền họa tiết (không còn khối trắng-oải hương đè lên nền). */
+@media (min-aspect-ratio:11/10) and (min-height:521px){
+  html:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.lvs{grid-row:2!important}
+  html:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.dbar{grid-row:3!important}
+}
+@media (min-width:700px),(min-aspect-ratio:11/10){
+  html:root:root[data-theme=light] .app:has(h1[data-pt="ve-chu-quai-vat"]) #home:not([hidden]){background:none!important}
+}
+
+/* Vẽ Chữ Thành Quái Vật, ĐIỆN THOẠI NẰM NGANG (khung hud): linh vật cao 4 hàng, "Quái vật hôm nay" và Album mỗi nút MỘT hàng đầy bề ngang (chữ tiếng Việt dài không tràn); danh sách chủ đề bên phải chỉ 1 cột (tên không bị cắt). */
+@media (min-aspect-ratio:11/10) and (max-height:520px){
+html.np-hudg:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home:not([hidden])::before{grid-row:1 / span 3!important;align-self:center!important;font-size:clamp(90px,36vh,150px)!important}
+html.np-hudg:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.dbar{grid-column:1!important;grid-row:4!important;justify-self:stretch!important;width:auto!important}
+html.np-hudg:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.abar{grid-column:1!important;grid-row:5!important;justify-self:stretch!important;width:auto!important}
+html.np-hudg:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .lvs .lvb{width:46px!important;height:46px!important;min-width:46px!important;min-height:46px!important;font-size:24px!important}
+html.np-hudg:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.lvs{gap:12px!important;align-self:start!important}
+html.np-hudg:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>:is(.dbar,.abar){align-items:center!important;line-height:1!important}
+html.np-hudg:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.dbar{align-self:end!important;translate:0 -4.6vh}
+html.np-hudg:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.abar{align-self:start!important;translate:0 -4.6vh}
+html.np-hudg:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>:is(.dbar,.abar)>span{font-size:15px!important;line-height:1.1!important;display:block!important;margin:0!important;padding:0!important}
+html.np-hudg:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>:is(.dbar,.abar)>span::first-letter{font-size:inherit!important;line-height:inherit!important}
+}
+
+/* ĐIỆN THOẠI NẰM NGANG, MỌI GAME POP: cột phải = danh sách MỖI HÀNG MỘT MỤC (tên không bị cắt). Quá 4 mục thì gom thành SLIDE ngang (mỗi trang 4 hàng, vuốt/cuộn-bám; trang sau ló 26px làm gợi ý). */
+@media (min-aspect-ratio:11/10) and (max-height:520px){
+  html.np-hudg:root:root .app:has(h1[data-pt]) #home .tiles{display:grid!important;grid-auto-flow:column!important;grid-template-columns:none!important;grid-template-rows:repeat(4,40px)!important;grid-auto-columns:100%!important;gap:6px 8px!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;align-content:start!important;padding:2px 3px 6px!important;margin-left:-3px!important}
+  html.np-hudg:root:root .app:has(h1[data-pt]) #home .tiles::-webkit-scrollbar{display:none}
+  html.np-hudg:root:root .app:has(h1[data-pt]) #home .tiles:has(>:nth-child(5)){grid-auto-columns:calc(100% - 26px)!important}
+  html.np-hudg:root:root .app:has(h1[data-pt]) #home .tiles>.tile{scroll-snap-align:start;min-width:0!important;width:auto!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:0 0 0 1px var(--pn-tile-ring,rgba(255,255,255,.25)),0 2px 4px rgba(20,10,60,.28)!important}
+}
+/* Linh vật điện thoại nằm ngang: phóng to cho kín khoảng trắng cột trái (mọi game Pop). */
+@media (min-aspect-ratio:11/10) and (max-height:520px){
+  html.np-hudg:root:root .app:has(h1[data-pt]:not([data-pt="ve-chu-quai-vat"])) :is(#home,#village,#ovStart):not([hidden])::before{font-size:clamp(90px,40vh,170px)!important;line-height:1!important}
+}
+/* Màn chọn (#home/#village/#ovStart) trong suốt ở màn ngang giao diện sáng: bỏ khối oải hương có viền lộ giữa màn (mọi game Pop). */
+@media (min-aspect-ratio:11/10){
+  html:root:root[data-theme=light] .app:has(h1[data-pt]) :is(#home,#village,#ovStart):not([hidden]){background:none!important}
+}
+
+/* Điện thoại nằm ngang, mọi game Pop (trừ Vẽ Chữ đã có khối riêng): hai cột canh ĐỀU nhau - linh vật bắt đầu ngang hàng cấp độ, nút "Hôm nay" chạm đáy ngang đáy danh sách bên phải. */
+@media (min-aspect-ratio:11/10) and (max-height:520px){
+  html.np-hudg:root:root .app:has(h1[data-pt]:not([data-pt="ve-chu-quai-vat"])) #home:not([hidden])::before{grid-row:1 / span 4!important;align-self:center!important}
+  html.np-hudg:root:root .app:has(h1[data-pt]:not([data-pt="ve-chu-quai-vat"])) #home>.dbar{align-self:end!important;translate:0 6.3vh}
+}
+/* Điện thoại dọc (thanh trượt): thẻ trong slide = ICON Ở TRÊN, CHỮ Ở DƯỚI. */
+@media (max-aspect-ratio:11/10) and (max-width:520px){
+  html.np-strip:root .app:has(h1[data-pt]) #home .tiles>.tile{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:3px!important;text-align:center!important;padding:8px 8px 6px!important}
+  html.np-strip:root .app:has(h1[data-pt]) #home .tiles>.tile .ti{font-size:30px!important;line-height:1!important;width:auto!important;height:auto!important;margin:0!important}
+  html.np-strip:root .app:has(h1[data-pt]) #home .tiles>.tile b{text-align:center!important;font-size:13px!important;line-height:1.1!important;max-width:100%}
+}
