@@ -65,10 +65,628 @@
   .app .top .ib,.app .top #phBtn{width:52px!important;height:52px!important;min-width:52px!important;min-height:52px!important;max-width:52px!important}
 }
 
+/* MÀN CHỌN (#home) ĐIỆN THOẠI NGANG: không vẽ khung nền bo tròn phía sau (khung hẹp giữa màn hình hở nền ở trên/dưới, trông như lỗi) */
+@media (min-aspect-ratio:11/10) and (max-height:520px){
+  .app:has(#home:not([hidden])) .play,.app:has(#village:not([hidden])) .play,.app:has(#ovStart:not([hidden])) .play{background:none!important;box-shadow:none!important;border:0!important;border-radius:0!important}
+  .app:has(#home:not([hidden])) .play::after{display:none!important}
+  .app #home:not([hidden]){background:none!important;box-shadow:none!important;border-radius:0!important}
+}
+
+@keyframes popMascotBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@media (prefers-reduced-motion:reduce){html.np-hudg .app *::before{animation:none!important}}
+/* MÀN CHỌN POP PLAY — ĐIỆN THOẠI NGANG (trong cổng): ĐÚNG SỐ ĐO BỐ CỤC COZY (đo Cánh Nhỏ 852x393): lưới 2 cột 1fr/1.2fr cách 18px, 6 hàng đều; TRÁI = linh vật hàng 1-3 + thẻ Hôm nay hàng 4 (cao 36px, bo 18px); PHẢI = 3 chip tròn 32px giữa, rồi thẻ cao 44px bo 18px tên 14px đậm, nút 🎨 30px; tên game 1 dòng ~25px sát trái */
+@media (min-aspect-ratio:11/10) and (max-height:520px){
+  html.np-hudg .app .top{position:fixed!important;top:8px!important;left:14px!important;width:auto!important;margin:0!important;padding:0!important;z-index:6}
+  html.np-hudg body:has(#home:not([hidden])) .side .hud,html.np-hudg body:has(#home:not([hidden])) .side .ask,html.np-hudg body:has(#village:not([hidden])) .side .hud,html.np-hudg body:has(#village:not([hidden])) .side .ask,html.np-hudg body:has(#ovStart:not([hidden])) .side .hud,html.np-hudg body:has(#ovStart:not([hidden])) .side .ask{display:none!important}
+  html.np-hudg .app .top h1,html.np-hudg .app .top h1.pt-title{font-size:clamp(17px,3vw,26px)!important;white-space:nowrap!important;overflow:visible!important;line-height:1.1!important}
+  html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home,
+  html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home,
+  html.np-hudg .app:has(h1[data-pt="qua-song"]) #home,
+  html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home,
+  html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home,
+  html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home,
+  html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home,
+  html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home,
+  html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home,
+  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home{position:fixed!important;left:12px!important;right:12px!important;top:44px!important;bottom:8px!important;width:auto!important;height:auto!important;max-height:none!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)!important;grid-template-rows:repeat(6,minmax(0,1fr))!important;column-gap:18px!important;row-gap:6px!important;padding:0!important;margin:0!important;background:none!important;box-shadow:none!important;border-radius:0!important;align-content:stretch!important;align-items:center!important;justify-items:stretch!important;overflow:visible!important;z-index:2}
+  html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home::before,
+  html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home::before,
+  html.np-hudg .app:has(h1[data-pt="qua-song"]) #home::before,
+  html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home::before,
+  html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home::before,
+  html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home::before,
+  html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home::before,
+  html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home::before,
+  html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home::before,
+  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home::before{grid-column:1;grid-row:1 / span 3;align-self:stretch;display:flex;align-items:flex-end;justify-content:center;font-size:clamp(60px,28vh,120px);line-height:1;pointer-events:none;animation:popMascotBob 2.8s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(0,0,0,.35));min-height:0;overflow:hidden;padding-top:0}
+  html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home::before{content:"🚀"}
+  html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home::before{content:"🐸"}
+  html.np-hudg .app:has(h1[data-pt="qua-song"]) #home::before{content:"⛵"}
+  html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home::before{content:"🥊"}
+  html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home::before{content:"🎤"}
+  html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home::before{content:"⏱️"}
+  html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home::before{content:"🎂"}
+  html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home::before{content:"💃"}
+  html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home::before{content:"🌈"}
+  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home::before{content:"👾"}
+  html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .lvs,
+  html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .lvs,
+  html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .lvs,
+  html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .lvs,
+  html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .lvs,
+  html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .lvs,
+  html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .lvs,
+  html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .lvs,
+  html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .lvs,
+  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .lvs{grid-column:2;grid-row:1;justify-self:center;width:auto!important;display:flex!important;gap:8px!important;padding:0!important;margin:0!important;background:none!important;box-shadow:none!important;border:0!important}
+  html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .lvs .lvb,
+  html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .lvs .lvb,
+  html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .lvs .lvb,
+  html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .lvs .lvb,
+  html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .lvs .lvb,
+  html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .lvs .lvb,
+  html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .lvs .lvb,
+  html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .lvs .lvb,
+  html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .lvs .lvb,
+  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .lvs .lvb{flex:none!important;width:32px!important;height:32px!important;min-width:32px!important;min-height:32px!important;padding:0!important;border-radius:50%!important;font-size:15px!important;display:grid!important;place-items:center}
+  html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .lvs .lvb small,
+  html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .lvs .lvb small,
+  html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .lvs .lvb small,
+  html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .lvs .lvb small,
+  html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .lvs .lvb small,
+  html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .lvs .lvb small,
+  html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .lvs .lvb small,
+  html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .lvs .lvb small,
+  html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .lvs .lvb small,
+  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .lvs .lvb small{display:none!important}
+  html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles,
+  html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .tiles,
+  html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .tiles,
+  html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles,
+  html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles,
+  html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles,
+  html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles,
+  html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .tiles,
+  html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .tiles,
+  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles{grid-column:2;grid-row:2 / span 5;display:grid!important;grid-template-columns:1fr!important;grid-auto-rows:44px!important;row-gap:12px!important;align-content:start!important;align-self:start!important;padding-top:4px!important;margin:0!important;min-height:0}
+  html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile,
+  html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile,
+  html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .tiles > .tile,
+  html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile,
+  html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile,
+  html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile,
+  html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile,
+  html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile,
+  html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile,
+  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile{height:44px!important;min-height:0!important;max-height:44px!important;border-radius:18px!important}
+  html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile:not(:has(> .pgb)),
+  html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile:not(:has(> .pgb)),
+  html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .tiles > .tile:not(:has(> .pgb)),
+  html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile:not(:has(> .pgb)),
+  html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile:not(:has(> .pgb)),
+  html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile:not(:has(> .pgb)),
+  html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile:not(:has(> .pgb)),
+  html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile:not(:has(> .pgb)),
+  html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile:not(:has(> .pgb)),
+  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile:not(:has(> .pgb)){padding:0 46px 0 12px!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;gap:10px!important;text-align:left!important}
+  html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile b,
+  html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile b,
+  html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .tiles > .tile b,
+  html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile b,
+  html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile b,
+  html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile b,
+  html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile b,
+  html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile b,
+  html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile b,
+  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile b{font-size:14px!important;font-weight:800!important}
+  html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile .ti,
+  html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile .ti,
+  html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .tiles > .tile .ti,
+  html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile .ti,
+  html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile .ti,
+  html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile .ti,
+  html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile .ti,
+  html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile .ti,
+  html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile .ti,
+  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile .ti,html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile .op,
+  html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile .op,
+  html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .tiles > .tile .op,
+  html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile .op,
+  html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile .op,
+  html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile .op,
+  html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile .op,
+  html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile .op,
+  html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile .op,
+  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile .op{font-size:20px!important;position:static!important;transform:none!important;margin:0!important;flex:none;line-height:1}
+  html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile > button.sk,
+  html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile > button.sk,
+  html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .tiles > .tile > button.sk,
+  html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile > button.sk,
+  html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile > button.sk,
+  html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile > button.sk,
+  html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile > button.sk,
+  html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile > button.sk,
+  html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile > button.sk,
+  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile > button.sk{width:30px!important;height:30px!important;min-width:30px!important;min-height:30px!important;position:absolute!important;right:8px!important;left:auto!important;top:50%!important;bottom:auto!important;transform:translateY(-50%)!important;margin:0!important}
+  html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile > button.sk svg,
+  html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile > button.sk svg,
+  html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .tiles > .tile > button.sk svg,
+  html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile > button.sk svg,
+  html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile > button.sk svg,
+  html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile > button.sk svg,
+  html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile > button.sk svg,
+  html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile > button.sk svg,
+  html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile > button.sk svg,
+  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile > button.sk svg{width:18px!important;height:18px!important}
+  html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .dbar,
+  html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .dbar,
+  html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .dbar,
+  html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .dbar,
+  html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .dbar,
+  html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .dbar,
+  html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .dbar,
+  html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .dbar,
+  html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .dbar,
+  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .dbar{grid-column:1;grid-row:4;align-self:center;height:36px!important;min-height:0!important;border-radius:18px!important;font-size:15px!important;padding:0 14px!important;margin:0!important;width:100%!important;box-sizing:border-box}
+  html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .profBtn,
+  html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .profBtn,
+  html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .profBtn,
+  html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .profBtn,
+  html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .profBtn,
+  html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .profBtn,
+  html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .profBtn,
+  html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .profBtn,
+  html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .profBtn,
+  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .profBtn,html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .abar,
+  html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .abar,
+  html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .abar,
+  html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .abar,
+  html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .abar,
+  html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .abar,
+  html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .abar,
+  html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .abar,
+  html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .abar,
+  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .abar{grid-column:1;grid-row:5;align-self:center;height:36px!important;min-height:0!important;border-radius:18px!important;font-size:15px!important;padding:0 14px!important;margin:0!important;width:100%!important;box-sizing:border-box}
+    html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .dbar > span,
+  html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .dbar > span,
+  html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .dbar > span,
+  html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .dbar > span,
+  html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .dbar > span,
+  html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .dbar > span,
+  html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .dbar > span,
+  html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .dbar > span,
+  html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .dbar > span,
+  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .dbar > span,html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .abar > span,
+  html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .abar > span,
+  html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .abar > span,
+  html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .abar > span,
+  html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .abar > span,
+  html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .abar > span,
+  html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .abar > span,
+  html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .abar > span,
+  html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .abar > span,
+  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .abar > span{font-size:15px!important;display:inline!important;line-height:1.1!important;white-space:nowrap}
+    html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .dbar,
+  html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .dbar,
+  html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .dbar,
+  html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .dbar,
+  html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .dbar,
+  html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .dbar,
+  html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .dbar,
+  html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .dbar,
+  html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .dbar,
+  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .dbar,html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .abar,
+  html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .abar,
+  html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .abar,
+  html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .abar,
+  html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .abar,
+  html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .abar,
+  html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .abar,
+  html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .abar,
+  html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .abar,
+  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .abar{display:flex!important;justify-content:space-between!important;align-items:center!important}
+  html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile:has(> .pgb) > b,
+  html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile:has(> .pgb) > b,
+  html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .tiles > .tile:has(> .pgb) > b,
+  html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile:has(> .pgb) > b,
+  html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile:has(> .pgb) > b,
+  html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile:has(> .pgb) > b,
+  html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile:has(> .pgb) > b,
+  html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile:has(> .pgb) > b,
+  html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile:has(> .pgb) > b,
+  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile:has(> .pgb) > b{grid-row:1 / span 2!important;align-self:center!important}
+  html.np-hudg .app:has(h1[data-pt="lang-cua-be"]) #village{position:fixed!important;left:12px!important;right:12px!important;top:44px!important;bottom:8px!important;width:auto!important;height:auto!important;max-height:none!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)!important;grid-template-rows:repeat(6,minmax(0,1fr))!important;column-gap:18px!important;row-gap:6px!important;padding:0!important;margin:0!important;background:none!important;box-shadow:none!important;border-radius:0!important;align-content:stretch!important;align-items:center!important;justify-items:stretch!important;overflow:visible!important;z-index:2}
+  html.np-hudg .app:has(h1[data-pt="lang-cua-be"]) #village::before{content:"🏡";grid-column:1;grid-row:1 / span 3;align-self:stretch;display:flex;align-items:flex-end;justify-content:center;font-size:clamp(60px,28vh,120px);line-height:1;pointer-events:none;animation:popMascotBob 2.8s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(0,0,0,.35));min-height:0;overflow:hidden;padding-top:0}
+  html.np-hudg .app:has(h1[data-pt="lang-cua-be"]) #village .dbar{grid-column:1;grid-row:4;align-self:center;height:36px!important;min-height:0!important;border-radius:18px!important;font-size:15px!important;padding:0 14px!important;margin:0!important;width:100%!important;box-sizing:border-box}
+  html.np-hudg .app:has(h1[data-pt="lang-cua-be"]) #village .band{grid-column:2;grid-row:span 2;margin:0!important;min-height:0;align-self:stretch}
+  html.np-hudg .app:has(h1[data-pt="pop-fly"]) #ovStart:not([hidden]){position:fixed!important;left:12px!important;right:12px!important;top:44px!important;bottom:8px!important;width:auto!important;height:auto!important;max-height:none!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)!important;grid-template-rows:repeat(6,minmax(0,1fr))!important;column-gap:18px!important;row-gap:6px!important;padding:0!important;margin:0!important;background:none!important;box-shadow:none!important;border-radius:0!important;align-content:stretch!important;align-items:center!important;justify-items:stretch!important;overflow:visible!important;z-index:2}
+  html.np-hudg .app:has(h1[data-pt="pop-fly"]) #ovStart::before{content:"🐦";grid-column:1;grid-row:1 / span 3;align-self:stretch;display:flex;align-items:flex-end;justify-content:center;font-size:clamp(60px,28vh,120px);line-height:1;pointer-events:none;animation:popMascotBob 2.8s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(0,0,0,.35));min-height:0;overflow:hidden;padding-top:0}
+  html.np-hudg .app:has(h1[data-pt="pop-fly"]) #ovStart .cards{grid-column:2;grid-row:1 / span 6;min-height:0;margin:0!important;align-self:center}
+  html.np-hudg .app:has(h1[data-pt="pop-fly"]) #ovStart #pgBtn{grid-column:1;grid-row:4;align-self:center;height:36px!important;min-height:0!important;border-radius:18px!important;font-size:15px!important;padding:0 14px!important;margin:0!important;width:100%!important;box-sizing:border-box}
+}
+
+/* LINH VẬT màn chọn Pop Play — PHONE DỌC / WEB / iPad (trong cổng): GIỐNG COZY — linh vật nằm TRONG cột nội dung, căn giữa, phía trên hàng chip cấp độ; điện thoại dọc thấp (<800px) ẩn linh vật như Cozy */
+@media not all and (min-aspect-ratio:11/10) and (max-height:520px){
+html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="lang-cua-be"]) #village::before,
+html.np-hudg .app:has(h1[data-pt="pop-fly"]) #ovStart::before,
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home::before{display:flex;flex:none;order:-9;align-items:center;justify-content:center;width:100%;font-size:clamp(64px,min(34vw,16vh),150px);line-height:1.15;margin:2px 0 6px;opacity:1!important;position:relative;z-index:3;pointer-events:none;animation:popMascotBob 2.8s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(0,0,0,.3))}
+html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home::before{content:"🚀"}
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home::before{content:"🐸"}
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home::before{content:"⛵"}
+html.np-hudg .app:has(h1[data-pt="lang-cua-be"]) #village::before{content:"🏡"}
+html.np-hudg .app:has(h1[data-pt="pop-fly"]) #ovStart::before{content:"🐦"}
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home::before{content:"🥊"}
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home::before{content:"🎤"}
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home::before{content:"⏱️"}
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home::before{content:"🎂"}
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home::before{content:"💃"}
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home::before{content:"🌈"}
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home::before{content:"👾"}
+html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .lvs,
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .lvs,
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .lvs,
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .lvs,
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .lvs,
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .lvs,
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .lvs,
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .lvs,
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .lvs,
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .lvs{align-self:center!important;width:auto!important;display:flex!important;gap:clamp(8px,1.4vh,16px)!important;padding:0!important;background:none!important;box-shadow:none!important;border:0!important}
+html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .lvs .lvb,
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .lvs .lvb,
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .lvs .lvb,
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .lvs .lvb,
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .lvs .lvb,
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .lvs .lvb,
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .lvs .lvb,
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .lvs .lvb,
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .lvs .lvb,
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .lvs .lvb{flex:none!important;width:clamp(40px,5.2vh,72px)!important;height:clamp(40px,5.2vh,72px)!important;min-width:0!important;padding:0!important;border-radius:50%!important;font-size:clamp(18px,2.6vh,30px)!important;display:grid!important;place-items:center}
+html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .lvs .lvb small,
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .lvs .lvb small,
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .lvs .lvb small,
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .lvs .lvb small,
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .lvs .lvb small,
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .lvs .lvb small,
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .lvs .lvb small,
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .lvs .lvb small,
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .lvs .lvb small,
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .lvs .lvb small{display:none!important}
+}
+@media (max-aspect-ratio:11/10) and (max-height:719px){
+html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="lang-cua-be"]) #village::before,
+html.np-hudg .app:has(h1[data-pt="pop-fly"]) #ovStart::before,
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home::before{display:none!important}
+}
+
+/* thẻ trò chơi cao cố định như Cozy (không giãn kín cột), tên 16px đậm, nút 🎨 36px */
+@media not all and (min-aspect-ratio:11/10) and (max-height:520px){
+html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles,
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .tiles,
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .tiles,
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles,
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles,
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles,
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles,
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .tiles,
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .tiles,
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles{display:grid!important;grid-template-columns:1fr!important;grid-auto-rows:clamp(52px,7vh,64px)!important;row-gap:clamp(6px,1vh,10px)!important;align-content:start!important;flex:none!important;min-height:0}
+  html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile,
+  html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile,
+  html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .tiles > .tile,
+  html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile,
+  html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile,
+  html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile,
+  html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile,
+  html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile,
+  html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile,
+  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile{height:clamp(52px,7vh,64px)!important;min-height:0!important;max-height:none!important;border-radius:20px!important}
+  html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile:not(:has(> .pgb)),
+  html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile:not(:has(> .pgb)),
+  html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .tiles > .tile:not(:has(> .pgb)),
+  html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile:not(:has(> .pgb)),
+  html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile:not(:has(> .pgb)),
+  html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile:not(:has(> .pgb)),
+  html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile:not(:has(> .pgb)),
+  html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile:not(:has(> .pgb)),
+  html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile:not(:has(> .pgb)),
+  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile:not(:has(> .pgb)){padding:0 52px 0 12px!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;gap:10px!important;text-align:left!important}
+html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile b,
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile b,
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .tiles > .tile b,
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile b,
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile b,
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile b,
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile b,
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile b,
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile b,
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile b{font-size:16px!important;font-weight:800!important}
+html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile .ti,
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile .ti,
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .tiles > .tile .ti,
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile .ti,
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile .ti,
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile .ti,
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile .ti,
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile .ti,
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile .ti,
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile .ti,html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile .op,
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile .op,
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .tiles > .tile .op,
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile .op,
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile .op,
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile .op,
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile .op,
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile .op,
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile .op,
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile .op{font-size:26px!important;position:static!important;transform:none!important;margin:0!important;flex:none;line-height:1}
+html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile > button.sk,
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile > button.sk,
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .tiles > .tile > button.sk,
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile > button.sk,
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile > button.sk,
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile > button.sk,
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile > button.sk,
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile > button.sk,
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile > button.sk,
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile > button.sk{width:36px!important;height:36px!important;min-width:36px!important;min-height:36px!important;position:absolute!important;right:10px!important;left:auto!important;top:50%!important;bottom:auto!important;transform:translateY(-50%)!important;margin:0!important}
+html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile > button.sk svg,
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile > button.sk svg,
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .tiles > .tile > button.sk svg,
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile > button.sk svg,
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile > button.sk svg,
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile > button.sk svg,
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile > button.sk svg,
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile > button.sk svg,
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile > button.sk svg,
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile > button.sk svg{width:20px!important;height:20px!important}
+html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .dbar,
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .dbar,
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .dbar,
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .dbar,
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .dbar,
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .dbar,
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .dbar,
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .dbar,
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .dbar,
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .dbar{flex:none!important;height:clamp(44px,5.5vh,56px)!important;min-height:0!important;border-radius:999px!important}
+}
+/* phone dọc: không có khung nền bo tròn phía sau (như Cozy) */
+@media (max-aspect-ratio:11/10) and (max-width:600px){
+  .app:has(#home:not([hidden])) .play,.app:has(#village:not([hidden])) .play,.app:has(#ovStart:not([hidden])) .play{background:none!important;box-shadow:none!important;border:0!important;border-radius:0!important}
+  .app #home:not([hidden]),.app #village:not([hidden]){background:none!important;box-shadow:none!important;border-radius:0!important}
+}
+
+/* MÀN CHỌN POP PLAY — WEB / iPad NGANG (từ 521px cao, trong cổng): BỐ CỤC 2 CỘT NHƯ COZY (Giá Chợ Việt): TRÁI = linh vật rất to căn giữa; PHẢI = chip cấp độ, thẻ Hôm nay, danh sách; tên game to ở góc trái trên */
+@media (min-aspect-ratio:11/10) and (min-height:521px){
+  html.np-hudg .app .top{position:fixed!important;top:22px!important;left:60px!important;width:auto!important;margin:0!important;padding:0!important;z-index:6}
+  html.np-hudg .app .top h1,html.np-hudg .app .top h1.pt-title{font-size:clamp(26px,5.6vh,46px)!important;white-space:nowrap!important;overflow:visible!important;line-height:1.1!important}
+  html.np-hudg .app:has(#home:not([hidden])) .play,html.np-hudg .app:has(#village:not([hidden])) .play,html.np-hudg .app:has(#ovStart:not([hidden])) .play{background:none!important;box-shadow:none!important;border:0!important;border-radius:0!important}
+  html.np-hudg body:has(#home:not([hidden])) .side .ask,html.np-hudg body:has(#village:not([hidden])) .side .ask,html.np-hudg body:has(#ovStart:not([hidden])) .side .ask{display:none!important}
+  html.np-hudg body:has(#home:not([hidden])) .side .hud,html.np-hudg body:has(#village:not([hidden])) .side .hud,html.np-hudg body:has(#ovStart:not([hidden])) .side .hud{position:fixed!important;left:24px!important;bottom:20px!important;top:auto!important;right:auto!important;transform:none!important;z-index:3;margin:0!important}
+html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home,
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home,
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home,
+html.np-hudg .app:has(h1[data-pt="lang-cua-be"]) #village,
+html.np-hudg .app:has(h1[data-pt="pop-fly"]) #ovStart,
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home,
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home,
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home,
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home,
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home,
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home,
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home{position:fixed!important;left:24px!important;right:24px!important;top:clamp(56px,9vh,84px)!important;bottom:20px!important;width:auto!important;height:auto!important;max-height:none!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;grid-template-rows:repeat(5,auto)!important;column-gap:clamp(24px,4vw,64px)!important;row-gap:0!important;align-content:center!important;align-items:center!important;padding:0!important;margin:0!important;background:none!important;box-shadow:none!important;border-radius:0!important;overflow:visible!important;z-index:2}
+html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home > *,
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home > *,
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home > *,
+html.np-hudg .app:has(h1[data-pt="lang-cua-be"]) #village > *,
+html.np-hudg .app:has(h1[data-pt="pop-fly"]) #ovStart > *,
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home > *,
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home > *,
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home > *,
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home > *,
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home > *,
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home > *,
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home > *{grid-column:2!important;margin:0 0 clamp(8px,1.6vh,14px)!important}
+html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="lang-cua-be"]) #village::before,
+html.np-hudg .app:has(h1[data-pt="pop-fly"]) #ovStart::before,
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home::before{grid-column:1!important;grid-row:1 / span 5!important;align-self:center!important;justify-self:center!important;display:flex!important;width:auto!important;order:0!important;margin:0!important;font-size:clamp(100px,32vh,320px)!important;line-height:1.05!important}
+html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile,
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile,
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .tiles > .tile,
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile,
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile,
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile,
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile,
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile,
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile,
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile{height:clamp(56px,9vh,72px)!important}
+html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles,
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .tiles,
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .tiles,
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles,
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles,
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles,
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles,
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .tiles,
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .tiles,
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles{grid-auto-rows:clamp(56px,9vh,72px)!important}
+html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .dbar,
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .dbar,
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .dbar,
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .dbar,
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .dbar,
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .dbar,
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .dbar,
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .dbar,
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .dbar,
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .dbar{height:clamp(60px,10.5vh,80px)!important}
+html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .lvs .lvb,
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .lvs .lvb,
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .lvs .lvb,
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .lvs .lvb,
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .lvs .lvb,
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .lvs .lvb,
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .lvs .lvb,
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .lvs .lvb,
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .lvs .lvb,
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .lvs .lvb{width:clamp(44px,8vh,72px)!important;height:clamp(44px,8vh,72px)!important}
+html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .lvs,
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .lvs,
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .lvs,
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home .lvs,
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home .lvs,
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .lvs,
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .lvs,
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .lvs,
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .lvs,
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .lvs{justify-self:center!important}
+html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home > .lvs,
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home > .lvs,
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home > .lvs,
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home > .lvs,
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home > .lvs,
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home > .lvs,
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home > .lvs,
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home > .lvs,
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home > .lvs,
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home > .lvs{grid-column:1!important;grid-row:3!important;justify-self:center!important}
+html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home > .dbar,
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home > .dbar,
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home > .dbar,
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home > .dbar,
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home > .dbar,
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home > .dbar,
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home > .dbar,
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home > .dbar,
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home > .dbar,
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home > .dbar{grid-column:1!important;grid-row:2!important}
+html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home > #npResume,
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home > #npResume,
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home > #npResume,
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home > #npResume,
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home > #npResume,
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home > #npResume,
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home > #npResume,
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home > #npResume,
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home > #npResume,
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home > #npResume{grid-column:1!important;grid-row:4!important}
+html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home > .profBtn,
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home > .profBtn,
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home > .profBtn,
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home > .profBtn,
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home > .profBtn,
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home > .profBtn,
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home > .profBtn,
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home > .profBtn,
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home > .profBtn,
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home > .profBtn,html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home > .abar,
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home > .abar,
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home > .abar,
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home > .abar,
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home > .abar,
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home > .abar,
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home > .abar,
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home > .abar,
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home > .abar,
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home > .abar{grid-column:1!important;grid-row:5!important}
+html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home > .tiles,
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home > .tiles,
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home > .tiles,
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home > .tiles,
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home > .tiles,
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home > .tiles,
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home > .tiles,
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home > .tiles,
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home > .tiles,
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home > .tiles{grid-column:2!important;grid-row:1 / span 5!important;align-self:center!important;margin:0!important}
+html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="qua-song"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="be-dau-bo-me"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="be-noi-dung-khong"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home::before,
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home::before{grid-row:1!important;font-size:clamp(90px,27vh,270px)!important}
+}
+
+/* POPUP (Giao diện / mua giao diện) — WEB + iPad (trong cổng, game Pop): lớp mờ phủ TOÀN MÀN HÌNH, không chỉ cột giữa (bố cục mới trải rộng hơn cột) */
+@media (min-height:521px){
+  html.np-hudg .app:has(h1[data-pt]) .play .ov:not([hidden]){position:fixed!important;padding-inline:max(16px,calc((100vw - 640px)/2))!important;box-sizing:border-box!important;inset:0!important;width:auto!important;height:auto!important;border-radius:0!important;background:rgba(8,6,24,.62)!important;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);align-items:center;justify-content:center;z-index:30}
+  html.np-hudg .app:has(h1[data-pt]) #ovHow:not([hidden]) #hwBack{display:grid!important;place-items:center;position:fixed!important;top:16px!important;right:16px!important;left:auto!important;width:48px!important;height:48px!important;min-width:48px!important;min-height:48px!important;padding:0!important;margin:0!important;border-radius:50%!important;font-size:0!important;background:rgba(255,255,255,.14)!important;border:1px solid rgba(255,255,255,.4)!important;color:#fff!important;z-index:31;cursor:pointer}
+  html.np-hudg .app:has(h1[data-pt]) #ovHow:not([hidden]) #hwBack::after{content:"✕";font-size:20px;line-height:1;font-weight:800}
+  html.np-hudg .app:has(h1[data-pt]):has(#ovSkin:not([hidden])) .play,html.np-hudg .app:has(h1[data-pt]):has(#ovPay:not([hidden])) .play{background:none!important;box-shadow:none!important;border:0!important;border-radius:0!important}
+  html.np-hudg .app:has(h1[data-pt]):has(#ovSkin:not([hidden])) .play::after,html.np-hudg .app:has(h1[data-pt]):has(#ovPay:not([hidden])) .play::after{display:none!important}
+}
+
+/* LINH VẬT màn chọn Pop Play — PHONE DỌC THẬT: cổng chỉ thêm html.np-hudg khi màn NGANG (hud.js), nên luật dọc KHÔNG được đòi class đó. Cao < 720px ẩn (như Cozy). */
+@media (max-aspect-ratio:11/10) and (min-height:720px){
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home::before,
+.app:has(h1[data-pt="con-vat-an-so"]) #home::before,
+.app:has(h1[data-pt="qua-song"]) #home::before,
+.app:has(h1[data-pt="lang-cua-be"]) #village::before,
+.app:has(h1[data-pt="pop-fly"]) #ovStart::before,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home::before,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home::before,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home::before,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home::before,
+.app:has(h1[data-pt="nhay-theo-so"]) #home::before,
+.app:has(h1[data-pt="thap-vong-mau"]) #home::before,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home::before{display:flex;flex:none;order:-9;align-items:center;justify-content:center;width:100%;font-size:clamp(64px,min(34vw,16vh),150px);line-height:1.15;margin:2px 0 6px;pointer-events:none;position:relative;z-index:3;animation:popMascotBob 2.8s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(0,0,0,.3))}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home::before{content:"🚀"}
+.app:has(h1[data-pt="con-vat-an-so"]) #home::before{content:"🐸"}
+.app:has(h1[data-pt="qua-song"]) #home::before{content:"⛵"}
+.app:has(h1[data-pt="lang-cua-be"]) #village::before{content:"🏡"}
+.app:has(h1[data-pt="pop-fly"]) #ovStart::before{content:"🐦"}
+.app:has(h1[data-pt="be-dau-bo-me"]) #home::before{content:"🥊"}
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home::before{content:"🎤"}
+.app:has(h1[data-pt="bo-me-5-giay"]) #home::before{content:"⏱️"}
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home::before{content:"🎂"}
+.app:has(h1[data-pt="nhay-theo-so"]) #home::before{content:"💃"}
+.app:has(h1[data-pt="thap-vong-mau"]) #home::before{content:"🌈"}
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home::before{content:"👾"}
+}
+
+/* POPUP GIAO DIỆN / NIGHT PASS — ĐIỆN THOẠI DỌC: bỏ khung nền bo tròn phía sau, lớp mờ phủ toàn màn hình (như màn ngang) */
+@media (max-aspect-ratio:11/10){
+  .app:has(#ovSkin:not([hidden])) .play,.app:has(#ovPay:not([hidden])) .play{background:none!important;box-shadow:none!important;border:0!important;border-radius:0!important}
+  .app:has(#ovSkin:not([hidden])) .play::after,.app:has(#ovPay:not([hidden])) .play::after{display:none!important}
+  #ovSkin:not([hidden]),#ovPay:not([hidden]){position:fixed!important;inset:0!important;width:auto!important;height:auto!important;border-radius:0!important;background:rgba(8,6,24,.55)!important;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);align-items:center;justify-content:center}
+}
+
 /* POPUP GIAO DIỆN / NIGHT PASS — ĐIỆN THOẠI NGANG: bỏ khung bo tròn thứ hai phía sau, ✕ 40px sát góc thẻ (không phình), ô giao diện gọn, thẻ nằm giữa */
 @media (min-aspect-ratio:11/10) and (max-height:520px){
   .app:has(#ovSkin:not([hidden])) .play,.app:has(#ovPay:not([hidden])) .play{background:none!important;box-shadow:none!important;border-radius:0!important}
-  #ovSkin:not([hidden]),#ovPay:not([hidden]){background:rgba(8,6,24,.55)!important;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);align-items:center;justify-content:center}
+  #ovSkin:not([hidden]),#ovPay:not([hidden]){position:fixed!important;inset:0!important;width:auto!important;height:auto!important;background:rgba(8,6,24,.55)!important;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);align-items:center;justify-content:center}
   #ovSkin .npc .npx,#ovPay .npc .npx{width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;top:8px!important;right:8px!important;font-size:18px!important}
   #ovSkin>.npc{width:min(94%,600px)!important;padding:8px 12px 10px!important;max-height:calc(100% - 8px)}
   #ovSkin .npc h2{padding:0 52px!important;min-height:40px;font-size:17px!important;margin:0!important}
@@ -87,3 +705,467 @@
   .app .top h1,.app .top h1.pt-title{font-size:15px!important}
   html.np-hudg .app .top h1,html.np-hudg .app .top h1.pt-title{font-size:18px!important;white-space:nowrap!important;line-height:1.15!important}
 }
+
+/* === BẢN DỌC KHÔNG CẦN html.np-hudg (cổng chỉ đặt class này khi màn ngang): cùng luật chip/thẻ/linh vật như trên === */
+/* LINH VẬT màn chọn Pop Play — PHONE DỌC / WEB / iPad (trong cổng): GIỐNG COZY — linh vật nằm TRONG cột nội dung, căn giữa, phía trên hàng chip cấp độ; điện thoại dọc thấp (<800px) ẩn linh vật như Cozy */
+@media (max-aspect-ratio:11/10){
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home::before,
+.app:has(h1[data-pt="con-vat-an-so"]) #home::before,
+.app:has(h1[data-pt="qua-song"]) #home::before,
+.app:has(h1[data-pt="lang-cua-be"]) #village::before,
+.app:has(h1[data-pt="pop-fly"]) #ovStart::before,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home::before,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home::before,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home::before,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home::before,
+.app:has(h1[data-pt="nhay-theo-so"]) #home::before,
+.app:has(h1[data-pt="thap-vong-mau"]) #home::before,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home::before{display:flex;flex:none;order:-9;align-items:center;justify-content:center;width:100%;font-size:clamp(64px,min(34vw,16vh),150px);line-height:1.15;margin:2px 0 6px;opacity:1!important;position:relative;z-index:3;pointer-events:none;animation:popMascotBob 2.8s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(0,0,0,.3))}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home::before{content:"🚀"}
+.app:has(h1[data-pt="con-vat-an-so"]) #home::before{content:"🐸"}
+.app:has(h1[data-pt="qua-song"]) #home::before{content:"⛵"}
+.app:has(h1[data-pt="lang-cua-be"]) #village::before{content:"🏡"}
+.app:has(h1[data-pt="pop-fly"]) #ovStart::before{content:"🐦"}
+.app:has(h1[data-pt="be-dau-bo-me"]) #home::before{content:"🥊"}
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home::before{content:"🎤"}
+.app:has(h1[data-pt="bo-me-5-giay"]) #home::before{content:"⏱️"}
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home::before{content:"🎂"}
+.app:has(h1[data-pt="nhay-theo-so"]) #home::before{content:"💃"}
+.app:has(h1[data-pt="thap-vong-mau"]) #home::before{content:"🌈"}
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home::before{content:"👾"}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home .lvs,
+.app:has(h1[data-pt="con-vat-an-so"]) #home .lvs,
+.app:has(h1[data-pt="qua-song"]) #home .lvs,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home .lvs,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home .lvs,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home .lvs,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home .lvs,
+.app:has(h1[data-pt="nhay-theo-so"]) #home .lvs,
+.app:has(h1[data-pt="thap-vong-mau"]) #home .lvs,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .lvs{align-self:center!important;width:auto!important;display:flex!important;gap:clamp(8px,1.4vh,16px)!important;padding:0!important;background:none!important;box-shadow:none!important;border:0!important}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home .lvs .lvb,
+.app:has(h1[data-pt="con-vat-an-so"]) #home .lvs .lvb,
+.app:has(h1[data-pt="qua-song"]) #home .lvs .lvb,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home .lvs .lvb,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home .lvs .lvb,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home .lvs .lvb,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home .lvs .lvb,
+.app:has(h1[data-pt="nhay-theo-so"]) #home .lvs .lvb,
+.app:has(h1[data-pt="thap-vong-mau"]) #home .lvs .lvb,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .lvs .lvb{flex:none!important;width:clamp(40px,5.2vh,72px)!important;height:clamp(40px,5.2vh,72px)!important;min-width:0!important;padding:0!important;border-radius:50%!important;font-size:clamp(18px,2.6vh,30px)!important;display:grid!important;place-items:center}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home .lvs .lvb small,
+.app:has(h1[data-pt="con-vat-an-so"]) #home .lvs .lvb small,
+.app:has(h1[data-pt="qua-song"]) #home .lvs .lvb small,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home .lvs .lvb small,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home .lvs .lvb small,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home .lvs .lvb small,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home .lvs .lvb small,
+.app:has(h1[data-pt="nhay-theo-so"]) #home .lvs .lvb small,
+.app:has(h1[data-pt="thap-vong-mau"]) #home .lvs .lvb small,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .lvs .lvb small{display:none!important}
+}
+@media (max-aspect-ratio:11/10) and (max-height:719px){
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home::before,
+.app:has(h1[data-pt="con-vat-an-so"]) #home::before,
+.app:has(h1[data-pt="qua-song"]) #home::before,
+.app:has(h1[data-pt="lang-cua-be"]) #village::before,
+.app:has(h1[data-pt="pop-fly"]) #ovStart::before,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home::before,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home::before,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home::before,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home::before,
+.app:has(h1[data-pt="nhay-theo-so"]) #home::before,
+.app:has(h1[data-pt="thap-vong-mau"]) #home::before,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home::before{display:none!important}
+}
+
+/* thẻ trò chơi cao cố định như Cozy (không giãn kín cột), tên 16px đậm, nút 🎨 36px */
+@media (max-aspect-ratio:11/10){
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles,
+.app:has(h1[data-pt="con-vat-an-so"]) #home .tiles,
+.app:has(h1[data-pt="qua-song"]) #home .tiles,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles,
+.app:has(h1[data-pt="nhay-theo-so"]) #home .tiles,
+.app:has(h1[data-pt="thap-vong-mau"]) #home .tiles,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles{display:grid!important;grid-template-columns:1fr!important;grid-auto-rows:clamp(52px,7vh,64px)!important;row-gap:clamp(6px,1vh,10px)!important;align-content:start!important;flex:none!important;min-height:0}
+  .app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile,
+  .app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile,
+  .app:has(h1[data-pt="qua-song"]) #home .tiles > .tile,
+  .app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile,
+  .app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile,
+  .app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile,
+  .app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile,
+  .app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile,
+  .app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile,
+  .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile{height:clamp(52px,7vh,64px)!important;min-height:0!important;max-height:none!important;border-radius:20px!important}
+  .app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile:not(:has(> .pgb)),
+  .app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile:not(:has(> .pgb)),
+  .app:has(h1[data-pt="qua-song"]) #home .tiles > .tile:not(:has(> .pgb)),
+  .app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile:not(:has(> .pgb)),
+  .app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile:not(:has(> .pgb)),
+  .app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile:not(:has(> .pgb)),
+  .app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile:not(:has(> .pgb)),
+  .app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile:not(:has(> .pgb)),
+  .app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile:not(:has(> .pgb)),
+  .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile:not(:has(> .pgb)){padding:0 52px 0 12px!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;gap:10px!important;text-align:left!important}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile b,
+.app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile b,
+.app:has(h1[data-pt="qua-song"]) #home .tiles > .tile b,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile b,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile b,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile b,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile b,
+.app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile b,
+.app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile b,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile b{font-size:16px!important;font-weight:800!important}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile .ti,
+.app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile .ti,
+.app:has(h1[data-pt="qua-song"]) #home .tiles > .tile .ti,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile .ti,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile .ti,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile .ti,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile .ti,
+.app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile .ti,
+.app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile .ti,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile .ti,.app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile .op,
+.app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile .op,
+.app:has(h1[data-pt="qua-song"]) #home .tiles > .tile .op,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile .op,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile .op,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile .op,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile .op,
+.app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile .op,
+.app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile .op,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile .op{font-size:26px!important;position:static!important;transform:none!important;margin:0!important;flex:none;line-height:1}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile > button.sk,
+.app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile > button.sk,
+.app:has(h1[data-pt="qua-song"]) #home .tiles > .tile > button.sk,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile > button.sk,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile > button.sk,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile > button.sk,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile > button.sk,
+.app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile > button.sk,
+.app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile > button.sk,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile > button.sk{width:36px!important;height:36px!important;min-width:36px!important;min-height:36px!important;position:absolute!important;right:10px!important;left:auto!important;top:50%!important;bottom:auto!important;transform:translateY(-50%)!important;margin:0!important}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile > button.sk svg,
+.app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile > button.sk svg,
+.app:has(h1[data-pt="qua-song"]) #home .tiles > .tile > button.sk svg,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile > button.sk svg,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile > button.sk svg,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile > button.sk svg,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile > button.sk svg,
+.app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile > button.sk svg,
+.app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile > button.sk svg,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile > button.sk svg{width:20px!important;height:20px!important}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home .dbar,
+.app:has(h1[data-pt="con-vat-an-so"]) #home .dbar,
+.app:has(h1[data-pt="qua-song"]) #home .dbar,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home .dbar,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home .dbar,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home .dbar,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home .dbar,
+.app:has(h1[data-pt="nhay-theo-so"]) #home .dbar,
+.app:has(h1[data-pt="thap-vong-mau"]) #home .dbar,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .dbar{flex:none!important;height:clamp(44px,5.5vh,56px)!important;min-height:0!important;border-radius:999px!important}
+}
+/* phone dọc: không có khung nền bo tròn phía sau (như Cozy) */
+@media (max-aspect-ratio:11/10) and (max-width:600px){
+  .app:has(#home:not([hidden])) .play,.app:has(#village:not([hidden])) .play,.app:has(#ovStart:not([hidden])) .play{background:none!important;box-shadow:none!important;border:0!important;border-radius:0!important}
+  .app #home:not([hidden]),.app #village:not([hidden]){background:none!important;box-shadow:none!important;border-radius:0!important}
+}
+
+/* MÀN CHỌN POP PLAY — WEB / iPad NGANG (từ 521px cao, trong cổng): BỐ CỤC 2 CỘT NHƯ COZY (Giá Chợ Việt): TRÁI = linh vật rất to căn giữa; PHẢI = chip cấp độ, thẻ Hôm nay, danh sách; tên game to ở góc trái trên */
+@media (min-aspect-ratio:11/10) and (min-height:521px){
+  .app .top{position:fixed!important;top:22px!important;left:60px!important;width:auto!important;margin:0!important;padding:0!important;z-index:6}
+  .app .top h1,.app .top h1.pt-title{font-size:clamp(26px,5.6vh,46px)!important;white-space:nowrap!important;overflow:visible!important;line-height:1.1!important}
+  .app:has(#home:not([hidden])) .play,.app:has(#village:not([hidden])) .play,.app:has(#ovStart:not([hidden])) .play{background:none!important;box-shadow:none!important;border:0!important;border-radius:0!important}
+  html.np-hudg body:has(#home:not([hidden])) .side .ask,html.np-hudg body:has(#village:not([hidden])) .side .ask,html.np-hudg body:has(#ovStart:not([hidden])) .side .ask{display:none!important}
+  html.np-hudg body:has(#home:not([hidden])) .side .hud,html.np-hudg body:has(#village:not([hidden])) .side .hud,html.np-hudg body:has(#ovStart:not([hidden])) .side .hud{position:fixed!important;left:24px!important;bottom:20px!important;top:auto!important;right:auto!important;transform:none!important;z-index:3;margin:0!important}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home,
+.app:has(h1[data-pt="con-vat-an-so"]) #home,
+.app:has(h1[data-pt="qua-song"]) #home,
+.app:has(h1[data-pt="lang-cua-be"]) #village,
+.app:has(h1[data-pt="pop-fly"]) #ovStart,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home,
+.app:has(h1[data-pt="nhay-theo-so"]) #home,
+.app:has(h1[data-pt="thap-vong-mau"]) #home,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home{position:fixed!important;left:24px!important;right:24px!important;top:clamp(56px,9vh,84px)!important;bottom:20px!important;width:auto!important;height:auto!important;max-height:none!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;grid-template-rows:repeat(5,auto)!important;column-gap:clamp(24px,4vw,64px)!important;row-gap:0!important;align-content:center!important;align-items:center!important;padding:0!important;margin:0!important;background:none!important;box-shadow:none!important;border-radius:0!important;overflow:visible!important;z-index:2}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home > *,
+.app:has(h1[data-pt="con-vat-an-so"]) #home > *,
+.app:has(h1[data-pt="qua-song"]) #home > *,
+.app:has(h1[data-pt="lang-cua-be"]) #village > *,
+.app:has(h1[data-pt="pop-fly"]) #ovStart > *,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home > *,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home > *,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home > *,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home > *,
+.app:has(h1[data-pt="nhay-theo-so"]) #home > *,
+.app:has(h1[data-pt="thap-vong-mau"]) #home > *,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home > *{grid-column:2!important;margin:0 0 clamp(8px,1.6vh,14px)!important}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home::before,
+.app:has(h1[data-pt="con-vat-an-so"]) #home::before,
+.app:has(h1[data-pt="qua-song"]) #home::before,
+.app:has(h1[data-pt="lang-cua-be"]) #village::before,
+.app:has(h1[data-pt="pop-fly"]) #ovStart::before,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home::before,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home::before,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home::before,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home::before,
+.app:has(h1[data-pt="nhay-theo-so"]) #home::before,
+.app:has(h1[data-pt="thap-vong-mau"]) #home::before,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home::before{grid-column:1!important;grid-row:1 / span 5!important;align-self:center!important;justify-self:center!important;display:flex!important;width:auto!important;order:0!important;margin:0!important;font-size:clamp(100px,32vh,320px)!important;line-height:1.05!important}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile,
+.app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile,
+.app:has(h1[data-pt="qua-song"]) #home .tiles > .tile,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile,
+.app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile,
+.app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile{height:clamp(56px,9vh,72px)!important}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles,
+.app:has(h1[data-pt="con-vat-an-so"]) #home .tiles,
+.app:has(h1[data-pt="qua-song"]) #home .tiles,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles,
+.app:has(h1[data-pt="nhay-theo-so"]) #home .tiles,
+.app:has(h1[data-pt="thap-vong-mau"]) #home .tiles,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles{grid-auto-rows:clamp(56px,9vh,72px)!important}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home .dbar,
+.app:has(h1[data-pt="con-vat-an-so"]) #home .dbar,
+.app:has(h1[data-pt="qua-song"]) #home .dbar,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home .dbar,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home .dbar,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home .dbar,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home .dbar,
+.app:has(h1[data-pt="nhay-theo-so"]) #home .dbar,
+.app:has(h1[data-pt="thap-vong-mau"]) #home .dbar,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .dbar{height:clamp(60px,10.5vh,80px)!important}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home .lvs .lvb,
+.app:has(h1[data-pt="con-vat-an-so"]) #home .lvs .lvb,
+.app:has(h1[data-pt="qua-song"]) #home .lvs .lvb,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home .lvs .lvb,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home .lvs .lvb,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home .lvs .lvb,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home .lvs .lvb,
+.app:has(h1[data-pt="nhay-theo-so"]) #home .lvs .lvb,
+.app:has(h1[data-pt="thap-vong-mau"]) #home .lvs .lvb,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .lvs .lvb{width:clamp(44px,8vh,72px)!important;height:clamp(44px,8vh,72px)!important}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home .lvs,
+.app:has(h1[data-pt="con-vat-an-so"]) #home .lvs,
+.app:has(h1[data-pt="qua-song"]) #home .lvs,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home .lvs,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home .lvs,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home .lvs,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home .lvs,
+.app:has(h1[data-pt="nhay-theo-so"]) #home .lvs,
+.app:has(h1[data-pt="thap-vong-mau"]) #home .lvs,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .lvs{justify-self:center!important}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home > .lvs,
+.app:has(h1[data-pt="con-vat-an-so"]) #home > .lvs,
+.app:has(h1[data-pt="qua-song"]) #home > .lvs,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home > .lvs,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home > .lvs,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home > .lvs,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home > .lvs,
+.app:has(h1[data-pt="nhay-theo-so"]) #home > .lvs,
+.app:has(h1[data-pt="thap-vong-mau"]) #home > .lvs,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home > .lvs{grid-column:1!important;grid-row:3!important;justify-self:center!important}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home > .dbar,
+.app:has(h1[data-pt="con-vat-an-so"]) #home > .dbar,
+.app:has(h1[data-pt="qua-song"]) #home > .dbar,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home > .dbar,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home > .dbar,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home > .dbar,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home > .dbar,
+.app:has(h1[data-pt="nhay-theo-so"]) #home > .dbar,
+.app:has(h1[data-pt="thap-vong-mau"]) #home > .dbar,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home > .dbar{grid-column:1!important;grid-row:2!important}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home > #npResume,
+.app:has(h1[data-pt="con-vat-an-so"]) #home > #npResume,
+.app:has(h1[data-pt="qua-song"]) #home > #npResume,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home > #npResume,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home > #npResume,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home > #npResume,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home > #npResume,
+.app:has(h1[data-pt="nhay-theo-so"]) #home > #npResume,
+.app:has(h1[data-pt="thap-vong-mau"]) #home > #npResume,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home > #npResume{grid-column:1!important;grid-row:4!important}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home > .profBtn,
+.app:has(h1[data-pt="con-vat-an-so"]) #home > .profBtn,
+.app:has(h1[data-pt="qua-song"]) #home > .profBtn,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home > .profBtn,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home > .profBtn,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home > .profBtn,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home > .profBtn,
+.app:has(h1[data-pt="nhay-theo-so"]) #home > .profBtn,
+.app:has(h1[data-pt="thap-vong-mau"]) #home > .profBtn,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home > .profBtn,.app:has(h1[data-pt="ten-lua-cua-be"]) #home > .abar,
+.app:has(h1[data-pt="con-vat-an-so"]) #home > .abar,
+.app:has(h1[data-pt="qua-song"]) #home > .abar,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home > .abar,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home > .abar,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home > .abar,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home > .abar,
+.app:has(h1[data-pt="nhay-theo-so"]) #home > .abar,
+.app:has(h1[data-pt="thap-vong-mau"]) #home > .abar,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home > .abar{grid-column:1!important;grid-row:5!important}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home > .tiles,
+.app:has(h1[data-pt="con-vat-an-so"]) #home > .tiles,
+.app:has(h1[data-pt="qua-song"]) #home > .tiles,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home > .tiles,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home > .tiles,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home > .tiles,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home > .tiles,
+.app:has(h1[data-pt="nhay-theo-so"]) #home > .tiles,
+.app:has(h1[data-pt="thap-vong-mau"]) #home > .tiles,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home > .tiles{grid-column:2!important;grid-row:1 / span 5!important;align-self:center!important;margin:0!important}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home::before,
+.app:has(h1[data-pt="con-vat-an-so"]) #home::before,
+.app:has(h1[data-pt="qua-song"]) #home::before,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home::before,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home::before,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home::before,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home::before,
+.app:has(h1[data-pt="nhay-theo-so"]) #home::before,
+.app:has(h1[data-pt="thap-vong-mau"]) #home::before,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home::before{grid-row:1!important;font-size:clamp(90px,27vh,270px)!important}
+}
+
+/* POPUP (Giao diện / mua giao diện) — WEB + iPad (trong cổng, game Pop): lớp mờ phủ TOÀN MÀN HÌNH, không chỉ cột giữa (bố cục mới trải rộng hơn cột) */
+@media (min-height:521px){
+  .app:has(h1[data-pt]) .play .ov:not([hidden]){position:fixed!important;padding-inline:max(16px,calc((100vw - 640px)/2))!important;box-sizing:border-box!important;inset:0!important;width:auto!important;height:auto!important;border-radius:0!important;background:rgba(8,6,24,.62)!important;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);align-items:center;justify-content:center;z-index:30}
+  .app:has(h1[data-pt]) #ovHow:not([hidden]) #hwBack{display:grid!important;place-items:center;position:fixed!important;top:16px!important;right:16px!important;left:auto!important;width:48px!important;height:48px!important;min-width:48px!important;min-height:48px!important;padding:0!important;margin:0!important;border-radius:50%!important;font-size:0!important;background:rgba(255,255,255,.14)!important;border:1px solid rgba(255,255,255,.4)!important;color:#fff!important;z-index:31;cursor:pointer}
+  .app:has(h1[data-pt]) #ovHow:not([hidden]) #hwBack::after{content:"✕";font-size:20px;line-height:1;font-weight:800}
+  .app:has(h1[data-pt]):has(#ovSkin:not([hidden])) .play,.app:has(h1[data-pt]):has(#ovPay:not([hidden])) .play{background:none!important;box-shadow:none!important;border:0!important;border-radius:0!important}
+  .app:has(h1[data-pt]):has(#ovSkin:not([hidden])) .play::after,.app:has(h1[data-pt]):has(#ovPay:not([hidden])) .play::after{display:none!important}
+}
+
+/* thẻ trò chơi cao cố định như Cozy (không giãn kín cột), tên 16px đậm, nút 🎨 36px */
+@media (max-aspect-ratio:11/10){
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles,
+.app:has(h1[data-pt="con-vat-an-so"]) #home .tiles,
+.app:has(h1[data-pt="qua-song"]) #home .tiles,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles,
+.app:has(h1[data-pt="nhay-theo-so"]) #home .tiles,
+.app:has(h1[data-pt="thap-vong-mau"]) #home .tiles,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles{display:grid!important;grid-template-columns:1fr!important;grid-auto-rows:clamp(52px,7vh,64px)!important;row-gap:clamp(6px,1vh,10px)!important;align-content:start!important;flex:none!important;min-height:0}
+  .app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile,
+  .app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile,
+  .app:has(h1[data-pt="qua-song"]) #home .tiles > .tile,
+  .app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile,
+  .app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile,
+  .app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile,
+  .app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile,
+  .app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile,
+  .app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile,
+  .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile{height:clamp(52px,7vh,64px)!important;min-height:0!important;max-height:none!important;border-radius:20px!important}
+  .app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile:not(:has(> .pgb)),
+  .app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile:not(:has(> .pgb)),
+  .app:has(h1[data-pt="qua-song"]) #home .tiles > .tile:not(:has(> .pgb)),
+  .app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile:not(:has(> .pgb)),
+  .app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile:not(:has(> .pgb)),
+  .app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile:not(:has(> .pgb)),
+  .app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile:not(:has(> .pgb)),
+  .app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile:not(:has(> .pgb)),
+  .app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile:not(:has(> .pgb)),
+  .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile:not(:has(> .pgb)){padding:0 52px 0 12px!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;gap:10px!important;text-align:left!important}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile b,
+.app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile b,
+.app:has(h1[data-pt="qua-song"]) #home .tiles > .tile b,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile b,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile b,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile b,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile b,
+.app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile b,
+.app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile b,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile b{font-size:16px!important;font-weight:800!important}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile .ti,
+.app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile .ti,
+.app:has(h1[data-pt="qua-song"]) #home .tiles > .tile .ti,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile .ti,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile .ti,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile .ti,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile .ti,
+.app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile .ti,
+.app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile .ti,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile .ti,.app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile .op,
+.app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile .op,
+.app:has(h1[data-pt="qua-song"]) #home .tiles > .tile .op,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile .op,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile .op,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile .op,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile .op,
+.app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile .op,
+.app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile .op,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile .op{font-size:26px!important;position:static!important;transform:none!important;margin:0!important;flex:none;line-height:1}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile > button.sk,
+.app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile > button.sk,
+.app:has(h1[data-pt="qua-song"]) #home .tiles > .tile > button.sk,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile > button.sk,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile > button.sk,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile > button.sk,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile > button.sk,
+.app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile > button.sk,
+.app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile > button.sk,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile > button.sk{width:36px!important;height:36px!important;min-width:36px!important;min-height:36px!important;position:absolute!important;right:10px!important;left:auto!important;top:50%!important;bottom:auto!important;transform:translateY(-50%)!important;margin:0!important}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home .tiles > .tile > button.sk svg,
+.app:has(h1[data-pt="con-vat-an-so"]) #home .tiles > .tile > button.sk svg,
+.app:has(h1[data-pt="qua-song"]) #home .tiles > .tile > button.sk svg,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home .tiles > .tile > button.sk svg,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home .tiles > .tile > button.sk svg,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home .tiles > .tile > button.sk svg,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home .tiles > .tile > button.sk svg,
+.app:has(h1[data-pt="nhay-theo-so"]) #home .tiles > .tile > button.sk svg,
+.app:has(h1[data-pt="thap-vong-mau"]) #home .tiles > .tile > button.sk svg,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles > .tile > button.sk svg{width:20px!important;height:20px!important}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home .dbar,
+.app:has(h1[data-pt="con-vat-an-so"]) #home .dbar,
+.app:has(h1[data-pt="qua-song"]) #home .dbar,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home .dbar,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home .dbar,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home .dbar,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home .dbar,
+.app:has(h1[data-pt="nhay-theo-so"]) #home .dbar,
+.app:has(h1[data-pt="thap-vong-mau"]) #home .dbar,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .dbar{flex:none!important;height:clamp(44px,5.5vh,56px)!important;min-height:0!important;border-radius:999px!important}
+}
+
+/* CHIP CẤP ĐỘ phone dọc: hình TRÒN (game đặt min-height 56px làm méo thành bầu dục 44x56) */
+@media (max-aspect-ratio:11/10){
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home .lvs,
+.app:has(h1[data-pt="con-vat-an-so"]) #home .lvs,
+.app:has(h1[data-pt="qua-song"]) #home .lvs,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home .lvs,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home .lvs,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home .lvs,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home .lvs,
+.app:has(h1[data-pt="nhay-theo-so"]) #home .lvs,
+.app:has(h1[data-pt="thap-vong-mau"]) #home .lvs,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .lvs{align-items:center!important;align-self:center!important}
+.app:has(h1[data-pt="ten-lua-cua-be"]) #home .lvs .lvb,
+.app:has(h1[data-pt="con-vat-an-so"]) #home .lvs .lvb,
+.app:has(h1[data-pt="qua-song"]) #home .lvs .lvb,
+.app:has(h1[data-pt="be-dau-bo-me"]) #home .lvs .lvb,
+.app:has(h1[data-pt="be-noi-dung-khong"]) #home .lvs .lvb,
+.app:has(h1[data-pt="bo-me-5-giay"]) #home .lvs .lvb,
+.app:has(h1[data-pt="doan-tuoi-nao"]) #home .lvs .lvb,
+.app:has(h1[data-pt="nhay-theo-so"]) #home .lvs .lvb,
+.app:has(h1[data-pt="thap-vong-mau"]) #home .lvs .lvb,
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .lvs .lvb{width:clamp(44px,6.2vh,60px)!important;height:clamp(44px,6.2vh,60px)!important;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;aspect-ratio:1/1!important;padding:0!important;flex:none!important;border-radius:50%!important;display:grid!important;place-items:center}
+}
+
+/* GIAO DIỆN SÁNG: màn chọn Pop có nền sáng Night Pass (bài đo check-popnp: --bg sáng); chỉ giao diện TỐI mới để trong suốt cho nền đêm lộ ra */
+html[data-theme="light"] .app:has(h1[data-pt]) #home:not([hidden]),html[data-theme="light"] .app:has(h1[data-pt]) #village:not([hidden]),html[data-theme="light"] .app:has(h1[data-pt]) #ovStart:not([hidden]){background:linear-gradient(165deg,#F3F0FA,#ECE6FB)!important}
