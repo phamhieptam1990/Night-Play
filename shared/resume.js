@@ -147,10 +147,15 @@
       host.insertBefore(card, anchor || host.firstChild);
     }
   }
+  /* Quyết định hiện/ẩn thẻ NGAY khi màn chọn vừa được dựng, trước khi trình duyệt vẽ: localStorage đọc đồng bộ, và MutationObserver chạy ở microtask
+     (trước lần vẽ kế tiếp) nên thẻ không "nhảy" vào sau làm đẩy lưới/đổi bố cục. Vòng 700ms chỉ còn là lưới an toàn. */
+  var ensureQ = false;
+  function ensureSoon() { if (ensureQ) return; ensureQ = true; Promise.resolve().then(function () { ensureQ = false; ensure(); }); }
   function watch() {
     ensure(); setInterval(ensure, 700);
+    try { new MutationObserver(ensureSoon).observe(document.body, { childList: true, subtree: true }); } catch (e) {}
     var home = document.getElementById("home");
-    try { if (home) new MutationObserver(function () { clearTimeout(watch.t); watch.t = setTimeout(ensure, 60); }).observe(home, { childList: true, attributes: true, attributeFilter: ["hidden", "class", "style"] }); } catch (e) {}
+    try { if (home) new MutationObserver(ensureSoon).observe(home, { attributes: true, attributeFilter: ["hidden", "class", "style"] }); } catch (e) {}
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", watch); else watch();
 
