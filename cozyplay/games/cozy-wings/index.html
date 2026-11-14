@@ -346,6 +346,30 @@ body:has(#ovStart:not([hidden])) .side .ask,body:has(#ovStart:not([hidden])) .si
 @media (min-width:521px){.top{flex-wrap:wrap}.top h1{flex:1 1 160px;min-width:160px}}
 </style>
 <link rel="stylesheet" href="../../../shared/poplandscape.css">
+<style>/* màn ngang thấp: nút thanh trên cùng cỡ 42px như mọi game Cozy (poplandscape.css ép 52px cho Pop); ≤420px cao: 38px */
+@media (min-aspect-ratio:11/10) and (max-height:520px){.app .top{row-gap:6px}.app .top .ib{width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;max-width:42px!important}}
+#ovSkin .sk .e{display:none}
+/* màn ngang thấp: tên game cùng kiểu mọi game Cozy (màu nhấn, ~21px) + thẻ chuyến bay gọn: bớt đệm phải, nút 🎨 sát mép */
+@media (min-aspect-ratio:11/10) and (max-height:520px){
+  html body .app .top h1,html.np-hudg body .app .top h1{color:var(--accent)!important;font-size:clamp(15px,2.55vw,22px)!important;line-height:1.1!important}
+  html body #ovStart .tile:not(.daily) .main{padding:2px 36px 2px 10px!important;gap:8px!important}
+  html body #ovStart .tile:not(.daily) .skinBtn{right:5px!important;width:28px!important;height:28px!important;font-size:14px!important}
+}
+/* popup Giao diện màn ngang: DANH SÁCH 2 cột (biểu tượng + tên, không ảnh) như mọi game Cozy */
+@media (min-aspect-ratio:11/10) and (max-height:520px){
+  html body #ovSkin .skgrid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:6px!important;width:100%;max-width:min(100%,640px)!important;margin-inline:auto}
+  html body #ovSkin .skgrid .sk{flex:none!important;width:auto!important;display:flex!important;flex-direction:row!important;align-items:center;justify-content:flex-start;gap:10px!important;text-align:left;padding:4px 10px!important;min-height:44px;border-radius:16px;box-sizing:border-box}
+  html body #ovSkin .npc .skgrid .sk{background:var(--npcard,rgba(255,255,255,.07))!important;color:var(--npi,#f1f2ff)!important;border:2px solid var(--npl,rgba(255,255,255,.22))!important;box-shadow:none!important;filter:none!important}
+  html body #ovSkin .npc .skgrid .sk.on{border-color:var(--npa,var(--accent))!important;background:linear-gradient(160deg,color-mix(in srgb,var(--npa,var(--accent)) 22%,var(--npcard,#222)),var(--npcard,#222))!important;outline:0!important}
+  html body #ovSkin .npc .skgrid .sk span{color:var(--npi,#f1f2ff)!important}
+  html body #ovSkin .skgrid .sk:last-child:nth-child(odd){grid-column:1/-1}
+  html body #ovSkin .skgrid .sk img{display:none!important}
+  html body #ovSkin .skgrid .sk .e{display:grid;place-items:center;flex:none;width:34px;height:34px;font-size:26px;line-height:1;font-style:normal}
+  html body #ovSkin .skgrid .sk span{margin:0!important;text-align:left;font-size:14px!important;line-height:1.1}
+}
+/* popup Giao diện màn ngang: như các game Cozy — chip độ khó + nút 📚 không nổi lên trên lớp mờ */
+@media (min-aspect-ratio:11/10) and (max-height:520px){body:has(#ovSkin:not([hidden])) #npDifBadge,body:has(#ovSkin:not([hidden])) #nsPill{display:none!important}}
+@media (min-aspect-ratio:11/10) and (max-height:420px){.app .top .ib{width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;max-width:38px!important}}</style>
 <script src="../../../shared/offline.js" defer></script>
 <link rel="stylesheet" href="../../../shared/endui.css"><script src="../../../shared/endui.js" defer></script>
 <style>
@@ -854,7 +878,7 @@ function openSkins(ty){
   skFor=ty;$("skH").textContent="🎨 "+t("ty."+ty);const g=$("skGrid");g.textContent="";
   for(const id of PF.catalog[ty]){
     const locked=skLocked(ty,id),b=document.createElement("button");b.type="button";b.className="sk"+(locked?" lock":"")+((PF.skinSel[ty]||"default")===id?" on":"");
-    b.innerHTML='<img alt="" src="'+THUMB(ty,id)+'" loading="lazy" onerror="this.style.visibility=\'hidden\'"><span>'+t("sk."+ty+"."+id)+'</span>';
+    b.innerHTML='<i class="e" aria-hidden="true">'+({bee:"🐝",fish:"🐟",lantern:"🏮",kite:"🪁",bug:"🐞"}[ty]||"🎨")+'</i><img alt="" src="'+THUMB(ty,id)+'" loading="lazy" onerror="this.style.visibility=\'hidden\'"><span>'+t("sk."+ty+"."+id)+'</span>';
     b.setAttribute("aria-label",locked?t("lockedLbl",{n:t("sk."+ty+"."+id)}):t("sk."+ty+"."+id));
     b.onclick=()=>locked?openPay(ty,id):chooseSkin(ty,id);g.appendChild(b);
   }

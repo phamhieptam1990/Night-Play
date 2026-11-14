@@ -1092,7 +1092,7 @@ addEventListener("keydown", e => {
 <script>
 /* làn điều khiển chung ngoài khung game: lấy màu nền của chính game để không thành dải đen xấu */
 (function(){var st=document.getElementById("stage");if(!st)return;
-function sync(){if(!st.classList.contains("on")){st.style.backgroundColor="";st.classList.remove("docked");return}var f=st.querySelector("iframe");if(!f)return;try{st.classList.toggle("docked",!!(f.contentWindow&&f.contentWindow.__npDock));var d=f.contentDocument,c=getComputedStyle(d.body).backgroundColor;if(!c||c==="rgba(0, 0, 0, 0)")c=getComputedStyle(d.documentElement).backgroundColor;if(c&&c!=="rgba(0, 0, 0, 0)"){st.style.backgroundColor=c;var m=c.match(/\d+(\.\d+)?/g)||[];var L=(.299*m[0]+.587*m[1]+.114*m[2])/255;st.dataset.lum=L>.55?"l":"d"}}catch(e){}}
+function sync(){if(!st.classList.contains("on")){st.style.backgroundColor="";st.classList.remove("docked");return}var f=st.querySelector("iframe");if(!f)return;try{st.classList.toggle("docked",!!(f.contentWindow&&f.contentWindow.__npDock));var d=f.contentDocument,c=getComputedStyle(d.body).backgroundColor;if(!c||c==="rgba(0, 0, 0, 0)")c=getComputedStyle(d.documentElement).backgroundColor;if(c&&c!=="rgba(0, 0, 0, 0)"){var m=c.match(/\d+(\.\d+)?/g)||[];if(m.length>3&&+m[3]<.95){var al=+m[3],bk=[11,20,28];c="rgb("+[0,1,2].map(function(i){return Math.round(+m[i]*al+bk[i]*(1-al))}).join(",")+")";m=c.match(/\d+(\.\d+)?/g)}st.style.backgroundColor=c;var L=(.299*m[0]+.587*m[1]+.114*m[2])/255;st.dataset.lum=L>.55?"l":"d"}}catch(e){}}
 setInterval(sync,600);document.addEventListener("load",sync,true);})();
 </script>
 <script src="../shared/rails.js"></script>
