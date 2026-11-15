@@ -96,6 +96,8 @@
     if (!w) { if (stage.classList.contains("np-hudc-sm")) stage.classList.remove("np-hudc-sm"); return; }
     var inRail = place();
     var sm = !inRail && innerHeight < 620; if (sm !== small) { small = sm; close(); } if (stage.classList.contains("np-hudc-sm") !== small) stage.classList.toggle("np-hudc-sm", small);
+    /* cỡ thấp: nút loa đứng NGOÀI thẻ ⋯ (ngay dưới ←), các nút còn lại trong thẻ; đủ cao: loa về lưới như cũ */
+    var sb = btns.snd; if (sb) { if (small) { if (sb.parentNode !== box) box.insertBefore(sb, more); } else if (sb.parentNode !== pn) pn.insertBefore(sb, pn.children[Math.min(1, pn.children.length)] || null); }
     hideNative(true); hook(); sync();
   }
   function park() { if (box && stage && box.parentNode !== stage) stage.appendChild(box); }

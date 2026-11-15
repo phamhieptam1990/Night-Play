@@ -84,7 +84,7 @@ const inter = (a, b) => a.l < b.r - 1 && a.r > b.l + 1 && a.t < b.b - 1 && a.b >
           const ref = r.home || r.bk; note(!!ref, tag + ": không thấy nút ←");
           if (ref) { note(Math.abs(ref.x - 38) <= 2.5 && Math.abs(ref.y - 38) <= 2.5, tag + ": ← tâm (" + Math.round(ref.x) + "," + Math.round(ref.y) + ") ≠ (38,38)"); }
           const bt = r.btn; note(bt.length >= 1, tag + ": HUD không có nút nào");
-          if (r.sm) note(bt.length === 1 && bt[0].k === "more", tag + ": cỡ thấp phải chỉ có ⋯ (có " + bt.map(b => b.k).join(",") + ")");
+          if (r.sm) note(bt.every(b => b.k === "more" || b.k === "snd") && bt.some(b => b.k === "more") && bt.filter(b => b.k === "snd").length <= 1, tag + ": cỡ thấp phải chỉ có ⋯ và (nếu game có) nút loa ngoài thẻ (có " + bt.map(b => b.k).join(",") + ")");
           else note(bt.length >= 2, tag + ": cỡ cao phải hiện nút trực tiếp (có " + bt.length + ")");
           for (const b of bt) {
             note(Math.abs(b.w - 44) <= 1 && Math.abs(b.h - 44) <= 1, tag + ": nút " + b.k + " cỡ " + Math.round(b.w) + "x" + Math.round(b.h));

@@ -36,3 +36,5 @@ html[data-theme=light] :is(button.btn.alt,button.sec,button.ghost,button.alt):no
 .nb-i{flex:none;width:1.25em;height:1.25em;display:block}.okb .nb-i{width:56%;height:56%}
 .nb.round .nb-i{width:52%;height:52%}
 @media (prefers-reduced-motion:reduce){:is(.nb,button.btn,a.btn,button.big,button.cta,button.go,button.bgo,button.btnbig,button.main,.okb,.tap){transition:none}}
+/* MỌI nút loa của app: khi TẮT tiếng đổi sang xám (bật = màu theo theme như các nút khác). aria-pressed do shared/bridge.js đồng bộ theo NPAudio. */
+html #bSnd[aria-pressed=false],html #soundBtn[aria-pressed=false],html #bSnd.off,html #soundBtn.off,html #soundBtn[aria-label$="(off)"],html .np-hb[data-k=snd][aria-pressed=false]{background:#6B6F80!important;background-image:none!important;border-color:rgba(255,255,255,.35)!important;color:#E9EAF2!important;box-shadow:none!important;opacity:1!important}
