@@ -52,6 +52,10 @@ main{flex:1;min-height:0;width:100%;max-width:760px;margin:0 auto;padding:10px 1
 .gpop{position:absolute;z-index:30;top:56px;left:50%;transform:translateX(-50%);width:min(100%,380px);max-height:min(460px,calc(100dvh - 210px));display:flex;flex-direction:column;gap:6px;padding:10px;background:var(--panel);color:var(--ink);border:1px solid color-mix(in srgb,var(--accent) 30%,var(--line));border-radius:22px;box-shadow:0 18px 50px rgba(0,0,0,.34),0 2px 8px rgba(0,0,0,.14);animation:gIn .16s ease-out}
 @keyframes gIn{from{opacity:0;transform:translateX(-50%) translateY(-6px) scale(.97)}}
 .gpop[hidden]{display:none}
+/* popup chọn game: Night Pass (tím tối, chữ trắng) ở MỌI giao diện, kể cả sáng — như các popup khác của app */
+.gpop{--panel:#1d1745;--ink:#fff;--muted:rgba(255,255,255,.72);--bg:#171236;--line:rgba(170,150,255,.42);color-scheme:dark;background:linear-gradient(165deg,#2b2064,#171236 70%)!important;border-color:rgba(170,150,255,.55)!important;box-shadow:0 0 0 1px rgba(124,92,255,.18),0 18px 60px rgba(124,92,255,.4),0 10px 36px rgba(0,0,0,.35)}
+.gpop input{background:rgba(8,6,24,.62);border-color:rgba(167,150,255,.55)}
+.gpop #glist button[aria-current=true]{color:#cfc4ff}
 .gpop input{flex:none;width:100%;height:44px;padding:0 14px;border-radius:14px;border:2px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;font-size:16px;outline:none}
 .gpop input:focus{border-color:var(--accent)}
 #glist{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:2px}
