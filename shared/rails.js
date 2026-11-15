@@ -263,7 +263,7 @@
       try { new MutationObserver(function (recs) { if (recs.every(function (r) { return r.type === "childList" && [].concat([].slice.call(r.addedNodes), [].slice.call(r.removedNodes)).every(function (n) { return n.id === "npHudc"; }); })) return; cur = null; update(); }).observe(O.stage, { attributes: true, attributeFilter: ["class"], childList: true }); } catch (e) {}
       var f = null, lastFrame = null;
       /* game mới mở / đổi: dựng lại sau khi iframe tải xong (đọc Cách chơi) */
-      setInterval(function () { var fr = O.getFrame(); if (fr !== lastFrame) { lastFrame = fr; cur = null; if (fr) { var again = function () { cur = null; update(); setTimeout(function () { if (on) render(); }, 250); }; fr.addEventListener("load", again); } update(); } }, 400);
+      setInterval(function () { var fr = O.getFrame(); if (fr !== lastFrame) { lastFrame = fr; cur = null; if (fr) { var again = function () { cur = null; update(); if (on) render(); else if (window.NPHud) NPHud.update(); setTimeout(function () { if (on) render(); }, 250); }; fr.addEventListener("load", again); } update(); } }, 120);
       addEventListener("resize", function () { update(); fit(); }); addEventListener("orientationchange", function () { setTimeout(update, 250); }); addEventListener("hashchange", function () { cur = null; update(); });
       document.addEventListener("visibilitychange", function () { if (!document.hidden && on) render(); });
       update();

@@ -120,7 +120,10 @@
     ov.querySelector("#phX").onclick = close;
     ov.addEventListener("click", function (e) { if (e.target === ov) close(); });
     addEventListener("keydown", function (e) { if (e.key === "Escape" && !ov.hidden) { e.stopPropagation(); close(); } }, true);
-    addEventListener("resize", function () { if (!ov.hidden) fit(); });
+    var refit = function () { if (!ov.hidden) fit(); };   /* xoay màn hình: cổng đổi cỡ khung game CHẬM hơn sự kiện resize → đọc #play cũ làm thẻ lệch phải; đo lại sau khi khung ổn định */
+    addEventListener("resize", function () { refit(); setTimeout(refit, 120); setTimeout(refit, 450); });
+    addEventListener("orientationchange", function () { setTimeout(refit, 200); setTimeout(refit, 600); });
+    try { var pl = document.getElementById("play"); if (pl && window.ResizeObserver) new ResizeObserver(refit).observe(pl); } catch (e) {}
     try { new MutationObserver(function () { if (!ov.hidden) { fill(); fit(); } }).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] }); } catch (e) {}
     addEventListener("pagehide", stopSay);
   }

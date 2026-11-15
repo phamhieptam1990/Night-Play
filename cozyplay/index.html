@@ -939,7 +939,7 @@ function openGame(g){
   f.addEventListener("load", () => {
     try{ if(f.contentDocument){ watchSwipe(f.contentDocument); stage.classList.remove("edge"); } else stage.classList.add("edge"); }
     catch(e){ stage.classList.add("edge"); }   // game khác domain: dùng dải cảm ứng ở mép trên
-    setTimeout(() => { if(frame !== f) return; try{ stage.classList.toggle("docked", !!(f.contentWindow && f.contentWindow.__npDock)); }catch(e){} stage.classList.remove("loading"); f.classList.add("show"); loader.classList.add("off"); },
+    setTimeout(() => { if(frame !== f) return; try{ stage.classList.toggle("docked", !!(f.contentWindow && f.contentWindow.__npDock)); }catch(e){} /* tính bố cục (cột bên lề + khối nút HUD + lớp np-hudg trong game) NGAY TRƯỚC khi hiện game: trước đây chờ nhịp 250–750ms nên game hiện xong mới vẽ lại */ try{ window.NPRails && NPRails.refresh(); window.NPHud && NPHud.update(); }catch(e){} stage.classList.remove("loading"); f.classList.add("show"); loader.classList.add("off"); },
       Math.max(0, MIN_LOAD - (performance.now() - t0)));
   });
   // Đợi chuyển fullscreen xong rồi mới tải game, tránh giật vì 2 việc nặng chạy cùng lúc
