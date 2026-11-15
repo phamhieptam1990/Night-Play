@@ -89,7 +89,8 @@ const MEASURE = (mode, CTRL, SRC, KEYS, CONTENT) => {
           m.leftover.forEach(x => note(false, tg + ": nút điều khiển LẠC CHỖ ngoài khối: " + x));
           if (verbose && m.generic.length) console.log("    (quét chung " + tg + "): " + m.generic.join(" "));
           if (mode !== "phone") {
-            const order = m.seq.map(k => KEYS.indexOf(k)); note(order.every((v, i) => i === 0 || v > order[i - 1]), tg + ": thứ tự nút sai " + m.seq.join(","));
+            const sq = m.seq[0] === "snd" && m.seq.includes("help") ? m.seq.slice(1) : m.seq;   /* màn thấp (HUD gọn): nút loa đứng NGOÀI thẻ ⋯, ngay dưới ←, các nút còn lại trong thẻ theo KEYS */
+            const order = sq.map(k => KEYS.indexOf(k)); note(order.every((v, i) => i === 0 || v > order[i - 1]), tg + ": thứ tự nút sai " + m.seq.join(","));
             if (!m.small) { const p = m.pos; let okp = true; for (let i = 1; i < p.length; i++) if (p[i][0] < p[i - 1][0] - 1 || (Math.abs(p[i][0] - p[i - 1][0]) <= 1 && p[i][1] <= p[i - 1][1])) okp = false; note(okp, tg + ": vị trí các nút không theo thứ tự " + JSON.stringify(p)); }
             m.need.forEach(k => { note(m.have[k] === 1, tg + ": chức năng '" + k + "' có " + m.have[k] + " nút hiện trong khối (cần đúng 1)"); });
             row[mode + W + phase] = m.seq.join("");
