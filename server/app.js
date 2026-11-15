@@ -936,7 +936,7 @@ function ogPage({ en, title, desc, image, target, site }) {
     '<meta name="twitter:title" content="' + escHtml(title) + '"><meta name="twitter:description" content="' + escHtml(desc) + '"><meta name="twitter:image" content="' + escHtml(image) + '">' +
     '<meta http-equiv="refresh" content="0;url=' + escHtml(target) + '"></head><body><script>location.replace(' + JSON.stringify(target).replace(/</g, "\\u003c") + ')</script><a href="' + escHtml(target) + '">' + escHtml(title) + '</a></body></html>';
 }
-const CW_TYPES = { bee: ["Ong Mật Về Tổ", "Honey Bee Home"], fish: ["Cá Chuồn Vượt Sóng", "Flying Fish"], lantern: ["Đèn Lồng Trung Thu", "Mid-Autumn Lantern"], kite: ["Diều Giấy", "Paper Kite"], bug: ["Bọ Rùa Phiêu Lưu", "Ladybug Adventure"] };
+const CW_TYPES = { bee: ["Ong Mật Về Tổ", "Honey Bee Home"], fish: ["Cá Chuồn Vượt Sóng", "Flying Fish"], lantern: ["Đèn Lồng Trung Thu", "Mid-Autumn Lantern"], kite: ["Diều Giấy", "Paper Kite"], bug: ["Bọ Rùa Phiêu Lưu", "Ladybug Adventure"], dep: ["Né Dép", "Slipper Dash"] };
 const CW_DIFFS = { easy: ["Dễ", "Easy"], mid: ["Vừa", "Medium"], hard: ["Khó", "Hard"] };
 route("GET", /^\/api\/share\/cozy-wings$/, async ({ query, headers }) => {
   const en = query.get("l") === "en", L = en ? 1 : 0, o = b64json(query.get("ch"));

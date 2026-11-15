@@ -110,7 +110,7 @@ body{transition:background .4s,color .4s}
 .tiles{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;width:100%;max-width:340px}
 .tile{position:relative;grid-column:span 2;border-radius:18px;overflow:hidden;background:var(--panel);box-shadow:var(--shadow)}
 /* đếm theo .tile (":nth-child(n of .tile)") vì shared/resume.js chèn thẻ "Tiếp tục ván dở" (#npResume) vào ĐẦU lưới: đếm theo vị trí con thì ô 4-5 lệch cột, lưới vỡ và tràn khung */
-.tile:nth-child(4 of .tile){grid-column:2/span 2}.tile:nth-child(5 of .tile){grid-column:4/span 2}
+/* 6 loại = 2 hàng × 3 ô, không cần canh giữa ô 4-5 */
 /* có thẻ ván dở (thêm một hàng 56px): ô ảnh vuông thay vì 3:4 để cả màn chọn vẫn nằm trọn trong khung */
 .tiles:has(#npResume) .tile img{aspect-ratio:1/1}
 /* điện thoại/iPad dọc (fan.js chế độ local: hàng nút 72px + tên game + thẻ nhắc + điểm nằm trên khung, neo sát hàng nút): khung chơi trừ đủ phần phía trên để KHÔNG tràn đáy màn hình */
@@ -130,7 +130,7 @@ body.np-local{--w:min(calc(100vw - 24px),calc((100dvh - 240px)*.75),760px)}
 .tile:active{transform:scale(.97)}
 .dif{width:48px;height:48px;padding:0;border-radius:50%;font-size:22px;display:grid;place-items:center}
 @media (max-height:700px){.tile img{aspect-ratio:1/1}.tile .tb{width:28px;height:28px;font-size:16px}.dif{width:40px;height:40px;font-size:18px}.tiles{gap:6px}}
-@media (max-height:380px) and (min-aspect-ratio:11/10){.tiles{grid-template-columns:repeat(5,1fr);gap:4px}.tile,.tile:nth-child(4 of .tile),.tile:nth-child(5 of .tile){grid-column:auto}.tile img{aspect-ratio:3/4}.tile .tb,.tile .skinBtn{width:22px;height:22px;font-size:12px}.tile .best{display:none}.dif{width:30px;height:30px;font-size:14px}}   /* thuộc tính hidden luôn thắng display:flex của từng lớp */
+@media (max-height:380px) and (min-aspect-ratio:11/10){.tiles{grid-template-columns:repeat(6,1fr);gap:4px}.tile{grid-column:auto}.tile img{aspect-ratio:3/4}.tile .tb,.tile .skinBtn{width:22px;height:22px;font-size:12px}.tile .best{display:none}.dif{width:30px;height:30px;font-size:14px}}   /* thuộc tính hidden luôn thắng display:flex của từng lớp */
 /* ===== MÀN CHỌN CÓ HÌNH (Night Pass): thẻ ảnh ĐỀU NHAU 2 cột (thẻ lẻ cuối rộng hết hàng), nút 🎨 kính ở GÓC TRÊN-PHẢI (không che hình/điểm), điểm cao + icon con vật làm huy hiệu kính; chữ ít ===== */
 @media not all and (max-height:380px) and (min-aspect-ratio:11/10){
   #ovStart .tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:100%;align-content:start}
@@ -222,6 +222,8 @@ body:has(#ovStart:not([hidden])) .side .ask,body:has(#ovStart:not([hidden])) .si
 #play:has(#ovStart:not([hidden])){box-shadow:none!important;border:0!important}
 #play:has(#ovStart:not([hidden]))::after{display:none!important}
 @media not all and (max-height:380px) and (min-aspect-ratio:11/10){#ovStart:not([hidden]){justify-content:center!important}#ovStart .cwHero{flex:none!important;min-height:120px;margin-top:34px}}
+/* 6 loại chơi: màn rộng cao 521-780px thu hàng + linh vật để cả 6 hàng + thẻ hôm nay vẫn vừa MỘT màn hình */
+@media (min-aspect-ratio:11/10) and (min-height:521px) and (max-height:780px){#ovStart .cwHero{min-height:0!important;height:clamp(64px,13vh,96px);margin-top:0!important}#ovStart .tiles{gap:6px!important}#ovStart .tile:not(.daily) .main{min-height:46px!important;padding-top:4px!important;padding-bottom:4px!important}#ovStart .tile:not(.daily) .skinBtn{width:36px!important;height:36px!important}#ovStart .tile.daily{min-height:40px;padding-top:4px;padding-bottom:4px}}
 /* Nền NGOÀI cột ở màn rộng (shared/widebg.js đọc --pbg của khung chơi): màn chọn có nền riêng theo giao diện thay vì trải bầu trời SÁNG của skin ong (giao diện tối trông chói + nhạt màu) */
 :root[data-theme="dark"] .play:has(> #ovStart:not([hidden])){--pbg:linear-gradient(180deg,#0d2b2c 0%,#12182e 55%,#0a141f 100%)}
 :root:not([data-theme="dark"]) .play:has(> #ovStart:not([hidden])){--pbg:linear-gradient(180deg,#eaf7f0 0%,#dcefff 100%)}
@@ -258,9 +260,12 @@ body:has(#ovStart:not([hidden])) .side .ask,body:has(#ovStart:not([hidden])) .si
   #ovStart .difs .dif{width:32px;height:32px;min-width:32px;min-height:32px;font-size:15px}
   #ovStart #npResume{height:44px}#ovStart #npResume .npr-go{height:44px;min-height:0;font-size:14px}#ovStart #npResume .npr-x{width:38px;height:38px}
 }
+/* 6 loại chơi ở máy rất thấp: gom khoảng cách để hàng cuối không đè chân trang */
+@media (max-height:380px) and (min-aspect-ratio:11/10){#ovStart .tiles{gap:3px!important}#ovStart .tile:not(.daily){height:38px!important}#ovStart .tile:not(.daily) .main{height:100%!important}#ovStart:not([hidden]){row-gap:3px!important}}
+@media (max-height:420px) and (min-aspect-ratio:11/10){html body #ovStart .tiles{gap:4px!important}html body #ovStart .tile:not(.daily) .main{min-height:36px!important;height:36px!important;padding-top:2px!important;padding-bottom:2px!important}html body #ovStart .tile:not(.daily) .skinBtn{width:32px!important;height:32px!important;min-width:32px!important;min-height:32px!important}html body #ovStart .tile:not(.daily){height:auto!important}}
 /* máy RẤT thấp (≤380px, 2 cột): hàng đều nhau cố định 40px */
 @media (max-height:380px) and (min-aspect-ratio:11/10){
-  #ovStart:not([hidden]){grid-template-rows:repeat(5,40px)!important;grid-auto-rows:40px!important;row-gap:6px!important;align-content:center!important}
+  #ovStart:not([hidden]){grid-template-rows:repeat(6,40px)!important;grid-auto-rows:40px!important;row-gap:6px!important;align-content:center!important}
   #ovStart .tile:not(.daily){height:40px;align-self:center}#ovStart .tile:not(.daily) .main{min-height:0!important;height:100%}
   #ovStart .tile.daily{height:34px;min-height:0;align-self:center}#ovStart #npResume{height:40px}#ovStart #npResume .npr-go{height:40px}
 }
@@ -322,9 +327,9 @@ body:has(#ovStart:not([hidden])) .side .ask,body:has(#ovStart:not([hidden])) .si
 /* thanh trên màn chọn: tên game một dòng riêng, không cắt "…" */
 @media (max-width:520px){.top{flex-wrap:wrap}.top h1{order:9;flex:1 1 100%;white-space:normal;overflow:visible;text-overflow:clip;line-height:1.1}}
 /* ===== MÀN CHỌN — MÀN NGANG ≤520px CAO: ĐÚNG BỐ CỤC CÁC GAME COZY KHÁC (đối chiếu Gà Mẹ 956x440 + 667x375) =====
-   2 CỘT: TRÁI = linh vật to + thẻ hôm nay (+ tiếp tục ván dở); PHẢI = hàng cấp độ ở trên, rồi 5 chuyến bay. Khối này đặt SAU mọi luật vá trước nên thắng tất cả. */
+   2 CỘT: TRÁI = linh vật to + thẻ hôm nay (+ tiếp tục ván dở); PHẢI = hàng cấp độ ở trên, rồi 6 chuyến bay. Khối này đặt SAU mọi luật vá trước nên thắng tất cả. */
 @media (max-height:520px) and (min-aspect-ratio:11/10){
-  html #ovStart:not([hidden]){position:fixed!important;left:84px!important;right:16px!important;top:46px!important;bottom:8px!important;width:auto!important;height:auto!important;padding:0!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)!important;grid-template-rows:repeat(6,minmax(0,1fr))!important;grid-auto-rows:minmax(0,1fr)!important;column-gap:18px!important;row-gap:6px!important;align-content:stretch!important;align-items:center!important;justify-content:stretch!important;background:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  html #ovStart:not([hidden]){position:fixed!important;left:84px!important;right:16px!important;top:46px!important;bottom:8px!important;width:auto!important;height:auto!important;padding:0!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)!important;grid-template-rows:repeat(7,minmax(0,1fr))!important;grid-auto-rows:minmax(0,1fr)!important;column-gap:18px!important;row-gap:6px!important;align-content:stretch!important;align-items:center!important;justify-content:stretch!important;background:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
   html.np-hudg #ovStart:not([hidden]){left:12px!important;right:12px!important;top:44px!important}
   html #ovStart #stH{display:none!important}
   html #ovStart .cwHero,html.np-hudg #ovStart .cwHero{top:auto!important;bottom:auto!important;right:auto!important;display:flex!important;position:static!important;grid-column:1!important;grid-row:1 / span 3!important;width:auto!important;height:auto!important;align-self:stretch!important;align-items:center;justify-content:center;margin:0!important;font-size:clamp(60px,28vh,120px)!important;line-height:1;white-space:nowrap;overflow:hidden;animation:cwBob 2.8s ease-in-out infinite;pointer-events:none;padding-top:10px;margin-bottom:-8px!important;align-items:flex-end!important;transform-origin:50% 100%}
@@ -411,6 +416,7 @@ body:has(#ovStart:not([hidden])) .side .ask,body:has(#ovStart:not([hidden])) .si
 @media (max-aspect-ratio:11/10){html body #ovSkin .skgrid{grid-template-columns:1fr!important;max-width:min(100%,420px)!important}html body #ovSkin .skgrid .sk{min-height:46px}html body #ovSkin:not([hidden]){padding:8px!important}html body #ovSkin>.npc{width:min(100%,440px)!important;padding:12px 12px 14px!important;gap:8px!important}html body #ovSkin .skgrid .sk span{white-space:nowrap}}
 @media (min-aspect-ratio:11/10) and (max-height:420px){.app .top .ib{width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;max-width:38px!important}}</style>
 <script src="../../../shared/offline.js" defer></script>
+<script src="../../../shared/help.js" defer></script>
 <link rel="stylesheet" href="../../../shared/endui.css"><script src="../../../shared/endui.js" defer></script>
 <style>
 /* MÀN RỘNG (máy tính, iPad ngang): màn chọn co giãn theo bề rộng khung chơi (cqw), không còn ô/thẻ cỡ px cố định lọt thỏm giữa khung 520-760px. Điện thoại và màn thấp giữ nguyên. GAME_RULES 5k. */
@@ -425,7 +431,6 @@ body:has(#ovStart:not([hidden])) .side .ask,body:has(#ovStart:not([hidden])) .si
 .tile.daily{font-size:4.6cqw;padding:2cqw 3.4cqw}.tile.daily .de{font-size:7.4cqw}.tile.daily .dm,.tile.daily .df{font-size:3.8cqw}
 .difs{gap:2cqw}.dif{width:11cqw;height:11cqw;font-size:5cqw}
 .ov .big{font-size:4.8cqw}.ov .ghost{font-size:3.8cqw}
-.tile:nth-child(4 of .tile){grid-column:1/span 3}.tile:nth-child(5 of .tile){grid-column:4/span 3}.tile:nth-child(4 of .tile) img,.tile:nth-child(5 of .tile) img{aspect-ratio:3/2}   /* hàng 2: hai ô rộng lấp đầy khung thay vì 3+2 so le */
 }
 @media (min-aspect-ratio:11/10){.ask{gap:8px;padding:6px 10px;min-width:0;flex-wrap:nowrap}.ask .ib{flex:none;width:40px;height:40px;min-width:40px;min-height:40px}#askTxt{min-width:0;flex:1 1 0;font-size:clamp(12px,1.7vw,20px);line-height:1.15;overflow-wrap:normal;word-break:normal}.side{flex:none;min-width:min(180px,28vw)}}   /* thẻ nhắc việc ở cột trái hẹp: không bóp thành cột 106px / xuống từng chữ */
 </style>
@@ -499,30 +504,30 @@ let LANG=(()=>{const q=new URLSearchParams(location.search).get("lang");if(q==="
 const I18N={
 vi:{back:"Về màn chọn",title:"Cánh Nhỏ Phiêu Lưu",docTitle:"Cánh Nhỏ Phiêu Lưu",sound:"Âm thanh",lang:"Ngôn ngữ",pause:"Tạm dừng",resume:"Tiếp tục",how:"Cách chơi",
  "st.h":"Chọn chuyến bay","st.p":"Chọn một chuyến bay nhé","dif.h":"Độ khó","dif.easy":"Dễ","dif.mid":"Vừa","dif.hard":"Khó","best":"Kỷ lục {n}",
- "ty.bee":"Ong Mật Về Tổ","ty.bee.d":"Né mạng nhện, hái phấn hoa, gió đổi hướng","ty.fish":"Cá Chuồn Vượt Sóng","ty.fish.d":"Chạm để nhảy, giữ tay để lặn","ty.lantern":"Đèn Lồng Trung Thu","ty.lantern.d":"Nhặt nến giữ lửa không tắt","ty.kite":"Diều Giấy","ty.kite.d":"Kéo ngón tay để diều lên xuống","ty.bug":"Bọ Rùa Phiêu Lưu","ty.bug.d":"Giữ tay để lượn, thả tay để rơi",
- "tip.bee":"Chạm để vỗ cánh · gió đang đổi hướng","tip.fish":"Chạm: nhảy lên · Giữ tay: lặn xuống","tip.lantern":"Chạm để bay · nhặt nến giữ lửa","tip.kite":"Kéo ngón tay lên xuống để điều khiển diều","tip.bug":"Giữ tay: lượn lên · Thả tay: rơi xuống",
- "hud.bee":"🌬️ {w} · 🏠 Tổ {n}","hud.fish":"🫧 Ngọc trai {n}","hud.lantern":"🔥 Lửa","hud.kite":"🎀 {n} · 🌬️ {w}","hud.bug":"💧 Giọt sương {n}",
+ "ty.bee":"Ong Mật Về Tổ","ty.bee.d":"Né mạng nhện, hái phấn hoa, gió đổi hướng","ty.fish":"Cá Chuồn Vượt Sóng","ty.fish.d":"Chạm để nhảy, giữ tay để lặn","ty.lantern":"Đèn Lồng Trung Thu","ty.lantern.d":"Nhặt nến giữ lửa không tắt","ty.kite":"Diều Giấy","ty.kite.d":"Kéo ngón tay để diều lên xuống","ty.bug":"Bọ Rùa Phiêu Lưu","ty.dep":"Né Dép","ty.bug.d":"Giữ tay để lượn, thả tay để rơi","ty.dep.d":"Mẹ ném dép, bạn chạy, chạm để nhảy",
+ "tip.bee":"Chạm để vỗ cánh · gió đang đổi hướng","tip.fish":"Chạm: nhảy lên · Giữ tay: lặn xuống","tip.lantern":"Chạm để bay · nhặt nến giữ lửa","tip.kite":"Kéo ngón tay lên xuống để điều khiển diều","tip.bug":"Giữ tay: lượn lên · Thả tay: rơi xuống","tip.dep":"Chạm: nhảy · Giữ tay: nhảy cao",
+ "hud.bee":"🌬️ {w} · 🏠 Tổ {n}","hud.fish":"🫧 Ngọc trai {n}","hud.lantern":"🔥 Lửa","hud.kite":"🎀 {n} · 🌬️ {w}","hud.bug":"💧 Giọt sương {n}","hud.dep":"🥿 Dép đã né {n}",
  "w.up":"lên ↑","w.down":"xuống ↓","w.calm":"lặng","hit":"Úi! Còn {n} tim","out":"Đèn tắt! Còn {n} tim","hive":"Tổ ong lên cấp {n}! Thêm ong mới 🐝","dead":"Hết tim rồi",
  "en.h":"Hết chuyến bay!","en.h.new":"🏆 Kỷ lục mới!","en.p":"{n} điểm","en.d":"{t} · {d}","again":"Bay lại","home":"Chọn chuyến khác",
- "rank.btn":"🏆 Lên bảng điểm","share.vid":"Video ván chơi","daily.t":"Thử thách hôm nay #{n}","en.tap":"👆 Chạm để bay lại","pts":"điểm","txt.copied":"Đã sao chép kết quả!","share.txt":"Chia sẻ kết quả (chữ + emoji)","ch.h":"⚔ Bạn được thách đấu!","ch.rival":"ĐỐI THỦ","ch.you":"BẠN","ch.go":"⚔ Chơi ngay","ch.beat":"Vượt rồi!","ch.beatPop":"Vượt kỷ lục {b}!","ch.cd":"BAY!","ch.winT":"BẠN THẮNG!","ch.loseT":"THUA RỒI!","ch.tieT":"HOÀ!","ch.win":"Thắng thách đấu {b} điểm.","ch.lose":"Chưa phá được {b} điểm, thử lại nhé!","ch.tie":"Hoà {b} điểm.","share.btn":"Khoe điểm","share.t":"Khoe điểm","share.img":"Gửi ảnh","share.save":"Lưu ảnh","share.ch":"⚔ Link thách bạn","share.saved":"Đã lưu ảnh","share.copied":"Đã sao chép link, dán vào Zalo, Messenger…","share.copyHint":"Chạm vào ô để sao chép link","share.text":"Mình vừa bay được {n} điểm ở Cánh Nhỏ Phiêu Lưu, bạn vượt được không?","end.helper":"Kết quả sẽ được gửi cho bạn của bạn nhé!","combo":"Combo ×{n}!","cd.title":"Cánh Nhỏ Phiêu Lưu","cd.ch":"⚔ Thách bạn vượt {n} điểm!","cd.win":"Thắng thách đấu {b} điểm","cd.lose":"Chưa phá được {b} điểm","cd.score":"ĐIỂM","fun.bee.0":"Ong còn lạc đường 🐝","fun.bee.1":"Có phấn hoa rồi, ong về tổ được rồi!","fun.bee.2":"Ong thợ chăm chỉ, tổ đầy mật!","fun.bee.3":"Nữ hoàng ong đây rồi 👑","fun.fish.0":"Cá còn đang khởi động 🐟","fun.fish.1":"Nhảy khá mượt, sóng cũng nể!","fun.fish.2":"Cá chuồn thứ thiệt, né thuyền như bay!","fun.fish.3":"Vua đại dương, hải âu cũng chịu!","fun.lantern.0":"Đèn lồng còn chập chờn 🏮","fun.lantern.1":"Giữ được lửa rồi, phố đêm sáng hơn!","fun.lantern.2":"Đèn lồng sáng cả con phố!","fun.lantern.3":"Trung Thu năm nay có bạn là sáng nhất ✨","fun.kite.0":"Diều còn đang chao đảo 🪁","fun.kite.1":"Kéo dây khá mượt đó!","fun.kite.2":"Diều lượn như nghệ nhân!","fun.kite.3":"Thả diều cả bầu trời, không ai theo kịp 🌤️","fun.bug.0":"Bọ rùa vừa rơi vài lần 🐞","fun.bug.1":"Lượn khá khéo, mưa không ướt!","fun.bug.2":"Né mưa như ninja bọ rùa!","fun.bug.3":"Chúa tể khu vườn, giọt mưa cũng chịu thua 🌿","how.bee.1":"👆 Chạm để ong vỗ cánh bay lên","how.bee.2":"🕸️ Né mạng nhện và cành gai, hái 🌼 phấn hoa","how.bee.3":"🌬️ Gió đổi hướng nên nhớ chỉnh lực bay · cứ 5 phấn hoa là tổ ong lên cấp","how.fish.1":"👆 Chạm nhanh: cá nhảy lên khỏi mặt nước","how.fish.2":"✋ Giữ tay: cá lặn xuống sâu","how.fish.3":"🚤 Nhảy qua thuyền và đá · 🕊️ Lặn xuống khi hải âu lao tới","how.lantern.1":"👆 Chạm để đèn lồng bay lên","how.lantern.2":"🏠 Né mái nhà và dây điện","how.lantern.3":"🕯️ Nhặt nến để lửa không bị tắt","how.kite.1":"👆 Kéo ngón tay lên xuống để điều khiển diều","how.kite.2":"🌬️ Gió đẩy diều theo nhịp, dây rất mềm","how.kite.3":"🐦 Né chim và mây bão, nhặt 🎀 dải lụa","how.bug.1":"✋ Giữ tay: bọ rùa xòe cánh, lượn lên chậm","how.bug.2":"👇 Thả tay: bọ rùa rơi nhanh xuống","how.bug.3":"💧 Né giọt mưa (có vạch báo trước) và lá rụng","how.go":"▶ Bắt đầu bay","how.resume":"▶ Tiếp tục","how.back":"Chọn chuyến khác","how.rule":"❤️ {h} tim · điểm ×{m}", "sk.pick":"Chọn giao diện","pw.h":"Giao diện Night Pass","pw.p":"Mở {name} và 19 giao diện khác: thế giới mới, nhân vật mới, bố cục màn chơi mới cho cả 5 chuyến bay.","pw.go":"Mở bằng Night Pass","pw.trial":"Chơi thử 1 ván","pw.later":"Để sau","pw.tried":"Hôm nay bạn đã chơi thử rồi, mai quay lại nhé.",lockedLbl:"{n} (cần Night Pass)",badge:"Night Pass",
+ "hlp.h.1":"✈️ Chọn một chuyến bay ở màn chọn","hlp.h.2":"👆 Chạm vào chuyến bay để xem cách chơi, rồi bấm Bắt đầu bay","hlp.h.3":"❤️ Hết tim là hết ván, chơi lại bao nhiêu lần cũng được","rank.btn":"🏆 Lên bảng điểm","share.vid":"Video ván chơi","daily.t":"Thử thách hôm nay #{n}","en.tap":"👆 Chạm để bay lại","pts":"điểm","txt.copied":"Đã sao chép kết quả!","share.txt":"Chia sẻ kết quả (chữ + emoji)","ch.h":"⚔ Bạn được thách đấu!","ch.rival":"ĐỐI THỦ","ch.you":"BẠN","ch.go":"⚔ Chơi ngay","ch.beat":"Vượt rồi!","ch.beatPop":"Vượt kỷ lục {b}!","ch.cd":"BAY!","ch.winT":"BẠN THẮNG!","ch.loseT":"THUA RỒI!","ch.tieT":"HOÀ!","ch.win":"Thắng thách đấu {b} điểm.","ch.lose":"Chưa phá được {b} điểm, thử lại nhé!","ch.tie":"Hoà {b} điểm.","share.btn":"Khoe điểm","share.t":"Khoe điểm","share.img":"Gửi ảnh","share.save":"Lưu ảnh","share.ch":"⚔ Link thách bạn","share.saved":"Đã lưu ảnh","share.copied":"Đã sao chép link, dán vào Zalo, Messenger…","share.copyHint":"Chạm vào ô để sao chép link","share.text":"Mình vừa bay được {n} điểm ở Cánh Nhỏ Phiêu Lưu, bạn vượt được không?","end.helper":"Kết quả sẽ được gửi cho bạn của bạn nhé!","combo":"Combo ×{n}!","cd.title":"Cánh Nhỏ Phiêu Lưu","cd.ch":"⚔ Thách bạn vượt {n} điểm!","cd.win":"Thắng thách đấu {b} điểm","cd.lose":"Chưa phá được {b} điểm","cd.score":"ĐIỂM","fun.bee.0":"Ong còn lạc đường 🐝","fun.bee.1":"Có phấn hoa rồi, ong về tổ được rồi!","fun.bee.2":"Ong thợ chăm chỉ, tổ đầy mật!","fun.bee.3":"Nữ hoàng ong đây rồi 👑","fun.fish.0":"Cá còn đang khởi động 🐟","fun.fish.1":"Nhảy khá mượt, sóng cũng nể!","fun.fish.2":"Cá chuồn thứ thiệt, né thuyền như bay!","fun.fish.3":"Vua đại dương, hải âu cũng chịu!","fun.lantern.0":"Đèn lồng còn chập chờn 🏮","fun.lantern.1":"Giữ được lửa rồi, phố đêm sáng hơn!","fun.lantern.2":"Đèn lồng sáng cả con phố!","fun.lantern.3":"Trung Thu năm nay có bạn là sáng nhất ✨","fun.kite.0":"Diều còn đang chao đảo 🪁","fun.kite.1":"Kéo dây khá mượt đó!","fun.kite.2":"Diều lượn như nghệ nhân!","fun.kite.3":"Thả diều cả bầu trời, không ai theo kịp 🌤️","fun.bug.0":"Bọ rùa vừa rơi vài lần 🐞","fun.bug.1":"Lượn khá khéo, mưa không ướt!","fun.bug.2":"Né mưa như ninja bọ rùa!","fun.bug.3":"Chúa tể khu vườn, giọt mưa cũng chịu thua 🌿","how.bee.1":"👆 Chạm để ong vỗ cánh bay lên","how.bee.2":"🕸️ Né mạng nhện và cành gai, hái 🌼 phấn hoa","how.bee.3":"🌬️ Gió đổi hướng nên nhớ chỉnh lực bay · cứ 5 phấn hoa là tổ ong lên cấp","how.fish.1":"👆 Chạm nhanh: cá nhảy lên khỏi mặt nước","how.fish.2":"✋ Giữ tay: cá lặn xuống sâu","how.fish.3":"🚤 Nhảy qua thuyền và đá · 🕊️ Lặn xuống khi hải âu lao tới","how.lantern.1":"👆 Chạm để đèn lồng bay lên","how.lantern.2":"🏠 Né mái nhà và dây điện","how.lantern.3":"🕯️ Nhặt nến để lửa không bị tắt","how.kite.1":"👆 Kéo ngón tay lên xuống để điều khiển diều","how.kite.2":"🌬️ Gió đẩy diều theo nhịp, dây rất mềm","how.kite.3":"🐦 Né chim và mây bão, nhặt 🎀 dải lụa","how.bug.1":"✋ Giữ tay: bọ rùa xòe cánh, lượn lên chậm","how.dep.1":"👆 Chạm: nhảy qua chồng dép dưới đất","how.bug.2":"👇 Thả tay: bọ rùa rơi nhanh xuống","how.dep.2":"✋ Giữ tay: nhảy cao hơn một chút","how.bug.3":"💧 Né giọt mưa (có vạch báo trước) và lá rụng","how.dep.3":"🥿 Dép bay thấp thì nhảy, dép bay cao thì cứ chạy bên dưới","how.go":"▶ Bắt đầu bay","how.resume":"▶ Tiếp tục","how.back":"Chọn chuyến khác","how.rule":"❤️ {h} tim · điểm ×{m}", "sk.pick":"Chọn giao diện","pw.h":"Giao diện Night Pass","pw.p":"Mở {name} và 19 giao diện khác: thế giới mới, nhân vật mới, bố cục màn chơi mới cho cả 5 chuyến bay.","pw.go":"Mở bằng Night Pass","pw.trial":"Chơi thử 1 ván","pw.later":"Để sau","pw.tried":"Hôm nay bạn đã chơi thử rồi, mai quay lại nhé.",lockedLbl:"{n} (cần Night Pass)",badge:"Night Pass",
  "sk.bee.default":"Vườn xuân","sk.bee.sakura":"Hoa anh đào","sk.bee.lavender":"Đồng oải hương","sk.bee.royal":"Ong hoàng gia","sk.bee.firefly":"Đêm đom đóm",
  "sk.fish.default":"Biển xanh","sk.fish.coral":"Rạn san hô","sk.fish.sunset":"Hoàng hôn biển","sk.fish.arctic":"Bắc cực băng giá","sk.fish.glow":"Biển đêm phát sáng",
  "sk.lantern.default":"Phố đêm","sk.lantern.hoian":"Phố cổ Hội An","sk.lantern.moon":"Rằm Trung Thu","sk.lantern.festival":"Lễ hội hoa đăng","sk.lantern.snow":"Đêm tuyết",
  "sk.kite.default":"Trời xanh","sk.kite.rice":"Đồng lúa chiều","sk.kite.beach":"Bãi biển","sk.kite.alps":"Núi tuyết","sk.kite.dusk":"Hoàng hôn rực",
- "sk.bug.default":"Khu vườn","sk.bug.rain":"Vườn sau mưa","sk.bug.mush":"Rừng nấm","sk.bug.night":"Vườn đêm","sk.bug.autumn":"Mùa thu lá đỏ"},
+ "sk.bug.default":"Khu vườn","sk.dep.default":"Phố nhà mình","sk.dep.tet":"Phố Tết","sk.dep.mua":"Phố mưa","sk.dep.dem":"Phố đêm","sk.dep.bien":"Hè biển","sk.bug.rain":"Vườn sau mưa","sk.bug.mush":"Rừng nấm","sk.bug.night":"Vườn đêm","sk.bug.autumn":"Mùa thu lá đỏ"},
 en:{back:"Back to flights",title:"Little Wings",docTitle:"Little Wings",sound:"Sound",lang:"Language",pause:"Pause",resume:"Resume",how:"How to play",
  "st.h":"Pick a flight","st.p":"Pick a flight","dif.h":"Difficulty","dif.easy":"Easy","dif.mid":"Medium","dif.hard":"Hard","best":"Best {n}",
- "ty.bee":"Honey Bee Home","ty.bee.d":"Dodge webs, gather pollen, shifting wind","ty.fish":"Flying Fish","ty.fish.d":"Tap to jump, hold to dive","ty.lantern":"Mid-Autumn Lantern","ty.lantern.d":"Collect candles, keep the flame","ty.kite":"Paper Kite","ty.kite.d":"Drag your finger to steer the kite","ty.bug":"Ladybug Adventure","ty.bug.d":"Hold to glide, release to drop",
- "tip.bee":"Tap to flap · the wind keeps changing","tip.fish":"Tap: jump · Hold: dive","tip.lantern":"Tap to fly · grab candles for flame","tip.kite":"Drag your finger up and down to steer","tip.bug":"Hold: glide up · Release: drop",
- "hud.bee":"🌬️ {w} · 🏠 Hive {n}","hud.fish":"🫧 Pearls {n}","hud.lantern":"🔥 Flame","hud.kite":"🎀 {n} · 🌬️ {w}","hud.bug":"💧 Dew {n}",
+ "ty.bee":"Honey Bee Home","ty.bee.d":"Dodge webs, gather pollen, shifting wind","ty.fish":"Flying Fish","ty.fish.d":"Tap to jump, hold to dive","ty.lantern":"Mid-Autumn Lantern","ty.lantern.d":"Collect candles, keep the flame","ty.kite":"Paper Kite","ty.kite.d":"Drag your finger to steer the kite","ty.bug":"Ladybug Adventure","ty.dep":"Slipper Dash","ty.bug.d":"Hold to glide, release to drop","ty.dep.d":"Mom throws slippers, you run, tap to jump",
+ "tip.bee":"Tap to flap · the wind keeps changing","tip.fish":"Tap: jump · Hold: dive","tip.lantern":"Tap to fly · grab candles for flame","tip.kite":"Drag your finger up and down to steer","tip.bug":"Hold: glide up · Release: drop","tip.dep":"Tap: jump · Hold: jump higher",
+ "hud.bee":"🌬️ {w} · 🏠 Hive {n}","hud.fish":"🫧 Pearls {n}","hud.lantern":"🔥 Flame","hud.kite":"🎀 {n} · 🌬️ {w}","hud.bug":"💧 Dew {n}","hud.dep":"🥿 Slippers dodged {n}",
  "w.up":"up ↑","w.down":"down ↓","w.calm":"calm","hit":"Ouch! {n} hearts left","out":"Flame out! {n} hearts left","hive":"Hive level {n}! New bees 🐝","dead":"Out of hearts",
  "en.h":"Flight over!","en.h.new":"🏆 New record!","en.p":"{n} points","en.d":"{t} · {d}","again":"Fly again","home":"Other flights",
- "rank.btn":"🏆 Leaderboard","share.vid":"Run video","daily.t":"Daily flight #{n}","en.tap":"👆 Tap to fly again","pts":"pts","txt.copied":"Result copied!","share.txt":"Share result (text + emoji)","ch.h":"⚔ You've been challenged!","ch.rival":"RIVAL","ch.you":"YOU","ch.go":"⚔ Play now","ch.beat":"Beaten!","ch.beatPop":"Beat the record of {b}!","ch.cd":"FLY!","ch.winT":"YOU WIN!","ch.loseT":"YOU LOST!","ch.tieT":"TIE!","ch.win":"Beat the challenge of {b}.","ch.lose":"Missed the challenge of {b}, try again!","ch.tie":"Tied at {b}.","share.btn":"Show off","share.t":"Show off your score","share.img":"Send image","share.save":"Save image","share.ch":"⚔ Challenge link","share.saved":"Image saved","share.copied":"Link copied, paste it into Zalo, Messenger…","share.copyHint":"Tap the box to copy the link","share.text":"I just flew {n} points in Little Wings, can you beat it?","end.helper":"The result goes back to your friend!","combo":"Combo ×{n}!","cd.title":"Little Wings","cd.ch":"⚔ Beat {n} points!","cd.win":"Beat the challenge of {b}","cd.lose":"Missed the challenge of {b}","cd.score":"SCORE","fun.bee.0":"The bee is still lost 🐝","fun.bee.1":"Pollen collected, the bee heads home!","fun.bee.2":"A busy worker, the hive is full!","fun.bee.3":"Queen bee has arrived 👑","fun.fish.0":"The fish is still warming up 🐟","fun.fish.1":"Smooth jumps, even the waves respect it!","fun.fish.2":"A true flying fish, boats can't touch it!","fun.fish.3":"King of the ocean, gulls give up!","fun.lantern.0":"The lantern is still flickering 🏮","fun.lantern.1":"Flame kept alive, the street glows!","fun.lantern.2":"The whole street is lit up!","fun.lantern.3":"Brightest lantern of the festival ✨","fun.kite.0":"The kite is wobbling 🪁","fun.kite.1":"Nice smooth steering!","fun.kite.2":"Gliding like a kite master!","fun.kite.3":"Owner of the sky, nobody can follow 🌤️","fun.bug.0":"The ladybug fell a few times 🐞","fun.bug.1":"Neat gliding, no raindrops landed!","fun.bug.2":"Dodging rain like a ladybug ninja!","fun.bug.3":"Lord of the garden, even the rain gives up 🌿","how.bee.1":"👆 Tap to flap and fly up","how.bee.2":"🕸️ Dodge webs and thorns, collect 🌼 pollen","how.bee.3":"🌬️ The wind keeps changing · every 5 pollen levels up your hive","how.fish.1":"👆 Quick tap: the fish jumps out of the water","how.fish.2":"✋ Hold: the fish dives deep","how.fish.3":"🚤 Jump over boats and rocks · 🕊️ dive when a gull swoops","how.lantern.1":"👆 Tap to make the lantern fly up","how.lantern.2":"🏠 Dodge rooftops and wires","how.lantern.3":"🕯️ Grab candles to keep the flame alive","how.kite.1":"👆 Drag your finger up and down to steer","how.kite.2":"🌬️ The wind pushes the kite, the string is soft","how.kite.3":"🐦 Dodge birds and storm clouds, grab 🎀 ribbons","how.bug.1":"✋ Hold: the ladybug opens its wings and glides up","how.bug.2":"👇 Release: it drops fast","how.bug.3":"💧 Dodge raindrops (a dashed line warns you) and falling leaves","how.go":"▶ Start flying","how.resume":"▶ Resume","how.back":"Other flights","how.rule":"❤️ {h} hearts · score ×{m}", "sk.pick":"Pick a look","pw.h":"Night Pass looks","pw.p":"Unlock {name} and 19 more looks: new worlds, new characters and new screen layouts for all 5 flights.","pw.go":"Unlock with Night Pass","pw.trial":"Try one round","pw.later":"Later","pw.tried":"You already tried today, come back tomorrow.",lockedLbl:"{n} (needs Night Pass)",badge:"Night Pass",
+ "hlp.h.1":"✈️ Pick a flight on the start screen","hlp.h.2":"👆 Tap a flight to see how to play, then press Start","hlp.h.3":"❤️ Lose all hearts and the run ends — play again as often as you like","rank.btn":"🏆 Leaderboard","share.vid":"Run video","daily.t":"Daily flight #{n}","en.tap":"👆 Tap to fly again","pts":"pts","txt.copied":"Result copied!","share.txt":"Share result (text + emoji)","ch.h":"⚔ You've been challenged!","ch.rival":"RIVAL","ch.you":"YOU","ch.go":"⚔ Play now","ch.beat":"Beaten!","ch.beatPop":"Beat the record of {b}!","ch.cd":"FLY!","ch.winT":"YOU WIN!","ch.loseT":"YOU LOST!","ch.tieT":"TIE!","ch.win":"Beat the challenge of {b}.","ch.lose":"Missed the challenge of {b}, try again!","ch.tie":"Tied at {b}.","share.btn":"Show off","share.t":"Show off your score","share.img":"Send image","share.save":"Save image","share.ch":"⚔ Challenge link","share.saved":"Image saved","share.copied":"Link copied, paste it into Zalo, Messenger…","share.copyHint":"Tap the box to copy the link","share.text":"I just flew {n} points in Little Wings, can you beat it?","end.helper":"The result goes back to your friend!","combo":"Combo ×{n}!","cd.title":"Little Wings","cd.ch":"⚔ Beat {n} points!","cd.win":"Beat the challenge of {b}","cd.lose":"Missed the challenge of {b}","cd.score":"SCORE","fun.bee.0":"The bee is still lost 🐝","fun.bee.1":"Pollen collected, the bee heads home!","fun.bee.2":"A busy worker, the hive is full!","fun.bee.3":"Queen bee has arrived 👑","fun.fish.0":"The fish is still warming up 🐟","fun.fish.1":"Smooth jumps, even the waves respect it!","fun.fish.2":"A true flying fish, boats can't touch it!","fun.fish.3":"King of the ocean, gulls give up!","fun.lantern.0":"The lantern is still flickering 🏮","fun.lantern.1":"Flame kept alive, the street glows!","fun.lantern.2":"The whole street is lit up!","fun.lantern.3":"Brightest lantern of the festival ✨","fun.kite.0":"The kite is wobbling 🪁","fun.kite.1":"Nice smooth steering!","fun.kite.2":"Gliding like a kite master!","fun.kite.3":"Owner of the sky, nobody can follow 🌤️","fun.bug.0":"The ladybug fell a few times 🐞","fun.bug.1":"Neat gliding, no raindrops landed!","fun.bug.2":"Dodging rain like a ladybug ninja!","fun.bug.3":"Lord of the garden, even the rain gives up 🌿","how.bee.1":"👆 Tap to flap and fly up","how.bee.2":"🕸️ Dodge webs and thorns, collect 🌼 pollen","how.bee.3":"🌬️ The wind keeps changing · every 5 pollen levels up your hive","how.fish.1":"👆 Quick tap: the fish jumps out of the water","how.fish.2":"✋ Hold: the fish dives deep","how.fish.3":"🚤 Jump over boats and rocks · 🕊️ dive when a gull swoops","how.lantern.1":"👆 Tap to make the lantern fly up","how.lantern.2":"🏠 Dodge rooftops and wires","how.lantern.3":"🕯️ Grab candles to keep the flame alive","how.kite.1":"👆 Drag your finger up and down to steer","how.kite.2":"🌬️ The wind pushes the kite, the string is soft","how.kite.3":"🐦 Dodge birds and storm clouds, grab 🎀 ribbons","how.bug.1":"✋ Hold: the ladybug opens its wings and glides up","how.dep.1":"👆 Tap: jump over slipper piles on the ground","how.bug.2":"👇 Release: it drops fast","how.dep.2":"✋ Hold: jump a little higher","how.bug.3":"💧 Dodge raindrops (a dashed line warns you) and falling leaves","how.dep.3":"🥿 Low slippers: jump. High slippers: keep running underneath","how.go":"▶ Start flying","how.resume":"▶ Resume","how.back":"Other flights","how.rule":"❤️ {h} hearts · score ×{m}", "sk.pick":"Pick a look","pw.h":"Night Pass looks","pw.p":"Unlock {name} and 19 more looks: new worlds, new characters and new screen layouts for all 5 flights.","pw.go":"Unlock with Night Pass","pw.trial":"Try one round","pw.later":"Later","pw.tried":"You already tried today, come back tomorrow.",lockedLbl:"{n} (needs Night Pass)",badge:"Night Pass",
  "sk.bee.default":"Spring garden","sk.bee.sakura":"Cherry blossom","sk.bee.lavender":"Lavender fields","sk.bee.royal":"Royal bee","sk.bee.firefly":"Firefly night",
  "sk.fish.default":"Blue sea","sk.fish.coral":"Coral reef","sk.fish.sunset":"Sunset sea","sk.fish.arctic":"Frozen arctic","sk.fish.glow":"Glowing night sea",
  "sk.lantern.default":"Night street","sk.lantern.hoian":"Hoi An old town","sk.lantern.moon":"Harvest moon","sk.lantern.festival":"Lantern festival","sk.lantern.snow":"Snowy night",
  "sk.kite.default":"Blue sky","sk.kite.rice":"Rice field","sk.kite.beach":"Beach","sk.kite.alps":"Snow peaks","sk.kite.dusk":"Blazing dusk",
- "sk.bug.default":"Garden","sk.bug.rain":"After the rain","sk.bug.mush":"Mushroom forest","sk.bug.night":"Night garden","sk.bug.autumn":"Autumn leaves"}};
+ "sk.bug.default":"Garden","sk.dep.default":"Our street","sk.dep.tet":"Lunar New Year street","sk.dep.mua":"Rainy street","sk.dep.dem":"Night street","sk.dep.bien":"Beach summer","sk.bug.rain":"After the rain","sk.bug.mush":"Mushroom forest","sk.bug.night":"Night garden","sk.bug.autumn":"Autumn leaves"}};
 const t=(k,p)=>{let x=(I18N[LANG]||{})[k];if(x==null)x=I18N.vi[k];if(x==null)x=k;return p&&typeof x==="string"?x.replace(/\{(\w+)\}/g,(_,y)=>p[y]):x};
 const MR=Math.random;let RNG=MR;   /* RNG = bộ số ngẫu nhiên của LUẬT CHƠI (thử thách ngày dùng hạt giống chung); hiệu ứng thì luôn dùng MR */
 const pickOf=a=>a[Math.floor(RNG()*a.length)];
@@ -532,10 +537,10 @@ const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 
 /* ===== LÕI ===== */
 const W=360,BX=96,HR=13;let H=480;
-const TYPES=["bee","fish","lantern","kite","bug"];
+const TYPES=["bee","fish","lantern","kite","bug","dep"];
 const DIFF={easy:{hearts:4,sp:.85,gap:1.3,mult:1,wind:.55,drain:.7,rain:.65,id:"easy"},mid:{hearts:3,sp:1,gap:1.08,mult:1.5,wind:1,drain:1,rain:1,id:"mid"},hard:{hearts:2,sp:1.2,gap:.92,mult:2,wind:1.45,drain:1.3,rain:1.35,id:"hard"}};
 const PF=window.PF={W,BX,t,pickOf,types:{},pro:null,order:TYPES,S:null,dim:{W:360,H:480},safe:{top:0,bottom:0,pad:34},skins:{},skinSel:{},
-  catalog:{bee:["default","sakura","lavender","royal","firefly"],fish:["default","coral","sunset","arctic","glow"],lantern:["default","hoian","moon","festival","snow"],kite:["default","rice","beach","alps","dusk"],bug:["default","rain","mush","night","autumn"]}};
+  catalog:{bee:["default","sakura","lavender","royal","firefly"],fish:["default","coral","sunset","arctic","glow"],lantern:["default","hoian","moon","festival","snow"],kite:["default","rice","beach","alps","dusk"],bug:["default","rain","mush","night","autumn"],dep:["default","tet","mua","dem","bien"]}};
 PF.skinSel=LS.get("cw-skin",{});
 let diff=LS.get("cw-diff","easy");if(!DIFF[diff])diff="easy";
 const curSkin=type=>{const m=PF.skins[type],id=PF.skinSel[type];return m&&id&&m[id]?m[id]:null};
@@ -568,8 +573,9 @@ const PAL={
  fish:{boat:"#c86a3a",rock:"#6f7d8f",gull:"#ffffff",item:"#f4f1ff",st:0},
  lantern:{roof:"#7a2e2e",wall:"#2b2150",wire:"#222",item:"#ffe08a",win:"#ffd36a",st:0},
  kite:{bird:"#2f3b52",storm:"#6c7a99",item:"#ff6b9a",st:0},
- bug:{drop:"#6fc3ff",leaf:"#d98a3a",item:"#8be3ff",st:0}};
-const BASIC_HERO={bee:"🐝",fish:"🐟",lantern:"🏮",kite:"🪁",bug:"🐞"};
+ bug:{drop:"#6fc3ff",leaf:"#d98a3a",item:"#8be3ff",st:0},
+ dep:{a:"#ff4d8d",b:"#4da3ff",c:"#7ed957",item:"#ffd23f",st:0}};
+const BASIC_HERO={bee:"🐝",fish:"🐟",lantern:"🏮",kite:"🪁",bug:"🐞",dep:"🏃"};
 
 /* nền mặc định (miễn phí) */
 const BASIC_BG={
@@ -577,6 +583,7 @@ const BASIC_BG={
  fish(c,S){const yw=S.c.yw;sky(c,["#9fdcff","#e9f8ff"]);cloudsL(c,S,"#fff",.16,3,8,.9);const g=c.createLinearGradient(0,yw,0,H);g.addColorStop(0,"#37a9e8");g.addColorStop(1,"#0b4a86");c.fillStyle=g;c.fillRect(0,yw,W,H-yw);c.strokeStyle="rgba(255,255,255,.7)";c.lineWidth=3;c.beginPath();for(let x=0;x<=W;x+=6)c.lineTo(x,yw+Math.sin((x+S.t*40)/14)*2.5);c.stroke()},
  lantern(c,S){sky(c,["#1b1850","#6e3a96","#ff9a76"]);c.fillStyle="#fff";for(let i=0;i<22;i++){c.globalAlpha=.4+.6*Math.abs(Math.sin(S.t*1.4+i));disc(c,(i*97+S.t*-3)%W+(i*97+S.t*-3<0?W:0),(i*53)%(H*.5),1.2)}c.globalAlpha=1;c.fillStyle="#fff6c8";disc(c,W*.78,H*.16,26);hillsL(c,S,"#2a1550",.88,36,12,34)},
  kite(c,S){sky(c,["#66c8ff","#e9f8ff"]);cloudsL(c,S,"#fff",.3,4,10,.9);cloudsL(c,S,"#fff",.65,3,18,.7);hillsL(c,S,"#8fd18f",.9,40,10,50)},
+ dep(c,S){const gy=S.c.gy||H*.76;const g=c.createLinearGradient(0,0,0,gy);g.addColorStop(0,"#2fb2d0");g.addColorStop(1,"#9be8d8");c.fillStyle=g;c.fillRect(0,0,W,H);c.fillStyle="rgba(255,210,63,.3)";disc(c,W*.78,H*.16,38);c.fillStyle="#ffd23f";disc(c,W*.78,H*.16,26);const off=S.c.off||0;const cols=["#30b5ae","#37bfb7","#ffb84d","#ff8a5b","#f7a1c4"];const bw=54,per=bw*9,o=(off*.3)%per;for(let k=-1;k<9;k++){const i=((k%9)+9)%9,hh=70+((i*37)%90),x=k*bw-o;c.fillStyle=cols[i%5];c.fillRect(x,gy-hh,bw-4,hh);c.fillStyle="rgba(27,27,47,.2)";c.fillRect(x,gy-hh,bw-4,6);c.fillStyle="rgba(27,27,47,.35)";for(let yy=gy-hh+16;yy<gy-24;yy+=26)c.fillRect(x+10,yy,10,14),c.fillRect(x+bw-24,yy,10,14)}},
  bug(c,S){sky(c,["#d6f5c6","#f4ffe9"]);cloudsL(c,S,"#fff",.12,2,6,.7);hillsL(c,S,"#7fcf78",.8,48,10,40);hillsL(c,S,"#4fae5c",.92,36,20,32,3)}};
 
 /* ===== PAINTERS VẬT CẢN (dùng bảng màu của giao diện) ===== */
@@ -591,9 +598,11 @@ const P={
  birds(c,o,S,pal){c.fillStyle=pal.bird;c.strokeStyle=pal.bird;c.lineWidth=3;c.lineCap="round";for(let i=0;i<3;i++){const bx=o.x+10+i*14,by=o.y+10+(i===1?-8:i?6:0),f=Math.sin(S.t*14+i)*5;c.beginPath();c.moveTo(bx-9,by-f);c.quadraticCurveTo(bx-3,by-6,bx,by);c.quadraticCurveTo(bx+3,by-6,bx+9,by-f);c.stroke()}},
  storm(c,o,S,pal){c.fillStyle=pal.storm;c.beginPath();c.ellipse(o.x+o.w/2,o.y+o.h/2,o.w/2,o.h/2-4,0,0,TAU);c.ellipse(o.x+o.w*.25,o.y+o.h*.6,o.w*.28,o.h*.32,0,0,TAU);c.ellipse(o.x+o.w*.75,o.y+o.h*.6,o.w*.28,o.h*.32,0,0,TAU);c.fill();if(Math.sin(S.t*9+o.x)>.6){c.strokeStyle="#ffe14d";c.lineWidth=3;c.beginPath();c.moveTo(o.x+o.w*.5,o.y+o.h*.7);c.lineTo(o.x+o.w*.42,o.y+o.h+8);c.lineTo(o.x+o.w*.55,o.y+o.h+8);c.lineTo(o.x+o.w*.46,o.y+o.h+22);c.stroke()}},
  drop(c,o,S,pal){c.fillStyle=pal.drop;c.beginPath();c.moveTo(o.x+5,o.y-6);c.quadraticCurveTo(o.x+14,o.y+10,o.x+5,o.y+16);c.quadraticCurveTo(o.x-4,o.y+10,o.x+5,o.y-6);c.fill();c.fillStyle="rgba(255,255,255,.55)";disc(c,o.x+3,o.y+6,2)},
+ stack(c,o,S,pal){const cs=[pal.a,pal.b,pal.c];for(let i=0;i<o.n;i++){const y=o.y+o.h-(i+1)*20;c.fillStyle=cs[(o.col+i)%3];c.strokeStyle="#1b1b2f";c.lineWidth=2.5;rrect(c,o.x+(i%2?3:0),y+1,o.w-3,18,8);c.fill();c.stroke();c.strokeStyle="#fff6dc";c.lineWidth=3.5;c.lineCap="round";c.beginPath();c.moveTo(o.x+12+(i%2?3:0),y+10);c.lineTo(o.x+o.w-14,y+10);c.stroke()}},
+ fly(c,o,S,pal){c.save();c.translate(o.x+o.w/2,o.y+o.h/2);c.rotate(o.rot||0);c.fillStyle=o.low?pal.a:pal.b;c.strokeStyle="#1b1b2f";c.lineWidth=2.5;c.beginPath();c.ellipse(0,0,10.5,17,0,0,TAU);c.fill();c.stroke();c.strokeStyle="#fff6dc";c.lineWidth=4.5;c.lineCap="round";c.lineJoin="round";c.beginPath();c.moveTo(-6.5,-3);c.lineTo(0,-11);c.lineTo(6.5,-3);c.stroke();c.restore()},
  leaf(c,o,S,pal){c.save();c.translate(o.x+o.w/2,o.y+o.h/2);c.rotate(Math.sin(S.t*2+o.ph)*.6);c.fillStyle=pal.leaf;c.beginPath();c.ellipse(0,0,o.w/2,o.h/2,0,0,TAU);c.fill();c.strokeStyle="rgba(0,0,0,.25)";c.lineWidth=1.5;c.beginPath();c.moveTo(-o.w/2,0);c.lineTo(o.w/2,0);c.stroke();c.restore()}
 };
-const ITEM_EMO={bee:"🌼",fish:"🫧",lantern:"🕯️",kite:"🎀",bug:"💧"};
+const ITEM_EMO={bee:"🌼",fish:"🫧",lantern:"🕯️",kite:"🎀",bug:"💧",dep:"🍚"};
 
 /* ===== TRẠNG THÁI VÁN ===== */
 function newState(type,opts){
@@ -685,6 +694,25 @@ PF.types.bug={id:"bug",
   hud(S){return t("hud.bug",{n:S.c.dew})}
 };
 
+/* ===== LOẠI 6: NÉ DÉP (chạy trên phố, chạm nhảy, giữ nhảy cao; mẹ ném dép) ===== */
+PF.types.dep={id:"dep",
+  init(S){const gy=Math.round(H*.76);S.c={gy,rest:gy-24,hold:false,holdT:0,air:false,vy:0,off:0,momT:0};S.h.y=S.c.rest},
+  down(S){const c=S.c;c.hold=true;if(!c.air&&!S.over){c.air=true;c.vy=-720;c.holdT=0;sfx.jump();burst(BX,c.gy,"💨",3)}},
+  up(S){S.c.hold=false},
+  update(S,dt){const c=S.c,h=S.h;c.gy=Math.round(H*.76);c.rest=c.gy-24;c.off+=S.speed*dt;if(c.momT>0)c.momT-=dt;
+    if(c.air){let g=2600;if(c.hold&&c.vy<0&&c.holdT<.16)g*=.35;c.holdT+=dt;c.vy+=g*dt;h.y+=c.vy*dt;h.rot=clamp(c.vy*.0004,-.25,.25);if(h.y>=c.rest&&c.vy>0){h.y=c.rest;c.vy=0;c.air=false;h.rot=0;burst(BX,c.gy,"💨",2);if(c.hold){c.air=true;c.vy=-720;c.holdT=0;sfx.jump()}}}
+    else{h.y=c.rest;h.rot=0}
+    h.vy=c.vy;for(const o of S.obs)if(o.k==="fly"){o.x-=o.sp*dt;o.rot+=o.spin*dt}},
+  spawn(S){const c=S.c,r=RNG();
+    if(r<.42){const n=1+Math.floor(RNG()*3);S.obs.push({k:"stack",x:W+30,y:c.gy-n*20,w:42,h:n*20,n,col:Math.floor(RNG()*3),sc:true})}
+    else if(r<.72){S.obs.push({k:"fly",x:W+30,y:c.gy-52,w:30,h:32,low:true,sp:55,rot:0,spin:10,sc:true});c.momT=.3}
+    else{S.obs.push({k:"fly",x:W+30,y:c.gy-148,w:30,h:32,low:false,sp:35,rot:0,spin:-12,sc:true});c.momT=.3}
+    S.spawnAt=rf(165,225)},
+  hud(S){return t("hud.dep",{n:S.passed})},
+  paintBack(c,S){const gy=S.c.gy,off=S.c.off,pl=S.pal;c.fillStyle=pl.curb||"#d8d2bd";c.fillRect(0,gy,W,12);c.fillStyle=pl.road||"#f2542d";c.fillRect(0,gy+12,W,H-gy-12);c.fillStyle="rgba(27,27,47,.16)";c.fillRect(0,gy+12,W,5);c.fillStyle=pl.line||"#fff6dc";const gap=70,o=off%gap;for(let x=-gap;x<W+gap;x+=gap)c.fillRect(x-o,gy+44,36,5);
+    const k=S.c.momT>0?Math.sin((.3-S.c.momT)/.3*Math.PI):0;c.font="46px "+EMO;c.textAlign="center";c.textBaseline="middle";c.fillText(pl.mom||"👩",W-26-k*14,gy-24)}
+};
+
 /* ===== CẬP NHẬT ===== */
 function update(dt){
   const S=PF.S;if(!S)return;if(S.over){S.endT-=dt;S.h.vy+=520*dt;S.h.y+=S.h.vy*dt;S.h.rot+=dt*4;if(S.endT<=0)finishRound();stepParts(S,dt);return}
@@ -707,9 +735,9 @@ function stepParts(S,dt){for(const p of S.parts){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+
 /* ===== VẼ ===== */
 function paintObs(c,S,o){const pal=S.pal,sk=S.skin;if(sk&&sk.obs&&sk.obs(c,o,S,pal))return;
   switch(o.k){case"web":P.web(c,o,pal);break;case"thorn":P.thorn(c,o,pal);break;case"boat":P.boat(c,o,S,pal);break;case"rock":P.rock(c,o,S,pal);break;case"gull":P.gull(c,o,S,pal);break;
-    case"roof":P.roof(c,o,pal);break;case"wire":P.wire(c,o,pal);break;case"birds":P.birds(c,o,S,pal);break;case"storm":P.storm(c,o,S,pal);break;case"drop":if(o.warn>0){c.strokeStyle="rgba(120,190,255,.55)";c.lineWidth=2;c.setLineDash([4,5]);c.beginPath();c.moveTo(o.x+5,0);c.lineTo(o.x+5,H);c.stroke();c.setLineDash([]);c.fillStyle="rgba(120,190,255,.8)";c.beginPath();c.moveTo(o.x+5,4);c.lineTo(o.x-1,16);c.lineTo(o.x+11,16);c.fill()}else P.drop(c,o,S,pal);break;case"leaf":P.leaf(c,o,S,pal);break}}
+    case"roof":P.roof(c,o,pal);break;case"wire":P.wire(c,o,pal);break;case"birds":P.birds(c,o,S,pal);break;case"storm":P.storm(c,o,S,pal);break;case"drop":if(o.warn>0){c.strokeStyle="rgba(120,190,255,.55)";c.lineWidth=2;c.setLineDash([4,5]);c.beginPath();c.moveTo(o.x+5,0);c.lineTo(o.x+5,H);c.stroke();c.setLineDash([]);c.fillStyle="rgba(120,190,255,.8)";c.beginPath();c.moveTo(o.x+5,4);c.lineTo(o.x-1,16);c.lineTo(o.x+11,16);c.fill()}else P.drop(c,o,S,pal);break;case"leaf":P.leaf(c,o,S,pal);break;case"stack":P.stack(c,o,S,pal);break;case"fly":P.fly(c,o,S,pal);break}}
 function drawHero(c,S){const h=S.h,sk=S.skin;c.save();c.translate(BX,h.y);c.rotate(h.rot);if(S.inv>0&&Math.floor(S.t*14)%2===0)c.globalAlpha=.45;
-  if(sk&&sk.hero)sk.hero(c,S,h);else{c.font="44px "+EMO;c.textAlign="center";c.textBaseline="middle";if(S.type==="bee"||S.type==="fish")c.scale(-1,1);if(S.type==="kite")c.rotate(.5);c.fillText(BASIC_HERO[S.type],0,0)}
+  if(sk&&sk.hero)sk.hero(c,S,h);else{c.font="44px "+EMO;c.textAlign="center";c.textBaseline="middle";if(S.type==="bee"||S.type==="fish"||S.type==="dep")c.scale(-1,1);if(S.type==="kite")c.rotate(.5);c.fillText(BASIC_HERO[S.type],0,0)}
   c.restore()}
 function drawKiteString(c,S){const h=S.h,tail=S.c.ribbons||0;c.strokeStyle="rgba(255,255,255,.8)";c.lineWidth=1.5;c.beginPath();c.moveTo(BX-6,h.y+12);c.quadraticCurveTo(BX-40,h.y+(H-h.y)*.5,18,H);c.stroke()}
 function draw(){
@@ -722,7 +750,7 @@ function draw(){
   for(const it of S.items){if(it.got)continue;const bob=Math.sin(S.t*5+it.x*.05)*3;if(sk&&sk.item)sk.item(ctx,it,S);else{glow(ctx,it.x,it.y+bob,20,"rgba(255,240,150,.55)");ctx.font="26px "+EMO;ctx.fillStyle="#000";ctx.fillText((sk&&sk.itemGlyph)||ITEM_EMO[S.type],it.x,it.y+bob)}}
   if(S.type==="kite")drawKiteString(ctx,S);
   if(S.type==="lantern"&&!(sk&&sk.noFlame)){const f=S.c.flame/100;glow(ctx,BX,S.h.y,34+46*f,"rgba(255,190,80,"+(.25+.4*f)+")")}
-  drawHero(ctx,S);
+  drawHero(ctx,S);if(sk&&sk.fx)sk.fx(ctx,S);   /* hiệu ứng riêng của giao diện (Night Pass) */
   if(S.type==="kite"&&S.c.ribbons>=0){ctx.strokeStyle=S.pal.item;ctx.lineWidth=3;ctx.lineCap="round";ctx.beginPath();const n=2+S.c.ribbons;for(let i=0;i<n;i++){const x=BX-16-i*8,y=S.h.y+14+Math.sin(S.t*6-i*.8)*6+i*2;i?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.stroke()}
   const gl=sk&&sk.glyphs;for(const p of S.parts){ctx.globalAlpha=Math.max(0,p.life);ctx.font=p.s+"px "+EMO;ctx.fillText(p.g,p.x,p.y)}ctx.globalAlpha=1;
   if(S.type==="lantern"){const f=S.c.flame/100;if(f<.45){ctx.fillStyle="rgba(5,0,25,"+(.55*(1-f/.45))+")";ctx.fillRect(0,0,W,H)}}
@@ -739,6 +767,7 @@ PF.preview=function(type,id,c){const sk=id==="default"?null:(PF.skins[type]||{})
   if(type==="bee"||type==="lantern"){const k1=type==="bee"?"web":"wire",k2=type==="bee"?"thorn":"roof";S.obs=[{k:k1,x:210,y:0,w:type==="bee"?48:14,h:g*.3},{k:k2,x:210,y:g*.7,w:type==="bee"?48:54,h:g*.3}];S.items=[{k:"item",x:236,y:g*.5,r:12}]}
   if(type==="fish"){S.obs=[{k:"rock",x:210,y:yw+6,w:44,h:H},{k:"gull",x:290,y:yw-100,w:34,h:140}];S.items=[{k:"item",x:160,y:yw-82,r:12},{k:"item",x:250,y:S.c.deep,r:12}]}
   if(type==="kite"){S.obs=[{k:"birds",x:210,y:g*.25,w:46,h:30},{k:"storm",x:250,y:g*.65,w:72,h:46}];S.items=[{k:"item",x:170,y:g*.5,r:12}];S.c.ribbons=4}
+  if(type==="dep"){const gy=S.c.gy;S.obs=[{k:"stack",x:200,y:gy-60,w:42,h:60,n:3,col:0},{k:"fly",x:280,y:gy-52,w:30,h:32,low:true,rot:.5}];S.h.y=S.c.rest}
   if(type==="bug"){S.obs=[{k:"leaf",x:200,y:g*.3,w:38,h:20,ph:0},{k:"drop",x:260,y:g*.55,w:12,h:20,warn:0},{k:"drop",x:300,y:g*.25,w:12,h:20,warn:0}];S.items=[{k:"item",x:170,y:g*.55,r:12},{k:"item",x:240,y:g*.8,r:12}]}
   PF.S=S;draw();};
 
@@ -766,7 +795,7 @@ function shareText(info){const rows=[],lg=info.log||[];for(let i=0;i<lg.length&&
   const head=info.daily?"📅 "+t("title")+" #"+info.daily.n:ICO[info.type]+" "+t("title");
   return head+"\n"+t("ty."+info.type)+" · "+t("dif."+info.diff)+" · "+info.score+" "+t("pts")+"\n"+(rows.length?rows.join("\n")+"\n":"")+challengeUrl(info)}
 const funLine=info=>{const n=info.score,tier=n>=300?3:n>=150?2:n>=50?1:0;return t("fun."+info.type+"."+tier)};
-const CARD_COL={bee:["#ffe27a","#ff9f1c"],fish:["#6fd3ff","#1f6fd6"],lantern:["#6a3aa8","#ff7a3a"],kite:["#7ad7ff","#4a8cff"],bug:["#b8f08a","#3aa660"]};
+const CARD_COL={bee:["#ffe27a","#ff9f1c"],fish:["#6fd3ff","#1f6fd6"],lantern:["#6a3aa8","#ff7a3a"],kite:["#7ad7ff","#4a8cff"],bug:["#b8f08a","#3aa660"],dep:["#ff8a5b","#f2542d"]};
 let endInfo=null,endAt=0;
 function wrapLines(x,text,maxW){const words=String(text).split(" "),lines=[];let cur="";for(const w of words){const tt=cur?cur+" "+w:w;if(x.measureText(tt).width>maxW&&cur){lines.push(cur);cur=w}else cur=tt}if(cur)lines.push(cur);return lines}
 function drawCard(cv2,info){
@@ -853,7 +882,7 @@ PF.startRound=startRound;
 function finishRound(){
   const S=PF.S;if(!S||S.over===2)return;S.over=2;running=false;$("pauseBtn").hidden=true;
   const best=LS.get("cw-best",{}),k=S.daily?"daily:"+dailyInfo().key:S.type+":"+S.D.id,isNew=S.score>(best[k]||0);if(isNew){best[k]=S.score;LS.set("cw-best",best)}
-  sfx.win();$("enH").textContent=t(isNew&&S.score>0?"en.h.new":"en.h");$("enP").textContent=t("en.p",{n:S.score});$("enD").textContent=t("en.d",{t:t("ty."+S.type),d:t("dif."+S.D.id)});
+  sfx.win();$("enH").textContent=t(isNew&&S.score>0?"en.h.new":"en.h");$("enP").innerHTML='<small class="enPl">'+t("en.p",{n:""}).trim()+'</small><b class="enPn">'+(S.score)+'</b>';$("enD").textContent=t("en.d",{t:t("ty."+S.type),d:t("dif."+S.D.id)});
   const skid=PF.skinSel[S.type];endInfo={score:S.score,type:S.type,diff:S.D.id,sk:skid&&skid!=="default"&&PF.skins[S.type]&&PF.skins[S.type][skid]?skid:"default",ch:CH&&!HELPER?CH.s:0,daily:S.daily?dailyInfo():null,log:S.log.slice(),hearts:S.hearts};
   endAt=performance.now();if(window.NPFx&&!HELPER)NPFx.recStop().then(b=>{if(endInfo)endInfo.video=b&&b.size>2000?b:null;if(!$("ovShare").hidden)$("shVid").hidden=!(endInfo&&endInfo.video)});if(S.daily){const ds=dailyStore();dailyDone(S);$("enD").textContent="📅 "+t("daily.t",{n:dailyInfo().n})}
   let hd=null;if(CH&&!HELPER){const w=S.score>CH.s,l=S.score<CH.s;hd=(w?"🏆 ":l?"😅 ":"🤝 ")+t(w?"ch.winT":l?"ch.loseT":"ch.tieT");$("enH").className=w?"chw":l?"chl":"chw";$("enD").textContent=t(w?"ch.win":l?"ch.lose":"ch.tie",{b:CH.s})}else{$("enH").className=""}
@@ -893,7 +922,7 @@ $("langBtn").addEventListener("click",()=>{LANG=LANG==="vi"?"en":"vi";try{localS
 const passToken=()=>{try{const p=JSON.parse(localStorage.getItem("pass"));return p&&p.token}catch(e){return null}};
 const track=(f,k)=>{try{fetch("/api/paywall",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({f,k}),keepalive:true}).catch(()=>{})}catch(e){}};
 const subUrl=()=>"../../../subscribe.html?from="+encodeURIComponent("cozyplay/index.html#cozy-wings")+"&plan=month";
-const ICO={bee:"🐝",fish:"🐟",lantern:"🏮",kite:"🪁",bug:"🐞"};
+const ICO={bee:"🐝",fish:"🐟",lantern:"🏮",kite:"🪁",bug:"🐞",dep:"🥿"};
 const DIFF_ICO={easy:"🌱",mid:"⚡",hard:"🔥"};
 function applyDiffTheme(){document.documentElement.dataset.diff=diff}
 function renderDiff(){const box=$("diffs");box.textContent="";applyDiffTheme();["easy","mid","hard"].forEach(id=>{const b=document.createElement("button");b.type="button";b.className="dif"+(diff===id?" on":"");b.textContent=DIFF_ICO[id];b.setAttribute("aria-label",t("dif."+id));b.setAttribute("aria-pressed",diff===id);b.onclick=()=>{diff=id;LS.set("cw-diff",id);renderDiff();renderCards()};box.appendChild(b)})}
@@ -918,7 +947,7 @@ function openSkins(ty){
   skFor=ty;$("skH").textContent="🎨 "+t("ty."+ty);const g=$("skGrid");g.textContent="";
   for(const id of PF.catalog[ty]){
     const locked=skLocked(ty,id),b=document.createElement("button");b.type="button";b.className="sk"+(locked?" lock":"")+((PF.skinSel[ty]||"default")===id?" on":"");
-    b.innerHTML='<i class="e" aria-hidden="true">'+({bee:"🐝",fish:"🐟",lantern:"🏮",kite:"🪁",bug:"🐞"}[ty]||"🎨")+'</i><img alt="" src="'+THUMB(ty,id)+'" loading="lazy" onerror="this.style.visibility=\'hidden\'"><span>'+t("sk."+ty+"."+id)+'</span>';
+    b.innerHTML='<i class="e" aria-hidden="true">'+({bee:"🐝",fish:"🐟",lantern:"🏮",kite:"🪁",bug:"🐞",dep:"🥿"}[ty]||"🎨")+'</i><img alt="" src="'+THUMB(ty,id)+'" loading="lazy" onerror="this.style.visibility=\'hidden\'"><span>'+t("sk."+ty+"."+id)+'</span>';
     b.setAttribute("aria-label",locked?t("lockedLbl",{n:t("sk."+ty+"."+id)}):t("sk."+ty+"."+id));
     b.onclick=()=>locked?openPay(ty,id):chooseSkin(ty,id);g.appendChild(b);
   }
@@ -962,7 +991,15 @@ function applyLang(){
   renderStart();$("paH").textContent=t("pause");$("resumeBtn").setAttribute("aria-label",t("resume"));$("homeBtn1").setAttribute("aria-label",t("home"));$("skBack").setAttribute("aria-label",t("home"));$("againBtn").setAttribute("aria-label",t("again"));$("homeBtn2").setAttribute("aria-label",t("home"));$("shareBtn").setAttribute("aria-label",t("share.btn"));$("rankBtn").setAttribute("aria-label",t("rank.btn"));$("hwBack").setAttribute("aria-label",t("how.back"));
   $("pauseBtn").setAttribute("aria-label",t("pause"));$("bBk").setAttribute("aria-label",t("back"));$("bBk").title=t("back");$("askBtn").setAttribute("aria-label",t("how"));cv.setAttribute("aria-label",t("title"));syncSound();renderDiff();renderCards();renderStart();
   if(PF.S&&PF.S.ty)$("askTxt").innerHTML=PF.S.ty.hud(PF.S);else $("askTxt").textContent=t("st.p");
+  if(typeof renderHelpSrc==="function")renderHelpSrc();
 }
+/* ===== NÚT ? (shared/help.js): nguồn chữ = .help-src, đổi theo loại đang bay + ngôn ngữ; mở ? giữa ván thì tạm dừng, đóng thì chạy tiếp ===== */
+function renderHelpSrc(){let h=$("hlpSrc");if(!h){h=document.createElement("div");h.id="hlpSrc";h.hidden=true;document.body.appendChild(h)}
+  const S=PF.S,ty=S&&S.type;const L=ty&&PF.types[ty]?[1,2,3].map(i=>t("how."+ty+"."+i)).concat([t("how.rule",{h:S.D.hearts,m:S.D.mult})]):[t("hlp.h.1"),t("hlp.h.2"),t("hlp.h.3")];
+  h.innerHTML="";L.forEach(x=>{const d=document.createElement("div");d.className="help-src";d.textContent=x;h.appendChild(d)})}
+renderHelpSrc();
+document.addEventListener("click",e=>{if(!(e.target.closest&&e.target.closest("#bHelp")))return;renderHelpSrc();if(running&&!paused)pauseRound("parent");
+  const ov=$("hlpOv");if(ov&&!ov._w){ov._w=1;new MutationObserver(()=>{if(ov.hidden)resumeRound("parent")}).observe(ov,{attributes:true,attributeFilter:["hidden"]})}},true);
 addEventListener("storage",e=>{if(e.key==="theme")document.documentElement.dataset.theme=e.newValue||"light"});
 
 /* ===== CẦU NỐI VỚI TRANG CHA ===== */

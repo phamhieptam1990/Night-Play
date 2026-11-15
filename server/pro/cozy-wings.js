@@ -136,6 +136,12 @@ function main(PF, OPTS) {
   Lyr.lanternsFloat = (c, S, l) => { for (let i = 0; i < l.n; i++) { const x = ((rnd(i) * W - S.t * 8 * (.5 + rnd(i + 1))) % W + W) % W, y = (((rnd(i + 3) * H()) - S.t * 18 * (.5 + rnd(i + 6))) % H() + H()) % H(); glow(c, x, y, 20, "rgba(255,170,70,.55)"); c.fillStyle = l.c[i % l.c.length]; c.beginPath(); c.ellipse(x, y, 6, 8, 0, 0, TAU); c.fill(); } };
   Lyr.ice = (c, S, l) => { const per = 110, off = S.t * l.sp, sh = off % per, i0 = Math.floor(off / per), base = H() * l.y; for (let k = -1; k < 5; k++) { const x = k * per - sh, h = 26 + rnd(i0 + k) * 40; c.fillStyle = l.c; c.beginPath(); c.moveTo(x - 30, base + 4); c.lineTo(x - 8, base - h); c.lineTo(x + 6, base - h * .6); c.lineTo(x + 24, base - h * .9); c.lineTo(x + 42, base + 4); c.closePath(); c.fill(); } };
 
+  /* dãy phố cho chuyến Né Dép: đứng trên mặt đường (S.c.gy), lặp liền mạch */
+  Lyr.skyline = (c, S, l) => { const gy = S.c.gy, ws = []; let P = 0; for (let k = 0; k < 12; k++) { const w = 44 + rnd(k + 40) * 32; ws.push([P, w, 60 + rnd(k + 70) * (l.h || 110), k]); P += w + 3; }
+    const sh = (S.t * l.sp) % P; for (let rep = -1; rep < 3; rep++) for (const [px, w, h, k] of ws) { const x = px + rep * P - sh; if (x > W + 4 || x + w < -4) continue;
+      c.fillStyle = l.cols[k % l.cols.length]; c.fillRect(x, gy - h, w, h); c.fillStyle = "rgba(0,0,0,.18)"; c.fillRect(x, gy - h, w, 6);
+      c.fillStyle = l.win; for (let yy = gy - h + 14; yy < gy - 14; yy += 20) for (let xx = x + 8; xx < x + w - 10; xx += 14) if (rnd(k * 31 + xx * 0 + yy + (xx - x)) > .4) c.fillRect(xx, yy, 6, 9); } };
+
   /* ================= NHÂN VẬT TỰ VẼ (quay mặt sang phải) ================= */
   const eye = (c, x, y, r) => { c.fillStyle = "#fff"; disc(c, x, y, r); c.fillStyle = "#1b1330"; disc(c, x + r * .3, y, r * .55); c.fillStyle = "#fff"; disc(c, x + r * .45, y - r * .3, r * .2); };
   const acc = (c, name, x, y, S) => {
@@ -202,6 +208,45 @@ function main(PF, OPTS) {
     if (o.acc) acc(c, o.acc, 2, -14, S);
   };
 
+  const depH = o => (c, S, h) => {
+    /* nhân vật Night Pass: to hơn bản free ~35%, có quầng sáng + viền đậm + trang phục riêng, nên nổi hẳn lên khỏi nền */
+    const air = !!(S.c && S.c.air), ph = ((S.c && S.c.off) || 0) * .09, bob = air ? 0 : Math.abs(Math.sin(ph)) * 1.5;
+    glow(c, 0, 2, 54, o.aura || o.glow || "rgba(255,255,255,.45)");
+    c.save(); c.translate(0, 22); c.scale(1.35, 1.35); c.translate(0, -22 - bob);
+    c.lineJoin = "round"; c.lineCap = "round";
+    if (o.back) o.back(c, S, air, ph);
+    c.strokeStyle = o.pants || "#1b1330"; c.lineWidth = 4.5;
+    for (let k = 0; k < 2; k++) { const sw = !air ? Math.sin(ph + k * Math.PI) * 9 : (k ? 7 : -7); c.beginPath(); c.moveTo(0, 10); c.lineTo(sw, 22); c.stroke(); c.fillStyle = o.shoe || "#fff"; disc(c, sw + 2, 22.5, 3.2); }
+    c.fillStyle = o.tunic; c.strokeStyle = "#1b1330"; c.lineWidth = 2; c.beginPath(); c.ellipse(0, 4, 10.5, 11.5, 0, 0, TAU); c.fill(); c.stroke();
+    c.fillStyle = o.trim || "#fff"; c.fillRect(-10, 6, 20, 3);
+    c.fillStyle = o.skin; c.beginPath(); c.arc(2, -11, 11.5, 0, TAU); c.fill(); c.stroke();
+    c.fillStyle = o.hair; c.beginPath(); c.arc(2, -11, 11.5, Math.PI * 1.02, Math.PI * 2 - .1); c.lineTo(2, -14); c.closePath(); c.fill();
+    eye(c, 7.5, -10, 2.9); c.strokeStyle = "#7a2b2b"; c.lineWidth = 1.6; c.beginPath(); c.arc(8, -6, 3.2, .2, 1.5); c.stroke();
+    if (o.front) o.front(c, S, air, ph);
+    if (o.acc) acc(c, o.acc, 2, -21, S);
+    c.restore();
+    if (o.sparks) { for (let i = 0; i < 4; i++) { const t = (S.t * 1.6 + i * .25) % 1, a = Math.sin(t * Math.PI); c.globalAlpha = a; c.fillStyle = o.sparks; starPath(c, -18 + Math.sin(i * 2.1 + S.t * 3) * 22, -26 - t * 16 + i * 4, 4 + a * 2, 1.6); c.fill(); } c.globalAlpha = 1; }
+  };
+
+  /* hiệu ứng riêng từng giao diện Né Dép (vẽ trên cảnh, dưới hạt): người chơi nhìn vào là biết đây không phải bản free */
+  const DEPFX = {
+    tet(c, S) { const cols = ["#ffd23f", "#ff4d4d", "#ff9f43", "#fff3c4"];
+      for (let b = 0; b < 2; b++) { const T = 2.4, tt = S.t + b * 1.2, k = Math.floor(tt / T), ph = (tt % T) / T; if (ph > .72) continue;
+        const cx = 60 + rnd(k * 3 + b) * 240, cy = H() * .1 + rnd(k * 5 + b + 1) * H() * .22, r = 6 + ph * 62, a = 1 - ph / .72; c.globalAlpha = a; c.fillStyle = cols[(k + b) % 4];
+        for (let i = 0; i < 16; i++) { const an = i * TAU / 16; disc(c, cx + Math.cos(an) * r, cy + Math.sin(an) * r + ph * ph * 22, 2.6); disc(c, cx + Math.cos(an) * r * .6, cy + Math.sin(an) * r * .6 + ph * ph * 14, 1.6); } c.globalAlpha = 1; } },
+    mua(c, S) { const gy = S.c.gy, off = S.c.off || 0; c.strokeStyle = "rgba(255,255,255,.7)"; c.lineWidth = 1.6;
+      for (let i = 0; i < 7; i++) { const x = ((rnd(i) * W - off * (.6 + rnd(i + 3) * .4)) % W + W) % W, y = gy + 26 + rnd(i + 7) * (H() - gy - 46), ph = (S.t * 1.4 + i * .37) % 1; c.globalAlpha = (1 - ph) * .85; c.beginPath(); c.ellipse(x, y, 4 + ph * 18, 1.6 + ph * 6, 0, 0, TAU); c.stroke(); }
+      c.globalAlpha = 1; if (!(S.c && S.c.air)) { c.fillStyle = "rgba(190,225,255,.9)"; for (let i = 0; i < 4; i++) { const ph = (S.t * 5 + i * .25) % 1; disc(c, PF.BX - 6 - i * 5, gy - 2 - Math.sin(ph * Math.PI) * 12, 2); } } },
+    dem(c, S) { const gy = S.c.gy; c.save(); c.globalCompositeOperation = "lighter";
+      for (let k = 1; k <= 7; k++) { c.fillStyle = k % 2 ? "rgba(124,240,255," + .34 * (1 - k / 8) + ")" : "rgba(255,47,208," + .34 * (1 - k / 8) + ")"; disc(c, PF.BX - 12 - k * 9, S.h.y + 6, 11 - k * 1.1); }
+      for (const o of S.obs) if (o.k === "fly") glow(c, o.x + 15, o.y + 16, 30, o.low ? "rgba(255,47,208,.55)" : "rgba(47,230,255,.55)");
+      const g = c.createLinearGradient(0, gy, 0, gy + 18); g.addColorStop(0, "rgba(124,240,255,.55)"); g.addColorStop(1, "rgba(124,240,255,0)"); c.fillStyle = g; c.fillRect(0, gy, W, 18); c.restore(); },
+    bien(c, S) { const gy = S.c.gy; c.strokeStyle = "rgba(255,255,255,.9)"; c.lineWidth = 3; c.lineCap = "round"; c.beginPath(); for (let x = 0; x <= W + 6; x += 6) c.lineTo(x, gy - 3 + Math.sin((x + S.t * 60) / 12) * 2.5); c.stroke();
+      c.lineWidth = 2; c.strokeStyle = "#ffffff"; for (let i = 0; i < 3; i++) { const x = ((rnd(i + 20) * W - S.t * (22 + i * 8)) % (W + 60) + W + 60) % (W + 60) - 30, y = H() * (.1 + rnd(i + 24) * .2) + Math.sin(S.t * 2 + i) * 6, f = Math.sin(S.t * 7 + i) * 4;
+        c.beginPath(); c.moveTo(x - 9, y + f); c.quadraticCurveTo(x - 4, y - 5, x, y); c.quadraticCurveTo(x + 4, y - 5, x + 9, y + f); c.stroke(); }
+      c.fillStyle = "#fff"; for (let i = 0; i < 9; i++) { const a = Math.abs(Math.sin(S.t * 3 + i * 1.7)); c.globalAlpha = a; disc(c, 20 + rnd(i + 50) * (W - 40), H() * .5 + rnd(i + 60) * (gy - H() * .5 - 60), 1.6 + a * 1.4); } c.globalAlpha = 1; }
+  };
+
   /* ================= 20 GIAO DIỆN ================= */
   const mk = (layout, bg, hero, pal, glyph) => ({ layout, bg, hero, pal: pal || {}, itemGlyph: glyph });
   const PET = ["#ffc2dc", "#ff9ec7", "#fff"];
@@ -255,6 +300,16 @@ function main(PF, OPTS) {
         bugH({ shell: "#3ab0ff", spot: "#fff", wing: "#cfeaff", glow: "rgba(90,200,255,.4)", acc: "halo" }), { drop: "#7fb8ff", leaf: "#5a7a3a" }, "🌙"),
       autumn: mk("book", world({ sky: ["#ffd9a0", "#fff2d0"], layers: [{ k: "sun", x: .75, y: .16, r: 30, c: "#fff6d0" }, { k: "clouds", c: "#fff8ea", sp: 8, y: .22, n: 3 }, { k: "hills", c: "#e08a3a", sp: 6, y: .76, h: 50, w: 46 }, { k: "trees", c: "#d9501f", sp: 14, y: .92 }, FALL(22, ["#e0662a", "#f2a33a", "#c4401a"], { shape: "leaf", sp: 22, drift: 14 })] }),
         bugH({ shell: "#e0662a", spot: "#2a1a0a", wing: "#ffe9c4", acc: "leaf" }), { drop: "#7fc3ff", leaf: "#e0662a" }, "🍁")
+    },
+    dep: {
+      tet: Object.assign(mk("book", (c, S) => { ctxSky(c, ["#ff6a4d", "#ffb27a", "#ffe3a3"]); Lyr.sun(c, S, { x: .8, y: .16, r: 30, c: "#fff3c4" }); Lyr.clouds(c, S, { c: "#ffd9c0", sp: 8, y: .22, n: 3, a: .8 }); Lyr.skyline(c, S, { cols: ["#b83227", "#d94a3a", "#c98a14", "#e0702a"], win: "#fff0b0", sp: 10 }); Lyr.lanterns(c, S, { n: 8 }); Lyr.parts(c, S, FALL(16, ["#ffd23f", "#ff9f43"], {})); },
+        depH({ skin: "#f3be86", hair: "#1b1b2f", tunic: "#e63946", trim: "#ffd23f", acc: "flower", aura: "rgba(255,210,63,.6)", sparks: "#ffd23f", shoe: "#ffd23f", back: (c, S, air, ph) => { c.fillStyle = "#e63946"; c.strokeStyle = "#1b1330"; c.lineWidth = 1.6; c.beginPath(); c.moveTo(-6, 8); c.quadraticCurveTo(-18, 14 + Math.sin(S.t * 9) * 3, -20, 24); c.lineTo(-4, 18); c.closePath(); c.fill(); c.stroke(); } }), { road: "#8a1f1f", curb: "#e8c27a", line: "#ffd23f", mom: "👵", a: "#ffd23f", b: "#ff4d4d", c: "#fff3c4" }, "🧧"), { deco: ["🏮", "🧧", "🌸", "🎆"], fx: DEPFX.tet }),
+      mua: Object.assign(mk("cabin", (c, S) => { ctxSky(c, ["#7f95a3", "#b7c8cf", "#dfe9e6"]); Lyr.clouds(c, S, { c: "#9fb0b8", sp: 8, y: .12, n: 3, a: .95 }); Lyr.skyline(c, S, { cols: ["#6f8794", "#7e95a1", "#5f7683"], win: "#ffe9a8", sp: 10 }); Lyr.rain(c, S, { n: 40 }); },
+        depH({ skin: "#f3be86", hair: "#2a1a0a", tunic: "#ffcf3a", trim: "#fff", acc: "umbrella", aura: "rgba(120,200,255,.55)", sparks: "#bfe6ff", shoe: "#e63946", front: (c) => { c.fillStyle = "#ffcf3a"; c.strokeStyle = "#1b1330"; c.lineWidth = 1.6; c.beginPath(); c.arc(2, -11, 13.5, Math.PI * .9, Math.PI * 2.1); c.lineTo(2, -9); c.closePath(); c.globalCompositeOperation = "destination-over"; c.fill(); c.stroke(); c.globalCompositeOperation = "source-over"; } }), { road: "#3f4b57", curb: "#aab6bd", line: "#cfd8dc", mom: "👩", a: "#ff8fab", b: "#6fc3ff", c: "#a5e86f" }, "💧"), { deco: ["☔", "💧", "🌧️", "🛵"], fx: DEPFX.mua }),
+      dem: Object.assign(mk("arcade", (c, S) => { ctxSky(c, ["#05061f", "#171a52", "#3a2a7a"]); Lyr.stars(c, S, { n: 40, c: "#fff", span: .6, sp: 3 }); Lyr.moon(c, S, { x: .8, y: .16, r: 26, c: "#fff6c8" }); Lyr.skyline(c, S, { cols: ["#12123a", "#1b1b4f", "#241a5c"], win: "#ffd36a", sp: 10 }); },
+        depH({ skin: "#f3be86", hair: "#1b1b2f", tunic: "#7c4dff", trim: "#2fe6ff", glow: "rgba(130,90,255,.4)", aura: "rgba(124,240,255,.6)", sparks: "#7cf0ff", shoe: "#ff2fd0", acc: "star", front: (c, S) => { c.fillStyle = "rgba(47,230,255,.85)"; c.fillRect(2, -14, 14, 5); c.strokeStyle = "#fff"; c.lineWidth = 1.2; c.strokeRect(2, -14, 14, 5); c.strokeStyle = "#ff2fd0"; c.lineWidth = 4; c.beginPath(); c.moveTo(-8, 0); c.quadraticCurveTo(-22, -2 + Math.sin(S.t * 10) * 4, -30, 4 + Math.sin(S.t * 8) * 5); c.stroke(); } }), { road: "#161433", curb: "#2e2a5e", line: "#7cf0ff", mom: "👩‍🦱", a: "#ff2fd0", b: "#2fe6ff", c: "#b6ff3c" }, "🌃"), { deco: ["🌙", "⭐", "🌃", "🛵"], fx: DEPFX.dem }),
+      bien: Object.assign(mk("full", (c, S) => { ctxSky(c, ["#6fd0ff", "#c8f1ff", "#fff4cf"]); Lyr.sun(c, S, { x: .2, y: .14, r: 32, c: "#fff3a0" }); Lyr.clouds(c, S, { c: "#fff", sp: 12, y: .26, n: 3 }); Lyr.waves(c, S, { c: "#3ec0e8", sp: 14, y: .68, h: 8, w: 30 }); Lyr.palms(c, S, { c: "#2f9e55", sp: 10, y: .76 }); },
+        depH({ skin: "#e8a96a", hair: "#3a2418", tunic: "#ff6f91", trim: "#fff", pants: "#2a4a7a", acc: "cap", aura: "rgba(255,240,150,.65)", sparks: "#fff6a8", shoe: "#ffd23f", front: (c) => { c.fillStyle = "#1b1330"; c.fillRect(4, -13, 12, 5); c.strokeStyle = "#ffd23f"; c.lineWidth = 3; c.beginPath(); c.ellipse(0, 6, 13, 6, 0, 0, TAU); c.stroke(); } }), { road: "#f1d99a", curb: "#e6c97a", line: "#ffffff", mom: "👩", a: "#ff6f91", b: "#ffd23f", c: "#4de1d0" }, "🐚"), { deco: ["🏖️", "🐚", "🌴", "☀️"], fx: DEPFX.bien })
     }
   };
 
