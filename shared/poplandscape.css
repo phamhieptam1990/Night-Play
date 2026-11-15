@@ -61,7 +61,8 @@
 }
 @media (min-aspect-ratio:11/10) and (max-height:520px) and (max-width:700px){
   #ovSkin .skgrid{grid-template-columns:repeat(6,minmax(0,1fr))!important}
-  #ovSkin .skc{grid-column:span 2!important}#ovSkin .skc:nth-child(n+4){grid-column:span 3!important}
+  #ovSkin .skc{grid-column:span 2!important}   /* mọi ô CÙNG rộng (3 cột đều); hàng cuối thiếu ô thì canh giữa, KHÔNG kéo giãn (trước: 3 ô hẹp + 2 ô rộng) */
+  #ovSkin .skc:last-child:nth-child(3n+1){grid-column:3 / span 2!important}#ovSkin .skc:last-child:nth-child(3n+2){grid-column:4 / span 2!important}#ovSkin .skc:nth-last-child(2):nth-child(3n+1){grid-column:2 / span 2!important}
   #ovSkin .skc .sw{height:min(16vh,62px)!important}
 }
 
@@ -1423,3 +1424,6 @@ html.np-hudg:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>:is(.dbar,.
 @media (min-aspect-ratio:11/10){
   html.np-hudg .app:has(h1[data-pt="lang-cua-be"]) #village>.vcoll{display:inline-flex!important;align-items:center;justify-content:center;grid-column:1;grid-row:6;align-self:center;justify-self:start;min-height:44px;height:44px;padding:0 16px;margin:0!important;font-size:15px;max-width:100%;box-sizing:border-box}
 }
+
+/* popup Giao diện ở màn ngang rất thấp (<=340px cao): ô gọn hơn để thẻ không phải cuộn (một màn hình); đặt cuối file + html để thắng các luật .sw aspect-ratio phía trên */
+@media (min-aspect-ratio:11/10) and (max-height:340px){html.npp-kid #ovSkin .npc .skc .sw{height:34px!important;aspect-ratio:auto!important;font-size:22px!important}html.npp-kid #ovSkin .npc .skc{padding:4px!important;gap:3px!important}html.npp-kid #ovSkin .npc .skgrid{gap:6px!important}}
