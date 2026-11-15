@@ -171,6 +171,10 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 #village #npResume{height:auto;min-height:0;margin:0;gap:2cqw}
 #village #npResume .npr-go{height:11.5cqw;min-height:44px;padding:0 4.5cqw;border-radius:99cqw;font-size:4.4cqw;line-height:1.05}
 #village #npResume .npr-go small{font-size:2.9cqw}
+/* chữ 2 thanh "Tiếp tục ván dở" / "Bài học hôm nay" tính theo cqw nên phình to ở khung rộng (web, iPad): đặt trần cỡ chữ */
+#village #npResume .npr-go{font-size:min(4.4cqw,19px)!important;line-height:1.1!important}
+#village #npResume .npr-go small{font-size:min(2.9cqw,13px)!important;line-height:1.1}
+#village .dbar{font-size:min(4.4cqw,19px)!important}
 #village #npResume .npr-x{width:11.5cqw;height:11.5cqw;min-width:44px;min-height:44px}
 #village .dbar{min-height:9.5cqw}
 /* khung lời nhắc + điểm sao: kính tối Night Pass thay nền trắng */
@@ -180,7 +184,7 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .hud .sc{align-self:flex-start;padding:2px 14px 2px 10px;border-radius:999px;background:linear-gradient(165deg,#2b2064,#171236);color:#fff;border:1px solid rgba(170,150,255,.5);font-size:18px}
 /* ===== LÀNG CỦA BÉ — thẻ khu kiểu Night Pass cho bé: [icon to | tên + 3 chấm cấp | nút 🎨 56px], hàng dưới = dải đồ đã nhặt (không còn dấu ? chữ); màn thấp (<=700px) bỏ dải để vẫn đủ 56px ===== */
 html.npp-kid #village>.band{container-type:normal;display:grid;grid-template-columns:auto minmax(0,1fr) var(--pop-btn);grid-template-rows:var(--pop-btn) auto;align-content:center;align-items:center;column-gap:10px;row-gap:3px;flex:1 1 0;min-height:calc(var(--pop-btn) + 8px);padding:4px 6px 6px 12px;position:relative;isolation:isolate;overflow:hidden;
-  background:linear-gradient(135deg,color-mix(in srgb,var(--sa) 46%,#261b5c),#171236 85%)!important;color:#fff!important;border:1px solid rgba(170,150,255,.55)!important;border-radius:22px!important;box-shadow:0 6px 18px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.18),inset 0 0 18px color-mix(in srgb,var(--sa) 30%,transparent)!important}
+  background:linear-gradient(135deg,color-mix(in srgb,var(--sa) 46%,#261b5c),#171236 85%)!important;color:#fff!important;border:0!important;border-radius:22px!important;box-shadow:0 6px 18px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.18),inset 0 0 18px color-mix(in srgb,var(--sa) 30%,transparent)!important}
 html.npp-kid #village>.band .bh{display:contents}
 html.npp-kid #village>.band .bi{grid-column:1;grid-row:1;font-size:38px!important;line-height:1;filter:drop-shadow(0 3px 8px color-mix(in srgb,var(--sa) 80%,transparent));animation:kidBob 2.6s ease-in-out infinite;transform-origin:50% 80%}
 html.npp-kid #village>.band:nth-of-type(2n) .bi{animation-delay:-.9s}html.npp-kid #village>.band:nth-of-type(3n) .bi{animation-delay:-1.7s}
@@ -199,6 +203,46 @@ html.npp-kid #village>.band:active{transform:scale(.97);filter:brightness(1.15)}
 @keyframes kidShine{0%,70%{left:-40%}100%{left:130%}}
 @media (max-height:700px){#village{gap:4px;padding:3px}html.npp-kid #village>.band{grid-template-rows:var(--pop-btn);min-height:calc(var(--pop-btn) + 4px);padding:2px 6px 2px 12px}html.npp-kid #village>.band .slots{display:none}}
 @media (prefers-reduced-motion:reduce){html.npp-kid #village>.band .bi,html.npp-kid #village>.band::after{animation:none}}
+/* ===== thẻ chọn khu cách nhau thoáng (trước chỉ 4–7px, dính nhau): khe rộng hơn, các thẻ co lại thay vì sát nhau; màn thấp chừa chỗ chữ nightplay.vn phía dưới và cho tên khu nhỏ vừa để không bị cắt "…" ===== */
+@media (orientation:portrait){#village{gap:clamp(9px,3cqw,16px)}}
+/* điện thoại dọc cao tới ~980px (iPhone 16/Pro Max…): phần còn lại cho 3 thẻ chỉ ~64px/thẻ nên dải đồ đã nhặt tràn ra đáy và nút 🎨 / icon bị cắt mép trên → bỏ dải (như màn thấp), thẻ gọn 1 hàng đủ 56px */
+@media (orientation:portrait) and (max-height:980px){html.npp-kid #village>.band{grid-template-rows:var(--pop-btn);padding:4px 6px 4px 12px}html.npp-kid #village>.band .slots{display:none}}
+@media (orientation:portrait) and (max-height:700px){#village{padding-bottom:30px}html.npp-kid #village>.band{padding:2px 6px 2px 12px}html.npp-kid #village>.band .bh b{font-size:clamp(12px,3.9vw,19px)!important}}
+/* nút "Bộ sưu tập" (🎒) ở hàng điểm + popup danh sách đồ đã nhặt của 3 khu (thay dải đồ nhặt ở đáy thẻ khu, vốn bị ẩn ở màn thấp) */
+.coll{flex:none;min-height:44px;padding:0 16px;border-radius:999px;font:800 16px/1 var(--font);color:#fff;cursor:pointer;background:linear-gradient(135deg,#6C4BF2,#C2410C);border:1px solid rgba(255,255,255,.4);box-shadow:0 4px 12px rgba(108,75,242,.45),inset 0 1px 0 rgba(255,255,255,.3);white-space:nowrap}
+.hud .coll{display:none!important}   /* mặc định ẩn: mỗi chế độ chỉ hiện MỘT nút Bộ sưu tập (xem bên dưới) */
+#village>.vcoll{display:none}
+/* màn rộng (iPad, web): bỏ nền chấm sao + viền sáng + quầng tím của khung game quanh danh sách → không còn 'tấm' có khung bao các thẻ */
+@media (min-width:600px){#play.play,#village{background:none!important;box-shadow:none!important;border:0!important;border-radius:0!important}#play.play::after,#play.play::before{display:none!important}}
+#village[style*="--lc-hs"]::before{font-size:var(--lc-hs)!important}
+@media (orientation:landscape) and (max-aspect-ratio:11/10){html.np-hudg #village>.vcoll{display:flex;align-items:center;justify-content:center;flex:none;min-height:44px;height:44px;padding:0 16px;box-sizing:border-box;font:800 15px/1 var(--font);align-self:center}}   /* khung gần vuông (web ~950x890): bố cục cột dọc như phone, nút dưới các thẻ */
+@media (orientation:landscape){html:not(.np-hudg) #village>.vcoll{display:flex;align-items:center;justify-content:center;flex:none;min-height:44px;height:44px;padding:0 16px;box-sizing:border-box;font:800 15px/1 var(--font);align-self:center}}
+/* DỌC: nút ở dưới cùng, dưới 3 thẻ khu (ngang: ô lưới cột trái, xem poplandscape.css). Màn thấp (<=700px) không còn chỗ → nút gọn cùng hàng, thẳng hàng với pill ⭐ */
+@media (orientation:portrait) and (min-height:701px){
+  #village>.vcoll{display:flex;align-items:center;justify-content:center;flex:none;width:100%;min-height:44px;height:44px;margin:2px 0 0;font:800 16px/1 var(--font);padding:0 16px;box-sizing:border-box}
+}
+/* màn dọc CAO (iPad Pro 13: 1376px; thẻ có dải đồ nhặt): thẻ khu tự giãn lấp chỗ trống tới ~160px dù nội dung chỉ cần ~92px → đặt trần, cụm thẻ canh giữa */
+@media (orientation:portrait) and (min-height:981px){
+  html.npp-kid #village>.band{max-height:108px}
+  #village{justify-content:center}
+}
+@media (orientation:portrait) and (max-height:700px){
+  .hud{justify-content:flex-start;gap:10px}
+  html.npp-kid #village>.band{max-height:72px}   /* iPhone SE (375x667): thẻ khu từng tự giãn tới 86px lấp chỗ trống dù nội dung chỉ cần ~64px */
+  #village{justify-content:center}
+  .hud .coll:not([hidden]){display:inline-flex!important;align-items:center;min-height:34px;height:34px;padding:0 12px;font-size:14px}
+}
+#ovColl{gap:12px;padding:16px;background:rgba(8,6,24,.78)!important}
+#ovColl h2{font-size:clamp(22px,6cqw,30px);color:#fff}
+#collList{width:100%;max-width:520px;max-height:100%;overflow:hidden;display:flex;flex-direction:column;gap:10px;min-height:0}
+#collList .crow{padding:10px 14px;border-radius:20px;text-align:left;background:linear-gradient(165deg,#2b2064,#171236);border:1px solid rgba(170,150,255,.5);box-shadow:inset 0 0 14px rgba(124,92,255,.14);color:#fff}
+#collList .crow b{display:flex;justify-content:space-between;gap:8px;font-size:clamp(15px,4.2cqw,19px);font-weight:800}
+#collList .crow b small{font-size:.85em;opacity:.8;font-weight:700}
+#collList .ci{display:flex;flex-wrap:wrap;gap:6px 10px;margin-top:6px}
+#collList .ci i{font-style:normal;font-size:clamp(26px,7cqw,34px);line-height:1;width:1.25em;text-align:center}
+#collList .ci i.no{font-size:0;width:14px;height:14px;margin:8px 5px;border-radius:50%;background:rgba(255,255,255,.22)}
+#ovColl .big{min-height:52px;flex:none}
+@media (max-height:480px){#ovColl{gap:6px;padding:8px 12px}#ovColl h2{font-size:18px}#collList{flex-direction:row;max-width:820px;gap:8px}#collList .crow{flex:1 1 0;min-width:0;padding:8px 10px}#collList .crow b{flex-direction:column;gap:0;font-size:14px}#collList .ci{gap:2px 6px}#collList .ci i{font-size:24px}#collList .ci i.no{margin:5px 4px;width:10px;height:10px}#ovColl .big{min-height:44px;padding:0 20px}}
 @media (prefers-reduced-motion:reduce){#deco i,.spk,.hint,.slot.new,.reward{animation:none}}
 /* nút biểu tượng luôn có viền cùng màu biểu tượng để nổi trên mọi nền/giao diện */
 .ib,.ib2{border:1.5px solid color-mix(in srgb,currentColor 42%,transparent)!important;box-sizing:border-box}
@@ -221,12 +265,13 @@ html.npp-kid #village>.band:active{transform:scale(.97);filter:brightness(1.15)}
       <button class="ib" id="langBtn" type="button" style="font-size:14px;font-weight:800">VI</button>
     </div>
     <div class="ask"><button class="ib" id="askBtn" type="button"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z" fill="currentColor"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/></svg></button><b id="askTxt" aria-live="polite"></b></div>
-    <div class="hud"><span class="sc">⭐ <b id="sc">0</b></span><span class="dots" id="dots"></span></div>
+    <div class="hud"><span class="sc">⭐ <b id="sc">0</b></span><button class="coll" id="collBtn" type="button" hidden></button><span class="dots" id="dots"></span></div>
   </div>
   <div class="play" id="play">
     <div id="village"></div>
     <div id="lesson" hidden><div id="deco"></div><div id="act"></div></div>
     <div class="toast" id="toast" role="status"></div>
+    <div class="ov" id="ovColl" hidden role="dialog" aria-modal="true"><h2 id="collH"></h2><div id="collList"></div><button class="big" id="collX" type="button"></button></div>
     <div class="ov" id="ovCh" hidden>
       <h2 id="chH"></h2><div class="reward" id="chE"></div><p id="chP"></p>
       <div class="row"><button class="ib2" id="chNo" type="button">✕</button><button class="big" id="chGo" type="button"></button></div>
@@ -272,7 +317,7 @@ vi:{title:"Làng Của Bé",docTitle:"Làng Của Bé",sound:"Âm thanh",lang:"N
  right:["Giỏi quá!","Tuyệt vời!","Đúng rồi!","Hoan hô!"],wrong:["Thử lại nhé!","Chưa đúng, mình thử tiếp!","Cố lên nào!"],
  "daily.t":"Bài học hôm nay #{n}","gt.sh":"Để chia sẻ, hỏi người lớn:","sh.btn":"Chia sẻ","txt.copied":"Đã sao chép kết quả!","tx.res":"{z} · {s} · {p} điểm","cd.ask":"Bé nhà bạn làm được mấy sao?","cd.foot":"Xây làng cùng bé tại","cd.items":"{n}/24 món trong làng","cd.streak":"🔥 {n} ngày liền","cd.lv":"Cấp","ch.h":"⚔ Bạn được thách!","ch.p":"Bé nhà kia được {s}⭐ ({sc} điểm) ở {z}. Cùng một bài, bé nhà bạn làm được không?","ch.win":"Bé nhà bạn hơn: {sc} điểm so với {ck}! 🎉","ch.lose":"Nhà kia nhỉnh hơn: {sc} so với {ck} điểm","ch.tie":"Ngang nhau: {sc} điểm",
  "en.h3":"Siêu giỏi!","en.h2":"Giỏi lắm!","en.h1":"Cố lên nhé!","en.p":"{n} điểm","en.new":"Làng có thêm một điều mới!","en.full":"Khu này đã đầy! Bé nhận thêm ⭐","en.lv":"⬆️ Lên cấp {n}!","rank.btn":"Lên bảng điểm",
- "sk.pick":"Chọn giao diện","pw.h":"Giao diện của Night Pass","pw.p":"Mở khoá {name} và 11 giao diện đẹp khác cho cả 3 khu. Phần này dành cho phụ huynh.","pw.go":"Dành cho phụ huynh","pw.trial":"Chơi thử 1 bài","pw.later":"Để sau","pw.tried":"Hôm nay đã chơi thử rồi, mai thử tiếp nhé.",
+ "sk.pick":"Chọn giao diện","coll":"Bộ sưu tập","coll.n":"{n}/{t} món","coll.x":"Đóng","pw.h":"Giao diện của Night Pass","pw.p":"Mở khoá {name} và 11 giao diện đẹp khác cho cả 3 khu. Phần này dành cho phụ huynh.","pw.go":"Dành cho phụ huynh","pw.trial":"Chơi thử 1 bài","pw.later":"Để sau","pw.tried":"Hôm nay đã chơi thử rồi, mai thử tiếp nhé.",
  "gt.h":"Dành cho phụ huynh","gt.p":"Hỏi người lớn: {a} + {b} = ?","gt.x":"Quay lại",lockedLbl:"{n} (cần Night Pass)",
  "sk.0.basic":"Cổ điển","sk.0.night":"Đêm lồng đèn","sk.0.snow":"Xứ tuyết","sk.0.candy":"Kẹo ngọt","sk.0.jungle":"Rừng xanh",
  "sk.1.basic":"Cổ điển","sk.1.harvest":"Mùa gặt","sk.1.flower":"Đồng hoa","sk.1.island":"Đảo nhiệt đới","sk.1.moon":"Đêm đom đóm",
@@ -286,7 +331,7 @@ en:{title:"Baby's Village",docTitle:"Baby's Village",sound:"Sound",lang:"Languag
  right:["Great job!","Awesome!","Correct!","Hooray!"],wrong:["Try again!","Not quite, try once more!","You can do it!"],
  "daily.t":"Today's lesson #{n}","gt.sh":"To share, ask a grown-up:","sh.btn":"Share","txt.copied":"Result copied!","tx.res":"{z} · {s} · {p} points","cd.ask":"How many stars can your kid get?","cd.foot":"Build a village with your kid at","cd.items":"{n}/24 things in the village","cd.streak":"🔥 {n} days in a row","cd.lv":"Level","ch.h":"⚔ You're challenged!","ch.p":"Their kid got {s}⭐ ({sc} points) at {z}. Same lesson, can your kid beat it?","ch.win":"Your kid wins: {sc} points vs {ck}! 🎉","ch.lose":"They're ahead: {sc} vs {ck} points","ch.tie":"Tied: {sc} points",
  "en.h3":"Super!","en.h2":"Well done!","en.h1":"Keep going!","en.p":"{n} points","en.new":"Something new in the village!","en.full":"This area is full! Bonus ⭐ for you","en.lv":"⬆️ Level {n}!","rank.btn":"Post to leaderboard",
- "sk.pick":"Pick a look","pw.h":"Night Pass looks","pw.p":"Unlock {name} and 11 more beautiful looks for all 3 areas. This part is for parents.","pw.go":"For parents","pw.trial":"Try one lesson","pw.later":"Later","pw.tried":"You already tried today, come back tomorrow.",
+ "sk.pick":"Pick a look","coll":"Collection","coll.n":"{n}/{t} items","coll.x":"Close","pw.h":"Night Pass looks","pw.p":"Unlock {name} and 11 more beautiful looks for all 3 areas. This part is for parents.","pw.go":"For parents","pw.trial":"Try one lesson","pw.later":"Later","pw.tried":"You already tried today, come back tomorrow.",
  "gt.h":"For parents","gt.p":"Ask a grown-up: {a} + {b} = ?","gt.x":"Back",lockedLbl:"{n} (needs Night Pass)",
  "sk.0.basic":"Classic","sk.0.night":"Lantern night","sk.0.snow":"Snow land","sk.0.candy":"Candy","sk.0.jungle":"Jungle",
  "sk.1.basic":"Classic","sk.1.harvest":"Harvest","sk.1.flower":"Flower field","sk.1.island":"Tropical island","sk.1.moon":"Firefly night",
@@ -523,7 +568,7 @@ function startSession(z,res,o){
   RNG=mulberry32(seed);const seq=[];while(seq.length<ROUNDS)seq.push(...shuffle(list));RNG=MR;
   S={z,lvOv:(HELPER||fixed)?lv:null,fixed,seed,daily:o.daily||null,ch:o.ch||null,seq:seq.slice(0,ROUNDS),r:0,score:0,good:0,dots:[],over:false,startLv:lv};
   if(res){S.r=Math.max(0,Math.min(ROUNDS-1,res.r|0));S.score=Math.max(0,Math.min(60,res.sc|0));S.good=Math.max(0,Math.min(S.r,res.g|0));if(Array.isArray(res.dots))S.dots=res.dots.slice(0,ROUNDS).map(d=>d===1||d===2?d:0)}
-  lessonOn=true;paused=false;$("play").classList.remove("paused");showOv(null);$("village").hidden=true;$("lesson").hidden=false;$("homeBtn").hidden=HELPER;
+  lessonOn=true;paused=false;$("play").classList.remove("paused");showOv(null);$("village").hidden=true;$("collBtn").hidden=true;$("lesson").hidden=false;$("homeBtn").hidden=HELPER;
   applySkinFor(z);$("sc").textContent=S.score;renderDots();window.NP&&NP.start();nextRound();
 }
 function applySkinFor(z){const sk=skinOf(z);applyVars($("play"),sk);skCss(sk);const d=$("deco");d.innerHTML="";(sk.deco||["⭐"]).forEach((e,i)=>{for(let k=0;k<3;k++){const q=document.createElement("i");q.textContent=e;q.style.left=((i*3+k)*(100/((sk.deco||[1]).length*3))+RNG()*6)+"%";q.style.animationDelay=(-RNG()*9)+"s";q.style.animationDuration=(8+RNG()*6)+"s";d.appendChild(q)}})}
@@ -554,7 +599,25 @@ function goHome(){
   if(window.NPAudio)NPAudio.silence();S=null;R={done:true};lessonOn=false;paused=false;$("play").classList.remove("paused");$("homeBtn").hidden=true;
   $("lesson").hidden=true;$("village").hidden=false;showOv(null);applyVars($("play"),PF.skins[0].basic);skCss(null);$("askTxt").textContent=T("ask.home");R.speak=T("ask.home");$("dots").innerHTML="";$("sc").textContent=prog.stars;renderVillage();
 }
+/* Dọc: nếu danh sách (thẻ Tiếp tục + Hôm nay + 3 thẻ khu + nút Bộ sưu tập) tràn khung thì thu nhỏ hình ngôi nhà trang trí (::before) cho vừa, không cắt thẻ nào */
+function fitVillage(){
+  const v=$("village");if(!v)return;v.style.removeProperty("--lc-hs");
+  if(v.hidden||!matchMedia("(orientation:portrait)").matches)return;
+  const cs=getComputedStyle(v,"::before");if(!cs||cs.content==="none")return;
+  let fs=Math.round(parseFloat(cs.fontSize)||0);
+  for(let i=0;i<16&&v.scrollHeight>v.clientHeight+1&&fs>34;i++){fs=Math.max(34,fs-10);v.style.setProperty("--lc-hs",fs+"px")}
+}
+{let fvq=0;const fvGo=()=>{if(fvq)return;fvq=requestAnimationFrame(()=>{fvq=0;fitVillage()})};try{new MutationObserver(fvGo).observe($("village"),{childList:true})}catch(e){}addEventListener("resize",fvGo);addEventListener("load",fvGo);try{document.fonts&&document.fonts.ready.then(fvGo)}catch(e){}setTimeout(fvGo,600);setTimeout(fvGo,1800)}
+function renderColl(){
+  const tot=prog.got.reduce((a,b)=>a+b,0),all=ITEMS.reduce((a,b)=>a+b.length,0),cb=$("collBtn");
+  cb.textContent="🎒 "+T("coll")+" "+tot+"/"+all;cb.setAttribute("aria-label",T("coll")+": "+tot+"/"+all);cb.hidden=false;
+  $("collH").textContent="🎒 "+T("coll");$("collX").textContent=T("coll.x");
+  $("collList").innerHTML=[0,1,2].map(z=>'<div class="crow"><b><span>'+ZICON[z]+" "+T("z")[z]+"</span><small>"+T("coll.n",{n:prog.got[z],t:ITEMS[z].length})+'</small></b><div class="ci">'+ITEMS[z].map((e,i)=>i<prog.got[z]?"<i>"+e+"</i>":'<i class="no"></i>').join("")+"</div></div>").join("");
+}
+$("collBtn").onclick=()=>{renderColl();showOv("ovColl")};$("collX").onclick=()=>showOv(null);
+function addVColl(v){const b=document.createElement("button");b.type="button";b.className="coll vcoll";b.textContent=$("collBtn").textContent;b.setAttribute("aria-label",$("collBtn").getAttribute("aria-label"));b.onclick=()=>{renderColl();showOv("ovColl")};v.appendChild(b)}   /* màn ngang: cổng ẩn hàng điểm (.hud) nên đặt thêm nút ngay trong lưới của màn Làng */
 function renderVillage(){
+  renderColl();
   const v=$("village");v.innerHTML="";
   const di=dailyInfo(),ds=dailyStore(),db=document.createElement("button");db.type="button";db.className="dbar";
   db.innerHTML="<span>📅 "+T("daily.t",{n:di.n})+"</span><span>"+(ds.streak&&(ds.last===di.key||ds.last===dayBefore(di.key))?"🔥 "+ds.streak+" ":"")+(ds.best[di.key]!=null?"✓ "+ds.best[di.key]:"▶")+"</span>";db.onclick=startDaily;v.appendChild(db);
@@ -566,9 +629,10 @@ function renderVillage(){
     b.querySelector(".sk").onclick=e=>{e.stopPropagation();openSkins(z)};
     v.appendChild(b);
   }
+  addVColl(v);fitVillage();
   if(window.LCnew!=null){const n=window.LCnew;window.LCnew=null;const bands=v.querySelectorAll(".band");if(bands[n.z]){const sl=bands[n.z].querySelectorAll(".slot")[n.i];sl&&sl.classList.add("new")}}
 }
-const ovs=["ovEnd","ovCh","ovSkin","ovPay","ovGate"];
+const ovs=["ovEnd","ovCh","ovSkin","ovPay","ovGate","ovColl"];
 function showOv(id){for(const o of ovs)$(o).hidden=(o!==id)}
 
 /* ===== GIAO DIỆN / TRẢ PHÍ ===== */
