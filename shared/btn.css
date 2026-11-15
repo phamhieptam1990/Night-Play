@@ -19,6 +19,8 @@
 :is(.nb[data-nb=ghost],button.btn.alt,button.sec,button.ghost,button.alt){
   --nb-glow:rgba(124,92,255,.3);background:rgba(255,255,255,.1)!important;border-color:rgba(255,255,255,.3)!important;color:#fff!important;
   box-shadow:0 4px 14px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 14px rgba(124,92,255,.25)!important;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+/* THEME SÁNG: kính trắng + chữ trắng ở trên chỉ hợp nền tối → mất hết chữ/icon trên nền sáng (chủ site báo màn kết thúc Mắt Tinh Không; quét ra nút Hoàn tác, popup trả phí, popup giao diện… cũng vậy). Nền sáng pha màu nhấn + chữ tối + viền màu nhấn. */
+html[data-theme=light] :is(button.btn.alt,button.sec,button.ghost,button.alt):not(.res *){background:color-mix(in srgb,var(--accent,var(--sa,#7C5CFF)) 9%,#fff)!important;color:var(--ink,#1b1340)!important;border-color:color-mix(in srgb,var(--accent,var(--sa,#7C5CFF)) 48%,transparent)!important;box-shadow:0 3px 0 color-mix(in srgb,var(--accent,var(--sa,#7C5CFF)) 24%,transparent),0 8px 16px rgba(80,50,20,.10)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
 /* theme màu */
 :is(.nb[data-nb=ok],.okb){--nb-1:#3DDC84;--nb-2:#14935A;--nb-glow:rgba(40,200,120,.5)}
 .nb[data-nb=danger]{--nb-1:#FF6B6B;--nb-2:#C81E4B;--nb-glow:rgba(230,60,90,.5)}

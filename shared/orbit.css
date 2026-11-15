@@ -76,8 +76,8 @@ html[data-theme=light] .ring{opacity:.85;filter:drop-shadow(0 0 3px currentColor
 html[data-theme=light] .planet{box-shadow:0 0 0 5px rgba(124,92,255,.12),0 0 24px 7px rgba(70,160,255,.35),0 0 44px 12px rgba(124,92,255,.22),0 12px 16px -4px rgba(40,20,90,.32)}
 html[data-theme=light] .orblab{background:rgba(255,255,255,.95);color:#241B3A;box-shadow:0 2px 8px rgba(40,20,90,.18)}
 html[data-theme=light] .orbhint{background:rgba(255,255,255,.88);color:#241B3A;border-color:rgba(124,92,255,.4)}
-html[data-theme=light] .orbsnd{background:rgba(255,255,255,.92);color:#241B3A;border-color:#A18BFF}
-html[data-theme=light] .orbsnd[aria-pressed=true]{background:#7C5CFF;color:#fff;border-color:#fff}
+html[data-theme=light] .orbsnd{background:#7050F2;color:#fff;border-color:rgba(255,255,255,.6)}   /* nút icon tròn theme sáng = tím đặc + icon trắng (GAME_RULES: không nền sáng + icon tối) */
+html[data-theme=light] .orbsnd[aria-pressed=true]{background:#5B3FD6;color:#fff;border-color:#fff}
 html[data-theme=light] .orbsnd:focus-visible{outline-color:#7C5CFF}
 
 /* mặt trăng / mặt trời nền khối vệ tinh: góc dưới-trái, phía sau quỹ đạo (z 0), không nhận chạm */

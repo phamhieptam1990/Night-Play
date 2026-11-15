@@ -290,7 +290,7 @@ html.playing.sc-ok .foot,html.playing #fFab,html.playing #fInfo,html.playing #fP
 
 /* CỤM NÚT GÓC PHẢI (+ / ⓘ / 🔒): cùng một kiểu nút đặc gradient rực (tím → hồng-tím → cam, đi qua magenta nên không xỉn), biểu tượng trắng, viền trắng mảnh, cùng cỡ 44px, quầng sáng nhẹ đối xứng */
 @media (orientation:portrait) and (max-width:520px) and (max-height:719px),(orientation:landscape) and (max-height:520px){
- html.sc-ok #fFab,html.sc-ok #fInfo,html[data-app].sc-ok .foot button#lock:not(.pri):not(.on){background:linear-gradient(135deg,#7C3AED 0%,#C026D3 50%,#F0561A 100%)!important;background-image:linear-gradient(135deg,#7C3AED 0%,#C026D3 50%,#F0561A 100%)!important;color:#fff!important;border:2px solid rgba(255,255,255,.75)!important;box-shadow:0 4px 14px rgba(192,38,211,.5),0 2px 6px rgba(0,0,0,.3)!important;box-sizing:border-box;padding:0;opacity:1}
+ html.sc-ok #fFab,html.sc-ok #fInfo,html[data-app].sc-ok .foot button#lock:not(.pri):not(.on){background:linear-gradient(135deg,#7C3AED 0%,#C026D3 50%,#CC4C0E 100%)!important;background-image:linear-gradient(135deg,#7C3AED 0%,#C026D3 50%,#CC4C0E 100%)!important;color:#fff!important;border:2px solid rgba(255,255,255,.75)!important;box-shadow:0 4px 14px rgba(192,38,211,.5),0 2px 6px rgba(0,0,0,.3)!important;box-sizing:border-box;padding:0;opacity:1}
  html.sc-ok #fFab svg,html.sc-ok #fInfo svg,html[data-app].sc-ok .foot #lock svg,html[data-app].sc-ok .foot #lock .ic{color:#fff!important;stroke-width:2.5;filter:none}
  html.sc-ok #fFab[aria-expanded=true]{box-shadow:0 0 0 3px rgba(255,255,255,.9),0 4px 14px rgba(192,38,211,.55)!important}
  html[data-app].sc-ok .foot #lock #ring circle{stroke:#fff}
@@ -298,7 +298,7 @@ html.playing.sc-ok .foot,html.playing #fFab,html.playing #fInfo,html.playing #fP
 }
 
 /* nút khoá trẻ em ở chân trang bản web: cùng kiểu với cụm nút di động (không viền trắng dày + quầng sáng rộng làm nhìn to và lệch so với chữ "Last updated") */
-html[data-app] button#lock:not(.pri):not(.on){background:linear-gradient(135deg,#7C3AED 0%,#C026D3 50%,#F0561A 100%)!important;background-image:linear-gradient(135deg,#7C3AED 0%,#C026D3 50%,#F0561A 100%)!important;color:#fff!important;border:2px solid rgba(255,255,255,.75)!important;box-shadow:0 4px 14px rgba(192,38,211,.5),0 2px 6px rgba(0,0,0,.3)!important;box-sizing:border-box;padding:0}
+html[data-app] button#lock:not(.pri):not(.on){background:linear-gradient(135deg,#7C3AED 0%,#C026D3 50%,#CC4C0E 100%)!important;background-image:linear-gradient(135deg,#7C3AED 0%,#C026D3 50%,#CC4C0E 100%)!important;color:#fff!important;border:2px solid rgba(255,255,255,.75)!important;box-shadow:0 4px 14px rgba(192,38,211,.5),0 2px 6px rgba(0,0,0,.3)!important;box-sizing:border-box;padding:0}
 html[data-app] #lock .ic{color:#fff;stroke-width:2.5;filter:none}
 
 /* Popup ⓘ (bản quyền, ngày cập nhật, liên kết): KÍNH ĐÊM Night Pass ở cả sáng lẫn tối — nền tím đêm, viền gradient tím–cam, quầng tím, chữ sáng, liên kết tím nhạt có vạch ngăn, "Night Pass" nổi màu gradient. */

@@ -5,10 +5,10 @@
 :root{--tap-lg:56px;--gl-bg:rgba(22,17,48,.72);--gl-bd:rgba(255,255,255,.2);--gl-ink:#fff;--gl-glow:rgba(124,92,255,.3);--gl-main:linear-gradient(135deg,#6C4BF2,#C2410C)}
 
 /* MỌI CỠ (điện thoại, iPad, máy tính) + sáng/tối: nút icon trong game cùng kiểu kính tối, icon trắng (GAME_RULES 0a-18). Cỡ chỉ đổi ở khối điện thoại dọc bên dưới. */
-:is(.top .ib,.top .icon-btn,#bBk,#bBack,#homeBtn,#bSkin,#bBoard,#bRe,#restartBtn,#bSnd,#soundBtn,#bHelp,#phBtn,#bLang,#langBtn,#bCam,#bShr,#pauseBtn,#undoBtn,#resetBtn,.skinBtn,button.sk,#hlpX):not(.it){
+:is(.top .ib,.top .icon-btn,#bBk,#bBack,#homeBtn,#bSkin,#bBoard,#bRe,#restartBtn,#bSnd,#soundBtn,#bHelp,#phBtn,#bLang,#langBtn,#bCam,#bShr,#pauseBtn,#undoBtn,#resetBtn,.skinBtn,button.sk,#hlpX,#bOpts):not(.it){
   background:var(--gl-bg)!important;background-image:none!important;color:var(--gl-ink)!important;border:1px solid var(--gl-bd)!important;
   box-shadow:0 4px 14px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 14px var(--gl-glow)!important;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);text-shadow:none!important}
-:is(.top .ib,.top .icon-btn,#bSkin,#bBoard,#bRe,#restartBtn,#bHelp,#phBtn,#pauseBtn,#undoBtn,#resetBtn,.skinBtn,button.sk,#bBk,#bBack,#homeBtn) svg{color:var(--gl-ink)!important}
+:is(.top .ib,.top .icon-btn,#bSkin,#bBoard,#bRe,#restartBtn,#bHelp,#phBtn,#pauseBtn,#undoBtn,#resetBtn,.skinBtn,button.sk,#bBk,#bBack,#homeBtn,#bOpts) svg{color:var(--gl-ink)!important}
 button.sk.on,button.sk[aria-pressed=true],button.sk.sel{border-color:#fff!important;box-shadow:0 0 0 2px var(--accent,#7C5CFF),0 4px 14px rgba(0,0,0,.38)!important}
 :is(.top .ib,.top .icon-btn,#bSkin,#bBoard,#bRe,#restartBtn,#pauseBtn,#undoBtn,#resetBtn,.skinBtn,button.sk):disabled{opacity:.5}
 /* nút chính nổi (Hỏi/đọc to): gradient tím-cam */
@@ -40,8 +40,12 @@ button.sk.on,button.sk[aria-pressed=true],button.sk.sel{border-color:#fff!import
 /* THEME SÁNG (chủ site: "màu button theme light xấu dã man, ghét màu xám"): kính tối TRONG SUỐT trên nền kem/trắng ra màu XÁM-TÍM đục. Ở theme sáng: thẻ/nút/chip màn chọn = nền sáng pha màu nhấn của game + chữ tối + viền màu nhấn (không xám); nút icon tròn = tím indigo ĐẶC (không trong suốt). Theme tối giữ nguyên. */
 /* nút icon tròn ở theme SÁNG: màu ĐẶC tươi (không kính tối xám) + icon trắng. Cozy = violet #7050F2, Pop = cam vàng #F2701D (chủ site chốt). Theme tối giữ kính tối. */
 html[data-theme=light]{--gl-bg:#7050F2;--gl-bd:rgba(255,255,255,.55);--gl-ink:#fff;--gl-glow:rgba(112,80,242,.35)}
-html.npp-kid[data-theme=light]{--gl-bg:#F2701D;--gl-bd:rgba(255,255,255,.6);--gl-ink:#fff;--gl-glow:rgba(242,112,29,.35)}
+/* MỘT biến cho mọi nền CAM có chữ/icon TRẮNG đè lên (trắng/#CC4C0E = 4,56:1 ≥ 4,5). #F2701D (2,95:1) chỉ còn dùng cho chỗ không có chữ trắng. Chủ dự án đổi màu bằng đúng dòng này. */
+:root{--np-orange-on:#CC4C0E}
+html.npp-kid[data-theme=light]{--gl-bg:var(--np-orange-on);--gl-bd:rgba(255,255,255,.6);--gl-ink:#fff;--gl-glow:rgba(204,76,14,.35)}
 html[data-theme=light] #home :is(.ty,.btn.alt,.chip,.lv):not(.on){background:color-mix(in srgb,var(--accent) 9%,#fff)!important;color:var(--ink)!important;border-color:color-mix(in srgb,var(--accent) 48%,transparent)!important;box-shadow:0 3px 0 color-mix(in srgb,var(--accent) 24%,transparent),0 8px 16px rgba(80,50,20,.10)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+/* màn KẾT THÚC ở theme sáng: nút phụ (Quay lại/Đấu lại/Ván mới/Trang chủ) từng là kính trắng + chữ trắng → mất chữ/icon trên nền sáng. Dùng nền sáng pha màu nhấn + chữ tối như màn chọn. */
+html[data-theme=light] :is(#end,#res,#result,#ovEnd)>.row button.btn.alt,html[data-theme=light] :is(#end,#res,#result,#ovEnd) .row button.btn.alt{background:color-mix(in srgb,var(--accent,#7C5CFF) 9%,#fff)!important;color:var(--ink,#1b1340)!important;border-color:color-mix(in srgb,var(--accent,#7C5CFF) 48%,transparent)!important;box-shadow:0 3px 0 color-mix(in srgb,var(--accent,#7C5CFF) 24%,transparent),0 8px 16px rgba(80,50,20,.10)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
 html[data-theme=light] #home .ty.on{background:color-mix(in srgb,var(--accent) 24%,#fff)!important;color:var(--ink)!important;border-color:var(--accent)!important;box-shadow:0 0 0 .5cqw color-mix(in srgb,var(--accent) 40%,transparent),0 4px 12px rgba(80,50,20,.14)!important}
 html[data-theme=light] #home .ty.lock:not(.on){background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--accent) 7%,#fff) 0 2cqw,color-mix(in srgb,var(--accent) 12%,#fff) 2cqw 4cqw)!important}
 #home :is(.ty,.lv) .t,#home .ty .e{color:inherit}
@@ -81,7 +85,7 @@ html:root #home .ty.ty.lock .e{filter:grayscale(.45) opacity(.85)}
 .ib2:not([data-l]),.skinBtn,.tile>button.sk,.bh>button.sk{
   border-color:color-mix(in srgb,var(--accent,#7C5CFF) 55%,rgba(255,255,255,.35))!important;
   box-shadow:0 4px 14px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 14px color-mix(in srgb,var(--accent,#7C5CFF) 45%,transparent)!important}
-.ib2.main:not([data-l]){background:linear-gradient(135deg,var(--accent,#7C5CFF),color-mix(in srgb,var(--accent,#7C5CFF) 62%,#000))!important;border-color:rgba(255,255,255,.45)!important;
+.ib2.main:not([data-l]){background:linear-gradient(135deg,color-mix(in srgb,var(--accent,#7C5CFF) 62%,#000),color-mix(in srgb,var(--accent,#7C5CFF) 40%,#000))!important;border-color:rgba(255,255,255,.45)!important;
   box-shadow:0 5px 16px color-mix(in srgb,var(--accent,#7C5CFF) 55%,transparent),0 2px 6px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.3)!important}
 
 /* Hàng nút cuối ván (Quay lại / Đấu lại / Ván mới / Trang chủ): MỌI game Cozy (kể cả viết tay) — 4 nút CÙNG CAO, thẳng hàng; icon SVG (↻ thay 🔁) cùng cỡ emoji */
@@ -97,3 +101,14 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;opac
 body:has(#home:not([hidden]) .lvs :is(.lvb,.lv):nth-child(1).on)::after{opacity:1;background:radial-gradient(120% 70% at 50% 0%,rgba(11,154,95,.38),transparent 70%)}
 body:has(#home:not([hidden]) .lvs :is(.lvb,.lv):nth-child(2).on)::after{opacity:1;background:radial-gradient(120% 70% at 50% 0%,rgba(37,99,235,.45),transparent 70%)}
 body:has(#home:not([hidden]) .lvs :is(.lvb,.lv):nth-child(3).on)::after{opacity:1;background:radial-gradient(120% 70% at 50% 0%,rgba(228,80,26,.32),transparent 70%)}
+/* nút có thuộc tính hidden (⏸ #pauseBtn chưa chơi, 🏠 #homeBtn, ← #bBk…) PHẢI ẩn thật: .ib / glass đặt display riêng nên đè lên [hidden] làm ⏸ hiện cả ở màn chọn và sau khi thoát ván */
+.top .ib[hidden],.top .icon-btn[hidden],#pauseBtn[hidden],#homeBtn[hidden],#bBk[hidden],#bBack[hidden],#bRe[hidden],#restartBtn[hidden]{display:none!important}
+/* Hàng nút cuối màn chọn của game Cozy (nút chữ "Ván ngẫu nhiên"/"Practice"… + nút 🎨 #bSkin + Album/Công thức): chiều cao tự nhiên mỗi nút khác nhau (45,7 vs 46,8; 48,1 vs 52,8) nên so le. Dùng MỘT biến chiều cao cho cả hàng, nút 🎨 tròn đúng bằng chiều cao đó. */
+.row:has(>#bSkin){--rh:max(48px,12cqw);align-items:center}
+.row:has(>#bSkin)>:is(button,.btn){height:var(--rh)!important;min-height:var(--rh)!important;max-height:var(--rh)!important;padding-top:0!important;padding-bottom:0!important;box-sizing:border-box!important;display:inline-flex!important;align-items:center;justify-content:center}
+.row>#bSkin{width:var(--rh)!important;min-width:var(--rh)!important;flex:none}
+/* Cột bên đã thu gọn: nút mở lại cột (.np-tab) của cổng nằm x 72..116, y 16..60 trong khung game (sau nút ←) và đè lên đầu TÊN GAME ở mọi game (tên bắt đầu x=60, hoặc x=44 + 48 ở bố cục phủ). Luật cũ chỉ nằm trong landscape.css (game Pop và Cánh Nhỏ không nhúng; poptitle.css còn ép margin !important) → đặt ở đây cho mọi game: tên bắt đầu >= 124. */
+html.np-tabon .top>h1{margin-left:64px!important}
+html.np-tabon.npw-cover .top>h1{margin-left:80px!important}
+/* Popup phụ huynh (#ovGate) và popup tạm dừng (#ovPause, ví dụ nút "Đổi trò" của Chim Bay) ở theme SÁNG: nền popup là scrim TỐI (rgba(8,6,24,.62)) và --ink = #fff, nhưng luật theme sáng của btn.css tô nút phụ (.ghost "Quay lại") nền KEM → chữ trắng trên nền kem (1,1:1, vô hình) ở cả 12 game Pop. Trong popup tối nút phụ dùng kính tối + chữ trắng như nút phụ Night Pass khác. */
+html[data-theme=light] :is(#ovGate,#ovPause) :is(button.ghost,button.sec,button.alt,button.btn.alt){background:rgba(255,255,255,.12)!important;color:#fff!important;border:1px solid rgba(190,175,255,.55)!important;box-shadow:none!important}

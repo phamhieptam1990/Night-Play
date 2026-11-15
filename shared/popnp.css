@@ -69,7 +69,7 @@ html:root[data-theme=dark] .play:has(> :is(#home,#village,#ovStart):not([hidden]
 /* ===== POP PLAY: MỌI NÚT >= 56px (bằng nút mở khoá iPhone = --tap-lg), ở MỌI cỡ màn hình + mọi game (chủ site: "nút Pop Play tối thiểu bằng nút mở khoá iPhone, nhỏ hơn thì layout lại theo Night Pass") =====
    Bài đo: scripts/cozygame/check-popbtn.js. Nút icon = tròn 56px kính tối (glass.css); nút chữ/thanh = cao >= 56px; khi cột trái màn ngang hẹp thì nút XUỐNG HÀNG (flex-wrap) thay vì co nhỏ. */
 html.npp-kid{--pop-btn:56px}
-html.npp-kid :is(.top .ib,.app .ask .ib,#phBtn,#soundBtn,#langBtn,#homeBtn,#skinBtn,#undoBtn,#hintBtn,#resetBtn,#micBtn,#askBtn,#clrBtn,#goBtn,button.sk,.app.tight .top .ib){
+html.npp-kid :is(.top .ib,.app .ask .ib,#phBtn,#soundBtn,#langBtn,#homeBtn,#skinBtn,#undoBtn,#hintBtn,#resetBtn,#micBtn,#askBtn,#clrBtn,#goBtn,.bh>button.sk,.tile>button.sk,.app.tight .top .ib){
   box-sizing:border-box!important;width:var(--pop-btn)!important;height:var(--pop-btn)!important;min-width:var(--pop-btn)!important;min-height:var(--pop-btn)!important;max-width:none!important;max-height:none!important;flex:none}
 html.npp-kid .app .top{gap:8px;flex-wrap:wrap}
 html.npp-kid :is(.dbar,.lvb,.ab,.abar,.jy,.jn,.chip2,#prOk,.main,.npr-x,.abar button,#pgBtn,#profBtn){min-height:var(--pop-btn)!important;box-sizing:border-box}
@@ -180,9 +180,9 @@ html.npp-kid #home .tiles{width:100%!important;flex:1 1 100%!important}
 /* NÚT CẤP ĐỘ đang chọn: MỖI CẤP MỘT MÀU thể hiện độ khó, cố định ở mọi game Pop (1 xanh lá, 2 xanh dương, 3 cam đỏ), chữ trắng, viền trắng mảnh + bóng nhẹ */
 html.npp-kid:root .lvs .lvb.on,html.npp-kid:root .lvs .lv.on{color:#fff!important;border:2px solid rgba(255,255,255,.85)!important}
 html.npp-kid:root .lvs .lvb.on *{color:#fff!important}
-html.npp-kid:root .lvs :is(.lvb,.lv):nth-child(1).on{background:#0B9A5F!important;box-shadow:0 3px 10px rgba(11,154,95,.5)!important}
+html.npp-kid:root .lvs :is(.lvb,.lv):nth-child(1).on{background:#0A8754!important;box-shadow:0 3px 10px rgba(10,135,84,.5)!important}
 html.npp-kid:root .lvs :is(.lvb,.lv):nth-child(2).on{background:#2563EB!important;box-shadow:0 3px 10px rgba(37,99,235,.5)!important}
-html.npp-kid:root .lvs :is(.lvb,.lv):nth-child(3).on{background:#E4501A!important;box-shadow:0 3px 10px rgba(228,80,26,.5)!important}
+html.npp-kid:root .lvs :is(.lvb,.lv):nth-child(3).on{background:var(--np-orange-on,#CC4C0E)!important;box-shadow:0 3px 10px rgba(204,76,14,.5)!important}
 
 /* thẻ "Hôm nay"/Album gọn lại: 56px → 46px (chủ site: "card hôm nay bự") */
 html.npp-kid #play :is(.dbar,.abar){height:46px!important;min-height:46px!important}

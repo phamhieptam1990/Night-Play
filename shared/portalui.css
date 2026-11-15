@@ -165,7 +165,7 @@ html[data-theme=dark] .pu-chip:focus-visible{outline-color:#fff}
 }
 
 /* ===== Pop Play: giao diện trẻ em — tiêu đề nhiều màu bút sáp, nghiêng nhẹ + nhún; icon game nhún nhảy lệch pha ===== */
-html[data-app=popplay] .hero h1{font-family:ui-rounded,"Nunito","Baloo 2","Fredoka",var(--font);font-weight:900;letter-spacing:.01em;
+html[data-app=popplay] .hero h1{font-family:var(--font);font-weight:900;letter-spacing:.01em;
   background-image:linear-gradient(90deg,#E5322D 0 22%,#E8710A 22% 46%,#1FA14F 46% 70%,#1E7FE0 70% 86%,#8A3FE0 86%);
   -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;text-shadow:none;transform:rotate(-1.5deg);transform-origin:left center}
 html[data-app=popplay][data-theme=dark] .hero h1{background-image:linear-gradient(90deg,#FF6B6B 0 22%,#FFC83D 22% 46%,#5BE07F 46% 70%,#5CC2FF 70% 86%,#C58BFF 86%)}

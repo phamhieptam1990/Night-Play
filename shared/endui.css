@@ -42,3 +42,7 @@
 
 /* không để lại ô thống kê rỗng */
 #end .chip:empty,#res .chip:empty,#result .chip:empty{display:none}
+/* nhãn "điểm" nằm TRÊN, số điểm to nằm DƯỚI (chủ site: "label điểm nằm trên, số điểm nằm dưới") */
+#enP .enPl,#enP .enPn{display:block}
+#enP .enPl{font-size:.42em;line-height:1.1;font-weight:800;letter-spacing:.04em;opacity:.92}
+#enP .enPn{font-size:1em;line-height:1.05;font-weight:800}

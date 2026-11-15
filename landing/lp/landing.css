@@ -213,7 +213,7 @@ html[data-theme=dark] .top{background:rgba(18,20,31,.85)}
 @media (max-height:700px){.hero-in{padding-top:18px;gap:12px}}
 
 /* ===== Menu icon (header + chân trang) ===== */
-.mbtn{display:none;align-items:center;justify-content:center;min-width:44px;min-height:44px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer;padding:0}
+.mbtn{font:inherit;display:none;align-items:center;justify-content:center;min-width:44px;min-height:44px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer;padding:0}
 .mbtn:hover{border-color:var(--accent)}
 /* icon trong mục menu: chỉ hiện khi menu mở dạng popover */
 .mic{display:none}
