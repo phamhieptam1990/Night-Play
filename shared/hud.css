@@ -32,4 +32,4 @@ html.np-locked #npHudc{display:none!important}
 html #stage #npHudc .np-hb[data-k=snd][aria-pressed=false]{background:#6B6F80!important;background-image:none!important;border-color:rgba(255,255,255,.35)!important;color:#E9EAF2!important;box-shadow:none!important;opacity:1!important}
 
 /* popup của game đang mở (shared/nppopup.js đặt html.np-popup-open ở trang cổng): cột nút HUD ← 🔊 ⋯ và nút nổi của cổng nằm NGOÀI khung game nên không bị lớp mờ phủ → làm mờ cho khỏi lộ */
-html.np-popup-open #npHudc,html.np-popup-open .nps-fab,html.np-popup-open #klock,html.np-popup-open .np-tab{opacity:.28;filter:saturate(.4);transition:opacity .2s}
+html.np-popup-open #npHudc:not(.inrail),html.np-popup-open .nps-fab,html.np-popup-open #klock,html.np-popup-open .np-tab{opacity:.28;filter:saturate(.4);transition:opacity .2s}

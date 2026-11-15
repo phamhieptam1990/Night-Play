@@ -362,9 +362,9 @@ html:not(#np) #setup .sh-f .icon-btn{font-size:var(--fs-label)!important}
 html:not(#np) :is(.npc .npx,#hlpX,#phX,#setupX,.sheet .sh-h>.icon-btn,#ovHow #hwBack:not([hidden])){
   box-sizing:border-box!important;display:grid!important;place-items:center;width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;padding:0!important;border-radius:50%!important;
   font-size:0!important;line-height:0!important;color:#fff!important;cursor:pointer;
-  background:linear-gradient(135deg,var(--nb-1,#6C4BF2),var(--nb-2,#C2410C))!important;
+  background:linear-gradient(135deg,var(--xc1,#7C5CFF),var(--xc2,#5B3FE0))!important;
   border:1px solid rgba(255,255,255,.42)!important;
-  box-shadow:0 6px 18px var(--nb-glow,rgba(108,75,242,.5)),0 2px 6px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.35)!important;
+  box-shadow:0 6px 18px var(--xcg,rgba(108,75,242,.5)),0 2px 6px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.35)!important;
   -webkit-backdrop-filter:none!important;backdrop-filter:none!important}
 html:not(#np) :is(.npc .npx,#hlpX,#phX,#setupX,.sheet .sh-h>.icon-btn,#ovHow #hwBack)>*{display:none!important}
 html:not(#np) :is(.npc .npx,#hlpX,#phX,#setupX,.sheet .sh-h>.icon-btn,#ovHow #hwBack)::after{content:none!important;display:none!important}
@@ -399,3 +399,14 @@ html:not(#np) #ovSkin .npc :is(#skX,#skBack){display:none!important}
 }
 @media (max-width:520px) and (orientation:portrait){html:not(#np):not(.npp-kid) #ovSkin .npc .sk>.skc .e{font-size:38px!important;line-height:1!important}}
 html:not(#np) #ovHow:not([hidden])>#hwBack{zoom:1!important}
+
+/* MÀU THEME của ✕ popup: Night Play (Cozy) = tím, Pop Play = cam — cùng màu các nút tròn của game (←, 🔊), không dùng gradient tím–cam chung */
+:root{--xc1:#7C5CFF;--xc2:#5B3FE0;--xcg:rgba(108,75,242,.5)}
+html.npp-kid{--xc1:#F2701D;--xc2:var(--np-orange-on,#CC4C0E);--xcg:rgba(242,112,29,.5)}
+/* POP DESKTOP / iPad — popup Giao diện: ô KHÔNG bị nén phẳng (trước: lưới 3 cột kéo ô rộng ~290px, preview chỉ cao 120px) → ô vuông-nhỏ cố định, canh giữa */
+@media (min-width:700px) and (min-height:521px){
+  html.npp-kid #ovSkin>.npc{width:min(94%,780px)!important}
+  html.npp-kid #ovSkin .skgrid{display:flex!important;flex-wrap:wrap!important;justify-content:center!important;gap:16px!important;width:100%!important}
+  html.npp-kid #ovSkin .skgrid>.skc{flex:0 0 clamp(150px,26%,210px)!important;width:auto!important;grid-column:auto!important}
+  html.npp-kid #ovSkin .skgrid>.skc .sw{height:auto!important;aspect-ratio:4/3!important;font-size:clamp(34px,5vw,56px)!important}
+}
