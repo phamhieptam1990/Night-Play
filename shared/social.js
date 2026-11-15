@@ -237,9 +237,9 @@ window.NPS = (function () {
     /* ===== Night Pass: thẻ tím tối + viền sáng + quầng tím, nút pill 52px, ô link kính tối (trước: nền phẳng, nút cam vuông) — popup chia sẻ "Nhờ bạn chơi hộ", khoe điểm, ảnh chụp ===== */
     ".nps-sheet,.nps-dlg{border:1px solid rgba(167,150,255,.5);border-radius:28px;background:linear-gradient(160deg,rgba(44,36,104,.97),rgba(22,24,42,.97));color:#F1F2FF;font-family:Inter,system-ui,-apple-system,sans-serif;box-shadow:0 0 0 1px rgba(124,92,255,.18),0 18px 60px rgba(124,92,255,.45),0 10px 36px rgba(0,0,0,.35)}" +
     ".nps-sheet{padding:20px 18px 18px;max-height:calc(100% - 24px);overflow:auto;overscroll-behavior:contain}.nps-dlg{padding:22px 18px 18px}" +
-    ".nps-sheet h3,.nps-dlg h3{margin:0 0 6px;font-size:22px;font-weight:800;letter-spacing:-.01em;color:#F1F2FF}.nps-sheet p,.nps-dlg p{color:#C9CCF0;opacity:1}" +
+    ".nps-sheet h3,.nps-dlg h3{margin:0 0 6px;font-size:25px;font-weight:800;letter-spacing:-.01em;color:#F1F2FF}.nps-sheet p,.nps-dlg p{color:#C9CCF0;opacity:1}" +
     ".nps-sheet input{min-height:52px;border-radius:16px;border:1.5px solid rgba(167,150,255,.55);background:rgba(8,6,24,.62);color:#F1F2FF;box-shadow:inset 0 0 14px rgba(124,92,255,.18)}.nps-sheet input:focus-visible{outline:2px solid #fff;outline-offset:2px}" +
-    ".nps-sheet .nps-row,.nps-dlg .nps-row{gap:10px;margin-top:14px}.nps-sheet .nps-row button,.nps-dlg .nps-row button,.nps-dlg a.nps-s{height:52px;border-radius:999px;font-size:16px}" +
+    ".nps-sheet .nps-row,.nps-dlg .nps-row{gap:10px;margin-top:14px}.nps-sheet .nps-row button,.nps-dlg .nps-row button,.nps-dlg a.nps-s{height:54px;border-radius:999px;font-size:18px}" +
     ".nps-sheet .nps-p,.nps-dlg .nps-p{background:linear-gradient(135deg,#6C4BF2,#C2410C);color:#fff;border:1px solid rgba(255,255,255,.4)!important;box-shadow:0 5px 16px rgba(108,75,242,.5),inset 0 1px 0 rgba(255,255,255,.3)}" +
     ".nps-sheet .nps-s,.nps-dlg .nps-s{background:transparent;color:#F1F2FF;border:1px solid rgba(167,150,255,.55)!important}" +
     ".nps-sheet .nps-st{color:#FFD66B;font-weight:700}.nps-sheet .nps-note{color:#C9CCF0;opacity:.85}.nps-sheet .nps-err{color:#FFB4A0}" +

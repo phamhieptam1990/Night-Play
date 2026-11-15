@@ -280,3 +280,24 @@ html #setup .proNote{color:#C9CCF0}
 html.npp-kid #ovHow:not([hidden]){background:radial-gradient(520px 340px at 50% 22%,rgba(124,92,255,.28),transparent),rgba(8,6,24,.92)!important;-webkit-backdrop-filter:blur(10px)!important;backdrop-filter:blur(10px)!important}
 html.npp-kid #ovHow:not([hidden]) h2{text-shadow:0 2px 12px rgba(0,0,0,.6)}
 html.npp-kid #ovHow:not([hidden]) #hwBack{background:var(--np-orange-on,#CC4C0E)!important;border:2px solid rgba(255,255,255,.7)!important;color:#fff!important;box-shadow:0 3px 10px rgba(0,0,0,.35)!important}   /* ✕ cùng kiểu mọi popup (trước: xám xanh trong suốt chìm vào nền) */
+
+/* Pop: nút loa đọc to ở màn Cách chơi (#ovHow) và lời thách đấu (#ovCh) — tròn 56px cạnh nút chính */
+html.npp-kid .npSay{flex:none;display:grid;place-items:center;width:56px;height:56px;min-width:56px;min-height:56px;padding:0;margin:0 10px 0 0;border-radius:50%;cursor:pointer;color:#fff;background:rgba(124,92,255,.4);border:1.5px solid rgba(190,175,255,.75);box-shadow:0 3px 10px rgba(0,0,0,.3)}
+html.npp-kid .npSay.on{background:linear-gradient(135deg,#6C4BF2,#C2410C);border-color:#fff}
+html.npp-kid .npSay svg{width:28px;height:28px}
+/* chữ popup to hơn cho dễ nhìn (Pop dọc: ý hướng dẫn 16 → 19px; nhãn giao diện 15 → 17px) */
+@media (orientation:portrait){
+  html.npp-kid #ovHow .hwL li{font-size:max(19px,5vw)!important;line-height:1.3}
+  html.npp-kid #ovSkin .npc .skc span{font-size:17px!important}
+  html:not(.npp-kid) #ovSkin .npc .skc .sx b{font-size:17px!important}
+}
+
+html.npp-kid #ovHow .npSay{width:52px!important;height:52px!important;min-width:52px!important;min-height:52px!important}
+/* chữ popup to rõ hơn: Đập Deadline (#setup), thẻ mời Night Pass (#ovPay/#pay), tiêu đề/ghi chú */
+html #setup .chip b{font-size:15px}
+html #setup .sec small{font-size:13px}
+html #setup .sh-h{font-size:24px}
+html #setup .proNote{font-size:14px}
+html #ovPay .npc p,html #pay .pw-p,html #pay p{font-size:17px!important;line-height:1.4}
+html #ovPay .npc h2{font-size:clamp(24px,6.4vw,30px)!important}
+@media (max-height:520px) and (min-aspect-ratio:11/10){html #setup .chip b{font-size:13px}html #setup .sh-h{font-size:19px}html #setup .sec small{font-size:11.5px}}

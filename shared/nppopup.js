@@ -21,6 +21,23 @@
         new MutationObserver(fix).observe(h, { childList: true, characterData: true, subtree: true }); fix();
       }
     });
+    /* POP PLAY: popup cho bé (Cách chơi / Bắt đầu #ovHow, lời thách đấu #ovCh) PHẢI có nút loa đọc to (bé chưa biết đọc): nút tròn cạnh nút chính, đọc tiêu đề + các ý (speechSynthesis, đọc được cả khi game tắt tiếng), bấm lần nữa để dừng; đóng popup thì dừng đọc. */
+    if (R.classList.contains("npp-kid") && window.speechSynthesis && window.SpeechSynthesisUtterance) {
+      var ICO = '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h3.6L13 19V5L7.6 9.5z"/><path d="M16.2 9a4.2 4.2 0 0 1 0 6M18.8 6.4a8 8 0 0 1 0 11.2"/></svg>';
+      [["ovHow", "hwGo", ["hwH", "hwL"]], ["ovCh", "chGo", ["chH", "chP"]]].forEach(function (c) {
+        var ov = d.getElementById(c[0]), go = d.getElementById(c[1]); if (!ov || !go || d.getElementById(c[0] + "Say")) return;
+        var b = d.createElement("button"); b.type = "button"; b.id = c[0] + "Say"; b.className = "npSay"; b.innerHTML = ICO; b.setAttribute("aria-label", vi ? "Nghe hướng dẫn" : "Listen");
+        go.parentNode.insertBefore(b, go);
+        var stop = function () { try { speechSynthesis.cancel(); } catch (e) {} b.classList.remove("on"); };
+        b.addEventListener("click", function (e) {
+          e.stopPropagation(); if (b.classList.contains("on")) { stop(); return; }
+          var tx = []; c[2].forEach(function (i) { var el = d.getElementById(i); if (!el) return; var li = el.querySelectorAll("li"); if (li.length) li.forEach(function (x) { tx.push(x.textContent); }); else tx.push(el.textContent); });
+          var t = tx.join(". ").replace(/[^\p{L}\p{N}\s.,!?:'’+\-−×÷=]/gu, " ").replace(/\s+/g, " ").trim(); if (!t) return;
+          try { speechSynthesis.cancel(); var u = new SpeechSynthesisUtterance(t); u.npForce = true; u.lang = vi ? "vi-VN" : "en-US"; u.rate = .85; u.pitch = 1.1; u.onend = u.onerror = function () { b.classList.remove("on"); }; b.classList.add("on"); speechSynthesis.speak(u); } catch (er) { b.classList.remove("on"); }
+        });
+        try { new MutationObserver(function () { if (ov.hidden) stop(); }).observe(ov, { attributes: true, attributeFilter: ["hidden"] }); } catch (e) {}
+      });
+    }
     d.addEventListener("keydown", function (e) {
       if (e.key !== "Escape") return;
       for (var id in MAP) { var ov = d.getElementById(id); if (ov && !ov.hidden && ov.querySelector(".npc")) { var c = closer(id); if (c) { e.preventDefault(); c.click(); } return; } }

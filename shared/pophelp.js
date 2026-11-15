@@ -70,7 +70,7 @@
     if (land) { var cw = Math.min(W - 144, 780), sx = Math.max(72, (W - cw) / 2); ov.style.padding = "12px " + sx + "px"; w = W - 2 * sx; }   /* màn ngang (điện thoại): thẻ rộng ra gần hết cửa sổ (chừa 72px cột nút ← ⋯) để chữ to hơn */
     else ov.style.padding = pd + "px " + Math.max(0, W - pr.right + pd) + "px " + pd + "px " + Math.max(0, pr.left + pd) + "px";
     ov.style.setProperty("--u", (w / 100) + "px");
-    var f = land ? Math.max(13, Math.min(26, w / 26)) : Math.max(13, Math.min(19, w / 22)), g = 0;   /* cỡ chữ vừa phải: trước đây w/17 (tới 26px) làm chữ to, dòng bị ép xuống nhìn như bị nén */
+    var f = land ? Math.max(14, Math.min(26, w / 24)) : Math.max(14, Math.min(22, w / 19)), g = 0;   /* cỡ chữ vừa phải: trước đây w/17 (tới 26px) làm chữ to, dòng bị ép xuống nhìn như bị nén */
     card.style.setProperty("--f", f + "px");
     while ((card.scrollHeight > card.clientHeight + 1 || card.scrollWidth > card.clientWidth + 1) && f > 9 && g++ < 60) { f -= .5; card.style.setProperty("--f", f + "px"); }
   }
