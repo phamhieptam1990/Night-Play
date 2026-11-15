@@ -38,6 +38,11 @@
         try { new MutationObserver(function () { if (ov.hidden) stop(); }).observe(ov, { attributes: true, attributeFilter: ["hidden"] }); } catch (e) {}
       });
     }
+    /* Cột nút HUD (← 🔊 ⋯) nằm trong TRANG CỔNG, ngoài khung game → lớp mờ của popup không phủ tới và nút vẫn sáng rực. Khi một popup của game mở thì đặt html.np-popup-open ở trang cổng; shared/hud.css làm mờ cột nút. */
+    var PO = ["ovHow", "ovSkin", "ovPay", "ovCh", "ovGate", "ovColl"];
+    var syncPo = function () { var on = PO.some(function (i) { var e = d.getElementById(i); return e && !e.hidden; }); try { if (window.parent && window.parent !== window) window.parent.document.documentElement.classList.toggle("np-popup-open", on); } catch (e) {} };
+    PO.forEach(function (i) { var e = d.getElementById(i); if (e) try { new MutationObserver(syncPo).observe(e, { attributes: true, attributeFilter: ["hidden"] }); } catch (x) {} });
+    addEventListener("pagehide", function () { try { window.parent.document.documentElement.classList.remove("np-popup-open"); } catch (e) {} }); syncPo();
     d.addEventListener("keydown", function (e) {
       if (e.key !== "Escape") return;
       for (var id in MAP) { var ov = d.getElementById(id); if (ov && !ov.hidden && ov.querySelector(".npc")) { var c = closer(id); if (c) { e.preventDefault(); c.click(); } return; } }

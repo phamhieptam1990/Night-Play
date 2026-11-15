@@ -335,3 +335,6 @@ html:not(.npp-kid) #ovHow:not([hidden]) #hwBack::before{content:"✕";font-size:
   html:not(.npp-kid) #ovSkin .npc .skc .e{width:28px!important;height:28px!important;font-size:22px!important}
   html:not(.npp-kid) #ovSkin .npc .skc .sx b{font-size:14px!important;overflow-wrap:normal!important;word-break:normal!important;white-space:normal}
 }
+
+/* ✕ của màn Cách chơi Cozy: tâm cùng hàng nút ← của HUD (tâm y=38px, cách mép phải 16px) */
+html:not(.npp-kid) #ovHow:not([hidden]) #hwBack:not([hidden]){top:16px!important;right:16px!important}
