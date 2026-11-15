@@ -18,7 +18,7 @@ html #ovPay{padding:12px;align-items:center;justify-content:center}
 html #ovSkin{padding:12px;align-items:center;justify-content:center}
 html:not(.npp-kid) #ovSkin{padding-top:64px}   /* Cozy: ov phủ cả màn, thanh trên (⋯) nằm đè lên → thẻ nằm dưới thanh */
 /* màn ngang có khối nút HUD ← ⋯ nằm đè lên cột trái (cổng, z-index trên khung game): thẻ chừa cột 72px hai bên để không bị hai nút che */
-html.np-hudg #ovSkin,html.np-hudg #ovPay{padding-left:72px;padding-right:72px}
+html.np-hudg #ovSkin,html.np-hudg #ovPay{padding-left:72px!important;padding-right:72px!important}
 /* thẻ */
 html .npc{position:relative;box-sizing:border-box;display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:10px;text-align:center;overflow:hidden;
   font-family:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--npi);background:var(--npbg);
@@ -257,4 +257,21 @@ html #setup .proNote{color:#C9CCF0}
   html #setup .chip b{font-size:12px}
   html #setup .chip .gr{width:20px;height:20px}
   html #setup .sec small{margin-bottom:3px}
+}
+
+/* Điện thoại NGANG: popup dạng .sheet (position:fixed phủ cả khung game, ví dụ Đập Deadline: Giao diện & tuỳ chọn, chia sẻ, thống kê) bị cột nút HUD ← 🔊 ⋯ (x 16–60px, nằm đè lên khung game) che mép trái thẻ → chừa 72px hai bên */
+@media (min-aspect-ratio:11/10) and (max-height:520px){
+  html.np-hudg .sheet{padding-left:72px;padding-right:72px}
+  html.np-hudg .sheet .sheet-in{width:min(660px,100%)}
+}
+@media (min-aspect-ratio:11/10) and (max-height:520px) and (max-width:640px){html.np-hudg .sheet{padding-right:14px}}   /* màn ngang hẹp: bên phải không có nút → bớt lề phải để các ô không bị bóp */
+
+/* COZY WINGS (Cánh Nhỏ) — popup Giao diện dạng .skgrid > button.sk (icon + ảnh + tên), điện thoại NGANG: trước 2 cột rộng mà tên bị bóp vào cột hẹp (3 dòng), ô cuối kéo dài hết hàng, ảnh hỏng chừa khoảng trống → 3 cột đều, hàng cuối canh giữa, icon trái + tên chiếm phần còn lại */
+@media (max-height:520px) and (min-aspect-ratio:11/10){
+  html:not(.npp-kid) #ovSkin .skgrid{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:8px!important;max-width:100%!important}
+  html:not(.npp-kid) #ovSkin .skgrid>.sk{grid-column:span 2!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;gap:8px!important;min-height:52px;padding:6px 10px!important;text-align:left}
+  html:not(.npp-kid) #ovSkin .skgrid>.sk:last-child:nth-child(3n+1){grid-column:3 / span 2!important}html:not(.npp-kid) #ovSkin .skgrid>.sk:last-child:nth-child(3n+2){grid-column:4 / span 2!important}html:not(.npp-kid) #ovSkin .skgrid>.sk:nth-last-child(2):nth-child(3n+1){grid-column:2 / span 2!important}
+  html:not(.npp-kid) #ovSkin .skgrid>.sk>i.e{flex:none;font-size:26px!important;width:30px;display:grid;place-items:center}
+  html:not(.npp-kid) #ovSkin .skgrid>.sk>img{display:none!important}
+  html:not(.npp-kid) #ovSkin .skgrid>.sk>span{flex:1 1 auto;min-width:0;width:auto!important;max-width:none!important;font-size:13px!important;line-height:1.15;text-align:left;white-space:normal;overflow-wrap:anywhere}
 }
