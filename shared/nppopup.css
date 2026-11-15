@@ -191,3 +191,7 @@ html.npp-kid #ovPay .npc #pwGo{background:transparent!important;background-image
   html.npp-kid #ovSkin .npc .sk:not(.skc){min-height:0;padding:6px!important;gap:4px!important}
   html.npp-kid #ovSkin .npc .sk:not(.skc) img{width:100%!important;height:auto!important;aspect-ratio:2/1!important;object-fit:cover}
 }
+/* Cozy: thanh nút trên (← 🔊 ⋯, .top.npfan, position:fixed z-index 40) từng nằm ĐÈ trên popup của game (Giao diện, Night Pass…) → popup mở thì hạ thanh xuống dưới lớp mờ, cùng kiểu popup hướng dẫn (?) phủ trọn cửa sổ. Màn bắt đầu (#ovStart) và kết thúc ván (#ovEnd) giữ nút để còn thoát. */
+html:not(.npp-kid):has(.ov:not([hidden]):not(#ovStart):not(#ovEnd)) .top.npfan{z-index:1!important}
+/* huy hiệu độ khó (Dễ/Easy, position:fixed z-index 2147482000) cũng nằm dưới lớp mờ khi popup của game mở */
+html:has(.ov:not([hidden]):not(#ovStart):not(#ovEnd)) #npDifBadge{z-index:1!important}
