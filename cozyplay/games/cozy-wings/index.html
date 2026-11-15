@@ -356,7 +356,7 @@ body:has(#ovHow:not([hidden])) .side .ask,body:has(#ovHow:not([hidden])) .side .
 @media (max-height:700px){#hwR{display:none}#ovHow{gap:6px}.hwL li b{font-size:1.25em}.hwL li{padding:5px 6px;font-size:12.5px}#ovHow .big{padding:8px 22px;font-size:17px}#ovHow .ghost{padding:6px 16px;font-size:14px}}
 @media (max-height:520px) and (min-aspect-ratio:11/10){#ovHow h2{font-size:16px;padding:2px 12px}.hwE{display:none}#ovHow p{display:none}.hwL li{padding:3px 8px;font-size:11px}#ovHow .big{padding:5px 16px;font-size:14px}}
 /* màn "Cách chơi" TO RÕ: trước 11–12px (khung game hẹp ở điện thoại ngang) + thanh gợi ý "Chọn một chuyến bay nhé" chồng lên nút Bắt đầu bay → cỡ chữ theo chiều cao màn (tối thiểu 14–19px), ẩn thanh gợi ý khi màn thấp */
-@media (max-height:760px){#ovHow h2{font-size:clamp(18px,5.4vh,24px)!important;line-height:1.15!important}.hwL li{font-size:clamp(15px,4.4vh,19px)!important;line-height:1.2!important;padding:3px 6px!important}#ovHow .big{font-size:clamp(16px,4.8vh,21px)!important}}
+@media (max-height:760px){#ovHow h2{font-size:var(--tip-t,22px)!important;line-height:1.15!important}.hwL li{font-size:var(--tip-b,17px)!important;line-height:1.2!important;padding:3px 6px!important}#ovHow .big{font-size:calc(var(--tip-b,17px)*1.1)!important}}
 @media (max-height:480px){#ovHow #hwR,#ovHow p{display:none!important}}
 /* --- thách đấu · khoe điểm · combo --- */
 #chTrack{display:flex;align-items:center;gap:6px;font:800 12.5px var(--display);white-space:nowrap;padding:3px 9px;border-radius:999px;background:color-mix(in srgb,var(--panel) 80%,transparent);color:var(--ink)}#chTrack[hidden]{display:none}
