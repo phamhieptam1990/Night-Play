@@ -191,7 +191,7 @@ body.np-local{--w:min(calc(100vw - 24px),calc((100dvh - 240px)*.75),760px)}
 /* ĐIỆN THOẠI NGANG: màn chọn 2 CỘT trên toàn màn hình (khung 3:4 quá nhỏ: thêm thẻ "Tiếp tục ván dở" là tràn cả hai đầu). Trái: hôm nay + tiếp tục + độ khó; phải: 5 chuyến bay một hàng gọn. */
 @media (max-height:380px) and (min-aspect-ratio:11/10){
   #play:has(#ovStart:not([hidden])){box-shadow:none!important}#play:has(#ovStart:not([hidden]))::after{display:none!important}
-  body:has(#ovStart:not([hidden])) .side .ask,body:has(#ovStart:not([hidden])) .side .hud,body:has(#ovSkin:not([hidden])) .side .ask,body:has(#ovSkin:not([hidden])) .side .hud,body:has(#ovPay:not([hidden])) .side .ask,body:has(#ovPay:not([hidden])) .side .hud{display:none!important}
+  body:has(#ovHow:not([hidden])) .side .ask,body:has(#ovHow:not([hidden])) .side .hud,body:has(#ovStart:not([hidden])) .side .ask,body:has(#ovStart:not([hidden])) .side .hud,body:has(#ovSkin:not([hidden])) .side .ask,body:has(#ovSkin:not([hidden])) .side .hud,body:has(#ovPay:not([hidden])) .side .ask,body:has(#ovPay:not([hidden])) .side .hud{display:none!important}
   #ovStart:not([hidden]){position:fixed!important;left:150px;right:24px;padding-inline:calc((100% - min(100%,560px))/2)!important;top:8px;bottom:6px;width:auto!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);grid-auto-rows:max-content;column-gap:14px;row-gap:6px;align-content:center;align-items:center;justify-items:stretch;padding:0;background:none!important;-webkit-backdrop-filter:none;backdrop-filter:none}
   #ovStart .cwHero,#ovStart #stH:not(:empty):not([hidden]){display:none}
   #ovStart .tiles{display:contents!important}
@@ -217,7 +217,7 @@ html[data-theme=light] #ovStart .tile:not(.daily) .main,html[data-theme=light] #
   #ovStart .tile:not(.daily) .skinBtn{right:8px!important;top:50%!important;transform:translateY(-50%)!important;width:40px!important;height:40px!important}
 }
 /* MÀN CHỌN: bỏ thẻ "Chọn một chuyến bay nhé" + ⭐ điểm ở MỌI cỡ (web/iPad/điện thoại); hai thứ này chỉ cần khi đang bay */
-body:has(#ovStart:not([hidden])) .side .ask,body:has(#ovStart:not([hidden])) .side .hud,body:has(#ovSkin:not([hidden])) .side .ask,body:has(#ovSkin:not([hidden])) .side .hud,body:has(#ovPay:not([hidden])) .side .ask,body:has(#ovPay:not([hidden])) .side .hud{display:none!important}
+body:has(#ovHow:not([hidden])) .side .ask,body:has(#ovHow:not([hidden])) .side .hud,body:has(#ovStart:not([hidden])) .side .ask,body:has(#ovStart:not([hidden])) .side .hud,body:has(#ovSkin:not([hidden])) .side .ask,body:has(#ovSkin:not([hidden])) .side .hud,body:has(#ovPay:not([hidden])) .side .ask,body:has(#ovPay:not([hidden])) .side .hud{display:none!important}
 /* MÀN CHỌN (mọi cỡ): bỏ khung viền xanh + nền hộp bao quanh, căn nội dung GIỮA khung */
 #play:has(#ovStart:not([hidden])){box-shadow:none!important;border:0!important}
 #play:has(#ovStart:not([hidden]))::after{display:none!important}
