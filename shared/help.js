@@ -63,7 +63,7 @@
       try {
         if (speaking) { stopSay(); return; }
         var vi = (document.documentElement.lang || "vi").slice(0, 2) !== "en", tx = [].map.call(ov.querySelectorAll(".hlpIt span"), function (e) { return e.textContent; }).join(". ");
-        speechSynthesis.cancel(); var u = new SpeechSynthesisUtterance(tx); u.lang = vi ? "vi-VN" : "en-US"; u.rate = .9;
+        speechSynthesis.cancel(); var u = new SpeechSynthesisUtterance(tx); u.npForce = true; u.lang = vi ? "vi-VN" : "en-US"; u.rate = .9;
         u.onend = u.onerror = function () { speaking = false; mark(false); };
         speaking = true; mark(true); speechSynthesis.speak(u);
       } catch (e) { speaking = false; }

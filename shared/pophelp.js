@@ -32,7 +32,7 @@
     "#phX{flex:none;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;padding:0;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.28)!important;box-sizing:border-box;outline:none}#phX:focus-visible{outline:2px solid #fff;outline-offset:3px}#phX:active{transform:scale(.94)}" +
     "#phSay.on{background:rgba(255,255,255,.28);border-color:#fff!important}" +
     /* nút NGHE to có chữ (bé không tìm thấy loa tròn nhỏ): thay loa tròn trong tiêu đề */
-    "#phSay{display:none!important}#phLis{flex:none;min-height:56px;border-radius:999px;padding:0 calc(var(--f,16px)*1.2);font:800 calc(var(--f,16px)*1.05) var(--font);color:#fff;cursor:pointer;background:rgba(124,92,255,.38);border:1.5px solid rgba(190,175,255,.7);box-sizing:border-box}#phLis.on{background:linear-gradient(135deg,#6C4BF2,#C2410C);border-color:#fff}#phLis[hidden]{display:none!important}" +
+    "#phSay{display:none!important}#phAct{flex:none;display:flex;align-items:stretch;gap:calc(var(--f,16px)*.6)}#phAct #phGo{flex:1 1 auto;min-width:0}#phLis{flex:none;display:grid;place-items:center;width:56px;min-width:56px;min-height:56px;padding:0;border-radius:999px;color:#fff;cursor:pointer;background:rgba(124,92,255,.38);border:1.5px solid rgba(190,175,255,.7);box-sizing:border-box}#phLis.on{background:linear-gradient(135deg,#6C4BF2,#C2410C);border-color:#fff}#phLis[hidden]{display:none!important}#phLis svg{width:28px;height:28px}" +
     "#phLs{display:flex;flex-direction:column;gap:calc(var(--f,16px)*.5);margin:0;padding:0;list-style:none}" +
     "#phLs li{display:flex;align-items:center;gap:calc(var(--f,16px)*.7);padding:calc(var(--f,16px)*.55) calc(var(--f,16px)*.75);border-radius:calc(var(--f,16px)*1.1);background:rgba(124,92,255,.2);border:1px solid rgba(170,150,255,.42);box-shadow:inset 0 0 14px rgba(124,92,255,.14)}" +
     "#phLs i{flex:none;font-style:normal;font-size:calc(var(--f,16px)*2);line-height:1;min-width:1.1em;text-align:center}" +
@@ -54,7 +54,7 @@
       var d = dat(), tx = d.s.map(function (x) { return x[1].replace(/[^\p{L}\p{N}\s.,!?:'’+\-−×÷=]/gu, " "); }).join(". ");
       speechSynthesis.cancel();
       var u = new SpeechSynthesisUtterance(tx);
-      u.lang = lang() === "vi" ? "vi-VN" : "en-US"; u.rate = .85; u.pitch = 1.1;
+      u.npForce = true; u.lang = lang() === "vi" ? "vi-VN" : "en-US"; u.rate = .85; u.pitch = 1.1;
       u.onend = u.onerror = function () { speaking = false; mark(false); };
       speaking = true; mark(true); speechSynthesis.speak(u);
     } catch (e) { speaking = false; }
@@ -80,7 +80,7 @@
     var nt = card.querySelector("#phNt"); nt.textContent = d.n || ""; nt.hidden = !d.n;
     card.querySelector("#phGo").textContent = vi ? "Đã hiểu!" : "Got it!";
     var sy = card.querySelector("#phSay"); sy.setAttribute("aria-label", vi ? "Đọc to" : "Read aloud");
-    var li = card.querySelector("#phLis"); li.textContent = "🔊 " + (vi ? "Nghe hướng dẫn" : "Listen"); li.setAttribute("aria-label", vi ? "Nghe hướng dẫn" : "Listen to the guide"); li.hidden = !(window.speechSynthesis && window.SpeechSynthesisUtterance);
+    var li = card.querySelector("#phLis"); li.innerHTML = ICO_SND; li.setAttribute("aria-label", vi ? "Nghe hướng dẫn" : "Listen to the guide"); li.hidden = !(window.speechSynthesis && window.SpeechSynthesisUtterance);
     card.querySelector("#phX").setAttribute("aria-label", vi ? "Đóng" : "Close");
     sy.hidden = !(window.speechSynthesis && window.SpeechSynthesisUtterance);
     btn.setAttribute("aria-label", vi ? "Cách chơi" : "How to play");
@@ -110,7 +110,7 @@
     if (ref && ref.parentNode === top) top.insertBefore(btn, ref); else top.appendChild(btn);
     if (!seen()) btn.classList.add("ph-new");
     ov = document.createElement("div"); ov.id = "phOv"; ov.hidden = true;
-    ov.innerHTML = '<div id="phCard" role="dialog" aria-modal="true"><div id="phHd"><h2 id="phTt"></h2><button id="phSay" type="button">' + ICO_SND + '</button><button id="phX" type="button">' + ICO_X + '</button></div><ul id="phLs"></ul><p id="phNt"></p><button id="phLis" type="button"></button><button id="phGo" type="button"></button></div>';
+    ov.innerHTML = '<div id="phCard" role="dialog" aria-modal="true"><div id="phHd"><h2 id="phTt"></h2><button id="phSay" type="button">' + ICO_SND + '</button><button id="phX" type="button">' + ICO_X + '</button></div><ul id="phLs"></ul><p id="phNt"></p><div id="phAct"><button id="phLis" type="button"></button><button id="phGo" type="button"></button></div></div>';
     document.body.appendChild(ov); card = ov.firstChild;
     btn.onclick = open;
     ov.querySelector("#phGo").onclick = close;

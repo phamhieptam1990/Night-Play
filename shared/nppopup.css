@@ -17,6 +17,8 @@ html[data-theme=dark] #ovPay,html[data-theme=dark] #ovSkin{--npdim:rgba(8,9,18,.
 html #ovPay{padding:12px;align-items:center;justify-content:center}
 html #ovSkin{padding:12px;align-items:center;justify-content:center}
 html:not(.npp-kid) #ovSkin{padding-top:64px}   /* Cozy: ov phủ cả màn, thanh trên (⋯) nằm đè lên → thẻ nằm dưới thanh */
+/* màn ngang có khối nút HUD ← ⋯ nằm đè lên cột trái (cổng, z-index trên khung game): thẻ chừa cột 72px hai bên để không bị hai nút che */
+html.np-hudg #ovSkin,html.np-hudg #ovPay{padding-left:72px;padding-right:72px}
 /* thẻ */
 html .npc{position:relative;box-sizing:border-box;display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:10px;text-align:center;overflow:hidden;
   font-family:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--npi);background:var(--npbg);

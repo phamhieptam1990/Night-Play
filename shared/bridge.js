@@ -179,7 +179,7 @@ try { var _q = new URLSearchParams(location.search).get("lang"), _s = null; try 
     for (var i = 0; i < vs.length; i++) { if (String(vs[i].lang || "").toLowerCase().replace("_", "-").indexOf(lg) !== 0) continue; var sc = score(vs[i], lg); if (sc > ts) { ts = sc; top = vs[i]; } }
     cache[lg] = { n: vs.length, v: top }; return top;
   }
-  synth.speak = function (u) { try { if (window.NPAudio && NPAudio.muted && NPAudio.muted()) return; } catch (e) {} try { if (u && !u.voice) { var v = best(u.lang); if (v) u.voice = v; } } catch (e) {} return orig(u); };
+  synth.speak = function (u) { try { if (window.NPAudio && NPAudio.muted && NPAudio.muted() && !(u && u.npForce)) { try { if (u && u.onend) u.onend(); } catch (e) {} return; } } catch (e) {} try { if (u && !u.voice) { var v = best(u.lang); if (v) u.voice = v; } } catch (e) {} return orig(u); };
   try { synth.addEventListener("voiceschanged", function () { cache = {}; }); } catch (e) {}
   window.NPAudio && (window.NPAudio.bestVoice = best);
 })();
