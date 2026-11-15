@@ -352,3 +352,10 @@ html:not(#np) #ovSkin .npc .skc span,html:not(#np) #ovSkin .npc .skc .sx b,html:
 html:not(#np) #ovSkin .npc .skc small,html:not(#np) #ovSkin .npc .skc .sx small,html:not(#np) #setup .sec small,html:not(#np) #setup .proNote,html:not(#np) .nps-sheet .nps-note,html:not(#np) #ovHow .fine{font-size:var(--fs-note)!important}
 html:not(#np) :is(#hwGo,#chGo,#pwGo,#npsYes,#npsGo) ,html:not(#np) .nps-sheet .nps-row button,html:not(#np) .nps-dlg .nps-row button{font-size:var(--fs-btn)!important}
 html:not(#np) #setup .sh-f .icon-btn{font-size:var(--fs-label)!important}
+
+/* COZY (Cánh Nhỏ…) trên WEB / máy tính / iPad (màn rộng, cao): lưới giao diện từng bị giới hạn 360px nên 5 ô dồn trái, bên phải trống, hàng dưới lệch → mở rộng, ô bằng nhau, canh GIỮA cả hàng đủ lẫn hàng thiếu */
+@media (min-width:700px) and (min-height:521px){
+  html:not(.npp-kid) #ovSkin>.npc{width:min(94%,860px)!important}
+  html:not(.npp-kid) #ovSkin .skgrid{display:flex!important;flex-wrap:wrap!important;justify-content:center!important;gap:16px!important;width:100%!important;max-width:none!important}
+  html:not(.npp-kid) #ovSkin .skgrid>.sk{flex:0 0 clamp(150px,26%,230px)!important;width:auto!important;max-width:230px}
+}
