@@ -197,12 +197,10 @@ html:not(.npp-kid):has(.ov:not([hidden]):not(#ovStart):not(#ovEnd)) .top.npfan{z
 html:has(.ov:not([hidden]):not(#ovStart):not(#ovEnd)) #npDifBadge{z-index:1!important}
 /* Pop điện thoại DỌC: popup của game (Giao diện, Night Pass, Bộ sưu tập, Phụ huynh) nằm trong khung game (.play, overflow:hidden) nên tiêu đề, thanh điểm và nút trên vẫn sáng bên ngoài → thêm lớp mờ phủ TRỌN cửa sổ (cùng kỹ thuật popup hướng dẫn: lớp mờ ngay dưới khung game được nâng z-index), popup vẫn nằm trong cột game. */
 @media (orientation:portrait){
-  html.npp-kid:has(:is(#ovSkin,#ovPay,#ovColl,#ovGate,#ovHow,#ovCh):not([hidden]))::after{content:"";position:fixed;inset:0;z-index:2147482999;background:rgba(8,6,22,.72);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
   html.npp-kid:has(:is(#ovSkin,#ovPay,#ovColl,#ovGate,#ovHow,#ovCh):not([hidden])) .play{z-index:2147483000}
 }
 
 /* Safari/iOS cũ (html.np-fixcb: popup position:fixed bị nhốt trong khung game): lớp mờ toàn cửa sổ cả màn NGANG */
-html.npp-kid.np-fixcb:has(:is(#ovSkin,#ovPay,#ovColl,#ovGate,#ovHow,#ovCh):not([hidden]))::after{content:"";position:fixed;inset:0;z-index:2147482999;background:rgba(8,6,22,.72);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
 html.npp-kid.np-fixcb:has(:is(#ovSkin,#ovPay,#ovColl,#ovGate,#ovHow,#ovCh):not([hidden])) .play{z-index:2147483000}
 
 /* POPUP GIAO DIỆN COZY, ĐIỆN THOẠI NGANG (thấp): MỌI ô cùng kích thước — 3 cột đều, hàng cuối canh giữa (trước: 4 ô hẹp chữ xuống 3-4 dòng đè ổ khoá + 1 ô kéo dài hết hàng) */
@@ -277,7 +275,7 @@ html #setup .proNote{color:#C9CCF0}
 }
 
 /* Pop: màn "Cách chơi / Bắt đầu" (#ovHow) khó nhìn — lớp phủ chỉ tối 62–66% + mờ 4px nên thanh nút, tên game, thẻ khu và vòng sáng phía sau lộ xuyên qua, tranh chữ. Phủ tối đậm hơn (90%) + mờ 10px + quầng tím nhẹ để chỉ còn nội dung hướng dẫn nổi lên. */
-html.npp-kid #ovHow:not([hidden]){background:radial-gradient(520px 340px at 50% 22%,rgba(124,92,255,.28),transparent),rgba(8,6,24,.92)!important;-webkit-backdrop-filter:blur(10px)!important;backdrop-filter:blur(10px)!important}
+html.npp-kid #ovHow:not([hidden]){background:radial-gradient(520px 340px at 50% 22%,rgba(124,92,255,.28),transparent),rgba(8,6,24,.95)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
 html.npp-kid #ovHow:not([hidden]) h2{text-shadow:0 2px 12px rgba(0,0,0,.6)}
 html.npp-kid #ovHow:not([hidden]) #hwBack{background:var(--np-orange-on,#CC4C0E)!important;border:2px solid rgba(255,255,255,.7)!important;color:#fff!important;box-shadow:0 3px 10px rgba(0,0,0,.35)!important}   /* ✕ cùng kiểu mọi popup (trước: xám xanh trong suốt chìm vào nền) */
 
@@ -315,13 +313,12 @@ html.npp-kid #ovHow .row,html.npp-kid #ovCh .row{display:flex!important;flex-dir
 html.npp-kid #hwGo,html.npp-kid #chGo{white-space:nowrap}
 
 /* COZY: màn Cách chơi (#ovHow) + thách đấu (#ovCh) cũng làm MỜ TRỌN cửa sổ phía sau (tiêu đề, nút, khung viền), cùng kỹ thuật popup hướng dẫn: lớp mờ ngay dưới khung game, khung game được nâng z-index */
-html:not(.npp-kid):has(#play :is(#ovHow,#ovCh):not([hidden]))::after{content:"";position:fixed;inset:0;z-index:2147482999;background:rgba(8,6,22,.78);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);pointer-events:none}
 html:not(.npp-kid) #play:has(:is(#ovHow,#ovCh):not([hidden])){z-index:2147483000}
 
 /* POPUP LUÔN PHỦ TRỌN CỬA SỔ (không còn bị nhốt trong khung game 3:4), mọi trình duyệt, dọc + ngang, Pop + Cozy: khi một popup của game mở, KHUNG GAME phủ trọn cửa sổ; popup nằm giữa, lớp mờ phía sau là chính khung/nền popup */
 html .play:has(:is(#ovHow,#ovSkin,#ovPay,#ovCh,#ovGate,#ovColl):not([hidden])),html #play:has(:is(#ovHow,#ovSkin,#ovPay,#ovCh,#ovGate,#ovColl):not([hidden])){position:fixed!important;inset:0!important;width:auto!important;height:auto!important;max-width:none!important;max-height:none!important;aspect-ratio:auto!important;margin:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:none!important;transform:none!important;z-index:2147483000!important}
 html .play:has(:is(#ovHow,#ovSkin,#ovPay,#ovCh,#ovGate,#ovColl):not([hidden]))::after,html #play:has(:is(#ovHow,#ovSkin,#ovPay,#ovCh,#ovGate,#ovColl):not([hidden]))::after{display:none!important}
-html :is(#ovHow,#ovSkin,#ovPay,#ovCh,#ovGate,#ovColl):not([hidden]){position:fixed!important;inset:0!important;width:auto!important;height:auto!important;background:rgba(8,6,22,.82)!important;-webkit-backdrop-filter:blur(8px)!important;backdrop-filter:blur(8px)!important}
+html :is(#ovHow,#ovSkin,#ovPay,#ovCh,#ovGate,#ovColl):not([hidden]){position:fixed!important;inset:0!important;width:auto!important;height:auto!important;background:rgba(8,6,22,.93)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}   /* nền TỐI ĐẶC thay cho mờ (backdrop-filter lồng nhau làm đen màn hình trên một số GPU/Chrome) */
 
 /* COZY: màn Cách chơi (#ovHow) phải có ✕ quay về (glass.css ẩn #hwBack vì cổng có nút ←, nhưng lớp phủ toàn cửa sổ che nút đó) → hiện lại thành ✕ tròn 44px ở góc trên-phải, bấm = quay về màn chọn */
 html:not(.npp-kid) #ovHow:not([hidden]) #hwBack:not([hidden]){display:grid!important;place-items:center;position:fixed!important;top:max(10px,env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right));left:auto!important;width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;padding:0!important;margin:0!important;border-radius:50%!important;font-size:0!important;background:#7050F2!important;border:2px solid rgba(255,255,255,.7)!important;color:#fff!important;box-shadow:0 3px 10px rgba(0,0,0,.35)!important;z-index:5;cursor:pointer}
@@ -362,18 +359,18 @@ html:not(#np) #setup .sh-f .icon-btn{font-size:var(--fs-label)!important}
 
 /* ===== ✕ ĐÓNG POPUP = NÚT CHUẨN CỦA APP (shared/btn.css: tròn, gradient --nb-1→--nb-2 tím–cam, viền trắng mờ, quầng sáng, icon ✕ nét 2.6) =====
    Trước: mỗi popup tự vẽ ✕ (Cozy tím đặc, Pop cam đặc, hướng dẫn kính trong, Đập Deadline tím...). Nay MỘT kiểu duy nhất, mọi popup; vị trí vẫn do từng popup giữ. Icon ✕ là SVG mask (cùng nét với btn.js), không phụ thuộc phông. */
-html:not(#np) :is(.npc .npx,#hlpX,#phX,#setupX,#ovHow #hwBack:not([hidden])){
+html:not(#np) :is(.npc .npx,#hlpX,#phX,#setupX,.sheet .sh-h>.icon-btn,#ovHow #hwBack:not([hidden])){
   box-sizing:border-box!important;display:grid!important;place-items:center;width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;padding:0!important;border-radius:50%!important;
   font-size:0!important;line-height:0!important;color:#fff!important;cursor:pointer;
   background:linear-gradient(135deg,var(--nb-1,#6C4BF2),var(--nb-2,#C2410C))!important;
   border:1px solid rgba(255,255,255,.42)!important;
   box-shadow:0 6px 18px var(--nb-glow,rgba(108,75,242,.5)),0 2px 6px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.35)!important;
   -webkit-backdrop-filter:none!important;backdrop-filter:none!important}
-html:not(#np) :is(.npc .npx,#hlpX,#phX,#setupX,#ovHow #hwBack)>*{display:none!important}
-html:not(#np) :is(.npc .npx,#hlpX,#phX,#setupX,#ovHow #hwBack)::after{content:none!important;display:none!important}
-html:not(#np) :is(.npc .npx,#hlpX,#phX,#setupX,#ovHow #hwBack)::before{content:""!important;display:block!important;position:static!important;width:20px;height:20px;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E") center/contain no-repeat;transform:none!important;margin:0!important}
-html:not(#np) :is(.npc .npx,#hlpX,#phX,#setupX,#ovHow #hwBack):active{transform:scale(.96);filter:brightness(1.08)}
-html:not(#np) :is(.npc .npx,#hlpX,#phX,#setupX,#ovHow #hwBack):focus-visible{outline:3px solid #fff;outline-offset:2px}
+html:not(#np) :is(.npc .npx,#hlpX,#phX,#setupX,.sheet .sh-h>.icon-btn,#ovHow #hwBack)>*{display:none!important}
+html:not(#np) :is(.npc .npx,#hlpX,#phX,#setupX,.sheet .sh-h>.icon-btn,#ovHow #hwBack)::after{content:none!important;display:none!important}
+html:not(#np) :is(.npc .npx,#hlpX,#phX,#setupX,.sheet .sh-h>.icon-btn,#ovHow #hwBack)::before{content:""!important;display:block!important;position:static!important;width:20px;height:20px;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E") center/contain no-repeat;transform:none!important;margin:0!important}
+html:not(#np) :is(.npc .npx,#hlpX,#phX,#setupX,.sheet .sh-h>.icon-btn,#ovHow #hwBack):active{transform:scale(.96);filter:brightness(1.08)}
+html:not(#np) :is(.npc .npx,#hlpX,#phX,#setupX,.sheet .sh-h>.icon-btn,#ovHow #hwBack):focus-visible{outline:3px solid #fff;outline-offset:2px}
 
 /* ✕ của thẻ "Tiếp tục ván dở" (#npResume .npr-x): cùng kiểu nút chuẩn như ✕ popup; KÍCH THƯỚC vẫn do shared/resume.js (syncX) ép bằng chiều cao thẻ */
 html:not(#np) #npResume .npr-x{display:grid!important;place-items:center;padding:0!important;border-radius:50%!important;font-size:0!important;line-height:0!important;color:#fff!important;

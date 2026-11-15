@@ -149,12 +149,14 @@
       host.insertBefore(card, anchor || host.firstChild);
     }
     syncX();
+    try { if (window.ResizeObserver && !card._ro) { var g0 = card.querySelector(".npr-go"); if (g0) { card._ro = new ResizeObserver(syncX); card._ro.observe(g0); } } } catch (e) {}   /* thẻ đổi cỡ sau lúc dựng (cqw/zoom của game, cửa sổ web) → ✕ tự đo lại, luôn cao bằng thẻ */
+    setTimeout(syncX, 120); setTimeout(syncX, 600);
   }
   /* ✕ luôn CAO BẰNG thẻ "Tiếp tục" (và tròn): nhiều luật riêng từng game/màn ngang đặt chiều cao khác nhau cho thẻ và ✕ nên đo thẻ rồi ép ✕ bằng style nội tuyến !important */
   function syncX() {
     try {
       var go = card && card.querySelector(".npr-go"), x = card && card.querySelector(".npr-x"); if (!go || !x || !card.isConnected) return;
-      var h = Math.round(go.getBoundingClientRect().height); if (!(h > 0)) return;
+      var h = go.offsetHeight || Math.round(go.getBoundingClientRect().height); if (!(h > 0)) return;   /* offsetHeight = px CSS CHƯA nhân zoom của game (Đập Deadline zoom ×1,25 ở màn rộng: đo bằng getBoundingClientRect rồi đặt làm px CSS bị nhân zoom hai lần → ✕ 88px trong thẻ cao 70px) */
       ["width", "height", "min-width", "min-height", "max-width", "max-height"].forEach(function (k) { if (x.style.getPropertyValue(k) !== h + "px") x.style.setProperty(k, h + "px", "important"); });
     } catch (e) {}
   }
