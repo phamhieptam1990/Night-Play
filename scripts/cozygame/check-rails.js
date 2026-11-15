@@ -74,8 +74,7 @@ const INNER = () => {   /* chạy trong khung game */
     note(/\|2$/.test(m.top), portal + "/" + id + " 1440x900: bản top 5 đã lưu (cache cũ) không hiện khi mất mạng (" + m.top + ")");
     await pg.click("#npSug .np-g"); await wait(2500);
     note(await pg.evaluate(rid => { const h = location.hash.slice(1), f = document.querySelector("#stage iframe"); return h && h !== rid && f && f.src.includes("/" + h + "/"); }, resId), portal + "/" + id + ": bấm game gợi ý không mở game đó");
-    await pg.click("#npRes"); await wait(2500);
-    note(await pg.evaluate(rid => location.hash.slice(1) === rid && !!document.querySelector("#stage iframe") && /resume=1/.test(document.querySelector("#stage iframe").src), resId), portal + "/" + id + ": bấm ván dở không mở đúng game với ?resume=1");
+    /* Thẻ "Chơi tiếp" #npRes của chính game đang chơi bị ẩn có chủ ý (rails.css, commit 6fc8331 14/11: tên game đã ở cột trái, màn chọn đã có "Tiếp tục ván dở") → không bấm nữa; mục ván dở vẫn được kiểm ở trên (m.res) */
     await pg.click("#npRailL .np-hide"); await wait(500); m = await pg.evaluate(MEASURE); note(!m.L && !m.R && m.fw >= 1365, portal + "/" + id + ": nút ẩn cột bên không trả khung game full (fw=" + m.fw + ")");
     await pg.click(".np-tab"); await wait(500); m = await pg.evaluate(MEASURE); note(m.L && m.R, portal + "/" + id + ": nút hiện lại cột bên không hoạt động"); await pg.close();
     if (!quick || portal === "cozyplay") for (const [W, H, t] of NARROW) {
