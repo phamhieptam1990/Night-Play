@@ -54,7 +54,7 @@ window.NPS = (function () {
       waiting: "Đang chờ bạn bè mở link…", playing: "Bạn bè đang chơi hộ…", done: "Đã có kết quả!", expired: "Link đã hết hạn.", close: "Đóng", err: "Có lỗi, vui lòng thử lại.", offline: "Cần có mạng để tạo link chơi hộ. Game của bạn vẫn chạy bình thường, bạn thử lại khi có mạng nhé.", queued: "Đang offline: điểm của bạn sẽ tự gửi khi có mạng lại.", slow: "Thao tác quá nhanh, thử lại sau ít phút.", noShare: "Game này chưa hỗ trợ chơi hộ.",
       notRankedBase: "Chế độ này không tính vào bảng xếp hạng.", notRanked: "Chế độ này không tính vào bảng xếp hạng. Hãy chơi chế độ Cổ điển, độ khó Thường nhé!", brag: "Khoe điểm", bragT: "Khoe điểm lên bảng xếp hạng?", bragP: "Chỉ biệt danh và điểm của bạn được lưu, và chỉ khi bạn bấm \"Khoe điểm\". Không bấm thì không lưu gì.", nick: "Biệt danh (2–16 ký tự)", skip: "Không, cảm ơn",
       bragOk: "Đã lên bảng xếp hạng!", bragView: "Xem bảng xếp hạng", badNick: "Biệt danh chưa hợp lệ (2–16 ký tự, không chứa link/email).", scoreLine: "Điểm của bạn",
-      gotT: "Bạn bè đã chơi hộ xong!", gotP: "Kết quả chơi hộ", points: "điểm", view: "Xem kết quả", rank: "Bảng xếp hạng", results: "Kết quả chơi hộ",
+      gotT: "Bạn bè đã chơi hộ xong!", gotP: "Kết quả chơi hộ", points: "điểm", view: "Xem kết quả", bragNow: "Khoe điểm", allRes: "Tất cả kết quả", rank: "Bảng xếp hạng", results: "Kết quả chơi hộ",
       shot: "Chụp màn hình", shotT: "Ảnh chụp màn hình", shotErr: "Không chụp được màn hình. Vui lòng thử lại.", save: "Lưu ảnh", shareImg: "Chia sẻ ảnh", copyImg: "Sao chép ảnh", imgCopied: "Đã sao chép ảnh",
       linkCopied: "Đã sao chép link, dán vào Zalo, Messenger… để gửi bạn bè", viaApps: "Link đã được sao chép: dán vào Zalo, Messenger… hoặc gửi nhanh qua:", shareText: "Chơi hộ mình một lượt {g} nhé!", shotText: "Mình vừa chơi {g} trên {b}!", resumeP: "Bạn ấy sẽ chơi tiếp đúng chỗ bạn đang dở rồi báo kết quả về cho bạn.", kidName: "Tên vui của bạn", reroll: "Đổi tên khác", kidP: "Bạn được đặt tên vui tự động, không cần gõ gì cả. Chỉ tên vui và điểm được lưu, và chỉ khi bạn bấm \"Khoe điểm\".", bestIn: "Điểm cao nhất của bạn ở", sendApps: "Gửi qua Zalo, Messenger…" },
     en: { share: "Ask a friend to play", shareT: "Ask a friend to play one round for you", shareP: "Send this link to a friend. They play one round for you and the result is sent back to you.",
@@ -62,7 +62,7 @@ window.NPS = (function () {
       waiting: "Waiting for your friend to open the link…", playing: "Your friend is playing…", done: "Result is in!", expired: "This link has expired.", close: "Close", err: "Something went wrong, please try again.", offline: "You need a connection to create a help link. Your game keeps running; try again once you are online.", queued: "You are offline: your score will be sent automatically when you are back online.", slow: "Too many tries, please wait a few minutes.", noShare: "This game doesn't support this yet.",
       notRankedBase: "This mode isn't ranked.", notRanked: "This mode isn't ranked. Play Classic mode at Normal difficulty!", brag: "Show off score", bragT: "Post your score to the leaderboard?", bragP: "Only your nickname and score are saved, and only if you press \"Show off score\". If you don't, nothing is saved.", nick: "Nickname (2–16 characters)", skip: "No thanks",
       bragOk: "You're on the leaderboard!", bragView: "View leaderboard", badNick: "Invalid nickname (2–16 characters, no links/emails).", scoreLine: "Your score",
-      gotT: "Your friend finished playing for you!", gotP: "Result", points: "points", view: "View result", rank: "Leaderboard", results: "Shared results",
+      gotT: "Your friend finished playing for you!", gotP: "Result", points: "points", view: "View result", bragNow: "Show off score", allRes: "All results", rank: "Leaderboard", results: "Shared results",
       shot: "Screenshot", shotT: "Screenshot", shotErr: "Couldn't capture the screen. Please try again.", save: "Save image", shareImg: "Share image", copyImg: "Copy image", imgCopied: "Image copied",
       linkCopied: "Link copied. Paste it into Zalo, Messenger… to send it to friends", viaApps: "Link copied: paste it into Zalo, Messenger… or send quickly via:", shareText: "Play a round of {g} for me!", shotText: "I just played {g} on {b}!", resumeP: "Your friend continues right where you left off and sends the result back to you.", kidName: "Your fun name", reroll: "New name", kidP: "You get a fun name automatically, no typing needed. Only the fun name and score are saved, and only if you press \"Show off score\".", bestIn: "Your best score in", sendApps: "Send via Zalo, Messenger…" }
   };
@@ -447,7 +447,16 @@ window.NPS = (function () {
         '<div class="nps-row"><button class="nps-s" id="npsX" type="button">' + esc(T("close")) + '</button><button class="nps-p" id="npsGo" type="button">' + esc(T("view")) + '</button></div>';
       if (!dlg.open) dlg.showModal();
       document.getElementById("npsX").onclick = function () { s.seen = true; mark(s); dlg.close(); };
-      document.getElementById("npsGo").onclick = function () { location.href = sharedUrl; };
+      document.getElementById("npsGo").onclick = function () {   /* "Xem kết quả" mở THẺ ĐIỂM (cùng kiểu thẻ khoe): tên game, điểm/%, Khoe điểm → trang bảng xếp hạng, hoặc xem danh sách */
+        s.seen = true; mark(s);
+        var canBrag = leaderboard && GAMES[s.game] && GAMES[s.game].board && (r.score | 0) >= 1, bu = boardUrl + (boardUrl.indexOf("?") < 0 ? "?" : "&") + "game=" + encodeURIComponent(s.game) + "&brag=" + (r.score | 0);
+        dlg.className = "nps-dlg nps-got nps-card";
+        dlg.innerHTML = '<h3>' + esc(gameName(s.game, (r && r.extra && r.extra.pack) || packOf(s.st))) + '</h3><p>' + esc(T("gotP")) + '</p><div class="nps-big">' + esc(fmtScore(s.game, r.score)) + '</div>' + (isPct(s.game) ? '' : '<p>' + esc(T("points")) + '</p>') +
+          '<div class="nps-row"><button class="nps-s" id="npsAll" type="button">' + esc(T("allRes")) + '</button>' + (canBrag ? '<button class="nps-p" id="npsBrag" type="button">' + esc(T("bragNow")) + '</button>' : '<button class="nps-p" id="npsX2" type="button">' + esc(T("close")) + '</button>') + '</div>';
+        document.getElementById("npsAll").onclick = function () { location.href = sharedUrl; };
+        var bb = document.getElementById("npsBrag"); if (bb) bb.onclick = function () { location.href = bu; };
+        var x2 = document.getElementById("npsX2"); if (x2) x2.onclick = function () { dlg.close(); };
+      };
     });
     function mark(s) { var a = load(); a.forEach(function (x) { if (x.id === s.id) x.seen = true; }); save(a); }
     var tick = function () { if (!document.hidden && load().some(function (s) { return s.state === "open" || s.state === "claimed"; })) poll(); };

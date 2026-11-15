@@ -49,7 +49,7 @@ main{flex:1;min-height:0;width:100%;max-width:640px;margin:0 auto;padding:10px 1
 .meta{color:var(--muted);font-size:12.5px;grid-column:1}
 .big{grid-column:2;grid-row:1 / span 2;text-align:right;font-size:28px;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums;line-height:1}.big small{display:block;font-size:11px;font-weight:600;color:var(--muted)}
 .chip{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700}.chip i{width:9px;height:9px;border-radius:50%;display:inline-block}
-.act{grid-column:1 / -1;display:flex;gap:8px}.act button{padding:0 12px;height:28px;border-radius:999px;background:var(--bg);border:1px solid var(--line);font-size:12.5px;font-weight:700}
+.act{grid-column:1 / -1;display:flex;gap:8px}.act button.hot{background:var(--accent);color:var(--on-accent);border-color:transparent}.act button{color:var(--ink);padding:0 12px;height:28px;border-radius:999px;background:var(--bg);border:1px solid var(--line);font-size:12.5px;font-weight:700}
 
 .new{background:var(--accent);color:var(--on-accent);border-radius:999px;font-size:11px;font-weight:800;padding:1px 8px;margin-left:6px}
 .empty{height:100%;display:grid;place-items:center;text-align:center;color:var(--muted);padding:16px}
@@ -90,10 +90,10 @@ const $ = id => document.getElementById(id), root = document.documentElement;
 const TXT = {
   vi: { back: "Night Play", h: "Kết quả chơi hộ", sub: "Theo dõi những lời nhờ bạn bè chơi hộ và xem kết quả khi họ chơi xong.", empty: "Chưa có lời nhờ nào. Khi đang chơi, bấm nút chia sẻ rồi gửi link cho bạn bè nhé.",
         note: "Kết quả được mã hoá, máy chủ không đọc được và xoá ngay khi bạn nhận. Danh sách này chỉ nằm trên thiết bị của bạn.", pts: "điểm", st_open: "Đang chờ bạn bè mở link", st_claimed: "Bạn bè đang chơi hộ", st_done: "Đã có kết quả", st_expired: "Đã hết hạn",
-        copy: "Sao chép link", copied: "Đã sao chép", cancel: "Huỷ link", del: "Xoá", newTag: "Mới", home: "Trang chủ", priv: "Quyền riêng tư", rank: "Bảng xếp hạng", rights: "Bảo lưu mọi quyền.", theme: "Sáng / Tối", page: "Trang", of: "/", ago: ["vừa xong", "phút trước", "giờ trước", "ngày trước"], at: "Tạo" },
+        brag: "Khoe điểm", copy: "Sao chép link", copied: "Đã sao chép", cancel: "Huỷ link", del: "Xoá", newTag: "Mới", home: "Trang chủ", priv: "Quyền riêng tư", rank: "Bảng xếp hạng", rights: "Bảo lưu mọi quyền.", theme: "Sáng / Tối", page: "Trang", of: "/", ago: ["vừa xong", "phút trước", "giờ trước", "ngày trước"], at: "Tạo" },
   en: { back: "Night Play", h: "Shared results", sub: "Track the rounds friends play for you and see the result when they finish.", empty: "No requests yet. While playing, tap the share button and send the link to a friend.",
         note: "Results are encrypted; the server can't read them and deletes them as soon as you receive them. This list lives only on your device.", pts: "points", st_open: "Waiting for a friend to open the link", st_claimed: "A friend is playing for you", st_done: "Result received", st_expired: "Expired",
-        copy: "Copy link", copied: "Copied", cancel: "Revoke link", del: "Delete", newTag: "New", home: "Home", priv: "Privacy", rank: "Leaderboard", rights: "All rights reserved.", theme: "Light / Dark", page: "Page", of: "/", ago: ["just now", "min ago", "h ago", "d ago"], at: "Created" }
+        brag: "Show off score", copy: "Copy link", copied: "Copied", cancel: "Revoke link", del: "Delete", newTag: "New", home: "Home", priv: "Privacy", rank: "Leaderboard", rights: "All rights reserved.", theme: "Light / Dark", page: "Page", of: "/", ago: ["just now", "min ago", "h ago", "d ago"], at: "Created" }
 };
 const POP = root.dataset.app === "popplay", BRAND = POP ? "Pop Play" : "Night Play", HOME = POP ? "popplay/index.html" : "cozyplay/index.html";
 const L = () => TXT[root.lang === "en" ? "en" : "vi"];
@@ -117,7 +117,7 @@ function draw() {
     return '<div class="item" data-id="' + s.id + '"><div><div class="g">' + esc(NPS.gameName(s.game, (s.result && s.result.extra && s.result.extra.pack) || NPS.packOf(s.st))) + (s.state === "done" && !s.seen ? '<span class="new">' + esc(t.newTag) + "</span>" : "") + '</div>' +
       '<div class="meta"><span class="chip"><i style="background:' + COLOR[s.state] + '"></i>' + esc(t["st_" + s.state]) + "</span> · " + esc(t.at + " " + ago(s.at)) + "</div></div>" +
       (s.state === "done" ? '<div class="big">' + esc(NPS.fmtScore(s.game, r.score)) + (NPS.isPct(s.game) ? "" : "<small>" + esc(t.pts) + "</small>") + "</div>" : "") +
-      '<div class="act">' + (live ? '<button data-a="copy">' + esc(t.copy) + '</button><button data-a="cancel">' + esc(t.cancel) + "</button>" : '<button data-a="del">' + esc(t.del) + "</button>") + "</div></div>";
+      '<div class="act">' + (live ? '<button data-a="copy">' + esc(t.copy) + '</button><button data-a="cancel">' + esc(t.cancel) + "</button>" : (s.state === "done" && NPS.GAMES[s.game] && NPS.GAMES[s.game].board && (r.score | 0) >= 1 ? '<button data-a="brag" class="hot">' + esc(t.brag) + "</button>" : "") + '<button data-a="del">' + esc(t.del) + "</button>") + "</div></div>";
   }).join("");
   $("pager").hidden = pages < 2;
   $("pager").innerHTML = pages < 2 ? "" : '<button id="pp" aria-label="‹"' + (page ? "" : " disabled") + '>‹</button><span>' + esc(t.page) + " " + (page + 1) + " " + esc(t.of) + " " + pages + '</span><button id="pn" aria-label="›"' + (page < pages - 1 ? "" : " disabled") + ">›</button>";
@@ -125,6 +125,7 @@ function draw() {
 }
 $("list").addEventListener("click", e => {
   const b = e.target.closest("button[data-a]"); if (!b) return; const id = b.closest(".item").dataset.id, s = items.find(x => x.id === id); if (!s) return;
+  if (b.dataset.a === "brag") { const r = s.result || {}; location.href = "leaderboard.html?game=" + encodeURIComponent(s.game) + "&brag=" + (r.score | 0) + (POP ? "&from=popplay/index.html" : ""); return; }
   if (b.dataset.a === "copy") { const link = NPS.linkFor(s); (navigator.clipboard ? navigator.clipboard.writeText(link) : Promise.reject()).catch(() => {}).then(() => { b.textContent = L().copied; setTimeout(draw, 1200); }); }
   else {
     if (b.dataset.a === "cancel") fetch("/api/relay/" + s.id + "/ack", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ token: s.owner }) }).catch(() => {});   // xoá khỏi máy chủ → link vô hiệu

@@ -139,7 +139,8 @@ let period = "week", seq = 0, last = null;
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 /* điểm cao lưu trên máy: game cũ có khoá riêng; game mới theo quy ước np-hi-<id game> (xem shared/bridge.js) */
 const bestKey = { "dap-deadline": "dapdeadline-hi" };
-const myBest = () => { try { return +localStorage.getItem(bestKey[game] || ("np-hi-" + game)) || 0; } catch (e) { return 0; } };
+const BRAG = +(new URLSearchParams(location.search).get("brag")) || 0;   // điểm chơi hộ được đưa sang để khoe (trang Kết quả chơi hộ / popup nhận điểm)
+const myBest = () => { let b = 0; try { b = +localStorage.getItem(bestKey[game] || ("np-hi-" + game)) || 0; } catch (e) {} return Math.max(b, BRAG); };
 
 function texts() {
   const t = L(); document.title = t.h + " · " + BRAND; $("backT").textContent = BRAND; $("h").textContent = t.h; $("sub").textContent = t.sub;
