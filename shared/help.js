@@ -24,9 +24,14 @@
     "#hlpGo{flex:none;min-height:50px;border-radius:999px;border:1px solid rgba(255,255,255,.4);padding:0 22px;font:800 clamp(17px,4.6cqw,21px) var(--font);color:#fff;cursor:pointer;background:linear-gradient(135deg,#6C4BF2,#C2410C);box-shadow:0 5px 16px rgba(108,75,242,.5),inset 0 1px 0 rgba(255,255,255,.3)}" +
     "#hlpGo:active{transform:scale(.97)}" +
     /* nút NGHE to có chữ thay loa tròn nhỏ (bé không tìm thấy) */
-    "#hlpSay{display:none!important}#hlpLis{flex:none;min-height:56px;border-radius:999px;padding:0 22px;font:800 clamp(16px,4.4cqw,20px) var(--font);color:#fff;cursor:pointer;background:rgba(124,92,255,.38);border:1.5px solid rgba(190,175,255,.7);box-sizing:border-box}#hlpLis.on{background:linear-gradient(135deg,#6C4BF2,#C2410C);border-color:#fff}#hlpLis[hidden]{display:none!important}" +
-    "#hlpSay{position:absolute;right:64px;top:12px;width:44px;height:44px;min-width:44px;min-height:44px;box-sizing:border-box;display:grid;place-items:center;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;cursor:pointer}#hlpSay svg{width:22px;height:22px}#hlpSay.on{background:rgba(255,255,255,.28);border-color:#fff}#hlpSay[hidden]{display:none}" +
+    "#hlpSay{display:none!important}#hlpAct{flex:none;display:flex;align-items:stretch;gap:10px}#hlpAct #hlpGo{flex:1 1 auto;min-width:0;min-height:56px}#hlpLis{flex:none;display:grid;place-items:center;width:56px;min-width:56px;min-height:56px;padding:0;border-radius:999px;color:#fff;cursor:pointer;background:rgba(124,92,255,.38);border:1.5px solid rgba(190,175,255,.7);box-sizing:border-box}#hlpLis.on{background:linear-gradient(135deg,#6C4BF2,#C2410C);border-color:#fff}#hlpLis[hidden]{display:none!important}" +
+    "#hlpSay{position:absolute;right:64px;top:12px;width:44px;height:44px;min-width:44px;min-height:44px;box-sizing:border-box;display:grid;place-items:center;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;cursor:pointer}#hlpSay svg{width:22px;height:22px}#hlpLis svg{width:28px;height:28px}#hlpSay.on{background:rgba(255,255,255,.28);border-color:#fff}#hlpSay[hidden]{display:none}" +
     "#hlpX{position:absolute;right:12px;top:12px;width:44px;height:44px;min-width:44px;min-height:44px;box-sizing:border-box;display:grid;place-items:center;padding:0;line-height:1;border-radius:50%;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;font:800 18px var(--font);cursor:pointer}" +
+    "@media (orientation:landscape) and (max-height:500px){" +
+    /* điện thoại ngang: khung game hẹp → thẻ dùng hết bề ngang khung, chữ/khoảng cách gọn để KHÔNG cắt hàng nút; loa + Đã hiểu vẫn cùng một hàng */
+    "#hlpOv{padding:8px 12px}#hlpCard{width:100%;max-height:none;overflow:hidden;padding:10px 14px 12px;gap:6px;border-radius:22px}" +
+    "#hlpCard h3{min-height:40px;font-size:20px;margin-right:112px}#hlpB{gap:6px}.hlpIt{padding:6px 12px;gap:10px;border-radius:14px}.hlpIt i{font-size:24px;width:1.4em}.hlpIt i.n{width:28px;height:28px;font-size:14px}.hlpIt span{font-size:15px;line-height:1.25}" +
+    "#hlpAct #hlpGo,#hlpLis{min-height:48px}#hlpLis{width:52px;min-width:52px}}" +
     "@media (max-width:520px) and (orientation:portrait){#hlpCard h3{margin-right:132px;min-height:56px}#hlpCard{padding-top:12px}#hlpX{right:12px;top:12px;width:var(--tap-lg,56px);height:var(--tap-lg,56px)}#hlpSay{right:76px;top:12px;width:var(--tap-lg,56px);height:var(--tap-lg,56px)}}" +
     "@media (prefers-reduced-motion:reduce){#hlpCard{animation:none}}";
   document.head.appendChild(css);
@@ -53,7 +58,7 @@
     bd.addEventListener("click", function () { ov.querySelector("#hlpGo").click(); });
     new MutationObserver(function () { bd.hidden = ov.hidden; }).observe(ov, { attributes: true, attributeFilter: ["hidden"] });
     var say = ov.querySelector("#hlpSay"), speaking = false;
-    var lis = document.createElement("button"); lis.id = "hlpLis"; lis.type = "button"; ov.querySelector("#hlpGo").parentNode.insertBefore(lis, ov.querySelector("#hlpGo"));
+    var lis = document.createElement("button"); lis.id = "hlpLis"; lis.type = "button"; var go0 = ov.querySelector("#hlpGo"), act = document.createElement("div"); act.id = "hlpAct"; go0.parentNode.insertBefore(act, go0); act.appendChild(lis); act.appendChild(go0);   /* loa (nút tròn chỉ icon) + Đã hiểu cùng MỘT hàng */
     var mark = function (on) { say.classList.toggle("on", on); lis.classList.toggle("on", on); };
     var stopSay = function () { try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {} speaking = false; mark(false); };
     var close = function () { ov.hidden = true; stopSay(); };
@@ -77,7 +82,7 @@
       b.setAttribute("aria-label", vi ? "Gợi ý" : "Hint");
       ov.querySelector("h3").textContent = "❓ " + (vi ? "Cách chơi" : "How to play");
       var body = ov.querySelector("#hlpB"); body.innerHTML = "";
-      ov.querySelector("#hlpGo").textContent = vi ? "Đã hiểu!" : "Got it!"; say.setAttribute("aria-label", vi ? "Đọc to" : "Read aloud"); lis.textContent = "🔊 " + (vi ? "Nghe hướng dẫn" : "Listen"); lis.setAttribute("aria-label", vi ? "Nghe hướng dẫn" : "Listen to the guide");
+      ov.querySelector("#hlpGo").textContent = vi ? "Đã hiểu!" : "Got it!"; say.setAttribute("aria-label", vi ? "Đọc to" : "Read aloud"); lis.innerHTML = say.innerHTML; lis.setAttribute("aria-label", vi ? "Nghe hướng dẫn" : "Listen to the guide");
       tx.forEach(function (t, i) {
         var m = /^(\p{Extended_Pictographic}\uFE0F?)\s*([\s\S]*)$/u.exec(t), row = document.createElement("div"), ic = document.createElement("i"), sp = document.createElement("span");
         row.className = "hlpIt"; if (m && m[2]) { ic.textContent = m[1]; sp.textContent = m[2]; } else { ic.className = "n"; ic.textContent = String(i + 1); sp.textContent = t; }
