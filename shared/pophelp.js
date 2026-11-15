@@ -33,6 +33,7 @@
     "#phSay.on{background:rgba(255,255,255,.28);border-color:#fff!important}" +
     /* nút NGHE to có chữ (bé không tìm thấy loa tròn nhỏ): thay loa tròn trong tiêu đề */
     "#phSay{display:none!important}#phAct{flex:none;display:flex;align-items:stretch;gap:calc(var(--f,16px)*.6)}#phAct #phGo{flex:1 1 auto;min-width:0}#phLis{flex:none;display:grid;place-items:center;width:56px;min-width:56px;min-height:56px;padding:0;border-radius:999px;color:#fff;cursor:pointer;background:rgba(124,92,255,.38);border:1.5px solid rgba(190,175,255,.7);box-sizing:border-box}#phLis.on{background:linear-gradient(135deg,#6C4BF2,#C2410C);border-color:#fff}#phLis[hidden]{display:none!important}#phLis svg{width:28px;height:28px}" +
+    "@media (orientation:landscape) and (max-height:500px){#phLis{position:fixed;right:8px;bottom:calc(12px + var(--f,16px)*.9)}}" +
     "#phLs{display:flex;flex-direction:column;gap:calc(var(--f,16px)*.5);margin:0;padding:0;list-style:none}" +
     "#phLs li{display:flex;align-items:center;gap:calc(var(--f,16px)*.7);padding:calc(var(--f,16px)*.55) calc(var(--f,16px)*.75);border-radius:calc(var(--f,16px)*1.1);background:rgba(124,92,255,.2);border:1px solid rgba(170,150,255,.42);box-shadow:inset 0 0 14px rgba(124,92,255,.14)}" +
     "#phLs i{flex:none;font-style:normal;font-size:calc(var(--f,16px)*2);line-height:1;min-width:1.1em;text-align:center}" +
