@@ -1460,7 +1460,7 @@ html.np-hudg:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>:is(.dbar,.
   /* VỪA KHUNG MÀ KHÔNG THU CHỮ (GAME_RULES 6d): cột phải (các ý) rộng hơn, ý gọn lại, biểu tượng nhỏ; hàng huy hiệu ẩn khi quá thấp */
   .app:has(h1[data-pt]) #ovHow:not([hidden]),html.np-strip .app:has(h1[data-pt]) #ovHow:not([hidden]){grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)!important;column-gap:10px!important;padding-top:6px!important;padding-bottom:6px!important}
   html.npp-kid #ovHow:not([hidden]) .row .npSay{width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important}
-  html.npp-kid #ovHow:not([hidden]) .hwL{padding:2px 10px!important;border-radius:20px!important}
+  html.npp-kid #ovHow:not([hidden]) .hwL{padding:8px 16px!important;border-radius:20px!important}
   html.npp-kid #ovHow:not([hidden]) .hwL li{padding:5px 4px!important;gap:10px!important}
   html.npp-kid #ovHow:not([hidden]) .hwL li b{font-size:26px!important;width:34px!important}
   /* hàng huy hiệu (.stk) KHÔNG tràn khỏi cột trái (trước: 7 vòng rộng theo cqw tràn sang trái đè lên cột nút HUD) */
@@ -1480,7 +1480,18 @@ html.np-hudg .app .top{left:68px!important}   /* tiêu đề game không bị n�
 @media (min-aspect-ratio:11/10) and (max-height:300px){
   .app:has(h1[data-pt]) #ovHow:not([hidden]),html.np-strip .app:has(h1[data-pt]) #ovHow:not([hidden]){padding-top:4px!important;padding-bottom:4px!important;row-gap:3px!important}
   html.npp-kid #ovHow:not([hidden]) .hwL li{padding:2px 4px!important;line-height:1.12!important}
-  html.npp-kid #ovHow:not([hidden]) .hwL{padding:0 8px!important}
+  html.npp-kid #ovHow:not([hidden]) .hwL{padding:6px 14px!important}
   html.npp-kid #ovHow:not([hidden]) .chip{padding-block:3px!important}
   html.npp-kid #ovHow:not([hidden]) h2{margin:0!important;line-height:1.05!important}
+}
+
+/* NÚT BẮT ĐẦU + NÚT LOA: CÙNG CHIỀU CAO (màn ngang thấp / điện thoại ngang có thanh địa chỉ). Hàng quá hẹp để chữ "Bắt đầu!" nằm gọn → nút Bắt đầu đổi thành icon ▶ tròn bằng nút loa, KHÔNG nén chữ. */
+@media (min-aspect-ratio:11/10) and (max-height:520px){
+  html.npp-kid #ovHow:not([hidden]) .row:has(#hwGo){--hb:clamp(40px,15vh,56px);width:100%!important;container-type:inline-size;align-items:center!important;justify-content:center!important}
+  html.npp-kid #ovHow:not([hidden]) .row #hwGo{height:var(--hb)!important;min-height:var(--hb)!important;max-height:var(--hb)!important;padding-block:0!important;display:grid!important;place-items:center!important}
+  html.npp-kid #ovHow:not([hidden]) .row .npSay{height:var(--hb)!important;min-height:var(--hb)!important;width:var(--hb)!important;min-width:var(--hb)!important}
+}
+@container (max-width:205px){
+  html.npp-kid #ovHow:not([hidden]) .row #hwGo{flex:none!important;width:var(--hb)!important;min-width:var(--hb)!important;padding:0!important;font-size:0!important;position:relative!important}
+  html.npp-kid #ovHow:not([hidden]) .row #hwGo::before{content:"";position:absolute;inset:0;margin:auto;transform:translateX(7%);width:calc(var(--hb)*.34);height:calc(var(--hb)*.38);background:#fff;clip-path:polygon(0 0,100% 50%,0 100%)}   /* tam giác vẽ bằng CSS: ký tự ▶ lệch lên/trái do phông */
 }
