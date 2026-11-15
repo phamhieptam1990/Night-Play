@@ -78,7 +78,12 @@
     var go = ov.querySelector(".npx-go"), out = ov.querySelector(".npx-out"); go.textContent = x.go; out.textContent = x.out;
     onLeave = onExit;
     go.addEventListener("click", function () { close(true); });
-    out.addEventListener("click", function () { var f = onLeave; close(false); if (f) f(); });
+    out.addEventListener("click", function () {
+      var f = onLeave; close(false); if (f) f();
+      /* "Thoát" mà trang vẫn còn ván (cổng không rời đi được, bấm trượt…): game đang bị NP.pauseNow nên kẹt mờ, popup đã đóng → không còn nút nào để thoát.
+         Sau 700ms nếu vẫn đang chơi và không có popup hỏi mới thì cho chạy tiếp. */
+      setTimeout(function () { try { if (!ov && peek() && NP.resumeNow) NP.resumeNow(); } catch (e) {} }, 700);
+    });
     ov.addEventListener("keydown", function (e) { if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); close(true); } });
     document.body.appendChild(ov);
     if (NP.pauseNow) NP.pauseNow();

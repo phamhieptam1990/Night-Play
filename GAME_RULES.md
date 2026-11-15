@@ -229,6 +229,13 @@ Nguyên tắc dự án: game chạy **offline, không lag, không gọi máy ch�
 - Giữ chất riêng từng nhóm bằng màu/bo/độ đậm, KHÔNG bằng phông: tiêu đề lớn 800, nhấn 700, chữ thường 400-500. Tên game Cozy viết hoa = Inter 800 + `letter-spacing` nhỏ.
 - Ảnh og/PDF dựng bằng `setContent`: nhúng phông base64 (`scripts/cozygame/fontface.js`, `build-legal-pdf.js`).
 
+## 6d. CỠ CHỮ DÙNG CHUNG — một thang cho MỌI popup VÀ MỌI trang/màn hình, mọi chế độ/skin của cùng một game (`shared/nppopup.css`, biến `--fs-*` / `--tip-*`)
+- **Phạm vi: popup + toàn bộ trang** (cổng Pop/Cozy/Night Pass, màn chọn, màn chơi, màn kết thúc, trang pháp lý/đăng ký/bảng điểm, popup Giao diện/Cách chơi/Bắt đầu/Thách đấu/Mua/Pass/Hướng dẫn ?/Hỏi thoát/Cài đặt/Tiếp tục…). Cùng một vai trò chữ thì CÙNG một cỡ ở mọi nơi.
+- Chữ lấy từ thang chung: `--fs-title` (tiêu đề), `--fs-body` (nội dung, tên ô/mục), `--fs-label` (nhãn nhỏ), `--fs-btn` (nút), `--fs-note` (ghi chú); Cách chơi/Hướng dẫn dùng `--tip-t` / `--tip-b`. Thang đổi theo nhóm (Pop trẻ nhỏ to hơn) và **RESPONSIVE theo chiều cao màn** (màn ngang thấp / điện thoại ngang có thanh địa chỉ 260–350px: `clamp(min, N vh, max)` ở cuối `nppopup.css`; cùng màn thì mọi chế độ cùng cỡ) — KHÔNG theo từng game, từng trang, từng popup.
+- **CẤM** đặt `font-size` cố định (px/vh/cqw/clamp) cho chữ, kể cả trong CSS của game; chỉ được `font-size:var(--fs-…)`. Trang/popup/ô mới phải gắn vào thang này.
+- **CẤM thu nhỏ chữ theo nội dung** (zoom/transform/scale đo theo độ dài chữ của từng chế độ). Cùng một game, màn Bắt đầu của Tên lửa / Cá con / Tàu hỏa / Khủng long phải ra CÙNG cỡ chữ (lỗi đã báo: .86 / .93 / 1 → mỗi chế độ một cỡ). Muốn vừa khung thì thu hình/biểu tượng/khoảng cách/số dòng, hoặc chia 2 cột — không thu chữ.
+- Bài đo: mở từng trang và từng popup/màn Bắt đầu của MỌI chế độ ở các cỡ màn (gồm ngang thấp 568×260, 667×300, 740×320) rồi so `getComputedStyle().fontSize` của tiêu đề, nội dung, nhãn, nút — phải bằng nhau giữa các chế độ/trang cùng vai trò và bằng giá trị của thang.
+
 ## 7. Trước khi báo "xong"
 - [ ] `check.js` "✓ tất cả đạt"
 - [ ] `check-landscape.js` "✓ màn ngang đạt" (nếu đụng bố cục/giao diện)

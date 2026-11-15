@@ -304,7 +304,7 @@ html #ovPay .npc h2{font-size:clamp(24px,6.4vw,30px)!important}
 /* THANG CỠ CHỮ CHUNG cho "Cách chơi" (#ovHow: màn Bắt đầu) và "Hướng dẫn" (popup ?): LUÔN BẰNG NHAU trong cùng một app; Pop Play (trẻ nhỏ) to hơn Night Play. --tip-t = tiêu đề, --tip-b = nội dung. Mỗi popup chỉ tự thu NHỎ khi tràn (howfit.js / pophelp.js / help.js), không bao giờ khác cỡ gốc. */
 :root{--tip-t:22px;--tip-b:17px}
 html.npp-kid{--tip-t:26px;--tip-b:20px}
-@media (orientation:landscape) and (max-height:520px){:root{--tip-t:20px;--tip-b:16px}html.npp-kid{--tip-t:23px;--tip-b:18px}}
+@media (orientation:landscape) and (max-height:520px){:root{--tip-t:clamp(15px,5.75vh,20px);--tip-b:clamp(12px,4.6vh,16px)}html.npp-kid{--tip-t:clamp(15px,6.6vh,23px);--tip-b:clamp(12.5px,5.2vh,18px)}}
 
 /* GỐC của lỗi "popup nhỏ vừa khung chơi, không full" cứ lặp lại: trên Chrome/Safari có layout containment (html.np-fixcb), popup position:fixed bị NHỐT trong khung game (.play, 3:4) thay vì phủ cả cửa sổ. Thay vì vá từng popup: khi MỘT popup của game đang mở, KHUNG GAME tự phủ trọn cửa sổ → popup nào (Cách chơi, Giao diện, Night Pass, thách đấu, thu thập, phụ huynh) cũng full như khi không bị nhốt. Màn bắt đầu/kết thúc/tạm dừng giữ nguyên. */
 html.npp-kid.np-fixcb .play:has(:is(#ovHow,#ovSkin,#ovPay,#ovCh,#ovGate,#ovColl):not([hidden])){position:fixed!important;inset:0!important;width:auto!important;height:auto!important;max-width:none!important;max-height:none!important;aspect-ratio:auto!important;margin:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:none!important;transform:none!important;z-index:2147483000!important}
@@ -342,7 +342,8 @@ html:not(.npp-kid) #ovHow:not([hidden]) #hwBack:not([hidden]){top:16px!important
    Chỉnh MỘT chỗ này để đổi toàn app. */
 :root{--fs-title:22px;--fs-body:17px;--fs-label:15px;--fs-btn:18px;--fs-note:14px;--tip-t:var(--fs-title);--tip-b:var(--fs-body)}
 html.npp-kid{--fs-title:26px;--fs-body:20px;--fs-label:17px;--fs-btn:21px;--fs-note:16px}
-@media (orientation:landscape) and (max-height:520px){:root{--fs-title:20px;--fs-body:16px;--fs-label:14px;--fs-btn:17px;--fs-note:13px}html.npp-kid{--fs-title:23px;--fs-body:18px;--fs-label:15px;--fs-btn:19px;--fs-note:14px}}
+/* RESPONSIVE: màn ngang thấp (điện thoại ngang có thanh địa chỉ 260–350px) — thang chữ co THEO CHIỀU CAO MÀN (vh, có chặn dưới/trên), KHÔNG theo nội dung từng popup/chế độ → cùng màn hình thì mọi chế độ cùng cỡ chữ (GAME_RULES 6d) */
+@media (orientation:landscape) and (max-height:520px){:root{--fs-title:clamp(15px,5.75vh,20px);--fs-body:clamp(12px,4.6vh,16px);--fs-label:clamp(11px,4vh,14px);--fs-btn:clamp(13px,4.9vh,17px);--fs-note:clamp(10.5px,3.75vh,13px)}html.npp-kid{--fs-title:clamp(15px,6.6vh,23px);--fs-body:clamp(12.5px,5.2vh,18px);--fs-label:clamp(11.5px,4.4vh,15px);--fs-btn:clamp(14px,5.7vh,19px);--fs-note:clamp(11px,4vh,14px)}}
 html:not(#np) :is(#ovSkin,#ovPay,#ovCh,#ovHow,#ovGate,#ovColl) h2,html:not(#np) #setup .sh-h,html:not(#np) .nps-sheet h3,html:not(#np) .nps-dlg h3,html:not(#np) #hlpCard h3{font-size:var(--fs-title)!important}
 html:not(#np) :is(#ovPay,#ovCh,#ovGate) .npc p,html:not(#np) #pay p,html:not(#np) #pay .pw-p,html:not(#np) .nps-sheet p,html:not(#np) .nps-dlg p,html:not(#np) #hwL li,html:not(#np) #ovHow .hwL li{font-size:var(--fs-body)!important}
 html:not(#np) #ovSkin .npc .skc span,html:not(#np) #ovSkin .npc .skc .sx b,html:not(#np) #ovSkin .skgrid>.sk>span,html:not(#np) #setup .chip b{font-size:var(--fs-label)!important}
@@ -409,4 +410,38 @@ html.npp-kid{--xc1:#F2701D;--xc2:var(--np-orange-on,#CC4C0E);--xcg:rgba(242,112,
   html.npp-kid #ovSkin .skgrid{display:flex!important;flex-wrap:wrap!important;justify-content:center!important;gap:16px!important;width:100%!important}
   html.npp-kid #ovSkin .skgrid>.skc{flex:0 0 clamp(150px,26%,210px)!important;width:auto!important;grid-column:auto!important}
   html.npp-kid #ovSkin .skgrid>.skc .sw{height:auto!important;aspect-ratio:4/3!important;font-size:clamp(34px,5vw,56px)!important}
+}
+
+/* DẤU ✕ NẰM GIỮA NÚT: nút là lưới 2 hàng (icon ::before 20px + chữ "✕" gốc cao 0) nên icon bị đẩy LÊN TRÊN tâm nút (lệch top ~5px, thấy rõ trên mọi popup + thẻ Tiếp tục). Gom hàng vào giữa. */
+html:not(#np) :is(.npc .npx,#hlpX,#phX,#setupX,.sheet .sh-h>.icon-btn,#ovHow #hwBack,#npResume .npr-x){display:grid!important;place-items:center!important;place-content:center!important;gap:0!important}
+
+/* ===== POPUP GIAO DIỆN — ĐIỆN THOẠI NGANG (còn 260–420px cao vì thanh địa chỉ), MỌI GAME: một khối luật duy nhất =====
+   Thẻ chừa cột nút HUD 72px bên trái; ô BẰNG NHAU, cao THEO CHIỀU CAO MÀN (không còn ô 52–66px bị bẹp, trống trên/dưới):
+   ≥700px rộng: 5 ô một hàng; hẹp hơn: 3 + 2 canh giữa. Ô = hình/biểu tượng giãn ở trên + tên một dòng ở dưới.
+   Vật chứa: .skgrid (Pop, Cánh Nhỏ) và div.sk (Cozy sinh tự động). */
+@media (orientation:landscape) and (max-height:420px){
+  html:not(#np) #ovSkin{align-items:center!important;justify-content:center!important;padding:6px 12px 26px 72px!important;box-sizing:border-box!important}
+  html:not(#np) #ovSkin>.npc{width:min(100%,900px)!important;height:100%!important;max-height:100%!important;padding:8px 12px 10px!important;gap:6px!important;box-sizing:border-box!important;overflow:visible!important;display:flex!important;flex-direction:column!important}
+  html:not(#np) #ovSkin .npc h2{min-height:40px!important;margin:0!important;flex:none!important}
+  html:not(#np) #ovSkin .npc>:is(.skgrid,div.sk){display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;--skh:max(40px,calc((100dvh - 190px)/2));grid-auto-rows:auto!important;align-content:center!important;align-items:center!important;gap:10px!important;margin:0!important;width:100%!important;max-width:none!important;flex:1 1 0!important;min-height:0!important}
+  html:not(#np) #ovSkin .npc>:is(.skgrid,div.sk)>:is(.skc,button.sk){grid-column:span 2!important;box-sizing:border-box!important;width:auto!important;min-width:0!important;max-width:none!important;height:auto!important;align-self:center!important;min-height:0!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:center!important;padding:5px!important;gap:3px!important;overflow:visible!important;text-align:center!important}
+  html:not(#np) #ovSkin .npc>:is(.skgrid,div.sk)>:last-child:nth-child(3n+1){grid-column:3 / span 2!important}
+  html:not(#np) #ovSkin .npc>:is(.skgrid,div.sk)>:last-child:nth-child(3n+2){grid-column:4 / span 2!important}
+  html:not(#np) #ovSkin .npc>:is(.skgrid,div.sk)>:nth-last-child(2):nth-child(3n+1){grid-column:2 / span 2!important}
+  /* Pop: khung xem trước .sw giãn hết phần còn lại của ô */
+  html:not(#np) #ovSkin .npc .skgrid>.skc>.sw{flex:0 1 auto!important;min-height:0!important;height:auto!important;width:100%!important;max-height:var(--skh)!important;aspect-ratio:4/3!important;display:grid!important;place-items:center!important;font-size:clamp(24px,calc(var(--skh)*.6),64px)!important;line-height:1!important}
+  /* Cánh Nhỏ: ảnh xem trước giãn, bỏ biểu tượng lặp */
+  html:not(#np) #ovSkin .npc .skgrid>button.sk>img{display:block!important;flex:0 1 auto!important;min-height:0!important;width:100%!important;height:auto!important;max-height:var(--skh)!important;aspect-ratio:4/3!important;object-fit:cover!important;border-radius:10px!important}
+  html:not(#np) #ovSkin .npc .skgrid>button.sk>i.e{display:none!important}
+  /* Cozy sinh tự động: biểu tượng to ở trên, tên ở dưới */
+  html:not(#np) #ovSkin .npc div.sk>.skc>.e{flex:none!important;align-self:center!important;width:auto!important;height:auto!important;font-size:clamp(24px,calc(var(--skh)*.6),64px)!important;line-height:1!important}
+  html:not(#np) #ovSkin .npc div.sk>.skc>.e img{width:auto!important;height:clamp(24px,calc(var(--skh)*.6),64px)!important}
+  html:not(#np) #ovSkin .npc div.sk>.skc>.sx{flex:none!important;width:100%!important;min-width:0!important;padding:0!important;text-align:center!important}
+  html:not(#np) #ovSkin .npc div.sk>.skc>.sx small{display:none!important}
+  html:not(#np) #ovSkin .npc>:is(.skgrid,div.sk)>:is(.skc,button.sk) :is(span,b){flex:none!important;display:block!important;font-size:var(--fs-body)!important;line-height:1.15!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;text-align:center!important}
+}
+@media (orientation:landscape) and (max-height:420px) and (min-width:700px){
+  html:not(#np) #ovSkin .npc>:is(.skgrid,div.sk):not(:has(>:nth-child(6))){--skh:42vh!important}
+  html:not(#np) #ovSkin .npc>:is(.skgrid,div.sk):not(:has(>:nth-child(6))){grid-template-columns:repeat(5,minmax(0,1fr))!important}
+  html:not(#np) #ovSkin .npc>:is(.skgrid,div.sk):not(:has(>:nth-child(6)))>:is(.skc,button.sk){grid-column:auto!important;height:auto!important}
 }

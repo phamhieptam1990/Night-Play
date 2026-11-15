@@ -8,7 +8,10 @@
   function fit() {
     raf = 0; var o = document.getElementById("ovHow"); if (!o) return;
     o.style.setProperty("--hz", "1"); if (o.hidden) return;
+    /* CỠ CHỮ ĐỒNG NHẤT giữa các chế độ/skin của cùng một game: hệ số khởi đầu chỉ phụ thuộc CHIỀU CAO màn (điện thoại ngang thấp), không phụ thuộc số dòng chữ của từng chế độ
+       (trước: Tên lửa .86, Cá con .93, Tàu hỏa 1 → mỗi chế độ một cỡ chữ). Chỉ khi vẫn tràn mới thu thêm. */
     var hz = 1, i, ks, q, t, b, l, r, cs, ah, aw, k;
+    try { if (matchMedia("(min-aspect-ratio:11/10) and (max-height:520px)").matches) { return; } } catch (e) {}
     for (i = 0; i < 5; i++) {
       ks = [].filter.call(o.children, function (c) { return c.getClientRects().length && getComputedStyle(c).position !== "fixed"; }); if (!ks.length) return;
       t = 1e9; b = -1e9; l = 1e9; r = -1e9;
