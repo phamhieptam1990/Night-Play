@@ -17,7 +17,7 @@
 .pt-title::before,.pt-title .pi::before{content:var(--pt-ic);display:inline-block;margin-right:.22em;font-size:.86em;line-height:1;-webkit-text-fill-color:initial;color:initial;vertical-align:-.04em;letter-spacing:0}
 .pt-title:not([data-pt])::before,.pt-title[data-pt=""]::before,.pt-title.pt-on::before,.pt-title:not([data-pt]) .pi::before{display:none}
 /* nghiêng −2° đặt ở lớp trong (.pi) để khung h1 giữ nguyên (khoảng cách tới khối kế dưới không bị phình theo góc nghiêng) */
-.pt-title .pi{display:block;transform:translateY(2px) rotate(-2deg);transform-origin:center}
+.pt-title .pi{display:block;transform:translateY(2px) rotate(-2deg);transform-origin:center;will-change:transform}   /* lớp riêng: không có thì Chrome bỏ sót vài chữ (Đ_án, Th_Thách…) khi xoay nghiêng + chữ tô gradient background-clip:text */
 .pt-title .pw{display:inline-block;white-space:nowrap}
 .pt-title .pl{display:inline-block;position:relative;top:0;background:linear-gradient(180deg,var(--pt-a),var(--pt-b));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
 /* vào MỘT lần: từng chữ nảy lên (dùng top thay vì transform để không tạo lớp riêng làm chữ nền gradient nhấp nháy trên Safari) */

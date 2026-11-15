@@ -18,8 +18,22 @@
     });
     var pi = document.createElement("span"); pi.className = "pi"; pi.appendChild(f); t.textContent = ""; t.appendChild(pi); t.setAttribute("aria-label", txt.trim()); t.classList.add("pt-on");
     if (first && !reduce) { first = false; t.classList.add("pt-anim"); setTimeout(function () { t.classList.remove("pt-anim"); }, 1300); } else first = false;
-    t._ptBusy = false;
+    t._ptBusy = false; fit(t);
   }
+  /* Tên dài ở cột hẹp (điện thoại ngang: cột trái ~130px, "Parents' 5-Second Challenge" xuống 3 dòng): thu nhỏ chữ từng 0,5px (tối thiểu 11px) tới khi còn ≤2 dòng.
+     Tên vừa 2 dòng ở cỡ chuẩn thì KHÔNG đổi gì (cỡ chuẩn do CSS quyết định, xoá cỡ thu nhỏ rồi đo lại mỗi lần đổi kích thước). */
+  function fit(t) {
+    var pi = t.querySelector(".pi"); if (!pi || t._ptFit) return; t._ptFit = 1;
+    try {
+      t.style.removeProperty("font-size");
+      var pls = t.querySelectorAll(".pw"), lines = function () { var s = {}, n = 0; for (var k = 0; k < pls.length; k++) { var y = Math.round(pls[k].offsetTop / 4); if (!s[y]) { s[y] = 1; n++; } } return n; };   /* đếm dòng thật theo vị trí TỪNG TỪ (.pw; từng chữ .pl đang nảy nên offsetTop đổi theo animation; .pi có thể bị cắt chiều cao nên không đo bằng offsetHeight) */
+      var cur = parseFloat(getComputedStyle(t).fontSize); var over = function () { return t.scrollWidth > t.clientWidth + 1; };   /* poplandscape.css ép white-space:nowrap!important (đã duyệt) → tên dài không xuống dòng mà TRÀN NGANG: cũng thu chữ cho tới khi vừa */
+      while (cur > 11 && (lines() > 2 || over())) { cur -= 0.5; t.style.setProperty("font-size", cur + "px", "important"); }
+    } catch (e) {}
+    t._ptFit = 0;
+  }
+  var rz = 0; function refit() { clearTimeout(rz); rz = setTimeout(function () { var t = document.getElementById("title"); if (t && t.classList.contains("pt-title")) fit(t); }, 120); }
+  addEventListener("resize", refit); addEventListener("load", refit); try { document.fonts.ready.then(refit); } catch (e) {}
   function gameId() { var m = location.pathname.match(/\/popplay\/games\/([^/]+)\//); return m ? m[1] : ""; }
   function watch(t) {
     if (t._ptW) return; t._ptW = 1;

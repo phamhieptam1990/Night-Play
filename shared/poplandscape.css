@@ -1214,15 +1214,12 @@ html[data-theme="light"] .app:has(h1[data-pt]) #home:not([hidden]),html[data-the
 }
 
 
-/* THẺ "CÁCH CHƠI" (#ovHow) Ở MÀN NGANG / WEB THẤP: bỏ cột dọc hẹp → khung rộng như popup Giao diện; HAI CỘT (trái: tên + hình + nhãn; phải: danh sách ý + nút Bắt đầu); con của thẻ có zoom:var(--hz) do shared/howfit.js tính cho vừa khung */
-@media (min-aspect-ratio:11/10) and (max-height:800px){
+/* THẺ "CÁCH CHƠI" (#ovHow) Ở MÀN NGANG / WEB THẤP: bỏ cột dọc hẹp → khung rộng như popup Giao diện; MỘT CỘT dọc (tên + hình + nhãn → danh sách ý → nút Bắt đầu), chữ thu nhỏ cho vừa chiều cao; con của thẻ có zoom:var(--hz) do shared/howfit.js tính cho vừa khung */
+@media (min-aspect-ratio:11/10) and (max-height:760px){
   .app:has(#ovHow:not([hidden])){grid-template-columns:minmax(0,1fr) min(calc(100vw - 340px),760px) minmax(0,1fr)}
   .app:has(#ovHow:not([hidden])) .play{width:auto;aspect-ratio:auto;height:calc(100dvh - 30px);max-height:none}
-  .app:has(h1[data-pt]) #ovHow:not([hidden]){display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);column-gap:24px;row-gap:8px;align-content:center!important;align-items:center;justify-items:center;justify-content:stretch;padding:14px 76px 14px 20px!important;box-sizing:border-box;overflow:hidden}
+  .app:has(h1[data-pt]) #ovHow:not([hidden]){display:grid!important;grid-template-columns:minmax(0,1fr);row-gap:8px;align-content:center!important;align-items:center;justify-items:center;justify-content:stretch;padding:14px 76px!important;box-sizing:border-box;overflow:hidden}
   .app:has(h1[data-pt]) #ovHow:not([hidden])>*{grid-column:1;zoom:var(--hz,1);max-width:100%}
-  .app:has(h1[data-pt]) #ovHow:not([hidden])>ul,
-  .app:has(h1[data-pt]) #ovHow:not([hidden])>.hwL{grid-column:2;grid-row:1 / span 6;width:100%;align-self:center}
-  .app:has(h1[data-pt]) #ovHow:not([hidden])>.row:last-child{grid-column:2;grid-row:7}
 }
 
 /* THẺ "CÁCH CHƠI" — ĐIỆN THOẠI NGANG (<=520px cao): phủ TOÀN KHUNG như popup Giao diện (trước bó trong khung chơi 440px, chữ bị zoom nhỏ xíu) + nút ✕ ở góc trên-phải khung */
@@ -1259,7 +1256,7 @@ html[data-theme="light"] .app:has(h1[data-pt]) #home:not([hidden]),html[data-the
   .app:has(h1[data-pt="lang-cua-be"]) #village>#npResume{grid-column:1!important;grid-row:5!important;align-self:center!important;width:100%!important;min-width:0!important;height:40px!important;margin:0!important}
   .app:has(h1[data-pt="lang-cua-be"]) #village>#npResume .npr-go{height:40px!important;min-height:0!important;font-size:14px!important;padding:0 14px!important}
   .app:has(h1[data-pt="lang-cua-be"]) #village>#npResume .npr-x{width:40px!important;height:40px!important}
-  .app:has(h1[data-pt="lang-cua-be"]) #village .band{min-height:0!important;max-height:84px!important}
+  .app:has(h1[data-pt="lang-cua-be"]) #village .band{min-height:0!important;max-height:100px!important}   /* 84→100: ô chia ~113px/thẻ, trần 84 để lại khe ~30px giữa các thẻ (quá rộng) */
   .app:has(h1[data-pt="lang-cua-be"]) #village .band b,.app:has(h1[data-pt="lang-cua-be"]) #village .band .nm{font-size:16px!important}
 }
 
@@ -1301,14 +1298,11 @@ html[data-theme="light"] .app:has(h1[data-pt]) #home:not([hidden]),html[data-the
 
 
 
-@media (min-aspect-ratio:11/10) and (max-height:800px){
+@media (min-aspect-ratio:11/10) and (max-height:760px){
   .app:has(#ovHow:not([hidden])){grid-template-columns:minmax(0,1fr) min(calc(100vw - 340px),760px) minmax(0,1fr)}
   .app:has(#ovHow:not([hidden])) .play{width:auto;aspect-ratio:auto;height:calc(100dvh - 30px);max-height:none}
-  html.np-strip .app:has(h1[data-pt]) #ovHow:not([hidden]){display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);column-gap:24px;row-gap:8px;align-content:center!important;align-items:center;justify-items:center;justify-content:stretch;padding:14px 76px 14px 20px!important;box-sizing:border-box;overflow:hidden}
+  html.np-strip .app:has(h1[data-pt]) #ovHow:not([hidden]){display:grid!important;grid-template-columns:minmax(0,1fr);row-gap:8px;align-content:center!important;align-items:center;justify-items:center;justify-content:stretch;padding:14px 76px!important;box-sizing:border-box;overflow:hidden}
   html.np-strip .app:has(h1[data-pt]) #ovHow:not([hidden])>*{grid-column:1;zoom:var(--hz,1);max-width:100%}
-  html.np-strip .app:has(h1[data-pt]) #ovHow:not([hidden])>ul,
-  html.np-strip .app:has(h1[data-pt]) #ovHow:not([hidden])>.hwL{grid-column:2;grid-row:1 / span 6;width:100%;align-self:center}
-  html.np-strip .app:has(h1[data-pt]) #ovHow:not([hidden])>.row:last-child{grid-column:2;grid-row:7}
 }
 
 
@@ -1415,4 +1409,17 @@ html.np-hudg:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>:is(.dbar,.
   html.np-strip:root .app:has(h1[data-pt]) #home .tiles>.tile{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:3px!important;text-align:center!important;padding:8px 8px 6px!important}
   html.np-strip:root .app:has(h1[data-pt]) #home .tiles>.tile .ti{font-size:30px!important;line-height:1!important;width:auto!important;height:auto!important;margin:0!important}
   html.np-strip:root .app:has(h1[data-pt]) #home .tiles>.tile b{text-align:center!important;font-size:13px!important;line-height:1.1!important;max-width:100%}
+}
+/* Pop Fly màn ngang thấp (<600px cao): nút cuối "Tiến độ của bé" (#pgBtn) bị giãn theo cả cột lưới (442px) trong khi các thẻ chế độ chỉ rộng tối đa 340px → nút cuối dài hơn các nút trên. Cho bằng đúng bề rộng thẻ (cùng mép trái). */
+@media (min-aspect-ratio:11/10) and (max-height:599px){
+  .app:has(h1[data-pt="pop-fly"]) #ovStart>#pgBtn{justify-self:start;width:100%;max-width:340px;box-sizing:border-box}
+}
+/* Nút cấp 1/2/3 (hình tròn 44–72px) ở khung ngang lớn KHÔNG có html.np-hudg (khung "Chơi cùng lúc", web rộng): chữ "🌱 1" cỡ 6cqw (~39px) rộng hơn vòng tròn nên con số tràn ra ngoài mép, nút lệch. Ẩn con số (như bản np-hudg) và co chữ theo vòng tròn. */
+@media (min-aspect-ratio:11/10) and (min-height:521px){
+  .app:has(h1[data-pt]) #home .lvs .lvb{padding:0!important;font-size:clamp(20px,3.8vh,32px)!important;display:grid!important;place-items:center;line-height:1}
+  .app:has(h1[data-pt]) #home .lvs .lvb small{display:none!important}
+}
+/* Làng Của Bé màn ngang: nút "🎒 Bộ sưu tập" nằm trong lưới (cột trái, hàng 6 dưới thẻ Tiếp tục ván dở), vì cổng ẩn hàng điểm .hud */
+@media (min-aspect-ratio:11/10){
+  html.np-hudg .app:has(h1[data-pt="lang-cua-be"]) #village>.vcoll{display:inline-flex!important;align-items:center;justify-content:center;grid-column:1;grid-row:6;align-self:center;justify-self:start;min-height:44px;height:44px;padding:0 16px;margin:0!important;font-size:15px;max-width:100%;box-sizing:border-box}
 }

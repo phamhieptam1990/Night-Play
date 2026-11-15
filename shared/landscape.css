@@ -38,7 +38,8 @@
 #play.tight .top>.ib{width:42px;height:42px;min-width:42px;min-height:42px;font-size:15px}   /* màn ngang: nút nằm cột riêng, không co theo tiêu đề */
 .top>#bBk{grid-column:1;grid-row:1;justify-self:start}
 .top>h1{grid-column:1;grid-row:2;white-space:normal;text-wrap:balance;overflow-wrap:anywhere;text-overflow:clip;font-size:3.8cqw;line-height:1.12;margin:0;transition:opacity .35s;max-height:9cqw;overflow:hidden}
-html.np-tabon .top>h1{margin-left:48px}   /* cổng: nút mở lại cột bên (.np-tab, x 8..52 trong khung game) nằm đúng chỗ tên game → đẩy tên sang phải */
+html.np-tabon .top>h1{margin-left:64px}   /* nút .np-tab nay nằm x 72..116 (sau nút ←): tên phải bắt đầu >= 124 (trước: 48px theo toạ độ cũ x 8..52 → nút ⊟ đè đầu tên ở mọi game khi cột đã thu gọn) */
+html.np-tabon.npw-cover .top>h1{margin-left:80px}   /* bố cục 'phủ' (vd. Xây Cầu Tre) tên bắt đầu sớm hơn 16px */   /* cổng: nút mở lại cột bên (.np-tab, x 8..52 trong khung game) nằm đúng chỗ tên game → đẩy tên sang phải */
 body.idle #play[data-scr="game"] .top>.ib:not(#bBk),body.idle #play[data-scr="game"] .top>h1{opacity:.22}
 body.idle #play[data-scr="game"] .top>.ib:hover,body.idle #play[data-scr="game"] .top>.ib:focus-visible{opacity:1}
 /* mọi màn: bỏ chừa chỗ cho thanh trên (thanh trên đã ra hai bên) → khung chơi cao tối đa */
@@ -47,6 +48,8 @@ body.idle #play[data-scr="game"] .top>.ib:hover,body.idle #play[data-scr="game"]
 .scr#game{gap:1.6cqw}
 /* cột trái: điểm / lượt / combo + mục tiêu */
 #game>.stats{position:absolute;right:calc(100% + 2.5cqw);top:calc(27cqw - 2.5cqw);width:calc(var(--cl) - 1cqw);flex-direction:column;gap:1.4cqw;z-index:3}
+/* cổng bật HUD gọn (cột nút ← ? 🔊 … ở mép trái, np-hudg): chừa thêm 28px bên trái để cột stats không tràn xuống dưới cột nút (check-hud.js) */
+html.np-hudg #game>.stats{width:calc(var(--cl) - 1cqw - 28px)}
 #game>.stats .st{display:flex;flex-direction:row-reverse;align-items:center;justify-content:space-between;gap:2cqw;padding:1.1cqw 2.6cqw;border-radius:3cqw;text-align:left}
 #game>.stats .st b{font-size:5.2cqw;display:inline}#game>.stats .st span{font-size:2.9cqw}
 #game>.tgt{position:absolute;right:calc(100% + 2.5cqw);top:calc(62cqw - 2.5cqw);width:calc(var(--cl) - 1cqw);flex-wrap:wrap;justify-content:center;z-index:3}

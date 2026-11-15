@@ -1,7 +1,7 @@
 /* Sống Sót Đến Cuối Tháng — 8 triệu lương, 30 ngày, mỗi ngày một tình huống: chọn Có / Không. Hết tiền hoặc kiệt sức là thua. Danh hiệu theo kiểu chi tiêu. */
 module.exports = {
   id: "song-sot-cuoi-thang", prefix: "sv", title: { vi: "Sống Sót Đến Cuối Tháng", en: "Survive to Payday" }, maxScore: 5000,
-  hero: "💰📅", deco: ["💰", "💸", "🍜", "☕"],
+  hero: "📅💰", deco: ["💰", "💸", "🍜", "☕"],
   types: [["💰", "Lương 8 triệu", "8M salary"], ["🧧", "Tết lì xì", "Tet envelopes"], ["⏳", "Sale đếm ngược", "Sale countdown"], ["🎓", "Học bổng", "Scholar"]],
   catalog: [["basic", "Sổ tay chi tiêu", "Spending notebook", "📒"], ["chat", "Nhóm chat bạn bè", "Friends group chat", "💬"], ["bank", "Tin nhắn ngân hàng", "Bank SMS", "🏦"], ["shop", "Chợ online", "Online mall", "🛒"], ["cal", "Lịch tháng", "Month calendar", "📅"]],
   rootCss: `:root{--bg:#FFF6DD;--panel:#ffffff;--ink:#33280f;--muted:#7a6a3a;--accent:#d97706;--on:#ffffff;--good:#2f9e44;--bad:#e03131;--line:#f0dba0;--pbg:linear-gradient(#ffe9a8,#fff9e6);--field:#fff4cc;--field2:#ffe59a;

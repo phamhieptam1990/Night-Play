@@ -1,7 +1,7 @@
 /* Bao Nhiêu Giây? — bấm bắt đầu, đồng hồ biến mất, bấm dừng khi nghĩ đã đúng mốc giờ. Điểm theo độ lệch. */
 module.exports = {
   id: "bao-nhieu-giay", prefix: "bg", title: { vi: "Bao Nhiêu Giây?", en: "How Many Seconds?" }, maxScore: 5000,
-  hero: "⏱️🐢", deco: ["⏱️", "🐢", "⏳", "🎯"],
+  hero: "🐢⏱️", deco: ["⏱️", "🐢", "⏳", "🎯"],
   types: [["⏱️", "Cổ điển 10 giây", "Classic 10 s"], ["🎵", "Đếm nhịp", "Metronome"], ["🎲", "Mốc ngẫu nhiên", "Random marks"], ["🏃", "Marathon 30 giây", "30 s marathon"]],
   catalog: [["basic", "Đồng hồ rùa", "Turtle watch", "🐢"], ["sand", "Đồng hồ cát sa mạc", "Desert hourglass", "⏳"], ["bomb", "Gỡ bom hẹn giờ", "Defuse the bomb", "💣"], ["rocket", "Phóng tên lửa", "Rocket launch", "🚀"], ["oven", "Lò bánh tiệm xưa", "Old bakery oven", "🥐"]],
   rootCss: `:root{--bg:#FFF3DF;--panel:#ffffff;--ink:#3a2410;--muted:#7a5a3a;--accent:#e8590c;--on:#ffffff;--good:#2f9e44;--bad:#e03131;--line:#f1d3a8;--pbg:linear-gradient(#ffe4bd,#fff7ea);--field:#fff1d8;--field2:#ffe0b0;

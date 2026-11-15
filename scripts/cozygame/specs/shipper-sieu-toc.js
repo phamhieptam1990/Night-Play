@@ -1,7 +1,7 @@
 /* Shipper Siêu Tốc — nhận các đơn trên bản đồ, chạm lần lượt để vẽ lộ trình giao hết nhanh nhất. Có đơn gấp, đồ nóng, khách hủy phút chót. Điểm = % so với lời giải tối ưu (game tự tính bằng vét cạn). 3 màn. */
 module.exports = {
   id: "shipper-sieu-toc", prefix: "ss", title: { vi: "Shipper Siêu Tốc", en: "Speedy Shipper" }, maxScore: 3000,
-  hero: "🛵📦", deco: ["🛵", "📦", "🍜", "🏠"],
+  hero: "📦🛵", deco: ["🛵", "📦", "🍜", "🏠"],
   types: [["🛵", "Cổ điển 5 đơn", "Classic 5 orders"], ["🆕", "Đơn dồn dập", "Orders pour in"], ["🧊", "Đồ nguội dần", "Cooling"], ["🚚", "Xe tải 3 đơn", "Truck x3"]],
   catalog: [["basic", "Phố ô bàn cờ", "Block city", "🛵"], ["saigon", "Sài Gòn bàn cờ", "Saigon grid", "🌃"], ["hanoi", "Phố cổ đường chéo", "Old quarter", "🏮"], ["mekong", "Sông và cầu miền Tây", "River & bridges", "🌉"], ["tower", "Chung cư nhiều tầng", "High-rise", "🏢"]],
   rootCss: `:root{--bg:#FFF4E4;--panel:#ffffff;--ink:#3a2410;--muted:#7a5a3a;--accent:#e8590c;--on:#ffffff;--good:#2f9e44;--bad:#e03131;--line:#f1d3a8;--pbg:linear-gradient(#ffe4bd,#fff7ea);--field:#fff1d8;--field2:#ffe0b0;

@@ -116,7 +116,7 @@ canvas#cv{border-radius:3cqw;background:linear-gradient(var(--field),var(--field
   <div class="deco" id="deco"></div>
   <div class="top"><button class="ib" id="bBk" type="button" hidden aria-label="←">←</button><h1 id="ttl"></h1><button class="ib" id="bRe" type="button" hidden>↻</button><button class="ib" id="bBoard" type="button">🏆</button><button class="ib" id="bSnd" type="button">🔊</button><button class="ib" id="bLang" type="button"></button></div>
   <section class="scr" id="home">
-    <div class="hero" id="hHero">💰📅</div>
+    <div class="hero" id="hHero">📅💰</div>
     <p class="mut" id="hSub" style="text-align:center;margin:0;font-size:3.6cqw"></p>
     <div class="tys" id="tys"></div>
     <button class="btn dbtn" id="bDaily" type="button"><span class="n" id="dN"></span><span class="grow"><b id="dT"></b><br><span id="dS" style="font-size:3.3cqw;opacity:.85"></span></span><span>▶</span></button>
@@ -290,7 +290,7 @@ const SCR=["home","game","end"];
 function show(id){SCR.forEach(s=>$(s).hidden=s!==id);["ovCh","ovSkin","ovPay"].forEach(o=>$(o).hidden=true);if(id==="home")$("ttl").textContent=T("title");if(id==="game")requestAnimationFrame(fitCanvas)}
 const getSave=()=>LS.get("sv-save",{streak:0,last:"",best:0,total:0,days:{},dayT:{}});
 function renderTypes(){const b=$("tys");b.innerHTML="";TYPES.forEach((t,i)=>{const e=document.createElement("button");e.type="button";e.className="ty"+(TY===i?" on":"")+(tLocked(i)?" lock":"");e.innerHTML='<span class="e">'+t[0]+'</span><span class="t">'+L2([t[1],t[2]])+"</span>";e.onclick=()=>{if(tLocked(i)){openPay(i,null);return}TY=i;LS.set("sv-type",i);renderHome()};b.appendChild(e)})}
-function renderHome(){const sv=getSave(),k=dayKey(),done=TY?(sv.dayT||{})[k+"|"+TY]:sv.days[k];$("ttl").textContent=T("title");$("hSub").textContent=T("sub");$("hHero").textContent=skinOf().hero||"💰📅";$("bLang").textContent=LANG==="vi"?"EN":"VI";$("bSnd").textContent=snd()?"🔊":"🔇";renderTypes();
+function renderHome(){const sv=getSave(),k=dayKey(),done=TY?(sv.dayT||{})[k+"|"+TY]:sv.days[k];$("ttl").textContent=T("title");$("hSub").textContent=T("sub");$("hHero").textContent=skinOf().hero||"📅💰";$("bLang").textContent=LANG==="vi"?"EN":"VI";$("bSnd").textContent=snd()?"🔊":"🔇";renderTypes();
  $("dN").textContent="#"+dayNo(k);$("dT").textContent=T("daily");$("dS").textContent=done!=null?T("done",{s:SF(done)}):T("dS");$("bFree").textContent=T("free");$("hNote").textContent=T("note");
  $("hChips").innerHTML="";[sv.streak?"🔥 "+sv.streak:"",sv.best?T("best",{n:SF(sv.best)}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("hChips").appendChild(c)})}
 const hintOf=t=>T("hint"+(t||0));

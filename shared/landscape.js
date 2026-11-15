@@ -9,18 +9,22 @@
   function glyphs(t) { t = (t || "").replace(/\s/g, ""); try { if (window.Intl && Intl.Segmenter) return Math.max(1, Array.from(new Intl.Segmenter(undefined, { granularity: "grapheme" }).segment(t)).length); } catch (e) {} return Math.max(1, Array.from(t.replace(/[\u200d\ufe0f]/g, "")).length); }
   function fitHero() {
     var h = document.getElementById("hHero"); if (!h) return;
+    h.style.removeProperty("max-height");   /* đo ô ở cỡ tự nhiên (giãn hết chỗ trống) rồi mới giới hạn lại, để không vòng lặp */
     if (getComputedStyle(h).flexGrow !== "1") { h.style.removeProperty("--hs"); h.style.removeProperty("--hp"); h.removeAttribute("data-stack"); return; }   /* lưới 2 cột (điện thoại ngang thấp): linh vật cỡ cũ */
     var H = h.clientHeight, W = h.clientWidth; if (H < 20 || W < 20) { h.style.removeProperty("--hs"); h.removeAttribute("data-stack"); return; }
     var n = glyphs(h.textContent), CAP = 300, row = Math.min(H * 0.92, W * 0.8, W / (1.12 * n), CAP), col = n > 1 && n <= 3 ? Math.min(H * 0.92 / n, W * 0.8, CAP) : 0;   /* trần 300px: emoji bitmap phóng quá to bị vỡ hạt */
     /* màn CAO: 2–3 emoji xếp CHỒNG DỌC (mỗi emoji to hơn nhiều) thay vì một hàng nhỏ → bớt khoảng trống trên/dưới */
     var stack = col > row * 1.15, fs = Math.max(24, Math.floor(stack ? col : row));
     h.style.setProperty("--hs", fs + "px");
+    /* emoji xếp MỘT HÀNG thì ô chỉ cần cao ~1,5 lần cỡ emoji; phần trống dồn ra hai đầu (cột #home căn giữa) để linh vật nằm sát tên/thẻ thay vì lơ lửng giữa khoảng trống lớn */
+    if (!stack) h.style.setProperty("max-height", Math.ceil(fs * 1.5) + "px");
     if (stack) { h.style.setProperty("--hp", Math.max(0, Math.floor((W - fs * 1.2) / 2)) + "px"); h.setAttribute("data-stack", "1"); } else { h.removeAttribute("data-stack"); h.style.removeProperty("--hp"); }
     /* kiểm tra TRÀN THẬT (khung hẹp: 2 emoji không xuống dòng dù đã xếp chồng → tràn hai mép, bị cắt): nếu rộng hơn khung thì thu về cỡ một hàng vừa khung */
     if (h.scrollWidth > h.clientWidth + 2) {
       var safe = Math.max(24, Math.floor(Math.min(row, (W - 8) / (1.25 * n))));
       h.removeAttribute("data-stack"); h.style.removeProperty("--hp"); h.style.setProperty("--hs", safe + "px");
       for (var g = 0; g < 6 && h.scrollWidth > h.clientWidth + 2 && safe > 24; g++) { safe = Math.max(24, Math.floor(safe * 0.88)); h.style.setProperty("--hs", safe + "px"); }
+      h.style.setProperty("max-height", Math.ceil(parseFloat(h.style.getPropertyValue("--hs")) * 1.5) + "px");
     }
   }
   function watchHero() {

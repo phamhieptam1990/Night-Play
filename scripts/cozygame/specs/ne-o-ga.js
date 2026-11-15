@@ -1,7 +1,7 @@
 /* Né Ổ Gà Mùa Mưa — chạy xe máy trên đường ngập nước. Vuốt/chạm để đổi làn, né ổ gà, nắp cống, xe tạt nước; nhặt áo mưa và bánh mì. Chạy vô tận, phá kỷ lục. */
 module.exports = {
   id: "ne-o-ga", prefix: "og", title: { vi: "Né Ổ Gà Mùa Mưa", en: "Dodge the Potholes" }, maxScore: 6000,
-  hero: "🛵🌧️", deco: ["🌧️", "🛵", "☔", "💧"],
+  hero: "🌧️🛵", deco: ["🌧️", "🛵", "☔", "💧"],
   types: [["🌦️", "Mưa phùn", "Drizzle"], ["⛈️", "Bão gió giật", "Gale storm"], ["🚗", "Xe ngược chiều", "Oncoming"], ["🔦", "Đêm pin yếu", "Dying torch"]],
   catalog: [["basic", "Phố mưa", "Rainy street", "🌧️"], ["saigon", "Sài Gòn đêm mưa", "Saigon rain night", "🌃"], ["hanoi", "Phố cổ Hà Nội", "Hanoi old quarter", "🏮"], ["mekong", "Cầu khỉ miền Tây", "Mekong bridge", "🛶"], ["dalat", "Đèo Đà Lạt sương", "Misty Da Lat pass", "🌲"]],
   rootCss: `:root{--bg:#E6EEF4;--panel:#ffffff;--ink:#14283a;--muted:#587186;--accent:#1c7ed6;--on:#ffffff;--good:#1a9a55;--bad:#d23b3b;--line:#bcd0e0;--pbg:linear-gradient(#c9dbe9,#eef5fa);--field:#eaf2f8;--field2:#d3e2ee;
