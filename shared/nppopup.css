@@ -195,3 +195,8 @@ html.npp-kid #ovPay .npc #pwGo{background:transparent!important;background-image
 html:not(.npp-kid):has(.ov:not([hidden]):not(#ovStart):not(#ovEnd)) .top.npfan{z-index:1!important}
 /* huy hiệu độ khó (Dễ/Easy, position:fixed z-index 2147482000) cũng nằm dưới lớp mờ khi popup của game mở */
 html:has(.ov:not([hidden]):not(#ovStart):not(#ovEnd)) #npDifBadge{z-index:1!important}
+/* Pop điện thoại DỌC: popup của game (Giao diện, Night Pass, Bộ sưu tập, Phụ huynh) nằm trong khung game (.play, overflow:hidden) nên tiêu đề, thanh điểm và nút trên vẫn sáng bên ngoài → thêm lớp mờ phủ TRỌN cửa sổ (cùng kỹ thuật popup hướng dẫn: lớp mờ ngay dưới khung game được nâng z-index), popup vẫn nằm trong cột game. */
+@media (orientation:portrait){
+  html.npp-kid:has(:is(#ovSkin,#ovPay,#ovColl,#ovGate):not([hidden]))::after{content:"";position:fixed;inset:0;z-index:2147482999;background:rgba(8,6,22,.72);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+  html.npp-kid:has(:is(#ovSkin,#ovPay,#ovColl,#ovGate):not([hidden])) .play{z-index:2147483000}
+}
