@@ -326,3 +326,12 @@ html :is(#ovHow,#ovSkin,#ovPay,#ovCh,#ovGate,#ovColl):not([hidden]){position:fix
 /* COZY: màn Cách chơi (#ovHow) phải có ✕ quay về (glass.css ẩn #hwBack vì cổng có nút ←, nhưng lớp phủ toàn cửa sổ che nút đó) → hiện lại thành ✕ tròn 44px ở góc trên-phải, bấm = quay về màn chọn */
 html:not(.npp-kid) #ovHow:not([hidden]) #hwBack:not([hidden]){display:grid!important;place-items:center;position:fixed!important;top:max(10px,env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right));left:auto!important;width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;padding:0!important;margin:0!important;border-radius:50%!important;font-size:0!important;background:#7050F2!important;border:2px solid rgba(255,255,255,.7)!important;color:#fff!important;box-shadow:0 3px 10px rgba(0,0,0,.35)!important;z-index:5;cursor:pointer}
 html:not(.npp-kid) #ovHow:not([hidden]) #hwBack::before{content:"✕";font-size:19px;line-height:1;font-weight:800}
+
+/* ĐIỆN THOẠI NGANG — popup Giao diện / Night Pass dùng RỘNG màn hình: chỉ chừa cột nút HUD bên TRÁI (72px); bên phải chỉ 16px (✕ nằm trong thẻ) → thẻ rộng tới 760px, ô giao diện rộng, tên không bị bẻ dòng. Thay cho luật chừa 72px CẢ HAI bên trước đây làm thẻ hẹp. */
+@media (min-aspect-ratio:11/10) and (max-height:520px){
+  html.np-hudg #ovSkin,html.np-hudg #ovPay{padding-left:72px!important;padding-right:16px!important}
+  html #ovSkin>.npc,html #ovPay>.npc{width:min(100%,760px)!important;max-width:none!important}
+  html:not(.npp-kid) #ovSkin .npc .skc{padding:6px 8px!important;gap:6px!important}
+  html:not(.npp-kid) #ovSkin .npc .skc .e{width:28px!important;height:28px!important;font-size:22px!important}
+  html:not(.npp-kid) #ovSkin .npc .skc .sx b{font-size:14px!important;overflow-wrap:normal!important;word-break:normal!important;white-space:normal}
+}
