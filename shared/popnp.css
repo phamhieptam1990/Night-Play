@@ -214,9 +214,9 @@ html.npp-kid #play .card.daily .main{min-height:46px!important;padding-block:4px
 /* tên trò chơi căn giữa dọc trong hàng (màn ngang) */
 @media (min-aspect-ratio:11/10) and (max-height:520px){html.npp-kid #home .tile b{align-self:center}html.npp-kid #home .tile{align-items:center!important}}
 
-/* POPUP GIAO DIỆN, ĐIỆN THOẠI DỌC: ✕ 40px nằm TRONG thẻ (cách mép 8px, không lồi ra góc, không phình theo cqw) + bỏ khung bo tròn thứ hai phía sau */
+/* POPUP GIAO DIỆN, ĐIỆN THOẠI DỌC: ✕ 44px nằm TRONG thẻ (cách mép 8px, không lồi ra góc, không phình theo cqw) + bỏ khung bo tròn thứ hai phía sau */
 @media (max-width:520px) and (orientation:portrait){
-  html.npp-kid #ovSkin .npc .npx,html.npp-kid #ovPay .npc .npx{width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;top:8px!important;right:8px!important;font-size:18px!important}
+  html.npp-kid #ovSkin .npc .npx,html.npp-kid #ovPay .npc .npx{width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;top:8px!important;right:8px!important;font-size:18px!important}
   html.npp-kid #play:has(#ovSkin:not([hidden])),html.npp-kid #play:has(#ovPay:not([hidden])){background:none!important;box-shadow:none!important}
 }
 

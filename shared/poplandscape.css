@@ -691,11 +691,11 @@ html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home::before{grid-row:1!im
   #ovSkin:not([hidden]),#ovPay:not([hidden]){position:fixed!important;inset:0!important;width:auto!important;height:auto!important;border-radius:0!important;background:rgba(8,6,24,.55)!important;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);align-items:center;justify-content:center}
 }
 
-/* POPUP GIAO DIỆN / NIGHT PASS — ĐIỆN THOẠI NGANG: bỏ khung bo tròn thứ hai phía sau, ✕ 40px sát góc thẻ (không phình), ô giao diện gọn, thẻ nằm giữa */
+/* POPUP GIAO DIỆN / NIGHT PASS — ĐIỆN THOẠI NGANG: bỏ khung bo tròn thứ hai phía sau, ✕ 44px sát góc thẻ (không phình), ô giao diện gọn, thẻ nằm giữa */
 @media (min-aspect-ratio:11/10) and (max-height:520px){
   .app:has(#ovSkin:not([hidden])) .play,.app:has(#ovPay:not([hidden])) .play{background:none!important;box-shadow:none!important;border-radius:0!important}
   #ovSkin:not([hidden]),#ovPay:not([hidden]){position:fixed!important;inset:0!important;width:auto!important;height:auto!important;background:rgba(8,6,24,.55)!important;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);align-items:center;justify-content:center}
-  #ovSkin .npc .npx,#ovPay .npc .npx{width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;top:8px!important;right:8px!important;font-size:18px!important}
+  #ovSkin .npc .npx,#ovPay .npc .npx{width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;top:8px!important;right:8px!important;font-size:18px!important}
   #ovSkin>.npc{width:min(94%,600px)!important;padding:8px 12px 10px!important;max-height:calc(100% - 8px)}
   #ovSkin .npc h2{padding:0 52px!important;min-height:40px;font-size:17px!important;margin:0!important}
   #ovSkin .skgrid{gap:6px!important}

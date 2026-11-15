@@ -160,7 +160,7 @@ html .npc h2{padding-right:60px!important;padding-left:60px!important;box-sizing
   html:not(.npp-kid) #ovSkin .npc .skc{min-height:64px!important;grid-column:auto!important}
 }
 /* ✕ cùng cỡ cho Cozy ở điện thoại dọc */
-@media (max-width:520px) and (orientation:portrait){html:not(.npp-kid) .npc .npx{width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;top:8px!important;right:8px!important;font-size:18px!important}}
+@media (max-width:520px) and (orientation:portrait){html:not(.npp-kid) .npc .npx{width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;top:8px!important;right:8px!important;font-size:18px!important}}
 /* popup Cozy dọc thấp (≤680px): ô thấp hơn để nút "quay lại" không lòi đáy */
 @media (max-width:520px) and (orientation:portrait) and (max-height:680px){
   html:not(.npp-kid) #ovSkin>.npc{padding:12px 12px 10px!important;gap:6px!important}
