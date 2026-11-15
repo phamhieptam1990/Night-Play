@@ -575,8 +575,11 @@ function applySkinFor(z){const sk=skinOf(z);applyVars($("play"),sk);skCss(sk);co
 function skCss(sk){let st=$("skCss");if(!st){st=document.createElement("style");st.id="skCss";document.head.appendChild(st)}st.textContent=sk&&sk.css||""}
 function nextRound(){
   if(!S||S.over)return;if(S.r>=ROUNDS)return finishSession();
-  R={fail:0,done:false};renderDots();const el=act();el.innerHTML="";el._trace=null;RNG=mulberry32((S.seed^Math.imul(S.r+1,2654435761))>>>0);ACT[S.seq[S.r]](el);RNG=MR;
+  R={fail:0,done:false};renderDots();const el=act();el.innerHTML="";el._trace=null;RNG=mulberry32((S.seed^Math.imul(S.r+1,2654435761))>>>0);ACT[S.seq[S.r]](el);RNG=MR;fitRows();
 }
+/* Hàng ô đáp án (.lrow chữ, .opts số): kích thước tính bằng PX từ bề rộng khung chơi, không dựa vào flex-shrink + max-width:cqw — trên iPhone thật các ô rộng gấp ~1,5 lần và tràn ra ngoài khung (Chrome giả lập thì đúng). */
+function fitRows(){const pl=$("play"),pw=pl&&pl.clientWidth;if(!pw)return;document.querySelectorAll("#act .lrow,#act .opts").forEach(row=>{const kids=[...row.children],n=kids.length;if(!n)return;const gap=.03*pw,cap=(row.classList.contains("lrow")?.34:.26)*pw,w=Math.floor(Math.min(cap,(pw*.92-(n-1)*gap)/n));row.style.gap=gap+"px";kids.forEach(b=>{b.style.flex="none";b.style.width=w+"px";b.style.minWidth="0";b.style.maxWidth=w+"px"})})}
+addEventListener("resize",()=>{try{fitRows()}catch(e){}});try{new ResizeObserver(()=>{try{fitRows()}catch(e){}}).observe($("play"))}catch(e){}
 function finishSession(){
   S.over=true;lessonOn=false;const stars=S.good>=5?3:S.good>=3?2:1,z=S.z;let info={z,stars,item:null,lvUp:0,full:false};
   const total=S.score+stars*10;
