@@ -4,7 +4,7 @@
    điện thoại dọc (390x844) = hàng nút trên cùng trong game (← ⏸ 🔊 ⋯) + menu ⋯.
    Kiểm cho MỌI game (Cozy 20 + Pop 12) × chế độ, ở màn chọn và (nếu bấm được nút bắt đầu) màn chơi:
    (a) không còn nút điều khiển (id trong CTRL) hiện ở NGOÀI khối quy định (nút nội dung chơi: ô chọn, đáp án, skin, album, thanh công cụ ↶ 🗑 ⚡ 💡… KHÔNG tính; danh sách ngoại lệ ở CONTENT);
-   (b) thứ tự các nút trong khối = KEYS (? 🔊 ngôn ngữ ↻ ⏸ 🏆 📷 📤 🔒 🍜) và vị trí tăng dần theo thứ tự đó (giống nhau giữa các game);
+   (b) thứ tự các nút trong khối = KEYS (? 🔊 ngôn ngữ ☀/🌙 ↻ ⏸ 🏆 📷 📤 🔒 🍜) và vị trí tăng dần theo thứ tự đó (giống nhau giữa các game);
    (c) rails: nút thu gọn cột ở góc TRÊN-TRÁI (cạnh ←), nút mở lại (.np-tab) sau khi thu NẰM ĐÚNG CÙNG toạ độ, không bao giờ ở nửa dưới màn hình;
    (d) mỗi chức năng điều khiển mà game có (nút gốc không hidden) có ĐÚNG MỘT nút hiện, bấm được trong khối; bấm hộ đúng nút thật (đếm click); 🔊 và ngôn ngữ phản chiếu trạng thái đúng.
    --games=id,id: chỉ các game đó; --port=N: cổng http (chạy song song nhiều tiến trình). --quick: 3 game đại diện × 5 chế độ (nối vào check.js). --all-games: cả 32 game × 5 chế độ. Không cờ: 32 game × 9 chế độ. Thoát mã 1 nếu có lỗi. */
@@ -13,7 +13,8 @@ const args = process.argv.slice(2), quick = args.includes("--quick"), verbose = 
 const root = (args.find(a => a.startsWith("--root=")) || "").slice(7) || path.join(__dirname, "..", ".."), shots = (args.find(a => a.startsWith("--shots=")) || "").slice(8);
 const PORT = +((args.find(a => a.startsWith("--port=")) || "").slice(7)) || 8887 , B = "http://localhost:" + PORT + "/";
 const wait = ms => new Promise(r => setTimeout(r, ms)), fails = [], note = (ok, m) => { if (!ok) { fails.push(m); console.log("  ✗ " + m); } };
-const KEYS = ["help", "snd", "lang", "restart", "pause", "board", "cam", "shr", "lock", "pass"];
+/* PHẢI giống KEYS trong shared/hud.js (thêm "theme" từ v2026.11.13: nút Sáng/Tối trong khối HUD) */
+const KEYS = ["help", "snd", "lang", "theme", "restart", "pause", "board", "cam", "shr", "lock", "pass"];
 const COZY = fs.readdirSync(path.join(root, "cozyplay", "games")).sort(), POP = fs.readdirSync(path.join(root, "popplay", "games")).sort();
 const allG = args.includes("--all-games");
 const GAMES = quick && !allG ? [["cozyplay", "ga-me-ban-trung"], ["cozyplay", "dap-deadline"], ["popplay", "pop-fly"]] : COZY.map(g => ["cozyplay", g]).concat(POP.map(g => ["popplay", g]));

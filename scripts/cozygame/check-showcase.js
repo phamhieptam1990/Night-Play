@@ -21,7 +21,8 @@ const MEASURE = kind => {
   if (de.scrollHeight > vh + 1 || de.scrollWidth > vw + 1) out.errs.push("trang cuộn/tràn");
   if (main.scrollHeight > main.clientHeight + 1) out.errs.push("main cuộn " + main.scrollHeight + ">" + main.clientHeight);
   out.on = vis(host); out.tiny = main.classList.contains("sc-tiny");
-  const tiles = [...document.querySelectorAll("#grid .tile")].filter(vis), mn = kind === "cozy" ? (vw <= 520 && vh >= 760 ? 71.5 : (vw > vh && vh < 560 ? 63.5 : 87.5)) : (vw > vh && vh < 560 ? 59.5 : 63.5);
+  /* điện thoại dọc thấp >= 620px: sân khấu vẫn hiện (commit 5bf539a, ngưỡng 128px) nên lưới 4 cột co ô còn ~74px — chủ ý, vẫn >= 71.5 */
+  const tiles = [...document.querySelectorAll("#grid .tile")].filter(vis), mn = kind === "cozy" ? (vw <= 520 && vh >= 620 ? 71.5 : (vw > vh && vh < 560 ? 63.5 : 87.5)) : (vw > vh && vh < 560 ? 59.5 : 63.5);
   for (const t of tiles) { const r = t.getBoundingClientRect(); if (r.left > -1 && r.right < vw + 1 && (r.width < mn || r.height < mn)) { out.errs.push("ô game nhỏ " + Math.round(r.width)); break; } }
   if (!tiles.length) out.errs.push("lưới rỗng");
   const pt = document.getElementById("puToday"); out.puToday = vis(pt);

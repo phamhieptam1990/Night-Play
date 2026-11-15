@@ -76,7 +76,7 @@ const inter = (a, b) => a.l < b.r - 1 && a.r > b.l + 1 && a.t < b.b - 1 && a.b >
           if (r.scroll.gw != null) note(r.scroll.gw <= 2 && r.scroll.gh <= 2, tag + ": trong game cuộn/tràn (" + r.scroll.gw + "," + r.scroll.gh + ")");
           if (!r.land) { note(!r.hud, tag + ": màn DỌC không được bật HUD gọn"); continue; }
           if (r.title) { note(r.title.lines <= 2, tag + ": tên game " + r.title.lines + " dòng (>2): " + r.title.txt); note(!r.title.cut, tag + ": tên game bị cắt: " + r.title.txt); }
-          if (r.ask) { const a = r.ask; note(a.lines <= 3, tag + ": thẻ nhắc việc " + a.lines + " dòng"); note(a.w >= 140 || a.col || W >= 900, tag + ": thẻ nhắc việc rộng " + Math.round(a.w) + "px (<140) mà không ở dạng gọn"); note(a.bw <= 44.5 && a.bh <= 44.5, tag + ": nút loa " + Math.round(a.bw) + "x" + Math.round(a.bh) + " (>44)"); note(!a.cut, tag + ": chữ thẻ nhắc việc bị cắt"); note(a.fs >= 11, tag + ": chữ thẻ nhắc việc " + a.fs + "px (<11)"); }
+          if (r.ask) { const a = r.ask; note(a.lines <= 3, tag + ": thẻ nhắc việc " + a.lines + " dòng"); note(a.w >= 140 || a.col || W >= 900, tag + ": thẻ nhắc việc rộng " + Math.round(a.w) + "px (<140) mà không ở dạng gọn"); const sp = portal === "popplay" ? 56.5 : 44.5; /* Pop: mọi nút >= 56px theo popnp.css (check-popbtn.js) nên loa thẻ nhắc việc 56 là CHỦ Ý; Cozy giữ 44 */ note(a.bw <= sp && a.bh <= sp, tag + ": nút loa " + Math.round(a.bw) + "x" + Math.round(a.bh) + " (>44)"); note(!a.cut, tag + ": chữ thẻ nhắc việc bị cắt"); note(a.fs >= 11, tag + ": chữ thẻ nhắc việc " + a.fs + "px (<11)"); }
           if (r.rails) continue;
           if (!r.hud) { if (!r.docked && r.native && r.native.length) note(false, tag + ": game có " + r.native.join(",") + " mà HUD không bật"); continue; }
           nHud++;
@@ -91,7 +91,7 @@ const inter = (a, b) => a.l < b.r - 1 && a.r > b.l + 1 && a.t < b.b - 1 && a.b >
             if (ref) note(Math.abs(b.x - ref.x) <= 1.5, tag + ": nút " + b.k + " lệch trục X " + Math.round(b.x - ref.x) + "px so với ←");
             note(b.l >= 0 && b.t >= 0 && b.r <= W && b.b <= H, tag + ": nút " + b.k + " ngoài khung nhìn");
             note(b.hit, tag + ": nút " + b.k + " bị che bởi " + b.by);
-            note(b.r <= r.fl + 1, tag + ": nút " + b.k + " nằm trong khung game (r=" + Math.round(b.r) + " > " + Math.round(r.fl) + ")");
+            /* khung iframe của cổng nay phủ TOÀN bề ngang (nền ngoài cột do widebg.js vẽ, GAME_RULES popnp) nên "nằm ngoài iframe" không còn đúng; điều cần giữ là KHÔNG che vùng chơi — đo bằng r.play bên dưới (#play,.play,#cvw,.ask,.hud...) */
             for (const p of r.play || []) note(!inter(b, p), tag + ": nút " + b.k + " chồng lên " + p.n);
           }
           for (let i = 0; i < bt.length; i++) for (let j = i + 1; j < bt.length; j++) note(!inter(bt[i], bt[j]), tag + ": nút " + bt[i].k + " chồng " + bt[j].k);

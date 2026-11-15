@@ -22,7 +22,8 @@ const SCAN = exc => {
       if (r.right < 0 || r.bottom < 0 || r.left > w.innerWidth || r.top > w.innerHeight) return; if (e.matches(exc) || e.closest(exc)) return;
       const txt = (e.textContent || "").replace(/\s+/g, "").trim(), hasSvg = !!e.querySelector("svg"); if (!hasSvg && txt.length > 3) return; if (!hasSvg && !txt) return;
       const bg = num(s.backgroundColor), a = bg.length > 3 ? bg[3] : 1, hasImg = s.backgroundImage !== "none";
-      const bl = hasImg ? (() => { const st = (s.backgroundImage.match(/rgba?\([^)]*\)/g) || []).map(num); return st.length ? Math.max(...st.map(c => { const al = c.length > 3 ? c[3] : 1; return L(c[0] * al + 255 * (1 - al), c[1] * al + 255 * (1 - al), c[2] * al + 255 * (1 - al)); })) : 0; })() : a < .05 ? -1 : L(bg[0] * a + 255 * (1 - a), bg[1] * a + 255 * (1 - a), bg[2] * a + 255 * (1 - a));
+      const bl = hasImg ? (() => { const layers = s.backgroundImage.split(/(?=linear-gradient\()/).filter(x => /rgba?\(/.test(x)), opq = layers.find(x => (x.match(/rgba?\([^)]*\)/g) || []).map(num).every(c => (c.length > 3 ? c[3] : 1) >= .9)), src = opq || s.backgroundImage;   /* chữ nằm trên lớp nền ĐẶC đầu tiên (padding-box), không phải lớp viền border-box sáng ở dưới cùng */
+        const st = (src.match(/rgba?\([^)]*\)/g) || []).map(num); return st.length ? Math.max(...st.map(c => { const al = c.length > 3 ? c[3] : 1; return L(c[0] * al + 255 * (1 - al), c[1] * al + 255 * (1 - al), c[2] * al + 255 * (1 - al)); })) : 0; })() : a < .05 ? -1 : L(bg[0] * a + 255 * (1 - a), bg[1] * a + 255 * (1 - a), bg[2] * a + 255 * (1 - a));
       const ink = num(s.color), il = L(ink[0], ink[1], ink[2]);
       out.push({ n: tag + " " + (e.id ? "#" + e.id : e.tagName.toLowerCase() + "." + (e.className + "").split(" ")[0]), w: Math.round(r.width), bl, il, cr: bl < 0 ? 99 : (Math.max(il, bl) + .05) / (Math.min(il, bl) + .05) });
     });

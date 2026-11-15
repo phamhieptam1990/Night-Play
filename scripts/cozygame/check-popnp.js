@@ -36,11 +36,13 @@ const MEASURE = () => {
   const db = [...document.querySelectorAll(".play .dbar")].find(vis);
   if (db) { const b = cs(db).backgroundImage; o.dbar = /rgb\(106, 72, 240\)/.test(b) && /rgb\(194, 65, 12\)/.test(b); o.dbarInk = L(num(cs(db).color)); }
   const panelC = num(rs.getPropertyValue("--panel").trim().replace(/^#(..)(..)(..)$/, (m, a, b, c) => "rgb(" + [a, b, c].map(h => parseInt(h, 16)).join(",") + ")")), o2 = [];
-  document.querySelectorAll(".side .hud,.side .ask").forEach(e => { if (!vis(e)) return; const b = num(cs(e).backgroundColor); if (!b[3] && cs(e).backgroundImage === "none") return;
+  document.querySelectorAll(".side .hud,.side .ask").forEach(e => { if (!vis(e)) return; let b = num(cs(e).backgroundColor); if (!b[3] && cs(e).backgroundImage === "none") return;
+    if (!b[3]) { const st = lastStops(cs(e).backgroundImage); if (st.length) b = st[st.length - 1]; }   /* nền là gradient (màu nền trong suốt): đo theo màu cuối của gradient, không coi như nền trang */
     const t = [...e.querySelectorAll("b,span")].find(x => vis(x) && x.textContent.trim()) || e; o2.push({ n: e.className, cr: cr(L(num(cs(t).color)), L(over(b, base))) }); });
   o.panels = o2;
   const lv = [...document.querySelectorAll("#home .lvs .lvb:not(.on)")].find(vis);
-  if (lv) { const p = lv.closest(".lvs"), hb = home ? lastStops(cs(home).backgroundImage) : [], under = hb.length ? over(hb[hb.length - 1], base) : base; o.lvb = cr(L(num(cs(lv).color)), L(over(num(cs(p).backgroundColor), under))); }
+  if (lv) { const p = lv.closest(".lvs"), hb = home ? lastStops(cs(home).backgroundImage) : [], under = hb.length ? over(hb[hb.length - 1], base) : base; let chip = num(cs(lv).backgroundColor); if (!chip[3]) { const bi = cs(lv).backgroundImage, layers = bi.split(/(?=linear-gradient\()/).filter(x => /rgba?\(/.test(x)), opq = layers.find(x => (x.match(/rgba?\([^)]*\)/g) || []).map(num).every(c => (c.length > 3 ? c[3] : 1) >= .9)), st = ((opq || bi).match(/rgba?\([^)]*\)/g) || []).map(num); if (st.length) chip = st[st.length - 1]; }   /* lớp nền ĐẶC đầu tiên (padding-box), không phải lớp viền sáng dưới cùng */   /* nền RIÊNG của chip (nút tròn tối chữ trắng) */
+    o.lvb = cr(L(num(cs(lv).color)), L(over(chip, over(num(cs(p).backgroundColor), under)))); }
   const wd = document.getElementById("npWide"); if (wd && innerWidth >= 700 && cs(wd).display !== "none") { const st = lastStops(cs(wd).backgroundImage); o.wideL = st.length ? Math.max(...st.map(c => L(over(c, base)))) : -1; o.wideMin = st.length ? Math.min(...st.map(c => L(over(c, base)))) : -1; }
   const pn = document.querySelector("#npPmFan .pn");
   const bk = document.querySelector("#npPmFan .bk"); if (bk) { const r = bk.getBoundingClientRect(); o.bk = [r.left, r.top, innerWidth - r.right, innerHeight - r.bottom].map(Math.round); o.bkR = parseFloat(cs(bk).borderTopLeftRadius) || 0; }
@@ -68,6 +70,7 @@ const MEASURE = () => {
       if (W < 700 && !m.bodyBg) bad("body còn nền đặc che nền Night Pass");
       if (m.scroll) bad("trang bị cuộn");
       if (!m.home) bad("không thấy màn chọn (#home/#village/#ovStart)");
+      else if (m.homeMin === -1 && W > H) { /* màn NGANG chủ ý để màn chọn TRONG SUỐT trên nền họa tiết chung (#npWide, đã kiểm riêng ở dòng 'nền ngoài cột') */ }
       else if (dark ? m.homeL > .12 : m.homeMin < .6) bad(`màn chọn ${m.home} chưa phải nền Night Pass (L ${m.homeMin.toFixed(2)}–${m.homeL.toFixed(2)})`);
       if (W >= 700 && (m.wideL === undefined || (dark ? m.wideL > .12 : m.wideMin < .6))) bad(`nền ngoài cột chưa phải nền Night Pass (L ${m.wideMin === undefined ? "?" : m.wideMin.toFixed(2) + "–" + m.wideL.toFixed(2)})`);
       if (m.dbar === false) bad(".dbar chưa gradient tím–cam"); if (m.dbar && m.dbarInk < .9) bad(".dbar chữ không trắng");

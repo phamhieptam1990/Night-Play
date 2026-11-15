@@ -125,7 +125,10 @@ const O = "https://nightplay.vn";
         note(!m.small.length, tag, "nút/liên kết <44px: " + m.small.slice(0, 3).map(s => s.t + " " + Math.round(s.w) + "x" + Math.round(s.h)).join(" | "));
         for (const c of m.chips) { const fg = rgb(c.fg), bg = rgb(c.bg); if (fg && bg) note(cr(fg, bg) >= 4.5, tag, "tương phản «" + c.t + "» " + cr(fg, bg).toFixed(2)); }
         if (W < 1000) note(m.mbtn || (W < 340 && !m.links), tag, "dưới 1000px phải có nút menu ☰"); else note(m.links && !m.mbtn, tag, "từ 1000px menu phải hiện thẳng");
-        if (W >= 340) note(m.lang && m.theme, tag, "thiếu công tắc ngôn ngữ/giao diện trên thanh"); else await pg.evaluate(() => 0);
+        /* từ 1000px: công tắc riêng trên thanh; dưới 1000px (thiết kế mới, commit 8be52ac): ngôn ngữ + Giao diện nằm trong menu ☰ (mục .xtra), nên mở ☰ và đo ở đó */
+        if (W >= 1000) note(m.lang && m.theme, tag, "thiếu công tắc ngôn ngữ/giao diện trên thanh");
+        else if (W >= 340) { await pg.click(".top .mbtn"); await wait(150); const mx = await pg.evaluate(() => { const v = e => !!e && e.offsetParent !== null && e.getBoundingClientRect().height >= 44; return { lang: v(document.querySelector("#hlinks a[data-set-lang]")), theme: v(document.querySelector("#hlinks [data-theme-toggle]")) }; });
+          note(mx.lang && mx.theme, tag, "menu ☰ thiếu mục ngôn ngữ/Giao diện (>=44px) " + JSON.stringify(mx)); await pg.keyboard.press("Escape"); await wait(100); }
         /* cuộn hết trang để ảnh lazy tải, rồi đo ảnh */
         await pg.evaluate(async () => { for (let y = 0; y < document.body.scrollHeight; y += 400) { scrollTo(0, y); await new Promise(r => setTimeout(r, 140)); } scrollTo(0, 0); for (let k = 0; k < 40 && [...document.images].some(i => !i.complete); k++) await new Promise(r => setTimeout(r, 100)); }); await wait(300);
         const im = await pg.evaluate(() => [...document.querySelectorAll("img")].map(i => ({ s: i.getAttribute("src"), ok: i.complete && i.naturalWidth > 0, w: i.getAttribute("width"), nw: i.naturalWidth })));
@@ -142,7 +145,7 @@ const O = "https://nightplay.vn";
       await pg.click(".top .mbtn"); note(await pg.evaluate(() => document.getElementById("hlinks").classList.contains("open") && !!document.querySelector('#hlinks a[href="/moi/"][aria-current=page]')), "menu", "bấm ☰ phải mở menu có mục Mới");
       await pg.keyboard.press("Escape"); note(await pg.evaluate(() => !document.getElementById("hlinks").classList.contains("open")), "menu", "Esc phải đóng menu");
       await pg.evaluate(() => { const e = document.getElementById("hOlder"); scrollTo(0, e.getBoundingClientRect().top + scrollY - 120); }); await wait(300);
-      await Promise.all([pg.waitForNavigation({ waitUntil: "load" }), pg.click(".top .tools .lang")]); await wait(600);
+      await pg.click(".top .mbtn"); await wait(150); await Promise.all([pg.waitForNavigation({ waitUntil: "load" }), pg.click("#hlinks a[data-set-lang]")]); await wait(600);
       note(await pg.evaluate(() => location.pathname === "/en/moi/"), "VI/EN", "công tắc không sang /en/moi/");
       const top = await pg.evaluate(() => { const r = document.getElementById("hOlder").getBoundingClientRect(); return r.top; }); note(top > -40 && top < 400, "VI/EN", "không giữ vị trí cuộn (h2 'Earlier launches' ở top=" + Math.round(top) + ")");
       await pg.close(); }
