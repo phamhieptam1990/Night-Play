@@ -287,7 +287,8 @@ html.npp-kid .npSay.on{background:linear-gradient(135deg,#6C4BF2,#C2410C);border
 html.npp-kid .npSay svg{width:28px;height:28px}
 /* chữ popup to hơn cho dễ nhìn (Pop dọc: ý hướng dẫn 16 → 19px; nhãn giao diện 15 → 17px) */
 @media (orientation:portrait){
-  html.npp-kid #ovHow .hwL li{font-size:max(19px,5vw)!important;line-height:1.3}
+  html.npp-kid #ovHow h2{font-size:var(--tip-t)!important;line-height:1.15!important}
+  html.npp-kid #ovHow .hwL li{font-size:var(--tip-b)!important;line-height:1.3}
   html.npp-kid #ovSkin .npc .skc span{font-size:17px!important}
   html:not(.npp-kid) #ovSkin .npc .skc .sx b{font-size:17px!important}
 }
@@ -301,3 +302,13 @@ html #setup .proNote{font-size:14px}
 html #ovPay .npc p,html #pay .pw-p,html #pay p{font-size:17px!important;line-height:1.4}
 html #ovPay .npc h2{font-size:clamp(24px,6.4vw,30px)!important}
 @media (max-height:520px) and (min-aspect-ratio:11/10){html #setup .chip b{font-size:13px}html #setup .sh-h{font-size:19px}html #setup .sec small{font-size:11.5px}}
+
+/* THANG CỠ CHỮ CHUNG cho "Cách chơi" (#ovHow: màn Bắt đầu) và "Hướng dẫn" (popup ?): LUÔN BẰNG NHAU trong cùng một app; Pop Play (trẻ nhỏ) to hơn Night Play. --tip-t = tiêu đề, --tip-b = nội dung. Mỗi popup chỉ tự thu NHỎ khi tràn (howfit.js / pophelp.js / help.js), không bao giờ khác cỡ gốc. */
+:root{--tip-t:22px;--tip-b:17px}
+html.npp-kid{--tip-t:26px;--tip-b:20px}
+@media (orientation:landscape) and (max-height:520px){:root{--tip-t:20px;--tip-b:16px}html.npp-kid{--tip-t:23px;--tip-b:18px}}
+
+/* GỐC của lỗi "popup nhỏ vừa khung chơi, không full" cứ lặp lại: trên Chrome/Safari có layout containment (html.np-fixcb), popup position:fixed bị NHỐT trong khung game (.play, 3:4) thay vì phủ cả cửa sổ. Thay vì vá từng popup: khi MỘT popup của game đang mở, KHUNG GAME tự phủ trọn cửa sổ → popup nào (Cách chơi, Giao diện, Night Pass, thách đấu, thu thập, phụ huynh) cũng full như khi không bị nhốt. Màn bắt đầu/kết thúc/tạm dừng giữ nguyên. */
+html.npp-kid.np-fixcb .play:has(:is(#ovHow,#ovSkin,#ovPay,#ovCh,#ovGate,#ovColl):not([hidden])){position:fixed!important;inset:0!important;width:auto!important;height:auto!important;max-width:none!important;max-height:none!important;aspect-ratio:auto!important;margin:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:none!important;transform:none!important;z-index:2147483000!important}
+html.npp-kid.np-fixcb .play:has(:is(#ovHow,#ovSkin,#ovPay,#ovCh,#ovGate,#ovColl):not([hidden]))::after{display:none!important}
+html.npp-kid #ovHow .row,html.npp-kid #ovCh .row{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:center;justify-content:center;gap:10px}   /* loa + Bắt đầu luôn CÙNG MỘT hàng */

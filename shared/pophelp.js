@@ -27,13 +27,15 @@
     "#phCard{position:relative;display:flex;flex-direction:column;gap:calc(var(--f,16px)*.55);width:100%;max-width:100%;max-height:100%;box-sizing:border-box;overflow:hidden;padding:calc(var(--f,16px)*.9);border-radius:calc(var(--f,16px)*1.5);background:linear-gradient(165deg,#2b2064,#171236 62%,#120e2b);color:#fff;border:calc(var(--f,16px)*.16) solid rgba(170,150,255,.6);box-shadow:0 10px 36px rgba(0,0,0,.55),0 0 28px rgba(124,92,255,.38),inset 0 1px 0 rgba(255,255,255,.18);animation:phIn .18s ease-out}" +
     "@keyframes phIn{from{transform:scale(.92);opacity:0}}" +
     "#phHd{display:flex;align-items:center;gap:calc(var(--f,16px)*.6)}" +
-    "#phTt{flex:1;min-width:0;margin:0;font-size:calc(var(--f,16px)*1.35);line-height:1.1;font-weight:800;color:#fff}" +
+    "#phTt{flex:1;min-width:0;margin:0;font-size:calc(var(--f,16px)*1.3);line-height:1.1;font-weight:800;color:#fff}" +
     "#phSay{flex:none;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;padding:0;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.28)!important;box-sizing:border-box}" +
     "#phX{flex:none;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;padding:0;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.28)!important;box-sizing:border-box;outline:none}#phX:focus-visible{outline:2px solid #fff;outline-offset:3px}#phX:active{transform:scale(.94)}" +
     "#phSay.on{background:rgba(255,255,255,.28);border-color:#fff!important}" +
     /* nút NGHE to có chữ (bé không tìm thấy loa tròn nhỏ): thay loa tròn trong tiêu đề */
     "#phSay{display:none!important}#phAct{flex:none;display:flex;align-items:stretch;gap:calc(var(--f,16px)*.6)}#phAct #phGo{flex:1 1 auto;min-width:0}#phLis{flex:none;display:grid;place-items:center;width:56px;min-width:56px;min-height:56px;padding:0;border-radius:999px;color:#fff;cursor:pointer;background:rgba(124,92,255,.38);border:1.5px solid rgba(190,175,255,.7);box-sizing:border-box}#phLis.on{background:linear-gradient(135deg,#6C4BF2,#C2410C);border-color:#fff}#phLis[hidden]{display:none!important}#phLis svg{width:28px;height:28px}" +
     "@media (orientation:landscape) and (max-height:500px){#phLis{position:fixed;right:8px;bottom:calc(12px + var(--f,16px)*.9)}}" +
+    /* màn ngang thấp: 2 CỘT như màn Cách chơi (trái: tiêu đề + ghi chú + nút, phải: các ý) → giữ NGUYÊN cỡ chữ chung (--tip-b) thay vì tự thu nhỏ còn 12–15px */
+    "@media (orientation:landscape) and (max-height:500px){#phCard{display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr);grid-template-rows:auto auto 1fr;column-gap:calc(var(--f,16px)*1.1);row-gap:calc(var(--f,16px)*.5);align-content:center}#phHd{grid-column:1;grid-row:1}#phLs{grid-column:2;grid-row:1 / span 3;align-self:center}#phNt{grid-column:1;grid-row:2}#phAct{grid-column:1;grid-row:3;align-self:end}}" +
     "#phLs{display:flex;flex-direction:column;gap:calc(var(--f,16px)*.5);margin:0;padding:0;list-style:none}" +
     "#phLs li{display:flex;align-items:center;gap:calc(var(--f,16px)*.7);padding:calc(var(--f,16px)*.55) calc(var(--f,16px)*.75);border-radius:calc(var(--f,16px)*1.1);background:rgba(124,92,255,.2);border:1px solid rgba(170,150,255,.42);box-shadow:inset 0 0 14px rgba(124,92,255,.14)}" +
     "#phLs i{flex:none;font-style:normal;font-size:calc(var(--f,16px)*2);line-height:1;min-width:1.1em;text-align:center}" +
@@ -70,7 +72,7 @@
     if (land) { var cw = Math.min(W - 144, 780), sx = Math.max(72, (W - cw) / 2); ov.style.padding = "12px " + sx + "px"; w = W - 2 * sx; }   /* màn ngang (điện thoại): thẻ rộng ra gần hết cửa sổ (chừa 72px cột nút ← ⋯) để chữ to hơn */
     else ov.style.padding = pd + "px " + Math.max(0, W - pr.right + pd) + "px " + pd + "px " + Math.max(0, pr.left + pd) + "px";
     ov.style.setProperty("--u", (w / 100) + "px");
-    var f = land ? Math.max(14, Math.min(26, w / 24)) : Math.max(14, Math.min(22, w / 19)), g = 0;   /* cỡ chữ vừa phải: trước đây w/17 (tới 26px) làm chữ to, dòng bị ép xuống nhìn như bị nén */
+    var tb = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--tip-b")) || (land ? 18 : 20), f = tb, g = 0;   /* cỡ gốc = thang chung --tip-b (bằng màn Cách chơi); chỉ thu nhỏ khi tràn */   /* cỡ chữ vừa phải: trước đây w/17 (tới 26px) làm chữ to, dòng bị ép xuống nhìn như bị nén */
     card.style.setProperty("--f", f + "px");
     while ((card.scrollHeight > card.clientHeight + 1 || card.scrollWidth > card.clientWidth + 1) && f > 9 && g++ < 60) { f -= .5; card.style.setProperty("--f", f + "px"); }
   }
