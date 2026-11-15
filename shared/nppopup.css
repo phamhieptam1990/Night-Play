@@ -275,3 +275,8 @@ html #setup .proNote{color:#C9CCF0}
   html:not(.npp-kid) #ovSkin .skgrid>.sk>img{display:none!important}
   html:not(.npp-kid) #ovSkin .skgrid>.sk>span{flex:1 1 auto;min-width:0;width:auto!important;max-width:none!important;font-size:13px!important;line-height:1.15;text-align:left;white-space:normal;overflow-wrap:anywhere}
 }
+
+/* Pop: màn "Cách chơi / Bắt đầu" (#ovHow) khó nhìn — lớp phủ chỉ tối 62–66% + mờ 4px nên thanh nút, tên game, thẻ khu và vòng sáng phía sau lộ xuyên qua, tranh chữ. Phủ tối đậm hơn (90%) + mờ 10px + quầng tím nhẹ để chỉ còn nội dung hướng dẫn nổi lên. */
+html.npp-kid #ovHow:not([hidden]){background:radial-gradient(520px 340px at 50% 22%,rgba(124,92,255,.28),transparent),rgba(8,6,24,.92)!important;-webkit-backdrop-filter:blur(10px)!important;backdrop-filter:blur(10px)!important}
+html.npp-kid #ovHow:not([hidden]) h2{text-shadow:0 2px 12px rgba(0,0,0,.6)}
+html.npp-kid #ovHow:not([hidden]) #hwBack{background:var(--np-orange-on,#CC4C0E)!important;border:2px solid rgba(255,255,255,.7)!important;color:#fff!important;box-shadow:0 3px 10px rgba(0,0,0,.35)!important}   /* ✕ cùng kiểu mọi popup (trước: xám xanh trong suốt chìm vào nền) */

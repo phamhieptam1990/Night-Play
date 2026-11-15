@@ -15,12 +15,12 @@
     /* Night Pass: thẻ tím tối + viền sáng + quầng tím (không nền trắng), mỗi ý một thẻ có emoji/số, nút loa, nút "Đã hiểu!" to */
     "#hlpCard{position:relative;box-sizing:border-box;display:flex;flex-direction:column;gap:10px;width:100%;max-width:100%;max-height:92%;overflow:auto;background:linear-gradient(165deg,#2b2064,#171236 62%,#120e2b);color:#fff;border:2px solid rgba(170,150,255,.6);border-radius:26px;padding:14px 16px 16px;box-shadow:0 10px 36px rgba(0,0,0,.55),0 0 28px rgba(124,92,255,.38),inset 0 1px 0 rgba(255,255,255,.18);animation:hlpIn .18s ease-out}" +
     "@keyframes hlpIn{from{transform:scale(.92);opacity:0}}" +
-    "#hlpCard h3{margin:0 112px 0 0;min-height:44px;display:flex;align-items:center;font:800 clamp(20px,5.4cqw,26px)/1.1 var(--font);color:#fff}" +
+    "#hlpCard h3{margin:0 64px 0 0;min-height:44px;display:flex;align-items:center;font:800 calc(clamp(20px,5.4cqw,26px)*var(--hf,1))/1.1 var(--font);color:#fff}" +
     "#hlpB{display:flex;flex-direction:column;gap:8px}" +
     ".hlpIt{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:18px;background:rgba(124,92,255,.2);border:1px solid rgba(170,150,255,.42);box-shadow:inset 0 0 14px rgba(124,92,255,.14)}" +
-    ".hlpIt i{flex:none;width:1.6em;text-align:center;font-style:normal;font-size:clamp(24px,7cqw,32px);line-height:1}" +
+    ".hlpIt i{flex:none;width:1.6em;text-align:center;font-style:normal;font-size:calc(clamp(24px,7cqw,32px)*var(--hf,1));line-height:1}" +
     ".hlpIt i.n{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:linear-gradient(135deg,#6C4BF2,#C2410C);font:800 16px var(--font);color:#fff}" +
-    ".hlpIt span{flex:1;min-width:0;font:700 clamp(15px,4.2cqw,19px)/1.35 var(--font);color:#fff}" +
+    ".hlpIt span{flex:1;min-width:0;font:700 calc(clamp(15px,4.2cqw,19px)*var(--hf,1))/1.3 var(--font);color:#fff}" +
     "#hlpGo{flex:none;min-height:50px;border-radius:999px;border:1px solid rgba(255,255,255,.4);padding:0 22px;font:800 clamp(17px,4.6cqw,21px) var(--font);color:#fff;cursor:pointer;background:linear-gradient(135deg,#6C4BF2,#C2410C);box-shadow:0 5px 16px rgba(108,75,242,.5),inset 0 1px 0 rgba(255,255,255,.3)}" +
     "#hlpGo:active{transform:scale(.97)}" +
     /* nút NGHE to có chữ thay loa tròn nhỏ (bé không tìm thấy) */
@@ -30,9 +30,9 @@
     "@media (orientation:landscape) and (max-height:500px){" +
     /* điện thoại ngang: khung game Cozy hẹp (~1/3 màn) nên lớp phủ phủ CẢ CỬA SỔ (position:fixed), thẻ rộng tới 760px chừa 72px hai bên cho cột nút ← 🔊 ⋯ → chữ/ô to, mỗi ý thường một dòng; cỡ chữ theo chiều cao màn để không cắt hàng nút; loa + Đã hiểu vẫn cùng một hàng */
     "#hlpOv{position:fixed;padding:6px 72px}#hlpCard{width:100%;max-width:760px;max-height:none;overflow:hidden;padding:10px 16px 12px;gap:6px;border-radius:22px}" +
-    "#hlpCard h3{min-height:40px;font-size:calc(clamp(17px,6vh,22px)*var(--hf,1));margin-right:112px}#hlpB{gap:6px}.hlpIt{padding:5px 12px;gap:10px;border-radius:14px}.hlpIt i{font-size:calc(clamp(20px,7vh,28px)*var(--hf,1));width:1.4em}.hlpIt i.n{width:28px;height:28px;font-size:14px}.hlpIt span{font-size:calc(clamp(13px,4.8vh,18px)*var(--hf,1));line-height:1.25}" +
+    "#hlpCard h3{min-height:40px;font-size:calc(clamp(17px,6vh,22px)*var(--hf,1));margin-right:64px}#hlpB{gap:6px}.hlpIt{padding:5px 12px;gap:10px;border-radius:14px}.hlpIt i{font-size:calc(clamp(20px,7vh,28px)*var(--hf,1));width:1.4em}.hlpIt i.n{width:28px;height:28px;font-size:14px}.hlpIt span{font-size:calc(clamp(13px,4.8vh,18px)*var(--hf,1));line-height:1.25}" +
     "#hlpAct #hlpGo,#hlpLis{min-height:48px}#hlpLis{width:52px;min-width:52px}}" +
-    "@media (max-width:520px) and (orientation:portrait){#hlpCard h3{margin-right:132px;min-height:56px}#hlpCard{padding-top:12px}#hlpX{right:12px;top:12px;width:var(--tap-lg,56px);height:var(--tap-lg,56px)}#hlpSay{right:76px;top:12px;width:var(--tap-lg,56px);height:var(--tap-lg,56px)}}" +
+    "@media (max-width:520px) and (orientation:portrait){#hlpCard h3{margin-right:72px;min-height:56px}#hlpCard{padding-top:12px}#hlpX{right:12px;top:12px;width:var(--tap-lg,56px);height:var(--tap-lg,56px)}#hlpSay{right:76px;top:12px;width:var(--tap-lg,56px);height:var(--tap-lg,56px)}}" +
     "@media (prefers-reduced-motion:reduce){#hlpCard{animation:none}}";
   document.head.appendChild(css);
   function texts() {
@@ -63,7 +63,7 @@
     var stopSay = function () { try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {} speaking = false; mark(false); };
     var close = function () { ov.hidden = true; stopSay(); };
     /* thẻ không cắt hàng nút / không cuộn: nếu nội dung cao hơn thẻ thì thu cỡ chữ (--hf) từng bước cho tới khi vừa (màn ngang thấp, khung hẹp) */
-    var hlpFit = function () { var c = ov.querySelector("#hlpCard"); if (!c || ov.hidden) return; var f = 1, g = 0; c.style.setProperty("--hf", "1"); while (c.scrollHeight > c.clientHeight + 1 && f > .55 && g++ < 30) { f -= .04; c.style.setProperty("--hf", f.toFixed(2)); } };
+    var hlpFit = function () { var c = ov.querySelector("#hlpCard"); if (!c || ov.hidden) return; var f = 1, g = 0; c.style.setProperty("--hf", "1"); while (c.scrollHeight > c.clientHeight + 1 && f > .5 && g++ < 40) { f -= .04; c.style.setProperty("--hf", f.toFixed(2)); } };
     addEventListener("resize", function () { setTimeout(hlpFit, 60); }); addEventListener("orientationchange", function () { setTimeout(hlpFit, 300); });
     ov.querySelector("#hlpGo").onclick = close;
     say.hidden = !(window.speechSynthesis && window.SpeechSynthesisUtterance); lis.hidden = say.hidden;
