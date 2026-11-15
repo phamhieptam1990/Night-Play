@@ -544,3 +544,19 @@ window.NP = (function () {
     setInterval(tick, 800); addEventListener("resize", tick); addEventListener("load", tick);
   } catch (e) {}
 })();
+/* SAFARI/iOS CŨ: khung game dùng container-type:size kéo theo "layout containment" → phần tử position:fixed bên trong (popup Giao diện/Night Pass…) bị NHỐT trong khung game thay vì phủ cả cửa sổ (Chrome và Safari mới thì không). Đo thật một lần: nếu bị nhốt thì đặt html.np-fixcb để CSS (nppopup.css, poplandscape.css) dùng cách khác (lớp mờ toàn cửa sổ + bố cục ô theo khung). */
+(function () {
+  "use strict";
+  try {
+    var run = function () {
+      var h = document.createElement("div"), c = document.createElement("div");
+      h.style.cssText = "position:absolute;left:40px;top:40px;width:80px;height:80px;container-type:size;visibility:hidden;pointer-events:none";
+      c.style.cssText = "position:fixed;left:0;top:0;width:1px;height:1px";
+      h.appendChild(c); document.documentElement.appendChild(h);
+      var r = c.getBoundingClientRect(), contained = r.left > 20;
+      h.remove();
+      if (contained) document.documentElement.classList.add("np-fixcb");
+    };
+    if (document.body) run(); else document.addEventListener("DOMContentLoaded", run);
+  } catch (e) {}
+})();

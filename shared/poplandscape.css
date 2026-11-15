@@ -1427,3 +1427,18 @@ html.np-hudg:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>:is(.dbar,.
 
 /* popup Giao diện ở màn ngang rất thấp (<=340px cao): ô gọn hơn để thẻ không phải cuộn (một màn hình); đặt cuối file + html để thắng các luật .sw aspect-ratio phía trên */
 @media (min-aspect-ratio:11/10) and (max-height:340px){html.npp-kid #ovSkin .npc .skc .sw{height:34px!important;aspect-ratio:auto!important;font-size:22px!important}html.npp-kid #ovSkin .npc .skc{padding:4px!important;gap:3px!important}html.npp-kid #ovSkin .npc .skgrid{gap:6px!important}}
+
+/* Safari/iOS cũ (html.np-fixcb: popup bị nhốt trong khung game ~460px): màn ngang xếp 3 + 2 ô BẰNG NHAU theo bề rộng khung, không theo bề rộng cửa sổ (trước: 5 cột trên khung hẹp → ô cao hẹp, chữ xuống 3-4 dòng) */
+@media (min-aspect-ratio:11/10) and (max-height:520px){
+  html.np-fixcb #ovSkin .skgrid{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+  html.np-fixcb #ovSkin .skc{grid-column:span 2!important}
+  html.np-fixcb #ovSkin .skc:last-child:nth-child(3n+1){grid-column:3 / span 2!important}html.np-fixcb #ovSkin .skc:last-child:nth-child(3n+2){grid-column:4 / span 2!important}html.np-fixcb #ovSkin .skc:nth-last-child(2):nth-child(3n+1){grid-column:2 / span 2!important}
+  html.np-fixcb #ovSkin .skc .sw{height:min(16vh,62px)!important}
+  /* khung bị nhốt thấp (~320px): gọn hơn để thẻ vừa khung, không cắt tiêu đề/hàng cuối */
+  html.npp-kid.np-fixcb #ovSkin>.npc{padding:6px 10px 8px!important;gap:4px!important}
+  html.npp-kid.np-fixcb #ovSkin .npc h2{min-height:34px!important;font-size:16px!important}
+  html.npp-kid.np-fixcb #ovSkin .npc .skgrid{gap:6px!important;margin-top:12px!important}
+  html.npp-kid.np-fixcb #ovSkin .npc .skc{padding:4px!important;gap:2px!important}
+  html.npp-kid.np-fixcb #ovSkin .npc .skc .sw{height:min(11vh,40px)!important;aspect-ratio:auto!important;font-size:24px!important}
+  html.npp-kid.np-fixcb #ovSkin .npc .skc span{font-size:12px!important;line-height:1.1}
+}
