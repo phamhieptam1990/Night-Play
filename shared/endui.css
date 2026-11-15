@@ -46,3 +46,13 @@
 #enP .enPl,#enP .enPn{display:block}
 #enP .enPl{font-size:.42em;line-height:1.1;font-weight:800;letter-spacing:.04em;opacity:.92}
 #enP .enPn{font-size:1em;line-height:1.05;font-weight:800}
+
+/* Màn kết thúc trên điện thoại có thanh trình duyệt (khung chơi thấp): thẻ kết quả KHÔNG bị bóp (flex-shrink + overflow:hidden làm chip hạng/điểm tràn ra ngoài đáy thẻ rồi bị cắt), thay vào đó biểu tượng/điểm/lưới ô thu nhỏ theo chiều cao màn */
+.endui .endui-card{flex:none!important}
+.endui .mini{flex:none}
+@media (max-height:760px){.endui .endui-card{padding:4cqw 3cqw 3.6cqw}.endui .endui-card .bt{font-size:min(15cqw,9.5vh)}.endui .endui-card .big{font-size:min(21cqw,11vh);margin:.6cqw 0 1.4cqw}.endui .mini{width:min(30cqw,19vh);font-size:min(5.4cqw,3vh)}}
+@media (max-height:620px){.endui .endui-card .bt{font-size:min(12cqw,8vh)}.endui .endui-card .big{font-size:min(17cqw,10vh)}.endui .mini{width:min(24cqw,17vh)}}
+@media (max-height:760px){.endui{gap:1.8cqw!important}.endui .mini{width:min(26cqw,15vh);gap:.8cqw}.endui .mini span{min-height:6.4cqw}.endui>.row.endui-row .btn.alt[data-l]{padding:1.4cqw 1cqw}}
+/* iPhone SE (≈375x553 có thanh trình duyệt, 320x460 bản cũ): thu thêm để hàng nút dưới cùng chừa chỗ chữ nightplay.vn (≥24px) */
+@media (max-height:620px){.endui .endui-card{padding:3cqw 3cqw 2.6cqw}.endui .endui-card .bt{font-size:min(10cqw,7vh)}.endui .endui-card .big{font-size:min(15cqw,9vh);margin:.2cqw 0 1cqw}.endui .mini{width:min(20cqw,12vh)}.endui .chips{display:none}.endui>.row.endui-row .endui-share{min-height:11cqw}.endui>.row.endui-row .btn.alt[data-l]{padding:1cqw}}
+@media (max-height:500px){.endui .mini{display:none}.endui .endui-card .bt{font-size:min(9cqw,6vh)}}

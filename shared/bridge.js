@@ -560,3 +560,11 @@ window.NP = (function () {
     if (document.body) run(); else document.addEventListener("DOMContentLoaded", run);
   } catch (e) {}
 })();
+/* Nút loa TRONG popup hướng dẫn/Cách chơi (#phLis, #hlpLis, .npSay) phải phản ánh trạng thái âm thanh của game: tắt tiếng → loa gạch chéo + xám (class np-snd-off, CSS ở shared/btn.css). Bấm vẫn đọc to hướng dẫn. */
+(function () {
+  "use strict";
+  var SEL = "#phLis,#hlpLis,.npSay,#phSay,#hlpSay";
+  function off() { try { if (window.NPAudio) { if (NPAudio.muted && NPAudio.muted()) return true; if (NPAudio.get) return !NPAudio.get(); } } catch (e) {} return false; }
+  function sync() { var o = off(); [].forEach.call(document.querySelectorAll(SEL), function (b) { if (b.classList.contains("np-snd-off") !== o) b.classList.toggle("np-snd-off", o); }); }
+  setInterval(function () { if (!document.hidden) sync(); }, 400); sync();
+})();
