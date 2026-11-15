@@ -377,8 +377,8 @@ html:not(#np) :is(.npc .npx,#hlpX,#phX,#setupX,#ovHow #hwBack):focus-visible{out
 
 /* ✕ của thẻ "Tiếp tục ván dở" (#npResume .npr-x): cùng kiểu nút chuẩn như ✕ popup; KÍCH THƯỚC vẫn do shared/resume.js (syncX) ép bằng chiều cao thẻ */
 html:not(#np) #npResume .npr-x{display:grid!important;place-items:center;padding:0!important;border-radius:50%!important;font-size:0!important;line-height:0!important;color:#fff!important;
-  background:linear-gradient(135deg,var(--nb-1,#6C4BF2),var(--nb-2,#C2410C))!important;border:1px solid rgba(255,255,255,.42)!important;
-  box-shadow:0 6px 18px var(--nb-glow,rgba(108,75,242,.5)),0 2px 6px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.35)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  background:linear-gradient(100deg,#6a45ff,#ff5a1f)!important;border:0!important;   /* KHỚP HỆT nút "Tiếp tục ván dở" bên cạnh (.npr-go): cùng gradient, không viền, cùng cạnh dưới dày + quầng */
+  box-shadow:0 3px 0 rgba(0,0,0,.28),0 0 14px rgba(124,92,255,.5)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;animation:npRes 2.6s ease-in-out infinite}
 html:not(#np) #npResume .npr-x>*{display:none!important}
 html:not(#np) #npResume .npr-x::after{content:none!important;display:none!important}
 html:not(#np) #npResume .npr-x::before{content:""!important;display:block!important;width:22px;height:22px;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E") center/contain no-repeat}
