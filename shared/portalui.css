@@ -142,6 +142,10 @@ html[data-theme=dark] .pu-chip:focus-visible{outline-color:#fff}
 /* màn ngang thấp: thẻ + chip gọn */
 @media (orientation:landscape) and (max-height:520px){.pu-card{min-height:48px;padding-top:4px;padding-bottom:4px}.pu-ico{width:38px;height:38px}#puTop{margin-bottom:4px}}
 
+/* Mọi thiết bị: bỏ các chấm tròn chuyển trang dưới lưới (vuốt ngang / nút ‹ › vẫn đổi trang); thiết bị cảm ứng / điện thoại không còn nút ‹ › nên bỏ cả hàng cho lưới rộng + cao hơn */
+#gdots button:not(.gn){display:none!important}
+@media (max-width:520px),(hover:none){#grid.slide ~ #gdots{display:none!important}}
+
 /* Điện thoại dọc: bỏ hàng chấm trang dưới lưới (vuốt ngang vẫn đổi trang) để sân khấu/lưới cao hơn; slogan to hơn tên trang, màu nổi bật */
 @media (max-width:520px) and (orientation:portrait){
   #grid.slide ~ #gdots{display:none!important}
