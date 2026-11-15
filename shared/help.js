@@ -28,9 +28,9 @@
     "#hlpSay{position:absolute;right:64px;top:12px;width:44px;height:44px;min-width:44px;min-height:44px;box-sizing:border-box;display:grid;place-items:center;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;cursor:pointer}#hlpSay svg{width:22px;height:22px}#hlpLis svg{width:28px;height:28px}#hlpSay.on{background:rgba(255,255,255,.28);border-color:#fff}#hlpSay[hidden]{display:none}" +
     "#hlpX{position:absolute;right:12px;top:12px;width:44px;height:44px;min-width:44px;min-height:44px;box-sizing:border-box;display:grid;place-items:center;padding:0;line-height:1;border-radius:50%;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;font:800 18px var(--font);cursor:pointer}" +
     "@media (orientation:landscape) and (max-height:500px){" +
-    /* điện thoại ngang: khung game hẹp → thẻ dùng hết bề ngang khung, chữ/khoảng cách gọn để KHÔNG cắt hàng nút; loa + Đã hiểu vẫn cùng một hàng */
-    "#hlpOv{padding:8px 12px}#hlpCard{width:100%;max-height:none;overflow:hidden;padding:10px 14px 12px;gap:6px;border-radius:22px}" +
-    "#hlpCard h3{min-height:40px;font-size:20px;margin-right:112px}#hlpB{gap:6px}.hlpIt{padding:6px 12px;gap:10px;border-radius:14px}.hlpIt i{font-size:24px;width:1.4em}.hlpIt i.n{width:28px;height:28px;font-size:14px}.hlpIt span{font-size:15px;line-height:1.25}" +
+    /* điện thoại ngang: khung game Cozy hẹp (~1/3 màn) nên lớp phủ phủ CẢ CỬA SỔ (position:fixed), thẻ rộng tới 760px chừa 72px hai bên cho cột nút ← 🔊 ⋯ → chữ/ô to, mỗi ý thường một dòng; cỡ chữ theo chiều cao màn để không cắt hàng nút; loa + Đã hiểu vẫn cùng một hàng */
+    "#hlpOv{position:fixed;padding:6px 72px}#hlpCard{width:100%;max-width:760px;max-height:none;overflow:hidden;padding:10px 16px 12px;gap:6px;border-radius:22px}" +
+    "#hlpCard h3{min-height:40px;font-size:calc(clamp(17px,6vh,22px)*var(--hf,1));margin-right:112px}#hlpB{gap:6px}.hlpIt{padding:5px 12px;gap:10px;border-radius:14px}.hlpIt i{font-size:calc(clamp(20px,7vh,28px)*var(--hf,1));width:1.4em}.hlpIt i.n{width:28px;height:28px;font-size:14px}.hlpIt span{font-size:calc(clamp(13px,4.8vh,18px)*var(--hf,1));line-height:1.25}" +
     "#hlpAct #hlpGo,#hlpLis{min-height:48px}#hlpLis{width:52px;min-width:52px}}" +
     "@media (max-width:520px) and (orientation:portrait){#hlpCard h3{margin-right:132px;min-height:56px}#hlpCard{padding-top:12px}#hlpX{right:12px;top:12px;width:var(--tap-lg,56px);height:var(--tap-lg,56px)}#hlpSay{right:76px;top:12px;width:var(--tap-lg,56px);height:var(--tap-lg,56px)}}" +
     "@media (prefers-reduced-motion:reduce){#hlpCard{animation:none}}";
@@ -62,6 +62,9 @@
     var mark = function (on) { say.classList.toggle("on", on); lis.classList.toggle("on", on); };
     var stopSay = function () { try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {} speaking = false; mark(false); };
     var close = function () { ov.hidden = true; stopSay(); };
+    /* thẻ không cắt hàng nút / không cuộn: nếu nội dung cao hơn thẻ thì thu cỡ chữ (--hf) từng bước cho tới khi vừa (màn ngang thấp, khung hẹp) */
+    var hlpFit = function () { var c = ov.querySelector("#hlpCard"); if (!c || ov.hidden) return; var f = 1, g = 0; c.style.setProperty("--hf", "1"); while (c.scrollHeight > c.clientHeight + 1 && f > .55 && g++ < 30) { f -= .04; c.style.setProperty("--hf", f.toFixed(2)); } };
+    addEventListener("resize", function () { setTimeout(hlpFit, 60); }); addEventListener("orientationchange", function () { setTimeout(hlpFit, 300); });
     ov.querySelector("#hlpGo").onclick = close;
     say.hidden = !(window.speechSynthesis && window.SpeechSynthesisUtterance); lis.hidden = say.hidden;
     say.onclick = function () {
@@ -88,7 +91,7 @@
         row.className = "hlpIt"; if (m && m[2]) { ic.textContent = m[1]; sp.textContent = m[2]; } else { ic.className = "n"; ic.textContent = String(i + 1); sp.textContent = t; }
         row.appendChild(ic); row.appendChild(sp); body.appendChild(row);
       });
-      ov.hidden = false;
+      ov.hidden = false; hlpFit();
     };
     setInterval(function () { b.hidden = !texts().length; }, 600);
     b.hidden = !texts().length;
