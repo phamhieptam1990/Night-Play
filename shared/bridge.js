@@ -499,3 +499,48 @@ window.NP = (function () {
     var j = document.createElement("script"); j.id = "npHowFit"; j.src = src.replace(/bridge\.js(\?.*)?$/, "howfit.js$1"); j.async = false; document.head.appendChild(j);
   } catch (e) {}
 })();
+
+/* ===== Nút to "Bật âm thanh" ở MÀN CHỌN khi âm đang tắt =====
+   Bé không biết loa nhỏ nằm trong menu ⋯. Trình duyệt web chỉ cho phát tiếng SAU khi chạm màn hình nên không thể tự bật: chạm nút này (một lần chạm thật) → NPAudio.set(true).
+   Chỉ hiện khi: âm tắt, không đang chơi (NP.peek()), không có popup mở, màn đủ cao và nút không đè lên thẻ/nút nào của game. */
+(function () {
+  try {
+    if (window.__npSndPrompt || window.top !== window.self && /multi=1/.test(location.search)) return; window.__npSndPrompt = 1;
+    var btn = null, vi = function () { return (document.documentElement.lang || "vi").slice(0, 2) !== "en"; };
+    function css() {
+      var st = document.createElement("style");
+      st.textContent = "#npSndGo{position:fixed;left:50%;bottom:calc(36px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:35;min-height:48px;max-width:calc(100vw - 32px);padding:0 22px;border-radius:999px;border:1.5px solid rgba(190,175,255,.75);background:linear-gradient(135deg,#6C4BF2,#C2410C);color:#fff;font:800 16px/1.1 var(--font,system-ui,sans-serif);white-space:nowrap;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.4),0 0 14px rgba(124,92,255,.5);display:none;-webkit-tap-highlight-color:transparent}#npSndGo.on{display:block}";
+      document.head.appendChild(st);
+    }
+    function build() {
+      if (btn || !document.body) return; css();
+      btn = document.createElement("button"); btn.id = "npSndGo"; btn.type = "button";
+      btn.addEventListener("click", function () { try { window.NPAudio && NPAudio.set(true); } catch (e) {} btn.classList.remove("on"); });
+      document.body.appendChild(btn);
+    }
+    function playing() { try { return !!(window.NP && NP.peek && NP.peek()); } catch (e) { return false; } }
+    function tick() {
+      try {
+        var A = window.NPAudio; if (!A || !A.get) return; build(); if (!btn) return;
+        var off = !A.get(), show = off && !playing() && innerHeight >= 640 && !document.querySelector("#hlpOv:not([hidden]),#phOv:not([hidden]),.ov:not([hidden]):not(#ovStart),.nps-sheet:not([hidden]),dialog[open]");
+        if (show) {
+          btn.textContent = "🔊 " + (vi() ? "Chạm để bật âm thanh" : "Tap to turn sound on"); btn.setAttribute("aria-label", vi() ? "Bật âm thanh" : "Turn sound on");
+          /* vị trí thử lần lượt: (1) sát đáy; (2) ngay dưới tên game. Hiện khi vùng 48px đó không đè lên nút/thẻ/linh vật/tên nào */
+          var boxes = [];
+          document.querySelectorAll(".main,.band,.tile,.btn,.dbtn,.dbar,.row,#bDaily,.ty,.cards>*,.lvb,button.sk,.top .ib,h1,.np-gname,.pt-title,.ask,.hud").forEach(function (e) { if (e === btn || !e.getClientRects().length) return; var r = e.getBoundingClientRect(); if (r.width > 20 && r.height > 14 && r.bottom > 0 && r.top < innerHeight) boxes.push([r.top, r.bottom, r.left, r.right]); });
+          /* linh vật (#hHero) chỉ để trang trí nên nút được phép nằm đè lên phần trên của nó */
+          var tt = document.querySelector("h1,.np-gname,.pt-title"), tb = 0;
+          if (tt && tt.getClientRects().length) tb = tt.getBoundingClientRect().bottom;
+          var W = btn.offsetWidth || 240, L = (innerWidth - W) / 2, R = L + W;
+          var free = function (t) { var b2 = t + 48; return boxes.every(function (q) { return q[1] <= t - 6 || q[0] >= b2 + 6 || q[3] <= L || q[2] >= R; }); };
+          var bottomTop = innerHeight - (36 + 48), topTop = Math.max(tb + 8, 96);
+          if (free(bottomTop)) { btn.style.top = ""; btn.style.bottom = "calc(36px + env(safe-area-inset-bottom,0px))"; }
+          else if (free(topTop)) { btn.style.bottom = "auto"; btn.style.top = Math.round(topTop) + "px"; }
+          else show = false;
+        }
+        btn.classList.toggle("on", show);
+      } catch (e) {}
+    }
+    setInterval(tick, 800); addEventListener("resize", tick); addEventListener("load", tick);
+  } catch (e) {}
+})();

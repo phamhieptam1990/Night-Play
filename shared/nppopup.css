@@ -133,7 +133,7 @@ html:not([data-theme=dark]) :is(.nps-sheet,.nps-dlg,#pgOv>*,#klO>*,#npInApp>*,#n
 
 /* ✕ ĐÓNG: nền màu nhấn ĐẶC + icon trắng (trước: trong suốt chìm vào thẻ tối), tách khỏi tiêu đề; Pop = cam vàng */
 html .npc .npx{background:#7050F2!important;color:#fff!important;border:2px solid rgba(255,255,255,.7)!important;box-shadow:0 3px 10px rgba(0,0,0,.35)!important;top:12px;right:12px}
-html.npp-kid .npc .npx{background:#F2701D!important}
+html.npp-kid .npc .npx{background:var(--np-orange-on,#CC4C0E)!important}   /* chữ trắng trên #F2701D chỉ 2,95:1 → cam đậm (--np-orange-on của glass.css; popup có thể không nạp glass.css nên giữ hex dự phòng) */
 @media (hover:hover){html .npc .npx:hover{filter:brightness(1.1)}}
 html .npc h2{padding-right:60px!important;padding-left:60px!important;box-sizing:border-box}
 /* điện thoại NGANG (thấp): thẻ giao diện rộng ra, tiêu đề một dòng, lưới ô gọn */
@@ -178,3 +178,14 @@ html.npp-kid #ovSkin .npc .skgrid{gap:12px!important}
 html.npp-kid #ovSkin .npc .skc{padding:8px!important;gap:8px!important;border-radius:20px!important}
 html.npp-kid #ovSkin .npc .skc .sw{height:clamp(64px,11vh,104px)!important;aspect-ratio:auto!important;font-size:clamp(34px,6.6vh,58px)!important;line-height:1!important;border-radius:13px}
 html.npp-kid #ovSkin .npc .skc span{font-size:15px;font-weight:800}
+
+/* CHỐNG GHI ĐÈ (nhóm D): shared/btn.css (nút chuẩn) và poplandscape.css / CSS inline của game ép nền phẳng hoặc gradient lên popup mời bằng !important (đặc hiệu 1,1,0).
+   Bản này có đặc hiệu (1,1,1) nên thắng mọi nơi, không phụ thuộc thứ tự nạp: (1) lớp mờ phía sau LUÔN có quầng tím; (2) Pop Play: "Dành cho phụ huynh" chỉ là nút viền, không gradient. */
+html #ovPay:not([hidden]),html #ovSkin:not([hidden]){background:radial-gradient(560px 360px at 50% 18%,rgba(124,92,255,.34),transparent),var(--npdim,rgba(8,9,18,.66))!important}
+html.npp-kid #ovPay .npc #pwGo{background:transparent!important;background-image:none!important;box-shadow:none!important}
+/* POP PLAY, popup Giao diện ĐIỆN THOẠI DỌC, ô dùng ảnh thu nhỏ (.sk > img, vd. Chim Bay): lưới KHÔNG co lại trong thẻ (trước: hàng bị bóp còn 68px, ảnh tràn đè nhãn, thẻ cuộn) và ảnh dẹt 2:1 để 3 hàng vừa khung */
+@media (max-width:520px) and (orientation:portrait){
+  html.npp-kid #ovSkin .npc .skgrid{flex:none!important;align-content:start;grid-auto-rows:auto!important}
+  html.npp-kid #ovSkin .npc .sk:not(.skc){min-height:0;padding:6px!important;gap:4px!important}
+  html.npp-kid #ovSkin .npc .sk:not(.skc) img{width:100%!important;height:auto!important;aspect-ratio:2/1!important;object-fit:cover}
+}
