@@ -121,7 +121,7 @@ function view() {
   document.querySelectorAll("#langSeg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.l === root.lang)));
   if (!valid) { card.innerHTML = WARN + "<h1>" + esc(t.bad) + "</h1><p>" + esc(t.badP) + '</p><a href="play/index.html">' + esc(t.more) + "</a>"; return; }
   if (stage === "used") { card.innerHTML = WARN + "<h1>" + esc(t.used) + "</h1><p>" + esc(t.usedP) + '</p><a href="play/index.html">' + esc(t.more) + "</a>"; return; }
-  if (stage === "done") { card.innerHTML = ICON + "<h1>" + esc(t.doneT) + '</h1><div class="big">' + (result.score | 0) + "</div><p>" + esc(t.pts) + " · " + esc(GN()) + "</p><p>" + esc(t.doneP) + '</p><button class="cta" id="more" type="button">' + esc(t.more) + "</button>"; $("more").onclick = () => { location.href = "index.html"; }; return; }
+  if (stage === "done") { card.innerHTML = ICON + "<h1>" + esc(t.doneT) + '</h1><div class="big">' + esc(NPS.fmtScore(game, result.score)) + "</div><p>" + (NPS.isPct(game) ? "" : esc(t.pts) + " · ") + esc(GN()) + "</p><p>" + esc(t.doneP) + '</p><button class="cta" id="more" type="button">' + esc(t.more) + "</button>"; $("more").onclick = () => { location.href = "index.html"; }; return; }
   card.innerHTML = ICON + "<h1>" + esc(t.t) + '</h1><p class="game">' + esc(GN()) + "</p><p>" + esc(t.p) + '</p>' + (rstate ? '<p class="game" style="font-size:15px">' + esc(t.resumeP) + '</p>' : '') + '<ul class="how"><li><b>1</b><span>' + esc(t.s1) + "</span></li><li><b>2</b><span>" + esc(t.s2) + "</span></li><li><b>3</b><span>" + esc(t.s3) + '</span></li></ul><button class="cta" id="go" type="button">' + esc(getTok() ? t.resume : t.start) + '</button><p class="err" id="err" role="alert"></p><p class="small">' + esc(t.privacy) + "</p>";
   $("go").onclick = start;
 }
@@ -149,12 +149,12 @@ let tries = 0, retryT = 0;
 addEventListener("online", () => { if (result && stage !== "done" && tries > 0) { clearTimeout(retryT); send(); } });
 function send() {
   clearTimeout(retryT);
-  const t = L(); $("res").classList.add("on"); $("resCard").innerHTML = ICON + "<h1>" + (result.score | 0) + " " + esc(t.pts) + "</h1><p>" + esc(t.sending) + "</p>";
+  const t = L(); $("res").classList.add("on"); $("resCard").innerHTML = ICON + "<h1>" + esc(NPS.fmtScore(game, result.score)) + (NPS.isPct(game) ? "" : " " + esc(t.pts)) + "</h1><p>" + esc(t.sending) + "</p>";
   NPS.sendResult(id, getTok(), key, result).then(() => {
     try { sessionStorage.removeItem(tokKey); } catch (e) {} stage = "done"; $("stage").classList.remove("on"); $("stage").querySelectorAll("iframe").forEach(x => x.remove()); root.classList.remove("playing"); view();
   }).catch(() => {
     if (++tries < 15) { retryT = setTimeout(send, Math.min(2500 * tries, 10000)); return; }   /* mất mạng: tự gửi lại, người chơi hộ vẫn thấy 'đang gửi' như bình thường */
-    $("resCard").innerHTML = WARN + "<h1>" + (result.score | 0) + " " + esc(t.pts) + "</h1><p>" + esc(t.sendErr) + '</p><button class="cta" id="re" type="button">' + esc(t.retry) + "</button>"; $("re").onclick = () => { tries = 0; send(); };
+    $("resCard").innerHTML = WARN + "<h1>" + esc(NPS.fmtScore(game, result.score)) + (NPS.isPct(game) ? "" : " " + esc(t.pts)) + "</h1><p>" + esc(t.sendErr) + '</p><button class="cta" id="re" type="button">' + esc(t.retry) + "</button>"; $("re").onclick = () => { tries = 0; send(); };
   });
 }
 function setLang(l, save) { root.lang = l; if (save) try { localStorage.setItem("lang", l); } catch (e) {} if (!$("stage").classList.contains("on")) view(); else $("tag").textContent = L().playing + " · " + GN(); }

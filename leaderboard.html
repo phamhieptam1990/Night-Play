@@ -184,11 +184,11 @@ function renderMine() {
   if (!b) { el.innerHTML = '<span style="color:var(--muted)">' + esc(t.none) + "</span>"; return; }
   if (kid) {
     if (!kidNick || !NPS.isKidName(kidNick, root.lang)) kidNick = NPS.isKidName(NPS.nickGet(), root.lang) ? NPS.nickGet() : NPS.kidName(root.lang);
-    el.innerHTML = '<span>' + esc(t.best) + " " + esc(NPS.gameName(game)) + ': <b>' + b + '</b></span><form id="bragF"><b class="kidn" id="kidn">' + esc(kidNick) + '</b><button type="button" id="reroll" class="alt">🎲</button><button type="submit">' + esc(t.brag) + '</button></form><span class="err" id="bragE" role="alert"></span>';
+    el.innerHTML = '<span>' + esc(t.best) + " " + esc(NPS.gameName(game)) + ': <b>' + esc(NPS.fmtScore(game, b)) + '</b></span><form id="bragF"><b class="kidn" id="kidn">' + esc(kidNick) + '</b><button type="button" id="reroll" class="alt">🎲</button><button type="submit">' + esc(t.brag) + '</button></form><span class="err" id="bragE" role="alert"></span>';
     $("reroll").setAttribute("aria-label", t.reroll); $("reroll").title = t.reroll;
     $("reroll").onclick = () => { kidNick = NPS.kidName(root.lang); $("kidn").textContent = kidNick; };
   } else {
-    el.innerHTML = '<span>' + esc(t.best) + " " + esc(NPS.gameName(game)) + ': <b>' + b + '</b></span><form id="bragF"><input id="bragN" maxlength="16" autocomplete="nickname" placeholder="' + esc(t.nick) + '" value="' + esc(NPS.nickGet()) + '" aria-label="' + esc(t.nick) + '"><button type="submit">' + esc(t.brag) + '</button></form><span class="err" id="bragE" role="alert"></span>';
+    el.innerHTML = '<span>' + esc(t.best) + " " + esc(NPS.gameName(game)) + ': <b>' + esc(NPS.fmtScore(game, b)) + '</b></span><form id="bragF"><input id="bragN" maxlength="16" autocomplete="nickname" placeholder="' + esc(t.nick) + '" value="' + esc(NPS.nickGet()) + '" aria-label="' + esc(t.nick) + '"><button type="submit">' + esc(t.brag) + '</button></form><span class="err" id="bragE" role="alert"></span>';
   }
   $("bragF").onsubmit = e => { e.preventDefault(); const n = kid ? kidNick : $("bragN").value.trim().replace(/\s+/g, " "), btn = e.target.querySelector("button[type=submit]"); btn.disabled = true;
     NPS.submitScore(game, b, n).then(() => { NPS.nickSet(n); $("bragE").style.color = "var(--ok)"; $("bragE").textContent = t.ok; load(); })
@@ -196,7 +196,7 @@ function renderMine() {
 }
 function draw(rows) {
   const t = L(), me = NPS.nickGet().toLowerCase();
-  $("list").innerHTML = rows.length ? rows.map(r => '<div class="row' + (me && r.nick.toLowerCase() === me ? " me" : "") + '"><span class="rk g' + r.rank + '" aria-label="#' + r.rank + '">' + r.rank + '</span><span class="nick" title="' + esc(r.nick) + '">' + esc(r.nick) + (r.pro ? '<span class="pro" title="Night Pass" aria-label="Night Pass">★</span>' : "") + (me && r.nick.toLowerCase() === me ? "<small>" + esc(t.you) + "</small>" : "") + '</span><span class="sc">' + r.score + "<small>" + esc(t.pts) + (period === "all" ? " · " + r.day.slice(5).split("-").reverse().join("/") : "") + "</small></span></div>").join("")
+  $("list").innerHTML = rows.length ? rows.map(r => '<div class="row' + (me && r.nick.toLowerCase() === me ? " me" : "") + '"><span class="rk g' + r.rank + '" aria-label="#' + r.rank + '">' + r.rank + '</span><span class="nick" title="' + esc(r.nick) + '">' + esc(r.nick) + (r.pro ? '<span class="pro" title="Night Pass" aria-label="Night Pass">★</span>' : "") + (me && r.nick.toLowerCase() === me ? "<small>" + esc(t.you) + "</small>" : "") + '</span><span class="sc">' + esc(NPS.fmtScore(game, r.score)) + "<small>" + (NPS.isPct(game) ? "" : esc(t.pts)) + (period === "all" ? (NPS.isPct(game) ? "" : " · ") + r.day.slice(5).split("-").reverse().join("/") : "") + "</small></span></div>").join("")
     : '<div class="empty">' + esc(t.empty) + "</div>";
 }
 function load() {

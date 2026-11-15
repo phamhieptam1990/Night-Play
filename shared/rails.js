@@ -42,6 +42,7 @@
   var gname = function (g) { return (g.name && (g.name[lg()] || g.name.vi || g.name.en)) || g.id; };
   function vnDay() { try { return new Date(Date.now() + 252e5).toISOString().slice(0, 10); } catch (e) { return new Date().toISOString().slice(0, 10); } }
   var dayNo = function (k) { return Math.floor((Date.parse(k + "T00:00:00Z") - Date.parse("2026-01-01T00:00:00Z")) / 864e5) + 1; };
+  function fmtG(id, n) { try { if (window.NPS && NPS.isPct && NPS.isPct(id)) return NPS.fmtScore(id, n); } catch (e) {} return fmtN(n); }   /* game chấm bằng %: hiện 75,0% thay vì 750 */
   function fmtN(n) { try { return Number(n).toLocaleString(lg() === "en" ? "en-US" : "vi-VN"); } catch (e) { return String(n); } }
 
   /* ---------- đọc dữ liệu ---------- */
@@ -136,7 +137,7 @@
     var chips = el("div", "np-chips"); chips.style.marginTop = "10px";
     if (isCozy && sv.daily !== null) { var c1 = html("span", "np-chip" + (sv.daily !== false ? " np-ok" : ""), ico("cal")); c1.appendChild(document.createTextNode(sv.daily !== false ? t.done + (typeof sv.daily === "number" ? ": " + fmtN(sv.daily) : "") : t.todo)); chips.appendChild(c1); }
     if (sv.streak) { var c2 = html("span", "np-chip", ico("flame")); c2.appendChild(document.createTextNode(sv.streak + " " + t.streak)); chips.appendChild(c2); }
-    if (sv.best != null) { var c3 = html("span", "np-chip", ico("star")); c3.appendChild(document.createTextNode(t.best + ": " + fmtN(sv.best))); chips.appendChild(c3); }
+    if (sv.best != null) { var c3 = html("span", "np-chip", ico("star")); c3.appendChild(document.createTextNode(t.best + ": " + fmtG(g.id, sv.best))); chips.appendChild(c3); }
     if (chips.children.length) card.appendChild(chips);
     L.appendChild(card);
     var top = el("div", "np-c np-top"); top.id = "npTop"; top.appendChild(html("div", "np-row", '<span class="np-chip">' + ico("trophy") + "</span>")); top.firstChild.firstChild.appendChild(document.createTextNode(t.top));
@@ -148,7 +149,7 @@
       if (seq !== topSeq) return;
       if (rows === undefined) { top.hidden = true; fit(); return; }
       top.hidden = false; ol.textContent = "";
-      if (rows && rows.length) rows.forEach(function (r, i) { var li = el("li"); li.appendChild(el("i", "", String(i + 1))); li.appendChild(el("span", "", r.nick || "—")); li.appendChild(el("b", "", fmtN(r.score))); ol.appendChild(li); });
+      if (rows && rows.length) rows.forEach(function (r, i) { var li = el("li"); li.appendChild(el("i", "", String(i + 1))); li.appendChild(el("span", "", r.nick || "—")); li.appendChild(el("b", "", fmtG(g.id, r.score))); ol.appendChild(li); });
       note.textContent = rows && rows.length ? (offline ? t.off + " (" + t.saved + ")" : "") : (offline ? t.off : t.empty); note.hidden = !note.textContent; ol.hidden = !(rows && rows.length);
       fit();
     });

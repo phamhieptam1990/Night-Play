@@ -81,6 +81,11 @@ window.NPS = (function () {
   var isKid = function (id) { return !!(GAMES[id] && GAMES[id].kids); };
   var lang = function () { return document.documentElement.lang === "en" ? "en" : "vi"; };
   var T = function (k) { return STR[lang()][k] || k; };
+  /* Điểm lưu/gửi/xếp hạng là SỐ NGUYÊN. Game chấm bằng % (Vẽ Một Nét) lưu theo phần nghìn (75,0% = 750) → mọi nơi NGOÀI game (popup chơi hộ, khoe điểm, ảnh chụp, bảng xếp hạng, cột bên lề) đổi lại thành % thay vì "750 điểm". */
+  var PCT = { "ve-mot-net": 10 };
+  var isPct = function (id) { return !!PCT[id]; };
+  var fmtScore = function (id, n) { n = Number(n) || 0; return PCT[id] ? (n / PCT[id]).toFixed(1).replace(".", lang() === "vi" ? "," : ".") + "%" : String(Math.round(n)); };
+  var fmtScoreU = function (id, n) { return PCT[id] ? fmtScore(id, n) : fmtScore(id, n) + " " + T("points"); };
   /* Đập Deadline có nhiều loại game: tên hiển thị đổi theo loại người nhờ đang chơi (chỉ là tên, không lộ nội dung trả phí) */
   var PACK_NAMES = { animals: { vi: "Đập Thú quậy", en: "Smash the Critters" }, lover: { vi: "Đập Chuyện giận", en: "Smash the Grudges" } };
   var gameName = function (id, pack) { var g = GAMES[id]; if (id === "dap-deadline" && pack && PACK_NAMES[pack]) return PACK_NAMES[pack][lang()]; return g ? g.name[lang()] : id; };
@@ -332,7 +337,7 @@ window.NPS = (function () {
     function showBrag(game, score) {
       var g = GAMES[game]; if (!leaderboard || !g || !g.board || score < 1) return;
       var kid = !!g.kids, kname = kid ? (isKidName(nickGet(), lang()) ? nickGet() : kidName(lang())) : "";
-      sheet.innerHTML = '<h3>' + esc(T("bragT")) + '</h3><p>' + esc(gameName(game)) + ' · ' + esc(T("scoreLine")) + ': <b>' + score + '</b>. ' + esc(T(kid ? "kidP" : "bragP")) + '</p>' +
+      sheet.innerHTML = '<h3>' + esc(T("bragT")) + '</h3><p>' + esc(gameName(game)) + ' · ' + esc(T("scoreLine")) + ': <b>' + fmtScore(game, score) + '</b>. ' + esc(T(kid ? "kidP" : "bragP")) + '</p>' +
         (kid ? '<div class="nps-kid"><span>' + esc(T("kidName")) + '</span><b id="npsKid">' + esc(kname) + '</b><button type="button" id="npsRe">🎲 ' + esc(T("reroll")) + '</button></div><p class="nps-err" id="npsErr" role="alert"></p>'
               : '<input id="npsNick" maxlength="16" autocomplete="nickname" placeholder="' + esc(T("nick")) + '" value="' + esc(nickGet()) + '"><p class="nps-err" id="npsErr" role="alert"></p>') +
         '<div class="nps-row"><button class="nps-s" id="npsNo" type="button">' + esc(T("skip")) + '</button><button class="nps-p" id="npsYes" type="button">' + esc(T("brag")) + '</button></div>';
@@ -389,7 +394,7 @@ window.NPS = (function () {
       var c = out.getContext("2d"); c.drawImage(canvas, 0, 0); c.fillStyle = "#0E1020"; c.fillRect(0, canvas.height, out.width, band);
       var pad = Math.round(16 * sc), y = canvas.height + band / 2; c.textBaseline = "middle"; c.fillStyle = "#FFFFFF";
       var ls = Math.round(28 * sc), lx = pad; if (logo) { c.drawImage(logo, pad, canvas.height + (band - ls) / 2, ls, ls); lx = pad + ls + Math.round(8 * sc); } c.font = "800 " + Math.round(17 * sc) + 'px Inter,system-ui,sans-serif';
-      var left = brandOf(curGame()) + " · " + gameName(curGame()) + (lastScore ? " · " + lastScore + " " + T("points") : ""); c.textAlign = "left"; c.fillText(left, lx, y, out.width * 0.72 - (lx - pad));
+      var left = brandOf(curGame()) + " · " + gameName(curGame()) + (lastScore ? " · " + fmtScoreU(curGame(), lastScore) : ""); c.textAlign = "left"; c.fillText(left, lx, y, out.width * 0.72 - (lx - pad));
       c.fillStyle = GAMES[curGame()] && GAMES[curGame()].site === "popplay" ? "#FFB27A" : "#A58BFF"; c.font = "600 " + Math.round(13 * sc) + "px Inter,system-ui,sans-serif"; c.textAlign = "right"; c.fillText(location.host, out.width - pad, y, out.width * 0.26);
       return new Promise(function (res, rej) { out.toBlob(function (b) { b ? res(b) : rej(new Error("blob")); }, "image/png"); });
     }
@@ -438,7 +443,7 @@ window.NPS = (function () {
     onResult(function (list) {
       var s = list[list.length - 1], r = s.result || {};
       dlg.className = "nps-dlg nps-got";
-      dlg.innerHTML = '<h3>' + esc(T("gotT")) + '</h3><p>' + esc(gameName(s.game, (r && r.extra && r.extra.pack) || packOf(s.st))) + '</p><div class="nps-big">' + (r.score | 0) + '</div><p>' + esc(T("points")) + '</p>' +
+      dlg.innerHTML = '<h3>' + esc(T("gotT")) + '</h3><p>' + esc(gameName(s.game, (r && r.extra && r.extra.pack) || packOf(s.st))) + '</p><div class="nps-big">' + esc(fmtScore(s.game, r.score)) + '</div>' + (isPct(s.game) ? '' : '<p>' + esc(T("points")) + '</p>') +
         '<div class="nps-row"><button class="nps-s" id="npsX" type="button">' + esc(T("close")) + '</button><button class="nps-p" id="npsGo" type="button">' + esc(T("view")) + '</button></div>';
       if (!dlg.open) dlg.showModal();
       document.getElementById("npsX").onclick = function () { s.seen = true; mark(s); dlg.close(); };
@@ -449,6 +454,6 @@ window.NPS = (function () {
     setInterval(tick, 8000); document.addEventListener("visibilitychange", tick); poll();
   }
 
-  return { kidName: kidName, isKidName: isKidName, isKid: isKid, brandOf: brandOf, GAMES: GAMES, T: T, lang: lang, gameName: gameName, packOf: packOf, load: load, save: save, prune: prune, linkFor: linkFor, createShare: createShare, poll: poll, onResult: onResult,
+  return { fmtScore: fmtScore, fmtScoreU: fmtScoreU, isPct: isPct, kidName: kidName, isKidName: isKidName, isKid: isKid, brandOf: brandOf, GAMES: GAMES, T: T, lang: lang, gameName: gameName, packOf: packOf, load: load, save: save, prune: prune, linkFor: linkFor, createShare: createShare, poll: poll, onResult: onResult,
     isNet: isNet, claim: claim, sendResult: sendResult, submitScore: submitScore, getScores: getScores, nickGet: nickGet, nickSet: nickSet, initParent: initParent, TTL: TTL, STR: STR };
 })();
