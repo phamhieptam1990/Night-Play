@@ -197,13 +197,13 @@ html:not(.npp-kid):has(.ov:not([hidden]):not(#ovStart):not(#ovEnd)) .top.npfan{z
 html:has(.ov:not([hidden]):not(#ovStart):not(#ovEnd)) #npDifBadge{z-index:1!important}
 /* Pop điện thoại DỌC: popup của game (Giao diện, Night Pass, Bộ sưu tập, Phụ huynh) nằm trong khung game (.play, overflow:hidden) nên tiêu đề, thanh điểm và nút trên vẫn sáng bên ngoài → thêm lớp mờ phủ TRỌN cửa sổ (cùng kỹ thuật popup hướng dẫn: lớp mờ ngay dưới khung game được nâng z-index), popup vẫn nằm trong cột game. */
 @media (orientation:portrait){
-  html.npp-kid:has(:is(#ovSkin,#ovPay,#ovColl,#ovGate):not([hidden]))::after{content:"";position:fixed;inset:0;z-index:2147482999;background:rgba(8,6,22,.72);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
-  html.npp-kid:has(:is(#ovSkin,#ovPay,#ovColl,#ovGate):not([hidden])) .play{z-index:2147483000}
+  html.npp-kid:has(:is(#ovSkin,#ovPay,#ovColl,#ovGate,#ovHow,#ovCh):not([hidden]))::after{content:"";position:fixed;inset:0;z-index:2147482999;background:rgba(8,6,22,.72);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+  html.npp-kid:has(:is(#ovSkin,#ovPay,#ovColl,#ovGate,#ovHow,#ovCh):not([hidden])) .play{z-index:2147483000}
 }
 
 /* Safari/iOS cũ (html.np-fixcb: popup position:fixed bị nhốt trong khung game): lớp mờ toàn cửa sổ cả màn NGANG */
-html.npp-kid.np-fixcb:has(:is(#ovSkin,#ovPay,#ovColl,#ovGate):not([hidden]))::after{content:"";position:fixed;inset:0;z-index:2147482999;background:rgba(8,6,22,.72);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
-html.npp-kid.np-fixcb:has(:is(#ovSkin,#ovPay,#ovColl,#ovGate):not([hidden])) .play{z-index:2147483000}
+html.npp-kid.np-fixcb:has(:is(#ovSkin,#ovPay,#ovColl,#ovGate,#ovHow,#ovCh):not([hidden]))::after{content:"";position:fixed;inset:0;z-index:2147482999;background:rgba(8,6,22,.72);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+html.npp-kid.np-fixcb:has(:is(#ovSkin,#ovPay,#ovColl,#ovGate,#ovHow,#ovCh):not([hidden])) .play{z-index:2147483000}
 
 /* POPUP GIAO DIỆN COZY, ĐIỆN THOẠI NGANG (thấp): MỌI ô cùng kích thước — 3 cột đều, hàng cuối canh giữa (trước: 4 ô hẹp chữ xuống 3-4 dòng đè ổ khoá + 1 ô kéo dài hết hàng) */
 @media (max-height:520px) and (min-aspect-ratio:11/10){
@@ -312,3 +312,4 @@ html.npp-kid{--tip-t:26px;--tip-b:20px}
 html.npp-kid.np-fixcb .play:has(:is(#ovHow,#ovSkin,#ovPay,#ovCh,#ovGate,#ovColl):not([hidden])){position:fixed!important;inset:0!important;width:auto!important;height:auto!important;max-width:none!important;max-height:none!important;aspect-ratio:auto!important;margin:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:none!important;transform:none!important;z-index:2147483000!important}
 html.npp-kid.np-fixcb .play:has(:is(#ovHow,#ovSkin,#ovPay,#ovCh,#ovGate,#ovColl):not([hidden]))::after{display:none!important}
 html.npp-kid #ovHow .row,html.npp-kid #ovCh .row{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:center;justify-content:center;gap:10px}   /* loa + Bắt đầu luôn CÙNG MỘT hàng */
+html.npp-kid #hwGo,html.npp-kid #chGo{white-space:nowrap}
