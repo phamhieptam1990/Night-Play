@@ -64,6 +64,29 @@ ul.how b{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-i
 @media (max-height:600px){.card .em{display:none}.small{font-size:12px;line-height:1.35}h1{font-size:20px}.cta{height:46px}}
 .foot{flex:none;display:flex;justify-content:center;flex-wrap:wrap;gap:4px 18px;padding:6px 16px;border-top:1px solid var(--line);background:linear-gradient(180deg,transparent,var(--hero1));font-size:13px}
 .foot a{padding:6px 0;color:var(--ink);text-decoration:none}
+
+/* ===== NIGHT PASS (15/11/2026): trang người chơi hộ — link không hợp lệ / đã dùng / hết hạn / lời mời / kết quả: nền tím tối + thẻ kính viền sáng + nút gradient chuẩn (shared/btn.css) ===== */
+:root{--hp-1:#6C4BF2;--hp-2:#C2410C}
+html,body{background:#0E1020!important;color:#F1F2FF}
+body{background:radial-gradient(520px 360px at 50% 8%,rgba(124,92,255,.38),transparent 70%),radial-gradient(420px 300px at 85% 95%,rgba(194,65,12,.22),transparent 70%),#0E1020!important}
+.nav{background:transparent!important;border:0!important}
+.mark,.mark span{color:#F1F2FF}
+.ico,.seg{background:rgba(255,255,255,.1)!important;box-shadow:inset 0 0 0 1px rgba(167,150,255,.35)!important;color:#F1F2FF}
+.seg button{color:#C9CCF0}.seg button[aria-pressed=true]{background:linear-gradient(135deg,var(--hp-1),var(--hp-2));color:#fff}
+.card{position:relative;background:linear-gradient(160deg,rgba(44,36,104,.97),rgba(22,24,42,.97))!important;border:1px solid rgba(167,150,255,.55);border-radius:28px;color:#F1F2FF;box-shadow:0 0 0 1px rgba(124,92,255,.18),0 18px 60px rgba(124,92,255,.42),0 10px 36px rgba(0,0,0,.4)!important}
+.card h1{color:#fff;letter-spacing:-.01em}.card p{color:#C9CCF0}.card .game{color:#FFD66B}.small{color:#9EA3D6}
+.card .em{width:76px;height:76px;padding:16px;border-radius:50%;color:#fff!important;background:linear-gradient(135deg,var(--hp-1),var(--hp-2));box-shadow:0 8px 24px rgba(108,75,242,.55),inset 0 1px 0 rgba(255,255,255,.35);margin-bottom:14px}
+.card.st-used .em,.card.st-bad .em{background:linear-gradient(135deg,#FFC94D,#F08A1A);color:#2B1A00!important;box-shadow:0 8px 24px rgba(255,170,40,.45),inset 0 1px 0 rgba(255,255,255,.45)}
+.card .hint{font-weight:700;color:#FFD66B!important}
+ul.how b{background:linear-gradient(135deg,var(--hp-1),var(--hp-2))!important;color:#fff!important}ul.how li{color:#D6D8F5}
+.cta,.nb-a{display:flex;align-items:center;justify-content:center;width:100%;min-height:54px;height:auto;padding:0 22px;border-radius:999px;text-decoration:none;font-weight:800;font-size:18px;color:#fff!important;background:linear-gradient(135deg,var(--hp-1),var(--hp-2))!important;border:1px solid rgba(255,255,255,.42)!important;box-shadow:0 6px 18px rgba(108,75,242,.5),0 2px 6px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.35)!important}
+.nb-a{margin-top:14px}
+.cta:active,.nb-a:active{transform:scale(.97)}
+.sec{min-height:50px;height:auto;border-radius:999px;background:transparent!important;border:1px solid rgba(167,150,255,.55)!important;box-shadow:none!important;color:#F1F2FF;font-size:16px}
+.err{color:#FFB4A0}.big{background:linear-gradient(90deg,#9B83FF,#FF9A6B);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-size:64px}
+.foot{background:transparent!important;border-color:rgba(167,150,255,.25)!important}.foot a{color:#C9CCF0}
+#res{background:rgba(8,6,22,.82)}
+@media (max-height:600px){.card .em{width:52px;height:52px;padding:11px;margin-bottom:8px}.cta,.nb-a{min-height:46px;font-size:16px}}
 </style>
 <script src="shared/offline.js" defer></script>
 </head>
@@ -92,11 +115,11 @@ ul.how b{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-i
 "use strict";
 const $ = id => document.getElementById(id), root = document.documentElement;
 const TXT = {
-  vi: { offline: "Chưa có mạng. Nhận link cần kết nối một lần, bạn bật mạng rồi bấm Bắt đầu lại nhé. Link vẫn còn nguyên.", bad: "Link không hợp lệ", badP: "Đường link này bị thiếu hoặc sai. Hãy nhờ bạn của bạn gửi lại link.", used: "Link này đã được dùng hoặc đã hết hạn", usedP: "Mỗi link chỉ dùng được một lần và hết hạn sau 24 giờ.", slow: "Thao tác quá nhanh, vui lòng thử lại sau ít phút.",
+  vi: { offline: "Chưa có mạng. Nhận link cần kết nối một lần, bạn bật mạng rồi bấm Bắt đầu lại nhé. Link vẫn còn nguyên.", bad: "Link không hợp lệ", badP: "Đường link này bị thiếu hoặc sai. Hãy nhờ bạn của bạn gửi lại link.", used: "Link này đã được dùng hoặc đã hết hạn", usedP: "Mỗi link chỉ dùng được một lần và hết hạn sau 24 giờ.", usedH: "Nhờ bạn bè gửi cho bạn một link mới nhé!", slow: "Thao tác quá nhanh, vui lòng thử lại sau ít phút.",
         t: "Bạn được nhờ chơi hộ một lượt!", p: "Một người bạn muốn bạn chơi hộ họ một lượt. Kết quả sẽ được gửi về cho bạn ấy.", s1: "Bạn chơi đúng một lượt, không cần tài khoản.", s2: "Điểm của bạn được mã hoá rồi gửi cho người nhờ, họ xem ngay trong game của họ.", s3: "Link chỉ dùng được một lần và bạn không thể chia sẻ tiếp.",
         start: "Bắt đầu chơi hộ", resume: "Tiếp tục chơi hộ", resumeP: "Bạn sẽ chơi tiếp đúng chỗ bạn của bạn đang dở, cho tới hết lượt.", privacy: "Chúng tôi không lưu thông tin của bạn. Kết quả được mã hoá, máy chủ không đọc được và xoá ngay khi người nhờ nhận.", playing: "Bạn đang chơi hộ", sending: "Đang gửi kết quả…",
         doneT: "Đã gửi kết quả!", doneP: "Cảm ơn bạn đã chơi hộ. Người bạn của bạn sẽ thấy kết quả ngay.", pts: "điểm", more: "Khám phá Play Hub", retry: "Gửi lại", sendErr: "Chưa gửi được kết quả. Vui lòng thử lại.", close: "Đóng", home: "Trang chủ", priv: "Quyền riêng tư", title: "Chơi hộ bạn · Play Hub", theme: "Sáng / Tối" },
-  en: { offline: "You are offline. Starting needs a connection once: turn the network on and tap Start again. The link is still valid.", bad: "Invalid link", badP: "This link is missing or incorrect. Ask your friend to send it again.", used: "This link was already used or has expired", usedP: "Each link works once and expires after 24 hours.", slow: "Too many tries, please wait a few minutes.",
+  en: { offline: "You are offline. Starting needs a connection once: turn the network on and tap Start again. The link is still valid.", bad: "Invalid link", badP: "This link is missing or incorrect. Ask your friend to send it again.", used: "This link was already used or has expired", usedP: "Each link works once and expires after 24 hours.", usedH: "Ask your friend to send you a new link!", slow: "Too many tries, please wait a few minutes.",
         t: "You've been asked to play a round!", p: "A friend would like you to play one round for them. The result will be sent back to them.", s1: "You play exactly one round, no account needed.", s2: "Your score is encrypted and sent to your friend, who sees it right in their game.", s3: "The link works once and you can't share it further.",
         start: "Start playing for them", resume: "Continue playing for them", resumeP: "You'll continue right where your friend left off, until the round ends.", privacy: "We don't store your info. The result is encrypted, the server can't read it, and it's deleted as soon as your friend receives it.", playing: "You're playing for a friend", sending: "Sending result…",
         doneT: "Result sent!", doneP: "Thanks for playing for them. Your friend will see it right away.", pts: "points", more: "Explore Play Hub", retry: "Send again", sendErr: "Couldn't send the result. Please try again.", close: "Close", home: "Home", priv: "Privacy", title: "Play for a friend · Play Hub", theme: "Light / Dark" }
@@ -104,6 +127,8 @@ const TXT = {
 const L = () => TXT[root.lang === "en" ? "en" : "vi"];
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const ICON = '<svg class="em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z"/></svg>';
+const HOUR = '<svg class="em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12M6 21h12M7 3c0 5 5 6 5 9s-5 4-5 9M17 3c0 5-5 6-5 9s5 4 5 9"/></svg>';
+const LINKX = '<svg class="em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1M4 4l16 16"/></svg>';
 const WARN = '<svg class="em" style="color:var(--warn)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.01"/></svg>';
 
 /* link: help.html#<id 22 ký tự>.<khoá 43 ký tự>.<game> — phần sau # không bao giờ được gửi lên máy chủ */
@@ -117,10 +142,10 @@ const setTok = v => { try { sessionStorage.setItem(tokKey, v); } catch (e) {} };
 let result = null, stage = "intro";
 
 function view() {
-  const t = L(), card = $("card"); document.title = t.title; $("fHome").textContent = t.home; $("fPriv").textContent = t.priv; $("themeBtn").setAttribute("aria-label", t.theme);
+  const t = L(), card = $("card"); card.className = "card"; document.title = t.title; $("fHome").textContent = t.home; $("fPriv").textContent = t.priv; $("themeBtn").setAttribute("aria-label", t.theme);
   document.querySelectorAll("#langSeg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.l === root.lang)));
-  if (!valid) { card.innerHTML = WARN + "<h1>" + esc(t.bad) + "</h1><p>" + esc(t.badP) + '</p><a href="play/index.html">' + esc(t.more) + "</a>"; return; }
-  if (stage === "used") { card.innerHTML = WARN + "<h1>" + esc(t.used) + "</h1><p>" + esc(t.usedP) + '</p><a href="play/index.html">' + esc(t.more) + "</a>"; return; }
+  if (!valid) { card.className = "card st-bad"; card.innerHTML = LINKX + "<h1>" + esc(t.bad) + "</h1><p>" + esc(t.badP) + '</p><a class="nb-a" href="play/index.html">' + esc(t.more) + "</a>"; return; }
+  if (stage === "used") { card.className = "card st-used"; card.innerHTML = HOUR + "<h1>" + esc(t.used) + "</h1><p>" + esc(t.usedP) + '</p><p class="hint">' + esc(t.usedH) + '</p><a class="nb-a" href="play/index.html">' + esc(t.more) + "</a>"; return; }
   if (stage === "done") { card.innerHTML = ICON + "<h1>" + esc(t.doneT) + '</h1><div class="big">' + esc(NPS.fmtScore(game, result.score)) + "</div><p>" + (NPS.isPct(game) ? "" : esc(t.pts) + " · ") + esc(GN()) + "</p><p>" + esc(t.doneP) + '</p><button class="cta" id="more" type="button">' + esc(t.more) + "</button>"; $("more").onclick = () => { location.href = "index.html"; }; return; }
   card.innerHTML = ICON + "<h1>" + esc(t.t) + '</h1><p class="game">' + esc(GN()) + "</p><p>" + esc(t.p) + '</p>' + (rstate ? '<p class="game" style="font-size:15px">' + esc(t.resumeP) + '</p>' : '') + '<ul class="how"><li><b>1</b><span>' + esc(t.s1) + "</span></li><li><b>2</b><span>" + esc(t.s2) + "</span></li><li><b>3</b><span>" + esc(t.s3) + '</span></li></ul><button class="cta" id="go" type="button">' + esc(getTok() ? t.resume : t.start) + '</button><p class="err" id="err" role="alert"></p><p class="small">' + esc(t.privacy) + "</p>";
   $("go").onclick = start;
