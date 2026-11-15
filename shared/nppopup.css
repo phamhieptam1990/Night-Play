@@ -338,3 +338,17 @@ html:not(.npp-kid) #ovHow:not([hidden]) #hwBack::before{content:"✕";font-size:
 
 /* ✕ của màn Cách chơi Cozy: tâm cùng hàng nút ← của HUD (tâm y=38px, cách mép phải 16px) */
 html:not(.npp-kid) #ovHow:not([hidden]) #hwBack:not([hidden]){top:16px!important;right:16px!important}
+
+/* ===== THANG CỠ CHỮ CHUẨN CHO MỌI POPUP (15/11/2026) =====
+   5 bậc dùng chung: --fs-title (tiêu đề), --fs-body (nội dung/ý hướng dẫn), --fs-label (nhãn ô giao diện, chip), --fs-btn (nút chính), --fs-note (ghi chú).
+   Pop Play (trẻ nhỏ) to hơn Night Play một bậc; điện thoại ngang thấp nhỏ hơn một bậc. Popup nào cần co vì tràn thì tự co từ cỡ chuẩn (howfit.js, pophelp.js, help.js), không đặt cỡ riêng.
+   Chỉnh MỘT chỗ này để đổi toàn app. */
+:root{--fs-title:22px;--fs-body:17px;--fs-label:15px;--fs-btn:18px;--fs-note:14px;--tip-t:var(--fs-title);--tip-b:var(--fs-body)}
+html.npp-kid{--fs-title:26px;--fs-body:20px;--fs-label:17px;--fs-btn:21px;--fs-note:16px}
+@media (orientation:landscape) and (max-height:520px){:root{--fs-title:20px;--fs-body:16px;--fs-label:14px;--fs-btn:17px;--fs-note:13px}html.npp-kid{--fs-title:23px;--fs-body:18px;--fs-label:15px;--fs-btn:19px;--fs-note:14px}}
+html:not(#np) :is(#ovSkin,#ovPay,#ovCh,#ovHow,#ovGate,#ovColl) h2,html:not(#np) #setup .sh-h,html:not(#np) .nps-sheet h3,html:not(#np) .nps-dlg h3,html:not(#np) #hlpCard h3{font-size:var(--fs-title)!important}
+html:not(#np) :is(#ovPay,#ovCh,#ovGate) .npc p,html:not(#np) #pay p,html:not(#np) #pay .pw-p,html:not(#np) .nps-sheet p,html:not(#np) .nps-dlg p,html:not(#np) #hwL li,html:not(#np) #ovHow .hwL li{font-size:var(--fs-body)!important}
+html:not(#np) #ovSkin .npc .skc span,html:not(#np) #ovSkin .npc .skc .sx b,html:not(#np) #ovSkin .skgrid>.sk>span,html:not(#np) #setup .chip b{font-size:var(--fs-label)!important}
+html:not(#np) #ovSkin .npc .skc small,html:not(#np) #ovSkin .npc .skc .sx small,html:not(#np) #setup .sec small,html:not(#np) #setup .proNote,html:not(#np) .nps-sheet .nps-note,html:not(#np) #ovHow .fine{font-size:var(--fs-note)!important}
+html:not(#np) :is(#hwGo,#chGo,#pwGo,#npsYes,#npsGo) ,html:not(#np) .nps-sheet .nps-row button,html:not(#np) .nps-dlg .nps-row button{font-size:var(--fs-btn)!important}
+html:not(#np) #setup .sh-f .icon-btn{font-size:var(--fs-label)!important}
