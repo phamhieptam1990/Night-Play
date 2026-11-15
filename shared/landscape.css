@@ -104,3 +104,6 @@ html.np-hudg #game>.stats{width:calc(var(--cl) - 1cqw - 28px)}
 #play #game .item .em{font-size:14cqw}
 #play #home #hHero{flex:none;display:flex!important;align-items:center;justify-content:center;height:min(36cqh,40cqw);font-size:min(30cqh,34cqw);line-height:1;white-space:nowrap;transform-origin:50% 100%;animation:npHeroBob 2.8s ease-in-out infinite}#play #home #hHero[data-stack="1"]{white-space:normal;padding-inline:0;line-height:.98}#play #home{margin-bottom:0}   /* lưới 2 cột (điện thoại ngang): linh vật to theo chiều cao khung (trước ghim 16cqw ≈ 57px, "nhỏ xíu") */
 }
+
+/* Điện thoại NGANG có cột nút HUD (← 🔊 ⋯ ở x 16–60): tiêu đề tên game bắt đầu ở x≥68 để KHÔNG bị nút ← che chữ cái đầu (trước: bắt đầu ở x=52, che 8px) */
+html.np-hudg .top{left:68px!important}

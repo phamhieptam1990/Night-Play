@@ -1458,3 +1458,7 @@ html.np-hudg:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>:is(.dbar,.
   html.npp-kid #ovHow:not([hidden]) .fine,html.npp-kid #ovHow:not([hidden]) #hwS,html.npp-kid #ovHow:not([hidden]) p{font-size:calc(var(--tip-b)*.8)!important;line-height:1.3!important}
   html.npp-kid #ovHow:not([hidden]) #hwGo{font-size:calc(var(--tip-b)*1.1)!important}
 }
+
+/* ✕ của màn Cách chơi (#hwBack, position:fixed) KHÔNG bị zoom của howfit.js: zoom làm nút nhỏ lại (≈20px) và tọa độ top/right nhân theo → ✕ trôi vào giữa trên ở iPhone. Giữ 44px, góc phải-trên. */
+html.npp-kid #ovHow:not([hidden])>#hwBack{zoom:1!important;position:fixed!important;top:10px!important;right:10px!important;left:auto!important;width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important}
+html.np-hudg .app .top{left:68px!important}   /* tiêu đề game không bị nút ← che chữ đầu (cột nút HUD x 16–60) */

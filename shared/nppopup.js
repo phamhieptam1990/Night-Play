@@ -38,6 +38,24 @@
         try { new MutationObserver(function () { if (ov.hidden) stop(); }).observe(ov, { attributes: true, attributeFilter: ["hidden"] }); } catch (e) {}
       });
     }
+    /* ✕ CANH THEO TIÊU ĐỀ: tâm ✕ luôn TRÙNG tâm tiêu đề (h2) và cách mép trên/phải thẻ bằng nhau — đo thật rồi đặt top/right, không phụ thuộc phông, cỡ chữ, zoom hay engine (trước: mỗi popup một top riêng nên ✕ lệch 7–15px so với tiêu đề trên iPhone) */
+    var alignX = function (card) {
+      try {
+        var x = card.querySelector(".npx"), h = card.querySelector("h2"); if (!x || !h || !card.offsetWidth) return;
+        var cr = card.getBoundingClientRect(), hr = h.getBoundingClientRect(), xr = x.getBoundingClientRect(); if (!hr.height || !xr.height) return;
+        var z = cr.width / (card.offsetWidth || cr.width) || 1;   /* hệ số zoom/scale của thẻ */
+        var cy = (hr.top + hr.height / 2 - cr.top) / z, top = Math.max(6, Math.round(cy - xr.height / z / 2)), gap = Math.min(14, Math.max(8, top));
+        x.style.setProperty("top", top + "px", "important"); x.style.setProperty("right", gap + "px", "important");
+      } catch (e) {}
+    };
+    ["ovSkin", "ovPay"].forEach(function (id) {
+      var ov = d.getElementById(id), card = ov && ov.querySelector(".npc"); if (!card) return;
+      var run = function () { alignX(card); setTimeout(function () { alignX(card); }, 120); };
+      try { new MutationObserver(function () { if (!ov.hidden) run(); }).observe(ov, { attributes: true, attributeFilter: ["hidden"] }); } catch (e) {}
+      try { if (window.ResizeObserver) new ResizeObserver(function () { if (!ov.hidden) alignX(card); }).observe(card); } catch (e) {}
+      addEventListener("resize", function () { if (!ov.hidden) run(); });
+      var h2 = card.querySelector("h2"); if (h2) try { new MutationObserver(function () { if (!ov.hidden) run(); }).observe(h2, { childList: true, characterData: true, subtree: true }); } catch (e) {}
+    });
     /* Cột nút HUD (← 🔊 ⋯) nằm trong TRANG CỔNG, ngoài khung game → lớp mờ của popup không phủ tới và nút vẫn sáng rực. Khi một popup của game mở thì đặt html.np-popup-open ở trang cổng; shared/hud.css làm mờ cột nút. */
     var PO = ["ovHow", "ovSkin", "ovPay", "ovCh", "ovGate", "ovColl"];
     var syncPo = function () { var on = PO.some(function (i) { var e = d.getElementById(i); return e && !e.hidden; }); try { if (window.parent && window.parent !== window) window.parent.document.documentElement.classList.toggle("np-popup-open", on); } catch (e) {} };

@@ -398,3 +398,4 @@ html:not(#np) #ovSkin .npc :is(#skX,#skBack){display:none!important}
   html:not(.npp-kid) #ovSkin .npc .sk>.skc .sx b{overflow-wrap:anywhere;line-height:1.15}
 }
 @media (max-width:520px) and (orientation:portrait){html:not(#np):not(.npp-kid) #ovSkin .npc .sk>.skc .e{font-size:38px!important;line-height:1!important}}
+html:not(#np) #ovHow:not([hidden])>#hwBack{zoom:1!important}
