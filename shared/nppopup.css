@@ -204,3 +204,57 @@ html:has(.ov:not([hidden]):not(#ovStart):not(#ovEnd)) #npDifBadge{z-index:1!impo
 /* Safari/iOS cũ (html.np-fixcb: popup position:fixed bị nhốt trong khung game): lớp mờ toàn cửa sổ cả màn NGANG */
 html.npp-kid.np-fixcb:has(:is(#ovSkin,#ovPay,#ovColl,#ovGate):not([hidden]))::after{content:"";position:fixed;inset:0;z-index:2147482999;background:rgba(8,6,22,.72);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
 html.npp-kid.np-fixcb:has(:is(#ovSkin,#ovPay,#ovColl,#ovGate):not([hidden])) .play{z-index:2147483000}
+
+/* POPUP GIAO DIỆN COZY, ĐIỆN THOẠI NGANG (thấp): MỌI ô cùng kích thước — 3 cột đều, hàng cuối canh giữa (trước: 4 ô hẹp chữ xuống 3-4 dòng đè ổ khoá + 1 ô kéo dài hết hàng) */
+@media (max-height:520px) and (min-aspect-ratio:11/10){
+  html:not(.npp-kid) #ovSkin .npc .sk{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:8px!important;margin-top:8px!important}
+  html:not(.npp-kid) #ovSkin .npc .skc{grid-column:span 2!important;min-height:52px!important;padding:6px 10px!important;gap:8px!important}
+  html:not(.npp-kid) #ovSkin .npc .skc:last-child:nth-child(3n+1){grid-column:3 / span 2!important}
+  html:not(.npp-kid) #ovSkin .npc .skc:last-child:nth-child(3n+2){grid-column:4 / span 2!important}
+  html:not(.npp-kid) #ovSkin .npc .skc:nth-last-child(2):nth-child(3n+1){grid-column:2 / span 2!important}
+  html:not(.npp-kid) #ovSkin .npc .skc .e{font-size:26px!important;width:32px;height:32px;display:grid;place-items:center;flex:none}
+  html:not(.npp-kid) #ovSkin .npc .skc .e img{width:30px;height:30px}
+  html:not(.npp-kid) #ovSkin .npc .skc .sx{min-width:0;flex:1}
+  html:not(.npp-kid) #ovSkin .npc .skc .sx b{font-size:13px!important;line-height:1.15;overflow-wrap:anywhere}
+  html:not(.npp-kid) #ovSkin .npc .skc .sx small{font-size:11px!important}
+}
+
+/* ===== ĐẬP DEADLINE — popup "Giao diện & tuỳ chọn" (#setup) kiểu Night Pass: thẻ tím tối viền sáng + quầng, ✕ tròn nhấn, ô BẰNG NHAU (Theme 3+2 canh giữa, Bàn 4 cột, Loại 3 cột), 🔒 huy hiệu vàng góc ô, đang chọn = viền sáng + ✓ gradient, nút Stats pill; màn ngang thấp chia 2 cột ===== */
+html #setup .sheet-in{width:min(460px,100%);gap:12px;background:linear-gradient(160deg,rgba(44,36,104,.98),rgba(22,24,42,.98));border:1px solid rgba(167,150,255,.6);border-radius:28px;padding:16px;color:#F1F2FF;box-shadow:0 0 0 1px rgba(124,92,255,.2),0 18px 60px rgba(124,92,255,.45),0 10px 36px rgba(0,0,0,.4)}
+html #setup .sh-h{position:relative;justify-content:center;border-bottom:0;padding:2px 54px 2px;min-height:44px;font:800 22px/1.15 Inter,system-ui,sans-serif;letter-spacing:-.01em;color:#fff;text-align:center}
+html #setup #setupT::before{content:"🎨";margin-right:8px}
+html #setup #setupX{position:absolute;top:0;right:0;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;display:grid;place-items:center;border-radius:50%;background:#7050F2;color:#fff;border:2px solid rgba(255,255,255,.7);box-shadow:0 3px 10px rgba(0,0,0,.35);font-size:18px}
+html #setup .sec small{color:#C9CCF0;font-size:11.5px;letter-spacing:.1em;margin-bottom:7px}
+html #setup .chips{gap:10px}
+html #setup .chip{box-sizing:border-box;min-height:80px;height:80px;border:2px solid rgba(167,150,255,.38);border-radius:18px;background:rgba(8,6,24,.5);color:#fff;box-shadow:none;opacity:1}
+html #setup .chip b{color:#fff;font-weight:800}
+html #setup .chip.on{border-color:#B7A9FF;background:linear-gradient(160deg,rgba(108,75,242,.5),rgba(194,65,12,.22));box-shadow:0 0 0 2px rgba(183,169,255,.3),0 4px 18px rgba(108,75,242,.45)}
+html #setup .chip.on::after{background:linear-gradient(135deg,#6C4BF2,#C2410C);color:#fff;border:1.5px solid rgba(255,255,255,.7)}
+html #setup .chip.lock{opacity:1}
+html #setup .chip .lk{position:absolute!important;top:-7px;right:-5px;display:grid!important;place-items:center;width:22px;height:22px;margin:0!important;border-radius:50%!important;background:rgba(20,16,50,.95)!important;border:1.5px solid #FFD66B;font-size:11px!important;line-height:1;box-shadow:0 2px 6px rgba(0,0,0,.4)!important;z-index:2}
+html #setup #chipSkins{grid-template-columns:repeat(6,minmax(0,1fr))}
+html #setup #chipSkins .chip,html #setup #chipSkins .chip:nth-child(n+4){grid-column:span 2}
+html #setup #chipSkins .chip:last-child:nth-child(3n+1){grid-column:3 / span 2}html #setup #chipSkins .chip:last-child:nth-child(3n+2){grid-column:4 / span 2}html #setup #chipSkins .chip:nth-last-child(2):nth-child(3n+1){grid-column:2 / span 2}
+html #setup #chipGrids{grid-template-columns:repeat(4,minmax(0,1fr))}
+html #setup #chipPacks,html #setup #chipPartners{grid-template-columns:repeat(3,minmax(0,1fr))}
+html #setup .sh-f{gap:8px}
+html #setup .sh-f .icon-btn{min-height:48px;border-radius:999px;border:1.5px solid rgba(167,150,255,.55);background:transparent;color:#F1F2FF;font:800 15px Inter,system-ui,sans-serif}
+html #setup .proNote{color:#C9CCF0}
+@media (max-height:700px) and (orientation:portrait){html #setup .chip{min-height:64px;height:64px}}
+@media (max-height:520px) and (min-aspect-ratio:11/10){
+  html #setup .sheet-in{width:min(660px,calc(100% - 24px));display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px 16px;padding:10px 14px 12px;border-radius:22px;align-content:start}
+  html #setup .sh-h,html #setup .sh-f{grid-column:1 / -1}
+  html #setup .sh-h{min-height:40px;font-size:18px;padding-top:0}
+  html #setup .sheet-in>.sec:nth-child(2){grid-column:1;grid-row:2 / span 3}
+  html #setup .sheet-in>.sec:nth-child(3){grid-column:2;grid-row:2}
+  html #setup .sheet-in>.sec:nth-child(4){grid-column:2;grid-row:3}
+  html #setup .sheet-in>.sec:nth-child(5){grid-column:2;grid-row:4}
+  html #setup .sh-f{flex-direction:row!important;align-items:center;gap:10px;margin-top:2px}html #setup .sh-f .icon-btn{width:auto!important;flex:0 0 auto;padding:0 20px;min-height:40px}html #setup .proNote{flex:1;text-align:left!important}
+  html #setup .chips{gap:6px}
+  html #setup .chip{min-height:46px;height:46px;padding:4px 4px!important;gap:2px!important;flex-direction:row!important}
+  html #setup #chipSkins .chip{flex-direction:column!important;min-height:54px;height:54px}
+  html #setup .chip .pv{display:none}html #setup #chipSkins .chip .sw{height:20px;max-width:64px}
+  html #setup .chip b{font-size:12px}
+  html #setup .chip .gr{width:20px;height:20px}
+  html #setup .sec small{margin-bottom:3px}
+}
