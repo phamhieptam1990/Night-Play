@@ -255,8 +255,11 @@ tr.row-open{cursor:pointer} tr.row-open:hover td{background:var(--hover)}
 .evform{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-bottom:14px}.evf{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--ink2)}.evf .field{width:100%;border-radius:10px;min-width:0;font-size:15px;color:var(--ink)}
 .evskinhd{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}.evcount{font-size:12px;color:var(--ink2)}.evskinhd .grow{flex:1}
 .evcat{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
-.evgame{border:1px solid var(--border);border-radius:12px;padding:10px 12px;background:color-mix(in srgb,var(--ink) 3%,transparent)}
-.evgame>header{display:flex;align-items:center;gap:8px;margin-bottom:6px}.evgame>header b{flex:1;font-size:14px}.evgame>header button{border:0;background:none;color:var(--accent);font-size:12px;padding:4px 6px;min-height:32px}
+.evgame{border:1px solid var(--border);border-radius:12px;padding:0 12px 6px;background:color-mix(in srgb,var(--ink) 3%,transparent)}
+.evgame>summary{display:flex;align-items:center;gap:8px;min-height:48px;cursor:pointer;list-style:none;-webkit-tap-highlight-color:transparent}.evgame>summary::-webkit-details-marker{display:none}
+.evgame>summary::before{content:"▸";color:var(--ink2);font-size:13px;transition:transform .15s;flex:none}.evgame[open]>summary::before{transform:rotate(90deg)}
+.evgame>summary b{flex:1;font-size:15px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.evn{font-size:12px;color:var(--ink2);border:1px solid var(--border);border-radius:999px;padding:2px 9px;flex:none}.evn.on{background:var(--accent);color:var(--on-accent);border-color:var(--accent);font-weight:700}
+.evgame>summary button{border:0;background:none;color:var(--accent);font-size:13px;padding:0 6px;min-height:44px;flex:none}.evbar{display:none}
 .evsk{display:flex;align-items:center;gap:10px;min-height:40px;padding:2px 0;cursor:pointer;font-size:14px}.evsk input{width:20px;height:20px;flex:none;accent-color:var(--accent)}.evsk .em{font-size:20px;flex:none}.evsk small{color:var(--ink2);margin-left:auto;font-size:11px}
 .evact{display:flex;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap}.evmsg{font-size:13px}.evmsg.bad{color:var(--bad-text)}.evmsg.ok{color:var(--st-good)}
 .btn.primary{background:var(--accent);color:var(--on-accent);border-color:var(--accent);font-weight:700;min-height:40px;padding:8px 20px}
@@ -265,7 +268,7 @@ tr.row-open{cursor:pointer} tr.row-open:hover td{background:var(--hover)}
 .evst{font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;border:1px solid var(--border);white-space:nowrap}.evst.active{color:var(--st-good);border-color:var(--st-good)}.evst.upcoming{color:var(--st-warning);border-color:var(--st-warning)}.evst.ended,.evst.revoked,.evst.full{color:var(--ink2)}
 .evdesc{grid-column:1/-1;font-size:12px;color:var(--ink2);line-height:1.5}.evdesc .evchip{display:inline-block;margin:2px 4px 2px 0;padding:1px 8px;border-radius:999px;background:color-mix(in srgb,var(--accent) 12%,transparent)}
 .evrow2{grid-column:1/-1;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.evempty{color:var(--ink2);padding:10px 0;font-size:14px}
-@media (max-width:640px){.evcat{grid-template-columns:1fr}.evitem{grid-template-columns:1fr auto}.evitem .evcodebig{grid-column:1}.evitem .evst{grid-column:2;grid-row:1;justify-self:end}.evmeta{grid-column:1/-1;justify-self:start;text-align:left}.evact .btn.primary{flex:1;min-height:46px}.evsk{min-height:44px}}
+@media (max-width:760px){.evform{grid-template-columns:1fr}.evf .field,.evnew .field{font-size:16px;min-height:46px}.evnew,.evlist{padding:12px}.evskinhd .btn{min-height:40px;flex:1}.evskinhd .grow,.evcount{display:none}.evact{position:sticky;bottom:-16px;margin:12px -12px -12px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:var(--surface);border-top:1px solid var(--border);border-radius:0 0 16px 16px;gap:10px;z-index:5}.evbar{display:block;font-size:13px;color:var(--ink2);flex:1;min-width:0}.evact .btn.primary{flex:0 0 auto;min-width:120px}.evmsg{flex-basis:100%;order:3}.evsk{min-height:46px}.evsk input{width:22px;height:22px}.evcodebig{font-size:30px}.evrow2 .btn{min-height:44px;flex:1}.evcat{grid-template-columns:1fr}.evitem{grid-template-columns:1fr auto}.evitem .evcodebig{grid-column:1}.evitem .evst{grid-column:2;grid-row:1;justify-self:end}.evmeta{grid-column:1/-1;justify-self:start;text-align:left}.evact .btn.primary{flex:1;min-height:46px}.evsk{min-height:44px}}
 </style>
 </head>
 <body>
@@ -450,7 +453,7 @@ tr.row-open{cursor:pointer} tr.row-open:hover td{background:var(--hover)}
         </div>
         <div class="evskinhd"><b data-i18n="evSkins"></b><span id="evCount" class="evcount"></span><span class="grow"></span><button class="btn" type="button" id="evAll" data-i18n="evAll"></button><button class="btn" type="button" id="evNone" data-i18n="evNone"></button></div>
         <div id="evCat" class="evcat"></div>
-        <div class="evact"><button class="btn primary" type="button" id="evCreate" data-i18n="evCreate"></button><span id="evMsg" class="evmsg" role="status"></span></div>
+        <div class="evact"><span id="evBar" class="evbar"></span><button class="btn primary" type="button" id="evCreate" data-i18n="evCreate"></button><span id="evMsg" class="evmsg" role="status"></span></div>
       </div>
       <div class="card evlist"><h3 data-i18n="evListTitle"></h3><div id="evList"></div></div>
     </section>
@@ -732,15 +735,18 @@ const pad2 = n => String(n).padStart(2, "0");
 const localIso = d => d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()) + "T" + pad2(d.getHours()) + ":" + pad2(d.getMinutes());
 const fmtDt = iso => { try { return new Date(iso).toLocaleString(t("locale"), { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }); } catch (e) { return iso; } };
 function evMsg(text, cls) { const m = $("evMsg"); m.textContent = text || ""; m.className = "evmsg" + (cls ? " " + cls : ""); }
+const evOpen = new Set(); let evOpenInit = false;
 function renderCat() {
   if (!ev.cat) return;
-  const L = lang === "en" ? "en" : "vi";
+  const L = lang === "en" ? "en" : "vi", wide = matchMedia("(min-width:761px)").matches;
+  if (!evOpenInit) { evOpenInit = true; if (wide) ev.cat.forEach(g => evOpen.add(g.id)); }
   $("evCat").innerHTML = ev.cat.map(g => {
-    const sel = ev.sel[g.id] || new Set();
-    return '<div class="evgame" data-g="' + esc(g.id) + '"><header><b>' + esc(g.name) + '</b><button type="button" data-all="' + esc(g.id) + '">' + esc(t(sel.size === g.skins.length ? "evGameNone" : "evGameAll")) + '</button></header>' +
-      g.skins.map(k => '<label class="evsk"><input type="checkbox" data-g="' + esc(g.id) + '" data-s="' + esc(k.id) + '"' + (sel.has(k.id) ? " checked" : "") + '><span class="em">' + esc(k.e) + '</span><span>' + esc(k[L]) + '</span></label>').join("") + "</div>";
+    const sel = ev.sel[g.id] || new Set(), all = sel.size === g.skins.length;
+    return '<details class="evgame" data-g="' + esc(g.id) + '"' + (evOpen.has(g.id) ? " open" : "") + '><summary><b>' + esc(g.name) + '</b><span class="evn' + (sel.size ? " on" : "") + '">' + sel.size + "/" + g.skins.length + '</span><button type="button" data-all="' + esc(g.id) + '">' + esc(t(all ? "evGameNone" : "evGameAll")) + '</button></summary>' +
+      g.skins.map(k => '<label class="evsk"><input type="checkbox" data-g="' + esc(g.id) + '" data-s="' + esc(k.id) + '"' + (sel.has(k.id) ? " checked" : "") + '><span class="em">' + esc(k.e) + '</span><span>' + esc(k[L]) + '</span></label>').join("") + "</details>";
   }).join("");
   $("evCount").textContent = t("evSel", { n: evSelCount() });
+  $("evBar").textContent = t("evSel", { n: evSelCount() });
 }
 function renderEvList(codes) {
   const L = lang === "en" ? "en" : "vi", names = {}, sk = {};
@@ -758,7 +764,8 @@ async function loadEvents() {
   } catch (e) { if (!(e instanceof AuthError)) evMsg(errText(e), "bad"); }
 }
 $("evCat").addEventListener("change", e => { const c = e.target.closest("input[data-s]"); if (!c) return; const g = c.dataset.g, set = ev.sel[g] || (ev.sel[g] = new Set()); c.checked ? set.add(c.dataset.s) : set.delete(c.dataset.s); renderCat(); });
-$("evCat").addEventListener("click", e => { const b = e.target.closest("button[data-all]"); if (!b) return; const g = ev.cat.find(x => x.id === b.dataset.all), set = ev.sel[g.id] || (ev.sel[g.id] = new Set()); if (set.size === g.skins.length) set.clear(); else g.skins.forEach(k => set.add(k.id)); renderCat(); });
+$("evCat").addEventListener("toggle", e => { const d = e.target.closest && e.target.closest("details[data-g]"); if (d) d.open ? evOpen.add(d.dataset.g) : evOpen.delete(d.dataset.g); }, true);
+$("evCat").addEventListener("click", e => { const b = e.target.closest("button[data-all]"); if (!b) return; e.preventDefault(); e.stopPropagation(); const g = ev.cat.find(x => x.id === b.dataset.all), set = ev.sel[g.id] || (ev.sel[g.id] = new Set()); if (set.size === g.skins.length) set.clear(); else g.skins.forEach(k => set.add(k.id)); renderCat(); });
 $("evAll").onclick = () => { (ev.cat || []).forEach(g => ev.sel[g.id] = new Set(g.skins.map(k => k.id))); renderCat(); };
 $("evNone").onclick = () => { ev.sel = {}; renderCat(); };
 $("evCode").addEventListener("input", e => { e.target.value = e.target.value.replace(/\D/g, "").slice(0, 6); });
