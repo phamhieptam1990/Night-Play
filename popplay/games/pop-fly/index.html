@@ -252,7 +252,9 @@ const cv=$("cv"),ctx=cv.getContext("2d");let K=1,DPR=1;
 let ac=null;
 function audio(){if(!sound)return null;try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();if(ac.state==="suspended")ac.resume();return ac}catch(e){return null}}
 function tone(f,d,type,vol,when){const a=audio();if(!a)return;const t0=a.currentTime+(when||0),o=a.createOscillator(),g=a.createGain();o.type=type||"sine";o.frequency.setValueAtTime(f,t0);g.gain.setValueAtTime(.0001,t0);g.gain.exponentialRampToValueAtTime(vol||.12,t0+.02);g.gain.exponentialRampToValueAtTime(.0001,t0+d);o.connect(g).connect(a.destination);o.start(t0);o.stop(t0+d+.02)}
-const sfx={flap:()=>tone(520,.09,"triangle",.07),good:()=>{tone(660,.12,"triangle",.12);tone(880,.16,"triangle",.12,.09);tone(1100,.2,"triangle",.1,.18)},bad:()=>tone(220,.22,"sine",.1),star:()=>tone(980,.1,"triangle",.09),win:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.2,"triangle",.12,i*.1))};
+/* đang đọc giọng (nhất là câu dài): bỏ âm chạm/vỗ cánh để nhẹ máy, tránh chồng âm gây khựng trên iOS */
+const talking=()=>{try{return !!(window.speechSynthesis&&(speechSynthesis.speaking||sayTxt.length>12))}catch(e){return false}};
+const sfx={flap:()=>{if(!talking())tone(520,.09,"triangle",.07)},good:()=>{tone(660,.12,"triangle",.12);tone(880,.16,"triangle",.12,.09);tone(1100,.2,"triangle",.1,.18)},bad:()=>tone(220,.22,"sine",.1),star:()=>tone(980,.1,"triangle",.09),win:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.2,"triangle",.12,i*.1))};
 /* HIỆU NĂNG iOS: speechSynthesis.cancel()+speak() chạy ĐỒNG BỘ giữa lúc đang bay làm khựng khung hình (iPhone/iPad). Gộp lời đọc: chỉ giữ câu MỚI NHẤT, đọc ở nhịp rảnh kế tiếp (không đọc chồng), chỉ cancel khi đang đọc dở. */
 let sayT=0,sayTxt="";function say(text){if(!sound||!window.speechSynthesis)return;sayTxt=text;if(sayT)return;sayT=setTimeout(()=>{sayT=0;const tx=sayTxt;try{const sy=speechSynthesis;if(sy.speaking||sy.pending)sy.cancel();const u=new SpeechSynthesisUtterance(tx);u.lang=LANG==="vi"?"vi-VN":"en-US";u.rate=.85;u.pitch=1.15;sy.speak(u)}catch(e){}},(window.requestIdleCallback?60:120))}
 PF.say=say;PF.sfx=sfx;PF.tone=tone;
