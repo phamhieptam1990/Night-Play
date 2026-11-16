@@ -99,7 +99,7 @@
   /* ---------- nút trong popup Giao diện ---------- */
   function ensureBtn() {
     var ov = document.getElementById("ovSkin"); if (!ov || ov.hidden) return;
-    var host = ov.querySelector(".npc") || ov; if (host.querySelector("#evtBtn")) return;
+    var host = ov.querySelector(".npc") || ov; var old = host.querySelector("#evtBtn"); if (old) { old.textContent = tr("btn"); return; }   /* đổi ngôn ngữ: cập nhật chữ nút đã có */
     var b = document.createElement("button"); b.id = "evtBtn"; b.type = "button"; b.textContent = tr("btn"); b.onclick = open;
     var back = host.querySelector("#skBack,#skX"); if (back && back.parentNode === host && back.id === "skBack") host.insertBefore(b, back); else host.appendChild(b);
   }
@@ -109,5 +109,6 @@
     ensureBtn();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", watch); else watch();
+  try { new MutationObserver(function () { ensureBtn(); var d = document.getElementById("evtDlg"); if (d && !d.hidden) { d.querySelector("#evtT").textContent = tr("title"); d.querySelector("#evtH").textContent = tr("hint"); d.querySelector("#evtGo").textContent = tr("go"); d.querySelector("#evtX").textContent = tr("close"); } }).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] }); } catch (e) {}
   loadSkins();
 })();

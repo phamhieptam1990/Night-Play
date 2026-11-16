@@ -139,10 +139,20 @@
     var host = t.parentNode; while (host && host !== document.body && host.querySelectorAll(sel).length < 2) host = host.parentNode;   // khung chứa CẢ danh sách ô chọn, không phải bên trong một ô
     return host && host !== document.body ? { el: host, home: false } : null;
   }
+  function relabel(rec) {
+    try {
+      var l = vi() ? "vi" : "en"; if (!card || card._lang === l) { if (card && !card._lang) card._lang = l; return; }
+      var t = T[l], go = card.querySelector(".npr-go"), x = card.querySelector(".npr-x"), m = Math.floor((Date.now() - rec.ts) / 60000);
+      if (go) { go.innerHTML = t.go + "<small></small>"; go.querySelector("small").textContent = t.ago(m); }
+      if (x) { x.setAttribute("aria-label", t.x); x.title = t.x; }
+      card._lang = l;
+    } catch (e) {}
+  }
   function ensure() {
     var h = canResume && !challenge && !MULTI && !NP.resumeBoot() ? selectHost() : null, rec = h ? read() : null;
     if (!rec || !h) { if (card && card.parentNode) card.remove(); if (!rec && !canResume) card = null; if (!read()) card = null; return; }
     if (!card) card = build(rec);
+    relabel(rec);   /* đổi ngôn ngữ sau khi thẻ đã dựng → cập nhật chữ thẻ (trước: giữ ngôn ngữ lúc dựng) */
     var host = (h.home && h.el.querySelector(":scope>.hl")) || h.el;
     if (card.parentNode !== host) {   // ngay trên nút chơi chính nếu có (thẻ hôm nay), không thì đầu màn chọn
       var anchor = host.querySelector(":scope>#bDaily,:scope>#bCamp,:scope>#bMake,:scope>.dbtn,:scope>#bPractice");
