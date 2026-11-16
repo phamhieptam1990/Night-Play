@@ -1495,3 +1495,18 @@ html.np-hudg .app .top{left:68px!important}   /* tiêu đề game không bị n�
   html.npp-kid #ovHow:not([hidden]) .row #hwGo{flex:none!important;width:var(--hb)!important;min-width:var(--hb)!important;padding:0!important;font-size:0!important;position:relative!important}
   html.npp-kid #ovHow:not([hidden]) .row #hwGo::before{content:"";position:absolute;inset:0;margin:auto;transform:translateX(7%);width:calc(var(--hb)*.34);height:calc(var(--hb)*.38);background:#fff;clip-path:polygon(0 0,100% 50%,0 100%)}   /* tam giác vẽ bằng CSS: ký tự ▶ lệch lên/trái do phông */
 }
+
+/* MÀN BẮT ĐẦU (#ovHow) MỌI CỠ MÀN (iPad, web): chữ ô Cấp/Người chơi, huy hiệu, biểu tượng ý KHÔNG theo cqw của khung (trước: chip 30–42px gấp đôi danh sách 20px, huy hiệu to, nội dung cao quá → howfit thu chữ .45 và cắt đầu/đuôi) — dùng thang chung GAME_RULES 6d */
+html.npp-kid #ovHow:not([hidden]) .chip{font-size:var(--fs-body)!important;padding:6px 16px!important;min-height:0!important;line-height:1.2!important}
+html.npp-kid #ovHow:not([hidden]) .stk{gap:8px!important}
+html.npp-kid #ovHow:not([hidden]) .stk span{flex:0 1 auto!important;width:clamp(38px,6.2vh,54px)!important;max-width:none!important;font-size:clamp(18px,3.4vh,26px)!important}
+html.npp-kid #ovHow:not([hidden]) .hwL li b{font-size:clamp(30px,5.2vh,46px)!important;width:clamp(44px,7vh,64px)!important}
+html.npp-kid #ovHow:not([hidden]) .hwL li{padding-block:clamp(6px,1.6vh,14px)!important}
+
+/* NÚT LOA + BẮT ĐẦU cùng chiều cao ở màn CAO (iPad, web, điện thoại dọc) — như màn ngang thấp ở trên; hàng nút nằm SÁT ngay dưới khung thông tin (hàng huy hiệu xuống sau nút), không trôi xa */
+@media (min-height:521px){
+  html.npp-kid #ovHow:not([hidden]) .row:has(#hwGo){--hb:clamp(52px,7.4vh,68px);order:4;margin-top:clamp(6px,1.6vh,14px)!important;align-items:center!important}
+  html.npp-kid #ovHow:not([hidden]) .row #hwGo{height:var(--hb)!important;min-height:var(--hb)!important;max-height:var(--hb)!important;padding-block:0!important;display:grid!important;place-items:center!important}
+  html.npp-kid #ovHow:not([hidden]) .row .npSay{height:var(--hb)!important;min-height:var(--hb)!important;width:var(--hb)!important;min-width:var(--hb)!important}
+  html.npp-kid #ovHow:not([hidden]) .stk{order:5}
+}
