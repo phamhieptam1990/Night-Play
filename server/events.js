@@ -4,7 +4,7 @@
    Giao hàng: GET /api/pro/<game>.js?event=<token> trả mã Night Pass của game đã bị LỌC (xem filterSource) chỉ còn các giao diện được phép.
    Bảo vệ: giới hạn số lần thử theo IP/thiết bị (mã 6 số chỉ có 1 triệu khả năng), mã có hạn + tối đa X lượt, mỗi thiết bị một lượt/mã, thu hồi được.
    Chỉ game trong server/event-catalog.js (đã qua scripts/check-eventcode.js) mới được tích. Cần migration 008. */
-const CATALOG = require("./event-catalog");
+const CATALOG = require("./event-catalog").concat(require("./event-catalog-pop.json"));   // Night Play (Cozy) + Pop Play; Pop: khoá giao diện = "loại:giao diện"
 const MODS = {   // require LITERAL (bundler không gộp được require động)
   "bao-nhieu-giay": () => require("./pro/bao-nhieu-giay"),
   "cat-banh-chung": () => require("./pro/cat-banh-chung"),
@@ -16,15 +16,29 @@ const MODS = {   // require LITERAL (bundler không gộp được require độ
   "song-sot-cuoi-thang": () => require("./pro/song-sot-cuoi-thang"),
   "ve-mot-net": () => require("./pro/ve-mot-net"),
   "xay-cau-tre": () => require("./pro/xay-cau-tre"),
+  "be-dau-bo-me": () => require("./pro/be-dau-bo-me"),
+  "be-noi-dung-khong": () => require("./pro/be-noi-dung-khong"),
+  "bo-me-5-giay": () => require("./pro/bo-me-5-giay"),
+  "con-vat-an-so": () => require("./pro/con-vat-an-so"),
+  "doan-tuoi-nao": () => require("./pro/doan-tuoi-nao"),
+  "lang-cua-be": () => require("./pro/lang-cua-be"),
+  "nhay-theo-so": () => require("./pro/nhay-theo-so"),
+  "pop-fly": () => require("./pro/pop-fly"),
+  "qua-song": () => require("./pro/qua-song"),
+  "ten-lua-cua-be": () => require("./pro/ten-lua-cua-be"),
+  "thap-vong-mau": () => require("./pro/thap-vong-mau"),
+  "ve-chu-quai-vat": () => require("./pro/ve-chu-quai-vat"),
 };
 const JS = "application/javascript; charset=utf-8";
 const SKINS = Object.fromEntries(CATALOG.map(g => [g.id, new Set(g.skins.map(s => s.id))]));
 
 /* Mã Night Pass của game, bị lọc: chạy xong chỉ giữ PF.skins ∈ keep (+ basic); MỌI thuộc tính khác của PF (chế độ, loại chơi, cờ pro…) trả về đúng như trước khi chạy. */
 function filterSource(id, keep) {
-  const src = MODS[id]().source({ trial: false });
-  return "(function(){var __k=" + JSON.stringify(keep) + ";var __o={};for(var a in PF)__o[a]=PF[a];\n" + src +
-    "\n;try{var N=PF.skins;for(var s in N){if(s!=='basic'&&__k.indexOf(s)<0)delete N[s]}}catch(e){}" +
+  const src = MODS[id]().source({ trial: false }), nested = !!(CATALOG.find(g => g.id === id) || {}).nested;
+  const clean = nested
+    ? "try{var N=PF.skins;for(var t in N){var o=N[t];if(!o||typeof o!=='object')continue;for(var s in o){if(s!=='basic'&&s!=='default'&&__k.indexOf(t+':'+s)<0)delete o[s]}}}catch(e){}"
+    : "try{var N=PF.skins;for(var s in N){if(s!=='basic'&&__k.indexOf(s)<0)delete N[s]}}catch(e){}";
+  return "(function(){var __k=" + JSON.stringify(keep) + ";var __o={};for(var a in PF)__o[a]=PF[a];\n" + src + "\n;" + clean +
     "for(var b in PF){if(b==='skins')continue;if(!(b in __o))delete PF[b];else if(PF[b]!==__o[b])PF[b]=__o[b]}})();";
 }
 

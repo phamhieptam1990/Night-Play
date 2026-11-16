@@ -12,7 +12,7 @@ for (const id of SUPPORTED) {
   const m = /const CATALOG=(\[\[.*?\]\]);/.exec(html); if (!m) throw new Error("không thấy CATALOG: " + id);
   const cat = JSON.parse(m[1]);
   const t = /<title>([^<]*)<\/title>/.exec(html), name = t ? t[1].replace(/\s*[–-].*$/, "").trim() : id;
-  out.push({ id, name, skins: cat.filter(c => c[0] !== "basic").map(c => ({ id: c[0], vi: c[1], en: c[2], e: c[3] })) });
+  out.push({ id, portal: "night", nested: false, name, skins: cat.filter(c => c[0] !== "basic").map(c => ({ id: c[0], vi: c[1], en: c[2], e: c[3] })) });
 }
 fs.writeFileSync(path.join(root, "server/event-catalog.js"), '"use strict";\n/* TỰ SINH bởi scripts/gen-event-catalog.js — không sửa tay. */\nmodule.exports = ' + JSON.stringify(out, null, 1) + ";\n");
 console.log("✓ " + out.length + " game, " + out.reduce((a, g) => a + g.skins.length, 0) + " giao diện");

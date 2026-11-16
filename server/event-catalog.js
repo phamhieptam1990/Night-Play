@@ -3,6 +3,8 @@
 module.exports = [
  {
   "id": "bao-nhieu-giay",
+  "portal": "night",
+  "nested": false,
   "name": "Bao Nhiêu Giây?",
   "skins": [
    {
@@ -33,6 +35,8 @@ module.exports = [
  },
  {
   "id": "cat-banh-chung",
+  "portal": "night",
+  "nested": false,
   "name": "Cắt Bánh Chưng",
   "skins": [
    {
@@ -63,6 +67,8 @@ module.exports = [
  },
  {
   "id": "duong-ray",
+  "portal": "night",
+  "nested": false,
   "name": "Đường Ray",
   "skins": [
    {
@@ -93,6 +99,8 @@ module.exports = [
  },
  {
   "id": "mat-tinh-khong",
+  "portal": "night",
+  "nested": false,
   "name": "Mắt Tinh Không?",
   "skins": [
    {
@@ -123,6 +131,8 @@ module.exports = [
  },
  {
   "id": "ne-o-ga",
+  "portal": "night",
+  "nested": false,
   "name": "Né Ổ Gà Mùa Mưa",
   "skins": [
    {
@@ -153,6 +163,8 @@ module.exports = [
  },
  {
   "id": "noi-mot-net",
+  "portal": "night",
+  "nested": false,
   "name": "Nối Một Nét",
   "skins": [
    {
@@ -183,6 +195,8 @@ module.exports = [
  },
  {
   "id": "shipper-sieu-toc",
+  "portal": "night",
+  "nested": false,
   "name": "Shipper Siêu Tốc",
   "skins": [
    {
@@ -213,6 +227,8 @@ module.exports = [
  },
  {
   "id": "song-sot-cuoi-thang",
+  "portal": "night",
+  "nested": false,
   "name": "Sống Sót Đến Cuối Tháng",
   "skins": [
    {
@@ -243,6 +259,8 @@ module.exports = [
  },
  {
   "id": "ve-mot-net",
+  "portal": "night",
+  "nested": false,
   "name": "Vẽ Một Nét",
   "skins": [
    {
@@ -273,6 +291,8 @@ module.exports = [
  },
  {
   "id": "xay-cau-tre",
+  "portal": "night",
+  "nested": false,
   "name": "Xây Cầu Tre",
   "skins": [
    {

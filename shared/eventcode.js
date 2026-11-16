@@ -29,6 +29,7 @@
   function whenReady(f, n) { if (window.PF && typeof window.PF.loadPro === "function") return f(); if ((n || 0) > 100) return; setTimeout(function () { whenReady(f, (n || 0) + 1); }, 100); }
   function refreshUi() {
     try { if (typeof window.applySkin === "function") window.applySkin(); } catch (e) {}
+    try { if (typeof window.renderCards === "function") window.renderCards(); } catch (e) {}   /* Pop: thẻ chọn chế độ/giao diện */
     try { var h = document.getElementById("home"); if (h && !h.hidden && typeof window.renderHome === "function") window.renderHome(); } catch (e) {}
   }
   function apply(src) { try { new Function("PF", src)(window.PF); refreshUi(); return true; } catch (e) { return false; } }
@@ -92,7 +93,7 @@
         var mine = (x.j.skins || {})[GID], n = Object.keys(x.j.skins || {}).reduce(function (a, k) { return a + x.j.skins[k].length; }, 0);
         if (!mine) return say("nogame", { e: x.j.name }, "ok");
         say("ok", { n: mine.length, e: x.j.name, d: fmt(x.j.ends) }, "ok");
-        loadSkins().then(function () { setTimeout(function () { close(); try { if (typeof window.openSkins === "function") window.openSkins(); } catch (e) {} }, 1300); });
+        loadSkins().then(function () { setTimeout(function () { close(); try { if (typeof window.openSkins === "function") { var ty; try { ty = (typeof skFor !== "undefined" && skFor != null) ? skFor : undefined; } catch (e2) {} window.openSkins(ty); } } catch (e) {}   /* Pop: mở lại đúng loại chơi đang xem */ }, 1300); });
       }).catch(function () { go.disabled = false; say("net"); });
   }
 

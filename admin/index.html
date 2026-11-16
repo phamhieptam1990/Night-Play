@@ -255,6 +255,7 @@ tr.row-open{cursor:pointer} tr.row-open:hover td{background:var(--hover)}
 .evform{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-bottom:14px}.evf{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--ink2)}.evf .field{width:100%;border-radius:10px;min-width:0;font-size:15px;color:var(--ink)}
 .evskinhd{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}.evcount{font-size:12px;color:var(--ink2)}.evskinhd .grow{flex:1}
 .evcat{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.evportal{grid-column:1/-1;margin:10px 0 0;font-size:14px;color:var(--ink)}.evportal:first-child{margin-top:0}.evportal small{color:var(--ink2);font-weight:400}
 .evgame{border:1px solid var(--border);border-radius:12px;padding:0 12px 6px;background:color-mix(in srgb,var(--ink) 3%,transparent)}
 .evgame>summary{display:flex;align-items:center;gap:8px;min-height:48px;cursor:pointer;list-style:none;-webkit-tap-highlight-color:transparent}.evgame>summary::-webkit-details-marker{display:none}
 .evgame>summary::before{content:"▸";color:var(--ink2);font-size:13px;transition:transform .15s;flex:none}.evgame[open]>summary::before{transform:rotate(90deg)}
@@ -740,11 +741,12 @@ function renderCat() {
   if (!ev.cat) return;
   const L = lang === "en" ? "en" : "vi", wide = matchMedia("(min-width:761px)").matches;
   if (!evOpenInit) { evOpenInit = true; if (wide) ev.cat.forEach(g => evOpen.add(g.id)); }
-  $("evCat").innerHTML = ev.cat.map(g => {
+  const gameHtml = g => {
     const sel = ev.sel[g.id] || new Set(), all = sel.size === g.skins.length;
     return '<details class="evgame" data-g="' + esc(g.id) + '"' + (evOpen.has(g.id) ? " open" : "") + '><summary><b>' + esc(g.name) + '</b><span class="evn' + (sel.size ? " on" : "") + '">' + sel.size + "/" + g.skins.length + '</span><button type="button" data-all="' + esc(g.id) + '">' + esc(t(all ? "evGameNone" : "evGameAll")) + '</button></summary>' +
       g.skins.map(k => '<label class="evsk"><input type="checkbox" data-g="' + esc(g.id) + '" data-s="' + esc(k.id) + '"' + (sel.has(k.id) ? " checked" : "") + '><span class="em">' + esc(k.e) + '</span><span>' + esc(k[L]) + '</span></label>').join("") + "</details>";
-  }).join("");
+  };
+  $("evCat").innerHTML = [["night", "Night Play"], ["pop", "Pop Play"]].map(([k, nm]) => { const gs = ev.cat.filter(g => (g.portal || "night") === k); return '<h4 class="evportal">' + esc(nm) + " <small>" + gs.length + "</small></h4>" + gs.map(gameHtml).join(""); }).join("");
   $("evCount").textContent = t("evSel", { n: evSelCount() });
   $("evBar").textContent = t("evSel", { n: evSelCount() });
 }
