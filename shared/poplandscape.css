@@ -1523,3 +1523,8 @@ html.npp-kid #ovHow:not([hidden]) .hwL li{padding-block:clamp(6px,1.6vh,14px)!im
   html.npp-kid #ovHow:not([hidden])>*{row-gap:2px}
   html.npp-kid #ovHow:not([hidden]) :is(.pic,.hero,.mascot,#hwHero,#hwPic){max-height:34vh!important}
 }
+
+/* iPad DỌC (Pop): khung chơi không chạm đáy — chừa dải 30px cho chữ ký nightplay.vn (trước: khung kéo tới sát đáy, logo nằm đè lên mép khung, chữ trắng mờ khó đọc trên nền sáng) */
+@media (orientation:portrait) and (min-width:700px){
+  .app>.play,.app .play{max-height:calc(100dvh - 165px - 34px)!important}
+}
