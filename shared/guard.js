@@ -27,6 +27,28 @@
     var a = d.getElementById("npOpen"); if (a) a.href = url;
     throw new Error("np-embed-blocked");   // dừng phần còn lại của guard.js
   })();
+  /* KHÓA KÉO TRANG (iPad/iPhone): trang game + cổng là MỘT MÀN HÌNH (GAME_RULES). iOS vẫn cho ngón tay kéo cả trang dù overflow:hidden → trang trượt lên, lộ dải xám/nền cổng ở đáy và tiêu đề bị cắt.
+     (1) overscroll-behavior:none; (2) chặn touchmove một ngón khi KHÔNG nằm trong vùng tự cuộn thật / ô nhập / thanh trượt / vùng tự xử lý chạm (touch-action); (3) nếu trang vẫn bị cuộn thì trả về 0. Chỉ ở trang game và cổng, không đụng admin/trang pháp lý. */
+  (function bounceLock() {
+    var path = loc.pathname;
+    if (!(/\/games\//.test(path) || /^\/(cozyplay|popplay|play)\/(index\.html)?$/.test(path))) return;
+    try { var st = document.createElement("style"); st.textContent = "html,body{overscroll-behavior:none}"; (document.head || document.documentElement).appendChild(st); } catch (e) {}
+    function inner(el) {
+      for (var e = el; e && e.nodeType === 1 && e !== document.documentElement && e !== document.body; e = e.parentElement) {   /* body/html là chính CÁI TRANG: không coi là vùng cuộn hợp lệ (lề trái/phải cạnh khung game) */
+        var tag = e.tagName; if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || e.isContentEditable) return true;
+        var c = getComputedStyle(e);
+        if (/^(none|pan-x|pan-y|pinch-zoom|manipulation\s+none)$/.test(c.touchAction) || (c.touchAction && c.touchAction !== "auto" && c.touchAction !== "manipulation")) return true;
+        if (/(auto|scroll)/.test(c.overflowY) && e.scrollHeight > e.clientHeight + 1) return true;
+        if (/(auto|scroll)/.test(c.overflowX) && e.scrollWidth > e.clientWidth + 1) return true;
+      }
+      return false;
+    }
+    document.addEventListener("touchmove", function (ev) {
+      if (!ev.cancelable || (ev.touches && ev.touches.length !== 1)) return;
+      try { if (!inner(ev.target)) ev.preventDefault(); } catch (e) {}
+    }, { passive: false });
+    addEventListener("scroll", function () { try { var d = document.scrollingElement || document.documentElement; if (d && (d.scrollTop > 0 || d.scrollLeft > 0)) scrollTo(0, 0); } catch (e) {} }, { passive: true });
+  })();
   /* CHỮ KÝ trên màn chơi: logo nhỏ + chữ "nightplay.vn" mờ giữa mép dưới, chỉ ở trang game (/games/), không bắt chạm, không chiếm chỗ
      (position:fixed → không gây cuộn). Bỏ qua khung nhỏ (ô "Chơi cùng lúc") để khỏi lặp. Bị gỡ khỏi DOM thì tự gắn lại. */
   (function signature() {
