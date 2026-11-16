@@ -118,7 +118,7 @@ function render(){
 $("bUse").onclick=function(){
   if(!ok()&&window.NPTrial&&NPTrial.state()==="avail")NPTrial.start();
   if(!ok()){location.href="subscribe.html?lang="+L()+"&from=nightpass-theme.html";return}
-  NPGrad.preview(null);NPFont.preview(null);NPGrad.set(g);NPFont.set(f);$("msg").textContent=X().saved;apply();
+  NPGrad.preview(null);NPFont.preview(null);NPGrad.set(g);NPFont.set(f);$("msg").textContent=X().saved;$("bUse").disabled=true;setTimeout(function(){location.href="nightpass.html?tab=2&lang="+L()},700);
 };
 document.querySelectorAll(".seg button").forEach(function(b){b.onclick=function(){de.lang=b.dataset.l;try{localStorage.setItem("lang",b.dataset.l)}catch(e){}render()}});
 /* bắt đầu từ lựa chọn hiện tại (nếu có gói) hoặc bộ đầu tiên để thấy ngay hiệu ứng */
