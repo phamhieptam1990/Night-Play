@@ -17,22 +17,30 @@ var l=[q,s].find(function(x){return x==="vi"||x==="en"})||(/^vi/i.test(navigator
 <link rel="preload" href="shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="shared/fonts.css">
 <link rel="stylesheet" href="shared/theme.css">
+<link rel="stylesheet" href="shared/npfont.css">
+<script src="shared/npfont.js"></script>
+<script src="shared/npgrad.js"></script>
 <style>
+/* nền Night Pass (thay màu đen/xám mặc định): tím đêm → hồng tím → cam ấm, sáng thì oải hương → đào; thẻ tím đậm viền sáng */
+html:root[data-app=hub][data-theme=dark]{--bg:#1a1240;--panel:rgba(48,32,112,.78);--line:rgba(170,150,255,.34);--muted:#bdb7ee}
+html:root[data-app=hub][data-theme=light]{--bg:#f4efff;--panel:rgba(255,255,255,.88);--line:#d9ccf6;--muted:#6a6290}
+html[data-theme=dark] body{background:linear-gradient(165deg,#1a1048 0%,#2e1670 48%,#5a1f6b 82%,#8a2f4f 100%) fixed}
+html[data-theme=light] body{background:linear-gradient(165deg,#efe7ff 0%,#f7e6ff 50%,#ffe6da 100%) fixed}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%}
 body{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.3;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 header,nav.tabs,main{width:100%;max-width:760px;margin:0 auto;padding-left:16px;padding-right:16px}
 header{flex:none;display:flex;align-items:center;gap:10px;padding-top:10px;padding-bottom:8px}
-.back{width:44px;height:44px;border-radius:50%;background:var(--panel);box-shadow:var(--shadow);display:grid;place-items:center;color:var(--ink);text-decoration:none;flex:none}
+.back{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#6C4BF2,#C2410C);box-shadow:0 4px 14px rgba(108,75,242,.45);display:grid;place-items:center;color:#fff;text-decoration:none;flex:none}
 .back svg{width:22px;height:22px}
 h1{margin:0;font-size:clamp(18px,4.6vw,24px);line-height:1.2;margin-right:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .seg{display:inline-flex;flex:none;background:var(--panel);box-shadow:var(--shadow);border-radius:22px;padding:3px}
 .seg button{font:inherit;border:0;background:none;color:var(--muted);border-radius:19px;height:36px;min-width:40px;padding:0 10px;font-weight:800;font-size:13px;cursor:pointer}
-.seg button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.seg button[aria-pressed=true]{background:linear-gradient(135deg,#6C4BF2,#C2410C);color:#fff}
 nav.tabs{flex:none;display:flex;gap:6px;padding-bottom:8px}
 .tabs button{flex:1;min-width:0;height:44px;border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--muted);font:inherit;font-weight:800;font-size:13.5px;padding:0 6px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tabs button[aria-selected=true]{background:var(--accent);color:var(--on-accent);border-color:transparent}
+.tabs button[aria-selected=true]{background:linear-gradient(135deg,#6C4BF2,#C2410C);color:#fff;border-color:rgba(255,255,255,.65);box-shadow:0 0 0 2px rgba(108,75,242,.45),0 6px 16px rgba(108,75,242,.35);text-shadow:none}
 main{flex:1;min-height:0;padding-bottom:12px;display:flex;flex-direction:column}
 .pane{flex:1;min-height:0;display:none;gap:10px;align-content:start}
 .pane.on{display:grid;grid-template-columns:1fr}
@@ -43,7 +51,7 @@ main{flex:1;min-height:0;padding-bottom:12px;display:flex;flex-direction:column}
 .kv{display:flex;justify-content:space-between;gap:10px;align-items:baseline;font-size:14px;margin-top:4px}
 .kv b{font-weight:800;text-align:right}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 16px;border-radius:12px;font:inherit;font-weight:800;font-size:14px;text-decoration:none;background:var(--panel);color:var(--ink);border:1px solid var(--line);cursor:pointer}
-.btn.p{background:var(--accent);color:var(--on-accent);border-color:transparent}
+.btn.p{background:linear-gradient(135deg,#6C4BF2,#C2410C);color:#fff;border-color:transparent}
 .btn:disabled{opacity:.55}
 .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .row .btn{flex:1 1 auto}
@@ -57,8 +65,11 @@ input{width:100%;height:44px;border:1px solid var(--line);border-radius:12px;bac
 .msg.ok{color:var(--good,#16a34a)}.msg.bad{color:var(--bad,#dc2626)}
 .sw{display:flex;gap:8px;flex-wrap:wrap}
 .sw .btn{flex:1 1 30%}
-.sw .btn[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:transparent}
+.sw .btn[aria-pressed=true]{background:linear-gradient(135deg,#6C4BF2,#C2410C);color:#fff;border-color:rgba(255,255,255,.65);box-shadow:0 0 0 2px rgba(108,75,242,.45),0 6px 16px rgba(108,75,242,.35);text-shadow:none}
 .rrow{display:flex;align-items:center;gap:10px;justify-content:space-between}.rrow .mut{flex:1;min-width:0}.rrow .btn{flex:none}[hidden]{display:none!important}
+.fonts{display:grid;grid-template-columns:1fr 1fr;gap:8px}.fonts .btn{flex-direction:column;gap:0;min-height:50px;padding:6px 8px;line-height:1.15}.fonts .btn[aria-pressed=true]{background:linear-gradient(135deg,#6C4BF2,#C2410C);color:#fff;border-color:rgba(255,255,255,.65);box-shadow:0 0 0 2px rgba(108,75,242,.45),0 6px 16px rgba(108,75,242,.35);text-shadow:none}.fonts .btn[disabled]{opacity:.6}.fonts .fs{font-size:20px;font-weight:700}.fonts .fn{font-size:11.5px;font-weight:700;opacity:.8}.lockmsg{margin:6px 0 0;font-size:12.5px;color:var(--muted)}
+.grads{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.grads button{height:42px;border-radius:14px;border:2px solid var(--line);padding:0;cursor:pointer;position:relative;color:#fff;font:800 11px/1.1 var(--font);display:grid;place-items:end center;padding-bottom:4px;text-shadow:0 1px 3px rgba(0,0,0,.6)}.grads button[aria-pressed=true]{border-color:#fff;box-shadow:0 0 0 3px #6C4BF2,0 6px 16px rgba(108,75,242,.4)}.grads .none[aria-pressed=true]{background:linear-gradient(135deg,#6C4BF2,#C2410C);color:#fff;border-color:rgba(255,255,255,.65);box-shadow:0 0 0 2px rgba(108,75,242,.45),0 6px 16px rgba(108,75,242,.35);text-shadow:none}.grads button[disabled]{opacity:.55}.grads .none{background:var(--panel);color:var(--ink);text-shadow:none}
+html[data-theme=light] .grads button:not(.none){color:#2b2250;text-shadow:0 1px 2px rgba(255,255,255,.8)}
 .links{display:grid;gap:8px}
 .links .btn{justify-content:flex-start;width:100%}
 @media (min-width:700px),(max-height:480px) and (min-width:560px){.pane.on{grid-template-columns:1fr 1fr}.pane .wide{grid-column:1/-1}}
@@ -76,6 +87,7 @@ input{width:100%;height:44px;border:1px solid var(--line);border-radius:12px;bac
   <button type="button" role="tab" id="tb0" data-t="0"></button>
   <button type="button" role="tab" id="tb1" data-t="1"></button>
   <button type="button" role="tab" id="tb2" data-t="2"></button>
+  <button type="button" role="tab" id="tb3" data-t="3"></button>
 </nav>
 <main>
   <section class="pane" id="p0" role="tabpanel" aria-labelledby="tb0">
@@ -84,11 +96,14 @@ input{width:100%;height:44px;border:1px solid var(--line);border-radius:12px;bac
     <div class="card wide" id="cRest"></div>
   </section>
   <section class="pane" id="p1" role="tabpanel" aria-labelledby="tb1">
-    <div class="card"><h2 id="thH"></h2><div class="sw" id="swTheme"></div></div>
-    <div class="card"><h2 id="lgH"></h2><div class="sw" id="swLang"></div></div>
-    <div class="card wide"><h2 id="skH"></h2><p class="mut" id="skP" style="margin:0 0 8px"></p><div class="row"><a class="btn p" id="skGo" href="cozyplay/index.html"></a><a class="btn" id="skGo2" href="popplay/index.html"></a></div></div>
+    <div class="card"><h2 id="thH"></h2><div class="sw" id="swTheme"></div><h2 id="lgH" style="margin-top:8px"></h2><div class="sw" id="swLang"></div></div>
+    <div class="card wide"><h2 id="skH"></h2><p class="mut" id="skP" style="margin:0 0 6px"></p><div class="row"><a class="btn p" id="skGo" href="cozyplay/index.html"></a><a class="btn" id="skGo2" href="popplay/index.html"></a></div></div>
   </section>
   <section class="pane" id="p2" role="tabpanel" aria-labelledby="tb2">
+    <div class="card" id="cFont"></div>
+    <div class="card" id="cGrad"></div>
+  </section>
+  <section class="pane" id="p3" role="tabpanel" aria-labelledby="tb3">
     <div class="card"><h2 id="rfH"></h2><p class="mut" id="rfP" style="margin:0 0 8px"></p><div class="links"><a class="btn p" id="rfBtn" href="#"></a></div></div>
     <div class="card"><h2 id="dcH"></h2><div class="links"><a class="btn" id="lDoc" href="documents.html?doc=6"></a><a class="btn" id="lPay" href="documents.html?doc=4"></a><a class="btn" id="lPrice" href="documents.html?doc=3"></a></div></div>
     <div class="card wide"><h2 id="hlH"></h2><div class="links"><a class="btn" id="lChk" href="passcheck.html"></a><a class="btn" id="lMail" href="#"></a></div></div>
@@ -97,7 +112,7 @@ input{width:100%;height:44px;border:1px solid var(--line);border-radius:12px;bac
 <script>
 "use strict";
 var T={vi:{
- ttl:"Cài đặt Night Pass",back:"Về trang chủ",t0:"Gói & thiết bị",t1:"Giao diện",t2:"Hỗ trợ",
+ ttl:"Cài đặt Night Pass",back:"Về trang chủ",t0:"Gói",t1:"Giao diện",t2:"Tuỳ chỉnh",t3:"Hỗ trợ",grad:"Màu nền gradient (Night Pass)",gradNone:"Gốc",fx:"Hiệu ứng chuyển động trên nền",fxOn:"Bật",fxOff:"Tắt",prev:"Xem thử theme",gradNote:"Phủ nền toàn màn hình game, tự đổi theo Sáng/Tối.",gradLock:"Cần gói Night Pass còn hạn để đổi màu nền. ",
  plan:"Gói của bạn",none:"Chưa có gói Night Pass",noneS:"Mua gói để mở khoá giao diện và chế độ mới.",buy:"Mua gói",renew:"Gia hạn",
  pDay:"Gói ngày",pWeek:"Gói tuần",pMonth:"Gói tháng",pYear:"Gói năm",pDef:"Night Pass",
  exp:"Hết hạn",left:function(d,h){return d>0?"còn "+d+" ngày":h>0?"còn "+h+" giờ":"sắp hết hạn"},expired:"Đã hết hạn",
@@ -107,13 +122,14 @@ var T={vi:{
  devOff:"Cần mạng để xem số thiết bị.",signout:"Đăng xuất thiết bị khác",signing:"Đang đăng xuất…",signedOut:function(n){return "Đã đăng xuất "+n+" thiết bị khác."},signErr:"Không đăng xuất được, thử lại sau.",
  rest:"Khôi phục gói",restQ:"Đã mua nhưng máy này chưa có gói?",restP:"Đã mua nhưng máy này chưa có gói? Nhập email đã mua, nhận mã 6 số.",email:"Email đã mua",send:"Gửi mã",otp:"Mã 6 số",ok:"Xác nhận",
  sent:"Đã gửi mã tới email. Nhập mã để khôi phục.",bad:"Mã chưa đúng hoặc đã hết hạn.",none2:"Không tìm thấy gói đang hoạt động cho email này.",net:"Không kết nối được máy chủ.",slow:"Thử quá nhiều lần, đợi một lúc rồi thử lại.",done:"Đã khôi phục gói.",emailBad:"Email chưa hợp lệ.",
+ fnt:"Font chữ (Night Pass)",fntDef:"Mặc định",fntLock:"Cần gói Night Pass còn hạn để đổi font. ",fntBuy:"Mua gói",fntSample:"Chữ Việt Aa",fntNote:"Áp cho toàn bộ chữ trong game.",
  th:"Sáng / Tối",thA:"Tự động",thL:"Sáng",thD:"Tối",lg:"Ngôn ngữ",
  sk:"Giao diện từng game",skP:"Mỗi game có giao diện riêng: mở game, bấm nút 🎨 trên thẻ để chọn. Giao diện đã chọn được lưu trên máy này, xem được cả khi không có mạng.",skGo:"Night Play (Cozy)",skGo2:"Pop Play",
  rf:"Hoàn tiền",rfP:"Gửi email cho chúng tôi, đã điền sẵn email mua và hạn gói. Hãy ghi thêm mã đơn (NP…).",rfBtn:"Yêu cầu hoàn tiền",rfSub:"Yêu cầu hoàn tiền Night Pass",
  dc:"Chính sách",lDoc:"Đổi trả và hoàn tiền",lPay:"Thanh toán",lPrice:"Chính sách giá",
  hl:"Cần giúp?",lChk:"Kiểm tra Night Pass (game vẫn khoá?)",lMail:"Gửi email hỗ trợ"},
 en:{
- ttl:"Night Pass settings",back:"Back to home",t0:"Plan & devices",t1:"Look",t2:"Support",
+ ttl:"Night Pass settings",back:"Back to home",t0:"Plan",t1:"Look",t2:"Custom",t3:"Support",grad:"Gradient background (Night Pass)",gradNone:"Original",fx:"Moving effects on the background",fxOn:"On",fxOff:"Off",prev:"Preview themes",gradNote:"Covers the whole game screen, follows Light/Dark.",gradLock:"A valid Night Pass is needed to change the background. ",
  plan:"Your plan",none:"No Night Pass yet",noneS:"Get a plan to unlock new looks and modes.",buy:"Get a plan",renew:"Extend",
  pDay:"Day pass",pWeek:"Week pass",pMonth:"Month pass",pYear:"Year pass",pDef:"Night Pass",
  exp:"Expires",left:function(d,h){return d>0?d+" days left":h>0?h+" h left":"expires soon"},expired:"Expired",
@@ -123,6 +139,7 @@ en:{
  devOff:"Go online to see the device count.",signout:"Sign out other devices",signing:"Signing out…",signedOut:function(n){return "Signed out "+n+" other device(s)."},signErr:"Could not sign out, try again later.",
  rest:"Restore pass",restQ:"Bought it but this device has no pass?",restP:"Bought it but this device has no pass? Enter your purchase email and get a 6-digit code.",email:"Purchase email",send:"Send code",otp:"6-digit code",ok:"Confirm",
  sent:"Code sent to your email. Enter it to restore.",bad:"The code is wrong or expired.",none2:"No active plan found for this email.",net:"Could not reach the server.",slow:"Too many tries, wait a moment and retry.",done:"Pass restored.",emailBad:"Email looks invalid.",
+ fnt:"Font (Night Pass)",fntDef:"Default",fntLock:"A valid Night Pass is needed to change the font. ",fntBuy:"Get a plan",fntSample:"Sample Aa",fntNote:"Applies to all text in the games.",
  th:"Light / Dark",thA:"Auto",thL:"Light",thD:"Dark",lg:"Language",
  sk:"Look per game",skP:"Each game has its own looks: open a game and tap the 🎨 button on its card. Your picks are saved on this device and work offline.",skGo:"Night Play (Cozy)",skGo2:"Pop Play",
  rf:"Refund",rfP:"Email us, pre-filled with your purchase email and expiry. Please add your order code (NP…).",rfBtn:"Request a refund",rfSub:"Night Pass refund request",
@@ -205,13 +222,34 @@ async function restVerify(){
     restStep=0;restOpen=false;renderAll();loadSrv();
   }catch(e){b.disabled=false;msg("bad",e&&e.status===429?x.slow:e&&e.status?x.bad:x.net)}
 }
+function renderFont(){
+  var x=X(),ok=window.NPFont&&NPFont.active(),cur=window.NPFont?NPFont.get():"";
+  var opts=[["",x.fntDef,"Inter"]].concat(window.NPFont?NPFont.list.map(function(f){return [f[0],f[2],f[1]]}):[]);
+  var h='<h2>'+esc(x.fnt)+'</h2><div class="fonts">'+opts.map(function(o){
+    return '<button type="button" class="btn" data-f="'+o[0]+'" aria-pressed="'+(cur===o[0])+'"'+(ok||o[0]===""?"":" disabled")+'><span class="fs" data-npkeep style="font-family:\''+(o[0]?o[2]:"Inter")+'\',Inter,sans-serif">'+esc(x.fntSample)+'</span><span class="fn">'+(ok||o[0]===""?"":"🔒 ")+esc(o[1])+'</span></button>'}).join("")+'</div>';
+  h+='<p class="lockmsg">'+(ok?esc(x.fntNote):esc(x.fntLock)+'<a href="'+sub()+'" style="color:var(--accent);font-weight:800">'+esc(x.fntBuy)+'</a>')+'</p>';
+  $("cFont").innerHTML=h;
+  $("cFont").querySelectorAll("button[data-f]").forEach(function(b){b.onclick=function(){if(!window.NPFont)return;if(b.dataset.f&&!NPFont.active())return;NPFont.set(b.dataset.f);renderFont()}});
+}
+function renderGrad(){
+  var x=X(),ok=window.NPGrad&&NPGrad.active(),cur=window.NPGrad?NPGrad.get():"",dark=de.dataset.theme==="dark",vi=L()==="vi";
+  var h='<h2>'+esc(x.grad)+'</h2><div class="grads"><button type="button" class="none" data-g="" aria-pressed="'+(cur==="")+'">'+esc(x.gradNone)+'</button>';
+  (window.NPGrad?NPGrad.list:[]).forEach(function(g){var nm=vi?g[1]:g[2];h+='<button type="button" data-g="'+g[0]+'" aria-pressed="'+(cur===g[0])+'" aria-label="'+esc(nm)+'" style="background:'+(dark?g[3]:g[4])+'"'+(ok?"":" disabled")+'>'+(ok?"":"🔒 ")+esc(nm)+'</button>'});
+  h+='</div><p class="lockmsg">'+(ok?esc(x.gradNote):esc(x.gradLock)+'<a href="'+sub()+'" style="color:var(--accent);font-weight:800">'+esc(x.fntBuy)+'</a>')+'</p>';
+  var fo=window.NPGrad&&NPGrad.fxOn();
+  h+='<div class="kv" style="margin-top:6px;align-items:center"><span>'+esc(x.fx)+'</span><span class="sw" style="flex:none"><button type="button" class="btn" id="fxOn" aria-pressed="'+!!fo+'"'+(ok?"":" disabled")+'>'+esc(x.fxOn)+'</button><button type="button" class="btn" id="fxOff" aria-pressed="'+!fo+'"'+(ok?"":" disabled")+'>'+esc(x.fxOff)+'</button></span></div>';
+  h+='<div class="row" style="margin-top:6px"><a class="btn p" href="nightpass-theme.html?lang='+L()+'">🎨 '+esc(x.prev)+'</a></div>';
+  $("cGrad").innerHTML=h;
+  $("fxOn").onclick=function(){NPGrad.setFx(true);renderGrad()};$("fxOff").onclick=function(){NPGrad.setFx(false);renderGrad()};
+  $("cGrad").querySelectorAll("button[data-g]").forEach(function(b){b.onclick=function(){if(!window.NPGrad)return;if(b.dataset.g&&!NPGrad.active())return;NPGrad.set(b.dataset.g);renderGrad()}});
+}
 function renderLook(){
   var x=X(),cur=null;try{cur=localStorage.getItem("theme")}catch(e){}
   $("thH").textContent=x.th;$("lgH").textContent=x.lg;
   var opts=[[null,x.thA],["light",x.thL],["dark",x.thD]];
   $("swTheme").innerHTML=opts.map(function(o){return '<button type="button" class="btn" data-v="'+(o[0]||"")+'" aria-pressed="'+((cur||"")===(o[0]||""))+'">'+esc(o[1])+'</button>'}).join("");
   $("swTheme").querySelectorAll("button").forEach(function(b){b.onclick=function(){var v=b.dataset.v;try{if(v)localStorage.setItem("theme",v);else localStorage.removeItem("theme")}catch(e){}
-    de.dataset.theme=v||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");renderLook()}});
+    de.dataset.theme=v||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");renderLook();renderGrad()}});
   $("swLang").innerHTML=["vi","en"].map(function(l){return '<button type="button" class="btn" data-l="'+l+'" aria-pressed="'+(L()===l)+'">'+(l==="vi"?"Tiếng Việt":"English")+'</button>'}).join("");
   $("swLang").querySelectorAll("button").forEach(function(b){b.onclick=function(){setLang(b.dataset.l)}});
   $("skH").textContent=x.sk;$("skP").textContent=x.skP;$("skGo").textContent=x.skGo;$("skGo2").textContent=x.skGo2;
@@ -229,16 +267,16 @@ function renderSupport(){
 function renderAll(){
   var x=X();$("ttl").textContent=x.ttl;document.title=x.ttl;
   var b=$("back");b.setAttribute("aria-label",x.back);b.href=fromPath();
-  ["tb0","tb1","tb2"].forEach(function(id,i){var e=$(id);e.textContent=x["t"+i];e.setAttribute("aria-selected",String(tab===i))});
-  for(var i=0;i<3;i++)$("p"+i).classList.toggle("on",tab===i);
+  ["tb0","tb1","tb2","tb3"].forEach(function(id,i){var e=$(id);e.textContent=x["t"+i];e.setAttribute("aria-selected",String(tab===i))});
+  for(var i=0;i<4;i++)$("p"+i).classList.toggle("on",tab===i);
   document.querySelectorAll(".seg button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.l===L()))});
-  renderPlan();renderDev();renderRest();renderLook();renderSupport();
+  renderPlan();renderDev();renderRest();renderLook();renderFont();renderGrad();renderSupport();
 }
 function setLang(l){de.lang=l;try{localStorage.setItem("lang",l)}catch(e){}renderAll()}
 document.querySelectorAll(".seg button").forEach(function(b){b.onclick=function(){setLang(b.dataset.l)}});
 document.querySelectorAll(".tabs button").forEach(function(b){b.onclick=function(){tab=+b.dataset.t;try{var q=new URLSearchParams(location.search);q.set("tab",tab);history.replaceState(null,"","?"+q)}catch(e){}renderAll()}});
 addEventListener("storage",function(e){if(e.key==="lang"&&(e.newValue==="vi"||e.newValue==="en")){de.lang=e.newValue;renderAll()}});
-tab=Math.max(0,Math.min(2,parseInt(new URLSearchParams(location.search).get("tab"),10)||0));
+tab=Math.max(0,Math.min(3,parseInt(new URLSearchParams(location.search).get("tab"),10)||0));
 renderAll();loadSrv();
 if(location.hash==="#restore"){tab=0;renderAll();var re=$("rE");re&&re.focus()}
 </script>

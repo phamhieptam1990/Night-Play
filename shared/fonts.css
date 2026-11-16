@@ -1,6 +1,6 @@
 /* MỘT PHÔNG DUY NHẤT cho toàn app: Inter (SIL OFL 1.1, xem fonts/LICENSE-OFL.txt), tự host, KHÔNG gọi Google Fonts.
    Một file variable woff2 (trục wght 100-900), tập con Latin + Latin Extended-A + tiếng Việt + ký hiệu thường dùng (→ ← ✓ × · … € ₫).
-   Mọi trang/game dùng var(--font); --display, --body, --np-serif đều trỏ về --font. Cấm thêm phông khác. */
+   Mọi trang/game dùng var(--font); --display, --body, --np-serif đều trỏ về --font. Cấm thêm phông khác, TRỪ 3 phông riêng của người có Night Pass (shared/npfont.css + npfont.js, chỉ nạp khi người dùng chọn). */
 @font-face{
   font-family:"Inter";font-style:normal;font-weight:100 900;font-display:swap;
   src:url("fonts/inter-var-latin-vi.woff2") format("woff2");

@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="vi" data-app="hub" data-np="">
+<head>
+<meta charset="utf-8">
+<script src="shared/guard.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/svg+xml" sizes="any" href="/shared/favicon.svg">
+<title>Xem thử theme</title>
+<script>
+try{var t=localStorage.getItem("theme")}catch(e){}
+document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
+(function(){var q=new URLSearchParams(location.search).get("lang"),s=null;try{s=localStorage.getItem("lang")}catch(e){}
+var l=[q,s].find(function(x){return x==="vi"||x==="en"})||(/^vi/i.test(navigator.language||"")?"vi":"en");document.documentElement.lang=l;})();
+</script>
+<link rel="preload" href="shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="shared/fonts.css">
+<link rel="stylesheet" href="shared/theme.css">
+<link rel="stylesheet" href="shared/npfont.css">
+<script src="shared/npfont.js"></script>
+<script src="shared/npgrad.js"></script>
+<style>
+/* nền Night Pass (thay màu đen/xám mặc định): tím đêm → hồng tím → cam ấm, sáng thì oải hương → đào; thẻ tím đậm viền sáng */
+html:root[data-app=hub][data-theme=dark]{--bg:#1a1240;--panel:rgba(48,32,112,.78);--line:rgba(170,150,255,.34);--muted:#bdb7ee}
+html:root[data-app=hub][data-theme=light]{--bg:#f4efff;--panel:rgba(255,255,255,.88);--line:#d9ccf6;--muted:#6a6290}
+html[data-theme=dark] body{background:linear-gradient(165deg,#1a1048 0%,#2e1670 48%,#5a1f6b 82%,#8a2f4f 100%) fixed}
+html[data-theme=light] body{background:linear-gradient(165deg,#efe7ff 0%,#f7e6ff 50%,#ffe6da 100%) fixed}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.3;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+header,.stage,.dock{width:100%;max-width:760px;margin:0 auto;padding-left:16px;padding-right:16px}
+header{flex:none;display:flex;align-items:center;gap:10px;padding-top:10px;padding-bottom:8px}
+.back{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#6C4BF2,#C2410C);box-shadow:0 4px 14px rgba(108,75,242,.45);display:grid;place-items:center;color:#fff;text-decoration:none;flex:none}
+.back svg{width:22px;height:22px}
+h1{margin:0;font-size:clamp(18px,4.6vw,24px);line-height:1.2;margin-right:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.seg{display:inline-flex;flex:none;background:var(--panel);box-shadow:var(--shadow);border-radius:22px;padding:3px}
+.seg button{font:inherit;border:0;background:none;color:var(--muted);border-radius:19px;height:36px;min-width:40px;padding:0 10px;font-weight:800;font-size:13px;cursor:pointer}
+.seg button[aria-pressed=true]{background:linear-gradient(135deg,#6C4BF2,#C2410C);color:#fff}
+.stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+.demo{width:min(100%,380px);display:grid;gap:10px;text-align:center}
+.demo .ttl{font-size:clamp(26px,8vw,36px);font-weight:800;line-height:1.1}
+.demo .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:12px 14px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;text-align:left}
+.demo .card .e{font-size:30px}.demo .card b{display:block;font-size:16px}.demo .card span{font-size:13px;color:var(--muted)}
+.demo .btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;border-radius:999px;font:inherit;font-weight:800;font-size:16px;background:linear-gradient(90deg,#6C4BF2,#C2410C);color:#fff;border:0}
+.hint{font-size:12.5px;color:var(--muted);margin:0}
+.dock{flex:none;display:grid;gap:8px;padding-bottom:12px;padding-top:6px}
+.row{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:2px 0;scroll-snap-type:x proximity}
+.row::-webkit-scrollbar{display:none}
+.chip{flex:none;scroll-snap-align:start;min-height:44px;min-width:84px;padding:0 12px;border-radius:14px;border:2px solid var(--line);color:#fff;font:800 13px/1.1 var(--font);cursor:pointer;display:grid;place-items:end center;padding-bottom:5px;text-shadow:0 1px 3px rgba(0,0,0,.6);position:relative;height:52px}
+.chip[aria-pressed=true]{border-color:#fff;box-shadow:0 0 0 3px #6C4BF2,0 6px 16px rgba(108,75,242,.4)}.chip.f[aria-pressed=true]{background:linear-gradient(135deg,#6C4BF2,#C2410C);color:#fff;border-color:rgba(255,255,255,.65);box-shadow:0 0 0 2px rgba(108,75,242,.45),0 6px 16px rgba(108,75,242,.35);text-shadow:none}
+html[data-theme=light] .chip:not(.f){color:#2b2250;text-shadow:0 1px 2px rgba(255,255,255,.8)}
+.chip.f{background:var(--panel);color:var(--ink);text-shadow:none;place-items:center;padding:0 12px;min-width:96px}
+.chip.f span{pointer-events:none}
+.act{display:flex;gap:8px}
+.act .b{flex:1;min-height:48px;border-radius:14px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;font-weight:800;font-size:15px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+.act .b.p{background:linear-gradient(135deg,#6C4BF2,#C2410C);color:#fff;border-color:transparent}
+.tip{position:fixed;left:50%;bottom:calc(var(--dockh,190px) + 10px);transform:translateX(-50%);z-index:50;width:min(92vw,340px);padding:10px 14px;border-radius:16px;background:linear-gradient(135deg,rgba(108,75,242,.96),rgba(194,65,12,.96));color:#fff;box-shadow:0 10px 28px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.45);text-align:left;pointer-events:none;animation:tipIn .18s ease-out}.tip b{display:block;font-size:15px;margin-bottom:2px}.tip span{font-size:12.5px;line-height:1.3;opacity:.95}.tip.out{animation:tipOut .3s ease-in forwards}.tip::after{content:"";position:absolute;left:50%;bottom:-7px;width:14px;height:14px;margin-left:-7px;background:#a0481f;transform:rotate(45deg);border-right:1px solid rgba(255,255,255,.45);border-bottom:1px solid rgba(255,255,255,.45)}@keyframes tipIn{from{opacity:0;transform:translateX(-50%) translateY(8px) scale(.96)}}@keyframes tipOut{to{opacity:0;transform:translateX(-50%) translateY(10px) scale(.96)}}@media (prefers-reduced-motion:reduce){.tip,.tip.out{animation:none}.tip.out{opacity:0}}
+.msg{min-height:1.2em;font-size:13px;font-weight:700;text-align:center;margin:0}
+@media (max-height:560px){header{padding-top:4px;padding-bottom:4px}.demo .card{padding:8px 12px}.demo{gap:6px}.dock{gap:5px;padding-bottom:6px}.chip{height:44px}.act .b{min-height:42px}.hint{display:none}.back{width:38px;height:38px}}
+@media (max-height:440px){.stage{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <a class="back" id="back" href="nightpass.html?tab=2" aria-label="Quay lại"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
+  <h1 id="ttl">Xem thử theme</h1>
+  <div class="seg" role="group" aria-label="Language"><button type="button" data-l="vi">VI</button><button type="button" data-l="en">EN</button></div>
+</header>
+<main class="stage">
+  <div class="demo" aria-live="polite">
+    <div class="ttl" id="dT"></div>
+    <div class="card"><span class="e" aria-hidden="true">🐝</span><div><b id="dC1"></b><span id="dC2"></span></div></div>
+    <button class="btn" type="button" id="dB"></button>
+    <p class="hint" id="dH"></p>
+  </div>
+</main>
+<div class="dock">
+  <div class="row" id="rGrad" role="group"></div>
+  <div class="row" id="rFont" role="group"></div>
+  <p class="msg" id="msg" role="status"></p>
+  <div class="act"><a class="b" id="bBack" href="nightpass.html?tab=2"></a><button class="b p" id="bUse" type="button"></button></div>
+</div>
+<div class="tip" id="tip" role="status" aria-live="polite" hidden></div>
+<script>
+"use strict";
+var T={vi:{ttl:"Xem thử theme",back:"Quay lại",demoT:"Tên game của bé",c1:"Thẻ trò chơi",c2:"Chữ, nút và thẻ sẽ như thế này",btn:"Chơi ngay",hint:"Chạm vào vật đang bay để làm nổ. Thỉnh thoảng sẽ có khách bất ngờ!",none:"Gốc",fd:"Mặc định",use:"Dùng theme này",buy:"Mua gói để dùng",saved:"Đã áp dụng cho mọi game.",lock:"Đang xem thử. Cần gói Night Pass còn hạn để áp dụng."},
+en:{ttl:"Preview theme",back:"Back",demoT:"Game title",c1:"Game card",c2:"Text, buttons and cards will look like this",btn:"Play now",hint:"Tap a flying object to pop it. Surprise visitors show up now and then!",none:"Original",fd:"Default",use:"Use this theme",buy:"Get a plan to use it",saved:"Applied to all games.",lock:"Previewing. A valid Night Pass is needed to apply it."}};
+var DESC={vi:{sunset:["Hoàng hôn","Mây, chim bay ngang, ánh cam dưới đáy, tia nắng xoay. Bất ngờ: cầu vồng, đại bàng, bóng bay."],ocean:["Đại dương","Sóng cuộn, bong bóng nổi, cá, bạch tuộc, rùa. Bất ngờ: cá voi, cá heo, cá mập bơi ngang."],forest:["Rừng xanh","Lá rơi, bướm, đom đóm phát sáng, tia nắng qua tán lá. Bất ngờ: hươu, cú, cáo chạy ngang."],candy:["Kẹo ngọt","Kẹo, bánh rơi, trái tim nổi, đốm sáng nhiều màu. Bất ngờ: bóng bay, bánh donut, pháo giấy."],aurora:["Cực quang","Dải cực quang uốn lượn, sao nhấp nháy, sao băng. Bất ngờ: mưa sao băng, đĩa bay."],gold:["Vàng ấm","Vệt sáng quét, bụi vàng lấp lánh, đồng xu rơi. Bất ngờ: mưa vàng, vương miện, cúp bay qua."],midnight:["Nửa đêm","Bầu trời đầy sao, trăng sáng trôi chậm, sao băng. Bất ngờ: đĩa bay, mưa sao, cú đêm."],rose:["Hồng đào","Cánh hoa rơi xoay, đốm sáng hồng, bướm. Bất ngờ: bồ câu, hoa hồng bay lên, lá thư."],"":["Gốc","Nền gốc của từng game, không có hiệu ứng thêm."]},
+en:{sunset:["Sunset","Clouds, birds, an orange glow and turning sun rays. Surprise: a rainbow, an eagle, balloons."],ocean:["Ocean","Rolling waves, bubbles, fish, an octopus, a turtle. Surprise: a whale, dolphin or shark swims by."],forest:["Forest","Falling leaves, butterflies, glowing fireflies, light rays. Surprise: a deer, owl or fox dashes by."],candy:["Candy","Candy and donuts falling, floating hearts, colorful glows. Surprise: balloons, a donut, confetti."],aurora:["Aurora","Waving aurora ribbons, twinkling stars, shooting stars. Surprise: a meteor shower, a UFO."],gold:["Golden","Light sweeps, gold dust, falling coins. Surprise: a gold rain, a crown, a trophy."],midnight:["Midnight","A sky full of stars, a slow moon, shooting stars. Surprise: a UFO, a star shower, an owl."],rose:["Rose","Swirling petals, pink glows, butterflies. Surprise: a dove, rising roses, a love letter."],"":["Original","The game's own background, no extra effects."]}};
+var tipT=0;
+function tip(a,b){var t=document.getElementById("tip");t.innerHTML="<b>"+esc(a)+"</b><span>"+esc(b)+"</span>";t.hidden=false;t.classList.remove("out");void t.offsetWidth;
+  var dock=document.querySelector(".dock");if(dock)t.style.setProperty("--dockh",dock.getBoundingClientRect().height+"px");
+  clearTimeout(tipT);tipT=setTimeout(function(){t.classList.add("out");tipT=setTimeout(function(){t.hidden=true;t.classList.remove("out")},320)},3000)}
+var de=document.documentElement,$=function(i){return document.getElementById(i)},g="",f="",first=true;
+function L(){return de.lang==="en"?"en":"vi"}function X(){return T[L()]}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function fromPath(){var q=new URLSearchParams(location.search).get("from");return q&&/^[\w\-./]+(#[\w-]+)?$/.test(q)&&q.indexOf("..")<0&&q.charAt(0)!=="/"?q:""}
+function ok(){return window.NPGrad&&NPGrad.active()}
+function apply(){if(window.NPGrad)NPGrad.preview(g);if(window.NPFont)NPFont.preview(f)}
+function render(){
+  var x=X(),dark=de.dataset.theme==="dark",vi=L()==="vi";
+  document.title=x.ttl;$("ttl").textContent=x.ttl;$("dT").textContent=x.demoT;$("dC1").textContent=x.c1;$("dC2").textContent=x.c2;$("dB").textContent=x.btn;$("dH").textContent=x.hint;
+  $("back").setAttribute("aria-label",x.back);$("bBack").textContent=x.back;
+  var gh='<button type="button" class="chip f" data-g="" aria-pressed="'+(g==="")+'"><span>'+esc(x.none)+'</span></button>';
+  NPGrad.list.forEach(function(e){gh+='<button type="button" class="chip" data-g="'+e[0]+'" aria-pressed="'+(g===e[0])+'" style="background:'+(dark?e[3]:e[4])+'">'+esc(vi?e[1]:e[2])+'</button>'});
+  $("rGrad").innerHTML=gh;
+  var fh='<button type="button" class="chip f" data-f="" aria-pressed="'+(f==="")+'"><span style="font-family:Inter,sans-serif;font-weight:700">'+esc(x.fd)+'</span></button>';
+  NPFont.list.forEach(function(e){fh+='<button type="button" class="chip f" data-f="'+e[0]+'" aria-pressed="'+(f===e[0])+'"><span data-npkeep style="font-family:\''+e[1]+'\',Inter,sans-serif;font-weight:700">'+esc(e[2])+'</span></button>'});
+  $("rFont").innerHTML=fh;
+  $("rGrad").querySelectorAll("[data-g]").forEach(function(b){b.onclick=function(){g=b.dataset.g;apply();render();var d=DESC[L()][g]||DESC[L()][""];tip(d[0],d[1])}});
+  $("rFont").querySelectorAll("[data-f]").forEach(function(b){b.onclick=function(){f=b.dataset.f;apply();render();var nm=f?(NPFont.list.filter(function(x){return x[0]===f})[0]||[])[2]:X().fd;tip(nm,L()==="vi"?"Áp cho toàn bộ chữ trong game: Chữ Việt có dấu Ắ Ế Ộ Ữ Ỳ rõ ràng.":"Applies to all text in the games, with clear Vietnamese diacritics.")}});
+  var can=ok();$("bUse").textContent=can?x.use:x.buy;$("msg").textContent=can?"":x.lock;
+  document.querySelectorAll(".seg button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.l===L()))});
+  var sel=document.querySelector("#rGrad [aria-pressed=true]");if(sel&&first){first=false;try{sel.scrollIntoView({inline:"center",block:"nearest"})}catch(e){}}
+}
+$("bUse").onclick=function(){
+  if(!ok()){location.href="subscribe.html?lang="+L()+"&from=nightpass-theme.html";return}
+  NPGrad.preview(null);NPFont.preview(null);NPGrad.set(g);NPFont.set(f);$("msg").textContent=X().saved;apply();
+};
+document.querySelectorAll(".seg button").forEach(function(b){b.onclick=function(){de.lang=b.dataset.l;try{localStorage.setItem("lang",b.dataset.l)}catch(e){}render()}});
+/* bắt đầu từ lựa chọn hiện tại (nếu có gói) hoặc bộ đầu tiên để thấy ngay hiệu ứng */
+g=(ok()&&NPGrad.get())||NPGrad.list[0][0];f=(ok()&&NPFont.get())||"";
+var q=new URLSearchParams(location.search).get("g");if(q&&NPGrad.find(q))g=q;
+apply();render();
+</script>
+<script src="shared/offline.js" defer></script>
+</body>
+</html>
