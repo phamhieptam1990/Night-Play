@@ -536,7 +536,9 @@ function updHud(){if(!G)return;$("hl").textContent="⭐ "+G.stars;$("hr").textCo
   $("fi").textContent=FUELI[G.t];$("ff").style.width=(G.W.fuel*100)+"%"}
 
 /* ===== VẼ ===== */
-function drawEm(c,e,x,y,s,rot){c.save();c.translate(x,y);if(rot)c.rotate(rot);c.font=s+"px 'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";c.textAlign="center";c.textBaseline="middle";c.fillText(e,0,0);c.restore()}
+/* HIỆU NĂNG iOS: dựng sẵn mỗi emoji một lần (bộ nhớ đệm) rồi drawImage, thay vì fillText + đổi font mỗi khung hình */
+const EMC=new Map();function emImg(e,s){const z=Math.max(12,Math.round(s/4)*4),k=e+"|"+z;let m=EMC.get(k);if(m)return m;if(EMC.size>160)EMC.clear();const d=Math.min(2,window.devicePixelRatio||1);m=document.createElement("canvas");m.width=m.height=Math.ceil(z*1.5*d);const x=m.getContext("2d");x.scale(d,d);x.textAlign="center";x.textBaseline="middle";x.font=z+"px 'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";x.fillText(e,z*.75,z*.75);m.__z=z*1.5;EMC.set(k,m);return m}
+function drawEm(c,e,x,y,s,rot){const m=emImg(e,s);c.save();c.translate(x,y);if(rot)c.rotate(rot);c.drawImage(m,-m.__z/2,-m.__z/2,m.__z,m.__z);c.restore()}
 function coal(c,x,y,s){c.fillStyle="#222";c.beginPath();c.moveTo(x-s*.5,y+s*.2);c.lineTo(x-s*.3,y-s*.4);c.lineTo(x+s*.2,y-s*.5);c.lineTo(x+s*.55,y);c.lineTo(x+s*.3,y+s*.45);c.lineTo(x-s*.3,y+s*.45);c.closePath();c.fill();c.fillStyle="rgba(255,255,255,.55)";c.beginPath();c.moveTo(x-s*.2,y-s*.25);c.lineTo(x+s*.05,y-s*.35);c.lineTo(x-s*.05,y-s*.1);c.closePath();c.fill()}
 function render(){
   if(!G||$("run").hidden||!cv.width)return;const W=G.W,sk=skinOf(G.t),C=CFG[G.t],c=cx;c.setTransform(CK,0,0,CK,0,0);

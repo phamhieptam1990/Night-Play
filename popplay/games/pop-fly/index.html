@@ -350,6 +350,9 @@ function update(dt){
 /* ===== VẼ ===== */
 function roundRect(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
 const RING=["#ff8fb1","#ffd166","#7bdcb5"];
+/* HIỆU NĂNG iOS: vẽ emoji bằng fillText mỗi khung hình (đổi ctx.font + dựng glyph màu) rất chậm trên Safari → giật đúng lúc bay qua chữ đúng (nổ 12 hạt). Dựng SẴN mỗi emoji một lần vào canvas nhỏ (bộ nhớ đệm theo cỡ làm tròn) rồi chỉ drawImage. */
+const EMO=new Map();function emo(g,sz){const z=Math.max(12,Math.round(sz/4)*4),k=g+"|"+z;let c=EMO.get(k);if(c)return c;if(EMO.size>120)EMO.clear();
+  const d=Math.min(2,window.devicePixelRatio||1);c=document.createElement("canvas");c.width=c.height=Math.ceil(z*1.5*d);const x=c.getContext("2d");x.scale(d,d);x.textAlign="center";x.textBaseline="middle";x.font=z+"px 'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";x.fillText(g,z*.75,z*.75);c.__z=z*1.5;EMO.set(k,c);return c}
 function draw(){
   const S=PF.S;ctx.setTransform(DPR*K,0,0,DPR*K,0,0);ctx.clearRect(0,0,W,H);
   if(!S)return;
@@ -367,9 +370,9 @@ function draw(){
   /* nhân vật */
   const b=S.bird,hero=S.ty.hero;ctx.save();ctx.translate(BX,b.y+(b.wob>0?Math.sin(S.t*38)*4*b.wob:0));ctx.rotate(S.type==="math"?b.rot*.6:b.rot);
   const sc=S.celebrate>0?1.2:1;ctx.scale(sc,sc);
-  if(sk&&sk.hero)sk.hero(ctx,S,b);else if(S.type==="math")drawPlane(ctx);else{ctx.scale(-1,1);ctx.font="46px 'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";ctx.fillText(hero,0,0)}   /* 🐤 nhìn sang trái → lật để bay sang phải */
+  if(sk&&sk.hero)sk.hero(ctx,S,b);else if(S.type==="math")drawPlane(ctx);else{ctx.scale(-1,1);{const im=emo(hero,46);ctx.drawImage(im,-im.__z/2,-im.__z/2,im.__z,im.__z)}}   /* 🐤 nhìn sang trái → lật để bay sang phải */
   ctx.restore();
-  for(const p of S.parts){ctx.globalAlpha=Math.max(0,p.life);ctx.font=p.s+"px 'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";ctx.fillText(p.g,p.x,p.y)}ctx.globalAlpha=1;
+  for(const p of S.parts){ctx.globalAlpha=Math.max(0,p.life);const im=emo(p.g,p.s);if(im){const z=im.__z;ctx.drawImage(im,p.x-z/2,p.y-z/2,z,z)}}ctx.globalAlpha=1;
 }
 function drawPlane(c){   /* tàu bay tự vẽ (emoji ✈️ quay mỗi nền tảng một hướng) */
   c.lineJoin="round";c.lineWidth=3;c.strokeStyle="#5b8def";
