@@ -179,7 +179,23 @@ try { var _q = new URLSearchParams(location.search).get("lang"), _s = null; try 
     for (var i = 0; i < vs.length; i++) { if (String(vs[i].lang || "").toLowerCase().replace("_", "-").indexOf(lg) !== 0) continue; var sc = score(vs[i], lg); if (sc > ts) { ts = sc; top = vs[i]; } }
     cache[lg] = { n: vs.length, v: top }; return top;
   }
-  synth.speak = function (u) { try { if (window.NPAudio && NPAudio.muted && NPAudio.muted() && !(u && u.npForce)) { try { if (u && u.onend) u.onend(); } catch (e) {} return; } } catch (e) {} try { if (u && !u.voice) { var v = best(u.lang); if (v) u.voice = v; } } catch (e) {} return orig(u); };
+  synth.speak = function (u) { try { if (window.NPAudio && NPAudio.muted && NPAudio.muted() && !(u && u.npForce)) { try { if (u && u.onend) u.onend(); } catch (e) {} return; } } catch (e) {} try { if (u && !u.voice) { var v = best(u.lang); if (v) u.voice = v; } } catch (e) {}
+    /* BỀN HƠN trên Safari/iPad/Chrome di động: (1) hàng đợi đang "paused" (sau khi ẩn tab/đổi app) thì resume trước; (2) sau cancel() mà speak() ngay thường bị RƠI IM LẶNG → nếu 1,2s chưa có tiếng (không start, không speaking) thì cancel + resume rồi đọc lại đúng một lần. Lệnh mở khoá âm lượng 0 không thử lại. */
+    try { if (synth.paused) synth.resume(); } catch (e) {}
+    var r = orig(u);
+    try {
+      if (u && !(u.volume === 0) && !u.__npRetried) {
+        var started = false; u.addEventListener("start", function () { started = true; });
+        setTimeout(function () {
+          try {
+            if (started || synth.speaking) return;
+            u.__npRetried = true; synth.cancel(); try { synth.resume(); } catch (e2) {}
+            setTimeout(function () { try { orig(u); } catch (e3) {} }, 80);
+          } catch (e) {}
+        }, 1200);
+      }
+    } catch (e) {}
+    return r; };
   try { synth.addEventListener("voiceschanged", function () { cache = {}; }); } catch (e) {}
   window.NPAudio && (window.NPAudio.bestVoice = best);
 })();
@@ -574,6 +590,16 @@ window.NP = (function () {
   "use strict";
   var SEL = "#phLis,#hlpLis,.npSay,#phSay,#hlpSay";
   function off() { try { if (window.NPAudio) { if (NPAudio.muted && NPAudio.muted()) return true; if (NPAudio.get) return !NPAudio.get(); } } catch (e) {} return false; }
-  function sync() { var o = off(); [].forEach.call(document.querySelectorAll(SEL), function (b) { if (b.classList.contains("np-snd-off") !== o) b.classList.toggle("np-snd-off", o); }); }
+  /* Loa TẮT: đổi hẳn biểu tượng thành "loa + dấu ✕" (không còn các vạch sóng) để khác rõ với loa BẬT; bật lại thì trả đúng biểu tượng gốc. */
+  var OFF_SVG = '<path d="M4 9.5v5h3.6L13 19V5L7.6 9.5z"/><path d="M16.5 9.5l4.5 5M21 9.5l-4.5 5"/>';
+  function sync() {
+    var o = off();
+    [].forEach.call(document.querySelectorAll(SEL), function (b) {
+      if (b.classList.contains("np-snd-off") !== o) b.classList.toggle("np-snd-off", o);
+      var sv = b.querySelector("svg"); if (!sv) return;
+      if (o && sv.getAttribute("data-np-off") !== "1") { sv.setAttribute("data-np-orig", sv.innerHTML); sv.innerHTML = OFF_SVG; sv.setAttribute("data-np-off", "1"); }
+      else if (!o && sv.getAttribute("data-np-off") === "1") { sv.innerHTML = sv.getAttribute("data-np-orig") || sv.innerHTML; sv.removeAttribute("data-np-off"); }
+    });
+  }
   setInterval(function () { if (!document.hidden) sync(); }, 400); sync();
 })();

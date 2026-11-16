@@ -40,5 +40,5 @@ html[data-theme=light] :is(button.btn.alt,button.sec,button.ghost,button.alt):no
 html #bSnd[aria-pressed=false],html #soundBtn[aria-pressed=false],html #bSnd.off,html #soundBtn.off,html #soundBtn[aria-label$="(off)"],html .np-hb[data-k=snd][aria-pressed=false]{background:#6B6F80!important;background-image:none!important;border-color:rgba(255,255,255,.35)!important;color:#E9EAF2!important;box-shadow:none!important;opacity:1!important}
 
 /* loa TẮT trong popup hướng dẫn: xám + gạch chéo (class np-snd-off do shared/bridge.js đặt theo NPAudio) */
-:is(#phLis,#hlpLis,.npSay,#phSay,#hlpSay).np-snd-off{position:relative;opacity:.75;filter:grayscale(1)}
-:is(#phLis,#hlpLis,.npSay,#phSay,#hlpSay).np-snd-off::after{content:"";position:absolute;left:50%;top:50%;width:62%;height:3px;border-radius:2px;background:#fff;box-shadow:0 0 0 1.5px rgba(0,0,0,.45);transform:translate(-50%,-50%) rotate(-45deg);pointer-events:none}
+:is(#phLis,#hlpLis,.npSay,#phSay,#hlpSay).np-snd-off{position:relative;opacity:.85;filter:grayscale(1)}
+:is(#phLis,#hlpLis,.npSay,#phSay,#hlpSay).np-snd-off::after{display:none!important;content:"";position:absolute;left:50%;top:50%;width:62%;height:3px;border-radius:2px;background:#fff;box-shadow:0 0 0 1.5px rgba(0,0,0,.45);transform:translate(-50%,-50%) rotate(-45deg);pointer-events:none}
