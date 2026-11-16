@@ -328,3 +328,4 @@ html.sc-ok #fPop{background:linear-gradient(165deg,#2b2064,#171236 62%,#120e2b)!
 html.sc-ok #fPop a{color:#d7ccff!important}html.sc-ok #fPop .fpu{opacity:.8}
 html.sc-ok #fFab[aria-expanded=true] svg{display:none!important}
 html.sc-ok #fFab[aria-expanded=true]::before{content:"";width:16px;height:16px;display:block;background:linear-gradient(45deg,transparent calc(50% - 1.3px),#fff calc(50% - 1.3px),#fff calc(50% + 1.3px),transparent calc(50% + 1.3px)),linear-gradient(-45deg,transparent calc(50% - 1.3px),#fff calc(50% - 1.3px),#fff calc(50% + 1.3px),transparent calc(50% + 1.3px))}   /* mở ra: ✕ đóng (không trùng biểu tượng ⓘ của nút thông tin) */
+html.sc-ok #fPop p{color:#fff!important;opacity:1!important}html.sc-ok #fPop .fpu{color:#cfc4ff!important;opacity:1!important}   /* dòng © và ngày cập nhật đọc rõ trên nền tím tối (trước: chữ tối gần như chìm) */
