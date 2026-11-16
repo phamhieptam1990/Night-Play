@@ -24,15 +24,17 @@
 @media (prefers-reduced-motion:reduce){#play #home #hHero{animation:none!important}}
 /* POPUP (? giúp đỡ, chọn giao diện, kết thúc…) phủ TRỌN cửa sổ game ở mọi cỡ: cột #play hẹp hơn cửa sổ (máy tính/iPad trong cổng có hai cột bên) thì lớp mờ từng chỉ che cột giữa → nới lớp mờ ra 100vw quanh tâm cột, #play tạm overflow:visible khi có popup */
 #play:has(>#hlpOv:not([hidden]),>.ov:not([hidden])){overflow:visible}
-#play>#hlpOv,#play>.ov{left:calc(50% - 50vw);right:auto;width:100vw;box-sizing:border-box}
+/* Cổng thêm lề trái (--npl, vd 52px chừa cột nút ←) vào trang game → thân trang chỉ rộng 100vw − --npl và CẮT phần ngoài; các lớp toàn màn hình (#home, .top, #end, popup…) từng rộng 100vw nên tràn phải npl/2 và thẻ ngoài cùng (vd "Tiếp tục ván dở") bị xén mép trái. Dùng --vw = bề rộng thực còn lại. */
+:root{--vw:calc(100vw - var(--npl,0px))}
+#play>#hlpOv,#play>.ov{left:calc(50% - var(--vw)/2);right:auto;width:var(--vw);box-sizing:border-box}
 #play>#hlpOv>*{max-width:min(92cqw,480px)}   /* hộp popup giữ cỡ cột game dù lớp mờ rộng 100vw */
 @media (orientation:landscape) and (max-height:700px) and (min-width:560px),(orientation:landscape) and (pointer:coarse) and (max-height:900px) and (min-width:800px),(orientation:landscape) and (min-width:900px) and (min-aspect-ratio:13/10){
 :root{--stage:min(100vw,calc(100dvh*.92),52vw,760px);--side:calc((100vw - var(--stage))/2);--sl:env(safe-area-inset-left,0px);--sr:env(safe-area-inset-right,0px);--cl:calc(var(--side) - 2.5cqw - var(--sl));--cr:calc(var(--side) - 2.5cqw - var(--sr))}
 #play{width:var(--stage);overflow:visible;background:none;isolation:isolate}
-#play::before{content:"";position:absolute;top:0;bottom:0;left:calc(50% - 50vw);width:100vw;background:var(--pbg);z-index:-1}
-.deco{left:calc(50% - 50vw);right:auto;width:100vw}
+#play::before{content:"";position:absolute;top:0;bottom:0;left:calc(50% - var(--vw)/2);width:var(--vw);background:var(--pbg);z-index:-1}
+.deco{left:calc(50% - var(--vw)/2);right:auto;width:var(--vw)}
 /* thanh trên → hai cột HUD */
-.top{left:calc(50% - 50vw);right:auto;width:100vw;top:0;height:100%;padding:2.4cqw calc(2.5cqw + var(--sr)) 2.4cqw calc(2.5cqw + var(--sl));display:grid;grid-template-columns:var(--cl) minmax(0,1fr) var(--cr);grid-auto-rows:min-content;align-content:start;gap:1.8cqw 0;pointer-events:none}
+.top{left:calc(50% - var(--vw)/2);right:auto;width:var(--vw);top:0;height:100%;padding:2.4cqw calc(2.5cqw + var(--sr)) 2.4cqw calc(2.5cqw + var(--sl));display:grid;grid-template-columns:var(--cl) minmax(0,1fr) var(--cr);grid-auto-rows:min-content;align-content:start;gap:1.8cqw 0;pointer-events:none}
 .top>*{pointer-events:auto}
 .top>.ib{grid-column:3;justify-self:end;width:42px;height:42px;min-width:42px;min-height:42px;padding:0;font-size:15px;transition:opacity .35s}
 #play.tight .top>.ib{width:42px;height:42px;min-width:42px;min-height:42px;font-size:15px}   /* màn ngang: nút nằm cột riêng, không co theo tiêu đề */
@@ -63,7 +65,7 @@ html.np-hudg #game>.stats{width:calc(var(--cl) - 1cqw - 28px)}
 #play[data-pro] #game::after{content:"👑 NIGHT PASS";position:absolute;right:calc(100% + 2.5cqw);bottom:0;font:800 2.6cqw var(--body);letter-spacing:.1em;white-space:nowrap;color:var(--accent);padding:1.2cqw 2.4cqw;border-radius:99cqw;border:.4cqw solid var(--accent);background:color-mix(in srgb,var(--panel) 80%,transparent);box-shadow:0 0 4cqw color-mix(in srgb,var(--accent) 45%,transparent)}
 #play[data-pro][data-scr="game"]::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;border-left:.5cqw solid color-mix(in srgb,var(--accent) 70%,transparent);border-right:.5cqw solid color-mix(in srgb,var(--accent) 70%,transparent);box-shadow:inset 0 0 14cqw color-mix(in srgb,var(--accent) 22%,transparent),0 0 10cqw color-mix(in srgb,var(--accent) 40%,transparent)}
 /* màn chọn: HAI CỘT trải hết bề ngang (trái: hero + thẻ hôm nay/nút chính + chip; phải: lưới loại chơi + cài đặt + nút phụ). Hai cột do landscape.js dựng (.hl/.hr) */
-#home{left:calc(50% - 50vw);right:auto;width:100vw;top:0;bottom:0;padding:2.5cqw calc(var(--sr) + 62px) 2.5cqw calc(var(--sl) + 14px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.12fr);column-gap:5cqw;align-items:center;align-content:center}
+#home{left:calc(50% - var(--vw)/2);right:auto;width:var(--vw);top:0;bottom:0;padding:2.5cqw calc(var(--sr) + 62px) 2.5cqw calc(var(--sl) + 14px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.12fr);column-gap:5cqw;align-items:center;align-content:center}
 #home>.hl,#home>.hr{display:flex;flex-direction:column;gap:2.2cqw;min-width:0;justify-content:center}
 #home>.hl{padding-top:14cqw}
 #home .hero,#home #hHero{display:block!important;font-size:16cqw;text-align:center}
@@ -73,14 +75,14 @@ html.np-hudg #game>.stats{width:calc(var(--cl) - 1cqw - 28px)}
 #end>.card{position:absolute;right:calc(100% + 2.5cqw);top:50%;transform:translateY(-50%);width:calc(var(--cl) - 1cqw)}
 #end>#eLeg{position:absolute;left:calc(100% + 2.5cqw);bottom:0;width:calc(var(--cr) - 1cqw)}
 /* màn kết thúc NGANG: hai cột cân đối ở giữa màn hình (trái: thẻ kết quả; phải: thông tin + nút), không dồn một bên */
-#end:not([hidden]){left:calc(50% - 50vw);right:auto;width:100vw;top:0;bottom:0;padding:2.5cqw max(calc(var(--sr) + 62px),calc(50vw - 460px)) 2.5cqw max(calc(var(--sl) + 62px),calc(50vw - 460px));display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);grid-auto-rows:min-content;align-content:center;align-items:center;column-gap:4cqw;row-gap:2cqw}
+#end:not([hidden]){left:calc(50% - var(--vw)/2);right:auto;width:var(--vw);top:0;bottom:0;padding:2.5cqw max(calc(var(--sr) + 62px),calc(50vw - 460px)) 2.5cqw max(calc(var(--sl) + 62px),calc(50vw - 460px));display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);grid-auto-rows:min-content;align-content:center;align-items:center;column-gap:4cqw;row-gap:2cqw}
 #end:not([hidden])>.card{position:static;transform:none;width:auto;right:auto;top:auto;grid-column:1;grid-row:1 / span 5}
 #end:not([hidden])>:not(.card){grid-column:2}
 #end:not([hidden])>#eLeg{position:static;width:auto;left:auto;bottom:auto}
 #play[data-scr="end"] .top>.ib:not(#bBk){opacity:.4}
 /* hộp thoại phủ cả bề ngang, nội dung vẫn nằm giữa */
-.ov{left:calc(50% - 50vw);right:auto;width:100vw;inset-block:0;padding-left:calc((100vw - 100cqw)/2 + 5cqw);padding-right:calc((100vw - 100cqw)/2 + 5cqw)}
-#play #hlpOv{left:calc(50% - 50vw);right:auto;width:100vw;inset-block:0;box-sizing:border-box}
+.ov{left:calc(50% - var(--vw)/2);right:auto;width:var(--vw);inset-block:0;padding-left:calc((var(--vw) - 100cqw)/2 + 5cqw);padding-right:calc((var(--vw) - 100cqw)/2 + 5cqw)}
+#play #hlpOv{left:calc(50% - var(--vw)/2);right:auto;width:var(--vw);inset-block:0;box-sizing:border-box}
 #play #hlpCard{width:min(100%,520px);max-height:90%}
 /* Đổi Đời 2048: bàn cờ to nhất có thể ở giữa; thang tiến hoá xếp dọc ở cột phải (khung dọc cũ bị ẩn bởi @container) */
 #play #game>.board{width:min(92cqw,calc(100cqh - 5cqw))}
@@ -90,7 +92,7 @@ html.np-hudg #game>.stats{width:calc(var(--cl) - 1cqw - 28px)}
 /* canvas có viền: tính viền vào kích thước để không vượt khung (giao diện Night Pass có viền dày) */
 #cvw canvas#cv{box-sizing:border-box;max-height:100%}
 /* Em Xin Nghỉ: màn kết quả #res (nhiều thẻ xếp dọc) → lưới 2 cột trải ngang, nút hàng dưới */
-#res:not([hidden]){left:calc(50% - 50vw);right:auto;width:100vw;top:0;bottom:0;padding:2.5cqw calc(var(--sr) + 62px) 2.5cqw calc(var(--sl) + 128px);display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:min-content;align-content:center;align-items:start;column-gap:3cqw;row-gap:1.6cqw}
+#res:not([hidden]){left:calc(50% - var(--vw)/2);right:auto;width:var(--vw);top:0;bottom:0;padding:2.5cqw calc(var(--sr) + 62px) 2.5cqw calc(var(--sl) + 128px);display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:min-content;align-content:center;align-items:start;column-gap:3cqw;row-gap:1.6cqw}
 #res>:nth-child(1){grid-column:1;grid-row:1}#res>:nth-child(2){grid-column:1;grid-row:1 / span 2}#res>:nth-child(3){grid-column:2;grid-row:1}#res>:nth-child(4){grid-column:2;grid-row:2}#res>:nth-child(5){grid-column:2;grid-row:3}
 #res>:nth-child(6){grid-column:1 / -1;grid-row:4}#res>:nth-child(7){grid-column:1 / -1;grid-row:5}#res>:nth-child(8){grid-column:1 / -1;grid-row:6}
 /* hàng nút của #res ở màn ngang thấp: một hàng gọn, bỏ nhãn chữ để không tràn */
@@ -102,7 +104,7 @@ html.np-hudg #game>.stats{width:calc(var(--cl) - 1cqw - 28px)}
 #play[data-pro] #cvw::after,#play[data-pro] #cvw::before{display:none!important}#play[data-pro] #cvw{padding:0!important}
 /* Giá Chợ Việt: thẻ món hàng thấp hơn để nút Chốt giá không bị cắt ở màn thấp */
 #play #game .item .em{font-size:14cqw}
-#play #home #hHero{flex:none;display:flex!important;align-items:center;justify-content:center;height:min(36cqh,40cqw);font-size:min(30cqh,34cqw);line-height:1;white-space:nowrap;transform-origin:50% 100%;animation:npHeroBob 2.8s ease-in-out infinite}#play #home #hHero[data-stack="1"]{white-space:normal;padding-inline:0;line-height:.98}#play #home{margin-bottom:0}   /* lưới 2 cột (điện thoại ngang): linh vật to theo chiều cao khung (trước ghim 16cqw ≈ 57px, "nhỏ xíu") */
+#play #home #hHero{flex:none;display:flex!important;align-items:center;justify-content:center;height:min(36cqh,40cqw);font-size:var(--hs,min(30cqh,34cqw));line-height:1;white-space:nowrap;transform-origin:50% 100%;animation:npHeroBob 2.8s ease-in-out infinite}#play #home #hHero[data-stack="1"]{white-space:normal;padding-inline:0;line-height:.98}#play #home{margin-bottom:0}   /* lưới 2 cột (điện thoại ngang): linh vật to theo chiều cao khung (trước ghim 16cqw ≈ 57px, "nhỏ xíu") */
 }
 
 /* Điện thoại NGANG có cột nút HUD (← 🔊 ⋯ ở x 16–60): tiêu đề tên game bắt đầu ở x≥68 để KHÔNG bị nút ← che chữ cái đầu (trước: bắt đầu ở x=52, che 8px) */

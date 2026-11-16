@@ -10,7 +10,12 @@
   function fitHero() {
     var h = document.getElementById("hHero"); if (!h) return;
     h.style.removeProperty("max-height");   /* đo ô ở cỡ tự nhiên (giãn hết chỗ trống) rồi mới giới hạn lại, để không vòng lặp */
-    if (getComputedStyle(h).flexGrow !== "1") { h.style.removeProperty("--hs"); h.style.removeProperty("--hp"); h.removeAttribute("data-stack"); return; }   /* lưới 2 cột (điện thoại ngang thấp): linh vật cỡ cũ */
+    if (getComputedStyle(h).flexGrow !== "1") {   /* lưới 2 cột (iPad/điện thoại ngang): cỡ CSS, rồi co lại cho VỪA CỘT (trước: 🥚➜🏰 rộng hơn cột → đầu trái chui sau nút HUD, đầu phải đè ô chế độ) */
+      h.style.removeProperty("--hs"); h.style.removeProperty("--hp"); h.removeAttribute("data-stack");
+      var cw = h.clientWidth, sw = h.scrollWidth;
+      if (cw > 20 && sw > cw + 2) { var f0 = parseFloat(getComputedStyle(h).fontSize) || 40; h.style.setProperty("--hs", Math.max(24, Math.floor(f0 * (cw - 4) / sw)) + "px"); if (h.scrollWidth > h.clientWidth + 2) h.style.setProperty("--hs", Math.max(24, Math.floor(parseFloat(h.style.getPropertyValue("--hs")) * 0.9)) + "px"); }
+      return;
+    }
     var H = h.clientHeight, W = h.clientWidth; if (H < 20 || W < 20) { h.style.removeProperty("--hs"); h.removeAttribute("data-stack"); return; }
     var n = glyphs(h.textContent), CAP = 300, row = Math.min(H * 0.92, W * 0.8, W / (1.12 * n), CAP), col = n > 1 && n <= 3 ? Math.min(H * 0.92 / n, W * 0.8, CAP) : 0;   /* trần 300px: emoji bitmap phóng quá to bị vỡ hạt */
     /* màn CAO: 2–3 emoji xếp CHỒNG DỌC (mỗi emoji to hơn nhiều) thay vì một hàng nhỏ → bớt khoảng trống trên/dưới */

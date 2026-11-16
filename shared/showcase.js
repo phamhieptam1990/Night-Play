@@ -318,8 +318,8 @@
   var lock = document.getElementById("lock");
   if (!lock || document.getElementById("fFab")) return;
   var f = document.createElement("button"); f.id = "fFab"; f.type = "button"; f.setAttribute("aria-expanded", "false");
-  f.setAttribute("aria-label", document.documentElement.lang === "en" ? "More" : "Thêm");
-  f.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
+  f.setAttribute("aria-label", document.documentElement.lang === "en" ? "Info" : "Thông tin");
+  f.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle cx="12" cy="7.8" r=".6" fill="currentColor"/></svg>';   /* biểu tượng thông tin ⓘ (trước: dấu +) */
   lock.parentNode.insertBefore(f, lock);
   var root = document.documentElement;
   function set(on) { root.classList.toggle("foot-open", on); f.setAttribute("aria-expanded", on ? "true" : "false"); if (!on) { var pp = document.getElementById("fPop"); if (pp) pp.hidden = true; } }
