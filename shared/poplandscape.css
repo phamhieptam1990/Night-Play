@@ -1487,11 +1487,12 @@ html.np-hudg .app .top{left:68px!important}   /* tiêu đề game không bị n�
 
 /* NÚT BẮT ĐẦU + NÚT LOA: CÙNG CHIỀU CAO (màn ngang thấp / điện thoại ngang có thanh địa chỉ). Hàng quá hẹp để chữ "Bắt đầu!" nằm gọn → nút Bắt đầu đổi thành icon ▶ tròn bằng nút loa, KHÔNG nén chữ. */
 @media (min-aspect-ratio:11/10) and (max-height:520px){
-  html.npp-kid #ovHow:not([hidden]) .row:has(#hwGo){--hb:clamp(40px,15vh,56px);width:100%!important;container-type:inline-size;align-items:center!important;justify-content:center!important}
+  html.npp-kid #ovHow:not([hidden]) .row:has(#hwGo){--hb:clamp(40px,15vh,56px);width:100%!important;align-items:center!important;justify-content:center!important}
   html.npp-kid #ovHow:not([hidden]) .row #hwGo{height:var(--hb)!important;min-height:var(--hb)!important;max-height:var(--hb)!important;padding-block:0!important;display:grid!important;place-items:center!important}
   html.npp-kid #ovHow:not([hidden]) .row .npSay{height:var(--hb)!important;min-height:var(--hb)!important;width:var(--hb)!important;min-width:var(--hb)!important}
 }
-@container (max-width:205px){
+/* KHÔNG dùng container-type trên .row: Safari coi nó là khung chứa của phần tử position:fixed → nút ✕ (#hwBack) rơi xuống đè lên nút Bắt đầu. Dùng bề rộng màn hình. */
+@media (min-aspect-ratio:11/10) and (max-height:520px) and (max-width:600px){
   html.npp-kid #ovHow:not([hidden]) .row #hwGo{flex:none!important;width:var(--hb)!important;min-width:var(--hb)!important;padding:0!important;font-size:0!important;position:relative!important}
   html.npp-kid #ovHow:not([hidden]) .row #hwGo::before{content:"";position:absolute;inset:0;margin:auto;transform:translateX(7%);width:calc(var(--hb)*.34);height:calc(var(--hb)*.38);background:#fff;clip-path:polygon(0 0,100% 50%,0 100%)}   /* tam giác vẽ bằng CSS: ký tự ▶ lệch lên/trái do phông */
 }
