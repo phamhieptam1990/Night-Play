@@ -370,7 +370,7 @@ const skLocked=(z,id)=>id!=="basic"&&!PF.skins[z][id];
 function applyVars(el,sk){const old=el._v||[];old.forEach(k=>el.style.removeProperty(k));el._v=Object.keys(sk.vars);for(const k of el._v)el.style.setProperty(k,sk.vars[k])}
 
 /* ===== TRẠNG THÁI ===== */
-const HELPER=!!(window.NP&&NP.helper),HS=HELPER&&NP.initialState&&typeof NP.initialState==="object"?NP.initialState:null;
+const BOOT_H=!!(window.NP&&NP.helper),HELPER=BOOT_H&&!(NP.resumeBoot&&NP.resumeBoot()),HS=BOOT_H&&NP.initialState&&typeof NP.initialState==="object"?NP.initialState:null;
 const defProg=()=>({lv:[1,1,1],up:[0,0,0],got:[0,0,0],stars:0,days:[],ses:0});
 let prog=Object.assign(defProg(),LS.get("lc-prog",{}));
 const saveProg=()=>{if(!HELPER)LS.set("lc-prog",prog)};
@@ -716,7 +716,7 @@ applyLang();
 if(HS&&Number.isInteger(HS.z)&&HS.z>=0&&HS.z<3){
   const go=()=>startSession(HS.z,HS),okT=HS.tk&&/^h\.\d{13}\.[\w-]{43}$/.test(HS.tk);
   if(okT)PF.loadPro(false,HS.tk).then(()=>{if(/^[a-z]{3,10}$/.test(HS.sk||"")&&PF.skins[HS.z][HS.sk])PF.skinSel[HS.z]=HS.sk}).catch(()=>{}).finally(go);else go();
-}else{goHome();if(!HELPER){CH=parseCh();if(CH)openCh();else if(location.hash==="#daily")startDaily()}}
+}else{goHome();if(!BOOT_H){CH=parseCh();if(CH)openCh();else if(location.hash==="#daily")startDaily()}}
 window.LC={drawCard,shareText,shareLink,dailyInfo,parseCh,b64e,startDaily,dayStreak,get CH(){return CH},get S(){return S},get R(){return R},startSession,goHome,PF,ACT,get prog(){return prog},ok,bad};
 </script>
 <script src="../../../shared/season.js"></script>

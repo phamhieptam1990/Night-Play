@@ -422,7 +422,7 @@ function skCss(sk){let st=$("skCss");if(!st){st=document.createElement("style");
 function fillDeco(sk){document.querySelectorAll(".dc").forEach(d=>{d.innerHTML="";const L=sk.deco||["⭐"];L.forEach((e,i)=>{for(let k=0;k<3;k++){const q=document.createElement("i");q.textContent=e;q.style.left=((i*3+k)*(100/(L.length*3))+Math.random()*6)+"%";q.style.animationDelay=(-Math.random()*9)+"s";q.style.animationDuration=(8+Math.random()*6)+"s";d.appendChild(q)}})})}
 
 /* ===== TRẠNG THÁI ===== */
-const HELPER=!!(window.NP&&NP.helper);
+const BOOT_H=!!(window.NP&&NP.helper),HELPER=BOOT_H&&!(NP.resumeBoot&&NP.resumeBoot());
 let prog=Object.assign({best:0,played:0},LS.get("nt-prog",{}));
 const saveProg=()=>{if(!HELPER)LS.set("nt-prog",prog)};
 let LVL=Math.min(3,Math.max(1,+LS.get("nt-lv",1)||1)),G=null,CH=null,paused=false,sound=true,payFor=null,skFor=0,gateBack="ovPay",gid=0,endAt=0,wantCam=false;
@@ -797,7 +797,7 @@ applyLang();goHome();
 if(HS){
   const go=()=>{const rs=Math.max(0,Math.min(I_(HS.rs,0,10000),10000))/100,hs=/^[12]{0,10}$/.test(HS.hs||"")?HS.hs.split(""):[];begin(HS.t,{seed:HS.s,lv:HS.lv,r:HS.r,first:I_(HS.f,0,10),rs,rn:I_(HS.rn,0,200),cb:I_(HS.cb,0,10),mc:I_(HS.mc,0,10),hist:hs,log:genQs(HS.s,HS.lv).slice(0,HS.r).map((q,i)=>({a:q.a,b:q.b,op:q.op,ans:q.ans,tries:1}))})},okT=HS.tk&&/^h\.\d{13}\.[\w-]{43}$/.test(HS.tk);
   if(okT)PF.loadPro(false,HS.tk).then(()=>{if(/^[a-z]{3,10}$/.test(HS.sk||"")&&PF.skins[HS.t][HS.sk])PF.skinSel[HS.t]=HS.sk}).catch(()=>{}).finally(go);else go();
-}else if(!HELPER){CH=parseCh();if(CH)openCh();else if(location.hash==="#daily")startDaily()}
+}else if(!BOOT_H){CH=parseCh();if(CH)openCh();else if(location.hash==="#daily")startDaily()}
 function I_(v,a,z){return Number.isInteger(v)?Math.max(a,Math.min(z,v)):a}
 window.NH={Counter,CPAR,drawCard,drawScene,rig,shareText,shareLink,dailyInfo,parseCh,b64e,startDaily,genQs,get CAH(){return CAH},get G(){return G},get cam(){return cam},get want(){return wantCam},begin,goHome,PF,beat,fakeBeat(n){let k=0;for(let i=0;i<(n||1);i++)if(beat("fake"))k++;return k},okPress,settle,
   solve(){const n=G.q.ans;for(let i=0;i<n;i++)beat("fake");settle()},overshoot(){const n=G.q.ans;for(let i=0;i<=n;i++)beat("fake")},

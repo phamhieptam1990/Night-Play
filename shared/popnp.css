@@ -262,6 +262,6 @@ html:root .lvs .lvb,html:root .lvs .lv{border:2px solid transparent!important;bo
   html.npp-kid #ovStart #pgBtn{display:none}
 }
 /* Pop điện thoại dọc: nút loa / ⋯ / ← trên thanh (position:fixed, z-index 45) từng nằm ĐÈ trên popup của game (Bộ sưu tập, Giao diện...) → popup mở thì hạ xuống dưới lớp mờ, cùng kiểu popup hướng dẫn (?) phủ trọn cửa sổ. Ván kết thúc (#ovEnd) giữ nút để còn thoát. */
-html.np-pm:has(.ov:not([hidden]):not(#ovEnd)) :is(#soundBtn,#npPmFab,#npPmBk){z-index:1!important}
+html.np-pm:has(.ov:not([hidden]):not(#ovEnd):not(#ovStart)) :is(#soundBtn,#npPmFab,#npPmBk){z-index:1!important}
 /* Nút Giao diện 🎨 (.sk) trong thẻ khu: nút 30–36px nhưng vòng viền trắng 3px (outline) vẽ NGOÀI nút không nhận cú bấm → bấm vào mép icon rơi xuống thẻ bên dưới, "không mở được popup". Nới vùng bấm ra ngoài vòng viền (≥ 48px, phủ hết icon thấy được). */
 html.npp-kid button.sk::after{content:"";position:absolute;inset:-9px;border-radius:50%}

@@ -394,7 +394,7 @@ function skCss(sk){let st=$("skCss");if(!st){st=document.createElement("style");
 function fillDeco(sk){const d=$("dc");d.innerHTML="";const L=sk.deco||["⭐"];L.forEach((e,i)=>{for(let k=0;k<3;k++){const q=document.createElement("i");q.textContent=e;q.style.left=((i*3+k)*(100/(L.length*3))+MR()*6)+"%";q.style.animationDelay=(-MR()*9)+"s";q.style.animationDuration=(8+MR()*6)+"s";d.appendChild(q)}})}
 
 /* ===== TRẠNG THÁI ===== */
-const HELPER=!!(window.NP&&NP.helper),HS=HELPER&&NP.initialState&&typeof NP.initialState==="object"?NP.initialState:null;
+const BOOT_H=!!(window.NP&&NP.helper),HELPER=BOOT_H&&!(NP.resumeBoot&&NP.resumeBoot()),HS=BOOT_H&&NP.initialState&&typeof NP.initialState==="object"?NP.initialState:null;
 let prog=Object.assign({played:0,best:0},LS.get("bn-prog",{}));
 const saveProg=()=>{if(!HELPER)LS.set("bn-prog",prog)};
 let LVL=Math.min(3,Math.max(1,+LS.get("bn-lv",1)||1)),G=null,paused=false,sound=true,payFor=null,skFor=0,gateBack="ovPay",gid=0,CH=null,endAt=0;
@@ -733,7 +733,7 @@ const okHS=HS&&Number.isInteger(HS.t)&&HS.t>=0&&HS.t<4&&Number.isInteger(HS.lv)&
 if(okHS){
   const go=()=>begin(HS.t,{seed:HS.s,lv:HS.lv,resume:{r:HS.r,sc:HS.sc,hist:(HS.h||"").split("")}}),okT=HS.tk&&/^h\.\d{13}\.[\w-]{43}$/.test(HS.tk);
   if(okT)PF.loadPro(false,HS.tk).then(()=>{if(/^[a-z]{3,10}$/.test(HS.sk||"")&&PF.skins[HS.t][HS.sk])PF.skinSel[HS.t]=HS.sk}).catch(()=>{}).finally(go);else go();
-}else{goHome();if(!HELPER){CH=parseCh();if(CH)openCh();else if(location.hash==="#daily")startDaily()}}
+}else{goHome();if(!BOOT_H){CH=parseCh();if(CH)openCh();else if(location.hash==="#daily")startDaily()}}
 window.BN={drawCard,shareText,shareLink,dailyInfo,parseCh,b64e,startDaily,parseNum,parseLetter,numWord,clipFrame,clipData,clipParts,get CLIP(){return CLIP},
   get CH(){return CH},get G(){return G},get ST(){return ST},get micOK(){return micOK},get micOn(){return micOn},get recRun(){return recRun},begin,goHome,PF,Q,get prog(){return prog},setLv(n){LVL=n},
   qFor(t,lv,seed,r){const sv=RNG;RNG=mulberry32((seed^Math.imul(r+1,2654435761))>>>0);try{return Q[t](lv)}finally{RNG=sv}},

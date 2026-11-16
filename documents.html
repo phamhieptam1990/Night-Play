@@ -38,7 +38,11 @@ h1{margin:0;font-size:clamp(19px,4.5vw,26px);line-height:1.2;flex:none;margin-ri
 .btn.p{background:var(--accent);color:var(--on-accent);border-color:transparent}
 .btn svg{width:18px;height:18px}
 main{flex:1;min-height:0;max-width:1000px;width:100%;margin:0 auto;padding:0 16px 12px;display:flex}
-iframe{flex:1;width:100%;border:1px solid var(--line);border-radius:14px;background:#fff}
+#view{flex:1;width:100%;position:relative;min-height:0;border:1px solid var(--line);border-radius:14px;background:var(--panel);overflow:hidden}
+.pdf-scroll{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;padding:10px;display:flex;flex-direction:column;gap:10px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.pdf-page{flex:none;width:100%;background:#fff;border-radius:6px;box-shadow:0 3px 14px rgba(0,0,0,.25);overflow:hidden}
+.pdf-page canvas{display:block}
+.pdf-load{height:100%;display:grid;place-items:center;color:var(--muted);font-weight:600;font-size:14px}
 @media (max-width:480px){.btn span{display:none}.btn{width:44px;padding:0}}
 @media (min-width:700px){.sel{flex:1 1 0;order:0}}
 @media (max-height:480px){header{padding:4px 16px;flex-wrap:nowrap}.sel{flex:1 1 0;order:0}.back,.btn,.sel select{height:38px}.seg button{height:32px}.back{width:38px}h1{display:none}main{padding-bottom:6px}}
@@ -55,7 +59,7 @@ iframe{flex:1;width:100%;border:1px solid var(--line);border-radius:14px;backgro
   </div>
   <label class="sel"><select id="pick" aria-label="Chọn tài liệu"></select><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></label>
 </header>
-<main><iframe id="view" title="Tài liệu"></iframe></main>
+<main><div id="view" role="document"></div></main>
 <script>
 /* [tên vi, tên en, tệp (vi), tệp (en), tệp song ngữ VI+EN dùng cho nút Tải PDF]. PDF tiếng Việt: legal/*-vi.pdf hoặc legal/tailieu/NN-xxx.pdf; tiếng Anh: legal/*-en.pdf hoặc legal/tailieu/NN-xxx-en.pdf */
 var DOCS=[
@@ -70,6 +74,37 @@ var DOCS=[
 var UI={vi:{t:"Tài liệu",open:"Mở trong tab mới",dl:"Tải PDF (VI + EN)",pick:"Chọn tài liệu",back:"Về trang chủ",o:"Mở",site:"Play Hub"},en:{t:"Documents",open:"Open in new tab",dl:"Download PDF (VI + EN)",pick:"Choose a document",back:"Back to home",o:"Open",site:"Play Hub"}};
 var de=document.documentElement,pick=document.getElementById("pick"),cur=0;
 function lg(){return de.lang==="en"?"en":"vi"}
+var pjs=null;
+function loadPdfjs(){
+  if(!pjs)pjs=new Promise(function(res,rej){
+    if(window.pdfjsLib)return res(window.pdfjsLib);
+    var sc=document.createElement("script");sc.src="shared/vendor/pdfjs/pdf.min.js";
+    sc.onload=function(){try{pdfjsLib.GlobalWorkerOptions.workerSrc="shared/vendor/pdfjs/pdf.worker.min.js";res(pdfjsLib)}catch(e){rej(e)}};
+    sc.onerror=function(){pjs=null;rej(new Error("pdfjs"))};document.head.appendChild(sc)});
+  return pjs;
+}
+/* Vẽ MỌI trang bằng PDF.js: iOS/iPad/điện thoại hiện PDF nhúng chỉ trang 1 */
+function draw(f,l){
+  var v=document.getElementById("view"),w=v.clientWidth;if(!w)return;
+  var key=f+"|"+l+"|"+Math.round(w/40);if(v.dataset.k===key)return;v.dataset.k=key;
+  var tok=(v.__tok=(v.__tok||0)+1),vi=l==="vi";
+  v.innerHTML='<div class="pdf-load">'+(vi?"Đang tải PDF…":"Loading PDF…")+'</div>';
+  loadPdfjs().then(function(lib){return lib.getDocument({url:f}).promise}).then(function(doc){
+    if(v.__tok!==tok)return;
+    return doc.getPage(1).then(function(p1){
+      if(v.__tok!==tok)return;
+      var sc=document.createElement("div");sc.className="pdf-scroll";v.replaceChildren(sc);
+      var v1=p1.getViewport({scale:1}),k=Math.max(.3,(sc.clientWidth-20)/v1.width),dpr=Math.min(window.devicePixelRatio||1,2);
+      var io=new IntersectionObserver(function(es){es.forEach(function(e){
+        if(!e.isIntersecting)return;var el=e.target;io.unobserve(el);
+        doc.getPage(+el.dataset.n).then(function(pg){if(v.__tok!==tok)return;
+          var vp=pg.getViewport({scale:k*dpr}),cv=document.createElement("canvas");cv.width=Math.floor(vp.width);cv.height=Math.floor(vp.height);
+          cv.style.width="100%";cv.style.height="auto";el.appendChild(cv);
+          return pg.render({canvasContext:cv.getContext("2d"),viewport:vp}).promise})})},{root:sc,rootMargin:"600px 0px"});
+      for(var n=1;n<=doc.numPages;n++){var el=document.createElement("div");el.className="pdf-page";el.dataset.n=n;el.style.aspectRatio=v1.width+" / "+v1.height;el.setAttribute("aria-label",(vi?"Trang ":"Page ")+n+"/"+doc.numPages);sc.appendChild(el);io.observe(el)}
+    })}).catch(function(){if(v.__tok===tok)v.innerHTML='<div class="pdf-load"><a class="btn p" href="'+f+'" target="_blank" rel="noopener">'+(vi?"Mở PDF":"Open PDF")+'</a></div>'});
+}
+var rz;addEventListener("resize",function(){clearTimeout(rz);rz=setTimeout(function(){paint()},150)});
 function paint(){
   var l=lg(),u=UI[l],k=l==="en"?1:0,fk=l==="en"?3:2;
   document.getElementById("ttl").textContent=u.t;
@@ -80,7 +115,7 @@ function paint(){
   pick.innerHTML=DOCS.map(function(x,i){return '<option value="'+i+'">'+(i+1)+'. '+x[k]+'</option>'}).join("");
   pick.value=cur;
   var f=DOCS[cur][fk];
-  var v=document.getElementById("view");if(v.getAttribute("data-f")!==f){v.setAttribute("data-f",f);v.src=f+"#view=FitH"}
+  draw(f,l);
   var bi=DOCS[cur][4];o.href=f;d.href=bi;d.setAttribute("download",bi.split("/").pop());
   document.title=DOCS[cur][k]+" · "+u.site;
   document.querySelectorAll(".seg button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.l===l))});

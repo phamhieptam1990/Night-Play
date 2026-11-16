@@ -784,7 +784,7 @@ PF.preview=function(type,id,c){const sk=id==="default"?null:(PF.skins[type]||{})
 
 
 /* ===== THÁCH ĐẤU · CHƠI HỘ · KHOE ĐIỂM · COMBO (sườn giống Đập Deadline) ===== */
-const HELPER=!!(window.NP&&NP.helper),HS=HELPER&&window.NP.initialState&&typeof NP.initialState==="object"?NP.initialState:null;
+const BOOT_H=!!(window.NP&&NP.helper),HELPER=BOOT_H&&!(NP.resumeBoot&&NP.resumeBoot()),HS=BOOT_H&&window.NP.initialState&&typeof NP.initialState==="object"?NP.initialState:null;
 const b64e=o=>btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
 const b64d=s=>{try{return JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g,"+").replace(/_/g,"/")))))}catch(e){return null}};
 const TICKET_RE=/^h\.\d{13}\.[\w-]{43}$/;

@@ -489,7 +489,7 @@ function skCss(sk){let st=$("skCss");if(!st){st=document.createElement("style");
 function fillDeco(sk){document.querySelectorAll(".dc").forEach(d=>{d.innerHTML="";const L=sk.deco||["⭐"];L.forEach((e,i)=>{for(let k=0;k<3;k++){const q=document.createElement("i");q.textContent=e;q.style.left=((i*3+k)*(100/(L.length*3))+MR()*6)+"%";q.style.animationDelay=(-MR()*9)+"s";q.style.animationDuration=(8+MR()*6)+"s";d.appendChild(q)}})})}
 
 /* ===== TRẠNG THÁI · ALBUM ===== */
-const HELPER=!!(window.NP&&NP.helper);
+const BOOT_H=!!(window.NP&&NP.helper),HELPER=BOOT_H&&!(NP.resumeBoot&&NP.resumeBoot());   /* ?resume=1 nạp ván dở qua đường của chơi hộ: nhánh nạp dùng BOOT_H, còn nút/điểm/chia sẻ dùng HELPER (người chơi thật, không ẩn nút ở màn kết thúc) */
 let prog=Object.assign({best:0,played:0},LS.get("qv-prog",{}));
 const saveProg=()=>{if(!HELPER)LS.set("qv-prog",prog)};
 let LVL=Math.min(3,Math.max(1,+LS.get("qv-lv",1)||1)),G=null,paused=false,sound=true,payFor=null,skFor=0,gateBack="ovPay",gid=0,CH=null,endAt=0,MON=null;
@@ -844,7 +844,7 @@ if(window.NP){
 }
 if(passToken()&&!HELPER)PF.loadPro(false).catch(()=>{});
 applyLang();goHome();
-if(!HELPER){CH=parseCh();if(CH)openCh();else if(location.hash==="#daily")startDaily()}
+if(!BOOT_H){CH=parseCh();if(CH)openCh();else if(location.hash==="#daily")startDaily()}
 else{const HS=window.NP&&NP.initialState,I=(v,a,z)=>Number.isInteger(v)&&v>=a&&v<=z;
   if(HS&&I(HS.t,0,3)&&I(HS.lv,1,3)&&I(HS.s,0,4294967295)&&I(HS.r,0,2)){const go=()=>begin(HS.t,{seed:HS.s,lv:HS.lv,r0:HS.r}),okT=HS.tk&&/^h\.\d{13}\.[\w-]{43}$/.test(HS.tk);
     if(okT)PF.loadPro(false,HS.tk).then(()=>{if(/^[a-z]{3,10}$/.test(HS.sk||"")&&PF.skins[HS.t][HS.sk])PF.skinSel[HS.t]=HS.sk}).catch(()=>{}).finally(go);else go()}}

@@ -351,7 +351,7 @@ function fillDeco(sk){$("gnd").textContent=(sk.gnd||"🌈☁️").repeat(6);docu
 const masHTML=sk=>'<div class="mas"><div class="m-aura"></div><span class="m-fx"></span><div class="m-body"><i class="m-e"></i><i class="m-e r"></i><b class="m-m"></b></div><span class="m-hat">'+(sk.hat||"")+'</span><span class="m-prop">'+(sk.prop||"")+"</span></div>";
 
 /* ===== TRẠNG THÁI ===== */
-const HELPER=!!(window.NP&&NP.helper);
+const BOOT_H=!!(window.NP&&NP.helper),HELPER=BOOT_H&&!(NP.resumeBoot&&NP.resumeBoot());
 let prog=Object.assign({best:0,played:0},LS.get("dt-prog",{}));
 const saveProg=()=>{if(!HELPER)LS.set("dt-prog",prog)};
 const cleanName=s=>String(s||"").replace(/[^\p{L}\p{N} \-]/gu,"").replace(/\s+/g," ").trim().slice(0,12);
@@ -599,7 +599,7 @@ addEventListener("keydown",e=>{if(G&&G.over&&!HELPER&&(e.key==="Enter"||e.key===
 addEventListener("storage",e=>{if(e.key==="theme")document.documentElement.dataset.theme=e.newValue||"light"});
 
 /* ===== CẦU NỐI VỚI TRANG CHA ===== */
-const HS=HELPER&&NP.initialState&&typeof NP.initialState==="object"?NP.initialState:null;
+const HS=BOOT_H&&NP.initialState&&typeof NP.initialState==="object"?NP.initialState:null;
 if(window.NP){
   NP.state(()=>{if(!G||G.over||!G.run)return null;const st={t:G.t,lv:G.lv,s:G.seed};if(PF.pro&&!PF.pro.trial&&PF.ticket){st.tk=PF.ticket;const sk=PF.skinSel[G.t];if(sk&&sk!=="basic"&&PF.skins[G.t][sk])st.sk=sk}return st});   /* chơi hộ: bạn chơi cùng bộ câu hỏi, đúng giao diện */
   NP.onPause(()=>{paused=true;$("play").classList.add("paused");if(window.speechSynthesis)speechSynthesis.cancel()},()=>{paused=false;if(G)G.last=performance.now();$("play").classList.remove("paused")});
@@ -610,7 +610,7 @@ if(HS&&Number.isInteger(HS.t)&&HS.t>=0&&HS.t<4&&Number.isInteger(HS.lv)&&HS.lv>=
   const go=()=>begin(HS.t,{seed:HS.s,lv:HS.lv}),okT=HS.tk&&/^h\.\d{13}\.[\w-]{43}$/.test(HS.tk);
   if(okT)PF.loadPro(false,HS.tk).then(()=>{if(/^[a-z]{3,10}$/.test(HS.sk||"")&&PF.skins[HS.t][HS.sk])PF.skinSel[HS.t]=HS.sk}).catch(()=>{}).finally(go);else go();
 }
-if(!HELPER){CH=parseCh();if(CH)openCh();else if(location.hash==="#daily")startDaily()}
+if(!BOOT_H){CH=parseCh();if(CH)openCh();else if(location.hash==="#daily")startDaily()}
 window.DT={drawCard,shareText,shareLink,dailyInfo,parseCh,b64e,startDaily,genQ,calc,ageFromScore,titleOf,cleanName,get CH(){return CH},get G(){return G},begin,goHome,PF,get prog(){return prog},get AGE(){return AGE},setLv(n){LVL=n},setAge(n){AGE=n;LS.set("dt-age",n)},
   adv(ms){if(G&&G.run){G.el+=ms;upd();if(G.el>=TIME)finish()}},solve(){if(G&&G.open)tap(G.q.a)},wrong(){if(G&&G.open)tap(G.q.o.findIndex((_,i)=>i!==G.q.a&&!$("ans").children[i].disabled))}};
 </script>
