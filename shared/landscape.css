@@ -120,4 +120,14 @@ html.np-hudg .top{left:68px!important}
   #home .ty .e,#home .ty>span:first-child:not(.t){font-size:clamp(18px,7vh,26px)!important;line-height:1!important}
   #home .ty{min-height:44px!important;height:auto!important;gap:2px!important;padding:4px 3px!important}
   #home .lv{font-size:clamp(11px,4.1vh,13px)!important;min-height:36px!important}
+  /* ô chế độ TO HƠN: 2 HÀNG (4 ô → lưới 2×2; 5–6 ô → 3 cột × 2 hàng), biểu tượng trái + tên phải một dòng (trước: 1 hàng 4–6 ô hẹp ~70–100px, tên gập 2–3 dòng) */
+  #home .tys{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}
+  /* ≥5 ô: MỘT HÀNG TRƯỢT NGANG (vuốt xem thêm), ô rộng cố định, icon trên + tên dưới tối đa 2 dòng — không bóp thành ô hẹp */
+  #home .tys:has(>.ty:nth-child(5)){display:flex!important;flex-wrap:nowrap!important;gap:6px!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scrollbar-width:none;padding:5px 4px 4px;margin:-5px -4px -4px}
+  #home .tys:has(>.ty:nth-child(5))::-webkit-scrollbar{display:none}
+  #home .tys:has(>.ty:nth-child(5))>.ty{flex:0 0 clamp(96px,17vw,124px)!important;scroll-snap-align:start;flex-direction:column!important;justify-content:center!important;text-align:center!important;gap:2px!important;padding:4px 4px!important;min-height:60px!important}
+  #home .tys:has(>.ty:nth-child(5))>.ty :is(.t,b,.sx){text-align:center!important;flex:none!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  #home .ty{flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;text-align:left!important;gap:8px!important;padding:4px 10px!important;min-height:44px!important}
+  #home .ty .e,#home .ty>span:first-child:not(.t){flex:none!important}
+  #home .ty .t,#home .ty b{flex:1 1 auto!important;min-width:0!important;text-align:left!important}
 }

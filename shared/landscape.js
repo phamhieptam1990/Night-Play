@@ -128,3 +128,22 @@
   function queueFit() { cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(function () { fitTitle(); fitHome(); fitGame(); }); }
   if (tl) { try { new MutationObserver(queueFit).observe(tl, { childList: true, characterData: true, subtree: true }); new MutationObserver(queueFit).observe(pl, { attributes: true, attributeFilter: ["data-scr"] }); } catch (e) {} addEventListener("resize", queueFit); addEventListener("orientationchange", function () { setTimeout(queueFit, 200); }); if (document.fonts && document.fonts.ready) document.fonts.ready.then(queueFit); queueFit(); }
 })();
+
+/* Hàng chế độ trượt ngang (màn chính Cozy, điện thoại ngang thấp, ≥5 ô): tự cuộn tới ô đang chọn (.on) khi mở màn / đổi chế độ / xoay màn, không cuộn cả trang. */
+(function () {
+  "use strict";
+  function snap() {
+    try {
+      var t = document.querySelector("#home .tys"); if (!t || t.scrollWidth <= t.clientWidth + 2) return;
+      var on = t.querySelector(".ty.on"); if (!on) return;
+      var tr = t.getBoundingClientRect(), or = on.getBoundingClientRect(), x = t.scrollLeft + (or.left - tr.left) - (tr.width - or.width) / 2;
+      if (Math.abs(t.scrollLeft - x) > 4) t.scrollTo({ left: Math.max(0, x), behavior: "smooth" });
+    } catch (e) {}
+  }
+  function init() {
+    var h = document.getElementById("home"); if (!h) return;
+    try { new MutationObserver(function () { setTimeout(snap, 60); }).observe(h, { attributes: true, subtree: true, attributeFilter: ["class", "hidden"], childList: true }); } catch (e) {}
+    addEventListener("resize", function () { setTimeout(snap, 120); }); setTimeout(snap, 300);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+})();
