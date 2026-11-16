@@ -322,7 +322,7 @@ html:root[data-theme=light].sc-ok #fPop a:last-child{border-bottom:0}
 html:root[data-theme=light].sc-ok #fPop a:hover,html:root[data-theme=light].sc-ok #fPop a:focus-visible{color:#E4571F}
 
 /* NÚT THÔNG TIN ⓘ + MENU CHÂN TRANG KIỂU NIGHT PASS (mọi cỡ màn dùng nút nổi: điện thoại, iPad dọc/ngang): nền tím tối gradient, viền sáng tím, quầng tím, chữ trắng — không theo màu cam/tím từng trang; mở ra thì gradient tím–cam */
-html.sc-ok #fFab,html.sc-ok #fInfo{background:linear-gradient(165deg,#2b2064,#171236 62%,#120e2b)!important;color:#fff!important;border:1.5px solid rgba(170,150,255,.6)!important;box-shadow:0 0 0 1px rgba(124,92,255,.25),0 4px 14px rgba(108,75,242,.4)!important;opacity:1!important}
+html.sc-ok #fFab,html.sc-ok #fInfo{background:linear-gradient(135deg,#8B6CFF,#5B3CE0)!important;color:#fff!important;border:1.5px solid rgba(255,255,255,.7)!important;box-shadow:0 0 0 1px rgba(124,92,255,.35),0 4px 14px rgba(108,75,242,.5)!important;opacity:1!important}   /* tím sáng (không còn gần như đen) */
 html.sc-ok #fFab[aria-expanded=true]{background:linear-gradient(135deg,#6C4BF2,#C2410C)!important;border-color:rgba(255,255,255,.7)!important}
 html.sc-ok #fPop{background:linear-gradient(165deg,#2b2064,#171236 62%,#120e2b)!important;color:#fff!important;border:1.5px solid rgba(170,150,255,.6)!important;box-shadow:0 14px 36px rgba(0,0,0,.5),0 0 22px rgba(124,92,255,.32)!important;border-radius:18px!important}
 html.sc-ok #fPop a{color:#d7ccff!important}html.sc-ok #fPop .fpu{opacity:.8}

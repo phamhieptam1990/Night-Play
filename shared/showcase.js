@@ -300,7 +300,7 @@
     var mb = document.getElementById("madeBy"), up = foot.querySelector(".site-upd");
     if (mb && mb.textContent) { var p = document.createElement("p"); p.textContent = mb.textContent; pop.appendChild(p); }
     if (up && up.textContent) { var u = document.createElement("p"); u.className = "fpu"; u.textContent = up.textContent; pop.appendChild(u); }
-    [].forEach.call(foot.querySelectorAll(".fcol a"), function (a) {
+    [].forEach.call(document.querySelectorAll(".fcol a, .foot .bars-pop a"), function (a) {   /* điện thoại nhỏ: bars.js đã chuyển liên kết chân trang sang .bars-pop (trước: menu ⓘ chỉ còn dòng ©, không có liên kết) */
       if (!a.textContent.trim() || a.id === "fGames") return;
       var c = document.createElement("a"); c.textContent = a.textContent; c.href = a.getAttribute("href") || "#"; if (a.target) { c.target = a.target; c.rel = "noopener"; }
       c.addEventListener("click", function (e) { if (a.getAttribute("href") === "#") { e.preventDefault(); a.click(); } close(); });
