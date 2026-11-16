@@ -66,14 +66,15 @@ main{flex:1;min-height:0;padding-bottom:12px;display:flex;flex-direction:column;
 @media (prefers-reduced-motion:reduce){.bd.ok .em{animation:none}.bar i{transition:none}}
 @media (max-height:600px){header{padding-top:4px;padding-bottom:4px}.tabs button{height:46px}.tabs button b{font-size:15px}.prog{padding:6px 12px}.back{width:38px;height:38px}.bd .em{font-size:36px}.bd .hs{display:none}.bd{padding:6px}}
 @media (max-height:480px){h1{display:none}.sp{display:none}main{gap:6px}.grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px}}
+.gset{flex:none;display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 12px;border-radius:20px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow);color:var(--ink);text-decoration:none;font-weight:800;font-size:13px}@media (max-width:430px){.gset span{display:none}.gset{width:40px;padding:0;justify-content:center}}
 </style>
 </head>
 <body>
 <header>
   <a class="back" id="back" href="nightpass.html" aria-label="Quay lại"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
   <h1 id="ttl">Huy hiệu</h1>
-  <span class="total" id="tot"></span>
-  <div class="seg" role="group" aria-label="Language"><button type="button" data-l="vi">VI</button><button type="button" data-l="en">EN</button></div>
+  <span class="total" id="tot"></span><a class="total" id="mlink" href="nightpass-mascot.html" style="text-decoration:none;color:inherit">🐾</a>
+  <a class="gset" id="gset" href="nightpass.html" aria-label="Cài đặt Night Pass" title="Cài đặt Night Pass"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:20px;height:20px"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span id="gsetT">Cài đặt</span></a><div class="seg" role="group" aria-label="Language"><button type="button" data-l="vi">VI</button><button type="button" data-l="en">EN</button></div>
 </header>
 <nav class="tabs" id="tabs" role="tablist"></nav>
 <main>
@@ -91,7 +92,7 @@ function fromPath(){var f=new URLSearchParams(location.search).get("from");retur
 function render(){
   var x=X(),l=L(),B=NPBadges,G=B.GROUPS;
   document.title=x.ttl;$("ttl").textContent=x.ttl;$("back").setAttribute("aria-label",x.back);$("back").href=fromPath();
-  $("tot").textContent="🏅 "+B.total()+"/"+B.CATALOG.length;
+  $("gset").href="nightpass.html?lang="+l;$("gsetT").textContent=l==="vi"?"Cài đặt":"Settings";$("gset").title=l==="vi"?"Cài đặt Night Pass":"Night Pass settings";$("mlink").href="nightpass-mascot.html?lang="+l;$("mlink").setAttribute("aria-label",l==="vi"?"Linh vật":"Mascot");$("tot").textContent="🏅 "+B.total()+"/"+B.CATALOG.length;
   $("tabs").innerHTML=Object.keys(G).map(function(k){var p=B.progress(k);return '<button type="button" role="tab" data-g="'+k+'" aria-selected="'+(k===grp)+'"><b>'+G[k].icon+'</b><span>'+esc(G[k][l])+' '+p.have+'/'+p.need+'</span></button>'}).join("");
   $("tabs").querySelectorAll("button").forEach(function(b){b.onclick=function(){grp=b.dataset.g;render()}});
   var p=B.progress(grp),g=G[grp],pc=Math.min(100,Math.round(p.have/p.need*100));

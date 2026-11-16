@@ -115,7 +115,7 @@ html[data-theme=light] .grads button:not(.none){color:#2b2250;text-shadow:0 1px 
 <script>
 "use strict";
 var T={vi:{
- ttl:"Cài đặt Night Pass",back:"Về trang chủ",trAv:"Dùng thử miễn phí hôm nay",trAvS:"Chọn font và màu nền thoải mái trong 15 phút, sau đó tự về mặc định.",trGo:"Dùng thử",trOn:"Đang dùng thử",trOnS:function(m){return "Còn "+m+" phút, hết giờ tự về mặc định."},trUsed:"Hôm nay đã dùng thử",trUsedS:"Quay lại vào ngày mai, hoặc mua gói để dùng không giới hạn.",badges:"Huy hiệu",t0:"Gói",t1:"Giao diện",t2:"Tuỳ chỉnh",t3:"Hỗ trợ",grad:"Màu nền gradient (Night Pass)",gradNone:"Gốc",fx:"Hiệu ứng chuyển động trên nền",fxOn:"Bật",fxOff:"Tắt",prev:"Xem thử theme",gradNote:"Phủ nền toàn màn hình game, tự đổi theo Sáng/Tối.",gradLock:"Cần gói Night Pass còn hạn để đổi màu nền. ",
+ ttl:"Cài đặt Night Pass",back:"Về trang chủ",trAv:"Dùng thử miễn phí hôm nay",trAvS:"Chọn font và màu nền thoải mái trong 15 phút, sau đó tự về mặc định.",trGo:"Dùng thử",trOn:"Đang dùng thử",trOnS:function(m){return "Còn "+m+" phút, hết giờ tự về mặc định."},trUsed:"Hôm nay đã dùng thử",trUsedS:"Quay lại vào ngày mai, hoặc mua gói để dùng không giới hạn.",badges:"Huy hiệu",mascot:"Linh vật",t0:"Gói",t1:"Giao diện",t2:"Tuỳ chỉnh",t3:"Hỗ trợ",grad:"Màu nền gradient (Night Pass)",gradNone:"Gốc",fx:"Hiệu ứng chuyển động trên nền",fxOn:"Bật",fxOff:"Tắt",prev:"Xem thử theme",gradNote:"Phủ nền toàn màn hình game, tự đổi theo Sáng/Tối.",gradLock:"Cần gói Night Pass còn hạn để đổi màu nền. ",
  plan:"Gói của bạn",none:"Chưa có gói Night Pass",noneS:"Mua gói để mở khoá giao diện và chế độ mới.",buy:"Mua gói",renew:"Gia hạn",
  pDay:"Gói ngày",pWeek:"Gói tuần",pMonth:"Gói tháng",pYear:"Gói năm",pDef:"Night Pass",
  exp:"Hết hạn",left:function(d,h){return d>0?"còn "+d+" ngày":h>0?"còn "+h+" giờ":"sắp hết hạn"},expired:"Đã hết hạn",
@@ -132,7 +132,7 @@ var T={vi:{
  dc:"Chính sách",lDoc:"Đổi trả và hoàn tiền",lPay:"Thanh toán",lPrice:"Chính sách giá",
  hl:"Cần giúp?",lChk:"Kiểm tra Night Pass (game vẫn khoá?)",lMail:"Gửi email hỗ trợ"},
 en:{
- ttl:"Night Pass settings",back:"Back to home",trAv:"Free try-out today",trAvS:"Pick any font and background for 15 minutes, then it resets to default.",trGo:"Try it",trOn:"Trying it out",trOnS:function(m){return m+" min left, then it resets to default."},trUsed:"You already tried it today",trUsedS:"Come back tomorrow, or get a plan to use it without limits.",badges:"Badges",t0:"Plan",t1:"Look",t2:"Custom",t3:"Support",grad:"Gradient background (Night Pass)",gradNone:"Original",fx:"Moving effects on the background",fxOn:"On",fxOff:"Off",prev:"Preview themes",gradNote:"Covers the whole game screen, follows Light/Dark.",gradLock:"A valid Night Pass is needed to change the background. ",
+ ttl:"Night Pass settings",back:"Back to home",trAv:"Free try-out today",trAvS:"Pick any font and background for 15 minutes, then it resets to default.",trGo:"Try it",trOn:"Trying it out",trOnS:function(m){return m+" min left, then it resets to default."},trUsed:"You already tried it today",trUsedS:"Come back tomorrow, or get a plan to use it without limits.",badges:"Badges",mascot:"Mascot",t0:"Plan",t1:"Look",t2:"Custom",t3:"Support",grad:"Gradient background (Night Pass)",gradNone:"Original",fx:"Moving effects on the background",fxOn:"On",fxOff:"Off",prev:"Preview themes",gradNote:"Covers the whole game screen, follows Light/Dark.",gradLock:"A valid Night Pass is needed to change the background. ",
  plan:"Your plan",none:"No Night Pass yet",noneS:"Get a plan to unlock new looks and modes.",buy:"Get a plan",renew:"Extend",
  pDay:"Day pass",pWeek:"Week pass",pMonth:"Month pass",pYear:"Year pass",pDef:"Night Pass",
  exp:"Expires",left:function(d,h){return d>0?d+" days left":h>0?h+" h left":"expires soon"},expired:"Expired",
@@ -158,10 +158,10 @@ function renderPlan(){
   var x=X(),p=pass(),exp=p&&p.exp?new Date(p.exp):null,left=exp?exp-Date.now():0,ok=exp&&left>0;
   var nm=p?(x[{day:"pDay",week:"pWeek",month:"pMonth",year:"pYear"}[p.plan]]||x.pDef):"";
   var h='<h2>'+esc(x.plan)+'</h2>';
-  if(!p||!exp){h+='<div class="big">'+esc(x.none)+'</div><div class="mut">'+esc(x.noneS)+'</div><div class="row"><a class="btn p" href="'+sub()+'">'+esc(x.buy)+'</a><a class="btn" href="nightpass-badges.html?lang='+L()+'">🏅 '+esc(x.badges)+'</a></div>'}
+  if(!p||!exp){h+='<div class="big">'+esc(x.none)+'</div><div class="mut">'+esc(x.noneS)+'</div><div class="row"><a class="btn p" href="'+sub()+'">'+esc(x.buy)+'</a><a class="btn" href="nightpass-badges.html?lang='+L()+'">🏅 '+esc(x.badges)+'</a><a class="btn" href="nightpass-mascot.html?lang='+L()+'">🐾 '+esc(x.mascot)+'</a></div>'}
   else{
     var d=Math.floor(left/864e5),hr=Math.floor(left/36e5);
-    h+='<div class="big">'+esc(nm)+'</div><div class="kv"><span>'+esc(x.exp)+'</span><b>'+esc(fmt(exp))+(ok?' · '+esc(x.left(d,hr)):' · '+esc(x.expired))+'</b></div><div class="mut" style="margin-top:6px">'+esc(x.noAuto)+'</div><div class="row"><a class="btn p" href="'+sub()+'">'+esc(x.renew)+'</a><a class="btn" href="nightpass-badges.html?lang='+L()+'">🏅 '+esc(x.badges)+'</a></div>';
+    h+='<div class="big">'+esc(nm)+'</div><div class="kv"><span>'+esc(x.exp)+'</span><b>'+esc(fmt(exp))+(ok?' · '+esc(x.left(d,hr)):' · '+esc(x.expired))+'</b></div><div class="mut" style="margin-top:6px">'+esc(x.noAuto)+'</div><div class="row"><a class="btn p" href="'+sub()+'">'+esc(x.renew)+'</a><a class="btn" href="nightpass-badges.html?lang='+L()+'">🏅 '+esc(x.badges)+'</a><a class="btn" href="nightpass-mascot.html?lang='+L()+'">🐾 '+esc(x.mascot)+'</a></div>';
   }
   $("cPlan").innerHTML=h;
 }

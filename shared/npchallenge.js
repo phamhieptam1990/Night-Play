@@ -101,8 +101,8 @@
     var won = false; try { won = !!spec.judge(res); } catch (e) {}
     chip(false);
     if (won) {
-      var first = NPBadges.award(ent.id, { score: res && res.score }); refreshBtn();
-      mkOv('<div class="tg">🎉 ' + tx("won") + '</div><div class="bs" aria-hidden="true">' + ent.badge + "</div><h2>" + esc(T(ent.badgeName)) + "</h2><p>" + (first ? "<b>" + tx("newb") + "</b> · " : tx("already") + " · ") + esc(T(ent.title)) + '</p><div class="row"><button class="b" id="npChX" type="button">' + tx("close") + '</button><button class="b p" id="npChC" type="button">🏅 ' + tx("coll") + "</button></div>");
+      var M2 = window.NPMascot2, before = M2 ? M2.list().map(function (m) { return m.id + ":" + M2.unlocked(m.id).length; }).join() : ""; var first = NPBadges.award(ent.id, { score: res && res.score }); refreshBtn(); var newSk = 0; if (M2 && first) { var bs = before.split(","); M2.list().forEach(function (m, i) { var n0 = +(bs[i] || ":0").split(":")[1]; if (M2.unlocked(m.id).length > n0) newSk += M2.unlocked(m.id).length - n0; }); }
+      mkOv('<div class="tg">🎉 ' + tx("won") + '</div><div class="bs" aria-hidden="true">' + ent.badge + "</div><h2>" + esc(T(ent.badgeName)) + "</h2><p>" + (first ? "<b>" + tx("newb") + "</b> · " : tx("already") + " · ") + esc(T(ent.title)) + (newSk ? "<br><b>🎁 " + (vi() ? "Mở khoá " + newSk + " skin linh vật mới!" : newSk + " new mascot skin(s) unlocked!") + "</b>" : "") + '</p><div class="row"><button class="b" id="npChX" type="button">' + tx("close") + '</button><button class="b p" id="npChC" type="button">🏅 ' + tx("coll") + "</button></div>");
       confetti([ent.badge, "✨", "🎉", "⭐"]);
       document.getElementById("npChC").onclick = function () { go(collUrl()); };
     } else {

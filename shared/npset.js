@@ -1,5 +1,5 @@
 /* Nút "Cài đặt Night Pass" trong thanh trên của game (và vì thế trong menu ⋯ của điện thoại/iPad dọc: fan.js / popmenu.js gom theo id #npSetBtn).
-   CHỈ hiện khi máy này có gói Night Pass còn hạn (đọc localStorage "pass": chạy cả khi offline); trên nút có huy hiệu số ngày còn lại. Bấm → trang nightpass.html (cửa sổ trên cùng, có ?from= để quay lại đúng chỗ).
+   Hiện cho MỌI NGƯỜI (không cần gói); khi có gói còn hạn (đọc localStorage "pass": chạy cả khi offline); trên nút có huy hiệu số ngày còn lại. Bấm → trang nightpass.html (cửa sổ trên cùng, có ?from= để quay lại đúng chỗ).
    Nạp tự động từ shared/resume.js (mọi game, trừ chế độ ?multi=1). */
 (function () {
   "use strict";
@@ -20,7 +20,7 @@
   (document.head || document.documentElement).appendChild(css);
   function sync() {
     var top = topBar(), b = document.getElementById(ID), n = days();
-    if (!n || !top) { if (b) b.remove(); return; }
+    if (!top) { if (b) b.remove(); return; }   /* HIỂN THỊ CHO MỌI NGƯỜI: có gói thì kèm số ngày còn lại, chưa có gói thì không có huy hiệu số (vào trang để dùng thử/mua) */
     if (!b) {
       var ref = document.getElementById("bSnd") || document.getElementById("soundBtn");
       b = document.createElement("button"); b.type = "button"; b.id = ID; b.className = (ref && ref.className.replace(/\b(np-snd-off|on|off)\b/g, "").trim()) || "ib";
@@ -28,8 +28,8 @@
       b.addEventListener("click", function () { var t = url(); try { t.w.location.href = t.u; } catch (e) { location.href = t.u; } });
       if (ref && ref.parentNode === top) top.insertBefore(b, ref); else top.appendChild(b);
     }
-    var lab = (vi() ? "Cài đặt Night Pass · còn " + n + " ngày" : "Night Pass settings · " + n + " day" + (n > 1 ? "s" : "") + " left");
-    var d = b.querySelector(".npd"); if (d.textContent !== String(n)) d.textContent = n;
+    var lab = n ? (vi() ? "Cài đặt Night Pass · còn " + n + " ngày" : "Night Pass settings · " + n + " day" + (n > 1 ? "s" : "") + " left") : (vi() ? "Cài đặt Night Pass" : "Night Pass settings");
+    var d = b.querySelector(".npd"); d.style.display = n ? "" : "none"; if (n && d.textContent !== String(n)) d.textContent = n;
     if (b.getAttribute("aria-label") !== lab) { b.setAttribute("aria-label", lab); b.title = lab; }
   }
   sync(); setInterval(sync, 2000); addEventListener("storage", sync);

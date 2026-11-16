@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="vi" data-app="hub" data-np="">
+<head>
+<meta charset="utf-8">
+<script src="shared/guard.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/svg+xml" sizes="any" href="/shared/favicon.svg">
+<title>Linh vật của bạn</title>
+<script>
+try{var t=localStorage.getItem("theme")}catch(e){}
+document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
+(function(){var q=new URLSearchParams(location.search).get("lang"),s=null;try{s=localStorage.getItem("lang")}catch(e){}
+var l=[q,s].find(function(x){return x==="vi"||x==="en"})||(/^vi/i.test(navigator.language||"")?"vi":"en");document.documentElement.lang=l;})();
+</script>
+<link rel="preload" href="shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="shared/fonts.css">
+<link rel="stylesheet" href="shared/theme.css">
+<link rel="stylesheet" href="shared/npfont.css">
+<script src="shared/nptrial.js"></script>
+<script src="shared/npfont.js"></script>
+<script src="shared/npgrad.js"></script>
+<script src="shared/npbadges.js"></script>
+<script src="shared/npmascot.js"></script>
+<style>
+html:root[data-app=hub][data-theme=dark]{--bg:#1a1240;--panel:rgba(48,32,112,.78);--line:rgba(170,150,255,.34);--muted:#bdb7ee}
+html:root[data-app=hub][data-theme=light]{--bg:#f4efff;--panel:rgba(255,255,255,.88);--line:#d9ccf6;--muted:#6a6290}
+html[data-theme=dark] body{background:linear-gradient(165deg,#1a1048 0%,#2e1670 48%,#5a1f6b 82%,#8a2f4f 100%) fixed}
+html[data-theme=light] body{background:linear-gradient(165deg,#efe7ff 0%,#f7e6ff 50%,#ffe6da 100%) fixed}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.3;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+header,main{width:100%;max-width:760px;margin:0 auto;padding-left:16px;padding-right:16px}
+header{flex:none;display:flex;align-items:center;gap:10px;padding-top:10px;padding-bottom:8px}
+.back{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#6C4BF2,#C2410C);box-shadow:0 4px 14px rgba(108,75,242,.45);display:grid;place-items:center;color:#fff;text-decoration:none;flex:none}
+.back svg{width:22px;height:22px}
+h1{margin:0;font-size:clamp(18px,4.6vw,24px);line-height:1.2;margin-right:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.seg{display:inline-flex;flex:none;background:var(--panel);box-shadow:var(--shadow);border-radius:22px;padding:3px}
+.seg button{font:inherit;border:0;background:none;color:var(--muted);border-radius:19px;height:36px;min-width:40px;padding:0 10px;font-weight:800;font-size:13px;cursor:pointer}
+.seg button[aria-pressed=true]{background:linear-gradient(135deg,#6C4BF2,#C2410C);color:#fff}
+main{flex:1;min-height:0;padding-bottom:12px;display:flex;flex-direction:column;gap:10px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:10px 12px;box-shadow:var(--shadow);min-width:0}
+.prev{flex:none;display:flex;align-items:center;gap:14px}
+.prev .stage{flex:none;width:clamp(96px,28vw,140px);aspect-ratio:1;display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle,rgba(124,92,255,.25),transparent 70%)}
+.prev .inf{flex:1;min-width:0;display:grid;gap:3px}
+.prev .nm{font-weight:800;font-size:clamp(16px,4.4vw,20px);line-height:1.15}
+.prev .sk{font-size:13px;color:var(--muted)}
+.prev .st{font-size:12.5px;font-weight:700}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 14px;border-radius:12px;font:inherit;font-weight:800;font-size:14px;text-decoration:none;background:rgba(255,255,255,.12);color:var(--ink);border:1px solid var(--line);cursor:pointer}
+.btn.p{background:linear-gradient(135deg,#6C4BF2,#C2410C);color:#fff;border-color:rgba(255,255,255,.5)}
+.btn:disabled{opacity:.55;cursor:default}[hidden]{display:none!important}
+.h2{margin:0 0 6px;font-size:12.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.skins{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:2px}
+.skins::-webkit-scrollbar{display:none}
+.skc{flex:none;width:92px;min-height:104px;border-radius:14px;border:2px solid var(--line);background:rgba(255,255,255,.06);color:var(--ink);font:inherit;padding:6px 4px;cursor:pointer;display:grid;gap:2px;justify-items:center;align-content:center;position:relative}
+.skc .n{font-weight:800;font-size:12px;line-height:1.1}
+.skc[aria-pressed=true]{border-color:#fff;box-shadow:0 0 0 3px #6C4BF2,0 6px 16px rgba(108,75,242,.4);background:linear-gradient(135deg,rgba(108,75,242,.5),rgba(194,65,12,.4))}
+.skc.lk{opacity:.6}.skc.lk::after{content:"🔒";position:absolute;right:4px;top:3px;font-size:14px}
+.tabs{display:flex;gap:6px;margin-bottom:8px}
+.tabs button{flex:1;min-width:0;height:40px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.06);color:var(--muted);font:inherit;font-weight:800;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;padding:0 4px;white-space:nowrap;overflow:hidden}
+.tabs button[aria-selected=true]{background:linear-gradient(135deg,#6C4BF2,#C2410C);color:#fff;border-color:rgba(255,255,255,.6)}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.mc{border-radius:14px;border:2px solid var(--line);background:rgba(255,255,255,.06);color:var(--ink);font:inherit;padding:6px 2px 4px;cursor:pointer;display:grid;justify-items:center;gap:2px;min-width:0;position:relative}
+.mc .n{font-size:10.5px;font-weight:700;line-height:1.1;text-align:center;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mc[aria-pressed=true]{border-color:#fff;box-shadow:0 0 0 3px #6C4BF2}
+.mc.main::before{content:"⭐";position:absolute;left:2px;top:0;font-size:12px}
+.mc.own::after{content:"✓";position:absolute;right:3px;top:1px;font-size:11px;font-weight:900;color:#51cf66}
+.note{font-size:12.5px;color:var(--muted);margin:0}
+.fill{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+@media (max-height:640px){.prev .stage{width:84px}.card{padding:8px 10px}.mc .n{display:none}.skc{min-height:88px}.skc .n{font-size:11px}header{padding-top:4px;padding-bottom:4px}.back{width:38px;height:38px}main{gap:6px}.tabs button{height:34px}}
+@media (max-height:480px){h1{display:none}.fill{display:none}}
+@media (min-width:700px){.grid{grid-template-columns:repeat(10,1fr)}}
+.gset{flex:none;display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 12px;border-radius:20px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow);color:var(--ink);text-decoration:none;font-weight:800;font-size:13px}@media (max-width:430px){.gset span{display:none}.gset{width:40px;padding:0;justify-content:center}}
+</style>
+</head>
+<body>
+<header>
+  <a class="back" id="back" href="nightpass.html" aria-label="Quay lại"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
+  <h1 id="ttl">Linh vật của bạn</h1>
+  <a class="gset" id="gset" href="nightpass.html" aria-label="Cài đặt Night Pass" title="Cài đặt Night Pass"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:20px;height:20px"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span id="gsetT">Cài đặt</span></a><div class="seg" role="group" aria-label="Language"><button type="button" data-l="vi">VI</button><button type="button" data-l="en">EN</button></div>
+</header>
+<main>
+  <section class="card prev" aria-live="polite">
+    <div class="stage" id="stage"></div>
+    <div class="inf"><div class="nm" id="nm"></div><div class="sk" id="skn"></div><div class="st" id="st"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px"><button class="btn p" id="bMain" type="button"></button><a class="btn" id="bBuy" href="subscribe.html" hidden></a></div></div>
+  </section>
+  <section class="card"><h2 class="h2" id="hSk"></h2><div class="skins" id="skins" role="group"></div></section>
+  <section class="card fill"><h2 class="h2" id="hMc"></h2><div class="tabs" id="tabs" role="tablist"></div><div class="grid" id="grid"></div></section>
+</main>
+<script>
+"use strict";
+var T={vi:{ttl:"Linh vật của bạn",back:"Quay lại",hSk:"Skin (mở bằng huy hiệu thử thách)",hMc:"Chọn linh vật",main:"Chọn làm linh vật chủ đạo",isMain:"✓ Linh vật chủ đạo của bạn",wear:"Đang mặc",lockTxt:"Chưa mở: ",buy:"Mua gói để dùng",needPass:"Cần gói Night Pass còn hạn để chọn linh vật và mặc skin.",tip:"Linh vật chủ đạo đi cùng bạn ở màn chọn của mọi game. Bấm vào bạn ấy để quay lại đây.",grp:{build:"Xây dựng",brain:"Trí tuệ",kid:"Khám phá",skill:"Khéo tay"},got:"Đã có huy hiệu",no:"Chưa có huy hiệu"},
+en:{ttl:"Your mascot",back:"Back",hSk:"Skins (unlocked by challenge badges)",hMc:"Pick a mascot",main:"Make my main mascot",isMain:"✓ Your main mascot",wear:"Wearing",lockTxt:"Locked: ",buy:"Get a plan to use it",needPass:"A valid Night Pass is needed to pick a mascot and wear skins.",tip:"Your main mascot follows you on every game's home screen. Tap it to come back here.",grp:{build:"Builders",brain:"Brainy",kid:"Explorers",skill:"Quick hands"},got:"Badge owned",no:"No badge yet"}};
+var de=document.documentElement,$=function(i){return document.getElementById(i)},cur="",grp="kid";
+function L(){return de.lang==="en"?"en":"vi"}function X(){return T[L()]}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function fromPath(){var f=new URLSearchParams(location.search).get("from");return f&&/^[\w\-./]+(#[\w-]+)?$/.test(f)&&f.indexOf("..")<0&&f.charAt(0)!=="/"?f:"nightpass.html"}
+var view="";   /* skin đang xem trước */
+function render(){
+  var x=X(),l=L(),M=NPMascot2,list=M.list(),ok=M.ok(),B=NPBadges;
+  document.title=x.ttl;$("gset").href="nightpass.html?lang="+l;var gl=l==="vi"?"Cài đặt Night Pass":"Night Pass settings";$("gset").setAttribute("aria-label",gl);$("gset").title=gl;$("gsetT").textContent=l==="vi"?"Cài đặt":"Settings";$("ttl").textContent=x.ttl;$("back").href=fromPath();$("back").setAttribute("aria-label",x.back);$("hSk").textContent=x.hSk;$("hMc").textContent=x.hMc;
+  if(!cur)cur=M.get()||(list.filter(function(m){return m.group===grp})[0]||list[0]).id;
+  var m=list.filter(function(i){return i.id===cur})[0];if(!m)return;
+  if(!view||!M.skins(cur).some(function(s){return s.id===view}))view=M.getSkin(cur);
+  var sk=M.skin(cur,view),open=M.isOpen(cur,view);
+  $("stage").innerHTML=M.html(cur,view,Math.round(Math.min(120,innerWidth*.22)));
+  $("nm").textContent=(l==="vi"?m.name.vi:m.name.en);
+  $("skn").textContent=(l==="vi"?sk.n[0]:sk.n[1])+(open?"":" 🔒");
+  var isMain=M.get()===cur,worn=M.getSkin(cur)===view;
+  $("st").textContent=!open?x.lockTxt+M.need(cur,view):(worn&&isMain?x.wear:"");
+  var bm=$("bMain");bm.textContent=isMain&&worn?x.isMain:(isMain?x.main:x.main);bm.disabled=!ok||!open||(isMain&&worn);
+  if(isMain&&worn)bm.textContent=x.isMain;
+  $("bBuy").hidden=ok;$("bBuy").textContent=x.buy;
+  $("skins").innerHTML=M.skins(cur).map(function(s){var o=s.open();return '<button type="button" class="skc'+(o?'':' lk')+'" data-s="'+s.id+'" aria-pressed="'+(view===s.id)+'" aria-label="'+esc(l==="vi"?s.n[0]:s.n[1])+'">'+M.html(cur,s.id,40)+'<span class="n">'+esc(l==="vi"?s.n[0]:s.n[1])+'</span></button>'}).join("");
+  $("skins").querySelectorAll(".skc").forEach(function(b){b.onclick=function(){view=b.dataset.s;render()}});
+  var G=M.GRP;
+  $("tabs").innerHTML=Object.keys(G).map(function(k){return '<button type="button" role="tab" data-g="'+k+'" aria-selected="'+(k===grp)+'">'+G[k].acc+' '+esc(x.grp[k])+'</button>'}).join("");
+  $("tabs").querySelectorAll("button").forEach(function(b){b.onclick=function(){grp=b.dataset.g;render()}});
+  $("grid").innerHTML=list.filter(function(i){return i.group===grp}).map(function(i){var own=B.has(i.id);return '<button type="button" class="mc'+(own?' own':'')+(M.get()===i.id?' main':'')+'" data-i="'+i.id+'" aria-pressed="'+(i.id===cur)+'" aria-label="'+esc(l==="vi"?i.name.vi:i.name.en)+'" title="'+esc(own?x.got:x.no)+'">'+M.html(i.id,M.getSkin(i.id),34)+'<span class="n">'+esc(l==="vi"?i.name.vi:i.name.en)+'</span></button>'}).join("");
+  $("grid").querySelectorAll(".mc").forEach(function(b){b.onclick=function(){cur=b.dataset.i;view="";render()}});
+  document.querySelectorAll(".seg button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.l===l))});
+}
+$("bMain").onclick=function(){var M=NPMascot2;if(!M.ok()||!M.isOpen(cur,view))return;M.setMain(cur);M.setSkin(cur,view);render()};
+document.querySelectorAll(".seg button").forEach(function(b){b.onclick=function(){de.lang=b.dataset.l;try{localStorage.setItem("lang",b.dataset.l)}catch(e){}render()}});
+var q=new URLSearchParams(location.search).get("m");if(q&&NPBadges.entry(q)){cur=q;grp=NPBadges.entry(q).group}
+else{var mm=NPMascot2.get();if(mm){cur=mm;grp=NPBadges.entry(mm).group}}
+render();
+</script>
+<script src="shared/offline.js" defer></script>
+</body>
+</html>
