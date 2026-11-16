@@ -487,3 +487,6 @@ html:not(.npp-kid) .row>#inNo.btn{align-self:stretch!important;height:auto!impor
 @media (max-width:520px) and (orientation:portrait) and (max-height:700px){
   html:not(.npp-kid) #ovSkin .npc .sk:not(:has(>.skc:nth-child(7)))>.skc{min-height:84px!important;padding:6px!important}
 }
+
+/* POPUP NIGHT PASS (Cozy): đã có ✕ chuẩn ở góc trên phải (.npx) → ẩn ✕ thứ hai (#pwNo) cạnh nút mua; trước: hai nút ✕ cùng lúc */
+html:not(.npp-kid) #ovPay .npc:has(.npx) #pwNo{display:none!important}
