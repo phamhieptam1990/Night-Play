@@ -470,3 +470,7 @@ html #ovSkin .npc :is(.skgrid>.skc,.skgrid>.sk,div.sk>.skc):active{transform:sca
 html #ovSkin .npc :is(.skc,.sk).lock::after{border:0!important;background:rgba(10,8,30,.78)!important;box-shadow:none!important}
 html #ovSkin .npc :is(.skgrid>.sk,.skgrid>.skc)>img,html #ovSkin .npc :is(.skgrid>.skc)>.sw{border:0!important;box-shadow:none!important}
 html #ovSkin>.npc{border-width:1px!important;border-color:rgba(170,150,255,.35)!important}
+
+/* NÚT 🎨 GIAO DIỆN (Cozy .skinBtn): biểu tượng bảng màu theo em của game nên ở iPad/web rộng hơn cả nút (47px trong nút 40px) → tràn khỏi vòng tròn, hốc ngón tay trắng lòi ra như chấm trắng ở góc. Luôn nhỏ hơn nút, canh giữa. */
+html:not(.npp-kid) .skinBtn{overflow:hidden}
+html:not(.npp-kid) .skinBtn>svg{width:64%!important;height:64%!important;max-width:none!important;display:block!important}
