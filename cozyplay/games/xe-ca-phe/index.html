@@ -281,6 +281,8 @@ function renderTypes(){const b=$("tys");b.innerHTML="";TYPES.forEach((t,i)=>{con
 function beginDay(mode,t,seed,camp,day,ch){const P=setup(mode,t,camp),ev=pickEvent(seed,day,t);G=newDay(P,seed,day,ev);G.mode=mode;G.type=t;G.ch=ch||(CHW&&mode==="camp"&&CAMP&&CAMP.wch!=null?{s:seed,sc:CAMP.wch,t:0,w:1}:null);if(G.ch&&G.ch.w&&chCur(G)>G.ch.sc)G.beat=true;show("game");applySkin();buildIngs(G);paintFront(G);$("lane")._k="";$("cupIn")._k=null;$("ttl").textContent=(mode==="daily"?"📅 "+T("daily"):mode==="camp"?TYPES[t][0]+" "+T("camp",{d:day,n:t===2?5:DAYS}):TYPES[t][0]+" "+L2([TYPES[t][1],TYPES[t][2]]));
  if(!LS.get("xc-tut",0)&&mode==="camp"&&day===1){toast(T("tut"),4200)}/* sự kiện đã hiện ở dải #evB, không bật thêm toast che lưới nguyên liệu */
  last=performance.now();window.NP&&NP.start();filmStart();render()}
+/* Thử thách Night Pass (khung chung shared/npchallenge.js): seed cố định; ngưỡng 4000 là mức "giỏi" của game hoặc ƯỚC LƯỢNG (chưa đo bằng người chơi) */
+window.NP_CHALLENGE={id:"xe-ca-phe",start(){if(tLocked(1))return false;CHW=false;beginDay("blitz",1,20261116,BLITZ_SETUP(),1)},judge(r){return !!r&&r.score>=4000&&!!r.extra&&r.extra.mode==="blitz"}};
 function startCamp(){CHW=false;if(tLocked(TY))TY=0;const t=TY;if(t===1){startBlitz();return}CAMP=getCamp(t);if(CAMP.day>(t===2?5:DAYS))CAMP=freshCamp();putCamp(t,CAMP);beginDay("camp",t,CAMP.seed,CAMP,CAMP.day)}
 function startBlitz(){CHW=false;const c=BLITZ_SETUP();beginDay("blitz",1,newSeed(),c,1)}
 function startDaily(){CHW=false;const dk=dayKey();beginDay("daily",0,fnv("xcafe|"+dk),DAILY_SETUP(),3)}

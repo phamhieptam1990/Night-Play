@@ -769,6 +769,8 @@ function hudPulse(ms) {   /* bảng điểm sáng lên, rồi mờ dần nếu �
   document.body.classList.remove("hud-dim"); clearTimeout(hudT);
   if (running) hudT = setTimeout(() => { if (running && timeLeft > 10) document.body.classList.add("hud-dim"); }, ms || 1800);
 }
+/* Thử thách Night Pass (khung chung shared/npchallenge.js): seed cố định; ngưỡng 600 là mức "giỏi" của game hoặc ƯỚC LƯỢNG (chưa đo bằng người chơi) */
+window.NP_CHALLENGE={id:"dap-deadline",start(){DD.sel.mode="classic";DD.sel.diff="normal";start()},judge(r){return !!r&&r.score>=600&&!!r.extra&&r.extra.mode==="classic"&&r.extra.diff==="normal"}};
 function start(from){
   audio();
   const resumed=!!(from&&typeof from==='object'&&from.timeLeft);       // người chơi hộ chơi tiếp đúng chế độ / độ khó của bạn (nếu có vé), không thì Cổ điển / Thường

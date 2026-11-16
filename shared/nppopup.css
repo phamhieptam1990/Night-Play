@@ -505,17 +505,17 @@ html:root:root .ov .npc button:is(.ghost,.alt,.sec,.btn.alt){background:rgba(255
   html.npp-kid #ovSkin .npc .skgrid>.sk img{aspect-ratio:4/3!important;height:auto!important;max-height:150px;object-fit:cover}
   html.npp-kid #ovSkin .npc{max-height:calc(100dvh - 24px)!important;overflow:auto}
 }
-/* Pop Play — màn chọn game: mỗi thẻ trong danh sách MỘT MÀU khác nhau, MỘT LỚP nền duy nhất (trước: khung thẻ tối + nút gradient chồng lên nhau, lộ viền tối quanh thẻ). Khung .card mang gradient, .main trong suốt. */
-html.npp-kid #ovStart .cards>.card{--nb-1:#7048e8;--nb-2:#4263eb;background:linear-gradient(135deg,var(--nb-1),var(--nb-2))!important;border:2px solid rgba(255,255,255,.55)!important;box-shadow:0 6px 16px rgba(0,0,0,.22)!important;overflow:hidden}
-html.npp-kid #ovStart .cards>.card>.main{background:transparent!important;background-image:none!important;border:0!important;box-shadow:none!important}
-html.npp-kid #ovStart .cards>.card>.skinBtn{background:rgba(255,255,255,.92)!important;border:0!important;box-shadow:0 2px 6px rgba(0,0,0,.25)!important}
-html.npp-kid #ovStart .cards>.card:nth-child(1){--nb-1:#2f7de1;--nb-2:#17a2c9}
-html.npp-kid #ovStart .cards>.card:nth-child(2){--nb-1:#16a34a;--nb-2:#7bc043}
-html.npp-kid #ovStart .cards>.card:nth-child(3){--nb-1:#e8590c;--nb-2:#f59f00}
-html.npp-kid #ovStart .cards>.card:nth-child(4){--nb-1:#d6336c;--nb-2:#9c36b5}
-html.npp-kid #ovStart .cards>.card:nth-child(5){--nb-1:#7048e8;--nb-2:#4263eb}
-html.npp-kid #ovStart .cards>.card:nth-child(n+6){--nb-1:#0ca678;--nb-2:#1098ad}
-html.npp-kid #ovStart .cards>.card.daily{--nb-1:#f59f00;--nb-2:#e8590c}
-html.npp-kid #ovStart .cards>.card.daily>.main{color:#2b1a00}
+/* Pop Play — màn chọn game (Chim Bay...): thẻ KÍNH TỐI pha một sắc riêng cho từng thẻ, GIỐNG các game Pop khác (Qua Sông, Làng Của Bé...) thay vì gradient sáng chói; MỘT lớp nền duy nhất (khung .card mang nền, .main trong suốt). Thẻ Bài học hôm nay = dải gradient tím-cam như các game khác. */
+html.npp-kid #ovStart .cards>.card{--tc:#7048e8;background:linear-gradient(135deg,color-mix(in srgb,var(--tc) 46%,#1b1442),color-mix(in srgb,var(--tc) 22%,#120d2c))!important;border:1px solid color-mix(in srgb,var(--tc) 60%,rgba(255,255,255,.25))!important;box-shadow:0 4px 14px rgba(0,0,0,.35)!important;overflow:hidden}
+html.npp-kid #ovStart .cards>.card>.main{background:transparent!important;background-image:none!important;border:0!important;box-shadow:none!important;color:#fff!important}
+html.npp-kid #ovStart .cards>.card small{color:rgba(255,255,255,.78)!important}
+html.npp-kid #ovStart .cards>.card>.skinBtn{background:rgba(255,255,255,.14)!important;border:2px solid rgba(255,255,255,.55)!important;box-shadow:none!important}
+html.npp-kid #ovStart .cards>.card:nth-child(1){--tc:#2f7de1}
+html.npp-kid #ovStart .cards>.card:nth-child(2){--tc:#16a34a}
+html.npp-kid #ovStart .cards>.card:nth-child(3){--tc:#e8590c}
+html.npp-kid #ovStart .cards>.card:nth-child(4){--tc:#d6336c}
+html.npp-kid #ovStart .cards>.card:nth-child(5){--tc:#7048e8}
+html.npp-kid #ovStart .cards>.card:nth-child(n+6){--tc:#0ca678}
+html.npp-kid #ovStart .cards>.card.daily{background:linear-gradient(90deg,#6C4BF2,#C2410C)!important;border:1px solid rgba(255,255,255,.45)!important}
 /* Pop Play: nút viền (.ghost) trong MỌI popup tối (Tiến độ, Album, Giao diện...) — nền trong + chữ sáng; luật glass.css ở giao diện sáng từng đè nền trắng đục lên chữ trắng ("Back" không đọc được) */
 html:root:root.npp-kid .ov button.ghost{background:rgba(255,255,255,.14)!important;background-image:none!important;color:#fff!important;border:2px solid rgba(255,255,255,.5)!important;box-shadow:none!important;text-shadow:none!important}

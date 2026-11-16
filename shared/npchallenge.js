@@ -23,6 +23,12 @@
   css.textContent =
     "#" + ID + "{position:relative}#" + ID + " svg{width:22px;height:22px;display:block;margin:auto}#" + ID + " .npk{position:absolute;right:-4px;top:-4px;min-width:18px;height:18px;border-radius:9px;background:#16a34a;color:#fff;border:1.5px solid #fff;font:800 11px/15px system-ui,sans-serif;text-align:center;pointer-events:none}" +
     "#" + ID + ".lk{opacity:.8}.np-hb[data-k=npch]{position:relative}" +
+    /* NỔI BẬT thu hút bấm: nút 🏆 vàng nhấp nháy + vòng sáng lan, đến khi bé MỞ thử thách hoặc đã có huy hiệu; nút ⋯ (menu gom) có chấm vàng nhấp nháy cùng lúc */
+    "#" + ID + ".hot,.np-hb[data-k=npch].hot{background:linear-gradient(135deg,#ffb020,#ff5a1f)!important;color:#fff!important;border-color:rgba(255,255,255,.8)!important;animation:npchPulse 1.6s ease-in-out infinite}" +
+    "#" + ID + ".hot svg{color:#fff!important}" +
+    "html.np-ch-hot :is(#npPmFab,#npFab)::after{content:'🏆';position:absolute;right:-6px;top:-6px;width:22px;height:22px;border-radius:50%;background:#ffb020;border:2px solid #fff;font-size:12px;line-height:18px;text-align:center;animation:npchPulse 1.6s ease-in-out infinite;pointer-events:none}" +
+    "@keyframes npchPulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,176,32,.75)}50%{transform:scale(1.1);box-shadow:0 0 0 10px rgba(255,176,32,0)}}" +
+    "@media (prefers-reduced-motion:reduce){#" + ID + ".hot,html.np-ch-hot :is(#npPmFab,#npFab)::after{animation:none}}" +
     "#npChOv{position:fixed;inset:0;z-index:2147483100;display:flex;align-items:center;justify-content:center;padding:14px;background:rgba(10,6,34,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);font-family:var(--font,Inter,system-ui,sans-serif);animation:npchIn .2s ease-out}" +
     "#npChOv .cd{position:relative;width:min(100%,400px);max-height:100%;overflow:auto;box-sizing:border-box;border-radius:26px;padding:18px 18px 16px;color:#fff;text-align:center;background:linear-gradient(165deg,#2b2064,#171236 62%,#120e2b);border:2px solid rgba(170,150,255,.6);box-shadow:0 12px 40px rgba(0,0,0,.55),0 0 30px rgba(124,92,255,.4);display:flex;flex-direction:column;gap:10px}" +
     "#npChOv .tg{font:800 12px/1 var(--font,Inter,system-ui,sans-serif);letter-spacing:.08em;text-transform:uppercase;color:#bdb7ee}" +
@@ -56,9 +62,13 @@
   }
   function collUrl() { return "/nightpass-badges.html?lang=" + (vi() ? "vi" : "en"); }
   function go(u) { try { window.top.location.href = u; } catch (e) { location.href = u; } }
+  var SEEN_KEY = "np-ch-seen";
+  function seen() { try { return sessionStorage.getItem(SEEN_KEY + ":" + ent.id) === "1"; } catch (e) { return false; } }
+  function markSeen() { try { sessionStorage.setItem(SEEN_KEY + ":" + ent.id, "1"); } catch (e) {} refreshBtn(); }
   function close() { if (ov) { ov.remove(); ov = null; } }
   function mkOv(html) { close(); ov = document.createElement("div"); ov.id = "npChOv"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true"); ov.innerHTML = '<div class="cd">' + html + "</div>"; document.documentElement.appendChild(ov); ov.addEventListener("pointerdown", function (e) { e.stopPropagation(); }, true); return ov; }
   function intro() {
+    markSeen();
     var ok = NPBadges.pass(), own = NPBadges.has(ent.id);
     mkOv('<div class="tg">🏆 ' + tx("chal") + '</div><div class="hero" aria-hidden="true">' + ent.hero + "</div><h2>" + esc(T(ent.title)) + '</h2><div class="hn">' + esc(T(ent.heroName)) + "</div><p>" + esc(T(ent.story)) + '</p><div class="gl"><b>' + tx("goal") + "</b>" + esc(T(ent.goal)) + '</div><div class="rw"><i aria-hidden="true">' + ent.badge + "</i><span>" + esc(T(ent.badgeName)) + "<small>" + (own ? tx("own") : tx("reward")) + "</small></span></div>" +
       (ok ? "" : '<div class="lkb">🔒 ' + tx("lock") + "</div>") + '<div class="row st"><button class="b" id="npChX" type="button">' + tx("later") + '</button><button class="b p" id="npChGo" type="button">' + (ok ? tx("start") : tx("buy")) + "</button></div>");
@@ -95,7 +105,7 @@
   }
   function refreshBtn() {
     var b = document.getElementById(ID); if (!b) return; var ok = NPBadges.pass(), own = NPBadges.has(ent.id);
-    b.classList.toggle("lk", !ok); var k = b.querySelector(".npk"); if (own && !k) { k = document.createElement("span"); k.className = "npk"; k.textContent = "✓"; b.appendChild(k); } else if (!own && k) k.remove();
+    b.classList.toggle("lk", !ok); var hot = !own && !seen(); b.classList.toggle("hot", hot); var hb = document.querySelector(".np-hb[data-k=npch]"); if (hb) hb.classList.toggle("hot", hot); document.documentElement.classList.toggle("np-ch-hot", hot); var k = b.querySelector(".npk"); if (own && !k) { k = document.createElement("span"); k.className = "npk"; k.textContent = "✓"; b.appendChild(k); } else if (!own && k) k.remove();
     var lab = tx("chal") + ": " + T(ent.title) + (own ? " ✓" : ""); if (b.getAttribute("aria-label") !== lab) { b.setAttribute("aria-label", lab); b.title = lab; }
   }
   function sync() {

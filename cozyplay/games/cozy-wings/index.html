@@ -872,6 +872,8 @@ const ovs=["ovStart","ovPause","ovEnd","ovPay","ovSkin","ovShare","ovHow"];
 function showOv(id){for(const o of ovs)$(o).hidden=(o!==id)}
 function applyLayout(l){PF.safe=l==="full"?{top:112,bottom:64,pad:34}:l==="window"?{top:64,bottom:64,pad:64}:{top:0,bottom:0,pad:34};const a=document.querySelector(".app");if(l&&l!=="classic")a.dataset.layout=l;else delete a.dataset.layout;setTimeout(fit,30)}
 PF.applyLayout=applyLayout;
+/* Thử thách Night Pass (khung chung shared/npchallenge.js): seed cố định; ngưỡng 1000 là mức "giỏi" của game hoặc ƯỚC LƯỢNG (chưa đo bằng người chơi) */
+window.NP_CHALLENGE={id:"cozy-wings",start(){if(!PF.types.bee)return false;diff="mid";applyDiffTheme();startRound("bee")},judge(r){return !!r&&r.score>=1000&&!!r.extra&&r.extra.type==="bee"&&r.extra.diff==="mid"}};
 function startRound(type,resume,opts){
   if(!PF.types[type])return;audio();chBeat=false;
   const sk=curSkin(type);applyLayout(sk?sk.layout:"classic");window.NPWide&&NPWide.skin(sk,type+":"+(PF.skinSel[type]||"default"));

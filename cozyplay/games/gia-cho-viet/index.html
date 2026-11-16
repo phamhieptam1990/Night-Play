@@ -172,6 +172,8 @@ function toast(m,ms){const t=$("toast");t.textContent=m;t.hidden=false;clearTime
 function renderHome(){const sv=getSave(),k=dayKey(),dn=dayNo(k),done=sv.days[k];$("ttl").textContent=T("hdr");$("dN").textContent="#"+dn;$("dT").textContent=T("daily");$("dS").textContent=done!=null?T("done",{s:done}):T("dS");$("bPractice").textContent=T("practice");$("hNote").textContent=T("note");$("bLang").textContent=LANG==="vi"?"EN":"VI";$("bSnd").textContent=snd()?"🔊":"🔇";
  $("hChips").innerHTML="";[sv.streak?T("streak",{n:sv.streak}):"",sv.best?T("best",{n:sv.best}):"",sv.total?T("tot",{n:sv.total}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("hChips").appendChild(c)});
  $("hHero").textContent=skinOf().deco[0]||"🧺"}
+/* Thử thách Night Pass (khung chung shared/npchallenge.js): seed cố định; ngưỡng 400 là mức "giỏi" của game hoặc ƯỚC LƯỢNG (chưa đo bằng người chơi) */
+window.NP_CHALLENGE={id:"gia-cho-viet",start(){begin(20261116,"free",null)},judge(r){return !!r&&r.score>=400&&!!r.extra&&r.extra.mode!=="daily"}};
 function begin(seed,m,ch){G={streak:0,beat:false,seed,mode:m,ch:ch||null,q:genRound(seed),i:0,pts:[],guess:[],done:false,rev:false,m:m};mode=m;applySkin();show("round");window.NP&&NP.start();showQ()}
 /* ===== HIỆU ỨNG COMBO (đoán chuẩn liên tiếp) / THÁCH ĐẤU ===== */
 const L2=a=>LANG==="vi"?a[0]:a[1];

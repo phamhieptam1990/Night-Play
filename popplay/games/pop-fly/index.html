@@ -116,6 +116,8 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .ib:not(:disabled),.ib2:not(:disabled){filter:none}
 /*skgrid-center*/.skgrid{display:flex!important;flex-wrap:wrap;justify-content:center;--n:3;--gg:8px;gap:var(--gg)!important}.skgrid>*{flex:0 0 calc((100% - (var(--n) - 1)*var(--gg))/var(--n))!important;min-width:0;box-sizing:border-box}@media (max-height:520px) and (min-aspect-ratio:11/10){.skgrid{--n:6;--gg:4px}}
 body:has(#ovStart:not([hidden])) .side .ask,body:has(#ovStart:not([hidden])) .side .hud{visibility:hidden}
+/* màn chọn game: khung chơi #play (nền trời xanh của ván) KHÔNG tô nền sau danh sách game — trước: khối xanh phủ từ đầu con chim xuống dưới trên iPad */
+html:root:root .app:has(#ovStart:not([hidden])) #play{background:none!important;background-image:none!important;box-shadow:none!important;border-color:transparent!important}
 /* màn chọn game: lớp phủ cố định (popup) KHÔNG che tiêu đề game; nền trong suốt để thấy tên "Chim Bay Học Vui" */
 html[data-theme]:root:root .app:has(h1[data-pt]) #ovStart:not([hidden]){background:none!important;background-color:transparent!important;background-image:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
 </style>
@@ -251,7 +253,8 @@ let ac=null;
 function audio(){if(!sound)return null;try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();if(ac.state==="suspended")ac.resume();return ac}catch(e){return null}}
 function tone(f,d,type,vol,when){const a=audio();if(!a)return;const t0=a.currentTime+(when||0),o=a.createOscillator(),g=a.createGain();o.type=type||"sine";o.frequency.setValueAtTime(f,t0);g.gain.setValueAtTime(.0001,t0);g.gain.exponentialRampToValueAtTime(vol||.12,t0+.02);g.gain.exponentialRampToValueAtTime(.0001,t0+d);o.connect(g).connect(a.destination);o.start(t0);o.stop(t0+d+.02)}
 const sfx={flap:()=>tone(520,.09,"triangle",.07),good:()=>{tone(660,.12,"triangle",.12);tone(880,.16,"triangle",.12,.09);tone(1100,.2,"triangle",.1,.18)},bad:()=>tone(220,.22,"sine",.1),star:()=>tone(980,.1,"triangle",.09),win:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.2,"triangle",.12,i*.1))};
-function say(text){if(!sound||!window.speechSynthesis)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang=LANG==="vi"?"vi-VN":"en-US";u.rate=.85;u.pitch=1.15;speechSynthesis.speak(u)}catch(e){}}
+/* HIỆU NĂNG iOS: speechSynthesis.cancel()+speak() chạy ĐỒNG BỘ giữa lúc đang bay làm khựng khung hình (iPhone/iPad). Gộp lời đọc: chỉ giữ câu MỚI NHẤT, đọc ở nhịp rảnh kế tiếp (không đọc chồng), chỉ cancel khi đang đọc dở. */
+let sayT=0,sayTxt="";function say(text){if(!sound||!window.speechSynthesis)return;sayTxt=text;if(sayT)return;sayT=setTimeout(()=>{sayT=0;const tx=sayTxt;try{const sy=speechSynthesis;if(sy.speaking||sy.pending)sy.cancel();const u=new SpeechSynthesisUtterance(tx);u.lang=LANG==="vi"?"vi-VN":"en-US";u.rate=.85;u.pitch=1.15;sy.speak(u)}catch(e){}},(window.requestIdleCallback?60:120))}
 PF.say=say;PF.sfx=sfx;PF.tone=tone;
 
 let toastT=0;function toast(m,ms){const e=$("toast");e.textContent=m;e.classList.add("on");clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove("on"),ms||1500)}
@@ -328,7 +331,7 @@ function evalWave(S,w){
   if(w.item){const it=w.item,okk=!!(hit&&hit.ok);setTimeout(()=>Prog.rec(it,okk),0)}   /* ghi localStorage ngoài khung hình đang vẽ */
   if(hit&&hit.ok){w.res="ok";S.correct++;S.streak++;addScore(10+(S.streak>=3?5:0));markDot(w.idx,1);sfx.good();burst(BX,b.y,pickOf(["⭐","✨","🌟"]),12);toast(pickOf(t("right")),1100);S.celebrate=.4}
   else{w.res=hit?"wrong":"miss";S.wrong++;S.streak=0;markDot(w.idx,2);sfx.bad();S.slow=1.1;b.wob=.9;toast(hit?pickOf(t("wrong")):t("miss"),1500);
-    const ok=w.rings.find(r=>r.ok);if(ok){w.hintT=1.6;if(w.hint)setTimeout(()=>{if(running&&!paused)say(w.hint)},350)}}
+    const ok=w.rings.find(r=>r.ok);if(ok){w.hintT=1.6;/* không đọc thêm lời gợi ý sau khi bay sai: tránh đọc chồng gây khựng trên iOS (chữ gợi ý đã hiện trên màn hình) */}}
 }
 
 function update(dt){
