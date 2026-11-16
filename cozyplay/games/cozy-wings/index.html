@@ -154,6 +154,8 @@ body.np-local{--w:min(calc(100vw - 24px),calc((100dvh - 240px)*.75),760px)}
   #ovStart .tile:not(.daily) .best{position:static;padding:1px 8px;font-size:11px}
   #ovStart .tile:not(.daily) .skinBtn{right:6px;top:6px;width:40px;height:40px;min-width:40px;min-height:40px}
 }
+/* Màn KẾT THÚC: thanh ⭐ điểm/❤/🔥 Lửa (.hud) nổi trên lớp phủ và đè lên hàng nút ← 🔊 ⋯ (điện thoại dọc + ngang) → ẩn khi #ovEnd hiện (điểm đã có trong thẻ kết thúc) */
+body:has(#ovEnd:not([hidden])) .hud,body:has(#ovEnd:not([hidden])) .ask{display:none!important}
 /* GỌN, bớt "trẻ con" (chủ site): màn chọn chuyến bay KHÔNG hiện thanh "Pick a flight" + ⭐ điểm (chỉ cần khi đang bay); cụm độ khó nhỏ lại, phẳng */
 @media (max-width:520px) and (orientation:portrait){
   body:has(#ovHow:not([hidden])) .side .ask,body:has(#ovHow:not([hidden])) .side .hud,body:has(#ovStart:not([hidden])) .side .ask,body:has(#ovStart:not([hidden])) .side .hud,body:has(#ovSkin:not([hidden])) .side .ask,body:has(#ovSkin:not([hidden])) .side .hud,body:has(#ovPay:not([hidden])) .side .ask,body:has(#ovPay:not([hidden])) .side .hud{display:none!important}
