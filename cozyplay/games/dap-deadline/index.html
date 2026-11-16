@@ -382,6 +382,7 @@ html[data-skin] .ty.on{animation:tyGlow 2.4s ease-in-out infinite}
     <div class="sh-h"><span id="howT"></span><button class="icon-btn" id="howX" type="button">✕</button></div>
     <div id="howB" style="font-size:14px;line-height:1.45"></div>
     <div class="legend" id="howL" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+    <button class="icon-btn npSay" id="howLis" type="button" style="align-self:flex-start;display:grid;place-items:center;width:48px;height:48px;padding:0;border-radius:50%"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h3.6L13 19V5L7.6 9.5z"/><path d="M16.2 9a4.2 4.2 0 0 1 0 6M18.8 6.4a8 8 0 0 1 0 11.2"/></svg></button>
   </div>
 </div>
 <div class="sheet" id="setup" hidden role="dialog" aria-modal="true" aria-labelledby="setupT">
@@ -1082,7 +1083,17 @@ DD.lockPro=function(){   /* hết lượt dùng thử: trả về bản miễn p
 };
 $("setupBtn").addEventListener("click",()=>{ if(running){say(t("busy"));return} DD.refresh();openSheet("setup") });
 $("setupX").addEventListener("click",()=>closeSheet("setup"));
-$("bHelp").addEventListener("click",()=>{$("howT").textContent=t("help.t");$("howB").innerHTML="<b>"+t("start.h")+"</b><br>"+t("start.p")+"<br><small style='opacity:.75'>"+t("start.tip")+"</small>";$("howL").innerHTML=[1,2,3,4].map(i=>"<span style='padding:3px 10px;border-radius:99px;border:1.5px solid var(--line)'>"+t("leg"+i)+"</span>").join("");openSheet("howS")});
+/* nút loa đọc to hướng dẫn (như các game khác): đọc tiêu đề + nội dung + các mục; bấm lần nữa để dừng */
+let howSay=false;
+const howStop=()=>{try{if(window.speechSynthesis)speechSynthesis.cancel()}catch(e){}howSay=false};
+$("howLis").addEventListener("click",()=>{
+  if(!window.speechSynthesis||!window.SpeechSynthesisUtterance)return;
+  if(howSay){howStop();return}
+  try{speechSynthesis.cancel();const tx=[$("howT").textContent,$("howB").innerText,...[...$("howL").children].map(e=>e.textContent)].join(". ");
+   const u=new SpeechSynthesisUtterance(tx);u.npForce=true;u.lang=LANG==="en"?"en-US":"vi-VN";u.rate=.9;u.onend=u.onerror=()=>{howSay=false};howSay=true;speechSynthesis.speak(u)}catch(e){howSay=false}
+});
+$("howX").addEventListener("click",howStop);
+$("bHelp").addEventListener("click",()=>{$("howT").textContent=t("help.t");$("howB").innerHTML="<b>"+t("start.h")+"</b><br>"+t("start.p")+"<br><small style='opacity:.75'>"+t("start.tip")+"</small>";$("howL").innerHTML=[1,2,3,4].map(i=>"<span style='padding:3px 10px;border-radius:99px;border:1.5px solid var(--line)'>"+t("leg"+i)+"</span>").join("");openSheet("howS");$("howLis").setAttribute("aria-label",LANG==="en"?"Listen to the guide":"Nghe hướng dẫn");$("howLis").title=$("howLis").getAttribute("aria-label")});
 $("howX").addEventListener("click",()=>closeSheet("howS"));
 $("statsX").addEventListener("click",()=>closeSheet("statsP"));$("payX0").addEventListener("click",()=>closeSheet("pay"));
 $("statsBtn").addEventListener("click",()=>{ if(DD.pro&&DD.pro.stats&&DD.openStats){DD.openStats();openSheet("statsP")}else DD.paywall("stats") });
