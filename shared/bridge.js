@@ -518,7 +518,16 @@ window.NP = (function () {
       btn.addEventListener("click", function () { try { window.NPAudio && NPAudio.set(true); } catch (e) {} btn.classList.remove("on"); });
       document.body.appendChild(btn);
     }
-    function playing() { try { return !!(window.NP && NP.peek && NP.peek()); } catch (e) { return false; } }
+    function playing() {
+      try {
+        if (window.NP && NP.peek && NP.peek()) return true;
+        if (document.documentElement.classList.contains("np-playing")) return true;
+        /* màn chọn của game = #home hoặc #ovStart đang hiện; có các màn đó mà không cái nào hiện → đang ở màn chơi/kết thúc → không hiện nút bật âm */
+        var h = document.getElementById("home"), o = document.getElementById("ovStart");
+        if (h || o) { var vis = function (e) { return !!e && !e.hidden && e.getClientRects().length > 0; }; if (!vis(h) && !vis(o)) return true; }
+      } catch (e) {}
+      return false;
+    }
     function tick() {
       try {
         var A = window.NPAudio; if (!A || !A.get) return; build(); if (!btn) return;
