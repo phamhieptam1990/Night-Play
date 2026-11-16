@@ -71,7 +71,10 @@ input[type=range]::-moz-range-thumb{width:8cqw;height:8cqw;border-radius:50%;bac
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 /*sk-rows*/.sk .skc{display:flex;align-items:center;gap:2.6cqw;text-align:left;padding:2cqw 2.6cqw}.sk .skc:last-child:nth-child(odd){grid-column:1/-1}.sk .skc .e{font-size:9.5cqw;line-height:1;flex:none}
 </style>
-<style id="skCss"></style>
+<style id="skCss">/* chỉ Đoán Giá Chợ Việt (màn ngang rộng): chừa hàng tiêu đề phía trên + dải chữ ký/nút cuối phía dưới, tiêu đề căn giữa khung chơi (KHÔNG áp chung cho game khác: Xe Cà Phê… cần trọn chiều cao) */
+@media (orientation:landscape) and (min-width:900px) and (min-height:521px){#play{--scrT:52px;--scrB:30px}}
+@media (orientation:landscape) and (min-width:900px){#play .top>h1{grid-column:1/-1;grid-row:1/-1;position:fixed;left:calc(50% + var(--npl,0px)/2);transform:translateX(-50%);top:14px;z-index:4;width:max-content;max-width:min(60%,520px);text-align:center;max-height:none;margin:0!important}}
+</style>
 <link rel="stylesheet" href="../../../shared/typeui.css">
 <link rel="stylesheet" href="../../../shared/landscape.css"><script src="../../../shared/landscape.js" defer></script><script src="../../../shared/offline.js" defer></script><script src="../../../shared/icons.js" defer></script><script src="../../../shared/resume.js" defer></script><script src="../../../shared/fan.js" defer></script><script src="../../../shared/passwatch.js" defer></script><link rel="stylesheet" href="../../../shared/endui.css"><script src="../../../shared/endui.js" defer></script>
 </head>
