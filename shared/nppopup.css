@@ -490,3 +490,9 @@ html:not(.npp-kid) .row>#inNo.btn{align-self:stretch!important;height:auto!impor
 
 /* POPUP NIGHT PASS (Cozy): đã có ✕ chuẩn ở góc trên phải (.npx) → ẩn ✕ thứ hai (#pwNo) cạnh nút mua; trước: hai nút ✕ cùng lúc */
 html:not(.npp-kid) #ovPay .npc:has(.npx) #pwNo{display:none!important}
+/* Popup Night Pass: nút VIỀN ("Thử 1 ván", "Để sau", "Dành cho phụ huynh") luôn chữ sáng trên nền trong; nút CHÍNH luôn gradient + chữ tương phản.
+   Lỗi cũ: ở giao diện SÁNG, luật chung của nút .ghost/.alt (glass.css) đè nền trắng đục (!important) lên khung popup tối, còn chữ vẫn trắng → chữ cùng màu nền, không đọc được. */
+html #ovPay .npc #pwLater,html:not(.npp-kid) #ovPay .npc #pwTrial,html.npp-kid #ovPay .npc #pwGo{background:transparent!important;background-image:none!important;color:var(--npi)!important;box-shadow:none!important;border:2px solid color-mix(in srgb,var(--npa) 55%,var(--npl))!important;text-shadow:none!important}
+html #ovPay .npc #pwLater{border-color:transparent!important}
+html.npp-kid #ovPay .npc #pwTrial,html:not(.npp-kid) #ovPay .npc #pwGo{background:var(--npg)!important;background-color:var(--npa)!important;color:var(--npon)!important;border:0!important;text-shadow:none!important}
+@media (hover:hover){html #ovPay .npc #pwLater:hover,html:not(.npp-kid) #ovPay .npc #pwTrial:hover,html.npp-kid #ovPay .npc #pwGo:hover{background:color-mix(in srgb,var(--npa) 14%,transparent)!important}}
