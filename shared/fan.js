@@ -128,6 +128,8 @@
     /* iPad dọc: .scr vốn bắt đầu ở 14cqw (iPad Pro 13: ~120px) -> tên game cách hàng nút ~100px; neo cố định ngay dưới hàng nút (GAME_RULES 0a-23) */
     "#play.npfan .scr{top:calc(88px + env(safe-area-inset-top,0px))}" +
     "}" +
+    /* MỌI cỡ màn (iPad, web, điện thoại ngang), cả theme sáng: panel ⋯ kiểu Night Pass như điện thoại dọc — nền tối gradient, viền tím–cam, chữ trắng; KHÔNG theo màu từng game (trước: tím đặc + viền cam/vàng) */
+    "#npFan .pn{--npink:#fff;--npbg:#171236;background:linear-gradient(160deg,#211C52,#14152A) padding-box,linear-gradient(135deg,#9B83FF,#FF9A6B) border-box!important;color:#fff!important;border:1.5px solid transparent!important;box-shadow:0 14px 36px rgba(0,0,0,.5),0 0 26px rgba(124,92,255,.32)!important}" +
     "@media (prefers-reduced-motion:reduce){#npFab,#npFab svg,#npFan .bk,#npFan .pn{transition:none!important}}";
   document.head.appendChild(st);
 

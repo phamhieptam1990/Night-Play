@@ -57,6 +57,8 @@ html[data-app=popplay]{--sc-gmin:250px;--gnd:var(--h3)}
 html[data-app=cozyplay]{--sc-gmin:204px;--gnd:var(--b3)}
 @media (max-width:520px) and (min-height:600px){html[data-app=popplay]{--sc-gmin:178px}}   /* điện thoại dọc: lưới Pop chỉ 2 hàng (trượt ngang xem thêm) để sân khấu cao hơn */
 @media (max-width:520px) and (min-height:760px){html[data-app=cozyplay]{--sc-gmin:260px}}
+/* iPad DỌC (700–1000px rộng, vd 744×1133, 768×1024, 810×1080): sân khấu thu bớt để lưới Cozy đủ 3 hàng — thấy HẾT 20 game thay vì 7 game + trượt 5 trang (ô tối thiểu 88px) */
+@media (min-width:700px) and (max-width:1000px) and (orientation:portrait) and (min-height:900px){html[data-app=cozyplay]{--sc-gmin:318px}html[data-app=popplay]{--sc-gmin:236px}}
 /* điện thoại dọc THẤP (~640-720px): lưới nhỏ lại để sân khấu cao hơn → thẻ giữa luôn >= 1.5 lần ô game (chủ site: "hình ở giữa không được nhỏ hơn 1.5 kích thước list") */
 @media (max-width:520px) and (min-height:600px) and (max-height:719px){
   html[data-app=cozyplay]{--sc-gmin:176px}   /* đúng 2 hàng ô 73px (2x73 + khe 12 + 16): không dư chỗ → không hở giữa sân khấu và lưới */

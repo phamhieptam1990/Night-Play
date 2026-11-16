@@ -832,7 +832,7 @@ function renderGrid(){
 /* Chọn số cột + cỡ ô lớn nhất để toàn bộ game nằm gọn trong khung, không cuộn.
    Nếu ô vẫn nhỏ hơn 64px (quá nhiều game / màn hình thấp) thì chuyển sang TRƯỢT NGANG theo trang. */
 const gdots = $("gdots"); let MIN_TILE = 88;   /* điện thoại dọc cao: 72 → 4 cột x 3 hàng */
-const minTile = () => (innerWidth <= 520 && innerHeight >= 600 ? 72 : (innerWidth > innerHeight && innerHeight < 560 && innerWidth >= 560 ? 64 : 88));
+const minTile = () => (innerWidth <= 520 && innerHeight >= 600 ? 72 : (innerWidth >= 700 && innerWidth <= 1000 && innerHeight >= 900 && innerHeight > innerWidth ? 80 : (innerWidth > innerHeight && innerHeight < 560 && innerWidth >= 560 ? 64 : 88)));
 //   // ô tối thiểu 88px để hiện tên ngắn dưới icon (như Pop Play); không đủ chỗ thì chia TRANG
 let gPage = { step:0, n:1 };
 function fitGrid(){

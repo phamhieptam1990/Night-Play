@@ -80,6 +80,8 @@
     "#npPmFan .pn{top:calc(env(safe-area-inset-top,0px) + 80px);grid-template-columns:repeat(3,68px);gap:10px;padding:12px;background:linear-gradient(160deg,#211C52,#14152A) padding-box,linear-gradient(135deg,#9B83FF,#FF9A6B) border-box!important;color:#fff!important;border:1.5px solid transparent!important;box-shadow:0 14px 36px rgba(0,0,0,.5),0 0 26px rgba(124,92,255,.32)!important;border-radius:26px}" +
     TILE(68, 32, 30, 21, "") +
     "}" +
+    /* MỌI cỡ màn (iPad, web, điện thoại ngang): panel ⋯ kiểu Night Pass như điện thoại dọc — nền tối gradient, viền tím–cam, chữ trắng; KHÔNG theo màu từng game (trước: tím đặc + viền cam / nền xám viền xanh) */
+    "#npPmFan .pn{--npink:#fff;--npbg:#171236;background:linear-gradient(160deg,#211C52,#14152A) padding-box,linear-gradient(135deg,#9B83FF,#FF9A6B) border-box!important;color:#fff!important;border:1.5px solid transparent!important;box-shadow:0 14px 36px rgba(0,0,0,.5),0 0 26px rgba(124,92,255,.32)!important}" +
     "@media (prefers-reduced-motion:reduce){#npPmFab svg,#npPmFan .bk,#npPmFan .pn{transition:none!important}#npPmFab.nudge{animation:none}}";
   document.head.appendChild(st);
 

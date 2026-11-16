@@ -423,19 +423,19 @@ html:not(#np) :is(.npc .npx,#hlpX,#phX,#setupX,.sheet .sh-h>.icon-btn,#ovHow #hw
   html:not(#np) #ovSkin{align-items:center!important;justify-content:center!important;padding:6px 12px 26px 72px!important;box-sizing:border-box!important}
   html:not(#np) #ovSkin>.npc{width:min(100%,900px)!important;height:100%!important;max-height:100%!important;padding:8px 12px 10px!important;gap:6px!important;box-sizing:border-box!important;overflow:visible!important;display:flex!important;flex-direction:column!important}
   html:not(#np) #ovSkin .npc h2{min-height:40px!important;margin:0!important;flex:none!important}
-  html:not(#np) #ovSkin .npc>:is(.skgrid,div.sk){display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;--skh:max(40px,calc((100dvh - 190px)/2));grid-auto-rows:auto!important;align-content:center!important;align-items:center!important;gap:10px!important;margin:0!important;width:100%!important;max-width:none!important;flex:1 1 0!important;min-height:0!important}
-  html:not(#np) #ovSkin .npc>:is(.skgrid,div.sk)>:is(.skc,button.sk){grid-column:span 2!important;box-sizing:border-box!important;width:auto!important;min-width:0!important;max-width:none!important;height:auto!important;align-self:center!important;min-height:0!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:center!important;padding:5px!important;gap:3px!important;overflow:visible!important;text-align:center!important}
+  html:not(#np) #ovSkin .npc>:is(.skgrid,div.sk){display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;--skh:max(40px,calc((100dvh - 190px)/2));grid-auto-rows:auto!important;align-content:center!important;align-items:stretch!important;gap:10px!important;margin:0!important;width:100%!important;max-width:none!important;flex:1 1 0!important;min-height:0!important}
+  html:not(#np) #ovSkin .npc>:is(.skgrid,div.sk)>:is(.skc,button.sk){grid-column:span 2!important;box-sizing:border-box!important;width:auto!important;min-width:0!important;max-width:none!important;height:auto!important;align-self:stretch!important;min-height:0!important;font-size:var(--fs-body)!important;line-height:1.15!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:center!important;padding:5px!important;gap:3px!important;overflow:visible!important;text-align:center!important}
   html:not(#np) #ovSkin .npc>:is(.skgrid,div.sk)>:last-child:nth-child(3n+1){grid-column:3 / span 2!important}
   html:not(#np) #ovSkin .npc>:is(.skgrid,div.sk)>:last-child:nth-child(3n+2){grid-column:4 / span 2!important}
   html:not(#np) #ovSkin .npc>:is(.skgrid,div.sk)>:nth-last-child(2):nth-child(3n+1){grid-column:2 / span 2!important}
   /* Pop: khung xem trước .sw giãn hết phần còn lại của ô */
-  html:not(#np) #ovSkin .npc .skgrid>.skc>.sw{flex:0 1 auto!important;min-height:0!important;height:auto!important;width:100%!important;max-height:var(--skh)!important;aspect-ratio:4/3!important;display:grid!important;place-items:center!important;font-size:clamp(24px,calc(var(--skh)*.6),64px)!important;line-height:1!important}
+  html:not(#np) #ovSkin .npc .skgrid>.skc>.sw{flex:0 1 auto!important;min-height:0!important;height:auto!important;width:100%!important;max-height:var(--skh)!important;aspect-ratio:4/3!important;display:grid!important;place-items:center!important;font-size:clamp(24px,calc(var(--skh)*.6),44px)!important;line-height:1!important}
   /* Cánh Nhỏ: ảnh xem trước giãn, bỏ biểu tượng lặp */
   html:not(#np) #ovSkin .npc .skgrid>button.sk>img{display:block!important;flex:0 1 auto!important;min-height:0!important;width:100%!important;height:auto!important;max-height:var(--skh)!important;aspect-ratio:4/3!important;object-fit:cover!important;border-radius:10px!important}
   html:not(#np) #ovSkin .npc .skgrid>button.sk>i.e{display:none!important}
   /* Cozy sinh tự động: biểu tượng to ở trên, tên ở dưới */
-  html:not(#np) #ovSkin .npc div.sk>.skc>.e{flex:none!important;align-self:center!important;width:auto!important;height:auto!important;font-size:clamp(24px,calc(var(--skh)*.6),64px)!important;line-height:1!important}
-  html:not(#np) #ovSkin .npc div.sk>.skc>.e img{width:auto!important;height:clamp(24px,calc(var(--skh)*.6),64px)!important}
+  html:not(#np) #ovSkin .npc div.sk>.skc>.e{flex:none!important;align-self:center!important;width:auto!important;height:auto!important;font-size:clamp(24px,calc(var(--skh)*.6),44px)!important;line-height:1!important}
+  html:not(#np) #ovSkin .npc div.sk>.skc>.e img{width:auto!important;height:clamp(24px,calc(var(--skh)*.6),44px)!important}
   html:not(#np) #ovSkin .npc div.sk>.skc>.sx{flex:none!important;width:100%!important;min-width:0!important;padding:0!important;text-align:center!important}
   html:not(#np) #ovSkin .npc div.sk>.skc>.sx small{display:none!important}
   html:not(#np) #ovSkin .npc>:is(.skgrid,div.sk)>:is(.skc,button.sk) :is(span,b){flex:none!important;display:block!important;font-size:var(--fs-body)!important;line-height:1.15!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;text-align:center!important}
@@ -444,4 +444,17 @@ html:not(#np) :is(.npc .npx,#hlpX,#phX,#setupX,.sheet .sh-h>.icon-btn,#ovHow #hw
   html:not(#np) #ovSkin .npc>:is(.skgrid,div.sk):not(:has(>:nth-child(6))){--skh:42vh!important}
   html:not(#np) #ovSkin .npc>:is(.skgrid,div.sk):not(:has(>:nth-child(6))){grid-template-columns:repeat(5,minmax(0,1fr))!important}
   html:not(#np) #ovSkin .npc>:is(.skgrid,div.sk):not(:has(>:nth-child(6)))>:is(.skc,button.sk){grid-column:auto!important;height:auto!important}
+}
+
+/* POPUP GIAO DIỆN TRÊN iPAD (dọc + ngang; khung game >=700px rộng, >=521px cao), MỌI GAME — chữ KHÔNG bị nén 2 dòng:
+   Cozy: danh sách ô (div.sk > .skc: tên + mô tả) xếp MỘT CỘT dọc rộng vừa phải (trước 2 cột → mô tả gập 2 dòng, ô cuối lẻ kéo dài hết hàng).
+   Pop: thẻ rộng hơn + ô rộng hơn để tên một dòng ("Tàu vũ trụ ngầu"). Tên/mô tả cỡ theo thang chung. */
+@media (min-width:700px) and (min-height:521px){
+  html:not(.npp-kid) #ovSkin .npc>div.sk{display:grid!important;grid-template-columns:minmax(0,1fr)!important;width:min(100%,560px)!important;max-width:none!important;margin-inline:auto!important;gap:10px!important}
+  html:not(.npp-kid) #ovSkin .npc>div.sk>.skc{grid-column:1/-1!important;width:auto!important;max-width:none!important;min-height:64px!important}
+  html:not(.npp-kid) #ovSkin .npc div.sk>.skc>.sx{min-width:0}
+  html:not(.npp-kid) #ovSkin .npc div.sk>.skc>.sx b,html:not(.npp-kid) #ovSkin .npc div.sk>.skc>.sx small{white-space:normal;overflow-wrap:anywhere}
+  html.npp-kid #ovSkin>.npc{width:min(94%,780px)!important}
+  html.npp-kid #ovSkin .npc .skgrid>.skc,html.npp-kid #ovSkin .npc .skgrid>.sk{flex:0 0 clamp(176px,29%,232px)!important;width:auto!important;max-width:232px}
+  html.npp-kid #ovSkin .npc .skgrid>.skc>span,html.npp-kid #ovSkin .npc .skgrid>.sk>span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 }
