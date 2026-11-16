@@ -462,3 +462,11 @@ html:not(#np) :is(.npc .npx,#hlpX,#phX,#setupX,.sheet .sh-h>.icon-btn,#ovHow #hw
 /* NÚT ✕ ĐÓNG cạnh nút chính trong popup/thẻ của game Cozy (.btn.alt chứa "✕": skX, pwNo, chNo, wrNo, inNo, rcX, alX): theme SÁNG từng ra nền kem nhạt + dấu ✕ trắng gần như chìm. Một kiểu chuẩn mọi theme: tròn, gradient tím–cam, viền trắng, ✕ trắng. */
 html:not(.npp-kid) .row:has(>:is(#skX,#pwNo,#chNo,#wrNo,#inNo,#rcX,#alX).btn){align-items:stretch!important}
 html:not(.npp-kid) :is(#skX,#pwNo,#chNo,#wrNo,#inNo,#rcX,#alX).btn{flex:none!important;width:auto!important;min-width:0!important;height:auto!important;min-height:44px!important;aspect-ratio:1/1!important;align-self:stretch!important;padding:0!important;border-radius:50%!important;display:grid!important;place-items:center!important;font-size:22px!important;line-height:1!important;color:#fff!important;background:linear-gradient(135deg,#6C4BF2,#C2410C)!important;border:2px solid rgba(255,255,255,.7)!important;box-shadow:0 4px 14px rgba(108,75,242,.45)!important}
+
+/* POPUP GIAO DIỆN — KIỂU NIGHT PASS GỌN (bớt viền): chỉ MỘT viền mảnh ở thẻ ngoài; ô là nền kính mờ KHÔNG viền; ô đang chọn nổi bằng gradient tím–cam + quầng sáng; ổ khoá là chấm nền tối nhỏ không viền. Mọi game (Pop, Cánh Nhỏ, Cozy sinh tự động). */
+html #ovSkin .npc :is(.skgrid>.skc,.skgrid>.sk,div.sk>.skc){border:0!important;background:linear-gradient(165deg,rgba(255,255,255,.1),rgba(255,255,255,.04))!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.1)!important;transition:transform .15s,box-shadow .15s}
+html #ovSkin .npc :is(.skgrid>.skc,.skgrid>.sk,div.sk>.skc):is(.on,.sel,.active){background:linear-gradient(135deg,rgba(108,75,242,.85),rgba(194,65,12,.8))!important;box-shadow:0 0 0 2px rgba(255,255,255,.55),0 8px 22px rgba(108,75,242,.5)!important;outline:0!important}
+html #ovSkin .npc :is(.skgrid>.skc,.skgrid>.sk,div.sk>.skc):active{transform:scale(.97)}
+html #ovSkin .npc :is(.skc,.sk).lock::after{border:0!important;background:rgba(10,8,30,.78)!important;box-shadow:none!important}
+html #ovSkin .npc :is(.skgrid>.sk,.skgrid>.skc)>img,html #ovSkin .npc :is(.skgrid>.skc)>.sw{border:0!important;box-shadow:none!important}
+html #ovSkin>.npc{border-width:1px!important;border-color:rgba(170,150,255,.35)!important}
