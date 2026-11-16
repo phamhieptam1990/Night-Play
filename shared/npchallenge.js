@@ -26,6 +26,12 @@
     /* NỔI BẬT thu hút bấm: nút 🏆 vàng nhấp nháy + vòng sáng lan, đến khi bé MỞ thử thách hoặc đã có huy hiệu; nút ⋯ (menu gom) có chấm vàng nhấp nháy cùng lúc */
     "#" + ID + ".hot,.np-hb[data-k=npch].hot{background:linear-gradient(135deg,#ffb020,#ff5a1f)!important;color:#fff!important;border-color:rgba(255,255,255,.8)!important;animation:npchPulse 1.6s ease-in-out infinite}" +
     "#" + ID + ".hot svg{color:#fff!important}" +
+    /* LẤP LÁNH: vệt sáng quét ngang nút + hai ngôi sao ✨ nhấp nháy lệch pha ở hai góc */
+    "#" + ID + ".hot,.np-hb[data-k=npch].hot{overflow:visible;background-image:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.75) 48%,transparent 66%),linear-gradient(135deg,#ffb020,#ff5a1f)!important;background-size:250% 100%,100% 100%;background-repeat:no-repeat;animation:npchPulse 1.6s ease-in-out infinite,npchShine 2.4s linear infinite}" +
+    "#" + ID + ".hot::before,#" + ID + ".hot::after{content:'✨';position:absolute;font-size:14px;line-height:1;pointer-events:none;animation:npchTw 1.4s ease-in-out infinite}" +
+    "#" + ID + ".hot::before{left:-8px;top:-6px}#" + ID + ".hot::after{right:-8px;bottom:-6px;animation-delay:.7s}" +
+    "@keyframes npchShine{from{background-position:130% 0,0 0}to{background-position:-60% 0,0 0}}@keyframes npchTw{0%,100%{opacity:.15;transform:scale(.5) rotate(0)}50%{opacity:1;transform:scale(1.25) rotate(25deg)}}" +
+    "@media (prefers-reduced-motion:reduce){#" + ID + ".hot::before,#" + ID + ".hot::after{animation:none;opacity:.9}}" +
     "html.np-ch-hot :is(#npPmFab,#npFab)::after{content:'🏆';position:absolute;right:-6px;top:-6px;width:22px;height:22px;border-radius:50%;background:#ffb020;border:2px solid #fff;font-size:12px;line-height:18px;text-align:center;animation:npchPulse 1.6s ease-in-out infinite;pointer-events:none}" +
     "@keyframes npchPulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,176,32,.75)}50%{transform:scale(1.1);box-shadow:0 0 0 10px rgba(255,176,32,0)}}" +
     "@media (prefers-reduced-motion:reduce){#" + ID + ".hot,html.np-ch-hot :is(#npPmFab,#npFab)::after{animation:none}}" +
