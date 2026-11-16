@@ -1101,8 +1101,14 @@ route("GET", /^\/api\/health$/, async () => {
 });
 
 /* ===== ĐIỂM VÀO ===== */
+/* Mã sự kiện 6 số (server/events.js): người chơi nhập mã → dùng các giao diện admin đã tích trong khoảng ngày của sự kiện */
+const events = require("./events")({ route, out, limited, hmac, safeEq, ipHash, adminGuard, noTable, b64u, db });
 async function handle({ method, pathname, query = new URLSearchParams(), headers = {}, bodyText = "", ip = "" }) {
   headers = { ...headers, "x-np-method": method, "x-np-path": pathname };   // ghi đè sau khi sao chép: client không giả được
+  if (method === "GET" && query.get("event")) {   // /api/pro/<game>.js?event=<token>: giao mã giao diện đã lọc, không qua đường Night Pass
+    const em = /^\/api\/pro\/([a-z0-9-]+)\.js$/.exec(pathname);
+    if (em) { try { return await events.serve(em[1], query.get("event")); } catch (e) { console.error(String(e && e.stack || e).replace(/npg_\w+/g, "<ẩn>")); return out(500, { error: "server" }); } }
+  }
   for (const r of routes) {
     const m = pathname.match(r.re);
     if (!m || r.method !== method) continue;

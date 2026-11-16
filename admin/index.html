@@ -250,6 +250,21 @@ tr.row-open{cursor:pointer} tr.row-open:hover td{background:var(--hover)}
 @media (max-width:520px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (min-width:1000px) and (max-height:640px){.kpis{grid-template-columns:repeat(6,minmax(0,1fr))}}
 @media (max-width:640px){.site-foot .mark,#copy{display:none}.site-foot{padding:2px 12px}.site-foot nav a{padding:5px 0;font-size:12.5px}}
+.evnew h3,.evlist h3{margin:0 0 4px;font-size:16px}.evhint{margin:0 0 12px;color:var(--ink2);font-size:13px;line-height:1.4}
+.evform{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-bottom:14px}.evf{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--ink2)}.evf .field{width:100%;border-radius:10px;min-width:0;font-size:15px;color:var(--ink)}
+.evskinhd{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}.evcount{font-size:12px;color:var(--ink2)}.evskinhd .grow{flex:1}
+.evcat{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.evgame{border:1px solid var(--border);border-radius:12px;padding:10px 12px;background:color-mix(in srgb,var(--ink) 3%,transparent)}
+.evgame>header{display:flex;align-items:center;gap:8px;margin-bottom:6px}.evgame>header b{flex:1;font-size:14px}.evgame>header button{border:0;background:none;color:var(--accent);font-size:12px;padding:4px 6px;min-height:32px}
+.evsk{display:flex;align-items:center;gap:10px;min-height:40px;padding:2px 0;cursor:pointer;font-size:14px}.evsk input{width:20px;height:20px;flex:none;accent-color:var(--accent)}.evsk .em{font-size:20px;flex:none}.evsk small{color:var(--ink2);margin-left:auto;font-size:11px}
+.evact{display:flex;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap}.evmsg{font-size:13px}.evmsg.bad{color:var(--bad-text)}.evmsg.ok{color:var(--st-good)}
+.btn.primary{background:var(--accent);color:var(--on-accent);border-color:var(--accent);font-weight:700;min-height:40px;padding:8px 20px}
+.evitem{display:grid;grid-template-columns:auto auto 1fr;justify-items:start;gap:6px 14px;align-items:center;padding:12px 0;border-top:1px solid var(--grid)}.evitem:first-of-type{border-top:0}
+.evcodebig{font:800 26px/1 var(--font);letter-spacing:.14em;color:var(--accent);cursor:pointer;user-select:all}.evmeta{min-width:0;justify-self:end;text-align:right}.evmeta b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.evmeta small{display:block;color:var(--ink2);font-size:12px;line-height:1.4}
+.evst{font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;border:1px solid var(--border);white-space:nowrap}.evst.active{color:var(--st-good);border-color:var(--st-good)}.evst.upcoming{color:var(--st-warning);border-color:var(--st-warning)}.evst.ended,.evst.revoked,.evst.full{color:var(--ink2)}
+.evdesc{grid-column:1/-1;font-size:12px;color:var(--ink2);line-height:1.5}.evdesc .evchip{display:inline-block;margin:2px 4px 2px 0;padding:1px 8px;border-radius:999px;background:color-mix(in srgb,var(--accent) 12%,transparent)}
+.evrow2{grid-column:1/-1;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.evempty{color:var(--ink2);padding:10px 0;font-size:14px}
+@media (max-width:640px){.evcat{grid-template-columns:1fr}.evitem{grid-template-columns:1fr auto}.evitem .evcodebig{grid-column:1}.evitem .evst{grid-column:2;grid-row:1;justify-self:end}.evmeta{grid-column:1/-1;justify-self:start;text-align:left}.evact .btn.primary{flex:1;min-height:46px}.evsk{min-height:44px}}
 </style>
 </head>
 <body>
@@ -279,6 +294,7 @@ tr.row-open{cursor:pointer} tr.row-open:hover td{background:var(--hover)}
       <button class="tab" role="tab" id="tab-review" data-tab="review" aria-controls="v-review" aria-selected="false" tabindex="-1"><span data-i18n="tabReview"></span> <span class="count" id="reviewBadge" hidden></span></button>
       <button class="tab" role="tab" id="tab-orders" data-tab="orders" aria-controls="v-orders" aria-selected="false" tabindex="-1" data-i18n="tabOrders"></button>
       <button class="tab" role="tab" id="tab-passes" data-tab="passes" aria-controls="v-passes" aria-selected="false" tabindex="-1" data-i18n="tabPasses"></button>
+      <button class="tab" role="tab" id="tab-events" data-tab="events" aria-controls="v-events" aria-selected="false" tabindex="-1" data-i18n="tabEvents"></button>
     </nav>
     <button class="btn ico" id="moreBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="tools" data-i18n-attr="aria-label:menu;title:menu"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg></button>
     <div class="tools" id="tools">
@@ -420,6 +436,23 @@ tr.row-open{cursor:pointer} tr.row-open:hover td{background:var(--hover)}
         <div class="pager" id="lPager"></div>
       </div>
     </section>
+    <section class="view" id="v-events" role="tabpanel" aria-labelledby="tab-events" hidden>
+      <div class="card evnew">
+        <h3 data-i18n="evNewTitle"></h3>
+        <p class="evhint" data-i18n="evHint"></p>
+        <div class="evform">
+          <label class="evf"><span data-i18n="evName"></span><input class="field" id="evName" maxlength="80" autocomplete="off"></label>
+          <label class="evf"><span data-i18n="evStart"></span><input class="field" id="evStart" type="datetime-local"></label>
+          <label class="evf"><span data-i18n="evEnd"></span><input class="field" id="evEnd" type="datetime-local"></label>
+          <label class="evf"><span data-i18n="evMax"></span><input class="field" id="evMax" type="number" min="1" max="1000000" value="100" inputmode="numeric"></label>
+          <label class="evf"><span data-i18n="evCode"></span><input class="field" id="evCode" maxlength="6" inputmode="numeric" pattern="[0-9]*" data-i18n-attr="placeholder:evCodePh" autocomplete="off"></label>
+        </div>
+        <div class="evskinhd"><b data-i18n="evSkins"></b><span id="evCount" class="evcount"></span><span class="grow"></span><button class="btn" type="button" id="evAll" data-i18n="evAll"></button><button class="btn" type="button" id="evNone" data-i18n="evNone"></button></div>
+        <div id="evCat" class="evcat"></div>
+        <div class="evact"><button class="btn primary" type="button" id="evCreate" data-i18n="evCreate"></button><span id="evMsg" class="evmsg" role="status"></span></div>
+      </div>
+      <div class="card evlist"><h3 data-i18n="evListTitle"></h3><div id="evList"></div></div>
+    </section>
   </main>
 </div>
 <div id="dBack" hidden></div>
@@ -487,6 +520,11 @@ const I18N = {
     searchLabel:"Tìm đơn", searchPh:"Tìm email hoặc mã đơn", colCreated:"Tạo lúc", colPlan:"Gói", colPaidAt:"Thanh toán lúc",
     pgShowing:"Hiển thị {a}–{b} / {c}", pgNone:"0 kết quả", pgFirst:"Trang đầu", pgPrev:"Trang trước", pgNext:"Trang sau", pgLast:"Trang cuối",
     pgPrevBtn:"‹ Trước", pgNextBtn:"Sau ›", pgPage:"Trang {p} / {n}", noData:"Không có dữ liệu.",
+    tabEvents:"Sự kiện", evNewTitle:"Tạo mã sự kiện", evHint:"Mã 6 số mở các giao diện được tích (không cần Night Pass, không mở chế độ trả phí) trong khoảng ngày bạn chọn. Người chơi nhập mã trong popup Giao diện của game.",
+    evName:"Tên sự kiện", evStart:"Bắt đầu", evEnd:"Kết thúc", evMax:"Số lượt tối đa", evCode:"Mã 6 số (để trống = tự tạo)", evCodePh:"tự tạo", evSkins:"Giao diện được mở", evAll:"Chọn tất cả", evNone:"Bỏ chọn", evCreate:"Tạo mã", evListTitle:"Mã đã tạo", evEmpty:"Chưa có mã nào.", evGameAll:"Cả game", evGameNone:"Bỏ",
+    evSel:"Đã chọn {n} giao diện", evUses:"{u}/{m} lượt", evRevoke:"Thu hồi", evRestore:"Bật lại", evCopy:"Sao chép", evCopied:"Đã sao chép", evCreated:"Đã tạo mã {c}", evMig:"Chưa chạy migration 008 trên database — chạy xong mới tạo mã được.",
+    evConfirmRevoke:"Thu hồi mã {c}? Người đã nhập mất giao diện ngay khi tải lại game.", st_active:"Đang chạy", st_upcoming:"Sắp bắt đầu", st_ended:"Đã kết thúc", st_revoked:"Đã thu hồi", st_full:"Hết lượt",
+    e_name_required:"Cần nhập tên sự kiện.", e_skins_required:"Chọn ít nhất một giao diện.", e_bad_dates:"Ngày kết thúc phải sau ngày bắt đầu.", e_too_long:"Sự kiện tối đa 400 ngày.", e_bad_max:"Số lượt từ 1 đến 1.000.000.", e_bad_code:"Mã phải đúng 6 chữ số.", e_code_taken:"Mã này đã được dùng.",
     tabPasses:"Pass", pModeLabel:"Chế độ xem", viewList:"Danh sách", viewLog:"Nhật ký",
     psAll:"Tất cả pass", ps_active:"Đang hoạt động", ps_expiring:"Sắp hết hạn (3 ngày)", ps_expired:"Đã hết hạn", psSearchLabel:"Tìm pass", psSearchPh:"Tìm email, mã đơn hoặc ID",
     colExp:"Hết hạn", colDevices:"Thiết bị", colLastOrder:"Đơn gần nhất", colPaidTotal:"Đã trả", colWho:"Pass", colAction:"Thao tác", colReason:"Lý do", colChange:"Thay đổi",
@@ -536,6 +574,11 @@ const I18N = {
     searchLabel:"Search orders", searchPh:"Search email or order code", colCreated:"Created", colPlan:"Plan", colPaidAt:"Paid at",
     pgShowing:"Showing {a}–{b} of {c}", pgNone:"0 results", pgFirst:"First page", pgPrev:"Previous page", pgNext:"Next page", pgLast:"Last page",
     pgPrevBtn:"‹ Prev", pgNextBtn:"Next ›", pgPage:"Page {p} of {n}", noData:"No data.",
+    tabEvents:"Events", evNewTitle:"Create event code", evHint:"A 6-digit code unlocks the ticked skins (no Night Pass needed, no paid modes) between the dates you pick. Players enter it in the game's Skin popup.",
+    evName:"Event name", evStart:"Starts", evEnd:"Ends", evMax:"Max uses", evCode:"6-digit code (empty = auto)", evCodePh:"auto", evSkins:"Skins to unlock", evAll:"Select all", evNone:"Clear", evCreate:"Create code", evListTitle:"Created codes", evEmpty:"No codes yet.", evGameAll:"All", evGameNone:"None",
+    evSel:"{n} skins selected", evUses:"{u}/{m} uses", evRevoke:"Revoke", evRestore:"Restore", evCopy:"Copy", evCopied:"Copied", evCreated:"Code {c} created", evMig:"Migration 008 has not been run on the database yet — run it to create codes.",
+    evConfirmRevoke:"Revoke code {c}? People who entered it lose the skins on their next game reload.", st_active:"Active", st_upcoming:"Upcoming", st_ended:"Ended", st_revoked:"Revoked", st_full:"Fully used",
+    e_name_required:"Enter an event name.", e_skins_required:"Pick at least one skin.", e_bad_dates:"The end must be after the start.", e_too_long:"Events last 400 days at most.", e_bad_max:"Uses must be 1 to 1,000,000.", e_bad_code:"The code must be exactly 6 digits.", e_code_taken:"That code is already used.",
     tabPasses:"Passes", pModeLabel:"View mode", viewList:"List", viewLog:"Audit log",
     psAll:"All passes", ps_active:"Active", ps_expiring:"Expiring (3 days)", ps_expired:"Expired", psSearchLabel:"Search passes", psSearchPh:"Search email, order code or ID",
     colExp:"Expires", colDevices:"Devices", colLastOrder:"Latest order", colPaidTotal:"Paid total", colWho:"Pass", colAction:"Action", colReason:"Reason", colChange:"Change",
@@ -656,7 +699,7 @@ function setLang(l, save) {
 document.addEventListener("click", e => { const b = e.target.closest("[data-lang]"); if (b) setLang(b.dataset.lang, true); });
 
 /* ---------- tab ---------- */
-const TABS = ["overview", "review", "orders", "passes"];
+const TABS = ["overview", "review", "orders", "passes", "events"];
 function selectTab(name, focus) {
   if (!TABS.includes(name)) name = "overview";
   tab = name;
@@ -669,6 +712,7 @@ function selectTab(name, focus) {
   $("range").hidden = name !== "overview";
   if (location.hash.slice(1) !== name) history.replaceState(null, "", "#" + name);
   if (name === "overview") { if (stats) renderOverview(); }
+  else if (name === "events") loadEvents();
   else loadList(curList());
 }
 document.querySelector("nav.tabs").addEventListener("click", e => { const b = e.target.closest(".tab"); if (b) selectTab(b.dataset.tab); });
@@ -679,6 +723,63 @@ document.querySelector("nav.tabs").addEventListener("keydown", e => {
   if (j >= 0) { e.preventDefault(); selectTab(TABS[j], true); }
 });
 addEventListener("hashchange", () => { const n = location.hash.slice(1); if (TABS.includes(n) && n !== tab && !$("app").hidden) selectTab(n); });
+
+/* ---------- sự kiện: mã 6 số mở giao diện ---------- */
+const ev = { cat: null, sel: {}, busy: false };
+const evSelCount = () => Object.values(ev.sel).reduce((a, l) => a + l.size, 0);
+const pad2 = n => String(n).padStart(2, "0");
+const localIso = d => d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()) + "T" + pad2(d.getHours()) + ":" + pad2(d.getMinutes());
+const fmtDt = iso => { try { return new Date(iso).toLocaleString(t("locale"), { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }); } catch (e) { return iso; } };
+function evMsg(text, cls) { const m = $("evMsg"); m.textContent = text || ""; m.className = "evmsg" + (cls ? " " + cls : ""); }
+function renderCat() {
+  if (!ev.cat) return;
+  const L = lang === "en" ? "en" : "vi";
+  $("evCat").innerHTML = ev.cat.map(g => {
+    const sel = ev.sel[g.id] || new Set();
+    return '<div class="evgame" data-g="' + esc(g.id) + '"><header><b>' + esc(g.name) + '</b><button type="button" data-all="' + esc(g.id) + '">' + esc(t(sel.size === g.skins.length ? "evGameNone" : "evGameAll")) + '</button></header>' +
+      g.skins.map(k => '<label class="evsk"><input type="checkbox" data-g="' + esc(g.id) + '" data-s="' + esc(k.id) + '"' + (sel.has(k.id) ? " checked" : "") + '><span class="em">' + esc(k.e) + '</span><span>' + esc(k[L]) + '</span></label>').join("") + "</div>";
+  }).join("");
+  $("evCount").textContent = t("evSel", { n: evSelCount() });
+}
+function renderEvList(codes) {
+  const L = lang === "en" ? "en" : "vi", names = {}, sk = {};
+  (ev.cat || []).forEach(g => { names[g.id] = g.name; g.skins.forEach(k => sk[g.id + "/" + k.id] = k[L]); });
+  $("evList").innerHTML = codes.length ? codes.map(c => '<div class="evitem"><span class="evcodebig" data-copy="' + esc(c.code) + '" title="' + esc(t("evCopy")) + '">' + esc(c.code) + '</span><span class="evst ' + esc(c.status) + '">' + esc(t("st_" + c.status)) + '</span>' +
+    '<div class="evmeta"><b>' + esc(c.name) + '</b><small>' + esc(fmtDt(c.starts)) + ' → ' + esc(fmtDt(c.ends)) + ' · ' + esc(t("evUses", { u: c.uses, m: c.max })) + '</small></div>' +
+    '<div class="evdesc">' + Object.keys(c.skins).map(g => '<b>' + esc(names[g] || g) + ':</b> ' + c.skins[g].map(s => '<span class="evchip">' + esc(sk[g + "/" + s] || s) + '</span>').join("")).join("<br>") + '</div>' +
+    '<div class="evrow2"><button class="btn" type="button" data-rev="' + c.id + '" data-code="' + esc(c.code) + '" data-to="' + (c.revoked ? "0" : "1") + '">' + esc(t(c.revoked ? "evRestore" : "evRevoke")) + '</button></div></div>').join("") : '<div class="evempty">' + esc(t("evEmpty")) + "</div>";
+}
+async function loadEvents() {
+  try {
+    const d = await api("events");
+    ev.cat = d.catalog; if (!$("evStart").value) { const a = new Date(), b = new Date(a.getTime() + 7 * 864e5); $("evStart").value = localIso(a); $("evEnd").value = localIso(b); }
+    renderCat(); renderEvList(d.codes); if (d.migration) evMsg(t("evMig"), "bad");
+  } catch (e) { if (!(e instanceof AuthError)) evMsg(errText(e), "bad"); }
+}
+$("evCat").addEventListener("change", e => { const c = e.target.closest("input[data-s]"); if (!c) return; const g = c.dataset.g, set = ev.sel[g] || (ev.sel[g] = new Set()); c.checked ? set.add(c.dataset.s) : set.delete(c.dataset.s); renderCat(); });
+$("evCat").addEventListener("click", e => { const b = e.target.closest("button[data-all]"); if (!b) return; const g = ev.cat.find(x => x.id === b.dataset.all), set = ev.sel[g.id] || (ev.sel[g.id] = new Set()); if (set.size === g.skins.length) set.clear(); else g.skins.forEach(k => set.add(k.id)); renderCat(); });
+$("evAll").onclick = () => { (ev.cat || []).forEach(g => ev.sel[g.id] = new Set(g.skins.map(k => k.id))); renderCat(); };
+$("evNone").onclick = () => { ev.sel = {}; renderCat(); };
+$("evCode").addEventListener("input", e => { e.target.value = e.target.value.replace(/\D/g, "").slice(0, 6); });
+$("evCreate").onclick = async () => {
+  if (ev.busy) return; evMsg("");
+  const skins = {}; for (const g in ev.sel) if (ev.sel[g].size) skins[g] = [...ev.sel[g]];
+  const body = { name: $("evName").value.trim(), skins, starts: new Date($("evStart").value).toISOString(), ends: new Date($("evEnd").value).toISOString(), max: parseInt($("evMax").value, 10) || 100 };
+  const code = $("evCode").value.trim(); if (code) body.code = code;
+  if (!$("evStart").value || !$("evEnd").value) return evMsg(t("e_bad_dates"), "bad");
+  ev.busy = true; $("evCreate").disabled = true;
+  try {
+    const r = await api("events", body);
+    evMsg(t("evCreated", { c: r.code }), "ok"); $("evName").value = ""; $("evCode").value = ""; ev.sel = {}; renderCat(); await loadEvents();
+  } catch (e) { if (!(e instanceof AuthError)) evMsg(e && e.key === "errServer" && e.p && e.p.n === 503 ? t("evMig") : errText(e), "bad"); }
+  finally { ev.busy = false; $("evCreate").disabled = false; }
+};
+$("evList").addEventListener("click", async e => {
+  const c = e.target.closest("[data-copy]"); if (c) { try { await navigator.clipboard.writeText(c.dataset.copy); c.title = t("evCopied"); evMsg(t("evCopied"), "ok"); } catch (x) {} return; }
+  const b = e.target.closest("[data-rev]"); if (!b) return;
+  if (b.dataset.to === "1" && !confirm(t("evConfirmRevoke", { c: b.dataset.code }))) return;
+  b.disabled = true; try { await api("events/" + b.dataset.rev + "/revoke", { revoked: b.dataset.to === "1" }); await loadEvents(); } catch (x) { b.disabled = false; if (!(x instanceof AuthError)) evMsg(errText(x), "bad"); }
+});
 
 /* ---------- tổng quan ---------- */
 const tv = { rev: false, traf: false };   // true = đang xem dạng bảng
