@@ -46,7 +46,11 @@ body.idle #play[data-scr="game"] .top>.ib:not(#bBk),body.idle #play[data-scr="ga
 body.idle #play[data-scr="game"] .top>.ib:hover,body.idle #play[data-scr="game"] .top>.ib:focus-visible{opacity:1}
 /* mọi màn: bỏ chừa chỗ cho thanh trên (thanh trên đã ra hai bên) → khung chơi cao tối đa */
 .scr{left:2.5cqw;right:2.5cqw}
-#play .scr:not(#home):not(#res){top:1.4cqw;bottom:1.4cqw}
+#play .scr:not(#home):not(#res){top:max(1.4cqw,var(--scrT,0px));bottom:max(1.4cqw,var(--scrB,0px))}
+/* màn chơi ngang: chừa hàng TIÊU ĐỀ phía trên (không đè lên khung game) và chữ ký nightplay.vn + nút cuối ("Món tiếp") phía dưới */
+@media (orientation:landscape) and (min-width:900px) and (min-height:521px){#play{--scrT:52px;--scrB:30px}}
+/* tên game ở iPad ngang không có cột lề (rộng ≥900): ở GIỮA phía trên khung chơi (trước: nằm cột trái, lệch tâm khung và chạm hàng chấm) */
+@media (orientation:landscape) and (min-width:900px){#play .top>h1{grid-column:1/-1;grid-row:1/-1;position:fixed;left:calc(50% + var(--npl,0px)/2);transform:translateX(-50%);top:14px;z-index:4;width:max-content;max-width:min(60%,520px);text-align:center;max-height:none;margin:0!important}}
 .scr#game{gap:1.6cqw}
 /* cột trái: điểm / lượt / combo + mục tiêu */
 #game>.stats{position:absolute;right:calc(100% + 2.5cqw);top:calc(27cqw - 2.5cqw);width:calc(var(--cl) - 1cqw);flex-direction:column;gap:1.4cqw;z-index:3}
