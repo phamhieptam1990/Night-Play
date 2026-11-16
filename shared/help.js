@@ -8,7 +8,6 @@
     "#bHelp{font-weight:900}" +
     "#hlpOv{position:absolute;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;padding:5cqw;background:rgba(8,6,22,.72)}" +
     "#hlpOv[hidden]{display:none!important}" +
-    "html:has(#hlpBd:not([hidden])) #hlpOv{background:transparent}" +   /* #hlpBd đã mờ cả cửa sổ: bỏ lớp mờ thứ hai trong thẻ (trước: hình chữ nhật giữa đậm hơn hai bên) */
     /* lớp mờ TRỌN cửa sổ (cả thanh nút/tên game phía trên, vùng chữ nightplay.vn): #hlpOv nằm trong #play nên chỉ phủ cột game; thêm #hlpBd cố định cả cửa sổ,
        nằm DƯỚI #play (được nâng z-index khi popup mở) → mọi thứ ngoài #play bị mờ, #play tự mờ bằng #hlpOv */
     "#hlpBd{position:fixed;inset:0;z-index:2147482999;background:rgba(8,6,22,.72);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}#hlpBd[hidden]{display:none!important}" +

@@ -186,6 +186,8 @@ html.npp-kid:root .lvs :is(.lvb,.lv):nth-child(3).on{background:var(--np-orange-
 
 /* thẻ "Hôm nay"/Album gọn lại: 56px → 46px (chủ site: "card hôm nay bự") */
 html.npp-kid #play :is(.dbar,.abar){height:46px!important;min-height:46px!important}
+/* 3 thẻ ở màn chọn (Hôm nay, Tiếp tục ván dở, Album) CÙNG CAO 46px (chủ site: "3 thẻ height bằng nhau cho đẹp"); thẻ tiếp tục (shared/resume.js) mặc định 56px nên hạ về 46px cùng ✕ */
+html.npp-kid #npResume{height:46px!important}html.npp-kid #npResume .npr-go{height:46px!important;min-height:46px!important;max-height:46px!important;border-radius:23px!important;padding:0 18px!important}html.npp-kid #npResume .npr-x{width:46px!important;height:46px!important;min-height:46px!important;max-height:46px!important}
 html.npp-kid #play .card.daily,html.npp-kid #play .tile.daily{min-height:0!important;height:auto;padding-block:6px!important}
 
 /* 3 NÚT CẤP ĐỘ: khe giữa các nút 14px + cách thẻ phía dưới 10px (chủ site: "padding xa 3 cái button ra") */

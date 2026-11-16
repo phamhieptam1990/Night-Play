@@ -235,7 +235,7 @@
   html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .dbar,
   html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .dbar,
   html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .dbar,
-  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .dbar{grid-column:1;grid-row:4;align-self:center;height:36px!important;min-height:0!important;border-radius:18px!important;font-size:15px!important;padding:0 14px!important;margin:0!important;width:100%!important;box-sizing:border-box}
+  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .dbar{grid-column:1;grid-row:4;align-self:center;height:46px!important;min-height:0!important;border-radius:23px!important;font-size:15px!important;padding:0 14px!important;margin:0!important;width:100%!important;box-sizing:border-box}
   html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .profBtn,
   html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .profBtn,
   html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .profBtn,
@@ -254,7 +254,7 @@
   html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .abar,
   html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .abar,
   html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .abar,
-  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .abar{grid-column:1;grid-row:5;align-self:center;height:36px!important;min-height:0!important;border-radius:18px!important;font-size:15px!important;padding:0 14px!important;margin:0!important;width:100%!important;box-sizing:border-box}
+  html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .abar{grid-column:1;grid-row:5;align-self:center;height:46px!important;min-height:0!important;border-radius:23px!important;font-size:15px!important;padding:0 14px!important;margin:0!important;width:100%!important;box-sizing:border-box}
     html.np-hudg .app:has(h1[data-pt="ten-lua-cua-be"]) #home .dbar > span,
   html.np-hudg .app:has(h1[data-pt="con-vat-an-so"]) #home .dbar > span,
   html.np-hudg .app:has(h1[data-pt="qua-song"]) #home .dbar > span,
@@ -475,7 +475,7 @@ html.np-hudg .app:has(h1[data-pt="bo-me-5-giay"]) #home .dbar,
 html.np-hudg .app:has(h1[data-pt="doan-tuoi-nao"]) #home .dbar,
 html.np-hudg .app:has(h1[data-pt="nhay-theo-so"]) #home .dbar,
 html.np-hudg .app:has(h1[data-pt="thap-vong-mau"]) #home .dbar,
-html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .dbar{flex:none!important;height:clamp(44px,5.5vh,56px)!important;min-height:0!important;border-radius:999px!important}
+html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .dbar{flex:none!important;height:46px!important;min-height:0!important;border-radius:999px!important}
 }
 /* phone dọc: không có khung nền bo tròn phía sau (như Cozy) */
 @media (max-aspect-ratio:11/10) and (max-width:600px){
@@ -877,7 +877,7 @@ html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home::before{grid-row:1!im
 .app:has(h1[data-pt="doan-tuoi-nao"]) #home .dbar,
 .app:has(h1[data-pt="nhay-theo-so"]) #home .dbar,
 .app:has(h1[data-pt="thap-vong-mau"]) #home .dbar,
-.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .dbar{flex:none!important;height:clamp(44px,5.5vh,56px)!important;min-height:0!important;border-radius:999px!important}
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .dbar{flex:none!important;height:46px!important;min-height:0!important;border-radius:999px!important}
 }
 /* phone dọc: không có khung nền bo tròn phía sau (như Cozy) */
 @media (max-aspect-ratio:11/10) and (max-width:600px){
@@ -1148,7 +1148,7 @@ html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home::before{grid-row:1!im
 .app:has(h1[data-pt="doan-tuoi-nao"]) #home .dbar,
 .app:has(h1[data-pt="nhay-theo-so"]) #home .dbar,
 .app:has(h1[data-pt="thap-vong-mau"]) #home .dbar,
-.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .dbar{flex:none!important;height:clamp(44px,5.5vh,56px)!important;min-height:0!important;border-radius:999px!important}
+.app:has(h1[data-pt="ve-chu-quai-vat"]) #home .dbar{flex:none!important;height:46px!important;min-height:0!important;border-radius:999px!important}
 }
 
 /* CHIP CẤP ĐỘ phone dọc: hình TRÒN (game đặt min-height 56px làm méo thành bầu dục 44x56) */
@@ -1204,7 +1204,7 @@ html[data-theme="light"] .app:has(h1[data-pt]) #home:not([hidden]),html[data-the
   .app:has(h1[data-pt="ve-chu-quai-vat"]) #home{display:grid!important;flex-direction:initial!important;flex-wrap:initial!important;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)!important;grid-template-rows:auto minmax(0,1fr) auto auto auto!important;column-gap:6px!important;row-gap:6px!important;align-content:stretch!important;align-items:stretch!important}
   .app:has(h1[data-pt="ve-chu-quai-vat"]) #home::before{grid-column:1 / -1!important;grid-row:2!important;align-self:stretch!important;order:0!important}
   .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.lvs{grid-column:1 / -1!important;grid-row:1!important;order:0!important;flex:none!important}
-  .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>#npResume{grid-column:1 / -1!important;grid-row:3!important;order:0!important;height:56px!important;margin:0!important}
+  .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>#npResume{grid-column:1 / -1!important;grid-row:3!important;order:0!important;height:46px!important;margin:0!important}
   .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.dbar{grid-column:1!important;grid-row:4!important;order:0!important;flex:none!important;width:auto!important;min-width:0!important;height:46px!important;min-height:0!important;padding:0 12px!important;font-size:13px!important;justify-content:space-between!important;overflow:hidden}
   .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.abar{grid-column:2!important;grid-row:4!important;order:0!important;flex:none!important;width:auto!important;min-width:0!important;height:46px!important;min-height:0!important;padding:0 12px!important;font-size:13px!important;justify-content:space-between!important;overflow:hidden}
   .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.dbar span,.app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.abar span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -1287,7 +1287,7 @@ html[data-theme="light"] .app:has(h1[data-pt]) #home:not([hidden]),html[data-the
   html.np-strip .app:has(h1[data-pt="ve-chu-quai-vat"]) #home{display:grid!important;flex-direction:initial!important;flex-wrap:initial!important;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)!important;grid-template-rows:auto minmax(0,1fr) auto auto auto!important;column-gap:6px!important;row-gap:6px!important;align-content:stretch!important;align-items:stretch!important}
   html.np-strip .app:has(h1[data-pt="ve-chu-quai-vat"]) #home::before{grid-column:1 / -1!important;grid-row:2!important;align-self:stretch!important;order:0!important}
   html.np-strip .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.lvs{grid-column:1 / -1!important;grid-row:1!important;order:0!important;flex:none!important}
-  html.np-strip .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>#npResume{grid-column:1 / -1!important;grid-row:3!important;order:0!important;height:56px!important;margin:0!important}
+  html.np-strip .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>#npResume{grid-column:1 / -1!important;grid-row:3!important;order:0!important;height:46px!important;margin:0!important}
   html.np-strip .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.dbar{grid-column:1!important;grid-row:4!important;order:0!important;flex:none!important;width:auto!important;min-width:0!important;height:46px!important;min-height:0!important;padding:0 12px!important;font-size:13px!important;justify-content:space-between!important;overflow:hidden}
   html.np-strip .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.abar{grid-column:2!important;grid-row:4!important;order:0!important;flex:none!important;width:auto!important;min-width:0!important;height:46px!important;min-height:0!important;padding:0 12px!important;font-size:13px!important;justify-content:space-between!important;overflow:hidden}
   html.np-strip .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.dbar span,.app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.abar span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -1321,7 +1321,7 @@ html[data-theme="light"] .app:has(h1[data-pt]) #home:not([hidden]),html[data-the
   html.np-strip .app:has(h1[data-pt="ve-chu-quai-vat"]) #home{display:grid!important;flex-direction:initial!important;flex-wrap:initial!important;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)!important;grid-template-rows:auto minmax(0,1fr) auto auto auto!important;column-gap:6px!important;row-gap:6px!important;align-content:stretch!important;align-items:stretch!important}
   html.np-strip .app:has(h1[data-pt="ve-chu-quai-vat"]) #home::before{grid-column:1 / -1!important;grid-row:2!important;align-self:stretch!important;order:0!important}
   html.np-strip .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.lvs{grid-column:1 / -1!important;grid-row:1!important;order:0!important;flex:none!important}
-  html.np-strip .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>#npResume{grid-column:1 / -1!important;grid-row:3!important;order:0!important;height:56px!important;margin:0!important}
+  html.np-strip .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>#npResume{grid-column:1 / -1!important;grid-row:3!important;order:0!important;height:46px!important;margin:0!important}
   html.np-strip .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.dbar{grid-column:1!important;grid-row:4!important;order:0!important;flex:none!important;width:auto!important;min-width:0!important;height:46px!important;min-height:0!important;padding:0 12px!important;font-size:13px!important;justify-content:space-between!important;overflow:hidden}
   html.np-strip .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.abar{grid-column:2!important;grid-row:4!important;order:0!important;flex:none!important;width:auto!important;min-width:0!important;height:46px!important;min-height:0!important;padding:0 12px!important;font-size:13px!important;justify-content:space-between!important;overflow:hidden}
   html.np-strip .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.dbar span,.app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.abar span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -1339,17 +1339,17 @@ html[data-theme="light"] .app:has(h1[data-pt]) #home:not([hidden]),html[data-the
   html.np-strip .app:has(h1[data-pt]) #ovStart .cards>.card>.main span:not(.e){font-size:15px!important;font-weight:800!important}
 }
 
-/* Vẽ Chữ Thành Quái Vật, màn dọc thấp/có thanh trượt: nút Album chỉ còn ICON 📖 (vuông 56px) để nút "Quái vật hôm nay" bên trái dài ra. */
+/* Vẽ Chữ Thành Quái Vật, màn dọc thấp/có thanh trượt: nút Album chỉ còn ICON 📖 (tròn 46px) để nút "Quái vật hôm nay" bên trái dài ra. */
 @media (max-aspect-ratio:11/10) and (max-width:520px) and (max-height:719px){
-  html:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home{grid-template-columns:minmax(0,1fr) 56px!important}
-  html:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.abar{width:56px!important;min-width:56px!important;padding:0!important;justify-content:center!important}
+  html:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home{grid-template-columns:minmax(0,1fr) 46px!important;column-gap:8px!important}
+  html:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.abar{width:46px!important;min-width:46px!important;max-width:46px!important;padding:0!important;justify-content:center!important;border-radius:50%!important}
   html:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.abar>span+span{display:none!important}
   html:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.abar>span:first-child{font-size:0!important}
   html:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.abar>span:first-child::first-letter{font-size:26px!important}
 }
 @media (max-aspect-ratio:11/10) and (min-height:720px) and (max-height:899px) and (max-width:520px){
-  html.np-strip:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home{grid-template-columns:minmax(0,1fr) 56px!important}
-  html.np-strip:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.abar{width:56px!important;min-width:56px!important;padding:0!important;justify-content:center!important}
+  html.np-strip:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home{grid-template-columns:minmax(0,1fr) 46px!important;column-gap:8px!important}
+  html.np-strip:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.abar{width:46px!important;min-width:46px!important;max-width:46px!important;padding:0!important;justify-content:center!important;border-radius:50%!important}
   html.np-strip:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.abar>span+span{display:none!important}
   html.np-strip:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.abar>span:first-child{font-size:0!important}
   html.np-strip:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home>.abar>span:first-child::first-letter{font-size:26px!important}
@@ -1536,4 +1536,19 @@ html.npp-kid #ovHow:not([hidden]) .hwL li{padding-block:clamp(6px,1.6vh,14px)!im
   html.npp-kid #ovStart #npResume .npr-go small{display:none}
   html.npp-kid #ovStart .cards{gap:4px!important}
   html.npp-kid #ovStart #pgBtn{min-height:44px!important;height:44px!important;margin-top:2px!important}
+}
+
+/* Vẽ Chữ Thành Quái Vật, điện thoại NGANG: hàng nút độ khó 🌱🌿🌳 (46px) nằm ở hàng lưới đầu nhưng hàng này co theo chiều cao (30px ở màn thấp) nên nút tràn xuống đè lên danh sách bên phải. Hàng đầu luôn đủ 46px, các hàng còn lại chia đều. */
+@media (min-aspect-ratio:11/10) and (max-height:520px){
+  html.np-hudg:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home{grid-template-rows:46px repeat(5,minmax(0,1fr))!important;row-gap:8px!important}
+}
+@media (min-aspect-ratio:11/10) and (max-height:340px){   /* iPhone SE ngang (568×320): thu nút độ khó 40px + danh sách slide 3 hàng để không chạm thẻ "Tiếp tục ván dở" */
+  html.np-hudg:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home{grid-template-rows:40px repeat(5,minmax(0,1fr))!important;row-gap:6px!important}
+  html.np-hudg:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .lvs{height:40px!important}
+  html.np-hudg:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .lvb{width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important}
+  html.np-hudg:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles{grid-template-rows:repeat(3,40px)!important;grid-auto-columns:calc(100% - 22px)!important;row-gap:4px!important}   /* danh sách là SLIDE vuốt ngang: không đủ chỗ thì bớt hàng mỗi trang (3 hàng, ô vẫn 40px), ô còn lại sang trang sau, lộ mép trang sau để biết vuốt */
+  html.np-hudg:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles>.tile{scroll-snap-align:start}
+}
+@media (min-aspect-ratio:11/10) and (max-height:290px){
+  html.np-hudg:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles{grid-template-rows:repeat(2,40px)!important}
 }
