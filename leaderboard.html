@@ -120,7 +120,7 @@ main{flex:1;min-height:0;width:100%;max-width:760px;margin:0 auto;padding:10px 1
   </section>
 </main>
 <footer class="foot">
-  <nav><a id="fHome" href="play/index.html"></a><a id="fPriv" href="privacy.html"></a><a id="fHelp" href="shared.html"></a></nav>
+  <nav><a id="fHome" href="play/index.html"></a><a id="fPriv" href="privacy.html"></a><a id="fDocs" href="documents.html"></a><a id="fHelp" href="shared.html"></a></nav>
   <p id="copy"></p>
 </footer>
 <script src="shared/social.js"></script>
@@ -149,7 +149,7 @@ const myBest = () => { let b = 0; try { b = +localStorage.getItem(bestKey[game] 
 function texts() {
   const t = L(); document.title = t.h + " · " + BRAND; $("backT").textContent = BRAND; $("h").textContent = t.h; $("sub").textContent = t.sub;
   document.querySelectorAll("#period button").forEach(b => { b.textContent = t[b.dataset.p]; b.setAttribute("aria-pressed", String(b.dataset.p === period)); });
-  $("fHome").textContent = t.home; $("fPriv").textContent = t.priv; $("fHelp").textContent = t.help; $("copy").textContent = "© " + new Date().getFullYear() + " " + BRAND + ". " + t.rights;
+  $("fHome").textContent = t.home; $("fPriv").textContent = t.priv; $("fDocs").textContent = /^vi/i.test(document.documentElement.lang || "vi") ? "Tài liệu" : "Documents"; $("fHelp").textContent = t.help; $("copy").textContent = "© " + new Date().getFullYear() + " " + BRAND + ". " + t.rights;
   $("themeBtn").setAttribute("aria-label", t.theme);
   document.querySelectorAll("#langSeg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.l === root.lang)));
   buildPicker(); $("gname").textContent = (EMO[game] || "🎮") + " " + NPS.gameName(game);

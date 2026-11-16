@@ -335,3 +335,6 @@ html[data-theme=light].sc-ok #fPop{background:linear-gradient(165deg,#ffffff,#ef
 html[data-theme=light].sc-ok #fPop p{color:#2b2064!important}
 html[data-theme=light].sc-ok #fPop .fpu{color:#6b5fa8!important}
 html[data-theme=light].sc-ok #fPop a{color:#5b3ce0!important}
+
+/* Màn ngang thấp: popup ⓘ có 9 liên kết (thêm "Tài liệu") — thu khoảng đệm để hiện đủ, không phải cuộn trong popup */
+@media (max-height:480px){html.sc-ok #fPop{padding:8px 14px!important}html.sc-ok #fPop a{padding:4px 2px!important}html.sc-ok #fPop .fpu{margin-bottom:4px;padding-bottom:4px}}

@@ -147,6 +147,7 @@ h1{margin:0;font-size:clamp(22px,min(6vw,3.8dvh),44px);line-height:1.1;letter-sp
   </a>
   <div class="tools">
     <a id="passBtn" class="pill" href="../subscribe.html"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/></svg><span>Night Pass</span></a>
+    <a id="docBtn" class="ico" href="../documents.html" aria-label="Tài liệu" title="Tài liệu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></a>
     <button id="themeBtn" class="ico" type="button" aria-label="Theme">
       <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
       <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
@@ -183,6 +184,7 @@ h1{margin:0;font-size:clamp(22px,min(6vw,3.8dvh),44px);line-height:1.1;letter-sp
   <a id="pass2" href="../subscribe.html">Night Pass</a>
   <a id="priv" href="../privacy.html" target="_blank" rel="noopener">Quyền riêng tư</a>
   <a id="terms" href="../terms.html" target="_blank" rel="noopener">Điều khoản</a>
+  <a id="docs" href="../documents.html">Tài liệu</a>
   <a id="mail" href="mailto:support@nightplay.vn">Liên hệ</a></nav>
 </footer>
 
@@ -213,7 +215,7 @@ function applyLang(){
   { const at = lang === "vi" ? "Giới thiệu" : "About", ah = lang === "vi" ? "/?landing=1" : "/en/?landing=1";
     $("aboutTxt").textContent = at; $("about").textContent = at; $("aboutLink").href = ah; $("about").href = ah;
     $("aboutLink").setAttribute("aria-label", lang === "vi" ? "Giới thiệu Play Hub" : "About Play Hub"); }
-  $("priv").textContent = t.privacy; $("terms").textContent = lang === "vi" ? "Điều khoản" : "Terms"; $("mail").textContent = t.contact;
+  $("priv").textContent = t.privacy; $("terms").textContent = lang === "vi" ? "Điều khoản" : "Terms"; $("docs").textContent = lang === "vi" ? "Tài liệu" : "Documents"; { const dt = lang === "vi" ? "Tài liệu" : "Documents", db = $("docBtn"); db.setAttribute("aria-label", dt); db.title = dt; } $("mail").textContent = t.contact;
   $("copy").textContent = "© " + new Date().getFullYear() + " Play Hub. " + t.rights;
   $("passBtn").href = "../subscribe.html?from=play/index.html&lang=" + lang; $("passBtn").lastChild.textContent = t.pass; $("passBtn").setAttribute("aria-label", t.upgrade);
   $("themeBtn").setAttribute("aria-label", t.theme);

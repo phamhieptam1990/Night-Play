@@ -321,6 +321,7 @@ html[data-dens="4"] #s2 input[type=email]{padding:9px 12px}
     <a id="fMail" href="#"></a>
     <a id="fPriv" href="#" target="_blank" rel="noopener"></a>
     <a id="fTerms" href="terms.html" target="_blank" rel="noopener"></a>
+    <a id="fDocs" href="documents.html"></a>
   </nav>
   <p id="madeBy"></p>
 </footer>
@@ -503,6 +504,7 @@ function applyLang(){
   $("fHome").textContent = T("home"); $("restore").textContent = T("restore");
   const fm = $("fMail"); fm.href = "mailto:" + EMAIL; fm.textContent = T("contact");
   const fp = $("fPriv"); fp.href = PRIVACY_URL; fp.textContent = T("privacy");
+  $("fDocs").textContent = lang === "vi" ? "Tài liệu" : "Documents";
   $("fTerms").textContent = lang === "vi" ? "Điều khoản" : "Terms";
   $("madeBy").textContent = "© " + new Date().getFullYear() + " " + APP.brand + ". " + T("rights");
   $("fine").innerHTML = esc(T("fine")) + ' <a href="terms.html" target="_blank" rel="noopener">' + esc(T("terms2")) + "</a>";

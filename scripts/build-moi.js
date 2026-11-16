@@ -23,7 +23,7 @@ const T = {
     facts: "Có gì trong lần ra mắt này", more: "Các lần ra mắt khác", ready: "Sẵn sàng chơi một ván?", back: "← Xem tất cả", crumbHome: "Trang chủ", crumbNew: "Mới",
     alt: n => "Ảnh chụp màn hình " + n, brand: "Play Hub", skip: "Bỏ qua tới nội dung", mainNav: "Chính", footNav: "Footer", themeLbl: "Đổi giao diện sáng/tối", themeTxt: "Giao diện sáng/tối",
     navHome: "Trang chủ", navGame: "Game", navNew: "Mới", navNP: "Night Pass", langName: "English", langShort: "EN", langAria: "English", langAttr: "en",
-    f: { pop: "Pop Play", night: "Night Play", np: "Night Pass", priv: "Chính sách bảo mật", terms: "Điều khoản sử dụng", mail: "Liên hệ: support@nightplay.vn", news: "Mới" },
+    f: { pop: "Pop Play", night: "Night Play", np: "Night Pass", priv: "Chính sách bảo mật", terms: "Điều khoản sử dụng", docs: "Tài liệu", mail: "Liên hệ: support@nightplay.vn", news: "Mới" },
     freeNote: "Chơi miễn phí; Night Pass là gói tuỳ chọn.", pubAria: "Ngày ra mắt"
   },
   en: {
@@ -35,7 +35,7 @@ const T = {
     facts: "What is in this launch", more: "More launches", ready: "Ready for a round?", back: "← See all", crumbHome: "Home", crumbNew: "New",
     alt: n => "Screenshot of " + n, brand: "Play Hub", skip: "Skip to content", mainNav: "Main", footNav: "Footer", themeLbl: "Toggle light/dark theme", themeTxt: "Light / Dark",
     navHome: "Home", navGame: "Games", navNew: "New", navNP: "Night Pass", langName: "Tiếng Việt", langShort: "VI", langAria: "Tiếng Việt", langAttr: "vi",
-    f: { pop: "Pop Play", night: "Night Play", np: "Night Pass", priv: "Privacy Policy", terms: "Terms of Use", mail: "Contact: support@nightplay.vn", news: "New" },
+    f: { pop: "Pop Play", night: "Night Play", np: "Night Pass", priv: "Privacy Policy", terms: "Terms of Use", docs: "Documents", mail: "Contact: support@nightplay.vn", news: "New" },
     freeNote: "Free to play; Night Pass is an optional pass.", pubAria: "Launch date"
   }
 };
@@ -138,7 +138,7 @@ function foot(l) {
    <div class="fr">
    <nav class="flinks" id="flinks" aria-label="${t.footNav}">
     <a href="/popplay/">${f.pop}</a><a href="/cozyplay/">${f.night}</a><a href="${t.base}">${f.news}</a><a href="/subscribe.html">${f.np}</a>
-    <a href="/privacy.html">${f.priv}</a><a href="/terms.html">${f.terms}</a>
+    <a href="/privacy.html">${f.priv}</a><a href="/terms.html">${f.terms}</a><a href="/documents.html?lang=${t.lang||(f.docs==="Documents"?"en":"vi")}">${f.docs}</a>
     <a href="mailto:support@nightplay.vn">${f.mail}</a>
    </nav>
    </div>

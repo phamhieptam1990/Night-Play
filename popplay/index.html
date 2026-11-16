@@ -455,7 +455,7 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
   <div class="fin">
     <div class="fbrand"><div class="mark"><svg class="mk" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="var(--accent)"/><path d="M25 18l22 14-22 14z" fill="#fff"/></svg><span id="fName"></span></div><p id="fTag"></p></div>
     <nav class="fcol" aria-labelledby="fH1"><h4 id="fH1"></h4><a id="fHub" href="../play/index.html"></a><a id="fAbout" href="/?landing=1"></a><a id="fRank" href="../leaderboard.html?from=popplay/index.html"></a><a id="fHelp" href="../shared.html?from=popplay/index.html"></a><a id="fGames" href="#grid"></a><a id="fPass" href="#"></a></nav>
-    <nav class="fcol" aria-labelledby="fH2"><h4 id="fH2"></h4><a id="fMail" href="#"></a><a id="fPriv" href="#" target="_blank" rel="noopener"></a><a id="fTerms" href="#" target="_blank" rel="noopener"></a></nav>
+    <nav class="fcol" aria-labelledby="fH2"><h4 id="fH2"></h4><a id="fMail" href="#"></a><a id="fPriv" href="#" target="_blank" rel="noopener"></a><a id="fTerms" href="#" target="_blank" rel="noopener"></a><a id="fDocs" href="../documents.html"></a></nav>
   </div>
   <div class="fbar"><p id="madeBy"></p>
   <button id="lock" type="button" aria-label="Parents">
@@ -507,6 +507,7 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
     <div class="gf">
       <a id="mail"></a>
       <a id="priv" target="_blank" rel="noopener"></a>
+      <a id="docsLink" href="../documents.html"></a>
       <a id="about"></a>
       <button id="close" type="button"></button>
     </div>
@@ -615,6 +616,7 @@ function applyLang(){
   { const vi = /^vi/i.test(document.documentElement.lang || "vi"), ah = vi ? "/?landing=1" : "/en/?landing=1", at = vi ? "Giới thiệu Play Hub" : "About Play Hub";
     $("fAbout").href = ah; $("fAbout").textContent = at; $("about").href = ah; $("about").textContent = vi ? "Giới thiệu" : "About"; }
   const fp = $("fPriv"); fp.href = PRIVACY_URL; fp.textContent = t.privacy;
+  $("fDocs").textContent = /^vi/i.test(document.documentElement.lang || "vi") ? "Tài liệu" : "Documents";
   const ft = $("fTerms"); ft.href = "../terms.html"; ft.textContent = /^vi/i.test(document.documentElement.lang || "vi") ? "Điều khoản" : "Terms";
   const SUB = "../subscribe.html?from=popplay/index.html&lang=" + lang;
   $("passBtn").href = SUB; $("passBtn").lastChild.textContent = t.pass; $("passBtn").setAttribute("aria-label", t.upgrade);
@@ -627,6 +629,7 @@ function applyLang(){
   $("close").textContent = t.close; $("gX").setAttribute("aria-label", t.close);
   const u = $("pass"); $("passTxt").textContent = t.upgrade; u.href = "../subscribe.html?from=popplay/index.html&lang=" + lang;
   const m = $("mail"); m.href = "mailto:" + EMAIL; m.textContent = t.contact;
+  $("docsLink").textContent = $("fDocs").textContent;
   const p = $("priv"); p.href = PRIVACY_URL; p.textContent = t.privacy;
   $("gTimeH").textContent = t.timeH;
   $("gGamesH").textContent = t.gamesH;

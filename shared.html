@@ -80,7 +80,7 @@ main{flex:1;min-height:0;width:100%;max-width:640px;margin:0 auto;padding:10px 1
   <p class="note" id="note"></p>
 </main>
 <footer class="foot">
-  <nav><a id="fHome" href="play/index.html"></a><a id="fPriv" href="privacy.html"></a><a id="fRank" href="leaderboard.html"></a></nav>
+  <nav><a id="fHome" href="play/index.html"></a><a id="fPriv" href="privacy.html"></a><a id="fDocs" href="documents.html"></a><a id="fRank" href="leaderboard.html"></a></nav>
   <p id="copy"></p>
 </footer>
 <script src="shared/social.js"></script>
@@ -105,7 +105,7 @@ const ROW = 84;
 
 function texts() {
   const t = L(); document.title = t.h + " · " + BRAND; $("backT").textContent = BRAND; $("h").textContent = t.h; $("sub").textContent = t.sub; $("note").textContent = t.note;
-  $("fHome").textContent = t.home; $("fPriv").textContent = t.priv; $("fRank").textContent = t.rank; $("copy").textContent = "© " + new Date().getFullYear() + " " + BRAND + ". " + t.rights; $("themeBtn").setAttribute("aria-label", t.theme);
+  $("fHome").textContent = t.home; $("fPriv").textContent = t.priv; $("fDocs").textContent = /^vi/i.test(document.documentElement.lang || "vi") ? "Tài liệu" : "Documents"; $("fRank").textContent = t.rank; $("copy").textContent = "© " + new Date().getFullYear() + " " + BRAND + ". " + t.rights; $("themeBtn").setAttribute("aria-label", t.theme);
   document.querySelectorAll("#langSeg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.l === root.lang)));
 }
 function draw() {

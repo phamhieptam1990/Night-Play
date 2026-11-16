@@ -220,10 +220,10 @@ html[data-theme=dark] .top{background:rgba(18,20,31,.85)}
 /* Menu mở (header + chân trang): MỘT thẻ kính tối kiểu Night Pass ở cả giao diện sáng và tối (một box-shadow mềm duy nhất, không viền/bóng thứ hai);
    hàng phẳng căn trái cùng trục: icon + chữ, cao >=48px, kẻ mảnh giữa hàng. Chữ vẫn là liên kết tĩnh trong HTML (tắt JS vẫn dùng được). */
 @media (max-width:999px){
- .links.open,.foot.js-menu .flinks.open{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;position:fixed;right:16px;left:auto;margin:0;gap:0;padding:6px;box-sizing:border-box;width:min(88vw,320px);max-height:70dvh;overflow-y:auto;overscroll-behavior:contain;background:rgba(22,17,48,.97);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(165,139,255,.35);border-radius:20px;box-shadow:0 12px 32px rgba(8,6,24,.38);color:#F1F2FA;z-index:60}
+ .links.open,.foot.js-menu .flinks.open{display:flex;flex-direction:column;flex-wrap:nowrap;align-items:stretch;justify-content:flex-start;position:fixed;right:16px;left:auto;margin:0;gap:0;padding:6px;box-sizing:border-box;width:min(88vw,320px);max-height:70dvh;overflow-y:auto;overscroll-behavior:contain;background:rgba(22,17,48,.97);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(165,139,255,.35);border-radius:20px;box-shadow:0 12px 32px rgba(8,6,24,.38);color:#F1F2FA;z-index:60}
  .links.open{top:62px}
  .foot.js-menu .flinks.open{bottom:calc(82px + env(safe-area-inset-bottom,0px))}
- .links.open a,.links.open .xtra,.foot.js-menu .flinks.open a{display:flex;align-items:center;justify-content:flex-start;gap:12px;min-width:0;width:100%;min-height:48px;box-sizing:border-box;padding:8px 12px;margin:0;border:0;border-radius:12px;background:none;background-image:none;color:#F1F2FA;font:600 16px/1.3 var(--font);text-align:left;text-decoration:none;overflow-wrap:anywhere;cursor:pointer}
+ .links.open a,.links.open .xtra,.foot.js-menu .flinks.open a{flex:none;display:flex;align-items:center;justify-content:flex-start;gap:12px;min-width:0;width:100%;min-height:48px;box-sizing:border-box;padding:8px 12px;margin:0;border:0;border-radius:12px;background:none;background-image:none;color:#F1F2FA;font:600 16px/1.3 var(--font);text-align:left;text-decoration:none;overflow-wrap:anywhere;cursor:pointer}
  .links.open a+a,.links.open a+.xtra,.links.open .xtra+.xtra,.foot.js-menu .flinks.open a+a{border-top:1px solid rgba(165,139,255,.2);border-radius:0}
  .links.open>:first-child,.foot.js-menu .flinks.open>:first-child{border-radius:14px 14px 0 0}.links.open>:last-child,.foot.js-menu .flinks.open>:last-child{border-radius:0 0 14px 14px}
  .links.open a:hover,.links.open .xtra:hover,.foot.js-menu .flinks.open a:hover{background:rgba(155,131,255,.22);background-image:none}
@@ -506,3 +506,6 @@ main p a:not(.btn){transition:color .18s ease,text-decoration-color .18s ease}
 /* chân trang: menu bên phải căn thẳng hàng với logo bên trái (trước đây căn giữa theo cột logo + dòng bản quyền nên thấp hơn ~23px) */
 .fcols{align-items:flex-start}
 .foot .fr{min-height:44px}
+
+/* Chân trang máy tính hẹp (1000–1200px): đã có thêm liên kết "Tài liệu" nên thu khoảng cách/cỡ chữ để hàng liên kết không đè lên logo */
+@media (min-width:1000px) and (max-width:1200px){.flinks{gap:0}.flinks a{padding:0 3px;font-size:13px;min-width:44px}}
