@@ -519,3 +519,8 @@ html.npp-kid #ovStart .cards>.card:nth-child(n+6){--tc:#0ca678}
 html.npp-kid #ovStart .cards>.card.daily{background:linear-gradient(90deg,#6C4BF2,#C2410C)!important;border:1px solid rgba(255,255,255,.45)!important}
 /* Pop Play: nút viền (.ghost) trong MỌI popup tối (Tiến độ, Album, Giao diện...) — nền trong + chữ sáng; luật glass.css ở giao diện sáng từng đè nền trắng đục lên chữ trắng ("Back" không đọc được) */
 html:root:root.npp-kid .ov button.ghost{background:rgba(255,255,255,.14)!important;background-image:none!important;color:#fff!important;border:2px solid rgba(255,255,255,.5)!important;box-shadow:none!important;text-shadow:none!important}
+/* Pop Play màn chọn, giao diện SÁNG: thẻ kính tối pha màu trông đục, khó nhìn trên nền sáng → dùng màu đậm RÕ từng thẻ (xanh dương, xanh lá, cam, hồng tím), chữ trắng, viền trắng, bóng nhẹ */
+html[data-theme=light].npp-kid #ovStart .cards>.card:not(.daily){background:linear-gradient(135deg,color-mix(in srgb,var(--tc) 94%,#fff),color-mix(in srgb,var(--tc) 70%,#1b1442))!important;border:2px solid rgba(255,255,255,.85)!important;box-shadow:0 6px 16px color-mix(in srgb,var(--tc) 45%,transparent)!important}
+html[data-theme=light].npp-kid #ovStart .cards>.card:not(.daily) small{color:rgba(255,255,255,.92)!important}
+html[data-theme=light].npp-kid #ovStart .cards>.card>.skinBtn{background:rgba(255,255,255,.95)!important;border:0!important}
+html[data-theme=light].npp-kid #ovStart .cards>.card.daily{border:2px solid rgba(255,255,255,.85)!important;box-shadow:0 6px 16px rgba(194,65,12,.4)!important}

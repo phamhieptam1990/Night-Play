@@ -526,6 +526,8 @@ DD.modes.classic={id:"classic",title:()=>pk("end.title"),timeLabel:()=>t("left")
   progress:()=>1-timeLeft/ROUND,stay:p=>1250-p*550,stay2:p=>1150-p*500,gap:p=>720-p*360,dbl:p=>p>.4?.35:0,coffeeP:.08,
   tick(){timeLeft-=.1;if(timeLeft<=0){timeLeft=0;end()}},timeText:()=>Math.ceil(timeLeft)+"s",timeBar:()=>timeLeft/ROUND};
 DD.diffs.normal={id:"normal",stay:1,gap:1,score:1};
+/* ĐỘ KHÓ: MỞ CHO MỌI NGƯỜI (không cần Night Pass): Dễ / Thường / Khó / Điên. Nhân điểm theo độ khó (0,8 / 1 / 1,3 / 1,7) */
+DD.diffs.easy={id:"easy",stay:1.25,gap:1.15,score:.8};DD.diffs.hard={id:"hard",stay:.82,gap:.85,score:1.3};DD.diffs.rage={id:"rage",stay:.65,gap:.7,score:1.7};
 let mode=DD.modes.classic,diff=DD.diffs.normal,runT0=0;
 DD.pk=(k,pr)=>pk(k,pr);
 DD.g={get PESTS(){return PESTS},get COFFEE(){return COFFEE},ROUND,$,cells,say:t=>say(t),render:()=>render(),end:()=>end(),
@@ -869,8 +871,8 @@ addEventListener("keydown",e=>{if((e.key==="p"||e.key==="P")&&!e.ctrlKey&&!e.met
 if(window.NP){
   NP.state(()=>{
     if(!running)return null;
-    const sk=DD.sel.skin||"default",free=mode.id==="classic"&&diff.id==="normal"&&sk==="default"&&grid.id==="g3"&&packId==="deadline";
-    if(!free&&!DD.ticket)return mode.id==="classic"&&diff.id==="normal"&&grid.id==="g3"&&packId==="deadline"?{score:score,combo:combo,best:best,timeLeft:Math.round(timeLeft*10)/10}:null;
+    const sk=DD.sel.skin||"default",free=mode.id==="classic"&&sk==="default"&&grid.id==="g3"&&packId==="deadline";
+    if(!free&&!DD.ticket)return mode.id==="classic"&&grid.id==="g3"&&packId==="deadline"?{score:score,combo:combo,best:best,timeLeft:Math.round(timeLeft*10)/10}:null;
     const st={score:score,combo:combo,best:best,timeLeft:mode.id==="endless"?ROUND:Math.round(timeLeft*10)/10};
     if(!free){st.mode=mode.id;st.diff=diff.id;st.skin=sk;st.grid=grid.id;st.pack=packId;st.partner=partnerId;st.tk=DD.ticket}   /* vé 24 giờ: bạn bè chơi tiếp đúng chế độ trả phí, không phải Night Pass */
     if(mode.snap)Object.assign(st,mode.snap());
@@ -881,7 +883,7 @@ if(window.NP){
 /* ===== Giao diện chọn chế độ, khóa Night Pass, tải mã bản trả phí ===== */
 DD.catalog={
   modes:[{id:"classic",ico:"⏱️",free:1},{id:"endless",ico:"♾️"},{id:"daily",ico:"📅"},{id:"boss",ico:"👔"}],
-  diffs:[{id:"easy"},{id:"normal",free:1},{id:"hard"},{id:"rage"}],
+  diffs:[{id:"easy",free:1},{id:"normal",free:1},{id:"hard",free:1},{id:"rage",free:1}],
   skins:[{id:"default",free:1},{id:"cafe"},{id:"retro"},{id:"neon"},{id:"sakura"}],
   grids:[{id:"g3",n:3,free:1},{id:"g4",n:4},{id:"g5",n:5},{id:"g6",n:6}],
   packs:[{id:"deadline",ico:"🏢",free:1},{id:"animals",ico:"🐾"},{id:"lover",ico:"💔"}],
