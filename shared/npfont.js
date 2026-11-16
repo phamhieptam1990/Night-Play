@@ -7,15 +7,16 @@
   "use strict";
   if (window.NPFont) return;
   var LIST = [["ba", "NP Baloo", "Baloo 2"], ["bv", "NP BeVietnam", "Be Vietnam Pro"], ["it", "NP Itim", "Itim"]];
-  var KEY = "np-font", pv = null;   /* pv: xem thử, không cần gói, không lưu */
+  var KEY = "np-font", pv = null, tm = 0;   /* pv: xem thử, không cần gói, không lưu */
   var base = ((document.currentScript && document.currentScript.src) || "").replace(/npfont\.js(\?.*)?$/, "");
-  function active() { try { var p = JSON.parse(localStorage.getItem("pass")); return !!(p && p.exp && new Date(p.exp) > new Date()); } catch (e) { return false; } }
+  function active() { if (window.NPTrial) return NPTrial.on(); try { var p = JSON.parse(localStorage.getItem("pass")); return !!(p && p.exp && new Date(p.exp) > new Date()); } catch (e) { return false; } }
   /* gói HẾT HẠN → xoá lựa chọn font, về mặc định (gia hạn lại phải chọn lại) */
   function expired() { try { var p = JSON.parse(localStorage.getItem("pass")); return !!(p && p.exp && new Date(p.exp) <= new Date()); } catch (e) { return false; } }
   function get() { try { var v = localStorage.getItem(KEY); return LIST.some(function (x) { return x[0] === v; }) ? v : ""; } catch (e) { return ""; } }
   function set(id) { try { if (id) localStorage.setItem(KEY, id); else localStorage.removeItem(KEY); } catch (e) {} apply(); }
   function apply() {
-    if (pv === null && expired()) { try { localStorage.removeItem(KEY); } catch (e) {} }
+    if (pv === null) { if (window.NPTrial) NPTrial.cleanup(); else if (expired()) { try { localStorage.removeItem(KEY); } catch (e) {} } }
+    if (window.NPTrial && NPTrial.state() === "on") { clearTimeout(tm); tm = setTimeout(apply, NPTrial.left() + 400); }
     var id = pv !== null ? pv : (active() ? get() : ""), old = document.getElementById("npFontCss"), lk = document.getElementById("npFontLink");
     if (!id) { if (old) old.remove(); if (lk) lk.remove(); document.documentElement.removeAttribute("data-npfont"); return; }
     var f = LIST.filter(function (x) { return x[0] === id; })[0];
@@ -28,5 +29,5 @@
     if (!st.parentNode) (document.head || document.documentElement).appendChild(st);
   }
   window.NPFont = { preview: function (id) { pv = id == null ? null : id; apply(); }, list: LIST, active: active, get: get, set: set, apply: apply };
-  apply(); addEventListener("storage", function (e) { if (e.key === KEY || e.key === "pass") apply(); });
+  apply(); addEventListener("storage", function (e) { if (e.key === KEY || e.key === "pass" || e.key === "np-trial") apply(); });
 })();

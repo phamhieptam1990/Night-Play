@@ -292,6 +292,8 @@ function renderHome(){const sv=getSave(),k=dayKey(),done=TY?(sv.dayT||{})[k+"|"+
  $("hChips").innerHTML="";[sv.streak?"🔥 "+sv.streak:"",sv.best?T("best",{n:SF(sv.best)}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("hChips").appendChild(c)})}
 const hintOf=t=>T("hint"+(t||0));
 const ttlOf=D=>D.mode==="daily"?"📅 "+T("daily"):TYPES[D.t][0]+" "+L2([TYPES[D.t][1],TYPES[D.t][2]]);
+/* Thử thách Night Pass (khung chung shared/npchallenge.js): cầu tre đêm bão = chế độ Mưa gió (loại 2), seed cố định, thắng khi cả 4 xe qua và đạt >= 1250 điểm (đo bằng bot: giàn Warren 17 thanh được ~1375) */
+window.NP_CHALLENGE={id:"xay-cau-tre",start(){if(tLocked(2))return false;begin(20261116,"free",2)},judge(r){return !!r&&r.score>=1250&&!!r.extra&&r.extra.t===2&&r.extra.mode!=="daily"}};
 function begin(seed,mode,t,ch){t=t==null?(mode==="daily"?0:TY):t;if(tLocked(t))t=0;if(mode==="daily")t=0;G=newGame(seed,mode,t,ch);$("play").dataset.ty=t;acc=0;last=performance.now();show("game");applySkin();$("ttl").textContent=(mode==="daily"?"📅 "+T("daily"):TYPES[t][0]+" "+L2([TYPES[t][1],TYPES[t][2]]));$("gHint").textContent=hintOf(t);if(!LS.get("xc-tut",0)){toast(T("tut"),4200)}fitCanvas();hud();window.NP&&NP.start();recBegin();if(typeof onBegin==="function")onBegin(G)}
 let clipReady=false,clipT=0;
 function recBegin(){clipReady=false;clipT=0;if(!cv)return;if(window.NP&&NP.helper)return;if(window.NPFx&&NPFx.canRec()){try{NPFx.recStart(cv,36000)}catch(e){}}}

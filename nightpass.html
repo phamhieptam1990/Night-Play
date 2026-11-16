@@ -18,6 +18,7 @@ var l=[q,s].find(function(x){return x==="vi"||x==="en"})||(/^vi/i.test(navigator
 <link rel="stylesheet" href="shared/fonts.css">
 <link rel="stylesheet" href="shared/theme.css">
 <link rel="stylesheet" href="shared/npfont.css">
+<script src="shared/nptrial.js"></script>
 <script src="shared/npfont.js"></script>
 <script src="shared/npgrad.js"></script>
 <style>
@@ -70,6 +71,7 @@ input{width:100%;height:44px;border:1px solid var(--line);border-radius:12px;bac
 .fonts{display:grid;grid-template-columns:1fr 1fr;gap:8px}.fonts .btn{flex-direction:column;gap:0;min-height:50px;padding:6px 8px;line-height:1.15}.fonts .btn[aria-pressed=true]{background:linear-gradient(135deg,#6C4BF2,#C2410C);color:#fff;border-color:rgba(255,255,255,.65);box-shadow:0 0 0 2px rgba(108,75,242,.45),0 6px 16px rgba(108,75,242,.35);text-shadow:none}.fonts .btn[disabled]{opacity:.6}.fonts .fs{font-size:20px;font-weight:700}.fonts .fn{font-size:11.5px;font-weight:700;opacity:.8}.lockmsg{margin:6px 0 0;font-size:12.5px;color:var(--muted)}
 .grads{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.grads button{height:42px;border-radius:14px;border:2px solid var(--line);padding:0;cursor:pointer;position:relative;color:#fff;font:800 11px/1.1 var(--font);display:grid;place-items:end center;padding-bottom:4px;text-shadow:0 1px 3px rgba(0,0,0,.6)}.grads button[aria-pressed=true]{border-color:#fff;box-shadow:0 0 0 3px #6C4BF2,0 6px 16px rgba(108,75,242,.4)}.grads .none[aria-pressed=true]{background:linear-gradient(135deg,#6C4BF2,#C2410C);color:#fff;border-color:rgba(255,255,255,.65);box-shadow:0 0 0 2px rgba(108,75,242,.45),0 6px 16px rgba(108,75,242,.35);text-shadow:none}.grads button[disabled]{opacity:.55}.grads .none{background:var(--panel);color:var(--ink);text-shadow:none}
 html[data-theme=light] .grads button:not(.none){color:#2b2250;text-shadow:0 1px 2px rgba(255,255,255,.8)}
+.trial{display:flex;align-items:center;gap:10px;padding:8px 12px;background:linear-gradient(135deg,rgba(108,75,242,.55),rgba(194,65,12,.45));border-color:rgba(255,255,255,.4)}.trial .tx{flex:1;min-width:0;font-size:12.5px;line-height:1.3}.trial .tx b{display:block;font-size:13.5px}.trial .btn{flex:none;min-height:40px;padding:0 14px}
 .links{display:grid;gap:8px}
 .links .btn{justify-content:flex-start;width:100%}
 @media (min-width:700px),(max-height:480px) and (min-width:560px){.pane.on{grid-template-columns:1fr 1fr}.pane .wide{grid-column:1/-1}}
@@ -100,6 +102,7 @@ html[data-theme=light] .grads button:not(.none){color:#2b2250;text-shadow:0 1px 
     <div class="card wide"><h2 id="skH"></h2><p class="mut" id="skP" style="margin:0 0 6px"></p><div class="row"><a class="btn p" id="skGo" href="cozyplay/index.html"></a><a class="btn" id="skGo2" href="popplay/index.html"></a></div></div>
   </section>
   <section class="pane" id="p2" role="tabpanel" aria-labelledby="tb2">
+    <div class="card wide trial" id="cTrial" hidden></div>
     <div class="card" id="cFont"></div>
     <div class="card" id="cGrad"></div>
   </section>
@@ -112,7 +115,7 @@ html[data-theme=light] .grads button:not(.none){color:#2b2250;text-shadow:0 1px 
 <script>
 "use strict";
 var T={vi:{
- ttl:"Cài đặt Night Pass",back:"Về trang chủ",t0:"Gói",t1:"Giao diện",t2:"Tuỳ chỉnh",t3:"Hỗ trợ",grad:"Màu nền gradient (Night Pass)",gradNone:"Gốc",fx:"Hiệu ứng chuyển động trên nền",fxOn:"Bật",fxOff:"Tắt",prev:"Xem thử theme",gradNote:"Phủ nền toàn màn hình game, tự đổi theo Sáng/Tối.",gradLock:"Cần gói Night Pass còn hạn để đổi màu nền. ",
+ ttl:"Cài đặt Night Pass",back:"Về trang chủ",trAv:"Dùng thử miễn phí hôm nay",trAvS:"Chọn font và màu nền thoải mái trong 15 phút, sau đó tự về mặc định.",trGo:"Dùng thử",trOn:"Đang dùng thử",trOnS:function(m){return "Còn "+m+" phút, hết giờ tự về mặc định."},trUsed:"Hôm nay đã dùng thử",trUsedS:"Quay lại vào ngày mai, hoặc mua gói để dùng không giới hạn.",badges:"Huy hiệu",t0:"Gói",t1:"Giao diện",t2:"Tuỳ chỉnh",t3:"Hỗ trợ",grad:"Màu nền gradient (Night Pass)",gradNone:"Gốc",fx:"Hiệu ứng chuyển động trên nền",fxOn:"Bật",fxOff:"Tắt",prev:"Xem thử theme",gradNote:"Phủ nền toàn màn hình game, tự đổi theo Sáng/Tối.",gradLock:"Cần gói Night Pass còn hạn để đổi màu nền. ",
  plan:"Gói của bạn",none:"Chưa có gói Night Pass",noneS:"Mua gói để mở khoá giao diện và chế độ mới.",buy:"Mua gói",renew:"Gia hạn",
  pDay:"Gói ngày",pWeek:"Gói tuần",pMonth:"Gói tháng",pYear:"Gói năm",pDef:"Night Pass",
  exp:"Hết hạn",left:function(d,h){return d>0?"còn "+d+" ngày":h>0?"còn "+h+" giờ":"sắp hết hạn"},expired:"Đã hết hạn",
@@ -129,7 +132,7 @@ var T={vi:{
  dc:"Chính sách",lDoc:"Đổi trả và hoàn tiền",lPay:"Thanh toán",lPrice:"Chính sách giá",
  hl:"Cần giúp?",lChk:"Kiểm tra Night Pass (game vẫn khoá?)",lMail:"Gửi email hỗ trợ"},
 en:{
- ttl:"Night Pass settings",back:"Back to home",t0:"Plan",t1:"Look",t2:"Custom",t3:"Support",grad:"Gradient background (Night Pass)",gradNone:"Original",fx:"Moving effects on the background",fxOn:"On",fxOff:"Off",prev:"Preview themes",gradNote:"Covers the whole game screen, follows Light/Dark.",gradLock:"A valid Night Pass is needed to change the background. ",
+ ttl:"Night Pass settings",back:"Back to home",trAv:"Free try-out today",trAvS:"Pick any font and background for 15 minutes, then it resets to default.",trGo:"Try it",trOn:"Trying it out",trOnS:function(m){return m+" min left, then it resets to default."},trUsed:"You already tried it today",trUsedS:"Come back tomorrow, or get a plan to use it without limits.",badges:"Badges",t0:"Plan",t1:"Look",t2:"Custom",t3:"Support",grad:"Gradient background (Night Pass)",gradNone:"Original",fx:"Moving effects on the background",fxOn:"On",fxOff:"Off",prev:"Preview themes",gradNote:"Covers the whole game screen, follows Light/Dark.",gradLock:"A valid Night Pass is needed to change the background. ",
  plan:"Your plan",none:"No Night Pass yet",noneS:"Get a plan to unlock new looks and modes.",buy:"Get a plan",renew:"Extend",
  pDay:"Day pass",pWeek:"Week pass",pMonth:"Month pass",pYear:"Year pass",pDef:"Night Pass",
  exp:"Expires",left:function(d,h){return d>0?d+" days left":h>0?h+" h left":"expires soon"},expired:"Expired",
@@ -155,10 +158,10 @@ function renderPlan(){
   var x=X(),p=pass(),exp=p&&p.exp?new Date(p.exp):null,left=exp?exp-Date.now():0,ok=exp&&left>0;
   var nm=p?(x[{day:"pDay",week:"pWeek",month:"pMonth",year:"pYear"}[p.plan]]||x.pDef):"";
   var h='<h2>'+esc(x.plan)+'</h2>';
-  if(!p||!exp){h+='<div class="big">'+esc(x.none)+'</div><div class="mut">'+esc(x.noneS)+'</div><div class="row"><a class="btn p" href="'+sub()+'">'+esc(x.buy)+'</a></div>'}
+  if(!p||!exp){h+='<div class="big">'+esc(x.none)+'</div><div class="mut">'+esc(x.noneS)+'</div><div class="row"><a class="btn p" href="'+sub()+'">'+esc(x.buy)+'</a><a class="btn" href="nightpass-badges.html?lang='+L()+'">🏅 '+esc(x.badges)+'</a></div>'}
   else{
     var d=Math.floor(left/864e5),hr=Math.floor(left/36e5);
-    h+='<div class="big">'+esc(nm)+'</div><div class="kv"><span>'+esc(x.exp)+'</span><b>'+esc(fmt(exp))+(ok?' · '+esc(x.left(d,hr)):' · '+esc(x.expired))+'</b></div><div class="mut" style="margin-top:6px">'+esc(x.noAuto)+'</div><div class="row"><a class="btn p" href="'+sub()+'">'+esc(x.renew)+'</a></div>';
+    h+='<div class="big">'+esc(nm)+'</div><div class="kv"><span>'+esc(x.exp)+'</span><b>'+esc(fmt(exp))+(ok?' · '+esc(x.left(d,hr)):' · '+esc(x.expired))+'</b></div><div class="mut" style="margin-top:6px">'+esc(x.noAuto)+'</div><div class="row"><a class="btn p" href="'+sub()+'">'+esc(x.renew)+'</a><a class="btn" href="nightpass-badges.html?lang='+L()+'">🏅 '+esc(x.badges)+'</a></div>';
   }
   $("cPlan").innerHTML=h;
 }
@@ -222,12 +225,22 @@ async function restVerify(){
     restStep=0;restOpen=false;renderAll();loadSrv();
   }catch(e){b.disabled=false;msg("bad",e&&e.status===429?x.slow:e&&e.status?x.bad:x.net)}
 }
+function renderTrial(){
+  var x=X(),st=window.NPTrial?NPTrial.state():"pass",c=$("cTrial");
+  if(st==="pass"){c.hidden=true;return}
+  c.hidden=false;var m=Math.max(1,Math.ceil((window.NPTrial?NPTrial.left():0)/60000));
+  if(st==="avail")c.innerHTML='<div class="tx"><b>🎁 '+esc(x.trAv)+'</b>'+esc(x.trAvS)+'</div><button class="btn p" id="trGo" type="button">'+esc(x.trGo)+'</button>';
+  else if(st==="on")c.innerHTML='<div class="tx"><b>⏳ '+esc(x.trOn)+'</b>'+esc(x.trOnS(m))+'</div>';
+  else c.innerHTML='<div class="tx"><b>🔒 '+esc(x.trUsed)+'</b>'+esc(x.trUsedS)+'</div><a class="btn p" href="'+sub()+'">'+esc(x.buy)+'</a>';
+  var g=$("trGo");if(g)g.onclick=function(){NPTrial.start();renderAll()};
+}
+var trI=0;function trTick(){clearInterval(trI);if(window.NPTrial&&NPTrial.state()==="on"){trI=setInterval(function(){if(NPTrial.state()!=="on"){clearInterval(trI);NPTrial.cleanup();if(window.NPFont)NPFont.apply();if(window.NPGrad)NPGrad.set(NPGrad.get());renderAll()}else renderTrial()},15000)}}
 function renderFont(){
   var x=X(),ok=window.NPFont&&NPFont.active(),cur=window.NPFont?NPFont.get():"";
   var opts=[["",x.fntDef,"Inter"]].concat(window.NPFont?NPFont.list.map(function(f){return [f[0],f[2],f[1]]}):[]);
   var h='<h2>'+esc(x.fnt)+'</h2><div class="fonts">'+opts.map(function(o){
     return '<button type="button" class="btn" data-f="'+o[0]+'" aria-pressed="'+(cur===o[0])+'"'+(ok||o[0]===""?"":" disabled")+'><span class="fs" data-npkeep style="font-family:\''+(o[0]?o[2]:"Inter")+'\',Inter,sans-serif">'+esc(x.fntSample)+'</span><span class="fn">'+(ok||o[0]===""?"":"🔒 ")+esc(o[1])+'</span></button>'}).join("")+'</div>';
-  h+='<p class="lockmsg">'+(ok?esc(x.fntNote):esc(x.fntLock)+'<a href="'+sub()+'" style="color:var(--accent);font-weight:800">'+esc(x.fntBuy)+'</a>')+'</p>';
+  h+=ok?'<p class="lockmsg">'+esc(x.fntNote)+'</p>':'';
   $("cFont").innerHTML=h;
   $("cFont").querySelectorAll("button[data-f]").forEach(function(b){b.onclick=function(){if(!window.NPFont)return;if(b.dataset.f&&!NPFont.active())return;NPFont.set(b.dataset.f);renderFont()}});
 }
@@ -235,7 +248,7 @@ function renderGrad(){
   var x=X(),ok=window.NPGrad&&NPGrad.active(),cur=window.NPGrad?NPGrad.get():"",dark=de.dataset.theme==="dark",vi=L()==="vi";
   var h='<h2>'+esc(x.grad)+'</h2><div class="grads"><button type="button" class="none" data-g="" aria-pressed="'+(cur==="")+'">'+esc(x.gradNone)+'</button>';
   (window.NPGrad?NPGrad.list:[]).forEach(function(g){var nm=vi?g[1]:g[2];h+='<button type="button" data-g="'+g[0]+'" aria-pressed="'+(cur===g[0])+'" aria-label="'+esc(nm)+'" style="background:'+(dark?g[3]:g[4])+'"'+(ok?"":" disabled")+'>'+(ok?"":"🔒 ")+esc(nm)+'</button>'});
-  h+='</div><p class="lockmsg">'+(ok?esc(x.gradNote):esc(x.gradLock)+'<a href="'+sub()+'" style="color:var(--accent);font-weight:800">'+esc(x.fntBuy)+'</a>')+'</p>';
+  h+='</div>'+(ok?'<p class="lockmsg">'+esc(x.gradNote)+'</p>':'');
   var fo=window.NPGrad&&NPGrad.fxOn();
   h+='<div class="kv" style="margin-top:6px;align-items:center"><span>'+esc(x.fx)+'</span><span class="sw" style="flex:none"><button type="button" class="btn" id="fxOn" aria-pressed="'+!!fo+'"'+(ok?"":" disabled")+'>'+esc(x.fxOn)+'</button><button type="button" class="btn" id="fxOff" aria-pressed="'+!fo+'"'+(ok?"":" disabled")+'>'+esc(x.fxOff)+'</button></span></div>';
   h+='<div class="row" style="margin-top:6px"><a class="btn p" href="nightpass-theme.html?lang='+L()+'">🎨 '+esc(x.prev)+'</a></div>';
@@ -270,7 +283,7 @@ function renderAll(){
   ["tb0","tb1","tb2","tb3"].forEach(function(id,i){var e=$(id);e.textContent=x["t"+i];e.setAttribute("aria-selected",String(tab===i))});
   for(var i=0;i<4;i++)$("p"+i).classList.toggle("on",tab===i);
   document.querySelectorAll(".seg button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.l===L()))});
-  renderPlan();renderDev();renderRest();renderLook();renderFont();renderGrad();renderSupport();
+  renderPlan();renderDev();renderRest();renderLook();renderTrial();renderFont();renderGrad();renderSupport();trTick();
 }
 function setLang(l){de.lang=l;try{localStorage.setItem("lang",l)}catch(e){}renderAll()}
 document.querySelectorAll(".seg button").forEach(function(b){b.onclick=function(){setLang(b.dataset.l)}});

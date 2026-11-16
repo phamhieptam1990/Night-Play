@@ -203,6 +203,8 @@ function renderHome(){const sv=getSave(),k=dayKey(),done=TY?(sv.dayT||{})[k+"|"+
  $("hHero").textContent=lad()[0][0]+"➜"+lad()[10][0];$("hSub").textContent=L2(PF.sub[TY]||PF.sub[0]);renderTypes();$("hLad").innerHTML="";lad().forEach(l=>{const s=document.createElement("i");s.textContent=l[0];s.className="on";$("hLad").appendChild(s)})}
 function renderTypes(){const b=$("tys");b.innerHTML="";PF.types.forEach((t,i)=>{const e=document.createElement("button");e.type="button";e.className="ty"+(TY===i?" on":"")+(tLocked(i)?" lock":"");e.innerHTML='<span class="e">'+t[0]+'</span><span class="t">'+L2([t[1],t[2]])+"</span>";e.onclick=()=>{if(tLocked(i)){openPay(i,null);return}TY=i;LS.set("d48-type",i);applySkin();renderHome()};b.appendChild(e)})}
 function typeBanner(){const t=G.t;if(t>0){NPJuice.text($("play"),TYPES[t][0]+" "+L2([TYPES[t][1],TYPES[t][2]]),{color:"#ffd24a",top:"22%",size:6.4});setTimeout(()=>{if(G&&!G.over)toast(L2(["Thang mới: ","New ladder: "])+lad()[0][0]+" → "+lad()[10][0],2400)},400)}}
+/* Thử thách Night Pass: ghép ô 256 (mức 8) trong tối đa 200 nước đi, seed cố định */
+window.NP_CHALLENGE={id:"doi-doi-2048",start(){begin(20261116,"free",200,null,0)},judge(r){return !!r&&!!r.extra&&r.extra.mode==="free"&&r.extra.best>=8&&r.extra.moves<=200}};
 function begin(seed,mode,cap,ch,t){t=t==null?(mode==="daily"?0:TY):t;if(tLocked(t))t=0;newGame(seed,mode,cap,ch,t);show("game");applySkin();buildBoard();render();typeBanner();window.NP&&NP.start()}
 /* ===== KẾT THÚC / CHIA SẺ ===== */
 function boardRows(){const g=Array.from({length:N},()=>Array(N).fill(0));G.tiles.forEach(t=>g[t.r][t.c]=t.v);return g}

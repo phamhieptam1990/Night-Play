@@ -397,13 +397,15 @@ function startRound(type,resume,opts){
   window.NP&&NP.start();
 }
 PF.startRound=startRound;
+/* Thử thách Night Pass: trò Chữ cái, bay đúng CẢ 10 cổng (acc = 1) */
+window.NP_CHALLENGE={id:"pop-fly",start(){startRound("letters")},judge(r){return !!r&&!!r.extra&&r.extra.type==="letters"&&!r.extra.daily&&r.extra.acc>=1}};
 function finishRound(){
   const S=PF.S;if(!S||S.over)return;S.over=true;running=false;$("pauseBtn").hidden=true;
   const total=S.ty.total,acc=S.ty.custom?(S.custom.right||0)/total:S.correct/total,stars=acc>=.85?3:acc>=.55?2:1;
   endAt=performance.now();endInfo={score:S.score,type:S.type,daily:S.daily,dots:S.dots.slice()};if(S.daily)dailyDone(S);$("shareBtn").hidden=HELPER||S.score<1;$("shareBtn").setAttribute("aria-label",t("sh.btn"));$("enT").textContent=HELPER?"":t("en.tap");
   sfx.win();$("enH").textContent=t("en.h"+stars);$("enStars").textContent="⭐".repeat(stars)+"☆".repeat(3-stars);$("enP").innerHTML='<small class="enPl">'+t("en.p",{n:""}).trim()+'</small><b class="enPn">'+(S.score)+'</b>';showOv("ovEnd");
   const best=LS.get("pf-best",{});if(!best[S.type]||S.score>best[S.type])best[S.type]=S.score;LS.set("pf-best",best);
-  window.NP&&NP.result({score:S.score,extra:{type:S.type}});
+  window.NP&&NP.result({score:S.score,extra:{type:S.type,acc:acc,daily:!!S.daily}});
   $("rankBtn").hidden=!(window.NP&&!NP.helper&&S.score>0);const pr=Prog.finish(S.type,acc,stars,S.max0),sk=Prog.streak(),hp=!!(window.NP&&NP.helper);$("againBtn").hidden=hp;$("homeBtn2").hidden=hp;$("pgBtn2").hidden=hp;$("enS").textContent=sk.n>1?t("end.streak",{n:sk.n}):t("end.first");$("enS").hidden=hp;
   $("enR").hidden=!pr;if(pr){const K=pr.ups[0],lv=Prog.lv(),T=TIERS[LANG],lines=[];
     if(K){const n=K==="L"?lv.L:K==="M"?lv.M:lv.S;lines.push(K==="L"?t("lv.L",{n,l:T[n-1].join(" ")}):t("lv."+K,{n}))}

@@ -17,6 +17,7 @@ var l=[q,s].find(function(x){return x==="vi"||x==="en"})||(/^vi/i.test(navigator
 <link rel="stylesheet" href="shared/fonts.css">
 <link rel="stylesheet" href="shared/theme.css">
 <link rel="stylesheet" href="shared/npfont.css">
+<script src="shared/nptrial.js"></script>
 <script src="shared/npfont.js"></script>
 <script src="shared/npgrad.js"></script>
 <style>
@@ -84,8 +85,8 @@ html[data-theme=light] .chip:not(.f){color:#2b2250;text-shadow:0 1px 2px rgba(25
 <div class="tip" id="tip" role="status" aria-live="polite" hidden></div>
 <script>
 "use strict";
-var T={vi:{ttl:"Xem thử theme",back:"Quay lại",demoT:"Tên game của bé",c1:"Thẻ trò chơi",c2:"Chữ, nút và thẻ sẽ như thế này",btn:"Chơi ngay",hint:"Chạm vào vật đang bay để làm nổ. Thỉnh thoảng sẽ có khách bất ngờ!",none:"Gốc",fd:"Mặc định",use:"Dùng theme này",buy:"Mua gói để dùng",saved:"Đã áp dụng cho mọi game.",lock:"Đang xem thử. Cần gói Night Pass còn hạn để áp dụng."},
-en:{ttl:"Preview theme",back:"Back",demoT:"Game title",c1:"Game card",c2:"Text, buttons and cards will look like this",btn:"Play now",hint:"Tap a flying object to pop it. Surprise visitors show up now and then!",none:"Original",fd:"Default",use:"Use this theme",buy:"Get a plan to use it",saved:"Applied to all games.",lock:"Previewing. A valid Night Pass is needed to apply it."}};
+var T={vi:{ttl:"Xem thử theme",back:"Quay lại",demoT:"Tên game của bé",c1:"Thẻ trò chơi",c2:"Chữ, nút và thẻ sẽ như thế này",btn:"Chơi ngay",hint:"Chạm vào vật đang bay để làm nổ. Thỉnh thoảng sẽ có khách bất ngờ!",none:"Gốc",fd:"Mặc định",use:"Dùng theme này",tryit:"Dùng thử 15 phút (miễn phí hôm nay)",lockTry:"Hôm nay bạn được dùng thử miễn phí 15 phút, sau đó tự về mặc định.",buy:"Mua gói để dùng",saved:"Đã áp dụng cho mọi game.",lock:"Đang xem thử. Cần gói Night Pass còn hạn để áp dụng."},
+en:{ttl:"Preview theme",back:"Back",demoT:"Game title",c1:"Game card",c2:"Text, buttons and cards will look like this",btn:"Play now",hint:"Tap a flying object to pop it. Surprise visitors show up now and then!",none:"Original",fd:"Default",use:"Use this theme",tryit:"Try for 15 min (free today)",lockTry:"You get one free 15-minute try today, then it resets to default.",buy:"Get a plan to use it",saved:"Applied to all games.",lock:"Previewing. A valid Night Pass is needed to apply it."}};
 var DESC={vi:{sunset:["Hoàng hôn","Mây, chim bay ngang, ánh cam dưới đáy, tia nắng xoay. Bất ngờ: cầu vồng, đại bàng, bóng bay."],ocean:["Đại dương","Sóng cuộn, bong bóng nổi, cá, bạch tuộc, rùa. Bất ngờ: cá voi, cá heo, cá mập bơi ngang."],forest:["Rừng xanh","Lá rơi, bướm, đom đóm phát sáng, tia nắng qua tán lá. Bất ngờ: hươu, cú, cáo chạy ngang."],candy:["Kẹo ngọt","Kẹo, bánh rơi, trái tim nổi, đốm sáng nhiều màu. Bất ngờ: bóng bay, bánh donut, pháo giấy."],aurora:["Cực quang","Dải cực quang uốn lượn, sao nhấp nháy, sao băng. Bất ngờ: mưa sao băng, đĩa bay."],gold:["Vàng ấm","Vệt sáng quét, bụi vàng lấp lánh, đồng xu rơi. Bất ngờ: mưa vàng, vương miện, cúp bay qua."],midnight:["Nửa đêm","Bầu trời đầy sao, trăng sáng trôi chậm, sao băng. Bất ngờ: đĩa bay, mưa sao, cú đêm."],rose:["Hồng đào","Cánh hoa rơi xoay, đốm sáng hồng, bướm. Bất ngờ: bồ câu, hoa hồng bay lên, lá thư."],"":["Gốc","Nền gốc của từng game, không có hiệu ứng thêm."]},
 en:{sunset:["Sunset","Clouds, birds, an orange glow and turning sun rays. Surprise: a rainbow, an eagle, balloons."],ocean:["Ocean","Rolling waves, bubbles, fish, an octopus, a turtle. Surprise: a whale, dolphin or shark swims by."],forest:["Forest","Falling leaves, butterflies, glowing fireflies, light rays. Surprise: a deer, owl or fox dashes by."],candy:["Candy","Candy and donuts falling, floating hearts, colorful glows. Surprise: balloons, a donut, confetti."],aurora:["Aurora","Waving aurora ribbons, twinkling stars, shooting stars. Surprise: a meteor shower, a UFO."],gold:["Golden","Light sweeps, gold dust, falling coins. Surprise: a gold rain, a crown, a trophy."],midnight:["Midnight","A sky full of stars, a slow moon, shooting stars. Surprise: a UFO, a star shower, an owl."],rose:["Rose","Swirling petals, pink glows, butterflies. Surprise: a dove, rising roses, a love letter."],"":["Original","The game's own background, no extra effects."]}};
 var tipT=0;
@@ -110,11 +111,12 @@ function render(){
   $("rFont").innerHTML=fh;
   $("rGrad").querySelectorAll("[data-g]").forEach(function(b){b.onclick=function(){g=b.dataset.g;apply();render();var d=DESC[L()][g]||DESC[L()][""];tip(d[0],d[1])}});
   $("rFont").querySelectorAll("[data-f]").forEach(function(b){b.onclick=function(){f=b.dataset.f;apply();render();var nm=f?(NPFont.list.filter(function(x){return x[0]===f})[0]||[])[2]:X().fd;tip(nm,L()==="vi"?"Áp cho toàn bộ chữ trong game: Chữ Việt có dấu Ắ Ế Ộ Ữ Ỳ rõ ràng.":"Applies to all text in the games, with clear Vietnamese diacritics.")}});
-  var can=ok();$("bUse").textContent=can?x.use:x.buy;$("msg").textContent=can?"":x.lock;
+  var avail=window.NPTrial&&NPTrial.state()==="avail",can=ok();$("bUse").textContent=can?x.use:avail?x.tryit:x.buy;$("msg").textContent=can?"":(avail?x.lockTry:x.lock);
   document.querySelectorAll(".seg button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.l===L()))});
   var sel=document.querySelector("#rGrad [aria-pressed=true]");if(sel&&first){first=false;try{sel.scrollIntoView({inline:"center",block:"nearest"})}catch(e){}}
 }
 $("bUse").onclick=function(){
+  if(!ok()&&window.NPTrial&&NPTrial.state()==="avail")NPTrial.start();
   if(!ok()){location.href="subscribe.html?lang="+L()+"&from=nightpass-theme.html";return}
   NPGrad.preview(null);NPFont.preview(null);NPGrad.set(g);NPFont.set(f);$("msg").textContent=X().saved;apply();
 };

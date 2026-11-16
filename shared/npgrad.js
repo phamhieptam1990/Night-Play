@@ -139,15 +139,16 @@
       surprise();
     }, 25000 + Math.random() * 45000);
   }
-  var KEY = "np-grad", pv = null;   /* pv: chế độ XEM THỬ (nightpass-theme.html): áp tạm không cần gói, không lưu */
-  function active() { try { var p = JSON.parse(localStorage.getItem("pass")); return !!(p && p.exp && new Date(p.exp) > new Date()); } catch (e) { return false; } }
+  var KEY = "np-grad", pv = null, trT = 0;   /* pv: chế độ XEM THỬ (nightpass-theme.html): áp tạm không cần gói, không lưu */
+  function active() { if (window.NPTrial) return NPTrial.on(); try { var p = JSON.parse(localStorage.getItem("pass")); return !!(p && p.exp && new Date(p.exp) > new Date()); } catch (e) { return false; } }
   /* gói HẾT HẠN → xoá màu nền + bật/tắt hiệu ứng đã chọn, về mặc định (gia hạn lại phải chọn lại) */
   function expired() { try { var p = JSON.parse(localStorage.getItem("pass")); return !!(p && p.exp && new Date(p.exp) <= new Date()); } catch (e) { return false; } }
   function get() { try { var v = localStorage.getItem(KEY); return LIST.some(function (x) { return x[0] === v; }) ? v : ""; } catch (e) { return ""; } }
   function set(id) { try { if (id) localStorage.setItem(KEY, id); else localStorage.removeItem(KEY); } catch (e) {} apply(); }
   function find(id) { return LIST.filter(function (x) { return x[0] === id; })[0]; }
   function apply() {
-    if (pv === null && expired()) { try { localStorage.removeItem(KEY); localStorage.removeItem("np-fx"); } catch (e) {} }
+    if (pv === null) { if (window.NPTrial) NPTrial.cleanup(); else if (expired()) { try { localStorage.removeItem(KEY); localStorage.removeItem("np-fx"); } catch (e) {} } }
+    if (window.NPTrial && NPTrial.state() === "on") { clearTimeout(trT); trT = setTimeout(apply, NPTrial.left() + 400); }
     var id = pv !== null ? pv : (active() ? get() : ""), st = document.getElementById("npGradCss"), de = document.documentElement;
     if (!id) { if (st) st.remove(); de.removeAttribute("data-npgrad"); de.removeAttribute("data-npfx"); fxClear(); clearTimeout(surT); return; }
     var g = find(id); if (!st) { st = document.createElement("style"); st.id = "npGradCss"; (document.head || de).appendChild(st); }
@@ -158,5 +159,5 @@
   }
   window.NPGrad = { list: LIST, active: active, get: get, set: set, find: find, fxOn: fxOn, preview: function (id) { pv = id == null ? null : id; document.documentElement.removeAttribute("data-npfx"); apply(); }, setFx: function (v) { try { localStorage.setItem("np-fx", v ? "1" : "0"); } catch (e) {} apply(); } };
   addEventListener("pointerdown", onTap, { capture: true, passive: true });
-  apply(); addEventListener("storage", function (e) { if (e.key === KEY || e.key === "pass" || e.key === "np-fx") apply(); });
+  apply(); addEventListener("storage", function (e) { if (e.key === KEY || e.key === "pass" || e.key === "np-fx" || e.key === "np-trial") apply(); });
 })();

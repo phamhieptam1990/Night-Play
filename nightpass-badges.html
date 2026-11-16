@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="vi" data-app="hub" data-np="">
+<head>
+<meta charset="utf-8">
+<script src="shared/guard.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/svg+xml" sizes="any" href="/shared/favicon.svg">
+<title>Huy hiệu Night Pass</title>
+<script>
+try{var t=localStorage.getItem("theme")}catch(e){}
+document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
+(function(){var q=new URLSearchParams(location.search).get("lang"),s=null;try{s=localStorage.getItem("lang")}catch(e){}
+var l=[q,s].find(function(x){return x==="vi"||x==="en"})||(/^vi/i.test(navigator.language||"")?"vi":"en");document.documentElement.lang=l;})();
+</script>
+<link rel="preload" href="shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="shared/fonts.css">
+<link rel="stylesheet" href="shared/theme.css">
+<link rel="stylesheet" href="shared/npfont.css">
+<script src="shared/nptrial.js"></script>
+<script src="shared/npfont.js"></script>
+<script src="shared/npgrad.js"></script>
+<script src="shared/npbadges.js"></script>
+<style>
+html:root[data-app=hub][data-theme=dark]{--bg:#1a1240;--panel:rgba(48,32,112,.78);--line:rgba(170,150,255,.34);--muted:#bdb7ee}
+html:root[data-app=hub][data-theme=light]{--bg:#f4efff;--panel:rgba(255,255,255,.88);--line:#d9ccf6;--muted:#6a6290}
+html[data-theme=dark] body{background:linear-gradient(165deg,#1a1048 0%,#2e1670 48%,#5a1f6b 82%,#8a2f4f 100%) fixed}
+html[data-theme=light] body{background:linear-gradient(165deg,#efe7ff 0%,#f7e6ff 50%,#ffe6da 100%) fixed}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.3;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+header,nav.tabs,main{width:100%;max-width:760px;margin:0 auto;padding-left:16px;padding-right:16px}
+header{flex:none;display:flex;align-items:center;gap:10px;padding-top:10px;padding-bottom:8px}
+.back{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#6C4BF2,#C2410C);box-shadow:0 4px 14px rgba(108,75,242,.45);display:grid;place-items:center;color:#fff;text-decoration:none;flex:none}
+.back svg{width:22px;height:22px}
+h1{margin:0;font-size:clamp(18px,4.6vw,24px);line-height:1.2;margin-right:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.total{flex:none;padding:6px 12px;border-radius:999px;background:var(--panel);border:1px solid var(--line);font-weight:800;font-size:13px}
+.seg{display:inline-flex;flex:none;background:var(--panel);box-shadow:var(--shadow);border-radius:22px;padding:3px}
+.seg button{font:inherit;border:0;background:none;color:var(--muted);border-radius:19px;height:36px;min-width:40px;padding:0 10px;font-weight:800;font-size:13px;cursor:pointer}
+.seg button[aria-pressed=true]{background:linear-gradient(135deg,#6C4BF2,#C2410C);color:#fff}
+nav.tabs{flex:none;display:flex;gap:6px;padding-bottom:8px}
+.tabs button{flex:1;min-width:0;height:58px;border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--muted);font:inherit;font-weight:800;font-size:12.5px;padding:0 4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;line-height:1.1}
+.tabs button b{font-size:18px;line-height:1;margin-bottom:2px}.tabs button span{font-size:11.5px}
+.tabs button[aria-selected=true]{background:linear-gradient(135deg,#6C4BF2,#C2410C);color:#fff;border-color:rgba(255,255,255,.65);box-shadow:0 0 0 2px rgba(108,75,242,.45),0 6px 16px rgba(108,75,242,.35)}
+main{flex:1;min-height:0;padding-bottom:12px;display:flex;flex-direction:column;gap:10px}
+.prog{flex:none;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:10px 14px;box-shadow:var(--shadow)}
+.prog .t{display:flex;justify-content:space-between;gap:8px;font-weight:800;font-size:14px}
+.bar{height:10px;border-radius:9px;background:var(--line);overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,#6C4BF2,#C2410C);transition:width .4s}
+.sp{margin-top:8px;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
+.sp b{font-size:26px;line-height:1}
+.sp.on{color:var(--ink);font-weight:800}
+.grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;align-content:start}
+.bd{position:relative;border-radius:18px;padding:10px 8px 10px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow);text-align:center;text-decoration:none;color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0}
+.bd .em{font-size:clamp(40px,11vw,54px);line-height:1}
+.bd .nm{font-weight:800;font-size:13px;line-height:1.2}
+.bd .hs{font-size:11.5px;color:var(--muted);line-height:1.25}
+.bd.no .em{filter:grayscale(1) brightness(.5);opacity:.7}
+.bd.no .hs::before{content:"🔒 "}
+.bd.ok{border-color:rgba(255,214,102,.8);box-shadow:0 0 0 2px rgba(255,214,102,.35),var(--shadow);background:linear-gradient(165deg,rgba(255,214,102,.16),var(--panel))}
+.bd.ok .em{animation:glow 2.6s ease-in-out infinite}
+.bd .go{margin-top:2px;font-size:12px;font-weight:800;color:var(--accent)}
+.empty{grid-column:1/-1;text-align:center;color:var(--muted);font-size:14px;padding:18px 8px}
+@keyframes glow{50%{filter:drop-shadow(0 0 12px rgba(255,214,102,.9))}}
+@media (prefers-reduced-motion:reduce){.bd.ok .em{animation:none}.bar i{transition:none}}
+@media (max-height:600px){header{padding-top:4px;padding-bottom:4px}.tabs button{height:46px}.tabs button b{font-size:15px}.prog{padding:6px 12px}.back{width:38px;height:38px}.bd .em{font-size:36px}.bd .hs{display:none}.bd{padding:6px}}
+@media (max-height:480px){h1{display:none}.sp{display:none}main{gap:6px}.grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px}}
+</style>
+</head>
+<body>
+<header>
+  <a class="back" id="back" href="nightpass.html" aria-label="Quay lại"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
+  <h1 id="ttl">Huy hiệu</h1>
+  <span class="total" id="tot"></span>
+  <div class="seg" role="group" aria-label="Language"><button type="button" data-l="vi">VI</button><button type="button" data-l="en">EN</button></div>
+</header>
+<nav class="tabs" id="tabs" role="tablist"></nav>
+<main>
+  <div class="prog" id="prog"></div>
+  <div class="grid" id="grid"></div>
+</main>
+<script>
+"use strict";
+var T={vi:{ttl:"Huy hiệu",back:"Quay lại",need:"Sưu tập đủ",of:"huy hiệu để mở",special:"Game đặc biệt",soon:"Game đặc biệt đang được chuẩn bị",open:"Game đặc biệt đã mở!",play:"Chơi thử thách",no:"Chưa chinh phục",empty:"Nhóm này chưa có thử thách. Sắp có thêm!",need2:"Cần gói Night Pass để thử thách"},
+en:{ttl:"Badges",back:"Back",need:"Collect",of:"badges to unlock",special:"Special game",soon:"The special game is being prepared",open:"Special game unlocked!",play:"Play the challenge",no:"Not conquered yet",empty:"No challenges in this group yet. More coming soon!",need2:"Night Pass needed for challenges"}};
+var de=document.documentElement,$=function(i){return document.getElementById(i)},grp="build";
+function L(){return de.lang==="en"?"en":"vi"}function X(){return T[L()]}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function fromPath(){var f=new URLSearchParams(location.search).get("from");return f&&/^[\w\-./]+(#[\w-]+)?$/.test(f)&&f.indexOf("..")<0&&f.charAt(0)!=="/"?f:"nightpass.html"}
+function render(){
+  var x=X(),l=L(),B=NPBadges,G=B.GROUPS;
+  document.title=x.ttl;$("ttl").textContent=x.ttl;$("back").setAttribute("aria-label",x.back);$("back").href=fromPath();
+  $("tot").textContent="🏅 "+B.total()+"/"+B.CATALOG.length;
+  $("tabs").innerHTML=Object.keys(G).map(function(k){var p=B.progress(k);return '<button type="button" role="tab" data-g="'+k+'" aria-selected="'+(k===grp)+'"><b>'+G[k].icon+'</b><span>'+esc(G[k][l])+' '+p.have+'/'+p.need+'</span></button>'}).join("");
+  $("tabs").querySelectorAll("button").forEach(function(b){b.onclick=function(){grp=b.dataset.g;render()}});
+  var p=B.progress(grp),g=G[grp],pc=Math.min(100,Math.round(p.have/p.need*100));
+  $("prog").innerHTML='<div class="t"><span>'+g.icon+' '+esc(g[l])+'</span><span>'+p.have+'/'+p.need+'</span></div><div class="bar" aria-hidden="true"><i style="width:'+pc+'%"></i></div><div class="sp'+(p.done?' on':'')+'"><b aria-hidden="true">🎁</b><span>'+(p.done?esc(x.open):esc(x.need)+' '+p.need+' '+esc(x.of)+' '+esc(x.special)+(g.special?'':' · '+esc(x.soon)))+'</span></div>';
+  var list=B.CATALOG.filter(function(c){return c.group===grp}),h="";
+  list.forEach(function(c){var own=B.has(c.id),href=c.app+'/index.html#'+c.game;
+    h+='<a class="bd '+(own?'ok':'no')+'" href="'+href+'" aria-label="'+esc(c.title[l])+'"><span class="em" aria-hidden="true">'+(own?c.badge:c.hero)+'</span><span class="nm">'+esc(own?c.badgeName[l]:c.title[l])+'</span><span class="hs">'+esc(own?c.title[l]:x.no)+'</span>'+(own?'':'<span class="go">'+esc(x.play)+' ›</span>')+'</a>'});
+  $("grid").innerHTML=h||'<div class="empty">'+esc(x.empty)+'</div>';
+  document.querySelectorAll(".seg button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.l===l))});
+}
+document.querySelectorAll(".seg button").forEach(function(b){b.onclick=function(){de.lang=b.dataset.l;try{localStorage.setItem("lang",b.dataset.l)}catch(e){}render()}});
+addEventListener("storage",function(e){if(e.key==="np-badges"||e.key==="lang")render()});
+var q=new URLSearchParams(location.search).get("g");if(q&&NPBadges.GROUPS[q])grp=q;
+render();
+</script>
+<script src="shared/offline.js" defer></script>
+</body>
+</html>

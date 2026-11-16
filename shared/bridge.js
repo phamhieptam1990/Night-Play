@@ -243,7 +243,7 @@ window.NP = (function () {
     try { var r = JSON.parse(localStorage.getItem(RK)); if (!r || !r.state || typeof r.state !== "object") return null;
       var age = Date.now() - r.ts; if (!(age >= 0 && age < 7 * 864e5)) return null; if (r.daily && r.day !== vnDay()) return null; return r; } catch (e) { return null; }
   }
-  function emit(n) { try { dispatchEvent(new CustomEvent("np:" + n)); } catch (e) {} }
+  function emit(n, d) { try { dispatchEvent(new CustomEvent("np:" + n, { detail: d })); } catch (e) {} }
   function post(m) { try { m.np = 1; parent.postMessage(m, location.origin); } catch (e) {} }
   try {
     var s = q.get("s");
@@ -426,7 +426,7 @@ window.NP = (function () {
     peek: function () { try { var st = getter ? getter() : null; if (st && JSON.stringify(st).length > 1200) st = null; return st; } catch (e) { return null; } },
     start: function () { post({ type: "start" }); emit("start"); },
     brag: function () { post({ type: "brag" }); },     // người chơi chủ động bấm "Lên bảng điểm" → trang cha mở hộp đăng điểm (không tự bật sau mỗi ván)
-    result: function (r) { r = r || {}; emit("result"); post({ type: "result", score: Math.max(0, Math.floor(+r.score || 0)), extra: r.extra && typeof r.extra === "object" ? r.extra : null }); },
+    result: function (r) { r = r || {}; emit("result", { score: Math.max(0, Math.floor(+r.score || 0)), extra: r.extra && typeof r.extra === "object" ? r.extra : null }); post({ type: "result", score: Math.max(0, Math.floor(+r.score || 0)), extra: r.extra && typeof r.extra === "object" ? r.extra : null }); },
     state: function (fn) { getter = fn; },
     hud: function (fn) { hudFn = fn; },          // (tuỳ chọn) game tự báo HUD cho chế độ nhiều game: NP.hud(() => ({ score, combo, moves }))
     multi: multi,
