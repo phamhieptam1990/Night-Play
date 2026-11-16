@@ -45,7 +45,7 @@
         var cr = card.getBoundingClientRect(), hr = h.getBoundingClientRect(), xr = x.getBoundingClientRect(); if (!hr.height || !xr.height) return;
         var z = cr.width / (card.offsetWidth || cr.width) || 1;   /* hệ số zoom/scale của thẻ */
         var cy = (hr.top + hr.height / 2 - cr.top) / z, top = Math.max(6, Math.round(cy - xr.height / z / 2)), gap = Math.min(14, Math.max(8, top));
-        if (card.closest("#ovPay")) { top = 14; gap = 14; }   /* popup Night Pass: có 👑 phía trên tiêu đề → ghim ✕ vào góc trên phải thẻ (canh theo tâm tiêu đề làm ✕ tụt xuống giữa thẻ) */
+        if (card.closest("#ovPay") && innerHeight > 520) { top = 14; gap = 14; }   /* popup Night Pass: có 👑 phía trên tiêu đề → ghim ✕ vào góc trên phải thẻ (canh theo tâm tiêu đề làm ✕ tụt xuống giữa thẻ) */
         x.style.setProperty("top", top + "px", "important"); x.style.setProperty("right", gap + "px", "important");
       } catch (e) {}
     };
