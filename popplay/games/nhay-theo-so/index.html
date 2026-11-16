@@ -630,6 +630,8 @@ function frame(){
   S.u=Math.min(1,(now-S.last)/380);const fr=((now-G.grid.t0)/G.grid.ms);S.bp=Math.pow(1-(fr-Math.floor(fr)),3);S.bpm=60000/G.grid.ms;S.cnt=G.cnt;S.over=!!G.q&&G.cnt>G.q.ans;
   const cv=$("cv");drawScene(cv.getContext("2d"),cv.width,cv.height,now/1000,S);raf=requestAnimationFrame(frame);
 }
+/* Thử thách Night Pass (khung chung shared/npchallenge.js): ván mức khó nhất, seed cố định */
+window.NP_CHALLENGE={id:"nhay-theo-so",start(){begin(0,{seed:20261116,lv:3})},judge(r){return !!r&&r.score>=280&&!!r.extra&&r.extra.lv===3}};
 async function begin(t,o){
   o=o||{};if(window.NPAudio)NPAudio.silence();clearTimers();musStop();camStop();const id=++gid;
   const lv=o.lv||LVL;LVL=lv;const seed=o.seed!=null?o.seed:Math.floor(MR()*4294967296)>>>0;

@@ -486,6 +486,8 @@ $("hwBack").onclick=()=>showOv(null);
 
 /* ===== VÁN CHƠI ===== */
 const MOUTH={x:50,y:106};   /* tâm miệng (đơn vị cqw) */
+/* Thử thách Night Pass (khung chung shared/npchallenge.js): ván mức khó nhất, seed cố định */
+window.NP_CHALLENGE={id:"con-vat-an-so",start(){LVL=3;begin(0,{seed:20261116})},judge(r){return !!r&&r.score>=270&&!!r.extra&&r.extra.lv===3}};
 async function begin(t,o){
   o=o||{};if(window.NPAudio)NPAudio.silence();clearTimers();const id=++gid;
   const seed=o.seed!=null?o.seed:Math.floor(MR()*4294967295)>>>0;

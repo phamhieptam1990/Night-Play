@@ -496,3 +496,26 @@ html #ovPay .npc #pwLater,html:not(.npp-kid) #ovPay .npc #pwTrial,html.npp-kid #
 html #ovPay .npc #pwLater{border-color:transparent!important}
 html.npp-kid #ovPay .npc #pwTrial,html:not(.npp-kid) #ovPay .npc #pwGo{background:var(--npg)!important;background-color:var(--npa)!important;color:var(--npon)!important;border:0!important;text-shadow:none!important}
 @media (hover:hover){html #ovPay .npc #pwLater:hover,html:not(.npp-kid) #ovPay .npc #pwTrial:hover,html.npp-kid #ovPay .npc #pwGo:hover{background:color-mix(in srgb,var(--npa) 14%,transparent)!important}}
+/* Nút VIỀN (Quay lại / Back / Để sau...) trong MỌI popup Night Pass (.npc): luôn nền trong + chữ sáng. Lỗi cũ: ở giao diện SÁNG luật chung của .ghost/.alt (glass.css) đè nền trắng đục lên khung tối, chữ vẫn trắng. */
+html:root:root .ov .npc button:is(.ghost,.alt,.sec,.btn.alt){background:rgba(255,255,255,.1)!important;background-image:none!important;color:var(--npi)!important;border:2px solid color-mix(in srgb,var(--npa) 55%,var(--npl))!important;box-shadow:none!important;text-shadow:none!important}
+/* Pop Play (bé) — popup Giao diện trên MÁY TÍNH BẢNG dọc/rộng (>=521px): lưới 3 cột, ảnh xem trước 4:3 gọn (trước: 1 cột ảnh 3:4 rất cao, tràn khung, mất tiêu đề) */
+@media (min-width:521px) and (max-aspect-ratio:11/10),(min-width:900px) and (min-aspect-ratio:11/10){
+  html.npp-kid #ovSkin .npc .skgrid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important;width:100%!important;max-width:min(100%,680px)!important;margin-inline:auto;align-content:start}
+  html.npp-kid #ovSkin .npc .skgrid>.sk{flex:none!important;width:auto!important;max-width:none!important}
+  html.npp-kid #ovSkin .npc .skgrid>.sk img{aspect-ratio:4/3!important;height:auto!important;max-height:150px;object-fit:cover}
+  html.npp-kid #ovSkin .npc{max-height:calc(100dvh - 24px)!important;overflow:auto}
+}
+/* Pop Play — màn chọn game: mỗi thẻ trong danh sách MỘT MÀU khác nhau, MỘT LỚP nền duy nhất (trước: khung thẻ tối + nút gradient chồng lên nhau, lộ viền tối quanh thẻ). Khung .card mang gradient, .main trong suốt. */
+html.npp-kid #ovStart .cards>.card{--nb-1:#7048e8;--nb-2:#4263eb;background:linear-gradient(135deg,var(--nb-1),var(--nb-2))!important;border:2px solid rgba(255,255,255,.55)!important;box-shadow:0 6px 16px rgba(0,0,0,.22)!important;overflow:hidden}
+html.npp-kid #ovStart .cards>.card>.main{background:transparent!important;background-image:none!important;border:0!important;box-shadow:none!important}
+html.npp-kid #ovStart .cards>.card>.skinBtn{background:rgba(255,255,255,.92)!important;border:0!important;box-shadow:0 2px 6px rgba(0,0,0,.25)!important}
+html.npp-kid #ovStart .cards>.card:nth-child(1){--nb-1:#2f7de1;--nb-2:#17a2c9}
+html.npp-kid #ovStart .cards>.card:nth-child(2){--nb-1:#16a34a;--nb-2:#7bc043}
+html.npp-kid #ovStart .cards>.card:nth-child(3){--nb-1:#e8590c;--nb-2:#f59f00}
+html.npp-kid #ovStart .cards>.card:nth-child(4){--nb-1:#d6336c;--nb-2:#9c36b5}
+html.npp-kid #ovStart .cards>.card:nth-child(5){--nb-1:#7048e8;--nb-2:#4263eb}
+html.npp-kid #ovStart .cards>.card:nth-child(n+6){--nb-1:#0ca678;--nb-2:#1098ad}
+html.npp-kid #ovStart .cards>.card.daily{--nb-1:#f59f00;--nb-2:#e8590c}
+html.npp-kid #ovStart .cards>.card.daily>.main{color:#2b1a00}
+/* Pop Play: nút viền (.ghost) trong MỌI popup tối (Tiến độ, Album, Giao diện...) — nền trong + chữ sáng; luật glass.css ở giao diện sáng từng đè nền trắng đục lên chữ trắng ("Back" không đọc được) */
+html:root:root.npp-kid .ov button.ghost{background:rgba(255,255,255,.14)!important;background-image:none!important;color:#fff!important;border:2px solid rgba(255,255,255,.5)!important;box-shadow:none!important;text-shadow:none!important}

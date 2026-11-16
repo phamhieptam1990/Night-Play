@@ -372,6 +372,8 @@ $("hwBack").onclick=()=>showOv(null);
 const castOf=(e,cast)=>{const d={C:"👮",T:"🦹",F:"👨‍🌾",x1:"🐺",x2:"🐐",x3:"🥬",x4:"🐔",x5:"🌽",Fa:"👨",M:"👩",P:"👮",Tf:"🦹",S:"👦",D:"👧"};
   if(e.k==="p")return (cast.p||["🧒","👧","👦","👴","👵"])[e._i%5];return cast[e.k]||d[e.k]||"🙂"};
 function nameOf(e){if(e.k==="p")return T("n.p")+" "+e.t;return T("n."+e.k)}
+/* Thử thách Night Pass (khung chung shared/npchallenge.js): ván mức khó nhất, seed cố định */
+window.NP_CHALLENGE={id:"qua-song",start(){begin(0,{seed:20261116,lv:3})},judge(r){return !!r&&!!r.extra&&r.extra.lv===3&&r.extra.stars===3}};
 function begin(t,o){
   o=o||{};if(window.NPAudio)NPAudio.silence();showOv(null);const lv=o.lv||LVL,seed=o.seed!=null?o.seed:Math.floor(MR()*1e9),P=makePuzzle(t,lv,seed);P.ents.forEach((e,i)=>e._i=i);
   G={t,lv,seed,P,side:Array(P.ents.length).fill(0),boat:0,load:[],mv:[],used:0,hints:0,over:false,rem:P.opt,combo:0,maxCombo:0,daily:o.daily||null,ch:o.ch||null,hl:[]};

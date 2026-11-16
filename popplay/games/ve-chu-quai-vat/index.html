@@ -599,6 +599,8 @@ $("hwBack").onclick=()=>showOv(null);
 let TR=null,hintT=0;
 const FONTS=(()=>{try{return Promise.all([document.fonts.load(FONT(100),VI.join("")+"ABC0123"),document.fonts.ready]).then(()=>{LC.clear();MC.clear()}).catch(()=>{})}catch(e){return Promise.resolve()}})();
 function stopAll(){if(window.NPAudio)NPAudio.silence();clearTimeout(hintT);TR=null}
+/* Thử thách Night Pass (khung chung shared/npchallenge.js): ván mức khó nhất, seed cố định */
+window.NP_CHALLENGE={id:"ve-chu-quai-vat",start(){begin(0,{seed:20261116,lv:3})},judge(r){return !!r&&r.score>=230&&!!r.extra&&r.extra.lv===3}};
 async function begin(t,o){
   o=o||{};stopAll();const lv=o.lv||LVL;if(o.lv)LVL=o.lv;const seed=o.seed!=null?o.seed>>>0:Math.floor(MR()*4294967296);
   const plan=makePlan(t,lv,seed,!(o.daily||o.ch||o.seed!=null));

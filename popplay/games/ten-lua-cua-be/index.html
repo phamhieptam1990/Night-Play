@@ -616,6 +616,8 @@ function loop(ts){raf=requestAnimationFrame(loop);if(!G||$("run").hidden)return;
 raf=requestAnimationFrame(loop);
 
 /* ===== VÁN CHƠI ===== */
+/* Thử thách Night Pass (khung chung shared/npchallenge.js): ván mức khó nhất, seed cố định */
+window.NP_CHALLENGE={id:"ten-lua-cua-be",start(){begin(0,{seed:20261116,lv:3})},judge(r){return !!r&&r.score>=280&&!!r.extra&&r.extra.lv===3}};
 function begin(t,o){
   o=o||{};if(window.NPAudio)NPAudio.silence();gid++;
   const lv=o.lv||LVL;G={t,lv,seed:o.seed!=null?o.seed:Math.floor(MR()*4294967295)>>>0,daily:o.daily||null,ch:o.ch||null,W:newWorld(),alt:0,run:0,dest:0,stars:0,first:0,hits:0,combo:0,maxCombo:0,bonus:0,mood:"idle",moodT:0,qi:0,qdone:0,d:LVCFG[lv-1].ds,streak:0,newD:[],over:false,q:null,wrong:0,auto:false,score:0};

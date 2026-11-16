@@ -459,6 +459,8 @@ function openHow(t){
 $("hwBack").onclick=()=>showOv(null);
 
 /* ===== VÁN CHƠI ===== */
+/* Thử thách Night Pass (khung chung shared/npchallenge.js): ván mức khó nhất, seed cố định */
+window.NP_CHALLENGE={id:"doan-tuoi-nao",start(){begin(0,{seed:20261116,lv:3})},judge(r){return !!r&&r.score>=280&&!!r.extra&&r.extra.lv===3}};
 async function begin(t,o){
   o=o||{};if(window.NPAudio)NPAudio.silence();clearTimers();const id=++gid;
   if(AGE==null)AGE=5;

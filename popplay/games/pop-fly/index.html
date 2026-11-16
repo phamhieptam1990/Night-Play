@@ -115,6 +115,9 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .ib,.ib2{border:1.5px solid color-mix(in srgb,currentColor 42%,transparent)!important;box-sizing:border-box}
 .ib:not(:disabled),.ib2:not(:disabled){filter:none}
 /*skgrid-center*/.skgrid{display:flex!important;flex-wrap:wrap;justify-content:center;--n:3;--gg:8px;gap:var(--gg)!important}.skgrid>*{flex:0 0 calc((100% - (var(--n) - 1)*var(--gg))/var(--n))!important;min-width:0;box-sizing:border-box}@media (max-height:520px) and (min-aspect-ratio:11/10){.skgrid{--n:6;--gg:4px}}
+body:has(#ovStart:not([hidden])) .side .ask,body:has(#ovStart:not([hidden])) .side .hud{visibility:hidden}
+/* màn chọn game: lớp phủ cố định (popup) KHÔNG che tiêu đề game; nền trong suốt để thấy tên "Chim Bay Học Vui" */
+html[data-theme]:root:root .app:has(h1[data-pt]) #ovStart:not([hidden]){background:none!important;background-color:transparent!important;background-image:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
 </style>
 <script src="../../../shared/offline.js" defer></script>
 <link rel="stylesheet" href="../../../shared/poplandscape.css">

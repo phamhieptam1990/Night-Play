@@ -351,6 +351,8 @@ function openHow(t){
 $("hwBack").onclick=()=>showOv(null);
 
 /* ===== VÁN CHƠI ===== */
+/* Thử thách Night Pass (khung chung shared/npchallenge.js): ván mức khó nhất, seed cố định */
+window.NP_CHALLENGE={id:"thap-vong-mau",start(){begin(0,{seed:20261116,lv:3})},judge(r){return !!r&&!!r.extra&&r.extra.lv===3&&r.extra.stars===3}};
 function begin(t,o){
   o=o||{};if(window.NPAudio)NPAudio.silence();showOv(null);const lv=o.lv||LVL,seed=o.seed!=null?o.seed:Math.floor(MR()*1e9),P=makePuzzle(t,lv,seed);
   G={t,lv,seed,P,pos:P.start.slice(),sel:-1,mv:[],used:0,hints:0,over:false,rem:P.opt,combo:0,maxCombo:0,daily:o.daily||null,ch:o.ch||null,hl:[]};
