@@ -477,3 +477,13 @@ html:not(.npp-kid) .skinBtn>svg{width:64%!important;height:64%!important;max-wid
 
 /* chỉ hàng ngang đã biết (Bạn Có Hiểu Tôi Không: ✕ + Bắt đầu đo): ✕ cao bằng nút bên cạnh, rộng cố định 52px (KHÔNG kéo giãn ở hàng xếp dọc) */
 html:not(.npp-kid) .row>#inNo.btn{align-self:stretch!important;height:auto!important;max-height:none!important;min-height:44px!important}
+
+/* ĐIỆN THOẠI DỌC, popup Giao diện Cozy ≤6 mục: 2 CỘT (ô rộng gấp rưỡi → mô tả 1–2 dòng thay vì 3 dòng bị nén khi popup còn nhiều chỗ cao); hàng cuối lẻ canh giữa. >6 mục giữ lưới 4 cột như trên. */
+@media (max-width:520px) and (orientation:portrait){
+  html:not(.npp-kid) #ovSkin .npc .sk:not(:has(>.skc:nth-child(7))){grid-template-columns:repeat(4,minmax(0,1fr))!important}
+  html:not(.npp-kid) #ovSkin .npc .sk:not(:has(>.skc:nth-child(7)))>.skc:nth-child(n){grid-column:span 2!important}
+  html:not(.npp-kid) #ovSkin .npc .sk:not(:has(>.skc:nth-child(7)))>.skc:last-child:nth-child(odd){grid-column:2 / span 2!important}
+}
+@media (max-width:520px) and (orientation:portrait) and (max-height:700px){
+  html:not(.npp-kid) #ovSkin .npc .sk:not(:has(>.skc:nth-child(7)))>.skc{min-height:84px!important;padding:6px!important}
+}
