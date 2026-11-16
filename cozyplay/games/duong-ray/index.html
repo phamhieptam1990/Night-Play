@@ -226,6 +226,8 @@ function renderHome(){const sv=getSave(),k=dayKey(),done=TY?(sv.dayT||{})[k+"|"+
  $("dN").textContent="#"+dayNo(k);$("dT").textContent=T("daily");$("dS").textContent=done!=null?T("done",{s:done}):T("dS");$("bFree").textContent=T("free");$("hNote").textContent=T("note");
  $("hChips").innerHTML="";[sv.streak?"🔥 "+sv.streak:"",sv.best?T("best",{n:sv.best}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("hChips").appendChild(c)})}
 const hintOf=t=>t===1?T("hintSw"):t===2?T("hintSt"):t===3?T("hintEx"):T("hint");
+/* Thử thách Night Pass (khung chung shared/npchallenge.js): seed cố định, chế độ Cổ điển; ngưỡng 350 là ƯỚC LƯỢNG (chưa đo bằng người chơi) */
+window.NP_CHALLENGE={id:"duong-ray",start(){if(tLocked(0))return false;begin(20261116,"free",0)},judge(r){return !!r&&r.score>=350&&!!r.extra&&r.extra.t===0&&r.extra.mode!=="daily"}};
 function begin(seed,mode,t,ch){t=t==null?(mode==="daily"?0:TY):t;if(tLocked(t))t=0;if(mode==="daily")t=0;G=newGame(seed,mode,t,ch);acc=0;last=performance.now();show("game");applySkin();$("ttl").textContent=(mode==="daily"?"📅 "+T("daily"):TYPES[t][0]+" "+L2([TYPES[t][1],TYPES[t][2]]));$("gHint").textContent=hintOf(t);if(!LS.get("dr-tut",0)){toast(T("tut"),4200)}fitCanvas();hud();window.NP&&NP.start();recBegin()}
 let clipReady=false,clipT=0;
 function recBegin(){clipReady=false;clipT=0;if(window.NP&&NP.helper)return;if(window.NPFx&&NPFx.canRec()){try{NPFx.recStart(cv,36000)}catch(e){}}}
