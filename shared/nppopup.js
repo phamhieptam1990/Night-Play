@@ -58,7 +58,7 @@
       var h2 = card.querySelector("h2"); if (h2) try { new MutationObserver(function () { if (!ov.hidden) run(); }).observe(h2, { childList: true, characterData: true, subtree: true }); } catch (e) {}
     });
     /* Cột nút HUD (← 🔊 ⋯) nằm trong TRANG CỔNG, ngoài khung game → lớp mờ của popup không phủ tới và nút vẫn sáng rực. Khi một popup của game mở thì đặt html.np-popup-open ở trang cổng; shared/hud.css làm mờ cột nút. */
-    var PO = ["ovHow", "ovSkin", "ovPay", "ovCh", "ovGate", "ovColl"];
+    var PO = ["ovHow", "ovSkin", "ovPay", "ovCh", "ovGate", "ovColl", "hlpOv", "phOv"];   /* + popup Hướng dẫn (?) của help.js / pophelp.js */
     var syncPo = function () { var on = PO.some(function (i) { var e = d.getElementById(i); return e && !e.hidden; }); try { if (window.parent && window.parent !== window) window.parent.document.documentElement.classList.toggle("np-popup-open", on); } catch (e) {} };
     PO.forEach(function (i) { var e = d.getElementById(i); if (e) try { new MutationObserver(syncPo).observe(e, { attributes: true, attributeFilter: ["hidden"] }); } catch (x) {} });
     addEventListener("pagehide", function () { try { window.parent.document.documentElement.classList.remove("np-popup-open"); } catch (e) {} }); syncPo();
