@@ -133,7 +133,7 @@
   start();
 })();
 
-/* ===== Thẻ Night Pass bấm được: thẻ gói (1 ngày/tuần/tháng/năm) → subscribe.html?plan=<gói> đúng gói; thẻ tính năng → subscribe.html (giữ ngôn ngữ trang) ===== */
+/* ===== Thẻ gói Night Pass bấm được: thẻ gói (1 ngày/tuần/tháng/năm) → subscribe.html?plan=<gói> đúng gói. Thẻ tính năng KHÔNG bấm được. ===== */
 (function () {
   var en = location.pathname.indexOf("/en/") === 0, lang = en ? "&lang=en" : "&lang=vi";
   var ids = ["day", "week", "month", "year"];
@@ -147,9 +147,7 @@
     var h = li.querySelector("h3"), p = li.querySelector(".pp");
     wire(li, "/subscribe.html?plan=" + ids[i] + lang, (h ? h.textContent : "") + (p ? " · " + p.textContent : ""));
   });
-  Array.prototype.forEach.call(document.querySelectorAll(".feats .feat"), function (a) {
-    var h = a.querySelector("h3"); wire(a, "/subscribe.html" + (lang ? "?" + lang.slice(1) : ""), h ? h.textContent : "");
-  });
+  /* Thẻ "Tính năng nổi bật" là tính năng MIỄN PHÍ → KHÔNG bấm được sang trang mua Night Pass (trước: bấm thẻ nào cũng chuyển sang subscribe.html). */
 })();
 
 /* ===== Nhãn tên game khi hover/focus icon trong dải icon ===== */
