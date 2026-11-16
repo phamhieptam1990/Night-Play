@@ -247,6 +247,12 @@ tr.row-open{cursor:pointer} tr.row-open:hover td{background:var(--hover)}
   .tile{padding:4px 10px}.tile .label{font-size:11.5px;line-height:1.3}.tile .val,.tile.hero .val{font-size:17px;line-height:1.25}
   .site-foot nav{gap:0 12px}.site-foot nav a{font-size:12px}
 }
+@media (max-width:360px){
+  nav.tabs{gap:2px;padding:2px;border-radius:16px}
+  .tab{flex:1 1 0;min-width:0;white-space:normal;text-align:center;line-height:1.15;font-size:11px;padding:5px 2px;border-radius:12px;overflow:visible;text-overflow:clip;word-break:keep-all}
+  .tab .count{display:block;margin:2px auto 0}
+  .toolbar input.field{flex:1 1 100%}
+}
 @media (max-width:520px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (min-width:1000px) and (max-height:640px){.kpis{grid-template-columns:repeat(6,minmax(0,1fr))}}
 @media (max-width:640px){.site-foot .mark,#copy{display:none}.site-foot{padding:2px 12px}.site-foot nav a{padding:5px 0;font-size:12.5px}}
@@ -270,6 +276,36 @@ tr.row-open{cursor:pointer} tr.row-open:hover td{background:var(--hover)}
 .evdesc{grid-column:1/-1;font-size:12px;color:var(--ink2);line-height:1.5}.evdesc .evchip{display:inline-block;margin:2px 4px 2px 0;padding:1px 8px;border-radius:999px;background:color-mix(in srgb,var(--accent) 12%,transparent)}
 .evrow2{grid-column:1/-1;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.evempty{color:var(--ink2);padding:10px 0;font-size:14px}
 @media (max-width:760px){.evform{grid-template-columns:1fr}.evf .field,.evnew .field{font-size:16px;min-height:46px}.evnew,.evlist{padding:12px}.evskinhd .btn{min-height:40px;flex:1}.evskinhd .grow,.evcount{display:none}.evact{position:sticky;bottom:-16px;margin:12px -12px -12px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:var(--surface);border-top:1px solid var(--border);border-radius:0 0 16px 16px;gap:10px;z-index:5}.evbar{display:block;font-size:13px;color:var(--ink2);flex:1;min-width:0}.evact .btn.primary{flex:0 0 auto;min-width:120px}.evmsg{flex-basis:100%;order:3}.evsk{min-height:46px}.evsk input{width:22px;height:22px}.evcodebig{font-size:30px}.evrow2 .btn{min-height:44px;flex:1}.evcat{grid-template-columns:1fr}.evitem{grid-template-columns:1fr auto}.evitem .evcodebig{grid-column:1}.evitem .evst{grid-column:2;grid-row:1;justify-self:end}.evmeta{grid-column:1/-1;justify-self:start;text-align:left}.evact .btn.primary{flex:1;min-height:46px}.evsk{min-height:44px}}
+
+/* Màn hình rộng (>=1100px, cao >640px): thanh bên trái (logo, mục, công cụ) + vùng nội dung bên phải; vẫn đúng một khung, không cuộn.
+   Nhỏ hơn: giữ thanh trên như cũ. */
+@media (min-width:1100px) and (min-height:641px){
+  .shell{max-width:1480px;display:grid;grid-template-columns:208px minmax(0,1fr);grid-template-rows:minmax(0,1fr);gap:0 16px;padding:16px}
+  .shell>.login{grid-column:1/-1;grid-row:1;justify-self:center;align-self:center;width:min(400px,100%);margin:0;padding:28px 28px 24px}
+  .login h1{font-size:20px}.login .sub{margin:14px 0 0}.login input{padding:12px 14px;font-size:15px}.login .go{padding:12px;border-radius:12px}
+  .top{grid-column:1;grid-row:1;flex-direction:column;align-items:stretch;flex-wrap:nowrap;gap:14px;min-height:0;padding:16px 12px;background:var(--surface);border:1px solid var(--border);border-radius:20px}
+  .top[hidden]{display:none!important}
+  .top .tools{margin-left:0}
+  .brand{padding:0 6px 10px;border-bottom:1px solid var(--grid)}
+  nav.tabs{flex-direction:column;gap:2px;border:0;border-radius:0;padding:0;background:none}
+  .tab{justify-content:flex-start;width:100%;border-radius:12px;padding:10px 12px;font-size:14px}
+  .tab .count{margin-left:auto}
+  .tools{margin-top:auto;flex-direction:column;align-items:stretch;gap:8px;padding-top:12px;border-top:1px solid var(--grid)}
+  .tools .seg{align-self:stretch}.tools .seg button{flex:1;min-width:0;white-space:nowrap;padding:6px 4px;font-size:13px}
+  .tools .asof{text-align:center;white-space:normal}
+  .tools .ico{align-self:center}
+  .tools .btn:not(.ico){text-align:center}
+  main{grid-column:2;grid-row:1;margin-top:0;min-width:0}
+  .view{gap:14px}
+  .kpis{grid-template-columns:repeat(7,minmax(0,1fr))}
+  .tile.hero{grid-column:span 2}
+  .tile.hero .val{font-size:clamp(28px,3.2vw,44px);white-space:nowrap}
+  .tile .val{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+}
+@media (min-width:1100px) and (max-width:1360px) and (min-height:641px){
+  .kpis{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .tile.hero,.tile:last-child{grid-column:span 2}
+}
 </style>
 </head>
 <body>
@@ -531,7 +567,7 @@ const I18N = {
     evConfirmRevoke:"Thu hồi mã {c}? Người đã nhập mất giao diện ngay khi tải lại game.", st_active:"Đang chạy", st_upcoming:"Sắp bắt đầu", st_ended:"Đã kết thúc", st_revoked:"Đã thu hồi", st_full:"Hết lượt",
     e_name_required:"Cần nhập tên sự kiện.", e_skins_required:"Chọn ít nhất một giao diện.", e_bad_dates:"Ngày kết thúc phải sau ngày bắt đầu.", e_too_long:"Sự kiện tối đa 400 ngày.", e_bad_max:"Số lượt từ 1 đến 1.000.000.", e_bad_code:"Mã phải đúng 6 chữ số.", e_code_taken:"Mã này đã được dùng.",
     tabPasses:"Pass", pModeLabel:"Chế độ xem", viewList:"Danh sách", viewLog:"Nhật ký",
-    psAll:"Tất cả pass", ps_active:"Đang hoạt động", ps_expiring:"Sắp hết hạn (3 ngày)", ps_expired:"Đã hết hạn", psSearchLabel:"Tìm pass", psSearchPh:"Tìm email, mã đơn hoặc ID",
+    psAll:"Tất cả pass", ps_active:"Đang hoạt động", ps_expiring:"Sắp hết hạn (3 ngày)", ps_expired:"Đã hết hạn", psSearchLabel:"Tìm pass", psSearchPh:"Tìm email, mã đơn, ID",
     colExp:"Hết hạn", colDevices:"Thiết bị", colLastOrder:"Đơn gần nhất", colPaidTotal:"Đã trả", colWho:"Pass", colAction:"Thao tác", colReason:"Lý do", colChange:"Thay đổi",
     exportCsv:"Xuất CSV", exportBusy:"Đang tạo…", exportFail:"Không tải được tệp CSV.", logOff:"Chưa có bảng nhật ký: cần chạy migration 007_admin_actions.sql.",
     dClose:"Đóng", dId:"ID", dCreated:"Tạo lúc", dPlanExp:"Hết hạn", dNoPass:"Chưa có pass", dDevicesN:"Thiết bị", dIdentities:"Danh tính", dDevices:"Thiết bị ({n}/{max})", dOrders:"Đơn hàng", dTxs:"Giao dịch", dLog:"Nhật ký thao tác",
@@ -585,7 +621,7 @@ const I18N = {
     evConfirmRevoke:"Revoke code {c}? People who entered it lose the skins on their next game reload.", st_active:"Active", st_upcoming:"Upcoming", st_ended:"Ended", st_revoked:"Revoked", st_full:"Fully used",
     e_name_required:"Enter an event name.", e_skins_required:"Pick at least one skin.", e_bad_dates:"The end must be after the start.", e_too_long:"Events last 400 days at most.", e_bad_max:"Uses must be 1 to 1,000,000.", e_bad_code:"The code must be exactly 6 digits.", e_code_taken:"That code is already used.",
     tabPasses:"Passes", pModeLabel:"View mode", viewList:"List", viewLog:"Audit log",
-    psAll:"All passes", ps_active:"Active", ps_expiring:"Expiring (3 days)", ps_expired:"Expired", psSearchLabel:"Search passes", psSearchPh:"Search email, order code or ID",
+    psAll:"All passes", ps_active:"Active", ps_expiring:"Expiring (3 days)", ps_expired:"Expired", psSearchLabel:"Search passes", psSearchPh:"Email, order code, ID",
     colExp:"Expires", colDevices:"Devices", colLastOrder:"Latest order", colPaidTotal:"Paid total", colWho:"Pass", colAction:"Action", colReason:"Reason", colChange:"Change",
     exportCsv:"Export CSV", exportBusy:"Preparing…", exportFail:"Could not download the CSV file.", logOff:"No audit table yet: run migration 007_admin_actions.sql.",
     dClose:"Close", dId:"ID", dCreated:"Created", dPlanExp:"Expires", dNoPass:"No pass", dDevicesN:"Devices", dIdentities:"Identities", dDevices:"Devices ({n}/{max})", dOrders:"Orders", dTxs:"Transactions", dLog:"Admin actions",
