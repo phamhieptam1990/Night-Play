@@ -524,3 +524,17 @@ html[data-theme=light].npp-kid #ovStart .cards>.card:not(.daily){background:line
 html[data-theme=light].npp-kid #ovStart .cards>.card:not(.daily) small{color:rgba(255,255,255,.92)!important}
 html[data-theme=light].npp-kid #ovStart .cards>.card>.skinBtn{background:rgba(255,255,255,.95)!important;border:0!important}
 html[data-theme=light].npp-kid #ovStart .cards>.card.daily{border:2px solid rgba(255,255,255,.85)!important;box-shadow:0 6px 16px rgba(194,65,12,.4)!important}
+/* Pop Play màn chọn, giao diện TỐI: thẻ quá tối/đục, chữ phụ xám tím khó đọc → màu đậm sáng hơn, chữ phụ trắng, viền sáng rõ */
+html[data-theme=dark].npp-kid #ovStart .cards>.card:not(.daily){background:linear-gradient(135deg,color-mix(in srgb,var(--tc) 82%,#2a1f66),color-mix(in srgb,var(--tc) 52%,#14102e))!important;border:2px solid color-mix(in srgb,var(--tc) 55%,#fff)!important;box-shadow:0 6px 16px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.08)!important}
+html[data-theme=dark].npp-kid #ovStart .cards>.card:not(.daily)>.main{color:#fff!important}
+html[data-theme=dark].npp-kid #ovStart .cards>.card small{color:rgba(255,255,255,.92)!important;opacity:1!important}
+html[data-theme=dark].npp-kid #ovStart .cards>.card>.skinBtn{background:rgba(255,255,255,.95)!important;border:0!important}
+html[data-theme=dark].npp-kid #ovStart .cards>.card.daily{border:2px solid rgba(255,255,255,.7)!important}
+/* Pop Play màn chọn, theme SÁNG: thẻ "Bài học hôm nay" chữ trắng trên giữa dải tím-cam bị nhạt → nền đậm hơn, chữ có bóng, chữ phụ/biểu tượng trắng đặc */
+html[data-theme=light].npp-kid #ovStart .cards>.card.daily{background:linear-gradient(90deg,#4a2fd0,#8c2fa0 55%,#b8340f)!important}
+html[data-theme=light].npp-kid #ovStart .cards>.card.daily>.main{color:#fff!important;text-shadow:0 1px 3px rgba(0,0,0,.45)}
+html[data-theme=light].npp-kid #ovStart .cards>.card.daily small{color:#fff!important;opacity:1!important;font-weight:800;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+/* Pop Play màn chọn, theme TỐI: thẻ "Bài học hôm nay" — nền đậm hơn + chữ trắng có bóng, chữ phụ/biểu tượng trắng đặc (giống theme sáng) */
+html[data-theme=dark].npp-kid #ovStart .cards>.card.daily{background:linear-gradient(90deg,#5a3cf0,#a63aa8 55%,#e0561c)!important;border:2px solid rgba(255,255,255,.85)!important;box-shadow:0 6px 16px rgba(0,0,0,.5),0 0 14px rgba(224,86,28,.35)!important}
+html[data-theme=dark].npp-kid #ovStart .cards>.card.daily>.main{color:#fff!important;text-shadow:0 1px 3px rgba(0,0,0,.55)}
+html[data-theme=dark].npp-kid #ovStart .cards>.card.daily small{color:#fff!important;opacity:1!important;font-weight:800;text-shadow:0 1px 3px rgba(0,0,0,.6)}
