@@ -1528,3 +1528,12 @@ html.npp-kid #ovHow:not([hidden]) .hwL li{padding-block:clamp(6px,1.6vh,14px)!im
 @media (orientation:portrait) and (min-width:700px){
   .app>.play,.app .play{max-height:calc(100dvh - 165px - 34px)!important}
 }
+
+/* Chim Bay Học Vui, màn NGANG THẤP: thẻ "Tiếp tục ván dở" gọn 44px + khoảng cách nhỏ → nút "Tiến độ của bé" không bị đẩy xuống đè chữ ký/đáy */
+@media (orientation:landscape) and (max-height:420px){
+  html.npp-kid #ovStart #npResume{height:44px!important;margin:0 0 4px!important}
+  html.npp-kid #ovStart #npResume .npr-go{height:44px!important;min-height:44px!important;max-height:44px!important;padding:0 14px!important}
+  html.npp-kid #ovStart #npResume .npr-go small{display:none}
+  html.npp-kid #ovStart .cards{gap:4px!important}
+  html.npp-kid #ovStart #pgBtn{min-height:44px!important;height:44px!important;margin-top:2px!important}
+}

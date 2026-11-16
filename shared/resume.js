@@ -154,6 +154,9 @@
     if (!card) card = build(rec);
     relabel(rec);   /* đổi ngôn ngữ sau khi thẻ đã dựng → cập nhật chữ thẻ (trước: giữ ngôn ngữ lúc dựng) */
     var host = (h.home && h.el.querySelector(":scope>.hl")) || h.el;
+    /* khung chứa là DẢI TRƯỢT NGANG (vd Chim Bay Học Vui trên điện thoại dọc: .cards cuộn ngang) → đặt thẻ NGAY TRÊN dải, không nhét vào trong (trước: thẻ thành ô đầu của dải, đẩy các ô khác ra ngoài khung) */
+    var strip = false; try { var hs = getComputedStyle(host); strip = !h.home && hs.display === "flex" && /^row/.test(hs.flexDirection) && hs.overflowX !== "visible" && host.parentNode && host.parentNode !== document.body; } catch (e) {}
+    if (strip) { if (card.parentNode !== host.parentNode || card.nextSibling !== host) host.parentNode.insertBefore(card, host); syncX(); return; }
     if (card.parentNode !== host) {   // ngay trên nút chơi chính nếu có (thẻ hôm nay), không thì đầu màn chọn
       var anchor = host.querySelector(":scope>#bDaily,:scope>#bCamp,:scope>#bMake,:scope>.dbtn,:scope>#bPractice");
       host.insertBefore(card, anchor || host.firstChild);
