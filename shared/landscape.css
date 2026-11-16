@@ -113,3 +113,11 @@ html.np-hudg #game>.stats{width:calc(var(--cl) - 1cqw - 28px)}
 
 /* Điện thoại NGANG có cột nút HUD (← 🔊 ⋯ ở x 16–60): tiêu đề tên game bắt đầu ở x≥68 để KHÔNG bị nút ← che chữ cái đầu (trước: bắt đầu ở x=52, che 8px) */
 html.np-hudg .top{left:68px!important}
+
+/* MÀN CHÍNH COZY, ĐIỆN THOẠI NGANG THẤP (có thanh địa chỉ, cao ≤420px): chữ ô CHẾ ĐỘ + ĐỘ KHÓ theo thang chung --fs-label (trước 5–10px theo cqw, không đọc nổi); icon vừa phải; ô tự cao theo chữ (tên 2 dòng được), không thu chữ (GAME_RULES 6d) */
+@media (orientation:landscape) and (max-height:420px){
+  #home .ty,#home .ty *{font-size:clamp(11px,4.1vh,13px)!important;line-height:1.12!important}
+  #home .ty .e,#home .ty>span:first-child:not(.t){font-size:clamp(18px,7vh,26px)!important;line-height:1!important}
+  #home .ty{min-height:44px!important;height:auto!important;gap:2px!important;padding:4px 3px!important}
+  #home .lv{font-size:clamp(11px,4.1vh,13px)!important;min-height:36px!important}
+}
