@@ -16,12 +16,13 @@
     ["cam", ["bCam"], ["Chụp ảnh", "Photo"]],
     ["shr", ["bShr"], ["Chia sẻ", "Share"]],
     ["lock", ["bLock"], ["Khoá màn", "Lock"]],
+    ["npset", ["npSetBtn"], ["Night Pass", "Night Pass"]],
     ["pass", ["nsPill"], ["Sự kiện", "Event"]],
     ["snd", ["bSnd", "soundBtn"], ["Âm thanh", "Sound"]],
     ["lang", ["bLang", "langBtn"], ["Ngôn ngữ", "Language"]],
     ["theme", ["themeBtn2"], ["Sáng / Tối", "Light / Dark"]]
   ];
-  var GRID = ["help", "snd", "lang", "theme", "restart", "board", "cam", "shr", "lock", "pass"];   // thứ tự trong bảng (hay dùng nhất ở trên cùng)
+  var GRID = ["help", "snd", "lang", "theme", "restart", "board", "cam", "shr", "lock", "npset", "pass"];   // thứ tự trong bảng (hay dùng nhất ở trên cùng)
   var play0 = document.getElementById("play"), top = (play0 && play0.querySelector(".top")) || document.querySelector(".top");
   if (!top) return;
   var local = !(play0 && play0.contains(top)), play = local ? top : play0;

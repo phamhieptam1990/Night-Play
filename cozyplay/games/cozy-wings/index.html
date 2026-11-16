@@ -58,12 +58,6 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .card .skinBtn{width:48px;height:48px;margin-right:10px;border-radius:50%;background:color-mix(in srgb,var(--accent) 16%,var(--panel));font-size:22px;display:grid;place-items:center;flex:none;position:relative}
 .card .skinBtn i{position:absolute;right:-4px;top:-4px;font-size:12px;font-style:normal;background:var(--panel);border-radius:50%;padding:1px}
 .card:active{transform:scale(.97)}
-.skgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;max-width:360px}
-.sk{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:5px 5px 6px;border-radius:16px;background:var(--panel);box-shadow:var(--shadow);font-size:12.5px;font-weight:800;line-height:1.05}
-.sk img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:11px;background:var(--line)}
-.sk.on{outline:3px solid var(--accent)}.sk.lock img{filter:saturate(.8)}
-.sk.lock::after{content:"🔒";position:absolute;right:6px;top:6px;font-size:16px;background:var(--panel);border-radius:50%;padding:2px 3px;line-height:1}
-.sk:active{transform:scale(.96)}
 .big{background:var(--accent);color:var(--on-accent);border-radius:999px;padding:12px 28px;font-size:clamp(18px,5vw,24px);font-weight:800;box-shadow:0 5px 0 color-mix(in srgb,var(--accent) 55%,#000)}
 .ghost{background:var(--panel);color:var(--ink);border-radius:999px;padding:10px 22px;font-size:clamp(15px,4.2vw,19px);font-weight:800;box-shadow:var(--shadow)}
 .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}#hwBack{align-self:center}#ovPay .big,#ovPay .ghost{min-height:44px;white-space:nowrap}
@@ -90,9 +84,8 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .mt{display:inline-block;vertical-align:middle;width:84px;height:10px;border-radius:10px;background:rgba(0,0,0,.25);overflow:hidden;margin-left:6px}.mt i{display:block;height:100%;background:linear-gradient(90deg,#ff7a1a,#ffd23f);border-radius:10px;transition:width .15s}
 #askTxt{font-size:clamp(14px,4.2vw,20px)}
 .toast{white-space:normal;width:max-content;max-width:88%;text-align:center;line-height:1.2;padding:7px 14px;border-radius:18px}
-.sk img{aspect-ratio:1/1}
 @media (max-height:780px){#ovPay{gap:8px}#ovPay p{font-size:13px;line-height:1.25}}
-@media (max-height:640px){#ovPay p{font-size:12px;line-height:1.25}.sk{padding:3px 3px 4px;font-size:11px}.skgrid{gap:5px;max-width:300px}}
+@media (max-height:640px){#ovPay p{font-size:12px;line-height:1.25}}
 .ov .cards{gap:7px}.card .main{padding:7px 12px}.card .e{font-size:clamp(26px,8vw,36px)}.card{font-size:clamp(15px,4.5vw,20px)}
 @media (max-height:700px){.ov{gap:8px;padding:12px}.ov h2{font-size:clamp(20px,6vw,28px)}.ov .cards{gap:5px}.card .main{padding:4px 10px}.card .e{font-size:24px}.card small{font-size:.66em}.card .skinBtn{width:38px;height:38px;font-size:18px}.dif{padding:5px 14px}}
 @media (max-height:600px){.card small{display:none}}
@@ -247,8 +240,6 @@ body:has(#ovHow:not([hidden])) .side .ask,body:has(#ovHow:not([hidden])) .side .
 /* màn chọn neo TRÊN (không căn giữa): thẻ "Tiếp tục ván dở" hiện muộn không làm cả khối nhảy lên xuống khi đổi cấp độ */
 #ovStart:not([hidden]){justify-content:flex-start!important;padding-top:6px}
 /* popup giao diện Cánh Nhỏ ở điện thoại dọc thấp: ảnh ô thấp lại để nút quay lại nằm trong thẻ */
-@media (max-width:520px) and (orientation:portrait) and (max-height:700px){#ovSkin .skgrid .sk img{aspect-ratio:2/1!important;height:auto!important;max-height:56px;object-fit:cover}#ovSkin .skgrid .sk{padding:4px!important;gap:2px!important}#ovSkin .skgrid{gap:6px!important}#ovSkin h2{font-size:17px!important}}
-@media (max-width:520px) and (orientation:portrait) and (max-height:640px){#ovSkin h2{display:none!important}#ovSkin .skgrid .sk img{max-height:38px!important}#ovSkin>.npc{padding-top:10px!important}#ovSkin #skBack{min-height:44px!important;height:44px!important}}
 /* ĐIỆN THOẠI NGANG cao 381-520px: GIỮ BỐ CỤC CỦA MÀN DỌC (một cột, ở giữa, các hàng đều nhau) nhưng gọn: hàng 38px, khe 6px, không linh vật (chủ site: "để dọc sao đó xoay ngang") */
 @media (max-height:520px) and (min-height:381px) and (min-aspect-ratio:11/10){
   #ovStart:not([hidden]){justify-content:center!important;gap:6px!important;padding:6px 8px!important}
@@ -321,10 +312,6 @@ body:has(#ovHow:not([hidden])) .side .ask,body:has(#ovHow:not([hidden])) .side .
 @media (max-height:520px) and (min-aspect-ratio:11/10){
   #play:has(#ovSkin:not([hidden]))::after,#play:has(#ovPay:not([hidden]))::after{display:none!important}
   #ovSkin:not([hidden]){position:fixed!important;inset:0!important;width:auto!important;height:auto!important;background:rgba(8,6,24,.62)!important;-webkit-backdrop-filter:blur(3px)!important;backdrop-filter:blur(3px)!important;align-items:center;justify-content:center;padding:8px!important}
-  #ovSkin .skgrid{display:flex!important;flex-wrap:nowrap!important;justify-content:center!important;gap:8px!important;max-width:none!important}
-  #ovSkin .skgrid .sk{flex:0 0 92px;width:92px;padding:5px 4px!important}
-  #ovSkin .skgrid .sk span{display:block!important;font-size:11px;line-height:1.1;text-align:center;margin-top:3px}
-  #ovSkin .skgrid .sk img{width:100%!important;height:auto!important;aspect-ratio:3/4;max-height:92px;object-fit:cover}
 }
 /* thanh trên màn chọn: tên game một dòng riêng, không cắt "…" */
 @media (max-width:520px){.top{flex-wrap:wrap}.top h1{order:9;flex:1 1 100%;white-space:normal;overflow:visible;text-overflow:clip;line-height:1.1}}
@@ -385,14 +372,12 @@ body:has(#ovHow:not([hidden])) .side .ask,body:has(#ovHow:not([hidden])) .side .
 /* nút biểu tượng luôn có viền cùng màu biểu tượng để nổi trên mọi nền/giao diện */
 .ib,.ib2{border:1.5px solid color-mix(in srgb,currentColor 42%,transparent)!important;box-sizing:border-box}
 .ib:not(:disabled),.ib2:not(:disabled){filter:none}
-/*skgrid-center*/.skgrid{display:flex!important;flex-wrap:wrap;justify-content:center;--n:3;--gg:8px;gap:var(--gg)!important}.skgrid>*{flex:0 0 calc((100% - (var(--n) - 1)*var(--gg))/var(--n))!important;min-width:0;box-sizing:border-box}@media (max-height:520px) and (min-aspect-ratio:11/10){.skgrid{--n:6;--gg:4px}}@media (max-height:640px){.skgrid{--gg:5px}}
 /* màn ngang: bố cục 3 cột (trái: tên + nút + câu hỏi, giữa: khung bay, phải: điểm) dùng chung với Pop Play — shared/poplandscape.css (nạp bên dưới). Cửa sổ rộng hơn một chút (>=521px) mà khung hẹp: tên game xuống hàng riêng, không xuống từng chữ. */
 @media (min-width:521px){.top{flex-wrap:wrap}.top h1{flex:1 1 160px;min-width:160px}}
 </style>
 <link rel="stylesheet" href="../../../shared/poplandscape.css">
 <style>/* màn ngang thấp: nút thanh trên cùng cỡ 42px như mọi game Cozy (poplandscape.css ép 52px cho Pop); ≤420px cao: 38px */
 @media (min-aspect-ratio:11/10) and (max-height:520px){.app .top{row-gap:6px}.app .top .ib{width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;max-width:42px!important}}
-#ovSkin .sk .e{display:none}
 /* màn ngang thấp: tên game cùng kiểu mọi game Cozy (màu nhấn, ~21px) + thẻ chuyến bay gọn: bớt đệm phải, nút 🎨 sát mép */
 @media (min-aspect-ratio:11/10) and (max-height:520px){
   html body .app .top h1,html.np-hudg body .app .top h1{color:var(--accent)!important;font-size:clamp(15px,2.55vw,22px)!important;line-height:1.1!important}
@@ -401,24 +386,8 @@ body:has(#ovHow:not([hidden])) .side .ask,body:has(#ovHow:not([hidden])) .side .
   html body #ovStart .tile:not(.daily) .main{padding:2px 36px 2px 10px!important;gap:8px!important}
   html body #ovStart .tile:not(.daily) .skinBtn{right:5px!important;width:28px!important;height:28px!important;font-size:14px!important}
 }
-/* popup Giao diện: DANH SÁCH 2 cột (biểu tượng + tên, không ảnh) như mọi game Cozy — màn ngang thấp VÀ màn dọc */
-@media (max-aspect-ratio:11/10) and (max-width:699px),(min-aspect-ratio:11/10) and (max-height:520px){   /* chỉ ĐIỆN THOẠI: iPad (khung ≥700px rộng) dùng thẻ có ảnh của nppopup.css */
-  html body #ovSkin .skgrid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:6px!important;width:100%;max-width:min(100%,640px)!important;margin-inline:auto}
-  html body #ovSkin .skgrid .sk{flex:none!important;width:auto!important;display:flex!important;flex-direction:row!important;align-items:center;justify-content:flex-start;gap:10px!important;text-align:left;padding:4px 10px!important;min-height:44px;border-radius:16px;box-sizing:border-box}
-  html body #ovSkin .npc .skgrid .sk{background:var(--npcard,rgba(255,255,255,.07))!important;color:var(--npi,#f1f2ff)!important;border:2px solid var(--npl,rgba(255,255,255,.22))!important;box-shadow:none!important;filter:none!important}
-  html body #ovSkin .npc .skgrid .sk.on{border-color:var(--npa,var(--accent))!important;background:linear-gradient(160deg,color-mix(in srgb,var(--npa,var(--accent)) 22%,var(--npcard,#222)),var(--npcard,#222))!important;outline:0!important}
-  html body #ovSkin .npc .skgrid .sk span{color:var(--npi,#f1f2ff)!important}
-  html body #ovSkin .skgrid .sk:last-child:nth-child(odd){grid-column:1/-1}
-  html body #ovSkin .skgrid .sk img{display:none!important}
-  html body #ovSkin .skgrid .sk .e{display:grid;place-items:center;flex:none;width:34px;height:34px;font-size:26px;line-height:1;font-style:normal}
-  html body #ovSkin .skgrid .sk span{margin:0!important;text-align:left;font-size:14px!important;line-height:1.1}
-}
 /* popup Giao diện màn ngang: như các game Cozy — chip độ khó + nút 📚 không nổi lên trên lớp mờ */
 @media (min-aspect-ratio:11/10) and (max-height:520px){body:has(#ovSkin:not([hidden])) #npDifBadge,body:has(#ovSkin:not([hidden])) #nsPill{display:none!important}}
-/* popup Giao diện (mọi hướng): các dòng sát nhau, không bị giãn đều ra cả chiều cao khung */
-@media (max-aspect-ratio:11/10),(min-aspect-ratio:11/10) and (max-height:520px){html body #ovSkin .skgrid{align-content:start!important;grid-auto-rows:auto!important;flex:none!important;height:auto!important;gap:7px!important}html body #ovSkin .skgrid .sk{margin:0!important}}
-/* popup Giao diện màn DỌC: xếp dọc 1 cột như các game Cozy khác để tên không xuống dòng */
-@media (max-aspect-ratio:11/10){html body #ovSkin .skgrid{grid-template-columns:1fr!important;max-width:min(100%,420px)!important}html body #ovSkin .skgrid .sk{min-height:46px}html body #ovSkin:not([hidden]){padding:8px!important}html body #ovSkin>.npc{width:min(100%,440px)!important;padding:12px 12px 14px!important;gap:8px!important}html body #ovSkin .skgrid .sk span{white-space:nowrap}}
 @media (min-aspect-ratio:11/10) and (max-height:420px){.app .top .ib{width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;max-width:38px!important}}</style>
 <script src="../../../shared/offline.js" defer></script>
 <script src="../../../shared/help.js" defer></script>
@@ -444,6 +413,27 @@ html body #ovStart .tile:not(.daily){min-height:58px;box-sizing:border-box}
 html body #ovStart .tile:not(.daily) .skinBtn{right:12px!important}
 /* iPad / web DỌC (rộng >520px): hiện linh vật 🐝🐟 ở màn chọn chuyến bay (trước: bị ẩn → khoảng trống lớn phía trên, chỉ có ở điện thoại) */
 @media (min-width:521px) and (orientation:portrait){#ovStart .cwHero{order:0;flex:0 1 auto;height:clamp(150px,24vh,300px);min-height:0;width:100%;display:flex;align-items:center;justify-content:center;font-size:clamp(90px,min(18vw,15vh),200px)!important;line-height:1;white-space:nowrap;overflow:hidden;animation:cwBob 2.8s ease-in-out infinite}}
+/* iPhone SE / máy thấp (dọc): danh sách chuyến bay thành DẢI TRƯỢT NGANG (thẻ 96px) để nhường chỗ cho LINH VẬT (#cwHero) ở trên; mặc định danh sách dọc ăn hết chiều cao làm linh vật mất */
+@media (max-width:520px) and (orientation:portrait) and (max-height:760px){
+  #ovStart .tiles{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;gap:8px!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;touch-action:pan-x;scrollbar-width:none;overscroll-behavior-x:contain;width:calc(100% + 16px)!important;margin-inline:-8px!important;padding:4px 8px 6px!important;flex:none!important;height:auto!important;max-height:112px!important;align-items:flex-start!important;align-content:flex-start!important;max-width:none!important}
+  #ovStart .tiles::-webkit-scrollbar{display:none}
+  #ovStart .tile{flex:0 0 min(42%,150px)!important;width:auto!important;height:96px!important;min-height:0!important;scroll-snap-align:start;position:relative;display:flex!important;flex-direction:column!important;grid-column:auto!important}
+  #ovStart .tile:not(.daily) .main{width:100%!important;height:100%!important;min-height:0!important;box-sizing:border-box!important;flex-direction:column!important;justify-content:flex-end!important;align-items:center!important;gap:0!important;padding:4px 6px 6px!important;text-align:center!important}
+  #ovStart .tile:not(.daily) .tb{font-size:50px!important;line-height:1!important;flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center}
+  #ovStart .tile:not(.daily) .nm{flex:none;margin-top:auto;font-size:13px!important;line-height:1.1!important;text-align:center!important;width:100%;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  #ovStart .tile:not(.daily) .best,#ovStart .tile small{display:none!important}
+  #ovStart .tile:not(.daily) .skinBtn{position:absolute!important;top:4px!important;right:4px!important;left:auto!important;bottom:auto!important;transform:none!important;width:30px!important;height:30px!important;min-width:30px!important;min-height:30px!important}
+  #ovStart .tile.daily{flex-direction:column!important;justify-content:center;align-items:center;gap:1px;padding:4px!important}
+  #ovStart > .tile.daily.dailyOut{flex:none!important;width:100%!important;height:52px!important;min-height:0!important;max-height:none!important;order:2;flex-direction:row!important;justify-content:space-between!important;align-items:center!important;gap:10px!important;padding:6px 16px!important;border-radius:18px;box-sizing:border-box;font-size:16px}
+  #ovStart > .tile.daily.dailyOut .dd{font-size:16px!important}#ovStart > .tile.daily.dailyOut .de{font-size:26px!important}#ovStart > .tile.daily.dailyOut .dm,#ovStart > .tile.daily.dailyOut .df{display:inline!important;font-size:14px!important}
+  #ovStart .tile.daily .dd{font-size:14px!important;line-height:1.1}#ovStart .tile.daily .de{font-size:28px!important;line-height:1.1}#ovStart .tile.daily .dm{font-size:12px!important;line-height:1.1}#ovStart .tile.daily .df{display:none!important}
+  #ovStart .tile:not(.daily) .main{flex:1 1 auto!important}
+  #ovStart #stH{display:none}
+  #ovStart .cwHero{order:0!important}#ovStart .difs{order:1!important}#ovStart #npResume{order:2!important;margin:0!important}#ovStart > .tile.daily.dailyOut,#ovStart .tiles{order:3!important}
+}
+/* popup Giao diện: dùng đúng khung .sk/.skc của các game Cozy khác (ô biểu tượng + tên; nppopup.css lo bố cục) */
+.sk{display:grid;grid-template-columns:1fr 1fr;gap:2.4cqw}.skc{position:relative;border:1.5px solid color-mix(in srgb,var(--ink) 30%,transparent);border-radius:3.4cqw;padding:2.2cqw;background:var(--panel);color:var(--ink);font:800 3.6cqw var(--body);cursor:pointer;min-height:44px}.skc.on{border-color:var(--accent)}.sk .skc{display:flex;align-items:center;gap:2.6cqw;text-align:left;padding:2cqw 2.6cqw}.sk .skc:last-child:nth-child(odd){grid-column:1/-1}.skc .e{font-size:9.5cqw;line-height:1;flex:none}.skc .sx{display:flex;flex-direction:column;gap:.9cqw;min-width:0}.skc .sx b{font:900 3.7cqw/1.15 var(--body)}.skc .sx small{font:700 2.7cqw/1.2 var(--body);opacity:.75}.skc.lock{opacity:.85}.skc.lock::after{content:'🔒';position:absolute;top:1.4cqw;right:2cqw;font-size:3.8cqw}
+
 </style>
 </head>
 <body>
@@ -494,7 +484,7 @@ html body #ovStart .tile:not(.daily) .skinBtn{right:12px!important}
     </div>
     <div class="ov" id="ovSkin" hidden>
       <h2 id="skH"></h2>
-      <div class="skgrid" id="skGrid"></div>
+      <div class="sk" id="skGrid"></div>
       <button class="ib2" id="skBack" type="button">←</button>
     </div>
     <div class="ov" id="ovPay" hidden>
@@ -937,8 +927,10 @@ const ICO={bee:"🐝",fish:"🐟",lantern:"🏮",kite:"🪁",bug:"🐞",dep:"�
 const DIFF_ICO={easy:"🌱",mid:"⚡",hard:"🔥"};
 function applyDiffTheme(){document.documentElement.dataset.diff=diff}
 function renderDiff(){const box=$("diffs");box.textContent="";applyDiffTheme();["easy","mid","hard"].forEach(id=>{const b=document.createElement("button");b.type="button";b.className="dif"+(diff===id?" on":"");b.textContent=DIFF_ICO[id];b.setAttribute("aria-label",t("dif."+id));b.setAttribute("aria-pressed",diff===id);b.onclick=()=>{diff=id;LS.set("cw-diff",id);renderDiff();renderCards()};box.appendChild(b)})}
+const STRIP_MQ=matchMedia("(max-width:520px) and (orientation:portrait) and (max-height:760px)");   /* điện thoại thấp: danh sách chuyến bay là dải trượt ngang, thẻ lịch nằm RIÊNG phía trên dải */
+if(STRIP_MQ.addEventListener)STRIP_MQ.addEventListener("change",()=>{try{renderCards()}catch(e){}});
 function renderCards(){
-  const box=$("cards");box.textContent="";const best=LS.get("cw-best",{});
+  const box=$("cards");box.textContent="";document.querySelectorAll("#ovStart > .tile.daily").forEach(e=>e.remove());const best=LS.get("cw-best",{});
   let dailyEl=null;
   if(!CH&&!HELPER){const di=dailyInfo(),st=dailyStore(),bs=st.best[di.key],d=document.createElement("button");d.type="button";d.className="tile daily";
     d.innerHTML='<span class="dd">📅 #'+di.n+'</span><span class="de">'+ICO[di.type]+'</span><span class="dm">'+(bs?'🏆 '+bs:'🆕')+'</span>'+(st.streak&&(st.last===di.key||st.last===dayBefore(di.key))?'<span class="df">🔥 '+st.streak+'</span>':'');d.setAttribute("aria-label",t("daily.t",{n:di.n})+" — "+t("ty."+di.type));d.onclick=openDaily;dailyEl=d}
@@ -949,16 +941,17 @@ function renderCards(){
     const k=document.createElement("button");k.type="button";k.className="skinBtn";k.innerHTML='<svg viewBox="0 0 24 24" width="1.3em" height="1.3em" aria-hidden="true" style="display:block"><path d="M12 3C6.5 3 2.5 7 2.5 11.8c0 4.7 3.8 8.2 8.2 8.2 1.3 0 2-.8 2-1.7 0-.5-.2-.9-.5-1.3-.3-.4-.5-.8-.5-1.3 0-1 .8-1.8 1.8-1.8H17c2.5 0 4.5-2 4.5-4.5C21.5 6.6 17.4 3 12 3z" fill="#f5c26b" stroke="#a86a2b" stroke-width="1.2" stroke-linejoin="round"/><circle cx="7.6" cy="10.4" r="1.5" fill="#ef4444"/><circle cx="11.2" cy="7.2" r="1.5" fill="#3b82f6"/><circle cx="15.8" cy="7.9" r="1.5" fill="#22c55e"/><circle cx="6.9" cy="14.6" r="1.4" fill="#a855f7"/></svg>'+(prem?"<i>★</i>":"");k.setAttribute("aria-label",t("sk.pick"));k.onclick=()=>openSkins(id);
     c.appendChild(m);c.appendChild(k);box.appendChild(c);
   }
-  if(dailyEl)box.appendChild(dailyEl);
+  if(dailyEl){if(STRIP_MQ.matches&&box.parentNode){dailyEl.classList.add("dailyOut");box.parentNode.insertBefore(dailyEl,box)}else box.appendChild(dailyEl)}
 }
 const THUMB=(ty,id)=>"thumbs/"+ty+"-"+id+".jpg";
 const skLocked=(ty,id)=>id!=="default"&&!(PF.skins[ty]&&PF.skins[ty][id]);
 let skFor=null,payFor=null;
+const SKE={bee:{default:"🌿",sakura:"🌸",lavender:"🪻",royal:"👑",firefly:"✨"},fish:{default:"🌊",coral:"🪸",sunset:"🌅",arctic:"❄️",glow:"💡"},lantern:{default:"🏮",hoian:"🏘️",moon:"🌕",festival:"🎆",snow:"❄️"},kite:{default:"🪁",rice:"🌾",beach:"🏖️",alps:"🏔️",dusk:"🌇"},bug:{default:"🌳",rain:"🌧️",mush:"🍄",night:"🌙",autumn:"🍂"},dep:{default:"🥿",tet:"🧧",mua:"🌧️",dem:"🌙",bien:"🌊"}};   /* biểu tượng từng giao diện: popup giống các game Cozy khác (ô to có biểu tượng + tên) */
 function openSkins(ty){
   skFor=ty;$("skH").textContent="🎨 "+t("ty."+ty);const g=$("skGrid");g.textContent="";
   for(const id of PF.catalog[ty]){
-    const locked=skLocked(ty,id),b=document.createElement("button");b.type="button";b.className="sk"+(locked?" lock":"")+((PF.skinSel[ty]||"default")===id?" on":"");
-    b.innerHTML='<i class="e" aria-hidden="true">'+({bee:"🐝",fish:"🐟",lantern:"🏮",kite:"🪁",bug:"🐞",dep:"🥿"}[ty]||"🎨")+'</i><img alt="" src="'+THUMB(ty,id)+'" loading="lazy" onerror="this.style.visibility=\'hidden\'"><span>'+t("sk."+ty+"."+id)+'</span>';
+    const locked=skLocked(ty,id),b=document.createElement("button");b.type="button";b.className="skc"+(locked?" lock":"")+((PF.skinSel[ty]||"default")===id?" on":"");
+    b.innerHTML='<span class="e" aria-hidden="true">'+((SKE[ty]&&SKE[ty][id])||"🎨")+'</span><span class="sx"><b>'+t("sk."+ty+"."+id)+'</b></span>';
     b.setAttribute("aria-label",locked?t("lockedLbl",{n:t("sk."+ty+"."+id)}):t("sk."+ty+"."+id));
     b.onclick=()=>locked?openPay(ty,id):chooseSkin(ty,id);g.appendChild(b);
   }
@@ -1034,7 +1027,7 @@ if(HS&&TYPES.includes(HS.type)&&DIFF[HS.diff]){   /* chơi hộ: vào thẳng đ
 /* linh vật màn chọn: phình theo ô trống còn lại (ô flex:1 1 0 nên cỡ ô không phụ thuộc chữ → không vòng lặp); trần 300px vì emoji bitmap phóng quá to bị vỡ hạt */
 (function(){var h=document.getElementById("cwHero");if(!h)return;
 function fit(){var H=h.clientHeight,W=h.clientWidth;if(getComputedStyle(h).display==="none")return;if(H<44||W<40){h.dataset.fit="0";h.style.removeProperty("--cwfs");return}
-h.dataset.fit="1";var fs=Math.floor(Math.min(H*.92,W*.8/(1.12*2),300));h.style.setProperty("--cwfs",Math.max(32,fs)+"px")}
+h.dataset.fit="1";var fs=Math.floor(Math.min(H*.96,W*.96/(1.16*2),340));h.style.setProperty("--cwfs",Math.max(32,fs)+"px")}
 try{new ResizeObserver(fit).observe(h)}catch(e){}addEventListener("resize",fit);addEventListener("load",fit);fit()})();
 </script>
 </body>

@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="vi" data-app="hub" data-np="">
+<head>
+<meta charset="utf-8">
+<script src="shared/guard.js"></script>
+<script src="shared/device.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/svg+xml" sizes="any" href="/shared/favicon.svg">
+<title>Cài đặt Night Pass</title>
+<script>
+try{var t=localStorage.getItem("theme")}catch(e){}
+document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
+(function(){var q=new URLSearchParams(location.search).get("lang"),s=null;try{s=localStorage.getItem("lang")}catch(e){}
+var l=[q,s].find(function(x){return x==="vi"||x==="en"})||(/^vi/i.test(navigator.language||"")?"vi":"en");document.documentElement.lang=l;})();
+</script>
+<link rel="preload" href="shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="shared/fonts.css">
+<link rel="stylesheet" href="shared/theme.css">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.3;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+header,nav.tabs,main{width:100%;max-width:760px;margin:0 auto;padding-left:16px;padding-right:16px}
+header{flex:none;display:flex;align-items:center;gap:10px;padding-top:10px;padding-bottom:8px}
+.back{width:44px;height:44px;border-radius:50%;background:var(--panel);box-shadow:var(--shadow);display:grid;place-items:center;color:var(--ink);text-decoration:none;flex:none}
+.back svg{width:22px;height:22px}
+h1{margin:0;font-size:clamp(18px,4.6vw,24px);line-height:1.2;margin-right:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.seg{display:inline-flex;flex:none;background:var(--panel);box-shadow:var(--shadow);border-radius:22px;padding:3px}
+.seg button{font:inherit;border:0;background:none;color:var(--muted);border-radius:19px;height:36px;min-width:40px;padding:0 10px;font-weight:800;font-size:13px;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+nav.tabs{flex:none;display:flex;gap:6px;padding-bottom:8px}
+.tabs button{flex:1;min-width:0;height:44px;border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--muted);font:inherit;font-weight:800;font-size:13.5px;padding:0 6px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs button[aria-selected=true]{background:var(--accent);color:var(--on-accent);border-color:transparent}
+main{flex:1;min-height:0;padding-bottom:12px;display:flex;flex-direction:column}
+.pane{flex:1;min-height:0;display:none;gap:10px;align-content:start}
+.pane.on{display:grid;grid-template-columns:1fr}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:12px 14px;box-shadow:var(--shadow);min-width:0}
+.card h2{margin:0 0 6px;font-size:13px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.big{font-size:clamp(20px,5.4vw,26px);font-weight:800;line-height:1.15}
+.mut{color:var(--muted);font-size:13px}
+.kv{display:flex;justify-content:space-between;gap:10px;align-items:baseline;font-size:14px;margin-top:4px}
+.kv b{font-weight:800;text-align:right}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 16px;border-radius:12px;font:inherit;font-weight:800;font-size:14px;text-decoration:none;background:var(--panel);color:var(--ink);border:1px solid var(--line);cursor:pointer}
+.btn.p{background:var(--accent);color:var(--on-accent);border-color:transparent}
+.btn:disabled{opacity:.55}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.row .btn{flex:1 1 auto}
+.dots{display:flex;gap:6px;margin:4px 0}
+.dots i{width:22px;height:22px;border-radius:50%;background:var(--line);display:block}
+.dots i.on{background:var(--accent)}
+.warn{margin:6px 0 0;font-size:12.5px;color:var(--muted)}
+input{width:100%;height:44px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);font:inherit;font-size:16px;padding:0 12px}
+.otp{letter-spacing:.4em;text-align:center;font-weight:800}
+.msg{min-height:1.2em;font-size:13px;margin-top:6px;font-weight:700}
+.msg.ok{color:var(--good,#16a34a)}.msg.bad{color:var(--bad,#dc2626)}
+.sw{display:flex;gap:8px;flex-wrap:wrap}
+.sw .btn{flex:1 1 30%}
+.sw .btn[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:transparent}
+.rrow{display:flex;align-items:center;gap:10px;justify-content:space-between}.rrow .mut{flex:1;min-width:0}.rrow .btn{flex:none}[hidden]{display:none!important}
+.links{display:grid;gap:8px}
+.links .btn{justify-content:flex-start;width:100%}
+@media (min-width:700px),(max-height:480px) and (min-width:560px){.pane.on{grid-template-columns:1fr 1fr}.pane .wide{grid-column:1/-1}}
+@media (max-height:600px){header{padding-top:4px;padding-bottom:4px}nav.tabs{padding-bottom:4px}.tabs button{height:38px}.card{padding:8px 12px}.btn{min-height:40px}.pane{gap:6px}.back{width:38px;height:38px}.big{font-size:20px}}
+@media (max-height:480px){h1{display:none}.btn{min-height:36px}.card{padding:6px 10px}.card h2{margin-bottom:3px}.links{gap:5px}.big{font-size:18px}}
+</style>
+</head>
+<body>
+<header>
+  <a class="back" id="back" href="play/index.html" aria-label="Về trang chủ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
+  <h1 id="ttl">Cài đặt Night Pass</h1>
+  <div class="seg" role="group" aria-label="Language"><button type="button" data-l="vi">VI</button><button type="button" data-l="en">EN</button></div>
+</header>
+<nav class="tabs" role="tablist">
+  <button type="button" role="tab" id="tb0" data-t="0"></button>
+  <button type="button" role="tab" id="tb1" data-t="1"></button>
+  <button type="button" role="tab" id="tb2" data-t="2"></button>
+</nav>
+<main>
+  <section class="pane" id="p0" role="tabpanel" aria-labelledby="tb0">
+    <div class="card" id="cPlan"></div>
+    <div class="card" id="cDev"></div>
+    <div class="card wide" id="cRest"></div>
+  </section>
+  <section class="pane" id="p1" role="tabpanel" aria-labelledby="tb1">
+    <div class="card"><h2 id="thH"></h2><div class="sw" id="swTheme"></div></div>
+    <div class="card"><h2 id="lgH"></h2><div class="sw" id="swLang"></div></div>
+    <div class="card wide"><h2 id="skH"></h2><p class="mut" id="skP" style="margin:0 0 8px"></p><div class="row"><a class="btn p" id="skGo" href="cozyplay/index.html"></a><a class="btn" id="skGo2" href="popplay/index.html"></a></div></div>
+  </section>
+  <section class="pane" id="p2" role="tabpanel" aria-labelledby="tb2">
+    <div class="card"><h2 id="rfH"></h2><p class="mut" id="rfP" style="margin:0 0 8px"></p><div class="links"><a class="btn p" id="rfBtn" href="#"></a></div></div>
+    <div class="card"><h2 id="dcH"></h2><div class="links"><a class="btn" id="lDoc" href="documents.html?doc=6"></a><a class="btn" id="lPay" href="documents.html?doc=4"></a><a class="btn" id="lPrice" href="documents.html?doc=3"></a></div></div>
+    <div class="card wide"><h2 id="hlH"></h2><div class="links"><a class="btn" id="lChk" href="passcheck.html"></a><a class="btn" id="lMail" href="#"></a></div></div>
+  </section>
+</main>
+<script>
+"use strict";
+var T={vi:{
+ ttl:"Cài đặt Night Pass",back:"Về trang chủ",t0:"Gói & thiết bị",t1:"Giao diện",t2:"Hỗ trợ",
+ plan:"Gói của bạn",none:"Chưa có gói Night Pass",noneS:"Mua gói để mở khoá giao diện và chế độ mới.",buy:"Mua gói",renew:"Gia hạn",
+ pDay:"Gói ngày",pWeek:"Gói tuần",pMonth:"Gói tháng",pYear:"Gói năm",pDef:"Night Pass",
+ exp:"Hết hạn",left:function(d,h){return d>0?"còn "+d+" ngày":h>0?"còn "+h+" giờ":"sắp hết hạn"},expired:"Đã hết hạn",
+ noAuto:"Không tự gia hạn, không tự trừ tiền. Mua thêm được cộng dồn vào hạn hiện tại.",
+ dev:"Thiết bị",devN:function(n,m){return n+"/"+m+" thiết bị"},devThis:"Máy này đã đăng ký",devNo:"Máy này chưa có khoá thiết bị",
+ devWarn:function(m){return "Thiết bị thứ "+(m+1)+" vào thì thiết bị lâu không dùng nhất sẽ bị thu hồi."},
+ devOff:"Cần mạng để xem số thiết bị.",signout:"Đăng xuất thiết bị khác",signing:"Đang đăng xuất…",signedOut:function(n){return "Đã đăng xuất "+n+" thiết bị khác."},signErr:"Không đăng xuất được, thử lại sau.",
+ rest:"Khôi phục gói",restQ:"Đã mua nhưng máy này chưa có gói?",restP:"Đã mua nhưng máy này chưa có gói? Nhập email đã mua, nhận mã 6 số.",email:"Email đã mua",send:"Gửi mã",otp:"Mã 6 số",ok:"Xác nhận",
+ sent:"Đã gửi mã tới email. Nhập mã để khôi phục.",bad:"Mã chưa đúng hoặc đã hết hạn.",none2:"Không tìm thấy gói đang hoạt động cho email này.",net:"Không kết nối được máy chủ.",slow:"Thử quá nhiều lần, đợi một lúc rồi thử lại.",done:"Đã khôi phục gói.",emailBad:"Email chưa hợp lệ.",
+ th:"Sáng / Tối",thA:"Tự động",thL:"Sáng",thD:"Tối",lg:"Ngôn ngữ",
+ sk:"Giao diện từng game",skP:"Mỗi game có giao diện riêng: mở game, bấm nút 🎨 trên thẻ để chọn. Giao diện đã chọn được lưu trên máy này, xem được cả khi không có mạng.",skGo:"Night Play (Cozy)",skGo2:"Pop Play",
+ rf:"Hoàn tiền",rfP:"Gửi email cho chúng tôi, đã điền sẵn email mua và hạn gói. Hãy ghi thêm mã đơn (NP…).",rfBtn:"Yêu cầu hoàn tiền",rfSub:"Yêu cầu hoàn tiền Night Pass",
+ dc:"Chính sách",lDoc:"Đổi trả và hoàn tiền",lPay:"Thanh toán",lPrice:"Chính sách giá",
+ hl:"Cần giúp?",lChk:"Kiểm tra Night Pass (game vẫn khoá?)",lMail:"Gửi email hỗ trợ"},
+en:{
+ ttl:"Night Pass settings",back:"Back to home",t0:"Plan & devices",t1:"Look",t2:"Support",
+ plan:"Your plan",none:"No Night Pass yet",noneS:"Get a plan to unlock new looks and modes.",buy:"Get a plan",renew:"Extend",
+ pDay:"Day pass",pWeek:"Week pass",pMonth:"Month pass",pYear:"Year pass",pDef:"Night Pass",
+ exp:"Expires",left:function(d,h){return d>0?d+" days left":h>0?h+" h left":"expires soon"},expired:"Expired",
+ noAuto:"Never auto-renews, never auto-charges. Buying more adds to your current expiry.",
+ dev:"Devices",devN:function(n,m){return n+"/"+m+" devices"},devThis:"This device is registered",devNo:"This device has no device key",
+ devWarn:function(m){return "When device number "+(m+1)+" joins, the least recently used one is revoked."},
+ devOff:"Go online to see the device count.",signout:"Sign out other devices",signing:"Signing out…",signedOut:function(n){return "Signed out "+n+" other device(s)."},signErr:"Could not sign out, try again later.",
+ rest:"Restore pass",restQ:"Bought it but this device has no pass?",restP:"Bought it but this device has no pass? Enter your purchase email and get a 6-digit code.",email:"Purchase email",send:"Send code",otp:"6-digit code",ok:"Confirm",
+ sent:"Code sent to your email. Enter it to restore.",bad:"The code is wrong or expired.",none2:"No active plan found for this email.",net:"Could not reach the server.",slow:"Too many tries, wait a moment and retry.",done:"Pass restored.",emailBad:"Email looks invalid.",
+ th:"Light / Dark",thA:"Auto",thL:"Light",thD:"Dark",lg:"Language",
+ sk:"Look per game",skP:"Each game has its own looks: open a game and tap the 🎨 button on its card. Your picks are saved on this device and work offline.",skGo:"Night Play (Cozy)",skGo2:"Pop Play",
+ rf:"Refund",rfP:"Email us, pre-filled with your purchase email and expiry. Please add your order code (NP…).",rfBtn:"Request a refund",rfSub:"Night Pass refund request",
+ dc:"Policies",lDoc:"Returns and refunds",lPay:"Payment",lPrice:"Pricing",
+ hl:"Need help?",lChk:"Night Pass check (still locked?)",lMail:"Email support"}};
+var de=document.documentElement,$=function(i){return document.getElementById(i)},tab=0,srv=null,restStep=0,restEmail="",restOpen=false;
+var MAIL="support@nightplay.vn";
+function L(){return de.lang==="en"?"en":"vi"}function X(){return T[L()]}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function pass(){try{return JSON.parse(localStorage.getItem("pass"))||null}catch(e){return null}}
+function fmt(d){try{return d.toLocaleDateString(L()==="vi"?"vi-VN":"en-GB")}catch(e){return d.toISOString().slice(0,10)}}
+function renderPlan(){
+  var x=X(),p=pass(),exp=p&&p.exp?new Date(p.exp):null,left=exp?exp-Date.now():0,ok=exp&&left>0;
+  var nm=p?(x[{day:"pDay",week:"pWeek",month:"pMonth",year:"pYear"}[p.plan]]||x.pDef):"";
+  var h='<h2>'+esc(x.plan)+'</h2>';
+  if(!p||!exp){h+='<div class="big">'+esc(x.none)+'</div><div class="mut">'+esc(x.noneS)+'</div><div class="row"><a class="btn p" href="'+sub()+'">'+esc(x.buy)+'</a></div>'}
+  else{
+    var d=Math.floor(left/864e5),hr=Math.floor(left/36e5);
+    h+='<div class="big">'+esc(nm)+'</div><div class="kv"><span>'+esc(x.exp)+'</span><b>'+esc(fmt(exp))+(ok?' · '+esc(x.left(d,hr)):' · '+esc(x.expired))+'</b></div><div class="mut" style="margin-top:6px">'+esc(x.noAuto)+'</div><div class="row"><a class="btn p" href="'+sub()+'">'+esc(x.renew)+'</a></div>';
+  }
+  $("cPlan").innerHTML=h;
+}
+function sub(){return "subscribe.html?from="+encodeURIComponent(fromPath())+"&lang="+L()}
+function fromPath(){var f=new URLSearchParams(location.search).get("from");return f&&/^[\w\-./]+(#[\w-]+)?$/.test(f)&&f.indexOf("..")<0&&f.charAt(0)!=="/"?f:"play/index.html"}
+function renderDev(){
+  var x=X(),p=pass(),h='<h2>'+esc(x.dev)+'</h2>';
+  if(!p||!p.token){$("cDev").innerHTML=h+'<div class="mut">'+esc(x.noneS)+'</div>';return}
+  if(srv&&srv.devices){
+    var n=srv.devices.n,m=srv.devices.max,dots="";for(var i=0;i<m;i++)dots+='<i class="'+(i<n?"on":"")+'"></i>';
+    h+='<div class="big">'+esc(x.devN(n,m))+'</div><div class="dots" aria-hidden="true">'+dots+'</div><div class="warn">'+esc(x.devWarn(m))+'</div><div class="row"><button class="btn" id="bSign" type="button"'+(n<2?" disabled":"")+'>'+esc(x.signout)+'</button></div><div class="msg" id="mSign" role="status"></div>';
+  }else h+='<div class="mut">'+esc(srv===false?x.devOff:"…")+'</div>';
+  $("cDev").innerHTML=h;
+  var b=$("bSign");if(b)b.onclick=signOut;
+}
+async function loadSrv(){
+  var p=pass();if(!p||!p.token){srv=null;renderDev();return}
+  try{
+    var r=await fetch("/api/pass",{headers:{Authorization:"Bearer "+p.token},cache:"no-store"});
+    if(!r.ok)throw 0;srv=await r.json();
+    try{var q=pass()||p;if(srv.exp){q.exp=new Date(srv.exp).toISOString();localStorage.setItem("pass",JSON.stringify(q))}}catch(e){}
+  }catch(e){srv=false}
+  renderPlan();renderDev();
+}
+async function signOut(){
+  var x=X(),b=$("bSign"),m=$("mSign");b.disabled=true;b.textContent=x.signing;
+  try{var p=pass(),r=await fetch("/api/pass/signout-others",{method:"POST",headers:{Authorization:"Bearer "+p.token}}),j=await r.json();if(!r.ok)throw 0;await loadSrv();var mm=$("mSign");if(mm){mm.className="msg ok";mm.textContent=x.signedOut(j.removed)}}
+  catch(e){b.disabled=false;b.textContent=x.signout;m.className="msg bad";m.textContent=x.signErr}
+}
+function renderRest(){
+  var x=X(),p=pass(),em=restEmail||(p&&p.email)||"";
+  $("cPlan").hidden=$("cDev").hidden=restOpen;
+  if(!restOpen){$("cRest").innerHTML='<div class="rrow"><span class="mut">'+esc(x.restQ)+'</span><button class="btn" id="rOpen" type="button">'+esc(x.rest)+'</button></div>';$("rOpen").onclick=function(){restOpen=true;restStep=0;renderRest()};return}
+  var h='<h2>'+esc(x.rest)+'</h2><p class="mut" style="margin:0 0 8px">'+esc(x.restP)+'</p>';
+  if(restStep===0)h+='<label class="mut" for="rE">'+esc(x.email)+'</label><input id="rE" type="email" inputmode="email" autocomplete="email" value="'+esc(em)+'">';
+  else h+='<label class="mut" for="rO">'+esc(x.otp)+'</label><input id="rO" class="otp" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="••••••">';
+  h+='<div class="row"><button class="btn" id="rBk" type="button">←</button><button class="btn p" id="rGo" type="button">'+esc(restStep===0?x.send:x.ok)+'</button></div><div class="msg" id="rM" role="status"></div>';
+  $("cRest").innerHTML=h;
+  $("rGo").onclick=restStep===0?restSend:restVerify;
+  var o=$("rO");if(o){o.oninput=function(){o.value=o.value.replace(/\D/g,"").slice(0,6)};o.onkeydown=function(e){if(e.key==="Enter")restVerify()};o.focus()}
+  var e=$("rE");if(e)e.onkeydown=function(ev){if(ev.key==="Enter")restSend()};
+  $("rBk").onclick=function(){if(restStep===1){restStep=0}else restOpen=false;renderRest()};
+}
+function msg(c,t){var m=$("rM");if(m){m.className="msg "+c;m.textContent=t}}
+async function api(path,body){
+  var r=await fetch("/api"+path,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}),d={};try{d=await r.json()}catch(e){}
+  if(!r.ok)throw{status:r.status};return d;
+}
+async function restSend(){
+  var x=X(),em=$("rE").value.trim();if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){msg("bad",x.emailBad);return}
+  $("rGo").disabled=true;
+  try{await api("/restore",{email:em});restEmail=em;restStep=1;renderRest();msg("ok",x.sent)}
+  catch(e){$("rGo").disabled=false;msg("bad",e&&e.status===429?x.slow:x.net)}
+}
+async function restVerify(){
+  var x=X(),b=$("rGo");if(b.disabled)return;b.disabled=true;
+  try{
+    var d=await api("/restore/verify",{email:restEmail,otp:$("rO").value.trim()});
+    if(!d.active||!d.token){b.disabled=false;msg("bad",x.none2);return}
+    try{localStorage.setItem("pass",JSON.stringify({plan:d.plan,exp:new Date(d.exp).toISOString(),email:restEmail,token:d.token}))}catch(e){}
+    restStep=0;restOpen=false;renderAll();loadSrv();
+  }catch(e){b.disabled=false;msg("bad",e&&e.status===429?x.slow:e&&e.status?x.bad:x.net)}
+}
+function renderLook(){
+  var x=X(),cur=null;try{cur=localStorage.getItem("theme")}catch(e){}
+  $("thH").textContent=x.th;$("lgH").textContent=x.lg;
+  var opts=[[null,x.thA],["light",x.thL],["dark",x.thD]];
+  $("swTheme").innerHTML=opts.map(function(o){return '<button type="button" class="btn" data-v="'+(o[0]||"")+'" aria-pressed="'+((cur||"")===(o[0]||""))+'">'+esc(o[1])+'</button>'}).join("");
+  $("swTheme").querySelectorAll("button").forEach(function(b){b.onclick=function(){var v=b.dataset.v;try{if(v)localStorage.setItem("theme",v);else localStorage.removeItem("theme")}catch(e){}
+    de.dataset.theme=v||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");renderLook()}});
+  $("swLang").innerHTML=["vi","en"].map(function(l){return '<button type="button" class="btn" data-l="'+l+'" aria-pressed="'+(L()===l)+'">'+(l==="vi"?"Tiếng Việt":"English")+'</button>'}).join("");
+  $("swLang").querySelectorAll("button").forEach(function(b){b.onclick=function(){setLang(b.dataset.l)}});
+  $("skH").textContent=x.sk;$("skP").textContent=x.skP;$("skGo").textContent=x.skGo;$("skGo2").textContent=x.skGo2;
+}
+function renderSupport(){
+  var x=X(),p=pass(),em=(p&&p.email)||"",ex=p&&p.exp?fmt(new Date(p.exp)):"";
+  $("rfH").textContent=x.rf;$("rfP").textContent=x.rfP;$("rfBtn").textContent=x.rfBtn;
+  var body=(L()==="vi"?"Email mua: ":"Purchase email: ")+em+"\n"+(L()==="vi"?"Hạn gói: ":"Plan expiry: ")+ex+"\n"+(L()==="vi"?"Mã đơn (NP…): ":"Order code (NP…): ")+"\n";
+  $("rfBtn").href="mailto:"+MAIL+"?subject="+encodeURIComponent(x.rfSub)+"&body="+encodeURIComponent(body);
+  $("lMail").href="mailto:"+MAIL;$("lMail").textContent=x.lMail+" · "+MAIL;
+  $("dcH").textContent=x.dc;$("lDoc").textContent=x.lDoc;$("lPay").textContent=x.lPay;$("lPrice").textContent=x.lPrice;
+  $("hlH").textContent=x.hl;$("lChk").textContent=x.lChk;
+  ["lDoc","lPay","lPrice"].forEach(function(i){var a=$(i);a.href=a.getAttribute("href").split("&")[0]});
+}
+function renderAll(){
+  var x=X();$("ttl").textContent=x.ttl;document.title=x.ttl;
+  var b=$("back");b.setAttribute("aria-label",x.back);b.href=fromPath();
+  ["tb0","tb1","tb2"].forEach(function(id,i){var e=$(id);e.textContent=x["t"+i];e.setAttribute("aria-selected",String(tab===i))});
+  for(var i=0;i<3;i++)$("p"+i).classList.toggle("on",tab===i);
+  document.querySelectorAll(".seg button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.l===L()))});
+  renderPlan();renderDev();renderRest();renderLook();renderSupport();
+}
+function setLang(l){de.lang=l;try{localStorage.setItem("lang",l)}catch(e){}renderAll()}
+document.querySelectorAll(".seg button").forEach(function(b){b.onclick=function(){setLang(b.dataset.l)}});
+document.querySelectorAll(".tabs button").forEach(function(b){b.onclick=function(){tab=+b.dataset.t;try{var q=new URLSearchParams(location.search);q.set("tab",tab);history.replaceState(null,"","?"+q)}catch(e){}renderAll()}});
+addEventListener("storage",function(e){if(e.key==="lang"&&(e.newValue==="vi"||e.newValue==="en")){de.lang=e.newValue;renderAll()}});
+tab=Math.max(0,Math.min(2,parseInt(new URLSearchParams(location.search).get("tab"),10)||0));
+renderAll();loadSrv();
+if(location.hash==="#restore"){tab=0;renderAll();var re=$("rE");re&&re.focus()}
+</script>
+<script src="shared/offline.js" defer></script>
+</body>
+</html>
