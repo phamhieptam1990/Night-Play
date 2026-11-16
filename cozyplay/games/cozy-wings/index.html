@@ -438,6 +438,12 @@ body:has(#ovHow:not([hidden])) .side .ask,body:has(#ovHow:not([hidden])) .side .
 .ov .big{font-size:4.8cqw}.ov .ghost{font-size:3.8cqw}
 }
 @media (min-aspect-ratio:11/10){.ask{gap:8px;padding:6px 10px;min-width:0;flex-wrap:nowrap}.ask .ib{flex:none;width:40px;height:40px;min-width:40px;min-height:40px}#askTxt{min-width:0;flex:1 1 0;font-size:clamp(12px,1.7vw,20px);line-height:1.15;overflow-wrap:normal;word-break:normal}.side{flex:none;min-width:min(180px,28vw)}}   /* thẻ nhắc việc ở cột trái hẹp: không bóp thành cột 106px / xuống từng chữ */
+/* màn chọn chuyến bay: thẻ ngày + các hàng CÙNG CHIỀU CAO 58px mọi cỡ màn (trước: thẻ ngày 87px ở iPad / 46px ở điện thoại, hàng 58px); nút 🎨 cách mép phải 12px, không dính sát */
+html body #ovStart .tile.daily{height:58px!important;min-height:58px!important;padding-block:0!important;box-sizing:border-box}
+html body #ovStart .tile:not(.daily){min-height:58px;box-sizing:border-box}
+html body #ovStart .tile:not(.daily) .skinBtn{right:12px!important}
+/* iPad / web DỌC (rộng >520px): hiện linh vật 🐝🐟 ở màn chọn chuyến bay (trước: bị ẩn → khoảng trống lớn phía trên, chỉ có ở điện thoại) */
+@media (min-width:521px) and (orientation:portrait){#ovStart .cwHero{order:0;flex:0 1 auto;height:clamp(150px,24vh,300px);min-height:0;width:100%;display:flex;align-items:center;justify-content:center;font-size:clamp(90px,min(18vw,15vh),200px)!important;line-height:1;white-space:nowrap;overflow:hidden;animation:cwBob 2.8s ease-in-out infinite}}
 </style>
 </head>
 <body>

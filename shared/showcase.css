@@ -329,3 +329,9 @@ html.sc-ok #fPop a{color:#d7ccff!important}html.sc-ok #fPop .fpu{opacity:.8}
 html.sc-ok #fFab[aria-expanded=true] svg{display:none!important}
 html.sc-ok #fFab[aria-expanded=true]::before{content:"";width:16px;height:16px;display:block;background:linear-gradient(45deg,transparent calc(50% - 1.3px),#fff calc(50% - 1.3px),#fff calc(50% + 1.3px),transparent calc(50% + 1.3px)),linear-gradient(-45deg,transparent calc(50% - 1.3px),#fff calc(50% - 1.3px),#fff calc(50% + 1.3px),transparent calc(50% + 1.3px))}   /* mở ra: ✕ đóng (không trùng biểu tượng ⓘ của nút thông tin) */
 html.sc-ok #fPop p{color:#fff!important;opacity:1!important}html.sc-ok #fPop .fpu{color:#cfc4ff!important;opacity:1!important}   /* dòng © và ngày cập nhật đọc rõ trên nền tím tối (trước: chữ tối gần như chìm) */
+
+/* THEME SÁNG: menu ⓘ chân trang nền trắng–tím nhạt, chữ tím đậm, liên kết tím (không ép nền đen) */
+html[data-theme=light].sc-ok #fPop{background:linear-gradient(165deg,#ffffff,#efe9ff)!important;color:#2b2064!important;border:1.5px solid rgba(124,92,255,.45)!important;box-shadow:0 14px 36px rgba(60,40,140,.25)!important}
+html[data-theme=light].sc-ok #fPop p{color:#2b2064!important}
+html[data-theme=light].sc-ok #fPop .fpu{color:#6b5fa8!important}
+html[data-theme=light].sc-ok #fPop a{color:#5b3ce0!important}

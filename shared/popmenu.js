@@ -82,6 +82,8 @@
     "}" +
     /* MỌI cỡ màn (iPad, web, điện thoại ngang): panel ⋯ kiểu Night Pass như điện thoại dọc — nền tối gradient, viền tím–cam, chữ trắng; KHÔNG theo màu từng game (trước: tím đặc + viền cam / nền xám viền xanh) */
     "#npPmFan .pn{--npink:#fff;--npbg:#171236;background:linear-gradient(160deg,#211C52,#14152A) padding-box,linear-gradient(135deg,#9B83FF,#FF9A6B) border-box!important;color:#fff!important;border:1.5px solid transparent!important;box-shadow:0 14px 36px rgba(0,0,0,.5),0 0 26px rgba(124,92,255,.32)!important}" +
+    "html[data-theme=light] #npPmFan .pn{--npink:#2b2064;--npbg:#fff;background:linear-gradient(160deg,#ffffff,#efe9ff) padding-box,linear-gradient(135deg,#9B83FF,#FF9A6B) border-box!important;color:#2b2064!important;box-shadow:0 14px 36px rgba(60,40,140,.25),0 0 22px rgba(124,92,255,.18)!important}" +
+    "html[data-theme=light] #npPmFan .pn .it,html[data-theme=light] #npPmFan .pn .it *{color:#2b2064!important}html[data-theme=light] #npPmFan .pn .it{color:#2b2064!important;background:rgba(124,92,255,.1)!important;border-color:rgba(124,92,255,.28)!important}" +
     "@media (prefers-reduced-motion:reduce){#npPmFab svg,#npPmFan .bk,#npPmFan .pn{transition:none!important}#npPmFab.nudge{animation:none}}";
   document.head.appendChild(st);
 
