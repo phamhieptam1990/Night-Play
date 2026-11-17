@@ -343,6 +343,10 @@ window.NP = (function () {
     document.querySelectorAll(".stats").forEach(function (r) { var all = r.querySelectorAll(".st").length, hid = r.querySelectorAll(".st[data-nohud]").length; r.classList.toggle("np-allhid", all > 0 && all === hid); });
     return n;
   }
+  /* nút của game mà menu ⋯ của khung (host) có thể điều khiển: chơi lại, bảng xếp hạng, thử thách — host chỉ hiện ô khi game có nút */
+  var CAPIDS = { restart: ["restartBtn", "bRe"], board: ["bBoard"], npch: ["npChBtn"] };
+  function capBtn(k) { var a = CAPIDS[k]; for (var i = 0; i < a.length; i++) { var e = document.getElementById(a[i]); if (e && !e.hidden) return e; } return null; }
+  function capsOf() { var o = {}; for (var k in CAPIDS) o[k] = capBtn(k) ? 1 : 0; return o; }
   function readHud() {
     var st = null; try { st = getter ? getter() : null; } catch (e) {}
     var o = hudFn ? (function () { try { return hudFn() || {}; } catch (e) { return {}; } })() : {}, g = function (k) { return st && typeof st[k] === "number" ? st[k] : null; };
@@ -354,7 +358,7 @@ window.NP = (function () {
     var time = o.time != null ? o.time : g("timeLeft") != null ? g("timeLeft") : g("tl") != null ? g("tl") : domNum(["time", "tm", "svTimer"]);
     var playing = !!st; if (playing) mOver = false;
     var best = null; try { best = numOf(localStorage.getItem("np-hi-" + gid)); } catch (e) {}
-    return { type: "np-hud", id: gid, hc: hudScan(), stats: mStats, hp: document.getElementById("phBtn") ? 1 : 0, time: time, score: score, combo: combo, moves: moves, best: best, state: mPaused ? "paused" : playing ? "playing" : mOver ? "over" : "idle" };
+    return { type: "np-hud", id: gid, hc: hudScan(), stats: mStats, hp: document.getElementById("phBtn") ? 1 : 0, caps: capsOf(), time: time, score: score, combo: combo, moves: moves, best: best, state: mPaused ? "paused" : playing ? "playing" : mOver ? "over" : "idle" };
   }
   /* ẢNH CHỤP cho khay thumbnail: vuông 128px, nền ĐẶC (màu nền thật của game), canvas vẽ "contain" giữa ô — không cắt, không để lộ vùng trong suốt/đen.
      Canvas trong suốt (game vẽ trên nền CSS) khi lưu JPEG sẽ thành ĐEN → nếu > 30% điểm ảnh là trong suốt hoặc đen thuần thì trả null (host dùng icon). Host chụp TRƯỚC khi ẩn khung. */
@@ -414,6 +418,7 @@ window.NP = (function () {
     else if (c === "hud-hide") { mHudHide = true; document.documentElement.classList.add("np-nohud"); }
     else if (c === "hud-show") { mHudHide = false; document.documentElement.classList.remove("np-nohud"); }
     else if (c === "help") { var hb = document.getElementById("phBtn"); if (hb) hb.click(); }
+    else if (c === "restart" || c === "board" || c === "npch") { var cb = capBtn(c); if (cb) cb.click(); }
     else if (c === "snapshot") { post({ type: "np-snap", id: gid, dataUrl: snapCanvas() }); return; }
     post(readHud());
   }
