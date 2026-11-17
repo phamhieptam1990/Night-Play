@@ -186,9 +186,11 @@
     if (!host || !o || !G[o.game]) return null; var it = find(host);
     if (!it) { it = new Inst(host, o); insts.push(it); } it.mount(); return it;
   }
+  /* cỡ linh vật mini = cỡ NHÂN VẬT của game (chim/nhân vật chính ~ 1/5 bề ngang khung chơi), 60–112px */
+  function miniSize(parent) { var w = (parent.getBoundingClientRect().width) || 360; return Math.max(60, Math.min(112, Math.round(w * 0.2))); }
   function companion(game, parent, o) {
     if (!parent || !G[game]) return null; o = o || {}; var d = parent.querySelector(":scope>.npa-mini"); if (d) return find(d);
-    d = document.createElement("div"); d.className = "npa-mini " + (o.pos || "bl"); d.setAttribute("data-npa-game", game); var sz = o.size || 56; d.style.width = d.style.height = sz + "px"; parent.appendChild(d); var inst = mount(d, { game: game, role: "mini" }); drag(d, parent, game); return inst;
+    d = document.createElement("div"); d.className = "npa-mini " + (o.pos || "bl"); d.setAttribute("data-npa-game", game); var sz = o.size || miniSize(parent); d.style.width = d.style.height = sz + "px"; parent.appendChild(d); if (!o.size) { var fm = function () { var z = miniSize(parent) + "px"; if (d.style.width !== z) { d.style.width = d.style.height = z; applyPos(d, parent, game); } }; addEventListener("resize", fm); try { new ResizeObserver(fm).observe(parent); } catch (e) {} } var inst = mount(d, { game: game, role: "mini" }); drag(d, parent, game); return inst;
   }
 
   /* ---------- NGƯỜI CHƠI KÉO LINH VẬT MINI ĐẶT Ở ĐÂU CŨNG ĐƯỢC TRONG KHUNG GAME (nhớ theo game, lưu máy; tỉ lệ theo khung nên đổi cỡ vẫn đúng) ---------- */
@@ -367,7 +369,7 @@
     /* KHUNG CHUNG: tự bọc hàm toast(msg,ms,kind) toàn cục của game → thông báo vào bong bóng linh vật; game KHÔNG phải sửa hàm toast */
     try { var ot = window.toast; if (typeof ot === "function" && !ot.__npa) { var nt = function (m, ms, kind) { try { if (typeof m === "string" && sayAll(m, ms, kind)) return; } catch (e) {} return ot.apply(this, arguments); }; nt.__npa = 1; window.toast = nt; } } catch (e) {}
     var h = document.querySelector(HERO); if (h) mount(h, { game: gid, role: "hero" });
-    if (document.documentElement.getAttribute("data-npa-mini") !== "off") { var pl = document.getElementById("play"); if (pl) companion(gid, pl, { pos: G[gid].pos || "br", size: 48 }); }
+    if (document.documentElement.getAttribute("data-npa-mini") !== "off") { var pl = document.getElementById("play"); if (pl) companion(gid, pl, { pos: G[gid].pos || "br" }); }
   }
   addEventListener("npa", function (e) { var d = (e && e.detail) || {}; if (d.name) event(d.name, d); });
   addEventListener("np:start", function () { event("start"); });
