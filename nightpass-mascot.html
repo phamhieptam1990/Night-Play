@@ -101,6 +101,17 @@ main{flex:1;min-height:0;padding-bottom:12px;display:flex;flex-direction:column;
   .skins,.ths{flex-wrap:nowrap!important;overflow-x:auto!important}
   main>.card.fill{min-height:120px}
 }
+
+/* CUỘN ĐƯỢC ở bố cục 2 cột: cột phải cuộn dọc (cả skin, theme, danh sách chọn), cột trái đứng yên */
+@media (orientation:landscape) and (min-width:560px),(min-width:900px){
+  main{overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y;grid-template-rows:auto auto auto!important;align-content:start;scrollbar-width:thin}
+  .prev{position:sticky;top:0;align-self:start;grid-row:1/4!important;max-height:calc(100dvh - 76px);overflow:hidden}
+  main>.card.fill{grid-row:3!important;display:block;min-height:0;overflow:visible}
+  main>.card.fill .grid{overflow:visible;max-height:none;flex:none}
+  main>.card.fill{height:max-content!important;max-height:none!important;align-self:start!important;flex:none!important;padding-bottom:12px;display:flow-root!important;contain:none!important}main{padding-bottom:18px!important}
+  main>.card.fill .tabs{margin-bottom:8px}main>.card.fill .grid{display:grid;height:auto!important;min-height:0}
+  main>.card:not(.prev){flex:none}
+}
 </style>
 </head>
 <body>
