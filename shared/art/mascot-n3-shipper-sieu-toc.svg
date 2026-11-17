@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Shipper Siêu Tốc" class="np-mascot sk-default" data-style="night" data-game="shipper-sieu-toc">
+<title>Corgi Giao Hàng — Shipper Siêu Tốc</title>
+<desc>Chữ ký khuôn mặt (giữ nguyên ở mọi skin): mắt to hai chấm sáng, má hồng, biểu cảm riêng, tia chớp giữa trán. Đạo cụ nhận diện game (luôn có): thùng hàng SHIP + mũ bảo hiểm. Phong cách Night 3D mềm. Chi tiết nhỏ dùng màu cứng.</desc>
+<style>.np-mascot[data-game="shipper-sieu-toc"]{--bg1:#2b2064;--bg2:#171236;--bgx:#FF4FA3;--sh:color-mix(in srgb,var(--bg2) 55%,#000)}
+.acc,.fx{display:none}.npa{transform-box:fill-box;transform-origin:50% 100%}.npa-breathe{animation:npa-breathe 3.2s ease-in-out infinite}@keyframes npa-breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.02,.98)}}
+:root.np-playing .npa{animation:none}@media (prefers-reduced-motion:reduce){.npa{animation:none}}</style>
+<defs><radialGradient id="h" cx=".34" cy=".26" r=".85"><stop offset="0" stop-color="#FFC285"/><stop offset=".55" stop-color="#FF9A3C"/><stop offset="1" stop-color="#D8681A"/></radialGradient>
+<radialGradient id="b" cx=".4" cy=".25" r=".9"><stop offset="0" stop-color="#FFC285"/><stop offset=".6" stop-color="#FF9A3C"/><stop offset="1" stop-color="#D8681A"/></radialGradient>
+<radialGradient id="v" cx=".5" cy=".35" r=".7"><stop offset="0" stop-color="#FFF1DC"/><stop offset="1" stop-color="#FFF1DC" stop-opacity=".78"/></radialGradient></defs>
+<g id="shadow"><ellipse cx="128" cy="240" rx="76" ry="9" fill="var(--sh)" opacity=".5"/></g>
+<g id="all" class="npa npa-breathe"><g id="pose" transform="rotate(2.4 128 230)">
+
+<g id="body"><ellipse cx="128" cy="184" rx="68" ry="54" fill="url(#b)"/><ellipse cx="128" cy="190" rx="42" ry="34" fill="url(#v)"/>
+<ellipse cx="62" cy="176" rx="17" ry="26" fill="url(#b)" transform="rotate(18 62 176)"/><ellipse cx="194" cy="176" rx="17" ry="26" fill="url(#b)" transform="rotate(-18 194 176)"/>
+<ellipse cx="98" cy="232" rx="24" ry="13" fill="url(#b)"/><ellipse cx="158" cy="232" rx="24" ry="13" fill="url(#b)"/>
+<path d="M60 84L44 22L106 58Z" fill="#FF9A3C"/><path d="M196 84L212 22L150 58Z" fill="#FF9A3C"/><path d="M66 70L58 42L92 60Z" fill="#FFB3A0"/><path d="M190 70L198 42L164 60Z" fill="#FFB3A0"/><ellipse cx="128" cy="108" rx="84" ry="74" fill="url(#h)"/><ellipse cx="96" cy="58" rx="28" ry="13" fill="#fff" opacity=".42" transform="rotate(-22 96 58)"/><path d="M52 132Q60 176 100 186" fill="none" stroke="#D8681A" stroke-width="10" opacity=".14" stroke-linecap="round"/></g>
+<g id="face"><g id="eyes"><ellipse cx="100" cy="108" rx="13" ry="15.5" fill="#2A1A33"/><circle cx="104" cy="102" r="4.193548387096774" fill="#fff"/><circle cx="96" cy="113" r="2.1666666666666665" fill="#fff" opacity=".85"/><ellipse cx="156" cy="108" rx="13" ry="15.5" fill="#2A1A33"/><circle cx="160" cy="102" r="4.193548387096774" fill="#fff"/><circle cx="152" cy="113" r="2.1666666666666665" fill="#fff" opacity=".85"/><ellipse cx="78" cy="130" rx="13" ry="8" fill="#FF8FA8" opacity=".55"/><ellipse cx="178" cy="130" rx="13" ry="8" fill="#FF8FA8" opacity=".55"/><path d="M104 130Q128 160 152 130Z" fill="#7A2A3A"/><path d="M114 146Q128 136 142 146Q128 156 114 146Z" fill="#FF7F9A"/></g><path id="mark" d="M132 78L120 96H130L124 110L138 90H128Z" fill="#fff"/></g>
+<path d="M80 66Q82 22 128 20Q174 22 176 66Z" fill="#2DD4A8"/><path d="M82 60H174" stroke="#fff" stroke-width="7" stroke-linecap="round"/><g id="sign"><rect x="180" y="170" width="62" height="52" rx="9" fill="#E3B27A"/><path d="M180 190H242" stroke="#B8854E" stroke-width="4"/><text x="211" y="214" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-weight="900" font-size="14" fill="#7A4A00">SHIP</text></g>
+<g id="acc-badge" class="acc acc-badge"></g><g id="acc-group" class="acc acc-group"></g><g id="acc-night" class="acc acc-night"></g><g id="acc-star" class="acc acc-star"></g><g id="fx-night" class="fx fx-night"></g><g id="fx-star" class="fx fx-star"></g>
+</g></g></svg>

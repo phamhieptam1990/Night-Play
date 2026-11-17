@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Đoán Giá Chợ Việt" class="np-mascot sk-default" data-style="night" data-game="gia-cho-viet">
+<title>Heo Đất Chốt Đơn — Đoán Giá Chợ Việt</title>
+<desc>Chữ ký khuôn mặt (giữ nguyên ở mọi skin): mắt to hai chấm sáng, má hồng, biểu cảm riêng, khe bỏ tiền trên đầu. Đạo cụ nhận diện game (luôn có): bảng giá 25K. Phong cách Night 3D mềm. Chi tiết nhỏ dùng màu cứng.</desc>
+<style>.np-mascot[data-game="gia-cho-viet"]{--bg1:#2b2064;--bg2:#171236;--bgx:#FF4FA3;--sh:color-mix(in srgb,var(--bg2) 55%,#000)}
+.acc,.fx{display:none}.npa{transform-box:fill-box;transform-origin:50% 100%}.npa-breathe{animation:npa-breathe 3.2s ease-in-out infinite}@keyframes npa-breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.02,.98)}}
+:root.np-playing .npa{animation:none}@media (prefers-reduced-motion:reduce){.npa{animation:none}}</style>
+<defs><radialGradient id="h" cx=".34" cy=".26" r=".85"><stop offset="0" stop-color="#FFC2D9"/><stop offset=".55" stop-color="#FF8FBC"/><stop offset="1" stop-color="#D5578F"/></radialGradient>
+<radialGradient id="b" cx=".4" cy=".25" r=".9"><stop offset="0" stop-color="#FFC2D9"/><stop offset=".6" stop-color="#FF8FBC"/><stop offset="1" stop-color="#D5578F"/></radialGradient>
+<radialGradient id="v" cx=".5" cy=".35" r=".7"><stop offset="0" stop-color="#FFE0EC"/><stop offset="1" stop-color="#FFE0EC" stop-opacity=".78"/></radialGradient></defs>
+<g id="shadow"><ellipse cx="128" cy="240" rx="76" ry="9" fill="var(--sh)" opacity=".5"/></g>
+<g id="all" class="npa npa-breathe"><g id="pose" transform="rotate(2.4 128 230)">
+
+<g id="body"><ellipse cx="128" cy="184" rx="68" ry="54" fill="url(#b)"/><ellipse cx="128" cy="190" rx="42" ry="34" fill="url(#v)"/>
+<ellipse cx="62" cy="176" rx="17" ry="26" fill="url(#b)" transform="rotate(18 62 176)"/><ellipse cx="194" cy="176" rx="17" ry="26" fill="url(#b)" transform="rotate(-18 194 176)"/>
+<ellipse cx="98" cy="232" rx="24" ry="13" fill="url(#b)"/><ellipse cx="158" cy="232" rx="24" ry="13" fill="url(#b)"/>
+<path d="M66 70L52 30L96 52Z" fill="#FF8FBC"/><path d="M190 70L204 30L160 52Z" fill="#FF8FBC"/><ellipse cx="128" cy="108" rx="84" ry="74" fill="url(#h)"/><ellipse cx="96" cy="58" rx="28" ry="13" fill="#fff" opacity=".42" transform="rotate(-22 96 58)"/><path d="M52 132Q60 176 100 186" fill="none" stroke="#D5578F" stroke-width="10" opacity=".14" stroke-linecap="round"/></g>
+<g id="face"><g id="eyes"><ellipse cx="104" cy="108" rx="13" ry="15.5" fill="#2A1A33"/><circle cx="108" cy="102" r="4.193548387096774" fill="#fff"/><circle cx="100" cy="113" r="2.1666666666666665" fill="#fff" opacity=".85"/><ellipse cx="160" cy="108" rx="13" ry="15.5" fill="#2A1A33"/><circle cx="164" cy="102" r="4.193548387096774" fill="#fff"/><circle cx="156" cy="113" r="2.1666666666666665" fill="#fff" opacity=".85"/><path d="M86 94Q104 82 122 100M138 100Q158 82 176 94" fill="none" stroke="#2A1A33" stroke-width="5" stroke-linecap="round"/><ellipse cx="78" cy="130" rx="13" ry="8" fill="#FF8FA8" opacity=".55"/><ellipse cx="178" cy="130" rx="13" ry="8" fill="#FF8FA8" opacity=".55"/><path d="M112 136Q130 146 152 128" fill="none" stroke="#7A2A3A" stroke-width="4.5" stroke-linecap="round"/></g><rect id="mark" x="112" y="34" width="32" height="9" rx="4.5" fill="#8A2A5A"/></g>
+<g id="sign" transform="rotate(-8 36 190)"><path d="M8 168H64L74 190L64 212H8Z" fill="#FFD93D"/><text x="42" y="196" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-weight="900" font-size="18" fill="#7A4A00">25K</text></g>
+<g id="acc-badge" class="acc acc-badge"></g><g id="acc-group" class="acc acc-group"></g><g id="acc-night" class="acc acc-night"></g><g id="acc-star" class="acc acc-star"></g><g id="fx-night" class="fx fx-night"></g><g id="fx-star" class="fx fx-star"></g>
+</g></g></svg>

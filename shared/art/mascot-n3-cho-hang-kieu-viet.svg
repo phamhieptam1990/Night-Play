@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Chở Hàng Kiểu Việt" class="np-mascot sk-default" data-style="night" data-game="cho-hang-kieu-viet">
+<title>Trâu Nón Lá — Chở Hàng Kiểu Việt</title>
+<desc>Chữ ký khuôn mặt (giữ nguyên ở mọi skin): mắt to hai chấm sáng, má hồng, biểu cảm riêng, nốt ruồi má phải. Đạo cụ nhận diện game (luôn có): chồng thùng hàng. Phong cách Night 3D mềm. Chi tiết nhỏ dùng màu cứng.</desc>
+<style>.np-mascot[data-game="cho-hang-kieu-viet"]{--bg1:#2b2064;--bg2:#171236;--bgx:#FF4FA3;--sh:color-mix(in srgb,var(--bg2) 55%,#000)}
+.acc,.fx{display:none}.npa{transform-box:fill-box;transform-origin:50% 100%}.npa-breathe{animation:npa-breathe 3.2s ease-in-out infinite}@keyframes npa-breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.02,.98)}}
+:root.np-playing .npa{animation:none}@media (prefers-reduced-motion:reduce){.npa{animation:none}}</style>
+<defs><radialGradient id="h" cx=".34" cy=".26" r=".85"><stop offset="0" stop-color="#C8CEDA"/><stop offset=".55" stop-color="#98A2B6"/><stop offset="1" stop-color="#667187"/></radialGradient>
+<radialGradient id="b" cx=".4" cy=".25" r=".9"><stop offset="0" stop-color="#C8CEDA"/><stop offset=".6" stop-color="#98A2B6"/><stop offset="1" stop-color="#667187"/></radialGradient>
+<radialGradient id="v" cx=".5" cy=".35" r=".7"><stop offset="0" stop-color="#E9ECF2"/><stop offset="1" stop-color="#E9ECF2" stop-opacity=".78"/></radialGradient></defs>
+<g id="shadow"><ellipse cx="128" cy="240" rx="76" ry="9" fill="var(--sh)" opacity=".5"/></g>
+<g id="all" class="npa npa-breathe"><g id="pose" transform="rotate(1.2 128 230)">
+
+<g id="body"><ellipse cx="128" cy="184" rx="68" ry="54" fill="url(#b)"/><ellipse cx="128" cy="190" rx="42" ry="34" fill="url(#v)"/>
+<ellipse cx="62" cy="176" rx="17" ry="26" fill="url(#b)" transform="rotate(18 62 176)"/><ellipse cx="194" cy="176" rx="17" ry="26" fill="url(#b)" transform="rotate(-18 194 176)"/>
+<ellipse cx="98" cy="232" rx="24" ry="13" fill="url(#b)"/><ellipse cx="158" cy="232" rx="24" ry="13" fill="url(#b)"/>
+<path d="M44 78Q10 70 12 40Q44 44 66 70Z" fill="#98A2B6"/><path d="M212 78Q246 70 244 40Q212 44 190 70Z" fill="#98A2B6"/><path d="M62 52Q40 30 56 14Q66 30 86 40Z" fill="#F4E3A8"/><path d="M194 52Q216 30 200 14Q190 30 170 40Z" fill="#F4E3A8"/><ellipse cx="128" cy="108" rx="84" ry="74" fill="url(#h)"/><ellipse cx="96" cy="58" rx="28" ry="13" fill="#fff" opacity=".42" transform="rotate(-22 96 58)"/><path d="M52 132Q60 176 100 186" fill="none" stroke="#667187" stroke-width="10" opacity=".14" stroke-linecap="round"/></g>
+<g id="face"><g id="eyes"><ellipse cx="100" cy="108" rx="13" ry="15.5" fill="#2A1A33"/><circle cx="104" cy="102" r="4.193548387096774" fill="#fff"/><circle cx="96" cy="113" r="2.1666666666666665" fill="#fff" opacity=".85"/><ellipse cx="156" cy="108" rx="13" ry="15.5" fill="#2A1A33"/><circle cx="160" cy="102" r="4.193548387096774" fill="#fff"/><circle cx="152" cy="113" r="2.1666666666666665" fill="#fff" opacity=".85"/><ellipse cx="78" cy="130" rx="13" ry="8" fill="#FF8FA8" opacity=".55"/><ellipse cx="178" cy="130" rx="13" ry="8" fill="#FF8FA8" opacity=".55"/><path d="M104 130Q128 160 152 130Z" fill="#7A2A3A"/><path d="M114 146Q128 136 142 146Q128 156 114 146Z" fill="#FF7F9A"/></g><circle id="mark" cx="180" cy="130" r="4" fill="#4A3B33"/></g>
+<path d="M58 62L128 14L198 62Q128 78 58 62Z" fill="#F2D88A"/><path d="M84 60L128 24L172 60" fill="none" stroke="#C9A85A" stroke-width="3.5" opacity=".7"/><g id="sign"><rect x="188" y="176" width="56" height="46" rx="8" fill="#E3B27A"/><rect x="196" y="140" width="42" height="38" rx="8" fill="#F0C48C"/><rect x="204" y="106" width="28" height="34" rx="7" fill="#E3B27A"/><path d="M188 198H244M216 176V222" stroke="#B8854E" stroke-width="3.5"/></g>
+<g id="acc-badge" class="acc acc-badge"></g><g id="acc-group" class="acc acc-group"></g><g id="acc-night" class="acc acc-night"></g><g id="acc-star" class="acc acc-star"></g><g id="fx-night" class="fx fx-night"></g><g id="fx-star" class="fx fx-star"></g>
+</g></g></svg>

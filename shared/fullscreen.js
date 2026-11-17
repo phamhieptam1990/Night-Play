@@ -24,7 +24,7 @@
   var t = function (k) { return T[vi() ? "vi" : "en"][k]; };
   var css = document.createElement("style"); css.id = "npFsCss";
   css.textContent =
-    "html.np-fs .top,html.np-fs #npFab,html.np-fs #npFan,html.np-fs #npPmFab,html.np-fs #npPmFan,html.np-fs #npPmBk,html.np-fs #npPmShr,html.np-fs #npPmCam,html.np-fs #npPmLock,html.np-fs #npResume,html.np-fs #npInApp,html.np-fs #npTitle,html.np-fs .nps-fab,html.np-fs #bCam,html.np-fs #bShr,html.np-fs #nsPill,html.np-fs #npHudc,html.np-fs #npFsBtn,html.np-fs .stats,html.np-fs .gametitle{display:none!important}" +
+    "html.np-fs .top,html.np-fs #npFab,html.np-fs #npFan,html.np-fs #npPmFab,html.np-fs #npPmFan,html.np-fs #npPmBk,html.np-fs #npPmShr,html.np-fs #npPmCam,html.np-fs #npPmLock,html.np-fs #npInApp,html.np-fs #npTitle,html.np-fs .nps-fab,html.np-fs #bCam,html.np-fs #bShr,html.np-fs #nsPill,html.np-fs #npHudc,html.np-fs #npFsBtn,html.np-fs .stats,html.np-fs .gametitle{display:none!important}" +
     "#" + MI + ",#" + PN + "{display:none}" +
     "html.np-fs #" + MI + "{display:flex;position:fixed;z-index:2147483000;top:max(2px,env(safe-area-inset-top));right:max(2px,env(safe-area-inset-right));width:48px;height:48px;align-items:center;justify-content:center;padding:0;border:0;background:none;color:#fff;opacity:.5;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}" +
     "#" + MI + " i{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:rgba(14,12,32,.78);border:1px solid rgba(255,255,255,.4)}" +
