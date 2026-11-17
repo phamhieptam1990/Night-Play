@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Tên Lửa Của Bé" class="np-mascot sk-default" data-style="pop" data-game="ten-lua-cua-be">
+<title>Phi công Mi — Tên Lửa Của Bé</title>
+<desc>Chữ ký khuôn mặt (giữ nguyên ở mọi skin): mắt tròn to hai chấm sáng, má hồng, miệng cười nhỏ, ba chấm tàn nhang bên má phải. Đạo cụ nhận diện game (luôn có): tên lửa nhỏ cầm tay phải. BẢN MẪU chờ duyệt (chỉ skin Mặc định).</desc>
+<style>
+.np-mascot[data-game="ten-lua-cua-be"]{--bg1:#2b2064;--bg2:#171236;--bgx:#FF8A4C;--p1:#FFC9A3;--p2:#F4A27A;--pst:#C97A55;--k1:#FF5A4D;--k2:#FFFFFF;--bl:#FF9DB0;--ink:#2A2350;--hl:#fff;--sh:color-mix(in srgb,var(--bg2) 55%,#000);--c1:var(--p1);--c2:var(--p2);--st:var(--pst)}
+.acc,.fx{display:none}
+.npa{transform-box:fill-box;transform-origin:50% 100%}.npa-bob{animation:npa-bob 2.4s ease-in-out infinite}.npa-blink{transform-origin:50% 50%;animation:npa-blink 4.2s infinite}.npa-twinkle{animation:npa-twinkle 1.8s ease-in-out infinite}
+@keyframes npa-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}@keyframes npa-blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.12)}}@keyframes npa-twinkle{0%,100%{opacity:.25}50%{opacity:1}}
+:root.np-playing .npa,:root.np-playing .npa-twinkle{animation:none}@media (prefers-reduced-motion:reduce){.npa,.npa-twinkle{animation:none}}
+</style>
+<defs><linearGradient id="pg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--c1)"/><stop offset="1" style="stop-color:var(--c2)"/></linearGradient></defs>
+<g id="shadow"><ellipse cx="128" cy="237" rx="72" ry="9" fill="var(--sh)" opacity=".4"/></g>
+<g id="all" class="npa npa-bob">
+<g id="body"><rect x="86" y="170" width="84" height="60" rx="30" fill="var(--k1)" stroke="var(--st)" stroke-width="3"/><ellipse cx="128" cy="128" rx="86" ry="82" fill="url(#pg)" stroke="var(--st)" stroke-width="3"/><ellipse cx="98" cy="88" rx="26" ry="12" transform="rotate(-24 98 88)" fill="var(--hl)" opacity=".5"/><path d="M44 118Q44 38 128 38Q212 38 212 118Q170 92 128 92Q86 92 44 118Z" fill="var(--k1)" stroke="var(--st)" stroke-width="3" stroke-linejoin="round"/><rect x="40" y="108" width="22" height="40" rx="11" fill="var(--k1)" stroke="var(--st)" stroke-width="3"/><rect x="194" y="108" width="22" height="40" rx="11" fill="var(--k1)" stroke="var(--st)" stroke-width="3"/><path d="M96 66h64" stroke="var(--k2)" stroke-width="7" stroke-linecap="round" opacity=".8"/><ellipse cx="102" cy="226" rx="16" ry="8" fill="var(--k2)" stroke="var(--st)" stroke-width="3"/><ellipse cx="154" cy="226" rx="16" ry="8" fill="var(--k2)" stroke="var(--st)" stroke-width="3"/></g>
+<g id="face"><g id="eyes" class="npa-blink"><circle cx="100" cy="112" r="14" fill="var(--ink)"/><circle cx="156" cy="112" r="14" fill="var(--ink)"/><circle cx="105" cy="106" r="5" fill="#fff"/><circle cx="161" cy="106" r="5" fill="#fff"/><circle cx="96" cy="118" r="2.5" fill="#fff"/><circle cx="152" cy="118" r="2.5" fill="#fff"/></g><g id="blush"><ellipse cx="80" cy="138" rx="11" ry="7" fill="var(--bl)" opacity=".75"/><ellipse cx="176" cy="138" rx="11" ry="7" fill="var(--bl)" opacity=".75"/></g><g id="mark" fill="#C97A55"><circle cx="168" cy="128" r="2.6"/><circle cx="176" cy="123" r="2.6"/><circle cx="182" cy="130" r="2.6"/></g><path id="mouth" class="m-talk" d="M114 144Q128 158 142 144" fill="none" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/></g>
+<g id="sign" transform="rotate(18 206 168)"><path d="M206 120Q222 144 218 184H194Q190 144 206 120Z" fill="#fff" stroke="#9AA3B8" stroke-width="3" stroke-linejoin="round"/><circle cx="206" cy="150" r="9" fill="#8FD8FF" stroke="#4A9ED0" stroke-width="3"/><path d="M194 168L180 190L194 184ZM218 168L232 190L218 184Z" fill="#FF5A4D" stroke="#C93A30" stroke-width="3" stroke-linejoin="round"/><path d="M198 186Q206 210 214 186Z" fill="#FFB020"/></g>
+<g id="acc-badge" class="acc acc-badge"></g><g id="acc-group" class="acc acc-group"></g><g id="acc-night" class="acc acc-night"></g><g id="acc-star" class="acc acc-star"></g>
+<g id="fx-night" class="fx fx-night"></g><g id="fx-star" class="fx fx-star"></g>
+</g>
+</svg>

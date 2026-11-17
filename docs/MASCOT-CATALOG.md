@@ -90,3 +90,6 @@ Cấu trúc 5 skin mỗi game: **1 Mặc định** (miễn phí) · **2 Huy hi�
 2. Mỗi game 1 tệp SVG (`shared/art/mascot-<pop|night>-<id>.svg`) chứa đủ 4 skin trả phí + mặc định, ≤ 13KB (xem luật). 32 tệp.
 3. Thay emoji `hero` bằng SVG ở: màn chính, trang linh vật, huy hiệu, linh vật mini trong game.
 4. Gói vẽ theo đợt (đề xuất): 12 Pop trước (cùng phong cách, dễ nhất quán) → 20 Night theo nhóm.
+
+## Bản mẫu Pop Play (chờ duyệt, chỉ skin Mặc định)
+Tấm hình: [pop-mascots-sheet.png](pop-mascots-sheet.png). Nguồn sinh: `node scripts/art/gen-pop.js` → `shared/art/mascot-pop-<id>.svg` + xem ở `shared/art/pop-sheet.html`. Chưa nhúng vào game, chưa có 4 skin trả phí. Duyệt xong từng con mới làm skin + nối game theo checklist mục 9 MASCOT-ART-RULES.
