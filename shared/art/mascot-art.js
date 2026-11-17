@@ -141,8 +141,8 @@
     }
   };
   Inst.prototype.say = function (text, ms) {
-    var h = this.host, w = this.box; if (!w || !text || !this.visible()) return;
-    if (innerWidth < 300 || innerHeight < 340) return;   /* khung quá nhỏ: không có chỗ cho chữ */
+    var h = this.host, w = this.box; if (!w || !text || !this.visible()) return false;
+    if (innerWidth < 300 || innerHeight < 340) return false;   /* khung quá nhỏ: không có chỗ cho chữ */
     var b = w.querySelector(".npa-bub"); if (!b) { b = document.createElement("div"); b.className = "npa-bub"; w.appendChild(b); }
     b.textContent = String(text).slice(0, 48); clearTimeout(this.bt); w.setAttribute("data-npa-style", this.def.style || (/pop/.test(this.def.file) ? "pop" : "night"));
     try { var ac = getComputedStyle(this.svg), c = ac.getPropertyValue("--bgx").trim() || ac.getPropertyValue("--pa").trim() || ac.getPropertyValue("--a").trim(); if (c) b.style.setProperty("--npa-ac", c); } catch (e) {}
@@ -151,6 +151,7 @@
     if (!mini) { var r = b.getBoundingClientRect(), dx = 0; if (r.left < 8) dx = 8 - r.left; else if (r.right > innerWidth - 8) dx = innerWidth - 8 - r.right; if (dx) b.style.setProperty("--dx", Math.round(dx) + "px"); }   /* không tràn mép màn hình; đuôi vẫn chỉ về linh vật */
     if (b.animate && !reduce) b.animate([{ opacity: 0, scale: ".78" }, { opacity: 1, scale: "1.05", offset: .7 }, { opacity: 1, scale: "1" }], { duration: 240, fill: "forwards", easing: "ease-out" }); else b.style.opacity = 1;
     this.bt = rst(function () { if (b.animate && !reduce) b.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 180, fill: "forwards" }); else b.style.opacity = 0; }, ms || 2500);
+    return true;
   };
   Inst.prototype.talk = function (on, ms) { if (!this.svg) return; this.svg.classList.toggle("talk", !!on); clearTimeout(this.tt); if (on) this.tt = rst(function (s) { return function () { s.classList.remove("talk"); }; }(this.svg), ms || 8000); };
 
@@ -179,7 +180,7 @@
       else if (name === "half") { it.motion(1); it.say(line(it, "half")); }
       else if (name === "wrong" || name === "no") { it.motion(1, "wrong"); it.sayT(line(it, name === "no" ? "no" : "wrong"), 2200); }
       else if (name === "combo") { var t = Math.max(1, tier || 1); it.motion(1 + t); it.fx(t); it.say(line(it, "combo", t), 2400); it.ls = Date.now(); }
-      else if (name === "ask") { it.talk(true, 5000); if (d.text) it.say(d.text, 3200); else it.say(line(it, "ask")); }
+      else if (name === "ask") { it.talk(true, 5000); if (Date.now() - (it.ls || 0) < 1500) return; if (d.text && String(d.text).length > 3) { it.ls = Date.now(); it.say(d.text, 3200); } else if (!d.text) it.say(line(it, "ask")); }   /* 1 chữ cái ("D") không đáng làm bong bóng; không đè lên thông báo vừa hiện */
       else if (name === "start") { it.motion(1); it.say(line(it, "start"), 2000); }
       else if (name === "end") { it.say(line(it, "end"), 2600); }
       else if (name === "tap") { it.motion(1); it.say(line(it, "tap"), 2000); }
@@ -267,6 +268,12 @@
     (window.__npRST || setTimeout)(done, T + 250);
   }
   addEventListener("np:start", leave);
+  /* THÔNG BÁO CỦA GAME (toast) → vào BONG BÓNG linh vật: game gọi `if(window.NPArt&&NPArt.say(msg,ms))return;` đầu hàm toast; trả false (không có linh vật/khung quá nhỏ) thì game hiện toast như cũ. Ưu tiên linh vật mini khi đang chơi, hero ở màn chính. */
+  function sayAll(text, ms) {
+    var pick2 = null, i; for (i = 0; i < insts.length; i++) if (insts[i].svg && insts[i].visible() && insts[i].role === "mini") { pick2 = insts[i]; break; }
+    if (!pick2) for (i = 0; i < insts.length; i++) if (insts[i].svg && insts[i].visible()) { pick2 = insts[i]; break; }
+    if (!pick2) return false; pick2.ls = Date.now(); return pick2.say(text, ms || 2200) === true;
+  }
   function refresh() { insts.forEach(function (it) { if (it.svg) it.paint(); }); }
   document.addEventListener("visibilitychange", function () { if (!document.hidden) refresh(); });
   /* miệng cử động theo giọng đọc của game (speechSynthesis) */
@@ -295,5 +302,5 @@
     (document.head || document.documentElement).appendChild(j);
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
-  window.NPArt = { register: register, boot: boot, mount: mount, companion: companion, event: event, touch: touch, refresh: refresh, has: function (g) { return !!G[g]; }, games: G };
+  window.NPArt = { say: sayAll, register: register, boot: boot, mount: mount, companion: companion, event: event, touch: touch, refresh: refresh, has: function (g) { return !!G[g]; }, games: G };
 })();

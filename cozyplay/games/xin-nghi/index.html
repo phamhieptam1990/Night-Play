@@ -185,7 +185,7 @@ const sfx={combo:n=>{const b=440*Math.pow(1.122,Math.min(n,8));[0,1,2].forEach(i
 let G=null,CH=null,lastEnd=0;
 const getSave=()=>LS.get("xn-save",{streak:0,last:"",best:0,total:0,days:{}});
 function show(id){["home","ask","res"].forEach(s=>$(s).hidden=s!==id);["ovCh","ovSkin","ovPay"].forEach(o=>$(o).hidden=true)}
-function toast(m,ms){const t=$("toast");t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,ms||1800)}
+function toast(m,ms){if(window.NPArt&&NPArt.say&&NPArt.say(m,ms))return;const t=$("toast");t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,ms||1800)}
 const sitText=s=>MOODS[s.mood].e+" "+L2([MOODS[s.mood].vi,MOODS[s.mood].en]);
 function renderHome(){const sv=getSave(),k=dayKey(),done=sv.days[k],h=holidayNear(k),sk=skinOf();$("ttl").textContent=T("hdr");$("dN").textContent="#"+dayNo(k);$("dT").textContent=T("daily");$("dS").textContent=done!=null?T("done",{s:done}):T("dS");$("bPractice").textContent=T("practice");$("hNote").textContent=T("note");$("bLang").textContent=LANG==="vi"?"EN":"VI";$("bSnd").textContent=snd()?"🔊":"🔇";
  $("hAv").textContent=sk.face||"🧑‍💼";if(!$("hHero").querySelector("svg"))$("hHero").textContent="🏖️"+(sk.face||"🧑‍💼");$("hBub").textContent=h?T("holi",{h:LANG==="vi"?h[1]:h[2]})+" 🎊 "+L2(sk.name||PF.skins[0].basic.name)+":\n“…”":L2(sk.name||PF.skins[0].basic.name)+": “…”";
