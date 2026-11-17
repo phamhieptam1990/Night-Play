@@ -8,7 +8,7 @@
   css.textContent =
     "html.np-ovs :is(#ovStart,#home) :is(.cards,.tiles).npo-s{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;gap:10px!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;width:100%!important;max-width:none!important;grid-template-columns:none!important;grid-auto-flow:column;min-height:0!important;max-height:none!important;touch-action:pan-x;overscroll-behavior-x:contain}" +
     "html.np-ovs .npo-s::-webkit-scrollbar{display:none}" +
-    "html.np-ovs .npo-s>*{flex:0 0 min(46%,230px)!important;width:auto!important;min-width:0!important;height:auto!important;min-height:92px!important;scroll-snap-align:start;box-sizing:border-box}" +
+    "html.np-ovs .npo-s>*{flex:0 0 min(64%,260px)!important;width:auto!important;min-width:0!important;height:auto!important;min-height:92px!important;scroll-snap-align:start;box-sizing:border-box}" +
     ".npo-dots{display:none;justify-content:center;gap:6px;margin:6px 0 0;pointer-events:none}html.np-ovs .npo-dots{display:flex}.npo-dots i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3)}.npo-dots i.on{background:#fff}";
   (document.head || document.documentElement).appendChild(css);
   function scr() { for (var i = 0; i < SCR.length; i++) { var e = document.querySelector(SCR[i]); if (e && !e.hidden && e.getClientRects().length) return e; } return null; }
