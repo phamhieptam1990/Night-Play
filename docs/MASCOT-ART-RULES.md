@@ -8,15 +8,15 @@ Trạng thái: **đã có 2 con MẪU CHỜ DUYỆT** — Pop: Chim Bay (`shared
 
 | | **POP** (Pop Play: bé nhỏ + phụ huynh) | **NIGHT** (Night Play: thanh niên, người đi làm) |
 |---|---|---|
-| Tên phong cách | "Đồ chơi mềm" | "Cute có cá tính" |
-| Hình khối | Tròn, phình như bong bóng, KHÔNG góc nhọn | Gọn, ít chi tiết, đường nét sắc, có góc bo nhỏ |
+| Tên phong cách | "Đồ chơi mềm" | **"Gen Z sticker / streetwear"** (chủ site chọn: trẻ trung, có cá tính; chút neon chỉ cho skin Dạ quang) |
+| Hình khối | Tròn, phình như bong bóng, KHÔNG góc nhọn | Thân bo tròn + **POSE có thái độ** (nghiêng ~5°, nhìn đời, nhếch mép), hoodie, tai nghe, sneaker; chi tiết vừa đủ, đọc được ở 40px |
 | Tỉ lệ đầu : thân | Đầu ≈ 60% chiều cao | Đầu ≈ 45–50% chiều cao |
 | Mắt | To, 2 chấm sáng (highlight) trong mỗi mắt, má hồng | Nhỏ hơn, biểu cảm (mệt, lười, ngầu), không má hồng mặc định |
 | Viền | KHÔNG viền đen; viền = màu thân đậm hơn 25%, dày 3 đơn vị | Viền sticker 1 màu đậm (tím đêm `#1B1442`), dày 5 đơn vị, bo tròn |
-| Tô màu | Gradient mịn 2 điểm dừng + 1 vệt bóng trắng (opacity .55) trên đầu | Phẳng + 1 lớp bóng đổ cứng (một khối tối hơn 18%), không gradient mềm |
-| Bảng màu | Sáng, ấm, bão hoà vừa (kẹo, bơ, hồng đào, xanh bạc hà) | Tím đêm, xanh đêm, cam đào làm điểm nhấn; tương phản cao |
-| Chuyển động | Nhanh, nảy, vui (nhún, chớp mắt, thè lưỡi) | Chậm, có biểu cảm (thở dài, gật gù, uể oải rồi bật dậy khi chạm) |
-| Hài hước | Ngây thơ, dễ thương | Dân văn phòng: mắt thâm, cà phê, laptop (chỉ khi hợp nội dung game) |
+| Tô màu | Gradient mịn 2 điểm dừng + 1 vệt bóng trắng (opacity .55) trên đầu | Phẳng; **bóng đổ cứng bằng MÀU CHÓI lệch (+8,+8)** (in lệch màu: hồng neon `--c3`), không gradient mềm |
+| Bảng màu | Sáng, ấm, bão hoà vừa (kẹo, bơ, hồng đào, xanh bạc hà) | Màu chói tương phản: tím điện `#8B5CFF`, hồng neon `#FF4FA3`, vàng chanh `#D7FF3F`, viền `#12102B`; mỗi skin đổi bộ màu chói |
+| Chuyển động | Nhanh, nảy, vui (nhún, chớp mắt, thè lưỡi) | Thở chậm, lim dim, rồi bật dậy/đổi biểu cảm khi chạm hoặc combo |
+| Hài hước | Ngây thơ, dễ thương | Kiểu meme của người trẻ: ánh mắt lim dim "ổn mà", nhếch mép, một chân mày nhướn; phụ kiện đời thường (hoodie, tai nghe, mũ lưỡi trai, kính râm, dây chuyền) |
 | Skin ví dụ | Mũ phi hành gia, tai gấu, ba lô đi học, áo mưa | Huy hiệu, đồng phục nhóm, dạ quang, vương miện |
 
 Game thuộc nhóm nào do `portal` trong `shared/multi-games.js` quyết định (`popplay` = POP, `cozyplay` = NIGHT). Không đổi phong cách của một game giữa chừng.
