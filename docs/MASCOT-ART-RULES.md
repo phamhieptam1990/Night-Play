@@ -54,6 +54,10 @@ Game thuộc nhóm nào do `portal` trong `shared/multi-games.js` quyết địn
 
 Skin Pop dùng phụ kiện "đời thường của bé" (mũ phi hành gia, tai gấu, ba lô, áo mưa); skin Night dùng phụ kiện theo nội dung game. Mọi phụ kiện thuộc nhóm nào thì chỉ dùng cho nhóm đó.
 
+## 4b. Skin là CHỦ ĐỀ RIÊNG của từng game (chủ site chốt)
+
+Mỗi game 1 linh vật, 4 skin trả phí mang **chủ đề riêng của game đó** (danh mục từng game: [MASCOT-CATALOG.md](MASCOT-CATALOG.md)). Skin phải khác nhau thật — mỗi skin đổi ĐỒNG THỜI: (a) phụ kiện đầu, (b) đạo cụ cầm tay, (c) biểu cảm mắt/miệng, (d) hiệu ứng nền (tối đa 3 hoạt ảnh), và skin 4 (Dạ quang) / 5 (Siêu sao) đổi cả DÁNG THÂN. Không được chỉ đổi màu + 1 món đồ.
+
 ## 5. Quy trình bắt buộc khi vẽ một linh vật mới
 
 1. Đọc mục 1 → chọn phong cách theo `portal`.
@@ -62,6 +66,10 @@ Skin Pop dùng phụ kiện "đời thường của bé" (mũ phi hành gia, tai
 4. Dựng đủ 5 skin bằng biến + phụ kiện, không đổi thân.
 5. Chụp ảnh ở 40/96/200px × sáng/tối (puppeteer) và TỰ NHÌN; gửi chủ site duyệt mẫu đầu tiên của mỗi nhóm.
 6. Chạy bài đo (mục 6). Chỉ khi đạt mới nhúng vào game.
+
+## 8. Màu ăn theo nền gradient Night Pass (chủ site chốt)
+
+Linh vật đọc bộ nền đang chọn (`NPGrad.get()`/`find()`, 8 bộ × sáng/tối) và đặt 3 biến: `--bg1`, `--bg2` (tông nền), `--bgx` (màu tương phản). Thân GIỮ màu theo skin; chỉ phần sau ăn theo nền: viền sáng mép (rim light), bóng đổ ngả màu nền (thay xám), hào quang + lấp lánh của skin Dạ quang/Siêu sao, màu nhấn phụ kiện (màu bù). Không gói / chưa chọn nền = bộ màu mặc định. Chỉ dùng biến CSS (không filter). Phải chụp ảnh 8 nền × 5 skin × sáng/tối và tự nhìn trước khi nhúng.
 
 ## 6. Bài đo tự động cần có (`scripts/cozygame/check-art.js`, đã viết, chưa nối vào `check.js`)
 
