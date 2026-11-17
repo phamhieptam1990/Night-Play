@@ -1,6 +1,6 @@
 # Danh mục linh vật & skin theo từng game — BẢN Ý TƯỞNG chờ chủ site duyệt
 
-Quyết định của chủ site: **mỗi game đúng 1 linh vật; 4 skin trả phí là chủ đề RIÊNG của game đó** (không dùng chung theo nhóm). Skin phải khác nhau thật: mỗi skin đổi **phụ kiện đầu + đạo cụ cầm tay + biểu cảm + hiệu ứng** (và dáng thân với skin 4/5), không chỉ trang phục. Luật vẽ: [MASCOT-ART-RULES.md](MASCOT-ART-RULES.md). Linh vật gốc lấy từ nhân vật đã có trong `shared/npbadges.js` (heroName) để khớp trang huy hiệu/thử thách.
+Quyết định của chủ site: **mỗi game đúng 1 linh vật; 4 skin trả phí là chủ đề RIÊNG của game đó** (không dùng chung theo nhóm). Skin phải khác nhau thật: mỗi skin đổi **phụ kiện đầu + đạo cụ cầm tay + hiệu ứng + biểu cảm nhẹ** (và dáng thân với skin 4/5), không chỉ trang phục. **KHUÔN MẶT là dấu hiệu nhận diện: mọi skin giữ nguyên chữ ký khuôn mặt của linh vật** (xem MASCOT-ART-RULES mục 4b); các mô tả "mắt to", "mắt vàng", "mắt phát sáng" trong bảng chỉ là biến thể nhẹ của chính mắt gốc (màu/độ sáng/mí), KHÔNG đổi hình mắt. Luật vẽ: [MASCOT-ART-RULES.md](MASCOT-ART-RULES.md). Linh vật gốc lấy từ nhân vật đã có trong `shared/npbadges.js` (heroName) để khớp trang huy hiệu/thử thách.
 
 Cấu trúc 5 skin mỗi game: **1 Mặc định** (miễn phí) · **2 Huy hiệu** (thắng thử thách game đó: gắn huy hiệu + đạo cụ "thành tích") · **3 Chủ đề riêng** (nghề/vai trò khác của linh vật, gắn nội dung game) · **4 Dạ quang** (phiên bản đêm: phát sáng, biểu cảm buồn ngủ/huyền bí, dáng thân đổi) · **5 Siêu sao** (hoàng gia/ngôi sao: vương miện, đạo cụ vàng, hiệu ứng lấp lánh).
 

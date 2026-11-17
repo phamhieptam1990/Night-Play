@@ -56,7 +56,15 @@ Skin Pop dùng phụ kiện "đời thường của bé" (mũ phi hành gia, tai
 
 ## 4b. Skin là CHỦ ĐỀ RIÊNG của từng game (chủ site chốt)
 
-Mỗi game 1 linh vật, 4 skin trả phí mang **chủ đề riêng của game đó** (danh mục từng game: [MASCOT-CATALOG.md](MASCOT-CATALOG.md)). Skin phải khác nhau thật — mỗi skin đổi ĐỒNG THỜI: (a) phụ kiện đầu, (b) đạo cụ cầm tay, (c) biểu cảm mắt/miệng, (d) hiệu ứng nền (tối đa 3 hoạt ảnh), và skin 4 (Dạ quang) / 5 (Siêu sao) đổi cả DÁNG THÂN. Không được chỉ đổi màu + 1 món đồ.
+Mỗi game 1 linh vật, 4 skin trả phí mang **chủ đề riêng của game đó** (danh mục từng game: [MASCOT-CATALOG.md](MASCOT-CATALOG.md)). Skin phải khác nhau thật — mỗi skin đổi ĐỒNG THỜI: (a) phụ kiện đầu, (b) đạo cụ cầm tay, (c) hiệu ứng nền (tối đa 3 hoạt ảnh), (d) biểu cảm NHẸ trong phạm vi khuôn mặt (xem dưới), và skin 4 (Dạ quang) / 5 (Siêu sao) đổi cả DÁNG THÂN. Không được chỉ đổi màu + 1 món đồ.
+
+### KHUÔN MẶT LÀ DẤU HIỆU NHẬN DIỆN (chủ site chốt — BẮT BUỘC)
+Dù skin đổi hình dáng thế nào, **khuôn mặt PHẢI giữ nét đặc trưng của linh vật** để người chơi nhận ra ngay đó vẫn là nó:
+1. Mỗi linh vật có **chữ ký khuôn mặt**: hình dạng + tỉ lệ + vị trí mắt, kiểu chân mày/mí mắt, hình miệng/mỏ, và **một dấu hiệu riêng** (vd: chấm tàn nhang, nốt ruồi, vết sẹo, chiếc răng khểnh, chân mày nhướn một bên, chỏm tóc). Ghi chữ ký này ở đầu tệp SVG (`<desc>`) và ở MASCOT-CATALOG.
+2. Nhóm `face` (`eyes`, `mouth`, `blush`, dấu hiệu riêng) **dùng chung cho cả 5 skin, KHÔNG vẽ lại theo skin**. Skin chỉ được đổi BIỂU CẢM bằng biến thể nhỏ của chính khuôn mặt đó: mí mắt (mở/lim dim/nhắm), độ cong miệng, độ nhướn chân mày — cùng hình mắt, cùng dấu hiệu riêng.
+3. Phụ kiện KHÔNG được che mắt/miệng/dấu hiệu riêng: kính/visor phải trong suốt (thấy rõ mắt) hoặc đẩy lên trán; mũ/vương miện/tai nghe chỉ chạm viền đầu. Dáng thân Dạ quang/Siêu sao đổi, nhưng đầu + mặt giữ nguyên tỉ lệ so với skin Mặc định.
+4. Bài đo `check-art.js`: nhóm `face` của mọi skin phải render giống nhau ≥ 90% điểm ảnh trong vùng mặt khi tắt phụ kiện (so với skin Mặc định) — chưa viết.
+5. **Sai ở hai mẫu hiện tại cần sửa:** Xin Nghỉ skin Nhóm đang dùng kính râm ĐEN che mắt (phải đổi sang kính trong/đẩy lên trán); Chim Bay skin Dạ quang đổi màu mặt/cú dẹt thì vẫn phải giữ mắt + mỏ + má đúng khuôn mặt gốc.
 
 ## 5. Quy trình bắt buộc khi vẽ một linh vật mới
 
