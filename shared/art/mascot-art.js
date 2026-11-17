@@ -64,6 +64,7 @@
   css.textContent =
     ".npa-box{position:relative;display:flex;align-items:flex-end;justify-content:center;width:100%;height:100%;min-height:0;pointer-events:none}" +
     ".npa-box>svg{display:block;width:100%;height:100%;max-height:100%;overflow:visible;transform-origin:50% 100%}" +
+    "#play:has(#home:not([hidden])) .npa-mini,#play:has(#ovStart:not([hidden])) .npa-mini,#play:has(#village:not([hidden])) .npa-mini{display:none}" +
     ".npa-mini{position:absolute;z-index:6;pointer-events:none}.npa-mini.bl{left:6px;bottom:6px}.npa-mini.br{right:6px;bottom:6px}" +
     /* BONG BÓNG KIỂU NIGHT PASS: thẻ tím đậm, viền + quầng sáng màu nhấn của linh vật (--npa-ac), đuôi chỉ về linh vật; Pop tròn hơn + chữ to hơn */
     ".npa-bub{--dx:0px;--npa-ac:#a99bff;position:absolute;left:50%;bottom:100%;transform:translateX(calc(-50% + var(--dx)));transform-origin:50% 100%;margin-bottom:10px;max-width:min(240px,calc(100vw - 24px));width:max-content;box-sizing:border-box;padding:9px 14px;border-radius:18px;background:var(--bbg,linear-gradient(165deg,#2b2064,#171236 85%));color:#fff;border:2px solid var(--bbd,color-mix(in srgb,var(--npa-ac) 75%,#fff 8%));text-shadow:0 1px 2px rgba(0,0,0,.35);font:800 14px/1.3 system-ui,-apple-system,'Segoe UI',sans-serif;text-align:center;text-wrap:balance;box-shadow:0 8px 22px rgba(0,0,0,.45),0 0 22px var(--bgl,color-mix(in srgb,var(--npa-ac) 45%,transparent)),inset 0 1px 0 rgba(255,255,255,.22);opacity:0;pointer-events:none;z-index:7}" +
@@ -78,6 +79,12 @@
     ".npa-bub[data-mood=combo]{--bbg:linear-gradient(135deg,#ff4fa3,#ff9f2e 50%,#ffd84d);--bt:#ffd84d;--bbd:#fff3b0;--bgl:rgba(255,200,60,.75);color:#3a1450;text-shadow:0 1px 0 rgba(255,255,255,.5)}" +
     ".npa-bub[data-mood=ask]{--bbg:linear-gradient(165deg,#3b82f6,#1b3fa8);--bt:#1b3fa8;--bbd:#a9cbff;--bgl:rgba(90,150,255,.6)}" +
     ".npa-bub[data-mood=cool]{--bbg:linear-gradient(165deg,#8b5cff,#4b1fb8);--bt:#4b1fb8;--bbd:#cbb8ff;--bgl:rgba(150,110,255,.6)}" +
+    /* HÀO QUANG COMBO: giữ suốt chuỗi đúng, mạnh dần theo bậc; chỉ transform/opacity */
+    ".npa-aura{position:absolute;left:50%;top:50%;width:150%;height:150%;margin:-75% 0 0 -75%;border-radius:50%;pointer-events:none;z-index:-1;background:radial-gradient(circle,var(--au1,#ffd84d) 0,var(--au2,rgba(255,170,60,.0)) 62%);opacity:.0;animation:npa-aurap .9s ease-in-out infinite;filter:none}.npa-mini .npa-aura{width:230%;height:230%;margin:-115% 0 0 -115%}" +
+    ".npa-aura::after{content:'';position:absolute;inset:-6%;border-radius:50%;background:conic-gradient(from 0deg,var(--au1,#ffd84d),transparent 18%,var(--au3,#ff4fa3) 34%,transparent 52%,var(--au1,#ffd84d) 68%,transparent 84%,var(--au3,#ff4fa3));-webkit-mask:radial-gradient(circle,transparent 58%,#000 60%,#000 66%,transparent 68%);mask:radial-gradient(circle,transparent 58%,#000 60%,#000 66%,transparent 68%);opacity:0;animation:npa-spin 3s linear infinite}" +
+    ".npa-aura[data-t='2']::after,.npa-aura[data-t='3']::after{opacity:.9}.npa-aura[data-t='3']{width:185%;height:185%;margin:-92% 0 0 -92%}.npa-aura[data-t='3']::after{animation-duration:1.4s}" +
+    "@keyframes npa-aurap{0%,100%{opacity:.55;transform:scale(.92)}50%{opacity:1;transform:scale(1.1)}}@keyframes npa-spin{to{transform:rotate(360deg)}}" +
+    "@media (prefers-reduced-motion:reduce){.npa-aura,.npa-aura::after{animation:none}.npa-aura{opacity:.55}}" +
     ".npa-fx{position:fixed;left:0;top:0;z-index:9999;pointer-events:none;line-height:1;will-change:transform,opacity;font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif}" +
     ".npa-ring{position:fixed;left:0;top:0;z-index:9998;pointer-events:none;border-radius:50%;border:4px solid var(--mx-c,#ffb84d);box-sizing:border-box;will-change:transform,opacity}" +
     /* miệng cử động khi nói (mỏ Chim Bay / miệng Xin Nghỉ) */
@@ -130,7 +137,7 @@
     }, function () { /* không tải được: giữ nguyên emoji dự phòng của game */ });
   };
   Inst.prototype.motion = function (i, kind) {
-    var s = this.svg; if (!s || reduce || !s.animate) return; i = Math.max(1, Math.min(3, i | 0 || 1));
+    var s = this.svg; if (!s || reduce || !s.animate) return; i = Math.max(1, Math.min(3, i | 0 || 1)); if (this.role === "mini" && kind !== "wrong") i = i * 2.4;   /* bản mini nhỏ: nhảy cao gấp ~2,4 để vẫn thấy rõ */
     try { s.animate(kind === "wrong" ? WRONG : (MOTION[this.skin] || MOTION["default"])(i), { duration: kind === "wrong" ? 520 : DUR[this.skin] || 560, easing: this.skin === "night" ? "ease-in-out" : "cubic-bezier(.3,.7,.4,1)" }); } catch (e) {}
   };
   Inst.prototype.fx = function (tier, at) {
@@ -146,6 +153,14 @@
       f.className = "npa-fx"; f.textContent = pics[i % pics.length]; f.style.fontSize = sz + "px"; f.style.left = (cx - sz / 2) + "px"; f.style.top = (cy - sz / 2) + "px"; document.body.appendChild(f);
       f.animate([{ transform: "translate(0,0) scale(.4)", opacity: 1 }, { transform: "translate(" + Math.cos(a) * v + "px," + (Math.sin(a) * v - D * .2) + "px) scale(1.15)", opacity: 1, offset: .55 }, { transform: "translate(" + Math.cos(a) * v * 1.15 + "px," + (Math.sin(a) * v + D * .35) + "px) scale(.7)", opacity: 0 }], { duration: 700 + Math.random() * 300, easing: "cubic-bezier(.12,.7,.25,1)" }).onfinish = (function (el) { return function () { el.remove(); }; })(f);
     }
+  };
+  var AURA = { "default": ["#ffd84d", "#ff4fa3"], badge: ["#ff8a3d", "#ffd84d"], group: ["#4db8ff", "#7cf0b0"], night: ["#39f5ff", "#ff4fa3"], star: ["#ffd84d", "#ff4fa3"] };
+  Inst.prototype.aura = function (tier) {
+    var w = this.box; if (!w) return; var a = w.querySelector(".npa-aura");
+    if (!tier) { if (a) { clearTimeout(this.at); a.remove(); } return; }
+    if (!a) { a = document.createElement("div"); a.className = "npa-aura"; w.insertBefore(a, w.firstChild); }
+    var c = AURA[this.skin] || AURA["default"]; a.style.setProperty("--au1", c[0]); a.style.setProperty("--au2", "transparent"); a.style.setProperty("--au3", c[1]); a.setAttribute("data-t", String(tier));
+    var self = this; clearTimeout(this.at); this.at = rst(function () { self.aura(0); }, 7000);   /* hết chuỗi nếu 7 giây không có combo mới */
   };
   Inst.prototype.say = function (text, ms, mood) {
     var h = this.host, w = this.box; if (!w || !text || !this.visible()) return false;
@@ -183,13 +198,13 @@
     d = d || {}; var tier = d.tier || (d.n >= 7 ? 3 : d.n >= 5 ? 2 : d.n >= 3 ? 1 : 0);
     insts.forEach(function (it) {
       if (!it.svg || !it.visible()) return; var role = it.role;
-      if (name === "ok" || name === "correct") { it.motion(1 + tier); if (tier || name === "ok") it.fx(Math.max(1, tier)); if (role === "mini" || it.game === "xin-nghi") it.sayT(line(it, name === "ok" ? "ok" : "correct"), 2200, "ok"); }
+      if (name === "ok" || name === "correct") { if (tier) it.aura(tier); it.motion(1 + tier); if (tier || name === "ok") it.fx(Math.max(1, tier)); if (role === "mini" || it.game === "xin-nghi") it.sayT(line(it, name === "ok" ? "ok" : "correct"), 2200, "ok"); }
       else if (name === "half") { it.motion(1); it.say(line(it, "half"), 2400, "half"); }
-      else if (name === "wrong" || name === "no") { it.motion(1, "wrong"); it.sayT(line(it, name === "no" ? "no" : "wrong"), 2200, "bad"); }
-      else if (name === "combo") { var t = Math.max(1, tier || 1); it.motion(1 + t); it.fx(t); it.say(line(it, "combo", t), 2400, "combo"); it.ls = Date.now(); }
+      else if (name === "wrong" || name === "no") { it.aura(0); it.motion(1, "wrong"); it.sayT(line(it, name === "no" ? "no" : "wrong"), 2200, "bad"); }
+      else if (name === "combo") { var t = Math.max(1, tier || 1); it.motion(1 + t); it.fx(t); it.aura(t); if (role === "mini" && it.svg.animate && !reduce) { try { it.svg.animate([{ scale: "1" }, { scale: String(1.5 + t * .25), offset: .35 }, { scale: "1" }], { duration: 700, easing: "ease-out" }); } catch (x) {} } it.say(line(it, "combo", t), 2400, "combo"); it.ls = Date.now(); }
       else if (name === "ask") { it.talk(true, 5000); if (Date.now() - (it.ls || 0) < 1500) return; if (d.text && String(d.text).length > 3) { it.ls = Date.now(); it.say(d.text, 3200, "ask"); } else if (!d.text) it.say(line(it, "ask"), 2500, "ask"); }   /* 1 chữ cái ("D") không đáng làm bong bóng; không đè lên thông báo vừa hiện */
       else if (name === "start") { it.motion(1); it.say(line(it, "start"), 2000); }
-      else if (name === "end") { it.say(line(it, "end"), 2600); }
+      else if (name === "end") { it.aura(0); it.say(line(it, "end"), 2600); }
       else if (name === "tap") { it.motion(1); it.say(line(it, "tap"), 2000, "cool"); }
     });
   }
@@ -298,6 +313,8 @@
   function gameId() { var m = /\/games\/([a-z0-9-]+)\//.exec(location.pathname); return m ? m[1] : ""; }
   function boot() {
     var gid = gameId(); if (!gid || !G[gid]) return;
+    /* KHUNG CHUNG: tự bọc hàm toast(msg,ms,kind) toàn cục của game → thông báo vào bong bóng linh vật; game KHÔNG phải sửa hàm toast */
+    try { var ot = window.toast; if (typeof ot === "function" && !ot.__npa) { var nt = function (m, ms, kind) { try { if (typeof m === "string" && sayAll(m, ms, kind)) return; } catch (e) {} return ot.apply(this, arguments); }; nt.__npa = 1; window.toast = nt; } } catch (e) {}
     var h = document.querySelector(HERO); if (h) mount(h, { game: gid, role: "hero" });
     if (document.documentElement.getAttribute("data-npa-mini") !== "off") { var pl = document.getElementById("play"); if (pl) companion(gid, pl, { pos: G[gid].pos || "br", size: 48 }); }
   }
