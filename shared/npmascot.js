@@ -22,7 +22,8 @@
       { id: "star", n: ["Siêu sao", "Superstar"], need: ["Có 10 huy hiệu bất kỳ", "Own any 10 badges"], acc: "👑", accPos: "top", c1: "#ffd43b", c2: "#ff6b6b", fx: "rainbow", open: function () { return !!b && b.total() >= 10; } }
     ];
   }
-  function skin(id, sid) { var a = skins(id); for (var i = 0; i < a.length; i++) if (a[i].id === sid) return a[i]; return a[0]; }
+  function skinsX(id) { var a = skins(id), nm = window.NPArt && NPArt.skinNames && NPArt.skinNames(id); if (nm) a.forEach(function (s) { if (nm[s.id]) s.n = nm[s.id]; }); return a; }   /* linh vật SVG: tên skin = chủ đề riêng của game */
+  function skin(id, sid) { var a = skinsX(id); for (var i = 0; i < a.length; i++) if (a[i].id === sid) return a[i]; return a[0]; }
   function isOpen(id, sid) { return skin(id, sid).open(); }
   function unlocked(id) { return skins(id).filter(function (s) { return s.open(); }).map(function (s) { return s.id; }); }
   function need(id, sid) { var s = skin(id, sid); return vi() ? s.need[0] : s.need[1]; }
@@ -42,7 +43,8 @@
     "@media (prefers-reduced-motion:reduce){.npm .aura,.npm .sp{animation:none!important}.npm .sp{opacity:.8}}";
   function inject() { if (document.getElementById("npmCss")) return; var s = document.createElement("style"); s.id = "npmCss"; s.textContent = CSS; (document.head || document.documentElement).appendChild(s); }
   function html(id, sid, size) {
-    inject(); var e = ent(id); if (!e) return ""; var s = skin(id, sid || "default"), sz = size || 64;
+    inject(); var e = ent(id); if (!e) return "";
+    if (window.NPArt && NPArt.markup) { var sv = NPArt.markup(id, sid || "default", size || 64); if (sv) return '<span class="npm art" style="display:inline-grid;place-items:center;width:' + (size || 64) + 'px;height:' + (size || 64) + 'px" aria-hidden="true">' + sv + "</span>"; }   /* có linh vật SVG thì dùng, không thì emoji */ var s = skin(id, sid || "default"), sz = size || 64;
     return '<span class="npm ' + s.fx + '" style="font-size:' + sz + 'px;--c1:' + (s.c1 || "transparent") + ';--c2:' + (s.c2 || "transparent") + '" aria-hidden="true"><i class="aura"></i><b class="m">' + e.hero + '</b>' + (s.acc ? '<i class="acc ' + (s.accPos || "top") + '" style="font-size:' + (s.accPos === "br" ? .42 : .46) + 'em">' + s.acc + '</i>' : "") + (s.fx ? '<i class="sp a">✨</i><i class="sp b">✨</i>' : "") + '</span>';
   }
   /* ---- bạn đồng hành ở màn chọn game ---- */
@@ -61,6 +63,6 @@
     if (wrap.dataset.k !== key) { wrap.dataset.k = key; wrap.innerHTML = html(id, sid, 34); wrap.setAttribute("aria-label", (vi() ? "Linh vật của bạn" : "Your mascot")); wrap.title = wrap.getAttribute("aria-label"); }
   }
   var inGame = !!document.getElementById("play") || !!document.querySelector(".app");
-  window.NPMascot2 = { list: list, skins: skins, skin: skin, unlocked: unlocked, isOpen: isOpen, need: need, get: get, setMain: setMain, getSkin: getSkin, setSkin: setSkin, html: html, ok: ok, GRP: GRP };
+  window.NPMascot2 = { list: list, skins: skinsX, skin: skin, unlocked: unlocked, isOpen: isOpen, need: need, get: get, setMain: setMain, getSkin: getSkin, setSkin: setSkin, html: html, ok: ok, GRP: GRP };
   if (inGame && !/nightpass/.test(location.pathname)) { setInterval(paint, 1500); addEventListener("load", function () { setTimeout(paint, 600); }); addEventListener("storage", paint); }
 })();

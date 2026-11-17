@@ -5,7 +5,7 @@
   "use strict";
   if (!window.NPArt) return;
   var G = {
-    "pop-fly": { pos: "bl", file: "mascot-pop-pop-fly.svg", emoji: "🐦", name: ["Chim Bay", "Birdie"],
+    "pop-fly": { pos: "bl", skinNames: { badge: ["Phi công nhí", "Little pilot"], group: ["Chim học bài", "Study bird"], night: ["Chim đêm", "Night owl-bird"], star: ["Chim hoàng gia", "Royal bird"] }, file: "mascot-pop-pop-fly.svg", emoji: "🐦", name: ["Chim Bay", "Birdie"],
       fx: { "default": ["⭐", "✨"], badge: ["✈️", "⭐"], group: ["🔤", "📚"], night: ["🌙", "✨"], star: ["👑", "🌟"] },
       L: {
         hi: [["Cùng bay nào bé ơi!", "Let's fly together!"], ["Chào bé, mình là Bi!", "Hi, I'm Bi!"]],
@@ -15,7 +15,7 @@
         combo: [[["Liên tục luôn!", "On a roll!"]], [["Siêu quá đi!", "Super!"]], [["Bay như tên lửa!", "Rocket speed!"]]],
         tap: [["Hihi, nhột quá!", "Hehe, tickles!"], ["Chào bé!", "Hello!"]],
         end: [["Hay lắm, bay lại nhé!", "Nice! Fly again?"]] } },
-    "xin-nghi": { pos: "br", file: "mascot-night-xin-nghi.svg", emoji: "🏖️", name: ["Nhân viên Xin Nghỉ", "The Day-Off Hero"],
+    "xin-nghi": { pos: "br", skinNames: { badge: ["Chiến thần deadline", "Deadline warrior"], group: ["Dân streetwear", "Streetwear"], night: ["Cyber đêm", "Night cyber"], star: ["Sếp tổng", "Big boss"] }, file: "mascot-night-xin-nghi.svg", emoji: "🏖️", name: ["Nhân viên Xin Nghỉ", "The Day-Off Hero"],
       fx: { "default": ["🏖️", "✨"], badge: ["🔥", "☕"], group: ["🧢", "😎"], night: ["⚡", "💜"], star: ["💸", "👑"] },
       L: {
         hi: [["Sếp ơi, hôm nay cho em nghỉ nhé?", "Boss, can I have today off?"], ["Lại một ngày cày cuốc…", "Another day at the grind…"]],

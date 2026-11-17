@@ -346,6 +346,16 @@
   } catch (e) {}
 
   function register(id, def) { G[id] = def; }
+  /* ---- DÙNG Ở TRANG LINH VẬT / HUY HIỆU / THẺ: chuỗi SVG đồng bộ (cần preload) ---- */
+  var texts = {};
+  function preload(ids) { return Promise.all((ids || Object.keys(G)).map(function (g) { return G[g] ? load(G[g].file).then(function (t) { texts[g] = t; }, function () {}) : null; })); }
+  function markup(game, skin, size, theme) {
+    var t = texts[game]; if (!t || !G[game]) return ""; var k = ++uid, sk = skin || "default", th = theme == null ? (window.NPArtForce != null ? window.NPArtForce : themeNow()) : theme, st = "";
+    t = t.replace(/id="([a-zA-Z0-9_-]+)"/g, function (m, i) { return 'id="' + i + "-p" + k + '"'; }).replace(/url\(#([a-zA-Z0-9_-]+)\)/g, function (m, i) { return "url(#" + i + "-p" + k + ")"; }).replace("sk-default", "sk-" + sk);
+    if (th && window.NPArtTheme && NPArtTheme.vars(th)) { var v = NPArtTheme.vars(th); for (var n in v) st += "--" + n + ":" + v[n] + ";"; }
+    return t.replace("<svg ", '<svg width="' + (size || 96) + '" height="' + (size || 96) + '" style="' + st + 'display:block;overflow:visible" aria-hidden="true" ');
+  }
+  function skinNames(game) { return (G[game] && G[game].skinNames) || null; }
   /* ---------- tự khởi động ---------- */
   var HERO = "[data-npa-hero],#hHero,#paHero,#cwHero";
   function gameId() { var m = /\/games\/([a-z0-9-]+)\//.exec(location.pathname); return m ? m[1] : ""; }
@@ -364,5 +374,5 @@
     (document.head || document.documentElement).appendChild(j);
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
-  window.NPArt = { say: sayAll, register: register, boot: boot, mount: mount, companion: companion, event: event, touch: touch, refresh: refresh, has: function (g) { return !!G[g]; }, games: G };
+  window.NPArt = { markup: markup, preload: preload, skinNames: skinNames, say: sayAll, register: register, boot: boot, mount: mount, companion: companion, event: event, touch: touch, refresh: refresh, has: function (g) { return !!G[g]; }, games: G };
 })();

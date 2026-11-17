@@ -22,6 +22,8 @@ var l=[q,s].find(function(x){return x==="vi"||x==="en"})||(/^vi/i.test(navigator
 <script src="shared/npgrad.js"></script>
 <script src="shared/npbadges.js"></script>
 <script src="shared/npmascot.js"></script>
+<script src="shared/art/mascot-theme.js"></script>
+<script src="shared/art/mascot-art.js"></script>
 <style>
 html:root[data-app=hub][data-theme=dark]{--bg:#1a1240;--panel:rgba(48,32,112,.78);--line:rgba(170,150,255,.34);--muted:#bdb7ee}
 html:root[data-app=hub][data-theme=light]{--bg:#f4efff;--panel:rgba(255,255,255,.88);--line:#d9ccf6;--muted:#6a6290}
@@ -66,6 +68,7 @@ main{flex:1;min-height:0;padding-bottom:12px;display:flex;flex-direction:column;
 .mc[aria-pressed=true]{border-color:#fff;box-shadow:0 0 0 3px #6C4BF2}
 .mc.main::before{content:"⭐";position:absolute;left:2px;top:0;font-size:12px}
 .mc.own::after{content:"✓";position:absolute;right:3px;top:1px;font-size:11px;font-weight:900;color:#51cf66}
+.ths{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:2px}.ths::-webkit-scrollbar{display:none}.th{flex:0 0 auto;min-width:64px;height:44px;border-radius:14px;border:2px solid var(--line);background:rgba(255,255,255,.06);color:var(--ink);font:inherit;font-weight:800;font-size:11px;cursor:pointer;padding:0 10px}.th[aria-pressed=true]{border-color:#fff;box-shadow:0 0 0 3px #6C4BF2}.th i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:5px;vertical-align:-1px}
 .note{font-size:12.5px;color:var(--muted);margin:0}
 .fill{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column}
 @media (max-height:640px){.prev .stage{width:84px}.card{padding:8px 10px}.mc{min-height:66px}.mc .n{font-size:10px}.skc{min-height:88px}.skc .n{font-size:11px}header{padding-top:4px;padding-bottom:4px}.back{width:38px;height:38px}main{gap:6px}.tabs button{height:34px}}
@@ -87,6 +90,7 @@ main{flex:1;min-height:0;padding-bottom:12px;display:flex;flex-direction:column;
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px"><button class="btn p" id="bMain" type="button"></button><a class="btn" id="bBuy" href="subscribe.html" hidden></a></div></div>
   </section>
   <section class="card"><h2 class="h2" id="hSk"></h2><div class="skins" id="skins" role="group"></div></section>
+  <section class="card" id="thCard" hidden><h2 class="h2" id="hTh"></h2><div class="ths" id="ths" role="group"></div></section>
   <section class="card fill"><h2 class="h2" id="hMc"></h2><div class="tabs" id="tabs" role="tablist"></div><div class="grid" id="grid"></div></section>
 </main>
 <script>
@@ -116,6 +120,11 @@ function render(){
   $("skins").innerHTML=M.skins(cur).map(function(s){var o=s.open();return '<button type="button" class="skc'+(o?'':' lk')+'" data-s="'+s.id+'" aria-pressed="'+(view===s.id)+'" aria-label="'+esc(l==="vi"?s.n[0]:s.n[1])+'">'+M.html(cur,s.id,40)+'<span class="n">'+esc(l==="vi"?s.n[0]:s.n[1])+'</span></button>'}).join("");
   $("skins").querySelectorAll(".skc").forEach(function(b){b.onclick=function(){view=b.dataset.s;render()}});
   var G=M.GRP;
+  var art=window.NPArt&&NPArt.skinNames&&NPArt.skinNames(cur),tc=$("thCard");tc.hidden=!art;
+  if(art){$("hTh").textContent=l==="vi"?"Theme màu (xem thử)":"Colour theme (preview)";var TH=window.NPArtTheme,cur2=window.NPArtForce==null?"":window.NPArtForce;
+    $("ths").innerHTML=[''].concat(TH.ids).map(function(t){var v=t&&TH.vars(t);return '<button type="button" class="th" data-t="'+t+'" aria-pressed="'+(cur2===t)+'"><i style="background:'+(v?v.p1:"#8EE0EE")+'"></i>'+(t?TH.names[t][l==="vi"?0:1]:(l==="vi"?"Mặc định":"Default"))+'</button>'}).join("");
+    $("ths").querySelectorAll(".th").forEach(function(b){b.onclick=function(){window.NPArtForce=b.dataset.t;render()}})}
+  else window.NPArtForce=null;
   $("tabs").innerHTML=Object.keys(G).map(function(k){return '<button type="button" role="tab" data-g="'+k+'" aria-selected="'+(k===grp)+'">'+G[k].acc+' '+esc(x.grp[k])+'</button>'}).join("");
   $("tabs").querySelectorAll("button").forEach(function(b){b.onclick=function(){grp=b.dataset.g;render()}});
   $("grid").innerHTML=list.filter(function(i){return i.group===grp}).map(function(i){var own=B.has(i.id);return '<button type="button" class="mc'+(own?' own':'')+(M.get()===i.id?' main':'')+'" data-i="'+i.id+'" aria-pressed="'+(i.id===cur)+'" aria-label="'+esc(l==="vi"?i.name.vi:i.name.en)+'" title="'+esc(own?x.got:x.no)+'">'+M.html(i.id,M.getSkin(i.id),34)+'<span class="n">'+esc(l==="vi"?i.name.vi:i.name.en)+'</span></button>'}).join("");
@@ -126,7 +135,7 @@ $("bMain").onclick=function(){var M=NPMascot2;if(!M.ok()||!M.isOpen(cur,view))re
 document.querySelectorAll(".seg button").forEach(function(b){b.onclick=function(){de.lang=b.dataset.l;try{localStorage.setItem("lang",b.dataset.l)}catch(e){}render()}});
 var q=new URLSearchParams(location.search).get("m");if(q&&NPBadges.entry(q)){cur=q;grp=NPBadges.entry(q).group}
 else{var mm=NPMascot2.get();if(mm){cur=mm;grp=NPBadges.entry(mm).group}}
-render();
+(function go(n){var A=window.NPArt;if(A&&A.games&&Object.keys(A.games).length){A.preload().then(function(){render()},render)}else if(n<30)setTimeout(function(){go(n+1)},60);else render()})(0);
 </script>
 <script src="shared/offline.js" defer></script>
 </body>
