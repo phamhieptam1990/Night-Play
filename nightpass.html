@@ -294,9 +294,5 @@ renderAll();loadSrv();
 if(location.hash==="#restore"){tab=0;renderAll();var re=$("rE");re&&re.focus()}
 </script>
 <script src="shared/offline.js" defer></script>
-<script>
-/* ?embed=1 (mở từ lớp phủ trong game): nút quay lại đóng lớp phủ, KHÔNG ra màn hình chính */
-(function(){if(new URLSearchParams(location.search).get("embed")!=="1")return;function go(){var b=document.getElementById("back");if(!b)return;b.addEventListener("click",function(e){e.preventDefault();try{parent.postMessage({np:1,type:"mc-close"},location.origin)}catch(x){}},true)}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",go);else go();document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a[href]");if(!a||a.id==="back")return;var h=a.getAttribute("href")||"";if(/^(subscribe|passcheck)/.test(h)){e.preventDefault();try{window.top.location.href=a.href}catch(x){location.href=a.href}}},true)})();
-</script>
 </body>
 </html>

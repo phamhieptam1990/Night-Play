@@ -51,7 +51,7 @@
   var wrap = null, POP = /\/popplay\/games\//.test(location.pathname);
   function home() { var h = document.getElementById("home") || document.getElementById("ovStart"); if (!h || h.hidden) return false; try { return h.getClientRects().length > 0 && !document.querySelector(".ov:not([hidden]):not(#ovStart)"); } catch (e) { return false; } }
   function paint() {
-    var id = get(), show = false && !!id && ok() && !!B() && home() && !/[?&](helper|multi)=1/.test(location.search);   /* chủ site chốt: BỎ vòng tròn "Linh vật của bạn" ở màn chọn (menu ⋯ đã có nút linh vật #npMcBtn) */
+    var id = get(), show = !!id && ok() && !!B() && home() && !/[?&](helper|multi)=1/.test(location.search);
     if (!show) { if (wrap) { wrap.remove(); wrap = null; } return; }
     var sid = getSkin(id), key = id + "|" + sid + "|" + (vi() ? 1 : 0);
     if (!wrap) {
