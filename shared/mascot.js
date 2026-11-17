@@ -11,7 +11,7 @@
   if (window.NPMascot) return;
   var reduce = false; try { reduce = matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
 
-  var EL_SEL = "#hHero,#cwHero", PS_SEL = "#home,#village,#ovStart";
+  var EL_SEL = "#hHero,#cwHero,#mHero,#shHero", PS_SEL = "#home,#village,#ovStart";
   var LP_DELAY = 260, LP_FULL = 1000;   /* nhấn giữ: sau 0,26s bắt đầu phình, +1s thì pop */
   var EMOJI = /\p{Extended_Pictographic}/u;
 
