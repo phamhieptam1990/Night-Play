@@ -90,6 +90,10 @@ body.bare #rail{display:none}
 .pn .pb svg{width:20px;height:20px}
 .po{position:absolute;inset:0;z-index:4;display:none;place-items:center;text-align:center;background:rgba(10,8,25,.55);color:#fff;font-weight:800;padding:20px;cursor:pointer;line-height:1.35}
 .fr.paused .po{display:grid}
+/* tạm dừng: NÚT PLAY TO ở giữa khung (thay chữ "chạm để tiếp tục"), cỡ theo khung nhỏ nhất, luôn ≥56px */
+.po .pp{width:clamp(56px,min(34cqw,34cqh),112px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--on-accent);box-shadow:0 6px 22px rgba(0,0,0,.45),0 0 0 6px rgba(255,255,255,.18)}
+.po .pp svg{width:46%;height:46%;margin-left:6%}
+.fr{container-type:size}
 .cd{position:absolute;inset:0;z-index:5;display:none;place-items:center;background:rgba(10,8,25,.55);color:#fff;font:900 min(34vmin,120px)/1 var(--font);text-shadow:0 4px 20px rgba(0,0,0,.5)}
 .fr.counting .cd{display:grid}
 .ld{position:absolute;inset:0;z-index:3;display:grid;place-items:center;color:var(--muted);font-weight:700;background:var(--card);pointer-events:none}
@@ -396,7 +400,7 @@ body.side #perf{max-width:50px;font-size:10px}
   function buildEl(it) {
     var el = document.createElement("div"); el.className = "fr"; el.dataset.id = it.id; el.dataset.name = gname(it.id);
     el.innerHTML = '<div class="ld"></div><div class="po"></div><div class="cd"></div><button class="mi" type="button" aria-haspopup="true"><b class="bd"></b><i>' + ICON.dots + '</i></button><div class="pn" role="group"></div>';
-    el.querySelector(".ld").textContent = t().loading; el.querySelector(".po").textContent = t().tap; el.querySelector(".mi").setAttribute("aria-label", t().menu + ": " + gname(it.id));
+    el.querySelector(".ld").textContent = t().loading; var po = el.querySelector(".po"); po.innerHTML = '<span class="pp">' + ICON.play + '</span>'; po.setAttribute("role", "button"); po.setAttribute("aria-label", t().tap); po.title = t().tap; el.querySelector(".mi").setAttribute("aria-label", t().menu + ": " + gname(it.id));
     el.querySelector(".po").addEventListener("click", function () { it.userPaused = false; it.autoPaused = false; sync(it); render(it); });
     el.querySelector(".mi").addEventListener("click", function (e) { e.stopPropagation(); togglePanel(it); });
     el.addEventListener("pointerdown", function () { if (sel !== it) select(it); }, true);
