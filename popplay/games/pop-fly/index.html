@@ -30,6 +30,14 @@ button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
 .ib[hidden]{display:none}
 .ask{display:flex;align-items:center;gap:10px;min-height:56px;padding:6px 10px;border-radius:20px;background:var(--panel);box-shadow:var(--shadow)}
 .ask .ib{width:44px;height:44px;box-shadow:none;background:var(--accent);color:var(--on-accent)}
+.ask{flex-wrap:wrap}
+.lrow{flex:1 1 100%;display:flex;justify-content:center;flex-wrap:nowrap;gap:clamp(2px,1.2vw,7px);padding:0 0 2px}
+.lrow i{font-style:normal;font-weight:900;font-size:clamp(13px,4vw,20px);line-height:1.15;min-width:1.35em;text-align:center;padding:1px 3px;border-radius:9px;opacity:.38;transition:opacity .2s,transform .25s,background .2s;position:relative}
+.lrow i.cur{opacity:.8;outline:2px dashed var(--accent);outline-offset:1px}
+.lrow i.say{opacity:1;background:#ffd84d;color:#3a1450;transform:scale(1.22)}
+.lrow i.on{opacity:1;background:var(--accent);color:var(--on-accent);transform:scale(1.18);box-shadow:0 0 12px color-mix(in srgb,var(--accent) 70%,transparent)}
+.lrow i.miss{opacity:.45;text-decoration:line-through}
+html.np-fs .lrow i{opacity:.5}html.np-fs .lrow i.on{opacity:1}html.np-fs .lrow i.say{opacity:1}
 #askTxt{flex:1;font-size:clamp(18px,5.6vw,28px);font-weight:800;line-height:1.1;text-align:center}
 #askTxt .big{display:inline-block;min-width:1.3em;padding:0 .25em;border-radius:12px;background:var(--accent);color:var(--on-accent);margin:0 2px}
 .hud{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:30px}
@@ -182,7 +190,7 @@ html.np-fs .app>.side .stats,html.np-fs .app>.side .gametitle{display:none!impor
       <button class="ib" id="soundBtn" type="button">🔊</button>
       <button class="ib" id="langBtn" type="button" style="font-size:14px;font-weight:800">VI</button>
     </div>
-    <div class="ask"><button class="ib" id="askBtn" type="button"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z" fill="currentColor"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/></svg></button><b id="askTxt" aria-live="polite"></b></div>
+    <div class="ask"><button class="ib" id="askBtn" type="button"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z" fill="currentColor"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/></svg></button><b id="askTxt" aria-live="polite"></b><div class="lrow" id="lrow" aria-hidden="true" hidden></div></div>
     <div class="hud"><span class="sc">⭐ <b id="sc">0</b></span><span class="dots" id="dots"></span></div>
   </div>
   <div class="play" id="play">
@@ -252,7 +260,7 @@ let LANG=(()=>{const q=new URLSearchParams(location.search).get("lang");if(q==="
 const I18N={
 vi:{title:"Chim Bay Học Vui",docTitle:"Chim Bay Học Vui",sound:"Âm thanh",lang:"Ngôn ngữ",pause:"Tạm dừng",resume:"Tiếp tục",
  "st.h":"Chọn trò chơi","daily.t":"Bài học hôm nay #{n}","sh.btn":"📤 Chia sẻ kết quả","en.tap":"👆 Chạm để bay lại","pts":"điểm","txt.copied":"Đã sao chép kết quả!","rank.btn":"🏆 Lên bảng điểm","lv.L":"🎉 Lên cấp {n}! Chữ mới: {l}","lv.M":"🎉 Phép tính lên cấp {n}!","lv.S":"🎉 Đếm sao lên cấp {n}!","stk.new":"Sticker mới!","stk.dup":"Sticker (đã có rồi)","bk.h":"Album sticker","bk.n":"Sưu tầm {a}/{b}","pg.lvl":"Cấp {n}","pg.top":"⭐ Cấp {n}","pg.bk":"🎴 Album sticker {a}/{b}","cd.lv":"⭐ Cấp {n} · 🎴 {a}/{b} sticker","pg.btn":"Tiến độ của bé","pg.h":"Tiến độ học của bé","pg.ph":"Tên bé (chỉ lưu trên máy)","pg.s0":"Chơi 1 ván hôm nay để bắt đầu chuỗi nhé!","pg.s":"🔥 {n} ngày học liền","pg.L":"Chữ đã biết {a}/{b}","pg.S":"Đếm sao đúng {p}%","pg.M":"Phép tính đúng {p}%","pg.none":"Chưa chơi","pg.prac":"Cần luyện thêm: {l}","pg.pracOk":"Chưa có chữ nào khó. Giỏi quá!","pg.share":"📤 Gửi cho ba mẹ","pg.back":"Quay lại","pg.shared":"Đã lưu ảnh","end.streak":"🔥 Chuỗi {n} ngày liền!","end.first":"🌱 Ngày học đầu tiên!","end.today":"Hôm nay bé đã học {n} ván","days":["CN","T2","T3","T4","T5","T6","T7"],"cd.t":"{n} đang học cùng Chim Bay Học Vui","cd.kid":"Bé","cd.sd":"ngày học liền","cd.L":"Chữ cái đã biết","cd.S":"Đếm sao đúng","cd.M":"Phép tính đúng","cd.prac":"Đang luyện: {l}","cd.foot":"Chơi miễn phí tại","cd.share":"Bé học cùng Chim Bay Học Vui","gt.sh":"Chia sẻ ảnh dành cho phụ huynh. Hãy trả lời câu hỏi người lớn nhé:","st.p":"Chạm để bay lên nhé!","ty.letters":"Chim học chữ","ty.letters.d":"Bay qua đúng chữ","ty.stars":"Bay đếm sao","ty.stars.d":"Nhặt sao rồi đếm","ty.math":"Tàu bay phép tính","ty.math.d":"Bay qua đáp án đúng",
- "ask.letters":"Bay qua chữ {l}","ask.math":"{q}","ask.stars":"Nhặt thật nhiều sao!","say.letters":"Bay qua chữ {l}!","say.math":"{a} cộng {b} bằng mấy?","say.mathMinus":"{a} trừ {b} bằng mấy?",
+ "ask.letters":"Bay qua chữ {l}","intro.say":"Bé nghe nhé! Hôm nay mình bay qua các chữ:","ask.math":"{q}","ask.stars":"Nhặt thật nhiều sao!","say.letters":"Bay qua chữ {l}!","say.math":"{a} cộng {b} bằng mấy?","say.mathMinus":"{a} trừ {b} bằng mấy?",
  right:["Giỏi quá!","Tuyệt vời!","Đúng rồi!","Hoan hô!"],wrong:["Thử lại nhé!","Chưa đúng, mình thử tiếp!","Cố lên nào!"],miss:"Mình thử tiếp nhé!",hintL:"Đây là chữ {l}",hintN:"Đáp án là {n}",
  "q.h":"Bé nhặt mấy ngôi sao?","q.p":"Chạm vào số đúng nhé","q.right":"Đúng rồi! {n} ngôi sao","q.wrong":"Có {n} ngôi sao đó!",
  "en.h3":"Siêu giỏi!","en.h2":"Giỏi lắm!","en.h1":"Cố lên nhé!","en.p":"{n} điểm","again":"Chơi tiếp","home":"Đổi trò",
@@ -260,7 +268,7 @@ vi:{title:"Chim Bay Học Vui",docTitle:"Chim Bay Học Vui",sound:"Âm thanh",l
  "gt.h":"Dành cho phụ huynh","gt.p":"Hỏi người lớn: {a} + {b} = ?","gt.x":"Quay lại",lockedLbl:"{n} (cần Night Pass)",badge:"Night Pass"},
 en:{title:"Fly & Learn",docTitle:"Fly & Learn",sound:"Sound",lang:"Language",pause:"Pause",resume:"Resume",
  "st.h":"Pick a game","daily.t":"Today's lesson #{n}","sh.btn":"📤 Share result","en.tap":"👆 Tap to fly again","pts":"pts","txt.copied":"Result copied!","rank.btn":"🏆 Leaderboard","lv.L":"🎉 Level {n}! New letters: {l}","lv.M":"🎉 Math level {n}!","lv.S":"🎉 Star counting level {n}!","stk.new":"New sticker!","stk.dup":"Sticker (already have)","bk.h":"Sticker album","bk.n":"Collected {a}/{b}","pg.lvl":"Lv {n}","pg.top":"⭐ Level {n}","pg.bk":"🎴 Sticker album {a}/{b}","cd.lv":"⭐ Level {n} · 🎴 {a}/{b} stickers","pg.btn":"Learning progress","pg.h":"Learning progress","pg.ph":"Child name (kept on this device)","pg.s0":"Play one round today to start a streak!","pg.s":"🔥 {n}-day streak","pg.L":"Letters known {a}/{b}","pg.S":"Star counting {p}% right","pg.M":"Math {p}% right","pg.none":"Not played yet","pg.prac":"Needs practice: {l}","pg.pracOk":"No tricky letters. Great!","pg.share":"📤 Send to parents","pg.back":"Back","pg.shared":"Image saved","end.streak":"🔥 {n}-day streak!","end.first":"🌱 First learning day!","end.today":"Today: {n} rounds","days":["Su","Mo","Tu","We","Th","Fr","Sa"],"cd.t":"{n} is learning with Fly & Learn","cd.kid":"My little one","cd.sd":"day streak","cd.L":"Letters known","cd.S":"Star counting","cd.M":"Math right","cd.prac":"Practicing: {l}","cd.foot":"Play free at","cd.share":"Learning with Fly & Learn","gt.sh":"Sharing is for parents. Please answer the grown-up question:","st.p":"Tap to fly up!","ty.letters":"Birdie ABC","ty.letters.d":"Fly through the right letter","ty.stars":"Star counter","ty.stars.d":"Catch stars, then count","ty.math":"Math plane","ty.math.d":"Fly through the right answer",
- "ask.letters":"Fly through the letter {l}","ask.math":"{q}","ask.stars":"Catch lots of stars!","say.letters":"Fly through the letter {l}!","say.math":"What is {a} plus {b}?","say.mathMinus":"What is {a} minus {b}?",
+ "ask.letters":"Fly through the letter {l}","intro.say":"Listen! Today we fly through the letters:","ask.math":"{q}","ask.stars":"Catch lots of stars!","say.letters":"Fly through the letter {l}!","say.math":"What is {a} plus {b}?","say.mathMinus":"What is {a} minus {b}?",
  right:["Great job!","Wonderful!","Correct!","Hooray!"],wrong:["Try again!","Not quite, let's try!","You can do it!"],miss:"Let's try the next one!",hintL:"This is the letter {l}",hintN:"The answer is {n}",
  "q.h":"How many stars?","q.p":"Tap the right number","q.right":"Yes! {n} stars","q.wrong":"There were {n} stars!",
  "en.h3":"Super!","en.h2":"Well done!","en.h1":"Keep going!","en.p":"{n} points","again":"Play again","home":"Pick a game",
@@ -301,9 +309,11 @@ const LET={vi:[].concat(...TIERS.vi).sort((a,b)=>"AĂÂBCDĐEÊGHIKLMNOÔƠPQRST
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(RNG()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 PF.shuffle=shuffle;
 PF.types.letters={id:"letters",ico:"🐤",hero:"🐤",total:10,
+  init(S){const P=S.daily?dailyPool():Prog.pool(),it=Prog.load().items;let used=[],row=[];RNG=S.rngA||MR;
+    for(let n=0;n<10;n++){let cand=P.filter(l=>!used.includes(l));if(!cand.length){used=[];cand=P}const need=cand.filter(l=>{const o=it["L:"+l];return !o||o.r<3||o.w>=o.r}),tg=pickOf(!S.daily&&need.length&&RNG()<.7?need:cand);used.push(tg);row.push(tg)}RNG=MR;S.row=row},
   name:()=>t("ty.letters"),
   makeWave(i,S){const P=S.daily?dailyPool():Prog.pool(),it=Prog.load().items;let cand=P.filter(l=>!S.used.includes(l));if(!cand.length){S.used=[];cand=P}
-    const need=cand.filter(l=>{const o=it["L:"+l];return !o||o.r<3||o.w>=o.r}),target=pickOf(!S.daily&&need.length&&RNG()<.7?need:cand);S.used.push(target);
+    let target;if(S.row&&S.row[i]!=null)target=S.row[i];else{const need=cand.filter(l=>{const o=it["L:"+l];return !o||o.r<3||o.w>=o.r});target=pickOf(!S.daily&&need.length&&RNG()<.7?need:cand);S.used.push(target)}
     const ds=shuffle(P.filter(l=>l!==target)).slice(0,2),labels=shuffle([target].concat(ds));
     return {item:"L:"+target,ask:t("ask.letters",{l:'<span class="big">'+target+'</span>'}),askPlain:t("ask.letters",{l:target}),speak:target,hint:t("hintL",{l:target}),rings:labels.map(l=>({label:l,ok:l===target}))}}};
 
@@ -345,8 +355,8 @@ function markDot(i,st){const S=PF.S;S.dots[i]=st;renderDots()}
 PF.markDot=markDot;
 function renderDots(){const S=PF.S,el=$("dots");if(!S){el.innerHTML="";return}const n=S.dots.length;if(el.children.length!==n){el.innerHTML=S.dots.map(d=>'<i class="'+(d===1?"ok":d===2?"miss":"")+'"></i>').join("");return}
   for(let k=0;k<n;k++){const d=S.dots[k],c=d===1?"ok":d===2?"miss":"",e=el.children[k];if(e.className!==c)e.className=c}}   /* chỉ đổi class chấm thay đổi, không dựng lại cả hàng */
-function setAsk(html,plain,speak){const S=PF.S;if(S){S.ask=html;S.askPlain=plain||html.replace(/<[^>]*>/g,"");S.speak=speak||""}$("askTxt").innerHTML=html;if(speak&&(!S||S.spawned<=1||!running)){clearTimeout(setAsk.t);setAsk.t=setTimeout(()=>say(speak),160)}}   /* CHỈ đọc tự động ở câu ĐẦU của ván (như Cánh Nhỏ: không đọc giọng giữa lúc bay → hết khựng iOS); các câu sau bé chạm nút 🔊 để nghe lại */   /* đọc to chậm 160ms: speechSynthesis.cancel/speak chạy ngay lúc bay qua chữ làm khựng khung hình trên iPhone */
-PF.setAsk=setAsk;
+function setAsk(html,plain,speak){setTimeout(markCur,0);const S=PF.S;if(S){S.ask=html;S.askPlain=plain||html.replace(/<[^>]*>/g,"");S.speak=speak||""}$("askTxt").innerHTML=html;if(speak&&(!S||S.spawned<=1||!running)){clearTimeout(setAsk.t);setAsk.t=setTimeout(()=>say(speak),160)}}   /* CHỈ đọc tự động ở câu ĐẦU của ván (như Cánh Nhỏ: không đọc giọng giữa lúc bay → hết khựng iOS); các câu sau bé chạm nút 🔊 để nghe lại */   /* đọc to chậm 160ms: speechSynthesis.cancel/speak chạy ngay lúc bay qua chữ làm khựng khung hình trên iPhone */
+PF.setAsk=setAsk;const _sa=setAsk;
 
 /* ===== VẬT LÝ NHẸ NHÀNG (không có thua) ===== */
 function flap(){if(!running||paused)return;const S=PF.S;S.bird.vy=-215;sfx.flap();if(S.ty.onFlap)S.ty.onFlap(S)}
@@ -365,8 +375,8 @@ function spawnWave(S){
 function evalWave(S,w){
   const b=S.bird,hit=w.rings.find(r=>Math.abs(r.y-b.y)<R+10);w.done=true;
   if(w.item){const it=w.item,okk=!!(hit&&hit.ok);setTimeout(()=>Prog.rec(it,okk),0)}   /* ghi localStorage ngoài khung hình đang vẽ */
-  if(hit&&hit.ok){w.res="ok";S.correct++;S.streak++;addScore(10+(S.streak>=3?5:0));markDot(w.idx,1);sfx.good();burst(BX,b.y,pickOf(["⭐","✨","🌟"]),12);if(window.NPArt){const n=S.streak;NPArt.event(n===3||n===5||n===7||n%5===0?"combo":"correct",{n:n,tier:n>=7?3:n>=5?2:n>=3?1:0})}toast(pickOf(t("right")),1100,"ok");S.celebrate=.4}
-  else{w.res=hit?"wrong":"miss";S.wrong++;S.streak=0;markDot(w.idx,2);sfx.bad();S.slow=1.1;b.wob=.9;window.NPArt&&NPArt.event("wrong");toast(hit?pickOf(t("wrong")):t("miss"),1500,hit?"bad":"miss");
+  if(hit&&hit.ok){w.res="ok";S.correct++;S.streak++;addScore(10+(S.streak>=3?5:0));markDot(w.idx,1);litLetter(w.idx,true);sfx.good();burst(BX,b.y,pickOf(["⭐","✨","🌟"]),12);if(window.NPArt){const n=S.streak;NPArt.event(n===3||n===5||n===7||n%5===0?"combo":"correct",{n:n,tier:n>=7?3:n>=5?2:n>=3?1:0})}toast(pickOf(t("right")),1100,"ok");S.celebrate=.4}
+  else{w.res=hit?"wrong":"miss";S.wrong++;S.streak=0;markDot(w.idx,2);litLetter(w.idx,false);sfx.bad();S.slow=1.1;b.wob=.9;window.NPArt&&NPArt.event("wrong");toast(hit?pickOf(t("wrong")):t("miss"),1500,hit?"bad":"miss");
     const ok=w.rings.find(r=>r.ok);if(ok){w.hintT=1.6;/* không đọc thêm lời gợi ý sau khi bay sai: tránh đọc chồng gây khựng trên iOS (chữ gợi ý đã hiện trên màn hình) */}}
 }
 
@@ -455,15 +465,30 @@ const ovs=["ovStart","ovPause","ovQ","ovEnd","ovPay","ovGate","ovSkin","ovProg",
 function showOv(id){for(const o of ovs)$(o).hidden=(o!==id)}
 function applyLayout(l){PF.safe=l==="full"?{top:112,bottom:64,pad:34}:l==="window"?{top:64,bottom:64,pad:64}:{top:0,bottom:0,pad:34};if(document.documentElement.classList.contains("np-fs"))PF.safe=fsSafe();const a=document.querySelector(".app");if(l&&l!=="classic")a.dataset.layout=l;else delete a.dataset.layout;setTimeout(fit,30)}
 PF.applyLayout=applyLayout;
+/* HÀNG 10 CHỮ của ván (chế độ Chữ cái): hiện MỜ trên thẻ câu hỏi, bé bay qua chữ nào ĐÚNG thì chữ đó SÁNG LÊN; đầu ván linh vật ĐỌC cả hàng (game tạm dừng lúc đọc, chạm để bỏ qua) */
+let intro=false;
+function lrowEl(){return $("lrow")}
+function refreshRowClear(){const el=lrowEl();if(el){el.hidden=true;el.innerHTML=""}}
+function refreshRow(){const S=PF.S,el=lrowEl();if(!el)return;if(!S||!S.row){el.hidden=true;el.innerHTML="";return}el.hidden=false;el.innerHTML=S.row.map((l,i)=>'<i class="'+(S.dots&&S.dots[i]===1?"on":S.dots&&S.dots[i]===2?"miss":"")+'">'+l+'</i>').join("");markCur()}
+function markCur(){const S=PF.S,el=lrowEl();if(!S||!S.row||!el)return;[...el.children].forEach((e,i)=>e.classList.toggle("cur",i===S.done&&!e.classList.contains("on")&&!e.classList.contains("miss")))}
+function litLetter(i,ok){const el=lrowEl();if(!el||!el.children[i])return;const e=el.children[i];e.classList.remove("cur","say");e.classList.add(ok?"on":"miss");if(ok&&e.animate&&!matchMedia("(prefers-reduced-motion: reduce)").matches)try{e.animate([{transform:"scale(1)"},{transform:"scale(1.7) rotate(-8deg)"},{transform:"scale(1.18)"}],{duration:520,easing:"cubic-bezier(.3,.8,.4,1.4)"})}catch(x){}}
+function rowSay(i){const el=lrowEl();if(!el)return;[...el.children].forEach((e,k)=>e.classList.toggle("say",k===i))}
+function introRead(S){const sy=window.speechSynthesis;if(!sound||!sy||!S.row||intro)return;
+  intro=true;paused=true;pausedBy="intro";const items=[t("intro.say")].concat(S.row);let k=0,fin=false;
+  const done=()=>{if(fin)return;fin=true;clearTimeout(guard);rowSay(-1);if(pausedBy==="intro"){paused=false;pausedBy=null;last=performance.now()}intro=false;PF.skipIntro=null;try{sy.cancel()}catch(e){}};
+  const guard=setTimeout(done,20000);PF.skipIntro=done;
+  const next=()=>{if(fin||PF.S!==S||!running||k>=items.length)return done();const i=k++;let go=false;const nx=()=>{if(go)return;go=true;setTimeout(next,i===0?140:300)};
+    try{const u=new SpeechSynthesisUtterance(String(items[i]));u.lang=LANG==="vi"?"vi-VN":"en-US";u.rate=.8;u.pitch=1.15;u.onstart=()=>{if(i>0&&!fin)rowSay(i-1)};u.onend=nx;u.onerror=nx;sy.speak(u)}catch(e){done()}};
+  next()}
 function startRound(type,resume,opts){
   if(!PF.types[type])return;audio();
   PF.S=newState(type,opts);applyLayout(PF.S.skin?PF.S.skin.layout:"classic");window.NPWide&&NPWide.skin(PF.S.skin,type+":"+(PF.skinSel[type]||"default"));PF.cur=type;running=true;paused=false;pausedBy=null;showOv(null);$("pauseBtn").hidden=false;$("sc").textContent="0";renderDots();
-  const ty=PF.types[type];if(ty.init)ty.init(PF.S);
+  const ty=PF.types[type];if(ty.init)ty.init(PF.S);refreshRow();
   if(!ty.custom){$("askTxt").textContent="";}else setAsk(t("ask.stars"),t("ask.stars"),"");
   if(resume){const S=PF.S;S.score=Math.max(0,Math.min(1500,resume.score|0));S.correct=resume.correct|0;S.wrong=resume.wrong|0;S.streak=resume.streak|0;S.done=resume.done|0;S.spawned=resume.done|0;   /* cổng đang bay lúc chuyển giao không được mang theo: sinh lại, kẻo kẹt không còn cổng nào */
     if(Array.isArray(resume.dots))S.dots=S.dots.map((d,i)=>[0,1,2].includes(resume.dots[i])?resume.dots[i]:0);if(Array.isArray(resume.used))S.used=resume.used.filter(x=>typeof x==="string").slice(0,40);
     if(S.type==="stars"&&S.custom){S.custom.seg=resume.seg|0;S.custom.right=resume.right|0}$("sc").textContent=S.score;renderDots()}
-  window.NP&&NP.start();
+  refreshRow();window.NP&&NP.start();if(!resume&&PF.S.row)introRead(PF.S);
 }
 PF.startRound=startRound;
 /* Thử thách Night Pass: trò Chữ cái, bay đúng CẢ 10 cổng (acc = 1) */
@@ -496,10 +521,10 @@ function shareText(info){const em=info.dots.map(d=>d===1?"🟩":d===2?"🟥":"�
 async function doShareText(){const tx=shareText(endInfo);if(navigator.share){try{await navigator.share({text:tx});return}catch(e){if(e&&e.name==="AbortError")return}}try{await navigator.clipboard.writeText(tx);toast(t("txt.copied"),1600)}catch(e){toast(tx,4000)}}
 function retry(){if(HELPER||!endInfo)return;if(endInfo.daily)startDaily();else startRound(endInfo.type)}
 
-function goHome(){if(window.NPAudio)NPAudio.silence();else if(window.speechSynthesis)speechSynthesis.cancel();applyLayout("classic");window.NPWide&&NPWide.skin(null);running=false;paused=false;PF.S=null;$("pauseBtn").hidden=true;$("sc").textContent="0";renderDots();setAsk("","","");$("askTxt").textContent=t("st.p");showOv("ovStart");renderCards();draw()}
+function goHome(){intro=false;PF.skipIntro=null;try{refreshRowClear()}catch(e){}if(window.NPAudio)NPAudio.silence();else if(window.speechSynthesis)speechSynthesis.cancel();applyLayout("classic");window.NPWide&&NPWide.skin(null);running=false;paused=false;PF.S=null;$("pauseBtn").hidden=true;$("sc").textContent="0";renderDots();setAsk("","","");$("askTxt").textContent=t("st.p");showOv("ovStart");renderCards();draw()}
 
 function pauseRound(by){if(!running||paused)return;paused=true;pausedBy=by==="user"?"user":"parent";if(window.speechSynthesis)speechSynthesis.cancel();if(pausedBy==="user"){$("ovPause").hidden=false}}
-function resumeRound(by){if(!paused)return;if(by==="parent"&&pausedBy==="user")return;paused=false;pausedBy=null;$("ovPause").hidden=true;last=performance.now()}
+function resumeRound(by){if(!paused)return;if(intro&&pausedBy==="intro")return;if(by==="parent"&&pausedBy==="user")return;paused=false;pausedBy=null;$("ovPause").hidden=true;last=performance.now()}
 $("pauseBtn").addEventListener("click",()=>pauseRound("user"));$("resumeBtn").addEventListener("click",()=>resumeRound("user"));
 $("homeBtn1").addEventListener("click",goHome);$("homeBtn2").addEventListener("click",goHome);
 $("againBtn").addEventListener("click",()=>{if(endInfo&&endInfo.daily&&PF.S&&PF.S.daily)startDaily();else startRound(PF.cur||"letters")});
@@ -508,7 +533,7 @@ addEventListener("keydown",e=>{if((e.code==="Space"||e.key==="Enter")&&!e.repeat
 $("shareBtn").addEventListener("click",()=>{gateBack="ovEnd";openGate(()=>{showOv("ovEnd");doShareText()},"ovEnd","gt.sh")});$("rankBtn").addEventListener("click",()=>window.NP&&NP.brag());
 document.addEventListener("visibilitychange",()=>{if(document.hidden&&running&&!paused)pauseRound("user")});
 addEventListener("keydown",e=>{if(e.code==="Space"||e.key==="ArrowUp"){e.preventDefault();flap()}else if((e.key==="p"||e.key==="P")&&running){paused?resumeRound("user"):pauseRound("user")}});
-$("play").addEventListener("pointerdown",e=>{if(e.target.closest(".ov")||e.target.closest("button"))return;e.preventDefault();flap()});
+$("play").addEventListener("pointerdown",e=>{if(e.target.closest(".ov")||e.target.closest("button"))return;e.preventDefault();if(intro&&PF.skipIntro){PF.skipIntro();return}flap()});
 $("askBtn").addEventListener("click",()=>{const S=PF.S;say(S&&S.speak?S.speak:t("st.p"))});
 $("soundBtn").addEventListener("click",()=>{sound=!sound;if(window.NPAudio)NPAudio.set(sound);else if(!sound&&window.speechSynthesis)speechSynthesis.cancel();syncSound()});
 function syncSound(){$("soundBtn").textContent=sound?"🔊":"🔇";$("soundBtn").setAttribute("aria-label",t("sound")+(sound?"":" (off)"))}
