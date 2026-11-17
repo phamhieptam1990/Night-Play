@@ -1180,7 +1180,7 @@ html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home::before{grid-row:1!im
 }
 
 /* GIAO DIỆN SÁNG: màn chọn Pop có nền sáng Night Pass (bài đo check-popnp: --bg sáng); chỉ giao diện TỐI mới để trong suốt cho nền đêm lộ ra */
-html[data-theme="light"] .app:has(h1[data-pt]) #home:not([hidden]),html[data-theme="light"] .app:has(h1[data-pt]) #village:not([hidden]),html[data-theme="light"] .app:has(h1[data-pt]) #ovStart:not([hidden]){background:linear-gradient(165deg,#F3F0FA,#ECE6FB)!important}
+html[data-theme="light"] .app:has(h1[data-pt]) #home:not([hidden]),html[data-theme="light"] .app:has(h1[data-pt]) #village:not([hidden]),html[data-theme="light"] .app:has(h1[data-pt]) #ovStart:not([hidden]){background:none!important}   /* chủ site: bỏ nền/viền bao quanh khung ở màn chọn, cả theme sáng */
 
 /* ĐIỆN THOẠI DỌC THẤP (iPhone SE…, <=719px cao): danh sách game thành THANH TRƯỢT NGANG (vuốt, ô kế bên ló ra gợi ý) để nhường chỗ dọc cho LINH VẬT hiện lại (trước đó linh vật bị ẩn vì danh sách dọc chiếm hết màn). Áp dụng 10 game dùng #home .tiles + Chim Bay (#ovStart .cards); Làng Của Bé (#village) giữ nguyên. */
 @media (max-aspect-ratio:11/10) and (max-height:719px) and (max-width:520px){
@@ -1558,3 +1558,9 @@ html.npp-kid #ovHow:not([hidden]) .hwL li{padding-block:clamp(6px,1.6vh,14px)!im
 @media (min-aspect-ratio:11/10) and (max-height:290px){
   html.np-hudg:root:root .app:has(h1[data-pt="ve-chu-quai-vat"]) #home .tiles{grid-template-rows:repeat(2,40px)!important}
 }
+
+/* MÀN CHỌN (mọi cỡ màn hình): KHÔNG vẽ nền / viền / bóng / bo góc bao quanh khung, và chip điểm (.hud, vd 0/28) không nền (chủ site chốt). Khi đang chơi giữ nguyên. */
+.app:has(#home:not([hidden])) .play,.app:has(#village:not([hidden])) .play,.app:has(#ovStart:not([hidden])) .play{background:none!important;box-shadow:none!important;border:0!important;border-radius:0!important;backdrop-filter:none!important}
+.app:has(#home:not([hidden])) .play::after,.app:has(#village:not([hidden])) .play::after,.app:has(#ovStart:not([hidden])) .play::after{display:none!important}
+.app #home:not([hidden]),.app #village:not([hidden]){background:none!important;box-shadow:none!important;border-radius:0!important}
+.app:has(#home:not([hidden])) .hud,.app:has(#village:not([hidden])) .hud,.app:has(#ovStart:not([hidden])) .hud{background:none!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important}

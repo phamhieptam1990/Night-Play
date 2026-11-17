@@ -60,6 +60,7 @@
       wrap.addEventListener("click", function (e) { e.preventDefault(); try { window.top.location.href = wrap.href + "&from=" + encodeURIComponent((window.top.location.pathname.replace(/^\//, "") || "play/index.html") + (/^#[\w-]+$/.test(window.top.location.hash) ? window.top.location.hash : "")); } catch (x) { location.href = wrap.href; } });
       document.documentElement.appendChild(wrap);
     }
+    try { var hd = document.querySelector(".hud"); wrap.style.bottom = "calc(46px + env(safe-area-inset-bottom,0px))"; if (hd) { var a = wrap.getBoundingClientRect(), b2 = hd.getBoundingClientRect(); if (b2.width && Math.min(a.right, b2.right) - Math.max(a.left, b2.left) > 4 && Math.min(a.bottom, b2.bottom) - Math.max(a.top, b2.top) > 4) wrap.style.bottom = "calc(" + Math.round(window.innerHeight - b2.top + 10) + "px)"; } } catch (e) {}   /* không đè lên chip điểm (.hud) */
     if (wrap.dataset.k !== key) { wrap.dataset.k = key; wrap.innerHTML = html(id, sid, 34); wrap.setAttribute("aria-label", (vi() ? "Linh vật của bạn" : "Your mascot")); wrap.title = wrap.getAttribute("aria-label"); }
   }
   var inGame = !!document.getElementById("play") || !!document.querySelector(".app");

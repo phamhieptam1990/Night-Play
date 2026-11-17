@@ -4,7 +4,9 @@
 #paHero .npa-box>svg{height:100%;width:auto;max-width:100%}
 html.np-strip #home>#paHero,html.np-strip #village>#paHero{flex:1 1 0;height:auto;min-height:0}
 @media (min-aspect-ratio:11/10) and (min-height:521px){.app:has(#paHero) #home>#paHero,.app:has(#paHero) #village>#paHero{grid-column:1!important;grid-row:1!important;align-self:end!important;justify-self:stretch!important;height:clamp(170px,34vh,320px)!important;height:clamp(170px,34dvh,320px)!important;margin-bottom:clamp(6px,1.4dvh,12px)!important;min-height:0!important;width:100%!important;overflow:hidden!important;position:relative}
-html.np-hudg .app:has(#paHero) #home>#paHero,html.np-hudg .app:has(#paHero) #village>#paHero{grid-row:1 / span 3!important;align-self:stretch!important;height:auto!important;contain:size}
+html.np-hudg .app:has(h1[data-pt]):has(#paHero) #home>#paHero,html.np-hudg .app:has(h1[data-pt]):has(#paHero) #village>#paHero{grid-row:1 / span 3!important;align-self:stretch!important;height:auto!important;contain:size}
 .app:has(#paHero) #home>#paHero .npa-box,.app:has(#paHero) #village>#paHero .npa-box{position:absolute!important;inset:0;display:flex;align-items:flex-end;justify-content:center}}
 /* ĐIỆN THOẠI NGANG (thấp ≤520px): linh vật BẮT BUỘC có ở màn chính → đặt góc dưới-phải, cố định, không chiếm chỗ lưới thẻ */
 @media (min-aspect-ratio:11/10) and (max-height:520px){#home>#paHero,#village>#paHero{display:flex!important;position:fixed!important;right:max(8px,env(safe-area-inset-right));bottom:30px;left:auto!important;top:auto!important;width:clamp(84px,17vw,150px)!important;height:clamp(84px,36vh,130px)!important;height:clamp(84px,36dvh,130px)!important;margin:0!important;order:0;z-index:2;pointer-events:auto;grid-column:auto!important;grid-row:auto!important;overflow:visible}}
+/* chế độ chiếm 1 hàng (mascot-art.js bật khi hero chồng lên thẻ cạnh nó) */
+.app #home>#paHero.pa-flow,.app #village>#paHero.pa-flow{grid-row:1!important;grid-column:1!important;align-self:end!important;contain:none!important;height:clamp(150px,30dvh,300px)!important;max-height:none!important;margin:0 0 clamp(6px,1.4dvh,12px)!important}
