@@ -99,16 +99,17 @@
   Inst.prototype.enter = function () {
     var self = this, s = this.svg, n = Date.now(); if (!s || !this.visible() || n - (this.le || 0) < 3500) return; this.le = n;
     if (!reduce && s.animate) { var e = ENTER[this.skin] || ENTER["default"]; try { this.ea = s.animate(e[0], { duration: e[1], easing: "linear" }); } catch (x) {} }
-    var fire = function () { self.pendingHi = null; self.ea = null; if (!self.visible()) return; if (self.skin === "night" || self.skin === "star") self.fx(2); else if (self.skin === "badge" || self.skin === "group") self.motion(1); var t = line(self, "hi") || line(self, "start"); self.ls = Date.now(); self.say(t, 2600); };
+    var fire = function () { self.pendingHi = null; self.ea = null; self.rem(); if (!self.visible()) return; if (self.skin === "night" || self.skin === "star") self.fx(2); else if (self.skin === "badge" || self.skin === "group") self.motion(1); var t = line(self, "hi") || line(self, "start"); self.ls = Date.now(); self.say(t, 2600); };
     this.pendingHi = fire; clearTimeout(this.et); this.et = rst(fire, Math.round((ENTER[this.skin] || ENTER["default"])[1] * 0.85));
   };
+  Inst.prototype.rem = function () { try { if (this.svg && this.visible()) { var r = this.svg.getBoundingClientRect(); if (r.width > 40) this.lastRect = r; } } catch (e) {} };
   Inst.prototype.skipEnter = function () {   /* người dùng thao tác: linh vật vào đúng vị trí NGAY, câu chào hiện luôn */
     var a = this.ea; this.ea = null; if (a) { try { a.finish(); } catch (e) {} }
     clearTimeout(this.et); if (this.pendingHi) { var f = this.pendingHi; this.pendingHi = null; f(); }
   };
   Inst.prototype.watch = function () {
     var self = this; if (this.io || !window.IntersectionObserver || this.role !== "hero") return;
-    this.io = new IntersectionObserver(function (es) { es.forEach(function (x) { if (x.isIntersecting && self.svg) self.enter(); }); }, { threshold: 0.35 }); this.io.observe(this.host);
+    this.io = new IntersectionObserver(function (es) { es.forEach(function (x) { if (x.isIntersecting && self.svg) { self.enter(); rst(function () { self.rem(); }, 2800); } }); }, { threshold: 0.35 }); this.io.observe(this.host);
   };
   Inst.prototype.mount = function () {
     var self = this, h = this.host;
@@ -213,8 +214,10 @@
   ["pointerdown", "keydown"].forEach(function (n) { addEventListener(n, takeSnap, { capture: true, passive: true }); });
   /* RỜI ĐI XONG MỚI HIỆN GAME: bản sao màn chính (nguyên vẹn, trừ linh vật) che màn chơi trong lúc ghost chạy hiệu ứng; game bị đóng băng (NP.menuPause) rồi chạy tiếp khi hiệu ứng xong. */
   function leave() {
-    var sn = snap; snap = null; if (!sn || holding || Date.now() - sn.at > 2500 || reduce || !Element.prototype.animate) return;
-    var it = sn.it, r = sn.r, d = document.createElement("div"), cov = null, froze = false, pl = document.getElementById("play") || document.body, pr = pl.getBoundingClientRect(), tx = pr.left + pr.width / 2 - (r.left + r.width / 2), ty = pr.top + pr.height * 0.42 - (r.top + r.height / 2), T = 1800;
+    var sn = snap; snap = null; if (holding || reduce || !Element.prototype.animate) return;
+    var user = !!sn && Date.now() - sn.at <= 2500;   /* người dùng vừa thao tác → ĐI NHANH ra giữa rồi thu nhỏ vào khung; không thao tác (game tự bắt đầu) → đi CHẬM, tự nhiên, lắc lư */
+    if (!user) { var h0 = null; for (var q0 = 0; q0 < insts.length; q0++) if (insts[q0].role === "hero" && insts[q0].lastRect) { h0 = insts[q0]; break; } if (!h0) return; sn = { it: h0, r: h0.lastRect, at: 0, html: h0.svg ? h0.svg.outerHTML : "", scr: null, cl: null, sid: "" }; if (!sn.html) return; }
+    var it = sn.it, r = sn.r, d = document.createElement("div"), cov = null, froze = false, pl = document.getElementById("play") || document.body, pr = pl.getBoundingClientRect(), tx = pr.left + pr.width / 2 - (r.left + r.width / 2), ty = pr.top + pr.height * 0.42 - (r.top + r.height / 2), T = user ? 1500 : 2900, SW = user ? .45 : 1;
     d.style.cssText = "position:fixed;z-index:2147483000;pointer-events:none;left:" + r.left + "px;top:" + r.top + "px;width:" + r.width + "px;height:" + r.height + "px;transform-origin:50% 100%";
     d.innerHTML = uniq(sn.html); var sv = d.firstChild; if (sv && sv.style) { sv.style.width = "100%"; sv.style.height = "100%"; }
     try {
@@ -238,7 +241,7 @@
         els.forEach(function (el, n) {
           if (!el.getClientRects().length) return; var q = el.getBoundingClientRect(); if (q.width < 20) return;
           var mx = q.left + q.width / 2 - cx0, my = q.top + q.height / 2 - cy0, dir = mx === 0 ? (n % 2 ? 1 : -1) : (mx > 0 ? 1 : -1), far = dir * (innerWidth * .9 + q.width), up = my < -innerHeight * .18 ? -innerHeight * .5 : 0;
-          el.animate([{ transform: "none", opacity: 1 }, { transform: "scale(.96)", offset: .08, opacity: 1 }, { transform: "translate(" + far + "px," + up + "px) rotate(" + dir * 12 + "deg)", opacity: 1 }], { duration: Math.round(T * .42), delay: Math.round(n * 45), easing: "cubic-bezier(.5,0,.9,.4)", fill: "forwards" });
+          el.animate([{ transform: "none", opacity: 1 }, { transform: "scale(.96)", offset: .08, opacity: 1 }, { transform: "translate(" + far + "px," + up + "px) rotate(" + dir * 12 + "deg)", opacity: 1 }], { duration: Math.round(T * .3), delay: Math.round(n * 55), easing: "cubic-bezier(.5,0,.9,.4)", fill: "forwards" });
         });
       }
       /* linh vật ra GIỮA màn hình rồi vừa THU NHỎ vừa DI CHUYỂN về vị trí của nó trong khung game (linh vật mini), cover mờ dần khi nó đáp xuống → game bắt đầu (KHÔNG nổ tung) */
@@ -246,9 +249,20 @@
       if (!mr) { var mm = document.querySelector(".npa-mini"), sz = (mm && parseInt(mm.style.width, 10)) || 48, bl = !mm || mm.classList.contains("bl"); mr = { left: bl ? pr.left + 6 : pr.right - 6 - sz, top: pr.bottom - 6 - sz, width: sz, height: sz }; }   /* mini đang ẩn ở màn chọn: tính vị trí theo góc bl/br */
       var hc = { x: r.left + r.width / 2, y: r.top + r.height / 2 }, mx2 = mr.left + mr.width / 2 - hc.x, my2 = mr.top + mr.height / 2 - hc.y, sc2 = Math.max(.08, Math.min(1, mr.width / r.width)), ccx = pr.left + pr.width / 2 - hc.x, ccy = pr.top + pr.height * .42 - hc.y;
       d.style.transformOrigin = "50% 50%";
-      var a = d.animate([{ transform: "none", opacity: 1 }, { transform: "scale(1.08,.92)", offset: .1, opacity: 1 }, { transform: "translate(" + ccx * .5 + "px," + (ccy * .5 - 40) + "px) scale(1.15)", offset: .27, opacity: 1 }, { transform: "translate(" + ccx + "px," + ccy + "px) scale(1.35)", offset: .45, opacity: 1 }, { transform: "translate(" + ccx + "px," + ccy + "px) scale(1.35)", offset: .5, opacity: 1 }, { transform: "translate(" + (ccx + mx2) / 2 + "px," + (ccy + my2) / 2 + "px) scale(" + (1.35 + sc2) / 2 + ") rotate(-8deg)", offset: .72, opacity: 1 }, { transform: "translate(" + mx2 + "px," + my2 + "px) scale(" + sc2 + ")", offset: .92, opacity: 1 }, { transform: "translate(" + mx2 + "px," + my2 + "px) scale(" + sc2 + ")", opacity: 0 }], { duration: T, easing: "ease-in-out", fill: "forwards" });
+      /* đường bay TỰ NHIÊN: lấy mẫu mượt (easeInOut) từng chặng, thêm LẮC LƯ (xoay ±9° + dập dềnh ngang/dọc) tắt dần khi đáp xuống */
+      var ez = function (t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }, kf = [], N = 44, q, tt, px, py, sc, rot, sw, ph;
+      for (q = 0; q <= N; q++) {
+        tt = q / N;
+        if (tt < .1) { var u = tt / .1; px = 0; py = 0; sc = 1; rot = 0; kf.push({ offset: tt, transform: "scale(" + (1 + .08 * Math.sin(u * Math.PI)) + "," + (1 - .1 * Math.sin(u * Math.PI)) + ")", opacity: 1 }); continue; }
+        if (tt < .5) { ph = ez((tt - .1) / .4); px = ccx * ph; py = ccy * ph - 70 * SW * Math.sin(ph * Math.PI); sc = 1 + .35 * ph; sw = Math.sin(ph * Math.PI); rot = SW * 9 * Math.sin((tt - .1) * 22) * sw; }
+        else if (tt < .6) { px = ccx; py = ccy + 6 * Math.sin((tt - .5) * 40); sc = 1.35 + .03 * Math.sin((tt - .5) * 50); rot = SW * 6 * Math.sin((tt - .5) * 38); }
+        else { ph = ez((tt - .6) / .4); px = ccx + (mx2 - ccx) * ph; py = ccy + (my2 - ccy) * ph - 60 * SW * Math.sin(ph * Math.PI); sc = 1.35 + (sc2 - 1.35) * ph; sw = Math.sin(ph * Math.PI); rot = SW * 10 * Math.sin((tt - .6) * 24) * (.25 + sw) * (1 - ph * .85); }
+        kf.push({ offset: tt, transform: "translate(" + px.toFixed(1) + "px," + py.toFixed(1) + "px) rotate(" + rot.toFixed(2) + "deg) scale(" + sc.toFixed(3) + ")", opacity: 1 });
+      }
+      kf.push({ offset: 1, transform: "translate(" + mx2 + "px," + my2 + "px) scale(" + sc2 + ")", opacity: 0 });
+      var a = d.animate(kf, { duration: T, easing: "linear", fill: "forwards" });
       a.onfinish = done;
-      if (cov && cov.animate) cov.animate([{ opacity: 1 }, { opacity: 1, offset: .6 }, { opacity: 0 }], { duration: T, fill: "forwards", easing: "ease-in" });
+      if (cov && cov.animate) cov.animate([{ opacity: 1 }, { opacity: 1, offset: .72 }, { opacity: 0 }], { duration: T, fill: "forwards", easing: "ease-in" });
     } catch (x) { done(); return; }
     (window.__npRST || setTimeout)(done, T + 250);
   }
