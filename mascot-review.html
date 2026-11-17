@@ -39,14 +39,44 @@ h1{flex:1;margin:0;font-size:17px;font-weight:900;white-space:nowrap;overflow:hi
 #snd{border:1.5px solid rgba(170,150,255,.55);cursor:pointer;padding:0}#snd svg{width:22px;height:22px}#snd[aria-pressed=false]{opacity:.55}
 .lab{flex:none;align-self:flex-start;margin:4px 14px 2px;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:rgba(23,18,54,.88);border:1px solid rgba(170,150,255,.5)}   /* nhãn nằm trong thẻ tối: đọc được ở cả nền sáng lẫn tối (theme sáng từng là chữ trắng mờ trên nền hồng) */
 @media (max-height:560px){header{padding:4px 12px}.ev{width:48px;height:48px}.ev svg{width:24px;height:24px}.chip{min-height:40px}.lab{display:none}}
+
+/* ===== BỐ CỤC PRO: sân khấu lớn + bảng điều khiển kính tối (dọc: dưới; ngang rộng: cột phải) ===== */
+#wrap{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;padding:0 12px 12px}
+#wrap .stagebox{margin:0;flex:1 1 0;min-height:160px}
+#dock{flex:none;display:flex;flex-direction:column;gap:2px;border-radius:24px;padding:8px 0 10px;background:rgba(18,14,44,.82);border:1px solid rgba(170,150,255,.35);box-shadow:0 10px 30px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.1);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.sec{display:flex;flex-direction:column;gap:2px}
+.sec+.sec{border-top:1px solid rgba(255,255,255,.08);margin-top:4px;padding-top:4px}
+.lab{margin:2px 16px 0;padding:0;background:none;border:0;border-radius:0;font-size:11px;letter-spacing:.08em;color:#C9BEFF}
+.row{padding:6px 14px}
+.nm{background:rgba(18,14,44,.78);border:1px solid rgba(170,150,255,.4);padding:5px 12px;border-radius:999px;font-size:14px;text-shadow:none;left:12px;bottom:12px}
+.lk{background:rgba(18,14,44,.78);border:1px solid rgba(255,220,140,.55);color:#FFE08A;bottom:12px;right:12px;padding:5px 12px}
+header{margin:8px 12px 10px;padding:6px 8px;border-radius:999px;background:rgba(18,14,44,.92);border:1px solid rgba(170,150,255,.45);box-shadow:0 6px 18px rgba(0,0,0,.3)}
+h1#ttl{background:none!important;border:0!important;padding:0 4px!important;font-size:18px;letter-spacing:-.01em;color:#fff!important;text-shadow:none}
+header .back{background:rgba(255,255,255,.1)!important;border-color:rgba(255,255,255,.22)!important}
+@media (min-width:900px) and (min-height:561px){
+  #wrap{flex-direction:row;gap:14px;padding:0 16px 16px}
+  #wrap .stagebox{flex:1 1 0;min-width:0}
+  #dock{width:min(400px,38vw);overflow-y:auto;justify-content:flex-start;padding:12px 0}
+  #dock .row{flex-wrap:wrap;overflow:visible}
+  .ev{width:64px;height:64px}
+}
+@media (orientation:landscape) and (max-height:560px) and (min-width:600px){#wrap{flex-direction:row;padding:0 10px 8px;gap:8px}#wrap .stagebox{flex:1 1 0;min-width:0}#dock{width:min(330px,46vw);overflow-y:auto;padding:6px 0;justify-content:flex-start}#dock .row{flex-wrap:nowrap;overflow-x:auto;padding:3px 10px}.sec+.sec{margin-top:0;padding-top:0}.lab{display:block!important;font-size:10px;margin:2px 12px 0}.ev{width:44px;height:44px}.ev svg{width:22px;height:22px}.chip{min-height:34px;padding:0 12px}}
+@media (max-width:899px) and (max-height:560px) and (orientation:portrait){#dock{padding:4px 0}}
+
+/* nút nổi hẳn khỏi bảng tối: nền tím sáng hơn, viền sáng, bóng + vệt sáng trên */
+.ev:not(.ok):not(.bad):not(.cb):not(.ask),.chip{background:linear-gradient(165deg,#5A47C9,#3A2C96 90%)!important;border:1.5px solid rgba(214,204,255,.85)!important;box-shadow:0 5px 14px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.35)!important;color:#fff}
+.chip{font-size:13px}
+.chip[aria-pressed=true]{background:linear-gradient(135deg,#8B6BFF,#C158F5 55%,#FF7A2E)!important;border-color:#fff!important;box-shadow:0 0 0 2px rgba(255,255,255,.35),0 6px 18px rgba(160,100,255,.6)!important}
+.ev.ok,.ev.bad,.ev.cb,.ev.ask{border-color:rgba(255,255,255,.85)}
+header .back{background:rgba(255,255,255,.16)!important;border-color:rgba(255,255,255,.4)!important}
 </style>
 </head>
 <body>
 <header><a class="back" id="back" href="nightpass-mascot.html" aria-label="Back"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a><h1 id="ttl"></h1><button class="back" id="snd" type="button" aria-pressed="true"></button></header>
-<div class="stagebox" id="stg"><div class="nm" id="nm"></div><div class="lk" id="lk" hidden></div><div id="hero" data-npa-hero></div></div>
-<div class="lab" id="lE"></div><div class="row" id="evs" role="group"></div>
-<div class="lab" id="lS"></div><div class="row" id="sks" role="group"></div>
-<div class="lab" id="lT"></div><div class="row" id="ths" role="group"></div>
+<main id="wrap"><div class="stagebox" id="stg"><div class="nm" id="nm"></div><div class="lk" id="lk" hidden></div><div id="hero" data-npa-hero></div></div>
+<aside id="dock"><section class="sec"><div class="lab" id="lE"></div><div class="row" id="evs" role="group"></div></section>
+<section class="sec"><div class="lab" id="lS"></div><div class="row" id="sks" role="group"></div></section>
+<section class="sec"><div class="lab" id="lT"></div><div class="row" id="ths" role="group"></div></section></aside></main>
 <script src="shared/nptrial.js"></script><script src="shared/npgrad.js"></script><script src="shared/npbadges.js"></script><script src="shared/npmascot.js"></script>
 <script src="shared/art/mascot-theme.js"></script><script src="shared/art/mascot-art.js"></script>
 <script>
