@@ -168,7 +168,7 @@
     play.appendChild(fan); play.appendChild(fab);
     fab.addEventListener("click", function (e) { e.stopPropagation(); setOpen(!open); if (open && e.detail === 0) { var f1 = panel.querySelector(".it:not([hidden])"); if (f1) setTimeout(function () { try { f1.focus(); } catch (x) {} }, 0); } });   /* mở bằng bàn phím (Enter/Space): đưa tiêu điểm vào ô đầu, Tab đi qua các ô, Esc đóng + trả tiêu điểm về ⋯ */
     bd.addEventListener("click", function () { setOpen(false); });
-    panel.addEventListener("click", function (e) { var b = e.target.closest && e.target.closest(".it"); if (b) setTimeout(function () { setOpen(false); }, 0); });
+    panel.addEventListener("click", function (e) { var b = e.target.closest && e.target.closest(".it"); if (b) (window.__npRST || setTimeout)(function () { setOpen(false); }, 0); });
     document.addEventListener("pointerdown", function (e) { if (open && !(fan.contains(e.target) || fab.contains(e.target))) setOpen(false); }, true);   // bấm ra ngoài đóng menu (không phụ thuộc nền mờ .bk)
     document.addEventListener("keydown", function (e) { if (e.key === "Escape" && open) { setOpen(false); fab.focus(); } });
     labels();

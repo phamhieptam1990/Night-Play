@@ -278,10 +278,9 @@ window.NP = (function () {
        Khung mặc định TẮT TIẾNG (chưa được chọn); "focus" = khung được chọn → bật tiếng (nếu người dùng không tắt); "blur" = tắt; "mute/unmute" = nút loa ở bảng của khung. */
   var multi = q.get("multi") === "1", mPaused = false, mBlur = true, mUser = false, mOver = false, mPausedByUs = false, mBase = ((document.currentScript && document.currentScript.src) || "").replace(/bridge\.js(\?.*)?$/, "");
   var vt = { off: 0, at: 0 }, held = {}, heldT = {}, alias = {};
-  if (multi) {
-    document.documentElement.classList.add("np-multi"); if (gid) document.documentElement.classList.add("np-g-" + gid);   /* np-g-<id game>: để multi.css chỉnh riêng một game khi cần */
-    try { var lk = document.createElement("link"); lk.rel = "stylesheet"; lk.href = mBase + "multi.css"; (document.head || document.documentElement).appendChild(lk); } catch (e) {}
-    try { if (window.NPAudio) NPAudio.mute(true); } catch (e) {}
+  /* ĐỒNG HỒ ẢO dùng chung: chế độ chơi cùng lúc (host tạm dừng khung) VÀ trang game thường (mở menu ⋯ → tạm dừng, đóng menu → đếm 3-2-1: shared/menupause.js gọi NP.freeze/thaw). Không áp cho chế độ chơi hộ (?helper=1). */
+  var PAUSABLE = !helper, mMenu = false, mMenuByUs = false;
+  if (multi || PAUSABLE) {
     (function () {   /* đồng hồ ảo */
       var rPN = performance.now.bind(performance), rRAF = window.requestAnimationFrame.bind(window), rCAF = window.cancelAnimationFrame.bind(window),
           rST = window.setTimeout.bind(window), rCT = window.clearTimeout.bind(window), rSI = window.setInterval.bind(window);
@@ -311,6 +310,7 @@ window.NP = (function () {
         var a = Array.prototype.slice.call(arguments, 2);
         return rSI(function () { if (!vt.at) fn.apply(window, a); }, d);
       };
+      window.__npRST = rST;   /* setTimeout THẬT (không bị đồng hồ ảo giữ): UI của menu dùng để vẫn chạy khi game đang tạm dừng */
       vt.freeze = function () { if (!vt.at) vt.at = rPN(); };
       vt.thaw = function () {
         if (!vt.at) return; vt.off += rPN() - vt.at; vt.at = 0;
@@ -318,6 +318,11 @@ window.NP = (function () {
         Object.keys(heldT).forEach(function (id) { var h = heldT[id]; delete heldT[id]; alias[id] = rST(function () { h.fn.apply(window, h.a); }, h.rem); });
       };
     })();
+  }
+  if (multi) {
+    document.documentElement.classList.add("np-multi"); if (gid) document.documentElement.classList.add("np-g-" + gid);   /* np-g-<id game>: để multi.css chỉnh riêng một game khi cần */
+    try { var lk = document.createElement("link"); lk.rel = "stylesheet"; lk.href = mBase + "multi.css"; (document.head || document.documentElement).appendChild(lk); } catch (e) {}
+    try { if (window.NPAudio) NPAudio.mute(true); } catch (e) {}
     ["pointerdown", "mousedown", "touchstart", "click", "keydown", "keyup", "wheel"].forEach(function (n) {   /* đang tạm dừng: nuốt thao tác (host cũng phủ lớp chắn) */
       addEventListener(n, function (e) { if (mPaused) { if (n === "pointerdown") post({ type: "np-focus" }); if (n === "keydown" && e.key === "Escape") post({ type: "np-key", key: "Escape" }); e.stopImmediatePropagation(); if (e.cancelable) e.preventDefault(); } }, { capture: true, passive: false });
     });
@@ -433,6 +438,18 @@ window.NP = (function () {
     state: function (fn) { getter = fn; },
     hud: function (fn) { hudFn = fn; },          // (tuỳ chọn) game tự báo HUD cho chế độ nhiều game: NP.hud(() => ({ score, combo, moves }))
     multi: multi,
+    /* TẠM DỪNG KHI MỞ MENU ⋯ (trang game thường; shared/menupause.js): đóng băng đồng hồ ảo + NP.onPause; menuResume() chạy tiếp từ đúng chỗ. Chỉ khi đang chơi (NP.state trả dữ liệu) mới coi là "đang chơi" để đếm 3-2-1. */
+    playing: function () { try { return !!(getter && getter()); } catch (e) { return false; } },
+    menuPause: function () {
+      if (multi || helper || !PAUSABLE || mMenu) return false; mMenu = true; document.documentElement.classList.add("np-menupaused"); if (vt.freeze) vt.freeze();
+      try { if (getter && getter() && pauseFn) { pauseFn(); mMenuByUs = true; } } catch (x) {}
+      try { if (window.NPAudio) NPAudio.silence(); } catch (x) {}
+      return true;
+    },
+    menuResume: function () {
+      if (!mMenu) return; mMenu = false; document.documentElement.classList.remove("np-menupaused"); if (vt.thaw) vt.thaw();
+      if (mMenuByUs) { mMenuByUs = false; try { if (resumeFn) resumeFn(); } catch (x) {} }
+    },
     onPause: function (p, r) { pauseFn = p; resumeFn = r; },
     pauseNow: function () { if (pauseFn) try { pauseFn(); } catch (x) {} },     // shared/exitconfirm.js: tạm dừng khi hỏi thoát
     resumeNow: function () { if (resumeFn) try { resumeFn(); } catch (x) {} }

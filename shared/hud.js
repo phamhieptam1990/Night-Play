@@ -56,8 +56,9 @@
     KEYS.forEach(function (k) { pn.appendChild(mk(k)); });
     box.appendChild(more); box.appendChild(pn); stage.appendChild(box);
   }
-  function open() { box.classList.add("open"); more.setAttribute("aria-expanded", "true"); }
-  function close() { if (!box) return; box.classList.remove("open"); more.setAttribute("aria-expanded", "false"); }
+  function tellGame(o) { try { var f = stage && stage.querySelector("iframe"); f && f.contentWindow && f.contentWindow.postMessage({ np: 1, type: "np-menu", open: o }, location.origin); } catch (e) {} }   /* game tạm dừng khi mở thẻ ⋯ */
+  function open() { box.classList.add("open"); more.setAttribute("aria-expanded", "true"); tellGame(true); }
+  function close() { if (!box) return; var was = box.classList.contains("open"); box.classList.remove("open"); more.setAttribute("aria-expanded", "false"); if (was) tellGame(false); }
   function hideNative(on) {
     var d = gdoc(); if (!d || !d.documentElement) return;
     try { if (on === d.documentElement.classList.contains("np-hudg") && (!on || d.getElementById("npHudgCss"))) return; if (on && !d.getElementById("npHudgCss")) { var st = d.createElement("style"); st.id = "npHudgCss"; st.textContent = HIDECSS; (d.head || d.documentElement).appendChild(st); } d.documentElement.classList.toggle("np-hudg", !!on); } catch (e) {}
