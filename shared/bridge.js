@@ -439,6 +439,7 @@ window.NP = (function () {
     hud: function (fn) { hudFn = fn; },          // (tuỳ chọn) game tự báo HUD cho chế độ nhiều game: NP.hud(() => ({ score, combo, moves }))
     multi: multi,
     /* TẠM DỪNG KHI MỞ MENU ⋯ (trang game thường; shared/menupause.js): đóng băng đồng hồ ảo + NP.onPause; menuResume() chạy tiếp từ đúng chỗ. Chỉ khi đang chơi (NP.state trả dữ liệu) mới coi là "đang chơi" để đếm 3-2-1. */
+    hudInfo: function () { try { hudScan(); return readHud(); } catch (e) { return null; } },   // điểm/combo/lượt/chỉ số hiện tại (bảng ⋯ của chế độ toàn màn hình)
     playing: function () { try { return !!(getter && getter()); } catch (e) { return false; } },
     menuPause: function () {
       if (multi || helper || !PAUSABLE || mMenu) return false; mMenu = true; document.documentElement.classList.add("np-menupaused"); if (vt.freeze) vt.freeze();

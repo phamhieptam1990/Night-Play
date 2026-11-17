@@ -10,6 +10,7 @@
   var open = false, wasPlaying = false, cdEl = null, cdRun = 0;
   var css = document.createElement("style"); css.id = "npMpCss";
   css.textContent = "html.np-menupaused *,html.np-menupaused *::before,html.np-menupaused *::after{animation-play-state:paused!important}" +
+    "html.np-menupaused #npMpCd,html.np-menupaused #npMpCd *{animation-play-state:running!important}" +
     "#npMpCd{position:fixed;inset:0;z-index:2147482000;display:none;align-items:center;justify-content:center;background:rgba(10,8,25,.55);color:#fff;font:900 min(34vmin,140px)/1 system-ui,sans-serif;text-shadow:0 4px 20px rgba(0,0,0,.5);-webkit-user-select:none;user-select:none;touch-action:none}" +
     "#npMpCd.on{display:flex}#npMpCd b{animation:npMpPop .7s ease-out}@keyframes npMpPop{0%{transform:scale(1.6);opacity:0}25%{opacity:1}100%{transform:scale(1)}}";
   (document.head || de).appendChild(css);
@@ -28,7 +29,7 @@
   /* menu của fan.js / popmenu.js: theo dõi lớp .open */
   var watched = {};
   function watch() {
-    ["npFan", "npPmFan"].forEach(function (id) {
+    ["npFan", "npPmFan", "npFsPn"].forEach(function (id) {
       var el = document.getElementById(id); if (!el || watched[id] === el) return; watched[id] = el;
       new MutationObserver(function () { set(el.classList.contains("open")); }).observe(el, { attributes: true, attributeFilter: ["class"] });
       if (el.classList.contains("open")) set(true);
