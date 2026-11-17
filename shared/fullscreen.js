@@ -14,6 +14,8 @@
   var HOME = SVGH + 'width:36px;height:36px"><path d="M15 5l-7 7 7 7"/></svg>';
   var HELP = SVGH + 'width:36px;height:36px"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.6 2.2c-.7.4-1.1.9-1.1 1.8M12 17h.01"/></svg>';
   var ICON_FS = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
+  var ICON_ADD = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:26px;height:26px;display:block;margin:auto"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8.5v7M8.5 12h7"/></svg>';
+  var ICON_X = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" aria-hidden="true" style="width:26px;height:26px;display:block;margin:auto"><path d="M6 6l12 12M18 6L6 18"/></svg>';
   var T = { vi: { fs: "Toàn màn hình", x: "Thu nhỏ về như cũ", menu: "Menu", score: "Điểm", moves: "Lượt", combo: "Combo", snd: "Âm thanh", help: "Cách chơi", paused: "Tạm dừng", home: "Về trang chủ", noFs: "Máy này không ẩn được thanh địa chỉ.", how: "Cách thêm vào Màn hình chính", close: "Đóng", howT: "Chơi toàn màn hình thật", stIos: ["Mở trang này bằng Safari.", "Bấm nút Chia sẻ (ô vuông có mũi tên lên) ở thanh dưới hoặc trên.", "Chọn “Thêm vào Màn hình chính” rồi bấm Thêm.", "Mở game từ biểu tượng mới trên màn hình chính: không còn thanh địa chỉ."], stAnd: ["Mở trang này bằng Chrome.", "Bấm nút ⋮ (menu) ở góc trên.", "Chọn “Cài đặt ứng dụng” hoặc “Thêm vào màn hình chính”.", "Mở game từ biểu tượng mới: không còn thanh địa chỉ."], stApp: ["Bạn đang mở trong ứng dụng khác (Zalo, Facebook, TikTok...).", "Bấm ⋯ rồi chọn “Mở bằng trình duyệt” (Safari / Chrome).", "Sau đó làm theo hướng dẫn thêm vào Màn hình chính."] }, en: { fs: "Full screen", x: "Exit full screen", menu: "Menu", score: "Score", moves: "Moves", combo: "Combo", snd: "Sound", help: "How to play", paused: "Paused", home: "Back to home", noFs: "This device can't hide the address bar.", how: "How to add to Home Screen", close: "Close", howT: "Play in true full screen", stIos: ["Open this page in Safari.", "Tap the Share button (square with an up arrow) in the bottom or top bar.", "Choose “Add to Home Screen”, then tap Add.", "Open the game from the new icon: no address bar."], stAnd: ["Open this page in Chrome.", "Tap the ⋮ menu at the top.", "Choose “Install app” or “Add to Home screen”.", "Open the game from the new icon: no address bar."], stApp: ["You are inside another app (Zalo, Facebook, TikTok...).", "Tap ⋯ and choose “Open in browser” (Safari / Chrome).", "Then follow the Add to Home Screen steps."] } };
   var t = function (k) { return T[vi() ? "vi" : "en"][k]; };
   var css = document.createElement("style"); css.id = "npFsCss";
@@ -38,7 +40,7 @@
     "#npFsToast .ic,#npFsHow .ic{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#7C5CFF,#C2410C);box-shadow:0 4px 14px rgba(124,92,255,.5)}#npFsToast .ic svg,#npFsHow .ic svg{width:24px;height:24px}" +
     "#npFsToast span.tx{flex:1;min-width:0}" +
     "#npFsToast button.go,#npFsHow button.ok{flex:none;min-height:48px;padding:0 18px;border-radius:999px;border:0;color:#fff;font:800 14px system-ui,sans-serif;cursor:pointer;background:linear-gradient(135deg,#7C5CFF,#a855f7 55%,#C2410C);box-shadow:0 6px 18px rgba(124,92,255,.45);-webkit-tap-highlight-color:transparent}" +
-    "#npFsToast button.go{max-width:44%}" +
+    "#npFsToast button.go{width:48px;height:48px;min-height:48px;padding:0;border-radius:50%;display:grid;place-items:center}" +
     "#npFsHow{position:fixed;inset:0;z-index:2147483003;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(6,5,16,.7);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}#npFsHow.on{display:flex}" +
     "#npFsHow .d{width:min(400px,100%);max-height:100%;overflow:auto;box-sizing:border-box;padding:18px;border-radius:28px;font-size:14px;font-weight:600;line-height:1.45}" +
     "#npFsHow .hd{display:flex;align-items:center;gap:12px;margin-bottom:12px}#npFsHow h3{margin:0;font-size:19px;font-weight:900;line-height:1.2}" +
@@ -57,13 +59,13 @@
       h.addEventListener("click", function (e) { if (e.target === h || e.target.classList.contains("ok")) h.classList.remove("on"); }); }
     var steps = (INAPP ? t("stApp").concat(IOS ? t("stIos").slice(1) : t("stAnd").slice(1)) : (IOS ? t("stIos") : t("stAnd")));
     h.querySelector("h3").textContent = t("howT"); h.querySelector("ol").innerHTML = steps.map(function (x) { return "<li></li>"; }).join("");
-    var li = h.querySelectorAll("li"); steps.forEach(function (x, i) { li[i].textContent = x; }); h.querySelector("button.ok").textContent = t("close"); h.classList.add("on");
+    var li = h.querySelectorAll("li"); steps.forEach(function (x, i) { li[i].textContent = x; }); var ok = h.querySelector("button.ok"); ok.innerHTML = ICON_X; ok.setAttribute("aria-label", t("close")); ok.title = t("close"); h.classList.add("on");
   }
   var toastT = 0;
   function noFsHint() {
     if (standalone()) return; var e = document.getElementById("npFsToast");
     if (!e) { e = document.createElement("div"); e.id = "npFsToast"; e.setAttribute("role", "status"); e.innerHTML = '<span class="ic">' + ICON_FS + '</span><span class="tx"></span><button type="button" class="go"></button>'; (document.body || de).appendChild(e); e.querySelector("button").addEventListener("click", function () { hideToast(); howSheet(); }); }
-    e.querySelector(".tx").textContent = t("noFs"); e.querySelector("button").textContent = t("how"); e.classList.add("on");
+    e.querySelector(".tx").textContent = t("noFs"); var gb = e.querySelector("button"); gb.innerHTML = ICON_ADD; gb.setAttribute("aria-label", t("how")); gb.title = t("how"); e.classList.add("on");
     clearTimeout(toastT); toastT = setTimeout(hideToast, 7000);
   }
 
