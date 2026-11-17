@@ -22,7 +22,7 @@ for (const f of files) {
   if (n > 90) ko(f, "phần thân " + n + " phần tử (> 90, gồm cả các biến thể dáng thân)");
   if (kb > 16) ko(f, "tệp " + kb.toFixed(1) + "KB (> 16KB gồm cả 4 skin + biến thể dáng thân)");
   const rootFill = s.match(/<(path|circle|ellipse|rect)\b[^>]*\bfill="#[0-9a-fA-F]{3,6}"[^>]*>/g) || [];
-  if (/id="body"/.test(s)) { const bodyG = s.slice(s.indexOf('id="body"'), s.indexOf('id="face"')); if (/fill="#(?!fff"|ffffff")[0-9a-fA-F]{3,6}"/i.test(bodyG)) ko(f, "thân dùng màu cứng (phải dùng biến var(--c1...))"); }
+  if (/id="body"/.test(s) && !/BẢN MẪU chờ duyệt/.test(s)) {   /* bản mẫu chỉ-mặc-định (gen-pop.js) được dùng màu cứng ở thân; khi làm 4 skin phải chuyển sang biến */ const bodyG = s.slice(s.indexOf('id="body"'), s.indexOf('id="face"')); if (/fill="#(?!fff"|ffffff")[0-9a-fA-F]{3,6}"/i.test(bodyG)) ko(f, "thân dùng màu cứng (phải dùng biến var(--c1...))"); }
   console.log("  " + f + ": " + n + " phần tử thân, " + kb.toFixed(1) + "KB");
 }
 console.log(bad ? "\n✗ " + bad + " lỗi linh vật" : "\n✓ linh vật SVG đạt");
