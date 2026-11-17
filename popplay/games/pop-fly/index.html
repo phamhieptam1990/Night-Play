@@ -424,6 +424,8 @@ function drawPlane(c){   /* tàu bay tự vẽ (emoji ✈️ quay mỗi nền t�
   c.fillStyle="#5b8def";for(const x of [-12,-2,8]){c.beginPath();c.arc(x,-2,3,0,7);c.fill()}   /* cửa sổ */
 }
 function fit(){const r=$("play").getBoundingClientRect();if(!r.width)return;DPR=Math.min(2.5,window.devicePixelRatio||1);cv.width=Math.round(r.width*DPR);cv.height=Math.round(r.height*DPR);K=r.width/W;H=Math.max(380,Math.min(820,Math.round(W*r.height/r.width)));PF.dim.H=H;if(PF.S&&PF.S.bird)PF.S.bird.y=Math.min(PF.S.bird.y,H-PF.safe.pad);draw()}
+/* toàn màn hình: hàng câu hỏi nổi ở đầu khung → chừa vùng an toàn phía trên để chữ cái/cổng không bị che (dùng lại safe của layout "full") */
+{let sv=null;new MutationObserver(()=>{const on=document.documentElement.classList.contains("np-fs");if(on&&!sv){sv=PF.safe;PF.safe={top:112,bottom:64,pad:34}}else if(!on&&sv){PF.safe=sv;sv=null}}).observe(document.documentElement,{attributes:true,attributeFilter:["class"]})}
 addEventListener("resize",fit);if(window.ResizeObserver)new ResizeObserver(fit).observe($("play"));
 
 let lastPl=false;
@@ -433,7 +435,7 @@ if(running&&!paused)update(dt);draw()}
 /* ===== VÒNG ĐỜI VÁN CHƠI ===== */
 const ovs=["ovStart","ovPause","ovQ","ovEnd","ovPay","ovGate","ovSkin","ovProg","ovBook"];
 function showOv(id){for(const o of ovs)$(o).hidden=(o!==id)}
-function applyLayout(l){PF.safe=l==="full"?{top:112,bottom:64,pad:34}:l==="window"?{top:64,bottom:64,pad:64}:{top:0,bottom:0,pad:34};const a=document.querySelector(".app");if(l&&l!=="classic")a.dataset.layout=l;else delete a.dataset.layout;setTimeout(fit,30)}
+function applyLayout(l){PF.safe=l==="full"?{top:112,bottom:64,pad:34}:l==="window"?{top:64,bottom:64,pad:64}:{top:0,bottom:0,pad:34};if(document.documentElement.classList.contains("np-fs"))PF.safe={top:112,bottom:64,pad:34};const a=document.querySelector(".app");if(l&&l!=="classic")a.dataset.layout=l;else delete a.dataset.layout;setTimeout(fit,30)}
 PF.applyLayout=applyLayout;
 function startRound(type,resume,opts){
   if(!PF.types[type])return;audio();
