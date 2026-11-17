@@ -9,7 +9,7 @@
 <radialGradient id="e" cx=".4" cy=".3" r=".9"><stop offset="0" stop-color="#6A4A5E"/><stop offset=".6" stop-color="#2A1A33"/><stop offset="1" stop-color="#140B1C"/></radialGradient>
 <radialGradient id="v" cx=".5" cy=".35" r=".7"><stop offset="0" stop-color="#FFE0B8"/><stop offset="1" stop-color="#FFE0B8" stop-opacity=".78"/></radialGradient></defs>
 <g id="shadow"><ellipse cx="128" cy="240" rx="76" ry="9" fill="var(--sh)" opacity=".5"/></g>
-<g id="all" class="npa npa-breathe"><g id="scene"><path d="M0 206Q128 176 256 206V256H0Z" fill="#6EC6FF" opacity=".3"/><g fill="#9BD65C" opacity=".6"><rect x="0" y="196" width="256" height="12" rx="5"/></g><g stroke="#7AA83C" stroke-width="4" opacity=".7"><path d="M24 196V232M72 194V232M120 192V232M168 192V232M216 194V232"/></g></g><g id="pose" transform="rotate(0 128 230)">
+<g id="all" class="npa npa-breathe"><g id="scene"><g fill="#9BD65C" opacity=".7"><rect x="14" y="204" width="228" height="12" rx="6"/></g><g stroke="#7AA83C" stroke-width="4" opacity=".7" stroke-linecap="round"><path d="M34 214V240M84 214V240M134 214V240M184 214V240M228 214V240"/></g></g><g id="pose" transform="rotate(0 128 230)">
 <g id="charg" transform="translate(14 30) scale(.82)"><path d="M208 210Q250 198 240 154Q232 136 216 148Q232 158 222 180Z" fill="#7A3F0E"/>
 <g id="body"><ellipse cx="128" cy="184" rx="68" ry="54" fill="url(#b)"/><ellipse cx="128" cy="190" rx="42" ry="34" fill="url(#v)"/>
 <ellipse cx="62" cy="176" rx="17" ry="26" fill="url(#b)" transform="rotate(18 62 176)"/><ellipse cx="194" cy="176" rx="17" ry="26" fill="url(#b)" transform="rotate(-18 194 176)"/>

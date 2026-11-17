@@ -9,7 +9,7 @@
 <radialGradient id="e" cx=".4" cy=".3" r=".9"><stop offset="0" stop-color="#6A4A5E"/><stop offset=".6" stop-color="#2A1A33"/><stop offset="1" stop-color="#140B1C"/></radialGradient>
 <radialGradient id="v" cx=".5" cy=".35" r=".7"><stop offset="0" stop-color="#FFE0EC"/><stop offset="1" stop-color="#FFE0EC" stop-opacity=".78"/></radialGradient></defs>
 <g id="shadow"><ellipse cx="128" cy="240" rx="76" ry="9" fill="var(--sh)" opacity=".5"/></g>
-<g id="all" class="npa npa-breathe"><g id="scene"><path d="M12 20H244L232 58Q220 70 208 58Q196 70 184 58Q172 70 160 58Q148 70 136 58Q124 70 112 58Q100 70 88 58Q76 70 64 58Q52 70 40 58Q28 70 20 58Z" fill="#FF6B6B" opacity=".5"/><g fill="#fff" opacity=".4"><path d="M24 20H244" stroke="#fff" stroke-width="3"/></g><circle cx="196" cy="226" r="14" fill="#FF6B6B" opacity=".5"/><circle cx="222" cy="232" r="12" fill="#6BCB77" opacity=".5"/></g><g id="pose" transform="rotate(2.4 128 230)">
+<g id="all" class="npa npa-breathe"><g id="scene"><path d="M20 14H236L226 40Q215 50 204 40Q193 50 182 40Q171 50 160 40Q149 50 138 40Q127 50 116 40Q105 50 94 40Q83 50 72 40Q61 50 50 40Q39 50 30 40Z" fill="#FF6B6B" opacity=".55"/></g><g id="pose" transform="rotate(2.4 128 230)">
 <g id="charg" transform="translate(40 30) scale(.82)">
 <g id="body"><ellipse cx="128" cy="184" rx="68" ry="54" fill="url(#b)"/><ellipse cx="128" cy="190" rx="42" ry="34" fill="url(#v)"/>
 <ellipse cx="62" cy="176" rx="17" ry="26" fill="url(#b)" transform="rotate(18 62 176)"/><ellipse cx="194" cy="176" rx="17" ry="26" fill="url(#b)" transform="rotate(-18 194 176)"/>

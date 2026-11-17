@@ -9,7 +9,7 @@
 <radialGradient id="e" cx=".4" cy=".3" r=".9"><stop offset="0" stop-color="#6A4A5E"/><stop offset=".6" stop-color="#2A1A33"/><stop offset="1" stop-color="#140B1C"/></radialGradient>
 <radialGradient id="v" cx=".5" cy=".35" r=".7"><stop offset="0" stop-color="#FFF8EA"/><stop offset="1" stop-color="#FFF8EA" stop-opacity=".78"/></radialGradient></defs>
 <g id="shadow"><ellipse cx="128" cy="240" rx="76" ry="9" fill="var(--sh)" opacity=".5"/></g>
-<g id="all" class="npa npa-breathe"><g id="scene"><path d="M20 214Q128 250 236 214L224 246Q128 262 32 246Z" fill="#E3B27A" opacity=".7"/><g fill="#fff" opacity=".6"><ellipse cx="60" cy="214" rx="14" ry="18"/><ellipse cx="196" cy="218" rx="14" ry="18"/></g><path d="M210 40l8 10-12 4ZM40 50l10 8-12 6Z" fill="#FFB020" opacity=".5"/></g><g id="pose" transform="rotate(1.2 128 230)">
+<g id="all" class="npa npa-breathe"><g id="scene"><path d="M30 226Q128 254 226 226" fill="none" stroke="#E3B27A" stroke-width="12" stroke-linecap="round" opacity=".8"/></g><g id="pose" transform="rotate(1.2 128 230)">
 <g id="charg" transform="translate(14 30) scale(.82)">
 <g id="body"><ellipse cx="128" cy="184" rx="68" ry="54" fill="url(#b)"/><ellipse cx="128" cy="190" rx="42" ry="34" fill="url(#v)"/>
 <ellipse cx="62" cy="176" rx="17" ry="26" fill="url(#b)" transform="rotate(18 62 176)"/><ellipse cx="194" cy="176" rx="17" ry="26" fill="url(#b)" transform="rotate(-18 194 176)"/>
