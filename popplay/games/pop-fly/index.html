@@ -423,9 +423,20 @@ function drawPlane(c){   /* tàu bay tự vẽ (emoji ✈️ quay mỗi nền t�
   c.fillStyle="#7bdcb5";c.beginPath();c.arc(20,-1,7,Math.PI,0);c.fill();   /* mũi */
   c.fillStyle="#5b8def";for(const x of [-12,-2,8]){c.beginPath();c.arc(x,-2,3,0,7);c.fill()}   /* cửa sổ */
 }
-function fit(){const r=$("play").getBoundingClientRect();if(!r.width)return;DPR=Math.min(2.5,window.devicePixelRatio||1);cv.width=Math.round(r.width*DPR);cv.height=Math.round(r.height*DPR);K=r.width/W;H=Math.max(380,Math.min(820,Math.round(W*r.height/r.width)));PF.dim.H=H;if(PF.S&&PF.S.bird)PF.S.bird.y=Math.min(PF.S.bird.y,H-PF.safe.pad);draw()}
+/* ĐỔI KHUNG GIỮA VÁN (toàn màn hình bật/tắt, xoay màn…): chữ cái/cổng đang bay, ngôi sao, chim, mây phải ĐƯỢC SẮP LẠI theo vùng chơi mới (trước đây giữ toạ độ cũ nên lệch khung / chui dưới hàng câu hỏi) */
+let lastReg=null;
+function regionNow(){const sf=PF.safe;return{a:sf.top+40,z:H-sf.bottom-40,H,pd:sf.pad}}
+function reflowWorld(o,n){const S=PF.S;if(!S||!o||!n||(o.a===n.a&&o.z===n.z&&o.H===n.H))return;
+  const m=y=>n.a+(y-o.a)/Math.max(1,o.z-o.a)*(n.z-n.a),mb=y=>n.pd+(y-o.pd)/Math.max(1,o.H-2*o.pd)*(n.H-2*n.pd);
+  {const sf=PF.safe,a2=sf.top+40,z2=H-sf.bottom-40,c=(a2+z2)/2,sp=Math.min(.27*H,(z2-a2)/2),L=[c-sp,c,c+sp];   /* cổng đang bay: xếp lại đúng 3 làn của khung MỚI, giữ thứ tự trên-giữa-dưới (không nén lại làm các vòng chồng nhau) */
+    (S.waves||[]).forEach(w=>{const o2=w.rings.map((r,i)=>i).sort((i,j)=>w.rings[i].y-w.rings[j].y);o2.forEach((ri,k)=>{w.rings[ri].y=L[Math.min(k,2)]})})}
+  if(S.custom&&S.custom.list)S.custom.list.forEach(st=>{st.y=Math.max(n.a,Math.min(n.z,m(st.y)))});
+  if(S.bird){S.bird.y=Math.max(n.pd,Math.min(n.H-n.pd,mb(S.bird.y)))}
+  (S.clouds||[]).forEach(c=>{c.y=c.y/o.H*n.H})}
+function fit(){const r=$("play").getBoundingClientRect();if(!r.width)return;DPR=Math.min(2.5,window.devicePixelRatio||1);cv.width=Math.round(r.width*DPR);cv.height=Math.round(r.height*DPR);K=r.width/W;H=Math.max(380,Math.min(820,Math.round(W*r.height/r.width)));PF.dim.H=H;const nr=regionNow();if(lastReg)reflowWorld(lastReg,nr);lastReg=nr;if(PF.S&&PF.S.bird)PF.S.bird.y=Math.min(PF.S.bird.y,H-PF.safe.pad);draw()}
 /* toàn màn hình: hàng câu hỏi nổi ở đầu khung → chừa vùng an toàn phía trên để chữ cái/cổng không bị che (dùng lại safe của layout "full") */
-{let sv=null;new MutationObserver(()=>{const on=document.documentElement.classList.contains("np-fs");if(on&&!sv){sv=PF.safe;PF.safe={top:112,bottom:64,pad:34}}else if(!on&&sv){PF.safe=sv;sv=null}}).observe(document.documentElement,{attributes:true,attributeFilter:["class"]})}
+function fsSafe(){const sd=document.querySelector(".side"),k=($("play").getBoundingClientRect().width||360)/W,b=sd?sd.getBoundingClientRect().bottom:90;return{top:Math.round(b/k)+8,bottom:24,pad:34}}   /* vùng an toàn tính theo ĐƠN VỊ THẾ GIỚI (không phải px): hàng câu hỏi cao ~76px trên màn thật */
+{let sv=null;new MutationObserver(()=>{const on=document.documentElement.classList.contains("np-fs");if(on&&!sv){sv=PF.safe;PF.safe=fsSafe()}else if(!on&&sv){PF.safe=sv;sv=null}fit()}).observe(document.documentElement,{attributes:true,attributeFilter:["class"]})}
 addEventListener("resize",fit);if(window.ResizeObserver)new ResizeObserver(fit).observe($("play"));
 
 let lastPl=false;
@@ -435,7 +446,7 @@ if(running&&!paused)update(dt);draw()}
 /* ===== VÒNG ĐỜI VÁN CHƠI ===== */
 const ovs=["ovStart","ovPause","ovQ","ovEnd","ovPay","ovGate","ovSkin","ovProg","ovBook"];
 function showOv(id){for(const o of ovs)$(o).hidden=(o!==id)}
-function applyLayout(l){PF.safe=l==="full"?{top:112,bottom:64,pad:34}:l==="window"?{top:64,bottom:64,pad:64}:{top:0,bottom:0,pad:34};if(document.documentElement.classList.contains("np-fs"))PF.safe={top:112,bottom:64,pad:34};const a=document.querySelector(".app");if(l&&l!=="classic")a.dataset.layout=l;else delete a.dataset.layout;setTimeout(fit,30)}
+function applyLayout(l){PF.safe=l==="full"?{top:112,bottom:64,pad:34}:l==="window"?{top:64,bottom:64,pad:64}:{top:0,bottom:0,pad:34};if(document.documentElement.classList.contains("np-fs"))PF.safe=fsSafe();const a=document.querySelector(".app");if(l&&l!=="classic")a.dataset.layout=l;else delete a.dataset.layout;setTimeout(fit,30)}
 PF.applyLayout=applyLayout;
 function startRound(type,resume,opts){
   if(!PF.types[type])return;audio();
