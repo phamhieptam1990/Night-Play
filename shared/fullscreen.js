@@ -12,7 +12,7 @@
   var SHRINK = SVGH + 'width:36px;height:36px"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>';
   var DOTS = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:18px;height:18px;display:block"><circle cx="5.5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="18.5" cy="12" r="1.8"/></svg>';
   var HELP = SVGH + 'width:36px;height:36px"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.6 2.2c-.7.4-1.1.9-1.1 1.8M12 17h.01"/></svg>';
-  var T = { vi: { fs: "Toàn màn hình", x: "Thu nhỏ về như cũ", menu: "Menu", score: "Điểm", moves: "Lượt", combo: "Combo", snd: "Âm thanh", help: "Cách chơi" }, en: { fs: "Full screen", x: "Exit full screen", menu: "Menu", score: "Score", moves: "Moves", combo: "Combo", snd: "Sound", help: "How to play" } };
+  var T = { vi: { fs: "Toàn màn hình", x: "Thu nhỏ về như cũ", menu: "Menu", score: "Điểm", moves: "Lượt", combo: "Combo", snd: "Âm thanh", help: "Cách chơi", noFs: "Máy này không ẩn được thanh địa chỉ.", how: "Cách thêm vào Màn hình chính", close: "Đóng", howT: "Chơi toàn màn hình thật", stIos: ["Mở trang này bằng Safari.", "Bấm nút Chia sẻ (ô vuông có mũi tên lên) ở thanh dưới hoặc trên.", "Chọn “Thêm vào Màn hình chính” rồi bấm Thêm.", "Mở game từ biểu tượng mới trên màn hình chính: không còn thanh địa chỉ."], stAnd: ["Mở trang này bằng Chrome.", "Bấm nút ⋮ (menu) ở góc trên.", "Chọn “Cài đặt ứng dụng” hoặc “Thêm vào màn hình chính”.", "Mở game từ biểu tượng mới: không còn thanh địa chỉ."], stApp: ["Bạn đang mở trong ứng dụng khác (Zalo, Facebook, TikTok...).", "Bấm ⋯ rồi chọn “Mở bằng trình duyệt” (Safari / Chrome).", "Sau đó làm theo hướng dẫn thêm vào Màn hình chính."] }, en: { fs: "Full screen", x: "Exit full screen", menu: "Menu", score: "Score", moves: "Moves", combo: "Combo", snd: "Sound", help: "How to play", noFs: "This device can't hide the address bar.", how: "How to add to Home Screen", close: "Close", howT: "Play in true full screen", stIos: ["Open this page in Safari.", "Tap the Share button (square with an up arrow) in the bottom or top bar.", "Choose “Add to Home Screen”, then tap Add.", "Open the game from the new icon: no address bar."], stAnd: ["Open this page in Chrome.", "Tap the ⋮ menu at the top.", "Choose “Install app” or “Add to Home screen”.", "Open the game from the new icon: no address bar."], stApp: ["You are inside another app (Zalo, Facebook, TikTok...).", "Tap ⋯ and choose “Open in browser” (Safari / Chrome).", "Then follow the Add to Home Screen steps."] } };
   var t = function (k) { return T[vi() ? "vi" : "en"][k]; };
   var css = document.createElement("style"); css.id = "npFsCss";
   css.textContent =
@@ -26,7 +26,33 @@
     "#" + PN + " .g{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}#" + PN + " .c{border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);padding:6px 10px}#" + PN + " .c i{display:block;font-style:normal;font-size:11px;color:rgba(255,255,255,.7)}#" + PN + " .c b{font-size:22px;font-weight:900;font-variant-numeric:tabular-nums}" +
     "#" + PN + " .r{display:flex;justify-content:space-between;padding:2px 2px;color:rgba(255,255,255,.8)}#" + PN + " .r b{color:#fff;font-variant-numeric:tabular-nums}" +
     "#" + PN + " .b{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}#" + PN + " .b button{min-height:68px;border-radius:16px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.1);color:#fff;display:grid;place-items:center;padding:0;cursor:pointer}#" + PN + " .b button svg{width:34px;height:34px}";
+  css.textContent +=
+    "#npFsToast{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:2147483002;width:calc(100vw - 24px);max-width:420px;box-sizing:border-box;display:none;align-items:center;gap:10px;padding:8px 8px 8px 16px;border-radius:22px;background:rgba(20,18,30,.94);color:#fff;font:700 13px/1.3 system-ui,-apple-system,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.45)}#npFsToast.on{display:flex}" +
+    "#npFsToast span{flex:1;min-width:0}#npFsToast button{flex:none;max-width:48%;min-height:36px;padding:0 14px;border-radius:999px;border:0;background:#7C5CFF;color:#fff;font:800 13px system-ui,sans-serif;cursor:pointer}" +
+    "#npFsHow{position:fixed;inset:0;z-index:2147483003;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(6,5,16,.66)}#npFsHow.on{display:flex}" +
+    "#npFsHow .d{width:min(380px,100%);max-height:100%;overflow:auto;box-sizing:border-box;padding:16px;border-radius:22px;color:#fff;font:600 14px/1.45 system-ui,-apple-system,sans-serif;background:linear-gradient(165deg,#2b2064,#171236 70%);border:1px solid rgba(170,150,255,.55);box-shadow:0 14px 40px rgba(0,0,0,.55)}" +
+    "#npFsHow h3{margin:0 0 8px;font-size:18px;font-weight:900}#npFsHow ol{margin:0 0 12px;padding-left:20px}#npFsHow li{margin:6px 0}#npFsHow button{width:100%;min-height:48px;border-radius:999px;border:0;background:#7C5CFF;color:#fff;font:800 15px system-ui,sans-serif;cursor:pointer}";
   (document.head || de).appendChild(css);
+
+  /* KHÔNG ẩn được thanh địa chỉ (iPhone Safari không có Fullscreen API cho trang web; app Zalo/Facebook/TikTok thường chặn) → báo rõ + hướng dẫn "Thêm vào Màn hình chính" (PWA, chạy không thanh địa chỉ) */
+  function standalone() { try { return !!(navigator.standalone || matchMedia("(display-mode: standalone)").matches || matchMedia("(display-mode: fullscreen)").matches); } catch (e) { return false; } }
+  var ua = navigator.userAgent || "", IOS = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1), INAPP = /FBAN|FBAV|Instagram|Zalo|TikTok|musical_ly|Line\/|MicroMessenger|; wv\)/i.test(ua);
+  function hideToast() { var e = document.getElementById("npFsToast"); if (e) e.classList.remove("on"); }
+  function howSheet() {
+    var h = document.getElementById("npFsHow");
+    if (!h) { h = document.createElement("div"); h.id = "npFsHow"; h.setAttribute("role", "dialog"); h.setAttribute("aria-modal", "true"); h.innerHTML = '<div class="d"><h3></h3><ol></ol><button type="button"></button></div>'; (document.body || de).appendChild(h);
+      h.addEventListener("click", function (e) { if (e.target === h || (e.target.tagName === "BUTTON")) h.classList.remove("on"); }); }
+    var steps = (INAPP ? t("stApp").concat(IOS ? t("stIos").slice(1) : t("stAnd").slice(1)) : (IOS ? t("stIos") : t("stAnd")));
+    h.querySelector("h3").textContent = t("howT"); h.querySelector("ol").innerHTML = steps.map(function (x) { return "<li></li>"; }).join("");
+    var li = h.querySelectorAll("li"); steps.forEach(function (x, i) { li[i].textContent = x; }); h.querySelector("button").textContent = t("close"); h.classList.add("on");
+  }
+  var toastT = 0;
+  function noFsHint() {
+    if (standalone()) return; var e = document.getElementById("npFsToast");
+    if (!e) { e = document.createElement("div"); e.id = "npFsToast"; e.setAttribute("role", "status"); e.innerHTML = '<span></span><button type="button"></button>'; (document.body || de).appendChild(e); e.querySelector("button").addEventListener("click", function () { hideToast(); howSheet(); }); }
+    e.querySelector("span").textContent = t("noFs"); e.querySelector("button").textContent = t("how"); e.classList.add("on");
+    clearTimeout(toastT); toastT = setTimeout(hideToast, 7000);
+  }
 
   function fsEl() { return document.fullscreenElement || document.webkitFullscreenElement || null; }
   function relayout() { try { requestAnimationFrame(function () { requestAnimationFrame(function () { window.dispatchEvent(new Event("resize")); }); }); } catch (e) {} }
@@ -78,10 +104,12 @@
     de.classList.add("np-fs"); api = false; build();
     try { var r = de.requestFullscreen || de.webkitRequestFullscreen; if (r) { var p = r.call(de, { navigationUI: "hide" }); api = true; if (p && p.catch) p.catch(function () { api = false; }); } } catch (e) { api = false; }
     relayout();
+    if (!api) noFsHint();
+    else setTimeout(function () { if (de.classList.contains("np-fs") && !fsEl()) noFsHint(); }, 600);   /* API có nhưng bị chặn (iframe không allow, app lồng...) */
   }
   function exit() {
     if (!de.classList.contains("np-fs")) return;
-    setPanel(false); de.classList.remove("np-fs");
+    setPanel(false); hideToast(); de.classList.remove("np-fs");
     try { if (fsEl()) { var e = document.exitFullscreen || document.webkitExitFullscreen; e && e.call(document); } } catch (e) {}
     relayout();
   }
