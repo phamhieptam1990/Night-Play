@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Bạn Có Hiểu Tôi Không?" class="np-mascot sk-default" data-style="night" data-game="ban-co-hieu-toi">
+<title>Mực Đọc Vị — Bạn Có Hiểu Tôi Không?</title>
+<desc>Chữ ký khuôn mặt (giữ nguyên ở mọi skin): mắt lim dim nửa mở, một chân mày nhướn, nhếch mép một bên, chấm tim đỏ nhỏ dưới mắt trái. Đạo cụ nhận diện game (luôn có): bong bóng suy nghĩ có dấu ? và trái tim. Phong cách Night (sticker). Chi tiết nhỏ dùng màu cứng.</desc>
+<style>
+.np-mascot[data-game="ban-co-hieu-toi"]{--bg1:#2b2064;--bg2:#171236;--bgx:#FF4FA3;--p1:#8B5CFF;--p2:#5B2FE0;--pa:#FF4FA3;--pb:#D7FF3F;--face:#FFE9D6;--ink:#12102B;--c1:var(--p1);--c2:var(--p2);--c3:var(--pa);--c4:var(--pb);--c3x:var(--c3);--sh:color-mix(in srgb,var(--bg2) 55%,#000);--lid:var(--c1)}
+.acc,.fx{display:none}
+.npa{transform-box:fill-box;transform-origin:50% 100%}.npa-breathe{animation:npa-breathe 3.2s ease-in-out infinite}.npa-blink{transform-origin:50% 50%;animation:npa-blink 5s infinite}
+@keyframes npa-breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.025,.975)}}@keyframes npa-blink{0%,90%,100%{transform:scaleY(1)}94%{transform:scaleY(.1)}}
+:root.np-playing .npa{animation:none}@media (prefers-reduced-motion:reduce){.npa{animation:none}}
+</style>
+<g id="shadow"><ellipse cx="130" cy="240" rx="70" ry="8" fill="var(--sh)" opacity=".45"/></g>
+<g id="all" class="npa npa-breathe" stroke="var(--ink)" stroke-linejoin="round" stroke-linecap="round" stroke-width="5">
+<g id="pose" transform="rotate(-4 128 232)">
+<g id="sil" transform="translate(8 8)" fill="var(--c3x)"><path d="M72 112Q72 30 128 30Q184 30 184 112V170Q168 196 154 170Q142 200 128 172Q114 200 102 170Q88 196 72 170Z"/></g>
+<g id="body"><path d="M44 120Q36 90 62 80L76 120ZM212 120Q220 90 194 80L180 120Z" fill="var(--c2)"/><path d="M64 112Q64 24 120 24Q176 24 176 112V164Q160 190 146 164Q134 194 120 166Q106 194 94 164Q80 190 64 164Z" transform="translate(8 0)" fill="var(--c1)"/><path d="M82 160Q90 214 76 226M112 166Q112 220 124 232M146 164Q150 218 140 230M170 160Q184 210 168 224" fill="none" stroke-width="9"/><path d="M82 160Q90 214 76 226M112 166Q112 220 124 232M146 164Q150 218 140 230M170 160Q184 210 168 224" fill="none" stroke="var(--c1)" stroke-width="4"/></g>
+<g id="face"><g id="eyes" class="npa-blink"><ellipse cx="102" cy="108" rx="9" ry="10" fill="var(--ink)" stroke="none"/><ellipse cx="154" cy="108" rx="9" ry="10" fill="var(--ink)" stroke="none"/><circle cx="105" cy="105" r="3" fill="#fff" stroke="none"/><circle cx="157" cy="105" r="3" fill="#fff" stroke="none"/><rect x="91" y="96" width="22" height="10" fill="var(--c1)" stroke="none"/><rect x="143" y="96" width="22" height="10" fill="var(--c1)" stroke="none"/></g><path d="M92 93H111M143 93L165 86" fill="none" stroke-width="4.5"/><path id="mouth" class="m-talk" d="M115 138Q132 148 146 130M146 130l5 -3" fill="none" stroke-width="4"/><path id="mark" d="M96 138c-4-6-12 0-6 6l6 6 6-6c6-6-2-12-6-6z" fill="#FF3B5C" stroke-width="2.5"/></g>
+<g id="sign"><circle cx="206" cy="82" r="6" fill="#fff" stroke-width="3"/><circle cx="196" cy="100" r="4" fill="#fff" stroke-width="3"/><path d="M178 36Q178 20 198 22Q206 8 222 20Q242 16 240 38Q248 56 228 62Q220 74 204 66Q186 74 180 58Q170 50 178 36Z" fill="#fff" stroke-width="4"/><path d="M200 40Q200 32 210 32Q220 32 220 40Q220 46 210 50V54" fill="none" stroke="var(--c3x)" stroke-width="4.5"/><circle cx="210" cy="60" r="2.8" fill="var(--c3x)" stroke="none"/></g>
+<g id="acc-badge" class="acc acc-badge"></g><g id="acc-group" class="acc acc-group"></g><g id="acc-night" class="acc acc-night"></g><g id="acc-star" class="acc acc-star"></g><g id="fx-night" class="fx fx-night"></g><g id="fx-star" class="fx fx-star"></g>
+</g>
+</g>
+</svg>

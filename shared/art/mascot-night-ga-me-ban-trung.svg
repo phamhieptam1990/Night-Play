@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Gà Mẹ Bắn Trứng" class="np-mascot sk-default" data-style="night" data-game="ga-me-ban-trung">
+<title>Gà Mái Ngầu — Gà Mẹ Bắn Trứng</title>
+<desc>Chữ ký khuôn mặt (giữ nguyên ở mọi skin): mắt lim dim nửa mở, một chân mày nhướn, nhếch mép một bên, ba chấm tàn nhang bên má trái. Đạo cụ nhận diện game (luôn có): quả trứng to trong tay + mũ lưỡi trai. Phong cách Night (sticker). Chi tiết nhỏ dùng màu cứng.</desc>
+<style>
+.np-mascot[data-game="ga-me-ban-trung"]{--bg1:#2b2064;--bg2:#171236;--bgx:#FF4FA3;--p1:#FFF3E0;--p2:#F2C98A;--pa:#FF4D6D;--pb:#FFB703;--face:#FFF3E0;--ink:#12102B;--c1:var(--p1);--c2:var(--p2);--c3:var(--pa);--c4:var(--pb);--c3x:var(--c3);--sh:color-mix(in srgb,var(--bg2) 55%,#000);--lid:var(--c1)}
+.acc,.fx{display:none}
+.npa{transform-box:fill-box;transform-origin:50% 100%}.npa-breathe{animation:npa-breathe 3.2s ease-in-out infinite}.npa-blink{transform-origin:50% 50%;animation:npa-blink 5s infinite}
+@keyframes npa-breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.025,.975)}}@keyframes npa-blink{0%,90%,100%{transform:scaleY(1)}94%{transform:scaleY(.1)}}
+:root.np-playing .npa{animation:none}@media (prefers-reduced-motion:reduce){.npa{animation:none}}
+</style>
+<g id="shadow"><ellipse cx="130" cy="240" rx="70" ry="8" fill="var(--sh)" opacity=".45"/></g>
+<g id="all" class="npa npa-breathe" stroke="var(--ink)" stroke-linejoin="round" stroke-linecap="round" stroke-width="5">
+<g id="pose" transform="rotate(-4 128 232)">
+<g id="sil" transform="translate(8 8)" fill="var(--c3x)"><ellipse cx="128" cy="150" rx="82" ry="78"/><rect x="84" y="36" width="96" height="40" rx="14"/></g>
+<g id="body"><path d="M104 76Q98 38 116 46Q122 26 136 44Q156 34 154 76Z" fill="var(--c3)"/><ellipse cx="128" cy="150" rx="78" ry="74" fill="var(--c1)"/><path d="M46 160Q26 150 34 124Q60 130 64 160ZM208 160Q230 150 222 124Q196 130 192 160Z" fill="var(--c2)"/><path d="M114 150L128 142L142 150L128 168Z" fill="var(--c4)" stroke-width="3.5"/><path d="M122 170Q128 190 134 170Q128 164 122 170Z" fill="var(--c3)" stroke-width="3"/><path d="M100 224v12M156 224v12" fill="none" stroke-width="7"/><path d="M80 72Q84 36 128 34Q172 36 176 72Z" fill="#3B82F6" stroke-width="5"/><path d="M168 66H216Q220 78 204 80H168Z" fill="#3B82F6" stroke-width="5"/></g>
+<g id="face"><g id="eyes" class="npa-blink"><ellipse cx="102" cy="116" rx="9" ry="10" fill="var(--ink)" stroke="none"/><ellipse cx="154" cy="116" rx="9" ry="10" fill="var(--ink)" stroke="none"/><circle cx="105" cy="113" r="3" fill="#fff" stroke="none"/><circle cx="157" cy="113" r="3" fill="#fff" stroke="none"/><rect x="91" y="104" width="22" height="10" fill="var(--c1)" stroke="none"/><rect x="143" y="104" width="22" height="10" fill="var(--c1)" stroke="none"/></g><path d="M92 101H111M143 101L165 94" fill="none" stroke-width="4.5"/><path id="mouth" class="m-talk" d="M115 146Q132 156 146 138M146 138l5 -3" fill="none" stroke-width="4"/><g id="mark" fill="#C8693A" stroke="none"><circle cx="82" cy="136" r="2.6"/><circle cx="92" cy="140" r="2.6"/><circle cx="84" cy="146" r="2.6"/></g></g>
+<g id="sign"><ellipse cx="206" cy="186" rx="24" ry="30" fill="#FFF8EC" stroke-width="5" transform="rotate(14 206 186)"/><path d="M196 178l8 8-6 8" fill="none" stroke-width="3" opacity=".6"/></g>
+<g id="acc-badge" class="acc acc-badge"></g><g id="acc-group" class="acc acc-group"></g><g id="acc-night" class="acc acc-night"></g><g id="acc-star" class="acc acc-star"></g><g id="fx-night" class="fx fx-night"></g><g id="fx-star" class="fx fx-star"></g>
+</g>
+</g>
+</svg>
