@@ -158,3 +158,5 @@ Tệp: `shared/art/mascot-art.js` (lõi), `shared/art/mascot-games.js` (dữ li�
 **Chưa làm:** chưa có hiệu ứng nhảy riêng cho từng game ngoài bộ chung; chưa nối `mini` vào các game khác; `check-art.js` chưa kiểm khuôn mặt giống nhau giữa skin.
 
 **Hiệu ứng xuất hiện (màn chính):** linh vật di chuyển TỪ TỪ vào vị trí (~1,9–2,4 giây, mỗi skin một kiểu: `ENTER` trong mascot-art.js); **người dùng thao tác (chạm/phím/cuộn) thì vào ĐÚNG VỊ TRÍ NGAY** (`Inst.skipEnter`, câu chào hiện luôn). Chưa có hiệu ứng rời đi.
+
+**Hiệu ứng rời đi (bắt đầu ván):** màn chính ẩn NGAY (không trễ game); một BẢN SAO linh vật (ghost) ở đúng chỗ cũ chạy hiệu ứng rồi biến mất (`EXIT`/`leave()` trong mascot-art.js, kích hoạt bởi `np:start`, vị trí lấy từ lần chạm/phím gần nhất ≤ 2,5 giây). Mỗi skin một kiểu: Mặc định chúi rồi bật vọt lên · Huy hiệu nhảy xoay sang phải · Chủ đề riêng nhảy sang trái · Dạ quang mờ dần bay lên · Siêu sao xoay lật nhỏ dần.
