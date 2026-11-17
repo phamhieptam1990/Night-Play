@@ -15,6 +15,61 @@
   var LP_DELAY = 260, LP_FULL = 1000;   /* nhấn giữ: sau 0,26s bắt đầu phình, +1s thì pop */
   var EMOJI = /\p{Extended_Pictographic}/u;
 
+  /* ---------- ÂM THANH khớp hiệu ứng (tổng hợp bằng WebAudio, không tệp âm thanh, chạy offline) ----------
+     rê chuột = "bip" nhẹ lên cao · chạm nhanh = "boing" lò xo · giữ = tiếng thổi phồng TĂNG DẦN theo độ phình (cao độ + rung) · nhả giữa chừng = xì hơi xuống · POP = tách + lấp lánh.
+     Tôn trọng nút loa của game (NPAudio.get/muted: khung Chơi cùng lúc đang tắt tiếng cũng im); ctx tạo ở lần chạm đầu qua AudioContext đã được bridge.js bọc. */
+  var sfx = (function () {
+    var ctx = null, hv = null, lastHover = 0;
+    function on() { try { if (window.NPAudio) { if (NPAudio.muted && NPAudio.muted()) return false; if (NPAudio.get && !NPAudio.get()) return false; } } catch (e) {} return !document.hidden; }
+    function C() {
+      if (!on()) return null;
+      try { if (!ctx) { var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null; ctx = new AC(); } if (ctx.state !== "running") ctx.resume(); } catch (e) { return null; }
+      return ctx;
+    }
+    function tone(c, type, f0, f1, t0, dur, vol, vib) {
+      var o = c.createOscillator(), g = c.createGain(), t = c.currentTime + t0;
+      o.type = type; o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(Math.max(30, f1), t + dur);
+      if (vib) { var l = c.createOscillator(), lg = c.createGain(); l.frequency.value = vib[0]; lg.gain.value = vib[1]; l.connect(lg); lg.connect(o.frequency); l.start(t); l.stop(t + dur + .05); }
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + Math.min(.02, dur / 4)); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + dur + .05);
+    }
+    function noise(c, t0, dur, vol, f) {
+      var n = Math.floor(c.sampleRate * dur), b = c.createBuffer(1, n, c.sampleRate), d = b.getChannelData(0), i;
+      for (i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / n);
+      var s = c.createBufferSource(), fl = c.createBiquadFilter(), g = c.createGain(), t = c.currentTime + t0;
+      s.buffer = b; fl.type = "bandpass"; fl.frequency.value = f; fl.Q.value = .8; g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      s.connect(fl); fl.connect(g); g.connect(c.destination); s.start(t);
+    }
+    return {
+      hover: function () { var n = performance.now(); if (n - lastHover < 500) return; lastHover = n; var c = C(); if (!c) return; tone(c, "sine", 560, 840, 0, .09, .05); tone(c, "sine", 840, 1120, .07, .08, .035); },
+      tap: function () { var c = C(); if (!c) return; tone(c, "sine", 260, 620, 0, .12, .09, [26, 40]); tone(c, "triangle", 620, 210, .1, .2, .07, [22, 30]); },
+      hold: function (p) {   /* gọi mỗi khung hình khi đang giữ: cao độ + âm lượng + độ rung tăng theo p (0..1) */
+        var c = C(); if (!c) return; var t = c.currentTime;
+        if (!hv) {
+          var o = c.createOscillator(), g = c.createGain(), l = c.createOscillator(), lg = c.createGain();
+          o.type = "triangle"; l.type = "sine"; l.connect(lg); lg.connect(o.frequency); o.connect(g); g.connect(c.destination);
+          g.gain.value = 0.0001; o.start(); l.start(); hv = { o: o, g: g, l: l, lg: lg, f: 0 };
+        }
+        var f = 170 + 640 * p * p;
+        hv.f = f; hv.o.frequency.setTargetAtTime(f, t, .04); hv.l.frequency.setTargetAtTime(7 + 20 * p, t, .05); hv.lg.gain.setTargetAtTime(6 + 40 * p, t, .05); hv.g.gain.setTargetAtTime(.03 + .06 * p, t, .04);
+      },
+      holdStop: function (deflate) {
+        if (!hv) return; var v = hv; hv = null;
+        try {
+          var c = ctx, t = c.currentTime;
+          if (deflate) { v.o.frequency.cancelScheduledValues(t); v.o.frequency.setValueAtTime(Math.max(v.f, 120), t); v.o.frequency.exponentialRampToValueAtTime(110, t + .26); v.g.gain.cancelScheduledValues(t); v.g.gain.setValueAtTime(Math.max(v.g.gain.value, .03), t); v.g.gain.exponentialRampToValueAtTime(0.0001, t + .26); noise(c, 0, .2, .03, 1800); v.o.stop(t + .3); v.l.stop(t + .3); }
+          else { v.g.gain.cancelScheduledValues(t); v.g.gain.setTargetAtTime(0.0001, t, .015); v.o.stop(t + .12); v.l.stop(t + .12); }
+        } catch (e) {}
+      },
+      pop: function () {
+        var c = C(); if (!c) return;
+        noise(c, 0, .12, .22, 2600); tone(c, "sine", 900, 120, 0, .14, .16);
+        [1046, 1318, 1568, 2093].forEach(function (f, i) { tone(c, "sine", f, f * 1.02, .08 + i * .06, .22, .05); });
+      },
+      live: function () { return !!hv; }
+    };
+  })();
+
   var css = document.createElement("style"); css.id = "npMascotCss";
   css.textContent =
     ".npmx-hold{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}" +
@@ -141,12 +196,13 @@
     var s = 1 + ((cur.info.ms || 1.6) - 1) * e, sh = Math.sin(now * 0.075) * p * 3.5;
     tg.sx = s * (1 + 0.025 * Math.sin(now * 0.04)); tg.sy = s * (1 - 0.025 * Math.sin(now * 0.04));
     tg.r = lean.r * lk + Math.sin(now * 0.05) * p * 5; tg.x = lean.x * lk + sh; tg.y = lean.y * lk;
+    if (cur === S) sfx.hold(p);
     if (p >= 1) pop(cur);
   }
   function pop(s) {
     if (!s || s.popped) return; s.popped = true; lockH = true;
     var i = s.info, cx = i.L + i.W / 2, cy = i.T + i.H / 2;
-    burst(cx, cy, i.gs, i.emoji);
+    burst(cx, cy, i.gs, i.emoji); sfx.holdStop(false); sfx.pop();
     try { navigator.vibrate && navigator.vibrate(18); } catch (e) {}
     ch.sx = [0.25, 0]; ch.sy = [0.25, 0]; ch.o = [0, 0]; tg.sx = tg.sy = 0.25; tg.o = 0; tg.r = tg.x = tg.y = 0; ch.r = [0, 0]; ch.x = [0, 0]; ch.y = [0, 0];
     busyUntil = performance.now() + 900; run();
@@ -185,12 +241,12 @@
   }
 
   /* ---------- sự kiện ---------- */
-  function cancelAll() { hand(false); S = null; H = null; HS = null; lockH = false; clearTimeout(popTimer); popTimer = 0; detach(); }
+  function cancelAll() { sfx.holdStop(false); hand(false); S = null; H = null; HS = null; lockH = false; clearTimeout(popTimer); popTimer = 0; detach(); }
   function release(boingOnTap) {
     var s = S; S = null; if (!s || s.popped) { run(); return; }
     var held = performance.now() - s.t0;
     tg.sx = tg.sy = 1; tg.r = tg.x = tg.y = 0;
-    if (held < LP_DELAY && boingOnTap) boing(true); else { ch.sx[1] += (ch.sx[0] - 1) * -4; ch.sy[1] += (ch.sy[0] - 1) * -4; }   /* nhả giữa chừng: xẹp lại kiểu thạch */
+    if (held < LP_DELAY && boingOnTap) { sfx.tap(); boing(true); } else { sfx.holdStop(sfx.live()); ch.sx[1] += (ch.sx[0] - 1) * -4; ch.sy[1] += (ch.sy[0] - 1) * -4; }   /* nhả giữa chừng: xẹp lại kiểu thạch */
     if (H) { tg.sx = tg.sy = 1.04; }
     run();
   }
@@ -222,7 +278,7 @@
     aim(e.clientX, e.clientY, 1);
     if (!HS && !lockH && now >= busyUntil) HS = { info: info, t0: now, popped: false, hover: true }; else if (HS) HS.info = info;
     if (HS && !HS.popped) { tg.r = lean.r; tg.x = lean.x; tg.y = lean.y; tg.sx = tg.sy = 1.05; }
-    if (entering && now - enterAt > 700) { enterAt = now; boing(false); } else run();
+    if (entering && now - enterAt > 700) { enterAt = now; sfx.hover(); boing(false); } else run();
   }
   addEventListener("pointerup", function (e) { if (S && e.pointerId === S.pid) release(true); }, true);
   addEventListener("pointercancel", function (e) { if (S && e.pointerId === S.pid) release(false); }, true);
