@@ -154,6 +154,10 @@ body.side #perf{max-width:50px;font-size:10px}
 .pn .pb button[aria-pressed=true]:not(.sw){background:color-mix(in srgb,var(--accent) 24%,var(--card));border-color:var(--np-bd)}
 .pn .pb .sw[aria-pressed=true]{background:color-mix(in srgb,var(--accent) 24%,var(--card));border-color:var(--np-bd)}
 .pn .sw::after{display:none}
+/* TRÀN → SLIDE: ô menu chia trang 3 cột theo chiều cao khung, vuốt ngang + chấm trang */
+.pn .pb.paged{display:flex;gap:0;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}.pn .pb.paged::-webkit-scrollbar{display:none}
+.pn .pb .pg{flex:0 0 100%;box-sizing:border-box;scroll-snap-align:start;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;align-content:start}
+.pn .dots{display:flex;justify-content:center;gap:6px;margin-top:8px}.pn .dots[hidden]{display:none}.pn .dots i{width:8px;height:8px;border-radius:50%;background:var(--line)}.pn .dots i.on{background:var(--accent)}
 /* MENU KIỂU NIGHT PASS: KHÔNG chữ nhãn, icon TO (nhãn vẫn có ở aria-label/title) — GAME_RULES mục 21 */
 .pn .pb button span,.pn .sw span,.hbtn span{display:none}
 .pn .pb{gap:10px}
@@ -430,7 +434,7 @@ body.side #perf{max-width:50px;font-size:10px}
     el.addEventListener("pointerdown", function () { if (sel !== it) select(it); }, true);
     var pn = el.querySelector(".pn");
     pn.setAttribute("role", "dialog"); pn.setAttribute("aria-label", gname(it.id));
-    pn.innerHTML = '<div class="pt"><b></b><span data-k="st"></span></div><div class="ps"><div class="sc"><i data-l="score"></i><b data-k="score">–</b></div><div class="sc"><i data-l="cc"></i><b data-k="cc">–</b></div></div><div class="pl" data-k="stats"></div><div class="pb"></div>';
+    pn.innerHTML = '<div class="pt"><b></b><span data-k="st"></span></div><div class="ps"><div class="sc"><i data-l="score"></i><b data-k="score">–</b></div><div class="sc"><i data-l="cc"></i><b data-k="cc">–</b></div></div><div class="pl" data-k="stats"></div><div class="pb"></div><div class="dots" hidden></div>';
     var pb = pn.querySelector(".pb");
     [["pz", ICON.pause, function () { it.userPaused = !it.userPaused; if (!it.userPaused) it.autoPaused = false; sync(it); render(it); }],
      ["sn", ICON.snd, function () { it.userMuted = !it.userMuted; send(it, it.userMuted ? "mute" : "unmute"); render(it); }],
@@ -444,8 +448,22 @@ body.side #perf{max-width:50px;font-size:10px}
      ["x", ICON.x, function () { closeItem(it); }]].forEach(function (d) {
       var b = document.createElement("button"); b.type = "button"; b.dataset.a = d[0]; b.className = d[0] === "x" ? "x" : d[0] === "hud" ? "sw" : ""; if (d[0] === "hud" || d[0] === "hp" || d[0] === "rs" || d[0] === "bd" || d[0] === "ch") b.hidden = true; b.innerHTML = d[1] + "<span></span>"; b.addEventListener("click", function (e) { e.stopPropagation(); d[2](); }); pb.appendChild(b);
     });
+    pn.querySelector(".pb").addEventListener("scroll", function () { dotsMark(pn); }, { passive: true });
     pn.addEventListener("keydown", function (e) { trapTab(e, pn); });
     grid.appendChild(el); return el;
+  }
+  function dotsMark(pn) { var b = pn.querySelector(".pb"), d = pn.querySelectorAll(".dots i"), w = b.clientWidth || 1, k = Math.round(b.scrollLeft / w); d.forEach(function (x, i) { x.classList.toggle("on", i === k); }); }
+  function paginate(it) {
+    var pn = it.el.querySelector(".pn"), b = pn.querySelector(".pb"), dots = pn.querySelector(".dots"); if (!pn || !b) return;
+    var all = [].slice.call(b.querySelectorAll("button[data-a]")), vis = all.filter(function (x) { return !x.hidden; });
+    var other = pn.offsetHeight - b.offsetHeight - (dots.hidden ? 0 : dots.offsetHeight + 8), avail = it.el.clientHeight - 44 - 8 - other - 22;
+    var rows = Math.max(1, Math.floor((avail + 10) / 82)), per = Math.max(3, rows * 3), pages = vis.length > per ? Math.ceil(vis.length / per) : 1;
+    var key = [pages, per, vis.map(function (x) { return x.dataset.a; }).join()].join("|"); if (it.pgKey === key) return; it.pgKey = key;
+    b.textContent = ""; b.classList.toggle("paged", pages > 1);
+    if (pages === 1) all.forEach(function (x) { b.appendChild(x); });
+    else { for (var i = 0; i < pages; i++) { var pg = document.createElement("div"); pg.className = "pg"; vis.slice(i * per, (i + 1) * per).forEach(function (x) { pg.appendChild(x); }); b.appendChild(pg); }
+      all.filter(function (x) { return x.hidden; }).forEach(function (x) { b.firstChild.appendChild(x); }); b.scrollLeft = 0; }
+    dots.hidden = pages === 1; dots.innerHTML = new Array(pages + 1).join("<i></i>"); dotsMark(pn);
   }
   function render(it) {
     if (!it.el) return; var el = it.el, h = it.hud || {}, T_ = t();
@@ -469,6 +487,7 @@ body.side #perf{max-width:50px;font-size:10px}
     var caps = h.caps || {}; [["rs", "restart", T_.rs, ICON.rs], ["bd", "board", T_.bd, ICON.bd], ["ch", "npch", T_.ch, ICON.ch]].forEach(function (c) { var cb = pn.querySelector('[data-a=' + c[0] + ']'); cb.hidden = !caps[c[1]]; tile(cb, c[3], c[2]); });
     var bf = pn.querySelector('[data-a=fs]'); tile(bf, fsItem === it ? ICON.shrink : ICON.full, fsItem === it ? T_.shrink : T_.full); var fb2 = el.querySelector(".fsb"); fb2.setAttribute("aria-label", T_.shrink); fb2.title = T_.shrink;
     tile(bx, ICON.x, T_.close);
+    if (el.classList.contains("po-open")) paginate(it);
   }
   function togglePanel(it) {
     var open = !it.el.classList.contains("po-open");

@@ -24,6 +24,9 @@
     "html.np-fs #" + MI + ":hover,html.np-fs #" + MI + ":focus-visible,html.np-fs #" + MI + ".on{opacity:1}" +
     "html.np-fs #" + PN + ".open{display:block;position:fixed;z-index:2147483001;top:max(46px,calc(env(safe-area-inset-top) + 44px));right:max(8px,env(safe-area-inset-right));width:min(240px,calc(100vw - 16px));box-sizing:border-box;padding:10px;border-radius:20px;color:#fff;font:700 13px/1.25 system-ui,-apple-system,sans-serif;background:linear-gradient(165deg,#2b2064,#171236 70%);border:1px solid rgba(170,150,255,.55);box-shadow:0 10px 30px rgba(0,0,0,.5)}" +
     "#" + PN + " .t{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:8px}#" + PN + " .t b{font-size:15px;font-weight:900;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#" + PN + " .t em{flex:none;font-style:normal;font-size:11px;font-weight:800;padding:1px 8px;border-radius:999px;background:rgba(255,255,255,.16)}#" + PN + " button[hidden]{display:none}#" + PN + ".open{max-height:calc(100vh - 60px);overflow:auto}" +
+    "#" + PN + " .b.paged{display:flex;gap:0;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}#" + PN + " .b.paged::-webkit-scrollbar{display:none}" +
+    "#" + PN + " .pg{flex:0 0 100%;box-sizing:border-box;scroll-snap-align:start;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;align-content:start}" +
+    "#" + PN + " .dots{display:flex;justify-content:center;gap:6px;margin-top:8px}#" + PN + " .dots[hidden]{display:none}#" + PN + " .dots i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3)}#" + PN + " .dots i.on{background:#fff}" +
     "#" + PN + " .g{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}#" + PN + " .c{border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);padding:6px 10px}#" + PN + " .c i{display:block;font-style:normal;font-size:11px;color:rgba(255,255,255,.7)}#" + PN + " .c b{font-size:22px;font-weight:900;font-variant-numeric:tabular-nums}" +
     "#" + PN + " .r{display:flex;justify-content:space-between;padding:2px 2px;color:rgba(255,255,255,.8)}#" + PN + " .r b{color:#fff;font-variant-numeric:tabular-nums}" +
     "#" + PN + " .b{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}#" + PN + " .b button{min-height:68px;border-radius:16px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.1);color:#fff;display:grid;place-items:center;padding:0;cursor:pointer}#" + PN + " .b button svg{width:34px;height:34px}";
@@ -90,13 +93,29 @@
     });
     var hm = pn.querySelector('[data-a=home]'), back = real(["bBk", "bBack", "homeBtn"]); if (hm) { hm.hidden = !back; hm.setAttribute("aria-label", t("home")); hm.title = t("home"); }
     var pz = pn.querySelector(".t em"); if (pz) pz.textContent = t("paused");
+    paginate();
   }
+  /* TRÀN → SLIDE: chia các ô thành trang 3 cột; số hàng mỗi trang tính theo chỗ còn trống của màn hình, vuốt ngang + chấm trang */
+  var pgKey = "";
+  function paginate() {
+    var pn = pnEl(); if (!pn) return; var b = pn.querySelector(".b"), dots = pn.querySelector(".dots"); if (!b) return;
+    var all = [].slice.call(pn.querySelectorAll("button[data-a]")), vis = all.filter(function (x) { return !x.hidden; });
+    var other = pn.offsetHeight - b.offsetHeight - (dots.hidden ? 0 : dots.offsetHeight + 8) - 8, avail = innerHeight - 56 - 8 - other - 28;
+    var rows = Math.max(1, Math.floor((avail + 8) / 76)), per = Math.max(3, rows * 3), pages = vis.length > per ? Math.ceil(vis.length / per) : 1;
+    var key = [pages, per, vis.map(function (x) { return x.dataset.a; }).join()].join("|"); if (key === pgKey) return; pgKey = key;
+    var keep = b.scrollLeft; b.textContent = ""; b.classList.toggle("paged", pages > 1);
+    if (pages === 1) { all.forEach(function (x) { b.appendChild(x); }); b.style.display = ""; }
+    else { for (var i = 0; i < pages; i++) { var pg = document.createElement("div"); pg.className = "pg"; vis.slice(i * per, (i + 1) * per).forEach(function (x) { pg.appendChild(x); }); b.appendChild(pg); }
+      all.filter(function (x) { return x.hidden; }).forEach(function (x) { b.firstChild.appendChild(x); }); b.scrollLeft = 0; }
+    dots.hidden = pages === 1; dots.innerHTML = new Array(pages + 1).join("<i></i>"); markDots();
+  }
+  function markDots() { var pn = pnEl(), b = pn.querySelector(".b"), d = pn.querySelectorAll(".dots i"), w = b.clientWidth || 1, k = Math.round(b.scrollLeft / w); d.forEach(function (x, i) { x.classList.toggle("on", i === k); }); }
   function build() {
     if (document.getElementById(MI)) return;
     var mi = document.createElement("button"); mi.type = "button"; mi.id = MI; mi.setAttribute("aria-haspopup", "true"); mi.setAttribute("aria-expanded", "false"); mi.setAttribute("aria-label", t("menu")); mi.title = t("menu"); mi.innerHTML = "<i>" + DOTS + "</i>";
     mi.addEventListener("click", function (e) { e.stopPropagation(); setPanel(!pnEl().classList.contains("open")); });
     var pn = document.createElement("div"); pn.id = PN; pn.setAttribute("role", "dialog");
-    pn.innerHTML = '<div class="t"><b></b><em></em></div><div class="g"></div><div class="l"></div><div class="b">' + ROLES.map(function (r) { return '<button type="button" data-a="' + r[0] + '" hidden></button>'; }).join("") + '<button type="button" data-a="home" hidden></button><button type="button" data-a="x"></button></div>';
+    pn.innerHTML = '<div class="t"><b></b><em></em></div><div class="g"></div><div class="l"></div><div class="b">' + ROLES.map(function (r) { return '<button type="button" data-a="' + r[0] + '" hidden></button>'; }).join("") + '<button type="button" data-a="home" hidden></button><button type="button" data-a="x"></button></div><div class="dots" hidden></div>';
     pn.querySelector('[data-a=help]').innerHTML = HELP; pn.querySelector('[data-a=x]').innerHTML = SHRINK; pn.querySelector('[data-a=home]').innerHTML = HOME;
     pn.addEventListener("click", function (e) {
       var b = e.target.closest && e.target.closest("button[data-a]"); if (!b) return; e.stopPropagation(); var a = b.dataset.a;
@@ -107,6 +126,7 @@
       if (a === "help" || a === "restart" || a === "board" || a === "npch") { setPanel(false); setTimeout(function () { src.click(); }, 80); }   /* đóng bảng (game chạy tiếp/đếm) rồi mới bấm */
       else { src.click(); setTimeout(fill, 100); }
     });
+    pn.querySelector(".b").addEventListener("scroll", function () { markDots(); }, { passive: true });
     var host = document.body || de; host.appendChild(mi); host.appendChild(pn);
     document.addEventListener("pointerdown", function (e) { var p = pnEl(); if (p && p.classList.contains("open") && !p.contains(e.target) && !mi.contains(e.target)) setPanel(false); }, true);
   }
