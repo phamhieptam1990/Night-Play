@@ -4,6 +4,17 @@ Mục tiêu: mọi linh vật/skin do code (SVG vẽ tay), **cùng một hệ th
 
 Trạng thái: **đã có 2 con MẪU (bản 2, vẽ lại theo luật khuôn mặt chữ ký + đạo cụ nhận diện + skin riêng + màu ăn theo nền) CHỜ DUYỆT** — Pop: Chim Bay (`shared/art/mascot-pop-pop-fly.svg`), Night: Xin Nghỉ (`shared/art/mascot-night-xin-nghi.svg`), mỗi con đủ 5 skin (1 miễn phí = Mặc định, 4 trả phí). CHƯA nhúng vào game nào. Xem: mở `shared/art/preview.html` qua máy chủ tĩnh. Chủ site duyệt xong mới sửa số mục 3 (nếu cần) rồi mới nhân ra các game còn lại. Bài đo: `node scripts/cozygame/check-art.js`.
 
+## 0. TÓM TẮT CÁC QUYẾT ĐỊNH CỦA CHỦ SITE (đọc trước, mọi mục dưới đều theo đây)
+1. **Mỗi game 1 linh vật**; **5 skin mỗi linh vật, 1 miễn phí** (Mặc định), 4 trả phí (Huy hiệu, Chủ đề riêng, Dạ quang, Siêu sao). Danh mục 32 game: [MASCOT-CATALOG.md](MASCOT-CATALOG.md).
+2. **Hai phong cách tách bạch**: Pop (đồ chơi mềm, cho bé) và Night (Gen Z sticker / streetwear, trẻ trung, có cá tính) — mục 1.
+3. **Skin là chủ đề RIÊNG của từng game** và phải khác nhau thật (phụ kiện đầu, đạo cụ cầm tay, hiệu ứng, biểu cảm nhẹ, dáng thân với Dạ quang/Siêu sao) — mục 4b.
+4. **Khuôn mặt là chữ ký nhận diện**, giữ nguyên ở cả 5 skin; phụ kiện không che mặt — mục 4b.
+5. **Nhìn vào biết ngay là game đó**: mỗi linh vật có đạo cụ nhận diện game luôn có ở mọi skin — mục 4b.
+6. **Mỗi skin có 8 theme màu** (8 bộ theme Night Pass hiện có) = đổi bảng màu của CHÍNH linh vật + phụ kiện, KHÔNG phải nền sau lưng — mục 8.
+7. **Màu linh vật đối xứng (màu bù) với màu nền của theme** để nổi bật — mục 8.
+8. **Linh vật đi cùng trong game** (mini 40–56px, nhảy, nói): Pop ĐỌC câu hỏi + KHEN khi đúng; Night hài hước + làm theo hiệu ứng combo; ai cũng có, Night Pass chỉ thêm skin đẹp hơn — mục 6b.
+9. Vẽ bằng SVG/CSS, offline, không AI/bitmap/filter lúc chơi.
+
 ## 1. Hai phong cách (chọn theo nhóm game, KHÔNG trộn)
 
 | | **POP** (Pop Play: bé nhỏ + phụ huynh) | **NIGHT** (Night Play: thanh niên, người đi làm) |
