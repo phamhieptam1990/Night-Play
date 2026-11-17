@@ -1564,3 +1564,6 @@ html.npp-kid #ovHow:not([hidden]) .hwL li{padding-block:clamp(6px,1.6vh,14px)!im
 .app:has(#home:not([hidden])) .play::after,.app:has(#village:not([hidden])) .play::after,.app:has(#ovStart:not([hidden])) .play::after{display:none!important}
 .app #home:not([hidden]),.app #village:not([hidden]){background:none!important;box-shadow:none!important;border-radius:0!important}
 .app:has(#home:not([hidden])) .hud,.app:has(#village:not([hidden])) .hud,.app:has(#ovStart:not([hidden])) .hud{background:none!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important}
+
+/* CHIM BAY, màn NGANG: thẻ "Tiếp tục ván dở" (#npResume, phần tử riêng của #ovStart, resume.js đặt grid-column:1/-1) phải nằm CỘT TRÁI dưới nút Tiến độ (chỗ trống), không trải cả hai cột đè lên linh vật và không bị dải thẻ bên phải che */
+@media (min-aspect-ratio:11/10){html.np-hudg .app:has(h1[data-pt="pop-fly"]) #ovStart>#npResume{grid-column:1!important;grid-row:5!important;align-self:start!important;margin:6px 0 0!important}}
