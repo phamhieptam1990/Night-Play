@@ -107,7 +107,7 @@ html:root:root .app .toast.on{animation:toastPop .45s cubic-bezier(.2,1.5,.4,1) 
 @media (max-height:700px){.enT{display:none}}
 @media (max-height:620px){#stH{display:none}.card.daily .main{padding:4px 10px}.card small{display:none}.card .main{padding:5px 10px}.card .e{font-size:26px}.cards{gap:6px}.ov .ghost.sm{padding:5px 14px;font-size:13px}}
 .enT{margin:0;font-weight:800;font-size:14px;opacity:.85;animation:enpulse 1.4s ease-in-out infinite}@keyframes enpulse{50%{opacity:.72}}@media (prefers-reduced-motion:reduce){.enT{animation:none}}#ovEnd{cursor:pointer}
-.card.daily{order:-1}.card.daily .main{background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 22%,var(--panel)),var(--panel))}
+.dailyRow{width:100%;max-width:340px;flex:none}.card.daily{order:-1}.card.daily .main{background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 22%,var(--panel)),var(--panel))}
 .ov .ghost.sm{padding:8px 16px;font-size:14px}
 #ovProg{gap:6px}#ovProg h2{display:none}#ovProg .streakBig{font-size:clamp(17px,5vw,22px)}#ovProg .week i{width:26px;height:26px;font-size:13px}#ovProg .week span{width:30px;font-size:10px}
 #ovProg .pgr{padding:5px 10px;font-size:13px;gap:8px}#ovProg .pgr .e{font-size:20px}#ovProg #pgPrac{font-size:13px}
@@ -497,7 +497,9 @@ function renderCards(){
     const k=document.createElement("button");k.type="button";k.className="skinBtn";k.innerHTML='<svg viewBox="0 0 24 24" width="1.3em" height="1.3em" aria-hidden="true" style="display:block"><path d="M12 3C6.5 3 2.5 7 2.5 11.8c0 4.7 3.8 8.2 8.2 8.2 1.3 0 2-.8 2-1.7 0-.5-.2-.9-.5-1.3-.3-.4-.5-.8-.5-1.3 0-1 .8-1.8 1.8-1.8H17c2.5 0 4.5-2 4.5-4.5C21.5 6.6 17.4 3 12 3z" fill="#f5c26b" stroke="#a86a2b" stroke-width="1.2" stroke-linejoin="round"/><circle cx="7.6" cy="10.4" r="1.5" fill="#ef4444"/><circle cx="11.2" cy="7.2" r="1.5" fill="#3b82f6"/><circle cx="15.8" cy="7.9" r="1.5" fill="#22c55e"/><circle cx="6.9" cy="14.6" r="1.4" fill="#a855f7"/></svg>'+(prem?"<i>★</i>":"");k.setAttribute("aria-label",t("sk.pick"));k.onclick=()=>openSkins(id);
     c.appendChild(m);c.appendChild(k);box.appendChild(c);
   }
-  if(dailyEl)box.appendChild(dailyEl);
+  /* THẺ RIÊNG: "Bài học hôm nay" nằm NGOÀI danh sách game (như thanh Hôm nay của các game Pop khác); danh sách game là slide/dải trượt riêng */
+  const old=$("dailyRow");if(old)old.remove();
+  if(dailyEl){const row=document.createElement("div");row.id="dailyRow";row.className="dailyRow";row.appendChild(dailyEl);box.parentNode.insertBefore(row,box)}
 }
 const THUMB=(ty,id)=>"thumbs/"+ty+"-"+id+".jpg";
 const skLocked=(ty,id)=>id!=="default"&&!(PF.skins[ty]&&PF.skins[ty][id]);

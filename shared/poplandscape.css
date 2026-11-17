@@ -309,7 +309,8 @@
   html.np-hudg .app:has(h1[data-pt="lang-cua-be"]) #village .band{grid-column:2;grid-row:span 2;margin:0!important;min-height:0;align-self:stretch}
   html.np-hudg .app:has(h1[data-pt="pop-fly"]) #ovStart:not([hidden]){position:fixed!important;left:12px!important;right:12px!important;top:44px!important;bottom:8px!important;width:auto!important;height:auto!important;max-height:none!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)!important;grid-template-rows:repeat(6,minmax(0,1fr))!important;column-gap:18px!important;row-gap:6px!important;padding:0!important;margin:0!important;background:none!important;box-shadow:none!important;border-radius:0!important;align-content:stretch!important;align-items:center!important;justify-items:stretch!important;overflow:visible!important;z-index:2}
   html.np-hudg .app:has(h1[data-pt="pop-fly"]) #ovStart::before{content:"🐦";grid-column:1;grid-row:1 / span 3;align-self:stretch;display:flex;align-items:flex-end;justify-content:center;font-size:clamp(60px,28vh,120px);line-height:1;pointer-events:none;animation:popMascotBob 2.8s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(0,0,0,.35));min-height:0;overflow:hidden;padding-top:0}
-  html.np-hudg .app:has(h1[data-pt="pop-fly"]) #ovStart .cards{grid-column:2;grid-row:1 / span 6;min-height:0;margin:0!important;align-self:center}
+  html.np-hudg .app:has(h1[data-pt="pop-fly"]) #ovStart>.dailyRow{grid-column:2;grid-row:1;align-self:end;max-width:none;margin:0 0 6px!important}
+  html.np-hudg .app:has(h1[data-pt="pop-fly"]) #ovStart .cards{grid-column:2;grid-row:2 / span 5;min-height:0;margin:0!important;align-self:start}
   html.np-hudg .app:has(h1[data-pt="pop-fly"]) #ovStart #pgBtn{grid-column:1;grid-row:4;align-self:center;height:36px!important;min-height:0!important;border-radius:18px!important;font-size:15px!important;padding:0 14px!important;margin:0!important;width:100%!important;box-sizing:border-box}
 }
 
