@@ -226,7 +226,7 @@
         /* id trùng: luật CSS theo id áp lên bản sao; getElementById của game vẫn trả màn THẬT (đứng trước trong DOM) */
       }
     } catch (x) { cov = null; }
-    document.body.appendChild(d); holding = 1;
+    d.setAttribute("data-npa-ghost", "1"); document.body.appendChild(d); holding = 1;
     try { if (window.NP && NP.menuPause) froze = NP.menuPause(); } catch (x) {}
     var done = function () { if (!holding) return; holding = 0; try { d.remove(); } catch (x) {} if (cov) { try { cov.remove(); } catch (x) {} } if (froze) { try { NP.menuResume(); } catch (x) {} } };
     /* THEO Ý CHỦ SITE: linh vật bay RA GIỮA màn hình, phình lên rồi NỔ TUNG (hạt + vòng sáng theo skin) trong lúc màn chơi SÁNG LÊN (bản sao màn chính mờ dần) → mở màn game */
@@ -241,10 +241,14 @@
           el.animate([{ transform: "none", opacity: 1 }, { transform: "scale(.96)", offset: .08, opacity: 1 }, { transform: "translate(" + far + "px," + up + "px) rotate(" + dir * 12 + "deg)", opacity: 1 }], { duration: Math.round(T * .42), delay: Math.round(n * 45), easing: "cubic-bezier(.5,0,.9,.4)", fill: "forwards" });
         });
       }
-      var a = d.animate([{ transform: "none", opacity: 1 }, { transform: "scale(1.08,.92)", offset: .16, opacity: 1 }, { transform: "none", offset: .3, opacity: 1 }, { transform: "translate(" + tx * .5 + "px," + (ty * .5 - 50) + "px) scale(1.12)", offset: .5, opacity: 1 }, { transform: "translate(" + tx + "px," + ty + "px) scale(1.55)", offset: .68, opacity: 1 }, { transform: "translate(" + tx + "px," + ty + "px) scale(2.1)", offset: .76, opacity: 0 }, { transform: "translate(" + tx + "px," + ty + "px) scale(2.1)", opacity: 0 }], { duration: T, easing: "ease-in-out", fill: "forwards" });
+      /* linh vật ra GIỮA màn hình rồi vừa THU NHỎ vừa DI CHUYỂN về vị trí của nó trong khung game (linh vật mini), cover mờ dần khi nó đáp xuống → game bắt đầu (KHÔNG nổ tung) */
+      var mini = document.querySelector(".npa-mini"), mr = mini && mini.getClientRects().length ? mini.getBoundingClientRect() : null;
+      if (!mr) { var mm = document.querySelector(".npa-mini"), sz = (mm && parseInt(mm.style.width, 10)) || 48, bl = !mm || mm.classList.contains("bl"); mr = { left: bl ? pr.left + 6 : pr.right - 6 - sz, top: pr.bottom - 6 - sz, width: sz, height: sz }; }   /* mini đang ẩn ở màn chọn: tính vị trí theo góc bl/br */
+      var hc = { x: r.left + r.width / 2, y: r.top + r.height / 2 }, mx2 = mr.left + mr.width / 2 - hc.x, my2 = mr.top + mr.height / 2 - hc.y, sc2 = Math.max(.08, Math.min(1, mr.width / r.width)), ccx = pr.left + pr.width / 2 - hc.x, ccy = pr.top + pr.height * .42 - hc.y;
+      d.style.transformOrigin = "50% 50%";
+      var a = d.animate([{ transform: "none", opacity: 1 }, { transform: "scale(1.08,.92)", offset: .1, opacity: 1 }, { transform: "translate(" + ccx * .5 + "px," + (ccy * .5 - 40) + "px) scale(1.15)", offset: .27, opacity: 1 }, { transform: "translate(" + ccx + "px," + ccy + "px) scale(1.35)", offset: .45, opacity: 1 }, { transform: "translate(" + ccx + "px," + ccy + "px) scale(1.35)", offset: .5, opacity: 1 }, { transform: "translate(" + (ccx + mx2) / 2 + "px," + (ccy + my2) / 2 + "px) scale(" + (1.35 + sc2) / 2 + ") rotate(-8deg)", offset: .72, opacity: 1 }, { transform: "translate(" + mx2 + "px," + my2 + "px) scale(" + sc2 + ")", offset: .92, opacity: 1 }, { transform: "translate(" + mx2 + "px," + my2 + "px) scale(" + sc2 + ")", opacity: 0 }], { duration: T, easing: "ease-in-out", fill: "forwards" });
       a.onfinish = done;
-      (window.__npRST || setTimeout)(function () { if (!holding) return; var at = { cx: pr.left + pr.width / 2, cy: pr.top + pr.height * 0.42, D: Math.min(pr.width, 260) }; it.fx(3, at); it.fx(it.skin === "default" ? 2 : 3, { cx: at.cx, cy: at.cy, D: Math.min(pr.width, 200) }); }, Math.round(T * .68));
-      if (cov && cov.animate) cov.animate([{ opacity: 1 }, { opacity: 1, offset: .7 }, { opacity: 0 }], { duration: T, fill: "forwards", easing: "ease-in" });
+      if (cov && cov.animate) cov.animate([{ opacity: 1 }, { opacity: 1, offset: .6 }, { opacity: 0 }], { duration: T, fill: "forwards", easing: "ease-in" });
     } catch (x) { done(); return; }
     (window.__npRST || setTimeout)(done, T + 250);
   }
