@@ -28,7 +28,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
     for (const m of modes) {
       const pg = await br.newPage(); await pg.setViewport(m.vp);
       await pg.evaluateOnNewDocument(() => { try { localStorage.clear(); } catch (e) {} });
-      await pg.goto(B + g + "/index.html", { waitUntil: "load" }); await sleep(1400); try { await pg.waitForFunction(() => window.NPMascot, { timeout: 5000 }); } catch (e) {}
+      await pg.goto(B + g + "/index.html", { waitUntil: "load" }); await sleep(3400); try { await pg.waitForFunction(() => window.NPMascot, { timeout: 5000 }); } catch (e) {}
       const tag = id + " · " + m.n, hit = await pg.evaluate(scan);
       if (!hit || hit.nolib) { if (hit && hit.nolib) note(false, tag + ": thiếu NPMascot (bridge.js chưa nạp mascot.js)"); await pg.close(); continue; }   /* game không có linh vật ở màn chọn */
       sawAny = true;

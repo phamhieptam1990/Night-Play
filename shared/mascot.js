@@ -105,6 +105,7 @@
   function elInfo(h) {
     var hr = h.getBoundingClientRect(), rg = document.createRange(); rg.selectNodeContents(h);
     var g = rg.getBoundingClientRect(); if (!g.width || !g.height) g = hr;
+    var sv = h.querySelector(".npa-box > svg"); if (sv) { var sr = sv.getBoundingClientRect(); if (sr.width && sr.height) g = sr; }   /* linh vật SVG: đo theo chính hình vẽ, KHÔNG tính bong bóng/hào quang/hạt nằm trong ô */
     return { host: h, kind: "el", emoji: h.dataset && h.dataset.emoji ? h.dataset.emoji : firstGlyph(h.textContent), L: g.left, T: g.top, W: g.width, H: g.height, ox: g.left + g.width / 2 - hr.left, oy: g.bottom - g.height * 0.1 - hr.top, gs: Math.min(g.height, 220) };
   }
   function psInfo(h) {

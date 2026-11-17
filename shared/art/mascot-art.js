@@ -65,7 +65,7 @@
     ".npa-box{position:relative;display:flex;align-items:flex-end;justify-content:center;width:100%;height:100%;min-height:0;pointer-events:none}" +
     ".npa-box>svg{display:block;width:100%;height:100%;max-height:100%;overflow:visible;transform-origin:50% 100%}" +
     "#play:has(#home:not([hidden])) .npa-mini,#play:has(#ovStart:not([hidden])) .npa-mini,#play:has(#village:not([hidden])) .npa-mini{display:none}" +
-    ".npa-mini{position:absolute;z-index:6;pointer-events:none}.npa-mini.bl{left:6px;bottom:6px}.npa-mini.br{right:6px;bottom:6px}" +
+    ".npa-mini{position:absolute;z-index:6;pointer-events:auto;touch-action:none;cursor:grab;-webkit-user-select:none;user-select:none}.npa-mini.drag{cursor:grabbing;z-index:8}.npa-mini.drag .npa-box>svg{scale:1.12}.npa-mini.bl{left:6px;bottom:6px}.npa-mini.br{right:6px;bottom:6px}" +
     /* BONG BÓNG KIỂU NIGHT PASS: thẻ tím đậm, viền + quầng sáng màu nhấn của linh vật (--npa-ac), đuôi chỉ về linh vật; Pop tròn hơn + chữ to hơn */
     ".npa-bub{--dx:0px;--npa-ac:#a99bff;position:absolute;left:50%;bottom:100%;transform:translateX(calc(-50% + var(--dx)));transform-origin:50% 100%;margin-bottom:10px;max-width:min(240px,calc(100vw - 24px));width:max-content;box-sizing:border-box;padding:9px 14px;border-radius:18px;background:var(--bbg,linear-gradient(165deg,#2b2064,#171236 85%));color:#fff;border:2px solid var(--bbd,color-mix(in srgb,var(--npa-ac) 75%,#fff 8%));text-shadow:0 1px 2px rgba(0,0,0,.35);font:800 14px/1.3 system-ui,-apple-system,'Segoe UI',sans-serif;text-align:center;text-wrap:balance;box-shadow:0 8px 22px rgba(0,0,0,.45),0 0 22px var(--bgl,color-mix(in srgb,var(--npa-ac) 45%,transparent)),inset 0 1px 0 rgba(255,255,255,.22);opacity:0;pointer-events:none;z-index:7}" +
     ".npa-bub::after{content:'';position:absolute;left:calc(50% - var(--dx));bottom:-8px;width:13px;height:13px;margin-left:-7px;background:var(--bt,#171236);border-right:2px solid var(--bbd,color-mix(in srgb,var(--npa-ac) 75%,#fff 8%));border-bottom:2px solid var(--bbd,color-mix(in srgb,var(--npa-ac) 75%,#fff 8%));transform:rotate(45deg);border-radius:0 0 4px 0}" +
@@ -131,7 +131,7 @@
       needTheme(function () {
         if (h.__npaBox) { self.paint(); return; }
         h.textContent = ""; var box = document.createElement("div"); box.className = "npa-box"; box.innerHTML = uniq(t); h.appendChild(box);
-        self.svg = box.firstChild; self.box = box; h.__npaBox = box; h.classList.add("npa-hero"); self.paint(); self.watch(); self.enter();
+        self.svg = box.firstChild; self.box = box; h.__npaBox = box; if (self.role !== "mini") h.classList.add("npa-hero");   /* mini KHÔNG là mục tiêu của mascot.js (giữ để kéo, không phình/pop) */ self.paint(); self.watch(); self.enter();
         try { self.svg.setAttribute("aria-label", self.def.name[vi() ? 0 : 1]); } catch (e) {}
       });
     }, function () { /* không tải được: giữ nguyên emoji dự phòng của game */ });
@@ -170,6 +170,7 @@
     try { var ac = getComputedStyle(this.svg), c = ac.getPropertyValue("--bgx").trim() || ac.getPropertyValue("--pa").trim() || ac.getPropertyValue("--a").trim(); if (c) b.style.setProperty("--npa-ac", c); } catch (e) {}
     b.style.setProperty("--dx", "0px"); b.style.opacity = 0; if (mood) b.setAttribute("data-mood", mood); else b.removeAttribute("data-mood");
     var mini = /npa-mini/.test(h.className);
+    if (mini) { var mr0 = h.getBoundingClientRect(), roomR = innerWidth - mr0.right, roomL = mr0.left, need = Math.min(b.offsetWidth || 180, 210) + 24; h.classList.toggle("br", !(roomR >= need) && roomL > roomR); h.classList.toggle("bl", !h.classList.contains("br")); }   /* bong bóng bên nào đủ chỗ */
     if (!mini) { var r = b.getBoundingClientRect(), dx = 0; if (r.left < 8) dx = 8 - r.left; else if (r.right > innerWidth - 8) dx = innerWidth - 8 - r.right; if (dx) b.style.setProperty("--dx", Math.round(dx) + "px"); }   /* không tràn mép màn hình; đuôi vẫn chỉ về linh vật */
     if (b.animate && !reduce) b.animate([{ opacity: 0, scale: ".78" }, { opacity: 1, scale: "1.05", offset: .7 }, { opacity: 1, scale: "1" }], { duration: 240, fill: "forwards", easing: "ease-out" }); else b.style.opacity = 1;
     this.bt = rst(function () { if (b.animate && !reduce) b.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 180, fill: "forwards" }); else b.style.opacity = 0; }, ms || 2500);
@@ -184,7 +185,43 @@
   }
   function companion(game, parent, o) {
     if (!parent || !G[game]) return null; o = o || {}; var d = parent.querySelector(":scope>.npa-mini"); if (d) return find(d);
-    d = document.createElement("div"); d.className = "npa-mini " + (o.pos || "bl"); var sz = o.size || 56; d.style.width = d.style.height = sz + "px"; parent.appendChild(d); return mount(d, { game: game, role: "mini" });
+    d = document.createElement("div"); d.className = "npa-mini " + (o.pos || "bl"); d.setAttribute("data-npa-game", game); var sz = o.size || 56; d.style.width = d.style.height = sz + "px"; parent.appendChild(d); var inst = mount(d, { game: game, role: "mini" }); drag(d, parent, game); return inst;
+  }
+
+  /* ---------- NGƯỜI CHƠI KÉO LINH VẬT MINI ĐẶT Ở ĐÂU CŨNG ĐƯỢC TRONG KHUNG GAME (nhớ theo game, lưu máy; tỉ lệ theo khung nên đổi cỡ vẫn đúng) ---------- */
+  function posKey(g) { return "np-art-pos:" + g; }
+  function readPos(g) { try { var v = JSON.parse(localStorage.getItem(posKey(g))); if (v && isFinite(v.x) && isFinite(v.y)) return v; } catch (e) {} return null; }
+  function applyPos(d, parent, g) {
+    var v = readPos(g); if (!v) return; var pr = parent.getBoundingClientRect(), w = d.offsetWidth || 48, h = d.offsetHeight || 48;
+    var x = Math.max(0, Math.min(pr.width - w, v.x * pr.width)), y = Math.max(0, Math.min(pr.height - h, v.y * pr.height));
+    d.style.left = x + "px"; d.style.top = y + "px"; d.style.right = "auto"; d.style.bottom = "auto"; side(d, parent);
+  }
+  function side(d, parent) { var pr = parent.getBoundingClientRect(), r = d.getBoundingClientRect(); d.classList.toggle("br", r.left + r.width / 2 > pr.left + pr.width / 2); d.classList.toggle("bl", !(r.left + r.width / 2 > pr.left + pr.width / 2)); }
+  function drag(d, parent, g) {
+    var st = null;
+    applyPos(d, parent, g); addEventListener("resize", function () { applyPos(d, parent, g); });
+    /* CHẠM TRÚNG = NHẢY; NHẤN GIỮ (~0,35 giây) = nhấc lên rồi KÉO đi đâu cũng được */
+    var HOLD = 350;
+    d.addEventListener("pointerdown", function (e) {
+      if (e.button > 0) return; var r = d.getBoundingClientRect(); st = { id: e.pointerId, x: e.clientX, y: e.clientY, ox: r.left, oy: r.top, lifted: false, moved: false, cancel: false };
+      try { d.setPointerCapture(e.pointerId); } catch (x) {} e.stopPropagation();
+      var me = st; me.t = (window.__npRST || setTimeout)(function () { if (st !== me || me.cancel) return; me.lifted = true; d.classList.add("drag"); try { navigator.vibrate && navigator.vibrate(12); } catch (x) {} var it = find(d); if (it && it.svg && !reduce && it.svg.animate) { try { it.svg.animate([{ transform: "scale(1,1)" }, { transform: "scale(1.2,.85)" }, { transform: "scale(1.1)" }], { duration: 200, fill: "forwards" }); } catch (x) {} } }, HOLD);
+    });
+    d.addEventListener("pointermove", function (e) {
+      if (!st || e.pointerId !== st.id) return; var dx = e.clientX - st.x, dy = e.clientY - st.y;
+      if (!st.lifted) { if (Math.abs(dx) + Math.abs(dy) > 10) st.cancel = true; return; }   /* di chuyển trước khi giữ đủ lâu = không kéo */
+      st.moved = true; e.preventDefault();
+      var pr = parent.getBoundingClientRect(), w = d.offsetWidth, h = d.offsetHeight, x = Math.max(0, Math.min(pr.width - w, st.ox + dx - pr.left)), y = Math.max(0, Math.min(pr.height - h, st.oy + dy - pr.top));
+      d.style.left = x + "px"; d.style.top = y + "px"; d.style.right = "auto"; d.style.bottom = "auto"; side(d, parent);
+    });
+    function end(e) {
+      if (!st || e.pointerId !== st.id) return; var was = st; st = null; clearTimeout(was.t); d.classList.remove("drag"); try { d.releasePointerCapture(e.pointerId); } catch (x) {}
+      if (was.lifted) { var itL = find(d); if (itL && itL.svg) { try { itL.svg.getAnimations().forEach(function (an) { an.cancel(); }); } catch (x) {} } }
+      if (was.moved) { var pr = parent.getBoundingClientRect(), r = d.getBoundingClientRect(); try { localStorage.setItem(posKey(g), JSON.stringify({ x: +((r.left - pr.left) / pr.width).toFixed(4), y: +((r.top - pr.top) / pr.height).toFixed(4) })); } catch (x) {} var it = find(d); if (it && it.svg && !reduce && it.svg.animate) { try { it.svg.animate([{ transform: "scale(1.15,.88)" }, { transform: "none" }], { duration: 260, easing: "ease-out" }); } catch (x) {} } }
+      else if (!was.cancel && !was.lifted) { var it2 = find(d); if (it2) { it2.motion(2); it2.say(line(it2, "tap"), 2000, "cool"); } }   /* chạm nhanh trúng linh vật = nhảy + nói */
+    }
+    d.addEventListener("pointerup", end); d.addEventListener("pointercancel", end);
+    d.addEventListener("dblclick", function () { try { localStorage.removeItem(posKey(g)); } catch (x) {} d.style.left = d.style.top = d.style.right = d.style.bottom = ""; d.className = d.className.replace(/\b(bl|br)\b/g, "") + " " + ((G[g] && G[g].pos) || "bl"); });   /* nhấp đúp = về chỗ mặc định */
   }
 
   /* ---------- sự kiện từ game ---------- */
@@ -212,7 +249,7 @@
     var it = find(host); if (!it || !it.svg) return;
     if (kind === "pop") { it.motion(3); it.say(line(it, "tap"), 2000); } else { it.motion(1); it.say(line(it, "tap"), 2000); }
   }
-  ["pointerdown", "keydown", "wheel", "touchstart"].forEach(function (n) { addEventListener(n, function () { insts.forEach(function (it) { if (it.ea || it.pendingHi) it.skipEnter(); }); }, { capture: true, passive: true }); });
+  ["pointerdown", "pointermove", "keydown", "wheel", "touchstart"].forEach(function (n) { addEventListener(n, function () { insts.forEach(function (it) { if (it.ea || it.pendingHi) it.skipEnter(); }); }, { capture: true, passive: true }); });
   /* HIỆU ỨNG RỜI ĐI (khi bắt đầu ván): màn chính ẩn NGAY (không trễ game); một BẢN SAO linh vật (ghost, position:fixed) ở đúng chỗ cũ chạy hiệu ứng rồi biến mất.
      Mỗi skin một kiểu: Mặc định chúi xuống rồi bật vọt lên khỏi màn · Huy hiệu nhảy xoay sang phải · Chủ đề riêng nhảy sang trái · Dạ quang mờ dần bay lơ lửng lên · Siêu sao xoay lật nhỏ dần tan lấp lánh. */
   var EXIT = {
@@ -269,6 +306,7 @@
       }
       /* linh vật ra GIỮA màn hình rồi vừa THU NHỎ vừa DI CHUYỂN về vị trí của nó trong khung game (linh vật mini), cover mờ dần khi nó đáp xuống → game bắt đầu (KHÔNG nổ tung) */
       var mini = document.querySelector(".npa-mini"), mr = mini && mini.getClientRects().length ? mini.getBoundingClientRect() : null;
+      if (!mr) { var sp = readPos(it.game); if (sp) { mr = { left: pr.left + sp.x * pr.width, top: pr.top + sp.y * pr.height, width: 48, height: 48 }; } }
       if (!mr) { var mm = document.querySelector(".npa-mini"), sz = (mm && parseInt(mm.style.width, 10)) || 48, bl = !mm || mm.classList.contains("bl"); mr = { left: bl ? pr.left + 6 : pr.right - 6 - sz, top: pr.bottom - 6 - sz, width: sz, height: sz }; }   /* mini đang ẩn ở màn chọn: tính vị trí theo góc bl/br */
       var hc = { x: r.left + r.width / 2, y: r.top + r.height / 2 }, mx2 = mr.left + mr.width / 2 - hc.x, my2 = mr.top + mr.height / 2 - hc.y, sc2 = Math.max(.08, Math.min(1, mr.width / r.width)), ccx = pr.left + pr.width / 2 - hc.x, ccy = pr.top + pr.height * .42 - hc.y;
       d.style.transformOrigin = "50% 50%";
