@@ -20,6 +20,7 @@ var l=[q,s].find(function(x){return x==="vi"||x==="en"})||(/^vi/i.test(navigator
 html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:var(--font);touch-action:manipulation}
 body{display:flex;flex-direction:column;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);background:linear-gradient(165deg,#2b2064,#0E1020 70%);color:#fff}
 header{flex:none;display:flex;align-items:center;gap:10px;padding:8px 12px}
+#ttl{padding:5px 14px;border-radius:999px;background:rgba(23,18,54,.88);border:1px solid rgba(170,150,255,.5);color:#fff}.back{background:rgba(23,18,54,.88)!important}
 .back{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;text-decoration:none}
 h1{flex:1;margin:0;font-size:17px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .stagebox{flex:1;min-height:0;position:relative;margin:0 12px;border-radius:26px;border:1.5px solid rgba(170,150,255,.5);box-shadow:0 0 24px rgba(124,92,255,.25),inset 0 1px 0 rgba(255,255,255,.14);background:var(--stg,linear-gradient(165deg,#2b2064,#171236 70%));display:flex;align-items:flex-end;justify-content:center;padding:84px 10px 34px;overflow:hidden}
@@ -36,7 +37,7 @@ h1{flex:1;margin:0;font-size:17px;font-weight:900;white-space:nowrap;overflow:hi
 .chip{flex:0 0 auto;min-height:48px;padding:0 16px;border-radius:999px;border:1.5px solid rgba(170,150,255,.45);background:linear-gradient(165deg,#2b2064,#171236 85%);color:#fff;font:800 12px var(--font);cursor:pointer;display:flex;align-items:center;gap:6px}
 .chip[aria-pressed=true]{border-color:#fff;background:linear-gradient(135deg,#7C5CFF,#a855f7 55%,#C2410C);box-shadow:0 4px 14px rgba(124,92,255,.5)}.chip i{width:12px;height:12px;border-radius:50%}
 #snd{border:1.5px solid rgba(170,150,255,.55);cursor:pointer;padding:0}#snd svg{width:22px;height:22px}#snd[aria-pressed=false]{opacity:.55}
-.lab{flex:none;padding:0 14px;font-size:11px;font-weight:800;opacity:.7;text-transform:uppercase;letter-spacing:.04em}
+.lab{flex:none;align-self:flex-start;margin:4px 14px 2px;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:rgba(23,18,54,.88);border:1px solid rgba(170,150,255,.5)}   /* nhãn nằm trong thẻ tối: đọc được ở cả nền sáng lẫn tối (theme sáng từng là chữ trắng mờ trên nền hồng) */
 @media (max-height:560px){header{padding:4px 12px}.ev{width:48px;height:48px}.ev svg{width:24px;height:24px}.chip{min-height:40px}.lab{display:none}}
 </style>
 </head>
