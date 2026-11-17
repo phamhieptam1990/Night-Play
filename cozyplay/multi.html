@@ -148,6 +148,13 @@ body.side #perf{max-width:50px;font-size:10px}
 .pn .pb button[aria-pressed=true]:not(.sw){background:color-mix(in srgb,var(--accent) 24%,var(--card));border-color:var(--np-bd)}
 .pn .pb .sw[aria-pressed=true]{background:color-mix(in srgb,var(--accent) 24%,var(--card));border-color:var(--np-bd)}
 .pn .sw::after{display:none}
+/* MENU KIỂU NIGHT PASS: KHÔNG chữ nhãn, icon TO (nhãn vẫn có ở aria-label/title) — GAME_RULES mục 21 */
+.pn .pb button span,.pn .sw span,.hbtn span{display:none}
+.pn .pb{gap:10px}
+.pn .pb button,.pn .sw{min-height:72px}
+.pn .pb button svg,.pn .sw svg{width:36px;height:36px}
+.hbtn{min-height:68px}.hbtn svg{width:36px;height:36px}
+#hp .hr{gap:10px}
 .pn .pb button.x{background:color-mix(in srgb,var(--warn) 85%,#000);color:#fff;border-color:transparent}
 .pn .pb button[hidden],.pn .sw[hidden]{display:none}
 #hp{left:6px;top:44px;width:min(310px,calc(100% - 12px));gap:10px;max-height:calc(100% - 52px);overflow:hidden}
@@ -602,7 +609,7 @@ body.side #perf{max-width:50px;font-size:10px}
     var per = bare ? Math.max(1, Math.min(4, Math.floor((innerHeight - 250) / 82))) : 0, pages = bare ? Math.max(1, Math.ceil(list.length / per)) : 1; hpPage = Math.min(hpPage, pages - 1);
     var cap = bare ? per : Math.max(1, Math.floor(((side ? tray.clientHeight : tray.clientWidth) || 200) / (side ? 50 : wide ? 112 : 58))), shown = bare ? list.slice(hpPage * per, hpPage * per + per) : list.slice(0, cap);
     $("hmBd").textContent = list.length ? String(list.length) : ""; $("hmBd").classList.toggle("on", list.length > 0);
-    $("hpT").textContent = t().hpT; $("hpCnt").textContent = items.length + " / " + CAP.slots; $("hHomeT").textContent = t().home; $("hAddT").textContent = t().add;
+    $("hpT").textContent = t().hpT; $("hpCnt").textContent = items.length + " / " + CAP.slots; $("hHomeT").textContent = t().home; $("hAddT").textContent = t().add; $("hHome").setAttribute("aria-label", t().home); $("hHome").title = t().home; $("hAdd").setAttribute("aria-label", t().add); $("hAdd").title = t().add;
     $("hpSec").textContent = list.length ? t().hpSec + " (" + list.length + ")" : t().hpNone; $("hpPg").hidden = pages <= 1; $("hpPgT").textContent = (hpPage + 1) + "/" + pages; $("hpPrev").disabled = hpPage <= 0; $("hpNext").disabled = hpPage >= pages - 1;
     shown.forEach(function (it) { tr.appendChild(chip(it, wide, function () { if (main) main.menuPaused = false; closeHp(); resumeMenu(); switchTo(it); })); });
     if (!bare && list.length > shown.length) { var m = document.createElement("span"); m.id = "more"; m.textContent = "+" + (list.length - shown.length); tr.appendChild(m); }
