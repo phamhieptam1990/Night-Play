@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="vi" data-app="hub" data-np="">
+<head>
+<meta charset="utf-8">
+<script src="shared/guard.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/svg+xml" sizes="any" href="/shared/favicon.svg">
+<title>Xem linh vật</title>
+<script>
+try{var t=localStorage.getItem("theme")}catch(e){}
+document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
+(function(){var q=new URLSearchParams(location.search).get("lang"),s=null;try{s=localStorage.getItem("lang")}catch(e){}
+var l=[q,s].find(function(x){return x==="vi"||x==="en"})||(/^vi/i.test(navigator.language||"")?"vi":"en");document.documentElement.lang=l;})();
+</script>
+<link rel="stylesheet" href="shared/fonts.css">
+<link rel="stylesheet" href="shared/theme.css">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:var(--font);touch-action:manipulation}
+body{display:flex;flex-direction:column;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);background:linear-gradient(165deg,#2b2064,#0E1020 70%);color:#fff}
+header{flex:none;display:flex;align-items:center;gap:10px;padding:8px 12px}
+.back{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;text-decoration:none}
+h1{flex:1;margin:0;font-size:17px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stagebox{flex:1;min-height:0;position:relative;margin:0 12px;border-radius:26px;border:1.5px solid rgba(170,150,255,.5);box-shadow:0 0 24px rgba(124,92,255,.25),inset 0 1px 0 rgba(255,255,255,.14);background:var(--stg,linear-gradient(165deg,#2b2064,#171236 70%));display:flex;align-items:flex-end;justify-content:center;padding:46px 10px 30px;overflow:hidden}
+#hero{width:100%;height:100%;display:flex;align-items:flex-end;justify-content:center;position:relative}
+#hero .npa-box{height:100%;width:100%}#hero .npa-box>svg{height:100%;width:100%}
+.nm{position:absolute;left:14px;bottom:10px;z-index:3;font-weight:900;font-size:15px;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+.lk{position:absolute;right:12px;bottom:10px;z-index:3;font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.14)}
+.row{flex:none;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:8px 12px}.row::-webkit-scrollbar{display:none}
+.ev{flex:0 0 auto;width:56px;height:56px;border-radius:18px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;font-size:26px;display:grid;place-items:center;cursor:pointer}
+.ev:active{transform:scale(.94)}
+.chip{flex:0 0 auto;min-height:44px;padding:0 14px;border-radius:14px;border:2px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);color:#fff;font:800 12px var(--font);cursor:pointer;display:flex;align-items:center;gap:6px}
+.chip[aria-pressed=true]{border-color:#fff;box-shadow:0 0 0 3px #6C4BF2}.chip i{width:12px;height:12px;border-radius:50%}
+.lab{flex:none;padding:0 14px;font-size:11px;font-weight:800;opacity:.7;text-transform:uppercase;letter-spacing:.04em}
+@media (max-height:560px){header{padding:4px 12px}.ev{width:44px;height:44px;font-size:20px}.chip{min-height:38px}.lab{display:none}}
+</style>
+</head>
+<body>
+<header><a class="back" id="back" href="nightpass-mascot.html" aria-label="Back"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a><h1 id="ttl"></h1></header>
+<div class="stagebox" id="stg"><div class="nm" id="nm"></div><div class="lk" id="lk" hidden></div><div id="hero" data-npa-hero></div></div>
+<div class="lab" id="lE"></div><div class="row" id="evs" role="group"></div>
+<div class="lab" id="lS"></div><div class="row" id="sks" role="group"></div>
+<div class="lab" id="lT"></div><div class="row" id="ths" role="group"></div>
+<script src="shared/nptrial.js"></script><script src="shared/npgrad.js"></script><script src="shared/npbadges.js"></script><script src="shared/npmascot.js"></script>
+<script src="shared/art/mascot-theme.js"></script><script src="shared/art/mascot-art.js"></script>
+<script>
+"use strict";
+var $=function(i){return document.getElementById(i)},Q=new URLSearchParams(location.search),de=document.documentElement,G=Q.get("m")||"xin-nghi",SK=["default","badge","group","night","star"],skin=SK.indexOf(Q.get("s"))>=0?Q.get("s"):"default",th=Q.get("t")||"";
+function L(){return de.lang==="en"?"en":"vi"}
+var T={vi:{ttl:"Xem linh vật",lE:"Thử hoạt động",lS:"Skin",lT:"Theme màu",lock:"🔒 Skin chưa mở",ev:[["start","👋","Chào"],["tap","👆","Chạm"],["correct","👍","Đúng"],["wrong","😢","Sai"],["c1","🔥","Combo 1"],["c2","⚡","Combo 2"],["c3","🌟","Combo 3"],["ask","❓","Hỏi"],["enter","⬇️","Xuất hiện lại"]],def:"Mặc định"},
+en:{ttl:"Preview mascot",lE:"Try the moves",lS:"Skin",lT:"Colour theme",lock:"🔒 Skin locked",ev:[["start","👋","Hi"],["tap","👆","Tap"],["correct","👍","Right"],["wrong","😢","Wrong"],["c1","🔥","Combo 1"],["c2","⚡","Combo 2"],["c3","🌟","Combo 3"],["ask","❓","Ask"],["enter","⬇️","Enter again"]],def:"Default"}};
+function X(){return T[L()]}
+function setBack(){var f=Q.get("from");$("back").href=f&&/^[\w\-./?=&%]+$/.test(f)&&f.indexOf("..")<0?f:"nightpass-mascot.html?lang="+L()+"&m="+G}
+function mount(){var h=$("hero");window.NPArtSkinForce=skin;window.NPArtForce=th;NPArt.mount(h,{game:G,role:"hero"});setTimeout(function(){NPArt.repaint();paintBg()},60)}
+function paintBg(){var v=th&&NPArtTheme.vars(th);$("stg").style.setProperty("--stg",v?"linear-gradient(165deg,"+v.bg2+"55,#171236 80%)":"")}
+function render(){
+  var x=X(),g=NPArt.games[G],nm=g&&g.skinNames||{},e=NPBadges&&NPBadges.entry?NPBadges.entry(G):null,l=L()==="vi"?0:1;
+  document.title=x.ttl;$("ttl").textContent=x.ttl;$("lE").textContent=x.lE;$("lS").textContent=x.lS;$("lT").textContent=x.lT;setBack();
+  $("nm").textContent=(g&&g.name?g.name[l]:"")+" · "+(skin==="default"?x.def:(nm[skin]||[skin,skin])[l]);
+  var open=true;try{open=NPMascot2.isOpen(G,skin)}catch(er){}$("lk").hidden=open;$("lk").textContent=x.lock;
+  $("evs").innerHTML=x.ev.map(function(a){return '<button type="button" class="ev" data-e="'+a[0]+'" aria-label="'+a[2]+'" title="'+a[2]+'">'+a[1]+'</button>'}).join("");
+  $("evs").querySelectorAll(".ev").forEach(function(b){b.onclick=function(){var k=b.dataset.e,h=$("hero");
+    if(k==="enter"){NPArt.enterNow(h)}else if(k==="c1")NPArt.event("combo",{tier:1});else if(k==="c2")NPArt.event("combo",{tier:2});else if(k==="c3")NPArt.event("combo",{tier:3});else if(k==="ask")NPArt.event("ask",{text:L()==="vi"?"Bay qua chữ A":"Fly through letter A"});else NPArt.event(k,{n:1})}});
+  $("sks").innerHTML=SK.map(function(s){return '<button type="button" class="chip" data-s="'+s+'" aria-pressed="'+(skin===s)+'">'+(s==="default"?x.def:(nm[s]||[s,s])[l])+'</button>'}).join("");
+  $("sks").querySelectorAll(".chip").forEach(function(b){b.onclick=function(){skin=b.dataset.s;window.NPArtSkinForce=skin;NPArt.repaint();render();NPArt.enterNow($("hero"))}});
+  $("ths").innerHTML=[""].concat(NPArtTheme.ids).map(function(t){var v=t&&NPArtTheme.vars(t);return '<button type="button" class="chip" data-t="'+t+'" aria-pressed="'+(th===t)+'"><i style="background:'+(v?v.p1:"#8EE0EE")+'"></i>'+(t?NPArtTheme.names[t][l]:x.def)+'</button>'}).join("");
+  $("ths").querySelectorAll(".chip").forEach(function(b){b.onclick=function(){th=b.dataset.t;window.NPArtForce=th;NPArt.repaint();paintBg();render()}});
+}
+(function go(n){var A=window.NPArt;if(A&&A.games&&A.games[G]){mount();render()}else if(n<40)setTimeout(function(){go(n+1)},60);else location.replace("nightpass-mascot.html")})(0);
+</script>
+</body>
+</html>

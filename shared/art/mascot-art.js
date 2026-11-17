@@ -99,8 +99,8 @@
   var cache = {}, uid = 0, insts = [];
   function load(file) { return cache[file] || (cache[file] = fetch(BASE + file).then(function (r) { if (!r.ok) throw 0; return r.text(); })); }
   function uniq(txt) { var k = ++uid; return txt.replace(/id="([a-zA-Z0-9_-]+)"/g, function (m, i) { return 'id="' + i + "-" + k + '"'; }).replace(/url\(#([a-zA-Z0-9_-]+)\)/g, function (m, i) { return "url(#" + i + "-" + k + ")"; }); }
-  function skinNow(gid) { try { var M = window.NPMascot2; if (M && M.getSkin) return M.getSkin(gid) || "default"; } catch (e) {} return "default"; }
-  function themeNow() { try { if (window.NPGrad && NPGrad.active() && NPGrad.get()) return NPGrad.get(); } catch (e) {} return ""; }
+  function skinNow(gid) { if (window.NPArtSkinForce) return window.NPArtSkinForce; try { var M = window.NPMascot2; if (M && M.getSkin) return M.getSkin(gid) || "default"; } catch (e) {} return "default"; }
+  function themeNow() { if (window.NPArtForce != null) return window.NPArtForce; try { if (window.NPGrad && NPGrad.active() && NPGrad.get()) return NPGrad.get(); } catch (e) {} return ""; }
   function needTheme(fn) { if (window.NPArtTheme) return fn(); var j = document.createElement("script"); j.src = BASE + "mascot-theme.js"; j.onload = fn; j.onerror = fn; (document.head || document.documentElement).appendChild(j); }
   function pick(a, last) { if (!a || !a.length) return ""; var x = a[Math.floor(Math.random() * a.length)], n = 0; while (x === last && a.length > 1 && n++ < 4) x = a[Math.floor(Math.random() * a.length)]; return x; }
 
@@ -379,5 +379,5 @@
     (document.head || document.documentElement).appendChild(j);
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
-  window.NPArt = { markup: markup, preload: preload, skinNames: skinNames, say: sayAll, register: register, boot: boot, mount: mount, companion: companion, event: event, touch: touch, refresh: refresh, has: function (g) { return !!G[g]; }, games: G };
+  window.NPArt = { enterNow: function (h) { var it = find(h); if (it) { it.le = 0; it.enter(); } }, repaint: function () { insts.forEach(function (it) { if (it.svg) it.paint(); }); }, markup: markup, preload: preload, skinNames: skinNames, say: sayAll, register: register, boot: boot, mount: mount, companion: companion, event: event, touch: touch, refresh: refresh, has: function (g) { return !!G[g]; }, games: G };
 })();

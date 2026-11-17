@@ -131,3 +131,9 @@ html.np-hudg .top{left:68px!important}
   #home .ty .e,#home .ty>span:first-child:not(.t){flex:none!important}
   #home .ty .t,#home .ty b{flex:1 1 auto!important;min-width:0!important;text-align:left!important}
 }
+
+/* Màn ngang THẤP (điện thoại ngang ≤440px cao): cột nút bên phải có thêm nút ⛶ toàn màn hình nên 9–10 nút × 42px tràn khỏi màn hình (nút cuối bị cắt) → thu nút còn 38px, khoảng cách 3px, lề dọc 6px để vừa */
+@media (orientation:landscape) and (max-height:440px){
+  .top{padding-top:6px!important;padding-bottom:6px!important;gap:3px!important}
+  .top>.ib,.top>button.ib,.top>#npFsBtn,.top>#npMcBtn,.top>#npChBtn,.top>#npSetBtn{width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important}
+}

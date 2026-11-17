@@ -109,7 +109,7 @@ function render(){
   var m=list.filter(function(i){return i.id===cur})[0];if(!m)return;
   if(!view||!M.skins(cur).some(function(s){return s.id===view}))view=M.getSkin(cur);
   var sk=M.skin(cur,view),open=M.isOpen(cur,view);
-  $("stage").innerHTML=M.html(cur,view,Math.round(Math.min(120,innerWidth*.22)));
+  $("stage").innerHTML=M.html(cur,view,Math.round(Math.min(120,innerWidth*.22)));var art2=window.NPArt&&NPArt.skinNames&&NPArt.skinNames(cur);$("stage").style.cursor=art2?"pointer":"";$("stage").setAttribute("role",art2?"button":"");$("stage").setAttribute("tabindex",art2?"0":"-1");$("stage").setAttribute("aria-label",art2?(l==="vi"?"Xem linh vật, bấm để thử hoạt động":"Preview mascot"):"");
   $("nm").textContent=(l==="vi"?m.name.vi:m.name.en);
   $("skn").textContent=(l==="vi"?sk.n[0]:sk.n[1])+(open?"":" 🔒");
   var isMain=M.get()===cur,worn=M.getSkin(cur)===view;
@@ -131,6 +131,8 @@ function render(){
   $("grid").querySelectorAll(".mc").forEach(function(b){b.onclick=function(){cur=b.dataset.i;view="";render()}});
   document.querySelectorAll(".seg button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.l===l))});
 }
+$("stage").onclick=function(){if(!(window.NPArt&&NPArt.skinNames&&NPArt.skinNames(cur)))return;location.href="mascot-review.html?lang="+L()+"&m="+encodeURIComponent(cur)+"&s="+encodeURIComponent(view||"default")+"&t="+encodeURIComponent(window.NPArtForce||"")+"&from="+encodeURIComponent("nightpass-mascot.html?lang="+L()+"&m="+cur)};
+$("stage").onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();$("stage").onclick()}};
 $("bMain").onclick=function(){var M=NPMascot2;if(!M.ok()||!M.isOpen(cur,view))return;M.setMain(cur);M.setSkin(cur,view);render()};
 document.querySelectorAll(".seg button").forEach(function(b){b.onclick=function(){de.lang=b.dataset.l;try{localStorage.setItem("lang",b.dataset.l)}catch(e){}render()}});
 var q=new URLSearchParams(location.search).get("m");if(q&&NPBadges.entry(q)){cur=q;grp=NPBadges.entry(q).group}
