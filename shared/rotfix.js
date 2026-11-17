@@ -13,10 +13,7 @@
       var all = document.body ? document.body.getElementsByTagName("*") : [], i, e, cs;
       for (i = 0; i < all.length; i++) {
         e = all[i]; if (!e.scrollTop && !e.scrollLeft) continue;
-        cs = getComputedStyle(e);
-        /* KHÔNG đụng khung cuộn THẬT (overflow auto/scroll ở một trục: dải thẻ trượt ngang, danh sách cuộn, popup…) — lỗi trước: dải slide cứ bị kéo về thẻ đầu. Chỉ chữa khung bị khoá cứng cả hai trục (hidden/clip/visible). */
-        if (/^(auto|scroll|overlay)$/.test(cs.overflowX) || /^(auto|scroll|overlay)$/.test(cs.overflowY)) continue;
-        if (cs.overflowY === "hidden" || cs.overflowY === "clip" || cs.overflowX === "hidden" || cs.overflowX === "clip") { e.scrollTop = 0; e.scrollLeft = 0; }
+        cs = getComputedStyle(e); if (cs.overflowY === "hidden" || cs.overflowY === "clip" || cs.overflowX === "hidden" || cs.overflowX === "clip") { e.scrollTop = 0; e.scrollLeft = 0; }
       }
     } catch (x) {}
   }

@@ -19,5 +19,3 @@ html.np-hudg .app:has(h1[data-pt]):has(#paHero) #home>#paHero,html.np-hudg .app:
 /* linh vật TRƯỢT mượt tới chỗ mới khi xoay/đổi cỡ (không nhảy); tắt khi người dùng giảm chuyển động */
 #home>#paHero,#village>#paHero{transition:top .28s ease,left .28s ease,width .28s ease,height .28s ease,margin-top .28s ease}
 @media (prefers-reduced-motion:reduce){#home>#paHero,#village>#paHero{transition:none}}
-/* CHIM BAY, điện thoại NGANG thấp: linh vật nhỏ lại (72px) để dải thẻ trò chơi + Tiến độ hiện đủ, không bị cắt */
-@media (orientation:landscape) and (max-height:430px){#ovStart>#paHero{height:72px!important;min-height:0!important;flex:none!important}#ovStart .cards{min-height:92px}}
