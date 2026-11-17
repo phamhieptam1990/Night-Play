@@ -14,6 +14,7 @@
   var SHRINK = SVGH + 'width:36px;height:36px"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>';
   var DOTS = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:18px;height:18px;display:block"><circle cx="5.5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="18.5" cy="12" r="1.8"/></svg>';
   var HOME = SVGH + 'width:36px;height:36px"><path d="M15 5l-7 7 7 7"/></svg>';
+  var SNDON = SVGH + 'width:34px;height:34px"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>';
   var MUTE = SVGH + 'width:34px;height:34px"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>';
   var HELP = SVGH + 'width:36px;height:36px"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.6 2.2c-.7.4-1.1.9-1.1 1.8M12 17h.01"/></svg>';
   var ICON_FS = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
@@ -43,11 +44,11 @@
   css.textContent +=
     /* kiểu Night Pass: thẻ nền tím đậm, viền + quầng sáng màu nhấn, bo lớn, nút ≥48px pill gradient */
     "#npFsToast,#npFsHow .d{color:#fff;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:linear-gradient(165deg,#2b2064,#171236 70%);border:1.5px solid rgba(170,150,255,.6);box-shadow:0 14px 40px rgba(0,0,0,.55),0 0 26px rgba(124,92,255,.35),inset 0 1px 0 rgba(255,255,255,.14)}" +
-    "#npFsToast{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:2147483002;width:calc(100vw - 24px);max-width:440px;box-sizing:border-box;display:none;align-items:center;gap:12px;padding:12px;border-radius:26px;font-size:14px;font-weight:700;line-height:1.3}#npFsToast.on{display:flex}" +
+    "#npFsToast{position:fixed;left:max(8px,env(safe-area-inset-left));top:max(8px,env(safe-area-inset-top));z-index:2147483002;width:calc(100vw - 72px);max-width:440px;box-sizing:border-box;display:none;align-items:center;gap:12px;padding:12px;border-radius:26px;font-size:14px;font-weight:700;line-height:1.3}#npFsToast.on{display:flex}" +
     "#npFsToast .ic,#npFsHow .ic{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#7C5CFF,#C2410C);box-shadow:0 4px 14px rgba(124,92,255,.5)}#npFsToast .ic svg,#npFsHow .ic svg{width:24px;height:24px}" +
     "#npFsToast span.tx{flex:1;min-width:0}" +
     "#npFsToast button.go,#npFsHow button.ok{flex:none;min-height:48px;padding:0 18px;border-radius:999px;border:0;color:#fff;font:800 14px system-ui,sans-serif;cursor:pointer;background:linear-gradient(135deg,#7C5CFF,#a855f7 55%,#C2410C);box-shadow:0 6px 18px rgba(124,92,255,.45);-webkit-tap-highlight-color:transparent}" +
-    "#npFsToast button.go{width:48px;height:48px;min-height:48px;padding:0;border-radius:50%;display:grid;place-items:center}" +
+    "#npFsToast button.x{flex:none;width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);color:#fff;display:grid;place-items:center;padding:0;cursor:pointer}#npFsToast button.go{width:48px;height:48px;min-height:48px;padding:0;border-radius:50%;display:grid;place-items:center}" +
     "#npFsHow{position:fixed;inset:0;z-index:2147483003;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(6,5,16,.7);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}#npFsHow.on{display:flex}" +
     "#npFsHow .d{width:min(400px,100%);max-height:100%;overflow:auto;box-sizing:border-box;padding:18px;border-radius:28px;font-size:14px;font-weight:600;line-height:1.45}" +
     "#npFsHow .hd{display:flex;align-items:center;gap:12px;margin-bottom:12px}#npFsHow h3{margin:0;font-size:19px;font-weight:900;line-height:1.2}" +
@@ -59,6 +60,7 @@
   /* KHÔNG ẩn được thanh địa chỉ (iPhone Safari không có Fullscreen API cho trang web; app Zalo/Facebook/TikTok thường chặn) → báo rõ + hướng dẫn "Thêm vào Màn hình chính" (PWA, chạy không thanh địa chỉ) */
   function standalone() { try { return !!(navigator.standalone || matchMedia("(display-mode: standalone)").matches || matchMedia("(display-mode: fullscreen)").matches); } catch (e) { return false; } }
   var ua = navigator.userAgent || "", IOS = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1), INAPP = /FBAN|FBAV|Instagram|Zalo|TikTok|musical_ly|Line\/|MicroMessenger|; wv\)/i.test(ua);
+  document.addEventListener("pointerdown", function (e) { var t = document.getElementById("npFsToast"); if (t && t.classList.contains("on") && !t.contains(e.target)) hideToast(); }, true);   /* chạm bất kỳ đâu ngoài thông báo = tắt */
   function hideToast() { var e = document.getElementById("npFsToast"); if (e) e.classList.remove("on"); }
   function howSheet() {
     var h = document.getElementById("npFsHow");
@@ -71,9 +73,10 @@
   var toastT = 0;
   function noFsHint() {
     if (standalone()) return; var e = document.getElementById("npFsToast");
-    if (!e) { e = document.createElement("div"); e.id = "npFsToast"; e.setAttribute("role", "status"); e.innerHTML = '<span class="ic">' + ICON_FS + '</span><span class="tx"></span><button type="button" class="go"></button>'; (document.body || de).appendChild(e); e.querySelector("button").addEventListener("click", function () { hideToast(); howSheet(); }); }
-    e.querySelector(".tx").textContent = t("noFs"); var gb = e.querySelector("button"); gb.innerHTML = ICON_ADD; gb.setAttribute("aria-label", t("how")); gb.title = t("how"); e.classList.add("on");
-    clearTimeout(toastT); toastT = setTimeout(hideToast, 7000);
+    if (!e) { e = document.createElement("div"); e.id = "npFsToast"; e.setAttribute("role", "status"); e.innerHTML = '<span class="ic">' + ICON_FS + '</span><span class="tx"></span><button type="button" class="go"></button><button type="button" class="x"></button>'; (document.body || de).appendChild(e); e.querySelector("button.go").addEventListener("click", function () { hideToast(); howSheet(); }); }
+    var xb = e.querySelector("button.x"); xb.innerHTML = ICON_X.replace(/26px/g, "18px"); xb.setAttribute("aria-label", t("close")); xb.title = t("close"); if (!xb.__b) { xb.__b = 1; xb.addEventListener("click", hideToast); }
+    e.querySelector(".tx").textContent = t("noFs"); var gb = e.querySelector("button.go"); gb.innerHTML = ICON_ADD; gb.setAttribute("aria-label", t("how")); gb.title = t("how"); e.classList.add("on");
+    clearTimeout(toastT); toastT = setTimeout(hideToast, 4000);
   }
 
   function fsEl() { return document.fullscreenElement || document.webkitFullscreenElement || null; }
@@ -105,7 +108,9 @@
     ROLES.forEach(function (r) {
       var bt = pn.querySelector('[data-a=' + r[0] + ']'); if (!bt) return; var src = real(r[1]), ok = !!src && !src.hidden;
       bt.hidden = !ok; if (!ok) return;
-      if (r[0] === "snd" && !src.querySelector("svg")) { if (bt.__h !== "mute") { bt.__h = "mute"; bt.innerHTML = MUTE; } }   /* trạng thái tắt tiếng của game là chữ 🔇 (nhỏ) → vẽ icon loa gạch chéo cùng cỡ */
+      if (r[0] === "snd" && !src.querySelector("svg")) {   /* game dùng chữ 🔊 / 🔇 (nhỏ) → vẽ SVG loa bật / loa gạch chéo cùng cỡ, theo đúng trạng thái */
+        var off = src.getAttribute("aria-pressed") === "false" || /🔇/.test(src.textContent) || (src.getAttribute("aria-pressed") == null && window.NPAudio && NPAudio.get && !NPAudio.get()), k = off ? "mute" : "on";
+        if (bt.__h !== k) { bt.__h = k; bt.innerHTML = off ? MUTE : SNDON; } }   /* trạng thái tắt tiếng của game là chữ 🔇 (nhỏ) → vẽ icon loa gạch chéo cùng cỡ */
       else if (r[0] !== "help") { var hh = src.innerHTML; if (bt.__h !== hh) { bt.__h = hh; bt.innerHTML = hh; } }
       var al = src.getAttribute("aria-label") || src.title || t(r[0]) || r[0]; if (bt.getAttribute("aria-label") !== al) { bt.setAttribute("aria-label", al); bt.title = al; }
       if (src.hasAttribute("aria-pressed")) bt.setAttribute("aria-pressed", src.getAttribute("aria-pressed")); else bt.removeAttribute("aria-pressed");
