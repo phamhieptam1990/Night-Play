@@ -27,12 +27,12 @@
   };
   var DUR = { "default": 520, badge: 620, group: 560, night: 950, star: 760 };
   /* HIỆU ỨNG XUẤT HIỆN (màn chính): mỗi skin vào một kiểu, rồi chào bằng một câu */
-  var ENTER = {
-    "default": [[{ transform: "translateY(-130px)", opacity: 0 }, { transform: "translateY(0) scale(1.12,.86)", opacity: 1, offset: .55 }, { transform: "translateY(-14px) scale(.96,1.06)", offset: .75 }, { transform: "none", opacity: 1 }], 850],
-    badge: [[{ transform: "translateX(-130px) rotate(-18deg)", opacity: 0 }, { transform: "translateX(8px) rotate(7deg)", opacity: 1, offset: .6 }, { transform: "translateX(-3px) rotate(-3deg)", offset: .8 }, { transform: "none", opacity: 1 }], 800],
-    group: [[{ transform: "translateY(50px) scale(.6)", opacity: 0 }, { transform: "translateY(-24px) scale(1.05,.95)", opacity: 1, offset: .42 }, { transform: "translateY(0) scale(1.05,.93)", offset: .7 }, { transform: "none", opacity: 1 }], 800],
-    night: [[{ transform: "translateY(-46px)", opacity: 0 }, { transform: "translateY(7px)", opacity: 1, offset: .62 }, { transform: "none", opacity: 1 }], 1200],
-    star: [[{ transform: "scaleX(-1) scale(.3)", opacity: 0 }, { transform: "scaleX(1) scale(1.14)", opacity: 1, offset: .6 }, { transform: "scale(.97)", offset: .8 }, { transform: "none", opacity: 1 }], 1000]
+  var ENTER = {   /* di chuyển TỪ TỪ vào vị trí (~2 giây); người dùng thao tác thì vào đúng chỗ NGAY (Inst.skipEnter) */
+    "default": [[{ transform: "translateY(-220px)", opacity: 0 }, { transform: "translateY(0) scale(1.12,.86)", opacity: 1, offset: .62 }, { transform: "translateY(-16px) scale(.96,1.06)", offset: .8 }, { transform: "none", opacity: 1 }], 1900],
+    badge: [[{ transform: "translateX(-240px) rotate(-18deg)", opacity: 0 }, { transform: "translateX(10px) rotate(7deg)", opacity: 1, offset: .66 }, { transform: "translateX(-4px) rotate(-3deg)", offset: .84 }, { transform: "none", opacity: 1 }], 1900],
+    group: [[{ transform: "translateY(120px) scale(.5)", opacity: 0 }, { transform: "translateY(-30px) scale(1.05,.95)", opacity: 1, offset: .5 }, { transform: "translateY(0) scale(1.05,.93)", offset: .76 }, { transform: "none", opacity: 1 }], 1900],
+    night: [[{ transform: "translateY(-90px)", opacity: 0 }, { transform: "translateY(9px)", opacity: 1, offset: .7 }, { transform: "none", opacity: 1 }], 2400],
+    star: [[{ transform: "scaleX(-1) scale(.2)", opacity: 0 }, { transform: "scaleX(1) scale(1.14)", opacity: 1, offset: .66 }, { transform: "scale(.97)", offset: .84 }, { transform: "none", opacity: 1 }], 2100]
   };
   var WRONG = [{ transform: "none" }, { transform: "translateX(-7px) rotate(-4deg)", offset: .15 }, { transform: "translateX(6px) rotate(4deg)", offset: .35 }, { transform: "translateX(-4px) rotate(-2deg) scale(1,.95)", offset: .55 }, { transform: "scale(1,.94)", offset: .8 }, { transform: "none" }];
 
@@ -74,8 +74,13 @@
   };
   Inst.prototype.enter = function () {
     var self = this, s = this.svg, n = Date.now(); if (!s || !this.visible() || n - (this.le || 0) < 3500) return; this.le = n;
-    if (!reduce && s.animate) { var e = ENTER[this.skin] || ENTER["default"]; try { s.animate(e[0], { duration: e[1], easing: "cubic-bezier(.3,.8,.35,1)" }); } catch (x) {} }
-    rst(function () { if (!self.visible()) return; if (self.skin === "night" || self.skin === "star") self.fx(2); else if (self.skin === "badge" || self.skin === "group") self.motion(1); var t = line(self, "hi") || line(self, "start"); self.ls = Date.now(); self.say(t, 2600); }, Math.round((ENTER[this.skin] || ENTER["default"])[1] * 0.8));
+    if (!reduce && s.animate) { var e = ENTER[this.skin] || ENTER["default"]; try { this.ea = s.animate(e[0], { duration: e[1], easing: "cubic-bezier(.3,.8,.35,1)" }); } catch (x) {} }
+    var fire = function () { self.pendingHi = null; self.ea = null; if (!self.visible()) return; if (self.skin === "night" || self.skin === "star") self.fx(2); else if (self.skin === "badge" || self.skin === "group") self.motion(1); var t = line(self, "hi") || line(self, "start"); self.ls = Date.now(); self.say(t, 2600); };
+    this.pendingHi = fire; clearTimeout(this.et); this.et = rst(fire, Math.round((ENTER[this.skin] || ENTER["default"])[1] * 0.85));
+  };
+  Inst.prototype.skipEnter = function () {   /* người dùng thao tác: linh vật vào đúng vị trí NGAY, câu chào hiện luôn */
+    var a = this.ea; this.ea = null; if (a) { try { a.finish(); } catch (e) {} }
+    clearTimeout(this.et); if (this.pendingHi) { var f = this.pendingHi; this.pendingHi = null; f(); }
   };
   Inst.prototype.watch = function () {
     var self = this; if (this.io || !window.IntersectionObserver || this.role !== "hero") return;
@@ -159,6 +164,7 @@
     var it = find(host); if (!it || !it.svg) return;
     if (kind === "pop") { it.motion(3); it.say(line(it, "tap"), 2000); } else { it.motion(1); it.say(line(it, "tap"), 2000); }
   }
+  ["pointerdown", "keydown", "wheel", "touchstart"].forEach(function (n) { addEventListener(n, function () { insts.forEach(function (it) { if (it.ea || it.pendingHi) it.skipEnter(); }); }, { capture: true, passive: true }); });
   function refresh() { insts.forEach(function (it) { if (it.svg) it.paint(); }); }
   document.addEventListener("visibilitychange", function () { if (!document.hidden) refresh(); });
   /* miệng cử động theo giọng đọc của game (speechSynthesis) */

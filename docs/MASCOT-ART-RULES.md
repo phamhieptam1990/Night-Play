@@ -156,3 +156,5 @@ Tệp: `shared/art/mascot-art.js` (lõi), `shared/art/mascot-games.js` (dữ li�
 
 **Hành vi chung đã cài:** mỗi skin có cách cử động riêng (Mặc định nảy · Huy hiệu nghiêng chào · Chủ đề riêng gật đầu · Dạ quang bay lơ lửng · Siêu sao xoay lật) và hạt hiệu ứng riêng; combo bậc 2–3 của Dạ quang/Siêu sao thêm vòng sáng; khen/đùa cách nhau ≥ 1,4 giây; khung rộng < 300px hoặc cao < 340px không hiện bóng chữ; tắt khi `prefers-reduced-motion`. **KHÔNG tự đọc giọng nói trong lúc đang chơi** (iOS khựng, xem lỗi Chim Bay đã sửa): Pop chỉ hiện bóng chữ + động miệng khi giọng của game đang đọc; muốn linh vật tự đọc lời khen thì chỉ ở màn chọn/kết thúc.
 **Chưa làm:** chưa có hiệu ứng nhảy riêng cho từng game ngoài bộ chung; chưa nối `mini` vào các game khác; `check-art.js` chưa kiểm khuôn mặt giống nhau giữa skin.
+
+**Hiệu ứng xuất hiện (màn chính):** linh vật di chuyển TỪ TỪ vào vị trí (~1,9–2,4 giây, mỗi skin một kiểu: `ENTER` trong mascot-art.js); **người dùng thao tác (chạm/phím/cuộn) thì vào ĐÚNG VỊ TRÍ NGAY** (`Inst.skipEnter`, câu chào hiện luôn). Chưa có hiệu ứng rời đi.
