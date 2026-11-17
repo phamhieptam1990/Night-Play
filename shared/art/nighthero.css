@@ -37,8 +37,11 @@ body.at-home #secModes>small,body.at-home #secLv>small,body.at-home #modeDesc{di
   body.at-home #home{gap:6px!important}
   body.at-home #home .hdaily,body.at-home #bDaily.hdaily{min-height:44px!important}
 }
-/* ĐẬP DEADLINE điện thoại NGANG thấp: cột trái (linh vật + Tiếp tục + Hôm nay + Chơi) phải vừa khung kể cả khi Safari có thanh địa chỉ → linh vật thấp lại */
+/* ĐẬP DEADLINE điện thoại NGANG thấp: cột trái (Tiếp tục + Hôm nay + Chơi) chiếm trọn chiều cao; LINH VẬT nằm góc trên-trái cạnh tiêu đề (~92px, không chiếm chỗ cột thẻ) → không còn tí hon/lệch, nút Chơi luôn trong khung kể cả khi Safari có thanh địa chỉ */
 @media (orientation:landscape) and (max-height:430px){
-  body.at-home #home #hHero.npa-hero{flex:0 0 auto!important;height:max(48px,calc(100dvh - 340px))!important;min-height:48px!important;max-height:84px!important}
+  body.at-home #home>.hl{padding-top:0!important;justify-content:flex-start!important;gap:6px!important}
+  body.at-home #home #hHero.npa-hero{position:fixed!important;left:10px;top:6px;width:min(104px,28dvh);height:min(96px,26dvh)!important;min-height:0!important;max-height:none!important;flex:none!important;margin:0!important;z-index:5;pointer-events:auto}
+  body.at-home #home #hHero .npa-box{height:100%;width:100%}
+  body.at-home #home #hHero .npa-box>svg{height:100%;width:auto;max-width:100%}
+  body.at-home .top>h1{padding-left:min(112px,30dvh)!important}
 }
-@media (orientation:landscape) and (max-height:340px){body.at-home #home #hHero.npa-hero{display:none!important}}
