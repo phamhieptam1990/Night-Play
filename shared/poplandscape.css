@@ -919,6 +919,7 @@ html.np-hudg .app:has(h1[data-pt="ve-chu-quai-vat"]) #home::before{grid-row:1!im
 .app:has(h1[data-pt="nhay-theo-so"]) #home > *,
 .app:has(h1[data-pt="thap-vong-mau"]) #home > *,
 .app:has(h1[data-pt="ve-chu-quai-vat"]) #home > *{grid-column:2!important;margin:0 0 clamp(8px,1.6vh,14px)!important}
+.app:has(h1[data-pt="pop-fly"]) #ovStart > #paHero{grid-column:1!important;grid-row:1 / span 4!important;align-self:center!important;justify-self:stretch!important;height:auto!important;max-height:100%!important;min-height:0!important;margin:0!important;width:100%!important}
 .app:has(h1[data-pt="ten-lua-cua-be"]) #home::before,
 .app:has(h1[data-pt="con-vat-an-so"]) #home::before,
 .app:has(h1[data-pt="qua-song"]) #home::before,
