@@ -6,6 +6,8 @@
   "use strict";
   if (window.__npFs) return; window.__npFs = true;
   var ID = "npFsBtn", MI = "npFsMi", PN = "npFsPn", de = document.documentElement, api = false, timer = 0;
+  /* setTimeout THẬT (window.__npRST của bridge.js): đồng hồ ảo đóng băng timer của game lúc tạm dừng, nhưng bảng ⋯ vẫn phải cập nhật khi game đang dừng */
+  var rt = function (fn, ms) { return (window.__npRST || setTimeout)(fn, ms); }, loopOn = 0;
   var vi = function () { return (de.lang || "vi") === "vi"; };
   var SVGH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:auto;';
   var EXPAND = SVGH + 'width:22px;height:22px"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
@@ -32,7 +34,8 @@
     "#" + PN + " .dots{display:flex;justify-content:center;gap:6px;margin-top:8px}#" + PN + " .dots[hidden]{display:none}#" + PN + " .dots i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3)}#" + PN + " .dots i.on{background:#fff}" +
     "#" + PN + " .g{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}#" + PN + " .c{border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);padding:6px 10px}#" + PN + " .c i{display:block;font-style:normal;font-size:11px;color:rgba(255,255,255,.7)}#" + PN + " .c b{font-size:22px;font-weight:900;font-variant-numeric:tabular-nums}" +
     "#" + PN + " .r{display:flex;justify-content:space-between;padding:2px 2px;color:rgba(255,255,255,.8)}#" + PN + " .r b{color:#fff;font-variant-numeric:tabular-nums}" +
-    "#" + PN + " .b{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}#" + PN + " .b button{min-height:68px;border-radius:16px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.1);color:#fff;display:grid;place-items:center;padding:0;cursor:pointer}#" + PN + " .b button svg{width:34px;height:34px}";
+    "#" + PN + " .b{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}#" + PN + " .b button{min-height:68px;border-radius:16px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.1);color:#fff;display:grid;place-items:center;padding:0;cursor:pointer}#" + PN + " .b button svg{width:34px;height:34px}" +
+    "#" + PN + " .b button[data-a=lang]{font:900 24px/1 system-ui,-apple-system,sans-serif;letter-spacing:.02em}";
   css.textContent +=
     /* kiểu Night Pass: thẻ nền tím đậm, viền + quầng sáng màu nhấn, bo lớn, nút ≥48px pill gradient */
     "#npFsToast,#npFsHow .d{color:#fff;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:linear-gradient(165deg,#2b2064,#171236 70%);border:1.5px solid rgba(170,150,255,.6);box-shadow:0 14px 40px rgba(0,0,0,.55),0 0 26px rgba(124,92,255,.35),inset 0 1px 0 rgba(255,255,255,.14)}" +
@@ -75,7 +78,7 @@
   function setPanel(v) {
     var pn = pnEl(), mi = document.getElementById(MI); if (!pn) return;
     pn.classList.toggle("open", !!v); if (mi) { mi.classList.toggle("on", !!v); mi.setAttribute("aria-expanded", String(!!v)); }
-    clearInterval(timer); if (v) { fill(); timer = setInterval(fill, 400); }
+    loopOn++; if (v) { fill(); (function lp(id) { rt(function () { if (id !== loopOn || !pnEl() || !pnEl().classList.contains("open")) return; fill(); lp(id); }, 400); })(loopOn); }
   }
   /* các nút của menu ⋯ gốc được phản chiếu vào bảng (icon + nhãn lấy từ chính nút thật, bấm = bấm nút thật): [vai trò, [id có thể có]] */
   var ROLES = [["snd", ["bSnd", "soundBtn"]], ["help", ["phBtn", "bHelp", "askBtn"]], ["restart", ["restartBtn", "bRe"]], ["board", ["bBoard"]], ["npch", ["npChBtn"]], ["lang", ["bLang", "langBtn"]], ["theme", ["themeBtn2"]]];
@@ -131,11 +134,11 @@
     pn.addEventListener("click", function (e) {
       var b = e.target.closest && e.target.closest("button[data-a]"); if (!b) return; e.stopPropagation(); var a = b.dataset.a;
       if (a === "x") { exit(); return; }
-      if (a === "home") { var bk = real(["bBk", "bBack", "homeBtn"]); exit(); bk && setTimeout(function () { bk.click(); }, 200); return; }   /* thoát toàn màn hình rồi dùng nút ← của game (có hộp xác nhận thoát) */
+      if (a === "home") { var bk = real(["bBk", "bBack", "homeBtn"]); exit(); bk && rt(function () { bk.click(); }, 200); return; }   /* thoát toàn màn hình rồi dùng nút ← của game (có hộp xác nhận thoát) */
       var role = ROLES.filter(function (r) { return r[0] === a; })[0]; if (!role) return;
       var src = real(role[1]); if (!src) return;
-      if (a === "help" || a === "restart" || a === "board" || a === "npch") { setPanel(false); setTimeout(function () { src.click(); }, 80); }   /* đóng bảng (game chạy tiếp/đếm) rồi mới bấm */
-      else { src.click(); setTimeout(fill, 100); }
+      if (a === "help" || a === "restart" || a === "board" || a === "npch") { setPanel(false); rt(function () { src.click(); }, 80); }   /* đóng bảng (game chạy tiếp/đếm) rồi mới bấm */
+      else { src.click(); rt(fill, 100); rt(fill, 450); }
     });
     pn.querySelector(".b").addEventListener("scroll", function () { markDots(); }, { passive: true });
     var host = document.body || de; host.appendChild(mi); host.appendChild(pn);

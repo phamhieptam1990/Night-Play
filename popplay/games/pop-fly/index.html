@@ -655,7 +655,7 @@ PF.lockPro=function(){PF.skins={};PF.pro=null;if(PF.skinRestore){const r=PF.skin
 
 /* ===== NGÔN NGỮ / GIAO DIỆN ===== */
 function applyLang(){
-  document.documentElement.lang=LANG;document.title=t("docTitle");$("title").textContent=t("title");$("langBtn").textContent=LANG.toUpperCase();$("langBtn").setAttribute("aria-label",t("lang"));
+  document.documentElement.lang=LANG;document.title=t("docTitle");$("title").textContent=t("title");$("langBtn").textContent=(LANG==="vi"?"EN":"VI");$("langBtn").setAttribute("aria-label",t("lang"));
   $("stH").textContent=t("st.h");$("paH").textContent=t("pause");$("resumeBtn").textContent="▶ "+t("resume");$("homeBtn1").textContent=t("home");$("homeBtn2").setAttribute("aria-label",t("home"));$("againBtn").setAttribute("aria-label",t("again"));$("rankBtn").setAttribute("aria-label",t("rank.btn"));$("pgBtn2").setAttribute("aria-label",t("pg.btn"));pgBtnText();
   $("pauseBtn").setAttribute("aria-label",t("pause"));$("askBtn").setAttribute("aria-label",t("ask.letters",{l:""}));cv.setAttribute("aria-label",t("title"));syncSound();renderCards();
   if(PF.S&&PF.S.askPlain)$("askTxt").textContent=PF.S.askPlain;else if(!PF.S)$("askTxt").textContent=t("st.p");

@@ -993,7 +993,7 @@ PF.lockPro=function(){PF.skins={};PF.pro=null;if(PF.skinRestore){const r=PF.skin
 
 /* ===== NGÔN NGỮ ===== */
 function applyLang(){
-  document.documentElement.lang=LANG;document.title=t("docTitle");$("title").textContent=t("title");$("langBtn").textContent=LANG.toUpperCase();$("langBtn").setAttribute("aria-label",t("lang"));
+  document.documentElement.lang=LANG;document.title=t("docTitle");$("title").textContent=t("title");$("langBtn").textContent=(LANG==="vi"?"EN":"VI");$("langBtn").setAttribute("aria-label",t("lang"));
   renderStart();$("paH").textContent=t("pause");$("resumeBtn").setAttribute("aria-label",t("resume"));$("homeBtn1").setAttribute("aria-label",t("home"));$("skBack").setAttribute("aria-label",t("home"));$("againBtn").setAttribute("aria-label",t("again"));$("homeBtn2").setAttribute("aria-label",t("home"));$("shareBtn").setAttribute("aria-label",t("share.btn"));$("rankBtn").setAttribute("aria-label",t("rank.btn"));$("hwBack").setAttribute("aria-label",t("how.back"));
   $("pauseBtn").setAttribute("aria-label",t("pause"));$("bBk").setAttribute("aria-label",t("back"));$("bBk").title=t("back");$("askBtn").setAttribute("aria-label",t("how"));cv.setAttribute("aria-label",t("title"));syncSound();renderDiff();renderCards();renderStart();
   if(PF.S&&PF.S.ty)$("askTxt").innerHTML=PF.S.ty.hud(PF.S);else $("askTxt").textContent=t("st.p");

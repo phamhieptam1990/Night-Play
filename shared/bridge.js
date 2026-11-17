@@ -453,6 +453,9 @@ window.NP = (function () {
       try { if (window.NPAudio) NPAudio.silence(); } catch (x) {}
       return true;
     },
+    menuNudge: function (ms) {   // menu đang tạm dừng mà người dùng đổi ngôn ngữ/giao diện: thả đồng hồ ảo ~vài chục ms để game vẽ lại chữ/màu NGAY, rồi đóng băng lại
+      if (!mMenu || !vt.thaw) return; vt.thaw(); (window.__npRST || setTimeout)(function () { if (mMenu && vt.freeze) vt.freeze(); }, ms || 160);
+    },
     menuResume: function () {
       if (!mMenu) return; mMenu = false; document.documentElement.classList.remove("np-menupaused"); if (vt.thaw) vt.thaw();
       if (mMenuByUs) { mMenuByUs = false; try { if (resumeFn) resumeFn(); } catch (x) {} }

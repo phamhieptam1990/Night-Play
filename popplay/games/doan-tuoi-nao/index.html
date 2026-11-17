@@ -582,7 +582,7 @@ addEventListener("online",()=>{if(!PF.ticket)PF.fetchTicket()});setInterval(()=>
 
 /* ===== NGÔN NGỮ / ÂM THANH ===== */
 function applyLang(){
-  document.documentElement.lang=LANG;document.title=T("docTitle");$("title").textContent=T("title");$("langBtn").textContent=LANG.toUpperCase();$("langBtn").setAttribute("aria-label",T("lang"));
+  document.documentElement.lang=LANG;document.title=T("docTitle");$("title").textContent=T("title");$("langBtn").textContent=(LANG==="vi"?"EN":"VI");$("langBtn").setAttribute("aria-label",T("lang"));
   $("soundBtn").setAttribute("aria-label",T("sound"));$("homeBtn").setAttribute("aria-label",T("home"));$("homeBtn2").setAttribute("aria-label",T("home"));$("rankBtn").setAttribute("aria-label",T("rank.btn"));syncSound();
   if(!G)renderHome();else if(G.over)renderEnd();
   if(!$("ovProf").hidden)openProf(afterProf);

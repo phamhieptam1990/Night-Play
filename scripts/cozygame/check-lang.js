@@ -40,7 +40,7 @@ const STATE = () => {
     o.g = d.documentElement.lang; o.gls = w.localStorage.getItem("lang"); o.mark = !!w.__langMark; o.url = f.src.split("?")[1] || "";
     const cl = d.body.cloneNode(true); cl.querySelectorAll("#toast,.toast").forEach(x => x.remove()); o.text = (d.body.innerText || "").split((d.getElementById("toast") || {}).innerText || "\u0000").join(" ").replace(/\s+/g, " ").trim();
     const t = [...d.querySelectorAll("h1,#ttl,#title")].find(e => vis(e, w) && e.textContent.trim()); o.ttl = t ? t.textContent.trim() : "";
-    o.screens = [...d.querySelectorAll("body > *, #play > *, #game > *")].filter(e => e.id && !/^(toast|cdn|fx|npFan|npFab|npPmFan|npPmFab|npPmBk|npTitle)$/.test(e.id) && vis(e, w) && e.getBoundingClientRect().height > 40).map(e => e.id).join(",");
+    o.screens = [...d.querySelectorAll("body > *, #play > *, #game > *")].filter(e => e.id && !/^(toast|cdn|fx|npFan|npFab|npPmFan|npPmFab|npPmBk|npTitle|npMpCd|npFsMi|npFsPn|npFsToast|npFsHow)$/.test(e.id) && vis(e, w) && e.getBoundingClientRect().height > 40).map(e => e.id).join(",");
     const lb = ["bLang", "langBtn"].map(i => d.getElementById(i)).find(Boolean); o.lbl = lb ? (lb.getAttribute("data-l") || "") : null; o.lbAria = lb ? (lb.getAttribute("aria-label") || lb.title || "") : null;
   }
   return o;

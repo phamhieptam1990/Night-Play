@@ -40,5 +40,7 @@
   addEventListener("message", function (e) {
     if (e.source !== parent || e.origin !== location.origin || !e.data || e.data.np !== 1 || e.data.type !== "np-menu") return; set(!!e.data.open);
   });
+  /* đổi ngôn ngữ / giao diện lúc đang tạm dừng: cho game vẽ lại ngay (không chờ hết 3-2-1) */
+  document.addEventListener("click", function (e) { var t = e.target && e.target.closest && e.target.closest("#bLang,#langBtn,#themeBtn2"); if (!t || !open) return; rST()(function () { var N = NPo(); N && N.menuNudge && N.menuNudge(220); }, 30); }, true);
   addEventListener("pagehide", function () { if (open) { open = false; stopCount(); var N = NPo(); N && N.menuResume && N.menuResume(); } });
 })();

@@ -656,7 +656,7 @@ function relabel(){   /* đổi ngôn ngữ giữa ván: chỉ cập nhật ch�
   if(!G||G.over||!G.spec)return;const sp=G.spec;$("rt").innerHTML=(sp.bonus&&!sp.flip?"🌟 ":"")+T("r"+G.t+(sp.flip?"f":""))+(G.t===3&&!sp.flip?"<small>"+T("r3.pick")+"</small>":"");upd();
 }
 function applyLang(){
-  document.documentElement.lang=LANG;document.title=T("docTitle");$("title").textContent=T("title");$("langBtn").textContent=LANG.toUpperCase();$("langBtn").setAttribute("aria-label",T("lang"));
+  document.documentElement.lang=LANG;document.title=T("docTitle");$("title").textContent=T("title");$("langBtn").textContent=(LANG==="vi"?"EN":"VI");$("langBtn").setAttribute("aria-label",T("lang"));
   $("soundBtn").setAttribute("aria-label",T("sound"));$("homeBtn").setAttribute("aria-label",T("home"));$("homeBtn2").setAttribute("aria-label",T("home"));$("rankBtn").setAttribute("aria-label",T("rank.btn"));syncSound();
   if(!G)renderHome();else if(G.over)renderEnd();else relabel();
   if(!$("ovHow").hidden&&G==null){const k=TY_ICON.indexOf($("hwH").textContent.trim().split(" ")[0]);if(k>=0)openHow(k)}
