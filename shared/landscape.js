@@ -9,6 +9,7 @@
   function glyphs(t) { t = (t || "").replace(/\s/g, ""); try { if (window.Intl && Intl.Segmenter) return Math.max(1, Array.from(new Intl.Segmenter(undefined, { granularity: "grapheme" }).segment(t)).length); } catch (e) {} return Math.max(1, Array.from(t.replace(/[\u200d\ufe0f]/g, "")).length); }
   function fitHero() {
     var h = document.getElementById("hHero"); if (!h) return;
+    if (h.querySelector("svg")) { h.style.removeProperty("max-height"); h.style.removeProperty("--hs"); h.style.removeProperty("--hp"); h.removeAttribute("data-stack"); return; }   /* linh vật SVG (shared/art): tự co theo ô, không đo emoji */
     h.style.removeProperty("max-height");   /* đo ô ở cỡ tự nhiên (giãn hết chỗ trống) rồi mới giới hạn lại, để không vòng lặp */
     if (getComputedStyle(h).flexGrow !== "1") {   /* lưới 2 cột (iPad/điện thoại ngang): cỡ CSS, rồi co lại cho VỪA CỘT (trước: 🥚➜🏰 rộng hơn cột → đầu trái chui sau nút HUD, đầu phải đè ô chế độ) */
       h.style.removeProperty("--hs"); h.style.removeProperty("--hp"); h.removeAttribute("data-stack");

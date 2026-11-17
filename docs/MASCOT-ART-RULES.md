@@ -140,3 +140,19 @@ Ràng buộc bắt buộc (từ các lỗi đã báo):
 - Bitmap, ảnh sinh bằng AI, SVG tải từ nguồn ngoài (bản quyền).
 - `filter`, `mask` nặng, `backdrop-filter`, animation > 3 cái cùng lúc, bất kỳ vòng lặp JS nào để chạy hoạt ảnh.
 - Tự ý đổi số ở mục 3 khi chưa được chủ site duyệt.
+
+## 9. KHUNG TÍCH HỢP CHUNG — nối linh vật vào game (đồng nhất mọi game; đã chạy ở Chim Bay + Xin Nghỉ)
+
+Tệp: `shared/art/mascot-art.js` (lõi), `shared/art/mascot-games.js` (dữ liệu từng game), `shared/art/mascot-theme.js` (8 theme màu), `shared/art/mascot-<pop|night>-<id>.svg`. `shared/mascot.js` bắt rê/chạm/giữ/pop trên linh vật SVG (`.npa-hero`, `#paHero`, `#hHero`) và gọi `NPArt.touch`. Game KHÔNG viết mã linh vật riêng.
+
+**Thêm một game (checklist bắt buộc):**
+1. Vẽ `shared/art/mascot-<pop|night>-<id>.svg` theo mục 1–8 (đủ `#mark`, `#sign`, `<desc>`, 5 skin, biến `--p*`), chạy `node scripts/cozygame/check-art.js`, chụp `preview-themes.html`.
+2. Thêm MỘT khối vào `shared/art/mascot-games.js`: `file`, `emoji` (dự phòng + hạt pop), `name`, `pos` (`bl`|`br` — góc linh vật mini, chọn góc KHÔNG che nút/vùng chơi), `fx` (hạt hiệu ứng 5 skin), `L` (câu thoại: start, ok/correct, half, wrong/no, combo×3 bậc, ask, tap, end; Pop dịu/khen, Night hài hước).
+3. Thêm `shared/art/mascot-art.js` + 4 tệp art vào `SHELL` của `sw.js`; trong HTML game: `<script src="../../../shared/art/mascot-art.js" defer></script>`.
+4. Có một ô hero `#hHero` (Cozy) hoặc `#paHero`/`[data-npa-hero]` (để emoji dự phòng bên trong; ĐỪNG ghi đè `textContent` của ô sau khi đã có `<svg>` — kiểm tra `querySelector("svg")`). Pop: ẩn `::before` emoji của màn chọn và đặt ô thật cùng chỗ. Landscape/fitHero đã bỏ qua ô có SVG.
+5. Game gọi `NP.start()` / `NP.result()` như mọi game (linh vật tự nghe `np:start`/`np:result`) và bắn sự kiện chơi bằng `NPArt.event(name, data)` (hoặc `window.dispatchEvent(new CustomEvent("npa",{detail:{name,…}}))`), `name`: `correct`, `wrong`, `ok`/`half`/`no` (game theo lượt), `combo` (`{n}` hoặc `{tier:1..3}`), `ask` (`{text}`: câu hỏi hiện bóng chữ + miệng cử động theo giọng đọc của game). Luôn bọc `window.NPArt&&…`.
+6. Ẩn linh vật mini ở màn chọn nếu nó che nút: `#play:has(<màn chọn>:not([hidden])) .npa-mini{display:none}`.
+7. Chạy: `node scripts/cozygame/check-mascot.js --quick --only=<id>`, chụp màn chính ở 390×844, 375×667, 844×390, 834×1000 + khung Chơi cùng lúc (353×491), và TỰ NHÌN.
+
+**Hành vi chung đã cài:** mỗi skin có cách cử động riêng (Mặc định nảy · Huy hiệu nghiêng chào · Chủ đề riêng gật đầu · Dạ quang bay lơ lửng · Siêu sao xoay lật) và hạt hiệu ứng riêng; combo bậc 2–3 của Dạ quang/Siêu sao thêm vòng sáng; khen/đùa cách nhau ≥ 1,4 giây; khung rộng < 300px hoặc cao < 340px không hiện bóng chữ; tắt khi `prefers-reduced-motion`. **KHÔNG tự đọc giọng nói trong lúc đang chơi** (iOS khựng, xem lỗi Chim Bay đã sửa): Pop chỉ hiện bóng chữ + động miệng khi giọng của game đang đọc; muốn linh vật tự đọc lời khen thì chỉ ở màn chọn/kết thúc.
+**Chưa làm:** chưa có hiệu ứng nhảy riêng cho từng game ngoài bộ chung; chưa nối `mini` vào các game khác; `check-art.js` chưa kiểm khuôn mặt giống nhau giữa skin.

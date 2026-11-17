@@ -11,7 +11,7 @@
   if (window.NPMascot) return;
   var reduce = false; try { reduce = matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
 
-  var EL_SEL = "#hHero,#cwHero,#mHero,#shHero", PS_SEL = "#home,#village,#ovStart";
+  var EL_SEL = "#hHero,#cwHero,#mHero,#shHero,#paHero,.npa-hero", PS_SEL = "#home,#village,#ovStart";
   var LP_DELAY = 260, LP_FULL = 1000;   /* nhấn giữ: sau 0,26s bắt đầu phình, +1s thì pop */
   var EMOJI = /\p{Extended_Pictographic}/u;
 
@@ -105,7 +105,7 @@
   function elInfo(h) {
     var hr = h.getBoundingClientRect(), rg = document.createRange(); rg.selectNodeContents(h);
     var g = rg.getBoundingClientRect(); if (!g.width || !g.height) g = hr;
-    return { host: h, kind: "el", emoji: firstGlyph(h.textContent), L: g.left, T: g.top, W: g.width, H: g.height, ox: g.left + g.width / 2 - hr.left, oy: g.bottom - g.height * 0.1 - hr.top, gs: Math.min(g.height, 220) };
+    return { host: h, kind: "el", emoji: h.dataset && h.dataset.emoji ? h.dataset.emoji : firstGlyph(h.textContent), L: g.left, T: g.top, W: g.width, H: g.height, ox: g.left + g.width / 2 - hr.left, oy: g.bottom - g.height * 0.1 - hr.top, gs: Math.min(g.height, 220) };
   }
   function psInfo(h) {
     if (h.querySelector(EL_SEL)) return null;
@@ -202,7 +202,7 @@
   function pop(s) {
     if (!s || s.popped) return; s.popped = true; lockH = true;
     var i = s.info, cx = i.L + i.W / 2, cy = i.T + i.H / 2;
-    burst(cx, cy, i.gs, i.emoji); sfx.holdStop(false); sfx.pop();
+    burst(cx, cy, i.gs, i.emoji); sfx.holdStop(false); sfx.pop(); try { window.NPArt && NPArt.touch(i.host, "pop"); } catch (e) {}
     try { navigator.vibrate && navigator.vibrate(18); } catch (e) {}
     ch.sx = [0.25, 0]; ch.sy = [0.25, 0]; ch.o = [0, 0]; tg.sx = tg.sy = 0.25; tg.o = 0; tg.r = tg.x = tg.y = 0; ch.r = [0, 0]; ch.x = [0, 0]; ch.y = [0, 0];
     busyUntil = performance.now() + 900; run();
@@ -246,7 +246,7 @@
     var s = S; S = null; if (!s || s.popped) { run(); return; }
     var held = performance.now() - s.t0;
     tg.sx = tg.sy = 1; tg.r = tg.x = tg.y = 0;
-    if (held < LP_DELAY && boingOnTap) { sfx.tap(); boing(true); } else { sfx.holdStop(sfx.live()); ch.sx[1] += (ch.sx[0] - 1) * -4; ch.sy[1] += (ch.sy[0] - 1) * -4; }   /* nhả giữa chừng: xẹp lại kiểu thạch */
+    if (held < LP_DELAY && boingOnTap) { sfx.tap(); boing(true); try { window.NPArt && NPArt.touch(s.info.host, "tap"); } catch (e) {} } else { sfx.holdStop(sfx.live()); ch.sx[1] += (ch.sx[0] - 1) * -4; ch.sy[1] += (ch.sy[0] - 1) * -4; }   /* nhả giữa chừng: xẹp lại kiểu thạch */
     if (H) { tg.sx = tg.sy = 1.04; }
     run();
   }

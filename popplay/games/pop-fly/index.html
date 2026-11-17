@@ -137,7 +137,17 @@ html:root:root .app:has(#ovStart:not([hidden])) #play{background:none!important;
 html[data-theme]:root:root .app:has(h1[data-pt]) #ovStart:not([hidden]){background:none!important;background-color:transparent!important;background-image:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
 </style>
 <script src="../../../shared/offline.js" defer></script>
+<script src="../../../shared/art/mascot-art.js" defer></script>
 <link rel="stylesheet" href="../../../shared/poplandscape.css">
+<style>/* LINH VẬT SVG (shared/art): phần tử thật #paHero thay ::before emoji ở màn chọn; mascot.js bắt chạm/giữ/pop */
+html:root:root .app:has(h1[data-pt="pop-fly"]) #ovStart::before{display:none!important;content:none!important}
+#ovStart #paHero{display:flex;order:-9;flex:none;width:100%;height:clamp(110px,24vh,210px);align-items:flex-end;justify-content:center;margin:2px 0 6px;position:relative;z-index:3;font-size:64px;line-height:1}
+#ovStart #paHero .npa-box>svg{height:100%;width:auto;max-width:100%}
+html.np-strip #ovStart #paHero{flex:1 1 0;height:auto;min-height:0}
+html.np-hudg .app:has(h1[data-pt="pop-fly"]) #ovStart #paHero{grid-column:1;grid-row:1 / span 3;align-self:stretch;height:auto;min-height:0;margin:0}
+#play .npa-mini{width:48px!important;height:48px!important}
+#play:has(#ovStart:not([hidden])) .npa-mini{display:none}
+</style>
 <link rel="stylesheet" href="../../../shared/popnp.css">
 <link rel="stylesheet" href="../../../shared/poptitle.css"><script src="../../../shared/poptitle.js" defer></script>
 <link rel="stylesheet" href="../../../shared/endui.css"><script src="../../../shared/endui.js" defer></script>
@@ -174,6 +184,7 @@ html[data-theme]:root:root .app:has(h1[data-pt]) #ovStart:not([hidden]){backgrou
     <div class="toast" id="toast" role="status"></div>
 
     <div class="ov" id="ovStart">
+      <div id="paHero" class="npa-hero" aria-hidden="true">🐦</div>
       <h2 id="stH"></h2>
       <div class="cards" id="cards"></div>
       <button class="ghost sm" id="pgBtn" type="button"></button>
@@ -270,7 +281,7 @@ function tone(f,d,type,vol,when){const a=audio();if(!a)return;const t0=a.current
 const sfx={flap:()=>tone(520,.09,"triangle",.07),good:()=>{tone(660,.12,"triangle",.12);tone(880,.16,"triangle",.12,.09);tone(1100,.2,"triangle",.1,.18)},bad:()=>tone(220,.22,"sine",.1),star:()=>tone(980,.1,"triangle",.09),win:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.2,"triangle",.12,i*.1))};
 /* HIỆU NĂNG iOS: speechSynthesis.cancel()+speak() chạy ĐỒNG BỘ giữa lúc đang bay làm khựng khung hình (iPhone/iPad). Gộp lời đọc: chỉ giữ câu MỚI NHẤT, đọc ở nhịp rảnh kế tiếp (không đọc chồng), chỉ cancel khi đang đọc dở. */
 let sayT=0,sayTxt="";
-function say(text){if(!sound||!window.speechSynthesis)return;sayTxt=text;if(sayT)return;sayT=setTimeout(()=>{sayT=0;const tx=sayTxt;try{const sy=speechSynthesis;if(sy.speaking||sy.pending)sy.cancel();const u=new SpeechSynthesisUtterance(tx);u.lang=LANG==="vi"?"vi-VN":"en-US";u.rate=.85;u.pitch=1.15;sy.speak(u)}catch(e){}},60)}   /* gộp lời đọc, KHÔNG dừng game khi đọc */
+function say(text){window.NPArt&&NPArt.event("ask",{text:String(text).slice(0,40)});if(!sound||!window.speechSynthesis)return;sayTxt=text;if(sayT)return;sayT=setTimeout(()=>{sayT=0;const tx=sayTxt;try{const sy=speechSynthesis;if(sy.speaking||sy.pending)sy.cancel();const u=new SpeechSynthesisUtterance(tx);u.lang=LANG==="vi"?"vi-VN":"en-US";u.rate=.85;u.pitch=1.15;sy.speak(u)}catch(e){}},60)}   /* gộp lời đọc, KHÔNG dừng game khi đọc */
 PF.say=say;PF.sfx=sfx;PF.tone=tone;
 /* ÂM CHẠM: mọi lần chạm nút/thẻ ngoài lúc đang bay có tiếng "tách" ngắn nhẹ (không chạy khi đang bay để khỏi chồng với tiếng vỗ cánh) */
 document.addEventListener("pointerdown",e=>{if(running&&!paused)return;const b=e.target.closest&&e.target.closest("button,a,.card,.main,[role=button]");if(!b||b.disabled)return;try{tone(760,.05,"triangle",.07);tone(1040,.06,"triangle",.05,.04)}catch(x){}},true);
@@ -348,8 +359,8 @@ function spawnWave(S){
 function evalWave(S,w){
   const b=S.bird,hit=w.rings.find(r=>Math.abs(r.y-b.y)<R+10);w.done=true;
   if(w.item){const it=w.item,okk=!!(hit&&hit.ok);setTimeout(()=>Prog.rec(it,okk),0)}   /* ghi localStorage ngoài khung hình đang vẽ */
-  if(hit&&hit.ok){w.res="ok";S.correct++;S.streak++;addScore(10+(S.streak>=3?5:0));markDot(w.idx,1);sfx.good();burst(BX,b.y,pickOf(["⭐","✨","🌟"]),12);toast(pickOf(t("right")),1100,"ok");S.celebrate=.4}
-  else{w.res=hit?"wrong":"miss";S.wrong++;S.streak=0;markDot(w.idx,2);sfx.bad();S.slow=1.1;b.wob=.9;toast(hit?pickOf(t("wrong")):t("miss"),1500,hit?"bad":"miss");
+  if(hit&&hit.ok){w.res="ok";S.correct++;S.streak++;addScore(10+(S.streak>=3?5:0));markDot(w.idx,1);sfx.good();burst(BX,b.y,pickOf(["⭐","✨","🌟"]),12);if(window.NPArt){const n=S.streak;NPArt.event(n===3||n===5||n===7||n%5===0?"combo":"correct",{n:n,tier:n>=7?3:n>=5?2:n>=3?1:0})}toast(pickOf(t("right")),1100,"ok");S.celebrate=.4}
+  else{w.res=hit?"wrong":"miss";S.wrong++;S.streak=0;markDot(w.idx,2);sfx.bad();S.slow=1.1;b.wob=.9;window.NPArt&&NPArt.event("wrong");toast(hit?pickOf(t("wrong")):t("miss"),1500,hit?"bad":"miss");
     const ok=w.rings.find(r=>r.ok);if(ok){w.hintT=1.6;/* không đọc thêm lời gợi ý sau khi bay sai: tránh đọc chồng gây khựng trên iOS (chữ gợi ý đã hiện trên màn hình) */}}
 }
 
