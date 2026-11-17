@@ -66,11 +66,18 @@
     ".npa-box>svg{display:block;width:100%;height:100%;max-height:100%;overflow:visible;transform-origin:50% 100%}" +
     ".npa-mini{position:absolute;z-index:6;pointer-events:none}.npa-mini.bl{left:6px;bottom:6px}.npa-mini.br{right:6px;bottom:6px}" +
     /* BONG BÓNG KIỂU NIGHT PASS: thẻ tím đậm, viền + quầng sáng màu nhấn của linh vật (--npa-ac), đuôi chỉ về linh vật; Pop tròn hơn + chữ to hơn */
-    ".npa-bub{--dx:0px;--npa-ac:#a99bff;position:absolute;left:50%;bottom:100%;transform:translateX(calc(-50% + var(--dx)));transform-origin:50% 100%;margin-bottom:10px;max-width:min(240px,calc(100vw - 24px));width:max-content;box-sizing:border-box;padding:9px 14px;border-radius:18px;background:linear-gradient(165deg,#2b2064,#171236 85%);color:#fff;border:1.5px solid color-mix(in srgb,var(--npa-ac) 75%,#fff 8%);font:800 14px/1.3 system-ui,-apple-system,'Segoe UI',sans-serif;text-align:center;text-wrap:balance;box-shadow:0 8px 22px rgba(0,0,0,.45),0 0 18px color-mix(in srgb,var(--npa-ac) 45%,transparent),inset 0 1px 0 rgba(255,255,255,.16);opacity:0;pointer-events:none;z-index:7}" +
-    ".npa-bub::after{content:'';position:absolute;left:calc(50% - var(--dx));bottom:-8px;width:13px;height:13px;margin-left:-7px;background:#171236;border-right:1.5px solid color-mix(in srgb,var(--npa-ac) 75%,#fff 8%);border-bottom:1.5px solid color-mix(in srgb,var(--npa-ac) 75%,#fff 8%);transform:rotate(45deg);border-radius:0 0 4px 0}" +
-    "[data-npa-style=pop] .npa-bub,.npa-box[data-npa-style=pop] .npa-bub{border-radius:22px;font-size:15px;padding:10px 16px}" +
+    ".npa-bub{--dx:0px;--npa-ac:#a99bff;position:absolute;left:50%;bottom:100%;transform:translateX(calc(-50% + var(--dx)));transform-origin:50% 100%;margin-bottom:10px;max-width:min(240px,calc(100vw - 24px));width:max-content;box-sizing:border-box;padding:9px 14px;border-radius:18px;background:var(--bbg,linear-gradient(165deg,#2b2064,#171236 85%));color:#fff;border:2px solid var(--bbd,color-mix(in srgb,var(--npa-ac) 75%,#fff 8%));text-shadow:0 1px 2px rgba(0,0,0,.35);font:800 14px/1.3 system-ui,-apple-system,'Segoe UI',sans-serif;text-align:center;text-wrap:balance;box-shadow:0 8px 22px rgba(0,0,0,.45),0 0 22px var(--bgl,color-mix(in srgb,var(--npa-ac) 45%,transparent)),inset 0 1px 0 rgba(255,255,255,.22);opacity:0;pointer-events:none;z-index:7}" +
+    ".npa-bub::after{content:'';position:absolute;left:calc(50% - var(--dx));bottom:-8px;width:13px;height:13px;margin-left:-7px;background:var(--bt,#171236);border-right:2px solid var(--bbd,color-mix(in srgb,var(--npa-ac) 75%,#fff 8%));border-bottom:2px solid var(--bbd,color-mix(in srgb,var(--npa-ac) 75%,#fff 8%));transform:rotate(45deg);border-radius:0 0 4px 0}" +
+    "[data-npa-style=pop] .npa-bub,.npa-box[data-npa-style=pop] .npa-bub{border-radius:22px;font-size:15px;padding:10px 16px}.npa-bub{font-weight:900}" +
     ".npa-mini .npa-bub{left:100%;bottom:50%;transform:translateY(50%);transform-origin:0 50%;margin:0 0 0 12px;max-width:min(210px,calc(100vw - 90px))}.npa-mini .npa-bub::after{left:-8px;bottom:50%;margin:0 0 -7px 0;transform:rotate(135deg);border-radius:0 0 4px 0}" +
     ".npa-mini.br .npa-bub{left:auto;right:100%;margin:0 12px 0 0;transform-origin:100% 50%}.npa-mini.br .npa-bub::after{left:auto;right:-8px;transform:rotate(-45deg)}" +
+    /* BONG BÓNG THEO TÂM TRẠNG (đúng/sai/combo/hỏi): màu đậm, viền sáng, quầng sáng cùng màu */
+    ".npa-bub[data-mood=ok]{--bbg:linear-gradient(165deg,#22b35e,#0c6a38);--bt:#0c6a38;--bbd:#8dffbd;--bgl:rgba(60,255,140,.6)}" +
+    ".npa-bub[data-mood=bad]{--bbg:linear-gradient(165deg,#e5484d,#8f1626);--bt:#8f1626;--bbd:#ffa3a3;--bgl:rgba(255,80,90,.6)}" +
+    ".npa-bub[data-mood=half]{--bbg:linear-gradient(165deg,#ff9f2e,#c25a0a);--bt:#c25a0a;--bbd:#ffd28a;--bgl:rgba(255,170,60,.6)}" +
+    ".npa-bub[data-mood=combo]{--bbg:linear-gradient(135deg,#ff4fa3,#ff9f2e 50%,#ffd84d);--bt:#ffd84d;--bbd:#fff3b0;--bgl:rgba(255,200,60,.75);color:#3a1450;text-shadow:0 1px 0 rgba(255,255,255,.5)}" +
+    ".npa-bub[data-mood=ask]{--bbg:linear-gradient(165deg,#3b82f6,#1b3fa8);--bt:#1b3fa8;--bbd:#a9cbff;--bgl:rgba(90,150,255,.6)}" +
+    ".npa-bub[data-mood=cool]{--bbg:linear-gradient(165deg,#8b5cff,#4b1fb8);--bt:#4b1fb8;--bbd:#cbb8ff;--bgl:rgba(150,110,255,.6)}" +
     ".npa-fx{position:fixed;left:0;top:0;z-index:9999;pointer-events:none;line-height:1;will-change:transform,opacity;font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif}" +
     ".npa-ring{position:fixed;left:0;top:0;z-index:9998;pointer-events:none;border-radius:50%;border:4px solid var(--mx-c,#ffb84d);box-sizing:border-box;will-change:transform,opacity}" +
     /* miệng cử động khi nói (mỏ Chim Bay / miệng Xin Nghỉ) */
@@ -140,13 +147,13 @@
       f.animate([{ transform: "translate(0,0) scale(.4)", opacity: 1 }, { transform: "translate(" + Math.cos(a) * v + "px," + (Math.sin(a) * v - D * .2) + "px) scale(1.15)", opacity: 1, offset: .55 }, { transform: "translate(" + Math.cos(a) * v * 1.15 + "px," + (Math.sin(a) * v + D * .35) + "px) scale(.7)", opacity: 0 }], { duration: 700 + Math.random() * 300, easing: "cubic-bezier(.12,.7,.25,1)" }).onfinish = (function (el) { return function () { el.remove(); }; })(f);
     }
   };
-  Inst.prototype.say = function (text, ms) {
+  Inst.prototype.say = function (text, ms, mood) {
     var h = this.host, w = this.box; if (!w || !text || !this.visible()) return false;
     if (innerWidth < 300 || innerHeight < 340) return false;   /* khung quá nhỏ: không có chỗ cho chữ */
     var b = w.querySelector(".npa-bub"); if (!b) { b = document.createElement("div"); b.className = "npa-bub"; w.appendChild(b); }
     b.textContent = String(text).slice(0, 48); clearTimeout(this.bt); w.setAttribute("data-npa-style", this.def.style || (/pop/.test(this.def.file) ? "pop" : "night"));
     try { var ac = getComputedStyle(this.svg), c = ac.getPropertyValue("--bgx").trim() || ac.getPropertyValue("--pa").trim() || ac.getPropertyValue("--a").trim(); if (c) b.style.setProperty("--npa-ac", c); } catch (e) {}
-    b.style.setProperty("--dx", "0px"); b.style.opacity = 0;
+    b.style.setProperty("--dx", "0px"); b.style.opacity = 0; if (mood) b.setAttribute("data-mood", mood); else b.removeAttribute("data-mood");
     var mini = /npa-mini/.test(h.className);
     if (!mini) { var r = b.getBoundingClientRect(), dx = 0; if (r.left < 8) dx = 8 - r.left; else if (r.right > innerWidth - 8) dx = innerWidth - 8 - r.right; if (dx) b.style.setProperty("--dx", Math.round(dx) + "px"); }   /* không tràn mép màn hình; đuôi vẫn chỉ về linh vật */
     if (b.animate && !reduce) b.animate([{ opacity: 0, scale: ".78" }, { opacity: 1, scale: "1.05", offset: .7 }, { opacity: 1, scale: "1" }], { duration: 240, fill: "forwards", easing: "ease-out" }); else b.style.opacity = 1;
@@ -171,19 +178,19 @@
     var L = it.def.L, a = L[key]; if (!a) return ""; if (key === "combo") a = a[Math.max(0, Math.min(a.length - 1, tier - 1))] || a[0];
     var x = pick(a, lastLine[it.game + key]); lastLine[it.game + key] = x; return x ? x[vi() ? 0 : 1] : "";
   }
-  Inst.prototype.sayT = function (text, ms) { var n = Date.now(); if (n - (this.ls || 0) < 1400) return; this.ls = n; this.say(text, ms); };   /* khen/đùa không dồn dập: cách nhau ≥ 1,4 giây */
+  Inst.prototype.sayT = function (text, ms, mood) { var n = Date.now(); if (n - (this.ls || 0) < 1400) return; this.ls = n; this.say(text, ms, mood); };   /* khen/đùa không dồn dập: cách nhau ≥ 1,4 giây */
   function event(name, d) {
     d = d || {}; var tier = d.tier || (d.n >= 7 ? 3 : d.n >= 5 ? 2 : d.n >= 3 ? 1 : 0);
     insts.forEach(function (it) {
       if (!it.svg || !it.visible()) return; var role = it.role;
-      if (name === "ok" || name === "correct") { it.motion(1 + tier); if (tier || name === "ok") it.fx(Math.max(1, tier)); if (role === "mini" || it.game === "xin-nghi") it.sayT(line(it, name === "ok" ? "ok" : "correct"), 2200); }
-      else if (name === "half") { it.motion(1); it.say(line(it, "half")); }
-      else if (name === "wrong" || name === "no") { it.motion(1, "wrong"); it.sayT(line(it, name === "no" ? "no" : "wrong"), 2200); }
-      else if (name === "combo") { var t = Math.max(1, tier || 1); it.motion(1 + t); it.fx(t); it.say(line(it, "combo", t), 2400); it.ls = Date.now(); }
-      else if (name === "ask") { it.talk(true, 5000); if (Date.now() - (it.ls || 0) < 1500) return; if (d.text && String(d.text).length > 3) { it.ls = Date.now(); it.say(d.text, 3200); } else if (!d.text) it.say(line(it, "ask")); }   /* 1 chữ cái ("D") không đáng làm bong bóng; không đè lên thông báo vừa hiện */
+      if (name === "ok" || name === "correct") { it.motion(1 + tier); if (tier || name === "ok") it.fx(Math.max(1, tier)); if (role === "mini" || it.game === "xin-nghi") it.sayT(line(it, name === "ok" ? "ok" : "correct"), 2200, "ok"); }
+      else if (name === "half") { it.motion(1); it.say(line(it, "half"), 2400, "half"); }
+      else if (name === "wrong" || name === "no") { it.motion(1, "wrong"); it.sayT(line(it, name === "no" ? "no" : "wrong"), 2200, "bad"); }
+      else if (name === "combo") { var t = Math.max(1, tier || 1); it.motion(1 + t); it.fx(t); it.say(line(it, "combo", t), 2400, "combo"); it.ls = Date.now(); }
+      else if (name === "ask") { it.talk(true, 5000); if (Date.now() - (it.ls || 0) < 1500) return; if (d.text && String(d.text).length > 3) { it.ls = Date.now(); it.say(d.text, 3200, "ask"); } else if (!d.text) it.say(line(it, "ask"), 2500, "ask"); }   /* 1 chữ cái ("D") không đáng làm bong bóng; không đè lên thông báo vừa hiện */
       else if (name === "start") { it.motion(1); it.say(line(it, "start"), 2000); }
       else if (name === "end") { it.say(line(it, "end"), 2600); }
-      else if (name === "tap") { it.motion(1); it.say(line(it, "tap"), 2000); }
+      else if (name === "tap") { it.motion(1); it.say(line(it, "tap"), 2000, "cool"); }
     });
   }
   function touch(host, kind) {
@@ -269,10 +276,10 @@
   }
   addEventListener("np:start", leave);
   /* THÔNG BÁO CỦA GAME (toast) → vào BONG BÓNG linh vật: game gọi `if(window.NPArt&&NPArt.say(msg,ms))return;` đầu hàm toast; trả false (không có linh vật/khung quá nhỏ) thì game hiện toast như cũ. Ưu tiên linh vật mini khi đang chơi, hero ở màn chính. */
-  function sayAll(text, ms) {
+  function sayAll(text, ms, kind) {
     var pick2 = null, i; for (i = 0; i < insts.length; i++) if (insts[i].svg && insts[i].visible() && insts[i].role === "mini") { pick2 = insts[i]; break; }
     if (!pick2) for (i = 0; i < insts.length; i++) if (insts[i].svg && insts[i].visible()) { pick2 = insts[i]; break; }
-    if (!pick2) return false; pick2.ls = Date.now(); return pick2.say(text, ms || 2200) === true;
+    if (!pick2) return false; pick2.ls = Date.now(); return pick2.say(text, ms || 2200, kind === "ok" ? "ok" : kind === "bad" || kind === "miss" ? "bad" : kind === "combo" ? "combo" : kind === "half" ? "half" : "cool") === true;
   }
   function refresh() { insts.forEach(function (it) { if (it.svg) it.paint(); }); }
   document.addEventListener("visibilitychange", function () { if (!document.hidden) refresh(); });
