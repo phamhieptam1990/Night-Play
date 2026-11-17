@@ -51,7 +51,7 @@
   var wrap = null;
   function home() { var h = document.getElementById("home") || document.getElementById("ovStart"); if (!h || h.hidden) return false; try { return h.getClientRects().length > 0 && !document.querySelector(".ov:not([hidden]):not(#ovStart)"); } catch (e) { return false; } }
   function paint() {
-    var id = get(), show = !!id && ok() && !!B() && home() && !/[?&](helper|multi)=1/.test(location.search);
+    var id = get(), show = !!id && ok() && !!B() && home() && !/[?&](helper|multi)=1/.test(location.search) && !/\/popplay\/games\//.test(location.pathname);   /* Pop Play: mỗi game đã có linh vật riêng ở giữa màn chọn → bỏ vòng tròn "Linh vật của bạn" (chủ site chốt) */
     if (!show) { if (wrap) { wrap.remove(); wrap = null; } return; }
     var sid = getSkin(id), key = id + "|" + sid + "|" + (vi() ? 1 : 0);
     if (!wrap) {
