@@ -7,5 +7,3 @@
 /* Cánh Nhỏ Phiêu Lưu (#cwHero ở màn #ovStart): tiêu đề game phủ lên ô hero làm chuột không chạm được linh vật → đưa hero lên trên, SVG theo chiều cao */
 #ovStart #cwHero.npa-hero{position:relative!important;z-index:6;pointer-events:auto;font-size:0!important;line-height:0}
 #ovStart #cwHero .npa-box>svg{height:100%;width:auto;max-width:100%}
-/* Cánh Nhỏ, màn DỌC (iPad 768×1024…): linh vật cao vừa phải để DANH SÁCH vẫn xếp dọc đủ 6 dòng (quá cao → shared/overflowslide.js ép danh sách thành slide ngang 1 thẻ) */
-@media (max-aspect-ratio:11/10){#ovStart #cwHero.npa-hero{height:clamp(96px,14.5dvh,200px)!important;flex:none!important;min-height:0!important}}
