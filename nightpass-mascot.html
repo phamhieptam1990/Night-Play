@@ -138,10 +138,10 @@ var de=document.documentElement,$=function(i){return document.getElementById(i)}
 function L(){return de.lang==="en"?"en":"vi"}function X(){return T[L()]}
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
 function fromPath(){var f=new URLSearchParams(location.search).get("from");return f&&/^[\w\-./]+(#[\w-]+)?$/.test(f)&&f.indexOf("..")<0&&f.charAt(0)!=="/"?f:"nightpass.html"}
-var view="";   /* skin đang xem trước */
+var EMB=new URLSearchParams(location.search).get("embed")==="1";var view="";   /* skin đang xem trước */
 function render(){
   var x=X(),l=L(),M=NPMascot2,list=M.list(),ok=M.ok(),B=NPBadges;
-  document.title=x.ttl;$("gset").href="nightpass.html?lang="+l;var gl=l==="vi"?"Cài đặt Night Pass":"Night Pass settings";$("gset").setAttribute("aria-label",gl);$("gset").title=gl;$("gsetT").textContent=l==="vi"?"Cài đặt":"Settings";$("ttl").textContent=x.ttl;$("back").href=fromPath();$("back").setAttribute("aria-label",x.back);$("hSk").textContent=x.hSk;$("hMc").textContent=x.hMc;
+  document.title=x.ttl;$("gset").href="nightpass.html?lang="+l+(EMB?"&embed=1":"");var gl=l==="vi"?"Cài đặt Night Pass":"Night Pass settings";$("gset").setAttribute("aria-label",gl);$("gset").title=gl;$("gsetT").textContent=l==="vi"?"Cài đặt":"Settings";$("ttl").textContent=x.ttl;$("back").href=fromPath();if(EMB){$("back").onclick=function(e){e.preventDefault();try{parent.postMessage({np:1,type:"mc-close"},location.origin)}catch(x){}}}$("back").setAttribute("aria-label",x.back);$("hSk").textContent=x.hSk;$("hMc").textContent=x.hMc;
   if(!cur)cur=M.get()||(list.filter(function(m){return m.group===grp})[0]||list[0]).id;
   var m=list.filter(function(i){return i.id===cur})[0];if(!m)return;
   if(!view||!M.skins(cur).some(function(s){return s.id===view}))view=M.getSkin(cur);
