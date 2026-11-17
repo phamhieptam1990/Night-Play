@@ -8,6 +8,7 @@
     "pop-fly": { pos: "bl", file: "mascot-pop-pop-fly.svg", emoji: "🐦", name: ["Chim Bay", "Birdie"],
       fx: { "default": ["⭐", "✨"], badge: ["✈️", "⭐"], group: ["🔤", "📚"], night: ["🌙", "✨"], star: ["👑", "🌟"] },
       L: {
+        hi: [["Cùng bay nào bé ơi!", "Let's fly together!"], ["Chào bé, mình là Bi!", "Hi, I'm Bi!"]],
         start: [["Mình bay thôi!", "Let's fly!"], ["Cùng bay nào bé ơi!", "Fly with me!"]],
         correct: [["Giỏi quá!", "Great job!"], ["Đúng rồi!", "That's right!"], ["Hoan hô bé!", "Hooray!"], ["Bé giỏi lắm!", "You're so good!"]],
         wrong: [["Không sao, thử lại nhé!", "It's ok, try again!"], ["Cố lên nào!", "Come on!"]],
@@ -17,6 +18,7 @@
     "xin-nghi": { pos: "br", file: "mascot-night-xin-nghi.svg", emoji: "🏖️", name: ["Nhân viên Xin Nghỉ", "The Day-Off Hero"],
       fx: { "default": ["🏖️", "✨"], badge: ["🔥", "☕"], group: ["🧢", "😎"], night: ["⚡", "💜"], star: ["💸", "👑"] },
       L: {
+        hi: [["Sếp ơi, hôm nay cho em nghỉ nhé?", "Boss, can I have today off?"], ["Lại một ngày cày cuốc…", "Another day at the grind…"]],
         start: [["Em xin phép sếp… 🙏", "Permission, boss… 🙏"], ["Lại phải làm màu rồi.", "Time to act natural."]],
         ok: [["Sếp duyệt!!! Tự do rồi 🏖️", "Approved!!! Freedom 🏖️"], ["Duyệt luôn, quá đỉnh!", "Approved, legend!"]],
         half: [["Nửa đồng ý, tạm ổn.", "Half yes. I'll take it."], ["Chưa mất hết hi vọng.", "Not all hope is lost."]],

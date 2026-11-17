@@ -26,6 +26,14 @@
     star: function (i) { return [{ transform: "scaleX(1)" }, { transform: "translateY(" + (-20 * i) + "px) scaleX(-1)", offset: .5 }, { transform: "translateY(" + (-6 * i) + "px) scaleX(1)", offset: .82 }, { transform: "scaleX(1)" }]; }
   };
   var DUR = { "default": 520, badge: 620, group: 560, night: 950, star: 760 };
+  /* HIỆU ỨNG XUẤT HIỆN (màn chính): mỗi skin vào một kiểu, rồi chào bằng một câu */
+  var ENTER = {
+    "default": [[{ transform: "translateY(-130px)", opacity: 0 }, { transform: "translateY(0) scale(1.12,.86)", opacity: 1, offset: .55 }, { transform: "translateY(-14px) scale(.96,1.06)", offset: .75 }, { transform: "none", opacity: 1 }], 850],
+    badge: [[{ transform: "translateX(-130px) rotate(-18deg)", opacity: 0 }, { transform: "translateX(8px) rotate(7deg)", opacity: 1, offset: .6 }, { transform: "translateX(-3px) rotate(-3deg)", offset: .8 }, { transform: "none", opacity: 1 }], 800],
+    group: [[{ transform: "translateY(50px) scale(.6)", opacity: 0 }, { transform: "translateY(-24px) scale(1.05,.95)", opacity: 1, offset: .42 }, { transform: "translateY(0) scale(1.05,.93)", offset: .7 }, { transform: "none", opacity: 1 }], 800],
+    night: [[{ transform: "translateY(-46px)", opacity: 0 }, { transform: "translateY(7px)", opacity: 1, offset: .62 }, { transform: "none", opacity: 1 }], 1200],
+    star: [[{ transform: "scaleX(-1) scale(.3)", opacity: 0 }, { transform: "scaleX(1) scale(1.14)", opacity: 1, offset: .6 }, { transform: "scale(.97)", offset: .8 }, { transform: "none", opacity: 1 }], 1000]
+  };
   var WRONG = [{ transform: "none" }, { transform: "translateX(-7px) rotate(-4deg)", offset: .15 }, { transform: "translateX(6px) rotate(4deg)", offset: .35 }, { transform: "translateX(-4px) rotate(-2deg) scale(1,.95)", offset: .55 }, { transform: "scale(1,.94)", offset: .8 }, { transform: "none" }];
 
   var css = document.createElement("style"); css.id = "npArtCss";
@@ -33,8 +41,12 @@
     ".npa-box{position:relative;display:flex;align-items:flex-end;justify-content:center;width:100%;height:100%;min-height:0;pointer-events:none}" +
     ".npa-box>svg{display:block;width:100%;height:100%;max-height:100%;overflow:visible;transform-origin:50% 100%}" +
     ".npa-mini{position:absolute;z-index:6;pointer-events:none}.npa-mini.bl{left:6px;bottom:6px}.npa-mini.br{right:6px;bottom:6px}" +
-    ".npa-bub{position:absolute;left:50%;bottom:100%;transform:translateX(-50%);margin-bottom:4px;max-width:200px;width:max-content;padding:6px 12px;border-radius:16px;background:linear-gradient(165deg,#2b2064,#171236);color:#fff;border:1.5px solid rgba(170,150,255,.6);font:800 13px/1.3 system-ui,-apple-system,sans-serif;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.4);opacity:0;pointer-events:none;z-index:7}" +
-    ".npa-mini .npa-bub{left:100%;bottom:60%;transform:none;margin:0 0 0 6px}.npa-mini.br .npa-bub{left:auto;right:100%;margin:0 6px 0 0}" +
+    /* BONG BÓNG KIỂU NIGHT PASS: thẻ tím đậm, viền + quầng sáng màu nhấn của linh vật (--npa-ac), đuôi chỉ về linh vật; Pop tròn hơn + chữ to hơn */
+    ".npa-bub{--dx:0px;--npa-ac:#a99bff;position:absolute;left:50%;bottom:100%;transform:translateX(calc(-50% + var(--dx)));transform-origin:50% 100%;margin-bottom:10px;max-width:min(240px,calc(100vw - 24px));width:max-content;box-sizing:border-box;padding:9px 14px;border-radius:18px;background:linear-gradient(165deg,#2b2064,#171236 85%);color:#fff;border:1.5px solid color-mix(in srgb,var(--npa-ac) 75%,#fff 8%);font:800 14px/1.3 system-ui,-apple-system,'Segoe UI',sans-serif;text-align:center;text-wrap:balance;box-shadow:0 8px 22px rgba(0,0,0,.45),0 0 18px color-mix(in srgb,var(--npa-ac) 45%,transparent),inset 0 1px 0 rgba(255,255,255,.16);opacity:0;pointer-events:none;z-index:7}" +
+    ".npa-bub::after{content:'';position:absolute;left:calc(50% - var(--dx));bottom:-8px;width:13px;height:13px;margin-left:-7px;background:#171236;border-right:1.5px solid color-mix(in srgb,var(--npa-ac) 75%,#fff 8%);border-bottom:1.5px solid color-mix(in srgb,var(--npa-ac) 75%,#fff 8%);transform:rotate(45deg);border-radius:0 0 4px 0}" +
+    "[data-npa-style=pop] .npa-bub,.npa-box[data-npa-style=pop] .npa-bub{border-radius:22px;font-size:15px;padding:10px 16px}" +
+    ".npa-mini .npa-bub{left:100%;bottom:50%;transform:translateY(50%);transform-origin:0 50%;margin:0 0 0 12px;max-width:min(210px,calc(100vw - 90px))}.npa-mini .npa-bub::after{left:-8px;bottom:50%;margin:0 0 -7px 0;transform:rotate(135deg);border-radius:0 0 4px 0}" +
+    ".npa-mini.br .npa-bub{left:auto;right:100%;margin:0 12px 0 0;transform-origin:100% 50%}.npa-mini.br .npa-bub::after{left:auto;right:-8px;transform:rotate(-45deg)}" +
     ".npa-fx{position:fixed;left:0;top:0;z-index:9999;pointer-events:none;line-height:1;will-change:transform,opacity;font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif}" +
     ".npa-ring{position:fixed;left:0;top:0;z-index:9998;pointer-events:none;border-radius:50%;border:4px solid var(--mx-c,#ffb84d);box-sizing:border-box;will-change:transform,opacity}" +
     /* miệng cử động khi nói (mỏ Chim Bay / miệng Xin Nghỉ) */
@@ -60,13 +72,22 @@
     if (window.NPArtTheme) NPArtTheme.apply(s, themeNow());
     this.host.dataset.emoji = (this.def.fx[sk] || this.def.fx["default"])[0];
   };
+  Inst.prototype.enter = function () {
+    var self = this, s = this.svg, n = Date.now(); if (!s || !this.visible() || n - (this.le || 0) < 3500) return; this.le = n;
+    if (!reduce && s.animate) { var e = ENTER[this.skin] || ENTER["default"]; try { s.animate(e[0], { duration: e[1], easing: "cubic-bezier(.3,.8,.35,1)" }); } catch (x) {} }
+    rst(function () { if (!self.visible()) return; if (self.skin === "night" || self.skin === "star") self.fx(2); else if (self.skin === "badge" || self.skin === "group") self.motion(1); var t = line(self, "hi") || line(self, "start"); self.ls = Date.now(); self.say(t, 2600); }, Math.round((ENTER[this.skin] || ENTER["default"])[1] * 0.8));
+  };
+  Inst.prototype.watch = function () {
+    var self = this; if (this.io || !window.IntersectionObserver || this.role !== "hero") return;
+    this.io = new IntersectionObserver(function (es) { es.forEach(function (x) { if (x.isIntersecting && self.svg) self.enter(); }); }, { threshold: 0.35 }); this.io.observe(this.host);
+  };
   Inst.prototype.mount = function () {
     var self = this, h = this.host;
     return load(this.def.file).then(function (t) {
       needTheme(function () {
         if (h.__npaBox) { self.paint(); return; }
         h.textContent = ""; var box = document.createElement("div"); box.className = "npa-box"; box.innerHTML = uniq(t); h.appendChild(box);
-        self.svg = box.firstChild; self.box = box; h.__npaBox = box; h.classList.add("npa-hero"); self.paint();
+        self.svg = box.firstChild; self.box = box; h.__npaBox = box; h.classList.add("npa-hero"); self.paint(); self.watch(); self.enter();
         try { self.svg.setAttribute("aria-label", self.def.name[vi() ? 0 : 1]); } catch (e) {}
       });
     }, function () { /* không tải được: giữ nguyên emoji dự phòng của game */ });
@@ -93,9 +114,13 @@
     var h = this.host, w = this.box; if (!w || !text || !this.visible()) return;
     if (innerWidth < 300 || innerHeight < 340) return;   /* khung quá nhỏ: không có chỗ cho chữ */
     var b = w.querySelector(".npa-bub"); if (!b) { b = document.createElement("div"); b.className = "npa-bub"; w.appendChild(b); }
-    b.textContent = String(text).slice(0, 48); clearTimeout(this.bt);
-    if (b.animate && !reduce) b.animate([{ opacity: 0, transform: b.parentNode.parentNode && /npa-mini/.test(h.className) ? "translateY(4px)" : "translateX(-50%) translateY(4px)" }, { opacity: 1 }], { duration: 160, fill: "forwards" }); else b.style.opacity = 1;
-    this.bt = rst(function () { b.style.opacity = 0; }, ms || 2500);
+    b.textContent = String(text).slice(0, 48); clearTimeout(this.bt); w.setAttribute("data-npa-style", this.def.style || (/pop/.test(this.def.file) ? "pop" : "night"));
+    try { var ac = getComputedStyle(this.svg), c = ac.getPropertyValue("--bgx").trim() || ac.getPropertyValue("--pa").trim() || ac.getPropertyValue("--a").trim(); if (c) b.style.setProperty("--npa-ac", c); } catch (e) {}
+    b.style.setProperty("--dx", "0px"); b.style.opacity = 0;
+    var mini = /npa-mini/.test(h.className);
+    if (!mini) { var r = b.getBoundingClientRect(), dx = 0; if (r.left < 8) dx = 8 - r.left; else if (r.right > innerWidth - 8) dx = innerWidth - 8 - r.right; if (dx) b.style.setProperty("--dx", Math.round(dx) + "px"); }   /* không tràn mép màn hình; đuôi vẫn chỉ về linh vật */
+    if (b.animate && !reduce) b.animate([{ opacity: 0, scale: ".78" }, { opacity: 1, scale: "1.05", offset: .7 }, { opacity: 1, scale: "1" }], { duration: 240, fill: "forwards", easing: "ease-out" }); else b.style.opacity = 1;
+    this.bt = rst(function () { if (b.animate && !reduce) b.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 180, fill: "forwards" }); else b.style.opacity = 0; }, ms || 2500);
   };
   Inst.prototype.talk = function (on, ms) { if (!this.svg) return; this.svg.classList.toggle("talk", !!on); clearTimeout(this.tt); if (on) this.tt = rst(function (s) { return function () { s.classList.remove("talk"); }; }(this.svg), ms || 8000); };
 
