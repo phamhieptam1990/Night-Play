@@ -74,8 +74,15 @@ html[data-theme=light] .app:has(h1[data-pt]) .play .ov:not([hidden]):not(#ovStar
 html[data-theme=light] .dots i{background:#b3a6e0}html[data-theme=light] .dots i.ok{background:var(--warn)}html[data-theme=light] .dots i.miss{background:#7d7399;opacity:.8}
 html[data-theme=light] #enT,html[data-theme=light] #ovEnd small,html[data-theme=light] #ovProg .week .td{color:#fff!important;opacity:1!important}
 html[data-theme=light] #ovProg .week i{background:rgba(255,255,255,.28)}html[data-theme=light] #ovProg .week b,html[data-theme=light] #ovProg .week span{color:#fff}
+#ovStart #stH{display:none!important}   /* bỏ chữ "Chọn trò chơi" ở màn chọn */
 html.np-playing .ns-fl{display:none!important}html.np-playing #npChBtn,html.np-playing #npChBtn::before,html.np-playing #npChBtn::after,html.np-playing #npPmFab::after,html.np-playing #npMcBtn{animation:none!important}
-html:root:root .app .toast{background:none!important;border:0!important;box-shadow:none!important;padding:0!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;color:#fff!important;font-weight:900;-webkit-text-stroke:.14em rgba(25,35,90,.85);paint-order:stroke fill;text-shadow:none}
+html:root:root .app .toast{background:none!important;border:0!important;box-shadow:none!important;padding:0!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;color:transparent!important;font-weight:900;letter-spacing:.01em;font-size:clamp(26px,8vw,40px);-webkit-text-stroke:.09em rgba(20,30,90,.85);paint-order:stroke fill;text-shadow:none;background-image:linear-gradient(180deg,#fff7a8 0%,#ffd43b 45%,#ff9f1c 100%)!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent;transform-origin:50% 60%;background-repeat:no-repeat!important}
+html:root:root .app .toast.ok{background-image:linear-gradient(180deg,#e9ffd0 0%,#7ae582 50%,#1fb86a 100%)!important}
+html:root:root .app .toast.bad{background-image:linear-gradient(180deg,#ffe3e3 0%,#ff9aa2 55%,#ff5d73 100%)!important}
+html:root:root .app .toast.miss{background-image:linear-gradient(180deg,#e3f0ff 0%,#9ccbff 55%,#5aa0ff 100%)!important}
+html:root:root .app .toast.on{animation:toastPop .45s cubic-bezier(.2,1.5,.4,1) both}
+@keyframes toastPop{0%{transform:translateX(-50%) scale(.4) rotate(-6deg);opacity:0}60%{transform:translateX(-50%) scale(1.15) rotate(2deg)}100%{transform:translateX(-50%) scale(1) rotate(0)}}
+@media (prefers-reduced-motion:reduce){html:root:root .app .toast.on{animation:none}}
 .toast.on{opacity:1}
 @media (max-width:360px){.ask{padding:4px 8px}}
 .app[data-layout]{transition:none}
@@ -265,8 +272,10 @@ const sfx={flap:()=>tone(520,.09,"triangle",.07),good:()=>{tone(660,.12,"triangl
 let sayT=0,sayTxt="";
 function say(text){if(!sound||!window.speechSynthesis)return;sayTxt=text;if(sayT)return;sayT=setTimeout(()=>{sayT=0;const tx=sayTxt;try{const sy=speechSynthesis;if(sy.speaking||sy.pending)sy.cancel();const u=new SpeechSynthesisUtterance(tx);u.lang=LANG==="vi"?"vi-VN":"en-US";u.rate=.85;u.pitch=1.15;sy.speak(u)}catch(e){}},60)}   /* gộp lời đọc, KHÔNG dừng game khi đọc */
 PF.say=say;PF.sfx=sfx;PF.tone=tone;
+/* ÂM CHẠM: mọi lần chạm nút/thẻ ngoài lúc đang bay có tiếng "tách" ngắn nhẹ (không chạy khi đang bay để khỏi chồng với tiếng vỗ cánh) */
+document.addEventListener("pointerdown",e=>{if(running&&!paused)return;const b=e.target.closest&&e.target.closest("button,a,.card,.main,[role=button]");if(!b||b.disabled)return;try{tone(760,.05,"triangle",.07);tone(1040,.06,"triangle",.05,.04)}catch(x){}},true);
 
-let toastT=0;function toast(m,ms){const e=$("toast");e.textContent=m;e.classList.add("on");clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove("on"),ms||1500)}
+let toastT=0;function toast(m,ms,kind){const e=$("toast");e.textContent=m;e.className="toast "+(kind||"");void e.offsetWidth;e.classList.add("on");clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove("on"),ms||1500)}
 PF.toast=toast;
 
 /* ===== LOẠI 1 (MIỄN PHÍ): CHIM HỌC CHỮ ===== */
@@ -319,7 +328,7 @@ function markDot(i,st){const S=PF.S;S.dots[i]=st;renderDots()}
 PF.markDot=markDot;
 function renderDots(){const S=PF.S,el=$("dots");if(!S){el.innerHTML="";return}const n=S.dots.length;if(el.children.length!==n){el.innerHTML=S.dots.map(d=>'<i class="'+(d===1?"ok":d===2?"miss":"")+'"></i>').join("");return}
   for(let k=0;k<n;k++){const d=S.dots[k],c=d===1?"ok":d===2?"miss":"",e=el.children[k];if(e.className!==c)e.className=c}}   /* chỉ đổi class chấm thay đổi, không dựng lại cả hàng */
-function setAsk(html,plain,speak){const S=PF.S;if(S){S.ask=html;S.askPlain=plain||html.replace(/<[^>]*>/g,"");S.speak=speak||""}$("askTxt").innerHTML=html;if(speak){clearTimeout(setAsk.t);setAsk.t=setTimeout(()=>say(speak),160)}}   /* đọc to chậm 160ms: speechSynthesis.cancel/speak chạy ngay lúc bay qua chữ làm khựng khung hình trên iPhone */
+function setAsk(html,plain,speak){const S=PF.S;if(S){S.ask=html;S.askPlain=plain||html.replace(/<[^>]*>/g,"");S.speak=speak||""}$("askTxt").innerHTML=html;if(speak&&(!S||S.spawned<=1||!running)){clearTimeout(setAsk.t);setAsk.t=setTimeout(()=>say(speak),160)}}   /* CHỈ đọc tự động ở câu ĐẦU của ván (như Cánh Nhỏ: không đọc giọng giữa lúc bay → hết khựng iOS); các câu sau bé chạm nút 🔊 để nghe lại */   /* đọc to chậm 160ms: speechSynthesis.cancel/speak chạy ngay lúc bay qua chữ làm khựng khung hình trên iPhone */
 PF.setAsk=setAsk;
 
 /* ===== VẬT LÝ NHẸ NHÀNG (không có thua) ===== */
@@ -339,8 +348,8 @@ function spawnWave(S){
 function evalWave(S,w){
   const b=S.bird,hit=w.rings.find(r=>Math.abs(r.y-b.y)<R+10);w.done=true;
   if(w.item){const it=w.item,okk=!!(hit&&hit.ok);setTimeout(()=>Prog.rec(it,okk),0)}   /* ghi localStorage ngoài khung hình đang vẽ */
-  if(hit&&hit.ok){w.res="ok";S.correct++;S.streak++;addScore(10+(S.streak>=3?5:0));markDot(w.idx,1);sfx.good();burst(BX,b.y,pickOf(["⭐","✨","🌟"]),12);toast(pickOf(t("right")),1100);S.celebrate=.4}
-  else{w.res=hit?"wrong":"miss";S.wrong++;S.streak=0;markDot(w.idx,2);sfx.bad();S.slow=1.1;b.wob=.9;toast(hit?pickOf(t("wrong")):t("miss"),1500);
+  if(hit&&hit.ok){w.res="ok";S.correct++;S.streak++;addScore(10+(S.streak>=3?5:0));markDot(w.idx,1);sfx.good();burst(BX,b.y,pickOf(["⭐","✨","🌟"]),12);toast(pickOf(t("right")),1100,"ok");S.celebrate=.4}
+  else{w.res=hit?"wrong":"miss";S.wrong++;S.streak=0;markDot(w.idx,2);sfx.bad();S.slow=1.1;b.wob=.9;toast(hit?pickOf(t("wrong")):t("miss"),1500,hit?"bad":"miss");
     const ok=w.rings.find(r=>r.ok);if(ok){w.hintT=1.6;/* không đọc thêm lời gợi ý sau khi bay sai: tránh đọc chồng gây khựng trên iOS (chữ gợi ý đã hiện trên màn hình) */}}
 }
 
@@ -362,7 +371,7 @@ function update(dt){
 
 /* ===== VẼ ===== */
 function roundRect(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
-const RING=["#ff8fb1","#ffd166","#7bdcb5"],LETC=["#ff3d7f","#ff9500","#00c48c"];   /* màu CHỮ từng cổng (đậm, rõ trên trời xanh sáng lẫn tối) */
+const RING=["#ff8fb1","#ffd166","#7bdcb5"],LETC=["#ff3d7f","#ff9500","#00c48c"],LETD=["#b3004f","#b35c00","#00704f"];   /* màu CHỮ từng cổng (đậm, rõ trên trời xanh sáng lẫn tối) */
 /* HIỆU NĂNG iOS: vẽ emoji bằng fillText mỗi khung hình (đổi ctx.font + dựng glyph màu) rất chậm trên Safari → giật đúng lúc bay qua chữ đúng (nổ 12 hạt). Dựng SẴN mỗi emoji một lần vào canvas nhỏ (bộ nhớ đệm theo cỡ làm tròn) rồi chỉ drawImage. */
 const EMO=new Map();function emo(g,sz){const z=Math.max(12,Math.round(sz/4)*4),k=g+"|"+z;let c=EMO.get(k);if(c)return c;if(EMO.size>120)EMO.clear();
   const d=Math.min(2,window.devicePixelRatio||1);c=document.createElement("canvas");c.width=c.height=Math.ceil(z*1.5*d);const x=c.getContext("2d");x.scale(d,d);x.textAlign="center";x.textBaseline="middle";x.font=z+"px 'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";x.fillText(g,z*.75,z*.75);c.__z=z*1.5;EMO.set(k,c);return c}
@@ -376,8 +385,9 @@ function draw(){
   for(const w of S.waves){
     w.rings.forEach((r,i)=>{const pul=(w.hintT>0&&r.ok)?1+.08*Math.sin(S.t*14):1;ctx.save();ctx.translate(w.x,r.y);ctx.scale(pul,pul);
       if(sk&&sk.gate){sk.gate(ctx,r,i,w.hintT>0&&r.ok,S);ctx.restore();return}
-      /* HIỆU NĂNG: bỏ nền tròn + viền dày (fill+stroke mỗi cổng mỗi khung hình) — chỉ vẽ CHỮ/SỐ đậm có màu riêng từng cổng; gợi ý (hintT) thì vàng */
-      ctx.fillStyle=(w.hintT>0&&r.ok)?"#ffd43b":LETC[i%3];ctx.font='900 '+(String(r.label).length>2?46:64)+'px Inter,system-ui,sans-serif';ctx.fillText(r.label,0,3);ctx.restore()});
+      /* cổng chữ/số: vòng tròn nền trắng + viền màu (như bản gốc) */
+      ctx.fillStyle=(w.hintT>0&&r.ok)?"rgba(255,235,120,.95)":"rgba(255,255,255,.88)";ctx.strokeStyle=RING[i%3];ctx.lineWidth=7;ctx.beginPath();ctx.arc(0,0,R,0,7);ctx.fill();ctx.stroke();
+      ctx.fillStyle="#3b2a1d";ctx.font='800 '+(String(r.label).length>2?34:46)+'px Inter,system-ui,sans-serif';ctx.fillText(r.label,0,3);ctx.restore()});
   }
   if(S.ty.draw)S.ty.draw(ctx,S);
   /* nhân vật */
