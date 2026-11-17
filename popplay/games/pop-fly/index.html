@@ -145,6 +145,15 @@ html:root:root .app:has(h1[data-pt="pop-fly"]) #ovStart::before{display:none!imp
 #ovStart #paHero .npa-box>svg{height:100%;width:auto;max-width:100%}
 html.np-strip #ovStart #paHero{flex:1 1 0;height:auto;min-height:0}
 #play .npa-mini{width:48px!important;height:48px!important}
+/* TOÀN MÀN HÌNH (shared/fullscreen.js, html.np-fs): khung chơi phủ KÍN màn hình; câu hỏi + điểm nổi ở đầu khung (không có câu hỏi thì không biết bay qua chữ nào) */
+html.np-fs body{padding:0!important;display:block!important}
+html.np-fs .app{display:block!important;width:100vw!important;height:100dvh!important;margin:0!important;gap:0!important}
+html.np-fs #play{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;max-width:none!important;max-height:none!important;aspect-ratio:auto!important;border-radius:0!important;margin:0!important}
+html.np-fs .app>.side{display:block!important;position:fixed;left:0;right:0;top:max(8px,env(safe-area-inset-top));width:auto!important;z-index:30;padding:0 64px 0 12px;pointer-events:none;gap:0}
+html.np-fs .app>.side .ask{pointer-events:auto;min-height:48px;margin:0 auto;max-width:520px;background:rgba(14,12,40,.72);-webkit-backdrop-filter:none;backdrop-filter:none;color:#fff}
+html.np-fs .app>.side .hud{margin:6px auto 0;max-width:520px;padding:0 10px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6)}
+html.np-fs .app>.side .stats,html.np-fs .app>.side .gametitle{display:none!important}
+
 </style>
 <link rel="stylesheet" href="../../../shared/popnp.css">
 <link rel="stylesheet" href="../../../shared/poptitle.css"><script src="../../../shared/poptitle.js" defer></script>

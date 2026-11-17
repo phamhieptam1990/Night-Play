@@ -39,7 +39,7 @@
     "#" + PN + " .b{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}#" + PN + " .b button{min-height:68px;border-radius:16px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.1);color:#fff;display:grid;place-items:center;padding:0;cursor:pointer}#" + PN + " .b button svg{width:34px;height:34px}" +
     "#" + PN + " .b button{font-size:28px;line-height:1}#" + PN + " .b button[data-a=lang]{font:900 24px/1 system-ui,-apple-system,sans-serif;letter-spacing:.02em}";
   /* thanh trên đã ẩn nhưng body còn chừa chỗ cho nó (padding-top ~76px) → khung bị lệch xuống: trả hết, căn giữa khung theo CẢ HAI chiều */
-  css.textContent += "html.np-fs body{padding-top:0!important;padding-bottom:0!important;justify-content:center!important;align-items:center!important}html.np-fs body>.app,html.np-fs .app{margin-top:0!important;margin-bottom:0!important;align-self:center!important}html.np-fs .app>.side{display:none!important}";   /* .side (hàng chỉ số cũ) chiếm chỗ trên khung dù chỉ số đã ẩn */
+  css.textContent += "html.np-fs body{padding-top:0!important;padding-bottom:0!important;justify-content:center!important;align-items:center!important}html.np-fs body>.app,html.np-fs .app{margin-top:0!important;margin-bottom:0!important;align-self:center!important}";   /* .side (hàng chỉ số cũ) chiếm chỗ trên khung dù chỉ số đã ẩn */
   css.textContent += "html.np-fs #play,html.np-fs .app>.play{border-radius:0!important;box-shadow:none!important;border:0!important;margin-left:auto!important;margin-right:auto!important}";
   css.textContent +=
     /* kiểu Night Pass: thẻ nền tím đậm, viền + quầng sáng màu nhấn, bo lớn, nút ≥48px pill gradient */
