@@ -385,7 +385,7 @@ let ac=null;
 function audio(){if(!sound)return null;try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();if(ac.state==="suspended")ac.resume();return ac}catch(e){return null}}
 function tone(f,d,ty,v,dl){const c=audio();if(!c)return;const t0=c.currentTime+(dl||0),o=c.createOscillator(),g=c.createGain();o.type=ty||"sine";o.frequency.value=f;g.gain.setValueAtTime(0,t0);g.gain.linearRampToValueAtTime(v||.1,t0+.02);g.gain.exponentialRampToValueAtTime(.0001,t0+d);o.connect(g);g.connect(c.destination);o.start(t0);o.stop(t0+d+.05)}
 const sfx={good:()=>{tone(660,.12,"triangle",.12);tone(880,.16,"triangle",.12,.09);tone(1100,.2,"triangle",.1,.18)},no:()=>tone(220,.22,"sine",.1),pop:()=>tone(520,.08,"triangle",.07),win:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.2,"triangle",.12,i*.1))};
-function say(text){if(!sound||!window.speechSynthesis||!text)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang=LANG==="vi"?"vi-VN":"en-US";u.rate=.85;u.pitch=1.15;speechSynthesis.speak(u)}catch(e){}}
+function say(text,force){if((!sound&&!force)||!window.speechSynthesis||!text)return;try{speechSynthesis.cancel();try{speechSynthesis.resume()}catch(e){}const u=new SpeechSynthesisUtterance(text);u.lang=LANG==="vi"?"vi-VN":"en-US";u.rate=.85;u.pitch=1.15;if(force)u.npForce=true;setTimeout(()=>{try{speechSynthesis.speak(u)}catch(e){}},force?60:0)}catch(e){}}   /* nút loa "nghe" do người chơi chủ động bấm → force: đọc kể cả khi tắt âm game; cancel→speak cách 60ms (Chrome/Safari hay rơi tiếng) */
 const sayNum=n=>say(String(n));
 let toastT=0;function toast(m,ms){const e=$("toast");e.textContent=m;e.classList.add("on");clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove("on"),ms||1500)}
 
@@ -427,7 +427,7 @@ function listen(el){
   const P=pool(),t=pick(P),cs=shuffle([t].concat(shuffle(P.filter(x=>x!==t)).slice(0,2))),sp=LANG==="vi"?PHON[t]:t;
   ask("a.listen",{},sp);
   el.innerHTML='<div class="qa"><button class="spk" id="spk" type="button" aria-label="🔊"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h3.6L13 19V5L7.6 9.5z" fill="currentColor"/><path d="M16.2 9a4.2 4.2 0 0 1 0 6M18.8 6.4a8 8 0 0 1 0 11.2"/></svg></button><div class="lrow">'+cs.map(l=>'<button class="lcard" type="button" data-l="'+l+'">'+l+"</button>").join("")+"</div></div>";
-  R.solve=()=>[...el.querySelectorAll(".lcard")].find(b=>b.dataset.l===t).click();R.wrongClick=()=>[...el.querySelectorAll(".lcard")].find(b=>b.dataset.l!==t).click();$("spk").onclick=()=>say(sp);R.hint=()=>[...el.querySelectorAll(".lcard")].find(b=>b.dataset.l===t).classList.add("hint");
+  R.solve=()=>[...el.querySelectorAll(".lcard")].find(b=>b.dataset.l===t).click();R.wrongClick=()=>[...el.querySelectorAll(".lcard")].find(b=>b.dataset.l!==t).click();$("spk").onclick=()=>say(sp,true);R.hint=()=>[...el.querySelectorAll(".lcard")].find(b=>b.dataset.l===t).classList.add("hint");
   el.querySelectorAll(".lcard").forEach(b=>b.onclick=()=>{if(R.done||paused)return;if(b.dataset.l===t){b.classList.add("good");ok(b)}else{say(b.dataset.l);bad(b)}});
 }
 function trace(el){
@@ -696,7 +696,7 @@ function applyLang(){
 function syncSound(){$("soundBtn").textContent=sound?"🔊":"🔇"}
 $("soundBtn").onclick=()=>{sound=!sound;if(window.NPAudio)NPAudio.set(sound);else if(!sound&&window.speechSynthesis)speechSynthesis.cancel();syncSound()};
 $("langBtn").onclick=()=>{const mid=!HELPER&&S&&!S.over&&S.z===0;LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}applyLang();if(mid)startSession(0,null,{seed:S.seed,daily:S.daily,ch:S.ch,lv:S.fixed?S.lvOv:undefined})};   /* bảng chữ cái vi/en khác nhau → làm lại bài chữ cái bằng bộ chữ mới */
-$("askBtn").onclick=()=>{if(window.speechSynthesis)speechSynthesis.cancel();say(R.speak||T("ask.home"))};
+$("askBtn").onclick=()=>{if(window.speechSynthesis)speechSynthesis.cancel();say(R.speak||T("ask.home"),true)};
 $("homeBtn").onclick=()=>{if(HELPER)return;goHome()};
 $("againBtn").onclick=again;
 $("shareBtn").onclick=()=>openGate(()=>{showOv("ovEnd");doShare()},"ovEnd","gt.sh");
