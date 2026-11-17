@@ -4,7 +4,7 @@ Quyết định của chủ site: **mỗi game đúng 1 linh vật; 4 skin trả
 
 Cấu trúc 5 skin mỗi game: **1 Mặc định** (miễn phí) · **2 Huy hiệu** (thắng thử thách game đó: gắn huy hiệu + đạo cụ "thành tích") · **3 Chủ đề riêng** (nghề/vai trò khác của linh vật, gắn nội dung game) · **4 Dạ quang** (phiên bản đêm: phát sáng, biểu cảm buồn ngủ/huyền bí, dáng thân đổi) · **5 Siêu sao** (hoàng gia/ngôi sao: vương miện, đạo cụ vàng, hiệu ứng lấp lánh).
 
-Màu mọi skin ăn theo nền gradient Night Pass đang chọn (viền sáng, bóng, hào quang, màu nhấn bù) — xem MASCOT-ART-RULES mục 8. Chưa vẽ: mới có 2 mẫu (Chim Bay, Xin Nghỉ) ở `shared/art/`, sẽ vẽ lại theo bảng này.
+**Mỗi skin có 8 theme màu** (Hoàng hôn…Hồng đào, như bộ theme Night Pass hiện có): theme đổi bảng màu của chính linh vật + phụ kiện — xem MASCOT-ART-RULES mục 8. Chưa vẽ: mới có 2 mẫu (Chim Bay, Xin Nghỉ) ở `shared/art/`, sẽ vẽ lại theo bảng này.
 
 ## POP PLAY (12 game, phong cách "đồ chơi mềm")
 

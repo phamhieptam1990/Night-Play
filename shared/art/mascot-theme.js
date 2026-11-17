@@ -1,20 +1,22 @@
-/* Màu linh vật ĂN THEO NỀN GRADIENT NIGHT PASS (docs/MASCOT-ART-RULES.md mục 8). NPArtTheme.vars(gradId, "dark"|"light") -> {bg1,bg2,bgx}; NPArtTheme.apply(svgEl, gradId, theme).
-   Thân giữ màu theo skin; chỉ viền sáng mép, bóng đổ, hào quang/lấp lánh và màu nhấn phụ kiện lấy từ biến --bg1/--bg2/--bgx (màu bù, tương phản với nền). Không gói/chưa chọn nền: không đặt biến (dùng mặc định trong SVG). */
+/* 8 THEME MÀU NIGHT PASS CHO LINH VẬT (docs/MASCOT-ART-RULES.md mục 8): 1 skin × 8 theme (như 8 bộ nền gradient hiện có). Theme đổi BẢNG MÀU của chính linh vật + phụ kiện (không phải nền sau lưng).
+   NPArtTheme.apply(svgEl, themeId) đặt --p1 (thân sáng) --p2 (thân đậm) --pst (viền) --pa (nhấn 1) --pb (nhấn 2) (+ --bgx/--bg2 cho viền sáng/bóng). SKIN trong SVG biến đổi bảng này (Dạ quang tối đi, Siêu sao ngả vàng...).
+   themeId rỗng/không có gói = xoá biến → dùng bảng mặc định trong SVG. Dùng chung id với NPGrad (sunset, ocean, forest, candy, aurora, gold, midnight, rose). */
 (function () {
   "use strict";
   if (window.NPArtTheme) return;
-  /* id : [tối bg1, tối bg2, sáng bg1, sáng bg2, bgx tối (bù), bgx sáng (bù, đậm hơn)] */
+  /* id: [p1, p2, pst, pa, pb] */
   var T = {
-    sunset: ["#2a1248", "#c2410c", "#ffe3d1", "#ffd9a0", "#4DD8FF", "#0E8FB8"],
-    ocean: ["#06233f", "#0f8b9d", "#d8f1ff", "#c8f5ec", "#FF8A6B", "#E0502F"],
-    forest: ["#0b2a1c", "#3f7d3a", "#e3f6d8", "#e8f3c4", "#FF7AC6", "#C21F8A"],
-    candy: ["#3b1054", "#d9467c", "#ffe0f1", "#e1d1ff", "#5CF2C0", "#0FA57A"],
-    aurora: ["#0b1b3d", "#5b3fa8", "#d7f7ee", "#e6d9ff", "#FFD24D", "#C98A00"],
-    gold: ["#2b1d05", "#b8801f", "#fff3cf", "#ffd0a0", "#8B7CFF", "#5B3FE0"],
-    midnight: ["#05060f", "#2a2f78", "#e1e6ff", "#dcd7ff", "#D7FF3F", "#7A9A00"],
-    rose: ["#3a0f1f", "#c24a62", "#ffe1e6", "#ffe5d0", "#6BE8E8", "#0F8F8F"]
+    sunset: ["#FF8A4C", "#C2410C", "#8A2A08", "#B57BFF", "#FFD84D"],
+    ocean: ["#35C2D8", "#0F8B9D", "#0A5F70", "#FF8A6B", "#FFE08A"],
+    forest: ["#6FCB6E", "#2F8F46", "#1E6030", "#FFD24D", "#FF8FB0"],
+    candy: ["#FF7AB6", "#D9468F", "#A82B6B", "#5CF2C0", "#FFE08A"],
+    aurora: ["#5CE0C8", "#7A5CD8", "#3F2C8A", "#FFD24D", "#FF8FD0"],
+    gold: ["#FFC84D", "#D99A1E", "#9A6A0A", "#8B7CFF", "#FF7A59"],
+    midnight: ["#7C86FF", "#3A3FB5", "#232780", "#D7FF3F", "#FF4FA3"],
+    rose: ["#FF8FA3", "#D94F6B", "#A3304A", "#6BE8E8", "#FFE08A"]
   };
-  function vars(id, theme) { var t = T[id]; if (!t) return null; var l = theme === "light"; return { bg1: l ? t[2] : t[0], bg2: l ? t[3] : t[1], bgx: l ? t[5] : t[4] }; }
-  function apply(el, id, theme) { var v = vars(id, theme), k; if (!el) return; if (!v) { ["--bg1", "--bg2", "--bgx"].forEach(function (n) { el.style.removeProperty(n); }); return; } for (k in v) el.style.setProperty("--" + k, v[k]); }
-  window.NPArtTheme = { ids: Object.keys(T), vars: vars, apply: apply };
+  var NAMES = { sunset: ["Hoàng hôn", "Sunset"], ocean: ["Đại dương", "Ocean"], forest: ["Rừng xanh", "Forest"], candy: ["Kẹo ngọt", "Candy"], aurora: ["Cực quang", "Aurora"], gold: ["Vàng ấm", "Golden"], midnight: ["Nửa đêm", "Midnight"], rose: ["Hồng đào", "Rose"] };
+  function vars(id) { var t = T[id]; return t ? { p1: t[0], p2: t[1], pst: t[2], pa: t[3], pb: t[4], bgx: t[3], bg2: t[2] } : null; }
+  function apply(el, id) { if (!el) return; var v = vars(id), n; if (!v) { ["p1", "p2", "pst", "pa", "pb", "bgx", "bg2"].forEach(function (k) { el.style.removeProperty("--" + k); }); return; } for (n in v) el.style.setProperty("--" + n, v[n]); }
+  window.NPArtTheme = { ids: Object.keys(T), names: NAMES, vars: vars, apply: apply };
 })();

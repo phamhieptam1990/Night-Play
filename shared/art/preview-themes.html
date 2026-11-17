@@ -1,13 +1,14 @@
 <!doctype html>
-<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Linh vật × nền Night Pass</title>
-<style>body{margin:0;background:#111;font:600 12px system-ui,sans-serif;color:#fff;padding:8px}h2{margin:10px 0 4px;font-size:14px}.r{display:grid;grid-template-columns:70px repeat(5,1fr);gap:6px;margin-bottom:6px;align-items:center}.c{border-radius:12px;padding:4px;display:flex;justify-content:center;align-items:flex-end;gap:2px}.c svg{width:120px;height:auto}.c svg+svg{width:36px}.n{font-size:11px;opacity:.9}</style></head><body>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Linh vật: 5 skin × 8 theme</title>
+<style>body{margin:0;background:#0E1020;font:600 12px system-ui,sans-serif;color:#fff;padding:8px}body.lt{background:#f4efe9;color:#2a2350}h2{margin:10px 0 4px;font-size:14px}.r{display:grid;grid-template-columns:70px repeat(5,1fr);gap:6px;margin-bottom:6px;align-items:center}.c{border-radius:12px;padding:4px;display:flex;justify-content:center;align-items:flex-end;gap:2px;background:linear-gradient(165deg,#2b2064,#171236)}.lt .c{background:linear-gradient(165deg,#fff,#ece6ff)}.c svg{width:120px;height:auto}.c svg+svg{width:36px}.n{font-size:11px;opacity:.9}.hd{opacity:.7;text-align:center}</style></head><body>
 <script src="mascot-theme.js"></script>
 <script>
-var q=new URLSearchParams(location.search),theme=q.get("t")==="light"?"light":"dark",f=q.get("m")||"mascot-pop-pop-fly.svg",SK=["default","badge","group","night","star"],N=0;
-var BG={sunset:["#2a1248","#7a2a5e","#c2410c","#ffe3d1","#ffc4b0","#ffd9a0"],ocean:["#06233f","#0b5a8a","#0f8b9d","#d8f1ff","#aee0f5","#c8f5ec"],forest:["#0b2a1c","#14532d","#3f7d3a","#e3f6d8","#bfe8b5","#e8f3c4"],candy:["#3b1054","#8a2f7a","#d9467c","#ffe0f1","#f9c6ea","#e1d1ff"],aurora:["#0b1b3d","#1b6a6a","#5b3fa8","#d7f7ee","#cfe3ff","#e6d9ff"],gold:["#2b1d05","#6b4a0e","#b8801f","#fff3cf","#ffe39a","#ffd0a0"],midnight:["#05060f","#101a45","#2a2f78","#e1e6ff","#c9d2ff","#dcd7ff"],rose:["#3a0f1f","#7d1f3d","#c24a62","#ffe1e6","#ffc9d3","#ffe5d0"]};
-function inl(t,sk,id){var k=++N;t=t.replace(/id="([a-zA-Z0-9_-]+)"/g,function(m,i){return 'id="'+i+'-'+k+'"'}).replace(/url\(#([a-zA-Z0-9_-]+)\)/g,function(m,i){return 'url(#'+i+'-'+k+')'}).replace('sk-default','sk-'+sk);var d=document.createElement("div");d.innerHTML=t;var s=d.firstChild;NPArtTheme.apply(s,id,theme);return s}
+var q=new URLSearchParams(location.search),lt=q.get("t")==="light",f=q.get("m")||"mascot-pop-pop-fly.svg",SK=[["default","Mặc định (miễn phí)"],["badge","Huy hiệu"],["group","Chủ đề riêng"],["night","Dạ quang"],["star","Siêu sao"]],N=0;
+if(lt)document.body.className="lt";
+function inl(t,sk,id){var k=++N;t=t.replace(/id="([a-zA-Z0-9_-]+)"/g,function(m,i){return 'id="'+i+'-'+k+'"'}).replace(/url\(#([a-zA-Z0-9_-]+)\)/g,function(m,i){return 'url(#'+i+'-'+k+')'}).replace('sk-default','sk-'+sk);var d=document.createElement("div");d.innerHTML=t;var s=d.firstChild;if(id)NPArtTheme.apply(s,id);return s}
 fetch(f).then(function(r){return r.text()}).then(function(t){
- var h=document.createElement("h2");h.textContent=f+" — nền "+(theme==="light"?"sáng":"tối");document.body.appendChild(h);
- NPArtTheme.ids.forEach(function(id){var row=document.createElement("div");row.className="r";var n=document.createElement("div");n.className="n";n.textContent=id;row.appendChild(n);
-  SK.forEach(function(sk){var c=document.createElement("div");c.className="c";var b=BG[id];c.style.background="linear-gradient(165deg,"+(theme==="light"?b[3]+","+b[4]+" 55%,"+b[5]:b[0]+","+b[1]+" 55%,"+b[2])+")";c.appendChild(inl(t,sk,id));c.appendChild(inl(t,sk,id));row.appendChild(c)});document.body.appendChild(row)})});
+ var h=document.createElement("h2");h.textContent=f+" — 5 skin × (mặc định + 8 theme)";document.body.appendChild(h);
+ var hr=document.createElement("div");hr.className="r";hr.innerHTML="<div></div>"+SK.map(function(s){return '<div class="hd">'+s[1]+'</div>'}).join("");document.body.appendChild(hr);
+ [""].concat(NPArtTheme.ids).forEach(function(id){var row=document.createElement("div");row.className="r";var n=document.createElement("div");n.className="n";n.textContent=id?NPArtTheme.names[id][0]:"mặc định";row.appendChild(n);
+  SK.forEach(function(s){var c=document.createElement("div");c.className="c";c.appendChild(inl(t,s[0],id));c.appendChild(inl(t,s[0],id));row.appendChild(c)});document.body.appendChild(row)})});
 </script></body></html>

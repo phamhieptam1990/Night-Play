@@ -82,9 +82,14 @@ Mỗi linh vật phải gợi ra đúng game chỉ trong ~1 giây, kể cả ở
 5. Chụp ảnh ở 40/96/200px × sáng/tối (puppeteer) và TỰ NHÌN; gửi chủ site duyệt mẫu đầu tiên của mỗi nhóm.
 6. Chạy bài đo (mục 6). Chỉ khi đạt mới nhúng vào game.
 
-## 8. Màu ăn theo nền gradient Night Pass (chủ site chốt)
+## 8. MỖI SKIN CÓ 8 THEME MÀU (chủ site chốt: "1 skin có 8 theme như hiện tại")
 
-Linh vật đọc bộ nền đang chọn (`NPGrad.get()`/`find()`, 8 bộ × sáng/tối) và đặt 3 biến: `--bg1`, `--bg2` (tông nền), `--bgx` (màu tương phản). Thân GIỮ màu theo skin; chỉ phần sau ăn theo nền: viền sáng mép (rim light), bóng đổ ngả màu nền (thay xám), hào quang + lấp lánh của skin Dạ quang/Siêu sao, màu nhấn phụ kiện (màu bù). Không gói / chưa chọn nền = bộ màu mặc định. Chỉ dùng biến CSS (không filter). Phải chụp ảnh 8 nền × 5 skin × sáng/tối và tự nhìn trước khi nhúng.
+Night Pass hiện có **8 theme** (Hoàng hôn, Đại dương, Rừng xanh, Kẹo ngọt, Cực quang, Vàng ấm, Nửa đêm, Hồng đào — `NPGrad.LIST`, `shared/art/mascot-theme.js`). Theme đổi **BẢNG MÀU CỦA CHÍNH LINH VẬT + PHỤ KIỆN** (KHÔNG phải màu nền sau lưng): 5 skin × (mặc định + 8 theme) = 45 biến thể mỗi game, từ MỘT tệp SVG.
+
+- Theme đặt 5 biến gốc `--p1` (thân sáng) `--p2` (thân đậm) `--pst` (viền) `--pa`, `--pb` (nhấn 1, nhấn 2) bằng `NPArtTheme.apply(svg, themeId)`. SKIN biến đổi bảng đó bằng `color-mix` (Dạ quang tối đi/tím hoá, Siêu sao sáng + lấp lánh vàng; Mặc định/Huy hiệu/Chủ đề riêng giữ nguyên bảng) → skin khác nhau bằng DÁNG + PHỤ KIỆN, theme khác nhau bằng MÀU.
+- Không có gói / chưa chọn theme: không đặt biến, dùng bảng mặc định ghi trong SVG (miễn phí). Theme màu là phần của Night Pass (cổng `NPGrad.active()`).
+- **Màu KHUÔN MẶT và ĐẠO CỤ NHẬN DIỆN không đổi theo theme** khi chúng là dấu hiệu nhận diện (mỏ/chữ ký mặt cố định; mặt kem, mắt, chân mày; đạo cụ vẫn nhận ra dù đổi màu).
+- Bài chụp bắt buộc: `shared/art/preview-themes.html?m=<tệp>.svg` (cột = 5 skin, hàng = mặc định + 8 theme, nền tối; thêm `&t=light` cho nền sáng) và TỰ NHÌN trước khi nhúng.
 
 ## 6. Bài đo tự động cần có (`scripts/cozygame/check-art.js`, đã viết, chưa nối vào `check.js`)
 

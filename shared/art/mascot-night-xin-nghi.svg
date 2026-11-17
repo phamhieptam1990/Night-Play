@@ -2,11 +2,10 @@
 <title>Nhân viên Xin Nghỉ</title>
 <desc>Chữ ký khuôn mặt (giữ nguyên ở mọi skin): mặt kem hình bầu dục, mắt lim dim "ổn mà", chân mày phải nhướn, chân mày trái có vết cắt, nhếch mép một bên. Đạo cụ nhận diện game (luôn có): tờ đơn xin nghỉ có hình ô dù bãi biển cầm ở tay trái. Dáng thân đổi: hoodie (Mặc định/Huy hiệu/Nhóm), áo khoác dài (Dạ quang), vest vai rộng (Siêu sao).</desc>
 <style>
-.np-mascot{--bg1:#2b2064;--bg2:#171236;--bgx:#FF4FA3;--c1:#8B5CFF;--c2:#5B2FE0;--c3:#FF4FA3;--c4:#D7FF3F;--face:#FFE9D6;--ink:#12102B;--c3x:color-mix(in srgb,var(--c3) 65%,var(--bgx));--sh:color-mix(in srgb,var(--bg2) 55%,#000)}
-.np-mascot.sk-badge{--c1:#FF6B4A;--c2:#D94426;--c3:#FFD43B}
-.np-mascot.sk-group{--c1:#2EC9FF;--c2:#1590D6;--c3:#FFB020;--c4:#FF4FA3}
-.np-mascot.sk-night{--c1:#24266E;--c2:#15174A;--c3:#39F5FF;--c4:#FF4FA3}
-.np-mascot.sk-star{--c1:#FFD83D;--c2:#F0A81C;--c3:#FF4FA3;--c4:#8B5CFF}
+/* THEME (8 bộ Night Pass) đặt bảng gốc --p1 --p2 --pa --pb; SKIN biến đổi bảng đó. Không theme: bảng mặc định. */
+.np-mascot{--bg1:#2b2064;--bg2:#171236;--bgx:#FF4FA3;--p1:#8B5CFF;--p2:#5B2FE0;--pa:#FF4FA3;--pb:#D7FF3F;--face:#FFE9D6;--ink:#12102B;--c1:var(--p1);--c2:var(--p2);--c3:var(--pa);--c4:var(--pb);--c3x:var(--c3);--sh:color-mix(in srgb,var(--bg2) 55%,#000)}
+.np-mascot.sk-night{--c1:color-mix(in srgb,var(--p2) 50%,#0f1040);--c2:color-mix(in srgb,var(--p2) 25%,#070820)}
+.np-mascot.sk-star{--c1:color-mix(in srgb,var(--p1) 70%,#fff);--c2:color-mix(in srgb,var(--p2) 85%,#fff)}
 .acc,.fx,.shp,.hp{display:none}
 .sk-default .shp-def,.sk-badge .shp-def,.sk-group .shp-def,.sk-night .shp-night,.sk-star .shp-star{display:inline}
 .sk-default .hp,.sk-badge .hp,.sk-group .hp,.sk-night .hp{display:inline}
