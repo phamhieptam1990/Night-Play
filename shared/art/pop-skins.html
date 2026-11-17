@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Linh vật Pop: 5 skin × 8 theme</title>
+<style>body{margin:0;background:#171236;color:#fff;font:700 12px system-ui,sans-serif;padding:10px}h2{margin:12px 0 4px;font-size:14px}.r{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:4px}.c{border-radius:14px;padding:4px;background:linear-gradient(165deg,#2b2064,#171236 80%);text-align:center}.c svg{width:100%;max-width:130px;height:auto;display:block;margin:0 auto}.n{font-size:10px;opacity:.8}</style></head><body>
+<script src="mascot-theme.js"></script><script src="mascot-art.js"></script>
+<script>
+var Q=new URLSearchParams(location.search),IDS=(Q.get("m")||"ten-lua-cua-be").split(","),TH=Q.get("t")||"",SKN=["default","badge","group","night","star"],N=0;
+function go(n){if(!(window.NPArt&&NPArt.games&&Object.keys(NPArt.games).length)){if(n<50)return setTimeout(function(){go(n+1)},60)}
+ NPArt.preload(IDS).then(function(){IDS.forEach(function(id){var g=NPArt.games[id];if(!g)return;var h=document.createElement("h2");h.textContent=id+" — "+g.name[0];document.body.appendChild(h);var row=document.createElement("div");row.className="r";SKN.forEach(function(s){var c=document.createElement("div");c.className="c";window.NPArtForce=TH;c.innerHTML=NPArt.markup(id,s,130,TH)+'<div class="n">'+(s==="default"?"Mặc định":(g.skinNames[s]||[s])[0])+"</div>";row.appendChild(c)});document.body.appendChild(row)})})}
+go(0);
+</script></body></html>

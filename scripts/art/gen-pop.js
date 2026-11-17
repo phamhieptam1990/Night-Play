@@ -1,6 +1,6 @@
 /* Sinh 11 linh vật POP còn lại (bản MẪU chờ duyệt): node scripts/art/gen-pop.js → shared/art/mascot-pop-<id>.svg + shared/art/pop-sheet.html
    Luật: docs/MASCOT-ART-RULES.md (phong cách Pop "đồ chơi mềm", khuôn mặt chữ ký + đạo cụ nhận diện id="sign" + dấu hiệu id="mark"). Chỉ có skin MẶC ĐỊNH ở bản mẫu này. */
-const fs = require("fs"), path = require("path"), out = path.join(__dirname, "../../shared/art");
+const fs = require("fs"), path = require("path"), out = path.join(__dirname, "../../shared/art"), { S: SK } = require("./pop-skins.js");
 const eyes = '<g id="eyes" class="npa-blink"><circle cx="100" cy="112" r="14" fill="var(--ink)"/><circle cx="156" cy="112" r="14" fill="var(--ink)"/><circle cx="105" cy="106" r="5" fill="#fff"/><circle cx="161" cy="106" r="5" fill="#fff"/><circle cx="96" cy="118" r="2.5" fill="#fff"/><circle cx="152" cy="118" r="2.5" fill="#fff"/></g>';
 const blush = '<g id="blush"><ellipse cx="80" cy="138" rx="11" ry="7" fill="var(--bl)" opacity=".75"/><ellipse cx="176" cy="138" rx="11" ry="7" fill="var(--bl)" opacity=".75"/></g>';
 const smile = '<path id="mouth" class="m-talk" d="M114 144Q128 158 142 144" fill="none" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/>';
@@ -63,13 +63,18 @@ G["lang-cua-be"] = { name: "Làng Của Bé", hero: "Cừu non Trưởng Làng",
   mark: '<g id="mark"><path d="M114 46L128 34L142 46V58H114Z" fill="#fff" stroke="#9AA3B8" stroke-width="2.5" stroke-linejoin="round"/><rect x="123" y="48" width="10" height="10" fill="#FF8A4C"/></g>',
   sign: '<g id="sign"><path d="M178 200L206 174L234 200V236H178Z" fill="#FFE9C8" stroke="#C89A5A" stroke-width="3" stroke-linejoin="round"/><path d="M172 204L206 170L240 204" fill="none" stroke="#E8454F" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><rect x="198" y="212" width="16" height="24" rx="4" fill="#B8783C"/><rect x="186" y="208" width="10" height="10" rx="2" fill="#8FD8FF"/><path d="M210 172V138L232 148L210 158" fill="#FFD43B" stroke="#C89A0A" stroke-width="3" stroke-linejoin="round"/></g>' };
 function svg(id, d) {
-  const p = d.pal, vars = `--p1:${p.p1};--p2:${p.p2};--pst:${p.pst};--k1:${p.k1};--k2:${p.k2};${d.extraVars || ""}`;
+  const p = d.pal, sk = SK[id], vars = `--p1:${p.p1};--p2:${p.p2};--pst:${p.pst};--k1:var(--pa,${p.k1});--k2:var(--pb,${p.k2});${d.extraVars || ""}`;
+  const body = d.body.replace(/var\(--p1\)/g, "var(--c1)").replace(/var\(--p2\)/g, "var(--c2)");
+  const G = "np-mascot[data-game=\"" + id + "\"]";
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="${d.name}" class="np-mascot sk-default" data-style="pop" data-game="${id}">
 <title>${d.hero} — ${d.name}</title>
-<desc>Chữ ký khuôn mặt (giữ nguyên ở mọi skin): mắt tròn to hai chấm sáng, má hồng, miệng cười nhỏ, ${d.markTxt}. Đạo cụ nhận diện game (luôn có): ${d.prop}. BẢN MẪU chờ duyệt (chỉ skin Mặc định).</desc>
+<desc>Chữ ký khuôn mặt (giữ nguyên ở mọi skin): mắt tròn to hai chấm sáng, má hồng, miệng cười nhỏ, ${d.markTxt}. Đạo cụ nhận diện game (luôn có): ${d.prop}. 5 skin (1 miễn phí). Chi tiết nhỏ dùng màu cứng.</desc>
 <style>
-.np-mascot[data-game="${id}"]{--bg1:#2b2064;--bg2:#171236;--bgx:#FF8A4C;${vars}--bl:#FF9DB0;--ink:#2A2350;--hl:#fff;--sh:color-mix(in srgb,var(--bg2) 55%,#000);--c1:var(--p1);--c2:var(--p2);--st:var(--pst)}
+.${G}{--bg1:#2b2064;--bg2:#171236;--bgx:#FF8A4C;${vars}--bl:#FF9DB0;--ink:#2A2350;--hl:#fff;--sh:color-mix(in srgb,var(--bg2) 55%,#000);--c1:var(--p1);--c2:var(--p2);--st:var(--pst)}
+.${G}.sk-night{--c1:color-mix(in srgb,var(--p1) 60%,#0b0c3a);--c2:color-mix(in srgb,var(--p2) 55%,#0b0c3a);--st:color-mix(in srgb,var(--pst) 50%,#0b0c3a)}
+.${G}.sk-star{--c1:color-mix(in srgb,var(--p1) 70%,#fff);--c2:color-mix(in srgb,var(--p2) 84%,#fff)}
 .acc,.fx{display:none}
+.sk-badge .acc-badge,.sk-group .acc-group,.sk-night .acc-night,.sk-star .acc-star,.sk-night .fx-night,.sk-star .fx-star{display:inline}
 .npa{transform-box:fill-box;transform-origin:50% 100%}.npa-bob{animation:npa-bob 2.4s ease-in-out infinite}.npa-blink{transform-origin:50% 50%;animation:npa-blink 4.2s infinite}.npa-twinkle{animation:npa-twinkle 1.8s ease-in-out infinite}
 @keyframes npa-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}@keyframes npa-blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.12)}}@keyframes npa-twinkle{0%,100%{opacity:.25}50%{opacity:1}}
 :root.np-playing .npa,:root.np-playing .npa-twinkle{animation:none}@media (prefers-reduced-motion:reduce){.npa,.npa-twinkle{animation:none}}
@@ -77,11 +82,12 @@ function svg(id, d) {
 <defs><linearGradient id="pg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--c1)"/><stop offset="1" style="stop-color:var(--c2)"/></linearGradient></defs>
 <g id="shadow"><ellipse cx="128" cy="237" rx="72" ry="9" fill="var(--sh)" opacity=".4"/></g>
 <g id="all" class="npa npa-bob">
-<g id="body">${d.body}</g>
+${sk.back.group ? `<g id="back-group" class="acc acc-group">${sk.back.group}</g>` : ""}<g id="back-star" class="acc acc-star">${sk.back.star}</g>
+<g id="body">${body}</g>
 <g id="face">${eyes}${blush}${d.mark}${d.noMouth ? "" : smile}${d.beak || ""}</g>
 ${d.sign}
-<g id="acc-badge" class="acc acc-badge"></g><g id="acc-group" class="acc acc-group"></g><g id="acc-night" class="acc acc-night"></g><g id="acc-star" class="acc acc-star"></g>
-<g id="fx-night" class="fx fx-night"></g><g id="fx-star" class="fx fx-star"></g>
+<g id="acc-badge" class="acc acc-badge">${sk.badge}</g><g id="acc-group" class="acc acc-group">${sk.group}</g><g id="acc-night" class="acc acc-night">${sk.night}</g><g id="acc-star" class="acc acc-star">${sk.star}</g>
+<g id="fx-night" class="fx fx-night">${sk.fxNight}</g><g id="fx-star" class="fx fx-star">${sk.fxStar}</g>
 </g>
 </svg>
 `;
@@ -89,4 +95,12 @@ ${d.sign}
 const bellFix = s => s.replace(/var\(--bell\)/g, "#FFF3D4");
 for (const id in G) { let s = svg(id, G[id]); fs.writeFileSync(path.join(out, "mascot-pop-" + id + ".svg"), s); }
 console.log("đã sinh", Object.keys(G).length, "linh vật");
+/* ghi dữ liệu đăng ký vào shared/art/mascot-games.js (giữa hai dấu GEN-POP) */
+const J = JSON.stringify, lineSet = (id) => { const k = SK[id]; return { start: [["Mình bay thôi!", "Let's go!"], ["Cùng chơi nào bé ơi!", "Let's play!"]], correct: [["Giỏi quá!", "Great job!"], ["Đúng rồi!", "That's right!"], ["Hoan hô bé!", "Hooray!"], ["Bé giỏi lắm!", "You're so good!"]], wrong: [["Không sao, thử lại nhé!", "It's ok, try again!"], ["Cố lên nào!", "Come on!"]], combo: [[["Liên tục luôn!", "On a roll!"]], [["Siêu quá đi!", "Super!"]], [["Tuyệt vời ông mặt trời!", "Amazing!"]]], hi: k.hi, tap: k.tap, end: [["Hay lắm, chơi lại nhé!", "Nice! Play again?"]] }; };
+let gen = "";
+for (const id in G) { const k = SK[id]; gen += `    ${J(id)}: { pos: "bl", style: "pop", file: ${J("mascot-pop-" + id + ".svg")}, emoji: ${J(k.emoji)}, name: ${J([G[id].name, G[id].name])}, skinNames: ${J(k.names)}, fx: ${J(k.fx)}, L: ${J(lineSet(id))} },\n`; }
+const gp = path.join(out, "mascot-games.js"); let gs = fs.readFileSync(gp, "utf8");
+if (!gs.includes("/*GEN-POP-START*/")) gs = gs.replace('"pop-fly": {', '/*GEN-POP-START*/\n/*GEN-POP-END*/\n    "pop-fly": {');
+gs = gs.replace(/\/\*GEN-POP-START\*\/[\s\S]*?\/\*GEN-POP-END\*\//, "/*GEN-POP-START*/\n" + gen + "    /*GEN-POP-END*/");
+fs.writeFileSync(gp, gs); console.log("đã ghi", Object.keys(G).length, "mục vào mascot-games.js");
 module.exports = { G };

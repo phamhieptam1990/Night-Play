@@ -366,9 +366,18 @@
   function gameId() { var m = /\/games\/([a-z0-9-]+)\//.exec(location.pathname); return m ? m[1] : ""; }
   function boot() {
     var gid = gameId(); if (!gid || !G[gid]) return;
+    /* KHUNG CHUNG: bọc comboFx()/comboLose() toàn cục (các game Pop có sẵn) → hiệu ứng combo của linh vật theo chuỗi */
+    try { var cf = window.comboFx, cl = window.comboLose, cn = 0; if (typeof cf === "function" && !cf.__npa) { window.comboFx = function () { cn++; try { event("combo", { tier: Math.min(3, Math.max(1, cn - 1)) }); } catch (e) {} return cf.apply(this, arguments); }; window.comboFx.__npa = 1; }
+      if (typeof cl === "function" && !cl.__npa) { window.comboLose = function () { cn = 0; try { event("wrong"); } catch (e) {} return cl.apply(this, arguments); }; window.comboLose.__npa = 1; }
+      addEventListener("np:start", function () { cn = 0; }); } catch (e) {}
     /* KHUNG CHUNG: tự bọc hàm toast(msg,ms,kind) toàn cục của game → thông báo vào bong bóng linh vật; game KHÔNG phải sửa hàm toast */
     try { var ot = window.toast; if (typeof ot === "function" && !ot.__npa) { var nt = function (m, ms, kind) { try { if (typeof m === "string" && sayAll(m, ms, kind)) return; } catch (e) {} return ot.apply(this, arguments); }; nt.__npa = 1; window.toast = nt; } } catch (e) {}
-    var h = document.querySelector(HERO); if (h) mount(h, { game: gid, role: "hero" });
+    var h = document.querySelector(HERO);
+    if (!h && G[gid].style === "pop") {   /* game Pop chưa có ô hero: chèn #paHero vào màn chọn (+ CSS dùng chung pophero.css) */
+      var scr = document.getElementById("home") || document.getElementById("village") || document.getElementById("ovStart");
+      if (scr) { var lk = document.createElement("link"); lk.rel = "stylesheet"; lk.href = BASE + "pophero.css"; document.head.appendChild(lk); h = document.createElement("div"); h.id = "paHero"; h.className = "npa-hero"; h.setAttribute("aria-hidden", "true"); h.textContent = G[gid].emoji || ""; scr.insertBefore(h, scr.firstChild); }
+    }
+    if (h) mount(h, { game: gid, role: "hero" });
     if (document.documentElement.getAttribute("data-npa-mini") !== "off") { var pl = document.getElementById("play"); if (pl) companion(gid, pl, { pos: G[gid].pos || "br" }); }
   }
   addEventListener("npa", function (e) { var d = (e && e.detail) || {}; if (d.name) event(d.name, d); });
