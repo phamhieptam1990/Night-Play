@@ -878,7 +878,7 @@ if(window.NP){
     if(mode.snap)Object.assign(st,mode.snap());
     return st;
   });
-  NP.onPause(()=>pauseRound("parent"),()=>resumeRound("parent"));
+  NP.onPause(()=>pauseRound("parent"),()=>resumeRound("parent"),{countdown:true});
 }
 /* ===== Giao diện chọn chế độ, khóa Night Pass, tải mã bản trả phí ===== */
 DD.catalog={

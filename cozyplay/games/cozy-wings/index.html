@@ -1012,7 +1012,7 @@ addEventListener("storage",e=>{if(e.key==="theme")document.documentElement.datas
 if(window.NP){
   NP.state(()=>{const S=PF.S;if(!S||!running||S.over)return null;const st={type:S.type,diff:S.D.id,score:S.score,hearts:S.hearts,t:Math.round(S.t*10)/10,combo:S.combo|0},sk=PF.skinSel[S.type];
     if(sk&&sk!=="default"&&PF.skins[S.type]&&PF.skins[S.type][sk]&&PF.ticket&&!(PF.pro&&PF.pro.trial)){st.sk=sk;st.tk=PF.ticket}return st});
-  NP.onPause(()=>pauseRound("parent"),()=>resumeRound("parent"));
+  NP.onPause(()=>pauseRound("parent"),()=>resumeRound("parent"),{countdown:true});
 }
 if(!HELPER&&passToken())PF.loadPro(false).catch(()=>{});
 applyLang();fit();requestAnimationFrame(loop);

@@ -279,7 +279,7 @@ window.NP = (function () {
   var multi = q.get("multi") === "1", mPaused = false, mBlur = true, mUser = false, mOver = false, mPausedByUs = false, mBase = ((document.currentScript && document.currentScript.src) || "").replace(/bridge\.js(\?.*)?$/, "");
   var vt = { off: 0, at: 0 }, held = {}, heldT = {}, alias = {};
   /* ĐỒNG HỒ ẢO dùng chung: chế độ chơi cùng lúc (host tạm dừng khung) VÀ trang game thường (mở menu ⋯ → tạm dừng, đóng menu → đếm 3-2-1: shared/menupause.js gọi NP.freeze/thaw). Không áp cho chế độ chơi hộ (?helper=1). */
-  var PAUSABLE = !helper, mMenu = false, mMenuByUs = false;
+  var PAUSABLE = !helper, mMenu = false, mMenuByUs = false, ownCd = false;
   if (multi || PAUSABLE) {
     (function () {   /* đồng hồ ảo */
       var rPN = performance.now.bind(performance), rRAF = window.requestAnimationFrame.bind(window), rCAF = window.cancelAnimationFrame.bind(window),
@@ -440,6 +440,7 @@ window.NP = (function () {
     multi: multi,
     /* TẠM DỪNG KHI MỞ MENU ⋯ (trang game thường; shared/menupause.js): đóng băng đồng hồ ảo + NP.onPause; menuResume() chạy tiếp từ đúng chỗ. Chỉ khi đang chơi (NP.state trả dữ liệu) mới coi là "đang chơi" để đếm 3-2-1. */
     hudInfo: function () { try { hudScan(); return readHud(); } catch (e) { return null; } },   // điểm/combo/lượt/chỉ số hiện tại (bảng ⋯ của chế độ toàn màn hình)
+    ownCountdown: function () { return ownCd; },   // game khai NP.onPause(p, r, {countdown:true}) = resume của game đã tự có 3-2-1 → menupause.js không đếm thêm (tránh đếm hai lần)
     playing: function () { try { return !!(getter && getter()); } catch (e) { return false; } },
     menuPause: function () {
       if (multi || helper || !PAUSABLE || mMenu) return false; mMenu = true; document.documentElement.classList.add("np-menupaused"); if (vt.freeze) vt.freeze();
@@ -451,7 +452,7 @@ window.NP = (function () {
       if (!mMenu) return; mMenu = false; document.documentElement.classList.remove("np-menupaused"); if (vt.thaw) vt.thaw();
       if (mMenuByUs) { mMenuByUs = false; try { if (resumeFn) resumeFn(); } catch (x) {} }
     },
-    onPause: function (p, r) { pauseFn = p; resumeFn = r; },
+    onPause: function (p, r, o) { pauseFn = p; resumeFn = r; ownCd = !!(o && o.countdown); },
     pauseNow: function () { if (pauseFn) try { pauseFn(); } catch (x) {} },     // shared/exitconfirm.js: tạm dừng khi hỏi thoát
     resumeNow: function () { if (resumeFn) try { resumeFn(); } catch (x) {} }
   };

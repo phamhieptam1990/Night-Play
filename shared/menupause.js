@@ -19,7 +19,7 @@
   function set(v) {
     v = !!v; if (v === open) return; open = v; var NPn = NPo(); if (!NPn || !NPn.menuPause) return;
     if (v) { stopCount(); wasPlaying = !!(NPn.playing && NPn.playing()) || wasPlaying; NPn.menuPause(); return; }
-    if (!wasPlaying) { NPn.menuResume(); return; }
+    if (!wasPlaying || (NPn.ownCountdown && NPn.ownCountdown())) { wasPlaying = false; NPn.menuResume(); return; }   /* game có 3-2-1 riêng khi resume (NP.onPause 3 tham số {countdown:true}): để game tự đếm */
     var run = ++cdRun, n = 3, el = cd(); el.classList.add("on");
     (function tick() {
       if (run !== cdRun) return; el.innerHTML = "<b>" + n + "</b>";

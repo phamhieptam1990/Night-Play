@@ -667,7 +667,7 @@ const BOOT_H=!!(window.NP&&NP.helper),HELPER=BOOT_H&&!(NP.resumeBoot&&NP.resumeB
 if(window.NP){
   NP.state(()=>{const S=PF.S;if(!S||!running||S.over)return null;const st={type:S.type,score:S.score,correct:S.correct,wrong:S.wrong,streak:S.streak,done:S.done,spawned:S.spawned,dots:S.dots.slice(0,12),used:S.used.slice(-12)};if(S.type==="stars"&&S.custom){st.seg=S.custom.seg;st.right=S.custom.right}
     if(PF.pro&&!PF.pro.trial&&PF.ticket){st.tk=PF.ticket;const sk=PF.skinSel[S.type];if(sk&&sk!=="default"&&PF.skins[S.type]&&PF.skins[S.type][sk])st.sk=sk}return st});   /* chơi hộ: bạn chơi tiếp đúng chỗ đang dở */
-  NP.onPause(()=>pauseRound("parent"),()=>resumeRound("parent"));
+  NP.onPause(()=>pauseRound("parent"),()=>resumeRound("parent"),{countdown:true});
 }
 if(passToken()&&!(window.NP&&NP.helper))PF.loadPro(false).catch(()=>{});
 applyLang();fit();requestAnimationFrame(loop);
