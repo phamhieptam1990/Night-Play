@@ -329,8 +329,11 @@ window.NP = (function () {
   var hudFn = null;
   /* ẨN BẢNG ĐIỂM CỦA GAME (lệnh hud-hide/hud-show): chỉ các ô .stats .st có nhãn trùng thông tin đã có ở panel host (Điểm / Tốt nhất / Cao nhất / Combo); ô cần để chơi (mạng, giờ, lượt còn, tiền...) KHÔNG ẩn */
   var HUDRE = /^(điểm|score|tốt nhất|best|cao nhất|kỷ lục|kỉ lục|điểm cao|combo)$/i, mHudHide = false;
+  var mStats = [];   /* MỌI ô .stats .st của game (nhãn + giá trị) gửi lên host để hiện trong panel ⋯ của khung (game ở chế độ chơi cùng lúc ẩn cả hàng chỉ số cho vừa khung) */
   function hudScan() {
-    var n = 0;
+    var n = 0, ss = [];
+    document.querySelectorAll(".stats .st").forEach(function (st) { var lb = st.querySelector("span"), v = st.querySelector("b"); if (lb && v) { var l = lb.textContent.trim(), t = v.textContent.trim(); if (l && t) ss.push([l.slice(0, 18), t.slice(0, 14)]); } });
+    mStats = ss.slice(0, 8);
     document.querySelectorAll(".stats .st").forEach(function (st) { var lb = st.querySelector("span"), m = !!(lb && HUDRE.test(lb.textContent.trim())); if (m) n++; if (m && mHudHide) st.setAttribute("data-nohud", ""); else st.removeAttribute("data-nohud"); });
     document.querySelectorAll(".stats").forEach(function (r) { var all = r.querySelectorAll(".st").length, hid = r.querySelectorAll(".st[data-nohud]").length; r.classList.toggle("np-allhid", all > 0 && all === hid); });
     return n;
@@ -346,7 +349,7 @@ window.NP = (function () {
     var time = o.time != null ? o.time : g("timeLeft") != null ? g("timeLeft") : g("tl") != null ? g("tl") : domNum(["time", "tm", "svTimer"]);
     var playing = !!st; if (playing) mOver = false;
     var best = null; try { best = numOf(localStorage.getItem("np-hi-" + gid)); } catch (e) {}
-    return { type: "np-hud", id: gid, hc: hudScan(), hp: document.getElementById("phBtn") ? 1 : 0, time: time, score: score, combo: combo, moves: moves, best: best, state: mPaused ? "paused" : playing ? "playing" : mOver ? "over" : "idle" };
+    return { type: "np-hud", id: gid, hc: hudScan(), stats: mStats, hp: document.getElementById("phBtn") ? 1 : 0, time: time, score: score, combo: combo, moves: moves, best: best, state: mPaused ? "paused" : playing ? "playing" : mOver ? "over" : "idle" };
   }
   /* ẢNH CHỤP cho khay thumbnail: vuông 128px, nền ĐẶC (màu nền thật của game), canvas vẽ "contain" giữa ô — không cắt, không để lộ vùng trong suốt/đen.
      Canvas trong suốt (game vẽ trên nền CSS) khi lưu JPEG sẽ thành ĐEN → nếu > 30% điểm ảnh là trong suốt hoặc đen thuần thì trả null (host dùng icon). Host chụp TRƯỚC khi ẩn khung. */

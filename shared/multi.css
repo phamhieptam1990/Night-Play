@@ -22,3 +22,6 @@ html.np-multi .cards .card{min-height:0}
 html.np-g-dap-deadline body{padding-top:14px}
 /* ẩn ô điểm/combo trùng với panel host (bridge.js hudScan đặt data-nohud) */
 html.np-nohud [data-nohud], html.np-nohud .stats.np-allhid { display: none !important; }
+
+/* CHƠI CÙNG LÚC — CHỈ KHUNG CHƠI: hàng chỉ số (.stats: điểm, lượt, giờ...) và tên game ở đầu khung ẩn hẳn để khung vừa nội dung; các chỉ số hiện trong panel ⋯ của khung (host đọc qua np-hud.stats) + huy hiệu nhỏ trên icon ⋯ */
+html.np-multi .stats, html.np-multi .gametitle { display: none !important; }

@@ -54,6 +54,17 @@ svg{display:block}
 .fr{position:relative;min-width:0;min-height:0;border-radius:14px;overflow:hidden;background:var(--card);box-shadow:0 0 0 1px var(--line);transition:box-shadow .15s}
 .fr.hid{display:none}
 .fr.sel{box-shadow:0 0 0 3px var(--accent)}
+/* ĐANG CHƠI NỔI BẬT: khung được chọn có viền sáng + quầng + nhãn tên game ở trên; các khung còn lại phủ lớp tối nhẹ (chỉ opacity, không filter) — chạm vào để chuyển */
+.fr::after{content:"";position:absolute;inset:0;background:#05050f;opacity:0;pointer-events:none;transition:opacity .2s;z-index:3}
+body.multi2 .fr:not(.sel)::after{opacity:.34}
+/* khung ĐANG CHƠI to hơn một chút (+1,2%, nằm gọn trong khe giữa các khung nên không đè khung bên cạnh), các khung khác thu nhẹ (−1,2%); chỉ transform nên nhẹ */
+body.multi2 .fr{transition:box-shadow .15s,transform .25s cubic-bezier(.2,.9,.3,1)}
+body.multi2 .fr.sel{transform:scale(1.012)}body.multi2 .fr:not(.sel){transform:scale(.988)}
+@media (prefers-reduced-motion:reduce){body.multi2 .fr{transition:box-shadow .15s}}
+.fr.sel{box-shadow:0 0 0 3px var(--accent),0 0 22px color-mix(in srgb,var(--accent) 55%,transparent)}
+.fr::before{content:attr(data-name);position:absolute;left:50%;top:6px;transform:translate(-50%,-4px);max-width:70%;padding:3px 12px;border-radius:999px;background:var(--accent);color:var(--on-accent);font:800 12px/1.4 var(--font);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;pointer-events:none;z-index:4;transition:opacity .2s,transform .2s}
+body.multi2 .fr.sel.lbl::before{opacity:.95;transform:translate(-50%,0)}
+
 .fr{z-index:0;contain:layout paint;isolation:isolate}   /* mọi khung cùng z-index; chỉ popup/panel nổi (panel nằm TRONG khung) */
 .fr iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#0b0b18;display:block}
 .mi,.hm{position:absolute;top:0;height:44px;min-width:44px;padding:0 9px;display:flex;align-items:center;justify-content:center;gap:4px;opacity:.45;z-index:6;transition:opacity .15s}
@@ -124,7 +135,7 @@ body.side #perf{max-width:50px;font-size:10px}
 .pn{width:min(272px,calc(100% - 12px));max-height:calc(100% - 48px);right:6px;top:42px;font-size:13px}
 .pn .pt{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0}.pn .pt b{font-size:17px;line-height:1.15;font-weight:900;min-width:0}
 .pn .pt span{flex:none;padding:3px 9px;border-radius:99px;background:color-mix(in srgb,var(--accent) 24%,var(--card));font-size:11px;font-weight:800;color:var(--ink)}
-.pn .ps{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pn .ps{display:grid;grid-template-columns:1fr 1fr;gap:8px}.pn .pl{display:grid;grid-template-columns:1fr 1fr;gap:6px}.pn .pl:empty{display:none}.pn .pl div{display:flex;justify-content:space-between;align-items:baseline;gap:6px;padding:4px 10px;border-radius:12px;background:var(--card);border:1px solid var(--line);font-size:12px}.pn .pl i{font-style:normal;color:var(--muted);font-weight:700}.pn .pl b{font-weight:800}
 .pn .sc{border-radius:16px;background:var(--card);border:1px solid var(--line);padding:6px 10px;display:flex;flex-direction:column;gap:0}.pn .sc i{font-style:normal;font-size:11px;font-weight:700;color:var(--muted)}.pn .sc b{font-size:24px;line-height:1.1;font-weight:900;font-variant-numeric:tabular-nums;color:var(--ink)}
 .pn .pb{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0}
 .pn .pb button,.pn .sw{margin:0;width:auto;min-height:62px;border-radius:16px;background:var(--card);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:6px 2px;font-size:11px;font-weight:800;line-height:1.1;text-align:center;color:var(--ink)}
@@ -284,9 +295,11 @@ body.side #perf{max-width:50px;font-size:10px}
     for (var rows = 1; rows <= n; rows++) {
       var counts = [], base = Math.floor(n / rows), extra = n % rows;
       for (var r = 0; r < rows; r++) counts.push(base + (r < extra ? 1 : 0));
-      var h = (H - GAP * (rows - 1)) / rows, minRatio = 1e9, k = 0;
-      counts.forEach(function (cnt) { var w = (W - GAP * (cnt - 1)) / cnt; for (var c = 0; c < cnt; c++) { var nd = needOf(list[k++] || { g: { minW: 280, minH: 320 } }, w, h); minRatio = Math.min(minRatio, w / nd[0], h / nd[1]); } });
-      if (!best || minRatio > best.ratio + 1e-6) best = { rows: rows, counts: counts, ratio: minRatio, h: h };
+      var h = (H - GAP * (rows - 1)) / rows, minRatio = 1e9, k = 0, area = 0;
+      counts.forEach(function (cnt) { var w = (W - GAP * (cnt - 1)) / cnt; for (var c = 0; c < cnt; c++) { var itm = list[k++] || { g: { minW: 280, minH: 320 } }, nd = needOf(itm, w, h); minRatio = Math.min(minRatio, w / nd[0], h / nd[1]); var ff = fitOf(itm, w, h); area += ff[0] * ff[1]; } });
+      /* ưu tiên cách xếp ĐỦ chỗ (ratio>=1) rồi chọn cách cho DIỆN TÍCH khung game lớn nhất (ít khoảng trống nhất); không đủ chỗ thì như cũ: ratio lớn nhất */
+      var ok = minRatio >= 0.999, cand = { rows: rows, counts: counts, ratio: minRatio, h: h, area: area, ok: ok };
+      if (!best || (ok && !best.ok) || (ok === best.ok && (ok ? area > best.area + 1 : minRatio > best.ratio + 1e-6))) best = cand;
     }
     return best;
   }
@@ -295,7 +308,7 @@ body.side #perf{max-width:50px;font-size:10px}
   /* khi đã có game: thanh trên ẩn hẳn (khung game chiếm toàn màn); ← / + / khay game dở nằm trong menu nhỏ mờ ở góc trái (#hm). Màn trống / bảng chọn: thanh trên hiện */
   function chrome() {
     var bare = slotItems().length > 0, was = document.body.classList.contains("bare");
-    document.body.classList.toggle("bare", bare); $("hm").hidden = !bare; if (!bare) closeHp();
+    document.body.classList.toggle("bare", bare); document.body.classList.toggle("multi2", slotItems().length > 1); $("hm").hidden = !bare; if (!bare) closeHp();
     if (bare !== was) renderTray();
   }
   function trapTab(e, root) {
@@ -317,7 +330,7 @@ body.side #perf{max-width:50px;font-size:10px}
     slotItems().forEach(function (it) { try { var f = it.fr, w = f && f.contentWindow; if (!w) return; var r = f.getBoundingClientRect(); if (Math.abs(w.innerWidth - r.width) > 2 || Math.abs(w.innerHeight - r.height) > 2 || true) w.dispatchEvent(new Event("resize")); } catch (e) {} });
   }
   var lyT = 0, lastRects = {};
-  var RESET = ["left", "top", "right", "bottom", "width", "height", "transform", "z-index", "grid-area", "grid-row", "grid-column", "position", "margin", "inset"];
+  var RESET = ["left", "top", "right", "bottom", "width", "height", "transform", "z-index", "grid-area", "grid-row", "grid-column", "position", "margin", "inset", "justify-self", "align-self"];
   /* khung nào bị PHẦN TỬ KHÔNG THUỘC NÓ phủ lên (tâm + 4 góc)? — phòng lỗi vẽ lại của Safari/iPadOS khi khung đổi chỗ */
   function covered() {
     if (!$("sheet").hidden || !$("lock").hidden) return [];
@@ -348,11 +361,27 @@ body.side #perf{max-width:50px;font-size:10px}
     var k = 0;
     p.counts.forEach(function (cnt, r) { var span = L / cnt; for (var c = 0; c < cnt; c++) { var it = list[k++], st = it.el.style; st.gridRow = String(r + 1); st.gridColumn = (c * span + 1) + " / span " + span; } });
     ensureSel(); void grid.offsetHeight;   /* ép reflow */
+    fitFrames(list, single);
     var cov = covered();
     if (!single && (overlaps() || cov.length)) { console.warn("[multi] khung chồng lấn/bị phủ (" + (cov.join(",") || "overlap") + ") — xếp lại từ đầu"); layout(true); return; }
     repaintMoved();
     clearTimeout(lyT); requestAnimationFrame(function () { requestAnimationFrame(function () { if (!single && (overlaps() || covered().length)) { console.warn("[multi] chồng lấn/bị phủ sau 2 rAF"); layout(true); return; } fixIframes(); }); });
     lyT = setTimeout(function () { if (!single && (overlaps() || covered().length)) { console.warn("[multi] chồng lấn/bị phủ sau 250ms"); layout(true); return; } fixIframes(); }, 250);
+  }
+  /* VỪA KHUNG GAME: mỗi khung (ô lưới) được thu về tỉ lệ gần với màn hình thật của game (rộng/cao trong [0,44 ; 0,72]) rồi CĂN GIỮA trong ô — không còn dải trống hai bên/trên dưới trong khung.
+     Không bao giờ nhỏ hơn minW/minH của game (host vẫn đảm bảo không cắt). Ô lưới giữ nguyên nên không chồng lấn; chỉ khung (con trong ô) nhỏ lại. */
+  var AR_MIN = 0.44, AR_MAX = 0.72;   /* tỉ lệ màn hình thật của game dọc; game khai landH/landW (ngang được) cho phép rộng hơn */
+  function arMax(it) { return it && it.g && it.g.landH ? 1.4 : AR_MAX; }
+  function fitOf(it, cw, ch) { var q = cw / ch, tgt = Math.max(AR_MIN, Math.min(arMax(it), q)), fw = cw, fh = ch; if (q > tgt) fw = ch * tgt; else if (q < tgt) fh = cw / tgt; var nd = needOf(it, fw, fh); return [Math.min(cw, Math.max(fw, nd[0])), Math.min(ch, Math.max(fh, nd[1]))]; }
+  function fitFrames(list, single) {
+    if (single) return;
+    list.forEach(function (it) {
+      var st = it.el.style; st.width = ""; st.height = ""; st.justifySelf = ""; st.alignSelf = "";
+      var cw = it.el.offsetWidth, ch = it.el.offsetHeight; if (!cw || !ch) return;
+      var ff = fitOf(it, cw, ch), fw = ff[0], fh = ff[1];
+      if (cw - fw < 6 && ch - fh < 6) return;
+      st.justifySelf = "center"; st.alignSelf = "center"; st.width = Math.floor(fw) + "px"; st.height = Math.floor(fh) + "px";
+    });
   }
   /* màn trống (không còn khung nào): thẻ Night Pass với "Chọn game", game dở ở khay, ← */
   function renderEmpty() {
@@ -365,7 +394,7 @@ body.side #perf{max-width:50px;font-size:10px}
 
   /* ---------- khung game ---------- */
   function buildEl(it) {
-    var el = document.createElement("div"); el.className = "fr"; el.dataset.id = it.id;
+    var el = document.createElement("div"); el.className = "fr"; el.dataset.id = it.id; el.dataset.name = gname(it.id);
     el.innerHTML = '<div class="ld"></div><div class="po"></div><div class="cd"></div><button class="mi" type="button" aria-haspopup="true"><b class="bd"></b><i>' + ICON.dots + '</i></button><div class="pn" role="group"></div>';
     el.querySelector(".ld").textContent = t().loading; el.querySelector(".po").textContent = t().tap; el.querySelector(".mi").setAttribute("aria-label", t().menu + ": " + gname(it.id));
     el.querySelector(".po").addEventListener("click", function () { it.userPaused = false; it.autoPaused = false; sync(it); render(it); });
@@ -373,7 +402,7 @@ body.side #perf{max-width:50px;font-size:10px}
     el.addEventListener("pointerdown", function () { if (sel !== it) select(it); }, true);
     var pn = el.querySelector(".pn");
     pn.setAttribute("role", "dialog"); pn.setAttribute("aria-label", gname(it.id));
-    pn.innerHTML = '<div class="pt"><b></b><span data-k="st"></span></div><div class="ps"><div class="sc"><i data-l="score"></i><b data-k="score">–</b></div><div class="sc"><i data-l="cc"></i><b data-k="cc">–</b></div></div><div class="pb"></div>';
+    pn.innerHTML = '<div class="pt"><b></b><span data-k="st"></span></div><div class="ps"><div class="sc"><i data-l="score"></i><b data-k="score">–</b></div><div class="sc"><i data-l="cc"></i><b data-k="cc">–</b></div></div><div class="pl" data-k="stats"></div><div class="pb"></div>';
     var pb = pn.querySelector(".pb");
     [["pz", ICON.pause, function () { it.userPaused = !it.userPaused; if (!it.userPaused) it.autoPaused = false; sync(it); render(it); }],
      ["sn", ICON.snd, function () { it.userMuted = !it.userMuted; send(it, it.userMuted ? "mute" : "unmute"); render(it); }],
@@ -394,7 +423,9 @@ body.side #perf{max-width:50px;font-size:10px}
     pn.querySelector("b").textContent = gname(it.id); pn.querySelector('[data-k=st]').textContent = T_.st[paused ? "paused" : (h.state || "idle")] || "";
     pn.querySelector('[data-l=score]').textContent = T_.score; pn.querySelector('[data-k=score]').textContent = h.score != null ? h.score : "–";
     var hasCombo = h.combo != null; pn.querySelector('[data-l=cc]').textContent = hasCombo ? T_.combo : T_.moves; pn.querySelector('[data-k=cc]').textContent = hasCombo ? h.combo : (h.moves != null ? h.moves : "–");
-    var bd = el.querySelector(".mi .bd"), btxt = h.score != null ? String(h.score) : h.moves != null ? String(h.moves) : ""; if (h.combo > 1) btxt += (btxt ? " " : "") + "×" + h.combo;
+    var pl = pn.querySelector('[data-k=stats]'), sk = JSON.stringify(h.stats || []); if (pl.__k !== sk) { pl.__k = sk; pl.textContent = ""; (h.stats || []).forEach(function (r) { var d = document.createElement("div"), i = document.createElement("i"), b = document.createElement("b"); i.textContent = r[0]; b.textContent = r[1]; d.appendChild(i); d.appendChild(b); pl.appendChild(d); }); }
+    var tm = h.time != null && it.g && it.g.realtime ? (h.time >= 60 ? Math.floor(h.time / 60) + ":" + ("0" + Math.floor(h.time % 60)).slice(-2) : Math.max(0, Math.floor(h.time)) + "s") : "";
+    var bd = el.querySelector(".mi .bd"), btxt = h.score != null ? String(h.score) : h.moves != null ? String(h.moves) : ""; if (h.combo > 1) btxt += (btxt ? " " : "") + "×" + h.combo; if (tm) btxt = "⏱" + tm + (btxt ? " · " + btxt : "");
     bd.textContent = btxt; bd.classList.toggle("on", !!btxt && it.where === "slot");
     var tile = function (btn, icon, label, aria) { btn.innerHTML = icon + "<span></span>"; btn.lastChild.textContent = label; btn.setAttribute("aria-label", aria || label); btn.title = aria || label; };
     var swb = pn.querySelector(".sw"); swb.hidden = !(h.hc > 0); tile(swb, ICON.hud, hudHide(it) ? T_.hudShow : T_.hud); swb.setAttribute("aria-pressed", String(hudHide(it)));
@@ -438,7 +469,7 @@ body.side #perf{max-width:50px;font-size:10px}
   function applyAudio() { items.forEach(function (it) { if (!it.fr || !it.ready) return; send(it, sel === it && it.where === "slot" ? "focus" : "blur"); send(it, it.userMuted ? "mute" : "unmute"); }); }
   function select(it) {
     if (!it || it.where !== "slot") return; sel = it; it.lastUsed = now();
-    items.forEach(function (o) { if (o.el) o.el.classList.toggle("sel", o === it); });
+    items.forEach(function (o) { if (o.el) o.el.classList.toggle("sel", o === it); }); if (it.el) { it.el.classList.add("lbl"); clearTimeout(it.lblT); it.lblT = setTimeout(function () { it.el && it.el.classList.remove("lbl"); }, 2200); }
     applyAudio(); try { it.fr.focus(); it.fr.contentWindow.focus(); } catch (e) {}
   }
   addEventListener("message", function (e) {
