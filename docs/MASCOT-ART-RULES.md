@@ -66,6 +66,13 @@ Dù skin đổi hình dáng thế nào, **khuôn mặt PHẢI giữ nét đặc 
 4. Bài đo `check-art.js`: nhóm `face` của mọi skin phải render giống nhau ≥ 90% điểm ảnh trong vùng mặt khi tắt phụ kiện (so với skin Mặc định) — chưa viết.
 5. **Sai ở hai mẫu hiện tại cần sửa:** Xin Nghỉ skin Nhóm đang dùng kính râm ĐEN che mắt (phải đổi sang kính trong/đẩy lên trán); Chim Bay skin Dạ quang đổi màu mặt/cú dẹt thì vẫn phải giữ mắt + mỏ + má đúng khuôn mặt gốc.
 
+### NHÌN VÀO BIẾT LÀ GAME ĐÓ NGAY (chủ site chốt — BẮT BUỘC)
+Mỗi linh vật phải gợi ra đúng game chỉ trong ~1 giây, kể cả ở 40px và khi không có chữ:
+1. Mỗi game có **MỘT đạo cụ/biểu tượng nhận diện game** (ví dụ Xin Nghỉ: đơn xin nghỉ + ô dù bãi biển; Đập Deadline: búa + đồng hồ; Chim Bay: cánh + chữ cái). Đạo cụ này nằm ở **neo cố định** (tay hoặc đầu), **luôn có mặt ở cả 5 skin** (đổi kiểu theo chủ đề skin nhưng vẫn nhận ra là nó).
+2. **Chữ ký game = chữ ký khuôn mặt + đạo cụ nhận diện + bóng dáng (silhouette).** Skin đổi phụ kiện, dáng thân, màu; ba thứ trên giữ nguyên để không thể nhầm sang game khác.
+3. **Bài kiểm tra bắt buộc**: cho 5 người (hoặc tự xem) nhìn ảnh 40px KHÔNG có chữ — phải chỉ đúng game. Linh vật nào của hai game khác nhau mà giống nhau (cùng dáng + cùng màu) thì phải vẽ lại.
+4. Bảng đạo cụ nhận diện của 32 game: [MASCOT-CATALOG.md](MASCOT-CATALOG.md) mục "Đạo cụ nhận diện".
+
 ## 5. Quy trình bắt buộc khi vẽ một linh vật mới
 
 1. Đọc mục 1 → chọn phong cách theo `portal`.

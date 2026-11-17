@@ -48,6 +48,43 @@ Màu mọi skin ăn theo nền gradient Night Pass đang chọn (viền sáng, b
 | Bao Nhiêu Giây? | Thiền sư Tĩnh Tâm | Thiền sư vô địch: chuông, huy hiệu | Võ sư: đai, tay thủ ấn | Thiền đêm: hào quang, trăng | Đại sư: vương miện, hào quang vàng |
 | Mê Cung Truyền Tay | Nhà thám hiểm Gạo | Nhà thám hiểm giỏi: la bàn, huy hiệu | Khảo cổ: xẻng, mũ | Thám hiểm đêm: đèn pin, đom đóm | Vua mê cung: vương miện, kho báu |
 
+## Đạo cụ nhận diện game (luôn có ở cả 5 skin; chủ site: "nhìn vô biết là game đó liền")
+
+| Game | Đạo cụ nhận diện + chữ ký bóng dáng |
+|---|---|
+| Chim Bay Học Vui | Cánh xòe + chữ cái nhỏ bay quanh; đầu tròn có chỏm lông |
+| Tên Lửa Của Bé | Mũ phi công + tên lửa nhỏ trên tay |
+| Bé Nói Đúng Không? | Micro + bong bóng thoại |
+| Đoán Xem Bé Mấy Tuổi | Số tuổi trên bánh sinh nhật + mắt tròn kính lúp |
+| Bố Mẹ Thử Thách 5 Giây | Đồng hồ cát/5 ngón tay giơ lên |
+| Con Vật Ăn Số | Miệng há rộng ngậm con số |
+| Vẽ Chữ Thành Quái Vật | Cọ/bút vẽ + nét mực chạy thành quái vật |
+| Nhảy Theo Số | Chân nhảy + nốt nhạc có số |
+| Bé Đấu Bố Mẹ | Găng đấu nhỏ + dấu VS |
+| Qua Sông Cùng Bé | Thuyền nhỏ + sói/dê/cải xếp trên thuyền |
+| Tháp Vòng Màu | Chồng vòng nhiều màu |
+| Làng Của Bé | Ngôi nhà nhỏ + cờ làng |
+| Sếp Ơi Em Xin Nghỉ | Đơn xin nghỉ cầm tay + ô dù bãi biển |
+| Đập Deadline | Búa + đồng hồ nhận chữ "DEADLINE" |
+| Cánh Nhỏ Phiêu Lưu | Cánh ong mỏng + vệt bay |
+| Đoán Giá Chợ Việt | Rổ rau + cái cân |
+| Đổi Đời 2048 | Ô số 2048 + thang lên |
+| Gà Mẹ Bắn Trứng | Ổ trứng + ná bắn |
+| Bạn Có Hiểu Tôi Không? | Hai trái tim ghép + dấu hỏi |
+| Chở Hàng Kiểu Việt | Xe máy chất cao chồng hàng |
+| Xe Cà Phê Của Tôi | Xe đẩy cà phê + ly phin |
+| Đường Ray | Đường ray + đầu tàu |
+| Xây Cầu Tre | Cầu tre + con trâu |
+| Sống Sót Đến Cuối Tháng | Ví lép + tờ lịch cuối tháng |
+| Shipper Siêu Tốc | Thùng hàng sau lưng + xe giao |
+| Né Ổ Gà Mùa Mưa | Áo mưa + vũng nước ổ gà |
+| Nối Một Nét | Mạng nhện thành một nét liền |
+| Mắt Tinh Không? | Mắt to + vòng ngắm |
+| Cắt Bánh Chưng | Bánh chưng + dao cắt |
+| Vẽ Một Nét | Bút vẽ + một nét liền không nhấc tay |
+| Bao Nhiêu Giây? | Đồng hồ bấm giờ + tư thế thiền |
+| Mê Cung Truyền Tay | Mê cung nhỏ + điện thoại truyền tay |
+
 ## Việc kỹ thuật kéo theo (khi bắt đầu làm)
 1. **Skin "Nhóm" → "Chủ đề riêng của game":** hiện `shared/npmascot.js` dựng skin `group` theo nhóm (Thợ xây/Thông thái/Trẻ). Phải đổi thành chủ đề theo từng game, và cập nhật tên + điều kiện mở trong `nightpass-mascot.html`.
 2. Mỗi game 1 tệp SVG (`shared/art/mascot-<pop|night>-<id>.svg`) chứa đủ 4 skin trả phí + mặc định, ≤ 13KB (xem luật). 32 tệp.
