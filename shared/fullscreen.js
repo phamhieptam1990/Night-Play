@@ -14,6 +14,7 @@
   var SHRINK = SVGH + 'width:36px;height:36px"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>';
   var DOTS = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:18px;height:18px;display:block"><circle cx="5.5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="18.5" cy="12" r="1.8"/></svg>';
   var HOME = SVGH + 'width:36px;height:36px"><path d="M15 5l-7 7 7 7"/></svg>';
+  var MUTE = SVGH + 'width:34px;height:34px"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>';
   var HELP = SVGH + 'width:36px;height:36px"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.6 2.2c-.7.4-1.1.9-1.1 1.8M12 17h.01"/></svg>';
   var ICON_FS = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
   var ICON_ADD = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:26px;height:26px;display:block;margin:auto"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8.5v7M8.5 12h7"/></svg>';
@@ -35,7 +36,10 @@
     "#" + PN + " .g{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}#" + PN + " .c{border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);padding:6px 10px}#" + PN + " .c i{display:block;font-style:normal;font-size:11px;color:rgba(255,255,255,.7)}#" + PN + " .c b{font-size:22px;font-weight:900;font-variant-numeric:tabular-nums}" +
     "#" + PN + " .r{display:flex;justify-content:space-between;padding:2px 2px;color:rgba(255,255,255,.8)}#" + PN + " .r b{color:#fff;font-variant-numeric:tabular-nums}" +
     "#" + PN + " .b{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}#" + PN + " .b button{min-height:68px;border-radius:16px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.1);color:#fff;display:grid;place-items:center;padding:0;cursor:pointer}#" + PN + " .b button svg{width:34px;height:34px}" +
-    "#" + PN + " .b button[data-a=lang]{font:900 24px/1 system-ui,-apple-system,sans-serif;letter-spacing:.02em}";
+    "#" + PN + " .b button{font-size:28px;line-height:1}#" + PN + " .b button[data-a=lang]{font:900 24px/1 system-ui,-apple-system,sans-serif;letter-spacing:.02em}";
+  /* thanh trên đã ẩn nhưng body còn chừa chỗ cho nó (padding-top ~76px) → khung bị lệch xuống: trả hết, căn giữa khung theo CẢ HAI chiều */
+  css.textContent += "html.np-fs body{padding-top:0!important;padding-bottom:0!important;justify-content:center!important;align-items:center!important}html.np-fs body>.app,html.np-fs .app{margin-top:0!important;margin-bottom:0!important;align-self:center!important}html.np-fs .app>.side{display:none!important}";   /* .side (hàng chỉ số cũ) chiếm chỗ trên khung dù chỉ số đã ẩn */
+  css.textContent += "html.np-fs #play,html.np-fs .app>.play{border-radius:0!important;box-shadow:none!important;border:0!important;margin-left:auto!important;margin-right:auto!important}";
   css.textContent +=
     /* kiểu Night Pass: thẻ nền tím đậm, viền + quầng sáng màu nhấn, bo lớn, nút ≥48px pill gradient */
     "#npFsToast,#npFsHow .d{color:#fff;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:linear-gradient(165deg,#2b2064,#171236 70%);border:1.5px solid rgba(170,150,255,.6);box-shadow:0 14px 40px rgba(0,0,0,.55),0 0 26px rgba(124,92,255,.35),inset 0 1px 0 rgba(255,255,255,.14)}" +
@@ -101,7 +105,8 @@
     ROLES.forEach(function (r) {
       var bt = pn.querySelector('[data-a=' + r[0] + ']'); if (!bt) return; var src = real(r[1]), ok = !!src && !src.hidden;
       bt.hidden = !ok; if (!ok) return;
-      if (r[0] !== "help") { var hh = src.innerHTML; if (bt.__h !== hh) { bt.__h = hh; bt.innerHTML = hh; } }
+      if (r[0] === "snd" && !src.querySelector("svg")) { if (bt.__h !== "mute") { bt.__h = "mute"; bt.innerHTML = MUTE; } }   /* trạng thái tắt tiếng của game là chữ 🔇 (nhỏ) → vẽ icon loa gạch chéo cùng cỡ */
+      else if (r[0] !== "help") { var hh = src.innerHTML; if (bt.__h !== hh) { bt.__h = hh; bt.innerHTML = hh; } }
       var al = src.getAttribute("aria-label") || src.title || t(r[0]) || r[0]; if (bt.getAttribute("aria-label") !== al) { bt.setAttribute("aria-label", al); bt.title = al; }
       if (src.hasAttribute("aria-pressed")) bt.setAttribute("aria-pressed", src.getAttribute("aria-pressed")); else bt.removeAttribute("aria-pressed");
     });
@@ -145,9 +150,19 @@
     document.addEventListener("pointerdown", function (e) { var p = pnEl(); if (p && p.classList.contains("open") && !p.contains(e.target) && !mi.contains(e.target)) setPanel(false); }, true);
   }
   function labelFs() { return t("fs"); }
+  /* KHOẢNG HỞ ngoài khung game (iPad dọc: khung rộng ~62% chiều cao): có gói Night Pass + đã chọn nền → để NPGrad (nền gradient) phủ như bình thường; KHÔNG có gói → nền ngoài lấy ĐÚNG nền mặc định của khung game để liền mạch, bỏ bo góc/viền/bóng của khung */
+  var bgSet = false;
+  function themeGap() {
+    var pass = false; try { pass = !!(window.NPGrad && NPGrad.active() && NPGrad.get()); } catch (e) {}
+    var pl = document.getElementById("play") || document.querySelector(".app > .play") || document.querySelector(".play");
+    if (pass || !pl) return; var cs = getComputedStyle(pl), img = cs.backgroundImage, col = cs.backgroundColor;
+    var v = (img && img !== "none") ? img : col; if (!v) return;
+    de.style.setProperty("background", v, "important"); document.body && document.body.style.setProperty("background", v, "important"); bgSet = true;
+  }
+  function themeGapOff() { if (!bgSet) return; bgSet = false; de.style.removeProperty("background"); document.body && document.body.style.removeProperty("background"); }
   function enter() {
     if (de.classList.contains("np-fs")) return;
-    de.classList.add("np-fs"); api = false; build();
+    themeGap(); de.classList.add("np-fs"); api = false; build();
     try { var r = de.requestFullscreen || de.webkitRequestFullscreen; if (r) { var p = r.call(de, { navigationUI: "hide" }); api = true; if (p && p.catch) p.catch(function () { api = false; }); } } catch (e) { api = false; }
     relayout();
     if (!api) noFsHint();
@@ -155,11 +170,11 @@
   }
   function exit() {
     if (!de.classList.contains("np-fs")) return;
-    setPanel(false); hideToast(); de.classList.remove("np-fs");
+    setPanel(false); hideToast(); themeGapOff(); de.classList.remove("np-fs");
     try { if (fsEl()) { var e = document.exitFullscreen || document.webkitExitFullscreen; e && e.call(document); } } catch (e) {}
     relayout();
   }
-  function onFsChange() { if (api && !fsEl() && de.classList.contains("np-fs")) { setPanel(false); de.classList.remove("np-fs"); relayout(); } }
+  function onFsChange() { if (api && !fsEl() && de.classList.contains("np-fs")) { setPanel(false); themeGapOff(); de.classList.remove("np-fs"); relayout(); } }
   document.addEventListener("fullscreenchange", onFsChange); document.addEventListener("webkitfullscreenchange", onFsChange);
   addEventListener("keydown", function (e) {   /* Tab quay vòng trong bảng đang mở */
     if (e.key !== "Tab") return; var p = pnEl(); if (!p || !p.classList.contains("open")) return;
