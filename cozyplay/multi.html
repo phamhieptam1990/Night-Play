@@ -52,7 +52,13 @@ svg{display:block}
 #empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--ink);padding:16px;overflow:hidden}
 #empty[hidden]{display:none}
 .fr{position:relative;min-width:0;min-height:0;border-radius:14px;overflow:hidden;background:var(--card);box-shadow:0 0 0 1px var(--line);transition:box-shadow .15s}
-.fr.hid{display:none}
+.fr.hid,.fr.fsh{display:none}
+/* toàn màn hình: khung chiếm cả vùng chơi; nút thu nhỏ luôn hiện cạnh ⋯ */
+.fsb{display:none;position:absolute;top:0;right:44px;height:44px;min-width:44px;padding:0 9px;align-items:center;justify-content:center;opacity:.7;z-index:6}
+.fr.fs .fsb{display:flex}
+.fsb i{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:rgba(14,12,32,.78);color:#fff;border:1px solid rgba(255,255,255,.4)}.fsb svg{width:18px;height:18px}
+.fr.fs .fsb:hover,.fr.fs .fsb:focus-visible{opacity:1}
+body.multi2 .fr.fs{transform:none}
 .fr.sel{box-shadow:0 0 0 3px var(--accent)}
 /* ĐANG CHƠI NỔI BẬT: khung được chọn có viền sáng + quầng + nhãn tên game ở trên; các khung còn lại phủ lớp tối nhẹ (chỉ opacity, không filter) — chạm vào để chuyển */
 .fr::after{content:"";position:absolute;inset:0;background:#05050f;opacity:0;pointer-events:none;transition:opacity .2s;z-index:3}
@@ -242,12 +248,12 @@ body.side #perf{max-width:50px;font-size:10px}
   var LANG = document.documentElement.lang === "en" ? "en" : "vi";
   var T = {
     vi: { title: "Chơi cùng lúc", add: "Thêm game", back: "Trang chủ", pick: "Chọn game để chơi cùng lúc", start: "▶ Bắt đầu", all: "Tất cả", par: "Cùng lúc", foc: "Tập trung", parTag: "cùng lúc", focTag: "tập trung", open: "đang mở",
-      empty: "Bấm dấu + để chọn game.\nGame “cùng lúc” chạy song song; game “tập trung” chỉ một khung chạy, các game khác chờ ở khay.", pause: "Tạm dừng", play: "Tiếp tục", snd: "Tiếng", close: "Đóng game", move: "Đổi chỗ", menu: "Menu khung",
+      empty: "Bấm dấu + để chọn game.\nGame “cùng lúc” chạy song song; game “tập trung” chỉ một khung chạy, các game khác chờ ở khay.", pause: "Tạm dừng", play: "Tiếp tục", snd: "Tiếng", close: "Đóng game", move: "Đổi chỗ", full: "Toàn màn hình", shrink: "Thu nhỏ về khung", menu: "Menu khung",
       hp: "Cách chơi", hud: "Ẩn bảng điểm", hudShow: "Hiện bảng điểm", emT: "Chưa có game nào đang chạy", emP: "Chọn game để chơi cùng lúc, hoặc quay lại ván đang chơi dở.", emPick: "Chọn game", emSec: "Tiếp tục ván dở", hint: "Có {n} game dở ở khay (☰).", hpT: "Chơi cùng lúc", hpSec: "Game đang chơi dở", hpNone: "Chưa có game nào chờ ở khay.", search: "Tìm game…", pickInfo: "Tối đa {n} khung cùng lúc trên máy này · bấm để chọn nhiều game", noRes: "Không thấy game nào. Thử từ khoá khác nhé.", full2: "hết chỗ", pn: "Night Play", pp: "Pop Play", score: "Điểm", combo: "Combo", moves: "Lượt", st: { idle: "Chờ bắt đầu", playing: "Đang chơi", over: "Đã xong", paused: "Tạm dừng" }, tap: "⏸ Tạm dừng\nChạm để tiếp tục", loading: "Đang tải…",
       resumeTag: "đang chơi dở", left: "còn {t}", saved: "đã lưu ván", full: "Chỉ chơi tối đa {n} game cùng lúc trên máy này.", nofit: "Màn hình không đủ chỗ cho thêm khung nữa.", slow: "⚠ Máy hơi chậm: đã tạm dừng khung phụ", slowAdd: "Máy đang chậm, tạm thời chưa thêm khung được.",
       selMax: "Hết chỗ: bỏ bớt game đã chọn.", timeH: "Hết giờ chơi hôm nay", timeP: "Đã đến giới hạn thời gian do phụ huynh đặt. Hẹn ngày mai nhé!", home: "Trang chủ", sel: "Đã chọn", page: "Trang", min: "ph" },
     en: { title: "Play together", add: "Add game", back: "Home", pick: "Pick games to play at once", start: "▶ Start", all: "All", par: "Together", foc: "Focus", parTag: "runs together", focTag: "focus", open: "open",
-      empty: "Tap + to pick games.\n“Together” games run side by side; “Focus” games run one at a time and wait in the tray.", pause: "Pause", play: "Resume", snd: "Sound", close: "Close game", move: "Swap", menu: "Frame menu",
+      empty: "Tap + to pick games.\n“Together” games run side by side; “Focus” games run one at a time and wait in the tray.", pause: "Pause", play: "Resume", snd: "Sound", close: "Close game", move: "Swap", full: "Full screen", shrink: "Back to frames", menu: "Frame menu",
       hp: "How to play", hud: "Hide score board", hudShow: "Show score board", emT: "No game is running", emP: "Pick games to play together, or go back to a game in progress.", emPick: "Pick games", emSec: "Resume a game", hint: "{n} game(s) in progress in the tray (☰).", hpT: "Play together", hpSec: "Games in progress", hpNone: "No game is waiting in the tray.", search: "Search games…", pickInfo: "Up to {n} frames at once on this device · tap to pick several games", noRes: "No games found. Try another word.", full2: "no room", pn: "Night Play", pp: "Pop Play", score: "Score", combo: "Combo", moves: "Moves", st: { idle: "Ready", playing: "Playing", over: "Finished", paused: "Paused" }, tap: "⏸ Paused\nTap to resume", loading: "Loading…",
       resumeTag: "in progress", left: "{t} left", saved: "game saved", full: "This device can run up to {n} games at once.", nofit: "No room for another frame on this screen.", slow: "⚠ Device is slow: side frames paused", slowAdd: "Device is slow, can't add a frame right now.",
       selMax: "No room: unselect a game.", timeH: "Time's up for today", timeP: "The time limit set by a parent has been reached. See you tomorrow!", home: "Home", sel: "Selected", page: "Page", min: "min" }
@@ -261,6 +267,8 @@ body.side #perf{max-width:50px;font-size:10px}
     play: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l12-7.5z"/></svg>',
     snd: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z" fill="currentColor"/><path d="M15.5 9a4 4 0 010 6M18 6.5a8 8 0 010 11"/></svg>',
     mute: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z" fill="currentColor"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>',
+    full: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>',
+    shrink: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>',
     swap: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4L3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/></svg>',
     x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
     help: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.6 2.6 0 1 1 3.6 2.4c-.7.4-1.1.9-1.1 1.8M12 17h.01"/></svg>',
@@ -287,7 +295,7 @@ body.side #perf{max-width:50px;font-size:10px}
   var isTimeUp = function () { return prefs.limit > 0 && usedSec >= prefs.limit * 60; };
 
   /* ---------- trạng thái ---------- */
-  var items = [], main = null, sel = null, switching = false, slow = false, forceSlow = Q.get("perf") === "slow", sheetSel = [], flt = "all";
+  var items = [], main = null, sel = null, fsItem = null, switching = false, slow = false, forceSlow = Q.get("perf") === "slow", sheetSel = [], flt = "all";
   var grid = $("grid"), tray = $("tray"), now = function () { return Date.now(); };
   var slotItems = function () { return items.filter(function (i) { return i.where === "slot"; }); };
   var trayItems = function () { return items.filter(function (i) { return i.where === "tray"; }); };
@@ -331,14 +339,17 @@ body.side #perf{max-width:50px;font-size:10px}
      Lưới L cột (L = bội chung nhỏ nhất của số khung mỗi hàng), mỗi khung chiếm L/cnt cột của hàng của nó, hàng 1fr. Sau mỗi lần xếp: ép reflow, rồi kiểm tra bất biến
      (2 khung chồng nhau > 4px → xếp lại thành một cột + console.warn) và báo kích thước mới cho từng iframe (resize sau 2 rAF và ~250ms) — Safari/iPadOS không luôn áp lại kích thước iframe ngay. */
   var gcd = function (x, y) { return y ? gcd(y, x % y) : x; }, lcm = function (x, y) { return x * y / gcd(x, y); };
+  /* TOÀN MÀN HÌNH: một khung (fsItem) chiếm cả vùng chơi, các khung khác ẩn (display:none, vẫn sống, tạm dừng) tới khi thu nhỏ lại */
+  function shown() { return fsItem && fsItem.where === "slot" && items.indexOf(fsItem) >= 0 ? [fsItem] : slotItems(); }
+  function setFs(it) { fsItem = it || null; closePanels(); items.forEach(function (o) { if (o.fr) sync(o); }); layout(); if (fsItem) select(fsItem); }
   function overlaps() {
-    var els = slotItems().map(function (i) { return i.el.getBoundingClientRect(); }), bad = 0;
+    var els = shown().map(function (i) { return i.el.getBoundingClientRect(); }), bad = 0;
     for (var i = 0; i < els.length; i++) for (var j = i + 1; j < els.length; j++) { var ox = Math.min(els[i].right, els[j].right) - Math.max(els[i].left, els[j].left), oy = Math.min(els[i].bottom, els[j].bottom) - Math.max(els[i].top, els[j].top); if (ox > 4 && oy > 4) bad++; }
     return bad;
   }
   function ensureSel() { var list = slotItems(); if (list.length && (!sel || sel.where !== "slot" || items.indexOf(sel) < 0)) select(list[0]); }
   function fixIframes() {   /* iframe có kích thước trong (innerWidth/Height) lệch khung → đánh thức bằng resize */
-    slotItems().forEach(function (it) { try { var f = it.fr, w = f && f.contentWindow; if (!w) return; var r = f.getBoundingClientRect(); if (Math.abs(w.innerWidth - r.width) > 2 || Math.abs(w.innerHeight - r.height) > 2 || true) w.dispatchEvent(new Event("resize")); } catch (e) {} });
+    shown().forEach(function (it) { try { var f = it.fr, w = f && f.contentWindow; if (!w) return; var r = f.getBoundingClientRect(); if (Math.abs(w.innerWidth - r.width) > 2 || Math.abs(w.innerHeight - r.height) > 2 || true) w.dispatchEvent(new Event("resize")); } catch (e) {} });
   }
   var lyT = 0, lastRects = {};
   var RESET = ["left", "top", "right", "bottom", "width", "height", "transform", "z-index", "grid-area", "grid-row", "grid-column", "position", "margin", "inset", "justify-self", "align-self"];
@@ -346,7 +357,7 @@ body.side #perf{max-width:50px;font-size:10px}
   function covered() {
     if (!$("sheet").hidden || !$("lock").hidden) return [];
     var bad = [];
-    slotItems().forEach(function (it) {
+    shown().forEach(function (it) {
       var r = it.el.getBoundingClientRect(); if (r.width < 20 || r.height < 20) return;
       var pts = [[r.left + r.width / 2, r.top + r.height / 2], [r.left + 10, r.top + 10], [r.right - 10, r.top + 10], [r.left + 10, r.bottom - 10], [r.right - 10, r.bottom - 10]];
       for (var k = 0; k < pts.length; k++) { var e = document.elementFromPoint(pts[k][0], pts[k][1]); if (!e) continue; if (it.el.contains(e) || (e.closest && e.closest("#hp,#hm,#toast"))) continue; bad.push(it.id); break; }
@@ -354,7 +365,7 @@ body.side #perf{max-width:50px;font-size:10px}
     return bad;
   }
   function repaintMoved() {   /* khung đã đổi chỗ/kích thước: buộc vẽ lại lớp của iframe (Safari có thể giữ lớp cũ) */
-    slotItems().forEach(function (it) {
+    shown().forEach(function (it) {
       var r = it.el.getBoundingClientRect(), key = [Math.round(r.left), Math.round(r.top), Math.round(r.width), Math.round(r.height)].join(), f = it.fr;
       if (f && lastRects[it.id] !== key) { f.style.visibility = "hidden"; requestAnimationFrame(function () { f.style.visibility = ""; }); }
       lastRects[it.id] = key;
@@ -362,7 +373,9 @@ body.side #perf{max-width:50px;font-size:10px}
   }
   function layout(single) {
     chrome();
-    var list = slotItems(), a = areaSize(); $("empty").hidden = list.length > 0; renderEmpty();
+    if (fsItem && (items.indexOf(fsItem) < 0 || fsItem.where !== "slot")) fsItem = null;
+    var all = slotItems(), list = shown(), a = areaSize(); $("empty").hidden = all.length > 0; renderEmpty();
+    all.forEach(function (o) { o.el.classList.toggle("fsh", !!fsItem && o !== fsItem); o.el.classList.toggle("fs", o === fsItem); });
     if (!list.length) return;
     /* đặt lại TOÀN BỘ style inline vị trí của mọi khung (còn sót từ lần trước) rồi mới gán ô lưới mới */
     items.forEach(function (it) { RESET.forEach(function (pn) { it.el.style.removeProperty(pn); }); });
@@ -372,7 +385,7 @@ body.side #perf{max-width:50px;font-size:10px}
     var k = 0;
     p.counts.forEach(function (cnt, r) { var span = L / cnt; for (var c = 0; c < cnt; c++) { var it = list[k++], st = it.el.style; st.gridRow = String(r + 1); st.gridColumn = (c * span + 1) + " / span " + span; } });
     ensureSel(); void grid.offsetHeight;   /* ép reflow */
-    fitFrames(list, single);
+    fitFrames(list, single || !!fsItem);
     var cov = covered();
     if (!single && (overlaps() || cov.length)) { console.warn("[multi] khung chồng lấn/bị phủ (" + (cov.join(",") || "overlap") + ") — xếp lại từ đầu"); layout(true); return; }
     repaintMoved();
@@ -406,10 +419,11 @@ body.side #perf{max-width:50px;font-size:10px}
   /* ---------- khung game ---------- */
   function buildEl(it) {
     var el = document.createElement("div"); el.className = "fr"; el.dataset.id = it.id; el.dataset.name = gname(it.id);
-    el.innerHTML = '<div class="ld"></div><div class="po"></div><div class="cd"></div><button class="mi" type="button" aria-haspopup="true"><b class="bd"></b><i>' + ICON.dots + '</i></button><div class="pn" role="group"></div>';
+    el.innerHTML = '<div class="ld"></div><div class="po"></div><div class="cd"></div><button class="fsb" type="button"></button><button class="mi" type="button" aria-haspopup="true"><b class="bd"></b><i>' + ICON.dots + '</i></button><div class="pn" role="group"></div>';
     el.querySelector(".ld").textContent = t().loading; var po = el.querySelector(".po"); po.innerHTML = '<span class="pp">' + ICON.play + '</span>'; po.setAttribute("role", "button"); po.setAttribute("aria-label", t().tap); po.title = t().tap; el.querySelector(".mi").setAttribute("aria-label", t().menu + ": " + gname(it.id));
     el.querySelector(".po").addEventListener("click", function () { it.userPaused = false; it.autoPaused = false; sync(it); render(it); });
     el.querySelector(".mi").addEventListener("click", function (e) { e.stopPropagation(); togglePanel(it); });
+    var fsb = el.querySelector(".fsb"); fsb.innerHTML = "<i>" + ICON.shrink + "</i>"; fsb.addEventListener("click", function (e) { e.stopPropagation(); setFs(null); });
     el.addEventListener("pointerdown", function () { if (sel !== it) select(it); }, true);
     var pn = el.querySelector(".pn");
     pn.setAttribute("role", "dialog"); pn.setAttribute("aria-label", gname(it.id));
@@ -419,6 +433,7 @@ body.side #perf{max-width:50px;font-size:10px}
      ["sn", ICON.snd, function () { it.userMuted = !it.userMuted; send(it, it.userMuted ? "mute" : "unmute"); render(it); }],
      ["hp", ICON.help, function () { closePanels(); setTimeout(function () { send(it, "help"); }, 60); }],
      ["mv", ICON.swap, function () { moveEarlier(it); }],
+     ["fs", ICON.full, function () { setFs(fsItem === it ? null : it); }],
      ["hud", ICON.hud, function () { setHudHide(it, !hudHide(it)); render(it); }],
      ["x", ICON.x, function () { closeItem(it); }]].forEach(function (d) {
       var b = document.createElement("button"); b.type = "button"; b.dataset.a = d[0]; b.className = d[0] === "x" ? "x" : d[0] === "hud" ? "sw" : ""; if (d[0] === "hud" || d[0] === "hp") b.hidden = true; b.innerHTML = d[1] + "<span></span>"; b.addEventListener("click", function (e) { e.stopPropagation(); d[2](); }); pb.appendChild(b);
@@ -445,6 +460,7 @@ body.side #perf{max-width:50px;font-size:10px}
     tile(bz, paused ? ICON.play : ICON.pause, paused ? T_.play : T_.pause);
     tile(bs, it.userMuted ? ICON.mute : ICON.snd, T_.snd); bs.setAttribute("aria-pressed", String(!it.userMuted));
     tile(bm, ICON.swap, T_.move); bm.hidden = slotItems().length < 2 || it.where !== "slot";
+    var bf = pn.querySelector('[data-a=fs]'); tile(bf, fsItem === it ? ICON.shrink : ICON.full, fsItem === it ? T_.shrink : T_.full); var fb2 = el.querySelector(".fsb"); fb2.setAttribute("aria-label", T_.shrink); fb2.title = T_.shrink;
     tile(bx, ICON.x, T_.close);
   }
   function togglePanel(it) {
@@ -468,7 +484,7 @@ body.side #perf{max-width:50px;font-size:10px}
   /* khung phải tạm dừng khi: người dùng/máy chậm tạm dừng, đang ở khay (đóng băng), đang đếm ngược 3-2-1 */
   function sync(it) {
     if (!it.fr || !it.ready) return;
-    var want = !!(it.userPaused || it.autoPaused || it.menuPaused || it.where === "tray" || it.counting);
+    var want = !!(it.userPaused || it.autoPaused || it.menuPaused || it.where === "tray" || it.counting || (!!fsItem && fsItem !== it));
     if (want && !it.sentPaused) { it.sentPaused = true; send(it, "pause"); }
     else if (!want && it.sentPaused) { it.sentPaused = false; send(it, "resume"); }
     render(it);
@@ -631,6 +647,7 @@ body.side #perf{max-width:50px;font-size:10px}
     return pool().filter(function (id) { var g = M.flag(id); return (flt === "all" || g.mode === flt) && (pf === "all" || g.portal === pf) && (!nq || [g.vi, g.en].some(function (x) { return normS(x).indexOf(nq) >= 0; })); });
   }
   function openSheet() {
+    if (fsItem) { fsItem = null; items.forEach(function (o) { if (o.fr) sync(o); }); layout(); }
     items.forEach(function (o) { if (o.el) o.el.classList.remove("po-open"); }); closeHp(); pauseAllMenu(); sheetSel = []; spage = 0; q = ""; $("q").value = ""; $("qx").hidden = true;
     $("shT").textContent = t().pick; $("bStart").textContent = t().start; $("q").placeholder = t().search; $("q").setAttribute("aria-label", t().search); $("sheet").hidden = false;
     var box = $("flt"); box.textContent = "";
