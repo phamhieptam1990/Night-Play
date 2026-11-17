@@ -69,6 +69,20 @@ header .back{background:rgba(255,255,255,.1)!important;border-color:rgba(255,255
 .chip[aria-pressed=true]{background:linear-gradient(135deg,#8B6BFF,#C158F5 55%,#FF7A2E)!important;border-color:#fff!important;box-shadow:0 0 0 2px rgba(255,255,255,.35),0 6px 18px rgba(160,100,255,.6)!important}
 .ev.ok,.ev.bad,.ev.cb,.ev.ask{border-color:rgba(255,255,255,.85)}
 header .back{background:rgba(255,255,255,.16)!important;border-color:rgba(255,255,255,.4)!important}
+
+/* ĐIỆN THOẠI NGANG (thấp): thanh đầu gọn, sân khấu chiếm trọn chiều cao bên trái, bảng bên phải hiện ĐỦ các nút (xuống dòng, không cắt nửa chip) */
+@media (orientation:landscape) and (max-height:560px) and (min-width:600px){
+  header{margin:4px 10px 6px;padding:3px 6px;gap:8px}header .back{width:36px;height:36px}h1#ttl{font-size:15px}#snd{width:36px;height:36px}
+  #wrap{padding:0 10px 8px;gap:8px}
+  #dock{width:min(400px,50vw);overflow-y:auto;justify-content:space-between;padding:6px 0;gap:0}
+  #dock .row{flex-wrap:wrap!important;overflow:visible!important;padding:3px 10px;gap:6px}
+  .sec{flex:1 1 auto;justify-content:center}.sec+.sec{border-top:1px solid rgba(255,255,255,.1);margin-top:0;padding-top:2px}
+  .lab{display:block!important;font-size:9.5px;margin:1px 12px 0}
+  .ev{width:38px;height:38px;border-radius:12px}.ev svg{width:20px;height:20px}
+  .chip{min-height:30px!important;padding:0 10px;font-size:11.5px}.chip i{width:10px;height:10px}
+  .nm{font-size:12px;padding:3px 10px;left:8px;bottom:8px}.lk{font-size:11px;bottom:8px;right:8px}
+  .stagebox{padding-top:58px;padding-bottom:30px}
+}
 </style>
 </head>
 <body>
