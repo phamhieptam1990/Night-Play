@@ -1,0 +1,9 @@
+/* HERO LINH VẬT SVG cho game NIGHT (Cozy): mascot-art.js tự nạp khi game có ô hero (#hHero / #cwHero). Thay emoji (font-size:0) bằng SVG cao theo khung. */
+#home #hHero.npa-hero{display:flex!important;align-items:flex-end;justify-content:center;font-size:0!important;line-height:0;height:clamp(100px,34cqw,250px);min-height:0;flex:none;margin:46px auto 0}
+#home #hHero .npa-box>svg{height:100%;width:auto;max-width:100%}
+@media (orientation:landscape) and (max-height:700px){#home #hHero.npa-hero{height:clamp(96px,38cqh,230px);margin-top:36px}}
+/* màn HỎI/KẾT QUẢ ngang thấp: ẩn mini để khỏi đè danh sách và nút */
+@media (orientation:landscape) and (max-height:520px){#play:has(#ask:not([hidden])) .npa-mini,#play:has(#res:not([hidden])) .npa-mini,#play:has(#end:not([hidden])) .npa-mini{display:none}}
+/* Cánh Nhỏ Phiêu Lưu (#cwHero ở màn #ovStart): tiêu đề game phủ lên ô hero làm chuột không chạm được linh vật → đưa hero lên trên, SVG theo chiều cao */
+#ovStart #cwHero.npa-hero{position:relative!important;z-index:6;pointer-events:auto;font-size:0!important;line-height:0}
+#ovStart #cwHero .npa-box>svg{height:100%;width:auto;max-width:100%}

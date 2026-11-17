@@ -176,3 +176,12 @@ Tệp: `shared/art/mascot-art.js` (lõi), `shared/art/mascot-games.js` (dữ li�
 **Cỡ linh vật mini (chủ site chốt: to bằng nhân vật của game):** tự tính theo bề ngang khung chơi (`miniSize()` trong mascot-art.js) = 20% bề ngang, giới hạn 60–112px (điện thoại ~73px, iPad ~111px); co giãn khi đổi khung (toàn màn hình, xoay). Game KHÔNG đặt cỡ mini bằng CSS riêng.
 
 **Trang xem linh vật `mascot-review.html`:** bấm vào linh vật ở trang skin (`nightpass-mascot.html`, game có SVG) mở trang xem lớn: nút thử hoạt động (Chào, Chạm, Đúng, Sai, Combo 1-3, Hỏi, Xuất hiện lại), chọn skin + 8 theme màu ngay tại chỗ (`NPArtSkinForce`/`NPArtForce`, không lưu), nút ← về trang skin. Thêm game có SVG là tự dùng được (không sửa trang).
+
+## 11. NIGHT PLAY = "3D MỀM" (chủ site chốt 17/11/2026, thay "Gen Z sticker" cho 19 game; Xin Nghỉ giữ bản sticker đã duyệt)
+Nguồn: `scripts/art/gen-night3d.js` + `scripts/art/night3d-skins.js` → `shared/art/mascot-n3-<id>.svg`, đăng ký trong `mascot-games.js` (khối GEN-NIGHT). KHÔNG sửa tay tệp SVG/khối đăng ký; sửa bộ sinh rồi `node scripts/art/gen-night3d.js`.
+- **Hình**: thân tròn mũm, gradient xuyên tâm (sáng góc trên-trái), bóng đổ cằm, ánh sáng viền, vệt bóng trên đầu, mắt tròng gradient + 2 chấm sáng, má hồng, tay chân ngắn; mặc trang phục riêng.
+- **Nhận ra game ngay (bắt buộc)**: mỗi con có (1) ĐẠO CỤ nhận diện phóng to (`#sign`, luôn có ở mọi skin), (2) BỐI CẢNH riêng phía sau (đồng hồ, lịch deadline, ô 2048, đường ray, mê cung, mưa...), (3) KIỂU MẮT RIÊNG và mũi/mỏ đúng loài. Hai con không được trùng kiểu mắt. Bỏ nét thừa: nền không dùng khối chữ nhật cứng, không nét rối đè lên mặt/đạo cụ.
+- **Skin**: 1 miễn phí (Mặc định) + 4 trả phí KHÁC NHAU theo game (mũ/đạo cụ đầu khác nhau, tên riêng): Huy hiệu (mũ + huy chương), Chủ đề riêng (mũ), Dạ quang (thân xanh-tím sáng + quầng + sao nhấp nháy + phụ kiện sáng), Siêu sao (vương miện/mũ + áo choàng vàng + lấp lánh). Mũ của skin thay mũ gốc (`.base-top` ẩn) với 7 game có mũ gốc là một phần trang phục.
+- **Màu theo theme**: thân dùng biến `--p1/--p2` (qua `--g0/--g1/--g2`) nên 8 theme đổi được bảng màu linh vật.
+- **Nối vào game**: `mascot-art.js` tự nạp `nighthero.css` khi game có `#hHero`/`#cwHero`, chặn `hHero.textContent=` xoá SVG; game Cozy sinh tự động nạp script qua `tpl.html`; game viết tay (10 game) đã thêm `<script src=".../mascot-art.js">`. Mini: `pos:"br"`, `lift` (px) nâng mini lên khi game có hàng nút ở đáy (Sống Sót, Xe Cà Phê).
+- Xem tất cả skin: `shared/art/night3d-skins.html`; bản duyệt mặc định: `shared/art/night3d-sheet.html`.

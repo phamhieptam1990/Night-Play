@@ -93,3 +93,6 @@ Cấu trúc 5 skin mỗi game: **1 Mặc định** (miễn phí) · **2 Huy hi�
 
 ## Bản mẫu Pop Play (chờ duyệt, chỉ skin Mặc định)
 Tấm hình: [pop-mascots-sheet.png](pop-mascots-sheet.png). Nguồn sinh: `node scripts/art/gen-pop.js` → `shared/art/mascot-pop-<id>.svg` + xem ở `shared/art/pop-sheet.html`. Chưa nhúng vào game, chưa có 4 skin trả phí. Duyệt xong từng con mới làm skin + nối game theo checklist mục 9 MASCOT-ART-RULES.
+
+## Night Play — 19 linh vật 3D mềm (17/11/2026)
+Mực Đọc Vị (Bạn Có Hiểu Tôi Không?), Rùa Lề Mề (Bao Nhiêu Giây?), Chưng Chưng Chảnh (Cắt Bánh Chưng), Trâu Nón Lá (Chở Hàng Kiểu Việt), Chim Sẻ Chong Chóng (Cánh Nhỏ Phiêu Lưu), Chuột Chũi Thức Khuya (Đập Deadline), Mèo Thần Tài (Đổi Đời 2048), Đầu Tàu Tèo (Đường Ray), Gà Mái Ngầu (Gà Mẹ Bắn Trứng), Heo Đất Chốt Đơn (Đoán Giá Chợ Việt), Tắc Kè Soi (Mắt Tinh Không?), Chuột Lạc Đường (Mê Cung Truyền Tay), Vịt Áo Mưa (Né Ổ Gà), Nhện Giăng Tơ (Nối Một Nét), Corgi Giao Hàng (Shipper Siêu Tốc), Gián Bất Tử (Sống Sót Đến Cuối Tháng), Bút Chì Liều (Vẽ Một Nét), Khỉ Thợ Xây (Xây Cầu Tre), Lười Phin Đá (Xe Cà Phê). Tên skin từng con: `scripts/art/night3d-skins.js`.

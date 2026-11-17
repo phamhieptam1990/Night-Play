@@ -1,0 +1,14 @@
+<!doctype html><meta charset="utf-8"><title>Night 3D — 5 skin</title><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>body{margin:0;background:#171236;color:#fff;font-family:Inter,system-ui,sans-serif;padding:12px}h1{font-size:16px;margin:0 0 10px}
+#root{display:flex;flex-direction:column}.row{display:grid;grid-template-columns:90px repeat(5,1fr);gap:6px;align-items:center;margin-bottom:6px}.row b{font-size:12px}
+.c{background:linear-gradient(160deg,#2b2064,#171236);border:1px solid #ffffff22;border-radius:12px;padding:4px;text-align:center}.c svg{width:100%;height:auto;display:block}.c span{font-size:10px;opacity:.75;display:block}</style>
+<h1>Linh vật Night 3D — mặc định + 4 skin trả phí (?only=id1,id2 để lọc; ?t=sky để thử màu theme)</h1><div id="root"></div>
+<script>
+var IDS=["ban-co-hieu-toi","bao-nhieu-giay","cat-banh-chung","cho-hang-kieu-viet","cozy-wings","dap-deadline","doi-doi-2048","duong-ray","ga-me-ban-trung","gia-cho-viet","mat-tinh-khong","me-cung-truyen-tay","ne-o-ga","noi-mot-net","shipper-sieu-toc","song-sot-cuoi-thang","ve-mot-net","xay-cau-tre","xe-ca-phe"];
+var q=new URLSearchParams(location.search),only=(q.get("only")||"").split(",").filter(Boolean);if(only.length)IDS=IDS.filter(function(i){return only.indexOf(i)>=0});
+var SK=["default","badge","group","night","star"],NM={default:"Mặc định",badge:"Huy hiệu",group:"Chủ đề riêng",night:"Dạ quang",star:"Siêu sao"},root=document.getElementById("root");
+IDS.forEach(function(id,n){fetch("mascot-n3-"+id+".svg?"+Date.now()).then(function(r){return r.text()}).then(function(t){
+  var row=document.createElement("div");row.className="row";row.innerHTML="<b>"+id+"</b>";
+  SK.forEach(function(k){var c=document.createElement("div");c.className="c";var u="u"+n+k;c.innerHTML=t.replace(/id="(h|b|e|v)"/g,'id="$1'+u+'"').replace(/url\(#(h|b|e|v)\)/g,'url(#$1'+u+')').replace('sk-default','sk-'+k)+"<span>"+NM[k]+"</span>";row.appendChild(c)});
+  row.style.order=n;root.appendChild(row)})});
+</script>

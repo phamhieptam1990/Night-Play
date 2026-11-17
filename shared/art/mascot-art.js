@@ -132,7 +132,7 @@
     return load(this.def.file).then(function (t) {
       needTheme(function () {
         if (h.__npaBox) { self.paint(); return; }
-        h.textContent = ""; var box = document.createElement("div"); box.className = "npa-box"; box.innerHTML = uniq(t); h.appendChild(box);
+        while (h.firstChild) h.removeChild(h.firstChild); var box = document.createElement("div"); box.className = "npa-box"; box.innerHTML = uniq(t); h.appendChild(box);
         self.svg = box.firstChild; self.box = box; h.__npaBox = box; if (self.role !== "mini") h.classList.add("npa-hero");   /* mini KHÔNG là mục tiêu của mascot.js (giữ để kéo, không phình/pop) */ self.paint(); self.watch(); self.enter();
         try { self.svg.setAttribute("aria-label", self.def.name[vi() ? 0 : 1]); } catch (e) {}
       });
@@ -184,13 +184,16 @@
   function find(host) { for (var i = 0; i < insts.length; i++) if (insts[i].host === host) return insts[i]; return null; }
   function mount(host, o) {
     if (!host || !o || !G[o.game]) return null; var it = find(host);
-    if (!it) { it = new Inst(host, o); insts.push(it); } it.mount(); return it;
+    if (!it) { it = new Inst(host, o); insts.push(it); }
+    /* game Night vẽ lại màn chính bằng hHero.textContent=… (renderHome) sẽ xoá SVG → chặn ghi đè khi đã có SVG (không phải sửa từng game) */
+    if (o.role === "hero" && G[o.game].style === "night" && !host.__npaGuard) { host.__npaGuard = 1; try { var td = Object.getOwnPropertyDescriptor(Node.prototype, "textContent"); Object.defineProperty(host, "textContent", { configurable: true, get: function () { return td.get.call(this); }, set: function (v) { if (this.querySelector("svg")) return; td.set.call(this, v); } }); } catch (e) {} }
+    it.mount(); return it;
   }
   /* cỡ linh vật mini = cỡ NHÂN VẬT của game (chim/nhân vật chính ~ 1/5 bề ngang khung chơi), 60–112px */
   function miniSize(parent) { var w = (parent.getBoundingClientRect().width) || 360; return Math.max(60, Math.min(112, Math.round(w * 0.2))); }
   function companion(game, parent, o) {
     if (!parent || !G[game]) return null; o = o || {}; var d = parent.querySelector(":scope>.npa-mini"); if (d) return find(d);
-    d = document.createElement("div"); d.className = "npa-mini " + (o.pos || "bl"); d.setAttribute("data-npa-game", game); var sz = o.size || miniSize(parent); d.style.width = d.style.height = sz + "px"; parent.appendChild(d); if (!o.size) { var fm = function () { var z = miniSize(parent) + "px"; if (d.style.width !== z) { d.style.width = d.style.height = z; applyPos(d, parent, game); } }; addEventListener("resize", fm); try { new ResizeObserver(fm).observe(parent); } catch (e) {} } var inst = mount(d, { game: game, role: "mini" }); drag(d, parent, game); return inst;
+    d = document.createElement("div"); d.className = "npa-mini " + (o.pos || "bl"); d.setAttribute("data-npa-game", game); if (G[game] && G[game].lift) d.style.setProperty("bottom", G[game].lift + "px");   /* game có hàng nút ở đáy: nâng mini lên trên hàng nút */ var sz = o.size || miniSize(parent); d.style.width = d.style.height = sz + "px"; parent.appendChild(d); if (!o.size) { var fm = function () { var z = miniSize(parent) + "px"; if (d.style.width !== z) { d.style.width = d.style.height = z; applyPos(d, parent, game); } }; addEventListener("resize", fm); try { new ResizeObserver(fm).observe(parent); } catch (e) {} } var inst = mount(d, { game: game, role: "mini" }); drag(d, parent, game); return inst;
   }
 
   /* ---------- NGƯỜI CHƠI KÉO LINH VẬT MINI ĐẶT Ở ĐÂU CŨNG ĐƯỢC TRONG KHUNG GAME (nhớ theo game, lưu máy; tỉ lệ theo khung nên đổi cỡ vẫn đúng) ---------- */
@@ -488,6 +491,7 @@
           /* điện thoại ngang: bố cục còn dịch chuyển sau lúc đặt (thẻ Tiếp tục, phông, nút) → mỗi giây kiểm tra hero có che thẻ/nút không, có thì đặt lại */
           setInterval(function () { try { if (!keep.isConnected || host.hidden || getComputedStyle(keep).position !== "fixed" || getComputedStyle(keep).display === "none") return; var q = keep.getBoundingClientRect(); if (hits(blockers(), q.left, q.top - 30, q.width, q.height + 30)) placeFree(); } catch (e) {} }, 1000); } catch (e) {} }
     }
+    if (h && G[gid].style === "night" && !document.querySelector('link[href*="nighthero.css"]')) { var lk2 = document.createElement("link"); lk2.rel = "stylesheet"; lk2.href = BASE + "nighthero.css"; document.head.appendChild(lk2); }
     if (h) mount(h, { game: gid, role: "hero" });
     if (document.documentElement.getAttribute("data-npa-mini") !== "off") { var pl = document.getElementById("play"); if (pl) companion(gid, pl, { pos: G[gid].pos || "br" }); }
   }

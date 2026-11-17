@@ -71,7 +71,7 @@ def("doi-doi-2048", { name: "Đổi Đời 2048", hero: "Mèo Thần Tài", mt: 
   back: '', ears: '<path d="M62 78L54 24L108 56Z" fill="#F1ECFA"/><path d="M194 78L202 24L148 56Z" fill="#F1ECFA"/><path d="M68 70L66 42L92 58Z" fill="#FFB3CF"/><path d="M188 70L190 42L164 58Z" fill="#FFB3CF"/>', top: '', mark: E(128, 62, 6, 6, '#FFC400', 'id="mark"'),
   sign: '<g id="sign"><rect x="8" y="170" width="64" height="44" rx="10" fill="#FFC400" transform="rotate(-10 40 192)"/><text x="40" y="200" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-weight="900" font-size="18" fill="#7A4A00" transform="rotate(-10 40 192)">2048</text></g>' });
 def("duong-ray", { name: "Đường Ray", hero: "Đầu Tàu Tèo", mt: "vệt than trên má", prop: "ống khói + đường ray", c: ["#FF8F8F", "#E94B4B", "#A82A2A", "#FFE9D6"], face: "square", head: 0, square: 1,
-  back: '', ears: '', top: '<rect x="94" y="22" width="44" height="40" rx="8" fill="#9C2A2A"/><path d="M86 26H146" stroke="#FFD93D" stroke-width="9" stroke-linecap="round"/><circle cx="104" cy="8" r="9" fill="#fff" opacity=".9"/><circle cx="124" cy="-2" r="7" fill="#fff" opacity=".8"/><rect x="52" y="168" width="152" height="14" rx="6" fill="#FFD93D"/><circle cx="128" cy="198" r="12" fill="#FFF3A0" stroke="#C8A80A" stroke-width="3"/><circle cx="82" cy="226" r="22" fill="#3A3A52"/><circle cx="82" cy="226" r="8" fill="#FFD93D"/><circle cx="174" cy="226" r="22" fill="#3A3A52"/><circle cx="174" cy="226" r="8" fill="#FFD93D"/>', mark: '<path id="mark" d="M76 134q8-6 14 0q-2 8-14 6z" fill="#3A2A33" opacity=".6"/>',
+  back: '', ears: '', top: '<rect x="94" y="22" width="44" height="40" rx="8" fill="#9C2A2A"/><path d="M86 26H146" stroke="#FFD93D" stroke-width="9" stroke-linecap="round"/><circle cx="104" cy="8" r="9" fill="#fff" opacity=".9"/><circle cx="124" cy="-2" r="7" fill="#fff" opacity=".8"/>', topKeep: '<rect x="52" y="168" width="152" height="14" rx="6" fill="#FFD93D"/><circle cx="128" cy="198" r="12" fill="#FFF3A0" stroke="#C8A80A" stroke-width="3"/><circle cx="82" cy="226" r="22" fill="#3A3A52"/><circle cx="82" cy="226" r="8" fill="#FFD93D"/><circle cx="174" cy="226" r="22" fill="#3A3A52"/><circle cx="174" cy="226" r="8" fill="#FFD93D"/>', mark: '<path id="mark" d="M76 134q8-6 14 0q-2 8-14 6z" fill="#3A2A33" opacity=".6"/>',
   sign: '<g id="sign"><path d="M14 238H242" stroke="#FFD93D" stroke-width="9" stroke-linecap="round"/><path d="M40 230V246M84 230V246M128 230V246M172 230V246M216 230V246" stroke="#8A6A3C" stroke-width="5"/></g>' });
 def("ga-me-ban-trung", { name: "Gà Mẹ Bắn Trứng", hero: "Gà Mái Ngầu", mt: "ba tàn nhang má trái", prop: "quả trứng + mũ lưỡi trai", c: ["#FFFFFF", "#FFF0D6", "#EBCB98", "#FFF8EA"], face: "slyE", fx: '<path d="M116 126L128 118L140 126L128 146Z" fill="#FF9F1C"/><path d="M126 148q2 14 6 0z" fill="#FF4D6D"/>', head: 0,
   back: '', ears: '', top: '<path d="M104 40Q96 8 118 18Q122 0 134 18Q152 6 152 36Z" fill="#FF4D6D"/><path d="M86 66Q92 30 128 28Q164 30 170 66Z" fill="#3B82F6"/><path d="M164 60H214Q218 74 202 76H164Z" fill="#3B82F6"/>', mark: '<g id="mark" fill="#C8693A"><circle cx="76" cy="128" r="2.8"/><circle cx="86" cy="134" r="2.8"/><circle cx="76" cy="140" r="2.8"/></g>',
@@ -142,31 +142,39 @@ const PS = { "bao-nhieu-giay": 1.25, "dap-deadline": 1.0, "song-sot-cuoi-thang":
 const AX = { "doi-doi-2048": [6, 236], "gia-cho-viet": [6, 236], "ve-mot-net": [128, 250], "duong-ray": [128, 250], "noi-mot-net": [250, 0], "ban-co-hieu-toi": [250, 0], "mat-tinh-khong": [250, 236], "dap-deadline": [250, 236] };
 const PX = { "doi-doi-2048": 40, "gia-cho-viet": 40 };
 const EST = { "ban-co-hieu-toi": "spiral", "cozy-wings": "ring:#3A8FE8", "ga-me-ban-trung": "lash", "gia-cho-viet": "star", "me-cung-truyen-tay": "wideWhite", "ne-o-ga": "ring:#E8742A", "xay-cau-tre": "ring:#7A3F0E", "mat-tinh-khong": "slit", "shipper-sieu-toc": "heart", "cho-hang-kieu-viet": "lash", "noi-mot-net": "ring:#00C2E0", "dap-deadline": "", "xe-ca-phe": "" };
+const SK3 = require("./night3d-skins.js");
+const HIDE_TOP = ["cho-hang-kieu-viet", "cozy-wings", "dap-deadline", "ga-me-ban-trung", "shipper-sieu-toc", "xay-cau-tre", "duong-ray"];
 const ids = Object.keys(G);
 function svg(id, d) {
+  const KS = SK3.skins(id);
   const [c0, c1, c2, cb] = d.c, hy = d.square ? 8 : 0;
   const headShape = d.square ? `<rect x="46" y="38" width="164" height="150" rx="58" fill="url(#h)"/>` : `<ellipse cx="128" cy="108" rx="84" ry="74" fill="url(#h)"/>`;
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="${d.name}" class="np-mascot sk-default" data-style="night" data-game="${id}">
 <title>${d.hero} — ${d.name}</title>
 <desc>Chữ ký khuôn mặt (giữ nguyên ở mọi skin): mắt to hai chấm sáng, má hồng, biểu cảm riêng, ${d.mt}. Đạo cụ nhận diện game (luôn có): ${d.prop}. Phong cách Night 3D mềm. Chi tiết nhỏ dùng màu cứng.</desc>
-<style>.np-mascot[data-game="${id}"]{--bg1:#2b2064;--bg2:#171236;--bgx:#FF4FA3;--sh:color-mix(in srgb,var(--bg2) 55%,#000)}
-.acc,.fx{display:none}.npa{transform-box:fill-box;transform-origin:50% 100%}.npa-breathe{animation:npa-breathe 3.2s ease-in-out infinite}@keyframes npa-breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.02,.98)}}
-:root.np-playing .npa{animation:none}@media (prefers-reduced-motion:reduce){.npa{animation:none}}</style>
-<defs><radialGradient id="h" cx=".34" cy=".26" r=".85"><stop offset="0" stop-color="${c0}"/><stop offset=".55" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></radialGradient>
-<radialGradient id="b" cx=".4" cy=".25" r=".9"><stop offset="0" stop-color="${c0}"/><stop offset=".6" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></radialGradient>
+<style>.np-mascot[data-game="${id}"]{--bg1:#2b2064;--bg2:#171236;--bgx:#FF4FA3;--p1:${c1};--p2:${c2};--g0:color-mix(in srgb,var(--p1) 56%,#fff);--g1:var(--p1);--g2:var(--p2);--sh:color-mix(in srgb,var(--bg2) 55%,#000)}
+.np-mascot.sk-night{--g0:color-mix(in srgb,var(--p1) 26%,#8C8CFF);--g1:color-mix(in srgb,var(--p1) 34%,#4040B8);--g2:color-mix(in srgb,var(--p2) 40%,#1C1C6A)}
+.np-mascot.sk-star{--g0:color-mix(in srgb,var(--p1) 38%,#fff);--g1:color-mix(in srgb,var(--p1) 72%,#fff);--g2:color-mix(in srgb,var(--p2) 78%,#fff)}
+.acc,.fx{display:none}
+.sk-badge .acc-badge,.sk-group .acc-group,.sk-night .acc-night,.sk-star .acc-star,.sk-night .fx-night,.sk-star .fx-star{display:inline}
+.sk-badge .base-top,.sk-group .base-top,.sk-night .base-top,.sk-star .base-top{display:none}
+.npa{transform-box:fill-box;transform-origin:50% 100%}.npa-breathe{animation:npa-breathe 3.2s ease-in-out infinite}.npa-twinkle{animation:npa-twinkle 2s ease-in-out infinite}
+@keyframes npa-breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.02,.98)}}@keyframes npa-twinkle{0%,100%{opacity:.35}50%{opacity:1}}
+:root.np-playing .npa,:root.np-playing .npa-twinkle{animation:none}@media (prefers-reduced-motion:reduce){.npa,.npa-twinkle{animation:none}}</style>
+<defs><radialGradient id="h" cx=".34" cy=".26" r=".85"><stop offset="0" style="stop-color:var(--g0)"/><stop offset=".55" style="stop-color:var(--g1)"/><stop offset="1" style="stop-color:var(--g2)"/></radialGradient>
+<radialGradient id="b" cx=".4" cy=".25" r=".9"><stop offset="0" style="stop-color:var(--g0)"/><stop offset=".6" style="stop-color:var(--g1)"/><stop offset="1" style="stop-color:var(--g2)"/></radialGradient>
 <radialGradient id="e" cx=".4" cy=".3" r=".9"><stop offset="0" stop-color="#6A4A5E"/><stop offset=".6" stop-color="#2A1A33"/><stop offset="1" stop-color="#140B1C"/></radialGradient>
 <radialGradient id="v" cx=".5" cy=".35" r=".7"><stop offset="0" stop-color="${cb}"/><stop offset="1" stop-color="${cb}" stop-opacity=".78"/></radialGradient></defs>
 <g id="shadow"><ellipse cx="128" cy="240" rx="76" ry="9" fill="var(--sh)" opacity=".5"/></g>
 <g id="all" class="npa npa-breathe"><g id="scene">${SCENE[id] || ""}</g><g id="pose" transform="rotate(${((ids.indexOf(id) % 5) - 2) * 1.2} 128 230)">
-<g id="charg" transform="translate(${PX[id] === undefined ? 14 : PX[id]} 30) scale(.82)">${d.back}
+<g id="charg" transform="translate(${PX[id] === undefined ? 14 : PX[id]} 30) scale(.82)"><g id="back-star" class="acc acc-star">${KS.backStar}</g>${d.back}
 <g id="body"><ellipse cx="128" cy="184" rx="68" ry="54" fill="url(#b)"/><ellipse cx="128" cy="190" rx="42" ry="34" fill="url(#v)"/>
 <ellipse cx="62" cy="176" rx="17" ry="26" fill="url(#b)" transform="rotate(18 62 176)"/><ellipse cx="194" cy="176" rx="17" ry="26" fill="url(#b)" transform="rotate(-18 194 176)"/>
 <ellipse cx="98" cy="232" rx="24" ry="13" fill="url(#b)"/><ellipse cx="158" cy="232" rx="24" ry="13" fill="url(#b)"/>
 ${OUT[id] || ""}${d.ears}<ellipse cx="128" cy="170" rx="58" ry="12" fill="#000" opacity=".16"/>${headShape}<ellipse cx="94" cy="56" rx="30" ry="12" fill="#fff" opacity=".55" transform="rotate(-24 94 56)"/><ellipse cx="70" cy="86" rx="7" ry="4.5" fill="#fff" opacity=".4" transform="rotate(-50 70 86)"/><path d="M204 84Q216 112 198 150" fill="none" stroke="#fff" stroke-width="6" opacity=".22" stroke-linecap="round"/><path d="M60 176Q70 210 100 226" fill="none" stroke="#fff" stroke-width="5" opacity=".18" stroke-linecap="round"/><path d="M52 132Q60 176 100 186" fill="none" stroke="${c2}" stroke-width="10" opacity=".14" stroke-linecap="round"/></g>
 <g id="face"><g id="eyes">${(CUR = EST[id] || "", FACE[d.face](108))}</g>${d.fx || ""}${d.mark}</g>
-${d.top}</g>
+<g class="${HIDE_TOP.includes(id) ? "base-top" : "keep-top"}">${d.top}</g>${d.topKeep || ""}<g id="acc-badge" class="acc acc-badge">${KS.badge}</g><g id="acc-group" class="acc acc-group">${KS.group}</g><g id="acc-night" class="acc acc-night">${KS.night}</g><g id="acc-star" class="acc acc-star">${KS.star}</g><g id="fx-night" class="fx fx-night">${KS.fxNight}</g><g id="fx-star" class="fx fx-star">${KS.fxStar}</g></g>
 <g id="propg" transform="translate(${AX[id] ? AX[id][0] : 250} ${AX[id] ? AX[id][1] : 236}) scale(${PS[id] || 1.55}) translate(${AX[id] ? -AX[id][0] : -250} ${AX[id] ? -AX[id][1] : -236})">${d.sign}</g>
-<g id="acc-badge" class="acc acc-badge"></g><g id="acc-group" class="acc acc-group"></g><g id="acc-night" class="acc acc-night"></g><g id="acc-star" class="acc acc-star"></g><g id="fx-night" class="fx fx-night"></g><g id="fx-star" class="fx fx-star"></g>
 </g></g></svg>
 `;
 }
@@ -174,3 +182,17 @@ for (const id of ids) fs.writeFileSync(path.join(out, "mascot-n3-" + id + ".svg"
 const cards = ids.map(id => `<figure><img src="mascot-n3-${id}.svg" alt="${G[id].hero}"><figcaption><b>${G[id].hero}</b><span>${G[id].name}</span></figcaption></figure>`).join("");
 fs.writeFileSync(path.join(out, "night3d-sheet.html"), `<!doctype html><meta charset="utf-8"><title>Linh vật Night 3D mềm — bản duyệt</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;background:#171236;color:#fff;font-family:Inter,system-ui,sans-serif;padding:16px}h1{font-size:18px;margin:0 0 12px}.g{display:grid;grid-auto-flow:column;grid-template-rows:repeat(2,auto);grid-auto-columns:min(230px,44vw);gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px}figure{margin:0;scroll-snap-align:start;background:linear-gradient(160deg,#2b2064,#171236);border:1px solid #ffffff22;border-radius:16px;padding:8px;text-align:center}img{width:100%;height:auto;display:block}figcaption b{display:block;font-size:13px}figcaption span{font-size:11px;opacity:.7}.hint{font-size:11px;opacity:.6}</style><h1>Linh vật NIGHT PLAY kiểu 3D mềm — bản MẶC ĐỊNH chờ duyệt (19 game)</h1><div class="g">${cards}</div><p class="hint">Vuốt ngang để xem hết →</p>`);
 console.log("đã sinh", ids.length, "linh vật Night 3D");
+/* ---- ghi dữ liệu đăng ký (giữa dấu GEN-NIGHT) vào shared/art/mascot-games.js ---- */
+const J = JSON.stringify, DEF = { half: [["Tạm được, cố thêm nhé.", "Not bad, push on."]], ask: [["Chọn cho cẩn thận nha.", "Choose wisely."]] };
+const LIFT = { "song-sot-cuoi-thang": 74, "xe-ca-phe": 20 };
+let gen = "";
+for (const id of ids) {
+  const D = SK3.DATA[id], L = SK3.LN[id], sk = {}; ["badge", "group", "night", "star"].forEach((k, n) => { sk[k] = D.names[n]; });
+  const Ls = { hi: [L[0]], start: [L[0]], ok: [L[1], L[2]], half: DEF.half, no: [L[3], L[4]], combo: [[L[5]], [L[6]], [L[7]]], tap: [L[8], L[9]], ask: DEF.ask, end: [L[10]] };
+  gen += `    ${J(id)}: { pos: "br", ${LIFT[id] ? "lift: " + LIFT[id] + ", " : ""}style: "night", file: ${J("mascot-n3-" + id + ".svg")}, emoji: ${J(D.emoji)}, name: ${J([G[id].hero, SK3.EN[id]])}, skinNames: ${J(sk)}, fx: ${J({ default: [D.emoji, "✨"], badge: ["🏅", "✨"], group: ["🎩", "✨"], night: ["🌙", "💜"], star: ["👑", "🌟"] })}, L: ${J(Ls)} },\n`;
+}
+const gp = path.join(out, "mascot-games.js"); let gs = fs.readFileSync(gp, "utf8");
+if (!gs.includes("/*GEN-NIGHT-START*/")) gs = gs.replace('    "xin-nghi": {', '/*GEN-NIGHT-START*/\n/*GEN-NIGHT-END*/\n    "xin-nghi": {');
+gs = gs.replace(/\/\*GEN-NIGHT-START\*\/[\s\S]*?\/\*GEN-NIGHT-END\*\//, "/*GEN-NIGHT-START*/\n" + gen + "    /*GEN-NIGHT-END*/");
+fs.writeFileSync(gp, gs); console.log("đã ghi", ids.length, "mục Night vào mascot-games.js");
+
