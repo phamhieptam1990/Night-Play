@@ -125,9 +125,9 @@
     var s = this.svg; if (!s || reduce || !s.animate) return; i = Math.max(1, Math.min(3, i | 0 || 1));
     try { s.animate(kind === "wrong" ? WRONG : (MOTION[this.skin] || MOTION["default"])(i), { duration: kind === "wrong" ? 520 : DUR[this.skin] || 560, easing: this.skin === "night" ? "ease-in-out" : "cubic-bezier(.3,.7,.4,1)" }); } catch (e) {}
   };
-  Inst.prototype.fx = function (tier) {
-    if (reduce || !Element.prototype.animate || !this.visible()) return;
-    var r = this.svg.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height * 0.45, D = Math.max(60, Math.min(r.width, 160)), pics = this.def.fx[this.skin] || this.def.fx["default"], n = 4 + tier * 3, i, col = "#ffb84d";
+  Inst.prototype.fx = function (tier, at) {
+    if (reduce || !Element.prototype.animate || (!at && !this.visible())) return;
+    var r = at ? null : this.svg.getBoundingClientRect(), cx = at ? at.cx : r.left + r.width / 2, cy = at ? at.cy : r.top + r.height * 0.45, D = at ? at.D : Math.max(60, Math.min(r.width, 160)), pics = this.def.fx[this.skin] || this.def.fx["default"], n = 4 + tier * 3, i, col = "#ffb84d";
     try { col = getComputedStyle(this.svg).getPropertyValue("--bgx").trim() || getComputedStyle(this.svg).getPropertyValue("--pa").trim() || col; } catch (e) {}
     if (tier >= 2 && (this.skin === "night" || this.skin === "star")) {
       var ring = document.createElement("div"); ring.className = "npa-ring"; ring.style.setProperty("--mx-c", col); ring.style.width = ring.style.height = D + "px"; ring.style.left = (cx - D / 2) + "px"; ring.style.top = (cy - D / 2) + "px"; document.body.appendChild(ring);
@@ -198,16 +198,45 @@
     night: [[{ transform: "none", opacity: 1 }, { transform: "translateY(-30px)", offset: .4, opacity: .85 }, { transform: "translateY(-140px) scale(.85)", opacity: 0 }], 950],
     star: [[{ transform: "none", opacity: 1 }, { transform: "scale(1.18) rotate(-8deg)", offset: .25, opacity: 1 }, { transform: "scaleX(-1) rotate(10deg) scale(.7)", offset: .65, opacity: .9 }, { transform: "scaleX(1) rotate(0) scale(.1)", opacity: 0 }], 850]
   };
-  var snap = null;
-  function takeSnap() { for (var i = 0; i < insts.length; i++) { var it = insts[i]; if (it.role !== "hero" || !it.svg || !it.visible()) continue; var r = it.svg.getBoundingClientRect(); if (r.width > 40 && r.height > 40 && r.bottom > 0 && r.top < innerHeight) { snap = { it: it, r: r, at: Date.now(), html: it.svg.outerHTML }; return; } } }
+  var snap = null, holding = 0;
+  function takeSnap() {
+    if (holding) return;
+    for (var i = 0; i < insts.length; i++) {
+      var it = insts[i]; if (it.role !== "hero" || !it.svg || !it.visible()) continue; var r = it.svg.getBoundingClientRect();
+      if (r.width > 40 && r.height > 40 && r.bottom > 0 && r.top < innerHeight) {
+        var scr = it.host.closest("#home,#ovStart,#village"), cl = null;
+        try { if (scr) { cl = scr.cloneNode(true); cl.removeAttribute("id"); } } catch (e) {}
+        snap = { it: it, r: r, at: Date.now(), html: it.svg.outerHTML, scr: scr, cl: cl, sid: scr && scr.id }; return;
+      }
+    }
+  }
   ["pointerdown", "keydown"].forEach(function (n) { addEventListener(n, takeSnap, { capture: true, passive: true }); });
+  /* RỜI ĐI XONG MỚI HIỆN GAME: bản sao màn chính (nguyên vẹn, trừ linh vật) che màn chơi trong lúc ghost chạy hiệu ứng; game bị đóng băng (NP.menuPause) rồi chạy tiếp khi hiệu ứng xong. */
   function leave() {
-    var sn = snap; snap = null; if (!sn || Date.now() - sn.at > 2500 || reduce || !Element.prototype.animate) return;
-    var it = sn.it, r = sn.r, d = document.createElement("div"); d.style.cssText = "position:fixed;z-index:9997;pointer-events:none;left:" + r.left + "px;top:" + r.top + "px;width:" + r.width + "px;height:" + r.height + "px;transform-origin:50% 100%";
-    d.innerHTML = sn.html; var sv = d.firstChild; if (sv && sv.style) { sv.style.width = "100%"; sv.style.height = "100%"; } document.body.appendChild(d);
-    var e = EXIT[it.skin] || EXIT["default"], a;
-    try { a = d.animate(e[0], { duration: e[1], easing: "cubic-bezier(.4,0,.8,.6)", fill: "forwards" }); a.onfinish = function () { d.remove(); }; } catch (x) { d.remove(); return; }
-    setTimeout(function () { d.remove(); }, e[1] + 200);
+    var sn = snap; snap = null; if (!sn || holding || Date.now() - sn.at > 2500 || reduce || !Element.prototype.animate) return;
+    var it = sn.it, r = sn.r, d = document.createElement("div"), cov = null, froze = false, pl = document.getElementById("play") || document.body, pr = pl.getBoundingClientRect(), tx = pr.left + pr.width / 2 - (r.left + r.width / 2), ty = pr.top + pr.height * 0.42 - (r.top + r.height / 2), T = 1250;
+    d.style.cssText = "position:fixed;z-index:2147483000;pointer-events:none;left:" + r.left + "px;top:" + r.top + "px;width:" + r.width + "px;height:" + r.height + "px;transform-origin:50% 100%";
+    d.innerHTML = sn.html; var sv = d.firstChild; if (sv && sv.style) { sv.style.width = "100%"; sv.style.height = "100%"; }
+    try {
+      if (sn.cl && sn.scr && sn.scr.parentNode) {   /* bản sao màn chính che màn chơi */
+        cov = sn.cl; cov.hidden = false; cov.removeAttribute("hidden"); cov.id = sn.sid; cov.style.pointerEvents = "auto"; cov.style.zIndex = "2147482990";
+        var hh = cov.querySelector(".npa-hero"); if (hh) hh.style.visibility = "hidden";
+        var bb = cov.querySelectorAll(".npa-bub"); for (var k = 0; k < bb.length; k++) bb[k].remove();
+        sn.scr.parentNode.insertBefore(cov, sn.scr.nextSibling);
+        /* id trùng: luật CSS theo id áp lên bản sao; getElementById của game vẫn trả màn THẬT (đứng trước trong DOM) */
+      }
+    } catch (x) { cov = null; }
+    document.body.appendChild(d); holding = 1;
+    try { if (window.NP && NP.menuPause) froze = NP.menuPause(); } catch (x) {}
+    var done = function () { if (!holding) return; holding = 0; try { d.remove(); } catch (x) {} if (cov) { try { cov.remove(); } catch (x) {} } if (froze) { try { NP.menuResume(); } catch (x) {} } };
+    /* THEO Ý CHỦ SITE: linh vật bay RA GIỮA màn hình, phình lên rồi NỔ TUNG (hạt + vòng sáng theo skin) trong lúc màn chơi SÁNG LÊN (bản sao màn chính mờ dần) → mở màn game */
+    try {
+      var a = d.animate([{ transform: "none", opacity: 1 }, { transform: "scale(1.12,.86)", offset: .1, opacity: 1 }, { transform: "translate(" + tx * .55 + "px," + (ty * .55 - 40) + "px) scale(1.1)", offset: .38, opacity: 1 }, { transform: "translate(" + tx + "px," + ty + "px) scale(1.55)", offset: .62, opacity: 1 }, { transform: "translate(" + tx + "px," + ty + "px) scale(2.1)", offset: .72, opacity: 0 }, { transform: "translate(" + tx + "px," + ty + "px) scale(2.1)", opacity: 0 }], { duration: T, easing: "ease-in-out", fill: "forwards" });
+      a.onfinish = done;
+      (window.__npRST || setTimeout)(function () { if (!holding) return; var q = d.getBoundingClientRect(); it.fx(3, { cx: pr.left + pr.width / 2, cy: pr.top + pr.height * 0.42, D: Math.min(pr.width, 260) }); it.fx(it.skin === "default" ? 2 : 3, { cx: pr.left + pr.width / 2, cy: pr.top + pr.height * 0.42, D: Math.min(pr.width, 200) }); }, Math.round(T * .62));
+      if (cov && cov.animate) cov.animate([{ opacity: 1 }, { opacity: 1, offset: .62 }, { opacity: 0 }], { duration: T, fill: "forwards", easing: "ease-in" });
+    } catch (x) { done(); return; }
+    (window.__npRST || setTimeout)(done, T + 250);
   }
   addEventListener("np:start", leave);
   function refresh() { insts.forEach(function (it) { if (it.svg) it.paint(); }); }

@@ -159,4 +159,4 @@ Tệp: `shared/art/mascot-art.js` (lõi), `shared/art/mascot-games.js` (dữ li�
 
 **Hiệu ứng xuất hiện (màn chính):** linh vật di chuyển TỪ TỪ vào vị trí (~1,9–2,4 giây, mỗi skin một kiểu: `ENTER` trong mascot-art.js); **người dùng thao tác (chạm/phím/cuộn) thì vào ĐÚNG VỊ TRÍ NGAY** (`Inst.skipEnter`, câu chào hiện luôn). Chưa có hiệu ứng rời đi.
 
-**Hiệu ứng rời đi (bắt đầu ván):** màn chính ẩn NGAY (không trễ game); một BẢN SAO linh vật (ghost) ở đúng chỗ cũ chạy hiệu ứng rồi biến mất (`EXIT`/`leave()` trong mascot-art.js, kích hoạt bởi `np:start`, vị trí lấy từ lần chạm/phím gần nhất ≤ 2,5 giây). Mỗi skin một kiểu: Mặc định chúi rồi bật vọt lên · Huy hiệu nhảy xoay sang phải · Chủ đề riêng nhảy sang trái · Dạ quang mờ dần bay lên · Siêu sao xoay lật nhỏ dần.
+**Hiệu ứng rời đi (bắt đầu ván) — chủ site chốt:** linh vật bay RA GIỮA màn hình, phình lên rồi NỔ TUNG (hạt + vòng sáng theo skin) trong lúc bản sao màn chính mờ dần → màn chơi SÁNG LÊN (~1,25 giây). Game bị đóng băng (`NP.menuPause`) suốt hiệu ứng rồi chạy tiếp. Cài ở `leave()` (mascot-art.js, kích hoạt bởi `np:start`, vị trí lấy từ lần chạm/phím ≤ 2,5 giây trước).
