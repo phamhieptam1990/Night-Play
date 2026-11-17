@@ -214,9 +214,9 @@
   /* RỜI ĐI XONG MỚI HIỆN GAME: bản sao màn chính (nguyên vẹn, trừ linh vật) che màn chơi trong lúc ghost chạy hiệu ứng; game bị đóng băng (NP.menuPause) rồi chạy tiếp khi hiệu ứng xong. */
   function leave() {
     var sn = snap; snap = null; if (!sn || holding || Date.now() - sn.at > 2500 || reduce || !Element.prototype.animate) return;
-    var it = sn.it, r = sn.r, d = document.createElement("div"), cov = null, froze = false, pl = document.getElementById("play") || document.body, pr = pl.getBoundingClientRect(), tx = pr.left + pr.width / 2 - (r.left + r.width / 2), ty = pr.top + pr.height * 0.42 - (r.top + r.height / 2), T = 1250;
+    var it = sn.it, r = sn.r, d = document.createElement("div"), cov = null, froze = false, pl = document.getElementById("play") || document.body, pr = pl.getBoundingClientRect(), tx = pr.left + pr.width / 2 - (r.left + r.width / 2), ty = pr.top + pr.height * 0.42 - (r.top + r.height / 2), T = 1800;
     d.style.cssText = "position:fixed;z-index:2147483000;pointer-events:none;left:" + r.left + "px;top:" + r.top + "px;width:" + r.width + "px;height:" + r.height + "px;transform-origin:50% 100%";
-    d.innerHTML = sn.html; var sv = d.firstChild; if (sv && sv.style) { sv.style.width = "100%"; sv.style.height = "100%"; }
+    d.innerHTML = uniq(sn.html); var sv = d.firstChild; if (sv && sv.style) { sv.style.width = "100%"; sv.style.height = "100%"; }
     try {
       if (sn.cl && sn.scr && sn.scr.parentNode) {   /* bản sao màn chính che màn chơi */
         cov = sn.cl; cov.hidden = false; cov.removeAttribute("hidden"); cov.id = sn.sid; cov.style.pointerEvents = "auto"; cov.style.zIndex = "2147482990";
@@ -231,10 +231,20 @@
     var done = function () { if (!holding) return; holding = 0; try { d.remove(); } catch (x) {} if (cov) { try { cov.remove(); } catch (x) {} } if (froze) { try { NP.menuResume(); } catch (x) {} } };
     /* THEO Ý CHỦ SITE: linh vật bay RA GIỮA màn hình, phình lên rồi NỔ TUNG (hạt + vòng sáng theo skin) trong lúc màn chơi SÁNG LÊN (bản sao màn chính mờ dần) → mở màn game */
     try {
-      var a = d.animate([{ transform: "none", opacity: 1 }, { transform: "scale(1.12,.86)", offset: .1, opacity: 1 }, { transform: "translate(" + tx * .55 + "px," + (ty * .55 - 40) + "px) scale(1.1)", offset: .38, opacity: 1 }, { transform: "translate(" + tx + "px," + ty + "px) scale(1.55)", offset: .62, opacity: 1 }, { transform: "translate(" + tx + "px," + ty + "px) scale(2.1)", offset: .72, opacity: 0 }, { transform: "translate(" + tx + "px," + ty + "px) scale(2.1)", opacity: 0 }], { duration: T, easing: "ease-in-out", fill: "forwards" });
+      /* 1) MỌI thẻ/nút/chữ còn lại của màn chính bay ra khỏi khung (lệch nhau chút) · 2) linh vật bay ra giữa · 3) nổ tung · 4) màn chơi sáng lên */
+      if (cov && cov.animate) {
+        var cx0 = innerWidth / 2, cy0 = innerHeight / 2, els = [], kids = cov.children, ki, kj;
+        for (ki = 0; ki < kids.length; ki++) { var c = kids[ki]; if (c.classList.contains("npa-hero") || c.querySelector(".npa-hero") && !c.matches("#home,#ovStart,#village")) continue; if (c.matches(".cards,.tiles,.row,.chips,.lvs,.bands") && c.children.length > 1) { for (kj = 0; kj < c.children.length; kj++) els.push(c.children[kj]); } else els.push(c); }
+        els.forEach(function (el, n) {
+          if (!el.getClientRects().length) return; var q = el.getBoundingClientRect(); if (q.width < 20) return;
+          var mx = q.left + q.width / 2 - cx0, my = q.top + q.height / 2 - cy0, dir = mx === 0 ? (n % 2 ? 1 : -1) : (mx > 0 ? 1 : -1), far = dir * (innerWidth * .9 + q.width), up = my < -innerHeight * .18 ? -innerHeight * .5 : 0;
+          el.animate([{ transform: "none", opacity: 1 }, { transform: "scale(.96)", offset: .08, opacity: 1 }, { transform: "translate(" + far + "px," + up + "px) rotate(" + dir * 12 + "deg)", opacity: 1 }], { duration: Math.round(T * .42), delay: Math.round(n * 45), easing: "cubic-bezier(.5,0,.9,.4)", fill: "forwards" });
+        });
+      }
+      var a = d.animate([{ transform: "none", opacity: 1 }, { transform: "scale(1.08,.92)", offset: .16, opacity: 1 }, { transform: "none", offset: .3, opacity: 1 }, { transform: "translate(" + tx * .5 + "px," + (ty * .5 - 50) + "px) scale(1.12)", offset: .5, opacity: 1 }, { transform: "translate(" + tx + "px," + ty + "px) scale(1.55)", offset: .68, opacity: 1 }, { transform: "translate(" + tx + "px," + ty + "px) scale(2.1)", offset: .76, opacity: 0 }, { transform: "translate(" + tx + "px," + ty + "px) scale(2.1)", opacity: 0 }], { duration: T, easing: "ease-in-out", fill: "forwards" });
       a.onfinish = done;
-      (window.__npRST || setTimeout)(function () { if (!holding) return; var q = d.getBoundingClientRect(); it.fx(3, { cx: pr.left + pr.width / 2, cy: pr.top + pr.height * 0.42, D: Math.min(pr.width, 260) }); it.fx(it.skin === "default" ? 2 : 3, { cx: pr.left + pr.width / 2, cy: pr.top + pr.height * 0.42, D: Math.min(pr.width, 200) }); }, Math.round(T * .62));
-      if (cov && cov.animate) cov.animate([{ opacity: 1 }, { opacity: 1, offset: .62 }, { opacity: 0 }], { duration: T, fill: "forwards", easing: "ease-in" });
+      (window.__npRST || setTimeout)(function () { if (!holding) return; var at = { cx: pr.left + pr.width / 2, cy: pr.top + pr.height * 0.42, D: Math.min(pr.width, 260) }; it.fx(3, at); it.fx(it.skin === "default" ? 2 : 3, { cx: at.cx, cy: at.cy, D: Math.min(pr.width, 200) }); }, Math.round(T * .68));
+      if (cov && cov.animate) cov.animate([{ opacity: 1 }, { opacity: 1, offset: .7 }, { opacity: 0 }], { duration: T, fill: "forwards", easing: "ease-in" });
     } catch (x) { done(); return; }
     (window.__npRST || setTimeout)(done, T + 250);
   }
