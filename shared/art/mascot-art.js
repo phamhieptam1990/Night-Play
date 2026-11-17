@@ -27,12 +27,36 @@
   };
   var DUR = { "default": 520, badge: 620, group: 560, night: 950, star: 760 };
   /* HIỆU ỨNG XUẤT HIỆN (màn chính): mỗi skin vào một kiểu, rồi chào bằng một câu */
-  var ENTER = {   /* di chuyển TỪ TỪ vào vị trí (~2 giây); người dùng thao tác thì vào đúng chỗ NGAY (Inst.skipEnter) */
-    "default": [[{ transform: "translateY(-220px)", opacity: 0 }, { transform: "translateY(0) scale(1.12,.86)", opacity: 1, offset: .62 }, { transform: "translateY(-16px) scale(.96,1.06)", offset: .8 }, { transform: "none", opacity: 1 }], 1900],
-    badge: [[{ transform: "translateX(-240px) rotate(-18deg)", opacity: 0 }, { transform: "translateX(10px) rotate(7deg)", opacity: 1, offset: .66 }, { transform: "translateX(-4px) rotate(-3deg)", offset: .84 }, { transform: "none", opacity: 1 }], 1900],
-    group: [[{ transform: "translateY(120px) scale(.5)", opacity: 0 }, { transform: "translateY(-30px) scale(1.05,.95)", opacity: 1, offset: .5 }, { transform: "translateY(0) scale(1.05,.93)", offset: .76 }, { transform: "none", opacity: 1 }], 1900],
-    night: [[{ transform: "translateY(-90px)", opacity: 0 }, { transform: "translateY(9px)", opacity: 1, offset: .7 }, { transform: "none", opacity: 1 }], 2400],
-    star: [[{ transform: "scaleX(-1) scale(.2)", opacity: 0 }, { transform: "scaleX(1) scale(1.14)", opacity: 1, offset: .66 }, { transform: "scale(.97)", offset: .84 }, { transform: "none", opacity: 1 }], 2100]
+  /* HIỆU ỨNG XUẤT HIỆN = QUẢ BÓNG NHẢY: rơi (ease-in, tăng tốc) → chạm đất BẸP (squash) → nảy lên (ease-out, giảm tốc) thấp dần 100% → 42% → 18% → 6% rồi nằm yên; mỗi skin một kiểu bóng.
+     opts: from {x,y}: điểm rơi ban đầu; hopX: tiến dần theo ngang mỗi nảy; spin: xoay/lật theo nảy; low: trọng lực thấp (lơ lửng); sq: độ bẹp. Thời lượng mỗi quãng tỉ lệ √độ cao (vật lý). */
+  function ball(o) {
+    var H = o.H || 200, hs = o.heights || [1, .42, .18, .06], kf = [], t = 0, total = 0, i, segs = [], k = o.k || 1;
+    segs.push({ type: "fall", h: H, d: Math.sqrt(H) * k });
+    for (i = 1; i < hs.length; i++) { var up = H * hs[i] * 0.55 + 6; segs.push({ type: "up", h: up, d: Math.sqrt(up) * k }); segs.push({ type: "fall", h: up, d: Math.sqrt(up) * k }); }
+    segs.forEach(function (g) { total += g.d; });
+    var n = hs.length, x0 = (o.from && o.from.x) || 0, y0 = -H, sq = o.sq || 1, step = 0, cum = 0;
+    function fr(off, y, x, r, sx, sy, ez, op) { return { offset: Math.min(1, off), transform: "translate(" + x + "px," + y + "px) rotate(" + r + "deg) scale(" + sx + "," + sy + ")", opacity: op == null ? 1 : op, easing: ez || "linear" }; }
+    var gx = function (c) { return Math.round(x0 * (1 - (o.hopX ? (c / total) : 1))); };
+    kf.push(fr(0, y0, x0, o.spin ? -o.spin : 0, 1, 1, "cubic-bezier(.5,0,1,.6)", 0));
+    cum = 0;
+    segs.forEach(function (g, idx) {
+      cum += g.d; var off = cum / total, last = idx === segs.length - 1;
+      if (g.type === "fall") {
+        var strength = Math.min(1, g.h / H * 1.6 + .25);
+        kf.push(fr(off, 0, gx(cum), o.spin ? (last ? 0 : (idx % 4 ? 8 : -8)) : 0, 1 + .2 * sq * strength, 1 - .22 * sq * strength, last ? "ease-out" : "cubic-bezier(.2,.7,.4,1)", 1));
+      } else {
+        kf.push(fr(off, -g.h, gx(cum), o.spin ? (idx % 4 === 1 ? 14 : -14) : 0, 1 - .06 * sq, 1 + .1 * sq, "cubic-bezier(.5,0,1,.6)", 1));
+      }
+    });
+    kf.push(fr(1, 0, 0, 0, 1, 1, "ease-out", 1));
+    return [kf, o.T || 2000];
+  }
+  var ENTER = {
+    "default": ball({ H: 230, T: 1900 }),
+    badge: ball({ H: 150, from: { x: -230 }, hopX: true, spin: 10, heights: [1, .5, .24, .08], T: 2100 }),
+    group: ball({ H: 200, from: { x: 200 }, hopX: true, heights: [1, .55, .3, .12, .04], T: 2300 }),
+    night: ball({ H: 110, sq: .55, heights: [1, .6, .32, .12], T: 2600 }),
+    star: ball({ H: 190, spin: 24, sq: 1.1, heights: [1, .5, .24, .09], T: 2200 })
   };
   var WRONG = [{ transform: "none" }, { transform: "translateX(-7px) rotate(-4deg)", offset: .15 }, { transform: "translateX(6px) rotate(4deg)", offset: .35 }, { transform: "translateX(-4px) rotate(-2deg) scale(1,.95)", offset: .55 }, { transform: "scale(1,.94)", offset: .8 }, { transform: "none" }];
 
@@ -74,7 +98,7 @@
   };
   Inst.prototype.enter = function () {
     var self = this, s = this.svg, n = Date.now(); if (!s || !this.visible() || n - (this.le || 0) < 3500) return; this.le = n;
-    if (!reduce && s.animate) { var e = ENTER[this.skin] || ENTER["default"]; try { this.ea = s.animate(e[0], { duration: e[1], easing: "cubic-bezier(.3,.8,.35,1)" }); } catch (x) {} }
+    if (!reduce && s.animate) { var e = ENTER[this.skin] || ENTER["default"]; try { this.ea = s.animate(e[0], { duration: e[1], easing: "linear" }); } catch (x) {} }
     var fire = function () { self.pendingHi = null; self.ea = null; if (!self.visible()) return; if (self.skin === "night" || self.skin === "star") self.fx(2); else if (self.skin === "badge" || self.skin === "group") self.motion(1); var t = line(self, "hi") || line(self, "start"); self.ls = Date.now(); self.say(t, 2600); };
     this.pendingHi = fire; clearTimeout(this.et); this.et = rst(fire, Math.round((ENTER[this.skin] || ENTER["default"])[1] * 0.85));
   };
