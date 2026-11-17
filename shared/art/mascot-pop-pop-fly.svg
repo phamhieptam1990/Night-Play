@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Chim Bay" class="np-mascot sk-default" data-style="pop" data-game="pop-fly">
+<title>Chim Bay</title>
+<style>
+.np-mascot{--c1:#8EE0EE;--c2:#4DB5D1;--st:#2F8DB0;--belly:#FFF3D4;--c3:#FFA94D;--c3d:#E8862A;--bl:#FF9DB0;--ink:#2A2350;--hl:#fff}
+.np-mascot.sk-group{--c1:#A8EEC6;--c2:#52C98C;--st:#2FA06A}
+.np-mascot.sk-night{--c1:#9DB0FF;--c2:#6A5BE0;--st:#4A3DB8;--belly:#E8E4FF;--c3:#FFC857;--c3d:#E0A02E;--bl:#FF9DD0}
+.np-mascot.sk-star{--c1:#FFE58E;--c2:#FFC04D;--st:#D9902A;--belly:#FFF8E0;--c3:#FF8A4C;--c3d:#E0662A}
+.acc,.fx{display:none}
+.sk-badge .acc-badge,.sk-group .acc-group,.sk-night .acc-night,.sk-star .acc-star,.sk-night .fx-night,.sk-star .fx-star{display:inline}
+.npa{transform-box:fill-box;transform-origin:50% 100%}
+.npa-bob{animation:npa-bob 2.4s ease-in-out infinite}
+.npa-blink{transform-origin:50% 50%;animation:npa-blink 4.2s infinite}
+.npa-twinkle{animation:npa-twinkle 1.8s ease-in-out infinite}
+@keyframes npa-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes npa-blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.12)}}
+@keyframes npa-twinkle{0%,100%{opacity:.25}50%{opacity:1}}
+:root.np-playing .npa,:root.np-playing .npa-twinkle{animation:none}
+@media (prefers-reduced-motion:reduce){.npa,.npa-twinkle{animation:none}}
+</style>
+<defs><linearGradient id="pg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--c1)"/><stop offset="1" style="stop-color:var(--c2)"/></linearGradient></defs>
+<g id="shadow"><ellipse cx="128" cy="237" rx="70" ry="9" fill="var(--ink)" opacity=".18"/></g>
+<g id="all" class="npa npa-bob">
+<g id="wings"><ellipse cx="46" cy="152" rx="17" ry="27" transform="rotate(-16 46 152)" fill="var(--c2)" stroke="var(--st)" stroke-width="3"/><ellipse cx="210" cy="152" rx="17" ry="27" transform="rotate(16 210 152)" fill="var(--c2)" stroke="var(--st)" stroke-width="3"/></g>
+<g id="body"><ellipse cx="128" cy="140" rx="86" ry="82" fill="url(#pg)" stroke="var(--st)" stroke-width="3"/>
+<ellipse id="belly" cx="128" cy="174" rx="50" ry="38" fill="var(--belly)"/>
+<ellipse id="hl" cx="98" cy="86" rx="26" ry="12" transform="rotate(-24 98 86)" fill="var(--hl)" opacity=".55"/>
+<ellipse cx="106" cy="223" rx="14" ry="7" fill="var(--c3)" stroke="var(--c3d)" stroke-width="3"/><ellipse cx="150" cy="223" rx="14" ry="7" fill="var(--c3)" stroke="var(--c3d)" stroke-width="3"/>
+<path d="M120 62Q118 44 128 38Q126 52 134 60M134 60Q142 50 150 54" fill="none" stroke="var(--st)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></g>
+<g id="face"><g id="eyes" class="npa-blink"><circle cx="100" cy="112" r="14" fill="var(--ink)"/><circle cx="156" cy="112" r="14" fill="var(--ink)"/><circle cx="105" cy="106" r="5" fill="#fff"/><circle cx="161" cy="106" r="5" fill="#fff"/><circle cx="96" cy="118" r="2.5" fill="#fff"/><circle cx="152" cy="118" r="2.5" fill="#fff"/></g>
+<g id="blush"><ellipse cx="80" cy="136" rx="11" ry="7" fill="var(--bl)" opacity=".7"/><ellipse cx="176" cy="136" rx="11" ry="7" fill="var(--bl)" opacity=".7"/></g>
+<path id="beak" d="M113 138Q128 126 143 138Q128 160 113 138Z" fill="var(--c3)" stroke="var(--c3d)" stroke-width="3" stroke-linejoin="round"/></g>
+<g id="acc-badge" class="acc acc-badge"><path d="M114 188L128 206L142 188Z" fill="#FF6B6B"/><circle cx="128" cy="208" r="13" fill="#FFD43B" stroke="#E8A317" stroke-width="3"/><path d="M128 201l2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z" fill="#fff"/></g>
+<g id="acc-group" class="acc acc-group"><path d="M84 76Q86 36 128 34Q170 36 172 76Z" fill="#FF6B6B" stroke="#D94A4A" stroke-width="3" stroke-linejoin="round"/><path d="M84 76H186Q188 88 172 88H92Q82 88 84 76Z" fill="#FF8787" stroke="#D94A4A" stroke-width="3" stroke-linejoin="round"/><circle cx="128" cy="35" r="6" fill="#fff"/><path d="M128 184L104 172V196ZM128 184L152 172V196Z" fill="#FFD43B" stroke="#E8A317" stroke-width="3" stroke-linejoin="round"/><circle cx="128" cy="184" r="6" fill="#FF6B6B"/></g>
+<g id="acc-night" class="acc acc-night"><path d="M150 44Q190 40 194 76" fill="none" stroke="#5B4BD8" stroke-width="20" stroke-linecap="round"/><path d="M84 78Q88 40 128 38Q164 38 172 78Z" fill="#5B4BD8" stroke="#3E31A8" stroke-width="3" stroke-linejoin="round"/><path d="M80 76H178Q182 90 166 92H92Q76 90 80 76Z" fill="#fff" stroke="#C9C2FF" stroke-width="3" stroke-linejoin="round"/><circle cx="194" cy="80" r="9" fill="#fff"/><path d="M118 62l3 6 6.5 1-4.7 4.5 1.1 6.5-5.9-3.1-5.9 3.1 1.1-6.5-4.7-4.5 6.5-1z" fill="#FFD43B"/></g>
+<g id="acc-star" class="acc acc-star"><path d="M92 76L100 42L116 60L128 34L140 60L156 42L164 76Z" fill="#FFD43B" stroke="#E8A317" stroke-width="3" stroke-linejoin="round"/><circle cx="128" cy="62" r="4" fill="#FF6B6B"/><circle cx="106" cy="66" r="3" fill="#4DABF7"/><circle cx="150" cy="66" r="3" fill="#51CF66"/></g>
+<g id="fx-night" class="fx fx-night"><circle cx="128" cy="140" r="100" fill="none" stroke="#9DB0FF" stroke-width="5" opacity=".3"/><path class="npa-twinkle" d="M34 70l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" fill="#FFE08A"/><path class="npa-twinkle" style="animation-delay:.6s" d="M222 96l2.5 6.5 6.5 2.5-6.5 2.5-2.5 6.5-2.5-6.5-6.5-2.5 6.5-2.5z" fill="#FFE08A"/></g>
+<g id="fx-star" class="fx fx-star"><circle class="npa-twinkle" cx="40" cy="64" r="5" fill="#FF6B6B"/><circle class="npa-twinkle" style="animation-delay:.4s" cx="220" cy="80" r="5" fill="#4DABF7"/><circle class="npa-twinkle" style="animation-delay:.9s" cx="214" cy="40" r="4" fill="#51CF66"/><circle class="npa-twinkle" style="animation-delay:1.3s" cx="50" cy="30" r="4" fill="#CC5DE8"/></g>
+</g>
+</svg>

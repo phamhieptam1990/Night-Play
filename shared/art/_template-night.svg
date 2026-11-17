@@ -1,0 +1,21 @@
+<!-- KHUNG MẪU PHONG CÁCH NIGHT — copy rồi vẽ theo docs/MASCOT-ART-RULES.md (id nhóm + neo + biến màu bắt buộc). Đổi data-game, aria-label, title. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="TÊN LINH VẬT" class="np-mascot sk-default" data-style="night" data-game="ID-GAME">
+<title>TÊN LINH VẬT</title>
+<style>
+.np-mascot{--c1:#CDBFFF;--c2:#9A86F0;--ink:#1B1442;--c3:#FF8A4C}
+.acc,.fx{display:none}
+.sk-badge .acc-badge,.sk-group .acc-group,.sk-night .acc-night,.sk-star .acc-star,.sk-night .fx-night,.sk-star .fx-star{display:inline}
+.npa{transform-box:fill-box;transform-origin:50% 100%}
+.npa-bob{animation:npa-bob 2.4s ease-in-out infinite}.npa-blink{transform-origin:50% 50%;animation:npa-blink 4.2s infinite}
+@keyframes npa-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}@keyframes npa-blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.12)}}
+:root.np-playing .npa{animation:none}@media (prefers-reduced-motion:reduce){.npa{animation:none}}
+</style>
+<!-- neo (viewBox 256): đầu-đỉnh (128,40) · mắt (100,112) (156,112) · miệng (128,146) · cổ (128,178) · ngực/huy hiệu (128,200) · chân (128,232) -->
+<g id="shadow"><ellipse cx="128" cy="237" rx="70" ry="9" fill="var(--ink)" opacity=".18"/></g>
+<g id="all" class="npa npa-bob">
+<g id="body"></g>
+<g id="face"><g id="eyes" class="npa-blink"></g><g id="blush"></g></g>
+<g id="acc-badge" class="acc acc-badge"></g><g id="acc-group" class="acc acc-group"></g><g id="acc-night" class="acc acc-night"></g><g id="acc-star" class="acc acc-star"></g>
+<g id="fx-night" class="fx fx-night"></g><g id="fx-star" class="fx fx-star"></g>
+</g>
+</svg>

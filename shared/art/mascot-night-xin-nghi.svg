@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Sếp Ơi Em Xin Nghỉ" class="np-mascot sk-default" data-style="night" data-game="xin-nghi">
+<title>Nhân viên Xin Nghỉ</title>
+<style>
+.np-mascot{--c1:#CDBFFF;--c2:#9A86F0;--ink:#1B1442;--c3:#FF8A4C;--lid:#CDBFFF}
+.np-mascot.sk-group{--c1:#BFE3FF;--c2:#7DB6F0;--lid:#BFE3FF}
+.np-mascot.sk-night{--c1:#7E8BFF;--c2:#4B4FC4;--c3:#7CF0FF;--lid:#7E8BFF}
+.np-mascot.sk-star{--c1:#FFE9A8;--c2:#F2B94B;--c3:#FF5E8A;--lid:#FFE9A8}
+.acc,.fx{display:none}
+.sk-badge .acc-badge,.sk-group .acc-group,.sk-night .acc-night,.sk-star .acc-star,.sk-night .fx-night,.sk-star .fx-star{display:inline}
+.sk-star .tie{fill:#FFD43B}
+.npa{transform-box:fill-box;transform-origin:50% 100%}
+.npa-breathe{animation:npa-breathe 3.6s ease-in-out infinite}
+.npa-blink{transform-origin:50% 50%;animation:npa-blink 5s infinite}
+.npa-twinkle{animation:npa-twinkle 2.2s ease-in-out infinite}
+@keyframes npa-breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.02,.98)}}
+@keyframes npa-blink{0%,90%,100%{transform:scaleY(1)}94%{transform:scaleY(.1)}}
+@keyframes npa-twinkle{0%,100%{opacity:.25}50%{opacity:1}}
+:root.np-playing .npa,:root.np-playing .npa-twinkle{animation:none}
+@media (prefers-reduced-motion:reduce){.npa,.npa-twinkle{animation:none}}
+</style>
+<g id="shadow"><ellipse cx="128" cy="238" rx="66" ry="8" fill="var(--ink)" opacity=".18"/></g>
+<g id="all" class="npa npa-breathe" stroke="var(--ink)" stroke-linejoin="round" stroke-linecap="round">
+<g id="body"><rect x="54" y="70" width="148" height="150" rx="58" fill="var(--c2)" stroke-width="5"/><rect x="54" y="62" width="148" height="150" rx="58" fill="var(--c1)" stroke-width="5"/>
+<path d="M108 62Q104 40 116 36M128 60Q130 34 146 38M148 62Q160 46 168 52" fill="none" stroke-width="5"/>
+<rect x="94" y="206" width="26" height="24" rx="11" fill="var(--c2)" stroke-width="5"/><rect x="136" y="206" width="26" height="24" rx="11" fill="var(--c2)" stroke-width="5"/>
+<ellipse cx="56" cy="186" rx="12" ry="17" fill="var(--c1)" stroke-width="5"/><ellipse cx="200" cy="186" rx="12" ry="17" fill="var(--c1)" stroke-width="5"/></g>
+<g id="cup"><path d="M206 186q12 2 4 14" fill="none" stroke-width="4"/><rect x="186" y="178" width="24" height="26" rx="6" fill="#fff" stroke-width="4"/><path d="M194 170q-4-8 0-14M202 170q-4-8 0-14" fill="none" stroke-width="3" opacity=".55"/></g>
+<g id="face"><g id="eyes" class="npa-blink"><ellipse cx="100" cy="112" rx="10" ry="11" fill="var(--ink)" stroke="none"/><ellipse cx="156" cy="112" rx="10" ry="11" fill="var(--ink)" stroke="none"/><rect x="88" y="99" width="24" height="10" fill="var(--lid)" stroke="none"/><rect x="144" y="99" width="24" height="10" fill="var(--lid)" stroke="none"/><path d="M88 109H112M144 109H168" fill="none" stroke-width="4"/><circle cx="104" cy="115" r="2.6" fill="#fff" stroke="none"/><circle cx="160" cy="115" r="2.6" fill="#fff" stroke="none"/></g>
+<path d="M90 128Q100 134 110 128M146 128Q156 134 166 128" fill="none" stroke="var(--c2)" stroke-width="3.5"/>
+<path id="mouth" d="M114 150Q128 143 142 152" fill="none" stroke-width="4"/></g>
+<g id="outfit"><path d="M104 168L128 186L120 170ZM152 168L128 186L136 170Z" fill="#fff" stroke-width="4"/><path class="tie" d="M122 174H134L137 190L128 198L119 190Z" fill="var(--c3)" stroke-width="4"/></g>
+<g id="acc-badge" class="acc acc-badge"><circle cx="128" cy="208" r="11" fill="#FFD43B" stroke-width="4"/><path d="M128 202l2.2 4.6 5 .7-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5-3.6-3.5 5-.7z" fill="#fff" stroke="none"/></g>
+<g id="acc-group" class="acc acc-group"><path d="M78 100Q74 42 128 40Q182 42 178 100" fill="none" stroke-width="7"/><rect x="68" y="96" width="14" height="26" rx="6" fill="var(--c3)" stroke-width="4"/><rect x="174" y="96" width="14" height="26" rx="6" fill="var(--c3)" stroke-width="4"/><path d="M181 118Q186 140 158 146" fill="none" stroke-width="4"/><circle cx="156" cy="146" r="5" fill="var(--c3)" stroke-width="3"/><circle cx="100" cy="112" r="17" fill="#fff" fill-opacity=".25" stroke-width="4"/><circle cx="156" cy="112" r="17" fill="#fff" fill-opacity=".25" stroke-width="4"/><path d="M117 112H139" fill="none" stroke-width="4"/></g>
+<g id="acc-night" class="acc acc-night"><path d="M76 68H180Q184 86 170 88H86Q72 86 76 68Z" fill="#3A2E86" stroke-width="4"/><path d="M96 78q6 6 12 0M148 78q6 6 12 0" fill="none" stroke="#fff" stroke-width="3"/><circle cx="196" cy="140" r="9" fill="#FFE08A" stroke-width="3"/><circle cx="200" cy="137" r="8" fill="var(--c1)" stroke="none"/></g>
+<g id="acc-star" class="acc acc-star"><path d="M92 66L100 36L116 54L128 30L140 54L156 36L164 66Z" fill="#FFD43B" stroke-width="4"/><circle cx="128" cy="54" r="4" fill="var(--c3)" stroke="none"/></g>
+<g id="fx-night" class="fx fx-night" stroke="none"><rect x="54" y="62" width="148" height="150" rx="58" fill="none" stroke="#A89BFF" stroke-width="4" opacity=".35"/><path class="npa-twinkle" d="M32 64l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" fill="#FFE08A"/><path class="npa-twinkle" style="animation-delay:.7s" d="M224 96l2.5 6.5 6.5 2.5-6.5 2.5-2.5 6.5-2.5-6.5-6.5-2.5 6.5-2.5z" fill="#7CF0FF"/></g>
+<g id="fx-star" class="fx fx-star" stroke="none"><circle class="npa-twinkle" cx="36" cy="66" r="5" fill="#FF5E8A"/><circle class="npa-twinkle" style="animation-delay:.4s" cx="224" cy="84" r="5" fill="#4DABF7"/><circle class="npa-twinkle" style="animation-delay:.9s" cx="218" cy="40" r="4" fill="#51CF66"/><circle class="npa-twinkle" style="animation-delay:1.3s" cx="48" cy="30" r="4" fill="#CC5DE8"/></g>
+</g>
+</svg>
