@@ -75,6 +75,32 @@ main{flex:1;min-height:0;padding-bottom:12px;display:flex;flex-direction:column;
 @media (max-height:480px){h1{display:none}.fill{display:none}}
 
 .gset{flex:none;display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 12px;border-radius:20px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow);color:var(--ink);text-decoration:none;font-weight:800;font-size:13px}@media (max-width:430px){.gset span{display:none}.gset{width:40px;padding:0;justify-content:center}}
+
+/* ===== BỐ CỤC 2 CỘT (màn ngang / màn rộng): trái = linh vật LỚN + tên + nút; phải = skin, theme, chọn linh vật (cuộn trong thẻ). Dọc = xếp chồng như cũ ===== */
+.prev .stage .npm,.prev .stage .npm>svg,.prev .stage>svg{width:100%!important;height:100%!important}
+.btn.p:disabled{opacity:1;background:rgba(81,207,102,.22);border-color:#51cf66;color:var(--ink)}
+@media (orientation:landscape) and (min-width:560px),(min-width:900px){
+  header,main{max-width:1140px}
+  main{display:grid;grid-template-columns:minmax(220px,36%) minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr);gap:10px 14px;padding-bottom:10px}
+  .prev{grid-column:1;grid-row:1/-1;flex-direction:column;justify-content:center;text-align:center;gap:10px;padding:14px}
+  .prev .stage{width:min(100%,max(110px,min(40vh,300px)));max-width:300px;margin:0 auto}
+  .prev .inf{width:100%;justify-items:center}
+  .prev .inf>div{justify-content:center}
+  main>.card:not(.prev){grid-column:2}
+  main>.card:nth-of-type(2){grid-row:1}#thCard{grid-row:2}main>.card.fill{grid-row:3;display:flex;flex-direction:column;min-height:0}
+  .skins,.ths{flex-wrap:wrap;overflow:visible}
+  .prev{gap:8px}.prev .inf{gap:4px}
+}
+@media (orientation:landscape) and (max-height:560px){
+  header{padding-top:4px;padding-bottom:4px}.back{width:36px;height:36px}h1{font-size:17px}
+  .prev .stage{width:min(100%,max(96px,min(46vh,200px)))}
+  .prev{padding:8px}.prev .nm{font-size:16px}.prev .sk,.prev .st{font-size:12px}
+  .skc{width:74px;min-height:76px}.skc .n{font-size:10.5px}
+  .card{padding:6px 10px}.h2{margin-bottom:4px;font-size:11px}
+  .ths .chip,.ths button{min-height:32px}
+  .skins,.ths{flex-wrap:nowrap!important;overflow-x:auto!important}
+  main>.card.fill{min-height:120px}
+}
 </style>
 </head>
 <body>
