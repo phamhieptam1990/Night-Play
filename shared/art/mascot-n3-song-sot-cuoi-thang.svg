@@ -9,7 +9,7 @@
 <radialGradient id="e" cx=".4" cy=".3" r=".9"><stop offset="0" stop-color="#6A4A5E"/><stop offset=".6" stop-color="#2A1A33"/><stop offset="1" stop-color="#140B1C"/></radialGradient>
 <radialGradient id="v" cx=".5" cy=".35" r=".7"><stop offset="0" stop-color="#F4D9B8"/><stop offset="1" stop-color="#F4D9B8" stop-opacity=".78"/></radialGradient></defs>
 <g id="shadow"><ellipse cx="128" cy="240" rx="76" ry="9" fill="var(--sh)" opacity=".5"/></g>
-<g id="all" class="npa npa-breathe"><g id="scene"><rect x="30" y="24" width="196" height="40" rx="10" fill="#fff" opacity=".14"/><text x="128" y="52" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-weight="900" font-size="22" fill="#fff" opacity=".5">CUỐI THÁNG</text><g stroke="#FF4D4D" stroke-width="6" stroke-linecap="round" opacity=".55"><path d="M44 80l30 28M74 80L44 108M182 80l30 28M212 80l-30 28"/></g></g><g id="pose" transform="rotate(-2.4 128 230)">
+<g id="all" class="npa npa-breathe"><g id="scene"><text x="128" y="254" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-weight="900" font-size="15" fill="#fff" opacity=".7">CUỐI THÁNG</text><g stroke="#FF4D4D" stroke-width="6" stroke-linecap="round" opacity=".55"><path d="M44 80l30 28M74 80L44 108M182 80l30 28M212 80l-30 28"/></g></g><g id="pose" transform="rotate(-2.4 128 230)">
 <g id="charg" transform="translate(14 30) scale(.82)">
 <g id="body"><ellipse cx="128" cy="184" rx="68" ry="54" fill="url(#b)"/><ellipse cx="128" cy="190" rx="42" ry="34" fill="url(#v)"/>
 <ellipse cx="62" cy="176" rx="17" ry="26" fill="url(#b)" transform="rotate(18 62 176)"/><ellipse cx="194" cy="176" rx="17" ry="26" fill="url(#b)" transform="rotate(-18 194 176)"/>
