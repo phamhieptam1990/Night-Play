@@ -54,7 +54,9 @@
     "#npFsHow .hd{display:flex;align-items:center;gap:12px;margin-bottom:12px}#npFsHow h3{margin:0;font-size:19px;font-weight:900;line-height:1.2}" +
     "#npFsHow ol{margin:0 0 14px;padding:0;list-style:none;counter-reset:st}#npFsHow li{counter-increment:st;display:flex;gap:10px;align-items:flex-start;margin:0 0 8px;padding:10px 12px;border-radius:16px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14)}" +
     "#npFsHow li::before{content:counter(st);flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font:900 13px system-ui,sans-serif;background:linear-gradient(135deg,#7C5CFF,#C2410C)}" +
-    "#npFsHow button.ok{width:100%;min-height:52px;font-size:16px}";
+    "#npFsHow button.ok{width:100%;min-height:52px;font-size:16px}" +
+    /* màn thấp (điện thoại ngang): nút ✕ ghim góc trên-phải của hộp (luôn thấy), danh sách bước gọn lại, hộp cuộn trong màn hình */
+    "@media (max-height:520px){#npFsHow{padding:8px}#npFsHow .d{position:relative;max-height:calc(100vh - 16px);padding:10px 12px;border-radius:22px}#npFsHow .hd{margin:0 52px 6px 0}#npFsHow .ic{width:34px!important;height:34px!important}#npFsHow h3{font-size:15px}#npFsHow ol{margin:0}#npFsHow li{margin:0 0 5px;padding:6px 10px;font-size:12.5px;line-height:1.3;border-radius:12px}#npFsHow li::before{width:20px;height:20px;font-size:11px}#npFsHow button.ok{position:absolute;top:8px;right:8px;width:44px;min-height:44px;height:44px;padding:0;border-radius:50%;display:grid;place-items:center}}";
   (document.head || de).appendChild(css);
 
   /* KHÔNG ẩn được thanh địa chỉ (iPhone Safari không có Fullscreen API cho trang web; app Zalo/Facebook/TikTok thường chặn) → báo rõ + hướng dẫn "Thêm vào Màn hình chính" (PWA, chạy không thanh địa chỉ) */
