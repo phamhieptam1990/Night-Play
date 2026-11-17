@@ -375,7 +375,21 @@
     var h = document.querySelector(HERO);
     if (!h && G[gid].style === "pop") {   /* game Pop chưa có ô hero: chèn #paHero vào màn chọn (+ CSS dùng chung pophero.css) */
       var scr = document.getElementById("home") || document.getElementById("village") || document.getElementById("ovStart");
-      if (scr) { var lk = document.createElement("link"); lk.rel = "stylesheet"; lk.href = BASE + "pophero.css"; document.head.appendChild(lk); h = document.createElement("div"); h.id = "paHero"; h.className = "npa-hero"; h.setAttribute("aria-hidden", "true"); h.textContent = G[gid].emoji || ""; scr.insertBefore(h, scr.firstChild); }
+      if (scr) { var lk = document.createElement("link"); lk.rel = "stylesheet"; lk.href = BASE + "pophero.css"; document.head.appendChild(lk); h = document.createElement("div"); h.id = "paHero"; h.className = "npa-hero"; h.setAttribute("aria-hidden", "true"); h.textContent = G[gid].emoji || ""; scr.insertBefore(h, scr.firstChild);
+        /* game vẽ lại màn chọn bằng innerHTML="" (đổi độ khó/ngôn ngữ/quay về) sẽ xoá #paHero → gắn lại đúng phần tử cũ (giữ nguyên SVG đã mount), không thì linh vật mất và emoji cũ hiện lại */
+        try { var keep = h, host = scr, ft = 0;
+          /* hero tự co khi nội dung màn chọn tràn quá khung nhìn thật (iPad Safari có thanh địa chỉ: vh > chiều cao thấy được; thẻ "Tiếp tục ván dở" hiện thêm 46px) → không bao giờ đè lên thẻ/nút */
+          var same = function () { try { /* thẻ "Tiếp tục ván dở" cao BẰNG thẻ "Hôm nay" (chủ site chốt); ✕ tự theo chiều cao thanh (resume.js syncX) */
+              var rs = host.querySelector(":scope>#npResume"), dl = host.querySelector(":scope>.dbar,:scope>#bDaily,:scope>.dbtn"); if (!rs || !dl || !dl.offsetHeight) return; var go = rs.querySelector(".npr-go"), hh = dl.offsetHeight + "px"; if (!go) return;
+              [[rs, "height"], [rs, "min-height"], [go, "height"], [go, "min-height"], [go, "max-height"]].forEach(function (p) { if (p[0].style.getPropertyValue(p[1]) !== hh) p[0].style.setProperty(p[1], hh, "important"); });
+              var cs2 = getComputedStyle(dl); go.style.setProperty("font-size", cs2.fontSize, "important"); go.style.setProperty("font-weight", cs2.fontWeight, "important"); go.style.setProperty("line-height", "1.15", "important"); var sm = go.querySelector("small"); if (sm) sm.style.setProperty("font-size", "0.5em", "important");
+              go.style.setProperty("border-radius", (dl.offsetHeight / 2) + "px", "important"); } catch (e) {} };
+          var fit = function () { ft = 0; same(); try { if (!keep.isConnected || host.hidden) return; var cs = getComputedStyle(keep); if (cs.display === "none" || cs.position === "fixed") return; keep.style.removeProperty("height");
+            var vh = window.innerHeight, bot = 0; for (var i = 0; i < host.children.length; i++) { var e = host.children[i]; if (e === keep) continue; var q = e.getBoundingClientRect(); if (q.height > 2 && getComputedStyle(e).position !== "fixed" && getComputedStyle(e).position !== "absolute" && q.top >= keep.getBoundingClientRect().top - 1 && q.left < keep.getBoundingClientRect().right && q.right > keep.getBoundingClientRect().left) bot = Math.max(bot, q.bottom); }
+            var hb = keep.getBoundingClientRect().bottom, over = Math.max(bot, hb) - (vh - 12); if (over > 0) keep.style.setProperty("height", Math.max(96, Math.round(keep.getBoundingClientRect().height - over)) + "px", "important"); } catch (e) {} };
+          var sched = function () { if (!ft) ft = setTimeout(fit, 60); };
+          new MutationObserver(function () { if (keep.parentNode !== host) host.insertBefore(keep, host.firstChild); sched(); }).observe(host, { childList: true });
+          addEventListener("resize", sched); addEventListener("orientationchange", function () { setTimeout(sched, 250); }); setTimeout(fit, 400); setTimeout(fit, 1500); } catch (e) {} }
     }
     if (h) mount(h, { game: gid, role: "hero" });
     if (document.documentElement.getAttribute("data-npa-mini") !== "off") { var pl = document.getElementById("play"); if (pl) companion(gid, pl, { pos: G[gid].pos || "br" }); }

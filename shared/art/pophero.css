@@ -1,11 +1,10 @@
 /* HERO LINH VẬT SVG cho game POP (shared/art/mascot-art.js tự chèn #paHero vào màn chọn khi game không có sẵn ô hero): thay emoji ::before của poplandscape.css. Chim Bay có CSS riêng trong game. */
 .app:has(#paHero) #home::before,.app:has(#paHero) #village::before,.app:has(#paHero) #ovStart::before{display:none!important;content:none!important}
-#home>#paHero,#village>#paHero{display:flex;order:-9;flex:none;width:100%;height:clamp(110px,24vh,210px);align-items:flex-end;justify-content:center;margin:2px 0 6px;position:relative;z-index:3;font-size:64px;line-height:1}
+#home>#paHero,#village>#paHero{display:flex;order:-9;flex:none;width:100%;height:clamp(110px,24vh,210px);height:clamp(110px,24dvh,210px);align-items:flex-end;justify-content:center;margin:2px 0 6px;position:relative;z-index:3;font-size:64px;line-height:1}
 #paHero .npa-box>svg{height:100%;width:auto;max-width:100%}
 html.np-strip #home>#paHero,html.np-strip #village>#paHero{flex:1 1 0;height:auto;min-height:0}
-@media (min-aspect-ratio:11/10) and (min-height:521px){.app:has(#paHero) #home>#paHero,.app:has(#paHero) #village>#paHero{grid-column:1!important;grid-row:1!important;align-self:end!important;justify-self:stretch!important;height:clamp(170px,34vh,320px)!important;min-height:0!important;margin:0!important;width:100%!important;overflow:hidden!important;position:relative}
+@media (min-aspect-ratio:11/10) and (min-height:521px){.app:has(#paHero) #home>#paHero,.app:has(#paHero) #village>#paHero{grid-column:1!important;grid-row:1!important;align-self:end!important;justify-self:stretch!important;height:clamp(170px,34vh,320px)!important;height:clamp(170px,34dvh,320px)!important;margin-bottom:clamp(6px,1.4dvh,12px)!important;min-height:0!important;width:100%!important;overflow:hidden!important;position:relative}
 html.np-hudg .app:has(#paHero) #home>#paHero,html.np-hudg .app:has(#paHero) #village>#paHero{grid-row:1 / span 3!important;align-self:stretch!important;height:auto!important;contain:size}
 .app:has(#paHero) #home>#paHero .npa-box,.app:has(#paHero) #village>#paHero .npa-box{position:absolute!important;inset:0;display:flex;align-items:flex-end;justify-content:center}}
-@media (min-aspect-ratio:11/10) and (max-height:520px){#home>#paHero,#village>#paHero{display:none}}
-#paHero .npa-box{max-height:100%}
-.app:has(#paHero) #home>#paHero .npa-box>svg,.app:has(#paHero) #village>#paHero .npa-box>svg{max-height:100%}
+/* ĐIỆN THOẠI NGANG (thấp ≤520px): linh vật BẮT BUỘC có ở màn chính → đặt góc dưới-phải, cố định, không chiếm chỗ lưới thẻ */
+@media (min-aspect-ratio:11/10) and (max-height:520px){#home>#paHero,#village>#paHero{display:flex!important;position:fixed!important;right:max(8px,env(safe-area-inset-right));bottom:30px;left:auto!important;top:auto!important;width:clamp(84px,17vw,150px)!important;height:clamp(84px,36vh,130px)!important;height:clamp(84px,36dvh,130px)!important;margin:0!important;order:0;z-index:2;pointer-events:auto;grid-column:auto!important;grid-row:auto!important;overflow:visible}}
