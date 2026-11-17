@@ -543,3 +543,15 @@ html.np-strip.npp-kid .app:has(h1[data-pt]) #ovStart .cards>.card:not(.daily){ba
 html.np-strip.npp-kid .app:has(h1[data-pt]) #ovStart .cards>.card:not(.daily)>.main{color:#fff!important;text-shadow:0 1px 3px rgba(0,0,0,.55)}
 html.np-strip.npp-kid .app:has(h1[data-pt]) #ovStart .cards>.card:not(.daily)>.skinBtn{background:rgba(255,255,255,.95)!important;border:0!important}
 html.np-strip.npp-kid .app:has(h1[data-pt]) #ovStart .cards>.card.daily{background:linear-gradient(135deg,#5a3cf0,#a63aa8 55%,#e0561c)!important;border:2px solid rgba(255,255,255,.85)!important;border-radius:18px!important}
+
+/* Chim Bay (pop-fly): thẻ game ĐỒNG NHẤT với thẻ game của mọi game Pop khác (popnp.css `.tile:has(>.sk)`): kính tối nhuộm một sắc riêng, MỘT công thức cho theme sáng/tối/dải trượt — không còn thẻ màu đặc chói riêng của Chim Bay (chủ site: "card color không đồng nhất với card game khác") */
+html:root:root.npp-kid #ovStart .cards>.card:not(.daily){background:linear-gradient(135deg,color-mix(in srgb,var(--tc) 46%,#261b5c),#171236 85%)!important;color:#fff!important;border:1px solid rgba(170,150,255,.55)!important;box-shadow:0 6px 18px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.18),inset 0 0 18px color-mix(in srgb,var(--tc) 30%,transparent)!important}
+html:root:root.npp-kid #ovStart .cards>.card:not(.daily)>.main{color:#fff!important;text-shadow:none!important}
+html:root:root.npp-kid #ovStart .cards>.card:not(.daily) small{color:rgba(255,255,255,.78)!important;opacity:1!important}
+html:root:root.npp-kid #ovStart .cards>.card:not(.daily)>.skinBtn{background:rgba(255,255,255,.12)!important;border:1px solid rgba(255,255,255,.32)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.2)!important;color:#fff}
+
+/* cùng công thức khi dải trượt (html.np-strip, màn thấp/khung nhỏ): độ ưu tiên cao hơn luật strip cũ ở trên */
+html:root:root.npp-kid .app:has(h1[data-pt]) #ovStart .cards>.card:not(.daily){background:linear-gradient(135deg,color-mix(in srgb,var(--tc) 46%,#261b5c),#171236 85%)!important;color:#fff!important;border:1px solid rgba(170,150,255,.55)!important;box-shadow:0 6px 18px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.18),inset 0 0 18px color-mix(in srgb,var(--tc) 30%,transparent)!important}
+html:root:root.npp-kid .app:has(h1[data-pt]) #ovStart .cards>.card:not(.daily)>.main{color:#fff!important;text-shadow:none!important}
+html:root:root.npp-kid .app:has(h1[data-pt]) #ovStart .cards>.card:not(.daily) small{color:rgba(255,255,255,.78)!important;opacity:1!important}
+html:root:root.npp-kid .app:has(h1[data-pt]) #ovStart .cards>.card:not(.daily)>.skinBtn{background:rgba(255,255,255,.12)!important;border:1px solid rgba(255,255,255,.32)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.2)!important;color:#fff}
