@@ -557,7 +557,11 @@ html:root:root.npp-kid .app:has(h1[data-pt]) #ovStart .cards>.card:not(.daily) s
 html:root:root.npp-kid .app:has(h1[data-pt]) #ovStart .cards>.card:not(.daily)>.skinBtn{background:rgba(255,255,255,.12)!important;border:1px solid rgba(255,255,255,.32)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.2)!important;color:#fff}
 
 /* Chim Bay: thẻ "Bài học hôm nay" TÁCH RIÊNG (#dailyRow, ngoài danh sách game): thanh gradient tím-cam như thanh Hôm nay của game Pop khác; mọi theme */
-html:root:root.npp-kid #ovStart>.dailyRow{width:100%;max-width:340px;flex:none;box-sizing:border-box}
+html:root:root.npp-kid #ovStart>.dailyRow{width:100%;max-width:90cqw;flex:none;box-sizing:border-box}   /* cùng bề ngang với .cards (max-width:90cqw ở pop-fly) */
 html:root:root.npp-kid #ovStart>.dailyRow>.card.daily{width:100%;box-sizing:border-box;background:linear-gradient(90deg,#6C4BF2,#C2410C)!important;border:1px solid rgba(255,255,255,.45)!important;border-radius:22px!important;box-shadow:0 6px 16px rgba(0,0,0,.35)!important;overflow:hidden}
 html:root:root.npp-kid #ovStart>.dailyRow>.card.daily>.main{background:transparent!important;background-image:none!important;border:0!important;box-shadow:none!important;color:#fff!important;text-shadow:0 1px 3px rgba(0,0,0,.45)}
 html:root:root.npp-kid #ovStart>.dailyRow>.card.daily small{color:#fff!important;opacity:1!important;font-weight:800}
+
+/* Chim Bay (pop-fly), màn chọn dọc: #ovStart phủ cả màn nên linh vật (ô flex co giãn) được căn giữa CẢ vùng tiêu đề phía trên → trông cao và đè tên game. Chừa phần đầu (tên game + hàng nút) để linh vật căn giữa đúng phần trống giữa tên game và thẻ Bài học hôm nay */
+@media (max-aspect-ratio:11/10){html:not(.np-multi) .app:has(h1[data-pt="pop-fly"]) #ovStart:not([hidden]){padding-top:128px!important;box-sizing:border-box}}
+@media (max-width:520px){html:root:root.npp-kid #ovStart>.dailyRow{max-width:340px}}   /* điện thoại: .cards của Chim Bay tối đa 340px */
