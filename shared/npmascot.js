@@ -48,20 +48,24 @@
     return '<span class="npm ' + s.fx + '" style="font-size:' + sz + 'px;--c1:' + (s.c1 || "transparent") + ';--c2:' + (s.c2 || "transparent") + '" aria-hidden="true"><i class="aura"></i><b class="m">' + e.hero + '</b>' + (s.acc ? '<i class="acc ' + (s.accPos || "top") + '" style="font-size:' + (s.accPos === "br" ? .42 : .46) + 'em">' + s.acc + '</i>' : "") + (s.fx ? '<i class="sp a">✨</i><i class="sp b">✨</i>' : "") + '</span>';
   }
   /* ---- bạn đồng hành ở màn chọn game ---- */
-  var wrap = null;
+  var wrap = null, POP = /\/popplay\/games\//.test(location.pathname);
   function home() { var h = document.getElementById("home") || document.getElementById("ovStart"); if (!h || h.hidden) return false; try { return h.getClientRects().length > 0 && !document.querySelector(".ov:not([hidden]):not(#ovStart)"); } catch (e) { return false; } }
   function paint() {
-    var id = get(), show = !!id && ok() && !!B() && home() && !/[?&](helper|multi)=1/.test(location.search) && !/\/popplay\/games\//.test(location.pathname);   /* Pop Play: mỗi game đã có linh vật riêng ở giữa màn chọn → bỏ vòng tròn "Linh vật của bạn" (chủ site chốt) */
+    var id = get(), show = !!id && ok() && !!B() && home() && !/[?&](helper|multi)=1/.test(location.search);
     if (!show) { if (wrap) { wrap.remove(); wrap = null; } return; }
     var sid = getSkin(id), key = id + "|" + sid + "|" + (vi() ? 1 : 0);
     if (!wrap) {
       inject(); wrap = document.createElement("a"); wrap.id = "npMascotChip"; wrap.href = "/nightpass-mascot.html?lang=" + (vi() ? "vi" : "en");
       wrap.style.cssText = "position:fixed;left:10px;bottom:calc(46px + env(safe-area-inset-bottom,0px));z-index:40;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:rgba(30,22,70,.78);border:2px solid rgba(255,255,255,.55);box-shadow:0 4px 14px rgba(0,0,0,.4);text-decoration:none;-webkit-tap-highlight-color:transparent";
-      wrap.addEventListener("click", function (e) { e.preventDefault(); try { window.top.location.href = wrap.href + "&from=" + encodeURIComponent((window.top.location.pathname.replace(/^\//, "") || "play/index.html") + (/^#[\w-]+$/.test(window.top.location.hash) ? window.top.location.hash : "")); } catch (x) { location.href = wrap.href; } });
+      wrap.addEventListener("click", function (e) { e.preventDefault(); if (POP && wrap.dataset.open !== "1") { wrap.dataset.open = "1"; wrap.dataset.k = ""; paint(); clearTimeout(wrap._t); wrap._t = setTimeout(function () { if (wrap) { wrap.dataset.open = "0"; wrap.dataset.k = ""; paint(); } }, 4000); return; } try { window.top.location.href = wrap.href + "&from=" + encodeURIComponent((window.top.location.pathname.replace(/^\//, "") || "play/index.html") + (/^#[\w-]+$/.test(window.top.location.hash) ? window.top.location.hash : "")); } catch (x) { location.href = wrap.href; } });
       document.documentElement.appendChild(wrap);
+      if (POP) wrap.dataset.open = "0";
     }
+    /* Pop Play: nút "Linh vật của bạn" TỰ THU thành tab nhỏ ở mép trái, bấm để mở ra (4 giây), bấm lần nữa mới vào trang linh vật (chủ site chốt: không bỏ hẳn, tự ẩn) */
+    var open = !POP || wrap.dataset.open === "1", sz = open ? 58 : 34, st = wrap.style;
+    st.width = st.height = sz + "px"; st.left = open ? "10px" : "0"; st.borderRadius = open ? "50%" : "0 17px 17px 0"; st.opacity = open ? "1" : ".8"; st.borderLeftWidth = open ? "2px" : "0";
     try { var hd = document.querySelector(".hud"); wrap.style.bottom = "calc(46px + env(safe-area-inset-bottom,0px))"; if (hd) { var a = wrap.getBoundingClientRect(), b2 = hd.getBoundingClientRect(); if (b2.width && Math.min(a.right, b2.right) - Math.max(a.left, b2.left) > 4 && Math.min(a.bottom, b2.bottom) - Math.max(a.top, b2.top) > 4) wrap.style.bottom = "calc(" + Math.round(window.innerHeight - b2.top + 10) + "px)"; } } catch (e) {}   /* không đè lên chip điểm (.hud) */
-    if (wrap.dataset.k !== key) { wrap.dataset.k = key; wrap.innerHTML = html(id, sid, 34); wrap.setAttribute("aria-label", (vi() ? "Linh vật của bạn" : "Your mascot")); wrap.title = wrap.getAttribute("aria-label"); }
+    if (wrap.dataset.k !== key) { wrap.dataset.k = key; wrap.innerHTML = html(id, sid, open ? 34 : 22); wrap.setAttribute("aria-label", (vi() ? "Linh vật của bạn" : "Your mascot")); wrap.title = wrap.getAttribute("aria-label"); }
   }
   var inGame = !!document.getElementById("play") || !!document.querySelector(".app");
   window.NPMascot2 = { list: list, skins: skinsX, skin: skin, unlocked: unlocked, isOpen: isOpen, need: need, get: get, setMain: setMain, getSkin: getSkin, setSkin: setSkin, html: html, ok: ok, GRP: GRP };
