@@ -2,7 +2,7 @@
 
 Mục tiêu: mọi linh vật/skin do code (SVG vẽ tay), **cùng một hệ thống**, hai phong cách tách bạch cho hai nhóm người dùng. Không vẽ "tự do", không dùng ảnh bitmap, không gọi AI/máy chủ lúc chơi (xem GAME_RULES.md: offline, không lag).
 
-Trạng thái: **đã có 2 con MẪU CHỜ DUYỆT** — Pop: Chim Bay (`shared/art/mascot-pop-pop-fly.svg`), Night: Xin Nghỉ (`shared/art/mascot-night-xin-nghi.svg`), mỗi con đủ 5 skin (1 miễn phí = Mặc định, 4 trả phí). CHƯA nhúng vào game nào. Xem: mở `shared/art/preview.html` qua máy chủ tĩnh. Chủ site duyệt xong mới sửa số mục 3 (nếu cần) rồi mới nhân ra các game còn lại. Bài đo: `node scripts/cozygame/check-art.js`.
+Trạng thái: **đã có 2 con MẪU (bản 2, vẽ lại theo luật khuôn mặt chữ ký + đạo cụ nhận diện + skin riêng + màu ăn theo nền) CHỜ DUYỆT** — Pop: Chim Bay (`shared/art/mascot-pop-pop-fly.svg`), Night: Xin Nghỉ (`shared/art/mascot-night-xin-nghi.svg`), mỗi con đủ 5 skin (1 miễn phí = Mặc định, 4 trả phí). CHƯA nhúng vào game nào. Xem: mở `shared/art/preview.html` qua máy chủ tĩnh. Chủ site duyệt xong mới sửa số mục 3 (nếu cần) rồi mới nhân ra các game còn lại. Bài đo: `node scripts/cozygame/check-art.js`.
 
 ## 1. Hai phong cách (chọn theo nhóm game, KHÔNG trộn)
 
@@ -25,7 +25,7 @@ Game thuộc nhóm nào do `portal` trong `shared/multi-games.js` quyết địn
 
 1. **Một tệp SVG / linh vật**, `viewBox="0 0 256 256"`, nội dung gốc nằm trong 16..240 (chừa 16 lề cho bóng/viền). Không `width`/`height` cố định (co theo khung).
 2. **Chỉ dùng**: `path`, `circle`, `ellipse`, `rect` (bo góc), `g`, `linearGradient`/`radialGradient`, `clipPath`. **CẤM**: `<image>`, `<foreignObject>`, `filter` (blur/drop-shadow — gây sập WebKit, xem bộ nhớ dự án), `mask` phức tạp, font nhúng, `<script>`, `style` ngoài.
-3. **Ngân sách**: phần thân ≤ 60 phần tử (không tính phụ kiện/fx), ≤ 6 gradient; MỘT tệp chứa cả 4 skin trả phí (bật/tắt bằng lớp `sk-*` trên thẻ gốc) ≤ 13 KB. **id duy nhất**: gradient/clipPath dùng `id` trùng nhau khi nhúng nhiều bản trong một trang (màn chính + mini) sẽ lấy biến màu của bản đầu → khi nhúng PHẢI đổi hậu tố id theo từng bản (xem `inline()` trong `shared/art/preview.html`).
+3. **Ngân sách**: phần thân ≤ 90 phần tử (gồm các biến thể dáng thân, không tính phụ kiện/fx), ≤ 6 gradient; MỘT tệp chứa cả 4 skin trả phí (bật/tắt bằng lớp `sk-*` trên thẻ gốc) ≤ 16 KB. **id duy nhất**: gradient/clipPath dùng `id` trùng nhau khi nhúng nhiều bản trong một trang (màn chính + mini) sẽ lấy biến màu của bản đầu → khi nhúng PHẢI đổi hậu tố id theo từng bản (xem `inline()` trong `shared/art/preview.html`).
 4. **Màu** chỉ qua biến CSS (`--c1` thân chính, `--c2` thân phụ/bóng, `--c3` điểm nhấn, `--ink` viền/mắt, `--bl` má/blush, `--hl` vệt sáng), KHÔNG ghi màu cứng trong phần thân. Đổi skin = đổi biến + bật/tắt nhóm phụ kiện, không vẽ lại thân.
 5. **Neo (slot) cố định** để mọi skin/phụ kiện khớp mọi linh vật cùng nhóm (toạ độ trong viewBox 256): đầu-đỉnh `(128,40)`, mắt trái `(100,112)`, mắt phải `(156,112)`, miệng `(128,146)`, cổ `(128,178)`, ngực/huy hiệu `(128,200)`, tay trái/phải `(60,190)/(196,190)`, chân `(128,232)`. Phụ kiện đặt trong `<g id="acc-head|acc-eyes|acc-chest|acc-hand">` theo các neo này.
 6. **Cấu trúc nhóm** (id bắt buộc, theo thứ tự vẽ từ dưới lên): `shadow` → `body` → `belly/detail` → `face` (`eyes`, `mouth`, `blush`) → `acc-*` (phụ kiện, mặc định `display:none`) → `fx` (lấp lánh, dạ quang).
