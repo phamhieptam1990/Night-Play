@@ -1181,6 +1181,7 @@ html[data-theme="light"] .app:has(h1[data-pt]) #home:not([hidden]),html[data-the
 /* ĐIỆN THOẠI DỌC THẤP (iPhone SE…, <=719px cao): danh sách game thành THANH TRƯỢT NGANG (vuốt, ô kế bên ló ra gợi ý) để nhường chỗ dọc cho LINH VẬT hiện lại (trước đó linh vật bị ẩn vì danh sách dọc chiếm hết màn). Áp dụng 10 game dùng #home .tiles + Chim Bay (#ovStart .cards); Làng Của Bé (#village) giữ nguyên. */
 @media (max-aspect-ratio:11/10) and (max-height:719px) and (max-width:520px){
   .app:has(h1[data-pt]) #home::before,
+  .app:has(h1[data-pt]) #village::before,
   .app:has(h1[data-pt]) #ovStart::before{display:flex!important;flex:1 1 0!important;align-items:center!important;justify-content:center!important;width:100%!important;height:auto!important;min-height:0!important;flex:1 1 0!important;font-size:var(--np-hs,calc(clamp(0px,calc(100dvh - 520px),140px)*.78))!important;line-height:1!important;overflow:visible}
   .app:has(h1[data-pt]) #home .tiles,
   .app:has(h1[data-pt]) #ovStart .cards{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;gap:10px!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;touch-action:pan-x;scrollbar-width:none;overscroll-behavior-x:contain;width:calc(100% + 16px)!important;margin-inline:-8px!important;padding:4px 8px 6px!important;grid-auto-rows:unset!important;grid-template-columns:none!important;flex:none!important;min-height:0!important;height:auto!important;max-height:112px!important;align-items:flex-start!important;align-content:flex-start!important;max-width:none!important}
@@ -1198,7 +1199,8 @@ html[data-theme="light"] .app:has(h1[data-pt]) #home:not([hidden]),html[data-the
   .app:has(h1[data-pt]) #ovStart .cards>.card small{display:none!important}
   .app:has(h1[data-pt]) #ovStart .cards>.card>.skinBtn{position:absolute!important;top:4px!important;right:4px!important;left:auto!important;bottom:auto!important;width:30px!important;height:30px!important;min-width:30px!important;min-height:30px!important}
 }
-@media (max-height:520px) and (max-aspect-ratio:11/10){.app:has(h1[data-pt]) #home::before,.app:has(h1[data-pt]) #ovStart::before{display:none!important}}
+/* KHÔNG áp trong khung Chơi cùng lúc (html.np-multi): màn chính BẮT BUỘC có linh vật dù khung thấp (iPad dọc 3-4 game, có thanh địa chỉ) */
+@media (max-height:520px) and (max-aspect-ratio:11/10){html:not(.np-multi) .app:has(h1[data-pt]) #home::before,html:not(.np-multi) .app:has(h1[data-pt]) #ovStart::before{display:none!important}}
 /* Vẽ Chữ Thành Quái Vật (đặt #home thành hàng cuộn dòng ở <=700px): trong chế độ thanh trượt dùng LƯỚI — hàng 1 cấp độ, hàng 2 linh vật (co giãn), hàng 3 "Hôm nay" cạnh "Album", hàng 4 thanh trượt */
 @media (max-aspect-ratio:11/10) and (max-height:719px) and (max-width:520px){
   .app:has(h1[data-pt="ve-chu-quai-vat"]) #home{display:grid!important;flex-direction:initial!important;flex-wrap:initial!important;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)!important;grid-template-rows:auto minmax(0,1fr) auto auto auto!important;column-gap:6px!important;row-gap:6px!important;align-content:stretch!important;align-items:stretch!important}

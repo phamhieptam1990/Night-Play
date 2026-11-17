@@ -25,3 +25,7 @@ html.np-nohud [data-nohud], html.np-nohud .stats.np-allhid { display: none !impo
 
 /* CHƠI CÙNG LÚC — CHỈ KHUNG CHƠI: hàng chỉ số (.stats: điểm, lượt, giờ...) và tên game ở đầu khung ẩn hẳn để khung vừa nội dung; các chỉ số hiện trong panel ⋯ của khung (host đọc qua np-hud.stats) + huy hiệu nhỏ trên icon ⋯ */
 html.np-multi .stats, html.np-multi .gametitle { display: none !important; }
+
+/* LINH VẬT MÀN CHÍNH (bắt buộc, GAME_RULES.md): trong khung nhỏ (iPad dọc 3-4 game, có thanh địa chỉ) game Cozy từng ẨN linh vật (@container max-height:520px) hoặc thu nhỏ — ở chế độ multi luôn hiện và to theo chỗ còn trống */
+html.np-multi #hHero{display:flex!important;align-items:center;justify-content:center;flex:1 1 0;min-height:56px;font-size:clamp(48px,min(26cqw,24cqh),150px)!important;line-height:1!important}
+html.np-g-dap-deadline.np-multi #hHero{font-size:54px!important;min-height:58px}   /* màn chính hand-written, chật: linh vật vừa khung 58px, không đè thẻ Thử thách */
