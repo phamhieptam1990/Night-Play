@@ -426,17 +426,25 @@ function drawPlane(c){   /* tàu bay tự vẽ (emoji ✈️ quay mỗi nền t�
 /* ĐỔI KHUNG GIỮA VÁN (toàn màn hình bật/tắt, xoay màn…): chữ cái/cổng đang bay, ngôi sao, chim, mây phải ĐƯỢC SẮP LẠI theo vùng chơi mới (trước đây giữ toạ độ cũ nên lệch khung / chui dưới hàng câu hỏi) */
 let lastReg=null;
 function regionNow(){const sf=PF.safe;return{a:sf.top+40,z:H-sf.bottom-40,H,pd:sf.pad}}
-function reflowWorld(o,n){const S=PF.S;if(!S||!o||!n||(o.a===n.a&&o.z===n.z&&o.H===n.H))return;
+let tweenRaf=0;
+function tweenY(items,dur){   /* chuyển MƯỢT sang toạ độ mới (không giật): items=[{o,k,from,to}] */
+  const t0=performance.now();cancelAnimationFrame(tweenRaf);
+  const ez=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2,step=now=>{const u=Math.min(1,(now-t0)/dur),e=ez(u);items.forEach(i=>{i.o[i.k]=i.from+(i.to-i.from)*e});if(u<1)tweenRaf=requestAnimationFrame(step)};tweenRaf=requestAnimationFrame(step)}
+function reflowWorld(o,n){const S=PF.S;if(!S||!o||!n||(o.a===n.a&&o.z===n.z&&o.H===n.H))return;const tw=[];
   const m=y=>n.a+(y-o.a)/Math.max(1,o.z-o.a)*(n.z-n.a),mb=y=>n.pd+(y-o.pd)/Math.max(1,o.H-2*o.pd)*(n.H-2*n.pd);
   {const sf=PF.safe,a2=sf.top+40,z2=H-sf.bottom-40,c=(a2+z2)/2,sp=Math.min(.27*H,(z2-a2)/2),L=[c-sp,c,c+sp];   /* cổng đang bay: xếp lại đúng 3 làn của khung MỚI, giữ thứ tự trên-giữa-dưới (không nén lại làm các vòng chồng nhau) */
-    (S.waves||[]).forEach(w=>{const o2=w.rings.map((r,i)=>i).sort((i,j)=>w.rings[i].y-w.rings[j].y);o2.forEach((ri,k)=>{w.rings[ri].y=L[Math.min(k,2)]})})}
-  if(S.custom&&S.custom.list)S.custom.list.forEach(st=>{st.y=Math.max(n.a,Math.min(n.z,m(st.y)))});
-  if(S.bird){S.bird.y=Math.max(n.pd,Math.min(n.H-n.pd,mb(S.bird.y)))}
-  (S.clouds||[]).forEach(c=>{c.y=c.y/o.H*n.H})}
+    (S.waves||[]).forEach(w=>{const o2=w.rings.map((r,i)=>i).sort((i,j)=>w.rings[i].y-w.rings[j].y);o2.forEach((ri,k)=>{tw.push({o:w.rings[ri],k:"y",from:w.rings[ri].y,to:L[Math.min(k,2)]})})})}
+  if(S.custom&&S.custom.list)S.custom.list.forEach(st=>{tw.push({o:st,k:"y",from:st.y,to:Math.max(n.a,Math.min(n.z,m(st.y)))})});
+  if(S.bird){tw.push({o:S.bird,k:"y",from:S.bird.y,to:Math.max(n.pd,Math.min(n.H-n.pd,mb(S.bird.y)))})}
+  (S.clouds||[]).forEach(c=>{tw.push({o:c,k:"y",from:c.y,to:c.y/o.H*n.H})});tweenY(tw,520)}
 function fit(){const r=$("play").getBoundingClientRect();if(!r.width)return;DPR=Math.min(2.5,window.devicePixelRatio||1);cv.width=Math.round(r.width*DPR);cv.height=Math.round(r.height*DPR);K=r.width/W;H=Math.max(380,Math.min(820,Math.round(W*r.height/r.width)));PF.dim.H=H;const nr=regionNow();if(lastReg)reflowWorld(lastReg,nr);lastReg=nr;if(PF.S&&PF.S.bird)PF.S.bird.y=Math.min(PF.S.bird.y,H-PF.safe.pad);draw()}
+/* ĐỔI KHUNG: nhịp nghỉ 1 giây DỊU — chữ "Sẵn sàng" mờ vào/ra nhẹ nhàng, chim thở nhẹ; chỉ opacity/transform, tắt khi giảm chuyển động */
+function calmHint(){const old=document.getElementById("calmHint");if(old)old.remove();const d=document.createElement("div");d.id="calmHint";d.textContent=LANG==="vi"?"Sẵn sàng nhé…":"Get ready…";d.style.cssText="position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);z-index:20;padding:12px 24px;border-radius:999px;background:rgba(20,16,56,.55);color:#fff;font:800 clamp(18px,5vw,26px)/1 var(--display,system-ui);pointer-events:none;opacity:0";$("play").appendChild(d);
+  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;if(!d.animate||reduce){d.style.opacity=1;setTimeout(()=>d.remove(),1100);return}
+  d.animate([{opacity:0,transform:"translate(-50%,-40%) scale(.9)"},{opacity:1,transform:"translate(-50%,-50%) scale(1)",offset:.3},{opacity:1,transform:"translate(-50%,-50%) scale(1.04)",offset:.7},{opacity:0,transform:"translate(-50%,-56%) scale(1.08)"}],{duration:1100,easing:"ease-in-out",fill:"forwards"}).onfinish=()=>d.remove()}
 /* toàn màn hình: hàng câu hỏi nổi ở đầu khung → chừa vùng an toàn phía trên để chữ cái/cổng không bị che (dùng lại safe của layout "full") */
 function fsSafe(){const sd=document.querySelector(".side"),k=($("play").getBoundingClientRect().width||360)/W,b=sd?sd.getBoundingClientRect().bottom:90;return{top:Math.round(b/k)+8,bottom:24,pad:34}}   /* vùng an toàn tính theo ĐƠN VỊ THẾ GIỚI (không phải px): hàng câu hỏi cao ~76px trên màn thật */
-{let sv=null;new MutationObserver(()=>{const on=document.documentElement.classList.contains("np-fs");if(on&&!sv){sv=PF.safe;PF.safe=fsSafe()}else if(!on&&sv){PF.safe=sv;sv=null}fit()}).observe(document.documentElement,{attributes:true,attributeFilter:["class"]})}
+{let sv=null,was=false;new MutationObserver(()=>{const on=document.documentElement.classList.contains("np-fs");if(on===was)return;was=on;if(on&&!sv){sv=PF.safe;PF.safe=fsSafe()}else if(!on&&sv){PF.safe=sv;sv=null}fit();if(running&&!paused&&PF.S&&!PF.S.over){pauseRound("parent");calmHint();(window.__npRST||setTimeout)(()=>resumeRound("parent"),1100)}}).observe(document.documentElement,{attributes:true,attributeFilter:["class"]})}
 addEventListener("resize",fit);if(window.ResizeObserver)new ResizeObserver(fit).observe($("play"));
 
 let lastPl=false;
