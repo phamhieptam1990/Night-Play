@@ -26,13 +26,25 @@
       rST()(function () { if (run !== cdRun) return; n--; if (n > 0) tick(); else { el.classList.remove("on"); el.textContent = ""; wasPlaying = false; var N2 = NPo(); N2 && N2.menuResume(); } }, 700);
     })();
   }
+  /* NHIỀU NGƯỜI GIỮ tạm dừng (Control Center, xoay máy…): còn ai giữ thì còn dừng; hết người giữ → đếm 3-2-1 rồi chạy tiếp */
+  var holders = {};
+  window.__npMenuHold = function (key, on) { if (on) holders[key] = 1; else delete holders[key]; set(Object.keys(holders).length > 0 || menuOld); };
+  var menuOld = false, setOld = set;
+  /* XOAY MÁY: đang chơi mà xoay dọc↔ngang → dừng ngay; xoay xong (không đổi cỡ ~0,7 giây) → đếm 3-2-1 rồi chơi tiếp */
+  var land0 = innerWidth > innerHeight, rotT = 0;
+  function onRot() {
+    var l = innerWidth > innerHeight, NPn = NPo();
+    if (l !== land0) { land0 = l; if ((NPn && NPn.playing && NPn.playing()) || open) window.__npMenuHold("rot", true); }
+    if (holders.rot) { clearTimeout(rotT); rotT = rST()(function () { window.__npMenuHold("rot", false); }, 700); }
+  }
+  addEventListener("resize", onRot); addEventListener("orientationchange", onRot);
   /* menu của fan.js / popmenu.js: theo dõi lớp .open */
   var watched = {};
   function watch() {
     ["npFan", "npPmFan", "npFsPn"].forEach(function (id) {
       var el = document.getElementById(id); if (!el || watched[id] === el) return; watched[id] = el;
-      new MutationObserver(function () { set(el.classList.contains("open")); }).observe(el, { attributes: true, attributeFilter: ["class"] });
-      if (el.classList.contains("open")) set(true);
+      new MutationObserver(function () { menuOld = el.classList.contains("open"); set(menuOld || Object.keys(holders).length > 0); }).observe(el, { attributes: true, attributeFilter: ["class"] });
+      if (el.classList.contains("open")) { menuOld = true; set(true); }
     });
   }
   watch(); setInterval(watch, 700);

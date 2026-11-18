@@ -6,7 +6,9 @@
    5) chữ thẻ không vừa MỘT dòng → bỏ chữ cả danh sách (data-notext); thẻ Tiếp tục hẹp quá → chỉ còn ▶. */
 (function () {
   "use strict";
-  var de = document.documentElement; de.classList.add("nppl"); window.NPLayoutNew = 1; window.NPLayoutPop = 1; window.__npOvs = true;
+  var de = document.documentElement; de.classList.add("nppl"); window.NPLayoutNew = 1;
+  if (!/[?&]home3=0/.test(location.search)) de.classList.add("np-h3");   /* màn chọn mới bật NGAY lúc nạp (xem layout.js) */ window.NPLayoutPop = 1; window.__npOvs = true;
+  try { var sty0 = document.createElement("style"); sty0.textContent = "html.np-h3:not(.np-h3at) :is(#home,#village,#ovStart){visibility:hidden!important}"; (document.head || document.documentElement).appendChild(sty0); } catch (e) {}   /* ẩn màn chọn cũ cho tới khi màn chọn mới dựng xong (home3.js đặt np-h3at) → không còn khoảnh khắc layout cũ hiện ra lúc nạp */
   var MINROW = 72, MAXROW = 112, busy = 0, TOP = 88, BOTTOM = 28, SIDE = 88;
   function land() { return innerWidth > innerHeight * 1.1; }
   function railRight() {   /* màn ngang: các nút cố định bên TRÁI (←, 🔊, ⋯, …) xếp 1–2 cột → chừa tới mép phải xa nhất */
@@ -24,6 +26,7 @@
   }
   function vis(e) { return e && !e.hidden && getComputedStyle(e).display !== "none" && e.getClientRects().length; }
   function tune() {
+    if (document.documentElement.classList.contains("np-h3")) return;   /* màn chọn mới (home3.js) thay thế bố cục cũ */
     var h = host(); if (!h || busy) return; busy = 1;
     try {
       if (window.NPIcon) { try { NPIcon.apply(h); } catch (e) {} }   /* emoji chế độ có icon SVG → SVG theo theme; chưa có icon → giữ emoji (nội dung bài học .ti/.tb luôn giữ emoji) */

@@ -33,7 +33,7 @@
     /* 4 HÀNG TRỞ LÊN (độ khó + Hôm nay + chế độ + hàng nút…): màn thấp không đủ chỗ cho linh vật 250 + 4 hàng ≥72 → .npl-r4: linh vật nhường xuống ≥150px (dọc) / hàng thu tới ≥60px (ngang) thay vì ép nút còn 10px */
     var pl = document.getElementById("play"), raf = 0;
     function r4() {
-      raf = 0; if (!pl || h.hidden) return;
+      raf = 0; if (!pl || h.hidden || document.documentElement.classList.contains("np-h3")) return;
       var land = innerWidth > innerHeight * 1.1, n = 0;
       if (land) { n = h.classList.contains("npl-one") ? (parseInt(pl.style.getPropertyValue("--n"), 10) || 0) : 0; }
       else { Array.prototype.forEach.call(h.querySelectorAll("#bDaily,.dbtn,.npl-strip,.tys,#tys,.row,.lvs,.abar:not(#hLad),#npResume"), function (e) { if (e.parentElement && e.parentElement.classList.contains("npl-strip")) return; if (e.offsetParent) n++; }); }

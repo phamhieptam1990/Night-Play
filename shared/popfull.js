@@ -12,11 +12,22 @@
     if (ot) st.setProperty("top", ot, otp); else st.removeProperty("top");
     if (st.getPropertyValue("--npx") !== x) st.setProperty("--npx", x); if (st.getPropertyValue("--npy") !== y) st.setProperty("--npy", y);
   }
-  function all() { raf = 0; [].forEach.call(document.querySelectorAll(SEL), fix); }
+  /* HÌNH MINH HOẠ trong thẻ "Cách chơi" (#hwArt: tháp vòng, cột, ván mẫu…) vẽ theo cqw của #play → khi #play rộng (màn ngang) hình to hơn khung chứa và tràn ra ngoài thẻ: thu hình vừa khung (zoom, không đổi hình dạng) */
+  function fitArt() {
+    [].forEach.call(document.querySelectorAll(".hwArt"), function (a) {
+      if (!a.getClientRects().length) return;
+      [].forEach.call(a.children, function (c) { c.style.zoom = ""; });
+      var cs = getComputedStyle(a), avail = a.clientWidth - (parseFloat(cs.paddingLeft) || 0) - (parseFloat(cs.paddingRight) || 0), need = 0, gap = parseFloat(cs.columnGap) || 0;
+      [].forEach.call(a.children, function (c, i) { need += c.getBoundingClientRect().width + (i ? gap : 0); });
+      if (need > avail + 1 && avail > 40) { var z = Math.max(.3, Math.floor(avail / need * 100) / 100); [].forEach.call(a.children, function (c) { c.style.zoom = z; }); }
+    });
+  }
+  function all() { raf = 0; [].forEach.call(document.querySelectorAll(SEL), fix); fitArt(); }
   function sch() { if (!raf) raf = requestAnimationFrame(all); }
   function init() {
     sch(); addEventListener("resize", sch); addEventListener("orientationchange", sch);
     try { new MutationObserver(sch).observe(document.body, { subtree: true, attributes: true, attributeFilter: ["hidden"] }); } catch (e) {}
+    try { new MutationObserver(sch).observe(document.body, { subtree: true, childList: true }); } catch (e) {}   /* nội dung hình minh hoạ được dựng sau khi thẻ hiện */
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })();

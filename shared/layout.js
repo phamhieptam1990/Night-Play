@@ -7,6 +7,8 @@
 (function () {
   "use strict";
   var de = document.documentElement; de.classList.add("npl"); window.NPLayoutNew = 1;
+  if (!/[?&]home3=0/.test(location.search)) de.classList.add("np-h3");   /* màn chọn mới (home3.js) bật NGAY lúc nạp: không vẽ layout cũ rồi mới đổi (home3.js gỡ lớp này nếu không dựng được) */
+  try { var sty0 = document.createElement("style"); sty0.textContent = "html.np-h3:not(.np-h3at) :is(#home,#village,#ovStart){visibility:hidden!important}"; (document.head || document.documentElement).appendChild(sty0); } catch (e) {}   /* ẩn màn chọn cũ cho tới khi màn chọn mới dựng xong (home3.js đặt np-h3at) → không còn khoảnh khắc layout cũ hiện ra lúc nạp */
   var MINROW = 72, MAXROW = 84, busy = 0;
   function land() { return innerWidth > innerHeight * 1.1; }
   function num(pl, k, d) { return parseFloat(getComputedStyle(pl).getPropertyValue(k)) || d; }
@@ -28,6 +30,10 @@
     return n;
   }
   function tune() {
+    if (document.documentElement.classList.contains("np-h3")) {   /* màn chọn mới (home3.js) thay thế bố cục cũ: bỏ đo thẻ/hàng (từng gây lag khi bấm Start) NHƯNG vẫn cập nhật vị trí khung #play (--ox/--rail/--lgut) — màn chọn mới đặt theo toạ độ màn hình, thiếu --ox sau khi xoay thì màn chọn tràn ra ngoài khung */
+      var pl1 = document.getElementById("play"); if (pl1) { var L1 = land(), pr1 = pl1.getBoundingClientRect(), ox1 = (-pr1.left) + "px", rl1 = rail() + "px", lg1 = (L1 && de.classList.contains("np-hudg") ? 72 : 0) + "px"; if (pl1.style.getPropertyValue("--ox") !== ox1) pl1.style.setProperty("--ox", ox1); if (pl1.style.getPropertyValue("--rail") !== rl1) pl1.style.setProperty("--rail", rl1); if (pl1.style.getPropertyValue("--lgut") !== lg1) pl1.style.setProperty("--lgut", lg1); }
+      return;
+    }
     var pl = document.getElementById("play"), h = document.getElementById("home"); if (!pl || !h || h.hidden || busy) return;
     busy = 1;
     try {

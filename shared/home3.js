@@ -67,7 +67,7 @@
       .split(":not(#h3Wrap):not(.hl)").join(":not(#h3Wrap):not(#paHero):not(#cwHero):not(.hl)").split("{--H:min(calc(100cqw").join("{--topH:56px;--pad:16px;--row:84px;--gap:12px;--tap-lg:56px;--H:min(calc(100cqw");
   }
   if (POP) {
-    css += 'html.np-h3 #play[data-scr="home"]{overflow:hidden!important;position:fixed!important;aspect-ratio:auto!important;min-height:0!important;max-height:none!important;left:0!important;top:0!important;right:0!important;bottom:0!important;width:auto!important;height:auto!important;max-width:none!important;margin:0!important;border-radius:0!important;border:0!important;box-shadow:none!important;background:transparent!important}' +
+    css += 'html.np-h3 #play[data-scr="home"]:not(:has(.ov:not([hidden]):not(#ovStart),#phOv:not([hidden]),#hlpOv:not([hidden]))){overflow:hidden!important;position:fixed!important;aspect-ratio:auto!important;min-height:0!important;max-height:none!important;left:0!important;top:0!important;right:0!important;bottom:0!important;width:auto!important;height:auto!important;max-width:none!important;margin:0!important;border-radius:0!important;border:0!important;box-shadow:none!important;background:transparent!important}' +
       'html.np-h3.np-h3home :is(#title,.hud){opacity:0!important;pointer-events:none!important}' +
       'html.np-h3.np-h3.np-h3home :is(#title,.hud):not(#_):not(#__){opacity:0!important;visibility:hidden!important;pointer-events:none!important}' +
       /* TÊN GAME (Night + Pop): đậm nhất, to, chữ trắng có viền bóng đậm bốn phía + bóng đổ (đọc rõ trên mọi nền) */
@@ -89,7 +89,9 @@
   css += 'html.np-h3 #play[data-scr="home"] :is(#home,#village,#ovStart):not(#_):not(#__){overflow:visible!important}';   /* đạo cụ của linh vật (bảng 2048, ly…) tràn khỏi khung #home không bị cắt thẳng ở mép; trang vẫn không cuộn nhờ html/body overflow:hidden */
   css += 'html:has(.ov:not([hidden]):not(#ovStart),#phOv:not([hidden]),#hlpOv:not([hidden]),.sheet:not([hidden])) #h3Cal{display:none!important}   /* popup/thẻ cách chơi đang mở → nút lịch của màn chọn không nổi đè lên */';
   css += 'html.np-h3 #play:has(>.ov:not([hidden]):not(#ovStart)) :is(#home,#village,#ovStart){visibility:hidden!important}   /* thẻ che nền: màn chọn phía sau không lộ chữ mờ */';
-  css += 'html.np-h3,html.np-h3 body{overflow:hidden!important;max-width:100vw!important}html.np-h3 :is(#hHero,#paHero,#cwHero) .npa-box,html.np-h3 :is(#hHero,#paHero,#cwHero) svg{overflow:visible!important}';   /* bảng/ly/đạo cụ của linh vật tràn khỏi khung SVG không bị cắt thẳng */
+  /* VÀO VÁN: game ẩn màn chọn bằng thuộc tính hidden, nhưng luật hiện màn chọn mới (display:block!important) từng thắng nó → màn chọn đè lên bàn chơi. Ẩn lại bằng độ ưu tiên cao hơn; nút lịch + các phần của màn chọn nằm ngoài #home cũng ẩn theo. */
+  css += 'html.np-h3 #play :is(#home,#village,#ovStart)[hidden]:not(#_):not(#__):not(#___):not(#____):not(#_____){display:none!important}html.np-h3:not(.np-h3at) :is(#h3Cal,#h3Wrap,#h3Dots){display:none!important}';
+  css += 'html.np-h3,html.np-h3 body{overflow:hidden!important;overflow:clip!important;max-width:100vw!important;overscroll-behavior:none}html.np-h3 :is(#hHero,#paHero,#cwHero) .npa-box,html.np-h3 :is(#hHero,#paHero,#cwHero) svg{overflow:visible!important}';   /* bảng/ly/đạo cụ của linh vật tràn khỏi khung SVG không bị cắt thẳng */
   css += 'html[data-theme=light].np-h3 #h3Btns button{box-shadow:0 0 0 4px color-mix(in srgb,var(--npacc,var(--accent,#7C5CFF)) 22%,transparent),0 0 14px color-mix(in srgb,var(--npacc,var(--accent,#7C5CFF)) 28%,transparent)!important}';
   css += 'html[data-theme=light].np-h3.np-h3.np-h3 #h3T:not(#_):not(#__):not(#___){color:var(--ink,#241a5a)!important;-webkit-text-stroke:0;text-shadow:-2px 0 0 #fff,2px 0 0 #fff,0 -2px 0 #fff,0 2px 0 #fff,-1.5px -1.5px 0 #fff,1.5px -1.5px 0 #fff,-1.5px 1.5px 0 #fff,1.5px 1.5px 0 #fff,0 5px 0 rgba(255,255,255,.55),0 8px 14px rgba(60,40,120,.35)!important}';   /* giao diện SÁNG: chữ đậm màu tối + viền trắng (chữ trắng chìm vào nền sáng) */
   css += 'html.np-h3 #h3T:not(#_):not(#__):not(#___){white-space:nowrap!important;-webkit-line-clamp:unset!important;max-height:none!important;text-overflow:clip!important}';   /* tên game LUÔN MỘT dòng: fitTitle() thu cỡ chữ cho vừa */
@@ -99,7 +101,7 @@
   function heroEl() { return POP ? ($("paHero") || $("cwHero")) : $("hHero"); }
   function host() { for (var i = 0; i < (POP ? 3 : 1); i++) { var e = $(HOSTS[i]); if (e && !e.hidden && e.getClientRects().length) return e; } return null; }
   function firstTile() { var c = window.NPCC && NPCC.modeEl && NPCC.modeEl(); if (c) return c; var t = document.querySelector(".tiles>.tile,#cards>.tile"); return t && (t.querySelector(".main") || t); }
-  function dailyBtn() { return $("bDaily") || document.querySelector(".dbar,#dailyRow .dbar,#dailyRow,#ovStart>.tile.daily"); }
+  function dailyBtn() { return $("bDaily") || document.querySelector(".dbar,#dailyRow .dbar,#dailyRow,#ovStart .tile.daily,.tile.daily"); }
   function build() {
     var h = host(), t = titleEl(), hero = heroEl(); if (!h || !t || !hero) return !!$("h3Wrap");
     if ($("h3Wrap")) { if ($("h3Wrap").parentNode === h) return true; $("h3Wrap").remove(); }
@@ -149,6 +151,7 @@
     d.hidden = L.length < 2; d.innerHTML = L.length < 2 ? "" : L.map(function (s, i) { return '<i' + (i === cur ? ' class="on"' : "") + "></i>"; }).join("");
   }
   function sync() {
+    de.classList.toggle("np-h3at", !!host() && (!$("play") || ($("play").getAttribute("data-scr") || "home") === "home" || POP));
     if (POP) { var pl0 = $("play"), sc = host() ? "home" : "game"; if (pl0 && pl0.getAttribute("data-scr") !== sc) pl0.setAttribute("data-scr", sc); de.classList.toggle("np-h3home", sc === "home"); }
     if (!build()) return;
     de.classList.toggle("np-h3", true);   /* màn ngang: tạm giữ layout cũ (layout mới chưa làm riêng cho ngang) */
@@ -201,6 +204,12 @@
       } else if (POP && h.style.getPropertyValue("--hc")) h.style.removeProperty("--hc");
     } catch (e) {}
   }
-  if (POP) { var go0 = function () { var pl = $("play"); if (!pl) return setTimeout(go0, 200); try { new MutationObserver(function () { sync(); }).observe(pl, { attributes: true, subtree: true, attributeFilter: ["hidden"] }); } catch (e) {} }; go0(); }
+  var go0 = function () { var pl = $("play") || document.body; if (!pl) return setTimeout(go0, 200); try { new MutationObserver(function () { sync(); }).observe(pl, { attributes: true, subtree: true, attributeFilter: ["hidden", "data-scr", "class"] }); } catch (e) {} }; go0();
+  /* lớp np-h3 được bật sớm bởi layout.js / layout-pop.js; không dựng được màn chọn mới (không có linh vật/tên…) → gỡ để layout cũ chạy như trước, tránh màn trống */
+  /* trang không bao giờ được cuộn lệch (xoay máy, mở popup, bàn phím…): về gốc khi xoay/đổi cỡ và khi bị cuộn */
+  var home0 = function () { try { if (scrollX || scrollY) scrollTo(0, 0); var d = document.scrollingElement; if (d && (d.scrollLeft || d.scrollTop)) { d.scrollLeft = 0; d.scrollTop = 0; } } catch (e) {} };
+  addEventListener("resize", home0); addEventListener("orientationchange", home0); addEventListener("scroll", home0, { passive: true });
+  var bail = function () { if (!$("h3Wrap") && !build()) de.classList.remove("np-h3"); };
+  if (document.readyState === "complete") setTimeout(bail, 0); else addEventListener("load", function () { setTimeout(bail, 400); });
   sync(); setInterval(sync, 700); addEventListener("resize", function () { placeCal(); fitTitle(); rk = ""; rails(); }); addEventListener("orientationchange", placeCal);
 })();

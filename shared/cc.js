@@ -26,8 +26,13 @@
   function difIdx(k) { for (var i = 0; i < k.length; i++) if (k[i].classList.contains("on") || k[i].getAttribute("aria-pressed") === "true") return i; return 0; }
   function txt(e) { return (e.getAttribute("aria-label") || e.title || e.textContent || "").replace(/\s+/g, " ").trim(); }
   /* ===== chế độ ===== */
-  function modeEls() { return [].slice.call(document.querySelectorAll("#tys>.ty,.tys>.ty,.tiles>.tile,#cards>.tile")).filter(function (e) { return !e.classList.contains("daily"); }); }
-  function mlabel(e) { var n = e.querySelector(".t,b,.nm"); return (n ? n.textContent : e.textContent || "").replace(/\s+/g, " ").trim(); }
+  function modeEls() { return [].slice.call(document.querySelectorAll("#tys>.ty,.tys>.ty,.tiles>.tile,#cards>.tile,#cards>.card")).filter(function (e) { return !e.classList.contains("daily"); }); }
+  function mlabel(e) {
+    var n = e.querySelector(".t,b,.nm"); if (n) return (n.textContent || "").replace(/\s+/g, " ").trim();
+    var m = e.querySelector(".main span:not(.e):not(.ti)");   /* Pop Fly: tên là chữ trần trong span, theo sau là <small> mô tả → chỉ lấy chữ đầu */
+    if (m) { var tn = [].filter.call(m.childNodes, function (x) { return x.nodeType === 3 && x.nodeValue.trim(); })[0]; if (tn) return tn.nodeValue.replace(/\s+/g, " ").trim(); }
+    return (e.textContent || "").replace(/\s+/g, " ").trim();
+  }
   function micon(e) { var n = e.querySelector(".e,.ti,.tb"); if (!n) return ""; var ic = n.getAttribute("data-ic"); if (ic && window.NPIcon && NPIcon.svg) { var v = NPIcon.svg(ic); if (v) return v; } return n.innerHTML; }
   var KEY = "np-cc-mode:" + gid;
   function modeIdx(els) {
@@ -72,13 +77,34 @@
     if (!atHome()) {
       var its = playItems(), gi2;
       var keepOpen = { lang: 1, theme: 1, snd: 1, pause: 1 };
+      /* THẺ SỐ LIỆU VÁN (như bảng ⋯ cũ): tên chế độ, Điểm, Lượt/Combo và các chỉ số khác của game (NP.hudInfo), cập nhật trực tiếp khi bảng mở */
+      var stc = el("div", "card cstats"); pn.appendChild(stc);
+      var fillStats = function () {
+        var h = null; try { h = window.NP && NP.hudInfo ? NP.hudInfo() : null; } catch (e) {} h = h || {};
+        var t0 = document.querySelector("#play .top h1,#ttl,.top h1,h1"), title = (t0 && t0.textContent.trim()) || document.title || "";
+        var st = (h.stats || []).slice(), pick = function (re) { for (var i = 0; i < st.length; i++) if (re.test(st[i][0])) { var v = st[i][1]; st.splice(i, 1); return v; } return null; };
+        var sc = pick(/^(điểm|score)$/i), mv = pick(/^(lượt|moves|nước|bước)$/i), cb = pick(/^combo$/i);
+        var score = h.score != null ? h.score : sc, hasC = h.combo != null || cb != null, c2 = hasC ? (h.combo != null ? h.combo : cb) : (h.moves != null ? h.moves : mv);
+        var key = JSON.stringify([title, score, hasC, c2, st, vi()]); if (stc.__k === key) return; stc.__k = key;
+        var html = '<div class="sh"><b></b></div><div class="sg"><div class="sc"><i></i><b></b></div><div class="sc"><i></i><b></b></div></div>' + (st.length ? '<div class="sl">' + st.map(function () { return '<div class="sr"><span></span><b></b></div>'; }).join("") + "</div>" : "");
+        stc.innerHTML = html; stc.querySelector(".sh b").textContent = title.slice(0, 40);
+        var cs = stc.querySelectorAll(".sc"); cs[0].querySelector("i").textContent = vi() ? "Điểm" : "Score"; cs[0].querySelector("b").textContent = score != null ? score : "–";
+        cs[1].querySelector("i").textContent = hasC ? "Combo" : (vi() ? "Lượt" : "Moves"); cs[1].querySelector("b").textContent = c2 != null ? c2 : "–";
+        var rs = stc.querySelectorAll(".sr"); st.forEach(function (r, i) { rs[i].firstChild.textContent = r[0]; rs[i].lastChild.textContent = r[1]; });
+        /* chiều cao thẻ theo số dòng chỉ số: chiếm đúng N hàng lưới (tiêu đề + 2 ô + mỗi chỉ số ~20px), không đè lên thẻ nút bên dưới */
+        var sv = parseFloat(getComputedStyle(root).getPropertyValue("--s")) || 74, gv = 12; stc.style.setProperty("--sn", 1); stc.style.gridRow = "span 1"; var need = stc.scrollHeight, nrow = Math.max(2, Math.ceil((need + gv) / (sv + gv))); stc.style.setProperty("--sn", nrow); stc.style.gridRow = "span " + nrow;   /* đo chiều cao nội dung thật → số hàng vừa đủ */
+      };
+      fillStats(); var stT = 0; var stLoop = function () { if (!root || !root.classList.contains("on") || !openF) return; fillStats(); stT = (window.__npRST || setTimeout)(stLoop, 500); }; (window.__npRST || setTimeout)(stLoop, 500);
       var mkc = function (o) {
-        var r = o.getAttribute("data-r") || o.getAttribute("data-rr") || (/nps-cam/.test(o.className) ? "cam" : /nps-fab/.test(o.className) ? "shr" : o.id === "klock" ? "lock" : ""), c = el("button", "m c in " + r); c.type = "button"; c.innerHTML = ico(o); var lb = o.getAttribute("aria-label") || o.title || r; c.setAttribute("aria-label", lb); c.title = lb;
-        c.addEventListener("click", function () { o.click(); if (!keepOpen[r]) close(); else setTimeout(function () { c.innerHTML = ico(o); var l2 = o.getAttribute("aria-label") || o.title || r; c.setAttribute("aria-label", l2); c.title = l2; }, 80); });
+        var r = o.getAttribute("data-r") || o.getAttribute("data-rr") || (/nps-cam/.test(o.className) ? "cam" : /nps-fab/.test(o.className) ? "shr" : o.id === "klock" ? "lock" : ""), c = el("button", "m c in " + r); c.type = "button"; c.innerHTML = ico(o); var lb = o.getAttribute("aria-label") || o.title || r;
+        /* toàn màn hình đang bật: nút trở thành THU NHỎ (icon thu vào + nhãn "Thu nhỏ về như cũ") */
+        if (r === "fs" && de.classList.contains("np-fs")) { c.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>'; lb = vi() ? "Thu nhỏ về như cũ" : "Exit full screen"; c.classList.add("exit"); }
+        c.setAttribute("aria-label", lb); c.title = lb;
+        c.addEventListener("click", function () { if (r === "fs" && c.classList.contains("exit") && window.NPFs) NPFs.exit(); else o.click(); if (!keepOpen[r]) close(); else setTimeout(function () { c.innerHTML = ico(o); var l2 = o.getAttribute("aria-label") || o.title || r; c.setAttribute("aria-label", l2); c.title = l2; }, 80); });
         return c;
       };
       for (gi2 = 0; gi2 < its.length; gi2 += 4) { var cd = el("div", "card"); its.slice(gi2, gi2 + 4).forEach(function (o) { cd.appendChild(mkc(o)); }); pn.appendChild(cd); }
-      pn.classList.add("play");
+      pn.classList.add("play"); pn.style.setProperty("--cr", Math.max(2, pn.querySelectorAll(":scope>.card:not(.cstats)").length));   /* số thẻ nút → màn ngang: thẻ số liệu cột trái cao bằng ngần ấy hàng */
       bk.addEventListener("pointerdown", close);
       var sy2 = null; pn.addEventListener("pointerdown", function (e) { sy2 = e.target === pn ? e.clientY : null; }); pn.addEventListener("pointerup", function (e) { if (sy2 != null && e.clientY - sy2 > 60) close(); sy2 = null; });
       de.appendChild(root); return;
@@ -218,14 +244,14 @@
       var pd = window.parent.document;
       if (on) {
         fEl = window.frameElement; if (!fEl || pBk) return;
-        var cs = window.parent.getComputedStyle(fEl), fz = parseInt(cs.zIndex, 10) || 0; fSave = { pos: fEl.style.position, z: fEl.style.zIndex };
+        var cs = window.parent.getComputedStyle(fEl), fz = 2147483300;   /* cao hơn mọi thanh/cột bên lề của cổng (rails, HUD…) để lớp mờ phủ TOÀN màn hình */ fSave = { pos: fEl.style.position, z: fEl.style.zIndex };
         if (cs.position === "static") fEl.style.position = "relative"; fEl.style.zIndex = String(fz + 2);
         /* nền ngay DƯỚI khung game (cùng cấp chồng lớp): chỉ làm tối phần NGOÀI khung (phần trong khung do .bk của game đảm nhiệm) → không tối hai lần, bảng không bị mờ */
-        pBk = pd.createElement("div"); pBk.id = "ccPBk"; pBk.style.cssText = "position:fixed;inset:0;z-index:" + (fz + 1) + ";background:rgba(8,6,24,.62);opacity:0;transition:opacity .22s ease;touch-action:none";
+        pBk = pd.createElement("div"); pBk.id = "ccPBk"; pBk.style.cssText = "position:fixed;inset:0;z-index:" + (fz + 1) + ";background:rgba(255,255,255,.04);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);opacity:0;transition:opacity .22s ease;touch-action:none";
         pBk.addEventListener("pointerdown", function (e) { e.preventDefault(); close(); }); fEl.parentNode.insertBefore(pBk, fEl);
         void pBk.offsetWidth; pBk.style.opacity = "1";
       } else {
-        if (pBk) { var b = pBk; pBk = null; b.style.opacity = "0"; setTimeout(function () { try { b.remove(); } catch (e) {} }, 240); }
+        if (pBk) { var b = pBk; pBk = null; b.style.pointerEvents = "none"; b.style.opacity = "0"; var pw = (window.parent && window.parent.setTimeout) ? window.parent.setTimeout.bind(window.parent) : setTimeout; pw(function () { try { b.remove(); } catch (e) {} }, 240); try { b.addEventListener("transitionend", function () { try { b.remove(); } catch (e) {} }); } catch (e) {} }   /* gỡ bằng hẹn giờ của TRANG CỔNG (game tạm dừng đóng băng setTimeout của chính nó → lớp nền sót lại nuốt chạm của trang skin) */
         if (fEl && fSave) { fEl.style.position = fSave.pos; fEl.style.zIndex = fSave.z; } fEl = null; fSave = null;
       }
     } catch (e) {}
@@ -248,12 +274,12 @@
   }
   var openHome = true;
   function open() {
-    if (openF) return; openHome = atHome(); openF = true; portalBack(true); build(); root.removeAttribute("aria-hidden"); themeWatch(true); root.classList.add("on"); void root.offsetWidth; root.classList.add("in");
+    if (openF) return; openHome = atHome(); openF = true; try { window.__npMenuHold && __npMenuHold("cc", true); } catch (e) {} portalBack(true); build(); root.removeAttribute("aria-hidden"); themeWatch(true); root.classList.add("on"); void root.offsetWidth; root.classList.add("in");
   }
-  function close() { if (!openF) return; openF = false; portalBack(false); themeWatch(false); var r = root; r.classList.remove("in"); r.setAttribute("aria-hidden", "true"); (window.__npRST || setTimeout)(function () { if (!openF) r.classList.remove("on"); }, 240); }   /* __npRST = hẹn giờ thật (game bị tạm dừng sẽ đóng băng setTimeout thường); CSS :not(.in) ở cc.css đã chặn chạm ngay lập tức */
+  function close() { if (!openF) return; openF = false; try { window.__npMenuHold && __npMenuHold("cc", false); } catch (e) {} portalBack(false); themeWatch(false); var r = root; r.classList.remove("in"); r.setAttribute("aria-hidden", "true"); (window.__npRST || setTimeout)(function () { if (!openF) r.classList.remove("on"); }, 240); }   /* __npRST = hẹn giờ thật (game bị tạm dừng sẽ đóng băng setTimeout thường); CSS :not(.in) ở cc.css đã chặn chạm ngay lập tức */
   /* ===== chặn ⋯ ở màn chọn ===== */
   document.addEventListener("click", function (e) {
-    var t = e.target && e.target.closest && e.target.closest("#npFab,#npPmFab,#ccOpen"); if (!t) return;
+    var t = e.target && e.target.closest && e.target.closest("#npFab,#npPmFab,#ccOpen,#npFsMi"); if (!t) return;
     e.stopPropagation(); e.preventDefault(); if (e.stopImmediatePropagation) e.stopImmediatePropagation(); open();
   }, true);
   addEventListener("keydown", function (e) { if (e.key === "Escape" && openF) { e.stopPropagation(); close(); } }, true);

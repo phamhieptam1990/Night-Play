@@ -5,6 +5,7 @@
 (function () {
   "use strict";
   if (window.__npFs) return; window.__npFs = true;
+  window.NPFs = { enter: function () { enter(); }, exit: function () { exit(); }, on: function () { return de.classList.contains("np-fs"); } };   /* cho Control Center (cc.js): nút gốc #npFsBtn chỉ VÀO toàn màn hình, thoát phải gọi exit() */
   var ID = "npFsBtn", MI = "npFsMi", PN = "npFsPn", de = document.documentElement, api = false, timer = 0;
   /* setTimeout THẬT (window.__npRST của bridge.js): đồng hồ ảo đóng băng timer của game lúc tạm dừng, nhưng bảng ⋯ vẫn phải cập nhật khi game đang dừng */
   var rt = function (fn, ms) { return (window.__npRST || setTimeout)(fn, ms); }, loopOn = 0;

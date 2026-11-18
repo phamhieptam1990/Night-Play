@@ -2,7 +2,7 @@
    Chỉ transform + opacity (không backdrop-filter / filter / drop-shadow mới: lỗi WebKit sập trang). Màu lấy theo giao diện của game (--panel, --ink, --accent, --npacc). */
 #ccRoot{position:fixed;inset:0;z-index:2147482500;display:none;--s:clamp(52px,min(calc((100vw - 56px - 36px) / 4),calc((100dvh - 56px - 36px) / 4)),84px);--g:12px;--ccink:var(--ink,#fff);--ccbg:var(--panel,#1b1740);--ccac:var(--npacc,var(--accent,#7C5CFF))}
 #ccRoot.on{display:block}
-#ccRoot .bk{position:absolute;inset:0;background:rgba(8,6,24,.62);opacity:0;transition:opacity .22s ease}
+#ccRoot .bk{position:absolute;inset:0;background:rgba(255,255,255,.04);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);opacity:0;transition:opacity .22s ease}
 #ccRoot.in .bk{opacity:1}
 #ccRoot .pn{position:absolute;right:max(16px,env(safe-area-inset-right));top:max(16px,env(safe-area-inset-top));width:calc(var(--s) * 4 + var(--g) * 3 + 32px);max-width:calc(100vw - 24px);box-sizing:border-box;padding:16px;border-radius:34px;background:color-mix(in srgb,var(--ccbg) 88%,transparent);border:1.5px solid color-mix(in srgb,var(--ccink) 22%,transparent);display:grid;grid-template-columns:repeat(4,var(--s));grid-auto-rows:var(--s);gap:var(--g);transform-origin:top right;transform:scale(.4);opacity:0;color:var(--ccink);touch-action:none}
 #ccRoot.in .pn{transform:scale(1);opacity:1;transition:transform .42s cubic-bezier(.34,1.56,.64,1),opacity .18s ease}
@@ -350,3 +350,45 @@ html:has(.sheet:not([hidden]),.ov:not([hidden]):not(#ovStart),#hlpOv:not([hidden
 #ccRoot:not(.in){pointer-events:none!important}
 #ccRoot:not(.in) *{pointer-events:none!important}
 #ccRoot:not(.in) .pn{visibility:hidden;transition:visibility 0s .25s}
+
+
+/* KHUNG GAME ĐANG CHƠI căn GIỮA trên–dưới khi nội dung thấp hơn vùng chơi (trước dính phía trên, trống dưới); nội dung cao hơn thì vẫn bắt đầu từ trên (safe) */
+html #play[data-scr="game"] #game:not(#_):not(#__){justify-content:safe center!important}
+
+/* THẺ SỐ LIỆU VÁN khi đang chơi: tên chế độ + 2 ô (Điểm, Lượt/Combo) + các chỉ số khác */
+#ccRoot .card.cstats{grid-column:1 / -1;grid-row:auto;display:flex;flex-direction:column;gap:8px;padding:10px 12px;height:auto;min-height:0;border-radius:calc(var(--s) * .34);align-self:start}
+#ccRoot .card.cstats .sh b{font:900 clamp(16px,calc(var(--s) * .26),21px)/1.1 var(--font,system-ui);text-shadow:0 1px 0 rgba(0,0,0,.35)}
+#ccRoot .card.cstats .sg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#ccRoot .card.cstats .sc{background:color-mix(in srgb,var(--ccink) 12%,transparent);border-radius:16px;padding:8px 12px;display:flex;flex-direction:column;gap:2px}
+#ccRoot .card.cstats .sc i{font:800 12px/1 var(--font,system-ui);opacity:.85;font-style:normal}
+#ccRoot .card.cstats .sc b{font:900 clamp(20px,calc(var(--s) * .34),28px)/1.05 var(--font,system-ui)}
+#ccRoot .card.cstats .sl{display:flex;flex-direction:column;gap:2px}
+#ccRoot .card.cstats .sr{display:flex;justify-content:space-between;font:800 14px/1.3 var(--font,system-ui)}
+#ccRoot .card.cstats .sr span{opacity:.85}
+#ccRoot .m.c.exit{background:var(--ccac);color:var(--on,#fff)}
+#ccRoot .m.c.exit svg{width:56%;height:56%}
+@media (orientation:landscape){#ccRoot .pn.play .card.cstats{grid-column:1 / -1!important}}
+
+/* thẻ số liệu chiếm N hàng lưới (--sn) — thắng luật chiều cao cố định của thẻ nút */
+#ccRoot .pn.play .card.cstats{height:calc(var(--sn,2) * var(--s) + (var(--sn,2) - 1) * var(--g))!important;grid-column:1 / -1!important;box-sizing:border-box;overflow:hidden}
+@media (orientation:landscape){#ccRoot .pn.play .card.cstats{grid-column:1 / span 8!important}}
+
+/* BỎ VIỀN quanh bảng (kể cả viền màu nhấn của giao diện Night Pass và khung sáng của game phía sau) — chỉ còn nền kính mờ */
+#ccRoot .pn,html[data-npgrad] #ccRoot .pn{border:0!important;box-shadow:none!important;outline:0}
+#ccRoot .ml{border:0!important;box-shadow:none!important}
+
+/* MÀN NGANG ĐANG CHƠI: thẻ số liệu cột TRÁI (3 ô rộng), mỗi thẻ nút một hàng 4 nút bên PHẢI — không đè, không bị ép */
+@media (orientation:landscape){
+  #ccRoot .pn.play{grid-template-columns:repeat(7,var(--s))!important;grid-auto-rows:var(--s)!important;max-height:calc(100dvh - 24px);overflow-y:auto}
+  #ccRoot .pn.play .card.cstats{grid-column:1 / span 3!important;grid-row:1 / span var(--cr,2)!important;height:auto!important;align-self:stretch;overflow:hidden}
+  #ccRoot .pn.play .card:not(.cstats){grid-column:4 / span 4!important;grid-row:auto!important;height:var(--s)!important;grid-template-columns:repeat(4,1fr)!important;grid-auto-rows:1fr!important;padding:6px!important;gap:6px!important;align-content:center!important}
+  #ccRoot .pn.play .card:not(.cstats) .m.c{height:100%!important;width:auto!important;max-height:none!important;aspect-ratio:1 / 1;align-self:center!important;justify-self:center}
+}
+
+/* game có lớp .bk riêng (Chim Bay: aspect-ratio:1; border-radius; box-shadow) → khoá cứng hình dạng nền Control Center: phủ TRỌN màn hình */
+#ccRoot .bk{position:absolute!important;inset:0!important;width:auto!important;height:auto!important;aspect-ratio:auto!important;border-radius:0!important;box-shadow:none!important;margin:0!important;border:0!important;max-width:none!important;max-height:none!important;transform:none!important}
+
+/* HUY HIỆU SỐ (4, 18…) nằm TRỌN trong nút tròn, góc trên-phải, nhỏ gọn — không tràn ra ngoài nút/thẻ */
+#ccRoot .m.c{overflow:hidden}
+#ccRoot .m.c .bd{right:calc(var(--s) * .06);top:calc(var(--s) * .06);min-width:20px;height:20px;padding:0 5px;border-radius:10px;font:900 11px/20px var(--font,system-ui);max-width:calc(100% - 8px);overflow:hidden;text-overflow:clip;transform:none}
+#ccRoot .m.c .bd.dot{width:12px;min-width:0;height:12px;padding:0;top:calc(var(--s) * .12);right:calc(var(--s) * .12)}

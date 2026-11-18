@@ -185,12 +185,13 @@ try { var _q = new URLSearchParams(location.search).get("lang"), _s = null; try 
     var r = orig(u);
     try {
       if (u && !(u.volume === 0) && !u.__npRetried) {
+        var RT = window.__npRST || setTimeout;   /* hẹn giờ THẬT: đồng hồ ảo đóng băng lúc game tạm dừng (menu, xoay máy) sẽ làm lần đọc lại không bao giờ chạy */
         var started = false; u.addEventListener("start", function () { started = true; });
-        setTimeout(function () {
+        RT(function () {
           try {
             if (started || synth.speaking) return;
             u.__npRetried = true; synth.cancel(); try { synth.resume(); } catch (e2) {}
-            setTimeout(function () { try { orig(u); } catch (e3) {} }, 80);
+            RT(function () { try { orig(u); } catch (e3) {} }, 80);
           } catch (e) {}
         }, 1200);
       }
