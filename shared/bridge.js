@@ -179,7 +179,15 @@ try { var _q = new URLSearchParams(location.search).get("lang"), _s = null; try 
     for (var i = 0; i < vs.length; i++) { if (String(vs[i].lang || "").toLowerCase().replace("_", "-").indexOf(lg) !== 0) continue; var sc = score(vs[i], lg); if (sc > ts) { ts = sc; top = vs[i]; } }
     cache[lg] = { n: vs.length, v: top }; return top;
   }
-  synth.speak = function (u) { try { if (window.NPAudio && NPAudio.muted && NPAudio.muted() && !(u && u.npForce)) { try { if (u && u.onend) u.onend(); } catch (e) {} return; } } catch (e) {} try { if (u && !u.voice) { var v = best(u.lang); if (v) u.voice = v; } } catch (e) {}
+  /* iPhone/Safari: getVoices() rỗng cho tới khi giọng tải xong → câu đầu tiên không được gán giọng (đọc im hoặc sai tiếng). Chờ "voiceschanged" tối đa 0,5 giây (hẹn giờ thật) rồi mới đọc. */
+  var speak0 = null, waiting = 0;
+  function speakWhenVoices(u) {
+    try { if ((synth.getVoices() || []).length || waiting > 2) return false; } catch (e) { return false; }
+    waiting++; var done = false, go = function () { if (done) return; done = true; waiting--; try { synth.removeEventListener("voiceschanged", go); } catch (e) {} try { speak0(u); } catch (e) {} };
+    try { synth.addEventListener("voiceschanged", go); } catch (e) {} (window.__npRST || setTimeout)(go, 500); return true;
+  }
+  synth.speak = function (u) { if (speak0 && !(u && u.__npVw) && u) { u.__npVw = 1; if (speakWhenVoices(u)) return; } return speak0(u); };
+  speak0 = function (u) { try { if (window.NPAudio && NPAudio.muted && NPAudio.muted() && !(u && u.npForce)) { try { if (u && u.onend) u.onend(); } catch (e) {} return; } } catch (e) {} try { if (u && !u.voice) { var v = best(u.lang); if (v) u.voice = v; } } catch (e) {}
     /* BỀN HƠN trên Safari/iPad/Chrome di động: (1) hàng đợi đang "paused" (sau khi ẩn tab/đổi app) thì resume trước; (2) sau cancel() mà speak() ngay thường bị RƠI IM LẶNG → nếu 1,2s chưa có tiếng (không start, không speaking) thì cancel + resume rồi đọc lại đúng một lần. Lệnh mở khoá âm lượng 0 không thử lại. */
     try { if (synth.paused) synth.resume(); } catch (e) {}
     var r = orig(u);
