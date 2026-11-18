@@ -39,7 +39,7 @@
 #ccRoot .snd svg{width:46%;height:auto;max-width:none}
 #ccRoot .skin{grid-column:4;grid-row:2;background:color-mix(in srgb,var(--ccink) 20%,var(--ccbg))}
 #ccRoot .skin .mc{position:absolute;inset:0;display:grid;place-items:center;overflow:hidden;border-radius:50%}
-#ccRoot .skin .mc svg{width:128%;height:128%;max-width:none;display:block;transform:translateY(4%)}
+#ccRoot .skin .mc svg{width:94%;height:94%;max-width:none;display:block;transform:none}
 /* THẺ gom 4 nút (2×2); nhấn giữ → danh sách có chữ */
 #ccRoot .card{grid-column:span 2;grid-row:span 2;box-sizing:border-box;padding:10px;gap:8px;display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;border-radius:calc(var(--s) * .34);background:color-mix(in srgb,var(--ccink) 16%,var(--ccbg));touch-action:manipulation}
 #ccRoot .card .m.c{width:100%;height:100%;background:color-mix(in srgb,var(--ccink) 12%,transparent)}
@@ -97,7 +97,7 @@ html.np-cc-land.np-cc-home.np-cc-nofab #ccOpen{display:grid}
 #ccRoot .ml.ex .m.row .ic{font-size:36px;font-weight:900}
 #ccRoot .ml.ex .m.row .ic svg{width:36px;height:36px;stroke-width:2.9}
 #ccRoot .ml:not(.ex) .m .nm{font-weight:900;font-size:clamp(17px,calc(var(--s) * .27),22px)}
-#ccRoot .m.c.skin .mc svg{width:128%;height:128%;stroke-width:0}
+#ccRoot .m.c.skin .mc svg{width:94%;height:94%;stroke-width:0}
 
 /* danh sách CHỨC NĂNG (nhấn giữ thẻ): giống danh sách chế độ — lưới 2 cột, icon TO ở trên, chữ ở dưới */
 #ccRoot .ml.ex{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(54px,1fr);gap:10px;padding:14px}
@@ -392,3 +392,24 @@ html #play[data-scr="game"] #game:not(#_):not(#__){justify-content:safe center!i
 #ccRoot .m.c{overflow:hidden}
 #ccRoot .m.c .bd{right:calc(var(--s) * .06);top:calc(var(--s) * .06);min-width:20px;height:20px;padding:0 5px;border-radius:10px;font:900 11px/20px var(--font,system-ui);max-width:calc(100% - 8px);overflow:hidden;text-overflow:clip;transform:none}
 #ccRoot .m.c .bd.dot{width:12px;min-width:0;height:12px;padding:0;top:calc(var(--s) * .12);right:calc(var(--s) * .12)}
+
+/* thẻ LOA + LINH VẬT (.card.bar) và thẻ Giao diện: KHÓA chiều cao theo ô (--s), không để lưới/luật khác ép thành dải mỏng; nút tròn bên trong cỡ cố định */
+@media (orientation:portrait){#ccRoot .pn .card.bar{height:var(--s)!important;min-height:var(--s)!important;max-height:none!important;align-self:start!important;box-sizing:border-box;overflow:visible!important;padding:0 6px!important}}
+@media (orientation:landscape){
+  /* không có độ khó/chế độ: HÀNG 1 = thẻ loa + linh vật, HÀNG 2 = nút Giao diện (chỉ icon) — cùng 2 hàng với 2 thẻ chức năng bên phải */
+  #ccRoot .pn .card.bar{grid-column:1 / span 3!important;grid-row:1!important;margin:0!important;align-self:stretch!important;translate:none!important;height:var(--s)!important;min-height:var(--s)!important;padding:0 6px!important;flex-wrap:nowrap!important;align-content:center!important}
+  #ccRoot .pn .card.bar~.skinrow{grid-column:1 / span 3!important;grid-row:2!important;flex-direction:row!important;border-radius:calc(var(--s) * .34)!important;padding:0 16px!important;gap:10px;width:auto!important;height:var(--s)!important;translate:none!important;margin:0!important}
+  #ccRoot .pn .card.bar~.skinrow .nm{display:none!important}
+}
+@media (orientation:portrait){
+  /* không có độ khó/chế độ: MỘT hàng 4 ô = thẻ loa + linh vật (2 ô, mỗi nút 1 ô) + nút Giao diện (2 ô, CHỈ icon) */
+  #ccRoot .pn .card.bar{grid-column:1 / span 2!important;margin:0!important;gap:6px!important;padding:0 6px!important}
+  #ccRoot .pn .card.bar .m.c{width:calc(var(--s) - 10px)!important;height:calc(var(--s) - 10px)!important}
+  #ccRoot .pn .card.bar~.skinrow{grid-column:3 / span 2!important;grid-row:auto!important;height:var(--s)!important;min-height:0!important;align-self:start!important;gap:8px!important;padding:0 8px!important}
+  #ccRoot .pn .card.bar~.skinrow .nm{display:none!important}
+}
+/* linh vật dự phòng (game không có #hHero, vd Cozy Wings): svg 34px cố định → cho lấp đầy ô tròn như bản chính */
+#ccRoot .m.c.skin .npmcAv{position:absolute;inset:0;display:grid;place-items:center;overflow:hidden;border-radius:50%}
+#ccRoot .m.c.skin .npmcAv svg{width:94%!important;height:94%!important;max-width:none}
+/* màn chọn kiểu mới: tiêu đề do home3 (#h3T) đảm nhiệm → ẩn bản sao tiêu đề cũ #npTitle (Cánh Nhỏ Phiêu Lưu hiện 2 tiêu đề chồng nhau trên iPhone SE dọc) */
+html.np-h3.np-h3home #npTitle{display:none!important}

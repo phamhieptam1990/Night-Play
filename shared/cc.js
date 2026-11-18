@@ -24,6 +24,8 @@
     return null;
   }
   function difIdx(k) { for (var i = 0; i < k.length; i++) if (k[i].classList.contains("on") || k[i].getAttribute("aria-pressed") === "true") return i; return 0; }
+  /* bản sao SVG linh vật: đổi id (gradient/clip…) để KHÔNG trùng bản gốc — bản gốc bị ẩn (display:none) thì url(#id) trỏ vào nó làm bản sao mất màu */
+  function uniq(h) { return h.replace(/\bid="([^"]+)"/g, 'id="$1-cc"').replace(/url\(#([^)]+)\)/g, "url(#$1-cc)").replace(/(xlink:)?href="#([^"]+)"/g, function (m, x, i) { return (x || "") + 'href="#' + i + '-cc"'; }); }
   function txt(e) { return (e.getAttribute("aria-label") || e.title || e.textContent || "").replace(/\s+/g, " ").trim(); }
   /* ===== chế độ ===== */
   function modeEls() { return [].slice.call(document.querySelectorAll("#tys>.ty,.tys>.ty,.tiles>.tile,#cards>.tile,#cards>.card")).filter(function (e) { return !e.classList.contains("daily"); }); }
@@ -70,7 +72,7 @@
   }
   function build() {
     if (root) root.remove();
-    root = el("div"); root.id = "ccRoot"; root.setAttribute("role", "dialog"); root.setAttribute("aria-modal", "true"); root.setAttribute("aria-label", vi() ? "Bảng điều khiển" : "Control Center");
+    root = el("div"); root.id = "ccRoot"; root.addEventListener("contextmenu", function (e) { e.preventDefault(); }); root.setAttribute("role", "dialog"); root.setAttribute("aria-modal", "true"); root.setAttribute("aria-label", vi() ? "Bảng điều khiển" : "Control Center");
     var bk = el("div", "bk"), pn = el("div", "pn"); root.appendChild(bk); root.appendChild(pn);
     themeSync();
     /* ĐANG CHƠI: cùng bảng, chỉ gồm các nút của menu cũ (tạm dừng, về màn chọn, hướng dẫn, ngôn ngữ, sáng/tối, toàn màn hình…) gom thẻ 4 nút; không có độ khó/chế độ/giao diện */
@@ -159,7 +161,7 @@
     var hs = document.querySelector("#hHero .npa-box svg,#paHero .npa-box svg,#hHero svg,#paHero svg");
     if (olds.npmc) {
       var kb = el("button", "m c skin"); kb.type = "button"; kb.setAttribute("aria-label", olds.npmc.getAttribute("aria-label") || "Skin");
-      kb.innerHTML = hs ? '<span class="mc">' + hs.outerHTML + "</span>" : olds.npmc.innerHTML;
+      kb.innerHTML = hs ? '<span class="mc">' + uniq(hs.outerHTML) + "</span>" : olds.npmc.innerHTML;
       kb.addEventListener("click", function () { olds.npmc.click(); close(); }); (bar || pn).appendChild(kb);
     }
     /* chức năng gom THẺ 2×2 (4 nút / thẻ). Nhấn giữ thẻ → mở rộng thành danh sách CÓ CHỮ */
