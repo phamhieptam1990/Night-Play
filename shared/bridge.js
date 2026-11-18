@@ -28,6 +28,7 @@ try { var _q = new URLSearchParams(location.search).get("lang"), _s = null; try 
 (function () {
   "use strict";
   var ctxs = [], gestured = false, primed = null, keep = null, hinted = false;
+  var mpend = false;   /* nhạc nền bị trình duyệt chặn phát tự động: nút loa hiện TẮT cho tới lần chạm đầu (shared/music.js) — KHÔNG ghi "np-sound" */
   var fmute = false;   /* tắt tiếng TẠM của khung (chế độ ?multi=1: khung không được chọn / người dùng tắt ở bảng); KHÔNG ghi "np-sound" */
   var on = function () { if (fmute) return false; try { return localStorage.getItem("np-sound") !== "0"; } catch (e) { return true; } };
   var vi = function () { return (document.documentElement.lang || "vi").slice(0, 2) !== "en"; };
@@ -88,7 +89,7 @@ try { var _q = new URLSearchParams(location.search).get("lang"), _s = null; try 
   /* nút loa: icon luôn khớp trạng thái thật (🔊 / 🔇 gạch chéo; shared/icons.js đổi emoji sang SVG) + aria-pressed + nhãn */
   var btns = [];
   function syncBtn(b) {
-    var s = on() ? "on" : "off", lb = (vi() ? "Âm thanh: " + (s === "on" ? "bật" : "tắt") : "Sound: " + s);
+    var s = on() && !mpend ? "on" : "off", lb = (vi() ? "Âm thanh: " + (s === "on" ? "bật" : "tắt") : "Sound: " + s);
     if (b.getAttribute("data-npsnd") !== s) b.setAttribute("data-npsnd", s);
     var shown = b.children.length ? (/l5 5/.test(b.innerHTML) ? "off" : "on") : (/🔇|🔕/.test(b.textContent) ? "off" : "on");   /* icon đang hiện (emoji hoặc SVG do shared/icons.js đổi) */
     if (shown !== s) b.textContent = s === "on" ? "🔊" : "🔇";                                                                 /* lệch (game chưa kịp vẽ lại): đặt đúng, icons.js đổi sang SVG gạch chéo */
@@ -127,7 +128,8 @@ try { var _q = new URLSearchParams(location.search).get("lang"), _s = null; try 
   window.NPAudio = {
     silence: function () { stop(false); },
     kill: function () { stop(true); },
-    get: on,
+    get: function () { return on() && !mpend; },
+    pend: function (v) { v = !!v; if (v === mpend) return; mpend = v; syncBtns(); },
     set: function (v) { try { localStorage.setItem("np-sound", v ? "1" : "0"); } catch (e) {} if (!v) stop(false); else { resumeAll(); keepAlive(); } syncBtns(); },
     unlock: unlock,
     mute: function (v) { v = !!v; if (v === fmute) return; fmute = v; if (v) { stop(false); } else { resumeAll(); keepAlive(); } syncBtns(); },
@@ -143,6 +145,8 @@ try { var _q = new URLSearchParams(location.search).get("lang"), _s = null; try 
   addEventListener("message", function (e) {
     if (e.source === parent && e.origin === location.origin && e.data && e.data.np === 1 && e.data.type === "stopAudio") stop(true);
   });
+  /* NHẠC NỀN mỗi game một bản (shared/music.js): nạp ở đây để mọi game có mà không phải sửa từng trang; nạp SAU khi AudioContext đã được bọc ở trên */
+  try { var cs = document.currentScript, base = cs && cs.src ? cs.src.replace(/bridge\.js(\?.*)?$/, "") : ""; if (base && /\/games\//.test(location.pathname)) { var ms = document.createElement("script"); ms.src = base + "music.js"; ms.async = true; (document.head || document.documentElement).appendChild(ms); } } catch (e) {}
 })();
 /* GIỌNG ĐỌC: mỗi thiết bị có nhiều giọng tổng hợp; chọn giọng HAY NHẤT của ngôn ngữ đang đọc (vi / en) thay vì giọng mặc định.
    Ưu tiên: giọng tự nhiên/cao cấp/Siri (Natural, Neural, Premium, Enhanced) > Google/Microsoft > giọng thường; giọng cài sẵn trong máy hơn giọng gọi qua mạng

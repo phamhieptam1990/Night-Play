@@ -36,7 +36,7 @@ const b64 = o => Buffer.from(JSON.stringify(o)).toString("base64").replace(/\+/g
       await pg.goto(B + id + "/index.html?lang=vi" + (q || "")); await new Promise(r => setTimeout(r, 700)); return pg; };
     /* 2. free: không lỗi, thông báo theo giao diện, vừa màn, hạt giống */
     let pg = await mk(360, 640, "", "dark");
-    await pg.click("#bDaily").catch(() => {}); await new Promise(r => setTimeout(r, 500));
+    await pg.evaluate(() => { const e = document.getElementById("h3Play") || document.getElementById("bDaily"); e && e.click(); }); await new Promise(r => setTimeout(r, 500));
     const base = await pg.evaluate(() => { const t = document.getElementById("toast"), c = getComputedStyle(t), g = document.getElementById("game"); return { over: g.scrollHeight > g.clientHeight + 1, toastBg: c.backgroundColor, toastCol: c.color, hasHome: !!document.getElementById("bHome"), ty: document.getElementById("play").dataset.ty, snap: typeof snapP === "function" && typeof restoreP === "function", proFx: typeof proFx === "function" }; });
     note(!base.over, id, "màn chơi bị tràn/cuộn (free, 360x640)");
     note(!/rgb\(255, 255, 255\)|rgb\(17, 17, 17\)/.test(base.toastBg + base.toastCol), id, "thông báo nền trắng/chữ đen: " + base.toastBg + " / " + base.toastCol);
