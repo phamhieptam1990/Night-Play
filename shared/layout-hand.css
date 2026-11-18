@@ -1,0 +1,119 @@
+/* LAYOUT MỚI — bổ sung cho game Cozy VIẾT TAY (cùng quy tắc với shared/layout.css; nạp SAU layout.css).
+   Chỉ chứa phần mà game viết tay có thêm so với khung chung: hàng ĐỘ KHÓ (.lvs/.lv, .fbox), thẻ .boss, nhãn phụ.
+   Quy tắc không đổi: hàng cao bằng nhau (--row), khoảng cách --gap, chữ một dòng, linh vật ≥ 250px. */
+/* hàng độ khó: ba nút cao bằng hàng, nhãn phụ (.lvc) bỏ để dành chỗ cho linh vật */
+html.npl #play[data-scr="home"] #home .lvc{display:none!important}
+html.npl #play[data-scr="home"] #home .lvs{display:grid!important;grid-template-columns:repeat(var(--lvn,3),minmax(0,1fr));gap:var(--gap);order:6!important;flex:none;margin:0!important;padding:0!important}
+html.npl #play[data-scr="home"] #home .lvs>.lv,html.npl #play[data-scr="home"] #home .lvs>button{height:var(--row)!important;min-height:0!important;max-height:none!important;border-radius:18px!important;padding:0 4px!important;font-size:clamp(11px,calc(var(--row)*.17),16px)!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0!important}
+html.npl #play[data-scr="home"] #home .fbox{display:contents}
+/* thẻ .boss (Xin Nghỉ: thẻ thông tin trên linh vật) — một hàng như mọi hàng */
+html.npl #play[data-scr="home"] #home .boss{order:1;flex:none;height:var(--row)!important;min-height:0!important;max-height:none!important;margin:0!important;padding:0 16px!important;display:flex;align-items:center;box-sizing:border-box;border-radius:var(--r,22px)!important;overflow:hidden}
+/* ĐẬP DEADLINE: hàng Chơi (nút Chơi chính + bảng màu) và hàng độ khó; mô tả chế độ/nhãn bỏ */
+html.npl #play.npl-hplay[data-scr="home"] #home :is(small,.sdesc,#modeDesc){display:none!important}
+html.npl #play.npl-hplay[data-scr="home"] #home .lvs{order:5!important;display:grid!important}
+html.npl #play.npl-hplay[data-scr="home"] #home .hplay{order:6;display:flex!important;gap:var(--gap);height:var(--row)!important;min-height:0!important;flex:none;margin:0!important;padding:0!important}
+html.npl #play.npl-hplay[data-scr="home"] #home .hplay>#bPlay{flex:1 1 0;min-width:0;height:100%!important;min-height:0!important;margin:0!important;border-radius:var(--r,22px)!important;font-size:clamp(16px,calc(var(--row)*.3),26px)!important;box-shadow:0 4px 0 rgba(0,0,0,.28),0 0 18px color-mix(in srgb,var(--accent,#7C5CFF) 45%,transparent)!important}
+html.npl #play.npl-hplay[data-scr="home"] #home .hplay>#bOpts{flex:none;width:var(--row)!important;height:var(--row)!important;min-width:0!important;min-height:0!important;margin:0!important;border-radius:var(--r,22px)!important;font-size:max(36px,calc(var(--row)*.5))!important;background:rgba(255,255,255,.10)!important;border:1.5px solid rgba(255,255,255,.30)!important;box-shadow:none!important}
+html.npl #play.npl-hplay[data-scr="home"] #home .hplay>#bOpts svg{width:1em;height:1em}
+html.npl #play[data-scr="home"] #home #hHero{margin:0!important}
+/* màn NGANG thấp (một cột phải): tên game chỉ nằm trên cột trái nên cột phải được dùng từ mép trên → đủ chỗ cho 4 hàng ≥72px */
+@media (orientation:landscape){
+  html.npl #play[data-scr="home"] #home.npl-one{top:var(--gap)!important}
+  html.npl #play[data-scr="home"] #home.npl-one~*,html.npl #play[data-scr="home"] .top>h1{max-width:calc(100% - 55%)}
+}
+
+/* ĐẬP DEADLINE — vá các luật cũ (nighthero.css) chồng lên layout mới */
+html.npl #play.npl-hplay[data-scr="home"] #home .ty>.e:not(#_){line-height:1!important;font-size:max(56px,calc(var(--row)*.5))!important}
+html.npl body#play.at-home #home #hHero.npa-hero:not(#_){position:relative!important;left:auto!important;top:auto!important;width:auto!important;height:auto!important;max-height:none!important;min-height:var(--hmin)!important;flex:1 1 0!important;z-index:auto!important}
+html.npl body#play.at-home .top>h1:not(#_){padding-left:0!important}
+@media (orientation:landscape){
+  html.npl #play.npl-hplay[data-scr="home"] #home.npl-one #hHero.npa-hero:not(#_){grid-column:1!important;grid-row:1/-1!important;height:calc(100% - var(--topH) + var(--gap) + 4px)!important}
+  /* cột nút bên phải (như landscape.css): các nút của .top xếp DỌC, sát mép phải */
+  html.npl #play.npl-hplay[data-scr="home"] .top:not(#_){position:fixed!important;left:0!important;right:0!important;top:0!important;width:100%!important;height:100%!important;padding:6px!important;display:grid!important;grid-template-columns:minmax(0,1fr) 42px!important;grid-auto-rows:min-content;row-gap:6px;align-content:start;pointer-events:none;margin:0!important;flex-direction:initial}
+  html.npl #play.npl-hplay[data-scr="home"] .top>*{pointer-events:auto}
+  html.npl #play.npl-hplay[data-scr="home"] .top>:is(.ib,.icon-btn,button):not(#bBk){grid-column:2!important;justify-self:end;width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;padding:0;position:relative!important;left:auto!important;top:auto!important;right:auto!important}
+}
+html.npl #play.npl-hplay[data-scr="home"] #hHero .npa-bub{display:none!important}
+
+/* 4 HÀNG TRỞ LÊN (xem layout-hand.js .npl-r4) */
+html.npl #play #home #hLad.abar{height:auto!important;min-height:0!important;padding:0!important;border:0!important;background:none!important;box-shadow:none!important;border-radius:0!important}
+@media (orientation:portrait){html.npl #play.npl-r4:not(#_){--hmin:150px}}
+@media (orientation:landscape){html.npl #play.npl-r4 #home.npl-one:not(#_){--row:clamp(60px,calc((100dvh - 5*var(--gap))/var(--n,4)),112px)}
+  html.npl #play.npl-r4 #home.npl-one #hHero.npa-hero:not(#_){grid-row:1/-1!important;height:calc(100% - var(--topH) + var(--gap) + 4px)!important;min-height:0!important;max-height:calc(100% - var(--topH) + var(--gap) + 4px)!important}}
+/* hero ngang: không bao giờ cao hơn khung (game cũ đặt chiều cao riêng) */
+@media (orientation:landscape){html.npl #play #home.npl-one #hHero.npa-hero:not(#_){height:calc(100% - var(--topH) + var(--gap) + 4px)!important;max-height:calc(100% - var(--topH) + var(--gap) + 4px)!important;min-height:0!important;overflow:visible}}
+
+/* vá luật cũ landscape.css (slide có đệm/lề âm ±5px khi ≥5 thẻ) và .row thừa */
+html.npl #play[data-scr="home"] #home .tys:not(#_){margin:0!important;padding-top:0!important;padding-bottom:0!important;padding-left:0!important}
+html.npl #play[data-scr="home"] #home .tys[data-slide]:not(#_){gap:var(--gap)!important;scroll-snap-type:x mandatory}
+html.npl #play[data-scr="home"] #home .lvs.row:not(.hplay){display:grid!important}
+/* chữ phụ (#hChips: thông tin ván/ghi chú) ở màn ngang thấp: bỏ, nhường chỗ cho linh vật + hàng nút */
+@media (orientation:landscape){html.npl #play[data-scr="home"] #home.npl-one #hChips:not(#_){display:none!important}}
+
+/* màn NGANG thấp (npl-one): linh vật phủ TRỌN chiều cao cột trái (không phụ thuộc số hàng bên phải: 2 hàng × 112px vẫn cho linh vật ≥ 250px) */
+@media (orientation:landscape){
+  html.npl #play[data-scr="home"] #home.npl-one #hHero.npa-hero:not(#_){position:absolute!important;left:0!important;top:calc(var(--topH) - var(--gap) - 4px)!important;bottom:auto!important;width:calc((100% - var(--gap))*.45)!important;height:calc(100% - var(--topH) + var(--gap) + 4px)!important;max-height:none!important;min-height:0!important;margin:0!important;grid-column:auto!important;grid-row:auto!important}
+}
+html.npl #play[data-scr="home"] #home .row>.ib:not(#_){width:var(--row)!important;min-width:var(--row)!important;flex:none!important}
+/* Đập Deadline: linh vật không vượt khung (trước: rộng bằng ảnh gốc → trang cuộn ngang/dọc) */
+html.npl body#play.at-home #home #hHero.npa-hero:not(#_){width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden}
+html.npl body#play.at-home #home #hHero .npa-box,html.npl body#play.at-home #home #hHero svg{max-width:100%!important;max-height:100%!important}
+html.npl body#play{overflow:hidden!important}
+/* Đập Deadline (dọc): #home có width riêng (390px) + left:gap → tràn phải 9px → viewport nở 399 → mọi thứ lệch. Ép left/right và bỏ width cố định. */
+@media (orientation:portrait){html.npl body#play.at-home #home:not(#_){left:var(--gap)!important;right:var(--gap)!important;width:auto!important;max-width:none!important}}
+
+/* ============ COZY WINGS (#ovStart kiểu Pop; khung do layout-pop.js đặt --hx --hy --hw --hh) ============ */
+html.nppl:not(#_):not(#__) #ovStart:has(#cwHero){--r:22px;--gap:10px;--row:clamp(80px,10dvh,96px);--hmin:min(250px,calc((100dvh - 116px)*.5));display:flex!important;flex-direction:column!important;gap:var(--gap)!important;padding:0!important;align-items:stretch!important;justify-content:flex-start!important;overflow:hidden!important}
+html.nppl:not(#_):not(#__) #ovStart #cwHero{order:1!important;flex:1 1 0!important;min-height:var(--hmin)!important;height:auto!important;max-height:none!important;margin:0!important;position:relative!important;display:grid!important;place-items:center}
+html.nppl:not(#_):not(#__) #ovStart #cwHero .npa-box,html.nppl:not(#_):not(#__) #ovStart #cwHero svg{width:100%!important;height:100%!important;max-width:100%;max-height:100%}
+html.nppl:not(#_):not(#__) #ovStart #stH{display:none!important}
+/* độ khó: 3 nút tròn xếp CHỒNG góc trên-phải khung linh vật (không tốn một hàng) */
+html.nppl:not(#_):not(#__) #ovStart .difs{position:absolute!important;top:0;right:0;z-index:3;display:flex!important;flex-direction:column;gap:6px;order:0!important;width:auto!important;height:auto!important;margin:0!important}
+html.nppl:not(#_):not(#__) #ovStart .difs .dif{width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;font-size:22px!important}
+/* hàng Hôm nay: một hàng, cao --row, nút chính gradient */
+html.nppl:not(#_):not(#__) #ovStart>.tile.daily{order:3!important;flex:none!important;width:100%!important;height:var(--row)!important;min-height:0!important;max-height:none!important;margin:0!important;border-radius:var(--r)!important;padding:0 20px!important;flex-direction:row!important;justify-content:space-between!important;align-items:center!important}
+html.nppl:not(#_):not(#__) #ovStart>.tile.daily .dd{font-size:clamp(15px,calc(var(--row)*.26),22px)!important}
+html.nppl:not(#_):not(#__) #ovStart>.tile.daily .de{font-size:max(44px,calc(var(--row)*.5))!important;line-height:1}
+html.nppl:not(#_):not(#__) #ovStart>.tile.daily .dm{font-size:clamp(12px,calc(var(--row)*.2),16px)!important;display:inline!important}
+html.nppl:not(#_):not(#__) #ovStart>.tile.daily .df{display:none!important}
+html.nppl:not(#_):not(#__) #ovStart #npResume{order:2!important;flex:none!important;margin:0!important}
+/* danh sách trò chơi: MỘT hàng slide, thẻ nhẹ (nền gần trong suốt), cao bằng hàng, icon ≥56px căn giữa; chữ không vừa một dòng → bỏ chữ */
+html.nppl:not(#_):not(#__) #ovStart #cards.tiles{order:4!important;display:flex!important;flex-direction:row!important;gap:var(--gap)!important;height:var(--row)!important;flex:none!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0!important;padding:0!important;width:100%!important;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent)}
+html.nppl:not(#_):not(#__) #ovStart #cards.tiles::-webkit-scrollbar{display:none}
+html.nppl:not(#_):not(#__) #ovStart #cards.tiles>.tile{flex:0 0 clamp(150px,44%,210px)!important;height:var(--row)!important;min-height:0!important;max-height:none!important;width:auto!important;margin:0!important;border-radius:var(--r)!important;scroll-snap-align:start;background:rgba(255,255,255,.05)!important;border:1.5px solid rgba(255,255,255,.14)!important;box-shadow:none!important;padding:0!important;display:flex!important;flex-direction:row!important;position:relative}
+html.nppl:not(#_):not(#__) #ovStart #cards.tiles>.tile .main{flex:1 1 0!important;height:100%!important;min-width:0;padding:8px 12px!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;gap:10px!important;background:none!important;border:0!important;box-shadow:none!important;border-radius:var(--r)!important}
+html.nppl:not(#_):not(#__) #ovStart #cards.tiles>.tile .tb{font-size:max(56px,calc(var(--row)*.6))!important;line-height:1!important;flex:none!important;display:grid!important;place-items:center;width:56px;height:56px}
+html.nppl:not(#_):not(#__) #ovStart #cards.tiles>.tile .nm{font-size:clamp(12px,calc(var(--row)*.17),16px)!important;white-space:nowrap!important;overflow:hidden;display:block!important;-webkit-line-clamp:unset!important;text-align:left!important;margin:0!important;min-width:0}
+html.nppl:not(#_):not(#__) #ovStart #cards.tiles>.tile .best{display:none!important}
+html.nppl:not(#_):not(#__) #ovStart #cards.tiles[data-notext]>.tile .nm{display:none!important}
+html.nppl:not(#_):not(#__) #ovStart #cards.tiles[data-notext]>.tile .main{justify-content:center!important}
+html.nppl:not(#_):not(#__) #ovStart #cards.tiles[data-notext]>.tile{flex-basis:clamp(84px,24%,120px)!important}
+html.nppl:not(#_):not(#__) #ovStart #cards.tiles>.tile .skinBtn{position:absolute!important;top:-6px!important;right:-6px!important;left:auto!important;bottom:auto!important;width:var(--bd,24px)!important;height:var(--bd,24px)!important;min-width:0!important;min-height:0!important;padding:0!important;border-radius:50%!important;background:#2b1d68!important;border:1.5px solid rgba(255,255,255,.7)!important;z-index:3;display:grid!important;place-items:center}
+html.nppl:not(#_):not(#__) #ovStart #cards.tiles>.tile .skinBtn svg{width:14px!important;height:14px!important}
+html.nppl:not(#_):not(#__) #ovStart #cards.tiles>.tile:first-child{border-color:#fff!important;background:rgba(124,92,255,.35)!important;box-shadow:0 0 0 3px rgba(124,92,255,.5)!important}
+/* màn NGANG: linh vật phủ trọn cột trái (tuyệt đối), các hàng xếp cột phải và căn giữa */
+@media (orientation:landscape){
+  html.nppl:not(#_):not(#__) #ovStart:has(#cwHero){display:flex!important;flex-direction:column!important;justify-content:center!important;--row:clamp(64px,calc((var(--hh,300px) - 2*var(--gap))/2),96px);padding-left:calc((var(--hw,540px) - var(--gap))*.45 + var(--gap))!important}
+  html.nppl:not(#_):not(#__) #ovStart #cwHero{position:absolute!important;left:0!important;top:0!important;bottom:0!important;width:calc((var(--hw,540px) - var(--gap))*.45)!important;height:100%!important;min-height:0!important;flex:none!important}
+  html.nppl:not(#_):not(#__) #ovStart .difs{left:0;right:auto;top:0;flex-direction:column}
+}
+html.nppl:not(#_):not(#__) #ovStart #cards.tiles>.tile .tb svg,html.nppl:not(#_):not(#__) #ovStart #cards.tiles>.tile .tb img{width:56px!important;height:56px!important}
+/* hàng không bao giờ co lại (trước: bDaily bị ép còn 10px khi cột chật) — thiếu chỗ thì linh vật nhường (--hmin) */
+html.npl #play[data-scr="home"] #home :is(#bDaily,.dbtn,.row,.tys,.lvs,.abar,#npResume,.npl-strip,.boss):not(#_){flex:none!important;flex-shrink:0!important}
+html.npl #play[data-scr="home"] #home :is(#bDaily,.dbtn,.lvs):not(.npl-strip>*):not(#_){height:var(--row)!important}
+html.npl #play[data-scr="home"] #home .tys[data-slide]:not(#_){height:var(--row)!important}
+html.npl #play[data-scr="home"] #home .tys:not([data-slide]):not(#_){height:auto!important}
+@media (orientation:portrait){html.npl #play.npl-r4[data-scr="home"] #home #hChips:not(#_){display:none!important}}
+/* Cozy Wings: dải thẻ chừa 10px phía trên cho huy hiệu/quầng (không bị cắt), tâm dọc giữ nguyên */
+html.nppl:not(#_):not(#__) #ovStart #cards.tiles{height:calc(var(--row) + 12px)!important;padding-top:12px!important;margin-top:-6px!important;padding-left:4px!important;padding-right:4px!important;box-sizing:border-box}
+html.nppl:not(#_):not(#__) #ovStart #cards.tiles>.tile{align-self:flex-end;height:var(--row)!important}
+/* đồng bộ quy tắc mới: bo 22px (không viên thuốc) cho hàng Chơi Đập Deadline + Cozy Wings */
+html.npl #play.npl-hplay #home .hplay>:is(#bPlay,#bOpts){border-radius:var(--r,22px)!important}
+html.nppl:not(#_):not(#__) #ovStart:has(#cwHero){--r:22px}
+html.nppl:not(#_):not(#__) #ovStart #cards.tiles>.tile.daily,html.nppl:not(#_):not(#__) #ovStart>.tile.daily{border-radius:22px!important}
+
+/* ĐẬP DEADLINE (gốc là <body>, không có #play[data-scr]): luật THEME SÁNG + thẻ Tiếp tục kính cho game này */
+body.at-home #npResume .npr-go{background:rgba(255,255,255,.07)!important;border:1.5px solid color-mix(in srgb,var(--accent,#7C5CFF) 70%,#fff 10%)!important;box-shadow:none!important;animation:none!important;color:#fff!important}
+html[data-theme=light] body.at-home #npResume .npr-go{background:rgba(20,16,50,.06)!important;color:var(--ink,#241a5a)!important}
+html[data-theme=light] body.at-home #npResume .npr-tx,html[data-theme=light] body.at-home #npResume .npr-x{color:var(--ink,#241a5a)!important}
+html[data-theme=light] body.at-home .npl-strip[data-icononly]>#npResume .npr-go,html[data-theme=light] body.at-home #npResume .npr-go .npr-tx{color:var(--ink,#241a5a)!important}

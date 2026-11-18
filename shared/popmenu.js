@@ -11,6 +11,7 @@
    - iPad/máy tính bảng cảm ứng DỌC (pointer:coarse, ≤1100px rộng: iPad mini 744 … iPad Pro 13 1032): như trên nhưng 🔊 và ← ở NGOÀI menu (🔊 cố định cạnh ⋯), ô bảng 88px. iPad ngang / máy tính chuột: không gom.
    Nhúng sau pophelp.js/popfit.js: <script src="../../../shared/popmenu.js" defer></script> */
 (function () {
+  (function(){try{var s=document.currentScript,h=s&&s.src?s.src.replace(/[^\/]*(\?.*)?$/,"ccmenu.css"):"/shared/ccmenu.css";if(!document.querySelector("link[data-npcc]")){var l=document.createElement("link");l.rel="stylesheet";l.href=h;l.setAttribute("data-npcc","1");(document.head||document.documentElement).appendChild(l);}}catch(e){}})();
   "use strict";
   if (document.documentElement.classList.contains("np-multi")) return;   /* chế độ chơi cùng lúc (?multi=1): host lo các nút */
   var top = document.querySelector(".top"); if (!top) return;

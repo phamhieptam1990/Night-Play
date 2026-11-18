@@ -1,0 +1,173 @@
+/* LAYOUT MỚI cho nhóm POP PLAY — màn chọn (#home | #village | #ovStart của Chim Bay). Cùng quy tắc với shared/layout.css (Cozy):
+   1) Mọi thẻ / dòng / nút của màn chọn CAO BẰNG NHAU (--row ≥ 72px, bé bấm dễ); khoảng cách linh vật–thẻ–nút BẰNG NHAU (--gap).
+   2) Danh sách thẻ tràn → SLIDE ngang (mép phải mờ dần). Chật → gộp "Tiếp tục ván dở" + "Hôm nay" thành MỘT hàng (Hôm nay chỉ còn icon 📅, Tiếp tục hẹp thì chỉ còn ▶).
+   3) Chỗ trống còn lại dành cho LINH VẬT (≥ 250px, luôn hiện, lớn hơn nút); màn ngang thấp: linh vật trọn cột trái, mọi hàng sang cột phải.
+   4) Icon thẻ ≥ 56px, padding ≥ 8px, chữ MỘT dòng — không vừa thì bỏ chữ, icon căn giữa. Cỡ chữ có min–max.
+   5) Một nút CHÍNH (Tiếp tục nếu có ván dở, không thì Hôm nay) tô gradient; nút còn lại kính mờ viền mảnh.
+   Khung màn chọn do layout-pop.js đặt (--hx --hy --hw --hh: phần màn hình dưới thanh nút trên, trừ cột nút bên trái ở màn ngang). Chỉ CSS + một ResizeObserver; không hẹn giờ. */
+html.nppl:not(#npa):not(#npb) #play,html.nppl:not(#npa):not(#npb) .app{--gap:10px;--row:clamp(72px,10dvh,96px);--hmin:min(250px,calc((100dvh - 116px)*.5));--bd:24px;--bg:20px}
+@media (orientation:landscape){html.nppl:not(#npa):not(#npb) #play,html.nppl:not(#npa):not(#npb) .app{--hmin:250px}}
+
+/* ---------- KHUNG: #home / #village / #ovStart thành hộp tuyệt đối đúng vùng màn hình trống ---------- */
+html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart):not([hidden]){position:absolute!important;left:var(--hx,0px)!important;top:var(--hy,0px)!important;width:var(--hw,100%)!important;height:var(--hh,100%)!important;right:auto!important;bottom:auto!important;margin:0!important;padding:0!important;display:flex!important;flex-direction:column!important;justify-content:flex-start!important;align-items:stretch!important;gap:var(--gap)!important;overflow:hidden!important;box-sizing:border-box!important;background:none!important;transform:none!important}
+html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart):not([hidden])>:is(.hl,.hr){display:contents!important}
+html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart) :is(.npo-dots,#stH,.hometitle,.hsub,#hSub){display:none!important}
+
+/* ---------- LINH VẬT: giãn hết chỗ còn lại, phóng to cho đầy ---------- */
+html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart) #paHero{order:1!important;flex-basis:0!important;flex-grow:1!important;flex-shrink:1!important;min-height:var(--hmin)!important;height:auto!important;max-height:none!important;margin:0!important;padding:0!important;width:100%!important;display:grid!important;place-items:center;overflow:visible;position:relative!important;font-size:clamp(40px,22dvmin,140px)!important;line-height:1;animation:none}
+html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart) #paHero>*{max-width:100%;max-height:100%}
+html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart) #paHero .npa-box,html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart) #paHero svg{width:100%;height:100%;max-width:100%;max-height:100%}
+
+/* ---------- HÀNG: thứ tự + chiều cao bằng nhau ---------- */
+html.nppl:not(#npa):not(#npb) #home .lvs,html.nppl:not(#npa):not(#npb) #village .lvs{order:2!important}
+html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart) #npResume{order:3!important}
+html.nppl:not(#npa):not(#npb) :is(#home,#village) .dbar,html.nppl:not(#npa):not(#npb) #ovStart #dailyRow{order:4!important}
+html.nppl:not(#npa):not(#npb) :is(#home,#village) :is(.tiles,.band),html.nppl:not(#npa):not(#npb) #ovStart #cards{order:5!important}
+html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart) :is(.abar,#pgBtn){order:6!important}
+html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart) :is(.dbar,#dailyRow,#dailyRow .card.daily,#dailyRow .main,.band,.abar,#pgBtn,#npResume .npr-go){height:var(--row)!important;min-height:0!important;max-height:none!important;margin:0!important;box-sizing:border-box!important;flex:none!important}
+html.nppl:not(#npa):not(#npb) :is(#home,#village) .lvs{display:flex!important;justify-content:center;gap:var(--gap)!important;flex:none;height:var(--row);margin:0!important}
+html.nppl:not(#npa):not(#npb) :is(#home,#village) .lvs .lvb{flex:none!important;height:var(--lvs,var(--row))!important;width:var(--lvs,var(--row))!important;min-width:0!important;max-width:none!important;min-height:0!important;max-height:none!important;font-size:calc(var(--lvs,var(--row))*.46)!important;line-height:1!important;padding:6px!important;margin:0!important}
+html.nppl:not(#npa):not(#npb) :is(#home,#village) .lvs .lvb small{font-size:clamp(11px,calc(var(--row)*.18),15px)!important}
+html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart) :is(.dbar,#dailyRow .main,.abar,#pgBtn){font-size:clamp(15px,calc(var(--row)*.26),24px)!important;padding-left:16px!important;padding-right:16px!important;border-radius:999px!important;width:100%!important}
+html.nppl:not(#npa):not(#npb) :is(#home,#village) .abar{width:var(--row)!important;flex:none!important}
+html.nppl:not(#npa):not(#npb) #ovStart #dailyRow{padding:0!important;background:none!important;border:0!important;box-shadow:none!important;height:var(--row)!important;flex:none}
+html.nppl:not(#npa):not(#npb) #ovStart #dailyRow .card.daily{width:100%!important;padding:0!important;display:block}
+
+/* ---------- THẺ DANH SÁCH (.tile / .card): cao bằng hàng, icon ≥ 56px, padding ≥ 8px ---------- */
+html.nppl:not(#npa):not(#npb) :is(#home,#village) .tiles,html.nppl:not(#npa):not(#npb) #ovStart #cards{display:grid!important;grid-template-columns:repeat(var(--cols,4),minmax(0,1fr))!important;gap:var(--gap)!important;height:var(--row)!important;min-height:0!important;max-height:none!important;width:100%!important;flex:none!important;margin:0!important;padding:0!important;overflow:visible!important}
+html.nppl:not(#npa):not(#npb) :is(#home,#village) .tiles>.tile,html.nppl:not(#npa):not(#npb) #ovStart #cards>.card{height:var(--row)!important;min-height:0!important;max-height:none!important;width:auto!important;min-width:0!important;margin:0!important;padding:8px!important;box-sizing:border-box!important;border-radius:18px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:2px!important;overflow:hidden;position:relative}
+html.nppl:not(#npa):not(#npb) :is(#home,#village) .tiles .ti,html.nppl:not(#npa):not(#npb) #ovStart #cards .main .e{font-size:max(56px,calc(var(--row)*.56))!important;line-height:1!important;display:grid!important;place-items:center;width:max(56px,calc(var(--row)*.56))!important;height:max(56px,calc(var(--row)*.56))!important;margin:0!important;flex:none}
+html.nppl:not(#npa):not(#npb) :is(#home,#village) .tiles .tile>b,html.nppl:not(#npa):not(#npb) #ovStart #cards .main>span:not(.e){font-size:clamp(12px,calc(var(--row)*.17),17px)!important;white-space:nowrap!important;overflow:hidden;max-width:100%;min-width:0;line-height:1.1}
+html.nppl:not(#npa):not(#npb) :is(#home,#village) .tiles .tile>small,html.nppl:not(#npa):not(#npb) #ovStart #cards .main small{display:none!important}
+html.nppl:not(#npa):not(#npb) #ovStart #cards>.card>.main{width:100%!important;height:100%!important;min-height:0!important;max-height:none!important;display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:0!important;margin:0!important;background:none!important;border:0!important;box-shadow:none!important}
+html.nppl:not(#npa):not(#npb) :is(#home,#village) .tiles .sk,html.nppl:not(#npa):not(#npb) #ovStart #cards .skinBtn{position:absolute!important;top:4px!important;right:4px!important;width:32px!important;height:32px!important;min-width:32px!important;min-height:32px!important;padding:0!important;margin:0!important}
+/* slide khi không đủ chỗ cho cả danh sách */
+html.nppl:not(#npa):not(#npb) :is(#home,#village) .tiles[data-slide],html.nppl:not(#npa):not(#npb) #ovStart #cards[data-slide]{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent);padding-right:24px!important}
+html.nppl:not(#npa):not(#npb) :is(#home,#village) .tiles[data-slide][data-end],html.nppl:not(#npa):not(#npb) #ovStart #cards[data-slide][data-end]{-webkit-mask-image:none;mask-image:none;padding-right:0!important}
+html.nppl:not(#npa):not(#npb) :is(#home,#village) .tiles[data-slide]::-webkit-scrollbar,html.nppl:not(#npa):not(#npb) #ovStart #cards[data-slide]::-webkit-scrollbar{display:none}
+html.nppl:not(#npa):not(#npb) :is(#home,#village) .tiles[data-slide]>.tile,html.nppl:not(#npa):not(#npb) #ovStart #cards[data-slide]>.card{flex:0 0 clamp(104px,30%,150px)!important;scroll-snap-align:start}
+/* bỏ chữ → icon căn giữa */
+html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart) [data-notext] :is(b,span:not(.e):not(.ti),.t){display:none!important}
+
+/* ---------- MỘT nút chính; còn lại kính mờ ---------- */
+html.nppl:not(#npa):not(#npb) :is(#home,#village) #npResume~.dbar,html.nppl:not(#npa):not(#npb) :is(#home,#village) .lvs .lvb:not(.on),html.nppl:not(#npa):not(#npb) #ovStart #npResume~#dailyRow .card.daily{background:rgba(255,255,255,.10)!important;border:1.5px solid rgba(255,255,255,.30)!important;box-shadow:none!important;animation:none!important}
+html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart) #pgBtn,html.nppl:not(#npa):not(#npb) :is(#home,#village) .abar{background:rgba(255,255,255,.10)!important;border:1.5px solid rgba(255,255,255,.30)!important;box-shadow:none!important}
+
+/* ---------- THẺ "TIẾP TỤC VÁN DỞ" ---------- */
+html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart) #npResume{position:relative;display:flex!important;align-items:stretch;width:100%!important;min-width:0!important;margin:0!important;flex:none!important;height:var(--row)!important}
+html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart) #npResume .npr-go{flex:1 1 100%;width:100%!important;max-width:none!important;min-width:0;font-size:clamp(14px,calc(var(--row)*.24),20px)!important;padding:0 52px 0 16px!important;border-radius:999px!important}
+html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart) #npResume .npr-go small{font-size:clamp(11px,calc(var(--row)*.17),13px)!important}
+/* ✕ → thùng rác không nền, góc phải thẻ (vùng bấm 44px) */
+html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart) #npResume .npr-x{position:absolute!important;top:calc(50% - 22px)!important;right:4px!important;left:auto!important;bottom:auto!important;width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;max-width:none!important;max-height:none!important;margin:0!important;padding:0!important;border-radius:50%!important;z-index:3;background:transparent!important;color:#fff!important;box-shadow:none!important;animation:none!important}
+html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart) #npResume .npr-x::before{width:22px!important;height:22px!important;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v6M14 11v6' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat!important;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v6M14 11v6' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat!important}
+/* hàng GỘP Tiếp tục + Hôm nay */
+html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart) .npp-strip{order:3!important;display:flex;gap:var(--gap);flex:none;height:var(--row);overflow:visible}
+html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart) .npp-strip>#npResume{flex-basis:0!important;flex-grow:1!important;flex-shrink:1!important;width:auto!important}
+html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart) .npp-strip>:is(.dbar,#dailyRow){flex-basis:var(--row)!important;flex-grow:0!important;flex-shrink:0!important;width:var(--row)!important;min-width:0!important;padding:0!important;display:flex!important;align-items:center;justify-content:center;gap:0;font-size:0!important;overflow:hidden}
+html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart) .npp-strip>:is(.dbar,#dailyRow)>*{display:none!important}
+html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart) .npp-strip>:is(.dbar,#dailyRow)::before{content:"📅";font-size:max(36px,calc(var(--row)*.5));line-height:1}
+html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart) .npp-strip[data-icononly]>#npResume .npr-go{font-size:0!important;padding:0!important;display:grid;place-items:center}
+html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart) .npp-strip[data-icononly]>#npResume .npr-go>*{display:none!important}
+html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart) .npp-strip[data-icononly]>#npResume .npr-go::before{content:"▶";font-size:calc(var(--row)*.4);line-height:1}
+
+/* ---------- MÀN NGANG THẤP: linh vật trọn cột trái, mọi hàng sang cột phải ---------- */
+@media (orientation:landscape){
+  html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart):not([hidden]).npp-one{display:grid!important;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)!important;grid-template-rows:repeat(var(--n,3),var(--row))!important;row-gap:var(--gap)!important;column-gap:var(--gap)!important;align-content:center!important}
+  html.nppl:not(#npa):not(#npb) .npp-one #paHero{grid-column:1;grid-row:1/-1;height:100%!important}
+  html.nppl:not(#npa):not(#npb) .npp-one>:not(#paHero){grid-column:2}
+  html.nppl:not(#npa):not(#npb) .npp-one .tiles .tile>b,html.nppl:not(#npa):not(#npb) .npp-one #cards .main>span:not(.e){font-size:clamp(12px,calc(var(--row)*.16),16px)!important}
+}
+/* ---------- MÀN NGANG ĐỦ CAO: hai cột (trái = linh vật + hàng chính, phải = phần còn lại) giữ bằng cùng lưới ---------- */
+@media (orientation:landscape){
+  html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart):not([hidden]):not(.npp-one){display:grid!important;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)!important;grid-template-rows:repeat(var(--n,3),var(--row))!important;row-gap:var(--gap)!important;column-gap:var(--gap)!important;align-content:center!important}
+  html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart):not(.npp-one) #paHero{grid-column:1;grid-row:1/-1;height:100%!important}
+  html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart):not(.npp-one)>:not(#paHero){grid-column:2}
+}
+/* bong bóng chào của linh vật che thanh nút khi màn thấp */
+@media (max-height:600px){html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart) #paHero .npa-bub{display:none}}
+/* điểm/độ tuổi (.hud cố định) không đè khung: màn ngang nằm trong dải 40px trên cùng, bên phải */
+@media (orientation:landscape){html.nppl:not(#npa):not(#npb) .app .hud{position:fixed!important;top:4px!important;right:12px!important;left:auto!important;height:32px!important;z-index:4;flex-wrap:nowrap!important;white-space:nowrap;font-size:14px!important;gap:6px!important;width:auto!important}}
+html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart) #paHero .npa-box{overflow:visible}
+@media (orientation:landscape){html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart):not([hidden]){padding-top:6px!important}}
+/* hàng Hôm nay + nút phụ cùng hàng */
+html.nppl:not(#npa):not(#npb) :is(#home,#village) .npp-pair{order:4!important;display:flex;gap:var(--gap);height:var(--row);flex:none}
+html.nppl:not(#npa):not(#npb) :is(#home,#village) .npp-pair>.dbar{flex-basis:0!important;flex-grow:1!important;flex-shrink:1!important;width:auto!important}
+html.nppl:not(#npa):not(#npb) :is(#home,#village) .npp-pair>.abar{flex-basis:var(--row)!important;flex-grow:0!important;flex-shrink:0!important;width:var(--row)!important}
+html.nppl:not(#npa):not(#npb) .npp-strip>.npp-pair{flex-basis:var(--row)!important;flex-grow:0!important;flex-shrink:0!important;width:var(--row)!important;height:var(--row)}
+html.nppl:not(#npa):not(#npb) .npp-strip>.npp-pair>.abar{display:none!important}
+html.nppl:not(#npa):not(#npb) .npp-strip>.npp-pair>.dbar{width:100%!important;flex:1 1 auto!important}
+/* làng: các dải thành MỘT hàng slide */
+html.nppl:not(#npa):not(#npb) #village .npp-bands{order:5!important;display:flex;gap:var(--gap);height:var(--row);flex:none;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent);padding-right:24px}
+html.nppl:not(#npa):not(#npb) #village .npp-bands::-webkit-scrollbar{display:none}
+html.nppl:not(#npa):not(#npb) #village .npp-bands>.band{flex:0 0 78%!important;width:auto!important;scroll-snap-align:start;overflow:hidden}
+html.nppl:not(#npa):not(#npb) :is(#home,#village) .dbar{overflow:hidden;white-space:nowrap}
+html.nppl:not(#npa):not(#npb) .app .side .ask{display:none!important}
+html.nppl:not(#npa):not(#npb) :is(#home,#village) .tiles>.tile,html.nppl:not(#npa):not(#npb) #ovStart #cards>.card{grid-column:auto!important;grid-row:auto!important}
+html.nppl:not(#npa):not(#npb) :is(#home,#village) .lvs{height:var(--lvs,var(--row))!important}
+html.nppl:not(#npa):not(#npb) #village .vcoll{order:6!important;height:var(--row)!important;min-height:0!important;margin:0!important;flex:none!important;width:100%!important;border-radius:999px!important;font-size:clamp(14px,calc(var(--row)*.24),20px)!important;white-space:nowrap}
+@media (orientation:landscape){
+  html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart).npp-one #paHero,html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart):not(.npp-one) #paHero{min-height:0!important;height:max(100%,min(250px,var(--hh)))!important;align-self:center}
+}
+@media (orientation:landscape){html.nppl:not(#npa):not(#npb) :is(#home,#village,#ovStart)>#paHero{grid-column:1!important;grid-row:1/-1!important}}
+/* nút phụ cùng hàng Hôm nay: độ ưu tiên cao hơn luật width:100% chung */
+html.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #home .npp-pair>.abar,html.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #village .npp-pair>.abar{flex-basis:var(--row)!important;flex-grow:0!important;flex-shrink:0!important;width:var(--row)!important;min-width:0!important}
+html.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #home .npp-pair>.dbar,html.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #village .npp-pair>.dbar{flex-basis:0!important;flex-grow:1!important;flex-shrink:1!important;width:auto!important;min-width:0!important}
+/* Tiến độ → icon vuông cạnh hàng Hôm nay */
+html.nppl:not(#npa):not(#npb) #ovStart>.npp-pg{order:4!important;display:flex;gap:var(--gap);height:var(--row);flex:none}
+html.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #ovStart .npp-pg>#dailyRow{flex:1 1 0;min-width:0;height:var(--row)!important}
+html.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #ovStart .npp-pg>#pgBtn{flex-basis:var(--row)!important;flex-grow:0!important;flex-shrink:0!important;width:var(--row)!important;padding:0!important;font-size:0!important;display:grid;place-items:center;overflow:hidden}
+html.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #ovStart .npp-pg>#pgBtn::before{content:"📊";font-size:max(36px,calc(var(--row)*.5));line-height:1}
+html.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #home .npp-pair>.abar{display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:4px!important;overflow:hidden}
+html.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #home .npp-pair>.abar>span:first-child{font-size:0!important}
+html.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #home .npp-pair>.abar>span:first-child::before{content:'📖';font-size:max(30px,calc(var(--row)*.4));line-height:1}
+html.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #home .npp-pair>.abar>span:last-child{font-size:clamp(11px,calc(var(--row)*.16),15px)!important;line-height:1.1}
+html.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #home .npp-strip>.npp-pair>.abar{display:none!important}
+html.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #ovStart .npp-pg>#dailyRow{flex-basis:0!important;flex-grow:1!important;min-width:0!important;max-width:calc(100% - var(--row) - var(--gap))!important;overflow:hidden!important}
+html.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #ovStart .npp-pg>#dailyRow .card.daily,html.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #ovStart .npp-pg>#dailyRow .main{width:100%!important;min-width:0!important;padding-left:12px!important;padding-right:12px!important}
+html.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #ovStart .npp-strip>#pgBtn{flex-basis:var(--row)!important;flex-grow:0!important;flex-shrink:0!important;width:var(--row)!important;padding:0!important;font-size:0!important;display:grid!important;place-items:center;overflow:hidden;height:var(--row)!important}
+html.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #ovStart .npp-strip>#pgBtn::before{content:'📊';font-size:max(36px,calc(var(--row)*.5));line-height:1}
+@media (orientation:landscape){
+  html.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart)>:not(#paHero){grid-row:auto!important;grid-column:2!important;margin-top:0!important;margin-bottom:0!important;align-self:center!important;justify-self:stretch!important}
+  html.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart)>#paHero{grid-column:1!important;grid-row:1/-1!important;align-self:center!important;margin:0!important}
+  html.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart){grid-auto-flow:row!important;grid-auto-rows:var(--row)!important}
+}
+
+/* ===== ĐỒNG BỘ VỚI QUY TẮC MỚI NHẤT (cùng shared/layout.css của Cozy) ===== */
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) .app,html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #play{--r:22px;--bgd:#2b1d68}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart) :is(.dbar,#dailyRow,#dailyRow .card.daily,#dailyRow .main,.abar,#pgBtn,#npResume,#npResume .npr-go,.band,.vcoll,.npp-strip>*,.npp-pair>*){border-radius:var(--r)!important}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village) .lvs .lvb{border-radius:50%!important}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village) .dbar,html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #ovStart #dailyRow .card.daily,html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #ovStart #dailyRow .main{background:linear-gradient(100deg,#6a45ff,#c45a2a)!important;border:0!important;box-shadow:0 4px 0 rgba(0,0,0,.28),0 0 18px color-mix(in srgb,var(--accent,#8a5cf6) 40%,transparent)!important;animation:none!important}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village) .abar,html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart) #pgBtn,html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #village .vcoll{background:rgba(255,255,255,.07)!important;border:1.5px solid rgba(255,255,255,.28)!important;box-shadow:none!important;animation:none!important;color:inherit}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village) .lvs .lvb:not(.on){background:rgba(255,255,255,.04)!important;border:1.5px solid rgba(255,255,255,.22)!important;box-shadow:none!important}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village) .lvs .lvb.on{background:linear-gradient(160deg,color-mix(in srgb,var(--accent,#8a5cf6) 38%,transparent),color-mix(in srgb,var(--accent,#8a5cf6) 14%,transparent))!important;border:2.5px solid #fff!important;box-shadow:0 0 0 3px color-mix(in srgb,var(--accent,#8a5cf6) 55%,transparent),0 0 18px color-mix(in srgb,var(--accent,#8a5cf6) 50%,transparent)!important}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village) .tiles>.tile,html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #ovStart #cards>.card{background:rgba(255,255,255,.04)!important;border:1.5px solid rgba(255,255,255,.22)!important;box-shadow:none!important;overflow:visible!important;padding:8px!important;justify-content:center!important;align-items:center!important}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village) .tiles>.tile.on,html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #ovStart #cards>.card.on{background:linear-gradient(160deg,color-mix(in srgb,var(--accent,#8a5cf6) 38%,transparent),color-mix(in srgb,var(--accent,#8a5cf6) 14%,transparent))!important;border:2.5px solid #fff!important;box-shadow:0 0 0 3px color-mix(in srgb,var(--accent,#8a5cf6) 55%,transparent),0 0 18px color-mix(in srgb,var(--accent,#8a5cf6) 50%,transparent)!important}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village) .tiles,html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #ovStart #cards{padding-top:10px!important;margin-top:-10px!important}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village) .tiles .tile>b,html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #ovStart #cards .main>span:not(.e){overflow:hidden;white-space:nowrap;max-width:100%}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village) .tiles .sk,html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #ovStart #cards .skinBtn{top:-9px!important;right:-3px!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;border-radius:50%!important;background:var(--bgd,#2b1d68)!important;border:0!important;box-shadow:0 0 0 2px rgba(255,255,255,.35)!important;padding:0!important;display:grid!important;place-items:center;z-index:3}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village) .tiles .sk svg,html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #ovStart #cards .skinBtn svg{width:12px!important;height:12px!important}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village) .tiles .sk::after,html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #ovStart #cards .skinBtn::after{content:"";position:absolute;inset:-12px}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart) #npResume .npr-go{background:rgba(255,255,255,.07)!important;border:1.5px solid color-mix(in srgb,var(--accent,#8a5cf6) 70%,#fff 10%)!important;box-shadow:none!important;animation:none!important;color:#fff!important;text-shadow:none!important;display:flex!important;align-items:center;justify-content:flex-start;gap:12px;padding:0 60px 0 8px!important;font-size:clamp(16px,calc(var(--row)*.27),22px)!important;font-weight:800}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart) #npResume .npr-ic{display:block;flex:none;width:56px;height:56px;font-size:56px;line-height:0}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart) #npResume .npr-ic .npic{width:56px;height:56px}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart) #npResume .npr-tx{font:inherit;white-space:nowrap;overflow:hidden;text-overflow:clip;min-width:0}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart) #npResume .npr-x{right:8px!important;top:calc(50% - 22px)!important;background:transparent!important;opacity:.85}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart) .npp-strip>#npResume{flex-basis:0!important;flex-grow:1!important;flex-shrink:1!important}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart) .npp-strip>:is(.dbar,#dailyRow,.npp-pair)>:not(.npl-cal):not(.dbar),html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart) .npp-strip>:is(.dbar,#dailyRow)::before{display:none!important;content:none!important}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart) .npp-strip>.npp-pair>.dbar>:not(.npl-cal){display:none!important}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart) .npl-cal{display:block!important;width:max(56px,calc(var(--row)*.7));height:max(56px,calc(var(--row)*.7));font-size:max(56px,calc(var(--row)*.7));line-height:0}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart) .npl-cal>.npic{width:100%;height:100%}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart) .npp-strip>:is(.dbar,#dailyRow,.npp-pair){display:flex!important;align-items:center;justify-content:center;padding:0!important}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart) .npp-strip>#dailyRow .card.daily,html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart) .npp-strip>#dailyRow .main{display:none!important}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart) .npp-strip[data-icononly]>:is(#npResume,.dbar,#dailyRow,.npp-pair){flex-basis:0!important;flex-grow:1!important;flex-shrink:1!important;width:auto!important;min-width:0!important}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart) .npp-strip[data-icononly]>#npResume .npr-go{justify-content:center;padding:0!important;font-size:0!important}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart) .npp-strip[data-icononly]>#npResume .npr-go::before{content:none!important;display:none!important}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart) .npp-strip[data-icononly]>#npResume .npr-go .npr-tx{display:none!important}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart) .npp-strip[data-icononly]>#npResume .npr-go>.npr-ic{display:block!important}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart) .npp-strip[data-icononly]>#npResume .npr-x{top:-9px!important;right:-3px!important;width:24px!important;height:24px!important;min-width:24px!important;min-height:24px!important;opacity:1;background:var(--bgd,#2b1d68)!important;box-shadow:0 0 0 2px rgba(255,255,255,.35)!important}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart) .npp-strip[data-icononly]>#npResume .npr-x::before{width:14px!important;height:14px!important}
+@media (orientation:landscape){
+  html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village) .tiles,html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #ovStart #cards{margin-top:0!important;padding-top:10px!important;height:calc(var(--row) + 10px)!important;align-self:start!important;box-sizing:border-box!important}
+  html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village) .tiles>.tile,html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #ovStart #cards>.card{height:var(--row)!important}
+}
+html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart)>*:not(#paHero){translate:none!important;rotate:none!important;scale:none!important}

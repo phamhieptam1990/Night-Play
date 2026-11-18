@@ -39,6 +39,8 @@
     "@media (prefers-reduced-motion:reduce){#" + ID + ".hot,html.np-ch-hot :is(#npPmFab,#npFab)::after{animation:none}}" +
     "#npChOv{position:fixed;inset:0;z-index:2147483100;display:flex;align-items:center;justify-content:center;padding:14px;background:rgba(10,6,34,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);font-family:var(--font,Inter,system-ui,sans-serif);animation:npchIn .2s ease-out}" +
     "#npChOv .cd{position:relative;width:min(100%,400px);max-height:100%;overflow:auto;box-sizing:border-box;border-radius:26px;padding:18px 18px 16px;color:#fff;text-align:center;background:linear-gradient(165deg,#2b2064,#171236 62%,#120e2b);border:2px solid rgba(170,150,255,.6);box-shadow:0 12px 40px rgba(0,0,0,.55),0 0 30px rgba(124,92,255,.4);display:flex;flex-direction:column;gap:10px}" +
+    /* tên lớp .cd trùng với số đếm ngược 3-2-1 của Đập Deadline (position:fixed, animation cdp kết thúc opacity 0) → thẻ popup bị trong suốt: xoá phần thừa hưởng nhầm */
+    "#npChOv .cd{pointer-events:auto!important;left:auto;top:auto;right:auto;bottom:auto;transform:none!important;animation:none!important;opacity:1!important;font-size:16px;font-weight:inherit;text-shadow:none;letter-spacing:normal;line-height:normal;font-family:var(--font,Inter,system-ui,sans-serif)}" +
     "#npChOv .tg{font:800 12px/1 var(--font,Inter,system-ui,sans-serif);letter-spacing:.08em;text-transform:uppercase;color:#bdb7ee}" +
     "#npChOv .hero{font-size:clamp(58px,17vh,92px);line-height:1;filter:drop-shadow(0 6px 14px rgba(0,0,0,.45));animation:npchBob 2.8s ease-in-out infinite}" +
     "#npChOv h2{margin:0;font:800 clamp(20px,5.6vw,26px)/1.15 var(--font,Inter,system-ui,sans-serif)}" +

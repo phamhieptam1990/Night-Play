@@ -593,9 +593,16 @@ window.NP = (function () {
           else if (free(topTop)) { btn.style.bottom = "auto"; btn.style.top = Math.round(topTop) + "px"; }
           else show = false;
         }
+        /* nhắc bật âm thanh chỉ hiện ~2,6 giây rồi TRƯỢT XUỐNG ẩn (không nằm mãi); hiện lại khi người chơi quay lại màn chọn sau ván, hoặc sau khi bật rồi tắt tiếng */
+        if (!off) { sndDone = false; sndAt = 0; }
+        else if (show) { if (!sndAt) sndAt = Date.now(); if (Date.now() - sndAt > 2600) sndDone = true; }
+        else if (playing()) { sndDone = false; sndAt = 0; }
+        if (sndDone) show = false;
         btn.classList.toggle("on", show);
       } catch (e) {}
     }
+    var sndAt = 0, sndDone = false;
+    try { var sx = document.createElement("style"); sx.textContent = "#npSndGo{transition:opacity .3s ease,transform .3s ease!important}#npSndGo:not(.on){opacity:0;transform:translateX(-50%) translateY(28px)!important;pointer-events:none}"; (document.head || document.documentElement).appendChild(sx); } catch (e) {}
     setInterval(tick, 800); addEventListener("resize", tick); addEventListener("load", tick);
   } catch (e) {}
 })();

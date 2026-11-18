@@ -570,3 +570,23 @@ html:root:root.npp-kid #ovStart>.dailyRow>.card.daily small{color:#fff!important
 html #ovSkin>.npc{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 /* thẻ cao hơn màn: căn đầu + margin:auto (căn giữa khi vừa, cuộn được tới tiêu đề khi tràn — justify-content:center làm mất đầu thẻ) */
 html #ovSkin{justify-content:flex-start!important}html #ovSkin>.npc{margin-block:auto}
+
+/* tiêu đề popup giao diện/Night Pass: được xuống dòng + cỡ chữ co theo thẻ, chừa chỗ nút ✕ (màn ngang thẻ hẹp: ✕ từng đè lên chữ "Giao diện · Tiền Tài") */
+html #ovPay .npc h2,html #ovSkin .npc h2{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;overflow-wrap:anywhere;text-align:center;padding:0 56px!important;font-size:clamp(17px,min(5vw,3.4vh + 10px),26px)!important;line-height:1.15!important}
+
+/* MÀN NGANG THẤP: MỌI thẻ popup (cách chơi, tuỳ chọn, chia sẻ, thống kê, Night Pass, giao diện, hướng dẫn…) KHÔNG bị cắt đáy — thẻ cao tối đa bằng màn, nội dung dài thì cuộn TRONG thẻ (ẩn thanh cuộn, nút ✕ vẫn thấy) */
+@media (orientation:landscape) and (max-height:520px){
+  html :is(#howS,#setup,#shareG,#statsP,#pay,#pauseOv) :is(.sheet-in,.sheet-in>*:only-child),
+  html :is(#ovPay,#ovSkin,#ovRec,#ovCh,#ovSum,#hlpOv,#phOv,#pgOv,.ov:not(#ovStart)) .npc,
+  html #hlpOv>*{max-height:calc(100dvh - 16px)!important;overflow-y:auto!important;overscroll-behavior:contain;scrollbar-width:none;touch-action:pan-y;box-sizing:border-box}
+  html :is(#howS,#setup,#shareG,#statsP,#pay,#pauseOv) .sheet-in::-webkit-scrollbar,
+  html .npc::-webkit-scrollbar,html #hlpOv>*::-webkit-scrollbar{display:none}
+}
+
+/* MÀN NGANG: popup PHỦ TOÀN MÀN HÌNH (không nhốt trong cột game hẹp) — lớp phủ kéo ra trọn cửa sổ bằng --npx/--npy (shared/popfull.js), thẻ rộng tới 560px */
+@media (orientation:landscape){
+  html #play :is(#hlpOv,.ov:not(#ovStart),.overlay,.sheet),
+  html body#play :is(#hlpOv,.ov:not(#ovStart),.overlay,.sheet){left:var(--npx,0px)!important;top:var(--npy,0px)!important;right:auto!important;bottom:auto!important;width:100vw!important;height:100dvh!important;max-width:none!important;box-sizing:border-box;inset-inline-end:auto!important}
+  html :is(#hlpOv>*,.ov:not(#ovStart)>.npc,.sheet>.sheet-in,.overlay>.box,.overlay>*:not(.npx)){max-width:min(calc(100vw - 48px),560px)!important}
+  html :is(.ov:not(#ovStart)>.npc,.sheet>.sheet-in){width:min(calc(100vw - 48px),560px)!important}
+}

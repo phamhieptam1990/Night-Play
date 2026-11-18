@@ -14,7 +14,7 @@
   var base = ((document.currentScript && document.currentScript.src) || "").replace(/resume\.js(\?.*)?$/, "");
   function load(f) { if (!base) return; var sc = document.createElement("script"); sc.src = base + f; sc.async = false; (document.head || document.documentElement).appendChild(sc); }
   var MULTI = NP.multi === true;   /* ?multi=1 (chơi cùng lúc, xem bridge.js): host lo nút thoát/Back/tiếp tục; vẫn LƯU ván để host đẩy/nạp lại khung */
-  load("rotfix.js"); if (!MULTI) { load("exitconfirm.js"); load("overflowslide.js"); load("npset.js"); load("nptrial.js"); load("npfont.js"); load("npgrad.js"); load("npbadges.js"); load("npmascot.js"); load("npchallenge.js"); load("npmascotbtn.js"); load("fullscreen.js"); load("menupause.js"); } load("endguard.js"); load("difficulty.js"); if (!MULTI) load("eventcode.js");   /* mã sự kiện 6 số: nút nhập mã trong popup Giao diện + tải giao diện được mở */   /* endguard.js: cú chạm nối tiếp ngay sau khi hết ván không được tự chơi lại / làm mất màn kết thúc */
+  load("rotfix.js"); if (!MULTI) { load("exitconfirm.js"); load("overflowslide.js"); load("npset.js"); load("nptrial.js"); load("npfont.js"); load("npgrad.js"); load("npbadges.js"); load("npmascot.js"); load("npchallenge.js"); load("npmascotbtn.js"); load("fullscreen.js"); load("menupause.js"); load("home3.js"); load("cc.js"); load("popfull.js"); } load("endguard.js"); load("difficulty.js"); if (!MULTI) load("eventcode.js");   /* mã sự kiện 6 số: nút nhập mã trong popup Giao diện + tải giao diện được mở */   /* endguard.js: cú chạm nối tiếp ngay sau khi hết ván không được tự chơi lại / làm mất màn kết thúc */
   var gid = NP.gid, RK = "np-resume:" + gid;
   var q = new URLSearchParams(location.search);
   var realHelper = q.get("helper") === "1", challenge = /^#ch=/.test(location.hash);
@@ -154,6 +154,7 @@
     if (!card) card = build(rec);
     relabel(rec);   /* đổi ngôn ngữ sau khi thẻ đã dựng → cập nhật chữ thẻ (trước: giữ ngôn ngữ lúc dựng) */
     var host = (h.home && h.el.querySelector(":scope>.hl")) || h.el;
+    var nst = host.querySelector(":scope>.npl-strip,:scope>.npp-strip"); if (nst) host = nst;   /* layout mới (shared/layout.js) gộp Tiếp tục + Hôm nay thành một hàng slide khi chật */
     /* khung chứa là DẢI TRƯỢT NGANG (vd Chim Bay Học Vui trên điện thoại dọc: .cards cuộn ngang) → đặt thẻ NGAY TRÊN dải, không nhét vào trong (trước: thẻ thành ô đầu của dải, đẩy các ô khác ra ngoài khung) */
     var strip = false; try { var hs = getComputedStyle(host); strip = !h.home && hs.display === "flex" && /^row/.test(hs.flexDirection) && hs.overflowX !== "visible" && host.parentNode && host.parentNode !== document.body; } catch (e) {}
     if (strip) { if (card.parentNode !== host.parentNode || card.nextSibling !== host) host.parentNode.insertBefore(card, host); syncX(); return; }
@@ -167,6 +168,7 @@
   }
   /* ✕ luôn CAO BẰNG thẻ "Tiếp tục" (và tròn): nhiều luật riêng từng game/màn ngang đặt chiều cao khác nhau cho thẻ và ✕ nên đo thẻ rồi ép ✕ bằng style nội tuyến !important */
   function syncX() {
+    if (window.NPLayoutNew) return;   /* layout mới (shared/layout.css): ✕ là huy hiệu nhỏ góc trên-phải thẻ */
     try {
       var go = card && card.querySelector(".npr-go"), x = card && card.querySelector(".npr-x"); if (!go || !x || !card.isConnected) return;
       var h = go.offsetHeight || Math.round(go.getBoundingClientRect().height); if (!(h > 0)) return;   /* offsetHeight = px CSS CHƯA nhân zoom của game (Đập Deadline zoom ×1,25 ở màn rộng: đo bằng getBoundingClientRect rồi đặt làm px CSS bị nhân zoom hai lần → ✕ 88px trong thẻ cao 70px) */

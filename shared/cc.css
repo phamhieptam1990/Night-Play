@@ -1,0 +1,352 @@
+/* CONTROL CENTER kiểu iPhone (shared/cc.js) — dùng chung Night Play + Pop Play, mở từ nút ⋯ ở màn chọn.
+   Chỉ transform + opacity (không backdrop-filter / filter / drop-shadow mới: lỗi WebKit sập trang). Màu lấy theo giao diện của game (--panel, --ink, --accent, --npacc). */
+#ccRoot{position:fixed;inset:0;z-index:2147482500;display:none;--s:clamp(52px,min(calc((100vw - 56px - 36px) / 4),calc((100dvh - 56px - 36px) / 4)),84px);--g:12px;--ccink:var(--ink,#fff);--ccbg:var(--panel,#1b1740);--ccac:var(--npacc,var(--accent,#7C5CFF))}
+#ccRoot.on{display:block}
+#ccRoot .bk{position:absolute;inset:0;background:rgba(8,6,24,.62);opacity:0;transition:opacity .22s ease}
+#ccRoot.in .bk{opacity:1}
+#ccRoot .pn{position:absolute;right:max(16px,env(safe-area-inset-right));top:max(16px,env(safe-area-inset-top));width:calc(var(--s) * 4 + var(--g) * 3 + 32px);max-width:calc(100vw - 24px);box-sizing:border-box;padding:16px;border-radius:34px;background:color-mix(in srgb,var(--ccbg) 88%,transparent);border:1.5px solid color-mix(in srgb,var(--ccink) 22%,transparent);display:grid;grid-template-columns:repeat(4,var(--s));grid-auto-rows:var(--s);gap:var(--g);transform-origin:top right;transform:scale(.4);opacity:0;color:var(--ccink);touch-action:none}
+#ccRoot.in .pn{transform:scale(1);opacity:1;transition:transform .42s cubic-bezier(.34,1.56,.64,1),opacity .18s ease}
+@media (orientation:landscape){#ccRoot .pn{left:50%;right:auto;margin-left:calc(var(--s) * -2 - var(--g) * 1.5 - 16px);top:max(12px,env(safe-area-inset-top));transform-origin:top center}}
+@media (orientation:portrait){#ccRoot .pn{left:50%;right:auto;margin-left:calc(var(--s) * -2 - var(--g) * 1.5 - 16px);top:max(84px,env(safe-area-inset-top))}}
+/* mỗi module: viên kính bo tròn, nhấn co 94% */
+#ccRoot .m{position:relative;box-sizing:border-box;border:0;padding:0;margin:0;color:inherit;font:700 12px/1.1 var(--font,system-ui);background:color-mix(in srgb,var(--ccink) 16%,var(--ccbg));border-radius:calc(var(--s) * .34);overflow:hidden;cursor:pointer;display:grid;place-items:center;transition:transform .14s ease,background .18s ease;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+#ccRoot .m:active{transform:scale(.94)}
+#ccRoot .m:focus-visible{outline:3px solid var(--ccac);outline-offset:2px}
+#ccRoot .m.c{border-radius:50%}
+#ccRoot .m.c svg{width:46%;height:46%;max-width:none;display:block;stroke-width:2.2}
+#ccRoot .m.c img,#ccRoot .m.c canvas{width:62%;height:62%;object-fit:contain;display:block}
+#ccRoot .m.c .npa-box,#ccRoot .m.c .npa-mini{position:static;width:70%;height:70%}
+#ccRoot .m.c .bl,#ccRoot .m.c::after{display:none!important}
+#ccRoot .m.act{background:var(--ccink);color:var(--ccbg)}
+#ccRoot .m.act *{color:var(--ccbg)}
+/* độ khó: slider dọc cao 2 ô */
+#ccRoot .dif{grid-column:1;grid-row:span 2;display:block;cursor:ns-resize;touch-action:none}
+#ccRoot .dif .fill{position:absolute;left:0;right:0;bottom:0;height:var(--p,34%);background:var(--ccdt,var(--ccac));transition:height .22s cubic-bezier(.34,1.3,.64,1)}
+#ccRoot .dif.drag .fill{transition:none}
+#ccRoot .dif .ic{position:absolute;left:0;right:0;top:12%;text-align:center;font-size:calc(var(--s) * .46);line-height:1;pointer-events:none}
+#ccRoot .dif .nm{position:absolute;left:4px;right:4px;bottom:8%;text-align:center;font:800 clamp(11px,calc(var(--s) * .17),14px)/1.1 var(--font,system-ui);color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.45);pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#ccRoot .dif .tk{position:absolute;right:6px;top:30%;bottom:22%;width:4px;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none}
+#ccRoot .dif .tk i{display:block;width:4px;height:4px;border-radius:50%;background:color-mix(in srgb,var(--ccink) 55%,transparent)}
+/* chế độ: module 2×2 */
+#ccRoot .mod{grid-column:span 2;grid-row:span 2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:8px;text-align:center}
+#ccRoot .mod.wide{grid-column:1 / span 3}
+#ccRoot .mod .ic{font-size:calc(var(--s) * .9);line-height:1;display:grid;place-items:center;height:calc(var(--s) * .95)}
+#ccRoot .mod .ic svg{width:calc(var(--s) * .9);height:calc(var(--s) * .9)}
+#ccRoot .mod .nm{font:800 clamp(12px,calc(var(--s) * .2),16px)/1.15 var(--font,system-ui);max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#ccRoot .mod .hn{font:600 11px/1 var(--font,system-ui);opacity:.7}
+/* âm thanh = nút tròn (cột phải, hàng 1); linh vật/skin = nút tròn hàng 2 */
+#ccRoot .snd{grid-column:4;grid-row:1}
+#ccRoot .snd svg{width:46%;height:auto;max-width:none}
+#ccRoot .skin{grid-column:4;grid-row:2;background:color-mix(in srgb,var(--ccink) 20%,var(--ccbg))}
+#ccRoot .skin .mc{position:absolute;inset:0;display:grid;place-items:center;overflow:hidden;border-radius:50%}
+#ccRoot .skin .mc svg{width:128%;height:128%;max-width:none;display:block;transform:translateY(4%)}
+/* THẺ gom 4 nút (2×2); nhấn giữ → danh sách có chữ */
+#ccRoot .card{grid-column:span 2;grid-row:span 2;box-sizing:border-box;padding:10px;gap:8px;display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;border-radius:calc(var(--s) * .34);background:color-mix(in srgb,var(--ccink) 16%,var(--ccbg));touch-action:manipulation}
+#ccRoot .card .m.c{width:100%;height:100%;background:color-mix(in srgb,var(--ccink) 12%,transparent)}
+#ccRoot .m.c .ic{font-size:calc(var(--s) * .4);font-weight:800;line-height:1;display:grid;place-items:center}
+#ccRoot .m.c.lang .ic,#ccRoot .m.c.in.lang .ic{font-size:calc(var(--s) * .27)}
+#ccRoot .m.c.pass .ic{font-size:calc(var(--s) * .5)}
+#ccRoot .m.c.pass{background:color-mix(in srgb,#ffd24a 38%,var(--ccbg))}
+#ccRoot .ml.ex{grid-template-columns:1fr;grid-auto-rows:minmax(44px,1fr);gap:8px;padding:12px}
+#ccRoot .ml .m.row .ic{font-size:26px;font-weight:800;line-height:1}
+#ccRoot .ml .m.row .ic svg{width:30px;height:30px}
+#ccRoot .ml .m.row .ic .npmcAv{display:none}
+/* danh sách chế độ (nhấn giữ module chế độ): phủ lên bảng */
+#ccRoot .ml{position:absolute;inset:0;border-radius:34px;background:color-mix(in srgb,var(--ccbg) 96%,transparent);padding:14px;display:none;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(54px,1fr);gap:10px;overflow:hidden;z-index:2}
+#ccRoot .ml.on{display:grid;animation:ccpop .3s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ccpop{from{transform:scale(.7);opacity:0}}
+#ccRoot .ml .m{border-radius:20px;display:flex;align-items:center;justify-content:flex-start;gap:10px;padding:6px 12px;text-align:left}
+#ccRoot .ml .m .ic{font-size:30px;line-height:1;flex:none;display:grid;place-items:center;width:40px;height:40px}
+#ccRoot .ml .m .ic svg{width:40px;height:40px}
+#ccRoot .ml .m .nm{font:800 14px/1.15 var(--font,system-ui);min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* nút mở riêng ở màn ngang (không có ⋯) */
+#ccOpen{position:fixed;left:max(12px,env(safe-area-inset-left));top:12px;width:44px;height:44px;border-radius:50%;border:1.5px solid color-mix(in srgb,var(--ink,#fff) 35%,transparent);background:color-mix(in srgb,var(--panel,#1b1740) 80%,transparent);color:var(--ink,#fff);display:none;place-items:center;z-index:41;cursor:pointer;padding:0;touch-action:manipulation}
+#ccOpen svg{width:22px;height:22px}
+html.np-cc-land.np-cc-home.np-cc-nofab #ccOpen{display:grid}
+@media (prefers-reduced-motion:reduce){#ccRoot .pn,#ccRoot .bk,#ccRoot .dif .fill{transition:none}#ccRoot .ml.on{animation:none}}
+
+/* huy hiệu (số ngày sự kiện, chấm báo) ở góc nút; nút tròn không cắt huy hiệu */
+#ccRoot .m.c{overflow:visible}
+#ccRoot .m.skin{overflow:hidden}
+#ccRoot .bd{position:absolute;right:-2px;top:-2px;min-width:20px;height:20px;box-sizing:border-box;padding:0 5px;border-radius:10px;background:#ffd24a;color:#3a2400!important;font:900 12px/20px var(--font,system-ui);text-align:center;pointer-events:none;z-index:2}
+#ccRoot .bd.dot{min-width:0;width:12px;height:12px;padding:0;top:2px;right:2px;background:var(--ccac)}
+#ccRoot .ml .m.row .bd{top:50%;right:14px;transform:translateY(-50%)}
+#ccRoot .ml .m.row .bd.dot{right:18px}
+
+/* danh sách CHẾ ĐỘ (nhấn giữ): icon TO ở trên, tên bên dưới cỡ lớn (tối đa 2 dòng) */
+#ccRoot .ml:not(.ex) .m{flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:6px;padding:10px 8px}
+#ccRoot .ml:not(.ex) .m .ic{width:auto;height:auto;font-size:clamp(44px,calc(var(--s) * .8),66px);line-height:1}
+#ccRoot .ml:not(.ex) .m .ic svg{width:clamp(48px,calc(var(--s) * .85),68px);height:clamp(48px,calc(var(--s) * .85),68px)}
+#ccRoot .ml:not(.ex) .m .nm{font:800 clamp(16px,calc(var(--s) * .25),20px)/1.15 var(--font,system-ui);white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-overflow:clip;max-width:100%}
+/* danh sách CHỨC NĂNG (nhấn giữ thẻ): chữ lớn hơn, icon to hơn */
+#ccRoot .ml.ex .m.row .nm{font:800 clamp(16px,calc(var(--s) * .24),20px)/1.15 var(--font,system-ui);white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#ccRoot .ml.ex .m.row .ic{font-size:34px;width:48px;height:48px}
+#ccRoot .ml.ex .m.row .ic svg{width:34px;height:34px}
+
+/* ĐẬM + TO hơn cho dễ nhìn (chữ nhãn, gợi ý, icon nút tròn) */
+#ccRoot .dif .nm{font:900 clamp(14px,calc(var(--s) * .22),18px)/1.1 var(--font,system-ui)}
+#ccRoot .dif .ic{font-size:calc(var(--s) * .52)}
+#ccRoot .mod .nm{font:900 clamp(16px,calc(var(--s) * .26),22px)/1.15 var(--font,system-ui)}
+#ccRoot .mod .hn{font:800 clamp(12px,calc(var(--s) * .17),14px)/1.15 var(--font,system-ui);opacity:.9;white-space:normal}
+#ccRoot .m.c svg{width:56%;height:56%;stroke-width:2.9}
+#ccRoot .m.c .ic{font-size:calc(var(--s) * .46);font-weight:900}
+#ccRoot .m.c.lang .ic,#ccRoot .m.c.in.lang .ic{font-size:calc(var(--s) * .32);font-weight:900}
+#ccRoot .m.c.pass .ic{font-size:calc(var(--s) * .56)}
+#ccRoot .snd svg{width:54%}
+#ccRoot .ml.ex .m.row .nm{font-weight:900;font-size:clamp(17px,calc(var(--s) * .27),22px)}
+#ccRoot .ml.ex .m.row .ic{font-size:36px;font-weight:900}
+#ccRoot .ml.ex .m.row .ic svg{width:36px;height:36px;stroke-width:2.9}
+#ccRoot .ml:not(.ex) .m .nm{font-weight:900;font-size:clamp(17px,calc(var(--s) * .27),22px)}
+#ccRoot .m.c.skin .mc svg{width:128%;height:128%;stroke-width:0}
+
+/* danh sách CHỨC NĂNG (nhấn giữ thẻ): giống danh sách chế độ — lưới 2 cột, icon TO ở trên, chữ ở dưới */
+#ccRoot .ml.ex{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(54px,1fr);gap:10px;padding:14px}
+#ccRoot .ml.ex .m.row{flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:6px;padding:10px 8px;border-radius:24px}
+#ccRoot .ml.ex .m.row .ic{width:auto;height:auto;font-size:clamp(40px,calc(var(--s) * .72),60px);font-weight:900;line-height:1}
+#ccRoot .ml.ex .m.row .ic svg{width:clamp(44px,calc(var(--s) * .78),62px);height:clamp(44px,calc(var(--s) * .78),62px);stroke-width:2.9}
+#ccRoot .ml.ex .m.row .nm{font:900 clamp(16px,calc(var(--s) * .25),20px)/1.15 var(--font,system-ui);white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-align:center;max-width:100%}
+#ccRoot .ml.ex .m.row .bd{top:10px;right:10px;transform:none}
+#ccRoot .ml.ex .m.row .bd.dot{top:14px;right:14px}
+#ccRoot .ml{background:var(--ccbg)}
+
+/* không có độ khó/chế độ: loa + linh vật gom MỘT thẻ ngang dưới hai thẻ chức năng */
+#ccRoot .card.bar{order:9;grid-column:1 / -1;grid-row:span 1;display:flex;align-items:center;justify-content:center;gap:var(--g);padding:8px}
+#ccRoot .card.bar .m.c{flex:none;width:calc(var(--s) - 16px);height:calc(var(--s) - 16px);background:color-mix(in srgb,var(--ccink) 12%,transparent)}
+#ccRoot .card.bar .m.snd.act{background:var(--ccink)}
+
+/* THEME: giao diện Night Pass (nền gradient --npg) → nền bảng ăn theo gradient đó (phủ lớp màu tối/sáng của game cho dễ đọc); nhấn dùng --npacc */
+html[data-npgrad] #ccRoot .pn{background:linear-gradient(color-mix(in srgb,var(--ccbg) 58%,transparent),color-mix(in srgb,var(--ccbg) 58%,transparent)),var(--npg,var(--ccbg));border-color:color-mix(in srgb,var(--ccac) 55%,transparent)}
+html[data-npgrad] #ccRoot .ml{background:linear-gradient(color-mix(in srgb,var(--ccbg) 72%,transparent),color-mix(in srgb,var(--ccbg) 72%,transparent)),var(--npg,var(--ccbg))}
+html[data-npgrad] #ccRoot .m.act{background:var(--ccac);color:var(--on,#fff)}
+html[data-npgrad] #ccRoot .m.act *{color:var(--on,#fff)}
+html[data-npgrad] #ccRoot .dif .fill{background:var(--ccac)}
+
+/* hàng CHỦ ĐỀ: viên màu gradient, vuốt ngang nếu không vừa */
+#ccRoot .card.theme{order:10;grid-column:1 / -1;grid-row:span 1;display:flex;flex-wrap:nowrap;align-items:center;gap:10px;padding:8px 12px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;touch-action:pan-x}
+#ccRoot .card.theme::-webkit-scrollbar{display:none}
+#ccRoot .card.theme .sw{flex:none;width:calc(var(--s) * .66);height:calc(var(--s) * .66);min-width:44px;min-height:44px;border-radius:50%;border:2.5px solid color-mix(in srgb,var(--ccink) 35%,transparent);padding:0;cursor:pointer;display:grid;place-items:center;color:var(--ccink);font:900 18px/1 var(--font,system-ui);touch-action:manipulation}
+#ccRoot .card.theme .sw.on{border-color:var(--ccink);box-shadow:0 0 0 3px color-mix(in srgb,var(--ccac) 70%,transparent)}
+#ccRoot .card.theme .sw:active{transform:scale(.92)}
+/* 5 hàng trong màn ngang thấp → ô nhỏ lại cho vừa */
+@media (orientation:landscape){#ccRoot{--s:clamp(44px,min(calc((100vw - 56px - 36px) / 4),calc((100dvh - 24px - 32px - 52px) / 5)),84px)}}
+#ccRoot .card.theme .sw{background:color-mix(in srgb,var(--ccink) 18%,var(--ccbg))}
+
+/* thẻ GIAO DIỆN (skin của game): một hàng ngang, icon 🎨 + chữ */
+#ccRoot .skinrow{order:10;grid-column:1 / -1;grid-row:span 1;display:flex;align-items:center;justify-content:center;gap:12px;padding:0 16px;border-radius:calc(var(--s) * .34)}
+#ccRoot .skinrow .ic{font-size:calc(var(--s) * .5);line-height:1}
+#ccRoot .skinrow .nm{font:900 clamp(16px,calc(var(--s) * .26),22px)/1 var(--font,system-ui)}
+
+/* hàng chip tuỳ chọn (giao diện, cỡ bàn, gói, bạn đồng hành): nhãn nhỏ + chip vuốt ngang */
+#ccRoot .card.opt{order:10;grid-column:1 / -1;grid-row:span 1;display:flex;flex-direction:column;justify-content:center;gap:6px;padding:8px 12px;grid-template-columns:none;min-height:0}
+#ccRoot .card.opt .oh{font:800 clamp(11px,calc(var(--s) * .16),13px)/1 var(--font,system-ui);opacity:.8;text-transform:none}
+#ccRoot .card.opt .or{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;touch-action:pan-x}
+#ccRoot .card.opt .or::-webkit-scrollbar{display:none}
+#ccRoot .m.ch{flex:1 0 auto;min-width:44px;min-height:40px;padding:6px 14px;border-radius:99px;display:flex;align-items:center;justify-content:center;font:900 clamp(14px,calc(var(--s) * .22),17px)/1 var(--font,system-ui);white-space:nowrap;background:color-mix(in srgb,var(--ccink) 12%,transparent)}
+#ccRoot .m.ch.on{background:var(--ccink);color:var(--ccbg)}
+#ccRoot .m.ch.lk{opacity:.6}
+
+/* bảng LUÔN nằm trong màn: ô co theo số hàng (--nr), quá thấp thì cuộn trong bảng (ẩn thanh cuộn) */
+#ccRoot .pn{max-height:calc(100dvh - max(84px,env(safe-area-inset-top)) - 12px);overflow-y:auto;overflow-x:hidden;scrollbar-width:none;touch-action:pan-y}
+#ccRoot .pn::-webkit-scrollbar{display:none}
+@media (orientation:landscape){#ccRoot .pn{max-height:calc(100dvh - 24px)}}
+
+/* danh sách tuỳ chọn mở rộng (nhấn giữ thẻ): mỗi nhóm = nhãn + hàng chip, phủ trọn bảng, cuộn dọc nếu thấp */
+#ccRoot .ml.opx{display:none;grid-template-columns:1fr;grid-auto-rows:auto;align-content:start;gap:12px;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;touch-action:pan-y}
+#ccRoot .ml.opx.on{display:grid}
+#ccRoot .ml.opx::-webkit-scrollbar{display:none}
+#ccRoot .og .oh{font:900 clamp(13px,calc(var(--s) * .2),16px)/1 var(--font,system-ui);margin:0 2px 8px;opacity:.9}
+#ccRoot .og .or{display:flex;flex-wrap:wrap;gap:8px}
+#ccRoot .og .m.ch{flex:1 0 auto}
+#ccRoot .m.c.opt .ic{font-size:calc(var(--s) * .46)}
+
+/* MÀN NGANG: lưới 2 HÀNG × nhiều cột (chảy theo cột) → bảng thấp, rộng; ô co theo bề ngang để mọi module vừa một màn */
+@media (orientation:landscape){
+  #ccRoot{--s:clamp(44px,calc((100vw - 190px) / 11),84px)}
+  #ccRoot .pn{width:max-content;max-width:calc(100vw - 24px);left:0;right:0;margin:0 auto;translate:none;grid-template-columns:none;grid-template-rows:repeat(2,var(--s));grid-auto-flow:column;grid-auto-columns:var(--s);overflow:hidden;max-height:none;touch-action:none}
+  #ccRoot .snd,#ccRoot .skin{grid-column:auto;grid-row:auto}
+  #ccRoot .dif{grid-column:auto;grid-row:span 2}
+  #ccRoot .card.bar{grid-column:span 2;grid-row:span 2;display:flex;flex-wrap:wrap;align-content:center}
+  #ccRoot .skinrow{grid-column:span 2;grid-row:span 2;flex-direction:column;gap:4px;padding:0 6px}
+  #ccRoot .skinrow .nm{font-size:clamp(13px,calc(var(--s) * .26),17px)}
+  #ccRoot .ml{inset:0;grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:minmax(54px,1fr)}
+  #ccRoot .ml.opx{grid-template-columns:1fr 1fr;overflow-y:auto}
+}
+
+/* MÀN NGANG (bản chốt): ô GIỮ CỠ như màn dọc (tới 72px), trải NGANG — 3 hàng: trái = độ khó (cao 3 hàng) + chế độ (2 cột × 3 hàng) + loa/linh vật; phải = các thẻ, MỖI THẺ MỘT HÀNG 4 nút tròn. Không đủ ngang thì vuốt ngang trong bảng. */
+@media (orientation:landscape){
+  #ccRoot{--s:clamp(48px,calc((100vw - 24px - 32px - 7 * var(--g)) / 8),72px)}
+  #ccRoot .pn{width:max-content;max-width:calc(100vw - 24px);box-sizing:border-box;grid-template-columns:repeat(8,var(--s));grid-template-rows:repeat(3,var(--s));grid-auto-flow:row;grid-auto-columns:var(--s);grid-auto-rows:var(--s);overflow-x:auto;overflow-y:hidden;touch-action:pan-x;max-height:none}
+  #ccRoot .dif{grid-column:1;grid-row:1 / span 3}
+  #ccRoot .mod{grid-column:2 / span 2;grid-row:1 / span 3}
+  #ccRoot .mod.wide{grid-column:1 / span 3}
+  #ccRoot .snd{grid-column:4;grid-row:1}
+  #ccRoot .skin{grid-column:4;grid-row:2}
+  #ccRoot .skinrow{grid-column:4;grid-row:3;flex-direction:column;border-radius:50%;padding:0}
+  #ccRoot .skinrow .nm{display:none}
+  #ccRoot .card.bar{grid-column:1 / span 4;grid-row:1 / span 3}
+  #ccRoot .card{grid-column:5 / span 4;grid-row:auto / span 1;grid-template-columns:repeat(4,1fr);grid-auto-rows:1fr;padding:8px;gap:8px}
+  #ccRoot .card .m.c{width:100%;height:100%}
+  #ccRoot .card.bar{display:flex;flex-wrap:wrap;align-content:center;justify-content:center}
+  #ccRoot .card.bar .m.c{width:calc(var(--s) - 12px);height:calc(var(--s) - 12px)}
+  #ccRoot .ml.opx{grid-template-columns:1fr 1fr}
+}
+@media (orientation:landscape){#ccRoot .dif .nm{font-size:12px;left:2px;right:2px;letter-spacing:-.2px}}
+
+/* MÀN NGANG: thẻ chế độ 2×2 (như màn dọc), độ khó cao 2 hàng; cụm trái căn giữa theo 3 hàng khi bên phải có 3 thẻ */
+@media (orientation:landscape){
+  #ccRoot .dif{grid-row:1 / span 2}
+  #ccRoot .mod{grid-row:1 / span 2}
+  #ccRoot .mod.wide{grid-column:1 / span 3}
+  #ccRoot .pn.cen :is(.dif,.mod,.snd,.skin){translate:0 calc((var(--s) + var(--g)) / 2)}
+  #ccRoot .card.bar{grid-row:1 / span 2}
+}
+
+/* MÀN NGANG, game KHÔNG có độ khó: thẻ chế độ vẫn VUÔNG 2×2, dồn cột */
+@media (orientation:landscape){
+  #ccRoot .pn.nodif{grid-template-columns:repeat(7,var(--s))}
+  #ccRoot .pn.nodif .mod,#ccRoot .pn.nodif .mod.wide{grid-column:1 / span 2}
+  #ccRoot .pn.nodif :is(.snd,.skin,.skinrow){grid-column:3}
+  #ccRoot .pn.nodif .card:not(.bar){grid-column:4 / span 4}
+  #ccRoot .pn.nodif .card.bar{grid-column:1 / span 3}
+}
+
+/* ĐỘ KHÓ NẰM NGANG (Đập Deadline): thẻ chế độ 2×2 trái; phải = loa | linh vật (hàng 1), thanh độ khó ngang rộng 2 ô (hàng 2) */
+#ccRoot .dif.h{grid-column:3 / span 2;grid-row:2;cursor:ew-resize}
+#ccRoot .dif.h .fill{top:0;bottom:0;left:0;right:auto;height:auto;width:var(--p,34%);transition:width .22s cubic-bezier(.34,1.3,.64,1)}
+#ccRoot .dif.h .ic{left:10px;right:auto;top:50%;transform:translateY(-50%);font-size:calc(var(--s) * .46)}
+#ccRoot .dif.h .nm{left:auto;right:10px;bottom:auto;top:50%;transform:translateY(-50%);text-align:right;max-width:58%;font-size:clamp(12px,calc(var(--s) * .2),15px)}
+#ccRoot .dif.h .tk{display:none}
+#ccRoot .pn.hdif .mod{grid-column:1 / span 2;grid-row:1 / span 2}
+#ccRoot .pn.hdif .snd{grid-column:3;grid-row:1}
+#ccRoot .pn.hdif .skin{grid-column:4;grid-row:1}
+@media (orientation:landscape){
+  #ccRoot .pn.hdif .dif.h{grid-column:3 / span 2;grid-row:2}
+  #ccRoot .pn.hdif .mod{grid-column:1 / span 2;grid-row:1 / span 2}
+  #ccRoot .pn.hdif .snd{grid-column:3;grid-row:1}
+  #ccRoot .pn.hdif .skin{grid-column:4;grid-row:1}
+}
+
+/* ĐỘ KHÓ NGANG (bản chốt): thanh nằm NGAY DƯỚI thẻ chế độ (2 ô rộng); loa + linh vật bên phải thẻ chế độ; thẻ chức năng lấp chỗ trống (dense) */
+#ccRoot .pn.hdif{grid-auto-flow:row dense}
+#ccRoot .pn.hdif .mod{grid-column:1 / span 2;grid-row:1 / span 2}
+#ccRoot .pn.hdif .dif.h{grid-column:1 / span 2;grid-row:3}
+#ccRoot .pn.hdif .snd{grid-column:3;grid-row:1}
+#ccRoot .pn.hdif .skin{grid-column:4;grid-row:1}
+@media (orientation:landscape){
+  #ccRoot .pn.hdif{grid-template-columns:repeat(7,var(--s))}
+  #ccRoot .pn.hdif .mod{grid-column:1 / span 2;grid-row:1 / span 2}
+  #ccRoot .pn.hdif .dif.h{grid-column:1 / span 2;grid-row:3}
+  #ccRoot .pn.hdif .snd{grid-column:3;grid-row:1}
+  #ccRoot .pn.hdif .skin{grid-column:3;grid-row:2}
+  #ccRoot .pn.hdif .card:not(.bar){grid-column:4 / span 4;grid-row:auto / span 1}
+}
+
+/* có popup đang mở → nút ⋯ riêng của Control Center không nổi đè lên popup */
+html:has(.sheet:not([hidden]),.ov:not([hidden]):not(#ovStart),#hlpOv:not([hidden]),.overlay:not([hidden])) #ccOpen{display:none!important}
+
+/* danh sách TUỲ CHỌN mở rộng: cùng style các thẻ khác — ô bo 20px ĐỀU NHAU (lưới), chữ đậm, ô đang chọn = nền sáng đầy; tiêu đề nhóm rõ */
+#ccRoot .og .or{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:10px}
+#ccRoot .og .m.ch{flex:none;min-width:0;min-height:54px;padding:8px 6px;border-radius:20px;white-space:normal;text-align:center;line-height:1.15;font:900 clamp(14px,calc(var(--s) * .22),17px)/1.15 var(--font,system-ui);background:color-mix(in srgb,var(--ccink) 16%,var(--ccbg))}
+#ccRoot .og .m.ch.on{background:var(--ccink);color:var(--ccbg)}
+#ccRoot .og .oh{font:900 clamp(14px,calc(var(--s) * .22),17px)/1 var(--font,system-ui);margin:0 2px 10px;opacity:1}
+@media (orientation:landscape){#ccRoot .ml.opx{grid-template-columns:1fr 1fr;gap:14px 20px;align-content:center}}
+@media (orientation:landscape){
+  #ccRoot .ml.opx{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));align-content:start;gap:12px 16px;padding:14px 16px;overflow-y:auto}
+  #ccRoot .og .or{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  #ccRoot .og .m.ch{min-height:46px;padding:6px 4px;font-size:clamp(13px,calc(var(--s) * .2),16px);border-radius:16px}
+  #ccRoot .og .oh{margin-bottom:8px;font-size:clamp(13px,calc(var(--s) * .2),16px)}
+}
+
+/* CHỮ TRONG THẺ RÕ HƠN: tiêu đề nhóm, tên chế độ, gợi ý, nhãn độ khó, tên ô trong danh sách — to hơn, đậm nhất, sáng 100%, bóng nhẹ phía dưới */
+#ccRoot .og .oh{font:900 clamp(17px,calc(var(--s) * .28),21px)/1.1 var(--font,system-ui);opacity:1;color:var(--ccink);text-shadow:0 1px 0 rgba(0,0,0,.4);letter-spacing:.2px;margin-bottom:10px}
+#ccRoot .mod .nm{font:900 clamp(18px,calc(var(--s) * .3),24px)/1.1 var(--font,system-ui);text-shadow:0 1px 0 rgba(0,0,0,.4);white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+#ccRoot .mod .hn{font:800 clamp(12px,calc(var(--s) * .18),14px)/1.15 var(--font,system-ui);opacity:1;color:color-mix(in srgb,var(--ccink) 88%,transparent)}
+#ccRoot .dif .nm{font-weight:900;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+#ccRoot .ml:not(.ex) .m .nm,#ccRoot .ml.ex .m.row .nm{font-weight:900;text-shadow:0 1px 0 rgba(0,0,0,.35);opacity:1}
+#ccRoot .og .m.ch{font-weight:900;font-size:clamp(15px,calc(var(--s) * .24),18px);opacity:1}
+#ccRoot .og .m.ch.lk{opacity:.78}
+#ccRoot .skinrow .nm{text-shadow:0 1px 0 rgba(0,0,0,.35)}
+@media (orientation:landscape){#ccRoot .og .oh{font-size:clamp(15px,calc(var(--s) * .26),19px)}#ccRoot .og .m.ch{font-size:clamp(14px,calc(var(--s) * .22),17px)}}
+
+/* ===== DANH SÁCH MỞ RỘNG = CÙNG HỆ LƯỚI VỚI CONTROL CENTER (ô --s, khoảng --g, bo .34·s, lề 16px; màn dọc 4 cột, màn ngang tự chia theo bề rộng bảng) ===== */
+#ccRoot .pn .ml.ml{display:none;grid-template-columns:repeat(auto-fill,var(--s));grid-auto-rows:auto;gap:var(--g);padding:16px;justify-content:center;align-content:start;overflow-x:hidden;overflow-y:auto;scrollbar-width:none;border-radius:34px;touch-action:pan-y}
+#ccRoot .pn .ml.ml.on{display:grid}
+#ccRoot .pn .ml.ml::-webkit-scrollbar{display:none}
+/* ô chế độ + ô chức năng: 2×2 ô, icon to trên – chữ dưới (như thẻ chế độ) */
+#ccRoot .pn .ml.ml:not(.opx)>.m{grid-column:span 2;height:calc(var(--s) * 2 + var(--g));border-radius:calc(var(--s) * .34);padding:8px;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:6px}
+/* tuỳ chọn: nhóm trải 4 cột; tiêu đề cả hàng; chip = 1 ô, chữ đậm giữa ô */
+#ccRoot .pn .ml.opx>.og{display:contents}
+#ccRoot .pn .ml.opx .oh{grid-column:1 / -1;margin:6px 2px 0}
+#ccRoot .pn .ml.opx .or{display:contents}
+#ccRoot .pn .ml.opx .m.ch{grid-column:span 1;width:var(--s);height:var(--s);min-height:0;padding:4px;border-radius:calc(var(--s) * .34);font-size:clamp(12px,calc(var(--s) * .21),16px);line-height:1.1;white-space:normal;word-break:break-word}
+@media (orientation:landscape){#ccRoot .pn .ml.ml{inset:0;grid-template-columns:repeat(auto-fill,var(--s));justify-content:center;align-content:center}#ccRoot .pn .ml.opx .oh{grid-column:1 / -1}}
+@media (orientation:portrait){#ccRoot .pn .ml.ml{grid-template-columns:repeat(4,var(--s))}}
+/* màn ngang: tiêu đề nhóm nằm CÙNG HÀNG với các ô (2 ô rộng) → 3 nhóm = 3 hàng, vừa đúng chiều cao bảng */
+@media (orientation:landscape){
+  #ccRoot .pn .ml.opx .oh{grid-column:1 / span 2;height:var(--s);display:flex;align-items:center;margin:0 4px 0 0}
+  #ccRoot .pn .ml.opx{align-content:center}
+}
+#ccRoot .pn .ml.opx .m.ch{word-break:normal;overflow-wrap:break-word;hyphens:none;font-size:clamp(11.5px,calc(var(--s) * .19),15px)}
+@media (orientation:portrait){
+  #ccRoot .pn .ml.opx{gap:8px var(--g);padding-top:10px;padding-bottom:10px;align-content:start}
+  #ccRoot .pn .ml.opx .m.ch{height:calc(var(--s) * .76)}
+  #ccRoot .pn .ml.opx .oh{margin:4px 2px 0;font-size:clamp(16px,calc(var(--s) * .26),20px)}
+}
+
+/* ĐANG CHƠI: nút tròn luôn VUÔNG (không bị kéo dọc khi thẻ ít nút), thẻ căn đầu */
+#ccRoot .pn.play .card{align-content:start;grid-auto-rows:var(--s)}
+#ccRoot .pn.play .card .m.c{aspect-ratio:1 / 1;height:auto;width:100%;max-height:calc(var(--s) - 4px);justify-self:center}
+
+/* MỌI nút tròn trong thẻ LUÔN VUÔNG/TRÒN (thẻ chỉ có 1–2 nút không còn kéo thành hình bầu dục), căn giữa trong ô */
+#ccRoot .card:not(.bar):not(.opt) .m.c{width:100%;height:auto;aspect-ratio:1 / 1;align-self:center;justify-self:center}
+#ccRoot .card:not(.bar):not(.opt){align-content:center}
+@media (orientation:landscape){#ccRoot .card:not(.bar):not(.opt) .m.c{height:100%;width:auto;max-width:100%}}
+
+/* CĂN TOP: nút trong thẻ và các danh sách mở rộng căn sát đầu (không căn giữa dọc) */
+#ccRoot .card:not(.bar):not(.opt){align-content:start}
+#ccRoot .card:not(.bar):not(.opt) .m.c{align-self:start}
+#ccRoot .pn .ml.ml,#ccRoot .pn .ml.opx{align-content:start}
+@media (orientation:landscape){#ccRoot .pn .ml.ml,#ccRoot .pn .ml.opx{align-content:start}}
+
+/* TOOLTIP "Chạm để bật âm thanh" (âm thanh đang tắt): bong bóng kiểu Night Pass, mũi nhọn chỉ vào nút loa, tự mờ sau ~2,5 giây */
+#ccRoot .tip{position:fixed;z-index:5;display:flex;align-items:center;gap:8px;max-width:calc(100vw - 20px);box-sizing:border-box;padding:10px 14px;border-radius:16px;background:linear-gradient(135deg,#7C5CFF,#c2410c);color:#fff;font:800 14px/1.15 var(--font,system-ui);white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.4);pointer-events:none;opacity:0;transform:translateY(-6px) scale(.96);transition:opacity .22s ease,transform .22s ease}
+#ccRoot .tip.on{opacity:1;transform:none}
+#ccRoot .tip::before{content:"";position:absolute;top:-6px;left:var(--ax,50%);margin-left:-6px;width:12px;height:12px;background:#7C5CFF;transform:rotate(45deg);border-radius:2px}
+#ccRoot .tip .ti{font-size:18px;line-height:1}
+@media (prefers-reduced-motion:reduce){#ccRoot .tip{transition:none}}
+
+/* MÀN NGANG: bảng KHÔNG đè cột nút ← 🔊 ⋯ bên trái (chừa 84px), số hàng theo nội dung (không cứng 3 hàng → hết khoảng trống dưới thẻ) */
+@media (orientation:landscape){
+  #ccRoot{--s:clamp(46px,calc((100vw - 96px - 32px - 7 * var(--g)) / 8),72px)}
+  #ccRoot .pn{left:calc(84px + env(safe-area-inset-left,0px));right:12px;grid-template-rows:none;grid-auto-rows:var(--s);max-width:calc(100vw - 96px)}
+  #ccRoot .pn .skinbtn{width:100%;aspect-ratio:1 / 1;height:auto;align-self:start;justify-self:center}
+}
+
+/* ===== MÀN NGANG khi nhúng trong trang cổng / đang chơi: sửa các lỗi nhìn thấy ===== */
+@media (orientation:landscape){
+  /* tiêu đề/mục tiêu trên bảng chơi: sáng rõ theo màu chữ của giao diện, có bóng nhẹ (trước mờ xanh trên nền tối) */
+  html #play[data-scr="game"] .top h1,html #play[data-scr="game"] #ttl{color:var(--ink,#fff)!important;opacity:1!important;text-shadow:0 1px 3px rgba(0,0,0,.55)}
+  /* linh vật nhỏ khi chơi: nằm NGOÀI mép bảng chơi (bên phải), không đè lên vở/bảng */
+  html #play[data-scr="game"]{overflow:visible!important}
+  html #play[data-scr="game"] .npa-mini{left:calc(100% + 10px)!important;right:auto!important;bottom:8px!important}
+  /* Vẽ Một Nét: ô Best/Try/Last cách bảng vẽ ≥ 20px (trước chỉ 9px) */
+  html[data-gid="ve-mot-net"] #play[data-scr="game"] .stats{width:calc(100% - 12px)!important;max-width:108px!important;box-sizing:border-box;transform:translateX(-12px)}
+}
+
+/* ĐANG CHƠI: bảng ôm đúng nội dung (không kéo dài hết màn), căn đầu; màn ngang chỉ ~2–3 thẻ cạnh nhau */
+#ccRoot .pn.play{height:max-content!important;min-height:0!important;grid-template-rows:none!important;grid-auto-rows:var(--s)!important;align-content:start!important;align-items:start}
+#ccRoot .pn.play .card{height:calc(var(--s) * 2 + var(--g));align-self:start}
+@media (orientation:landscape){
+  #ccRoot .pn.play{grid-template-columns:repeat(8,var(--s))!important;left:50%!important;right:auto!important;width:max-content!important;max-width:calc(100vw - 24px)!important;translate:-50% 0;margin:0!important}
+  #ccRoot .pn.play .card{grid-column:span 4!important;grid-row:auto!important}
+}
+
+/* NÚT LOA đang bật = màu NHẤN của game/giao diện (theo skin/Night Pass), chữ/icon tương phản; tắt = nền kính như nút tròn khác */
+#ccRoot .m.snd.act,#ccRoot .card.bar .m.snd.act{background:var(--ccac)!important;color:var(--on,#fff)!important}
+#ccRoot .m.snd.act svg,#ccRoot .m.snd.act *{color:var(--on,#fff)!important;fill:currentColor}
+#ccRoot .m.snd:not(.act){background:color-mix(in srgb,var(--ccink) 16%,var(--ccbg))}
+
+/* đã đóng (mất .in) → KHÔNG chặn chạm dù chưa kịp ẩn (game đang tạm dừng có thể đóng băng hẹn giờ) và ẩn hẳn sau lớp mờ */
+#ccRoot:not(.in){pointer-events:none!important}
+#ccRoot:not(.in) *{pointer-events:none!important}
+#ccRoot:not(.in) .pn{visibility:hidden;transition:visibility 0s .25s}

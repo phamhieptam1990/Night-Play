@@ -11,3 +11,212 @@
 .site-foot nav a:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:4px}
 @media (max-width:620px){.site-foot{justify-content:flex-start}}
 @media print{.site-foot{display:none}}
+
+/* LAYOUT MỚI — màn chọn (#home) của game Cozy. Một bộ quy tắc cho MỌI cỡ màn (chủ site chốt):
+   1) Mọi thẻ / dòng danh sách / nút trong màn chọn CAO BẰNG NHAU (--row).
+   2) Khoảng cách giữa linh vật – thẻ – nút BẰNG NHAU (--gap), cũng là lề màn.
+   3) Danh sách thẻ tràn bề ngang → thành SLIDE (layout.js đặt data-slide); không bao giờ cuộn trang.
+   4) Mọi chỗ trống còn lại dành cho LINH VẬT (flex:1) và linh vật phóng to cho đầy ô, không để khoảng hở.
+   Chỉ dùng CSS + một ResizeObserver nhỏ (layout.js) — không hẹn giờ, không sửa style nội tuyến từng phần tử.
+   Nạp SAU landscape.css. Dùng đơn vị cqh/cqw của #play (container-type:size). */
+html.npl #play{--pad:clamp(10px,2.4cqw,32px);--bgd:#2b1d68;--r:22px;--back:64px;--bd:18px;--bg:16px;--hmin:min(250px,50cqh);--gap:clamp(8px,2.2cqmin,16px);--row:clamp(72px,10cqh,84px);--rail:0px;--topH:clamp(52px,13cqw,64px)}
+html.npl #play[data-scr="home"] #home{position:absolute;left:var(--pad);right:var(--pad);top:var(--topH);bottom:var(--pad);display:flex;flex-direction:column;gap:var(--gap);justify-content:flex-start;padding:0;margin:0;overflow:hidden}
+/* tên bản sao + mô tả phụ: không chiếm chỗ (tên game đã có ở thanh trên) */
+html.npl #play[data-scr="home"] #home .hometitle,html.npl #play[data-scr="home"] #hSub,html.npl #play[data-scr="home"] #hNote{display:none!important}
+
+/* khối rỗng (chips/ghi chú chưa có nội dung) không được chiếm khoảng cách */
+html.npl #play[data-scr="home"] #home :is(.chips,#hChips,#hLad,.lad,.boss,.hat,#hNote):empty{display:none!important}
+
+/* ---------- DỌC: hai cột .hl/.hr trong suốt, xếp dọc: linh vật (giãn) → Hôm nay → danh sách → hàng nút ---------- */
+html.npl #play[data-scr="home"] #home>.hl,html.npl #play[data-scr="home"] #home>.hr{display:contents}
+html.npl #play[data-scr="home"] #hHero,html.npl #play[data-scr="home"] #hHero.npa-hero{order:1;flex:1 1 0!important;min-height:var(--hmin)!important;height:auto!important;max-height:none!important;margin:0!important;padding:0;display:grid!important;place-items:center;overflow:visible;position:relative!important;font-size:clamp(40px,22cqmin,140px)!important;line-height:1}
+html.npl #play[data-scr="home"] #hHero>*{max-width:100%;max-height:100%}
+html.npl #play[data-scr="home"] #hHero svg{width:100%;height:100%;max-width:100%;max-height:100%}
+html.npl #play[data-scr="home"] #hHero .npa-box{width:100%;height:100%}
+html.npl #play[data-scr="home"] #npResume{order:2}
+html.npl #play[data-scr="home"] #bDaily{order:3}
+html.npl #play[data-scr="home"] #home .tys,html.npl #play[data-scr="home"] #home #tys{order:4}
+html.npl #play[data-scr="home"] #home .row{order:5}
+html.npl #play[data-scr="home"] #home .chips,html.npl #play[data-scr="home"] #hChips{order:6}
+/* mọi thẻ/nút cùng chiều cao */
+html.npl #play[data-scr="home"] #home :is(#bDaily,.dbtn,.ty,.row>.btn,.row>.ib,#bSkin,.abar,#npResume){height:var(--row)!important;min-height:0!important;max-height:none!important;box-sizing:border-box;margin:0!important}
+html.npl #play[data-scr="home"] #home #bSkin{width:var(--row)!important;flex:none}
+html.npl #play[data-scr="home"] #home .row{gap:var(--gap);flex:none}
+html.npl #play[data-scr="home"] #home .tys{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--gap);flex:none}
+html.npl #play[data-scr="home"] #home .ty{padding:8px!important;justify-content:center;gap:2px;overflow:hidden}
+html.npl #play[data-scr="home"] #home .ty{min-width:84px}
+html.npl #play[data-scr="home"] #home .ty .e{font-size:max(56px,calc(var(--row)*.5))!important;line-height:1!important}
+/* thẻ "Tiếp tục ván dở" (resume.js): một hàng như mọi hàng khác — thẻ chính + ✕ cùng cao --row */
+/* ✕ đóng thẻ: huy hiệu nhỏ XẾP CHỒNG góc TRÊN-PHẢI của thẻ (vùng bấm nới ra ≥ 44px bằng ::after) */
+html.npl #play[data-scr="home"] #home #npResume{position:relative}
+html.npl #play[data-scr="home"] #home #npResume .npr-x{position:absolute!important;top:calc(50% - 22px)!important;right:2px!important;left:auto!important;bottom:auto!important;width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;max-width:none!important;max-height:none!important;margin:0!important;padding:0!important;border-radius:50%!important;z-index:3;background:transparent!important;color:#fff!important;box-shadow:none!important;animation:none!important}
+html.npl #play[data-scr="home"] #home #npResume .npr-x::before{width:var(--bg)!important;height:var(--bg)!important;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v6M14 11v6' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat!important;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v6M14 11v6' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat!important}
+html.npl #play[data-scr="home"] #home #npResume .npr-go{padding-right:52px!important}
+html.npl #play[data-scr="home"] #home #npResume{display:flex;align-items:stretch;gap:var(--gap);width:100%!important;min-width:0!important;margin:0!important;flex:none}
+html.npl #play[data-scr="home"] #home #npResume .npr-go{flex:1 1 0;min-width:0;height:var(--row)!important;min-height:0!important;max-height:none!important;margin:0}
+/* hàng GỘP "Tiếp tục" + "Hôm nay" (layout.js tạo khi chật, để linh vật không bị thu nhỏ): thẻ Tiếp tục giãn, "Hôm nay" chỉ còn ICON LỊCH vuông cao bằng hàng */
+html.npl #play[data-scr="home"] #home .npl-strip{order:2;display:flex;gap:var(--gap);flex:none;height:var(--row);overflow:visible}
+html.npl #play[data-scr="home"] #home .npl-strip>#npResume{flex:1 1 0!important;width:auto!important;min-width:0!important}
+html.npl #play[data-scr="home"] #home .npl-strip>:is(#bDaily,.dbtn){flex:0 0 var(--row)!important;width:var(--row)!important;min-width:0!important;padding:0!important;justify-content:center;gap:0}
+html.npl #play[data-scr="home"] #home .npl-strip>:is(#bDaily,.dbtn)>:not(.npl-cal){display:none!important}
+html.npl #play[data-scr="home"] #home .npl-cal{display:block;width:max(56px,calc(var(--row)*.7));height:max(56px,calc(var(--row)*.7));font-size:max(56px,calc(var(--row)*.7))}
+html.npl #play[data-scr="home"] #home .npl-strip>#npResume .npr-go{padding:0 12px!important;font-size:clamp(13px,calc(var(--row)*.24),18px)!important}
+html.npl #play[data-scr="home"] #home .npl-strip>#npResume .npr-go small{font-size:clamp(11px,calc(var(--row)*.17),13px)!important}
+html.npl #play[data-scr="home"] #home .npl-strip[data-icononly]>#npResume .npr-go{font-size:0!important;padding:0!important;display:grid;place-items:center}
+html.npl #play[data-scr="home"] #home .npl-strip[data-icononly]>#npResume .npr-go>*{display:none!important}
+html.npl #play[data-scr="home"] #home .npl-strip[data-icononly]>#npResume .npr-go::before{content:"▶";font-size:calc(var(--row)*.4);line-height:1}
+/* SLIDE khi tràn bề ngang: thẻ cao bằng hàng, rộng vừa phải, thấy một phần thẻ kế để biết trượt được */
+html.npl #play[data-scr="home"] #home .tys[data-slide]{display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+html.npl #play[data-scr="home"] #home .tys[data-slide]::-webkit-scrollbar{display:none}
+html.npl #play[data-scr="home"] #home .tys[data-slide]>.ty{flex:0 0 clamp(88px,27%,140px);scroll-snap-align:start}
+
+/* ---------- NGANG: hai cột bằng nhau; trái = linh vật (giãn) + Hôm nay; phải = danh sách + nút; mọi hàng cao bằng nhau (--row do layout.js chia cho vừa cột) ---------- */
+@media (orientation:landscape){
+  html.npl #play{--topH:clamp(40px,12cqh,52px)}
+  html.npl #play[data-scr="home"] #home{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);column-gap:var(--gap);grid-template-rows:minmax(0,1fr);right:auto;left:calc(var(--ox,calc((100% - 100vw)/2)) + var(--pad) + var(--lgut,0px));width:calc(100vw - 2*var(--pad) - var(--rail) - var(--lgut,0px))}
+  html.npl #play[data-scr="home"] #home>.hl,html.npl #play[data-scr="home"] #home>.hr{display:flex;flex-direction:column;gap:var(--gap);min-height:0;min-width:0;height:100%!important;align-self:stretch!important;margin:0!important;padding:0!important;justify-content:flex-start}
+  html.npl #play[data-scr="home"] #home>.hr{justify-content:center}
+  html.npl #play[data-scr="home"] #home .tys{grid-template-columns:repeat(2,minmax(0,1fr))}
+  html.npl #play[data-scr="home"] #home .tys[data-slide]>.ty{flex-basis:clamp(96px,38%,150px)}
+  html.npl #play[data-scr="home"] #home .ty{flex-direction:row;gap:calc(var(--row)*.15);padding:8px 14px!important;justify-content:flex-start;text-align:left}
+  html.npl #play[data-scr="home"] #home .ty .e{font-size:max(56px,calc(var(--row)*.5))!important}
+  /* tên game: nằm gọn trong dải trên cùng bên trái, không đè linh vật */
+  html.npl #play[data-scr="home"] .top>h1{position:fixed;grid-area:auto;left:calc(var(--ox,calc((100% - 100vw)/2)) + var(--gap) + var(--back));top:0;height:var(--topH);width:calc(100vw - 2*var(--gap) - var(--rail) - var(--back));max-width:none;margin:0;display:grid;grid-template-columns:minmax(0,1fr);justify-items:start;text-align:left;align-items:center;font-size:clamp(14px,5.2cqh,24px)}
+}
+@media (orientation:landscape) and (max-height:480px){html.npl #hHero .npa-bub{display:none}}
+@media (max-height:600px){html.npl #hHero .npa-bub{display:none}}
+/* icon thẻ danh sách ≥ 56px; không đủ chỗ cho chữ → BỎ CHỮ, chỉ còn icon (layout.js đặt data-notext) */
+html.npl #play[data-scr="home"] #home .tys[data-notext]>.ty{font-size:0!important;gap:0;justify-content:center;padding:0}
+html.npl #play[data-scr="home"] #home .tys[data-notext]>.ty .e{display:block}
+html.npl #play[data-scr="home"] #home .tys[data-notext]>.ty>:not(.e){display:none!important}
+html.npl #play[data-scr="home"] #home .ty>.t{font-size:clamp(12px,calc(var(--row)*.16),16px)!important;white-space:nowrap!important;overflow:hidden;min-width:0;max-width:100%;text-overflow:clip}
+@media (orientation:landscape){html.npl #play[data-scr="home"] #home .ty>.t{flex:1 1 0}}
+/* GIỚI HẠN CỠ CHỮ (min–max, px) cho mọi chữ trong màn chọn: không bao giờ bé hơn mức đọc được; không vừa một dòng → ẩn chữ phụ / bỏ chữ, KHÔNG thu nhỏ thêm */
+html.npl #play[data-scr="home"] #home #dT{font-size:clamp(14px,calc(var(--row)*.27),22px)!important}
+html.npl #play[data-scr="home"] #home #dS{font-size:clamp(11px,calc(var(--row)*.19),14px)!important}
+html.npl #play[data-scr="home"] #home #dN{font-size:clamp(20px,calc(var(--row)*.42),34px)!important}
+html.npl #play[data-scr="home"] #home .row>.btn{font-size:clamp(14px,calc(var(--row)*.26),22px)!important}
+html.npl #play[data-scr="home"] #home #npResume .npr-go{font-size:clamp(13px,calc(var(--row)*.24),18px)!important}
+html.npl #play[data-scr="home"] #home #npResume .npr-go small{font-size:clamp(11px,calc(var(--row)*.17),13px)!important}
+html.npl #play[data-scr="home"] .top>h1{font-size:clamp(14px,5.2cqh,24px)!important}
+/* PADDING TỐI THIỂU trong thẻ/nút: hình và chữ không sát mép (icon 56 + 2×8 = 72 = hàng thấp nhất) */
+html.npl #play[data-scr="home"] #home .tys[data-notext]>.ty{padding:8px!important}
+html.npl #play[data-scr="home"] #home :is(#bDaily,.dbtn){padding-left:16px!important;padding-right:16px!important}
+html.npl #play[data-scr="home"] #home .row>.btn{padding-left:16px!important;padding-right:16px!important}
+html.npl #play[data-scr="home"] #home #npResume .npr-go{padding-left:16px!important}
+/* MÀN NGANG: cột TRÁI = linh vật (giãn) + thẻ Tiếp tục + Hôm nay (ngay dưới linh vật); cột PHẢI = thẻ chế độ + Random + bảng màu canh giữa dọc; hai cột cao bằng khung */
+@media (orientation:landscape){
+  html.npl #play[data-scr="home"] #home.npl-one{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);grid-template-rows:minmax(0,1fr);align-content:stretch}
+  html.npl #play[data-scr="home"] #home.npl-one>.hl,html.npl #play[data-scr="home"] #home.npl-one>.hr{display:flex;flex-direction:column;gap:var(--gap);grid-row:1;min-height:0;min-width:0;height:100%!important;align-self:stretch}
+  html.npl #play[data-scr="home"] #home.npl-one>.hl{grid-column:1}
+  html.npl #play[data-scr="home"] #home.npl-one>.hr{grid-column:2;justify-content:center}
+  html.npl #play[data-scr="home"] #home.npl-one>.hl #hHero{flex:1 1 0!important;min-height:0!important;height:auto!important}
+  html.npl #play[data-scr="home"] #home.npl-one>.hl>:not(#hHero),html.npl #play[data-scr="home"] #home.npl-one>.hr>*{flex:none}
+}
+}
+}
+/* HUY HIỆU CÙNG SIZE + CÙNG STYLE: vương miện, ổ khoá, ✕, icon lịch = vòng tròn --bd (28px) nền tối mờ + biểu tượng trắng --bg (18px) */
+html.npl #play[data-scr="home"] #home .ty:not(:first-child)::before,html.npl #play[data-scr="home"] #home .ty.lock::after{content:""!important;position:absolute!important;top:3px!important;width:var(--bd)!important;height:var(--bd)!important;font-size:0!important;border-radius:50%;background-color:transparent;box-shadow:none;background-position:center;background-size:var(--bg);background-repeat:no-repeat;animation:none!important;transform:none!important}
+html.npl #play[data-scr="home"] #home .ty:not(:first-child)::before{left:3px!important;right:auto!important;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 8l4.5 4L12 5l4.5 7L21 8l-2 10H5z' fill='white' stroke='white' stroke-width='1.4' stroke-linejoin='round'/%3E%3C/svg%3E")}
+html.npl #play[data-scr="home"] #home .ty.lock::after{right:3px!important;left:auto!important;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 11V8a5 5 0 0 1 10 0v3' fill='none' stroke='white' stroke-width='2.6' stroke-linecap='round'/%3E%3Crect x='5' y='11' width='14' height='10' rx='2.5' fill='white'/%3E%3C/svg%3E")}
+@media (orientation:landscape){html.npl #play{--hmin:250px}}
+html.npl #play[data-scr="home"] #home #bSkin{font-size:max(36px,calc(var(--row)*.5))!important}
+html.npl #play[data-scr="home"] #home #bSkin svg{width:1em;height:1em}
+/* bỏ chữ → icon CĂN GIỮA thẻ (cả hai chiều), mọi cỡ */
+html.npl #play[data-scr="home"] #home .tys[data-notext]>.ty{flex-direction:column!important;justify-content:center!important;align-items:center!important;text-align:center!important;gap:0!important}
+html.npl #play[data-scr="home"] #home .tys[data-notext]>.ty>.e{margin:0!important;flex:none}
+
+/* ===== HOÀN THIỆN GIAO DIỆN (thứ bậc nút · tên game · slide · bo góc/bóng thống nhất) ===== */
+/* (2) MỘT nút chính: có ván dở → thẻ Tiếp tục; không → thẻ Hôm nay. Mọi nút còn lại = kính mờ viền mảnh, không gradient, không glow */
+html.npl #play[data-scr="home"] #home #npResume~:is(#bDaily,.dbtn),html.npl #play[data-scr="home"] #home .row>.btn.alt,html.npl #play[data-scr="home"] #home #bSkin{background:rgba(255,255,255,.10)!important;border:1.5px solid rgba(255,255,255,.30)!important;box-shadow:none!important;color:inherit;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;animation:none!important}
+html.npl #play[data-scr="home"] #home :is(#bDaily,.dbtn,#npResume .npr-go,.row>.btn,#bSkin){border-radius:999px!important}
+html.npl #play[data-scr="home"] #home #npResume .npr-go,html.npl #play[data-scr="home"] #home #bDaily:not(#npResume~*){box-shadow:0 4px 0 rgba(0,0,0,.28),0 0 18px color-mix(in srgb,var(--accent) 45%,transparent)!important}
+/* (4) thẻ danh sách: một mức bo 18px, một mức bóng */
+html.npl #play[data-scr="home"] #home .ty{border-radius:18px!important;box-shadow:0 3px 0 rgba(0,0,0,.28)!important}
+/* (5) thẻ đang chọn rõ ràng cả khi chỉ còn icon; slide: mép phải mờ dần báo còn thẻ để trượt */
+html.npl #play[data-scr="home"] #home .ty.on{border:2.5px solid #fff!important;box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 60%,transparent),0 3px 0 rgba(0,0,0,.28)!important}
+html.npl #play[data-scr="home"] #home .tys[data-slide]{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent);padding-right:24px}
+html.npl #play[data-scr="home"] #home .tys[data-slide][data-end]{-webkit-mask-image:none;mask-image:none;padding-right:0}
+/* (3) màn DỌC: tên game nằm trong dải trên, bên trái hai nút, tối đa 2 dòng */
+@media (orientation:portrait){
+  html.npl #play[data-scr="home"] .top>h1{display:grid!important;grid-template-columns:minmax(0,1fr);justify-items:start;text-align:left!important;visibility:visible!important;opacity:1!important;position:fixed!important;grid-area:auto!important;left:calc(var(--gap) + var(--back));top:0;height:var(--topH);width:calc(100% - 2*var(--gap) - 132px - var(--back));max-width:none;margin:0!important;align-items:center;overflow:hidden;white-space:normal!important;font-size:clamp(16px,5.4cqw,24px)!important;line-height:1.1;-webkit-line-clamp:2;text-overflow:ellipsis;color:var(--accent)}
+}
+html.npl #play[data-scr="home"] #home #bDaily[data-nosub] #dS{display:none!important}
+html.npl #play[data-scr="home"] #home #bDaily[data-nosub] #dT{white-space:nowrap}
+html.npl #play[data-scr="home"] #home .ty .e{display:block;line-height:0!important}
+html.npl #play[data-scr="home"] #home .ty .e .npic{width:1em;height:1em}
+html.npl #play[data-scr="home"] #home #bFree .npic-in{flex:none}
+html.npl #play[data-scr="home"] #home .ty .e{flex:none!important;min-width:56px;min-height:56px;width:56px;height:56px}
+html.npl #play[data-scr="home"] #home .ty .e>.npic{width:56px!important;height:56px!important;font-size:56px}
+/* icon chính ≥ 56px: lịch (Hôm nay gộp hàng), xúc xắc (Random round), bảng màu */
+html.npl #play[data-scr="home"] #home .npl-cal>.npic{width:100%;height:100%}
+html.npl #play[data-scr="home"] #home #bFree .npic-in{width:56px!important;height:56px!important;margin-right:10px!important;vertical-align:middle!important}
+html.npl #play[data-scr="home"] #home #bFree{display:flex;align-items:center;justify-content:center}
+html.npl #play[data-scr="home"] #home #bSkin{font-size:max(56px,calc(var(--row)*.7))!important}
+html.npl #play[data-scr="home"] #home #bFree .npic-in>.npic{width:100%!important;height:100%!important}
+html.npl #play[data-scr="home"] #home #bFree[data-notext]{font-size:0!important;gap:0}
+html.npl #play[data-scr="home"] #home #bFree[data-notext] .npic-in{margin-right:0!important}
+
+/* ===== THẺ CHẾ ĐỘ NHẸ (chủ site duyệt): nền gần trong suốt + viền mảnh; CHỈ thẻ đang chọn có nền & quầng sáng; icon to hơn khi đủ chỗ ===== */
+html:root.npl #play[data-scr="home"] #home .tys .ty.ty:not(.on),html:root.npl #play[data-scr="home"] #home .tys .ty.ty.lock:not(.on){background:rgba(255,255,255,.04)!important;border:1.5px solid rgba(255,255,255,.22)!important;box-shadow:none!important;color:inherit}
+html:root.npl #play[data-scr="home"] #home .tys .ty.ty.on{background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 38%,transparent),color-mix(in srgb,var(--accent) 14%,transparent))!important;border:2.5px solid #fff!important;box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 55%,transparent),0 0 18px color-mix(in srgb,var(--accent) 50%,transparent)!important}
+html[data-theme=light]:root.npl #play[data-scr="home"] #home .tys .ty.ty:not(.on){background:rgba(0,0,0,.03)!important;border-color:rgba(0,0,0,.2)!important}
+html.npl #play[data-scr="home"] #home .tys[data-notext]>.ty .e,html.npl #play[data-scr="home"] #home .tys[data-notext]>.ty .e>.npic{width:min(72px,calc(var(--row) - 14px))!important;height:min(72px,calc(var(--row) - 14px))!important;min-width:56px!important;min-height:56px!important}
+
+/* BO GÓC THỐNG NHẤT: thẻ/nút hàng bo vừa phải (--r), không còn dạng viên thuốc */
+html:root.npl #play[data-scr="home"] #home :is(#bDaily,.dbtn,#npResume .npr-go,#npResume,.row>.btn,#bSkin,.npl-strip>*){border-radius:var(--r)!important}
+html:root.npl #play[data-scr="home"] #home .ty.ty{border-radius:var(--r)!important}
+
+/* KHÔNG ĐÈ NHAU mà vẫn CÂN ĐỐI: icon CĂN GIỮA thẻ; huy hiệu (vương miện/ổ khoá) bám NGOÀI mép góc thẻ (nửa trong, nửa ngoài) nên không chạm icon. Dải thẻ chừa 10px phía trên để huy hiệu không bị cắt. */
+html:root.npl #play[data-scr="home"] #home .tys{padding-top:10px!important;margin-top:-10px!important}
+html:root.npl #play[data-scr="home"] #home .tys>.ty{padding:4px!important;justify-content:center!important;align-items:center!important}
+html:root.npl #play[data-scr="home"] #home .ty:not(:first-child)::before,html:root.npl #play[data-scr="home"] #home .ty.lock::after{top:-9px!important;background-color:var(--bgd,#241a5a)!important;box-shadow:0 0 0 2px rgba(255,255,255,.35)}
+html:root.npl #play[data-scr="home"] #home .ty:not(:first-child)::before{left:-3px!important}
+html:root.npl #play[data-scr="home"] #home .ty.lock::after{right:-3px!important}
+@media (orientation:landscape){html:root.npl #play[data-scr="home"] #home .tys>.ty{flex-direction:row!important;padding:4px 14px!important;justify-content:flex-start!important}}
+html:root.npl #play[data-scr="home"] #home .tys[data-notext]>.ty{justify-content:center!important;align-items:center!important}
+html:root.npl #play[data-scr="home"] #home .tys>.ty{overflow:visible!important}
+html:root.npl #play[data-scr="home"] #home .tys>.ty>.t{overflow:hidden}
+
+/* THẺ "TIẾP TỤC VÁN DỞ" TINH GỌN (chủ site: bản gradient tím-cam làm game xấu): nền kính tối + viền màu theme, chữ trắng; không gradient, không quầng, không animation */
+html:root.npl #play[data-scr="home"] #home #npResume .npr-go{background:rgba(255,255,255,.07)!important;border:1.5px solid color-mix(in srgb,var(--accent) 70%,#fff 10%)!important;box-shadow:none!important;animation:none!important;color:#fff!important;text-shadow:none!important}
+html:root.npl #play[data-scr="home"] #home #npResume .npr-go small{opacity:.7!important;font-weight:600!important}
+html:root.npl #play[data-scr="home"] #home #npResume .npr-x{opacity:.75}
+html:root.npl #play[data-scr="home"] #home .npl-strip[data-icononly]>#npResume .npr-go::before{color:var(--accent)}
+/* một nút chính duy nhất: "Hôm nay" luôn giữ gradient (kể cả khi có thẻ Tiếp tục dịu bên trên) */
+html:root.npl #play[data-scr="home"] #home #npResume~#bDaily:not(.npl-strip>*){background:linear-gradient(100deg,#6a45ff,#c45a2a)!important;border:0!important;box-shadow:0 4px 0 rgba(0,0,0,.28),0 0 18px color-mix(in srgb,var(--accent) 40%,transparent)!important}
+/* thẻ Tiếp tục mới: [icon resume 56px] + chữ ngắn */
+html:root.npl #play[data-scr="home"] #home #npResume .npr-go{display:flex!important;align-items:center;justify-content:flex-start;gap:12px;padding:0 52px 0 14px!important;font-size:clamp(16px,calc(var(--row)*.27),22px)!important;font-weight:800}
+html:root.npl #play[data-scr="home"] #home #npResume .npr-ic{display:block;flex:none;width:56px;height:56px;font-size:56px;line-height:0}
+html:root.npl #play[data-scr="home"] #home #npResume .npr-ic .npic{width:56px;height:56px}
+html:root.npl #play[data-scr="home"] #home #npResume .npr-tx{font:inherit;white-space:nowrap;overflow:hidden;text-overflow:clip;min-width:0}
+html:root.npl #play[data-scr="home"] #home .npl-strip[data-icononly]>#npResume .npr-go{justify-content:center;padding:0!important;font-size:0!important}
+html:root.npl #play[data-scr="home"] #home .npl-strip[data-icononly]>#npResume .npr-go::before{content:none!important;display:none!important}
+html:root.npl #play[data-scr="home"] #home .npl-strip[data-icononly]>#npResume .npr-go .npr-tx{display:none}
+html:root.npl #play[data-scr="home"] #home .npl-strip[data-icononly]>#npResume .npr-go>*{display:block!important}
+html:root.npl #play[data-scr="home"] #home .npl-strip[data-icononly]>#npResume .npr-go .npr-tx{display:none!important}
+
+/* PADDING ĐỀU: icon cách mép trái = trên = dưới = 8px (thẻ có chữ); thùng rác cách mép phải 8px, căn giữa dọc */
+html:root.npl #play[data-scr="home"] #home #npResume .npr-go{padding:0 60px 0 8px!important}
+html:root.npl #play[data-scr="home"] #home #npResume .npr-x{right:8px!important;top:calc(50% - 22px)!important}
+/* thẻ CHỈ CÒN ICON: thẻ Tiếp tục + Hôm nay chia đôi bề rộng, icon căn giữa đều; thùng rác = huy hiệu góc trên-phải (như vương miện/ổ khoá) */
+html:root.npl #play[data-scr="home"] #home .npl-strip[data-icononly]>:is(#npResume,#bDaily,.dbtn){flex:1 1 0!important;width:auto!important;min-width:0!important}
+html:root.npl #play[data-scr="home"] #home .npl-strip[data-icononly]>#npResume .npr-go{padding:0!important}
+html:root.npl #play[data-scr="home"] #home .npl-strip[data-icononly]>#npResume .npr-x{top:-9px!important;right:-3px!important;width:24px!important;height:24px!important;min-width:24px!important;min-height:24px!important;opacity:1;background:var(--bgd,#2b1d68)!important;box-shadow:0 0 0 2px rgba(255,255,255,.35)!important}
+html:root.npl #play[data-scr="home"] #home .npl-strip[data-icononly]>#npResume .npr-x::before{width:14px!important;height:14px!important}
+/* tys nhiều hàng trong cột phải màn ngang: chiếm --tr hàng của lưới */
+@media (orientation:landscape){html:root.npl #play[data-scr="home"] #home.npl-one .tys{grid-row:span var(--tr,1)}
+  html:root.npl #play[data-scr="home"] #home.npl-one{align-content:center}
+  }
+
+/* ===== THEME SÁNG: thẻ/nút kính mờ đổi sang nền tối nhạt + chữ theo mực (--ink), thẻ Tiếp tục chữ tối, huy hiệu giữ nền tối chữ trắng ===== */
+html[data-theme=light]:root.npl #play[data-scr="home"] #home .tys .ty.ty:not(.on),html[data-theme=light]:root.npl #play[data-scr="home"] #home .tys .ty.ty.lock:not(.on){background:rgba(20,16,50,.05)!important;border:1.5px solid rgba(20,16,50,.28)!important;color:var(--ink)!important}
+html[data-theme=light]:root.npl #play[data-scr="home"] #home .tys .ty.ty.on{background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 28%,#fff),color-mix(in srgb,var(--accent) 10%,#fff))!important;border:2.5px solid var(--accent)!important;color:var(--ink)!important}
+html[data-theme=light]:root.npl #play[data-scr="home"] #home :is(.row>.btn.alt,#bSkin,#npResume~#bDaily.npl-x){background:rgba(20,16,50,.06)!important;border:1.5px solid rgba(20,16,50,.28)!important;color:var(--ink)!important}
+html[data-theme=light]:root.npl #play[data-scr="home"] #home #bSkin{color:var(--ink)!important}
+html[data-theme=light]:root.npl #play[data-scr="home"] #home #npResume .npr-go{background:rgba(20,16,50,.06)!important;border:1.5px solid color-mix(in srgb,var(--accent) 70%,#000 0%)!important;color:var(--ink)!important}
+html[data-theme=light]:root.npl #play[data-scr="home"] #home #npResume .npr-x{color:var(--ink)!important}
+html[data-theme=light]:root.npl #play[data-scr="home"] #home #bFree{color:var(--ink)!important}
+html[data-theme=light]:root.npl #play[data-scr="home"] #home .npl-strip>:is(#bDaily,.dbtn){background:rgba(20,16,50,.06)!important;border:1.5px solid rgba(20,16,50,.28)!important}
+html[data-theme=light]:root.npl #play[data-scr="home"] #home #bSkin svg,html[data-theme=light]:root.npl #play[data-scr="home"] #home #bSkin svg *{color:var(--ink)!important;stroke:var(--ink)!important}
+html[data-theme=light]:root.npl #play[data-scr="home"] #home #npResume .npr-go,html[data-theme=light]:root.npl #play[data-scr="home"] #home #npResume .npr-tx{color:var(--ink)!important}

@@ -1,0 +1,31 @@
+/* MENU ⋯ KIỂU "CONTROL CENTER" CỦA iPHONE — dùng chung cho Cozy (shared/fan.js, #npFan) và Pop (shared/popmenu.js, #npPmFan).
+   CHỈ đổi hình dạng + chuyển động, KHÔNG đổi màu theo giao diện (sáng/tối/Night Pass giữ nguyên do fan.js/popmenu.js tính):
+   - thẻ bo 32px, lưới 4 cột; mỗi nút là VIÊN TRÒN kính (như nút Control Center), icon ≈44% đường kính, KHÔNG chữ nhãn (quy tắc 21);
+   - nền mờ phủ trọn màn đậm hơn; khi mở, các viên tròn bật lên lần lượt (lò xo) từ góc nút ⋯; nhấn = co 92%;
+   - không backdrop-filter / filter / drop-shadow mới (lỗi WebKit sập trang) — chỉ transform + opacity.
+   Nạp tự động từ fan.js và popmenu.js. Selector dùng html:root để thắng các quy tắc !important cũ không phụ thuộc thứ tự nạp. */
+html:root #npFan .pn, html:root #npPmFan .pn {
+  --cct: clamp(50px, calc((100vw - 32px - 32px - 36px) / 4), 72px);
+  grid-template-columns: repeat(4, var(--cct)) !important;
+  gap: 12px !important; padding: 16px !important; border-radius: 32px !important;
+  transform-origin: top right;
+}
+html:root #npFan .pn .it, html:root #npPmFan .pn .it {
+  width: var(--cct) !important; height: var(--cct) !important; min-width: 0 !important; min-height: 0 !important;
+  padding: 0 !important; border-radius: 50% !important; aspect-ratio: 1 / 1;
+  display: grid !important; place-items: center; transition: transform .14s ease, opacity .14s;
+}
+html:root #npFan .pn .it svg, html:root #npPmFan .pn .it svg { width: calc(var(--cct) * .44) !important; height: calc(var(--cct) * .44) !important; }
+html:root #npFan .pn .it > span:first-child { font-size: calc(var(--cct) * .42) !important; }
+html:root #npFan .pn .it[data-r=lang], html:root #npFan .pn .it[data-r=lang] > span:first-child,
+html:root #npPmFan .pn .it[data-r=lang], html:root #npPmFan .pn .it[data-r=lang] > span { font-size: calc(var(--cct) * .31) !important; }
+html:root #npFan .bk, html:root #npPmFan .bk { background: rgba(8, 6, 22, .52) !important; }
+html:root:not([data-theme=light]) #npFan .pn .it, html:root:not([data-theme=light]) #npPmFan .pn .it { background: rgba(255, 255, 255, .14) !important; }
+html:root #npFan .pn .it:active, html:root #npPmFan .pn .it:active { transform: scale(.92) !important; }
+html:root #npFan.open .pn .it, html:root #npPmFan.open .pn .it { animation: npccIn .42s cubic-bezier(.2, 1.35, .4, 1) backwards !important; }
+html:root .pn .it:nth-child(2) { animation-delay: 30ms !important } html:root .pn .it:nth-child(3) { animation-delay: 60ms !important }
+html:root .pn .it:nth-child(4) { animation-delay: 90ms !important } html:root .pn .it:nth-child(5) { animation-delay: 120ms !important }
+html:root .pn .it:nth-child(6) { animation-delay: 150ms !important } html:root .pn .it:nth-child(7) { animation-delay: 180ms !important }
+html:root .pn .it:nth-child(8) { animation-delay: 210ms !important } html:root .pn .it:nth-child(n+9) { animation-delay: 240ms !important }
+@keyframes npccIn { from { opacity: 0; transform: scale(.4) translate(30%, -30%) } to { opacity: 1; transform: none } }
+@media (prefers-reduced-motion: reduce) { html:root #npFan.open .pn .it, html:root #npPmFan.open .pn .it { animation: none !important } }

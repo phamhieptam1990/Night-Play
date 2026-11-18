@@ -6,6 +6,7 @@
    - Chỉ bật khi (max-width:520px) và màn dọc; màn rộng/ngang trả các nút về đúng chỗ cũ.
    - Nút xuất hiện muộn (📷/📤 do landscape.js gắn, ? do help.js) được tự gom vào. Không làm gì nếu trang có ít hơn 3 nút phụ (game Pop Play). */
 (function () {
+  (function(){try{var s=document.currentScript,h=s&&s.src?s.src.replace(/[^\/]*(\?.*)?$/,"ccmenu.css"):"/shared/ccmenu.css";if(!document.querySelector("link[data-npcc]")){var l=document.createElement("link");l.rel="stylesheet";l.href=h;l.setAttribute("data-npcc","1");(document.head||document.documentElement).appendChild(l);}}catch(e){}})();
   "use strict";
   if (document.documentElement.classList.contains("np-multi")) return;   /* chế độ chơi cùng lúc (?multi=1): host lo các nút */
   /* vai trò theo thứ tự cũ trên thanh trên: [vai trò, [các id có thể có], [nhãn vi, en]] */

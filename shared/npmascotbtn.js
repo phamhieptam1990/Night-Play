@@ -21,9 +21,9 @@
   function openOverlay() {
     if (ov) return;
     try { if (window.NP && NP.menuPause) { NP.menuPause(); paused = true; } } catch (e) {}
-    ov = document.createElement("div"); ov.id = "npMcOv"; ov.style.cssText = "position:fixed;inset:0;z-index:2147483200;background:#0E1020";
-    var f = document.createElement("iframe"); f.src = "/nightpass-mascot.html?embed=1&lang=" + (vi() ? "vi" : "en") + "&m=" + encodeURIComponent(gid); f.title = vi() ? "Linh vật & skin" : "Mascot & skins"; f.style.cssText = "border:0;width:100%;height:100%;display:block";
-    ov.appendChild(f); (document.body || document.documentElement).appendChild(ov);
+    ov = document.createElement("div"); ov.id = "npMcOv"; ov.style.cssText = "position:fixed;inset:0;z-index:2147483200;background:#0E1020;touch-action:pan-y;overflow:hidden";   /* gắn vào <html> (không vào body: body/#play đặt touch-action:none chặn vuốt dọc cột phải) */
+    var f = document.createElement("iframe"); f.src = "/nightpass-mascot.html?embed=1&lang=" + (vi() ? "vi" : "en") + "&m=" + encodeURIComponent(gid); f.title = vi() ? "Linh vật & skin" : "Mascot & skins"; f.style.cssText = "border:0;width:100%;height:100%;display:block;touch-action:pan-y";
+    ov.appendChild(f); document.documentElement.appendChild(ov);
   }
   addEventListener("message", function (e) { if (e.origin !== location.origin || !e.data || e.data.np !== 1 || e.data.type !== "mc-close") return; closeOverlay(); });
   addEventListener("keydown", function (e) { if (e.key === "Escape") closeOverlay(); });
@@ -42,6 +42,6 @@
       if (window.NPArt && NPArt.markup && !b.getAttribute("data-art") && b.getAttribute("data-try")) { var mk = NPArt.markup(gid, (window.NPMascot2 && NPMascot2.getSkin ? NPMascot2.getSkin(gid) : "default") || "default", 34); if (mk) { b.innerHTML = '<span class="npmcAv">' + mk + "</span>"; b.setAttribute("data-art", "1"); } } } catch (e) {}
     var lab = vi() ? "Linh vật & skin" : "Mascot & skins"; if (b.getAttribute("aria-label") !== lab) { b.setAttribute("aria-label", lab); b.title = lab; }
   }
-  if (!document.getElementById("npMcCss")) { var st = document.createElement("style"); st.id = "npMcCss"; st.textContent = "#npMcBtn{background:linear-gradient(135deg,#7C5CFF,#FF7A2E)!important;border:2px solid rgba(255,255,255,.85)!important;box-shadow:0 4px 14px rgba(124,92,255,.5),inset 0 1px 0 rgba(255,255,255,.5)!important;padding:0!important}#npMcBtn .npmcAv{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;overflow:hidden;background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.35),rgba(255,255,255,0) 70%)}#npMcBtn .npmcAv svg{width:88%!important;height:88%!important;display:block}#npMcBtn:active{transform:scale(.94)}"; (document.head || document.documentElement).appendChild(st); }
+  if (!document.getElementById("npMcCss")) { var st = document.createElement("style"); st.id = "npMcCss"; st.textContent = "html:root #npMcBtn,html:root .top #npMcBtn.ib{background:none!important;border:0!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;padding:0!important;border-radius:0!important;overflow:visible!important}#npMcBtn .npmcAv{display:grid;place-items:center;width:100%;height:100%;border-radius:0;overflow:visible;background:none}#npMcBtn .npmcAv svg{width:128%!important;height:128%!important;max-width:none!important;display:block;filter:none}#npMcBtn:active{transform:scale(.94)}"; (document.head || document.documentElement).appendChild(st); }
   sync(); setInterval(sync, 2000);
 })();
