@@ -111,6 +111,54 @@ Sinh vật ghé thăm (ong, bướm, đom đóm, mục 2b) đến theo **môn b�
 - [ ] Đủ hoạt ảnh thu hoạch (phồng nhún, nông sản bay, kho nảy) và âm thanh nhẹ khi thu hoạch (dùng cơ chế âm thanh sẵn có).
 - [ ] Bản v2 tranh: thêm cây thứ 3 mỗi môn, cây vàng (hiếm) khi kỹ năng đạt mức giỏi.
 
+## 2d. Khu vườn DỰNG SẴN: khung cố định, bé đạt gì thì dựng cái đó (chủ site chốt)
+
+Chủ site chốt hướng: **làm trọn một khung cảnh vườn có sẵn các VỊ TRÍ; bé đạt thành tích nào thì vật tương ứng được dựng lên đúng chỗ của nó.** Thao tác của bé **chỉ giống thu hoạch** (chạm cây chín, chạm vật vừa dựng để xem). **Không** kéo thả trang trí, không đặt vật phẩm tự do.
+
+**Vì sao cách này hợp:**
+- **Cảnh dựng tay một lần, có thể rất đẹp** (bố cục như ảnh Hay Day: ruộng, tường đá, cây, nhà), vì vị trí cố định nên mình trau chuốt từng chỗ thay vì lo mọi tổ hợp.
+- **Số tranh cố định và đếm được** (khoảng 20–25 vị trí), không phình theo kho vật phẩm.
+- **Nhẹ và dễ kiểm thử:** mỗi vị trí chỉ có 2 trạng thái (chưa mở / đã dựng), điều kiện mở là dữ liệu, kiểm thử được bằng máy.
+- **Vòng học → thấy thành quả rõ ràng**: học xong một mục tiêu là cảnh vườn đổi thật.
+
+**Mỗi vị trí gồm:**
+1. **Trạng thái chưa mở:** bóng mờ hoặc khung dựng dở, kèm **mục tiêu tích cực** ("Làm đúng 5 câu liền để dựng cây táo") và thanh tiến độ. Chạm vào để xem mục tiêu.
+2. **Điều kiện mở**, lấy từ việc học thật (số lượt, chuỗi đúng, mức thạo kỹ năng, số nông sản đã thu, số kiểu câu hỏi đã thử, đủ ba môn).
+3. **Khoảnh khắc dựng:** hiệu ứng "tạch" bụi sao, vật nảy lên, linh vật reo, tiếng chuông. Đây là điểm "wow" của bé và ba mẹ.
+4. **Trạng thái đã dựng** (có hoạt ảnh nhẹ nếu cần), có thể chạm để nghe linh vật nói một câu.
+
+**Bảng vị trí đề xuất cho cảnh v1** (điều kiện là gợi ý, chủ site chỉnh):
+
+| Nhóm | Vị trí | Điều kiện mở |
+|---|---|---|
+| Ô trồng | Ô 1 | có sẵn |
+| | Ô 2, Ô 3 | xong 1 lượt; xong 3 lượt |
+| | Ô 4, Ô 5 | một kỹ năng đạt "khá"; học 2 môn |
+| | Ô 6 | học đủ 3 môn |
+| Công trình | Kho | có sẵn |
+| | Giếng | tổng 20 câu đúng ngay lần đầu |
+| | Cối xay gió | thu hoạch 10 lúa mì |
+| | Ngôi nhà | học đủ 3 môn |
+| Trang trí | Hàng rào | xong 1 lượt |
+| | Lối đá lát | xong 3 lượt |
+| | Cây táo | chuỗi 5 câu đúng |
+| | Bụi hoa oải hương | một lượt 5/5 |
+| | Ao nhỏ | thử 8 kiểu câu hỏi khác nhau |
+| | Đống rơm, thùng gỗ | thu hoạch 5 nông sản bất kỳ |
+| Sinh vật | Ong, bướm, đom đóm | đã có (theo môn học trong ngày) |
+| | Gà, thỏ (v2) | một kỹ năng đạt "giỏi" |
+
+**Nhẹ nhàng, không gây áp lực:** mọi vị trí chỉ mở thêm, **không bao giờ mất đi**; không có đồng hồ đếm ngược; mục tiêu luôn đo bằng việc học tốt chứ không bằng thời gian chơi lâu.
+
+**Biến thể cá nhân hóa nhẹ (không cần kéo thả):** mỗi bé một hạt giống ngẫu nhiên chọn kiểu cây to, màu cánh hoa, mẫu hàng rào, nên hai khu vườn cùng đã mở đủ vẫn hơi khác nhau.
+
+**Việc cần làm cho phần này (giai đoạn B, thay cho "kéo thả trang trí" ở giai đoạn C):**
+- [ ] Soạn **danh sách vị trí + điều kiện mở** thành dữ liệu `learn/scene.js` (kèm kiểm thử: không mở sớm, không mất khi đã mở, tiến độ đúng).
+- [ ] Vẽ **bộ khung cảnh v1** (cỏ nền, vị trí đã định) và **tranh từng vật** ở cả hai trạng thái (bóng chưa mở + bản đã dựng).
+- [ ] Màn **Vườn** hiển thị cảnh, chạm vị trí chưa mở thấy mục tiêu + tiến độ; chạm cây chín thu hoạch.
+- [ ] **Hiệu ứng và âm thanh dựng** vật mới, nối vào phát thưởng cuối lượt (khi vừa đạt điều kiện thì cảnh vườn báo "có vật mới!").
+- [ ] Mỗi vật mới gắn với một **huy hiệu** trong danh sách huy hiệu hiện có.
+
 ## 3. Nền kinh tế phần thưởng (đơn giản, hào phóng, không có tiền thật)
 
 | Tài nguyên | Kiếm từ đâu | Dùng để làm gì |
@@ -185,8 +233,7 @@ Mọi câu AI sinh ra đi qua **cổng lọc nội dung đã làm** (`LearnMasco
 ### Giai đoạn B3 — Sao lưu (xem mục 11): xuất/nhập tệp trước, máy chủ + email sau khi chốt pháp lý
 
 ### Giai đoạn C — Cửa hàng và trang trí
-- [ ] Đổi sao lấy vật phẩm trang trí (hàng rào, bình tưới, nhà kính, chuồng linh vật...).
-- [ ] Kéo thả vật phẩm vào vườn (dùng lại cơ chế kéo thả đã có trong `learn/qui.js`).
+- [x] (Đổi hướng, chủ site chốt) **Không làm** cửa hàng trang trí và kéo thả vật phẩm. Thay bằng **khung dựng sẵn mở theo thành tích** (mục 2d).
 - [ ] Linh vật Mochi/Mầm/Bibi "sống" trong vườn, nói câu khích lệ.
 
 ### Giai đoạn C2 ★ — Xưởng sáng tạo và bậc thử thách (nuôi điểm mạnh)
