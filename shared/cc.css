@@ -460,3 +460,4 @@ html.np-menupaused #ccRoot,html.np-menupaused #ccRoot *,html.np-menupaused #ccRo
 #ovSkin .skc .dots{gap:min(.9cqw,4px)!important}
 #ovSkin .skc .dots i{width:min(3.4cqw,13px)!important;height:min(3.4cqw,13px)!important}
 #ovSkin .sk{gap:min(2cqw,10px)!important}
+#ccRoot.nt,#ccRoot.nt *{transition:none!important;animation:none!important}

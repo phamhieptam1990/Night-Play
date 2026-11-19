@@ -183,7 +183,7 @@
     /* linh vật = nút giao diện (icon là CHÍNH linh vật đang hiện ở màn chọn) */
     var hs = document.querySelector("#hHero .npa-box svg,#paHero .npa-box svg,#hHero svg,#paHero svg");
     if (olds.npmc) {
-      var kb = el("button", "m c skin"); kb.type = "button"; kb.setAttribute("aria-label", olds.npmc.getAttribute("aria-label") || "Skin");
+      var kb = el("button", "m c skin"); kb.type = "button"; kb.setAttribute("aria-label", vi() ? "Linh vật & skin" : "Mascot & skins");
       kb.innerHTML = hs ? '<span class="mc">' + uniq(hs.outerHTML) + "</span>" : olds.npmc.innerHTML;
       kb.addEventListener("click", function () { olds.npmc.click(); close(); }); (bar || pn).appendChild(kb);
     }
@@ -298,6 +298,9 @@
     var raf = 0, sch = function () { if (!raf) raf = requestAnimationFrame(function () { raf = 0; themeSync(); }); };
     try { themeMO = new MutationObserver(sch); var pl = $("play"); if (pl) themeMO.observe(pl, { attributes: true, attributeFilter: ["style", "class", "data-scr"] }); themeMO.observe(de, { attributes: true, attributeFilter: ["data-theme", "data-skin", "data-npgrad", "style", "class"] }); } catch (e) {}
   }
+  /* ĐỔI NGÔN NGỮ khi bảng đang mở: dựng lại bảng tại chỗ (không hiệu ứng mở) để mọi nhãn/tên chế độ/chữ hướng dẫn đổi ngay, không phải thoát mở lại */
+  var langT = 0, lastLang = de.getAttribute("lang") || "";
+  try { new MutationObserver(function () { var l = de.getAttribute("lang") || ""; if (l === lastLang) return; lastLang = l; if (!openF) return; clearTimeout(langT); langT = RT(function () { if (!openF) return; var inn = root && root.classList.contains("in"); build(); root.removeAttribute("aria-hidden"); themeSync(); root.classList.add("nt", "on"); void root.offsetWidth; if (inn) root.classList.add("in"); RT(function () { if (root) root.classList.remove("nt"); }, 60); }, 380); }).observe(de, { attributes: true, attributeFilter: ["lang"] }); } catch (e) {}
   var openHome = true;
   function open() {
     if (openF) return; openHome = atHome(); openF = true; try { window.__npMenuHold && __npMenuHold("cc", true); } catch (e) {} portalBack(true); build(); root.removeAttribute("aria-hidden"); themeWatch(true); root.classList.add("on"); void root.offsetWidth; root.classList.add("in");
