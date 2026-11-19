@@ -161,6 +161,13 @@ try { var _q = new URLSearchParams(location.search).get("lang"), _s = null; try 
     }
     addEventListener("keydown", relay, true); addEventListener("keyup", relay, true);
   })();
+  /* PHÍM ? (Shift + /) = mở hướng dẫn của game: bấm hộ nút ? có sẵn (#bHelp / #phBtn; nút gốc bị ẩn trong HUD web vẫn bấm hộ được) */
+  addEventListener("keydown", function (e) {
+    if ((e.key !== "?" && !(e.code === "Slash" && e.shiftKey)) || e.ctrlKey || e.metaKey || e.altKey || e.repeat || e.defaultPrevented) return;
+    var t = e.target, tg = t && t.tagName; if (tg === "INPUT" || tg === "TEXTAREA" || tg === "SELECT" || (t && t.isContentEditable)) return;
+    var b = document.getElementById("bHelp") || document.getElementById("phBtn"); if (!b || b.disabled) return;
+    e.preventDefault(); b.click();
+  }, true);
   /* NHẠC NỀN mỗi game một bản (shared/music.js): nạp ở đây để mọi game có mà không phải sửa từng trang; nạp SAU khi AudioContext đã được bọc ở trên */
   try { var cs = document.currentScript, base = cs && cs.src ? cs.src.replace(/bridge\.js(\?.*)?$/, "") : ""; if (base && /\/games\//.test(location.pathname)) { var ms = document.createElement("script"); ms.src = base + "music.js"; ms.async = true; (document.head || document.documentElement).appendChild(ms); } } catch (e) {}
 })();
