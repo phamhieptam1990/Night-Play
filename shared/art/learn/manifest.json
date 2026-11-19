@@ -1,0 +1,58 @@
+{
+  "version": "1.0.0",
+  "curriculum": "GDPT_2018",
+  "asset_type": "subject_mascot",
+  "subjects": [
+    {
+      "id": "math",
+      "name": {
+        "vi": "Toán",
+        "en": "Mathematics"
+      },
+      "mascot_id": "mochi",
+      "mascot_name": "Mochi",
+      "base_asset": "math/math_base.svg",
+      "skins": {
+        "1": "math/math_grade_1.svg",
+        "2": "math/math_grade_2.svg",
+        "3": "math/math_grade_3.svg",
+        "4": "math/math_grade_4.svg",
+        "5": "math/math_grade_5.svg"
+      }
+    },
+    {
+      "id": "vietnamese",
+      "name": {
+        "vi": "Tiếng Việt",
+        "en": "Vietnamese Language"
+      },
+      "mascot_id": "mam",
+      "mascot_name": "Mầm",
+      "base_asset": "vietnamese/vietnamese_base.svg",
+      "skins": {
+        "1": "vietnamese/vietnamese_grade_1.svg",
+        "2": "vietnamese/vietnamese_grade_2.svg",
+        "3": "vietnamese/vietnamese_grade_3.svg",
+        "4": "vietnamese/vietnamese_grade_4.svg",
+        "5": "vietnamese/vietnamese_grade_5.svg"
+      }
+    },
+    {
+      "id": "english",
+      "name": {
+        "vi": "Tiếng Anh",
+        "en": "English"
+      },
+      "mascot_id": "bibi",
+      "mascot_name": "Bibi",
+      "base_asset": "english/english_base.svg",
+      "skins": {
+        "1": "english/english_grade_1.svg",
+        "2": "english/english_grade_2.svg",
+        "3": "english/english_grade_3.svg",
+        "4": "english/english_grade_4.svg",
+        "5": "english/english_grade_5.svg"
+      }
+    }
+  ]
+}

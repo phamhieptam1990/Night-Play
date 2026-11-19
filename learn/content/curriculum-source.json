@@ -1,0 +1,173 @@
+{
+  "dataset_id": "vn_gdpt2018_math_primary_g1_g5_ai_tutor",
+  "dataset_version": "1.0.0",
+  "language": "vi-VN",
+  "title": "Dữ liệu chương trình môn Toán GDPT 2018 – Lớp 1 đến lớp 5 – phục vụ AI gia sư",
+  "description": "Bộ dữ liệu cấu trúc hóa các mạch nội dung và định hướng yêu cầu học tập Toán tiểu học để xây dựng AI gia sư. Các trường interpretation và learning_outcomes_paraphrased là diễn giải sư phạm, không phải nguyên văn pháp quy. Không sử dụng dữ liệu này thay thế bản chương trình chính thức khi cần trích dẫn pháp lý.",
+  "legal_basis": {
+    "base_circular": {
+      "number": "32/2018/TT-BGDĐT",
+      "issued_date": "2018-12-26",
+      "effective_date": "2019-02-15",
+      "title": "Ban hành Chương trình giáo dục phổ thông",
+      "official_source": "https://vbpl.moj.gov.vn/bogiaoducdaotao/Pages/vbpq-toanvan.aspx?ItemID=146721"
+    },
+    "consolidated_reference": {
+      "title": "Văn bản hợp nhất Chương trình giáo dục phổ thông (VBHN-BGDĐT năm 2022)",
+      "source": "Bộ Giáo dục và Đào tạo",
+      "url": "https://moet.gov.vn/content/vanban/Lists/VBPQ/Attachments/1453/vbhn-322018-202021-ttbgddt-trinh-ky-xt.pdf",
+      "note": "Văn bản hợp nhất thể hiện Thông tư 32/2018 cùng sửa đổi tại Thông tư 20/2021 và 13/2022 theo nội dung văn bản."
+    },
+    "later_amendments_checked": [
+      {
+        "number": "17/2025/TT-BGDĐT",
+        "issued_date": "2025-09-12",
+        "effective_date": "2025-09-12",
+        "title": "Sửa đổi, bổ sung một số nội dung trong Chương trình giáo dục phổ thông",
+        "official_source": "https://vanban.chinhphu.vn/?docid=215347&pageid=27160",
+        "scope_note": "Phụ lục của văn bản này sửa đổi các chương trình Lịch sử và Địa lí, Lịch sử, Địa lí và Giáo dục công dân; không liệt kê môn Toán trong phạm vi sửa đổi. Cần kiểm tra văn bản mới hơn trước khi phát hành bản dùng chính thức."
+      }
+    ],
+    "copyright_and_quote_policy": "Chỉ trường official_excerpt chứa trích đoạn ngắn có nguồn cụ thể; các mô tả còn lại là diễn giải, không đặt trong ngoặc kép và không gán là nguyên văn Bộ GDĐT."
+  },
+  "content_labels": {
+    "official_excerpt": "Trích nguyên văn ngắn từ nguồn được ghi rõ; chỉ dùng khi có đối chiếu văn bản.",
+    "interpretation": "Diễn giải của bộ dữ liệu để AI hiểu và tổ chức nội dung; không phải câu chữ nguyên văn trong chương trình.",
+    "learning_outcomes_paraphrased": "Yêu cầu học tập diễn đạt lại theo ngôn ngữ dễ máy đọc; cần đối chiếu bản gốc khi đánh giá tuân thủ pháp lý.",
+    "ai_generated_extension": "Nội dung do hệ thống AI/nhà phát triển bổ sung; không được trình bày như nội dung bắt buộc của chương trình."
+  },
+  "curriculum_framework": {
+    "subject": "Toán",
+    "education_level": "Tiểu học",
+    "grades": [1, 2, 3, 4, 5],
+    "main_content_strands": [
+      {"id": "numbers_operations", "name": "Số và phép tính", "interpretation": "Phát triển hiểu biết về số, cấu tạo số, biểu diễn số, quan hệ thứ tự và ý nghĩa cũng như kỹ thuật thực hiện các phép tính."},
+      {"id": "geometry_measurement", "name": "Hình học và Đo lường", "interpretation": "Nhận dạng, mô tả hình; định hướng không gian; đo và tính toán với đại lượng; vận dụng vào tình huống thực tế."},
+      {"id": "statistics_probability", "name": "Một số yếu tố thống kê và xác suất", "interpretation": "Thu thập, phân loại, đọc và mô tả dữ liệu; bước đầu nhận biết khả năng xảy ra của sự kiện."},
+      {"id": "practical_experience", "name": "Hoạt động thực hành và trải nghiệm", "interpretation": "Sử dụng kiến thức toán học để giải quyết nhiệm vụ gần gũi; giao tiếp, hợp tác và trình bày cách làm."}
+    ],
+    "mathematical_competencies": [
+      {"id": "thinking_reasoning", "name": "Tư duy và lập luận toán học", "description": "Quan sát, so sánh, phân tích, giải thích và đưa ra lý do toán học phù hợp lứa tuổi."},
+      {"id": "modeling", "name": "Mô hình hoá toán học", "description": "Chuyển tình huống thực tế đơn giản thành hình vẽ, phép tính, sơ đồ, bảng hoặc biểu thức phù hợp."},
+      {"id": "problem_solving", "name": "Giải quyết vấn đề toán học", "description": "Nhận biết vấn đề, lựa chọn cách giải, thực hiện và kiểm tra kết quả."},
+      {"id": "communication", "name": "Giao tiếp toán học", "description": "Nghe, đọc, nói, viết và trình bày bằng ngôn ngữ thông thường kết hợp ký hiệu, hình vẽ, bảng biểu."},
+      {"id": "tool_use", "name": "Sử dụng công cụ, phương tiện học toán", "description": "Sử dụng đồ dùng trực quan, thước, ê-ke, đồng hồ, cân, dụng cụ đo và phương tiện học tập phù hợp."}
+    ]
+  },
+  "grades": [
+    {
+      "grade": 1,
+      "grade_label": "Lớp 1",
+      "learning_focus": "Hình thành nền tảng về số tự nhiên, phép cộng và phép trừ; nhận biết hình dạng, đại lượng và các tình huống toán học quen thuộc.",
+      "topics": [
+        {"id": "g1_numbers_100", "strand": "numbers_operations", "topic": "Số tự nhiên trong phạm vi 100", "subtopics": ["Đếm, đọc, viết số trong phạm vi 10, 20 và 100", "Chục và đơn vị", "Số tròn chục", "So sánh và sắp xếp số trong phạm vi 100"], "learning_outcomes_paraphrased": ["Đếm, đọc và viết số theo phạm vi học tập", "Nhận biết cấu tạo chục và đơn vị ở mức độ phù hợp", "So sánh và sắp xếp một nhóm số đơn giản"], "official_excerpt": [{"text": "Đếm, đọc, viết được các số trong phạm vi 10; trong phạm vi 20; trong phạm vi 100.", "source": "Thông tư 32/2018/TT-BGDĐT, Chương trình môn Toán, phần Lớp 1 – Số tự nhiên", "source_url": "https://accgroup.vn/thong-tu-32-2018-tt-bgddt-ve-mon-toan", "verification": "Trích đoạn ngắn; cần đối chiếu PDF chương trình gốc trước khi dùng trong tài liệu pháp lý."}]},
+        {"id": "g1_add_sub", "strand": "numbers_operations", "topic": "Phép cộng và phép trừ", "subtopics": ["Ý nghĩa phép cộng và phép trừ", "Cộng, trừ không nhớ trong phạm vi 100", "Tính nhẩm trong phạm vi 10", "Tính nhẩm với số tròn chục", "Biểu thức có hai phép cộng/trừ theo thứ tự từ trái sang phải"], "learning_outcomes_paraphrased": ["Diễn giải phép cộng là gộp/thêm và phép trừ là bớt/tìm phần còn lại trong tình huống phù hợp", "Thực hiện cộng trừ không nhớ trong phạm vi 100", "Tính nhẩm các phép tính đơn giản và kiểm tra kết quả bằng cách phù hợp"]},
+        {"id": "g1_geometry", "strand": "geometry_measurement", "topic": "Hình học trực quan", "subtopics": ["Nhận dạng và gọi tên một số hình phẳng cơ bản", "Nhận biết một số hình khối quen thuộc", "Vị trí và định hướng không gian đơn giản", "Lắp ghép, xếp hình"], "learning_outcomes_paraphrased": ["Nhận dạng hình qua vật thật và hình vẽ", "Mô tả đặc điểm trực quan đơn giản", "Sử dụng từ chỉ vị trí và thực hiện lắp ghép hình"]},
+        {"id": "g1_measurement", "strand": "geometry_measurement", "topic": "Đo lường và thời gian", "subtopics": ["So sánh dài hơn/ngắn hơn, nặng hơn/nhẹ hơn, nhiều hơn/ít hơn", "Đo độ dài với đơn vị phù hợp theo nội dung lớp", "Nhận biết tiền Việt Nam trong tình huống đơn giản", "Xem giờ đúng trên đồng hồ", "Ngày trong tuần và lịch đơn giản"], "learning_outcomes_paraphrased": ["So sánh trực tiếp các đại lượng", "Thực hành đo hoặc ước lượng đơn giản", "Đọc thông tin thời gian và sử dụng tiền trong tình huống gần gũi"]},
+        {"id": "g1_data", "strand": "statistics_probability", "topic": "Làm quen với dữ liệu", "subtopics": ["Phân loại đối tượng theo một dấu hiệu", "Đếm và trả lời câu hỏi từ nhóm dữ liệu đơn giản"], "learning_outcomes_paraphrased": ["Thu thập hoặc phân loại dữ liệu đơn giản", "Nêu nhận xét trực tiếp từ số lượng đã đếm"]}
+      ],
+      "prerequisite_summary": "Kiến thức đếm, phân loại, so sánh và nhận biết hình thành từ trải nghiệm trước tiểu học.",
+      "ai_tutor_guidance": {"recommended_methods": ["Dùng đồ vật cụ thể để biểu diễn số lượng", "Dùng hình ảnh và thao tác gộp/tách trước khi giới thiệu ký hiệu phép tính", "Chia bài tập thành bước ngắn, có phản hồi ngay"], "common_misconceptions": ["Nhầm chữ số hàng chục với số đơn vị", "Đảo thứ tự khi so sánh số", "Hiểu phép trừ chỉ là thao tác lấy đi mà chưa hiểu quan hệ phần-cả"], "assessment_modes": ["Quan sát thao tác với vật thật", "Đọc và viết số", "Tính nhẩm", "Bài toán lời văn một bước"]}
+    },
+    {
+      "grade": 2,
+      "grade_label": "Lớp 2",
+      "learning_focus": "Mở rộng hệ thống số tự nhiên, phát triển các phép tính và vận dụng trong bài toán thực tế; mở rộng nhận biết hình học và đo lường.",
+      "topics": [
+        {"id": "g2_numbers_1000", "strand": "numbers_operations", "topic": "Số tự nhiên trong phạm vi 1000", "subtopics": ["Đọc, viết, cấu tạo số có ba chữ số", "Hàng trăm, hàng chục, hàng đơn vị", "So sánh và sắp xếp số", "Số liền trước, số liền sau", "Ước lượng và làm tròn ở mức độ phù hợp"], "learning_outcomes_paraphrased": ["Đọc, viết và phân tích cấu tạo số có ba chữ số", "So sánh, sắp xếp và xác định quan hệ thứ tự của các số", "Sử dụng số trong tình huống đếm và đo lường"]},
+        {"id": "g2_operations", "strand": "numbers_operations", "topic": "Các phép tính với số tự nhiên", "subtopics": ["Cộng, trừ trong phạm vi 1000", "Bảng nhân và bảng chia được học ở lớp 2", "Ý nghĩa phép nhân và phép chia", "Tính nhẩm và tính giá trị biểu thức đơn giản", "Giải quyết vấn đề bằng một hoặc một số bước tính phù hợp"], "learning_outcomes_paraphrased": ["Thực hiện các phép cộng, trừ theo yêu cầu của lớp", "Hiểu nhân như phép cộng các nhóm bằng nhau và chia qua chia đều/chia theo nhóm", "Vận dụng bảng nhân, chia đã học vào bài toán đơn giản", "Trình bày được cách giải và câu trả lời"]},
+        {"id": "g2_geometry", "strand": "geometry_measurement", "topic": "Hình học", "subtopics": ["Nhận dạng và mô tả hình phẳng quen thuộc", "Đường thẳng, đường cong và đoạn thẳng ở mức độ phù hợp", "Hình khối trong môi trường xung quanh", "Vẽ, ghép và tạo hình đơn giản"], "learning_outcomes_paraphrased": ["Nhận biết hình qua đặc điểm trực quan", "Mô tả và phân loại hình đơn giản", "Sử dụng dụng cụ học tập để vẽ hoặc tạo hình"]},
+        {"id": "g2_measurement", "strand": "geometry_measurement", "topic": "Đại lượng và đo lường", "subtopics": ["Độ dài và đơn vị đo độ dài", "Khối lượng và dung tích theo nội dung lớp", "Tiền Việt Nam và bài toán mua bán", "Thời gian: giờ, ngày, tháng và lịch", "Thực hành đo, cân, đong, xem đồng hồ"], "learning_outcomes_paraphrased": ["Lựa chọn và sử dụng đơn vị đo phù hợp trong tình huống đơn giản", "Đọc số đo và giải quyết bài toán thực tế", "Tính toán với tiền và thời gian ở mức độ phù hợp"]},
+        {"id": "g2_data", "strand": "statistics_probability", "topic": "Dữ liệu và phân loại", "subtopics": ["Thu thập và phân loại dữ liệu", "Đọc bảng thống kê tranh hoặc bảng đơn giản", "Trả lời câu hỏi từ dữ liệu"], "learning_outcomes_paraphrased": ["Đọc được thông tin thể hiện bằng bảng hoặc biểu diễn trực quan", "So sánh số lượng và nêu nhận xét đơn giản"]}
+      ],
+      "prerequisite_summary": "Nền tảng số đến 100, cộng trừ cơ bản, nhận dạng hình và so sánh đại lượng từ lớp 1.",
+      "ai_tutor_guidance": {"recommended_methods": ["Dùng bó que/chục-trăm hoặc khối cơ số mười để minh họa cấu tạo số", "Minh họa phép nhân bằng nhóm bằng nhau và phép chia bằng chia đều", "Dùng tình huống mua bán và đo vật thật"], "common_misconceptions": ["Nhầm vị trí hàng trăm, chục, đơn vị", "Học thuộc bảng nhân nhưng chưa hiểu nhóm bằng nhau", "Nhầm phép chia đều với phép chia theo nhóm"], "assessment_modes": ["Đọc viết số", "Tính toán có giải thích", "Bài toán lời văn", "Đọc bảng dữ liệu"]}
+    },
+    {
+      "grade": 3,
+      "grade_label": "Lớp 3",
+      "learning_focus": "Củng cố và mở rộng số tự nhiên đến hàng chục nghìn, thành thạo hơn bốn phép tính, phát triển giải toán, đo lường, hình học và đọc dữ liệu.",
+      "topics": [
+        {"id": "g3_numbers_100000", "strand": "numbers_operations", "topic": "Số tự nhiên đến 100000", "subtopics": ["Đọc, viết số có nhiều chữ số trong phạm vi chương trình", "Cấu tạo thập phân của số", "So sánh và sắp xếp số", "Số La Mã hoặc nội dung số học liên quan theo phân phối chương trình"], "learning_outcomes_paraphrased": ["Đọc, viết và phân tích cấu tạo số trong phạm vi đã học", "So sánh và sắp xếp số", "Vận dụng số trong ngữ cảnh thực tế"]},
+        {"id": "g3_four_operations", "strand": "numbers_operations", "topic": "Bốn phép tính với số tự nhiên", "subtopics": ["Cộng, trừ các số trong phạm vi học tập", "Nhân số có nhiều chữ số với số có một chữ số", "Chia số có nhiều chữ số cho số có một chữ số", "Tính nhẩm, tính giá trị biểu thức", "Tìm thành phần chưa biết", "Giải bài toán có lời văn"], "learning_outcomes_paraphrased": ["Thực hiện phép tính theo thuật toán đã học", "Lựa chọn phép tính phù hợp với quan hệ trong đề bài", "Kiểm tra tính hợp lý của kết quả", "Giải bài toán bằng các bước rõ ràng"]},
+        {"id": "g3_fraction_intro", "strand": "numbers_operations", "topic": "Làm quen với phân số", "subtopics": ["Nhận biết phân số qua phần bằng nhau của đơn vị", "Đọc, viết phân số đơn giản", "Nhận biết ý nghĩa tử số và mẫu số ở mức độ ban đầu"], "learning_outcomes_paraphrased": ["Biểu diễn phần bằng nhau của một đơn vị bằng hình ảnh và phân số", "Đọc và viết phân số đơn giản theo yêu cầu lớp"]},
+        {"id": "g3_geometry", "strand": "geometry_measurement", "topic": "Hình học phẳng và hình khối", "subtopics": ["Góc vuông và góc không vuông", "Các yếu tố của hình tam giác, tứ giác và hình đã học", "Chu vi một số hình", "Nhận biết hình khối qua mô hình và vật thật"], "learning_outcomes_paraphrased": ["Nhận biết và mô tả yếu tố hình học", "Sử dụng ê-ke hoặc dụng cụ phù hợp để kiểm tra góc", "Tính chu vi trong các tình huống đã học"]},
+        {"id": "g3_measurement", "strand": "geometry_measurement", "topic": "Đại lượng và đo lường", "subtopics": ["Đơn vị đo độ dài, khối lượng, dung tích", "Thời gian và tiền Việt Nam", "Diện tích ở mức độ làm quen hoặc theo nội dung lớp", "Giải toán liên quan đến đại lượng"], "learning_outcomes_paraphrased": ["Đổi hoặc so sánh số đo trong phạm vi đã học", "Thực hiện phép tính với đại lượng", "Vận dụng đo lường vào bài toán thực tế"]},
+        {"id": "g3_statistics", "strand": "statistics_probability", "topic": "Thống kê và khả năng xảy ra", "subtopics": ["Thu thập, phân loại và ghi chép số liệu", "Đọc bảng số liệu và biểu đồ tranh/cột đơn giản", "Nhận biết khả năng xảy ra của một sự kiện qua tình huống"], "learning_outcomes_paraphrased": ["Đọc, mô tả và trả lời câu hỏi từ bảng hoặc biểu đồ đơn giản", "Nhận xét sự kiện có thể, chắc chắn hoặc không thể xảy ra trong tình huống trực quan"]}
+      ],
+      "prerequisite_summary": "Số đến 1000, cộng trừ, bảng nhân chia, đo lường và nhận dạng hình từ lớp 1–2.",
+      "ai_tutor_guidance": {"recommended_methods": ["Dùng sơ đồ đoạn thẳng và bảng tóm tắt để giải toán", "Cho học sinh ước lượng trước khi tính", "Dùng giấy gấp hoặc hình tô màu để giới thiệu phân số", "Cho học sinh tự đọc biểu đồ và nêu kết luận"], "common_misconceptions": ["Sai thuật toán đặt tính do lệch hàng", "Chọn phép tính theo từ khóa thay vì hiểu quan hệ", "Hiểu mẫu số là số phần được lấy thay vì tổng số phần bằng nhau", "Nhầm chu vi với diện tích"], "assessment_modes": ["Bài tính nhiều bước", "Bài toán lời văn", "Nhận biết phân số qua hình", "Bài thực hành đo và đọc biểu đồ"]}
+    },
+    {
+      "grade": 4,
+      "grade_label": "Lớp 4",
+      "learning_focus": "Mở rộng số tự nhiên, phát triển hiểu biết và thao tác với phân số; tăng cường giải quyết vấn đề, hình học, đo lường và thống kê.",
+      "topics": [
+        {"id": "g4_large_numbers", "strand": "numbers_operations", "topic": "Số tự nhiên và cấu tạo thập phân", "subtopics": ["Số có nhiều chữ số theo giới hạn chương trình", "Hàng và lớp", "Đọc, viết, so sánh, sắp xếp số", "Làm tròn và ước lượng theo yêu cầu học tập"], "learning_outcomes_paraphrased": ["Đọc, viết và phân tích cấu tạo số tự nhiên", "So sánh, sắp xếp và làm tròn số trong các trường hợp đã học", "Vận dụng số để giải quyết tình huống thực tế"]},
+        {"id": "g4_operations", "strand": "numbers_operations", "topic": "Các phép tính với số tự nhiên", "subtopics": ["Cộng, trừ số tự nhiên", "Nhân với số có nhiều chữ số", "Chia cho số có nhiều chữ số theo nội dung lớp", "Tính chất phép tính", "Biểu thức và tìm thành phần chưa biết", "Giải toán nhiều bước"], "learning_outcomes_paraphrased": ["Thực hiện thành thạo hơn các phép tính trong phạm vi học", "Vận dụng tính chất phép tính để tính thuận tiện", "Giải và kiểm tra bài toán nhiều bước"]},
+        {"id": "g4_fractions", "strand": "numbers_operations", "topic": "Phân số", "subtopics": ["Nhận biết, đọc, viết và biểu diễn phân số", "Phân số bằng nhau và rút gọn hoặc quy đồng theo nội dung lớp", "So sánh phân số", "Các phép tính với phân số theo yêu cầu chương trình"], "learning_outcomes_paraphrased": ["Biểu diễn và giải thích ý nghĩa phân số", "So sánh phân số bằng cách phù hợp", "Thực hiện các phép tính phân số đã học và vận dụng giải toán"]},
+        {"id": "g4_geometry", "strand": "geometry_measurement", "topic": "Hình học", "subtopics": ["Góc và đơn vị đo góc", "Hai đường thẳng vuông góc và song song", "Hình bình hành, hình thoi và các hình đã học", "Đặc điểm và yếu tố của hình"], "learning_outcomes_paraphrased": ["Nhận biết, mô tả và vẽ một số yếu tố hình học", "Sử dụng dụng cụ để đo hoặc kiểm tra góc và quan hệ vuông góc/song song", "Nhận biết đặc điểm của một số hình phẳng"]},
+        {"id": "g4_measurement", "strand": "geometry_measurement", "topic": "Đại lượng và đo lường", "subtopics": ["Đơn vị đo độ dài, khối lượng, thời gian", "Đơn vị đo diện tích", "Tiền Việt Nam và bài toán thực tế", "Chu vi, diện tích một số hình theo chương trình"], "learning_outcomes_paraphrased": ["Đổi và tính toán với các đơn vị đo đã học", "Tính chu vi, diện tích trong trường hợp phù hợp", "Giải quyết vấn đề thực tế có sử dụng số đo"]},
+        {"id": "g4_statistics", "strand": "statistics_probability", "topic": "Thống kê và xác suất", "subtopics": ["Thu thập và phân loại dữ liệu", "Bảng số liệu và biểu đồ cột", "Đọc, phân tích và nhận xét số liệu", "Khả năng xảy ra của sự kiện qua trò chơi/tình huống"], "learning_outcomes_paraphrased": ["Đọc và mô tả thông tin từ bảng, biểu đồ", "So sánh dữ liệu và đưa ra nhận xét có căn cứ", "Nhận biết khả năng xảy ra trong các tình huống đơn giản"]}
+      ],
+      "prerequisite_summary": "Bốn phép tính với số tự nhiên, phân số ban đầu, chu vi, đo lường và đọc biểu đồ từ lớp 1–3.",
+      "ai_tutor_guidance": {"recommended_methods": ["Dùng mô hình diện tích và dải phân số để giải thích phân số", "Cho học sinh giải thích vì sao chọn quy tắc hoặc phép tính", "Dùng hình vẽ có ký hiệu vuông góc/song song", "Liên hệ diện tích với ô vuông đơn vị"], "common_misconceptions": ["Cộng tử số và mẫu số một cách máy móc", "So sánh phân số chỉ dựa vào tử số", "Nhầm đơn vị độ dài với đơn vị diện tích", "Đọc biểu đồ không chú ý đơn vị và thang đo"], "assessment_modes": ["Bài toán phân số", "Bài giải nhiều bước", "Thực hành đo/vẽ hình", "Đọc và phân tích biểu đồ"]}
+    },
+    {
+      "grade": 5,
+      "grade_label": "Lớp 5",
+      "learning_focus": "Hoàn thiện kiến thức số học tiểu học với phân số và số thập phân, tỉ số phần trăm; phát triển hình học, đo lường và vận dụng toán học.",
+      "topics": [
+        {"id": "g5_fractions", "strand": "numbers_operations", "topic": "Ôn tập và tính toán với phân số", "subtopics": ["Ôn tập phân số và các phép tính", "Vận dụng phân số trong bài toán", "Tìm phân số của một số hoặc dạng toán liên quan theo nội dung lớp"], "learning_outcomes_paraphrased": ["Củng cố biểu diễn, so sánh và tính toán với phân số", "Giải quyết bài toán thực tế có sử dụng phân số"]},
+        {"id": "g5_decimals", "strand": "numbers_operations", "topic": "Số thập phân và các phép tính", "subtopics": ["Khái niệm, đọc, viết và cấu tạo số thập phân", "So sánh và làm tròn số thập phân", "Cộng, trừ, nhân, chia số thập phân theo chương trình", "Đổi đơn vị đo liên quan đến số thập phân"], "learning_outcomes_paraphrased": ["Đọc, viết, phân tích cấu tạo và so sánh số thập phân", "Thực hiện các phép tính với số thập phân", "Ước lượng và kiểm tra kết quả", "Vận dụng số thập phân trong đo lường và mua bán"]},
+        {"id": "g5_ratio_percent", "strand": "numbers_operations", "topic": "Tỉ số và tỉ số phần trăm", "subtopics": ["Tỉ số của hai đại lượng", "Tỉ số phần trăm", "Tìm giá trị phần trăm của một số", "Giải toán liên quan đến tỉ số phần trăm"], "learning_outcomes_paraphrased": ["Hiểu và biểu diễn quan hệ tỉ số trong tình huống đơn giản", "Đọc, viết và tính toán với tỉ số phần trăm", "Giải quyết bài toán phần trăm gắn với thực tiễn"]},
+        {"id": "g5_geometry", "strand": "geometry_measurement", "topic": "Hình học phẳng và hình khối", "subtopics": ["Tam giác, hình thang và các hình đã học", "Đường tròn, hình tròn và các yếu tố liên quan", "Hình hộp chữ nhật, hình lập phương và hình khối liên quan theo chương trình", "Chu vi, diện tích và thể tích các hình được học"], "learning_outcomes_paraphrased": ["Nhận biết, mô tả và vẽ hình theo yêu cầu", "Tính chu vi, diện tích hoặc thể tích trong các trường hợp đã học", "Vận dụng hình học để giải quyết tình huống thực tế"]},
+        {"id": "g5_measurement", "strand": "geometry_measurement", "topic": "Đại lượng và đo lường", "subtopics": ["Đơn vị đo độ dài, khối lượng, diện tích, thể tích và thời gian", "Chuyển đổi đơn vị đo", "Vận dụng số thập phân trong đo lường", "Bài toán chuyển động đều ở mức độ tiểu học"], "learning_outcomes_paraphrased": ["Sử dụng và chuyển đổi đơn vị đo đã học", "Giải bài toán liên quan đến vận tốc, quãng đường và thời gian theo nội dung lớp", "Diễn giải kết quả bằng đơn vị phù hợp"]},
+        {"id": "g5_statistics", "strand": "statistics_probability", "topic": "Thống kê và xác suất", "subtopics": ["Thu thập và biểu diễn dữ liệu", "Bảng số liệu và biểu đồ", "Đọc, phân tích, so sánh số liệu", "Nhận biết khả năng xảy ra của sự kiện"], "learning_outcomes_paraphrased": ["Đọc và rút ra nhận xét từ bảng/biểu đồ", "Giải thích kết luận dựa trên dữ liệu", "Nhận biết khả năng xảy ra trong các tình huống đơn giản"]}
+      ],
+      "prerequisite_summary": "Phân số, bốn phép tính với số tự nhiên, đại lượng, hình học và thống kê từ lớp 1–4.",
+      "ai_tutor_guidance": {"recommended_methods": ["Dùng bảng giá, hóa đơn và tình huống giảm giá để dạy phần trăm", "Dùng lưới ô vuông và trục số để giải thích số thập phân", "Dùng vật thể 3D hoặc hình khai triển để dạy thể tích", "Dùng sơ đồ quãng đường-thời gian để giải toán chuyển động"], "common_misconceptions": ["Đặt dấu phẩy thập phân sai khi tính", "Coi phần trăm là một số nguyên độc lập thay vì phần trên 100", "Nhầm diện tích với thể tích", "Nhầm vận tốc, quãng đường và thời gian trong bài toán chuyển động"], "assessment_modes": ["Bài tính số thập phân", "Bài toán phần trăm", "Bài hình học và đo lường", "Bài toán chuyển động", "Đọc và diễn giải dữ liệu"]}
+    }
+  ],
+  "ai_tutor_runtime": {
+    "response_policy": [
+      "Luôn xác định lớp, chủ đề và mục tiêu học tập trước khi tạo bài.",
+      "Không tuyên bố một câu diễn giải là nguyên văn Bộ GDĐT.",
+      "Nếu người dùng yêu cầu trích nguyên văn hoặc xác nhận chuẩn pháp lý, phải truy xuất bản PDF/văn bản chính thức và lưu số trang/mục/đoạn.",
+      "Ưu tiên gợi mở từng bước; không đưa đáp án ngay nếu học sinh đang luyện tập, trừ khi được yêu cầu.",
+      "Giải thích bằng ngôn ngữ phù hợp lứa tuổi; dùng hình ảnh, vật thật hoặc sơ đồ khi cần.",
+      "Kiểm tra phép tính và tính hợp lý của đáp số trước khi trả lời.",
+      "Không tự nâng độ khó vượt lớp đang học nếu chưa đánh dấu là bài mở rộng."
+    ],
+    "question_generation_schema": {
+      "required_fields": ["question_id", "grade", "strand", "topic_id", "difficulty", "question_type", "prompt", "expected_answer", "solution_steps", "misconception_tags", "curriculum_alignment"],
+      "difficulty_levels": ["foundation", "standard", "challenge"],
+      "question_types": ["multiple_choice", "short_answer", "calculation", "word_problem", "visual_reasoning", "practical_activity"],
+      "curriculum_alignment_fields": ["grade", "strand", "topic_id", "learning_outcome_id", "alignment_type"]
+    },
+    "student_progress_schema": {
+      "required_fields": ["student_id", "grade", "topic_id", "skill_id", "mastery_level", "evidence_count", "last_assessed_at", "recommended_next_step"],
+      "mastery_levels": ["not_started", "emerging", "developing", "proficient", "advanced"]
+    }
+  },
+  "quality_and_limitations": {
+    "status": "starter_dataset_for_ai_product_prototype",
+    "official_verbatim_coverage": "partial",
+    "paraphrase_coverage": "broad_topic_map_for_grades_1_to_5",
+    "not_a_complete_official_transcription": true,
+    "requires_human_curriculum_review": true,
+    "review_checklist": [
+      "Đối chiếu từng chủ đề và yêu cầu cần đạt với đúng phụ lục Chương trình môn Toán của Thông tư 32/2018/TT-BGDĐT.",
+      "Xác minh các thuật ngữ, phạm vi số, đơn vị đo và nội dung cụ thể theo từng lớp.",
+      "Bổ sung số trang, mục, bảng và đoạn văn bản gốc cho từng learning_outcome.",
+      "Rà soát văn bản sửa đổi, bổ sung có hiệu lực tại ngày phát hành sản phẩm.",
+      "Thẩm định sư phạm trước khi dùng để chấm điểm hoặc kết luận học sinh đạt/chưa đạt chuẩn."
+    ]
+  },
+  "sources": [
+    {"source_id": "src_01", "publisher": "Bộ Tư pháp – Cơ sở dữ liệu quốc gia về văn bản pháp luật", "title": "Thông tư 32/2018/TT-BGDĐT", "url": "https://vbpl.moj.gov.vn/bogiaoducdaotao/Pages/vbpq-toanvan.aspx?ItemID=146721", "source_type": "official_legal_text"},
+    {"source_id": "src_02", "publisher": "Bộ Giáo dục và Đào tạo", "title": "Văn bản hợp nhất Chương trình giáo dục phổ thông", "url": "https://moet.gov.vn/content/vanban/Lists/VBPQ/Attachments/1453/vbhn-322018-202021-ttbgddt-trinh-ky-xt.pdf", "source_type": "official_consolidated_document"},
+    {"source_id": "src_03", "publisher": "Cổng Thông tin điện tử Chính phủ", "title": "Thông tư 17/2025/TT-BGDĐT", "url": "https://vanban.chinhphu.vn/?docid=215347&pageid=27160", "source_type": "official_amending_circular"},
+    {"source_id": "src_04", "publisher": "Tài liệu tra cứu thứ cấp", "title": "Chương trình giáo dục phổ thông môn Toán – nội dung theo lớp", "url": "https://giaoan.edu.vn/chuong-trinh-giao-duc-pho-thong-mon-toan-4258/", "source_type": "secondary_reference", "use_note": "Chỉ hỗ trợ định vị cấu trúc; không thay thế nguồn chính thức."}
+  ]
+}

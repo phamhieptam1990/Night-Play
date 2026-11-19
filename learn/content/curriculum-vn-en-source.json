@@ -1,0 +1,82 @@
+{
+  "_note": "Bản GỌN, đã làm sạch từ hai file chủ site gửi (gdpt2018_tieng_viet_lop1-5_ai_tutor.json, gdpt2018_tieng_anh_lop1-5_ai_tutor.json). Chỉ giữ trường tiếng Việt; bỏ trường 'en' vì bị lệch với bản 'vi' (mẫu điền sẵn). Mọi mục là DIỄN GIẢI, chưa đối chiếu nguyên văn (source_status=paraphrase_only_pending_primary_text_verification, official_excerpt rỗng). Căn cứ: Thông tư 32/2018/TT-BGDĐT. Cần người rà soát sư phạm trước khi dùng chấm đạt/chưa đạt.",
+  "common": {
+    "source_status": "paraphrase_only_pending_primary_text_verification",
+    "official_excerpt": [],
+    "tutor_vi": {
+      "tviet": {
+        "teaching_moves": ["Làm mẫu ngắn", "Cho học sinh thực hành có hướng dẫn", "Phản hồi cụ thể vào một lỗi mỗi lượt", "Tăng dần độ khó"],
+        "common_difficulties": ["Nhầm âm/vần hoặc dấu thanh", "Đọc chưa liền mạch", "Diễn đạt thiếu ý", "Lỗi chính tả và dấu câu"],
+        "assessment_evidence": ["Đọc thành tiếng", "Trả lời câu hỏi đọc hiểu", "Sản phẩm viết", "Quan sát trao đổi nói-nghe"]
+      },
+      "tanh": {
+        "teaching_moves": ["Nghe mẫu có ngữ cảnh", "Lặp lại và luyện nói theo cặp", "Dùng tranh/vật thật", "Ôn từ vựng theo vòng lặp ngắt quãng"],
+        "common_difficulties": ["Nhầm âm và trọng âm", "Thiếu vốn từ", "Dịch từng từ", "Ngại nói", "Khó nối câu"],
+        "assessment_evidence": ["Phản hồi khi nghe", "Đoạn hội thoại ngắn", "Đọc hiểu văn bản ngắn", "Sản phẩm viết theo mẫu"]
+      }
+    }
+  },
+  "subjects": {
+    "tviet": {
+      "name_vi": "Tiếng Việt",
+      "domains": {"READING": "Đọc", "WRITING": "Viết", "SPEAKING_LISTENING": "Nói và nghe", "VIETNAMESE_KNOWLEDGE": "Kiến thức tiếng Việt", "LITERATURE": "Kiến thức văn học"},
+      "grades": {
+        "1": {"overview": "Làm quen chữ viết, âm và tiếng; đọc và viết ban đầu", "topics": [
+          {"id": "VI-G1-01", "name": "Âm, chữ và vần", "outcome": "Nhận diện chữ cái, âm và các kiểu vần đã học; ghép tiếng và đọc từ/câu ngắn phù hợp."},
+          {"id": "VI-G1-02", "name": "Đọc hiểu ban đầu", "outcome": "Đọc văn bản ngắn; nhận biết nhân vật, sự việc hoặc thông tin trực tiếp; trả lời câu hỏi đơn giản."},
+          {"id": "VI-G1-03", "name": "Viết và chính tả", "outcome": "Tập viết chữ, từ và câu; nghe–viết hoặc nhìn–viết theo nội dung đã học."},
+          {"id": "VI-G1-04", "name": "Nói và nghe", "outcome": "Nói câu đơn giản về bản thân, gia đình, trường lớp; lắng nghe và phản hồi phù hợp."}]},
+        "2": {"overview": "Củng cố đọc thông, viết thạo ở mức đầu cấp; mở rộng vốn từ và câu", "topics": [
+          {"id": "VI-G2-01", "name": "Đọc thành tiếng và đọc hiểu", "outcome": "Đọc văn bản ngắn trôi chảy hơn; xác định nội dung chính và chi tiết hiển nhiên."},
+          {"id": "VI-G2-02", "name": "Từ và câu", "outcome": "Mở rộng vốn từ theo chủ điểm; nhận biết và sử dụng một số kiểu câu, dấu câu đã học."},
+          {"id": "VI-G2-03", "name": "Viết đoạn ngắn", "outcome": "Viết câu và đoạn ngắn kể, tả hoặc giới thiệu theo gợi ý; trình bày ý theo trình tự."},
+          {"id": "VI-G2-04", "name": "Nói và nghe", "outcome": "Kể lại sự việc, trao đổi về chủ đề quen thuộc; biết chờ lượt và lắng nghe."}]},
+        "3": {"overview": "Phát triển đọc hiểu, viết đoạn và sử dụng tiếng Việt trong giao tiếp", "topics": [
+          {"id": "VI-G3-01", "name": "Đọc văn bản", "outcome": "Đọc văn bản văn học và thông tin phù hợp; nêu ý chính, nhân vật, sự việc và một số thông tin hỗ trợ."},
+          {"id": "VI-G3-02", "name": "Kiến thức tiếng Việt", "outcome": "Nhận biết, vận dụng từ ngữ, câu, dấu câu và một số quy tắc chính tả trong ngữ cảnh."},
+          {"id": "VI-G3-03", "name": "Viết", "outcome": "Viết đoạn văn theo mục đích quen thuộc như kể, tả, giới thiệu hoặc nêu cảm nghĩ; biết rà soát bài viết."},
+          {"id": "VI-G3-04", "name": "Nói và nghe", "outcome": "Kể, trình bày ý kiến và trao đổi ngắn có nội dung, có trình tự."}]},
+        "4": {"overview": "Đọc sâu hơn; viết bài theo kiểu văn bản; bước đầu biết tìm và ghi nhận thông tin", "topics": [
+          {"id": "VI-G4-01", "name": "Đọc hiểu văn học", "outcome": "Nhận biết chủ đề, nhân vật, chi tiết tiêu biểu và tác dụng của một số yếu tố nghệ thuật quen thuộc."},
+          {"id": "VI-G4-02", "name": "Đọc hiểu thông tin", "outcome": "Tìm thông tin trong văn bản; nhận biết cách trình bày và mục đích thông báo/giải thích đơn giản."},
+          {"id": "VI-G4-03", "name": "Viết bài", "outcome": "Lập ý và viết bài kể chuyện, miêu tả, thư hoặc văn bản thông dụng theo yêu cầu học tập."},
+          {"id": "VI-G4-04", "name": "Nói và nghe", "outcome": "Trình bày, thảo luận; biết nêu lí do và tiếp nhận ý kiến khác."}]},
+        "5": {"overview": "Hoàn thiện năng lực đọc, viết, nói và nghe ở cuối cấp tiểu học", "topics": [
+          {"id": "VI-G5-01", "name": "Đọc hiểu tổng hợp", "outcome": "Xác định chủ đề, ý chính, thông điệp; kết nối thông tin và suy luận ở mức phù hợp lứa tuổi."},
+          {"id": "VI-G5-02", "name": "Tiếng Việt và ngữ pháp", "outcome": "Vận dụng kiến thức từ, câu, liên kết câu và quy tắc chính tả để hiểu và tạo lập văn bản."},
+          {"id": "VI-G5-03", "name": "Viết văn bản", "outcome": "Viết bài kể, tả, thuyết minh/giới thiệu hoặc bày tỏ ý kiến theo yêu cầu; chỉnh sửa để rõ ý, đúng mục đích."},
+          {"id": "VI-G5-04", "name": "Nói và nghe", "outcome": "Thuyết trình ngắn, thảo luận, nêu và bảo vệ ý kiến bằng lí lẽ phù hợp; tóm tắt nội dung nghe."}]}
+      }
+    },
+    "tanh": {
+      "name_vi": "Tiếng Anh",
+      "status_note_vi": "Ngoại ngữ 1 bắt buộc ở lớp 3, 4, 5; lớp 1, 2 là tự chọn/làm quen tùy điều kiện nhà trường, không coi là yêu cầu chung.",
+      "domains": {"LISTENING": "Nghe", "SPEAKING": "Nói", "READING": "Đọc", "WRITING": "Viết", "LANGUAGE_KNOWLEDGE": "Kiến thức ngôn ngữ"},
+      "grades": {
+        "1": {"status": "optional_or_school_dependent", "overview": "Làm quen theo điều kiện; không mặc định là môn bắt buộc", "topics": [
+          {"id": "EN-G1-01", "name": "Làm quen nghe và nói", "outcome": "Nhận biết và phản hồi với một số lời chào, chỉ dẫn, từ/cụm từ rất quen thuộc khi chương trình làm quen được tổ chức."},
+          {"id": "EN-G1-02", "name": "Từ vựng gần gũi", "outcome": "Làm quen từ/cụm từ về bản thân, gia đình, lớp học, màu sắc, số đếm và đồ vật quen thuộc."},
+          {"id": "EN-G1-03", "name": "Phát âm và tương tác", "outcome": "Bắt chước âm, nhịp điệu và mẫu lời nói ngắn; tham gia trò chơi, bài hát và hoạt động nghe-nói."}]},
+        "2": {"status": "optional_or_school_dependent", "overview": "Tiếp tục làm quen theo điều kiện; nội dung tùy kế hoạch của nhà trường", "topics": [
+          {"id": "EN-G2-01", "name": "Nghe hiểu chỉ dẫn", "outcome": "Hiểu và làm theo một số chỉ dẫn quen thuộc; nhận biết từ/cụm từ trong tình huống trực quan."},
+          {"id": "EN-G2-02", "name": "Nói theo mẫu", "outcome": "Sử dụng lời chào, giới thiệu và mẫu câu rất ngắn trong hoạt động có hỗ trợ."},
+          {"id": "EN-G2-03", "name": "Từ vựng theo chủ đề", "outcome": "Mở rộng vốn từ quen thuộc thông qua tranh ảnh, trò chơi, bài hát và tình huống."}]},
+        "3": {"status": "compulsory_foreign_language_1", "overview": "Bắt đầu Ngoại ngữ 1 bắt buộc; hình thành giao tiếp tiếng Anh cơ bản", "topics": [
+          {"id": "EN-G3-01", "name": "Nghe (Listening)", "outcome": "Nhận biết chủ đề, từ/cụm từ và thông tin đơn giản trong lời nói ngắn, rõ, quen thuộc."},
+          {"id": "EN-G3-02", "name": "Nói (Speaking)", "outcome": "Hỏi–đáp và nói câu/cụm câu đơn giản về chủ đề quen thuộc với hỗ trợ phù hợp."},
+          {"id": "EN-G3-03", "name": "Đọc (Reading)", "outcome": "Nhận diện chữ, từ và hiểu thông tin rất đơn giản trong văn bản ngắn có hỗ trợ hình ảnh."},
+          {"id": "EN-G3-04", "name": "Viết (Writing)", "outcome": "Chép/viết từ, cụm từ và câu đơn giản theo mẫu phù hợp với nội dung đã học."}]},
+        "4": {"status": "compulsory_foreign_language_1", "overview": "Mở rộng vốn ngôn ngữ và khả năng giao tiếp trong các tình huống quen thuộc", "topics": [
+          {"id": "EN-G4-01", "name": "Nghe (Listening)", "outcome": "Hiểu ý chính và một số chi tiết trong hội thoại/thông báo ngắn, rõ về chủ đề quen thuộc."},
+          {"id": "EN-G4-02", "name": "Nói (Speaking)", "outcome": "Trao đổi thông tin cá nhân và chủ đề quen thuộc bằng câu đơn giản; phát âm đủ rõ để giao tiếp."},
+          {"id": "EN-G4-03", "name": "Đọc (Reading)", "outcome": "Đọc hiểu văn bản ngắn, tìm thông tin trực tiếp và đoán nghĩa từ ngữ quen thuộc nhờ ngữ cảnh."},
+          {"id": "EN-G4-04", "name": "Viết (Writing)", "outcome": "Viết câu và đoạn rất ngắn theo mẫu/gợi ý về chủ đề đã học."}]},
+        "5": {"status": "compulsory_foreign_language_1", "overview": "Củng cố và mở rộng năng lực giao tiếp tiếng Anh ở cuối cấp tiểu học", "topics": [
+          {"id": "EN-G5-01", "name": "Nghe (Listening)", "outcome": "Hiểu nội dung chính và thông tin cụ thể trong lời nói ngắn, rõ về chủ đề quen thuộc."},
+          {"id": "EN-G5-02", "name": "Nói (Speaking)", "outcome": "Hỏi, trả lời, mô tả và trình bày ngắn về bản thân, gia đình, trường học và môi trường xung quanh."},
+          {"id": "EN-G5-03", "name": "Đọc (Reading)", "outcome": "Đọc hiểu văn bản ngắn quen thuộc, xác định ý chính và thông tin cụ thể."},
+          {"id": "EN-G5-04", "name": "Viết (Writing)", "outcome": "Viết câu và đoạn ngắn có liên kết đơn giản theo chủ đề và yêu cầu đã học."}]}
+      }
+    }
+  }
+}

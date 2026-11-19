@@ -1,0 +1,16 @@
+<!doctype html><meta charset="utf-8"><title>Contact sheet — 3 môn × 5 lớp</title>
+<style>body{margin:0;background:#F6F4F1;font:14px system-ui;color:#222}.w{padding:20px;max-width:900px;margin:0 auto}h1{margin:0 0 12px;font-size:22px}
+.g{display:grid;grid-template-columns:70px repeat(3,1fr);gap:10px 14px;align-items:center}.h{font-weight:800;text-align:center}.r{font-weight:900;font-size:22px;text-align:center}
+.c{background:#fff;border-radius:18px;border:1px solid #e3ddef;padding:6px;text-align:center}.c img{width:100%;max-width:170px;display:block;margin:0 auto}.s{display:flex;gap:10px;align-items:flex-end;justify-content:center;margin-top:4px}
+.dark{background:#12141F;color:#eee}.dark .c{background:#1b1e33;border-color:#2c3160}</style>
+<nav class="rvnav" style="position:sticky;top:0;z-index:99;display:flex;gap:6px 14px;flex-wrap:wrap;align-items:center;padding:8px 16px;background:#1a1d33;color:#fff;font:600 13px system-ui"><b style="opacity:.7">Duyệt Học Vui:</b><a style="color:#cfd3ff;text-decoration:none;padding:4px 10px;border-radius:99px" href="../../../learn/mascot-review.html">🐾 Linh vật theo bố cục học</a><a style="color:#cfd3ff;text-decoration:none;padding:4px 10px;border-radius:99px" href="../../../learn/index.html">Trang học</a><a style="color:#cfd3ff;text-decoration:none;padding:4px 10px;border-radius:99px" href="../brand-learn.html">Thương hiệu 3 môn</a><span style="padding:4px 10px;border-radius:99px;background:#fff;color:#1a1d33">Bảng 3×5 lớp</span><a style="color:#cfd3ff;text-decoration:none;padding:4px 10px;border-radius:99px" href="../preview-learn.html">3 bản base</a><a style="color:#cfd3ff;text-decoration:none;padding:4px 10px;border-radius:99px" href="../preview-emotions.html">Cảm xúc</a></nav>
+
+<div class="w" id="w"></div>
+<script>
+const S=[["math","Mochi · Toán"],["vietnamese","Mầm · Tiếng Việt"],["english","Bibi · Tiếng Anh"]];
+let h='<h1>3 môn × 5 lớp (cột = môn, hàng = lớp) — hàng cuối: 48px / 96px</h1><div class="g"><div></div>'+S.map(s=>`<div class="h">${s[1]}</div>`).join("");
+for(let g=1;g<=5;g++){h+=`<div class="r">${g}</div>`+S.map(s=>`<div class="c"><img src="${s[0]}/${s[0]}_grade_${g}.svg" alt=""></div>`).join("")}
+h+='</div><h1 style="margin-top:22px">Nhỏ: 48px và 96px, mọi lớp</h1><div class="g" style="grid-template-columns:70px repeat(5,1fr)">';
+for(const s of S){h+=`<div class="h">${s[1].split(" ")[0]}</div>`+[1,2,3,4,5].map(g=>`<div class="c"><div class="s"><img src="${s[0]}/${s[0]}_grade_${g}.svg" style="width:48px"><img src="${s[0]}/${s[0]}_grade_${g}.svg" style="width:96px"></div></div>`).join("")}
+document.getElementById("w").innerHTML=h+'</div>';
+</script>
