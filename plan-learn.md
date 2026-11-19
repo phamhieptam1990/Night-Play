@@ -39,10 +39,10 @@ Quy ước nội dung: mỗi câu hỏi có trường `standard` (mã/mô tả y
 
 - [x] 0.0 Thêm thẻ "Học" vào `play/index.html` trỏ tới `learn/index.html`.
 - [x] 0.1 (phần 1) Khung `learn/`: chọn lớp 1–5 → danh sách chủ đề theo GDPT 2018, vi/en, ← về hub, ⭐ lưu local. Còn lại: bản đồ phiêu lưu, hồ sơ bé. Một màn hình không cuộn, nút ←, chạy được màn ngang.
-- [ ] 0.2 Mô hình nội dung `learn/content/*.json`: `topic, grade, skill, difficulty, stem, answer, distractors[{value, misconception}]`.
-- [ ] 0.3 Công cụ kỹ năng: `mastery[skill]`, `errors[misconception]` lưu local; hàm chọn câu tiếp theo (luyện thích ứng, không dùng AI).
-- [ ] 0.4 Mở rộng kiểm tra tự động: đáp án đúng nằm trong lựa chọn, mọi đáp án sai có `misconception`, không trùng đáp án.
-- [ ] 0.5 20 câu mẫu + test bộ chọn câu.
+- [x] 0.2 Mô hình nội dung: ngân hàng dựng sẵn [learn/content/bank.js](learn/content/bank.js) (42 câu: id, môn, kỹ năng, lớp, độ khó, kiểu, lời văn vi/en, đáp án, đáp án sai gắn mã lỗi tư duy, lời giải từng bước) + 22 kỹ năng trong [learn/engine.js](learn/engine.js), mỗi kỹ năng gắn chủ đề GDPT 2018. `E.toSchema()` xuất đúng `question_generation_schema` cho gia sư AI.
+- [x] 0.3 Công cụ kỹ năng trong `learn/engine.js`: tiến độ từng kỹ năng lưu máy (`learn:m:<môn>`: n, ok, p gần đây, lỗi theo mã) + 5 mức thành thạo; `planRound()` chọn kỹ năng cho vòng 5 câu (khởi động dễ, ưu tiên kỹ năng yếu / hay sai, ôn lớp dưới, không lặp); `summary()` cho báo cáo phụ huynh. Trang học dùng bộ máy này, không dùng AI.
+- [x] 0.4 Kiểm tra tự động: `node scripts/learn/check-bank.js` (lược đồ ngân hàng, chủ đề có trong chương trình, 25.800 câu sinh ra đều đúng 4 lựa chọn khác nhau / 1 đúng / mọi đáp án sai có mã lỗi / PHÉP TÍNH ĐÚNG, mức thành thạo, hành vi thích ứng, xuất lược đồ). Chưa nối vào `check.js`.
+- [x] 0.5 42 câu mẫu (>20) + test bộ chọn câu (kỹ năng bé hay sai tăng 23% → 38% số lần xuất hiện, kỹ năng đã thạo giảm còn 13%).
 
 **Xong khi:** bộ chọn câu thích ứng chạy được, test đạt.
 
