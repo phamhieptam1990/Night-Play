@@ -74,6 +74,43 @@ Bộ máy hiện có đã theo dõi 22 kỹ năng, mỗi kỹ năng có mức th
 - Ngày bé vắng, vườn **vẫn đẹp**, và khi quay lại thấy quà tích lại. Không phạt bé vì nghỉ.
 - Có nhắc nghỉ mắt; cuối lượt vườn "chúc ngủ ngon", không mời chơi tiếp mãi.
 
+## 2c. Thu hoạch kiểu Hay Day: cây trồng thật, mỗi cây một sự sống riêng
+
+Chủ site yêu cầu: **không chỉ hoa, mà là khu vườn để THU HOẠCH như Hay Day**, mỗi cây có hiệu ứng riêng. Bản vẽ v1: [shared/art/garden/preview-crops.html](shared/art/garden/preview-crops.html) (sinh bằng `scripts/learn/gen-crops-art.js`).
+
+**Vòng thu hoạch (vẫn "mỗi cây = một kỹ năng", nhưng chín theo số câu đúng):**
+1. Bé gieo một **hạt giống** vào ô, chọn kỹ năng cần luyện.
+2. Mỗi **câu đúng ngay lần đầu** của kỹ năng đó cho cây **1 điểm lớn**; đủ điểm (đề xuất 5) thì cây **CHÍN** (giai đoạn 4, có lấp lánh, ô sáng, hiện 👆).
+3. Bé **chạm để thu hoạch**: cây phồng nhún, **nông sản bay về kho** (kho nảy, "+1"), cây **mọc lại** từ mầm. **Chín rồi không biến mất, không héo** (không ép bé).
+4. Số nông sản mỗi lần phụ thuộc **mức thạo** kỹ năng (giỏi hơn thì thu được nhiều hoặc nông sản vàng), nên học giỏi lên có phần thưởng thấy được.
+5. **Không đồng hồ đếm ngược, không tăng tốc bằng tiền**: cây lớn nhờ học.
+
+**6 cây trồng, mỗi môn 2, mỗi cây một sự sống riêng:**
+
+| Cây | Môn | Dáng | Hoạt ảnh riêng | Nông sản |
+|---|---|---|---|---|
+| Cà rốt | Toán | bụi lá xòe, củ nhô khỏi đất | lá đung đưa lệch nhịp, củ rung rinh khi chín | củ cà rốt |
+| Bắp | Toán | thân cao, lá dài, trái bọc vỏ | lá và râu phe phẩy, trái nhún nhẹ | trái bắp |
+| Lúa mì | Tiếng Việt | nhiều bông thẳng đứng | cả bụi gợn sóng như có gió, bông vàng cúi khi chín | bó lúa |
+| Hướng dương | Tiếng Việt | thân cao, bông to | bông chậm rãi xoay theo nắng | bông hướng dương |
+| Dâu tây | Tiếng Anh | bụi thấp, hoa trắng | quả đỏ nhún nhảy, lấp lánh | quả dâu |
+| Cà chua | Tiếng Anh | cây leo có cuống | quả đung đưa nhẹ | quả cà chua |
+
+Sinh vật ghé thăm (ong, bướm, đom đóm, mục 2b) đến theo **môn bé vừa học**; mỗi cây chín thu hút một loài hợp (ví dụ ong quanh hoa hướng dương và bắp).
+
+**Nông sản dùng để làm gì (làm theo bậc):**
+- **Bậc 1:** chỉ **sưu tầm** trong kho, hiện số lượng, nhận huy hiệu theo mốc (ví dụ thu hoạch 10 cà rốt).
+- **Bậc 2:** **đơn hàng của linh vật** ("Mochi cần 3 cà rốt để nấu canh"), nấu món đơn giản từ nông sản, vật nuôi ăn nông sản. Đơn hàng thưởng sao và hạt giống.
+- **Bậc 3:** đổi nông sản lấy vật phẩm trang trí, mở rộng đất, nguyên liệu cho chuyến phiêu lưu.
+- **Không làm:** bán/mua với người chơi khác, đồng hồ chờ, tăng tốc bằng tiền thật.
+
+**Việc cần làm cho phần này (xem mục 7, giai đoạn B):**
+- [x] Bản vẽ v1: 6 cây × 5 giai đoạn, 3 tông lá, nông sản, kho, thu hoạch thử có hiệu ứng (chờ chủ site duyệt).
+- [ ] Đổi dữ liệu Vườn: mỗi ô có **điểm lớn** theo kỹ năng, **kho nông sản**, hành động **thu hoạch** (trong `learn/garden.js`), kèm kiểm thử.
+- [ ] Màn Vườn: chạm cây chín để thu hoạch, kho hiện số lượng, ô sáng khi chín.
+- [ ] Đủ hoạt ảnh thu hoạch (phồng nhún, nông sản bay, kho nảy) và âm thanh nhẹ khi thu hoạch (dùng cơ chế âm thanh sẵn có).
+- [ ] Bản v2 tranh: thêm cây thứ 3 mỗi môn, cây vàng (hiếm) khi kỹ năng đạt mức giỏi.
+
 ## 3. Nền kinh tế phần thưởng (đơn giản, hào phóng, không có tiền thật)
 
 | Tài nguyên | Kiếm từ đâu | Dùng để làm gì |

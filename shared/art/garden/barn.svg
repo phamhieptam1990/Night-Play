@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Kho nông sản" class="np-barn" data-style="pop" data-game="barn"><title>Kho nông sản</title>
+<style>.npa{transform-box:fill-box;transform-origin:50% 100%}.npa-bounce.on{animation:npa-bounce .5s ease-out}@keyframes npa-bounce{0%{transform:scale(1)}35%{transform:scale(1.12,.9)}65%{transform:scale(.96,1.06)}100%{transform:scale(1)}}:root.np-playing .npa{animation:none}@media (prefers-reduced-motion:reduce){.npa{animation:none!important}}</style>
+<defs><linearGradient id="br" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F26B5B"/><stop offset="1" stop-color="#C73E33"/></linearGradient><linearGradient id="rf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8E6A52"/><stop offset="1" stop-color="#6A4A37"/></linearGradient></defs>
+<g id="all" class="npa npa-bounce"><ellipse cx="128" cy="236" rx="92" ry="9" fill="#000" opacity=".16"/>
+<path d="M30 112L128 44L226 112V232H30Z" fill="url(#br)" stroke="#9E2C23" stroke-width="4" stroke-linejoin="round"/>
+<path d="M18 116L128 36L238 116L226 130L128 62L30 130Z" fill="url(#rf)" stroke="#4F3427" stroke-width="4" stroke-linejoin="round"/>
+<rect x="78" y="142" width="100" height="90" rx="10" fill="#FFF3E0" stroke="#9E2C23" stroke-width="4"/><path d="M78 142L178 232M178 142L78 232" stroke="#C73E33" stroke-width="6" stroke-linecap="round"/><rect x="78" y="142" width="100" height="90" rx="10" fill="none" stroke="#9E2C23" stroke-width="4"/>
+<circle cx="128" cy="96" r="14" fill="#FFF3E0" stroke="#9E2C23" stroke-width="4"/><path d="M128 86V106M118 96H138" stroke="#C73E33" stroke-width="4" stroke-linecap="round"/><ellipse cx="62" cy="152" rx="10" ry="5" fill="#fff" opacity=".28"/></g></svg>
