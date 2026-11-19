@@ -441,3 +441,22 @@ html.np-menupaused #ccRoot,html.np-menupaused #ccRoot *,html.np-menupaused #ccRo
 #ccRoot .ml .m.row.lang .ic{font-size:calc(var(--s) * .365)!important}
 #ccRoot .ml .m.row .ic svg{width:calc(var(--s) * .565)!important;height:calc(var(--s) * .565)!important}
 #ccRoot .ml .m.row.fs .ic svg{width:calc(var(--s) * .355)!important;height:calc(var(--s) * .355)!important}
+/* danh sách CHẾ ĐỘ ở màn ngang/web: tất cả chế độ trên MỘT hàng (≤6), nhiều hơn thì cuộn dọc — không cắt ô tràn hàng 2 */
+@media (orientation:landscape){
+  #ccRoot .pn .ml:not(.ex):not(.opx){grid-template-columns:repeat(var(--mc,4),minmax(0,1fr))!important;grid-auto-rows:minmax(84px,1fr)!important;align-content:stretch!important;justify-content:stretch!important;overflow-y:auto!important}
+  #ccRoot .pn .ml:not(.ex):not(.opx) .m{min-width:0}
+}
+@media (orientation:landscape){#ccRoot .pn .ml:not(.ex):not(.opx)>.m{grid-column:span 1!important}}
+@media (orientation:portrait){
+  #ccRoot .pn .ml:not(.ex):not(.opx){grid-template-columns:repeat(var(--pc,2),minmax(0,1fr))!important;grid-auto-rows:minmax(84px,1fr)!important;align-content:stretch!important;justify-content:stretch!important;overflow-y:auto!important}
+  #ccRoot .pn .ml:not(.ex):not(.opx)>.m{grid-column:span 1!important;min-width:0}
+}
+/* POPUP GIAO DIỆN (#ovSkin, các thẻ .skc dùng đơn vị cqw nên trên màn web rộng mỗi thẻ cao ~150px → popup bị CUỘN): chặn trần theo px để mọi thẻ nhỏ gọn, cả danh sách nằm trọn khung không cuộn */
+#ovSkin .skc{padding:min(2cqw,9px) min(2.6cqw,12px)!important;gap:min(2.6cqw,12px)!important;border-radius:min(3.4cqw,14px)!important;min-height:0!important}
+#ovSkin .skc .e{font-size:min(9.5cqw,34px)!important}
+#ovSkin .skc .sx{gap:min(.9cqw,4px)!important}
+#ovSkin .skc .sx b{font-size:min(3.7cqw,15px)!important}
+#ovSkin .skc .sx small{font-size:min(2.7cqw,12px)!important}
+#ovSkin .skc .dots{gap:min(.9cqw,4px)!important}
+#ovSkin .skc .dots i{width:min(3.4cqw,13px)!important;height:min(3.4cqw,13px)!important}
+#ovSkin .sk{gap:min(2cqw,10px)!important}
