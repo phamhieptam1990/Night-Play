@@ -536,3 +536,11 @@ main p a:not(.btn){transition:color .18s ease,text-decoration-color .18s ease}
 .hvi{transition:transform .25s}
 .hvc.s3 .hvi img{left:-47%;top:-8%}   /* cắt đầu Bibi lệch trái để không lộ góc bong bóng "Hi!" */
 @media (prefers-reduced-motion:reduce){.hvc:hover,.hvc:focus-visible,.hvc:active{transform:none}.hvc:hover .hvi,.hvc:focus-visible .hvi{transform:none}}
+/* cỡ chữ 3 thẻ Học Vui ngang bằng thẻ game (.world h3 32px, p 17px, nút 17px); điện thoại nhỏ hơn một chút */
+.hvc{padding:18px 18px;gap:16px}
+.hvi{width:60px;height:60px}
+.hvt{gap:4px}
+.hvt b{font-size:24px;line-height:1.15}
+.hvt span{font-size:16px;line-height:1.4;opacity:.95}
+.hvg{font-size:17px}
+@media (min-width:760px){.hvc{padding:28px 24px;gap:12px}.hvi{width:88px;height:88px}.hvt{gap:6px}.hvt b{font-size:30px}.hvt span{font-size:17px}.hvg{margin-top:10px}}
