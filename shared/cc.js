@@ -61,7 +61,7 @@
   }
   /* sau khi chọn chế độ: game có thể TỪ CHỐI (chế độ khoá Night Pass → mở popup mua) → nếu có popup mở thì đóng bảng để thấy popup; không thì đọc lại chế độ THẬT của game */
   function settle(done) { RT(function () { var pop = document.querySelector(".sheet:not([hidden]),.ov:not([hidden]):not(#ovStart),#hlpOv:not([hidden]),.overlay:not([hidden])"); if (pop && !pop.closest("#ccRoot")) { close(); return; } if (done) done(); themeSync(); }, 140); }
-  function setMode(i) { var els = modeEls(); if (!els[i]) return; if (POP) { try { localStorage.setItem(KEY, String(i)); } catch (e) {} } else els[i].click(); }
+  function setMode(i) { var els = modeEls(); if (!els[i]) return; if (POP) { try { localStorage.setItem(KEY, String(i)); } catch (e) {} } else { var mb = els[i].querySelector(":scope>button.main,:scope>.main"); (mb || els[i]).click(); } }   /* thẻ bọc (.tile) không có onclick: bấm nút chính bên trong (Cánh Nhỏ Phiêu Lưu) */
   window.NPCC = { modeEl: function () { var e = modeEls(); if (!e.length) return null; var t = e[POP ? modeIdx(e) : 0]; return t && (t.querySelector(".main") || t); }, open: function () { open(); }, close: function () { close(); } };
   /* ===== dựng bảng ===== */
   var SVG = {
