@@ -275,6 +275,14 @@ function defs() {
 const STYLE = `<style>.npa-spin{transform-box:fill-box;transform-origin:50% 50%;animation:npa-spin 14s linear infinite}.npa-hover{animation:npa-hover 3s ease-in-out infinite}@keyframes npa-spin{to{transform:rotate(360deg)}}@keyframes npa-hover{0%,100%{transform:translate(0,0)}50%{transform:translate(6px,-8px)}}:root.np-playing .npa-spin,:root.np-playing .npa-hover{animation:none}@media (prefers-reduced-motion:reduce){.npa-spin,.npa-hover{animation:none!important}}</style>`;
 
 /* cấu hình cảnh: levels = cấp của từng vị trí (0 = chưa có). time = day | dusk | night */
+/* ====== BỘ VỊ TRÍ CỐ ĐỊNH, CÓ THỨ TỰ TRƯỚC SAU (để không vật nào đè lên vật khác) ======
+   Thứ tự VẼ (từ dưới lên): 0 cỏ nền → 1 ao, sân → 2 lối đi (một mảng liền) → 3 đất ô trồng → 4 vật đứng (rào, công trình, cây, vật nuôi...) xếp theo độ sâu y.
+   Thứ tự CHIẾM CHỖ (ai có trước thì giữ chỗ): công trình + ao + rào + lối đi (cố định) → ô trồng → cây lớn → vật nhỏ (rơm, thùng, hoa) → vật nuôi.
+   Mỗi vật có VÙNG CHIẾM ĐẤT (hình elip dưới chân). Vật nào chạm vùng đã có chủ thì bị bỏ (và được báo cáo), nên không bao giờ chồng lên nhau. */
+const FOOT = { bigTree: [52, 13, 1], pine: [30, 11, 1], hay: [34, 12], barrel: [20, 8], chicken: [11, 5], rabbit: [13, 5], cow: [38, 11], rock: [24, 8], bush: [30, 9], lavender: [26, 8], flowerPatch: [32, 13], pumpkins: [30, 8], milkcans: [32, 9], roundHay: [32, 10], crate: [24, 8], coop: [44, 14] };
+const SPRITES = { bigTree, pine, hay, barrel, chicken, rabbit, cow, rock, bush, lavender, flowerPatch, pumpkins, milkcans, roundHay, crate, coop };
+const hit = (a, b) => !(a.kind === "plot" && b.kind === "plot") && Math.pow((a.x - b.x) / (a.rx + b.rx), 2) + Math.pow((a.y - b.y) / (a.ry + b.ry), 2) < .8;
+const DROPPED = [], MOVED = [];
 const HOT = [];   /* vị trí các ô trồng của cảnh vừa sinh (để trang tương tác đặt vùng rê/bấm) */
 function scene(o) {
   HOT.length = 0;
@@ -290,7 +298,23 @@ function scene(o) {
   const U = (sx, sy) => [(sx - OX) / TW + (sy - OY) / TH, (sy - OY) / TH - (sx - OX) / TW];   /* màn hình → ô lưới */
   const fenceAt = (x, y, dir, lv) => { const [gx, gy] = U(x, y); return fence(gx, gy, dir, lv); };
   const at = (sx, sy) => [sx, sy], base = [], stand = [];
-  const D = L.deco, push = (y, svg) => stand.push({ d: y, svg });
+  const D = L.deco, occ = [];
+  const reg = (x, y, rx, ry, kind) => occ.push({ x, y, rx, ry, kind: kind || "fixed" }), line = (x0, y0, dx, dy, n, rx, ry, kind) => { const len = Math.hypot(dx * n, dy * n), k = Math.max(1, Math.round(len / 28)); for (let i = 0; i <= k; i++) reg(x0 + dx * n * i / k, y0 + dy * n * i / k, rx, ry, kind); };
+  const free = fp => !occ.some(o => hit(fp, o));
+  const push = (y, svg) => { let fp = svg && svg.fp;
+    if (fp && !free(fp)) {   /* trùng chỗ → tìm chỗ trống gần nhất (vòng xoắn elip), không có thì bỏ */
+      let got = null; for (let r = 1; r <= 9 && !got; r++) for (let a = 0; a < 16 && !got; a++) { const ang = a / 16 * Math.PI * 2, nx = fp.x + Math.cos(ang) * r * 30, ny = fp.y + Math.sin(ang) * r * 15; if (nx < 24 || nx > 1256 || ny < 150 || ny > 872) continue; if (free(Object.assign({}, fp, { x: nx, y: ny }))) got = [nx, ny]; }
+      if (!got || !svg.re) { DROPPED.push(fp.name); return; } MOVED.push(fp.name); y += got[1] - fp.y; svg = svg.re(got[0], got[1]); fp = svg.fp; }
+    if (fp) occ.push(fp); stand.push({ d: y, svg: String(svg) }); };
+  /* các vật cố định giữ chỗ TRƯỚC */
+  if (L.pond) reg(330, 300, 140, 68); if (L.house) reg(650, 425, 170, 60); if (L.barn) reg(1090, 565, 125, 50); if (L.well) reg(470, 535, 38, 16); if (L.windmill) reg(1170, 335, 50, 18);
+  if (D >= 3) { reg(880, 340, 80, 28); reg(1020, 385, 72, 26); } if (D >= 2) reg(1205, 430, 50, 16);
+  if (L.fence) { line(648, 282, -52, 26, 4, 30, 13); line(648, 282, 52, 26, 5, 30, 13); if (D >= 1) { line(440, 386, 52, 26, 2, 30, 13); line(908, 412, -52, 26, 2, 30, 13); } }
+  if (D >= 3) line(260, 650, 52, 26, 4, 28, 12);
+  if (L.path) { line(548, 900, 18, -70, 1, 40, 22); [[548, 900], [566, 830], [584, 770], [604, 715], [632, 656], [668, 598], [700, 540], [708, 490]].forEach(([x, y]) => reg(x, y, 40, 22)); if (D >= 1) { [[596, 700], [540, 664], [470, 684], [400, 706], [330, 726], [690, 540], [770, 526], [850, 512], [940, 490], [640, 640], [720, 628], [790, 640]].forEach(([x, y]) => reg(x, y, 30, 16)); } if (D >= 2) [[950, 480], [1010, 440], [1070, 400], [540, 560], [470, 560], [400, 538], [350, 520]].forEach(([x, y]) => reg(x, y, 30, 16)); }
+  /* vật có vùng chiếm đất tự động: bọc các hàm vẽ để mang theo vùng của nó */
+  const W2 = (name, fn) => { const mk = (x, y, a, b, c) => { const o = new String(fn(x, y, a, b, c)), F = FOOT[name], sc = name === "bigTree" || name === "pine" || name === "cow" ? (a || 1) : 1; o.fp = { x, y, rx: F[0] * sc, ry: F[1] * Math.max(.7, sc), kind: name, name }; o.re = (nx, ny) => mk(nx, ny, a, b, c); return o; }; return mk; };
+  const bigTree = W2("bigTree", SPRITES.bigTree), pine = W2("pine", SPRITES.pine), hay = W2("hay", SPRITES.hay), barrel = W2("barrel", SPRITES.barrel), chicken = W2("chicken", SPRITES.chicken), rabbit = W2("rabbit", SPRITES.rabbit), cow = W2("cow", SPRITES.cow), rock = W2("rock", SPRITES.rock), bush = W2("bush", SPRITES.bush), lavender = W2("lavender", SPRITES.lavender), flowerPatch = W2("flowerPatch", SPRITES.flowerPatch), pumpkins = W2("pumpkins", SPRITES.pumpkins), milkcans = W2("milkcans", SPRITES.milkcans), roundHay = W2("roundHay", SPRITES.roundHay), crate = W2("crate", SPRITES.crate), coop = W2("coop", SPRITES.coop);
   /* ---- lớp mặt đất ---- */
   if (L.pond) base.push(pond([330, 300]));
   /* lối đi = mảng liền; kiểu chọn bằng L.pathStyle (dat | soi | cuoi | dalat | gach) */
@@ -307,6 +331,7 @@ function scene(o) {
   const FIELDS = [[[810, 590], 3, 3], [[352, 770], 3, 2], [[256, 508], 3, 2], [[940, 810], 4, 1], [[966, 214], 2, 1], [[1100, 700], 2, 2], [[120, 330], 3, 2], [[640, 800], 3, 2], [[1180, 420], 2, 2], [[520, 220], 3, 1], [[60, 200], 3, 2], [[1150, 220], 2, 2], [[200, 640], 3, 2], [[1180, 560], 2, 2], [[900, 130], 3, 1]];
   let left = L.plots, ci = 0, pidx = 0; const nGray = Math.max(0, L.plots - L.planted), grayIdx = new Set(Array.from({ length: nGray }, (_, k) => Math.min(L.plots - 1, Math.floor((k + 1) * L.plots / (nGray + 1)))));
   for (const [fo, na, nb] of FIELDS) for (let b = 0; b < nb; b++) for (let a = 0; a < na; a++) { if (left <= 0) break; left--; const planted = !grayIdx.has(pidx++), cp = planted ? cyc[ci++ % cyc.length] : null, tl = [fo[0] + (a - b) * TW / 2, fo[1] + (a + b) * TH / 2];
+    { const fpP = { x: tl[0], y: tl[1] + TH / 2, rx: 62, ry: 31, kind: "plot", name: "plot" }; if (!free(fpP)) { DROPPED.push("plot"); continue; } occ.push(fpP); }
     HOT.push({ x: Math.round(tl[0]), y: Math.round(tl[1] + TH / 2), planted, crop: cp ? ({ [cropWheat]: "wheat", [cropCarrot]: "carrot", [cropCorn]: "corn", [cropStraw]: "strawberry", [cropTomato]: "tomato", [cropSun]: "sunflower" })[cp[0]] : null, ripe: cp ? cp[1] : false });
     const A = tl, B = [tl[0] + TW / 2, tl[1] + TH / 2], Cc = [tl[0], tl[1] + TH], Dd = [tl[0] - TW / 2, tl[1] + TH / 2], lvl = L.plots >= 4 ? 3 : 2;
     let o;
@@ -353,6 +378,7 @@ function scene(o) {
   if (D >= 2) { [[560, 780], [610, 820], [700, 850]].forEach(([x, y]) => push(y, chicken(x, y))); push(830, rabbit(740, 830)); push(560, rabbit(1000, 700)); push(640, coop(820, 720)); }
   if (D >= 3) { [[300, 700, 1], [420, 710, 0], [520, 740, 1], [880, 760, 0], [1010, 760, 1], [1120, 600, 0], [1180, 760, 1], [330, 820, 0]].forEach(([x, y, fl]) => push(y, cow(x, y, .85, !!fl))); [[240, 640], [940, 700], [1060, 640], [760, 700], [980, 840]].forEach(([x, y]) => push(y, chicken(x, y))); [[1100, 790], [250, 700], [850, 600], [700, 640], [180, 760], [1060, 520]].forEach(([x, y]) => push(y, rabbit(x, y))); [[120, 830, 0], [640, 860, 1], [760, 780, 0], [990, 840, 1], [200, 560, 0], [1200, 700, 1]].forEach(([x, y, fl]) => push(y, cow(x, y, .85, !!fl))); [[100, 700], [340, 650], [820, 870], [1150, 650], [60, 600], [1000, 590], [560, 700]].forEach(([x, y]) => push(y, chicken(x, y))); push(760, coop(1020, 600)); [[300, 740], [440, 770], [880, 800]].forEach(([x, y]) => push(y, hay(x, y))); { const g = U(260, 650), r = fenceRun(g[0], g[1], "x", 4, "go"); push(r.d + 40, r.svg); } }
   items.push(...base, ...stand);
+  if (!o.view && !o.overlay) { const c = {}; DROPPED.forEach(n => c[n] = (c[n] || 0) + 1); console.log("  vị trí [" + (o.label || "").slice(0, 26) + "]: dời " + MOVED.length + " vật sang chỗ trống, bỏ " + DROPPED.length + " vật hết chỗ " + JSON.stringify(c)); } DROPPED.length = 0; MOVED.length = 0;
   const ground0 = items.filter(i => i.d <= 1), up = items.filter(i => i.d > 1).sort((a, b) => a.d - b.d); items.length = 0; items.push(...ground0, ...up);
   /* trời + thời điểm trong ngày */
   const tint = { day: null, dusk: ["#FF8A3D", .28], night: ["#12163A", .55] }[time];
