@@ -215,13 +215,13 @@ function defs() {
   const lg = (id, a, b, v) => `<linearGradient id="${id}" x1="0" y1="0" x2="${v ? 0 : 1}" y2="${v ? 1 : 0}"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`;
   return `<defs>${lg("gLeaf", "#9BE665", "#4FA83B", 1)}${lg("gPine", "#4FB36A", "#1E7A44", 1)}${lg("gWood", "#D6A066", "#9A6532", 1)}${lg("gSoil", "#A8703F", "#7B4A28", 1)}${lg("gStone", "#E6E3DC", "#B5B1A8", 1)}${lg("gStoneL", "#D6D3CC", "#A8A59E", 1)}${lg("gStoneR", "#C2BFB7", "#8F8B83", 1)}${lg("gWheat", "#FFE08A", "#E8B83A", 1)}${lg("gWater", "#8FDCF7", "#3FA3D9", 1)}${lg("gWall", "#FFFFFF", "#E4D8C4", 0)}${lg("gStraw", "#F0CB62", "#D9A93A", 1)}${lg("gTile3", "#EE8A56", "#C95A2B", 1)}${lg("gTile4", "#F06A52", "#B23A2A", 1)}${lg("gLeafRoof", "#7FD35F", "#3F9A3A", 1)}${lg("gLeafRoof2", "#6BC653", "#2F8A36", 1)}
 <radialGradient id="gGrass" cx=".5" cy=".4" r=".85"><stop offset="0" stop-color="#9AD95A"/><stop offset=".7" stop-color="#7FC448"/><stop offset="1" stop-color="#69AE3C"/></radialGradient><radialGradient id="gGlow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFE9A0" stop-opacity=".95"/><stop offset="1" stop-color="#FFE9A0" stop-opacity="0"/></radialGradient>
-<linearGradient id="gSkyDay" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8FD3FF"/><stop offset="1" stop-color="#E9F8FF"/></linearGradient></defs>`;
+<linearGradient id="gGray" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C9C6BF"/><stop offset="1" stop-color="#A29E96"/></linearGradient><linearGradient id="gSkyDay" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8FD3FF"/><stop offset="1" stop-color="#E9F8FF"/></linearGradient></defs>`;
 }
 const STYLE = `<style>.npa-spin{transform-box:fill-box;transform-origin:50% 50%;animation:npa-spin 14s linear infinite}.npa-hover{animation:npa-hover 3s ease-in-out infinite}@keyframes npa-spin{to{transform:rotate(360deg)}}@keyframes npa-hover{0%,100%{transform:translate(0,0)}50%{transform:translate(6px,-8px)}}:root.np-playing .npa-spin,:root.np-playing .npa-hover{animation:none}@media (prefers-reduced-motion:reduce){.npa-spin,.npa-hover{animation:none!important}}</style>`;
 
 /* cấu hình cảnh: levels = cấp của từng vị trí (0 = chưa có). time = day | dusk | night */
 function scene(o) {
-  const L = Object.assign({ deco: 3, house: 4, fence: 3, well: 3, barn: 3, windmill: 3, plots: 26, path: 1, apple: 1, flowers: 1, pond: 1, hay: 1, animals: 1 }, o.levels || {});
+  const L = Object.assign({ deco: 3, house: 4, fence: 3, well: 3, barn: 3, windmill: 3, plots: 31, planted: 24, path: 1, apple: 1, flowers: 1, pond: 1, hay: 1, animals: 1 }, o.levels || {});
   const time = o.time || "day"; const items = [], R = rng(7);
   /* nền cỏ */
   let ground = `<rect width="${W}" height="${H}" fill="url(#gGrass)"/>`;
@@ -247,12 +247,18 @@ function scene(o) {
   }
   /* nhiều thửa ruộng: [gốc (x,y), số ô theo a, số ô theo b]; mở dần theo L.plots (A 9 ô, B 6, E 6, C 3, F 2) */
   const cyc = [[cropWheat, true], [cropCarrot, true], [cropCorn, false], [cropStraw, true], [cropWheat, true], [cropTomato, true], [cropSun, false], [cropCarrot, false], [cropStraw, true], [cropWheat, true]];
-  const FIELDS = [[[810, 590], 3, 3], [[352, 770], 3, 2], [[256, 508], 3, 2], [[920, 806], 3, 1], [[966, 214], 2, 1]];
-  let left = L.plots, ci = 0;
-  for (const [fo, na, nb] of FIELDS) for (let b = 0; b < nb; b++) for (let a = 0; a < na; a++) { if (left <= 0) break; left--; const cp = cyc[ci++ % cyc.length], tl = [fo[0] + (a - b) * TW / 2, fo[1] + (a + b) * TH / 2];
+  const FIELDS = [[[810, 590], 3, 3], [[352, 770], 3, 2], [[256, 508], 3, 2], [[940, 810], 4, 1], [[966, 214], 2, 1], [[1100, 700], 2, 2]];
+  let left = L.plots, ci = 0, pidx = 0; const nGray = Math.max(0, L.plots - L.planted), grayIdx = new Set(Array.from({ length: nGray }, (_, k) => Math.min(L.plots - 1, Math.floor((k + 1) * L.plots / (nGray + 1)))));
+  for (const [fo, na, nb] of FIELDS) for (let b = 0; b < nb; b++) for (let a = 0; a < na; a++) { if (left <= 0) break; left--; const planted = !grayIdx.has(pidx++), cp = planted ? cyc[ci++ % cyc.length] : null, tl = [fo[0] + (a - b) * TW / 2, fo[1] + (a + b) * TH / 2];
     const A = tl, B = [tl[0] + TW / 2, tl[1] + TH / 2], Cc = [tl[0], tl[1] + TH], Dd = [tl[0] - TW / 2, tl[1] + TH / 2], lvl = L.plots >= 4 ? 3 : 2;
-    let o = poly([A, B, Cc, Dd], "url(#gSoil)", lvl >= 3 ? "#7A4B24" : C.soilD, lvl >= 3 ? 7 : 3); for (let k = 1; k < 5; k++) { const p = lerp(A, Dd, k / 5), q = lerp(B, Cc, k / 5); o += `<path d="M${f(p[0])} ${f(p[1])}L${f(q[0])} ${f(q[1])}" stroke="${C.soilD}" stroke-width="2.6" opacity=".45" stroke-linecap="round"/>`; } if (lvl >= 3) o += poly([A, B, Cc, Dd], "none", "#C58B4E", 3);
+    let o;
+    if (planted) { o = poly([A, B, Cc, Dd], "url(#gSoil)", lvl >= 3 ? "#7A4B24" : C.soilD, lvl >= 3 ? 7 : 3); for (let k = 1; k < 5; k++) { const p = lerp(A, Dd, k / 5), q = lerp(B, Cc, k / 5); o += `<path d="M${f(p[0])} ${f(p[1])}L${f(q[0])} ${f(q[1])}" stroke="${C.soilD}" stroke-width="2.6" opacity=".45" stroke-linecap="round"/>`; } if (lvl >= 3) o += poly([A, B, Cc, Dd], "none", "#C58B4E", 3); }
+    else { /* đất xám chưa trồng: chạm để chọn cây */
+      o = poly([A, B, Cc, Dd], "url(#gGray)", "#6E6A63", 5) + poly([A, B, Cc, Dd], "none", "#CFCBC3", 2.4); const r = rng(pidx * 13 + 1);
+      for (let k = 0; k < 5; k++) { const q = lerp(lerp(A, Dd, r()), lerp(B, Cc, r()), r()); o += ell(q[0], q[1], 3.4 + r() * 2.4, 2, "#8F8B83", null).replace("/>", ' opacity=".7"/>'); }
+      for (let k = 1; k < 4; k++) { const p = lerp(A, Dd, k / 4), q = lerp(B, Cc, k / 4); o += `<path d="M${f(p[0] + 10)} ${f(p[1])}L${f(q[0] - 10)} ${f(q[1])}" stroke="#8F8B83" stroke-width="1.8" stroke-dasharray="6 9" opacity=".5" stroke-linecap="round"/>`; } }
     base.push({ d: 1, svg: o });
+    if (!planted) continue;
     let cr = ""; for (let k = 0; k < 4; k++) for (let m = 0; m < 4; m++) { const p = lerp(lerp(A, Dd, (k + .5) / 4), lerp(B, Cc, (k + .5) / 4), (m + .5) / 4); cr += cp[0](p[0], p[1] + 8, cp[1]); }
     push(Cc[1] - 8, `<g transform="translate(${f(tl[0])} ${f(tl[1] + TH / 2)}) scale(1.35) translate(${f(-tl[0])} ${f(-(tl[1] + TH / 2))})">${cr}</g>`); }
   /* tường đá / rào quanh sân (hình thoi: Lc(440,386) Bc(648,282) Rc(908,412) Fc(700,516)) */
@@ -271,7 +277,7 @@ function scene(o) {
   if (D >= 2) { push(440, table(1205, 425)); push(500, coop(380, 470)); }
   /* ---- cây, bụi, đá ---- */
   /* hàng cây sát nhau quanh rìa + vườn cây ăn quả nhiều loại */
-  const forest = [[25, 200, "pine", 1.2], [95, 150, "oak", 1.0], [165, 215, "pine", 1.1], [250, 150, "pine", 1.15], [345, 118, "oak", .9], [440, 160, "pine", 1.0], [520, 120, "oak", .95], [600, 168, "pine", .95], [680, 128, "oak", .9], [760, 160, "pine", 1.0], [850, 120, "oak", .9], [930, 150, "pine", 1.0], [1010, 118, "oak", .85], [1090, 150, "pine", 1.0], [1180, 130, "oak", .95], [1255, 190, "pine", 1.15], [1235, 690, "oak", 1.1], [1190, 800, "pine", 1.1], [1090, 850, "oak", .95], [1010, 868, "pine", .9], [20, 330, "oak", 1.0], [70, 420, "pine", 1.0], [1255, 330, "pine", 1.0], [1250, 450, "oak", .95], [1255, 580, "pine", 1.0]];
+  const forest = [[25, 200, "pine", 1.2], [95, 150, "oak", 1.0], [165, 215, "pine", 1.1], [250, 150, "pine", 1.15], [345, 118, "oak", .9], [440, 160, "pine", 1.0], [520, 120, "oak", .95], [600, 168, "pine", .95], [680, 128, "oak", .9], [760, 160, "pine", 1.0], [850, 120, "oak", .9], [930, 150, "pine", 1.0], [1010, 118, "oak", .85], [1090, 150, "pine", 1.0], [1180, 130, "oak", .95], [1255, 190, "pine", 1.15], [1235, 690, "oak", 1.1], [20, 330, "oak", 1.0], [70, 420, "pine", 1.0], [1255, 330, "pine", 1.0], [1250, 450, "oak", .95], [1255, 580, "pine", 1.0]];
   const fruitKinds = ["mango", "apple", "orange", "pomelo", "litchi", "pear", "plum", "peach"]; let pk = 0; forest.slice(0, [9, 16, 22, forest.length][Math.min(D, 3)]).forEach(([x, y, k, sc], q) => push(y, bigTree(x, y, sc * (k === "pine" ? 1.0 : 1.0), fruitKinds[(q * 3 + pk++) % fruitKinds.length])));
   if (L.apple) { const kinds = ["apple", "orange", "pear", "apple", "peach", "orange"]; const orch = [[60, 560], [150, 610], [235, 660], [60, 680], [150, 730], [235, 780], [60, 800], [150, 850], [120, 500], [30, 450]]; orch.forEach(([x, y], k) => push(y, bigTree(x, y, .8, kinds[k % kinds.length]))); }
   [[540, 610, 1]].forEach(([x, y, sc]) => push(y, bush(x, y, sc)));
@@ -279,9 +285,9 @@ function scene(o) {
   [[410, 400, 1], [560, 220, .8], [1080, 720, .9], [760, 800, .8], [180, 330, .9], [1180, 700, 1]].forEach(([x, y, sc]) => push(y, rock(x, y, sc)));
   /* ---- vật nhỏ làm dày cảnh ---- */
   if (L.hay) { [[960, 640], [1010, 662]].forEach(([x, y]) => push(y, hay(x, y))); [[560, 470, 1.1], [600, 490, 1]].forEach(([x, y, sc]) => push(y, barrel(x, y, sc))); }
-  if (D >= 1) { push(470, milkcans(740, 488)); push(330, roundHay(960, 400)); push(570, roundHay(1215, 560)); push(600, crate(860, 560)); push(432, hedge(760, 466, 3, "x")); [[570, 560], [420, 520]].forEach(([x, y]) => push(y, flowerPatch(x, y, "#FFD24D"))); push(700, pumpkins(1090, 690)); }
+  if (D >= 1) { push(470, milkcans(740, 488)); push(330, roundHay(960, 400)); push(570, roundHay(1215, 560)); push(600, crate(860, 560)); push(432, hedge(760, 466, 3, "x")); [[570, 560], [420, 520]].forEach(([x, y]) => push(y, flowerPatch(x, y, "#FFD24D"))); push(520, pumpkins(1190, 500)); }
   if (D >= 2) { push(520, hedge(380, 456, 3, "x")); [[1040, 470], [440, 460], [1100, 360]].forEach(([x, y], q) => push(y, flowerPatch(x, y, q % 2 ? "#FF8FB0" : "#FFD24D"))); push(620, barrel(1210, 600, 1)); push(840, crate(830, 800)); }
-  if (D >= 3) { push(700, hay(1110, 700)); push(300, hay(1110, 290)); push(760, pumpkins(920, 790)); [[790, 330], [800, 352]].forEach(([x, y]) => push(y, barrel(x, y, .9))); }
+  if (D >= 3) { push(300, hay(1110, 290)); push(760, pumpkins(920, 790)); [[790, 330], [800, 352]].forEach(([x, y]) => push(y, barrel(x, y, .9))); }
   if (L.animals) { [[610, 770], [660, 810]].forEach(([x, y]) => push(y, chicken(x, y))); push(600, rabbit(420, 560)); if (D >= 2) { push(180, chicken(150, 600)); } }
   if (D >= 3) { push(700, cow(300, 700, .9)); push(760, cow(420, 700, .85, true)); }
   items.push(...base, ...stand);
@@ -303,15 +309,15 @@ function scene(o) {
   const body = (o.crop ? "" : "") + items.map(i => i.svg).join("");
   const view = o.view || [0, 0, W, H];
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${view.join(" ")}" role="img" aria-label="${o.label || "Khu vườn Học Vui"}" data-style="pop" data-game="garden-scene">
-<title>${o.label || "Khu vườn Học Vui"}</title>${STYLE}${defs()}${sky}<g>${far}</g>${ground}${body}${fly}${over}</svg>
+<title>${o.label || "Khu vườn Học Vui"}</title>${STYLE}${defs()}${sky}<g>${far}</g>${ground}${body}${fly}${over}${o.overlay || ""}</svg>
 `;
 }
 
 const SCENES = [
   ["01-toan-canh", "Toàn cảnh khu vườn (ban ngày): nhà ngói, tường đá, ruộng, cây táo, ao, cối xay gió, kho", {}],
-  ["02-cap-1", "Cấp 1: mới bắt đầu, lều lá, rào tre, một ô trồng", { levels: { deco: 0, house: 1, fence: 1, well: 1, barn: 0, windmill: 0, plots: 1, path: 0, apple: 0, flowers: 0, pond: 1, hay: 0, animals: 0 } }],
-  ["03-cap-2", "Cấp 2: nhà tranh, rào gỗ, giếng xây, hai ô trồng", { levels: { deco: 1, house: 2, fence: 2, well: 2, barn: 1, windmill: 1, plots: 3, path: 1, apple: 0, flowers: 1, pond: 1, hay: 0, animals: 0 } }],
-  ["04-cap-3", "Cấp 3: nhà tường, tường đá, kho, cối xay, bốn ô trồng", { levels: { deco: 2, house: 3, fence: 3, well: 2, barn: 2, windmill: 2, plots: 12, path: 1, apple: 1, flowers: 1, pond: 1, hay: 1, animals: 0 } }],
+  ["02-cap-1", "Cấp 1: mới bắt đầu, lều lá, rào tre, một ô trồng", { levels: { deco: 0, house: 1, fence: 1, well: 1, barn: 0, windmill: 0, plots: 2, planted: 1, path: 0, apple: 0, flowers: 0, pond: 1, hay: 0, animals: 0 } }],
+  ["03-cap-2", "Cấp 2: nhà tranh, rào gỗ, giếng xây, hai ô trồng", { levels: { deco: 1, house: 2, fence: 2, well: 2, barn: 1, windmill: 1, plots: 6, planted: 3, path: 1, apple: 0, flowers: 1, pond: 1, hay: 0, animals: 0 } }],
+  ["04-cap-3", "Cấp 3: nhà tường, tường đá, kho, cối xay, bốn ô trồng", { levels: { deco: 2, house: 3, fence: 3, well: 2, barn: 2, windmill: 2, plots: 12, planted: 8, path: 1, apple: 1, flowers: 1, pond: 1, hay: 1, animals: 0 } }],
   ["05-hoang-hon", "Hoàng hôn (cùng khu vườn, cấp đầy đủ)", { time: "dusk" }],
   ["06-ban-dem", "Ban đêm: đèn sáng, đom đóm, trăng", { time: "night" }]
 ];
@@ -322,7 +328,8 @@ const CLOSE = [
   ["07-nha-4-cap", "Cận cảnh ngôi nhà qua 4 cấp: lều lá → nhà tranh → nhà tường → nhà ngói", null],
   ["08-rao-duong", "Cận cảnh hàng rào (tre, gỗ, đá) và lối đá lát", null],
   ["09-ruong-cay", "Cận cảnh ruộng, cây táo, hoa oải hương, bụi cây", [40, 480, 900, 400]],
-  ["10-cong-trinh", "Cận cảnh công trình: kho, giếng, cối xay gió, rơm, thùng, vật nuôi", [420, 110, 860, 520]]
+  ["10-cong-trinh", "Cận cảnh công trình: kho, giếng, cối xay gió, rơm, thùng, vật nuôi", [420, 110, 860, 520]],
+  ["11-chon-cay", "Đất xám trống: bé chạm chọn cây muốn trồng (đất xám → đất nâu có cây)", null]
 ];
 files["scene-09-ruong-cay.svg"] = scene({ label: CLOSE[2][1], view: CLOSE[2][2] });
 files["scene-10-cong-trinh.svg"] = scene({ label: CLOSE[3][1], view: CLOSE[3][2] });
@@ -347,18 +354,33 @@ function strip(label, makers, w, h, bg) {
   [1, 2, 3].forEach((lv, i) => r += pp(lv, i));
   files["scene-08-rao-duong.svg"] = strip(CLOSE[1][1], r, 1400, 580);
 }
+/* ảnh 11: màn "chọn cây để trồng" — nền cỏ sạch, các ô nâu đã trồng và một ô đất xám đang được chọn */
+{
+  const names = ["Lúa mì", "Cà rốt", "Bắp", "Dâu", "Cà chua", "Hướng dương"], fns = [cropWheat, cropCarrot, cropCorn, cropStraw, cropTomato, cropSun], ripe = [1, 1, 0, 1, 1, 0], R2 = rng(21);
+  let g = `<rect width="1000" height="640" fill="url(#gGrass)"/>`; for (let i = 0; i < 90; i++) g += tuft(R2() * 1000, 40 + R2() * 600, .8 + R2() * .5);
+  const cellsXY = [[250, 440], [354, 492], [458, 544], [146, 492], [250, 544], [354, 596], [562, 440], [666, 492], [770, 440]];
+  const gray = [3, 8], pl = [cropWheat, cropCarrot, cropCorn, cropStraw, cropTomato, cropSun, cropWheat, cropCarrot, cropStraw];
+  cellsXY.forEach(([cx0, cy0], k) => { const A = [cx0, cy0 - TH / 2], B = [cx0 + TW / 2, cy0], Cc = [cx0, cy0 + TH / 2], Dd = [cx0 - TW / 2, cy0]; const isG = k === 3;
+    if (isG) { g += poly([A, B, Cc, Dd], "url(#gGray)", "#6E6A63", 5) + poly([A, B, Cc, Dd], "none", "#fff", 4).replace("/>", ' stroke-dasharray="10 8"/>'); for (let q = 0; q < 6; q++) { const t = lerp(lerp(A, Dd, R2()), lerp(B, Cc, R2()), R2()); g += ell(t[0], t[1], 3.4 + R2() * 2, 2, "#8F8B83", null); } }
+    else { g += poly([A, B, Cc, Dd], "url(#gSoil)", "#7A4B24", 6) + poly([A, B, Cc, Dd], "none", "#C58B4E", 3); let cr = ""; for (let a = 0; a < 4; a++) for (let b = 0; b < 4; b++) { const t = lerp(lerp(A, Dd, (a + .5) / 4), lerp(B, Cc, (a + .5) / 4), (b + .5) / 4); cr += pl[k % pl.length](t[0], t[1] + 8, k % 3 !== 2); } g += `<g transform="translate(${cx0} ${cy0}) scale(1.35) translate(${-cx0} ${-cy0})">${cr}</g>`; } });
+  const px = 146, py = 492, bw = 560, bh = 176, bx = 20, by = 130;
+  let ov = `<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="26" fill="#000" opacity=".16" transform="translate(0 8)"/><path d="M${px - 20} ${by + bh - 2}L${px} ${by + bh + 34}L${px + 20} ${by + bh - 2}Z" fill="#fff"/><rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="26" fill="#fff" stroke="#E3DDEF" stroke-width="3"/>` +
+    `<text x="${bx + bw / 2}" y="${by + 38}" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="900" font-size="26" fill="#2B2150">Trồng cây gì?</text>`;
+  names.forEach((nm, i) => { const cx2 = bx + 66 + i * 86, cy2 = by + 100, sel = i === 1; ov += `<g><circle cx="${cx2}" cy="${cy2}" r="36" fill="${sel ? "#FFE9B0" : "#F2EEFA"}" stroke="${sel ? "#F2A100" : "#DAD3EA"}" stroke-width="${sel ? 5 : 3}"/><g transform="translate(${cx2} ${cy2 + 16}) scale(1.05)">${fns[i](0, 0, !!ripe[i])}</g><text x="${cx2}" y="${cy2 + 58}" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="800" font-size="13" fill="#4B3FA0">${nm}</text></g>`; });
+  files["scene-11-chon-cay.svg"] = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" role="img" aria-label="Chọn cây để trồng trên ô đất xám" data-style="pop"><title>Chọn cây để trồng</title>${STYLE}${defs()}${g}${ov}</svg>\n`;
+}
 for (const [n, c] of Object.entries(files)) fs.writeFileSync(path.join(out, n), c);
 const ids = [...SCENES.map(s => [s[0], s[1]]), ...CLOSE.map(c => [c[0], c[1]])].sort();
 const A = 'style="color:#cfd3ff;text-decoration:none;padding:4px 10px;border-radius:99px"';
-const nav = `<nav class="rvnav" style="position:sticky;top:0;z-index:99;display:flex;gap:6px 14px;flex-wrap:wrap;align-items:center;padding:8px 16px;background:#1a1d33;color:#fff;font:600 13px system-ui"><b style="opacity:.7">Duyệt Học Vui:</b><a ${A} href="../../../learn/mascot-review.html">🐾 Linh vật theo bố cục học</a><a ${A} href="../../../learn/index.html">Trang học</a><a ${A} href="../brand-learn.html">Thương hiệu 3 môn</a><a ${A} href="../learn/mascot_sheet.html">Bảng 3×5 lớp</a><a ${A} href="../preview-learn.html">3 bản base</a><a ${A} href="../preview-emotions.html">Cảm xúc</a><a ${A} href="preview-garden.html">🌸 Vườn hoa</a><a ${A} href="preview-crops.html">🌾 Thu hoạch (cây trồng)</a><span style="padding:4px 10px;border-radius:99px;background:#fff;color:#1a1d33">🏡 Khu vườn (10 ảnh)</span></nav>`;
-const html = `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Khu vườn Học Vui: 10 ảnh duyệt</title>
+const nav = `<nav class="rvnav" style="position:sticky;top:0;z-index:99;display:flex;gap:6px 14px;flex-wrap:wrap;align-items:center;padding:8px 16px;background:#1a1d33;color:#fff;font:600 13px system-ui"><b style="opacity:.7">Duyệt Học Vui:</b><a ${A} href="../../../learn/mascot-review.html">🐾 Linh vật theo bố cục học</a><a ${A} href="../../../learn/index.html">Trang học</a><a ${A} href="../brand-learn.html">Thương hiệu 3 môn</a><a ${A} href="../learn/mascot_sheet.html">Bảng 3×5 lớp</a><a ${A} href="../preview-learn.html">3 bản base</a><a ${A} href="../preview-emotions.html">Cảm xúc</a><a ${A} href="preview-garden.html">🌸 Vườn hoa</a><a ${A} href="preview-crops.html">🌾 Thu hoạch (cây trồng)</a><span style="padding:4px 10px;border-radius:99px;background:#fff;color:#1a1d33">🏡 Khu vườn</span></nav>`;
+const html = `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Khu vườn Học Vui: ảnh duyệt</title>
 <style>:root{--ink:#1d1a33;--bg:#F6F4F1;--panel:#fff;--line:#E3DDEF}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
 .wrap{max-width:1180px;margin:0 auto;padding:24px 16px 70px}h1{font-size:clamp(26px,5vw,40px);margin:0 0 6px;font-weight:900}p.n{color:#5b5578;max-width:52em;margin:0 0 14px}
 .shot{margin:0 0 26px;background:var(--panel);border:1px solid var(--line);border-radius:22px;overflow:hidden}.shot img{display:block;width:100%;height:auto}.shot figcaption{padding:12px 18px;font-weight:800}.shot figcaption span{color:#7a7499;font-weight:600;margin-right:8px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}@media (max-width:760px){.grid{grid-template-columns:1fr}}</style></head><body>${nav}<div class="wrap">
-<h1>Khu vườn Học Vui — 10 ảnh duyệt</h1>
-<p class="n">Cảnh dựng sẵn góc nhìn chéo (isometric), phong cách "đồ chơi mềm". Mỗi vật có <b>cấp độ</b>: bé đạt gì thì nâng cấp đúng vị trí đó (ảnh 2–4 và 7–8 cho thấy cấp). Ảnh 1 là toàn cảnh đầy đủ; 5–6 là buổi trong ngày; 9–10 là cận cảnh. Đây là <b>bản đề xuất để duyệt</b>, chủ site sẽ thay từng phần để tối ưu. Sinh bằng <code>node scripts/learn/gen-scene-art.js</code>, không sửa tay.</p>
-${ids.map(([id, label], i) => `<figure class="shot"><img src="scene/scene-${id}.svg" alt="${label}" loading="${i < 2 ? "eager" : "lazy"}"><figcaption><span>Ảnh ${i + 1}/10</span>${label}</figcaption></figure>`).join("")}
+<h1>Khu vườn Học Vui — ảnh duyệt</h1>
+<p class="n">Cảnh dựng sẵn góc nhìn chéo (isometric), phong cách "đồ chơi mềm". Mỗi vật có <b>cấp độ</b>: bé đạt gì thì nâng cấp đúng vị trí đó (ảnh 2–4 và 7–8 cho thấy cấp). Ảnh 1 là toàn cảnh đầy đủ; 5–6 là buổi trong ngày; 9–10 là cận cảnh; <b>ảnh 11 là màn chọn cây để trồng trên ô đất xám</b> (đất xám trống → bé chọn cây → đất nâu có cây). Đây là <b>bản đề xuất để duyệt</b>, chủ site sẽ thay từng phần để tối ưu. Sinh bằng <code>node scripts/learn/gen-scene-art.js</code>, không sửa tay.</p>
+${ids.map(([id, label], i) => `<figure class="shot"><img src="scene/scene-${id}.svg" alt="${label}" loading="${i < 2 ? "eager" : "lazy"}"><figcaption><span>Ảnh ${i + 1}/${ids.length}</span>${label}</figcaption></figure>`).join("")}
 </div></body></html>
 `;
 fs.writeFileSync(path.join(out, "..", "preview-scene.html"), html);
