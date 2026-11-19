@@ -511,3 +511,8 @@ html.np-menupaused #ccRoot,html.np-menupaused #ccRoot *,html.np-menupaused #ccRo
 #ccRoot .pn .ml.opx .m.ch.lk{opacity:.85!important}
 #ccRoot .ml .m.mlk{position:relative}
 #ccRoot .ml .m.mlk::after{content:"\1F451";position:absolute;top:6px;right:8px;font-size:16px;line-height:1;filter:drop-shadow(0 1px 1px rgba(0,0,0,.4))}
+
+/* ===== HIỆU NĂNG KHI ĐANG CHƠI (máy nóng sau vài phút): bỏ kính mờ trên nút/HUD và hạt rơi trang trí lúc đang chơi ===== */
+#play[data-scr="game"] *{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html:has(#play[data-scr="game"]) :is(.ns-pill,#nsPill,#npFab,.nps-fab,.nps-cam,.nps-bd){-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html:has(#play[data-scr="game"]) .ns-fl{display:none!important}

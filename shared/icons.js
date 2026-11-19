@@ -56,7 +56,19 @@
     st.textContent = "#bLang{font-size:13px!important;letter-spacing:0!important;padding:0!important;white-space:nowrap;font-variant-numeric:normal}";
     document.head.appendChild(st);
     swap();
-    try { new MutationObserver(queue).observe(document.body, { childList: true, characterData: true, subtree: true }); } catch (e) {}
+    try {
+      /* HIỆU NĂNG: game đổi chữ đếm giờ/điểm mỗi khung hình → trước đây MỌI thay đổi đều quét lại toàn bộ nút (hàng trăm lần/giây, nóng máy).
+         Chỉ quét khi có nút được thêm vào, hoặc chữ BÊN TRONG một nút đổi (vd. 🔊→🔇); gộp tối đa ~8 lần/giây. */
+      var BTN = "button,a.ib2", last = 0, tm = 0;
+      var rel = function (r) {
+        if (r.type === "childList") { for (var i = 0; i < r.addedNodes.length; i++) { var n = r.addedNodes[i]; if (n.nodeType === 1 && (n.matches(BTN) || n.querySelector(BTN))) return true; } }
+        var t = r.target, el = t && (t.nodeType === 1 ? t : t.parentElement); return !!(el && el.closest && el.closest(BTN));
+      };
+      new MutationObserver(function (recs) {
+        if (busy) return; var go = false; for (var i = 0; i < recs.length && !go; i++) go = rel(recs[i]); if (!go) return;
+        var now = Date.now(); if (now - last < 120) { if (!tm) tm = setTimeout(function () { tm = 0; last = Date.now(); queue(); }, 120); return; } last = now; queue();
+      }).observe(document.body, { childList: true, characterData: true, subtree: true });
+    } catch (e) {}
   }
   if (document.body) init(); else document.addEventListener("DOMContentLoaded", init);
 })();

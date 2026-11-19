@@ -192,3 +192,7 @@ html:not([data-theme=dark]) .bars-pop{background:linear-gradient(165deg,#2b2064,
 
 /* game đang mở (html.playing): thẻ "Chơi tiếp"/thông tin của CỔNG phải ẩn hẳn (từng lòi ra sau khung game ở màn ngang thành "tiêu đề thứ hai" mờ) */
 html.playing #puInfo,html.playing #puResume,html.playing #puTop{visibility:hidden!important;pointer-events:none!important}
+
+/* HIỆU NĂNG KHI ĐANG CHƠI: phần nền của cổng bị game phủ kín → bỏ kính mờ (backdrop-filter) và hạt rơi trang trí */
+html.playing :is(.nav,.sc-info,.sc-nav,#puToday,#puResume,#findFab,#fpList,#fpRow,.foot,#home){-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html.playing .ns-fl{display:none!important}

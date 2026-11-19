@@ -166,3 +166,19 @@
     _debug: { pickToday: pickToday, resumeRec: resumeRec, SAVE: SAVE, NO_FREE_DAILY: NO_FREE_DAILY }
   };
 })();
+
+/* HIỆU NĂNG KHI ĐANG CHƠI (máy nóng): trang cổng nằm sau khung game vẫn chạy hàng chục animation vô hạn (sao lấp lánh, bay, rơi…) + kính mờ dù bị game phủ kín.
+   Khi <html> có class "playing" (cổng mở game) → tạm dừng mọi animation vô hạn của cổng; thoát game → chạy tiếp. Animation một lần (hiện/ẩn nút, toast) không đụng tới. */
+(function () {
+  "use strict";
+  var el = document.documentElement, held = [];
+  function inf(a) { try { return a.effect && a.effect.getComputedTiming().iterations === Infinity && a.playState === "running"; } catch (e) { return false; } }
+  function sync() {
+    try {
+      if (el.classList.contains("playing")) { if (!held.length && document.getAnimations) { document.getAnimations().forEach(function (a) { if (inf(a)) { held.push(a); a.pause(); } }); } }
+      else if (held.length) { held.forEach(function (a) { try { a.play(); } catch (e) {} }); held = []; }
+    } catch (e) {}
+  }
+  try { new MutationObserver(sync).observe(el, { attributes: true, attributeFilter: ["class"] }); } catch (e) {}
+  sync();
+})();
