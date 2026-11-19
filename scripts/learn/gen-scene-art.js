@@ -219,10 +219,11 @@ const PATHS = {
   dalat: { vi: "Đá lát",     edge: "#8A867E", fill: "#D2CEC6", mark: "slab" },
   gach:  { vi: "Gạch đỏ",    edge: "#8E3E1B", fill: "#D9774A", mark: "brick" }
 };
-function pathPatch(pl, w, style, seed) {
+function pathPatch(pl, w, style, seed, part) {
   const S = PATHS[style] || PATHS.soi, r = rng((seed || 1) * 977 + 13);
   let d = `M${f(pl[0][0])} ${f(pl[0][1])}`; for (let i = 1; i < pl.length - 1; i++) { const m = [(pl[i][0] + pl[i + 1][0]) / 2, (pl[i][1] + pl[i + 1][1]) / 2]; d += `Q${f(pl[i][0])} ${f(pl[i][1])} ${f(m[0])} ${f(m[1])}`; } d += `L${f(pl[pl.length - 1][0])} ${f(pl[pl.length - 1][1])}`;
-  let o = `<path d="${d}" fill="none" stroke="${S.edge}" stroke-width="${w + 9}" stroke-linecap="round" stroke-linejoin="round" opacity=".55" transform="translate(0 4)"/><path d="${d}" fill="none" stroke="${S.edge}" stroke-width="${w + 7}" stroke-linecap="round" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="${S.fill}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`;
+  const E = `<path d="${d}" fill="none" stroke="${S.edge}" stroke-width="${w + 9}" stroke-linecap="round" stroke-linejoin="round" opacity=".55" transform="translate(0 4)"/><path d="${d}" fill="none" stroke="${S.edge}" stroke-width="${w + 7}" stroke-linecap="round" stroke-linejoin="round"/>`, Fl = `<path d="${d}" fill="none" stroke="${S.fill}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`;
+  let o = "";
   /* hoa văn bề mặt rải theo chiều dài (nằm trong dải) */
   const seg = []; let tot = 0; for (let i = 0; i < pl.length - 1; i++) { const l = Math.hypot(pl[i + 1][0] - pl[i][0], pl[i + 1][1] - pl[i][1]); seg.push(l); tot += l; }
   const at = t => { let a = t * tot, i = 0; while (i < seg.length - 1 && a > seg[i]) { a -= seg[i]; i++; } const k = seg[i] ? a / seg[i] : 0, nx = pl[i + 1][0] - pl[i][0], ny = pl[i + 1][1] - pl[i][1], L2 = Math.hypot(nx, ny) || 1; return [pl[i][0] + nx * k, pl[i][1] + ny * k, -ny / L2, nx / L2]; };
@@ -233,8 +234,10 @@ function pathPatch(pl, w, style, seed) {
     else if (S.mark === "dirt") o += i % 3 ? ell(px, py, 2 + r() * 3, 1.2 + r() * 1.4, "#8A5A2E", null).replace("/>", ' opacity=".55"/>') : ell(px, py, 2.6, 1.8, "#D6AE80", null);
     else if (S.mark === "cobble") { const rx = 7 + r() * 5; o += ell(px, py + 1.4, rx, rx * .55, "#7E7A72", null) + ell(px, py, rx, rx * .55, "#CFCBC2", "#8F8B83", 1.6) + ell(px - rx * .3, py - rx * .2, rx * .35, rx * .16, "#fff", null).replace("/>", ' opacity=".7"/>'); }
     else if (S.mark === "brick") o += `<rect x="${f(px - 8)}" y="${f(py - 3)}" width="16" height="6" rx="1.6" fill="#E48A5C" stroke="#8E3E1B" stroke-width="1.4"/>`; }
-  return o;
+  return part === "e" ? E : part === "f" ? Fl : part === "t" ? o : E + Fl + o;
 }
+/* gộp nhiều dải thành MỘT mảng liền: vẽ tất cả viền trước, rồi tất cả nền, rồi hoa văn → chỗ giao nhau không có viền cắt, không dải nào đè lên dải khác */
+function pathNet(list, style) { return list.map((q, i) => pathPatch(q[0], q[1], style, q[2] || i + 1, "e")).join("") + list.map((q, i) => pathPatch(q[0], q[1], style, q[2] || i + 1, "f")).join("") + list.map((q, i) => pathPatch(q[0], q[1], style, q[2] || i + 1, "t")).join(""); }
 const FENCES = { tre: "Rào tre", go: "Rào gỗ", trang: "Rào gỗ trắng", da: "Tường đá", bui: "Hàng rào cây", sat: "Rào sắt" };
 function fenceRun(gx, gy, dir, n, style) {
   const A = P(gx, gy), st = dir === "x" ? [TW / 2, TH / 2] : [-TW / 2, TH / 2], B = [A[0] + st[0] * n, A[1] + st[1] * n];
@@ -292,11 +295,12 @@ function scene(o) {
   if (L.pond) base.push(pond([330, 300]));
   /* lối đi = mảng liền; kiểu chọn bằng L.pathStyle (dat | soi | cuoi | dalat | gach) */
   const PS = L.pathStyle || "soi";
-  if (D >= 1) base.push({ d: 0, svg: pathPatch([[90, 170], [200, 180], [310, 168]], 92, "cuoi", 5) });   /* sân đá cuội gần ao */
+  if (D >= 1) base.push({ d: 0, svg: pathPatch([[90, 170], [200, 180], [310, 168]], 92, "cuoi", 5) });   /* sân đá cuội gần ao (kiểu riêng, không chạm lối đi) */
   if (L.path) {
-    base.push({ d: 0, svg: pathPatch([[548, 900], [566, 830], [584, 770], [604, 715], [632, 656], [668, 598], [700, 540], [708, 490]], 66, PS, 1) });
-    if (D >= 1) { base.push({ d: 0, svg: pathPatch([[596, 700], [540, 664], [470, 684], [400, 706], [330, 726]], 46, PS, 2) }); base.push({ d: 0, svg: pathPatch([[690, 540], [770, 526], [850, 512], [940, 490]], 46, PS, 3) }); base.push({ d: 0, svg: pathPatch([[640, 640], [720, 628], [790, 640]], 40, PS, 4) }); }
-    if (D >= 2) { base.push({ d: 0, svg: pathPatch([[950, 480], [1010, 440], [1070, 400]], 44, PS, 5) }); base.push({ d: 0, svg: pathPatch([[540, 560], [470, 560], [400, 538], [350, 520]], 40, PS, 6) }); }
+    const net = [[[[548, 900], [566, 830], [584, 770], [604, 715], [632, 656], [668, 598], [700, 540], [708, 490]], 66, 1]];
+    if (D >= 1) { net.push([[[596, 700], [540, 664], [470, 684], [400, 706], [330, 726]], 46, 2]); net.push([[[690, 540], [770, 526], [850, 512], [940, 490]], 46, 3]); net.push([[[640, 640], [720, 628], [790, 640]], 40, 4]); }
+    if (D >= 2) { net.push([[[950, 480], [1010, 440], [1070, 400]], 44, 5]); net.push([[[540, 560], [470, 560], [400, 538], [350, 520]], 40, 6]); }
+    base.push({ d: 0, svg: pathNet(net, PS) });   /* một mảng liền duy nhất */
   }
   /* nhiều thửa ruộng: [gốc (x,y), số ô theo a, số ô theo b]; mở dần theo L.plots (A 9 ô, B 6, E 6, C 3, F 2) */
   const cyc = [[cropWheat, true], [cropCarrot, true], [cropCorn, false], [cropStraw, true], [cropWheat, true], [cropTomato, true], [cropSun, false], [cropCarrot, false], [cropStraw, true], [cropWheat, true]];
