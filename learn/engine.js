@@ -67,7 +67,7 @@
     var fresh = pool.filter(function (b) { return !(c.used && c.used[b.id]); }); if (fresh.length) pool = fresh;
     var it = pool[rnd(0, pool.length - 1)]; if (c.used) c.used[it.id] = 1;
     var st = typeof it.stem === "string" ? it.stem : (it.stem[c.lang] || it.stem.vi);
-    st = st.replace(/_{2,}/, function (m) { return "<em>" + m + "</em>"; });
+    st = st.replace(/_{2,}/, function (m) { return "<em class=\"bl\">" + m + "</em>"; });
     if (it.type === "dialogue") st = st.replace(" B: ", "<br>B: ");
     var wrongs = it.wrong;
     if (!wrongs) { wrongs = shuf(bank().filter(function (b) { return b.type === it.type && b.answer !== it.answer; })).slice(0, 3).map(function (b) { return [b.answer, "word"]; }); }
@@ -100,12 +100,31 @@
     if (s.n >= 8 && s.p >= .92) return "advanced";
     return "proficient";
   }
+  /* nhật ký theo ngày (cho trang phụ huynh): learn:day = { "YYYY-MM-DD": { n, ok, s: { toan: n, ... } } }, giữ 30 ngày gần nhất; chỉ có số đếm, không có nội dung câu hỏi */
+  function dayKey(d) { d = d || new Date(); var z = function (x) { return (x < 10 ? "0" : "") + x; }; return d.getFullYear() + "-" + z(d.getMonth() + 1) + "-" + z(d.getDate()); }
+  function bumpDay(subj, ok) {
+    try {
+      var all = JSON.parse(backend.get("learn:day") || "{}") || {}, k = dayKey(), d = all[k] || { n: 0, ok: 0, s: {} };
+      d.n++; if (ok) d.ok++; d.s[subj] = (d.s[subj] || 0) + 1; all[k] = d;
+      var keys = Object.keys(all).sort(); while (keys.length > 30) delete all[keys.shift()];
+      backend.set("learn:day", JSON.stringify(all));
+    } catch (x) {}
+  }
+  /* n ngày gần nhất (cũ → mới), ngày không học có n = 0 */
+  function daily(n) {
+    var all = {}; try { all = JSON.parse(backend.get("learn:day") || "{}") || {}; } catch (x) {}
+    var out = [], now = new Date();
+    for (var i = n - 1; i >= 0; i--) { var d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i), k = dayKey(d), v = all[k] || { n: 0, ok: 0, s: {} }; out.push({ date: k, dow: d.getDay(), n: v.n, ok: v.ok, s: v.s }); }
+    return out;
+  }
+  /* xoá toàn bộ tiến độ học của bé (giữ cài đặt giao diện) */
+  function resetAll() { ["toan", "tviet", "tanh"].forEach(function (s) { backend.set("learn:m:" + s, "{}"); }); backend.set("learn:err", "{}"); backend.set("learn:day", "{}"); }
   function record(subj, skill, ok, tag) {
     if (!SK[skill]) return null;
     var m = load(subj), s = m[skill] || { n: 0, ok: 0, p: 0, tags: {}, t: 0 }, v = ok ? 1 : 0;
     s.n++; if (ok) s.ok++; s.p = s.n === 1 ? v : .7 * s.p + .3 * v; s.t = Date.now();
     if (!ok) { var tg = TAGS.indexOf(tag) >= 0 ? tag : "other"; s.tags[tg] = (s.tags[tg] || 0) + 1; bumpErr(tg); }
-    m[skill] = s; save(subj, m); return level(s);
+    m[skill] = s; save(subj, m); bumpDay(subj, ok); return level(s);
   }
 
   /* ---- chọn kỹ năng cho một vòng ---- */
@@ -156,7 +175,7 @@
   /* ---- tóm tắt cho phụ huynh / báo cáo ---- */
   function summary(subj) {
     var m = load(subj), out = [];
-    Object.keys(SK).forEach(function (id) { if (SK[id].subj !== subj) return; var s = m[id]; out.push({ id: id, level: level(s), n: s ? s.n : 0, p: s ? Math.round(s.p * 100) / 100 : 0, tags: s ? s.tags : {} }); });
+    Object.keys(SK).forEach(function (id) { if (SK[id].subj !== subj) return; var s = m[id]; out.push({ id: id, level: level(s), n: s ? s.n : 0, p: s ? Math.round(s.p * 100) / 100 : 0, tags: s ? s.tags : {}, t: s ? s.t || 0 : 0 }); });
     var weak = out.filter(function (x) { return x.n > 0 && (x.level === "emerging" || x.level === "developing"); }).sort(function (a, b) { return a.p - b.p; });
     var tags = {}; try { tags = JSON.parse(backend.get("learn:err") || "{}"); } catch (e) {}
     return { skills: out, weakest: weak.map(function (x) { return x.id; }), tags: tags };
@@ -172,7 +191,7 @@
   }
 
   var E = {
-    TAGS: TAGS, SKILLS: SK, make: make, round: round, planRound: planRound, record: record, level: level, summary: summary, toSchema: toSchema, topicOf: topicOf,
+    TAGS: TAGS, SKILLS: SK, make: make, round: round, planRound: planRound, record: record, level: level, summary: summary, daily: daily, resetAll: resetAll, dayKey: dayKey, toSchema: toSchema, topicOf: topicOf,
     use: function (b) { backend = b; }, setRng: function (f) { R = f || Math.random; }, setBank: function (b) { BANK = b; }, load: load,
     skillsFor: function (subj, grade) { return candidates(subj, grade); }
   };

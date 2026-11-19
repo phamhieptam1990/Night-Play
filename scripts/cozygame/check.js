@@ -18,6 +18,10 @@ const GAMES = {
 const fails = [], note = (ok, game, msg) => { if (!ok) { fails.push(game + ": " + msg); console.log("  ✗ " + game + ": " + msg); } };
 const b64 = o => Buffer.from(JSON.stringify(o)).toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 
+/* CỜ: --learn = CHỈ chạy bộ kiểm tra HỌC TẬP (scripts/learn/check.js, thêm --full để đủ); --games (hoặc --no-learn) = CHỈ game; không cờ = cả hai (như trước) */
+const ONLY_LEARN = process.argv.includes("--learn"), NO_LEARN = process.argv.includes("--games") || process.argv.includes("--no-learn");
+const runLearn = () => require("child_process").spawnSync(process.execPath, [path.join(__dirname, "..", "learn", "check.js")].concat(process.argv.includes("--full") ? ["--full"] : []), { cwd: root, env: process.env, stdio: "inherit" }).status === 0;
+if (ONLY_LEARN) process.exit(runLearn() ? 0 : 1);
 (async () => {
   /* 1. khung sinh ra phải khớp spec (không còn sửa tay trong file sinh ra) */
   try {
@@ -169,6 +173,7 @@ const b64 = o => Buffer.from(JSON.stringify(o)).toString("base64").replace(/\+/g
   { const mx = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-mascot.js"), "--quick"], { cwd: root, env: process.env, stdio: "inherit" }); note(mx.status === 0, "tổng", "check-mascot.js báo lỗi (linh vật phản ứng rê/chạm/giữ) — xem log phía trên"); }   // linh vật màn chọn: nghiêng theo chuột, nhún khi chạm, giữ phình rồi pop
   { const lg = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-lang.js")].concat(process.argv.includes("--full-lang") ? [] : ["--quick"]), { cwd: root, env: process.env, stdio: "inherit" }); note(lg.status === 0, "tổng", "check-lang.js báo lỗi (nút đổi ngôn ngữ không áp dụng / cổng ≠ game) — xem log phía trên"); }   // đổi ngôn ngữ hai chiều cổng <-> game
   { const oz = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-onezone.js"), "--quick"], { cwd: root, env: process.env, stdio: "inherit" }); note(oz.status === 0, "tổng", "check-onezone.js báo lỗi (mỗi chế độ chỉ MỘT nơi chứa nút điều khiển; GAME_RULES 5l) — xem log trên"); }
+  if (!NO_LEARN) { console.log("== học tập (Học Vui)"); note(runLearn(), "tổng", "bộ kiểm tra học tập (scripts/learn/check.js) báo lỗi — xem log phía trên; chạy riêng: node scripts/cozygame/check.js --learn"); }
   console.log("\n" + (fails.length ? "✗ " + fails.length + " lỗi" : "✓ tất cả đạt"));
   process.exit(fails.length ? 1 : 0);
 })();
