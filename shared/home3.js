@@ -228,10 +228,16 @@
         if (!b || !b.width || !b.height) return;
         var t = Math.min(0, b.y) - 4, bt = Math.max(256, b.y + b.height) + 4, l = Math.min(0, b.x) - 4, r = Math.max(256, b.x + b.width) + 4;
         s.setAttribute("data-vbfit", "1");
+        var vx = 0, vy = 0, vh = 256;
         if (t < -4.5 || bt > 260.5 || l < -4.5 || r > 260.5) {
           var w = r - l, h = bt - t, m = Math.max(w, h);   /* vuông, căn giữa: không đổi tỉ lệ khung */
-          s.setAttribute("viewBox", (l - (m - w) / 2) + " " + (t - (m - h) / 2) + " " + m + " " + m);
+          vx = l - (m - w) / 2; vy = t - (m - h) / 2; vh = m;
+          s.setAttribute("viewBox", vx + " " + vy + " " + m + " " + m);
         }
+        /* BÓNG THOẠI KHÔNG ĐÈ LINH VẬT: CSS kéo bóng chồng xuống khung hero --rt (mặc định 21,7% chiều cao) vì tưởng phần trên của tranh luôn trống; tranh có tai/mái che sát đỉnh thì bóng che mất.
+           Đặt --rt = tỉ lệ khoảng trống THẬT phía trên nét vẽ của từng tranh (trừ một chút), bóng chỉ chồng vào phần trống */
+        var hero = s.closest("#hHero,#paHero,#cwHero");
+        if (hero) { var top = Math.max(0, Math.min(.217, (b.y - vy) / vh - .02)); hero.style.setProperty("--rt", top.toFixed(3)); }
       });
     } catch (e) {}
   }

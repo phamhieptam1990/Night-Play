@@ -26,6 +26,7 @@
   };
   function ico(n) { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + SVG[n] + "</svg>"; }
   var GAMEIDS = { help: ["bHelp", "phBtn"], snd: ["bSnd", "soundBtn"], lang: ["bLang", "langBtn"], theme: ["themeBtn2"], restart: ["restartBtn", "bRe"], pause: ["pauseBtn"], board: ["bBoard"], npset: ["npSetBtn"], npch: ["npChBtn"], npmc: ["npMcBtn"], fs: ["npFsBtn"], pass: ["nsPill"] };
+  var KEEP = { snd: 1, pause: 1 };   /* cột nút trên web: ← (của cổng) · ⋯ Control Center · 🔊 · ⏸ (chỉ game có tạm dừng) */
   var KEYS = ["help", "snd", "lang", "theme", "restart", "pause", "board", "cam", "shr", "lock", "npch", "npmc", "fs", "npset", "pass"];
   var HIDECSS = "html.np-hudg #bHelp,html.np-hudg #phBtn,html.np-hudg #bSnd,html.np-hudg #soundBtn,html.np-hudg #bLang,html.np-hudg #langBtn,html.np-hudg #themeBtn2,html.np-hudg #bCam,html.np-hudg #bShr,html.np-hudg #bRe,html.np-hudg #restartBtn,html.np-hudg #pauseBtn,html.np-hudg #bBoard,html.np-hudg #nsPill,html.np-hudg #npSetBtn,html.np-hudg #npChBtn,html.np-hudg #npMcBtn,html.np-hudg #npFsBtn,html.np-hudg #bLock,html.np-hudg #bBk,html.np-hudg #bBack,html.np-hudg #homeBtn,html.np-hudg #npPmBk{display:none!important}";
   var stage = null, box = null, pn = null, more = null, ccb = null, btns = {}, active = false, small = false, tick = 0, hooked = null;
@@ -72,7 +73,7 @@
     if (!box) return;
     var L = lab[lg()], vis = 0;
     KEYS.forEach(function (k) {
-      var b = btns[k], src = real(k), shown = usable(k, src);
+      var b = btns[k], src = real(k), shown = usable(k, src) && !!KEEP[k];   /* chỉ 🔊 và ⏸ ở NGOÀI; mọi nút khác nằm trong Control Center (nút ⋯) */
       if (b.hidden === shown) b.hidden = !shown;
       if (shown) vis++; if (!src) return;
       if (MIRROR[k]) { var h = src.innerHTML.trim(); if (h && b.__h !== h) { b.__h = h; b.innerHTML = src.innerHTML; } }

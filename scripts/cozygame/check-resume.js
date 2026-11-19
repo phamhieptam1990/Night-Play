@@ -53,12 +53,12 @@ const TUT = ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "xn", "dd", "
     note(!!rec && rec.state && rec.state.seed === st0.seed, id, "chưa có bản lưu hợp lệ sau khi chơi dở");
     /* tải lại → thẻ tiếp tục */
     await pg.goto(base, { waitUntil: "load" }); await sleep(1500);
-    const card = await pg.evaluate(() => { const c = document.getElementById("npResume"); return c ? c.getBoundingClientRect().height : 0; });
+    const card = await pg.evaluate(() => { const c = document.getElementById("h3Res") || document.getElementById("npResume"); return c ? c.getBoundingClientRect().height : 0; });
     note(card >= 44, id, "không thấy thẻ 'Tiếp tục ván dở' ở màn chọn (cao " + Math.round(card) + "px)");
     const over = await pg.evaluate(() => { const h = document.getElementById("home"); return h ? h.scrollHeight > h.clientHeight + 2 : false; });
     note(!over, id, "màn chọn bị tràn/cuộn khi có thẻ tiếp tục");
     if (card >= 44) {
-      await pg.evaluate(() => document.querySelector("#npResume .npr-go").click()); await sleep(2800);
+      await pg.evaluate(() => (document.getElementById("h3Res") || document.querySelector("#npResume .npr-go")).click()); await sleep(2800);
       let r = await pg.evaluate(() => ({ st: NP.peek(), helper: NP.helper, url: location.search, board: (() => { const b = document.getElementById("bBoard"); return !b || !b.hidden; })() }));
       if (!r.st) { /* game dừng ở màn bắt đầu sau khi nạp (Đập Deadline...): bấm bắt đầu rồi đo */
         await pg.evaluate(() => { const b = document.getElementById("bPlay") || document.querySelector(".main"); b && b.click(); }).catch(() => {}); await sleep(1200);
@@ -79,10 +79,10 @@ const TUT = ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "xn", "dd", "
     pg = await mk(base);
     await pg.evaluate((key, st) => localStorage.setItem(key, JSON.stringify({ v: 1, ts: Date.now() - 8 * 864e5, daily: false, day: "x", state: st })), key, st0);
     await pg.goto(base, { waitUntil: "load" }); await sleep(1200);
-    note(await pg.evaluate(() => !document.getElementById("npResume")), id, "bản lưu quá 7 ngày vẫn hiện thẻ tiếp tục");
+    note(await pg.evaluate(() => (() => { const a = document.getElementById("h3Res"), b = document.getElementById("npResume"); return !(a && a.getBoundingClientRect().height > 0) && !b; })()), id, "bản lưu quá 7 ngày vẫn hiện thẻ tiếp tục");
     await pg.evaluate((key, st) => localStorage.setItem(key, JSON.stringify({ v: 1, ts: Date.now(), daily: true, day: "2000-01-01", state: st })), key, st0);
     await pg.goto(base, { waitUntil: "load" }); await sleep(1200);
-    note(await pg.evaluate(() => !document.getElementById("npResume")), id, "ván 'hôm nay' của ngày cũ vẫn hiện thẻ tiếp tục");
+    note(await pg.evaluate(() => (() => { const a = document.getElementById("h3Res"), b = document.getElementById("npResume"); return !(a && a.getBoundingClientRect().height > 0) && !b; })()), id, "ván 'hôm nay' của ngày cũ vẫn hiện thẻ tiếp tục");
     await pg.close();
     pg = await mk(base + "&helper=1&s=" + Buffer.from(JSON.stringify(st0)).toString("base64url").replace(/=+$/, ""));
     await sleep(5200);
