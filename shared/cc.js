@@ -26,6 +26,8 @@
   function difIdx(k) { for (var i = 0; i < k.length; i++) if (k[i].classList.contains("on") || k[i].getAttribute("aria-pressed") === "true") return i; return 0; }
   /* bản sao SVG linh vật: đổi id (gradient/clip…) để KHÔNG trùng bản gốc — bản gốc bị ẩn (display:none) thì url(#id) trỏ vào nó làm bản sao mất màu */
   function uniq(h) { return h.replace(/\bid="([^"]+)"/g, 'id="$1-cc"').replace(/url\(#([^)]+)\)/g, "url(#$1-cc)").replace(/(xlink:)?href="#([^"]+)"/g, function (m, x, i) { return (x || "") + 'href="#' + i + '-cc"'; }); }
+  /* HẸN GIỜ THẬT: mở bảng thì game bị tạm dừng bằng đồng hồ ảo (bridge.js) → setTimeout thường bị giữ, nhấn giữ 420ms/cập nhật nhãn sẽ không bao giờ chạy */
+  function RT(f, d) { return (window.__npRST || window.setTimeout)(f, d); }
   function txt(e) { return (e.getAttribute("aria-label") || e.title || e.textContent || "").replace(/\s+/g, " ").trim(); }
   /* ===== chế độ ===== */
   function modeEls() { return [].slice.call(document.querySelectorAll("#tys>.ty,.tys>.ty,.tiles>.tile,#cards>.tile,#cards>.card")).filter(function (e) { return !e.classList.contains("daily"); }); }
@@ -42,7 +44,7 @@
     var v = 0; try { v = parseInt(localStorage.getItem(KEY), 10) || 0; } catch (e) {} return Math.min(Math.max(v, 0), Math.max(0, els.length - 1));
   }
   /* sau khi chọn chế độ: game có thể TỪ CHỐI (chế độ khoá Night Pass → mở popup mua) → nếu có popup mở thì đóng bảng để thấy popup; không thì đọc lại chế độ THẬT của game */
-  function settle(done) { setTimeout(function () { var pop = document.querySelector(".sheet:not([hidden]),.ov:not([hidden]):not(#ovStart),#hlpOv:not([hidden]),.overlay:not([hidden])"); if (pop && !pop.closest("#ccRoot")) { close(); return; } if (done) done(); themeSync(); }, 140); }
+  function settle(done) { RT(function () { var pop = document.querySelector(".sheet:not([hidden]),.ov:not([hidden]):not(#ovStart),#hlpOv:not([hidden]),.overlay:not([hidden])"); if (pop && !pop.closest("#ccRoot")) { close(); return; } if (done) done(); themeSync(); }, 140); }
   function setMode(i) { var els = modeEls(); if (!els[i]) return; if (POP) { try { localStorage.setItem(KEY, String(i)); } catch (e) {} } else els[i].click(); }
   window.NPCC = { modeEl: function () { var e = modeEls(); if (!e.length) return null; var t = e[POP ? modeIdx(e) : 0]; return t && (t.querySelector(".main") || t); }, open: function () { open(); }, close: function () { close(); } };
   /* ===== dựng bảng ===== */
@@ -72,7 +74,10 @@
   }
   function build() {
     if (root) root.remove();
-    root = el("div"); root.id = "ccRoot"; root.addEventListener("contextmenu", function (e) { e.preventDefault(); }); root.setAttribute("role", "dialog"); root.setAttribute("aria-modal", "true"); root.setAttribute("aria-label", vi() ? "Bảng điều khiển" : "Control Center");
+    root = el("div"); root.id = "ccRoot"; root.addEventListener("contextmenu", function (e) { e.preventDefault(); }); /* danh sách nhấn-giữ vừa hiện dưới ngón tay: lúc thả tay không được tính là chạm vào hàng bên dưới (giờ THẬT, vì performance.now bị đồng hồ ảo giữ) */
+    var lastOn = 0; try { new MutationObserver(function (ml) { ml.forEach(function (m) { var t = m.target; if (t.classList && t.classList.contains("ml") && t.classList.contains("on") && (m.oldValue || "").indexOf("on") < 0) lastOn = new Date().getTime(); }); }).observe(root, { attributes: true, attributeFilter: ["class"], attributeOldValue: true, subtree: true }); } catch (x) {}
+    root.addEventListener("click", function (e) { if (new Date().getTime() - lastOn < 450 && e.target.closest && e.target.closest(".ml")) { e.preventDefault(); e.stopPropagation(); } }, true);
+    root.setAttribute("role", "dialog"); root.setAttribute("aria-modal", "true"); root.setAttribute("aria-label", vi() ? "Bảng điều khiển" : "Control Center");
     var bk = el("div", "bk"), pn = el("div", "pn"); root.appendChild(bk); root.appendChild(pn);
     themeSync();
     /* ĐANG CHƠI: cùng bảng, chỉ gồm các nút của menu cũ (tạm dừng, về màn chọn, hướng dẫn, ngôn ngữ, sáng/tối, toàn màn hình…) gom thẻ 4 nút; không có độ khó/chế độ/giao diện */
@@ -102,7 +107,7 @@
         /* toàn màn hình đang bật: nút trở thành THU NHỎ (icon thu vào + nhãn "Thu nhỏ về như cũ") */
         if (r === "fs" && de.classList.contains("np-fs")) { c.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>'; lb = vi() ? "Thu nhỏ về như cũ" : "Exit full screen"; c.classList.add("exit"); }
         c.setAttribute("aria-label", lb); c.title = lb;
-        c.addEventListener("click", function () { if (r === "fs" && c.classList.contains("exit") && window.NPFs) NPFs.exit(); else o.click(); if (!keepOpen[r]) close(); else setTimeout(function () { c.innerHTML = ico(o); var l2 = o.getAttribute("aria-label") || o.title || r; c.setAttribute("aria-label", l2); c.title = l2; }, 80); });
+        c.addEventListener("click", function () { if (r === "fs" && c.classList.contains("exit") && window.NPFs) NPFs.exit(); else o.click(); if (!keepOpen[r]) close(); else RT(function () { c.innerHTML = ico(o); var l2 = o.getAttribute("aria-label") || o.title || r; c.setAttribute("aria-label", l2); c.title = l2; }, 320); });
         return c;
       };
       for (gi2 = 0; gi2 < its.length; gi2 += 4) { var cd = el("div", "card"); its.slice(gi2, gi2 + 4).forEach(function (o) { cd.appendChild(mkc(o)); }); pn.appendChild(cd); }
@@ -137,7 +142,7 @@
       var showM = function (k) { var fe = modeEls(), cur0 = fe[k] || ms[k]; mi = k; mic.innerHTML = micon(cur0); mnm.textContent = mlabel(cur0); mhn.textContent = ms.length > 1 ? (vi() ? "Chạm: đổi · Giữ: xem" : "Tap: next · Hold: all") : ""; mm.setAttribute("aria-label", (vi() ? "Chế độ: " : "Mode: ") + mlabel(cur0)); };
       showM(mi);
       var holdT = 0, held = false;
-      mm.addEventListener("pointerdown", function () { held = false; clearTimeout(holdT); holdT = setTimeout(function () { held = true; try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) {} list.classList.add("on"); }, 420); });
+      mm.addEventListener("pointerdown", function () { held = false; clearTimeout(holdT); holdT = RT(function () { held = true; try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) {} list.classList.add("on"); }, 420); });
       var cancel = function () { clearTimeout(holdT); };
       mm.addEventListener("pointerup", cancel); mm.addEventListener("pointerleave", cancel); mm.addEventListener("pointercancel", cancel);
       mm.addEventListener("click", function () { if (held) { held = false; return; } var fe = modeEls(); if (fe.length > 1) { var k = (modeIdx(fe) + 1) % fe.length, lk0 = fe[k].classList.contains("lock"); setMode(k); if (POP || !lk0) showM(k); if (!POP) settle(function () { showM(modeIdx(modeEls())); }); } });
@@ -173,12 +178,12 @@
         roles.forEach(function (r) {
           var o = olds[r], lb = o.getAttribute("aria-label") || o.title || r, ih = ico(o);
           var c = el("button", "m c in " + r); c.type = "button"; c.innerHTML = ih; c.setAttribute("aria-label", lb); c.title = lb;
-          c.addEventListener("click", function (e) { if (held) { held = false; e.preventDefault(); e.stopPropagation(); return; } o.click(); if (!STAY[r]) close(); else setTimeout(function () { c.innerHTML = ico(o); }, 60); });
+          c.addEventListener("click", function (e) { if (held) { held = false; e.preventDefault(); e.stopPropagation(); return; } o.click(); if (!STAY[r]) close(); else RT(function () { c.innerHTML = ico(o); }, 320); });
           card.appendChild(c);
           var row = el("button", "m row " + r); row.type = "button"; row.innerHTML = '<span class="ic">' + ih + '</span><span class="nm"></span>'; row.lastChild.textContent = lb;
           row.addEventListener("click", function () { o.click(); ex.classList.remove("on"); if (!STAY[r]) close(); }); ex.appendChild(row);
         });
-        card.addEventListener("pointerdown", function () { held = false; clearTimeout(ht); ht = setTimeout(function () { held = true; try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) {} ex.classList.add("on"); }, 420); });
+        card.addEventListener("pointerdown", function () { held = false; clearTimeout(ht); ht = RT(function () { held = true; try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) {} ex.classList.add("on"); }, 420); });
         var stop = function () { clearTimeout(ht); }; card.addEventListener("pointerup", stop); card.addEventListener("pointerleave", stop); card.addEventListener("pointercancel", stop);
         ex.addEventListener("pointerdown", function (e) { if (e.target === ex) ex.classList.remove("on"); });
         pn.appendChild(card); pn.appendChild(ex);
@@ -215,7 +220,7 @@
         });
         oex.appendChild(g);
       });
-      ocard.addEventListener("pointerdown", function () { oHold = false; clearTimeout(oT); oT = setTimeout(function () { oHold = true; try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) {} openOpt(); }, 420); });
+      ocard.addEventListener("pointerdown", function () { oHold = false; clearTimeout(oT); oT = RT(function () { oHold = true; try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) {} openOpt(); }, 420); });
       var oStop = function () { clearTimeout(oT); }; ocard.addEventListener("pointerup", oStop); ocard.addEventListener("pointerleave", oStop); ocard.addEventListener("pointercancel", oStop);
       oex.addEventListener("pointerdown", function (e) { if (e.target === oex) oex.classList.remove("on"); });
       pn.appendChild(ocard); pn.appendChild(oex);
@@ -278,7 +283,9 @@
   function open() {
     if (openF) return; openHome = atHome(); openF = true; try { window.__npMenuHold && __npMenuHold("cc", true); } catch (e) {} portalBack(true); build(); root.removeAttribute("aria-hidden"); themeWatch(true); root.classList.add("on"); void root.offsetWidth; root.classList.add("in");
   }
-  function close() { if (!openF) return; openF = false; try { window.__npMenuHold && __npMenuHold("cc", false); } catch (e) {} portalBack(false); themeWatch(false); var r = root; r.classList.remove("in"); r.setAttribute("aria-hidden", "true"); (window.__npRST || setTimeout)(function () { if (!openF) r.classList.remove("on"); }, 240); }   /* __npRST = hẹn giờ thật (game bị tạm dừng sẽ đóng băng setTimeout thường); CSS :not(.in) ở cc.css đã chặn chạm ngay lập tức */
+  /* đóng bảng bằng chạm nền: cú CLICK theo sau (sau khi thả tay) lọt xuống trang bên dưới → mở popup Night Pass/hướng dẫn ngoài ý muốn. Nuốt mọi click ngoài bảng trong 450ms (giờ THẬT) sau khi đóng */
+  var swUntil = 0; document.addEventListener("click", function (e) { if (swUntil && new Date().getTime() < swUntil && !(e.target.closest && e.target.closest("#ccRoot"))) { e.stopPropagation(); e.preventDefault(); } }, true);
+  function close() { if (!openF) return; openF = false; swUntil = new Date().getTime() + 450; try { window.__npMenuHold && __npMenuHold("cc", false); } catch (e) {} portalBack(false); themeWatch(false); var r = root; r.classList.remove("in"); r.setAttribute("aria-hidden", "true"); (window.__npRST || setTimeout)(function () { if (!openF) r.classList.remove("on"); }, 240); }   /* __npRST = hẹn giờ thật (game bị tạm dừng sẽ đóng băng setTimeout thường); CSS :not(.in) ở cc.css đã chặn chạm ngay lập tức */
   /* ===== chặn ⋯ ở màn chọn ===== */
   document.addEventListener("click", function (e) {
     var t = e.target && e.target.closest && e.target.closest("#npFab,#npPmFab,#ccOpen,#npFsMi"); if (!t) return;

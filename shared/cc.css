@@ -413,3 +413,5 @@ html #play[data-scr="game"] #game:not(#_):not(#__){justify-content:safe center!i
 #ccRoot .m.c.skin .npmcAv svg{width:94%!important;height:94%!important;max-width:none}
 /* màn chọn kiểu mới: tiêu đề do home3 (#h3T) đảm nhiệm → ẩn bản sao tiêu đề cũ #npTitle (Cánh Nhỏ Phiêu Lưu hiện 2 tiêu đề chồng nhau trên iPhone SE dọc) */
 html.np-h3.np-h3home #npTitle{display:none!important}
+/* thanh độ khó của bảng KHÔNG chịu luật .dif của game (Cánh Nhỏ Phiêu Lưu có .dif{width:40px;height:40px} cho nút độ khó riêng → thanh bị nén thành chấm 40px, khó trượt) */
+#ccRoot .pn .m.dif{width:auto!important;height:auto!important;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;font-size:12px!important;padding:0!important}
