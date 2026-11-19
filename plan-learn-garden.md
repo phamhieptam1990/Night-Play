@@ -147,6 +147,17 @@ Mỗi vị trí **giữ nguyên chỗ**, nhưng **tranh đổi theo cấp** khi 
 - **Cách giữ số tranh trong tầm tay:** vẽ **một hình khối nền cho mỗi vị trí**, rồi **đổi vật liệu và chi tiết** theo cấp (lá → tranh → gạch → ngói; tre → gỗ → đá). Mình sinh bằng code từ các bộ phận dùng chung, nên ba cấp của một vật dùng chung dáng. Ước lượng tổng khoảng **40–50 tranh**, không phải 100+.
 - Cảnh quen thuộc với bé Việt: nhà lá, nhà tranh, nhà tường là các cấp tự nhiên của "xây nhà".
 
+### Bộ sưu tập: vị trí cố định, nhưng "cái gì đứng ở đó" lấy từ vật bé đã sưu tầm (chủ site chốt)
+Phân biệt hai thứ:
+- **Vị trí (slot):** chỗ cố định trong cảnh, thuộc một **loại** (cây ăn trái ở hàng rìa, cây trên ruộng, hàng rào, nhà...).
+- **Vật sưu tầm (item):** cái cụ thể đứng ở vị trí đó, nằm trong **bộ sưu tập** của bé (ví dụ cây xoài, cây vải, cây bưởi...).
+
+Các cây trong ảnh duyệt hiện nay (táo, cam, lê, đào, xoài, bưởi, vải, mận) chỉ là **chỗ giữ tạm**. Khi làm thật: mỗi lần bé đạt thành tích hoặc hái đủ nông sản, bé **mở khóa thêm một loài** vào bộ sưu tập; các vị trí cây ăn trái hiện **loài đã mở**, ưu tiên loài mới nhất. Chưa mở thì vị trí hiện cây mặc định đơn giản.
+- **Không có đặt vật tự do.** Nếu cần để bé có chút lựa chọn, bé chạm vào một cây để **đổi sang loài khác đã sưu tầm** (vẫn ở đúng chỗ đó).
+- **Mỗi loại vị trí có danh mục riêng:** cây ăn trái, cây trồng trên ruộng, hoa, vật nuôi, hàng rào/tường, nhà, kiểu lối đi. Mỗi danh mục có **các loài/mẫu** xếp theo độ hiếm và cách mở khóa (làm đúng 5 câu liền, thu hoạch 10 cà rốt, đạt "giỏi" một kỹ năng...).
+- **Màn "Bộ sưu tập":** lưới các loài, loài chưa mở là bóng mờ kèm mục tiêu mở, loài đã mở bấm để xem và chọn. Đây cũng là cơ hội "khám phá" cho bé (xem kế hoạch mục 0).
+- **Dữ liệu:** `learn/scene.js` mô tả vị trí và loại; `learn/garden.js` giữ danh sách loài đã mở và loài đang chọn ở từng vị trí.
+
 **Bảng vị trí đề xuất cho cảnh v1** (đây là bảng mở lần đầu, từng vị trí sẽ có các cấp như trên) (điều kiện là gợi ý, chủ site chỉnh):
 
 | Nhóm | Vị trí | Điều kiện mở |
