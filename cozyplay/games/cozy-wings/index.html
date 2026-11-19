@@ -375,6 +375,8 @@ body:has(#ovHow:not([hidden])) .side .ask,body:has(#ovHow:not([hidden])) .side .
 .ib:not(:disabled),.ib2:not(:disabled){filter:none}
 /* màn ngang: bố cục 3 cột (trái: tên + nút + câu hỏi, giữa: khung bay, phải: điểm) dùng chung với Pop Play — shared/poplandscape.css (nạp bên dưới). Cửa sổ rộng hơn một chút (>=521px) mà khung hẹp: tên game xuống hàng riêng, không xuống từng chữ. */
 @media (min-width:521px){.top{flex-wrap:wrap}.top h1{flex:1 1 160px;min-width:160px}}
+/* màn chọn dọc: linh vật to hơn (viewBox gọn) nên chừa chỗ cho bóng thoại phía trên đầu, không đè tên game */
+#ovStart .cwHero{overflow:visible!important}   /* bóng thoại phía trên đầu không bị cắt mép */
 </style>
 <link rel="stylesheet" href="../../../shared/poplandscape.css"><link rel="stylesheet" href="../../../shared/layout-pop.css"><link rel="stylesheet" href="../../../shared/layout-hand.css">
 <style>/* màn ngang thấp: nút thanh trên cùng cỡ 42px như mọi game Cozy (poplandscape.css ép 52px cho Pop); ≤420px cao: 38px */

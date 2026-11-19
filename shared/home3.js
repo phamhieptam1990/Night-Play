@@ -195,7 +195,7 @@
     try {
       var h = host(), hero = heroEl(), sv = hero && (hero.querySelector(".npa-box svg") || hero.querySelector("svg")); if (!h || !sv) return;
       var hr = hero.getBoundingClientRect(); if (hr.height < 60) return;
-      var bb = sv.getBBox(), m = sv.getScreenCTM(); if (!bb || !m || !bb.height) return;
+      var bb = (window.NPVisBox && window.NPVisBox(sv)) || sv.getBBox(), m = sv.getScreenCTM(); if (!bb || !m || !bb.height) return;
       var r = (m.f + bb.y * m.d - hr.top) / hr.height; if (!(r > -.05 && r < .5)) return;
       var cur = parseFloat(h.style.getPropertyValue("--rt")); if (isNaN(cur) || Math.abs(cur - r) > .01) h.style.setProperty("--rt", r.toFixed(3));
       if (POP && innerHeight >= innerWidth) {   /* Pop dọc: hình lấp đầy khung (tâm ≈ 0.5H, không phải 0.596H của hình Night) → tâm thật + 0.04 (bóng đổ dưới chân kéo hộp xuống) để nhìn cân giữa màn như Night */
@@ -218,13 +218,28 @@
 (function () {
   "use strict";
   var SEL = "#hHero svg,#paHero svg,#cwHero svg";
+  /* Khung bao CHỈ của nét đang nhìn thấy: getBBox() của cả SVG tính luôn nhóm ẩn (opacity 0: hạt hiệu ứng, phụ kiện skin khác, biển…) nằm xa thân → viewBox phình (Cánh Nhỏ: 459 thay vì ~275) và linh vật bị co nhỏ ở màn chọn */
+  function visBox(svg) {
+    var x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9, n = 0, ls = svg.querySelectorAll("path,circle,ellipse,rect,polygon,polyline,line,text,image,use");
+    for (var i = 0; i < ls.length; i++) {
+      var e = ls[i], op = 1, a = e, hide = false;
+      while (a && a !== svg) { var cs = getComputedStyle(a); if (cs.display === "none" || cs.visibility === "hidden") { hide = true; break; } op *= parseFloat(cs.opacity); a = a.parentElement; }
+      if (hide || op < .05 || e.closest("defs,clipPath,mask,symbol")) continue;
+      var bb, m; try { bb = e.getBBox(); m = e.getCTM(); } catch (x) { continue; } if (!bb || !m || (bb.width < 0.75 && bb.height < 0.75)) continue;   /* bỏ chấm gần như không có kích thước (vd. circle r≈0 của biển báo ẩn ở y=-190) */
+      var rt = svg.getCTM(), im = rt ? rt.inverse() : null; if (im) m = im.multiply(m);
+      [[bb.x, bb.y], [bb.x + bb.width, bb.y], [bb.x, bb.y + bb.height], [bb.x + bb.width, bb.y + bb.height]].forEach(function (c) { var q = new DOMPoint(c[0], c[1]).matrixTransform(m); x0 = Math.min(x0, q.x); y0 = Math.min(y0, q.y); x1 = Math.max(x1, q.x); y1 = Math.max(y1, q.y); });
+      n++;
+    }
+    return n ? { x: x0, y: y0, width: x1 - x0, height: y1 - y0 } : null;
+  }
+  window.NPVisBox = visBox;
   function fit() {
     try {
       [].forEach.call(document.querySelectorAll(SEL), function (s) {
         if (s.getAttribute("data-vbfit")) return;
         var vb = (s.getAttribute("viewBox") || "").trim().split(/[\s,]+/).map(Number);
         if (vb.length !== 4 || vb[2] !== 256 || vb[3] !== 256) return;
-        var b; try { b = s.getBBox(); } catch (e) { return; }
+        var b; try { b = visBox(s) || s.getBBox(); } catch (e) { return; }
         if (!b || !b.width || !b.height) return;
         var t = Math.min(0, b.y) - 4, bt = Math.max(256, b.y + b.height) + 4, l = Math.min(0, b.x) - 4, r = Math.max(256, b.x + b.width) + 4;
         s.setAttribute("data-vbfit", "1");
