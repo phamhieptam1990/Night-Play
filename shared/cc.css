@@ -461,3 +461,7 @@ html.np-menupaused #ccRoot,html.np-menupaused #ccRoot *,html.np-menupaused #ccRo
 #ovSkin .skc .dots i{width:min(3.4cqw,13px)!important;height:min(3.4cqw,13px)!important}
 #ovSkin .sk{gap:min(2cqw,10px)!important}
 #ccRoot.nt,#ccRoot.nt *{transition:none!important;animation:none!important}
+/* huy hiệu số (Night Pass/sự kiện…) KHÔNG được nằm trên danh sách mở rộng: danh sách luôn cao hơn mọi huy hiệu của ô */
+#ccRoot .pn .ml{z-index:30!important}
+#ccRoot .bd{z-index:1!important}
+#ccRoot .ml .bd{z-index:2!important}
