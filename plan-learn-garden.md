@@ -190,6 +190,36 @@ Các cây trong ảnh duyệt hiện nay (táo, cam, lê, đào, xoài, bưởi,
 - [ ] **Hiệu ứng và âm thanh dựng** vật mới, nối vào phát thưởng cuối lượt (khi vừa đạt điều kiện thì cảnh vườn báo "có vật mới!").
 - [ ] Mỗi vật mới gắn với một **huy hiệu** trong danh sách huy hiệu hiện có.
 
+## 2e. Bạn đồng hành của ngày: mỗi ngày một cây trồng hoặc vật nuôi làm linh vật dẫn đường (chủ site đề xuất)
+
+**Ý tưởng:** mỗi ngày **một cây trồng hoặc một vật nuôi** trong vườn bé (cà rốt, bắp, lúa, hướng dương, dâu, cà chua, gà, bò, thỏ...) trở thành **"bạn đồng hành của ngày"**: xuất hiện bên cạnh trong bài học, nói chuyện, phản ứng với từng câu bé làm, và **đổi đề bài theo chủ đề của nó**. Hôm sau là một bạn khác. Đây là lý do mới để bé mở app mỗi ngày: "hôm nay là bạn nào nhỉ?".
+
+**Quan hệ với 3 linh vật môn học (Mochi, Mầm, Bibi):** giữ nguyên là **linh vật chính** của môn (thương hiệu, không đổi). Bạn của ngày là **bạn nhỏ đi cùng** (khách mời), không thay thế. Đề xuất này để bạn duyệt; nếu muốn bạn của ngày thay luôn linh vật môn thì nhắn mình.
+
+**Bạn của ngày làm gì trong bài học:**
+1. **Chào ở đầu lượt:** hiện nhẹ nhàng có tiếng, một câu giới thiệu đúng tính cách ("Cà Rốt đây! Hôm nay mình đếm cùng nhau nhé!").
+2. **Nói và phản ứng khi bé làm bài:** khen, an ủi khi sai, gợi ý nhẹ, nhún nhảy khi đúng (dùng chung cơ chế cảm xúc/bong bóng thoại của linh vật hiện có).
+3. **Đề bài mang chủ đề của bạn:** Toán thì "Cà Rốt có 5 củ, bạn cho thêm 3 củ. Hỏi có mấy củ?"; Tiếng Anh thì **từ của ngày** (carrot, chicken...); Tiếng Việt thì từ ngữ về chính bạn đó. Kiểu "đếm bằng chạm" dùng hình bạn của ngày.
+4. **Cuối lượt:** bạn của ngày mừng cùng bé và **ghi vào sổ "đã gặp"** (sưu tầm).
+5. **Ba mẹ thấy được:** bản tin có dòng "Hôm nay bé học cùng Cà Rốt".
+
+**Chọn bạn của ngày thế nào (công bằng, không ép):**
+- Chọn **theo ngày + hạt giống của bé** (cùng ngày thì bé luôn gặp cùng một bạn, kể cả mở lại nhiều lần), ưu tiên **loài bé đã mở trong bộ sưu tập** và **loài lâu chưa gặp**.
+- **Không có chuỗi ngày, không phạt khi nghỉ**: ngày bé vắng thì bạn của ngày đó đơn giản bị bỏ qua; không đếm "bạn bỏ lỡ".
+- Bạn **mới mở khóa** có thể xuất hiện ngay hôm sau như một bất ngờ.
+
+**Việc cần làm (xếp theo thứ tự, mỗi bước kiểm thử và duyệt ảnh):**
+- [ ] **Chốt danh sách bạn đồng hành bản đầu** (đề xuất 8: cà rốt, bắp, lúa, hướng dương, dâu, cà chua, gà, bò) và **tính cách** từng bạn (giọng nói, câu cửa miệng, ≤ 40 ký tự mỗi câu theo cổng lọc).
+- [ ] **Vẽ "bản linh vật"** của từng bạn: thêm **khuôn mặt chữ ký** (mắt tròn có hai chấm sáng, má hồng) theo [docs/MASCOT-ART-RULES.md](docs/MASCOT-ART-RULES.md), 4 cảm xúc (vui, mừng, buồn, suy nghĩ). Cây trồng hiện chưa có mặt nên đây là phần tranh mới. Làm sau khi chủ site duyệt phong cách.
+- [ ] **Dữ liệu bạn của ngày** (`learn/companion.js`): danh sách bạn, câu thoại theo sự kiện (chào, đúng, sai, chuỗi, kết thúc), chủ đề đề bài, cách chọn theo ngày; kiểm thử (cùng ngày cùng bạn, ngày khác bạn khác, ưu tiên loài đã mở).
+- [ ] **Nối vào trang học:** hiện bạn của ngày cạnh linh vật môn, phản ứng theo từng câu, đề bài theo chủ đề, cuối lượt ghi sổ "đã gặp".
+- [ ] **Sổ "đã gặp"** trong bộ sưu tập, và dòng trong báo cáo cho phụ huynh.
+
+**Rủi ro và cách giảm:**
+- **Quá nhiều linh vật làm bé rối.** Giảm bằng cách giữ linh vật môn học là chính, bạn của ngày nhỏ hơn và chỉ nói ít.
+- **Lời thoại và đề bài theo chủ đề tốn công nội dung.** Giảm bằng cách dùng **mẫu đề có chỗ trống** (tên bạn, số lượng) điền từ bộ sinh số học có sẵn thay vì viết tay từng câu.
+- **Phần tranh mới (mặt cho 8 bạn).** Làm một bạn trước (cà rốt), duyệt xong mới làm các bạn khác.
+
 ## 3. Nền kinh tế phần thưởng (đơn giản, hào phóng, không có tiền thật)
 
 | Tài nguyên | Kiếm từ đâu | Dùng để làm gì |
