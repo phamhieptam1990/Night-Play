@@ -171,3 +171,5 @@ html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovSta
   html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village) .tiles>.tile,html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) #ovStart #cards>.card{height:var(--row)!important}
 }
 html:root.nppl:not(#npa):not(#npb):not(#npc):not(#npd) :is(#home,#village,#ovStart)>*:not(#paHero){translate:none!important;rotate:none!important;scale:none!important}
+/* HUD điểm/quãng đường ở góc phải (màn ngang): luôn MỘT HÀNG, các mục không co lại — trước đây game đặt flex-direction:column nên hai mục bị ép còn 4px cao (chữ vỡ thành vạch) */
+@media (orientation:landscape){html.nppl:not(#npa):not(#npb) .app .hud{flex-direction:row!important;align-items:center!important;height:auto!important;min-height:32px!important}html.nppl:not(#npa):not(#npb) .app .hud>*{flex:none!important;min-height:0!important}}
