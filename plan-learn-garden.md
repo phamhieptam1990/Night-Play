@@ -220,6 +220,20 @@ Các cây trong ảnh duyệt hiện nay (táo, cam, lê, đào, xoài, bưởi,
 - **Lời thoại và đề bài theo chủ đề tốn công nội dung.** Giảm bằng cách dùng **mẫu đề có chỗ trống** (tên bạn, số lượng) điền từ bộ sinh số học có sẵn thay vì viết tay từng câu.
 - **Phần tranh mới (mặt cho 8 bạn).** Làm một bạn trước (cà rốt), duyệt xong mới làm các bạn khác.
 
+## 2f. Ô trồng cố định, trồng gì cũng được, có 3 loại cây (chủ site chốt)
+
+- **Vị trí không đổi.** Mỗi ô là một chỗ cố định. Thu hoạch xong, ô **trở lại đất trống** (đất xám) và bé **trồng cây nào cũng được** ở đúng chỗ đó. Bé cũng có thể **đổi giống** trong từng vị trí bất cứ lúc nào (tiến độ cây cũ bắt đầu lại).
+- **3 loại cây, thời gian chín khác nhau (tính bằng số câu đúng, không phải giờ):**
+
+| Loại | Ví dụ | Cần | Sau khi thu hoạch |
+|---|---|---|---|
+| Cây ngắn ngày | cà rốt, cà chua, dâu | 5 câu đúng | ô trống lại |
+| Hoa màu | lúa mì, bắp, hướng dương | 8 câu đúng | ô trống lại |
+| Cây lâu năm (ăn quả) | xoài, cam, táo, lê | 12 câu đúng | cây vẫn đứng đó, mùa sau ra quả tiếp |
+
+- Mỗi loài gắn một **môn và kỹ năng** (ví dụ bắp: bảng nhân), nên chọn giống nào là chọn luyện kỹ năng đó. Mỗi lần trồng tốn **1 hạt giống** kiếm từ việc học.
+- Bản thử có sẵn ở trang vườn tương tác ([shared/art/garden/preview-garden-play.html](shared/art/garden/preview-garden-play.html)). **Câu hỏi còn mở:** cây lâu năm chỉ trồng ở các vị trí "vườn cây" phía trên, hay trồng ở ô nào cũng được?
+
 ## 3. Nền kinh tế phần thưởng (đơn giản, hào phóng, không có tiền thật)
 
 | Tài nguyên | Kiếm từ đâu | Dùng để làm gì |
