@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="vi" data-app="hub">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Học Vui: dành cho phụ huynh</title>
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F6F4F1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#12141F" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/svg+xml" sizes="any" href="/shared/favicon.svg">
+<script>try{var t=localStorage.getItem("theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"||t==="light"?t:(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");</script>
+<link rel="stylesheet" href="../../shared/fonts.css">
+<link rel="stylesheet" href="../../shared/theme.css">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100dvh;font-family:var(--font,Inter,system-ui,sans-serif);background:var(--bg);color:var(--ink);--s1:#0B6B4F;--s2:#0F8A66;--sg:#3DD6A0;--sx:#FFB020}
+body[data-subj=tviet]{--s1:#9A3412;--s2:#C2410C;--sg:#FFB020;--sx:#FF6B3D}
+body[data-subj=tanh]{--s1:#1D4ED8;--s2:#2563EB;--sg:#60A5FA;--sx:#A78BFA}
+button{font:inherit;color:inherit;cursor:pointer}
+[hidden]{display:none!important}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px calc(32px + env(safe-area-inset-bottom))}
+/* thanh trên: ← góc trái, tiêu đề, ngôn ngữ, giao diện */
+.top{position:sticky;top:0;z-index:10;padding:calc(env(safe-area-inset-top) + 10px) 0 10px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.bar{max-width:720px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:10px}
+.ib{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;font-size:22px;font-weight:800;text-decoration:none;color:var(--ink);background:color-mix(in srgb,var(--panel) 80%,transparent);border:1px solid var(--line)}
+.bar h1{flex:1;min-width:0;margin:0;font-size:clamp(17px,4.6vw,22px);font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sub{margin:6px 0 18px;color:var(--ink2);font-size:15px;line-height:1.5}
+/* cổng */
+.gate{min-height:calc(100dvh - 90px);display:grid;place-items:center;padding:12px 0}
+.card{padding:20px;border-radius:26px;background:var(--panel);border:1.5px solid var(--line)}
+.gate .card{width:100%;max-width:380px;text-align:center;padding:28px 20px}
+.gate .big{font-size:56px;line-height:1}
+.gate h2{margin:10px 0 4px;font-size:clamp(22px,6vw,28px);font-weight:900}
+.gate p{margin:0 0 14px;color:var(--ink2)}
+.sum{margin:10px 0 14px;font-size:clamp(34px,10vw,46px);font-weight:900;letter-spacing:.02em}
+.gate input{width:100%;min-height:56px;border-radius:18px;border:2px solid var(--line);background:color-mix(in srgb,var(--ink) 6%,transparent);color:var(--ink);font:900 28px/1 var(--font,inherit);text-align:center}
+.gate input:focus-visible,.btn:focus-visible,.ib:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid var(--sg);outline-offset:2px}
+.msg{min-height:22px;margin:8px 0 0;font-size:14px;font-weight:700;color:#E5484D}
+.btn{display:inline-flex;align-items:center;justify-content:center;width:100%;min-height:52px;margin-top:10px;padding:0 22px;border:0;border-radius:99px;font-weight:900;font-size:17px;color:#fff;text-decoration:none;background:linear-gradient(135deg,var(--s1),var(--s2))}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--line);font-size:15px;min-height:48px}
+.btn.danger{background:linear-gradient(135deg,#B42318,#E5484D)}
+.btn:active{transform:scale(.98)}
+/* tab môn */
+.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:4px 0 16px}
+.tab{display:flex;align-items:center;justify-content:center;gap:6px;min-width:0;min-height:52px;padding:4px 6px;border-radius:18px;font-weight:800;font-size:13.5px;line-height:1.15;background:color-mix(in srgb,var(--panel) 80%,transparent);border:2px solid var(--line)}
+.tab span{min-width:0;overflow-wrap:anywhere}.tab img{flex:none;width:30px;height:30px;border-radius:50%;background:color-mix(in srgb,var(--ink) 8%,transparent)}
+.tab[aria-selected=true]{border-color:var(--sg);background:color-mix(in srgb,var(--sg) 16%,var(--panel))}
+.sec{margin:0 0 18px}
+.sec>h2{margin:0 0 10px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2)}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tile{padding:14px;border-radius:20px;background:var(--panel);border:1.5px solid var(--line)}
+.tile b{display:block;font-size:clamp(26px,8vw,34px);font-weight:900;line-height:1.1}
+.tile span{display:block;margin-top:2px;font-size:13px;color:var(--ink2)}
+/* biểu đồ 7 ngày */
+.chart{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;align-items:end;height:150px;padding:8px 4px 0}
+.col{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;min-width:0}
+.col .v{font-size:12px;font-weight:800;color:var(--ink2);margin-bottom:3px;min-height:15px}
+.col .b{width:100%;max-width:34px;border-radius:8px 8px 4px 4px;background:linear-gradient(180deg,var(--sg),var(--s2));min-height:4px}
+.col .b.z{background:color-mix(in srgb,var(--ink) 14%,transparent)}
+.col .d{margin-top:6px;font-size:12px;font-weight:700;color:var(--ink2)}
+.col.now .d{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.legend{margin:8px 0 0;font-size:12.5px;color:var(--ink2)}
+/* bản đồ kỹ năng */
+.gl{margin:14px 0 6px;font-size:12px;font-weight:800;color:var(--ink2);letter-spacing:.06em;text-transform:uppercase}
+.sk{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.sk:first-of-type{border-top:0}
+.sk b{font-size:15px;font-weight:700}
+.sk .lv{font-size:12.5px;font-weight:800;text-align:right;white-space:nowrap}
+.meter{grid-column:1/-1;display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.meter i{height:8px;border-radius:4px;background:color-mix(in srgb,var(--ink) 12%,transparent)}
+.meter i.on{background:var(--lc)}
+.sk[data-l=not_started]{--lc:#9CA3AF}.sk[data-l=emerging]{--lc:#F97316}.sk[data-l=developing]{--lc:#EAB308}.sk[data-l=proficient]{--lc:#22C55E}.sk[data-l=advanced]{--lc:#0EA5E9}
+.sk .lv{color:var(--ink2)}
+.sk .n{font-size:12px;color:var(--ink2);font-weight:600}
+/* chỗ yếu + gợi ý */
+.wk{padding:14px;margin-bottom:10px;border-radius:20px;background:var(--panel);border:1.5px solid var(--line)}
+.wk h3{margin:0 0 4px;font-size:16px;font-weight:800}
+.wk .ct{display:inline-block;margin-left:6px;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:800;background:color-mix(in srgb,#F97316 22%,transparent);color:var(--ink)}
+.wk p{margin:6px 0 0;font-size:14.5px;line-height:1.55;color:var(--ink2)}
+.wk .tp{margin-top:8px;padding:10px 12px;border-radius:14px;background:color-mix(in srgb,var(--sg) 14%,transparent);color:var(--ink)}
+.wk .tp b{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.ok{padding:14px;border-radius:20px;background:color-mix(in srgb,#22C55E 14%,var(--panel));border:1.5px solid color-mix(in srgb,#22C55E 40%,var(--line));font-weight:700}
+.empty{padding:16px;border-radius:20px;border:1.5px dashed var(--line);color:var(--ink2);text-align:center;line-height:1.5}
+/* giới hạn giờ */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.chip{min-height:46px;min-width:64px;padding:0 14px;border-radius:99px;font-weight:800;font-size:15px;background:color-mix(in srgb,var(--panel) 80%,transparent);border:2px solid var(--line)}
+.chip[aria-pressed=true]{background:linear-gradient(135deg,var(--s1),var(--s2));color:#fff;border-color:transparent}
+.pb{height:12px;border-radius:6px;overflow:hidden;background:color-mix(in srgb,var(--ink) 12%,transparent)}
+.pb i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--sg),var(--s2))}
+.pb.full i{background:linear-gradient(90deg,#F97316,#E5484D)}
+.pl{margin:8px 0 0;font-size:14px;font-weight:700}
+.note{margin:0 0 10px;font-size:14px;color:var(--ink2);line-height:1.5}
+.priv{margin:18px 0 0;font-size:12.5px;color:var(--ink2);text-align:center;line-height:1.5}
+.grades{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:8px 0}
+.grades .chip{min-width:0;padding:0}
+.ov{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:16px;background:color-mix(in srgb,var(--bg) 70%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.ov .card{width:100%;max-width:360px;text-align:center}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 20px);transform:translateX(-50%);z-index:40;max-width:calc(100% - 32px);padding:12px 18px;border-radius:99px;font-weight:800;font-size:14.5px;color:#fff;background:#111827;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+/* ===== hover / nhấn / khoảng đệm (hover chỉ khi có chuột; cảm ứng không bị dính) ===== */
+.wrap{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+.bar{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+.sec{margin:0 0 26px}.sec>h2{margin:0 0 12px;padding-left:4px}
+.sub{margin:8px 4px 20px}
+.card{padding:20px 18px}
+.tile{padding:16px 16px 14px}.tile span{margin-top:4px;line-height:1.35}
+.tiles{gap:12px}.chart{padding:10px 6px 2px}
+#chart+.legend,.legend{margin:10px 2px 0}
+.tabs{margin:8px 0 20px}
+.sk{padding:12px 2px}.gl{margin:18px 2px 6px}.gl:first-child{margin-top:2px}
+.wk{padding:16px 16px 14px;margin-bottom:12px}.wk .tp{margin-top:10px;padding:12px 14px}
+.chips{gap:10px;margin:12px 0 14px}.grades{gap:10px;margin:10px 0}
+.pl{margin:10px 2px 0}.note{margin:0 2px 12px}
+.btn,.btn.ghost{margin-top:14px}
+.top .ib,.tab,.chip,.btn,.tile,.wk,.card{transition:background-color .16s,border-color .16s,box-shadow .16s,transform .16s,color .16s}
+.ib:active,.tab:active,.chip:active{transform:scale(.96)}
+@media (hover:hover){
+  .ib:hover{border-color:var(--sg);background:color-mix(in srgb,var(--sg) 14%,var(--panel))}
+  .tab:hover{border-color:color-mix(in srgb,var(--sg) 70%,var(--line));background:color-mix(in srgb,var(--sg) 10%,var(--panel));transform:translateY(-1px)}
+  .tab[aria-selected=true]:hover{border-color:var(--sg);background:color-mix(in srgb,var(--sg) 20%,var(--panel))}
+  .chip:hover{border-color:var(--sg);background:color-mix(in srgb,var(--sg) 12%,var(--panel));transform:translateY(-1px)}
+  .chip[aria-pressed=true]:hover{background:linear-gradient(135deg,var(--s1),var(--s2));filter:brightness(1.1);border-color:transparent}
+  .btn:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 10px 24px -10px var(--s2)}
+  .btn.ghost:hover{filter:none;background:color-mix(in srgb,var(--ink) 7%,transparent);border-color:var(--sg);box-shadow:none}
+  .btn.danger:hover{box-shadow:0 10px 24px -10px #E5484D}
+  .tile:hover,.wk:hover{border-color:color-mix(in srgb,var(--sg) 60%,var(--line));transform:translateY(-2px);box-shadow:0 12px 28px -16px color-mix(in srgb,var(--s2) 70%,#000)}
+  .sk:hover{background:color-mix(in srgb,var(--ink) 5%,transparent);border-radius:12px}
+  .col:hover .b:not(.z){filter:brightness(1.15)}.col:hover .d{color:var(--ink)}
+}
+@media (min-width:600px){.wrap{max-width:760px;padding-top:6px}.bar{max-width:760px}.card{padding:24px 24px 22px}.sec{margin-bottom:30px}.chart{height:170px}.tab{min-height:56px;font-size:15px}.tab img{width:34px;height:34px}}
+@media (max-height:430px){.gate{min-height:auto;padding:8px 0 20px}.gate .card{padding:18px 18px 16px}.gate .big{font-size:36px}.sum{margin:4px 0 8px;font-size:30px}.gate input{min-height:46px}.gate h2{margin:4px 0 2px;font-size:20px}.gate p{margin:0 0 4px}.gate .msg{min-height:0;margin:4px 0 0}.gate .btn{margin-top:6px;min-height:46px}.gate .big{display:none}}
+@media (min-width:600px){.tiles{grid-template-columns:repeat(4,1fr)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body data-subj="toan">
+<header class="top"><div class="bar">
+  <a class="ib" id="back" href="/learn/index.html" aria-label="Quay lại">←</a>
+  <h1 id="ttl">Dành cho phụ huynh</h1>
+  <button class="ib" id="lang" type="button" style="font-size:14px">EN</button>
+  <button class="ib" id="theme" type="button" aria-label="Sáng / Tối">🌓</button>
+</div></header>
+<div class="wrap">
+  <!-- cổng người lớn -->
+  <section class="gate" id="gate" aria-labelledby="gT"><div class="card">
+    <div class="big" aria-hidden="true">🔒</div><h2 id="gT"></h2><p id="gP"></p>
+    <div class="sum" id="sum" aria-live="polite"></div>
+    <form id="gf" autocomplete="off"><input id="gi" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4"><p class="msg" id="gm" role="alert"></p><button class="btn" id="gb" type="submit"></button></form>
+  </div></section>
+  <!-- bảng điều khiển -->
+  <main id="dash" hidden>
+    <p class="sub" id="sub"></p>
+    <section class="sec" aria-labelledby="h1o"><h2 id="h1o"></h2>
+      <div class="tiles" id="tiles"></div>
+      <div class="card" style="margin-top:10px"><div class="chart" id="chart" role="img"></div><p class="legend" id="legend"></p></div>
+    </section>
+    <div class="tabs" id="tabs" role="tablist"></div>
+    <section class="sec" aria-labelledby="h2m"><h2 id="h2m"></h2><div class="card" id="map"></div></section>
+    <section class="sec" aria-labelledby="h2w"><h2 id="h2w"></h2><div id="weak"></div></section>
+    <section class="sec" aria-labelledby="h2l"><h2 id="h2l"></h2><div class="card" id="limit"></div></section>
+    <section class="sec" aria-labelledby="h2s"><h2 id="h2s"></h2><div class="card" id="set"></div></section>
+    <a class="btn ghost" id="exit" href="/learn/index.html"></a>
+    <p class="priv" id="priv"></p>
+  </main>
+</div>
+<div class="ov" id="ask" role="dialog" aria-modal="true" aria-labelledby="aT" hidden><div class="card"><h2 id="aT" style="margin:0 0 6px;font-size:22px"></h2><p id="aP" class="note"></p><button class="btn danger" id="aY" type="button"></button><button class="btn ghost" id="aN" type="button"></button></div></div>
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="../content/parent-copy.js"></script>
+<script src="../engine.js"></script>
+<script src="../limit.js"></script>
+<script>
+"use strict";
+const C = window.PARENT_COPY, E = window.LearnEngine, LL = window.LearnLimit, $ = id => document.getElementById(id);
+const ls = (k, v, s) => { try{ const st = s ? sessionStorage : localStorage; if(v === undefined) return st.getItem(k); st.setItem(k, v); }catch(e){} return null; };
+const SUBJ = ["toan", "tviet", "tanh"], SF = {toan: "math", tviet: "vietnamese", tanh: "english"};
+let lang = (ls("lang") === "en" || (!ls("lang") && /^en/i.test(navigator.language || ""))) ? "en" : "vi";
+try{ const u = new URLSearchParams(location.search).get("lang"); if(u === "vi" || u === "en") lang = u; }catch(e){}
+let subj = ls("learn:subj"); if(SUBJ.indexOf(subj) < 0) subj = "toan";
+const U = () => C.UI[lang], L = () => lang === "en" ? 1 : 0, esc = x => String(x).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+/* ---------- cổng: phép tính người lớn làm được nhanh, trẻ lớp 1–5 khó giải ---------- */
+let ans = 0;
+function newSum(){ const a = 13 + Math.floor(Math.random() * 7), b = 6 + Math.floor(Math.random() * 4), c = 7 + Math.floor(Math.random() * 12); ans = a * b + c; $("sum").textContent = a + " × " + b + " + " + c + " = ?"; $("gi").value = ""; }
+function paintGate(){ const u = U(); $("gT").textContent = u.gateH; $("gP").textContent = u.gateP; $("gb").textContent = u.gateGo; $("gi").setAttribute("aria-label", u.gateIn); }
+$("gf").onsubmit = e => { e.preventDefault(); if(+$("gi").value === ans){ ls("learn:pg", String(Date.now()), true); open_(); } else { $("gm").textContent = U().gateBad; newSum(); $("gi").focus(); } };
+const passed = () => { const t = +ls("learn:pg", undefined, true); return t > 0 && Date.now() - t < 15 * 60 * 1000; };
+function open_(){ $("gate").hidden = true; $("dash").hidden = false; render(); window.scrollTo(0, 0); }
+
+/* ---------- vẽ bảng điều khiển ---------- */
+const DOW = { vi: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"], en: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"] };
+const fmtMin = s => Math.max(0, Math.round(s / 60));
+function hd(k){ return "../../shared/art/learn/" + SF[k] + "/" + SF[k] + "_head.svg"; }
+function overview(){
+  const u = U(), days = E.daily(7), n7 = days.reduce((a, d) => a + d.n, 0), ok7 = days.reduce((a, d) => a + d.ok, 0), today = days[6];
+  let solid = 0; SUBJ.forEach(s => E.summary(s).skills.forEach(k => { if(k.level === "proficient" || k.level === "advanced") solid++; }));
+  const tile = (v, t) => '<div class="tile"><b>' + v + "</b><span>" + esc(t) + "</span></div>";
+  $("tiles").innerHTML = tile(today.n, u.ovToday + " (" + u.q + ")") + tile(n7, u.ovQ) + tile(n7 ? Math.round(ok7 * 100 / n7) + "%" : "–", u.ovAcc + " · " + u.acc) + tile(solid, u.ovSkills);
+  const mx = Math.max(1, ...days.map(d => d.n));
+  $("chart").innerHTML = days.map((d, i) => '<div class="col' + (i === 6 ? " now" : "") + '"><span class="v">' + (d.n || "") + '</span><span class="b' + (d.n ? "" : " z") + '" style="height:' + (d.n ? Math.max(6, Math.round(d.n / mx * 100)) : 4) + '%"></span><span class="d">' + DOW[lang][d.dow] + "</span></div>").join("");
+  $("chart").setAttribute("aria-label", u.week + ": " + days.map(d => DOW[lang][d.dow] + " " + d.n).join(", "));
+  $("legend").textContent = n7 ? u.week + " · " + u.q : u.noData;
+}
+function tabs(){
+  const u = U(); $("tabs").innerHTML = SUBJ.map(k => '<button class="tab" role="tab" type="button" data-k="' + k + '" aria-selected="' + (k === subj) + '"><img src="' + hd(k) + '" alt=""><span>' + esc(u.tabs[k]) + "</span></button>").join("");
+  $("tabs").querySelectorAll(".tab").forEach(b => b.onclick = () => { subj = b.dataset.k; ls("learn:subj", subj); render(); });
+}
+function skillMap(){
+  const u = U(), S = E.summary(subj), byG = {};
+  if(!S.skills.some(k => k.n > 0)){ $("map").innerHTML = '<div class="empty">' + esc(u.noDataSubj) + "</div>"; }
+  S.skills.forEach(k => { const g = E.SKILLS[k.id].grades[0]; (byG[g] = byG[g] || []).push(k); });
+  const idx = { not_started: 0, emerging: 1, developing: 2, proficient: 4, advanced: 5 };
+  $("map").innerHTML = Object.keys(byG).sort().map(g => '<div class="gl">' + u.l.charAt(0).toUpperCase() + u.l.slice(1) + " " + g + "</div>" + byG[g].map(k => {
+    const nm = C.SKILL[k.id][L()], lv = C.LEVEL[k.level][L()], on = idx[k.level] || 0;
+    return '<div class="sk" data-l="' + k.level + '"><b>' + esc(nm) + '</b><span class="lv">' + esc(lv) + '</span><div class="meter" aria-hidden="true">' + [1, 2, 3, 4, 5].map(i => "<i" + (i <= on ? ' class="on"' : "") + "></i>").join("") + "</div>" + (k.n ? '<span class="n">' + k.n + " " + u.q + " · " + Math.round(k.p * 100) + "%</span>" : "") + "</div>";
+  }).join("")).join("");
+}
+function weak(){
+  const u = U(), S = E.summary(subj), tg = {};
+  S.skills.forEach(k => Object.keys(k.tags || {}).forEach(t => { tg[t] = (tg[t] || 0) + k.tags[t]; }));
+  const tops = Object.keys(tg).sort((a, b) => tg[b] - tg[a]).slice(0, 3), ws = S.weakest.slice(0, 4);
+  let h = "";
+  if(!S.skills.some(k => k.n > 0)){ h = '<div class="empty">' + esc(u.noDataSubj) + "</div>"; }
+  else {
+    h += ws.length ? ws.map(id => { const k = S.skills.find(x => x.id === id); return '<div class="wk"><h3>' + esc(C.SKILL[id][L()]) + '<span class="ct">' + Math.round(k.p * 100) + "%</span></h3></div>"; }).join("") : '<div class="ok">✅ ' + esc(u.weakNone) + "</div>";
+    if(tops.length) h += '<h2 style="margin:16px 0 10px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2)">' + esc(u.tips) + "</h2>" + tops.map(t => { const c = C.TAG[t] || C.TAG.other, o = L(); return '<div class="wk"><h3>' + esc(c[o]) + '<span class="ct">' + tg[t] + " " + esc(u.times) + "</span></h3><p>" + esc(c[2 + o]) + '</p><p class="tp"><b>' + esc(u.tryIt) + "</b>" + esc(c[4 + o]) + "</p></div>"; }).join("");
+    else h += '<p class="note">' + esc(u.tipsEmpty) + "</p>";
+  }
+  $("weak").innerHTML = h;
+}
+function limit(){
+  const u = U(), cur = LL.getLimit(), used = LL.usedSec(), allow = LL.allowedSec(), opts = [0, 15, 30, 45, 60, 90];
+  let h = '<p class="note">' + esc(u.limitP) + '</p><div class="chips" role="group" aria-label="' + esc(u.limit) + '">' + opts.map(m => '<button class="chip" type="button" data-m="' + m + '" aria-pressed="' + (m === cur) + '">' + (m ? m + " " + u.min : esc(u.off)) + "</button>").join("") + "</div>";
+  if(cur){ const pct = Math.min(100, Math.round(used / allow * 100)); h += '<div class="pb' + (pct >= 100 ? " full" : "") + '" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '"><i style="width:' + pct + '%"></i></div><p class="pl">' + esc(u.used) + ": " + fmtMin(used) + " / " + (cur + LL.bonusMin()) + " " + u.min + " · " + esc(u.left) + " " + fmtMin(Math.max(0, allow - used)) + " " + u.min + '</p><button class="btn ghost" id="bonus" type="button">' + esc(u.unlock) + "</button>"; }
+  else h += '<p class="pl">' + esc(u.used) + ": " + fmtMin(used) + " " + u.min + "</p>";
+  $("limit").innerHTML = h;
+  $("limit").querySelectorAll(".chip").forEach(b => b.onclick = () => { LL.setLimit(+b.dataset.m); limit(); });
+  const bn = $("bonus"); if(bn) bn.onclick = () => { LL.addBonus(10); limit(); toast(u.unlocked); };
+}
+function settings(){
+  const u = U(), g = +ls("learn:grade") || 1;
+  $("set").innerHTML = '<p class="note" style="margin-bottom:4px"><b>' + esc(u.grade) + '</b></p><div class="grades" role="group" aria-label="' + esc(u.grade) + '">' + [1, 2, 3, 4, 5].map(i => '<button class="chip" type="button" data-g="' + i + '" aria-pressed="' + (i === g) + '">' + i + "</button>").join("") + '</div><hr style="border:0;border-top:1px solid var(--line);margin:16px 0"><p class="note"><b>' + esc(u.reset) + "</b><br>" + esc(u.resetP) + '</p><button class="btn danger" id="rs" type="button">' + esc(u.reset) + "</button>";
+  $("set").querySelectorAll("[data-g]").forEach(b => b.onclick = () => { ls("learn:grade", b.dataset.g); settings(); });
+  $("rs").onclick = () => { $("aT").textContent = u.resetAsk; $("aP").textContent = u.resetP; $("aY").textContent = u.resetYes; $("aN").textContent = u.resetNo; $("ask").hidden = false; $("aN").focus(); };
+}
+let tt = 0; function toast(m){ const t = $("toast"); t.textContent = m; t.hidden = false; clearTimeout(tt); tt = setTimeout(() => t.hidden = true, 2200); }
+$("aN").onclick = () => { $("ask").hidden = true; };
+$("aY").onclick = () => { E.resetAll(); $("ask").hidden = true; render(); toast(U().resetDone); };
+$("ask").addEventListener("click", e => { if(e.target === $("ask")) $("ask").hidden = true; });
+document.addEventListener("keydown", e => { if(e.key === "Escape" && !$("ask").hidden) $("ask").hidden = true; });
+
+function chrome(){
+  const u = U(); document.documentElement.lang = lang; document.title = "Học Vui: " + u.title; $("ttl").textContent = u.title; $("back").setAttribute("aria-label", u.back); $("back").href = "/learn/index.html?lang=" + lang;
+  $("lang").textContent = lang === "vi" ? "EN" : "VI"; $("sub").textContent = u.sub; $("h1o").textContent = u.overview; $("h2m").textContent = u.map; $("h2w").textContent = u.weak; $("h2l").textContent = u.limit; $("h2s").textContent = u.settings;
+  $("exit").textContent = u.exit; $("exit").href = "/learn/index.html?lang=" + lang; $("priv").textContent = u.privacy; paintGate();
+}
+function render(){ document.body.dataset.subj = subj; chrome(); overview(); tabs(); skillMap(); weak(); limit(); settings(); }
+$("lang").onclick = () => { lang = lang === "vi" ? "en" : "vi"; ls("lang", lang); $("gm").textContent = ""; if($("dash").hidden) chrome(); else render(); };
+$("theme").onclick = () => { const d = document.documentElement.dataset.theme === "dark" ? "light" : "dark"; document.documentElement.dataset.theme = d; ls("theme", d); };
+chrome(); newSum();
+if(passed()) open_(); else $("gi").focus();
+</script>
+</body>
+</html>
