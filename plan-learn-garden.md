@@ -117,17 +117,37 @@ Chủ site chốt hướng: **làm trọn một khung cảnh vườn có sẵn c
 
 **Vì sao cách này hợp:**
 - **Cảnh dựng tay một lần, có thể rất đẹp** (bố cục như ảnh Hay Day: ruộng, tường đá, cây, nhà), vì vị trí cố định nên mình trau chuốt từng chỗ thay vì lo mọi tổ hợp.
-- **Số tranh cố định và đếm được** (khoảng 20–25 vị trí), không phình theo kho vật phẩm.
-- **Nhẹ và dễ kiểm thử:** mỗi vị trí chỉ có 2 trạng thái (chưa mở / đã dựng), điều kiện mở là dữ liệu, kiểm thử được bằng máy.
+- **Số tranh cố định và đếm được:** khoảng 12–15 vị trí chính × 3–4 cấp (xem "Cấp độ" dưới), không phình theo kho vật phẩm.
+- **Nhẹ và dễ kiểm thử:** mỗi vị trí có một dãy cấp (0 chưa có, 1, 2, 3...), điều kiện lên cấp là dữ liệu, kiểm thử được bằng máy.
 - **Vòng học → thấy thành quả rõ ràng**: học xong một mục tiêu là cảnh vườn đổi thật.
 
 **Mỗi vị trí gồm:**
 1. **Trạng thái chưa mở:** bóng mờ hoặc khung dựng dở, kèm **mục tiêu tích cực** ("Làm đúng 5 câu liền để dựng cây táo") và thanh tiến độ. Chạm vào để xem mục tiêu.
-2. **Điều kiện mở**, lấy từ việc học thật (số lượt, chuỗi đúng, mức thạo kỹ năng, số nông sản đã thu, số kiểu câu hỏi đã thử, đủ ba môn).
+2. **Điều kiện mở và lên cấp**, lấy từ việc học thật (số lượt, chuỗi đúng, mức thạo kỹ năng, số nông sản đã thu, số kiểu câu hỏi đã thử, đủ ba môn).
 3. **Khoảnh khắc dựng:** hiệu ứng "tạch" bụi sao, vật nảy lên, linh vật reo, tiếng chuông. Đây là điểm "wow" của bé và ba mẹ.
 4. **Trạng thái đã dựng** (có hoạt ảnh nhẹ nếu cần), có thể chạm để nghe linh vật nói một câu.
 
-**Bảng vị trí đề xuất cho cảnh v1** (điều kiện là gợi ý, chủ site chỉnh):
+### Cấp độ của từng vị trí: cùng chỗ, tranh nâng cấp dần (chủ site chốt)
+Mỗi vị trí **giữ nguyên chỗ**, nhưng **tranh đổi theo cấp** khi bé học giỏi hơn. Ví dụ ngôi nhà ở một chỗ: **nhà lá → nhà tranh → nhà tường → nhà ngói**; hàng rào: **tre → gỗ → đá**. Cùng một vị trí mà vẻ ngoài lớn lên cùng bé, ba mẹ nhìn vườn là thấy bé đã tiến xa đến đâu.
+
+| Vị trí | Cấp 1 | Cấp 2 | Cấp 3 | Cấp 4 |
+|---|---|---|---|---|
+| Ngôi nhà | Lều lá | Nhà tranh | Nhà tường | Nhà ngói có hiên |
+| Hàng rào | Rào tre | Rào gỗ | Tường đá thấp | Tường đá có cổng |
+| Giếng | Giếng đất | Giếng xây gạch | Giếng có mái | |
+| Kho | Kho gỗ nhỏ | Kho lớn | Kho đỏ có gác | |
+| Cối xay gió | Bệ đá | Cối xay nhỏ | Cối xay cánh lớn | |
+| Ô trồng | Đất trống | Luống có bờ | Luống có rào | Nhà kính |
+| Lối đi | Đường đất | Lối đá cuội | Đá lát gọn | |
+| Cây táo | Cây non | Cây có hoa | Cây trĩu quả | |
+| Chỗ nuôi (v2) | Ổ rơm | Chuồng gỗ | Chuồng có mái | |
+
+- **Điều kiện lên cấp** tăng dần theo việc học thật (ví dụ nhà cấp 2 khi đạt 1 kỹ năng "khá", cấp 3 khi 3 kỹ năng "khá", cấp 4 khi 1 kỹ năng "giỏi" ở mỗi môn). Điều kiện cụ thể để chủ site chỉnh.
+- **Lên cấp có khoảnh khắc "nâng cấp":** vật cũ biến thành bụi sao, vật mới hiện ra, linh vật reo. Cấp cũ **không mất**; chỉ có lên.
+- **Cách giữ số tranh trong tầm tay:** vẽ **một hình khối nền cho mỗi vị trí**, rồi **đổi vật liệu và chi tiết** theo cấp (lá → tranh → gạch → ngói; tre → gỗ → đá). Mình sinh bằng code từ các bộ phận dùng chung, nên ba cấp của một vật dùng chung dáng. Ước lượng tổng khoảng **40–50 tranh**, không phải 100+.
+- Cảnh quen thuộc với bé Việt: nhà lá, nhà tranh, nhà tường là các cấp tự nhiên của "xây nhà".
+
+**Bảng vị trí đề xuất cho cảnh v1** (đây là bảng mở lần đầu, từng vị trí sẽ có các cấp như trên) (điều kiện là gợi ý, chủ site chỉnh):
 
 | Nhóm | Vị trí | Điều kiện mở |
 |---|---|---|
@@ -154,7 +174,7 @@ Chủ site chốt hướng: **làm trọn một khung cảnh vườn có sẵn c
 
 **Việc cần làm cho phần này (giai đoạn B, thay cho "kéo thả trang trí" ở giai đoạn C):**
 - [ ] Soạn **danh sách vị trí + điều kiện mở** thành dữ liệu `learn/scene.js` (kèm kiểm thử: không mở sớm, không mất khi đã mở, tiến độ đúng).
-- [ ] Vẽ **bộ khung cảnh v1** (cỏ nền, vị trí đã định) và **tranh từng vật** ở cả hai trạng thái (bóng chưa mở + bản đã dựng).
+- [ ] Vẽ **bộ khung cảnh v1** (cỏ nền, vị trí đã định) và **tranh từng vật theo cấp** (bóng chưa mở + các cấp 1–4, sinh từ hình khối nền + đổi vật liệu).
 - [ ] Màn **Vườn** hiển thị cảnh, chạm vị trí chưa mở thấy mục tiêu + tiến độ; chạm cây chín thu hoạch.
 - [ ] **Hiệu ứng và âm thanh dựng** vật mới, nối vào phát thưởng cuối lượt (khi vừa đạt điều kiện thì cảnh vườn báo "có vật mới!").
 - [ ] Mỗi vật mới gắn với một **huy hiệu** trong danh sách huy hiệu hiện có.
