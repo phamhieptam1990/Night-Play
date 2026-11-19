@@ -114,7 +114,7 @@
     calEl.onclick = function () { var b = dailyBtn(); if (b) b.click(); };
     $("h3Play").firstChild.innerHTML = ic("rocket"); $("h3Res").firstChild.innerHTML = ic("resume");
     /* nút vào ván có sẵn của từng game: chơi tự do (#bFree) → chiến dịch (#bCamp) → thử thách hôm nay (#bDaily) */
-    var go = function () { var ids = ["bPlay", "bFree", "bCamp", "bDaily"], i, b; if (POP) return firstTile() || dailyBtn(); for (i = 0; i < ids.length; i++) { b = $(ids[i]); if (b) return b; } return null; };
+    var go = function () { var ids = ["bPlay", "bFree", "bCamp", "bDaily", "bMake"], i, b; if (POP) return firstTile() || dailyBtn(); for (i = 0; i < ids.length; i++) { b = $(ids[i]); if (b) return b; } return null; };
     $("h3Play").onclick = function () { var b = go(); if (b) b.click(); };
     $("h3Res").onclick = function () { var b = document.querySelector("#npResume .npr-go") || go(); if (b) b.click(); };
     /* VUỐT NGANG trên linh vật = đổi skin (chỉ các skin đã mở khoá; vuốt trái = skin kế, vuốt phải = skin trước, vòng tròn) */
