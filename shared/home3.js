@@ -213,3 +213,28 @@
   if (document.readyState === "complete") setTimeout(bail, 0); else addEventListener("load", function () { setTimeout(bail, 400); });
   sync(); setInterval(sync, 700); addEventListener("resize", function () { placeCal(); fitTitle(); rk = ""; rails(); }); addEventListener("orientationchange", placeCal);
 })();
+/* LINH VẬT KHÔNG BỊ CẮT Ở MÀN CHỌN: nhiều tranh vẽ vượt khỏi viewBox 0 0 256 256 (tai thỏ cao hơn 25 đơn vị…) mà khung hero overflow:hidden → tai/mũ bị cắt phẳng.
+   Mở rộng viewBox của bản SVG hero cho vừa trọn nét vẽ (tự co nhỏ đều, không dịch chuyển/biến hình); làm một lần cho mỗi SVG, theo dõi khi game đổi skin/vẽ lại. */
+(function () {
+  "use strict";
+  var SEL = "#hHero svg,#paHero svg,#cwHero svg";
+  function fit() {
+    try {
+      [].forEach.call(document.querySelectorAll(SEL), function (s) {
+        if (s.getAttribute("data-vbfit")) return;
+        var vb = (s.getAttribute("viewBox") || "").trim().split(/[\s,]+/).map(Number);
+        if (vb.length !== 4 || vb[2] !== 256 || vb[3] !== 256) return;
+        var b; try { b = s.getBBox(); } catch (e) { return; }
+        if (!b || !b.width || !b.height) return;
+        var t = Math.min(0, b.y) - 4, bt = Math.max(256, b.y + b.height) + 4, l = Math.min(0, b.x) - 4, r = Math.max(256, b.x + b.width) + 4;
+        s.setAttribute("data-vbfit", "1");
+        if (t < -4.5 || bt > 260.5 || l < -4.5 || r > 260.5) {
+          var w = r - l, h = bt - t, m = Math.max(w, h);   /* vuông, căn giữa: không đổi tỉ lệ khung */
+          s.setAttribute("viewBox", (l - (m - w) / 2) + " " + (t - (m - h) / 2) + " " + m + " " + m);
+        }
+      });
+    } catch (e) {}
+  }
+  function go() { fit(); setInterval(fit, 1200); try { new MutationObserver(function () { setTimeout(fit, 30); }).observe(document.body, { childList: true, subtree: true }); } catch (e) {} }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", go); else go();
+})();

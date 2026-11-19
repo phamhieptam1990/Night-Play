@@ -37,6 +37,13 @@
     if (m) { var i = el("span", "ci"); i.textContent = m[1]; b.appendChild(i); if (m[2]) { var l = el("span", "cl"); l.textContent = m[2]; b.appendChild(l); } }
     else { var l2 = el("span", "cl"); l2.textContent = t1 || t; b.appendChild(l2); }
   }
+  /* nhãn dự phòng theo vai trò (nút gốc chưa có aria-label/title thì không được hiện tên thô "help"/"board"/"lang") */
+  var RLM = { help: ["Hướng dẫn", "How to play"], board: ["Xếp hạng", "Leaderboard"], lang: ["Ngôn ngữ", "Language"], theme: ["Sáng / Tối", "Light / Dark"], fs: ["Toàn màn hình", "Fullscreen"], npch: ["Thử thách", "Challenge"], pass: ["Sự kiện", "Event"], npset: ["Cài đặt Night Pass", "Night Pass settings"], skinbtn: ["Giao diện", "Appearance"], cam: ["Chụp ảnh", "Photo"], shr: ["Chia sẻ", "Share"], lock: ["Khoá trẻ em", "Kids lock"], snd: ["Âm thanh", "Sound"], skin: ["Linh vật & skin", "Mascot & skin"] };
+  function RL(r) { var a = RLM[r]; return a ? a[vi() ? 0 : 1] : r; }
+  /* TOÀN MÀN HÌNH: nút gốc #npFsBtn chỉ VÀO; đang ở toàn màn hình thì ô trong bảng phải hiện "thu nhỏ" và bấm = thoát (NPFs.exit) */
+  var FSX = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>';
+  function fsOn() { return document.documentElement.classList.contains("np-fs") && !!window.NPFs; }
+  function fsAct(o) { if (fsOn()) NPFs.exit(); else o.click(); }
   function txt(e) { return (e.getAttribute("aria-label") || e.title || e.textContent || "").replace(/\s+/g, " ").trim(); }
   /* ===== chế độ ===== */
   function modeEls() { return [].slice.call(document.querySelectorAll("#tys>.ty,.tys>.ty,.tiles>.tile,#cards>.tile,#cards>.card")).filter(function (e) { return !e.classList.contains("daily"); }); }
@@ -112,11 +119,11 @@
       };
       fillStats(); var stT = 0; var stLoop = function () { if (!root || !root.classList.contains("on") || !openF) return; fillStats(); stT = (window.__npRST || setTimeout)(stLoop, 500); }; (window.__npRST || setTimeout)(stLoop, 500);
       var mkc = function (o) {
-        var r = o.getAttribute("data-r") || o.getAttribute("data-rr") || (/nps-cam/.test(o.className) ? "cam" : /nps-fab/.test(o.className) ? "shr" : o.id === "klock" ? "lock" : ""), c = el("button", "m c in " + r); c.type = "button"; c.innerHTML = ico(o); var lb = o.getAttribute("aria-label") || o.title || r;
+        var r = o.getAttribute("data-r") || o.getAttribute("data-rr") || (/nps-cam/.test(o.className) ? "cam" : /nps-fab/.test(o.className) ? "shr" : o.id === "klock" ? "lock" : ""), c = el("button", "m c in " + r); c.type = "button"; c.innerHTML = ico(o); var lb = o.getAttribute("aria-label") || o.title || RL(r);
         /* toàn màn hình đang bật: nút trở thành THU NHỎ (icon thu vào + nhãn "Thu nhỏ về như cũ") */
         if (r === "fs" && de.classList.contains("np-fs")) { c.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>'; lb = vi() ? "Thu nhỏ về như cũ" : "Exit full screen"; c.classList.add("exit"); }
         c.setAttribute("aria-label", lb); c.title = lb;
-        c.addEventListener("click", function () { if (r === "fs" && c.classList.contains("exit") && window.NPFs) NPFs.exit(); else o.click(); if (!keepOpen[r]) close(); else RT(function () { c.innerHTML = ico(o); var l2 = o.getAttribute("aria-label") || o.title || r; c.setAttribute("aria-label", l2); c.title = l2; }, 320); });
+        c.addEventListener("click", function () { if (r === "fs" && c.classList.contains("exit") && window.NPFs) NPFs.exit(); else o.click(); if (!keepOpen[r]) close(); else RT(function () { c.innerHTML = ico(o); var l2 = o.getAttribute("aria-label") || o.title || RL(r); c.setAttribute("aria-label", l2); c.title = l2; }, 320); });
         return c;
       };
       for (gi2 = 0; gi2 < its.length; gi2 += 4) { var cd = el("div", "card"); its.slice(gi2, gi2 + 4).forEach(function (o) { cd.appendChild(mkc(o)); }); pn.appendChild(cd); }
@@ -185,12 +192,13 @@
       (function (roles) {
         var card = el("div", "card"), ex = el("div", "ml ex"), held = false, ht = 0;
         roles.forEach(function (r) {
-          var o = olds[r], lb = o.getAttribute("aria-label") || o.title || r, ih = ico(o);
+          var o = olds[r], lb = o.getAttribute("aria-label") || o.title || RL(r), ih = ico(o);
+          if (r === "fs" && fsOn()) { ih = FSX; lb = vi() ? "Thu nhỏ về như cũ" : "Exit full screen"; }
           var c = el("button", "m c in " + r); c.type = "button"; c.innerHTML = ih; c.setAttribute("aria-label", lb); c.title = lb;
-          c.addEventListener("click", function (e) { if (held) { held = false; e.preventDefault(); e.stopPropagation(); return; } o.click(); if (!STAY[r]) close(); else RT(function () { c.innerHTML = ico(o); }, 320); });
+          c.addEventListener("click", function (e) { if (held) { held = false; e.preventDefault(); e.stopPropagation(); return; } if (r === "fs") fsAct(o); else o.click(); if (!STAY[r]) close(); else RT(function () { c.innerHTML = ico(o); }, 320); });
           card.appendChild(c);
           var row = el("button", "m row " + r); row.type = "button"; row.innerHTML = '<span class="ic">' + ih + '</span><span class="nm"></span>'; row.lastChild.textContent = lb;
-          row.addEventListener("click", function () { o.click(); ex.classList.remove("on"); if (!STAY[r]) close(); }); ex.appendChild(row);
+          row.addEventListener("click", function () { if (r === "fs") fsAct(o); else o.click(); ex.classList.remove("on"); if (!STAY[r]) close(); }); ex.appendChild(row);
         });
         card.addEventListener("pointerdown", function () { held = false; clearTimeout(ht); ht = RT(function () { held = true; try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) {} ex.classList.add("on"); }, 420); });
         var stop = function () { clearTimeout(ht); }; card.addEventListener("pointerup", stop); card.addEventListener("pointerleave", stop); card.addEventListener("pointercancel", stop);
