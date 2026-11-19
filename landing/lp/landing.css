@@ -509,3 +509,21 @@ main p a:not(.btn){transition:color .18s ease,text-decoration-color .18s ease}
 
 /* Chân trang máy tính hẹp (1000–1200px): đã có thêm liên kết "Tài liệu" nên thu khoảng cách/cỡ chữ để hàng liên kết không đè lên logo */
 @media (min-width:1000px) and (max-width:1200px){.flinks{gap:0}.flinks a{padding:0 3px;font-size:13px;min-width:44px}}
+
+/* Học Vui: ba môn (Toán / Tiếng Việt / Tiếng Anh), sinh trang ở scripts/learn/gen-landing.js */
+.hvsub{text-align:center;color:var(--ink2);max-width:40em;margin:-8px auto 26px;font-size:clamp(15px,3.8vw,18px)}
+.hv{display:grid;gap:12px}
+.hvc{display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:22px;text-decoration:none;color:#fff;box-shadow:var(--shadow);transition:transform .18s;background:linear-gradient(135deg,#0B6B4F,#0F8A66)}
+.hvc.s2{background:linear-gradient(135deg,#9A3412,#C2410C)}
+.hvc.s3{background:linear-gradient(135deg,#1D4ED8,#2563EB)}
+.hvc:hover{transform:translateY(-3px)}
+.hvi{flex:none;display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.2);font-size:26px}
+.hvt{display:grid;gap:2px;min-width:0;flex:1}
+.hvt b{font-size:20px}.hvt span{font-size:14px;opacity:.92;line-height:1.35}
+.hvg{display:none;font-weight:800;font-size:14px}
+@media (min-width:760px){.hv{grid-template-columns:repeat(3,1fr)}.hvc{flex-direction:column;align-items:flex-start;padding:22px}.hvg{display:block;margin-top:6px}}
+.hvi{position:relative;overflow:hidden}.hvi img{position:absolute;width:175%;max-width:none;left:-37%;top:-10%}
+@media (min-width:760px){.hvi{width:72px;height:72px}}
+.hvall{text-align:center;margin:-10px 0 20px}.hvall a{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:22px;font-weight:800;color:var(--accent);text-decoration:none;transition:background .15s}
+.hvall a:hover{background:color-mix(in srgb,var(--accent) 14%,transparent)}
+.hvslogan{text-align:center;margin:-6px auto 10px;font-weight:800;font-size:clamp(17px,4.2vw,22px);background:linear-gradient(100deg,#9B83FF,#FF9A6B);-webkit-background-clip:text;background-clip:text;color:transparent}
