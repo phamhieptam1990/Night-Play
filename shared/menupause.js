@@ -30,6 +30,22 @@
   var holders = {};
   window.__npMenuHold = function (key, on) { if (on) holders[key] = 1; else delete holders[key]; set(Object.keys(holders).length > 0 || menuOld); };
   var menuOld = false, setOld = set;
+  /* PHÍM ENTER = TẠM DỪNG / CHƠI TIẾP nhanh (bàn phím): đang chơi → Enter dừng; Enter lần nữa → đếm 3-2-1 rồi chạy tiếp. Chặn Enter ở pha capture để game không coi là "bấm" (dừng đồng hồ, bắn trứng, đập ô…) */
+  var pz = null;
+  function pzEl() { if (!pz) { pz = document.createElement("div"); pz.id = "npMpPz"; pz.setAttribute("role", "status"); pz.style.cssText = "position:fixed;left:50%;top:max(14px,env(safe-area-inset-top));transform:translateX(-50%);z-index:2147482100;padding:10px 20px;border-radius:999px;background:rgba(20,18,40,.88);color:#fff;font:800 15px/1.2 system-ui,sans-serif;white-space:nowrap;pointer-events:none;display:none"; (document.body || de).appendChild(pz); } return pz; }
+  addEventListener("keydown", function (e) {
+    if (e.key !== "Enter" || e.repeat || e.ctrlKey || e.metaKey || e.altKey || e.defaultPrevented) return;
+    var NPn = NPo(); if (!NPn || !NPn.menuPause) return;
+    var t = e.target, tg = t && t.tagName;
+    if (tg === "INPUT" || tg === "TEXTAREA" || tg === "SELECT" || (t && t.isContentEditable)) return;
+    if (document.getElementById("ccRoot") && document.getElementById("ccRoot").classList.contains("on")) return;
+    if (holders.key) { e.preventDefault(); e.stopPropagation(); pzEl().style.display = "none"; window.__npMenuHold("key", false); return; }
+    if (open || Object.keys(holders).length) return;   /* đang dừng vì lý do khác (menu, xoay máy…) */
+    if (!(NPn.playing && NPn.playing())) return;       /* chỉ khi ĐANG CHƠI: ở màn chọn/kết thúc Enter vẫn làm việc của nó */
+    e.preventDefault(); e.stopPropagation();
+    var z = pzEl(); z.textContent = (document.documentElement.lang || "vi").slice(0, 2) === "en" ? "⏸ Paused · press Enter to resume" : "⏸ Tạm dừng · nhấn Enter để chơi tiếp"; z.style.display = "block";
+    window.__npMenuHold("key", true);
+  }, true);
   /* XOAY MÁY: đang chơi mà xoay dọc↔ngang → dừng ngay; xoay xong (không đổi cỡ ~0,7 giây) → đếm 3-2-1 rồi chơi tiếp */
   var land0 = innerWidth > innerHeight, rotT = 0;
   function onRot() {

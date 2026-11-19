@@ -145,6 +145,22 @@ try { var _q = new URLSearchParams(location.search).get("lang"), _s = null; try 
   addEventListener("message", function (e) {
     if (e.source === parent && e.origin === location.origin && e.data && e.data.np === 1 && e.data.type === "stopAudio") stop(true);
   });
+  /* W A S D (hoa hay thường, theo phím vật lý) = mũi tên ↑ ← ↓ → ở MỌI game: đổi sự kiện ở pha capture thành phím mũi tên tương ứng rồi nuốt phím gốc (game nào đã tự bắt A/D/W cũng không bị đếm đôi) */
+  (function () {
+    var MAP = { KeyW: "ArrowUp", KeyA: "ArrowLeft", KeyS: "ArrowDown", KeyD: "ArrowRight" }, KC = { ArrowUp: 38, ArrowLeft: 37, ArrowDown: 40, ArrowRight: 39 };
+    function relay(e) {
+      if (e.__npWasd || e.ctrlKey || e.metaKey || e.altKey) return;
+      var k = MAP[e.code]; if (!k) { var c = (e.key || "").toLowerCase(); k = c === "w" ? "ArrowUp" : c === "a" ? "ArrowLeft" : c === "s" ? "ArrowDown" : c === "d" ? "ArrowRight" : null; if (!k || (e.code && /^Key/.test(e.code))) return; }
+      var t = e.target, tg = t && t.tagName; if (tg === "INPUT" || tg === "TEXTAREA" || tg === "SELECT" || (t && t.isContentEditable)) return;
+      e.stopImmediatePropagation(); e.preventDefault();
+      try {
+        var n = new KeyboardEvent(e.type, { key: k, code: k, keyCode: KC[k], which: KC[k], repeat: e.repeat, shiftKey: e.shiftKey, bubbles: true, cancelable: true, composed: true });
+        n.__npWasd = true; try { Object.defineProperty(n, "keyCode", { value: KC[k] }); Object.defineProperty(n, "which", { value: KC[k] }); } catch (x) {}
+        (t && t.dispatchEvent ? t : document).dispatchEvent(n);
+      } catch (x) {}
+    }
+    addEventListener("keydown", relay, true); addEventListener("keyup", relay, true);
+  })();
   /* NHẠC NỀN mỗi game một bản (shared/music.js): nạp ở đây để mọi game có mà không phải sửa từng trang; nạp SAU khi AudioContext đã được bọc ở trên */
   try { var cs = document.currentScript, base = cs && cs.src ? cs.src.replace(/bridge\.js(\?.*)?$/, "") : ""; if (base && /\/games\//.test(location.pathname)) { var ms = document.createElement("script"); ms.src = base + "music.js"; ms.async = true; (document.head || document.documentElement).appendChild(ms); } } catch (e) {}
 })();
