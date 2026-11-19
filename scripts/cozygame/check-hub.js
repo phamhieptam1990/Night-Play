@@ -77,7 +77,7 @@ const freePort = () => new Promise(res => { const s = net.createServer(); s.list
       note(m.th === th && m.lg === lang, tag, `theme/lang sai ${m.th}/${m.lg}`);
       note(m.sy <= 0 && m.sx <= 0 && m.my <= 1 && m.mx <= 0, tag, `CUỘN: dọc ${m.sy}, ngang ${m.sx}, main ${m.my}/${m.mx}`);
       note(m.navB.t >= -0.5 && m.foot.b <= m.vh + 0.5, tag, `header/chân trang ra ngoài màn hình ${m.navB.t}/${m.foot.b}>${m.vh}`);
-      note(m.doors.length === 2 && m.doors[0].href.endsWith("popplay/index.html") && m.doors[1].href.endsWith("cozyplay/index.html"), tag, "hai thẻ phải trỏ popplay / cozyplay: " + m.doors.map(d => d.href));
+      note(m.doors.length === 3 && m.doors[0].href.endsWith("popplay/index.html") && m.doors[1].href.endsWith("cozyplay/index.html") && /hoc\/$/.test(m.doors[2].href), tag, "ba thẻ phải trỏ popplay / cozyplay / hub Học Vui (/hoc/): " + m.doors.map(d => d.href));
       m.doors.forEach(d => { note(d.h >= 56 - 0.5, tag, `thẻ ${d.id} cao ${d.h.toFixed(1)} < 56`); note(d.l >= 16 - eps && d.r <= m.vw - 16 + eps && d.t >= 0 && d.b <= m.vh + 0.5, tag, `thẻ ${d.id} không trọn trong lề 16px: ${d.l.toFixed(0)}-${d.r.toFixed(0)} x ${d.t.toFixed(0)}-${d.b.toFixed(0)}`); note(d.hit && d.vis, tag, `thẻ ${d.id} bị che`); });
       note(m.sats.length === 12 && m.sats.filter(s => s.pop).length === 6, tag, "cần 12 icon (6 Pop + 6 Night), có " + m.sats.length);
       m.sats.forEach(s => { const mm = s.href.match(/\.\.\/(popplay|cozyplay)\/index\.html#([a-z0-9-]+)$/); note(mm && ids[mm[2]] === mm[1], tag, "icon trỏ id không có thật/sai cổng: " + s.href); note(s.w >= 44 && s.h >= 44, tag, "icon nhỏ " + s.w + "x" + s.h); note(new RegExp("^" + (lang === "vi" ? "Chơi " : "Play ")).test(s.label || ""), tag, "nhãn icon sai ngôn ngữ: " + s.label); });

@@ -20,7 +20,8 @@
 try{var t=localStorage.getItem("theme")}catch(e){}
 document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
 </script>
-<style>html.pre body{visibility:hidden}</style>
+<style>html.pre body{visibility:hidden}
+</style>
 <script>/* chỉ ẩn nội dung khi ngôn ngữ KHÔNG phải tiếng Việt (HTML tĩnh là tiếng Việt: người dùng VI thấy chữ ngay, không có màn trống); tối đa 1,2 giây */(function(){var l;try{l=localStorage.getItem("lang")}catch(e){}if(l!=="vi"&&l!=="en"){l="vi";var a=navigator.languages||[navigator.language||""];for(var i=0;i<a.length;i++){var c=String(a[i]).split("-")[0].toLowerCase();if(c==="vi"||c==="en"){l=c;break}}}if(l!=="vi"){var h=document.documentElement;h.classList.add("pre");setTimeout(function(){h.classList.remove("pre")},1200)}})()</script>
 <noscript><style>html.pre body{visibility:visible}</style></noscript>
 <link rel="preload" href="../shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
@@ -83,6 +84,17 @@ h1{margin:0;font-size:clamp(22px,min(6vw,3.8dvh),44px);line-height:1.1;letter-sp
 .world{position:relative;display:flex;align-items:center;gap:12px;min-height:60px;padding:8px 12px 8px 10px;border-radius:20px;text-decoration:none;color:#fff;box-shadow:var(--shadow);text-align:left;transition:transform .2s,box-shadow .2s}
 .world.pop{background:linear-gradient(135deg,#B83A09,#C2410C)}
 .world.night{background:linear-gradient(135deg,#3B2A9E,#5B3FD6)}
+.world.learn{background:linear-gradient(135deg,#0B6B4F,#0F8A66)}
+.world.learn{overflow:hidden;isolation:isolate;grid-column:1/-1}
+.world.learn::before{content:"";position:absolute;z-index:-1;right:-30px;top:-40px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.28),transparent 70%)}
+.world.learn .trio{flex:none;display:flex;align-items:center;padding-left:2px}
+.world.learn .th{position:relative;flex:none;width:42px;height:42px;margin-left:-13px;border-radius:50%;overflow:hidden;border:2.5px solid #fff;box-shadow:0 4px 10px rgba(0,0,0,.28);background:var(--b)}
+.world.learn .th:first-child{margin-left:0}
+.world.learn .th:nth-child(2){z-index:2;transform:translateY(-2px)}
+.world.learn .th img{position:absolute;width:175%;max-width:none;left:-37%;top:-10%}
+@media (max-width:420px){.world.learn .th{width:34px;height:34px;margin-left:-12px}.world.learn h2{font-size:18px}.world.learn .tag{font-size:11px}}
+@media (max-height:720px) and (max-width:700px){.sub{display:none}.doors{gap:8px}.world.learn .tag{display:none}.world.learn .th{width:36px;height:36px}}
+@media (max-height:600px) and (max-width:360px){.hubsys{gap:4px}.side{gap:4px}.hubsys .orbstage{width:min(100cqw,120cqh,282px)}.world.learn .th{width:32px;height:32px}}
 .world .di{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:23px;line-height:1;background:rgba(255,255,255,.2)}
 .world .dt{display:grid;gap:1px;min-width:0;flex:1}
 .world .tag{font-size:12px;font-weight:700;letter-spacing:.03em;opacity:.92;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -93,6 +105,7 @@ h1{margin:0;font-size:clamp(22px,min(6vw,3.8dvh),44px);line-height:1.1;letter-sp
 .world:hover .go svg{transform:translateX(3px)}
 .world.on{transform:scale(1.03);z-index:2;outline:3px solid #fff;outline-offset:-3px}
 .world.pop.on{box-shadow:0 0 0 3px #FF8A55,0 12px 36px rgba(255,90,31,.5)}
+.world.learn.on{box-shadow:0 0 0 3px #5EE0B0,0 12px 36px rgba(15,138,102,.5)}
 .world.night.on{box-shadow:0 0 0 3px #A18BFF,0 12px 36px rgba(124,92,255,.55)}
 .world:focus-visible{outline:4px solid var(--ink);outline-offset:3px}
 @media (max-width:380px){.world .go span{display:none}.world .go{padding:0;width:44px;justify-content:center}}
@@ -173,6 +186,7 @@ h1{margin:0;font-size:clamp(22px,min(6vw,3.8dvh),44px);line-height:1.1;letter-sp
       <div class="doors">
         <a class="world pop" id="aPop" href="../popplay/index.html"><span class="di" aria-hidden="true">🎈</span><span class="dt"><span class="tag" id="tPop">Dành cho bé</span><h2>Pop Play</h2><span class="dsc" id="dPop">Game vui, an toàn, màu sắc tươi sáng cho các bé.</span></span><span class="go"><span id="gPop">Vào Pop Play</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
         <a class="world night" id="aNight" href="../cozyplay/index.html"><span class="di" aria-hidden="true">🌙</span><span class="dt"><span class="tag" id="tNight">Dành cho người lớn</span><h2>Night Play</h2><span class="dsc" id="dNight">Game thư giãn buổi tối: bài, cờ, xếp hình và hơn thế nữa.</span></span><span class="go"><span id="gNight">Vào Night Play</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+        <a class="world learn" id="aLearn" href="../hoc/"><span class="trio" aria-hidden="true"><span class="th" style="--b:#5C8DF5"><img src="../shared/art/learn/math/math_happy.svg" width="64" height="64" alt=""></span><span class="th" style="--b:#E8694D"><img src="../shared/art/learn/vietnamese/vietnamese_happy.svg" width="64" height="64" alt=""></span><span class="th" style="--b:#34D4BE"><img src="../shared/art/learn/english/english_happy.svg" width="64" height="64" alt=""></span></span><span class="dt"><span class="tag" id="tLearn">Học cùng AI</span><h2 id="hLearn">Học Vui</h2><span class="dsc" id="dLearn">Toán vui cho bé lớp 1–5 và luyện thi vào lớp 6.</span></span><span class="go"><span id="gLearn">Vào Học Vui</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
       </div>
     </div>
   </div>
@@ -193,12 +207,14 @@ h1{margin:0;font-size:clamp(22px,min(6vw,3.8dvh),44px);line-height:1.1;letter-sp
 <script>window.Track&&Track.view("home")</script>
 <script>
 const i18n = {
-  vi:{ name:"Tiếng Việt", h1:"Chọn thế giới của bạn", sub:"Hai nơi chơi game riêng, không quảng cáo, không theo dõi cá nhân. Chạm một game hoặc một thế giới.",
+  vi:{ name:"Tiếng Việt", h1:"Chọn thế giới của bạn", sub:"Ba nơi chơi và học riêng, không quảng cáo, không theo dõi cá nhân. Chạm một game hoặc một thế giới.",
        tPop:"Dành cho bé", dPop:"Game vui, an toàn, màu sắc tươi sáng cho các bé.", gPop:"Vào Pop Play",
+       hLearn:"Học Vui", tLearn:"Học cùng AI", dLearn:"Toán vui cho bé lớp 1–5 và luyện thi vào lớp 6.", gLearn:"Vào Học Vui",
        tNight:"Dành cho người lớn", dNight:"Game thư giãn buổi tối: bài, cờ, xếp hình và hơn thế nữa.", gNight:"Vào Night Play",
        pass:"Night Pass", upgrade:"Night Pass: thêm chế độ & giao diện", theme:"Sáng / Tối", lang:"Ngôn ngữ", privacy:"Quyền riêng tư", contact:"Liên hệ", rights:"Bảo lưu mọi quyền.", resume:"Chơi tiếp:", stage:"Hai quỹ đạo game: kéo để xoay, rê vào để dừng", play:"Chơi " },
-  en:{ name:"English", h1:"Choose your world", sub:"Two separate play spaces. No ads, no personal tracking. Tap a game or a world.",
+  en:{ name:"English", h1:"Choose your world", sub:"Three separate spaces to play and learn. No ads, no personal tracking. Tap a game or a world.",
        tPop:"For kids", dPop:"Fun, safe, brightly colored games made for little ones.", gPop:"Enter Pop Play",
+       hLearn:"Fun Learning", tLearn:"Learn with AI", dLearn:"Fun math for grades 1–5 and 6th-grade exam prep.", gLearn:"Enter Learn",
        tNight:"For grown-ups", dNight:"Evening unwind games: cards, chess, puzzles and more.", gNight:"Enter Night Play",
        pass:"Night Pass", upgrade:"Night Pass: extra modes & looks", theme:"Light / Dark", lang:"Language", privacy:"Privacy", contact:"Contact", rights:"All rights reserved.", resume:"Continue:", stage:"Two game orbits: drag to spin, hover to pause", play:"Play " }
 };
@@ -211,7 +227,7 @@ let lang = (() => {
 function applyLang(){
   const t = i18n[lang];
   document.documentElement.lang = lang;
-  ["h1","sub","tPop","dPop","gPop","tNight","dNight","gNight"].forEach(k => { $(k).textContent = t[k]; });
+  ["h1","sub","tPop","dPop","gPop","tNight","dNight","gNight","hLearn","tLearn","dLearn","gLearn"].forEach(k => { $(k).textContent = t[k]; });
   { const at = lang === "vi" ? "Giới thiệu" : "About", ah = lang === "vi" ? "/?landing=1" : "/en/?landing=1";
     $("aboutTxt").textContent = at; $("about").textContent = at; $("aboutLink").href = ah; $("about").href = ah;
     $("aboutLink").setAttribute("aria-label", lang === "vi" ? "Giới thiệu Play Hub" : "About Play Hub"); }
@@ -220,7 +236,7 @@ function applyLang(){
   $("passBtn").href = "../subscribe.html?from=play/index.html&lang=" + lang; $("passBtn").lastChild.textContent = t.pass; $("passBtn").setAttribute("aria-label", t.upgrade);
   $("themeBtn").setAttribute("aria-label", t.theme);
   $("pass2").textContent = t.pass; $("pass2").href = $("passBtn").href;
-  $("aPop").href = "../popplay/index.html"; $("aNight").href = "../cozyplay/index.html";
+  $("aPop").href = "../popplay/index.html"; $("aNight").href = "../cozyplay/index.html"; $("aLearn").href = lang === "en" ? "../en/hoc/" : "../hoc/";
   /* quỹ đạo: nhãn game theo ngôn ngữ (nguồn tên = shared/multi-games.js), nhãn sân khấu + nút âm thanh */
   $("orbsys").setAttribute("data-lang", lang); $("stage").setAttribute("aria-label", t.stage);
   const MG = window.NPMultiGames;

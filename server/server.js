@@ -51,6 +51,13 @@ try {
 } catch (e) { console.warn("[dev] không sinh được /moi/ cục bộ:", e.message); }
 function serveStatic(req, res, pathname) {
   let rel; try { rel = decodeURIComponent(pathname); } catch { return send(res, 400, { error: "bad_path" }); }
+  /* Địa chỉ thư mục không có "/" cuối (vd /hoc/tieng-anh): chuyển 301 sang có "/" như Cloudflare ở bản thật, thay vì 404 */
+  if (!rel.endsWith("/") && !path.extname(rel)) {
+    for (const base of [STATIC_ROOT, path.join(STATIC_ROOT, "landing")]) {
+      const d = path.resolve(base, "." + rel);
+      if (d.startsWith(base + path.sep) && fs.existsSync(path.join(d, "index.html"))) { const q = (req.url || "").indexOf("?"); res.writeHead(301, { Location: rel + "/" + (q >= 0 ? req.url.slice(q) : "") }); return res.end(); }
+    }
+  }
   if (rel.endsWith("/")) rel += "index.html";
   let file = path.resolve(STATIC_ROOT, "." + rel);
   /* Landing giới thiệu: nguồn nằm ở landing/ nhưng triển khai lên gốc (/, /en/, /lp/...; xem scripts/build.js) → bản dev tìm thêm ở landing/ */

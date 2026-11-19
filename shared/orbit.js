@@ -264,7 +264,36 @@
   /* ===== hành tinh: bấm để pulse ===== */
   var planet = stage.querySelector(".planet");
   if (planet) planet.innerHTML = '<defs><clipPath id="plc2"><circle cx="32" cy="32" r="30"/></clipPath><radialGradient id="pleo" cx=".38" cy=".32" r=".9"><stop offset="0" stop-color="#5BB8FF"/><stop offset=".55" stop-color="#1F6FE0"/><stop offset="1" stop-color="#0A2F86"/></radialGradient><radialGradient id="plsh" cx=".34" cy=".28" r=".85"><stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#020a24" stop-opacity=".62"/></radialGradient><linearGradient id="plrim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".5" stop-color="#9FD2FF" stop-opacity=".3"/><stop offset="1" stop-color="#3B7BFF" stop-opacity=".8"/></linearGradient></defs><g clip-path="url(#plc2)"><rect width="64" height="64" fill="url(#pleo)"/><path d="M12 15c4-4 10-4 13 0 2 3-1 5-3 7 3 2 5 6 3 10-1 3-4 5-5 9-4-3-6-9-4-14-4-3-6-8-4-12z" fill="#3DBE6A"/><path d="M36 11c5-3 11-1 14 4 2 3-1 6-4 6 3 4 2 9-2 12-3 2-3 7-6 10-4-4-4-10-2-15-3-3-5-7-3-11-1-3 0-5 3-6z" fill="#34A85E"/><path d="M47 40c3-1 6 1 6 4s-3 5-6 4c-2-1-3-5 0-8z" fill="#3DBE6A"/><path d="M20 47c3-1 6 0 6 2s-3 3-6 2c-1-1-1-3 0-4z" fill="#34A85E"/><g fill="#fff" opacity=".78"><ellipse cx="22" cy="20" rx="8" ry="2.2"/><ellipse cx="44" cy="30" rx="9" ry="2.4"/><ellipse cx="30" cy="42" rx="9" ry="2.2"/><ellipse cx="14" cy="34" rx="5" ry="1.7"/></g><circle cx="32" cy="32" r="30" fill="url(#plsh)"/></g><circle cx="32" cy="32" r="30" fill="none" stroke="url(#plrim)" stroke-width="2"/>';
-  if (planet) { planet.style.pointerEvents = "auto"; planet.style.cursor = "pointer"; planet.addEventListener("click", function () { planet.classList.remove("pulse"); void planet.offsetWidth; planet.classList.add("pulse"); if (soundOn && ctx && ctx.state === "running") whoosh("night"); }); }
+  /* Trái Đất ở giữa = cổng vào HUB HỌC VUI (/hoc/ hoặc /en/hoc/ theo ngôn ngữ của hệ quỹ đạo): nháy sáng, zoom vào như bấm vệ tinh rồi chuyển trang (giảm chuyển động / phím tắt / chuột phải: đi ngay). Có thể dùng bàn phím (Enter/Space). */
+  if (planet) {
+    planet.style.pointerEvents = "auto"; planet.style.cursor = "pointer";
+    planet.removeAttribute("aria-hidden"); planet.setAttribute("role", "link"); planet.setAttribute("tabindex", "0");
+    var learnUrl = function () { return isVi() ? "/hoc/" : "/en/hoc/"; };
+    var planetLabel = function () { planet.setAttribute("aria-label", isVi() ? "Học Vui: học cùng AI cho bé lớp 1–5" : "Fun Learning: learn with AI for Grades 1–5"); };
+    planetLabel(); new MutationObserver(planetLabel).observe(sys, { attributes: true, attributeFilter: ["data-lang"] });
+    var openLearn = function (e) {
+      planet.classList.remove("pulse"); void planet.offsetWidth; planet.classList.add("pulse"); if (soundOn && ctx && ctx.state === "running") whoosh("night");
+      var url = learnUrl();
+      if (reduced || (e && (e.button > 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey))) { if (e && (e.metaKey || e.ctrlKey || e.shiftKey)) window.open(url, "_blank", "noopener"); else location.href = url; return; }
+      stage.style.transformOrigin = "50% 50%"; sys.classList.add("warp"); clearTimeout(warpT); warpT = setTimeout(function () { location.href = url; }, 450);
+    };
+    /* rê/focus Trái Đất ↔ thẻ Học Vui cùng sáng lên (giống vệ tinh ↔ thẻ Pop/Night); chỉ chuột, như các vệ tinh */
+    var learnCard = sys.querySelector(".world.learn");
+    var lit = function (on) { if (learnCard) learnCard.classList.toggle("on", on); planet.classList.toggle("hot", on); };
+    var focusVisible = function () { var v = true; try { v = planet.matches(":focus-visible"); } catch (x) {} return v; };
+    planet.addEventListener("pointerover", function (e) { if (e.pointerType === "mouse") lit(true); });
+    planet.addEventListener("pointerout", function (e) { if (e.pointerType === "mouse") lit(false); });
+    planet.addEventListener("focus", function () { if (focusVisible()) lit(true); });
+    planet.addEventListener("blur", function () { lit(false); });
+    if (learnCard) {
+      learnCard.addEventListener("pointerover", function (e) { if (e.pointerType === "mouse") lit(true); });
+      learnCard.addEventListener("pointerout", function (e) { if (e.pointerType === "mouse" && !(e.relatedTarget && learnCard.contains(e.relatedTarget))) lit(false); });
+      learnCard.addEventListener("focusin", function (e) { var v = true; try { v = e.target.matches(":focus-visible"); } catch (x) {} if (v) lit(true); });
+      learnCard.addEventListener("focusout", function () { lit(false); });
+    }
+    planet.addEventListener("click", openLearn);
+    planet.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openLearn(e); } });
+  }
 
   /* ===== warp: bấm game/thế giới thì cảnh zoom vào ~450ms rồi mới điều hướng (giảm chuyển động / phím tắt / chuột phải: đi ngay) ===== */
   var warpT = 0;
