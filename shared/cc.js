@@ -162,7 +162,7 @@
       var cancel = function () { clearTimeout(holdT); };
       mm.addEventListener("pointerup", cancel); mm.addEventListener("pointerleave", cancel); mm.addEventListener("pointercancel", cancel);
       mm.addEventListener("click", function () { if (held) { held = false; return; } var fe = modeEls(); if (fe.length > 1) { var k = (modeIdx(fe) + 1) % fe.length, lk0 = fe[k].classList.contains("lock"); setMode(k); if (POP || !lk0) showM(k); if (!POP) settle(function () { showM(modeIdx(modeEls())); }); } });
-      ms.forEach(function (e, k) { var b = el("button", "m" + (k === mi ? " act" : "")); b.type = "button"; b.innerHTML = '<span class="ic">' + micon(e) + '</span><span class="nm"></span>'; b.lastChild.textContent = mlabel(e);
+      ms.forEach(function (e, k) { var b = el("button", "m" + (k === mi ? " act" : "")); b.type = "button"; b.innerHTML = '<span class="ic">' + micon(e) + '</span><span class="nm"></span>'; b.lastChild.textContent = mlabel(e); if (e.classList.contains("lock") || e.classList.contains("locked")) b.classList.add("mlk");   /* chế độ cần Night Pass: huy hiệu 👑 */
         b.addEventListener("click", function () { setMode(k); list.classList.remove("on"); var upd = function (kk) { showM(kk); [].forEach.call(list.children, function (c, j) { c.classList.toggle("act", j === kk); }); }; var lk1 = (modeEls()[k] || {}).classList && modeEls()[k].classList.contains("lock"); if (POP || !lk1) upd(k); if (!POP) settle(function () { upd(modeIdx(modeEls())); }); }); list.appendChild(b); });
       pn.appendChild(mm); pn.appendChild(list);
       list.style.setProperty("--pc", "2");   /* màn dọc: ≥5 chế độ → 3 cột (2 cột thì hàng thứ 3 bị cắt) */

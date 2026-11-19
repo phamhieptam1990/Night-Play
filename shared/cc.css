@@ -506,3 +506,8 @@ html.np-menupaused #ccRoot,html.np-menupaused #ccRoot *,html.np-menupaused #ccRo
 #ccRoot .pn .ml.opx .m.ch{min-height:46px;padding:5px 3px!important;border-radius:15px!important;font-size:14.5px!important}
 #ccRoot .pn>.card:has(>.m.opt:only-child){display:grid!important;grid-template-columns:1fr!important;grid-template-rows:1fr!important;place-items:center!important;place-content:center!important}
 #ccRoot .pn>.card:has(>.m.opt:only-child)>.m.opt{grid-column:1!important;grid-row:1!important;justify-self:center!important;align-self:center!important}
+/* mục cần Night Pass trong popup tuỳ chọn / chọn loại: biểu tượng 👑 (thay ổ khoá), bấm vào mở popup Night Pass của game */
+#ccRoot .pn .ml.opx .m.ch.lk::after{content:"\1F451"!important;top:2px!important;right:4px!important;font-size:14px!important;filter:drop-shadow(0 1px 1px rgba(0,0,0,.4))}
+#ccRoot .pn .ml.opx .m.ch.lk{opacity:.85!important}
+#ccRoot .ml .m.mlk{position:relative}
+#ccRoot .ml .m.mlk::after{content:"\1F451";position:absolute;top:6px;right:8px;font-size:16px;line-height:1;filter:drop-shadow(0 1px 1px rgba(0,0,0,.4))}
