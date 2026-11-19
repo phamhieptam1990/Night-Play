@@ -221,7 +221,7 @@ const STYLE = `<style>.npa-spin{transform-box:fill-box;transform-origin:50% 50%;
 
 /* cấu hình cảnh: levels = cấp của từng vị trí (0 = chưa có). time = day | dusk | night */
 function scene(o) {
-  const L = Object.assign({ deco: 3, house: 4, fence: 3, well: 3, barn: 3, windmill: 3, plots: 31, planted: 24, path: 1, apple: 1, flowers: 1, pond: 1, hay: 1, animals: 1 }, o.levels || {});
+  const L = Object.assign({ deco: 3, house: 4, fence: 3, well: 3, barn: 3, windmill: 3, plots: 52, planted: 40, path: 1, apple: 1, flowers: 1, pond: 1, hay: 1, animals: 1 }, o.levels || {});
   const time = o.time || "day"; const items = [], R = rng(7);
   /* nền cỏ */
   let ground = `<rect width="${W}" height="${H}" fill="url(#gGrass)"/>`;
@@ -247,7 +247,7 @@ function scene(o) {
   }
   /* nhiều thửa ruộng: [gốc (x,y), số ô theo a, số ô theo b]; mở dần theo L.plots (A 9 ô, B 6, E 6, C 3, F 2) */
   const cyc = [[cropWheat, true], [cropCarrot, true], [cropCorn, false], [cropStraw, true], [cropWheat, true], [cropTomato, true], [cropSun, false], [cropCarrot, false], [cropStraw, true], [cropWheat, true]];
-  const FIELDS = [[[810, 590], 3, 3], [[352, 770], 3, 2], [[256, 508], 3, 2], [[940, 810], 4, 1], [[966, 214], 2, 1], [[1100, 700], 2, 2]];
+  const FIELDS = [[[810, 590], 3, 3], [[352, 770], 3, 2], [[256, 508], 3, 2], [[940, 810], 4, 1], [[966, 214], 2, 1], [[1100, 700], 2, 2], [[120, 330], 3, 2], [[640, 800], 3, 2], [[1180, 420], 2, 2], [[520, 220], 3, 1]];
   let left = L.plots, ci = 0, pidx = 0; const nGray = Math.max(0, L.plots - L.planted), grayIdx = new Set(Array.from({ length: nGray }, (_, k) => Math.min(L.plots - 1, Math.floor((k + 1) * L.plots / (nGray + 1)))));
   for (const [fo, na, nb] of FIELDS) for (let b = 0; b < nb; b++) for (let a = 0; a < na; a++) { if (left <= 0) break; left--; const planted = !grayIdx.has(pidx++), cp = planted ? cyc[ci++ % cyc.length] : null, tl = [fo[0] + (a - b) * TW / 2, fo[1] + (a + b) * TH / 2];
     const A = tl, B = [tl[0] + TW / 2, tl[1] + TH / 2], Cc = [tl[0], tl[1] + TH], Dd = [tl[0] - TW / 2, tl[1] + TH / 2], lvl = L.plots >= 4 ? 3 : 2;
@@ -278,8 +278,8 @@ function scene(o) {
   /* ---- cây, bụi, đá ---- */
   /* hàng cây sát nhau quanh rìa + vườn cây ăn quả nhiều loại */
   const forest = [[25, 200, "pine", 1.2], [95, 150, "oak", 1.0], [165, 215, "pine", 1.1], [250, 150, "pine", 1.15], [345, 118, "oak", .9], [440, 160, "pine", 1.0], [520, 120, "oak", .95], [600, 168, "pine", .95], [680, 128, "oak", .9], [760, 160, "pine", 1.0], [850, 120, "oak", .9], [930, 150, "pine", 1.0], [1010, 118, "oak", .85], [1090, 150, "pine", 1.0], [1180, 130, "oak", .95], [1255, 190, "pine", 1.15], [1235, 690, "oak", 1.1], [20, 330, "oak", 1.0], [70, 420, "pine", 1.0], [1255, 330, "pine", 1.0], [1250, 450, "oak", .95], [1255, 580, "pine", 1.0]];
-  const fruitKinds = ["mango", "apple", "orange", "pomelo", "litchi", "pear", "plum", "peach"]; let pk = 0; forest.slice(0, [9, 16, 22, forest.length][Math.min(D, 3)]).forEach(([x, y, k, sc], q) => push(y, bigTree(x, y, sc * (k === "pine" ? 1.0 : 1.0), fruitKinds[(q * 3 + pk++) % fruitKinds.length])));
-  if (L.apple) { const kinds = ["apple", "orange", "pear", "apple", "peach", "orange"]; const orch = [[60, 560], [150, 610], [235, 660], [60, 680], [150, 730], [235, 780], [60, 800], [150, 850], [120, 500], [30, 450]]; orch.forEach(([x, y], k) => push(y, bigTree(x, y, .8, kinds[k % kinds.length]))); }
+  const extra = []; for (let i = 0; i < 34; i++) extra.push([20 + i * 38, 70 + (i % 3) * 22, "oak", 1]); if (D >= 2) extra.forEach(([x, y, k, sc], q) => push(y, bigTree(x, y, .34, ["mango", "apple", "orange", "litchi", "pear", "plum"][q % 6]))); const fruitKinds = ["mango", "apple", "orange", "pomelo", "litchi", "pear", "plum", "peach"]; let pk = 0; forest.slice(0, [9, 16, 22, forest.length][Math.min(D, 3)]).forEach(([x, y, k, sc], q) => push(y, bigTree(x, y * .9 + 14, sc * .36, fruitKinds[(q * 3 + pk++) % fruitKinds.length])));
+  if (L.apple) { const kinds = ["apple", "orange", "pear", "apple", "peach", "orange"]; const orch = [[60, 560], [150, 610], [235, 660], [60, 680], [150, 730], [235, 780], [60, 800], [150, 850], [120, 500], [30, 450]]; orch.forEach(([x, y], k) => push(y, bigTree(x, y, .3, kinds[k % kinds.length]))); }
   [[540, 610, 1]].forEach(([x, y, sc]) => push(y, bush(x, y, sc)));
   if (L.flowers) { [[520, 805], [480, 700]].forEach(([x, y]) => push(y, lavender(x, y, 1.2))); [[620, 655], [668, 702], [756, 742], [840, 770], [930, 740], [980, 690], [1020, 640]].forEach(([x, y]) => push(y, lavender(x, y, 1.05))); }
   [[410, 400, 1], [560, 220, .8], [1080, 720, .9], [760, 800, .8], [180, 330, .9], [1180, 700, 1]].forEach(([x, y, sc]) => push(y, rock(x, y, sc)));
@@ -289,7 +289,9 @@ function scene(o) {
   if (D >= 2) { push(520, hedge(380, 456, 3, "x")); [[1040, 470], [440, 460], [1100, 360]].forEach(([x, y], q) => push(y, flowerPatch(x, y, q % 2 ? "#FF8FB0" : "#FFD24D"))); push(620, barrel(1210, 600, 1)); push(840, crate(830, 800)); }
   if (D >= 3) { push(300, hay(1110, 290)); push(760, pumpkins(920, 790)); [[790, 330], [800, 352]].forEach(([x, y]) => push(y, barrel(x, y, .9))); }
   if (L.animals) { [[610, 770], [660, 810]].forEach(([x, y]) => push(y, chicken(x, y))); push(600, rabbit(420, 560)); if (D >= 2) { push(180, chicken(150, 600)); } }
-  if (D >= 3) { push(700, cow(300, 700, .9)); push(760, cow(420, 700, .85, true)); }
+  if (D >= 1) { [[470, 600], [520, 640]].forEach(([x, y]) => push(y, chicken(x, y))); push(610, rabbit(560, 620)); }
+  if (D >= 2) { [[560, 780], [610, 820], [700, 850]].forEach(([x, y]) => push(y, chicken(x, y))); push(830, rabbit(740, 830)); push(560, rabbit(1000, 700)); push(640, coop(820, 720)); }
+  if (D >= 3) { [[300, 700, 1], [420, 710, 0], [520, 740, 1], [880, 760, 0], [1010, 760, 1], [1120, 600, 0], [1180, 760, 1], [330, 820, 0]].forEach(([x, y, fl]) => push(y, cow(x, y, .85, !!fl))); [[240, 640], [940, 700], [1060, 640], [760, 700], [980, 840]].forEach(([x, y]) => push(y, chicken(x, y))); [[1100, 790], [250, 700], [850, 600]].forEach(([x, y]) => push(y, rabbit(x, y))); push(760, coop(1020, 600)); [[300, 740], [440, 770], [880, 800]].forEach(([x, y]) => push(y, hay(x, y))); for (let k = 0; k < 4; k++) push(740 + k * 20, fenceAt(260 + 52 * k, 650 + 26 * k, "x", 2).svg); }
   items.push(...base, ...stand);
   const ground0 = items.filter(i => i.d <= 1), up = items.filter(i => i.d > 1).sort((a, b) => a.d - b.d); items.length = 0; items.push(...ground0, ...up);
   /* trời + thời điểm trong ngày */
