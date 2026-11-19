@@ -26,8 +26,23 @@
   function sch() { if (!raf) raf = requestAnimationFrame(all); }
   function init() {
     sch(); addEventListener("resize", sch); addEventListener("orientationchange", sch);
-    try { new MutationObserver(sch).observe(document.body, { subtree: true, attributes: true, attributeFilter: ["hidden"] }); } catch (e) {}
-    try { new MutationObserver(sch).observe(document.body, { subtree: true, childList: true }); } catch (e) {}   /* nội dung hình minh hoạ được dựng sau khi thẻ hiện */
+    try {   /* chỉ khi popup / hình minh hoạ đổi trạng thái hidden (game có thể bật/tắt hidden của phần tử khác mỗi khung hình) */
+      new MutationObserver(function (recs) {
+        for (var i = 0; i < recs.length; i++) { var t = recs[i].target; if (t && t.matches && (t.matches(SEL + ",.hwArt") || t.closest(SEL + ",.hwArt") || t.querySelector(".hwArt"))) { sch(); return; } }
+      }).observe(document.body, { subtree: true, attributes: true, attributeFilter: ["hidden"] });
+    } catch (e) {}
+    try {   /* nội dung hình minh hoạ được dựng sau khi thẻ hiện.
+         HIỆU NĂNG: trước đây MỌI thay đổi DOM (đếm giờ, điểm, hạt…) đều gọi all() = đo bố cục ép layout, 15–30 lần/giây; nay chỉ khi có popup/hình minh hoạ được thêm vào (hoặc thay đổi nằm trong .hwArt), tối đa ~5 lần/giây. */
+      var WANT = SEL + ",.hwArt", lastS = 0, tmS = 0;
+      var relevant = function (r) {
+        for (var i = 0; i < r.addedNodes.length; i++) { var n = r.addedNodes[i]; if (n.nodeType === 1 && (n.matches(WANT) || n.querySelector(WANT))) return true; }
+        var t = r.target; return !!(t && t.closest && t.closest(".hwArt"));
+      };
+      new MutationObserver(function (recs) {
+        var go = false; for (var i = 0; i < recs.length && !go; i++) go = relevant(recs[i]); if (!go) return;
+        var now = Date.now(); if (now - lastS < 200) { if (!tmS) tmS = setTimeout(function () { tmS = 0; lastS = Date.now(); sch(); }, 200); return; } lastS = now; sch();
+      }).observe(document.body, { subtree: true, childList: true });
+    } catch (e) {}
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })();

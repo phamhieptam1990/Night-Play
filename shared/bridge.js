@@ -325,9 +325,17 @@ window.NP = (function () {
       /* Date.now() cũng chạy theo đồng hồ ảo (đóng băng khi pause). CHỈ Date.now: new Date() / Date() vẫn là GIỜ THẬT nên dayKey, ván theo ngày, hạn Night Pass (new Date(exp) > new Date()), giới hạn phụ huynh không bị lệch.
          Hệ quả duy nhất: tuổi vé chơi hộ (Date.now()-ticketAt, 20 giờ) trẻ hơn đúng bằng thời gian đã tạm dừng — vô hại. */
       try { var rDN = Date.now.bind(Date); Date.now = function () { return rDN() - vt.off - (vt.at ? rPN() - vt.at : 0); }; } catch (e) {}
+      /* HIỆU NĂNG (máy nóng): game KHÔNG cần mượt cao (giải đố, chọn tình huống, dựng cầu — không phản xạ nhanh) chạy tối đa ~30 khung/giây thay vì 60 → nửa tải JS + vẽ.
+         Game dùng bước cố định (accumulator) vẫn đúng tốc độ vì dùng timestamp; mỗi hàm được tính riêng nên vòng lặp thứ hai không bị bỏ đói. ?fps=60 để so sánh. */
+      var LOWFPS = /^(gia-cho-viet|xin-nghi|doi-doi-2048|ban-co-hieu-toi|noi-mot-net|cat-banh-chung|ve-mot-net|me-cung-truyen-tay|ve-chu-quai-vat|qua-song|thap-vong-mau|lang-cua-be|xay-cau-tre|song-sot-cuoi-thang|shipper-sieu-toc)$/.test(gid) && q.get("fps") !== "60", lastBy = typeof WeakMap === "function" ? new WeakMap() : null;
       window.requestAnimationFrame = function (cb) {
-        var id = rRAF(function (ts) { if (vt.at) { held[id] = cb; return; } cb(ts - vt.off); });
-        return id;
+        var oid, run = function (ts) {
+          if (vt.at) { held[oid] = cb; return; }
+          if (LOWFPS && lastBy) { var t0 = lastBy.get(cb); if (t0 != null && ts - t0 < 28) { alias[oid] = rRAF(run); return; } lastBy.set(cb, ts); }
+          delete alias[oid]; cb(ts - vt.off);
+        };
+        oid = rRAF(run);
+        return oid;
       };
       window.cancelAnimationFrame = function (id) { delete held[id]; rCAF(alias[id] || id); };
       window.setTimeout = function (fn, d) {
@@ -344,7 +352,7 @@ window.NP = (function () {
       window.setInterval = function (fn, d) {
         if (typeof fn !== "function") return rSI(fn, d);
         var a = Array.prototype.slice.call(arguments, 2);
-        return rSI(function () { if (!vt.at) fn.apply(window, a); }, d);
+        return rSI(function () { if (!vt.at && !document.hidden) fn.apply(window, a); }, d);   /* tab/ứng dụng ẩn: không chạy timer */
       };
       window.__npRST = rST;   /* setTimeout THẬT (không bị đồng hồ ảo giữ): UI của menu dùng để vẫn chạy khi game đang tạm dừng */
       vt.freeze = function () { if (!vt.at) vt.at = rPN(); };
