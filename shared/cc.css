@@ -469,3 +469,16 @@ html.np-menupaused #ccRoot,html.np-menupaused #ccRoot *,html.np-menupaused #ccRo
 @media (orientation:landscape){
   #ccRoot .pn.play{width:calc(7 * var(--s) + 6 * var(--g) + 32px)!important;max-width:calc(100vw - 24px)!important;box-sizing:border-box!important;overflow-x:hidden}
 }
+
+/* Danh sách chế độ (nhấn giữ thẻ chế độ): tên KHÔNG bị cắt "Cá Chuồ…" (cho tới 3 dòng, chữ vừa phải khi 3 cột) + nhấn giữ không bôi đen chữ / không hiện menu "Sao chép" */
+#ccRoot,#ccRoot *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+#ccRoot .pn .ml:not(.ex):not(.opx) .m{padding:6px 4px!important;gap:4px!important}
+#ccRoot .pn .ml:not(.ex):not(.opx) .m .nm{-webkit-line-clamp:3!important;line-clamp:3;font-size:clamp(13px,calc(var(--s) * .21),17px)!important;line-height:1.12!important;overflow-wrap:anywhere;hyphens:none}
+/* 2 cột: mỗi ô cao cố định, danh sách cuộn dọc nếu nhiều hàng (không ép/chồng ô) */
+@media (orientation:portrait){
+  #ccRoot .pn .ml:not(.ex):not(.opx){grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-auto-rows:104px!important;align-content:start!important;overflow-y:auto!important}
+  #ccRoot .pn .ml:not(.ex):not(.opx)>.m{height:104px!important;min-height:0!important}
+  #ccRoot .pn .ml:not(.ex):not(.opx) .m .ic{font-size:44px!important;width:auto!important;height:auto!important}
+  #ccRoot .pn .ml:not(.ex):not(.opx) .m .ic svg{width:46px!important;height:46px!important}
+  #ccRoot .pn .ml:not(.ex):not(.opx) .m .nm{font-size:16px!important}
+}

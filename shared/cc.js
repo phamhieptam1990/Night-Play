@@ -165,7 +165,7 @@
       ms.forEach(function (e, k) { var b = el("button", "m" + (k === mi ? " act" : "")); b.type = "button"; b.innerHTML = '<span class="ic">' + micon(e) + '</span><span class="nm"></span>'; b.lastChild.textContent = mlabel(e);
         b.addEventListener("click", function () { setMode(k); list.classList.remove("on"); var upd = function (kk) { showM(kk); [].forEach.call(list.children, function (c, j) { c.classList.toggle("act", j === kk); }); }; var lk1 = (modeEls()[k] || {}).classList && modeEls()[k].classList.contains("lock"); if (POP || !lk1) upd(k); if (!POP) settle(function () { upd(modeIdx(modeEls())); }); }); list.appendChild(b); });
       pn.appendChild(mm); pn.appendChild(list);
-      list.style.setProperty("--pc", ms.length <= 4 ? "2" : "3");   /* màn dọc: ≥5 chế độ → 3 cột (2 cột thì hàng thứ 3 bị cắt) */
+      list.style.setProperty("--pc", "2");   /* màn dọc: ≥5 chế độ → 3 cột (2 cột thì hàng thứ 3 bị cắt) */
       list.style.setProperty("--mc", String(Math.max(2, Math.min(ms.length, 6))));   /* màn ngang: số cột = số chế độ (tối đa 6) để KHÔNG tràn sang hàng 2 bị cắt */
       list.addEventListener("pointerdown", function (e) { if (e.target === list) list.classList.remove("on"); });
     }
