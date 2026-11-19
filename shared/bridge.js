@@ -13,6 +13,23 @@
 
    Quy ước điểm cao lưu trên máy: localStorage "np-hi-<id game>".
    Trang cha (shared/social.js, help.html) chỉ nhận tin từ đúng iframe của mình và cùng origin. */
+/* HIỆU NĂNG (máy nóng): ghi LẠI CÙNG MỘT CHỮ (textContent / data) không làm gì nữa.
+   Nhiều game ghi điểm/giờ mỗi khung hình dù không đổi → mỗi lần là một "thay đổi DOM" → hàng loạt bộ quan sát (nền rộng, độ khó, xoay màn…) chạy theo ~20 lần/giây kể cả khi game đứng yên. */
+(function () {
+  try {
+    var d = Object.getOwnPropertyDescriptor(Node.prototype, "textContent");
+    if (d && d.set && !Node.prototype.__npSame) {
+      Node.prototype.__npSame = 1;
+      Object.defineProperty(Node.prototype, "textContent", { configurable: true, enumerable: d.enumerable, get: d.get, set: function (v) {
+        if (this.nodeType === 1) { var f = this.firstChild, s = v == null ? "" : String(v); if (f && f.nodeType === 3 && !f.nextSibling && f.data === s) return; if (!f && s === "") return; }
+        return d.set.call(this, v);
+      } });
+    }
+    var c = Object.getOwnPropertyDescriptor(CharacterData.prototype, "data");
+    if (c && c.set) Object.defineProperty(CharacterData.prototype, "data", { configurable: true, enumerable: c.enumerable, get: c.get, set: function (v) { if (this.data === String(v)) return; return c.set.call(this, v); } });
+  } catch (e) {}
+})();
+
 /* ÂM THANH: mọi game dùng chung một "công tắc" — khi rời game / đổi trò / ẩn tab thì TẮT HẲN tiếng
    (giọng đọc, bộ tạo âm Web Audio, thẻ audio/video) rồi mới sang trò khác; bật/tắt được nhớ giữa các game ("np-sound", chưa từng chọn = BẬT).
    MỞ KHOÁ ÂM THANH (lỗi "vào game không có tiếng"), làm ở đây để MỌI game được hưởng, game không phải tự lo:
@@ -328,11 +345,37 @@ window.NP = (function () {
       /* HIỆU NĂNG (máy nóng): game KHÔNG cần mượt cao (giải đố, chọn tình huống, dựng cầu — không phản xạ nhanh) chạy tối đa ~30 khung/giây thay vì 60 → nửa tải JS + vẽ.
          Game dùng bước cố định (accumulator) vẫn đúng tốc độ vì dùng timestamp; mỗi hàm được tính riêng nên vòng lặp thứ hai không bị bỏ đói. ?fps=60 để so sánh. */
       var LOWFPS = /^(gia-cho-viet|xin-nghi|doi-doi-2048|ban-co-hieu-toi|noi-mot-net|cat-banh-chung|ve-mot-net|me-cung-truyen-tay|ve-chu-quai-vat|qua-song|thap-vong-mau|lang-cua-be|xay-cau-tre|song-sot-cuoi-thang|shipper-sieu-toc)$/.test(gid) && q.get("fps") !== "60", lastBy = typeof WeakMap === "function" ? new WeakMap() : null;
+      /* NGHỈ KHI ĐỨNG YÊN (game tĩnh, nhóm LOWFPS): hình canvas không đổi + không thao tác ≥ 3 giây → mỗi vòng lặp chỉ chạy 1 lần/giây (kiểm tra có gì đổi không), CPU ≈ 0.
+         Có thao tác (chạm, chuột, phím, cuộn) → chạy lại ngay đủ tốc độ; hình canvas đổi (mô phỏng, hiệu ứng do timer) → thoát nghỉ ở lần kiểm tra kế. Không có canvas 2D đọc được → không bao giờ nghỉ. ?idle=0 để tắt. */
+      var IDLE_OK = LOWFPS && q.get("idle") !== "0", idle = false, idleWait = {}, lastIn = rPN(), lastSig = null, sameN = 0, lastSmp = 0, probe = null;
+      var wake = function () { lastIn = rPN(); sameN = 0; if (!idle) return; idle = false; Object.keys(idleWait).forEach(function (k) { var w = idleWait[k]; delete idleWait[k]; rCT(w.t); alias[k] = rRAF(w.run); }); };
+      var sig = function () {
+        try {
+          var cs = document.querySelectorAll("canvas"), h = 0, n = 0;
+          for (var i = 0; i < cs.length && i < 3; i++) {
+            var c = cs[i]; if (!c.offsetParent || !c.width || !c.height) continue;
+            if (!probe) { probe = document.createElement("canvas"); probe.width = probe.height = 48; probe.__x = probe.getContext("2d", { willReadFrequently: true }); }
+            probe.__x.clearRect(0, 0, 48, 48); probe.__x.drawImage(c, 0, 0, 48, 48);
+            var d = probe.__x.getImageData(0, 0, 48, 48).data; for (var j = 0; j < d.length; j += 4) h = (h * 31 + d[j] + 3 * d[j + 1] + 7 * d[j + 2] + 11 * d[j + 3]) | 0;
+            n++;
+          }
+          return n ? h : null;
+        } catch (e) { return null; }
+      };
+      if (IDLE_OK) ["pointerdown", "pointermove", "pointerup", "touchstart", "touchmove", "keydown", "wheel", "click"].forEach(function (n) { addEventListener(n, wake, { capture: true, passive: true }); });
+      var judge = function () {
+        var now = rPN(); if (now - lastSmp < 500) return; lastSmp = now;
+        var h = sig(); if (h == null) { sameN = 0; if (idle) wake(); return; }
+        if (h === lastSig) sameN++; else { sameN = 0; if (idle) wake(); }
+        lastSig = h; if (!idle && sameN >= 6 && now - lastIn > 3000) idle = true;
+      };
       window.requestAnimationFrame = function (cb) {
-        var oid, run = function (ts) {
+        var oid, probing = false, run = function (ts) {
           if (vt.at) { held[oid] = cb; return; }
+          if (IDLE_OK && idle && !probing) { idleWait[oid] = { run: run, t: rST(function () { delete idleWait[oid]; probing = true; alias[oid] = rRAF(run); }, 1000) }; return; }   /* đang nghỉ: 1 lần/giây */
+          probing = false;
           if (LOWFPS && lastBy) { var t0 = lastBy.get(cb); if (t0 != null && ts - t0 < 28) { alias[oid] = rRAF(run); return; } lastBy.set(cb, ts); }
-          delete alias[oid]; cb(ts - vt.off);
+          delete alias[oid]; cb(ts - vt.off); if (IDLE_OK) judge();
         };
         oid = rRAF(run);
         return oid;

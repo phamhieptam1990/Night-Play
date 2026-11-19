@@ -120,11 +120,13 @@
     rs.setProperty("--np-pat", tile(s.em, seed, dark, true) + "," + imgs[ti + 1]); rs.setProperty("--np-size", "340px 340px," + sizes[ti + 1]);
     cur = { seed: seed, v: v, em: s.em, base: s.base, sig: imgs.join("|") };
   }
-  function soon() { if (!timer) timer = setTimeout(apply, 140); }
+  var moRef = null;
+  /* apply() tạm gỡ/thêm lại class npw trên <html> để đọc nền thật → chính bộ quan sát class của ta thấy thay đổi đó → apply lại → lặp vô hạn ~7 lần/giây trên MỌI game (kể cả khi đứng yên). Sau mỗi lần vẽ, bỏ các bản ghi do chính ta gây ra. */
+  function soon() { if (!timer) timer = setTimeout(function () { apply(); try { if (moRef) moRef.takeRecords(); } catch (e) {} }, 140); }
   function init() {
     apply();
     try {
-      var mo = new MutationObserver(soon), pl = document.getElementById("play");
+      var mo = moRef = new MutationObserver(soon), pl = document.getElementById("play");
       if (pl) mo.observe(pl, { attributes: true, attributeFilter: ["style", "class", "data-pro", "data-scr", "data-ty", "data-layout"] });
       mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
       document.querySelectorAll(".deco,.dc").forEach(function (d) { mo.observe(d, { childList: true }); });

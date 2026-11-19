@@ -122,7 +122,7 @@
     if (stepT < ctx.currentTime - .2) stepT = ctx.currentTime + .05;   /* tab bị treo lâu → không dồn nốt */
     while (stepT < ctx.currentTime + .25) { sched(step, stepT); stepT += spb; step++; }
   }
-  function ensureRun() { if (!timer) timer = setInterval(tick, 60); }
+  function ensureRun() { if (!timer) timer = setInterval(tick, 100); }
   function setLevel() {
     var scr = ""; try { var p = document.getElementById("play"); scr = p ? (p.getAttribute("data-scr") || "") : ""; } catch (e) {}
     level = (scr === "home" || scr === "" || scr === "start" || scr === "menu") ? 1 : .6;
