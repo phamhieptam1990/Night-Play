@@ -139,12 +139,12 @@
     }, function () { /* không tải được: giữ nguyên emoji dự phòng của game */ });
   };
   Inst.prototype.motion = function (i, kind) {
-    var s = this.svg; if (!s || reduce || !s.animate) return; var nowM = Date.now(); if (nowM - (this.lm || 0) < (this.role === "mini" ? 1100 : 350)) return; this.lm = nowM;   /* sự kiện dồn dập (Sếp nổi giận đập liên tục) không làm linh vật nhảy liên tục: tối đa ~1 lần/1,1 giây (mini) */
+    var s = this.svg; if (!s || reduce || !s.animate) return; var nowM = Date.now(); if (nowM - (this.lm || 0) < (this.role === "mini" ? 2000 : 350)) return; this.lm = nowM;   /* sự kiện dồn dập (Sếp nổi giận đập liên tục) không làm linh vật nhảy liên tục: tối đa ~1 lần/2 giây (mini) */
     i = Math.max(1, Math.min(3, i | 0 || 1)); if (this.role === "mini" && kind !== "wrong") i = i * 2.4;   /* bản mini nhỏ: nhảy cao gấp ~2,4 để vẫn thấy rõ */
     try { s.animate(kind === "wrong" ? WRONG : (MOTION[this.skin] || MOTION["default"])(i), { duration: kind === "wrong" ? 520 : DUR[this.skin] || 560, easing: this.skin === "night" ? "ease-in-out" : "cubic-bezier(.3,.7,.4,1)" }); } catch (e) {}
   };
   Inst.prototype.fx = function (tier, at) {
-    if (reduce || !Element.prototype.animate || (!at && !this.visible())) return; if (!at) { var nowF = Date.now(); if (nowF - (this.lf || 0) < (this.role === "mini" ? 1100 : 350)) return; this.lf = nowF; }
+    if (reduce || !Element.prototype.animate || (!at && !this.visible())) return; if (!at) { var nowF = Date.now(); if (nowF - (this.lf || 0) < (this.role === "mini" ? 2000 : 350)) return; this.lf = nowF; }
     var r = at ? null : this.svg.getBoundingClientRect(), cx = at ? at.cx : r.left + r.width / 2, cy = at ? at.cy : r.top + r.height * 0.45, D = at ? at.D : Math.max(60, Math.min(r.width, 160)), pics = this.def.fx[this.skin] || this.def.fx["default"], n = 4 + tier * 3, i, col = "#ffb84d";
     try { col = getComputedStyle(this.svg).getPropertyValue("--bgx").trim() || getComputedStyle(this.svg).getPropertyValue("--pa").trim() || col; } catch (e) {}
     if (tier >= 2 && (this.skin === "night" || this.skin === "star")) {
