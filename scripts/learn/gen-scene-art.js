@@ -175,6 +175,41 @@ function pond(c) { let o = ell(0, 6, 138, 70, "#6E9B3C", null) + ell(0, 0, 134, 
   return { d: -1, svg: G(c[0], c[1], o) };
 }
 
+/* ---------- thêm vật cho cảnh dày hơn (bò, cối ép, lò gạch, bình sữa, bàn ghế, chuồng gà, rơm cuộn, bụi hoa, hàng rào bụi, bí ngô) ---------- */
+function cow(x, y, s, flip) {
+  const sc = s || 1; return G(x, y, `<g transform="scale(${flip ? -sc : sc} ${sc})">` + shadow(40, 11, .22) +
+    [-18, 14].map(a => `<rect x="${a - 4}" y="-20" width="9" height="22" rx="3" fill="#F4F0EA" stroke="#9A918A" stroke-width="2.4"/><rect x="${a - 4}" y="-4" width="9" height="6" rx="2" fill="#3A2A24"/>`).join("") +
+    ell(0, -32, 30, 19, "#FFFFFF", "#9A918A", 3) + ell(-10, -38, 9, 6.4, "#3A2A24", null) + ell(10, -26, 8, 6, "#3A2A24", null) + ell(-22, -26, 5.6, 5, "#3A2A24", null) +
+    `<path d="M-30 -36Q-42 -34 -40 -18" stroke="#9A918A" stroke-width="3" fill="none" stroke-linecap="round"/>` + ell(-40, -16, 3, 4, "#3A2A24") +
+    ell(32, -42, 13, 12, "#FFFFFF", "#9A918A", 3) + ell(40, -37, 8, 6, "#F4A9B4", "#C97A88", 2) + ell(37, -37, 1.3, 1.3, "#7A3A48") + ell(43, -37, 1.3, 1.3, "#7A3A48") + ell(30, -48, 2, 2.4, "#3A2A24") +
+    ell(23, -54, 5, 3, "#FFFFFF", "#9A918A", 2) + ell(40, -54, 5, 3, "#FFFFFF", "#9A918A", 2) + `<path d="M28 -54L26 -62M36 -54L38 -62" stroke="#E8D9B0" stroke-width="3" stroke-linecap="round"/>` + `</g>`);
+}
+function press(x, y) {
+  let o = shadow(70, 20, .24);
+  const pl = box([0, 14], 1.7, 1.2, 14, { l: "#B98350", r: "#9A6532", t: "#D6A066", s: C.woodD, sw: 2.6 }); o += pl.svg;
+  const tub = `<path d="M-44 -4C-48 -24 -46 -46 -42 -66H42C46 -46 48 -24 44 -4C28 8 -28 8 -44 -4Z" fill="url(#gWood)" stroke="${C.woodD}" stroke-width="3.4" stroke-linejoin="round"/>` + [-30, -15, 0, 15, 30].map(a => `<path d="M${a} -64V4" stroke="${C.woodD}" stroke-width="1.8" opacity=".35"/>`).join("") + [-20, -44].map(k => `<path d="M${k === -20 ? -46 : -46} ${k}Q0 ${k + 12} 46 ${k}" stroke="#6B6459" stroke-width="4.4" fill="none"/>`).join("") + ell(0, -66, 42, 15, "#7B4A28", C.woodD, 3.4) + ell(0, -64, 36, 11, "#A96A3A", null);
+  o += G(0, -4, tub);
+  o += `<rect x="-62" y="-150" width="9" height="150" rx="3" fill="#E0553E" stroke="#8E2A1B" stroke-width="3"/><rect x="53" y="-150" width="9" height="150" rx="3" fill="#E0553E" stroke="#8E2A1B" stroke-width="3"/><path d="M-62 -146Q0 -178 62 -146" stroke="#8E2A1B" stroke-width="13" fill="none" stroke-linecap="round"/><path d="M-62 -146Q0 -178 62 -146" stroke="#E0553E" stroke-width="8" fill="none" stroke-linecap="round"/><path d="M0 -162V-118" stroke="#8E2A1B" stroke-width="9" stroke-linecap="round"/><path d="M0 -162V-118" stroke="#B9B6AE" stroke-width="5" stroke-linecap="round"/><path d="M-8 -118H8L4 -104H-4Z" fill="#B9B6AE" stroke="#6E6A63" stroke-width="2.4"/>`;
+  o += `<path d="M-54 22L-30 36L-2 24L-26 10Z" fill="#B98350" stroke="${C.woodD}" stroke-width="2.4"/><path d="M-50 28L-26 41" stroke="${C.woodD}" stroke-width="2" opacity=".5"/>`;
+  return G(x, y, o);
+}
+function oven(x, y) {
+  const F = [0, 0], bx = box(F, 1.3, 1, 54, { l: "#C86A4A", r: "#A9523A", t: "#DE8B6C", s: "#6E3A22", sw: 3 }); let o = shadow(70, 18, .24) + bx.svg;
+  for (let k = 1; k < 5; k++) { const t = k / 5; o += `<path d="M${f(bx.L[0])} ${f(bx.L[1] - 54 * t)}L${f(bx.F[0])} ${f(bx.F[1] - 54 * t)}L${f(bx.R[0])} ${f(bx.R[1] - 54 * t)}" stroke="#7E4430" stroke-width="1.6" fill="none" opacity=".5"/>`; }
+  const dp = lerp(bx.F, bx.R, .5); o += `<path d="M${f(dp[0] - 15)} ${f(dp[1] + 2)}V${f(dp[1] - 22)}Q${f(dp[0])} ${f(dp[1] - 42)} ${f(dp[0] + 15)} ${f(dp[1] - 22)}V${f(dp[1] - 4)}Z" fill="#2A1A14" stroke="#4A2A1A" stroke-width="3"/><path d="M${f(dp[0] - 9)} ${f(dp[1])}V${f(dp[1] - 16)}Q${f(dp[0])} ${f(dp[1] - 28)} ${f(dp[0] + 9)} ${f(dp[1] - 16)}V${f(dp[1])}Z" fill="#FF9A3D"/><path d="M${f(dp[0] - 4)} ${f(dp[1])}Q${f(dp[0])} ${f(dp[1] - 14)} ${f(dp[0] + 4)} ${f(dp[1])}Z" fill="#FFE08A"/>`;
+  o += `<rect x="-6" y="-92" width="22" height="42" rx="3" fill="#B0643F" stroke="#6E3A22" stroke-width="3"/><rect x="-10" y="-98" width="30" height="10" rx="3" fill="#8A4E2E" stroke="#6E3A22" stroke-width="2.6"/>`;
+  return G(x, y, o);
+}
+function milkcans(x, y) { const can = (a, s) => `<g transform="translate(${a} 0) scale(${s})"><path d="M-12 0V-34C-12 -40 12 -40 12 -34V0C12 5 -12 5 -12 0Z" fill="#CBD0DC" stroke="#6E7488" stroke-width="2.6"/><path d="M-12 -30H12" stroke="#8E94A8" stroke-width="2"/><rect x="-14" y="-46" width="28" height="9" rx="3" fill="#E5E8F0" stroke="#6E7488" stroke-width="2.4"/><path d="M-6 -4V-34" stroke="#fff" stroke-width="3" opacity=".6" stroke-linecap="round"/></g>`; return G(x, y, shadow(34, 9, .22) + can(-16, 1) + can(14, 1) + can(-1, .8).replace("translate(-1 0)", "translate(-1 -6)")); }
+function table(x, y) { const chair = (a, flip) => `<g transform="translate(${a} 0) scale(${flip ? -1 : 1} 1)"><rect x="-10" y="-22" width="20" height="8" rx="3" fill="#7CCB5A" stroke="#3F8A30" stroke-width="2.4"/><path d="M-10 -22V-44H10V-22" fill="none" stroke="#3F8A30" stroke-width="4" stroke-linejoin="round"/><path d="M-8 -14V0M8 -14V0" stroke="#3F8A30" stroke-width="3" stroke-linecap="round"/></g>`; return G(x, y, shadow(50, 13, .22) + chair(-34, 0) + `<path d="M0 -4V-34" stroke="${C.woodD}" stroke-width="6" stroke-linecap="round"/>` + ell(0, -38, 26, 10, "url(#gWood)", C.woodD, 3) + ell(0, -42, 20, 6, "#E4B27A", null) + chair(36, 1)); }
+function coop(x, y) { return G(x, y, shadow(44, 12, .22) + `<path d="M-40 0C-40 -46 -18 -60 0 -60C18 -60 40 -46 40 0Z" fill="#EFC36E" stroke="#A26B2A" stroke-width="3.4" stroke-linejoin="round"/><path d="M-30 -26Q0 -40 30 -26M-36 -12Q0 -26 36 -12" stroke="#B9833A" stroke-width="2" fill="none" opacity=".6"/>` + ell(0, -18, 13, 15, "#7A4A26", "#3A2210", 3) + ell(0, -16, 8, 10, "#2A1A14", null) + `<path d="M-52 2C-36 -4 -20 -2 -12 2M14 2C26 -4 44 -4 52 2" stroke="#D9A93A" stroke-width="4" stroke-linecap="round" fill="none"/>`); }
+function roundHay(x, y) { return G(x, y, shadow(34, 9, .22) + `<path d="M-26 -4V-34C-26 -42 26 -42 26 -34V-4C26 6 -26 6 -26 -4Z" fill="url(#gWheat)" stroke="#A9801A" stroke-width="3"/>` + ell(0, -34, 26, 9, "#F8DD86", "#A9801A", 3) + `<path d="M-18 -34Q0 -30 18 -34M-10 -34Q0 -32 10 -34" stroke="#C9A12E" stroke-width="2" fill="none"/><path d="M-26 -16Q0 -8 26 -16M-26 -26Q0 -18 26 -26" stroke="#C9A12E" stroke-width="2" fill="none" opacity=".7"/>`); }
+function flowerPatch(x, y, col) { const r = rng(Math.floor(x * 3 + y)); let o = ell(0, -6, 34, 14, "#5AA838", "#3F7A2B", 2.4); for (let i = 0; i < 12; i++) o += `<g transform="translate(${f((r() - .5) * 58)} ${f(-6 - r() * 18)})">${ell(0, 0, 5, 4, col || "#FFD24D", "#C9A12E", 1.4)}${ell(0, 0, 1.8, 1.4, "#FFF3C4")}</g>`; return G(x, y, o); }
+function hedge(x, y, n, dir) { let o = ""; for (let i = 0; i < n; i++) { const dx = dir === "x" ? i * 40 : -i * 40, dy = i * 20; o += G(x + dx, y + dy, ell(0, -14, 24, 17, "url(#gLeaf)", C.leafD, 2.6) + ell(-6, -22, 9, 5, "#C3F294", null).replace("/>", ' opacity=".45"/>') + (i % 2 ? flowerBit(8, -18, "#FFD24D") + flowerBit(-10, -12, "#fff") : flowerBit(-8, -20, "#FF8FB0") + flowerBit(10, -10, "#FFD24D"))); } return o; }
+const flowerBit = (x, y, c) => ell(x, y, 3.4, 3, c, "#fff", 1);
+function pumpkins(x, y) { const pk = (a, b, s) => `<g transform="translate(${a} ${b}) scale(${s})">${ell(0, -10, 14, 11, "#F59A2B", "#B2591A", 2.4)}${ell(-5, -10, 5, 10, "#F9B04D", null).replace("/>", ' opacity=".6"/>')}${ell(5, -10, 5, 10, "#E8841C", null).replace("/>", ' opacity=".5"/>')}<path d="M0 -20Q2 -26 6 -26" stroke="#4E8B2E" stroke-width="3" fill="none" stroke-linecap="round"/></g>`; return G(x, y, shadow(32, 8, .2) + pk(-14, 0, 1) + pk(12, 2, .9) + pk(0, 8, .8)); }
+function crate(x, y) { const b = box([0, 0], .6, .5, 22, { l: "#C58B4E", r: "#9A6532", t: "#D6A066", s: C.woodD, sw: 2.4 }); return G(x, y, shadow(26, 8, .22) + b.svg + `<path d="M${f(b.L[0])} ${f(b.L[1] - 11)}L${f(b.F[0])} ${f(b.F[1] - 11)}L${f(b.R[0])} ${f(b.R[1] - 11)}" stroke="${C.woodD}" stroke-width="2" fill="none" opacity=".6"/>`); }
+
 /* ---------- ghép cảnh ---------- */
 function defs() {
   const lg = (id, a, b, v) => `<linearGradient id="${id}" x1="0" y1="0" x2="${v ? 0 : 1}" y2="${v ? 1 : 0}"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`;
@@ -186,7 +221,7 @@ const STYLE = `<style>.npa-spin{transform-box:fill-box;transform-origin:50% 50%;
 
 /* cấu hình cảnh: levels = cấp của từng vị trí (0 = chưa có). time = day | dusk | night */
 function scene(o) {
-  const L = Object.assign({ house: 4, fence: 3, well: 3, barn: 3, windmill: 3, plots: 6, path: 1, apple: 1, flowers: 1, pond: 1, hay: 1, animals: 1 }, o.levels || {});
+  const L = Object.assign({ deco: 3, house: 4, fence: 3, well: 3, barn: 3, windmill: 3, plots: 9, path: 1, apple: 1, flowers: 1, pond: 1, hay: 1, animals: 1 }, o.levels || {});
   const time = o.time || "day"; const items = [], R = rng(7);
   /* nền cỏ */
   let ground = `<rect width="${W}" height="${H}" fill="url(#gGrass)"/>`;
@@ -196,33 +231,54 @@ function scene(o) {
   /* chân trời: đồi + cây xa */
   let far = ""; for (let i = 0; i < 9; i++) far += ell(60 + i * 150 + R() * 40, 128 + R() * 20, 120 + R() * 40, 44 + R() * 16, i % 2 ? "#79C044" : "#6FB43F", null);
   const U = (sx, sy) => [(sx - OX) / TW + (sy - OY) / TH, (sy - OY) / TH - (sx - OX) / TW];   /* màn hình → ô lưới */
+  const fenceAt = (x, y, dir, lv) => { const [gx, gy] = U(x, y); return fence(gx, gy, dir, lv); };
   const at = (sx, sy) => [sx, sy], base = [], stand = [];
-  /* lớp mặt đất (vẽ trước, không xếp theo độ sâu): ao, đường đá, đáy ô trồng */
+  const D = L.deco, push = (y, svg) => stand.push({ d: y, svg });
+  /* ---- lớp mặt đất ---- */
   if (L.pond) base.push(pond([330, 300]));
-  if (L.path) { const pl = [[548, 880], [566, 830], [582, 780], [598, 730], [620, 680], [646, 632], [676, 580], [698, 530], [708, 486]]; pl.forEach(([x, y], k) => { const [gx, gy] = U(x, y); [[0, 0], [.55, -.2], [-.5, .25]].forEach(([dx, dy]) => { const r = rng(k * 9 + Math.floor(dx * 10) + 3); base.push({ d: 0, svg: ell(x + dx * 70 + (r() - .5) * 10, y + dy * 26, 26 + r() * 8, 12 + r() * 3, "#8F8B83", null) + ell(x + dx * 70 + (r() - .5) * 10, y + dy * 26 - 2, 26 + r() * 8, 12 + r() * 3, "url(#gStone)", "#807C74", 2.2) + `<path d="M${f(x + dx * 70 - 12)} ${f(y + dy * 26 - 6)}Q${f(x + dx * 70)} ${f(y + dy * 26 - 11)} ${f(x + dx * 70 + 10)} ${f(y + dy * 26 - 7)}" stroke="#fff" stroke-width="2.4" fill="none" opacity=".65" stroke-linecap="round"/>` }); }); });
-    [[600, 660], [546, 680], [494, 698]].forEach(([x, y], k) => { const r = rng(k + 40); for (let q = 0; q < 2; q++) base.push({ d: 0, svg: ell(x + q * 44, y + q * 12, 24, 11, "#8F8B83", null) + ell(x + q * 44, y + q * 12 - 2, 24, 11, "url(#gStone)", "#807C74", 2.2) }); }); }
-  /* ruộng: 3 x 2 ô, gốc ở (700, 560) */
-  const crops = [[cropWheat, true], [cropWheat, true], [cropCarrot, true], [cropCorn, false], [cropStraw, true], [cropSun, false]], fcell = [[0, 0], [1, 0], [2, 0], [0, 1], [1, 1], [2, 1]], fo = [800, 568];
-  for (let i = 0; i < L.plots; i++) { const [a, b] = fcell[i], tl = [fo[0] + (a - b) * TW / 2, fo[1] + (a + b) * TH / 2]; const A = tl, B = [tl[0] + TW / 2, tl[1] + TH / 2], Cc = [tl[0], tl[1] + TH], D = [tl[0] - TW / 2, tl[1] + TH / 2], lvl = L.plots >= 4 ? 3 : 2;
-    let o = poly([A, B, Cc, D], "url(#gSoil)", lvl >= 3 ? "#7A4B24" : C.soilD, lvl >= 3 ? 7 : 3); for (let k = 1; k < 5; k++) { const p = lerp(A, D, k / 5), q = lerp(B, Cc, k / 5); o += `<path d="M${f(p[0])} ${f(p[1])}L${f(q[0])} ${f(q[1])}" stroke="${C.soilD}" stroke-width="2.6" opacity=".45" stroke-linecap="round"/>`; } if (lvl >= 3) o += poly([A, B, Cc, D], "none", "#C58B4E", 3);
+  /* mảng đá cuội lát sân gần ao (như ảnh) */
+  if (D >= 1) { const r = rng(5); for (let i = 0; i < 26; i++) { const x = 70 + r() * 240, y = 120 + r() * 100; base.push({ d: 0, svg: ell(x, y + 2, 16 + r() * 6, 8, "#8F8B83", null) + ell(x, y, 16 + r() * 6, 8, "#B7B3AB", "#807C74", 2) }); } }
+  /* lối đá: đường chính + nhánh trái (chuồng, bò) + nhánh phải (kho, lò) + nhánh ra ruộng */
+  const stones = (pl, k0) => pl.forEach(([x, y], k) => [[0, 0], [.55, -.2], [-.5, .25]].forEach(([dx, dy], q) => { const r = rng((k + k0) * 9 + q * 3 + 3), ox = x + dx * 70 + (r() - .5) * 10, oy = y + dy * 26; base.push({ d: 0, svg: ell(ox, oy + 2, 24 + r() * 8, 11 + r() * 3, "#8F8B83", null) + ell(ox, oy, 24 + r() * 8, 11 + r() * 3, "url(#gStone)", "#807C74", 2.2) + `<path d="M${f(ox - 12)} ${f(oy - 4)}Q${f(ox)} ${f(oy - 9)} ${f(ox + 10)} ${f(oy - 5)}" stroke="#fff" stroke-width="2.4" fill="none" opacity=".65" stroke-linecap="round"/>` }); }));
+  if (L.path) {
+    stones([[548, 880], [566, 830], [582, 780], [598, 730], [620, 680], [646, 632], [676, 580], [698, 530], [708, 490]], 0);
+    if (D >= 1) { stones([[560, 650], [506, 668], [452, 686], [398, 704], [344, 722], [290, 740]], 40); stones([[770, 520], [826, 508], [882, 496], [938, 484]], 80); stones([[650, 606], [706, 620], [762, 634]], 120); }
+    if (D >= 2) { stones([[960, 420], [1010, 395], [1060, 372]], 160); stones([[300, 480], [352, 460], [404, 440]], 200); }
+  }
+  /* ruộng lớn 3 x 3 ô, góc trên ở (800, 574) */
+  const crops = [[cropWheat, true], [cropWheat, true], [cropCarrot, true], [cropWheat, true], [cropCorn, false], [cropStraw, true], [cropSun, false], [cropTomato, false], [cropWheat, true]], fcell = [[0, 0], [1, 0], [2, 0], [0, 1], [1, 1], [2, 1], [0, 2], [1, 2], [2, 2]], fo = [810, 590];
+  for (let i = 0; i < Math.min(L.plots, 9); i++) { const [a, b] = fcell[i], tl = [fo[0] + (a - b) * TW / 2, fo[1] + (a + b) * TH / 2]; const A = tl, B = [tl[0] + TW / 2, tl[1] + TH / 2], Cc = [tl[0], tl[1] + TH], Dd = [tl[0] - TW / 2, tl[1] + TH / 2], lvl = L.plots >= 4 ? 3 : 2;
+    let o = poly([A, B, Cc, Dd], "url(#gSoil)", lvl >= 3 ? "#7A4B24" : C.soilD, lvl >= 3 ? 7 : 3); for (let k = 1; k < 5; k++) { const p = lerp(A, Dd, k / 5), q = lerp(B, Cc, k / 5); o += `<path d="M${f(p[0])} ${f(p[1])}L${f(q[0])} ${f(q[1])}" stroke="${C.soilD}" stroke-width="2.6" opacity=".45" stroke-linecap="round"/>`; } if (lvl >= 3) o += poly([A, B, Cc, Dd], "none", "#C58B4E", 3);
     base.push({ d: 1, svg: o });
-    let cr = ""; for (let k = 0; k < 4; k++) for (let m = 0; m < 4; m++) { const p = lerp(lerp(A, D, (k + .5) / 4), lerp(B, Cc, (k + .5) / 4), (m + .5) / 4); cr += crops[i][0](p[0], p[1] + 8, crops[i][1]); }
-    stand.push({ d: Cc[1] - 8, svg: `<g transform="translate(${f(tl[0])} ${f(tl[1] + TH / 2)}) scale(1.35) translate(${f(-tl[0])} ${f(-(tl[1] + TH / 2))})">${cr}</g>` }); }
-  /* tường đá / rào quanh sân: lưới quanh nhà */
-  if (L.fence) { const g0 = U(640, 430); const gx0 = g0[0] - 4.6, gy0 = g0[1] - 3.9; for (let g = 2; g <= 6; g++) stand.push(fence(gx0 + g, gy0, "x", L.fence)); for (let g = 1; g <= 3; g++) stand.push(fence(gx0 + 2, gy0 + g, "y", L.fence)); for (let g = 1; g <= 2; g++) stand.push(fence(gx0 + 7, gy0 + g - 1, "y", L.fence)); }
-  /* công trình */
-  if (L.windmill) stand.push(windmill(at(1170, 330), L.windmill));
-  if (L.barn) stand.push(barn(at(980, 500), L.barn));
-  if (L.house) stand.push(house(at(650, 440), L.house));
-  if (L.well) stand.push(well(at(470, 540), L.well));
-  /* cây, bụi, đá, rơm, thùng, vật nuôi */
-  [[230, 200, "pine", 1.25], [880, 210, "oak", 1.1], [1180, 560, "oak", 1.15], [110, 450, "oak", 1.1], [60, 250, "pine", 1.15], [1120, 790, "pine", 1.2]].forEach(([x, y, k, sc]) => stand.push({ d: y, svg: k === "pine" ? pine(x, y, sc) : bigTree(x, y, sc, "oak") }));
-  if (L.apple) [[150, 700], [260, 760], [370, 820]].forEach(([x, y]) => stand.push({ d: y, svg: bigTree(x, y, .86, "apple") }));
-  [[540, 610, 1]].forEach(([x, y, sc]) => stand.push({ d: y, svg: bush(x, y, sc) }));
-  if (L.flowers) { [[430, 790], [520, 805], [300, 640], [470, 700]].forEach(([x, y]) => stand.push({ d: y, svg: lavender(x, y, 1.2) })); [[610, 650], [668, 700]].forEach(([x, y]) => stand.push({ d: y, svg: lavender(x, y, 1.05) })); }
-  [[410, 400, 1], [560, 220, .8], [1080, 700, .9], [760, 770, .8]].forEach(([x, y, sc]) => stand.push({ d: y, svg: rock(x, y, sc) }));
-  if (L.hay) { [[990, 560], [1040, 582], [1010, 606]].forEach(([x, y]) => stand.push({ d: y, svg: hay(x, y) })); [[560, 470, 1.1], [600, 490, 1]].forEach(([x, y, sc]) => stand.push({ d: y, svg: barrel(x, y, sc) })); }
-  if (L.animals) { [[610, 770], [660, 810]].forEach(([x, y]) => stand.push({ d: y, svg: chicken(x, y) })); stand.push({ d: 600, svg: rabbit(420, 560) }); }
+    let cr = ""; for (let k = 0; k < 4; k++) for (let m = 0; m < 4; m++) { const p = lerp(lerp(A, Dd, (k + .5) / 4), lerp(B, Cc, (k + .5) / 4), (m + .5) / 4); cr += crops[i][0](p[0], p[1] + 8, crops[i][1]); }
+    push(Cc[1] - 8, `<g transform="translate(${f(tl[0])} ${f(tl[1] + TH / 2)}) scale(1.35) translate(${f(-tl[0])} ${f(-(tl[1] + TH / 2))})">${cr}</g>`); }
+  /* tường đá / rào quanh sân (hình thoi: Lc(440,386) Bc(648,282) Rc(908,412) Fc(700,516)) */
+  if (L.fence) {
+    for (let k = 0; k < 4; k++) push(282 + 26 * k + 12, fenceAt(648 - 52 * k, 282 + 26 * k, "y", L.fence).svg);                 /* cạnh trái-sau */
+    for (let k = 0; k < 5; k++) push(282 + 26 * k + 14, fenceAt(648 + 52 * k, 282 + 26 * k, "x", L.fence).svg);                 /* cạnh phải-sau */
+    if (D >= 1) { for (let k = 0; k < 2; k++) push(386 + 26 * k + 14, fenceAt(440 + 52 * k, 386 + 26 * k, "x", L.fence).svg); for (let k = 0; k < 2; k++) push(412 + 26 * k + 12, fenceAt(908 - 52 * k, 412 + 26 * k, "y", L.fence).svg); }
+    if (D >= 2) { for (let k = 0; k < 4; k++) push(740 + 26 * k, fenceAt(90 + 52 * k, 700 + 26 * k, "x", 2).svg); for (let k = 0; k < 3; k++) push(780 + 26 * k, fenceAt(298 - 52 * k, 778 + 26 * k, "y", 2).svg); }   /* rào gỗ quanh bãi bò */
+  }
+  /* ---- công trình ---- */
+  if (L.windmill) push(330, windmill(at(1170, 330), L.windmill).svg);
+  if (L.barn) push(580, barn(at(1090, 580), L.barn).svg);
+  if (L.house) push(440, house(at(650, 440), L.house).svg);
+  if (L.well) push(540, well(at(470, 540), L.well).svg);
+  if (D >= 3) { push(330, press(880, 340)); push(380, oven(1020, 380)); }
+  if (D >= 2) { push(440, table(1205, 425)); push(660, coop(215, 650)); }
+  /* ---- cây, bụi, đá ---- */
+  [[230, 200, "pine", 1.25], [770, 150, "oak", .9], [1235, 690, "oak", 1.1], [105, 450, "oak", 1.1], [60, 250, "pine", 1.15], [1130, 800, "pine", 1.2], [520, 175, "pine", .95], [1250, 170, "pine", 1.1]].forEach(([x, y, k, sc]) => push(y, k === "pine" ? pine(x, y, sc) : bigTree(x, y, sc, "oak")));
+  if (L.apple) [[130, 690], [235, 735], [340, 790], [60, 600]].forEach(([x, y]) => push(y, bigTree(x, y, .86, "apple")));
+  [[540, 610, 1]].forEach(([x, y, sc]) => push(y, bush(x, y, sc)));
+  if (L.flowers) { [[430, 790], [520, 805], [310, 650], [470, 705]].forEach(([x, y]) => push(y, lavender(x, y, 1.2))); [[620, 655], [668, 702], [756, 742], [840, 770], [930, 740], [980, 690], [1020, 640]].forEach(([x, y]) => push(y, lavender(x, y, 1.05))); }
+  [[410, 400, 1], [560, 220, .8], [1080, 720, .9], [760, 800, .8], [180, 330, .9], [1180, 700, 1]].forEach(([x, y, sc]) => push(y, rock(x, y, sc)));
+  /* ---- vật nhỏ làm dày cảnh ---- */
+  if (L.hay) { [[960, 640], [1010, 662]].forEach(([x, y]) => push(y, hay(x, y))); [[560, 470, 1.1], [600, 490, 1]].forEach(([x, y, sc]) => push(y, barrel(x, y, sc))); }
+  if (D >= 1) { push(470, milkcans(740, 488)); push(330, roundHay(960, 400)); push(570, roundHay(1215, 560)); push(600, crate(860, 560)); push(432, hedge(760, 466, 3, "x")); [[570, 560], [420, 520]].forEach(([x, y]) => push(y, flowerPatch(x, y, "#FFD24D"))); push(700, pumpkins(1090, 690)); }
+  if (D >= 2) { push(520, hedge(380, 456, 3, "x")); [[1040, 470], [440, 460], [1100, 360]].forEach(([x, y], q) => push(y, flowerPatch(x, y, q % 2 ? "#FF8FB0" : "#FFD24D"))); push(620, barrel(1210, 600, 1)); push(840, crate(830, 800)); }
+  if (D >= 3) { push(700, hay(1110, 700)); push(300, hay(1110, 290)); push(760, pumpkins(920, 790)); [[790, 330], [800, 352]].forEach(([x, y]) => push(y, barrel(x, y, .9))); }
+  if (L.animals) { [[610, 770], [660, 810]].forEach(([x, y]) => push(y, chicken(x, y))); push(600, rabbit(420, 560)); if (D >= 2) { push(180, chicken(150, 600)); } }
+  if (D >= 3) { push(800, cow(190, 800, 1)); push(840, cow(280, 840, .95, true)); push(760, cow(120, 760, .9)); }
   items.push(...base, ...stand);
   const ground0 = items.filter(i => i.d <= 1), up = items.filter(i => i.d > 1).sort((a, b) => a.d - b.d); items.length = 0; items.push(...ground0, ...up);
   /* trời + thời điểm trong ngày */
@@ -233,7 +289,7 @@ function scene(o) {
   if (time === "night") {
     for (let i = 0; i < 40; i++) over += `<circle cx="${f(R() * W)}" cy="${f(R() * 140)}" r="${f(1 + R() * 1.6)}" fill="#fff" opacity="${f(.5 + R() * .5)}"/>`;
     over += `<circle cx="1120" cy="60" r="34" fill="#FFF3C4"/><circle cx="1132" cy="52" r="30" fill="#14183F" opacity=".0"/>`;
-    [[520, 340, 62], [560, 372, 62], [612, 384, 60], [470, 500, 56], [1010, 452, 70], [700, 470, 54]].forEach(([x, y, r]) => over += `<circle cx="${x}" cy="${y}" r="${r}" fill="url(#gGlow)"/>`);
+    [[520, 340, 62], [560, 372, 62], [612, 384, 60], [470, 500, 56], [1010, 452, 70], [700, 470, 54], [1058, 380, 64], [900, 300, 54]].forEach(([x, y, r]) => over += `<circle cx="${x}" cy="${y}" r="${r}" fill="url(#gGlow)"/>`);
     for (let i = 0; i < 18; i++) over += `<circle cx="${f(200 + R() * 880)}" cy="${f(300 + R() * 480)}" r="${f(2 + R() * 2)}" fill="#E8FF8A" opacity="${f(.5 + R() * .5)}"/>`;
   }
   if (time === "dusk") { over += `<circle cx="1060" cy="120" r="46" fill="#FFB562" opacity=".9"/>`; }
@@ -248,9 +304,9 @@ function scene(o) {
 
 const SCENES = [
   ["01-toan-canh", "Toàn cảnh khu vườn (ban ngày): nhà ngói, tường đá, ruộng, cây táo, ao, cối xay gió, kho", {}],
-  ["02-cap-1", "Cấp 1: mới bắt đầu, lều lá, rào tre, một ô trồng", { levels: { house: 1, fence: 1, well: 1, barn: 0, windmill: 0, plots: 1, path: 0, apple: 0, flowers: 0, pond: 1, hay: 0, animals: 0 } }],
-  ["03-cap-2", "Cấp 2: nhà tranh, rào gỗ, giếng xây, hai ô trồng", { levels: { house: 2, fence: 2, well: 2, barn: 1, windmill: 1, plots: 3, path: 1, apple: 0, flowers: 1, pond: 1, hay: 0, animals: 0 } }],
-  ["04-cap-3", "Cấp 3: nhà tường, tường đá, kho, cối xay, bốn ô trồng", { levels: { house: 3, fence: 3, well: 2, barn: 2, windmill: 2, plots: 4, path: 1, apple: 1, flowers: 1, pond: 1, hay: 1, animals: 0 } }],
+  ["02-cap-1", "Cấp 1: mới bắt đầu, lều lá, rào tre, một ô trồng", { levels: { deco: 0, house: 1, fence: 1, well: 1, barn: 0, windmill: 0, plots: 1, path: 0, apple: 0, flowers: 0, pond: 1, hay: 0, animals: 0 } }],
+  ["03-cap-2", "Cấp 2: nhà tranh, rào gỗ, giếng xây, hai ô trồng", { levels: { deco: 1, house: 2, fence: 2, well: 2, barn: 1, windmill: 1, plots: 3, path: 1, apple: 0, flowers: 1, pond: 1, hay: 0, animals: 0 } }],
+  ["04-cap-3", "Cấp 3: nhà tường, tường đá, kho, cối xay, bốn ô trồng", { levels: { deco: 2, house: 3, fence: 3, well: 2, barn: 2, windmill: 2, plots: 6, path: 1, apple: 1, flowers: 1, pond: 1, hay: 1, animals: 0 } }],
   ["05-hoang-hon", "Hoàng hôn (cùng khu vườn, cấp đầy đủ)", { time: "dusk" }],
   ["06-ban-dem", "Ban đêm: đèn sáng, đom đóm, trăng", { time: "night" }]
 ];
