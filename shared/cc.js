@@ -218,11 +218,15 @@
     if (optRows) {
       var OI = { chipSkins: "🎨", chipGrids: "▦", chipPacks: "🎮", chipPartners: "👥" }, ocard = el("div", "card"), oex = el("div", "ml opx"), oHold = false, oT = 0;
       var openOpt = function () { oex.classList.add("on"); };
+      var ohd = el("div", "ohd"), ohT = el("b"), ohX = el("button", "x"); ohT.textContent = vi() ? "Tùy chọn" : "Options"; ohX.type = "button"; ohX.textContent = "✕"; ohX.setAttribute("aria-label", vi() ? "Đóng" : "Close");
+      ohX.addEventListener("click", function () { oex.classList.remove("on"); }); ohd.appendChild(ohT); ohd.appendChild(ohX); oex.appendChild(ohd);   /* thanh tiêu đề + nút đóng của popup */
       secs.forEach(function (sec) {
         var box = sec.querySelector(".chips"), chips = [].slice.call(box.children), lab = sec.querySelector("small"), lt = lab ? lab.textContent.trim() : "";
-        var ob = el("button", "m c in opt"); ob.type = "button"; ob.innerHTML = '<span class="ic">' + (OI[box.id] || "⚙") + "</span>"; ob.setAttribute("aria-label", lt); ob.title = lt;
-        ob.addEventListener("click", function (e) { if (oHold) { oHold = false; e.preventDefault(); return; } openOpt(); }); ocard.appendChild(ob);
-        var g = el("div", "og"), hd = el("div", "oh"), rw = el("div", "or"); hd.textContent = lt; g.appendChild(hd); g.appendChild(rw);
+        if (!ocard.firstChild) {   /* MỘT nút "Tùy chọn" duy nhất (trước đây 3 nút 🎨 ▦ 🎮 cùng mở một popup): popup bên trong vẫn có đủ các nhóm */
+          var ob = el("button", "m c in opt"), ol = vi() ? "Tùy chọn" : "Options"; ob.type = "button"; ob.innerHTML = '<span class="ic">🎛️</span>'; ob.setAttribute("aria-label", ol); ob.title = ol;
+          ob.addEventListener("click", function (e) { if (oHold) { oHold = false; e.preventDefault(); return; } openOpt(); }); ocard.appendChild(ob);
+        }
+        var g = el("div", "og"), hd = el("div", "oh"), rw = el("div", "or"); hd.textContent = lt; g.appendChild(hd); g.appendChild(rw); rw.style.setProperty("--oc", String(chips.length <= 4 ? Math.max(2, chips.length) : 3));
         chips.forEach(function (c, j) {
           var b = el("button", "m ch" + (c.classList.contains("on") || c.getAttribute("aria-pressed") === "true" ? " on" : "")); b.type = "button";
           fillChip(b, (c.textContent || "").replace(/\s+/g, " ").trim() || c.getAttribute("aria-label") || "•"); if (c.classList.contains("lock") || c.classList.contains("locked")) b.classList.add("lk");

@@ -482,3 +482,27 @@ html.np-menupaused #ccRoot,html.np-menupaused #ccRoot *,html.np-menupaused #ccRo
   #ccRoot .pn .ml:not(.ex):not(.opx) .m .ic svg{width:46px!important;height:46px!important}
   #ccRoot .pn .ml:not(.ex):not(.opx) .m .nm{font-size:16px!important}
 }
+/* thẻ Tùy chọn chỉ có MỘT nút: căn giữa thẻ */
+#ccRoot .card:has(>.m.opt:only-child){display:grid!important;place-items:center}
+#ccRoot .card:has(>.m.opt:only-child)>.m.opt{width:min(100%,calc(var(--s,64px) * 1.15));height:auto;aspect-ratio:1/1}
+
+/* ===== POPUP TÙY CHỌN (Giao diện / Cỡ bàn / Loại game…) — bố cục mới: mỗi nhóm một thẻ, chip lưới đều, chữ không bị cắt, có tiêu đề + nút đóng ===== */
+#ccRoot .pn .ml.opx{display:none;grid-template-columns:1fr!important;grid-auto-rows:auto!important;align-content:start!important;gap:12px!important;padding:14px!important;overflow-y:auto!important;overflow-x:hidden!important}
+#ccRoot .pn .ml.opx.on{display:grid!important}
+@media (orientation:landscape){#ccRoot .pn .ml.opx{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important}#ccRoot .pn .ml.opx>.ohd{grid-column:1 / -1}}
+#ccRoot .pn .ml.opx>.ohd{display:flex;align-items:center;justify-content:space-between;padding:2px 4px 0}
+#ccRoot .pn .ml.opx>.ohd b{font:900 20px/1.1 var(--font,system-ui)}
+#ccRoot .pn .ml.opx>.ohd .x{width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.14);color:inherit;font:800 18px/1 var(--font,system-ui);cursor:pointer}
+#ccRoot .pn .ml.opx>.og{display:flex!important;flex-direction:column;gap:10px;padding:12px;border-radius:24px;background:rgba(255,255,255,.07);min-width:0}
+#ccRoot .pn .ml.opx .oh{grid-column:auto!important;margin:0!important;height:auto!important;display:block!important;font:800 14px/1.2 var(--font,system-ui)!important;letter-spacing:.04em;text-transform:uppercase;opacity:.75}
+#ccRoot .pn .ml.opx .or{display:grid!important;grid-template-columns:repeat(var(--oc,3),minmax(0,1fr));gap:8px}
+#ccRoot .pn .ml.opx .m.ch{width:auto!important;height:auto!important;min-height:58px;padding:8px 4px!important;border-radius:18px!important;display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center;font:800 15px/1.15 var(--font,system-ui)!important;white-space:normal!important;overflow-wrap:anywhere;word-break:normal!important;position:relative;min-width:0}
+#ccRoot .pn .ml.opx{gap:8px!important;padding:12px!important}
+#ccRoot .pn .ml.opx>.ohd b{font-size:19px}
+#ccRoot .pn .ml.opx>.ohd .x{width:38px;height:38px}
+#ccRoot .pn .ml.opx>.og{gap:6px;padding:9px 10px;border-radius:20px}
+#ccRoot .pn .ml.opx .oh{font-size:12.5px!important}
+#ccRoot .pn .ml.opx .or{gap:6px}
+#ccRoot .pn .ml.opx .m.ch{min-height:46px;padding:5px 3px!important;border-radius:15px!important;font-size:14.5px!important}
+#ccRoot .pn>.card:has(>.m.opt:only-child){display:grid!important;grid-template-columns:1fr!important;grid-template-rows:1fr!important;place-items:center!important;place-content:center!important}
+#ccRoot .pn>.card:has(>.m.opt:only-child)>.m.opt{grid-column:1!important;grid-row:1!important;justify-self:center!important;align-self:center!important}
