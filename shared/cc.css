@@ -328,7 +328,7 @@ html:has(.sheet:not([hidden]),.ov:not([hidden]):not(#ovStart),#hlpOv:not([hidden
   html #play[data-scr="game"] .top h1,html #play[data-scr="game"] #ttl{color:var(--ink,#fff)!important;opacity:1!important;text-shadow:0 1px 3px rgba(0,0,0,.55)}
   /* linh vật nhỏ khi chơi: nằm NGOÀI mép bảng chơi (bên phải), không đè lên vở/bảng */
   html #play[data-scr="game"]{overflow:visible!important}
-  html #play[data-scr="game"] .npa-mini{left:calc(100% + 10px)!important;right:auto!important;bottom:8px!important}
+  html #play[data-scr="game"] .npa-mini:not(.npa-moved){left:calc(100% + 10px)!important;right:auto!important;bottom:8px!important}
   /* Vẽ Một Nét: ô Best/Try/Last cách bảng vẽ ≥ 20px (trước chỉ 9px) */
   html[data-gid="ve-mot-net"] #play[data-scr="game"] .stats{width:calc(100% - 12px)!important;max-width:108px!important;box-sizing:border-box;transform:translateX(-12px)}
 }

@@ -202,7 +202,7 @@
   function applyPos(d, parent, g) {
     var v = readPos(g); if (!v) return; var pr = parent.getBoundingClientRect(), w = d.offsetWidth || 48, h = d.offsetHeight || 48;
     var x = Math.max(0, Math.min(pr.width - w, v.x * pr.width)), y = Math.max(0, Math.min(pr.height - h, v.y * pr.height));
-    d.style.left = x + "px"; d.style.top = y + "px"; d.style.right = "auto"; d.style.bottom = "auto"; side(d, parent);
+    d.style.left = x + "px"; d.style.top = y + "px"; d.style.right = "auto"; d.style.bottom = "auto"; d.classList.add("npa-moved"); side(d, parent);
   }
   function side(d, parent) { var pr = parent.getBoundingClientRect(), r = d.getBoundingClientRect(); d.classList.toggle("br", r.left + r.width / 2 > pr.left + pr.width / 2); d.classList.toggle("bl", !(r.left + r.width / 2 > pr.left + pr.width / 2)); }
   function drag(d, parent, g) {
@@ -220,7 +220,7 @@
       if (!st.lifted) { if (Math.abs(dx) + Math.abs(dy) > 10) st.cancel = true; return; }   /* di chuyển trước khi giữ đủ lâu = không kéo */
       st.moved = true; e.preventDefault();
       var pr = parent.getBoundingClientRect(), w = d.offsetWidth, h = d.offsetHeight, x = Math.max(0, Math.min(pr.width - w, st.ox + dx - pr.left)), y = Math.max(0, Math.min(pr.height - h, st.oy + dy - pr.top));
-      d.style.left = x + "px"; d.style.top = y + "px"; d.style.right = "auto"; d.style.bottom = "auto"; side(d, parent);
+      d.style.left = x + "px"; d.style.top = y + "px"; d.style.right = "auto"; d.style.bottom = "auto"; d.classList.add("npa-moved"); side(d, parent);
     });
     function end(e) {
       if (!st || e.pointerId !== st.id) return; var was = st; st = null; clearTimeout(was.t); d.classList.remove("drag"); try { d.releasePointerCapture(e.pointerId); } catch (x) {}
@@ -229,7 +229,7 @@
       else if (!was.cancel && !was.lifted) { var it2 = find(d); if (it2) { it2.motion(2); it2.say(line(it2, "tap"), 2000, "cool"); } }   /* chạm nhanh trúng linh vật = nhảy + nói */
     }
     d.addEventListener("pointerup", end); d.addEventListener("pointercancel", end);
-    d.addEventListener("dblclick", function () { try { localStorage.removeItem(posKey(g)); } catch (x) {} d.style.left = d.style.top = d.style.right = d.style.bottom = ""; d.className = d.className.replace(/\b(bl|br)\b/g, "") + " " + ((G[g] && G[g].pos) || "bl"); });   /* nhấp đúp = về chỗ mặc định */
+    d.addEventListener("dblclick", function () { try { localStorage.removeItem(posKey(g)); } catch (x) {} d.style.left = d.style.top = d.style.right = d.style.bottom = ""; d.className = d.className.replace(/\b(bl|br|npa-moved)\b/g, "") + " " + ((G[g] && G[g].pos) || "bl"); });   /* nhấp đúp = về chỗ mặc định */
   }
 
   /* ---------- sự kiện từ game ---------- */
