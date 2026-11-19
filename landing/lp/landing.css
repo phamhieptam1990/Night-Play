@@ -516,7 +516,7 @@ main p a:not(.btn){transition:color .18s ease,text-decoration-color .18s ease}
 .hvc{display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:22px;text-decoration:none;color:#fff;box-shadow:var(--shadow);transition:transform .18s;background:linear-gradient(135deg,#0B6B4F,#0F8A66)}
 .hvc.s2{background:linear-gradient(135deg,#9A3412,#C2410C)}
 .hvc.s3{background:linear-gradient(135deg,#1D4ED8,#2563EB)}
-.hvc:hover{transform:translateY(-3px)}
+
 .hvi{flex:none;display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.2);font-size:26px}
 .hvt{display:grid;gap:2px;min-width:0;flex:1}
 .hvt b{font-size:20px}.hvt span{font-size:14px;opacity:.92;line-height:1.35}
@@ -527,3 +527,12 @@ main p a:not(.btn){transition:color .18s ease,text-decoration-color .18s ease}
 .hvall{text-align:center;margin:-10px 0 20px}.hvall a{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:22px;font-weight:800;color:var(--accent);text-decoration:none;transition:background .15s}
 .hvall a:hover{background:color-mix(in srgb,var(--accent) 14%,transparent)}
 .hvslogan{text-align:center;margin:-6px auto 10px;font-weight:800;font-size:clamp(17px,4.2vw,22px);background:linear-gradient(100deg,#9B83FF,#FF9A6B);-webkit-background-clip:text;background-clip:text;color:transparent}
+/* 3 thẻ Học Vui (Mochi / Mầm / Bibi): rê, chạm, focus bàn phím thì sáng lên giống hai thẻ game (.orbsys .world.on): phóng nhẹ + viền trắng + quầng đúng màu thẻ */
+.hvc{--ring:#5EE0B0;--glow:rgba(15,138,102,.55);transition:transform .25s,box-shadow .25s;position:relative}
+.hvc.s2{--ring:#FF8A55;--glow:rgba(255,90,31,.55)}
+.hvc.s3{--ring:#7FB0FF;--glow:rgba(37,99,235,.55)}
+.hvc:hover,.hvc:focus-visible,.hvc:active{transform:scale(1.035);z-index:2;outline:3px solid #fff;outline-offset:-3px;box-shadow:0 0 0 3px var(--ring),0 14px 44px var(--glow)}
+.hvc:hover .hvi,.hvc:focus-visible .hvi{transform:scale(1.08)}
+.hvi{transition:transform .25s}
+.hvc.s3 .hvi img{left:-47%;top:-8%}   /* cắt đầu Bibi lệch trái để không lộ góc bong bóng "Hi!" */
+@media (prefers-reduced-motion:reduce){.hvc:hover,.hvc:focus-visible,.hvc:active{transform:none}.hvc:hover .hvi,.hvc:focus-visible .hvi{transform:none}}

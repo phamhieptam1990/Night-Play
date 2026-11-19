@@ -90,7 +90,8 @@
     if (frontPass.length) { var n = performance.now(); if (soundOn && ctx && ctx.state === "running" && n - lastWhoosh > 260) { lastWhoosh = n; whoosh(frontPass[0]); } if (navigator.vibrate && (soundOn || userActive) && !reduced && n - lastVib > 400) { lastVib = n; try { navigator.vibrate(7); } catch (e) {} } frontPass.length = 0; }
   }
   function still() { return reduced && !force; }
-  function paused(o) { return o.drag || o.hover > 0 || o.focus > 0; }
+  var learnHold = 0;   /* rê/focus thẻ Học Vui hoặc Trái Đất: cả hai quỹ đạo dừng (giống rê thẻ Pop/Night dừng quỹ đạo của nó) */
+  function paused(o) { return o.drag || o.hover > 0 || o.focus > 0 || learnHold > 0; }
   function active() { if (!LITE && !reduced && (Math.abs(tx - px) > 0.002 || Math.abs(ty - py) > 0.002)) return true; return ["pop", "night"].some(function (w) { var o = O[w]; return Math.abs(o.vel) > 0.003 || o.pend !== 0 || o.drag || (!still() && !paused(o)); }); }
   function setLite(v) { LITE = v; sys.classList.toggle("lite", v); if (DB) DB.lite = v; }
   function wake() { if (!raf && onScreen && tabOn) { last = 0; raf = requestAnimationFrame(frame); } }
@@ -279,7 +280,7 @@
     };
     /* rê/focus Trái Đất ↔ thẻ Học Vui cùng sáng lên (giống vệ tinh ↔ thẻ Pop/Night); chỉ chuột, như các vệ tinh */
     var learnCard = sys.querySelector(".world.learn");
-    var lit = function (on) { if (learnCard) learnCard.classList.toggle("on", on); planet.classList.toggle("hot", on); };
+    var lit = function (on) { if (learnCard) learnCard.classList.toggle("on", on); planet.classList.toggle("hot", on); learnHold = on ? 1 : 0; refresh(); };
     var focusVisible = function () { var v = true; try { v = planet.matches(":focus-visible"); } catch (x) {} return v; };
     planet.addEventListener("pointerover", function (e) { if (e.pointerType === "mouse") lit(true); });
     planet.addEventListener("pointerout", function (e) { if (e.pointerType === "mouse") lit(false); });

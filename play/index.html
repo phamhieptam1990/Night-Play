@@ -195,6 +195,7 @@ h1{margin:0;font-size:clamp(22px,min(6vw,3.8dvh),44px);line-height:1.1;letter-sp
 <footer class="foot">
   <span id="copy">© 2026 Play Hub. Bảo lưu mọi quyền.</span>
   <nav><a id="about" href="/?landing=1">Giới thiệu</a>
+  <a id="learnLink" href="../hoc/">Học Vui</a>
   <a id="pass2" href="../subscribe.html">Night Pass</a>
   <a id="priv" href="../privacy.html" target="_blank" rel="noopener">Quyền riêng tư</a>
   <a id="terms" href="../terms.html" target="_blank" rel="noopener">Điều khoản</a>
@@ -236,6 +237,7 @@ function applyLang(){
   $("passBtn").href = "../subscribe.html?from=play/index.html&lang=" + lang; $("passBtn").lastChild.textContent = t.pass; $("passBtn").setAttribute("aria-label", t.upgrade);
   $("themeBtn").setAttribute("aria-label", t.theme);
   $("pass2").textContent = t.pass; $("pass2").href = $("passBtn").href;
+  $("learnLink").textContent = lang === "en" ? "Fun Learning" : "Học Vui"; $("learnLink").href = lang === "en" ? "../en/hoc/" : "../hoc/";
   $("aPop").href = "../popplay/index.html"; $("aNight").href = "../cozyplay/index.html"; $("aLearn").href = lang === "en" ? "../en/hoc/" : "../hoc/";
   /* quỹ đạo: nhãn game theo ngôn ngữ (nguồn tên = shared/multi-games.js), nhãn sân khấu + nút âm thanh */
   $("orbsys").setAttribute("data-lang", lang); $("stage").setAttribute("aria-label", t.stage);
