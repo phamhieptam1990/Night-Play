@@ -415,3 +415,5 @@ html #play[data-scr="game"] #game:not(#_):not(#__){justify-content:safe center!i
 html.np-h3.np-h3home #npTitle{display:none!important}
 /* thanh độ khó của bảng KHÔNG chịu luật .dif của game (Cánh Nhỏ Phiêu Lưu có .dif{width:40px;height:40px} cho nút độ khó riêng → thanh bị nén thành chấm 40px, khó trượt) */
 #ccRoot .pn .m.dif{width:auto!important;height:auto!important;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;font-size:12px!important;padding:0!important}
+/* game đang tạm dừng (menupause.js đặt animation-play-state:paused cho MỌI phần tử) → hiệu ứng mở danh sách (ccpop: opacity 0→1) đứng ở trong suốt: bấm nút mà không thấy gì. Bảng điều khiển luôn chạy hiệu ứng của chính nó */
+html.np-menupaused #ccRoot,html.np-menupaused #ccRoot *,html.np-menupaused #ccRoot *::before,html.np-menupaused #ccRoot *::after{animation-play-state:running!important}
