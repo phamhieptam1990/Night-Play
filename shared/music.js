@@ -13,6 +13,7 @@
   var ID = m[1];
   var A = window.AudioContext || window.webkitAudioContext; if (!A) return;
   try { if (/[?&]nomusic=1/.test(location.search)) return; } catch (e) {}
+  try { if (/[?&]multi=1/.test(location.search)) return; } catch (e) {}   /* chơi nhiều game cùng lúc: nhiều khung chạy một lúc → KHÔNG phát nhạc nền (nhạc các game sẽ đè lên nhau) */
 
   var SC = { maj: [0, 2, 4, 5, 7, 9, 11], min: [0, 2, 3, 5, 7, 8, 10], dor: [0, 2, 3, 5, 7, 9, 10], mix: [0, 2, 4, 5, 7, 9, 10], lyd: [0, 2, 4, 6, 7, 9, 11], pen: [0, 2, 4, 7, 9, 12, 14] };
   /* bpm · root (MIDI) · sc (âm giai) · prog (bậc hợp âm mỗi ô nhịp, 8 ô) · lead (nhạc cụ giai điệu) · groove 0-2 · bass (các bước 16 trong ô nhịp) · arp (bước arp) */
