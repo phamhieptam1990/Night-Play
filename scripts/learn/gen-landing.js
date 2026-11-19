@@ -8,6 +8,8 @@ const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(
 const SUBJ = ["toan", "tieng-viet", "tieng-anh"], KEY = { "toan": "toan", "tieng-viet": "tviet", "tieng-anh": "tanh" };
 const CLS = { "toan": "s-toan", "tieng-viet": "s-viet", "tieng-anh": "s-anh" };
 const MAS = { "toan": { f: "math", n: "Mochi", brand: { vi: "Mochi Toán", en: "Mochi Math" }, tag: { vi: "Chơi vui, giỏi Toán", en: "Play, count, shine" } }, "tieng-viet": { f: "vietnamese", n: "Mầm", brand: { vi: "Mầm Tiếng Việt", en: "Mầm Vietnamese" }, tag: { vi: "Yêu chữ, mê đọc", en: "Love words, love stories" } }, "tieng-anh": { f: "english", n: "Bibi", brand: { vi: "Bibi English", en: "Bibi English" }, tag: { vi: "Nói liền, tự tin", en: "Speak up, shine" } } };
+const MK = { "toan": "mochi", "tieng-viet": "mam", "tieng-anh": "bibi" };
+const mi = (sl, noswap) => `data-mas="${MK[sl]}" tabindex="0" role="button"${noswap ? ' data-noswap="1"' : ""}`;
 const asset = (sl, kind) => `/shared/art/learn/${MAS[sl].f}/${MAS[sl].f}_${kind}.svg`;
 const head = (sl, kind, lazy) => `<span class="hd"><img src="${asset(sl, kind || "base")}" width="64" height="64" alt=""${lazy ? ' loading="lazy" decoding="async"' : ""}></span>`;
 const ICON = { "toan": "🔢", "tieng-viet": "📖", "tieng-anh": "🔤" };
@@ -244,7 +246,7 @@ function page(l, sl) {
       <ul class="badges">${s.badges.map(b => `<li>${esc(b)}</li>`).join("")}</ul>
     </div>
     <div class="devbox" aria-hidden="true">
-      <img class="hmas" src="${asset(sl, "happy")}" width="200" height="200" alt="${MAS[sl].n}"><span class="float b">⭐</span>
+      <img class="mi hmas" ${mi(sl)} src="${asset(sl, "happy")}" width="200" height="200" alt="${MAS[sl].n}"><span class="float b">⭐</span>
       <div class="dev"><div class="scr"><div class="sb"><b>9:41</b><b>⭐ 120</b></div><div class="q">${esc(s.scr.q)}</div><div class="field">${bubbles}</div><div class="row">${row}</div></div></div>
     </div>
   </div>
@@ -268,7 +270,7 @@ function page(l, sl) {
 
 <section class="sec" id="lop"><div class="wrap">
   <span class="tag">${MAS[sl].n}</span><h2 class="reveal">${esc(t.growH.split("{n}").join(MAS[sl].n))}</h2><p class="sub reveal">${esc(t.growSub)}</p>
-  <div class="grow">${[1, 2, 3, 4, 5].map(g => `<figure class="card gw reveal"><img src="${asset(sl, "grade_" + g)}" width="200" height="200" alt="${MAS[sl].n}, ${t.gradeLbl}${g}" loading="lazy" decoding="async"><figcaption><b>${t.gradeLbl}${g}</b><span>${esc(t.growItems[g - 1])}</span></figcaption></figure>`).join("")}</div>
+  <div class="grow">${[1, 2, 3, 4, 5].map(g => `<figure class="card gw reveal"><img class="mi" ${mi(sl, 1)} src="${asset(sl, "grade_" + g)}" width="200" height="200" alt="${MAS[sl].n}, ${t.gradeLbl}${g}" loading="lazy" decoding="async"><figcaption><b>${t.gradeLbl}${g}</b><span>${esc(t.growItems[g - 1])}</span></figcaption></figure>`).join("")}</div>
 </div></section>
 
 <section class="sec" id="trochoi"><div class="wrap">
@@ -310,7 +312,7 @@ ${s.exam ? `<section class="sec" id="luyenthi"><div class="wrap">
   <p class="sl sl1 reveal">${esc(t.slogan[0])}</p><p class="sl sl2 reveal">${esc(t.slogan[1])}</p><p class="sl sl3 reveal">${esc(t.slogan[2])}</p>
 </div></section>
 <section class="endcta"><div class="wrap">
-  <img class="emas" src="${asset(sl, "happy")}" width="150" height="150" alt="" loading="lazy" decoding="async">
+  <img class="mi emas" ${mi(sl)} src="${asset(sl, "happy")}" width="150" height="150" alt="${MAS[sl].n}" loading="lazy" decoding="async">
   <h2>${esc(s.kick)}</h2><p class="sub">${esc(s.lead)}</p>
   <a class="btn white big" href="${learn}">${t.cta} →</a>
 </div></section>
@@ -331,23 +333,24 @@ ${s.exam ? `<section class="sec" id="luyenthi"><div class="wrap">
 const HUBT = {
   vi: { title: "Học Vui: học cùng AI cho bé lớp 1–5 (Toán, Tiếng Việt, Tiếng Anh)", desc: "Học Vui gồm Mochi Toán, Mầm Tiếng Việt và Bibi English: mỗi chủ đề là một trò chơi, gia sư AI gợi ý từng bước, báo cáo phụ huynh mỗi tối. Bám chương trình GDPT 2018.",
     kick: "Học Vui · lớp 1–5 · luyện thi lớp 6", h1: "Vào là <em>học liền</em>, bé học bằng trò chơi.", lead: "Chọn một người bạn đồng hành: Mochi dạy Toán, Mầm dạy Tiếng Việt, Bibi dạy Tiếng Anh. Mỗi lớp linh vật có khăn màu và số lớp riêng, bé nhìn là biết mình học môn nào, lớp nào.",
-    pickH: "Chọn môn của bé", pickSub: "Mỗi môn có một linh vật, một màu và một bộ trò chơi riêng.", view: "Xem môn này", try: "Vào học thử",
+    greet: "Chọn một người bạn đồng hành nhé!", pickH: "Chọn môn của bé", pickSub: "Mỗi môn có một linh vật, một màu và một bộ trò chơi riêng.", view: "Xem môn này", try: "Vào học thử",
     stepsH: "Bé học thế nào", steps: [["Vào là chơi", "Mở trang là có ngay câu đầu tiên, không phải chọn nhiều. Môn và lớp được nhớ cho lần sau."], ["Gợi ý, không giải hộ", "Sai thì linh vật hỏi gợi ý từng bước để bé tự nghĩ ra."], ["Luyện đúng chỗ yếu", "App ghi lại lỗi tư duy của bé và đưa thêm đúng dạng bài đó."]],
     featH: "Vì sao bố mẹ yên tâm", ok: "Có cổng phụ huynh, hẹn giờ học và báo cáo mỗi tối qua Zalo.", curH: "Bám chương trình GDPT 2018", curP: "Chủ đề chia theo từng lớp, câu hỏi tự soạn và có người duyệt, không chép sách giáo khoa.", home: "Trang chủ" },
   en: { title: "Fun Learning: learn with AI for Grades 1–5 (Math, Vietnamese, English)", desc: "Fun Learning has Mochi Math, Mầm Vietnamese and Bibi English: every topic is a game, the AI tutor hints step by step, and parents get an evening report. Follows Vietnam’s 2018 curriculum.",
     kick: "Fun Learning · Grades 1–5 · Grade 6 prep", h1: "Open and <em>start learning</em>, through play.", lead: "Pick a companion: Mochi teaches Math, Mầm teaches Vietnamese, Bibi teaches English. Each grade gives the mascot its own scarf color and number, so kids see at a glance which subject and grade they are in.",
-    pickH: "Pick your subject", pickSub: "Each subject has its own mascot, color and set of games.", view: "View subject", try: "Try it now",
+    greet: "Pick a companion to learn with!", pickH: "Pick your subject", pickSub: "Each subject has its own mascot, color and set of games.", view: "View subject", try: "Try it now",
     stepsH: "How kids learn", steps: [["Open and play", "The first question appears right away, no long menus. Subject and grade are remembered."], ["Hints, not answers", "On a mistake the mascot asks hint by hint so the child works it out."], ["Practise the gap", "The app logs thinking errors and serves more of exactly that type."]],
     featH: "Why parents feel at ease", ok: "Parent gate, study timer and an evening report on Zalo.", curH: "Follows Vietnam’s 2018 curriculum", curP: "Topics are organised by grade; questions are written and reviewed by us, not copied from textbooks.", home: "Home" }
 };
 function hubPage(l) {
   const t = L[l], h = HUBT[l], url = `${BASE}${l === "vi" ? "/hoc/" : "/en/hoc/"}`, pre = t.prefix;
   const cards = SUBJ.map(sl => { const m = MAS[sl], s = S[sl][l], c = CLS[sl];
-    return `<article class="card hc ${c} reveal"><div class="hh"><img src="${asset(sl, "happy")}" width="170" height="170" alt="${m.n}" loading="lazy" decoding="async"></div><h3>${esc(m.brand[l])}</h3><p class="ht">${esc(m.tag[l])}</p><ul class="hl">${s.games.slice(0, 3).map(g => `<li>${g[0]} ${esc(g[1])}</li>`).join("")}</ul><div class="hb"><a class="btn sm" href="/learn/index.html?subj=${KEY[sl]}&lang=${l}">${h.try} →</a><a class="btn sm ghost" href="${pre}${sl}/">${h.view}</a></div></article>`; }).join("");
+    return `<article class="card hc ${c} reveal"><div class="hh"><img class="mi" ${mi(sl)} src="${asset(sl, "happy")}" width="170" height="170" alt="${m.n}" loading="lazy" decoding="async"></div><h3>${esc(m.brand[l])}</h3><p class="ht">${esc(m.tag[l])}</p><ul class="hl">${s.games.slice(0, 3).map(g => `<li>${g[0]} ${esc(g[1])}</li>`).join("")}</ul><div class="hb"><a class="btn sm" href="/learn/index.html?subj=${KEY[sl]}&lang=${l}">${h.try} →</a><a class="btn sm ghost" href="${pre}${sl}/">${h.view}</a></div></article>`; }).join("");
   const nav = SUBJ.map(x => `<a href="${pre}${x}/">${t.nav[x]}</a>`).join("");
   const faq = t.common_faq.map(f => `<details class="card"><summary>${esc(f[0])}</summary><p>${esc(f[1])}</p></details>`).join("");
   const feats = t.feats.map(f => `<article class="card feat reveal"><div class="fi" aria-hidden="true">${f[0]}</div><h3>${esc(f[1].split("Mít").join(l === "vi" ? "Linh vật" : "Mascot"))}</h3><p>${esc(f[2].split("Mít").join(l === "vi" ? "linh vật" : "the mascot"))}</p></article>`).join("");
-  const trio = SUBJ.map((sl, i) => `<img class="trio t${i}" src="${asset(sl, "happy")}" width="190" height="190" alt="${MAS[sl].n}">`).join("");
+  const tcs = SUBJ.map((sl, i) => `<div class="tc ${CLS[sl]}" data-mas="${MK[sl]}"><img class="mi trio t${i}" ${mi(sl)} src="${asset(sl, "happy")}" width="190" height="190" alt="${MAS[sl].n}"><a class="tcl" href="${pre}${sl}/"><b>${esc(MAS[sl].brand[l])}</b><small>${esc(MAS[sl].tag[l])}</small></a></div>`).join("");
+  const trioOld = SUBJ.map((sl, i) => `<img class="mi trio t${i}" ${mi(sl)} src="${asset(sl, "happy")}" width="190" height="190" alt="${MAS[sl].n}">`).join("");
   const jsonld = { "@context": "https://schema.org", "@type": "CollectionPage", name: h.title, description: h.desc, inLanguage: l, isPartOf: { "@type": "WebSite", name: "Play Hub", url: BASE + "/" } };
   return `<!doctype html>
 <html lang="${l}" data-app="hub">
@@ -380,7 +383,7 @@ function hubPage(l) {
 <section class="hero" id="top"><div class="aur" aria-hidden="true"><i></i><i></i><i></i></div><div class="stars" aria-hidden="true"></div>
   <div class="wrap hero-in"><div><span class="kick">✨ ${esc(h.kick)}</span><h1>${h.h1}</h1><p class="lead">${esc(h.lead)}</p>
     <div class="cta"><a class="btn big" href="/learn/index.html?lang=${l}">${h.try} →</a><a class="btn ghost" href="#mon">${h.pickH}</a></div></div>
-    <div class="trios" aria-hidden="false">${trio}</div></div></section>
+    <div class="trios"><div class="spot on" id="spot" role="status" aria-live="polite"><p class="spot-say" id="spotSay">${esc(h.greet)}</p><img id="spotImg" data-k="mochi" src="${asset("toan", "happy")}" width="360" height="360" alt=""></div><div class="tcs">${tcs}</div></div></div></section>
 <section class="sec alt" id="mon"><div class="wrap"><h2 class="reveal">${esc(h.pickH)}</h2><p class="sub reveal">${esc(h.pickSub)}</p><div class="hubgrid">${cards}</div></div></section>
 <section class="sec slogan" id="khauhieu" aria-label="${esc(t.slogan[0])}"><div class="aur" aria-hidden="true"><i></i><i></i></div><div class="wrap">
   <p class="sl sl1 reveal">${esc(t.slogan[0])}</p><p class="sl sl2 reveal">${esc(t.slogan[1])}</p><p class="sl sl3 reveal">${esc(t.slogan[2])}</p>

@@ -59,7 +59,7 @@ for (const sj of SUBJ) {
       .replace(/<title>[^<]*<\/title>/, `<title>${g ? sj.label + " lớp " + g : sj.label}</title>`);
     fs.writeFileSync(path.join(dir, name), x);
   };
-  emit(0, `${sj.id}_base.svg`); { const x = fs.readFileSync(path.join(dir, `${sj.id}_base.svg`), "utf8").replace('class="np-mascot sk-default"', 'class="np-mascot sk-default em-happy"'); fs.writeFileSync(path.join(dir, `${sj.id}_happy.svg`), x); } for (let g = 1; g <= 5; g++) emit(g, `${sj.id}_grade_${g}.svg`);
+  emit(0, `${sj.id}_base.svg`); { const x = fs.readFileSync(path.join(dir, `${sj.id}_base.svg`), "utf8").replace('class="np-mascot sk-default"', 'class="np-mascot sk-default em-happy"'); fs.writeFileSync(path.join(dir, `${sj.id}_happy.svg`), x); } { const y = fs.readFileSync(path.join(dir, `${sj.id}_base.svg`), "utf8").replace('class="np-mascot sk-default"', 'class="np-mascot sk-default em-cheer"'); fs.writeFileSync(path.join(dir, `${sj.id}_cheer.svg`), y); } for (let g = 1; g <= 5; g++) emit(g, `${sj.id}_grade_${g}.svg`);
 }
 const manifest = { version: "1.0.0", curriculum: "GDPT_2018", asset_type: "subject_mascot", subjects: SUBJ.map(s => ({ id: s.id, name: { vi: s.vi, en: s.en }, mascot_id: s.mascot, mascot_name: s.name, base_asset: `${s.id}/${s.id}_base.svg`, skins: Object.fromEntries([1, 2, 3, 4, 5].map(g => [String(g), `${s.id}/${s.id}_grade_${g}.svg`])) })) };
 fs.writeFileSync(path.join(art, "learn", "manifest.json"), JSON.stringify(manifest, null, 2) + "\n");
