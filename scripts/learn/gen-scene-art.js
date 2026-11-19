@@ -272,7 +272,9 @@ function defs() {
 const STYLE = `<style>.npa-spin{transform-box:fill-box;transform-origin:50% 50%;animation:npa-spin 14s linear infinite}.npa-hover{animation:npa-hover 3s ease-in-out infinite}@keyframes npa-spin{to{transform:rotate(360deg)}}@keyframes npa-hover{0%,100%{transform:translate(0,0)}50%{transform:translate(6px,-8px)}}:root.np-playing .npa-spin,:root.np-playing .npa-hover{animation:none}@media (prefers-reduced-motion:reduce){.npa-spin,.npa-hover{animation:none!important}}</style>`;
 
 /* cấu hình cảnh: levels = cấp của từng vị trí (0 = chưa có). time = day | dusk | night */
+const HOT = [];   /* vị trí các ô trồng của cảnh vừa sinh (để trang tương tác đặt vùng rê/bấm) */
 function scene(o) {
+  HOT.length = 0;
   const L = Object.assign({ deco: 3, house: 4, fence: 3, well: 3, barn: 3, windmill: 3, plots: 74, planted: 56, path: 1, apple: 1, flowers: 1, pond: 1, hay: 1, animals: 1 }, o.levels || {});
   const time = o.time || "day"; const items = [], R = rng(7);
   /* nền cỏ */
@@ -301,6 +303,7 @@ function scene(o) {
   const FIELDS = [[[810, 590], 3, 3], [[352, 770], 3, 2], [[256, 508], 3, 2], [[940, 810], 4, 1], [[966, 214], 2, 1], [[1100, 700], 2, 2], [[120, 330], 3, 2], [[640, 800], 3, 2], [[1180, 420], 2, 2], [[520, 220], 3, 1], [[60, 200], 3, 2], [[1150, 220], 2, 2], [[200, 640], 3, 2], [[1180, 560], 2, 2], [[900, 130], 3, 1]];
   let left = L.plots, ci = 0, pidx = 0; const nGray = Math.max(0, L.plots - L.planted), grayIdx = new Set(Array.from({ length: nGray }, (_, k) => Math.min(L.plots - 1, Math.floor((k + 1) * L.plots / (nGray + 1)))));
   for (const [fo, na, nb] of FIELDS) for (let b = 0; b < nb; b++) for (let a = 0; a < na; a++) { if (left <= 0) break; left--; const planted = !grayIdx.has(pidx++), cp = planted ? cyc[ci++ % cyc.length] : null, tl = [fo[0] + (a - b) * TW / 2, fo[1] + (a + b) * TH / 2];
+    HOT.push({ x: Math.round(tl[0]), y: Math.round(tl[1] + TH / 2), planted, crop: cp ? ({ [cropWheat]: "wheat", [cropCarrot]: "carrot", [cropCorn]: "corn", [cropStraw]: "strawberry", [cropTomato]: "tomato", [cropSun]: "sunflower" })[cp[0]] : null, ripe: cp ? cp[1] : false });
     const A = tl, B = [tl[0] + TW / 2, tl[1] + TH / 2], Cc = [tl[0], tl[1] + TH], Dd = [tl[0] - TW / 2, tl[1] + TH / 2], lvl = L.plots >= 4 ? 3 : 2;
     let o;
     if (planted) { o = poly([A, B, Cc, Dd], "url(#gSoil)", lvl >= 3 ? "#7A4B24" : C.soilD, lvl >= 3 ? 7 : 3); for (let k = 1; k < 5; k++) { const p = lerp(A, Dd, k / 5), q = lerp(B, Cc, k / 5); o += `<path d="M${f(p[0])} ${f(p[1])}L${f(q[0])} ${f(q[1])}" stroke="${C.soilD}" stroke-width="2.6" opacity=".45" stroke-linecap="round"/>`; } if (lvl >= 3) o += poly([A, B, Cc, Dd], "none", "#C58B4E", 3); }
@@ -377,7 +380,8 @@ const SCENES = [
   ["06-ban-dem", "Ban đêm: đèn sáng, đom đóm, trăng", { time: "night" }]
 ];
 const files = {};
-for (const [id, label, o] of SCENES) files[`scene-${id}.svg`] = scene(Object.assign({ label }, o));
+let HOT1 = null;
+for (const [id, label, o] of SCENES) { files[`scene-${id}.svg`] = scene(Object.assign({ label }, o)); if (id === "01-toan-canh") HOT1 = HOT.slice(); }
 /* ảnh cận cảnh: cắt vùng của cùng cảnh */
 const CLOSE = [
   ["07-nha-4-cap", "Cận cảnh ngôi nhà qua 4 cấp: lều lá → nhà tranh → nhà tường → nhà ngói", null],
@@ -424,7 +428,7 @@ function strip(label, makers, w, h, bg) {
 for (const [n, c] of Object.entries(files)) fs.writeFileSync(path.join(out, n), c);
 const ids = [...SCENES.map(s => [s[0], s[1]]), ...CLOSE.map(c => [c[0], c[1]])].sort();
 const A = 'style="color:#cfd3ff;text-decoration:none;padding:4px 10px;border-radius:99px"';
-const nav = `<nav class="rvnav" style="position:sticky;top:0;z-index:99;display:flex;gap:6px 14px;flex-wrap:wrap;align-items:center;padding:8px 16px;background:#1a1d33;color:#fff;font:600 13px system-ui"><b style="opacity:.7">Duyệt Học Vui:</b><a ${A} href="../../../learn/mascot-review.html">🐾 Linh vật theo bố cục học</a><a ${A} href="../../../learn/index.html">Trang học</a><a ${A} href="../brand-learn.html">Thương hiệu 3 môn</a><a ${A} href="../learn/mascot_sheet.html">Bảng 3×5 lớp</a><a ${A} href="../preview-learn.html">3 bản base</a><a ${A} href="../preview-emotions.html">Cảm xúc</a><a ${A} href="preview-garden.html">🌸 Vườn hoa</a><a ${A} href="preview-crops.html">🌾 Thu hoạch (cây trồng)</a><span style="padding:4px 10px;border-radius:99px;background:#fff;color:#1a1d33">🏡 Khu vườn</span></nav>`;
+const nav = `<nav class="rvnav" style="position:sticky;top:0;z-index:99;display:flex;gap:6px 14px;flex-wrap:wrap;align-items:center;padding:8px 16px;background:#1a1d33;color:#fff;font:600 13px system-ui"><b style="opacity:.7">Duyệt Học Vui:</b><a ${A} href="../../../learn/mascot-review.html">🐾 Linh vật theo bố cục học</a><a ${A} href="../../../learn/index.html">Trang học</a><a ${A} href="../brand-learn.html">Thương hiệu 3 môn</a><a ${A} href="../learn/mascot_sheet.html">Bảng 3×5 lớp</a><a ${A} href="../preview-learn.html">3 bản base</a><a ${A} href="../preview-emotions.html">Cảm xúc</a><a ${A} href="preview-garden.html">🌸 Vườn hoa</a><a ${A} href="preview-crops.html">🌾 Thu hoạch (cây trồng)</a><span style="padding:4px 10px;border-radius:99px;background:#fff;color:#1a1d33">🏡 Khu vườn</span><a ${A} href="preview-garden-play.html">👆 Vườn tương tác</a></nav>`;
 const html = `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Khu vườn Học Vui: ảnh duyệt</title>
 <style>:root{--ink:#1d1a33;--bg:#F6F4F1;--panel:#fff;--line:#E3DDEF}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
 .wrap{max-width:1180px;margin:0 auto;padding:24px 16px 70px}h1{font-size:clamp(26px,5vw,40px);margin:0 0 6px;font-weight:900}p.n{color:#5b5578;max-width:52em;margin:0 0 14px}
@@ -436,4 +440,94 @@ ${ids.map(([id, label], i) => `<figure class="shot"><img src="scene/scene-${id}.
 </div></body></html>
 `;
 fs.writeFileSync(path.join(out, "..", "preview-scene.html"), html);
-console.log("✓ đã sinh " + Object.keys(files).length + " ảnh cảnh + preview-scene.html");
+
+
+/* ---------- trang VƯỜN TƯƠNG TÁC: rê vào ô = thanh tiến độ, bấm vào = popup chi tiết ---------- */
+const CROPINFO = {
+  wheat: { vi: "Lúa mì", subj: "Tiếng Việt", sk: "tviet", g: 2, skill: "Chính tả và từ ngữ", ic: "🌾", per: [3, 4, 5, 6, 7], learn: ["Điền chữ còn thiếu (ch/tr, s/x)", "Ghép chữ cái thành từ", "Sắp xếp từ thành câu"], care: ["Đọc kỹ rồi chọn chữ đúng", "Làm đúng liền nhau để cây lớn nhanh hơn", "Ôn lại những chữ hay nhầm"], tip: "Chữ đúng, bông lúa nặng hạt." },
+  carrot: { vi: "Cà rốt", subj: "Toán", sk: "toan", g: 2, skill: "Cộng trừ trong 100", ic: "🥕", per: [2, 3, 4, 5, 6], learn: ["Cộng trừ trong 100 (36 + 27)", "Đếm bằng chạm, so sánh số", "Đặt số lên trục số"], care: ["Tính nhẩm cẩn thận, kiểm tra lại kết quả", "Làm đúng liền nhau để cây lớn nhanh hơn", "Ôn lại phép tính có nhớ khi bị sai"], tip: "Mỗi phép tính đúng là một củ lớn lên." },
+  corn: { vi: "Bắp", subj: "Toán", sk: "toan", g: 3, skill: "Bảng nhân", ic: "🌽", per: [2, 3, 4, 5, 6], learn: ["Bảng nhân 2 đến 9", "Điền phép nhân còn thiếu", "Nhân nhẩm nhanh"], care: ["Đọc thuộc bảng nhân từng dòng", "Làm đúng liền nhau để cây lớn nhanh hơn", "Ôn lại dòng nhân bị sai"], tip: "Nhân đúng, bắp ra thêm trái." },
+  strawberry: { vi: "Dâu tây", subj: "Tiếng Anh", sk: "tanh", g: 2, skill: "Từ vựng trái cây", ic: "🍓", per: [3, 4, 5, 6, 8], learn: ["Chọn hình đúng với từ (apple, banana...)", "Ghép chữ cái thành từ", "Lật thẻ ghép hình với từ"], care: ["Nghe và đọc to từ mới", "Làm đúng liền nhau để cây lớn nhanh hơn", "Ôn lại những từ chưa nhớ"], tip: "Nhớ từ mới, dâu thêm đỏ." },
+  tomato: { vi: "Cà chua", subj: "Tiếng Anh", sk: "tanh", g: 2, skill: "Từ vựng rau củ", ic: "🍅", per: [2, 3, 4, 5, 6], learn: ["Nối từ với hình (carrot, tomato...)", "Phân loại rau củ và trái cây", "Điền từ vào chỗ trống"], care: ["Nói to từ mới theo máy", "Làm đúng liền nhau để cây lớn nhanh hơn", "Ôn lại từ sai ở lượt trước"], tip: "Nói đúng từ, quả chín đỏ." },
+  sunflower: { vi: "Hướng dương", subj: "Tiếng Việt", sk: "tviet", g: 3, skill: "Đọc hiểu ngắn", ic: "🌻", per: [1, 2, 3, 4, 5], learn: ["Đọc câu ngắn rồi chọn ý đúng", "Sắp xếp từ thành câu", "Chọn từ đúng điền vào câu"], care: ["Đọc chậm và chú ý từ khóa", "Làm đúng liền nhau để cây lớn nhanh hơn", "Đọc lại câu khi chưa hiểu"], tip: "Hiểu bài, bông xoay về phía nắng." }
+};
+{
+  const rr = rng(77), plots = HOT1.map((h, i) => { const need = 5, got = h.planted ? (h.ripe ? need : 1 + Math.floor(rr() * 4)) : 0; return { i, x: h.x, y: h.y, planted: h.planted, crop: h.crop, got, need }; });
+  const ids = Object.keys(CROPINFO);
+  const A = 'style="color:#cfd3ff;text-decoration:none;padding:4px 10px;border-radius:99px"';
+  const nav = `<nav class="rvnav" style="position:sticky;top:0;z-index:99;display:flex;gap:6px 14px;flex-wrap:wrap;align-items:center;padding:8px 16px;background:#1a1d33;color:#fff;font:600 13px system-ui"><b style="opacity:.7">Duyệt Học Vui:</b><a ${A} href="../../../learn/mascot-review.html">🐾 Linh vật theo bố cục học</a><a ${A} href="../brand-learn.html">Thương hiệu 3 môn</a><a ${A} href="preview-garden.html">🌸 Vườn hoa</a><a ${A} href="preview-crops.html">🌾 Thu hoạch (cây trồng)</a><a ${A} href="preview-scene.html">🏡 Khu vườn</a><span style="padding:4px 10px;border-radius:99px;background:#fff;color:#1a1d33">👆 Vườn tương tác</span></nav>`;
+  const html2 = `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Vườn Học Vui: tương tác thử</title>
+<style>:root{--ink:#1d1a33;--bg:#F6F4F1;--panel:#fff;--line:#E3DDEF;--ac:#7C5CFF}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:1180px;margin:0 auto;padding:18px 14px 60px}h1{font-size:clamp(22px,4.5vw,34px);margin:0 0 4px;font-weight:900}p.n{color:#5b5578;max-width:54em;margin:0 0 12px}
+.stage{position:relative;width:100%;aspect-ratio:1280/880;border-radius:22px;overflow:hidden;background:#8ccf55;border:1px solid var(--line)}.stage>img{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
+.hs{position:absolute;width:9%;height:9.6%;transform:translate(-50%,-50%);border:0;background:none;padding:0;border-radius:50%;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.hs::before{content:"";position:absolute;inset:8% 4%;border:3px solid transparent;border-radius:50%;transition:border-color .15s,background .15s}.hs:hover::before,.hs:focus-visible::before{border-color:#fff;background:rgba(255,255,255,.22)}.hs:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+.hs.ripe::after{content:"";position:absolute;left:50%;top:50%;width:46%;height:46%;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 0 0 rgba(255,236,120,.9);animation:pulse 1.6s ease-out infinite}@keyframes pulse{to{box-shadow:0 0 0 26px rgba(255,236,120,0)}}
+.hs .bdg{position:absolute;left:50%;top:-4%;transform:translateX(-50%);min-width:clamp(18px,2.4vw,28px);height:clamp(18px,2.4vw,28px);display:grid;place-items:center;border-radius:50%;background:#fff;color:#7C5CFF;font:900 clamp(12px,1.8vw,20px)/1 system-ui;box-shadow:0 2px 6px rgba(0,0,0,.3);pointer-events:none}
+.tip{position:absolute;z-index:5;pointer-events:none;width:clamp(170px,22%,260px);padding:10px 12px 12px;border-radius:16px;background:#fff;border:2px solid #E3DDEF;box-shadow:0 10px 26px rgba(40,30,90,.3);transform:translate(-50%,-100%);opacity:0;transition:opacity .12s}.tip.on{opacity:1}
+.tip b{display:block;font-size:14px;margin-bottom:6px}.tip small{display:block;margin-top:5px;font-size:12px;font-weight:700;color:#5b5578}
+.bar{height:12px;border-radius:7px;background:#E9E4F5;overflow:hidden;border:1px solid #D6CFEA}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#34D399,#FFD24D);border-radius:7px;transition:width .5s}.bar.full i{background:linear-gradient(90deg,#FFD24D,#FF9A3D)}
+.ov{position:fixed;inset:0;z-index:50;display:none;place-items:center;padding:16px;background:rgba(20,16,50,.5)}.ov.on{display:grid}
+.card{width:min(480px,100%);max-height:calc(100vh - 32px);overflow:auto;background:#fff;border-radius:26px;padding:22px 22px 20px;border:2px solid #E3DDEF;box-shadow:0 24px 60px rgba(20,16,50,.45)}
+.card .hd{display:flex;gap:14px;align-items:center}.card .pi{width:84px;height:84px;border-radius:22px;background:#F2EEFA;display:grid;place-items:center;flex:none}.card .pi img{width:76px;height:76px}
+.card h2{margin:0;font-size:26px;font-weight:900}.chip{display:inline-block;font-size:12px;font-weight:800;padding:2px 10px;border-radius:99px;background:#EDE9FF;color:#4B3FA0;margin:2px 6px 0 0}
+.row{display:flex;justify-content:space-between;gap:10px;margin:14px 0 6px;font-weight:800;font-size:14px}.card p{margin:10px 0 0;color:#4d4770}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.pick{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 4px;border-radius:16px;border:2px solid #E3DDEF;background:#fff;font:800 13px system-ui;cursor:pointer;min-height:44px}.pick img{width:44px;height:44px}.pick:hover,.pick:focus-visible{border-color:var(--ac);background:#F6F2FF;outline:none}
+.card h3{margin:16px 0 4px;font-size:14px;font-weight:900;color:#4B3FA0;letter-spacing:.02em}.stp{list-style:none;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin:6px 0 0;padding:0}.stp li{text-align:center;font-size:11px;color:#8c85a8;position:relative}.stp i{display:grid;place-items:center;width:26px;height:26px;margin:0 auto 3px;border-radius:50%;background:#E9E4F5;font:900 12px system-ui;font-style:normal;color:#8c85a8}.stp b{display:block;font-size:12px}.stp li.dn i{background:#34D399;color:#fff}.stp li.dn{color:#0b7a56}.stp li.nw i{background:#FFB020;color:#3a2a00;box-shadow:0 0 0 4px rgba(255,176,32,.3)}.stp li.nw{color:#8a5a00;font-weight:800}.stp li.nw b{color:#3a2a00}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}.chips span{font-size:12px;font-weight:700;padding:5px 10px;border-radius:99px;background:#F2EEFA;color:#4B3FA0}.care{margin:6px 0 0;padding-left:20px;color:#4d4770;font-size:14px}.card p.sm{font-size:13px}.btn.go{display:grid;place-items:center;text-decoration:none;background:linear-gradient(135deg,#7C5CFF,#5B8DEF)}
+.acts{display:flex;gap:10px;margin-top:18px}.btn{flex:1;min-height:48px;border-radius:16px;border:0;font:900 16px system-ui;cursor:pointer;background:linear-gradient(135deg,#34D399,#10B981);color:#fff}.btn[disabled]{background:#E3DDEF;color:#8c85a8;cursor:not-allowed}.btn.g{background:#F2EEFA;color:#4B3FA0}
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);z-index:60;background:#1d1a33;color:#fff;padding:10px 18px;border-radius:99px;font-weight:800;opacity:0;transition:.25s;pointer-events:none}.toast.on{opacity:1;transform:translate(-50%,0)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0 0;font-size:14px;color:#5b5578}.legend span{display:inline-flex;align-items:center;gap:6px}
+@media (prefers-reduced-motion:reduce){.hs.ripe::after{animation:none}.bar i{transition:none}}</style></head><body>${nav}<div class="wrap">
+<h1>Vườn tương tác — rê và bấm thử</h1>
+<p class="n"><b>Rê chuột</b> (hoặc chạm giữ trên điện thoại) vào một ô trồng để xem <b>thanh tiến độ còn bao lâu thì thu hoạch</b>. <b>Bấm vào ô</b> để mở <b>popup chi tiết</b>: tên cây, môn, kỹ năng, tiến độ, nông sản sẽ thu, và nút <b>Thu hoạch</b> khi đã chín. Ô <b>đất xám</b> thì bấm để chọn cây muốn trồng. Đây là bản thử trên ảnh tĩnh nên cây không đổi hình, chỉ có dấu hiệu nhỏ báo trạng thái.</p>
+<div class="stage" id="st"><img src="scene/scene-01-toan-canh.svg" alt="Khu vườn Học Vui"><div id="tip" class="tip" aria-hidden="true"></div></div>
+<div class="legend"><span>✨ Ô đang sáng nhịp: cây đã chín, bấm để thu hoạch</span><span>⬜ Đất xám: ô trống, bấm để chọn cây</span><span>🔢 Thanh tiến độ tính theo số câu đúng của kỹ năng đó</span></div></div>
+<div class="ov" id="ov" role="dialog" aria-modal="true" aria-labelledby="ptitle"><div class="card" id="card"></div></div><div class="toast" id="toast" role="status"></div>
+<script>
+var CI = ${JSON.stringify(CROPINFO)}, PLOTS = ${JSON.stringify(plots)}, IDS = ${JSON.stringify(ids)}, ST = ["Hạt", "Mầm", "Cây con", "Sắp chín", "CHÍN"], W = 1280, H = 880;
+var stage = document.getElementById("st"), tip = document.getElementById("tip"), ov = document.getElementById("ov"), card = document.getElementById("card"), toastEl = document.getElementById("toast"), cur = null, lastFocus = null;
+var TH = [0, 1, 2, 4, 5], SN = ["Hạt", "Mầm", "Cây con", "Sắp chín", "CHÍN"];
+function stg(p){ return !p.planted ? 0 : p.got >= 5 ? 4 : p.got >= 4 ? 3 : p.got >= 2 ? 2 : p.got >= 1 ? 1 : 0; }
+function mins(n){ return Math.max(1, Math.ceil(n * 0.7)); }
+function reward(p){ var c = CI[p.crop]; return c.per[Math.min(4, stg(p))]; }
+function badge(p, b){ var e = b.querySelector(".bdg"); if(e) e.remove(); var t = !p.planted ? "+" : p.got >= p.need ? CI[p.crop].ic : ""; if(t){ e = document.createElement("span"); e.className = "bdg"; e.textContent = t; b.appendChild(e); } b.classList.toggle("ripe", p.planted && p.got >= p.need); b.setAttribute("aria-label", p.planted ? CI[p.crop].vi + (p.got >= p.need ? ": chín, bấm để thu hoạch" : ": còn " + (p.need - p.got) + " câu đúng nữa") : "Đất trống, bấm để chọn cây"); }
+PLOTS.forEach(function(p){ var b = document.createElement("button"); b.type = "button"; b.className = "hs"; b.style.left = (p.x / W * 100) + "%"; b.style.top = (p.y / H * 100) + "%"; p.el = b; badge(p, b); stage.appendChild(b);
+  b.addEventListener("pointerenter", function(){ showTip(p); }); b.addEventListener("pointerleave", hideTip); b.addEventListener("focus", function(){ showTip(p); }); b.addEventListener("blur", hideTip); b.addEventListener("click", function(){ hideTip(); openCard(p, b); }); });
+function showTip(p){
+  var c = p.planted ? CI[p.crop] : null, left = p.need - p.got, pct = p.planted ? p.got / p.need * 100 : 0;
+  tip.innerHTML = p.planted ? "<b>" + c.ic + " " + c.vi + (left ? "" : " · đã chín") + "</b><div class='bar" + (left ? "" : " full") + "'><i style='width:0'></i></div><small>" + (left ? "Còn <b style=\\"display:inline\\">" + left + "</b> câu đúng nữa (khoảng " + mins(left) + " phút học) · " + p.got + "/" + p.need : "Chín rồi! Bấm để thu hoạch") + "</small>" : "<b>Đất trống</b><small>Bấm để chọn cây muốn trồng</small>";
+  tip.style.left = (p.x / W * 100) + "%"; tip.style.top = ((p.y - 52) / H * 100) + "%"; tip.classList.add("on");
+  var i = tip.querySelector(".bar i"); if(i) requestAnimationFrame(function(){ requestAnimationFrame(function(){ i.style.width = pct + "%"; }); });
+}
+function hideTip(){ tip.classList.remove("on"); }
+function toast(t){ toastEl.textContent = t; toastEl.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(function(){ toastEl.classList.remove("on"); }, 2200); }
+function closeCard(){ ov.classList.remove("on"); if(lastFocus) lastFocus.focus(); }
+function openCard(p, btn){
+  cur = p; lastFocus = btn; var h;
+  if(!p.planted){
+    h = "<div class='hd'><div class='pi' style='font-size:44px'>🟫</div><div><h2 id='ptitle'>Đất trống</h2><span class='chip'>Chưa trồng</span></div></div><p>Chọn cây bé muốn trồng ở ô này. Mỗi lần trồng tốn <b>1 hạt giống</b> (kiếm được sau mỗi lượt học). Cây sẽ chín khi bé làm đúng đủ <b>5 câu</b> của kỹ năng đó.</p><div class='grid'>" + IDS.map(function(id){ return "<button class='pick' type='button' data-id='" + id + "'><img src='produce_" + id + ".svg' alt=''>" + CI[id].vi + "<span style='font-weight:600;color:#7a7499;font-size:11px'>" + CI[id].subj + "</span></button>"; }).join("") + "</div><div class='acts'><button class='btn g' type='button' id='cl'>Để sau</button></div>";
+  } else {
+    var c = CI[p.crop], left = p.need - p.got, ripe = left <= 0, sg = stg(p);
+    var stepper = SN.map(function(n, k){ var done = k < sg, now = k === sg; return "<li class='" + (done ? "dn" : now ? "nw" : "") + "'><i>" + (done ? "✓" : k + 1) + "</i><b>" + n + "</b><span>" + (TH[k] ? "từ " + TH[k] + " câu đúng" : "mới gieo") + "</span></li>"; }).join("");
+    h = "<div class='hd'><div class='pi'><img src='produce_" + p.crop + ".svg' alt=''></div><div><h2 id='ptitle'>" + c.vi + "</h2><span class='chip'>" + c.subj + "</span><span class='chip'>" + SN[sg] + "</span></div></div>" +
+      "<div class='row'><span>" + (ripe ? "Đã chín!" : "Còn " + left + " câu đúng nữa · khoảng " + mins(left) + " phút học") + "</span><span>" + p.got + "/" + p.need + "</span></div><div class='bar" + (ripe ? " full" : "") + "'><i id='pb' style='width:0'></i></div>" +
+      "<h3>Giai đoạn phát triển</h3><ol class='stp'>" + stepper + "</ol>" +
+      "<h3>Bé cần học gì để cây lớn?</h3><p style='margin-top:4px'><b>Kỹ năng " + c.subj + ": " + c.skill + "</b></p><div class='chips'>" + c.learn.map(function(t){ return "<span>" + t + "</span>"; }).join("") + "</div>" +
+      "<h3>Cách chăm sóc</h3><ul class='care'>" + c.care.map(function(t){ return "<li>" + t + "</li>"; }).join("") + "</ul>" +
+      "<p class='sm'>" + (ripe ? "Thu hoạch được <b>" + reward(p) + " " + c.vi.toLowerCase() + "</b>. " : "Khi chín sẽ thu được khoảng <b>" + c.per[4] + "</b>. ") + c.tip + " Cây lớn nhờ bé làm đúng bài, không có đồng hồ đếm ngược và không bao giờ héo.</p>" +
+      "<div class='acts'><button class='btn g' type='button' id='cl'>Đóng</button>" + (ripe ? "" : "<a class='btn go' id='go' href='../../../learn/index.html?subj=" + c.sk + "&grade=" + c.g + "&lang=vi'>Học ngay</a>") + "<button class='btn' type='button' id='hv'" + (ripe ? "" : " disabled") + ">" + (ripe ? "Thu hoạch" : "Chưa chín") + "</button></div>";
+  }
+  card.innerHTML = h; ov.classList.add("on");
+  var pb = card.querySelector("#pb"); if(pb) requestAnimationFrame(function(){ requestAnimationFrame(function(){ pb.style.width = (p.got / p.need * 100) + "%"; }); });
+  card.querySelector("#cl").onclick = closeCard; (card.querySelector("#hv") || card.querySelector(".pick") || card.querySelector("#cl")).focus();
+  var hv = card.querySelector("#hv"); if(hv) hv.onclick = function(){ var n = reward(p); toast("+" + n + " " + CI[p.crop].ic + " " + CI[p.crop].vi + " vào kho"); p.got = 0; badge(p, p.el); closeCard(); };
+  card.querySelectorAll(".pick").forEach(function(b){ b.onclick = function(){ p.planted = true; p.crop = b.getAttribute("data-id"); p.got = 0; badge(p, p.el); toast("Đã trồng " + CI[p.crop].ic + " " + CI[p.crop].vi + " (−1 hạt giống)"); closeCard(); }; });
+}
+ov.addEventListener("click", function(e){ if(e.target === ov) closeCard(); });
+document.addEventListener("keydown", function(e){ if(e.key === "Escape" && ov.classList.contains("on")) closeCard(); });
+</script></body></html>
+`;
+  fs.writeFileSync(path.join(out, "..", "preview-garden-play.html"), html2);
+}
+console.log("✓ đã sinh " + Object.keys(files).length + " ảnh cảnh + preview-scene.html + preview-garden-play.html");
