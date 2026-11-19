@@ -28,9 +28,10 @@
   var GAMEIDS = { help: ["bHelp", "phBtn"], snd: ["bSnd", "soundBtn"], lang: ["bLang", "langBtn"], theme: ["themeBtn2"], restart: ["restartBtn", "bRe"], pause: ["pauseBtn"], board: ["bBoard"], npset: ["npSetBtn"], npch: ["npChBtn"], npmc: ["npMcBtn"], fs: ["npFsBtn"], pass: ["nsPill"] };
   var KEYS = ["help", "snd", "lang", "theme", "restart", "pause", "board", "cam", "shr", "lock", "npch", "npmc", "fs", "npset", "pass"];
   var HIDECSS = "html.np-hudg #bHelp,html.np-hudg #phBtn,html.np-hudg #bSnd,html.np-hudg #soundBtn,html.np-hudg #bLang,html.np-hudg #langBtn,html.np-hudg #themeBtn2,html.np-hudg #bCam,html.np-hudg #bShr,html.np-hudg #bRe,html.np-hudg #restartBtn,html.np-hudg #pauseBtn,html.np-hudg #bBoard,html.np-hudg #nsPill,html.np-hudg #npSetBtn,html.np-hudg #npChBtn,html.np-hudg #npMcBtn,html.np-hudg #npFsBtn,html.np-hudg #bLock,html.np-hudg #bBk,html.np-hudg #bBack,html.np-hudg #homeBtn,html.np-hudg #npPmBk{display:none!important}";
-  var stage = null, box = null, pn = null, more = null, btns = {}, active = false, small = false, tick = 0, hooked = null;
+  var stage = null, box = null, pn = null, more = null, ccb = null, btns = {}, active = false, small = false, tick = 0, hooked = null;
   var lab = { vi: { restart: "Chơi lại", pause: "Tạm dừng", board: "Bảng xếp hạng", pass: "Sự kiện", npset: "Cài đặt Night Pass", npch: "Thử thách", npmc: "Linh vật", fs: "Toàn màn hình", help: "Cách chơi", snd: "Âm thanh", lang: "Ngôn ngữ", theme: "Sáng / Tối", cam: "Chụp ảnh", shr: "Chia sẻ", lock: "Khoá màn hình", more: "Thêm" }, en: { restart: "Restart", pause: "Pause", board: "Leaderboard", pass: "Event", npset: "Night Pass settings", npch: "Challenge", npmc: "Mascot", fs: "Full screen", help: "How to play", snd: "Sound", lang: "Language", theme: "Light / Dark", cam: "Screenshot", shr: "Share", lock: "Lock screen", more: "More" } };
   function setA(e, k, v) { if (e.getAttribute(k) !== v) e.setAttribute(k, v); }
+  function vi0() { return lg() !== "en"; }
   function lg() { return ((document.documentElement.lang || "vi") + "").slice(0, 2) === "en" ? "en" : "vi"; }
   function gdoc() { try { var f = stage && stage.querySelector("iframe"); return f && f.contentDocument; } catch (e) { return null; } }
   function gel(ids) { var d = gdoc(); if (!d) return null; for (var i = 0; i < ids.length; i++) { var e = d.getElementById(ids[i]); if (e) return e; } return null; }
@@ -53,6 +54,10 @@
     more = document.createElement("button"); more.type = "button"; more.className = "np-hb np-hmore"; more.innerHTML = ico("more"); more.setAttribute("aria-expanded", "false");
     more.addEventListener("click", function () { box.classList.contains("open") ? close() : open(); });
     pn = document.createElement("div"); pn.className = "np-hpn";
+    /* nút ⋯ = mở CONTROL CENTER của game đang chạy (độ khó, chế độ, giao diện, linh vật…) — trên web máy tính các nút lẻ ở cột này chỉ phản chiếu vài nút, thiếu chỗ chọn cấp độ/chế độ */
+    ccb = document.createElement("button"); ccb.type = "button"; ccb.className = "np-hb"; ccb.dataset.k = "cc"; ccb.innerHTML = ico("more"); ccb.hidden = true;
+    ccb.addEventListener("click", function () { try { var f = stage.querySelector("iframe"), w = f && f.contentWindow; if (w && w.NPCC) { w.NPCC.open(); if (small) close(); } } catch (e) {} });
+    pn.appendChild(ccb);
     KEYS.forEach(function (k) { pn.appendChild(mk(k)); });
     box.appendChild(more); box.appendChild(pn); stage.appendChild(box);
   }
@@ -75,6 +80,7 @@
       if (k === "pause") { var rs = /^(Tiếp tục|Chơi tiếp|Resume|Continue|Play on)/i.test(al) ? "play" : "pause"; if (b.__ic !== rs) { b.__ic = rs; b.innerHTML = ico(rs); } }   /* ⏸ ↔ ▶ theo trạng thái */
       if (src.hasAttribute("aria-pressed")) setA(b, "aria-pressed", src.getAttribute("aria-pressed")); else if (b.hasAttribute("aria-pressed")) b.removeAttribute("aria-pressed");
     });
+    if (ccb) { var hasCC = false; try { var f0 = stage.querySelector("iframe"); hasCC = !!(f0 && f0.contentWindow && f0.contentWindow.NPCC); } catch (e) {} if (ccb.hidden === hasCC) ccb.hidden = !hasCC; if (hasCC) vis++; var cl = vi0() ? "Bảng điều khiển" : "Control Center"; setA(ccb, "aria-label", cl); if (ccb.title !== cl) ccb.title = cl; }
     setA(more, "aria-label", L.more); if (more.title !== L.more) more.title = L.more;
     if (box.dataset.n !== String(vis)) box.dataset.n = vis;
   }

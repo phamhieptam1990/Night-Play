@@ -37,3 +37,6 @@ html.np-popup-open #npHudc:not(.inrail),html.np-popup-open .nps-fab,html.np-popu
 /* popup đang mở: hai CỘT BÊN của cổng (rails) cũng mờ như khung game, để lớp mờ phủ hết nền (trước: cột bên còn sáng rực) */
 html.np-popup-open .np-rail{opacity:.28;filter:saturate(.4);transition:opacity .2s}
 html.np-popup-open #npHudc.inrail{opacity:.28;filter:saturate(.4)}
+/* số ngày Night Pass (.npd) trong nút vương miện sao chép từ game: CSS huy hiệu của nó nằm trong game (npset.js), trang cổng không có → số hiện TO dưới icon. Đặt lại: huy hiệu nhỏ ở GÓC trên phải */
+#npHudc .np-hb{position:relative}
+#npHudc .np-hb .npd{position:absolute;right:-4px;top:-4px;min-width:19px;height:19px;padding:0 4px;box-sizing:border-box;border-radius:10px;background:#7C5CFF;color:#fff;border:1.5px solid #fff;font:800 11px/16px system-ui,sans-serif;text-align:center;pointer-events:none}
