@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Ong đếm số (Counting bee)" class="np-visitor" data-style="pop" data-game="garden-bee">
+<title>Ong đếm số</title><desc>Sinh vật ghé thăm vườn khi bé học Toán. Mắt tròn to hai chấm sáng, má hồng, cánh trong mờ vẫy nhẹ.</desc>
+<style>.np-visitor{--y1:#FFD24D;--y2:#F5A623;--yd:#C9840F;--ink:#3A2A12;--bl:#FF9DB0}.npa{transform-box:fill-box;transform-origin:50% 50%}.npa-flap{animation:npa-flap .22s ease-in-out infinite alternate}.npa-hover{animation:npa-hover 2.6s ease-in-out infinite}
+@keyframes npa-flap{from{transform:scaleY(1) rotate(0)}to{transform:scaleY(.55) rotate(-8deg)}}@keyframes npa-hover{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+:root.np-playing .npa{animation:none}@media (prefers-reduced-motion:reduce){.npa{animation:none!important}}</style>
+<defs><linearGradient id="by" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--y1)"/><stop offset="1" style="stop-color:var(--y2)"/></linearGradient></defs>
+<g id="all" class="npa npa-hover"><ellipse id="shadow" cx="128" cy="238" rx="46" ry="7" fill="#000" opacity=".14"/>
+<g class="npa npa-flap"><ellipse cx="96" cy="86" rx="30" ry="44" fill="#fff" opacity=".78" stroke="#BFD9F2" stroke-width="3" transform="rotate(-24 96 86)"/></g><g class="npa npa-flap"><ellipse cx="160" cy="86" rx="30" ry="44" fill="#fff" opacity=".78" stroke="#BFD9F2" stroke-width="3" transform="rotate(24 160 86)"/></g>
+<ellipse id="body" cx="128" cy="144" rx="68" ry="62" fill="url(#by)" stroke="var(--yd)" stroke-width="3"/>
+<path d="M86 94C104 88 152 88 170 94L172 106C152 100 104 100 84 106Z" fill="var(--ink)" opacity=".85"/><path d="M78 176C104 184 152 184 178 176L170 194C150 202 106 202 86 194Z" fill="var(--ink)" opacity=".85"/>
+<ellipse cx="104" cy="104" rx="26" ry="14" fill="#fff" opacity=".5" transform="rotate(-12 104 104)"/>
+<g id="face"><circle id="eyes" cx="100" cy="132" r="13" fill="var(--ink)"/><circle cx="156" cy="132" r="13" fill="var(--ink)"/><circle cx="104" cy="127" r="5" fill="#fff"/><circle cx="160" cy="127" r="5" fill="#fff"/><circle cx="97" cy="136" r="2.4" fill="#fff"/><circle cx="153" cy="136" r="2.4" fill="#fff"/><circle cx="82" cy="150" r="9" fill="var(--bl)" opacity=".8"/><circle cx="174" cy="150" r="9" fill="var(--bl)" opacity=".8"/><path d="M118 152Q128 164 138 152" fill="none" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/></g>
+<path d="M110 84Q104 64 90 58M146 84Q152 64 166 58" fill="none" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/><circle cx="90" cy="58" r="6" fill="var(--c3,#FFC94A)"/><circle cx="166" cy="58" r="6" fill="var(--c3,#FFC94A)"/></g></svg>

@@ -48,15 +48,15 @@ Quy ước nội dung: mỗi câu hỏi có trường `standard` (mã/mô tả y
 
 ## Giai đoạn 1: MVP học và chơi (3–4 tuần)
 
-- [ ] 1.1 Game bắn bong bóng ghép số (cộng trừ trong 10, lớp 1) — làm TRƯỚC, để kiểm chứng vòng lặp chơi → ghi lỗi → luyện thêm.
+- [ ] 1.1 (một phần: đã có KIỂU CÂU HỎI "bắn bong bóng" dùng lại câu chọn 1/4, chưa phải game riêng có điểm và màn chơi) Game bắn bong bóng ghép số (cộng trừ trong 10, lớp 1) — làm TRƯỚC, để kiểm chứng vòng lặp chơi → ghi lỗi → luyện thêm.
 - [ ] 1.2 Game đi chợ thối tiền (lớp 2–3).
 - [ ] 1.3 Game phòng thủ cửu chương (lớp 2–3).
-- [ ] 1.4 Ngân hàng câu hỏi: sinh bằng Batch API (Haiku 5.5), người duyệt, lưu JSON tĩnh. Runtime không gọi AI.
-- [ ] 1.5 Vòng thưởng: sao, thú cưng, xây làng (dùng lại hệ linh vật).
+- [ ] 1.4 (một phần: bộ sinh số học theo lớp + 42 câu viết tay + 18 kiểu câu hỏi, chưa có Batch API và người duyệt) Ngân hàng câu hỏi: sinh bằng Batch API (Haiku 5.5), người duyệt, lưu JSON tĩnh. Runtime không gọi AI.
+- [ ] 1.5 (một phần: đã có sao, cổ vũ bằng pháo giấy + âm thanh, thanh tiến độ có linh vật chạy; chưa có thú cưng/làng. Hướng mới: VƯỜN, xem plan-learn-garden.md) Vòng thưởng: sao, thú cưng, xây làng (dùng lại hệ linh vật).
 - [ ] 1.6 Bản đồ phiêu lưu: mỗi chủ đề một vùng, hoàn thành mở khóa vùng sau.
 - [ ] 1.7 Ghép nhân vật từ bộ phận SVG vẽ sẵn (thân, tai, sừng, cánh, đuôi, hoa văn, bảng màu đã phối); bộ phận mới mở khóa bằng sao.
 - [ ] 1.8 Giới hạn thời gian chơi (cổng phụ huynh, lưu local).
-- [ ] 1.9 Chụp ảnh kiểm tra 360×640, 380×760, 844×390, 1200×640; chạy `check.js`.
+- [ ] 1.9 (một phần: đã chụp 390×844 và 360×640 cho trang học; chưa đủ 380×760, 844×390, 1200×640; check.js chưa xanh) Chụp ảnh kiểm tra 360×640, 380×760, 844×390, 1200×640; chạy `check.js`.
 
 **Xong khi:** một bé chơi liền 15 phút, có tiến trình và nhân vật riêng.
 
@@ -103,3 +103,14 @@ Quy ước nội dung: mỗi câu hỏi có trường `standard` (mã/mô tả y
 - Không báo xong khi chưa mở trình duyệt thật, chụp ảnh và tự nhìn.
 
 - [x] 0.1b `learn/index.html`: vào là học liền (vòng 5 câu ngay khi mở), chọn môn/lớp bằng hình, nút 🔊, ghi lỗi tư duy `learn:err`, sao `learn:stars`. Tiếng Việt/Anh là ngân hàng nhỏ viết tay, cần người duyệt.
+
+## Đã làm thêm ngoài kế hoạch gốc (cập nhật theo tiến độ thực tế)
+
+- [x] L.1 **8 trang landing Học Vui** sinh tự động bằng `scripts/learn/gen-landing.js`: hub `/hoc/`, `/en/hoc/`, và 3 môn × vi/en; menu di động, thanh trên tự ẩn khi cuộn, chân trang gom vào menu, trích dẫn nguồn.
+- [x] L.2 **Thương hiệu 3 môn + linh vật** Mochi (Toán), Mầm (Tiếng Việt), Bibi (Tiếng Anh): kèm 5 skin theo lớp, cảm xúc, bong bóng thoại, bản "đầu" để làm huy hiệu; `learn/mascot-kit.js`, hợp đồng AI [docs/LEARN-MASCOT-AI-CONTRACT.md](docs/LEARN-MASCOT-AI-CONTRACT.md), trang duyệt `learn/mascot-review.html`.
+- [x] L.3 **Tích hợp hub và About:** thẻ Học Vui ở hub game, Trái Đất → `/hoc/`, 3 thẻ trên About sáng khi rê, menu "Học Vui/Fun Learning".
+- [x] L.4 **Trang học làm lại:** bố cục một màn không cuộn, thanh trên tự thu sau 3 giây, thanh tiến độ có linh vật chạy, câu hỏi canh trái có nhãn nổi, hiệu ứng xuất hiện ngẫu nhiên 10 bộ, đáp án có khung "đang tải".
+- [x] L.5 **18 kiểu câu hỏi** ([learn/content/qtypes.js](learn/content/qtypes.js), [learn/qui.js](learn/qui.js)): chọn 1/4, đúng/sai, chọn hình, ghép cặp, sắp xếp, ghép chữ, gõ số, khác loại, chọn nhiều, so sánh, đếm bằng chạm, bắn bong bóng, lật thẻ, trục số, đồng hồ, tìm trong tranh, kéo vào chỗ trống, phân loại; có kéo thả thật. Kiểm thử: `node scripts/learn/check-types.js`.
+- [x] L.6 **Âm thanh và cổ vũ:** tiếng chạm, chuông, vỗ tay, pháo giấy, nhạc nền êm có nút tắt; đọc đề khi chạm linh vật (kèm báo khi máy không có giọng đọc).
+
+**Chưa làm / còn nợ (nhớ trước khi báo xong):** `check.js` chưa xanh toàn bộ (lỗi cũ `check-onezone`, CLS), nhiều thay đổi **chưa commit**, nội dung từ vựng và câu cần người duyệt, `check-bank.js` và `check-types.js` chưa nối vào `check.js`, nội dung quảng bá trên landing nhắc tính năng chưa có (gia sư AI, báo cáo Zalo), chưa kiểm tra màn ngang cho các kiểu câu hỏi mới.
