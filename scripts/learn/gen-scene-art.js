@@ -210,6 +210,58 @@ const flowerBit = (x, y, c) => ell(x, y, 3.4, 3, c, "#fff", 1);
 function pumpkins(x, y) { const pk = (a, b, s) => `<g transform="translate(${a} ${b}) scale(${s})">${ell(0, -10, 14, 11, "#F59A2B", "#B2591A", 2.4)}${ell(-5, -10, 5, 10, "#F9B04D", null).replace("/>", ' opacity=".6"/>')}${ell(5, -10, 5, 10, "#E8841C", null).replace("/>", ' opacity=".5"/>')}<path d="M0 -20Q2 -26 6 -26" stroke="#4E8B2E" stroke-width="3" fill="none" stroke-linecap="round"/></g>`; return G(x, y, shadow(32, 8, .2) + pk(-14, 0, 1) + pk(12, 2, .9) + pk(0, 8, .8)); }
 function crate(x, y) { const b = box([0, 0], .6, .5, 22, { l: "#C58B4E", r: "#9A6532", t: "#D6A066", s: C.woodD, sw: 2.4 }); return G(x, y, shadow(26, 8, .22) + b.svg + `<path d="M${f(b.L[0])} ${f(b.L[1] - 11)}L${f(b.F[0])} ${f(b.F[1] - 11)}L${f(b.R[0])} ${f(b.R[1] - 11)}" stroke="${C.woodD}" stroke-width="2" fill="none" opacity=".6"/>`); }
 
+/* ---------- LỐI ĐI = MỘT MẢNG LIỀN (nhiều kiểu để chọn) và HÀNG RÀO = MỘT DẢI LIỀN (nhiều kiểu để chọn) ---------- */
+const U0 = (sx, sy) => [(sx - OX) / TW + (sy - OY) / TH, (sy - OY) / TH - (sx - OX) / TW];
+const PATHS = {
+  dat:   { vi: "Đường đất",  edge: "#8A5A2E", fill: "#B98350", mark: "dirt" },
+  soi:   { vi: "Sỏi",        edge: "#A19D95", fill: "#DAD6CD", mark: "gravel" },
+  cuoi:  { vi: "Đá cuội",    edge: "#7E7A72", fill: "#B6B2A9", mark: "cobble" },
+  dalat: { vi: "Đá lát",     edge: "#8A867E", fill: "#D2CEC6", mark: "slab" },
+  gach:  { vi: "Gạch đỏ",    edge: "#8E3E1B", fill: "#D9774A", mark: "brick" }
+};
+function pathPatch(pl, w, style, seed) {
+  const S = PATHS[style] || PATHS.soi, r = rng((seed || 1) * 977 + 13);
+  let d = `M${f(pl[0][0])} ${f(pl[0][1])}`; for (let i = 1; i < pl.length - 1; i++) { const m = [(pl[i][0] + pl[i + 1][0]) / 2, (pl[i][1] + pl[i + 1][1]) / 2]; d += `Q${f(pl[i][0])} ${f(pl[i][1])} ${f(m[0])} ${f(m[1])}`; } d += `L${f(pl[pl.length - 1][0])} ${f(pl[pl.length - 1][1])}`;
+  let o = `<path d="${d}" fill="none" stroke="${S.edge}" stroke-width="${w + 9}" stroke-linecap="round" stroke-linejoin="round" opacity=".55" transform="translate(0 4)"/><path d="${d}" fill="none" stroke="${S.edge}" stroke-width="${w + 7}" stroke-linecap="round" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="${S.fill}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`;
+  /* hoa văn bề mặt rải theo chiều dài (nằm trong dải) */
+  const seg = []; let tot = 0; for (let i = 0; i < pl.length - 1; i++) { const l = Math.hypot(pl[i + 1][0] - pl[i][0], pl[i + 1][1] - pl[i][1]); seg.push(l); tot += l; }
+  const at = t => { let a = t * tot, i = 0; while (i < seg.length - 1 && a > seg[i]) { a -= seg[i]; i++; } const k = seg[i] ? a / seg[i] : 0, nx = pl[i + 1][0] - pl[i][0], ny = pl[i + 1][1] - pl[i][1], L2 = Math.hypot(nx, ny) || 1; return [pl[i][0] + nx * k, pl[i][1] + ny * k, -ny / L2, nx / L2]; };
+  const cnt = Math.round(tot / ({ dirt: 14, gravel: 5, cobble: 15, slab: 40, brick: 26 }[S.mark])), hw = w * .5 - 5;
+  if (S.mark === "slab") { for (let i = 1; i < cnt; i++) { const [x, y, nx, ny] = at(i / cnt); o += `<path d="M${f(x - nx * hw)} ${f(y - ny * hw)}L${f(x + nx * hw)} ${f(y + ny * hw)}" stroke="#9A968E" stroke-width="2.4" stroke-linecap="round" opacity=".75"/>`; } o += `<path d="${d}" fill="none" stroke="#fff" stroke-width="${Math.max(4, w - 26)}" stroke-linecap="round" stroke-linejoin="round" opacity=".18"/>`; }
+  else for (let i = 0; i < cnt; i++) { const [x, y, nx, ny] = at(r()), off = (r() * 2 - 1) * hw, px = x + nx * off, py = y + ny * off;
+    if (S.mark === "gravel") o += ell(px, py, 1.8 + r() * 2.6, 1.2 + r() * 1.6, ["#B9B5AC", "#F2EFE8", "#9C988F", "#C9C5BB"][i % 4], null);
+    else if (S.mark === "dirt") o += i % 3 ? ell(px, py, 2 + r() * 3, 1.2 + r() * 1.4, "#8A5A2E", null).replace("/>", ' opacity=".55"/>') : ell(px, py, 2.6, 1.8, "#D6AE80", null);
+    else if (S.mark === "cobble") { const rx = 7 + r() * 5; o += ell(px, py + 1.4, rx, rx * .55, "#7E7A72", null) + ell(px, py, rx, rx * .55, "#CFCBC2", "#8F8B83", 1.6) + ell(px - rx * .3, py - rx * .2, rx * .35, rx * .16, "#fff", null).replace("/>", ' opacity=".7"/>'); }
+    else if (S.mark === "brick") o += `<rect x="${f(px - 8)}" y="${f(py - 3)}" width="16" height="6" rx="1.6" fill="#E48A5C" stroke="#8E3E1B" stroke-width="1.4"/>`; }
+  return o;
+}
+const FENCES = { tre: "Rào tre", go: "Rào gỗ", trang: "Rào gỗ trắng", da: "Tường đá", bui: "Hàng rào cây", sat: "Rào sắt" };
+function fenceRun(gx, gy, dir, n, style) {
+  const A = P(gx, gy), st = dir === "x" ? [TW / 2, TH / 2] : [-TW / 2, TH / 2], B = [A[0] + st[0] * n, A[1] + st[1] * n];
+  const rail = (h, col, wd) => `<path d="M${f(A[0])} ${f(A[1] - h)}L${f(B[0])} ${f(B[1] - h)}" stroke="${col[2]}" stroke-width="${wd + 4}" stroke-linecap="round"/><path d="M${f(A[0])} ${f(A[1] - h)}L${f(B[0])} ${f(B[1] - h)}" stroke="${col[0]}" stroke-width="${wd}" stroke-linecap="round"/>`;
+  const posts = (cnt, fn) => { let o = ""; for (let i = 0; i <= cnt; i++) o += fn(A[0] + (B[0] - A[0]) * i / cnt, A[1] + (B[1] - A[1]) * i / cnt, i); return o; };
+  let o = "";
+  if (style === "da") {
+    const th = .28, F = dir === "x" ? P(gx + n, gy + th) : P(gx + th, gy + n), a = dir === "x" ? n : th, b = dir === "x" ? th : n, H = 32;
+    const bx = box(F, a, b, H, { l: "url(#gStoneL)", r: "url(#gStoneR)", t: "#E4E0D8", s: "#7E7A72", sw: 2.4 }); o += bx.svg;
+    const cnt = Math.round(n * 3); for (let k = 1; k < cnt; k++) { const t = k / cnt, p = dir === "x" ? lerp(bx.L, bx.F, t) : lerp(bx.F, bx.R, t); o += `<path d="M${f(p[0])} ${f(p[1])}V${f(p[1] - H)}" stroke="#8E8A82" stroke-width="1.8" opacity=".55"/>`; }
+    const e = dir === "x" ? [bx.L, bx.F] : [bx.F, bx.R]; o += `<path d="M${f(e[0][0])} ${f(e[0][1] - H / 2)}L${f(e[1][0])} ${f(e[1][1] - H / 2)}" stroke="#8E8A82" stroke-width="1.8" fill="none" opacity=".6"/>`;
+  } else if (style === "bui") {
+    const cnt = Math.round(n * 3.2); for (let i = 0; i <= cnt; i++) { const x = A[0] + (B[0] - A[0]) * i / cnt, y = A[1] + (B[1] - A[1]) * i / cnt; o += G(x, y, ell(0, -16, 22, 17, "url(#gLeaf)", C.leafD, 2.6) + ell(-5, -24, 8, 4.6, "#C3F294", null).replace("/>", ' opacity=".45"/>') + (i % 3 === 0 ? flowerBit(7, -18, "#FFD24D") + flowerBit(-8, -12, "#fff") : i % 3 === 1 ? flowerBit(-6, -22, "#FF8FB0") : "")); }
+  } else if (style === "trang") {
+    o += rail(10, ["#FFFFFF", "#D9D5CC", "#9A968E"], 5) + rail(26, ["#FFFFFF", "#D9D5CC", "#9A968E"], 5);
+    o += posts(Math.round(n * 4), (x, y) => `<g transform="translate(${f(x)} ${f(y)})"><path d="M-4.4 2V-34L0 -42L4.4 -34V2Z" fill="#fff" stroke="#9A968E" stroke-width="2.2" stroke-linejoin="round"/></g>`);
+  } else if (style === "sat") {
+    o += rail(8, ["#4A4F5C", "#2A2D36", "#14161C"], 4) + rail(34, ["#4A4F5C", "#2A2D36", "#14161C"], 4);
+    o += posts(Math.round(n * 5), (x, y, i) => `<g transform="translate(${f(x)} ${f(y)})"><path d="M0 2V-40" stroke="#14161C" stroke-width="${i % 5 === 0 ? 6 : 3}" stroke-linecap="round"/>${i % 5 === 0 ? ell(0, -44, 5, 5, "#C9A23A", "#7A5E14", 1.6) : `<path d="M-3 -40L0 -48L3 -40Z" fill="#14161C"/>`}</g>`);
+  } else {
+    const col = style === "tre" ? ["#EBDDA0", "#C9B466", "#7F6C28"] : [C.wood1, C.wood2, C.woodD];
+    o += rail(14, col, 4.4) + rail(28, col, 4.4);
+    o += posts(Math.round(n * 1.6), (x, y) => `<g transform="translate(${f(x)} ${f(y)})"><rect x="-4.4" y="-40" width="8.8" height="42" rx="${style === "tre" ? 4.4 : 2}" fill="${col[0]}" stroke="${col[2]}" stroke-width="2.4"/>${style === "tre" ? `<path d="M-4.4 -26H4.4M-4.4 -12H4.4" stroke="${col[2]}" stroke-width="2"/>` : `<path d="M-6 -40L0 -48L6 -40Z" fill="${col[1]}" stroke="${col[2]}" stroke-width="2.4" stroke-linejoin="round"/>`}</g>`);
+  }
+  return { d: (A[1] + B[1]) / 2 + 14, svg: o };
+}
+
 /* ---------- ghép cảnh ---------- */
 function defs() {
   const lg = (id, a, b, v) => `<linearGradient id="${id}" x1="0" y1="0" x2="${v ? 0 : 1}" y2="${v ? 1 : 0}"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`;
@@ -236,14 +288,13 @@ function scene(o) {
   const D = L.deco, push = (y, svg) => stand.push({ d: y, svg });
   /* ---- lớp mặt đất ---- */
   if (L.pond) base.push(pond([330, 300]));
-  /* mảng đá cuội lát sân gần ao (như ảnh) */
-  if (D >= 1) { const r = rng(5); for (let i = 0; i < 26; i++) { const x = 70 + r() * 240, y = 120 + r() * 100; base.push({ d: 0, svg: ell(x, y + 2, 16 + r() * 6, 8, "#8F8B83", null) + ell(x, y, 16 + r() * 6, 8, "#B7B3AB", "#807C74", 2) }); } }
-  /* lối đá: đường chính + nhánh trái (chuồng, bò) + nhánh phải (kho, lò) + nhánh ra ruộng */
-  const stones = (pl, k0) => pl.forEach(([x, y], k) => [[0, 0], [.55, -.2], [-.5, .25]].forEach(([dx, dy], q) => { const r = rng((k + k0) * 9 + q * 3 + 3), ox = x + dx * 70 + (r() - .5) * 10, oy = y + dy * 26; base.push({ d: 0, svg: ell(ox, oy + 2, 24 + r() * 8, 11 + r() * 3, "#8F8B83", null) + ell(ox, oy, 24 + r() * 8, 11 + r() * 3, "url(#gStone)", "#807C74", 2.2) + `<path d="M${f(ox - 12)} ${f(oy - 4)}Q${f(ox)} ${f(oy - 9)} ${f(ox + 10)} ${f(oy - 5)}" stroke="#fff" stroke-width="2.4" fill="none" opacity=".65" stroke-linecap="round"/>` }); }));
+  /* lối đi = mảng liền; kiểu chọn bằng L.pathStyle (dat | soi | cuoi | dalat | gach) */
+  const PS = L.pathStyle || "soi";
+  if (D >= 1) base.push({ d: 0, svg: pathPatch([[90, 170], [200, 180], [310, 168]], 92, "cuoi", 5) });   /* sân đá cuội gần ao */
   if (L.path) {
-    stones([[548, 880], [566, 830], [582, 780], [598, 730], [620, 680], [646, 632], [676, 580], [698, 530], [708, 490]], 0);
-    if (D >= 1) { stones([[560, 650], [506, 668], [452, 686], [398, 704], [344, 722]], 40); stones([[770, 520], [826, 508], [882, 496], [938, 484]], 80); stones([[650, 606], [706, 620], [762, 634]], 120); }
-    if (D >= 2) { stones([[960, 440], [1010, 415], [1060, 392]], 160); stones([[460, 560], [410, 540], [360, 520]], 200); }
+    base.push({ d: 0, svg: pathPatch([[548, 900], [566, 830], [584, 770], [604, 715], [632, 656], [668, 598], [700, 540], [708, 490]], 66, PS, 1) });
+    if (D >= 1) { base.push({ d: 0, svg: pathPatch([[596, 700], [540, 664], [470, 684], [400, 706], [330, 726]], 46, PS, 2) }); base.push({ d: 0, svg: pathPatch([[690, 540], [770, 526], [850, 512], [940, 490]], 46, PS, 3) }); base.push({ d: 0, svg: pathPatch([[640, 640], [720, 628], [790, 640]], 40, PS, 4) }); }
+    if (D >= 2) { base.push({ d: 0, svg: pathPatch([[950, 480], [1010, 440], [1070, 400]], 44, PS, 5) }); base.push({ d: 0, svg: pathPatch([[540, 560], [470, 560], [400, 538], [350, 520]], 40, PS, 6) }); }
   }
   /* nhiều thửa ruộng: [gốc (x,y), số ô theo a, số ô theo b]; mở dần theo L.plots (A 9 ô, B 6, E 6, C 3, F 2) */
   const cyc = [[cropWheat, true], [cropCarrot, true], [cropCorn, false], [cropStraw, true], [cropWheat, true], [cropTomato, true], [cropSun, false], [cropCarrot, false], [cropStraw, true], [cropWheat, true]];
@@ -263,10 +314,9 @@ function scene(o) {
     push(Cc[1] - 8, `<g transform="translate(${f(tl[0])} ${f(tl[1] + TH / 2)}) scale(1.35) translate(${f(-tl[0])} ${f(-(tl[1] + TH / 2))})">${cr}</g>`); }
   /* tường đá / rào quanh sân (hình thoi: Lc(440,386) Bc(648,282) Rc(908,412) Fc(700,516)) */
   if (L.fence) {
-    for (let k = 0; k < 4; k++) push(282 + 26 * k + 12, fenceAt(648 - 52 * k, 282 + 26 * k, "y", L.fence).svg);                 /* cạnh trái-sau */
-    for (let k = 0; k < 5; k++) push(282 + 26 * k + 14, fenceAt(648 + 52 * k, 282 + 26 * k, "x", L.fence).svg);                 /* cạnh phải-sau */
-    if (D >= 1) { for (let k = 0; k < 2; k++) push(386 + 26 * k + 14, fenceAt(440 + 52 * k, 386 + 26 * k, "x", L.fence).svg); for (let k = 0; k < 2; k++) push(412 + 26 * k + 12, fenceAt(908 - 52 * k, 412 + 26 * k, "y", L.fence).svg); }
-       /* rào gỗ quanh bãi bò */
+    const FS = L.fenceStyle || ({ 1: "tre", 2: "go", 3: "da" }[L.fence] || "da"), run = (sx, sy, dir, n, st) => { const g = U(sx, sy), r = fenceRun(g[0], g[1], dir, n, st || FS); push(r.d, r.svg); };
+    run(648, 282, "y", 4); run(648, 282, "x", 5);                                  /* hai cạnh sau của sân */
+    if (D >= 1) { run(440, 386, "x", 2); run(908, 412, "y", 2); }                  /* hai cạnh trước */
   }
   /* ---- công trình ---- */
   if (L.windmill) push(330, windmill(at(1170, 330), L.windmill).svg);
@@ -294,7 +344,7 @@ function scene(o) {
   if (L.animals) { [[610, 770], [660, 810]].forEach(([x, y]) => push(y, chicken(x, y))); push(600, rabbit(420, 560)); if (D >= 2) { push(180, chicken(150, 600)); } }
   if (D >= 1) { [[470, 600], [520, 640]].forEach(([x, y]) => push(y, chicken(x, y))); push(610, rabbit(560, 620)); }
   if (D >= 2) { [[560, 780], [610, 820], [700, 850]].forEach(([x, y]) => push(y, chicken(x, y))); push(830, rabbit(740, 830)); push(560, rabbit(1000, 700)); push(640, coop(820, 720)); }
-  if (D >= 3) { [[300, 700, 1], [420, 710, 0], [520, 740, 1], [880, 760, 0], [1010, 760, 1], [1120, 600, 0], [1180, 760, 1], [330, 820, 0]].forEach(([x, y, fl]) => push(y, cow(x, y, .85, !!fl))); [[240, 640], [940, 700], [1060, 640], [760, 700], [980, 840]].forEach(([x, y]) => push(y, chicken(x, y))); [[1100, 790], [250, 700], [850, 600], [700, 640], [180, 760], [1060, 520]].forEach(([x, y]) => push(y, rabbit(x, y))); [[120, 830, 0], [640, 860, 1], [760, 780, 0], [990, 840, 1], [200, 560, 0], [1200, 700, 1]].forEach(([x, y, fl]) => push(y, cow(x, y, .85, !!fl))); [[100, 700], [340, 650], [820, 870], [1150, 650], [60, 600], [1000, 590], [560, 700]].forEach(([x, y]) => push(y, chicken(x, y))); push(760, coop(1020, 600)); [[300, 740], [440, 770], [880, 800]].forEach(([x, y]) => push(y, hay(x, y))); for (let k = 0; k < 4; k++) push(740 + k * 20, fenceAt(260 + 52 * k, 650 + 26 * k, "x", 2).svg); }
+  if (D >= 3) { [[300, 700, 1], [420, 710, 0], [520, 740, 1], [880, 760, 0], [1010, 760, 1], [1120, 600, 0], [1180, 760, 1], [330, 820, 0]].forEach(([x, y, fl]) => push(y, cow(x, y, .85, !!fl))); [[240, 640], [940, 700], [1060, 640], [760, 700], [980, 840]].forEach(([x, y]) => push(y, chicken(x, y))); [[1100, 790], [250, 700], [850, 600], [700, 640], [180, 760], [1060, 520]].forEach(([x, y]) => push(y, rabbit(x, y))); [[120, 830, 0], [640, 860, 1], [760, 780, 0], [990, 840, 1], [200, 560, 0], [1200, 700, 1]].forEach(([x, y, fl]) => push(y, cow(x, y, .85, !!fl))); [[100, 700], [340, 650], [820, 870], [1150, 650], [60, 600], [1000, 590], [560, 700]].forEach(([x, y]) => push(y, chicken(x, y))); push(760, coop(1020, 600)); [[300, 740], [440, 770], [880, 800]].forEach(([x, y]) => push(y, hay(x, y))); { const g = U(260, 650), r = fenceRun(g[0], g[1], "x", 4, "go"); push(r.d + 40, r.svg); } }
   items.push(...base, ...stand);
   const ground0 = items.filter(i => i.d <= 1), up = items.filter(i => i.d > 1).sort((a, b) => a.d - b.d); items.length = 0; items.push(...ground0, ...up);
   /* trời + thời điểm trong ngày */
@@ -331,7 +381,7 @@ for (const [id, label, o] of SCENES) files[`scene-${id}.svg`] = scene(Object.ass
 /* ảnh cận cảnh: cắt vùng của cùng cảnh */
 const CLOSE = [
   ["07-nha-4-cap", "Cận cảnh ngôi nhà qua 4 cấp: lều lá → nhà tranh → nhà tường → nhà ngói", null],
-  ["08-rao-duong", "Cận cảnh hàng rào (tre, gỗ, đá) và lối đá lát", null],
+  ["08-rao-duong", "Chọn kiểu: 6 loại hàng rào (dải liền) và 5 loại lối đi (mảng liền)", null],
   ["09-ruong-cay", "Cận cảnh ruộng, cây táo, hoa oải hương, bụi cây", [40, 480, 900, 400]],
   ["10-cong-trinh", "Cận cảnh công trình: kho, giếng, cối xay gió, rơm, thùng, vật nuôi", [420, 110, 860, 520]],
   ["11-chon-cay", "Đất xám trống: bé chạm chọn cây muốn trồng (đất xám → đất nâu có cây)", null]
@@ -349,15 +399,12 @@ function strip(label, makers, w, h, bg) {
   [1, 2, 3, 4].forEach((lv, i) => { const cx = 190 + i * 340, hs = house([cx + (lv === 1 ? 0 : 60), 560], lv); s += `<g transform="translate(${f(cx * .0)} 0)">${hs.svg}</g>`; s += `<text x="${cx + 20}" y="660" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="800" font-size="30" fill="#2F5A22">${["Cấp 1: lều lá", "Cấp 2: nhà tranh", "Cấp 3: nhà tường", "Cấp 4: nhà ngói"][i]}</text>`; });
   files["scene-07-nha-4-cap.svg"] = strip(CLOSE[0][1], s, 1400, 720);
   let r = "";
-  [1, 2, 3].forEach((lv, i) => { const base = [140 + i * 440, 250]; for (let k = 0; k < 4; k++) { const A = [base[0] + k * 52, base[1] + k * 26]; const fx = fence(0, 0, "x", lv); r += `<g transform="translate(${A[0] - P(0, 0)[0]} ${A[1] - P(0, 0)[1]})">${fx.svg}</g>`; } r += `<text x="${base[0] + 120}" y="380" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="800" font-size="30" fill="#2F5A22">${["Rào tre", "Rào gỗ", "Tường đá"][i]}</text>`; });
-  /* ba kiểu lối đi: đất, cuội, đá lát */
-  const pp = (lv, i) => { const y0 = 470, x0 = 120 + i * 440; let o = ""; for (let k = 0; k < 6; k++) { const x = x0 + k * 46, y = y0 + (k % 2) * 8, rr = rng(lv * 20 + k);
-    if (lv === 1) o += ell(x, y + 6, 26, 12, "#A8703F", null).replace("/>", ' opacity=".7"/>') + ell(x + (rr() - .5) * 20, y + 8, 3.4, 2.4, "#C9A57A", null);
-    else if (lv === 2) o += ell(x, y + 4, 24 + rr() * 4, 11, "#8F8B83", null) + ell(x, y + 2, 24 + rr() * 4, 11, "url(#gStone)", "#807C74", 2.2);
-    else o += poly([[x, y - 12], [x + 30, y], [x, y + 12], [x - 30, y]], "url(#gStone)", "#807C74", 2.4) + `<path d="M${x - 14} ${y - 4}L${x} ${y - 10}" stroke="#fff" stroke-width="2.4" opacity=".6" stroke-linecap="round"/>`; }
-    return o + `<text x="${x0 + 120}" y="${y0 + 70}" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="800" font-size="30" fill="#2F5A22">${["Đường đất", "Lối cuội", "Đá lát"][lv - 1]}</text>`; };
-  [1, 2, 3].forEach((lv, i) => r += pp(lv, i));
-  files["scene-08-rao-duong.svg"] = strip(CLOSE[1][1], r, 1400, 580);
+  const lbl = (x, y, t) => `<text x="${x}" y="${y}" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="800" font-size="26" fill="#2F5A22">${t}</text>`;
+  r += `<text x="700" y="56" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="900" font-size="34" fill="#1F4A18">Hàng rào: một dải liền, chọn kiểu</text>`;
+  Object.keys(FENCES).forEach((st, i) => { const col = i % 3, row = Math.floor(i / 3), sx = 150 + col * 440, sy = 170 + row * 210, g = U0(sx, sy), fr = fenceRun(g[0], g[1], "x", 3, st); r += `<g>${fr.svg}</g>` + lbl(sx + 80, sy + 118, FENCES[st]); });
+  r += `<text x="700" y="640" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="900" font-size="34" fill="#1F4A18">Lối đi: một mảng liền, chọn kiểu</text>`;
+  Object.keys(PATHS).forEach((st, i) => { const sx = 140 + i * 262, sy = 740; r += pathPatch([[sx - 30, sy - 60], [sx + 40, sy], [sx + 100, sy + 50]], 66, st, i + 3) + lbl(sx + 40, sy + 112, PATHS[st].vi); });
+  files["scene-08-rao-duong.svg"] = strip(CLOSE[1][1], r, 1400, 900);
 }
 /* ảnh 11: màn "chọn cây để trồng" — nền cỏ sạch, các ô nâu đã trồng và một ô đất xám đang được chọn */
 {
