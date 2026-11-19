@@ -28,6 +28,15 @@
   function uniq(h) { return h.replace(/\bid="([^"]+)"/g, 'id="$1-cc"').replace(/url\(#([^)]+)\)/g, "url(#$1-cc)").replace(/(xlink:)?href="#([^"]+)"/g, function (m, x, i) { return (x || "") + 'href="#' + i + '-cc"'; }); }
   /* HẸN GIỜ THẬT: mở bảng thì game bị tạm dừng bằng đồng hồ ảo (bridge.js) → setTimeout thường bị giữ, nhấn giữ 420ms/cập nhật nhãn sẽ không bao giờ chạy */
   function RT(f, d) { return (window.__npRST || window.setTimeout)(f, d); }
+  /* ô chọn (giao diện, cỡ bàn, loại game…): emoji ở ĐẦU chữ tách thành icon TO ở trên, nhãn ở dưới; 🔒 → huy hiệu góc (class .lk), không chen vào nhãn */
+  function fillChip(b, t) {
+    t = (t || "").replace(/\s+/g, " ").trim(); b.setAttribute("data-t", t);
+    var t1 = t.replace(/\uD83D\uDD12/g, "").trim(), m = null;
+    try { m = /^((?:\p{Extended_Pictographic}\uFE0F?(?:\u200D\p{Extended_Pictographic}\uFE0F?)*)+)\s*(.*)$/u.exec(t1); } catch (e) {}
+    b.textContent = "";
+    if (m) { var i = el("span", "ci"); i.textContent = m[1]; b.appendChild(i); if (m[2]) { var l = el("span", "cl"); l.textContent = m[2]; b.appendChild(l); } }
+    else { var l2 = el("span", "cl"); l2.textContent = t1 || t; b.appendChild(l2); }
+  }
   function txt(e) { return (e.getAttribute("aria-label") || e.title || e.textContent || "").replace(/\s+/g, " ").trim(); }
   /* ===== chế độ ===== */
   function modeEls() { return [].slice.call(document.querySelectorAll("#tys>.ty,.tys>.ty,.tiles>.tile,#cards>.tile,#cards>.card")).filter(function (e) { return !e.classList.contains("daily"); }); }
@@ -206,14 +215,14 @@
         var g = el("div", "og"), hd = el("div", "oh"), rw = el("div", "or"); hd.textContent = lt; g.appendChild(hd); g.appendChild(rw);
         chips.forEach(function (c, j) {
           var b = el("button", "m ch" + (c.classList.contains("on") || c.getAttribute("aria-pressed") === "true" ? " on" : "")); b.type = "button";
-          b.textContent = (c.textContent || "").replace(/\s+/g, " ").trim() || c.getAttribute("aria-label") || "•"; if (c.classList.contains("lock") || c.classList.contains("locked")) b.classList.add("lk");
+          fillChip(b, (c.textContent || "").replace(/\s+/g, " ").trim() || c.getAttribute("aria-label") || "•"); if (c.classList.contains("lock") || c.classList.contains("locked")) b.classList.add("lk");
           /* game dựng lại chip mỗi lần đổi → luôn lấy chip MỚI NHẤT trong khung (theo vị trí) rồi bấm hộ; sau đó đọc lại trạng thái thật (đang chọn / khoá) */
           b.addEventListener("click", function () {
             if (!b.classList.contains("lk")) [].forEach.call(rw.children, function (x) { x.classList.toggle("on", x === b); });   /* sáng NGAY (chip khoá thì không); settle() đối chiếu lại với game */
             var live = [].slice.call(box.children); if (live[j]) live[j].click();
             settle(function () {
               var l2 = [].slice.call(box.children);
-              [].forEach.call(rw.children, function (x, i2) { var cc = l2[i2]; if (!cc) return; x.classList.toggle("on", cc.classList.contains("on") || cc.getAttribute("aria-pressed") === "true"); x.classList.toggle("lk", cc.classList.contains("lock") || cc.classList.contains("locked")); var t2 = (cc.textContent || "").replace(/\s+/g, " ").trim(); if (t2 && x.textContent !== t2) x.textContent = t2; });
+              [].forEach.call(rw.children, function (x, i2) { var cc = l2[i2]; if (!cc) return; x.classList.toggle("on", cc.classList.contains("on") || cc.getAttribute("aria-pressed") === "true"); x.classList.toggle("lk", cc.classList.contains("lock") || cc.classList.contains("locked")); var t2 = (cc.textContent || "").replace(/\s+/g, " ").trim(); if (t2 && x.getAttribute("data-t") !== t2) fillChip(x, t2); });
             });
           });
           rw.appendChild(b);

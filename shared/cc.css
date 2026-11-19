@@ -417,3 +417,8 @@ html.np-h3.np-h3home #npTitle{display:none!important}
 #ccRoot .pn .m.dif{width:auto!important;height:auto!important;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;font-size:12px!important;padding:0!important}
 /* game đang tạm dừng (menupause.js đặt animation-play-state:paused cho MỌI phần tử) → hiệu ứng mở danh sách (ccpop: opacity 0→1) đứng ở trong suốt: bấm nút mà không thấy gì. Bảng điều khiển luôn chạy hiệu ứng của chính nó */
 html.np-menupaused #ccRoot,html.np-menupaused #ccRoot *,html.np-menupaused #ccRoot *::before,html.np-menupaused #ccRoot *::after{animation-play-state:running!important}
+/* ô chọn trong danh sách tuỳ chọn: icon TO ở trên, nhãn ở dưới (không dồn chung một dòng rồi xuống hàng); 🔒 là huy hiệu góc */
+#ccRoot .pn .ml.opx .m.ch{display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:4px 3px!important;white-space:normal}
+#ccRoot .m.ch .ci{display:block;font-size:calc(var(--s) * .42);line-height:1;flex:none}
+#ccRoot .m.ch .cl{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;max-width:100%;font-size:clamp(11px,calc(var(--s) * .17),14px);line-height:1.08;text-align:center;overflow-wrap:anywhere;word-break:normal}
+#ccRoot .m.ch.lk::after{content:"\1F512";position:absolute;top:3px;right:4px;font-size:11px;line-height:1}
