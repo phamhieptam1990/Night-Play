@@ -465,3 +465,7 @@ html.np-menupaused #ccRoot,html.np-menupaused #ccRoot *,html.np-menupaused #ccRo
 #ccRoot .pn .ml{z-index:30!important}
 #ccRoot .bd{z-index:1!important}
 #ccRoot .ml .bd{z-index:2!important}
+/* MÀN NGANG ĐANG CHƠI: khung bảng đủ rộng cho 7 cột (thẻ điểm 3 cột + thẻ nút 4 cột) — trước đây khung chỉ ~222px nên thẻ nút tràn ra ngoài, thẻ điểm to bất thường */
+@media (orientation:landscape){
+  #ccRoot .pn.play{width:calc(7 * var(--s) + 6 * var(--g) + 32px)!important;max-width:calc(100vw - 24px)!important;box-sizing:border-box!important;overflow-x:hidden}
+}
