@@ -11,7 +11,7 @@ const MAS = { "toan": { f: "math", n: "Mochi", brand: { vi: "Mochi Toán", en: "
 const MK = { "toan": "mochi", "tieng-viet": "mam", "tieng-anh": "bibi" };
 const mi = (sl, noswap) => `data-mas="${MK[sl]}" tabindex="0" role="button"${noswap ? ' data-noswap="1"' : ""}`;
 const asset = (sl, kind) => `/shared/art/learn/${MAS[sl].f}/${MAS[sl].f}_${kind}.svg`;
-const head = (sl, kind, lazy) => `<span class="hd"><img src="${asset(sl, kind || "base")}" width="64" height="64" alt=""${lazy ? ' loading="lazy" decoding="async"' : ""}></span>`;
+const head = (sl, kind, lazy) => `<span class="hd" data-m="${MK[sl]}"><img src="${asset(sl, !kind || kind === "base" ? "head" : kind)}" width="64" height="64" alt=""${lazy ? ' loading="lazy" decoding="async"' : ""}></span>`;
 const ICON = { "toan": "🔢", "tieng-viet": "📖", "tieng-anh": "🔤" };
 
 const L = {
@@ -178,6 +178,28 @@ const S = {
 };
 
 const BASE = "https://nightplay.vn";
+/* ---------- menu di động (< 760px): ngăn kéo dưới thanh trên ---------- */
+const MENU = {
+  vi: { open: "Mở menu", close: "Đóng menu", hub: "Tổng quan Học Vui", subjects: "Môn học", onpage: "Trong trang", cta: "Vào học thử",
+        sec: { mon: "Chọn môn", cachhoc: "Cách học", giasu: "Gia sư AI", tinhnang: "Tính năng", lop: "Linh vật theo lớp", trochoi: "Trò chơi", chuongtrinh: "Chương trình", luyenthi: "Luyện thi lớp 6", phuhuynh: "Phụ huynh", antoan: "An toàn", hoi: "Hỏi đáp" },
+        more: [["/hoc/phu-huynh/", "Dành cho phụ huynh"], ["/", "Play Hub"], ["/popplay/", "Pop Play"], ["/cozyplay/", "Night Play"], ["/privacy.html", "Quyền riêng tư"], ["/terms.html", "Điều khoản"], ["mailto:support@nightplay.vn", "Liên hệ"]] },
+  en: { open: "Open menu", close: "Close menu", hub: "Fun Learning overview", subjects: "Subjects", onpage: "On this page", cta: "Try it now",
+        sec: { mon: "Pick a subject", cachhoc: "How it works", giasu: "AI tutor", tinhnang: "Features", lop: "Mascot by grade", trochoi: "Games", chuongtrinh: "Curriculum", luyenthi: "Grade 6 prep", phuhuynh: "Parents", antoan: "Safety", hoi: "FAQ" },
+        more: [["/en/hoc/parents/", "For parents"], ["/en/", "Play Hub"], ["/popplay/", "Pop Play"], ["/cozyplay/", "Night Play"], ["/privacy.html", "Privacy"], ["/terms.html", "Terms"], ["mailto:support@nightplay.vn", "Contact"]] }
+};
+const mbtn = l => `<button class="ico mbtn" id="mbtn" type="button" aria-label="${MENU[l].open}" aria-expanded="false" aria-controls="mnav"><svg class="mb1" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="mb2" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>`;
+function menuHtml(l, sl, ids) {
+  const t = L[l], m = MENU[l], learn = `/learn/index.html?${sl ? "subj=" + KEY[sl] + "&" : ""}lang=${l}`;
+  const subs = SUBJ.map(x => `<a class="ms ${CLS[x]}" href="${t.prefix}${x}/"${x === sl ? ' aria-current="page"' : ""}>${head(x, "base", 1)}<span><b>${esc(MAS[x].brand[l])}</b><small>${esc(MAS[x].tag[l])}</small></span></a>`).join("");
+  const secs = ids.filter(Boolean).map(id => `<a href="#${id}" data-mclose>${esc(m.sec[id])}</a>`).join("");
+  const more = m.more.map(x => `<a href="${x[0]}">${esc(x[1])}</a>`).join("");
+  return `<div class="mnav" id="mnav" hidden><div class="mbd" data-mclose></div><nav class="mpan" id="mpan" aria-label="Menu">
+<a class="mhub" href="${t.prefix}"${sl ? "" : ' aria-current="page"'}><i aria-hidden="true">✨</i><span>${esc(m.hub)}</span></a>
+<h3 class="mh">${esc(m.subjects)}</h3><div class="msj">${subs}</div>
+<h3 class="mh">${esc(m.onpage)}</h3><div class="mls">${secs}</div>
+<a class="btn mcta" href="${learn}">${esc(m.cta)} →</a>
+<div class="mmore">${more}</div></nav></div>`;
+}
 function mapHtml(l, sl) {
   const t = L[l], k = KEY[sl], gr = CUR.subjects[k].grades;
   const tabs = gr.map((g, i) => `<button type="button" role="tab" data-g="${g.grade}" aria-selected="${i === 0}">${t.gradeLbl}${g.grade}</button>`).join("");
@@ -232,8 +254,10 @@ function page(l, sl) {
   <div class="tools">
     <a class="ico" href="${t.otherPrefix}${sl}/" hreflang="${t.other}" lang="${t.other}" data-set-lang="${t.other}" aria-label="${t.otherLabel}">${t.other.toUpperCase()}</a>
     <button class="ico" type="button" data-theme-toggle aria-label="${t.theme}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg></button>
+    ${mbtn(l)}
   </div>
 </div></header>
+${menuHtml(l, sl, ["cachhoc", "giasu", "tinhnang", "lop", "trochoi", "chuongtrinh", s.exam ? "luyenthi" : null, "phuhuynh", "antoan", "hoi"])}
 <main id="main">
 <section class="hero" id="top">
   <div class="aur" aria-hidden="true"><i></i><i></i><i></i></div><div class="stars" aria-hidden="true"></div>
@@ -318,7 +342,7 @@ ${s.exam ? `<section class="sec" id="luyenthi"><div class="wrap">
 </div></section>
 </main>
 <footer class="foot"><div class="wrap">
-  <nav class="fl" aria-label="Footer"><a href="${t.home}">${t.back}</a><a href="/popplay/">${t.foot[0]}</a><a href="/cozyplay/">${t.foot[1]}</a><a href="/privacy.html">${t.foot[2]}</a><a href="/terms.html">${t.foot[3]}</a><a href="mailto:support@nightplay.vn">${t.foot[4]}</a></nav>
+  <nav class="fl" aria-label="Footer"><a href="${t.home}">${t.back}</a><a href="${t.prefix}${PAR[l].slug}/">${l === "vi" ? "Dành cho phụ huynh" : "For parents"}</a><a href="/popplay/">${t.foot[0]}</a><a href="/cozyplay/">${t.foot[1]}</a><a href="/privacy.html">${t.foot[2]}</a><a href="/terms.html">${t.foot[3]}</a><a href="mailto:support@nightplay.vn">${t.foot[4]}</a></nav>
   <p>&copy; <span id="yr">2026</span> Play Hub</p>
 </div></footer>
 <div class="sticky" id="sticky"><a class="btn" href="${learn}">${t.sticky} →</a></div>
@@ -377,8 +401,9 @@ function hubPage(l) {
   <a class="brand" href="${t.home}"><i aria-hidden="true">✨</i><span>${t.brand}</span></a>
   <nav class="tabs" aria-label="${t.brand}">${nav}</nav>
   <div class="tools"><a class="ico" href="${t.otherPrefix}" hreflang="${t.other}" lang="${t.other}" data-set-lang="${t.other}" aria-label="${t.otherLabel}">${t.other.toUpperCase()}</a>
-    <button class="ico" type="button" data-theme-toggle aria-label="${t.theme}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg></button></div>
+    <button class="ico" type="button" data-theme-toggle aria-label="${t.theme}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg></button>${mbtn(l)}</div>
 </div></header>
+${menuHtml(l, null, ["mon", "cachhoc", "tinhnang", "antoan", "hoi"])}
 <main id="main">
 <section class="hero" id="top"><div class="aur" aria-hidden="true"><i></i><i></i><i></i></div><div class="stars" aria-hidden="true"></div>
   <div class="wrap hero-in"><div><span class="kick">✨ ${esc(h.kick)}</span><h1>${h.h1}</h1><p class="lead">${esc(h.lead)}</p>
@@ -395,8 +420,84 @@ function hubPage(l) {
 <section class="sec alt" id="hoi"><div class="wrap"><span class="tag">${t.faqTag}</span><h2 class="reveal">${esc(t.faqH)}</h2><div class="faq" style="margin-top:28px">${faq}</div></div></section>
 <section class="endcta"><div class="wrap"><h2>${esc(h.kick)}</h2><p class="sub">${esc(h.lead)}</p><a class="btn white big" href="/learn/index.html?lang=${l}">${h.try} →</a></div></section>
 </main>
-<footer class="foot"><div class="wrap"><nav class="fl" aria-label="Footer"><a href="${t.home}">${t.back}</a><a href="/popplay/">${t.foot[0]}</a><a href="/cozyplay/">${t.foot[1]}</a><a href="/privacy.html">${t.foot[2]}</a><a href="/terms.html">${t.foot[3]}</a><a href="mailto:support@nightplay.vn">${t.foot[4]}</a></nav><p>&copy; <span id="yr">2026</span> Play Hub</p></div></footer>
+<footer class="foot"><div class="wrap"><nav class="fl" aria-label="Footer"><a href="${t.home}">${t.back}</a><a href="${t.prefix}${PAR[l].slug}/">${l === "vi" ? "Dành cho phụ huynh" : "For parents"}</a><a href="/popplay/">${t.foot[0]}</a><a href="/cozyplay/">${t.foot[1]}</a><a href="/privacy.html">${t.foot[2]}</a><a href="/terms.html">${t.foot[3]}</a><a href="mailto:support@nightplay.vn">${t.foot[4]}</a></nav><p>&copy; <span id="yr">2026</span> Play Hub</p></div></footer>
 <div class="sticky" id="sticky"><a class="btn" href="/learn/index.html?lang=${l}">${t.sticky} →</a></div>
+<script src="/hoc/hoc.js" defer></script>
+</body>
+</html>
+`;
+}
+
+/* ---------- TRANG PHỤ HUYNH /hoc/phu-huynh/ và /en/hoc/parents/ (giới thiệu bảng điều khiển phụ huynh trong app: learn/parent/) ---------- */
+const PAR = {
+  vi: { slug: "phu-huynh", title: "Học Vui cho phụ huynh: xem bé học, hẹn giờ chơi, kèm đúng chỗ yếu", desc: "Trang phụ huynh của Học Vui: bản đồ kỹ năng theo từng môn, chỗ bé hay sai kèm gợi ý kèm con tại nhà, hẹn giờ chơi mỗi ngày. Dữ liệu chỉ nằm trên thiết bị của bé.",
+    kick: "Dành cho phụ huynh", h1: "Biết bé <em>đang học thế nào</em>, kèm đúng chỗ bé cần.", lead: "Một trang riêng cho bố mẹ, có cổng người lớn: xem bé đã làm bao nhiêu câu, kỹ năng nào vững, kỹ năng nào còn yếu, và nên kèm bé thế nào. Đặt giờ chơi mỗi ngày nếu bố mẹ muốn.", open: "Mở trang phụ huynh", try: "Cho bé học thử",
+    featH: "Bố mẹ xem được gì", featSub: "Mọi thứ dựa trên cách bé thật sự làm bài, không có điểm số để so sánh với bạn.",
+    feats: [["📊", "Tổng quan 7 ngày", "Số câu bé làm mỗi ngày, tỉ lệ đúng ngay lần đầu và số kỹ năng đã khá vững."], ["🗺️", "Bản đồ kỹ năng", "Từng kỹ năng của Toán, Tiếng Việt, Tiếng Anh theo lớp, chia 5 mức từ chưa học đến thành thạo."], ["🎯", "Chỗ bé còn yếu", "Những kỹ năng bé hay sai nhất, kèm loại lỗi tư duy, ví dụ quên số nhớ hoặc nhầm dấu thanh."], ["🤝", "Gợi ý kèm con", "Với mỗi loại lỗi có một việc nhỏ làm tại nhà với đồ có sẵn, khoảng 5 phút mỗi ngày."]],
+    timeH: "Hẹn giờ chơi mỗi ngày", timeSub: "Bố mẹ quyết định bé chơi bao lâu.", time: [["⏱️", "Chọn 15 đến 90 phút", "Chọn số phút mỗi ngày, hoặc để không giới hạn. Chỉ tính lúc bé đang thật sự chơi."], ["🌙", "Không cắt ngang", "Hết giờ giữa chừng thì bé được làm xong vòng đang chơi, rồi app nghỉ đến ngày mai."], ["🔑", "Bố mẹ mở khoá", "Muốn cho bé chơi thêm, bố mẹ vào trang phụ huynh và cộng 10 phút."]],
+    privH: "Dữ liệu của bé ở đâu", priv: [["📱", "Chỉ nằm trên thiết bị này", "Tiến độ, lỗi và nhật ký lưu ngay trên máy, không gửi lên máy chủ. Đổi máy thì bắt đầu lại từ đầu."], ["🔒", "Có cổng người lớn", "Muốn vào trang phụ huynh phải giải một phép tính mà bé lớp 1 đến lớp 5 khó giải. Đây là hàng rào nhẹ, không thay cho việc bố mẹ trông chừng."], ["🗑️", "Xoá bất cứ lúc nào", "Bố mẹ xoá toàn bộ tiến độ chỉ bằng một nút, có bước xác nhận."], ["🚫", "Không thu thập thông tin cá nhân", "Học Vui không hỏi tên, ngày sinh hay ảnh của bé."]],
+    soon: "Sắp có", soonP: "Tài khoản phụ huynh để xem trên nhiều thiết bị và báo cáo mỗi tối qua Zalo đang được chuẩn bị; chưa có trong bản hiện tại.",
+    faqH: "Câu hỏi của phụ huynh", faq: [["Trang phụ huynh có dành cho bé không?", "Không. Trang có cổng phép tính cho người lớn. Bố mẹ nên đặt thiết bị ở chỗ dễ trông chừng khi bé học."], ["Tôi đổi điện thoại thì sao?", "Tiến độ chỉ nằm trên thiết bị nên máy mới sẽ bắt đầu lại. Tài khoản phụ huynh để đồng bộ nằm trong kế hoạch sau."], ["Tỉ lệ đúng ngay lần đầu nghĩa là gì?", "Là tỉ lệ câu bé trả lời đúng ở lần chọn đầu tiên, không tính những lần thử lại sau khi được gợi ý."], ["Hết giờ có mất bài đang làm không?", "Không. Bé được làm xong vòng 5 câu đang chơi, rồi app mới nghỉ."]] },
+  en: { slug: "parents", title: "Fun Learning for parents: see progress, set play time, help where it counts", desc: "The Fun Learning parent area: a skill map per subject, where your child slips up with tips for practising at home, and a daily play timer. Data stays on your child’s device.",
+    kick: "For parents", h1: "Know <em>how your child is doing</em>, help exactly where it counts.", lead: "A separate area for grown-ups, behind an adult gate: see how many questions your child answered, which skills are solid, which need work, and how to help. Set a daily play time if you want one.", open: "Open the parent area", try: "Let your child try it",
+    featH: "What parents can see", featSub: "Everything comes from how your child actually answers, with no scores to compare with other kids.",
+    feats: [["📊", "7-day overview", "Questions per day, accuracy on the first try, and how many skills are solid."], ["🗺️", "Skill map", "Every Math, Vietnamese and English skill by grade, in 5 levels from not started to mastered."], ["🎯", "Where help is needed", "The skills your child misses most, with the type of thinking slip, such as forgetting to carry or mixing tone marks."], ["🤝", "Tips for practising together", "Each slip comes with a small at-home activity using things you already have, about 5 minutes a day."]],
+    timeH: "A daily play timer", timeSub: "You decide how long your child plays.", time: [["⏱️", "Pick 15 to 90 minutes", "Choose minutes per day, or no limit. Only time spent actively playing counts."], ["🌙", "No mid-question cut-off", "If time runs out mid-round your child can finish that round, then the app rests until tomorrow."], ["🔑", "You unlock more time", "To allow extra play, open the parent area and add 10 minutes."]],
+    privH: "Where your child’s data lives", priv: [["📱", "Only on this device", "Progress, mistakes and history are stored on the device and not sent to a server. A new device starts fresh."], ["🔒", "An adult gate", "Entering the parent area needs a sum that is hard for Grade 1 to 5 kids. It is a light barrier, not a replacement for supervision."], ["🗑️", "Erase any time", "Erase all progress with one button, with a confirmation step."], ["🚫", "No personal information", "Fun Learning never asks for your child’s name, birthday or photo."]],
+    soon: "Coming later", soonP: "Parent accounts to view on several devices and an evening report on Zalo are being prepared and are not in the current version.",
+    faqH: "Parents’ questions", faq: [["Is the parent area meant for kids?", "No. It sits behind an adult sum. Keep the device somewhere you can keep an eye on while your child learns."], ["What if I switch phones?", "Progress lives only on the device, so a new phone starts fresh. Parent accounts for syncing are planned for later."], ["What does accuracy on the first try mean?", "The share of questions answered correctly on the first choice, not counting retries after a hint."], ["Does my child lose the round when time is up?", "No. They can finish the 5-question round in progress before the app rests."]] }
+};
+function parentPage(l) {
+  const t = L[l], h = PAR[l], pre = t.prefix, url = `${BASE}${pre}${h.slug}/`, other = l === "vi" ? "en" : "vi", ourl = `${BASE}${other === "vi" ? "/hoc/" : "/en/hoc/"}${PAR[other].slug}/`;
+  const nav = SUBJ.map(x => `<a href="${pre}${x}/">${t.nav[x]}</a>`).join("");
+  const card = (x, cls) => `<article class="card ${cls} reveal"><div class="fi" aria-hidden="true">${x[0]}</div><h3>${esc(x[1])}</h3><p>${esc(x[2])}</p></article>`;
+  const it = x => `<div class="card it reveal"><i aria-hidden="true">${x[0]}</i><div><h3>${esc(x[1])}</h3><p>${esc(x[2])}</p></div></div>`;
+  const faq = h.faq.map(f => `<details class="card"><summary>${esc(f[0])}</summary><p>${esc(f[1])}</p></details>`).join("");
+  const mas = SUBJ.map((sl, i) => `<img class="mi" ${mi(sl, true)} src="${asset(sl, "happy")}" width="120" height="120" alt="${MAS[sl].n}" loading="lazy" decoding="async">`).join("");
+  const jsonld = { "@context": "https://schema.org", "@type": "WebPage", name: h.title, description: h.desc, inLanguage: l, isPartOf: { "@type": "WebSite", name: "Play Hub", url: BASE + "/" } };
+  const open = `/learn/parent/index.html?lang=${l}`;
+  return `<!doctype html>
+<html lang="${l}" data-app="hub">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${esc(h.title)}</title>
+<meta name="description" content="${esc(h.desc)}">
+<link rel="canonical" href="${url}">
+<link rel="alternate" hreflang="${l}" href="${url}">
+<link rel="alternate" hreflang="${other}" href="${ourl}">
+<link rel="alternate" hreflang="x-default" href="${BASE}/hoc/${PAR.vi.slug}/">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Play Hub"><meta property="og:title" content="${esc(h.title)}"><meta property="og:description" content="${esc(h.desc)}"><meta property="og:url" content="${url}"><meta property="og:image" content="${BASE}/lp/img/og.png"><meta property="og:locale" content="${l === "vi" ? "vi_VN" : "en_US"}"><meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#F6F4F1" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#12141F" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/svg+xml" sizes="any" href="/shared/favicon.svg">
+<script>try{var t=localStorage.getItem("theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"||t==="light"?t:(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");</script>
+<link rel="preload" href="/shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/shared/fonts.css"><link rel="stylesheet" href="/shared/theme.css"><link rel="stylesheet" href="/hoc/hoc.css">
+<script type="application/ld+json">${JSON.stringify(jsonld)}</script>
+</head>
+<body class="s-hub" data-lang="${l}">
+<a class="skip" href="#main">${t.skip}</a>
+<header class="top"><div class="wrap bar">
+  <a class="brand" href="${t.home}"><i aria-hidden="true">✨</i><span>${t.brand}</span></a>
+  <nav class="tabs" aria-label="${t.brand}">${nav}</nav>
+  <div class="tools"><a class="ico" href="${PAR[other].slug ? (other === "vi" ? "/hoc/" : "/en/hoc/") + PAR[other].slug + "/" : ""}" hreflang="${other}" lang="${other}" data-set-lang="${other}" aria-label="${t.otherLabel}">${other.toUpperCase()}</a>
+    <button class="ico" type="button" data-theme-toggle aria-label="${t.theme}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg></button>${mbtn(l)}</div>
+</div></header>
+${menuHtml(l, null, ["tinhnang", "phuhuynh", "antoan", "hoi"])}
+<main id="main">
+<section class="hero" id="top" style="min-height:auto;padding:clamp(40px,8vw,88px) 0"><div class="aur" aria-hidden="true"><i></i><i></i><i></i></div><div class="stars" aria-hidden="true"></div>
+  <div class="wrap hero-in" style="display:block"><span class="kick">🔒 ${esc(h.kick)}</span><h1>${h.h1}</h1><p class="lead">${esc(h.lead)}</p>
+    <div class="cta"><a class="btn big" href="${open}">${h.open} →</a><a class="btn ghost" href="/learn/index.html?lang=${l}">${h.try}</a></div>
+    <div style="display:flex;gap:10px;justify-content:flex-start;margin-top:22px" aria-hidden="true">${mas}</div></div></section>
+<section class="sec alt" id="tinhnang"><div class="wrap"><h2 class="reveal">${esc(h.featH)}</h2><p class="sub reveal">${esc(h.featSub)}</p><div class="grid f" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))">${h.feats.map(x => card(x, "feat")).join("")}</div></div></section>
+<section class="sec" id="phuhuynh"><div class="wrap"><h2 class="reveal">${esc(h.timeH)}</h2><p class="sub reveal">${esc(h.timeSub)}</p><div class="grid f">${h.time.map(x => card(x, "feat")).join("")}</div></div></section>
+<section class="sec alt" id="antoan"><div class="wrap"><h2 class="reveal">${esc(h.privH)}</h2><div class="safe">${h.priv.map(it).join("")}</div>
+  <aside class="cite reveal"><h3>${esc(h.soon)}</h3><p>${esc(h.soonP)}</p></aside></div></section>
+<section class="sec" id="hoi"><div class="wrap"><h2 class="reveal">${esc(h.faqH)}</h2><div class="faq" style="margin-top:28px">${faq}</div></div></section>
+<section class="endcta"><div class="wrap"><h2>${esc(h.kick)}</h2><p class="sub">${esc(h.lead)}</p><a class="btn white big" href="${open}">${h.open} →</a></div></section>
+</main>
+<footer class="foot"><div class="wrap"><nav class="fl" aria-label="Footer"><a href="${t.home}">${t.back}</a><a href="${pre}">${t.brand}</a><a href="${t.prefix}${PAR[l].slug}/">${l === "vi" ? "Dành cho phụ huynh" : "For parents"}</a><a href="/popplay/">${t.foot[0]}</a><a href="/cozyplay/">${t.foot[1]}</a><a href="/privacy.html">${t.foot[2]}</a><a href="/terms.html">${t.foot[3]}</a><a href="mailto:support@nightplay.vn">${t.foot[4]}</a></nav><p>&copy; <span id="yr">2026</span> Play Hub</p></div></footer>
+<div class="sticky" id="sticky"><a class="btn" href="${open}">${h.open} →</a></div>
 <script src="/hoc/hoc.js" defer></script>
 </body>
 </html>
@@ -409,5 +510,6 @@ for (const l of ["vi", "en"]) for (const sl of SUBJ) {
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(path.join(dir, "index.html"), page(l, sl)); n++;
 }
-for (const l of ["vi", "en"]) { const dir = path.join(root, "landing", l === "vi" ? "hoc" : "en/hoc"); fs.writeFileSync(path.join(dir, "index.html"), hubPage(l)); n++; }
+for (const l of ["vi", "en"]) { const dir = path.join(root, "landing", l === "vi" ? "hoc" : "en/hoc"); fs.writeFileSync(path.join(dir, "index.html"), hubPage(l)); n++;
+  const pd = path.join(dir, PAR[l].slug); fs.mkdirSync(pd, { recursive: true }); fs.writeFileSync(path.join(pd, "index.html"), parentPage(l)); n++; }
 console.log("✓ đã sinh", n, "trang landing Học Vui (gồm 2 trang hub /hoc/)");

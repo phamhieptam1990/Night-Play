@@ -98,4 +98,26 @@
   if (spot) { showSpot("mochi", GREET || pick("mochi"), false); rotate(); }
   d.addEventListener("visibilitychange", function () { if (!d.hidden) rotate(); });
   addEventListener("scroll", hide, { passive: true });
+  /* di động: thanh trên tự ẩn khi bé cuộn xuống, hiện lại khi cuộn lên hoặc về đầu trang (không ẩn khi menu đang mở) */
+  var hdr = d.querySelector("header.top"), lastY = window.pageYOffset || 0, tick = false;
+  if (hdr) addEventListener("scroll", function () {
+    if (tick) return; tick = true;
+    requestAnimationFrame(function () {
+      tick = false; var y = window.pageYOffset || 0, dy = y - lastY;
+      if (root.classList.contains("mopen") || y <= 10 || dy < -6) hdr.classList.remove("hide");
+      else if (dy > 6 && y > 80) hdr.classList.add("hide");
+      if (Math.abs(dy) > 6) lastY = y;
+    });
+  }, { passive: true });
+  /* menu di động: mở/đóng, khoá cuộn nền, Esc / chạm nền / chọn mục thì đóng, trả focus về nút */
+  var mb = d.getElementById("mbtn"), mn = d.getElementById("mnav"), mpan = d.getElementById("mpan");
+  if (mb && mn) {
+    var openM = function () { mn.hidden = false; mb.classList.add("on"); mb.setAttribute("aria-expanded", "true"); root.classList.add("mopen"); var f = mpan.querySelector("a"); if (f) f.focus(); };
+    var closeM = function (back) { if (mn.hidden) return; mn.hidden = true; mb.classList.remove("on"); mb.setAttribute("aria-expanded", "false"); root.classList.remove("mopen"); if (back) mb.focus(); };
+    mb.addEventListener("click", function () { mn.hidden ? openM() : closeM(true); });
+    mn.addEventListener("click", function (e) { var a = e.target.closest ? e.target.closest("[data-mclose]") : null; if (a) closeM(false); });
+    d.addEventListener("keydown", function (e) { if (e.key === "Escape") closeM(true); });
+    addEventListener("resize", function () { if (innerWidth >= 760) closeM(false); });
+    addEventListener("pageshow", function () { closeM(false); });
+  }
 })();

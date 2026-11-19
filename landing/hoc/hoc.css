@@ -191,7 +191,10 @@ p{margin:0}
 .cite a:hover{color:var(--sg)}
 /* linh vật Học Vui (ảnh tĩnh <img>; đầu = cắt từ ảnh nguyên con) */
 .hd{position:relative;display:inline-block;width:1.7em;height:1.7em;border-radius:50%;overflow:hidden;vertical-align:middle;background:linear-gradient(135deg,var(--s1),var(--sg));flex:none}
-.hd img{position:absolute;width:175%;max-width:none;left:-37%;top:-10%}
+[data-m=mochi]{--iw:96%;--il:1.9%;--it:.5%}
+[data-m=mam]{--iw:92%;--il:3.9%;--it:4.3%}
+[data-m=bibi]{--iw:90%;--il:5%;--it:6.3%}
+.hd img{position:absolute;height:auto;width:var(--iw,175%);max-width:none;left:var(--il,-37%);top:var(--it,-10%)}
 .mb{font-style:normal;display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--s1),var(--sg));overflow:hidden}
 .mb .hd{width:34px;height:34px;background:none}
 .kick .hd{width:26px;height:26px}
@@ -256,3 +259,35 @@ p{margin:0}
 @media (prefers-reduced-motion:reduce){.spot.swap img{animation:none}.tc{transition:none}}
 .hero-in>*{min-width:0}
 .kick{white-space:normal}
+/* menu di động (< 760px): ngăn kéo dưới thanh trên; từ 760px dùng thanh tab như cũ */
+.mbtn .mb2,.mbtn.on .mb1{display:none}.mbtn.on .mb2{display:block}
+html.mopen,html.mopen body{overflow:hidden}
+.mnav{position:fixed;left:0;right:0;top:56px;bottom:0;z-index:60}
+.mnav[hidden]{display:none}
+.mbd{position:absolute;inset:0;background:rgba(8,8,24,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);animation:mfade .2s}
+.mpan{position:relative;max-height:100%;overflow:auto;overscroll-behavior:contain;padding:14px 16px calc(18px + env(safe-area-inset-bottom));background:var(--bg);border-radius:0 0 26px 26px;border-bottom:1px solid var(--line);box-shadow:0 30px 60px -20px rgba(0,0,0,.6);animation:mdown .26s cubic-bezier(.2,.9,.3,1)}
+@keyframes mdown{from{transform:translateY(-14px);opacity:0}}@keyframes mfade{from{opacity:0}}
+.mhub{display:flex;align-items:center;gap:12px;min-height:52px;padding:0 14px;border-radius:16px;font-weight:800;font-size:17px;background:color-mix(in srgb,var(--sg) 16%,transparent)}
+.mhub i{font-style:normal;font-size:22px}
+.mhub[aria-current=page]{outline:2px solid var(--sg);outline-offset:-2px}
+.mh{margin:18px 4px 8px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2)}
+.msj{display:grid;gap:8px}
+.ms{display:flex;align-items:center;gap:12px;padding:10px 14px 10px 10px;border-radius:18px;color:#fff;background:linear-gradient(135deg,var(--s1),var(--s2))}
+.ms.s-toan{--s1:#0B6B4F;--s2:#0F8A66}.ms.s-viet{--s1:#9A3412;--s2:#C2410C}.ms.s-anh{--s1:#1D4ED8;--s2:#2563EB}
+.ms .hd{width:46px;height:46px;background:rgba(255,255,255,.22)}
+.ms b{display:block;font-size:18px;line-height:1.2}.ms small{display:block;font-size:13.5px;opacity:.92}
+.ms[aria-current=page]{outline:3px solid #fff;outline-offset:-3px;box-shadow:0 0 0 3px var(--sg)}
+.mls{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.mls a{display:flex;align-items:center;justify-content:space-between;gap:6px;min-height:48px;padding:0 14px;border-radius:14px;font-weight:700;font-size:15.5px;background:var(--panel);border:1px solid var(--line)}
+.mls a::after{content:"›";opacity:.45;font-size:20px}
+.mls a:active,.mhub:active,.ms:active{transform:scale(.98)}
+.mcta{width:100%;margin-top:16px;min-height:54px;font-size:19px}
+.mmore{display:flex;flex-wrap:wrap;gap:4px 6px;margin-top:12px;justify-content:center}
+.mmore a{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;border-radius:12px;font-size:14px;font-weight:600;color:var(--ink2)}
+@media (min-width:760px){.mbtn,.mnav{display:none!important}}
+@media (prefers-reduced-motion:reduce){.mpan,.mbd{animation:none}}
+
+/* di động: cụm nút (EN, sáng/tối, menu) canh phải; chân trang gom vào menu, chỉ còn một dòng bản quyền */
+@media (max-width:759px){.tabs+.tools{margin-left:auto}.foot{padding:16px 0 90px}.foot .fl{display:none}.foot p{margin:0;text-align:center;font-size:13px}}
+@media (max-width:759px){.top{transition:transform .25s ease}.top.hide{transform:translateY(-100%)}}
+@media (prefers-reduced-motion:reduce){.top{transition:none}}

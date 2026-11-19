@@ -522,7 +522,10 @@ main p a:not(.btn){transition:color .18s ease,text-decoration-color .18s ease}
 .hvt b{font-size:20px}.hvt span{font-size:14px;opacity:.92;line-height:1.35}
 .hvg{display:none;font-weight:800;font-size:14px}
 @media (min-width:760px){.hv{grid-template-columns:repeat(3,1fr)}.hvc{flex-direction:column;align-items:flex-start;padding:22px}.hvg{display:block;margin-top:6px}}
-.hvi{position:relative;overflow:hidden}.hvi img{position:absolute;width:175%;max-width:none;left:-37%;top:-10%}
+[data-m=mochi]{--iw:96%;--il:1.9%;--it:.5%}
+[data-m=mam]{--iw:92%;--il:3.9%;--it:4.3%}
+[data-m=bibi]{--iw:90%;--il:5%;--it:6.3%}
+.hvi{position:relative;overflow:hidden}.hvi img{position:absolute;height:auto;width:var(--iw);max-width:none;left:var(--il);top:var(--it)}
 @media (min-width:760px){.hvi{width:72px;height:72px}}
 .hvall{text-align:center;margin:-10px 0 20px}.hvall a{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:22px;font-weight:800;color:var(--accent);text-decoration:none;transition:background .15s}
 .hvall a:hover{background:color-mix(in srgb,var(--accent) 14%,transparent)}
@@ -534,7 +537,6 @@ main p a:not(.btn){transition:color .18s ease,text-decoration-color .18s ease}
 .hvc:hover,.hvc:focus-visible,.hvc:active{transform:scale(1.035);z-index:2;outline:3px solid #fff;outline-offset:-3px;box-shadow:0 0 0 3px var(--ring),0 14px 44px var(--glow)}
 .hvc:hover .hvi,.hvc:focus-visible .hvi{transform:scale(1.08)}
 .hvi{transition:transform .25s}
-.hvc.s3 .hvi img{left:-47%;top:-8%}   /* cắt đầu Bibi lệch trái để không lộ góc bong bóng "Hi!" */
 @media (prefers-reduced-motion:reduce){.hvc:hover,.hvc:focus-visible,.hvc:active{transform:none}.hvc:hover .hvi,.hvc:focus-visible .hvi{transform:none}}
 /* cỡ chữ 3 thẻ Học Vui ngang bằng thẻ game (.world h3 32px, p 17px, nút 17px); điện thoại nhỏ hơn một chút */
 .hvc{padding:18px 18px;gap:16px}
