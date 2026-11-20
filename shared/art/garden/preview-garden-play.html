@@ -76,6 +76,9 @@ body.fs{overflow:hidden;background:#6FB43F}.fsw{position:fixed;inset:0;display:g
 .masb{display:flex;align-items:center;gap:8px;margin:2px 0 4px}.masi{width:136px;height:136px;flex:none;animation:masb 2.6s ease-in-out infinite;transform-origin:50% 100%;filter:drop-shadow(0 6px 8px rgba(0,0,0,.35))}@keyframes masb{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-6px) rotate(2deg)}}
 .bub{position:relative;flex:1;background:rgba(255,255,255,.16);border:2px solid rgba(255,255,255,.45);border-radius:20px;padding:10px 14px;font-weight:700;font-size:19px;line-height:1.35;color:#fff}.bub::before{content:"";position:absolute;left:-9px;top:50%;margin-top:-8px;width:14px;height:14px;background:rgba(255,255,255,.16);border-left:2px solid rgba(255,255,255,.45);border-bottom:2px solid rgba(255,255,255,.45);transform:rotate(45deg)}.bub b{display:block;font-size:15px;color:var(--i1);margin-bottom:2px}
 @media (prefers-reduced-motion:reduce){.masi{animation:none}}
+/* tooltip: vị trí tính bằng JS (px), mũi nhọn chỉ vào ô */
+.fs .tip{transform:none!important}.tip{left:0;top:0}.tip .tico{left:var(--ax,50%)!important}
+.tip::after{content:"";position:absolute;left:var(--ax,50%);bottom:-9px;width:16px;height:16px;margin-left:-8px;background:color-mix(in srgb,var(--d2) 82%,transparent);border-right:2px solid rgba(255,255,255,.4);border-bottom:2px solid rgba(255,255,255,.4);transform:rotate(45deg)}.tip.below::after{display:none}
 .ov{background:rgba(12,9,36,.34)!important}
 .card{overflow:visible!important;margin-top:48px;position:relative;max-height:calc(100vh - 100px)!important;max-height:calc(100dvh - 100px)!important;background:linear-gradient(165deg,color-mix(in srgb,var(--d1) 86%,transparent),color-mix(in srgb,var(--d2) 78%,transparent))!important;border:2px solid rgba(255,255,255,.38)!important;box-shadow:0 24px 60px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.25)!important}
 .card .cico{position:absolute;left:50%;top:-50px;transform:translateX(-50%);width:96px;height:96px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 28%,var(--i1),var(--i2));border:4px solid #fff;box-shadow:0 12px 26px rgba(0,0,0,.38),0 0 0 7px rgba(255,255,255,.16);z-index:3;font-size:46px;line-height:1}.card .cico img{width:68px;height:68px}
@@ -127,10 +130,20 @@ function reward(p){ var c = CI[p.crop]; return c.per[Math.min(4, stg(p))]; }
 function badge(p, b){ var e = b.querySelector(".bdg"); if(e) e.remove(); var t = !p.planted ? "+" : p.got >= p.need ? CI[p.crop].ic : ""; if(t){ e = document.createElement("span"); e.className = "bdg"; e.textContent = t; b.appendChild(e); } b.classList.toggle("ripe", p.planted && p.got >= p.need); b.setAttribute("aria-label", p.planted ? CI[p.crop].vi + (p.got >= p.need ? ": chín, bấm để thu hoạch" : ": còn " + (p.need - p.got) + " câu đúng nữa") : "Đất trống, bấm để chọn cây"); }
 PLOTS.forEach(function(p){ var b = document.createElement("button"); b.type = "button"; b.className = "hs"; b.style.left = (p.x / W * 100) + "%"; b.style.top = (p.y / H * 100) + "%"; p.el = b; badge(p, b); stage.appendChild(b);
   b.addEventListener("pointerenter", function(){ showTip(p); }); b.addEventListener("pointerleave", hideTip); b.addEventListener("focus", function(){ showTip(p); }); b.addEventListener("blur", hideTip); b.addEventListener("click", function(){ hideTip(); openCard(p, b); }); });
+/* tooltip tự đặt vị trí: đo kích thước thật, dịch vào trong khung (không bị cắt ở mép trái/phải), lật xuống dưới khi sát mép trên, mũi nhọn và icon luôn chỉ đúng ô */
+function placeTip(p){
+  tip.classList.remove("below"); tip.style.visibility = "hidden"; tip.classList.add("on"); tip.style.left = "0px"; tip.style.top = "0px";
+  var sr = stage.getBoundingClientRect(), tw = tip.offsetWidth, th = tip.offsetHeight, px = p.x / W * sr.width, py = p.y / H * sr.height, m = 10, hudH = 64, vtop = Math.max(0, -sr.top) + hudH;
+  var left = Math.min(Math.max(px - tw / 2, m), Math.max(m, sr.width - tw - m)), top = py - 40 - th, below = false;
+  if(top < vtop - Math.min(0, sr.top) - 0 && sr.top + top < hudH){ top = py + 46; below = true; }
+  var vbot = innerHeight - sr.top - 54; if(top + th > vbot) top = Math.max(m, vbot - th);
+  tip.style.left = Math.round(left) + "px"; tip.style.top = Math.round(top) + "px"; tip.style.setProperty("--ax", Math.round(Math.min(Math.max(px - left, 30), tw - 30)) + "px");
+  tip.classList.toggle("below", below); tip.style.visibility = "";
+}
 function showTip(p){
   var c = p.planted ? CI[p.crop] : null, left = p.need - p.got, pct = p.planted ? p.got / p.need * 100 : 0;
   tip.innerHTML = "<div class='tico'>" + (p.planted ? icon(p.crop, 34) : "🌱") + "</div>" + (p.planted ? "<b>" + c.vi + (left ? "" : " · đã chín") + (p.hurt ? " " + HURT[p.hurt].ic : "") + "</b><div class='bar" + (left ? "" : " full") + "'><i style='width:0'></i></div><small>" + (left ? "Còn <b style=\"display:inline\">" + left + "</b> câu đúng nữa (khoảng " + mins(left) + " phút học) · " + p.got + "/" + p.need : "Chín rồi! Bấm để thu hoạch") + "</small>" : "<b>Đất trống</b><small>Bấm để chọn cây muốn trồng</small>");
-  tip.style.left = (p.x / W * 100) + "%"; tip.style.top = ((p.y - 52) / H * 100) + "%"; tip.classList.add("on");
+  placeTip(p);
   var i = tip.querySelector(".bar i"); if(i) requestAnimationFrame(function(){ requestAnimationFrame(function(){ i.style.width = pct + "%"; }); });
 }
 function hideTip(){ tip.classList.remove("on"); }
