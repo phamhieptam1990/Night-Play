@@ -585,6 +585,11 @@ body.fs{overflow:hidden;background:#6FB43F}.fsw{position:fixed;inset:0;display:g
 .hs .bdg{background:none!important;box-shadow:none!important;border:0!important;color:#fff;text-shadow:0 0 2px rgba(20,16,50,.9),0 0 4px rgba(20,16,50,.7),0 2px 3px rgba(20,16,50,.55);filter:drop-shadow(0 2px 2px rgba(0,0,0,.45))}
 .hs .bdg.plus{position:absolute;left:90%;top:50%;transform:translate(-50%,-50%);width:clamp(15px,1.7vw,22px);height:clamp(15px,1.7vw,22px);min-width:0;border-radius:50%;background:#22C55E!important;border:2px solid #15803D!important;font-size:0;text-shadow:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}
 .hs .bdg.plus::before,.hs .bdg.plus::after{content:"";position:absolute;left:50%;top:50%;width:56%;height:2.5px;margin:-1.25px 0 0 -28%;border-radius:2px;background:#fff}.hs .bdg.plus::after{transform:rotate(90deg)}
+/* vùng bấm nhà / kho / ao cá */
+.bld{position:absolute;z-index:2;transform:translate(-50%,-50%);border-radius:28px;text-decoration:none;color:#fff;-webkit-tap-highlight-color:transparent;transition:background .15s,box-shadow .15s}
+.bld .bt{position:absolute;left:50%;top:0;transform:translate(-50%,-50%);display:inline-flex;align-items:center;gap:6px;white-space:nowrap;min-height:34px;padding:0 12px 0 8px;border-radius:99px;background:rgba(20,16,50,.62);border:2px solid rgba(255,255,255,.55);font:800 14px system-ui;box-shadow:0 4px 12px rgba(0,0,0,.3);transition:transform .15s,background .15s}.bld .bt i{font-style:normal;font-size:18px}
+.bld:hover,.bld:focus-visible{background:rgba(255,255,255,.16);box-shadow:0 0 0 4px rgba(255,255,255,.85);outline:none}.bld:hover .bt,.bld:focus-visible .bt{background:linear-gradient(135deg,var(--a),var(--b));transform:translate(-50%,-58%) scale(1.08)}
+@media (max-width:560px){.bld .bt{font-size:12px;min-height:30px}}
 .ov{background:rgba(12,9,36,.34)!important}
 .card{overflow:visible!important;margin-top:48px;position:relative;max-height:calc(100vh - 100px)!important;max-height:calc(100dvh - 100px)!important;background:linear-gradient(165deg,color-mix(in srgb,var(--d1) 86%,transparent),color-mix(in srgb,var(--d2) 78%,transparent))!important;border:2px solid rgba(255,255,255,.38)!important;box-shadow:0 24px 60px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.25)!important}
 .card .cico{position:absolute;left:50%;top:-50px;transform:translateX(-50%);width:96px;height:96px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 28%,var(--i1),var(--i2));border:4px solid #fff;box-shadow:0 12px 26px rgba(0,0,0,.38),0 0 0 7px rgba(255,255,255,.16);z-index:3;font-size:46px;line-height:1}.card .cico img{width:68px;height:68px}
@@ -723,6 +728,11 @@ function openRescue(){ var e = EV[evCur]; if(!e) return; var t = LVS[LV];
     "<div class='acts'><button class='btn g' type='button' id='cl'>Để sau</button><button class='btn g' type='button' id='sim'>Chơi 1 bài (mô phỏng)</button><a class='btn go' href='../../../learn/index.html?subj=" + e.sk + "&grade=2&lang=vi&rescue=" + evCur + "'>Học ngay</a></div>";
   var pr = skin(h).split("<!--B-->"); card.innerHTML = pr[0] + "<div class='cbody'>" + pr[1] + "</div>"; ov.classList.add("on"); bindTabs(card); card.querySelector("#cl").onclick = closeCard;
   card.querySelector("#sim").onclick = function(){ evGot++; if(evGot >= e.need){ toast("🎉 Cứu vườn thành công! +1 🌱 · huy hiệu Người bảo vệ vườn 🛡️"); clearEv(); closeCard(); return; } card.querySelector("#rg").textContent = evGot + "/" + e.need; card.querySelector("#rb").style.width = (evGot / e.need * 100) + "%"; card.querySelector("#rm").textContent = CHEER[(evGot - 1) % CHEER.length]; evBanner(); }; }
+/* vùng bấm lên 3 vật lớn: nhà, kho, ao cá → vào trang con (đặt dưới các ô trồng, ô trồng vẫn bấm được) */
+var BLD = [{ n: "Trong nhà", ic: "🏠", u: "preview-house.html", x: 620, y: 330, w: 300, h: 270 }, { n: "Kho nông sản", ic: "📦", u: "preview-barn.html", x: 1092, y: 505, w: 240, h: 210 }, { n: "Ao cá", ic: "🐟", u: "preview-pond.html", x: 330, y: 308, w: 290, h: 150 }];
+BLD.forEach(function(d){ var a = document.createElement("a"); a.className = "bld"; a.href = d.u; a.setAttribute("aria-label", d.n + ": bấm để vào"); a.dataset.n = d.n;
+  a.style.cssText = "left:" + (d.x / W * 100) + "%;top:" + (d.y / H * 100) + "%;width:" + (d.w / W * 100) + "%;height:" + (d.h / H * 100) + "%";
+  a.innerHTML = "<span class='bt'><i>" + d.ic + "</i>" + d.n + "</span>"; stage.appendChild(a); });
 renderMis();
 document.querySelectorAll(".evbar button").forEach(function(b){ b.onclick = function(){ closeMn(); startEv(b.dataset.ev); }; });
 document.querySelectorAll(".lvbar button").forEach(function(b){ b.onclick = function(){ applyLv(+b.dataset.l); }; }); applyLv(LV);
