@@ -1,6 +1,6 @@
 /* Bộ kiểm tra HỌC TẬP (Học Vui) gom một chỗ. Chạy:
      NODE_PATH=<thư mục có puppeteer-core> node scripts/learn/check.js [--full]
-   Gồm: ngân hàng câu (check-bank), 18 kiểu câu hỏi (check-types), trang phụ huynh + hẹn giờ (check-parent), luật Vườn (check-garden),
+   Gồm: SVG vườn (check-garden-art), ngân hàng câu (check-bank), 18 kiểu câu hỏi (check-types), trang phụ huynh + hẹn giờ (check-parent), luật Vườn (check-garden),
    linh vật SVG (cozygame/check-art), giao diện trang học bằng Chrome thật (check-ui; --full thêm 3 môn x mọi kiểu x màn ngang).
    Cũng chạy được từ check.js của game bằng cờ:  node scripts/cozygame/check.js --learn   (chỉ học tập)  |  --games  (chỉ game)  |  không cờ = cả hai. */
 "use strict";
@@ -12,6 +12,7 @@ const STEPS = [
   ["trang phụ huynh + hẹn giờ", "scripts/learn/check-parent.js", []],
   ["Vườn (dữ liệu + luật)", "scripts/learn/check-garden.js", []],
   ["linh vật SVG", "scripts/cozygame/check-art.js", []],
+  ["SVG vườn (luật vẽ + trang duyệt)", "scripts/learn/check-garden-art.js", []],
   ["giao diện trang học", "scripts/learn/check-ui.js", process.argv.includes("--full") ? ["--full"] : []]
 ];
 const failed = [];
