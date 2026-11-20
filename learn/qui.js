@@ -64,22 +64,60 @@
 
   /* gõ số bằng bàn phím trên màn hình (và bàn phím thật) */
   function renderTypein(b, host) {
-    var val = "", disp = h("div", "qd ph", "?"), pad = h("div", "qk");
-    function show() { disp.textContent = val || "?"; disp.classList.toggle("ph", !val); }
-    function add(c) { if (busy(host) || val.length >= 7) return; val += c; A.sfx("tap"); show(); }
-    function back() { if (busy(host)) return; val = val.slice(0, -1); A.sfx("tap"); show(); }
+    /* ô nhập thật (text field) + bàn phím số trên màn hình. inputmode="none": không bật bàn phím hệ thống (che màn hình) nhưng vẫn gõ được bằng bàn phím máy tính.
+       b.dec: đáp án thập phân → thêm phím dấu phẩy (b.sep). b.ans là số chuẩn ("3.14"), b.show là cách hiển thị cho bé ("3,14"). */
+    var sep = b.sep || ",", fld = h("div", "qd fld"), inp = h("input", "qi"), pad = h("div", "qk"), unit = b.unit ? h("span", "un", b.unit) : null;
+    inp.type = "text"; inp.setAttribute("inputmode", "none"); inp.setAttribute("autocomplete", "off"); inp.setAttribute("autocapitalize", "off"); inp.setAttribute("spellcheck", "false");
+    inp.maxLength = 8; inp.placeholder = "?"; inp.setAttribute("aria-label", b.lab || "");
+    fld.appendChild(inp); if (unit) fld.appendChild(unit);
+    function clean(v) { v = v.replace(/[.,]/g, function (c, i) { return b.dec ? sep : ""; }).replace(/[^0-9,.]/g, ""); var k = v.indexOf(sep); if (k >= 0) v = v.slice(0, k + 1) + v.slice(k + 1).replace(/[,.]/g, ""); if (v === sep) v = "0" + sep; return v.slice(0, 8); }
+    function add(c) { if (busy(host)) return; var v = inp.value; if (c === sep && (!b.dec || v.indexOf(sep) >= 0)) return; if (v.length >= 8) return; inp.value = clean(v + c); A.sfx("tap"); inp.focus({ preventScroll: true }); }
+    function back() { if (busy(host)) return; inp.value = inp.value.slice(0, -1); A.sfx("tap"); inp.focus({ preventScroll: true }); }
     function submit() {
-      if (busy(host) || !val) return;
-      if (val === b.ans) { A.right(disp); return; }
-      shake(disp); var r = A.wrong("other", function () { val = b.ans; show(); disp.classList.add("okk"); }, b.reveal);
-      if (r === 1) setTimeout(function () { val = ""; show(); }, 650);
+      var raw = inp.value.replace(new RegExp("\\" + sep + "$"), "");
+      if (busy(host) || !raw) return;
+      var num = Number(raw.replace(sep, ".")), key = String(num);
+      if (Math.abs(num - Number(b.ans)) < 1e-9) { A.right(fld); return; }
+      shake(fld); var r = A.wrong((b.tags && b.tags[key]) || "other", function () { inp.value = b.show || b.ans; fld.classList.add("okk"); }, b.reveal);   /* gõ trúng một đáp án nhiễu của engine thì ghi đúng mã lỗi tư duy */
+      if (r === 1) setTimeout(function () { inp.value = ""; inp.focus({ preventScroll: true }); }, 650);
     }
+    inp.addEventListener("input", function () { var v = clean(inp.value); if (v !== inp.value) inp.value = v; });
     "1234567890".split("").forEach(function (c) { var k = tile(c, "kb"); k.onclick = function () { add(c); }; pad.appendChild(k); });
-    var bk = tile("⌫", "kb act"); bk.setAttribute("aria-label", "⌫"); bk.onclick = back; pad.appendChild(bk);
+    var bk = tile("⌫", "kb act"); bk.setAttribute("aria-label", "⌫"); bk.onclick = back;
+    if (b.dec) { var sk = tile(sep, "kb"); sk.setAttribute("aria-label", sep === "," ? "dấu phẩy" : "decimal point"); sk.onclick = function () { add(sep); }; pad.appendChild(sk); bk.style.gridColumn = "span 1"; }
+    pad.appendChild(bk);
     var go = tile("✓", "kb go"); go.setAttribute("aria-label", "✓"); go.onclick = submit; pad.appendChild(go);
-    var onKey = function (e) { if (e.ctrlKey || e.metaKey || e.altKey) return; if (/^[0-9]$/.test(e.key)) { add(e.key); } else if (e.key === "Backspace") { back(); } else if (e.key === "Enter") { e.preventDefault(); submit(); } };
+    var onKey = function (e) { if (e.ctrlKey || e.metaKey || e.altKey) return; if (e.key === "Enter") { e.preventDefault(); submit(); } else if (e.target !== inp && (/^[0-9,.]$/.test(e.key) || e.key === "Backspace")) inp.focus({ preventScroll: true }); };
     d.addEventListener("keydown", onKey); cleanup = function () { d.removeEventListener("keydown", onKey); };
-    host.appendChild(disp); host.appendChild(pad);
+    host.appendChild(fld); host.appendChild(pad); setTimeout(function () { try { inp.focus({ preventScroll: true }); } catch (e) {} }, 0);
+  }
+
+  /* nghe–viết (dictate) và viết câu (write): ô nhập chữ thật + nút ✓. dictate so khớp từ cần viết; write chấm theo tiêu chí hình thức (LearnTypes.checkWrite) */
+  function renderText(b, host) {
+    var fld = h("div", "qd fld txt"), inp = h("input", "qi"), go = tile("✓", "ab tl kb go"), row = h("div", "qk qt1"), isW = b.kind === "write";
+    inp.type = "text"; inp.maxLength = isW ? 140 : 24; inp.placeholder = isW ? "…" : "?"; inp.setAttribute("autocomplete", "off"); inp.setAttribute("autocorrect", "off"); inp.setAttribute("autocapitalize", isW ? "sentences" : "off"); inp.setAttribute("spellcheck", "false"); inp.setAttribute("aria-label", b.lab || "");
+    fld.appendChild(inp); go.setAttribute("aria-label", "✓");
+    function norm(x) { x = String(x).replace(/\s+/g, " ").trim().toLowerCase(); return x.normalize ? x.normalize("NFC") : x; }
+    function submit() {
+      if (busy(host) || !inp.value.trim()) return;
+      if (isW) {
+        var res = (window.LearnTypes && LearnTypes.checkWrite) ? LearnTypes.checkWrite(inp.value, b, b.lang) : { ok: inp.value.trim().length > 3, tip: "" };
+        if (res.ok) { A.right(fld); return; }
+        shake(fld); var r0 = A.wrong("other", function () { fld.classList.add("okk"); }, null); if (A.say && res.tip) A.say(res.tip); if (r0 === 1) setTimeout(function () { inp.focus(); }, 300); return;
+      }
+      var v = norm(inp.value);
+      if ((b.accept || [b.ans]).indexOf(v) >= 0) { A.right(fld); return; }
+      shake(fld); var r = A.wrong("spelling", function () { inp.value = b.reveal || b.ans; fld.classList.add("okk"); }, b.reveal || b.ans);
+      if (r === 1) setTimeout(function () { inp.value = ""; inp.focus(); }, 650);
+    }
+    go.onclick = submit; inp.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); submit(); } });
+    row.appendChild(go); host.appendChild(fld); host.appendChild(row); setTimeout(function () { try { inp.focus({ preventScroll: true }); } catch (e) {} }, 0);
+  }
+  /* đọc to (speak): bé đọc thành tiếng rồi tự báo; không có nhận dạng giọng nói nên ghi là "tự báo" */
+  function renderSpeak(b, host) {
+    var done = tile((b.lang === "en" ? "✓ I read it aloud" : "✓ Em đã đọc to xong"), "ab tl kb go sayb");
+    done.onclick = function () { if (busy(host)) return; A.right(done); };
+    host.appendChild(done);
   }
 
   /* chọn nhiều đáp án đúng, rồi bấm "Xong" */
@@ -233,7 +271,7 @@
     host.appendChild(pool); host.appendChild(bins);
   }
 
-  var R = { count: renderCount, pop: renderPop, dragfill: renderDragfill, memory: renderMemory, numline: renderNumline, clock: renderClock, sort: renderSort, order: function (b, h2) { renderOrder(b, h2, false); }, wordbuild: function (b, h2) { renderOrder(b, h2, true); }, typein: renderTypein, multi: renderMulti, match: renderMatch };
+  var R = { count: renderCount, pop: renderPop, dragfill: renderDragfill, memory: renderMemory, numline: renderNumline, clock: renderClock, sort: renderSort, order: function (b, h2) { renderOrder(b, h2, false); }, wordbuild: function (b, h2) { renderOrder(b, h2, true); }, typein: renderTypein, dictate: renderText, write: renderText, speak: renderSpeak, multi: renderMulti, match: renderMatch };
   window.LearnQUI = {
     custom: function (kind) { return !!R[kind]; },
     render: function (b, host, api) { if (cleanup) { cleanup(); cleanup = null; } A = api; host.textContent = ""; R[b.kind](b, host); }

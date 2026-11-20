@@ -2,7 +2,7 @@
 
 Cách dùng: trước mỗi lần báo "xong" một hạng mục Học Vui, đối chiếu từng dòng; **đã đo/nhìn ảnh mới được tick**, dòng nào chưa kiểm tra thì để trống và ghi lý do.
 Chạy bài đo tự động: `NODE_PATH=<puppeteer-core> node scripts/cozygame/check.js --learn` (thêm `--full` để đo đủ 3 môn × mọi kiểu × màn ngang). Chỉ game: `--games`. Cả hai: không cờ.
-Cập nhật lần cuối: 2026-11-19 (tự duyệt sau commit `b603c33`).
+Cập nhật lần cuối: 2026-11-20. Bài đo Học Vui hiện nằm ở `scripts/learn/check-*.js` (xem mục E); chỉ chạy phạm vi Học Vui, không chạy `check.js` toàn repo.
 
 ## A. Tiêu chí của chủ site nêu trong quá trình làm
 
@@ -16,7 +16,7 @@ Cập nhật lần cuối: 2026-11-19 (tự duyệt sau commit `b603c33`).
 - [ ] **Bé thích quay lại mỗi ngày**: cần Vườn có sự sống (kế hoạch mục 2b). Dữ liệu đã có, màn Vườn chưa làm.
 - [ ] **Bé khám phá, lộ điểm mạnh, ba mẹ "wow"**: đã ghi tín hiệu ở `learn/garden.js` nhưng chưa nối vào trang học, chưa có Hồ sơ khám phá.
 - [ ] **AI tương tác với bé**: chưa có (xem kế hoạch giai đoạn D). Hiện linh vật nói câu soạn sẵn.
-- [ ] **Bé học có câu chuyện**: bộ khung truyện đã viết (`docs/LEARN-STORY-BIBLE.md`), chờ chủ site duyệt, chưa soạn chuyến nào.
+- [ ] **Bé học có câu chuyện**: có kế hoạch cụ thể ở [LEARN-STORY-PLAN.md](LEARN-STORY-PLAN.md) (mạch "Bạn Mây đến vườn", 21 tập, 6 quyết định chờ chủ site). Chưa soạn tập nào, chưa có máy chơi truyện.
 
 ### Bố cục, canh lề (chủ site nhắc nhiều lần)
 - [x] **Một màn hình, không cuộn** ở 390×844, 360×640, 844×390: 90 tổ hợp, không cuộn/tràn.
@@ -26,7 +26,7 @@ Cập nhật lần cuối: 2026-11-19 (tự duyệt sau commit `b603c33`).
 - [x] **Không gạch chân menu**.
 - [x] **Nút chạm ≥ 44px** (màn dọc): 60 tổ hợp đạt. Màn ngang nút thanh trên 38px, nằm trong khoảng 38–46px mà GAME_RULES cho phép ở màn ngang.
 - [ ] **Màn ngang 844×390 xem bằng mắt cho từng kiểu**: mới đo số (không tràn, nút ≥38px), chưa xem ảnh từng kiểu.
-- [ ] **iPad, màn rộng**: chưa kiểm tra trang học ở 820/1024/1280.
+- [ ] **iPad, màn rộng**: trang HỌC chưa kiểm ở 820/1024/1280 (trang PHỤ HUYNH đã kiểm 768/1280/1600 và có bố cục hai cột).
 
 ### Phong cách và nhân vật
 - [x] **Linh vật không mờ, không chìm nền** (nền tối có vòng sáng).
@@ -51,23 +51,34 @@ Cập nhật lần cuối: 2026-11-19 (tự duyệt sau commit `b603c33`).
 - [x] Offline: trang học chạy không cần máy chủ; `sw.js` có tệp mới trong danh sách tải sẵn.
 - [x] Không gọi máy chủ/AI lúc chơi.
 - [ ] **Nút "?" cách chơi**: trang học chưa có nút "?". Các kiểu mới (kéo thả, trục số, lật thẻ) cần hướng dẫn ngắn. *Hiện mỗi câu có một dòng đề bài.*
-- [ ] **Quyền riêng tư**: `learn:garden`, `learn:music`, `learn:limit`... là khoá `localStorage` MỚI. GAME_RULES mục 6: thêm khoá lưu máy thì phải cập nhật `privacy.html` (vi + en) và ngày trong `shared/site.js`. **Chưa làm.**
+- [x] **Quyền riêng tư**: đã thêm mục khoá `learn:*` (vi + en) và đoạn "Học Vui" ở mục dữ liệu trẻ em của `privacy.html`; đổi `legalDate` thành 20/11/2026; dựng lại 4 PDF pháp lý; tăng `sw.js` lên `np-shell-v564` và thêm tệp học mới vào danh sách tải sẵn. *Chủ site cần đọc và xác nhận lời văn pháp lý.*
 - [ ] **Chơi hộ / thách đấu / Night Pass**: không áp dụng cho Học Vui (chưa quyết có hay không).
 
 ## C. Còn nợ kỹ thuật
 
 - [ ] `check.js` phần **game** vẫn đỏ ở các bài cũ không liên quan Học Vui (`check-onezone`... ). Mình không sửa trong phạm vi này. Phần học tập (`--learn`) xanh.
 - [ ] `check-landing.js` không chạy được (lỗi cũ).
-- [ ] Nội dung từ vựng, câu, nhóm phân loại do mình soạn nhanh: cần người duyệt đối chiếu chương trình.
+- [ ] Nội dung Toán, Tiếng Việt, Tiếng Anh do AI soạn: đã qua kiểm tra logic và đối chiếu luật tự động (hàng chục nghìn phép kiểm) nhưng **chưa qua giáo viên**. Cần người rà (xuất bảng để cô đọc khi bạn muốn).
 - [ ] Nội dung quảng bá trên landing nhắc tính năng chưa có (gia sư AI, báo cáo Zalo): rà lại cho khớp thực tế.
 - [ ] Hai tệp chưa theo dõi trong git không thuộc Học Vui: `doc.md`, `npicon-preview.html`.
-- [ ] Chưa nghe âm thanh bằng loa thật; chưa thử kéo thả bằng ngón tay trên điện thoại thật (chỉ giả lập bằng chuột).
+- [ ] Chưa nghe âm thanh bằng loa thật; chưa thử trên **điện thoại thật**: kéo thả bằng ngón tay, giọng đọc đề, ô nhập chữ/số và bàn phím, phím dấu phẩy (chỉ giả lập bằng Chrome).
 
 ## D. Việc tiếp theo (theo kế hoạch Vườn, Giai đoạn B)
 
 - [ ] Màn **Vườn** (`learn/garden.html`): một màn không cuộn, cây theo kỹ năng, chạm để tưới, ngày/đêm theo giờ máy, ong/bướm/đom đóm ghé thăm.
 - [ ] Nối `learn/garden.js` vào trang học: phát thưởng cuối lượt (`endRound`), ghi tín hiệu mỗi câu (`signal`), nút "Xem vườn" ở màn kết quả.
 - [ ] Hiển thị phần thưởng cuối lượt: 💧 🌱 🧪 và huy hiệu mới.
-- [ ] Cập nhật `privacy.html` cho các khoá lưu máy mới (mục B).
+- [x] Cập nhật `privacy.html` cho các khoá lưu máy mới (mục B): đã làm ngày 20/11/2026.
 - [ ] Màn "Thử điều mới" và thẻ "Điểm sáng" (Giai đoạn B2).
 - [ ] Mỗi mục xong: chạy `check.js --learn`, chụp ảnh 390×844 + 360×640 + 844×390 và tự nhìn.
+
+## E. Đã làm từ 19/11 đến 20/11/2026 (đo bằng `scripts/learn/*`)
+
+- [x] **Toán lớp 1–5**: 36 kỹ năng mới và bổ sung (hình, đo lường, biểu thức, phân số bằng nhau, số La Mã, số đo góc, tìm lỗi sai…), đáp án tự tính lại độc lập (`check-mathskills.js`, 27.431 phép kiểm).
+- [x] **Tiếng Việt và Tiếng Anh**: 30 kỹ năng mới (chính tả theo luật, từ loại, dấu câu, đọc hiểu, văn học, số nhiều, hiện tại đơn…), đối chiếu luật độc lập (`check-lang.js`, 4.451 phép kiểm).
+- [x] **Nghe, nghe–viết, viết câu (chấm hình thức), đọc to (tự báo)** cho cả hai môn.
+- [x] **Gợi ý 💡 theo bậc phủ 100% kỹ năng**, không lộ đáp án (`check-hint.js`).
+- [x] **Mức thành thạo 4 bậc** (Hiểu · Thực hiện · Vận dụng · Thành thạo) hiển thị ở trang phụ huynh.
+- [x] **Trang phụ huynh**: mục tiêu theo lớp, bé đã học gì (theo ngày, có số lần xem gợi ý), menu nhảy nhanh, bố cục hai cột màn rộng; mỗi mục một thẻ (`check-parent-ui.js`).
+- [x] Quy tắc mới trong `GAME_RULES.md` 0a-33, 0a-34: popup và thẻ nổi không nền trắng; câu hỏi canh giữa, hình co trước chữ co sau.
+- [ ] Còn lại, ngoài phạm vi hiện tại: tô chữ lớp 1, chấm nội dung bài viết, nhận dạng giọng nói, truyện dẫn bé học (xem kế hoạch).

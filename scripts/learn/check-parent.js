@@ -22,6 +22,33 @@ ok(Object.keys(JSON.parse(mem["learn:day"])).length <= 30, "chỉ giữ 30 ngày
 ok(E.summary("toan").skills.some(k => k.n > 0), "summary thấy tiến độ"); E.resetAll();
 ok(!E.summary("toan").skills.some(k => k.n > 0) && !E.summary("tviet").skills.some(k => k.n > 0), "resetAll xoá kỹ năng"); ok(E.daily(7).every(x => x.n === 0), "resetAll xoá nhật ký"); ok(Object.keys(E.summary("toan").tags).length === 0, "resetAll xoá lỗi");
 
+/* mọi kỹ năng có thể xuất hiện trong bản tóm tắt (kể cả kỹ năng chỉ theo dõi) phải có tên vi/en và có lớp để trang vẽ không sập */
+for (const id of Object.keys(E.TRACKED)) { ok(C.SKILL[id] && C.SKILL[id].length === 2, "kỹ năng theo dõi thiếu tên: " + id); ok(Array.isArray((E.SKILLS[id] || E.TRACKED[id]).grades), "kỹ năng theo dõi thiếu lớp: " + id); }
+E.record("toan", "count_obj", true); ok(E.summary("toan").skills.every(k => C.SKILL[k.id] && (E.SKILLS[k.id] || E.TRACKED[k.id])), "summary có kỹ năng không tra được tên/lớp");
+{ const dd = E.dayDetail(7); ok(dd.length === 7 && dd[6].items.some(x => x.id === "count_obj" && x.n === 1), "nhật ký chi tiết ghi tên kỹ năng + số câu"); E.noteHint("toan", "count_obj"); ok(E.dayDetail(1)[0].items.find(x => x.id === "count_obj").h === 1, "ghi lần xem gợi ý");
+  ok(!/\?|=|\+/.test(mem["learn:dayk"].replace(/[\[\]{}",:\d\-_a-z]/gi, "")), "nhật ký chi tiết chỉ chứa tên kỹ năng và số, không có nội dung câu");
+  E.setDetail(false); E.record("toan", "count_obj", true); ok(E.dayDetail(1)[0].items.length === 0, "tắt ghi chi tiết thì không ghi và đã xoá"); E.setDetail(true); E.record("toan", "count_obj", true); ok(E.dayDetail(1)[0].items.length === 1, "bật lại thì ghi tiếp"); E.clearDetail(); ok(E.dayDetail(1)[0].items.length === 0, "clearDetail xoá"); }
+{ const vm = require("vm"); global.window = global; vm.runInThisContext(fs.readFileSync(path.join(root, "learn/content/curriculum.js"), "utf8")); for (let g = 1; g <= 5; g++) { const G = E.goals("toan", g, window.LEARN_CURRICULUM); ok(G.topics.length >= 5 && G.total > 0 && G.topics.every(t => t.total > 0), "Toán lớp " + g + ": mọi chủ đề phải có bài luyện (có " + G.topics.filter(t => !t.total).map(t => t.id) + ")"); } }
+/* mỗi môn, mỗi lớp phải có đủ kỹ năng để bé không thấy trống (đo độ phủ, không đo chất lượng) */
+for (const [sj, min] of [["toan", 10], ["tviet", 5], ["tanh", 5]]) for (let g = 1; g <= 5; g++) { const n = Object.keys(E.SKILLS).filter(i => E.SKILLS[i].subj === sj && E.SKILLS[i].grades.includes(g)).length; ok(n >= min, sj + " lớp " + g + " chỉ có " + n + " kỹ năng (cần >= " + min + ")"); }
+/* CSS không được thừa/thiếu ngoặc nhọn: một dấu } thừa làm trình duyệt BỎ quy tắc đứng ngay sau nó (từng làm mất lề của mọi thẻ trang phụ huynh) */
+for (const f of ["learn/parent/index.html", "learn/index.html"]) { const h = fs.readFileSync(path.join(root, f), "utf8"); for (const m of h.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)) { const css = m[1].replace(/\/\*[\s\S]*?\*\//g, ""); let d = 0, neg = -1; for (let i = 0; i < css.length; i++) { if (css[i] === "{") d++; else if (css[i] === "}") { d--; if (d < 0 && neg < 0) neg = i; } } ok(neg < 0 && d === 0, f + ": CSS lệch ngoặc nhọn (độ sâu cuối " + d + (neg >= 0 ? ", dấu } thừa gần: …" + css.slice(Math.max(0, neg - 40), neg + 20).replace(/\s+/g, " ") + "…" : "") + ")"); } }
+/* mức thành thạo 4 bậc (Hiểu · Thực hiện · Vận dụng · Thành thạo) và bằng chứng thu thập trong record() */
+{ const m = E.mastery4;
+  ok(m(null) === 0 && m({ n: 0 }) === 0 && m({ n: 3, ok: 0, p: 0 }) === 0, "chưa đúng câu nào thì mức 0");
+  ok(m({ n: 1, ok: 1, p: 1 }) === 1 && m({ n: 5, ok: 2, p: .4 }) === 1, "mới đúng vài câu: Hiểu (1)");
+  ok(m({ n: 5, ok: 4, p: .8 }) === 2, ">= 5 câu, >= 70%: Thực hiện (2)");
+  ok(m({ n: 8, ok: 7, p: .85, fm: ["mc"] }) === 2, "chỉ MỘT dạng câu thì chưa Vận dụng");
+  ok(m({ n: 8, ok: 7, p: .85, fm: ["mc", "typein"] }) === 3, ">= 8 câu, >= 80%, 2 dạng câu: Vận dụng (3)");
+  ok(m({ n: 12, ok: 12, p: .95, fm: ["mc", "pop"], days: ["a", "b"], nh: 6 }) === 4, "đủ điều kiện: Thành thạo (4)");
+  ok(m({ n: 12, ok: 12, p: .95, fm: ["mc", "pop"], days: ["a"], nh: 6 }) === 3, "chỉ học một ngày thì chưa Thành thạo");
+  ok(m({ n: 12, ok: 12, p: .95, fm: ["mc", "pop"], days: ["a", "b"], nh: 5 }) === 3, "đúng nhờ gợi ý nhiều thì chưa Thành thạo");
+  ok(m({ n: 20, ok: 19, p: .6, fm: ["mc", "pop"], days: ["a", "b"], nh: 15 }) <= 1, "độ chính xác gần đây thấp thì không lên bậc cao");
+  E.resetAll(); for (let i = 0; i < 10; i++) E.record("toan", "add10", true, undefined, { kind: i % 2 ? "typein" : "mc" }); let st = E.load("toan").add10;
+  ok(st.fm.length === 2 && st.days.length === 1 && st.nh === 10, "record ghi dạng câu, ngày học, số câu đúng không gợi ý: " + JSON.stringify([st.fm, st.days.length, st.nh]));
+  E.record("toan", "add10", true, undefined, { kind: "mc", hint: true }); ok(E.load("toan").add10.nh === 10, "câu đúng có xem gợi ý KHÔNG tính là đúng độc lập");
+  ok(E.summary("toan").skills.find(x => x.id === "add10").m4 === 3, "summary có m4 (10 câu đúng, 2 dạng, 1 ngày = Vận dụng)");
+  E.resetAll(); }
 console.log("3) hẹn giờ chơi");
 const store = {}; global.localStorage = { getItem: k => (k in store ? store[k] : null), setItem: (k, v) => { store[k] = String(v); } };
 const LL = require(path.join(root, "learn/limit.js"));

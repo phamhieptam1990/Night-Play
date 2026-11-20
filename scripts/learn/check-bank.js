@@ -75,10 +75,10 @@ ok(JSON.parse(mem["learn:err"] || "{}").off_by_one === 4, "tổng lỗi toàn c�
 
 /* 4) chọn câu thích ứng */
 console.log("4) chọn câu thích ứng");
-const share = (subj, g, skill, rounds, seed) => { E.setRng(seeded(seed)); let n = 0, t = 0; for (let i = 0; i < rounds; i++) for (const p of E.planRound(subj, g, 5)) { t++; if (p.skill === skill) n++; } return n / t; };
+const share = (subj, g, skill, rounds, seed) => { E.setRng(seeded(seed)); let n = 0, t = 0; for (let i = 0; i < rounds; i++) for (const p of E.planRound(subj, g, 5).slice(1)) { t++; if (p.skill === skill) n++; } return n / t; };   /* chỉ đếm 4 câu chọn thích ứng; câu 1 là khởi động (50% lấy kỹ năng đã vững) nên không đo ưu tiên */
 fresh(); E.setRng(seeded(1)); const p0 = E.planRound("toan", 1, 5);
 ok(p0.length === 5, "vòng phải đủ 5 câu"); ok(new Set(p0.map(p => p.skill)).size >= 2, "vòng phải có >= 2 kỹ năng"); ok(E.SKILLS[p0[0].skill].diff === 1, "câu đầu là khởi động dễ");
-for (const sj of ["toan", "tviet", "tanh"]) for (let g = 1; g <= 5; g++) { fresh(); E.setRng(seeded(g)); const r = E.round(sj, g, { lang: "vi" }); ok(r.length === 5 && new Set(r.map(q => q.q)).size === 5, `${sj} lớp ${g}: 5 câu không lặp`); ok(E.skillsFor(sj, g).length >= 2, `${sj} lớp ${g}: cần >= 2 kỹ năng`); ok(r.every(q => q.grade === g), `${sj} lớp ${g}: câu mang đúng lớp`); }
+for (const sj of ["toan", "tviet", "tanh"]) for (let g = 1; g <= 5; g++) { fresh(); E.setRng(seeded(g)); const r = E.round(sj, g, { lang: "vi" }); ok(r.length === 5 && new Set(r.map(q => q.q + "|" + (q.speak || ""))).size === 5, `${sj} lớp ${g}: 5 câu không lặp`); ok(E.skillsFor(sj, g).length >= 2, `${sj} lớp ${g}: cần >= 2 kỹ năng`); ok(r.every(q => q.grade === g), `${sj} lớp ${g}: câu mang đúng lớp`); }
 fresh(); const base = share("toan", 2, "add_carry", 200, 7);
 fresh(); E.setRng(seeded(3)); for (let i = 0; i < 12; i++) { E.record("toan", "add_carry", false, "forget_carry"); for (const s of ["times25", "word_addsub"]) E.record("toan", s, true); }
 const after = share("toan", 2, "add_carry", 200, 7);

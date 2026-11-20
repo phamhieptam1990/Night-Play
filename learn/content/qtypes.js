@@ -14,8 +14,8 @@
   function nfc(s) { return s.normalize ? s.normalize("NFC") : s; }
 
   var LAB = {
-    vi: { tf: "Đúng hay sai?", pic: "Chọn hình", match: "Ghép cặp", order: "Sắp xếp", wordbuild: "Ghép chữ", typein: "Gõ đáp án", odd: "Khác loại", multi: "Chọn tất cả", compare: "So sánh", count: "Đếm", pop: "Bắn bong bóng", memory: "Lật thẻ", numline: "Trục số", clock: "Đồng hồ", find: "Tìm trong tranh", dragfill: "Kéo vào chỗ trống", sort: "Phân loại" },
-    en: { tf: "True or false?", pic: "Pick the picture", match: "Match", order: "Put in order", wordbuild: "Build the word", typein: "Type the answer", odd: "Odd one out", multi: "Pick all", compare: "Compare", count: "Count", pop: "Pop the balloon", memory: "Memory", numline: "Number line", clock: "Clock", find: "Find it", dragfill: "Drag to the gap", sort: "Sort" }
+    vi: { dictate: "Nghe – viết", write: "Viết câu", speak: "Đọc to", tf: "Đúng hay sai?", pic: "Chọn hình", match: "Ghép cặp", order: "Sắp xếp", wordbuild: "Ghép chữ", typein: "Gõ đáp án", odd: "Khác loại", multi: "Chọn tất cả", compare: "So sánh", count: "Đếm", pop: "Bắn bong bóng", memory: "Lật thẻ", numline: "Trục số", clock: "Đồng hồ", find: "Tìm trong tranh", dragfill: "Kéo vào chỗ trống", sort: "Phân loại" },
+    en: { dictate: "Dictation", write: "Write", speak: "Read aloud", tf: "True or false?", pic: "Pick the picture", match: "Match", order: "Put in order", wordbuild: "Build the word", typein: "Type the answer", odd: "Odd one out", multi: "Pick all", compare: "Compare", count: "Count", pop: "Pop the balloon", memory: "Memory", numline: "Number line", clock: "Clock", find: "Find it", dragfill: "Drag to the gap", sort: "Sort" }
   };
   var UI = { vi: { yes: "✓ Đúng", no: "✗ Sai", done: "Xong ✓" }, en: { yes: "✓ True", no: "✗ False", done: "Done ✓" } };
 
@@ -45,8 +45,11 @@
   function word(v, subj) { return subj === "tanh" ? v.en : v.w; }
   function others(v, n, same) { return shuf(V.filter(function (x) { return x !== v && (same ? x.c === v.c : true); })).slice(0, n); }
   function optList(texts, okIdx) { return texts.map(function (t, i) { return i === okIdx ? { v: t, ok: 1 } : { v: t }; }); }
+  /* kiểu câu Toán → kỹ năng theo dõi (engine.js TRACKED); các kiểu khác để skill:null */
+  var KSKILL = { count: "count_obj", numline: "number_line", compare: "compare_num", order: "order_num", clock: "clock_read" };
+  var KSKILL_L = { tviet: { order: "sent_order", wordbuild: "word_build", dictate: "dictate_vi", write: "write_vi", speak: "speak_vi" }, tanh: { order: "sent_order_en", wordbuild: "word_build_en", dictate: "dictate_en", write: "write_en", speak: "speak_en" } };
   function base(kind, subj, grade, lang, q, extra) {
-    var o = { kind: kind, type: kind, q: q, lab: LAB[lang][kind], subj: subj, grade: grade, skill: null, ui: UI[lang] };
+    var o = { kind: kind, type: kind, lang: lang, q: q, lab: LAB[lang][kind], subj: subj, grade: grade, skill: (subj === "toan" ? KSKILL[kind] : KSKILL_L[subj] && KSKILL_L[subj][kind]) || null, ui: UI[lang] };
     for (var k in extra) o[k] = extra[k]; return o;
   }
 
@@ -62,6 +65,8 @@
     } else { b = rnd(2, 9); res = g === 4 ? rnd(11, 99) : rnd(101, 400); a = b * res; }
     return { a: a, b: b, op: op, res: res, txt: a + " " + op + " " + b };
   }
+  /* phép tính cho ghép cặp / lật thẻ: phải tính CẢ 4 phép cùng lúc nên dùng số nhỏ (cộng trừ hai chữ số, bảng nhân), không dùng số ba chữ số */
+  function arithPair(g) { if (g <= 2) return arith(g); if (R() < .5) return arith(2); for (var i = 0; i < 30; i++) { var x = arith(3); if (x.op === "×") return x; } return arith(2); }
   var RANGE = [[1, 20], [10, 99], [100, 999], [1000, 9999], [10000, 99999]];
   function distinctNums(n, lo, hi) { var s = {}, out = []; var tries = 0; while (out.length < n && tries++ < 200) { var x = rnd(lo, hi); if (!s[x]) { s[x] = 1; out.push(x); } } return out; }
 
@@ -99,7 +104,7 @@
   G.match = function (subj, g, lang) {
     var pairs = [];
     if (subj === "toan") {
-      var seen = {}, t = 0; while (pairs.length < 4 && t++ < 80) { var x = arith(Math.min(g, 3)); if (!seen[x.res]) { seen[x.res] = 1; pairs.push([x.txt, String(x.res)]); } }
+      var seen = {}, t = 0; while (pairs.length < 4 && t++ < 80) { var x = arithPair(g); if (!seen[x.res]) { seen[x.res] = 1; pairs.push([x.txt, String(x.res)]); } }
       if (pairs.length < 4) return null;
     } else {
       var pool = shuf(V.filter(function (v) { return word(v, subj); })).slice(0, 4); pairs = pool.map(function (v) { return [v.e, name(v, subj)]; });
@@ -166,6 +171,41 @@
     return base("compare", subj, g, lang, L + " <em>?</em> " + Rr, { o: o, speak: lang === "vi" ? "So sánh " + L.replace("×", " nhân ").replace("÷", " chia ").replace("−", " trừ ").replace("+", " cộng ") + " với " + Rr.replace("×", " nhân ").replace("÷", " chia ").replace("−", " trừ ").replace("+", " cộng ") + "." : "Compare " + L + " and " + Rr + ".", meta: { lv: lv, rv: rv }, reveal: sym });
   };
 
+
+  /* ====== NGHE–VIẾT, VIẾT CÂU, ĐỌC TO (Tiếng Việt, Tiếng Anh) ====== */
+  var LD = (function () { try { if (root.LearnLangSkills && root.LearnLangSkills.DATA) return root.LearnLangSkills.DATA; if (typeof require !== "undefined") return require("../lang-skills.js").DATA; } catch (e) {} return null; })();
+  var LBTN = '<button type="button" class="lsn" aria-label="🔊">🔊</button>';
+  /* nghe–viết: bé nghe từ rồi gõ lại. Tiếng Việt lớp 1–3 (từ ngắn, có hình), Tiếng Anh lớp 2–5 (từ một chữ, có hình ở lớp thấp) */
+  G.dictate = function (subj, g, lang) {
+    if (subj === "toan" || !LD) return null; var it, pool = [];
+    if (subj === "tviet") { if (g > 3) return null; pool = LD.letterStart.filter(function (x) { return x[1].indexOf(" ") < 0 && Array.from(x[1]).length <= 5; }); }
+    else { if (g < 2) return null; Object.keys(LD.themes).forEach(function (k) { LD.themes[k].forEach(function (x) { if (x[1].indexOf(" ") < 0 && x[1].length <= 8) pool.push(x); }); }); }
+    it = pick(pool); var w = nfc(it[1].toLowerCase());
+    return base("dictate", subj, g, lang, (lang === "vi" ? "Nghe rồi viết lại từ" : "Listen and write the word") + "<br>" + (g <= 3 ? "<span class='dpic'>" + it[0] + "</span><br>" : "") + LBTN, { ans: w, accept: [w], speak: it[1], speakLang: subj === "tanh" ? "en" : "vi", listen: 1, reveal: it[1] });
+  };
+  /* viết câu: chấm theo TIÊU CHÍ HÌNH THỨC (đủ số từ, chữ đầu viết hoa, có dấu kết thúc); không chấm nội dung vì không có AI lúc chạy */
+  var WTOP = { tviet: ["mẹ", "trường học", "con mèo", "bạn thân", "ngôi nhà", "buổi sáng", "quê hương", "mùa hè"], tanh: ["my family", "my school", "my pet", "my friend", "my room"] };
+  function checkWrite(text, spec, lang) {
+    var t = String(text || "").replace(/\s+/g, " ").trim(), words = t ? t.split(" ").length : 0, vi = lang !== "en", first = Array.from(t)[0] || "", min = spec && spec.min ? spec.min : 3;
+    if (words < min) return { ok: false, tip: vi ? "Viết thêm cho đủ ý: câu cần ít nhất " + min + " từ." : "Write a bit more: at least " + min + " words." };
+    if (!first || first === first.toLowerCase()) return { ok: false, tip: vi ? "Chữ đầu câu phải viết hoa nhé." : "Start the sentence with a capital letter." };
+    if (!/[.?!…]$/.test(t)) return { ok: false, tip: vi ? "Cuối câu nhớ đặt dấu chấm (.) nhé." : "End the sentence with a full stop (.)." };
+    if (/\d/.test(t)) return { ok: false, tip: vi ? "Viết bằng chữ, không dùng chữ số nhé." : "Write with words, not digits." };
+    return { ok: true, tip: "" };
+  }
+  G.write = function (subj, g, lang) {
+    if (subj === "toan" || (subj === "tviet" && g < 2) || (subj === "tanh" && g < 3)) return null;
+    var topic = pick(WTOP[subj]), min = subj === "tviet" ? [0, 0, 3, 4, 5, 6][g] : [0, 0, 0, 3, 4, 5][g];
+    return base("write", subj, g, lang, (subj === "tviet" ? "Viết một câu về <em>" + topic + "</em>" : "Write a sentence about <em>" + topic + "</em>") + "<br><small>" + (lang === "vi" ? "Chữ đầu viết hoa, cuối câu có dấu chấm" : "Capital letter first, full stop at the end") + "</small>", { min: min, topic: topic, speak: (subj === "tviet" ? "Viết một câu về " : "Write a sentence about ") + topic });
+  };
+  /* đọc to: bé đọc thành tiếng theo mẫu rồi tự báo đã đọc (không có nhận dạng giọng nói) */
+  var SAY = { tviet: [["Em chào cô ạ.", 1], ["Em yêu mẹ của em.", 1], ["Con mèo nằm trên ghế.", 2], ["Hôm nay trời đẹp quá!", 2], ["Mẹ nấu cơm rất ngon.", 2], ["Mùa thu, bầu trời trong xanh và gió se lạnh.", 4], ["Em cố gắng học tập để trở thành người có ích.", 5]],
+    tanh: [["Hello, my name is Nam.", 1], ["I like apples.", 1], ["This is my school.", 2], ["I have a red bag.", 2], ["Nice to meet you.", 1], ["She plays football every day.", 4], ["On Sunday, we play in the park.", 5]] };
+  G.speak = function (subj, g, lang) {
+    if (subj === "toan") return null; var pool = SAY[subj].filter(function (x) { return x[1] <= g; }); if (!pool.length) return null; var it = pick(pool);
+    return base("speak", subj, g, lang, (lang === "vi" ? "Đọc to câu này:" : "Read this aloud:") + "<br><em>" + it[0] + "</em><br>" + LBTN, { speak: it[0], speakLang: subj === "tanh" ? "en" : "vi", listen: 1 });
+  };
+
   /* ====== 8 kiểu tương tác thêm ====== */
   /* đếm bằng chạm: chạm từng vật để đếm rồi chọn số */
   G.count = function (subj, g, lang) {
@@ -177,7 +217,7 @@
   /* lật thẻ trí nhớ: 4 cặp */
   G.memory = function (subj, g, lang) {
     var pairs = [];
-    if (subj === "toan") { if (g > 3) return null; var seen = {}, t = 0; while (pairs.length < 4 && t++ < 80) { var x = arith(Math.min(g, 3)); if (!seen[x.res]) { seen[x.res] = 1; pairs.push([x.txt, String(x.res)]); } } if (pairs.length < 4) return null; }
+    if (subj === "toan") { if (g > 3) return null; var seen = {}, t = 0; while (pairs.length < 4 && t++ < 80) { var x = arithPair(g); if (!seen[x.res]) { seen[x.res] = 1; pairs.push([x.txt, String(x.res)]); } } if (pairs.length < 4) return null; }
     else pairs = shuf(V.filter(function (v) { return word(v, subj); })).slice(0, 4).map(function (v) { return [v.e, name(v, subj)]; });
     return base("memory", subj, g, lang, lang === "vi" ? "Lật hai thẻ để tìm <em>cặp giống nhau</em>" : "Flip two cards to find a <em>matching pair</em>", { pairs: pairs, speak: lang === "vi" ? "Lật hai thẻ để tìm cặp giống nhau." : "Flip two cards to find a matching pair." });
   };
@@ -240,17 +280,28 @@
   /* bắn bong bóng: dùng lại một câu chọn 1/4 bất kỳ (giữ nguyên kỹ năng) nhưng đáp án là bong bóng bay lên */
   function asPop(q, lang) { if (!q || !q.o || (q.kind && q.kind !== "mc") || q.o.length !== 4) return null; var c = {}; for (var k in q) c[k] = q[k]; c.kind = "pop"; c.baseKind = q.kind || "mc"; c.lab = LAB[lang === "en" ? "en" : "vi"].pop; return c; }
 
-  var KINDS = { toan: ["tf", "pic", "match", "order", "typein", "odd", "multi", "compare", "count", "memory", "numline", "clock", "find", "dragfill", "sort"], tviet: ["tf", "pic", "match", "order", "wordbuild", "odd", "multi", "memory", "find", "dragfill", "sort"], tanh: ["tf", "pic", "match", "order", "wordbuild", "odd", "multi", "memory", "find", "dragfill", "sort"] };
-  function kindsFor(subj, grade) { return (KINDS[subj] || []).filter(function (k) { return !(subj === "toan" && ((k === "pic" && grade > 2) || (k === "count" && grade > 2) || (k === "clock" && grade > 3) || (k === "memory" && grade > 3))); }); }
+  var KINDS = { toan: ["tf", "pic", "match", "order", "typein", "odd", "multi", "compare", "count", "memory", "numline", "clock", "find", "dragfill", "sort"], tviet: ["tf", "pic", "match", "order", "wordbuild", "odd", "multi", "memory", "find", "dragfill", "sort", "dictate", "write", "speak"], tanh: ["tf", "pic", "match", "order", "wordbuild", "odd", "multi", "memory", "find", "dragfill", "sort", "dictate", "write", "speak"] };
+  function kindsFor(subj, grade) { return (KINDS[subj] || []).filter(function (k) { if (k === "dictate") return subj === "tviet" ? grade <= 3 : grade >= 2; if (k === "write") return subj === "tviet" ? grade >= 2 : grade >= 3; return true; }).filter(function (k) { return !(subj === "toan" && ((k === "pic" && grade > 2) || (k === "count" && grade > 2) || (k === "clock" && grade > 3) || (k === "memory" && grade > 3))); }); }
   function make(kind, subj, grade, lang) { grade = Math.min(5, Math.max(1, grade | 0 || 1)); lang = lang === "en" ? "en" : "vi"; var f = G[kind]; return f ? f(subj, grade, lang) : null; }
+  /* câu chọn 1/4 có đáp án là SỐ NGUYÊN (có thể kèm đơn vị) → câu cho bé GÕ số. Giữ kỹ năng, chủ đề, mã lỗi của từng đáp án nhiễu (gõ trúng đáp án nhiễu nào thì ghi mã lỗi đó). */
+  function asTypein(q, lang) {
+    if (!q || q.kind || !q.o || q.o.length !== 4 || !q.skill) return null;
+    var re = /^(\d{1,6}(?:[.,]\d{1,3})?)(?: (\S+))?$/, ok = null, show = "", tags = {}, unit = null, dec = false, i, m, key;
+    for (i = 0; i < 4; i++) { m = re.exec(q.o[i].v); if (!m) return null; if (unit === null) unit = m[2] || ""; else if ((m[2] || "") !== unit) return null; key = String(Number(m[1].replace(",", "."))); if (/[.,]/.test(m[1])) dec = true; if (q.o[i].ok) { ok = key; show = m[1]; } else tags[key] = q.o[i].tag || "other"; }
+    if (ok === null) return null;
+    var plain = String(q.q).replace(/<br>/g, ". ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+    return { kind: "typein", type: "typein", q: q.q, lab: LAB[lang].typein, subj: q.subj, grade: q.grade, skill: q.skill, topic: q.topic, diff: q.diff, id: q.id, hint: q.hint, ui: UI[lang], ans: ok, show: show, dec: dec, sep: lang === "vi" ? "," : ".", unit: unit, tags: tags, speak: plain, reveal: show + (unit ? " " + unit : "") };
+  }
   /* trộn kiểu mới vào một vòng: giữ câu đầu là chọn 1/4 (khởi động), thay n câu sau bằng các kiểu KHÁC NHAU */
   function mix(round, subj, grade, lang, n) {
     var ks = shuf(kindsFor(subj, grade)), pos = shuf([1, 2, 3, 4].filter(function (i) { return i < round.length; })), out = round.slice(), done = 0;
     for (var i = 0; i < ks.length && done < (n == null ? 3 : n) && done < pos.length; i++) { var q = make(ks[i], subj, grade, lang); if (q) { out[pos[done]] = q; done++; } }
+    /* từ lớp 2: câu chọn 1/4 có đáp án số nguyên, ~40% cho bé tự GÕ số (câu 1 giữ chọn 1/4 làm khởi động) */
+    if (subj === "toan" && grade >= 2) for (var t = 1; t < out.length; t++) if (R() < .4) { var tq = asTypein(out[t], lang); if (tq) out[t] = tq; }
     /* một câu chọn 1/4 còn lại (nếu có) đổi sang dạng bong bóng, vẫn giữ kỹ năng và mã lỗi */
     if (R() < .7) { var rest = pos.slice(done); for (var j = 0; j < rest.length; j++) { var pq = asPop(out[rest[j]], lang); if (pq) { out[rest[j]] = pq; break; } } }
     return out;
   }
-  root.LearnTypes = { asPop: asPop, make: make, mix: mix, kindsFor: kindsFor, KINDS: KINDS, LAB: LAB };
+  root.LearnTypes = { checkWrite: checkWrite, asTypein: asTypein, asPop: asPop, make: make, mix: mix, kindsFor: kindsFor, KINDS: KINDS, LAB: LAB };
   if (typeof module !== "undefined" && module.exports) module.exports = root.LearnTypes;
 })(typeof window !== "undefined" ? window : globalThis);

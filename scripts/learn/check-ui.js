@@ -7,8 +7,8 @@
 const { spawn } = require("child_process"), path = require("path"), puppeteer = require("puppeteer-core");
 const root = path.join(__dirname, "..", ".."), PORT = 8878, FULL = process.argv.includes("--full");
 const w = ms => new Promise(r => setTimeout(r, ms));
-const QUICK = { toan: ["", "tf", "pic", "match", "order", "typein", "odd", "multi", "compare", "count", "memory", "numline", "clock", "find", "dragfill", "sort", "pop"], tviet: ["wordbuild"], tanh: [] };
-const ALL = { toan: QUICK.toan, tviet: ["", "tf", "pic", "match", "order", "wordbuild", "odd", "multi", "memory", "find", "dragfill", "sort", "pop"], tanh: ["", "tf", "pic", "match", "order", "wordbuild", "odd", "multi", "memory", "find", "dragfill", "sort", "pop"] };
+const QUICK = { toan: ["", "tf", "pic", "match", "order", "typein", "odd", "multi", "compare", "count", "memory", "numline", "clock", "find", "dragfill", "sort", "pop"], tviet: ["wordbuild", "dictate", "write", "speak"], tanh: ["dictate", "write", "speak"] };
+const ALL = { toan: QUICK.toan, tviet: ["", "tf", "pic", "match", "order", "wordbuild", "odd", "multi", "memory", "find", "dragfill", "sort", "pop", "dictate", "write", "speak"], tanh: ["", "tf", "pic", "match", "order", "wordbuild", "odd", "multi", "memory", "find", "dragfill", "sort", "pop", "dictate", "write", "speak"] };
 const VP = FULL ? [[390, 844], [360, 640], [844, 390]] : [[390, 844], [360, 640]];
 const fails = []; const bad = (m) => { fails.push(m); console.log("  ✗ " + m); };
 
@@ -42,6 +42,8 @@ const fails = []; const bad = (m) => { fails.push(m); console.log("  ✗ " + m);
           else if (kd === "sort") { for (const it of b.items) { [...ans.querySelectorAll(".qp .pt")].find(x => x.textContent === it.v && !x.disabled).click(); await W(20); ans.querySelectorAll(".qbin")[it.bin].click(); await W(30); } }
           else if (kd === "order" || kd === "wordbuild") { for (const it of b.items) { [...ans.querySelectorAll(".pt")].find(x => x.textContent === it && x.style.visibility !== "hidden").click(); await W(30); } }
           else if (kd === "typein") { for (const c of b.ans) [...ans.querySelectorAll(".kb")].find(x => x.textContent === c).click(); ans.querySelector(".kb.go").click(); }
+          else if (kd === "dictate" || kd === "write") { const inp = ans.querySelector("input.qi"); inp.value = kd === "dictate" ? b.ans : (b.lang === "en" ? "I like my school and my friends." : "Em yêu ngôi trường của em."); ans.querySelector(".kb.go").click(); }
+          else if (kd === "speak") { ans.querySelector(".sayb").click(); }
           else if (kd === "multi") { b.opts.forEach((o, i) => { if (o.ok) ans.querySelectorAll(".qg .ab")[i].click(); }); ans.querySelector(".qdone").click(); }
           else if (kd === "match") { for (const pr of b.pairs) { const L = [...ans.querySelectorAll(".qc")[0].children].find(x => x.textContent === pr[0]), Rr = [...ans.querySelectorAll(".qc")[1].children].find(x => x.textContent === pr[1]); L.click(); await W(20); Rr.click(); await W(20); } }
           else if (b.o) { ans.querySelectorAll(sel)[b.o.findIndex(x => x.ok)].click(); }
@@ -58,13 +60,14 @@ const fails = []; const bad = (m) => { fails.push(m); console.log("  ✗ " + m);
               else if (kd === "sort") { const tl = [...ans.querySelectorAll(".qp .pt")].filter(t => !t.disabled), it = b.items.find(x => tl.some(t => t.textContent === x.v)); tl.find(t => t.textContent === it.v).click(); await W(20); ans.querySelectorAll(".qbin")[1 - it.bin].click(); }
               else if (kd === "order" || kd === "wordbuild") { const items = b.items.slice().reverse(); if (items.join("|") === b.items.join("|")) items.push(items.shift()); for (const it of items) { const t = [...ans.querySelectorAll(".pt")].find(x => x.textContent === it && x.style.visibility !== "hidden"); if (t) { t.click(); await W(20); } } }
               else if (kd === "typein") { [...ans.querySelectorAll(".kb")].find(x => x.textContent === (b.ans === "1" ? "2" : "1")).click(); ans.querySelector(".kb.go").click(); }
+              else if (kd === "dictate" || kd === "write") { const inp = ans.querySelector("input.qi"); inp.value = "zq"; ans.querySelector(".kb.go").click(); }
               else if (kd === "multi") { const i = b.opts.findIndex(o => !o.ok); ans.querySelectorAll(".qg .ab")[i].click(); ans.querySelector(".qdone").click(); }
               else if (kd === "match") { const l = ans.querySelectorAll(".qc")[0].children, r = ans.querySelectorAll(".qc")[1].children, lt = [...l].find(x => !x.disabled), rt = [...r].find(x => !x.disabled && b.pairs.findIndex(p => p[1] === x.textContent) !== b.pairs.findIndex(p => p[0] === lt.textContent)); lt.click(); await W(20); rt.click(); }
               else if (b.o) { const bs = ans.querySelectorAll(sel), cand = b.o.map((x, i) => i).filter(i => !b.o[i].ok && !bs[i].disabled); (cand.length ? bs[cand[0]] : bs[b.o.findIndex(x => x.ok)]).click(); }
             };
             await once(); await W(900); await once();
           });
-          await w(500); const r2 = await pg.evaluate(() => bank[1].res); if (r2 !== "miss") bad(tag + ": chơi sai hai lần nhưng kết quả " + r2);
+          await w(500); const r2 = await pg.evaluate(() => bank[1].res); if (r2 !== "miss" && k !== "speak") bad(tag + ": chơi sai hai lần nhưng kết quả " + r2);
         }
       }
       if (errs.length) bad(tag + ": lỗi trang: " + errs.slice(0, 2).join(" | "));
