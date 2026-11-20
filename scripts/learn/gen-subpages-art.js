@@ -59,7 +59,7 @@ ${slots.map(({ b, x, y }, i) => `<button class="bd ${b[4] ? "on" : ""}" data-i="
 
 /* ====================== 2. KHO ====================== */
 {
-  const ITEMS = [["carrot", "Cà rốt", "🥕", 14, 1], ["tomato", "Cà chua", "🍅", 9, 1], ["strawberry", "Dâu tây", "🍓", 6, 1], ["wheat", "Lúa mì", "🌾", 22, 1], ["corn", "Bắp", "🌽", 5, 1], ["sunflower", "Hướng dương", "🌻", 3, 1], ["mango", "Xoài", "🥭", 8, 0], ["orange", "Cam", "🍊", 0, 0], ["apple", "Táo", "🍎", 4, 0], ["pear", "Lê", "🍐", 0, 0]];
+  const ITEMS = [["carrot", "Cà rốt", "🥕", 14, 1], ["tomato", "Cà chua", "🍅", 9, 1], ["strawberry", "Dâu tây", "🍓", 6, 1], ["wheat", "Lúa mì", "🌾", 22, 1], ["corn", "Bắp", "🌽", 5, 1], ["sunflower", "Hướng dương", "🌻", 3, 1], ["mango", "Xoài", "🥭", 8, 1], ["orange", "Cam", "🍊", 0, 1], ["apple", "Táo", "🍎", 4, 1], ["pear", "Lê", "🍐", 0, 1]];
   const body = `<div class="room barn"><div class="sign">KHO NÔNG SẢN</div><div class="shelves" id="sh"></div>
 <aside class="orders"><h3>📋 Đơn hàng của linh vật</h3><div id="od"></div><p class="sm">Giao nông sản cho linh vật để nhận ⭐ sao và 🌱 hạt giống.</p></aside></div>`;
   const css = `.barn{display:grid;grid-template-columns:1fr 290px;gap:16px;padding:18px;background:linear-gradient(#B07A4A,#8A5A2E);border:6px solid #5E3A1B;min-height:560px;position:relative}.barn::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(0,0,0,.08) 0 3px,transparent 3px 70px);pointer-events:none}

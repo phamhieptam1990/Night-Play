@@ -8,11 +8,11 @@ const dir = path.join(__dirname, "../../shared/art/garden");
 const BAN = /<(image|foreignObject|script|filter|mask|feGaussianBlur|feDropShadow)\b|backdrop-filter|filter\s*:|\bhref=|xlink:href/i;
 const files = []; for (const d of ["", "scene"]) for (const f of fs.readdirSync(path.join(dir, d)).filter(f => f.endsWith(".svg")).sort()) files.push({ rel: (d ? d + "/" : "") + f, scene: d === "scene" });
 const rows = []; let bad = 0, warn = 0;
-const kind = f => f.scene ? "Cảnh" : /^plant_/.test(f.rel) ? "Cây hoa" : /^crop_/.test(f.rel) ? "Cây trồng" : /^produce_/.test(f.rel) ? "Nông sản" : /^mascot_/.test(f.rel) ? "Linh vật" : /^visitor_/.test(f.rel) ? "Sinh vật ghé thăm" : /barn/.test(f.rel) ? "Kho" : "Khác";
+const kind = f => f.scene ? "Cảnh" : /^animal_/.test(f.rel) ? "Vật nuôi" : /^plant_/.test(f.rel) ? "Cây hoa" : /^crop_/.test(f.rel) ? "Cây trồng" : /^produce_/.test(f.rel) ? "Nông sản" : /^mascot_/.test(f.rel) ? "Linh vật" : /^visitor_/.test(f.rel) ? "Sinh vật ghé thăm" : /barn/.test(f.rel) ? "Kho" : "Khác";
 for (const f of files) {
   const s = fs.readFileSync(path.join(dir, f.rel), "utf8"), kb = Buffer.byteLength(s) / 1024, errs = [], ws = [];
   if (BAN.test(s)) errs.push("có thẻ/thuộc tính cấm (image/filter/mask/script/href)");
-  if (f.scene ? !/viewBox="-?\d+(\.\d+)? -?\d+(\.\d+)? \d+ \d+"/.test(s) : !/viewBox="0 0 256 256"/.test(s)) errs.push("viewBox lạ (cây, nông sản, linh vật, sinh vật phải là 0 0 256 256)");
+  if ((f.scene || /^animal_/.test(path.basename(f.rel))) ? !/viewBox="-?\d+(\.\d+)? -?\d+(\.\d+)? \d+ \d+"/.test(s) : !/viewBox="0 0 256 256"/.test(s)) errs.push("viewBox lạ (cây, nông sản, linh vật, sinh vật phải là 0 0 256 256)");
   if (!/role="img"/.test(s) || !/aria-label="[^"]+"/.test(s)) { if (!/^scene-0[78]|scene-11/.test(path.basename(f.rel)) || true) errs.push("thiếu role=img + aria-label"); }
   const anims = [...s.matchAll(/animation:\s*([a-zA-Z0-9_-]+)/g)].map(m => m[1]).filter(n => n !== "none");
   for (const a of anims) if (!/^npa-/.test(a)) errs.push("hoạt ảnh không bắt đầu npa-: " + a);
