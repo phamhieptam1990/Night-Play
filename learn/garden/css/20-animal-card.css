@@ -1,0 +1,25 @@
+/* Popup vật nuôi: gọn, ảnh to, vừa khung (không cuộn) */
+.card:has(.ani){width:min(480px,100%)!important;max-height:calc(100dvh - 96px)!important;margin-top:66px!important;overflow:visible!important}
+.card:has(.ani) .cico{width:140px!important;height:140px!important;top:-70px!important}
+.card:has(.ani) .cico img{width:104px!important;height:104px!important}
+.card:has(.ani) .hd{padding:78px 16px 0!important}.card:has(.ani) .hd h2{font-size:32px!important}
+.card:has(.ani) .chs{display:none!important}
+.card:has(.ani) .cbody{padding:8px 16px 16px!important}
+.ani .grid{margin:0!important;gap:10px}
+.ani .pick{padding:12px 4px 10px!important;gap:4px;font-size:19px!important}.ani .pick .pim{position:relative;display:grid;place-items:center}.ani .pick img{width:min(92px,22vw)!important;height:min(92px,22vw)!important}.ani .pick span{font-size:13px!important}
+.card:has(.ani) .acts{margin-top:12px!important}.card:has(.ani) .btn{min-height:50px!important}
+@media (max-height:560px){.card:has(.ani) .cico{width:96px!important;height:96px!important;top:-48px!important}.card:has(.ani) .cico img{width:72px!important;height:72px!important}.card:has(.ani) .hd{padding-top:54px!important}.card:has(.ani) .hd h2{font-size:24px!important}.ani .pick img{width:60px!important;height:60px!important}.card:has(.ani){margin-top:48px!important}}
+/* Nút ✕ đóng: to 48px, góc trên-phải của mọi popup (bé dễ bấm) */
+.card .rd{position:absolute!important;right:12px;top:12px;margin:0!important;width:48px;height:48px;min-height:0!important;padding:0!important;border-radius:50%!important;display:grid;place-items:center;font-size:24px!important;font-weight:900;line-height:1;z-index:4;cursor:pointer}
+/* Ô bị khoá theo cấp: ảnh mờ + xám, ổ khoá to che giữa ảnh */
+.ani .pick:disabled{opacity:1!important;cursor:not-allowed}.ani .pick:disabled .pim img{opacity:.28;filter:grayscale(1)}.ani .pick:disabled{background:rgba(255,255,255,.07)!important}
+.ani .pick .lk{position:absolute;inset:0;display:grid;place-items:center;font-style:normal;font-size:min(48px,11vw);filter:drop-shadow(0 2px 3px rgba(0,0,0,.5))}
+@media (max-height:560px){.ani .pick .lk{font-size:30px}}
+/* Popup đất trống (chọn cây): cùng khuôn gọn với popup vật nuôi */
+.ani.plant .tabs{margin:0 0 12px!important;gap:8px}.ani.plant .tab{min-height:52px!important;padding:0 6px!important;font-size:16px!important;border-radius:16px!important}
+.ani.plant .grid{grid-template-columns:repeat(auto-fit,minmax(104px,1fr))!important}.ani.plant .pick .pim{height:72px;align-items:end}.ani.plant .pick img{width:72px!important;height:72px!important}.ani.plant .pick .pim span{line-height:1}
+.ani.plant .hintp{margin:10px 0 0!important;text-align:center;font-size:14px!important;opacity:.85}
+@media (max-height:560px){.ani.plant .pick .pim{height:48px}.ani.plant .pick img{width:48px!important;height:48px!important}.ani.plant .tab{min-height:42px!important}}
+.ani.plant .tab{white-space:nowrap;font-size:15px!important;padding:0 4px!important}
+.ani.plant .grid:has(.pick:nth-child(4)){grid-template-columns:1fr 1fr!important}
+.ani.plant .grid:has(.pick:nth-child(4)) .pick{flex-direction:row;justify-content:center;gap:10px;padding:8px 10px!important;text-align:left}.ani.plant .grid:has(.pick:nth-child(4)) .pick .pim{height:64px}.ani.plant .grid:has(.pick:nth-child(4)) .pick img{width:60px!important;height:60px!important}

@@ -1,0 +1,6 @@
+/* Cây bé tự trồng trong ô (ảnh crop_<giống>[_s0..s3].svg), nằm trong nút ô nên không chặn bấm */
+.hs .cs{position:absolute;left:50%;top:80%;width:110%;height:auto;transform:translate(-50%,-100%);pointer-events:none;filter:drop-shadow(0 2px 2px rgba(40,24,10,.35));transform-origin:50% 100%;animation:csin .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes csin{from{transform:translate(-50%,-100%) scale(.3)}to{transform:translate(-50%,-100%) scale(1)}}
+@media (prefers-reduced-motion:reduce){.hs .cs{animation:none}}
+/* màn thấp (điện thoại ngang): ẩn chú thích để không che cảnh */
+@media (max-height:480px){.legend{display:none!important}}

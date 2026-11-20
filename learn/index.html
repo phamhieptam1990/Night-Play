@@ -230,6 +230,26 @@ body.tucked .rev{display:flex}
 @media (max-height:640px){.game{gap:8px}.mas{width:64px;height:64px;margin:-4px 0 -6px -2px}.mas .fb{font-size:30px}.mit p{font-size:14px;padding:6px 12px;min-height:40px}.ab{min-height:52px}.q,.q.short{padding:16px}.q h1{font-size:clamp(28px,9vw,44px)}}
 @media (max-height:430px) and (min-aspect-ratio:11/10){.mas{width:56px;height:56px}.prog{height:8px}.dots{height:8px;margin:0 6px}.dots .rn{display:none}.dots i{width:8px;height:8px;margin:-4px 0 0 -4px;border-width:2px}.dots .trk{height:4px;margin-top:-2px}.prog .streak{display:flex;align-items:center;height:8px;line-height:8px;font-size:13px;min-width:0}.mit p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:13px;line-height:1.2;padding:5px 12px;min-height:0;max-height:46px}.rmas{width:80px;height:80px}.sbd,.gbd{width:36px;min-width:36px;height:36px;font-size:20px}.pick{height:44px}.spk{width:40px;height:40px;font-size:20px}.game{max-width:none;display:grid;grid-template-columns:1.15fr 1fr;grid-template-rows:auto auto 1fr;gap:8px 16px;padding-top:2px}.prog{grid-column:1/-1}.mit{grid-column:1;grid-row:2}.q{grid-column:1;grid-row:3}.ans{grid-column:2;grid-row:2/4;grid-template-rows:1fr 1fr}.ab{min-height:0}.q h1{font-size:clamp(26px,6vw,40px)}.top{padding-top:4px}.foot{padding-bottom:2px}.ib,.pick,.star{height:38px}}
 @media (min-width:700px) and (min-height:700px){.game{max-width:680px}.ab{min-height:76px}.q h1{font-size:clamp(48px,7vw,76px)}}
+/* iPad / màn lớn: hình trong bảng câu hỏi phóng to theo cỡ khung (680px), không giữ cỡ điện thoại */
+@media (min-width:700px) and (min-height:700px){.qo{min-height:180px;gap:8px;padding:10px 64px 10px 10px}.qo .obj{width:84px;height:84px;font-size:64px}.qo .obj.cnt::after{min-width:28px;height:28px;border-radius:14px;font-size:16px;line-height:28px}.qn{min-width:56px;height:56px;font-size:30px}.qb{min-height:300px}.bln{width:104px;height:124px;margin-left:-52px}.ans[data-k=find]{grid-auto-rows:minmax(84px,110px)}.ans[data-k=find] .ab,.ans[data-k=find] .ab.long{font-size:clamp(44px,7vw,64px)}.qopt .ab,.qopt .ab.long{min-height:76px;font-size:34px}.q::before{font-size:min(46vw,340px)}}
+/* câu hỏi chỉ có HÌNH (emoji): phóng thật to, theo cả bề ngang và chiều cao màn hình */
+.q h1.pic{font-size:clamp(110px,min(46vw,30dvh),300px)!important;line-height:1.05!important;letter-spacing:0}
+/* chế độ bắn bong bóng: khung câu hỏi được nâng cao (flex-grow ở trên) nên hình vẫn to, chỉ giới hạn theo chiều cao */
+.game:has(.ans.kz) .q h1.pic{font-size:clamp(80px,min(40vw,19dvh),220px)!important}
+@media (min-width:700px) and (min-height:700px){.game:has(.ans.kz) .q h1.pic{font-size:clamp(110px,min(32vw,22dvh),300px)!important}}
+@media (max-height:430px) and (min-aspect-ratio:11/10){.q h1.pic{font-size:clamp(70px,min(24vw,46dvh),200px)!important}}
+@media (min-width:700px) and (min-height:700px){.q h1.pic{font-size:clamp(160px,min(36vw,34dvh),340px)!important}}
+/* phiêu lưu + mục tiêu ngắn hạn + cây lớn ngay trong bài */
+.adv{flex:none;display:flex;align-items:center;gap:10px;padding:6px 12px;border-radius:18px;background:color-mix(in srgb,var(--sg) 14%,var(--panel));border:1px solid color-mix(in srgb,var(--sg) 35%,var(--line))}
+.adv .pl{flex:none;width:46px;height:46px;object-fit:contain;transition:transform .3s}.adv .pl.grow{animation:plg .6s cubic-bezier(.3,1.6,.5,1)}@keyframes plg{40%{transform:scale(1.35) rotate(-6deg)}}
+.adv .ai{flex:1;min-width:0}.adv b{display:block;font-size:13px;font-weight:900;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.adv .gl{display:flex;align-items:center;gap:8px;margin-top:3px;font-size:12px;font-weight:800;color:var(--ink2)}.adv .gl span{white-space:nowrap}.adv .gl i{flex:1;height:8px;border-radius:5px;background:color-mix(in srgb,var(--ink) 12%,transparent);overflow:hidden;display:block}.adv .gl u{display:block;height:100%;width:0;border-radius:5px;background:linear-gradient(90deg,#34D399,#FFD24D);transition:width .5s;text-decoration:none}
+.mas .oft{position:absolute;left:50%;top:-6px;transform:translateX(-50%);font-size:28px;line-height:1;pointer-events:none;z-index:2;filter:drop-shadow(0 2px 2px rgba(0,0,0,.3))}.mas .oft:empty{display:none}
+.rstory,.rfarm{margin:6px 0 0;font-weight:800;font-size:15px;line-height:1.4;color:var(--ink)}.rfarm{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}.rfarm span{padding:4px 10px;border-radius:99px;background:color-mix(in srgb,var(--sg) 18%,var(--panel));border:1px solid color-mix(in srgb,var(--sg) 40%,var(--line));font-size:14px}.rfarm span.big{background:linear-gradient(135deg,#FFE08A,#FFB020);border-color:#E59A00;color:#4a2c00}
+/* màn thấp: thu gọn dải chương để không chèn ép khu trả lời */
+@media (max-height:780px){.adv{padding:4px 10px;gap:8px}.adv .pl{width:34px;height:34px}.adv b{font-size:12px}}
+@media (max-height:700px){.adv{display:none}}
+@media (max-height:430px) and (min-aspect-ratio:11/10){.adv{display:none}}
 @media (min-width:760px){.foot nav{display:flex}}
 @media (max-height:430px) and (min-aspect-ratio:11/10){.foot{padding-bottom:2px}.finfo{min-height:36px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -242,6 +262,8 @@ body.tucked .rev{display:flex}
 .ans[data-k=compare] .ab{font-size:clamp(34px,11vw,52px)}
 .ans.kz{display:flex;flex-direction:column;justify-content:center;gap:10px}
 .game:has(.ans.kz) .q{flex-grow:.55}.game:has(.ans.kz) .ans{flex-grow:1.5}
+/* chỉ khi câu hỏi là HÌNH + bong bóng mới nâng cao khung câu hỏi */
+.game:has(.ans.kz):has(.q h1.pic) .q{flex-grow:1.1}.game:has(.ans.kz):has(.q h1.pic) .ans{flex-grow:1.2}
 .ans.kz:not(.rv):not(.ld) .ab{animation:none}
 .ab.tl{min-height:48px;border-radius:16px;font-size:clamp(18px,5vw,24px);color:var(--ink);padding:0 10px;background:linear-gradient(145deg,color-mix(in srgb,var(--ink) 14%,var(--panel)),var(--panel));border:1.5px solid var(--line);box-shadow:0 6px 14px -6px rgba(0,0,0,.4),inset 0 2px 0 rgba(255,255,255,.12)}
 .ab.tl::after{display:none}
@@ -348,7 +370,8 @@ body.tucked .rev{display:flex}
 <button class="rev" id="rev" type="button" aria-label="Menu"><i></i></button>
 <main class="game" id="game">
   <div class="prog"><div class="dots" id="dots" aria-hidden="true"></div><span class="star" id="stars">⭐ 0</span><span class="streak" id="streak"></span></div>
-  <div class="mit"><button class="mas" id="mas" type="button"><span id="masBox" aria-hidden="true"></span><span class="fb" id="fb" aria-hidden="true">🐾</span></button><p class="say" id="say" role="status" aria-live="polite"></p></div>
+  <div class="adv" id="adv"><img class="pl" id="plant" alt=""><div class="ai"><b id="advT"></b><div class="gl"><span id="goalT"></span><i><u id="goalBar"></u></i></div></div></div>
+  <div class="mit"><button class="mas" id="mas" type="button"><span id="masBox" aria-hidden="true"></span><span class="oft" id="oft" aria-hidden="true"></span><span class="fb" id="fb" aria-hidden="true">🐾</span></button><p class="say" id="say" role="status" aria-live="polite"></p></div>
   <section class="q" id="q" aria-live="polite"><small id="ql"></small><h1 id="qt"></h1></section>
   <div class="ans" id="ans"></div>
 </main>
@@ -358,6 +381,7 @@ body.tucked .rev{display:flex}
   <div class="card"><div class="rmas" id="rMas" aria-hidden="true"></div><p class="rsay" id="rSay"></p><h2 id="rT" class="vh"></h2><p id="rP" class="vh"></p>
     <div class="starrow" id="rStars" aria-hidden="true"></div>
     <div class="stat"><div><b id="rS">0</b></div><div><b id="rB">0</b></div></div>
+    <p id="rStory" class="rstory"></p><p id="rFarm" class="rfarm"></p>
     <p id="rTip" class="tip"></p>
     <button class="btn" id="again" type="button">▶</button><button class="btn ghost" id="change" type="button">⚙️</button></div>
 </div>
@@ -371,6 +395,8 @@ body.tucked .rev{display:flex}
 <script src="engine.js"></script>
 <script src="content/parent-copy.js"></script>
 <script src="limit.js"></script>
+<script src="farm.js"></script>
+<script src="adventure.js"></script>
 <script src="content/qtypes.js"></script>
 <script src="qui.js"></script>
 <script>
@@ -435,9 +461,33 @@ function dots(){
   const at = Math.min(cur, 4), prev = rn.dataset.at; rn.dataset.at = at; rn.style.left = (at * 25) + "%"; trk.firstChild.style.width = (at * 25) + "%";
   if(prev != null && prev != at){ rn.classList.remove("hop"); void rn.offsetWidth; rn.classList.add("hop"); }
 }
+/* ---------- phiêu lưu + mục tiêu + cây lớn + trang phục (learn/farm.js, learn/adventure.js) ---------- */
+let ADV = null;
+function farmOutfit(){ const o = window.Farm && Farm.wearing(); $("oft").textContent = o ? o.e : ""; }
+function advUi(){
+  if(!window.Farm || !window.Adventure) return; const t = T[lang], F = Farm.get(), q = F.quest;
+  if(!ADV) ADV = Adventure.chapter(subj, lang);
+  $("advT").textContent = (lang === "en" ? "Chapter " : "Chương ") + ADV.n + " · " + ADV.step(Math.min(cur, 4));
+  const now = Math.min(q.goal, q.correct + roundStars);
+  $("goalT").textContent = "🎁 " + now + "/" + q.goal; $("goalBar").style.width = (now / q.goal * 100) + "%";
+  const pl = $("plant"), c = Farm.CROP[subj] || "carrot", k = Math.min(4, roundStars), want = "../shared/art/garden/crop_" + c + (k >= 4 ? "" : "_s" + k) + ".svg";
+  if(pl.getAttribute("src") !== want){ pl.src = want; pl.classList.remove("grow"); void pl.offsetWidth; pl.classList.add("grow"); }
+}
+function farmFinish(){
+  if(!window.Farm || !window.Adventure) return; const t = T[lang], vi = lang !== "en";
+  const rep = Farm.recordRound({ subj, correct: roundStars, wrong: wrongTags, best, starsGained: roundStars }), ok = roundStars >= 5, ch = ADV || Adventure.chapter(subj, lang);
+  if(ok) Adventure.advance(subj);
+  $("rStory").textContent = (vi ? "📖 " : "📖 ") + ch.outro(ok, roundStars);
+  const cn = { carrot: vi ? "cà rốt" : "carrots", wheat: vi ? "lúa mì" : "wheat", strawberry: vi ? "dâu tây" : "strawberries" }[rep.crop];
+  const chips = []; if(rep.cropN) chips.push("<span>" + (vi ? "🧺 +" + rep.cropN + " " + cn + " vào kho" : "🧺 +" + rep.cropN + " " + cn)+ "</span>"); if(rep.seeds) chips.push("<span>🌱 +" + rep.seeds + "</span>");
+  chips.push("<span>🎁 " + Math.min(rep.questGoal, rep.questNow) + "/" + rep.questGoal + "</span>");
+  if(rep.goalHit) chips.push("<span class='big'>" + (vi ? "🎉 Đủ mục tiêu hôm nay! +2 🌱 +3 ⭐" : "🎉 Daily goal done! +2 🌱 +3 ⭐") + "</span>");
+  if(rep.newOutfit) chips.push("<span class='big'>" + rep.newOutfit.e + " " + (vi ? "Mở trang phục mới: " : "New outfit: ") + rep.newOutfit.n + "</span>");
+  $("rFarm").innerHTML = chips.join(""); ADV = null; farmOutfit();
+}
 function showQ(){
-  const t = T[lang], b = bank[cur]; tries = 0; locked = false; dots();
-  $("q").dataset.ic = t.si[subj]; $("ql").textContent = b.lab || t.q[subj]; $("qt").innerHTML = b.q; { const L = String(b.q).replace(/<[^>]+>/g, "").length; $("qt").classList.toggle("mid", L > 16 && L <= 40); $("qt").classList.toggle("long", L > 40); $("q").classList.toggle("short", L <= 16); } const q = $("q"); q.classList.remove("pop"); void q.offsetWidth; q.classList.add("pop");
+  const t = T[lang], b = bank[cur]; tries = 0; locked = false; dots(); advUi();
+  $("q").dataset.ic = t.si[subj]; $("ql").textContent = b.lab || t.q[subj]; $("qt").innerHTML = b.q; { const L = String(b.q).replace(/<[^>]+>/g, "").length; $("qt").classList.toggle("mid", L > 16 && L <= 40); $("qt").classList.toggle("long", L > 40); $("q").classList.toggle("short", L <= 16); const T = String(b.q).replace(/<[^>]+>/g, "").trim(); $("qt").classList.toggle("pic", T.length > 0 && T.length <= 12 && !/[\p{L}\p{N}]/u.test(T.replace(/[\u200d\ufe0f]/g, ""))); } const q = $("q"); q.classList.remove("pop"); void q.offsetWidth; q.classList.add("pop");
   const a = $("ans"); a.textContent = ""; const custom = !!(b.kind && window.LearnQUI && LearnQUI.custom(b.kind)); a.classList.toggle("kz", custom); a.dataset.k = b.dk || b.kind || "mc"; $("q").dataset.k = b.kind || "mc";
   if(custom) LearnQUI.render(b, a, QAPI); else b.o.forEach((o, i) => { const btn = document.createElement("button"); btn.type = "button"; btn.className = "ab" + (b.o.some(x => x.v.length > 9) ? " long" : "");   /* cả 4 nút cùng cỡ chữ */ btn.textContent = o.v; btn.style.setProperty("--c1", COL[i % 4][0]); btn.style.setProperty("--c2", COL[i % 4][1]); btn.addEventListener("pointerdown", () => { if(!locked) sfx("tap"); }); btn.onclick = () => choose(btn, o); a.appendChild(btn); });
   /* đáp án: hiện khung "đang tải" nhấp nháy ~0,6 giây rồi lần lượt nảy ra từng ô */
@@ -524,7 +574,7 @@ function cheer(level, btn, text){
 function gotRight(el){
   const b = bank[cur]; locked = true; if(el){ if(el.classList) el.classList.add("ok"); burst(el); } streak++; best = Math.max(best, streak);
   { const cw = T[lang].cheer || {}; cheer(streak >= 3 ? 2 : 1, el, streak >= 5 ? cw.s5 : streak >= 3 ? cw.s3 : (tries === 0 && Math.random() < .5 ? cw.ok : "")); }
-  if(tries === 0){ E.record(subj, b.skill, true); stars++; roundStars++; ls("learn:stars", stars); const s = $("stars"); s.classList.remove("bump"); void s.offsetWidth; s.classList.add("bump"); b.res = "ok"; } else b.res = "miss";
+  if(tries === 0){ E.record(subj, b.skill, true); stars++; roundStars++; ls("learn:stars", stars); const s = $("stars"); s.classList.remove("bump"); void s.offsetWidth; s.classList.add("bump"); b.res = "ok"; advUi(); } else b.res = "miss";
   LM.event(streak >= 5 ? "streak5" : streak >= 3 ? "streak3" : "ok"); setTimeout(next, 1000); renderStars();
 }
 /* trả về 1 = sai lần đầu (cho thử lại, có gợi ý), 2 = sai lần hai (hiện đáp án rồi sang câu sau) */
@@ -565,13 +615,15 @@ function finish(){
   const evn = roundStars >= 5 ? "endGreat" : roundStars >= 3 ? "endGood" : "endTry"; const line = LM.event(evn); $("rSay").textContent = line; if(!LM.cloneInto($("rMas"), window.LEARN_PHRASES.events[evn][0])) $("rMas").textContent = roundStars >= 5 ? "🏆" : "🎉"; $("rT").textContent = t.rT; $("rP").textContent = t.rP;
   $("rStars").textContent = "⭐".repeat(roundStars) + "☆".repeat(5 - roundStars); $("rS").textContent = "⭐ +" + roundStars; $("rB").textContent = "🔥 " + best;
   $("rTip").textContent = top ? t.tipErr + t.tag[top] + "." : t.tipOk; $("again").setAttribute("aria-label", t.again); $("change").setAttribute("aria-label", t.change);
+  farmFinish();
   $("res").hidden = false; $("again").focus(); if(roundStars >= 3) cheer(3, null, "");
   if(window.LearnLimit) LearnLimit.check(false);   /* vừa xong vòng: nếu đã hết giờ thì hiện màn nghỉ */
 }
 function start(){
   if(window.LearnLimit && LearnLimit.over()){ $("res").hidden = true; $("sheet").hidden = true; LearnLimit.check(true); return; }   /* hết giờ chơi: không bắt đầu vòng mới */
   const t = T[lang]; cur = 0; streak = 0; best = 0; roundStars = 0; wrongTags = {}; $("res").hidden = true; $("sheet").hidden = true;
-  buildRound(); showQ(); LM.event("start");
+  buildRound(); ADV = null; farmOutfit(); showQ(); LM.event("start");
+  if(window.Farm && window.Adventure){ const gr = Farm.greet(subj, lang, c => (T[lang].tag || {})[c] || ""); const c0 = Adventure.chapter(subj, lang); LM.say(gr); setTimeout(() => { if(cur === 0 && !locked) LM.say(c0.intro); }, 3600); }
 }
 /* ---------- giao diện ---------- */
 function label(){ const t = T[lang]; $("sbd").innerHTML = '<img src="' + hd(subj, grade) + '" alt="">'; $("gbd").textContent = grade; $("pick").setAttribute("aria-label", t.sn[subj] + ", " + t.grade + " " + grade); }

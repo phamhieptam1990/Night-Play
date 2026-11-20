@@ -153,7 +153,7 @@ const BARN = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role
 `;
 
 const files = {};
-for (const [id, C] of Object.entries(CROPS)) { files[`crop_${id}.svg`] = cropSvg(id, C); files[`produce_${id}.svg`] = produceSvg(id, C); }
+for (const [id, C] of Object.entries(CROPS)) { files[`crop_${id}.svg`] = cropSvg(id, C); for (let k = 0; k < 4; k++) files[`crop_${id}_s${k}.svg`] = cropSvg(id, C).replace("np-crop s4", "np-crop s" + k); /* cây lớn dần: dùng khi bé trồng trên đất trống */ files[`produce_${id}.svg`] = produceSvg(id, C); }
 files["barn.svg"] = BARN;
 for (const [n, c] of Object.entries(files)) fs.writeFileSync(path.join(out, n), c);
 

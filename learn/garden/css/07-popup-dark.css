@@ -1,0 +1,10 @@
+/* Popup nền đậm theo cấp (--d1 --d2), khối trong là lớp mờ */
+/* popup nền đậm theo cấp (không trắng): khối trong là lớp mờ, chữ sáng */
+.card{background:linear-gradient(165deg,var(--d1),var(--d2))!important;color:#fff;border-color:rgba(255,255,255,.28)!important}.card .hd .pi{background:rgba(255,255,255,.22)!important;box-shadow:none!important}
+.card .sec{background:rgba(255,255,255,.13)!important;border-color:rgba(255,255,255,.3)!important;color:#fff}.card .sec.warn{background:rgba(251,146,60,.3)!important;border-color:#FDBA74!important;color:#FFEDD5}
+.card h3{color:var(--a)!important;filter:brightness(1.25)}.card p,.card li,.card .row,.card small{color:rgba(255,255,255,.92)!important}.card b{color:#fff}.card p.sm{color:rgba(255,255,255,.8)!important}
+.card .bar{background:rgba(255,255,255,.18)!important;border-color:rgba(255,255,255,.28)!important}.card .chips span{background:rgba(255,255,255,.16)!important;color:#fff!important;border-color:rgba(255,255,255,.32)!important}
+.card .stp li{color:rgba(255,255,255,.7)}.card .stp i{background:rgba(255,255,255,.2);color:#fff}.card .stp li.dn,.card .stp li.dn i{color:#fff}.card .stp li.dn i{background:var(--a);color:#1a1033}.card .stp li.nw{color:#FFE08A}.card .stp li.nw i{background:#FFD24D;color:#3a2a00}.card .stp li.nw b{color:#fff}
+.card .btn.g{background:rgba(255,255,255,.14)!important;color:#fff!important;border:2px solid rgba(255,255,255,.42)!important}.card .btn[disabled]{background:rgba(255,255,255,.14)!important;color:rgba(255,255,255,.55)!important}
+.card .tab{background:rgba(255,255,255,.12)!important;color:#fff!important;border-color:rgba(255,255,255,.38)!important}.card .tab.on{background:var(--a)!important;color:#1a1033!important;border-color:var(--a)!important}
+.card .pick{background:rgba(255,255,255,.14)!important;border-color:rgba(255,255,255,.32)!important;color:#fff!important}.card .pick span{color:rgba(255,255,255,.75)!important}.card .pick:hover,.card .pick:focus-visible{background:rgba(255,255,255,.26)!important;border-color:#fff!important}

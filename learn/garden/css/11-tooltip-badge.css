@@ -1,0 +1,8 @@
+/* Tooltip có mũi nhọn, dấu báo trên ô (+, ✓) */
+/* tooltip: vị trí tính bằng JS (px), mũi nhọn chỉ vào ô */
+.fs .tip{transform:none!important}.tip{left:0;top:0}.tip .tico{left:var(--ax,50%)!important}
+.tip::after{content:"";position:absolute;left:var(--ax,50%);bottom:-9px;width:16px;height:16px;margin-left:-8px;background:color-mix(in srgb,var(--d2) 82%,transparent);border-right:2px solid rgba(255,255,255,.4);border-bottom:2px solid rgba(255,255,255,.4);transform:rotate(45deg)}.tip.below::after{display:none}
+/* dấu báo trên ô: bỏ nền trắng, chỉ còn biểu tượng có viền bóng để nổi trên cỏ */
+.hs .bdg{background:none!important;box-shadow:none!important;border:0!important;color:#fff;text-shadow:0 0 2px rgba(20,16,50,.9),0 0 4px rgba(20,16,50,.7),0 2px 3px rgba(20,16,50,.55);filter:drop-shadow(0 2px 2px rgba(0,0,0,.45))}
+.hs .bdg.plus{position:absolute;left:90%;top:50%;transform:translate(-50%,-50%);width:clamp(15px,calc(var(--sw,100vw)*1.7/100),22px);height:clamp(15px,calc(var(--sw,100vw)*1.7/100),22px);min-width:0;border-radius:50%;background:#22C55E!important;border:2px solid #15803D!important;font-size:0;text-shadow:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}
+.hs .bdg.plus::before,.hs .bdg.plus::after{content:"";position:absolute;left:50%;top:50%;width:56%;height:2.5px;margin:-1.25px 0 0 -28%;border-radius:2px;background:#fff}.hs .bdg.plus::after{transform:rotate(90deg)}

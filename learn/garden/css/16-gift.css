@@ -1,0 +1,11 @@
+/* Hộp quà mỗi ngày: nhún nhảy + lấp lánh, nút to >= 56px; popup có dải 7 ngày */
+.gift{position:absolute;z-index:var(--z-ui);transform:translate(-50%,-50%);width:clamp(56px,calc(var(--sw,100vw)*6/100),84px);height:clamp(56px,calc(var(--sw,100vw)*6/100),84px);border:0;border-radius:50%;background:radial-gradient(circle,rgba(255,236,150,.85),rgba(255,210,77,0) 70%);font-size:clamp(34px,calc(var(--sw,100vw)*4/100),56px);line-height:1;cursor:pointer;padding:0;filter:drop-shadow(0 4px 6px rgba(40,20,80,.45));animation:giftb 1.6s ease-in-out infinite}
+.gift::after{content:"✨";position:absolute;right:-6px;top:-8px;font-size:.5em;animation:gifts 1.2s ease-in-out infinite alternate}
+.gift:hover,.gift:focus-visible{outline:3px solid #fff;outline-offset:2px}
+@keyframes giftb{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-64%) rotate(-6deg)}}
+@keyframes gifts{from{opacity:.3;transform:scale(.7)}to{opacity:1;transform:scale(1.2)}}
+.gift-rw{display:flex;justify-content:center;gap:22px;flex-wrap:wrap;font-size:24px;font-weight:800}.gift-rw b{font-size:34px}
+.gdots{display:flex;gap:8px;justify-content:center;margin:8px 0}.gd{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;font-style:normal;font-weight:900;font-size:18px;background:rgba(255,255,255,.14);border:2px solid rgba(255,255,255,.3);color:#fff}
+.gd.on{background:linear-gradient(135deg,#FFC83D,#FB923C);border-color:#fff}.gd.now{box-shadow:0 0 0 4px rgba(255,255,255,.45)}.gd.big{font-size:24px}
+@media (prefers-reduced-motion:reduce){.gift,.gift::after{animation:none}}
+@media (max-width:520px){.gd{width:36px;height:36px;font-size:15px}.gdots{gap:5px}}

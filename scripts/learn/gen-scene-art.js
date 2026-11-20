@@ -16,7 +16,8 @@ function rng(seed) { let a = seed >>> 0; return () => { a |= 0; a = a + 0x6D2B79
 const G = (x, y, inner, cls) => `<g${cls ? ` class="${cls}"` : ""} transform="translate(${f(x)} ${f(y)})">${inner}</g>`;
 const poly = (p, fill, stroke, sw) => `<polygon points="${pts(p)}" fill="${fill}"${stroke ? ` stroke="${stroke}" stroke-width="${sw || 3}" stroke-linejoin="round"` : ""}/>`;
 const ell = (cx, cy, rx, ry, fill, stroke, sw) => `<ellipse cx="${f(cx)}" cy="${f(cy)}" rx="${f(rx)}" ry="${f(ry)}" fill="${fill}"${stroke ? ` stroke="${stroke}" stroke-width="${sw || 3}"` : ""}/>`;
-const shadow = (rx, ry, o) => ell(0, 0, rx, ry, "#1F5A22", null, 0).replace("/>", ` opacity="${o || .22}"/>`);
+const SHADOW = require("./garden-shadow-art")({ ell });   /* bóng đổ: hướng, độ dài, màu theo buổi ở garden-shadow-art.js */
+const shadow = (rx, ry, o) => SHADOW.make(rx, ry, o);
 
 /* hộp isometric: F = đỉnh trước (thấp nhất) của chân, a = số ô theo gx, b = số ô theo gy, h = cao. Trả về {svg, pts} */
 function box(F, a, b, h, c) {
@@ -51,10 +52,15 @@ function butterfly(x, y, d, col) { return `<g class="npa npa-hover" style="anima
 /* ---------- cây ---------- */
 function bigTree(x, y, s, kind) {
   const r = rng(Math.floor(x * 13 + y * 7)); let canopy = "";
-  const blobs = [[-30, -88, 34], [26, -92, 36], [0, -118, 38], [-44, -62, 26], [44, -64, 28], [0, -80, 40]];
-  blobs.forEach(([a, b, rr]) => canopy += ell(a, b, rr, rr * .9, "url(#gLeaf)", C.leafD, 3));
-  for (let i = 0; i < 9; i++) canopy += ell((r() - .5) * 90, -70 - r() * 70, 5 + r() * 5, 3 + r() * 2.4, "#C3F294", null).replace("/>", ' opacity=".35"/>');
-  const FR = { apple: ["#E5484D", "#9E1B28"], orange: ["#FFA62B", "#B9650A"], pear: ["#D9E35A", "#8E9A1E"], peach: ["#FF9DB0", "#C2506A"], mango: ["#FFC23A", "#C28A0A"], pomelo: ["#C9E36A", "#7E9A2B"], litchi: ["#FF5D6C", "#B3243A"], plum: ["#9A6AE0", "#52309A"] }[kind]; if (FR) for (let i = 0; i < 12; i++) { const a = (r() - .5) * 100, b = -62 - r() * 70; canopy += ell(a, b, 6.4, 6.4, FR[0], FR[1], 1.8) + ell(a - 2, b - 2, 1.8, 1.4, "#fff"); }
+  /* tán dày kiểu vườn cây miền Tây: 3 lớp lá (tối → vừa → sáng), nhiều chùm lá nhỏ, quả to có điểm sáng */
+  const LT = { mango: ["#2F7D3A", "#4DA844", "#8ED65A"], apple: ["#3E8F3A", "#5FBA47", "#A2E36B"], orange: ["#2F8A3A", "#4FB040", "#94DB5C"], pear: ["#4C9A3A", "#7CC650", "#BEEA7C"], peach: ["#3E9A4A", "#68C45A", "#B0EC8A"], pomelo: ["#4A9A3A", "#78C348", "#BFE878"], litchi: ["#28793A", "#3F9A48", "#7FCF6A"], plum: ["#3A7F4E", "#5AA860", "#9AD688"] }[kind] || ["#3F8F36", "#5FB43F", "#A6E26E"];
+  const blobs = [[-34, -84, 36], [32, -88, 38], [0, -122, 40], [-48, -58, 28], [48, -60, 30], [0, -84, 44], [-18, -106, 30], [22, -104, 32]];
+  blobs.forEach(([a, b2, rr]) => canopy += ell(a, b2 + 5, rr * 1.04, rr * .94, LT[0], C.leafD, 3));
+  blobs.forEach(([a, b2, rr]) => canopy += ell(a - 2, b2 - 1, rr * .86, rr * .78, LT[1], null));
+  [[-26, -96, 20], [22, -100, 22], [-2, -128, 22], [-40, -66, 15], [40, -70, 16], [8, -90, 20]].forEach(([a, b2, rr]) => canopy += ell(a - 4, b2 - 4, rr, rr * .8, LT[2], null).replace("/>", ' opacity=".8"/>'));
+  for (let i = 0; i < 34; i++) { const lx = (r() - .5) * 104, ly = -52 - r() * 86, rot = Math.floor(r() * 180), lit = r() < .5; canopy += `<ellipse cx="${f(lx)}" cy="${f(ly)}" rx="7.5" ry="3.2" transform="rotate(${rot} ${f(lx)} ${f(ly)})" fill="${lit ? LT[2] : LT[0]}" opacity="${lit ? .75 : .55}"/>`; }
+  const FR = { apple: ["#E5484D", "#9E1B28"], orange: ["#FFA62B", "#B9650A"], pear: ["#D9E35A", "#8E9A1E"], peach: ["#FF9DB0", "#C2506A"], mango: ["#FFC23A", "#C28A0A"], pomelo: ["#C9E36A", "#7E9A2B"], litchi: ["#FF5D6C", "#B3243A"], plum: ["#9A6AE0", "#52309A"] }[kind];
+  if (FR) for (let i = 0; i < 17; i++) { const a = (r() - .5) * 108, b2 = -54 - r() * 76, q = 6.8 + r() * 1.6; canopy += ell(a, b2 + 1.5, q, q, FR[1], null) + ell(a, b2, q, q, FR[0], FR[1], 1.6) + ell(a - q * .32, b2 - q * .34, q * .3, q * .24, "#fff").replace("/>", ' opacity=".85"/>') + `<path d="M${f(a)} ${f(b2 - q)}q3 -4 7 -3q-2 4 -7 3z" fill="${LT[1]}" stroke="${LT[0]}" stroke-width="1"/>`; }
   return G(x, y, `<g transform="scale(${s})">` + shadow(64, 18, .24) + `<path d="M-12 0C-8 -20 -10 -40 -8 -64H8C10 -40 8 -20 12 0C4 5 -4 5 -12 0Z" fill="url(#gWood)" stroke="${C.woodD}" stroke-width="3" stroke-linejoin="round"/>` + canopy + `</g>`);
 }
 function pine(x, y, s) { let t = ""; [[0, 54, 64], [-4, 90, 52], [-8, 124, 40]].forEach(([a, b, w]) => t += `<path d="M${-w} ${-b + 30}C${-w * .5} ${-b + 28} ${-w * .3} ${-b - 6} 0 ${-b - 34}C${w * .3} ${-b - 6} ${w * .5} ${-b + 28} ${w} ${-b + 30}C${w * .4} ${-b + 40} ${-w * .4} ${-b + 40} ${-w} ${-b + 30}Z" fill="url(#gPine)" stroke="#1E5A33" stroke-width="3" stroke-linejoin="round"/>`); return G(x, y, `<g transform="scale(${s})">` + shadow(48, 14, .24) + `<rect x="-8" y="-34" width="16" height="36" rx="4" fill="url(#gWood)" stroke="${C.woodD}" stroke-width="3"/>` + t + `</g>`); }
@@ -281,7 +287,8 @@ const STYLE = `<style>.npa-spin{transform-box:fill-box;transform-origin:50% 50%;
    Mỗi vật có VÙNG CHIẾM ĐẤT (hình elip dưới chân). Vật nào chạm vùng đã có chủ thì bị bỏ (và được báo cáo), nên không bao giờ chồng lên nhau. */
 const FOOT = { bigTree: [52, 13, 1], pine: [30, 11, 1], hay: [34, 12], barrel: [20, 8], chicken: [11, 5], rabbit: [13, 5], cow: [38, 11], rock: [24, 8], bush: [30, 9], lavender: [26, 8], flowerPatch: [32, 13], pumpkins: [30, 8], milkcans: [32, 9], roundHay: [32, 10], crate: [24, 8], coop: [44, 14] };
 const SPRITES = { bigTree, pine, hay, barrel, chicken, rabbit, cow, rock, bush, lavender, flowerPatch, pumpkins, milkcans, roundHay, crate, coop };
-const hit = (a, b) => !(a.kind === "plot" && b.kind === "plot") && Math.pow((a.x - b.x) / (a.rx + b.rx), 2) + Math.pow((a.y - b.y) / (a.ry + b.ry), 2) < .8;
+let PEN_OK = false;
+const hit = (a, b) => !(a.kind === "plot" && b.kind === "plot") && !(PEN_OK && ((a.kind === "pen" && /^(cow|chicken|rabbit)$/.test(b.name)) || (b.kind === "pen" && /^(cow|chicken|rabbit)$/.test(a.name)))) && Math.pow((a.x - b.x) / (a.rx + b.rx), 2) + Math.pow((a.y - b.y) / (a.ry + b.ry), 2) < .8;
 const DROPPED = [], MOVED = [];
 
 /* ---------- thêm vật nuôi (heo, cừu, vịt) + CHUỒNG THÚ ---------- */
@@ -301,17 +308,34 @@ function stable(x, y, night) {
   o += `<path d="M-74 -6H-34M34 -6H74" stroke="${d}" stroke-width="5" stroke-linecap="round"/>` + [-64, -48, 48, 64].map(a => `<rect x="${a - 3}" y="-24" width="6" height="26" rx="2" fill="${wood}" stroke="${d}" stroke-width="2.4"/>`).join("");
   return G(x, y, o);
 }
+/* ===== QUY HOẠCH KHU VƯỜN (toạ độ vườn gốc 1280×880) =====
+   Trái cây: 2 hàng cây ngay ngắn phía trên (TOP trong scene). Rau: bên trái. Lúa: phía dưới bên phải. Hoa: phía dưới giữa. */
+const FENCE = require("./garden-fence");
+const LAYOUT = require("../../learn/garden/garden-layout.js");   /* tầng xếp chồng + thứ tự nạp mô-đun: sửa ở learn/garden/garden-layout.js */   /* kiểu hàng rào: đổi ở garden-fence.js */
+const HY = -190;   /* nhà + sân được dời lên phía trên (dy) */
+const PENS = [
+  { n: "Chuồng gà vịt", ic: "🐔", fo: [200, 690], na: 2, nb: 2, an: [["chicken", -50, 4], ["chicken", -14, -16], ["chicken", 30, 0], ["chicken", -30, 30], ["chicken", 26, 30], ["chicken", 0, 10], ["duck", 56, -4], ["duck", 8, 36], ["duck", -62, 14]] },
+  { n: "Chuồng heo cừu", ic: "🐖", fo: [770, 680], na: 2, nb: 2, an: [["pig", -44, 10], ["pig", -6, -10], ["pig", 36, 8], ["sheep", -24, 34], ["sheep", 30, 32]] },
+  { n: "Chuồng bò", ic: "🐄", fo: [958, 330], na: 3, nb: 2, an: [["cow", -62, 0], ["cow", 34, -8], ["cow", -6, 38]] }
+];
+   /* các khối ô đất trồng cây ăn trái ở chỗ trống (toạ độ vườn gốc, có thể âm / lớn hơn 1280 vì cảnh mở rộng) */
+const STABLE = [1040, 800];   /* chỗ chuồng thú / cửa chuồng (vật nuôi đi về đây buổi tối): khu chăn nuôi, gần kho */
+/* Cây trong khu vườn cây: MỌI giống đều là ảnh rời (lớp "sprites" của trang vườn, xếp theo độ sâu y) để cây ở hàng gần người nhìn luôn đè lên cây hàng sau.
+   Có PNG vẽ tay (shared/art/garden/tree/tree_<giống>.png) thì dùng PNG; chưa có thì bộ sinh tự xuất tree_<giống>.svg từ bigTree (không bóng: bóng do trang vẽ). */
+const SPRITE_KINDS = new Set(["mango", "orange", "apple", "pear", "peach", "pomelo", "litchi", "plum"]), TREE_PNG = new Set(["mango"]);
+const TREEPOS = [];
 const ANIM = [];
 const HOT = [];   /* vị trí các ô trồng của cảnh vừa sinh (để trang tương tác đặt vùng rê/bấm) */
 function scene(o) {
-  HOT.length = 0; ANIM.length = 0;
-  const L = Object.assign({ deco: 3, house: 4, fence: 3, well: 3, barn: 3, windmill: 3, plots: 74, planted: 56, path: 1, apple: 1, flowers: 1, pond: 1, hay: 1, animals: 1 }, o.levels || {});
+  SHADOW.setTime(o.time || "day"); HOT.length = 0; ANIM.length = 0; TREEPOS.length = 0; const WLD = o.world ? WORLD : null;   /* world = bản có đất mở rộng (núi, suối, đường làng): xem garden-world.js */
+  const L = Object.assign({ deco: 3, house: 4, fence: 3, well: 3, barn: 3, windmill: 3, plots: 400, planted: 300, path: 1, apple: 1, flowers: 1, pond: 1, hay: 1, animals: 1 }, o.levels || {});
   const time = o.time || "day"; const items = [], R = rng(7);
   /* nền cỏ */
-  let ground = `<rect width="${W}" height="${H}" fill="url(#gGrass)"/>`;
+  let ground = WLD ? WLD.groundRect() : `<rect width="${W}" height="${H}" fill="url(#gGrass)"/>`;
   for (let i = 0; i < 26; i++) ground += ell(R() * W, 120 + R() * (H - 120), 90 + R() * 120, 30 + R() * 40, R() < .5 ? "#A5E06C" : "#6FB43F", null).replace("/>", ' opacity=".18"/>');
   for (let i = 0; i < 160; i++) { const x = R() * W, y = 150 + R() * (H - 150); ground += tuft(x, y, .7 + R() * .6); }
   const cols = ["#FFFFFF", "#FFD24D", "#FF8FB0", "#B79CF0"]; if (L.flowers) for (let i = 0; i < 46; i++) ground += flower(R() * W, 170 + R() * (H - 190), cols[Math.floor(R() * 4)]);
+  if (WLD) ground += WLD.under(time);
   /* chân trời: đồi + cây xa */
   let far = ""; for (let i = 0; i < 9; i++) far += ell(60 + i * 150 + R() * 40, 128 + R() * 20, 120 + R() * 40, 44 + R() * 16, i % 2 ? "#79C044" : "#6FB43F", null);
   const U = (sx, sy) => [(sx - OX) / TW + (sy - OY) / TH, (sy - OY) / TH - (sx - OX) / TW];   /* màn hình → ô lưới */
@@ -329,12 +353,11 @@ function scene(o) {
     if (o.noAnimals && fp && /^(cow|chicken|rabbit|coop)$/.test(fp.name)) return;   /* bản không vật nuôi: vẫn giữ chỗ nhưng không vẽ */
     stand.push({ d: y, svg: String(svg) }); };
   /* các vật cố định giữ chỗ TRƯỚC */
-  if (L.pond) reg(330, 300, 140, 68); if (L.house) reg(650, 425, 170, 60); if (L.barn) reg(1090, 565, 125, 50); if (L.well) reg(470, 535, 38, 16); if (L.windmill) reg(1170, 335, 50, 18);
-  if (D >= 3) { reg(880, 340, 80, 28); reg(1020, 385, 72, 26); } if (D >= 2) reg(1205, 430, 50, 16);
-  if (D >= 1) { reg(150, 800, 96, 40); push(800, stable(150, 800, time === "night")); }   /* CHUỒNG THÚ: cửa chuồng ở (150,800) */
-  if (L.fence) { line(648, 282, -52, 26, 4, 30, 13); line(648, 282, 52, 26, 5, 30, 13); if (D >= 1) { line(440, 386, 52, 26, 2, 30, 13); line(908, 412, -52, 26, 2, 30, 13); } }
-  if (D >= 3) line(260, 650, 52, 26, 4, 28, 12);
-  if (L.path) { line(548, 900, 18, -70, 1, 40, 22); [[548, 900], [566, 830], [584, 770], [604, 715], [632, 656], [668, 598], [700, 540], [708, 490]].forEach(([x, y]) => reg(x, y, 40, 22)); if (D >= 1) { [[596, 700], [540, 664], [470, 684], [400, 706], [330, 726], [690, 540], [770, 526], [850, 512], [940, 490], [640, 640], [720, 628], [790, 640]].forEach(([x, y]) => reg(x, y, 30, 16)); } if (D >= 2) [[950, 480], [1010, 440], [1070, 400], [540, 560], [470, 560], [400, 538], [350, 520]].forEach(([x, y]) => reg(x, y, 30, 16)); }
+  if (L.pond) reg(330, 300, 140, 68); if (L.house) reg(650, 425 + HY, 170, 60); if (L.barn) reg(1090, 565, 125, 50); if (L.well) reg(470, 535, 38, 16); if (L.windmill) reg(1170, 335, 50, 18);
+  if (D >= 3) { reg(880, 340 + HY, 80, 28); reg(1020, 385 + HY, 72, 26); } if (D >= 2) reg(1205, 430, 50, 16);
+  if (D >= 1) { reg(STABLE[0], STABLE[1], 96, 40); push(STABLE[1], stable(STABLE[0], STABLE[1], time === "night")); }   /* CHUỒNG THÚ: cửa chuồng ở STABLE (giữa khu chăn nuôi) */
+  if (L.fence) { line(648, 282 + HY, -52, 26, 4, 30, 13); line(648, 282 + HY, 52, 26, 5, 30, 13); if (D >= 1) { line(440, 386 + HY, 52, 26, 2, 30, 13); line(908, 412 + HY, -52, 26, 2, 30, 13); } }
+  if (L.path) { line(548, 900, 18, -70, 1, 40, 22); [[548, 900], [566, 830], [584, 770], [604, 715], [632, 656], [668, 598], [700, 540], [640, 500], [592, 452], [568, 400], [575, 340], [620, 300], [675, 265]].forEach(([x, y]) => reg(x, y, 40, 22)); if (D >= 1) { [[596, 700], [540, 664], [470, 684], [400, 706], [330, 726], [690, 540], [770, 526], [850, 512], [940, 490], [640, 640], [720, 628], [790, 640]].forEach(([x, y]) => reg(x, y, 30, 16)); } if (D >= 2) [[950, 480], [1010, 440], [1070, 400], [540, 560], [470, 560], [400, 538], [350, 520]].forEach(([x, y]) => reg(x, y, 30, 16)); }
   /* vật có vùng chiếm đất tự động: bọc các hàm vẽ để mang theo vùng của nó */
   const W2 = (name, fn) => { const mk = (x, y, a, b, c) => { const o = new String(fn(x, y, a, b, c)), F = FOOT[name], sc = name === "bigTree" || name === "pine" || name === "cow" ? (a || 1) : 1; o.fp = { x, y, rx: F[0] * sc, ry: F[1] * Math.max(.7, sc), kind: name, name, a, b }; o.re = (nx, ny) => mk(nx, ny, a, b, c); return o; }; return mk; };
   const bigTree = W2("bigTree", SPRITES.bigTree), pine = W2("pine", SPRITES.pine), hay = W2("hay", SPRITES.hay), barrel = W2("barrel", SPRITES.barrel), chicken = W2("chicken", SPRITES.chicken), rabbit = W2("rabbit", SPRITES.rabbit), cow = W2("cow", SPRITES.cow), rock = W2("rock", SPRITES.rock), bush = W2("bush", SPRITES.bush), lavender = W2("lavender", SPRITES.lavender), flowerPatch = W2("flowerPatch", SPRITES.flowerPatch), pumpkins = W2("pumpkins", SPRITES.pumpkins), milkcans = W2("milkcans", SPRITES.milkcans), roundHay = W2("roundHay", SPRITES.roundHay), crate = W2("crate", SPRITES.crate), coop = W2("coop", SPRITES.coop);
@@ -342,88 +365,86 @@ function scene(o) {
   if (L.pond) base.push(pond([330, 300]));
   /* lối đi = mảng liền; kiểu chọn bằng L.pathStyle (dat | soi | cuoi | dalat | gach) */
   const PS = L.pathStyle || "soi";
-  if (D >= 1) base.push({ d: 0, svg: pathPatch([[90, 170], [200, 180], [310, 168]], 92, "cuoi", 5) });   /* sân đá cuội gần ao (kiểu riêng, không chạm lối đi) */
   if (L.path) {
-    const net = [[[[548, 900], [566, 830], [584, 770], [604, 715], [632, 656], [668, 598], [700, 540], [708, 490]], 66, 1]];
+    const net = [[[[548, 900], [566, 830], [584, 770], [604, 715], [632, 656], [668, 598], [700, 540], [640, 500], [592, 452], [568, 400], [575, 340], [620, 300], [675, 265]], 66, 1]];
     if (D >= 1) { net.push([[[596, 700], [540, 664], [470, 684], [400, 706], [330, 726]], 46, 2]); net.push([[[690, 540], [770, 526], [850, 512], [940, 490]], 46, 3]); net.push([[[640, 640], [720, 628], [790, 640]], 40, 4]); }
     if (D >= 2) { net.push([[[950, 480], [1010, 440], [1070, 400]], 44, 5]); net.push([[[540, 560], [470, 560], [400, 538], [350, 520]], 40, 6]); }
     base.push({ d: 0, svg: pathNet(net, PS) });   /* một mảng liền duy nhất */
   }
-  /* nhiều thửa ruộng: [gốc (x,y), số ô theo a, số ô theo b]; mở dần theo L.plots (A 9 ô, B 6, E 6, C 3, F 2) */
-  const cyc = [[cropWheat, true], [cropCarrot, true], [cropCorn, false], [cropStraw, true], [cropWheat, true], [cropTomato, true], [cropSun, false], [cropCarrot, false], [cropStraw, true], [cropWheat, true]];
-  const FIELDS = [[[810, 590], 3, 3], [[352, 770], 3, 2], [[256, 508], 3, 2], [[940, 810], 4, 1], [[966, 214], 2, 1], [[1100, 700], 2, 2], [[120, 330], 3, 2], [[640, 800], 3, 2], [[1180, 420], 2, 2], [[520, 220], 3, 1], [[60, 200], 3, 2], [[1150, 220], 2, 2], [[200, 640], 3, 2], [[1180, 560], 2, 2], [[900, 130], 3, 1]];
-  let left = L.plots, ci = 0, pidx = 0; const nGray = Math.max(0, L.plots - L.planted), grayIdx = new Set(Array.from({ length: nGray }, (_, k) => Math.min(L.plots - 1, Math.floor((k + 1) * L.plots / (nGray + 1)))));
-  for (const [fo, na, nb] of FIELDS) for (let b = 0; b < nb; b++) for (let a = 0; a < na; a++) { if (left <= 0) break; left--; const planted = !grayIdx.has(pidx++), cp = planted ? cyc[ci++ % cyc.length] : null, tl = [fo[0] + (a - b) * TW / 2, fo[1] + (a + b) * TH / 2];
-    { const fpP = { x: tl[0], y: tl[1] + TH / 2, rx: 62, ry: 31, kind: "plot", name: "plot" }; if (!free(fpP)) { DROPPED.push("plot"); continue; } occ.push(fpP); }
-    HOT.push({ x: Math.round(tl[0]), y: Math.round(tl[1] + TH / 2), planted, crop: cp ? ({ [cropWheat]: "wheat", [cropCarrot]: "carrot", [cropCorn]: "corn", [cropStraw]: "strawberry", [cropTomato]: "tomato", [cropSun]: "sunflower" })[cp[0]] : null, ripe: cp ? cp[1] : false });
-    const A = tl, B = [tl[0] + TW / 2, tl[1] + TH / 2], Cc = [tl[0], tl[1] + TH], Dd = [tl[0] - TW / 2, tl[1] + TH / 2], lvl = L.plots >= 4 ? 3 : 2;
-    let o;
-    if (planted) { o = poly([A, B, Cc, Dd], "url(#gSoil)", lvl >= 3 ? "#7A4B24" : C.soilD, lvl >= 3 ? 7 : 3); for (let k = 1; k < 5; k++) { const p = lerp(A, Dd, k / 5), q = lerp(B, Cc, k / 5); o += `<path d="M${f(p[0])} ${f(p[1])}L${f(q[0])} ${f(q[1])}" stroke="${C.soilD}" stroke-width="2.6" opacity=".45" stroke-linecap="round"/>`; } if (lvl >= 3) o += poly([A, B, Cc, Dd], "none", "#C58B4E", 3); }
-    else { /* đất xám chưa trồng: chạm để chọn cây */
-      o = poly([A, B, Cc, Dd], "url(#gGray)", "#6E6A63", 5) + poly([A, B, Cc, Dd], "none", "#CFCBC3", 2.4); const r = rng(pidx * 13 + 1);
-      for (let k = 0; k < 5; k++) { const q = lerp(lerp(A, Dd, r()), lerp(B, Cc, r()), r()); o += ell(q[0], q[1], 3.4 + r() * 2.4, 2, "#8F8B83", null).replace("/>", ' opacity=".7"/>'); }
-      for (let k = 1; k < 4; k++) { const p = lerp(A, Dd, k / 4), q = lerp(B, Cc, k / 4); o += `<path d="M${f(p[0] + 10)} ${f(p[1])}L${f(q[0] - 10)} ${f(q[1])}" stroke="#8F8B83" stroke-width="1.8" stroke-dasharray="6 9" opacity=".5" stroke-linecap="round"/>`; } }
-    base.push({ d: 1, svg: o });
-    if (!planted) continue;
-    let cr = ""; for (let k = 0; k < 4; k++) for (let m = 0; m < 4; m++) { const p = lerp(lerp(A, Dd, (k + .5) / 4), lerp(B, Cc, (k + .5) / 4), (m + .5) / 4); cr += cp[0](p[0], p[1] + 8, cp[1]); }
-    push(Cc[1] - 8, `<g transform="translate(${f(tl[0])} ${f(tl[1] + TH / 2)}) scale(1.35) translate(${f(-tl[0])} ${f(-(tl[1] + TH / 2))})">${cr}</g>`); }
+  /* ĐẤT TRỒNG (ruộng rau / lúa / hoa + khoảng đất cây ăn trái, có nền, bờ, rào): khai báo ở garden-land.js, rào ở garden-fence.js */
+  LAND.draw({ L, base, stand, push, occ, reg, free, DROPPED, HOT, TREEPOS, U, fenceRun, bigTree, WLD, SPRITE_KINDS });
   /* tường đá / rào quanh sân (hình thoi: Lc(440,386) Bc(648,282) Rc(908,412) Fc(700,516)) */
   if (L.fence) {
-    const FS = L.fenceStyle || ({ 1: "tre", 2: "go", 3: "da" }[L.fence] || "da"), run = (sx, sy, dir, n, st) => { const g = U(sx, sy), r = fenceRun(g[0], g[1], dir, n, st || FS); push(r.d, r.svg); };
-    run(648, 282, "y", 4); run(648, 282, "x", 5);                                  /* hai cạnh sau của sân */
-    if (D >= 1) { run(440, 386, "x", 2); run(908, 412, "y", 2); }                  /* hai cạnh trước */
+    const FS = L.fenceStyle || ({ 1: "tre", 2: "go", 3: FENCE.USE.court }[L.fence] || FENCE.USE.court), run = (sx, sy, dir, n, st) => { const g = U(sx, sy), r = fenceRun(g[0], g[1], dir, n, st || FS); push(r.d, r.svg); };
+    run(648, 282 + HY, "y", 4); run(648, 282 + HY, "x", 5);                                  /* hai cạnh sau của sân */
+    if (D >= 1) { run(440, 386 + HY, "x", 2); run(908, 412 + HY, "y", 2); }                  /* hai cạnh trước */
   }
   /* ---- công trình ---- */
   if (L.windmill) push(330, windmill(at(1170, 330), L.windmill).svg);
   if (L.barn) push(580, barn(at(1090, 580), L.barn).svg);
-  if (L.house) push(440, house(at(650, 440), L.house).svg);
+  if (L.house) push(440 + HY, house(at(650, 440 + HY), L.house).svg);
   if (L.well) push(540, well(at(470, 540), L.well).svg);
-  if (D >= 3) { push(330, press(880, 340)); push(380, oven(1020, 380)); }
-  if (D >= 2) { push(440, table(1205, 425)); push(500, coop(380, 470)); }
+  if (D >= 3) { push(330 + HY, press(880, 340 + HY)); push(380 + HY, oven(1020, 380 + HY)); }
+  if (D >= 2) { push(440, table(1205, 425)); }
   /* ---- cây, bụi, đá ---- */
   /* hàng cây sát nhau quanh rìa + vườn cây ăn quả nhiều loại */
   const forest = [[25, 200, "pine", 1.2], [95, 150, "oak", 1.0], [165, 215, "pine", 1.1], [250, 150, "pine", 1.15], [345, 118, "oak", .9], [440, 160, "pine", 1.0], [520, 120, "oak", .95], [600, 168, "pine", .95], [680, 128, "oak", .9], [760, 160, "pine", 1.0], [850, 120, "oak", .9], [930, 150, "pine", 1.0], [1010, 118, "oak", .85], [1090, 150, "pine", 1.0], [1180, 130, "oak", .95], [1255, 190, "pine", 1.15], [1235, 690, "oak", 1.1], [20, 330, "oak", 1.0], [70, 420, "pine", 1.0], [1255, 330, "pine", 1.0], [1250, 450, "oak", .95], [1255, 580, "pine", 1.0]];
   /* hàng trên: nhiều VỊ TRÍ cây lớn; bé đã mở cây nào thì cây đó đứng ở đó, chưa mở thì hiện chỗ trống (vòng đất + dấu +) */
-  const TOP = [[60, 150], [160, 120], [262, 158], [372, 120], [482, 150], [592, 118], [702, 150], [812, 118], [922, 150], [1032, 118], [1142, 150], [1240, 120], [110, 235], [1190, 235]], topKinds = ["mango", "apple", "orange", "litchi", "pear", "plum", "peach", "pomelo"], nTop = [2, 5, 9, 11][Math.min(D, 3)];
-  TOP.forEach(([x, y], q) => { if (q < nTop) push(y, bigTree(x, y, .85, topKinds[q % topKinds.length])); else base.push({ d: 0, svg: G(x, y, ell(0, 0, 40, 15, "url(#gSoil)", "#7A4B24", 4).replace("/>", ' opacity=".55"/>') + ell(0, -1, 40, 15, "none", "#fff", 3).replace("/>", ' stroke-dasharray="9 7"/>') + `<path d="M-9 0H9M0 -7V7" stroke="#fff" stroke-width="4.4" stroke-linecap="round"/>`) }); });
+  /* 3 CHUỒNG hình bình hành (gia cầm · heo cừu · bò): bò gần kho, gà vịt và heo cừu XA NHÀ ở phía dưới; vật nuôi đứng sẵn trong chuồng */
+  if (D >= 1) {
+    const fr2 = (sx, sy, dir, n) => { const gg = U(sx, sy), r = fenceRun(gg[0], gg[1], dir, n, FENCE.styleFor("pen")); push(r.d, r.svg); };
+    const addA = (k, fn, x, y) => { ANIM.push({ k, x: Math.round(x), y: Math.round(y), s: 1, f: 0 }); if (!o.noAnimals) stand.push({ d: y, svg: String(fn(x, y)) }); };
+    for (const pn of PENS) {
+      const [fx, fy] = pn.fo, na = pn.na, nb = pn.nb, T = [fx, fy], Rr = [fx + na * TW / 2, fy + na * TH / 2], Bb = [fx + (na - nb) * TW / 2, fy + (na + nb) * TH / 2], Ll = [fx - nb * TW / 2, fy + nb * TH / 2], cx = fx + (na - nb) * TW / 4, cy = fy + (na + nb) * TH / 4;
+      occ.push({ x: cx, y: cy, rx: (na + nb) * 24, ry: (na + nb) * 12, kind: "pen", name: "pen" });
+      base.push({ d: .45, svg: poly([T, Rr, Bb, Ll], "#E8D49B", "#B8944F", 4) + poly([T, Rr, Bb, Ll].map(p => [cx + (p[0] - cx) * .86, cy + (p[1] - cy) * .86]), "none", "#F4E4B4", 2.2) });
+      fr2(T[0], T[1], "x", na); fr2(T[0], T[1], "y", nb); fr2(Ll[0], Ll[1], "x", na); fr2(Rr[0], Rr[1], "y", nb);
+      PEN_OK = true;
+      for (const [k, dx, dy] of pn.an) { const x = cx + dx, y = cy + dy; if (k === "chicken") push(y, chicken(x, y)); else if (k === "cow") push(y, cow(x, y, .8, dx > 0)); else if (k === "pig") addA("pig", (a, b) => pig(a, b, .9, dx > 0), x, y); else if (k === "sheep") addA("sheep", (a, b) => sheep(a, b, .9, dx > 0), x, y); else if (k === "duck") addA("duck", duck, x, y); }
+      PEN_OK = false;
+    }
+  }
   const fruitKinds = ["mango", "apple", "orange", "pomelo", "litchi", "pear", "plum", "peach"]; let pk = 0; forest.slice(0, [9, 16, 22, forest.length][Math.min(D, 3)]).filter((_, q) => q === 100).forEach(([x, y, k, sc], q) => push(y, bigTree(x, y, sc * .9, fruitKinds[(q * 3 + pk++) % fruitKinds.length])));
-  if (L.apple) { const kinds = ["apple", "orange", "pear", "apple", "peach", "orange"]; const orch = [[60, 560], [150, 610], [235, 660], [60, 680], [150, 730], [235, 780], [60, 800], [150, 850], [120, 500], [30, 450]]; orch.filter((_, k) => k % 8 === 0 && k > 0).forEach(([x, y], k) => push(y, bigTree(x, y, .8, kinds[k % kinds.length]))); }
+  if (L.apple) { const kinds = ["apple", "orange", "pear", "apple", "peach", "orange"]; const orch = [[60, 560], [150, 610], [235, 660], [60, 680], [150, 730], [235, 780], [60, 800], [150, 850], [120, 500], [30, 450]]; orch.filter(() => false).forEach(([x, y], k) => push(y, bigTree(x, y, .8, kinds[k % kinds.length]))); }
   [[540, 610, 1]].forEach(([x, y, sc]) => push(y, bush(x, y, sc)));
   if (L.flowers) { [[520, 805], [480, 700]].forEach(([x, y]) => push(y, lavender(x, y, 1.2))); [[620, 655], [668, 702], [756, 742], [840, 770], [930, 740], [980, 690], [1020, 640]].forEach(([x, y]) => push(y, lavender(x, y, 1.05))); }
   [[410, 400, 1], [560, 220, .8], [1080, 720, .9], [760, 800, .8], [180, 330, .9], [1180, 700, 1]].forEach(([x, y, sc]) => push(y, rock(x, y, sc)));
   /* ---- vật nhỏ làm dày cảnh ---- */
-  if (L.hay) { [[960, 640], [1010, 662]].forEach(([x, y]) => push(y, hay(x, y))); [[560, 470, 1.1], [600, 490, 1]].forEach(([x, y, sc]) => push(y, barrel(x, y, sc))); }
-  if (D >= 1) { push(470, milkcans(740, 488)); push(330, roundHay(960, 400)); push(570, roundHay(1215, 560)); push(600, crate(860, 560)); push(432, hedge(760, 466, 3, "x")); [[570, 560], [420, 520]].forEach(([x, y]) => push(y, flowerPatch(x, y, "#FFD24D"))); push(520, pumpkins(1190, 500)); }
+  if (L.hay) { [[1228, 700], [1248, 738]].forEach(([x, y]) => push(y, hay(x, y))); [[560, 470, 1.1], [600, 490, 1]].forEach(([x, y, sc]) => push(y, barrel(x, y, sc))); }
+  if (D >= 1) { push(470, milkcans(740, 488)); push(330, roundHay(960, 400)); push(570, roundHay(1215, 560)); push(600, crate(860, 560)); push(432, hedge(760, 466, 3, "x")); [[570, 560], [420, 520]].forEach(([x, y]) => push(y, flowerPatch(x, y, "#FFD24D"))); push(520, pumpkins(1200, 480)); }
   if (D >= 2) { push(520, hedge(380, 456, 3, "x")); [[1040, 470], [440, 460], [1100, 360]].forEach(([x, y], q) => push(y, flowerPatch(x, y, q % 2 ? "#FF8FB0" : "#FFD24D"))); push(620, barrel(1210, 600, 1)); push(840, crate(830, 800)); }
-  if (D >= 3) { push(300, hay(1110, 290)); push(760, pumpkins(920, 790)); [[790, 330], [800, 352]].forEach(([x, y]) => push(y, barrel(x, y, .9))); }
+  if (D >= 3) { push(300, hay(1110, 290)); push(840, pumpkins(1210, 820)); [[790, 330], [800, 352]].forEach(([x, y]) => push(y, barrel(x, y, .9))); }
   if (L.animals) { [[610, 770], [660, 810]].forEach(([x, y]) => push(y, chicken(x, y))); push(600, rabbit(420, 560)); if (D >= 2) { push(180, chicken(150, 600)); } }
   if (D >= 1) { [[470, 600], [520, 640]].forEach(([x, y]) => push(y, chicken(x, y))); push(610, rabbit(560, 620)); }
   if (D >= 2) { [[560, 780], [610, 820], [700, 850]].forEach(([x, y]) => push(y, chicken(x, y))); push(830, rabbit(740, 830)); push(560, rabbit(1000, 700)); push(640, coop(820, 720)); }
   if (D >= 3) { [[300, 700, 1], [420, 710, 0], [520, 740, 1], [880, 760, 0], [1010, 760, 1], [1120, 600, 0], [1180, 760, 1], [330, 820, 0]].forEach(([x, y, fl]) => push(y, cow(x, y, .85, !!fl))); [[240, 640], [940, 700], [1060, 640], [760, 700], [980, 840]].forEach(([x, y]) => push(y, chicken(x, y))); [[1100, 790], [250, 700], [850, 600], [700, 640], [180, 760], [1060, 520]].forEach(([x, y]) => push(y, rabbit(x, y))); [[120, 830, 0], [640, 860, 1], [760, 780, 0], [990, 840, 1], [200, 560, 0], [1200, 700, 1]].forEach(([x, y, fl]) => push(y, cow(x, y, .85, !!fl))); [[100, 700], [340, 650], [820, 870], [1150, 650], [60, 600], [1000, 590], [560, 700]].forEach(([x, y]) => push(y, chicken(x, y))); push(760, coop(1020, 600)); [[300, 740], [440, 770], [880, 800]].forEach(([x, y]) => push(y, hay(x, y))); { const g = U(260, 650), r = fenceRun(g[0], g[1], "x", 4, "go"); push(r.d + 40, r.svg); } }
-  items.push(...base, ...stand);
+  items.push(...base, ...stand); if (WLD) items.push(...WLD.items(time));
   if (!o.view && !o.overlay) { const c = {}; DROPPED.forEach(n => c[n] = (c[n] || 0) + 1); console.log("  vị trí [" + (o.label || "").slice(0, 26) + "]: dời " + MOVED.length + " vật sang chỗ trống, bỏ " + DROPPED.length + " vật hết chỗ " + JSON.stringify(c)); } DROPPED.length = 0; MOVED.length = 0;
   const ground0 = items.filter(i => i.d <= 1), up = items.filter(i => i.d > 1).sort((a, b) => a.d - b.d); items.length = 0; items.push(...ground0, ...up);
   /* trời + thời điểm trong ngày */
   const tint = { day: null, dusk: ["#FF8A3D", .28], night: ["#12163A", .55] }[time];
-  const sky = time === "day" ? `<rect width="${W}" height="150" fill="url(#gSkyDay)"/>` : time === "dusk" ? `<rect width="${W}" height="150" fill="#F9A66B"/><rect y="60" width="${W}" height="90" fill="#FFD08A" opacity=".6"/>` : `<rect width="${W}" height="150" fill="#14183F"/>`;
+  const sky = WLD ? WLD.sky(time) + WLD.mountains(time) : time === "day" ? `<rect width="${W}" height="150" fill="url(#gSkyDay)"/>` : time === "dusk" ? `<rect width="${W}" height="150" fill="#F9A66B"/><rect y="60" width="${W}" height="90" fill="#FFD08A" opacity=".6"/>` : `<rect width="${W}" height="150" fill="#14183F"/>`;
   let over = "";
-  if (tint) over += `<rect width="${W}" height="${H}" fill="${tint[0]}" opacity="${tint[1]}"/>`;
-  if (time === "night") {
+  if (tint) over += WLD ? WLD.tintRect(tint[0], tint[1]) : `<rect width="${W}" height="${H}" fill="${tint[0]}" opacity="${tint[1]}"/>`;
+  if (WLD) over += WLD.over(time);
+  if (time === "night" && !WLD) {
     for (let i = 0; i < 40; i++) over += `<circle cx="${f(R() * W)}" cy="${f(R() * 140)}" r="${f(1 + R() * 1.6)}" fill="#fff" opacity="${f(.5 + R() * .5)}"/>`;
     over += `<circle cx="1120" cy="60" r="34" fill="#FFF3C4"/><circle cx="1132" cy="52" r="30" fill="#14183F" opacity=".0"/>`;
     [[520, 340, 62], [560, 372, 62], [612, 384, 60], [470, 500, 56], [1010, 452, 70], [700, 470, 54], [1058, 380, 64], [900, 300, 54]].forEach(([x, y, r]) => over += `<circle cx="${x}" cy="${y}" r="${r}" fill="url(#gGlow)"/>`);
     for (let i = 0; i < 18; i++) over += `<circle cx="${f(200 + R() * 880)}" cy="${f(300 + R() * 480)}" r="${f(2 + R() * 2)}" fill="#E8FF8A" opacity="${f(.5 + R() * .5)}"/>`;
   }
-  if (time === "dusk") { over += `<circle cx="1060" cy="120" r="46" fill="#FFB562" opacity=".9"/>`; }
+  if (time === "dusk" && !WLD) { over += `<circle cx="1060" cy="120" r="46" fill="#FFB562" opacity=".9"/>`; }
   /* sinh vật bay */
   let fly = ""; if (time !== "night") { [[300, 360], [820, 300], [560, 520]].forEach(([x, y], i) => fly += i === 1 ? bee(x, y, i * .7) : butterfly(x, y, i * .6, i ? "#FFB347" : "#FF8FB0")); }
-  const body = (o.crop ? "" : "") + items.map(i => i.svg).join("");
-  const view = o.view || [0, 0, W, H];
+  const body = (o.crop ? "" : "") + items.map(i => i.svg).join(""); SHADOW.setTime("day");
+  const view = o.view || (WLD ? WLD.VIEW : [0, 0, W, H]);
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${view.join(" ")}" role="img" aria-label="${o.label || "Khu vườn Học Vui"}" data-style="pop" data-game="garden-scene">
 <title>${o.label || "Khu vườn Học Vui"}</title>${STYLE}${defs()}${sky}<g>${far}</g>${ground}${body}${fly}${over}${o.overlay || ""}</svg>
 `;
 }
 
+const LAND = require("./garden-land")({ f, rng, poly, ell, lerp, C, TW, TH, cropFns: { wheat: cropWheat, carrot: cropCarrot, corn: cropCorn, strawberry: cropStraw, tomato: cropTomato, sunflower: cropSun } });
+const WORLD = require("./garden-world")({ f, rng, G, ell, shadow, tuft, flower, rock, bush, pine, bigTree, house, pathNet, hedge, flowerPatch, hay, barrel, crate, W, H });
 const SCENES = [
   ["01-toan-canh", "Toàn cảnh khu vườn (ban ngày): nhà ngói, tường đá, ruộng, cây táo, ao, cối xay gió, kho", {}],
   ["02-cap-1", "Cấp 1: mới bắt đầu, lều lá, rào tre, một ô trồng", { levels: { deco: 0, house: 1, fence: 1, well: 1, barn: 0, windmill: 0, plots: 2, planted: 1, path: 0, apple: 0, flowers: 0, pond: 1, hay: 0, animals: 0 } }],
@@ -436,9 +457,18 @@ const files = {};
 let HOT1 = null;
 for (const [id, label, o] of SCENES) { files[`scene-${id}.svg`] = scene(Object.assign({ label }, o)); if (id === "01-toan-canh") HOT1 = HOT.slice(); }
 /* bản KHÔNG vật nuôi cho trang tương tác (vật nuôi là lớp riêng: ban ngày thả ra, tối vào chuồng) */
-let SLOTS = null;
-for (const [id, t] of [["01-toan-canh-na", "day"], ["05-hoang-hon-na", "dusk"], ["06-ban-dem-na", "night"]]) { files[`scene-${id}.svg`] = scene({ label: "Khu vườn không vật nuôi (" + t + ")", time: t, noAnimals: true }); if (t === "day") SLOTS = ANIM.slice(); }
-{ const cap = { cow: 14, chicken: 22, rabbit: 12 }, cnt = {}; SLOTS = SLOTS.filter(a => (cnt[a.k] = (cnt[a.k] || 0) + 1) <= cap[a.k]).sort((a, b) => a.y - b.y); }
+let SLOTS = null, TREES = [], PLOTPOS = [];
+for (const [id, t] of [["01-toan-canh-na", "day"], ["05-hoang-hon-na", "dusk"], ["06-ban-dem-na", "night"]]) { files[`scene-${id}.svg`] = scene({ label: "Khu vườn không vật nuôi (" + t + ")", time: t, noAnimals: true, world: true }); if (t === "day") { SLOTS = ANIM.slice(); TREES = TREEPOS.slice(); PLOTPOS = HOT.slice(); } }
+/* LOẠI vật nuôi đứng sai chỗ: trên nhà / kho / ao / thân chuồng thú (hộp bấm BLD ở learn/garden/garden-places.js là vùng hình ảnh của công trình) và đè lên ô trồng, gốc cây.
+   Vật nuôi TRONG chuồng rào (gà vịt, heo cừu, bò) không bị loại. */
+{
+  const PL = (() => { const vm = require("vm"), sb = { GardenLayout: { ART: "" } }; vm.createContext(sb); vm.runInContext(fs.readFileSync(path.join(__dirname, "..", "..", "learn", "garden", "garden-places.js"), "utf8"), sb); return sb; })();
+  const boxes = PL.BLD.map(b => [b.x - b.w / 2, b.y - b.h / 2, b.x + b.w / 2, b.y + b.h / 2]); boxes.push([STABLE[0] - 60, STABLE[1] - 95, STABLE[0] + 60, STABLE[1] - 5]);
+  const before = SLOTS.length, removed = [];
+  SLOTS = SLOTS.filter(a => { const bad = boxes.some(b => a.x >= b[0] && a.x <= b[2] && a.y >= b[1] && a.y <= b[3]) || PLOTPOS.some(p => Math.abs(a.x - p.x) < 48 && Math.abs(a.y - p.y) < 24); if (bad) removed.push(a.k + "@" + a.x + "," + a.y); return !bad; });
+  console.log("  vật nuôi đứng sai chỗ (trên công trình / ô trồng) đã loại " + (before - SLOTS.length) + ": " + removed.join(" "));
+}
+{ const cap = { cow: 18, chicken: 28, rabbit: 12, pig: 4, sheep: 4, duck: 4 }, cnt = {}; SLOTS = SLOTS.filter(a => (cnt[a.k] = (cnt[a.k] || 0) + 1) <= cap[a.k]).sort((a, b) => a.y - b.y); }
 const AV = { cow: [-56, -76, 112, 88, "Bò"], pig: [-44, -58, 96, 68, "Heo"], sheep: [-38, -56, 88, 66, "Cừu"], chicken: [-18, -40, 46, 50, "Gà"], rabbit: [-18, -46, 40, 54, "Thỏ"], duck: [-20, -34, 46, 42, "Vịt"] };
 for (const [k, fn] of Object.entries({ cow: () => cow(0, 0, 1, false), pig: () => pig(0, 0, 1, false), sheep: () => sheep(0, 0, 1, false), chicken: () => chicken(0, 0), rabbit: () => rabbit(0, 0), duck: () => duck(0, 0) })) {
   const v = AV[k]; fs.writeFileSync(path.join(out, "..", `animal_${k}.svg`), `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${v[0]} ${v[1]} ${v[2]} ${v[3]}" role="img" aria-label="${v[4]}" data-style="pop" data-game="animal-${k}"><title>${v[4]}</title>${fn()}</svg>\n`);
@@ -527,308 +557,14 @@ Object.assign(CROPINFO.strawberry, { mas: true, mn: "Dâu Dâu", say: ["Hi! Mìn
 Object.assign(CROPINFO.tomato, { mas: true, mn: "Cà Chua", say: ["Hello! Mình là Cà Chua!", "So red! Thu hoạch mình nhé!"] });
 Object.assign(CROPINFO.sunflower, { mas: true, mn: "Hướng Dương", say: ["Mình là Hướng Dương! Cùng đọc nào!", "Bông to nở rộ rồi! Bé giỏi quá!"] });
 {
-  const rr = rng(77), plots = HOT1.map((h, i) => { const need = h.crop ? CROPINFO[h.crop].need : 5, got = h.planted ? (h.ripe ? need : 1 + Math.floor(rr() * (need - 1))) : 0; return { i, x: h.x, y: h.y, planted: h.planted, crop: h.crop, got, need }; });
+  const rr = rng(77), plots = HOT1.map((h, i) => { const need = h.crop ? CROPINFO[h.crop].need : 5, got = h.planted ? (h.ripe ? need : 1 + Math.floor(rr() * (need - 1))) : 0; const o = { i, tree: !!h.tree, x: h.x, y: h.y, planted: h.planted, crop: h.crop, got, need }; if (h.tilled) o.tilled = true; return o; });
   const ids = Object.keys(CROPINFO);
   const A = 'style="color:#cfd3ff;text-decoration:none;padding:4px 10px;border-radius:99px"';
   const nav = `<nav class="rvnav" style="position:sticky;top:0;z-index:99;display:flex;gap:6px 14px;flex-wrap:wrap;align-items:center;padding:8px 16px;background:#1a1d33;color:#fff;font:600 13px system-ui"><b style="opacity:.7">Duyệt Học Vui:</b><a ${A} href="../../../learn/mascot-review.html">🐾 Linh vật theo bố cục học</a><a ${A} href="../brand-learn.html">Thương hiệu 3 môn</a><a ${A} href="preview-garden.html">🌸 Vườn hoa</a><a ${A} href="preview-crops.html">🌾 Thu hoạch (cây trồng)</a><a ${A} href="preview-scene.html">🏡 Khu vườn</a><span style="padding:4px 10px;border-radius:99px;background:#fff;color:#1a1d33">👆 Vườn tương tác</span></nav>`;
-  const html2 = `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Vườn Học Vui: tương tác thử</title>
-<style>:root{--ink:#1d1a33;--bg:#F6F4F1;--panel:#fff;--line:#E3DDEF;--ac:#7C5CFF}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
-.wrap{max-width:1180px;margin:0 auto;padding:18px 14px 60px}h1{font-size:clamp(22px,4.5vw,34px);margin:0 0 4px;font-weight:900}p.n{color:#5b5578;max-width:54em;margin:0 0 12px}
-.stage{position:relative;width:100%;aspect-ratio:1280/880;border-radius:22px;overflow:hidden;background:#8ccf55;border:1px solid var(--line)}.stage>img{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
-.hs{z-index:3;position:absolute;width:9%;height:9.6%;transform:translate(-50%,-50%);border:0;background:none;padding:0;border-radius:50%;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.hs::before{content:"";position:absolute;inset:8% 4%;border:3px solid transparent;border-radius:50%;transition:border-color .15s,background .15s}.hs:hover::before,.hs:focus-visible::before{border-color:#fff;background:rgba(255,255,255,.22)}.hs:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
-.hs.ripe::after{content:"";position:absolute;left:50%;top:50%;width:46%;height:46%;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 0 0 rgba(255,236,120,.9);animation:pulse 1.6s ease-out infinite}@keyframes pulse{to{box-shadow:0 0 0 26px rgba(255,236,120,0)}}
-.hs .bdg{position:absolute;left:50%;top:-4%;transform:translateX(-50%);min-width:clamp(18px,2.4vw,28px);height:clamp(18px,2.4vw,28px);display:grid;place-items:center;border-radius:50%;background:#fff;color:#7C5CFF;font:900 clamp(12px,1.8vw,20px)/1 system-ui;box-shadow:0 2px 6px rgba(0,0,0,.3);pointer-events:none}
-.tip{position:absolute;z-index:5;pointer-events:none;width:clamp(170px,22%,260px);padding:10px 12px 12px;border-radius:16px;background:#fff;border:2px solid #E3DDEF;box-shadow:0 10px 26px rgba(40,30,90,.3);transform:translate(-50%,-100%);opacity:0;transition:opacity .12s}.tip.on{opacity:1}
-.tip b{display:block;font-size:14px;margin-bottom:6px}.tip small{display:block;margin-top:5px;font-size:12px;font-weight:700;color:#5b5578}
-.bar{height:12px;border-radius:7px;background:#E9E4F5;overflow:hidden;border:1px solid #D6CFEA}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#34D399,#FFD24D);border-radius:7px;transition:width .5s}.bar.full i{background:linear-gradient(90deg,#FFD24D,#FF9A3D)}
-.ov{position:fixed;inset:0;z-index:120;display:none;place-items:center;overflow:hidden;padding:16px;background:rgba(20,16,50,.5)}.ov.on{display:grid}
-.card{width:min(480px,100%);max-height:calc(100vh - 32px);overflow:auto;background:#fff;border-radius:26px;padding:22px 22px 20px;border:2px solid #E3DDEF;box-shadow:0 24px 60px rgba(20,16,50,.45)}
-.card .hd{display:flex;gap:14px;align-items:center}.card .pi{width:84px;height:84px;border-radius:22px;background:#F2EEFA;display:grid;place-items:center;flex:none}.card .pi img{width:76px;height:76px}
-.card h2{margin:0;font-size:26px;font-weight:900}.chip{display:inline-block;font-size:12px;font-weight:800;padding:2px 10px;border-radius:99px;background:#EDE9FF;color:#4B3FA0;margin:2px 6px 0 0}
-.row{display:flex;justify-content:space-between;gap:10px;margin:14px 0 6px;font-weight:800;font-size:14px}.card p{margin:10px 0 0;color:#4d4770}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.pick{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 4px;border-radius:16px;border:2px solid #E3DDEF;background:#fff;font:800 13px system-ui;cursor:pointer;min-height:44px}.pick img{width:44px;height:44px}.pick:hover,.pick:focus-visible{border-color:var(--ac);background:#F6F2FF;outline:none}
-.card h3{margin:16px 0 4px;font-size:14px;font-weight:900;color:#4B3FA0;letter-spacing:.02em}.stp{list-style:none;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin:6px 0 0;padding:0}.stp li{text-align:center;font-size:11px;color:#8c85a8;position:relative}.stp i{display:grid;place-items:center;width:26px;height:26px;margin:0 auto 3px;border-radius:50%;background:#E9E4F5;font:900 12px system-ui;font-style:normal;color:#8c85a8}.stp b{display:block;font-size:12px}.stp li.dn i{background:#34D399;color:#fff}.stp li.dn{color:#0b7a56}.stp li.nw i{background:#FFB020;color:#3a2a00;box-shadow:0 0 0 4px rgba(255,176,32,.3)}.stp li.nw{color:#8a5a00;font-weight:800}.stp li.nw b{color:#3a2a00}
-.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}.chips span{font-size:12px;font-weight:700;padding:5px 10px;border-radius:99px;background:#F2EEFA;color:#4B3FA0}.care{margin:6px 0 0;padding-left:20px;color:#4d4770;font-size:14px}.card p.sm{font-size:13px}.btn.go{display:grid;place-items:center;text-decoration:none;background:linear-gradient(135deg,#7C5CFF,#5B8DEF)}
-.tabs{display:flex;gap:6px;margin-top:12px}.tab{flex:1;min-height:44px;padding:6px 8px;border-radius:14px;border:2px solid #E3DDEF;background:#fff;font:800 13px system-ui;color:#4B3FA0;cursor:pointer}.tab.on{background:#7C5CFF;border-color:#7C5CFF;color:#fff}
-.acts{display:flex;gap:10px;margin-top:18px}.btn{flex:1;min-height:48px;border-radius:16px;border:0;font:900 16px system-ui;cursor:pointer;background:linear-gradient(135deg,#34D399,#10B981);color:#fff}.btn[disabled]{background:#E3DDEF;color:#8c85a8;cursor:not-allowed}.btn.g{background:#F2EEFA;color:#4B3FA0}
-.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);z-index:130;background:#1d1a33;color:#fff;padding:10px 18px;border-radius:99px;font-weight:800;opacity:0;transition:.25s;pointer-events:none}.toast.on{opacity:1;transform:translate(-50%,0)}
-/* popup đẹp hơn, màu theo cấp độ (biến --a --b --bg do JS đặt) */
-:root{--a:#A78BFA;--b:#7C5CFF;--bg:#F5F3FF}.card{padding:0!important;overflow:hidden;background:var(--bg);display:flex;flex-direction:column;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px)}.card .hd{flex:none}.cbody{flex:1 1 auto;min-height:0}
-.card .hd{background:linear-gradient(135deg,var(--a),var(--b));padding:18px 20px;color:#fff;position:relative}.card .hd::after{content:"";position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.14)}.card .hd h2{color:#fff;position:relative}.card .hd .chip{background:rgba(255,255,255,.28);color:#fff;position:relative}.card .hd .pi{background:rgba(255,255,255,.94);position:relative;box-shadow:0 4px 0 rgba(0,0,0,.12)}
-.cbody{padding:6px 18px 18px;overflow:auto}.sec{background:#fff;border:2px solid color-mix(in srgb,var(--a) 38%,#fff);border-radius:16px;padding:12px 14px;margin-top:10px}.sec h3{margin:0 0 6px}.sec.warn{background:#FFF4E5;border-color:#FDBA74;color:#9A3412;font-weight:700;font-size:14px}.sec .row{margin:0 0 8px}
-.card h3{color:var(--b)}.bar i{background:linear-gradient(90deg,var(--a),#FFD24D)}.btn{background:linear-gradient(135deg,var(--a),var(--b))!important;color:#fff}.btn.g{background:#fff!important;color:var(--b)!important;border:2px solid color-mix(in srgb,var(--a) 45%,#fff)}.btn[disabled]{background:#E3DDEF!important;color:#8c85a8!important}.btn.go{background:linear-gradient(135deg,#34D399,#10B981)!important}
-.tab{border-color:color-mix(in srgb,var(--a) 45%,#fff);color:var(--b)}.tab.on{background:var(--b)!important;border-color:var(--b)!important;color:#fff}.chips span{background:var(--bg);color:var(--b);border:1px solid color-mix(in srgb,var(--a) 40%,#fff)}.stp li.dn i{background:var(--a)}.card .acts{margin-top:14px}.card p.sm{margin:10px 2px 0}
-.lvbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 10px;font-weight:800;font-size:14px;color:#5b5578}.lvbar button{min-width:44px;min-height:44px;border-radius:14px;border:2px solid #E3DDEF;background:#fff;font:900 15px system-ui;cursor:pointer}.lvbar button.on{color:#fff;border-color:transparent}
-.evbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0 0;font-size:14px;color:#5b5578;font-weight:700}.evbar button{min-height:44px;padding:0 14px;border-radius:14px;border:2px solid #E3DDEF;background:#fff;font:800 14px system-ui;cursor:pointer}
-.alert{display:none;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 14px;margin:0 0 10px;border-radius:18px;background:linear-gradient(135deg,#FFEDD5,#FED7AA);border:2px solid #FDBA74;color:#7C2D12}.alert.on{display:flex}.alert .ai{font-size:34px}.alert b{display:block;font-size:16px}.alert span{font-size:13px}.alert .grow{flex:1;min-width:200px}.alert .mini{height:10px;border-radius:6px;background:rgba(255,255,255,.7);overflow:hidden;margin-top:6px}.alert .mini i{display:block;height:100%;width:0;background:linear-gradient(90deg,#34D399,#FFD24D);transition:width .4s}.alert button{min-height:46px;padding:0 18px;border:0;border-radius:14px;background:linear-gradient(135deg,#FB923C,#EA580C);color:#fff;font:900 15px system-ui;cursor:pointer}
-.pest,.intr{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:clamp(16px,2.6vw,30px);pointer-events:none;animation:wig .7s ease-in-out infinite alternate;filter:drop-shadow(0 2px 0 rgba(0,0,0,.3))}@keyframes wig{from{transform:translate(-60%,-50%) rotate(-12deg)}to{transform:translate(-40%,-58%) rotate(12deg)}}
-.rain{z-index:2;position:absolute;inset:0;pointer-events:none;display:none;overflow:hidden;background:linear-gradient(rgba(30,40,80,.38),rgba(30,40,80,.18))}.stage.storm .rain{display:block}.rain i{position:absolute;top:-10%;width:2px;height:36px;background:linear-gradient(transparent,rgba(220,235,255,.95));animation:drop .7s linear infinite}@keyframes drop{to{transform:translate(-30px,120vh)}}.stage.storm>img{animation:sw 1.3s ease-in-out infinite;transform-origin:50% 100%}@keyframes sw{0%,100%{transform:skewX(-.5deg)}50%{transform:skewX(.5deg)}}
-.mis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 10px}.mc{background:#fff;border:2px solid color-mix(in srgb,var(--a) 40%,#fff);border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:6px}.mc .mh{display:flex;align-items:center;gap:8px;font-weight:900}.mc .mh i{font-style:normal;font-size:28px}.mc small{color:#5b5578;font-size:12px;line-height:1.3}.mc .acts2{display:flex;gap:6px;margin-top:auto}.mc .acts2>*{flex:1;min-height:44px;border-radius:12px;border:0;font:800 13px system-ui;cursor:pointer;display:grid;place-items:center;text-decoration:none}.mc .go2{background:linear-gradient(135deg,var(--a),var(--b));color:#fff}.mc .sm2{background:#F2EEFA;color:var(--b)}.mc.dn{background:color-mix(in srgb,var(--a) 14%,#fff)}.mc.dn .mh::after{content:"✓ Xong";margin-left:auto;font-size:12px;background:var(--b);color:#fff;border-radius:99px;padding:2px 10px}.mtitle{font-weight:900;font-size:15px;margin:0 0 6px;color:var(--ink)}
-@media (max-width:760px){.mis{grid-template-columns:1fr}}
-/* popup nền đậm theo cấp (không trắng): khối trong là lớp mờ, chữ sáng */
-.card{background:linear-gradient(165deg,var(--d1),var(--d2))!important;color:#fff;border-color:rgba(255,255,255,.28)!important}.card .hd .pi{background:rgba(255,255,255,.22)!important;box-shadow:none!important}
-.card .sec{background:rgba(255,255,255,.13)!important;border-color:rgba(255,255,255,.3)!important;color:#fff}.card .sec.warn{background:rgba(251,146,60,.3)!important;border-color:#FDBA74!important;color:#FFEDD5}
-.card h3{color:var(--a)!important;filter:brightness(1.25)}.card p,.card li,.card .row,.card small{color:rgba(255,255,255,.92)!important}.card b{color:#fff}.card p.sm{color:rgba(255,255,255,.8)!important}
-.card .bar{background:rgba(255,255,255,.18)!important;border-color:rgba(255,255,255,.28)!important}.card .chips span{background:rgba(255,255,255,.16)!important;color:#fff!important;border-color:rgba(255,255,255,.32)!important}
-.card .stp li{color:rgba(255,255,255,.7)}.card .stp i{background:rgba(255,255,255,.2);color:#fff}.card .stp li.dn,.card .stp li.dn i{color:#fff}.card .stp li.dn i{background:var(--a);color:#1a1033}.card .stp li.nw{color:#FFE08A}.card .stp li.nw i{background:#FFD24D;color:#3a2a00}.card .stp li.nw b{color:#fff}
-.card .btn.g{background:rgba(255,255,255,.14)!important;color:#fff!important;border:2px solid rgba(255,255,255,.42)!important}.card .btn[disabled]{background:rgba(255,255,255,.14)!important;color:rgba(255,255,255,.55)!important}
-.card .tab{background:rgba(255,255,255,.12)!important;color:#fff!important;border-color:rgba(255,255,255,.38)!important}.card .tab.on{background:var(--a)!important;color:#1a1033!important;border-color:var(--a)!important}
-.card .pick{background:rgba(255,255,255,.14)!important;border-color:rgba(255,255,255,.32)!important;color:#fff!important}.card .pick span{color:rgba(255,255,255,.75)!important}.card .pick:hover,.card .pick:focus-visible{background:rgba(255,255,255,.26)!important;border-color:#fff!important}
-.legend{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0 0;font-size:14px;color:#5b5578}.legend span{display:inline-flex;align-items:center;gap:6px}
-/* ===== popup trong suốt, icon tương phản nhô lên trên ===== */
-/* ===== KHU VƯỜN FULL MÀN HÌNH + thanh trên + popup menu ===== */
-body.fs{overflow:hidden;background:#6FB43F}.fsw{position:fixed;inset:0;display:grid;place-items:center;background:linear-gradient(#8ccf55,#6FB43F)}
-.fs .stage{width:min(100vw,calc(100dvh*1.4545))!important;aspect-ratio:1280/880;border-radius:0!important;border:0!important;box-shadow:none!important;margin:0!important;background:transparent}
-.hud{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:max(10px,env(safe-area-inset-top)) 12px 10px;pointer-events:none}.hud>*{pointer-events:auto}.hl,.hr{display:flex;align-items:center;gap:8px}
-.hb{position:relative;display:grid;place-items:center;width:48px;height:48px;border-radius:50%;border:2px solid rgba(255,255,255,.55);background:rgba(20,16,50,.55);color:#fff;font:700 22px/1 system-ui;text-decoration:none;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.3);-webkit-tap-highlight-color:transparent}.hb:hover,.hb:focus-visible{background:rgba(20,16,50,.75);outline:3px solid #fff;outline-offset:2px}
-.hud .st1{background:rgba(20,16,50,.55);color:#fff;border:2px solid rgba(255,255,255,.4);min-height:40px;padding:0 12px;font-size:14px;box-shadow:0 4px 12px rgba(0,0,0,.25)}.hud .st1 b{color:#fff}
-.hb .bd{position:absolute;right:-4px;top:-4px;min-width:22px;height:22px;padding:0 5px;border-radius:11px;background:#EF4444;border:2px solid #fff;color:#fff;font:900 12px/18px system-ui;font-style:normal;text-align:center}
-.hb.blink{background:linear-gradient(135deg,#FFC83D,#FB923C);border-color:#fff;color:#fff;animation:blk 1.3s ease-in-out infinite}@keyframes blk{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,200,61,.85),0 6px 16px rgba(0,0,0,.3)}50%{transform:scale(1.12);box-shadow:0 0 0 14px rgba(255,200,61,0),0 6px 16px rgba(0,0,0,.3)}}
-.alert{position:fixed!important;z-index:29;top:68px;left:50%;transform:translateX(-50%);width:min(760px,94vw);margin:0!important;box-shadow:0 12px 30px rgba(0,0,0,.35)}
-.legend{position:fixed!important;z-index:28;left:50%;bottom:10px;transform:translateX(-50%);margin:0!important;padding:6px 14px;border-radius:99px;background:rgba(20,16,50,.55);color:#fff!important;gap:6px 16px!important;justify-content:center;max-width:96vw}.legend span{color:#fff!important;font-size:12px!important}
-.fs .tip{z-index:6}
-#mnov.on{display:grid}.card .sec.pn{background:rgba(255,255,255,.13)!important;box-shadow:none!important}.card .mc{background:rgba(255,255,255,.12)!important;border:2px solid rgba(255,255,255,.3)!important;color:#fff}.card .mc small{color:rgba(255,255,255,.88)!important}.card .mc small b{color:#fff}.card .mc .mh{color:#fff}.card .mc .sm2{background:rgba(255,255,255,.16)!important;color:#fff!important}.card .mc.dn{background:rgba(52,211,153,.22)!important}
-.card .evbar button{background:rgba(255,255,255,.14)!important;color:#fff!important;border:2px solid rgba(255,255,255,.4)!important}.card .evbar .end{background:rgba(255,255,255,.08)!important}.card .lvbar button{background:rgba(255,255,255,.14)!important;color:#fff!important;border:2px solid rgba(255,255,255,.4)!important}.card .lvbar button.on{border-color:#fff!important}
-.card .goto a{background:rgba(255,255,255,.14)!important;border:2px solid rgba(255,255,255,.4)!important}.card .goto a b{color:#fff}.card .goto a:hover,.card .goto a:focus-visible{background:rgba(255,255,255,.26)!important;border-color:#fff!important}.card .hint2{color:rgba(255,255,255,.8)!important}
-@media (max-width:560px){.hud .st1{display:none}}
-@media (prefers-reduced-motion:reduce){.hb.blink{animation:none}}
-/* ===== chữ TO RÕ cho bé + tab + nút nghe đọc ===== */
-.card{width:min(580px,100%)!important;font-size:19px}.card .hd h2{font-size:34px!important}.card .chip{font-size:16px!important;padding:5px 14px!important}
-.card p,.card li,.card .row,.card .hint2{font-size:19px!important;line-height:1.5!important}.card p.sm{font-size:17px!important}.card h3{font-size:21px!important}.card .chips span{font-size:17px!important;padding:8px 14px!important}
-.card .stp li{font-size:14px!important}.card .stp b{font-size:16px!important}.card .stp i{width:36px!important;height:36px!important;font-size:17px!important}
-.card .btn{min-height:56px!important;font-size:19px!important}.card .bar{height:18px!important}
-.card .tab{min-height:54px!important;font-size:17px!important}.card .pick{font-size:18px!important}.card .pick span{font-size:14px!important}
-.card .mc .mh{font-size:19px!important}.card .mc small{font-size:16px!important}.card .mc .acts2>*{min-height:50px!important;font-size:16px!important}
-.card .evbar button{font-size:18px!important;min-height:56px!important}.card .lvbar button{min-height:56px!important;font-size:20px!important}.card .goto a b{font-size:16px!important}.card .goto a{min-height:84px!important;font-size:34px!important}
-.tabs2{display:flex;gap:8px;margin:12px 0 0;flex-wrap:wrap}.t2{flex:1 1 0;min-height:54px;padding:6px 10px;border-radius:16px;border:2px solid rgba(255,255,255,.4);background:rgba(255,255,255,.12);color:#fff;font:800 17px system-ui;cursor:pointer;white-space:nowrap}.t2.on{background:var(--a);color:#1a1033;border-color:var(--a)}.t2:focus-visible{outline:3px solid #fff;outline-offset:2px}
-.pnl{display:none}.pnl.on{display:block}
-.rd{margin-top:12px;min-height:52px;padding:0 20px;border-radius:99px;border:2px solid rgba(255,255,255,.75);background:rgba(255,255,255,.18);color:#fff;font:800 18px system-ui;cursor:pointer}.rd:hover,.rd:focus-visible{background:rgba(255,255,255,.32);outline:none}
-.tip{width:clamp(220px,28%,320px)!important}.tip b{font-size:19px!important}.tip small{font-size:16px!important}
-@media (max-width:520px){.card{font-size:18px}.t2{font-size:15px;padding:4px 4px}.card .hd h2{font-size:28px!important}}
-.masb{display:flex;align-items:center;gap:8px;margin:2px 0 4px}.masi{width:136px;height:136px;flex:none;animation:masb 2.6s ease-in-out infinite;transform-origin:50% 100%;filter:drop-shadow(0 6px 8px rgba(0,0,0,.35))}@keyframes masb{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-6px) rotate(2deg)}}
-.bub{position:relative;flex:1;background:rgba(255,255,255,.16);border:2px solid rgba(255,255,255,.45);border-radius:20px;padding:10px 14px;font-weight:700;font-size:19px;line-height:1.35;color:#fff}.bub::before{content:"";position:absolute;left:-9px;top:50%;margin-top:-8px;width:14px;height:14px;background:rgba(255,255,255,.16);border-left:2px solid rgba(255,255,255,.45);border-bottom:2px solid rgba(255,255,255,.45);transform:rotate(45deg)}.bub b{display:block;font-size:15px;color:var(--i1);margin-bottom:2px}
-@media (prefers-reduced-motion:reduce){.masi{animation:none}}
-/* tooltip: vị trí tính bằng JS (px), mũi nhọn chỉ vào ô */
-.fs .tip{transform:none!important}.tip{left:0;top:0}.tip .tico{left:var(--ax,50%)!important}
-.tip::after{content:"";position:absolute;left:var(--ax,50%);bottom:-9px;width:16px;height:16px;margin-left:-8px;background:color-mix(in srgb,var(--d2) 82%,transparent);border-right:2px solid rgba(255,255,255,.4);border-bottom:2px solid rgba(255,255,255,.4);transform:rotate(45deg)}.tip.below::after{display:none}
-/* dấu báo trên ô: bỏ nền trắng, chỉ còn biểu tượng có viền bóng để nổi trên cỏ */
-.hs .bdg{background:none!important;box-shadow:none!important;border:0!important;color:#fff;text-shadow:0 0 2px rgba(20,16,50,.9),0 0 4px rgba(20,16,50,.7),0 2px 3px rgba(20,16,50,.55);filter:drop-shadow(0 2px 2px rgba(0,0,0,.45))}
-.hs .bdg.plus{position:absolute;left:90%;top:50%;transform:translate(-50%,-50%);width:clamp(15px,1.7vw,22px);height:clamp(15px,1.7vw,22px);min-width:0;border-radius:50%;background:#22C55E!important;border:2px solid #15803D!important;font-size:0;text-shadow:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}
-.hs .bdg.plus::before,.hs .bdg.plus::after{content:"";position:absolute;left:50%;top:50%;width:56%;height:2.5px;margin:-1.25px 0 0 -28%;border-radius:2px;background:#fff}.hs .bdg.plus::after{transform:rotate(90deg)}
-/* vùng bấm nhà / kho / ao cá */
-.bld{position:absolute;z-index:2;transform:translate(-50%,-50%);border-radius:28px;text-decoration:none;color:#fff;-webkit-tap-highlight-color:transparent;transition:background .15s,box-shadow .15s}
-.bld .bt{position:absolute;left:50%;top:0;transform:translate(-50%,-50%);display:inline-flex;align-items:center;gap:6px;white-space:nowrap;min-height:34px;padding:0 12px 0 8px;border-radius:99px;background:rgba(20,16,50,.62);border:2px solid rgba(255,255,255,.55);font:800 14px system-ui;box-shadow:0 4px 12px rgba(0,0,0,.3);transition:transform .15s,background .15s}.bld .bt i{font-style:normal;font-size:18px}
-.bld:hover,.bld:focus-visible{background:rgba(255,255,255,.16);box-shadow:0 0 0 4px rgba(255,255,255,.85);outline:none}.bld:hover .bt,.bld:focus-visible .bt{background:linear-gradient(135deg,var(--a),var(--b));transform:translate(-50%,-58%) scale(1.08)}
-@media (max-width:560px){.bld .bt{font-size:12px;min-height:30px}}
-/* hiệu ứng thu hoạch/trồng, vật nuôi, giờ */
-.fxs,.fxd{position:absolute;z-index:8;width:10px;height:10px;border-radius:50%;pointer-events:none}.fxd{background:#8A5A2E;width:8px;height:8px}.fxf{position:absolute;z-index:9;pointer-events:none}.fxf img,.fxf span{width:100%;height:100%;display:block;filter:drop-shadow(0 4px 4px rgba(0,0,0,.4))}
-.fxt{position:absolute;z-index:9;pointer-events:none;color:#fff;font:900 clamp(18px,2.4vw,28px) system-ui;text-shadow:0 2px 0 rgba(0,0,0,.45)}.fxr{position:absolute;z-index:8;width:70px;height:34px;border-radius:50%;border:4px solid rgba(255,255,255,.9);pointer-events:none}.fxp{position:absolute;z-index:9;font-size:clamp(22px,3vw,34px);pointer-events:none}
-.an{position:absolute;z-index:4;padding:0;border:0;background:none;cursor:pointer;transform-origin:50% 100%;transition-property:left,top,transform,opacity;transition-duration:2.4s,2.4s,2.4s,.5s;transition-timing-function:cubic-bezier(.4,.1,.3,1),cubic-bezier(.4,.1,.3,1),ease,ease;-webkit-tap-highlight-color:transparent}.an img{width:100%;height:100%;display:block;pointer-events:none}
-.an.in{transform:scale(.38);opacity:0;pointer-events:none;transition-duration:2.4s,2.4s,2.4s,.6s}.an:hover,.an:focus-visible{outline:none;filter:drop-shadow(0 0 6px #fff)}.an.walk img{animation:hop .5s ease-in-out 6}@keyframes hop{50%{transform:translateY(-5px)}}
-.zzz{position:absolute;z-index:5;pointer-events:none;display:none;transform:translate(-50%,0)}.zzz.on{display:block}.zzz i{position:absolute;font:900 20px system-ui;font-style:normal;color:#fff;text-shadow:0 0 6px #7C5CFF,0 2px 0 rgba(0,0,0,.4);opacity:0;animation:zz 2.6s ease-in-out infinite}.zzz i:nth-child(2){left:16px;animation-delay:.8s;font-size:26px}.zzz i:nth-child(3){left:34px;animation-delay:1.6s;font-size:20px}@keyframes zz{0%{transform:translateY(10px);opacity:0}30%{opacity:1}100%{transform:translateY(-34px);opacity:0}}
-@media (prefers-reduced-motion:reduce){.an,.an.in{transition-duration:.01s!important}.an.walk img,.zzz i{animation:none}.zzz i{opacity:1}}
-.phbar{display:grid;grid-template-columns:1fr 1fr;gap:8px}.card .phbar button{min-height:56px;border-radius:14px;font:800 18px system-ui;background:rgba(255,255,255,.14)!important;color:#fff!important;border:2px solid rgba(255,255,255,.4)!important;cursor:pointer}.card .phbar button.on{background:var(--a)!important;color:#1a1033!important;border-color:var(--a)!important}
-.ov{background:rgba(12,9,36,.34)!important}
-.card{overflow:visible!important;margin-top:48px;position:relative;max-height:calc(100vh - 100px)!important;max-height:calc(100dvh - 100px)!important;background:linear-gradient(165deg,color-mix(in srgb,var(--d1) 86%,transparent),color-mix(in srgb,var(--d2) 78%,transparent))!important;border:2px solid rgba(255,255,255,.38)!important;box-shadow:0 24px 60px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.25)!important}
-.card .cico{position:absolute;left:50%;top:-50px;transform:translateX(-50%);width:96px;height:96px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 28%,var(--i1),var(--i2));border:4px solid #fff;box-shadow:0 12px 26px rgba(0,0,0,.38),0 0 0 7px rgba(255,255,255,.16);z-index:3;font-size:46px;line-height:1}.card .cico img{width:68px;height:68px}
-.card .hd{display:block!important;background:none!important;padding:54px 20px 4px!important;text-align:center;border-radius:0!important}.card .hd::after{display:none!important}.card .hd h2{font-size:28px}.card .chs{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:8px}
-.card .cbody{border-radius:0 0 24px 24px}
-.tip{background:linear-gradient(165deg,color-mix(in srgb,var(--d1) 90%,transparent),color-mix(in srgb,var(--d2) 82%,transparent))!important;border:2px solid rgba(255,255,255,.4)!important;color:#fff;padding:30px 12px 12px!important;box-shadow:0 12px 28px rgba(0,0,0,.4)!important;text-align:center}
-.tip b{color:#fff;font-size:15px}.tip small{color:rgba(255,255,255,.9)!important}.tip small b{color:#FFE08A}.tip .bar{background:rgba(255,255,255,.2)!important;border-color:rgba(255,255,255,.3)!important;margin-top:2px}
-.tip .tico{position:absolute;left:50%;top:-24px;transform:translateX(-50%);width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 28%,var(--i1),var(--i2));border:3px solid #fff;box-shadow:0 6px 14px rgba(0,0,0,.35);font-size:26px;line-height:1}.tip .tico img{width:36px;height:36px}
-/* ===== bố cục mới: khu vườn bên trái, bảng điều khiển bên phải ===== */
-.wrap{max-width:1360px!important;padding:14px 16px 60px!important}
-.hdr{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:0 0 12px}.hdr h1{margin:0!important;font-size:clamp(22px,3.2vw,32px)!important}.hdr .sub{margin:2px 0 0;color:#5b5578;font-size:14px}
-.stats{display:flex;gap:8px;flex-wrap:wrap}.st1{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:99px;background:#fff;border:2px solid var(--line);font-weight:700;color:#4d4770}.st1 b{color:var(--ink);font-size:16px}
-.layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:16px;align-items:start}.main{min-width:0}.side{display:flex;flex-direction:column;gap:12px;position:sticky;top:60px}
-.pn{background:#fff;border:2px solid var(--line);border-radius:20px;padding:12px 14px;box-shadow:0 6px 18px rgba(40,30,90,.06)}.pn h2{margin:0 0 8px;font-size:15px;font-weight:900;color:var(--ink)}.hint2{margin:-4px 0 8px;font-size:12px;color:#7a7499}
-.pn .mis{display:flex!important;flex-direction:column;gap:8px;margin:0!important;grid-template-columns:none!important}.pn .mc{flex-direction:column!important;gap:4px!important;padding:10px 12px!important;border-radius:14px!important}.pn .mc .mh{font-size:15px;gap:8px}.pn .mc .mh i{font-size:24px}.pn .mc.dn .mh::after{content:"✓ Xong";margin-left:auto;font-size:11px;background:var(--b);color:#fff;border-radius:99px;padding:2px 9px}.pn .mc>small{font-size:12px;line-height:1.35}.pn .mc .acts2{margin:4px 0 0!important;gap:8px}.pn .mc .acts2>*{min-height:44px!important;font-size:13px!important}
-.evbar{display:grid!important;grid-template-columns:1fr 1fr;gap:8px;margin:0!important}.evbar button{min-height:44px!important}.evbar .end{grid-column:1/-1;background:#F2EEFA;border-color:#E3DDEF}
-.pn .lvbar{display:flex!important;gap:8px;margin:0!important}.pn .lvbar button{flex:1}
-.goto{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.goto a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:64px;border-radius:14px;background:#F6F2FF;border:2px solid var(--line);text-decoration:none;font-size:24px}.goto a b{font-size:12px;color:#4B3FA0}.goto a:hover,.goto a:focus-visible{border-color:var(--a);background:#fff;outline:none}
-.alert{margin:0 0 12px!important}.legend{margin:10px 2px 0!important;gap:8px 18px!important}.legend span{display:inline-flex;align-items:center;gap:7px;font-size:13px}.dot{display:inline-block;width:14px;height:14px;border-radius:50%}.dot.ripe{background:#FFE66B;box-shadow:0 0 0 4px rgba(255,230,107,.45)}.dot.gray{background:#B9B5AD;border:2px dashed #fff;box-shadow:0 0 0 1px #8F8B83}.dot.prog{background:linear-gradient(90deg,#34D399,#FFD24D)}
-.stage{border-radius:24px!important;box-shadow:0 14px 40px rgba(40,30,90,.18)}
-@media (max-width:1000px){.layout{grid-template-columns:1fr}.side{position:static}.pn .mis{display:grid!important;grid-template-columns:1fr;}}
-@media (prefers-reduced-motion:reduce){.hs.ripe::after{animation:none}.bar i{transition:none}}</style></head><body class="fs">
-<div class="fsw"><div class="stage" id="st"><div class="rain" id="rain"></div><img src="scene/scene-01-toan-canh-na.svg" alt="Khu vườn Học Vui"><div id="tip" class="tip" aria-hidden="true"></div></div></div>
-<div class="hud"><div class="hl"><a class="hb" href="preview-scene.html" aria-label="Quay lại">←</a><span class="st1">🌱 <b id="nSeed">3</b></span><span class="st1">⭐ <b id="nStar">12</b></span><span class="st1" id="chCrop">🧺 <b id="nCrop">47</b></span></div>
-<div class="hr"><button type="button" class="hb blink" id="bMis" aria-label="Nhiệm vụ hôm nay">📅<i class="bd" id="bdg">3</i></button><button type="button" class="hb" id="bMenu" aria-label="Menu">☰</button></div></div>
-<div class="alert" id="alert" role="alert"></div>
-<div class="legend"><span><i class="dot ripe"></i>Cây chín, bấm để thu hoạch</span><span><i class="dot gray"></i>Đất xám: chọn cây</span><span><i class="dot prog"></i>Rê để xem tiến độ</span></div>
-<div class="ov" id="mnov" role="dialog" aria-modal="true" aria-labelledby="mntitle"><div class="card" id="mncard"><div class="cico">🌱</div><div class="hd"><h2 id="mntitle">Chăm vườn hôm nay</h2><div class="chs"><span class="chip">Mỗi ngày một ít là đủ</span></div><button type="button" class="rd">🔊 Nghe đọc</button></div>
-<div class="cbody">
-<div class="tabs2" role="tablist"><button type="button" class="t2 on" data-t="0">📅 Nhiệm vụ</button><button type="button" class="t2" data-t="1">🎲 Sự kiện</button><button type="button" class="t2" data-t="2">🎨 Màu</button><button type="button" class="t2" data-t="3">🚪 Đi vào</button><button type="button" class="t2" data-t="4">🕒 Giờ</button></div>
-<section class="pnl on sec pn" data-p="0"><h3>📅 Nhiệm vụ hôm nay</h3><p class="hint2" style="margin:0 0 8px">Mỗi ngày làm mới. Nghỉ ngày nào cũng không mất gì.</p><div class="mis" id="mis"></div></section>
-<section class="pnl sec pn" data-p="1"><h3>🎲 Thử sự kiện bất ngờ</h3><div class="evbar"><button data-ev="pest">🐛 Sâu hại</button><button data-ev="storm">⛈️ Mưa gió</button><button data-ev="intruder">🦝 Sinh vật lạ</button><button data-ev="" class="end">Kết thúc</button></div></section>
-<section class="pnl sec pn" data-p="2"><h3>🎨 Màu popup theo cấp</h3><div class="lvbar" id="lvb"><button data-l="1">1</button><button data-l="2">2</button><button data-l="3">3</button><button data-l="4">4</button></div></section>
-<section class="pnl sec pn" data-p="4"><h3>🕒 Buổi trong ngày</h3><p class="hint2" style="margin:0 0 8px">Ban ngày vật nuôi được thả ra khắp vườn. Buổi tối chúng đi vào chuồng ngủ.</p><div class="phbar"><button data-ph="day">☀️ Sáng</button><button data-ph="dusk">🌇 Chiều</button><button data-ph="night">🌙 Tối</button><button data-ph="auto" class="on">🔄 Theo giờ máy</button></div></section>
-<section class="pnl sec pn" data-p="3"><h3>🚪 Đi vào trong</h3><div class="goto"><a href="preview-house.html">🏠<b>Trong nhà</b></a><a href="preview-barn.html">📦<b>Kho</b></a><a href="preview-pond.html">🐟<b>Ao cá</b></a></div><p style="margin:10px 0 0"><a href="preview-crop-mascots.html" style="color:#fff;font-weight:800">🐾 Xem linh vật cây trồng (duyệt)</a></p></section>
-<div class="acts"><button class="btn g" type="button" id="mncl">Đóng</button></div></div></div></div>
-<div class="ov" id="ov" role="dialog" aria-modal="true" aria-labelledby="ptitle"><div class="card" id="card"></div></div><div class="toast" id="toast" role="status"></div>
-<script>
-var CATS = ${JSON.stringify(CATS)}, CI = ${JSON.stringify(CROPINFO)}, PLOTS = ${JSON.stringify(plots)}, IDS = ${JSON.stringify(ids)}, ST = ["Hạt", "Mầm", "Cây con", "Sắp chín", "CHÍN"], W = 1280, H = 880;
-var LVS = [null, { n: "Cấp 1 · Mầm xanh", a: "#34D399", b: "#059669", bg: "#ECFDF5", d1: "#0B3D2E", d2: "#14675A", i1: "#FFF3B8", i2: "#FFB020" }, { n: "Cấp 2 · Trời xanh", a: "#38BDF8", b: "#2563EB", bg: "#EFF6FF", d1: "#0B2A5B", d2: "#1B4FB5", i1: "#FFE2B8", i2: "#FF8A3D" }, { n: "Cấp 3 · Tím mộng mơ", a: "#A78BFA", b: "#6D4AE0", bg: "#F5F3FF", d1: "#2A1763", d2: "#4C2FB0", i1: "#FFF7B8", i2: "#FFC83D" }, { n: "Cấp 4 · Nắng vàng", a: "#FBBF24", b: "#EA580C", bg: "#FFF7ED", d1: "#5A2A06", d2: "#A04A12", i1: "#DFF4FF", i2: "#38BDF8" }], LV = 3;
-try { LV = +localStorage.getItem("gardenLv") || 3; } catch (e) {}
-function applyLv(n){ LV = n; var t = LVS[n], r = document.documentElement.style; r.setProperty("--a", t.a); r.setProperty("--b", t.b); r.setProperty("--bg", t.bg); r.setProperty("--d1", t.d1); r.setProperty("--d2", t.d2); r.setProperty("--i1", t.i1); r.setProperty("--i2", t.i2); try { localStorage.setItem("gardenLv", n); } catch (e) {} document.querySelectorAll(".lvbar button").forEach(function(b){ var on = +b.dataset.l === n; b.classList.toggle("on", on); b.style.background = on ? "linear-gradient(135deg," + t.a + "," + t.b + ")" : ""; }); }
-var stage = document.getElementById("st"), tip = document.getElementById("tip"), ov = document.getElementById("ov"), card = document.getElementById("card"), toastEl = document.getElementById("toast"), cur = null, lastFocus = null;
-var SN = ["Hạt", "Mầm", "Cây con", "Sắp chín", "CHÍN"];
-function ths(n){ return [0, Math.ceil(n * .2), Math.ceil(n * .4), Math.ceil(n * .8), n]; }
-function stg(p){ if(!p.planted) return 0; var t = ths(p.need), k = 0; for(var i = 1; i < 5; i++) if(p.got >= t[i]) k = i; return k; }
-function icon(id, sz){ return CI[id].img ? "<img src='produce_" + id + ".svg' alt='' style='width:" + sz + "px;height:" + sz + "px'>" : "<span style='font-size:" + Math.round(sz * .8) + "px;line-height:1'>" + CI[id].ic + "</span>"; }
-function mins(n){ return Math.max(1, Math.ceil(n * 0.7)); }
-function reward(p){ var c = CI[p.crop]; return c.per[Math.min(4, stg(p))]; }
-function badge(p, b){ var e = b.querySelector(".bdg"); if(e) e.remove(); var t = !p.planted ? "+" : p.got >= p.need ? CI[p.crop].ic : ""; if(t){ e = document.createElement("span"); e.className = "bdg" + (t === "+" ? " plus" : ""); e.textContent = t; b.appendChild(e); } b.classList.toggle("ripe", p.planted && p.got >= p.need); b.setAttribute("aria-label", p.planted ? CI[p.crop].vi + (p.got >= p.need ? ": chín, bấm để thu hoạch" : ": còn " + (p.need - p.got) + " câu đúng nữa") : "Đất trống, bấm để chọn cây"); }
-PLOTS.forEach(function(p){ var b = document.createElement("button"); b.type = "button"; b.className = "hs"; b.style.left = (p.x / W * 100) + "%"; b.style.top = (p.y / H * 100) + "%"; p.el = b; badge(p, b); stage.appendChild(b);
-  b.addEventListener("pointerenter", function(){ showTip(p); }); b.addEventListener("pointerleave", hideTip); b.addEventListener("focus", function(){ showTip(p); }); b.addEventListener("blur", hideTip); b.addEventListener("click", function(){ hideTip(); openCard(p, b); }); });
-/* tooltip tự đặt vị trí: đo kích thước thật, dịch vào trong khung (không bị cắt ở mép trái/phải), lật xuống dưới khi sát mép trên, mũi nhọn và icon luôn chỉ đúng ô */
-function placeTip(p){
-  tip.classList.remove("below"); tip.style.visibility = "hidden"; tip.classList.add("on"); tip.style.left = "0px"; tip.style.top = "0px";
-  var sr = stage.getBoundingClientRect(), tw = tip.offsetWidth, th = tip.offsetHeight, px = p.x / W * sr.width, py = p.y / H * sr.height, m = 10, hudH = 64, vtop = Math.max(0, -sr.top) + hudH;
-  var left = Math.min(Math.max(px - tw / 2, m), Math.max(m, sr.width - tw - m)), top = py - 40 - th, below = false;
-  if(top < vtop - Math.min(0, sr.top) - 0 && sr.top + top < hudH){ top = py + 46; below = true; }
-  var vbot = innerHeight - sr.top - 54; if(top + th > vbot) top = Math.max(m, vbot - th);
-  tip.style.left = Math.round(left) + "px"; tip.style.top = Math.round(top) + "px"; tip.style.setProperty("--ax", Math.round(Math.min(Math.max(px - left, 30), tw - 30)) + "px");
-  tip.classList.toggle("below", below); tip.style.visibility = "";
+  /* dữ liệu mẫu cho trang vườn tương tác: SINH ở đây; phần mã/CSS/HTML của trang nằm trong learn/garden/ (viết tay: index.html, css/, garden-*.js; garden-layout.js là danh sách + thứ tự nạp) */
+  { const td = path.join(out, "..", "tree"); fs.mkdirSync(td, { recursive: true });
+    for (const k of SPRITE_KINDS) { if (TREE_PNG.has(k)) continue; let g = String(bigTree(0, 0, 1, k)); const i = g.indexOf('<path d="M-12 0C'), j = g.indexOf('<g transform="scale(1)">'); if (i < 0 || j < 0) throw new Error("bigTree đổi cấu trúc, sửa bộ xuất cây rời"); g = g.slice(0, j + 24) + g.slice(i);
+      fs.writeFileSync(path.join(td, `tree_${k}.svg`), `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-100 -180 200 205" width="200" height="205" role="img" aria-label="Cây ${k}">${defs()}${g}</svg>`); } }
+  fs.writeFileSync(path.join(out, "..", "garden-data.js"), "/* SINH TỰ ĐỘNG bởi scripts/learn/gen-scene-art.js, đừng sửa tay. */\nvar CATS = " + JSON.stringify(CATS) + ", CI = " + JSON.stringify(CROPINFO) + ", PLOTS = " + JSON.stringify(plots.map(p => Object.assign({}, p, { x: p.x + WORLD.MXL, y: p.y + WORLD.MT }))) + ", IDS = " + JSON.stringify(ids) + ", TREES = " + JSON.stringify(TREES.map(t => Object.assign({}, t, { x: t.x + WORLD.MXL, y: t.y + WORLD.MT }))) + ", ST = [\"Hạt\", \"Mầm\", \"Cây con\", \"Sắp chín\", \"CHÍN\"], W = " + WORLD.WW + ", H = " + WORLD.HH + ", OFX = " + WORLD.MXL + ", OFY = " + WORLD.MT + ", GX = " + (-WORLD.MXL) + ", GY = " + (-WORLD.MT) + ", GW = " + WORLD.WW + ", GH = " + WORLD.HH + ";\nvar SLOTS = " + JSON.stringify(SLOTS.map(s => Object.assign({}, s, { x: s.x + WORLD.MXL, y: s.y + WORLD.MT }))) + ", DOOR = [" + (STABLE[0] + WORLD.MXL) + ", " + (STABLE[1] + WORLD.MT) + "];\n");
 }
-function showTip(p){
-  var c = p.planted ? CI[p.crop] : null, left = p.need - p.got, pct = p.planted ? p.got / p.need * 100 : 0;
-  tip.innerHTML = "<div class='tico'>" + (p.planted ? icon(p.crop, 34) : "🌱") + "</div>" + (p.planted ? "<b>" + c.vi + (left ? "" : " · đã chín") + (p.hurt ? " " + HURT[p.hurt].ic : "") + "</b><div class='bar" + (left ? "" : " full") + "'><i style='width:0'></i></div><small>" + (left ? "Còn <b style=\\"display:inline\\">" + left + "</b> câu đúng nữa (khoảng " + mins(left) + " phút học) · " + p.got + "/" + p.need : "Chín rồi! Bấm để thu hoạch") + "</small>" : "<b>Đất trống</b><small>Bấm để chọn cây muốn trồng</small>");
-  placeTip(p);
-  var i = tip.querySelector(".bar i"); if(i) requestAnimationFrame(function(){ requestAnimationFrame(function(){ i.style.width = pct + "%"; }); });
-}
-function hideTip(){ tip.classList.remove("on"); }
-function toast(t){ toastEl.textContent = t; toastEl.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(function(){ toastEl.classList.remove("on"); }, 2200); }
-function closeCard(){ stopSpeak(); if(cur && cur.bk){ cur.planted = true; cur.crop = cur.bk.crop; cur.got = cur.bk.got; cur.need = cur.bk.need; cur.bk = null; badge(cur, cur.el); } ov.classList.remove("on"); if(lastFocus) lastFocus.focus(); }
-function openCard(p, btn){
-  cur = p; lastFocus = btn; var h;
-  if(!p.planted){
-    h = "<div class='hd'><div class='pi' style='font-size:44px'>🟫</div><div><h2 id='ptitle'>Đất trống</h2><span class='chip'>" + LVS[LV].n + "</span><span class='chip'>Trồng gì cũng được</span></div></div><!--B--><div class='sec'><p style='margin:0'>Chọn <b>loại cây</b> rồi chọn <b>giống</b> bé muốn trồng ở đúng ô này (đổi giống thì tiến độ cây cũ bắt đầu lại). Mỗi lần trồng tốn <b>1 hạt giống</b> (kiếm được sau mỗi lượt học).</p><div class='tabs' role='tablist'>" + Object.keys(CATS).map(function(k, n){ return "<button type='button' role='tab' class='tab" + (n === 0 ? " on" : "") + "' data-cat='" + k + "'>" + CATS[k].vi + "</button>"; }).join("") + "</div><p class='sm' id='cnote'></p><div class='grid' id='pg'></div></div><div class='acts'><button class='btn g' type='button' id='cl'>Để sau</button></div>";
-  } else {
-    var c = CI[p.crop], left = p.need - p.got, ripe = left <= 0, sg = stg(p);
-    var tt = ths(p.need), stepper = SN.map(function(n, k){ var done = k < sg, now = k === sg; return "<li class='" + (done ? "dn" : now ? "nw" : "") + "'><i>" + ["🌰", "🌱", "🌿", "🌸", "🧺"][k] + "</i><b>" + n + "</b><span>" + (tt[k] ? "từ " + tt[k] + " câu đúng" : "mới gieo") + "</span></li>"; }).join("");
-    h = "<div class='hd'><div class='pi'>" + icon(p.crop, 76) + "</div><div><h2 id='ptitle'>" + c.vi + "</h2><span class='chip'>" + LVS[LV].n + "</span><span class='chip'>" + CATS[c.cat].vi + "</span><span class='chip'>" + c.subj + "</span><span class='chip'>" + SN[sg] + "</span></div></div><!--B-->" + masB(p, ripe) +
-      (p.hurt ? "<div class='sec warn'>" + HURT[p.hurt].ic + " " + HURT[p.hurt].short + " Cây <b>tạm dừng lớn</b>, không hề hỏng. Bé cứu vườn bằng vài bài vui nhé!</div>" : "") +
-      "<div class='sec'><div class='row'><span>" + (ripe ? "Đã chín!" : "Còn " + left + " câu đúng · khoảng " + mins(left) + " phút học") + "</span><span>" + p.got + "/" + p.need + "</span></div><div class='bar" + (ripe ? " full" : "") + "'><i id='pb' style='width:0'></i></div></div>" +
-      "<div class='tabs2' role='tablist'><button type='button' class='t2 on' data-t='0'>🌱 Giai đoạn</button><button type='button' class='t2' data-t='1'>📚 Cần học</button><button type='button' class='t2' data-t='2'>💧 Chăm sóc</button></div>" +
-      "<div class='pnl on sec' data-p='0'><ol class='stp'>" + stepper + "</ol><p class='sm' style='margin-top:10px'>" + (ripe ? "Thu hoạch được <b>" + reward(p) + " " + c.vi.toLowerCase() + "</b>. " : "Khi chín sẽ thu được khoảng <b>" + c.per[4] + "</b>. ") + "<b>Sau khi thu hoạch:</b> " + (c.cat === "lau" ? "cây vẫn đứng ở vị trí này, mùa sau ra quả tiếp." : "ô trở lại đất trống, bé trồng cây nào cũng được.") + "</p></div>" +
-      "<div class='pnl sec' data-p='1'><p style='margin:0 0 8px'><b>Kỹ năng " + c.subj + ": " + c.skill + "</b></p><div class='chips'>" + c.learn.map(function(t){ return "<span>" + t + "</span>"; }).join("") + "</div></div>" +
-      "<div class='pnl sec' data-p='2'><ul class='care' style='margin:0'>" + c.care.map(function(t){ return "<li>" + t + "</li>"; }).join("") + "</ul><p class='sm' style='margin-top:10px'>" + c.tip + " Cây lớn nhờ bé làm đúng bài, không có đồng hồ đếm ngược và không bao giờ héo.</p></div>" +
-      "<div class='acts'><button class='btn g' type='button' id='cl'>Đóng</button><button class='btn g' type='button' id='sw'>Đổi giống</button>" + (ripe ? "" : "<a class='btn go' id='go' href='../../../learn/index.html?subj=" + c.sk + "&grade=" + c.g + "&lang=vi'>Học ngay</a>") + "<button class='btn' type='button' id='hv'" + (ripe ? "" : " disabled") + ">" + (ripe ? "Thu hoạch" : "Chưa chín") + "</button></div>";
-  }
-  var pr = skin(h).split("<!--B-->"); card.innerHTML = pr[0] + "<div class='cbody'>" + (pr[1] || "") + "</div>"; ov.classList.add("on"); bindTabs(card);
-  var pb = card.querySelector("#pb"); if(pb) requestAnimationFrame(function(){ requestAnimationFrame(function(){ pb.style.width = (p.got / p.need * 100) + "%"; }); });
-  card.querySelector("#cl").onclick = closeCard; (card.querySelector("#hv") || card.querySelector(".tab") || card.querySelector("#cl")).focus();
-  var hv = card.querySelector("#hv"); if(hv) hv.onclick = function(){ var c = CI[p.crop], n = reward(p); fxHarvest(p, n, p.crop);
-    if(c.cat === "lau"){ p.got = 0; toast("+" + n + " " + c.ic + " " + c.vi + " vào kho · cây vẫn ở đó, mùa sau ra quả tiếp"); }
-    else { p.planted = false; p.crop = null; p.got = 0; toast("+" + n + " " + c.ic + " " + c.vi + " vào kho · ô trống lại, trồng cây khác tùy ý"); }
-    badge(p, p.el); closeCard(); };
-  var sw = card.querySelector("#sw"); if(sw) sw.onclick = function(){ p.bk = { crop: p.crop, got: p.got, need: p.need }; p.planted = false; openCard(p, lastFocus); };
-  function fillPick(cat){ var pg = card.querySelector("#pg"); if(!pg) return; card.querySelector("#cnote").textContent = CATS[cat].note;
-    card.querySelectorAll(".tab").forEach(function(t){ t.classList.toggle("on", t.getAttribute("data-cat") === cat); });
-    pg.innerHTML = IDS.filter(function(id){ return CI[id].cat === cat; }).map(function(id){ return "<button class='pick' type='button' data-id='" + id + "'>" + icon(id, 44) + CI[id].vi + "<span style='font-weight:600;color:#7a7499;font-size:11px'>" + CI[id].subj + " · " + CI[id].need + " câu</span></button>"; }).join("");
-    pg.querySelectorAll(".pick").forEach(function(b){ b.onclick = function(){ var id = b.getAttribute("data-id"); p.bk = null; p.planted = true; p.crop = id; p.need = CI[id].need; p.got = 0; badge(p, p.el); fxPlant(p); toast("Đã trồng " + CI[id].ic + " " + CI[id].vi + " (−1 hạt giống)"); closeCard(); }; }); }
-  card.querySelectorAll(".tab").forEach(function(t){ t.onclick = function(){ fillPick(t.getAttribute("data-cat")); }; }); fillPick("ngan");
-}
-var DAYS = new Date().toISOString().slice(0, 10);
-function getDaily(){ try { var d = JSON.parse(localStorage.getItem("gardenDaily") || "null"); if(d && d.day === DAYS) return d; } catch (e) {} return { day: DAYS, water: 0, fert: 0, fish: 0 }; }
-function saveDaily(d){ try { localStorage.setItem("gardenDaily", JSON.stringify(d)); } catch (e) {} }
-var MIS = [{ k: "water", ic: "💧", t: "Tưới nước", d: "Chơi 1 bài Toán vui", sk: "toan", r: "Cả vườn lớn thêm 1 bước" }, { k: "fert", ic: "🧪", t: "Bón phân", d: "Ôn 1 bài Tiếng Việt", sk: "tviet", r: "3 cây lớn thêm 2 bước" }, { k: "fish", ic: "🐟", t: "Cho cá ăn", d: "Chơi 1 bài Tiếng Anh", sk: "tanh", r: "Mở thức ăn ở ao cá, cá vui" }];
-function renderMis(){ var d = getDaily(), el = document.getElementById("mis");
-  el.innerHTML = MIS.map(function(m){ var done = d[m.k]; return "<div class='mc" + (done ? " dn" : "") + "'><div class='mh'><i>" + m.ic + "</i>" + m.t + "</div><small><b>" + m.d + "</b><br>Thưởng: " + m.r + "</small><div class='acts2'>" + (done ? "" : "<a class='go2' href='../../../learn/index.html?subj=" + m.sk + "&grade=2&lang=vi&mission=" + m.k + "'>Làm nhiệm vụ</a><button class='sm2' type='button' data-m='" + m.k + "'>Mô phỏng xong</button>") + "</div></div>"; }).join("");
-  el.querySelectorAll(".sm2").forEach(function(b){ b.onclick = function(){ doneMis(b.dataset.m); }; });
-  var left = MIS.filter(function(m){ return !d[m.k]; }).length, bg = document.getElementById("bdg"), bm = document.getElementById("bMis"); if(bg){ bg.textContent = left; bg.style.display = left ? "block" : "none"; } if(bm) bm.classList.toggle("blink", left > 0); }
-function doneMis(k){ var d = getDaily(); d[k] = 1; saveDaily(d);
-  if(k === "water"){ PLOTS.forEach(function(p){ if(p.planted && !p.hurt && p.got < p.need){ p.got++; badge(p, p.el); } }); toast("💧 Đã tưới nước: cả vườn lớn thêm 1 bước!"); }
-  if(k === "fert"){ var n = 0; PLOTS.forEach(function(p){ if(n < 3 && p.planted && !p.hurt && p.got < p.need - 1){ p.got = Math.min(p.need, p.got + 2); badge(p, p.el); n++; } }); toast("🧪 Đã bón phân: 3 cây lớn thêm 2 bước!"); }
-  if(k === "fish") toast("🐟 Có thức ăn cho cá rồi! Vào ao cá để cho cá ăn nhé.");
-  renderMis(); }
-function skin(h){ return h.replace(/<div class='hd'[^>]*><div class='pi'([^>]*)>([^]*?)<[/]div><div>(<h2[^]*?<[/]h2>)([^]*?)<[/]div><[/]div><!--B-->/, function(m, a, ic, h2, chips){ return "<div class='cico'" + a + ">" + ic + "</div><div class='hd'>" + h2 + "<div class='chs'>" + chips + "</div><button type='button' class='rd'>🔊 Nghe đọc</button></div><!--B-->"; }); }
-function masB(p, ripe){ var c = CI[p.crop]; if(!c || !c.mas) return ""; return "<div class='masb'><img class='masi' src='mascot_" + p.crop + "_l" + LV + (ripe ? "_cheer" : "") + ".svg' alt='" + c.mn + "'><div class='bub'><b>" + c.mn + "</b>" + (ripe ? c.say[1] : c.say[0]) + "</div></div>"; }
-function bindTabs(root){ root.querySelectorAll(".t2").forEach(function(b){ b.onclick = function(){ var k = b.getAttribute("data-t"); root.querySelectorAll(".t2").forEach(function(x){ x.classList.toggle("on", x === b); }); root.querySelectorAll(".pnl").forEach(function(x){ x.classList.toggle("on", x.getAttribute("data-p") === k); }); }; }); var r = root.querySelector(".rd"); if(r) r.onclick = function(){ speakCard(root); }; }
-function speakCard(root){ var ss = window.speechSynthesis; if(!ss){ toast("Máy này chưa đọc to được"); return; } if(ss.speaking){ ss.cancel(); return; } var t = [], h = root.querySelector(".hd h2"); if(h) t.push(h.textContent);
-  root.querySelectorAll(".sec, .cbody > p").forEach(function(e){ if(e.classList.contains("pnl") && !e.classList.contains("on")) return; var c = e.cloneNode(true); c.querySelectorAll("button,a,.bar,.stp i").forEach(function(x){ x.remove(); }); var x = c.textContent.trim(); if(x) t.push(x); });
-  var u = new SpeechSynthesisUtterance(t.join(". ")); u.lang = "vi-VN"; u.rate = .88; var v = ss.getVoices().filter(function(x){ return /^vi/i.test(x.lang); })[0]; if(v) u.voice = v; ss.speak(u); }
-function stopSpeak(){ try { speechSynthesis.cancel(); } catch (e) {} }
-var HURT = { pest: { ic: "🐛", short: "Sâu hại đang ăn lá." }, storm: { ic: "⛈️", short: "Mưa gió làm cây nghiêng ngả." }, intruder: { ic: "🦝", short: "Sinh vật lạ làm ô này rối lên." } };
-var EV = { pest: { ic: "🐛", t: "Sâu hại đến vườn!", d: "Mấy chú sâu đang ăn lá ở vài ô trồng. Cây không hỏng, chỉ tạm dừng lớn.", need: 3, how: "Chơi 3 bài vui cùng bạn để bắt hết sâu", who: "Mochi", sk: "toan" }, storm: { ic: "⛈️", t: "Mưa gió kéo đến!", d: "Gió to làm cây nghiêng ngả. Cây chỉ cần bé giúp dựng mái che.", need: 5, how: "Chơi 5 bài vui để dựng mái che và buộc cây", who: "Mầm", sk: "tviet" }, intruder: { ic: "🦝", t: "Có sinh vật lạ vào vườn!", d: "Một bạn gấu mèo tò mò vào xem vườn và làm vài ô rối lên.", need: 4, how: "Chơi 4 bài vui để làm bạn và dẫn bạn ra ngoài", who: "Bibi", sk: "tanh" } };
-var CHEER = ["Vui quá! Vườn khỏe thêm một chút rồi.", "Bé chơi rất giỏi, cảm ơn bé nhiều!", "Cứ từ từ thôi, mình cùng chơi mà.", "Tuyệt vời! Các bạn trong vườn cổ vũ bé đó.", "Gần xong rồi, thêm một bài nữa thôi!"];
-var evCur = null, evGot = 0, alertEl = document.getElementById("alert");
-function clearEv(){ evCur = null; evGot = 0; alertEl.classList.remove("on"); stage.classList.remove("storm"); PLOTS.forEach(function(p){ p.hurt = null; }); stage.querySelectorAll(".pest,.intr").forEach(function(e){ e.remove(); }); }
-function evBanner(){ var e = EV[evCur]; alertEl.innerHTML = "<span class='ai'>" + e.ic + "</span><div class='grow'><b>" + e.t + "</b><span>" + e.d + " <u>" + e.how + "</u> (không có gì bị mất).</span><div class='mini'><i style='width:" + (evGot / e.need * 100) + "%'></i></div></div><button type='button' id='rs'>Cứu vườn " + evGot + "/" + e.need + "</button>"; alertEl.classList.add("on"); document.getElementById("rs").onclick = openRescue; }
-function startEv(k){ clearEv(); if(!k) return; evCur = k; evGot = 0; var pl = PLOTS.filter(function(p){ return p.planted; });
-  if(k === "storm"){ stage.classList.add("storm"); var r = document.getElementById("rain"); if(!r.children.length) for(var q = 0; q < 46; q++){ var d = document.createElement("i"); d.style.left = (q * 2.3) + "%"; d.style.animationDelay = (-(q % 9) * .08) + "s"; d.style.animationDuration = (.55 + (q % 5) * .08) + "s"; r.appendChild(d); } pl.forEach(function(p){ if(p.got < p.need) p.hurt = "storm"; }); }
-  else { var pick = pl.filter(function(p, i){ return i % (k === "pest" ? 6 : 14) === 2; }).slice(0, k === "pest" ? 8 : 3); pick.forEach(function(p){ p.hurt = k; var e = document.createElement("span"); e.className = k === "pest" ? "pest" : "intr"; e.textContent = HURT[k].ic; p.el.appendChild(e); }); }
-  evBanner(); }
-function openRescue(){ var e = EV[evCur]; if(!e) return; var t = LVS[LV];
-  var h = "<div class='hd' style='background:linear-gradient(135deg,#FB923C,#EA580C)'><div class='pi' style='font-size:44px'>" + e.ic + "</div><div><h2 id='ptitle'>" + e.t + "</h2><span class='chip'>Cứu vườn cùng " + e.who + "</span></div></div><!--B-->" +
-    "<div class='sec' style='border-color:#FDBA74'><p style='margin:0'><b>" + e.who + " nói:</b> “Đừng lo! Cây vẫn an toàn, chỉ đang chờ bé giúp. Mình cùng làm vài câu nhé!”</p></div>" +
-    "<div class='sec' style='border-color:#FDBA74'><div class='row'><span>" + e.how + "</span><span id='rg'>" + evGot + "/" + e.need + "</span></div><div class='bar'><i id='rb' style='width:" + (evGot / e.need * 100) + "%'></i></div><p class='sm' id='rm' style='margin:8px 0 0'>" + (evGot ? CHEER[(evGot - 1) % CHEER.length] : "Chơi xong bài nào, vườn khỏe thêm bài đó. Không chấm điểm, không cần đúng hết.") + "</p></div>" +
-    "<p class='sm'><b>Không bị phạt:</b> nếu bé chưa học ngay, cây chỉ tạm dừng lớn, không hỏng và không mất gì. Cứu xong bé nhận <b>1 hạt giống</b> và huy hiệu <b>Người bảo vệ vườn 🛡️</b>.</p>" +
-    "<div class='acts'><button class='btn g' type='button' id='cl'>Để sau</button><button class='btn g' type='button' id='sim'>Chơi 1 bài (mô phỏng)</button><a class='btn go' href='../../../learn/index.html?subj=" + e.sk + "&grade=2&lang=vi&rescue=" + evCur + "'>Học ngay</a></div>";
-  var pr = skin(h).split("<!--B-->"); card.innerHTML = pr[0] + "<div class='cbody'>" + pr[1] + "</div>"; ov.classList.add("on"); bindTabs(card); card.querySelector("#cl").onclick = closeCard;
-  card.querySelector("#sim").onclick = function(){ evGot++; if(evGot >= e.need){ toast("🎉 Cứu vườn thành công! +1 🌱 · huy hiệu Người bảo vệ vườn 🛡️"); clearEv(); closeCard(); return; } card.querySelector("#rg").textContent = evGot + "/" + e.need; card.querySelector("#rb").style.width = (evGot / e.need * 100) + "%"; card.querySelector("#rm").textContent = CHEER[(evGot - 1) % CHEER.length]; evBanner(); }; }
-/* vùng bấm lên 3 vật lớn: nhà, kho, ao cá → vào trang con (đặt dưới các ô trồng, ô trồng vẫn bấm được) */
-/* ===================== HIỆU ỨNG THU HOẠCH / TRỒNG (mọi cây, kể cả cây lâu năm) ===================== */
-function bumpNum(id, d){ var e = document.getElementById(id); if(!e) return; e.textContent = Math.max(0, (+e.textContent || 0) + d); var c = e.parentNode; if(c && c.animate) c.animate([{ transform: "scale(1)" }, { transform: "scale(1.25)" }, { transform: "scale(1)" }], { duration: 420 }); }
-function mkFx(cls, html, x, y){ var e = document.createElement("div"); e.className = cls; e.innerHTML = html; e.style.left = x + "px"; e.style.top = y + "px"; stage.appendChild(e); return e; }
-function fxHarvest(p, n, crop){ var r = stage.getBoundingClientRect(), x = p.x / W * r.width, y = p.y / H * r.height, tx = 1092 / W * r.width, ty = 505 / H * r.height, sz = Math.max(34, r.width * .045);
-  if(p.el && p.el.animate) p.el.animate([{ transform: "translate(-50%,-50%) scale(1)" }, { transform: "translate(-50%,-50%) scale(1.18,.86)" }, { transform: "translate(-50%,-50%) scale(.94,1.1)" }, { transform: "translate(-50%,-50%) scale(1)" }], { duration: 480 });
-  var cols = ["#FFD24D", "#FF8FA3", "#7CE0B4", "#8FB6FF"];
-  for(var k = 0; k < 9; k++){ var sp = mkFx("fxs", "", x, y - 10); sp.style.background = cols[k % 4]; var a = k / 9 * Math.PI * 2; sp.animate([{ transform: "translate(-50%,-50%) scale(1)", opacity: 1 }, { transform: "translate(" + (Math.cos(a) * 52 - 5) + "px," + (Math.sin(a) * 52 - 5) + "px) scale(.2)", opacity: 0 }], { duration: 650, easing: "ease-out" }).onfinish = (function(e){ return function(){ e.remove(); }; })(sp); }
-  var f = mkFx("fxf", icon(crop, sz), x, y - 10); f.style.width = sz + "px"; f.style.height = sz + "px";
-  var an = f.animate([{ transform: "translate(-50%,-50%) scale(.5)", opacity: 0 }, { transform: "translate(-50%,-140%) scale(1.25)", opacity: 1, offset: .22 }, { transform: "translate(calc(-50% + " + ((tx - x) * .6) + "px),calc(-50% + " + ((ty - y) * .6 - 70) + "px)) scale(1)", opacity: 1, offset: .62 }, { transform: "translate(calc(-50% + " + (tx - x) + "px),calc(-50% + " + (ty - y) + "px)) scale(.4)", opacity: .9 }], { duration: 1000, easing: "cubic-bezier(.3,.7,.3,1)" });
-  an.onfinish = function(){ f.remove(); bumpNum("nCrop", n); var t = mkFx("fxt", "+" + n, tx, ty - 14); t.animate([{ transform: "translate(-50%,0)", opacity: 1 }, { transform: "translate(-50%,-34px)", opacity: 0 }], { duration: 800 }).onfinish = function(){ t.remove(); }; }; }
-function fxPlant(p){ var r = stage.getBoundingClientRect(), x = p.x / W * r.width, y = p.y / H * r.height;
-  for(var k = 0; k < 7; k++){ var d = mkFx("fxd", "", x, y); var a = (k / 7) * Math.PI * 2; d.animate([{ transform: "translate(-50%,-50%) scale(1)", opacity: .9 }, { transform: "translate(" + (Math.cos(a) * 34 - 5) + "px," + (Math.sin(a) * 16 - 14) + "px) scale(.3)", opacity: 0 }], { duration: 600, easing: "ease-out" }).onfinish = (function(e){ return function(){ e.remove(); }; })(d); }
-  var rg = mkFx("fxr", "", x, y); rg.animate([{ transform: "translate(-50%,-50%) scale(.3)", opacity: .9 }, { transform: "translate(-50%,-50%) scale(1.6)", opacity: 0 }], { duration: 700, easing: "ease-out" }).onfinish = function(){ rg.remove(); };
-  var sp = mkFx("fxp", "🌱", x, y); sp.animate([{ transform: "translate(-50%,-30%) scale(0)", opacity: 0 }, { transform: "translate(-50%,-90%) scale(1.3)", opacity: 1, offset: .5 }, { transform: "translate(-50%,-110%) scale(1)", opacity: 0 }], { duration: 900 }).onfinish = function(){ sp.remove(); };
-  bumpNum("nSeed", -1); }
-
-/* ===================== VẬT NUÔI: ban ngày thả ra đúng chỗ, tối vào chuồng; mỗi vị trí đổi được con vật cùng cỡ ===================== */
-var AVB = { cow: [-56, -76, 112, 88], pig: [-44, -58, 96, 68], sheep: [-38, -56, 88, 66], chicken: [-18, -40, 46, 50], rabbit: [-18, -46, 40, 54], duck: [-20, -34, 46, 42] }, ANAME = { cow: "Bò", pig: "Heo", sheep: "Cừu", chicken: "Gà", rabbit: "Thỏ", duck: "Vịt" }, ACLS = { cow: "L", pig: "L", sheep: "L", chicken: "S", rabbit: "S", duck: "S" }, ALOCK = { sheep: 2, pig: 3, duck: 2 }, ASC = { cow: .85, pig: .8, sheep: .85 };
-var SLOTS = ${JSON.stringify(SLOTS)}, DOOR = [150, 800], savedA = {}; try { savedA = JSON.parse(localStorage.getItem("gardenAnimals") || "{}"); } catch (e) {}
-function aPos(s, fx, fy){ var vb = AVB[s.t], sc = ASC[s.t] || 1; return [(fx + vb[0] * sc) / W * 100, (fy + vb[1] * sc) / H * 100, vb[2] * sc / W * 100, vb[3] * sc / H * 100]; }
-function aLayout(s){ var q = aPos(s, s.x, s.y), d = aPos(s, DOOR[0], DOOR[1]); s.pos = q; s.dpos = d; var e = s.el; e.style.width = q[2] + "%"; e.style.height = q[3] + "%"; e.firstChild.src = "animal_" + s.t + ".svg"; e.firstChild.style.transform = s.f ? "scaleX(-1)" : ""; e.setAttribute("aria-label", ANAME[s.t] + ": bấm để đổi con vật"); e.style.left = (s.inside ? d[0] : q[0]) + "%"; e.style.top = (s.inside ? d[1] : q[1]) + "%"; }
-SLOTS.forEach(function(s, i){ s.id = "a" + i; s.t = savedA[s.id] || s.k; s.inside = false; var b = document.createElement("button"); b.type = "button"; b.className = "an"; b.innerHTML = "<img alt='' draggable='false'>"; s.el = b; aLayout(s); b.onclick = function(){ openAnimal(s); }; stage.appendChild(b); });
-function aMove(s, inside, instant, i){ var e = s.el; s.inside = inside; var q = s.pos, d = s.dpos, dl = instant ? 0 : (i % 14) * .16;
-  if(instant){ e.style.transition = "none"; } else { e.style.transition = ""; e.style.transitionDelay = dl + "s," + dl + "s," + dl + "s," + (dl + (inside ? 1.9 : 0)) + "s"; e.classList.add("walk"); setTimeout(function(){ e.classList.remove("walk"); }, 3200 + dl * 1000); }
-  e.classList.toggle("in", inside); e.style.left = (inside ? d[0] : q[0]) + "%"; e.style.top = (inside ? d[1] : q[1]) + "%"; if(instant){ void e.offsetWidth; e.style.transition = ""; } }
-var zzz = document.createElement("div"); zzz.className = "zzz"; zzz.style.left = (DOOR[0] / W * 100) + "%"; zzz.style.top = ((DOOR[1] - 112) / H * 100) + "%"; zzz.innerHTML = "<i>z</i><i>Z</i><i>z</i>"; stage.appendChild(zzz);
-var PHASE = "auto", curPhase = null, PIMG = { day: "01-toan-canh", dusk: "05-hoang-hon", night: "06-ban-dem" };
-function phaseNow(){ var h = new Date().getHours(); return h >= 6 && h < 17 ? "day" : h >= 17 && h < 19 ? "dusk" : "night"; }
-function setPhase(ph, instant){ PHASE = ph; var real = ph === "auto" ? phaseNow() : ph; document.querySelectorAll(".phbar button").forEach(function(b){ b.classList.toggle("on", b.dataset.ph === ph); }); if(real === curPhase) return; curPhase = real;
-  stage.querySelector("img").src = "scene/scene-" + PIMG[real] + "-na.svg"; var inside = real === "night"; SLOTS.forEach(function(s, i){ aMove(s, inside, instant, i); }); zzz.classList.toggle("on", inside); }
-function showCardH(h){ var pr = skin(h).split("<!--B-->"); card.innerHTML = pr[0] + "<div class='cbody'>" + (pr[1] || "") + "</div>"; ov.classList.add("on"); bindTabs(card); var c = card.querySelector("#cl"); if(c){ c.onclick = closeCard; c.focus(); } }
-function openAnimal(s){ if(s.inside) return; var cls = ACLS[s.t], list = Object.keys(ACLS).filter(function(k){ return ACLS[k] === cls; }); cur = null;
-  var h = "<div class='hd'><div class='pi'><img src='animal_" + s.t + ".svg' alt='' style='width:74px;height:74px'></div><div><h2 id='ptitle'>" + ANAME[s.t] + "</h2><span class='chip'>Vị trí vật nuôi</span><span class='chip'>" + (cls === "L" ? "Cỡ to" : "Cỡ nhỏ") + "</span></div></div><!--B-->" +
-    "<div class='sec'><p style='margin:0'>Ban ngày bạn này được thả ở đúng chỗ này, buổi tối đi vào chuồng ngủ. Bé có thể <b>đổi sang con vật khác</b> cùng cỡ cho vị trí này.</p></div><div class='sec'><div class='grid' id='ag'>" +
-    list.map(function(k){ var lk = ALOCK[k] && LV < ALOCK[k]; return "<button class='pick' type='button' data-k='" + k + "'" + (lk ? " disabled" : "") + (k === s.t ? " style='outline:3px solid var(--a)'" : "") + "><img src='animal_" + k + ".svg' alt='' style='width:56px;height:56px'>" + ANAME[k] + "<span>" + (lk ? "🔒 Mở ở cấp " + ALOCK[k] : k === s.t ? "Đang ở đây" : "Bấm để đổi") + "</span></button>"; }).join("") + "</div></div>" +
-    "<div class='acts'><button class='btn g' type='button' id='cl'>Đóng</button></div>";
-  showCardH(h);
-  card.querySelectorAll("#ag .pick").forEach(function(b){ b.onclick = function(){ var k = b.getAttribute("data-k"); if(k === s.t){ closeCard(); return; } s.t = k; savedA[s.id] = k; try { localStorage.setItem("gardenAnimals", JSON.stringify(savedA)); } catch (e) {} aLayout(s); if(s.el.animate) s.el.animate([{ transform: "scale(.4)" }, { transform: "scale(1.2)" }, { transform: "scale(1)" }], { duration: 450 }); toast("Đã đổi thành " + ANAME[k] + " 🐾"); closeCard(); }; }); }
-function openStable(){ cur = null; var out = SLOTS.filter(function(s){ return !s.inside; }).length, h = "<div class='hd'><div class='pi' style='font-size:44px'>🐄</div><div><h2 id='ptitle'>Chuồng thú</h2><span class='chip'>" + (curPhase === "night" ? "Đang ngủ 😴" : "Đang ở ngoài vườn") + "</span><span class='chip'>" + SLOTS.length + " bạn</span></div></div><!--B-->" +
-    "<div class='sec'><p style='margin:0'><b>Ban ngày:</b> các bạn được thả ra khắp vườn.<br><b>Buổi tối:</b> các bạn đi vào chuồng ngủ, trong chuồng sáng đèn ấm.</p></div><div class='sec'><p style='margin:0'>Hiện có <b>" + out + "</b> bạn đang ở ngoài vườn. Bấm vào từng bạn để đổi con vật khác cho vị trí đó.</p></div><div class='acts'><button class='btn g' type='button' id='cl'>Đóng</button></div>"; showCardH(h); }
-(function(){ var a = document.createElement("button"); a.type = "button"; a.className = "bld"; a.dataset.n = "Chuồng thú"; a.setAttribute("aria-label", "Chuồng thú: bấm để xem"); a.style.cssText = "left:" + (150 / H * 0 + 150 / W * 100) + "%;top:" + (766 / H * 100) + "%;width:" + (190 / W * 100) + "%;height:" + (150 / H * 100) + "%;border:0;background:none;padding:0;cursor:pointer"; a.innerHTML = "<span class='bt'><i>🐄</i>Chuồng thú</span>"; a.onclick = openStable; stage.appendChild(a); })();
-document.querySelectorAll(".phbar button").forEach(function(b){ b.onclick = function(){ setPhase(b.dataset.ph); closeMn(); }; });
-setPhase("auto", true); setInterval(function(){ if(PHASE === "auto") setPhase("auto"); }, 60000);
-var BLD = [{ n: "Trong nhà", ic: "🏠", u: "preview-house.html", x: 620, y: 330, w: 300, h: 270 }, { n: "Kho nông sản", ic: "📦", u: "preview-barn.html", x: 1092, y: 505, w: 240, h: 210 }, { n: "Ao cá", ic: "🐟", u: "preview-pond.html", x: 330, y: 308, w: 290, h: 150 }];
-BLD.forEach(function(d){ var a = document.createElement("a"); a.className = "bld"; a.href = d.u; a.setAttribute("aria-label", d.n + ": bấm để vào"); a.dataset.n = d.n;
-  a.style.cssText = "left:" + (d.x / W * 100) + "%;top:" + (d.y / H * 100) + "%;width:" + (d.w / W * 100) + "%;height:" + (d.h / H * 100) + "%";
-  a.innerHTML = "<span class='bt'><i>" + d.ic + "</i>" + d.n + "</span>"; stage.appendChild(a); });
-renderMis();
-document.querySelectorAll(".evbar button").forEach(function(b){ b.onclick = function(){ closeMn(); startEv(b.dataset.ev); }; });
-document.querySelectorAll(".lvbar button").forEach(function(b){ b.onclick = function(){ applyLv(+b.dataset.l); }; }); applyLv(LV);
-var mnov = document.getElementById("mnov");
-function openMn(){ mnov.classList.add("on"); hideTip(); var c = document.getElementById("mncl"); if(c) c.focus(); }
-function closeMn(){ stopSpeak(); mnov.classList.remove("on"); }
-bindTabs(document.getElementById("mncard"));
-document.getElementById("bMis").onclick = openMn; document.getElementById("bMenu").onclick = openMn; document.getElementById("mncl").onclick = closeMn;
-mnov.addEventListener("click", function(e){ if(e.target === mnov) closeMn(); });
-ov.addEventListener("click", function(e){ if(e.target === ov) closeCard(); });
-document.addEventListener("keydown", function(e){ if(e.key === "Escape"){ if(ov.classList.contains("on")) closeCard(); else if(mnov.classList.contains("on")) closeMn(); } });
-</script></body></html>
-`;
-  fs.writeFileSync(path.join(out, "..", "preview-garden-play.html"), html2);
-}
-console.log("✓ đã sinh " + Object.keys(files).length + " ảnh cảnh + preview-scene.html + preview-garden-play.html");
+console.log("✓ đã sinh " + Object.keys(files).length + " ảnh cảnh + preview-scene.html + garden-data.js (trang vườn: learn/garden/)");

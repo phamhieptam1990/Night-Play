@@ -1,0 +1,6 @@
+/* Vùng bấm nhà / kho / ao cá */
+/* vùng bấm nhà / kho / ao cá */
+.bld{position:absolute;z-index:var(--z-buildings);transform:translate(-50%,-50%);border-radius:28px;text-decoration:none;color:#fff;-webkit-tap-highlight-color:transparent;transition:background .15s,box-shadow .15s}
+.bld .bt{position:absolute;left:50%;top:0;transform:translate(-50%,-50%);display:inline-flex;align-items:center;gap:6px;white-space:nowrap;min-height:34px;padding:0 12px 0 8px;border-radius:99px;background:rgba(20,16,50,.62);border:2px solid rgba(255,255,255,.55);font:800 14px system-ui;box-shadow:0 4px 12px rgba(0,0,0,.3);transition:transform .15s,background .15s}.bld .bt i{font-style:normal;font-size:18px}
+.bld:hover,.bld:focus-visible{background:rgba(255,255,255,.16);box-shadow:0 0 0 4px rgba(255,255,255,.85);outline:none}.bld:hover .bt,.bld:focus-visible .bt{background:linear-gradient(135deg,var(--a),var(--b));transform:translate(-50%,-58%) scale(1.08)}
+@media (max-width:560px){.bld .bt{font-size:12px;min-height:30px}}

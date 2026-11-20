@@ -1,0 +1,9 @@
+/* Tầng .gl: cây ảnh lắc theo gió, lá bay, bóng đổ, nút thu phóng */
+.gl{position:absolute;inset:0;pointer-events:none}.gl-shadow{z-index:var(--z-shadow)}.gl-sprites{z-index:var(--z-sprites)}.gl-weather{z-index:var(--z-weather)}
+.gl img.tr{position:absolute;display:block;pointer-events:none;transform-origin:50% 88%;animation:treeSway var(--sd,5.5s) ease-in-out var(--sl,0s) infinite alternate}@keyframes treeSway{from{transform:rotate(calc(var(--sa,1deg) * -1))}to{transform:rotate(var(--sa,1deg))}}
+.stage{--sa:1.2deg}.stage[data-wind="0"]{--sa:0deg}.stage[data-wind="2"]{--sa:2.6deg}.stage[data-wind="3"]{--sa:4.6deg}
+.lf{position:absolute;left:-4%;width:11px;height:6px;border-radius:0 100% 0 100%;background:#6FBF3F;opacity:0;animation:leafDrift var(--ld,12s) linear var(--ldl,0s) infinite}@keyframes leafDrift{0%{transform:translate(0,0) rotate(0);opacity:0}8%{opacity:.9}50%{transform:translate(55vw,calc(var(--ly,0px) + 30px)) rotate(180deg)}92%{opacity:.9}100%{transform:translate(110vw,var(--ly,0px)) rotate(420deg);opacity:0}}.stage[data-wind="0"] .lf{display:none}
+.sh{position:absolute;border-radius:50%;background:radial-gradient(closest-side,rgba(24,56,24,.62),rgba(24,56,24,0));transform:translate(calc(-50% + var(--sdx,.08) * 100%),-50%) scaleX(var(--ssx,1));opacity:var(--so,.34)}.stage[data-ph=dusk]{--sdx:-.32;--ssx:1.6;--so:.36}.stage[data-ph=night]{--sdx:-.12;--so:.14}
+@media (prefers-reduced-motion:reduce){.gl img.tr,.lf{animation:none}}.stage[data-ph=dusk] .tr{filter:sepia(.4) saturate(1.25) brightness(.92)}.stage[data-ph=night] .tr{filter:brightness(.38) saturate(.7) hue-rotate(12deg)}
+.zoom{position:fixed;right:12px;bottom:max(14px,env(safe-area-inset-bottom));z-index:29;display:flex;flex-direction:column;gap:8px}.zoom .hb{width:46px;height:46px;font-size:22px}
+@media (prefers-reduced-motion:reduce){.hb.blink{animation:none}}

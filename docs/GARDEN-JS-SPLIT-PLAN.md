@@ -1,46 +1,56 @@
-# Kế hoạch tách JS của Vườn Học Vui (bàn giao cho phiên sau)
+# Cấu trúc trang Vườn Học Vui (đã tách xong)
 
-**Yêu cầu của chủ site:** tách JS theo **từng chức năng, mỗi chức năng một tệp** cho dễ quản lý và sửa; **một tệp điều phối (engine)** là đủ.
+Trang vườn là trang VIẾT TAY ở `learn/garden/index.html` (URL `/learn/garden/`). Tệp cũ `shared/art/garden/preview-garden-play.html` chỉ còn là trang chuyển hướng để liên kết cũ vẫn chạy.
 
-**Hiện trạng:** toàn bộ JS của trang vườn tương tác nằm trong MỘT khối `<script>` (khoảng 43.000 ký tự, 162 dòng, 81 câu lệnh cấp cao nhất) bên trong chuỗi mẫu của [scripts/learn/gen-scene-art.js](../scripts/learn/gen-scene-art.js) (từ dòng `<script>` khoảng 669 đến `</script></body></html>` khoảng 830, biến `html2`). Trang sinh ra: `shared/art/garden/preview-garden-play.html`.
+## Tệp và việc của từng tệp
+- `learn/garden/garden-layout.js`: **danh sách duy nhất** gồm `LAYERS` (tầng z), `STYLES` (CSS), `SCRIPTS` (JS), `START` (hàm khởi động), `ART` (đường dẫn thư mục ảnh `shared/art/garden/`). Trang gọi `GardenLayout.writeStyles()` ở `<head>` và `GardenLayout.writeScripts()` cuối `<body>`.
+- `learn/garden/css/NN-ten.css`: CSS theo chức năng. **Thứ tự số = thứ tự nạp**, tệp sau ghi đè tệp trước. Ba lớp popup (04, 05, 07, 10, 14) còn tách nhau vì xen kẽ với CSS khác; gộp lại cần kiểm bằng Chrome.
+- `learn/garden/garden-*.js`: mỗi chức năng một tệp (định nghĩa + hàm `init...`); `garden-engine.js` chỉ gọi `GardenLayout.start()`.
+- `shared/art/garden/garden-data.js`: SINH bởi `scripts/learn/gen-scene-art.js` (CATS, CI, PLOTS, SLOTS...). Bộ sinh không còn sinh HTML/CSS/JS của trang vườn.
+- Đường dẫn ảnh trong JS luôn viết `GardenLayout.ART + "tên"`, không viết đường dẫn tương đối trần.
 
-**Chưa làm gì trong code.** Đã commit mọi tính năng trước đó và đã push (`f1b4102`).
+## Chỉnh vị trí các vùng (không cần đoán số)
+- Vị trí chỉnh tay nằm một chỗ: `learn/garden/garden-places.js` (`BLD` nhà/kho/ao, `GIFT` hộp quà). Ô trồng, vật nuôi, cửa chuồng là dữ liệu SINH (`garden-data.js`).
+- Mở `learn/garden/?edit`: kéo vùng để dời, kéo ◢ để đổi cỡ, kéo 🎁; bấm "Sao chép" rồi dán đè khối trong `garden-places.js`. Mã: `garden-edit.js`, `css/17-edit.css`.
 
-## Cách làm (không dùng module, dùng script thường chung phạm vi toàn cục)
-1. Mỗi tệp chỉ chứa **định nghĩa** (function, var). Việc chạy lúc tải trang (tạo ô, gắn sự kiện, khởi động) gói vào hàm `init...()`.
-2. `learn/garden/garden-engine.js` là tệp **duy nhất** gọi: `initLevels`... theo đúng thứ tự (xem dưới), chạy khi DOM sẵn sàng.
-3. Bộ sinh `gen-scene-art.js`: (a) ghi `shared/art/garden/garden-data.js` chứa dữ liệu mẫu (dòng `var CATS = ... W = 1280, H = 880;` và `var SLOTS = ..., DOOR = [150, 800];`), (b) thay khối `<script>...</script>` bằng các thẻ `<script src>` theo thứ tự tải.
-4. Các tệp JS tách ra là **mã viết tay** (không sinh); chỉ `garden-data.js` là sinh.
+## Quy hoạch 3 khu — vườn GỌN, chỉ rộng bằng khu giữa (toàn cảnh ~1555 × 1040, khai ở `LANDS` trong scripts/learn/garden-land.js)
+- **Khu chăn nuôi** = giữa vườn: nhà, ao, 3 chuồng, kho, cối xay, chuồng thú (cửa chuồng `STABLE` trong gen-scene-art.js, cũng là `DOOR` của trang), vật nuôi.
+- **Khu hoa màu** = MỘT ruộng 4×3 đất trống (12 ô) ở góc trái phía trên, gần nhà, bé tự trồng.
+- **Vườn cây lâu năm** = ba dải: hàng ngoài cùng bên trái (5 mảnh, 20 ô), hàng trong bên trái ao (4 mảnh, 16 ô), và mép phải (7 mảnh, 28 ô).
+- **Chuồng** (`PENS` trong gen-scene-art.js): chuồng bò gần kho; chuồng gà vịt và heo cừu xa nhà, ở phía dưới.
+- Khung cảnh: `MXL/MXR/MT/MB` trong garden-world.js (chỉ còn núi phía trên, vài đèn/thông ở góc; không có đường làng, suối, ruộng phía nam).
+- Màn hình mở ra vừa khít (`viewHomeScale`); cỡ vùng bấm `.hs` và tỉ lệ khung tính bằng JS từ `W,H` (garden-plots.js).
+- Mảnh `legacy:true` chỉ vẽ ở cảnh cấp 1-3 (cảnh nhỏ cũ).
 
-## Bản đồ tệp (theo chỉ số câu lệnh khi phân tích bằng esprima; dùng `esprima` có sẵn ở thư mục tạm, hoặc tự cắt tay)
-| Tệp (`learn/garden/`) | Nội dung | Gói vào init |
-|---|---|---|
-| `garden-data.js` (SINH, `shared/art/garden/`) | CATS, CI, PLOTS, IDS, ST, W, H, SLOTS, DOOR | không |
-| `garden-core.js` | `stage, tip, ov, card, toastEl, cur, lastFocus`, `toast`, `bumpNum`, `mkFx` | không |
-| `garden-levels.js` | `LVS, LV`, `applyLv` | `initLevels` (nạp LV từ localStorage, gắn nút cấp, `applyLv(LV)`) |
-| `garden-plots.js` | `SN, ths, stg, icon, mins, reward, badge` | `initPlots` (tạo vùng bấm các ô) |
-| `garden-tooltip.js` | `placeTip, showTip, hideTip` | không |
-| `garden-popup.js` | `closeCard, skin, bindTabs, speakCard, stopSpeak, showCardH` | không |
-| `garden-plant-card.js` | `openCard, masB` | không |
-| `garden-missions.js` | `DAYS, getDaily, saveDaily, MIS, renderMis, doneMis` | `initMissions` (`renderMis()`) |
-| `garden-events.js` | `HURT, EV, CHEER, clearEv, evBanner, startEv, openRescue` | `initEvents` (nút sự kiện) |
-| `garden-fx.js` | `fxHarvest, fxPlant` | không |
-| `garden-animals.js` | `AVB, ANAME, ACLS, ALOCK, ASC, savedA, aPos, aLayout, aMove, openAnimal, openStable`, `zzz` | `initAnimals` (nạp savedA, tạo vật nuôi, zzz, nút chuồng) |
-| `garden-time.js` | `PHASE, curPhase, PIMG, phaseNow, setPhase` | `initTime` (nút giờ, `setPhase("auto", true)`, interval) |
-| `garden-buildings.js` | `BLD` | `initBuildings` (tạo vùng bấm nhà/kho/ao) |
-| `garden-menu.js` | `mnov, openMn, closeMn` | `initMenu` (nút 📅 ☰, đóng bằng nền/Esc) |
-| `garden-engine.js` | điều phối | gọi theo thứ tự |
+## Cây lâu năm: thứ tự trước/sau
+Mọi cây trong vườn cây là ảnh rời (`garden-trees.js`, lớp `sprites`), xếp theo độ sâu y nên cây ở hàng gần người nhìn luôn đè lên cây hàng sau. Mango dùng PNG vẽ tay (`tree/tree_mango.png`); các giống khác do `gen-scene-art.js` xuất `tree/tree_<giống>.svg` từ `bigTree` (không bóng, bóng do `garden-shadow.js` vẽ). Thêm giống mới có PNG: bỏ tên giống vào `TREE_PNG` và `TSPR`.
 
-## Thứ tự tải thẻ `<script src>`
-data → core → levels → plots → tooltip → popup → plant-card → missions → events → fx → animals → time → buildings → menu → engine.
+## Đất trống cho bé tự trồng
+- `scripts/learn/garden-land.js`: mảnh đất khai `{ empty: true }` (vd `land("lua", [380, 1420], 4, 3, { empty: true })`) = mọi ô là đất cày trống, bé bấm từng ô để trồng. Số ô = cols × rows (12–24 ô). Hiện 5 mảnh hàng cuối (62 ô). Muốn thêm/bớt mảnh: sửa `LANDS`, rồi `node scripts/learn/gen-scene-art.js`.
+- `garden-crops.js` + `css/18-crops.css`: vẽ cây lớn dần (`crop_<giống>_s0..s3.svg`, chín = `crop_<giống>.svg`, sinh bởi `gen-crops-art.js`) và NHỚ trên máy (`gardenFarm` trong localStorage). Chỉ áp cho ô không vẽ sẵn cây trong ảnh cảnh.
 
-## Thứ tự khởi động trong engine (giữ đúng như bản gốc để không đổi lớp xếp chồng)
-`initPlots → initAnimals → initTime → initBuildings → initMissions → initEvents → initLevels → initMenu`.
+## Thêm một tính năng
+1. Tạo `garden-<ten>.js` (và `css/NN-<ten>.css` nếu cần).
+2. Thêm tên vào `SCRIPTS`/`STYLES` (và hàm `init<Ten>` vào `START`) trong `garden-layout.js`.
+3. Cần HTML mới thì sửa tay `learn/garden/index.html`.
+4. Nếu cần dữ liệu mới thì thêm vào `gen-scene-art.js` rồi chạy `node scripts/learn/gen-scene-art.js`.
 
-## Kiểm thử sau khi tách (đã có sẵn trong thư mục tạm của phiên trước, viết lại nếu mất)
-Chạy trang bằng Chrome và kiểm: không lỗi trang; 55+ vùng ô; 44 vật nuôi; thu hoạch và trồng (cả cây lâu năm) tăng/giảm số ở góc; đổi giờ thì vật nuôi vào/ra chuồng; mở popup cây (3 tab), menu (5 tab), cứu vườn; bấm nhà/kho/ao; tooltip trong khung. Rồi `node scripts/cozygame/check.js --learn`.
+## Kiểm thử
+Mở `learn/garden/index.html` bằng Chrome: không lỗi trang; 266 ô, 61 vật nuôi, 4 vùng nhà/kho/ao; bấm ô mở popup, ☰ mở menu, bấm vật nuôi mở thẻ; sau đó `node scripts/learn/check-garden-art.js`.
 
-## Lưu ý
-- Hàm gọi nhau lúc chạy nên không cần thứ tự giữa các tệp, **trừ** các `var` khởi tạo phụ thuộc nhau lúc tải (xem bảng).
-- Có biểu thức chính quy bị mất dấu `\` nếu viết lại trong chuỗi mẫu; sau khi chuyển sang tệp JS thật thì dùng bình thường.
-- Quy tắc dự án: không push khi chưa được yêu cầu; kiểm tra bằng Chrome thật trước khi báo xong.
+## Ba trang con (Trong nhà, Kho, Ao cá) — `scripts/learn/gen-subpages-art.js`
+- Giao diện như trang vườn: trải kín bề ngang, nút ← góc trên-trái về `learn/garden/`, tên + chọn cấp ở thanh trên (không còn thanh "Duyệt", không chữ giải thích). Sinh ra `shared/art/garden/preview-house|barn|pond.html`.
+- **Linh vật trò chuyện** dùng chung (`MC` trong `SHARE_JS`): ảnh thử lần lượt các đường dẫn rồi mới dùng biểu tượng.
+  - Kho: bấm thùng nông sản → linh vật của nông sản đó nói chuyện. Tranh vẽ đặt ở `shared/art/garden/kho/mascot_<id>.svg` (id: carrot tomato strawberry wheat corn sunflower mango orange apple pear); chưa có thì dùng `mascot_<id>_l<cấp>.svg` (6 cây hoa màu), chưa có nữa thì biểu tượng. Lời thoại ở `MS` trong bộ sinh.
+  - Ao: nút linh vật góc dưới-trái → "Cùng làm bài" (Toán / Tiếng Việt / Tiếng Anh, 3 bài, có gợi ý, làm xong mở thức ăn cho cá). Tranh đặt ở `shared/art/garden/ao/mascot.svg` (tạm 🐸). Ngân hàng câu hỏi ở `QB`.
+
+### Bộ linh vật Kho + Ao (phong cách Pop, CHỜ CHỦ SITE DUYỆT)
+- Sinh bởi `scripts/learn/gen-kho-mascots.js`: 10 con trái cây/rau củ (`kho/mascot_<id>.svg`: Cà Rốt, Cà Chua, Dâu Dâu, Bông Lúa, Bắp Bắp, Hướng Dương, Xoài Ngọt, Cam Cam, Táo Đỏ, Lê Lê) + Sen Sen cho ao (`ao/mascot.svg`). Theo `docs/MASCOT-ART-RULES.md` (Pop): viewBox 256, không viền đen, mắt to 2 điểm sáng, má hồng, màu qua biến CSS, nhún + chớp mắt (`npa-*`); chữ ký khuôn mặt ghi trong `<desc>`; đạo cụ nhận diện môn: khối + = Toán, sách = Tiếng Việt, cờ = Tiếng Anh, vở + bút chì = Sen Sen.
+- Trang duyệt: `shared/art/garden/preview-kho-mascots.html` (cỡ 200 / 96 / 40px). Mới có skin Mặc định; 4 skin trả phí + 8 theme làm sau khi duyệt dáng.
+
+## Giữ chân bé: phiêu lưu + mục tiêu + linh vật nhớ bé (kho chung `learn/farm.js`)
+- `learn/farm.js` (`window.Farm`, lưu `learn:farm` trên máy): hạt giống, nông sản trong kho theo giống, mục tiêu hôm nay, tiến độ phiêu lưu theo môn, trí nhớ về bé (lỗi hay sai, số ngày liền, lần chơi gần nhất), trang phục. Sao vẫn là `learn:stars`.
+- `learn/adventure.js` (`window.Adventure`): 3 chương × 3 môn (Cà Rốt / Bông Lúa / Dâu Dâu); mỗi lượt 5 câu = 5 chặng; 5/5 đúng thì qua chương. Thêm chương = thêm mục vào `S` trong tệp.
+- Game học (`learn/index.html`): dải chương + chặng, thanh mục tiêu 🎁 hôm nay, cây của môn lớn lên theo câu đúng (`crop_<giống>_s0..s4`), linh vật chào theo trí nhớ, màn kết thúc có đoạn chuyện + thưởng (nông sản vào kho, hạt giống, quà mục tiêu, trang phục mới).
+- Vườn: HUD đọc `Farm`; trồng tốn 1 hạt (hết thì báo học bài), thu hoạch cộng vào kho (`garden-farm.js`, hook trong `garden-core/fx/plant-card`).
+- Trang Kho đọc số thật; linh vật nhắc số trong kho + chuỗi ngày. Trang Trong nhà có tủ đồ (đổi trang phục theo số sao); trang phục hiện trên linh vật trong game học.

@@ -1,0 +1,9 @@
+/* Chế độ chỉnh bố cục (?edit): viền các vùng bấm, tay cầm đổi cỡ, khối mã ở góc dưới */
+body.editing .bld{outline:3px dashed #fff;outline-offset:-3px;background:rgba(124,92,255,.28);cursor:move;touch-action:none}
+body.editing .bld::after{content:attr(data-n);position:absolute;left:6px;top:4px;font:800 13px system-ui;color:#fff;background:rgba(20,16,50,.7);padding:2px 8px;border-radius:99px}
+body.editing .gift{cursor:move;touch-action:none;outline:3px dashed #fff;border-radius:50%}
+.edh{position:absolute;right:-14px;bottom:-14px;width:36px;height:36px;display:grid;place-items:center;border-radius:50%;background:#7C5CFF;color:#fff;font-style:normal;font-size:18px;cursor:nwse-resize;touch-action:none;border:2px solid #fff;z-index:2}
+.edbar{position:fixed;left:8px;bottom:8px;z-index:200;max-width:min(520px,calc(100vw - 16px));background:rgba(20,16,50,.92);color:#fff;border-radius:16px;padding:10px 12px;font:600 14px/1.4 system-ui;box-shadow:0 8px 30px rgba(0,0,0,.4)}
+.edbar small{opacity:.75}.edbar button{margin-left:6px;min-height:40px;padding:0 14px;border:0;border-radius:99px;background:#FFC83D;color:#1d1a33;font:800 14px system-ui;cursor:pointer}
+.edcode{margin:8px 0 0;max-height:34vh;overflow:auto;padding:8px 10px;border-radius:10px;background:rgba(255,255,255,.1);font:12px/1.45 ui-monospace,Menlo,monospace;white-space:pre;user-select:text;-webkit-user-select:text}
+body.editing .bld.edskip{pointer-events:none;opacity:.5}body.editing .bld.edskip::after{content:none}

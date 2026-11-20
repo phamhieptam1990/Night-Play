@@ -1,0 +1,17 @@
+/* Chữ to rõ cho bé, tab, nút nghe đọc, linh vật, bong bóng */
+/* ===== chữ TO RÕ cho bé + tab + nút nghe đọc ===== */
+.card{width:min(580px,100%)!important;font-size:19px}.card .hd h2{font-size:34px!important}.card .chip{font-size:16px!important;padding:5px 14px!important}
+.card p,.card li,.card .row,.card .hint2{font-size:19px!important;line-height:1.5!important}.card p.sm{font-size:17px!important}.card h3{font-size:21px!important}.card .chips span{font-size:17px!important;padding:8px 14px!important}
+.card .stp li{font-size:14px!important}.card .stp b{font-size:16px!important}.card .stp i{width:36px!important;height:36px!important;font-size:17px!important}
+.card .btn{min-height:56px!important;font-size:19px!important}.card .bar{height:18px!important}
+.card .tab{min-height:54px!important;font-size:17px!important}.card .pick{font-size:18px!important}.card .pick span{font-size:14px!important}
+.card .mc .mh{font-size:19px!important}.card .mc small{font-size:16px!important}.card .mc .acts2>*{min-height:50px!important;font-size:16px!important}
+.card .evbar button{font-size:18px!important;min-height:56px!important}.card .lvbar button{min-height:56px!important;font-size:20px!important}.card .goto a b{font-size:16px!important}.card .goto a{min-height:84px!important;font-size:34px!important}
+.tabs2{display:flex;gap:8px;margin:12px 0 0;flex-wrap:wrap}.t2{flex:1 1 0;min-height:54px;padding:6px 10px;border-radius:16px;border:2px solid rgba(255,255,255,.4);background:rgba(255,255,255,.12);color:#fff;font:800 17px system-ui;cursor:pointer;white-space:nowrap}.t2.on{background:var(--a);color:#1a1033;border-color:var(--a)}.t2:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.pnl{display:none}.pnl.on{display:block}
+.rd{margin-top:12px;min-height:52px;padding:0 20px;border-radius:99px;border:2px solid rgba(255,255,255,.75);background:rgba(255,255,255,.18);color:#fff;font:800 18px system-ui;cursor:pointer}.rd:hover,.rd:focus-visible{background:rgba(255,255,255,.32);outline:none}
+.tip{width:clamp(220px,28%,320px)!important}.tip b{font-size:19px!important}.tip small{font-size:16px!important}
+@media (max-width:520px){.card{font-size:18px}.t2{font-size:15px;padding:4px 4px}.card .hd h2{font-size:28px!important}}
+.masb{display:flex;align-items:center;gap:8px;margin:2px 0 4px}.masi{width:136px;height:136px;flex:none;animation:masb 2.6s ease-in-out infinite;transform-origin:50% 100%;filter:drop-shadow(0 6px 8px rgba(0,0,0,.35))}@keyframes masb{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-6px) rotate(2deg)}}
+.bub{position:relative;flex:1;background:rgba(255,255,255,.16);border:2px solid rgba(255,255,255,.45);border-radius:20px;padding:10px 14px;font-weight:700;font-size:19px;line-height:1.35;color:#fff}.bub::before{content:"";position:absolute;left:-9px;top:50%;margin-top:-8px;width:14px;height:14px;background:rgba(255,255,255,.16);border-left:2px solid rgba(255,255,255,.45);border-bottom:2px solid rgba(255,255,255,.45);transform:rotate(45deg)}.bub b{display:block;font-size:15px;color:var(--i1);margin-bottom:2px}
+@media (prefers-reduced-motion:reduce){.masi{animation:none}}

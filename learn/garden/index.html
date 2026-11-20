@@ -1,0 +1,24 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Vườn Học Vui</title>
+<!-- Trang vườn VIẾT TAY (không sinh). CSS và JS KHÔNG khai ở đây: danh sách + thứ tự nằm ở garden-layout.js (STYLES, SCRIPTS, START).
+     Thêm tính năng = thêm css/NN-ten.css và/hoặc garden-ten.js rồi thêm tên vào garden-layout.js. Dữ liệu cây/ô: shared/art/garden/garden-data.js (SINH bởi scripts/learn/gen-scene-art.js). -->
+<script src="garden-layout.js"></script>
+<script>GardenLayout.writeStyles()</script>
+</head><body class="fs">
+<div class="fsw" id="fsw"><div class="stage" id="st"><img src="../../shared/art/garden/scene/scene-01-toan-canh-na.svg" alt="Khu vườn Học Vui"><div id="tip" class="tip" aria-hidden="true"></div></div></div>
+<div class="hud"><div class="hl"><a class="hb" href="../../shared/art/garden/preview-scene.html" aria-label="Quay lại">←</a><span class="st1">🌱 <b id="nSeed">3</b></span><span class="st1">⭐ <b id="nStar">12</b></span><span class="st1" id="chCrop">🧺 <b id="nCrop">47</b></span><span class="st1" id="chStreak" title="Số ngày liền nhau bé ghé vườn">🔥 <b id="nStreak">0</b></span></div>
+<div class="hr"><button type="button" class="hb blink" id="bMis" aria-label="Nhiệm vụ hôm nay">📅<i class="bd" id="bdg">3</i></button><button type="button" class="hb" id="bMenu" aria-label="Menu">☰</button></div></div>
+<div class="zoom" aria-label="Thu phóng khu vườn"><button type="button" class="hb" id="zIn" aria-label="Phóng to">＋</button><button type="button" class="hb" id="zOut" aria-label="Thu nhỏ">－</button><button type="button" class="hb" id="zHome" aria-label="Về khu vườn">🏡</button></div>
+<div class="alert" id="alert" role="alert"></div>
+<div class="legend"><span><i class="dot ripe"></i>Cây chín, bấm để thu hoạch</span><span><i class="dot gray"></i>Đất xám: chọn cây</span><span><i class="dot prog"></i>Rê để xem tiến độ</span></div>
+<div class="ov" id="mnov" role="dialog" aria-modal="true" aria-labelledby="mntitle"><div class="card" id="mncard"><div class="cico">🌱</div><div class="hd"><h2 id="mntitle">Chăm vườn hôm nay</h2><div class="chs"><span class="chip">Mỗi ngày một ít là đủ</span></div><button type="button" class="rd" aria-label="Đóng" title="Đóng">✕</button></div>
+<div class="cbody">
+<div class="tabs2" role="tablist"><button type="button" class="t2 on" data-t="0">📅 Nhiệm vụ</button><button type="button" class="t2" data-t="1">🎲 Sự kiện</button><button type="button" class="t2" data-t="2">🎨 Màu</button><button type="button" class="t2" data-t="3">🚪 Đi vào</button><button type="button" class="t2" data-t="4">🕒 Giờ</button></div>
+<section class="pnl on sec pn" data-p="0"><h3>📅 Nhiệm vụ hôm nay</h3><p class="hint2" style="margin:0 0 8px">Mỗi ngày làm mới. Nghỉ ngày nào cũng không mất gì.</p><div class="mis" id="mis"></div></section>
+<section class="pnl sec pn" data-p="1"><h3>🎲 Thử sự kiện bất ngờ</h3><div class="evbar"><button data-ev="pest">🐛 Sâu hại</button><button data-ev="storm">⛈️ Mưa gió</button><button data-ev="intruder">🦝 Sinh vật lạ</button><button data-ev="" class="end">Kết thúc</button></div></section>
+<section class="pnl sec pn" data-p="2"><h3>🎨 Màu popup theo cấp</h3><div class="lvbar" id="lvb"><button data-l="1">1</button><button data-l="2">2</button><button data-l="3">3</button><button data-l="4">4</button></div></section>
+<section class="pnl sec pn" data-p="4"><h3>🕒 Buổi trong ngày</h3><p class="hint2" style="margin:0 0 8px">Ban ngày vật nuôi được thả ra khắp vườn. Buổi tối chúng đi vào chuồng ngủ.</p><div class="phbar"><button data-ph="day">☀️ Sáng</button><button data-ph="dusk">🌇 Chiều</button><button data-ph="night">🌙 Tối</button><button data-ph="auto" class="on">🔄 Theo giờ máy</button></div></section>
+<section class="pnl sec pn" data-p="3"><h3>🚪 Đi vào trong</h3><div class="goto"><a href="../../shared/art/garden/preview-house.html">🏠<b>Trong nhà</b></a><a href="../../shared/art/garden/preview-barn.html">📦<b>Kho</b></a><a href="../../shared/art/garden/preview-pond.html">🐟<b>Ao cá</b></a></div><p style="margin:10px 0 0"><a href="../../shared/art/garden/preview-crop-mascots.html" style="color:#fff;font-weight:800">🐾 Xem linh vật cây trồng (duyệt)</a></p></section>
+<div class="acts"><button class="btn g" type="button" id="mncl">Đóng</button></div></div></div></div>
+<div class="ov" id="ov" role="dialog" aria-modal="true" aria-labelledby="ptitle"><div class="card" id="card"></div></div><div class="toast" id="toast" role="status"></div>
+<script>GardenLayout.writeScripts()</script>
+</body></html>
