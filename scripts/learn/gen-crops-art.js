@@ -219,4 +219,36 @@ function harvest(p){
 </script></body></html>
 `;
 fs.writeFileSync(path.join(out, "preview-crops.html"), html);
+
+/* ====== LINH VẬT CÂY TRỒNG: nông sản có mặt (chữ ký: mắt tròn hai chấm sáng, má hồng), 4 cấp trang phục, 2 cảm xúc ====== */
+const PAR = {
+  carrot: { f: [128, 156, .72], scarf: [128, 138, 26], medal: [152, 200], crown: [128, 106], sp: [[52, 90], [206, 120]] },
+  corn: { f: [128, 118, .56], scarf: [128, 146, 22], medal: [150, 176], crown: [128, 60], sp: [[60, 80], [200, 110]] },
+  wheat: { f: [128, 196, .5], scarf: [128, 170, 38], medal: [152, 218], crown: [128, 46], sp: [[56, 90], [204, 100]] },
+  sunflower: { f: [128, 128, 1], scarf: [128, 180, 50], medal: [172, 176], crown: [128, 34], sp: [[40, 60], [216, 70]] },
+  strawberry: { f: [128, 150, 1.15], scarf: [128, 196, 58], medal: [184, 206], crown: [128, 66], sp: [[40, 80], [216, 90]] },
+  tomato: { f: [128, 146, 1.3], scarf: [128, 190, 54], medal: [186, 200], crown: [128, 52], sp: [[38, 70], [218, 84]] }
+};
+const MASNAME = { carrot: "Cà Rốt", corn: "Bắp Bắp", wheat: "Bông Lúa", sunflower: "Hướng Dương", strawberry: "Dâu Dâu", tomato: "Cà Chua" };
+function mascotSvg(id, C, lvl, cheer) {
+  const P = PAR[id], [fx, fy, fs] = P.f, ink = "#2A2350";
+  const mouth = cheer ? `<path d="M-10 11Q0 32 10 11Z" fill="#7A2230" stroke="${ink}" stroke-width="2.4" stroke-linejoin="round"/><path d="M-5 21Q0 27 5 21" fill="#FF7A8A"/>` : `<path d="M-9 12Q0 22 9 12" fill="none" stroke="${ink}" stroke-width="3.4" stroke-linecap="round"/>`;
+  const face = `<g id="face" transform="translate(${fx} ${fy}) scale(${fs})"><ellipse cx="-15" cy="0" rx="8" ry="9" fill="#fff" stroke="${ink}" stroke-width="2"/><ellipse cx="15" cy="0" rx="8" ry="9" fill="#fff" stroke="${ink}" stroke-width="2"/><circle cx="-14" cy="1" r="4.6" fill="${ink}"/><circle cx="16" cy="1" r="4.6" fill="${ink}"/><circle cx="-12.5" cy="-1.5" r="1.7" fill="#fff"/><circle cx="17.5" cy="-1.5" r="1.7" fill="#fff"/><ellipse cx="-27" cy="11" rx="7" ry="4.4" fill="#FF9DB0" opacity=".85"/><ellipse cx="27" cy="11" rx="7" ry="4.4" fill="#FF9DB0" opacity=".85"/>${mouth}</g>`;
+  let acc = "";
+  if (lvl >= 2) { const [sx, sy, sw] = P.scarf; acc += `<g id="acc-scarf"><path d="M${sx - sw} ${sy}Q${sx} ${sy + 18} ${sx + sw} ${sy}" fill="none" stroke="#9E1B28" stroke-width="15" stroke-linecap="round"/><path d="M${sx - sw} ${sy}Q${sx} ${sy + 18} ${sx + sw} ${sy}" fill="none" stroke="#E5484D" stroke-width="10" stroke-linecap="round"/><path d="M${sx + sw * .55} ${sy + 8}l9 28l-15 -2z" fill="#E5484D" stroke="#9E1B28" stroke-width="3" stroke-linejoin="round"/></g>`; }
+  if (lvl >= 3) { const [mx, my] = P.medal; acc += `<g id="acc-medal" transform="translate(${mx} ${my})"><path d="M-8 -14L-14 -34M8 -14L14 -34" stroke="#3B82F6" stroke-width="8" stroke-linecap="round"/><circle r="13" fill="#FFD24D" stroke="#C9840F" stroke-width="3"/><path d="M0 -7L2.4 -2L8 -1.4L4 2.4L5 8L0 5.4L-5 8L-4 2.4L-8 -1.4L-2.4 -2Z" fill="#fff" stroke="#C9840F" stroke-width="1.4" stroke-linejoin="round"/></g>`; }
+  if (lvl >= 4) { const [cx, cy] = P.crown; acc += `<g id="acc-crown" transform="translate(${cx} ${cy})"><path d="M-24 0L-24 -20L-12 -8L0 -26L12 -8L24 -20L24 0Z" fill="#FFD24D" stroke="#C9840F" stroke-width="3.4" stroke-linejoin="round"/><circle cx="0" cy="-26" r="3.6" fill="#E5484D"/><circle cx="-24" cy="-20" r="3" fill="#3B82F6"/><circle cx="24" cy="-20" r="3" fill="#34D399"/></g>` + P.sp.map(([x, y], i) => sparkle(x, y, i * .5).replace(' class="npa-twinkle" style="animation-delay:' + (i * .5) + 's"', "")).join(""); }
+  return produceSvg(id, CROPS[id]).replace('class="np-produce"', `class="np-produce np-mascot sk-l${lvl} em-${cheer ? "cheer" : "happy"}" data-mascot="${id}" data-grade="${lvl}"`).replace(`aria-label="${CROPS[id].vi} thu hoạch"`, `aria-label="${MASNAME[id]} (linh vật cấp ${lvl})"`).replace('</svg>', face + acc + '</svg>');
+}
+for (const id of Object.keys(PAR)) for (let lv = 1; lv <= 4; lv++) for (const ch of [0, 1]) fs.writeFileSync(path.join(out, `mascot_${id}_l${lv}${ch ? "_cheer" : ""}.svg`), mascotSvg(id, CROPS[id], lv, ch));
+const mhtml = `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Linh vật cây trồng: bản duyệt</title>
+<style>:root{--ink:#1d1a33;--bg:#F6F4F1;--line:#E3DDEF}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}.wrap{max-width:1180px;margin:0 auto;padding:18px 14px 60px}h1{margin:0 0 6px;font-size:clamp(24px,4vw,36px);font-weight:900}p.n{color:#5b5578;max-width:56em;margin:0 0 14px}
+table{width:100%;border-collapse:separate;border-spacing:8px}th{font-size:14px;color:#4B3FA0;padding:4px}td{background:#fff;border:2px solid var(--line);border-radius:20px;padding:8px;text-align:center}td.nm{font-weight:900;font-size:18px;width:130px;background:#F2EEFA}td img{width:100%;max-width:150px;display:block;margin:0 auto}td small{display:block;color:#7a7499;font-size:12px}
+.tg{display:flex;gap:8px;margin:0 0 12px}.tg button{min-height:44px;padding:0 18px;border-radius:99px;border:2px solid #D6CFEA;background:#fff;font:800 15px system-ui;cursor:pointer}.tg button.on{background:#7C5CFF;border-color:#7C5CFF;color:#fff}@media (max-width:700px){td.nm{width:auto}td img{max-width:80px}}</style></head><body>${nav}<div class="wrap"><h1>Linh vật cây trồng — duyệt theo cây × cấp</h1>
+<p class="n">Mỗi cây trồng là một <b>linh vật</b>: nông sản có <b>khuôn mặt chữ ký</b> (mắt tròn hai chấm sáng, má hồng). Linh vật <b>lớn lên theo cấp vườn</b>: cấp 1 trơn, cấp 2 thêm khăn đỏ, cấp 3 thêm huy chương, cấp 4 thêm vương miện và lấp lánh. Có 2 cảm xúc: vui và reo mừng (khi cây chín). Bấm nút bên dưới để đổi cảm xúc. Sinh bằng <code>node scripts/learn/gen-crops-art.js</code>.</p>
+<div class="tg"><button class="on" data-c="">😊 Vui</button><button data-c="_cheer">🎉 Reo mừng</button></div>
+<table><thead><tr><th></th><th>Cấp 1</th><th>Cấp 2</th><th>Cấp 3</th><th>Cấp 4</th></tr></thead><tbody>${Object.keys(PAR).map(id => `<tr><td class="nm">${MASNAME[id]}<small>${CROPS[id].subj}</small></td>${[1, 2, 3, 4].map(l => `<td><img data-id="${id}" data-l="${l}" src="mascot_${id}_l${l}.svg" alt="${MASNAME[id]} cấp ${l}"></td>`).join("")}</tr>`).join("")}</tbody></table></div>
+<script>document.querySelectorAll(".tg button").forEach(function(b){b.onclick=function(){document.querySelectorAll(".tg button").forEach(function(x){x.classList.toggle("on",x===b)});document.querySelectorAll("td img").forEach(function(i){i.src="mascot_"+i.dataset.id+"_l"+i.dataset.l+b.dataset.c+".svg"})}})</script></body></html>
+`;
+fs.writeFileSync(path.join(out, "preview-crop-mascots.html"), mhtml);
 console.log("✓ đã sinh " + Object.keys(files).length + " tranh (cây, nông sản, kho) + trang duyệt preview-crops.html");
