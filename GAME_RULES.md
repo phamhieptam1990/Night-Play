@@ -276,6 +276,13 @@ Nguyên tắc dự án: game chạy **offline, không lag, không gọi máy ch�
 - [ ] **Game Cozy viết tay (không sinh tự động: Đập Deadline, Cánh Nhỏ Phiêu Lưu…) phải tự nạp `shared/dock.js` (gom 📷/📤/← của cổng vào thanh trên) + `shared/fan.js` (menu ⋯ + tên game sát khung ở chế độ local) + `shared/icons.js`; game có `#play` + `.top` thì nạp `shared/landscape.css/js` như các game sinh tự động. Thanh trên của game viết tay phải là `.top` có `h1`, nút ← là `#bBk`, nút phụ dùng id chuẩn (bSnd/bLang/bHelp/bBoard/restartBtn hoặc soundBtn/langBtn/askBtn).**
 - [ ] Báo cáo trung thực: cái gì đã kiểm tra, cái gì chưa (ví dụ trackpad thật)
 
+## 6e. Học Vui: khu vườn (cảnh SVG) ĐƯỢC PHÉP NẶNG (chủ site chốt)
+- **Tranh cảnh khu vườn** (`shared/art/garden/scene/*.svg`, sinh bằng `scripts/learn/gen-scene-art.js`) **được phép nặng** (hiện khoảng 530 KB/tranh, hơn 1.000 phần tử vẽ tay). Chủ site chốt: **khu vườn nặng không sao**, ưu tiên cảnh dày, đẹp, đầy đủ vật; **không giảm chi tiết chỉ để cho nhẹ**.
+- Vì vậy bài đo `scripts/learn/check-garden-art.js` **không còn cảnh báo cỡ tệp cho tranh cảnh**; chỉ còn cảnh báo cỡ cho tranh nhỏ (cây, nông sản, linh vật, sinh vật).
+- Các luật khác vẫn giữ cho MỌI tranh vườn: không `<image>`/`<foreignObject>`/`<script>`/`<filter>`/`<mask>`/`href`, có `role="img"` + `aria-label`, hoạt ảnh đặt tên `npa-*` và tắt khi `prefers-reduced-motion`, không chữ trong tranh nhỏ.
+- Tranh nhỏ dùng nhiều lần trong cảnh (cây, nông sản, linh vật) vẫn nên gọn; số phần tử của cả khu vườn chạy cùng lúc có thể nhiều, nhưng **không dùng filter** (gây sập WebKit).
+- Nếu sau này đo thấy máy yếu bị giật, xử lý bằng cách **tách lớp tĩnh/động** hoặc tạm dừng hoạt ảnh ngoài màn hình, **không** bằng cách bỏ bớt vật khỏi cảnh, trừ khi chủ site đồng ý.
+
 ## Bảo vệ chia sẻ Night Pass (token gắn thiết bị)
 - `shared/device.js` (nhúng ở `<head>` NGAY SAU `shared/guard.js` trên MỌI trang) bọc `window.fetch`: tự ký các request cùng nguồn tới `/api/pass*`, `/api/pro/*`, `GET /api/orders/<id>`, `POST /api/restore/verify`. **Game mới không cần làm gì thêm** — nhớ nhúng `device.js` (template `tpl.html` đã có).
 - KHÔNG gọi các API đó bằng `XMLHttpRequest`, `navigator.sendBeacon` hoặc iframe/form: sẽ không có chữ ký → máy chủ từ chối (game giữ khoá). Dùng `fetch`.

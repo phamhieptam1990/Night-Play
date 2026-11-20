@@ -21,7 +21,7 @@ for (const f of files) {
   if (/<style/.test(s) && /@keyframes\s+(?!npa-)/.test(s)) errs.push("@keyframes không bắt đầu npa-");
   const n = (s.match(/<(path|circle|ellipse|rect|line|polygon)\b/g) || []).length;
   const lim = f.scene ? 600 : 90 * 6;   /* tệp cây có đủ 5 giai đoạn; cảnh được phép lớn hơn */
-  if (f.scene && kb > 400) ws.push(kb.toFixed(0) + "KB, nặng: nên tách lớp tĩnh/động khi đưa vào app");
+  /* tranh cảnh được phép nặng (GAME_RULES 6e): không cảnh báo cỡ tệp */
   if (!f.scene && kb > 40) ws.push(kb.toFixed(0) + "KB, hơi nặng cho một tranh nhỏ");
   if (!f.scene && n > 1300) ws.push(n + " phần tử");
   if (/^mascot_/.test(path.basename(f.rel)) && !/id="face"/.test(s)) errs.push("linh vật thiếu id=face (khuôn mặt chữ ký)");
