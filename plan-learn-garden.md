@@ -234,6 +234,26 @@ Các cây trong ảnh duyệt hiện nay (táo, cam, lê, đào, xoài, bưởi,
 - Mỗi loài gắn một **môn và kỹ năng** (ví dụ bắp: bảng nhân), nên chọn giống nào là chọn luyện kỹ năng đó. Mỗi lần trồng tốn **1 hạt giống** kiếm từ việc học.
 - Bản thử có sẵn ở trang vườn tương tác ([shared/art/garden/preview-garden-play.html](shared/art/garden/preview-garden-play.html)). **Câu hỏi còn mở:** cây lâu năm chỉ trồng ở các vị trí "vườn cây" phía trên, hay trồng ở ô nào cũng được?
 
+## 2g. Ba trang con, nhiệm vụ hằng ngày và sự kiện bất ngờ (chủ site chốt)
+
+**Ba trang con** mở từ ba vật lớn ở khu vườn (bản duyệt: [preview-house.html](shared/art/garden/preview-house.html), [preview-barn.html](shared/art/garden/preview-barn.html), [preview-pond.html](shared/art/garden/preview-pond.html)):
+- **Bấm nhà → Trong nhà:** kệ huy hiệu (mở sáng vàng, chưa mở xám), bảng tin (bạn đồng hành của ngày, mục tiêu), sổ sưu tầm, ba linh vật. Phòng đẹp lên theo cấp nhà.
+- **Bấm kho → Kho nông sản:** mỗi loại một thùng có số lượng, và bảng **đơn hàng của linh vật** (đủ nông sản thì giao để nhận sao, hạt giống).
+- **Bấm ao → Ao cá:** cá bơi thật (mỗi chú một đường, vẫy đuôi, quay đầu), bong bóng, ve vẫy; bấm cá nghe điều thú vị; bộ sưu tập cá mở dần khi bé học giỏi.
+- **Popup màu theo cấp:** mỗi cấp (1 đến 4) một bảng màu (xanh lá, xanh dương, tím, vàng cam), bố cục chia khối rõ ràng.
+
+**Nhiệm vụ học tập hằng ngày = chăm vườn.** Tưới nước, bón phân, cho cá ăn không phải nút bấm tự do mà là **3 nhiệm vụ học mỗi ngày**, mỗi nhiệm vụ là một bài vui ngắn:
+
+| Nhiệm vụ | Bé làm | Thưởng |
+|---|---|---|
+| 💧 Tưới nước | 1 bài Toán vui | cả vườn lớn thêm 1 bước |
+| 🧪 Bón phân | 1 bài Tiếng Việt (ôn) | 3 cây lớn thêm 2 bước |
+| 🐟 Cho cá ăn | 1 bài Tiếng Anh | có thức ăn ở ao cá, cá vui |
+
+Mỗi ngày làm mới ba nhiệm vụ; **nghỉ ngày nào cũng không mất gì**, không phạt, không có chuỗi ngày bắt buộc.
+
+**Sự kiện bất ngờ (thỉnh thoảng):** sâu hại, mưa gió, sinh vật lạ (ví dụ gấu mèo) vào vườn. Cây **không bao giờ hỏng hay mất**, chỉ **tạm dừng lớn** ở các ô bị ảnh hưởng. Bé **cứu vườn bằng vài bài vui khích lệ** cùng một linh vật (sâu: Mochi, mưa gió: Mầm, sinh vật lạ: Bibi). **Không chấm đúng sai**: chơi xong bài nào, vườn khỏe thêm bài đó, để không giống bài kiểm tra. Cứu xong bé nhận 1 hạt giống và huy hiệu "Người bảo vệ vườn". Tần suất đề xuất thấp (khoảng một lần mỗi vài ngày), và **không tạo sự kiện** nếu bé đang quá bận hoặc vừa mới xong một sự kiện.
+
 ## 3. Nền kinh tế phần thưởng (đơn giản, hào phóng, không có tiền thật)
 
 | Tài nguyên | Kiếm từ đâu | Dùng để làm gì |
