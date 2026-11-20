@@ -539,15 +539,31 @@ Object.assign(CROPINFO, {
 .card .tab{background:rgba(255,255,255,.12)!important;color:#fff!important;border-color:rgba(255,255,255,.38)!important}.card .tab.on{background:var(--a)!important;color:#1a1033!important;border-color:var(--a)!important}
 .card .pick{background:rgba(255,255,255,.14)!important;border-color:rgba(255,255,255,.32)!important;color:#fff!important}.card .pick span{color:rgba(255,255,255,.75)!important}.card .pick:hover,.card .pick:focus-visible{background:rgba(255,255,255,.26)!important;border-color:#fff!important}
 .legend{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0 0;font-size:14px;color:#5b5578}.legend span{display:inline-flex;align-items:center;gap:6px}
+/* ===== bố cục mới: khu vườn bên trái, bảng điều khiển bên phải ===== */
+.wrap{max-width:1360px!important;padding:14px 16px 60px!important}
+.hdr{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:0 0 12px}.hdr h1{margin:0!important;font-size:clamp(22px,3.2vw,32px)!important}.hdr .sub{margin:2px 0 0;color:#5b5578;font-size:14px}
+.stats{display:flex;gap:8px;flex-wrap:wrap}.st1{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:99px;background:#fff;border:2px solid var(--line);font-weight:700;color:#4d4770}.st1 b{color:var(--ink);font-size:16px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:16px;align-items:start}.main{min-width:0}.side{display:flex;flex-direction:column;gap:12px;position:sticky;top:60px}
+.pn{background:#fff;border:2px solid var(--line);border-radius:20px;padding:12px 14px;box-shadow:0 6px 18px rgba(40,30,90,.06)}.pn h2{margin:0 0 8px;font-size:15px;font-weight:900;color:var(--ink)}.hint2{margin:-4px 0 8px;font-size:12px;color:#7a7499}
+.pn .mis{display:flex!important;flex-direction:column;gap:8px;margin:0!important;grid-template-columns:none!important}.pn .mc{flex-direction:column!important;gap:4px!important;padding:10px 12px!important;border-radius:14px!important}.pn .mc .mh{font-size:15px;gap:8px}.pn .mc .mh i{font-size:24px}.pn .mc.dn .mh::after{content:"✓ Xong";margin-left:auto;font-size:11px;background:var(--b);color:#fff;border-radius:99px;padding:2px 9px}.pn .mc>small{font-size:12px;line-height:1.35}.pn .mc .acts2{margin:4px 0 0!important;gap:8px}.pn .mc .acts2>*{min-height:44px!important;font-size:13px!important}
+.evbar{display:grid!important;grid-template-columns:1fr 1fr;gap:8px;margin:0!important}.evbar button{min-height:44px!important}.evbar .end{grid-column:1/-1;background:#F2EEFA;border-color:#E3DDEF}
+.pn .lvbar{display:flex!important;gap:8px;margin:0!important}.pn .lvbar button{flex:1}
+.goto{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.goto a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:64px;border-radius:14px;background:#F6F2FF;border:2px solid var(--line);text-decoration:none;font-size:24px}.goto a b{font-size:12px;color:#4B3FA0}.goto a:hover,.goto a:focus-visible{border-color:var(--a);background:#fff;outline:none}
+.alert{margin:0 0 12px!important}.legend{margin:10px 2px 0!important;gap:8px 18px!important}.legend span{display:inline-flex;align-items:center;gap:7px;font-size:13px}.dot{display:inline-block;width:14px;height:14px;border-radius:50%}.dot.ripe{background:#FFE66B;box-shadow:0 0 0 4px rgba(255,230,107,.45)}.dot.gray{background:#B9B5AD;border:2px dashed #fff;box-shadow:0 0 0 1px #8F8B83}.dot.prog{background:linear-gradient(90deg,#34D399,#FFD24D)}
+.stage{border-radius:24px!important;box-shadow:0 14px 40px rgba(40,30,90,.18)}
+@media (max-width:1000px){.layout{grid-template-columns:1fr}.side{position:static}.pn .mis{display:grid!important;grid-template-columns:1fr;}}
 @media (prefers-reduced-motion:reduce){.hs.ripe::after{animation:none}.bar i{transition:none}}</style></head><body>${nav}<div class="wrap">
-<h1>Vườn tương tác — rê và bấm thử</h1>
-<p class="n"><b>Rê chuột</b> (hoặc chạm giữ trên điện thoại) vào một ô trồng để xem <b>thanh tiến độ còn bao lâu thì thu hoạch</b>. <b>Bấm vào ô</b> để mở <b>popup chi tiết</b>: tên cây, môn, kỹ năng, tiến độ, nông sản sẽ thu, và nút <b>Thu hoạch</b> khi đã chín. Ô <b>đất xám</b> thì bấm để chọn cây muốn trồng. Đây là bản thử trên ảnh tĩnh nên cây không đổi hình, chỉ có dấu hiệu nhỏ báo trạng thái.</p>
-<div class="lvbar" id="lvb">Màu popup theo cấp vườn: <button data-l="1">1</button><button data-l="2">2</button><button data-l="3">3</button><button data-l="4">4</button></div>
-<div class="mis" id="mis"></div>
+<header class="hdr"><div><h1>🏡 Vườn của bé</h1><p class="sub">Rê vào ô để xem tiến độ, bấm vào ô để xem chi tiết hoặc trồng.</p></div><div class="stats"><span class="st1">🌱 <b>3</b> hạt</span><span class="st1">⭐ <b>12</b> sao</span><span class="st1">🧺 <b>47</b> nông sản</span></div></header>
 <div class="alert" id="alert" role="alert"></div>
-<div class="stage" id="st"><div class="rain" id="rain"></div><img src="scene/scene-01-toan-canh.svg" alt="Khu vườn Học Vui"><div id="tip" class="tip" aria-hidden="true"></div></div>
-<div class="evbar">🎲 Thử sự kiện bất ngờ: <button data-ev="pest">🐛 Sâu hại</button><button data-ev="storm">⛈️ Mưa gió</button><button data-ev="intruder">🦝 Sinh vật lạ</button><button data-ev="">Kết thúc sự kiện</button></div>
-<div class="legend"><span>✨ Ô đang sáng nhịp: cây đã chín, bấm để thu hoạch</span><span>⬜ Đất xám: ô trống, bấm để chọn cây</span><span>🔢 Thanh tiến độ tính theo số câu đúng của kỹ năng đó</span></div></div>
+<div class="layout">
+<div class="main"><div class="stage" id="st"><div class="rain" id="rain"></div><img src="scene/scene-01-toan-canh.svg" alt="Khu vườn Học Vui"><div id="tip" class="tip" aria-hidden="true"></div></div>
+<div class="legend"><span><i class="dot ripe"></i>Cây chín, bấm để thu hoạch</span><span><i class="dot gray"></i>Đất xám: bấm để chọn cây</span><span><i class="dot prog"></i>Rê để xem còn bao lâu</span></div></div>
+<aside class="side">
+<section class="pn"><h2>📅 Nhiệm vụ hôm nay</h2><p class="hint2">Mỗi ngày làm mới. Nghỉ ngày nào cũng không mất gì.</p><div class="mis" id="mis"></div></section>
+<section class="pn"><h2>🎲 Thử sự kiện bất ngờ</h2><div class="evbar"><button data-ev="pest">🐛 Sâu hại</button><button data-ev="storm">⛈️ Mưa gió</button><button data-ev="intruder">🦝 Sinh vật lạ</button><button data-ev="" class="end">Kết thúc</button></div></section>
+<section class="pn"><h2>🎨 Màu popup theo cấp</h2><div class="lvbar" id="lvb"><button data-l="1">1</button><button data-l="2">2</button><button data-l="3">3</button><button data-l="4">4</button></div></section>
+<section class="pn"><h2>🚪 Đi vào trong</h2><div class="goto"><a href="preview-house.html">🏠<b>Trong nhà</b></a><a href="preview-barn.html">📦<b>Kho</b></a><a href="preview-pond.html">🐟<b>Ao cá</b></a></div></section>
+</aside></div>
 <div class="ov" id="ov" role="dialog" aria-modal="true" aria-labelledby="ptitle"><div class="card" id="card"></div></div><div class="toast" id="toast" role="status"></div>
 <script>
 var CATS = ${JSON.stringify(CATS)}, CI = ${JSON.stringify(CROPINFO)}, PLOTS = ${JSON.stringify(plots)}, IDS = ${JSON.stringify(ids)}, ST = ["Hạt", "Mầm", "Cây con", "Sắp chín", "CHÍN"], W = 1280, H = 880;
@@ -608,7 +624,7 @@ function getDaily(){ try { var d = JSON.parse(localStorage.getItem("gardenDaily"
 function saveDaily(d){ try { localStorage.setItem("gardenDaily", JSON.stringify(d)); } catch (e) {} }
 var MIS = [{ k: "water", ic: "💧", t: "Tưới nước", d: "Chơi 1 bài Toán vui", sk: "toan", r: "Cả vườn lớn thêm 1 bước" }, { k: "fert", ic: "🧪", t: "Bón phân", d: "Ôn 1 bài Tiếng Việt", sk: "tviet", r: "3 cây lớn thêm 2 bước" }, { k: "fish", ic: "🐟", t: "Cho cá ăn", d: "Chơi 1 bài Tiếng Anh", sk: "tanh", r: "Mở thức ăn ở ao cá, cá vui" }];
 function renderMis(){ var d = getDaily(), el = document.getElementById("mis");
-  el.innerHTML = "<div style='grid-column:1/-1' class='mtitle'>📅 Nhiệm vụ chăm vườn hôm nay <span style='font-weight:600;color:#7a7499;font-size:12px'>(mỗi ngày mới có lại, nghỉ ngày nào cũng không mất gì)</span></div>" + MIS.map(function(m){ var done = d[m.k]; return "<div class='mc" + (done ? " dn" : "") + "'><div class='mh'><i>" + m.ic + "</i>" + m.t + "</div><small><b>" + m.d + "</b><br>Thưởng: " + m.r + "</small><div class='acts2'>" + (done ? "" : "<a class='go2' href='../../../learn/index.html?subj=" + m.sk + "&grade=2&lang=vi&mission=" + m.k + "'>Làm nhiệm vụ</a><button class='sm2' type='button' data-m='" + m.k + "'>Mô phỏng xong</button>") + "</div></div>"; }).join("");
+  el.innerHTML = MIS.map(function(m){ var done = d[m.k]; return "<div class='mc" + (done ? " dn" : "") + "'><div class='mh'><i>" + m.ic + "</i>" + m.t + "</div><small><b>" + m.d + "</b><br>Thưởng: " + m.r + "</small><div class='acts2'>" + (done ? "" : "<a class='go2' href='../../../learn/index.html?subj=" + m.sk + "&grade=2&lang=vi&mission=" + m.k + "'>Làm nhiệm vụ</a><button class='sm2' type='button' data-m='" + m.k + "'>Mô phỏng xong</button>") + "</div></div>"; }).join("");
   el.querySelectorAll(".sm2").forEach(function(b){ b.onclick = function(){ doneMis(b.dataset.m); }; }); }
 function doneMis(k){ var d = getDaily(); d[k] = 1; saveDaily(d);
   if(k === "water"){ PLOTS.forEach(function(p){ if(p.planted && !p.hurt && p.got < p.need){ p.got++; badge(p, p.el); } }); toast("💧 Đã tưới nước: cả vườn lớn thêm 1 bước!"); }
