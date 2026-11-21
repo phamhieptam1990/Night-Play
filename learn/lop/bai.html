@@ -144,7 +144,7 @@ function strip(s){return String(s).replace(/[\u{1F000}-\u{1FFFF}☀-➿⭐️]/g
 let touched=false, noVoiceShown=false;
 function say(t){
   if(!window.Voice) return;
-  Voice.say(strip(t),subj,"vi",{profile:"lesson",fail:()=>{ if(!noVoiceShown){ noVoiceShown=true; const h=$("vhint"); if(h){ h.hidden=false; h.textContent="🔇 Máy chưa có giọng đọc tiếng Việt. Nhờ ba mẹ bật giọng đọc trong Cài đặt của máy nhé."; } } }});
+  Voice.say(strip(t),subj,"vi",{profile:"lesson",fail:why=>{ const h=$("vhint"); if(!h) return; if(why==="novoice"){ if(noVoiceShown) return; noVoiceShown=true; h.hidden=false; h.textContent="🔇 Máy chưa có giọng đọc tiếng Việt. Nhờ ba mẹ bật giọng đọc trong Cài đặt của máy nhé."; } else if(!touched){ h.hidden=false; } }});
 }
 function firstTouch(){ if(touched) return; touched=true; const h=$("vhint"); if(h&&!noVoiceShown) h.hidden=true; if(AUTO&&curText) say(curText); }
 ["pointerdown","keydown","touchstart"].forEach(ev=>addEventListener(ev,firstTouch,{passive:true,once:false}));
@@ -178,7 +178,7 @@ function build(){
 }
 function dots(){[...$("dots").children].forEach((e,i)=>{e.className=(i<=idx?"on":"")+(i===idx?" cur":"")})}
 function setNext(en,label){const n=$("nx");n.disabled=!en;n.textContent=label||COPY.next}
-function speakIn(t){curText=t;$("bub").textContent=t;if(AUTO)say(t)}
+function speakIn(t){curText=t;$("bub").textContent=t;if(AUTO&&touched)say(t)}
 function show(i){
   idx=Math.max(0,Math.min(steps.length-1,i)); const st=steps[idx], stage=$("stage"); stage.innerHTML=""; stage.classList.remove("pop"); void stage.offsetWidth; stage.classList.add("pop");
   dots(); $("bk").disabled=idx===0; mood("grade");

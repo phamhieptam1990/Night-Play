@@ -39,13 +39,13 @@
         u.lang = LANG[lang] || lang; u.pitch = p.pitch; u.rate = p.rate; if (v) u.voice = v;
         u.onstart = function () { started = true; };
         u.onend = function () { if (opt.done) opt.done(true); };
-        u.onerror = function (e) { if (e && (e.error === "canceled" || e.error === "interrupted")) return; if (opt.fail) opt.fail(); };
+        u.onerror = function (e) { if (e && (e.error === "canceled" || e.error === "interrupted")) return; if (opt.fail) opt.fail(e && e.error === "not-allowed" ? "blocked" : (e && e.error) || "error"); };
         machine.u = u;   /* GIỮ THAM CHIẾU: Chrome có thể thu gom utterance đang đọc → câu sau im lặng */
         try { ss.resume(); } catch (e) {} ss.speak(u);
         setTimeout(function () {
           if (started) return;   /* chỉ tin onstart (ss.speaking có thể vẫn true sau cancel() mà không đọc gì) */
           if (attempt < 2) { try { ss.cancel(); } catch (e) {} setTimeout(function () { go(attempt + 1); }, 160); }
-          else if (opt.fail) opt.fail();
+          else if (opt.fail) opt.fail(v || !((ss.getVoices() || []).length) ? "blocked" : "novoice");   /* "novoice" CHỈ khi danh sách giọng đã tải mà không có giọng nào đúng ngôn ngữ */
         }, 900);
       } catch (e) { if (opt.fail) opt.fail(); }
     };
