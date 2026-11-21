@@ -28,11 +28,11 @@ function nextLessonCard(){
   var nx = LearnPath.next(QP.subj, QP.grade), prm = "grade=" + QP.grade + "&subj=" + QP.subj;
   if(!nx) return "<div class='gdc dn'><i aria-hidden='true'>🎉</i><div><b>Xong chương trình lớp này!</b><small>Bé đã học hết các chủ đề</small></div></div>";
   var href = (nx.hasLesson ? "../lop/bai.html?" : "../index.html?") + prm + "&topic=" + encodeURIComponent(nx.id);
-  return "<div class='gdc'><i aria-hidden='true'>📖</i><div><b>Hết nhiệm vụ! Học bài mới</b><small>Chủ đề " + (nx.index + 1) + "/" + nx.total + ": " + nx.name + ". Học xong có 3 nhiệm vụ mới.</small></div><a class='gdc-go' href='" + href + "'>" + (nx.hasLesson ? "Học" : "Kiểm tra") + "</a></div>";
+  return "<div class='gdc nx'><i aria-hidden='true'>📖</i><div><b>Học bài mới</b><small>Chủ đề " + (nx.index + 1) + "/" + nx.total + ": " + nx.name + "</small></div><a class='gdc-go' href='" + href + "'>" + (nx.hasLesson ? "Học" : "Kiểm tra") + "</a></div>";
 }
 function renderQuest(){
   var q = LearnPath.quest(QP.grade, QP.subj), el = document.getElementById("gdMis"), h = document.querySelector(".gd-m h4");
-  if(h) h.innerHTML = "🎁 Nhiệm vụ từ bài học <small>mỗi chủ đề xong có 3 nhiệm vụ</small>";
+  if(h) h.innerHTML = "🎁 Nhiệm vụ <small>mỗi bài xong có 3 nhiệm vụ</small>";
   if(el){ var out = [];
     for(var i = 0; i < Math.min(q.left, 3); i++){ var t = QT[(q.done + i) % 3]; out.push("<div class='gdc'><i aria-hidden='true'>" + t.ic + "</i><div><b>" + t.t + "</b><small>" + t.d + "</small></div><button type='button' class='gdc-go' data-q='1'>Làm</button></div>"); }
     if(q.left > 3) out.push("<div class='gdc dn'><i aria-hidden='true'>🎁</i><div><b>Còn " + (q.left - 3) + " nhiệm vụ nữa</b><small>Làm xong mới học bài mới</small></div></div>");

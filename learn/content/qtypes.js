@@ -302,6 +302,8 @@
     if (R() < .7) { var rest = pos.slice(done); for (var j = 0; j < rest.length; j++) { var pq = asPop(out[rest[j]], lang); if (pq) { out[rest[j]] = pq; break; } } }
     return out;
   }
-  root.LearnTypes = { checkWrite: checkWrite, asTypein: asTypein, asPop: asPop, make: make, mix: mix, kindsFor: kindsFor, KINDS: KINDS, LAB: LAB };
+  /* tên đồ vật theo emoji (cho giọng đọc): "🍇" -> "chùm nho" / "grapes" */
+  function nameOf(e, lang) { e = String(e).replace(/\uFE0F/g, ""); for (var i = 0; i < V.length; i++) { if (V[i].e.replace(/\uFE0F/g, "") === e) return lang === "vi" ? V[i].vi : V[i].en; } return ""; }
+  root.LearnTypes = { nameOf: nameOf, checkWrite: checkWrite, asTypein: asTypein, asPop: asPop, make: make, mix: mix, kindsFor: kindsFor, KINDS: KINDS, LAB: LAB };
   if (typeof module !== "undefined" && module.exports) module.exports = root.LearnTypes;
 })(typeof window !== "undefined" ? window : globalThis);

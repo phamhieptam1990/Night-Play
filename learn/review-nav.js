@@ -6,7 +6,7 @@
     ["learn/index.html", "Trang học"], ["learn/garden/", "🌳 Vườn Học Vui"], ["learn/garden/?edit", "✏️ Chỉnh bố cục"],
     ["shared/art/garden/preview-scene.html", "🏡 Cảnh vườn"], ["shared/art/garden/preview-house.html", "🏠 Trong nhà"], ["shared/art/garden/preview-barn.html", "📦 Kho"], ["shared/art/garden/preview-pond.html", "🐟 Ao cá"],
     ["shared/art/garden/preview-kho-mascots.html", "🍎 Linh vật Kho + Ao"], ["shared/art/garden/preview-crop-mascots.html", "🐾 Linh vật cây trồng"], ["shared/art/garden/preview-crops.html", "🌾 Cây trồng"], ["shared/art/garden/preview-garden.html", "🌸 Vườn hoa"],
-    ["learn/voice-test.html", "🎧 Giọng đọc"], ["learn/mascot-review.html", "🐾 Linh vật học"], ["shared/art/brand-learn.html", "Thương hiệu 3 môn"], ["shared/art/learn/mascot_sheet.html", "Bảng 3×5 lớp"], ["shared/art/preview-learn.html", "3 bản base"], ["shared/art/preview-emotions.html", "Cảm xúc"]
+    ["learn/lop/index.html", "📚 Chương trình học"], ["learn/lop/bai.html?grade=1&subj=toan&topic=g1_ready_n05", "🔢 Bài làm quen số"], ["shared/art/learn/icons/preview.html", "🎨 Bộ icon SVG"], ["learn/voice-test.html", "🎧 Giọng đọc"], ["learn/mascot-review.html", "🐾 Linh vật học"], ["shared/art/brand-learn.html", "Thương hiệu 3 môn"], ["shared/art/learn/mascot_sheet.html", "Bảng 3×5 lớp"], ["shared/art/preview-learn.html", "3 bản base"], ["shared/art/preview-emotions.html", "Cảm xúc"]
   ];
   var me = document.currentScript && document.currentScript.src, base = me ? me.replace(/learn\/review-nav\.js.*$/, "") : "/";
   var here = location.pathname.replace(/\/index\.html$/, "/");

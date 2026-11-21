@@ -31,7 +31,9 @@
      rồi chờ một nhịp (Chrome bỏ speak() ngay sau cancel()). opt.fail() chạy nếu sau 2 giây máy vẫn chưa bắt đầu đọc (chưa có giọng / bị tắt tiếng). */
   function machine(text, who, lang, opt) {
     opt = opt || {}; if (!ss) { if (opt.fail) opt.fail(); return; }
-    var go = function () {
+    /* Chrome/Safari hay NUỐT câu nói ngay sau cancel(): chờ ~180ms rồi nói; nếu 0,9 giây mà chưa bắt đầu thì hủy và thử lại (tối đa 2 lần) trước khi báo lỗi.
+       (Lỗi cũ: vừa nói xong câu khen rồi bấm Tiếp, câu của màn sau bị nuốt → bé thấy "im ru".) */
+    var go = function (attempt) {
       try {
         var u = new SpeechSynthesisUtterance(text), p = PROFILE[opt.profile] || PROFILE[who] || PROFILE.def, v = pickVoice(lang), started = false;
         u.lang = LANG[lang] || lang; u.pitch = p.pitch; u.rate = p.rate; if (v) u.voice = v;
@@ -39,10 +41,15 @@
         u.onend = function () { if (opt.done) opt.done(true); };
         u.onerror = function (e) { if (e && (e.error === "canceled" || e.error === "interrupted")) return; if (opt.fail) opt.fail(); };
         if (ss.paused) ss.resume(); ss.speak(u);
-        setTimeout(function () { if (!started && !ss.speaking && opt.fail) opt.fail(); }, 2000);
+        setTimeout(function () {
+          if (started || ss.speaking) return;
+          if (attempt < 2) { try { ss.cancel(); } catch (e) {} setTimeout(function () { go(attempt + 1); }, 160); }
+          else if (opt.fail) opt.fail();
+        }, 900);
       } catch (e) { if (opt.fail) opt.fail(); }
     };
-    if (ss.speaking || ss.pending) { ss.cancel(); clearTimeout(machine.t); machine.t = setTimeout(go, 70); } else go();
+    clearTimeout(machine.t);
+    if (ss.speaking || ss.pending) { ss.cancel(); machine.t = setTimeout(function () { go(0); }, 180); } else go(0);
   }
   /* DANH SÁCH TỆP THU SẴN: shared/audio/voice/index.json = { "<nhân_vật>/<mã>": "mp3" | "webm" | "m4a" } (tạo bằng node scripts/learn/voice-index.js).
      Chưa có tệp index.json (hoặc câu chưa có trong đó) thì đọc bằng giọng máy NGAY, không đợi tải tệp (đợi tải làm mất cú chạm của bé, giọng máy bị chặn). */

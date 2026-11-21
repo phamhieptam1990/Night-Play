@@ -220,6 +220,9 @@ body.tucked .rev{display:flex}
 .stat div{flex:1;padding:10px 6px;border-radius:18px;background:color-mix(in srgb,var(--sg) 14%,transparent);font-weight:800}
 .stat b{display:block;font-size:24px}
 .btn{display:inline-flex;align-items:center;justify-content:center;width:100%;min-height:54px;margin-top:10px;padding:0 24px;border-radius:99px;font-weight:900;font-size:19px;color:#fff;background:linear-gradient(135deg,var(--s1),var(--s2));box-shadow:0 10px 26px color-mix(in srgb,var(--s2) 50%,transparent)}
+.rrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.rrow .btn{width:auto;min-width:0;margin:0;min-height:68px;padding:6px 4px;flex-direction:column;gap:2px;font-size:14px;line-height:1.15;border-radius:22px;text-align:center}
+.rrow a.btn{text-decoration:none}.rrow .btn i{font-style:normal;font-size:26px;line-height:1}.rrow .btn span{font-weight:900;font-size:13.5px}
 .btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--line);box-shadow:none;font-size:16px;min-height:48px}
 .btn:active{transform:scale(.98)}
 .pl{display:grid;gap:8px;margin:10px 0}
@@ -410,7 +413,7 @@ body.tucked .rev{display:flex}
     <div class="stat"><div><b id="rS">0</b></div><div><b id="rB">0</b></div></div>
     <p id="rStory" class="rstory"></p><p id="rFarm" class="rfarm"></p>
     <p id="rTip" class="tip"></p>
-    <button class="btn" id="again" type="button">▶</button><button class="btn ghost" id="change" type="button">⚙️</button><a class="btn ghost" id="toMap" href="lop/index.html" aria-label="Bản đồ lớp" hidden>🗺️</a><a class="btn ghost" id="toMe" href="me/index.html" hidden>🌈</a><a class="btn ghost" id="toGdn" href="garden/index.html" hidden>🌱</a></div>
+    <div class="rrow"><button class="btn" id="again" type="button"><i aria-hidden="true">▶</i><span>Chơi lại</span></button><a class="btn ghost" id="toGdn" href="garden/index.html"><i aria-hidden="true">🌱</i><span>Khu vườn</span></a><a class="btn ghost" id="toMap" href="lop/index.html"><i aria-hidden="true">📖</i><span>Trang học</span></a></div><button class="btn ghost" id="change" type="button" hidden>⚙️</button><a class="btn ghost" id="toMe" href="me/index.html" hidden>🌈</a></div>
 </div>
 <div class="ov" id="sheet" role="dialog" aria-modal="true" aria-labelledby="shT" hidden>
   <div class="card"><div class="big" aria-hidden="true">🐾</div><h2 id="shT" class="vh"></h2><h3 id="shS" class="vh"></h3><div class="pl s" id="pS"></div><h3 id="shG" class="vh"></h3><div class="pl g" id="pG"></div>
@@ -736,13 +739,16 @@ function finish(){
   $("rStars").textContent = "⭐".repeat(roundStars) + "☆".repeat(5 - roundStars); $("rS").textContent = "⭐ +" + roundStars; $("rB").textContent = "🔥 " + best;
   $("rTip").textContent = top ? t.tipErr + t.tag[top] + "." : t.tipOk; $("again").setAttribute("aria-label", t.again); $("resX").setAttribute("aria-label", t.close); $("change").setAttribute("aria-label", t.change);
   farmFinish();
+  { const q = new URLSearchParams({ grade, subj, lang }).toString(), L = lang === "vi" ? ["Chơi lại", "Khu vườn", "Trang học"] : ["Play again", "Garden", "Lessons"];
+    $("toGdn").hidden = false; $("toMap").hidden = false; $("toGdn").href = "garden/index.html?" + q; $("toMap").href = "lop/index.html?" + q;
+    $("again").querySelector("span").textContent = L[0]; $("toGdn").querySelector("span").textContent = L[1]; $("toMap").querySelector("span").textContent = L[2]; }
   $("res").hidden = false; $("again").focus(); if(roundStars >= 3) cheer(3, null, "");
   if(window.LearnLimit) LearnLimit.check(false);   /* vừa xong vòng: nếu đã hết giờ thì hiện màn nghỉ */
 }
 function start(){
   if(window.LearnLimit && LearnLimit.over()){ $("res").hidden = true; $("sheet").hidden = true; LearnLimit.check(true); return; }   /* hết giờ chơi: không bắt đầu vòng mới */
   const t = T[lang]; cur = TRIP ? Story.resumeAt(TRIP.id) : 0; streak = 0; best = 0; roundStars = 0; wrongTags = {}; $("res").hidden = true; $("sheet").hidden = true;
-  $("toMe").hidden = !TRIP; $("toGdn").hidden = true; gardenBadge(); introPending = !!TRIP; buildRound(); ADV = null; farmOutfit(); showQ(); if(!TRIP) LM.event("start");
+  $("toMe").hidden = true; gardenBadge(); introPending = !!TRIP; buildRound(); ADV = null; farmOutfit(); showQ(); if(!TRIP) LM.event("start");
   if(window.Farm && window.Adventure && !TRIP){ const gr = Farm.greet(subj, lang, c => (T[lang].tag || {})[c] || ""); const c0 = Adventure.chapter(subj, lang); LM.say(gr); setTimeout(() => { if(cur === 0 && !locked) LM.say(c0.intro); }, 3600); }
 }
 /* ---------- giao diện ---------- */
@@ -786,7 +792,12 @@ function sheet(){
 function speak(){
   if(!("speechSynthesis" in window)) return; const b = bank[cur]; if(!b) return;
   const vi = lang === "vi", map = vi ? {"×":" nhân ","+":" cộng ","−":" trừ ","÷":" chia ","=":" bằng ","%":" phần trăm "} : {"×":" times ","+":" plus ","−":" minus ","÷":" divided by ","=":" equals ","%":" percent "};
-  let txt = b.speak != null ? String(b.speak) : b.q.replace(/<[^>]+>/g, "").replace(/[×+−÷=%]/g, c => map[c]).replace(/\?/g, " ")   /* dấu ? không đọc thành chữ */.replace(/_+/g, vi ? " chỗ trống " : " blank ");
+  /* ĐỌC ĐỀ GỌN: chỉ đọc CÂU HỎI (phần trước hàng hình đầu tiên); emoji trong câu hỏi đổi thành tên đồ vật MỘT lần ("Có mấy 🍇?" → "Có mấy chùm nho?"),
+     không bao giờ để máy đọc từng hình ("chùm nho, chùm nho, chùm nho, dâu tây…"). Hình nằm ở hàng đếm/bảng dưới câu hỏi thì bỏ qua khi đọc. */
+  const EMO = /\p{Extended_Pictographic}(?:\uFE0F|\u200D\p{Extended_Pictographic})*/gu;
+  const nameE = e => (window.LearnTypes && LearnTypes.nameOf && LearnTypes.nameOf(e, vi ? "vi" : "en")) || "";
+  const cleanSpeak = html => { let t = String(html).split(/<br\s*\/?>/i).map(x => x.replace(/<[^>]+>/g, "")).filter(x => x.trim() && (/\p{L}/u.test(x.replace(EMO, "")) || !EMO.test((EMO.lastIndex = 0, x)))).join(". ");   /* bỏ các dòng chỉ có hình (hàng đếm), giữ dòng có chữ (bảng, đề nhiều dòng) */ const seen = {}; t = t.replace(EMO, e => { if(seen[e]) return ""; seen[e] = 1; return nameE(e) ? " " + nameE(e) + " " : " "; }); return t.replace(/\s+/g, " ").trim(); };
+  let txt = b.speak != null ? String(b.speak).replace(EMO, " ").replace(/\s+/g, " ").trim() : cleanSpeak(b.q).replace(/[×+−÷=%]/g, c => map[c]).replace(/\?/g, " ")   /* dấu ? không đọc thành chữ */.replace(/_+/g, vi ? " chỗ trống " : " blank ");
   if(b.speak == null && subj === "tanh" && grade <= 2) txt = vi ? "Đây là gì?" : "What is this?";
   if(window.Voice){ Voice.say(txt, subj, b.speakLang || (subj === "tanh" ? "en" : (vi ? "vi" : "en")), { fail: () => LM.say(T[lang].noVoice) }); return; }   /* giọng chung: tệp thu sẵn nếu có, không thì giọng máy tốt nhất + cao độ riêng từng nhân vật (learn/voice.js) */
   try{ const lg = b.speakLang ? (b.speakLang === "vi" ? "vi-VN" : "en-US") : (subj === "tanh" ? "en-US" : (vi ? "vi-VN" : "en-US")), busy = speechSynthesis.speaking || speechSynthesis.pending; if(busy) speechSynthesis.cancel();

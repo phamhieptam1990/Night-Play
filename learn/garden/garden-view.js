@@ -42,4 +42,9 @@ function initView(){
   w.addEventListener("click", function(e){ if(VW.moved){ e.stopPropagation(); e.preventDefault(); VW.moved = false; } }, true);
   document.addEventListener("keydown", function(e){ if(document.querySelector(".ov.on")) return; if(e.key === "+" || e.key === "="){ setZoom(VW.s * 1.3); } else if(e.key === "-"){ setZoom(VW.s / 1.3); } else if(e.key === "0"){ viewHome(); } });
   window.addEventListener("resize", function(){ setZoom(VW.s); });
+  /* iOS Safari: chặn cử chỉ phóng to cả trang (nếu lỡ bị phóng to thì nút ＋ － nằm ngoài màn hình và không thu lại được) */
+  ["gesturestart", "gesturechange", "gestureend"].forEach(function(n){ document.addEventListener(n, function(e){ e.preventDefault(); }, { passive: false }); });
+  document.addEventListener("dblclick", function(e){ if(e.target && e.target.closest && e.target.closest(".zoom")) e.preventDefault(); });
+  /* an toàn: nếu trình duyệt vẫn bị phóng to trang (visualViewport.scale > 1) thì báo cách thu lại; nút Về giữa luôn thấy */
+  if(window.visualViewport){ var vvw = false; window.visualViewport.addEventListener("resize", function(){ var big = window.visualViewport.scale > 1.02; if(big && !vvw && typeof toast === "function") toast("Chụm hai ngón để thu nhỏ lại, hoặc bấm nút ⌂"); vvw = big; }); }
 }

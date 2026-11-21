@@ -321,7 +321,7 @@
     };
     G.en_numbers = function (cc) {
       var mx = cc.grade === 1 ? 10 : cc.grade === 2 ? 20 : 100, n = cc.grade >= 3 ? pk([11, 12, 13, 15, 18, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, 36, 47, 58, 99]) : rnd(1, mx), ans = numToWord(n), wr = [];
-      if (cc.grade <= 2 && rnd(0, 1)) { var e = pk(["🍎", "⭐", "🐟", "🎈", "🌸"]), k = rnd(1, 10); return fin((vi(cc) ? "Có bao nhiêu? " : "How many? ") + em(new Array(k + 1).join(e)), numToWord(k), W([k + 1, k - 1, k + 2, k + 3].filter(function (x) { return x >= 1 && x <= 12; }).map(numToWord), "off_by_one")); }
+      if (cc.grade <= 2 && rnd(0, 1)) { var e = pk(["🍎", "⭐", "🐟", "🎈", "🌸"]), k = rnd(1, 10); var NM = { "🍎": ["quả táo", "apples"], "⭐": ["ngôi sao", "stars"], "🐟": ["con cá", "fish"], "🎈": ["quả bóng", "balloons"], "🌸": ["bông hoa", "flowers"] }[e]; var qq = fin((vi(cc) ? "Có bao nhiêu? " : "How many? ") + em(new Array(k + 1).join(e)), numToWord(k), W([k + 1, k - 1, k + 2, k + 3].filter(function (x) { return x >= 1 && x <= 12; }).map(numToWord), "off_by_one")); qq.speak = vi(cc) ? "Có mấy " + NM[0] + "?" : "How many " + NM[1] + " are there?"; return qq; }
       [n + 1, n - 1, n + 2, n - 2, n + 10, n - 10, n + 3].forEach(function (x) { if (x >= 1 && x <= 100) wr.push(numToWord(x)); });
       if (n >= 13 && n <= 19) wr.push(numToWord(n * 10 % 100 || 30));   /* thirteen ~ thirty */
       return fin((vi(cc) ? "Số " : "The number ") + em(n) + (vi(cc) ? " đọc là gì?" : " is…?"), ans, W(wr, "word"));

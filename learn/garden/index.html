@@ -1,6 +1,19 @@
-<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Vườn Học Vui</title>
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover"><title>Vườn Học Vui</title>
 <!-- Trang vườn VIẾT TAY (không sinh). CSS và JS KHÔNG khai ở đây: danh sách + thứ tự nằm ở garden-layout.js (STYLES, SCRIPTS, START).
      Thêm tính năng = thêm css/NN-ten.css và/hoặc garden-ten.js rồi thêm tên vào garden-layout.js. Dữ liệu cây/ô: shared/art/garden/garden-data.js (SINH bởi scripts/learn/gen-scene-art.js). -->
+<style>
+/* chặn phóng to NGUYÊN TRANG bằng hai ngón (làm nút ＋ － trôi mất khỏi màn hình và kẹt không thu nhỏ được); vườn tự xử lý kẹp hai ngón bằng setZoom */
+html,body,.fsw{touch-action:pan-x pan-y}
+/* chuyển qua lại giữa các vườn (lớp × môn) */
+.gsw{position:fixed;left:50%;top:calc(max(10px,env(safe-area-inset-top)) + 52px);transform:translateX(-50%);z-index:31;display:flex;align-items:center;gap:4px;padding:4px;border-radius:99px;background:rgba(22,17,48,.74);border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 6px 16px rgba(0,0,0,.3)}
+.gsw a{display:inline-flex;align-items:center;justify-content:center;min-width:44px;height:44px;border-radius:22px;text-decoration:none;color:#fff;font:800 14px/1 system-ui,sans-serif;padding:0 6px;opacity:.7}
+.gsw a img{width:36px;height:36px;object-fit:contain}
+.gsw a[aria-current=true]{opacity:1;background:linear-gradient(135deg,var(--a,#34D399),var(--b,#0EA5E9));box-shadow:0 0 0 2px rgba(255,255,255,.55)}
+.gsw a[aria-current=true] span{margin:0 8px 0 2px}.gsw span{display:none}
+.gsw .gg{min-width:36px;opacity:.95;font-size:18px}.gsw .gg[aria-disabled=true]{opacity:.3;pointer-events:none}
+.gsw .gsl{min-width:0;padding:0 4px;font-size:13px;white-space:nowrap}
+@media (max-height:430px){.gsw{top:6px;left:auto;right:64px;transform:none}}
+</style>
 <script src="../slot.js"></script>
 <script src="../content/curriculum.js"></script>
 <script src="../path.js"></script>
@@ -26,5 +39,19 @@
 <div class="acts"><button class="btn g" type="button" id="mncl">Đóng</button></div></div></div></div>
 <div class="ov" id="ov" role="dialog" aria-modal="true" aria-labelledby="ptitle"><div class="card" id="card"></div></div><div class="toast" id="toast" role="status"></div>
 <script>GardenLayout.writeScripts()</script>
+<script>
+(function(){
+var S=window.LearnSlot; if(!S) return;
+var p=S.parts(), g=p?p.grade:(+(function(){try{return S.raw.get("learn:grade")}catch(e){return 1}})()||1), cur=p?p.subj:"";
+if(!(g>=1&&g<=5)) g=1;
+var M={toan:["math","Mochi","Toán","#34D399","#0EA5E9"],tviet:["vietnamese","Mầm","Tiếng Việt","#FFB020","#FB5A7A"],tanh:["english","Bibi","Tiếng Anh","#60A5FA","#A78BFA"]};
+function u(gr,sj){return "index.html?grade="+gr+"&subj="+sj}
+var bar=document.createElement("nav"); bar.className="gsw"; bar.id="gsw"; bar.setAttribute("aria-label","Chuyển vườn");
+var tgt=cur||"toan", h="";
+h+='<a class="gg" href="'+u(Math.max(1,g-1),tgt)+'" aria-label="Lớp trước"'+(g<=1?' aria-disabled="true"':"")+'>‹</a><a class="gsl" aria-label="Lớp '+g+'" style="opacity:1;pointer-events:none">Lớp '+g+'</a><a class="gg" href="'+u(Math.min(5,g+1),tgt)+'" aria-label="Lớp sau"'+(g>=5?' aria-disabled="true"':"")+'>›</a>';
+Object.keys(M).forEach(function(k){var m=M[k];h+='<a href="'+u(g,k)+'" title="'+m[2]+'" aria-label="Vườn '+m[2]+'"'+(k===cur?' aria-current="true" style="--a:'+m[3]+';--b:'+m[4]+'"':"")+'><img src="../../shared/art/learn/'+m[0]+'/'+m[0]+'_head.svg" alt=""><span>'+m[2]+'</span></a>'});
+bar.innerHTML=h; document.body.appendChild(bar);
+})();
+</script>
 <script src="../icons.js"></script>
 </body></html>

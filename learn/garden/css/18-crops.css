@@ -114,3 +114,23 @@
 #buddyCard .bd-ok{width:100%;min-height:56px;margin-top:12px;border-radius:99px;border:0;background:linear-gradient(135deg,#FFE08A,#FFB020);color:#4a2c00;font:900 20px system-ui;cursor:pointer}
 #buddyCard .bd-note{margin:8px 0 0;font-size:13px;font-weight:600;opacity:.88}#buddyCard .bd-x{margin-left:6px;min-height:36px;padding:0 12px;border-radius:99px;border:2px solid rgba(255,255,255,.4);background:transparent;color:#fff;font:800 13px system-ui;cursor:pointer}
 @media (max-height:520px){#buddyCard{padding:8px 14px!important;width:min(760px,100%);display:grid;grid-template-columns:1.5fr 1fr;gap:6px 14px;text-align:center}#buddyCard h2{grid-column:1/-1;margin:0;font-size:19px}#buddyCard .bd-who{grid-column:1;grid-row:2 / span 4}#buddyCard .bd-c img{width:min(100%,76px)}#buddyCard .bd-q{margin:0;grid-column:2}#buddyCard .bd-age,#buddyCard .bd-ok,#buddyCard .bd-note{grid-column:2}#buddyCard .bd-age button{min-height:42px;font-size:16px}#buddyCard .bd-ok{min-height:46px;margin-top:0;font-size:18px}#buddyCard .bd-note{margin:0}}
+
+/* ===== ĐIỆN THOẠI NHỎ (iPhone SE 320×568 / 375×667): bảng Chăm vườn PHẢI vừa một màn, không bị cắt ===== */
+@media (max-width:400px) and (min-height:521px), (max-height:700px) and (max-width:400px){
+  #mncard .hd{padding:8px 52px 8px 12px!important}#mncard .hd h2{font-size:19px!important}
+  #mncard .cbody{padding:6px 10px 10px!important}
+  #guide{gap:6px}
+  #guide .gd-who{display:none}                                  /* Bác Rễ nói: ẩn ở màn nhỏ để dành chỗ cho nhiệm vụ */
+  #guide .gd-goal{padding:6px 8px;gap:8px}#guide .gd-goal>img{width:64px;height:54px}#guide .gd-goal b{font-size:18px}#guide .gd-goal small{font-size:11px}
+  #guide .gd-goal span{font-size:13px;margin-top:1px}#guide .gd-bar{margin-top:3px;height:8px}
+  #guide .gd-m h4{font-size:15px;margin:0 0 4px}#guide .gd-m h4 small{display:none}
+  #guide .gdc-list{gap:5px}
+  #guide .gdc{padding:4px 8px;gap:8px}#guide .gdc>i{width:34px;height:34px;font-size:20px}#guide .gdc b{font-size:15px;line-height:1.15}
+  #guide .gdc small{font-size:12px;line-height:1.2}
+  #guide .gdc-go,#guide .gdc-ok{min-width:58px;min-height:42px;padding:0 10px;font-size:15px}
+  #guide .gd-go2>*{min-height:42px;font-size:14px}
+}
+@media (max-width:340px) and (min-height:521px){
+  #guide .gdc:not(.nx) small{display:none}                      /* 320px: chỉ icon + tên + nút (thẻ Học bài mới vẫn hiện tên chủ đề) */
+  #guide .gd-goal>img{width:52px;height:46px}#guide .gd-goal b{font-size:16px}
+}
