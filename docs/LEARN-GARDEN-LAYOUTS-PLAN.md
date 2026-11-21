@@ -15,6 +15,8 @@ Chủ site (2026-11-21): **Toán giữ nguyên layout hiện tại (Vườn Số
 
 Thứ tự: A1 Rừng Chữ → duyệt → A2 Vịnh Từ → duyệt → B (đổi màu lớp cho cả 3).
 
+**Cập nhật 2026-11-21:** việc B (đổi màu theo lớp) đã làm và deploy trước, vì chủ site chốt 5 màu: lớp 1 xanh lá, lớp 2 xanh ngọc lam, lớp 3 vàng hổ phách, lớp 4 trắng sương, lớp 5 tím chàm (`scripts/learn/gen-garden-grades.js`, xem `shared/art/garden/preview-grades.html`). Bố cục hai vườn mới đã vẽ ở `shared/art/garden/preview-layouts.html`, chờ chủ site chốt rồi mới làm A1/A2.
+
 ## Vật phẩm KHÁC NHAU theo từng lớp (chủ site: "tuy đổi màu nhưng vật phẩm mỗi lớp phải khác nhau")
 Mỗi lớp có **bộ vật phẩm riêng** (cây trồng, cây lâu năm, vật nuôi, đồ trang trí), mở bằng việc học đúng lớp đó. Màu đổi theo lớp, vật phẩm cũng đổi theo lớp, nên nhìn vườn là biết bé đang ở lớp nào. Hiện mới có 10 loại hạt giống (mở theo sao chung) và 6 vật nuôi; cần vẽ thêm vật phẩm mới để mỗi lớp có đồ riêng.
 
