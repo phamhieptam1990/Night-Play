@@ -34,6 +34,9 @@ main{position:relative;z-index:1;flex:1;min-height:0;display:flex;flex-direction
 .bub{position:relative;flex:1;min-width:0;padding:12px 14px;border-radius:20px;background:var(--panel);border:2px solid var(--line);font-weight:800;font-size:clamp(17px,4.8vw,22px);line-height:1.3;box-shadow:0 6px 18px rgba(30,20,80,.12)}
 .bub::before{content:"";position:absolute;left:-9px;bottom:16px;width:14px;height:14px;background:var(--panel);border-left:2px solid var(--line);border-bottom:2px solid var(--line);transform:rotate(45deg)}
 .hear{flex:none;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-size:22px;background:color-mix(in srgb,var(--c1) 25%,var(--panel));border:1px solid var(--line)}
+.vhint{flex:none;align-self:center;margin:2px 0 4px;padding:7px 14px;border-radius:99px;background:color-mix(in srgb,var(--c1) 30%,var(--panel));border:2px solid var(--c1);font-weight:800;font-size:14px;text-align:center;animation:vh 1.4s ease-in-out infinite}
+@media (max-height:430px) and (min-aspect-ratio:11/10){.vhint{display:none}}
+@keyframes vh{50%{transform:scale(1.04)}}@media (prefers-reduced-motion:reduce){.vhint{animation:none}}
 .stage{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;border-radius:26px;background:color-mix(in srgb,var(--panel) 80%,transparent);border:1px solid var(--line);padding:10px;overflow:hidden;text-align:center}
 .art{font-size:clamp(40px,13vw,72px);line-height:1.25;white-space:pre-line;font-weight:900}
 .shp{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}.shp svg{width:clamp(64px,22vw,110px);height:auto}
@@ -97,6 +100,7 @@ button.it:active{transform:scale(.92)}
 </header>
 <main id="m">
   <div class="say"><div class="mas"><img id="mi" alt=""></div><div class="bub" id="bub" role="status" aria-live="polite"></div><button class="hear" id="hear" type="button" aria-label="Nghe">🔊</button></div>
+  <div class="vhint" id="vhint" role="status">🔊 Chạm vào màn hình để nghe bạn linh vật nói</div>
   <div class="stage" id="stage"></div>
 </main>
 <div class="foot"><button class="bk" id="bk" type="button" aria-label="Màn trước">◀</button><button class="nx" id="nx" type="button">Tiếp ▶</button></div>
@@ -127,12 +131,20 @@ const art=n=>"../../shared/art/learn/"+M[0]+"/"+M[0]+"_"+n+".svg", MI=$("mi");
 function mood(n){MI.src=art(n==="happy"?"happy":n==="cheer"?"cheer":"grade_"+(grade||1))}
 const COPY={next:"Tiếp ▶",tryit:"Thử cùng nhé ▶",test:"Làm bài kiểm tra ▶",again:"Học lại",skip:"Kiểm tra luôn ▶",tchip:"Thử cùng · không tính điểm",combine:"Gộp lại",hear:"Nghe",done:"Xong! Bé giỏi quá! 🎉",ready:"Bé học xong rồi! Giờ mình làm bài kiểm tra nhé.",another:"Thử lại nhé, bé làm được mà!",show:"Đáp án đúng là đây nè!"};
 function strip(s){return String(s).replace(/[\u{1F000}-\u{1FFFF}☀-➿⭐️]/gu,"").replace(/\s+/g," ").trim()}
-function say(t){ if(!window.Voice) return; Voice.say(strip(t),subj,"vi",{profile:"lesson",fail:()=>{}}); }
+/* GIỌNG ĐỌC: trình duyệt CHỈ cho phát sau khi bé chạm màn hình ít nhất một lần, nên màn đầu im lặng. Cách xử lý:
+   (1) hiện thanh "Chạm để nghe" ở màn đầu cho tới khi bé chạm; (2) chạm lần đầu thì đọc NGAY câu đang hiện; (3) nếu máy không có giọng tiếng Việt thì báo rõ thay vì im. */
+let touched=false, noVoiceShown=false;
+function say(t){
+  if(!window.Voice) return;
+  Voice.say(strip(t),subj,"vi",{profile:"lesson",fail:()=>{ if(!noVoiceShown){ noVoiceShown=true; const h=$("vhint"); if(h){ h.hidden=false; h.textContent="🔇 Máy chưa có giọng đọc tiếng Việt. Nhờ ba mẹ bật giọng đọc trong Cài đặt của máy nhé."; } } }});
+}
+function firstTouch(){ if(touched) return; touched=true; const h=$("vhint"); if(h&&!noVoiceShown) h.hidden=true; if(AUTO&&curText) say(curText); }
+["pointerdown","keydown","touchstart"].forEach(ev=>addEventListener(ev,firstTouch,{passive:true,once:false}));
 function sayEn(t){ if(window.Voice) Voice.say(t,"tanh","en",{profile:"lesson",fail:()=>{}}); }
 let AUTO=ls("learn:auto")!=="0";   /* bài học: mặc định TỰ ĐỌC (bé lớp 1 chưa đọc thạo); bé tắt được bằng nút 🔊 */
 function sndUi(){$("snd").textContent=AUTO?"🔊":"🔇";$("snd").setAttribute("aria-pressed",String(AUTO))}
 $("snd").onclick=()=>{AUTO=!AUTO;ls("learn:auto",AUTO?"1":"0");sndUi();if(AUTO)say(curText);else if(window.speechSynthesis)speechSynthesis.cancel()};
-$("hear").onclick=()=>say(curText); sndUi();
+$("hear").onclick=()=>{touched=true;say(curText)}; $("mi").parentNode.onclick=()=>{touched=true;say(curText)}; sndUi();
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 const SH={
@@ -312,5 +324,7 @@ document.head.appendChild(sc);
 })();
 </script>
 <script src="../icons.js"></script>
+<script src="../../shared/offline.js" defer></script>
+<script src="../../shared/updated.js"></script>
 </body>
 </html>
