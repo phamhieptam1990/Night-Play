@@ -72,7 +72,7 @@ function ls(k){try{return localStorage.getItem(k)}catch(e){return null}}
 let lang=q.get("lang")||ls("lang"); if(lang!=="en") lang="vi";
 const MAS={toan:["math","Mochi","#34D399","#0EA5E9","Toán"],tviet:["vietnamese","Mầm","#FFB020","#FB5A7A","Tiếng Việt"],tanh:["english","Bibi","#60A5FA","#A78BFA","Tiếng Anh"]};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const KIND={say:"Học",tapcount:"Chạm đếm",merge:"Gộp lại",take:"Bớt đi",choose:"Câu hỏi",sum:"Tóm tắt"};
+const KIND={game:"Trò chơi",say:"Học",tapcount:"Chạm đếm",merge:"Gộp lại",take:"Bớt đi",choose:"Câu hỏi",sum:"Tóm tắt"};
 if(!(grade>=1&&grade<=5)||!MAS[subj]||!topic){location.replace("index.html");return}
 const M=MAS[subj]; document.body.style.setProperty("--k1",M[2]); document.body.style.setProperty("--k2",M[3]);
 $("back").href="index.html?"+new URLSearchParams({grade,subj,lang}).toString()+"#s-"+subj;
@@ -99,6 +99,8 @@ function render(L){
       if(s.art) body+='<div class="note">Hình: '+esc(s.art.replace(/\n/g," "))+'</div>';
       if(s.shapes) body+='<div class="note">Hình học: '+s.shapes.map(x=>({circle:"hình tròn",square:"hình vuông",triangle:"hình tam giác",rect:"hình chữ nhật"}[x]||x)).join(", ")+'</div>';
       if(s.en) body+='<div class="note">Từ tiếng Anh (chạm để nghe): '+s.en.map(esc).join(" · ")+'</div>';
+      if(s.chips) body+='<div class="note">Chạm để nghe: '+s.chips.map(c=>esc(c[0])+" ("+esc(c[1])+")").join(" · ")+'</div>';
+      if(s.k==="game") body+='<div class="note">'+s.rounds.length+' lượt chơi, bé nghe đề rồi chạm ô đúng (không cần đọc):</div><ul class="l">'+s.rounds.map(r=>'<li>'+esc(r.say)+(r.art?' '+esc(r.art):'')+' → <b>'+esc(r.opts[r.ok])+'</b> (ô khác: '+r.opts.filter((_,j)=>j!==r.ok).map(esc).join(', ')+')</li>').join('')+'</ul><div class="note">'+esc(s.done)+'</div>';
       if(s.k==="choose") body+='<div class="o">'+s.opts.map((o,j)=>'<span class="opt'+(j===s.ok?" ok":"")+'">'+esc(o)+(j===s.ok?" ✓":"")+'</span>').join("")+'</div><div class="note">Đúng: '+esc(s.yes)+' · Gợi ý khi sai: '+esc(s.no)+'</div>';
       if(s.k==="tapcount") body+='<div class="note">Bé chạm từng '+esc(s.e)+' để đếm đến '+s.n+'. '+esc(s.done)+'</div>';
       if(s.k==="merge") body+='<div class="note">Bé chạm “Gộp lại”: '+s.a+' + '+s.b+'. '+esc(s.done)+'</div>';
@@ -114,7 +116,7 @@ function render(L){
   } else {
     h+='<section><h2>Bài học trong ứng dụng</h2><div class="card">Bài học của chủ đề này đang được soạn. Trong lúc chờ, bé vẫn làm được bài kiểm tra nếu chủ đề đã có.</div></section>';
   }
-  h+='<section><h2>Bài kiểm tra<small>5 câu, đạt từ 3 câu đúng là qua</small></h2><div class="card">'+(skills.length?'<p style="margin:0 0 6px">Các kỹ năng được kiểm tra:</p><ul class="l">'+skills.map(id=>'<li>'+esc((SK[id]||[id])[0])+'</li>').join("")+'</ul>':'Chủ đề này chưa có kỹ năng kiểm tra riêng.')+'</div></section>';
+  h+='<section><h2>Bài kiểm tra<small>5 câu, đạt từ 3 câu đúng là qua</small></h2><div class="card">'+(t.ready?'Chủ đề làm quen: bé hoàn thành bằng trò chơi nghe và chạm, không có bài kiểm tra chữ.':skills.length?'<p style="margin:0 0 6px">Các kỹ năng được kiểm tra:</p><ul class="l">'+skills.map(id=>'<li>'+esc((SK[id]||[id])[0])+'</li>').join("")+'</ul>':'Chủ đề này chưa có kỹ năng kiểm tra riêng.')+'</div></section>';
   const stn={new:"Chưa học",learned:"Đã học",passed:"Đã qua kiểm tra",star:"Thành thạo"}[st];
   h+='<section><h2>Tiến độ của bé<small>lưu trên máy này</small></h2><div class="stats"><div><b>'+esc(stn)+'</b><span>trạng thái</span></div><div><b>'+rec.t+'</b><span>lần kiểm tra</span></div><div><b>'+(rec.b?"⭐".repeat(rec.b):"—")+'</b><span>kết quả tốt nhất</span></div></div></section>';
   h+='<div class="cta">'+(hasL?'<a class="btn" href="'+esc(learnUrl)+'">📖 Cho bé học bài này</a>':'')+(skills.length?'<a class="btn'+(hasL?" ghost":"")+'" href="'+esc(testUrl)+'">📝 Làm bài kiểm tra</a>':'')+'</div>';
@@ -127,5 +129,6 @@ if(hasL){
 } else render(null);
 })();
 </script>
+<script src="../icons.js"></script>
 </body>
 </html>

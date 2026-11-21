@@ -35,7 +35,7 @@ const L = {
     safeTag: "An toàn cho trẻ", safeH: "Thiết kế để bố mẹ yên tâm",
     safe: [["🚫", "Không quảng cáo", "Bé học, không bị chen ngang bởi quảng cáo."], ["💬", "Không chat tự do", "Không có chat giữa bé và AI hay giữa các bé. Chỉ có biểu tượng cổ vũ dựng sẵn."], ["🎁", "Không hộp quà ngẫu nhiên", "Không bán hộp quà ngẫu nhiên bằng tiền thật cho trẻ em."], ["⏱️", "Bố mẹ đặt giờ", "Giới hạn thời gian học mỗi ngày do phụ huynh quyết định."]],
     mapTag: "Chương trình", mapH: "Bám theo chương trình GDPT 2018", mapSub: "Chủ đề chia theo từng lớp, câu hỏi do chúng tôi tự soạn, không chép sách giáo khoa. Chọn lớp để xem:",
-    gradeLbl: "Lớp ", opt: "Tự chọn",
+    gradeLbl: "Lớp ", opt: "Tự chọn", more: "Xem thêm ›", gmore: "Xem chương trình Lớp {n} trong ứng dụng ›", ready: "Trò chơi làm quen",
     slogan: ["Học để trưởng thành, chơi để sáng tạo.", "Học có niềm vui, chơi có mục tiêu.", "Tuổi thơ hạnh phúc hôm nay, tương lai vững vàng ngày mai. 🌱"],
     growH: "{n} lớn lên cùng bé", growSub: "Mỗi lớp có khăn màu và số lớp riêng, còn khuôn mặt thì vẫn thân quen. Bé nhìn là biết mình đang học lớp nào.", growItems: ["Khăn vàng", "Khăn xanh lá, dây đeo túi", "Khăn xanh dương, ba lô", "Khăn tím, áo choàng", "Khăn cam, áo choàng, huy hiệu vàng"],
     citeH: "Nguồn tham chiếu", citeNote: "Danh sách chủ đề được diễn giải từ chương trình, không phải trích nguyên văn. Khi cần căn cứ pháp lý, vui lòng xem văn bản gốc:",
@@ -74,7 +74,7 @@ const L = {
     safeTag: "Child safety", safeH: "Designed so parents can relax",
     safe: [["🚫", "No ads", "Kids learn without ads cutting in."], ["💬", "No free chat", "No chat between child and AI or between kids. Only ready-made cheer icons."], ["🎁", "No loot boxes", "No random loot boxes sold to children for real money."], ["⏱️", "Parent time limit", "Daily study time is set by the parent."]],
     mapTag: "Curriculum", mapH: "Follows Vietnam’s 2018 national curriculum", mapSub: "Topics are organised by grade; questions are written by us, not copied from textbooks. Pick a grade:",
-    gradeLbl: "Grade ", opt: "Optional",
+    gradeLbl: "Grade ", opt: "Optional", more: "More ›", gmore: "See the Grade {n} programme in the app ›", ready: "Warm-up games",
     slogan: ["Learn to grow, play to create.", "Learning with joy, play with purpose.", "A happy childhood today, a steady future tomorrow. 🌱"],
     growH: "{n} grows up with your child", growSub: "Each grade has its own scarf color and number; the face stays familiar. Kids see at a glance which grade they are in.", growItems: ["Yellow scarf", "Green scarf, satchel strap", "Blue scarf, backpack", "Purple scarf, cape", "Orange scarf, cape, gold badge"],
     citeH: "Sources", citeNote: "Topic lists are paraphrased from the curriculum, not verbatim quotes. For legal reference please consult the official texts:",
@@ -189,7 +189,7 @@ const MENU = {
 };
 const mbtn = l => `<button class="ico mbtn" id="mbtn" type="button" aria-label="${MENU[l].open}" aria-expanded="false" aria-controls="mnav"><svg class="mb1" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="mb2" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>`;
 function menuHtml(l, sl, ids) {
-  const t = L[l], m = MENU[l], learn = `/learn/index.html?${sl ? "subj=" + KEY[sl] + "&" : ""}lang=${l}`;
+  const t = L[l], m = MENU[l], learn = `/learn/lop/index.html?${sl ? "subj=" + KEY[sl] + "&" : ""}lang=${l}`;
   const subs = SUBJ.map(x => `<a class="ms ${CLS[x]}" href="${t.prefix}${x}/"${x === sl ? ' aria-current="page"' : ""}>${head(x, "base", 1)}<span><b>${esc(MAS[x].brand[l])}</b><small>${esc(MAS[x].tag[l])}</small></span></a>`).join("");
   const secs = ids.filter(Boolean).map(id => `<a href="#${id}" data-mclose>${esc(m.sec[id])}</a>`).join("");
   const more = m.more.map(x => `<a href="${x[0]}">${esc(x[1])}</a>`).join("");
@@ -202,14 +202,15 @@ function menuHtml(l, sl, ids) {
 }
 function mapHtml(l, sl) {
   const t = L[l], k = KEY[sl], gr = CUR.subjects[k].grades;
+  const app = `/learn/lop/index.html?subj=${k}&lang=${l}`, det = (g, x) => `/learn/lop/chu-de.html?grade=${g.grade}&subj=${k}&topic=${encodeURIComponent(x.id)}&lang=${l}`;
   const tabs = gr.map((g, i) => `<button type="button" role="tab" data-g="${g.grade}" aria-selected="${i === 0}">${t.gradeLbl}${g.grade}</button>`).join("");
-  const panes = gr.map((g, i) => `<div class="gp${i === 0 ? " on" : ""}" data-g="${g.grade}" role="tabpanel"><ul>${g.topics.map(x => `<li class="card"><span class="ti" aria-hidden="true">${x.icon}</span><div><b>${esc(x.name)}${g.optional ? `<span class="opt">${t.opt}</span>` : ""}</b><span>${esc(x.sub[0])}</span></div></li>`).join("")}</ul></div>`).join("");
+  const panes = gr.map((g, i) => `<div class="gp${i === 0 ? " on" : ""}" data-g="${g.grade}" role="tabpanel">${g.focus && l === "vi" ? `<p class="foc">${esc(g.focus)}</p>` : ""}<ul>${g.topics.map(x => `<li class="card"><span class="ti" aria-hidden="true">${x.icon}</span><div><b>${esc(x.name)}${g.optional ? `<span class="opt">${t.opt}</span>` : ""}${x.ready ? `<span class="opt">🎮 ${t.ready}</span>` : ""}</b><span>${esc(x.sub[0])}</span></div><a class="tm" href="${det(g, x)}" aria-label="${esc(x.name)}: ${t.more.replace(" ›", "")}">${t.more}</a></li>`).join("")}</ul><a class="btn gmore" href="${app.replace("?", "?grade=" + g.grade + "&")}">${t.gmore.replace("{n}", g.grade)}</a></div>`).join("");
   return `<div class="gtabs" role="tablist" aria-label="${t.mapTag}">${tabs}</div>${panes}`;
 }
 function page(l, sl) {
   const t = L[l], s = S[sl][l], url = `${BASE}${t.prefix}${sl}/`;
   const vi = `${BASE}${L.vi.prefix}${sl}/`, en = `${BASE}${L.en.prefix}${sl}/`;
-  const learn = `/learn/index.html?subj=${KEY[sl]}&lang=${l}`;
+  const learn = `/learn/lop/index.html?subj=${KEY[sl]}&lang=${l}`;
   const bubbles = s.scr.b.map((b, i) => `<span class="bub" style="--c:${b[1]};left:${b[2]}%;top:${b[3]}%;--w:${b[4]}px;--f:${b[0].length > 2 ? 15 : 22}px;--t:${5 + i}s">${esc(b[0])}</span>`).join("");
   const row = s.scr.row.map(r => `<b${r[1] ? ' class="ok"' : ""}>${esc(r[0])}</b>`).join("");
   const faq = [...s.faq, ...t.common_faq].map(f => `<details class="card"><summary>${esc(f[0])}</summary><p>${esc(f[1])}</p></details>`).join("");
@@ -369,7 +370,7 @@ const HUBT = {
 function hubPage(l) {
   const t = L[l], h = HUBT[l], url = `${BASE}${l === "vi" ? "/hoc/" : "/en/hoc/"}`, pre = t.prefix;
   const cards = SUBJ.map(sl => { const m = MAS[sl], s = S[sl][l], c = CLS[sl];
-    return `<article class="card hc ${c} reveal"><div class="hh"><img class="mi" ${mi(sl)} src="${asset(sl, "happy")}" width="170" height="170" alt="${m.n}" loading="lazy" decoding="async"></div><h3>${esc(m.brand[l])}</h3><p class="ht">${esc(m.tag[l])}</p><ul class="hl">${s.games.slice(0, 3).map(g => `<li>${g[0]} ${esc(g[1])}</li>`).join("")}</ul><div class="hb"><a class="btn sm" href="/learn/index.html?subj=${KEY[sl]}&lang=${l}">${h.try} →</a><a class="btn sm ghost" href="${pre}${sl}/">${h.view}</a></div></article>`; }).join("");
+    return `<article class="card hc ${c} reveal"><div class="hh"><img class="mi" ${mi(sl)} src="${asset(sl, "happy")}" width="170" height="170" alt="${m.n}" loading="lazy" decoding="async"></div><h3>${esc(m.brand[l])}</h3><p class="ht">${esc(m.tag[l])}</p><ul class="hl">${s.games.slice(0, 3).map(g => `<li>${g[0]} ${esc(g[1])}</li>`).join("")}</ul><div class="hb"><a class="btn sm" href="/learn/lop/index.html?subj=${KEY[sl]}&lang=${l}">${h.try} →</a><a class="btn sm ghost" href="${pre}${sl}/">${h.view}</a></div></article>`; }).join("");
   const nav = SUBJ.map(x => `<a href="${pre}${x}/">${t.nav[x]}</a>`).join("");
   const faq = t.common_faq.map(f => `<details class="card"><summary>${esc(f[0])}</summary><p>${esc(f[1])}</p></details>`).join("");
   const feats = t.feats.map(f => `<article class="card feat reveal"><div class="fi" aria-hidden="true">${f[0]}</div><h3>${esc(f[1].split("Mít").join(l === "vi" ? "Linh vật" : "Mascot"))}</h3><p>${esc(f[2].split("Mít").join(l === "vi" ? "linh vật" : "the mascot"))}</p></article>`).join("");
@@ -407,7 +408,7 @@ ${menuHtml(l, null, ["mon", "cachhoc", "tinhnang", "antoan", "hoi"])}
 <main id="main">
 <section class="hero" id="top"><div class="aur" aria-hidden="true"><i></i><i></i><i></i></div><div class="stars" aria-hidden="true"></div>
   <div class="wrap hero-in"><div><span class="kick">✨ ${esc(h.kick)}</span><h1>${h.h1}</h1><p class="lead">${esc(h.lead)}</p>
-    <div class="cta"><a class="btn big" href="/learn/index.html?lang=${l}">${h.try} →</a><a class="btn ghost" href="#mon">${h.pickH}</a></div></div>
+    <div class="cta"><a class="btn big" href="/learn/lop/index.html?lang=${l}">${h.try} →</a><a class="btn ghost" href="#mon">${h.pickH}</a></div></div>
     <div class="trios"><div class="spot on" id="spot" role="status" aria-live="polite"><p class="spot-say" id="spotSay">${esc(h.greet)}</p><img id="spotImg" data-k="mochi" src="${asset("toan", "happy")}" width="360" height="360" alt=""></div><div class="tcs">${tcs}</div></div></div></section>
 <section class="sec alt" id="mon"><div class="wrap"><h2 class="reveal">${esc(h.pickH)}</h2><p class="sub reveal">${esc(h.pickSub)}</p><div class="hubgrid">${cards}</div></div></section>
 <section class="sec slogan" id="khauhieu" aria-label="${esc(t.slogan[0])}"><div class="aur" aria-hidden="true"><i></i><i></i></div><div class="wrap">
@@ -418,10 +419,10 @@ ${menuHtml(l, null, ["mon", "cachhoc", "tinhnang", "antoan", "hoi"])}
 <section class="sec" id="antoan"><div class="wrap"><span class="tag">${t.safeTag}</span><h2 class="reveal">${esc(t.safeH)}</h2><div class="safe">${t.safe.map(x => `<div class="card it reveal"><i aria-hidden="true">${x[0]}</i><div><h3>${esc(x[1])}</h3><p>${esc(x[2])}</p></div></div>`).join("")}</div>
   <aside class="cite reveal"><h3>${esc(h.curH)}</h3><p>${esc(h.curP)}</p><ol>${t.cite.map(c => `<li><a href="${c[1]}" target="_blank" rel="noopener noreferrer">${esc(c[0])}</a></li>`).join("")}</ol></aside></div></section>
 <section class="sec alt" id="hoi"><div class="wrap"><span class="tag">${t.faqTag}</span><h2 class="reveal">${esc(t.faqH)}</h2><div class="faq" style="margin-top:28px">${faq}</div></div></section>
-<section class="endcta"><div class="wrap"><h2>${esc(h.kick)}</h2><p class="sub">${esc(h.lead)}</p><a class="btn white big" href="/learn/index.html?lang=${l}">${h.try} →</a></div></section>
+<section class="endcta"><div class="wrap"><h2>${esc(h.kick)}</h2><p class="sub">${esc(h.lead)}</p><a class="btn white big" href="/learn/lop/index.html?lang=${l}">${h.try} →</a></div></section>
 </main>
 <footer class="foot"><div class="wrap"><nav class="fl" aria-label="Footer"><a href="${t.home}">${t.back}</a><a href="${t.prefix}${PAR[l].slug}/">${l === "vi" ? "Dành cho phụ huynh" : "For parents"}</a><a href="/popplay/">${t.foot[0]}</a><a href="/cozyplay/">${t.foot[1]}</a><a href="/privacy.html">${t.foot[2]}</a><a href="/terms.html">${t.foot[3]}</a><a href="mailto:support@nightplay.vn">${t.foot[4]}</a></nav><p>&copy; <span id="yr">2026</span> Play Hub</p></div></footer>
-<div class="sticky" id="sticky"><a class="btn" href="/learn/index.html?lang=${l}">${t.sticky} →</a></div>
+<div class="sticky" id="sticky"><a class="btn" href="/learn/lop/index.html?lang=${l}">${t.sticky} →</a></div>
 <script src="/hoc/hoc.js" defer></script>
 </body>
 </html>
@@ -487,7 +488,7 @@ ${menuHtml(l, null, ["tinhnang", "phuhuynh", "antoan", "hoi"])}
 <main id="main">
 <section class="hero" id="top" style="min-height:auto;padding:clamp(40px,8vw,88px) 0"><div class="aur" aria-hidden="true"><i></i><i></i><i></i></div><div class="stars" aria-hidden="true"></div>
   <div class="wrap hero-in" style="display:block"><span class="kick">🔒 ${esc(h.kick)}</span><h1>${h.h1}</h1><p class="lead">${esc(h.lead)}</p>
-    <div class="cta"><a class="btn big" href="${open}">${h.open} →</a><a class="btn ghost" href="/learn/index.html?lang=${l}">${h.try}</a></div>
+    <div class="cta"><a class="btn big" href="${open}">${h.open} →</a><a class="btn ghost" href="/learn/lop/index.html?lang=${l}">${h.try}</a></div>
     <div style="display:flex;gap:10px;justify-content:flex-start;margin-top:22px" aria-hidden="true">${mas}</div></div></section>
 <section class="sec alt" id="tinhnang"><div class="wrap"><h2 class="reveal">${esc(h.featH)}</h2><p class="sub reveal">${esc(h.featSub)}</p><div class="grid f" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))">${h.feats.map(x => card(x, "feat")).join("")}</div></div></section>
 <section class="sec" id="phuhuynh"><div class="wrap"><h2 class="reveal">${esc(h.timeH)}</h2><p class="sub reveal">${esc(h.timeSub)}</p><div class="grid f">${h.time.map(x => card(x, "feat")).join("")}</div></div></section>

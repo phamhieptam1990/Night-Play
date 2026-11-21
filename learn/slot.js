@@ -8,7 +8,7 @@
   "use strict";
   var SUBJ = ["toan", "tviet", "tanh"];
   var KEYS = ["learn:farm", "learn:garden", "gardenFarm", "gardenTrees", "gardenSeen", "gardenHelp", "gardenAnimals", "gardenGift", "gardenDaily", "gardenLv", "gardenName", "gardenQuest"];
-  var TOTAL = { toan: [5, 5, 6, 6, 6], tviet: [4, 4, 4, 4, 4], tanh: [3, 3, 4, 4, 4] };   /* số chủ đề mỗi lớp (khớp learn/content/curriculum.js; build-lessons.js kiểm khớp) */
+  var TOTAL = { toan: [7, 5, 6, 6, 6], tviet: [7, 4, 4, 4, 4], tanh: [3, 3, 4, 4, 4] };   /* số chủ đề mỗi lớp (khớp learn/content/curriculum.js; build-lessons.js kiểm khớp) */
   var proto = root.Storage && root.Storage.prototype, raw = null;
   if (!proto) return;
   raw = { get: proto.getItem, set: proto.setItem, del: proto.removeItem };

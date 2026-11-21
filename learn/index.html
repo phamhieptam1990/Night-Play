@@ -711,7 +711,7 @@ function choose(btn, o){
   gotWrong(o.tag, () => { const right = b.o.find(x => x.ok); Array.from($("ans").children).forEach(x => { x.disabled = true; if(x.textContent === right.v) x.classList.add("ok"); }); }, b.o.find(x => x.ok).v);
 }
 function next(){ cur++; if(TRIP) Story.rest(TRIP.id, cur); if(cur >= 5) return finish(); showQ(); }
-let AUTO = ls("learn:auto") === "1", GESTURE = false;
+let AUTO = ls("learn:auto") == null ? grade <= 2 : ls("learn:auto") === "1", GESTURE = false;   /* lớp 1–2 chưa đọc thạo: mặc định TỰ ĐỌC đề (bé tắt được) */
 const mqL = matchMedia("(max-height:430px) and (min-aspect-ratio:11/10)");
 function placeStars(){ const st = $("stars"); if(mqL.matches){ if(st.parentNode !== $("topRow")) $("snd").before(st); } else if(st.parentNode !== $("streak").parentNode) $("streak").before(st); }
 if(mqL.addEventListener) mqL.addEventListener("change", placeStars);
@@ -845,5 +845,6 @@ document.querySelector(".prog").classList.add("intro"); setTimeout(() => documen
 if(TRIP_ID && window.Story){ fetch("content/trips/" + TRIP_ID + ".json").then(r => r.json()).then(t => { TRIP = t; subj = t.subject; chrome(); start(); }).catch(() => { chrome(); start(); }); }
 else { chrome(); start(); }
 </script>
+<script src="icons.js"></script>
 </body>
 </html>

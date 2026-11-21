@@ -204,7 +204,7 @@ function topicCard(s,g,t,m,i,total){
   let learnU=null,testU=null,chips="";
   if(unl){ if(hasL) learnU="bai.html?"+prm; if(hasT) testU="../index.html?"+prm; }
   if(!unl) chips+='<span class="chip2 a">🔒 '+(vi?"Xong chủ đề "+i+" trước nhé":"Finish topic "+i+" first")+'</span>';
-  else { chips+=hasL?'<span class="chip2 g">📖 '+T.hasLesson+'</span>':'<span class="chip2 a">'+T.soon+'</span>'; if(!hasT) chips+='<span class="chip2 a">'+T.nt+'</span>'; }
+  else { chips+=t.ready?'<span class="chip2 g">🎮 '+(vi?"Trò chơi làm quen, không cần đọc":"Warm-up games, no reading")+'</span>':(hasL?'<span class="chip2 g">📖 '+T.hasLesson+'</span>':'<span class="chip2 a">'+T.soon+'</span>'); if(!hasT&&!t.ready) chips+='<span class="chip2 a">'+T.nt+'</span>'; }
   if(st!=="new") chips+='<span class="chip2 b">'+(passed?"✅ ":"")+T.stn[st]+'</span>';
   if(rec.r) chips+='<span class="chip2 b">🎁 '+(vi?"Đã nhận thưởng":"Reward claimed")+'</span>';
   else if(unl) chips+='<span class="chip2 b">🎁 '+(vi?"Xong là có 3 nhiệm vụ vườn":"Finish = 3 garden tasks")+'</span>';
@@ -212,7 +212,7 @@ function topicCard(s,g,t,m,i,total){
   const subs=(t.sub||[]).slice(0,2).map(esc).join(" · ");
   const pic='<div class="pic"><span class="big" aria-hidden="true">'+esc(TE[0])+'</span><span class="ttl"><small>'+esc(t.tag||"")+'</small>'+esc(t.name)+'</span>'+(unl?'':'<span class="lock" aria-hidden="true">🔒</span>')+'</div>';
   const main=learnU||testU;
-  const acts=(learnU?'<a class="cta" href="'+esc(learnU)+'">'+T.learn+' ›</a>':(testU?'<a class="cta ghost" href="'+esc(testU)+'">'+T.quiz+' ›</a>':''))+(learnU&&testU?'<a class="more" href="'+esc(testU)+'">'+T.quiz+'</a>':'')+'<a class="more" href="chu-de.html?'+esc(prm)+'">'+T.more+' ›</a>';
+  const acts=(learnU?'<a class="cta" href="'+esc(learnU)+'">'+(t.ready?(vi?"🎮 Chơi":"🎮 Play"):T.learn)+' ›</a>':(testU?'<a class="cta ghost" href="'+esc(testU)+'">'+T.quiz+' ›</a>':''))+(learnU&&testU?'<a class="more" href="'+esc(testU)+'">'+T.quiz+'</a>':'')+'<a class="more" href="chu-de.html?'+esc(prm)+'">'+T.more+' ›</a>';
   const card=el('<article class="tp'+(passed?" done":"")+(unl?"":" locked")+'"><span class="num" aria-hidden="true">'+(passed?"✓":(i+1))+'</span>'+(main?'<a class="tpa" href="'+esc(main)+'" aria-label="'+esc(t.name)+'">'+pic+'</a>':'<div class="tpa">'+pic+'</div>')+'<div class="tpb"><p class="subtxt">'+subs+'</p><div class="chips2">'+chips+'</div><div class="acts2">'+acts+'</div></div></article>');
   card.addEventListener("pointerenter",()=>narrate(i,false));
   card.addEventListener("focusin",()=>narrate(i,false));
@@ -273,5 +273,6 @@ window.addEventListener("resize",()=>{ if(!$("stage").classList.contains("compac
 render(); measure(); showMascot("subj");
 })();
 </script>
+<script src="../icons.js"></script>
 </body>
 </html>

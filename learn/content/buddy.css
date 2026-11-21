@@ -1,0 +1,23 @@
+/* Bạn Số / Bạn Chữ (learn/buddy.js) */
+.bd{--bs:110px;--bc:#60a5fa;position:relative;display:inline-block;width:var(--bs);height:calc(var(--bs)*1.18);vertical-align:middle;user-select:none}
+.bd-body{position:absolute;left:7%;right:7%;top:0;bottom:11%;border-radius:30%;background:linear-gradient(160deg,color-mix(in srgb,var(--bc) 70%,#fff),var(--bc) 55%,color-mix(in srgb,var(--bc) 80%,#000));box-shadow:inset 0 -7px 0 rgba(0,0,0,.16),inset 0 4px 0 rgba(255,255,255,.28),0 10px 16px rgba(0,0,0,.3)}
+.bd-gl{position:absolute;left:0;right:0;top:27%;text-align:center;font-weight:900;font-size:calc(var(--bs)*.6);line-height:1;color:#fff;text-shadow:0 3px 0 rgba(0,0,0,.22);font-family:var(--font)}
+.bd-eyes{position:absolute;left:0;right:0;top:9%;display:flex;justify-content:center;gap:calc(var(--bs)*.1)}
+.bd-eye{display:block;width:calc(var(--bs)*.17);height:calc(var(--bs)*.2);border-radius:50%;background:#fff;position:relative;transform-origin:50% 55%;animation:bdblink 4.2s infinite}
+.bd-eye::after{content:"";position:absolute;left:30%;top:34%;width:46%;height:52%;border-radius:50%;background:#1b1340}
+.bd-mouth{position:absolute;left:50%;bottom:7%;width:calc(var(--bs)*.26);height:calc(var(--bs)*.12);margin-left:calc(var(--bs)*-.13);border-radius:0 0 99px 99px;background:#1b1340;transition:height .15s}
+.bd.talk .bd-mouth{animation:bdtalk .28s infinite alternate}
+.bd-hand,.bd-foot{position:absolute;background:color-mix(in srgb,var(--bc) 85%,#000);border-radius:50%}
+.bd-hand{top:50%;width:calc(var(--bs)*.16);height:calc(var(--bs)*.16)}.bd-hand.l{left:0}.bd-hand.r{right:0}
+.bd-foot{bottom:0;width:calc(var(--bs)*.26);height:calc(var(--bs)*.14);border-radius:50% 50% 40% 40%}.bd-foot.l{left:20%}.bd-foot.r{right:20%}
+.bd-obj{position:absolute;right:-8%;top:-8%;width:calc(var(--bs)*.36);height:calc(var(--bs)*.36);display:grid;place-items:center;font-size:calc(var(--bs)*.24);border-radius:50%;background:#fff;box-shadow:0 3px 8px rgba(0,0,0,.35);transform:rotate(12deg)}
+.bd.plain .bd-hand,.bd.plain .bd-foot{display:none}
+.bd.jump{animation:bdjump .55s}
+.bd.sad{animation:bdsad .5s}
+.bd.hungry .bd-mouth{height:calc(var(--bs)*.2);width:calc(var(--bs)*.22);margin-left:calc(var(--bs)*-.11);border-radius:50%}
+.bd.happy .bd-mouth{height:calc(var(--bs)*.16);width:calc(var(--bs)*.34);margin-left:calc(var(--bs)*-.17)}
+@keyframes bdblink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+@keyframes bdtalk{to{height:calc(var(--bs)*.2)}}
+@keyframes bdjump{0%{transform:translateY(0)}30%{transform:translateY(calc(var(--bs)*-.28)) rotate(-6deg)}60%{transform:translateY(0) rotate(5deg)}100%{transform:none}}
+@keyframes bdsad{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@media (prefers-reduced-motion:reduce){.bd-eye,.bd.talk .bd-mouth,.bd.jump,.bd.sad{animation:none}}

@@ -635,6 +635,7 @@
     try { cur.subjects[subj].grades.forEach(function (g) { if (g.grade === grade) G = g; }); } catch (e) {}
     if (!G) return out;
     G.topics.forEach(function (t) {
+      if (t.ready) return;   /* chủ đề làm quen (trò chơi nhận biết số/chữ) không có kỹ năng để chấm */
       var ids = [];
       Object.keys(SK).forEach(function (id) { var k = SK[id]; if (k.subj === subj && k.grades.indexOf(grade) >= 0 && topicOf(id, grade) === t.id) ids.push(id); });
       Object.keys(TRACKED).forEach(function (id) { var k = TRACKED[id], tp = typeof k.topic === "object" ? k.topic[grade] : k.topic; if (k.subj === subj && k.grades.indexOf(grade) >= 0 && tp === t.id) ids.push(id); });

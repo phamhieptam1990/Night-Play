@@ -131,6 +131,13 @@ p{margin:0}
 .gp ul{margin:0;padding:0;display:grid;gap:10px}
 .gp li b{display:block;font-size:17px}.gp li span{color:var(--ink2);font-size:14.5px}
 .gp .ti{font-size:24px;flex:none}
+.gp{grid-template-columns:minmax(0,1fr)}.gp ul{grid-template-columns:minmax(0,1fr)}
+.gp li > div{flex:1 1 160px;min-width:0}
+.gp .tm{flex:none;align-self:center;min-height:44px;display:inline-flex;align-items:center;padding:0 14px;border-radius:99px;font-weight:800;font-size:14px;color:var(--ink);text-decoration:none;border:2px solid var(--line);background:var(--panel);white-space:nowrap}
+.gp .tm:hover{border-color:var(--sg)}
+.gp .gmore{justify-self:center;margin-top:8px}
+.gp .foc{max-width:60ch;margin:0 auto 8px}
+@media (max-width:560px){.gp li{flex-wrap:wrap}.gp .tm{margin-left:36px}.gp .gmore{width:100%;text-align:center}}
 .opt{display:inline-block;font-size:12px;font-weight:800;padding:2px 10px;border-radius:99px;background:color-mix(in srgb,var(--sx) 25%,transparent);margin-left:6px;vertical-align:middle}
 /* phụ huynh */
 .zalo{padding:18px;max-width:420px;margin:0 auto;display:grid;gap:10px}

@@ -1,5 +1,10 @@
 /* Gợi tò mò cho từng chủ đề trên trang Chương trình học: [hình emoji, câu hỏi gợi mở]. Mỗi chủ đề trong curriculum.js phải có đủ (build-lessons.js kiểm). */
 window.LEARN_TEASERS = {
+  g1_ready_n05: ["0️⃣1️⃣2️⃣", "Bạn Bút Chì, bạn Thiên Nga đang chờ bé! Bé gặp các bạn Số nhé!"],
+  g1_ready_n610: ["🎈⛄🎣", "Bạn Bóng Bay, bạn Người Tuyết đang chờ bé! Tìm đúng bạn nhé!"],
+  "VI-G1-00": ["🍎🥣🎩", "Bạn A cầm quả táo, bạn O cầm quả bóng! Gặp các bạn chữ nhé!"],
+  "VI-G1-00b": ["🐸🕯️☕", "Bạn Ê là chú ếch, bạn I là cây nến! Gặp tiếp các bạn nhé!"],
+  "VI-G1-00c": ["🐻🌙🥁", "Bạn B là chú gấu, bạn C là mặt trăng! Gặp các bạn nhé!"],
   g1_numbers_100: ["🪵🪵🪵", "Một bó có 10 que tính. 3 bó là bao nhiêu que nhỉ?"],
   g1_add_sub: ["🍎🍎➕🍎", "3 quả táo thêm 1 quả nữa thì có mấy quả nhỉ?"],
   g1_geometry: ["🔴🟦🔺", "Bánh xe thì tròn, vì sao cửa sổ lại vuông nhỉ?"],

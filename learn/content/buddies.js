@@ -1,0 +1,32 @@
+/* BẠN SỐ và BẠN CHỮ (lớp 1 chưa biết đọc): mỗi số/chữ là một nhân vật có TÊN, HÌNH GỢI NHỚ (giống hình dạng) và CÂU VÈ ngắn để bé nhớ.
+   say = lời đọc tên (máy đọc); rhyme = câu vè (<= 90 ký tự, tự soạn); obj = hình gợi nhớ (emoji). Thêm bạn mới: thêm vào đây + (nếu là số/chữ mới) build-lessons.js kiểm. */
+window.LEARN_BUDDIES = {
+  "0": { on: "quả trứng", name: "Bạn Trứng", say: "Số không", obj: "🥚", c: "#94a3b8", rhyme: "Số không tròn như quả trứng, không có gì bên trong!" },
+  "1": { on: "cây bút chì", name: "Bạn Bút Chì", say: "Số một", obj: "✏️", c: "#f87171", rhyme: "Số một thẳng như bút chì, đứng một mình thôi!" },
+  "2": { on: "chú thiên nga", name: "Bạn Thiên Nga", say: "Số hai", obj: "🦢", c: "#fb923c", rhyme: "Số hai cong cổ như thiên nga, bơi trên hồ xanh!" },
+  "3": { on: "chú bướm", name: "Bạn Bướm", say: "Số ba", obj: "🦋", c: "#fbbf24", rhyme: "Số ba như hai cánh bướm, bay bay trong vườn!" },
+  "4": { on: "chiếc thuyền", name: "Bạn Thuyền", say: "Số bốn", obj: "⛵", c: "#34d399", rhyme: "Số bốn như cánh buồm nhỏ, lướt trên sóng xanh!" },
+  "5": { on: "cái mũ", name: "Bạn Đội Mũ", say: "Số năm", obj: "🧢", c: "#22d3ee", rhyme: "Số năm đội mũ nằm ngang, bụng tròn tròn!" },
+  "6": { on: "chú sâu", name: "Bạn Sâu", say: "Số sáu", obj: "🐛", c: "#60a5fa", rhyme: "Số sáu như chú sâu cuộn tròn, bụng tròn xinh xinh!" },
+  "7": { on: "cần câu", name: "Bạn Cần Câu", say: "Số bảy", obj: "🎣", c: "#a78bfa", rhyme: "Số bảy như cần câu cá, câu được con cá to!" },
+  "8": { on: "người tuyết", name: "Bạn Người Tuyết", say: "Số tám", obj: "⛄", c: "#f472b6", rhyme: "Số tám như người tuyết, hai vòng tròn chồng nhau!" },
+  "9": { on: "quả bóng bay", name: "Bạn Bóng Bay", say: "Số chín", obj: "🎈", c: "#4ade80", rhyme: "Số chín như quả bóng bay, có sợi dây dài dài!" },
+  "10": { on: "cây kẹo mút", name: "Bạn Kẹo Mút", say: "Số mười", obj: "🍭", c: "#f59e0b", rhyme: "Số mười như cây kẹo mút, một que với một vòng!" },
+  "a": { on: "quả táo", name: "Bạn A", say: "a", obj: "🍎", c: "#f87171", rhyme: "Chữ a tròn như quả táo, có cái cuống nhỏ xinh!" },
+  "ă": { on: "cái bát", name: "Bạn Ă", say: "ă", obj: "🥣", c: "#fb923c", rhyme: "Chữ ă đội cái bát úp, ăn cơm ngon lành!" },
+  "â": { on: "cái mũ ảo thuật", name: "Bạn Â", say: "ớ", obj: "🎩", c: "#fbbf24", rhyme: "Chữ â đội mũ nhọn, như chú ảo thuật gia!" },
+  "o": { on: "quả bóng", name: "Bạn O", say: "o", obj: "⚽", c: "#34d399", rhyme: "Chữ o tròn như quả bóng, lăn lăn trên sân!" },
+  "ô": { on: "mũ đầu bếp", name: "Bạn Ô", say: "ô", obj: "👨‍🍳", c: "#22d3ee", rhyme: "Chữ ô đội mũ bếp, nấu món ngon cho bé!" },
+  "ơ": { on: "chú kiến", name: "Bạn Ơ", say: "ơ", obj: "🐜", c: "#60a5fa", rhyme: "Chữ ơ có cái râu nhỏ, như chú kiến siêng năng!" },
+  "e": { on: "con mắt", name: "Bạn E", say: "e", obj: "👁️", c: "#a78bfa", rhyme: "Chữ e như con mắt nhỏ, nheo nheo nhìn bé!" },
+  "ê": { on: "chú ếch", name: "Bạn Ê", say: "ê", obj: "🐸", c: "#f472b6", rhyme: "Chữ ê đội mũ nhọn, kêu ê ê như chú ếch!" },
+  "i": { on: "cây nến", name: "Bạn I", say: "i", obj: "🕯️", c: "#4ade80", rhyme: "Chữ i như cây nến nhỏ, có ngọn lửa chấm tròn!" },
+  "u": { on: "cái cốc", name: "Bạn U", say: "u", obj: "☕", c: "#f59e0b", rhyme: "Chữ u như cái cốc nhỏ, rót nước cho bé uống!" },
+  "ư": { on: "chú kỳ lân", name: "Bạn Ư", say: "ư", obj: "🦄", c: "#f87171", rhyme: "Chữ ư như cái cốc có râu, ư ư vui ghê!" },
+  "b": { on: "chú gấu", name: "Bạn B", say: "bờ", obj: "🐻", c: "#fb923c", rhyme: "Chữ b như chú gấu, bụng to bên cây gậy!" },
+  "c": { on: "mặt trăng", name: "Bạn C", say: "cờ", obj: "🌙", c: "#fbbf24", rhyme: "Chữ c như trăng khuyết, treo trên bầu trời đêm!" },
+  "d": { on: "cái trống", name: "Bạn D", say: "dờ", obj: "🥁", c: "#34d399", rhyme: "Chữ d như cái trống nhỏ, có cán bên phải!" },
+  "đ": { on: "cái cửa", name: "Bạn Đ", say: "đờ", obj: "🚪", c: "#22d3ee", rhyme: "Chữ đ như cái cửa nhỏ, có thanh ngang ở trên!" },
+  "g": { on: "kính lúp", name: "Bạn G", say: "gờ", obj: "🔍", c: "#60a5fa", rhyme: "Chữ g như kính lúp nhỏ, soi gà con ra sao!" },
+  "h": { on: "cái ghế", name: "Bạn H", say: "hờ", obj: "🪑", c: "#a78bfa", rhyme: "Chữ h như cái ghế cao, bé ngồi nghỉ chân nào!" }
+};

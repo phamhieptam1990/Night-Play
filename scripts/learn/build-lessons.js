@@ -4,7 +4,8 @@
 "use strict";
 const fs = require("fs"), path = require("path");
 const DIR = path.join(__dirname, "../../learn/content/lessons");
-const K_SCREEN = { say: 1, tapcount: 1, merge: 1, take: 1, choose: 1, sum: 1 };
+const K_SCREEN = { say: 1, tapcount: 1, merge: 1, take: 1, choose: 1, sum: 1, game: 1, meet: 1, trace: 1, feed: 1, pop: 1 };
+const BUD = (() => { const w = {}; new Function("window", fs.readFileSync(path.join(DIR, "..", "buddies.js"), "utf8"))(w); return w.LEARN_BUDDIES; })();
 const SHAPES = { circle: 1, square: 1, triangle: 1, rect: 1 };
 const MAX_T = 90, MAX_OPT = 24, errs = [];
 const reg = []; global.window = { LearnLessons: { reg: o => reg.push(o) } };
@@ -32,9 +33,9 @@ reg.forEach(L => {
   const w = L.id || "?";
   if (seen[L.id]) errs.push(w + ": trùng id"); seen[L.id] = 1;
   if (!topicOk(L.subj, L.grade, L.id)) errs.push(w + ": không có trong chương trình (curriculum) lớp " + L.grade + " môn " + L.subj);
-  else if (!E.topicSkills(L.subj, L.grade, L.id).length) console.warn("! " + w + ": chủ đề chưa có kỹ năng kiểm tra (bài kiểm tra dùng kỹ năng cả lớp)");
+  else if (!E.topicSkills(L.subj, L.grade, L.id).length && !C.subjects[L.subj].grades.find(g => g.grade === L.grade).topics.find(t => t.id === L.id).ready) console.warn("! " + w + ": chủ đề chưa có kỹ năng kiểm tra (bài kiểm tra dùng kỹ năng cả lớp)");
   txt(w + " title", L.title, 60);
-  if (!Array.isArray(L.screens) || L.screens.length < 4 || L.screens.length > 12) errs.push(w + ": cần 4–12 màn học");
+  if (!Array.isArray(L.screens) || L.screens.length < 4 || L.screens.length > 40) errs.push(w + ": cần 4–40 màn học");
   (L.screens || []).forEach((s, i) => {
     const x = w + " màn " + (i + 1);
     if (!K_SCREEN[s.k]) return errs.push(x + ": kiểu lạ " + s.k);
@@ -44,6 +45,11 @@ reg.forEach(L => {
     if (s.k === "take" && !(s.n <= 12 && s.m >= 1 && s.m < s.n && s.e)) errs.push(x + ": take cần n <= 12, 1 <= m < n và e");
     if (["tapcount", "merge", "take"].includes(s.k)) txt(x + " done", s.done);
     if (s.k === "choose") { choose(x, s); txt(x + " yes", s.yes); txt(x + " no", s.no); }
+    if (["meet", "trace", "feed"].includes(s.k) && !BUD[s.sym]) errs.push(x + ": không có bạn \"" + s.sym + "\" trong buddies.js");
+    if (s.k === "feed" && !(+s.sym >= 1 && +s.sym <= 10 && s.e)) errs.push(x + ": feed cần sym 1–10 và e");
+    if (s.k === "pop") { if (!BUD[s.target] || !Array.isArray(s.pool) || s.pool.length < 3 || !s.pool.includes(s.target) || s.pool.some(k => !BUD[k])) errs.push(x + ": pop cần target + pool (>= 3, đều là bạn có thật)"); }
+    if (s.k === "game") { if (!Array.isArray(s.rounds) || s.rounds.length < 3 || s.rounds.length > 8) errs.push(x + ": game cần 3–8 lượt"); else s.rounds.forEach((r, j) => { const y = x + " lượt " + (j + 1); txt(y + " say", r.say); if (!Array.isArray(r.opts) || r.opts.length < 2 || r.opts.length > 4) errs.push(y + ": cần 2–4 ô"); else { r.opts.forEach((o, k) => txt(y + " ô " + k, o, 6)); if (!(r.ok >= 0 && r.ok < r.opts.length)) errs.push(y + ": ok không hợp lệ"); if (new Set(r.opts).size !== r.opts.length) errs.push(y + ": ô trùng nhau"); } if (r.art !== undefined) txt(y + " art", r.art, 24); }); txt(x + " done", s.done); }
+    if (s.chips !== undefined) { if (!Array.isArray(s.chips) || s.chips.length < 1 || s.chips.length > 12) errs.push(x + ": chips cần 1–12 ô"); else s.chips.forEach((c, j) => { if (!Array.isArray(c) || c.length !== 2) errs.push(x + " chips[" + j + "]: cần [nhãn, lời đọc]"); else { txt(x + " chips[" + j + "] nhãn", c[0], 6); txt(x + " chips[" + j + "] đọc", c[1], 30); } }); }
     if (s.k === "sum" && !(Array.isArray(s.pts) && s.pts.length >= 2 && s.pts.length <= 4)) errs.push(x + ": sum cần 2–4 ý");
     if (s.k === "sum") (s.pts || []).forEach((p, j) => txt(x + " pts[" + j + "]", p));
     (s.shapes || []).forEach(h => { if (!SHAPES[h]) errs.push(x + ": hình lạ " + h); });
