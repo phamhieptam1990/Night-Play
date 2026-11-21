@@ -364,6 +364,7 @@ function scene(o) {
     if (fp && /^(cow|chicken|rabbit)$/.test(fp.name)) ANIM.push({ k: fp.name, x: Math.round(fp.x), y: Math.round(fp.y), s: fp.name === "cow" ? (fp.a || 1) : 1, f: fp.b ? 1 : 0 });
     if (o.noAnimals && fp && /^(cow|chicken|rabbit|coop)$/.test(fp.name)) return;   /* bản không vật nuôi: vẫn giữ chỗ nhưng không vẽ */
     stand.push({ d: y, svg: String(svg) }); };
+  if (o.extra) o.extra({ push, reg, at });   /* công trình nổi bật theo MÔN (scripts/learn/garden-themes.js): đặt trước để giữ chỗ */
   /* các vật cố định giữ chỗ TRƯỚC */
   if (L.pond) reg(330, 300, 140, 68); if (L.house) reg(650, 425 + HY, 170, 60); if (L.barn) reg(1090, 565, 125, 50); if (L.well) reg(470, 535, 38, 16); if (L.windmill) reg(1170, 335, 50, 18);
   if (D >= 3) { reg(880, 340 + HY, 80, 28); reg(1020, 385 + HY, 72, 26); } if (D >= 2) reg(1205, 430, 50, 16);
@@ -597,4 +598,42 @@ Object.assign(CROPINFO.sunflower, { mas: true, mn: "Hướng Dương", say: ["M�
       fs.writeFileSync(path.join(td, `tree_${k}.svg`), `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-100 -180 200 205" width="200" height="205" role="img" aria-label="Cây ${k}">${defs()}${g}</svg>`); } }
   fs.writeFileSync(path.join(out, "..", "garden-data.js"), "/* SINH TỰ ĐỘNG bởi scripts/learn/gen-scene-art.js, đừng sửa tay. */\nvar CATS = " + JSON.stringify(CATS) + ", CI = " + JSON.stringify(CROPINFO) + ", PLOTS = " + JSON.stringify(plots.map(p => Object.assign({}, p, { x: p.x + WORLD.MXL, y: p.y + WORLD.MT }))) + ", IDS = " + JSON.stringify(ids) + ", TREES = " + JSON.stringify(TREES.map(t => Object.assign({}, t, { x: t.x + WORLD.MXL, y: t.y + WORLD.MT }))) + ", ST = [\"Hạt\", \"Mầm\", \"Cây con\", \"Sắp chín\", \"CHÍN\"], W = " + WORLD.WW + ", H = " + WORLD.HH + ", OFX = " + WORLD.MXL + ", OFY = " + WORLD.MT + ", GX = " + (-WORLD.MXL) + ", GY = " + (-WORLD.MT) + ", GW = " + WORLD.WW + ", GH = " + WORLD.HH + ";\nvar SLOTS = " + JSON.stringify(SLOTS.map(s => Object.assign({}, s, { x: s.x + WORLD.MXL, y: s.y + WORLD.MT }))) + ", DOOR = [" + (STABLE[0] + WORLD.MXL) + ", " + (STABLE[1] + WORLD.MT) + "];\n");
 }
+
+/* ====== BA CẢNH THEO MÔN (Vườn Số / Rừng Chữ / Vịnh Từ): mẫu để chủ site duyệt, xem docs/LEARN-GARDEN-SCENES-PLAN.md ====== */
+{
+  const TH = require("./garden-themes")({ f, G, ell, shadow });
+  const swap = (svg, pairs) => pairs.reduce((t, [a, b]) => t.split(a).join(b), svg);
+  const BASE = {
+    toan: { name: "Vườn Số", sub: "Toán", extra: X => { X.push(548, TH.numberBlocks(445, 548, 1.55)); X.push(815, TH.numberBlocks(150, 815, .8)); X.push(820, TH.numberBlocks(1125, 820, .8)); }, levels: { well: 0 } },
+    viet: { name: "Rừng Chữ", sub: "Tiếng Việt", extra: X => { X.push(330, TH.letterTree(1170, 340, 1.05, true)); X.push(540, TH.openBook(470, 545)); X.push(812, TH.letterTree(150, 812, 1)); X.push(818, TH.letterTree(1125, 818, 1)); }, levels: { windmill: 0, well: 0 } },
+    anh: { name: "Vịnh Từ", sub: "Tiếng Anh", extra: X => { X.push(300, TH.bay(330, 300)); X.push(340, TH.hiSign(1170, 340)); X.push(560, TH.palm(470, 545, 1.1)); X.push(812, TH.palm(150, 812, 1.1)); X.push(818, TH.palm(1125, 818, 1.1)); }, levels: { windmill: 0, well: 0, pond: 0 } }
+  };
+  for (const [k, T] of Object.entries(BASE)) {
+    const svg = scene({ label: T.name + " (" + T.sub + ", cảnh gốc lớp 1)", extra: T.extra, levels: T.levels, noAnimals: true, world: true });
+    files[`scene-theme-${k}-g1.svg`] = swap(svg, TH.SWAP[k]);
+  }
+  /* mở rộng theo lớp: ô mẫu cạnh nhau (mỗi ô một công trình trên mảnh cỏ), lớp 2 và 3 đã vẽ; lớp 4, 5 sau khi duyệt */
+  const EXP = {
+    toan: [[2, "Đồng hồ lớn", TH.clockTower], [3, "Cầu thang số", TH.numberStairs]],
+    viet: [[2, "Thư viện trong hốc cây", TH.libraryTree], [3, "Suối kể chuyện + cầu đá", TH.storyBridge]],
+    anh: [[2, "Đèn hiệu nói Hi!", TH.lighthouse], [3, "Phố chợ ven vịnh", TH.harborStall]]
+  };
+  for (const [k, list] of Object.entries(EXP)) list.forEach(([g, label, fn]) => {
+    const o = String(fn(200, 250));
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="${BASE[k].name} lớp ${g}: ${label}" data-style="pop"><title>${BASE[k].name} lớp ${g}: ${label}</title>${STYLE}${defs()}<rect width="400" height="300" rx="26" fill="url(#gGrass)"/>${[[60, 60], [340, 70], [330, 250], [70, 250], [200, 40]].map(q => tuft(q[0], q[1], .9)).join("")}${o}</svg>\n`;
+    files[`scene-theme-${k}-g${g}.svg`] = swap(svg, TH.SWAP[k]);
+  });
+  /* trang duyệt */
+  const tcol = { toan: "#34D399", viet: "#FFB020", anh: "#60A5FA" }, stories = { toan: "Đồng quê hiện tại làm gốc, thêm khối số 1-2-3. Lên lớp thì có đồng hồ, cầu thang số, sông chia đều, đài thiên văn.", viet: "Rừng thu ấm, cây ra chữ quanh nhà, cuốn sách khổng lồ. Lên lớp thì có thư viện hốc cây, suối kể chuyện, lều đọc sách, cổng thành chữ.", anh: "Vịnh xanh có bến thuyền, cọ, biển Hi!. Lên lớp thì có đèn hiệu, phố chợ ven vịnh, cảng, tháp chuông và bản đồ thế giới." };
+  const cards = Object.entries(BASE).map(([k, T]) => `<section style="--c:${tcol[k]}"><h2>${T.name} <small>· ${T.sub}</small></h2><p>${stories[k]}</p>
+<h3>Cảnh gốc (lớp 1)</h3><img class="big" src="scene/scene-theme-${k}-g1.svg" alt="${T.name} cảnh gốc">
+<h3>Mở rộng theo lớp (cộng dồn: lớp 3 = gốc + lớp 2 + lớp 3)</h3><div class="ex">${EXP[k].map(([g, l]) => `<figure><img src="scene/scene-theme-${k}-g${g}.svg" alt=""><figcaption><b>Lớp ${g}</b> ${l}</figcaption></figure>`).join("")}<figure class="soon"><div>Lớp 4, 5<br>vẽ sau khi bạn duyệt</div></figure></div></section>`).join("");
+  fs.writeFileSync(path.join(out, "..", "preview-3-gardens.html"), `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Duyệt 3 khu vườn theo môn</title>
+<style>body{margin:0;background:#12141F;color:#ECEEFF;font:16px/1.5 system-ui,sans-serif}.wrap{max-width:1180px;margin:0 auto;padding:16px}h1{font-size:24px;margin:8px 0}h2{margin:0 0 4px;font-size:22px;border-left:8px solid var(--c);padding-left:10px}h2 small{opacity:.7;font-weight:600}h3{margin:16px 0 8px;font-size:15px;opacity:.85}section{margin:26px 0;padding:16px;border-radius:22px;background:#1b1e36;border:1px solid #2c3160}.big{width:100%;height:auto;border-radius:18px;display:block}.ex{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}.ex figure{margin:0;border-radius:18px;overflow:hidden;background:#12141F;border:1px solid #2c3160}.ex img{width:100%;display:block}.ex figcaption{padding:8px 12px;font-size:14px}.soon{display:grid;place-items:center;min-height:160px;opacity:.55;text-align:center;border-style:dashed!important}p{margin:6px 0 0;opacity:.9}.ask{padding:12px 16px;border-radius:16px;background:#2a2150;border:1px solid #5a4bd0}</style>
+<nav class="rvnav" style="display:flex;flex-wrap:wrap;gap:4px;align-items:center;padding:8px 12px;background:#1a1d33;color:#fff;font-size:13px"></nav><script src="../../../learn/review-nav.js"></script>
+<div class="wrap"><h1>Duyệt 3 khu vườn theo môn: Vườn Số, Rừng Chữ, Vịnh Từ</h1>
+<div class="ask"><b>Bạn duyệt giúp:</b> (1) bảng màu và không khí từng cảnh có đúng chủ đề không; (2) công trình nổi bật có dễ nhận ra không; (3) phần mở rộng lớp 2, 3 có hợp không; (4) có cần đổi công trình nào trước khi mình sinh đủ bộ (các giai đoạn xây × buổi trong ngày) và vẽ lớp 4, 5. Mẫu này là ảnh tĩnh của cảnh gốc, bản chơi được sẽ nối sau khi duyệt.</div>
+${cards}</div>`);
+}
+for (const [n, c] of Object.entries(files)) if (/^scene-theme-/.test(n)) fs.writeFileSync(path.join(out, n), c);
 console.log("✓ đã sinh " + Object.keys(files).length + " ảnh cảnh + preview-scene.html + garden-data.js (trang vườn: learn/garden/)");

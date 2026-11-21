@@ -10,8 +10,9 @@ html,body,.fsw{touch-action:pan-x pan-y}
 .gsw a img{width:36px;height:36px;object-fit:contain}
 .gsw a[aria-current=true]{opacity:1;background:linear-gradient(135deg,var(--a,#34D399),var(--b,#0EA5E9));box-shadow:0 0 0 2px rgba(255,255,255,.55)}
 .gsw a[aria-current=true] span{margin:0 8px 0 2px}.gsw span{display:none}
-.gsw .gg{min-width:36px;opacity:.95;font-size:18px}.gsw .gg[aria-disabled=true]{opacity:.3;pointer-events:none}
-.gsw .gsl{min-width:0;padding:0 4px;font-size:13px;white-space:nowrap}
+.gsw .gsn{display:flex;gap:2px;padding-right:6px;margin-right:2px;border-right:1px solid rgba(255,255,255,.25)}.gsw .gnb{position:relative;min-width:34px;height:44px;border-radius:18px;font-size:17px;font-weight:900;color:#fff;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;opacity:.8}.gsw .gnb[aria-current=true]{opacity:1;background:#fff;color:#1b1340}.gsw .gnb i{position:absolute;right:1px;top:1px;font-style:normal;font-size:10px;color:#4ade80}.gsw .gnb.lk{opacity:.35;font-size:14px}
+@media (max-width:400px){.gsw .gnb{min-width:28px;font-size:15px}.gsw .gsn{padding-right:3px;margin-right:1px}}
+@media (max-width:400px){.gsw{max-width:calc(100vw - 12px);gap:0;padding:3px}.gsw a{min-width:38px;padding:0 2px}.gsw a img{width:32px;height:32px}}
 @media (max-height:430px){.gsw{top:6px;left:auto;right:64px;transform:none}}
 </style>
 <script src="../slot.js"></script>
@@ -47,8 +48,13 @@ if(!(g>=1&&g<=5)) g=1;
 var M={toan:["math","Mochi","Toán","#34D399","#0EA5E9"],tviet:["vietnamese","Mầm","Tiếng Việt","#FFB020","#FB5A7A"],tanh:["english","Bibi","Tiếng Anh","#60A5FA","#A78BFA"]};
 function u(gr,sj){return "index.html?grade="+gr+"&subj="+sj}
 var bar=document.createElement("nav"); bar.className="gsw"; bar.id="gsw"; bar.setAttribute("aria-label","Chuyển vườn");
-var tgt=cur||"toan", h="";
-h+='<a class="gg" href="'+u(Math.max(1,g-1),tgt)+'" aria-label="Lớp trước"'+(g<=1?' aria-disabled="true"':"")+'>‹</a><a class="gsl" aria-label="Lớp '+g+'" style="opacity:1;pointer-events:none">Lớp '+g+'</a><a class="gg" href="'+u(Math.min(5,g+1),tgt)+'" aria-label="Lớp sau"'+(g>=5?' aria-disabled="true"':"")+'>›</a>';
+var cur0=cur,h="";
+var P=window.LearnPath, lg=+(function(){try{return S.raw.get("learn:grade")}catch(e){return 1}})()||1;
+function doneG(gr,sj){try{var ts=P.topics(sj,gr);return ts.length>0&&ts.every(function(t){return P.completed(gr,sj,t.id)})}catch(e){return false}}
+h+='<span class="gsn" role="group" aria-label="Chọn lớp">';
+for(var gi=1;gi<=5;gi++){var tg=cur||"toan",on=gi===g,ok=on||gi===lg||doneG(gi,tg);
+  h+=ok?'<a class="gnb" href="'+u(gi,tg)+'" aria-label="Lớp '+gi+(doneG(gi,tg)?" đã học xong":"")+'"'+(on?' aria-current="true"':'')+'>'+gi+(doneG(gi,tg)&&!on?'<i>✓</i>':'')+'</a>':'';}   /* lớp chưa học xong và không phải lớp đang học: ẩn (chỉ hiện lớp đã active) */
+h+='</span>';
 Object.keys(M).forEach(function(k){var m=M[k];h+='<a href="'+u(g,k)+'" title="'+m[2]+'" aria-label="Vườn '+m[2]+'"'+(k===cur?' aria-current="true" style="--a:'+m[3]+';--b:'+m[4]+'"':"")+'><img src="../../shared/art/learn/'+m[0]+'/'+m[0]+'_head.svg" alt=""><span>'+m[2]+'</span></a>'});
 bar.innerHTML=h; document.body.appendChild(bar);
 })();
