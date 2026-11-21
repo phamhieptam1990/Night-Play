@@ -25,7 +25,9 @@ function missionsDone(){ return window.Farm ? (Farm.get().build.n | 0) : 0; }
 function stageOf(n){ return n >= UNL.full ? UNL.full : n; }
 function stageNow(){ return stageOf(missionsDone()); }
 var PIMG_XAY = { day: "01", dusk: "05", night: "06" };
-function scenePath(ph){ var st = stageNow(); return GardenLayout.ART + "scene/scene-" + (st >= UNL.full ? PIMG[ph] + "-na" : PIMG_XAY[ph] + "-xay-" + st + "-na") + ".svg"; }
+/* mỗi MÔN một cảnh: Toán = Vườn Số, Tiếng Việt = Rừng Chữ, Tiếng Anh = Vịnh Từ (thư mục scene/<toan|viet|anh>/); vườn cũ (không môn) dùng cảnh gốc */
+function sceneDir(){ var p = window.LearnSlot && LearnSlot.parts && LearnSlot.parts(), m = {}; /* CHỈ bật môn nào đã có LAYOUT riêng được duyệt (vd { tviet: "viet", tanh: "anh" }); hiện cả 3 môn dùng cảnh gốc */ return p && m[p.subj] ? m[p.subj] + "/" : ""; }
+function scenePath(ph){ var st = stageNow(); return GardenLayout.ART + "scene/" + sceneDir() + "scene-" + (st >= UNL.full ? PIMG[ph] + "-na" : PIMG_XAY[ph] + "-xay-" + st + "-na") + ".svg"; }
 var STAGE_TOAST = Farm.BUILD.got;
 function applyUnlock(stage, stars){
   var o = unlockOrder(), full = stage >= UNL.full;

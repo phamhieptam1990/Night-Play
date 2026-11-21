@@ -612,6 +612,26 @@ Object.assign(CROPINFO.sunflower, { mas: true, mn: "Hướng Dương", say: ["M�
     const svg = scene({ label: T.name + " (" + T.sub + ", cảnh gốc lớp 1)", extra: T.extra, levels: T.levels, noAnimals: true, world: true });
     files[`scene-theme-${k}-g1.svg`] = swap(svg, TH.SWAP[k]);
   }
+  /* BỘ CẢNH CHƠI ĐƯỢC theo môn: cùng bố cục + vị trí ô đất/cây với cảnh gốc (công trình môn là LỚP PHỦ, không đẩy vật khác), ra scene/<viet|anh|toan>/scene-*.svg.
+     Vườn chọn thư mục theo môn (learn/garden/garden-unlock.js scenePath). */
+  const OV = {
+    toan: () => [[868, TH.numberBlocks, 905, 1.2], [815, TH.numberBlocks, 150, .8], [820, TH.numberBlocks, 1125, .8]],
+    viet: () => [[330, TH.letterTree, 1170, 1.05, true], [868, TH.openBook, 905], [812, TH.letterTree, 150, 1], [818, TH.letterTree, 1125, 1]],
+    anh: () => [[340, TH.hiSign, 1170], [868, TH.palm, 905, 1.1], [812, TH.palm, 150, 1.1], [818, TH.palm, 1125, 1.1]]
+  };
+  const ovFor = k => OV[k]().map(([y, fn, x, a1, a2]) => String(fn(x, y, a1, a2))).join("");
+  for (const k of (process.env.THEME_SCENES ? ["toan", "viet", "anh"] : [])) {   /* bản "đổi màu + lớp phủ" cùng layout: TẠM TẮT (chủ site muốn layout KHÁC cho Việt/Anh, xem docs/LEARN-GARDEN-LAYOUTS-PLAN.md) */
+    const dir = path.join(out, k); fs.mkdirSync(dir, { recursive: true });
+    const put = (name, svg) => fs.writeFileSync(path.join(dir, name), swap(svg, TH.SWAP[k]));
+    const lvB = {};
+    for (const [pre, t, full] of [["01", "day", "01-toan-canh"], ["05", "dusk", "05-hoang-hon"], ["06", "night", "06-ban-dem"]]) {
+      put(`scene-${full}-na.svg`, scene({ label: BASE[k].name + " (" + t + ")", time: t, noAnimals: true, world: true, levels: lvB, overlay: ovFor(k) }));
+      for (let q = 0; q <= 6; q++) {
+        const lv = { deco: 0, house: q >= 2 ? Math.min(q - 1, 4) : 0, fence: 0, well: 0, barn: 0, windmill: 0, path: 0, apple: 0, flowers: 0, pond: 0, hay: 0, animals: 0, plots: q >= 6 ? 400 : 0, planted: q >= 6 ? 300 : 0, noOrchard: 1 };
+        put(`scene-${pre}-xay-${q}-na.svg`, scene({ label: BASE[k].name + ": đang xây " + q + " (" + t + ")", time: t, noAnimals: true, world: true, levels: lv, lot: q === 1, overlay: ovFor(k) }));
+      }
+    }
+  }
   /* mở rộng theo lớp: ô mẫu cạnh nhau (mỗi ô một công trình trên mảnh cỏ), lớp 2 và 3 đã vẽ; lớp 4, 5 sau khi duyệt */
   const EXP = {
     toan: [[2, "Đồng hồ lớn", TH.clockTower], [3, "Cầu thang số", TH.numberStairs]],

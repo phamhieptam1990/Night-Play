@@ -12,8 +12,19 @@ html,body,.fsw{touch-action:pan-x pan-y}
 .gsw a[aria-current=true] span{margin:0 8px 0 2px}.gsw span{display:none}
 .gsw .gsn{display:flex;gap:2px;padding-right:6px;margin-right:2px;border-right:1px solid rgba(255,255,255,.25)}.gsw .gnb{position:relative;min-width:34px;height:44px;border-radius:18px;font-size:17px;font-weight:900;color:#fff;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;opacity:.8}.gsw .gnb[aria-current=true]{opacity:1;background:#fff;color:#1b1340}.gsw .gnb i{position:absolute;right:1px;top:1px;font-style:normal;font-size:10px;color:#4ade80}.gsw .gnb.lk{opacity:.35;font-size:14px}
 @media (max-width:400px){.gsw .gnb{min-width:28px;font-size:15px}.gsw .gsn{padding-right:3px;margin-right:1px}}
+/* màn rộng (web): thanh nằm NGANG HÀNG với HUD (giữa trên cùng, chỗ đang trống), không đè lên cảnh vườn */
+@media (min-width:700px) and (min-height:431px){.gsw{top:max(10px,env(safe-area-inset-top));padding:2px;background:rgba(22,17,48,.6)}.gsw a{height:40px}.gsw .gnb{height:40px}.gsw a img{width:32px;height:32px}}
 @media (max-width:400px){.gsw{max-width:calc(100vw - 12px);gap:0;padding:3px}.gsw a{min-width:38px;padding:0 2px}.gsw a img{width:32px;height:32px}}
 @media (max-height:430px){.gsw{top:6px;left:auto;right:64px;transform:none}}
+
+/* ===== HUD GỌN ĐỂ KHÔNG CHE KHU VƯỜN ===== */
+.gsw{display:none}.gsw.open{display:flex;top:calc(max(10px,env(safe-area-inset-top)) + 54px)}
+.gsw-t{position:fixed;z-index:31;left:50%;top:max(10px,env(safe-area-inset-top));transform:translateX(-50%);display:flex;align-items:center;gap:4px;height:40px;padding:0 10px 0 4px;border-radius:20px;background:rgba(22,17,48,.5);border:1px solid rgba(255,255,255,.3);color:#fff;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.gsw-t img{width:32px;height:32px;object-fit:contain}.gsw-t b{font:900 14px/1 system-ui,sans-serif;background:#fff;color:#1b1340;border-radius:10px;padding:3px 7px}.gsw-t.on{background:rgba(22,17,48,.85)}
+.zoom{opacity:.62;transition:opacity .2s;gap:6px}.zoom:hover,.zoom:focus-within,.zoom:active{opacity:1}.zoom .hb{width:40px!important;height:40px!important;font-size:19px!important}
+.goalchip{opacity:.85;min-height:38px!important;font-size:13px!important;padding:0 10px!important}
+.hud .hb,.hud .st1{opacity:.88}.hud .hb{width:42px;height:42px;font-size:19px}
+@media (max-width:480px){.zoom .hb{width:38px!important;height:38px!important}.hud .st1{min-height:34px!important;padding:0 9px!important;font-size:13px!important}}
 </style>
 <script src="../slot.js"></script>
 <script src="../content/curriculum.js"></script>
@@ -22,7 +33,7 @@ html,body,.fsw{touch-action:pan-x pan-y}
 <script src="garden-layout.js"></script>
 <script>GardenLayout.writeStyles()</script>
 </head><body class="fs">
-<div class="fsw" id="fsw"><div class="stage" id="st"><img src="../../shared/art/garden/scene/scene-01-xay-0-na.svg" alt="Khu vườn Học Vui"><div id="tip" class="tip" aria-hidden="true"></div></div></div>
+<div class="fsw" id="fsw"><div class="stage" id="st"><img src="../../shared/art/garden/scene/scene-01-xay-0-na.svg" alt="Khu vườn Học Vui" id="sceneImg"><div id="tip" class="tip" aria-hidden="true"></div></div></div>
 <div class="hud"><div class="hl"><a class="hb" href="../index.html" aria-label="Quay lại bài học">←</a><span class="st1">🌱 <b id="nSeed">3</b></span><span class="st1">⭐ <b id="nStar">12</b></span><span class="st1" id="chCrop">🧺 <b id="nCrop">47</b></span><span class="st1" id="chStreak" title="Số ngày liền nhau bé ghé vườn">🔥 <b id="nStreak">0</b></span></div>
 <div class="hr"><button type="button" class="hb blink" id="bMis" aria-label="Chăm vườn hôm nay">📅<i class="bd" id="bdg">3</i></button></div></div>
 <div class="zoom" aria-label="Thu phóng khu vườn"><button type="button" class="hb" id="zIn" aria-label="Phóng to">＋</button><button type="button" class="hb" id="zOut" aria-label="Thu nhỏ">－</button><button type="button" class="hb" id="zHome" aria-label="Về khu vườn">🏡</button></div>
@@ -57,6 +68,12 @@ for(var gi=1;gi<=5;gi++){var tg=cur||"toan",on=gi===g,ok=on||gi===lg||doneG(gi,t
 h+='</span>';
 Object.keys(M).forEach(function(k){var m=M[k];h+='<a href="'+u(g,k)+'" title="'+m[2]+'" aria-label="Vườn '+m[2]+'"'+(k===cur?' aria-current="true" style="--a:'+m[3]+';--b:'+m[4]+'"':"")+'><img src="../../shared/art/learn/'+m[0]+'/'+m[0]+'_head.svg" alt=""><span>'+m[2]+'</span></a>'});
 bar.innerHTML=h; document.body.appendChild(bar);
+/* THU GỌN: mặc định chỉ một nút nhỏ (linh vật môn đang ở); bấm mới xổ lớp + môn, tự thu lại sau 6 giây / khi chạm vào vườn */
+var curM=M[cur||"toan"], tg=document.createElement("button"); tg.type="button"; tg.className="gsw-t"; tg.id="gswT"; tg.setAttribute("aria-label","Đổi môn / lớp"); tg.setAttribute("aria-expanded","false");
+tg.innerHTML='<img src="../../shared/art/learn/'+curM[0]+'/'+curM[0]+'_head.svg" alt=""><b>'+g+'</b>'; document.body.appendChild(tg);
+var tmr=0; function setOpen(o){bar.classList.toggle("open",o);tg.setAttribute("aria-expanded",o);tg.classList.toggle("on",o);clearTimeout(tmr);if(o)tmr=setTimeout(function(){setOpen(false)},6000)}
+tg.onclick=function(e){e.stopPropagation();setOpen(!bar.classList.contains("open"))};
+document.addEventListener("pointerdown",function(e){if(bar.classList.contains("open")&&!bar.contains(e.target)&&e.target!==tg&&!tg.contains(e.target))setOpen(false)},true);
 })();
 </script>
 <script src="../icons.js"></script>

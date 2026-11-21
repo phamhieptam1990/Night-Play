@@ -130,15 +130,23 @@ const DATA = [
   {t:"Lớp 5 (Toán 6, Việt 4, Anh 4)", s:"todo"},
   {t:"Mỗi đợt có người duyệt, tự soạn không chép SGK", s:"todo"}
  ]},
- {g:"H5. Cảnh khu vườn: mỗi môn 1 cảnh, lớp cao thì cảnh mở rộng thêm (kế hoạch: docs/LEARN-GARDEN-SCENES-PLAN.md)", items:[
-  {t:"Chủ site chốt: mỗi môn MỘT cảnh (Vườn Số, Rừng Chữ, Vịnh Từ); lớp 1 như hiện tại, lớp 2 mở thêm cảnh", s:"done", n:"Quyết định 2026-11-21"},
-  {t:"Chủ site chốt: GIỮ 15 vườn (không gộp), cảnh lớp g = cảnh môn + phần mở rộng cộng dồn 2..g, vì bé có thể vào thẳng lớp 3", s:"done", n:"Quyết định 2026-11-21; không đổi slot.js, không chuyển dữ liệu"},
-  {t:"V1. Ba cảnh mẫu lớp 1 (Toán/Việt/Anh) + ảnh cảnh lớp 3 cộng dồn mở rộng, trang duyệt riêng", s:"todo"},
-  {t:"Bạn duyệt phong cách 3 cảnh mẫu", s:"ask"},
-  {t:"V2. Sinh đủ bộ tranh cảnh gốc theo chủ đề (giai đoạn xây × buổi trong ngày) cho 3 môn", s:"todo"},
-  {t:"V3. Lớp phủ mở rộng lớp 2–5 cho 3 môn (12 lớp phủ)", s:"todo"},
-  {t:"V4. Nối cảnh vào vườn: vườn (lớp, môn) chọn bộ tranh theo môn + bật lớp phủ đến lớp đó", s:"todo"},
-  {t:"V5. Kiểm tra bằng Chrome thật, cập nhật bài đo vườn", s:"todo"}
+ {g:"H5. 3 khu vườn: Toán giữ nguyên + 2 khu vườn MỚI (Rừng Chữ, Vịnh Từ) + đổi màu theo lớp (kế hoạch: docs/LEARN-GARDEN-LAYOUTS-PLAN.md)", items:[
+  {t:"Chốt: mỗi môn một khu vườn khác hẳn; Toán giữ nguyên layout; đổi màu dành cho LỚP", s:"done", n:"Quyết định 2026-11-21"},
+  {t:"Chốt: giữ 15 vườn dữ liệu (lớp × môn); vật phẩm theo lớp; giữ vườn khi lên lớp; vườn khởi đầu mức giữa", s:"done", n:"Các câu trả lời trước đó"},
+  {t:"A0. Bạn duyệt phác thảo bố cục Rừng Chữ và Vịnh Từ", s:"ask", n:"Mục Phác thảo trong LEARN-GARDEN-LAYOUTS-PLAN.md"},
+  {t:"A1. Khu vườn MỚI Rừng Chữ: tách LAYOUT, bố cục suối + cầu đá + thư viện hốc cây, tranh (ngày/hoàng hôn/đêm × 7 giai đoạn xây) + dữ liệu chơi được", s:"todo"},
+  {t:"A1. Bạn duyệt Rừng Chữ", s:"ask"},
+  {t:"A2. Khu vườn MỚI Vịnh Từ: bố cục vịnh + bến + đèn hiệu + phố chợ, tranh + dữ liệu chơi được", s:"todo"},
+  {t:"A2. Bạn duyệt Vịnh Từ", s:"ask"},
+  {t:"B. Đổi màu theo LỚP: bảng màu/mùa riêng cho lớp 1–5 trên cả 3 vườn (không đổi bố cục)", s:"todo"},
+  {t:"B. Bạn duyệt bảng màu 5 lớp", s:"ask"},
+  {t:"Bạn duyệt bảng vật phẩm KHÁC NHAU theo lớp (cây, vật nuôi, trang trí mỗi lớp)", s:"ask", n:"Bảng nháp trong LEARN-GARDEN-LAYOUTS-PLAN.md"},
+  {t:"Vẽ vật phẩm mới cho từng lớp (khoảng 20 loại mới: cây trồng, cây lâu năm, vật nuôi, đồ trang trí) theo phong cách Pop", s:"todo"},
+  {t:"Vật phẩm theo lớp: điều kiện mở theo chủ đề đã qua của đúng lớp (thay cho mở theo sao chung)", s:"todo"},
+  {t:"Bạn duyệt quy tắc lên lớp: mang theo + đổi (bộ sưu tập, đổi chỗ, đổi hạt giống ở quầy Bác Rễ) và vào thẳng lớp: bộ khởi đầu + bộ sưu tập khóa mờ", s:"ask", n:"Mục Khi bé lên lớp trong LEARN-GARDEN-LAYOUTS-PLAN.md"},
+  {t:"Bộ sưu tập chung (kho đồ mọi lớp, khóa mờ cho đồ chưa mở) + quầy đổi hạt giống của Bác Rễ", s:"todo"},
+  {t:"Vườn khởi đầu theo lớp (bé vào thẳng lớp 3) + bé ở lại lớp 1 vẫn có việc + gợi ý lên lớp cho phụ huynh", s:"todo"},
+  {t:"Kiểm bằng Chrome thật các cỡ màn, cập nhật bài đo vườn", s:"todo"}
  ]},
  {g:"Chuẩn bị chỗ cắm Plus ngay trong bản free (làm cùng H1–H3, tránh làm lại)", items:[
   {t:"Bạn chốt mô hình Free/Plus: A (free đủ bài và vườn, Plus = gia sư AI, đề thi, báo cáo, nhiều bé/máy)", s:"done", n:"Chốt 2026-11-21; kế hoạch giữ nguyên theo A"},
