@@ -6,6 +6,6 @@ function initShadow(){
     if(!TSPR[t.k]) return;
     var w = treeW(t), e = document.createElement("i"); e.className = "sh";
     e.style.left = (t.x / W * 100) + "%"; e.style.top = ((t.y + w * .01) / H * 100) + "%"; e.style.width = (w * .5 / W * 100) + "%"; e.style.height = (w * .13 / H * 100) + "%";
-    lay.appendChild(e);
+    t.sh = e; lay.appendChild(e);
   });
 }

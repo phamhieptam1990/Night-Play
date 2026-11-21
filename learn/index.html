@@ -378,6 +378,7 @@ body.tucked .rev{display:flex}
 <header class="top" id="topRow">
   <a class="ib" id="back" href="/hoc/" aria-label="Quay lại">←</a>
   <button class="pick" id="pick" type="button"><span class="sbd" id="sbd" aria-hidden="true"></span><span class="gbd" id="gbd" aria-hidden="true"></span></button>
+  <a class="ib" id="toGarden" href="garden/index.html" aria-label="Vào khu vườn" style="position:relative">🌱<i id="gBadge" hidden style="position:absolute;right:-2px;top:-2px;min-width:20px;height:20px;padding:0 5px;border-radius:10px;background:#EF4444;border:2px solid #fff;color:#fff;font:900 11px/16px system-ui;font-style:normal;text-align:center"></i></a>
   <button class="ib" id="snd" type="button" aria-pressed="false">🔇</button>
   <button class="ib main" id="mn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="mnu">⋯</button>
 </header>
@@ -387,6 +388,7 @@ body.tucked .rev{display:flex}
   <button class="mt" id="lang" type="button" role="menuitem">EN</button>
   <button class="mt" id="mMusic" type="button" role="menuitem" aria-pressed="true">🎶</button>
   <button class="mt" id="mTheme" type="button" role="menuitem">🌓</button>
+  <a class="mt" id="mMe" href="me/index.html" role="menuitem" aria-label="Của bé">🌈</a>
   <button class="mt" id="mParent" type="button" role="menuitem">🔒</button>
 </div>
 <button class="rev" id="rev" type="button" aria-label="Menu"><i></i></button>
@@ -406,7 +408,7 @@ body.tucked .rev{display:flex}
     <div class="stat"><div><b id="rS">0</b></div><div><b id="rB">0</b></div></div>
     <p id="rStory" class="rstory"></p><p id="rFarm" class="rfarm"></p>
     <p id="rTip" class="tip"></p>
-    <button class="btn" id="again" type="button">▶</button><button class="btn ghost" id="change" type="button">⚙️</button></div>
+    <button class="btn" id="again" type="button">▶</button><button class="btn ghost" id="change" type="button">⚙️</button><a class="btn ghost" id="toMe" href="me/index.html" hidden>🌈</a><a class="btn ghost" id="toGdn" href="garden/index.html" hidden>🌱</a></div>
 </div>
 <div class="ov" id="sheet" role="dialog" aria-modal="true" aria-labelledby="shT" hidden>
   <div class="card"><div class="big" aria-hidden="true">🐾</div><h2 id="shT" class="vh"></h2><h3 id="shS" class="vh"></h3><div class="pl s" id="pS"></div><h3 id="shG" class="vh"></h3><div class="pl g" id="pG"></div>
@@ -423,6 +425,7 @@ body.tucked .rev{display:flex}
 <script src="voice.js"></script>
 <script src="farm.js"></script>
 <script src="adventure.js"></script>
+<script src="story.js"></script>
 <script src="hint.js"></script>
 <script src="content/qtypes.js"></script>
 <script src="qui.js"></script>
@@ -465,6 +468,7 @@ let lang = "vi", subj = "toan", grade = 1;
 const E = window.LearnEngine;   /* sinh câu theo kỹ năng + chọn câu thích ứng + ghi tiến độ: learn/engine.js, ngân hàng: learn/content/bank.js */
 let bank = [];
 function buildRound(){
+  if(TRIP){ try{ bank = Story.questions(TRIP, { E, LT: window.LearnTypes, lang, grade }); return; }catch(e){ TRIP = null; } }   /* chuyến lỗi thì quay về vòng thường */
   const base = E.round(subj, grade, { lang, n: 5 }); bank = base;
   if(window.LearnTypes){ try{
     const qk = (new URLSearchParams(location.search).get("qk") || "").split(",").filter(Boolean);   /* ?qk=tf,match,... xem thử từng kiểu */
@@ -490,11 +494,22 @@ function dots(){
 }
 /* ---------- phiêu lưu + mục tiêu + cây lớn + trang phục (learn/farm.js, learn/adventure.js) ---------- */
 let ADV = null;
+/* ---------- truyện (learn/story.js): mở trang với ?trip=<id> thì vòng 5 câu là 5 CẢNH của chuyến ---------- */
+const TRIP_ID = (() => { try{ return (new URLSearchParams(location.search).get("trip") || "").replace(/[^a-z0-9-]/g, ""); }catch(e){ return ""; } })();
+let TRIP = null, introPending = false;
+/* nhiệm vụ từ khu vườn (?mission=water|fert|fish): xong vòng với >= 3 câu đúng, đúng môn của nhiệm vụ → Farm.missionDone mở thêm một phần đất */
+const MISSION = (() => { try{ const m = new URLSearchParams(location.search).get("mission"); return window.Farm && Farm.MISSION_SUBJ[m] ? m : ""; }catch(e){ return ""; } })();
+const missionOf = s => window.Farm ? Object.keys(Farm.MISSION_SUBJ).filter(k => Farm.MISSION_SUBJ[k] === s)[0] || "" : "";   /* bé chơi môn nào thì tính nhiệm vụ của môn đó, kể cả khi không bấm từ khu vườn */
+function gardenBadge(){ const b = $("gBadge"); if(!b || !window.Farm) return; const n = Farm.missionsLeft(); b.textContent = n; b.hidden = !n; }
+function storySay(txt){ const b = $("say"); if(!b || !txt) return; b.textContent = txt; b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop"); }   /* lời kể (<= 90 ký tự, đã kiểm bằng check-trips.js) dài hơn giới hạn 40 của LM.say */
+function storyScene(){ if(!TRIP) return; const sc = Story.scene(TRIP, bank[cur] ? bank[cur].scene : cur, lang); if(!sc) return;
+  if(introPending){ introPending = false; storySay(Story.tx(TRIP.intro.text, lang)); setTimeout(() => { if(bank[cur] && !locked && tries === 0) storySay(sc.narration); }, 4200); } else storySay(sc.narration); }
+function storyReact(ok){ if(!TRIP) return; const sc = Story.scene(TRIP, bank[cur] ? bank[cur].scene : cur, lang); if(sc) LM.say(ok ? sc.onRight : sc.onWrong); }
 function farmOutfit(){ const o = window.Farm && Farm.wearing(); $("oft").textContent = o ? o.e : ""; }
 function advUi(){
   if(!window.Farm || !window.Adventure) return; const t = T[lang], F = Farm.get(), q = F.quest;
   if(!ADV) ADV = Adventure.chapter(subj, lang);
-  $("advT").textContent = (lang === "en" ? "Chapter " : "Chương ") + ADV.n + " · " + ADV.step(Math.min(cur, 4));
+  $("advT").textContent = TRIP ? Story.tx(TRIP.title, lang) + " · " + (Math.min(cur, 4) + 1) + "/5" : (lang === "en" ? "Chapter " : "Chương ") + ADV.n + " · " + ADV.step(Math.min(cur, 4));
   const now = Math.min(q.goal, q.correct + roundStars);
   $("goalT").textContent = "🎁 " + now + "/" + q.goal; $("goalBar").style.width = (now / q.goal * 100) + "%";
   const pl = $("plant"), c = Farm.CROP[subj] || "carrot", k = Math.min(4, roundStars), want = "../shared/art/garden/crop_" + c + (k >= 4 ? "" : "_s" + k) + ".svg";
@@ -503,14 +518,19 @@ function advUi(){
 function farmFinish(){
   if(!window.Farm || !window.Adventure) return; const t = T[lang], vi = lang !== "en";
   const rep = Farm.recordRound({ subj, correct: roundStars, wrong: wrongTags, best, starsGained: roundStars }), ok = roundStars >= 5, ch = ADV || Adventure.chapter(subj, lang);
-  if(ok) Adventure.advance(subj);
-  $("rStory").textContent = (vi ? "📖 " : "📖 ") + ch.outro(ok, roundStars);
+  if(ok && !TRIP) Adventure.advance(subj);
+  let tr = null; if(TRIP){ tr = Story.finish(TRIP.id, roundStars); if(tr.seed) Farm.addSeeds(1); }
+  $("rStory").textContent = "📖 " + (TRIP ? Story.tx(TRIP.outro.text, lang) : ch.outro(ok, roundStars));
   const cn = { carrot: vi ? "cà rốt" : "carrots", wheat: vi ? "lúa mì" : "wheat", strawberry: vi ? "dâu tây" : "strawberries" }[rep.crop];
   const chips = []; if(rep.cropN) chips.push("<span>" + (vi ? "🧺 +" + rep.cropN + " " + cn + " vào kho" : "🧺 +" + rep.cropN + " " + cn)+ "</span>"); if(rep.seeds) chips.push("<span>🌱 +" + rep.seeds + "</span>");
+  if(tr && tr.seed) chips.push("<span class='big'>" + (vi ? "🌱 Hạt quý mới về vườn: +1" : "🌱 A rare seed came home: +1") + "</span>");
   chips.push("<span>🎁 " + Math.min(rep.questGoal, rep.questNow) + "/" + rep.questGoal + "</span>");
   if(rep.goalHit) chips.push("<span class='big'>" + (vi ? "🎉 Đủ mục tiêu hôm nay! +2 🌱 +3 ⭐" : "🎉 Daily goal done! +2 🌱 +3 ⭐") + "</span>");
   if(rep.newOutfit) chips.push("<span class='big'>" + rep.newOutfit.e + " " + (vi ? "Mở trang phục mới: " : "New outfit: ") + rep.newOutfit.n + "</span>");
-  $("rFarm").innerHTML = chips.join(""); ADV = null; farmOutfit();
+  { const mk = (MISSION && Farm.MISSION_SUBJ[MISSION] === subj) ? MISSION : missionOf(subj);
+    if(mk && roundStars >= 3){ const m = Farm.missionDone(mk), gt = Farm.BUILD.goal(m.n); chips.push("<span class='big'>" + (m.first ? (vi ? "🎯 Xong nhiệm vụ! " + (Farm.BUILD.got[Math.min(m.n, 7)] || "Khu vườn mở thêm một phần đất") + (gt ? " Tiếp theo: " + gt.name + " (còn " + Math.max(0, gt.at - gt.done) + ")" : "") : "🎯 Mission done! A new part of the garden opens 🌱") : (vi ? "🎯 Nhiệm vụ " + T[lang].sn[subj] + " hôm nay đã xong rồi" : "🎯 Today's mission is already done")) + "</span>"); $("toGdn").hidden = false; }
+    else if(mk && roundStars < 3) chips.push("<span>" + (vi ? "🎯 Đúng ít nhất 3 câu là xong nhiệm vụ. Thử lại nhé!" : "🎯 Get at least 3 right to finish the mission. Try again!") + "</span>"); }
+  $("rFarm").innerHTML = chips.join(""); gardenBadge(); ADV = null; farmOutfit();
 }
 /* tự co cỡ chữ câu hỏi cho vừa khung (câu dài, bảng nhiều dòng, hình): giữ nguyên lề, chỉ giảm chữ tới khi không tràn */
 function fitQ(){
@@ -580,6 +600,7 @@ function showQ(){
   $("hintBox").hidden = true; b.hl = 0; { const hb = $("hintBtn"); hb.hidden = !hintSteps(b); hb.setAttribute("aria-label", lang === "en" ? "Hint" : "Gợi ý"); }
   fitQ(); fitAns(); setTimeout(() => { if(bank[cur] === b){ fitQ(); fitAns(); } }, 700);   /* tính lại SAU khi bố cục kiểu câu (vd bong bóng) đã áp dụng */
   $("streak").textContent = streak > 1 ? "🔥 " + streak : "";
+  storyScene();
   if(GESTURE && (AUTO || b.listen)) setTimeout(() => { if(bank[cur] === b) speak(); }, 350);   /* câu NGHE tự đọc (sau cú chạm đầu tiên) */
 }
 /* âm thanh chạm (WebAudio, rất nhỏ, không cần tệp): "tách" khi chạm, chuông khi đúng, tiếng trầm nhẹ khi sai */
@@ -616,7 +637,7 @@ function musicTick(){
   if(document.hidden){ mNext = 0; return; }
   const now = AC.currentTime; if(mNext < now) mNext = now + .1;
   const key = KEY[subj] || 0;
-  while(mNext < now + 1.2){ const bar = Math.floor(mStep / 8) % 4, k = mStep % 8; boxNote(mtof(CH[bar][PAT[k]] + key), mNext, k === 0 ? .06 : .045); mStep++; mNext += .46; }
+  while(mNext < now + 1.2){ const bar = Math.floor(mStep / 8) % 4, k = mStep % 8; boxNote(mtof(CH[bar][PAT[k]] + key), mNext, k === 0 ? .13 : .1); mStep++; mNext += .46; }
 }
 function musicStart(){
   try{ AC = AC || new (window.AudioContext || window.webkitAudioContext)(); if(AC.state === "suspended") AC.resume();
@@ -626,6 +647,7 @@ function musicStart(){
 function musicStop(){ clearInterval(musicT); musicT = 0; }
 function musicUi(){ const m = $("mMusic"); if(!m) return; m.setAttribute("aria-pressed", String(MUSIC)); m.style.opacity = MUSIC ? "1" : ".45"; m.textContent = MUSIC ? "🎶" : "🎵"; }
 ["pointerdown", "touchstart", "keydown"].forEach(ev => addEventListener(ev, () => { if(MUSIC) musicStart(); }, { passive: true }));
+document.addEventListener("visibilitychange", () => { if(!document.hidden && MUSIC && AC && AC.state === "suspended") try{ AC.resume(); }catch(e){} });   /* quay lại tab / mở khoá điện thoại: nhạc chạy lại */
 function noise(t0, dur, gain, freq){
   try{ const n = Math.floor(AC.sampleRate * dur), buf = AC.createBuffer(1, n, AC.sampleRate), d = buf.getChannelData(0); for(let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 2);
     const src = AC.createBufferSource(), f = AC.createBiquadFilter(), g = AC.createGain(); src.buffer = buf; f.type = "bandpass"; f.frequency.value = freq; f.Q.value = .8; g.gain.value = gain * 1.1; src.connect(f); f.connect(g); g.connect(AC.destination); src.start(t0); }catch(e){}
@@ -659,12 +681,12 @@ function gotRight(el){
   const b = bank[cur]; locked = true; if(el){ if(el.classList) el.classList.add("ok"); burst(el); } streak++; best = Math.max(best, streak);
   { const cw = T[lang].cheer || {}; cheer(streak >= 3 ? 2 : 1, el, streak >= 5 ? cw.s5 : streak >= 3 ? cw.s3 : (tries === 0 && Math.random() < .5 ? cw.ok : "")); }
   if(tries === 0){ if(!(b.hl >= 2)) E.record(subj, b.skill, true, undefined, { kind: b.kind || "mc", hint: b.hl >= 1 }); stars++; roundStars++; ls("learn:stars", stars); const s = $("stars"); s.classList.remove("bump"); void s.offsetWidth; s.classList.add("bump"); b.res = "ok"; advUi(); } else b.res = "miss";
-  LM.event(streak >= 5 ? "streak5" : streak >= 3 ? "streak3" : "ok"); setTimeout(next, 1000); renderStars();
+  LM.event(streak >= 5 ? "streak5" : streak >= 3 ? "streak3" : "ok"); storyReact(true); setTimeout(next, 1000); renderStars();
 }
 /* trả về 1 = sai lần đầu (cho thử lại, có gợi ý), 2 = sai lần hai (hiện đáp án rồi sang câu sau) */
 function gotWrong(tag, reveal, text){
   const t = T[lang], b = bank[cur]; tries++; streak = 0; sfx("no"); err(tag || "other"); $("streak").textContent = "";
-  if(tries === 1){ E.record(subj, b.skill, false, tag || "other", { kind: b.kind || "mc" }); LM.emote("sad", 1600); LM.say(t.hint[tag] || t.hint.other); return 1; }   /* lần sai đầu tiên của câu này: ghi kỹ năng + mã lỗi tư duy */
+  if(tries === 1){ E.record(subj, b.skill, false, tag || "other", { kind: b.kind || "mc" }); LM.emote("sad", 1600); if(TRIP) storyReact(false); else LM.say(t.hint[tag] || t.hint.other); return 1; }   /* lần sai đầu tiên của câu này: ghi kỹ năng + mã lỗi tư duy */
   locked = true; b.res = "miss"; if(reveal) reveal(); LM.emote("sad", 2000); LM.say(text ? t.reveal + " " + text + "." : t.hint.other); setTimeout(next, 1700); return 2;
 }
 const QAPI = { sfx: k => sfx(k), locked: () => locked, right: el => gotRight(el), wrong: (tag, reveal, text) => gotWrong(tag, reveal, text), say: t => LM.say(t) };
@@ -674,7 +696,7 @@ function choose(btn, o){
   btn.classList.add("no"); btn.disabled = true;
   gotWrong(o.tag, () => { const right = b.o.find(x => x.ok); Array.from($("ans").children).forEach(x => { x.disabled = true; if(x.textContent === right.v) x.classList.add("ok"); }); }, b.o.find(x => x.ok).v);
 }
-function next(){ cur++; if(cur >= 5) return finish(); showQ(); }
+function next(){ cur++; if(TRIP) Story.rest(TRIP.id, cur); if(cur >= 5) return finish(); showQ(); }
 let AUTO = ls("learn:auto") === "1", GESTURE = false;
 const mqL = matchMedia("(max-height:430px) and (min-aspect-ratio:11/10)");
 function placeStars(){ const st = $("stars"); if(mqL.matches){ if(st.parentNode !== $("topRow")) $("snd").before(st); } else if(st.parentNode !== $("streak").parentNode) $("streak").before(st); }
@@ -705,9 +727,9 @@ function finish(){
 }
 function start(){
   if(window.LearnLimit && LearnLimit.over()){ $("res").hidden = true; $("sheet").hidden = true; LearnLimit.check(true); return; }   /* hết giờ chơi: không bắt đầu vòng mới */
-  const t = T[lang]; cur = 0; streak = 0; best = 0; roundStars = 0; wrongTags = {}; $("res").hidden = true; $("sheet").hidden = true;
-  buildRound(); ADV = null; farmOutfit(); showQ(); LM.event("start");
-  if(window.Farm && window.Adventure){ const gr = Farm.greet(subj, lang, c => (T[lang].tag || {})[c] || ""); const c0 = Adventure.chapter(subj, lang); LM.say(gr); setTimeout(() => { if(cur === 0 && !locked) LM.say(c0.intro); }, 3600); }
+  const t = T[lang]; cur = TRIP ? Story.resumeAt(TRIP.id) : 0; streak = 0; best = 0; roundStars = 0; wrongTags = {}; $("res").hidden = true; $("sheet").hidden = true;
+  $("toMe").hidden = !TRIP; $("toGdn").hidden = true; gardenBadge(); introPending = !!TRIP; buildRound(); ADV = null; farmOutfit(); showQ(); if(!TRIP) LM.event("start");
+  if(window.Farm && window.Adventure && !TRIP){ const gr = Farm.greet(subj, lang, c => (T[lang].tag || {})[c] || ""); const c0 = Adventure.chapter(subj, lang); LM.say(gr); setTimeout(() => { if(cur === 0 && !locked) LM.say(c0.intro); }, 3600); }
 }
 /* ---------- giao diện ---------- */
 function label(){ const t = T[lang]; $("sbd").innerHTML = '<img src="' + hd(subj, grade) + '" alt="">'; $("gbd").textContent = grade; $("pick").setAttribute("aria-label", t.sn[subj] + ", " + t.grade + " " + grade); }
@@ -752,7 +774,7 @@ function speak(){
   const vi = lang === "vi", map = vi ? {"×":" nhân ","+":" cộng ","−":" trừ ","÷":" chia ","=":" bằng ","%":" phần trăm ","?":" bao nhiêu "} : {"×":" times ","+":" plus ","−":" minus ","÷":" divided by ","=":" equals ","%":" percent ","?":" what "};
   let txt = b.speak != null ? String(b.speak) : b.q.replace(/<[^>]+>/g, "").replace(/[×+−÷=%?]/g, c => map[c]).replace(/_+/g, vi ? " chỗ trống " : " blank ");
   if(b.speak == null && subj === "tanh" && grade <= 2) txt = vi ? "Đây là gì?" : "What is this?";
-  if(window.Voice){ Voice.say(txt, subj, b.speakLang || (subj === "tanh" ? "en" : (vi ? "vi" : "en"))); return; }   /* giọng chung: tệp thu sẵn nếu có, không thì giọng máy tốt nhất + cao độ riêng từng nhân vật (learn/voice.js) */
+  if(window.Voice){ Voice.say(txt, subj, b.speakLang || (subj === "tanh" ? "en" : (vi ? "vi" : "en")), { fail: () => LM.say(T[lang].noVoice) }); return; }   /* giọng chung: tệp thu sẵn nếu có, không thì giọng máy tốt nhất + cao độ riêng từng nhân vật (learn/voice.js) */
   try{ const lg = b.speakLang ? (b.speakLang === "vi" ? "vi-VN" : "en-US") : (subj === "tanh" ? "en-US" : (vi ? "vi-VN" : "en-US")), busy = speechSynthesis.speaking || speechSynthesis.pending; if(busy) speechSynthesis.cancel();
     /* nếu đang đọc dở thì hủy rồi chờ một nhịp (Chrome bỏ speak() ngay sau cancel()); nếu không thì đọc NGAY trong cú chạm (Safari chỉ cho phát trong cú chạm) */
     const go = () => { const u = new SpeechSynthesisUtterance(txt); u.lang = lg; u.rate = .9; let ok = false;
@@ -806,7 +828,8 @@ document.querySelector(".prog").classList.add("intro"); setTimeout(() => documen
   arm();
 })();
 ["pointerdown", "keydown"].forEach(e => document.addEventListener(e, () => LM.wake(), true));
-chrome(); start();
+if(TRIP_ID && window.Story){ fetch("content/trips/" + TRIP_ID + ".json").then(r => r.json()).then(t => { TRIP = t; subj = t.subject; chrome(); start(); }).catch(() => { chrome(); start(); }); }
+else { chrome(); start(); }
 </script>
 </body>
 </html>

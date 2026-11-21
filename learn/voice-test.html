@@ -1,0 +1,24 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Nghe thử giọng đọc</title>
+<style>:root{--ink:#1d1a33;--bg:#F6F4F1;--line:#E3DDEF}@media (prefers-color-scheme:dark){:root{--ink:#f3f0ff;--bg:#15122b;--line:#3a3460}}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,sans-serif}.w{max-width:900px;margin:0 auto;padding:16px}h1{margin:0 0 4px;font-size:24px}p.n{margin:0 0 14px;opacity:.8}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:10px 0}select,textarea,button{font:inherit;color:inherit;background:transparent;border:2px solid var(--line);border-radius:14px;padding:10px 12px}textarea{width:100%;min-height:64px;box-sizing:border-box}button{cursor:pointer;font-weight:800;min-height:48px}button.p{background:#7C5CFF;color:#fff;border-color:transparent}label{font-weight:700;font-size:14px}input[type=range]{width:160px}
+table{width:100%;border-collapse:collapse;margin-top:10px}td,th{padding:8px;border-bottom:1px solid var(--line);text-align:left;font-size:14px}.ok{color:#16a34a;font-weight:800}</style></head><body><nav class="rvnav" style="position:sticky;top:0;z-index:99;display:flex;gap:6px 14px;flex-wrap:wrap;align-items:center;padding:8px 16px;background:#1a1d33;color:#fff;font:600 13px system-ui"></nav><script src="review-nav.js"></script><div class="w">
+<h1>🎧 Nghe thử giọng đọc</h1><p class="n">Chọn một giọng có trên máy này, chỉnh cao độ (cao hơn = giọng trẻ con hơn) rồi nghe. Muốn so với giọng thu sẵn thì bấm "Phát tệp thu sẵn".</p>
+<textarea id="t">Chào bé! Mình là Mochi. 6 cộng 3 bằng mấy nhỉ? Giỏi quá, đúng rồi!</textarea>
+<div class="row"><label>Ngôn ngữ <select id="lg"><option value="vi">Tiếng Việt</option><option value="en">English</option></select></label><label>Nhân vật <select id="who"><option value="toan">Mochi (Toán)</option><option value="tviet">Mầm (Tiếng Việt)</option><option value="tanh">Bibi (Tiếng Anh)</option><option value="sen">Sen Sen</option></select></label></div>
+<div class="row"><label>Giọng <select id="vo"></select></label></div>
+<div class="row"><label>Cao độ <input id="pi" type="range" min="0.6" max="2" step="0.05" value="1.5"> <b id="pv">1.5</b></label><label>Tốc độ <input id="ra" type="range" min="0.6" max="1.3" step="0.05" value="0.95"> <b id="rv">0.95</b></label></div>
+<div class="row"><button class="p" id="go" type="button">▶ Nghe giọng này</button><button id="auto" type="button">🔊 Giọng tự chọn của game</button><button id="rec" type="button">🎙️ Phát tệp thu sẵn</button></div>
+<p id="msg" class="n"></p>
+<h3>Mọi giọng có trên máy này</h3><table><thead><tr><th>Tên</th><th>Ngôn ngữ</th><th>Loại</th></tr></thead><tbody id="tb"></tbody></table>
+</div><script src="voice.js"></script><script>
+var $=function(i){return document.getElementById(i)},ss=window.speechSynthesis;
+function list(){var vs=(ss&&ss.getVoices())||[],lg=$("lg").value,pre=lg==="vi"?"vi":"en";$("vo").innerHTML="<option value=''>(tự chọn tốt nhất)</option>"+vs.filter(function(v){return v.lang.toLowerCase().indexOf(pre)===0}).map(function(v){return "<option value='"+v.name+"'>"+v.name+" ("+v.lang+(v.localService?"":", online")+")</option>"}).join("");
+$("tb").innerHTML=vs.map(function(v){return "<tr><td>"+v.name+"</td><td>"+v.lang+"</td><td>"+(v.localService?"trên máy":"online")+"</td></tr>"}).join("")||"<tr><td colspan=3>Máy này chưa có giọng nào.</td></tr>";
+var b=Voice.pickVoice(lg);$("msg").textContent=b?"Game sẽ tự chọn: "+b.name+" ("+b.lang+")":"Máy chưa có giọng "+(lg==="vi"?"tiếng Việt":"tiếng Anh")+" — nên dùng giọng thu sẵn."}
+if(ss){list();ss.onvoiceschanged=list}
+$("lg").onchange=list;$("pi").oninput=function(){$("pv").textContent=this.value};$("ra").oninput=function(){$("rv").textContent=this.value};
+$("who").onchange=function(){var p=Voice.PROFILE[this.value]||Voice.PROFILE.def;$("pi").value=p.pitch;$("ra").value=p.rate;$("pv").textContent=p.pitch;$("rv").textContent=p.rate};
+$("go").onclick=function(){if(!ss)return;ss.cancel();var u=new SpeechSynthesisUtterance($("t").value);u.lang=$("lg").value==="vi"?"vi-VN":"en-US";u.pitch=+$("pi").value;u.rate=+$("ra").value;var n=$("vo").value,v=ss.getVoices().filter(function(x){return x.name===n})[0]||Voice.pickVoice($("lg").value);if(v)u.voice=v;ss.speak(u)};
+$("auto").onclick=function(){Voice.say($("t").value,$("who").value,$("lg").value)};
+$("rec").onclick=function(){var k=Voice.key($("who").value,$("t").value),a=new Audio(Voice.BASE+$("who").value+"/"+k+".mp3");a.onerror=function(){$("msg").textContent="Chưa có tệp thu sẵn cho câu này. Tên tệp cần có: "+$("who").value+"/"+k+".mp3"};a.onplaying=function(){$("msg").innerHTML="<span class=ok>✓ Đang phát tệp thu sẵn</span> "+$("who").value+"/"+k+".mp3"};a.play().catch(function(){})};
+</script></body></html>

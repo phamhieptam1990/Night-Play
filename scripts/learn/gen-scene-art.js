@@ -104,6 +104,18 @@ function fence(gx, gy, dir, lvl) {   /* dir "x" = dọc theo gx (xuống-phải)
   return { d, svg: o };
 }
 
+/* ---------- ĐẤT NỀN CẤT NHÀ: mảnh đất bé "mua" bằng nhiệm vụ đầu tiên: nền đất san phẳng, cọc gỗ + dây ở bốn góc, một lá cờ đỏ ---------- */
+function houseLot(cx, cy, hw, hh) {
+  const T = [cx, cy - hh], R = [cx + hw, cy], B = [cx, cy + hh], Lf = [cx - hw, cy], inner = p => [cx + (p[0] - cx) * .9, cy + (p[1] - cy) * .9];
+  let o = poly([T, R, B, Lf], "#D8BF86", "#A8884A", 4) + poly([T, R, B, Lf].map(inner), "none", "#EBDDB0", 2.4);
+  for (let k = 0; k < 14; k++) { const r = rng(k * 17 + 3), px = cx + (r() - .5) * hw * 1.3, py = cy + (r() - .5) * hh * 1.2; if (Math.abs(px - cx) / hw + Math.abs(py - cy) / hh < .85) o += ell(px, py, 5 + r() * 5, 2.4, "#BFA468", null).replace("/>", ' opacity=".6"/>'); }
+  const post = p => `<g transform="translate(${f(p[0])} ${f(p[1])})">${shadow(11, 4, .22)}<rect x="-4" y="-34" width="8" height="34" rx="2.5" fill="url(#gWood)" stroke="${C.woodD}" stroke-width="2.2"/><circle cx="0" cy="-34" r="4.6" fill="${C.wood1}" stroke="${C.woodD}" stroke-width="2"/></g>`;
+  const rope = (p, q) => `<path d="M${f(p[0])} ${f(p[1] - 28)}Q${f((p[0] + q[0]) / 2)} ${f((p[1] + q[1]) / 2 - 18)} ${f(q[0])} ${f(q[1] - 28)}" fill="none" stroke="#F4EAC8" stroke-width="3" stroke-linecap="round"/>`;
+  o += rope(Lf, T) + rope(T, R);
+  o += [T, Lf, R].map(post).join("") + rope(Lf, B) + rope(B, R) + post(B);
+  o += `<g transform="translate(${f(B[0] + 16)} ${f(B[1] + 2)})">${shadow(10, 4, .2)}<path d="M0 0V-58" stroke="${C.woodD}" stroke-width="4" stroke-linecap="round"/><path d="M2 -56L34 -46L2 -34Z" fill="#E5484D" stroke="#9B1C1C" stroke-width="2.4" stroke-linejoin="round"/></g>`;
+  return o;
+}
 /* ---------- công trình ---------- */
 function house(F, lvl) {
   const a = 3, b = 2; let svg = "", sh = shadow(150, 44, .24);
@@ -363,6 +375,7 @@ function scene(o) {
   const bigTree = W2("bigTree", SPRITES.bigTree), pine = W2("pine", SPRITES.pine), hay = W2("hay", SPRITES.hay), barrel = W2("barrel", SPRITES.barrel), chicken = W2("chicken", SPRITES.chicken), rabbit = W2("rabbit", SPRITES.rabbit), cow = W2("cow", SPRITES.cow), rock = W2("rock", SPRITES.rock), bush = W2("bush", SPRITES.bush), lavender = W2("lavender", SPRITES.lavender), flowerPatch = W2("flowerPatch", SPRITES.flowerPatch), pumpkins = W2("pumpkins", SPRITES.pumpkins), milkcans = W2("milkcans", SPRITES.milkcans), roundHay = W2("roundHay", SPRITES.roundHay), crate = W2("crate", SPRITES.crate), coop = W2("coop", SPRITES.coop);
   /* ---- lớp mặt đất ---- */
   if (L.pond) base.push(pond([330, 300]));
+  if (o.lot) base.push({ d: .6, svg: houseLot(650, 238 + HY + 0, 170, 82) });   /* bước "đất nền cất nhà" */
   /* lối đi = mảng liền; kiểu chọn bằng L.pathStyle (dat | soi | cuoi | dalat | gach) */
   const PS = L.pathStyle || "soi";
   if (L.path) {
@@ -516,10 +529,27 @@ function strip(label, makers, w, h, bg) {
   names.forEach((nm, i) => { const cx2 = bx + 66 + i * 86, cy2 = by + 100, sel = i === 1; ov += `<g><circle cx="${cx2}" cy="${cy2}" r="36" fill="${sel ? "#FFE9B0" : "#F2EEFA"}" stroke="${sel ? "#F2A100" : "#DAD3EA"}" stroke-width="${sel ? 5 : 3}"/><g transform="translate(${cx2} ${cy2 + 16}) scale(1.05)">${fns[i](0, 0, !!ripe[i])}</g><text x="${cx2}" y="${cy2 + 58}" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="800" font-size="13" fill="#4B3FA0">${nm}</text></g>`; });
   files["scene-11-chon-cay.svg"] = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" role="img" aria-label="Chọn cây để trồng trên ô đất xám" data-style="pop"><title>Chọn cây để trồng</title>${STYLE}${defs()}${g}${ov}</svg>\n`;
 }
+/* CÁC BƯỚC XÂY KHU VƯỜN (bé xong nhiệm vụ nào thì mở thêm một phần đất; learn/garden/garden-unlock.js chọn cảnh theo số nhiệm vụ đã xong):
+   xay-0 = bãi cỏ xanh TRỐNG hoàn toàn · xay-1 = ĐẤT NỀN cất nhà (bé vừa "mua" được đất) · xay-2..5 = cất nhà qua 4 cấp (lều lá → nhà tranh → nhà tường → nhà cấp 4 hoàn thiện)
+   xay-6 = nhà xong + ruộng 12 ô đất trống. Cùng toạ độ với cảnh đầy đủ (ô trồng, vùng bấm khớp); cảnh đầy đủ (toan-canh-na) dùng sau bước 6. Ba buổi: 01 sáng · 05 chiều · 06 tối. */
+const XAY_NAMES = ["Bãi cỏ xanh trống", "Đất nền cất nhà", "Dựng lều lá", "Nhà tranh", "Nhà tường", "Nhà cấp 4 hoàn thiện", "Nhà cấp 4 và ruộng 12 ô"];
+for (const [pre, t] of [["01", "day"], ["05", "dusk"], ["06", "night"]]) for (let k = 0; k <= 6; k++) {
+  const lv = { deco: 0, house: k >= 2 ? Math.min(k - 1, 4) : 0, fence: 0, well: 0, barn: 0, windmill: 0, path: 0, apple: 0, flowers: 0, pond: 0, hay: 0, animals: 0, plots: k >= 6 ? 400 : 0, planted: k >= 6 ? 300 : 0, noOrchard: 1 };
+  files[`scene-${pre}-xay-${k}-na.svg`] = scene({ label: "Khu vườn đang xây: " + XAY_NAMES[k] + " (" + t + ")", time: t, noAnimals: true, world: true, levels: lv, lot: k === 1 });
+}
+/* ẢNH MỤC TIÊU cho bé (popup "Chăm vườn hôm nay"): cận cảnh đúng chỗ sẽ có: mảnh đất cất nhà · nhà cấp 4 · ruộng 12 ô. Ban ngày. */
+{
+  const base = { deco: 0, fence: 0, well: 0, barn: 0, windmill: 0, path: 0, apple: 0, flowers: 0, pond: 0, hay: 0, animals: 0, noOrchard: 1 };
+  const mk = (id, label, lv, extra) => { files[`scene-12-muc-tieu-${id}.svg`] = scene(Object.assign({ label, time: "day", noAnimals: true, world: true, levels: Object.assign({}, base, lv) }, extra)); };
+  mk("co", "Khu vườn lúc mới: bãi cỏ xanh trống", { house: 0, plots: 0, planted: 0 }, { view: [260, 30, 520, 300] });
+  mk("dat", "Mục tiêu: mảnh đất cất nhà", { house: 0, plots: 0, planted: 0 }, { lot: true, view: [440, -70, 420, 300] });
+  mk("nha", "Mục tiêu: nhà cấp 4", { house: 4, plots: 0, planted: 0 }, { view: [440, -20, 420, 300] });
+  mk("ruong", "Mục tiêu: ruộng 12 ô đất trống", { house: 0, plots: 400, planted: 300 }, { view: [-10, -10, 450, 330] });
+}
 for (const [n, c] of Object.entries(files)) fs.writeFileSync(path.join(out, n), c);
 const ids = [...SCENES.map(s => [s[0], s[1]]), ...CLOSE.map(c => [c[0], c[1]])].sort();
 const A = 'style="color:#cfd3ff;text-decoration:none;padding:4px 10px;border-radius:99px"';
-const nav = `<nav class="rvnav" style="position:sticky;top:0;z-index:99;display:flex;gap:6px 14px;flex-wrap:wrap;align-items:center;padding:8px 16px;background:#1a1d33;color:#fff;font:600 13px system-ui"><b style="opacity:.7">Duyệt Học Vui:</b><a ${A} href="../../../learn/mascot-review.html">🐾 Linh vật theo bố cục học</a><a ${A} href="../../../learn/index.html">Trang học</a><a ${A} href="../brand-learn.html">Thương hiệu 3 môn</a><a ${A} href="../learn/mascot_sheet.html">Bảng 3×5 lớp</a><a ${A} href="../preview-learn.html">3 bản base</a><a ${A} href="../preview-emotions.html">Cảm xúc</a><a ${A} href="preview-garden.html">🌸 Vườn hoa</a><a ${A} href="preview-crops.html">🌾 Thu hoạch (cây trồng)</a><span style="padding:4px 10px;border-radius:99px;background:#fff;color:#1a1d33">🏡 Khu vườn</span><a ${A} href="preview-garden-play.html">👆 Vườn tương tác</a></nav>`;
+const nav = `<nav class="rvnav" style="position:sticky;top:0;z-index:99;display:flex;gap:6px 14px;flex-wrap:wrap;align-items:center;padding:8px 16px;background:#1a1d33;color:#fff;font:600 13px system-ui"><b style="opacity:.7">Duyệt Học Vui:</b><a ${A} href="../../../learn/mascot-review.html">🐾 Linh vật theo bố cục học</a><a ${A} href="../../../learn/index.html">Trang học</a><a ${A} href="../brand-learn.html">Thương hiệu 3 môn</a><a ${A} href="../learn/mascot_sheet.html">Bảng 3×5 lớp</a><a ${A} href="../preview-learn.html">3 bản base</a><a ${A} href="../preview-emotions.html">Cảm xúc</a><a ${A} href="preview-garden.html">🌸 Vườn hoa</a><a ${A} href="preview-crops.html">🌾 Thu hoạch (cây trồng)</a><span style="padding:4px 10px;border-radius:99px;background:#fff;color:#1a1d33">🏡 Khu vườn</span><a ${A} href="preview-garden-play.html">👆 Vườn tương tác</a></nav><script src="../../../learn/review-nav.js"></script>`;
 const html = `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Khu vườn Học Vui: ảnh duyệt</title>
 <style>:root{--ink:#1d1a33;--bg:#F6F4F1;--panel:#fff;--line:#E3DDEF}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
 .wrap{max-width:1180px;margin:0 auto;padding:24px 16px 70px}h1{font-size:clamp(26px,5vw,40px);margin:0 0 6px;font-weight:900}p.n{color:#5b5578;max-width:52em;margin:0 0 14px}
@@ -560,7 +590,7 @@ Object.assign(CROPINFO.sunflower, { mas: true, mn: "Hướng Dương", say: ["M�
   const rr = rng(77), plots = HOT1.map((h, i) => { const need = h.crop ? CROPINFO[h.crop].need : 5, got = h.planted ? (h.ripe ? need : 1 + Math.floor(rr() * (need - 1))) : 0; const o = { i, tree: !!h.tree, x: h.x, y: h.y, planted: h.planted, crop: h.crop, got, need }; if (h.tilled) o.tilled = true; return o; });
   const ids = Object.keys(CROPINFO);
   const A = 'style="color:#cfd3ff;text-decoration:none;padding:4px 10px;border-radius:99px"';
-  const nav = `<nav class="rvnav" style="position:sticky;top:0;z-index:99;display:flex;gap:6px 14px;flex-wrap:wrap;align-items:center;padding:8px 16px;background:#1a1d33;color:#fff;font:600 13px system-ui"><b style="opacity:.7">Duyệt Học Vui:</b><a ${A} href="../../../learn/mascot-review.html">🐾 Linh vật theo bố cục học</a><a ${A} href="../brand-learn.html">Thương hiệu 3 môn</a><a ${A} href="preview-garden.html">🌸 Vườn hoa</a><a ${A} href="preview-crops.html">🌾 Thu hoạch (cây trồng)</a><a ${A} href="preview-scene.html">🏡 Khu vườn</a><span style="padding:4px 10px;border-radius:99px;background:#fff;color:#1a1d33">👆 Vườn tương tác</span></nav>`;
+  const nav = `<nav class="rvnav" style="position:sticky;top:0;z-index:99;display:flex;gap:6px 14px;flex-wrap:wrap;align-items:center;padding:8px 16px;background:#1a1d33;color:#fff;font:600 13px system-ui"><b style="opacity:.7">Duyệt Học Vui:</b><a ${A} href="../../../learn/mascot-review.html">🐾 Linh vật theo bố cục học</a><a ${A} href="../brand-learn.html">Thương hiệu 3 môn</a><a ${A} href="preview-garden.html">🌸 Vườn hoa</a><a ${A} href="preview-crops.html">🌾 Thu hoạch (cây trồng)</a><a ${A} href="preview-scene.html">🏡 Khu vườn</a><span style="padding:4px 10px;border-radius:99px;background:#fff;color:#1a1d33">👆 Vườn tương tác</span></nav><script src="../../../learn/review-nav.js"></script>`;
   /* dữ liệu mẫu cho trang vườn tương tác: SINH ở đây; phần mã/CSS/HTML của trang nằm trong learn/garden/ (viết tay: index.html, css/, garden-*.js; garden-layout.js là danh sách + thứ tự nạp) */
   { const td = path.join(out, "..", "tree"); fs.mkdirSync(td, { recursive: true });
     for (const k of SPRITE_KINDS) { if (TREE_PNG.has(k)) continue; let g = String(bigTree(0, 0, 1, k)); const i = g.indexOf('<path d="M-12 0C'), j = g.indexOf('<g transform="scale(1)">'); if (i < 0 || j < 0) throw new Error("bigTree đổi cấu trúc, sửa bộ xuất cây rời"); g = g.slice(0, j + 24) + g.slice(i);

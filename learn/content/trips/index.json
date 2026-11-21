@@ -1,0 +1,17 @@
+{
+  "season": { "vi": "Bạn Mây đến vườn", "en": "Cloud Friend Visits the Garden" },
+  "colors": [
+    { "n": 1, "vi": "Đỏ", "en": "Red", "hex": "#EF4444" },
+    { "n": 2, "vi": "Cam", "en": "Orange", "hex": "#F97316" },
+    { "n": 3, "vi": "Vàng", "en": "Yellow", "hex": "#FACC15" },
+    { "n": 4, "vi": "Lục", "en": "Green", "hex": "#22C55E" },
+    { "n": 5, "vi": "Lam", "en": "Blue", "hex": "#3B82F6" },
+    { "n": 6, "vi": "Chàm", "en": "Indigo", "hex": "#6366F1" },
+    { "n": 7, "vi": "Tím", "en": "Violet", "hex": "#A855F7" }
+  ],
+  "trips": [
+    { "id": "dao-so-01", "color": 1, "subject": "toan" },
+    { "id": "rung-chu-01", "color": 1, "subject": "tviet" },
+    { "id": "vinh-tu-01", "color": 1, "subject": "tanh", "soon": true, "title": { "vi": "Vịnh Từ Vui", "en": "Happy Word Bay" } }
+  ]
+}

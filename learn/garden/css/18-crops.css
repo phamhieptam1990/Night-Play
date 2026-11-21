@@ -1,6 +1,116 @@
+/* Phần CHƯA MỞ KHOÁ (cây ăn trái, vật nuôi, ô cây): ẩn hẳn, không bấm được (learn/garden/garden-unlock.js) */
+.lk{display:none!important}
 /* Cây bé tự trồng trong ô (ảnh crop_<giống>[_s0..s3].svg), nằm trong nút ô nên không chặn bấm */
 .hs .cs{position:absolute;left:50%;top:80%;width:110%;height:auto;transform:translate(-50%,-100%);pointer-events:none;filter:drop-shadow(0 2px 2px rgba(40,24,10,.35));transform-origin:50% 100%;animation:csin .45s cubic-bezier(.3,1.6,.5,1)}
 @keyframes csin{from{transform:translate(-50%,-100%) scale(.3)}to{transform:translate(-50%,-100%) scale(1)}}
 @media (prefers-reduced-motion:reduce){.hs .cs{animation:none}}
 /* màn thấp (điện thoại ngang): ẩn chú thích để không che cảnh */
 @media (max-height:480px){.legend{display:none!important}}
+/* Bảng "Chăm vườn hôm nay" cho bé: một màn, chữ to, nền màu của popup (không nền trắng) */
+#guide .gd-hero{display:flex;align-items:center;gap:14px;padding:14px;border-radius:20px;background:linear-gradient(135deg,rgba(255,224,138,.3),rgba(255,176,32,.22));border:2px solid rgba(255,224,138,.55)}
+#guide .gd-ic{flex:none;display:grid;place-items:center;width:64px;height:64px;border-radius:20px;font-size:38px;background:rgba(255,255,255,.2)}
+#guide .gd-hero b{display:block;font-size:22px;font-weight:900;line-height:1.2}#guide .gd-hero span{display:block;margin-top:2px;font-size:17px;font-weight:700;opacity:.95}
+#guide .gd-track{list-style:none;display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:12px 0 0;padding:0}
+#guide .gd-track li{display:grid;place-items:center;aspect-ratio:1;max-height:56px;border-radius:14px;background:rgba(0,0,0,.22);border:2px solid transparent}#guide .gd-track i{font-style:normal;font-size:24px;line-height:1}
+#guide .gd-track li.on{background:rgba(74,222,128,.32);border-color:rgba(74,222,128,.7)}#guide .gd-track li.now{border-color:#FFE08A;background:rgba(255,224,138,.22)}
+#guide h4{margin:16px 0 8px;font-size:18px;font-weight:900}
+#guide .gdc-list{display:grid;gap:8px}
+#guide .gdc{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:18px;background:rgba(0,0,0,.22);border:2px solid rgba(255,255,255,.2)}
+#guide .gdc>i{flex:none;display:grid;place-items:center;width:48px;height:48px;border-radius:15px;font-style:normal;font-size:28px;background:rgba(255,255,255,.18)}
+#guide .gdc>div{flex:1;min-width:0}#guide .gdc b{display:block;font-size:19px;font-weight:900;line-height:1.2}#guide .gdc small{display:block;margin-top:2px;font-size:15px;font-weight:600;opacity:.92}
+#guide .gdc-go,#guide .gdc-ok{flex:none;display:grid;place-items:center;min-width:76px;min-height:48px;padding:0 16px;border-radius:99px;font:900 17px system-ui;text-decoration:none}
+#guide .gdc-go{background:linear-gradient(135deg,#FFE08A,#FFB020);color:#4a2c00}#guide .gdc-ok{background:rgba(74,222,128,.3);color:#fff}
+#guide .gdc.dn{background:rgba(74,222,128,.16);border-color:rgba(74,222,128,.5)}
+#guide .gd-go2{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-top:12px}
+#guide .gd-go2 a{display:grid;place-items:center;min-height:52px;padding:0 12px;border-radius:16px;background:rgba(255,255,255,.16);border:2px solid rgba(255,255,255,.4);color:#fff;font-weight:900;font-size:17px;text-decoration:none}
+#guide .gd-foot{margin:12px 2px 0;font-size:14px;font-weight:600;opacity:.85;text-align:center}
+@media (max-height:520px){#guide .gd-hero{padding:8px 10px}#guide .gd-ic{width:48px;height:48px;font-size:28px}#guide h4{margin:8px 0 4px}#guide .gdc{padding:6px 10px}#guide .gd-track{display:none}}
+/* ===== Thẻ MỤC TIÊU trong bảng Chăm vườn: hình thứ sẽ có + thanh tiến độ + phần thưởng ===== */
+#guide .gd-goal{display:flex;align-items:center;gap:14px;padding:12px;border-radius:20px;background:linear-gradient(135deg,rgba(255,224,138,.28),rgba(255,176,32,.2));border:2px solid rgba(255,224,138,.6)}
+#guide .gd-goal>img{flex:none;width:116px;height:96px;object-fit:cover;border-radius:14px;background:#7fc15a;border:2px solid rgba(255,255,255,.5)}
+#guide .gd-goal small{display:block;font-size:13px;font-weight:900;letter-spacing:.06em;color:#FFE08A}
+#guide .gd-goal b{display:block;margin-top:1px;font-size:24px;font-weight:900;line-height:1.15}
+#guide .gd-goal span{display:block;margin-top:4px;font-size:16px;font-weight:700}
+#guide .gd-goal>div{min-width:0;flex:1}
+#guide .gd-goal.done .gd-ic{flex:none;display:grid;place-items:center;width:64px;height:64px;border-radius:20px;font-size:38px;background:rgba(255,255,255,.2)}
+#guide .gd-bar{height:12px;margin-top:8px;border-radius:7px;overflow:hidden;background:rgba(0,0,0,.28)}#guide .gd-bar i{display:block;height:100%;border-radius:7px;background:linear-gradient(90deg,#FFE08A,#FFB020)}
+#guide .gd-prize{display:flex;align-items:center;gap:10px;margin:10px 0 0;padding:10px 14px;border-radius:16px;background:rgba(0,0,0,.22);font-size:18px;font-weight:800;line-height:1.3;flex-wrap:wrap}
+#guide .gd-prize small{flex:none;padding:3px 10px;border-radius:99px;background:rgba(255,255,255,.2);font-size:13px;font-weight:900}
+#guide .gd-how{margin:-2px 2px 8px;font-size:16px;font-weight:700;opacity:.95}
+#guide .gd-again{display:block;width:100%;min-height:48px;margin-top:12px;border-radius:16px;border:2px solid rgba(255,255,255,.4);background:transparent;color:#fff;font:800 16px system-ui;cursor:pointer}
+@media (max-height:520px){#guide .gd-goal>img{width:84px;height:68px}#guide .gd-goal b{font-size:20px}#guide .gd-prize{margin-top:6px;padding:6px 10px;font-size:16px}}
+/* chip mục tiêu luôn thấy ở góc dưới trái (bé biết mình đang hướng tới gì), bấm mở bảng Chăm vườn */
+.goalchip{position:fixed;left:12px;bottom:max(14px,env(safe-area-inset-bottom));z-index:29;display:flex;align-items:center;gap:6px;min-height:46px;padding:0 16px;border-radius:99px;border:2px solid rgba(255,224,138,.8);background:linear-gradient(135deg,#6D4AE0,#3B2A9E);color:#fff;font:800 16px system-ui;box-shadow:0 8px 20px rgba(20,16,50,.4);cursor:pointer;max-width:calc(100vw - 96px)}
+.goalchip b{padding:2px 9px;border-radius:99px;background:#FFE08A;color:#4a2c00;font-weight:900}
+/* ===== SLIDE GIỚI THIỆU ===== */
+#introCard{position:relative;display:flex;flex-direction:column;gap:12px;width:min(520px,100%);padding:18px 18px 16px!important;text-align:center;color:#fff;background:linear-gradient(165deg,#2f6f60,#1d4a41 52%,#14332d)!important;border:2px solid rgba(255,224,138,.6)!important}
+#introCard .in-skip{align-self:flex-end;min-height:44px;padding:0 14px;border-radius:99px;border:2px solid rgba(255,255,255,.4);background:transparent;color:#fff;font:800 15px system-ui;cursor:pointer}
+#introCard .in-art{display:grid;place-items:center;min-height:120px}
+#introCard .in-art img{width:min(300px,70%);aspect-ratio:4/3;object-fit:cover;border-radius:22px;border:3px solid rgba(255,255,255,.55);background:#7fc15a;box-shadow:0 12px 28px rgba(0,0,0,.35)}
+#introCard .in-em{font-size:56px;letter-spacing:.1em;line-height:1.2;padding:12px 0}
+#introCard h2{margin:0;font-size:clamp(22px,6vw,28px);font-weight:900;line-height:1.2;color:#fff}
+#introCard p{margin:8px 0 0;font-size:clamp(17px,4.6vw,20px);font-weight:700;line-height:1.45;color:rgba(255,255,255,.95)}
+#introCard .in-dots{display:flex;justify-content:center;gap:10px}
+#introCard .in-dots button{width:16px;height:16px;padding:0;border-radius:50%;border:2px solid rgba(255,255,255,.7);background:transparent;cursor:pointer}#introCard .in-dots button.on{background:#FFE08A;border-color:#FFE08A;transform:scale(1.2)}
+#introCard .in-nav{display:flex;gap:10px}
+#introCard .in-b{flex:1;min-height:56px;border-radius:99px;border:0;background:linear-gradient(135deg,#FFE08A,#FFB020);color:#4a2c00;font:900 20px system-ui;cursor:pointer}
+#introCard .in-b.alt{flex:none;width:64px;background:rgba(255,255,255,.18);color:#fff;border:2px solid rgba(255,255,255,.4);font-size:20px}
+@media (max-height:520px){#introCard{flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 16px;padding:10px 14px!important;width:min(760px,100%)}#introCard .in-skip{position:absolute;right:10px;top:8px;min-height:40px}#introCard .in-art{flex:0 0 34%;min-height:0}#introCard .in-art img{width:100%}#introCard .in-em{font-size:40px}#introCard .in-tx{flex:1 1 46%;text-align:left}#introCard h2{font-size:21px}#introCard p{font-size:16px;margin-top:4px}#introCard .in-dots,#introCard .in-nav{flex:1 1 100%}#introCard .in-nav{max-width:420px;margin:0 auto}#introCard .in-b{min-height:48px;font-size:18px}}
+/* ===== GỌN MỘT MÀN, KHÔNG CUỘN (bảng Chăm vườn + slide): dọc 360×640 ≈ 550px, ngang 844×390 chia hai cột ===== */
+#mncard .cico,#mncard .hd .chs{display:none!important}
+#mncard .hd{padding:10px 14px!important}#mncard .hd h2{font-size:22px!important;margin:0!important}
+#mncard .cbody{padding:8px 12px 12px!important}
+#mncard .sec.pn[data-p="0"]{padding:0!important;margin:0!important;background:none!important;border:0!important}
+#guide{display:grid;gap:8px}
+#guide .gd-goal{padding:8px 10px;gap:10px}#guide .gd-goal>img{width:88px;height:74px}#guide .gd-goal b{font-size:21px}#guide .gd-goal span{margin-top:2px;font-size:15px}#guide .gd-bar{margin-top:5px;height:10px}
+#guide .gd-prize{margin:6px 0 0;padding:6px 10px;gap:8px;font-size:15px;line-height:1.25}#guide .gd-prize small{font-size:12px;padding:2px 8px}
+#guide .gd-m h4{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:0 0 6px;font-size:17px}#guide .gd-m h4 small{font-size:13px;font-weight:700;opacity:.9}
+#guide .gdc-list{gap:6px}
+#guide .gdc{padding:5px 8px;gap:10px;border-radius:16px}#guide .gdc>i{width:40px;height:40px;font-size:23px;border-radius:12px}#guide .gdc b{font-size:17px}#guide .gdc small{margin-top:0;font-size:13px}
+#guide .gdc-go,#guide .gdc-ok{min-width:68px;min-height:44px;padding:0 12px;font-size:16px}
+#guide .gd-go2{display:flex;flex-wrap:nowrap;gap:6px;margin:0}
+#guide .gd-go2>*{flex:1 1 0;min-width:0;display:grid;place-items:center;min-height:46px;padding:0 6px;border-radius:14px;border:2px solid rgba(255,255,255,.4);background:rgba(255,255,255,.14);color:#fff;font:800 15px system-ui;text-decoration:none;cursor:pointer;white-space:nowrap}
+#mncard .acts{margin:8px 0 0!important}#mncard .acts .btn{min-height:48px!important;font-size:17px!important}
+@media (max-height:520px){
+  #mncard .hd{padding:6px 12px!important}#mncard .hd h2{font-size:19px!important}#mncard .cbody{padding:6px 10px 8px!important}
+  #guide{grid-template-columns:1fr 1.1fr;align-items:start;gap:8px 12px}#guide .gd-a{grid-column:1;grid-row:1}#guide .gd-m{grid-column:2;grid-row:1 / span 2}#guide .gd-go2{grid-column:1;grid-row:2}
+  #guide .gd-goal>img{width:70px;height:58px}#guide .gd-goal b{font-size:18px}#guide .gd-prize{font-size:14px}
+  #guide .gdc{padding:3px 8px}#guide .gdc>i{width:34px;height:34px;font-size:20px}#guide .gdc-go,#guide .gdc-ok{min-height:40px}
+  #mncard .acts{margin-top:6px!important}#mncard .acts .btn{min-height:42px!important}
+}
+/* slide: nút Bỏ qua nằm góc trên, ảnh nhỏ hơn → vừa 360×640 */
+#introCard{padding:50px 16px 14px!important;gap:8px}
+#introCard .in-skip{position:absolute;right:10px;top:8px;align-self:auto}
+#introCard .in-art{min-height:0}#introCard .in-art img{width:min(240px,64%)}#introCard .in-em{font-size:48px;padding:8px 0}
+#introCard .in-nav{margin-top:2px}
+@media (max-height:520px){#introCard{padding:8px 14px!important}}
+/* Giới thiệu + các lối vào + Đóng: MỘT hàng (nút Đóng cũ ở đáy bị ẩn, nút ✕ ở tiêu đề vẫn còn) */
+#mncard .acts{display:none!important}
+#guide .gd-go2 .gd-close{flex:0.9 1 0;background:linear-gradient(135deg,#FFE08A,#FFB020);border-color:#E59A00;color:#4a2c00;font-weight:900}
+#guide .gd-go2.many>*{font-size:13px;padding:0 2px}
+/* ===== BÁC RỄ (linh vật làm vườn): dáng theo cấp của bé ===== */
+#guide .gd-a{display:grid;gap:8px}
+#guide .gd-who{display:flex;align-items:center;gap:10px}
+#guide .gd-mas{flex:none;display:flex;flex-direction:column;align-items:center;gap:2px;width:84px}
+#guide .gd-mas img{width:72px;height:72px}
+#guide .gd-mas span{padding:2px 8px;border-radius:99px;background:linear-gradient(135deg,#FFE08A,#FFB020);color:#4a2c00;font:900 11px system-ui;text-align:center;line-height:1.25}
+#guide .gd-say{position:relative;flex:1;margin:0;padding:10px 12px;border-radius:18px;background:rgba(255,255,255,.16);border:2px solid rgba(255,255,255,.35);font-size:16px;font-weight:800;line-height:1.3}
+#guide .gd-say::before{content:"";position:absolute;left:-8px;top:50%;width:12px;height:12px;margin-top:-6px;background:inherit;border-left:2px solid rgba(255,255,255,.35);border-bottom:2px solid rgba(255,255,255,.35);transform:rotate(45deg)}
+#guide .gd-goal>img{width:76px;height:62px}#guide .gd-goal span{font-size:14px;line-height:1.3}
+.goalchip{padding-left:6px}.goalchip img{width:34px;height:34px;flex:none}
+#introCard .in-art img.in-mas{width:min(190px,52%);aspect-ratio:1;object-fit:contain;border:0;background:none;box-shadow:none;border-radius:0}
+.pick.lock{opacity:.6;filter:grayscale(.5)}.pick.lock span{font-size:12px;line-height:1.25}
+@media (max-height:520px){#guide .gd-mas{width:64px}#guide .gd-mas img{width:52px;height:52px}#guide .gd-say{font-size:14px;padding:6px 10px}#guide .gd-goal>img{width:60px;height:50px}}
+/* ===== MÀN CHỌN BẠN LÀM VƯỜN (lần đầu vào vườn): một màn, không cuộn ===== */
+#buddyCard{width:min(520px,100%);padding:16px 16px 14px!important;text-align:center;color:#fff;background:linear-gradient(165deg,#2f6f60,#1d4a41 52%,#14332d)!important;border:2px solid rgba(255,224,138,.6)!important}
+#buddyCard h2{margin:0 0 10px;font-size:clamp(21px,5.6vw,26px);font-weight:900;color:#fff}
+#buddyCard .bd-who{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+#buddyCard .bd-c{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border-radius:18px;border:3px solid rgba(255,255,255,.3);background:rgba(0,0,0,.2);color:#fff;cursor:pointer}
+#buddyCard .bd-c img{width:min(100%,104px);aspect-ratio:1}#buddyCard .bd-c b{font-size:15px;font-weight:900;line-height:1.2}
+#buddyCard .bd-c.on{border-color:#FFE08A;background:rgba(255,224,138,.22);transform:translateY(-2px)}
+#buddyCard .bd-q{margin:12px 0 6px;font-size:17px;font-weight:800}
+#buddyCard .bd-age{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#buddyCard .bd-age button{min-height:50px;border-radius:99px;border:3px solid rgba(255,255,255,.35);background:rgba(0,0,0,.2);color:#fff;font:900 18px system-ui;cursor:pointer}#buddyCard .bd-age button.on{border-color:#FFE08A;background:rgba(255,224,138,.25)}
+#buddyCard .bd-ok{width:100%;min-height:56px;margin-top:12px;border-radius:99px;border:0;background:linear-gradient(135deg,#FFE08A,#FFB020);color:#4a2c00;font:900 20px system-ui;cursor:pointer}
+#buddyCard .bd-note{margin:8px 0 0;font-size:13px;font-weight:600;opacity:.88}#buddyCard .bd-x{margin-left:6px;min-height:36px;padding:0 12px;border-radius:99px;border:2px solid rgba(255,255,255,.4);background:transparent;color:#fff;font:800 13px system-ui;cursor:pointer}
+@media (max-height:520px){#buddyCard{padding:8px 14px!important;width:min(760px,100%);display:grid;grid-template-columns:1.5fr 1fr;gap:6px 14px;text-align:center}#buddyCard h2{grid-column:1/-1;margin:0;font-size:19px}#buddyCard .bd-who{grid-column:1;grid-row:2 / span 4}#buddyCard .bd-c img{width:min(100%,76px)}#buddyCard .bd-q{margin:0;grid-column:2}#buddyCard .bd-age,#buddyCard .bd-ok,#buddyCard .bd-note{grid-column:2}#buddyCard .bd-age button{min-height:42px;font-size:16px}#buddyCard .bd-ok{min-height:46px;margin-top:0;font-size:18px}#buddyCard .bd-note{margin:0}}

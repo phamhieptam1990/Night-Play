@@ -54,3 +54,12 @@ Mở `learn/garden/index.html` bằng Chrome: không lỗi trang; 266 ô, 61 v�
 - Game học (`learn/index.html`): dải chương + chặng, thanh mục tiêu 🎁 hôm nay, cây của môn lớn lên theo câu đúng (`crop_<giống>_s0..s4`), linh vật chào theo trí nhớ, màn kết thúc có đoạn chuyện + thưởng (nông sản vào kho, hạt giống, quà mục tiêu, trang phục mới).
 - Vườn: HUD đọc `Farm`; trồng tốn 1 hạt (hết thì báo học bài), thu hoạch cộng vào kho (`garden-farm.js`, hook trong `garden-core/fx/plant-card`).
 - Trang Kho đọc số thật; linh vật nhắc số trong kho + chuỗi ngày. Trang Trong nhà có tủ đồ (đổi trang phục theo số sao); trang phục hiện trên linh vật trong game học.
+
+## Giọng đọc (`learn/voice.js`)
+- Cửa chung `Voice.say(text, nhân_vật, ngôn_ngữ)`: phát tệp thu sẵn `shared/audio/voice/<nhân_vật>/<mã>.mp3` nếu có (offline, giọng thật/AI chất lượng cao), không có thì dùng giọng máy tốt nhất + cao độ/tốc độ riêng từng nhân vật (`PROFILE`).
+- Nhân vật: `toan` (Mochi), `tviet` (Mầm), `tanh` (Bibi), `sen` (Sen Sen), `narr`, `def`. Game học, kho và ao đã gọi qua đây.
+- `node scripts/learn/voice-list.js` → `shared/audio/voice/danh-sach-cau.csv` (72 câu, kèm tên tệp). Thả mp3 đúng tên là xong, không sửa code; làm dần từng nhân vật được.
+- Nghe thử: `learn/voice-test.html` (chọn giọng máy, chỉnh cao độ, phát thử tệp thu sẵn).
+
+## Thanh liên kết duyệt (`learn/review-nav.js`)
+Mọi trang duyệt chỉ cần `<nav class="rvnav"></nav>` + `<script src=".../learn/review-nav.js">`; danh sách liên kết nằm MỘT chỗ (`LINKS` trong tệp), trang đang mở được tô trắng. Thêm trang duyệt mới = thêm một dòng vào `LINKS` (các bộ sinh `gen-*.js` đã gắn sẵn script). Ba trang con Trong nhà / Kho / Ao là giao diện game nên không có thanh này.

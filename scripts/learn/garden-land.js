@@ -54,7 +54,7 @@ module.exports = function makeLand(d) {
   function draw(c) {
     const { L, base, push, occ, reg, free, DROPPED, HOT, TREEPOS, stand, U, fenceRun, bigTree, WLD, SPRITE_KINDS } = c;
     const big = L.plots >= 36;                                  /* cảnh đủ ô: có nền, rào, vườn cây; cảnh cấp thấp chỉ vài ô */
-    const cropLands = LANDS.filter(ld => TYPES[ld.type].mode === "crop" && (big ? !ld.legacy : ld.legacy)), treeLands = big ? LANDS.filter(ld => TYPES[ld.type].mode === "tree") : [];
+    const cropLands = LANDS.filter(ld => TYPES[ld.type].mode === "crop" && (big ? !ld.legacy : ld.legacy)), treeLands = big && !L.noOrchard ? LANDS.filter(ld => TYPES[ld.type].mode === "tree") : [];   /* noOrchard: cảnh cấp 1 (chỉ đất trống) không có các mảnh đất cây ăn trái */
     /* giữ chỗ cả mảnh: vật nuôi, cây, đồ nhỏ không chen vào trong */
     if (big) for (const ld of cropLands) { const n = ld.cols + ld.rows; reg(ld.at[0] + (ld.cols - ld.rows) * TW / 4, ld.at[1] + n * TH / 4, n * 33, n * 16.5, "plot"); }
 
@@ -96,7 +96,7 @@ module.exports = function makeLand(d) {
         const T = [fx + (ua - ub) * TW / 2, fy + (ua + ub) * TH / 2], R = [T[0] + pa * TW / 2, T[1] + pa * TH / 2], Lc = [T[0] - pb * TW / 2, T[1] + pb * TH / 2], B = [R[0] + Lc[0] - T[0], R[1] + Lc[1] - T[1]];
         const cx = (T[0] + B[0]) / 2, cy = (T[1] + B[1]) / 2, gray = oi % 5 === 3, kd = kinds[oi % kinds.length], ripe = oi % 3 !== 1; oi++;
         occ.push({ x: cx, y: cy, rx: (pa + pb) * TW * .2, ry: (pa + pb) * TH * .2, kind: "plot", name: "orch" });
-        base.push({ d: .5, svg: poly([T, R, B, Lc], gray ? "url(#gGray)" : "url(#gSoil)", gray ? "#6E6A63" : "#7A4B24", 4) + poly([T, R, B, Lc].map(p => [cx + (p[0] - cx) * .84, cy + (p[1] - cy) * .84]), "none", gray ? "#CFCBC3" : "#C58B4E", 2.2) + (gray ? `<path d="M${f(cx - 8)} ${f(cy)}H${f(cx + 8)}M${f(cx)} ${f(cy - 8)}V${f(cy + 8)}" stroke="#fff" stroke-width="4" stroke-linecap="round"/>` : "") });
+        base.push({ d: .5, svg: poly([T, R, B, Lc], gray ? "url(#gGray)" : "url(#gSoil)", gray ? "#6E6A63" : "#7A4B24", 4) + poly([T, R, B, Lc].map(p => [cx + (p[0] - cx) * .84, cy + (p[1] - cy) * .84]), "none", gray ? "#CFCBC3" : "#C58B4E", 2.2) + ""   /* đất xám không vẽ dấu + (bé bấm vào ô để chọn cây, không cần biểu tượng) */ });
         HOT.push({ tree: true, x: Math.round(cx), y: Math.round(cy), planted: !gray, crop: gray ? null : kd, ripe: gray ? false : ripe });
         if (gray) continue;
         if (WLD && SPRITE_KINDS.has(kd)) TREEPOS.push({ k: kd, x: Math.round(cx), y: Math.round(cy + 14 * s / .85), s });

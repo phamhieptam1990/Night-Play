@@ -10,6 +10,6 @@ function initTrees(){
     var w = treeW(t), e = document.createElement("img"); e.className = "tr"; e.src = src; e.alt = ""; e.draggable = false;
     e.style.left = ((t.x - w / 2) / W * 100) + "%"; e.style.top = ((t.y - treeFoot(t, w)) / H * 100) + "%"; e.style.width = (w / W * 100) + "%";
     e.style.setProperty("--sd", (4.5 + Math.random() * 3) + "s"); e.style.setProperty("--sl", (-Math.random() * 6) + "s");   /* mỗi cây lắc lệch pha */
-    GardenLayout.layer("sprites").appendChild(e);
+    t.el = e; GardenLayout.layer("sprites").appendChild(e);
   });
 }

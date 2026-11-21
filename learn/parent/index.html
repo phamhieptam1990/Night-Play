@@ -349,6 +349,8 @@ button{font:inherit;color:inherit;cursor:pointer}
 <script src="../content/parent-copy.js"></script>
 <script src="../lang-skills.js"></script>
 <script src="../engine.js"></script>
+<script src="../farm.js"></script>
+<script src="../backup.js"></script>
 <script src="../limit.js"></script>
 <script>
 "use strict";
@@ -470,13 +472,23 @@ function limit(){
 }
 function settings(){
   const u = U(), g = +ls("learn:grade") || 1;
-  $("set").innerHTML = '<p class="note" style="margin-bottom:4px"><b>' + esc(u.grade) + '</b></p><div class="grades" role="group" aria-label="' + esc(u.grade) + '">' + [1, 2, 3, 4, 5].map(i => '<button class="chip" type="button" data-g="' + i + '" aria-pressed="' + (i === g) + '">' + i + "</button>").join("") + '</div><hr style="border:0;border-top:1px solid var(--line);margin:16px 0"><p class="note"><b>' + esc(u.reset) + "</b><br>" + esc(u.resetP) + '</p><button class="btn danger" id="rs" type="button">' + esc(u.reset) + "</button>";
+  $("set").innerHTML = '<p class="note" style="margin-bottom:4px"><b>' + esc(u.grade) + '</b></p><div class="grades" role="group" aria-label="' + esc(u.grade) + '">' + [1, 2, 3, 4, 5].map(i => '<button class="chip" type="button" data-g="' + i + '" aria-pressed="' + (i === g) + '">' + i + "</button>").join("") + '</div><hr style="border:0;border-top:1px solid var(--line);margin:16px 0"><p class="note"><b>' + esc(u.reset) + "</b><br>" + esc(u.resetP) + '</p><button class="btn danger" id="rs" type="button">' + esc(u.reset) + '</button><hr style="border:0;border-top:1px solid var(--line);margin:16px 0"><p class="note"><b>' + esc(u.backup) + "</b><br>" + esc(u.backupP) + '</p><div class="acts"><button class="btn" id="bkd" type="button">' + esc(u.bkDown) + '</button><button class="btn ghost" id="bku" type="button">' + esc(u.bkUp) + '</button></div><input id="bkf" type="file" accept="application/json,.json" hidden>';
   $("set").querySelectorAll("[data-g]").forEach(b => b.onclick = () => { ls("learn:grade", b.dataset.g); settings(); });
-  $("rs").onclick = () => { $("aT").textContent = u.resetAsk; $("aP").textContent = u.resetP; $("aY").textContent = u.resetYes; $("aN").textContent = u.resetNo; $("ask").hidden = false; $("aN").focus(); };
+  $("bkd").onclick = () => { try{ const b = new Blob([JSON.stringify(Backup.collect())], { type: "application/json" }), url = URL.createObjectURL(b), a = document.createElement("a"); a.href = url; a.download = Backup.filename(); document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 4000); toast(u.bkSaved); }catch(e){ toast(u.bkBad); } };
+  $("bku").onclick = () => $("bkf").click();
+  $("bkf").onchange = () => { const f = $("bkf").files[0]; $("bkf").value = ""; if(!f) return; if(f.size > 2500000){ toast(u.bkBad); return; }
+    const r = new FileReader(); r.onerror = () => toast(u.bkBad);
+    r.onload = () => { let o = null; try{ o = JSON.parse(String(r.result)); }catch(e){} if(!Backup.validate(o).ok){ toast(u.bkBad); return; }
+      askYes(u.bkAsk, u.bkAskP, u.bkYes, () => { try{ Backup.apply(o); render(); toast(U().bkDone); }catch(e){ toast(u.bkBad); } }); };
+    r.readAsText(f); };
+  $("rs").onclick = () => askYes(u.resetAsk, u.resetP, u.resetYes, () => { E.resetAll(); if(window.Farm) Farm.resetAll(); render(); toast(U().resetDone); });
 }
 let tt = 0; function toast(m){ const t = $("toast"); t.textContent = m; t.hidden = false; clearTimeout(tt); tt = setTimeout(() => t.hidden = true, 2200); }
 $("aN").onclick = () => { $("ask").hidden = true; };
-$("aY").onclick = () => { E.resetAll(); $("ask").hidden = true; render(); toast(U().resetDone); };
+/* hộp hỏi lại dùng chung (xoá tiến độ / nạp dữ liệu từ tệp): onYes chạy khi phụ huynh xác nhận */
+let onYes = null;
+function askYes(t, p, yes, fn){ const u = U(); onYes = fn; $("aT").textContent = t; $("aP").textContent = p; $("aY").textContent = yes; $("aN").textContent = u.resetNo; $("ask").hidden = false; $("aN").focus(); }
+$("aY").onclick = () => { const f = onYes; onYes = null; $("ask").hidden = true; if(f) f(); };
 $("ask").addEventListener("click", e => { if(e.target === $("ask")) $("ask").hidden = true; });
 document.addEventListener("keydown", e => { if(e.key === "Escape" && !$("ask").hidden) $("ask").hidden = true; });
 
