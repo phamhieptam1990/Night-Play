@@ -57,7 +57,7 @@ function renderGuide(u){
   var who = "<div class='gd-who'><div class='gd-mas'><img src='" + gardenerImg(n) + "' alt='Bác Rễ'><span>Cấp " + t + " · " + Farm.BUILD.TIER_NAMES[t] + "</span></div><p class='gd-say'>" + Farm.BUILD.sayAt(n) + "</p></div>";
   if(goal){
     var pct = Math.round((goal.done - goal.from) / (goal.at - goal.from) * 100), left = goal.at - goal.done;
-    hero = "<div class='gd-goal'><img src='" + goalImg(goal) + "' alt=''><div><small>🎯 MỤC TIÊU</small><b>" + goal.name + "</b><div class='gd-bar' role='img' aria-label='" + pct + "%'><i style='width:" + pct + "%'></i></div><span>Còn " + left + " nhiệm vụ · xong là có " + goal.prize + "</span></div></div>";
+    hero = "<div class='gd-goal'><img src='" + goalImg(goal) + "' alt=''><div><small>🎯 MỤC TIÊU</small><b>" + goal.name + "</b><div class='gd-bar' role='img' aria-label='" + pct + "%'><i style='width:" + pct + "%'></i></div><span>Còn " + left + (window.LearnSlot && window.LearnSlot.id ? " bài học" : " nhiệm vụ") + " · xong là có " + goal.prize + "</span></div></div>";
   } else hero = "<div class='gd-goal done'><div class='gd-ic' aria-hidden='true'>🎉</div><div><b>Cả vườn đã mở!</b><span>Kiếm ⭐ để mở thêm hạt giống, bạn vật nuôi và cây</span></div></div>";
   /* một màn, không cuộn: Bác Rễ nói (trái trên) · mục tiêu · nhiệm vụ hôm nay (phải ở màn ngang) · hàng nút */
   var many = u.stage >= UNL.full;

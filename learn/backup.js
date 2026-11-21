@@ -12,7 +12,7 @@
   var PREFIX = ["learn:m:"];
   /* khoá GỐC (không qua ngăn vườn của slot.js) để sao lưu/khôi phục đúng từng vườn */
   var RAW = { get: function (k, st) { return root.LearnSlot ? root.LearnSlot.raw.get(k) : st.getItem(k); }, set: function (k, v, st) { if (root.LearnSlot) root.LearnSlot.raw.set(k, v); else st.setItem(k, v); }, del: function (k, st) { if (root.LearnSlot) root.LearnSlot.raw.del(k); else st.removeItem(k); } };
-  var SLOTP = ["learn:farm@", "learn:garden@", "gardenFarm@", "gardenTrees@", "gardenSeen@", "gardenHelp@", "gardenAnimals@", "gardenGift@", "gardenDaily@", "gardenLv@", "gardenName@"];
+  var SLOTP = ["learn:farm@", "learn:garden@", "gardenFarm@", "gardenTrees@", "gardenSeen@", "gardenHelp@", "gardenAnimals@", "gardenGift@", "gardenDaily@", "gardenLv@", "gardenName@", "gardenQuest@"];
   function okKey(k) {
     if (SLOTP.some(function (p) { return k.indexOf(p) === 0 && /^[1-5]:(toan|tviet|tanh)$/.test(k.slice(p.length)); })) return true;
     if (/^learn:pf:[A-Za-z0-9_-]{1,16}:lp:[1-5]:(toan|tviet|tanh)$/.test(k)) return true; return KEYS.indexOf(k) >= 0 || PREFIX.some(function (p) { return k.indexOf(p) === 0 && /^[a-z0-9_]+$/.test(k.slice(p.length)) && k.length <= 24; }); }

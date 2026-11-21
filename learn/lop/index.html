@@ -42,7 +42,7 @@ h1{margin:0;font-size:clamp(20px,5.4vw,28px);font-weight:900;flex:1;min-width:0;
 .step{display:flex;align-items:center;gap:8px}
 .step button{min-width:52px;min-height:48px;border-radius:99px;font-weight:900;font-size:18px;background:var(--panel);border:2px solid var(--line)}
 .step button.go{flex:1;background:linear-gradient(90deg,var(--k1),var(--k2));color:#0b1020;border:0;font-size:16px}
-.step span{font-weight:900;font-size:14px;color:var(--ink2);min-width:42px;text-align:center}
+.step #stepn{font-weight:900;font-size:14px;color:var(--ink2);min-width:42px;text-align:center}
 .stage.compact{padding:8px 10px}.stage.compact .gmas{width:84px;height:84px}.stage.compact .gname{display:none}.stage.compact .gbub{font-size:14px;padding:7px 12px}
 .list{flex:1;min-height:0;overflow:auto;-webkit-overflow-scrolling:touch;padding:12px 16px 40px;display:flex;flex-direction:column;gap:14px}
 .sum{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -61,6 +61,9 @@ h1{margin:0;font-size:clamp(20px,5.4vw,28px);font-weight:900;flex:1;min-width:0;
 .pic .ttl{position:absolute;left:0;right:0;bottom:0;padding:34px 16px 12px;background:linear-gradient(transparent,rgba(8,6,28,.86));color:#fff;font-weight:900;font-size:clamp(20px,5.4vw,26px);line-height:1.2;text-shadow:0 2px 6px rgba(0,0,0,.5)}
 .pic .ttl small{display:block;margin-bottom:2px;font-size:12px;font-weight:800;opacity:.85;text-transform:uppercase;letter-spacing:.05em}
 .num{position:absolute;left:12px;top:12px;z-index:1;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:15px;color:#0b1020;background:linear-gradient(135deg,var(--k1),var(--k2));box-shadow:0 0 0 3px rgba(255,255,255,.7)}
+.tp.locked{opacity:.78}.tp.locked .pic{filter:grayscale(.85) brightness(.8)}.tp.locked .big{opacity:.7}
+.pic .lock{position:absolute;right:14px;top:12px;font-size:26px;filter:none}
+.acts2{flex-wrap:wrap}.acts2 .more{min-height:48px}
 .tp.done .num{background:#16a34a;color:#fff}
 .tpb{padding:10px 14px 14px}
 .subtxt{margin:0;color:var(--ink2);font-size:14px;font-weight:600;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -82,6 +85,31 @@ h1{margin:0;font-size:clamp(20px,5.4vw,28px);font-weight:900;flex:1;min-width:0;
 .dlg .acts{display:flex;gap:10px;margin-top:8px}.dlg .acts button{flex:1;min-height:52px;border-radius:99px;font-weight:900;font-size:17px;border:2px solid var(--line);background:var(--panel)}
 .dlg .acts .ok{background:linear-gradient(90deg,var(--k1),var(--k2));color:#0b1020;border:0}
 /* màn rộng: linh vật bên trái, danh sách bên phải */
+
+/* ĐIỆN THOẠI DỌC: cả trang cuộn một lần; ô chọn cuộn đi, khung linh vật DÍNH trên cùng và tự thu nhỏ */
+@media (max-width:899px) and (min-height:521px){
+  .top{padding:8px 10px 4px;gap:8px}.ib{min-width:44px;height:44px;font-size:20px;padding:0 8px}.top #toGarden{display:none}
+  h1{font-size:clamp(16px,5vw,22px)}
+  .wrap{overflow:auto;-webkit-overflow-scrolling:touch;display:block;padding:0 12px 24px;scroll-padding-top:90px}
+  .left{display:contents}
+  .pick{margin:2px 0 8px;gap:8px}.pick select{min-height:48px;font-size:17px;padding-left:12px}.pick label{margin-bottom:2px}
+  .stage{position:sticky;top:0;z-index:4;margin:0 -4px 12px;padding:10px;border-radius:22px;display:grid;grid-template-columns:96px 1fr;grid-template-areas:"m b" "s s";gap:8px 10px;align-items:center;text-align:left}
+  .stage .say{display:contents}
+  .stage .gmas{grid-area:m;width:96px;height:96px;animation:none}
+  .stage .gname{display:none}
+  .stage .gbub{grid-area:b;font-size:14.5px;padding:8px 12px}
+  .stage .step{grid-area:s}
+  .stage.compact{grid-template-columns:52px 1fr auto;grid-template-areas:"m b s";padding:6px 8px;margin-bottom:8px;gap:8px}
+  .stage.compact .gmas{width:52px;height:52px}
+  .stage.compact .gbub{font-size:12.5px;line-height:1.3;padding:5px 9px;max-height:none;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .stage.compact .gbub b{display:inline;margin:0 4px 0 0}
+  .stage.compact .step span,.stage.compact #next .t{display:none}
+  .stage.compact .step button{min-width:42px;min-height:42px;padding:0}.stage.compact #next{min-width:42px;flex:none}
+  .list{overflow:visible;flex:none;padding:0 0 12px;gap:12px}
+  .pic{height:132px;padding-top:14px}.pic .big{font-size:60px}.pic .ttl{font-size:20px;padding:26px 14px 10px}
+  .tpb{padding:8px 12px 12px}.cta,.more{min-height:48px}
+  .gr{padding-left:12px}
+}
 @media (min-width:900px){.wrap{flex-direction:row;gap:20px;padding:0 20px}.left{flex:0 0 380px;padding:0;overflow:auto}.stage{flex-direction:column;align-items:center;text-align:center;position:sticky;top:0}.gmas{width:260px;height:260px}.say{align-self:stretch}.stage.compact{padding:12px}.stage.compact .gmas{width:260px;height:260px}.stage.compact .gname{display:block}.stage.compact .gbub{font-size:18px;padding:10px 14px}.list{padding:6px 4px 40px}}
 @media (max-height:520px) and (max-width:899px){.wrap{flex-direction:row;gap:12px;padding:0 12px}.left{flex:0 0 46%;padding:0;overflow:auto}.stage{flex-direction:column;align-items:center}.gmas,.stage.compact .gmas{width:72px;height:72px}.gname{display:none}.gbub{font-size:13px;padding:6px 10px}.pick select{min-height:44px;font-size:16px}.pick{margin-bottom:6px}.step button{min-height:42px}.stage{padding:8px;gap:8px}.pic{height:130px}}
 @media (prefers-reduced-motion:reduce){.gmas,.gmas.poke,.gbub.pop{animation:none}}
@@ -95,7 +123,7 @@ h1{margin:0;font-size:clamp(20px,5.4vw,28px);font-weight:900;flex:1;min-width:0;
   <a class="ib" id="toGarden" href="../garden/index.html" aria-label="Khu vườn">🌱</a>
   <a class="ib" id="toMe" href="../me/index.html" aria-label="Của bé">🌈</a>
 </header>
-<div class="wrap">
+<div class="wrap" id="wrap">
   <aside class="left">
     <div class="pick">
       <div><label for="selG" id="lG">Lớp</label><select id="selG"></select></div>
@@ -106,7 +134,7 @@ h1{margin:0;font-size:clamp(20px,5.4vw,28px);font-weight:900;flex:1;min-width:0;
       <div class="say">
         <div class="gname" id="gname"></div>
         <p class="gbub" id="gbub" role="status" aria-live="polite"></p>
-        <div class="step"><button type="button" id="prev" aria-label="Chủ đề trước">‹</button><span id="stepn"></span><button type="button" class="go" id="next">Giới thiệu ›</button></div>
+        <div class="step"><button type="button" id="prev" aria-label="Chủ đề trước">‹</button><span id="stepn"></span><button type="button" class="go" id="next"><span class="t">Giới thiệu </span>›</button></div>
       </div>
     </section>
   </aside>
@@ -171,17 +199,21 @@ function fillSelects(){
   sg.onchange=()=>change(+sg.value,S); ss.onchange=()=>change(G,ss.value);
 }
 function topicCard(s,g,t,m,i,total){
-  const st=P.status(s,g,t.id), hasL=P.hasLesson(t.id), hasT=P.hasTest(s,g,t.id), passed=(st==="passed"||st==="star");
-  let target=null,cta="",chips="";
+  const st=P.status(s,g,t.id), hasL=P.hasLesson(t.id), hasT=P.hasTest(s,g,t.id), passed=(st==="passed"||st==="star"), unl=P.unlocked(s,g,t.id), rec=P.get(g,s,t.id), ts=P.topics(s,g);
   const prm=new URLSearchParams({grade:g,subj:s,topic:t.id,lang}).toString();
-  if(hasL){ target="bai.html?"+prm; cta=T.learn; chips+='<span class="chip2 g">📖 '+T.hasLesson+'</span>'; }
-  else if(hasT){ target="../index.html?"+prm; cta=T.quiz; chips+='<span class="chip2 a">'+T.soon+'</span>'; }
-  else chips+='<span class="chip2 a">'+T.nt+'</span>';
+  let learnU=null,testU=null,chips="";
+  if(unl){ if(hasL) learnU="bai.html?"+prm; if(hasT) testU="../index.html?"+prm; }
+  if(!unl) chips+='<span class="chip2 a">🔒 '+(vi?"Xong chủ đề "+i+" trước nhé":"Finish topic "+i+" first")+'</span>';
+  else { chips+=hasL?'<span class="chip2 g">📖 '+T.hasLesson+'</span>':'<span class="chip2 a">'+T.soon+'</span>'; if(!hasT) chips+='<span class="chip2 a">'+T.nt+'</span>'; }
   if(st!=="new") chips+='<span class="chip2 b">'+(passed?"✅ ":"")+T.stn[st]+'</span>';
+  if(rec.r) chips+='<span class="chip2 b">🎁 '+(vi?"Đã nhận thưởng":"Reward claimed")+'</span>';
+  else if(unl) chips+='<span class="chip2 b">🎁 '+(vi?"Xong là có 3 nhiệm vụ vườn":"Finish = 3 garden tasks")+'</span>';
   const TE=(window.LEARN_TEASERS||{})[t.id]||["📚",""];
   const subs=(t.sub||[]).slice(0,2).map(esc).join(" · ");
-  const pic='<div class="pic"><span class="big" aria-hidden="true">'+esc(TE[0])+'</span><span class="ttl"><small>'+esc(t.tag||"")+'</small>'+esc(t.name)+'</span></div>';
-  const card=el('<article class="tp'+(passed?" done":"")+'"><span class="num" aria-hidden="true">'+(passed?"✓":(i+1))+'</span>'+(target?'<a class="tpa" href="'+esc(target)+'" aria-label="'+esc(t.name)+'">'+pic+'</a>':'<div class="tpa">'+pic+'</div>')+'<div class="tpb"><p class="subtxt">'+subs+'</p><div class="chips2">'+chips+'</div><div class="acts2">'+(target?'<a class="cta'+(hasL?"":" ghost")+'" href="'+esc(target)+'">'+cta+' ›</a>':'')+'<a class="more" href="chu-de.html?'+esc(prm)+'">'+T.more+' ›</a></div></div></article>');
+  const pic='<div class="pic"><span class="big" aria-hidden="true">'+esc(TE[0])+'</span><span class="ttl"><small>'+esc(t.tag||"")+'</small>'+esc(t.name)+'</span>'+(unl?'':'<span class="lock" aria-hidden="true">🔒</span>')+'</div>';
+  const main=learnU||testU;
+  const acts=(learnU?'<a class="cta" href="'+esc(learnU)+'">'+T.learn+' ›</a>':(testU?'<a class="cta ghost" href="'+esc(testU)+'">'+T.quiz+' ›</a>':''))+(learnU&&testU?'<a class="more" href="'+esc(testU)+'">'+T.quiz+'</a>':'')+'<a class="more" href="chu-de.html?'+esc(prm)+'">'+T.more+' ›</a>';
+  const card=el('<article class="tp'+(passed?" done":"")+(unl?"":" locked")+'"><span class="num" aria-hidden="true">'+(passed?"✓":(i+1))+'</span>'+(main?'<a class="tpa" href="'+esc(main)+'" aria-label="'+esc(t.name)+'">'+pic+'</a>':'<div class="tpa">'+pic+'</div>')+'<div class="tpb"><p class="subtxt">'+subs+'</p><div class="chips2">'+chips+'</div><div class="acts2">'+acts+'</div></div></article>');
   card.addEventListener("pointerenter",()=>narrate(i,false));
   card.addEventListener("focusin",()=>narrate(i,false));
   return card;
@@ -192,16 +224,17 @@ function bub(title,text){ const b=$("gbub"); b.innerHTML=(title?"<b>"+esc(title)
 function poke(){ const g=$("gmas"); g.classList.remove("poke"); void g.offsetWidth; g.classList.add("poke"); }
 function intro(){
   idx=-1; cards.forEach(c=>c.classList.remove("cur")); const m=MAS[S], ts=P.topics(S,G), nl=ts.filter(t=>P.hasLesson(t.id)).length;
-  $("stepn").textContent="0/"+ts.length; $("next").textContent=T.intro;
-  bub("", vi?("Chào bé! Mình là "+m[1]+", bạn đồng hành môn "+SN[S][0]+" lớp "+G+". Có "+ts.length+" chủ đề"+(nl?", đã có "+nl+" bài học":"")+". Bấm “Giới thiệu” để mình kể từng chủ đề nhé!"):("Hi! I’m "+m[1]+", your "+SN[S][1]+" friend for grade "+G+". There are "+ts.length+" topics. Tap “Start tour” and I’ll show you each one!"));
+  $("stepn").textContent="0/"+ts.length; $("next").innerHTML='<span class="t">'+T.intro.replace(" ›","")+' </span>›';
+  bub("", vi?("Chào bé! Mình là "+m[1]+" nè. Có "+ts.length+" chủ đề"+(nl?", "+nl+" bài học đã sẵn sàng":"")+". Bấm “Giới thiệu” nhé!"):("Hi! I’m "+m[1]+". "+ts.length+" topics here. Tap “Start tour”!"));
 }
 function narrate(i,scroll){
   const ts=P.topics(S,G); if(!ts.length) return; i=((i%ts.length)+ts.length)%ts.length; idx=i; const t=ts[i], TE=(window.LEARN_TEASERS||{})[t.id]||["",""], hasL=P.hasLesson(t.id);
   cards.forEach((c,k)=>c.classList.toggle("cur",k===i));
-  $("stepn").textContent=(i+1)+"/"+ts.length; $("next").textContent=T.next;
-  bub((vi?"Chủ đề ":"Topic ")+(i+1)+": "+t.name, (TE[1]?TE[1]+" ":"")+(hasL?(vi?"Bấm Học để bắt đầu nhé!":"Tap Learn to start!"):(vi?"Bài học đang được soạn.":"Lesson coming soon.")));
+  $("stepn").textContent=(i+1)+"/"+ts.length; $("next").innerHTML='<span class="t">'+T.next.replace(" ›","")+' </span>›';
+  bub((vi?"Chủ đề ":"Topic ")+(i+1)+": "+t.name, (!P.unlocked(S,G,t.id)?(vi?"Mình học xong chủ đề "+idx+" rồi mới mở chủ đề này nhé!":"Finish the topic before this one first!"):(TE[1]?TE[1]+" ":"")+(hasL?(vi?"Học xong có nhiệm vụ trong vườn đó! Bấm Học nhé!":"Finish it for garden tasks! Tap Learn!"):(vi?"Bài học đang được soạn. Mình làm kiểm tra nhé!":"Lesson coming soon. Try the quiz!"))));
   if(guideOK&&LM){ LM.wake(true); LM.emote(hasL?"happy":"think",1600); poke(); }
-  if(scroll&&cards[i]) cards[i].scrollIntoView({behavior:"smooth",block:"center"});
+  if(scroll&&cards[i]){ const beh=(q.get("instant")||matchMedia("(prefers-reduced-motion:reduce)").matches)?"auto":"smooth";
+    if(phone()) $("wrap").scrollTo({top:Math.max(0,cards[i].offsetTop-92),behavior:beh}); else cards[i].scrollIntoView({behavior:beh,block:"center"}); }
 }
 function showMascot(why){
   const m=MAS[S]; $("gname").textContent=m[1]+" · "+SN[S][vi?0:1]+" · "+T.gr+" "+G;
@@ -215,7 +248,7 @@ function render(){
   $("selG").value=G; $("selS").value=S; $("toGarden").href=gardenUrl(G,S);
   P.setGrade(G); lsw("learn:subj",S);
   try{ history.replaceState(null,"","?"+new URLSearchParams({grade:G,subj:S,lang}).toString()); }catch(e){}
-  const v=$("v"); v.innerHTML=""; v.scrollTop=0; $("stage").classList.remove("compact");
+  const v=$("v"); v.innerHTML=""; v.scrollTop=0; $("wrap").scrollTop=0; $("stage").classList.remove("compact");
   v.appendChild(el('<div class="sum"><b>'+esc(SN[S][vi?0:1])+" · "+T.gr+" "+G+'</b><span>'+ts.length+" "+T.topics+" · 📖 "+nl+" "+T.lessons+" · ✅ "+x.done+" "+T.passed+'</span></div>'));
   const gr=el('<div class="gr"><span class="gn">🌱 '+esc(LearnSlot.name(id))+'</span><button type="button" class="gb ren" aria-label="'+T.rename+'">✏️</button><a class="gb" href="'+gardenUrl(G,S)+'">'+T.visit+'</a></div>');
   gr.querySelector(".ren").onclick=()=>rename(id,m,()=>{gr.querySelector(".gn").textContent="🌱 "+LearnSlot.name(id)});
@@ -224,15 +257,20 @@ function render(){
   if(LearnSlot.hasLegacy()){ const o=el('<a class="old" href="../garden/index.html">'+T.old+'</a>'); o.onclick=()=>LearnSlot.setLegacy(); v.appendChild(o); }
   intro();
 }
-function change(g,s){ const gc=g!==G, sc=s!==S; G=g; S=s; render(); showMascot(gc&&!sc?"grade":"subj"); }
+function change(g,s){ const gc=g!==G, sc=s!==S; G=g; S=s; render(); measure(); showMascot(gc&&!sc?"grade":"subj"); }
 
 fillSelects();
 $("prev").onclick=()=>{ if(idx<0) narrate(P.topics(S,G).length-1,true); else narrate(idx-1,true); };
 $("next").onclick=()=>narrate(idx+1,true);
 $("gmas").onclick=()=>{ poke(); if(LM&&guideOK){ LM.wake(true); LM.emote("happy",1400); } if(idx<0) intro(); else narrate(idx,false); };
-/* cuộn danh sách: linh vật thu nhỏ để nhường chỗ (chỉ điện thoại) */
-$("v").addEventListener("scroll",()=>{ $("stage").classList.toggle("compact",$("v").scrollTop>70&&matchMedia("(max-width:899px)").matches&&matchMedia("(min-height:521px)").matches); },{passive:true});
-render(); showMascot("subj");
+/* điện thoại dọc: cuộn cả trang (#wrap), khung linh vật dính trên cùng và thu nhỏ khi cuộn; màn rộng: giữ to */
+const phone=()=>matchMedia("(max-width:899px) and (min-height:521px)").matches;
+let st0=0;   /* vị trí gốc của khung linh vật (khi chưa cuộn); có độ trễ để không nhấp nháy giữa to/nhỏ */
+const measure=()=>{ const w=$("wrap"),was=w.scrollTop; $("stage").classList.remove("compact"); w.scrollTop=0; st0=$("stage").offsetTop; w.scrollTop=was; };
+$("wrap").addEventListener("scroll",()=>{ const t=$("wrap").scrollTop, st=$("stage"); if(!phone()){ st.classList.remove("compact"); return; }
+  if(!st.classList.contains("compact")&&t>st0+60) st.classList.add("compact"); else if(st.classList.contains("compact")&&t<st0+8) st.classList.remove("compact"); },{passive:true});
+window.addEventListener("resize",()=>{ if(!$("stage").classList.contains("compact")) measure(); });
+render(); measure(); showMascot("subj");
 })();
 </script>
 </body>

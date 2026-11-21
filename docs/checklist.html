@@ -83,6 +83,8 @@ const DATA = [
   {t:"Thẻ chủ đề: hình to, tên chủ đề rõ trên hình, nội dung chi tiết ngắn + nút Xem thêm", s:"done", n:"learn/lop/index.html"},
   {t:"Trang chi tiết chủ đề cho phụ huynh (learn/lop/chu-de.html): nội dung chương trình, toàn bộ màn học + đáp án, câu thử cùng, kỹ năng kiểm tra, tiến độ của bé, nút in", s:"done", n:"Chưa kiểm ở 360px thật"},
   {t:"Làm gọn trang Chương trình học: 2 ô chọn Lớp + Môn, chỉ 1 lớp 1 môn 1 linh vật to hướng dẫn từng chủ đề (‹ Giới thiệu ›), danh sách thẻ của môn đang chọn", s:"done", n:"Chủ site góp ý ngày 2026-11-21 (trang cũ lan man). Bỏ bảng 5×3, hero, 3 cột môn. Đã thử bằng Chrome thật: đổi môn/lớp, Tiếp/Lùi, chạm linh vật"},
+  {t:"Trang Chương trình học dễ dùng trên điện thoại: cuộn cả trang một lần, khung linh vật dính trên cùng và tự thu nhỏ khi cuộn, bong bóng và nút không bị cắt ở 320–360px", s:"done", n:"Đã dựng khung 360×640 và 320×568 để thử; logic thu nhỏ đã thử bằng script (sự kiện cuộn gửi tay)"},
+  {t:"Chương trình học ↔ Khu vườn: học theo thứ tự (không nhảy bài); mỗi chủ đề xong (học hết hoặc kiểm tra đạt ≥ 3 sao) = 3 nhiệm vụ vườn + 2 hạt giống; hết nhiệm vụ thì vườn chỉ sang bài kế tiếp", s:"done", n:"path.js (unlocked/complete/next/quest), vườn có khoá gardenQuest, vườn cũ giữ nhiệm vụ hằng ngày. Đã thử bằng Chrome thật: nhiệm vụ → hết → thẻ Học bài mới"},
   {t:"Trang môn của lớp: danh sách chủ đề + trạng thái (chưa học / đã học / qua kiểm tra / thành thạo)", s:"done"},
   {t:"Tiến độ lưu theo lớp (khoá dữ liệu mới + chuyển dữ liệu cũ sang lớp hiện tại)", s:"done", n:"learn/path.js, khoá learn:pf:<hồ sơ>:lp:<lớp>:<môn>"},
   {t:"learn/index.html nhận ?grade&subject&topic và trở thành \"phòng kiểm tra\"", s:"done", n:"engine.js lọc kỹ năng theo chủ đề; xong vòng thì ghi tiến độ chủ đề"},

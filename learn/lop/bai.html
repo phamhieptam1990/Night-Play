@@ -77,6 +77,7 @@ button.it:active{transform:scale(.92)}
   <div class="stage" id="stage"></div>
 </main>
 <div class="foot"><button class="bk" id="bk" type="button" aria-label="Màn trước">◀</button><button class="nx" id="nx" type="button">Tiếp ▶</button></div>
+<script src="../slot.js"></script>
 <script src="../content/curriculum.js"></script>
 <script src="../content/bank.js"></script>
 <script src="../lang-skills.js"></script>
@@ -178,9 +179,11 @@ function quiz(stage,s,nl){
     };box.appendChild(b)});
 }
 function endScreen(stage){
-  P.markLearned(grade,subj,topic); mood("cheer"); setNext(true,COPY.test);
-  speakIn(COPY.ready);
+  P.markLearned(grade,subj,topic); const rw=P.complete(grade,subj,topic); mood("cheer"); setNext(true,COPY.test);
+  speakIn(rw.first?"Bé học xong rồi! Bé có 3 nhiệm vụ mới trong vườn!":COPY.ready);
   const a=document.createElement("div");a.className="art";a.textContent="🎉";stage.appendChild(a);
+  if(rw.first){const g=document.createElement("a");g.className="go2";g.style.textDecoration="none";g.href="../garden/index.html?"+new URLSearchParams({grade,subj}).toString();g.textContent="🎁 +3 nhiệm vụ · 🌱 +2 hạt: Vào vườn";stage.appendChild(g)}
+  else {const t=document.createElement("div");t.className="note";t.style.cssText="font-weight:800;opacity:.8";t.textContent="Bài này bé đã nhận phần thưởng rồi.";stage.appendChild(t)}
   const r=document.createElement("button");r.type="button";r.className="go2";r.style.background="var(--panel)";r.style.color="var(--ink)";r.style.border="2px solid var(--line)";r.textContent=COPY.again;r.onclick=()=>show(0);stage.appendChild(r);
 }
 $("nx").onclick=()=>{
@@ -195,6 +198,7 @@ function shortcut(){
   const a=document.createElement("a");a.className="bk";a.style.padding="0 16px";a.textContent="⏭";a.setAttribute("aria-label",COPY.skip);a.title=COPY.skip;
   a.href="../index.html?"+new URLSearchParams({grade,subj,topic,lang}).toString();document.querySelector(".foot").insertBefore(a,$("nx"));
 }
+if(MAS[subj]&&grade>=1&&grade<=5&&/^[A-Za-z0-9_-]{1,40}$/.test(topic||"")&&P.hasLesson(topic)&&!P.unlocked(subj,grade,topic)){ location.replace("index.html?"+new URLSearchParams({grade,subj,lang}).toString()); return; }   /* không nhảy bài: học xong chủ đề trước mới mở chủ đề này */
 if(!(grade>=1&&grade<=5)||!MAS[subj]||!/^[A-Za-z0-9_-]{1,40}$/.test(topic||"")||!P.hasLesson(topic)){ location.replace("index.html"+(MAS[subj]&&grade>=1&&grade<=5?"?"+new URLSearchParams({grade,subj,lang}).toString():"")); return; }
 if(false){ location.replace("index.html"); return; }
 window.addEventListener("lesson",()=>{L=window.LearnLessons.cur;shortcut();build()});

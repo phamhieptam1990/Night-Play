@@ -7,7 +7,7 @@
 (function (root) {
   "use strict";
   var SUBJ = ["toan", "tviet", "tanh"];
-  var KEYS = ["learn:farm", "learn:garden", "gardenFarm", "gardenTrees", "gardenSeen", "gardenHelp", "gardenAnimals", "gardenGift", "gardenDaily", "gardenLv", "gardenName"];
+  var KEYS = ["learn:farm", "learn:garden", "gardenFarm", "gardenTrees", "gardenSeen", "gardenHelp", "gardenAnimals", "gardenGift", "gardenDaily", "gardenLv", "gardenName", "gardenQuest"];
   var TOTAL = { toan: [5, 5, 6, 6, 6], tviet: [4, 4, 4, 4, 4], tanh: [3, 3, 4, 4, 4] };   /* số chủ đề mỗi lớp (khớp learn/content/curriculum.js; build-lessons.js kiểm khớp) */
   var proto = root.Storage && root.Storage.prototype, raw = null;
   if (!proto) return;
@@ -38,7 +38,7 @@
   /* mức xây (0..7) của ngăn theo số chủ đề đã qua kiểm tra (>= 3 sao) */
   S.passed = function (grade, subj) {
     var o = {}; try { o = JSON.parse(rget("learn:pf:" + (rget("learn:pf") || "1") + ":lp:" + grade + ":" + subj) || "{}") || {}; } catch (e) {}
-    var c = 0; Object.keys(o).forEach(function (t) { if (o[t] && o[t].b >= 3) c++; }); return c;
+    var c = 0; Object.keys(o).forEach(function (t) { if (o[t] && (o[t].b >= 3 || o[t].l)) c++; }); return c;
   };
   S.total = function (grade, subj) { return (TOTAL[subj] || [])[grade - 1] || 0; };
   S.buildN = function (id) {

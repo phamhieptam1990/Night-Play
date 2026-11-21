@@ -423,6 +423,7 @@ body.tucked .rev{display:flex}
 <script src="hint-texts.js"></script>
 <script src="lang-skills.js"></script>
 <script src="engine.js"></script>
+<script src="content/curriculum.js"></script>
 <script src="path.js"></script>
 <script src="content/lessons/index.js"></script>
 <script src="content/parent-copy.js"></script>
@@ -472,8 +473,8 @@ let lang = "vi", subj = "toan", grade = 1;
 if(window.LearnSlot){ LearnSlot.set(grade, subj); if(window.Farm) Farm.resetCache(); }   /* vườn theo lớp × môn: phần thưởng chảy vào đúng vườn */
 let TOPIC_ID = null;
 try{ const tp = new URLSearchParams(location.search).get("topic"); if(tp && window.LearnEngine && LearnEngine.topicSkills(subj, grade, tp).length) TOPIC_ID = tp; }catch(e){}
-/* cổng học → kiểm tra: chủ đề có bài học mà bé chưa học (và chưa thành thạo) thì về bài học trước */
-if(TOPIC_ID && window.LearnPath && LearnPath.hasLesson(TOPIC_ID) && !LearnPath.canTest(subj, grade, TOPIC_ID)){ location.replace("lop/bai.html?" + new URLSearchParams({ grade, subj, topic: TOPIC_ID, lang }).toString()); }
+/* không nhảy bài: chủ đề phải mở (xong chủ đề trước) mới làm kiểm tra theo chủ đề */
+if(TOPIC_ID && window.LearnPath && !LearnPath.unlocked(subj, grade, TOPIC_ID)){ location.replace("lop/index.html?" + new URLSearchParams({ grade, subj, lang }).toString()); }
 
 /* ---------- sinh câu hỏi (tự soạn, đáp án sai gắn với lỗi tư duy) ---------- */
 const E = window.LearnEngine;   /* sinh câu theo kỹ năng + chọn câu thích ứng + ghi tiến độ: learn/engine.js, ngân hàng: learn/content/bank.js */
@@ -530,13 +531,14 @@ function farmFinish(){
   if(!window.Farm || !window.Adventure) return; const t = T[lang], vi = lang !== "en";
   const rep = Farm.recordRound({ subj, correct: roundStars, wrong: wrongTags, best, starsGained: roundStars }), ok = roundStars >= 5, ch = ADV || Adventure.chapter(subj, lang);
   if(ok && !TRIP) Adventure.advance(subj);
-  if(TOPIC_ID && !TRIP && window.LearnPath) LearnPath.markTested(grade, subj, TOPIC_ID, roundStars);   /* ghi tiến độ chủ đề (lớp × môn) */
+  let CP = null; if(TOPIC_ID && !TRIP && window.LearnPath){ LearnPath.markTested(grade, subj, TOPIC_ID, roundStars); if(roundStars >= 3) CP = LearnPath.complete(grade, subj, TOPIC_ID); }   /* ghi tiến độ chủ đề (lớp × môn); đạt từ 3 sao = hoàn thành chủ đề → phát nhiệm vụ vườn */
   let tr = null; if(TRIP){ tr = Story.finish(TRIP.id, roundStars); if(tr.seed) Farm.addSeeds(1); }
   $("rStory").textContent = "📖 " + (TRIP ? Story.tx(TRIP.outro.text, lang) : ch.outro(ok, roundStars));
   const cn = { carrot: vi ? "cà rốt" : "carrots", wheat: vi ? "lúa mì" : "wheat", strawberry: vi ? "dâu tây" : "strawberries" }[rep.crop];
   const chips = []; if(rep.cropN) chips.push("<span>" + (vi ? "🧺 +" + rep.cropN + " " + cn + " vào kho" : "🧺 +" + rep.cropN + " " + cn)+ "</span>"); if(rep.seeds) chips.push("<span>🌱 +" + rep.seeds + "</span>");
   if(tr && tr.seed) chips.push("<span class='big'>" + (vi ? "🌱 Hạt quý mới về vườn: +1" : "🌱 A rare seed came home: +1") + "</span>");
   chips.push("<span>🎁 " + Math.min(rep.questGoal, rep.questNow) + "/" + rep.questGoal + "</span>");
+  if(CP && CP.first) chips.push("<span class='big'>" + (vi ? "🎁 Qua chủ đề! +3 nhiệm vụ trong vườn, +2 🌱" : "🎁 Topic passed! +3 garden tasks, +2 🌱") + "</span>"); else if(TOPIC_ID && roundStars < 3) chips.push("<span>" + (vi ? "Đúng từ 3 câu là qua chủ đề và nhận nhiệm vụ. Thử lại nhé!" : "Get 3 right to pass and earn tasks. Try again!") + "</span>");
   if(rep.goalHit) chips.push("<span class='big'>" + (vi ? "🎉 Đủ mục tiêu hôm nay! +2 🌱 +3 ⭐" : "🎉 Daily goal done! +2 🌱 +3 ⭐") + "</span>");
   if(rep.newOutfit) chips.push("<span class='big'>" + rep.newOutfit.e + " " + (vi ? "Mở trang phục mới: " : "New outfit: ") + rep.newOutfit.n + "</span>");
   { const mk = (MISSION && Farm.MISSION_SUBJ[MISSION] === subj) ? MISSION : missionOf(subj);

@@ -26,7 +26,7 @@
     topics: topics,
     hasLesson: function (topic) { return !!P.lessons[topic]; },
     hasTest: function (subj, grade, topic) { var E = eng(); return !!E && E.topicSkills(subj, grade, topic).length > 0; },
-    get: function (grade, subj, topic) { var r = read(grade, subj)[topic] || {}; return { l: r.l || 0, t: r.t || 0, b: r.b || 0 }; },
+    get: function (grade, subj, topic) { var r = read(grade, subj)[topic] || {}; return { l: r.l || 0, t: r.t || 0, b: r.b || 0, r: r.r || 0 }; },
     markLearned: function (grade, subj, topic) { var o = read(grade, subj), r = o[topic] || { l: 0, t: 0, b: 0 }; if (!r.l) r.l = Date.now(); r.u = Date.now(); o[topic] = r; write(grade, subj, o); },
     markTested: function (grade, subj, topic, stars) { var o = read(grade, subj), r = o[topic] || { l: 0, t: 0, b: 0 }; r.t = (r.t || 0) + 1; r.b = Math.max(r.b || 0, Math.max(0, Math.min(5, stars | 0))); r.u = Date.now(); o[topic] = r; write(grade, subj, o); return r; },
     /* mức thành thạo hiện có của chủ đề (0-4) từ tiến độ kỹ năng cũ: trung bình mastery4 các kỹ năng đã chơi, 0 nếu chưa chơi */
@@ -39,8 +39,28 @@
     status: function (subj, grade, topic) {
       var r = P.get(grade, subj, topic); if (r.b >= 5) return "star"; if (r.b >= 3) return "passed"; if (r.l) return "learned"; return "new";
     },
-    /* bài kiểm tra mở khi: chủ đề chưa có bài học, hoặc đã học, hoặc bé đã thành thạo (mức >= 2) */
-    canTest: function (subj, grade, topic) { return !P.hasLesson(topic) || !!P.get(grade, subj, topic).l || P.mastery(subj, grade, topic) >= 2; },
+    /* ---- HỌC THEO THỨ TỰ + NHIỆM VỤ VƯỜN ----
+       completed: đã học hết bài học (l) HOẶC qua kiểm tra (b >= 3). unlocked: chủ đề đầu, hoặc chủ đề liền trước đã completed (không nhảy bài).
+       complete(): lần đầu hoàn thành một chủ đề -> phát phần thưởng: 3 nhiệm vụ vườn (tưới, bón, cho cá) + 2 hạt giống; lưu ở khoá vườn "gardenQuest@<lớp>:<môn>". */
+    completed: function (grade, subj, topic) { var r = P.get(grade, subj, topic); return !!r.l || r.b >= 3; },
+    unlocked: function (subj, grade, topic) { var ts = topics(subj, grade), i = -1; ts.forEach(function (t, k) { if (t.id === topic) i = k; }); if (i < 0) return false; return i === 0 || P.completed(grade, subj, ts[i - 1].id); },
+    canTest: function (subj, grade, topic) { return P.unlocked(subj, grade, topic); },
+    next: function (subj, grade) {   /* chủ đề tiếp theo bé cần học (chưa completed), null nếu xong cả lớp */
+      var ts = topics(subj, grade); for (var i = 0; i < ts.length; i++) if (!P.completed(grade, subj, ts[i].id)) return { id: ts[i].id, name: ts[i].name, index: i, total: ts.length, hasLesson: !!P.lessons[ts[i].id] };
+      return null;
+    },
+    questKey: function (grade, subj) { return "gardenQuest@" + grade + ":" + subj; },
+    quest: function (grade, subj) {
+      var raw = root.LearnSlot ? root.LearnSlot.raw.get(P.questKey(grade, subj)) : ls(P.questKey(grade, subj)), q = null;
+      try { q = JSON.parse(raw || "null"); } catch (e) {} q = q && typeof q === "object" ? q : {}; return { left: q.left | 0, done: q.done | 0, seeds: q.seeds | 0, packs: q.packs | 0 };
+    },
+    saveQuest: function (grade, subj, q) { var v = JSON.stringify({ left: q.left | 0, done: q.done | 0, seeds: q.seeds | 0, packs: q.packs | 0 }); if (root.LearnSlot) root.LearnSlot.raw.set(P.questKey(grade, subj), v); else ls(P.questKey(grade, subj), v); },
+    complete: function (grade, subj, topic) {
+      var o = read(grade, subj), r = o[topic] || { l: 0, t: 0, b: 0 }; if (r.r || !(r.l || r.b >= 3)) return { first: false };
+      r.r = 1; r.u = Date.now(); o[topic] = r; write(grade, subj, o);
+      var q = P.quest(grade, subj); q.left += 3; q.seeds += 2; q.packs += 1; P.saveQuest(grade, subj, q);
+      return { first: true, left: q.left, seeds: 2 };
+    },
     summary: function (subj, grade) {
       var ts = topics(subj, grade), done = 0; ts.forEach(function (t) { var s = P.status(subj, grade, t.id); if (s === "passed" || s === "star") done++; });
       return { total: ts.length, done: done };
