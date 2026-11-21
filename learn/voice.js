@@ -40,16 +40,17 @@
         u.onstart = function () { started = true; };
         u.onend = function () { if (opt.done) opt.done(true); };
         u.onerror = function (e) { if (e && (e.error === "canceled" || e.error === "interrupted")) return; if (opt.fail) opt.fail(); };
-        if (ss.paused) ss.resume(); ss.speak(u);
+        machine.u = u;   /* GIỮ THAM CHIẾU: Chrome có thể thu gom utterance đang đọc → câu sau im lặng */
+        try { ss.resume(); } catch (e) {} ss.speak(u);
         setTimeout(function () {
-          if (started || ss.speaking) return;
+          if (started) return;   /* chỉ tin onstart (ss.speaking có thể vẫn true sau cancel() mà không đọc gì) */
           if (attempt < 2) { try { ss.cancel(); } catch (e) {} setTimeout(function () { go(attempt + 1); }, 160); }
           else if (opt.fail) opt.fail();
         }, 900);
       } catch (e) { if (opt.fail) opt.fail(); }
     };
     clearTimeout(machine.t);
-    if (ss.speaking || ss.pending) { ss.cancel(); machine.t = setTimeout(function () { go(0); }, 180); } else go(0);
+    if (ss.speaking || ss.pending || ss.paused) { try { ss.cancel(); } catch (e) {} machine.t = setTimeout(function () { try { ss.resume(); } catch (e) {} go(0); }, 200); } else go(0);
   }
   /* DANH SÁCH TỆP THU SẴN: shared/audio/voice/index.json = { "<nhân_vật>/<mã>": "mp3" | "webm" | "m4a" } (tạo bằng node scripts/learn/voice-index.js).
      Chưa có tệp index.json (hoặc câu chưa có trong đó) thì đọc bằng giọng máy NGAY, không đợi tải tệp (đợi tải làm mất cú chạm của bé, giọng máy bị chặn). */
