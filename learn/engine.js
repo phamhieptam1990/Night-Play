@@ -586,8 +586,9 @@
     if ((m._last || []).indexOf(c.id) >= 0) w *= .6;
     return w;
   }
-  function planRound(subj, grade, n) {
+  function planRound(subj, grade, n, topic) {
     n = n || 5; var m = load(subj), cs = candidates(subj, grade);
+    if (topic) { var ct = cs.filter(function (c) { return topicOf(c.id, grade) === topic; }); if (ct.length) cs = ct; }   /* kiểm tra theo chủ đề: chỉ lấy kỹ năng của chủ đề đó (không có thì dùng cả lớp) */
     if (!cs.length) cs = Object.keys(SK).filter(function (id) { return SK[id].subj === subj; }).map(function (id) { return { id: id, review: false }; });
     var main = cs.filter(function (c) { return !c.review; }), pool = main.length ? main : cs;
     // khởi động: kỹ năng bé đã vững (p cao, n>=3), nếu chưa có thì kỹ năng dễ nhất
@@ -611,7 +612,7 @@
   /* một vòng hoàn chỉnh: n câu đã sinh, không lặp câu dựng sẵn */
   function round(subj, grade, opts) {
     opts = opts || {}; var used = {}, lang = opts.lang || "vi", stems = {};
-    return planRound(subj, grade, opts.n || 5).map(function (p) {
+    return planRound(subj, grade, opts.n || 5, opts.topic).map(function (p) {
       var q, tries = 0; do { q = make(p.skill, { lang: lang, grade: grade, used: used }); tries++; } while (stems[q.q + "|" + (q.speak || "")] && tries < 8);   /* không lặp đúng một câu trong vòng */
       stems[q.q + "|" + (q.speak || "")] = 1; return q;
     });
@@ -665,7 +666,9 @@
   var E = {
     TAGS: TAGS, SKILLS: SK, TRACKED: TRACKED, make: make, round: round, planRound: planRound, record: record, level: level, summary: summary, mastery4: mastery4, M4: M4, goals: goals, detailOn: detailOn, setDetail: setDetail, clearDetail: clearDetail, noteHint: noteHint, dayDetail: dayDetail, daily: daily, resetAll: resetAll, dayKey: dayKey, toSchema: toSchema, topicOf: topicOf,
     use: function (b) { backend = b; }, setRng: function (f) { R = f || Math.random; }, setBank: function (b) { BANK = b; }, load: load,
-    skillsFor: function (subj, grade) { return candidates(subj, grade); }
+    skillsFor: function (subj, grade) { return candidates(subj, grade); },
+    topicOf: topicOf,
+    topicSkills: function (subj, grade, topic) { return candidates(subj, grade).filter(function (c) { return !c.review && topicOf(c.id, grade) === topic; }).map(function (c) { return c.id; }); }
   };
   if (typeof module !== "undefined" && module.exports) module.exports = E; else root.LearnEngine = E;
 })(typeof window !== "undefined" ? window : globalThis);

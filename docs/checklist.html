@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Checklist Học Vui</title>
+<style>
+:root{--bg:#F6F4FB;--panel:#fff;--ink:#1d1a33;--muted:#6b6785;--line:#e3dff0;--ok:#16a34a;--okbg:#e8f7ee;--acc:#7c5cff;--wip:#f59e0b}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12141F;--panel:#1c2038;--ink:#f1eefc;--muted:#a49fc4;--line:#2d3254;--ok:#4ade80;--okbg:#17332a;--acc:#9b83ff;--wip:#fbbf24}}
+:root[data-theme="dark"]{--bg:#12141F;--panel:#1c2038;--ink:#f1eefc;--muted:#a49fc4;--line:#2d3254;--ok:#4ade80;--okbg:#17332a;--acc:#9b83ff;--wip:#fbbf24}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:820px;margin:0 auto;padding:20px 16px 60px}
+h1{font-size:clamp(22px,5vw,30px);margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 16px;font-size:14px}
+.top{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0 12px;border-bottom:1px solid var(--line);margin-bottom:16px}
+.bar{height:12px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--ok));width:0;transition:width .4s}
+.tot{display:flex;justify-content:space-between;font-weight:800;font-size:14px;margin-top:6px}
+.filters{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.filters button{min-height:44px;padding:0 16px;border-radius:99px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink);font:700 14px inherit;cursor:pointer}
+.filters button[aria-pressed="true"]{border-color:var(--acc);background:var(--acc);color:#fff}
+section{background:var(--panel);border:1px solid var(--line);border-radius:18px;margin:0 0 14px;overflow:hidden}
+section>header{display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;min-height:56px}
+section>header h2{margin:0;font-size:17px;flex:1}
+.pill{font-size:13px;font-weight:800;padding:3px 10px;border-radius:99px;background:var(--line);white-space:nowrap}
+section.done .pill{background:var(--okbg);color:var(--ok)}
+.mini{height:6px;background:var(--line)}
+.mini i{display:block;height:100%;background:var(--ok)}
+ul{list-style:none;margin:0;padding:6px 8px 12px}
+li{display:flex;gap:12px;align-items:flex-start;padding:10px 10px;border-radius:12px}
+li .box{flex:none;width:26px;height:26px;border-radius:8px;border:2px solid var(--line);display:grid;place-items:center;font-weight:900;font-size:16px;margin-top:1px}
+li.done .box{background:var(--ok);border-color:var(--ok);color:#fff}
+li.done .t{color:var(--muted);text-decoration:line-through;text-decoration-thickness:1px}
+li.wip .box{border-color:var(--wip)}
+li .n{display:block;color:var(--muted);font-size:13px}
+li.ask .n{color:var(--wip);font-weight:700}
+.collapsed ul,.collapsed .mini{display:none}
+.chev{transition:transform .2s}.collapsed .chev{transform:rotate(-90deg)}
+.note{font-size:13px;color:var(--muted);margin-top:24px}
+</style>
+</head>
+<body>
+<main>
+<h1>Checklist Học Vui</h1>
+<p class="sub">Mục xong thì được tích ✓. Cập nhật lần cuối: <b id="upd"></b>. Kế hoạch: <code>docs/LEARN-LESSONS-PLAN.md</code>, <code>docs/LEARN-NIGHTPASS-PLAN.md</code>.</p>
+<div class="top">
+  <div class="bar"><i id="pb"></i></div>
+  <div class="tot"><span id="pt"></span><span id="pp"></span></div>
+  <div class="filters" role="group" aria-label="Lọc">
+    <button type="button" data-f="all" aria-pressed="true">Tất cả</button>
+    <button type="button" data-f="todo" aria-pressed="false">Chưa xong</button>
+    <button type="button" data-f="ask" aria-pressed="false">Chờ bạn duyệt</button>
+  </div>
+</div>
+<div id="root"></div>
+<p class="note">Cách dùng: mỗi lần làm xong một mục, mình sửa <code>done:true</code> trong trang này. Mục có nhãn "Chờ bạn duyệt" cần bạn trả lời trước khi làm.</p>
+</main>
+<script>
+const UPDATED = "2026-11-21";
+/* s: "done" | "wip" | "todo" | "ask" (chờ chủ site duyệt). n: ghi chú ngắn. */
+const DATA = [
+ {g:"H0. Chốt thiết kế bài học theo lớp (không code)", items:[
+  {t:"Viết kế hoạch bài học, vườn theo lớp/môn: docs/LEARN-LESSONS-PLAN.md", s:"done"},
+  {t:"Viết kế hoạch Night Pass/Plus + AI luyện cùng: docs/LEARN-NIGHTPASS-PLAN.md", s:"done"},
+  {t:"Tạo trang checklist này", s:"done"},
+  {t:"Bạn duyệt mô hình: 15 vườn riêng (lớp × môn), vườn cũ → \"Vườn cũ\"", s:"done", n:"Câu hỏi 1 trong LEARN-LESSONS-PLAN mục 10"},
+  {t:"Bạn chốt: 3 khu cũ giữ trong từng vườn hay thay bằng chủ đề môn", s:"done", n:"Câu hỏi 2"},
+  {t:"Bạn chốt cổng học → kiểm tra (bắt buộc / mở sẵn nếu thành thạo)", s:"done", n:"Câu hỏi 3"},
+  {t:"Bạn chốt: bé tự chọn lớp hay phụ huynh khoá lớp", s:"done", n:"Câu hỏi 4"},
+  {t:"Bạn chốt thứ tự soạn bài (lớp 1 cả 3 môn trước, hay một môn cho 5 lớp)", s:"done", n:"Câu hỏi 5"},
+  {t:"Bạn chốt tên vườn mặc định", s:"done", n:"Câu hỏi 6"},
+  {t:"Viết lại docs/LEARN-GARDEN-LEVELS.md theo mô hình vườn mới (điều kiện mở vườn theo tiến độ môn)", s:"todo"}
+ ]},
+ {g:"H1. Khung điều hướng theo lớp", items:[
+  {t:"Sao lưu dữ liệu cũ tự động trước khi chuyển (+ nút khôi phục)", s:"done", n:"Không cần chuyển: H1 chỉ THÊM khoá mới learn:pf:*, không đụng dữ liệu cũ; backup.js đã gồm learn:pf:"},
+  {t:"Trang chọn lớp /hoc/ (5 thẻ lớp, nhớ lớp của bé)", s:"done", n:"Làm ở learn/lop/index.html (?grade&subj thay vì thư mục từng lớp); các nút Vào học thử ở landing trỏ về đây"},
+  {t:"Bản đồ lớp: 3 khu vườn Toán / Việt / Anh, tiến độ từng khu", s:"done"},
+  {t:"Trang môn của lớp: danh sách chủ đề + trạng thái (chưa học / đã học / qua kiểm tra / thành thạo)", s:"done"},
+  {t:"Tiến độ lưu theo lớp (khoá dữ liệu mới + chuyển dữ liệu cũ sang lớp hiện tại)", s:"done", n:"learn/path.js, khoá learn:pf:<hồ sơ>:lp:<lớp>:<môn>"},
+  {t:"learn/index.html nhận ?grade&subject&topic và trở thành \"phòng kiểm tra\"", s:"done", n:"engine.js lọc kỹ năng theo chủ đề; xong vòng thì ghi tiến độ chủ đề"},
+  {t:"Lớp chưa có bài học: nhãn \"sắp có bài học\", vẫn kiểm tra như cũ", s:"done", n:"4 chủ đề Tiếng Việt lớp 2–5 chưa có kỹ năng nên hiện Sắp có bài kiểm tra"},
+  {t:"Giữ nút ←, một màn hình không cuộn, màn ngang (GAME_RULES)", s:"done"},
+  {t:"Chụp Chrome thật 360×640, 380×760, 844×390, 1200×640 và tự nhìn ảnh", s:"done", n:"Đã chụp 500×760, 844×390, 1200×640 và tự nhìn; chưa chụp được 360px (Chrome headless không mở cửa sổ hẹp hơn 500px)"},
+  {t:"Cập nhật sw.js (SHELL + CACHE) nếu thêm tệp", s:"done", n:"SHELL thêm path.js + lop/index.html, CACHE v565"}
+ ]},
+ {g:"H2. Bộ máy bài học", items:[
+  {t:"Định dạng JSON bài học (màn, ví dụ tương tác, thử cùng) + kiểm tra tự động", s:"todo"},
+  {t:"Trình phát bài học: màn, nút tiếp/lùi, linh vật giảng", s:"todo"},
+  {t:"Ví dụ tương tác nhỏ (kéo thả, đếm, chạm ghép)", s:"todo"},
+  {t:"Nghe đọc từng màn (voice.js)", s:"todo"},
+  {t:"\"Thử cùng\" 2–3 câu có gợi ý, không tính điểm", s:"todo"},
+  {t:"Cổng học xong mới mở bài kiểm tra (theo quyết định H0)", s:"todo"},
+  {t:"3 bài mẫu Toán lớp 1 để bạn xem và chỉnh", s:"todo"},
+  {t:"Bạn duyệt 3 bài mẫu", s:"ask"}
+ ]},
+ {g:"H3. Khu vườn theo lớp và môn", items:[
+  {t:"Tách dữ liệu vườn theo lớp × môn (learn:garden:<lớp>:<môn>)", s:"todo"},
+  {t:"Dữ liệu dùng chung: sao, trang phục, bạn làm vườn, bộ sưu tập", s:"todo"},
+  {t:"Chuyển vườn hiện tại thành \"Vườn cũ\" (không mất gì)", s:"todo"},
+  {t:"Bé tự đặt tên vườn (≤ 20 ký tự, biểu tượng, gợi ý sẵn, lọc từ nhạy cảm, nhắc không dùng tên thật)", s:"todo"},
+  {t:"Phần thưởng chảy đúng vườn của môn vừa kiểm tra", s:"todo"},
+  {t:"Mở vườn theo số chủ đề đã qua kiểm tra của môn", s:"todo"},
+  {t:"Cập nhật check-garden và kiểm tra bằng Chrome thật", s:"todo"}
+ ]},
+ {g:"H4. Soạn bài học hàng loạt (66 chủ đề)", items:[
+  {t:"Toán lớp 1 (5 chủ đề)", s:"todo"},
+  {t:"Tiếng Việt lớp 1 (4 chủ đề)", s:"todo"},
+  {t:"Tiếng Anh lớp 1 (3 chủ đề)", s:"todo"},
+  {t:"Lớp 2 (Toán 5, Việt 4, Anh 3)", s:"todo"},
+  {t:"Lớp 3 (Toán 6, Việt 4, Anh 4)", s:"todo"},
+  {t:"Lớp 4 (Toán 6, Việt 4, Anh 4)", s:"todo"},
+  {t:"Lớp 5 (Toán 6, Việt 4, Anh 4)", s:"todo"},
+  {t:"Mỗi đợt có người duyệt, tự soạn không chép SGK", s:"todo"}
+ ]},
+ {g:"H5. Hình vẽ khu vườn theo môn", items:[
+  {t:"Nền khu vườn Toán / Tiếng Việt / Tiếng Anh", s:"todo"},
+  {t:"5 bản đồ lớp", s:"todo"},
+  {t:"Bảng tên vườn + biểu tượng", s:"todo"},
+  {t:"Hình minh hoạ trong bài học", s:"todo"}
+ ]},
+ {g:"Chuẩn bị chỗ cắm Plus ngay trong bản free (làm cùng H1–H3, tránh làm lại)", items:[
+  {t:"Bạn chốt mô hình Free/Plus: A (free đủ bài và vườn, Plus = gia sư AI, đề thi, báo cáo, nhiều bé/máy)", s:"done", n:"Chốt 2026-11-21; kế hoạch giữ nguyên theo A"},
+  {t:"Khoá dữ liệu có mã hồ sơ bé (learn:<hồ sơ>:...) ngay từ H1, để sau này nhiều bé/đồng bộ không phải chuyển lại", s:"todo"},
+  {t:"Dữ liệu tiến độ/vườn dạng JSON gọn, có thời điểm sửa từng phần (sẵn sàng đồng bộ)", s:"todo"},
+  {t:"JSON bài học có chỗ tuỳ chọn cho Plus: giảng lại bằng AI, bài nâng cao, biến thể không giới hạn", s:"todo"},
+  {t:"learn/plus.js bản giả (Plus.has trả false) để gắn nút \"nhờ ba mẹ\" vào bài học/vườn", s:"todo"},
+  {t:"Nút phụ huynh trong trang môn/bài học dẫn về cổng phụ huynh (bé không thấy giá)", s:"todo"}
+ ]},
+ {g:"Plus G1. Nền bán hàng (Học Vui Plus)", items:[
+  {t:"Bạn chốt tên gói, giá, gói đôi, đồng bộ đám mây", s:"ask", n:"LEARN-NIGHTPASS-PLAN mục 8"},
+  {t:"Migration product ở orders/passes, PLANS_LEARN, token a:\"learn\"", s:"todo"},
+  {t:"/api/pass?product=learn + learn/plus.js", s:"todo"},
+  {t:"Thẻ Plus trong trang phụ huynh + dùng thử 7 ngày", s:"todo"},
+  {t:"Viết docs/LEARN-FREE-VS-PLUS.md, cập nhật privacy/terms", s:"todo"}
+ ]},
+ {g:"Plus G2. AI luyện cùng (bản đầu)", items:[
+  {t:"Bộ lọc từ nhạy cảm theo danh sách (điều kiện bắt buộc)", s:"todo"},
+  {t:"/api/learn/coach + schema đầu ra + khoá API ở Worker", s:"todo"},
+  {t:"Kiểm tra không lộ đáp án: 50+ bài mẫu đạt 100%", s:"todo"},
+  {t:"Cache (câu hỏi + mã lỗi), hạn mức ngày, đường lui khi AI lỗi", s:"todo"},
+  {t:"Công tắc bật/tắt AI + xem lại lời linh vật trong trang phụ huynh", s:"todo"},
+  {t:"Chạy thử nhóm nhỏ, đo chi phí thật, chốt giá", s:"todo"}
+ ]},
+ {g:"Plus G3–G6", items:[
+  {t:"G3: Luyện cùng 10 phút + Giờ dạy Bạn Mây + tóm tắt cho ba mẹ", s:"todo"},
+  {t:"G4: Đề thi thử lớp 6 (3 đề đầu) + báo cáo tuần", s:"todo"},
+  {t:"G5: Nhiều bé + đồng bộ đám mây (sau khi cập nhật pháp lý)", s:"todo"},
+  {t:"G6: Truyện mùa 2, vườn Night, Cambridge, giọng đọc, chụp bài tập", s:"todo"}
+ ]},
+ {g:"Đã deploy / làm xong gần đây", items:[
+  {t:"Học Vui: vườn mở khoá theo cấp, trợ thủ, giới thiệu, truyện, sao lưu (cc0d3de)", s:"done"},
+  {t:"Nút 🌈 \"Của bé\" trên thanh trên cùng trang học (5c56714)", s:"done"}
+ ]}
+];
+const $=id=>document.getElementById(id);let filter="all";
+function render(){
+  let all=0,done=0;const root=$("root");root.innerHTML="";
+  DATA.forEach((grp,gi)=>{
+    const d=grp.items.filter(i=>i.s==="done").length,n=grp.items.length;all+=n;done+=d;
+    const items=grp.items.filter(i=>filter==="all"||(filter==="todo"&&i.s!=="done")||(filter==="ask"&&i.s==="ask"));
+    if(!items.length)return;
+    const sec=document.createElement("section");if(d===n)sec.className="done";
+    sec.innerHTML=`<header role="button" tabindex="0" aria-expanded="true"><span class="chev" aria-hidden="true">▾</span><h2></h2><span class="pill">${d}/${n}</span></header><div class="mini"><i style="width:${Math.round(d/n*100)}%"></i></div><ul></ul>`;
+    sec.querySelector("h2").textContent=grp.g;
+    const ul=sec.querySelector("ul");
+    items.forEach(it=>{const li=document.createElement("li");li.className=it.s;
+      li.innerHTML=`<span class="box" aria-hidden="true">${it.s==="done"?"✓":""}</span><span><span class="t"></span><span class="n"></span></span>`;
+      li.querySelector(".t").textContent=it.t;
+      const nn=li.querySelector(".n");nn.textContent=(it.s==="ask"?"Chờ bạn duyệt. ":"")+(it.n||"");if(!nn.textContent)nn.remove();
+      li.setAttribute("aria-label",(it.s==="done"?"Đã xong: ":"Chưa xong: ")+it.t);ul.appendChild(li);});
+    const h=sec.querySelector("header");const tg=()=>{sec.classList.toggle("collapsed");h.setAttribute("aria-expanded",!sec.classList.contains("collapsed"));};
+    h.onclick=tg;h.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();tg();}};
+    root.appendChild(sec);
+  });
+  const p=Math.round(done/all*100);$("pb").style.width=p+"%";$("pt").textContent=done+" / "+all+" mục xong";$("pp").textContent=p+"%";
+}
+document.querySelectorAll(".filters button").forEach(b=>b.onclick=()=>{filter=b.dataset.f;document.querySelectorAll(".filters button").forEach(x=>x.setAttribute("aria-pressed",x===b));render();});
+$("upd").textContent=UPDATED;render();
+</script>
+</body>
+</html>

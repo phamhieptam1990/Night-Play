@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Học Vui · Lớp của bé</title>
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" type="image/svg+xml" sizes="any" href="/shared/favicon.svg">
+<script>try{var t=localStorage.getItem("theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"||t==="light"?t:(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");</script>
+<link rel="stylesheet" href="../../shared/fonts.css">
+<link rel="stylesheet" href="../../shared/theme.css">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.4}
+body{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);--c1:#7C5CFF;--c2:#FF9A6B}
+button,a{font:inherit;color:inherit}button{border:0;background:none;cursor:pointer;padding:0}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+[hidden]{display:none!important}
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(60vmax 60vmax at -10% -15%,color-mix(in srgb,var(--c1) 38%,transparent),transparent 70%),radial-gradient(50vmax 50vmax at 110% 10%,color-mix(in srgb,var(--c2) 30%,transparent),transparent 70%)}
+.top{position:relative;z-index:1;flex:none;display:flex;align-items:center;gap:10px;padding:12px 14px 6px}
+.ib{flex:none;min-width:50px;height:50px;border-radius:25px;display:grid;place-items:center;background:rgba(22,17,48,.72);color:#fff;border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);text-decoration:none;font-weight:800;font-size:22px;padding:0 12px;box-shadow:0 6px 16px rgba(0,0,0,.28),inset 0 0 12px rgba(155,131,255,.25)}
+.ib:active{transform:scale(.94)}
+h1{margin:0;font-size:clamp(20px,5.4vw,28px);font-weight:900;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+main{position:relative;z-index:1;flex:1;min-height:0;display:flex;flex-direction:column;padding:6px 16px 14px;max-width:560px;width:100%;margin:0 auto}
+.lead{margin:0 0 10px;color:var(--ink2);font-size:15px;font-weight:600}
+/* chọn lớp: 5 thẻ chia đều chiều cao, không cuộn */
+.grid{flex:1;min-height:0;display:grid;gap:10px}
+.grid.g5{grid-template-rows:repeat(5,minmax(52px,1fr))}
+.grid.g3{grid-template-rows:repeat(3,minmax(88px,1fr))}
+.card{display:flex;align-items:center;gap:14px;min-height:52px;padding:8px 14px;border-radius:22px;text-decoration:none;background:var(--panel);border:2px solid var(--line);box-shadow:0 6px 18px rgba(30,20,80,.12);position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,color-mix(in srgb,var(--k1,var(--c1)) 28%,transparent),transparent 65%);pointer-events:none}
+.card>*{position:relative}
+.card.cur{border-color:var(--k1,var(--accent))}
+.card:active{transform:scale(.985)}
+.num{flex:none;width:48px;height:48px;border-radius:16px;display:grid;place-items:center;font-size:26px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--k1,var(--c1)),var(--k2,var(--c2)))}
+.mas{flex:none;width:64px;height:64px;border-radius:20px;background:color-mix(in srgb,var(--k1) 22%,var(--panel));display:grid;place-items:center;overflow:hidden}
+.mas img{width:58px;height:58px;object-fit:contain}
+.tx{flex:1;min-width:0}.tx b{display:block;font-size:clamp(16px,4.4vw,19px);font-weight:900;line-height:1.2}
+.tx small{display:block;color:var(--muted);font-weight:700;font-size:13px;margin-top:2px}
+.go{flex:none;font-size:22px;opacity:.6}
+.pg{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:6px}.pg i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--k1),var(--k2));width:0}
+/* danh sách chủ đề: cuộn trong khung */
+.list{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:10px;padding:2px 2px 6px;-webkit-overflow-scrolling:touch}
+.topic{min-height:68px;flex:none}
+.st{flex:none;width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font-size:22px;background:color-mix(in srgb,var(--k1) 18%,var(--panel));border:1px solid var(--line)}
+.tag{display:inline-block;margin-top:3px;padding:1px 9px;border-radius:99px;font-size:12px;font-weight:800;background:var(--line);color:var(--ink2)}
+.tag.soon{background:color-mix(in srgb,#F59E0B 25%,var(--panel));color:var(--ink)}
+.tag.lock{background:color-mix(in srgb,var(--k1) 20%,var(--panel))}
+.foot{position:relative;z-index:1;flex:none;text-align:center;color:var(--muted);font-size:12px;padding:0 16px 8px}
+@media (max-height:430px) and (min-aspect-ratio:11/10){main{max-width:none}.grid.g5{grid-template-rows:none;grid-template-columns:repeat(5,1fr)}.grid.g5 .card{flex-direction:column;justify-content:center;text-align:center;padding:6px}.grid.g5 .go{display:none}.grid.g3{grid-template-rows:none;grid-template-columns:repeat(3,1fr)}.lead{display:none}.ib{height:40px;min-width:44px}.top{padding-top:6px}}
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true"></div>
+<header class="top">
+  <a class="ib" id="back" href="../../hoc/" aria-label="Quay lại">←</a>
+  <h1 id="ttl">Chọn lớp</h1>
+  <a class="ib" id="toGarden" href="../garden/index.html" aria-label="Khu vườn">🌱</a>
+  <a class="ib" id="toMe" href="../me/index.html" aria-label="Của bé">🌈</a>
+</header>
+<main>
+  <p class="lead" id="lead"></p>
+  <div id="v"></div>
+</main>
+<script src="../content/curriculum.js"></script>
+<script src="../content/bank.js"></script>
+<script src="../lang-skills.js"></script>
+<script src="../engine.js"></script>
+<script src="../path.js"></script>
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id), P=window.LearnPath;
+function ls(k){try{return localStorage.getItem(k)}catch(e){return null}}
+let lang=ls("lang"); if(lang!=="en"&&lang!=="vi") lang=/^en/i.test(navigator.language||"")?"en":"vi";
+const q=new URLSearchParams(location.search); if(q.get("lang")==="en"||q.get("lang")==="vi") lang=q.get("lang");
+const vi=lang==="vi";
+const SN={toan:["Toán","Math"],tviet:["Tiếng Việt","Vietnamese"],tanh:["Tiếng Anh","English"]};
+const MAS={toan:["math","Mochi","#34D399","#0EA5E9"],tviet:["vietnamese","Mầm","#FFB020","#FB5A7A"],tanh:["english","Bibi","#60A5FA","#A78BFA"]};
+const ST={new:"📚",learned:"📖",passed:"✅",star:"⭐"};
+const T={
+  pick:vi?"Chọn lớp":"Pick your grade", lead1:vi?"Bé học lớp mấy?":"Which grade are you in?", gr:vi?"Lớp":"Grade",
+  map:vi?"Lớp":"Grade", lead2:vi?"Chọn khu vườn để học nhé":"Pick a garden to learn in",
+  topics:vi?"chủ đề":"topics", done:vi?"đã qua":"passed", other:vi?"Lớp khác":"Other grade",
+  lead3:vi?"Học bài, rồi làm bài kiểm tra nhé":"Learn first, then take the quiz",
+  soon:vi?"Sắp có bài học":"Lessons coming soon", test:vi?"Làm bài kiểm tra":"Take the quiz",
+  nt:vi?"Sắp có bài kiểm tra":"Quiz coming soon", lock:vi?"Học bài trước nhé":"Learn first",
+  stn:{new:vi?"Chưa học":"Not started",learned:vi?"Đã học":"Learned",passed:vi?"Đã qua kiểm tra":"Passed",star:vi?"Thành thạo":"Mastered"}
+};
+function el(h){const d=document.createElement("div");d.innerHTML=h.trim();return d.firstChild}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+const hd=(s,g)=>"../../shared/art/learn/"+MAS[s][0]+"/"+MAS[s][0]+"_grade_"+g+".svg";
+function url(p){const u=new URLSearchParams(p);if(lang==="en")u.set("lang","en");return "?"+u.toString()}
+function view(){
+  const g=+q.get("grade"), s=q.get("subj"), v=$("v"); v.innerHTML="";
+  if(g>=1&&g<=5&&s&&MAS[s]) return topicsView(g,s,v);
+  if(g>=1&&g<=5) return mapView(g,v);
+  return gradeView(v);
+}
+function gradeView(v){
+  $("ttl").textContent=T.pick; $("lead").textContent=T.lead1; $("back").href="../../hoc/";
+  const cur=P.grade(), grid=el('<div class="grid g5"></div>');
+  for(let g=1;g<=5;g++){
+    let tot=0,done=0; P.SUBJ.forEach(s=>{const x=P.summary(s,g);tot+=x.total;done+=x.done});
+    const a=el('<a class="card'+(g===cur?" cur":"")+'" href="'+url({grade:g})+'"><span class="num">'+g+'</span><span class="tx"><b>'+T.gr+" "+g+'</b><small>'+done+"/"+tot+" "+T.topics+" "+T.done+'</small></span><span class="go" aria-hidden="true">›</span></a>');
+    grid.appendChild(a);
+  }
+  v.appendChild(grid); v.style.cssText="flex:1;min-height:0;display:flex;flex-direction:column";
+}
+function mapView(g,v){
+  P.setGrade(g); $("ttl").textContent=T.map+" "+g; $("lead").textContent=T.lead2; $("back").href=url({});
+  const grid=el('<div class="grid g3"></div>');
+  P.SUBJ.forEach(s=>{
+    const m=MAS[s], x=P.summary(s,g), pct=x.total?Math.round(x.done/x.total*100):0;
+    grid.appendChild(el('<a class="card" style="--k1:'+m[2]+';--k2:'+m[3]+'" href="'+url({grade:g,subj:s})+'"><span class="mas"><img src="'+hd(s,g)+'" alt=""></span><span class="tx"><b>'+esc(SN[s][vi?0:1])+'</b><small>'+esc(m[1])+" · "+x.done+"/"+x.total+" "+T.topics+'</small><span class="pg"><i style="width:'+pct+'%"></i></span></span><span class="go" aria-hidden="true">›</span></a>'));
+  });
+  v.appendChild(grid); v.style.cssText="flex:1;min-height:0;display:flex;flex-direction:column";
+}
+function topicsView(g,s,v){
+  const m=MAS[s]; $("ttl").textContent=SN[s][vi?0:1]+" · "+T.gr+" "+g; $("lead").textContent=T.lead3; $("back").href=url({grade:g});
+  document.body.style.setProperty("--c1",m[2]); document.body.style.setProperty("--c2",m[3]);
+  const list=el('<div class="list"></div>');
+  P.topics(s,g).forEach(t=>{
+    const st=P.status(s,g,t.id), hasL=P.hasLesson(t.id), hasT=P.hasTest(s,g,t.id), can=P.canTest(s,g,t.id);
+    let tag, href="";
+    if(hasL&&!can){ tag='<span class="tag lock">'+T.lock+'</span>'; href="lesson"; }
+    else if(!hasT){ tag='<span class="tag soon">'+T.nt+'</span>'; }
+    else { tag=hasL?'<span class="tag">'+T.stn[st]+'</span>':'<span class="tag soon">'+T.soon+'</span>'; }
+    const target = (hasL&&!can)?null:(hasT?"../index.html?"+new URLSearchParams({grade:g,subj:s,topic:t.id,lang}).toString():null);
+    const tag0=target?"a":"div";
+    const node=el('<'+tag0+' class="card topic" style="--k1:'+m[2]+';--k2:'+m[3]+'"'+(target?' href="'+esc(target)+'"':' aria-disabled="true"')+'><span class="st" aria-hidden="true">'+(t.icon||ST[st])+'</span><span class="tx"><b>'+esc(t.name)+'</b><small>'+esc(t.tag||"")+'</small>'+tag+'</span><span class="go" aria-hidden="true">'+(ST[st])+'</span></'+tag0+'>');
+    list.appendChild(node);
+  });
+  v.appendChild(list); v.style.cssText="flex:1;min-height:0;display:flex;flex-direction:column";
+}
+view();
+})();
+</script>
+</body>
+</html>

@@ -389,6 +389,7 @@ body.tucked .rev{display:flex}
   <button class="mt" id="lang" type="button" role="menuitem">EN</button>
   <button class="mt" id="mMusic" type="button" role="menuitem" aria-pressed="true">🎶</button>
   <button class="mt" id="mTheme" type="button" role="menuitem">🌓</button>
+  <a class="mt" id="mMap" href="lop/index.html" role="menuitem" aria-label="Bản đồ lớp">🗺️</a>
   <a class="mt" id="mMe" href="me/index.html" role="menuitem" aria-label="Của bé">🌈</a>
   <button class="mt" id="mParent" type="button" role="menuitem">🔒</button>
 </div>
@@ -409,7 +410,7 @@ body.tucked .rev{display:flex}
     <div class="stat"><div><b id="rS">0</b></div><div><b id="rB">0</b></div></div>
     <p id="rStory" class="rstory"></p><p id="rFarm" class="rfarm"></p>
     <p id="rTip" class="tip"></p>
-    <button class="btn" id="again" type="button">▶</button><button class="btn ghost" id="change" type="button">⚙️</button><a class="btn ghost" id="toMe" href="me/index.html" hidden>🌈</a><a class="btn ghost" id="toGdn" href="garden/index.html" hidden>🌱</a></div>
+    <button class="btn" id="again" type="button">▶</button><button class="btn ghost" id="change" type="button">⚙️</button><a class="btn ghost" id="toMap" href="lop/index.html" aria-label="Bản đồ lớp" hidden>🗺️</a><a class="btn ghost" id="toMe" href="me/index.html" hidden>🌈</a><a class="btn ghost" id="toGdn" href="garden/index.html" hidden>🌱</a></div>
 </div>
 <div class="ov" id="sheet" role="dialog" aria-modal="true" aria-labelledby="shT" hidden>
   <div class="card"><div class="big" aria-hidden="true">🐾</div><h2 id="shT" class="vh"></h2><h3 id="shS" class="vh"></h3><div class="pl s" id="pS"></div><h3 id="shG" class="vh"></h3><div class="pl g" id="pG"></div>
@@ -421,6 +422,7 @@ body.tucked .rev{display:flex}
 <script src="hint-texts.js"></script>
 <script src="lang-skills.js"></script>
 <script src="engine.js"></script>
+<script src="path.js"></script>
 <script src="content/parent-copy.js"></script>
 <script src="limit.js"></script>
 <script src="voice.js"></script>
@@ -464,13 +466,16 @@ let lang = "vi", subj = "toan", grade = 1;
 { const s = ls("lang"); if(s && T[s]) lang = s; else if(/^en/i.test(navigator.language || "")) lang = "en";
   const q = ls("learn:subj"); if(q && T.vi.sn[q]) subj = q; const g = +ls("learn:grade"); if(g >= 1 && g <= 5) grade = g;
   try{ const u = new URLSearchParams(location.search), a = u.get("subj"), b = u.get("lang"), c = +u.get("grade"); if(a && T.vi.sn[a]) subj = a; if(b && T[b]) lang = b; if(c >= 1 && c <= 5) grade = c; }catch(e){} }
+/* kiểm tra theo chủ đề: ?grade&subj&topic=<topic_id> (từ trang lop/); sai mã hoặc đổi môn/lớp thì bỏ */
+let TOPIC_ID = null;
+try{ const tp = new URLSearchParams(location.search).get("topic"); if(tp && window.LearnEngine && LearnEngine.topicSkills(subj, grade, tp).length) TOPIC_ID = tp; }catch(e){}
 
 /* ---------- sinh câu hỏi (tự soạn, đáp án sai gắn với lỗi tư duy) ---------- */
 const E = window.LearnEngine;   /* sinh câu theo kỹ năng + chọn câu thích ứng + ghi tiến độ: learn/engine.js, ngân hàng: learn/content/bank.js */
 let bank = [];
 function buildRound(){
   if(TRIP){ try{ bank = Story.questions(TRIP, { E, LT: window.LearnTypes, lang, grade }); return; }catch(e){ TRIP = null; } }   /* chuyến lỗi thì quay về vòng thường */
-  const base = E.round(subj, grade, { lang, n: 5 }); bank = base;
+  const base = E.round(subj, grade, { lang, n: 5, topic: TOPIC_ID }); bank = base;
   if(window.LearnTypes){ try{
     const qk = (new URLSearchParams(location.search).get("qk") || "").split(",").filter(Boolean);   /* ?qk=tf,match,... xem thử từng kiểu */
     bank = qk.length ? base.map((x, i) => { const k = qk[i % qk.length]; return (k === "pop" ? LearnTypes.asPop(x, lang) : LearnTypes.make(k, subj, grade, lang)) || x; }) : LearnTypes.mix(base, subj, grade, lang, 3);   /* thường ngày: trộn 3 câu kiểu khác vào vòng 5 câu */
@@ -520,6 +525,7 @@ function farmFinish(){
   if(!window.Farm || !window.Adventure) return; const t = T[lang], vi = lang !== "en";
   const rep = Farm.recordRound({ subj, correct: roundStars, wrong: wrongTags, best, starsGained: roundStars }), ok = roundStars >= 5, ch = ADV || Adventure.chapter(subj, lang);
   if(ok && !TRIP) Adventure.advance(subj);
+  if(TOPIC_ID && !TRIP && window.LearnPath) LearnPath.markTested(grade, subj, TOPIC_ID, roundStars);   /* ghi tiến độ chủ đề (lớp × môn) */
   let tr = null; if(TRIP){ tr = Story.finish(TRIP.id, roundStars); if(tr.seed) Farm.addSeeds(1); }
   $("rStory").textContent = "📖 " + (TRIP ? Story.tx(TRIP.outro.text, lang) : ch.outro(ok, roundStars));
   const cn = { carrot: vi ? "cà rốt" : "carrots", wheat: vi ? "lúa mì" : "wheat", strawberry: vi ? "dâu tây" : "strawberries" }[rep.crop];
@@ -787,7 +793,7 @@ function speak(){
     clearTimeout(window.__spT); if(busy) window.__spT = setTimeout(go, 70); else go(); }catch(e){}
 }
 $("pick").onclick = sheet; $("change").onclick = sheet;
-$("go").onclick = () => { subj = ps; grade = pg; ls("learn:subj", subj); ls("learn:grade", grade); chrome(); start(); };
+$("go").onclick = () => { if(subj !== ps || grade !== pg) TOPIC_ID = null; subj = ps; grade = pg; ls("learn:subj", subj); ls("learn:grade", grade); chrome(); start(); };
 $("again").onclick = start; function closeRes(){ $("res").hidden = true; start(); }   /* ✕ đóng popup cuối bài rồi mở vòng mới (không để bé kẹt ở màn câu cuối đã khoá) */
 $("resX").onclick = closeRes; addEventListener("keydown", e => { if(e.key === "Escape" && !$("res").hidden) closeRes(); });
 $("sheet").addEventListener("click", e => { if(e.target === $("sheet")){ document.body.dataset.subj = subj; $("sheet").hidden = true; } });
