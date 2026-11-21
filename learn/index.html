@@ -416,6 +416,7 @@ body.tucked .rev{display:flex}
   <div class="card"><div class="big" aria-hidden="true">🐾</div><h2 id="shT" class="vh"></h2><h3 id="shS" class="vh"></h3><div class="pl s" id="pS"></div><h3 id="shG" class="vh"></h3><div class="pl g" id="pG"></div>
     <button class="btn" id="go" type="button">▶</button></div>
 </div>
+<script src="slot.js"></script>
 <script src="content/phrases.js"></script>
 <script src="mascot-kit.js"></script>
 <script src="content/bank.js"></script>
@@ -423,6 +424,7 @@ body.tucked .rev{display:flex}
 <script src="lang-skills.js"></script>
 <script src="engine.js"></script>
 <script src="path.js"></script>
+<script src="content/lessons/index.js"></script>
 <script src="content/parent-copy.js"></script>
 <script src="limit.js"></script>
 <script src="voice.js"></script>
@@ -467,8 +469,11 @@ let lang = "vi", subj = "toan", grade = 1;
   const q = ls("learn:subj"); if(q && T.vi.sn[q]) subj = q; const g = +ls("learn:grade"); if(g >= 1 && g <= 5) grade = g;
   try{ const u = new URLSearchParams(location.search), a = u.get("subj"), b = u.get("lang"), c = +u.get("grade"); if(a && T.vi.sn[a]) subj = a; if(b && T[b]) lang = b; if(c >= 1 && c <= 5) grade = c; }catch(e){} }
 /* kiểm tra theo chủ đề: ?grade&subj&topic=<topic_id> (từ trang lop/); sai mã hoặc đổi môn/lớp thì bỏ */
+if(window.LearnSlot){ LearnSlot.set(grade, subj); if(window.Farm) Farm.resetCache(); }   /* vườn theo lớp × môn: phần thưởng chảy vào đúng vườn */
 let TOPIC_ID = null;
 try{ const tp = new URLSearchParams(location.search).get("topic"); if(tp && window.LearnEngine && LearnEngine.topicSkills(subj, grade, tp).length) TOPIC_ID = tp; }catch(e){}
+/* cổng học → kiểm tra: chủ đề có bài học mà bé chưa học (và chưa thành thạo) thì về bài học trước */
+if(TOPIC_ID && window.LearnPath && LearnPath.hasLesson(TOPIC_ID) && !LearnPath.canTest(subj, grade, TOPIC_ID)){ location.replace("lop/bai.html?" + new URLSearchParams({ grade, subj, topic: TOPIC_ID, lang }).toString()); }
 
 /* ---------- sinh câu hỏi (tự soạn, đáp án sai gắn với lỗi tư duy) ---------- */
 const E = window.LearnEngine;   /* sinh câu theo kỹ năng + chọn câu thích ứng + ghi tiến độ: learn/engine.js, ngân hàng: learn/content/bank.js */
@@ -778,8 +783,8 @@ function sheet(){
 }
 function speak(){
   if(!("speechSynthesis" in window)) return; const b = bank[cur]; if(!b) return;
-  const vi = lang === "vi", map = vi ? {"×":" nhân ","+":" cộng ","−":" trừ ","÷":" chia ","=":" bằng ","%":" phần trăm ","?":" bao nhiêu "} : {"×":" times ","+":" plus ","−":" minus ","÷":" divided by ","=":" equals ","%":" percent ","?":" what "};
-  let txt = b.speak != null ? String(b.speak) : b.q.replace(/<[^>]+>/g, "").replace(/[×+−÷=%?]/g, c => map[c]).replace(/_+/g, vi ? " chỗ trống " : " blank ");
+  const vi = lang === "vi", map = vi ? {"×":" nhân ","+":" cộng ","−":" trừ ","÷":" chia ","=":" bằng ","%":" phần trăm "} : {"×":" times ","+":" plus ","−":" minus ","÷":" divided by ","=":" equals ","%":" percent "};
+  let txt = b.speak != null ? String(b.speak) : b.q.replace(/<[^>]+>/g, "").replace(/[×+−÷=%]/g, c => map[c]).replace(/\?/g, " ")   /* dấu ? không đọc thành chữ */.replace(/_+/g, vi ? " chỗ trống " : " blank ");
   if(b.speak == null && subj === "tanh" && grade <= 2) txt = vi ? "Đây là gì?" : "What is this?";
   if(window.Voice){ Voice.say(txt, subj, b.speakLang || (subj === "tanh" ? "en" : (vi ? "vi" : "en")), { fail: () => LM.say(T[lang].noVoice) }); return; }   /* giọng chung: tệp thu sẵn nếu có, không thì giọng máy tốt nhất + cao độ riêng từng nhân vật (learn/voice.js) */
   try{ const lg = b.speakLang ? (b.speakLang === "vi" ? "vi-VN" : "en-US") : (subj === "tanh" ? "en-US" : (vi ? "vi-VN" : "en-US")), busy = speechSynthesis.speaking || speechSynthesis.pending; if(busy) speechSynthesis.cancel();
@@ -793,7 +798,7 @@ function speak(){
     clearTimeout(window.__spT); if(busy) window.__spT = setTimeout(go, 70); else go(); }catch(e){}
 }
 $("pick").onclick = sheet; $("change").onclick = sheet;
-$("go").onclick = () => { if(subj !== ps || grade !== pg) TOPIC_ID = null; subj = ps; grade = pg; ls("learn:subj", subj); ls("learn:grade", grade); chrome(); start(); };
+$("go").onclick = () => { if(subj !== ps || grade !== pg) TOPIC_ID = null; subj = ps; grade = pg; if(window.LearnSlot){ LearnSlot.set(grade, subj); if(window.Farm) Farm.resetCache(); } ls("learn:subj", subj); ls("learn:grade", grade); chrome(); start(); };
 $("again").onclick = start; function closeRes(){ $("res").hidden = true; start(); }   /* ✕ đóng popup cuối bài rồi mở vòng mới (không để bé kẹt ở màn câu cuối đã khoá) */
 $("resX").onclick = closeRes; addEventListener("keydown", e => { if(e.key === "Escape" && !$("res").hidden) closeRes(); });
 $("sheet").addEventListener("click", e => { if(e.target === $("sheet")){ document.body.dataset.subj = subj; $("sheet").hidden = true; } });

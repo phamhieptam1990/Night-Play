@@ -9,7 +9,7 @@
   /* hồ sơ: pitch/rate cho giọng máy. Nhân vật theo MÔN: toan (Mochi), tviet (Mầm), tanh (Bibi) + bạn trái cây theo môn + Sen Sen */
   var PROFILE = {
     toan:  { pitch: 1.55, rate: .98 }, tviet: { pitch: 1.4, rate: .92 }, tanh: { pitch: 1.6, rate: .95 },
-    sen:   { pitch: 1.5, rate: .95 }, narr:  { pitch: 1.15, rate: .9 }, def: { pitch: 1.4, rate: .95 }
+    sen:   { pitch: 1.5, rate: .95 }, lesson: { pitch: 1.08, rate: .9 }, narr:  { pitch: 1.15, rate: .9 }, def: { pitch: 1.4, rate: .95 }
   };
   var LANG = { vi: "vi-VN", en: "en-US" };
   function key(who, text) { var s = who + "|" + String(text).replace(/\s+/g, " ").trim(), h = 5381, i; for (i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) >>> 0; return h.toString(16); }
@@ -33,7 +33,7 @@
     opt = opt || {}; if (!ss) { if (opt.fail) opt.fail(); return; }
     var go = function () {
       try {
-        var u = new SpeechSynthesisUtterance(text), p = PROFILE[who] || PROFILE.def, v = pickVoice(lang), started = false;
+        var u = new SpeechSynthesisUtterance(text), p = PROFILE[opt.profile] || PROFILE[who] || PROFILE.def, v = pickVoice(lang), started = false;
         u.lang = LANG[lang] || lang; u.pitch = p.pitch; u.rate = p.rate; if (v) u.voice = v;
         u.onstart = function () { started = true; };
         u.onend = function () { if (opt.done) opt.done(true); };

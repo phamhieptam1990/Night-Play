@@ -23,7 +23,19 @@ Dáng đổi theo cấp, mỗi cấp THÊM một thứ, không bỏ thứ cũ. T
 - Độ tuổi: **5–7 tuổi** (tròn, mắt to) · **8–10 tuổi** (cao hơn, mắt nhỏ hơn). Gợi ý sẵn theo lớp (lớp 1–2 → 5–7 tuổi, lớp 3–5 → 8–10 tuổi).
 - Đây chỉ là KIỂU HÌNH, lưu trên máy (`gardenBuddy`), không hỏi tên hay thông tin khác. Xoá tiến độ không xoá lựa chọn này; tệp sao lưu có mang theo.
 
-## A. Bản ĐANG CHẠY: mỗi nhiệm vụ xong mở thêm một phần đất
+## 0. MÔ HÌNH MỚI (đang chạy từ giai đoạn H3): mỗi lớp × môn một khu vườn
+
+Thay cho phần A bên dưới. Bảng 8 mức (n = 0..7) và các mốc nhà/Bác Rễ GIỮ NGUYÊN, chỉ đổi **cái gì làm n tăng**.
+
+- **15 khu vườn**: 5 lớp × 3 môn (Toán, Tiếng Việt, Tiếng Anh). Mỗi vườn có dữ liệu riêng (cây, vật nuôi, kho, ao, nhà), kỹ thuật ở `learn/slot.js` (khoá vườn tự thêm hậu tố `@<lớp>:<môn>`).
+- **n = round(7 × số chủ đề đã qua kiểm tra / tổng chủ đề của lớp × môn)**, đủ hết = 7 (cả vườn); qua ít nhất 1 chủ đề thì n >= 1 (đất nền). "Qua kiểm tra" = đạt từ 3 sao ở bài kiểm tra chủ đề. Ví dụ Toán lớp 1 có 5 chủ đề: qua 1 → n=1 (đất nền), 2 → n=3 (nhà tranh), 3 → n=4, 4 → n=6 (ruộng), 5 → n=7 (cả vườn).
+- **Nhiệm vụ ngày** vẫn có để nhận thêm hạt/sao nhưng KHÔNG còn mở đất (n do chủ đề quyết định).
+- **Dùng chung mọi vườn**: tổng sao (mở trang phục và cây theo sao), bạn làm vườn đã chọn, chuyến phiêu lưu, tiến độ kỹ năng.
+- **Tên vườn do bé đặt** (2–20 chữ, lọc từ nhạy cảm, nhắc không dùng tên thật); mặc định "Vườn của Mochi / Mầm / Bibi".
+- **Vườn cũ** = dữ liệu vườn bé đã có trước giai đoạn H3 (khoá gốc không hậu tố), mở từ trang chọn lớp; không mất gì.
+- Mỗi vườn giữ 3 khu loại cũ (chăn nuôi, hoa màu, cây lâu năm) bên trong, chỉ đổi diện mạo theo môn ở giai đoạn H5.
+
+## A. (Bản cũ, trước H3) mỗi nhiệm vụ xong mở thêm một phần đất — giữ để tham khảo mốc n
 
 Mỗi ngày có 3 nhiệm vụ: 💧 Toán, 🧪 Tiếng Việt, 🐟 Tiếng Anh. Xong = chơi một vòng 5 câu **môn đó**, **đúng từ 3 câu**. Mỗi nhiệm vụ tính **một lần mỗi ngày** (ngày theo UTC, đổi lúc 7 giờ sáng giờ Việt Nam). Bé không cần bấm từ vườn: chơi môn nào ở trang học thì nhiệm vụ môn đó tự tính.
 

@@ -130,7 +130,7 @@
   /* gõ đáp án (chỉ Toán) */
   G.typein = function (subj, g, lang) {
     if (subj !== "toan") return null; var x = arith(g), ok = String(x.res);
-    return base("typein", subj, g, lang, x.txt + " = <em>?</em>", { ans: ok, speak: x.txt.replace("×", lang === "vi" ? " nhân " : " times ").replace("÷", lang === "vi" ? " chia " : " divided by ").replace("+", lang === "vi" ? " cộng " : " plus ").replace("−", lang === "vi" ? " trừ " : " minus ") + (lang === "vi" ? " bằng bao nhiêu?" : " equals what?"), reveal: ok });
+    return base("typein", subj, g, lang, x.txt + " = <em>?</em>", { ans: ok, speak: x.txt.replace("×", lang === "vi" ? " nhân " : " times ").replace("÷", lang === "vi" ? " chia " : " divided by ").replace("+", lang === "vi" ? " cộng " : " plus ").replace("−", lang === "vi" ? " trừ " : " minus ") + (lang === "vi" ? " bằng" : " equals"), reveal: ok });
   };
   /* tìm cái khác loại */
   G.odd = function (subj, g, lang) {

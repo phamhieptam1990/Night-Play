@@ -1,0 +1,2 @@
+/* SINH BỞI scripts/learn/build-lessons.js, không sửa tay. Danh sách chủ đề đã có bài học. */
+(function(){var P=window.LearnPath;if(P)Object.assign(P.lessons,{"EN-G1-01":{"n":6,"q":3},"EN-G1-02":{"n":6,"q":3},"EN-G1-03":{"n":6,"q":3},"VI-G1-01":{"n":6,"q":3},"VI-G1-02":{"n":6,"q":3},"VI-G1-03":{"n":6,"q":3},"VI-G1-04":{"n":6,"q":3},"g1_add_sub":{"n":6,"q":3},"g1_data":{"n":6,"q":3},"g1_geometry":{"n":8,"q":3},"g1_measurement":{"n":8,"q":3},"g1_numbers_100":{"n":7,"q":3}});})();

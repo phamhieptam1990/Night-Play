@@ -9,15 +9,20 @@
   /* tiến độ + lựa chọn của phụ huynh. KHÔNG gồm: thời gian đã chơi hôm nay (learn:time:*, learn:bonus:*), nhạc/đọc to, giao diện sáng-tối. */
   var KEYS = ["learn:err", "learn:day", "learn:dayk", "learn:dayk:off", "learn:stars", "learn:farm", "learn:garden", "learn:trips", "learn:grade", "learn:subj", "learn:limit",
     "gardenFarm", "gardenTrees", "gardenSeen", "gardenHelp", "gardenBuddy", "gardenAnimals", "gardenGift", "gardenDaily", "gardenLv"];
-  var PREFIX = ["learn:m:", "learn:pf:"];
-  function okKey(k) { return KEYS.indexOf(k) >= 0 || PREFIX.some(function (p) { return k.indexOf(p) === 0 && /^[a-z0-9_]+$/.test(k.slice(p.length)) && k.length <= 24; }); }
+  var PREFIX = ["learn:m:"];
+  /* khoá GỐC (không qua ngăn vườn của slot.js) để sao lưu/khôi phục đúng từng vườn */
+  var RAW = { get: function (k, st) { return root.LearnSlot ? root.LearnSlot.raw.get(k) : st.getItem(k); }, set: function (k, v, st) { if (root.LearnSlot) root.LearnSlot.raw.set(k, v); else st.setItem(k, v); }, del: function (k, st) { if (root.LearnSlot) root.LearnSlot.raw.del(k); else st.removeItem(k); } };
+  var SLOTP = ["learn:farm@", "learn:garden@", "gardenFarm@", "gardenTrees@", "gardenSeen@", "gardenHelp@", "gardenAnimals@", "gardenGift@", "gardenDaily@", "gardenLv@", "gardenName@"];
+  function okKey(k) {
+    if (SLOTP.some(function (p) { return k.indexOf(p) === 0 && /^[1-5]:(toan|tviet|tanh)$/.test(k.slice(p.length)); })) return true;
+    if (/^learn:pf:[A-Za-z0-9_-]{1,16}:lp:[1-5]:(toan|tviet|tanh)$/.test(k)) return true; return KEYS.indexOf(k) >= 0 || PREFIX.some(function (p) { return k.indexOf(p) === 0 && /^[a-z0-9_]+$/.test(k.slice(p.length)) && k.length <= 24; }); }
   function ls() { try { return root.localStorage; } catch (e) { return null; } }
   function allKeys(st) { var out = []; for (var i = 0; i < st.length; i++) { var k = st.key(i); if (k && okKey(k)) out.push(k); } return out; }
   function two(n) { return (n < 10 ? "0" : "") + n; }
   function filename() { var d = new Date(); return "hocvui-" + d.getFullYear() + two(d.getMonth() + 1) + two(d.getDate()) + ".json"; }
   function collect() {
     var st = ls(), data = {}; if (!st) return { app: APP, v: V, at: Date.now(), data: data };
-    allKeys(st).forEach(function (k) { var v = st.getItem(k); if (v != null) data[k] = v; });
+    allKeys(st).forEach(function (k) { var v = RAW.get(k, st); if (v != null) data[k] = v; });
     return { app: APP, v: V, at: Date.now(), data: data };
   }
   function validate(o) {
@@ -44,8 +49,8 @@
   function apply(o) {
     var r = validate(o); if (!r.ok) throw new Error("backup: " + r.why);
     var st = ls(); if (!st) throw new Error("backup: storage");
-    allKeys(st).forEach(function (k) { st.removeItem(k); });
-    Object.keys(o.data).forEach(function (k) { st.setItem(k, o.data[k]); });
+    allKeys(st).forEach(function (k) { RAW.del(k, st); });
+    Object.keys(o.data).forEach(function (k) { RAW.set(k, o.data[k], st); });
     if (root.Farm && root.Farm.resetCache) root.Farm.resetCache();
     return r.n;
   }

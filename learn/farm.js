@@ -24,6 +24,7 @@
     if (!cache || cache.v !== 1) cache = fresh();
     var f = fresh(); for (var k in f) if (cache[k] == null) cache[k] = f[k];
     if (!cache.quest || cache.quest.day !== day()) cache.quest = { day: day(), goal: GOAL, correct: 0, paid: 0 };
+    if (root.LearnSlot && root.LearnSlot.id) cache.build.n = root.LearnSlot.buildN();   /* vườn theo lớp × môn: mức xây theo số chủ đề đã qua kiểm tra */
     return cache;
   }
   function save() { if (cache) wr(KEY, JSON.stringify(cache)); }
@@ -78,7 +79,9 @@
     try { d = JSON.parse(rd("gardenDaily") || "null"); } catch (e) { d = null; }
     if (!d || d.day !== t) d = { day: t, water: 0, fert: 0, fish: 0 };
     if (d[k]) return { first: false, n: g.build.n };
-    d[k] = 1; wr("gardenDaily", JSON.stringify(d)); g.build.n++; g.build.fx.push(k); save();
+    d[k] = 1; wr("gardenDaily", JSON.stringify(d)); g.build.n++; g.build.fx.push(k);
+    if (root.LearnSlot && root.LearnSlot.id) g.build.n = root.LearnSlot.buildN();
+    save();
     return { first: true, n: g.build.n };
   }
   /* MỤC TIÊU XÂY VƯỜN (dùng chung cho vườn và trang học): n = số nhiệm vụ đã xong.
@@ -122,7 +125,7 @@
   /* XOÁ TOÀN BỘ tiến độ vườn + truyện + sao về trạng thái chưa mở khoá (nút "Xoá tiến độ học" ở trang phụ huynh, sau cổng phép tính).
      Giữ nguyên lựa chọn của phụ huynh/bé: lớp, môn, ngôn ngữ, nhạc, giới hạn giờ, màu giao diện vườn. Kỹ năng/lỗi/nhật ký ngày do LearnEngine.resetAll() xoá. */
   var RESET_KEYS = ["learn:farm", "learn:garden", "learn:stars", "learn:trips", "gardenFarm", "gardenTrees", "gardenSeen", "gardenHelp", "gardenAnimals", "gardenGift", "gardenDaily"];
-  function resetAll() { cache = null; RESET_KEYS.forEach(function (k) { try { root.localStorage.removeItem(k); } catch (e) {} }); }
+  function resetAll() { cache = null; RESET_KEYS.forEach(function (k) { try { root.localStorage.removeItem(k); } catch (e) {} }); if (root.LearnSlot) root.LearnSlot.clearAll(); }
   function resetCache() { cache = null; }   /* sau khi nạp dữ liệu từ tệp (learn/backup.js): đọc lại từ kho */
   var api = { missionsLeft: missionsLeft, SEEDS: SEEDS, seedState: seedState, BUILD: BUILD, missionDone: missionDone, MISSION_SUBJ: MISSION_SUBJ, resetCache: resetCache, resetAll: resetAll, RESET_KEYS: RESET_KEYS, KEY: KEY, GOAL: GOAL, CROP: CROP, OUTFITS: OUTFITS, day: day, get: get, save: save, stars: stars, addStars: addStars, addSeeds: addSeeds, addCrop: addCrop, cropTotal: cropTotal, streakDays: streakDays, recordRound: recordRound, outfitsOwned: outfitsOwned, wearing: wearing, wear: wear, greet: greet };
   if (typeof module !== "undefined" && module.exports) module.exports = api; else root.Farm = api;

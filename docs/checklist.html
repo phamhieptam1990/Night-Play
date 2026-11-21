@@ -71,12 +71,17 @@ const DATA = [
   {t:"Bạn chốt: bé tự chọn lớp hay phụ huynh khoá lớp", s:"done", n:"Câu hỏi 4"},
   {t:"Bạn chốt thứ tự soạn bài (lớp 1 cả 3 môn trước, hay một môn cho 5 lớp)", s:"done", n:"Câu hỏi 5"},
   {t:"Bạn chốt tên vườn mặc định", s:"done", n:"Câu hỏi 6"},
-  {t:"Viết lại docs/LEARN-GARDEN-LEVELS.md theo mô hình vườn mới (điều kiện mở vườn theo tiến độ môn)", s:"todo"}
+  {t:"Viết lại docs/LEARN-GARDEN-LEVELS.md theo mô hình vườn mới (điều kiện mở vườn theo tiến độ môn)", s:"done"}
  ]},
  {g:"H1. Khung điều hướng theo lớp", items:[
   {t:"Sao lưu dữ liệu cũ tự động trước khi chuyển (+ nút khôi phục)", s:"done", n:"Không cần chuyển: H1 chỉ THÊM khoá mới learn:pf:*, không đụng dữ liệu cũ; backup.js đã gồm learn:pf:"},
   {t:"Trang chọn lớp /hoc/ (5 thẻ lớp, nhớ lớp của bé)", s:"done", n:"Làm ở learn/lop/index.html (?grade&subj thay vì thư mục từng lớp); các nút Vào học thử ở landing trỏ về đây"},
   {t:"Bản đồ lớp: 3 khu vườn Toán / Việt / Anh, tiến độ từng khu", s:"done"},
+  {t:"Trang TỔNG QUAN: bảng 5 lớp × 3 môn (có bao nhiêu bài học, đã qua bao nhiêu) + chi tiết mọi chủ đề của lớp đang chọn, nội dung từng chủ đề", s:"done", n:"Thay cho luồng chọn lớp → chọn môn → chọn bài; chủ site góp ý ngày 2026-11-21. Chụp 500px và 1200px, tự nhìn ảnh"},
+  {t:"Trang Chương trình học: thêm hình gợi tò mò (mỗi chủ đề một tranh emoji + câu hỏi 🤔, linh vật lớn ở đầu trang và đầu mỗi lớp)", s:"done", n:"learn/content/teasers.js (66 chủ đề, build-lessons.js kiểm đủ). Chủ site yêu cầu 2026-11-21. Chưa có tranh vẽ riêng cho từng chủ đề (đang dùng emoji)"},
+  {t:"Linh vật hướng dẫn trên trang Chương trình học: chọn môn thì linh vật môn đó làm chủ đạo (đổi màu trang, nói, phản ứng khi chạm thẻ/linh vật/chọn môn)", s:"done", n:"Dùng LearnMascot (mascot-kit.js). Đã thử bằng Chrome thật: chọn Anh/Toán đổi màu + lời + cảm xúc, chạm thẻ → think, chạm linh vật → poke"},
+  {t:"Thẻ chủ đề: hình to, tên chủ đề rõ trên hình, nội dung chi tiết ngắn + nút Xem thêm", s:"done", n:"learn/lop/index.html"},
+  {t:"Trang chi tiết chủ đề cho phụ huynh (learn/lop/chu-de.html): nội dung chương trình, toàn bộ màn học + đáp án, câu thử cùng, kỹ năng kiểm tra, tiến độ của bé, nút in", s:"done", n:"Chưa kiểm ở 360px thật"},
   {t:"Trang môn của lớp: danh sách chủ đề + trạng thái (chưa học / đã học / qua kiểm tra / thành thạo)", s:"done"},
   {t:"Tiến độ lưu theo lớp (khoá dữ liệu mới + chuyển dữ liệu cũ sang lớp hiện tại)", s:"done", n:"learn/path.js, khoá learn:pf:<hồ sơ>:lp:<lớp>:<môn>"},
   {t:"learn/index.html nhận ?grade&subject&topic và trở thành \"phòng kiểm tra\"", s:"done", n:"engine.js lọc kỹ năng theo chủ đề; xong vòng thì ghi tiến độ chủ đề"},
@@ -86,28 +91,29 @@ const DATA = [
   {t:"Cập nhật sw.js (SHELL + CACHE) nếu thêm tệp", s:"done", n:"SHELL thêm path.js + lop/index.html, CACHE v565"}
  ]},
  {g:"H2. Bộ máy bài học", items:[
-  {t:"Định dạng JSON bài học (màn, ví dụ tương tác, thử cùng) + kiểm tra tự động", s:"todo"},
-  {t:"Trình phát bài học: màn, nút tiếp/lùi, linh vật giảng", s:"todo"},
-  {t:"Ví dụ tương tác nhỏ (kéo thả, đếm, chạm ghép)", s:"todo"},
-  {t:"Nghe đọc từng màn (voice.js)", s:"todo"},
-  {t:"\"Thử cùng\" 2–3 câu có gợi ý, không tính điểm", s:"todo"},
-  {t:"Cổng học xong mới mở bài kiểm tra (theo quyết định H0)", s:"todo"},
-  {t:"3 bài mẫu Toán lớp 1 để bạn xem và chỉnh", s:"todo"},
+  {t:"Định dạng bài học (màn, ví dụ tương tác, thử cùng) + kiểm tra tự động (màn, ví dụ tương tác, thử cùng) + kiểm tra tự động", s:"done", n:"Tệp JS gọi LearnLessons.reg (chạy được cả khi mở file://); node scripts/learn/build-lessons.js kiểm tra + sinh index.js"},
+  {t:"Trình phát bài học: màn, nút tiếp/lùi, linh vật giảng", s:"done", n:"learn/lop/bai.html; ?step=N để xem thử một màn"},
+  {t:"Ví dụ tương tác nhỏ (kéo thả, đếm, chạm ghép)", s:"done", n:"Có: chạm đếm, gộp lại, bớt đi, chọn đáp án. Chưa có kéo thả (làm khi bài cần)"},
+  {t:"Nghe đọc từng màn (voice.js)", s:"done", n:"Nút 🔊 + tự đọc (dùng chung learn:auto) qua Voice.say. Mình chưa nghe thử bằng loa thật"},
+  {t:"\"Thử cùng\" 2–3 câu có gợi ý, không tính điểm", s:"done", n:"Sai thì gợi ý, sai lần 2 thì chỉ đáp án; không tính điểm"},
+  {t:"Cổng học xong mới mở bài kiểm tra (theo quyết định H0)", s:"done", n:"Hub dẫn vào bài học; index.html tự chuyển về bài học nếu chưa học (trừ khi thành thạo mức >= 2); có nút ⏭ kiểm tra luôn khi đủ điều kiện"},
+  {t:"3 bài mẫu Toán lớp 1 để bạn xem và chỉnh", s:"done", n:"g1_numbers_100, g1_add_sub, g1_geometry; chạy thử từ đầu đến cuối bằng Chrome thật, đã ghi tiến độ đã học"},
   {t:"Bạn duyệt 3 bài mẫu", s:"ask"}
  ]},
  {g:"H3. Khu vườn theo lớp và môn", items:[
-  {t:"Tách dữ liệu vườn theo lớp × môn (learn:garden:<lớp>:<môn>)", s:"todo"},
-  {t:"Dữ liệu dùng chung: sao, trang phục, bạn làm vườn, bộ sưu tập", s:"todo"},
-  {t:"Chuyển vườn hiện tại thành \"Vườn cũ\" (không mất gì)", s:"todo"},
-  {t:"Bé tự đặt tên vườn (≤ 20 ký tự, biểu tượng, gợi ý sẵn, lọc từ nhạy cảm, nhắc không dùng tên thật)", s:"todo"},
-  {t:"Phần thưởng chảy đúng vườn của môn vừa kiểm tra", s:"todo"},
-  {t:"Mở vườn theo số chủ đề đã qua kiểm tra của môn", s:"todo"},
-  {t:"Cập nhật check-garden và kiểm tra bằng Chrome thật", s:"todo"}
+  {t:"Tách dữ liệu vườn theo lớp × môn (learn:garden:<lớp>:<môn>)", s:"done", n:"learn/slot.js bọc localStorage: khoá vườn tự thêm hậu tố @<lớp>:<môn>, không phải viết lại bộ máy vườn; đã thử 15 ca bằng Chrome thật"},
+  {t:"Dữ liệu dùng chung: sao, trang phục, bạn làm vườn, bộ sưu tập", s:"done", n:"Dùng chung: tổng sao, bạn làm vườn, chuyến phiêu lưu, tiến độ kỹ năng. Trang phục đang mặc (outfit.on) nằm trong vườn nên riêng từng vườn, số sao mở khoá vẫn chung"},
+  {t:"Chuyển vườn hiện tại thành \"Vườn cũ\" (không mất gì)", s:"done", n:"Khoá gốc không hậu tố = Vườn cũ, hiện ở trang chọn lớp. Lưu ý: nhiệm vụ chơi từ Vườn cũ ghi phần thưởng vào vườn lớp × môn đang học, không vào Vườn cũ"},
+  {t:"Bé tự đặt tên vườn (≤ 20 ký tự, biểu tượng, gợi ý sẵn, lọc từ nhạy cảm, nhắc không dùng tên thật)", s:"done", n:"Hộp thoại có 6 gợi ý bấm chọn, lọc từ nhạy cảm bằng LearnMascot.clean, nhắc không dùng tên thật; lưu JSON nên sao lưu được"},
+  {t:"Phần thưởng chảy đúng vườn của môn vừa kiểm tra", s:"done", n:"Trang kiểm tra gọi LearnSlot.set(lớp, môn) nên sao/cây/hạt vào đúng vườn"},
+  {t:"Mở vườn theo số chủ đề đã qua kiểm tra của môn", s:"done", n:"build.n = round(7 × chủ đề đã qua / tổng chủ đề), đủ chủ đề = 7 (cả vườn)"},
+  {t:"Cập nhật check-garden và kiểm tra bằng Chrome thật", s:"done", n:"check-garden 41/41 và check-backup đạt; chụp bản đồ lớp, hộp đặt tên, vườn ?grade=1&subj=toan"}
  ]},
  {g:"H4. Soạn bài học hàng loạt (66 chủ đề)", items:[
-  {t:"Toán lớp 1 (5 chủ đề)", s:"todo"},
-  {t:"Tiếng Việt lớp 1 (4 chủ đề)", s:"todo"},
-  {t:"Tiếng Anh lớp 1 (3 chủ đề)", s:"todo"},
+  {t:"Toán lớp 1 (5 chủ đề)", s:"done", n:"Bản NHÁP tự soạn, chạy thử từ đầu đến cuối bằng Chrome thật; chờ bạn duyệt"},
+  {t:"Tiếng Việt lớp 1 (4 chủ đề)", s:"done", n:"Bản NHÁP, chờ bạn duyệt"},
+  {t:"Tiếng Anh lớp 1 (3 chủ đề)", s:"done", n:"Bản NHÁP; có ô từ tiếng Anh chạm để nghe (giọng en-US của máy), chờ bạn duyệt"},
+  {t:"Bạn duyệt 12 bài lớp 1 (3 môn): giọng văn, độ dài, mức khó, từ tiếng Anh", s:"ask", n:"Mở: /learn/lop/index.html?grade=1&subj=toan (tviet, tanh)"},
   {t:"Lớp 2 (Toán 5, Việt 4, Anh 3)", s:"todo"},
   {t:"Lớp 3 (Toán 6, Việt 4, Anh 4)", s:"todo"},
   {t:"Lớp 4 (Toán 6, Việt 4, Anh 4)", s:"todo"},
@@ -122,10 +128,10 @@ const DATA = [
  ]},
  {g:"Chuẩn bị chỗ cắm Plus ngay trong bản free (làm cùng H1–H3, tránh làm lại)", items:[
   {t:"Bạn chốt mô hình Free/Plus: A (free đủ bài và vườn, Plus = gia sư AI, đề thi, báo cáo, nhiều bé/máy)", s:"done", n:"Chốt 2026-11-21; kế hoạch giữ nguyên theo A"},
-  {t:"Khoá dữ liệu có mã hồ sơ bé (learn:<hồ sơ>:...) ngay từ H1, để sau này nhiều bé/đồng bộ không phải chuyển lại", s:"todo"},
+  {t:"Khoá dữ liệu có mã hồ sơ bé (learn:<hồ sơ>:...) ngay từ H1, để sau này nhiều bé/đồng bộ không phải chuyển lại", s:"done", n:"Phần mới (learn:pf:...) đã có mã hồ sơ; khoá cũ giữ nguyên để không mất dữ liệu"},
   {t:"Dữ liệu tiến độ/vườn dạng JSON gọn, có thời điểm sửa từng phần (sẵn sàng đồng bộ)", s:"todo"},
   {t:"JSON bài học có chỗ tuỳ chọn cho Plus: giảng lại bằng AI, bài nâng cao, biến thể không giới hạn", s:"todo"},
-  {t:"learn/plus.js bản giả (Plus.has trả false) để gắn nút \"nhờ ba mẹ\" vào bài học/vườn", s:"todo"},
+  {t:"learn/plus.js bản giả (Plus.has trả false) để gắn nút \"nhờ ba mẹ\" vào bài học/vườn", s:"done", n:"Plus.has luôn false; chưa gắn nút nào vào trang bé"},
   {t:"Nút phụ huynh trong trang môn/bài học dẫn về cổng phụ huynh (bé không thấy giá)", s:"todo"}
  ]},
  {g:"Plus G1. Nền bán hàng (Học Vui Plus)", items:[
