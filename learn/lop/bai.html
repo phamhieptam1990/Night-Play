@@ -36,13 +36,21 @@ main{position:relative;z-index:1;flex:1;min-height:0;display:flex;flex-direction
 .hear{flex:none;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-size:22px;background:color-mix(in srgb,var(--c1) 25%,var(--panel));border:1px solid var(--line)}
 .vhint{flex:none;align-self:center;margin:2px 0 4px;padding:7px 14px;border-radius:99px;background:color-mix(in srgb,var(--c1) 30%,var(--panel));border:2px solid var(--c1);font-weight:800;font-size:14px;text-align:center;animation:vh 1.4s ease-in-out infinite}
 @media (max-height:430px) and (min-aspect-ratio:11/10){.vhint{display:none}}
-.spk-gate{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px;text-align:center;background:linear-gradient(160deg,var(--c1),var(--c2));color:#fff}
+.spk-gate{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(10px,2.6dvh,20px);padding:max(24px,env(safe-area-inset-top)) 24px max(24px,env(safe-area-inset-bottom));text-align:center;color:#fff;overflow:hidden;background:radial-gradient(120% 70% at 50% 28%,color-mix(in srgb,#fff 26%,transparent),transparent 62%),linear-gradient(165deg,var(--c1),var(--c2))}
 .spk-gate[hidden]{display:none}
-.spk-gate .sgb{width:min(52vw,40dvh,220px);aspect-ratio:1;border-radius:50%;border:6px solid #fff;background:rgba(255,255,255,.22);font-size:min(24vw,18dvh,100px);line-height:1;color:#fff;cursor:pointer;box-shadow:0 14px 40px -10px rgba(0,0,0,.4);animation:vh 1.4s ease-in-out infinite}
-.spk-gate b{font-size:clamp(20px,6vw,28px);font-weight:900}.spk-gate span{font-size:15px;font-weight:700;opacity:.92}
+.spk-gate .sgm{width:min(60vw,30dvh,240px);aspect-ratio:1;object-fit:contain;filter:drop-shadow(0 10px 18px rgba(0,0,0,.28));animation:sgf 2.4s ease-in-out infinite}
+.spk-gate .sgw{position:relative;width:min(50vw,26dvh,200px);aspect-ratio:1;display:grid;place-items:center;margin:4px 0}
+.spk-gate .sgw::before,.spk-gate .sgw::after{content:"";position:absolute;inset:0;border-radius:50%;border:3px solid rgba(255,255,255,.7);pointer-events:none;animation:sgr 2.2s ease-out infinite}
+.spk-gate .sgw::after{animation-delay:1.1s}
+.spk-gate .sgb{position:relative;width:100%;height:100%;border-radius:50%;border:0;background:#fff;color:var(--c2);font-size:min(22vw,11dvh,84px);line-height:1;cursor:pointer;display:grid;place-items:center;box-shadow:0 16px 36px -10px rgba(0,0,0,.45),inset 0 -6px 0 rgba(0,0,0,.08);transition:transform .12s}
+.spk-gate .sgb:active{transform:scale(.94)}
+.spk-gate b{font-size:clamp(22px,6.4vw,30px);font-weight:900;line-height:1.15;text-shadow:0 2px 10px rgba(0,0,0,.25)}
+.spk-gate span{max-width:300px;font-size:clamp(14px,4vw,17px);font-weight:700;line-height:1.35;opacity:.95;text-shadow:0 1px 6px rgba(0,0,0,.2)}
 .spk-gate .sgx{position:absolute;left:12px;top:max(12px,env(safe-area-inset-top));width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.25);color:#fff;font-size:22px;font-weight:900;display:flex;align-items:center;justify-content:center;text-decoration:none}
-.spk-gate .sgs{background:none;border:0;color:#fff;text-decoration:underline;font:inherit;font-weight:700;cursor:pointer;padding:10px}
-@media (prefers-reduced-motion:reduce){.spk-gate .sgb{animation:none}}
+.spk-gate .sgs{margin-top:clamp(10px,3dvh,26px);width:52px;height:52px;border-radius:50%;border:2px solid rgba(255,255,255,.7);background:rgba(255,255,255,.16);font-size:22px;line-height:1;cursor:pointer}
+@keyframes sgf{50%{transform:translateY(-6px)}}@keyframes sgr{from{transform:scale(1);opacity:.8}to{transform:scale(1.7);opacity:0}}
+@media (max-height:430px) and (min-aspect-ratio:11/10){.spk-gate{flex-direction:row;flex-wrap:wrap;gap:8px 20px}.spk-gate .sgm{width:110px}.spk-gate .sgw{width:110px}.spk-gate .sgs{margin-top:0}}
+@media (prefers-reduced-motion:reduce){.spk-gate .sgm,.spk-gate .sgw::before,.spk-gate .sgw::after{animation:none}}
 @keyframes vh{50%{transform:scale(1.04)}}@media (prefers-reduced-motion:reduce){.vhint{animation:none}}
 .stage{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;border-radius:26px;background:color-mix(in srgb,var(--panel) 80%,transparent);border:1px solid var(--line);padding:10px;overflow:hidden;text-align:center}
 .art{font-size:clamp(40px,13vw,72px);line-height:1.25;white-space:pre-line;font-weight:900}
@@ -111,7 +119,7 @@ button.it:active{transform:scale(.92)}
   <div class="stage" id="stage"></div>
 </main>
 <div class="foot"><button class="bk" id="bk" type="button" aria-label="Màn trước">◀</button><button class="nx" id="nx" type="button">Tiếp ▶</button></div>
-<div class="spk-gate" id="spkGate" role="dialog" aria-label="Bật loa"><a class="sgx" id="sgBack" href="index.html" aria-label="Quay lại">←</a><button class="sgb" id="sgOn" type="button" aria-label="Bật loa">🔊</button><b>Chạm vào loa để bật tiếng</b><span>Bạn linh vật sẽ đọc bài cho bé nghe</span><button class="sgs" id="sgOff" type="button">Học không cần tiếng</button></div>
+<div class="spk-gate" id="spkGate" role="dialog" aria-label="Bật loa"><a class="sgx" id="sgBack" href="index.html" aria-label="Quay lại">←</a><img class="sgm" id="sgMi" alt=""><div class="sgw"><button class="sgb" id="sgOn" type="button" aria-label="Bật loa">🔊</button></div><button class="sgs" id="sgOff" type="button" aria-label="Học không cần tiếng">🔇</button></div>
 <script src="../slot.js"></script>
 <script src="../content/curriculum.js"></script>
 <script src="../content/bank.js"></script>
@@ -146,16 +154,16 @@ function say(t){
   if(!window.Voice) return;
   Voice.say(strip(t),subj,"vi",{profile:"lesson",fail:why=>{ const h=$("vhint"); if(!h) return; if(why==="novoice"){ if(noVoiceShown) return; noVoiceShown=true; h.hidden=false; h.textContent="🔇 Máy chưa có giọng đọc tiếng Việt. Nhờ ba mẹ bật giọng đọc trong Cài đặt của máy nhé."; } else if(!touched){ h.hidden=false; } }});
 }
-function firstTouch(){ if(touched) return; touched=true; const h=$("vhint"); if(h&&!noVoiceShown) h.hidden=true; if(AUTO&&curText) say(curText); }
+function firstTouch(){ if(touched) return; touched=true; const h=$("vhint"); if(h&&!noVoiceShown) h.hidden=true; if(AUTO&&curText&&$("spkGate").hidden) say(curText); }   /* màn bật loa đang mở thì để nút loa tự đọc, tránh đọc hai lần */
 ["pointerdown","keydown","touchstart"].forEach(ev=>addEventListener(ev,firstTouch,{passive:true,once:false}));
 function sayEn(t){ if(window.Voice) Voice.say(t,"tanh","en",{profile:"lesson",fail:()=>{}}); }
 let AUTO=ls("learn:auto")!=="0";   /* bài học: mặc định TỰ ĐỌC (bé lớp 1 chưa đọc thạo); bé tắt được bằng nút 🔊 */
 function sndUi(){$("snd").textContent=AUTO?"🔊":"🔇";$("snd").setAttribute("aria-pressed",String(AUTO))}
 
 /* MÀN BẬT LOA toàn màn hình trước khi vào bài: cú chạm này mở khóa âm thanh của trình duyệt (iPhone/Safari chỉ cho đọc sau một cú chạm) */
-(function(){const g=$("spkGate"); $("sgBack").href=back;
+(function(){const g=$("spkGate"); $("sgBack").href=back; $("sgMi").src=art("happy");
   const close=()=>{g.hidden=true};
-  $("sgOn").onclick=()=>{AUTO=true;ls("learn:auto","1");sndUi();close();firstTouch();if(curText)say(curText)};
+  $("sgOn").onclick=()=>{AUTO=true;ls("learn:auto","1");sndUi();close();touched=true;const h=$("vhint");if(h&&!noVoiceShown)h.hidden=true;if(curText)say(curText)};
   $("sgOff").onclick=()=>{AUTO=false;ls("learn:auto","0");sndUi();close();touched=true;const h=$("vhint");if(h)h.hidden=true};
   if(!window.Voice) close();
 })();
