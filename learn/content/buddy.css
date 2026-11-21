@@ -21,3 +21,18 @@
 @keyframes bdjump{0%{transform:translateY(0)}30%{transform:translateY(calc(var(--bs)*-.28)) rotate(-6deg)}60%{transform:translateY(0) rotate(5deg)}100%{transform:none}}
 @keyframes bdsad{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 @media (prefers-reduced-motion:reduce){.bd-eye,.bd.talk .bd-mouth,.bd.jump,.bd.sad{animation:none}}
+
+/* BẠN = CHÍNH HÌNH CHỮ/SỐ làm thân quái vật (như game Vẽ Chữ Thành Quái Vật): learn/buddy.js vẽ hình chữ tô dày + viền ra ảnh, tự tìm chỗ nét to nhất để đặt mắt/miệng, gắn tay chân vào mép chữ.
+   Chưa vẽ xong (font chưa tải) thì giữ kiểu khối cũ ở trên. Các biến --img/--ex/--ey... được buddy.js ghi vào <style id="bd-mon-css"> cho từng ký tự. */
+.bd.mon .bd-body{left:0;right:0;top:0;bottom:0;border-radius:0;background:var(--img) center/100% 100% no-repeat;box-shadow:none}
+.bd.mon .bd-gl{display:none}
+.bd.mon .bd-eyes{left:calc(var(--ex)*100%);top:calc(var(--ey)*100%);right:auto;transform:translate(-50%,-50%);gap:calc(var(--bs)*var(--esp))}
+.bd.mon .bd-eye{width:calc(var(--bs)*var(--ew));height:calc(var(--bs)*var(--eh))}
+.bd.mon .bd-eye:nth-child(2){display:var(--e2,block)}
+.bd.mon .bd-mouth{left:calc(var(--mx)*100%);top:calc(var(--my)*100%);bottom:auto;width:calc(var(--bs)*var(--mw));margin-left:calc(var(--bs)*var(--mw)*-.5);height:calc(var(--bs)*var(--mw)*.46);display:var(--mv,block)}
+.bd.mon.hungry .bd-mouth{height:calc(var(--bs)*var(--mw)*.8);width:calc(var(--bs)*var(--mw)*.85);margin-left:calc(var(--bs)*var(--mw)*-.425)}
+.bd.mon.happy .bd-mouth,.bd.mon.talk .bd-mouth{width:calc(var(--bs)*var(--mw)*1.2);margin-left:calc(var(--bs)*var(--mw)*-.6)}
+.bd.mon .bd-hand{width:calc(var(--bs)*.17);height:calc(var(--bs)*.17);transform:translate(-50%,-50%);box-shadow:0 0 0 calc(var(--bs)*.02) rgba(27,19,64,.55)}
+.bd.mon .bd-hand.l{left:calc(var(--hlx)*100%);top:calc(var(--hly)*100%)}.bd.mon .bd-hand.r{left:calc(var(--hrx)*100%);right:auto;top:calc(var(--hry)*100%)}
+.bd.mon .bd-foot{bottom:auto;width:calc(var(--bs)*.24);height:calc(var(--bs)*.13);transform:translate(-50%,-55%);box-shadow:0 0 0 calc(var(--bs)*.02) rgba(27,19,64,.55)}
+.bd.mon .bd-foot.l{left:calc(var(--flx)*100%);top:calc(var(--fly)*100%)}.bd.mon .bd-foot.r{left:calc(var(--frx)*100%);right:auto;top:calc(var(--fry)*100%)}

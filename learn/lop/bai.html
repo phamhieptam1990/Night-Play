@@ -51,6 +51,9 @@ main{position:relative;z-index:1;flex:1;min-height:0;display:flex;flex-direction
 @keyframes sgf{50%{transform:translateY(-6px)}}@keyframes sgr{from{transform:scale(1);opacity:.8}to{transform:scale(1.7);opacity:0}}
 @media (max-height:430px) and (min-aspect-ratio:11/10){.spk-gate{flex-direction:row;flex-wrap:wrap;gap:8px 20px}.spk-gate .sgm{width:110px}.spk-gate .sgw{width:110px}.spk-gate .sgs{margin-top:0}}
 @media (prefers-reduced-motion:reduce){.spk-gate .sgm,.spk-gate .sgw::before,.spk-gate .sgw::after{animation:none}}
+.meet{position:relative}.newbd{position:absolute;left:6px;top:0;z-index:5;display:flex;align-items:center;gap:6px;min-height:44px;padding:0 16px;border-radius:99px;font-weight:900;font-size:20px;text-decoration:none;color:#4a2c00;background:linear-gradient(135deg,#FFE08A,#FFB020);border:2px solid #E59A00;box-shadow:0 8px 20px rgba(0,0,0,.35);animation:nbin .5s cubic-bezier(.2,.9,.3,1.3)}
+.newbd b{font-size:22px}.newbd.out{opacity:0;transform:translateY(-10px);transition:.45s}
+@keyframes nbin{from{opacity:0;transform:translateY(14px) scale(.7)}}@media (prefers-reduced-motion:reduce){.newbd{animation:none}}
 @keyframes vh{50%{transform:scale(1.04)}}@media (prefers-reduced-motion:reduce){.vhint{animation:none}}
 .stage{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;border-radius:26px;background:color-mix(in srgb,var(--panel) 80%,transparent);border:1px solid var(--line);padding:10px;overflow:hidden;text-align:center}
 .art{font-size:clamp(40px,13vw,72px);line-height:1.25;white-space:pre-line;font-weight:900}
@@ -130,6 +133,7 @@ button.it:active{transform:scale(.92)}
 <script src="../content/lessons/index.js"></script>
 <script src="../content/buddies.js"></script>
 <script src="../buddy.js"></script>
+<script src="../album.js"></script>
 <script src="../voice.js"></script>
 <script>
 (function(){
@@ -186,7 +190,7 @@ function build(){
 }
 function dots(){[...$("dots").children].forEach((e,i)=>{e.className=(i<=idx?"on":"")+(i===idx?" cur":"")})}
 function setNext(en,label){const n=$("nx");n.disabled=!en;n.textContent=label||COPY.next}
-function speakIn(t){curText=t;$("bub").textContent=t;if(AUTO&&touched)say(t)}
+function speakIn(t,sp){sp=sp||t;curText=sp;$("bub").textContent=t;if(AUTO&&touched)say(sp)}   /* sp: lời đọc nếu khác chữ trong bong bóng (màn "Bé nhớ nhé" đọc cả các ý) */
 function show(i){
   idx=Math.max(0,Math.min(steps.length-1,i)); const st=steps[idx], stage=$("stage"); stage.innerHTML=""; stage.classList.remove("pop"); void stage.offsetWidth; stage.classList.add("pop");
   dots(); $("bk").disabled=idx===0; mood("grade");
@@ -196,7 +200,7 @@ function show(i){
   if(isTry){const c=document.createElement("div");c.className="chip";c.textContent=COPY.tchip;stage.appendChild(c)}
   setNext(false,nextLabel);
   if(isTry) return quiz(stage,{t:s.q,opts:s.opts,ok:s.ok,yes:s.yes,no:s.hint,hint:s.hint,art:s.art,optlang:s.optlang,final:true},nextLabel);
-  speakIn(s.t);
+  speakIn(s.t, s.k==="sum"&&s.pts?[s.t].concat(s.pts).join(". "):null);
   if(s.k==="say"){ artOf(stage,s); setNext(true,nextLabel); }
   else if(s.k==="sum"){ const u=document.createElement("ul");u.className="pts";s.pts.forEach(p=>{const l=document.createElement("li");l.textContent=p;u.appendChild(l)});stage.appendChild(u); setNext(true,nextLabel); }
   else if(s.k==="tapcount") tapcount(stage,s,nextLabel);
@@ -250,13 +254,18 @@ function quiz(stage,s,nl){
 function ding(kind){ try{ const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return; const c=ding.c||(ding.c=new AC()); const t=c.currentTime, notes=kind==="ok"?[660,880,1100]:kind==="pop"?[520,780]:kind==="no"?[200]:[880]; notes.forEach((f,i)=>{const o=c.createOscillator(),g=c.createGain();o.type="sine";o.frequency.value=f;g.gain.setValueAtTime(.0001,t+i*.08);g.gain.exponentialRampToValueAtTime(.16,t+i*.08+.02);g.gain.exponentialRampToValueAtTime(.0001,t+i*.08+.2);o.connect(g);g.connect(c.destination);o.start(t+i*.08);o.stop(t+i*.08+.22)}); }catch(e){} }
 function sparks(host,n){ const E=["⭐","✨","🌟"]; for(let i=0;i<(n||8);i++){const e=document.createElement("span");e.className="spark";e.textContent=E[i%3];e.style.left=(30+Math.random()*40)+"%";e.style.top=(30+Math.random()*30)+"%";e.style.setProperty("--dx",(Math.random()*160-80)+"px");e.style.setProperty("--dy",(-40-Math.random()*90)+"px");host.appendChild(e);setTimeout(()=>e.remove(),950)} }
 const NUMW={"0":"không","1":"một","2":"hai","3":"ba","4":"bốn","5":"năm","6":"sáu","7":"bảy","8":"tám","9":"chín","10":"mười"};
+/* Bé chào bạn MỚI lần đầu: dải "📖 vào bộ sưu tập" bay lên (không chặn chạm, tự tắt) */
+function newBuddy(stage,d){
+  const t=document.createElement("a");t.className="newbd";t.href="../album/index.html?from=lop";t.setAttribute("aria-label","Bộ sưu tập: "+d.name+" mới");
+  t.innerHTML="<b>📖</b><span>+1</span>";(stage.querySelector(".meet")||stage).appendChild(t);setTimeout(()=>{t.classList.add("out");setTimeout(()=>t.remove(),500)},3200);
+}
 function meet(stage,s,nl){
   const BD=window.LearnBuddy,d=BD.get(s.sym); const w=document.createElement("div");w.className="meet";
   w.innerHTML=BD.html(s.sym,{size:Math.min(190,innerWidth*.46)})+'<div class="mname">'+esc(d.name)+'</div><p class="mrhyme">'+esc(d.rhyme)+'</p>';
   stage.appendChild(w); const b=w.querySelector(".bd");
   if(/^\d+$/.test(s.sym)&&+s.sym>0){const r=document.createElement("div");r.className="objrow";r.textContent=d.obj.repeat(Math.min(+s.sym,10));w.appendChild(r)}
   speakIn(s.t); setNext(false,nl); let tapped=false;
-  const hi=()=>{BD.talk(b,2400);BD.jump(b);ding("ok");sparks(stage,6);say(d.say+". "+d.rhyme);mood("happy");if(!tapped){tapped=true;setNext(true,nl)}};
+  const hi=()=>{BD.talk(b,2400);BD.jump(b);ding("ok");sparks(stage,6);say(d.say+". "+d.rhyme);mood("happy");if(window.Album&&Album.add(s.sym))newBuddy(stage,d);if(!tapped){tapped=true;setNext(true,nl)}};
   b.setAttribute("role","button");b.tabIndex=0;b.setAttribute("aria-label",d.name);b.onclick=hi;b.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();hi()}};
   setTimeout(()=>{if(!tapped)setNext(true,nl)},7000);
 }
@@ -324,6 +333,7 @@ function endScreen(stage){
   const a=document.createElement("div");a.className="art";a.textContent="🎉";stage.appendChild(a);
   if(rw.first){const g=document.createElement("a");g.className="go2";g.style.textDecoration="none";g.href="../garden/index.html?"+new URLSearchParams({grade,subj}).toString();g.textContent="🎁 +3 nhiệm vụ · 🌱 +2 hạt: Vào vườn";stage.appendChild(g)}
   else {const t=document.createElement("div");t.className="note";t.style.cssText="font-weight:800;opacity:.8";t.textContent="Bài này bé đã nhận phần thưởng rồi.";stage.appendChild(t)}
+  if(window.Album){const al=document.createElement("a");al.className="go2";al.style.cssText="text-decoration:none;background:linear-gradient(135deg,#8B5CFF,#5B3FD1)";al.href="../album/index.html?from=lop";al.textContent="📖 Bộ sưu tập "+Album.count()+"/"+Album.total();stage.appendChild(al)}
   const r=document.createElement("button");r.type="button";r.className="go2";r.style.background="var(--panel)";r.style.color="var(--ink)";r.style.border="2px solid var(--line)";r.textContent=COPY.again;r.onclick=()=>show(0);stage.appendChild(r);
 }
 $("nx").onclick=()=>{

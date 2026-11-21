@@ -15,7 +15,7 @@
   var SLOTP = ["learn:farm@", "learn:garden@", "gardenFarm@", "gardenTrees@", "gardenSeen@", "gardenHelp@", "gardenAnimals@", "gardenGift@", "gardenDaily@", "gardenLv@", "gardenName@", "gardenQuest@"];
   function okKey(k) {
     if (SLOTP.some(function (p) { return k.indexOf(p) === 0 && /^[1-5]:(toan|tviet|tanh)$/.test(k.slice(p.length)); })) return true;
-    if (/^learn:pf:[A-Za-z0-9_-]{1,16}:lp:[1-5]:(toan|tviet|tanh)$/.test(k)) return true; return KEYS.indexOf(k) >= 0 || PREFIX.some(function (p) { return k.indexOf(p) === 0 && /^[a-z0-9_]+$/.test(k.slice(p.length)) && k.length <= 24; }); }
+    if (/^learn:pf:[A-Za-z0-9_-]{1,16}:lp:[1-5]:(toan|tviet|tanh)$/.test(k)) return true; if (/^learn:pf:[A-Za-z0-9_-]{1,16}:album$/.test(k)) return true; return KEYS.indexOf(k) >= 0 || PREFIX.some(function (p) { return k.indexOf(p) === 0 && /^[a-z0-9_]+$/.test(k.slice(p.length)) && k.length <= 24; }); }
   function ls() { try { return root.localStorage; } catch (e) { return null; } }
   function allKeys(st) { var out = []; for (var i = 0; i < st.length; i++) { var k = st.key(i); if (k && okKey(k)) out.push(k); } return out; }
   function two(n) { return (n < 10 ? "0" : "") + n; }
