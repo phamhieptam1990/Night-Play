@@ -88,19 +88,24 @@
   var VI_ASCII = {};
   "an anh ba ban bay bo ca cam can cay chi cho co con cua cung da dan dang de di do em gia hay in kem len ma mo me minh mua nam nam nay nha nho nhu nhung ong qua ra rat sau so ta tay tam tao thay thi to tu tui va vao vui xa xin xem ai bai bang bon cac cai chang day den gap hai hon khi lai moi muon nao nua phai roi sang them tren tung ve voi vua"
     .split(" ").forEach(function (w) { VI_ASCII[w] = 1; });
-  function splitMix(text) {
+  var ENG = {};
+  ("a all aloud and at basket belong biggest build by capital card cards count different divided dot drag each end equals even false find first flip full gap in into is it left letter letters listen make match matching minus number numbers on one or order pair pick pictures plus put read right smallest stop tap the then this three time times to together true two what which with word words write " +
+   "starts start begin begins blank fill missing correct wrong sentence sentences about of how many does do you see choose select complete picture sound sounds rhymes spell spelling tone mark marks type say name animal animals fruit fruits car cat dog bird fish apple").split(" ").forEach(function (w) { ENG[w] = 1; });
+  "xe meo ga heo chim vit ngua cua ca ba me bo co con an em".split(" ").forEach(function (w) { VI_ASCII[w] = 1; });
+  function splitMix(text, base) {
     var toks = [], segs = [];
     (String(text).match(/\S+/g) || []).forEach(function (tk) {
       var core = tk.replace(/^[^A-Za-z\u00C0-\u1EF9\d]+|[^A-Za-z\u00C0-\u1EF9\d]+$/g, ""), l;
       if (!core || /^\d+$/.test(core)) l = "n";   /* dấu câu / số: đi theo đoạn bên cạnh */
       else if (!/^[A-Za-z]+(?:['\u2019\-][A-Za-z]+)*$/.test(core)) l = "vi";
+      else if (base === "en") l = ENG[core.toLowerCase()] ? "en" : VI_ASCII[core.toLowerCase()] ? "vi" : "?";   /* câu nền tiếng Anh: từ không dấu lạ thì Anh, trừ khi kề từ Việt */
       else l = VI_ASCII[core.toLowerCase()] ? "?" : "en";
       toks.push({ t: tk, l: l });
     });
     /* từ không dấu có thể là Việt hoặc Anh ("do", "can", "xin"): là Anh khi KHÔNG kề từ Việt nào và kề một từ Anh; còn lại là Việt */
     var real = toks.filter(function (x) { return x.l !== "n"; });
     real.forEach(function (x, i) { if (x.l === "?") { var p = real[i - 1], n = real[i + 1], nb = [p, /[.?!,:;]$/.test(x.t) ? null : n].filter(Boolean).map(function (y) { return y.l; });
-      x.r = nb.indexOf("vi") < 0 && nb.indexOf("en") >= 0 ? "en" : "vi"; } });
+      x.r = base === "en" ? (nb.indexOf("vi") < 0 ? "en" : "vi") : (nb.indexOf("vi") < 0 && nb.indexOf("en") >= 0 ? "en" : "vi"); } });
     real.forEach(function (x) { if (x.l === "?") x.l = x.r; });
     var cur = null;
     toks.forEach(function (x) {
@@ -112,8 +117,8 @@
   }
   function sayMix(text, who, lang, opt) {
     text = String(text || "").trim(); if (!text) return;
-    var segs = lang === "vi" ? splitMix(text) : [];
-    if (segs.length < 2 || segs.every(function (x) { return x.l === segs[0].l; })) return say(text, who, segs.length && segs[0].l === "en" ? "en" : lang, opt);
+    var segs = splitMix(text, lang === "en" ? "en" : "vi");
+    if (segs.length < 2 || segs.every(function (x) { return x.l === segs[0].l; })) return say(text, who, segs.length ? segs[0].l : lang, opt);
     var id = ++mixId, i = 0; opt = opt || {};
     (function next() {
       if (id !== mixId || i >= segs.length) { if (id === mixId && opt.done) opt.done(true); return; }
