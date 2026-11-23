@@ -31,9 +31,9 @@
   ];
   /* chính tả phụ âm đầu có hình minh hoạ (hình chỉ khớp đúng MỘT từ); nhóm: sx, dgr, ln */
   D.initWords = {
-    sx: { s: [["⭐", "sao"], ["🦁", "sư tử"], ["📖", "sách"], ["🥛", "sữa"], ["🌊", "sóng"], ["🪷", "sen"], ["🐚", "sò"]], x: [["🚗", "xe"], ["🥭", "xoài"], ["🦴", "xương"], ["🪣", "xô"], ["🛶", "xuồng"], ["🌭", "xúc xích"]], extra: ["ch", "tr"] },
-    dgr: { d: [["🍉", "dưa hấu"], ["🍓", "dâu"], ["🦗", "dế"], ["🔪", "dao"], ["☂️", "dù"], ["🐐", "dê"], ["🩴", "dép"]], gi: [["👟", "giày"], ["🛏️", "giường"], ["💨", "gió"], ["🧺", "giỏ"], ["📄", "giấy"]], r: [["🥬", "rau"], ["🐢", "rùa"], ["🐍", "rắn"], ["🐉", "rồng"], ["🦷", "răng"], ["🪰", "ruồi"]], extra: ["g", "gh"] },
-    ln: { l: [["🍃", "lá"], ["🔥", "lửa"], ["🌾", "lúa"], ["👅", "lưỡi"], ["🍐", "lê"]], n: [["💧", "nước"], ["🕯️", "nến"], ["🎀", "nơ"], ["🍄", "nấm"]], extra: ["nh", "ng"] }
+    sx: { s: [["⭐", "sao"], ["🦁", "sư tử"], ["📖", "sách"], ["🥛", "sữa"], ["🌊", "sóng"], ["🪷", "sen"], ["🐚", "sò"], ["🐛", "sâu"]], x: [["🚗", "xe"], ["🚂", "xe lửa"],["🥭", "xoài"], ["🦴", "xương"], ["🪣", "xô"], ["🛶", "xuồng"], ["🌭", "xúc xích"]], extra: ["ch", "tr"] },
+    dgr: { d: [["🍉", "dưa hấu"], ["🍓", "dâu"], ["🦗", "dế"], ["🔪", "dao"], ["☂️", "dù"], ["🐐", "dê"], ["🩴", "dép"], ["🦇", "dơi"]], gi: [["👟", "giày"], ["🛏️", "giường"], ["💨", "gió"], ["🧺", "giỏ"], ["📄", "giấy"]], r: [["🥬", "rau"], ["🐢", "rùa"], ["🐍", "rắn"], ["🐉", "rồng"], ["🦷", "răng"], ["🪰", "ruồi"], ["🌲", "rừng"]], extra: ["g", "gh"] },
+    ln: { l: [["🍃", "lá"], ["🔥", "lửa"], ["🌾", "lúa"], ["👅", "lưỡi"], ["🍐", "lê"], ["🏮", "lồng đèn"], ["🐷", "lợn"]], n: [["💧", "nước"], ["🕯️", "nến"], ["🎀", "nơ"], ["🍄", "nấm"], ["👒", "nón"], ["🍲", "nồi"]], extra: ["nh", "ng"] }
   };
   D.things = ["bàn", "ghế", "sách", "mèo", "hoa", "trường", "bút", "mẹ", "sông", "trăng", "nhà", "cây", "xe", "cặp", "thước"];
   D.actions = ["chạy", "nhảy", "đọc", "viết", "hát", "ăn", "ngủ", "bơi", "vẽ", "múa", "khóc", "cười", "học", "đi"];
@@ -104,7 +104,15 @@
     { g: [4], t: "Sông Hồng chảy qua Hà Nội. Nước sông mùa lũ đỏ phù sa, mùa cạn thì trong hơn.", q: "Nước sông mùa lũ đỏ vì có gì?", a: "phù sa", d: ["rác thải", "hoa đỏ", "sơn đỏ"] },
     { g: [4], t: "Chú ong thợ làm việc suốt ngày. Chú bay đi tìm mật hoa rồi mang về tổ để làm mật ong.", q: "Ong thợ mang gì về tổ?", a: "mật hoa", d: ["lá cây", "nước mưa", "hạt thóc"] },
     { g: [5], t: "Biển Việt Nam dài hơn ba nghìn cây số. Nhiều bãi biển đẹp thu hút khách du lịch mỗi năm.", q: "Điều gì thu hút khách du lịch?", a: "bãi biển đẹp", d: ["núi cao", "sa mạc", "tuyết trắng"] },
-    { g: [5], t: "Nhờ chăm chỉ luyện tập, Minh đã đạt giải nhất cuộc thi chạy của trường. Minh nói đó là kết quả của nhiều buổi tập sáng sớm.", q: "Minh đạt giải nhờ điều gì?", a: "chăm chỉ luyện tập", d: ["may mắn", "đi học muộn", "nghỉ ngơi nhiều"] }
+    { g: [5], t: "Nhờ chăm chỉ luyện tập, Minh đã đạt giải nhất cuộc thi chạy của trường. Minh nói đó là kết quả của nhiều buổi tập sáng sớm.", q: "Minh đạt giải nhờ điều gì?", a: "chăm chỉ luyện tập", d: ["may mắn", "đi học muộn", "nghỉ ngơi nhiều"] },
+    {g: [1], t: "Nhà em có một cái ao. Trong ao có nhiều cá.", q: "Trong ao có gì?", a: "cá", d: ["tôm","ếch","vịt"]},
+    {g: [1,2], t: "Chiều nay em giúp mẹ quét nhà. Mẹ khen em ngoan.", q: "Mẹ khen em thế nào?", a: "ngoan", d: ["lười","nhanh","giỏi"]},
+    {g: [2,3], t: "Mùa xuân, hoa đào nở khắp nơi. Cả nhà em quây quần dọn dẹp để đón Tết.", q: "Mùa nào hoa đào nở?", a: "mùa xuân", d: ["mùa hạ","mùa thu","mùa đông"]},
+    {g: [3,4,5], t: "Con voi là loài vật to nhất trên cạn. Voi có chiếc vòi dài dùng để uống nước và lấy thức ăn.", q: "Voi dùng vòi để làm gì?", a: "uống nước", d: ["bay lên","đào hang","bắt cá"]},
+    {g: [3,4], t: "Cây xanh hấp thụ khí các-bô-níc và thải ra khí ô-xi. Nhờ vậy, không khí quanh ta trong lành hơn.", q: "Cây xanh thải ra khí gì?", a: "ô-xi", d: ["ni-tơ","hơi nước","khói bụi"]},
+    {g: [4,5], t: "Trái Đất quay quanh Mặt Trời một vòng hết một năm. Mặt Trăng quay quanh Trái Đất khoảng một tháng.", q: "Mặt Trăng quay quanh vật nào?", a: "Trái Đất", d: ["Mặt Trời","sao Hỏa","sao Kim"]},
+    {g: [4,5], t: "Hà Nội là thủ đô của nước ta. Ở đây có Hồ Gươm, Văn Miếu và nhiều phố cổ. Mỗi năm, hàng triệu khách đến thăm.", q: "Thủ đô của nước ta là gì?", a: "Hà Nội", d: ["Huế","Đà Nẵng","Hải Phòng"]},
+    {g: [5], t: "Sông Mê Công chảy qua nhiều nước rồi đổ ra biển Đông. Ở Việt Nam, sông có tên là sông Cửu Long.", q: "Sông Mê Công đổ ra đâu?", a: "biển Đông", d: ["biển Tây","vịnh Bắc Bộ","hồ Ba Bể"]}
   ];
   /* văn học: truyện ngắn + hỏi nhân vật / cảm xúc / thông điệp. Đáp án suy ra từ truyện, đáp án nhiễu mâu thuẫn với truyện */
   D.stories = [
@@ -124,7 +132,11 @@
     { g: [3, 4], t: "Hà quên làm bài tập nên rất lo lắng. Hà nói thật với cô giáo. Cô mỉm cười và cho Hà làm bù vào hôm sau.", q: "Hà đã làm điều gì đáng khen?", a: "nói thật với cô", d: ["nói dối cô", "chép bài bạn", "bỏ học"] },
     { g: [3, 4], t: "Hà quên làm bài tập nên rất lo lắng. Hà nói thật với cô giáo. Cô mỉm cười và cho Hà làm bù vào hôm sau.", q: "Câu chuyện khuyên điều gì?", a: "hãy luôn trung thực", d: ["đừng làm bài tập", "chép bài của bạn", "giấu lỗi của mình"] },
     { g: [4, 5], t: "Cậu bé Nam thấy một chiếc ví rơi trên đường. Nam không giữ lại mà đem đến đồn công an. Người mất ví rất biết ơn Nam.", q: "Nam đã làm gì với chiếc ví?", a: "đem đến đồn công an", d: ["giữ lại cho mình", "vứt đi", "đưa cho bạn"] },
-    { g: [4, 5], t: "Cậu bé Nam thấy một chiếc ví rơi trên đường. Nam không giữ lại mà đem đến đồn công an. Người mất ví rất biết ơn Nam.", q: "Nam là người như thế nào?", a: "trung thực", d: ["tham lam", "lười biếng", "nhút nhát"] }
+    { g: [4, 5], t: "Cậu bé Nam thấy một chiếc ví rơi trên đường. Nam không giữ lại mà đem đến đồn công an. Người mất ví rất biết ơn Nam.", q: "Nam là người như thế nào?", a: "trung thực", d: ["tham lam", "lười biếng", "nhút nhát"] },
+    {g: [3,4,5], t: "Sáng nay trời đen kịt, gió nổi mạnh. Mẹ vội thu quần áo phơi ngoài sân vào nhà.", q: "Vì sao mẹ vội thu quần áo?", a: "trời sắp mưa", d: ["trời sắp nắng","nhà có khách","đến giờ ăn cơm"]},
+    {g: [4,5], t: "Nam hứa sẽ về sớm giúp bà tưới rau. Nhưng chiều đó Nam mải đá bóng nên quên mất. Tối về, thấy luống rau héo, Nam rất áy náy.", q: "Nam cảm thấy thế nào khi thấy rau héo?", a: "áy náy", d: ["tự hào","hờ hững","vui sướng"]},
+    {g: [1,2,3], t: "Bài thơ: Bé có đôi bàn tay / Rửa sạch trước khi ăn / Bé ngoan, bé khỏe mạnh / Cả nhà đều vui lắm.", q: "Bé rửa gì trước khi ăn?", a: "đôi bàn tay", d: ["đôi chân","khuôn mặt","bát đũa"]},
+    {g: [3,4,5], t: "Bài thơ: Mặt trời dậy từ sớm / Gọi bé thức dậy chơi / Hoa cười, chim hót vang / Ngày mới tới rồi thôi.", q: "Mặt trời gọi bé làm gì?", a: "thức dậy", d: ["đi ngủ","ăn cơm","làm bài"]}
   ];
   /* sắp xếp câu thành đoạn: các câu ĐÚNG THỨ TỰ (có từ nối hoặc trình tự thời gian rõ) */
   D.paragraphs = [
@@ -153,9 +165,11 @@
     transport: [["🚗", "car"], ["🚌", "bus"], ["🚲", "bike"], ["✈️", "plane"], ["🚢", "ship"], ["🚂", "train"], ["🏍️", "motorbike"], ["🚁", "helicopter"]],
     animals: [["🐱", "cat"], ["🐶", "dog"], ["🐟", "fish"], ["🐦", "bird"], ["🐘", "elephant"], ["🐒", "monkey"], ["🐴", "horse"], ["🐮", "cow"]],
     nature: [["🌳", "tree"], ["🌸", "flower"], ["🌙", "moon"], ["⭐", "star"], ["🌈", "rainbow"], ["⛰️", "mountain"]],
-    house: [["🛏️", "bed"], ["🪑", "chair"], ["🚪", "door"], ["🪟", "window"], ["🔑", "key"], ["🕒", "clock"]]
+    house: [["🛏️", "bed"], ["🪑", "chair"], ["🚪", "door"], ["🪟", "window"], ["🔑", "key"], ["🕒", "clock"]],
+    family: [["👶", "baby"], ["👵", "grandmother"], ["👴", "grandfather"], ["👦", "boy"], ["👧", "girl"], ["👪", "family"]],
+    toys: [["⚽", "ball"], ["🧸", "teddy bear"], ["🪁", "kite"], ["🎈", "balloon"], ["🤖", "robot"], ["🎮", "game"]]
   };
-  D.meanings = [["cook", "đầu bếp"], ["nurse", "y tá"], ["library", "thư viện"], ["market", "chợ"], ["hospital", "bệnh viện"], ["garden", "vườn"], ["father", "bố"], ["mother", "mẹ"], ["grandmother", "bà"], ["grandfather", "ông"], ["teacher", "giáo viên"], ["student", "học sinh"], ["friend", "bạn"], ["school", "trường học"], ["doctor", "bác sĩ"], ["farmer", "nông dân"]];
+  D.meanings = [["cook", "đầu bếp"], ["nurse", "y tá"], ["library", "thư viện"], ["market", "chợ"], ["hospital", "bệnh viện"], ["garden", "vườn"], ["father", "bố"], ["mother", "mẹ"], ["grandmother", "bà"], ["grandfather", "ông"], ["teacher", "giáo viên"], ["student", "học sinh"], ["friend", "bạn"], ["school", "trường học"], ["doctor", "bác sĩ"], ["farmer", "nông dân"], ["run", "chạy"], ["jump", "nhảy"], ["swim", "bơi"], ["sing", "hát"], ["draw", "vẽ"], ["sleep", "ngủ"], ["read", "đọc"], ["write", "viết"]];
   D.aWords = ["cat", "dog", "book", "pen", "bag", "table", "bike", "ruler", "car", "tree", "fish", "hat", "pencil", "school", "chair", "bed", "window", "door", "key", "house", "moon"];
   D.anWords = ["apple", "egg", "orange", "umbrella", "elephant", "ice cream", "ant", "owl", "eraser", "arm", "eye", "ear", "onion", "uncle", "island"];
   D.plurals = ["cat", "dog", "book", "bus", "box", "watch", "dish", "baby", "city", "child", "man", "woman", "foot", "tooth", "mouse", "pen", "bag", "class", "fox", "boy", "toy", "day", "bird", "flower", "star", "kiss", "bench", "wish", "puppy", "key", "house"];
@@ -194,7 +208,13 @@
     { g: [4], t: "Linh gets up at six. She washes her face and brushes her teeth. Then she has breakfast.", q: "What does Linh do after she brushes her teeth?", a: "has breakfast", d: ["goes to school", "plays games", "watches TV"] },
     { g: [5], t: "My town has a big park. In the park, there is a lake and many trees. Children like to play there after school.", q: "When do children play in the park?", a: "after school", d: ["in the morning", "at night", "on Sunday"] },
     { g: [5], t: "Tom's favourite subject is Science. He likes doing experiments. He wants to be a scientist.", q: "What does Tom want to be?", a: "a scientist", d: ["a teacher", "a doctor", "a farmer"] },
-    { g: [5], t: "Last Saturday, Mai visited her grandmother. They cooked dinner together and watched a film.", q: "Who did Mai visit?", a: "her grandmother", d: ["her friend", "her teacher", "her aunt"] }
+    { g: [5], t: "Last Saturday, Mai visited her grandmother. They cooked dinner together and watched a film.", q: "Who did Mai visit?", a: "her grandmother", d: ["her friend", "her teacher", "her aunt"] },
+    {g: [3], t: "I have a ball. The ball is red. I play with my brother.", q: "What colour is the ball?", a: "red", d: ["blue","green","yellow"]},
+    {g: [3,4], t: "It is Monday. Nam goes to school by bike. He has Maths and English today.", q: "How does Nam go to school?", a: "by bike", d: ["by bus","on foot","by car"]},
+    {g: [4,5], t: "My family is small. There are four people: my father, my mother, my sister and me. We live in a big house in Hue.", q: "Where do they live?", a: "in Hue", d: ["in Hanoi","in Da Nang","in Hai Phong"]},
+    {g: [4,5], t: "Linh wants to be a doctor. She studies hard and helps her friends. Every Saturday, she visits the hospital with her mother.", q: "What does Linh want to be?", a: "a doctor", d: ["a teacher","a singer","a cook"]},
+    {g: [5], t: "Last Sunday, we visited my grandmother. She cooked fish soup for us. After lunch, we played chess in the garden.", q: "What did the grandmother cook?", a: "fish soup", d: ["chicken soup","fried rice","noodles"]},
+    {g: [5], t: "The weather in Da Lat is cool all year. Many tourists go there in December because the flowers are beautiful.", q: "How is the weather in Da Lat?", a: "cool", d: ["hot","cold","rainy"]}
   ];
 
   /* ====================== luật (độc lập với bài kiểm) ====================== */
@@ -303,7 +323,7 @@
       return lis(fin(LBTN + "<br>" + (vi(cc) ? "Nghe rồi chọn hình đúng" : "Listen and pick the picture"), it[0], W(wr, "word")), it[1], "vi", true);
     };
     G.en_listen_word = function (cc) {
-      var th = pk(cc.grade <= 2 ? ["body", "food", "animals"] : Object.keys(D.themes)), it = pk(D.themes[th]), near = D.themes[th].filter(function (x) { return x !== it; }).map(function (x) { return x[0]; });
+      var th = pk(cc.grade <= 2 ? ["body", "food", "animals", "family", "toys"] : Object.keys(D.themes)), it = pk(D.themes[th]), near = D.themes[th].filter(function (x) { return x !== it; }).map(function (x) { return x[0]; });
       return lis(fin(LBTN + "<br>" + (vi(cc) ? "Nghe rồi chọn hình đúng" : "Listen and pick the picture"), it[0], W(near, "word")), it[1], "en", true);
     };
     G.en_listen_num = function (cc) {
@@ -327,7 +347,7 @@
       return fin((vi(cc) ? "Số " : "The number ") + em(n) + (vi(cc) ? " đọc là gì?" : " is…?"), ans, W(wr, "word"));
     };
     G.en_topic_vocab = function (cc) {
-      var ts = cc.grade <= 2 ? ["body", "food", "animals"] : cc.grade === 3 ? ["food", "clothes", "body", "school", "animals", "house"] : ["school", "weather", "transport", "clothes", "food", "nature", "house", "animals"], th = pk(ts), it = pk(D.themes[th]);
+      var ts = cc.grade <= 2 ? ["body", "food", "animals", "family", "toys"] : cc.grade === 3 ? ["food", "clothes", "body", "school", "animals", "house"] : ["school", "weather", "transport", "clothes", "food", "nature", "house", "animals"], th = pk(ts), it = pk(D.themes[th]);
       var wr = D.themes[th].filter(function (x) { return x !== it; }).map(function (x) { return x[1]; });
       Object.keys(D.themes).forEach(function (k) { if (k !== th) D.themes[k].forEach(function (x) { wr.push(x[1]); }); });
       var near = D.themes[th].filter(function (x) { return x !== it; }).map(function (x) { return x[1]; });
@@ -399,7 +419,7 @@
     T("reading_story", "tviet", [1, 2, 3, 4, 5], 2, { 1: "VI-G1-02", 2: "VI-G2-01", 3: "VI-G3-01", 4: "VI-G4-02", 5: "VI-G5-01" }, ["Đọc hiểu", "Reading"]);
     T("en_colors", "tanh", [1, 2], 1, { 1: "EN-G1-02", 2: "EN-G2-03" }, ["Màu sắc", "Colours"]);
     T("en_numbers", "tanh", [1, 2, 3], 1, { 1: "EN-G1-02", 2: "EN-G2-03", 3: "EN-G3-03" }, ["Số đếm", "Numbers"]);
-    T("en_topic_vocab", "tanh", [2, 3, 4, 5], 2, { 2: "EN-G2-03", 3: "EN-G3-03", 4: "EN-G4-03", 5: "EN-G5-03" }, ["Từ vựng", "Vocabulary"]);
+    T("en_topic_vocab", "tanh", [1, 2, 3, 4, 5], 2, { 1: "EN-G1-02", 2: "EN-G2-03", 3: "EN-G3-03", 4: "EN-G4-03", 5: "EN-G5-03" }, ["Từ vựng", "Vocabulary"]);
     T("en_meaning", "tanh", [3, 4, 5], 2, { 3: "EN-G3-03", 4: "EN-G4-03", 5: "EN-G5-03" }, ["Nghĩa của từ", "Meaning"]);
     T("en_a_an", "tanh", [3, 4], 2, { 3: "EN-G3-04", 4: "EN-G4-04" }, ["a hay an", "a or an"]);
     T("en_plural", "tanh", [3, 4, 5], 2, { 3: "EN-G3-04", 4: "EN-G4-04", 5: "EN-G5-04" }, ["Số nhiều", "Plurals"]);

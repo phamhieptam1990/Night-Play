@@ -9,16 +9,16 @@ Quy ước: `[x]` đã xong · `[ ]` chưa làm. Chỉ chạy kiểm tra của H
 ## A. Việc chung (mọi môn)
 
 - [x] Nhập nội dung vào `doc/toan.md` và `doc/tieng-anh.md` (bản nháp, cần chủ site rà soát).
-- [ ] Mỗi kỹ năng mới có đủ: bộ sinh/bank, chủ đề trong `TOPIC`, tên trong `parent-copy.js`, mã lỗi (nếu có) có lời giải thích vi/en.
-- [ ] Mỗi mã lỗi mới có đủ 3 chỗ: `TAGS` (engine.js), `TAG` (parent-copy.js, 6 chuỗi), `tag`/`hint` vi+en (index.html).
-- [ ] Chạy đủ bốn bộ kiểm: `check-bank`, `check-types`, `check-parent`, `check-garden` (+ `check-mathskills`).
-- [ ] **Chưa làm:** mở trình duyệt thật chơi thử từng môn × từng lớp 1–5, tự nhìn ảnh (câu có SVG, bảng, emoji, nút không tràn chữ).
-- [ ] Kiểm tra trang phụ huynh hiện tên kỹ năng mới và mã lỗi mới.
-- [ ] Kiểm tra vườn: kỹ năng mới có thể gieo, tên hiển thị đúng.
-- [ ] Màn hình nhỏ (điện thoại): câu có `<br>` / bảng không phải cuộn ngang.
-- [ ] Giọng đọc (`voice.js`): câu có SVG/emoji đọc được phần chữ, không đọc ký hiệu lạ.
-- [ ] Cập nhật `docs/LEARN-REVIEW-CHECKLIST.md` nếu có mục mới cần người duyệt.
-- [ ] Commit theo từng nhóm; chưa push khi chưa được yêu cầu; không commit `code.md`.
+- [x] Mỗi kỹ năng mới có đủ: bộ sinh/bank, chủ đề trong `TOPIC`, tên trong `parent-copy.js`, mã lỗi (nếu có) có lời giải thích vi/en.
+- [x] Mỗi mã lỗi mới có đủ 3 chỗ: `TAGS` (engine.js), `TAG` (parent-copy.js, 6 chuỗi), `tag`/`hint` vi+en (index.html).
+- [x] Chạy đủ bốn bộ kiểm: `check-bank`, `check-types`, `check-parent`, `check-garden` (+ `check-mathskills`).
+- [ ] Mở trình duyệt thật chơi thử từng môn × từng lớp 1–5, tự nhìn ảnh (câu có SVG, bảng, emoji, nút không tràn chữ). **Đã làm một phần (24/11):** `check-ui.js` chạy 48 tổ hợp; sửa nút chọn lớp/môn bị bóp còn 40px và chân trang ngắt 4 dòng ở màn 360px (`learn/index.html`); đã xem ảnh Toán L3/L5, Tiếng Việt L1, Tiếng Anh L3. **Còn:** `toan/find` 360×640 báo vùng đáp án bị cắt (ảnh nhìn vẫn đủ); lỗi `ERR_FAILED` ở dictate/write/speak do chưa có file giọng thu sẵn trong `shared/audio/voice/`; ảnh của `check-ui-math --shots` chỉ chụp màn bật loa nên chưa dùng được để duyệt câu.
+- [x] Kiểm tra trang phụ huynh hiện tên kỹ năng mới và mã lỗi mới.
+- [x] Kiểm tra vườn: kỹ năng mới có thể gieo, tên hiển thị đúng.
+- [x] Màn hình nhỏ (điện thoại): câu có `<br>` / bảng không phải cuộn ngang.
+- [x] Giọng đọc (`voice.js`): câu có SVG/emoji đọc được phần chữ, không đọc ký hiệu lạ.
+- [x] Cập nhật `docs/LEARN-REVIEW-CHECKLIST.md` (mục F) nếu có mục mới cần người duyệt.
+- [x] Commit theo từng nhóm (24/11); chưa push khi chưa được yêu cầu; không commit `code.md`.
 
 ---
 
@@ -56,7 +56,7 @@ Quy ước: `[x]` đã xong · `[ ]` chưa làm. Chỉ chạy kiểm tra của H
 - [x] **Gợi ý 💡 theo bậc cho MỌI kỹ năng** (phép tính: `hint.js`; còn lại: `hint-texts.js`, vi/en; bậc 3 mờ bớt 2 đáp án sai hoặc cho biết số chữ số). Có bài kiểm độ phủ 100% và không lộ đáp án.
 - [x] **Lập luận:** kiểu "tìm lỗi sai trong lời giải" (`find_error`, lớp 2–5): bé chỉ ra bước sai, đáp án tự tính lại độc lập.
 - [x] Phân số bằng nhau, so sánh, rút gọn (`fraction_equiv`, L4–5); số La Mã (`roman`, L3); số đo góc (`angle_measure`, L4–5).
-- [ ] Hình minh họa hình học nâng cao (đa giác, hình khối 3D); biểu đồ cột vẽ thật.
+- [ ] Hình minh họa hình học nâng cao (đa giác, hình khối 3D); biểu đồ cột vẽ thật. **Đã thử biểu đồ cột (24/11) và gỡ ra:** khung câu hỏi cố định một màn hình, `fitQ` ép SVG co về hình vuông tối thiểu 44px nên biểu đồ ngang không đọc được. Muốn làm cần thiết kế lại khung câu (ví dụ bỏ bảng chữ, chỉ dùng biểu đồ) và viết lại `check-mathskills` đọc số từ biểu đồ.
 - [ ] Kiểu câu "giải thích cách làm" bằng lời viết (cần chấm nội dung, không có AI lúc chạy).
 
 ---
@@ -74,10 +74,10 @@ Nguồn mục tiêu: `tieng-viet.md`. Kỹ năng hiện có: **16** (4 cũ + 12 
 - [x] **Đọc hiểu (L1–5):** `reading_story` (13 đoạn ngắn theo lớp, câu hỏi ai / ở đâu / mấy / khi nào), `reading_short` (cũ).
 - [x] **Giao tiếp (L1–2):** `greeting_vi` (chào hỏi, cảm ơn, xin lỗi, chúc mừng).
 - [x] Mã lỗi riêng Tiếng Việt: `word_class`, `punct`, `sent_type` (có giải thích cho phụ huynh).
-- [x] **Văn học (L1–5):** `story_lit` (12 câu hỏi từ 8 truyện ngắn: nhân vật, cảm xúc, thông điệp). [ ] Còn thiếu: thơ, nhiều truyện hơn và rà soát nội dung.
+- [x] **Văn học (L1–5):** `story_lit` (12 câu hỏi từ 8 truyện ngắn: nhân vật, cảm xúc, thông điệp). [x] Đã thêm 2 bài thơ ngắn và 2 truyện (24/11). [ ] Rà soát nội dung bởi giáo viên (xem LEARN-REVIEW-CHECKLIST mục F).
 - [x] **Sắp xếp các câu thành đoạn (L3–5):** `para_order` (6 đoạn, 3–4 câu, có từ nối thứ tự). [ ] Dàn ý (L5, tự học).
-- [ ] Mở rộng ngân hàng đọc hiểu (hiện 13 đoạn): thêm đoạn dài hơn, văn bản thông tin (L4–5), câu hỏi suy luận.
-- [ ] Hỏi / ngã, l/n, thêm nhiều từ chính tả (hiện mỗi nhóm 5–7 từ có hình).
+- [x] Mở rộng ngân hàng đọc hiểu: thêm 8 đoạn (có văn bản thông tin L4–5) và 2 câu suy luận trong `story_lit`. [ ] Đoạn dài hơn 5 câu chưa có (nút đáp án tối đa 24 ký tự).
+- [x] Thêm từ chính tả có hình cho l/n, s/x, d/gi/r (24/11). [ ] Hỏi / ngã: kỹ năng `tone` đã có, chưa thêm bộ từ riêng.
 
 ### C2. Nghe · Nói · Viết (đã làm phần khả thi; phần còn lại cần tính năng ngoài phạm vi)
 - [x] **Nghe:** nghe giọng đọc (`voice.js`) rồi chọn hình / số / câu trả lời: `vi_listen_word`, `en_listen_word`, `en_listen_num`, `en_listen_reply`. Câu Nghe tự đọc sau cú chạm đầu tiên.
@@ -103,7 +103,7 @@ Nguồn mục tiêu: `tieng-anh.md` (**bản nháp**, cần chủ site đối ch
 - [x] Theo dõi: `sent_order_en`, `word_build_en`.
 - [x] Mã lỗi `en_rule` (quy tắc tiếng Anh) có giải thích cho phụ huynh.
 - [x] **Nghe** (`en_listen_*`), **Nghe–viết** (`dictate_en`), **Viết câu** (`write_en`, chấm hình thức), **Đọc to** (`speak_en`, tự báo), **Sắp xếp câu** (`sent_order_en`).
-- [ ] Lớp 1–2 còn ít kỹ năng (mỗi lớp 4–5): thêm chủ đề gia đình, đồ chơi, hành động; bài hát, trò chơi.
+- [x] Lớp 1–2: thêm chủ đề gia đình, đồ chơi; `en_topic_vocab` mở cho lớp 1; 8 động từ vào `en_meaning` (24/11). [ ] Bài hát, trò chơi chưa làm.
 - [ ] Rà soát toàn bộ dữ liệu bằng người bản ngữ hoặc giáo viên tiếng Anh.
 
 ---
@@ -116,3 +116,8 @@ Nguồn mục tiêu: `tieng-anh.md` (**bản nháp**, cần chủ site đối ch
 4. Tiếng Việt C2: kiểu câu "nghe rồi chọn".
 5. Nhập `toan.md` / `tieng-anh.md`, làm Tiếng Anh theo cùng cách.
 6. Mastery 4 mức và hint ladder cho cả ba môn.
+
+TTS - Voice đề xuất 
+VieNeu-TTS v3 Turbo
+
+link https://huggingface.co/spaces/hynt/F5-TTS-Vietnamese-100h

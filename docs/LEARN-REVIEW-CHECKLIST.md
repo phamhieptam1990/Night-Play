@@ -82,3 +82,10 @@ Cập nhật lần cuối: 2026-11-20. Bài đo Học Vui hiện nằm ở `scri
 - [x] **Trang phụ huynh**: mục tiêu theo lớp, bé đã học gì (theo ngày, có số lần xem gợi ý), menu nhảy nhanh, bố cục hai cột màn rộng; mỗi mục một thẻ (`check-parent-ui.js`).
 - [x] Quy tắc mới trong `GAME_RULES.md` 0a-33, 0a-34: popup và thẻ nổi không nền trắng; câu hỏi canh giữa, hình co trước chữ co sau.
 - [ ] Còn lại, ngoài phạm vi hiện tại: tô chữ lớp 1, chấm nội dung bài viết, nhận dạng giọng nói, truyện dẫn bé học (xem kế hoạch).
+
+## F. Nội dung mới 24/11/2026 cần người duyệt
+
+- [ ] Tiếng Anh lớp 1–2: thêm chủ đề **Gia đình** (baby, grandmother, grandfather, boy, girl, family) và **Đồ chơi** (ball, teddy bear, kite, balloon, robot, game); `en_topic_vocab` mở cho lớp 1. Cần giáo viên xem hình emoji có đúng nghĩa không.
+- [ ] Tiếng Anh: 8 động từ vào `en_meaning` (run, jump, swim, sing, draw, sleep, read, write); 5 đoạn đọc hiểu mới (`en_reading`).
+- [ ] Tiếng Việt: 8 đoạn đọc hiểu mới (có văn bản thông tin lớp 4–5: Trái Đất, Hà Nội, sông Mê Công); 2 câu suy luận và 2 bài thơ ngắn do AI soạn (`story_lit`). Cần rà chính xác kiến thức và giọng văn.
+- [ ] Chính tả: thêm từ có hình cho s/x, d/gi/r, l/n.
