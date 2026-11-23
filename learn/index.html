@@ -72,6 +72,8 @@ body.tucked .rev{display:flex}
 .mt:active{transform:scale(.94)}
 .mt#lang{font-size:22px}
 .prog .star{height:34px;padding:0 10px;font-size:14px;border-radius:17px}
+@media (max-width:640px){footer.foot>.site-upd{flex:0 0 100%;order:99;width:100%;text-align:center;white-space:nowrap;font-size:10.5px;line-height:12px;padding:0}}
+@media (max-width:380px){.top{gap:6px;padding:10px 10px 4px 12px}.ib{min-width:44px;height:44px;padding:0 8px;font-size:20px}}
 .pick{flex:0 1 300px;margin:0 auto;min-width:0;display:flex;align-items:center;justify-content:center;gap:12px;height:56px;padding:0 18px;border-radius:30px;font-weight:800;font-size:15px;white-space:nowrap;background:color-mix(in srgb,var(--panel) 80%,transparent);border:1px solid var(--line);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .sbd{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;font-size:26px;background:linear-gradient(135deg,var(--s1),var(--sg));box-shadow:0 6px 16px color-mix(in srgb,var(--s2) 50%,transparent)}
 .gbd{display:grid;place-items:center;min-width:46px;height:46px;padding:0 8px;border-radius:16px;font-weight:900;font-size:30px;line-height:1;color:#2a1600;background:linear-gradient(135deg,#FFD36B,#FF9E6B);box-shadow:0 6px 16px rgba(255,158,107,.45),inset 0 2px 0 rgba(255,255,255,.5)}
@@ -842,7 +844,7 @@ function speak(){
      không bao giờ để máy đọc từng hình ("chùm nho, chùm nho, chùm nho, dâu tây…"). Hình nằm ở hàng đếm/bảng dưới câu hỏi thì bỏ qua khi đọc. */
   const EMO = /\p{Extended_Pictographic}(?:\uFE0F|\u200D\p{Extended_Pictographic})*/gu;
   const nameE = e => (window.LearnTypes && LearnTypes.nameOf && LearnTypes.nameOf(e, vi ? "vi" : "en")) || "";
-  const cleanSpeak = html => { let t = String(html).split(/<br\s*\/?>/i).map(x => x.replace(/<[^>]+>/g, "")).filter(x => x.trim() && (/\p{L}/u.test(x.replace(EMO, "")) || !EMO.test((EMO.lastIndex = 0, x)))).join(". ");   /* bỏ các dòng chỉ có hình (hàng đếm), giữ dòng có chữ (bảng, đề nhiều dòng) */ const seen = {}; t = t.replace(EMO, e => { if(seen[e]) return ""; seen[e] = 1; return nameE(e) ? " " + nameE(e) + " " : " "; }); return t.replace(/\s+/g, " ").trim(); };
+  const cleanSpeak = html => { let t = String(html).split(/<br\s*\/?>/i).map(x => x.replace(/<[^>]+>/g, "")).filter(x => x.trim() && (/\p{L}/u.test(x.replace(EMO, "")) || !EMO.test((EMO.lastIndex = 0, x)))).join(". ");   /* bỏ các dòng chỉ có hình (hàng đếm), giữ dòng có chữ (bảng, đề nhiều dòng) */ const seen = {}; t = t.replace(EMO, e => { if(seen[e]) return ""; seen[e] = 1; return nameE(e) ? " " + nameE(e) + " " : " "; }); return t.replace(/\s\/\s/g, ", ").replace(/\s+/g, " ").trim(); };
   let txt = b.speak != null ? String(b.speak).replace(EMO, " ").replace(/[×+−÷=%]/g, c => map[c]).replace(/(\d)\s*-\s*(?=\d)/g, "$1" + map["−"]).replace(/\s+/g, " ").trim() : cleanSpeak(b.q).replace(/[×+−÷=%]/g, c => map[c]).replace(/\?/g, " ")   /* dấu ? không đọc thành chữ */.replace(/_+/g, vi ? " chỗ trống " : " blank ");
   if(b.speak == null && subj === "tanh" && grade <= 2) txt = vi ? "Đây là gì?" : "What is this?";
   if(window.Voice){ if((subj === "tanh" ? vi : subj === "tviet" && !vi) && !b.speakLang && Voice.sayMix){ Voice.sayMix(txt, subj, vi ? "vi" : "en", { fail: why => { if(why === "novoice") LM.say(T[lang].noVoice); } }); return; }
