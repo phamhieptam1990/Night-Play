@@ -26,7 +26,7 @@
     return cand.sort(function (a, b) { return score(b) - score(a); })[0];
   }
   function stopAudio() { if (curAudio) { try { curAudio.pause(); } catch (e) {} curAudio = null; } }
-  function stop() { try { if (ss && (ss.speaking || ss.pending)) ss.cancel(); } catch (e) {} stopAudio(); }
+  function stop() { mixId++; try { if (ss && (ss.speaking || ss.pending)) ss.cancel(); } catch (e) {} stopAudio(); }
   /* giọng máy. QUAN TRỌNG: đọc NGAY trong cú chạm (Safari/iPhone chỉ cho phát trong cú chạm); chỉ hủy giọng đang đọc dở khi THẬT SỰ đang đọc,
      rồi chờ một nhịp (Chrome bỏ speak() ngay sau cancel()). opt.fail() chạy nếu sau 2 giây máy vẫn chưa bắt đầu đọc (chưa có giọng / bị tắt tiếng). */
   function machine(text, who, lang, opt) {
@@ -69,7 +69,9 @@
      Chưa có tệp index.json (hoặc câu chưa có trong đó) thì đọc bằng giọng máy NGAY, không đợi tải tệp (đợi tải làm mất cú chạm của bé, giọng máy bị chặn). */
   var EXT = ["mp3", "webm", "m4a"], index = null;
   try { if (root.fetch) root.fetch(BASE + "index.json").then(function (r) { return r.ok ? r.json() : {}; }).then(function (j) { index = j && typeof j === "object" ? j : {}; }).catch(function () { index = {}; }); } catch (e) {}
-  function say(text, who, lang, opt) {
+  var mixId = 0;
+  function say(text, who, lang, opt) { mixId++; say1(text, who, lang, opt); }
+  function say1(text, who, lang, opt) {
     who = who || "def"; lang = lang || "vi"; text = String(text || "").trim(); if (!text) return; opt = opt || {};
     var k = key(who, text), ext = index && index[who + "/" + k];
     stopAudio();
@@ -80,7 +82,46 @@
     a.onended = function () { if (opt.done) opt.done(true); };
     var pr = a.play(); if (pr && pr.catch) pr.catch(function () { if (curAudio === a) machine(text, who, lang, opt); });
   }
-  var api = { EXT: EXT, index: function () { return index; }, say: say, stop: stop, key: key, pickVoice: pickVoice, PROFILE: PROFILE, BASE: BASE, voices: function () { return ss ? ss.getVoices() : []; } };
+
+  /* ĐỌC LẪN TIẾNG: bài tiếng Anh bật giao diện tiếng Việt có câu vừa Việt vừa Anh ("Hello là xin chào"). Tách câu thành từng đoạn, đoạn
+     chữ Anh đọc bằng giọng Anh, đoạn Việt đọc bằng giọng Việt, nối tiếp nhau. Từ chỉ có chữ a-z (không dấu) mà không nằm trong VI_ASCII = tiếng Anh. */
+  var VI_ASCII = {};
+  "an anh ba ban bay bo ca cam can cay chi cho co con cua cung da dan dang de di do em gia hay in kem len ma mo me minh mua nam nam nay nha nho nhu nhung ong qua ra rat sau so ta tay tam tao thay thi to tu tui va vao vui xa xin xem ai bai bang bon cac cai chang day den gap hai hon khi lai moi muon nao nua phai roi sang them tren tung ve voi vua"
+    .split(" ").forEach(function (w) { VI_ASCII[w] = 1; });
+  function splitMix(text) {
+    var toks = [], segs = [];
+    (String(text).match(/\S+/g) || []).forEach(function (tk) {
+      var core = tk.replace(/^[^A-Za-z\u00C0-\u1EF9\d]+|[^A-Za-z\u00C0-\u1EF9\d]+$/g, ""), l;
+      if (!core || /^\d+$/.test(core)) l = "n";   /* dấu câu / số: đi theo đoạn bên cạnh */
+      else if (!/^[A-Za-z]+(?:['\u2019\-][A-Za-z]+)*$/.test(core)) l = "vi";
+      else l = VI_ASCII[core.toLowerCase()] ? "?" : "en";
+      toks.push({ t: tk, l: l });
+    });
+    /* từ không dấu có thể là Việt hoặc Anh ("do", "can", "xin"): là Anh khi KHÔNG kề từ Việt nào và kề một từ Anh; còn lại là Việt */
+    var real = toks.filter(function (x) { return x.l !== "n"; });
+    real.forEach(function (x, i) { if (x.l === "?") { var p = real[i - 1], n = real[i + 1], nb = [p, /[.?!,:;]$/.test(x.t) ? null : n].filter(Boolean).map(function (y) { return y.l; });
+      x.r = nb.indexOf("vi") < 0 && nb.indexOf("en") >= 0 ? "en" : "vi"; } });
+    real.forEach(function (x) { if (x.l === "?") x.l = x.r; });
+    var cur = null;
+    toks.forEach(function (x) {
+      if (x.l === "n") { if (cur) cur.t += " " + x.t; else segs.push(cur = { l: "vi", t: x.t }); return; }
+      if (cur && cur.l === x.l) cur.t += " " + x.t; else segs.push(cur = { l: x.l, t: x.t });
+    });
+    if (segs.length > 1 && segs[0].l === "vi" && !/[A-Za-z\u00C0-\u1EF9]/.test(segs[0].t)) { segs[1].t = segs[0].t + " " + segs[1].t; segs.shift(); }
+    return segs;
+  }
+  function sayMix(text, who, lang, opt) {
+    text = String(text || "").trim(); if (!text) return;
+    var segs = lang === "vi" ? splitMix(text) : [];
+    if (segs.length < 2 || segs.every(function (x) { return x.l === segs[0].l; })) return say(text, who, segs.length && segs[0].l === "en" ? "en" : lang, opt);
+    var id = ++mixId, i = 0; opt = opt || {};
+    (function next() {
+      if (id !== mixId || i >= segs.length) { if (id === mixId && opt.done) opt.done(true); return; }
+      var sg = segs[i++], o = {}; for (var k in opt) o[k] = opt[k]; o.done = next;
+      say1(sg.t, who, sg.l, o);
+    })();
+  }
+  var api = { sayMix: sayMix, splitMix: splitMix, EXT: EXT, index: function () { return index; }, say: say, stop: stop, key: key, pickVoice: pickVoice, PROFILE: PROFILE, BASE: BASE, voices: function () { return ss ? ss.getVoices() : []; } };
   if (ss && ss.addEventListener) ss.addEventListener("voiceschanged", function () {});
   if (typeof module !== "undefined" && module.exports) module.exports = api; else root.Voice = api;
 })(typeof window !== "undefined" ? window : globalThis);
