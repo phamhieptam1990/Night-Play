@@ -1,0 +1,21 @@
+/* nút chỉ có MỘT hình: hình phủ gần hết nút (to nhất có thể) trên nền sáng để màu hình nổi, nút nổi khối như các nút khác */
+.ans:not(.kz)>.ab:has(>.ico:only-child){display:flex;align-items:center;justify-content:center;padding:5px;
+  background:linear-gradient(160deg,#fff,color-mix(in srgb,var(--c1) 28%,#fff));-webkit-text-stroke:0;text-shadow:none}
+.ans:not(.kz)>.ab:has(>.ico:only-child)::after{display:none}
+@keyframes pickme{0%,100%{transform:translateY(0) scale(1,1)}14%{transform:translateY(0) scale(1.08,.9)}42%{transform:translateY(-9%) scale(.95,1.07)}
+  70%{transform:translateY(0) scale(1.05,.94)}85%{transform:translateY(-2%) scale(1,1)}}
+.ans:not(.kz)>.ab:has(>.ico:only-child)>.ico{animation:pickme 1.7s ease-in-out infinite;transform-origin:50% 90%}   /* hình nhún nhảy kiểu "chọn tớ đi" */
+.ans:not(.kz)>.ab:nth-child(2):has(>.ico:only-child)>.ico{animation-delay:-.25s}.ans:not(.kz)>.ab:nth-child(3):has(>.ico:only-child)>.ico{animation-delay:-.5s}
+  .ans:not(.kz)>.ab:nth-child(4):has(>.ico:only-child)>.ico{animation-delay:-.75s}.ans:not(.kz)>.ab:nth-child(5):has(>.ico:only-child)>.ico{animation-delay:-1s}
+  .ans:not(.kz)>.ab:nth-child(6):has(>.ico:only-child)>.ico{animation-delay:-1.25s}.ans:not(.kz)>.ab:nth-child(7):has(>.ico:only-child)>.ico{animation-delay:-.4s}
+  .ans:not(.kz)>.ab:nth-child(8):has(>.ico:only-child)>.ico{animation-delay:-.9s}.ans:not(.kz)>.ab:nth-child(9):has(>.ico:only-child)>.ico{animation-delay:-1.4s}
+@media (prefers-reduced-motion:reduce){.ans:not(.kz)>.ab:has(>.ico:only-child)>.ico{animation:none}}
+.ans:not(.kz)>.ab:has(>.ico:only-child)>.ico{height:100%;width:auto;aspect-ratio:1;max-width:100%;vertical-align:baseline;filter:drop-shadow(0 3px 0 rgba(0,0,0,.18))}
+.ab.long{font-size:clamp(18px,5.2vw,26px);line-height:1.2;-webkit-text-stroke-width:3.5px}
+.q h1 em.bl{display:inline-block;width:1.5em;height:.9em;vertical-align:-.1em;margin:0 .08em;border:.07em dashed color-mix(in srgb,var(--ink) 60%,transparent);border-radius:.22em;
+  background:color-mix(in srgb,var(--ink) 12%,transparent)!important;-webkit-background-clip:border-box!important;background-clip:border-box!important;color:transparent;
+  -webkit-text-fill-color:transparent;overflow:hidden;text-indent:-9em;white-space:nowrap;box-sizing:border-box;animation:blp 1.6s ease-in-out infinite alternate}
+  @keyframes blp{to{background-color:color-mix(in srgb,var(--ink) 24%,transparent)}}@media (prefers-reduced-motion:reduce){.q h1 em.bl{animation:none}}
+.q h1 em{font-style:normal;background:linear-gradient(100deg,var(--sg),var(--sx));-webkit-background-clip:text;background-clip:text;color:transparent}
+:root:not([data-theme=dark]) .q h1 em{background:linear-gradient(100deg,var(--s2),var(--sx));-webkit-background-clip:text;background-clip:text}
+.q.pop{animation:pop .35s}

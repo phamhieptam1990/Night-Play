@@ -1,0 +1,33 @@
+/* thanh trên */
+.top{flex:none;display:flex;align-items:center;gap:8px;padding:10px 12px 4px 16px}
+/* di động: thanh trên tự thu lại sau 3 giây để bảng câu hỏi rộng hơn; chạm mép trên / vuốt xuống thì hiện lại */
+.top{max-height:80px;transition:max-height .28s ease,padding .28s ease,opacity .2s ease}
+.top.tuck{max-height:0;padding-top:0;padding-bottom:0;opacity:0;overflow:hidden;pointer-events:none}
+@media (prefers-reduced-motion:reduce){.top{transition:none}}
+.ib{flex:none;min-width:50px;height:50px;border-radius:25px;display:grid;place-items:center;background:rgba(22,17,48,.72);color:#fff;border:1px solid rgba(255,255,255,.2);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);text-decoration:none;font-weight:800;font-size:22px;padding:0 12px;
+  box-shadow:0 6px 16px rgba(0,0,0,.28),inset 0 0 12px rgba(155,131,255,.25)}
+.ib:active{transform:scale(.94)}
+.ib.main{background:linear-gradient(135deg,#9B83FF,#FF9A6B);color:#1a1033;font-size:26px;border-color:transparent}
+.ib[aria-pressed=false]{opacity:.6}
+.prog .star{height:34px;padding:0 10px;font-size:14px;border-radius:17px}
+/* B4: màn chơi chỉ còn dòng ngày cập nhật; © / liên kết / Phụ huynh nằm trong menu ⋯ (mục ⓘ và 🔒) để bé không bấm nhầm */
+.foot .fc,.foot #fl,.foot .finfo{display:none}
+/* B5: loa tắt phải rõ là TẮT (nền đỏ), không mờ như nút hỏng; lớp 1 chỉ giữ ←, vườn, loa, ⋯ */
+.ib#snd[aria-pressed=false]{opacity:1;background:rgba(220,38,38,.5);border-color:rgba(254,202,202,.85)}
+body.g1 #pick,body.g1 #toMeTop{display:none}body.g1 #toGarden{margin-left:auto}
+@media (max-width:640px){footer.foot>.site-upd{flex:0 0 100%;order:99;width:100%;text-align:center;white-space:nowrap;font-size:10.5px;line-height:12px;padding:0}}
+@media (max-width:380px){.top{gap:6px;padding:10px 10px 4px 12px}.ib{min-width:44px;height:44px;padding:0 8px;font-size:20px}}
+.pick{flex:0 1 300px;margin:0 auto;min-width:0;display:flex;align-items:center;justify-content:center;gap:12px;height:56px;padding:0 18px;border-radius:30px;font-weight:800;
+  font-size:15px;white-space:nowrap;background:color-mix(in srgb,var(--panel) 80%,transparent);border:1px solid var(--line);backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px)}
+.sbd{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;font-size:26px;background:linear-gradient(135deg,var(--s1),var(--sg));
+  box-shadow:0 6px 16px color-mix(in srgb,var(--s2) 50%,transparent)}
+.gbd{display:grid;place-items:center;min-width:46px;height:46px;padding:0 8px;border-radius:16px;font-weight:900;font-size:30px;line-height:1;color:#2a1600;
+  background:linear-gradient(135deg,#FFD36B,#FF9E6B);box-shadow:0 6px 16px rgba(255,158,107,.45),inset 0 2px 0 rgba(255,255,255,.5)}
+.pick::after{content:"";width:16px;height:16px;background:currentColor;opacity:.6;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cpath d='M28 48L64 84L100 48' fill='none' stroke='%23000' stroke-width='16' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cpath d='M28 48L64 84L100 48' fill='none' stroke='%23000' stroke-width='16' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat}   /* mũi tên cùng họ icon điều khiển (gen-icons.js) */
+.star{flex:none;display:inline-flex;align-items:center;gap:4px;height:34px;padding:0 10px;border-radius:17px;background:color-mix(in srgb,var(--panel) 80%,transparent);
+  border:1px solid var(--line);font-weight:800;font-size:14px}
+.star.bump{animation:bump .5s}
+@keyframes bump{40%{transform:scale(1.25)}}

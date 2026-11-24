@@ -1,0 +1,23 @@
+/* thấp / ngang */
+@media (max-height:640px){.game{gap:8px}.mas{width:64px;height:64px;margin:-4px 0 -6px -2px}.mas .fb{font-size:30px}.mit p{font-size:14px;padding:6px 12px;min-height:40px}
+  .ab{min-height:52px}.q,.q.short{padding:16px}.q h1{font-size:clamp(28px,9vw,44px)}}
+@media (max-height:430px) and (min-aspect-ratio:11/10){.mas{width:56px;height:56px}.prog{height:8px}.dots{height:8px;margin:0 6px}.dots .rn{display:none}
+  .dots i{width:8px;height:8px;margin:-4px 0 0 -4px;border-width:2px}.dots .trk{height:4px;margin-top:-2px}.prog .streak{display:flex;align-items:center;height:8px;line-height:8px;
+  font-size:13px;min-width:0}.mit p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:13px;line-height:1.2;padding:5px 12px;
+  min-height:0;max-height:46px}.rmas{width:80px;height:80px}.sbd,.gbd{width:36px;min-width:36px;height:36px;font-size:20px}.pick{height:44px}
+  .spk{width:40px;height:40px;font-size:20px}.game{max-width:none;display:grid;grid-template-columns:1.15fr 1fr;grid-template-rows:auto auto 1fr;gap:8px 16px;padding-top:2px}
+  .prog{grid-column:1/-1}.mit{grid-column:1;grid-row:2}.q{grid-column:1;grid-row:3}.ans{grid-column:2;grid-row:2/4;grid-template-rows:1fr 1fr}.ab{min-height:0}
+  .q h1{font-size:clamp(26px,6vw,40px)}.top{padding-top:4px}.foot{padding-bottom:2px}.ib,.pick,.star{height:38px}}
+@media (min-width:700px) and (min-height:700px){.game{max-width:680px}.ab{min-height:76px}.q h1{font-size:clamp(48px,7vw,76px)}}
+/* iPad / màn lớn: hình trong bảng câu hỏi phóng to theo cỡ khung (680px), không giữ cỡ điện thoại */
+@media (min-width:700px) and (min-height:700px){.qo{min-height:180px;gap:8px;padding:10px 64px 10px 10px}.qo .obj{width:84px;height:84px;font-size:64px}
+  .qo .obj.cnt::after{min-width:28px;height:28px;border-radius:14px;font-size:16px;line-height:28px}.qn{min-width:56px;height:56px;font-size:30px}.qb{min-height:300px}
+  .bln{width:104px;height:124px;margin-left:-52px}.ans[data-k=find]{grid-auto-rows:minmax(84px,110px)}.ans[data-k=find] .ab,.ans[data-k=find] .ab.long{
+  font-size:clamp(44px,7vw,64px)}.qopt .ab,.qopt .ab.long{min-height:76px;font-size:34px}.q::before{font-size:min(46vw,340px)}}
+/* câu hỏi chỉ có HÌNH (emoji): phóng thật to, theo cả bề ngang và chiều cao màn hình */
+.q h1.pic{font-size:clamp(110px,min(46vw,30dvh),300px)!important;line-height:1.05!important;letter-spacing:0}
+/* chế độ bắn bong bóng: khung câu hỏi được nâng cao (flex-grow ở trên) nên hình vẫn to, chỉ giới hạn theo chiều cao */
+.game:has(.ans.kz) .q h1.pic{font-size:clamp(80px,min(40vw,19dvh),220px)!important}
+@media (min-width:700px) and (min-height:700px){.game:has(.ans.kz) .q h1.pic{font-size:clamp(110px,min(32vw,22dvh),300px)!important}}
+@media (max-height:430px) and (min-aspect-ratio:11/10){.q h1.pic{font-size:clamp(70px,min(24vw,46dvh),200px)!important}}
+@media (min-width:700px) and (min-height:700px){.q h1.pic{font-size:clamp(160px,min(36vw,34dvh),340px)!important}}

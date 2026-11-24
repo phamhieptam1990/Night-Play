@@ -66,7 +66,8 @@ for (const [f, other, self] of [["landing/hoc/phu-huynh/index.html", "/en/hoc/pa
 }
 const sm = fs.readFileSync(path.join(root, "landing/sitemap.xml"), "utf8"); ok(sm.includes("/hoc/phu-huynh/") && sm.includes("/en/hoc/parents/"), "sitemap thiếu trang phụ huynh");
 const sw = fs.readFileSync(path.join(root, "sw.js"), "utf8"); for (const u of ["/learn/parent/index.html", "/learn/limit.js", "/learn/content/parent-copy.js"]) ok(sw.includes('"' + u + '"'), "sw.js thiếu " + u);
-const li = fs.readFileSync(path.join(root, "learn/index.html"), "utf8"); ok(/src="limit\.js"/.test(li) && /id="mParent"/.test(li) && /LearnLimit\.guard/.test(li), "trang học chưa nối hẹn giờ/nút phụ huynh");
+const rdJs = d => fs.readdirSync(path.join(root, d)).filter(f => /\.js$/.test(f)).map(f => fs.readFileSync(path.join(root, d, f), "utf8")).join("\n");   /* mã trang học nay nằm trong learn/js/*.js */
+const li = fs.readFileSync(path.join(root, "learn/index.html"), "utf8") + rdJs("learn/js"); ok(/src="limit\.js"/.test(li) && /id="mParent"/.test(li) && /LearnLimit\.guard/.test(li), "trang học chưa nối hẹn giờ/nút phụ huynh");
 const pp = fs.readFileSync(path.join(root, "learn/parent/index.html"), "utf8"); ok(/noindex/.test(pp), "trang phụ huynh trong app phải noindex"); ok(/id="back"/.test(pp), "thiếu nút ←");
 
 console.log(bad ? "✗ " + bad + "/" + checks + " lỗi" : "✓ tất cả đạt (" + checks + " kiểm tra)"); process.exit(bad ? 1 : 0);

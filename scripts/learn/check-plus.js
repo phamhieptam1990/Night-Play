@@ -114,6 +114,6 @@ const fakeDb = require("./fake-db.js");
   await call("POST", "/api/webhook/sepay", { headers: { authorization: "Apikey " + "k".repeat(16) }, body: { id: "tx9", transferType: "in", transferAmount: 99000, content: co.order.code, accountNumber: "0000000000" } });
   pl = await P.pollOrder(co.order.orderId); ok(pl.status === "paid" && P.has("coach") && P.state().plan === "learn_month", "client poll paid → Plus");
   /* trang bé không có giá/nút mua */
-  const fs = require("fs"); for (const f of ["learn/index.html", "learn/lop/index.html"]) { try { const h = fs.readFileSync(path.join(__dirname, "../..", f), "utf8"); ok(!/99\.?000|learn_month|LearnPlus\.(createOrder|startTrial)/.test(h), f + " không được có giá/mua"); } catch (e) {} }
+  const fs = require("fs"); for (const f of ["learn/index.html", "learn/lop/index.html"]) { try { const dj = f === "learn/index.html" ? "learn/js" : "learn/lop/js", h = fs.readFileSync(path.join(__dirname, "../..", f), "utf8") + fs.readdirSync(path.join(__dirname, "../..", dj)).map(x => fs.readFileSync(path.join(__dirname, "../..", dj, x), "utf8")).join("\n"); ok(!/99\.?000|learn_month|LearnPlus\.(createOrder|startTrial)/.test(h), f + " không được có giá/mua"); } catch (e) {} }
   console.log(bad ? "✗ " + bad + " lỗi" : "✓ Nền Plus đạt"); process.exit(bad ? 1 : 0);
 })().catch(e => { console.log("✗ lỗi chạy:", e.stack || e); process.exit(1); });

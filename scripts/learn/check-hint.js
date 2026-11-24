@@ -56,5 +56,5 @@ console.log("5) độ phủ: MỌI kỹ năng phải có gợi ý (phép tính t
 }
 
 console.log("6) giao diện không lộ số chữ số của đáp án ở bậc gợi ý");
-{ const html = require("fs").readFileSync(path.join(__dirname, "..", "..", "learn/index.html"), "utf8"); ok(!/Đáp án có <b>|digit\(s\)\./.test(html), "learn/index.html: bậc 3 câu gõ số không được nêu số chữ số của đáp án"); }
+{ const fs_ = require("fs"), jsDir = path.join(__dirname, "..", "..", "learn/js"), html = fs_.readFileSync(path.join(__dirname, "..", "..", "learn/index.html"), "utf8") + fs_.readdirSync(jsDir).map(f => fs_.readFileSync(path.join(jsDir, f), "utf8")).join("\n"); ok(!/Đáp án có <b>|digit\(s\)\./.test(html), "learn/index.html: bậc 3 câu gõ số không được nêu số chữ số của đáp án"); }
 console.log(bad ? "\n✗ " + bad + " lỗi (" + checks + " phép kiểm)" : "\n✓ gợi ý đạt (" + checks + " phép kiểm)"); process.exit(bad ? 1 : 0);

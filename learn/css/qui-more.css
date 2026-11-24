@@ -1,0 +1,67 @@
+/* ===== 8 kiểu tương tác thêm ===== */
+.ans[data-k=find]{grid-template-columns:repeat(3,1fr);grid-auto-rows:minmax(54px,72px);gap:8px}
+/* màn đáp án là HÌNH: dồn chỗ trống cho vùng đáp án — hàng cao giãn hết cỡ để hình phủ nút to nhất có thể */
+.ans[data-k=pic],.ans[data-k=pic-n],.ans[data-k=find]{grid-auto-rows:minmax(54px,1fr);align-content:stretch}
+.game:has(.ans[data-k=pic]) .ans,.game:has(.ans[data-k=pic-n]) .ans{flex-grow:1.7}.game:has(.ans[data-k=find]) .ans{flex-grow:2.4}
+.ans[data-k=find] .ab,.ans[data-k=find] .ab.long{font-size:clamp(28px,9vw,40px);border-radius:18px;white-space:nowrap;padding:0 4px;letter-spacing:0}   /* số 4 chữ số không gãy dòng; fitAns co chữ */
+.q h1 em.bl.filled{text-indent:0;white-space:nowrap;width:auto;min-width:1.5em;padding:0 .25em;overflow:visible;color:var(--ink);-webkit-text-fill-color:currentColor;
+  border-style:solid;animation:none;font-weight:900;background:color-mix(in srgb,var(--sg) 28%,transparent)!important}
+.q h1 em.bl.filled.ok{background:#34D39955!important;border-color:#34D399}
+.bl.hot{outline:3px solid var(--sg);outline-offset:3px}
+.qo{position:relative;display:flex;flex-wrap:wrap;gap:4px;justify-content:center;align-content:center;min-height:116px;padding:6px 44px 6px 6px}
+.qo .obj{position:relative;flex:none;width:54px;height:54px;border:0;background:none;font-size:40px;line-height:1;padding:0;transition:transform .2s,opacity .2s}
+.qo .obj.cnt{opacity:.55;transform:scale(.88)!important}
+.qo .obj.cnt::after{content:attr(data-n);position:absolute;right:-2px;top:-2px;min-width:22px;height:22px;border-radius:11px;background:var(--sg);color:#fff;
+  font:900 13px/22px var(--font);text-align:center}
+.qn{position:absolute;right:4px;top:50%;transform:translateY(-50%);min-width:44px;height:44px;border-radius:50%;background:var(--sg);color:#fff;display:grid;place-items:center;
+  font:900 24px/1 var(--font)}
+.qopt{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.qopt .ab,.qopt .ab.long{min-height:54px;font-size:clamp(20px,6vw,28px);border-radius:16px;padding:0 4px}
+.qb{position:relative;flex:1;min-height:210px}
+.bln{position:absolute;width:76px;height:92px;margin-left:-38px;border:0;border-radius:50% 50% 48% 48%/58% 58% 42% 42%;color:#fff;font:900 clamp(20px,6vw,28px)/1 var(--font);
+  background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.55),transparent 38%),linear-gradient(160deg,var(--c1),var(--c2));box-shadow:0 10px 22px -6px var(--c2);
+  animation:blnb 3.2s ease-in-out infinite;padding:0 4px;overflow:visible;overflow-wrap:anywhere}
+.bln.long{font-size:15px}
+.bln::after{content:"";position:absolute;left:50%;top:100%;width:2px;height:44px;margin-left:-1px;background:linear-gradient(var(--c2),transparent)}
+@keyframes blnb{50%{transform:translateY(-12px)}}
+.bln.popd{animation:blnp .45s ease-out forwards}@keyframes blnp{40%{transform:scale(1.35)}100%{transform:scale(1.7);opacity:0}}
+.bln.no{animation:blnx .5s forwards;filter:saturate(.3)}@keyframes blnx{30%{transform:translateX(-6px)}60%{transform:translateX(6px)}100%{opacity:.25;transform:translateY(18px) scale(.9)}}
+.bln.hint{outline:4px solid #34D399;outline-offset:3px}
+.qg2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.qg4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.ab.mem{min-height:74px;padding:0 3px;font-size:clamp(13px,3.9vw,17px);line-height:1.1;overflow-wrap:anywhere;transition:transform .3s}
+.ab.mem.big{font-size:34px}
+.ab.mem:not(.open):not(.ok){color:var(--sg);font-size:28px;background:linear-gradient(145deg,color-mix(in srgb,var(--sg) 30%,var(--panel)),color-mix(in srgb,var(--sg) 12%,var(--panel)))}
+.nlw{position:relative;padding:0 16px;--steps:10}
+.nlw::before{content:"";position:absolute;left:16px;right:16px;top:50%;height:14px;margin-top:-4px;
+  background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px calc(100% / var(--steps)));opacity:.35;pointer-events:none}
+.nlr{width:100%;height:44px;margin:0;background:none;-webkit-appearance:none;appearance:none;position:relative}
+.nlr::-webkit-slider-runnable-track{height:10px;border-radius:6px;background:linear-gradient(90deg,var(--s2),var(--sg))}
+.nlr::-moz-range-track{height:10px;border-radius:6px;background:linear-gradient(90deg,var(--s2),var(--sg))}
+.nlr::-webkit-slider-thumb{-webkit-appearance:none;width:38px;height:38px;margin-top:-14px;border-radius:50%;background:#fff;border:5px solid var(--sg);box-shadow:0 4px 12px rgba(0,0,0,.4)}
+.nlr::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:#fff;border:5px solid var(--sg)}
+.nll{display:flex;justify-content:space-between;padding:0 8px;font-weight:800;font-size:14px;color:var(--ink2)}
+.qdone{min-height:50px;font-size:24px}
+.qclk{width:min(150px,38vh);margin:0 auto;color:var(--ink)}
+.qclk svg{width:100%;height:auto;display:block}
+.qclk .cf1{fill:color-mix(in srgb,var(--ink) 8%,var(--panel));stroke:var(--sg);stroke-width:3}
+.qclk .ck{stroke:var(--ink2)}.qclk .hh{stroke:var(--ink);stroke-width:5;stroke-linecap:round}.qclk .mh{stroke:var(--sg);stroke-width:3.2;stroke-linecap:round}.qclk .cc{fill:var(--ink)}
+.qbins{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.qbin{display:flex;flex-direction:column;gap:6px;align-items:stretch;min-height:104px;padding:8px;border-radius:18px;
+  border:2.5px dashed color-mix(in srgb,var(--sg) 60%,var(--line));background:color-mix(in srgb,var(--sg) 10%,transparent);color:var(--ink);text-align:center}
+.qbin b{font-size:15px;font-weight:900}
+.qbin.hot{background:color-mix(in srgb,var(--sg) 24%,transparent);border-style:solid}
+.qz{display:flex;flex-wrap:wrap;gap:5px;justify-content:center}
+.qz .ab.tl{min-width:42px;min-height:38px;padding:0 8px;font-size:20px;border-radius:12px;opacity:1}
+@media (max-height:700px){.qo{min-height:92px}.qo .obj{width:44px;height:44px;font-size:32px}.ab.mem{min-height:60px}.qb{min-height:170px}.qbin{min-height:84px}.ans.kz>.qclk{width:min(112px,26vh)}}
+
+/* canh đều hai bên và trên dưới cho mọi kiểu tương tác: khối con giãn hết bề ngang, ô trong lưới giãn đều */
+.ans.kz{align-items:stretch;justify-content:center}
+.ans.kz>*{width:100%;box-sizing:border-box}.ans.kz>.qclk{width:min(150px,30vh)}
+.qg,.qg2,.qg4,.qopt,.qm,.qbins{justify-items:stretch;align-items:stretch;align-content:center}
+.qg .ab,.qg2 .ab,.qg4 .ab,.qopt .ab,.qm .ab,.qc .ab{width:100%;box-sizing:border-box}
+.qc{justify-content:center}
+.qs,.qp{justify-content:center;align-content:center}
+.ans.kz{gap:14px}
+/* lề trên khung câu hỏi >= 26px ở MỌI cỡ màn (nhãn nổi thò xuống ~19px; quy tắc màn thấp từng đặt 16px làm nhãn đè chữ) */
+.q,.q.short,.q.pop,.q.rich{padding-top:26px!important}
