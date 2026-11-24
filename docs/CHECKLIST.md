@@ -83,4 +83,4 @@ avatar bé lớn, quyết định thiết kế chủ site, thử trên iPhone/iP
 
 - [x] Spec + mã client `scripts/cozygame/parts/truot-so/*.js` + `server/pro/truot-so-nam-cham.js` (3 loại: Số úp, Đua giờ, Nam châm nhiễu; 4 giao diện: Gỗ Cổ, Neon Đêm, Bong Bóng Biển, Phi Thuyền); nối hệ thống; check.js đạt (CHECK_ONLY)
 - [x] Ảnh Chrome 360×640: hộp nhập cỡ, bảng 5×5 free, giao diện Bong Bóng Biển
-- [ ] Chưa xem: Gỗ Cổ / Neon / Phi Thuyền, 380×760, ngang 844×390, 1200×640, màn kết thúc; chưa có linh vật SVG; chưa kiểm bảng lớn (8×8–10×10) trên máy thật
+- [ ] Chưa xem: Gỗ Cổ / Neon / Phi Thuyền, 380×760, ngang 844×390, 1200×640, màn kết thúc; linh vật Gấu Nam Châm đã có (check-mascot + check-art đạt); chưa kiểm bảng lớn (8×8–10×10) trên máy thật
