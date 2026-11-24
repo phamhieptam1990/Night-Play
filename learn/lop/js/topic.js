@@ -32,7 +32,7 @@ function render(L){
     L.screens.forEach((s,i)=>{
       let body='<div class="t">'+esc(s.t)+'</div>';
       if(s.art) body+='<div class="note">Hình: '+esc(s.art.replace(/\n/g," "))+'</div>';
-      if(s.shapes) body+='<div class="note">Hình học: '+s.shapes.map(x=>({circle:"hình tròn",square:"hình vuông",triangle:"hình tam giác",rect:"hình chữ nhật"}[x]||x)).join(", ")+'</div>';
+      if(s.shapes) body+='<div class="note">Hình học: '+s.shapes.map(x=>({circle:"hình tròn",square:"hình vuông",triangle:"hình tam giác",rect:"hình chữ nhật",cube:"khối lập phương",cuboid:"khối hộp chữ nhật",sphere:"khối cầu",cylinder:"khối trụ"}[x]||x)).join(", ")+'</div>';
       if(s.en) body+='<div class="note">Từ tiếng Anh (chạm để nghe): '+s.en.map(esc).join(" · ")+'</div>';
       if(s.chips) body+='<div class="note">Chạm để nghe: '+s.chips.map(c=>esc(c[0])+" ("+esc(c[1])+")").join(" · ")+'</div>';
       if(s.k==="game") body+='<div class="note">'+s.rounds.length+' lượt chơi, bé nghe đề rồi chạm ô đúng (không cần đọc):</div><ul class="l">'+s.rounds.map(r=>'<li>'+esc(r.say)+(

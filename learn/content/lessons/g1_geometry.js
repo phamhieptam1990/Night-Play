@@ -16,32 +16,24 @@ window.LearnLessons.reg({
    ]
   },
   {
-   "k": "say",
+   "k": "meet",
    "t": "Hình tròn tròn trịa, không có góc. Giống bánh xe!",
-   "shapes": [
-    "circle"
-   ]
+   "shape": "circle"
   },
   {
-   "k": "say",
+   "k": "meet",
    "t": "Hình vuông có 4 cạnh bằng nhau.",
-   "shapes": [
-    "square"
-   ]
+   "shape": "square"
   },
   {
-   "k": "say",
+   "k": "meet",
    "t": "Hình tam giác có 3 cạnh và 3 góc.",
-   "shapes": [
-    "triangle"
-   ]
+   "shape": "triangle"
   },
   {
-   "k": "say",
+   "k": "meet",
    "t": "Hình chữ nhật có 4 cạnh: 2 cạnh dài và 2 cạnh ngắn.",
-   "shapes": [
-    "rect"
-   ]
+   "shape": "rect"
   },
   {
    "k": "tapcount",
@@ -54,9 +46,9 @@ window.LearnLessons.reg({
    "k": "choose",
    "t": "Bánh xe hình nào?",
    "opts": [
-    "🔵",
-    "🟦",
-    "🔺"
+    "shape:circle",
+    "shape:square",
+    "shape:triangle"
    ],
    "ok": 0,
    "yes": "Đúng rồi! Bánh xe hình tròn.",
@@ -67,9 +59,9 @@ window.LearnLessons.reg({
    "k": "choose",
    "t": "Hình nào có 3 cạnh?",
    "opts": [
-    "🔺",
-    "🔵",
-    "🟦"
+    "shape:triangle",
+    "shape:circle",
+    "shape:square"
    ],
    "ok": 0,
    "yes": "Giỏi quá! Tam giác có 3 cạnh.",
@@ -80,14 +72,50 @@ window.LearnLessons.reg({
    "k": "choose",
    "t": "Hình nào có 4 cạnh bằng nhau?",
    "opts": [
-    "🟦",
-    "🔺",
-    "🔵"
+    "shape:square",
+    "shape:triangle",
+    "shape:circle"
    ],
    "ok": 0,
    "yes": "Đúng rồi! Hình vuông.",
    "no": "Nghĩ tới viên gạch men vuông.",
    "art": "4️⃣ cạnh bằng nhau"
+  },
+  {
+   "k": "say",
+   "t": "Còn các bạn hình khối nữa nè! Chạm vào từng bạn nhé.",
+   "shapes": [
+    "cube",
+    "cuboid",
+    "sphere",
+    "cylinder"
+   ]
+  },
+  {
+   "k": "choose",
+   "t": "Quả bóng giống khối nào?",
+   "opts": [
+    "shape:sphere",
+    "shape:cube",
+    "shape:cylinder"
+   ],
+   "ok": 0,
+   "yes": "Đúng rồi! Quả bóng là khối cầu.",
+   "no": "Khối nào lăn tròn được?",
+   "art": "⚽"
+  },
+  {
+   "k": "choose",
+   "t": "Lon nước giống khối nào?",
+   "opts": [
+    "shape:cylinder",
+    "shape:cuboid",
+    "shape:sphere"
+   ],
+   "ok": 0,
+   "yes": "Giỏi quá! Lon nước là khối trụ.",
+   "no": "Lon nước tròn và cao, đứng được.",
+   "art": "🥫"
   },
   {
    "k": "sum",
@@ -96,7 +124,7 @@ window.LearnLessons.reg({
     "Hình tròn: không có góc",
     "Hình vuông: 4 cạnh bằng nhau",
     "Hình tam giác: 3 cạnh",
-    "Hình chữ nhật: 2 cạnh dài, 2 cạnh ngắn"
+    "Khối cầu, khối trụ, khối hộp là các hình khối"
    ]
   }
  ],
@@ -116,9 +144,9 @@ window.LearnLessons.reg({
   {
    "q": "Hình nào có 3 cạnh?",
    "opts": [
-    "🔺",
-    "🟦",
-    "🔵"
+    "shape:triangle",
+    "shape:square",
+    "shape:circle"
    ],
    "ok": 0,
    "hint": "Tam là ba. Đếm 3 cạnh nào!",
@@ -136,6 +164,18 @@ window.LearnLessons.reg({
    "hint": "Quyển vở có 2 cạnh dài, 2 cạnh ngắn.",
    "yes": "Đúng rồi!",
    "art": "📒"
+  },
+  {
+   "q": "Hộp bánh giống khối nào?",
+   "opts": [
+    "shape:cuboid",
+    "shape:sphere",
+    "shape:cylinder"
+   ],
+   "ok": 0,
+   "hint": "Hộp bánh có các mặt chữ nhật.",
+   "yes": "Đúng rồi!",
+   "art": "🎁"
   }
  ]
 });

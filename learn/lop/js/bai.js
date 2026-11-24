@@ -76,13 +76,17 @@ function show(i){
   else if(s.k==="take") take(stage,s,nextLabel);
   else if(s.k==="choose") quiz(stage,s,nextLabel);
   else if(s.k==="game") game(stage,s,nextLabel);
+  else if(s.k==="meet"&&s.shape) LearnShapes.meet({speakIn,setNext,say,ding,mood,sparks},stage,s,nextLabel);
   else if(s.k==="meet") meet(stage,s,nextLabel);
   else if(s.k==="trace") trace(stage,s,nextLabel);
   else if(s.k==="feed") feed(stage,s,nextLabel);
   else if(s.k==="pop") popgame(stage,s,nextLabel);
 }
 function artOf(stage,s){
-  if(s.shapes){const w=document.createElement("div");w.className="shp";w.innerHTML=s.shapes.map(h=>SH[h]||"").join("");stage.appendChild(w)}
+  let LS;
+  if(s.shapes){const w=document.createElement("div");w.className="shp n"+s.shapes.length;LS=window.LearnShapes;
+    w.innerHTML=s.shapes.map(h=>LS&&LS.get(h)?LS.html(h):(SH[h]||"")).join("");stage.appendChild(w);
+    w.querySelectorAll(".shb").forEach(b=>b.onclick=()=>{const d=LS.get(b.dataset.k);LS.hop(b);ding("ok");say(d.say);mood("happy")})}
   if(s.art){const a=document.createElement("div");a.className="art";a.textContent=s.art;stage.appendChild(a)}
   if(s.chips&&s.chips.length){const w=document.createElement("div");w.className="row";s.chips.forEach(x=>{const b=document.createElement("button");b.type="button";
     b.className="enw";b.style.fontSize="clamp(34px,11vw,52px)";b.style.minHeight="76px";b.style.minWidth="76px";b.style.justifyContent="center";b.textContent=x[0];
@@ -115,13 +119,15 @@ function quiz(stage,s,nl){
   speakIn(s.t);
   const box=document.createElement("div");box.className="opts";stage.appendChild(box);let wrong=0,solved=false;
   const order=shuffle(s.opts.map((t,i)=>({t,ok:i===s.ok})));
-  order.forEach(o=>{const b=document.createElement("button");b.type="button";b.className="opt";b.textContent=o.t;
+  order.forEach(o=>{const b=document.createElement("button");b.type="button";b.className="opt";b.dataset.v=o.t;
+    if(/^shape:/.test(o.t)&&window.LearnShapes){const k=o.t.slice(6);b.innerHTML=LearnShapes.mini(k);b.classList.add("pic","shp-opt");box.classList.add("pic");b.setAttribute("aria-label",LearnShapes.get(k).name)}
+    else b.textContent=o.t;
     if(grade===1){ if(/^[\p{Extended_Pictographic}\uFE0F\u200D\s]+$/u.test(o.t)){b.classList.add("pic");box.classList.add("pic")} else if(/^\d{1,3}$/.test(o.t)){
       b.classList.add("num");if(s.opts.every(x=>/^\d{1,3}$/.test(x)))box.classList.add("pic")} }
     b.onclick=()=>{ if(solved) return; if(s.optlang==="en") sayEn(o.t);
       if(o.ok){solved=true;b.classList.add("ok");mood("happy");speakIn(s.yes);setNext(true,nl);return}
       wrong++;b.classList.add("no");b.disabled=true;speakIn(wrong>=2?COPY.show:(s.no||COPY.another));
-      if(wrong>=2){[...box.children].forEach(x=>{if(x.textContent===order.find(z=>z.ok).t)x.classList.add("ok")});solved=true;setNext(true,nl)}
+      if(wrong>=2){[...box.children].forEach(x=>{if(x.dataset.v===order.find(z=>z.ok).t)x.classList.add("ok")});solved=true;setNext(true,nl)}
     };box.appendChild(b)});
 }
 /* TRÒ CHƠI NHẬN BIẾT (không cần đọc): linh vật NÓI đề, bé nhìn hình/nghe rồi chạm ô lớn. Sai thì nghe lại, sai 2 lần thì chỉ đáp án. */
