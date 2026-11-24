@@ -1,30 +1,13 @@
 # Checklist Học Vui
 
-Cập nhật: 2026-11-24. Quy ước: `[x]` xong · `[ ]` chưa làm · `[~]` đang làm · `[?]` chờ chủ site duyệt. Xong mục nào thì đổi ký hiệu mục đó (sửa đúng một dòng).
-
-## Đã duyệt (24/11/2026)
-
-Chủ site duyệt các quyết định điều phối chốt tạm: bảng vật phẩm khác nhau theo lớp, quy tắc lên lớp (mang theo + đổi), cách đổi hạt ở quầy Bác Rễ (2 nông sản lớp cũ lấy 1 hạt, tối đa 3 lần/ngày), mặc định Học Vui Plus (tên, 99k/249k/790k, không gói đôi). Chưa duyệt: nội dung bài học (cần giáo viên), làm tròn số lớp 2 theo chương trình chính thức.
-
-## Điều phối (24/11/2026)
-
-Ba gói chạy song song, mỗi gói giữ một vùng tệp riêng để không đụng nhau. Các mục `[?]` chờ duyệt đã được điều phối CHỐT TẠM theo bản đề xuất trong kế hoạch tương ứng (chủ site xác nhận hoặc sửa sau).
-
-- **Gói A — Vườn theo lớp (H5):** `learn/garden/**`, `learn/farm.js`, `shared/art/garden/**`.
-- **Gói B — Lớp 1 trực quan + icon trang phụ huynh:** `learn/content/lessons/g1_*|VI-G1-*|EN-G1-*`, `learn/lop/bai.html`, `learn/parent/index.html`, `scripts/learn/gen-icons.js`.
-- **Gói C — Nền Plus + AI luyện cùng (chạy cục bộ, mock, tắt mặc định):** `worker/**`, `server/**`, `learn/plus.js`, `learn/slot.js|path.js|backup.js`, docs, `privacy.html`, `terms.html`.
-- Việc cần người/thiết bị thật (B13, B14, nghe loa thật, tô chữ trên cảm ứng, duyệt nội dung) vẫn giữ nguyên bên dưới.
-
-## H1. Khung điều hướng theo lớp
-
+Cập nhật: 2026-11-24 (đã dọn mục xong). Quy ước: `[x]` xong · `[ ]` chưa làm · `[~]` đang làm · `[?]` chờ chủ site duyệt. Xong mục nào thì đổi ký hiệu mục đó (sửa đúng một dòng).
 
 ## H2. Bộ máy bài học
 
 - [?] Bạn duyệt 3 bài mẫu
 
-## H6. Thói quen & niềm tin học (learn/habit.js)
+## H8. Thói quen & niềm tin học (learn/habit.js)
 
-- [x] Cầu vồng tuần (không mất), quà mốc 3/7/14/30 ngày, lời khen theo tiến bộ của chính bé, bản tin tuần cho ba mẹ
 - [ ] Lời chào mở app theo thói quen ("cây đang chờ con tưới")
 
 ## H4. Soạn bài học hàng loạt (66 chủ đề)
@@ -34,15 +17,11 @@ Ba gói chạy song song, mỗi gói giữ một vùng tệp riêng để không
 
 ## H5. 3 khu vườn: Toán giữ nguyên + 2 khu vườn MỚI (Rừng Chữ, Vịnh Từ) + đổi màu theo lớp (kế hoạch: docs/LEARN-GARDEN-LAYOUTS-PLAN.md)
 
-- [ ] Quầy đổi hạt: hạt giống trong kho là số chung (không theo loại), nên quầy đổi 2 nông sản lớp cũ lấy 1 hạt (3 lần/ngày) thay vì "hạt này lấy hạt kia" — cần bạn duyệt cách đổi này
 - [ ] Đồ trang trí chỉ có 4 chỗ đặt cố định (chạm để đặt/cất); chưa kéo thả đổi chỗ tự do
-- [ ] Sao lưu: khoá `gardenOwned`, `gardenDeco@*`, `gardenSwap` chưa nằm trong danh sách trắng của `learn/backup.js` (ngoài vùng gói A, giao gói C); đồ đã mở vẫn tính lại được từ tiến độ chủ đề, chỉ mất chỗ đặt trang trí khi khôi phục
 - [ ] 8 cây trồng mới chưa có linh vật riêng (mascot_<cây>_l1..l4) và ảnh kho; popup cây mới chưa có bong bóng lời thoại
 - [ ] Kiểm trên máy thật (iPhone/Android) các cỡ màn; đã kiểm bằng Chrome thật 360×640, 390×844, 844×390
 
-## Học Vui Plus (G1–G6): phần làm được cục bộ đã xong (tắt mặc định); còn lại chờ người/bên ngoài
-
-Đã xong và có bài đo: chỗ cắm đồng bộ (`check-sync.js`), nền bán hàng + token + dùng thử + thẻ Plus (`check-plus.js`, `check-plus-ui.js`), lọc từ nhạy cảm + không lộ đáp án + cache/hạn mức/đường lui + công tắc AI (`check-coach.js`), khung đề thi (`check-exam.js`), pháp lý. Chi tiết: `docs/LEARN-FREE-VS-PLUS.md`, `docs/LEARN-PLUS-DESIGN.md`.
+## Học Vui Plus (G1–G6): còn lại chờ người/bên ngoài (phần cục bộ đã xong, tắt mặc định)
 
 - [ ] Chạy migration 009 trên Neon rồi mới đặt `LEARN_PLUS=on` — cần quyền database sản xuất (chưa chạy: gói này không deploy)
 - [ ] Thử thanh toán thật bằng đơn `learn_test` 1.000đ (`LEARN_TEST_PRICE=on`) qua SePay — cần tài khoản SePay/ngân hàng; chưa đụng thanh toán thật
@@ -60,14 +39,14 @@ Ba gói chạy song song, mỗi gói giữ một vùng tệp riêng để không
 
 - [?] Mở rộng đủ 29 chữ cái + số khi có thêm bài học (hiện có 28 bạn: số 0–10, chữ a…h) — Cần bạn duyệt danh sách chữ/vè cho các chữ còn lại
 
-## H6. Đóng vai bé lớp 1: chưa đạt, cần sửa (khảo sát 2026-11-23, Chrome 390×780)
+## H9. Bé lớp 1: việc cần thiết bị/bé thật (khảo sát 2026-11-23)
 
 - [ ] B13. Rà lại toàn bộ bằng bé thật (hoặc phụ huynh quan sát) 5 phút, trên iPad và iPhone — Ghi lại: bé chạm vào đâu đầu tiên, có tự quay lại không, chỗ nào hỏi "cái này là gì". Mình mới đóng vai bằng ảnh Chrome, chưa có người thật
 - [ ] B14. iPhone SE thật: kiểm nút góc phải trên (sự kiện 📅) và góc phải dưới (＋ − ⌂) còn lệch icon không — Đã đổi cách căn giữa (flexbox thay grid) và vẽ ＋ − bằng SVG; Chrome headless đo tâm icon trùng tâm nút ở 320 và 375px nhưng không tái hiện được lỗi gốc, cần thử trên máy thật
 
 ## H7. Khảo sát đóng vai bé lớp 2–5 (24/11/2026): còn lại sau đợt sửa
 
-Báo cáo gốc: docs/khao-sat-lop-2.md, khao-sat-lop-3.md, khao-sat-lop-4.md, khao-sat-lop-5.md (119 phát hiện). Đã sửa: nút Đúng/Sai khó đọc, chữ ngắt giữa vần, menu có nhãn, thanh trên/cổng loa, màn kết thúc "Đúng x/N", đề Việt/Anh theo lớp (bỏ kiểu lớp 1 ở lớp ≥3), câu mơ hồ, gợi ý không lộ đáp án, 5 dạng Toán lớp 5, bài học lớp 2–5 viết lời giảng, "Luyện thêm" và "Ôn chỗ hay sai", lời linh vật lớp 4–5, tranh nền theo môn.
+Báo cáo gốc: docs/khao-sat-lop-2.md … khao-sat-lop-5.md (119 phát hiện).
 
 - [ ] Chống lặp trong một vòng (đọc bảng, "chữ số hàng", cùng từ hai lần ở ghép chữ) — thêm vào `engine.round` (L3-21).
 - [ ] `E.round` từng ném "Cannot read properties of undefined (reading 'id')" ở planRound khi chạy tay một script lấy mẫu; chưa tái hiện được trong bài đo — cần điều tra.

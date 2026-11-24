@@ -8,13 +8,13 @@ Quy ước: `[ ]` chưa làm · mục đã xong thì xoá khỏi file (lịch s�
 
 ## A. Việc chung (mọi môn)
 
-- [ ] Chơi thử bằng trình duyệt thật từng môn × từng lớp 1–5 và tự nhìn ảnh (câu có SVG, bảng, emoji, nút không tràn chữ). `check-ui.js` (50 tổ hợp) đã đạt; còn xem ảnh các tổ hợp chưa xem. Ảnh do `check-ui-math --shots` sinh ra chỉ chụp màn bật loa nên chưa dùng để duyệt câu. Lỗi `ERR_FAILED` ở nghe–viết, viết câu, đọc to do chưa có file giọng thu sẵn trong `shared/audio/voice/`.
+- [ ] Thiếu file giọng thu sẵn trong `shared/audio/voice/` (chỉ có `index.json`): nghe–viết, đọc to báo `ERR_FAILED` khi tải clip; `check-ui-math.js --shots` chỉ chụp màn bật loa nên chưa dùng để duyệt câu.
 
 ---
 
 ## B. Toán lớp 1–5
 
-- [ ] Hình minh họa hình học nâng cao (đa giác, hình khối 3D); biểu đồ cột vẽ thật. Đã thử biểu đồ cột và gỡ ra: khung câu hỏi cố định một màn hình, `fitQ` ép SVG co về hình vuông tối thiểu 44px nên biểu đồ ngang không đọc được. Muốn làm cần thiết kế lại khung câu (ví dụ bỏ bảng chữ, chỉ dùng biểu đồ) và viết lại `check-mathskills` đọc số từ biểu đồ.
+- [ ] Hình minh họa hình học nâng cao (đa giác, hình khối 3D) và biểu đồ quạt SVG thật (câu đọc bảng đã có biểu đồ thanh ngang). Biểu đồ SVG ngang bị `fitQ` co về hình vuông tối thiểu 44px trong khung câu cố định nên cần thiết kế lại khung câu.
 - [ ] Kiểu câu "giải thích cách làm" bằng lời viết (cần chấm nội dung, không có AI lúc chạy).
 
 ---
