@@ -945,6 +945,9 @@ stars = +ls("learn:stars") || 0;
   ["keydown", "keypress", "keyup"].forEach(ev => addEventListener(ev, e => { if(!g.hidden && e.key !== "Tab" && !(e.target && e.target.closest && e.target.closest("#spkGate"))){ e.stopImmediatePropagation(); e.preventDefault(); } }, true));   /* gõ phím không lọt xuyên cổng loa */
   $("sgOff").onclick = () => { AUTO = false; ls("learn:auto", "0"); sndUi(); GESTURE = true; g.hidden = true; };
 })();
+/* lớp 4–5: lời linh vật bớt "bé ơi" kiểu trẻ nhỏ (chỉ đổi chữ, tiếng Việt) */
+const toneUp = t => (typeof t !== "string" || lang !== "vi" || grade < 4) ? t : t.replace(/Cà Rốt bị lạc trong rừng! Giúp bạn ấy…?/, "Nhiệm vụ: đưa Cà Rốt về nhà.").replace(/ bé ơi/g, "").replace(/Chào bé yêu!/g, "Chào bạn!").replace(/ nè([!.?]|$)/g, "$1").replace(/(?<![\p{L}])Bé(?![\p{L}])/gu, "Bạn").replace(/(?<![\p{L}])bé(?![\p{L}])/gu, "bạn");
+{ const fs = LM.say, fe = LM.event; if(typeof fs === "function") LM.say = function(t){ const a = [].slice.call(arguments); a[0] = toneUp(t); return fs.apply(this, a); }; if(typeof fe === "function") LM.event = function(){ return toneUp(fe.apply(this, arguments)); }; }
 LM.bind({ box: $("masBox"), bubble: $("say"), base: "../shared/art/learn/", lang, idleMs: 15000, onTap: speak });
 $("mas").onclick = () => LM.poke();
 /* dùng bàn phím: Tab tới linh vật là nghe đọc câu hỏi (Enter/Space để nghe lại) */
