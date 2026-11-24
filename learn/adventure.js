@@ -27,8 +27,8 @@
     return { n: n + 1, i: i + 1, total: list.length, round: round, hero: c.hero, title: c.t, intro: intro, places: c.p,
       step: function (k) { return (L === "vi" ? "Chặng " : "Step ") + (k + 1) + "/5 · " + c.p[Math.min(4, k)]; },
       outro: function (ok, got) {
-        if (L === "vi") return ok ? c.hero + " đã " + c.g + " thành công! Chương mới đang chờ bé." : c.hero + " mới tới chặng " + Math.max(1, got) + "/5. Thử lại để " + c.g + " nhé!";
-        return ok ? c.hero + " made it: " + c.g + "! A new chapter awaits." : c.hero + " reached step " + Math.max(1, got) + "/5. Try again to " + c.g + "!";
+        if (L === "vi") return ok ? c.hero + " đã về đích! Chương mới đang chờ." : c.hero + " mới tới chặng " + Math.max(1, got) + "/5. Thử lại nhé!";
+        return ok ? c.hero + " made it! A new chapter awaits." : c.hero + " reached step " + Math.max(1, got) + "/5. Try again!";
       } };
   }
   function advance(subj) { var F = root.Farm; if (!F) return; var g = F.get(); g.story[subj] = (g.story[subj] || 0) + 1; F.save(); }

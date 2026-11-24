@@ -20,6 +20,11 @@ Ba gói chạy song song, mỗi gói giữ một vùng tệp riêng để không
 
 - [?] Bạn duyệt 3 bài mẫu
 
+## H6. Thói quen & niềm tin học (learn/habit.js)
+
+- [x] Cầu vồng tuần (không mất), quà mốc 3/7/14/30 ngày, lời khen theo tiến bộ của chính bé, bản tin tuần cho ba mẹ
+- [ ] Lời chào mở app theo thói quen ("cây đang chờ con tưới")
+
 ## H4. Soạn bài học hàng loạt (66 chủ đề)
 
 - [?] Bạn duyệt 12 bài lớp 1 (3 môn): giọng văn, độ dài, mức khó, từ tiếng Anh — Mở: /learn/lop/index.html?grade=1&subj=toan (tviet, tanh)

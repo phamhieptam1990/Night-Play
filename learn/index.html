@@ -294,6 +294,8 @@ body.g1 #pick,body.g1 #toMeTop{display:none}body.g1 #toGarden{margin-left:auto}
 .adv .gl{display:flex;align-items:center;gap:8px;margin-top:3px;font-size:12px;font-weight:800;color:var(--ink2)}.adv .gl span{white-space:nowrap}.adv .gl i{flex:1;height:8px;border-radius:5px;background:color-mix(in srgb,var(--ink) 12%,transparent);overflow:hidden;display:block}.adv .gl u{display:block;height:100%;width:0;border-radius:5px;background:linear-gradient(90deg,#34D399,#FFD24D);transition:width .5s;text-decoration:none}
 .mas .oft{position:absolute;left:50%;top:-6px;transform:translateX(-50%);font-size:28px;line-height:1;pointer-events:none;z-index:2;filter:drop-shadow(0 2px 2px rgba(0,0,0,.3))}.mas .oft:empty{display:none}
 .rstory,.rfarm{margin:6px 0 0;font-weight:800;font-size:15px;line-height:1.4;color:var(--ink)}.rfarm{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}.rfarm span{padding:4px 10px;border-radius:99px;background:color-mix(in srgb,var(--sg) 18%,var(--panel));border:1px solid color-mix(in srgb,var(--sg) 40%,var(--line));font-size:14px}.rfarm span.big{font-size:14px;line-height:1.4;background:linear-gradient(135deg,#FFE08A,#FFB020);border-color:#E59A00;color:#4a2c00}
+.rb{display:inline-flex;align-items:center;gap:4px}.rb i{width:12px;height:12px;border-radius:50%;background:color-mix(in srgb,var(--c) 18%,transparent);border:1.5px solid var(--c)}.rb i.on{background:var(--c);box-shadow:0 0 6px var(--c)}.rb i.td{outline:2px solid var(--ink);outline-offset:1px}
+@media (max-height:700px){#res .rmas{width:96px;height:96px}#res .starrow{font-size:30px;margin:2px 0}#res .stat{margin:6px 0}#res .stat div{padding:4px 6px}#res .stat b{font-size:24px}#res .rfarm{gap:4px}#res .rfarm span{padding:2px 8px;font-size:13px}}
 /* màn thấp: thu gọn dải chương để không chèn ép khu trả lời */
 @media (max-height:780px){.adv{padding:4px 10px;gap:8px}.adv .pl{width:34px;height:34px}.adv b{font-size:12px}}
 @media (max-height:700px){.adv{display:none}}
@@ -474,6 +476,7 @@ body.g1 #pick,body.g1 #toMeTop{display:none}body.g1 #toGarden{margin-left:auto}
 <script src="limit.js"></script>
 <script src="voice.js"></script>
 <script src="farm.js"></script>
+<script src="habit.js"></script>
 <script src="adventure.js"></script>
 <script src="story.js"></script>
 <script src="content/buddies.js"></script>
@@ -585,15 +588,15 @@ function farmFinish(){
   let tr = null; if(TRIP){ tr = Story.finish(TRIP.id, roundStars); if(tr.seed) Farm.addSeeds(1); }
   $("rStory").textContent = "📖 " + (TRIP ? Story.tx(TRIP.outro.text, lang) : ch.outro(ok, roundStars));
   const cn = { carrot: vi ? "cà rốt" : "carrots", wheat: vi ? "lúa mì" : "wheat", strawberry: vi ? "dâu tây" : "strawberries" }[rep.crop];
-  const chips = []; if(rep.cropN) chips.push("<span>" + (vi ? "🧺 +" + rep.cropN + " " + cn + " vào kho" : "🧺 +" + rep.cropN + " " + cn)+ "</span>"); if(rep.seeds) chips.push("<span>🌱 +" + rep.seeds + "</span>");
+  const chips = []; if(rep.cropN) chips.push("<span>" + (vi ? "🧺 +" + rep.cropN + " " + cn : "🧺 +" + rep.cropN + " " + cn)+ "</span>"); if(rep.seeds) chips.push("<span>🌱 +" + rep.seeds + "</span>");
   if(tr && tr.seed) chips.push("<span class='big'>" + (vi ? "🌱 Hạt quý mới về vườn: +1" : "🌱 A rare seed came home: +1") + "</span>");
   chips.push("<span>🎁 " + Math.min(rep.questGoal, rep.questNow) + "/" + rep.questGoal + "</span>");
-  if(CP && CP.first) chips.push("<span class='big'>" + (vi ? "🎁 Qua chủ đề! +3 nhiệm vụ trong vườn, +2 🌱" : "🎁 Topic passed! +3 garden tasks, +2 🌱") + "</span>"); else if(TOPIC_ID && roundStars < 3) chips.push("<span>" + (vi ? "Đúng từ 3 câu là qua chủ đề và nhận nhiệm vụ. Thử lại nhé!" : "Get 3 right to pass and earn tasks. Try again!") + "</span>");
-  if(rep.goalHit) chips.push("<span class='big'>" + (vi ? "🎉 Đủ mục tiêu hôm nay! +2 🌱 +3 ⭐" : "🎉 Daily goal done! +2 🌱 +3 ⭐") + "</span>");
+  if(CP && CP.first) chips.push("<span class='big'>" + (vi ? "🎁 Qua chủ đề! +3 nhiệm vụ, +2 🌱" : "🎁 Topic passed! +3 garden tasks, +2 🌱") + "</span>"); else if(TOPIC_ID && roundStars < 3) chips.push("<span>" + (vi ? "Đúng 3 câu là qua chủ đề. Thử lại nhé!" : "Get 3 right to pass and earn tasks. Try again!") + "</span>");
+  if(rep.goalHit) chips.push("<span class='big'>" + (vi ? "🎉 Đủ mục tiêu ngày! +2 🌱 +3 ⭐" : "🎉 Daily goal done! +2 🌱 +3 ⭐") + "</span>");
   if(rep.newOutfit) chips.push("<span class='big'>" + rep.newOutfit.e + " " + (vi ? "Mở trang phục mới: " : "New outfit: ") + rep.newOutfit.n + "</span>");
   { const mk = (MISSION && Farm.MISSION_SUBJ[MISSION] === subj) ? MISSION : missionOf(subj);
-    if(mk && roundStars >= 3){ const m = Farm.missionDone(mk), gt = Farm.BUILD.goal(m.n); chips.push("<span class='big'>" + (m.first ? (vi ? "🎯 Xong nhiệm vụ! " + (Farm.BUILD.got[Math.min(m.n, 7)] || "Khu vườn mở thêm một phần đất") + (gt ? " Tiếp theo: " + gt.name + " (còn " + Math.max(0, gt.at - gt.done) + ")" : "") : "🎯 Mission done! A new part of the garden opens 🌱") : (vi ? "🎯 Nhiệm vụ " + T[lang].sn[subj] + " hôm nay đã xong rồi" : "🎯 Today's mission is already done")) + "</span>"); $("toGdn").hidden = false; }
-    else if(mk && roundStars < 3) chips.push("<span>" + (vi ? "🎯 Đúng ít nhất 3 câu là xong nhiệm vụ. Thử lại nhé!" : "🎯 Get at least 3 right to finish the mission. Try again!") + "</span>"); }
+    if(mk && roundStars >= 3){ const m = Farm.missionDone(mk), gt = Farm.BUILD.goal(m.n); chips.push("<span class='big'>" + (m.first ? (vi ? "🎯 Xong nhiệm vụ! " + (Farm.BUILD.got[Math.min(m.n, 7)] || "Khu vườn mở thêm một phần đất") + (gt ? " Tiếp theo: " + gt.name + " (còn " + Math.max(0, gt.at - gt.done) + ")" : "") : "🎯 Mission done! A new part of the garden opens 🌱") : (vi ? "🎯 " + T[lang].sn[subj] + ": xong nhiệm vụ" : "🎯 Today's mission is already done")) + "</span>"); $("toGdn").hidden = false; }
+    else if(mk && roundStars < 3) chips.push("<span>" + (vi ? "🎯 Đúng 3 câu là xong nhiệm vụ. Thử lại nhé!" : "🎯 Get at least 3 right to finish the mission. Try again!") + "</span>"); }
   $("rFarm").innerHTML = chips.join(""); gardenBadge(); ADV = null; farmOutfit();
 }
 /* tự co cỡ chữ câu hỏi cho vừa khung (câu dài, bảng nhiều dòng, hình): giữ nguyên lề, chỉ giảm chữ tới khi không tràn */
@@ -815,7 +818,14 @@ function finish(){
   $("rTip").textContent = top ? t.tipErr + t.tag[top] + "." : t.tipOk; $("again").setAttribute("aria-label", t.again); $("resX").setAttribute("aria-label", t.close); $("change").setAttribute("aria-label", t.change);
   /* B11: lớp 1–2 — lý do quay lại: còn bao nhiêu bạn Số/Chữ đang chờ trong bộ sưu tập */
   if(grade <= 2 && window.Album){ try{ const left = Album.total() - Album.count(); if(left > 0) $("rTip").textContent += " " + (lang === "en" ? left + " new friends are waiting for you!" : "Còn " + left + " bạn đang chờ bé gặp, mai chơi tiếp nhé!"); }catch(e){} }
+  let HB = null; try{ if(window.Habit) HB = Habit.note(subj, roundStars, lang); }catch(e){}
+  if(HB){ let tp = HB.praise + (top ? " " + (lang === "en" ? "Practise: " : "Luyện thêm: ") + t.tag[top] + "." : "");
+    if(grade <= 2 && window.Album){ try{ const left = Album.total() - Album.count(); if(left > 0) tp += " " + (lang === "en" ? left + " friends are waiting!" : "Còn " + left + " bạn đang chờ bé!"); }catch(e){} }
+    $("rTip").textContent = tp; }
   farmFinish();
+  if(HB){
+    const rb = "<span class='rb' aria-label='" + (lang === "en" ? "Rainbow this week" : "Cầu vồng tuần này") + ": " + HB.week.count + "/7'>🌈 " + HB.week.days.map((d, i) => "<i class='" + (d.on ? "on" : "") + (d.today ? " td" : "") + "' style='--c:" + ["#FF5A5F","#FF9F43","#FFD43B","#4CC764","#38B6FF","#6C63FF","#C26BFF"][i] + "'></i>").join("") + "</span>";
+    $("rFarm").insertAdjacentHTML("afterbegin", rb + (HB.gift ? "<span class='big'>🎁 " + HB.gift + "</span>" : "")); }
   { const q = new URLSearchParams({ grade, subj, lang }).toString(), L = lang === "vi" ? ["Chơi lại", "Khu vườn", "Trang học"] : ["Play again", "Garden", "Lessons"];
     $("toGdn").hidden = false; $("toMap").hidden = false; $("toGdn").href = "garden/index.html?" + q; $("toMap").href = "lop/index.html?" + q;
     $("again").querySelector("span").textContent = L[0]; $("toGdn").querySelector("span").textContent = L[1]; $("toMap").querySelector("span").textContent = L[2]; }
