@@ -10,6 +10,7 @@ const MODS = {   // require LITERAL (bundler không gộp được require độ
   "cat-banh-chung": () => require("./pro/cat-banh-chung"),
   "duong-ray": () => require("./pro/duong-ray"),
   "mat-tinh-khong": () => require("./pro/mat-tinh-khong"),
+  "ghep-ba-the": () => require("./pro/ghep-ba-the"),
   "ne-o-ga": () => require("./pro/ne-o-ga"),
   "noi-mot-net": () => require("./pro/noi-mot-net"),
   "shipper-sieu-toc": () => require("./pro/shipper-sieu-toc"),

@@ -13,8 +13,11 @@ const GAMES = {
   "ne-o-ga": { g: "OG", pre: "G.dist=3200;G.lives=2;G.bonus=100;" },
   "shipper-sieu-toc": { g: "SS", pre: "G.route=G.lv.bestPerm.slice();startRun(G,false);G.runT=G.runLen+9;step(G,.01);clearTimeout(G.nt);" },
   "song-sot-cuoi-thang": { g: "SV", pre: "for(let i=0;i<4;i++){G.lock=false;choose(G,i%2==0);clearTimeout(G.nt);advance(G)}" },
-  "xay-cau-tre": { g: "TB", pre: "TB.warren(G,4,40);" }
+  "xay-cau-tre": { g: "TB", pre: "TB.warren(G,4,40);" },
+  "ghep-ba-the": { g: "GT", pre: "GT.playTo(G,7);" }
 };
+/* CHECK_ONLY=<id,id> chỉ đo các game này (bỏ các bài đo toàn repo) — dùng khi chỉ sửa một game */
+if (process.env.CHECK_ONLY) for (const k of Object.keys(GAMES)) if (!process.env.CHECK_ONLY.split(",").includes(k)) delete GAMES[k];
 const fails = [], note = (ok, game, msg) => { if (!ok) { fails.push(game + ": " + msg); console.log("  ✗ " + game + ": " + msg); } };
 const b64 = o => Buffer.from(JSON.stringify(o)).toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 
@@ -26,7 +29,7 @@ if (ONLY_LEARN) process.exit(runLearn() ? 0 : 1);
   /* 1. khung sinh ra phải khớp spec (không còn sửa tay trong file sinh ra) */
   try {
     execSync("node scripts/cozygame/gen.js all", { cwd: root, stdio: "pipe" });
-    const dirty = execSync("git status --porcelain -- cozyplay/games", { cwd: root }).toString().split("\n").filter(l => l && /(bao-nhieu|ve-mot|cat-banh|mat-tinh|noi-mot|ne-o-ga|shipper|song-sot|xay-cau)/.test(l));
+    const dirty = execSync("git status --porcelain -- cozyplay/games", { cwd: root }).toString().split("\n").filter(l => l && /(bao-nhieu|ve-mot|cat-banh|mat-tinh|noi-mot|ne-o-ga|shipper|song-sot|xay-cau|ghep-ba)/.test(l));
     note(!dirty.length, "tổng", "file sinh ra khác bản đã commit (sửa tay hoặc quên commit?): " + dirty.join(" | "));
   } catch (e) { note(false, "tổng", "gen.js lỗi: " + String(e.message).slice(0, 120)); }
   const srv = spawn("python3", ["-m", "http.server", String(PORT)], { cwd: root, stdio: "ignore" });
@@ -36,7 +39,7 @@ if (ONLY_LEARN) process.exit(runLearn() ? 0 : 1);
     const G = GAMES[id], errs = [];
     console.log("== " + id);
     const mk = async (w, h, q, th) => { const pg = await br.newPage(); await pg.setViewport({ width: w, height: h }); pg.on("pageerror", e => errs.push(e.message));
-      await pg.evaluateOnNewDocument(th => { localStorage.setItem("np-sound", "0"); for (const k of ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc"]) localStorage.setItem(k + "-tut", "1"); localStorage.setItem("theme", th || "dark"); window.__m = []; addEventListener("message", e => { if (e.data && e.data.np) window.__m.push(e.data); }); }, th);
+      await pg.evaluateOnNewDocument(th => { localStorage.setItem("np-sound", "0"); for (const k of ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "gt"]) localStorage.setItem(k + "-tut", "1"); localStorage.setItem("theme", th || "dark"); window.__m = []; addEventListener("message", e => { if (e.data && e.data.np) window.__m.push(e.data); }); }, th);
       await pg.goto(B + id + "/index.html?lang=vi" + (q || "")); await new Promise(r => setTimeout(r, 700)); return pg; };
     /* 2. free: không lỗi, thông báo theo giao diện, vừa màn, hạt giống */
     let pg = await mk(360, 640, "", "dark");
@@ -87,6 +90,7 @@ if (ONLY_LEARN) process.exit(runLearn() ? 0 : 1);
     await pg.close();
   }
   await br.close(); srv.kill();
+  if (process.env.CHECK_ONLY) { console.log("\n" + (fails.length ? "✗ " + fails.length + " lỗi" : "✓ game đạt (CHECK_ONLY)")); process.exit(fails.length ? 1 : 0); }
   /* tiếp tục ván dở + nút Back cho 9 game Cozy sinh tự động (scripts/cozygame/check-resume.js, cổng riêng) */
   console.log("== tiếp tục ván dở + Back");
   const rs = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "check-resume.js"), "--only=" + Object.keys(GAMES).join(",")], { cwd: root, env: process.env, stdio: "inherit" });

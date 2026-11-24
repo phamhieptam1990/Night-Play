@@ -61,3 +61,12 @@ avatar bé lớn, quyết định thiết kế chủ site, thử trên iPhone/iP
 - [ ] `learn/parent/index.html` (~550 dòng), `learn/lop/bai.html` (~390 dòng), `learn/lang-skills.js` (~460 dòng), `learn/content/qtypes.js` (~420 dòng), `learn/qui.js` (~330 dòng): tách CSS/JS riêng và theo chức năng.
 - [ ] Mọi dòng quá dài (cả khối viết trên một dòng, nhất là CSS/JS trong HTML): xuống dòng theo luật.
 - [ ] Thêm bài đo `scripts/learn/check-filesize.js`: báo tệp tay viết vượt giới hạn dòng (bỏ qua tệp sinh tự động), chạy cùng các bài đo của Học Vui.
+
+## G. Game Cozy mới "Ghép Ba Thẻ" (xếp thẻ chồng lớp, khay 7 ô, đủ 3 thẻ giống thì biến mất) — 1 giao diện free + 4 trả phí
+
+- [x] Spec `scripts/cozygame/specs/ghep-ba-the.js` + mã client `scripts/cozygame/parts/ghep-ba-the/*.js` (bố cục, luật chơi, vẽ)
+- [x] Mã Night Pass `server/pro/ghep-ba-the.js`: 3 chế độ (Tầng Tầng, Thẻ Úp, Đua 90 giây) + 4 giao diện đổi HẲN cách xếp thẻ (Tiệm Kẹo, Đáy Biển, Vườn Trái Cây, Vũ Trụ)
+- [x] Nối vào hệ thống: wire.js, og.js, events.js, multi-games.js, music.js, widebg.js, rails/portalui SAVE, check.js GAMES
+- [~] Sinh `node scripts/cozygame/gen.js ghep-ba-the`, kiểm Chrome thật: ĐÃ xem 360×640 (free + 4 skin); CHƯA xem 380×760, ngang 844×390, 1200×640; free + 4 skin; home / chơi / kết thúc / popup
+- [x] Bài đo riêng cho game (chỉ game này, không chạy cả repo) đạt
+- [ ] Linh vật SVG riêng (docs/MASCOT-ART-RULES.md) + thẻ npbadges — chưa làm, cần duyệt phong cách
