@@ -4,11 +4,14 @@
 (function (root) {
   "use strict";
   var VI = [
-    [2, "mẹ", "nấu, cơm, yêu, thương, chăm sóc, mẹ, má, mạ, u, bầm, mami, ôm, hát, ru, dịu dàng, hiền, tóc, nụ cười, bữa ăn, đưa đón, dạy, chợ, nhà bếp, áo, mệt, vất vả"],
+    [2, "mẹ",
+        "nấu, cơm, yêu, thương, chăm sóc, mẹ, má, mạ, u, bầm, mami, ôm, hát, ru, dịu dàng, hiền, tóc, nụ cười, bữa ăn, đưa đón, dạy, chợ, nhà bếp, áo, mệt, vất vả"],
     [2, "trường học", "trường, lớp, cô giáo, thầy giáo, thầy, cô, bạn, học, sân trường, bảng, sách, vở, bút, cặp, bàn, ghế, giờ ra chơi, đi học, " +
       "bài, học sinh, thư viện, cổng trường, chào cờ"],
     [2, "con mèo", "ghế, ngủ, bắt chuột, chuột, râu, mèo, mèo con, miu, lông, kêu, meo, cá, đuôi, móng, sữa, nằm, vuốt, mượt, kêu meo meo, tròn, mắt, nhảy, chạy, mềm"],
-    [2, "ngôi nhà", "nhà, ngôi nhà, cửa, cửa sổ, mái, mái nhà, phòng, tường, sân, vườn, bếp, giường, bàn, ghế, cổng, gia đình, ở, đẹp, nhỏ, rộng, ấm, quét, dọn, trang trí, cầu thang, hoa"],
+    [2, "ngôi nhà",
+        "nhà, ngôi nhà, cửa, cửa sổ, mái, mái nhà, phòng, tường, sân, vườn, bếp, giường, bàn, ghế, cổng, gia đình, "
+        + "ở, đẹp, nhỏ, rộng, ấm, quét, dọn, trang trí, cầu thang, hoa"],
     [2, "buổi sáng", "sáng, buổi sáng, mặt trời, nắng, thức dậy, dậy, ăn sáng, đánh răng, rửa mặt, đi học, gà gáy, sương, chim, hót, tập thể dục, " +
       "bình minh, mát, tươi, sớm, bữa sáng, gió, hoa, vươn vai, thể dục"],
     [2, "bạn thân", "bạn, bạn thân, bạn bè, chơi, cùng, giúp, giúp đỡ, vui, chia sẻ, kể chuyện, học, trò chuyện, tên, thân, tốt, hiền, đáng yêu, " +

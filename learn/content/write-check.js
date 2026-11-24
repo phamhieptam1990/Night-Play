@@ -4,12 +4,14 @@
 (function (root) {
   "use strict";
   var TOP = root.WriteTopics || (typeof require !== "undefined" ? (function () { try { return require("./write-topics.js"); } catch (e) { return null; } })() : null);
-  function strip(s) { s = String(s || "").toLowerCase(); s = s.normalize ? s.normalize("NFD").replace(/[̀-ͯ]/g, "") : s; return s.replace(/đ/g, "d").replace(/[^a-z0-9]+/g, " ").trim(); }
+  function strip(s) { s = String(s || "").toLowerCase(); s = s.normalize ? s.normalize("NFD").replace(/[̀-ͯ]/g, "") : s; return s.replace(/đ/g,
+      "d").replace(/[^a-z0-9]+/g, " ").trim(); }
   var cache = {};
   function build(lang) {
     if (cache[lang]) return cache[lang];
     var rows = (TOP && TOP[lang]) || [], freq = {}, by = {};
-    rows.forEach(function (r) { r[2].split(",").forEach(function (k) { k = strip(k); if (k && !(by[r[1]] = by[r[1]] || {})[k]) { by[r[1]][k] = 1; freq[k] = (freq[k] || 0) + 1; } }); });
+    rows.forEach(function (r) { r[2].split(",").forEach(function (k) { k = strip(k); if (k && !(by[r[1]] = by[r[1]] || {})[k]) { by[r[1]][k] = 1;
+        freq[k] = (freq[k] || 0) + 1; } }); });
     var res = { rows: rows, by: by, freq: freq }; cache[lang] = res; return res;
   }
   function find(lang, name) { var B = build(lang); for (var i = 0; i < B.rows.length; i++) if (B.rows[i][1] === name) return B.rows[i]; return null; }
@@ -19,7 +21,8 @@
     var B = build(lang), r = find(lang, name), out = [];
     if (!r) return out;
     var nm = name.split(" ").map(strip);
-    r[2].split(",").forEach(function (k) { k = k.trim(); if (out.length < n && k.length > 1 && k.indexOf(" ") < 0 && nm.indexOf(strip(k)) < 0 && B.freq[strip(k)] < 3) out.push(k); });
+    r[2].split(",").forEach(function (k) { k = k.trim(); if (out.length < n && k.length > 1 && k.indexOf(" ") < 0 && nm.indexOf(strip(k)) < 0 &&
+        B.freq[strip(k)] < 3) out.push(k); });
     return out;
   }
   /* từ chức năng/đại từ: không tính là "từ lạ" khi phát hiện câu chỉ toàn danh từ */
@@ -68,7 +71,8 @@
       return has(FUNC[lg], w) || set[w] || (lg === "en" && Object.keys(set).some(function (kk) { return matchKw([w], " " + w + " ", kk, lg); }));
     });
     var anyPred = toks.some(function (w) { return has(PRED[lg], w); });
-    if (allTopic && !anyPred && toks.length >= 3) return { ok: false, tip: tv ? "Thêm việc làm hoặc đặc điểm nhé: nó làm gì, trông thế nào?" : "Add what it does or what it is like." };
+    if (allTopic && !anyPred && toks.length >= 3) return { ok: false, tip: tv ? "Thêm việc làm hoặc đặc điểm nhé: nó làm gì, trông thế nào?" :
+        "Add what it does or what it is like." };
     return { ok: true, tip: "" };
   }
   var out = { check: check, topicsFor: topicsFor, hintWords: hintWords, strip: strip };

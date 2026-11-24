@@ -19,10 +19,12 @@
     ["Saturday comes after Friday.", 1], ["Tuesday comes before Monday.", 0], ["“Where” is a question word.", 1], ["“Happy” means “sad”.", 0],
       ["“Big” and “small” are opposites.", 1], ["There are seven days in a week.", 1], ["February has 31 days.", 0],
     ["“Mice” is the plural of “mouse”.", 1], ["“He have a dog.” is correct.", 0], ["We use “How much” to ask about the price.", 1],
-      ["“What time is it?” asks about the time.", 1], ["“I am eleven year old.” is correct.", 0], ["“Thursday” comes after “Wednesday”.", 1], ["“Apple” starts with a vowel sound.", 1]];
+      ["“What time is it?” asks about the time.", 1], ["“I am eleven year old.” is correct.", 0], ["“Thursday” comes after “Wednesday”.", 1],
+          ["“Apple” starts with a vowel sound.", 1]];
   var VI_TF = [["“Hôm nay” là một từ chỉ thời gian.", 1], ["Câu “Bạn tên là gì?” cuối câu dùng dấu chấm hỏi.", 1], ["“Mùa xuân” là mùa đầu tiên trong năm.", 1],
     ["Một năm có bốn mùa.", 1], ["Một tuần có sáu ngày.", 0], ["“Đỏ” là tên một màu sắc.", 1], ["“Chiếc bút” dùng để viết.", 1], ["Con cá sống trên cây.", 0],
-      ["Dấu chấm đặt ở cuối câu kể.", 1], ["Tên riêng của người phải viết hoa chữ cái đầu.", 1], ["“Bàn” và “ghế” đều là đồ vật.", 1], ["Mặt trời mọc ở hướng tây.", 0]];
+      ["Dấu chấm đặt ở cuối câu kể.", 1],
+      ["Tên riêng của người phải viết hoa chữ cái đầu.", 1], ["“Bàn” và “ghế” đều là đồ vật.", 1], ["Mặt trời mọc ở hướng tây.", 0]];
   function ldOK() { return !!LD; }
   function clsPick(n, cls) { return shuf(LD[cls]).slice(0, n); }
   function antPairs(n) { return shuf(LD.antonyms).slice(0, n).map(function (a) { return [a[0], a[1]]; }); }
@@ -51,9 +53,11 @@
   };
   HI.odd = function (subj, g, lang) {
     var list, ok, qv = lang === "vi" ? "Ba từ cùng loại, <em>từ nào khác loại?</em>" : "Three words match. <em>Which one is different?</em>";
-    if (subj === "tviet") { var cs = shuf(Object.keys(CLS)), a = cs[0], b = cs[1], g3 = clsPick(3, a), od = pick(LD[b]); list = shuf(g3.concat([od])); ok = list.indexOf(od); }
+    if (subj === "tviet") { var cs = shuf(Object.keys(CLS)), a = cs[0], b = cs[1], g3 = clsPick(3, a), od = pick(LD[b]); list = shuf(g3.concat([od]));
+        ok = list.indexOf(od); }
     else { var t = enTwoThemes(), tri = shuf(t.wa).slice(0, 3), o2 = pick(t.wb); list = shuf(tri.concat([o2])); ok = list.indexOf(o2); }
-    return base("odd", subj, g, lang, qv, { o: optList(list, ok), speak: lang === "vi" ? "Ba từ cùng loại, từ nào khác loại?" : "Three words match. Which one is different?", reveal: list[ok] });
+    return base("odd", subj, g, lang, qv, { o: optList(list, ok), speak: lang === "vi" ? "Ba từ cùng loại, từ nào khác loại?" :
+        "Three words match. Which one is different?", reveal: list[ok] });
   };
   HI.multi = function (subj, g, lang) {
     var opts, q, speak, want = rnd(2, 3);
@@ -84,7 +88,10 @@
   function pairsHi(subj) { return subj === "tviet" ? antPairs(4) : enPairs(4); }
   HI.match = function (subj, g, lang) {
     var vi = subj === "tviet";
-    return base("match", subj, g, lang, vi ? "Ghép mỗi từ với <em>từ trái nghĩa</em> của nó" : (lang === "vi" ? "Ghép mỗi từ với từ <em>trái nghĩa</em> hoặc <em>số nhiều</em>" : "Match each word with its <em>opposite</em> or <em>plural</em>"), { pairs: pairsHi(subj), speak: vi ? "Ghép mỗi từ với từ trái nghĩa của nó." : "Match each word with its opposite or plural." });
+    return base("match", subj, g, lang, vi ? "Ghép mỗi từ với <em>từ trái nghĩa</em> của nó" : (lang === "vi" ?
+        "Ghép mỗi từ với từ <em>trái nghĩa</em> hoặc <em>số nhiều</em>" :
+        "Match each word with its <em>opposite</em> or <em>plural</em>"), { pairs: pairsHi(subj), speak: vi ? "Ghép mỗi từ với từ trái nghĩa của nó." :
+        "Match each word with its opposite or plural." });
   };
   HI.memory = function (subj, g, lang) {
     return base("memory", subj, g, lang, lang === "vi" ? "Lật hai thẻ để tìm <em>cặp từ</em> đi cùng nhau" : "Flip two cards to find a <em>matching pair</em>",
@@ -124,7 +131,8 @@
     if (subj === "toan") return dragOld(subj, g, lang);
     var pool = DF[subj === "tanh" ? "en" : "vi"].filter(function (x) { return g <= 2 ? x[0] === 1 : (g >= 4 ? x[0] >= 3 : x[0] === 3 || x[0] === 4); });
     var it = pick(pool), q = it[1].replace("__", '<em class="bl">__</em>'), all = shuf([it[2]].concat(it[3]));
-    return base("dragfill", subj, g, lang, q, { o: optList(all, all.indexOf(it[2])), speak: lang === "vi" ? "Kéo thẻ đúng vào chỗ trống." : "Drag the right card into the gap.", reveal: it[2] });
+    return base("dragfill", subj, g, lang, q, { o: optList(all, all.indexOf(it[2])), speak: lang === "vi" ? "Kéo thẻ đúng vào chỗ trống." :
+        "Drag the right card into the gap.", reveal: it[2] });
   };
   ["tf", "odd", "multi", "sort", "match", "memory", "order"].forEach(function (k) { var old = G[k];
     G[k] = function (subj, g, lang) { return (subj !== "toan" && g >= 3 && ldOK()) ? HI[k](subj, g, lang) : old(subj, g, lang); }; });
