@@ -17,11 +17,14 @@ const SKIP_DIRS = new Set(["node_modules", ".git"]);
    Tệp dữ liệu / sinh ra nhưng không có dấu "SINH BỞI": được dòng dài tới 400 ký tự, tổng số dòng vẫn báo. */
 const DATA_FILES = [
   "learn/icons.js", "learn/bg.css", "learn/content/curriculum.js", "learn/content/teasers.js", "learn/content/bank.js",
-  "learn/content/lessons/*", "learn/content/trips/*"];
+  "learn/content/lessons/*", "learn/content/trips/*",
+  /* dữ liệu đọc hiểu (đoạn văn dài, một chuỗi) và các tệp chuỗi SVG/HTML mẫu của bộ sinh: không xuống dòng được khi không đổi nội dung */
+  "learn/lang/data-vi-read.js", "learn/lang/data-en.js", "scripts/learn/gen-icons*.js", "scripts/learn/gen-scene-*.js",
+  "scripts/learn/gen-landing*.js", "scripts/learn/lesson-teach-*.js"];
 /* Dòng chứa URI "data:" (ảnh mặt nạ SVG nhúng trong CSS) không thể xuống dòng: không tính là dòng dài. */
 const DATA_URI = /url\(\s*["']?data:/;
 
-const isData = rel => DATA_FILES.some(p => p.endsWith("/*") ? rel.startsWith(p.slice(0, -1)) : rel === p);
+const isData = rel => DATA_FILES.some(p => p.endsWith("/*") ? rel.startsWith(p.slice(0, -1)) : p.includes("*") ? new RegExp("^" + p.replace(/[.]/g, "\\.").replace(/\*/g, ".*") + "$").test(rel) : rel === p);
 const isGenerated = text => text.split("\n", 3).some(l => /SINH BỞI|SINH TỰ ĐỘNG/.test(l));
 
 function walk(dir, out) {

@@ -4,349 +4,30 @@
    nhà lá → nhà tranh → nhà tường → nhà ngói; rào tre → rào gỗ → tường đá...  Không filter/ảnh/script; hoạt ảnh chỉ transform/opacity (npa-*).
    KHÔNG sửa tay tệp sinh ra. */
 "use strict";
-const fs = require("fs"), path = require("path");
-const out = path.join(__dirname, "../../shared/art/garden/scene");
-fs.mkdirSync(out, { recursive: true });
+/* Các phần dựng cảnh nằm ở scripts/learn/gen-scene-*.js (lõi, vật nhỏ + cây, công trình, bố cục); tệp này ghép cảnh và xuất ảnh. */
+const SP = {};
+["gen-scene-core", "gen-scene-props", "gen-scene-build", "gen-scene-layout"].forEach(n => require("./" + n + ".js")(SP));
+const { SHADOW, HOT, ANIM, TREEPOS, rng, W, H, ell, tuft, flower, OX, TW, OY, TH, fence, DROPPED, MOVED, HY, STABLE, stable, FOOT, bigTree, SPRITES,
+  pine, hay, barrel, chicken, rabbit, cow, rock, bush, lavender, flowerPatch, pumpkins, milkcans, roundHay, crate, coop, pond, houseLot, pathNet,
+  fenceRun, SPRITE_KINDS, FENCE, windmill, barn, house, well, press, oven, table, PENS, poly, pig, sheep, duck, hedge, f, bee, butterfly, STYLE,
+  defs, lerp, C, cropWheat, cropCarrot, cropCorn, cropStraw, cropTomato, cropSun, G, shadow, fs, path, out, FENCES, U0, PATHS, pathPatch, TREE_PNG } = SP;
 
-const W = 1280, H = 880, TW = 104, TH = 52, OX = 640, OY = 96;
-const f = n => Math.round(n * 10) / 10;
-const P = (gx, gy) => [OX + (gx - gy) * TW / 2, OY + (gx + gy) * TH / 2];
-const pts = a => a.map(p => f(p[0]) + "," + f(p[1])).join(" ");
-function rng(seed) { let a = seed >>> 0; return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
-const G = (x, y, inner, cls) => `<g${cls ? ` class="${cls}"` : ""} transform="translate(${f(x)} ${f(y)})">${inner}</g>`;
-const poly = (p, fill, stroke, sw) => `<polygon points="${pts(p)}" fill="${fill}"${stroke ? ` stroke="${stroke}" stroke-width="${sw || 3}" stroke-linejoin="round"` : ""}/>`;
-const ell = (cx, cy, rx, ry, fill, stroke, sw) => `<ellipse cx="${f(cx)}" cy="${f(cy)}" rx="${f(rx)}" ry="${f(ry)}" fill="${fill}"${stroke ? ` stroke="${stroke}" stroke-width="${sw || 3}"` : ""}/>`;
-const SHADOW = require("./garden-shadow-art")({ ell });   /* bóng đổ: hướng, độ dài, màu theo buổi ở garden-shadow-art.js */
-const shadow = (rx, ry, o) => SHADOW.make(rx, ry, o);
-
-/* hộp isometric: F = đỉnh trước (thấp nhất) của chân, a = số ô theo gx, b = số ô theo gy, h = cao. Trả về {svg, pts} */
-function box(F, a, b, h, c) {
-  const L = [F[0] - a * TW / 2, F[1] - a * TH / 2], R = [F[0] + b * TW / 2, F[1] - b * TH / 2], B = [L[0] + R[0] - F[0], L[1] + R[1] - F[1]];
-  const up = p => [p[0], p[1] - h];
-  const sv = poly([F, L, up(L), up(F)], c.l, c.s, c.sw) + poly([F, R, up(R), up(F)], c.r, c.s, c.sw) + (c.t ? poly([up(F), up(L), up(B), up(R)], c.t, c.s, c.sw) : "");
-  return { svg: sv, F, L, R, B, up };
-}
-const lerp = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
-
-/* ---------- bảng màu chung ---------- */
-const C = {
-  grassA: "#86CC4E", grassB: "#79C044", grassD: "#5FA63A", edge: "#3F7A2B", soil1: "#A8703F", soil2: "#7B4A28", soilD: "#53321A",
-  wood1: "#C58B4E", wood2: "#9A6532", woodD: "#5E3A1B", stone1: "#D6D3CC", stone2: "#A8A59E", stoneD: "#6E6A63", leaf1: "#8EDB5A", leaf2: "#4FA83B", leafD: "#2F7A2F",
-  roofRed1: "#E0553E", roofRed2: "#B23A2A", roofRedD: "#7E2418", wall: "#F6EFE3", wallS: "#E4D8C4", wallD: "#9C8B72", straw1: "#F0CB62", straw2: "#D9A93A", strawD: "#9A7016",
-  water1: "#7FD3F2", water2: "#3FA3D9", waterD: "#2B73A6"
-};
-
-/* ---------- vật nhỏ ---------- */
-const tuft = (x, y, s) => `<g transform="translate(${f(x)} ${f(y)}) scale(${s})"><path d="M-6 0L-9 -12M0 0L0 -15M6 0L9 -12" stroke="#5AA838" stroke-width="3" stroke-linecap="round" fill="none"/></g>`;
-const flower = (x, y, col) => `<g transform="translate(${f(x)} ${f(y)})"><path d="M0 0V8" stroke="#4E9B34" stroke-width="2"/>${ell(0, -2, 5, 3.4, col, "#fff", 1.4)}${ell(0, -2, 1.8, 1.2, "#FFC94A")}</g>`;
-function rock(x, y, s) { return G(x, y, shadow(26 * s, 8 * s, .2) + `<path d="M${-22 * s} 0C${-24 * s} ${-14 * s} ${-8 * s} ${-26 * s} ${6 * s} ${-22 * s}C${22 * s} ${-20 * s} ${28 * s} ${-6 * s} ${22 * s} 0Z" fill="#B9B6AE" stroke="${C.stoneD}" stroke-width="3" stroke-linejoin="round"/><path d="M${-14 * s} ${-12 * s}C${-8 * s} ${-20 * s} ${4 * s} ${-20 * s} ${8 * s} ${-16 * s}" fill="none" stroke="#fff" stroke-width="3" opacity=".6" stroke-linecap="round"/>`); }
-function bush(x, y, s, col) { const c = col || [C.leaf1, C.leaf2]; return G(x, y, shadow(30 * s, 9 * s, .2) + [[-16, -14, 16], [10, -16, 18], [-2, -26, 18], [20, -6, 12]].map(([a, b, r]) => ell(a * s, b * s, r * s, r * s * .9, c[1], C.leafD, 2.4)).join("") + ell(-4 * s, -30 * s, 9 * s, 6 * s, c[0], null).replace("/>", ' opacity=".7"/>')); }
-function lavender(x, y, s) { let o = ""; const r = rng(Math.floor(x * 7 + y)); for (let i = 0; i < 9; i++) { const a = (i - 4) * 7 * s + (r() - .5) * 5, h = (20 + r() * 12) * s; o += `<path d="M${f(a)} 0C${f(a)} ${-h * .5} ${f(a + 3)} ${-h * .7} ${f(a + 2)} ${-h}" stroke="#4E9B34" stroke-width="2.4" fill="none" stroke-linecap="round"/>` + ell(a + 2, -h - 5 * s, 3.4 * s, 9 * s, i % 2 ? "#9B7BE0" : "#B79CF0", "#6F4FC0", 1.6); } return G(x, y, o); }
-function hay(x, y) { const b = box([0, 0], .8, .6, 22, { l: "#F0C95A", r: "#D6A83A", t: "#F8DD86", s: "#8E6A14", sw: 2.4 }); const lines = [-6, -12].map(k => `<path d="M${f(b.L[0])} ${f(b.L[1] - 22 - k)}L${f(b.F[0])} ${f(b.F[1] - 22 - k)}L${f(b.R[0])} ${f(b.R[1] - 22 - k)}" stroke="#A97C1C" stroke-width="2" fill="none" opacity=".6"/>`).join(""); return G(x, y, shadow(34, 10, .22) + b.svg + lines); }
-function barrel(x, y, s) { return G(x, y, shadow(20 * s, 7 * s, .22) + `<path d="M${-14 * s} ${-4 * s}C${-18 * s} ${-18 * s} ${-18 * s} ${-30 * s} ${-14 * s} ${-42 * s}H${14 * s}C${18 * s} ${-30 * s} ${18 * s} ${-18 * s} ${14 * s} ${-4 * s}C${6 * s} 6 ${-6 * s} 6 ${-14 * s} ${-4 * s}Z" fill="url(#gWood)" stroke="${C.woodD}" stroke-width="3" stroke-linejoin="round"/>` + ell(0, -42 * s, 14 * s, 6 * s, "#D6A066", C.woodD, 3) + [-14, -26].map(k => `<path d="M${-16.5 * s} ${k * s}C-6 ${(k + 7) * s} 6 ${(k + 7) * s} ${16.5 * s} ${k * s}" stroke="#6B6459" stroke-width="3.4" fill="none"/>`).join("")); }
-function chicken(x, y) { return G(x, y, shadow(12, 4, .2) + ell(0, -12, 11, 9, "#fff", "#C9C1B2", 2) + ell(8, -22, 6, 6, "#fff", "#C9C1B2", 2) + `<path d="M6 -29Q8 -35 11 -29Q13 -33 14 -28Z" fill="#E5484D"/><path d="M14 -22L21 -20L14 -18Z" fill="#F5A623"/>` + ell(10, -23, 1.4, 1.4, "#3A2A12") + `<path d="M-2 -2V4M3 -2V4" stroke="#F5A623" stroke-width="2.4" stroke-linecap="round"/>`); }
-function rabbit(x, y) { return G(x, y, shadow(14, 4.6, .2) + ell(0, -11, 11, 9, "#fff", "#CFC6D6", 2) + ell(8, -20, 7, 6.4, "#fff", "#CFC6D6", 2) + ell(6, -32, 2.6, 8, "#fff", "#CFC6D6", 2) + ell(12, -31, 2.6, 8, "#fff", "#CFC6D6", 2) + ell(6, -32, 1, 5, "#FFB3C1") + ell(11, -22, 1.3, 1.3, "#3A2A12") + ell(-11, -9, 3.6, 3.6, "#fff", "#CFC6D6", 1.6)); }
-function bee(x, y, d) { return `<g class="npa npa-hover" style="animation-delay:${d}s"><g transform="translate(${x} ${y})">${ell(-6, -5, 5, 3.4, "#fff", "#BFD9F2", 1.2).replace("/>", ' opacity=".85"/>')}${ell(0, 0, 8, 6.4, "#FFD24D", "#C9840F", 1.8)}<path d="M-3 -6V6M3 -6V6" stroke="#3A2A12" stroke-width="2.4"/>${ell(7, -1, 1.2, 1.2, "#3A2A12")}</g></g>`; }
-function butterfly(x, y, d, col) { return `<g class="npa npa-hover" style="animation-delay:${d}s"><g transform="translate(${x} ${y})"><path d="M0 0C-6 -12 -18 -10 -16 -2C-14 4 -6 4 0 0Z M0 0C6 -12 18 -10 16 -2C14 4 6 4 0 0Z" fill="${col || "#FF8FB0"}" stroke="#B5305F" stroke-width="1.6"/>${ell(0, 0, 1.8, 6, "#3A1E36")}</g></g>`; }
-
-/* ---------- cây ---------- */
-function bigTree(x, y, s, kind) {
-  const r = rng(Math.floor(x * 13 + y * 7)); let canopy = "";
-  /* tán dày kiểu vườn cây miền Tây: 3 lớp lá (tối → vừa → sáng), nhiều chùm lá nhỏ, quả to có điểm sáng */
-  const LT = { mango: ["#2F7D3A", "#4DA844", "#8ED65A"], apple: ["#3E8F3A", "#5FBA47", "#A2E36B"], orange: ["#2F8A3A", "#4FB040", "#94DB5C"], pear: ["#4C9A3A", "#7CC650", "#BEEA7C"], peach: ["#3E9A4A", "#68C45A", "#B0EC8A"], pomelo: ["#4A9A3A", "#78C348", "#BFE878"], litchi: ["#28793A", "#3F9A48", "#7FCF6A"], plum: ["#3A7F4E", "#5AA860", "#9AD688"] }[kind] || ["#3F8F36", "#5FB43F", "#A6E26E"];
-  const blobs = [[-34, -84, 36], [32, -88, 38], [0, -122, 40], [-48, -58, 28], [48, -60, 30], [0, -84, 44], [-18, -106, 30], [22, -104, 32]];
-  blobs.forEach(([a, b2, rr]) => canopy += ell(a, b2 + 5, rr * 1.04, rr * .94, LT[0], C.leafD, 3));
-  blobs.forEach(([a, b2, rr]) => canopy += ell(a - 2, b2 - 1, rr * .86, rr * .78, LT[1], null));
-  [[-26, -96, 20], [22, -100, 22], [-2, -128, 22], [-40, -66, 15], [40, -70, 16], [8, -90, 20]].forEach(([a, b2, rr]) => canopy += ell(a - 4, b2 - 4, rr, rr * .8, LT[2], null).replace("/>", ' opacity=".8"/>'));
-  for (let i = 0; i < 34; i++) { const lx = (r() - .5) * 104, ly = -52 - r() * 86, rot = Math.floor(r() * 180), lit = r() < .5; canopy += `<ellipse cx="${f(lx)}" cy="${f(ly)}" rx="7.5" ry="3.2" transform="rotate(${rot} ${f(lx)} ${f(ly)})" fill="${lit ? LT[2] : LT[0]}" opacity="${lit ? .75 : .55}"/>`; }
-  const FR = { apple: ["#E5484D", "#9E1B28"], orange: ["#FFA62B", "#B9650A"], pear: ["#D9E35A", "#8E9A1E"], peach: ["#FF9DB0", "#C2506A"], mango: ["#FFC23A", "#C28A0A"], pomelo: ["#C9E36A", "#7E9A2B"], litchi: ["#FF5D6C", "#B3243A"], plum: ["#9A6AE0", "#52309A"] }[kind];
-  if (FR) for (let i = 0; i < 17; i++) { const a = (r() - .5) * 108, b2 = -54 - r() * 76, q = 6.8 + r() * 1.6; canopy += ell(a, b2 + 1.5, q, q, FR[1], null) + ell(a, b2, q, q, FR[0], FR[1], 1.6) + ell(a - q * .32, b2 - q * .34, q * .3, q * .24, "#fff").replace("/>", ' opacity=".85"/>') + `<path d="M${f(a)} ${f(b2 - q)}q3 -4 7 -3q-2 4 -7 3z" fill="${LT[1]}" stroke="${LT[0]}" stroke-width="1"/>`; }
-  return G(x, y, `<g transform="scale(${s})">` + shadow(64, 18, .24) + `<path d="M-12 0C-8 -20 -10 -40 -8 -64H8C10 -40 8 -20 12 0C4 5 -4 5 -12 0Z" fill="url(#gWood)" stroke="${C.woodD}" stroke-width="3" stroke-linejoin="round"/>` + canopy + `</g>`);
-}
-function pine(x, y, s) { let t = ""; [[0, 54, 64], [-4, 90, 52], [-8, 124, 40]].forEach(([a, b, w]) => t += `<path d="M${-w} ${-b + 30}C${-w * .5} ${-b + 28} ${-w * .3} ${-b - 6} 0 ${-b - 34}C${w * .3} ${-b - 6} ${w * .5} ${-b + 28} ${w} ${-b + 30}C${w * .4} ${-b + 40} ${-w * .4} ${-b + 40} ${-w} ${-b + 30}Z" fill="url(#gPine)" stroke="#1E5A33" stroke-width="3" stroke-linejoin="round"/>`); return G(x, y, `<g transform="scale(${s})">` + shadow(48, 14, .24) + `<rect x="-8" y="-34" width="16" height="36" rx="4" fill="url(#gWood)" stroke="${C.woodD}" stroke-width="3"/>` + t + `</g>`); }
-
-/* ---------- đường đá, ô trồng, rào ---------- */
-function pathCell(gx, gy) {
-  const r = rng(gx * 31 + gy * 17 + 5), c = P(gx + .5, gy + .5); let o = "";
-  for (let i = 0; i < 5; i++) { const a = (r() - .5) * 70, b = (r() - .5) * 28, rx = 16 + r() * 9, ry = rx * .5; o += ell(c[0] + a, c[1] + b + 2, rx, ry, "#8F8B83", null) + ell(c[0] + a, c[1] + b, rx, ry, "url(#gStone)", "#807C74", 2.2) + `<path d="M${f(c[0] + a - rx * .5)} ${f(c[1] + b - ry * .3)}Q${f(c[0] + a)} ${f(c[1] + b - ry * .7)} ${f(c[0] + a + rx * .4)} ${f(c[1] + b - ry * .4)}" stroke="#fff" stroke-width="2.4" fill="none" opacity=".65" stroke-linecap="round"/>`; }
-  return { d: gx + gy + .2, svg: o };
-}
-function plotCell(gx, gy, crop, ripe, lvl) {
-  const A = P(gx, gy), B = P(gx + 1, gy), Cc = P(gx + 1, gy + 1), D = P(gx, gy + 1), ctr = P(gx + .5, gy + .5);
-  let o = poly([A, B, Cc, D], "url(#gSoil)", lvl >= 3 ? "#7A4B24" : C.soilD, lvl >= 3 ? 7 : 3);
-  for (let k = 1; k < 5; k++) o += `<path d="M${f(lerp(A, D, k / 5)[0])} ${f(lerp(A, D, k / 5)[1])}L${f(lerp(B, Cc, k / 5)[0])} ${f(lerp(B, Cc, k / 5)[1])}" stroke="${C.soilD}" stroke-width="2.6" opacity=".45" stroke-linecap="round"/>`;
-  if (lvl >= 3) o += poly([A, B, Cc, D], "none", "#C58B4E", 3);
-  let cr = "";
-  for (let k = 0; k < 4; k++) for (let m = 0; m < 4; m++) { const p = lerp(lerp(A, D, (k + .5) / 4), lerp(B, Cc, (k + .5) / 4), (m + .5) / 4); cr += crop(p[0], p[1] + 8, ripe); }
-  return { d: gx + gy + .3, svg: o, front: cr, fd: gx + gy + .7 };
-}
-const cropWheat = (x, y, ripe) => { let s = ""; for (let i = -1; i <= 1; i++) { const h = 26 + (i === 0 ? 4 : 0); s += `<path d="M${i * 4} 0L${i * 5} ${-h}" stroke="${ripe ? "#C9A12E" : "#4E9B34"}" stroke-width="2.4" stroke-linecap="round"/>` + ell(i * 5, -h - 4, 3, 8, ripe ? "url(#gWheat)" : "#7BC24A", ripe ? "#A9801A" : "#2F7A2F", 1.4); } return G(x, y, s); };
-const cropCarrot = (x, y, ripe) => G(x, y, `<path d="M-6 0Q-9 -14 -12 -18M0 0Q0 -18 0 -22M6 0Q9 -14 12 -18" stroke="#3FA83B" stroke-width="3.4" fill="none" stroke-linecap="round"/>` + (ripe ? ell(0, 1, 7, 3.6, "#F2701C", "#B84E0E", 1.6) : ""));
-const cropStraw = (x, y, ripe) => G(x, y, ell(-7, -6, 8, 6, "#4FA83B", "#2F7A2F", 1.6) + ell(7, -6, 8, 6, "#4FA83B", "#2F7A2F", 1.6) + ell(0, -11, 8, 6, "#6FCB55", "#2F7A2F", 1.6) + (ripe ? ell(-2, -3, 4.6, 5.4, "#E5484D", "#9E1B28", 1.4) + ell(6, -2, 4, 4.8, "#E5484D", "#9E1B28", 1.4) : ""));
-const cropTomato = (x, y, ripe) => G(x, y, `<path d="M0 0V-24" stroke="#3FA83B" stroke-width="3" stroke-linecap="round"/>` + ell(-6, -16, 6, 4, "#4FA83B", "#2F7A2F", 1.4) + ell(6, -20, 6, 4, "#4FA83B", "#2F7A2F", 1.4) + (ripe ? ell(-5, -9, 5.2, 5.2, "#E5322D", "#A81F1B", 1.4) + ell(6, -12, 5, 5, "#E5322D", "#A81F1B", 1.4) : ell(-5, -9, 4, 4, "#A8D872", "#6E9B3C", 1.2)));
-const cropCorn = (x, y, ripe) => G(x, y, `<path d="M0 0V-34" stroke="#3FA83B" stroke-width="4" stroke-linecap="round"/><path d="M0 -10Q-12 -18 -16 -30M0 -16Q12 -24 16 -34" stroke="#4FA83B" stroke-width="4" fill="none" stroke-linecap="round"/>` + (ripe ? ell(5, -18, 3.6, 8, "#FFD43B", "#B88400", 1.4) : ""));
-const cropSun = (x, y, ripe) => G(x, y, `<path d="M0 0V-26" stroke="#3FA83B" stroke-width="3.4" stroke-linecap="round"/>` + (ripe ? Array.from({ length: 8 }, (_, i) => ell(0, -34, 3, 6, "#FFD43B", "#B36B00", 1).replace("/>", ` transform="rotate(${i * 45} 0 -30)"/>`)).join("") + ell(0, -30, 5.4, 5.4, "#6B4426", "#3A2412", 1.4) : ell(0, -28, 4, 5, "#6FCB55", "#2F7A2F", 1.4)));
-
-function fence(gx, gy, dir, lvl) {   /* dir "x" = dọc theo gx (xuống-phải), "y" = dọc theo gy (xuống-trái) */
-  const A = dir === "x" ? P(gx, gy) : P(gx, gy), B = dir === "x" ? P(gx + 1, gy) : P(gx, gy + 1), d = dir === "x" ? gx + gy + .5 : gx + gy + .5;
-  let o = "";
-  if (lvl >= 3) { /* tường đá thấp */
-    const thick = .28, F = dir === "x" ? P(gx + 1, gy + thick) : P(gx + thick, gy + 1), a = dir === "x" ? 1 : thick, b = dir === "x" ? thick : 1;
-    const bx = box(F, a, b, 30, { l: "url(#gStoneL)", r: "url(#gStoneR)", t: "#E4E0D8", s: "#7E7A72", sw: 2.4 }); o += bx.svg;
-    for (let k = 1; k < 4; k++) { const t = k / 4; const p = lerp(bx.L, bx.F, t), q = lerp(bx.F, bx.R, t); o += `<path d="M${f(p[0])} ${f(p[1])}V${f(p[1] - 30)}" stroke="#8E8A82" stroke-width="1.8" opacity=".6"/><path d="M${f(q[0])} ${f(q[1])}V${f(q[1] - 30)}" stroke="#8E8A82" stroke-width="1.8" opacity=".6"/>`; }
-    o += `<path d="M${f(bx.L[0])} ${f(bx.L[1] - 15)}L${f(bx.F[0])} ${f(bx.F[1] - 15)}L${f(bx.R[0])} ${f(bx.R[1] - 15)}" stroke="#8E8A82" stroke-width="1.8" fill="none" opacity=".6"/>`;
-    return { d, svg: o };
-  }
-  const col = lvl === 1 ? ["#E0D090", "#B9A257", "#7F6C28"] : [C.wood1, C.wood2, C.woodD];
-  const post = (p) => `<g transform="translate(${f(p[0])} ${f(p[1])})"><rect x="-4.4" y="-40" width="8.8" height="42" rx="${lvl === 1 ? 4.4 : 2}" fill="${col[0]}" stroke="${col[2]}" stroke-width="2.4"/>${lvl === 1 ? `<path d="M-4.4 -26H4.4M-4.4 -12H4.4" stroke="${col[2]}" stroke-width="2"/>` : `<path d="M-6 -40L0 -48L6 -40Z" fill="${col[1]}" stroke="${col[2]}" stroke-width="2.4" stroke-linejoin="round"/>`}</g>`;
-  const rail = (y) => `<path d="M${f(A[0])} ${f(A[1] - y)}L${f(B[0])} ${f(B[1] - y)}" stroke="${col[2]}" stroke-width="8" stroke-linecap="round"/><path d="M${f(A[0])} ${f(A[1] - y)}L${f(B[0])} ${f(B[1] - y)}" stroke="${col[0]}" stroke-width="4.4" stroke-linecap="round"/>`;
-  o += rail(14) + rail(28) + post(A) + post(B);
-  return { d, svg: o };
-}
-
-/* ---------- ĐẤT NỀN CẤT NHÀ: mảnh đất bé "mua" bằng nhiệm vụ đầu tiên: nền đất san phẳng, cọc gỗ + dây ở bốn góc, một lá cờ đỏ ---------- */
-function houseLot(cx, cy, hw, hh) {
-  const T = [cx, cy - hh], R = [cx + hw, cy], B = [cx, cy + hh], Lf = [cx - hw, cy], inner = p => [cx + (p[0] - cx) * .9, cy + (p[1] - cy) * .9];
-  let o = poly([T, R, B, Lf], "#D8BF86", "#A8884A", 4) + poly([T, R, B, Lf].map(inner), "none", "#EBDDB0", 2.4);
-  for (let k = 0; k < 14; k++) { const r = rng(k * 17 + 3), px = cx + (r() - .5) * hw * 1.3, py = cy + (r() - .5) * hh * 1.2; if (Math.abs(px - cx) / hw + Math.abs(py - cy) / hh < .85) o += ell(px, py, 5 + r() * 5, 2.4, "#BFA468", null).replace("/>", ' opacity=".6"/>'); }
-  const post = p => `<g transform="translate(${f(p[0])} ${f(p[1])})">${shadow(11, 4, .22)}<rect x="-4" y="-34" width="8" height="34" rx="2.5" fill="url(#gWood)" stroke="${C.woodD}" stroke-width="2.2"/><circle cx="0" cy="-34" r="4.6" fill="${C.wood1}" stroke="${C.woodD}" stroke-width="2"/></g>`;
-  const rope = (p, q) => `<path d="M${f(p[0])} ${f(p[1] - 28)}Q${f((p[0] + q[0]) / 2)} ${f((p[1] + q[1]) / 2 - 18)} ${f(q[0])} ${f(q[1] - 28)}" fill="none" stroke="#F4EAC8" stroke-width="3" stroke-linecap="round"/>`;
-  o += rope(Lf, T) + rope(T, R);
-  o += [T, Lf, R].map(post).join("") + rope(Lf, B) + rope(B, R) + post(B);
-  o += `<g transform="translate(${f(B[0] + 16)} ${f(B[1] + 2)})">${shadow(10, 4, .2)}<path d="M0 0V-58" stroke="${C.woodD}" stroke-width="4" stroke-linecap="round"/><path d="M2 -56L34 -46L2 -34Z" fill="#E5484D" stroke="#9B1C1C" stroke-width="2.4" stroke-linejoin="round"/></g>`;
-  return o;
-}
-/* ---------- công trình ---------- */
-function house(F, lvl) {
-  const a = 3, b = 2; let svg = "", sh = shadow(150, 44, .24);
-  if (lvl === 1) {   /* lều lá */
-    const bx = box(F, 2, 2, 36, { l: "#D9C28E", r: "#BFA56E", t: null, s: "#7F6C28", sw: 3 });
-    const top = [bx.up(bx.F), bx.up(bx.L), bx.up(bx.B), bx.up(bx.R)], apex = [(top[0][0] + top[2][0]) / 2, (top[0][1] + top[2][1]) / 2 - 74];
-    let roof = poly([top[1], top[0], apex], "url(#gLeafRoof)", "#2F7A2F", 3) + poly([top[0], top[3], apex], "url(#gLeafRoof2)", "#2F7A2F", 3);
-    for (let i = 1; i < 6; i++) { const t = i / 6; roof += `<path d="M${f(lerp(top[1], top[0], t)[0])} ${f(lerp(top[1], top[0], t)[1])}L${f(apex[0])} ${f(apex[1])}" stroke="#2F7A2F" stroke-width="1.8" opacity=".5"/><path d="M${f(lerp(top[0], top[3], t)[0])} ${f(lerp(top[0], top[3], t)[1])}L${f(apex[0])} ${f(apex[1])}" stroke="#2F7A2F" stroke-width="1.8" opacity=".5"/>`; }
-    const dp = lerp(bx.F, bx.R, .5); const door = `<path d="M${f(dp[0] - 12)} ${f(dp[1] + 3)}V${f(dp[1] - 26)}Q${f(dp[0])} ${f(dp[1] - 38)} ${f(dp[0] + 12)} ${f(dp[1] - 26)}V${f(dp[1] - 4)}Z" fill="#5E3A1B" stroke="#3A2210" stroke-width="2.4" transform="translate(0 0)"/>`;
-    return { d: F[1], svg: `<g>${ell(F[0], F[1] - 8, 110, 32, "#1F5A22", null).replace("/>", ' opacity=".2"/>')}${bx.svg}${door}${roof}</g>` };
-  }
-  const h = [0, 0, 52, 66, 80][lvl], rh = [0, 0, 46, 54, 62][lvl];
-  const wallL = lvl === 2 ? "#DCC092" : C.wall, wallR = lvl === 2 ? "#C8A877" : C.wallS, st = lvl === 2 ? "#7F5A24" : C.wallD;
-  const bx = box(F, a, b, h, { l: wallL, r: wallR, t: null, s: st, sw: 3 });
-  const roofC = lvl === 2 ? ["url(#gStraw)", "#D9A93A", "#8A6414"] : lvl === 3 ? ["url(#gTile3)", "#D96B3A", "#8E3E1B"] : ["url(#gTile4)", "#E0553E", "#7E2418"];
-  const Ft = bx.up(bx.F), Lt = bx.up(bx.L), Rt = bx.up(bx.R), Bt = bx.up(bx.B);
-  const M1 = [(Ft[0] + Rt[0]) / 2, (Ft[1] + Rt[1]) / 2 - rh], M2 = [(Lt[0] + Bt[0]) / 2, (Lt[1] + Bt[1]) / 2 - rh];
-  const ov = (p, q, k) => [p[0] + (p[0] - q[0]) * k, p[1] + (p[1] - q[1]) * k];
-  let roof = poly([Ft, Rt, M1], lvl === 2 ? "#E9D1A0" : "#F4ECDD", st, 3);     /* đầu hồi (tam giác tường) */
-  /* tấm mái chính (mặt trái-trước) */
-  const e1 = ov(Ft, M1, .12), e2 = ov(Lt, M2, .12);
-  roof += poly([[Ft[0] - 10, Ft[1] + 6], [Lt[0] - 10, Lt[1] + 6], M2, M1], roofC[0], roofC[2], 3);
-  /* vạch ngói / rơm */
-  const n = lvl === 2 ? 9 : 7;
-  for (let i = 1; i < n; i++) { const t = i / n, p1 = lerp([Ft[0] - 10, Ft[1] + 6], M1, t), p2 = lerp([Lt[0] - 10, Lt[1] + 6], M2, t); roof += `<path d="M${f(p1[0])} ${f(p1[1])}L${f(p2[0])} ${f(p2[1])}" stroke="${roofC[2]}" stroke-width="${lvl === 2 ? 2.4 : 2}" opacity=".45"/>`; }
-  roof += `<path d="M${f(M1[0])} ${f(M1[1])}L${f(M2[0])} ${f(M2[1])}" stroke="${roofC[2]}" stroke-width="7" stroke-linecap="round"/><path d="M${f(M1[0])} ${f(M1[1])}L${f(M2[0])} ${f(M2[1])}" stroke="${roofC[1]}" stroke-width="3.6" stroke-linecap="round"/>`;
-  /* cửa + cửa sổ */
-  const dpt = lerp(bx.F, bx.R, .55), win = (p, w, hh, c) => `<g><rect x="${f(p[0] - w / 2)}" y="${f(p[1] - hh)}" width="${w}" height="${hh}" rx="3" fill="${c}" stroke="${st}" stroke-width="2.4"/><path d="M${f(p[0])} ${f(p[1] - hh)}V${f(p[1])}M${f(p[0] - w / 2)} ${f(p[1] - hh / 2)}H${f(p[0] + w / 2)}" stroke="${st}" stroke-width="1.8"/></g>`;
-  let deco = `<path d="M${f(dpt[0] - 14)} ${f(dpt[1] + 2)}V${f(dpt[1] - 36)}Q${f(dpt[0])} ${f(dpt[1] - 50)} ${f(dpt[0] + 14)} ${f(dpt[1] - 36)}V${f(dpt[1] - 4)}Z" fill="#7A4A26" stroke="#3A2210" stroke-width="2.6"/>${ell(dpt[0] + 7, dpt[1] - 20, 1.8, 1.8, "#F0CB62")}`;
-  [lerp(bx.F, bx.L, .28), lerp(bx.F, bx.L, .62), lerp(bx.F, bx.L, .88)].forEach(p => deco += win([p[0], p[1] - 22], 18, 22, lvl >= 3 ? "#9FD3F2" : "#6B4A2A"));
-  if (lvl >= 3) deco += win([lerp(bx.F, bx.R, .15)[0], lerp(bx.F, bx.R, .15)[1] - 24], 16, 20, "#9FD3F2");
-  if (lvl === 4) {
-    const dormer = (t) => { const p = lerp([Ft[0] - 10, Ft[1] + 6], M1, .5), q = lerp([Lt[0] - 10, Lt[1] + 6], M2, .5), c = lerp(p, q, t); return `<g transform="translate(${f(c[0])} ${f(c[1])})"><path d="M-12 4V-14L0 -26L12 -14V4Z" fill="${C.wall}" stroke="${st}" stroke-width="2.4"/><path d="M-16 -12L0 -30L16 -12" fill="none" stroke="${roofC[2]}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><rect x="-6" y="-12" width="12" height="12" rx="2" fill="#9FD3F2" stroke="${st}" stroke-width="2"/></g>`; };
-    deco += `` ; roof += dormer(.3) + dormer(.72);
-    const ch = lerp(M1, M2, .62); roof += `<g transform="translate(${f(ch[0] + 10)} ${f(ch[1] - 6)})"><rect x="-9" y="-28" width="18" height="30" rx="2" fill="#B0643F" stroke="#6E3A22" stroke-width="2.4"/><rect x="-12" y="-34" width="24" height="9" rx="2" fill="#8A4E2E" stroke="#6E3A22" stroke-width="2.4"/></g>`;
-    const stepP = lerp(bx.F, bx.R, .55); deco += `<path d="M${f(stepP[0] - 26)} ${f(stepP[1] + 12)}L${f(stepP[0])} ${f(stepP[1] + 26)}L${f(stepP[0] + 26)} ${f(stepP[1] + 12)}L${f(stepP[0])} ${f(stepP[1] - 2)}Z" fill="#B58A5A" stroke="${C.woodD}" stroke-width="2.4"/>`;
-  }
-  return { d: F[1], svg: ell(F[0] - 20, F[1] - 18, 150, 40, "#1F5A22", null).replace("/>", ' opacity=".2"/>') + bx.svg + deco + roof };
-}
-function well(c, lvl) { let o = shadow(46, 14, .24);
-  if (lvl === 1) o += ell(0, -4, 30, 14, "#8F8B83", null) + ell(0, -10, 30, 14, "url(#gStone)", "#7E7A72", 3) + ell(0, -12, 20, 8.6, "#2B73A6", "#1F4F78", 2);
-  else {
-    o += `<path d="M-30 -6V-30C-30 -42 30 -42 30 -30V-6C30 4 -30 4 -30 -6Z" fill="url(#gStoneL)" stroke="#7E7A72" stroke-width="3" stroke-linejoin="round"/>` + ell(0, -30, 30, 14, "#E4E0D8", "#7E7A72", 3) + ell(0, -31, 21, 9, "#2B73A6", "#1F4F78", 2);
-    for (let i = 0; i < 4; i++) o += `<path d="M${-24 + i * 16} ${-26 + (i % 2) * 3}V${-8}" stroke="#8E8A82" stroke-width="2" opacity=".6"/>`;
-    o += `<rect x="-30" y="-74" width="7" height="46" rx="2" fill="${C.wood1}" stroke="${C.woodD}" stroke-width="2.6"/><rect x="23" y="-74" width="7" height="46" rx="2" fill="${C.wood1}" stroke="${C.woodD}" stroke-width="2.6"/><rect x="-30" y="-80" width="60" height="8" rx="3" fill="${C.wood2}" stroke="${C.woodD}" stroke-width="2.6"/><path d="M0 -72V-48" stroke="#8E6B3A" stroke-width="3"/><path d="M-7 -48H7V-38C7 -34 -7 -34 -7 -38Z" fill="${C.wood1}" stroke="${C.woodD}" stroke-width="2.4"/>`;
-    if (lvl === 3) o += `<path d="M-40 -78L0 -106L40 -78Z" fill="url(#gTile3)" stroke="#8E3E1B" stroke-width="3" stroke-linejoin="round"/><path d="M-30 -84L0 -104L30 -84" fill="none" stroke="#F4A37A" stroke-width="2" opacity=".6"/>`;
-  }
-  return { d: c[1], svg: G(c[0], c[1], o) };
-}
-function barn(F, lvl) {
-  const h = [0, 40, 56, 66][lvl];
-  const col = lvl === 1 ? { l: "#C58B4E", r: "#A87438", s: "#5E3A1B" } : { l: "#E0553E", r: "#C23F2E", s: "#7E2418" };
-  const bx = box(F, 2, 2, h, { l: col.l, r: col.r, t: null, s: col.s, sw: 3 });
-  const Ft = bx.up(bx.F), Lt = bx.up(bx.L), Rt = bx.up(bx.R), Bt = bx.up(bx.B), rh = lvl === 1 ? 30 : 42;
-  const M1 = [(Ft[0] + Rt[0]) / 2, (Ft[1] + Rt[1]) / 2 - rh], M2 = [(Lt[0] + Bt[0]) / 2, (Lt[1] + Bt[1]) / 2 - rh], rc = lvl === 1 ? ["#8E6A3A", "#6A4A22"] : ["#7A5A44", "#4F3427"];
-  let o = ell(F[0] - 10, F[1] - 12, 110, 32, "#1F5A22", null).replace("/>", ' opacity=".2"/>') + bx.svg;
-  const dp = lerp(bx.F, bx.R, .5); o += `<g><rect x="${f(dp[0] - 22)}" y="${f(dp[1] - 38)}" width="44" height="40" rx="3" fill="#FFF3E0" stroke="${col.s}" stroke-width="3"/><path d="M${f(dp[0] - 22)} ${f(dp[1] - 38)}L${f(dp[0] + 22)} ${f(dp[1] + 2)}M${f(dp[0] + 22)} ${f(dp[1] - 38)}L${f(dp[0] - 22)} ${f(dp[1] + 2)}" stroke="${col.l}" stroke-width="5" stroke-linecap="round"/></g>`;
-  o += poly([Ft, Rt, M1], col.r, col.s, 3) + poly([[Ft[0] - 8, Ft[1] + 5], [Lt[0] - 8, Lt[1] + 5], M2, M1], rc[0], rc[1], 3) + `<path d="M${f(M1[0])} ${f(M1[1])}L${f(M2[0])} ${f(M2[1])}" stroke="${rc[1]}" stroke-width="6" stroke-linecap="round"/>`;
-  if (lvl >= 2) o += `<circle cx="${f(M1[0] - 4)}" cy="${f(M1[1] + 26)}" r="10" fill="#FFF3E0" stroke="${col.s}" stroke-width="3"/>`;
-  return { d: F[1], svg: o };
-}
-function windmill(c, lvl) { const hgt = [0, 70, 100, 124][lvl]; let o = shadow(56, 16, .24);
-  o += `<path d="M-30 0L-20 ${-hgt}H20L30 0C14 8 -14 8 -30 0Z" fill="url(#gWall)" stroke="${C.wallD}" stroke-width="3" stroke-linejoin="round"/><path d="M-26 ${-hgt * .55}L26 ${-hgt * .55}" stroke="#E0553E" stroke-width="12"/>`;
-  o += `<path d="M-26 -4V-26Q0 -40 26 -26V-4" fill="#7A4A26" stroke="#3A2210" stroke-width="3" transform="translate(0 0) scale(.38) translate(0 8)"/>`;
-  o += `<path d="M-26 ${-hgt + 2}L0 ${-hgt - 34}L26 ${-hgt + 2}Z" fill="url(#gTile4)" stroke="#7E2418" stroke-width="3" stroke-linejoin="round"/>`;
-  let blades = ""; for (let i = 0; i < 4; i++) blades += `<g transform="rotate(${i * 90})"><rect x="-4" y="-78" width="8" height="78" fill="${C.wood1}" stroke="${C.woodD}" stroke-width="2.4"/><rect x="4" y="-76" width="22" height="44" rx="2" fill="#FFF3E0" stroke="${C.woodD}" stroke-width="2.4"/><path d="M4 -64H26M4 -52H26M4 -40H26" stroke="#C9B08A" stroke-width="1.6"/></g>`;
-  o += `<g transform="translate(0 ${-hgt - 4})"><g class="npa npa-spin">${blades}</g>${ell(0, 0, 8, 8, "#E0553E", "#7E2418", 3)}</g>`;
-  return { d: c[1], svg: G(c[0], c[1], o) };
-}
-function pond(c) { let o = ell(0, 6, 138, 70, "#6E9B3C", null) + ell(0, 0, 134, 66, "#9C8A6A", "#6E6A63", 4) + ell(0, -4, 120, 58, "url(#gWater)", "#2B73A6", 3);
-  o += `<path d="M-70 -14Q-40 -24 -10 -14M10 6Q40 -4 70 8M-30 22Q0 14 34 24" fill="none" stroke="#fff" stroke-width="3" opacity=".55" stroke-linecap="round"/>`;
-  [[-60, 12], [50, -20], [30, 26]].forEach(([a, b]) => o += ell(a, b, 14, 6, "#5FB83E", "#2F7A2F", 2) + `<path d="M${a} ${b}L${a + 8} ${b - 3}" stroke="#2B73A6" stroke-width="2"/>`);
-  o += G(-30, -26, `<path d="M-56 -6C-60 -22 -34 -30 -10 -24L50 -10C70 -6 72 12 52 12L-40 12C-52 12 -58 6 -56 -6Z" fill="url(#gWood)" stroke="${C.woodD}" stroke-width="3"/>` + ell(52, -2, 9, 11, "#E4B27A", C.woodD, 2.4) + ell(-52, -4, 8, 10, "#E4B27A", C.woodD, 2.4)).replace("translate(-30 -26)", "translate(-30 -26) scale(.7)");
-  [-92, 86].forEach((a, i) => { o += `<path d="M${a} 8V${-34 - i * 6}M${a + 6} 8V${-26}M${a - 6} 8V${-28}" stroke="#7EA83A" stroke-width="3" stroke-linecap="round"/>` + ell(a, -38 - i * 6, 3, 9, "#7A4A26", "#3A2210", 1.4); });
-  return { d: -1, svg: G(c[0], c[1], o) };
-}
-
-/* ---------- thêm vật cho cảnh dày hơn (bò, cối ép, lò gạch, bình sữa, bàn ghế, chuồng gà, rơm cuộn, bụi hoa, hàng rào bụi, bí ngô) ---------- */
-function cow(x, y, s, flip) {
-  const sc = s || 1; return G(x, y, `<g transform="scale(${flip ? -sc : sc} ${sc})">` + shadow(40, 11, .22) +
-    [-18, 14].map(a => `<rect x="${a - 4}" y="-20" width="9" height="22" rx="3" fill="#F4F0EA" stroke="#9A918A" stroke-width="2.4"/><rect x="${a - 4}" y="-4" width="9" height="6" rx="2" fill="#3A2A24"/>`).join("") +
-    ell(0, -32, 30, 19, "#FFFFFF", "#9A918A", 3) + ell(-10, -38, 9, 6.4, "#3A2A24", null) + ell(10, -26, 8, 6, "#3A2A24", null) + ell(-22, -26, 5.6, 5, "#3A2A24", null) +
-    `<path d="M-30 -36Q-42 -34 -40 -18" stroke="#9A918A" stroke-width="3" fill="none" stroke-linecap="round"/>` + ell(-40, -16, 3, 4, "#3A2A24") +
-    ell(32, -42, 13, 12, "#FFFFFF", "#9A918A", 3) + ell(40, -37, 8, 6, "#F4A9B4", "#C97A88", 2) + ell(37, -37, 1.3, 1.3, "#7A3A48") + ell(43, -37, 1.3, 1.3, "#7A3A48") + ell(30, -48, 2, 2.4, "#3A2A24") +
-    ell(23, -54, 5, 3, "#FFFFFF", "#9A918A", 2) + ell(40, -54, 5, 3, "#FFFFFF", "#9A918A", 2) + `<path d="M28 -54L26 -62M36 -54L38 -62" stroke="#E8D9B0" stroke-width="3" stroke-linecap="round"/>` + `</g>`);
-}
-function press(x, y) {
-  let o = shadow(70, 20, .24);
-  const pl = box([0, 14], 1.7, 1.2, 14, { l: "#B98350", r: "#9A6532", t: "#D6A066", s: C.woodD, sw: 2.6 }); o += pl.svg;
-  const tub = `<path d="M-44 -4C-48 -24 -46 -46 -42 -66H42C46 -46 48 -24 44 -4C28 8 -28 8 -44 -4Z" fill="url(#gWood)" stroke="${C.woodD}" stroke-width="3.4" stroke-linejoin="round"/>` + [-30, -15, 0, 15, 30].map(a => `<path d="M${a} -64V4" stroke="${C.woodD}" stroke-width="1.8" opacity=".35"/>`).join("") + [-20, -44].map(k => `<path d="M${k === -20 ? -46 : -46} ${k}Q0 ${k + 12} 46 ${k}" stroke="#6B6459" stroke-width="4.4" fill="none"/>`).join("") + ell(0, -66, 42, 15, "#7B4A28", C.woodD, 3.4) + ell(0, -64, 36, 11, "#A96A3A", null);
-  o += G(0, -4, tub);
-  o += `<rect x="-62" y="-150" width="9" height="150" rx="3" fill="#E0553E" stroke="#8E2A1B" stroke-width="3"/><rect x="53" y="-150" width="9" height="150" rx="3" fill="#E0553E" stroke="#8E2A1B" stroke-width="3"/><path d="M-62 -146Q0 -178 62 -146" stroke="#8E2A1B" stroke-width="13" fill="none" stroke-linecap="round"/><path d="M-62 -146Q0 -178 62 -146" stroke="#E0553E" stroke-width="8" fill="none" stroke-linecap="round"/><path d="M0 -162V-118" stroke="#8E2A1B" stroke-width="9" stroke-linecap="round"/><path d="M0 -162V-118" stroke="#B9B6AE" stroke-width="5" stroke-linecap="round"/><path d="M-8 -118H8L4 -104H-4Z" fill="#B9B6AE" stroke="#6E6A63" stroke-width="2.4"/>`;
-  o += `<path d="M-54 22L-30 36L-2 24L-26 10Z" fill="#B98350" stroke="${C.woodD}" stroke-width="2.4"/><path d="M-50 28L-26 41" stroke="${C.woodD}" stroke-width="2" opacity=".5"/>`;
-  return G(x, y, o);
-}
-function oven(x, y) {
-  const F = [0, 0], bx = box(F, 1.3, 1, 54, { l: "#C86A4A", r: "#A9523A", t: "#DE8B6C", s: "#6E3A22", sw: 3 }); let o = shadow(70, 18, .24) + bx.svg;
-  for (let k = 1; k < 5; k++) { const t = k / 5; o += `<path d="M${f(bx.L[0])} ${f(bx.L[1] - 54 * t)}L${f(bx.F[0])} ${f(bx.F[1] - 54 * t)}L${f(bx.R[0])} ${f(bx.R[1] - 54 * t)}" stroke="#7E4430" stroke-width="1.6" fill="none" opacity=".5"/>`; }
-  const dp = lerp(bx.F, bx.R, .5); o += `<path d="M${f(dp[0] - 15)} ${f(dp[1] + 2)}V${f(dp[1] - 22)}Q${f(dp[0])} ${f(dp[1] - 42)} ${f(dp[0] + 15)} ${f(dp[1] - 22)}V${f(dp[1] - 4)}Z" fill="#2A1A14" stroke="#4A2A1A" stroke-width="3"/><path d="M${f(dp[0] - 9)} ${f(dp[1])}V${f(dp[1] - 16)}Q${f(dp[0])} ${f(dp[1] - 28)} ${f(dp[0] + 9)} ${f(dp[1] - 16)}V${f(dp[1])}Z" fill="#FF9A3D"/><path d="M${f(dp[0] - 4)} ${f(dp[1])}Q${f(dp[0])} ${f(dp[1] - 14)} ${f(dp[0] + 4)} ${f(dp[1])}Z" fill="#FFE08A"/>`;
-  o += `<rect x="-6" y="-92" width="22" height="42" rx="3" fill="#B0643F" stroke="#6E3A22" stroke-width="3"/><rect x="-10" y="-98" width="30" height="10" rx="3" fill="#8A4E2E" stroke="#6E3A22" stroke-width="2.6"/>`;
-  return G(x, y, o);
-}
-function milkcans(x, y) { const can = (a, s) => `<g transform="translate(${a} 0) scale(${s})"><path d="M-12 0V-34C-12 -40 12 -40 12 -34V0C12 5 -12 5 -12 0Z" fill="#CBD0DC" stroke="#6E7488" stroke-width="2.6"/><path d="M-12 -30H12" stroke="#8E94A8" stroke-width="2"/><rect x="-14" y="-46" width="28" height="9" rx="3" fill="#E5E8F0" stroke="#6E7488" stroke-width="2.4"/><path d="M-6 -4V-34" stroke="#fff" stroke-width="3" opacity=".6" stroke-linecap="round"/></g>`; return G(x, y, shadow(34, 9, .22) + can(-16, 1) + can(14, 1) + can(-1, .8).replace("translate(-1 0)", "translate(-1 -6)")); }
-function table(x, y) { const chair = (a, flip) => `<g transform="translate(${a} 0) scale(${flip ? -1 : 1} 1)"><rect x="-10" y="-22" width="20" height="8" rx="3" fill="#7CCB5A" stroke="#3F8A30" stroke-width="2.4"/><path d="M-10 -22V-44H10V-22" fill="none" stroke="#3F8A30" stroke-width="4" stroke-linejoin="round"/><path d="M-8 -14V0M8 -14V0" stroke="#3F8A30" stroke-width="3" stroke-linecap="round"/></g>`; return G(x, y, shadow(50, 13, .22) + chair(-34, 0) + `<path d="M0 -4V-34" stroke="${C.woodD}" stroke-width="6" stroke-linecap="round"/>` + ell(0, -38, 26, 10, "url(#gWood)", C.woodD, 3) + ell(0, -42, 20, 6, "#E4B27A", null) + chair(36, 1)); }
-function coop(x, y) { return G(x, y, shadow(44, 12, .22) + `<path d="M-40 0C-40 -46 -18 -60 0 -60C18 -60 40 -46 40 0Z" fill="#EFC36E" stroke="#A26B2A" stroke-width="3.4" stroke-linejoin="round"/><path d="M-30 -26Q0 -40 30 -26M-36 -12Q0 -26 36 -12" stroke="#B9833A" stroke-width="2" fill="none" opacity=".6"/>` + ell(0, -18, 13, 15, "#7A4A26", "#3A2210", 3) + ell(0, -16, 8, 10, "#2A1A14", null) + `<path d="M-52 2C-36 -4 -20 -2 -12 2M14 2C26 -4 44 -4 52 2" stroke="#D9A93A" stroke-width="4" stroke-linecap="round" fill="none"/>`); }
-function roundHay(x, y) { return G(x, y, shadow(34, 9, .22) + `<path d="M-26 -4V-34C-26 -42 26 -42 26 -34V-4C26 6 -26 6 -26 -4Z" fill="url(#gWheat)" stroke="#A9801A" stroke-width="3"/>` + ell(0, -34, 26, 9, "#F8DD86", "#A9801A", 3) + `<path d="M-18 -34Q0 -30 18 -34M-10 -34Q0 -32 10 -34" stroke="#C9A12E" stroke-width="2" fill="none"/><path d="M-26 -16Q0 -8 26 -16M-26 -26Q0 -18 26 -26" stroke="#C9A12E" stroke-width="2" fill="none" opacity=".7"/>`); }
-function flowerPatch(x, y, col) { const r = rng(Math.floor(x * 3 + y)); let o = ell(0, -6, 34, 14, "#5AA838", "#3F7A2B", 2.4); for (let i = 0; i < 12; i++) o += `<g transform="translate(${f((r() - .5) * 58)} ${f(-6 - r() * 18)})">${ell(0, 0, 5, 4, col || "#FFD24D", "#C9A12E", 1.4)}${ell(0, 0, 1.8, 1.4, "#FFF3C4")}</g>`; return G(x, y, o); }
-function hedge(x, y, n, dir) { let o = ""; for (let i = 0; i < n; i++) { const dx = dir === "x" ? i * 40 : -i * 40, dy = i * 20; o += G(x + dx, y + dy, ell(0, -14, 24, 17, "url(#gLeaf)", C.leafD, 2.6) + ell(-6, -22, 9, 5, "#C3F294", null).replace("/>", ' opacity=".45"/>') + (i % 2 ? flowerBit(8, -18, "#FFD24D") + flowerBit(-10, -12, "#fff") : flowerBit(-8, -20, "#FF8FB0") + flowerBit(10, -10, "#FFD24D"))); } return o; }
-const flowerBit = (x, y, c) => ell(x, y, 3.4, 3, c, "#fff", 1);
-function pumpkins(x, y) { const pk = (a, b, s) => `<g transform="translate(${a} ${b}) scale(${s})">${ell(0, -10, 14, 11, "#F59A2B", "#B2591A", 2.4)}${ell(-5, -10, 5, 10, "#F9B04D", null).replace("/>", ' opacity=".6"/>')}${ell(5, -10, 5, 10, "#E8841C", null).replace("/>", ' opacity=".5"/>')}<path d="M0 -20Q2 -26 6 -26" stroke="#4E8B2E" stroke-width="3" fill="none" stroke-linecap="round"/></g>`; return G(x, y, shadow(32, 8, .2) + pk(-14, 0, 1) + pk(12, 2, .9) + pk(0, 8, .8)); }
-function crate(x, y) { const b = box([0, 0], .6, .5, 22, { l: "#C58B4E", r: "#9A6532", t: "#D6A066", s: C.woodD, sw: 2.4 }); return G(x, y, shadow(26, 8, .22) + b.svg + `<path d="M${f(b.L[0])} ${f(b.L[1] - 11)}L${f(b.F[0])} ${f(b.F[1] - 11)}L${f(b.R[0])} ${f(b.R[1] - 11)}" stroke="${C.woodD}" stroke-width="2" fill="none" opacity=".6"/>`); }
-
-/* ---------- LỐI ĐI = MỘT MẢNG LIỀN (nhiều kiểu để chọn) và HÀNG RÀO = MỘT DẢI LIỀN (nhiều kiểu để chọn) ---------- */
-const U0 = (sx, sy) => [(sx - OX) / TW + (sy - OY) / TH, (sy - OY) / TH - (sx - OX) / TW];
-const PATHS = {
-  dat:   { vi: "Đường đất",  edge: "#8A5A2E", fill: "#B98350", mark: "dirt" },
-  soi:   { vi: "Sỏi",        edge: "#A19D95", fill: "#DAD6CD", mark: "gravel" },
-  cuoi:  { vi: "Đá cuội",    edge: "#7E7A72", fill: "#B6B2A9", mark: "cobble" },
-  dalat: { vi: "Đá lát",     edge: "#8A867E", fill: "#D2CEC6", mark: "slab" },
-  gach:  { vi: "Gạch đỏ",    edge: "#8E3E1B", fill: "#D9774A", mark: "brick" }
-};
-function pathPatch(pl, w, style, seed, part) {
-  const S = PATHS[style] || PATHS.soi, r = rng((seed || 1) * 977 + 13);
-  let d = `M${f(pl[0][0])} ${f(pl[0][1])}`; for (let i = 1; i < pl.length - 1; i++) { const m = [(pl[i][0] + pl[i + 1][0]) / 2, (pl[i][1] + pl[i + 1][1]) / 2]; d += `Q${f(pl[i][0])} ${f(pl[i][1])} ${f(m[0])} ${f(m[1])}`; } d += `L${f(pl[pl.length - 1][0])} ${f(pl[pl.length - 1][1])}`;
-  const E = `<path d="${d}" fill="none" stroke="${S.edge}" stroke-width="${w + 9}" stroke-linecap="round" stroke-linejoin="round" opacity=".55" transform="translate(0 4)"/><path d="${d}" fill="none" stroke="${S.edge}" stroke-width="${w + 7}" stroke-linecap="round" stroke-linejoin="round"/>`, Fl = `<path d="${d}" fill="none" stroke="${S.fill}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`;
-  let o = "";
-  /* hoa văn bề mặt rải theo chiều dài (nằm trong dải) */
-  const seg = []; let tot = 0; for (let i = 0; i < pl.length - 1; i++) { const l = Math.hypot(pl[i + 1][0] - pl[i][0], pl[i + 1][1] - pl[i][1]); seg.push(l); tot += l; }
-  const at = t => { let a = t * tot, i = 0; while (i < seg.length - 1 && a > seg[i]) { a -= seg[i]; i++; } const k = seg[i] ? a / seg[i] : 0, nx = pl[i + 1][0] - pl[i][0], ny = pl[i + 1][1] - pl[i][1], L2 = Math.hypot(nx, ny) || 1; return [pl[i][0] + nx * k, pl[i][1] + ny * k, -ny / L2, nx / L2]; };
-  const cnt = Math.round(tot / ({ dirt: 14, gravel: 5, cobble: 15, slab: 40, brick: 26 }[S.mark])), hw = w * .5 - 5;
-  if (S.mark === "slab") { for (let i = 1; i < cnt; i++) { const [x, y, nx, ny] = at(i / cnt); o += `<path d="M${f(x - nx * hw)} ${f(y - ny * hw)}L${f(x + nx * hw)} ${f(y + ny * hw)}" stroke="#9A968E" stroke-width="2.4" stroke-linecap="round" opacity=".75"/>`; } o += `<path d="${d}" fill="none" stroke="#fff" stroke-width="${Math.max(4, w - 26)}" stroke-linecap="round" stroke-linejoin="round" opacity=".18"/>`; }
-  else for (let i = 0; i < cnt; i++) { const [x, y, nx, ny] = at(r()), off = (r() * 2 - 1) * hw, px = x + nx * off, py = y + ny * off;
-    if (S.mark === "gravel") o += ell(px, py, 1.8 + r() * 2.6, 1.2 + r() * 1.6, ["#B9B5AC", "#F2EFE8", "#9C988F", "#C9C5BB"][i % 4], null);
-    else if (S.mark === "dirt") o += i % 3 ? ell(px, py, 2 + r() * 3, 1.2 + r() * 1.4, "#8A5A2E", null).replace("/>", ' opacity=".55"/>') : ell(px, py, 2.6, 1.8, "#D6AE80", null);
-    else if (S.mark === "cobble") { const rx = 7 + r() * 5; o += ell(px, py + 1.4, rx, rx * .55, "#7E7A72", null) + ell(px, py, rx, rx * .55, "#CFCBC2", "#8F8B83", 1.6) + ell(px - rx * .3, py - rx * .2, rx * .35, rx * .16, "#fff", null).replace("/>", ' opacity=".7"/>'); }
-    else if (S.mark === "brick") o += `<rect x="${f(px - 8)}" y="${f(py - 3)}" width="16" height="6" rx="1.6" fill="#E48A5C" stroke="#8E3E1B" stroke-width="1.4"/>`; }
-  return part === "e" ? E : part === "f" ? Fl : part === "t" ? o : E + Fl + o;
-}
-/* gộp nhiều dải thành MỘT mảng liền: vẽ tất cả viền trước, rồi tất cả nền, rồi hoa văn → chỗ giao nhau không có viền cắt, không dải nào đè lên dải khác */
-function pathNet(list, style) { return list.map((q, i) => pathPatch(q[0], q[1], style, q[2] || i + 1, "e")).join("") + list.map((q, i) => pathPatch(q[0], q[1], style, q[2] || i + 1, "f")).join("") + list.map((q, i) => pathPatch(q[0], q[1], style, q[2] || i + 1, "t")).join(""); }
-const FENCES = { tre: "Rào tre", go: "Rào gỗ", trang: "Rào gỗ trắng", da: "Tường đá", bui: "Hàng rào cây", sat: "Rào sắt" };
-function fenceRun(gx, gy, dir, n, style) {
-  const A = P(gx, gy), st = dir === "x" ? [TW / 2, TH / 2] : [-TW / 2, TH / 2], B = [A[0] + st[0] * n, A[1] + st[1] * n];
-  const rail = (h, col, wd) => `<path d="M${f(A[0])} ${f(A[1] - h)}L${f(B[0])} ${f(B[1] - h)}" stroke="${col[2]}" stroke-width="${wd + 4}" stroke-linecap="round"/><path d="M${f(A[0])} ${f(A[1] - h)}L${f(B[0])} ${f(B[1] - h)}" stroke="${col[0]}" stroke-width="${wd}" stroke-linecap="round"/>`;
-  const posts = (cnt, fn) => { let o = ""; for (let i = 0; i <= cnt; i++) o += fn(A[0] + (B[0] - A[0]) * i / cnt, A[1] + (B[1] - A[1]) * i / cnt, i); return o; };
-  let o = "";
-  if (style === "da") {
-    const th = .28, F = dir === "x" ? P(gx + n, gy + th) : P(gx + th, gy + n), a = dir === "x" ? n : th, b = dir === "x" ? th : n, H = 32;
-    const bx = box(F, a, b, H, { l: "url(#gStoneL)", r: "url(#gStoneR)", t: "#E4E0D8", s: "#7E7A72", sw: 2.4 }); o += bx.svg;
-    const cnt = Math.round(n * 3); for (let k = 1; k < cnt; k++) { const t = k / cnt, p = dir === "x" ? lerp(bx.L, bx.F, t) : lerp(bx.F, bx.R, t); o += `<path d="M${f(p[0])} ${f(p[1])}V${f(p[1] - H)}" stroke="#8E8A82" stroke-width="1.8" opacity=".55"/>`; }
-    const e = dir === "x" ? [bx.L, bx.F] : [bx.F, bx.R]; o += `<path d="M${f(e[0][0])} ${f(e[0][1] - H / 2)}L${f(e[1][0])} ${f(e[1][1] - H / 2)}" stroke="#8E8A82" stroke-width="1.8" fill="none" opacity=".6"/>`;
-  } else if (style === "bui") {
-    const cnt = Math.round(n * 3.2); for (let i = 0; i <= cnt; i++) { const x = A[0] + (B[0] - A[0]) * i / cnt, y = A[1] + (B[1] - A[1]) * i / cnt; o += G(x, y, ell(0, -16, 22, 17, "url(#gLeaf)", C.leafD, 2.6) + ell(-5, -24, 8, 4.6, "#C3F294", null).replace("/>", ' opacity=".45"/>') + (i % 3 === 0 ? flowerBit(7, -18, "#FFD24D") + flowerBit(-8, -12, "#fff") : i % 3 === 1 ? flowerBit(-6, -22, "#FF8FB0") : "")); }
-  } else if (style === "trang") {
-    o += rail(10, ["#FFFFFF", "#D9D5CC", "#9A968E"], 5) + rail(26, ["#FFFFFF", "#D9D5CC", "#9A968E"], 5);
-    o += posts(Math.round(n * 4), (x, y) => `<g transform="translate(${f(x)} ${f(y)})"><path d="M-4.4 2V-34L0 -42L4.4 -34V2Z" fill="#fff" stroke="#9A968E" stroke-width="2.2" stroke-linejoin="round"/></g>`);
-  } else if (style === "sat") {
-    o += rail(8, ["#4A4F5C", "#2A2D36", "#14161C"], 4) + rail(34, ["#4A4F5C", "#2A2D36", "#14161C"], 4);
-    o += posts(Math.round(n * 5), (x, y, i) => `<g transform="translate(${f(x)} ${f(y)})"><path d="M0 2V-40" stroke="#14161C" stroke-width="${i % 5 === 0 ? 6 : 3}" stroke-linecap="round"/>${i % 5 === 0 ? ell(0, -44, 5, 5, "#C9A23A", "#7A5E14", 1.6) : `<path d="M-3 -40L0 -48L3 -40Z" fill="#14161C"/>`}</g>`);
-  } else {
-    const col = style === "tre" ? ["#EBDDA0", "#C9B466", "#7F6C28"] : [C.wood1, C.wood2, C.woodD];
-    o += rail(14, col, 4.4) + rail(28, col, 4.4);
-    o += posts(Math.round(n * 1.6), (x, y) => `<g transform="translate(${f(x)} ${f(y)})"><rect x="-4.4" y="-40" width="8.8" height="42" rx="${style === "tre" ? 4.4 : 2}" fill="${col[0]}" stroke="${col[2]}" stroke-width="2.4"/>${style === "tre" ? `<path d="M-4.4 -26H4.4M-4.4 -12H4.4" stroke="${col[2]}" stroke-width="2"/>` : `<path d="M-6 -40L0 -48L6 -40Z" fill="${col[1]}" stroke="${col[2]}" stroke-width="2.4" stroke-linejoin="round"/>`}</g>`);
-  }
-  return { d: (A[1] + B[1]) / 2 + 14, svg: o };
-}
-
-/* ---------- ghép cảnh ---------- */
-function defs() {
-  const lg = (id, a, b, v) => `<linearGradient id="${id}" x1="0" y1="0" x2="${v ? 0 : 1}" y2="${v ? 1 : 0}"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`;
-  return `<defs>${lg("gLeaf", "#9BE665", "#4FA83B", 1)}${lg("gPine", "#4FB36A", "#1E7A44", 1)}${lg("gWood", "#D6A066", "#9A6532", 1)}${lg("gSoil", "#A8703F", "#7B4A28", 1)}${lg("gStone", "#E6E3DC", "#B5B1A8", 1)}${lg("gStoneL", "#D6D3CC", "#A8A59E", 1)}${lg("gStoneR", "#C2BFB7", "#8F8B83", 1)}${lg("gWheat", "#FFE08A", "#E8B83A", 1)}${lg("gWater", "#8FDCF7", "#3FA3D9", 1)}${lg("gWall", "#FFFFFF", "#E4D8C4", 0)}${lg("gStraw", "#F0CB62", "#D9A93A", 1)}${lg("gTile3", "#EE8A56", "#C95A2B", 1)}${lg("gTile4", "#F06A52", "#B23A2A", 1)}${lg("gLeafRoof", "#7FD35F", "#3F9A3A", 1)}${lg("gLeafRoof2", "#6BC653", "#2F8A36", 1)}
-<radialGradient id="gGrass" cx=".5" cy=".4" r=".85"><stop offset="0" stop-color="#9AD95A"/><stop offset=".7" stop-color="#7FC448"/><stop offset="1" stop-color="#69AE3C"/></radialGradient><radialGradient id="gGlow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFE9A0" stop-opacity=".95"/><stop offset="1" stop-color="#FFE9A0" stop-opacity="0"/></radialGradient>
-<linearGradient id="gGray" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C9C6BF"/><stop offset="1" stop-color="#A29E96"/></linearGradient><linearGradient id="gSkyDay" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8FD3FF"/><stop offset="1" stop-color="#E9F8FF"/></linearGradient></defs>`;
-}
-const STYLE = `<style>.npa-spin{transform-box:fill-box;transform-origin:50% 50%;animation:npa-spin 14s linear infinite}.npa-hover{animation:npa-hover 3s ease-in-out infinite}@keyframes npa-spin{to{transform:rotate(360deg)}}@keyframes npa-hover{0%,100%{transform:translate(0,0)}50%{transform:translate(6px,-8px)}}:root.np-playing .npa-spin,:root.np-playing .npa-hover{animation:none}@media (prefers-reduced-motion:reduce){.npa-spin,.npa-hover{animation:none!important}}</style>`;
-
-/* cấu hình cảnh: levels = cấp của từng vị trí (0 = chưa có). time = day | dusk | night */
-/* ====== BỘ VỊ TRÍ CỐ ĐỊNH, CÓ THỨ TỰ TRƯỚC SAU (để không vật nào đè lên vật khác) ======
-   Thứ tự VẼ (từ dưới lên): 0 cỏ nền → 1 ao, sân → 2 lối đi (một mảng liền) → 3 đất ô trồng → 4 vật đứng (rào, công trình, cây, vật nuôi...) xếp theo độ sâu y.
-   Thứ tự CHIẾM CHỖ (ai có trước thì giữ chỗ): công trình + ao + rào + lối đi (cố định) → ô trồng → cây lớn → vật nhỏ (rơm, thùng, hoa) → vật nuôi.
-   Mỗi vật có VÙNG CHIẾM ĐẤT (hình elip dưới chân). Vật nào chạm vùng đã có chủ thì bị bỏ (và được báo cáo), nên không bao giờ chồng lên nhau. */
-const FOOT = { bigTree: [52, 13, 1], pine: [30, 11, 1], hay: [34, 12], barrel: [20, 8], chicken: [11, 5], rabbit: [13, 5], cow: [38, 11], rock: [24, 8], bush: [30, 9], lavender: [26, 8], flowerPatch: [32, 13], pumpkins: [30, 8], milkcans: [32, 9], roundHay: [32, 10], crate: [24, 8], coop: [44, 14] };
-const SPRITES = { bigTree, pine, hay, barrel, chicken, rabbit, cow, rock, bush, lavender, flowerPatch, pumpkins, milkcans, roundHay, crate, coop };
 let PEN_OK = false;
-const hit = (a, b) => !(a.kind === "plot" && b.kind === "plot") && !(PEN_OK && ((a.kind === "pen" && /^(cow|chicken|rabbit)$/.test(b.name)) || (b.kind === "pen" && /^(cow|chicken|rabbit)$/.test(a.name)))) && Math.pow((a.x - b.x) / (a.rx + b.rx), 2) + Math.pow((a.y - b.y) / (a.ry + b.ry), 2) < .8;
-const DROPPED = [], MOVED = [];
-
-/* ---------- thêm vật nuôi (heo, cừu, vịt) + CHUỒNG THÚ ---------- */
-function pig(x, y, s, flip) {
-  const sc = s || 1; return G(x, y, `<g transform="scale(${flip ? -sc : sc} ${sc})">` + shadow(34, 10, .22) + [-16, 12].map(a => `<rect x="${a - 4}" y="-16" width="8" height="18" rx="3" fill="#F7A8C0" stroke="#C9738F" stroke-width="2.4"/>`).join("") + ell(0, -28, 28, 18, "#FFB6CC", "#C9738F", 3) + `<path d="M-27 -32Q-38 -36 -34 -24Q-30 -28 -28 -26" fill="none" stroke="#C9738F" stroke-width="3" stroke-linecap="round"/>` + ell(28, -34, 13, 12, "#FFB6CC", "#C9738F", 3) + ell(36, -31, 7, 5.4, "#FF8FB0", "#C9738F", 2) + ell(34, -31, 1.2, 1.6, "#8A3A58") + ell(38.5, -31, 1.2, 1.6, "#8A3A58") + ell(27, -38, 1.8, 2.2, "#3A2A24") + `<path d="M22 -44L18 -52L28 -47Z M33 -45L38 -52L40 -42Z" fill="#FF8FB0" stroke="#C9738F" stroke-width="2.4" stroke-linejoin="round"/></g>`);
-}
-function sheep(x, y, s, flip) {
-  const sc = s || 1; return G(x, y, `<g transform="scale(${flip ? -sc : sc} ${sc})">` + shadow(34, 10, .22) + [-14, 12].map(a => `<rect x="${a - 3}" y="-14" width="6" height="16" rx="2.4" fill="#4A3F3A"/>`).join("") + [[-18, -30, 14], [-4, -36, 15], [12, -34, 14], [22, -26, 11], [-10, -24, 13], [6, -24, 13]].map(([a, b, r]) => ell(a, b, r, r * .9, "#FFFFFF", "#C9C1D6", 2.4)).join("") + ell(32, -32, 10, 11, "#4A3F3A") + ell(35, -34, 1.5, 1.5, "#fff") + ell(26, -40, 3.4, 5, "#4A3F3A") + ell(18, -42, 7, 5, "#FFFFFF", "#C9C1D6", 2) + `</g>`);
-}
-function duck(x, y) { return G(x, y, shadow(12, 4, .2) + ell(0, -11, 11, 8, "#FFE066", "#C9A12E", 2) + `<path d="M-10 -12Q-18 -16 -14 -8Z" fill="#FFE066" stroke="#C9A12E" stroke-width="1.6"/>` + ell(9, -21, 6.4, 6.4, "#FFE066", "#C9A12E", 2) + `<path d="M14 -22L22 -20L14 -17Z" fill="#FF9A3D" stroke="#C26A12" stroke-width="1.6" stroke-linejoin="round"/>` + ell(11, -23, 1.4, 1.4, "#3A2A12") + `<path d="M-3 -2V4M3 -2V4" stroke="#FF9A3D" stroke-width="2.4" stroke-linecap="round"/>`); }
-function stable(x, y, night) {
-  const wood = "#C98F52", d = "#6B3E16"; let o = shadow(92, 18, .26);
-  o += `<path d="M-74 0V-46L0 -92L74 -46V0Z" fill="${wood}" stroke="${d}" stroke-width="4" stroke-linejoin="round"/>` + [-52, -32, -12, 12, 32, 52].map(a => `<path d="M${a} -2V-${50 - Math.abs(a) * .5}" stroke="${d}" stroke-width="1.8" opacity=".35"/>`).join("");
-  o += `<path d="M-84 -42L0 -100L84 -42L72 -33L0 -84L-72 -33Z" fill="#B24A24" stroke="#5A2410" stroke-width="4" stroke-linejoin="round"/><path d="M-60 -52L0 -90L60 -52" fill="none" stroke="#E07A4A" stroke-width="3" opacity=".6" stroke-linecap="round"/>`;
-  o += `<path d="M-28 0V-34Q0 -54 28 -34V0Z" fill="#2A160A" stroke="${d}" stroke-width="3.6"/>` + (night ? `<path d="M-22 0V-31Q0 -47 22 -31V0Z" fill="#FFB347" opacity=".9"/><ellipse cx="0" cy="-8" rx="26" ry="9" fill="#FFE29A" opacity=".55"/>` : `<path d="M-22 0V-31Q0 -47 22 -31V0Z" fill="#4A2A12"/>`);
-  o += `<circle cx="0" cy="-66" r="9" fill="${night ? "#FFE08A" : "#FFF3E0"}" stroke="${d}" stroke-width="3"/><path d="M0 -75V-57M-9 -66H9" stroke="${d}" stroke-width="2.2"/>`;
-  o += `<path d="M-74 -6H-34M34 -6H74" stroke="${d}" stroke-width="5" stroke-linecap="round"/>` + [-64, -48, 48, 64].map(a => `<rect x="${a - 3}" y="-24" width="6" height="26" rx="2" fill="${wood}" stroke="${d}" stroke-width="2.4"/>`).join("");
-  return G(x, y, o);
-}
-/* ===== QUY HOẠCH KHU VƯỜN (toạ độ vườn gốc 1280×880) =====
-   Trái cây: 2 hàng cây ngay ngắn phía trên (TOP trong scene). Rau: bên trái. Lúa: phía dưới bên phải. Hoa: phía dưới giữa. */
-const FENCE = require("./garden-fence");
-const LAYOUT = require("../../learn/garden/garden-layout.js");   /* tầng xếp chồng + thứ tự nạp mô-đun: sửa ở learn/garden/garden-layout.js */   /* kiểu hàng rào: đổi ở garden-fence.js */
-const HY = -190;   /* nhà + sân được dời lên phía trên (dy) */
-const PENS = [
-  { n: "Chuồng gà vịt", ic: "🐔", fo: [200, 690], na: 2, nb: 2, an: [["chicken", -50, 4], ["chicken", -14, -16], ["chicken", 30, 0], ["chicken", -30, 30], ["chicken", 26, 30], ["chicken", 0, 10], ["duck", 56, -4], ["duck", 8, 36], ["duck", -62, 14]] },
-  { n: "Chuồng heo cừu", ic: "🐖", fo: [770, 680], na: 2, nb: 2, an: [["pig", -44, 10], ["pig", -6, -10], ["pig", 36, 8], ["sheep", -24, 34], ["sheep", 30, 32]] },
-  { n: "Chuồng bò", ic: "🐄", fo: [958, 330], na: 3, nb: 2, an: [["cow", -62, 0], ["cow", 34, -8], ["cow", -6, 38]] }
-];
-   /* các khối ô đất trồng cây ăn trái ở chỗ trống (toạ độ vườn gốc, có thể âm / lớn hơn 1280 vì cảnh mở rộng) */
-const STABLE = [1040, 800];   /* chỗ chuồng thú / cửa chuồng (vật nuôi đi về đây buổi tối): khu chăn nuôi, gần kho */
-/* Cây trong khu vườn cây: MỌI giống đều là ảnh rời (lớp "sprites" của trang vườn, xếp theo độ sâu y) để cây ở hàng gần người nhìn luôn đè lên cây hàng sau.
-   Có PNG vẽ tay (shared/art/garden/tree/tree_<giống>.png) thì dùng PNG; chưa có thì bộ sinh tự xuất tree_<giống>.svg từ bigTree (không bóng: bóng do trang vẽ). */
-const SPRITE_KINDS = new Set(["mango", "orange", "apple", "pear", "peach", "pomelo", "litchi", "plum"]), TREE_PNG = new Set(["mango"]);
-const TREEPOS = [];
-const ANIM = [];
-const HOT = [];   /* vị trí các ô trồng của cảnh vừa sinh (để trang tương tác đặt vùng rê/bấm) */
+const hit = (a, b) => !(a.kind === "plot" && b.kind === "plot") && !(PEN_OK && ((a.kind === "pen" && /^(cow|chicken|rabbit)$/.test(b.name)) || (b.kind === "pen" &&
+    /^(cow|chicken|rabbit)$/.test(a.name)))) && Math.pow((a.x - b.x) / (a.rx + b.rx), 2) + Math.pow((a.y - b.y) / (a.ry + b.ry), 2) < .8;
 function scene(o) {
-  SHADOW.setTime(o.time || "day"); HOT.length = 0; ANIM.length = 0; TREEPOS.length = 0; const WLD = o.world ? WORLD : null;   /* world = bản có đất mở rộng (núi, suối, đường làng): xem garden-world.js */
-  const L = Object.assign({ deco: 3, house: 4, fence: 3, well: 3, barn: 3, windmill: 3, plots: 400, planted: 300, path: 1, apple: 1, flowers: 1, pond: 1, hay: 1, animals: 1 }, o.levels || {});
+  SHADOW.setTime(o.time || "day"); HOT.length = 0; ANIM.length = 0; TREEPOS.length = 0; const WLD = o.world ? WORLD : null;
+      /* world = bản có đất mở rộng (núi, suối, đường làng): xem garden-world.js */
+  const L = Object.assign({ deco: 3, house: 4, fence: 3, well: 3, barn: 3, windmill: 3, plots: 400, planted: 300, path: 1, apple: 1, flowers: 1, pond:
+      1, hay: 1, animals: 1 }, o.levels || {});
   const time = o.time || "day"; const items = [], R = rng(7);
   /* nền cỏ */
   let ground = WLD ? WLD.groundRect() : `<rect width="${W}" height="${H}" fill="url(#gGrass)"/>`;
-  for (let i = 0; i < 26; i++) ground += ell(R() * W, 120 + R() * (H - 120), 90 + R() * 120, 30 + R() * 40, R() < .5 ? "#A5E06C" : "#6FB43F", null).replace("/>", ' opacity=".18"/>');
+  for (let i = 0; i < 26; i++) ground += ell(R() * W, 120 + R() * (H - 120), 90 + R() * 120, 30 + R() * 40, R() < .5 ? "#A5E06C" : "#6FB43F",
+      null).replace("/>", ' opacity=".18"/>');
   for (let i = 0; i < 160; i++) { const x = R() * W, y = 150 + R() * (H - 150); ground += tuft(x, y, .7 + R() * .6); }
-  const cols = ["#FFFFFF", "#FFD24D", "#FF8FB0", "#B79CF0"]; if (L.flowers) for (let i = 0; i < 46; i++) ground += flower(R() * W, 170 + R() * (H - 190), cols[Math.floor(R() * 4)]);
+  const cols = ["#FFFFFF", "#FFD24D", "#FF8FB0", "#B79CF0"]; if (L.flowers) for (let i = 0; i < 46; i++) ground += flower(R() * W, 170 + R() * (
+      H - 190), cols[Math.floor(R() * 4)]);
   if (WLD) ground += WLD.under(time);
   /* chân trời: đồi + cây xa */
   let far = ""; for (let i = 0; i < 9; i++) far += ell(60 + i * 150 + R() * 40, 128 + R() * 20, 120 + R() * 40, 44 + R() * 16, i % 2 ? "#79C044" : "#6FB43F", null);
@@ -354,34 +35,59 @@ function scene(o) {
   const fenceAt = (x, y, dir, lv) => { const [gx, gy] = U(x, y); return fence(gx, gy, dir, lv); };
   const at = (sx, sy) => [sx, sy], base = [], stand = [];
   const D = L.deco, occ = [];
-  const reg = (x, y, rx, ry, kind) => occ.push({ x, y, rx, ry, kind: kind || "fixed" }), line = (x0, y0, dx, dy, n, rx, ry, kind) => { const len = Math.hypot(dx * n, dy * n), k = Math.max(1, Math.round(len / 28)); for (let i = 0; i <= k; i++) reg(x0 + dx * n * i / k, y0 + dy * n * i / k, rx, ry, kind); };
+  const reg = (x, y, rx, ry, kind) => occ.push({ x, y, rx, ry, kind: kind || "fixed" }), line = (x0, y0, dx, dy, n, rx, ry, kind) => {
+      const len = Math.hypot(dx * n, dy * n), k = Math.max(1,
+      Math.round(len / 28)); for (let i = 0; i <= k; i++) reg(x0 + dx * n * i / k, y0 + dy * n * i / k, rx, ry, kind); };
   const free = fp => !occ.some(o => hit(fp, o));
   const push = (y, svg) => { let fp = svg && svg.fp;
     if (fp && !free(fp)) {   /* trùng chỗ → tìm chỗ trống gần nhất (vòng xoắn elip), không có thì bỏ */
-      let got = null; for (let r = 1; r <= 9 && !got; r++) for (let a = 0; a < 16 && !got; a++) { const ang = a / 16 * Math.PI * 2, nx = fp.x + Math.cos(ang) * r * 30, ny = fp.y + Math.sin(ang) * r * 15; if (nx < 24 || nx > 1256 || ny < 150 || ny > 872) continue; if (free(Object.assign({}, fp, { x: nx, y: ny }))) got = [nx, ny]; }
+      let got = null; for (let r = 1; r <= 9 && !got; r++) for (let a = 0; a < 16 && !got; a++) { const ang = a / 16 * Math.PI * 2, nx = fp.x +
+          Math.cos(ang) * r * 30, ny = fp.y + Math.sin(
+          ang) * r * 15; if (nx < 24 || nx > 1256 || ny < 150 || ny > 872) continue; if (free(Object.assign({}, fp, { x: nx, y: ny }))) got = [nx, ny]; }
       if (!got || !svg.re) { DROPPED.push(fp.name); return; } MOVED.push(fp.name); y += got[1] - fp.y; svg = svg.re(got[0], got[1]); fp = svg.fp; }
     if (fp) occ.push(fp);
-    if (fp && /^(cow|chicken|rabbit)$/.test(fp.name)) ANIM.push({ k: fp.name, x: Math.round(fp.x), y: Math.round(fp.y), s: fp.name === "cow" ? (fp.a || 1) : 1, f: fp.b ? 1 : 0 });
+    if (fp && /^(cow|chicken|rabbit)$/.test(fp.name)) ANIM.push({ k: fp.name, x: Math.round(fp.x), y: Math.round(fp.y), s: fp.name === "cow" ? (
+        fp.a || 1) : 1, f: fp.b ? 1 : 0 });
     if (o.noAnimals && fp && /^(cow|chicken|rabbit|coop)$/.test(fp.name)) return;   /* bản không vật nuôi: vẫn giữ chỗ nhưng không vẽ */
     stand.push({ d: y, svg: String(svg) }); };
   if (o.extra) o.extra({ push, reg, at });   /* công trình nổi bật theo MÔN (scripts/learn/garden-themes.js): đặt trước để giữ chỗ */
   /* các vật cố định giữ chỗ TRƯỚC */
-  if (L.pond) reg(330, 300, 140, 68); if (L.house) reg(650, 425 + HY, 170, 60); if (L.barn) reg(1090, 565, 125, 50); if (L.well) reg(470, 535, 38, 16); if (L.windmill) reg(1170, 335, 50, 18);
+  if (L.pond) reg(330, 300, 140, 68); if (L.house) reg(650, 425 + HY, 170, 60); if (L.barn) reg(1090, 565, 125, 50); if (L.well) reg(470, 535, 38,
+      16); if (L.windmill) reg(1170, 335, 50, 18);
   if (D >= 3) { reg(880, 340 + HY, 80, 28); reg(1020, 385 + HY, 72, 26); } if (D >= 2) reg(1205, 430, 50, 16);
-  if (D >= 1) { reg(STABLE[0], STABLE[1], 96, 40); push(STABLE[1], stable(STABLE[0], STABLE[1], time === "night")); }   /* CHUỒNG THÚ: cửa chuồng ở STABLE (giữa khu chăn nuôi) */
-  if (L.fence) { line(648, 282 + HY, -52, 26, 4, 30, 13); line(648, 282 + HY, 52, 26, 5, 30, 13); if (D >= 1) { line(440, 386 + HY, 52, 26, 2, 30, 13); line(908, 412 + HY, -52, 26, 2, 30, 13); } }
-  if (L.path) { line(548, 900, 18, -70, 1, 40, 22); [[548, 900], [566, 830], [584, 770], [604, 715], [632, 656], [668, 598], [700, 540], [640, 500], [592, 452], [568, 400], [575, 340], [620, 300], [675, 265]].forEach(([x, y]) => reg(x, y, 40, 22)); if (D >= 1) { [[596, 700], [540, 664], [470, 684], [400, 706], [330, 726], [690, 540], [770, 526], [850, 512], [940, 490], [640, 640], [720, 628], [790, 640]].forEach(([x, y]) => reg(x, y, 30, 16)); } if (D >= 2) [[950, 480], [1010, 440], [1070, 400], [540, 560], [470, 560], [400, 538], [350, 520]].forEach(([x, y]) => reg(x, y, 30, 16)); }
+  if (D >= 1) { reg(STABLE[0], STABLE[1], 96, 40); push(STABLE[1], stable(STABLE[0], STABLE[1], time === "night"));
+      }   /* CHUỒNG THÚ: cửa chuồng ở STABLE (giữa khu chăn nuôi) */
+  if (L.fence) { line(648, 282 + HY, -52, 26, 4, 30, 13); line(648, 282 + HY, 52, 26, 5, 30, 13); if (D >= 1) { line(440, 386 + HY, 52, 26, 2, 30,
+      13); line(908, 412 + HY, -52, 26, 2, 30, 13); } }
+  if (L.path) { line(548, 900, 18, -70, 1, 40, 22); [[548, 900], [566, 830], [584, 770], [604, 715], [632, 656], [668, 598], [700, 540], [640, 500],
+      [592, 452], [568, 400], [575, 340], [620,
+      300], [675, 265]].forEach(([x, y]) => reg(x, y, 40, 22)); if (D >= 1) { [[596, 700], [540, 664], [470, 684], [400, 706], [330, 726], [690, 540],
+          [770, 526], [850, 512], [940, 490],
+      [640, 640], [720, 628], [790, 640]].forEach(([x, y]) => reg(x, y, 30, 16)); } if (D >= 2) [[950, 480], [1010, 440], [1070, 400], [540, 560],
+          [470, 560], [400, 538], [350,
+      520]].forEach(([x, y]) => reg(x, y, 30, 16)); }
   /* vật có vùng chiếm đất tự động: bọc các hàm vẽ để mang theo vùng của nó */
-  const W2 = (name, fn) => { const mk = (x, y, a, b, c) => { const o = new String(fn(x, y, a, b, c)), F = FOOT[name], sc = name === "bigTree" || name === "pine" || name === "cow" ? (a || 1) : 1; o.fp = { x, y, rx: F[0] * sc, ry: F[1] * Math.max(.7, sc), kind: name, name, a, b }; o.re = (nx, ny) => mk(nx, ny, a, b, c); return o; }; return mk; };
-  const bigTree = W2("bigTree", SPRITES.bigTree), pine = W2("pine", SPRITES.pine), hay = W2("hay", SPRITES.hay), barrel = W2("barrel", SPRITES.barrel), chicken = W2("chicken", SPRITES.chicken), rabbit = W2("rabbit", SPRITES.rabbit), cow = W2("cow", SPRITES.cow), rock = W2("rock", SPRITES.rock), bush = W2("bush", SPRITES.bush), lavender = W2("lavender", SPRITES.lavender), flowerPatch = W2("flowerPatch", SPRITES.flowerPatch), pumpkins = W2("pumpkins", SPRITES.pumpkins), milkcans = W2("milkcans", SPRITES.milkcans), roundHay = W2("roundHay", SPRITES.roundHay), crate = W2("crate", SPRITES.crate), coop = W2("coop", SPRITES.coop);
+  const W2 = (name, fn) => { const mk = (x, y, a, b, c) => { const o = new String(fn(x, y, a, b, c)), F = FOOT[name], sc = name === "bigTree" ||
+      name === "pine" || name === "cow" ? (a ||
+      1) : 1; o.fp = { x, y, rx: F[0] * sc, ry: F[1] * Math.max(.7, sc), kind: name, name, a, b }; o.re = (nx, ny) => mk(nx, ny, a, b, c); return o; }; return mk; };
+  const bigTree = W2("bigTree", SPRITES.bigTree), pine = W2("pine", SPRITES.pine), hay = W2("hay", SPRITES.hay), barrel = W2("barrel",
+      SPRITES.barrel), chicken = W2("chicken",
+      SPRITES.chicken), rabbit = W2("rabbit", SPRITES.rabbit), cow = W2("cow", SPRITES.cow), rock = W2("rock", SPRITES.rock), bush = W2("bush",
+          SPRITES.bush), lavender = W2("lavender",
+      SPRITES.lavender), flowerPatch = W2("flowerPatch", SPRITES.flowerPatch), pumpkins = W2("pumpkins", SPRITES.pumpkins), milkcans = W2("milkcans",
+          SPRITES.milkcans), roundHay = W2(
+      "roundHay", SPRITES.roundHay), crate = W2("crate", SPRITES.crate), coop = W2("coop", SPRITES.coop);
   /* ---- lớp mặt đất ---- */
   if (L.pond) base.push(pond([330, 300]));
   if (o.lot) base.push({ d: .6, svg: houseLot(650, 238 + HY + 0, 170, 82) });   /* bước "đất nền cất nhà" */
   /* lối đi = mảng liền; kiểu chọn bằng L.pathStyle (dat | soi | cuoi | dalat | gach) */
   const PS = L.pathStyle || "soi";
   if (L.path) {
-    const net = [[[[548, 900], [566, 830], [584, 770], [604, 715], [632, 656], [668, 598], [700, 540], [640, 500], [592, 452], [568, 400], [575, 340], [620, 300], [675, 265]], 66, 1]];
-    if (D >= 1) { net.push([[[596, 700], [540, 664], [470, 684], [400, 706], [330, 726]], 46, 2]); net.push([[[690, 540], [770, 526], [850, 512], [940, 490]], 46, 3]); net.push([[[640, 640], [720, 628], [790, 640]], 40, 4]); }
+    const net = [[[[548, 900], [566, 830], [584, 770], [604, 715], [632, 656], [668, 598], [700, 540], [640, 500], [592, 452], [568, 400], [575, 340],
+        [620, 300], [675, 265]], 66, 1]];
+    if (D >= 1) { net.push([[[596, 700], [540, 664], [470, 684], [400, 706], [330, 726]], 46, 2]); net.push([[[690, 540], [770, 526], [850, 512],
+        [940, 490]], 46, 3]); net.push([[[640, 640],
+        [720, 628], [790, 640]], 40, 4]); }
     if (D >= 2) { net.push([[[950, 480], [1010, 440], [1070, 400]], 44, 5]); net.push([[[540, 560], [470, 560], [400, 538], [350, 520]], 40, 6]); }
     base.push({ d: 0, svg: pathNet(net, PS) });   /* một mảng liền duy nhất */
   }
@@ -389,7 +95,9 @@ function scene(o) {
   LAND.draw({ L, base, stand, push, occ, reg, free, DROPPED, HOT, TREEPOS, U, fenceRun, bigTree, WLD, SPRITE_KINDS });
   /* tường đá / rào quanh sân (hình thoi: Lc(440,386) Bc(648,282) Rc(908,412) Fc(700,516)) */
   if (L.fence) {
-    const FS = L.fenceStyle || ({ 1: "tre", 2: "go", 3: FENCE.USE.court }[L.fence] || FENCE.USE.court), run = (sx, sy, dir, n, st) => { const g = U(sx, sy), r = fenceRun(g[0], g[1], dir, n, st || FS); push(r.d, r.svg); };
+    const FS = L.fenceStyle || ({ 1: "tre", 2: "go", 3: FENCE.USE.court }[L.fence] || FENCE.USE.court), run = (sx, sy, dir, n, st) => { const g = U(
+        sx, sy), r = fenceRun(g[0], g[1], dir, n,
+        st || FS); push(r.d, r.svg); };
     run(648, 282 + HY, "y", 4); run(648, 282 + HY, "x", 5);                                  /* hai cạnh sau của sân */
     if (D >= 1) { run(440, 386 + HY, "x", 2); run(908, 412 + HY, "y", 2); }                  /* hai cạnh trước */
   }
@@ -402,68 +110,115 @@ function scene(o) {
   if (D >= 2) { push(440, table(1205, 425)); }
   /* ---- cây, bụi, đá ---- */
   /* hàng cây sát nhau quanh rìa + vườn cây ăn quả nhiều loại */
-  const forest = [[25, 200, "pine", 1.2], [95, 150, "oak", 1.0], [165, 215, "pine", 1.1], [250, 150, "pine", 1.15], [345, 118, "oak", .9], [440, 160, "pine", 1.0], [520, 120, "oak", .95], [600, 168, "pine", .95], [680, 128, "oak", .9], [760, 160, "pine", 1.0], [850, 120, "oak", .9], [930, 150, "pine", 1.0], [1010, 118, "oak", .85], [1090, 150, "pine", 1.0], [1180, 130, "oak", .95], [1255, 190, "pine", 1.15], [1235, 690, "oak", 1.1], [20, 330, "oak", 1.0], [70, 420, "pine", 1.0], [1255, 330, "pine", 1.0], [1250, 450, "oak", .95], [1255, 580, "pine", 1.0]];
+  const forest = [[25, 200, "pine", 1.2], [95, 150, "oak", 1.0], [165, 215, "pine", 1.1], [250, 150, "pine", 1.15], [345, 118, "oak", .9], [440, 160,
+      "pine", 1.0], [520, 120, "oak", .95],
+      [600, 168, "pine", .95], [680, 128, "oak", .9], [760, 160, "pine", 1.0], [850, 120, "oak", .9], [930, 150, "pine", 1.0], [1010, 118, "oak",
+          .85], [1090, 150, "pine", 1.0], [1180, 130,
+      "oak", .95], [1255, 190, "pine", 1.15], [1235, 690, "oak", 1.1], [20, 330, "oak", 1.0], [70, 420, "pine", 1.0], [1255, 330, "pine", 1.0], [1250,
+          450, "oak", .95], [1255, 580, "pine",
+      1.0]];
   /* hàng trên: nhiều VỊ TRÍ cây lớn; bé đã mở cây nào thì cây đó đứng ở đó, chưa mở thì hiện chỗ trống (vòng đất + dấu +) */
   /* 3 CHUỒNG hình bình hành (gia cầm · heo cừu · bò): bò gần kho, gà vịt và heo cừu XA NHÀ ở phía dưới; vật nuôi đứng sẵn trong chuồng */
   if (D >= 1) {
     const fr2 = (sx, sy, dir, n) => { const gg = U(sx, sy), r = fenceRun(gg[0], gg[1], dir, n, FENCE.styleFor("pen")); push(r.d, r.svg); };
     const addA = (k, fn, x, y) => { ANIM.push({ k, x: Math.round(x), y: Math.round(y), s: 1, f: 0 }); if (!o.noAnimals) stand.push({ d: y, svg: String(fn(x, y)) }); };
     for (const pn of PENS) {
-      const [fx, fy] = pn.fo, na = pn.na, nb = pn.nb, T = [fx, fy], Rr = [fx + na * TW / 2, fy + na * TH / 2], Bb = [fx + (na - nb) * TW / 2, fy + (na + nb) * TH / 2], Ll = [fx - nb * TW / 2, fy + nb * TH / 2], cx = fx + (na - nb) * TW / 4, cy = fy + (na + nb) * TH / 4;
+      const [fx, fy] = pn.fo, na = pn.na, nb = pn.nb, T = [fx, fy], Rr = [fx + na * TW / 2, fy + na * TH / 2], Bb = [fx + (na - nb) * TW / 2, fy + (na + nb) * TH / 2],
+          Ll = [fx - nb * TW / 2, fy + nb * TH / 2], cx = fx + (na - nb) * TW / 4, cy = fy + (na + nb) * TH / 4;
       occ.push({ x: cx, y: cy, rx: (na + nb) * 24, ry: (na + nb) * 12, kind: "pen", name: "pen" });
-      base.push({ d: .45, svg: poly([T, Rr, Bb, Ll], "#E8D49B", "#B8944F", 4) + poly([T, Rr, Bb, Ll].map(p => [cx + (p[0] - cx) * .86, cy + (p[1] - cy) * .86]), "none", "#F4E4B4", 2.2) });
+      base.push({ d: .45, svg: poly([T, Rr, Bb, Ll], "#E8D49B", "#B8944F", 4) + poly([T, Rr, Bb, Ll].map(p => [cx + (p[0] - cx) * .86, cy + (
+          p[1] - cy) * .86]), "none", "#F4E4B4", 2.2) });
       fr2(T[0], T[1], "x", na); fr2(T[0], T[1], "y", nb); fr2(Ll[0], Ll[1], "x", na); fr2(Rr[0], Rr[1], "y", nb);
       PEN_OK = true;
-      for (const [k, dx, dy] of pn.an) { const x = cx + dx, y = cy + dy; if (k === "chicken") push(y, chicken(x, y)); else if (k === "cow") push(y, cow(x, y, .8, dx > 0)); else if (k === "pig") addA("pig", (a, b) => pig(a, b, .9, dx > 0), x, y); else if (k === "sheep") addA("sheep", (a, b) => sheep(a, b, .9, dx > 0), x, y); else if (k === "duck") addA("duck", duck, x, y); }
+      for (const [k, dx, dy] of pn.an) { const x = cx + dx, y = cy + dy; if (k === "chicken") push(y, chicken(x, y)); else if (k === "cow") push(y,
+          cow(x, y, .8, dx > 0)); else if (
+          k === "pig") addA("pig", (a, b) => pig(a, b, .9, dx > 0), x, y); else if (k === "sheep") addA("sheep", (a, b) => sheep(a, b, .9, dx > 0), x,
+              y); else if (k === "duck") addA("duck",
+          duck, x, y); }
       PEN_OK = false;
     }
   }
-  const fruitKinds = ["mango", "apple", "orange", "pomelo", "litchi", "pear", "plum", "peach"]; let pk = 0; forest.slice(0, [9, 16, 22, forest.length][Math.min(D, 3)]).filter((_, q) => q === 100).forEach(([x, y, k, sc], q) => push(y, bigTree(x, y, sc * .9, fruitKinds[(q * 3 + pk++) % fruitKinds.length])));
-  if (L.apple) { const kinds = ["apple", "orange", "pear", "apple", "peach", "orange"]; const orch = [[60, 560], [150, 610], [235, 660], [60, 680], [150, 730], [235, 780], [60, 800], [150, 850], [120, 500], [30, 450]]; orch.filter(() => false).forEach(([x, y], k) => push(y, bigTree(x, y, .8, kinds[k % kinds.length]))); }
+  const fruitKinds = ["mango", "apple", "orange", "pomelo", "litchi", "pear", "plum", "peach"]; let pk = 0; forest.slice(0, [9, 16, 22,
+      forest.length][Math.min(D, 3)]).filter((_,
+      q) => q === 100).forEach(([x, y, k, sc], q) => push(y, bigTree(x, y, sc * .9, fruitKinds[(q * 3 + pk++) % fruitKinds.length])));
+  if (L.apple) { const kinds = ["apple", "orange", "pear", "apple", "peach", "orange"]; const orch = [[60, 560], [150, 610], [235, 660], [60, 680],
+      [150, 730], [235, 780], [60, 800], [150,
+      850], [120, 500], [30, 450]]; orch.filter(() => false).forEach(([x, y], k) => push(y, bigTree(x, y, .8, kinds[k % kinds.length]))); }
   [[540, 610, 1]].forEach(([x, y, sc]) => push(y, bush(x, y, sc)));
-  if (L.flowers) { [[520, 805], [480, 700]].forEach(([x, y]) => push(y, lavender(x, y, 1.2))); [[620, 655], [668, 702], [756, 742], [840, 770], [930, 740], [980, 690], [1020, 640]].forEach(([x, y]) => push(y, lavender(x, y, 1.05))); }
+  if (L.flowers) { [[520, 805], [480, 700]].forEach(([x, y]) => push(y, lavender(x, y, 1.2))); [[620, 655], [668, 702], [756, 742], [840, 770], [930,
+      740], [980, 690], [1020, 640]].forEach((
+      [x, y]) => push(y, lavender(x, y, 1.05))); }
   [[410, 400, 1], [560, 220, .8], [1080, 720, .9], [760, 800, .8], [180, 330, .9], [1180, 700, 1]].forEach(([x, y, sc]) => push(y, rock(x, y, sc)));
   /* ---- vật nhỏ làm dày cảnh ---- */
   if (L.hay) { [[1228, 700], [1248, 738]].forEach(([x, y]) => push(y, hay(x, y))); [[560, 470, 1.1], [600, 490, 1]].forEach(([x, y, sc]) => push(y, barrel(x, y, sc))); }
-  if (D >= 1) { push(470, milkcans(740, 488)); push(330, roundHay(960, 400)); push(570, roundHay(1215, 560)); push(600, crate(860, 560)); push(432, hedge(760, 466, 3, "x")); [[570, 560], [420, 520]].forEach(([x, y]) => push(y, flowerPatch(x, y, "#FFD24D"))); push(520, pumpkins(1200, 480)); }
-  if (D >= 2) { push(520, hedge(380, 456, 3, "x")); [[1040, 470], [440, 460], [1100, 360]].forEach(([x, y], q) => push(y, flowerPatch(x, y, q % 2 ? "#FF8FB0" : "#FFD24D"))); push(620, barrel(1210, 600, 1)); push(840, crate(830, 800)); }
+  if (D >= 1) { push(470, milkcans(740, 488)); push(330, roundHay(960, 400)); push(570, roundHay(1215, 560)); push(600, crate(860, 560)); push(432,
+      hedge(760, 466, 3, "x")); [[570, 560],
+      [420, 520]].forEach(([x, y]) => push(y, flowerPatch(x, y, "#FFD24D"))); push(520, pumpkins(1200, 480)); }
+  if (D >= 2) { push(520, hedge(380, 456, 3, "x")); [[1040, 470], [440, 460], [1100, 360]].forEach(([x, y], q) => push(y, flowerPatch(x, y, q % 2 ?
+      "#FF8FB0" : "#FFD24D"))); push(620,
+      barrel(1210, 600, 1)); push(840, crate(830, 800)); }
   if (D >= 3) { push(300, hay(1110, 290)); push(840, pumpkins(1210, 820)); [[790, 330], [800, 352]].forEach(([x, y]) => push(y, barrel(x, y, .9))); }
   if (L.animals) { [[610, 770], [660, 810]].forEach(([x, y]) => push(y, chicken(x, y))); push(600, rabbit(420, 560)); if (D >= 2) { push(180, chicken(150, 600)); } }
   if (D >= 1) { [[470, 600], [520, 640]].forEach(([x, y]) => push(y, chicken(x, y))); push(610, rabbit(560, 620)); }
-  if (D >= 2) { [[560, 780], [610, 820], [700, 850]].forEach(([x, y]) => push(y, chicken(x, y))); push(830, rabbit(740, 830)); push(560, rabbit(1000, 700)); push(640, coop(820, 720)); }
-  if (D >= 3) { [[300, 700, 1], [420, 710, 0], [520, 740, 1], [880, 760, 0], [1010, 760, 1], [1120, 600, 0], [1180, 760, 1], [330, 820, 0]].forEach(([x, y, fl]) => push(y, cow(x, y, .85, !!fl))); [[240, 640], [940, 700], [1060, 640], [760, 700], [980, 840]].forEach(([x, y]) => push(y, chicken(x, y))); [[1100, 790], [250, 700], [850, 600], [700, 640], [180, 760], [1060, 520]].forEach(([x, y]) => push(y, rabbit(x, y))); [[120, 830, 0], [640, 860, 1], [760, 780, 0], [990, 840, 1], [200, 560, 0], [1200, 700, 1]].forEach(([x, y, fl]) => push(y, cow(x, y, .85, !!fl))); [[100, 700], [340, 650], [820, 870], [1150, 650], [60, 600], [1000, 590], [560, 700]].forEach(([x, y]) => push(y, chicken(x, y))); push(760, coop(1020, 600)); [[300, 740], [440, 770], [880, 800]].forEach(([x, y]) => push(y, hay(x, y))); { const g = U(260, 650), r = fenceRun(g[0], g[1], "x", 4, "go"); push(r.d + 40, r.svg); } }
+  if (D >= 2) { [[560, 780], [610, 820], [700, 850]].forEach(([x, y]) => push(y, chicken(x, y))); push(830, rabbit(740, 830)); push(560, rabbit(1000,
+      700)); push(640, coop(820, 720)); }
+  if (D >= 3) { [[300, 700, 1], [420, 710, 0], [520, 740, 1], [880, 760, 0], [1010, 760, 1], [1120, 600, 0], [1180, 760, 1], [330, 820, 0]].forEach((
+      [x, y, fl]) => push(y, cow(x, y, .85,
+      !!fl))); [[240, 640], [940, 700], [1060, 640], [760, 700], [980, 840]].forEach(([x, y]) => push(y, chicken(x, y))); [[1100, 790], [250, 700],
+          [850, 600], [700, 640], [180, 760], [1060,
+      520]].forEach(([x, y]) => push(y, rabbit(x, y))); [[120, 830, 0], [640, 860, 1], [760, 780, 0], [990, 840, 1], [200, 560, 0], [1200, 700,
+          1]].forEach(([x, y, fl]) => push(y, cow(x, y,
+      .85, !!fl))); [[100, 700], [340, 650], [820, 870], [1150, 650], [60, 600], [1000, 590], [560, 700]].forEach(([x, y]) => push(y, chicken(x, y)));
+          push(760, coop(1020, 600)); [[300,
+      740], [440, 770], [880, 800]].forEach(([x, y]) => push(y, hay(x, y))); { const g = U(260, 650), r = fenceRun(g[0], g[1], "x", 4, "go"); push(r.d + 40, r.svg); } }
   items.push(...base, ...stand); if (WLD) items.push(...WLD.items(time));
-  if (!o.view && !o.overlay) { const c = {}; DROPPED.forEach(n => c[n] = (c[n] || 0) + 1); console.log("  vị trí [" + (o.label || "").slice(0, 26) + "]: dời " + MOVED.length + " vật sang chỗ trống, bỏ " + DROPPED.length + " vật hết chỗ " + JSON.stringify(c)); } DROPPED.length = 0; MOVED.length = 0;
+  if (!o.view && !o.overlay) { const c = {}; DROPPED.forEach(n => c[n] = (c[n] || 0) + 1); console.log("  vị trí [" + (o.label || "").slice(0, 26) +
+      "]: dời " + MOVED.length +
+      " vật sang chỗ trống, bỏ " + DROPPED.length + " vật hết chỗ " + JSON.stringify(c)); } DROPPED.length = 0; MOVED.length = 0;
   const ground0 = items.filter(i => i.d <= 1), up = items.filter(i => i.d > 1).sort((a, b) => a.d - b.d); items.length = 0; items.push(...ground0, ...up);
   /* trời + thời điểm trong ngày */
   const tint = { day: null, dusk: ["#FF8A3D", .28], night: ["#12163A", .55] }[time];
-  const sky = WLD ? WLD.sky(time) + WLD.mountains(time) : time === "day" ? `<rect width="${W}" height="150" fill="url(#gSkyDay)"/>` : time === "dusk" ? `<rect width="${W}" height="150" fill="#F9A66B"/><rect y="60" width="${W}" height="90" fill="#FFD08A" opacity=".6"/>` : `<rect width="${W}" height="150" fill="#14183F"/>`;
+  const sky = WLD ? WLD.sky(time) + WLD.mountains(time) : time === "day" ? `<rect width="${W}" height="150" fill="url(#gSkyDay)"/>` : time === "dusk" ?
+      `<rect width="${W}" height="150" fill="#F9A66B"/><rect y="60" width="${W}" height="90" fill="#FFD08A" opacity=".6"/>` :
+          `<rect width="${W}" height="150" fill="#14183F"/>`;
   let over = "";
   if (tint) over += WLD ? WLD.tintRect(tint[0], tint[1]) : `<rect width="${W}" height="${H}" fill="${tint[0]}" opacity="${tint[1]}"/>`;
   if (WLD) over += WLD.over(time);
   if (time === "night" && !WLD) {
     for (let i = 0; i < 40; i++) over += `<circle cx="${f(R() * W)}" cy="${f(R() * 140)}" r="${f(1 + R() * 1.6)}" fill="#fff" opacity="${f(.5 + R() * .5)}"/>`;
     over += `<circle cx="1120" cy="60" r="34" fill="#FFF3C4"/><circle cx="1132" cy="52" r="30" fill="#14183F" opacity=".0"/>`;
-    [[520, 340, 62], [560, 372, 62], [612, 384, 60], [470, 500, 56], [1010, 452, 70], [700, 470, 54], [1058, 380, 64], [900, 300, 54]].forEach(([x, y, r]) => over += `<circle cx="${x}" cy="${y}" r="${r}" fill="url(#gGlow)"/>`);
-    for (let i = 0; i < 18; i++) over += `<circle cx="${f(200 + R() * 880)}" cy="${f(300 + R() * 480)}" r="${f(2 + R() * 2)}" fill="#E8FF8A" opacity="${f(.5 + R() * .5)}"/>`;
+    [[520, 340, 62], [560, 372, 62], [612, 384, 60], [470, 500, 56], [1010, 452, 70], [700, 470, 54], [1058, 380, 64], [900, 300, 54]].forEach(([x, y,
+        r]) => over += `<circle cx="${x}" cy="${y}" r="${r}" fill="url(#gGlow)"/>`);
+    for (let i = 0; i < 18; i++) over += `<circle cx="${f(200 + R() * 880)}" cy="${f(300 + R() * 480)}" r="${f(2 + R(
+        ) * 2)}" fill="#E8FF8A" opacity="${f(.5 + R() * .5)}"/>`;
   }
   if (time === "dusk" && !WLD) { over += `<circle cx="1060" cy="120" r="46" fill="#FFB562" opacity=".9"/>`; }
   /* sinh vật bay */
-  let fly = ""; if (time !== "night") { [[300, 360], [820, 300], [560, 520]].forEach(([x, y], i) => fly += i === 1 ? bee(x, y, i * .7) : butterfly(x, y, i * .6, i ? "#FFB347" : "#FF8FB0")); }
+  let fly = ""; if (time !== "night") { [[300, 360], [820, 300], [560, 520]].forEach(([x, y], i) => fly += i === 1 ? bee(x, y, i * .7) : butterfly(x,
+      y, i * .6, i ? "#FFB347" : "#FF8FB0")); }
   const body = (o.crop ? "" : "") + items.map(i => i.svg).join(""); SHADOW.setTime("day");
   const view = o.view || (WLD ? WLD.VIEW : [0, 0, W, H]);
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${view.join(" ")}" role="img" aria-label="${o.label || "Khu vườn Học Vui"}" data-style="pop" data-game="garden-scene">
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${view.join(" ")}" role="img" aria-label="${o.label ||
+      "Khu vườn Học Vui"}" data-style="pop" data-game="garden-scene">
 <title>${o.label || "Khu vườn Học Vui"}</title>${STYLE}${defs()}${sky}<g>${far}</g>${ground}${body}${fly}${over}${o.overlay || ""}</svg>
 `;
 }
 
-const LAND = require("./garden-land")({ f, rng, poly, ell, lerp, C, TW, TH, cropFns: { wheat: cropWheat, carrot: cropCarrot, corn: cropCorn, strawberry: cropStraw, tomato: cropTomato, sunflower: cropSun } });
-const WORLD = require("./garden-world")({ f, rng, G, ell, shadow, tuft, flower, rock, bush, pine, bigTree, house, pathNet, hedge, flowerPatch, hay, barrel, crate, W, H });
+const LAND = require("./garden-land")({ f, rng, poly, ell, lerp, C, TW, TH, cropFns: { wheat: cropWheat, carrot: cropCarrot, corn: cropCorn,
+    strawberry: cropStraw, tomato: cropTomato, sunflower: cropSun } });
+const WORLD = require("./garden-world")({ f, rng, G, ell, shadow, tuft, flower, rock, bush, pine, bigTree, house, pathNet, hedge, flowerPatch, hay,
+    barrel, crate, W, H });
 const SCENES = [
   ["01-toan-canh", "Toàn cảnh khu vườn (ban ngày): nhà ngói, tường đá, ruộng, cây táo, ao, cối xay gió, kho", {}],
-  ["02-cap-1", "Cấp 1: mới bắt đầu, lều lá, rào tre, một ô trồng", { levels: { deco: 0, house: 1, fence: 1, well: 1, barn: 0, windmill: 0, plots: 2, planted: 1, path: 0, apple: 0, flowers: 0, pond: 1, hay: 0, animals: 0 } }],
-  ["03-cap-2", "Cấp 2: nhà tranh, rào gỗ, giếng xây, hai ô trồng", { levels: { deco: 1, house: 2, fence: 2, well: 2, barn: 1, windmill: 1, plots: 6, planted: 3, path: 1, apple: 0, flowers: 1, pond: 1, hay: 0, animals: 0 } }],
-  ["04-cap-3", "Cấp 3: nhà tường, tường đá, kho, cối xay, bốn ô trồng", { levels: { deco: 2, house: 3, fence: 3, well: 2, barn: 2, windmill: 2, plots: 12, planted: 8, path: 1, apple: 1, flowers: 1, pond: 1, hay: 1, animals: 0 } }],
+  ["02-cap-1", "Cấp 1: mới bắt đầu, lều lá, rào tre, một ô trồng", { levels: { deco: 0, house: 1, fence: 1, well: 1, barn: 0, windmill: 0, plots: 2,
+      planted: 1, path: 0, apple: 0, flowers:
+      0, pond: 1, hay: 0, animals: 0 } }],
+  ["03-cap-2", "Cấp 2: nhà tranh, rào gỗ, giếng xây, hai ô trồng", { levels: { deco: 1, house: 2, fence: 2, well: 2, barn: 1, windmill: 1, plots: 6,
+      planted: 3, path: 1, apple: 0, flowers:
+      1, pond: 1, hay: 0, animals: 0 } }],
+  ["04-cap-3", "Cấp 3: nhà tường, tường đá, kho, cối xay, bốn ô trồng", { levels: { deco: 2, house: 3, fence: 3, well: 2, barn: 2, windmill: 2, plots:
+      12, planted: 8, path: 1, apple: 1,
+      flowers: 1, pond: 1, hay: 1, animals: 0 } }],
   ["05-hoang-hon", "Hoàng hôn (cùng khu vườn, cấp đầy đủ)", { time: "dusk" }],
   ["06-ban-dem", "Ban đêm: đèn sáng, đom đóm, trăng", { time: "night" }]
 ];
@@ -472,20 +227,34 @@ let HOT1 = null;
 for (const [id, label, o] of SCENES) { files[`scene-${id}.svg`] = scene(Object.assign({ label }, o)); if (id === "01-toan-canh") HOT1 = HOT.slice(); }
 /* bản KHÔNG vật nuôi cho trang tương tác (vật nuôi là lớp riêng: ban ngày thả ra, tối vào chuồng) */
 let SLOTS = null, TREES = [], PLOTPOS = [];
-for (const [id, t] of [["01-toan-canh-na", "day"], ["05-hoang-hon-na", "dusk"], ["06-ban-dem-na", "night"]]) { files[`scene-${id}.svg`] = scene({ label: "Khu vườn không vật nuôi (" + t + ")", time: t, noAnimals: true, world: true }); if (t === "day") { SLOTS = ANIM.slice(); TREES = TREEPOS.slice(); PLOTPOS = HOT.slice(); } }
+for (const [id, t] of [["01-toan-canh-na", "day"], ["05-hoang-hon-na", "dusk"], ["06-ban-dem-na", "night"]]) { files[`scene-${id}.svg`] = scene({
+    label: "Khu vườn không vật nuôi (" + t +
+    ")", time: t, noAnimals: true, world: true }); if (t === "day") { SLOTS = ANIM.slice(); TREES = TREEPOS.slice(); PLOTPOS = HOT.slice(); } }
 /* LOẠI vật nuôi đứng sai chỗ: trên nhà / kho / ao / thân chuồng thú (hộp bấm BLD ở learn/garden/garden-places.js là vùng hình ảnh của công trình) và đè lên ô trồng, gốc cây.
    Vật nuôi TRONG chuồng rào (gà vịt, heo cừu, bò) không bị loại. */
 {
-  const PL = (() => { const vm = require("vm"), sb = { GardenLayout: { ART: "" } }; vm.createContext(sb); vm.runInContext(fs.readFileSync(path.join(__dirname, "..", "..", "learn", "garden", "garden-places.js"), "utf8"), sb); return sb; })();
-  const boxes = PL.BLD.map(b => [b.x - b.w / 2, b.y - b.h / 2, b.x + b.w / 2, b.y + b.h / 2]); boxes.push([STABLE[0] - 60, STABLE[1] - 95, STABLE[0] + 60, STABLE[1] - 5]);
+  const PL = (() => { const vm = require("vm"), sb = { GardenLayout: { ART: "" } }; vm.createContext(sb); vm.runInContext(fs.readFileSync(path.join(
+      __dirname, "..", "..", "learn", "garden",
+      "garden-places.js"), "utf8"), sb); return sb; })();
+  const boxes = PL.BLD.map(b => [b.x - b.w / 2, b.y - b.h / 2, b.x + b.w / 2, b.y + b.h / 2]); boxes.push([STABLE[0] - 60, STABLE[1] - 95, STABLE[0] +
+      60, STABLE[1] - 5]);
   const before = SLOTS.length, removed = [];
-  SLOTS = SLOTS.filter(a => { const bad = boxes.some(b => a.x >= b[0] && a.x <= b[2] && a.y >= b[1] && a.y <= b[3]) || PLOTPOS.some(p => Math.abs(a.x - p.x) < 48 && Math.abs(a.y - p.y) < 24); if (bad) removed.push(a.k + "@" + a.x + "," + a.y); return !bad; });
+  SLOTS = SLOTS.filter(a => { const bad = boxes.some(b => a.x >= b[0] && a.x <= b[2] && a.y >= b[1] && a.y <= b[3]) || PLOTPOS.some(p => Math.abs(
+      a.x - p.x) < 48 && Math.abs(
+      a.y - p.y) < 24); if (bad) removed.push(a.k + "@" + a.x + "," + a.y); return !bad; });
   console.log("  vật nuôi đứng sai chỗ (trên công trình / ô trồng) đã loại " + (before - SLOTS.length) + ": " + removed.join(" "));
 }
-{ const cap = { cow: 18, chicken: 28, rabbit: 12, pig: 4, sheep: 4, duck: 4 }, cnt = {}; SLOTS = SLOTS.filter(a => (cnt[a.k] = (cnt[a.k] || 0) + 1) <= cap[a.k]).sort((a, b) => a.y - b.y); }
-const AV = { cow: [-56, -76, 112, 88, "Bò"], pig: [-44, -58, 96, 68, "Heo"], sheep: [-38, -56, 88, 66, "Cừu"], chicken: [-18, -40, 46, 50, "Gà"], rabbit: [-18, -46, 40, 54, "Thỏ"], duck: [-20, -34, 46, 42, "Vịt"] };
-for (const [k, fn] of Object.entries({ cow: () => cow(0, 0, 1, false), pig: () => pig(0, 0, 1, false), sheep: () => sheep(0, 0, 1, false), chicken: () => chicken(0, 0), rabbit: () => rabbit(0, 0), duck: () => duck(0, 0) })) {
-  const v = AV[k]; fs.writeFileSync(path.join(out, "..", `animal_${k}.svg`), `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${v[0]} ${v[1]} ${v[2]} ${v[3]}" role="img" aria-label="${v[4]}" data-style="pop" data-game="animal-${k}"><title>${v[4]}</title>${fn()}</svg>\n`);
+{ const cap = { cow: 18, chicken: 28, rabbit: 12, pig: 4, sheep: 4, duck: 4 }, cnt = {}; SLOTS = SLOTS.filter(a => (cnt[a.k] = (cnt[a.k] || 0) +
+    1) <= cap[a.k]).sort((a, b) => a.y - b.y); }
+const AV = { cow: [-56, -76, 112, 88, "Bò"], pig: [-44, -58, 96, 68, "Heo"], sheep: [-38, -56, 88, 66, "Cừu"], chicken: [-18, -40, 46, 50, "Gà"],
+    rabbit: [-18, -46, 40, 54, "Thỏ"], duck:
+    [-20, -34, 46, 42, "Vịt"] };
+for (const [k, fn] of Object.entries({ cow: () => cow(0, 0, 1, false), pig: () => pig(0, 0, 1, false), sheep: () => sheep(0, 0, 1, false), chicken: (
+    ) => chicken(0, 0), rabbit: () => rabbit(
+    0, 0), duck: () => duck(0, 0) })) {
+  const v = AV[k]; fs.writeFileSync(path.join(out, "..", `animal_${k}.svg`),
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${v[0]} ${v[1]} ${v[2]} ${v[3]}" role="img" aria-label="${v[4]}" data-style="pop" data-game="animal-${k}"><title>${v[4]}</title>${fn(
+      )}</svg>\n`);
 }
 /* ảnh cận cảnh: cắt vùng của cùng cảnh */
 const CLOSE = [
@@ -499,49 +268,76 @@ files["scene-09-ruong-cay.svg"] = scene({ label: CLOSE[2][1], view: CLOSE[2][2] 
 files["scene-10-cong-trinh.svg"] = scene({ label: CLOSE[3][1], view: CLOSE[3][2] });
 /* 07: bốn ngôi nhà cạnh nhau trên nền cỏ; 08: ba kiểu rào + lối đá */
 function strip(label, makers, w, h, bg) {
-  const R = rng(11); let g = `<rect width="${w}" height="${h}" fill="url(#gGrass)"/>`; for (let i = 0; i < 60; i++) g += tuft(R() * w, 60 + R() * (h - 60), .8 + R() * .5);
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" role="img" aria-label="${label}" data-style="pop"><title>${label}</title>${STYLE}${defs()}${g}${makers}</svg>\n`;
+  const R = rng(11); let g = `<rect width="${w}" height="${h}" fill="url(#gGrass)"/>`; for (let i = 0; i < 60; i++) g += tuft(R() * w, 60 + R() * (
+      h - 60), .8 + R() * .5);
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" role="img" aria-label="${label}" data-style="pop"><title>${label}</title>${STYLE}${defs(
+      )}${g}${makers}</svg>\n`;
 }
 {
   const item = (gx, gy, fn) => fn;
   let s = "";
-  [1, 2, 3, 4].forEach((lv, i) => { const cx = 190 + i * 340, hs = house([cx + (lv === 1 ? 0 : 60), 560], lv); s += `<g transform="translate(${f(cx * .0)} 0)">${hs.svg}</g>`; s += `<text x="${cx + 20}" y="660" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="800" font-size="30" fill="#2F5A22">${["Cấp 1: lều lá", "Cấp 2: nhà tranh", "Cấp 3: nhà tường", "Cấp 4: nhà ngói"][i]}</text>`; });
+  [1, 2, 3, 4].forEach((lv, i) => { const cx = 190 + i * 340, hs = house([cx + (lv === 1 ? 0 : 60), 560], lv); s += `<g transform="translate(${f(
+      cx * .0)} 0)">${hs.svg}</g>`;
+      s += `<text x="${cx +
+          20}" y="660" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="800" font-size="30" fill="#2F5A22">${["Cấp 1: lều lá",
+          "Cấp 2: nhà tranh",
+      "Cấp 3: nhà tường", "Cấp 4: nhà ngói"][i]}</text>`; });
   files["scene-07-nha-4-cap.svg"] = strip(CLOSE[0][1], s, 1400, 720);
   let r = "";
   const lbl = (x, y, t) => `<text x="${x}" y="${y}" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="800" font-size="26" fill="#2F5A22">${t}</text>`;
   r += `<text x="700" y="56" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="900" font-size="34" fill="#1F4A18">Hàng rào: một dải liền, chọn kiểu</text>`;
-  Object.keys(FENCES).forEach((st, i) => { const col = i % 3, row = Math.floor(i / 3), sx = 150 + col * 440, sy = 170 + row * 210, g = U0(sx, sy), fr = fenceRun(g[0], g[1], "x", 3, st); r += `<g>${fr.svg}</g>` + lbl(sx + 80, sy + 118, FENCES[st]); });
+  Object.keys(FENCES).forEach((st, i) => { const col = i % 3, row = Math.floor(i / 3), sx = 150 + col * 440, sy = 170 + row * 210, g = U0(sx, sy),
+      fr = fenceRun(g[0], g[1], "x", 3, st);
+      r += `<g>${fr.svg}</g>` + lbl(sx + 80, sy + 118, FENCES[st]); });
   r += `<text x="700" y="640" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="900" font-size="34" fill="#1F4A18">Lối đi: một mảng liền, chọn kiểu</text>`;
-  Object.keys(PATHS).forEach((st, i) => { const sx = 140 + i * 262, sy = 740; r += pathPatch([[sx - 30, sy - 60], [sx + 40, sy], [sx + 100, sy + 50]], 66, st, i + 3) + lbl(sx + 40, sy + 112, PATHS[st].vi); });
+  Object.keys(PATHS).forEach((st, i) => { const sx = 140 + i * 262, sy = 740; r += pathPatch([[sx - 30, sy - 60], [sx + 40, sy], [sx + 100, sy + 50]],
+      66, st, i + 3) + lbl(sx + 40, sy + 112, PATHS[st].vi); });
   files["scene-08-rao-duong.svg"] = strip(CLOSE[1][1], r, 1400, 900);
 }
 /* ảnh 11: màn "chọn cây để trồng" — nền cỏ sạch, các ô nâu đã trồng và một ô đất xám đang được chọn */
 {
-  const names = ["Lúa mì", "Cà rốt", "Bắp", "Dâu", "Cà chua", "Hướng dương"], fns = [cropWheat, cropCarrot, cropCorn, cropStraw, cropTomato, cropSun], ripe = [1, 1, 0, 1, 1, 0], R2 = rng(21);
+  const names = ["Lúa mì", "Cà rốt", "Bắp", "Dâu", "Cà chua", "Hướng dương"], fns = [cropWheat, cropCarrot, cropCorn, cropStraw, cropTomato, cropSun],
+      ripe = [1, 1, 0, 1, 1, 0], R2 = rng(21);
   let g = `<rect width="1000" height="640" fill="url(#gGrass)"/>`; for (let i = 0; i < 90; i++) g += tuft(R2() * 1000, 40 + R2() * 600, .8 + R2() * .5);
   const cellsXY = [[250, 440], [354, 492], [458, 544], [146, 492], [250, 544], [354, 596], [562, 440], [666, 492], [770, 440]];
   const gray = [3, 8], pl = [cropWheat, cropCarrot, cropCorn, cropStraw, cropTomato, cropSun, cropWheat, cropCarrot, cropStraw];
   cellsXY.forEach(([cx0, cy0], k) => { const A = [cx0, cy0 - TH / 2], B = [cx0 + TW / 2, cy0], Cc = [cx0, cy0 + TH / 2], Dd = [cx0 - TW / 2, cy0]; const isG = k === 3;
-    if (isG) { g += poly([A, B, Cc, Dd], "url(#gGray)", "#6E6A63", 5) + poly([A, B, Cc, Dd], "none", "#fff", 4).replace("/>", ' stroke-dasharray="10 8"/>'); for (let q = 0; q < 6; q++) { const t = lerp(lerp(A, Dd, R2()), lerp(B, Cc, R2()), R2()); g += ell(t[0], t[1], 3.4 + R2() * 2, 2, "#8F8B83", null); } }
-    else { g += poly([A, B, Cc, Dd], "url(#gSoil)", "#7A4B24", 6) + poly([A, B, Cc, Dd], "none", "#C58B4E", 3); let cr = ""; for (let a = 0; a < 4; a++) for (let b = 0; b < 4; b++) { const t = lerp(lerp(A, Dd, (a + .5) / 4), lerp(B, Cc, (a + .5) / 4), (b + .5) / 4); cr += pl[k % pl.length](t[0], t[1] + 8, k % 3 !== 2); } g += `<g transform="translate(${cx0} ${cy0}) scale(1.35) translate(${-cx0} ${-cy0})">${cr}</g>`; } });
+    if (isG) { g += poly([A, B, Cc, Dd], "url(#gGray)", "#6E6A63", 5) + poly([A, B, Cc, Dd], "none", "#fff", 4).replace("/>",
+        ' stroke-dasharray="10 8"/>'); for (let q = 0; q < 6; q++) {
+        const t = lerp(lerp(A, Dd, R2()), lerp(B, Cc, R2()), R2()); g += ell(t[0], t[1], 3.4 + R2() * 2, 2, "#8F8B83", null); } }
+    else { g += poly([A, B, Cc, Dd], "url(#gSoil)", "#7A4B24", 6) + poly([A, B, Cc, Dd], "none", "#C58B4E", 3); let cr = ""; for (let a = 0; a < 4;
+        a++) for (let b = 0; b < 4; b++) {
+        const t = lerp(lerp(A, Dd, (a + .5) / 4), lerp(B, Cc, (a + .5) / 4), (b + .5) / 4); cr += pl[k % pl.length](t[0], t[1] + 8, k % 3 !== 2);
+        } g += `<g transform="translate(${cx0} ${cy0}) scale(1.35) translate(${-cx0} ${-cy0})">${cr}</g>`; } });
   const px = 146, py = 492, bw = 560, bh = 176, bx = 20, by = 130;
-  let ov = `<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="26" fill="#000" opacity=".16" transform="translate(0 8)"/><path d="M${px - 20} ${by + bh - 2}L${px} ${by + bh + 34}L${px + 20} ${by + bh - 2}Z" fill="#fff"/><rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="26" fill="#fff" stroke="#E3DDEF" stroke-width="3"/>` +
-    `<text x="${bx + bw / 2}" y="${by + 38}" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="900" font-size="26" fill="#2B2150">Trồng cây gì?</text>`;
-  names.forEach((nm, i) => { const cx2 = bx + 66 + i * 86, cy2 = by + 100, sel = i === 1; ov += `<g><circle cx="${cx2}" cy="${cy2}" r="36" fill="${sel ? "#FFE9B0" : "#F2EEFA"}" stroke="${sel ? "#F2A100" : "#DAD3EA"}" stroke-width="${sel ? 5 : 3}"/><g transform="translate(${cx2} ${cy2 + 16}) scale(1.05)">${fns[i](0, 0, !!ripe[i])}</g><text x="${cx2}" y="${cy2 + 58}" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="800" font-size="13" fill="#4B3FA0">${nm}</text></g>`; });
-  files["scene-11-chon-cay.svg"] = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" role="img" aria-label="Chọn cây để trồng trên ô đất xám" data-style="pop"><title>Chọn cây để trồng</title>${STYLE}${defs()}${g}${ov}</svg>\n`;
+  let ov = `<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="26" fill="#000" opacity=".16" transform="translate(0 8)"/><path d="M${px - 20} ${by +
+      bh - 2}L${px} ${by + bh +
+      34}L${px + 20} ${by + bh - 2}Z" fill="#fff"/><rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="26" fill="#fff" stroke="#E3DDEF" stroke-width="3"/>` +
+    `<text x="${bx + bw / 2}" y="${by +
+        38}" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="900" font-size="26" fill="#2B2150">Trồng cây gì?</text>`;
+  names.forEach((nm, i) => { const cx2 = bx + 66 + i * 86, cy2 = by + 100, sel = i === 1; ov += `<g><circle cx="${cx2}" cy="${cy2}" r="36" fill="${sel ? "#FFE9B0" :
+      "#F2EEFA"}" stroke="${sel ? "#F2A100" : "#DAD3EA"}" stroke-width="${sel ? 5 : 3}"/><g transform="translate(${cx2} ${cy2 + 16}) scale(1.05)">${fns[i](0, 0,
+      !!ripe[i])}</g><text x="${cx2}" y="${cy2 +
+          58}" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="800" font-size="13" fill="#4B3FA0">${nm}</text></g>`; });
+  files["scene-11-chon-cay.svg"] = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" role="img" aria-label="Chọn cây để trồng trên ô đất xám" data-style="pop"><title>Chọn cây để trồng</title>${STYLE}${defs(
+      )}${g}${ov}</svg>\n`;
 }
 /* CÁC BƯỚC XÂY KHU VƯỜN (bé xong nhiệm vụ nào thì mở thêm một phần đất; learn/garden/garden-unlock.js chọn cảnh theo số nhiệm vụ đã xong):
    xay-0 = bãi cỏ xanh TRỐNG hoàn toàn · xay-1 = ĐẤT NỀN cất nhà (bé vừa "mua" được đất) · xay-2..5 = cất nhà qua 4 cấp (lều lá → nhà tranh → nhà tường → nhà cấp 4 hoàn thiện)
    xay-6 = nhà xong + ruộng 12 ô đất trống. Cùng toạ độ với cảnh đầy đủ (ô trồng, vùng bấm khớp); cảnh đầy đủ (toan-canh-na) dùng sau bước 6. Ba buổi: 01 sáng · 05 chiều · 06 tối. */
 const XAY_NAMES = ["Bãi cỏ xanh trống", "Đất nền cất nhà", "Dựng lều lá", "Nhà tranh", "Nhà tường", "Nhà cấp 4 hoàn thiện", "Nhà cấp 4 và ruộng 12 ô"];
 for (const [pre, t] of [["01", "day"], ["05", "dusk"], ["06", "night"]]) for (let k = 0; k <= 6; k++) {
-  const lv = { deco: 0, house: k >= 2 ? Math.min(k - 1, 4) : 0, fence: 0, well: 0, barn: 0, windmill: 0, path: 0, apple: 0, flowers: 0, pond: 0, hay: 0, animals: 0, plots: k >= 6 ? 400 : 0, planted: k >= 6 ? 300 : 0, noOrchard: 1 };
-  files[`scene-${pre}-xay-${k}-na.svg`] = scene({ label: "Khu vườn đang xây: " + XAY_NAMES[k] + " (" + t + ")", time: t, noAnimals: true, world: true, levels: lv, lot: k === 1 });
+  const lv = { deco: 0, house: k >= 2 ? Math.min(k - 1, 4) : 0, fence: 0, well: 0, barn: 0, windmill: 0, path: 0, apple: 0, flowers: 0, pond: 0, hay:
+      0, animals: 0, plots: k >= 6 ? 400 : 0,
+      planted: k >= 6 ? 300 : 0, noOrchard: 1 };
+  files[`scene-${pre}-xay-${k}-na.svg`] = scene({ label: "Khu vườn đang xây: " + XAY_NAMES[k] + " (" + t + ")", time: t, noAnimals: true, world: true,
+      levels: lv, lot: k === 1 });
 }
 /* ẢNH MỤC TIÊU cho bé (popup "Chăm vườn hôm nay"): cận cảnh đúng chỗ sẽ có: mảnh đất cất nhà · nhà cấp 4 · ruộng 12 ô. Ban ngày. */
 {
   const base = { deco: 0, fence: 0, well: 0, barn: 0, windmill: 0, path: 0, apple: 0, flowers: 0, pond: 0, hay: 0, animals: 0, noOrchard: 1 };
-  const mk = (id, label, lv, extra) => { files[`scene-12-muc-tieu-${id}.svg`] = scene(Object.assign({ label, time: "day", noAnimals: true, world: true, levels: Object.assign({}, base, lv) }, extra)); };
+  const mk = (id, label, lv, extra) => { files[`scene-12-muc-tieu-${id}.svg`] = scene(Object.assign({ label, time: "day", noAnimals: true, world:
+      true, levels: Object.assign({}, base, lv) }, extra)); };
   mk("co", "Khu vườn lúc mới: bãi cỏ xanh trống", { house: 0, plots: 0, planted: 0 }, { view: [260, 30, 520, 300] });
   mk("dat", "Mục tiêu: mảnh đất cất nhà", { house: 0, plots: 0, planted: 0 }, { lot: true, view: [440, -70, 420, 300] });
   mk("nha", "Mục tiêu: nhà cấp 4", { house: 4, plots: 0, planted: 0 }, { view: [440, -20, 420, 300] });
@@ -558,102 +354,15 @@ const html = `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta n
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}@media (max-width:760px){.grid{grid-template-columns:1fr}}</style></head><body>${nav}<div class="wrap">
 <h1>Khu vườn Học Vui — ảnh duyệt</h1>
 <p class="n">Cảnh dựng sẵn góc nhìn chéo (isometric), phong cách "đồ chơi mềm". Mỗi vật có <b>cấp độ</b>: bé đạt gì thì nâng cấp đúng vị trí đó (ảnh 2–4 và 7–8 cho thấy cấp). Ảnh 1 là toàn cảnh đầy đủ; 5–6 là buổi trong ngày; 9–10 là cận cảnh; <b>ảnh 11 là màn chọn cây để trồng trên ô đất xám</b> (đất xám trống → bé chọn cây → đất nâu có cây). Đây là <b>bản đề xuất để duyệt</b>, chủ site sẽ thay từng phần để tối ưu. Sinh bằng <code>node scripts/learn/gen-scene-art.js</code>, không sửa tay.</p>
-${ids.map(([id, label], i) => `<figure class="shot"><img src="scene/scene-${id}.svg" alt="${label}" loading="${i < 2 ? "eager" : "lazy"}"><figcaption><span>Ảnh ${i + 1}/${ids.length}</span>${label}</figcaption></figure>`).join("")}
+${ids.map(([id, label], i) => `<figure class="shot"><img src="scene/scene-${id}.svg" alt="${label}" loading="${i < 2 ? "eager" : "lazy"}"><figcaption><span>Ảnh ${i +
+    1}/${ids.length}</span>${label}</figcaption></figure>`).join("")}
 </div></body></html>
 `;
 fs.writeFileSync(path.join(out, "..", "preview-scene.html"), html);
 
 
-/* ---------- trang VƯỜN TƯƠNG TÁC: rê vào ô = thanh tiến độ, bấm vào = popup chi tiết ---------- */
-const CROPINFO = {
-  wheat: { vi: "Lúa mì", subj: "Tiếng Việt", sk: "tviet", g: 2, skill: "Chính tả và từ ngữ", ic: "🌾", per: [3, 4, 5, 6, 7], learn: ["Điền chữ còn thiếu (ch/tr, s/x)", "Ghép chữ cái thành từ", "Sắp xếp từ thành câu"], care: ["Đọc kỹ rồi chọn chữ đúng", "Làm đúng liền nhau để cây lớn nhanh hơn", "Ôn lại những chữ hay nhầm"], tip: "Chữ đúng, bông lúa nặng hạt." },
-  carrot: { vi: "Cà rốt", subj: "Toán", sk: "toan", g: 2, skill: "Cộng trừ trong 100", ic: "🥕", per: [2, 3, 4, 5, 6], learn: ["Cộng trừ trong 100 (36 + 27)", "Đếm bằng chạm, so sánh số", "Đặt số lên trục số"], care: ["Tính nhẩm cẩn thận, kiểm tra lại kết quả", "Làm đúng liền nhau để cây lớn nhanh hơn", "Ôn lại phép tính có nhớ khi bị sai"], tip: "Mỗi phép tính đúng là một củ lớn lên." },
-  corn: { vi: "Bắp", subj: "Toán", sk: "toan", g: 3, skill: "Bảng nhân", ic: "🌽", per: [2, 3, 4, 5, 6], learn: ["Bảng nhân 2 đến 9", "Điền phép nhân còn thiếu", "Nhân nhẩm nhanh"], care: ["Đọc thuộc bảng nhân từng dòng", "Làm đúng liền nhau để cây lớn nhanh hơn", "Ôn lại dòng nhân bị sai"], tip: "Nhân đúng, bắp ra thêm trái." },
-  strawberry: { vi: "Dâu tây", subj: "Tiếng Anh", sk: "tanh", g: 2, skill: "Từ vựng trái cây", ic: "🍓", per: [3, 4, 5, 6, 8], learn: ["Chọn hình đúng với từ (apple, banana...)", "Ghép chữ cái thành từ", "Lật thẻ ghép hình với từ"], care: ["Nghe và đọc to từ mới", "Làm đúng liền nhau để cây lớn nhanh hơn", "Ôn lại những từ chưa nhớ"], tip: "Nhớ từ mới, dâu thêm đỏ." },
-  tomato: { vi: "Cà chua", subj: "Tiếng Anh", sk: "tanh", g: 2, skill: "Từ vựng rau củ", ic: "🍅", per: [2, 3, 4, 5, 6], learn: ["Nối từ với hình (carrot, tomato...)", "Phân loại rau củ và trái cây", "Điền từ vào chỗ trống"], care: ["Nói to từ mới theo máy", "Làm đúng liền nhau để cây lớn nhanh hơn", "Ôn lại từ sai ở lượt trước"], tip: "Nói đúng từ, quả chín đỏ." },
-  sunflower: { vi: "Hướng dương", subj: "Tiếng Việt", sk: "tviet", g: 3, skill: "Đọc hiểu ngắn", ic: "🌻", per: [1, 2, 3, 4, 5], learn: ["Đọc câu ngắn rồi chọn ý đúng", "Sắp xếp từ thành câu", "Chọn từ đúng điền vào câu"], care: ["Đọc chậm và chú ý từ khóa", "Làm đúng liền nhau để cây lớn nhanh hơn", "Đọc lại câu khi chưa hiểu"], tip: "Hiểu bài, bông xoay về phía nắng." }
-};
-const CATS = { ngan: { vi: "Cây ngắn ngày", need: 5, note: "Chín nhanh (5 câu đúng). Thu hoạch xong, ô trống lại để trồng cây khác." }, hoamau: { vi: "Hoa màu", need: 8, note: "Cần nhiều bài hơn (8 câu đúng), thu được nhiều hơn. Thu hoạch xong, ô trống lại." }, lau: { vi: "Cây lâu năm", need: 12, note: "Trồng một lần (12 câu đúng). Thu hoạch xong cây VẪN Ở ĐÓ và mùa sau ra quả tiếp." } };
-for (const [k, c] of Object.entries({ carrot: "ngan", tomato: "ngan", strawberry: "ngan", wheat: "hoamau", corn: "hoamau", sunflower: "hoamau" })) { CROPINFO[k].cat = c; CROPINFO[k].need = CATS[c].need; CROPINFO[k].img = true; }
-Object.assign(CROPINFO, {
-  mango: { vi: "Xoài", subj: "Toán", sk: "toan", g: 3, skill: "Nhân chia trong bảng", ic: "🥭", cat: "lau", need: 12, img: true, per: [4, 5, 6, 8, 10], learn: ["Bảng nhân chia", "Giải toán có lời văn ngắn", "So sánh và sắp xếp số"], care: ["Học đều mỗi ngày một ít", "Làm đúng liền nhau để cây lớn nhanh hơn", "Ôn lại phần hay sai trước khi mùa quả tới"], tip: "Học đều, xoài ngọt." },
-  orange: { vi: "Cam", subj: "Tiếng Anh", sk: "tanh", g: 3, skill: "Câu giao tiếp đơn giản", ic: "🍊", cat: "lau", need: 12, img: true, per: [4, 5, 6, 8, 10], learn: ["Chào hỏi và hỏi đáp ngắn", "Sắp xếp từ thành câu", "Nghe rồi chọn đáp án"], care: ["Nói to từng câu theo máy", "Làm đúng liền nhau để cây lớn nhanh hơn", "Ôn lại câu chưa trôi chảy"], tip: "Nói tự tin, cam mọng nước." },
-  apple: { vi: "Táo", subj: "Tiếng Việt", sk: "tviet", g: 3, skill: "Đọc hiểu và viết câu", ic: "🍎", cat: "lau", need: 12, img: true, per: [4, 5, 6, 8, 10], learn: ["Đọc đoạn ngắn rồi trả lời", "Sắp xếp từ thành câu", "Điền từ vào chỗ trống"], care: ["Đọc chậm, gạch chân từ khóa", "Làm đúng liền nhau để cây lớn nhanh hơn", "Đọc lại đoạn khi chưa hiểu"], tip: "Hiểu bài, táo đỏ mọng." },
-  pear: { vi: "Lê", subj: "Toán", sk: "toan", g: 4, skill: "Phân số và số thập phân", ic: "🍐", cat: "lau", need: 12, img: true, per: [4, 5, 6, 8, 10], learn: ["Phân số cơ bản", "Đặt điểm lên trục số", "So sánh phân số"], care: ["Vẽ hình để hiểu phân số", "Làm đúng liền nhau để cây lớn nhanh hơn", "Ôn lại phần bị sai"], tip: "Kiên nhẫn, lê chín vàng." }
-});
-Object.assign(CROPINFO.wheat, { mas: true, mn: "Bông Lúa", say: ["Mình là Bông Lúa! Bé đọc đúng nhiều nhé!", "Mình chín vàng rồi! Thu hoạch nè!"] });
-Object.assign(CROPINFO.carrot, { mas: true, mn: "Cà Rốt", say: ["Cà Rốt đây! Cùng tính nhẩm nào!", "Cà Rốt giòn rụm rồi, nhổ mình đi!"] });
-Object.assign(CROPINFO.corn, { mas: true, mn: "Bắp Bắp", say: ["Bắp Bắp đây! Bé nhớ bảng nhân chưa?", "Bắp vàng ươm rồi! Bé thu hoạch nhé!"] });
-Object.assign(CROPINFO.strawberry, { mas: true, mn: "Dâu Dâu", say: ["Hi! Mình là Dâu! Cùng học từ mới!", "Yummy! Dâu chín đỏ rồi!"] });
-Object.assign(CROPINFO.tomato, { mas: true, mn: "Cà Chua", say: ["Hello! Mình là Cà Chua!", "So red! Thu hoạch mình nhé!"] });
-Object.assign(CROPINFO.sunflower, { mas: true, mn: "Hướng Dương", say: ["Mình là Hướng Dương! Cùng đọc nào!", "Bông to nở rộ rồi! Bé giỏi quá!"] });
-{
-  const rr = rng(77), plots = HOT1.map((h, i) => { const need = h.crop ? CROPINFO[h.crop].need : 5, got = h.planted ? (h.ripe ? need : 1 + Math.floor(rr() * (need - 1))) : 0; const o = { i, tree: !!h.tree, x: h.x, y: h.y, planted: h.planted, crop: h.crop, got, need }; if (h.tilled) o.tilled = true; return o; });
-  const ids = Object.keys(CROPINFO);
-  const A = 'style="color:#cfd3ff;text-decoration:none;padding:4px 10px;border-radius:99px"';
-  const nav = `<nav class="rvnav" style="position:sticky;top:0;z-index:99;display:flex;gap:6px 14px;flex-wrap:wrap;align-items:center;padding:8px 16px;background:#1a1d33;color:#fff;font:600 13px system-ui"><b style="opacity:.7">Duyệt Học Vui:</b><a ${A} href="../../../learn/mascot-review.html">🐾 Linh vật theo bố cục học</a><a ${A} href="../brand-learn.html">Thương hiệu 3 môn</a><a ${A} href="preview-garden.html">🌸 Vườn hoa</a><a ${A} href="preview-crops.html">🌾 Thu hoạch (cây trồng)</a><a ${A} href="preview-scene.html">🏡 Khu vườn</a><span style="padding:4px 10px;border-radius:99px;background:#fff;color:#1a1d33">👆 Vườn tương tác</span></nav><script src="../../../learn/review-nav.js"></script>`;
-  /* dữ liệu mẫu cho trang vườn tương tác: SINH ở đây; phần mã/CSS/HTML của trang nằm trong learn/garden/ (viết tay: index.html, css/, garden-*.js; garden-layout.js là danh sách + thứ tự nạp) */
-  { const td = path.join(out, "..", "tree"); fs.mkdirSync(td, { recursive: true });
-    for (const k of SPRITE_KINDS) { if (TREE_PNG.has(k)) continue; let g = String(bigTree(0, 0, 1, k)); const i = g.indexOf('<path d="M-12 0C'), j = g.indexOf('<g transform="scale(1)">'); if (i < 0 || j < 0) throw new Error("bigTree đổi cấu trúc, sửa bộ xuất cây rời"); g = g.slice(0, j + 24) + g.slice(i);
-      fs.writeFileSync(path.join(td, `tree_${k}.svg`), `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-100 -180 200 205" width="200" height="205" role="img" aria-label="Cây ${k}">${defs()}${g}</svg>`); } }
-  fs.writeFileSync(path.join(out, "..", "garden-data.js"), "/* SINH TỰ ĐỘNG bởi scripts/learn/gen-scene-art.js, đừng sửa tay. */\nvar CATS = " + JSON.stringify(CATS) + ", CI = " + JSON.stringify(CROPINFO) + ", PLOTS = " + JSON.stringify(plots.map(p => Object.assign({}, p, { x: p.x + WORLD.MXL, y: p.y + WORLD.MT }))) + ", IDS = " + JSON.stringify(ids) + ", TREES = " + JSON.stringify(TREES.map(t => Object.assign({}, t, { x: t.x + WORLD.MXL, y: t.y + WORLD.MT }))) + ", ST = [\"Hạt\", \"Mầm\", \"Cây con\", \"Sắp chín\", \"CHÍN\"], W = " + WORLD.WW + ", H = " + WORLD.HH + ", OFX = " + WORLD.MXL + ", OFY = " + WORLD.MT + ", GX = " + (-WORLD.MXL) + ", GY = " + (-WORLD.MT) + ", GW = " + WORLD.WW + ", GH = " + WORLD.HH + ";\nvar SLOTS = " + JSON.stringify(SLOTS.map(s => Object.assign({}, s, { x: s.x + WORLD.MXL, y: s.y + WORLD.MT }))) + ", DOOR = [" + (STABLE[0] + WORLD.MXL) + ", " + (STABLE[1] + WORLD.MT) + "];\n");
-}
+require("./gen-scene-garden-page.js")({ rng, STABLE, bigTree, SPRITE_KINDS, defs, fs, path, out, TREE_PNG, WORLD, HOT1, SLOTS, TREES, ids, A, nav });
 
-/* ====== BA CẢNH THEO MÔN (Vườn Số / Rừng Chữ / Vịnh Từ): mẫu để chủ site duyệt, xem docs/LEARN-GARDEN-SCENES-PLAN.md ====== */
-{
-  const TH = require("./garden-themes")({ f, G, ell, shadow });
-  const swap = (svg, pairs) => pairs.reduce((t, [a, b]) => t.split(a).join(b), svg);
-  const BASE = {
-    toan: { name: "Vườn Số", sub: "Toán", extra: X => { X.push(548, TH.numberBlocks(445, 548, 1.55)); X.push(815, TH.numberBlocks(150, 815, .8)); X.push(820, TH.numberBlocks(1125, 820, .8)); }, levels: { well: 0 } },
-    viet: { name: "Rừng Chữ", sub: "Tiếng Việt", extra: X => { X.push(330, TH.letterTree(1170, 340, 1.05, true)); X.push(540, TH.openBook(470, 545)); X.push(812, TH.letterTree(150, 812, 1)); X.push(818, TH.letterTree(1125, 818, 1)); }, levels: { windmill: 0, well: 0 } },
-    anh: { name: "Vịnh Từ", sub: "Tiếng Anh", extra: X => { X.push(300, TH.bay(330, 300)); X.push(340, TH.hiSign(1170, 340)); X.push(560, TH.palm(470, 545, 1.1)); X.push(812, TH.palm(150, 812, 1.1)); X.push(818, TH.palm(1125, 818, 1.1)); }, levels: { windmill: 0, well: 0, pond: 0 } }
-  };
-  for (const [k, T] of Object.entries(BASE)) {
-    const svg = scene({ label: T.name + " (" + T.sub + ", cảnh gốc lớp 1)", extra: T.extra, levels: T.levels, noAnimals: true, world: true });
-    files[`scene-theme-${k}-g1.svg`] = swap(svg, TH.SWAP[k]);
-  }
-  /* BỘ CẢNH CHƠI ĐƯỢC theo môn: cùng bố cục + vị trí ô đất/cây với cảnh gốc (công trình môn là LỚP PHỦ, không đẩy vật khác), ra scene/<viet|anh|toan>/scene-*.svg.
-     Vườn chọn thư mục theo môn (learn/garden/garden-unlock.js scenePath). */
-  const OV = {
-    toan: () => [[868, TH.numberBlocks, 905, 1.2], [815, TH.numberBlocks, 150, .8], [820, TH.numberBlocks, 1125, .8]],
-    viet: () => [[330, TH.letterTree, 1170, 1.05, true], [868, TH.openBook, 905], [812, TH.letterTree, 150, 1], [818, TH.letterTree, 1125, 1]],
-    anh: () => [[340, TH.hiSign, 1170], [868, TH.palm, 905, 1.1], [812, TH.palm, 150, 1.1], [818, TH.palm, 1125, 1.1]]
-  };
-  const ovFor = k => OV[k]().map(([y, fn, x, a1, a2]) => String(fn(x, y, a1, a2))).join("");
-  for (const k of (process.env.THEME_SCENES ? ["toan", "viet", "anh"] : [])) {   /* bản "đổi màu + lớp phủ" cùng layout: TẠM TẮT (chủ site muốn layout KHÁC cho Việt/Anh, xem docs/LEARN-GARDEN-LAYOUTS-PLAN.md) */
-    const dir = path.join(out, k); fs.mkdirSync(dir, { recursive: true });
-    const put = (name, svg) => fs.writeFileSync(path.join(dir, name), swap(svg, TH.SWAP[k]));
-    const lvB = {};
-    for (const [pre, t, full] of [["01", "day", "01-toan-canh"], ["05", "dusk", "05-hoang-hon"], ["06", "night", "06-ban-dem"]]) {
-      put(`scene-${full}-na.svg`, scene({ label: BASE[k].name + " (" + t + ")", time: t, noAnimals: true, world: true, levels: lvB, overlay: ovFor(k) }));
-      for (let q = 0; q <= 6; q++) {
-        const lv = { deco: 0, house: q >= 2 ? Math.min(q - 1, 4) : 0, fence: 0, well: 0, barn: 0, windmill: 0, path: 0, apple: 0, flowers: 0, pond: 0, hay: 0, animals: 0, plots: q >= 6 ? 400 : 0, planted: q >= 6 ? 300 : 0, noOrchard: 1 };
-        put(`scene-${pre}-xay-${q}-na.svg`, scene({ label: BASE[k].name + ": đang xây " + q + " (" + t + ")", time: t, noAnimals: true, world: true, levels: lv, lot: q === 1, overlay: ovFor(k) }));
-      }
-    }
-  }
-  /* mở rộng theo lớp: ô mẫu cạnh nhau (mỗi ô một công trình trên mảnh cỏ), lớp 2 và 3 đã vẽ; lớp 4, 5 sau khi duyệt */
-  const EXP = {
-    toan: [[2, "Đồng hồ lớn", TH.clockTower], [3, "Cầu thang số", TH.numberStairs]],
-    viet: [[2, "Thư viện trong hốc cây", TH.libraryTree], [3, "Suối kể chuyện + cầu đá", TH.storyBridge]],
-    anh: [[2, "Đèn hiệu nói Hi!", TH.lighthouse], [3, "Phố chợ ven vịnh", TH.harborStall]]
-  };
-  for (const [k, list] of Object.entries(EXP)) list.forEach(([g, label, fn]) => {
-    const o = String(fn(200, 250));
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="${BASE[k].name} lớp ${g}: ${label}" data-style="pop"><title>${BASE[k].name} lớp ${g}: ${label}</title>${STYLE}${defs()}<rect width="400" height="300" rx="26" fill="url(#gGrass)"/>${[[60, 60], [340, 70], [330, 250], [70, 250], [200, 40]].map(q => tuft(q[0], q[1], .9)).join("")}${o}</svg>\n`;
-    files[`scene-theme-${k}-g${g}.svg`] = swap(svg, TH.SWAP[k]);
-  });
-  /* trang duyệt */
-  const tcol = { toan: "#34D399", viet: "#FFB020", anh: "#60A5FA" }, stories = { toan: "Đồng quê hiện tại làm gốc, thêm khối số 1-2-3. Lên lớp thì có đồng hồ, cầu thang số, sông chia đều, đài thiên văn.", viet: "Rừng thu ấm, cây ra chữ quanh nhà, cuốn sách khổng lồ. Lên lớp thì có thư viện hốc cây, suối kể chuyện, lều đọc sách, cổng thành chữ.", anh: "Vịnh xanh có bến thuyền, cọ, biển Hi!. Lên lớp thì có đèn hiệu, phố chợ ven vịnh, cảng, tháp chuông và bản đồ thế giới." };
-  const cards = Object.entries(BASE).map(([k, T]) => `<section style="--c:${tcol[k]}"><h2>${T.name} <small>· ${T.sub}</small></h2><p>${stories[k]}</p>
-<h3>Cảnh gốc (lớp 1)</h3><img class="big" src="scene/scene-theme-${k}-g1.svg" alt="${T.name} cảnh gốc">
-<h3>Mở rộng theo lớp (cộng dồn: lớp 3 = gốc + lớp 2 + lớp 3)</h3><div class="ex">${EXP[k].map(([g, l]) => `<figure><img src="scene/scene-theme-${k}-g${g}.svg" alt=""><figcaption><b>Lớp ${g}</b> ${l}</figcaption></figure>`).join("")}<figure class="soon"><div>Lớp 4, 5<br>vẽ sau khi bạn duyệt</div></figure></div></section>`).join("");
-  fs.writeFileSync(path.join(out, "..", "preview-3-gardens.html"), `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Duyệt 3 khu vườn theo môn</title>
-<style>body{margin:0;background:#12141F;color:#ECEEFF;font:16px/1.5 system-ui,sans-serif}.wrap{max-width:1180px;margin:0 auto;padding:16px}h1{font-size:24px;margin:8px 0}h2{margin:0 0 4px;font-size:22px;border-left:8px solid var(--c);padding-left:10px}h2 small{opacity:.7;font-weight:600}h3{margin:16px 0 8px;font-size:15px;opacity:.85}section{margin:26px 0;padding:16px;border-radius:22px;background:#1b1e36;border:1px solid #2c3160}.big{width:100%;height:auto;border-radius:18px;display:block}.ex{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}.ex figure{margin:0;border-radius:18px;overflow:hidden;background:#12141F;border:1px solid #2c3160}.ex img{width:100%;display:block}.ex figcaption{padding:8px 12px;font-size:14px}.soon{display:grid;place-items:center;min-height:160px;opacity:.55;text-align:center;border-style:dashed!important}p{margin:6px 0 0;opacity:.9}.ask{padding:12px 16px;border-radius:16px;background:#2a2150;border:1px solid #5a4bd0}</style>
-<nav class="rvnav" style="display:flex;flex-wrap:wrap;gap:4px;align-items:center;padding:8px 12px;background:#1a1d33;color:#fff;font-size:13px"></nav><script src="../../../learn/review-nav.js"></script>
-<div class="wrap"><h1>Duyệt 3 khu vườn theo môn: Vườn Số, Rừng Chữ, Vịnh Từ</h1>
-<div class="ask"><b>Bạn duyệt giúp:</b> (1) bảng màu và không khí từng cảnh có đúng chủ đề không; (2) công trình nổi bật có dễ nhận ra không; (3) phần mở rộng lớp 2, 3 có hợp không; (4) có cần đổi công trình nào trước khi mình sinh đủ bộ (các giai đoạn xây × buổi trong ngày) và vẽ lớp 4, 5. Mẫu này là ảnh tĩnh của cảnh gốc, bản chơi được sẽ nối sau khi duyệt.</div>
-${cards}</div>`);
-}
+require("./gen-scene-themes.js")({ ell, tuft, TH, f, STYLE, defs, G, shadow, fs, path, out, scene, files });
 for (const [n, c] of Object.entries(files)) if (/^scene-theme-/.test(n)) fs.writeFileSync(path.join(out, n), c);
 console.log("✓ đã sinh " + Object.keys(files).length + " ảnh cảnh + preview-scene.html + garden-data.js (trang vườn: learn/garden/)");

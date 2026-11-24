@@ -1,0 +1,135 @@
+/* Lời giảng soạn tay cho bài học — Tiếng Anh (một phần của scripts/learn/lesson-teach.js; định dạng mục: xem tệp đó). */
+module.exports = {
+  "EN-G2-02": { say: [
+    ["Nói theo mẫu: Hello! I am Nam. How are you?", "👋 Hello!"],
+    ["Trả lời: I am fine, thank you.", "😊 I am fine."],
+    ["Chào tạm biệt: Goodbye! See you.", "👋 Goodbye!"]],
+    qs: [
+      ["Ai đó nói \"Hello!\". Bé đáp lại?", "Hello!", "Goodbye!", "Thank you", "Người ta chào, mình cũng chào.", "Đúng! Hello.", "Hello!"],
+      ["\"How are you?\" là hỏi gì?", "Bạn khoẻ không?", "Bạn tên gì?", "Bạn mấy tuổi?", "Hỏi sức khoẻ.", "Đúng! Bạn khoẻ không?", "How are you?"],
+      ["Trả lời \"How are you?\"", "I am fine, thank you.", "My name is Nam.", "Goodbye!", "Nói mình khoẻ.", "Đúng! I am fine.", "I am ...?"],
+      ["Tạm biệt trong tiếng Anh là?", "Goodbye", "Hello", "Thanks", "Nói khi chia tay.", "Đúng! Goodbye.", "👋"],
+      ["Cảm ơn trong tiếng Anh là?", "Thank you", "Sorry", "Hello", "Nói khi nhận quà.", "Đúng! Thank you.", "🎁"],
+      ["\"What is your name?\" Bé trả lời?", "My name is Nam.", "I am fine.", "Goodbye.", "Nói tên của mình.", "Đúng! My name is...", "My name is ...?"]],
+    sum: ["Hello là xin chào, Goodbye là tạm biệt", "How are you? — I am fine, thank you", "My name is ... là tên của em"] },
+  "EN-G2-03": { say: [
+    ["Con vật: cat là mèo, dog là chó, bird là chim.", "🐱 cat · 🐶 dog · 🐦 bird"],
+    ["Màu sắc: red là đỏ, blue là xanh dương, yellow là vàng.", "🔴 red · 🔵 blue"],
+    ["Số: one, two, three. Và ngày trong tuần: Monday là thứ Hai.", "1 one · 2 two · 3 three"]],
+    qs: [
+      ["Đây là con gì?", "cat", "dog", "bird", "Nghe tiếng kêu meo meo.", "Đúng! cat.", "🐱"],
+      ["Đây là con gì?", "dog", "cat", "fish", "Nghe tiếng kêu gâu gâu.", "Đúng! dog.", "🐶"],
+      ["Màu này tiếng Anh là gì?", "red", "blue", "green", "Nhìn màu của quả táo.", "Đúng! red.", "🔴"],
+      ["Số 3 tiếng Anh là?", "three", "two", "one", "Đếm 1, 2, 3.", "Đúng! three.", "3"],
+      ["Đây là gì?", "bird", "cat", "dog", "Con vật này biết bay.", "Đúng! bird.", "🐦"],
+      ["Màu này tiếng Anh là gì?", "blue", "red", "yellow", "Nhìn màu của bầu trời.", "Đúng! blue.", "🔵"]],
+    sum: ["cat mèo, dog chó, bird chim", "red đỏ, blue xanh dương, yellow vàng", "one, two, three là một, hai, ba"] },
+  "EN-G3-02": { say: [
+    ["I am, you are, he is, she is. Dùng am, is, are đúng với chủ ngữ.", "I am · He is · They are"],
+    ["Hỏi thăm: How are you? — I am fine. What is your name? — My name is Lan.", "💬 How are you?"],
+    ["Hỏi đáp ngắn: Is this a cat? — Yes, it is.", "Yes, it is. / No, it isn't."]],
+    qs: [
+      ["Điền am, is hay are: I __ a student.", "am", "is", "are", "Chủ ngữ là I.", "Đúng! I am.", "I __ a student."],
+      ["Điền am, is hay are: She __ my friend.", "is", "am", "are", "Chủ ngữ là một người (số ít).", "Đúng! She is.", "She __ my friend."],
+      ["Điền am, is hay are: They __ happy.", "are", "is", "am", "They chỉ nhiều người.", "Đúng! They are.", "They __ happy."],
+      ["\"What is your name?\" Trả lời?", "My name is Lan.", "I am fine.", "Yes, it is.", "Nói tên mình.", "Đúng! My name is...", "What is your name?"],
+      ["\"How are you?\" Trả lời?", "I am fine, thank you.", "My name is Lan.", "Goodbye.", "Nói về sức khoẻ.", "Đúng! I am fine.", "How are you?"],
+      ["Điền am, is hay are: We __ at school.", "are", "am", "is", "We là chúng tôi (nhiều người).", "Đúng! We are.", "We __ at school."]],
+    sum: ["I am, he/she/it is, you/we/they are", "Hỏi tên: What is your name?", "Hỏi thăm: How are you?"] },
+  "EN-G3-03": { say: [
+    ["Đọc câu ngắn, tìm từ chính để hiểu nghĩa.", "🍎 I like apples."],
+    ["Ngày trong tuần: Monday thứ Hai, Tuesday thứ Ba, Sunday Chủ nhật.", "Mon Tue Wed Thu Fri Sat Sun"],
+    ["Số: ten là mười, twenty là hai mươi.", "10 ten · 20 twenty"]],
+    qs: [
+      ["\"I like apples.\" nghĩa là?", "Tôi thích táo.", "Tôi ghét táo.", "Tôi mua táo.", "Tìm từ like.", "Đúng! Tôi thích táo.", "🍎"],
+      ["Sunday là ngày nào?", "Chủ nhật", "Thứ Hai", "Thứ Sáu", "Đây là ngày cuối tuần.", "Đúng! Chủ nhật.", "Sunday"],
+      ["Monday là ngày nào?", "Thứ Hai", "Thứ Ba", "Chủ nhật", "Ngày đầu tuần.", "Đúng! Thứ Hai.", "Monday"],
+      ["Số \"ten\" là số mấy?", "10", "20", "1", "Sau nine là gì?", "Đúng! 10.", "ten"],
+      ["\"cat\" nghĩa là?", "mèo", "chó", "chim", "Con vật kêu meo meo.", "Đúng! mèo.", "cat"],
+      ["\"It is red.\" nghĩa là?", "Nó màu đỏ.", "Nó màu xanh.", "Nó to.", "Tìm từ chỉ màu.", "Đúng! Nó màu đỏ.", "It is red."]],
+    sum: ["Đọc câu ngắn, tìm từ chính", "Ngày trong tuần: Monday ... Sunday", "Số: ten 10, twenty 20"] },
+  "EN-G3-04": { say: [
+    ["Dùng a trước phụ âm, an trước nguyên âm (a, e, i, o, u).", "a dog · an apple"],
+    ["Số nhiều thường thêm s: cat → cats. Từ tận cùng s, x, ch, sh thì thêm es.", "cat → cats\nbox → boxes"],
+    ["Viết đúng chính tả: đọc to từng chữ cái.", "c - a - t"]],
+    qs: [
+      ["Điền a hay an: This is __ apple.", "an", "a", "the", "Chữ cái đầu của apple là gì?", "Đúng! an apple.", "__ apple"],
+      ["Điền a hay an: This is __ dog.", "a", "an", "the", "Chữ cái đầu của dog là phụ âm.", "Đúng! a dog.", "__ dog"],
+      ["Số nhiều của cat là?", "cats", "cates", "cat", "Thêm s.", "Đúng! cats.", "one cat → two ?"],
+      ["Số nhiều của box là?", "boxes", "boxs", "boxies", "Từ tận cùng x thì thêm es.", "Đúng! boxes.", "one box → two ?"],
+      ["Chọn chữ viết đúng:", "apple", "aple", "appel", "Đọc từng chữ cái.", "Đúng! apple.", "🍎"],
+      ["Điền a hay an: This is __ egg.", "an", "a", "the", "Chữ cái đầu của egg là gì?", "Đúng! an egg.", "__ egg"]],
+    sum: ["a trước phụ âm, an trước nguyên âm", "Số nhiều thường thêm s", "Tận cùng x, s, ch, sh thêm es"] },
+  "EN-G4-02": { say: [
+    ["Câu hỏi Wh: What là gì, Where là ở đâu, Who là ai, When là khi nào.", "What? Where? Who? When?"],
+    ["Với I thì am, he/she/it thì is, you/we/they thì are.", "She is · They are"],
+    ["Trả lời đủ câu: Where is the cat? — It is on the bed.", "🐱 on the bed"]],
+    qs: [
+      ["Hỏi về nơi chốn dùng từ nào?", "Where", "Who", "What", "Câu hỏi này muốn biết ở đâu.", "Đúng! Where.", "📍"],
+      ["Hỏi về người dùng từ nào?", "Who", "Where", "When", "Câu hỏi này muốn biết ai.", "Đúng! Who.", "👤"],
+      ["Điền: My brother __ ten years old.", "is", "am", "are", "Chủ ngữ là một người (số ít).", "Đúng! is.", "My brother __ ten."],
+      ["\"Where is the cat?\" Trả lời?", "It is on the bed.", "It is red.", "Yes, it is.", "Nói chỗ ở của con mèo.", "Đúng! It is on the bed.", "🐱 ?"],
+      ["Điền: We __ in the classroom.", "are", "is", "am", "We là nhiều người.", "Đúng! We are.", "We __ here."],
+      ["\"What is this?\" Trả lời?", "It is a book.", "She is a girl.", "I am ten.", "Nói đồ vật.", "Đúng! It is a book.", "📘"]],
+    sum: ["What là gì, Where là ở đâu, Who là ai", "am, is, are theo chủ ngữ", "Trả lời bằng câu đầy đủ"] },
+  "EN-G4-03": { say: [
+    ["Đọc kỹ cả đoạn rồi tìm câu có đáp án.", "📖 Đọc → tìm → chọn"],
+    ["Từ chủ đề: school (trường), family (gia đình), food (đồ ăn).", "🏫 school"],
+    ["Ngày trong tuần: Friday là thứ Sáu, Saturday là thứ Bảy.", "Fri · Sat"]],
+    qs: [
+      ["\"I have a brother.\" nghĩa là?", "Tôi có một anh/em trai.", "Tôi có một chị.", "Tôi có một con chó.", "Tìm từ brother.", "Đúng! brother.", "👦"],
+      ["school nghĩa là?", "trường học", "bệnh viện", "chợ", "Nơi em đi học.", "Đúng! trường học.", "🏫"],
+      ["Friday là thứ mấy?", "thứ Sáu", "thứ Tư", "thứ Bảy", "Sau Thursday.", "Đúng! thứ Sáu.", "Friday"],
+      ["\"She likes milk.\" nghĩa là?", "Cô ấy thích sữa.", "Cô ấy ghét sữa.", "Cô ấy bán sữa.", "Tìm động từ likes.", "Đúng! Cô ấy thích sữa.", "🥛"],
+      ["family nghĩa là?", "gia đình", "bạn bè", "thầy cô", "Gồm ba mẹ, anh chị em.", "Đúng! gia đình.", "👨‍👩‍👧"],
+      ["Saturday là thứ mấy?", "thứ Bảy", "thứ Sáu", "Chủ nhật", "Sau Friday.", "Đúng! thứ Bảy.", "Saturday"]],
+    sum: ["Đọc kỹ rồi tìm đáp án trong bài", "Từ vựng: school, family, food", "Ngày trong tuần"] },
+  "EN-G4-04": { say: [
+    ["Dùng a trước phụ âm, an trước nguyên âm.", "a book · an egg"],
+    ["Với he, she, it, động từ thêm s: He plays.", "He plays · She eats"],
+    ["Số nhiều: cat → cats, box → boxes, child → children.", "child → children"]],
+    qs: [
+      ["Điền: She __ football.", "plays", "play", "playing", "Chủ ngữ she là một người.", "Đúng! She plays.", "She __ football."],
+      ["Điền: I __ milk.", "like", "likes", "liking", "Chủ ngữ là I.", "Đúng! I like.", "I __ milk."],
+      ["Điền a hay an: This is __ orange.", "an", "a", "the", "Chữ cái đầu của orange là gì?", "Đúng! an orange.", "__ orange"],
+      ["Số nhiều của box là?", "boxes", "boxs", "boxen", "Tận cùng x thì thêm es.", "Đúng! boxes.", "box → ?"],
+      ["Điền: He __ to school.", "goes", "go", "going", "Chủ ngữ he, động từ go thêm es.", "Đúng! He goes.", "He __ to school."],
+      ["Chọn chữ viết đúng:", "school", "scool", "shool", "Đọc từng chữ cái.", "Đúng! school.", "🏫"]],
+    sum: ["a trước phụ âm, an trước nguyên âm", "He/She/It: động từ thêm s hoặc es", "Số nhiều thường thêm s"] },
+  "EN-G5-02": { say: [
+    ["Câu hỏi Wh: What, Where, When, Who, Why, How.", "What? Where? Why?"],
+    ["Be: I am, he/she/it is, you/we/they are. Hôm qua dùng was/were.", "I was · They were"],
+    ["Trả lời đủ ý: Why? — Because ...", "Because it is raining."]],
+    qs: [
+      ["Hỏi lý do dùng từ nào?", "Why", "Where", "Who", "Câu trả lời thường bắt đầu bằng because.", "Đúng! Why.", "?"],
+      ["Điền: My parents __ at home.", "are", "is", "am", "Parents là nhiều người.", "Đúng! are.", "They __ at home."],
+      ["\"When is your birthday?\" Trả lời?", "It is in May.", "It is a cake.", "I am ten.", "Nói thời gian.", "Đúng! In May.", "🎂"],
+      ["Điền: She __ my teacher.", "is", "are", "am", "Chủ ngữ là một người.", "Đúng! is.", "She __ my teacher."],
+      ["\"How old are you?\" Trả lời?", "I am ten.", "It is red.", "I am fine.", "Nói tuổi.", "Đúng! I am ten.", "How old?"],
+      ["Điền: Yesterday I __ at school.", "was", "am", "is", "Hôm qua là quá khứ.", "Đúng! was.", "Yesterday I __ ..."]],
+    sum: ["Wh: What, Where, When, Who, Why, How", "am/is/are và was/were", "Why — Because"] },
+  "EN-G5-03": { say: [
+    ["Đọc đoạn ngắn, tìm ý chính và chi tiết.", "📖 Đọc → hiểu"],
+    ["Từ chủ đề: hobby (sở thích), job (nghề), place (nơi chốn).", "🎨 hobby"],
+    ["Câu phủ định: He does not like fish.", "does not = không"]],
+    qs: [
+      ["\"He is a doctor.\" nghĩa là?", "Ông ấy là bác sĩ.", "Ông ấy là giáo viên.", "Ông ấy là học sinh.", "Tìm từ doctor.", "Đúng! doctor = bác sĩ.", "🩺"],
+      ["hobby nghĩa là?", "sở thích", "nghề nghiệp", "ngôi nhà", "Việc em thích làm lúc rảnh.", "Đúng! sở thích.", "🎨"],
+      ["\"She does not like fish.\" nghĩa là?", "Cô ấy không thích cá.", "Cô ấy thích cá.", "Cô ấy ăn cá.", "Chú ý does not.", "Đúng! Không thích.", "🐟"],
+      ["library nghĩa là?", "thư viện", "bệnh viện", "chợ", "Nơi có nhiều sách.", "Đúng! thư viện.", "📚"],
+      ["\"We play football on Sunday.\" Chơi vào?", "Chủ nhật", "Thứ Hai", "Thứ Bảy", "Tìm từ chỉ ngày.", "Đúng! Chủ nhật.", "⚽"],
+      ["job nghĩa là?", "nghề nghiệp", "sở thích", "trường học", "Công việc của người lớn.", "Đúng! nghề nghiệp.", "👷"]],
+    sum: ["Đọc tìm ý chính và chi tiết", "Từ: hobby, job, place", "does not = không"] },
+  "EN-G5-04": { say: [
+    ["Số nhiều: thêm s, hoặc es sau s, x, ch, sh. Bất quy tắc: child → children.", "box → boxes"],
+    ["He, she, it: động từ thêm s hoặc es.", "She eats · He goes"],
+    ["Viết đúng chính tả: đọc to rồi viết.", "w - r - i - t - e"]],
+    qs: [
+      ["Số nhiều của child là?", "children", "childs", "childes", "Đây là từ bất quy tắc.", "Đúng! children.", "child → ?"],
+      ["Số nhiều của box là?", "boxes", "boxs", "boxen", "Tận cùng x thì thêm es.", "Đúng! boxes.", "box → ?"],
+      ["Điền: She __ breakfast every day.", "eats", "eat", "eating", "Chủ ngữ she là một người.", "Đúng! eats.", "She __ ..."],
+      ["Điền: He __ to school by bike.", "goes", "go", "going", "Go thêm es với he.", "Đúng! goes.", "He __ ..."],
+      ["Chọn chữ viết đúng:", "beautiful", "beatiful", "beutiful", "Đọc từng chữ cái.", "Đúng! beautiful.", "✨"],
+      ["Số nhiều của watch là?", "watches", "watchs", "watchies", "Tận cùng ch thì thêm es.", "Đúng! watches.", "watch → ?"]],
+    sum: ["Số nhiều: s, es, bất quy tắc", "He/She/It: động từ thêm s, es", "Đọc to rồi viết đúng chính tả"] }
+};
