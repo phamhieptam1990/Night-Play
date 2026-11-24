@@ -46,18 +46,12 @@ Cập nhật: 2026-11-24 (đã dọn mục xong). Quy ước: `[x]` xong · `[ ]
 
 ## H7. Khảo sát đóng vai bé lớp 2–5 (24/11/2026): còn lại sau đợt sửa
 
-Báo cáo gốc: docs/khao-sat-lop-2.md … khao-sat-lop-5.md (119 phát hiện).
+Báo cáo gốc: docs/khao-sat-lop-2.md … khao-sat-lop-5.md. Mã đã sửa; còn lại 18 mục `[ ]` "cần người" ghi ngay trong từng báo cáo
+(duyệt lời viết lại cho thẻ chủ đề, hình trăm-chục-đơn vị, làm tròn lớp 2 đối chiếu GDPT 2018, nội dung Việt/Anh lớp 5 và giáo viên duyệt,
+avatar bé lớn, quyết định thiết kế chủ site, thử trên iPhone/iPad thật).
 
-- [ ] Chống lặp trong một vòng (đọc bảng, "chữ số hàng", cùng từ hai lần ở ghép chữ) — thêm vào `engine.round` (L3-21).
-- [ ] `E.round` từng ném "Cannot read properties of undefined (reading 'id')" ở planRound khi chạy tay một script lấy mẫu; chưa tái hiện được trong bài đo — cần điều tra.
-- [ ] "Viết câu" chỉ chấm hình thức, nhận cả câu lạc đề (L3-22, L4-04): cần cách chấm nội dung (xem mục Chấm viết ở trên).
-- [ ] Trang Của bé + Bộ sưu tập: kỷ lục/so sánh bản thân, ô khoá nói rõ cách mở, bé lớn không thấy "toàn ?" (L3-24..26, L2-17, L4-17, L4-18); Bạn Số/Chữ chỉ có 28 bạn, toàn đồ lớp 1.
-- [ ] Nút ← của vườn có thể làm mất lớp với hồ sơ mới (L3-05) — cần kiểm lại trên hồ sơ thật.
-- [ ] Chữ "l" giống "I" hoa ở phông đậm (L2-05): đổi phông.
-- [ ] Toán lớp 5: biểu đồ quạt/cột bằng SVG thật, câu ra hỗn số, lời giải sau khi sai (L5-20).
-- [ ] Làm tròn số lớp 2: đang giữ làm tròn đến hàng chục; cần chủ site đối chiếu chương trình GDPT 2018 chính thức (L2-20).
-- [ ] Tách `learn/content/bank.js` (dòng quá dài) và `qtypes-hi.js` (7 dòng > 200 ký tự) theo quy tắc cấu trúc tệp.
 - [ ] Bé thật (hoặc phụ huynh quan sát) chơi thử trên iPad/iPhone thật: giọng đọc, kéo thả bằng ngón tay, bàn phím hệ điều hành.
+- [ ] Chạy tay `check-ui.js --full` và `check-lessons-ui.js --all` khi máy rảnh (chưa chạy trên mã đã gộp).
 
 
 ## Tách tệp (theo quy tắc "Cấu trúc tệp" trong CLAUDE.md và GAME_RULES.md)

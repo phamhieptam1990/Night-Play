@@ -74,11 +74,11 @@
         var A, B;
         if (g === 1) { A = rnd(1, 15); B = rnd(1, 20 - A); } else if (g === 2) { A = rnd(10, 80); B = rnd(5, 99 - A); } else if (g === 3) { A = rnd(
             300, 4000); B = rnd(100, 9999 - A);
-            } else if (g === 4) { A = rnd(1000, 6000); B = rnd(500, 9999 - A); } else { A = rnd(10000, 60000); B = rnd(1000, 99999 - A); }
+            } else if (g === 4) { A = rnd(1000, 6000); B = rnd(500, 9999 - A); } else { A = rnd(100000, 600000); B = rnd(10000, 999999 - A); }
         if (op === "+") { a = A; b = B; res = A + B; } else { a = A + B; b = B; res = A; }
       } else if (op === "×") {
-        a = g === 3 ? rnd(11, 60) : g === 4 ? rnd(11, 99) : rnd(101, 500); b = rnd(2, 9); res = a * b;
-      } else { b = rnd(2, 9); res = g === 3 ? rnd(12, 99) : g === 4 ? rnd(11, 99) : rnd(101, 400); a = b * res; }
+        a = g === 3 ? rnd(11, 60) : g === 4 ? rnd(11, 99) : rnd(21, 99); b = g === 5 ? rnd(12, 48) : rnd(2, 9); res = a * b;   /* lớp 5: nhân hai số có hai chữ số */
+      } else { b = g === 5 ? rnd(12, 36) : rnd(2, 9); res = g === 3 ? rnd(12, 99) : g === 4 ? rnd(11, 99) : rnd(21, 199); a = b * res; }
       return { a: a, b: b, op: op, res: res, txt: a + " " + op + " " + b };
     }
     /* phép tính cho ghép cặp / lật thẻ: phải tính CẢ 4 phép cùng lúc nên dùng số nhỏ (cộng trừ hai chữ số, bảng nhân), không dùng số ba chữ số */

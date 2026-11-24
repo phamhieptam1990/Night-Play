@@ -74,8 +74,9 @@
         out[pos[done]] = q; done++; } }
     /* từ lớp 2: câu chọn 1/4 có đáp án số nguyên, ~40% cho bé tự GÕ số (câu 1 giữ chọn 1/4 làm khởi động) */
     if (subj === "toan" && grade >= 2) for (var t = 1; t < out.length; t++) if (R() < .4) { var tq = asTypein(out[t], lang); if (tq) out[t] = tq; }
-    /* một câu chọn 1/4 còn lại (nếu có) đổi sang dạng bong bóng, vẫn giữ kỹ năng và mã lỗi */
-    if (R() < .7) { var rest = pos.slice(done); for (var j = 0; j < rest.length; j++) { var pq = asPop(out[rest[j]], lang); if (pq) { out[rest[j]] = pq; break; } } }
+    /* một câu chọn 1/4 còn lại (nếu có) đổi sang dạng bong bóng, vẫn giữ kỹ năng và mã lỗi; lớp 5 bỏ (bé lớn thấy như trò lớp 1) */
+    if (grade < 5 && R() < .7) { var rest = pos.slice(done);
+    for (var j = 0; j < rest.length; j++) { var pq = asPop(out[rest[j]], lang); if (pq) { out[rest[j]] = pq; break; } } }
     return out;
   }
   /* tên đồ vật theo emoji (cho giọng đọc): "🍇" -> "chùm nho" / "grapes" */

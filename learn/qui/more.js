@@ -118,10 +118,9 @@
           '" text-anchor="middle" font-size="13" font-weight="800">' + n[0] + '</text>'; });
       var svg = h("div", "qclk"); svg.setAttribute("role", "img"); svg.setAttribute("aria-label", b.h + ":" + (b.m < 10 ? "0" : "") + b.m);
       svg.innerHTML = '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="56" class="cf1"/><g class="ck" stroke-width="2.4" stroke-linecap="round">' +
-          ticks + '</g><g fill="currentColor">' + nums + '</g>' +
-        '<line x1="60" y1="60" x2="60" y2="34" class="hh" transform="rotate(' + ha +
+          ticks + '</g><line x1="60" y1="60" x2="60" y2="34" class="hh" transform="rotate(' + ha +
             ' 60 60)"/><line x1="60" y1="60" x2="60" y2="19" class="mh" transform="rotate(' + ma +
-            ' 60 60)"/><circle cx="60" cy="60" r="4" class="cc"/></svg>';
+            ' 60 60)"/><g fill="currentColor" class="cn">' + nums + '</g><circle cx="60" cy="60" r="4" class="cc"/></svg>';   /* số vẽ SAU kim: kim không che số */
       host.appendChild(svg); host.appendChild(optButtons(b, host, "qopt"));
     }
     /* phân loại vào hai rổ */

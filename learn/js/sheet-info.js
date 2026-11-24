@@ -40,7 +40,7 @@ const SC = {toan:["#34D399","#0EA5E9"],tviet:["#FFB020","#FB5A7A"],tanh:["#60A5F
 function sheet(){
   const t = T[lang]; ps = subj; pg = grade; $("shT").textContent = t.shT; $("shS").textContent = t.shS; $("shG").textContent = t.shG; $("go").setAttribute("aria-label", t.go);
   const keys = Object.keys(t.sn), S = $("pS"); S.textContent = "";
-  keys.forEach(k => { const b = document.createElement("button"); b.type = "button"; b.innerHTML = '<span class="hd"><img src="' + hd(k) + '" alt=""></span>';
+  keys.forEach(k => { const b = document.createElement("button"); b.type = "button"; b.innerHTML = '<span class="hd"><img src="' + hd(k) + '" alt=""></span><span class="sn">' + t.sn[k] + '</span>';
     b.style.setProperty("--c1", SC[k][0]); b.style.setProperty("--c2", SC[k][1]); b.setAttribute("aria-label", t.sn[k]); b.setAttribute("aria-pressed", String(k === ps));
     b.onclick = () => { ps = k; document.body.dataset.subj = k; Array.from(S.children).forEach((x, i) => x.setAttribute("aria-pressed", String(keys[i] === k))); }; S.appendChild(b); });
   const G = $("pG"); G.textContent = ""; for(let i = 1; i <= 5; i++){ const b = document.createElement("button"); b.type = "button"; b.textContent = i;

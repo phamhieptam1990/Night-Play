@@ -4,6 +4,7 @@ $("go").onclick = () => { if(subj !== ps || grade !== pg) TOPIC_ID = null; subj 
 /* ✕ đóng popup cuối bài rồi mở vòng mới (không để bé kẹt ở màn câu cuối đã khoá) */
 $("again").onclick = start; $("bMore").onclick = () => { ROUND_N = 10; FOCUS = null; KEEP = true; start(); }; $("bWeak").onclick = () => { ROUND_N = 10; FOCUS = "weak";
   KEEP = true; start(); }; function closeRes(){ $("res").hidden = true; start(); }
+$("bExam").onclick = () => { ROUND_N = 20; FOCUS = null; KEEP = true; start(); }; $("bHard").onclick = () => { ROUND_N = 5; FOCUS = "hard"; KEEP = true; start(); };
 $("resX").onclick = closeRes; addEventListener("keydown", e => { if(e.key === "Escape" && !$("res").hidden) closeRes(); });
 $("sheet").addEventListener("click", e => { if(e.target === $("sheet")){ document.body.dataset.subj = subj; $("sheet").hidden = true; } });
 document.addEventListener("keydown", e => { if(e.key === "Escape"){ if(!$("mnu").hidden) closeMenu(true); else if(!$("info").hidden) closeInfo();
@@ -36,7 +37,7 @@ stars = +ls("learn:stars") || 0;
   $("sgOff").onclick = () => { AUTO = false; ls("learn:auto", "0"); sndUi(); GESTURE = true; g.hidden = true; };
 })();
 toneUp.install(LM);   /* tone.js: lớp 4–5 lời linh vật gọn hơn */
-LM.bind({ box: $("masBox"), bubble: $("say"), base: "../shared/art/learn/", lang, idleMs: 15000, onTap: speak });
+LM.bind({ box: $("masBox"), bubble: $("say"), base: "../shared/art/learn/", lang, idleMs: 20000, onTap: speak });
 $("mas").onclick = () => LM.poke();
 /* dùng bàn phím: Tab tới linh vật là nghe đọc câu hỏi (Enter/Space để nghe lại) */
 $("mas").addEventListener("focus", () => { let v = false; try{ v = $("mas").matches(":focus-visible"); }catch(e){} if(v) speak(); });

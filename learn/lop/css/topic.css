@@ -43,3 +43,5 @@ ul.l{margin:0;padding-left:20px}ul.l li{margin:4px 0}
 @media (max-width:560px){.hero{flex-direction:column;align-items:flex-start;gap:8px}}
 @media print{.bar,.cta{display:none}body{background:#fff;color:#000}.hero,.card,.stats div{box-shadow:none}}
 .site-upd.fixed{position:static;width:auto;text-align:center;padding:8px 0 18px;pointer-events:none}
+/* dòng "Cập nhật lần cuối" nằm cuối trang (trong luồng), không đè nội dung khi cuộn */
+body>.site-upd.fixed{position:static;width:auto;text-align:center;padding:14px 0 calc(14px + env(safe-area-inset-bottom));opacity:.7}

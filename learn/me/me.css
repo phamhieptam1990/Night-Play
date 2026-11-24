@@ -109,7 +109,7 @@ button,a{font:inherit;color:inherit;cursor:pointer}
 .kb{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:clamp(92px,17dvh,150px);border-radius:28px;text-decoration:none;
   color:#fff;background:linear-gradient(135deg,var(--s1),var(--s2));border:2px solid rgba(255,255,255,.5);
   box-shadow:0 12px 26px -10px rgba(0,0,0,.45)}.kb:active{transform:scale(.97)}
-.kb b{font-size:clamp(44px,13vw,70px);line-height:1}.kb span{font-weight:900;font-size:clamp(20px,6vw,26px)}
+.kb b{font-size:clamp(44px,13vw,70px);line-height:1}.kb b img{display:block;width:1.15em;height:1.15em;object-fit:contain}.kb span{font-weight:900;font-size:clamp(20px,6vw,26px)}
 @media (max-height:520px){.kgrid{grid-template-columns:repeat(3,1fr);max-width:none}.kb{min-height:96px}.kb b{font-size:44px}}
 .kad{min-height:44px;padding:0 18px;border-radius:99px;border:2px solid var(--line,rgba(255,255,255,.3));background:rgba(0,0,0,.2);color:inherit;font-weight:800;
   font-size:14px;cursor:pointer}
@@ -131,3 +131,5 @@ button,a{font:inherit;color:inherit;cursor:pointer}
 /* màn ngang điện thoại: gọn lại cho vừa */
 @media (max-height:430px){.top{padding-top:6px;padding-bottom:6px}.ib{width:44px;height:44px}.sec{padding:16px 16px 14px;margin-bottom:14px}.chart{height:120px}}
 
+/* dòng "Cập nhật lần cuối" nằm cuối trang (trong luồng), không đè nội dung khi cuộn */
+body>.site-upd.fixed{position:static;width:auto;text-align:center;padding:14px 0 calc(14px + env(safe-area-inset-bottom));opacity:.7}

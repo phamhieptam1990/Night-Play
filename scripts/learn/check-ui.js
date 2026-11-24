@@ -80,7 +80,7 @@ const fails = []; const bad = (m) => { fails.push(m); console.log("  ✗ " + m);
             };
             await once(); await W(900); await once();
           });
-          await w(500); const r2 = await pg.evaluate(() => bank[1].res); if (r2 !== "miss" && k !== "speak") bad(tag + ": chơi sai hai lần nhưng kết quả " + r2);
+          let r2; for (let i = 0; i < 16; i++) { await w(250); r2 = await pg.evaluate(() => bank[1].res); if (r2 === "miss") break; } if (r2 !== "miss" && k !== "speak") bad(tag + ": chơi sai hai lần nhưng kết quả " + r2);
         }
       }
       if (errs.length) bad(tag + ": lỗi trang: " + errs.slice(0, 2).join(" | "));

@@ -62,3 +62,5 @@ h2 small{font-size:15px;font-weight:800;opacity:.75}
 .pop .x{position:absolute;right:12px;top:12px;width:44px;height:44px;border-radius:50%;border:0;font-size:20px;font-weight:900;color:#fff;background:rgba(255,255,255,.18)}
 :focus-visible{outline:3px solid #FFB020;outline-offset:2px}
 @media (prefers-reduced-motion:reduce){.card.shake{animation:none}.pbar i{transition:none}}
+/* dòng "Cập nhật lần cuối" nằm cuối trang (trong luồng), không đè nội dung khi cuộn */
+body>.site-upd.fixed{position:static;width:auto;text-align:center;padding:14px 0 calc(14px + env(safe-area-inset-bottom));opacity:.7}

@@ -52,7 +52,7 @@ function celebrate(stars, opts){
   $("celZoo").innerHTML = zoo.map((e, i) => '<span class="an" style="--d:' + (i * .13).toFixed(2) + 's">' + LearnIcons.html(e) + "</span>").join("");
   $("celGo").textContent = vi ? "Tiếp tục" : "Continue"; $("celGo").onclick = celClose;
   el.hidden = false; $("celGo").focus(); celJingle();
-  celTO = setTimeout(celClose, 9000);
+  celTO = setTimeout(celClose, g >= 4 ? 2800 : 9000);   /* lớp 4–5: tự sang thẻ kết quả sau ~3 giây, không bắt bấm thêm */
   const cv = $("celC"), ctx = cv.getContext("2d"), dpr = Math.min(2, window.devicePixelRatio || 1); cv.width = innerWidth * dpr; cv.height = innerHeight * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   if(window.matchMedia && matchMedia("(prefers-reduced-motion:reduce)").matches) return;
   const COL = th.col, P = [], KS = th.kinds.slice(); if(hs % 2) KS.push(th.kinds[hs % th.kinds.length]);

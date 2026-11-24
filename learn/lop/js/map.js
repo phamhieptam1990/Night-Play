@@ -54,7 +54,7 @@ function topicCard(s,g,t,m,i,total){
   const prm=new URLSearchParams({grade:g,subj:s,topic:t.id,lang}).toString();
   let learnU=null,testU=null,chips="";
   if(unl){ if(hasL) learnU="bai.html?"+prm; if(hasT) testU="../index.html?"+prm; }
-  if(!unl) chips+='<span class="chip2 a">🔒 '+(vi?"Xong chủ đề "+i+" trước nhé":"Finish topic "+i+" first")+'</span>';
+  if(!unl) chips+='<span class="chip2 a">🔒 '+(vi?"Xong chủ đề "+i+" trước nhé (hoặc qua bài Kiểm tra chủ đề "+i+" để mở nhanh)":"Finish topic "+i+" first (or pass its Quiz to unlock fast)")+'</span>';
   else { chips+=t.ready?'<span class="chip2 g">🎮 '+(vi?"Trò chơi làm quen, không cần đọc":"Warm-up games, no reading")+'</span>':(hasL
     ?'<span class="chip2 g">📖 '+T.hasLesson+'</span>':'<span class="chip2 a">'+T.soon+'</span>'); if(!hasT&&!t.ready) chips+='<span class="chip2 a">'+T.nt+'</span>'; }
   if(st!=="new") chips+='<span class="chip2 b">'+(passed?"✅ ":"")+T.stn[st]+'</span>';
@@ -82,7 +82,7 @@ function poke(){ const g=$("gmas"); g.classList.remove("poke"); void g.offsetWid
 function intro(){
   idx=-1; cards.forEach(c=>c.classList.remove("cur")); const m=MAS[S], ts=P.topics(S,G), nl=ts.filter(t=>P.hasLesson(t.id)).length;
   $("stepn").textContent="0/"+ts.length; $("next").innerHTML='<span class="t">'+T.intro.replace(" ›","")+' </span>›';
-  bub("", vi?("Chào bé! Mình là "+m[1]+" nè. Có "+ts.length+" chủ đề"+(nl?", "+nl+" bài học đã sẵn sàng":"")+". Bấm “Giới thiệu” nhé!"):(
+  bub("", vi?((G>=4?"Chào bạn! Mình là ":"Chào bé! Mình là ")+m[1]+" nè. Có "+ts.length+" chủ đề"+(nl?", "+nl+" bài học đã sẵn sàng":"")+". Bấm “Giới thiệu” nhé!"):(
     "Hi! I’m "+m[1]+". "+ts.length+" topics here. Tap “Start tour”!"));
 }
 function narrate(i,scroll){

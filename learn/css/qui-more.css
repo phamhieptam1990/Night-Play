@@ -42,7 +42,8 @@
 .nlr::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:#fff;border:5px solid var(--sg)}
 .nll{display:flex;justify-content:space-between;padding:0 8px;font-weight:800;font-size:14px;color:var(--ink2)}
 .qdone{min-height:50px;font-size:24px}
-.qclk{width:min(150px,38vh);margin:0 auto;color:var(--ink)}
+.qclk .cn{paint-order:stroke;stroke:var(--panel);stroke-width:3.2px;stroke-linejoin:round}
+.qclk{width:min(170px,38vh);margin:0 auto;color:var(--ink)}
 .qclk svg{width:100%;height:auto;display:block}
 .qclk .cf1{fill:color-mix(in srgb,var(--ink) 8%,var(--panel));stroke:var(--sg);stroke-width:3}
 .qclk .ck{stroke:var(--ink2)}.qclk .hh{stroke:var(--ink);stroke-width:5;stroke-linecap:round}.qclk .mh{stroke:var(--sg);stroke-width:3.2;stroke-linecap:round}.qclk .cc{fill:var(--ink)}
@@ -53,11 +54,11 @@
 .qbin.hot{background:color-mix(in srgb,var(--sg) 24%,transparent);border-style:solid}
 .qz{display:flex;flex-wrap:wrap;gap:5px;justify-content:center}
 .qz .ab.tl{min-width:42px;min-height:38px;padding:0 8px;font-size:20px;border-radius:12px;opacity:1}
-@media (max-height:700px){.qo{min-height:92px}.qo .obj{width:44px;height:44px;font-size:32px}.ab.mem{min-height:60px}.qb{min-height:170px}.qbin{min-height:84px}.ans.kz>.qclk{width:min(112px,26vh)}}
+@media (max-height:700px){.qo{min-height:92px}.qo .obj{width:44px;height:44px;font-size:32px}.ab.mem{min-height:60px}.qb{min-height:170px}.qbin{min-height:84px}.ans.kz>.qclk{width:min(128px,28vh)}}
 
 /* canh đều hai bên và trên dưới cho mọi kiểu tương tác: khối con giãn hết bề ngang, ô trong lưới giãn đều */
 .ans.kz{align-items:stretch;justify-content:center}
-.ans.kz>*{width:100%;box-sizing:border-box}.ans.kz>.qclk{width:min(150px,30vh)}
+.ans.kz>*{width:100%;box-sizing:border-box}.ans.kz>.qclk{width:min(180px,32vh)}
 .qg,.qg2,.qg4,.qopt,.qm,.qbins{justify-items:stretch;align-items:stretch;align-content:center}
 .qg .ab,.qg2 .ab,.qg4 .ab,.qopt .ab,.qm .ab,.qc .ab{width:100%;box-sizing:border-box}
 .qc{justify-content:center}

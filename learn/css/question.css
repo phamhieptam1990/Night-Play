@@ -4,7 +4,7 @@
 /* câu ngắn, chữ lớn (phép tính, một từ): đặt chính giữa bảng; câu dài vẫn canh trái từ trên xuống */
 .q.short{justify-content:center;align-items:center;text-align:center;padding-top:16px}.q.short h1{text-align:center}
 /* nhãn môn/dạng bài: thẻ nổi đè lên mép trên của bảng, như bong bóng gắn nhãn */
-.q small{position:absolute;left:50%;top:0;transform:translate(-50%,-50%);z-index:2;white-space:nowrap;max-width:calc(100% - 40px);overflow:hidden;text-overflow:ellipsis;
+.q>small{position:absolute;left:50%;top:0;transform:translate(-50%,-50%);z-index:2;white-space:nowrap;max-width:calc(100% - 40px);overflow:hidden;text-overflow:ellipsis;
   padding:7px 16px;border-radius:99px;font-size:13px;font-weight:900;letter-spacing:.08em;color:#fff;background:linear-gradient(135deg,var(--s1),var(--s2));
   border:2px solid color-mix(in srgb,#fff 70%,transparent);box-shadow:0 6px 16px -4px color-mix(in srgb,var(--s2) 70%,transparent)}
 .q,.q.short{padding:27px 22px 22px}   /* khung câu hỏi: lề đều bốn phía (nhãn nổi chỉ lấn 15px vào mép trên) */
@@ -25,7 +25,8 @@
 .ans.kz .ab{font-size:clamp(20px,5.6vw,28px);margin-bottom:0;-webkit-text-stroke:0;text-shadow:none;box-shadow:0 10px 24px -6px var(--c2),inset 0 2px 0 rgba(255,255,255,.35)}
   .ans.kz .ab:active{transform:scale(.96)}   /* các màn nhập chữ/số, ghép, sắp xếp… giữ nút gọn kiểu cũ */
 .ab.ok{background:linear-gradient(145deg,#34D399,#059669);animation:okp .5s;box-shadow:0 0 0 4px rgba(52,211,153,.5),0 10px 30px -4px #10B981}
-.ab.no{animation:shake .4s;filter:saturate(.3) brightness(.7)}
+.ab.no{animation:shake .4s;filter:none;background:linear-gradient(145deg,#8b90a0,#5a5f70);box-shadow:inset 0 0 0 3px #EF4444}
+.ab.no::before{content:"✕";position:absolute;right:8px;top:8px;z-index:2;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#EF4444;color:#fff;font:900 16px/1 var(--font,system-ui)}
 .ab[disabled]{pointer-events:none}
 @keyframes shim{to{background-position:-200% 0}}
 @keyframes abIn{from{opacity:0;transform:translateY(16px) scale(.9)}to{opacity:1;transform:none}}

@@ -36,7 +36,7 @@ function sndUi(){$("snd").textContent=AUTO?"🔊":"🔇";$("snd").setAttribute("
   const close=()=>{g.hidden=true};
   $("sgOn").onclick=()=>{AUTO=true;ls("learn:auto","1");sndUi();close();touched=true;const h=$("vhint");if(h&&!noVoiceShown)h.hidden=true;if(curText)say(curText)};
   $("sgOff").onclick=()=>{AUTO=false;ls("learn:auto","0");sndUi();close();touched=true;const h=$("vhint");if(h)h.hidden=true};
-  if(!window.Voice) close();
+  if(!window.Voice || grade>=4) close();   /* lớp 4–5 đọc thạo: vào thẳng bài có chữ, không qua màn loa to; loa vẫn bật bằng nút 🔊 */
 })();
 $("snd").onclick=()=>{AUTO=!AUTO;ls("learn:auto",AUTO?"1":"0");sndUi();if(AUTO)say(curText);else if(window.speechSynthesis)speechSynthesis.cancel()};
 $("mi").parentNode.onclick=()=>{touched=true;say(curText)}; sndUi();

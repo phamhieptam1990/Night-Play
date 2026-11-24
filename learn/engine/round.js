@@ -18,6 +18,7 @@
       var s = m[c.id], w = W[level(s)];
       if (focus === "weak") { var lv = level(s); w *= (lv === "emerging" || lv === "developing") ? 4 : (lv === "not_started" ? 1.5 : .25);
           }   /* chế độ "Ôn chỗ hay sai": dồn câu vào kỹ năng bé còn yếu */
+      if (focus === "hard") w *= SK[c.id].diff >= 3 ? 4 : SK[c.id].diff === 2 ? 1.2 : .25;   /* "Thử thách khó": dồn vào kỹ năng khó (diff 3) */
       if (s && typeof s === "object") { var tt = 0; Object.keys(s.tags && typeof s.tags === "object" ? s.tags : {}).forEach(function (t) {
           tt += s.tags[t] > 0 ? +s.tags[t] : 0; }); w *= 1 +
           Math.min(2, tt / 3); }
@@ -90,7 +91,7 @@
       }; LT.mix.guarded = true;
     }
     /* một vòng hoàn chỉnh: n câu đã sinh, không lặp câu dựng sẵn, không lặp đề/từ.
-       opts = { lang, n (1–40; vòng thường 5, "Luyện nhiều hơn" 10/20, đề tổng hợp 30), topic, focus: "weak" = ưu tiên kỹ năng yếu } */
+       opts = { lang, n (1–40; vòng thường 5, "Luyện nhiều hơn" 10/20, đề tổng hợp 30), topic, focus: "weak" = ưu tiên kỹ năng yếu, "hard" = ưu tiên kỹ năng khó } */
     function round(subj, grade, opts) {
       opts = opts || {}; grade = clampGrade(grade); var used = {}, lang = opts.lang === "en" ? "en" : "vi", list = []; guardMix();
       planRound(subj, grade, opts.n || 5, opts.topic, opts.focus).forEach(function (p) {

@@ -124,6 +124,7 @@ function chrome(){
   $("h-ov").textContent = t.ov; $("h-story").textContent = IDX ? Story.tx(IDX.season, lang) : t.story; $("h-grow").textContent = t.grow; $("h-garden").textContent = t.garden;
   $("toLearn").textContent = t.learn; $("toGarden").textContent = t.gdn;
   { const kd = $("kid"); if(kd){ $("kgT").textContent = t.kg; $("kaT").textContent = t.ka; $("kpT").textContent = t.kp; $("kAdult").textContent = t.kad;
+    if(HEAD[subj]) $("kaI").innerHTML = '<img src="../../shared/art/learn/' + HEAD[subj] + "/" + HEAD[subj] + '_head.svg" alt="">';
     $("kStars").innerHTML = "<span aria-hidden=\"true\">⭐</span> " + Farm.stars(); $("kStars").setAttribute("aria-label", Farm.stars() + " " + t.stars); } }
   if(window.MeRecords) MeRecords.render({ lang: lang, grade: grade, E: E });
   nav(); tiles(); week(); if(IDX) rainbow(); grow(); garden(); gardenCard();

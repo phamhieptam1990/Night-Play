@@ -19,6 +19,6 @@ body.tucked .rev{display:flex}body.tucked .revb{display:grid}
 .ab{overflow-wrap:normal;word-break:keep-all;hyphens:none}   /* không bẻ từ giữa vần ("chườ/ng"): chữ co lại thay vì ngắt */
 .rrow.rmore{grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}.rrow.rmore .btn{min-height:46px;flex-direction:row}
 .dots.many i{width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-width:2px}
-.ab.tl:has(>.ico:only-child){font-size:clamp(36px,10vw,52px);min-height:clamp(56px,9dvh,80px)}   /* thẻ chỉ có hình: hình to, dễ chạm */
+.ab.tl:has(>.ico:only-child){font-size:clamp(46px,13.5vw,60px);min-height:clamp(66px,9dvh,84px)}   /* thẻ chỉ có hình: hình to, dễ chạm */
 @media (min-width:700px) and (min-height:700px){.ab.tl:has(>.ico:only-child){font-size:72px;min-height:100px}}
 @media (max-height:430px) and (min-aspect-ratio:11/10){.ab.tl:has(>.ico:only-child){font-size:34px;min-height:44px}}
