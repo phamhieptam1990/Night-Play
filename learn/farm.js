@@ -24,8 +24,15 @@
     if (!cache || cache.v !== 1) cache = fresh();
     var f = fresh(); for (var k in f) if (cache[k] == null) cache[k] = f[k];
     if (!cache.quest || cache.quest.day !== day()) cache.quest = { day: day(), goal: GOAL, correct: 0, paid: 0 };
-    if (root.LearnSlot && root.LearnSlot.id) cache.build.n = root.LearnSlot.buildN();   /* vườn theo lớp × môn: mức xây theo số chủ đề đã qua kiểm tra */
+    if (root.LearnSlot && root.LearnSlot.id) cache.build.n = Math.max(root.LearnSlot.buildN(), (starter() || { n: 0 }).n);   /* vườn theo lớp × môn: mức xây theo số chủ đề đã qua kiểm tra (vào thẳng lớp cao: không thấp hơn mức khởi đầu) */
     return cache;
+  }
+  /* VƯỜN KHỞI ĐẦU: bé vào THẲNG lớp 2+ (chưa qua chủ đề nào ở các lớp thấp hơn) có sẵn nhà vừa + ruộng, vài cây và vài bạn vật nuôi để chăm ngay.
+     Lớp 2: nhà tranh (n=3); lớp 3-5: nhà cấp 4 + ruộng (n=6). Đồ hiếm của lớp thấp KHÔNG tặng (xem garden/garden-items.js). Trả về null nếu không áp dụng. */
+  function starter() {
+    var S = root.LearnSlot, p = S && S.parts && S.parts(); if (!p || p.grade < 2 || !S.passed) return null;
+    for (var g = 1; g < p.grade; g++) for (var i = 0; i < S.SUBJ.length; i++) if (S.passed(g, S.SUBJ[i]) > 0) return null;
+    return { n: p.grade === 2 ? 3 : 6, trees: p.grade === 2 ? 1 : 3, animals: p.grade === 2 ? 2 : 4, grade: p.grade };
   }
   function save() { if (cache) wr(KEY, JSON.stringify(cache)); }
   function stars() { return +rd("learn:stars") || 0; }
@@ -111,6 +118,7 @@
     orange: { stars: 60 }, apple: { stars: 80 }, pear: { stars: 100 }, mango: { stars: 120 }
   };
   function seedState(id) {
+    if (root.GardenItems) { var gs = root.GardenItems.seedState(id); if (gs) return gs; }   /* vật phẩm theo lớp (garden/garden-items.js): mở theo chủ đề đã qua của đúng lớp, thay cho mở theo sao */
     var q = SEEDS[id]; if (!q) return { open: true, need: "" };
     var n = get().build.n, st = stars(), cr = cropTotal();
     if (q.n != null) return { open: n >= q.n, need: "Mở khi có ruộng" };
@@ -124,9 +132,9 @@
   }
   /* XOÁ TOÀN BỘ tiến độ vườn + truyện + sao về trạng thái chưa mở khoá (nút "Xoá tiến độ học" ở trang phụ huynh, sau cổng phép tính).
      Giữ nguyên lựa chọn của phụ huynh/bé: lớp, môn, ngôn ngữ, nhạc, giới hạn giờ, màu giao diện vườn. Kỹ năng/lỗi/nhật ký ngày do LearnEngine.resetAll() xoá. */
-  var RESET_KEYS = ["learn:farm", "learn:garden", "learn:stars", "learn:trips", "gardenFarm", "gardenTrees", "gardenSeen", "gardenHelp", "gardenAnimals", "gardenGift", "gardenDaily"];
+  var RESET_KEYS = ["learn:farm", "learn:garden", "learn:stars", "learn:trips", "gardenFarm", "gardenTrees", "gardenSeen", "gardenHelp", "gardenAnimals", "gardenGift", "gardenDaily", "gardenOwned", "gardenSwap"];
   function resetAll() { cache = null; RESET_KEYS.forEach(function (k) { try { root.localStorage.removeItem(k); } catch (e) {} }); if (root.LearnSlot) root.LearnSlot.clearAll(); }
   function resetCache() { cache = null; }   /* sau khi nạp dữ liệu từ tệp (learn/backup.js): đọc lại từ kho */
-  var api = { missionsLeft: missionsLeft, SEEDS: SEEDS, seedState: seedState, BUILD: BUILD, missionDone: missionDone, MISSION_SUBJ: MISSION_SUBJ, resetCache: resetCache, resetAll: resetAll, RESET_KEYS: RESET_KEYS, KEY: KEY, GOAL: GOAL, CROP: CROP, OUTFITS: OUTFITS, day: day, get: get, save: save, stars: stars, addStars: addStars, addSeeds: addSeeds, addCrop: addCrop, cropTotal: cropTotal, streakDays: streakDays, recordRound: recordRound, outfitsOwned: outfitsOwned, wearing: wearing, wear: wear, greet: greet };
+  var api = { starter: starter, missionsLeft: missionsLeft, SEEDS: SEEDS, seedState: seedState, BUILD: BUILD, missionDone: missionDone, MISSION_SUBJ: MISSION_SUBJ, resetCache: resetCache, resetAll: resetAll, RESET_KEYS: RESET_KEYS, KEY: KEY, GOAL: GOAL, CROP: CROP, OUTFITS: OUTFITS, day: day, get: get, save: save, stars: stars, addStars: addStars, addSeeds: addSeeds, addCrop: addCrop, cropTotal: cropTotal, streakDays: streakDays, recordRound: recordRound, outfitsOwned: outfitsOwned, wearing: wearing, wear: wear, greet: greet };
   if (typeof module !== "undefined" && module.exports) module.exports = api; else root.Farm = api;
 })(typeof window !== "undefined" ? window : globalThis);

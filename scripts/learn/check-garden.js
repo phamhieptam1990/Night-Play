@@ -59,5 +59,45 @@ console.log("6) giới hạn");
   let planted = 0, why = ""; for (const id of s) { const r = g.plant(id); if (r.ok) planted++; else { why = r.why; break; } } ok(planted === Gm.MAX_PLOTS && why === "full", "tối đa " + Gm.MAX_PLOTS + " ô, rồi báo đầy (" + planted + "," + why + ")"); ok(g.view().badges.includes("garden_full"), "huy hiệu vườn đầy");
   const days = {}; const x = mk({}); for (let i = 0; i < 80; i++) { x.setT(Date.UTC(2026, 0, 1) + i * DAY); x.g.endRound({ subj: "toan", correct: 1, total: 5, best: 0 }); } ok(Object.keys(x.g.state().sig.days).length <= 60, "chỉ giữ 60 ngày tín hiệu gần nhất"); }
 
+console.log("7) vật phẩm theo lớp, bộ sưu tập, quầy đổi hạt, vườn khởi đầu (learn/garden/garden-items.js + farm.js)");
+{ const fs = require("fs"), GI = require(path.join(root, "learn/garden/garden-items.js")), Farm = require(path.join(root, "learn/farm.js")), ART = path.join(root, "shared/art/garden");
+  const TOT = { 1: 17, 2: 12, 3: 14, 4: 14, 5: 14 }; let done = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }, cg = 3, day = "2026-11-24"; const mem2 = {};
+  GI.env = Object.assign({}, GI.env, { done: g => done[g], total: g => TOT[g], grade: () => cg, slot: () => cg + ":toan", day: () => day, get: k => (k in mem2 ? mem2[k] : null), set: (k, v) => { mem2[k] = String(v); } });
+  const reset = () => { Object.keys(mem2).forEach(k => delete mem2[k]); done = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }; };
+  const ids = GI.ITEMS.map(i => i.id); ok(new Set(ids).size === ids.length && ids.length >= 40, "bảng vật phẩm: id không trùng, đủ 40+ món (" + ids.length + ")");
+  for (let g = 1; g <= 5; g++) { const it = GI.byGrade(g), kinds = new Set(it.map(i => i.kind)); ok(["crop", "tree", "animal", "deco"].every(k => kinds.has(k)), "lớp " + g + " có đủ cây trồng, cây lâu năm, vật nuôi, đồ trang trí"); ok(it.some(i => i.f === 0 && !i.base) || it.some(i => i.f === 0), "lớp " + g + " có đồ khởi đầu"); ok(it.some(i => i.kind === "deco" && i.f >= .5), "lớp " + g + " có đồ hiếm"); }
+  const miss = GI.ITEMS.filter(i => !fs.existsSync(path.join(ART, i.img))); ok(!miss.length, "mọi tranh vật phẩm có thật: " + miss.map(i => i.img).join(","));
+  const CI = {}, IDS = []; GI.extendCI(CI, IDS, { ngan: { need: 5 }, hoamau: { need: 8 } }); ok(Object.keys(CI).length === 8 && IDS.length === 8, "thêm 8 cây trồng mới vào CI/IDS");
+  for (const id of IDS) { for (const f of ["crop_" + id + ".svg", "crop_" + id + "_s0.svg", "crop_" + id + "_s1.svg", "crop_" + id + "_s2.svg", "crop_" + id + "_s3.svg", "produce_" + id + ".svg"]) ok(fs.existsSync(path.join(ART, f)), "có tranh " + f); ok(CI[id].per.length === 5 && CI[id].need > 0 && CI[id].sk && CI[id].g >= 1, id + ": dữ liệu cây đủ"); }
+  for (const a of ["goose", "goat", "horse", "deer"]) ok(fs.existsSync(path.join(ART, "animal_" + a + ".svg")), "có tranh vật nuôi " + a);
+  /* mở theo chủ đề của đúng lớp */
+  reset(); cg = 3; ok(GI.isOpen("corn") && GI.isOpen("orange") && GI.isOpen("sheep"), "vào lớp 3: đồ khởi đầu lớp 3 mở ngay");
+  ok(!GI.isOpen("pumpkin") && !GI.isOpen("goose") && !GI.isOpen("scarecrow") && !GI.isOpen("leaves"), "đồ hiếm lớp 3 chưa mở khi chưa qua chủ đề nào");
+  ok(!GI.isOpen("bokchoy") && /Học lớp 1/.test(GI.state("bokchoy").need), "vào thẳng lớp 3: đồ lớp 1 khoá mờ, 'Học lớp 1 để mở'");
+  ok(GI.isOpen("carrot") && GI.seedState("carrot") === null, "giống cơ bản luôn có (dùng luật cũ: mở cùng ruộng)");
+  const at = GI.need(GI.BY.pumpkin); ok(at === Math.ceil(.7 * 14), "bí đỏ cần ceil(0.7 x 14) = " + Math.ceil(.7 * 14) + " chủ đề (được " + at + ")");
+  done[3] = at - 1; ok(!GI.isOpen("pumpkin"), "thiếu 1 chủ đề: chưa mở"); done[3] = at; ok(GI.isOpen("pumpkin") && GI.seedState("pumpkin").open, "đủ chủ đề lớp 3: mở bí đỏ");
+  done[3] = 0; ok(GI.isOpen("pumpkin"), "đã mở thì GIỮ (mang theo)");
+  reset(); done[4] = 3; cg = 3; ok(!GI.isOpen("pumpkin") && GI.isOpen("potato") && !GI.isOpen("goat"), "chủ đề lớp 4 không mở đồ lớp 3; đồ khởi đầu lớp 4 mở khi đã qua chủ đề lớp 4");
+  reset(); cg = 4; ok(GI.isOpen("potato"), "vào lớp 4 mở khoai tây"); cg = 2; done[4] = 0; ok(GI.isOpen("potato"), "đồ đã mở giữ khi chuyển lớp");
+  reset(); cg = 3; ok(GI.directEntry() === false, "directEntry cần LearnSlot (node: false)");
+  /* cây lâu năm, vật nuôi theo lớp */
+  reset(); cg = 3; ok(GI.treeKinds().join() === "orange", "cây vườn lớp 3 lúc đầu: chỉ cam (" + GI.treeKinds() + ")"); done[3] = 14; ok(GI.treeKinds().indexOf("apple") === 0 || GI.treeKinds().indexOf("apple") === 1, "qua đủ chủ đề: có thêm táo");
+  reset(); cg = 3; ok(GI.animalKind("cow", 0) === "sheep" && GI.animalKind("sheep", 0) === "sheep", "loài chưa mở đổi sang loài đã mở cùng cỡ (bò → cừu)"); ok(GI.animalKind("chicken", 2) === "chicken", "không có loài nào mở cùng cỡ thì giữ loài gốc"); done[3] = 14; ok(GI.animalKind("chicken", 0) === "goose", "qua chủ đề: chỗ gà nhỏ nhường cho ngỗng đã mở");
+  reset(); cg = 5; ok(GI.animalKind("cow", 1) === "horse", "vật nuôi lớp 5: ngựa thay chỗ cho bò");
+  /* đồ trang trí */
+  reset(); cg = 3; ok(GI.decoToggle("scarecrow") === null && GI.decoGet().length === 0, "đồ trang trí chưa mở không đặt được"); done[3] = 14; ["scarecrow", "leaves"].forEach(i => GI.decoToggle(i)); ok(GI.decoGet().join() === "scarecrow,leaves", "đặt 2 món trang trí"); GI.decoToggle("scarecrow"); ok(GI.decoGet().join() === "leaves", "bấm lần nữa để cất");
+  done = { 1: 17, 2: 12, 3: 14, 4: 14, 5: 14 }; GI.decoToggle("swallow"); GI.decoToggle("peach_blossom"); GI.decoToggle("umbrella"); GI.decoToggle("frog"); ok(GI.decoGet().length === GI.DECO_MAX, "tối đa " + GI.DECO_MAX + " món (chỗ thứ 5 thay món cũ nhất)");
+  /* quầy Bác Rễ */
+  reset(); cg = 1; ok(GI.swapList({ carrot: 9 }).length === 0 && GI.swap("carrot", { carrot: 9 }).why === "grade", "lớp 1 chưa có quầy đổi hạt (chưa có đồ lớp cũ)");
+  cg = 3; const kho = { carrot: 5, wheat: 1, corn: 9 }; ok(GI.swapList(kho).map(r => r.id).join() === "carrot", "chỉ liệt kê giống lớp cũ có từ 2 nông sản (" + GI.swapList(kho).map(r => r.id) + ")");
+  ok(GI.swap("corn", kho).why === "grade", "không đổi nông sản của chính lớp đang học"); ok(GI.swap("wheat", kho).why === "have", "thiếu nông sản thì không đổi");
+  const r1 = GI.swap("carrot", kho); ok(r1.ok && r1.seeds === 1 && kho.carrot === 3, "đổi 2 nông sản lớp cũ lấy 1 hạt"); GI.swap("carrot", kho); GI.swap("carrot", { carrot: 9 }); ok(GI.swapLeft() === 0 && GI.swap("carrot", { carrot: 9 }).why === "limit", "giới hạn " + GI.SWAP_PER_DAY + " lần mỗi ngày"); day = "2026-11-25"; ok(GI.swapLeft() === GI.SWAP_PER_DAY, "sang ngày mới đổi lại được");
+  /* vườn khởi đầu (farm.js) */
+  const pass = {}; globalThis.LearnSlot = { SUBJ: ["toan", "tviet", "tanh"], parts: () => ({ grade: cg, subj: "toan" }), passed: (g, s) => pass[g + ":" + s] || 0, id: "3:toan" };
+  cg = 3; ok(JSON.stringify(Farm.starter()) === JSON.stringify({ n: 6, trees: 3, animals: 4, grade: 3 }), "vào thẳng lớp 3: bộ khởi đầu (nhà cấp 4 + ruộng, 3 cây, 4 vật nuôi)"); cg = 2; ok(Farm.starter().n === 3, "vào thẳng lớp 2: nhà tranh");
+  cg = 1; ok(Farm.starter() === null, "lớp 1: không có bộ khởi đầu (bắt đầu từ bãi cỏ)"); cg = 3; pass["1:toan"] = 1; ok(Farm.starter() === null, "đã học lớp thấp thì không phải vào thẳng: không tặng bộ khởi đầu");
+  delete globalThis.LearnSlot; }
+
 console.log(bad ? "\n✗ " + bad + " lỗi (trên " + checks + " kiểm tra)" : "\n✓ Vườn đạt (" + checks + " kiểm tra)");
 process.exit(bad ? 1 : 0);

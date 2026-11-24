@@ -1,0 +1,31 @@
+/* Bộ sưu tập, quầy Bác Rễ, đồ trang trí (learn/garden/garden-collection.js) */
+.gl img.dc{position:absolute;display:block;pointer-events:none;transform-origin:50% 92%;animation:treeSway 6s ease-in-out infinite alternate}
+.stage[data-ph=night] .dc{filter:brightness(.5) saturate(.8)}.stage[data-ph=dusk] .dc{filter:sepia(.3) saturate(1.2) brightness(.95)}
+@media (prefers-reduced-motion:reduce){.gl img.dc{animation:none}}
+.card:has(.pnl.col) .hd{padding:78px 16px 0!important}.card:has(.pnl.col) .hd h2{font-size:28px!important}.card:has(.pnl.col) .cbody{padding:8px 14px 14px!important;max-height:calc(100vh - 190px);max-height:calc(100dvh - 190px);overflow-y:auto;-webkit-overflow-scrolling:touch}
+.card:has(.pnl.col) .acts{margin-top:10px!important}
+@media (max-height:700px){.card:has(.pnl.col){margin-top:34px!important}.card:has(.pnl.col) .cico{width:60px!important;height:60px!important;top:-30px!important;font-size:30px!important}.card:has(.pnl.col) .hd{padding:36px 14px 0!important}.card:has(.pnl.col) .hd h2{font-size:20px!important}.card:has(.pnl.col) .chs{display:none!important}.card:has(.pnl.col) .cbody{max-height:calc(100vh - 100px);max-height:calc(100dvh - 100px)}.card:has(.pnl.col) .tabs2 .t2{min-height:40px;font-size:14px}}
+.pnl.col{display:none}.pnl.col.on{display:block}
+.tabs2.col{position:sticky;top:0;z-index:2}
+.cg{margin:12px 0 6px;font:900 17px system-ui;color:#FFE08A}.cg small{font:800 13px system-ui;color:#fff;opacity:.8;margin-left:6px}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px}
+.ct{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px 6px;border-radius:14px;border:2px solid rgba(255,255,255,.3);background:rgba(255,255,255,.14);color:#fff;font:800 14px/1.2 system-ui;cursor:pointer;min-height:44px}
+.ct span{font-size:11.5px;font-weight:700;opacity:.8;line-height:1.2;text-align:center}.ct b{font-size:14px}
+.ct .cti{position:relative;display:grid;place-items:center;width:64px;height:64px;opacity:1}.ct .cti img{object-fit:contain}
+.ct.lock{background:rgba(255,255,255,.07)}.ct.lock .cti img{opacity:.28;filter:grayscale(1)}.ct.lock b{opacity:.7}
+.ct .lk{position:absolute;inset:0;display:grid;place-items:center;font-style:normal;font-size:26px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.5))}
+.ct .pl{position:absolute;right:-4px;top:-4px;font-style:normal;font-size:16px}.ct.placed{border-color:#FFE08A;box-shadow:0 0 0 2px rgba(255,224,138,.35)}
+.cs-who{display:flex;align-items:center;gap:10px}.cs-who img{width:76px;height:76px;object-fit:contain;flex:none}.cs-who p{margin:0;font-weight:700;font-size:16px;line-height:1.35}
+.cs-left{margin:10px 0 6px}
+.cs-row{display:flex;align-items:center;gap:8px;padding:6px 8px;margin-top:6px;border-radius:12px;background:rgba(255,255,255,.1)}.cs-row img{flex:none;object-fit:contain}.cs-row b{flex:1;font-size:15px}.cs-row span{font-size:12.5px;opacity:.85}
+.cs-row .btn{flex:none;min-height:44px;padding:0 12px;font-size:14px}
+.cg-top b{display:block;font:900 18px system-ui}.cg-top .gd-bar{height:12px;margin:8px 0 6px;border-radius:7px;overflow:hidden;background:rgba(0,0,0,.28)}.cg-top .gd-bar i{display:block;height:100%;border-radius:7px;background:linear-gradient(90deg,#FFE08A,#FFB020)}.cg-top span{font-size:14px;font-weight:700;opacity:.9}
+.cg-up{margin-top:14px;padding:12px;border-radius:14px;background:rgba(255,224,138,.16);border:2px solid rgba(255,224,138,.5)}.cg-up b{font:900 17px system-ui}.cg-up p{margin:6px 0 0;font-size:15px;font-weight:600;line-height:1.35}
+.cg-up .acts{margin-top:10px;flex-wrap:wrap}.cg-up .btn{display:flex;align-items:center;justify-content:center;text-decoration:none;min-width:120px}
+@media (max-height:430px){.cgrid{grid-template-columns:repeat(auto-fill,minmax(84px,1fr))}.ct .cti{width:52px;height:52px}.ct .cti img{width:52px!important;height:52px!important}}
+
+.tabs2.col{display:flex;gap:6px}.tabs2.col .t2{flex:1;min-width:0;font-size:14px!important;padding:0 4px!important;min-height:44px!important;white-space:nowrap}
+@media (max-height:430px){.card:has(.pnl.col){margin-top:6px!important}.card:has(.pnl.col) .cico{display:none!important}.card:has(.pnl.col) .hd{padding:10px 64px 0 16px!important;text-align:left}.card:has(.pnl.col) .cbody{max-height:calc(100vh - 66px);max-height:calc(100dvh - 66px)}.card:has(.pnl.col) .acts{display:none}}
+@media (max-height:700px){.pnl.col .hint{display:none}}
+body:has(.ov.on) .goalchip{visibility:hidden}
+.ani.plant .pick span{overflow-wrap:anywhere;min-width:0}.ani.plant .pick{min-width:0}

@@ -32,6 +32,8 @@ var STAGE_TOAST = Farm.BUILD.got;
 function applyUnlock(stage, stars){
   var o = unlockOrder(), full = stage >= UNL.full;
   var nt = full ? unlockCount(stars, UNL.treeFirst, UNL.treeStep, o.plots.length) : 0, na = full ? unlockCount(stars, UNL.animFirst, UNL.animStep, o.animals.length) : 0;
+  var sm = window.Farm && Farm.starter && Farm.starter();   /* vườn khởi đầu (vào thẳng lớp cao): có sẵn vài cây và vài bạn vật nuôi dù chưa mở cả vườn */
+  if(sm){ nt = Math.max(nt, Math.min(sm.trees, o.plots.length)); na = Math.max(na, Math.min(sm.animals, o.animals.length)); }
   PLOTS.forEach(function(p){ if(!p.tree){ var lk = stage < 6; p.locked = lk; if(p.el) p.el.classList.toggle("lk", lk); } });   /* 12 ô ruộng: mở ở bước 6 */
   o.plots.forEach(function(p, i){
     var lock = i >= nt; p.locked = lock; if(p.el) p.el.classList.toggle("lk", lock);
@@ -60,7 +62,7 @@ function renderGuide(u){
   if(goal){
     var pct = Math.round((goal.done - goal.from) / (goal.at - goal.from) * 100), left = goal.at - goal.done;
     hero = "<div class='gd-goal'><img src='" + goalImg(goal) + "' alt=''><div><small>🎯 MỤC TIÊU</small><b>" + goal.name + "</b><div class='gd-bar' role='img' aria-label='" + pct + "%'><i style='width:" + pct + "%'></i></div><span>Còn " + left + (window.LearnSlot && window.LearnSlot.id ? " bài học" : " nhiệm vụ") + " · xong là có " + goal.prize + "</span></div></div>";
-  } else hero = "<div class='gd-goal done'><div class='gd-ic' aria-hidden='true'>🎉</div><div><b>Cả vườn đã mở!</b><span>Kiếm ⭐ để mở thêm hạt giống, bạn vật nuôi và cây</span></div></div>";
+  } else hero = "<div class='gd-goal done'><div class='gd-ic' aria-hidden='true'>🎉</div><div><b>Cả vườn đã mở!</b><span>" + (window.GardenItems ? "Mở thêm đồ sưu tầm của lớp: bấm 🎒 Bộ sưu tập" : "Kiếm ⭐ để mở thêm hạt giống, bạn vật nuôi và cây") + "</span></div></div>";
   /* một màn, không cuộn: Bác Rễ nói (trái trên) · mục tiêu · nhiệm vụ hôm nay (phải ở màn ngang) · hàng nút */
   var many = u.stage >= UNL.full;
   g.innerHTML = "<div class='gd-a'>" + who + hero + "</div>" +
