@@ -935,8 +935,10 @@ $("snd").onclick = () => { AUTO = !AUTO; ls("learn:auto", AUTO ? "1" : "0"); snd
 document.addEventListener("pointerdown", e => { GESTURE = true; if(!$("mnu").hidden && !e.target.closest("#mnu,#mn")) closeMenu(); }, true);
 stars = +ls("learn:stars") || 0;
 /* MÀN BẬT LOA trước bài kiểm tra: cú chạm này mở khóa âm thanh của trình duyệt (iPhone/Safari chỉ cho đọc sau một cú chạm) */
-(function(){ const g = $("spkGate"); if(!g || !window.Voice) return; const f = SUBF[subj]; $("sgBack").href = hubUrl(); $("sgMi").src = "../shared/art/learn/" + f + "/" + f + "_happy.svg"; g.hidden = false;
+(function(){ const g = $("spkGate"); if(!g || !window.Voice) return; if(ls("learn:auto") === "0") return;   /* bé đã chọn tắt tiếng: không hỏi lại */
+  const f = SUBF[subj]; $("sgBack").href = hubUrl(); $("sgMi").src = "../shared/art/learn/" + f + "/" + f + "_happy.svg"; g.hidden = false;
   $("sgOn").onclick = () => { AUTO = true; ls("learn:auto", "1"); sndUi(); GESTURE = true; g.hidden = true; speak(); };
+  ["keydown", "keypress", "keyup"].forEach(ev => addEventListener(ev, e => { if(!g.hidden && e.key !== "Tab" && !(e.target && e.target.closest && e.target.closest("#spkGate"))){ e.stopImmediatePropagation(); e.preventDefault(); } }, true));   /* gõ phím không lọt xuyên cổng loa */
   $("sgOff").onclick = () => { AUTO = false; ls("learn:auto", "0"); sndUi(); GESTURE = true; g.hidden = true; };
 })();
 LM.bind({ box: $("masBox"), bubble: $("say"), base: "../shared/art/learn/", lang, idleMs: 15000, onTap: speak });
