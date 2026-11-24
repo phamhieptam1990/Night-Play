@@ -40,33 +40,22 @@ Ba gói chạy song song, mỗi gói giữ một vùng tệp riêng để không
 - [ ] Vườn khởi đầu theo lớp (bé vào thẳng lớp 3) + bé ở lại lớp 1 vẫn có việc + gợi ý lên lớp cho phụ huynh
 - [ ] Kiểm bằng Chrome thật các cỡ màn, cập nhật bài đo vườn
 
-## Chuẩn bị chỗ cắm Plus ngay trong bản free (làm cùng H1–H3, tránh làm lại)
+## Học Vui Plus (G1–G6): phần làm được cục bộ đã xong (tắt mặc định); còn lại chờ người/bên ngoài
 
-- [ ] Dữ liệu tiến độ/vườn dạng JSON gọn, có thời điểm sửa từng phần (sẵn sàng đồng bộ)
+Đã xong và có bài đo: chỗ cắm đồng bộ (`check-sync.js`), nền bán hàng + token + dùng thử + thẻ Plus (`check-plus.js`, `check-plus-ui.js`), lọc từ nhạy cảm + không lộ đáp án + cache/hạn mức/đường lui + công tắc AI (`check-coach.js`), khung đề thi (`check-exam.js`), pháp lý. Chi tiết: `docs/LEARN-FREE-VS-PLUS.md`, `docs/LEARN-PLUS-DESIGN.md`.
 
-## Plus G1. Nền bán hàng (Học Vui Plus)
-
-- [?] Bạn chốt tên gói, giá, gói đôi, đồng bộ đám mây — LEARN-NIGHTPASS-PLAN mục 8
-- [ ] Migration product ở orders/passes, PLANS_LEARN, token a:"learn"
-- [ ] /api/pass?product=learn + learn/plus.js
-- [ ] Thẻ Plus trong trang phụ huynh + dùng thử 7 ngày
-- [ ] Viết docs/LEARN-FREE-VS-PLUS.md, cập nhật privacy/terms
-
-## Plus G2. AI luyện cùng (bản đầu)
-
-- [ ] Bộ lọc từ nhạy cảm theo danh sách (điều kiện bắt buộc)
-- [ ] /api/learn/coach + schema đầu ra + khoá API ở Worker
-- [ ] Kiểm tra không lộ đáp án: 50+ bài mẫu đạt 100%
-- [ ] Cache (câu hỏi + mã lỗi), hạn mức ngày, đường lui khi AI lỗi
-- [ ] Công tắc bật/tắt AI + xem lại lời linh vật trong trang phụ huynh
-- [ ] Chạy thử nhóm nhỏ, đo chi phí thật, chốt giá
-
-## Plus G3–G6
-
-- [ ] G3: Luyện cùng 10 phút + Giờ dạy Bạn Mây + tóm tắt cho ba mẹ
-- [ ] G4: Đề thi thử lớp 6 (3 đề đầu) + báo cáo tuần
-- [ ] G5: Nhiều bé + đồng bộ đám mây (sau khi cập nhật pháp lý)
-- [ ] G6: Truyện mùa 2, vườn Night, Cambridge, giọng đọc, chụp bài tập
+- [?] Chủ site xác nhận các mặc định đã chốt tạm (tên Học Vui Plus; 99k/249k/790k; không gói đôi; đồng bộ để sau) — `docs/LEARN-FREE-VS-PLUS.md` mục 0
+- [ ] Chạy migration 009 trên Neon rồi mới đặt `LEARN_PLUS=on` — cần quyền database sản xuất (chưa chạy: gói này không deploy)
+- [ ] Thử thanh toán thật bằng đơn `learn_test` 1.000đ (`LEARN_TEST_PRICE=on`) qua SePay — cần tài khoản SePay/ngân hàng; chưa đụng thanh toán thật
+- [ ] Khôi phục Plus bằng email (OTP) khi đổi máy, và xác nhận email trước khi cấp dùng thử — `/api/restore` mới chỉ khôi phục Night Pass; cần gửi email thật để thử
+- [ ] Trang admin: cấp/thu hồi Plus thủ công, xem đơn Plus — làm khi mở bán
+- [ ] Nối `learn/coach.js` vào trang học (💡 → gợi ý, sai → giải thích) — sửa `learn/index.html`/engine thuộc vùng gói khác; làm khi chủ site đồng ý bật thử (điểm cắm ghi ở `LEARN-PLUS-DESIGN.md`)
+- [ ] AI thật: đặt `LEARN_AI_KEY`, xác nhận mã mô hình, chạy thử nhóm nhỏ, đọc mẫu lời AI, đo chi phí thật, chốt giá và hạn mức — cần khoá API Anthropic + người; mô phỏng không cho số chi phí
+- [ ] Duyệt pháp lý/riêng tư (dữ liệu trẻ gửi nhà cung cấp AI), cập nhật `legalDate` ở `shared/site.js` khi mở bán — việc của chủ site/tư vấn pháp lý
+- [ ] G3: Luyện cùng 10 phút (lặp ngắt quãng `learn:srs:*`) + Giờ dạy Bạn Mây + tóm tắt cho ba mẹ — mới có hợp đồng dữ liệu (`LEARN-PLUS-DESIGN.md`); cần G2 chạy thử thật và nội dung "sai kiểu" cho Bạn Mây
+- [ ] G4: đề thi — thêm phần Tiếng Việt (cần người soạn), người duyệt 90 câu Toán sinh tự động, giao diện làm bài `learn/exam/`; báo cáo tuần/tháng + email hằng tuần (cần cơ chế đồng ý nhận thư + Brevo/Resend)
+- [ ] G5: Nhiều bé + đồng bộ đám mây — chỗ cắm dữ liệu đã sẵn; chờ chủ site đồng ý lưu dữ liệu bé lên máy chủ + cập nhật pháp lý trước; vườn theo hồ sơ đụng `farm.js`/`garden/**` (gói vườn đang sửa)
+- [ ] G6: Truyện mùa 2, vườn Night, Cambridge, giọng đọc, chụp bài tập — cần người viết/hoạ sĩ/nhà cung cấp TTS/duyệt riêng tư; chỉ có tài liệu
 
 ## Bộ sưu tập Bạn Số & Bạn Chữ (mỗi số/chữ là một quái vật riêng, bé gặp bạn nào bạn đó vào album)
 
