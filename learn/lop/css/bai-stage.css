@@ -1,0 +1,36 @@
+.stage{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;border-radius:26px;
+  background:color-mix(in srgb,var(--panel) 80%,transparent);border:1px solid var(--line);padding:10px;overflow:hidden;text-align:center}
+.art{font-size:clamp(40px,13vw,72px);line-height:1.25;white-space:pre-line;font-weight:900}
+.g1 .art{font-size:clamp(52px,17vw,88px)}   /* lớp 1: hình to */
+.shp{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}.shp svg{width:clamp(64px,22vw,110px);height:auto}
+.row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center}
+.it{position:relative;width:clamp(48px,14vw,66px);height:clamp(48px,14vw,66px);border-radius:16px;font-size:clamp(28px,8.5vw,40px);display:grid;place-items:center;
+  background:var(--panel);border:2px solid var(--line);transition:transform .15s,opacity .2s}
+button.it:active{transform:scale(.92)}
+.it.off{opacity:.3;filter:grayscale(1)}.it.gone{opacity:.25;text-decoration:none}.it.gone::after{content:"";position:absolute;width:30px;height:30px;background:#EF4444;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cpath d='M32 32L96 96M96 32L32 96' fill='none' stroke='%23000' stroke-width='16' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cpath d='M32 32L96 96M96 32L32 96' fill='none' stroke='%23000' stroke-width='16' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat}
+.it b{position:absolute;right:-6px;top:-6px;min-width:24px;height:24px;border-radius:12px;background:var(--c1);color:#0b1020;font-size:14px;display:grid;place-items:center;padding:0 5px}
+.enw{min-height:56px;padding:0 18px;border-radius:18px;font-weight:900;font-size:clamp(20px,6vw,28px);background:var(--panel);border:2px solid var(--line);display:inline-flex;
+  align-items:center;gap:8px}
+.enw:active{transform:scale(.96)}
+.meet{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+.mname{font-weight:900;font-size:clamp(20px,6vw,28px)}.mrhyme{margin:0;max-width:30em;font-weight:700;color:var(--ink2);font-size:clamp(15px,4.2vw,19px)}
+.objrow{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;font-size:clamp(26px,8vw,38px)}
+.bd[role=button]{cursor:pointer}
+.tcv{touch-action:none;flex:none;border-radius:26px;background:color-mix(in srgb,var(--panel) 70%,transparent);border:3px dashed var(--line)}
+.tbar{display:flex;gap:10px;align-items:center;justify-content:center}.tbar button{min-height:48px;padding:0 18px;border-radius:99px;font-weight:900;background:var(--panel);
+  border:2px solid var(--line)}
+.tprog{width:min(280px,70vw);height:10px;border-radius:99px;background:var(--line);overflow:hidden}.tprog i{display:block;height:100%;width:0;
+  background:linear-gradient(90deg,var(--c1),var(--c2));transition:width .15s}
+.fbar{font-weight:900;font-size:clamp(26px,8vw,40px)}
+.feedrow{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:420px}
+.feedrow .it{font-size:clamp(30px,9vw,44px)}.feedrow .it.gone{opacity:0;transform:scale(.3) translateY(-60px);pointer-events:none;transition:transform .35s,opacity .35s}
+.sky{position:relative;width:100%;max-width:460px;height:clamp(240px,52vh,380px)}
+.bl{position:absolute;width:clamp(58px,17vw,78px);height:clamp(72px,21vw,96px);border-radius:50% 50% 50% 50%/58% 58% 42% 42%;
+  background:radial-gradient(circle at 34% 28%,rgba(255,255,255,.7),var(--bc) 55%,color-mix(in srgb,var(--bc) 70%,#000));display:grid;place-items:center;font-weight:900;
+  font-size:clamp(30px,9vw,44px);color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.25);animation:bfl 3.2s ease-in-out infinite alternate;box-shadow:0 8px 14px rgba(0,0,0,.25)}
+.bl::after{content:"";position:absolute;left:50%;bottom:-20px;width:2px;height:20px;background:rgba(255,255,255,.55)}
+.bl.pop{animation:bpop .35s forwards}.bl.no{animation:sh .35s}
+@keyframes bfl{from{transform:translateY(0) rotate(-3deg)}to{transform:translateY(-14px) rotate(3deg)}}@keyframes bpop{to{transform:scale(1.7);opacity:0}}
+.spark{position:absolute;pointer-events:none;font-size:26px;animation:spk .9s forwards}@keyframes spk{from{opacity:1;transform:translate(0,0) scale(.6)}
+  to{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1.3)}}

@@ -1,0 +1,32 @@
+/* thẻ chủ đề */
+.tp{position:relative;border-radius:24px;background:var(--panel);border:1.5px solid var(--line);box-shadow:0 4px 14px rgba(30,20,80,.1);transition:border-color .2s,box-shadow .2s}
+.tp.cur{border-color:var(--k1);box-shadow:0 0 0 3px color-mix(in srgb,var(--k1) 40%,transparent),0 8px 22px rgba(30,20,80,.25)}
+.tpa{display:block;text-decoration:none;color:inherit;border-radius:22px 22px 0 0;overflow:hidden}
+.pic{position:relative;height:clamp(160px,42vw,210px);display:flex;align-items:flex-start;justify-content:center;padding-top:20px;overflow:hidden;
+  background:radial-gradient(120% 140% at 20% 0%,color-mix(in srgb,var(--k1) 60%,transparent),transparent 62%),
+  radial-gradient(100% 120% at 100% 100%,color-mix(in srgb,var(--k2) 55%,transparent),transparent 60%),color-mix(in srgb,var(--k1) 16%,var(--panel))}
+.pic::before,.pic::after{content:"✦";position:absolute;color:rgba(255,255,255,.6);font-size:16px}.pic::before{left:16px;top:14px}.pic::after{right:22px;top:30px;font-size:11px}
+.pic .big{font-size:clamp(60px,18vw,88px);line-height:1;letter-spacing:8px;filter:drop-shadow(0 8px 12px rgba(0,0,0,.38));transform:rotate(-4deg);transition:transform .25s}
+.tp:hover .big,.tp.cur .big{transform:rotate(3deg) scale(1.08)}
+.pic .ttl{position:absolute;left:0;right:0;bottom:0;padding:34px 16px 12px;background:linear-gradient(transparent,rgba(8,6,28,.86));color:#fff;font-weight:900;
+  font-size:clamp(20px,5.4vw,26px);line-height:1.2;text-shadow:0 2px 6px rgba(0,0,0,.5)}
+.pic .ttl small{display:block;margin-bottom:2px;font-size:12px;font-weight:800;opacity:.85;text-transform:uppercase;letter-spacing:.05em}
+.num{position:absolute;left:12px;top:12px;z-index:1;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:15px;color:#0b1020;
+  background:linear-gradient(135deg,var(--k1),var(--k2));box-shadow:0 0 0 3px rgba(255,255,255,.7)}
+.tp.locked{opacity:.78}.tp.locked .pic{filter:grayscale(.85) brightness(.8)}.tp.locked .big{opacity:.7}
+.pic .lock{position:absolute;right:14px;top:12px;font-size:26px;filter:none}
+.acts2{flex-wrap:wrap}.acts2 .more{min-height:48px}
+.tp.done .num{background:#16a34a;color:#fff}
+.tpb{padding:10px 14px 14px}
+.subtxt{margin:0;color:var(--ink2);font-size:14px;font-weight:600;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.chips2{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}
+.chip2{padding:3px 10px;border-radius:99px;font-size:12px;font-weight:800;background:var(--line);color:var(--ink2)}
+.chip2.g{background:color-mix(in srgb,#16a34a 24%,var(--panel));color:var(--ink)}.chip2.a{background:color-mix(in srgb,#F59E0B 26%,var(--panel));color:var(--ink)}
+  .chip2.b{background:color-mix(in srgb,var(--k1) 26%,var(--panel));color:var(--ink)}
+.acts2{display:flex;gap:10px;margin-top:10px}
+.cta{flex:1;min-height:50px;padding:0 16px;border-radius:99px;display:inline-flex;align-items:center;justify-content:center;font-weight:900;font-size:17px;text-decoration:none;
+  color:#0b1020;background:linear-gradient(90deg,var(--k1),var(--k2))}
+.cta.ghost{background:transparent;color:var(--ink);border:2px solid var(--line)}
+.more{flex:none;min-height:50px;padding:0 16px;border-radius:99px;display:inline-flex;align-items:center;font-weight:900;font-size:14px;text-decoration:none;color:var(--ink);
+  border:2px solid var(--line);background:var(--panel)}
+.old{display:flex;align-items:center;justify-content:center;min-height:48px;border-radius:99px;text-decoration:none;font-weight:800;color:var(--ink2);border:1px dashed var(--line)}

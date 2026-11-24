@@ -26,7 +26,8 @@ const T = {
     outfit: "My outfits", learn: "▶ Keep learning", gdn: "🌱 Go to the garden", locked: n => "Unlocks at " + n + " ⭐" }
 };
 /* lớp 4–5: bỏ giọng "bé ơi" ở các chữ cố định của trang (tone.js, cùng bộ lọc với lời linh vật) */
-if(grade >= 4 && window.toneUp){ const tv = T.vi; Object.keys(tv).forEach(k => { if(typeof tv[k] === "string") tv[k] = toneUp(tv[k]); else if(Array.isArray(tv[k])) tv[k] = tv[k].map(x => typeof x === "string" ? toneUp(x) : x);
+if(grade >= 4 && window.toneUp){ const tv = T.vi; Object.keys(tv).forEach(k => { if(typeof tv[k] === "string") tv[k] = toneUp(tv[k]);
+  else if(Array.isArray(tv[k])) tv[k] = tv[k].map(x => typeof x === "string" ? toneUp(x) : x);
   else if(typeof tv[k] === "function"){ const f = tv[k]; tv[k] = function(){ return toneUp(f.apply(this, arguments)); }; } }); }
 const ZIC = { toan: "🔢", tviet: "📖", tanh: "🔤" }, HEAD = { toan: "math", tviet: "vietnamese", tanh: "english" }, CROPE = { carrot: "🥕", wheat: "🌾", strawberry: "🍓" };
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
