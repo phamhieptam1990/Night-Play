@@ -14,8 +14,8 @@
   function nfc(s) { return s.normalize ? s.normalize("NFC") : s; }
 
   var LAB = {
-    vi: { dictate: "Nghe – viết", write: "Viết câu", speak: "Đọc to", tf: "Đúng hay sai?", pic: "Chọn hình", match: "Ghép cặp", order: "Sắp xếp", wordbuild: "Ghép chữ", typein: "Gõ đáp án", odd: "Khác loại", multi: "Chọn tất cả", compare: "So sánh", count: "Đếm", pop: "Bắn bong bóng", memory: "Lật thẻ", numline: "Trục số", clock: "Đồng hồ", find: "Tìm trong tranh", dragfill: "Kéo vào chỗ trống", sort: "Phân loại" },
-    en: { dictate: "Dictation", write: "Write", speak: "Read aloud", tf: "True or false?", pic: "Pick the picture", match: "Match", order: "Put in order", wordbuild: "Build the word", typein: "Type the answer", odd: "Odd one out", multi: "Pick all", compare: "Compare", count: "Count", pop: "Pop the balloon", memory: "Memory", numline: "Number line", clock: "Clock", find: "Find it", dragfill: "Drag to the gap", sort: "Sort" }
+    vi: { trace: "Tô chữ", dictate: "Nghe – viết", write: "Viết câu", speak: "Đọc to", tf: "Đúng hay sai?", pic: "Chọn hình", match: "Ghép cặp", order: "Sắp xếp", wordbuild: "Ghép chữ", typein: "Gõ đáp án", odd: "Khác loại", multi: "Chọn tất cả", compare: "So sánh", count: "Đếm", pop: "Bắn bong bóng", memory: "Lật thẻ", numline: "Trục số", clock: "Đồng hồ", find: "Tìm trong tranh", dragfill: "Kéo vào chỗ trống", sort: "Phân loại" },
+    en: { trace: "Trace", dictate: "Dictation", write: "Write", speak: "Read aloud", tf: "True or false?", pic: "Pick the picture", match: "Match", order: "Put in order", wordbuild: "Build the word", typein: "Type the answer", odd: "Odd one out", multi: "Pick all", compare: "Compare", count: "Count", pop: "Pop the balloon", memory: "Memory", numline: "Number line", clock: "Clock", find: "Find it", dragfill: "Drag to the gap", sort: "Sort" }
   };
   var UI = { vi: { yes: "✓ Đúng", no: "✗ Sai", done: "Xong ✓" }, en: { yes: "✓ True", no: "✗ False", done: "Done ✓" } };
 
@@ -47,7 +47,7 @@
   function optList(texts, okIdx) { return texts.map(function (t, i) { return i === okIdx ? { v: t, ok: 1 } : { v: t }; }); }
   /* kiểu câu Toán → kỹ năng theo dõi (engine.js TRACKED); các kiểu khác để skill:null */
   var KSKILL = { count: "count_obj", numline: "number_line", compare: "compare_num", order: "order_num", clock: "clock_read" };
-  var KSKILL_L = { tviet: { order: "sent_order", wordbuild: "word_build", dictate: "dictate_vi", write: "write_vi", speak: "speak_vi" }, tanh: { order: "sent_order_en", wordbuild: "word_build_en", dictate: "dictate_en", write: "write_en", speak: "speak_en" } };
+  var KSKILL_L = { tviet: { order: "sent_order", wordbuild: "word_build", dictate: "dictate_vi", write: "write_vi", speak: "speak_vi", trace: "trace_vi" }, tanh: { order: "sent_order_en", wordbuild: "word_build_en", dictate: "dictate_en", write: "write_en", speak: "speak_en" } };
   function base(kind, subj, grade, lang, q, extra) {
     var o = { kind: kind, type: kind, lang: lang, q: q, lab: LAB[lang][kind], subj: subj, grade: grade, skill: (subj === "toan" ? KSKILL[kind] : KSKILL_L[subj] && KSKILL_L[subj][kind]) || null, ui: UI[lang] };
     for (var k in extra) o[k] = extra[k]; return o;
@@ -206,6 +206,13 @@
     return base("speak", subj, g, lang, (lang === "vi" ? "Đọc to câu này:" : "Read this aloud:") + "<br><em>" + it[0] + "</em><br>" + LBTN, { speak: it[0], speakLang: subj === "tanh" ? "en" : "vi", listen: 1 });
   };
 
+  /* tô chữ (lớp 1): bé dùng ngón tay tô theo chữ cái mờ trên canvas; chấm theo độ phủ nét chữ và nét lem ra ngoài (qui.js) */
+  var TRACE = ["o", "c", "l", "i", "t", "a", "e", "u", "n", "m", "v", "x", "h", "b", "d", "g"];
+  G.trace = function (subj, g, lang) {
+    if (subj !== "tviet" || g > 1) return null; var ch = pick(TRACE);
+    return base("trace", subj, g, lang, (lang === "vi" ? "Tô theo chữ cái" : "Trace the letter") + " <em>" + ch + "</em>", { ch: ch, speak: (lang === "vi" ? "Tô theo chữ cái " : "Trace the letter ") + ch });
+  };
+
   /* ====== 8 kiểu tương tác thêm ====== */
   /* đếm bằng chạm: chạm từng vật để đếm rồi chọn số */
   G.count = function (subj, g, lang) {
@@ -280,8 +287,8 @@
   /* bắn bong bóng: dùng lại một câu chọn 1/4 bất kỳ (giữ nguyên kỹ năng) nhưng đáp án là bong bóng bay lên */
   function asPop(q, lang) { if (!q || !q.o || (q.kind && q.kind !== "mc") || q.o.length !== 4) return null; var c = {}; for (var k in q) c[k] = q[k]; c.kind = "pop"; c.baseKind = q.kind || "mc"; c.lab = LAB[lang === "en" ? "en" : "vi"].pop; return c; }
 
-  var KINDS = { toan: ["tf", "pic", "match", "order", "typein", "odd", "multi", "compare", "count", "memory", "numline", "clock", "find", "dragfill", "sort"], tviet: ["tf", "pic", "match", "order", "wordbuild", "odd", "multi", "memory", "find", "dragfill", "sort", "dictate", "write", "speak"], tanh: ["tf", "pic", "match", "order", "wordbuild", "odd", "multi", "memory", "find", "dragfill", "sort", "dictate", "write", "speak"] };
-  function kindsFor(subj, grade) { return (KINDS[subj] || []).filter(function (k) { if (k === "dictate") return subj === "tviet" ? grade <= 3 : grade >= 2; if (k === "write") return subj === "tviet" ? grade >= 2 : grade >= 3; return true; }).filter(function (k) { return !(subj === "toan" && ((k === "pic" && grade > 2) || (k === "count" && grade > 2) || (k === "clock" && grade > 3) || (k === "memory" && grade > 3))); }); }
+  var KINDS = { toan: ["tf", "pic", "match", "order", "typein", "odd", "multi", "compare", "count", "memory", "numline", "clock", "find", "dragfill", "sort"], tviet: ["tf", "pic", "match", "order", "wordbuild", "odd", "multi", "memory", "find", "dragfill", "sort", "dictate", "write", "speak", "trace"], tanh: ["tf", "pic", "match", "order", "wordbuild", "odd", "multi", "memory", "find", "dragfill", "sort", "dictate", "write", "speak"] };
+  function kindsFor(subj, grade) { return (KINDS[subj] || []).filter(function (k) { if (k === "trace") return subj === "tviet" && grade === 1; if (k === "dictate") return subj === "tviet" ? grade <= 3 : grade >= 2; if (k === "write") return subj === "tviet" ? grade >= 2 : grade >= 3; return true; }).filter(function (k) { return !(subj === "toan" && ((k === "pic" && grade > 2) || (k === "count" && grade > 2) || (k === "clock" && grade > 3) || (k === "memory" && grade > 3))); }); }
   function make(kind, subj, grade, lang) { grade = Math.min(5, Math.max(1, grade | 0 || 1)); lang = lang === "en" ? "en" : "vi"; var f = G[kind]; return f ? f(subj, grade, lang) : null; }
   /* câu chọn 1/4 có đáp án là SỐ NGUYÊN (có thể kèm đơn vị) → câu cho bé GÕ số. Giữ kỹ năng, chủ đề, mã lỗi của từng đáp án nhiễu (gõ trúng đáp án nhiễu nào thì ghi mã lỗi đó). */
   function asTypein(q, lang) {

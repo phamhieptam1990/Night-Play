@@ -120,6 +120,42 @@
     host.appendChild(done);
   }
 
+  /* tô chữ (trace, lớp 1): hai canvas chồng nhau — dưới là chữ mờ, trên là nét bé tô. Chấm: nét phủ >= 60% phần lõi của chữ
+     và nét lem ra ngoài (cách chữ > 12px) <= 30% tổng nét. Sai lần đầu: xoá cho tô lại; sai lần hai: hiện chữ đầy đủ rồi sang câu sau. */
+  function renderTrace(b, host) {
+    var W = 300, H = 240, wrap = h("div", "trw"), box = h("div", "trbox"), gc = h("canvas", "trg"), ic = h("canvas", "trc"), row = h("div", "trrow"), clr = tile("↺", "kb"), go = tile("✓", "ab tl kb go");
+    gc.width = ic.width = W; gc.height = ic.height = H; clr.setAttribute("aria-label", "↺"); go.setAttribute("aria-label", "✓"); go.disabled = true;
+    var g = gc.getContext("2d"), x = ic.getContext("2d"), fam = getComputedStyle(d.body).fontFamily, font = "800 " + Math.round(H * .92) + "px " + fam, drawing = false, any = false, locked = false;
+    function setup(c) { c.font = font; c.textAlign = "center"; c.textBaseline = "middle"; c.lineJoin = "round"; }
+    function guide(alpha) { g.clearRect(0, 0, W, H); setup(g); g.globalAlpha = alpha; g.fillStyle = getComputedStyle(d.body).color || "#888"; g.fillText(b.ch, W / 2, H * .54); g.globalAlpha = 1; }
+    function mask(erode, grow) {
+      var c = d.createElement("canvas"); c.width = W; c.height = H; var k = c.getContext("2d"); setup(k); k.fillStyle = k.strokeStyle = "#000";
+      if (grow) { k.lineWidth = grow * 2; k.strokeText(b.ch, W / 2, H * .54); } k.fillText(b.ch, W / 2, H * .54);
+      if (erode) { k.globalCompositeOperation = "destination-out"; k.lineWidth = erode * 2; k.strokeText(b.ch, W / 2, H * .54); }
+      return k.getImageData(0, 0, W, H).data;
+    }
+    function judge() {
+      var core = mask(9, 0), wide = mask(0, 12), ink = x.getImageData(0, 0, W, H).data, cn = 0, cc = 0, tot = 0, out = 0, i;
+      for (i = 3; i < core.length; i += 4) { var inkOn = ink[i] > 40; if (core[i] > 128) { cn++; if (inkOn) cc++; } if (inkOn) { tot++; if (wide[i] < 40) out++; } }
+      if (!tot) return false; return (cn < 40 || cc / cn >= .6) && out / tot <= .3;
+    }
+    function clear() { x.clearRect(0, 0, W, H); any = false; go.disabled = true; }
+    function pt(e) { var r = ic.getBoundingClientRect(); return [(e.clientX - r.left) * W / r.width, (e.clientY - r.top) * H / r.height]; }
+    x.lineWidth = 30; x.lineCap = x.lineJoin = "round"; x.strokeStyle = "#7C5CFF"; x.fillStyle = "#7C5CFF";
+    ic.style.touchAction = "none";
+    ic.addEventListener("pointerdown", function (e) { if (locked || busy(host)) return; drawing = true; try { ic.setPointerCapture(e.pointerId); } catch (z) {} var p = pt(e); x.beginPath(); x.moveTo(p[0], p[1]); x.lineTo(p[0] + .01, p[1]); x.stroke(); any = true; go.disabled = false; A.sfx("tap"); e.preventDefault(); });
+    ic.addEventListener("pointermove", function (e) { if (!drawing) return; var p = pt(e); x.lineTo(p[0], p[1]); x.stroke(); x.beginPath(); x.moveTo(p[0], p[1]); e.preventDefault(); });
+    function up() { drawing = false; } ic.addEventListener("pointerup", up); ic.addEventListener("pointercancel", up);
+    clr.onclick = function () { if (locked || busy(host)) return; clear(); };
+    go.onclick = function () {
+      if (locked || busy(host) || !any) return;
+      if (judge()) { locked = true; A.right(wrap); return; }
+      shake(box); var r = A.wrong("other", function () { locked = true; clear(); guide(.9); }, null); if (r === 1) setTimeout(clear, 650);
+    };
+    document.fonts && document.fonts.ready ? document.fonts.ready.then(function () { guide(.22); }) : guide(.22); guide(.22);
+    box.appendChild(gc); box.appendChild(ic); row.appendChild(clr); row.appendChild(go); wrap.appendChild(box); wrap.appendChild(row); host.appendChild(wrap);
+  }
+
   /* chọn nhiều đáp án đúng, rồi bấm "Xong" */
   function renderMulti(b, host) {
     var grid = h("div", "qg"), sel = {}, done = h("button", "ab go qdone", b.ui.done), els = [];
@@ -271,7 +307,7 @@
     host.appendChild(pool); host.appendChild(bins);
   }
 
-  var R = { count: renderCount, pop: renderPop, dragfill: renderDragfill, memory: renderMemory, numline: renderNumline, clock: renderClock, sort: renderSort, order: function (b, h2) { renderOrder(b, h2, false); }, wordbuild: function (b, h2) { renderOrder(b, h2, true); }, typein: renderTypein, dictate: renderText, write: renderText, speak: renderSpeak, multi: renderMulti, match: renderMatch };
+  var R = { count: renderCount, pop: renderPop, dragfill: renderDragfill, memory: renderMemory, numline: renderNumline, clock: renderClock, sort: renderSort, order: function (b, h2) { renderOrder(b, h2, false); }, wordbuild: function (b, h2) { renderOrder(b, h2, true); }, typein: renderTypein, dictate: renderText, write: renderText, speak: renderSpeak, trace: renderTrace, multi: renderMulti, match: renderMatch };
   window.LearnQUI = {
     custom: function (kind) { return !!R[kind]; },
     render: function (b, host, api) { if (cleanup) { cleanup(); cleanup = null; } A = api; host.textContent = ""; R[b.kind](b, host); }

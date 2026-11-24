@@ -112,7 +112,10 @@
     {g: [3,4], t: "Cây xanh hấp thụ khí các-bô-níc và thải ra khí ô-xi. Nhờ vậy, không khí quanh ta trong lành hơn.", q: "Cây xanh thải ra khí gì?", a: "ô-xi", d: ["ni-tơ","hơi nước","khói bụi"]},
     {g: [4,5], t: "Trái Đất quay quanh Mặt Trời một vòng hết một năm. Mặt Trăng quay quanh Trái Đất khoảng một tháng.", q: "Mặt Trăng quay quanh vật nào?", a: "Trái Đất", d: ["Mặt Trời","sao Hỏa","sao Kim"]},
     {g: [4,5], t: "Hà Nội là thủ đô của nước ta. Ở đây có Hồ Gươm, Văn Miếu và nhiều phố cổ. Mỗi năm, hàng triệu khách đến thăm.", q: "Thủ đô của nước ta là gì?", a: "Hà Nội", d: ["Huế","Đà Nẵng","Hải Phòng"]},
-    {g: [5], t: "Sông Mê Công chảy qua nhiều nước rồi đổ ra biển Đông. Ở Việt Nam, sông có tên là sông Cửu Long.", q: "Sông Mê Công đổ ra đâu?", a: "biển Đông", d: ["biển Tây","vịnh Bắc Bộ","hồ Ba Bể"]}
+    {g: [5], t: "Sông Mê Công chảy qua nhiều nước rồi đổ ra biển Đông. Ở Việt Nam, sông có tên là sông Cửu Long.", q: "Sông Mê Công đổ ra đâu?", a: "biển Đông", d: ["biển Tây","vịnh Bắc Bộ","hồ Ba Bể"]},
+    {g: [4,5], t: "Làng em nằm bên một dòng sông hiền hòa. Sáng sớm, các bác nông dân ra đồng cấy lúa. Trưa đến, lũ trẻ rủ nhau tắm sông. Chiều về, khói bếp bay lên từ những mái nhà tranh. Đêm xuống, cả làng chìm trong tiếng ếch nhái. Em rất yêu quê hương mình.", q: "Sáng sớm, các bác nông dân làm gì?", a: "cấy lúa", d: ["tắm sông","nấu cơm","bắt ếch"]},
+    {g: [4,5], t: "Làng em nằm bên một dòng sông hiền hòa. Sáng sớm, các bác nông dân ra đồng cấy lúa. Trưa đến, lũ trẻ rủ nhau tắm sông. Chiều về, khói bếp bay lên từ những mái nhà tranh. Đêm xuống, cả làng chìm trong tiếng ếch nhái. Em rất yêu quê hương mình.", q: "Lũ trẻ tắm sông vào lúc nào?", a: "trưa", d: ["sáng sớm","chiều","đêm"]},
+    {g: [5], t: "Ong là loài côn trùng chăm chỉ. Mỗi con ong thợ bay đi tìm hoa để hút mật. Về tổ, chúng nhả mật vào các ngăn nhỏ. Ong chúa lo việc đẻ trứng cho đàn. Nhờ biết chia việc, cả đàn ong sống rất trật tự.", q: "Ong chúa lo việc gì?", a: "đẻ trứng", d: ["hút mật","xây tổ","tìm hoa"]}
   ];
   /* văn học: truyện ngắn + hỏi nhân vật / cảm xúc / thông điệp. Đáp án suy ra từ truyện, đáp án nhiễu mâu thuẫn với truyện */
   D.stories = [
@@ -214,7 +217,9 @@
     {g: [4,5], t: "My family is small. There are four people: my father, my mother, my sister and me. We live in a big house in Hue.", q: "Where do they live?", a: "in Hue", d: ["in Hanoi","in Da Nang","in Hai Phong"]},
     {g: [4,5], t: "Linh wants to be a doctor. She studies hard and helps her friends. Every Saturday, she visits the hospital with her mother.", q: "What does Linh want to be?", a: "a doctor", d: ["a teacher","a singer","a cook"]},
     {g: [5], t: "Last Sunday, we visited my grandmother. She cooked fish soup for us. After lunch, we played chess in the garden.", q: "What did the grandmother cook?", a: "fish soup", d: ["chicken soup","fried rice","noodles"]},
-    {g: [5], t: "The weather in Da Lat is cool all year. Many tourists go there in December because the flowers are beautiful.", q: "How is the weather in Da Lat?", a: "cool", d: ["hot","cold","rainy"]}
+    {g: [5], t: "The weather in Da Lat is cool all year. Many tourists go there in December because the flowers are beautiful.", q: "How is the weather in Da Lat?", a: "cool", d: ["hot","cold","rainy"]},
+    {g: [5], t: "Mai lives in a small town. Every morning, she walks to school with her friend Lan. They have English on Monday and Wednesday. After school, they play badminton in the yard. On Sunday, Mai helps her mother cook dinner.", q: "When do they have English?", a: "Monday and Wednesday", d: ["Tuesday","Friday","every day"]},
+    {g: [5], t: "Mai lives in a small town. Every morning, she walks to school with her friend Lan. They have English on Monday and Wednesday. After school, they play badminton in the yard. On Sunday, Mai helps her mother cook dinner.", q: "What do they play after school?", a: "badminton", d: ["football","chess","volleyball"]}
   ];
 
   /* ====================== luật (độc lập với bài kiểm) ====================== */
@@ -438,6 +443,7 @@
     /* kỹ năng chỉ theo dõi: kiểu câu sắp xếp / ghép chữ (qtypes.js) */
     TRACKED.dictate_vi = { subj: "tviet", grades: [1, 2, 3], topic: { 1: "VI-G1-03", 2: "VI-G2-03", 3: "VI-G3-03" } };
     TRACKED.write_vi = { subj: "tviet", grades: [2, 3, 4, 5], topic: { 2: "VI-G2-03", 3: "VI-G3-03", 4: "VI-G4-03", 5: "VI-G5-03" } };
+    TRACKED.trace_vi = { subj: "tviet", grades: [1], topic: { 1: "VI-G1-03" } };
     TRACKED.speak_vi = { subj: "tviet", grades: [1, 2, 3, 4, 5], topic: { 1: "VI-G1-04", 2: "VI-G2-04", 3: "VI-G3-04", 4: "VI-G4-04", 5: "VI-G5-04" } };
     TRACKED.dictate_en = { subj: "tanh", grades: [2, 3, 4, 5], topic: { 2: "EN-G2-03", 3: "EN-G3-04", 4: "EN-G4-04", 5: "EN-G5-04" } };
     TRACKED.write_en = { subj: "tanh", grades: [3, 4, 5], topic: { 3: "EN-G3-04", 4: "EN-G4-04", 5: "EN-G5-04" } };

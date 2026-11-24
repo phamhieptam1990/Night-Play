@@ -12,7 +12,7 @@ Quy ước: `[x]` đã xong · `[ ]` chưa làm. Chỉ chạy kiểm tra của H
 - [x] Mỗi kỹ năng mới có đủ: bộ sinh/bank, chủ đề trong `TOPIC`, tên trong `parent-copy.js`, mã lỗi (nếu có) có lời giải thích vi/en.
 - [x] Mỗi mã lỗi mới có đủ 3 chỗ: `TAGS` (engine.js), `TAG` (parent-copy.js, 6 chuỗi), `tag`/`hint` vi+en (index.html).
 - [x] Chạy đủ bốn bộ kiểm: `check-bank`, `check-types`, `check-parent`, `check-garden` (+ `check-mathskills`).
-- [ ] Mở trình duyệt thật chơi thử từng môn × từng lớp 1–5, tự nhìn ảnh (câu có SVG, bảng, emoji, nút không tràn chữ). **Đã làm một phần (24/11):** `check-ui.js` chạy 48 tổ hợp; sửa nút chọn lớp/môn bị bóp còn 40px và chân trang ngắt 4 dòng ở màn 360px (`learn/index.html`); đã xem ảnh Toán L3/L5, Tiếng Việt L1, Tiếng Anh L3. **Còn:** `toan/find` 360×640 báo vùng đáp án bị cắt (ảnh nhìn vẫn đủ); lỗi `ERR_FAILED` ở dictate/write/speak do chưa có file giọng thu sẵn trong `shared/audio/voice/`; ảnh của `check-ui-math --shots` chỉ chụp màn bật loa nên chưa dùng được để duyệt câu.
+- [ ] Mở trình duyệt thật chơi thử từng môn × từng lớp 1–5, tự nhìn ảnh (câu có SVG, bảng, emoji, nút không tràn chữ). **Đã làm một phần (24/11):** `check-ui.js` chạy 48 tổ hợp; sửa nút chọn lớp/môn bị bóp còn 40px và chân trang ngắt 4 dòng ở màn 360px (`learn/index.html`); đã xem ảnh Toán L3/L5, Tiếng Việt L1, Tiếng Anh L3. **Còn:** `toan/find` 360×640 báo vùng đáp án bị cắt lúc 1 giây đầu, nhưng đo sau 2,5 giây thì vừa khít 194/194px (ô đang nghiêng theo hoạt ảnh xuất hiện); `check-ui.js` bản đầy đủ 50 tổ hợp chỉ còn lỗi này (24/11); lỗi `ERR_FAILED` ở dictate/write/speak do chưa có file giọng thu sẵn trong `shared/audio/voice/`; ảnh của `check-ui-math --shots` chỉ chụp màn bật loa nên chưa dùng được để duyệt câu.
 - [x] Kiểm tra trang phụ huynh hiện tên kỹ năng mới và mã lỗi mới.
 - [x] Kiểm tra vườn: kỹ năng mới có thể gieo, tên hiển thị đúng.
 - [x] Màn hình nhỏ (điện thoại): câu có `<br>` / bảng không phải cuộn ngang.
@@ -76,15 +76,15 @@ Nguồn mục tiêu: `tieng-viet.md`. Kỹ năng hiện có: **16** (4 cũ + 12 
 - [x] Mã lỗi riêng Tiếng Việt: `word_class`, `punct`, `sent_type` (có giải thích cho phụ huynh).
 - [x] **Văn học (L1–5):** `story_lit` (12 câu hỏi từ 8 truyện ngắn: nhân vật, cảm xúc, thông điệp). [x] Đã thêm 2 bài thơ ngắn và 2 truyện (24/11). [ ] Rà soát nội dung bởi giáo viên (xem LEARN-REVIEW-CHECKLIST mục F).
 - [x] **Sắp xếp các câu thành đoạn (L3–5):** `para_order` (6 đoạn, 3–4 câu, có từ nối thứ tự). [ ] Dàn ý (L5, tự học).
-- [x] Mở rộng ngân hàng đọc hiểu: thêm 8 đoạn (có văn bản thông tin L4–5) và 2 câu suy luận trong `story_lit`. [ ] Đoạn dài hơn 5 câu chưa có (nút đáp án tối đa 24 ký tự).
-- [x] Thêm từ chính tả có hình cho l/n, s/x, d/gi/r (24/11). [ ] Hỏi / ngã: kỹ năng `tone` đã có, chưa thêm bộ từ riêng.
+- [x] Mở rộng ngân hàng đọc hiểu: thêm 8 đoạn (có văn bản thông tin L4–5) và 2 câu suy luận trong `story_lit`. [x] Đã thêm đoạn 5–6 câu (đáp án vẫn ngắn do nút tối đa 24 ký tự).
+- [x] Thêm từ chính tả có hình cho l/n, s/x, d/gi/r (24/11). [x] Hỏi / ngã: thêm 12 câu vào kỹ năng `tone` (`bank.js`) có câu ngữ cảnh.
 
 ### C2. Nghe · Nói · Viết (đã làm phần khả thi; phần còn lại cần tính năng ngoài phạm vi)
 - [x] **Nghe:** nghe giọng đọc (`voice.js`) rồi chọn hình / số / câu trả lời: `vi_listen_word`, `en_listen_word`, `en_listen_num`, `en_listen_reply`. Câu Nghe tự đọc sau cú chạm đầu tiên.
 - [x] **Nghe–viết (chính tả):** nghe từ rồi gõ lại (`dictate_vi` lớp 1–3, `dictate_en` lớp 2–5).
 - [x] **Viết câu:** gõ một câu theo chủ đề; chấm theo **tiêu chí hình thức** (đủ số từ, chữ đầu viết hoa, có dấu kết thúc, không chữ số), có lời nhắc đúng lỗi (`write_vi` lớp 2–5, `write_en` lớp 3–5). **Không chấm nội dung** vì không có AI lúc chạy.
 - [x] **Nói (đọc to):** nghe câu mẫu, bé đọc thành tiếng rồi **tự báo** đã đọc (`speak_vi`, `speak_en`). Ghi chú rõ là tự báo; không có nhận dạng giọng nói.
-- [ ] **Viết chữ (L1):** tô chữ trên canvas.
+- [x] **Viết chữ (L1):** tô chữ trên canvas (`trace`, kỹ năng theo dõi `trace_vi`, 16 chữ cái; chấm theo độ phủ nét và nét lem; sai lần 1 tô lại, sai lần 2 hiện chữ). Đã chơi thử đúng/sai trong `check-ui.js` và xem ảnh dọc/ngang (24/11). [ ] Chưa thử bằng ngón tay trên điện thoại thật; mới có chữ cái thường, chưa tô số hay chữ hoa.
 - [ ] **Viết đoạn, viết bài (L2–5) chấm nội dung / mạch lạc:** cần chấm bằng người hoặc AI.
 - [ ] **Đọc thành tiếng chấm tốc độ, ngữ điệu; kể chuyện, thuyết trình:** cần nhận dạng giọng nói và cân nhắc quyền riêng tư.
 

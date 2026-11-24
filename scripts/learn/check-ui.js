@@ -7,8 +7,8 @@
 const { spawn } = require("child_process"), path = require("path"), puppeteer = require("puppeteer-core");
 const root = path.join(__dirname, "..", ".."), PORT = 8878, FULL = process.argv.includes("--full");
 const w = ms => new Promise(r => setTimeout(r, ms));
-const QUICK = { toan: ["", "tf", "pic", "match", "order", "typein", "odd", "multi", "compare", "count", "memory", "numline", "clock", "find", "dragfill", "sort", "pop"], tviet: ["wordbuild", "dictate", "write", "speak"], tanh: ["dictate", "write", "speak"] };
-const ALL = { toan: QUICK.toan, tviet: ["", "tf", "pic", "match", "order", "wordbuild", "odd", "multi", "memory", "find", "dragfill", "sort", "pop", "dictate", "write", "speak"], tanh: ["", "tf", "pic", "match", "order", "wordbuild", "odd", "multi", "memory", "find", "dragfill", "sort", "pop", "dictate", "write", "speak"] };
+const QUICK = { toan: ["", "tf", "pic", "match", "order", "typein", "odd", "multi", "compare", "count", "memory", "numline", "clock", "find", "dragfill", "sort", "pop"], tviet: ["wordbuild", "dictate", "write", "speak", "trace"], tanh: ["dictate", "write", "speak"] };
+const ALL = { toan: QUICK.toan, tviet: ["", "tf", "pic", "match", "order", "wordbuild", "odd", "multi", "memory", "find", "dragfill", "sort", "pop", "dictate", "write", "speak", "trace"], tanh: ["", "tf", "pic", "match", "order", "wordbuild", "odd", "multi", "memory", "find", "dragfill", "sort", "pop", "dictate", "write", "speak"] };
 const VP = FULL ? [[390, 844], [360, 640], [844, 390]] : [[390, 844], [360, 640]];
 const fails = []; const bad = (m) => { fails.push(m); console.log("  ✗ " + m); };
 
@@ -19,10 +19,11 @@ const fails = []; const bad = (m) => { fails.push(m); console.log("  ✗ " + m);
   let n = 0;
   try {
     for (const [subj, ks] of Object.entries(FULL ? ALL : QUICK)) for (const k of ks) for (const [W, H] of VP) {
+      if (process.env.ONLY && k !== process.env.ONLY) continue;
       const land = W > H, tag = `${subj}/${k || "mc"} ${W}x${H}`; n++;
       const pg = await br.newPage(); await pg.setViewport({ width: W, height: H, hasTouch: true, isMobile: true });
       const errs = []; pg.on("pageerror", e => errs.push(e.message)); pg.on("console", m => { if (m.type() === "error") errs.push("console: " + m.text().slice(0, 90)); });
-      await pg.goto(`http://localhost:${PORT}/learn/index.html?subj=${subj}&grade=${k === "pic" || k === "count" ? 2 : 3}&lang=vi${k ? "&qk=" + k : ""}`, { waitUntil: "networkidle0" });
+      await pg.goto(`http://localhost:${PORT}/learn/index.html?subj=${subj}&grade=${k === "pic" || k === "count" ? 2 : k === "trace" ? 1 : 3}&lang=vi${k ? "&qk=" + k : ""}`, { waitUntil: "networkidle0" });
       const ready = async () => { await pg.waitForFunction(() => { const a = document.getElementById("ans"); return !a.classList.contains("ld") && a.children.length > 0; }, { timeout: 6000 }); await w(1000); };
       try { await ready(); } catch (e) { bad(tag + ": màn không sẵn sàng"); await pg.close(); continue; }
       const m = await pg.evaluate((land) => {
@@ -44,6 +45,9 @@ const fails = []; const bad = (m) => { fails.push(m); console.log("  ✗ " + m);
           else if (kd === "typein") { for (const c of b.ans) [...ans.querySelectorAll(".kb")].find(x => x.textContent === c).click(); ans.querySelector(".kb.go").click(); }
           else if (kd === "dictate" || kd === "write") { const inp = ans.querySelector("input.qi"); inp.value = kd === "dictate" ? b.ans : (b.lang === "en" ? "I like my school and my friends." : "Em yêu ngôi trường của em."); ans.querySelector(".kb.go").click(); }
           else if (kd === "speak") { ans.querySelector(".sayb").click(); }
+          else if (kd === "trace") { const g = ans.querySelector(".trg"), ic = ans.querySelector(".trc"), gd = g.getContext("2d").getImageData(0, 0, g.width, g.height).data, rc = ic.getBoundingClientRect(), fire = (t, X, Y) => ic.dispatchEvent(new PointerEvent(t, { clientX: rc.left + X * rc.width / g.width, clientY: rc.top + Y * rc.height / g.height, pointerId: 1, bubbles: true, cancelable: true }));
+            for (let y = 4; y < g.height; y += 7) { let on = false; for (let X = 0; X < g.width; X += 7) { const a = gd[(y * g.width + X) * 4 + 3] > 12; if (a && !on) { fire("pointerdown", X, y); on = true; } else if (a) fire("pointermove", X, y); else if (on) { fire("pointerup", X, y); on = false; } } if (on) fire("pointerup", g.width - 1, y); }
+            await W(30); ans.querySelector(".kb.go").click(); }
           else if (kd === "multi") { b.opts.forEach((o, i) => { if (o.ok) ans.querySelectorAll(".qg .ab")[i].click(); }); ans.querySelector(".qdone").click(); }
           else if (kd === "match") { for (const pr of b.pairs) { const L = [...ans.querySelectorAll(".qc")[0].children].find(x => x.textContent === pr[0]), Rr = [...ans.querySelectorAll(".qc")[1].children].find(x => x.textContent === pr[1]); L.click(); await W(20); Rr.click(); await W(20); } }
           else if (b.o) { ans.querySelectorAll(sel)[b.o.findIndex(x => x.ok)].click(); }
@@ -60,6 +64,7 @@ const fails = []; const bad = (m) => { fails.push(m); console.log("  ✗ " + m);
               else if (kd === "sort") { const tl = [...ans.querySelectorAll(".qp .pt")].filter(t => !t.disabled), it = b.items.find(x => tl.some(t => t.textContent === x.v)); tl.find(t => t.textContent === it.v).click(); await W(20); ans.querySelectorAll(".qbin")[1 - it.bin].click(); }
               else if (kd === "order" || kd === "wordbuild") { const items = b.items.slice().reverse(); if (items.join("|") === b.items.join("|")) items.push(items.shift()); for (const it of items) { const t = [...ans.querySelectorAll(".pt")].find(x => x.textContent === it && x.style.visibility !== "hidden"); if (t) { t.click(); await W(20); } } }
               else if (kd === "typein") { [...ans.querySelectorAll(".kb")].find(x => x.textContent === (b.ans === "1" ? "2" : "1")).click(); ans.querySelector(".kb.go").click(); }
+              else if (kd === "trace") { const ic = ans.querySelector(".trc"), rc = ic.getBoundingClientRect(), fire = (t, X, Y) => ic.dispatchEvent(new PointerEvent(t, { clientX: rc.left + X, clientY: rc.top + Y, pointerId: 1, bubbles: true, cancelable: true })); fire("pointerdown", 3, 3); fire("pointermove", 20, 12); fire("pointerup", 20, 12); await W(20); ans.querySelector(".kb.go").click(); }
               else if (kd === "dictate" || kd === "write") { const inp = ans.querySelector("input.qi"); inp.value = "zq"; ans.querySelector(".kb.go").click(); }
               else if (kd === "multi") { const i = b.opts.findIndex(o => !o.ok); ans.querySelectorAll(".qg .ab")[i].click(); ans.querySelector(".qdone").click(); }
               else if (kd === "match") { const l = ans.querySelectorAll(".qc")[0].children, r = ans.querySelectorAll(".qc")[1].children, lt = [...l].find(x => !x.disabled), rt = [...r].find(x => !x.disabled && b.pairs.findIndex(p => p[1] === x.textContent) !== b.pairs.findIndex(p => p[0] === lt.textContent)); lt.click(); await W(20); rt.click(); }

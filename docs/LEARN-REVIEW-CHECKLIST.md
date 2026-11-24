@@ -89,3 +89,5 @@ Cập nhật lần cuối: 2026-11-20. Bài đo Học Vui hiện nằm ở `scri
 - [ ] Tiếng Anh: 8 động từ vào `en_meaning` (run, jump, swim, sing, draw, sleep, read, write); 5 đoạn đọc hiểu mới (`en_reading`).
 - [ ] Tiếng Việt: 8 đoạn đọc hiểu mới (có văn bản thông tin lớp 4–5: Trái Đất, Hà Nội, sông Mê Công); 2 câu suy luận và 2 bài thơ ngắn do AI soạn (`story_lit`). Cần rà chính xác kiến thức và giọng văn.
 - [ ] Chính tả: thêm từ có hình cho s/x, d/gi/r, l/n.
+- [ ] **Tô chữ lớp 1** (`trace`): thử bằng ngón tay trên điện thoại/iPad thật; chỉnh độ khó (ngưỡng phủ 60%, lem 30%, bút 30px) nếu bé khó qua hoặc qua quá dễ.
+- [ ] 12 câu hỏi/ngã mới (`tone`) và 3 đoạn đọc dài: cần giáo viên rà chính tả và nội dung.
