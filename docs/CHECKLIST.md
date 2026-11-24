@@ -2,6 +2,10 @@
 
 Cập nhật: 2026-11-24. Quy ước: `[x]` xong · `[ ]` chưa làm · `[~]` đang làm · `[?]` chờ chủ site duyệt. Xong mục nào thì đổi ký hiệu mục đó (sửa đúng một dòng).
 
+## Đã duyệt (24/11/2026)
+
+Chủ site duyệt các quyết định điều phối chốt tạm: bảng vật phẩm khác nhau theo lớp, quy tắc lên lớp (mang theo + đổi), cách đổi hạt ở quầy Bác Rễ (2 nông sản lớp cũ lấy 1 hạt, tối đa 3 lần/ngày), mặc định Học Vui Plus (tên, 99k/249k/790k, không gói đôi). Chưa duyệt: nội dung bài học (cần giáo viên), làm tròn số lớp 2 theo chương trình chính thức.
+
 ## Điều phối (24/11/2026)
 
 Ba gói chạy song song, mỗi gói giữ một vùng tệp riêng để không đụng nhau. Các mục `[?]` chờ duyệt đã được điều phối CHỐT TẠM theo bản đề xuất trong kế hoạch tương ứng (chủ site xác nhận hoặc sửa sau).
@@ -40,7 +44,6 @@ Ba gói chạy song song, mỗi gói giữ một vùng tệp riêng để không
 
 Đã xong và có bài đo: chỗ cắm đồng bộ (`check-sync.js`), nền bán hàng + token + dùng thử + thẻ Plus (`check-plus.js`, `check-plus-ui.js`), lọc từ nhạy cảm + không lộ đáp án + cache/hạn mức/đường lui + công tắc AI (`check-coach.js`), khung đề thi (`check-exam.js`), pháp lý. Chi tiết: `docs/LEARN-FREE-VS-PLUS.md`, `docs/LEARN-PLUS-DESIGN.md`.
 
-- [?] Chủ site xác nhận các mặc định đã chốt tạm (tên Học Vui Plus; 99k/249k/790k; không gói đôi; đồng bộ để sau) — `docs/LEARN-FREE-VS-PLUS.md` mục 0
 - [ ] Chạy migration 009 trên Neon rồi mới đặt `LEARN_PLUS=on` — cần quyền database sản xuất (chưa chạy: gói này không deploy)
 - [ ] Thử thanh toán thật bằng đơn `learn_test` 1.000đ (`LEARN_TEST_PRICE=on`) qua SePay — cần tài khoản SePay/ngân hàng; chưa đụng thanh toán thật
 - [ ] Khôi phục Plus bằng email (OTP) khi đổi máy, và xác nhận email trước khi cấp dùng thử — `/api/restore` mới chỉ khôi phục Night Pass; cần gửi email thật để thử
