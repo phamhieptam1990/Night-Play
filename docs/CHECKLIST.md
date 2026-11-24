@@ -69,7 +69,7 @@ avatar bé lớn, quyết định thiết kế chủ site, thử trên iPhone/iP
 - [x] Nối vào hệ thống: wire.js, og.js, events.js, multi-games.js, music.js, widebg.js, rails/portalui SAVE, check.js GAMES
 - [~] Sinh `node scripts/cozygame/gen.js ghep-ba-the`, kiểm Chrome thật: ĐÃ xem 360×640 (free + 4 skin); CHƯA xem 380×760, ngang 844×390, 1200×640; free + 4 skin; home / chơi / kết thúc / popup
 - [x] Bài đo riêng cho game (chỉ game này, không chạy cả repo) đạt
-- [ ] Linh vật SVG riêng (docs/MASCOT-ART-RULES.md) + thẻ npbadges — chưa làm, cần duyệt phong cách
+- [x] Linh vật Night 3D: Mèo Đen Bí Ngô (Ghép Ba Thẻ), Thỏ Hoa (Tìm Đôi Thẻ) — sinh từ scripts/art/gen-night3d.js, đủ 5 skin, check-mascot + check-art đạt; chưa có thẻ npbadges
 
 ## G2. Game Cozy mới "Tìm Đôi Thẻ" (chạm 2 thẻ giống nhau xếp chồng, 3 độ khó) — 1 giao diện free + 4 trả phí
 
