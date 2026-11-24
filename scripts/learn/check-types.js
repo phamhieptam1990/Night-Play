@@ -29,7 +29,10 @@ for (const subj of ["toan", "tviet", "tanh"]) for (let g = 1; g <= 5; g++) for (
   if (kind === "match") { if (q.pairs.length !== 4 || new Set(q.pairs.map(p => p[0])).size !== 4 || new Set(q.pairs.map(p => p[1])).size !== 4) fail("match", q); }
   if (kind === "multi") { const n = q.opts.filter(o => o.ok).length; if (q.opts.length !== 6 || n < 2 || n > 3 || new Set(q.opts.map(o => o.v)).size !== 6) fail("multi", q); }
 }
-for (const subj of ["toan", "tviet", "tanh"]) for (let g = 1; g <= 5; g++) { const base = [1, 2, 3, 4, 5].map(() => ({ kind: "mc", o: [{ v: "1", ok: 1 }, { v: "2" }, { v: "3" }, { v: "4" }] })); const r = T.mix(base, subj, g, "vi", 3); const ks = r.map(x => x.kind); if (ks.filter(k => k === "pop").length > 1) fail("nhiều hơn 1 pop", ks); if (ks[0] !== "mc" || ks.filter(k => k !== "mc" && k !== "pop").length !== 3 || new Set(ks.filter(k => k !== "mc" && k !== "pop")).size !== 3) fail("mix", ks); }
+for (const subj of ["toan", "tviet", "tanh"]) for (let g = 1; g <= 5; g++) { const base = [1, 2, 3, 4, 5].map(() => ({ kind: "mc", o: [{ v: "1", ok: 1 }, { v: "2" }, { v: "3" }, { v: "4" }] })); const r = T.mix(base, subj, g, "vi", 3); const ks = r.map(x => x.kind); const nk = ks.filter(k => k !== "mc" && k !== "pop"), want = subj === "toan" && g >= 3 ? 2 : 3; if (ks.filter(k => k === "pop").length > 1) fail("nhiều hơn 1 pop", ks); if (ks[0] !== "mc" || nk.length !== want || new Set(nk).size !== want) fail("mix", ks); }
+const EMO = /\p{Extended_Pictographic}/u;
+for (const subj of ["tviet", "tanh"]) for (let g = 3; g <= 5; g++) { for (const k of ["pic", "wordbuild", "find"]) if (T.kindsFor(subj, g).includes(k)) fail("kiểu emoji-từ-vựng còn ở lớp " + g, { subj, k });
+  for (let i = 0; i < 300; i++) for (const k of T.kindsFor(subj, g)) { const q = T.make(k, subj, g, "vi"); if (!q) continue; const txt = JSON.stringify([q.q, q.o, q.opts, q.pairs, q.items, q.bins]).replace(/<[^>]+>/g, ""); if (["tf", "odd", "multi", "sort", "match", "memory", "dragfill", "order"].includes(k) && EMO.test(txt)) { fail("emoji ở lớp " + g, q); break; } } }
 console.log(Object.keys(count).map(k => k + ":" + count[k]).join("  "));
 console.log(bad ? "✗ " + bad + " lỗi" : "✓ 10 kiểu câu hỏi đạt");
 process.exit(bad ? 1 : 0);
