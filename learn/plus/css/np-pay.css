@@ -1,0 +1,22 @@
+/* Nút bấm, bước 2 (thanh toán): email, tóm tắt, thông tin chuyển khoản QR. Nút gradient tím–cam do shared/nightpass-ui.css. */
+.cta{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:6px;padding:14px;border-radius:14px;
+  background:var(--accent);color:var(--on-accent);font-weight:800;font-size:17px}
+.cta svg{width:18px;height:18px;flex:none}
+.cta:disabled{opacity:.5;cursor:not-allowed}
+.cta.ghost,html[data-np] .cta.ghost{background:transparent;background-image:none;color:var(--ink);border:2px solid var(--accent);box-shadow:none}
+.lnk{display:block;margin:8px auto 0;background:none;color:var(--accent);font-weight:700;text-decoration:underline;min-height:44px}
+.pay{display:grid;gap:16px;max-width:720px;margin:16px auto 0}
+@media(min-width:900px){.pay{grid-template-columns:1fr 1fr;max-width:1000px}}
+.card{padding:18px;border-radius:20px;background:var(--panel);box-shadow:var(--shadow);border:1px solid var(--line)}
+.card h2{margin:0 0 10px;font-size:20px}
+.card label{display:block;margin:12px 0 6px;font-weight:700;font-size:14px}
+.card input{width:100%;height:48px;padding:0 14px;border-radius:14px;border:2px solid var(--line);background:var(--bg)}
+.sum{list-style:none;margin:0;padding:0}
+.sum li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;font-size:14px;border-bottom:1px solid var(--line)}
+.sum li:last-child{border-bottom:0;font-weight:800;font-size:16px}
+.msg{min-height:1.4em;margin:10px 0 0;font-weight:800}
+.ord{display:grid;gap:8px;align-content:start}
+.ord[hidden]{display:none}
+.ord img{width:220px;max-width:70%;height:auto;margin:0 auto;border-radius:12px;background:#fff;padding:6px}
+.ord .row{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:14px}
+.ord .row b{word-break:break-all}

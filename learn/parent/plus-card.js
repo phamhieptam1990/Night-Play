@@ -31,6 +31,7 @@
     } else {
       if (s.exp && !s.active && P.state().plan !== null) h += "<p><b>" + E(T("Plus đã hết hạn.", "Plus has expired.")) + "</b> " + E(T("Mọi thứ của bé vẫn được giữ nguyên.", "Everything your child made is kept.")) + "</p>";
       h += benefits();
+      h += '<p class="note" style="margin:0 0 8px"><a href="../plus/index.html' + (lang === "en" ? "?lang=en" : "") + '">' + E(T("Xem trang các gói và thanh toán", "See plans and checkout")) + "</a></p>";
       h += '<label class="note" for="plMail" style="display:block;margin:8px 0 4px">Email</label><input id="plMail" type="email" autocomplete="email" inputmode="email" value="' + E(mail) + '" style="width:100%;min-height:48px;padding:0 14px;border-radius:14px;border:2px solid var(--line);background:var(--panel);color:var(--ink);font:inherit">';
       h += '<button class="btn" id="plTrial" type="button"' + (busy ? " disabled" : "") + ">" + E(T("Dùng thử 7 ngày (không cần thẻ)", "Try 7 days (no card needed)")) + "</button>";
       if (plans && plans.plans) h += '<div class="chips" role="group" aria-label="Plus">' + plans.plans.map(function (p) { var n = PLAN_NAME[p.id] || [p.id, p.id]; return '<button class="chip" type="button" data-p="' + E(p.id) + '">' + E(T(n[0], n[1])) + " · " + money(p.amount) + "</button>"; }).join("") + "</div>";

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Học Vui Plus</title>
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#12141F">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" sizes="any" href="/shared/favicon.svg">
+<script>
+/* Cùng giao diện Night Pass (shared/nightpass-ui.css): bật bằng data-np; đêm là mặc định, theo lựa chọn của máy nếu có */
+try{var t=localStorage.getItem("theme")}catch(e){}
+document.documentElement.dataset.app="cozyplay";document.documentElement.dataset.np="";
+document.documentElement.dataset.theme=t==="dark"||t==="light"?t:(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");
+</script>
+<link rel="stylesheet" href="../../shared/fonts.css">
+<link rel="stylesheet" href="../type.css">
+<link rel="stylesheet" href="../../shared/theme.css">
+<link rel="stylesheet" href="css/np-layout.css">
+<link rel="stylesheet" href="css/np-plans.css">
+<link rel="stylesheet" href="css/np-pay.css">
+<link rel="stylesheet" href="../../shared/nightpass-ui.css">
+</head>
+<body>
+<header class="nav">
+  <a class="mark" href="../parent/index.html" id="home">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#7C5CFF"/><path d="M32 14c-8 6-10 14-4 22 3 4 8 6 12 5-3 4-9 5-14 1-7-5-8-15-2-22 3-4 7-6 8-6z" fill="#fff"/><circle cx="43" cy="22" r="3" fill="#FFE27A"/></svg>
+    <span id="brand">Học Vui</span>
+  </a>
+  <div class="tools"><a class="pill" id="back" href="../parent/index.html">← <span id="backT"></span></a><button class="pill" id="lang" type="button" aria-label="Ngôn ngữ">EN</button></div>
+</header>
+<main><div class="in">
+  <h1><svg class="crown" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/></svg><span id="h1"></span></h1>
+  <p class="sub" id="sub"></p>
+  <p class="soon" id="soon" hidden></p>
+  <ol class="steps" id="steps"></ol>
+  <section class="step" id="s1" tabindex="-1">
+    <div class="plans" id="plans" role="radiogroup"></div>
+    <div class="next"><button class="cta" id="go" type="button"></button><button class="cta ghost" id="trial" type="button"></button></div>
+  </section>
+  <section class="step" id="s2" tabindex="-1" hidden>
+    <div class="pay">
+      <div class="card"><h2 id="s2T"></h2><ul class="sum" id="sum"></ul>
+        <label for="mail" id="mailL"></label>
+        <input id="mail" type="email" autocomplete="email" inputmode="email" placeholder="email@..." maxlength="120">
+        <button class="cta" id="pay" type="button"></button>
+        <button class="lnk" id="again" type="button"></button>
+        <p class="msg" id="msg" role="status"></p></div>
+      <div class="card ord" id="ord" hidden></div>
+    </div>
+  </section>
+  <ul class="trust" id="trust"></ul>
+</div></main>
+<footer class="foot">
+  <a class="mark" href="../parent/index.html"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#7C5CFF"/><path d="M32 14c-8 6-10 14-4 22 3 4 8 6 12 5-3 4-9 5-14 1-7-5-8-15-2-22 3-4 7-6 8-6z" fill="#fff"/><circle cx="43" cy="22" r="3" fill="#FFE27A"/></svg><span>Học Vui</span></a>
+  <a href="../parent/index.html" id="fpar"></a><a href="../../privacy.html" id="fp"></a><a href="../../terms.html" id="ftm"></a>
+</footer>
+<script src="../plus.js"></script>
+<script src="js/copy.js"></script>
+<script src="js/render.js"></script>
+<script src="js/order.js"></script>
+<script src="js/boot.js"></script>
+<script src="../../shared/updated.js"></script>
+</body>
+</html>
