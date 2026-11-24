@@ -40,6 +40,7 @@
   P.aiOn = function () { return P.has("coach") && ls("learn:plus:ai") !== "0"; };
   P.setAi = function (on) { ls("learn:plus:ai", on ? "1" : "0"); };
   P.clear = function () { save(null); };
+  P.token = function () { var o = read(); return o && o.token && !o.test ? o.token : ""; };   /* chỉ cho learn/coach.js gửi lên máy chủ; token thử (cục bộ) không bao giờ được gửi */
 
   /* --- token thử cục bộ (chỉ cho kiểm/duyệt giao diện) --- */
   P.makeTestToken = function (features, days) {
