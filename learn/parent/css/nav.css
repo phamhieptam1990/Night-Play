@@ -1,0 +1,20 @@
+/* ===== MENU NHẢY NHANH TỚI TỪNG MỤC (dính dưới thanh tiêu đề) ===== */
+.sec{scroll-margin-top:calc(var(--th,70px) + 66px)}
+.snav{position:sticky;top:var(--th,70px);z-index:9;display:flex;gap:8px;overflow-x:auto;overscroll-behavior-x:contain;margin:0 -16px 16px;padding:8px 16px 10px;
+  scrollbar-width:none;background:linear-gradient(var(--bg) 82%,transparent)}
+.snav::-webkit-scrollbar{display:none}
+.sn{flex:none;display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:0 17px;border-radius:99px;font-weight:800;font-size:14.5px;color:#fff;text-decoration:none;
+  white-space:nowrap;background:linear-gradient(150deg,#3B4A63,#1E293B);border:2px solid transparent;box-shadow:0 8px 18px -12px rgba(0,0,0,.6);
+  transition:background-color .16s,border-color .16s,transform .16s}
+.sn:active{transform:scale(.96)}.sn:focus-visible{outline:3px solid var(--sg);outline-offset:2px}
+.sn[aria-current=true]{background:linear-gradient(135deg,#FFE08A,#FFB020);color:#4a2c00;border-color:#E59A00}
+@media (hover:hover){.sn:hover{background:linear-gradient(150deg,#4A5B7A,#26324A);border-color:#FFE08A;color:#fff}
+  .sn[aria-current=true]:hover{background:linear-gradient(135deg,#FFE08A,#FFB020);color:#4a2c00}}
+@media (min-width:1000px){#dash>.snav{grid-column:1/-1;margin:0 0 18px;padding:8px 0 10px;justify-content:flex-start;overflow-x:visible;flex-wrap:wrap}}
+/* tiêu đề thẻ + tiêu đề nhóm nổi bật; chữ đầu luôn viết hoa */
+.wk h3{font-size:clamp(18px,4.8vw,21px);font-weight:900;line-height:1.25;letter-spacing:-.005em}
+.wk .ct{font-size:12.5px;vertical-align:2px}
+.sub2{display:flex;align-items:center;gap:12px;margin:26px 2px 14px;font-size:clamp(19px,5vw,23px);font-weight:900;letter-spacing:-.01em;text-transform:none;color:var(--ink);line-height:1.2}
+.sub2::before{content:"🧩";flex:none;display:grid;place-items:center;width:38px;height:38px;border-radius:12px;font-size:20px;line-height:1;
+  background:linear-gradient(135deg,#9B6CFF,#5B3FD9);box-shadow:0 8px 18px -10px #5B3FD9}
+.tpc summary b,.dayh b,.sk b,.sk2 .nm{text-transform:none}

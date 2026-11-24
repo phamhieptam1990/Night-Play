@@ -1,0 +1,67 @@
+/* ===== TIÊU ĐỀ MỤC RÕ RÀNG + BỐ CỤC RỘNG (full width trên máy tính) ===== */
+.sec>h2{display:flex;align-items:center;gap:12px;margin:0 0 14px;padding-left:0;font-size:clamp(20px,5.2vw,26px);font-weight:900;letter-spacing:-.01em;text-transform:none;
+  color:var(--ink);line-height:1.2}
+.sec>h2 .hi{flex:none;display:grid;place-items:center;width:42px;height:42px;border-radius:14px;font-size:22px;line-height:1;background:linear-gradient(135deg,var(--s1),var(--s2));
+  box-shadow:0 8px 18px -10px var(--s2)}
+.sec>h2 .hi .ico{width:26px;height:26px}
+.sec>.note{font-size:15px;margin:-4px 2px 14px}
+.gtag{display:flex;align-items:center;gap:10px;margin:22px 4px 12px;font-size:15px;font-weight:900;letter-spacing:.04em;color:var(--ink)}
+  .gtag::before{content:"";flex:none;width:10px;height:10px;border-radius:50%;background:var(--sg)}
+@media (min-width:1000px){
+  .wrap,.bar{max-width:min(1500px,calc(100vw - 64px))}
+  /* màn rộng: các mục chạy theo thứ tự rồi TỰ CHIA ĐỀU vào hai cột (hai cột cao gần bằng nhau, không có khoảng trống lệch) */
+  .cols{columns:2;column-gap:36px}
+  .cols>.sec{break-inside:avoid;-webkit-column-break-inside:avoid;margin-bottom:30px}
+  #dash>.tabs{max-width:760px}
+  .chart{height:200px}
+}
+/* ===== MỖI MỤC = MỘT THẺ DUY NHẤT: tiêu đề + nội dung chung một thẻ; bên trong chỉ là hàng phẳng ngăn bằng đường kẻ, KHÔNG có thẻ lồng thẻ ===== */
+#dash .sec{position:relative;padding:22px 20px 20px;margin:0 0 22px;border-radius:30px;color:#fff;--ink:#fff;--ink2:rgba(255,255,255,.86);--panel:rgba(255,255,255,.1);
+  --line:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.14);box-shadow:0 20px 44px -24px rgba(0,0,0,.65),inset 0 1px 0 rgba(255,255,255,.15)}
+#dash #s-ov{background:linear-gradient(155deg,#2A3A66,#141B34)}
+#dash #s-goals{background:linear-gradient(155deg,#14967F,#0C4543)}
+#dash #s-learned{background:linear-gradient(155deg,#5F57F2,#2B2784)}
+#dash #s-weak{background:linear-gradient(155deg,#CF3F68,#6B1D45)}
+#dash #s-map{background:linear-gradient(155deg,#3D6A86,#1B3548)}
+#dash #s-limit{background:linear-gradient(155deg,#0E93B0,#12495A)}
+#dash #s-set{background:linear-gradient(155deg,#56657D,#232E44)}
+#dash .sec>h2{color:#fff;margin:0 0 6px}
+#dash .sec>h2::before{background:rgba(255,255,255,.18);box-shadow:none}
+#dash .sec>.note{color:rgba(255,255,255,.86);margin:0 2px 16px}
+#dash .sec>h2:last-child,#dash .sec>h2+div{margin-top:14px}
+/* các phần bên trong: phẳng */
+#dash .sec .card,#dash .sec .tpc,#dash .sec .dayc,#dash .sec .wk,#dash .sec .gg .tpc,#dash .sec .tpc.soon{background:none;border:0;box-shadow:none;border-radius:0;padding:0;filter:none;transform:none}
+#dash .sec .tpc,#dash .sec .dayc,#dash .sec .wk{border-top:1px solid rgba(255,255,255,.2);padding:14px 0;margin:0}   /* mọi hàng: lề trên/dưới 0, đệm trên = đệm dưới → khoảng cách đều */
+#dash .sec .gg .tpc:first-of-type,#dash .sec .wk:first-of-type,#dash .sec .dayc:first-of-type{border-top:0}
+#dash .sec .tpc summary{padding:2px 0}#dash .sec .tpc[open] summary{border-bottom:0}#dash .sec .tpc .bd{padding:6px 0 0}
+#dash .sec .tpc.soon .row{padding:0}
+#dash .sec .wk.tipc{background:none}
+#dash .sec .wk .tp,#dash .sec .nxt,#dash .sec .hbx,#dash .sec .ok,#dash .sec .empty,#dash .sec .tile,#dash .sec .hero{background:rgba(0,0,0,.2);border:0;box-shadow:none;border-radius:18px}
+#dash .sec .nxt,#dash .sec .hbx,#dash .sec .ok{padding:14px 16px;margin:12px 0}
+#dash .sec .empty{border:1.5px dashed rgba(255,255,255,.35);background:none}
+#dash .sec .tile{padding:14px}
+#dash .sec .hero{border-radius:22px}
+#dash .sec .nxt h3{margin-bottom:8px}
+#dash .sec .gtag{margin:22px 2px 6px}
+#dash .sec .dayc .sc{background:rgba(255,255,255,.14)}
+#dash .sec .chart{padding:10px 4px 2px}
+#dash .sec .legend{margin:6px 2px 0}
+#dash .sec #tiles{margin-bottom:14px}
+#dash .sec .wk h3{margin-bottom:4px}
+#dash .sec .sub2{margin:22px 0 8px;padding-top:18px;border-top:1px solid rgba(255,255,255,.2)}
+#dash .sec .sub2::before{background:rgba(255,255,255,.18);box-shadow:none}
+@media (hover:hover){#dash .sec .tile:hover,#dash .sec .wk:hover,#dash .sec .tpc:hover,#dash .sec .dayc:hover{transform:none;box-shadow:none;filter:none;
+  border-color:rgba(255,255,255,.2);background:none}#dash .sec .tile:hover{background:rgba(0,0,0,.28)}}
+#dash .sec .wsk{padding:12px 0}
+#dash .sec .wsk .wr{display:flex;align-items:center;justify-content:space-between;gap:12px}
+#dash .sec .wsk h3{margin:0;min-width:0;overflow-wrap:anywhere}
+#dash .sec .wsk .ct{flex:none;margin:0;padding:3px 11px;font-size:13px;background:rgba(0,0,0,.28)}
+#dash .sec .wbar{height:8px;margin:10px 0 0;border-radius:4px;overflow:hidden;background:rgba(0,0,0,.28)}
+#dash .sec .wbar i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#FFD166,#FFE9A8)}
+#dash .sec .wsk .wm{margin:7px 0 0;font-size:13.5px;font-weight:600;color:rgba(255,255,255,.82)}
+/* canh đều theo chiều dọc, KHÔNG gạch chân */
+#dash .sec .tpc summary{align-items:center}
+#dash .sec #map .tpc .ic,#dash #s-map .tpc .ic{grid-row:1}
+#dash .sec .tpc summary b,#dash .sec .tpc summary:hover b,#dash .sec .sc,#dash .sec a,#dash .sec .dayh b{text-decoration:none}
+#dash .sec .tpc .cnt{align-self:center;display:grid;place-items:center;min-width:28px;min-height:28px;font-size:14px}
+.col.now .d{text-decoration:none;color:#fff;font-weight:900}

@@ -1,0 +1,21 @@
+/* tab môn */
+.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:4px 0 16px}
+.tab{display:flex;align-items:center;justify-content:center;gap:6px;min-width:0;min-height:52px;padding:4px 6px;border-radius:18px;font-weight:800;font-size:13.5px;
+  line-height:1.15;background:color-mix(in srgb,var(--panel) 80%,transparent);border:2px solid var(--line)}
+.tab span{min-width:0;overflow-wrap:anywhere}.tab img{flex:none;width:30px;height:30px;border-radius:50%;background:color-mix(in srgb,var(--ink) 8%,transparent)}
+.tab[aria-selected=true]{border-color:var(--sg);background:color-mix(in srgb,var(--sg) 16%,var(--panel))}
+.sec{margin:0 0 18px}
+.sec>h2{margin:0 0 10px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2)}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tile{padding:14px;border-radius:20px;background:var(--panel);border:1.5px solid var(--line)}
+.tile b{display:block;font-size:clamp(26px,8vw,34px);font-weight:900;line-height:1.1}
+.tile span{display:block;margin-top:2px;font-size:13px;color:var(--ink2)}
+/* biểu đồ 7 ngày */
+.chart{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;align-items:end;height:150px;padding:8px 4px 0}
+.col{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;min-width:0}
+.col .v{font-size:12px;font-weight:800;color:var(--ink2);margin-bottom:3px;min-height:15px}
+.col .b{width:100%;max-width:34px;border-radius:8px 8px 4px 4px;background:linear-gradient(180deg,var(--sg),var(--s2));min-height:4px}
+.col .b.z{background:color-mix(in srgb,var(--ink) 14%,transparent)}
+.col .d{margin-top:6px;font-size:12px;font-weight:700;color:var(--ink2)}
+.col.now .d{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.legend{margin:8px 0 0;font-size:12.5px;color:var(--ink2)}

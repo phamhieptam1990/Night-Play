@@ -1,0 +1,51 @@
+/* ===== THẺ MÀU: KHÔNG nền trắng, mỗi loại thẻ một màu riêng, chữ sáng, giống nhau ở sáng/tối (GAME_RULES 0a-33) ===== */
+.card,.tile,.wk,.tpc,.dayc,.nxt,.ok,.empty,.hbx,.hero{color:#fff;--ink:#fff;--ink2:rgba(255,255,255,.82);--panel:rgba(255,255,255,.13);--line:rgba(255,255,255,.24);
+  border-color:rgba(255,255,255,.16);box-shadow:0 16px 32px -20px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.14)}
+.card{background:linear-gradient(150deg,#3B4A63,#1E293B)}
+.gate .card{background:linear-gradient(150deg,#12A07A,#0B4F3C)}.gate .msg{color:#FFE08A}.gate input{background:rgba(0,0,0,.22);border-color:rgba(255,255,255,.3);color:#fff}
+.tiles .tile:nth-child(1){background:linear-gradient(150deg,#12A07A,#0B6B4F)}
+.tiles .tile:nth-child(2){background:linear-gradient(150deg,#4C8DF6,#1D4ED8)}
+.tiles .tile:nth-child(3){background:linear-gradient(150deg,#EA6A1C,#9A3412)}
+.tiles .tile:nth-child(4){background:linear-gradient(150deg,#9B6CFF,#5B3FD9)}
+.card.c-chart{background:linear-gradient(160deg,#243357,#121A33)}
+#limit.card{background:linear-gradient(150deg,#0E8CA8,#134E5E)}
+#set.card{background:linear-gradient(150deg,#52627A,#1E293B)}
+.nxt{background:linear-gradient(150deg,#E08A0B,#8A3F0C)}.nxt h3{color:rgba(255,255,255,.9)}.nxt .nx span{background:rgba(0,0,0,.2);border-color:rgba(255,255,255,.35);color:#fff}
+.dayc{background:linear-gradient(150deg,#5B52F0,#2E2A87)}.dayc .sc{background:rgba(255,255,255,.14)}
+.tpc{background:linear-gradient(150deg,#12907F,#124A47)}
+.gg.g1 .tpc{background:linear-gradient(150deg,#3E7CF0,#1E3A8A)}.gg.g2 .tpc{background:linear-gradient(150deg,#9B6CFF,#4B2FB0)}
+  .gg.g3 .tpc{background:linear-gradient(150deg,#E0408F,#8E1A55)}.gg.g4 .tpc{background:linear-gradient(150deg,#E8892E,#8F3F0E)}
+#map .tpc{background:linear-gradient(150deg,#52627A,#1E293B)}
+.tpc .ic{background:rgba(255,255,255,.18)}.tpc.soon{background:linear-gradient(150deg,rgba(255,255,255,.1),rgba(255,255,255,.04));border:1.5px dashed rgba(255,255,255,.4);box-shadow:none}
+.tpc .stack{background:rgba(0,0,0,.28)}.tpc .stack .s{background:linear-gradient(90deg,#86EFAC,#22C55E)}.tpc .stack .l{background:#FFD166}
+.wk{background:linear-gradient(150deg,#E5486F,#8E2140)}.wk.tipc{background:linear-gradient(150deg,#8B5CF6,#4B2FB0)}.wk .ct{background:rgba(0,0,0,.25);color:#fff}
+  .wk .tp{background:rgba(0,0,0,.22);color:#fff}
+.ok{background:linear-gradient(150deg,#22A855,#14532D);border-color:rgba(255,255,255,.18)}
+.empty{background:linear-gradient(150deg,#4E5D75,#2A3548);border:1.5px dashed rgba(255,255,255,.35)}
+.hbx{background:linear-gradient(135deg,#2f7a68,#1d4a41)}
+.sk,.sk2{border-top-color:rgba(255,255,255,.18)}.sk .meter i{background:rgba(255,255,255,.18)}.sk .meter i.on{background:var(--lc)}
+.pill{box-shadow:0 0 0 1.5px rgba(255,255,255,.35)}
+.ib{background:linear-gradient(150deg,#3B4A63,#1E293B);color:#fff;border:1px solid rgba(255,255,255,.18)}
+.tab{background:linear-gradient(150deg,#3B4A63,#1E293B);color:#fff;border-color:transparent}.tab[aria-selected=true]{background:linear-gradient(135deg,var(--s1),var(--s2));
+  border-color:var(--sg);box-shadow:0 10px 22px -12px var(--s2)}
+.gsel button{background:linear-gradient(150deg,#3B4A63,#1E293B);color:#fff;border-color:transparent}.gsel button small{color:rgba(255,255,255,.75)}
+.gsel button[aria-pressed=true],.chip[aria-pressed=true]{background:linear-gradient(135deg,#FFE08A,#FFB020);color:#4a2c00;border-color:#E59A00}.gsel button[aria-pressed=true] small{color:#7a4a00}
+.chip{background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.28)}
+.card .btn.ghost{color:#fff;border-color:rgba(255,255,255,.4)}
+#exit.btn.ghost{background:linear-gradient(150deg,#3B4A63,#1E293B);color:#fff;border:0}
+.ov .card{background:linear-gradient(165deg,#2f6f60,#1d4a41 52%,#14332d);border:2px solid rgba(255,224,138,.6);box-shadow:0 26px 70px rgba(0,0,0,.5)}
+  .ov{background:radial-gradient(circle at 50% 28%,rgba(24,52,46,.62),rgba(6,14,12,.86))}
+/* hover: giữ NỀN MÀU và chữ sáng ở cả giao diện sáng và tối (các quy tắc hover cũ dùng --panel nên ở giao diện sáng thành nền trắng + chữ trắng) */
+@media (hover:hover){
+  .tile:hover,.wk:hover,.tpc:hover,.dayc:hover{border-color:rgba(255,255,255,.5);filter:brightness(1.06)}
+  .ib:hover{background:linear-gradient(150deg,#4A5B7A,#26324A);border-color:#FFE08A;color:#fff}
+  .tab:hover{background:linear-gradient(150deg,#4A5B7A,#26324A);border-color:rgba(255,224,138,.65);color:#fff;filter:none}
+  .tab[aria-selected=true]:hover{background:linear-gradient(135deg,var(--s1),var(--s2));border-color:var(--sg);color:#fff;filter:brightness(1.12)}
+  .chip:hover{background:rgba(255,255,255,.24);border-color:#FFE08A;color:#fff}
+  .chip[aria-pressed=true]:hover,.gsel button[aria-pressed=true]:hover{background:linear-gradient(135deg,#FFE08A,#FFB020);color:#4a2c00;border-color:#E59A00;filter:brightness(1.05)}
+  .gsel button:hover{background:linear-gradient(150deg,#4A5B7A,#26324A);border-color:#FFE08A;color:#fff}
+  .gsel button[aria-pressed=true]:hover small{color:#7a4a00}
+  .card .btn.ghost:hover{background:rgba(255,255,255,.16);border-color:#FFE08A;color:#fff}
+  #exit.btn.ghost:hover{background:linear-gradient(150deg,#4A5B7A,#26324A);color:#fff;border:0;filter:none;box-shadow:none}
+  .btn:hover{color:#fff}
+}
