@@ -119,7 +119,7 @@
       var v = norm(inp.value);
       if ((b.accept || [b.ans]).indexOf(v) >= 0) { A.right(fld); return; }
       shake(fld); var r = A.wrong("spelling", function () { inp.value = b.reveal || b.ans; fld.classList.add("okk"); }, b.reveal || b.ans);
-      if (r === 1) setTimeout(function () { inp.value = last = ""; inp.focus(); }, 650);
+      if (r === 1) setTimeout(function () { inp.value = ""; inp.focus(); }, 650);
     }
     go.onclick = submit; inp.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); submit(); } });
     row.appendChild(go); host.appendChild(fld); host.appendChild(row); setTimeout(function () { try { inp.focus({ preventScroll: true }); } catch (e) {} }, 0);
