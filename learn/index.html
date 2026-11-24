@@ -328,6 +328,9 @@ body.g1 #pick,body.g1 #toMeTop{display:none}body.g1 #toGarden{margin-left:auto}
 .ans.kz:not(.rv):not(.ld) .ab{animation:none}
 .ab.tl{min-height:48px;border-radius:16px;font-size:clamp(18px,5vw,24px);color:var(--ink);padding:0 10px;background:linear-gradient(145deg,color-mix(in srgb,var(--ink) 14%,var(--panel)),var(--panel));border:1.5px solid var(--line);box-shadow:0 6px 14px -6px rgba(0,0,0,.4),inset 0 2px 0 rgba(255,255,255,.12)}
 .ab.tl::after{display:none}
+.ab.tl:has(>.ico:only-child){font-size:clamp(36px,10vw,52px);min-height:clamp(56px,9dvh,80px)}   /* thẻ chỉ có hình: hình to, dễ chạm */
+@media (min-width:700px) and (min-height:700px){.ab.tl:has(>.ico:only-child){font-size:72px;min-height:100px}}
+@media (max-height:430px) and (min-aspect-ratio:11/10){.ab.tl:has(>.ico:only-child){font-size:34px;min-height:44px}}
 .ab.tl.sel{outline:3px solid var(--sg);outline-offset:-3px;transform:scale(1.04)}
 .ab.tl.ok{background:linear-gradient(145deg,#34D399,#059669);color:#fff;border-color:transparent}
 .ab.go{--c1:#34D399;--c2:#059669;color:#fff}.ab.go[disabled]{opacity:.45}
