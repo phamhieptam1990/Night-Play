@@ -21,7 +21,7 @@ for (const [a, op, b] of cases) for (const lang of ["vi", "en"]) {
   else if (op === "×" && a <= 9 && b <= 9) { /* bậc 2 tách số: có thể ra hai nửa, không được ra tích */ ok(!new RegExp(a + " × " + b + " = " + ans + "\\b").test(q) && !new RegExp("= " + ans + "\\.").test(q), "lộ đáp án nhân: " + w); }
   else ok(!new RegExp("(^|[^0-9])" + ans + "([^0-9]|$)").test(q.replace(new RegExp("\\b" + a + "\\b|\\b" + b + "\\b", "g"), " ")), "bậc 1–2 lộ đáp án " + ans + ": " + w + " | " + q.slice(0, 120));
   const full = H.steps(p, lang, { full: true }); ok(plain(full[2]).indexOf(String(ans)) >= 0, "bậc 3 (ghép cặp) phải nêu đáp án " + ans + ": " + w);
-  const lead = plain(s[2]); ok(String(ans).length >= 2 ? lead.indexOf(String(ans).charAt(0)) >= 0 : true, "bậc 3 sai chữ số đầu: " + w);
+  const lead = plain(s[2]); ok(!/chữ số đầu|có \d+ chữ số|digits|starts with|giữa|between/.test(lead) && lead.indexOf(String(a)) >= 0 && !new RegExp("(^|[^0-9])" + ans + "([^0-9]|$)").test(lead.replace(new RegExp("\\b" + a + "\\b|\\b" + b + "\\b", "g"), " ")), "bậc 3 lộ đáp án (chữ số đầu/số chữ số/khoảng) hoặc thiếu phép ngược: " + w + " | " + lead);
 }
 
 console.log("3) đặt tính thẳng hàng, ẩn kết quả, hàng nhớ đúng");
@@ -36,8 +36,13 @@ for (let i = 0; i < 300; i++) {
 }
 
 console.log("4) biểu thức nhiều phép");
-const E = [["3 + 4 × 2 = ?", 11, "4 × 2"], ["(8 − 3) × 4 = ?", 20, "8 − 3"], ["50 + 6 × 3 − 9 = ?", 59, "6 × 3"], ["(12 + 8) ÷ 5 = ?", 4, "12 + 8"]];
-for (const [t, ans, first] of E) { const s = H.steps(H.parse(t), "vi"); ok(s && s.length === 3 && plain(s[1]).indexOf(first) >= 0, "bước làm trước sai: " + t); ok(s && (String(ans).length < 2 || plain(s[2]).indexOf(String(ans).charAt(0)) >= 0), "chữ số đầu sai: " + t); ok(s && !new RegExp("= " + ans + "\\b").test(plain(s[0])), "lộ đáp án: " + t); }
+const E = [["3 + 4 × 2 = ?", 11, "4 × 2"], ["(8 − 3) × 4 = ?", 20, "8 − 3"], ["50 + 6 × 3 − 9 = ?", 59, "6 × 3"], ["(12 + 8) ÷ 5 = ?", 4, "12 + 8"], ["291 + 11 × 6 − 11 = ?", 346, "11 × 6"]];
+for (const [t, ans, first] of E) for (const lang of ["vi", "en"]) {
+  const s = H.steps(H.parse(t), lang), all = s ? plain(s.join(" | ")) : "";
+  ok(s && s.length === 3 && plain(s[1]).indexOf(first) >= 0, "bước làm trước sai: " + t);
+  /* không tính sẵn phép đầu tiên, không nêu chữ số đầu / số chữ số / bất kỳ chuỗi "= số" nào của biểu thức */
+  ok(s && !/chữ số|digit|starts/.test(all) && !new RegExp(first.replace(/[()]/g, "\\$&") + " = \\d").test(all) && !new RegExp("(^|[^0-9])" + ans + "([^0-9]|$)").test(all), "lộ đáp án/phép tính sẵn: " + t + " | " + all);
+}
 
 console.log("5) độ phủ: MỌI kỹ năng phải có gợi ý (phép tính trực tiếp dùng hint.js, còn lại dùng hint-texts.js)");
 {
@@ -50,4 +55,6 @@ console.log("5) độ phủ: MỌI kỹ năng phải có gợi ý (phép tính t
   for (const [id, sk] of Object.entries(E.SKILLS)) for (const g of sk.grades) for (let i = 0; i < 40; i++) { const q = E.make(id, { lang: "vi", grade: g, used: {} }); if (!q.hint || ["shape_id", "angle_type"].includes(id)) continue; const a = q.o.find(o => o.ok).v;   /* hình học: quy tắc nêu tên hình/góc là kiến thức cần nhắc, bé vẫn phải tự đếm cạnh/so góc */ if (a.length >= 5 && /[a-zA-ZÀ-ỹ]/.test(a)) { const txt = q.hint.join(" ").toLowerCase(); if (txt.includes(a.toLowerCase())) { ko("gợi ý lộ đáp án: " + id + " lớp " + g + " → " + a + " | " + q.hint.join(" / ").slice(0, 80)); break; } } }
 }
 
+console.log("6) giao diện không lộ số chữ số của đáp án ở bậc gợi ý");
+{ const html = require("fs").readFileSync(path.join(__dirname, "..", "..", "learn/index.html"), "utf8"); ok(!/Đáp án có <b>|digit\(s\)\./.test(html), "learn/index.html: bậc 3 câu gõ số không được nêu số chữ số của đáp án"); }
 console.log(bad ? "\n✗ " + bad + " lỗi (" + checks + " phép kiểm)" : "\n✓ gợi ý đạt (" + checks + " phép kiểm)"); process.exit(bad ? 1 : 0);

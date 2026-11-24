@@ -23,7 +23,7 @@ for (const lang of ["vi", "en"]) for (const g of [2, 3]) gen("place_value", g, l
 });
 gen("place_value", 4, "vi", N, (q, t, n) => { const d = n[1], num = n[0], pos = String(num).length - 1 - String(num).indexOf(String(d)); ok(rn(q) === d * Math.pow(10, pos), "sai: " + t + " → " + right(q)); });
 gen("place_value", 1, "vi", N, (q, t, n) => { const m = right(q).match(/(\d+) chục (\d+) đơn vị/); ok(m && +m[1] * 10 + +m[2] === n[0], "sai: " + t); });
-for (const g of [2, 3, 4]) gen("round_num", g, "vi", N, (q, t, n) => { const u = /chục nghìn/.test(t) ? 10000 : { "chục": 10, "trăm": 100, "nghìn": 1000 }[t.match(/hàng (\S+)/)[1]], x = n[0], exp = Math.floor(x / u + .5) * u; ok(rn(q) === exp, "sai: " + t + " → " + right(q) + " (đúng " + exp + ")"); });
+for (const g of [3, 4]) gen("round_num", g, "vi", N, (q, t, n) => { const u = /chục nghìn/.test(t) ? 10000 : { "chục": 10, "trăm": 100, "nghìn": 1000 }[t.match(/hàng (\S+)/)[1]], x = n[0], exp = Math.floor(x / u + .5) * u; ok(rn(q) === exp, "sai: " + t + " → " + right(q) + " (đúng " + exp + ")"); });
 gen("round_num", 5, "vi", N, (q, t, n) => { const tenth = /phần mười/.test(t), x = n[0], f = tenth ? 10 : 1; ok(close(rn(q), Math.floor(x * f + .5 + 1e-9) / f), "sai: " + t + " → " + right(q)); });
 
 console.log("3) đổi đơn vị, đo, tiền, thời gian, chuyển động");
@@ -34,6 +34,8 @@ for (const g of [2, 3, 4, 5]) gen("unit_convert", g, "vi", N, (q, t, n) => {
 });
 gen("measure_compare", 1, "vi", N, (q, t, n) => { ok(rn(q) === (/dài hơn/.test(t) ? Math.abs(n[1] - n[0]) : n[0] + n[1]), "sai: " + t + " → " + right(q)); });
 gen("measure_compare", 2, "vi", N, (q, t, n) => { ok(rn(q) === (/dài hơn/.test(t) ? Math.abs(n[1] - n[0]) : n[0] + n[1]), "sai: " + t + " → " + right(q)); });
+gen("money_calc", 2, "vi", N, (q, t, n) => { ok(Math.max(...n) <= 1000 && n.every(x => x % 100 === 0), "lớp 2 tiền phải trong phạm vi 1000, bội 100: " + t); ok(rn(q) === (/trả lại/.test(t) ? n[0] - n[1] : n[0] + n[1]), "sai: " + t + " → " + right(q)); });
+ok(!E.SKILLS.round_num.grades.includes(2), "làm tròn số không thuộc lớp 2 (GDPT 2018: từ lớp 3)");
 gen("money_calc", 1, "vi", N, (q, t, n) => ok(rn(q) === n[0] + n[1], "sai: " + t));
 gen("money_calc", 3, "vi", N, (q, t, n) => ok(rn(q) === n[0] * n[1], "sai: " + t));
 gen("money_calc", 4, "vi", N, (q, t, n) => ok(rn(q) === n[3] - (n[0] * n[1] + n[2]) || n.length < 4, "sai: " + t + " → " + right(q)));

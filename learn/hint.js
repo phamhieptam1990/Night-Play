@@ -27,10 +27,11 @@
     out.push(pad(sa, w)); out.push(op + pad(sb, w - 1)); out.push(new Array(w + 1).join("─")); out.push(pad(new Array(res.length + 1).join("?"), w));
     return "<pre class=\"hcol\">" + out.join("\n") + "</pre>";
   }
-  function lead(ans, vi) {
-    var s = String(ans);
-    if (s.length >= 2) return vi ? "Kết quả có <b>" + s.length + "</b> chữ số, chữ số đầu là <b>" + s.charAt(0) + "</b>." : "The answer has <b>" + s.length + "</b> digits and starts with <b>" + s.charAt(0) + "</b>.";
-    return vi ? "Kết quả nằm giữa <b>" + Math.max(0, ans - 2) + "</b> và <b>" + (ans + 2) + "</b>." : "The answer is between <b>" + Math.max(0, ans - 2) + "</b> and <b>" + (ans + 2) + "</b>.";
+  /* Bậc 3 KHÔNG nêu chữ số, số chữ số hay khoảng của kết quả (bé lớp 4–5 muốn tự nghĩ): chỉ chỉ cách TỰ KIỂM TRA bằng phép ngược. */
+  function lead(p, vi) {
+    var a = p.a, b = p.b, op = p.op, inv = op === "+" ? ["−", b, a] : op === "−" ? ["+", b, a] : op === "×" ? ["÷", b, a] : ["×", b, a];
+    return vi ? "Làm xong thì tự kiểm tra bằng phép ngược: lấy kết quả của bé " + (op === "+" ? "<b>trừ " + b + "</b>" : op === "−" ? "<b>cộng " + b + "</b>" : op === "×" ? "<b>chia " + b + "</b>" : "<b>nhân " + b + "</b>") + ", phải ra <b>" + a + "</b>."
+      : "Check with the opposite operation: take your answer and " + (op === "+" ? "<b>subtract " + b + "</b>" : op === "−" ? "<b>add " + b + "</b>" : op === "×" ? "<b>divide by " + b + "</b>" : "<b>multiply by " + b + "</b>") + ". You should get <b>" + a + "</b>.";
   }
   function binSteps(p, vi, opts) {
     var a = p.a, b = p.b, op = p.op, ans = calc(a, op, b), s1, s2, ua = a % 10, ub = b % 10, i, t;
@@ -63,7 +64,7 @@
       s1 = vi ? "Phép chia là phép nhân ngược: tìm số nhân với <b>" + b + "</b> ra <b>" + a + "</b>: " + b + " × <b>?</b> = " + a + "." : "Division is multiplication backwards: " + b + " × <b>?</b> = " + a + ".";
       s2 = (vi ? "Đếm thêm " + b + " mỗi lần cho tới " + a + ": " : "Count on by " + b + " up to " + a + ": ") + t.join(", ") + ".";
     }
-    return [s1, s2, opts && opts.full ? (vi ? "Đáp án: <b>" + a + " " + op + " " + b + " = " + ans + "</b>. Bé tìm ô " + ans + " nhé!" : "Answer: <b>" + a + " " + op + " " + b + " = " + ans + "</b>.") : lead(ans, vi)];
+    return [s1, s2, opts && opts.full ? (vi ? "Đáp án: <b>" + a + " " + op + " " + b + " = " + ans + "</b>. Bé tìm ô " + ans + " nhé!" : "Answer: <b>" + a + " " + op + " " + b + " = " + ans + "</b>.") : lead(p, vi)];
   }
   /* biểu thức nhiều phép: nhắc quy tắc, làm bước đầu, lộ chữ số đầu */
   function firstStep(tk) {
@@ -74,12 +75,12 @@
     return { desc: tk.slice(0, 3).join(" "), val: calc(+tk[0], tk[1], +tk[2]), next: [String(calc(+tk[0], tk[1], +tk[2]))].concat(tk.slice(3)) };
   }
   function exprSteps(p, vi) {
-    var tk = p.tokens, st = firstStep(tk), ans, cur = tk, guard = 0, f;
+    var tk = p.tokens, st = firstStep(tk), cur = tk, guard = 0, f;
     if (!st) return null;
     while (cur.length > 1 && guard++ < 10) { f = firstStep(cur); if (!f) return null; cur = f.next; }
-    ans = +cur[0];
     return [vi ? "Thứ tự: <b>trong ngoặc</b> trước, rồi <b>nhân, chia</b>, cuối cùng <b>cộng, trừ</b> từ trái sang phải." : "Order: <b>brackets</b> first, then <b>multiply and divide</b>, last <b>add and subtract</b> from left to right.",
-      (vi ? "Làm trước: <b>" + st.desc + " = " + st.val + "</b>.<br>Biểu thức còn: " : "Do first: <b>" + st.desc + " = " + st.val + "</b>.<br>Now: ") + st.next.join(" ") + " = ?", lead(ans, vi)];
+      vi ? "Phép tính phải làm trước là <b>" + st.desc + "</b>. Hãy tính riêng nó, viết kết quả vào chỗ của nó rồi chép lại phần còn lại." : "The step to do first is <b>" + st.desc + "</b>. Work it out on its own, write the result in its place and copy the rest.",
+      vi ? "Cứ lặp lại: tìm phép tính làm trước trong biểu thức mới, tính, viết lại, cho tới khi chỉ còn một số. Soát lại từng bước." : "Repeat: find the next step, work it out, rewrite, until one number is left. Check each step."];
   }
   function steps(p, lang, opts) {
     if (!p) return null; var vi = lang !== "en";

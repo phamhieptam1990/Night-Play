@@ -65,29 +65,40 @@
   /* gõ số bằng bàn phím trên màn hình (và bàn phím thật) */
   function renderTypein(b, host) {
     /* ô nhập thật (text field) + bàn phím số trên màn hình. inputmode="none": không bật bàn phím hệ thống (che màn hình) nhưng vẫn gõ được bằng bàn phím máy tính.
-       b.dec: đáp án thập phân → thêm phím dấu phẩy (b.sep). b.ans là số chuẩn ("3.14"), b.show là cách hiển thị cho bé ("3,14"). */
+       b.frac: đáp án phân số / hỗn số ("3/4", "1 1/2") → thêm phím "/" và phím cách (hỗn số); b.ans khi đó là chuỗi "3/4"; b.exact: phải đúng dạng đã rút gọn, không thì bằng giá trị là đủ. b.dec: đáp án thập phân → thêm phím dấu phẩy (b.sep). b.ans là số chuẩn ("3.14"), b.show là cách hiển thị cho bé ("3,14"). */
     var sep = b.sep || ",", fld = h("div", "qd fld"), inp = h("input", "qi"), pad = h("div", "qk"), unit = b.unit ? h("span", "un", b.unit) : null;
     inp.type = "text"; inp.setAttribute("inputmode", "none"); inp.setAttribute("autocomplete", "off"); inp.setAttribute("autocapitalize", "off"); inp.setAttribute("spellcheck", "false");
     inp.maxLength = 8; inp.placeholder = "?"; inp.setAttribute("aria-label", b.lab || "");
     fld.appendChild(inp); if (unit) fld.appendChild(unit);
-    function clean(v) { v = v.replace(/[.,]/g, function (c, i) { return b.dec ? sep : ""; }).replace(/[^0-9,.]/g, ""); var k = v.indexOf(sep); if (k >= 0) v = v.slice(0, k + 1) + v.slice(k + 1).replace(/[,.]/g, ""); if (v === sep) v = "0" + sep; return v.slice(0, 8); }
-    function add(c) { if (busy(host)) return; var v = inp.value; if (c === sep && (!b.dec || v.indexOf(sep) >= 0)) return; if (v.length >= 8) return; inp.value = clean(v + c); A.sfx("tap"); inp.focus({ preventScroll: true }); }
-    function back() { if (busy(host)) return; inp.value = inp.value.slice(0, -1); A.sfx("tap"); inp.focus({ preventScroll: true }); }
+    var last = "";   /* L3-03: lúc đáp án đang tải (busy) thì không nhận thêm chữ, tránh gõ nhanh bị dính "5252" */
+    function fnorm(t) { var m = /^\s*(?:(\d+)\s+)?(\d+)\/(\d+)\s*$/.exec(t); if (m) { if (+m[3] === 0) return null; var w = m[1] ? +m[1] : 0, nn = +m[2], dd = +m[3]; return { v: w + nn / dd, s: (w ? w + " " : "") + nn + "/" + dd }; } m = /^\s*(\d+)\s*$/.exec(t); return m ? { v: +m[1], s: String(+m[1]) } : null; }
+    function clean(v) { if (b.frac) { v = v.replace(/[^0-9\/ ]/g, "").replace(/^ +/, "").replace(/ +/g, " ").replace(/\/+/g, "/"); var sl = v.indexOf("/"); if (sl >= 0) v = v.slice(0, sl + 1) + v.slice(sl + 1).replace(/[^0-9]/g, ""); if (v.charAt(0) === "/") v = v.slice(1); return v.slice(0, 9); } v = v.replace(/[.,]/g, function (c, i) { return b.dec ? sep : ""; }).replace(/[^0-9,.]/g, ""); var k = v.indexOf(sep); if (k >= 0) v = v.slice(0, k + 1) + v.slice(k + 1).replace(/[,.]/g, ""); if (v === sep) v = "0" + sep; return v.slice(0, 8); }
+    function add(c) { if (busy(host)) return; var v = inp.value; if (b.frac) { if (c === "/" && (!/\d$/.test(v) || v.indexOf("/") >= 0)) return; if (c === " " && (!/\d$/.test(v) || v.indexOf("/") >= 0 || v.indexOf(" ") >= 0)) return; } if (c === sep && b.frac) return; if (c === sep && (!b.dec || v.indexOf(sep) >= 0)) return; if (v.length >= (b.frac ? 9 : 8)) return; inp.value = last = clean(v + c); A.sfx("tap"); inp.focus({ preventScroll: true }); }
+    function back() { if (busy(host)) return; inp.value = last = inp.value.slice(0, -1); A.sfx("tap"); inp.focus({ preventScroll: true }); }
     function submit() {
-      var raw = inp.value.replace(new RegExp("\\" + sep + "$"), "");
+      var raw = b.frac ? inp.value.trim() : inp.value.replace(new RegExp("\\" + sep + "$"), "");
       if (busy(host) || !raw) return;
+      if (b.frac) {
+        var fa = fnorm(raw), fk = fnorm(String(b.ans));
+        if (!fa) { shake(fld); return; }   /* chưa thành số hợp lệ (vd "3/"): rung nhẹ, không tính là sai */
+        if (b.exact ? fa.s === fk.s : Math.abs(fa.v - fk.v) < 1e-9) { A.right(fld); return; }
+        shake(fld); var rf = A.wrong((b.tags && b.tags[fa.s]) || "other", function () { inp.value = b.show || b.ans; fld.classList.add("okk"); }, b.reveal);
+        if (rf === 1) setTimeout(function () { inp.value = last = ""; inp.focus({ preventScroll: true }); }, 650);
+        return;
+      }
       var num = Number(raw.replace(sep, ".")), key = String(num);
       if (Math.abs(num - Number(b.ans)) < 1e-9) { A.right(fld); return; }
       shake(fld); var r = A.wrong((b.tags && b.tags[key]) || "other", function () { inp.value = b.show || b.ans; fld.classList.add("okk"); }, b.reveal);   /* gõ trúng một đáp án nhiễu của engine thì ghi đúng mã lỗi tư duy */
-      if (r === 1) setTimeout(function () { inp.value = ""; inp.focus({ preventScroll: true }); }, 650);
+      if (r === 1) setTimeout(function () { inp.value = last = ""; inp.focus({ preventScroll: true }); }, 650);
     }
-    inp.addEventListener("input", function () { var v = clean(inp.value); if (v !== inp.value) inp.value = v; });
+    inp.addEventListener("input", function () { if (busy(host)) { inp.value = last; return; } var v = clean(inp.value); if (v !== inp.value) inp.value = v; last = inp.value; });
     "1234567890".split("").forEach(function (c) { var k = tile(c, "kb"); k.onclick = function () { add(c); }; pad.appendChild(k); });
     var bk = tile("⌫", "kb act"); bk.setAttribute("aria-label", "⌫"); bk.onclick = back;
     if (b.dec) { var sk = tile(sep, "kb"); sk.setAttribute("aria-label", sep === "," ? "dấu phẩy" : "decimal point"); sk.onclick = function () { add(sep); }; pad.appendChild(sk); bk.style.gridColumn = "span 1"; }
+    if (b.frac) { var sl2 = tile("/", "kb"); sl2.setAttribute("aria-label", b.lang === "en" ? "fraction bar" : "gạch phân số"); sl2.onclick = function () { add("/"); }; pad.appendChild(sl2); var sp2 = tile("␣", "kb"); sp2.setAttribute("aria-label", b.lang === "en" ? "space (mixed number)" : "cách (hỗn số)"); sp2.onclick = function () { add(" "); }; pad.appendChild(sp2); bk.style.gridColumn = "span 1"; }
     pad.appendChild(bk);
-    var go = tile("✓", "kb go"); go.setAttribute("aria-label", "✓"); go.onclick = submit; pad.appendChild(go);
-    var onKey = function (e) { if (e.ctrlKey || e.metaKey || e.altKey) return; if (e.key === "Enter") { e.preventDefault(); submit(); } else if (e.target !== inp && (/^[0-9,.]$/.test(e.key) || e.key === "Backspace")) inp.focus({ preventScroll: true }); };
+    var go = tile("✓", "kb go"); if (b.frac) go.style.gridColumn = "span 2"; go.setAttribute("aria-label", "✓"); go.onclick = submit; pad.appendChild(go);
+    var onKey = function (e) { if (e.ctrlKey || e.metaKey || e.altKey) return; if (e.key === "Enter") { e.preventDefault(); submit(); } else if (e.target !== inp && (/^[0-9,.\/ ]$/.test(e.key) || e.key === "Backspace")) inp.focus({ preventScroll: true }); };
     d.addEventListener("keydown", onKey); cleanup = function () { d.removeEventListener("keydown", onKey); };
     host.appendChild(fld); host.appendChild(pad); setTimeout(function () { try { inp.focus({ preventScroll: true }); } catch (e) {} }, 0);
   }
@@ -108,7 +119,7 @@
       var v = norm(inp.value);
       if ((b.accept || [b.ans]).indexOf(v) >= 0) { A.right(fld); return; }
       shake(fld); var r = A.wrong("spelling", function () { inp.value = b.reveal || b.ans; fld.classList.add("okk"); }, b.reveal || b.ans);
-      if (r === 1) setTimeout(function () { inp.value = ""; inp.focus(); }, 650);
+      if (r === 1) setTimeout(function () { inp.value = last = ""; inp.focus(); }, 650);
     }
     go.onclick = submit; inp.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); submit(); } });
     row.appendChild(go); host.appendChild(fld); host.appendChild(row); setTimeout(function () { try { inp.focus({ preventScroll: true }); } catch (e) {} }, 0);

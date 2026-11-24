@@ -78,7 +78,11 @@
     var D = g === 2 ? 3 : g === 3 ? 5 : 6; ds = shuf([1, 2, 3, 4, 5, 6, 7, 8, 9]).slice(0, D); n = Number(ds.join("")); p = rnd(0, D - 1); d = Number(String(n).charAt(D - 1 - p));
     if (g <= 3) {
       for (var j = 0; j < D; j++) if (j !== p) wr.push([Number(String(n).charAt(D - 1 - j)), "place_value"]);
-      return mkn(v ? "Chữ số hàng <em>" + PL[p][0] + "</em> của số " + n + " là?" : "The digit in the <em>" + PL[p][1] + "</em> place of " + n + " is?", d, wr, c);
+      q = mkn(v ? "Chữ số hàng <em>" + PL[p][0] + "</em> của số " + n + " là?" : "The digit in the <em>" + PL[p][1] + "</em> place of " + n + " is?", d, wr, c);
+      var nth = ["thứ nhất", "thứ hai", "thứ ba", "thứ tư", "thứ năm"][p], nthE = ["1st", "2nd", "3rd", "4th", "5th"][p];   /* gợi ý theo số trong câu: chỉ vị trí hàng, KHÔNG nêu chữ số */
+      q.hint = v ? ["Hàng " + PL[p][0] + " là hàng <b>" + nth + "</b> tính từ bên PHẢI của số " + n + " (đơn vị, chục, trăm, nghìn…).", "Đặt ngón tay lên chữ số cuối cùng của " + n + " (hàng đơn vị), rồi đếm sang trái đến hàng " + nth + ". Chữ số ở đó là đáp án."]
+        : ["The " + PL[p][1] + " place is the <b>" + nthE + "</b> place from the RIGHT of " + n + " (ones, tens, hundreds, thousands…).", "Put a finger on the last digit of " + n + " (ones), then count left to the " + nthE + " place. The digit there is the answer."];
+      return q;
     }
     for (var m = 0; m < D; m++) if (m !== p) wr.push([d * Math.pow(10, m), "place_value"]);
     return mkn(v ? "Trong số " + n + ", chữ số <em>" + d + "</em> có giá trị là?" : "In " + n + ", the digit <em>" + d + "</em> has the value?", d * Math.pow(10, p), wr, c);
@@ -222,12 +226,13 @@
     if (down) { n = dec ? rnd(11, 99) / 10 : rnd(2, 9); ans = r2(n * f); from = n; ub = big; us = sm; }
     else { n = dec ? rnd(11, 99) * f / 10 : rnd(2, 9) * f; ans = r2(n / f); from = n; ub = sm; us = big; }
     var wr = down ? [[ans * 10, "unit_convert"], [ans / 10, "unit_convert"], [r2(n / f), "unit_convert"]] : [[ans * 10, "unit_convert"], [ans / 10, "unit_convert"], [r2(n * f), "unit_convert"]];
+    if (!dec) wr = wr.filter(function (w) { return w[0] === Math.floor(w[0]); }).concat([[ans * 100, "unit_convert"], [ans * f, "unit_convert"], [n + f, "unit_convert"]]);   /* lớp 2–4 chưa học số thập phân: đáp án nhiễu phải là số tự nhiên (L3-20) */
     return mkn(fmt(r2(from), c.lang) + " " + ub + " = <em>?</em> " + us, ans, wr, c, us);
   };
   G.measure_compare = function (c) {
     var g = c.grade, v = VI(c), a = g === 1 ? rnd(3, 10) : rnd(20, 60), b = g === 1 ? rnd(a + 1, 15) : rnd(a + 1, 95), x = pk([["bút chì", "pencil"], ["sợi dây", "string"], ["cái thước", "ruler"]]), y = pk([["bút bi", "pen"], ["đoạn băng", "ribbon"], ["que tính", "stick"]]);
-    if (R() < .5) return mkn(v ? "<em>" + x[0].replace(/^./, function (m) { return m.toUpperCase(); }) + "</em> dài " + a + " cm, <em>" + y[0] + "</em> dài " + b + " cm. " + y[0].replace(/^./, function (m) { return m.toUpperCase(); }) + " dài hơn " + x[0] + " mấy cm?" : "The " + x[1] + " is " + a + " cm long and the " + y[1] + " is " + b + " cm. How many cm longer is the " + y[1] + "?", b - a, [[a + b, "wrong_op"], [b - a + 1, "off_by_one"], [b - a - 1, "off_by_one"]], c, "cm");
-    return mkn(v ? "Nối <em>" + x[0] + "</em> dài " + a + " cm với <em>" + y[0] + "</em> dài " + b + " cm. Cả hai dài bao nhiêu cm?" : "Join the " + x[1] + " (" + a + " cm) and the " + y[1] + " (" + b + " cm). How long are they together?", a + b, [[b - a, "wrong_op"], [a + b + 1, "off_by_one"], [a + b - 1, "off_by_one"]], c, "cm");
+    if (R() < .5) return mkn(v ? "<em>" + x[0].replace(/^./, function (m) { return m.toUpperCase(); }) + "</em> dài " + a + " cm, <em>" + y[0] + "</em> dài " + b + " cm. " + y[0].replace(/^./, function (m) { return m.toUpperCase(); }) + " dài hơn " + x[0] + " mấy cm?" : "The " + x[1] + " is " + a + " cm long and the " + y[1] + " is " + b + " cm. How many cm longer is the " + y[1] + "?", b - a, [[a + b, "wrong_op"], [b - a + 10, "tens_error"], [b - a - 10, "tens_error"], [b - a + 1, "other"]], c, "cm");
+    return mkn(v ? "Nối <em>" + x[0] + "</em> dài " + a + " cm với <em>" + y[0] + "</em> dài " + b + " cm. Cả hai dài bao nhiêu cm?" : "Join the " + x[1] + " (" + a + " cm) and the " + y[1] + " (" + b + " cm). How long are they together?", a + b, [[b - a, "wrong_op"], [a + b + 10, "tens_error"], [a + b - 10, "forget_carry"], [a + b + 1, "other"]], c, "cm");
   };
 
   var WD = [["Thứ Hai", "Mon"], ["Thứ Ba", "Tue"], ["Thứ Tư", "Wed"], ["Thứ Năm", "Thu"], ["Thứ Sáu", "Fri"], ["Thứ Bảy", "Sat"], ["Chủ nhật", "Sun"]];
@@ -260,9 +265,9 @@
   G.money_calc = function (c) {
     var g = c.grade, v = VI(c), D = v ? " đồng" : " dong", a, b, s, m, k, p, nt = [1000, 2000, 5000, 10000, 20000], money = function (n) { return n; };
     if (g === 1) { a = pk([1000, 2000, 5000]); b = pk([1000, 2000, 5000]); return mkn(v ? "Mai có tờ <em>" + a + " đồng</em> và tờ <em>" + b + " đồng</em>. Mai có tất cả bao nhiêu đồng?" : "Mai has a <em>" + a + " dong</em> note and a <em>" + b + " dong</em> note. How much does she have?", a + b, [[Math.abs(a - b), "wrong_op"], [a + b + 1000, "off_by_one"], [a + b - 1000, "off_by_one"]], c, v ? "đồng" : "dong"); }
-    if (g === 2) {
-      if (R() < .5) { a = rnd(1, 9) * 1000; b = rnd(1, 9) * 1000; return mkn(v ? "Bút giá <em>" + a + " đồng</em>, tẩy giá <em>" + b + " đồng</em>. Mua cả hai hết bao nhiêu?" : "A pen costs <em>" + a + " dong</em> and an eraser <em>" + b + " dong</em>. How much for both?", a + b, [[Math.abs(a - b), "wrong_op"], [a + b + 1000, "off_by_one"], [a + b - 1000, "off_by_one"]], c, v ? "đồng" : "dong"); }
-      a = rnd(2, 9) * 1000; return mkn(v ? "Mai đưa <em>10000 đồng</em> mua một quyển truyện giá <em>" + a + " đồng</em>. Mai được trả lại bao nhiêu?" : "Mai pays <em>10000 dong</em> for a book that costs <em>" + a + " dong</em>. How much change?", 10000 - a, [[10000 + a, "wrong_op"], [a, "wrong_op"], [10000 - a + 1000, "off_by_one"]], c, v ? "đồng" : "dong");
+    if (g === 2) {   /* GDPT 2018 lớp 2: tiền Việt trong phạm vi 1000 đồng (tờ 100, 200, 500, 1000) → số nhỏ, đề ngắn */
+      if (R() < .5) { a = rnd(1, 4) * 100; b = rnd(1, 5) * 100; return mkn(v ? "Bút giá <em>" + a + " đồng</em>, tẩy giá <em>" + b + " đồng</em>. Mua cả hai hết bao nhiêu?" : "A pen costs <em>" + a + " dong</em> and an eraser <em>" + b + " dong</em>. How much for both?", a + b, [[Math.abs(a - b), "wrong_op"], [a + b + 100, "tens_error"], [a + b - 100, "tens_error"]], c, v ? "đồng" : "dong"); }
+      a = rnd(2, 9) * 100; return mkn(v ? "Mai đưa <em>1000 đồng</em> mua truyện giá <em>" + a + " đồng</em>. Mai được trả lại bao nhiêu?" : "Mai pays <em>1000 dong</em> for a book that costs <em>" + a + " dong</em>. How much change?", 1000 - a, [[1000 + a, "wrong_op"], [a, "wrong_op"], [1000 - a + 100, "tens_error"], [1000 - a - 100, "tens_error"]], c, v ? "đồng" : "dong");
     }
     if (g === 3) { p = rnd(2, 9) * 1000; k = rnd(2, 6); return mkn(v ? "Một quyển vở giá <em>" + p + " đồng</em>. Mua <em>" + k + "</em> quyển hết bao nhiêu tiền?" : "One notebook costs <em>" + p + " dong</em>. How much for <em>" + k + "</em> notebooks?", p * k, [[p + k, "wrong_op"], [p * k + 1000, "off_by_one"], [p * k - 1000, "off_by_one"]], c, v ? "đồng" : "dong"); }
     p = rnd(2, 8) * 1000; k = rnd(2, 5); var q = rnd(3, 9) * 1000, tot = p * k + q; m = Math.ceil((tot + 1) / 10000) * 10000;
@@ -336,19 +341,26 @@
 
   /* quy luật */
   G.pattern_seq = function (c) {
-    var g = c.grade, v = VI(c), seq = [], st, d, i, ans, wr, x, ns;
+    var g = c.grade, v = VI(c), seq = [], st, d, i, ans, wr, x, ns, pk2 = "lin";
     if (g === 1 && R() < .5) {
       var E2 = shuf(["🔴", "🔵", "🟡", "🟢", "🟣"]), A = E2[0], B = E2[1], pat = R() < .5 ? [A, B] : [A, A, B], full = [], L = pat.length;
       for (i = 0; i < 6; i++) full.push(pat[i % L]); var nx = pat[6 % L];
       return mk((v ? "Hình tiếp theo là gì?" : "What comes next?") + "<br>" + full.join(" ") + " <em>?</em>", nx, E2.filter(function (e) { return e !== nx; }).slice(0, 3).map(function (e) { return [e, "pattern_miss"]; }));
     }
     if (g <= 2) { d = g === 1 ? pk([1, 2, 5, 10]) : pk([2, 3, 4, 5, 10, 20, 50]); st = g === 1 ? rnd(0, 5) * (d > 2 ? 0 : 1) + (d > 2 ? d : 1) : rnd(1, 10) * 2; var down = g === 2 && R() < .35; if (down) { st = d * rnd(6, 12); d = -d; } for (i = 0; i < 5; i++) seq.push(st + d * i); ans = st + d * 5; }
-    else if (g === 3) { if (R() < .5) { st = rnd(1, 4); for (i = 0; i < 5; i++) seq.push(st * Math.pow(2, i)); ans = st * 32; } else { st = rnd(1, 5); x = st; for (i = 0; i < 5; i++) { seq.push(x); x += i + 1; } ans = x; } }
-    else if (g === 4) { if (R() < .5) { for (i = 1; i <= 5; i++) seq.push(i * i); ans = 36; } else { st = rnd(1, 3); for (i = 0; i < 5; i++) seq.push(st * Math.pow(3, i)); ans = st * 243; } }
-    else { if (R() < .5) { var f1 = rnd(1, 3), f2 = rnd(1, 4); seq = [f1, f2]; for (i = 2; i < 6; i++) seq.push(seq[i - 1] + seq[i - 2]); ans = seq[5] + seq[4]; seq = seq.slice(0, 6); } else { d = pk([.5, .25, 1.5, .2]); st = rnd(1, 5); for (i = 0; i < 5; i++) seq.push(r2(st + d * i)); ans = r2(st + d * 5); } }
+    else if (g === 3) { if (R() < .5) { pk2 = "geo"; st = rnd(1, 4); for (i = 0; i < 5; i++) seq.push(st * Math.pow(2, i)); ans = st * 32; } else { pk2 = "tri"; st = rnd(1, 5); x = st; for (i = 0; i < 5; i++) { seq.push(x); x += i + 1; } ans = x; } }
+    else if (g === 4) { if (R() < .5) { pk2 = "sq"; for (i = 1; i <= 5; i++) seq.push(i * i); ans = 36; } else { pk2 = "geo"; st = rnd(1, 3); for (i = 0; i < 5; i++) seq.push(st * Math.pow(3, i)); ans = st * 243; } }
+    else { if (R() < .5) { pk2 = "fib"; var f1 = rnd(1, 3), f2 = rnd(1, 4); seq = [f1, f2]; for (i = 2; i < 6; i++) seq.push(seq[i - 1] + seq[i - 2]); ans = seq[5] + seq[4]; seq = seq.slice(0, 6); } else { d = pk([.5, .25, 1.5, .2]); st = rnd(1, 5); for (i = 0; i < 5; i++) seq.push(r2(st + d * i)); ans = r2(st + d * 5); } }
     var last = seq[seq.length - 1], prev = seq[seq.length - 2], step = last - prev;
     wr = [[r2(ans + 1), "off_by_one"], [r2(ans - 1), "off_by_one"], [r2(last + step * 2), "pattern_miss"], [r2(last + (last - prev) / 2 + prev), "pattern_miss"], [r2(last * 2), "pattern_miss"], [r2(ans + (ans - last)), "pattern_miss"]];
-    return mkn((v ? "Số tiếp theo là số nào?" : "What number comes next?") + "<br>" + seq.map(function (z) { return fmt(z, c.lang); }).join(", ") + ", <em>?</em>", ans, wr, c);
+    var qq = mkn((v ? "Số tiếp theo là số nào?" : "What number comes next?") + "<br>" + seq.map(function (z) { return fmt(z, c.lang); }).join(", ") + ", <em>?</em>", ans, wr, c);
+    /* gợi ý theo ĐÚNG kiểu quy luật của câu (không dùng chung "hơn bao nhiêu, gấp mấy lần" cho dãy cộng hai số liền trước) */
+    var PH = { fib: [["Thử cộng HAI số liền trước: mỗi số bằng tổng của hai số đứng ngay trước nó.", "Kiểm tra trên các số đầu của dãy (số thứ ba = số thứ nhất + số thứ hai…), rồi áp dụng cho số cần tìm."], ["Try adding the TWO numbers before: each number is the sum of the two just before it.", "Check on the first numbers of the row, then use it for the missing one."]],
+      geo: [["Chia mỗi số cho số đứng trước: nếu được cùng một kết quả thì dãy gấp lên bấy nhiêu lần.", "Lấy số cuối nhân với số lần đó."], ["Divide each number by the one before it: the same result means the row multiplies by that.", "Multiply the last number by it."]],
+      tri: [["Tính hiệu của hai số liền nhau: các hiệu có tăng dần đều không?", "Nếu hiệu tăng thêm 1 mỗi lần, hãy viết tiếp hiệu mới rồi cộng vào số cuối."], ["Work out the gaps between neighbours: do the gaps grow steadily?", "If the gap grows by 1 each time, write the next gap and add it to the last number."]],
+      sq: [["Thử xem mỗi số có phải là một số nhân với chính nó không (1×1, 2×2, 3×3…).", "Số thứ n bằng n × n: tìm xem số cần tìm đứng thứ mấy."], ["Is each number a number times itself (1×1, 2×2, 3×3…)?", "The nth number is n × n: find which place the missing one is."]],
+      lin: [["Tìm xem mỗi số hơn (hoặc kém) số trước bao nhiêu.", "Kiểm tra mức chênh đó đúng với CẢ dãy rồi mới cộng (hoặc trừ) cho số cuối."], ["Find how much each number is bigger (or smaller) than the one before.", "Check the gap works for the WHOLE row, then add (or subtract) it from the last number."]] };
+    qq.hint = PH[pk2][v ? 0 : 1].slice(); return qq;
   };
 
 
@@ -417,7 +429,7 @@
   var A5 = [1, 2, 3, 4, 5];
   var SK = {
     fraction_equiv: { subj: "toan", grades: [4, 5], diff: 3 }, roman: { subj: "toan", grades: [3], diff: 2 }, angle_measure: { subj: "toan", grades: [4, 5], diff: 2 }, find_error: { subj: "toan", grades: [2, 3, 4, 5], diff: 3 },
-    place_value: { subj: "toan", grades: [1, 2, 3, 4, 5], diff: 1 }, round_num: { subj: "toan", grades: [2, 3, 4, 5], diff: 2 }, expr_order: { subj: "toan", grades: [1, 2, 3, 4, 5], diff: 2 }, unknown_num: { subj: "toan", grades: [1, 2, 3, 4, 5], diff: 2 },
+    place_value: { subj: "toan", grades: [1, 2, 3, 4, 5], diff: 1 }, round_num: { subj: "toan", grades: [3, 4, 5], diff: 2 }, expr_order: { subj: "toan", grades: [1, 2, 3, 4, 5], diff: 2 }, unknown_num: { subj: "toan", grades: [1, 2, 3, 4, 5], diff: 2 },
     shape_id: { subj: "toan", grades: [1, 2], diff: 1 }, angle_type: { subj: "toan", grades: [3, 4], diff: 2 }, perimeter: { subj: "toan", grades: [3, 4, 5], diff: 2 }, area_shape: { subj: "toan", grades: [3, 4, 5], diff: 3 }, volume_box: { subj: "toan", grades: [5], diff: 3 },
     unit_convert: { subj: "toan", grades: [2, 3, 4, 5], diff: 2 }, measure_compare: { subj: "toan", grades: [1, 2], diff: 1 }, time_calc: { subj: "toan", grades: [1, 2, 3, 4, 5], diff: 2 }, money_calc: { subj: "toan", grades: [1, 2, 3, 4], diff: 2 }, motion: { subj: "toan", grades: [5], diff: 3 },
     word_multi: { subj: "toan", grades: [3, 4, 5], diff: 3 }, data_read: { subj: "toan", grades: [1, 2, 3, 4, 5], diff: 1 }, fraction_of: { subj: "toan", grades: [3, 4, 5], diff: 3 }, pattern_seq: { subj: "toan", grades: [1, 2, 3, 4, 5], diff: 2 },
@@ -439,7 +451,7 @@
   var G1 = "g1_add_sub", VT = { 1: "VI-G1-03", 2: "VI-G2-02", 3: "VI-G3-02", 4: "VI-G4-03", 5: "VI-G5-02" }, EN = { 1: "EN-G1-02", 2: "EN-G2-03" }, EB = { 3: "EN-G3-02", 4: "EN-G4-02", 5: "EN-G5-02" };
   var TOPIC = {
     fraction_equiv: { 4: "g4_fractions", 5: "g5_fractions" }, roman: { 3: "g3_numbers_100000" }, angle_measure: { 4: "g4_geometry", 5: "g5_geometry" }, find_error: { 2: "g2_operations", 3: "g3_four_operations", 4: "g4_operations", 5: "g5_decimals" },
-    place_value: { 1: "g1_numbers_100", 2: "g2_numbers_1000", 3: "g3_numbers_100000", 4: "g4_large_numbers", 5: "g5_decimals" }, round_num: { 2: "g2_numbers_1000", 3: "g3_numbers_100000", 4: "g4_large_numbers", 5: "g5_decimals" },
+    place_value: { 1: "g1_numbers_100", 2: "g2_numbers_1000", 3: "g3_numbers_100000", 4: "g4_large_numbers", 5: "g5_decimals" }, round_num: { 3: "g3_numbers_100000", 4: "g4_large_numbers", 5: "g5_decimals" },
     expr_order: { 1: G1, 2: "g2_operations", 3: "g3_four_operations", 4: "g4_operations" }, unknown_num: { 1: G1, 2: "g2_operations", 3: "g3_four_operations", 4: "g4_operations", 5: "g5_decimals" },
     shape_id: { 1: "g1_geometry", 2: "g2_geometry" }, angle_type: { 3: "g3_geometry", 4: "g4_geometry" }, perimeter: { 3: "g3_geometry", 4: "g4_measurement", 5: "g5_geometry" }, area_shape: { 3: "g3_measurement", 4: "g4_measurement", 5: "g5_geometry" }, volume_box: { 5: "g5_geometry" },
     unit_convert: { 2: "g2_measurement", 3: "g3_measurement", 4: "g4_measurement", 5: "g5_measurement" }, measure_compare: { 1: "g1_measurement", 2: "g2_measurement" }, time_calc: { 1: "g1_measurement", 2: "g2_measurement", 3: "g3_measurement", 4: "g4_measurement", 5: "g5_measurement" },
