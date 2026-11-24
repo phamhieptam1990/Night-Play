@@ -368,7 +368,7 @@ const js = `/* SINH BỞI scripts/learn/gen-icons.js, không sửa tay. Bộ ico
   var busy = false;
   function skip(n) { for (var p = n.parentNode; p && p.nodeType === 1; p = p.parentNode) { if (SKIP[p.nodeName.toUpperCase()] || (p.hasAttribute && p.hasAttribute("data-noicon"))) return true; } return false; }
   function inCtl(t) { var p = t.parentNode; return !!(p && p.closest && p.closest("button,a,[role=button],[role=menuitem],.ab,.mt,.ib,.hb")); }
-  function ctlOnly(t, e) { var c = t.parentNode && t.parentNode.closest && t.parentNode.closest("button,a,[role=button]"); if (!c) return false; var rest = c.textContent.replace(e, "").replace(/\uFE0F/g, "").replace(/\s+/g, ""); return rest.length <= 3; }
+  function ctlOnly(t, e) { var c = t.parentNode && t.parentNode.closest && t.parentNode.closest("button,a,[role=button]"); if (!c || c.closest(".ab,.ans,.tile,.it,.bl,.mem,.pt,.qg,.qp,.kb")) return false; var rest = c.textContent.replace(e, "").replace(/\uFE0F/g, "").replace(/\s+/g, ""); return rest.length <= 3; }
   function swapText(t) {
     if (!t.parentNode) return;   /* nút đã bị tháo khỏi cây do lần thay trước (danh sách thu sẵn) */
     var s = t.nodeValue; if (!s || !RE.test(s)) { RE.lastIndex = 0; return; } RE.lastIndex = 0; if (skip(t)) return;
