@@ -5,7 +5,7 @@
    --full: đủ 3 môn x mọi kiểu x thêm màn ngang 844x390. Thoát mã 1 nếu có lỗi. */
 "use strict";
 const { spawn } = require("child_process"), path = require("path"), puppeteer = require("puppeteer-core");
-const root = path.join(__dirname, "..", ".."), PORT = 8878, FULL = process.argv.includes("--full");
+const root = path.join(__dirname, "..", ".."), PORT = +process.env.PORT || 8878, FULL = process.argv.includes("--full");
 const w = ms => new Promise(r => setTimeout(r, ms));
 const QUICK = { toan: ["", "tf", "pic", "match", "order", "typein", "odd", "multi", "compare", "count", "memory", "numline", "clock", "find", "dragfill", "sort", "pop"], tviet: ["wordbuild", "dictate", "write", "speak", "trace"], tanh: ["dictate", "write", "speak"] };
 const ALL = { toan: QUICK.toan, tviet: ["", "tf", "pic", "match", "order", "wordbuild", "odd", "multi", "memory", "find", "dragfill", "sort", "pop", "dictate", "write", "speak", "trace"], tanh: ["", "tf", "pic", "match", "order", "wordbuild", "odd", "multi", "memory", "find", "dragfill", "sort", "pop", "dictate", "write", "speak"] };

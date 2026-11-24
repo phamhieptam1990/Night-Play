@@ -140,6 +140,9 @@ body.g1 #pick,body.g1 #toMeTop{display:none}body.g1 #toGarden{margin-left:auto}
 /* nút chỉ có MỘT hình: hình phủ gần hết nút (to nhất có thể) trên nền sáng để màu hình nổi, nút nổi khối như các nút khác */
 .ans:not(.kz)>.ab:has(>.ico:only-child){display:flex;align-items:center;justify-content:center;padding:5px;background:linear-gradient(160deg,#fff,color-mix(in srgb,var(--c1) 28%,#fff));-webkit-text-stroke:0;text-shadow:none}
 .ans:not(.kz)>.ab:has(>.ico:only-child)::after{display:none}
+.ans:not(.kz)>.ab:has(>.ico:only-child){color:#1f2a44}   /* nền trắng thì chữ phải tối (nút Đúng/Sai có cả chữ lẫn hình) */
+.ans[data-k=tf]>.ab:has(>.ico:only-child){background:linear-gradient(145deg,var(--c1),var(--c2));color:#fff;gap:8px;-webkit-text-stroke:2px var(--d);paint-order:stroke fill}
+.ans[data-k=tf]>.ab:has(>.ico:only-child)::after{display:block}
 @keyframes pickme{0%,100%{transform:translateY(0) scale(1,1)}14%{transform:translateY(0) scale(1.08,.9)}42%{transform:translateY(-9%) scale(.95,1.07)}70%{transform:translateY(0) scale(1.05,.94)}85%{transform:translateY(-2%) scale(1,1)}}
 .ans:not(.kz)>.ab:has(>.ico:only-child)>.ico{animation:pickme 1.7s ease-in-out infinite;transform-origin:50% 90%}   /* hình nhún nhảy kiểu "chọn tớ đi" */
 .ans:not(.kz)>.ab:nth-child(2):has(>.ico:only-child)>.ico{animation-delay:-.25s}.ans:not(.kz)>.ab:nth-child(3):has(>.ico:only-child)>.ico{animation-delay:-.5s}.ans:not(.kz)>.ab:nth-child(4):has(>.ico:only-child)>.ico{animation-delay:-.75s}.ans:not(.kz)>.ab:nth-child(5):has(>.ico:only-child)>.ico{animation-delay:-1s}.ans:not(.kz)>.ab:nth-child(6):has(>.ico:only-child)>.ico{animation-delay:-1.25s}.ans:not(.kz)>.ab:nth-child(7):has(>.ico:only-child)>.ico{animation-delay:-.4s}.ans:not(.kz)>.ab:nth-child(8):has(>.ico:only-child)>.ico{animation-delay:-.9s}.ans:not(.kz)>.ab:nth-child(9):has(>.ico:only-child)>.ico{animation-delay:-1.4s}
