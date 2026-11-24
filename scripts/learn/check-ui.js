@@ -23,7 +23,7 @@ const fails = []; const bad = (m) => { fails.push(m); console.log("  ✗ " + m);
       const land = W > H, tag = `${subj}/${k || "mc"} ${W}x${H}`; n++;
       const pg = await br.newPage(); await pg.setViewport({ width: W, height: H, hasTouch: true, isMobile: true });
       const errs = []; pg.on("pageerror", e => errs.push(e.message)); pg.on("console", m => { if (m.type() === "error") errs.push("console: " + m.text().slice(0, 90)); });
-      await pg.goto(`http://localhost:${PORT}/learn/index.html?subj=${subj}&grade=${k === "pic" || k === "count" ? 2 : k === "trace" ? 1 : 3}&lang=vi${k ? "&qk=" + k : ""}`, { waitUntil: "networkidle0" });
+      await pg.goto(`http://localhost:${PORT}/learn/index.html?subj=${subj}&grade=${k === "pic" || k === "count" || (subj === "tviet" && (k === "dictate" || k === "speak")) ? 2 : k === "trace" ? 1 : 3}&lang=vi${k ? "&qk=" + k : ""}`, { waitUntil: "networkidle0" });
       const ready = async () => { await pg.waitForFunction(() => { const a = document.getElementById("ans"); return !a.classList.contains("ld") && a.children.length > 0; }, { timeout: 6000 }); await w(1000); };
       try { await ready(); } catch (e) { bad(tag + ": màn không sẵn sàng"); await pg.close(); continue; }
       const m = await pg.evaluate((land) => {
