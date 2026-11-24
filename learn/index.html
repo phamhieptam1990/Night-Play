@@ -163,6 +163,9 @@ body.g1 #pick,body.g1 #toMeTop{display:none}body.g1 #toGarden{margin-left:auto}
 .q.short{justify-content:center;align-items:center;text-align:center;padding-top:16px}.q.short h1{text-align:center}
 /* nhãn môn/dạng bài: thẻ nổi đè lên mép trên của bảng, như bong bóng gắn nhãn */
 .q small{position:absolute;left:50%;top:0;transform:translate(-50%,-50%);z-index:2;white-space:nowrap;max-width:calc(100% - 40px);overflow:hidden;text-overflow:ellipsis;padding:7px 16px;border-radius:99px;font-size:13px;font-weight:900;letter-spacing:.08em;color:#fff;background:linear-gradient(135deg,var(--s1),var(--s2));border:2px solid color-mix(in srgb,#fff 70%,transparent);box-shadow:0 6px 16px -4px color-mix(in srgb,var(--s2) 70%,transparent)}
+.q h1 small,.q.pop h1 small{animation:none;position:static;transform:none;display:block;white-space:normal;max-width:none;overflow:visible;text-overflow:clip;padding:0;margin-top:8px;border:0;background:none;box-shadow:none;color:var(--ink2);font-size:clamp(14px,3.8vw,18px);letter-spacing:.02em;text-transform:none;line-height:1.3}   /* dòng nhắc trong đề (kiểu write) nằm trong luồng, không phải nhãn nổi */
+.ans[data-k=tf] .ab,.ans[data-k=tf] .ab.long{white-space:nowrap}.ans[data-k=tf]>.ab>.ico{max-height:60%;width:auto;flex:none}
+@media (max-height:430px) and (min-aspect-ratio:11/10){.ans[data-k=tf]>.ab{font-size:clamp(18px,5vh,24px);gap:6px}.ans[data-k=tf]>.ab>.ico{height:42%}}
 .q,.q.short{padding:27px 22px 22px}   /* khung câu hỏi: lề đều bốn phía (nhãn nổi chỉ lấn 15px vào mép trên) */
 @keyframes lbl{from{opacity:0;transform:translate(-50%,-10%) scale(.7)}to{opacity:1;transform:translate(-50%,-50%)}}
 .q.pop small{animation:lbl .45s .05s cubic-bezier(.2,.9,.3,1.3) both}
