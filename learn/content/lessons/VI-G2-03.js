@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Tiếng Việt lớp 2 · Viết đoạn ngắn.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "VI-G2-03",
   "grade": 2,
@@ -43,7 +43,7 @@ window.LearnLessons.reg({
       ],
       "ok": 0,
       "yes": "Đúng rồi! Đáp án là Dấu chấm.",
-      "no": "Câu kể kết thúc bằng dấu chấm."
+      "no": "Câu kể dùng để kể hoặc tả: nó kết thúc thế nào?"
     },
     {
       "k": "choose",
@@ -75,7 +75,7 @@ window.LearnLessons.reg({
         "Mẹ đi chợ."
       ],
       "ok": 2,
-      "hint": "Ai làm gì? Mẹ đi đâu?",
+      "hint": "Câu cần nói ai làm gì: ai đứng trước, việc làm đứng sau.",
       "yes": "Đúng rồi!"
     },
     {

@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Toán lớp 5 · Thống kê và xác suất.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "g5_statistics",
   "grade": 5,
@@ -8,18 +8,18 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Thống kê và xác suất.",
-      "art": "📊"
-    },
-    {
-      "k": "say",
       "t": "Tỉ số phần trăm cho biết bao nhiêu phần trong 100 phần.",
-      "art": "📊"
+      "art": "50% = một nửa\n25% = một phần tư"
     },
     {
       "k": "say",
-      "t": "Biểu đồ hình quạt chia hình tròn thành các phần.",
-      "art": "📊"
+      "t": "Biểu đồ hình quạt chia hình tròn thành các phần. Cả hình tròn là 100%.",
+      "art": "🥧 100%"
+    },
+    {
+      "k": "say",
+      "t": "Đọc biểu đồ: tìm phần lớn nhất, so sánh các phần.",
+      "art": "40% + 35% + 25% = 100%"
     },
     {
       "k": "choose",

@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Tiếng Anh lớp 5 · Đọc (Reading).
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "EN-G5-03",
   "grade": 5,
@@ -8,95 +8,104 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Đọc (Reading).",
-      "art": "🔤"
+      "t": "Đọc đoạn ngắn, tìm ý chính và chi tiết.",
+      "art": "📖 Đọc → hiểu"
     },
     {
       "k": "say",
-      "t": "Đọc hiểu văn bản ngắn quen thuộc, xác định ý chính và thông tin cụ thể.",
-      "art": "🔤"
+      "t": "Từ chủ đề: hobby (sở thích), job (nghề), place (nơi chốn).",
+      "art": "🎨 hobby"
+    },
+    {
+      "k": "say",
+      "t": "Câu phủ định: He does not like fish.",
+      "art": "does not = không"
     },
     {
       "k": "choose",
-      "t": "Đây là gì? 🍎",
+      "t": "\"He is a doctor.\" nghĩa là?",
       "opts": [
-        "rice",
-        "orange",
-        "apple"
+        "Ông ấy là giáo viên.",
+        "Ông ấy là học sinh.",
+        "Ông ấy là bác sĩ."
       ],
       "ok": 2,
-      "yes": "Đúng rồi! Đáp án là apple.",
-      "no": "Nhìn hình và nói tên bằng tiếng Việt trước, rồi nhớ từ tiếng Anh.",
-      "optlang": "en"
+      "yes": "Đúng! doctor = bác sĩ.",
+      "no": "Tìm từ doctor.",
+      "art": "🩺"
     },
     {
       "k": "choose",
-      "t": "Từ cook nghĩa là gì?",
+      "t": "hobby nghĩa là?",
       "opts": [
-        "bà",
-        "nông dân",
-        "đầu bếp"
+        "nghề nghiệp",
+        "ngôi nhà",
+        "sở thích"
       ],
       "ok": 2,
-      "yes": "Đúng rồi! Đáp án là đầu bếp.",
-      "no": "Nhớ lại từ này trong bài học hoặc bài hát."
+      "yes": "Đúng! sở thích.",
+      "no": "Việc em thích làm lúc rảnh.",
+      "art": "🎨"
     },
     {
       "k": "choose",
-      "t": "Đây là gì? 🕒",
+      "t": "\"She does not like fish.\" nghĩa là?",
       "opts": [
-        "bed",
-        "key",
-        "clock"
+        "Cô ấy thích cá.",
+        "Cô ấy ăn cá.",
+        "Cô ấy không thích cá."
       ],
       "ok": 2,
-      "yes": "Đúng rồi! Đáp án là clock.",
-      "no": "Nhìn hình và nói tên bằng tiếng Việt trước, rồi nhớ từ tiếng Anh.",
-      "optlang": "en"
+      "yes": "Đúng! Không thích.",
+      "no": "Chú ý does not.",
+      "art": "🐟"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Đọc hiểu văn bản ngắn quen thuộc, xác định ý chính và thông tin cụ thể.",
-        "Sai thì thử lại, bé sẽ giỏi hơn!"
+        "Đọc tìm ý chính và chi tiết",
+        "Từ: hobby, job, place",
+        "does not = không"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "Từ run nghĩa là gì?",
+      "q": "library nghĩa là?",
       "opts": [
-        "nhảy",
-        "chạy",
-        "bà"
+        "chợ",
+        "thư viện",
+        "bệnh viện"
       ],
       "ok": 1,
-      "hint": "Nhớ lại từ này trong bài học hoặc bài hát.",
-      "yes": "Đúng rồi!"
+      "hint": "Nơi có nhiều sách.",
+      "yes": "Đúng! thư viện.",
+      "art": "📚"
     },
     {
-      "q": "Đây là gì? 🪑",
+      "q": "\"We play football on Sunday.\" Chơi vào?",
       "opts": [
-        "chair",
-        "bed",
-        "key"
+        "Chủ nhật",
+        "Thứ Hai",
+        "Thứ Bảy"
       ],
       "ok": 0,
-      "hint": "Nhìn hình và nói tên bằng tiếng Việt trước, rồi nhớ từ tiếng Anh.",
-      "yes": "Đúng rồi!",
-      "optlang": "en"
+      "hint": "Tìm từ chỉ ngày.",
+      "yes": "Đúng! Chủ nhật.",
+      "art": "⚽"
     },
     {
-      "q": "Từ hospital nghĩa là gì?",
+      "q": "job nghĩa là?",
       "opts": [
-        "thư viện",
-        "bệnh viện",
-        "bơi"
+        "sở thích",
+        "nghề nghiệp",
+        "trường học"
       ],
       "ok": 1,
-      "hint": "Nhớ lại từ này trong bài học hoặc bài hát.",
-      "yes": "Đúng rồi!"
+      "hint": "Công việc của người lớn.",
+      "yes": "Đúng! nghề nghiệp.",
+      "art": "👷"
     }
   ]
 });

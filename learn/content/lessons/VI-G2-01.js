@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Tiếng Việt lớp 2 · Đọc thành tiếng và đọc hiểu.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "VI-G2-01",
   "grade": 2,
@@ -8,92 +8,104 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Đọc thành tiếng và đọc hiểu.",
-      "art": "📖"
+      "t": "Đọc to, rõ, ngắt nghỉ ở dấu phẩy và dấu chấm. Nghe kỹ để hiểu câu chuyện.",
+      "art": "📖 Đọc chậm rãi"
     },
     {
       "k": "say",
-      "t": "Đọc văn bản ngắn trôi chảy hơn; xác định nội dung chính và chi tiết hiển nhiên.",
-      "art": "📖"
+      "t": "Đọc xong, hỏi: Ai? Làm gì? Ở đâu? Khi nào? Câu trả lời nằm ngay trong bài.",
+      "art": "Ai? Làm gì? Ở đâu?"
+    },
+    {
+      "k": "say",
+      "t": "Ghép vần: phụ âm + vần + thanh thành tiếng. Ví dụ m + ưa + huyền = mưa.",
+      "art": "m + ưa + ` = mưa"
     },
     {
       "k": "choose",
-      "t": "no thêm dấu sắc thành tiếng nào?",
+      "t": "Bé Na có một con mèo trắng. Mèo của Na màu gì?",
       "opts": [
-        "nó",
-        "nò",
-        "nọ"
+        "Màu trắng",
+        "Màu vàng",
+        "Màu đen"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là nó.",
-      "no": "Đọc liền hai âm với nhau: phụ âm rồi vần."
+      "yes": "Đúng! Mèo màu trắng.",
+      "no": "Tìm từ chỉ màu trong câu.",
+      "art": "🐱"
     },
     {
       "k": "choose",
-      "t": "Sáng thứ Bảy, Lan cùng bố ra chợ mua cá. Bố chọn một con cá chép to.Bố chọn mua con gì?",
+      "t": "Mẹ đi chợ mua cá. Mẹ mua gì?",
       "opts": [
-        "cá chép",
-        "cá thu",
-        "con tôm"
+        "Cá",
+        "Thịt",
+        "Rau"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là cá chép.",
-      "no": "Đọc lại cả đoạn thật chậm."
+      "yes": "Đúng! Mẹ mua cá.",
+      "no": "Tìm từ đứng sau chữ mua.",
+      "art": "🛒"
     },
     {
       "k": "choose",
-      "t": "li thêm dấu huyền thành tiếng nào?",
+      "t": "Ghép m + ưa + dấu huyền được tiếng nào?",
       "opts": [
-        "lì",
-        "lị",
-        "lĩ"
+        "mưa",
+        "mua",
+        "mứa"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là lì.",
-      "no": "Đọc liền hai âm với nhau: phụ âm rồi vần."
+      "yes": "Đúng! mưa.",
+      "no": "Nhớ vần ưa và dấu huyền.",
+      "art": "m + ưa + `"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Đọc văn bản ngắn trôi chảy hơn; xác định nội dung chính và chi tiết hiển nhiên.",
-        "Sai thì thử lại, bé sẽ giỏi hơn!"
+        "Đọc rõ, ngắt nghỉ ở dấu câu",
+        "Trả lời câu hỏi bằng thông tin trong bài",
+        "Ghép phụ âm + vần + thanh thành tiếng"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "vơ thêm dấu hỏi thành tiếng nào?",
+      "q": "Sáng nay trời mưa, bé mang áo mưa đi học. Vì sao bé mang áo mưa?",
       "opts": [
-        "vở",
-        "vớ",
-        "vỡ"
+        "Vì trời mưa",
+        "Vì trời lạnh",
+        "Vì trời nắng"
       ],
       "ok": 0,
-      "hint": "Đọc liền hai âm với nhau: phụ âm rồi vần.",
-      "yes": "Đúng rồi!"
+      "hint": "Đọc câu đầu của bài.",
+      "yes": "Đúng! Trời mưa.",
+      "art": "🌧️"
     },
     {
-      "q": "Con chó nhà Nam tên là Vàng. Vàng rất thích chơi bóng.Con chó thích gì?",
+      "q": "Tiếng nào ghép được từ ch + ợ + dấu nặng?",
       "opts": [
-        "bơi lội",
-        "ngủ",
-        "chơi bóng"
+        "chở",
+        "chỡ",
+        "chợ"
       ],
       "ok": 2,
-      "hint": "Đọc lại cả đoạn thật chậm.",
-      "yes": "Đúng rồi!"
+      "hint": "Ghép đúng dấu nặng dưới chữ ơ.",
+      "yes": "Đúng! chợ.",
+      "art": "ch + ợ"
     },
     {
-      "q": "da thêm dấu ngã thành tiếng nào?",
+      "q": "Ngắt nghỉ khi đọc ở chỗ nào?",
       "opts": [
-        "dạ",
-        "dã",
-        "dà"
+        "Không cần ngắt",
+        "Ở dấu phẩy, dấu chấm",
+        "Giữa một tiếng"
       ],
       "ok": 1,
-      "hint": "Đọc liền hai âm với nhau: phụ âm rồi vần.",
-      "yes": "Đúng rồi!"
+      "hint": "Nhìn các dấu trong câu.",
+      "yes": "Đúng! Dấu câu báo chỗ nghỉ.",
+      "art": "，。"
     }
   ]
 });

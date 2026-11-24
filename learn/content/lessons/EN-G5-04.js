@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Tiếng Anh lớp 5 · Viết (Writing).
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "EN-G5-04",
   "grade": 5,
@@ -8,97 +8,109 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Viết (Writing).",
-      "art": "🔤"
+      "t": "Số nhiều: thêm s, hoặc es sau s, x, ch, sh. Bất quy tắc: child → children.",
+      "art": "box → boxes"
     },
     {
       "k": "say",
-      "t": "Viết câu và đoạn ngắn có liên kết đơn giản theo chủ đề và yêu cầu đã học.",
-      "art": "🔤"
+      "t": "He, she, it: động từ thêm s hoặc es.",
+      "art": "She eats · He goes"
+    },
+    {
+      "k": "say",
+      "t": "Viết đúng chính tả: đọc to rồi viết.",
+      "art": "w - r - i - t - e"
     },
     {
       "k": "choose",
-      "t": "one day → two __ (số nhiều)",
+      "t": "Số nhiều của child là?",
       "opts": [
-        "days",
-        "dayen",
-        "daies"
+        "children",
+        "childes",
+        "childs"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là days.",
-      "no": "Thường thêm -s. Từ kết thúc bằng s, x, ch, sh thì thêm -es.",
+      "yes": "Đúng! children.",
+      "no": "Đây là từ bất quy tắc.",
+      "art": "child → ?",
       "optlang": "en"
     },
     {
       "k": "choose",
-      "t": "They __ (watch) every day.",
+      "t": "Số nhiều của box là?",
       "opts": [
-        "watch",
-        "watched",
-        "watches"
+        "boxes",
+        "boxen",
+        "boxs"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là watch.",
-      "no": "He / She / It (và một người) + động từ thêm -s hoặc -es.",
+      "yes": "Đúng! boxes.",
+      "no": "Tận cùng x thì thêm es.",
+      "art": "box → ?",
       "optlang": "en"
     },
     {
       "k": "choose",
-      "t": "Chọn cách viết đúng: 🐘",
+      "t": "Điền: She __ breakfast every day.",
       "opts": [
-        "elephant",
-        "elephaant",
-        "elephan"
+        "eats",
+        "eating",
+        "eat"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là elephant.",
-      "no": "Nhìn hình và đọc từng chữ cái của từ.",
+      "yes": "Đúng! eats.",
+      "no": "Chủ ngữ she là một người.",
+      "art": "She __ ...",
       "optlang": "en"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Viết câu và đoạn ngắn có liên kết đơn giản theo chủ đề và yêu cầu đã học.",
-        "Sai thì thử lại, bé sẽ giỏi hơn!"
+        "Số nhiều: s, es, bất quy tắc",
+        "He/She/It: động từ thêm s, es",
+        "Đọc to rồi viết đúng chính tả"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "one star → two __ (số nhiều)",
+      "q": "Điền: He __ to school by bike.",
       "opts": [
-        "stars",
-        "staren",
-        "starren"
+        "goes",
+        "go",
+        "going"
       ],
       "ok": 0,
-      "hint": "Thường thêm -s. Từ kết thúc bằng s, x, ch, sh thì thêm -es.",
-      "yes": "Đúng rồi!",
+      "hint": "Go thêm es với he.",
+      "yes": "Đúng! goes.",
+      "art": "He __ ...",
       "optlang": "en"
     },
     {
-      "q": "I __ (like) every day.",
+      "q": "Chọn chữ viết đúng:",
       "opts": [
-        "liked",
-        "likes",
-        "like"
+        "beatiful",
+        "beutiful",
+        "beautiful"
       ],
       "ok": 2,
-      "hint": "He / She / It (và một người) + động từ thêm -s hoặc -es.",
-      "yes": "Đúng rồi!",
+      "hint": "Đọc từng chữ cái.",
+      "yes": "Đúng! beautiful.",
+      "art": "✨",
       "optlang": "en"
     },
     {
-      "q": "Chọn cách viết đúng: 🌙",
+      "q": "Số nhiều của watch là?",
       "opts": [
-        "moon",
-        "omon",
-        "mon"
+        "watches",
+        "watchies",
+        "watchs"
       ],
       "ok": 0,
-      "hint": "Nhìn hình và đọc từng chữ cái của từ.",
-      "yes": "Đúng rồi!",
+      "hint": "Tận cùng ch thì thêm es.",
+      "yes": "Đúng! watches.",
+      "art": "watch → ?",
       "optlang": "en"
     }
   ]

@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Tiếng Anh lớp 4 · Viết (Writing).
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "EN-G4-04",
   "grade": 4,
@@ -8,97 +8,109 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Viết (Writing).",
-      "art": "🔤"
+      "t": "Dùng a trước phụ âm, an trước nguyên âm.",
+      "art": "a book · an egg"
     },
     {
       "k": "say",
-      "t": "Viết câu và đoạn rất ngắn theo mẫu/gợi ý về chủ đề đã học.",
-      "art": "🔤"
+      "t": "Với he, she, it, động từ thêm s: He plays.",
+      "art": "He plays · She eats"
+    },
+    {
+      "k": "say",
+      "t": "Số nhiều: cat → cats, box → boxes, child → children.",
+      "art": "child → children"
     },
     {
       "k": "choose",
-      "t": "Điền a hay an: This is __ ice cream.",
+      "t": "Điền: She __ football.",
+      "opts": [
+        "plays",
+        "play",
+        "playing"
+      ],
+      "ok": 0,
+      "yes": "Đúng! She plays.",
+      "no": "Chủ ngữ she là một người.",
+      "art": "She __ football.",
+      "optlang": "en"
+    },
+    {
+      "k": "choose",
+      "t": "Điền: I __ milk.",
+      "opts": [
+        "like",
+        "likes",
+        "liking"
+      ],
+      "ok": 0,
+      "yes": "Đúng! I like.",
+      "no": "Chủ ngữ là I.",
+      "art": "I __ milk.",
+      "optlang": "en"
+    },
+    {
+      "k": "choose",
+      "t": "Điền a hay an: This is __ orange.",
       "opts": [
         "an",
-        "many",
-        "two"
+        "a",
+        "the"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là an.",
-      "no": "Nghe âm đầu của từ: nguyên âm (a, e, i, o, u) thì dùng an; còn lại dùng a.",
-      "optlang": "en"
-    },
-    {
-      "k": "choose",
-      "t": "one boy → two __ (số nhiều)",
-      "opts": [
-        "boys",
-        "boyes",
-        "boies"
-      ],
-      "ok": 0,
-      "yes": "Đúng rồi! Đáp án là boys.",
-      "no": "Thường thêm -s. Từ kết thúc bằng s, x, ch, sh thì thêm -es.",
-      "optlang": "en"
-    },
-    {
-      "k": "choose",
-      "t": "My mother __ (watch) every day.",
-      "opts": [
-        "watches",
-        "watching",
-        "watch"
-      ],
-      "ok": 0,
-      "yes": "Đúng rồi! Đáp án là watches.",
-      "no": "He / She / It (và một người) + động từ thêm -s hoặc -es.",
+      "yes": "Đúng! an orange.",
+      "no": "Chữ cái đầu của orange là gì?",
+      "art": "__ orange",
       "optlang": "en"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Viết câu và đoạn rất ngắn theo mẫu/gợi ý về chủ đề đã học.",
-        "Sai thì thử lại, bé sẽ giỏi hơn!"
+        "a trước phụ âm, an trước nguyên âm",
+        "He/She/It: động từ thêm s hoặc es",
+        "Số nhiều thường thêm s"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "Chọn cách viết đúng: 🦵",
+      "q": "Số nhiều của box là?",
       "opts": [
-        "leeg",
-        "lge",
-        "leg"
+        "boxen",
+        "boxs",
+        "boxes"
       ],
       "ok": 2,
-      "hint": "Nhìn hình và đọc từng chữ cái của từ.",
-      "yes": "Đúng rồi!",
+      "hint": "Tận cùng x thì thêm es.",
+      "yes": "Đúng! boxes.",
+      "art": "box → ?",
       "optlang": "en"
     },
     {
-      "q": "Điền a hay an: This is __ eye.",
+      "q": "Điền: He __ to school.",
       "opts": [
-        "two",
-        "a",
-        "an"
+        "go",
+        "going",
+        "goes"
       ],
       "ok": 2,
-      "hint": "Nghe âm đầu của từ: nguyên âm (a, e, i, o, u) thì dùng an; còn lại dùng a.",
-      "yes": "Đúng rồi!",
+      "hint": "Chủ ngữ he, động từ go thêm es.",
+      "yes": "Đúng! He goes.",
+      "art": "He __ to school.",
       "optlang": "en"
     },
     {
-      "q": "one watch → two __ (số nhiều)",
+      "q": "Chọn chữ viết đúng:",
       "opts": [
-        "watchs",
-        "watches",
-        "watchen"
+        "scool",
+        "school",
+        "shool"
       ],
       "ok": 1,
-      "hint": "Thường thêm -s. Từ kết thúc bằng s, x, ch, sh thì thêm -es.",
-      "yes": "Đúng rồi!",
+      "hint": "Đọc từng chữ cái.",
+      "yes": "Đúng! school.",
+      "art": "🏫",
       "optlang": "en"
     }
   ]

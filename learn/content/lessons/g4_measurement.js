@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Toán lớp 4 · Đại lượng và đo lường.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "g4_measurement",
   "grade": 4,
@@ -8,98 +8,104 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Đại lượng và đo lường.",
-      "art": "📐"
+      "t": "Chu vi: cộng độ dài các cạnh. Diện tích chữ nhật = dài × rộng.",
+      "art": "Dài 8, rộng 5\nChu vi 26 · Diện tích 40"
     },
     {
       "k": "say",
-      "t": "Đơn vị đo độ dài, khối lượng, thời gian",
-      "art": "📐"
+      "t": "Đổi đơn vị: 1 tấn = 1000 kg, 1 giờ = 60 phút, 1 m² = 10 000 cm².",
+      "art": "1 tấn = 1000 kg"
     },
     {
       "k": "say",
-      "t": "Đơn vị đo diện tích",
-      "art": "📐"
+      "t": "Thời gian và tiền: tính từng bước, ghi rõ đơn vị.",
+      "art": "2 giờ 30 phút = 150 phút"
     },
     {
       "k": "choose",
-      "t": "Hình vuông có chu vi 28 cm. Cạnh hình vuông dài?",
+      "t": "Chữ nhật dài 8 cm, rộng 5 cm. Chu vi là?",
       "opts": [
-        "49 cm",
-        "24 cm",
-        "7 cm"
+        "13 cm",
+        "40 cm",
+        "26 cm"
       ],
       "ok": 2,
-      "yes": "Đúng rồi! Đáp án là 7 cm.",
-      "no": "Chu vi là độ dài đi MỘT VÒNG quanh hình."
+      "yes": "Đúng! (8 + 5) × 2 = 26.",
+      "no": "Cộng dài và rộng rồi nhân 2.",
+      "art": "8 × 5"
     },
     {
       "k": "choose",
-      "t": "Hình thoi có hai đường chéo 30 cm và 17 cm. Diện tích là?",
+      "t": "Chữ nhật dài 8 cm, rộng 5 cm. Diện tích là?",
       "opts": [
-        "255 cm²",
-        "94 cm²",
-        "47 cm²"
+        "40 cm²",
+        "26 cm²",
+        "13 cm²"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là 255 cm².",
-      "no": "Diện tích là phần mặt phẳng nằm BÊN TRONG hình (như số ô vuông phủ kín)."
+      "yes": "Đúng! 8 × 5 = 40.",
+      "no": "Nhân dài với rộng.",
+      "art": "8 × 5"
     },
     {
       "k": "choose",
-      "t": "7 phút = ? giây",
+      "t": "3 tấn bằng bao nhiêu ki-lô-gam?",
       "opts": [
-        "0,117 giây",
-        "420 giây",
-        "42 giây"
+        "300 kg",
+        "3 000 kg",
+        "30 kg"
       ],
       "ok": 1,
-      "yes": "Đúng rồi! Đáp án là 420 giây.",
-      "no": "Đổi từ đơn vị LỚN sang đơn vị BÉ thì NHÂN; từ BÉ sang LỚN thì CHIA."
+      "yes": "Đúng! 3 000 kg.",
+      "no": "1 tấn là 1000 kg.",
+      "art": "3 tấn = ? kg"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Đơn vị đo độ dài, khối lượng, thời gian",
-        "Đơn vị đo diện tích",
-        "Tiền Việt Nam và bài toán thực tế"
+        "Chu vi cộng các cạnh, diện tích nhân dài với rộng",
+        "1 tấn = 1000 kg, 1 giờ = 60 phút",
+        "Tính từng bước và ghi đúng đơn vị"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "Bắt đầu lúc 12 giờ 5 phút, làm trong 2 giờ 5 phút. Kết thúc lúc mấy giờ?",
+      "q": "2 giờ 30 phút bằng bao nhiêu phút?",
       "opts": [
-        "13 giờ 10 phút",
-        "14 giờ 20 phút",
-        "14 giờ 10 phút"
+        "230 phút",
+        "90 phút",
+        "150 phút"
       ],
       "ok": 2,
-      "hint": "Vẽ trục thời gian và đếm từ mốc đầu tới mốc cuối.",
-      "yes": "Đúng rồi!"
+      "hint": "Đổi 2 giờ ra phút rồi cộng 30.",
+      "yes": "Đúng! 120 + 30 = 150.",
+      "art": "2 giờ 30 phút"
     },
     {
-      "q": "Hình vuông có cạnh 29 m. Chu vi hình vuông là?",
+      "q": "Mua 3 quyển vở, mỗi quyển 7 500 đồng. Hết bao nhiêu?",
       "opts": [
-        "58 m",
-        "841 m",
-        "116 m"
+        "10 500 đồng",
+        "21 500 đồng",
+        "22 500 đồng"
       ],
       "ok": 2,
-      "hint": "Chu vi là độ dài đi MỘT VÒNG quanh hình.",
-      "yes": "Đúng rồi!"
+      "hint": "3 quyển giá bằng nhau: nhân.",
+      "yes": "Đúng! 7 500 × 3 = 22 500.",
+      "art": "7 500 × 3"
     },
     {
-      "q": "Hình bình hành có đáy 12 cm, chiều cao 13 cm. Diện tích là?",
+      "q": "Đi từ 7 giờ 15 phút đến 8 giờ. Đi mấy phút?",
       "opts": [
-        "156 cm²",
-        "50 cm²",
-        "78 cm²"
+        "45 phút",
+        "15 phút",
+        "55 phút"
       ],
       "ok": 0,
-      "hint": "Diện tích là phần mặt phẳng nằm BÊN TRONG hình (như số ô vuông phủ kín).",
-      "yes": "Đúng rồi!"
+      "hint": "Từ 7 giờ 15 phút đến 8 giờ còn thiếu bao nhiêu?",
+      "yes": "Đúng! 45 phút.",
+      "art": "7:15 → 8:00"
     }
   ]
 });

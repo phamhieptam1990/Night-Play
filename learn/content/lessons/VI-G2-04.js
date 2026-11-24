@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Tiếng Việt lớp 2 · Nói và nghe.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "VI-G2-04",
   "grade": 2,
@@ -8,92 +8,104 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Nói và nghe.",
-      "art": "📖"
+      "t": "Khi chào hỏi: nhìn người nghe, nói rõ ràng, lễ phép.",
+      "art": "Em chào cô ạ!"
     },
     {
       "k": "say",
-      "t": "Kể lại sự việc, trao đổi về chủ đề quen thuộc; biết chờ lượt và lắng nghe.",
-      "art": "📖"
+      "t": "Nghe xong, nhắc lại ý chính: ai, làm gì.",
+      "art": "👂 Nghe → nhớ → nói"
+    },
+    {
+      "k": "say",
+      "t": "Khi muốn nói, giơ tay xin phép; khi bạn nói, lắng nghe.",
+      "art": "🙋 Giơ tay"
     },
     {
       "k": "choose",
-      "t": "Đến giờ đi ngủ, em chúc bố mẹ:",
+      "t": "Gặp cô giáo buổi sáng, em nói gì?",
       "opts": [
-        "Em xin lỗi ạ!",
-        "Chúc bố mẹ ngủ ngon!",
-        "Chúc mừng sinh nhật!"
+        "Cô đi đi!",
+        "Em chào cô ạ!",
+        "Này cô!"
       ],
       "ok": 1,
-      "yes": "Đúng rồi! Đáp án là Chúc bố mẹ ngủ ngon!.",
-      "no": "Nghĩ xem lúc đó cần nói gì: chào, cảm ơn, xin lỗi hay chúc mừng?"
+      "yes": "Đúng! Chào cô lễ phép.",
+      "no": "Chọn lời lễ phép.",
+      "art": "👩‍🏫"
     },
     {
       "k": "choose",
-      "t": "🔊Nghe rồi chọn hình đúng",
+      "t": "Khi bạn đang nói, em nên làm gì?",
       "opts": [
-        "🚲",
-        "🐍",
-        "🩴"
+        "Quay đi chỗ khác",
+        "Lắng nghe",
+        "Nói chen vào"
       ],
       "ok": 1,
-      "yes": "Đúng rồi! Đáp án là 🐍.",
-      "no": "Bấm 🔊 để nghe lại."
+      "yes": "Đúng! Lắng nghe bạn.",
+      "no": "Nghĩ xem bạn muốn được đối xử thế nào.",
+      "art": "👂"
     },
     {
       "k": "choose",
-      "t": "Mẹ nấu cơm xong, mời cả nhà. Em nói:",
+      "t": "Muốn xin phép cô ra ngoài, em nói thế nào?",
       "opts": [
-        "Mời cả nhà ăn cơm ạ!",
-        "Chúc ngủ ngon!",
-        "Tạm biệt cả nhà!"
+        "Thưa cô, em xin ra ạ.",
+        "Em đi đây.",
+        "Cho ra!"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là Mời cả nhà ăn cơm ạ!.",
-      "no": "Nghĩ xem lúc đó cần nói gì: chào, cảm ơn, xin lỗi hay chúc mừng?"
+      "yes": "Đúng! Nói lễ phép.",
+      "no": "Bắt đầu bằng lời thưa.",
+      "art": "🚪"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Kể lại sự việc, trao đổi về chủ đề quen thuộc; biết chờ lượt và lắng nghe.",
-        "Sai thì thử lại, bé sẽ giỏi hơn!"
+        "Chào hỏi lễ phép",
+        "Lắng nghe khi bạn nói",
+        "Nói rõ ràng, nhìn người nghe"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "Em lỡ làm đổ nước của bạn. Em nói:",
+      "q": "Nhận quà từ bạn, em nói gì?",
       "opts": [
-        "Chào bạn nhé!",
-        "Mình xin lỗi bạn!",
-        "Hoan hô bạn!"
+        "Xin lỗi bạn!",
+        "Cảm ơn bạn!",
+        "Chào bạn!"
       ],
       "ok": 1,
-      "hint": "Nghĩ xem lúc đó cần nói gì: chào, cảm ơn, xin lỗi hay chúc mừng?",
-      "yes": "Đúng rồi!"
+      "hint": "Bạn vừa làm điều tốt cho em.",
+      "yes": "Đúng! Cảm ơn.",
+      "art": "🎁"
     },
     {
-      "q": "Bạn bị ngã. Em hỏi:",
+      "q": "Em lỡ làm rơi bút của bạn. Em nói gì?",
       "opts": [
-        "Tạm biệt bạn nhé!",
-        "Bạn có đau không?",
-        "Chúc mừng sinh nhật!"
+        "Không sao.",
+        "Xin lỗi bạn.",
+        "Cảm ơn bạn."
       ],
       "ok": 1,
-      "hint": "Nghĩ xem lúc đó cần nói gì: chào, cảm ơn, xin lỗi hay chúc mừng?",
-      "yes": "Đúng rồi!"
+      "hint": "Em đã làm điều không tốt.",
+      "yes": "Đúng! Xin lỗi.",
+      "art": "✏️"
     },
     {
-      "q": "Em được bố mẹ cho quà. Em nói:",
+      "q": "Khi nói chuyện, em nên nói thế nào?",
       "opts": [
-        "Con cảm ơn bố mẹ ạ!",
-        "Con tạm biệt bố mẹ!",
-        "Con chào bố mẹ ạ!"
+        "Rõ ràng, nhìn người nghe",
+        "Thật nhỏ, cúi mặt",
+        "Thật to, hét lên"
       ],
       "ok": 0,
-      "hint": "Nghĩ xem lúc đó cần nói gì: chào, cảm ơn, xin lỗi hay chúc mừng?",
-      "yes": "Đúng rồi!"
+      "hint": "Người nghe cần nghe và thấy em.",
+      "yes": "Đúng! Nói rõ, nhìn người nghe.",
+      "art": "🗣️"
     }
   ]
 });

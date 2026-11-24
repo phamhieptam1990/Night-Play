@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Tiếng Anh lớp 3 · Viết (Writing).
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "EN-G3-04",
   "grade": 3,
@@ -8,97 +8,109 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Viết (Writing).",
-      "art": "🔤"
+      "t": "Dùng a trước phụ âm, an trước nguyên âm (a, e, i, o, u).",
+      "art": "a dog · an apple"
     },
     {
       "k": "say",
-      "t": "Chép/viết từ, cụm từ và câu đơn giản theo mẫu phù hợp với nội dung đã học.",
-      "art": "🔤"
+      "t": "Số nhiều thường thêm s: cat → cats. Từ tận cùng s, x, ch, sh thì thêm es.",
+      "art": "cat → cats\nbox → boxes"
+    },
+    {
+      "k": "say",
+      "t": "Viết đúng chính tả: đọc to từng chữ cái.",
+      "art": "c - a - t"
     },
     {
       "k": "choose",
-      "t": "Điền a hay an: This is __ pencil.",
+      "t": "Điền a hay an: This is __ apple.",
+      "opts": [
+        "an",
+        "the",
+        "a"
+      ],
+      "ok": 0,
+      "yes": "Đúng! an apple.",
+      "no": "Chữ cái đầu của apple là gì?",
+      "art": "__ apple",
+      "optlang": "en"
+    },
+    {
+      "k": "choose",
+      "t": "Điền a hay an: This is __ dog.",
       "opts": [
         "a",
-        "an",
-        "many"
+        "the",
+        "an"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là a.",
-      "no": "Nghe âm đầu của từ: nguyên âm (a, e, i, o, u) thì dùng an; còn lại dùng a.",
+      "yes": "Đúng! a dog.",
+      "no": "Chữ cái đầu của dog là phụ âm.",
+      "art": "__ dog",
       "optlang": "en"
     },
     {
       "k": "choose",
-      "t": "one bird → two __ (số nhiều)",
+      "t": "Số nhiều của cat là?",
       "opts": [
-        "birds",
-        "birdies",
-        "birden"
-      ],
-      "ok": 0,
-      "yes": "Đúng rồi! Đáp án là birds.",
-      "no": "Thường thêm -s. Từ kết thúc bằng s, x, ch, sh thì thêm -es.",
-      "optlang": "en"
-    },
-    {
-      "k": "choose",
-      "t": "Chọn cách viết đúng: 🧣",
-      "opts": [
-        "scaf",
-        "scarf",
-        "scarff"
+        "cat",
+        "cats",
+        "cates"
       ],
       "ok": 1,
-      "yes": "Đúng rồi! Đáp án là scarf.",
-      "no": "Nhìn hình và đọc từng chữ cái của từ.",
+      "yes": "Đúng! cats.",
+      "no": "Thêm s.",
+      "art": "one cat → two ?",
       "optlang": "en"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Chép/viết từ, cụm từ và câu đơn giản theo mẫu phù hợp với nội dung đã học.",
-        "Sai thì thử lại, bé sẽ giỏi hơn!"
+        "a trước phụ âm, an trước nguyên âm",
+        "Số nhiều thường thêm s",
+        "Tận cùng x, s, ch, sh thêm es"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "Điền a hay an: This is __ bag.",
+      "q": "Số nhiều của box là?",
       "opts": [
-        "many",
-        "two",
+        "boxies",
+        "boxs",
+        "boxes"
+      ],
+      "ok": 2,
+      "hint": "Từ tận cùng x thì thêm es.",
+      "yes": "Đúng! boxes.",
+      "art": "one box → two ?",
+      "optlang": "en"
+    },
+    {
+      "q": "Chọn chữ viết đúng:",
+      "opts": [
+        "aple",
+        "appel",
+        "apple"
+      ],
+      "ok": 2,
+      "hint": "Đọc từng chữ cái.",
+      "yes": "Đúng! apple.",
+      "art": "🍎",
+      "optlang": "en"
+    },
+    {
+      "q": "Điền a hay an: This is __ egg.",
+      "opts": [
+        "the",
+        "an",
         "a"
       ],
-      "ok": 2,
-      "hint": "Nghe âm đầu của từ: nguyên âm (a, e, i, o, u) thì dùng an; còn lại dùng a.",
-      "yes": "Đúng rồi!",
-      "optlang": "en"
-    },
-    {
-      "q": "one foot → two __ (số nhiều)",
-      "opts": [
-        "footren",
-        "foots",
-        "feet"
-      ],
-      "ok": 2,
-      "hint": "Thường thêm -s. Từ kết thúc bằng s, x, ch, sh thì thêm -es.",
-      "yes": "Đúng rồi!",
-      "optlang": "en"
-    },
-    {
-      "q": "Chọn cách viết đúng: ❄️",
-      "opts": [
-        "sowy",
-        "snowy",
-        "ssnowy"
-      ],
       "ok": 1,
-      "hint": "Nhìn hình và đọc từng chữ cái của từ.",
-      "yes": "Đúng rồi!",
+      "hint": "Chữ cái đầu của egg là gì?",
+      "yes": "Đúng! an egg.",
+      "art": "__ egg",
       "optlang": "en"
     }
   ]

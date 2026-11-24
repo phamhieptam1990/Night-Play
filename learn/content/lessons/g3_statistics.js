@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Toán lớp 3 · Thống kê và khả năng xảy ra.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "g3_statistics",
   "grade": 3,
@@ -8,18 +8,18 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Thống kê và khả năng xảy ra.",
-      "art": "📊"
+      "t": "Bảng số liệu ghi số lượng của mỗi loại.",
+      "art": "Mèo 5 · Chó 8"
     },
     {
       "k": "say",
-      "t": "Bảng số liệu ghi lại số lượng của mỗi loại.",
-      "art": "📊"
+      "t": "Nhiều nhất là số lớn nhất, ít nhất là số bé nhất. Hơn bao nhiêu thì trừ.",
+      "art": "8 − 5 = 3"
     },
     {
       "k": "say",
-      "t": "Nhiều nhất là số lớn nhất, ít nhất là số bé nhất.",
-      "art": "📊"
+      "t": "Có thể xảy ra, chắc chắn hay không thể: ví dụ ngày mai mặt trời mọc là chắc chắn.",
+      "art": "🌅 chắc chắn"
     },
     {
       "k": "choose",

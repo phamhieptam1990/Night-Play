@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Tiếng Anh lớp 4 · Nghe (Listening).
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "EN-G4-01",
   "grade": 4,
@@ -31,7 +31,7 @@ window.LearnLessons.reg({
       ],
       "ok": 0,
       "yes": "Đúng rồi! Đáp án là 6 giờ.",
-      "no": "Six là số sáu."
+      "no": "Nghe lại từ khoá trong câu tiếng Anh, rồi nghĩ nghĩa của nó."
     },
     {
       "k": "choose",
@@ -43,7 +43,7 @@ window.LearnLessons.reg({
       ],
       "ok": 2,
       "yes": "Đúng rồi! Đáp án là Xe đạp.",
-      "no": "Bike là xe đạp."
+      "no": "Nghe lại từ khoá trong câu tiếng Anh, rồi nghĩ nghĩa của nó."
     },
     {
       "k": "choose",
@@ -55,7 +55,7 @@ window.LearnLessons.reg({
       ],
       "ok": 2,
       "yes": "Đúng rồi! Đáp án là Bơi.",
-      "no": "Swim là bơi."
+      "no": "Nghe lại từ khoá trong câu tiếng Anh, rồi nghĩ nghĩa của nó."
     },
     {
       "k": "sum",
@@ -75,7 +75,7 @@ window.LearnLessons.reg({
         "2"
       ],
       "ok": 0,
-      "hint": "Three là số ba.",
+      "hint": "Nghe lại từ khoá trong câu tiếng Anh, rồi nghĩ nghĩa của nó.",
       "yes": "Đúng rồi!"
     },
     {
@@ -86,7 +86,7 @@ window.LearnLessons.reg({
         "Đà Nẵng"
       ],
       "ok": 0,
-      "hint": "Hanoi là Hà Nội.",
+      "hint": "Nghe lại từ khoá trong câu tiếng Anh, rồi nghĩ nghĩa của nó.",
       "yes": "Đúng rồi!"
     },
     {
@@ -97,7 +97,7 @@ window.LearnLessons.reg({
         "Mưa"
       ],
       "ok": 1,
-      "hint": "Sunny là có nắng.",
+      "hint": "Nghe lại từ khoá trong câu tiếng Anh, rồi nghĩ nghĩa của nó.",
       "yes": "Đúng rồi!"
     }
   ]

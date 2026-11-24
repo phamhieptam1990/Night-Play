@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Tiếng Việt lớp 5 · Viết văn bản.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "VI-G5-03",
   "grade": 5,

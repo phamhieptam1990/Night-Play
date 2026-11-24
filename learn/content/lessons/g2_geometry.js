@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Toán lớp 2 · Hình học.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "g2_geometry",
   "grade": 2,
@@ -8,98 +8,104 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Hình học.",
-      "art": "📐"
+      "t": "Hình tròn không có góc. Hình vuông có 4 cạnh bằng nhau.",
+      "art": "⚪  ⬜"
     },
     {
       "k": "say",
-      "t": "Nhận dạng và mô tả hình phẳng quen thuộc",
-      "art": "📐"
+      "t": "Hình tam giác có 3 cạnh, 3 góc. Hình chữ nhật có 4 cạnh, 4 góc vuông.",
+      "art": "🔺  ▭"
     },
     {
       "k": "say",
-      "t": "Đường thẳng, đường cong và đoạn thẳng ở mức độ phù hợp",
-      "art": "📐"
+      "t": "Nhìn đồ vật quanh em: quả bóng là hình cầu, hộp quà là hình khối hộp.",
+      "art": "⚽  🎁"
     },
     {
       "k": "choose",
-      "t": "Hình tứ giác có mấy cạnh?",
+      "t": "Hình nào có đúng 3 cạnh?",
       "opts": [
-        "4",
-        "6",
-        "3"
+        "Hình tam giác",
+        "Hình tròn",
+        "Hình vuông"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là 4.",
-      "no": "Đếm số cạnh và số góc của hình."
+      "yes": "Đúng! Tam giác có 3 cạnh.",
+      "no": "Đếm số cạnh của từng hình.",
+      "art": "🔺"
     },
     {
       "k": "choose",
-      "t": "Hình vuông có mấy cạnh?",
+      "t": "Hình nào có 4 cạnh bằng nhau?",
       "opts": [
-        "4",
-        "5",
-        "3"
+        "Hình vuông",
+        "Hình tròn",
+        "Hình tam giác"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là 4.",
-      "no": "Đếm số cạnh và số góc của hình."
+      "yes": "Đúng! Đó là hình vuông.",
+      "no": "Hình này có 4 góc vuông và các cạnh bằng nhau.",
+      "art": "⬜"
     },
     {
       "k": "choose",
-      "t": "⚽ có dạng khối gì?",
+      "t": "Hình nào không có cạnh và không có góc?",
       "opts": [
-        "khối cầu",
-        "khối hộp chữ nhật",
-        "khối lập phương"
+        "Hình tròn",
+        "Hình vuông",
+        "Hình chữ nhật"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là khối cầu.",
-      "no": "Đếm số cạnh và số góc của hình."
+      "yes": "Đúng! Hình tròn không có góc.",
+      "no": "Hình này cong tròn đều.",
+      "art": "⚪"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Nhận dạng và mô tả hình phẳng quen thuộc",
-        "Đường thẳng, đường cong và đoạn thẳng ở mức độ phù hợp",
-        "Hình khối trong môi trường xung quanh"
+        "Tam giác 3 cạnh, vuông và chữ nhật 4 cạnh",
+        "Hình tròn không có góc",
+        "Đồ vật quanh ta có dạng các hình quen thuộc"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "Hình chữ nhật có mấy cạnh?",
+      "q": "Mặt bàn học thường có dạng hình gì?",
       "opts": [
-        "4",
-        "5",
-        "3"
+        "Hình chữ nhật",
+        "Hình tam giác",
+        "Hình tròn"
       ],
       "ok": 0,
-      "hint": "Đếm số cạnh và số góc của hình.",
-      "yes": "Đúng rồi!"
+      "hint": "Mặt bàn có 2 cạnh dài, 2 cạnh ngắn.",
+      "yes": "Đúng! Hình chữ nhật.",
+      "art": "📚"
     },
     {
-      "q": "Hình tam giác có mấy cạnh?",
+      "q": "Quả bóng giống khối nào?",
       "opts": [
-        "5",
-        "4",
-        "3"
+        "Khối trụ",
+        "Khối hộp",
+        "Khối cầu"
       ],
       "ok": 2,
-      "hint": "Đếm số cạnh và số góc của hình.",
-      "yes": "Đúng rồi!"
+      "hint": "Quả bóng lăn tròn mọi phía.",
+      "yes": "Đúng! Khối cầu.",
+      "art": "⚽"
     },
     {
-      "q": "📦 có dạng khối gì?",
+      "q": "Hình chữ nhật có mấy góc vuông?",
       "opts": [
-        "khối lập phương",
-        "khối cầu",
-        "khối hộp chữ nhật"
+        "2",
+        "3",
+        "4"
       ],
       "ok": 2,
-      "hint": "Đếm số cạnh và số góc của hình.",
-      "yes": "Đúng rồi!"
+      "hint": "Chữ nhật có 4 góc.",
+      "yes": "Đúng! Có 4 góc vuông.",
+      "art": "▭"
     }
   ]
 });

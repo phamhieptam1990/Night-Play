@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Toán lớp 2 · Đại lượng và đo lường.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "g2_measurement",
   "grade": 2,
@@ -8,98 +8,104 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Đại lượng và đo lường.",
-      "art": "📐"
+      "t": "1 mét bằng 100 xăng-ti-mét. 1 ki-lô-gam bằng 1000 gam.",
+      "art": "1 m = 100 cm\n1 kg = 1000 g"
     },
     {
       "k": "say",
-      "t": "Độ dài và đơn vị đo độ dài",
-      "art": "📐"
+      "t": "Đọc giờ: kim ngắn chỉ giờ, kim dài chỉ phút. Kim dài ở số 12 là giờ đúng.",
+      "art": "🕒 3 giờ"
     },
     {
       "k": "say",
-      "t": "Khối lượng và dung tích theo nội dung lớp",
-      "art": "📐"
+      "t": "Tiền Việt Nam: cộng các tờ lại để biết tổng.",
+      "art": "5 000 + 2 000\n= 7 000 đồng"
     },
     {
       "k": "choose",
-      "t": "70 dm = ? m",
+      "t": "1 m bằng bao nhiêu cm?",
       "opts": [
-        "70 m",
-        "700 m",
-        "7 m"
+        "10 cm",
+        "1000 cm",
+        "100 cm"
       ],
       "ok": 2,
-      "yes": "Đúng rồi! Đáp án là 7 m.",
-      "no": "Đổi từ đơn vị LỚN sang đơn vị BÉ thì NHÂN; từ BÉ sang LỚN thì CHIA."
+      "yes": "Đúng! 1 m = 100 cm.",
+      "no": "Nhớ: 1 mét có 100 xăng-ti-mét.",
+      "art": "1 m = ? cm"
     },
     {
       "k": "choose",
-      "t": "Nối sợi dây dài 26 cm với đoạn băng dài 93 cm. Cả hai dài bao nhiêu cm?",
+      "t": "2 m bằng bao nhiêu cm?",
       "opts": [
-        "119 cm",
-        "67 cm",
-        "120 cm"
+        "200 cm",
+        "20 cm",
+        "2 cm"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là 119 cm.",
-      "no": "“Dài hơn bao nhiêu” là lấy số lớn TRỪ số bé."
+      "yes": "Đúng! 2 × 100 = 200.",
+      "no": "Mỗi mét là 100 cm, có 2 mét.",
+      "art": "2 m = ? cm"
     },
     {
       "k": "choose",
-      "t": "Hôm nay là Thứ Bảy. 2 ngày sau là thứ mấy?",
+      "t": "Kim ngắn chỉ số 3, kim dài chỉ số 12. Là mấy giờ?",
       "opts": [
-        "Thứ Hai",
-        "Thứ Năm",
-        "Thứ Ba"
+        "3 giờ",
+        "3 giờ 12 phút",
+        "12 giờ"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là Thứ Hai.",
-      "no": "Vẽ trục thời gian và đếm từ mốc đầu tới mốc cuối."
+      "yes": "Đúng! Đó là 3 giờ.",
+      "no": "Kim ngắn chỉ giờ.",
+      "art": "🕒"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Độ dài và đơn vị đo độ dài",
-        "Khối lượng và dung tích theo nội dung lớp",
-        "Tiền Việt Nam và bài toán mua bán"
+        "1 m = 100 cm, 1 kg = 1000 g",
+        "Kim ngắn chỉ giờ, kim dài chỉ phút",
+        "Cộng các tờ tiền để biết tổng"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "Bút giá 1000 đồng, tẩy giá 7000 đồng. Mua cả hai hết bao nhiêu?",
+      "q": "Mua bút 5 000 đồng và vở 2 000 đồng. Hết bao nhiêu?",
       "opts": [
-        "6000 đồng",
-        "7000 đồng",
-        "8000 đồng"
+        "3 000 đồng",
+        "10 000 đồng",
+        "7 000 đồng"
       ],
       "ok": 2,
-      "hint": "Mua nhiều món thì CỘNG tiền từng món. Tiền trả lại = tiền đưa − tiền phải trả.",
-      "yes": "Đúng rồi!"
+      "hint": "Mua cả hai thì cộng lại.",
+      "yes": "Đúng! 5 000 + 2 000 = 7 000.",
+      "art": "5 000 + 2 000"
     },
     {
-      "q": "5 m = ? cm",
+      "q": "Con voi và con mèo, con nào nặng hơn?",
       "opts": [
-        "5000 cm",
-        "500 cm",
-        "50 cm"
+        "Con mèo",
+        "Con voi",
+        "Bằng nhau"
       ],
       "ok": 1,
-      "hint": "Đổi từ đơn vị LỚN sang đơn vị BÉ thì NHÂN; từ BÉ sang LỚN thì CHIA.",
-      "yes": "Đúng rồi!"
+      "hint": "Nghĩ xem con nào to lớn hơn.",
+      "yes": "Đúng! Voi nặng hơn rất nhiều.",
+      "art": "🐘 ? 🐱"
     },
     {
-      "q": "Bút chì dài 28 cm, đoạn băng dài 39 cm. Đoạn băng dài hơn bút chì mấy cm?",
+      "q": "Từ 2 giờ đến 5 giờ là mấy giờ?",
       "opts": [
-        "10 cm",
-        "11 cm",
-        "67 cm"
+        "7 giờ",
+        "3 giờ",
+        "2 giờ"
       ],
       "ok": 1,
-      "hint": "“Dài hơn bao nhiêu” là lấy số lớn TRỪ số bé.",
-      "yes": "Đúng rồi!"
+      "hint": "Lấy giờ sau trừ giờ trước.",
+      "yes": "Đúng! 5 − 2 = 3 giờ.",
+      "art": "2 giờ → 5 giờ"
     }
   ]
 });

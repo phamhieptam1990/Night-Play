@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Toán lớp 4 · Số tự nhiên và cấu tạo thập phân.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "g4_large_numbers",
   "grade": 4,
@@ -8,98 +8,104 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Số tự nhiên và cấu tạo thập phân.",
-      "art": "🔢"
+      "t": "Số lớn chia thành lớp: lớp đơn vị, lớp nghìn, lớp triệu. Mỗi lớp có 3 hàng.",
+      "art": "123 456 789\ntriệu · nghìn · đơn vị"
     },
     {
       "k": "say",
-      "t": "Số có nhiều chữ số theo giới hạn chương trình",
-      "art": "🔢"
+      "t": "Mỗi chữ số có giá trị theo hàng của nó. Trong 673 849, chữ số 7 chỉ 70 nghìn.",
+      "art": "673 849\n7 → 70 000"
     },
     {
       "k": "say",
-      "t": "Hàng và lớp",
-      "art": "🔢"
+      "t": "Làm tròn đến hàng nghìn: nhìn chữ số hàng trăm. Từ 5 trở lên thì lên.",
+      "art": "12 121 → 12 000"
     },
     {
       "k": "choose",
-      "t": "Trong số 516723, chữ số 3 có giá trị là?",
+      "t": "Trong số 673 849, chữ số 9 có giá trị là?",
       "opts": [
-        "30",
-        "3",
-        "300"
+        "90",
+        "9",
+        "900"
       ],
       "ok": 1,
-      "yes": "Đúng rồi! Đáp án là 3.",
-      "no": "Đọc số từ PHẢI sang TRÁI: đơn vị, chục, trăm, nghìn…"
+      "yes": "Đúng! Giá trị là 9.",
+      "no": "9 đứng ở hàng cuối cùng, hàng đơn vị.",
+      "art": "673 849"
     },
     {
       "k": "choose",
-      "t": "Làm tròn số 95773 đến hàng chục nghìn",
+      "t": "Trong số 248 596, chữ số 4 có giá trị là?",
       "opts": [
-        "100000",
-        "100001",
-        "90000"
+        "40 000",
+        "4 000",
+        "400"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là 100000.",
-      "no": "Nhìn chữ số ở hàng ngay bên phải hàng cần làm tròn."
+      "yes": "Đúng! 40 000.",
+      "no": "4 đứng ở hàng chục nghìn.",
+      "art": "248 596"
     },
     {
       "k": "choose",
-      "t": "Số tiếp theo là số nào?3, 9, 27, 81, 243, ?",
+      "t": "Làm tròn 12 121 đến hàng nghìn được?",
       "opts": [
-        "730",
-        "729",
-        "567"
+        "13 000",
+        "12 000",
+        "12 100"
       ],
       "ok": 1,
-      "yes": "Đúng rồi! Đáp án là 729.",
-      "no": "Tìm xem mỗi số hơn số trước bao nhiêu, hoặc gấp mấy lần."
+      "yes": "Đúng! Hàng trăm là 1 nên giữ.",
+      "no": "Hàng trăm là 1, bé hơn 5.",
+      "art": "12 121 ≈ ?"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Số có nhiều chữ số theo giới hạn chương trình",
-        "Hàng và lớp",
-        "Đọc, viết, so sánh, sắp xếp số"
+        "Số lớn chia lớp, mỗi lớp 3 hàng",
+        "Giá trị chữ số phụ thuộc hàng",
+        "Làm tròn: nhìn hàng kề bên phải"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "Trong số 546189, chữ số 4 có giá trị là?",
+      "q": "Số nào lớn nhất?",
       "opts": [
-        "40000",
-        "4",
-        "400"
+        "5 090 000",
+        "905 000",
+        "590 000"
       ],
       "ok": 0,
-      "hint": "Đọc số từ PHẢI sang TRÁI: đơn vị, chục, trăm, nghìn…",
-      "yes": "Đúng rồi!"
+      "hint": "Số nào có nhiều chữ số hơn thì lớn hơn.",
+      "yes": "Đúng! Có 7 chữ số.",
+      "art": "? lớn nhất"
     },
     {
-      "q": "Làm tròn số 10041 đến hàng nghìn",
+      "q": "Mỗi lớp có mấy hàng?",
       "opts": [
-        "10000",
-        "9000",
-        "10001"
+        "3 hàng",
+        "4 hàng",
+        "2 hàng"
       ],
       "ok": 0,
-      "hint": "Nhìn chữ số ở hàng ngay bên phải hàng cần làm tròn.",
-      "yes": "Đúng rồi!"
+      "hint": "Lớp đơn vị gồm đơn vị, chục, trăm.",
+      "yes": "Đúng! Mỗi lớp 3 hàng.",
+      "art": "lớp = ? hàng"
     },
     {
-      "q": "Số tiếp theo là số nào?1, 4, 9, 16, 25, ?",
+      "q": "Số 3 triệu 5 trăm nghìn viết là?",
       "opts": [
-        "37",
-        "36",
-        "43"
+        "35 000 000",
+        "3 500 000",
+        "3 050 000"
       ],
       "ok": 1,
-      "hint": "Tìm xem mỗi số hơn số trước bao nhiêu, hoặc gấp mấy lần.",
-      "yes": "Đúng rồi!"
+      "hint": "3 triệu = 3 000 000; thêm 500 000.",
+      "yes": "Đúng! 3 500 000.",
+      "art": "3 triệu 5 trăm nghìn"
     }
   ]
 });

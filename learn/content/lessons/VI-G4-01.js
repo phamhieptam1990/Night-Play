@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Tiếng Việt lớp 4 · Đọc hiểu văn học.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "VI-G4-01",
   "grade": 4,
@@ -8,92 +8,104 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Đọc hiểu văn học.",
-      "art": "📖"
+      "t": "Đọc văn học: tìm nhân vật, việc xảy ra và bài học rút ra.",
+      "art": "👤 Ai? 📖 Việc gì? 💡 Bài học"
     },
     {
       "k": "say",
-      "t": "Nhận biết chủ đề, nhân vật, chi tiết tiêu biểu và tác dụng của một số yếu tố nghệ…",
-      "art": "📖"
+      "t": "Thành ngữ là câu nói quen thuộc có nghĩa bóng.",
+      "art": "Ăn quả nhớ kẻ trồng cây"
+    },
+    {
+      "k": "say",
+      "t": "Từ trái nghĩa giúp ta thấy rõ sự đối lập.",
+      "art": "hiền ↔ dữ"
     },
     {
       "k": "choose",
-      "t": "Điền từ còn thiếu: Gần mực thì đen, gần đèn thì __",
+      "t": "Thành ngữ \"Ăn quả nhớ kẻ trồng cây\" khuyên ta điều gì?",
       "opts": [
-        "nấy",
-        "kim",
-        "rạng"
+        "Trồng nhiều cây",
+        "Ăn nhiều quả",
+        "Biết ơn người giúp mình"
       ],
       "ok": 2,
-      "yes": "Đúng rồi! Đáp án là rạng.",
-      "no": "Đọc cả câu lên cho có vần, có nhịp."
+      "yes": "Đúng! Nhớ ơn người giúp mình.",
+      "no": "Đây là nghĩa bóng, nói về lòng biết ơn.",
+      "art": "🌳"
     },
     {
       "k": "choose",
-      "t": "Điền từ còn thiếu: Gieo gió gặt __",
+      "t": "Từ trái nghĩa với \"hiền\" là?",
       "opts": [
-        "rạng",
-        "cao",
-        "bão"
+        "lành",
+        "ngoan",
+        "dữ"
       ],
       "ok": 2,
-      "yes": "Đúng rồi! Đáp án là bão.",
-      "no": "Đọc cả câu lên cho có vần, có nhịp."
+      "yes": "Đúng! hiền ↔ dữ.",
+      "no": "Nghĩ xem tính cách ngược lại.",
+      "art": "hiền ↔ ?"
     },
     {
       "k": "choose",
-      "t": "Điền từ còn thiếu: Cây ngay không sợ chết __",
+      "t": "Trong truyện, nhân vật là ai?",
       "opts": [
-        "nâng",
-        "đứng",
-        "bão"
+        "Tên cuốn sách",
+        "Người, vật trong truyện",
+        "Tên tác giả"
       ],
       "ok": 1,
-      "yes": "Đúng rồi! Đáp án là đứng.",
-      "no": "Đọc cả câu lên cho có vần, có nhịp."
+      "yes": "Đúng! Nhân vật.",
+      "no": "Nhân vật là đối tượng làm nên câu chuyện.",
+      "art": "👤"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Nhận biết chủ đề, nhân vật, chi tiết tiêu biểu và tác dụng của một số yếu tố nghệ…",
-        "Sai thì thử lại, bé sẽ giỏi hơn!"
+        "Tìm nhân vật, sự việc và bài học",
+        "Thành ngữ thường có nghĩa bóng",
+        "Từ trái nghĩa có nghĩa ngược nhau"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "Điền từ còn thiếu: Tốt gỗ hơn tốt __",
+      "q": "Thành ngữ \"Có công mài sắt có ngày nên kim\" nói về?",
       "opts": [
-        "mòn",
-        "tông",
-        "nước sơn"
+        "Làm đồ sắt",
+        "Mua kim",
+        "Kiên trì"
       ],
       "ok": 2,
-      "hint": "Đọc cả câu lên cho có vần, có nhịp.",
-      "yes": "Đúng rồi!"
+      "hint": "Hiểu theo nghĩa bóng.",
+      "yes": "Đúng! Kiên trì thì thành công.",
+      "art": "🪡"
     },
     {
-      "q": "Điền từ còn thiếu: Uống nước nhớ __",
+      "q": "Từ trái nghĩa với \"siêng năng\" là?",
       "opts": [
-        "nguồn",
-        "kim",
-        "cây"
+        "lười biếng",
+        "cần cù",
+        "chăm chỉ"
       ],
       "ok": 0,
-      "hint": "Đọc cả câu lên cho có vần, có nhịp.",
-      "yes": "Đúng rồi!"
+      "hint": "Tìm từ ngược nghĩa.",
+      "yes": "Đúng! lười biếng.",
+      "art": "siêng năng ↔ ?"
     },
     {
-      "q": "Điền từ còn thiếu: Ăn cây nào rào cây __",
+      "q": "Bài học của câu chuyện thường nằm ở đâu?",
       "opts": [
-        "nấy",
-        "cây",
-        "cỏ"
+        "Phần kết",
+        "Tên truyện",
+        "Tên tác giả"
       ],
       "ok": 0,
-      "hint": "Đọc cả câu lên cho có vần, có nhịp.",
-      "yes": "Đúng rồi!"
+      "hint": "Câu chuyện thường kết thúc bằng điều rút ra.",
+      "yes": "Đúng! Phần kết.",
+      "art": "💡"
     }
   ]
 });

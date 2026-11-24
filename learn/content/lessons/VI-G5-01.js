@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Tiếng Việt lớp 5 · Đọc hiểu tổng hợp.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "VI-G5-01",
   "grade": 5,
@@ -8,92 +8,104 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Đọc hiểu tổng hợp.",
-      "art": "📖"
+      "t": "Đọc hiểu: xác định chủ đề, ý chính của từng đoạn, rồi nêu ý chung.",
+      "art": "Đoạn 1 → ý 1 → chủ đề"
     },
     {
       "k": "say",
-      "t": "Xác định chủ đề, ý chính, thông điệp; kết nối thông tin và suy luận ở mức phù hợp lứa…",
-      "art": "📖"
+      "t": "Thành ngữ, tục ngữ có nghĩa bóng, nghĩa sâu hơn nghĩa chữ.",
+      "art": "Uống nước nhớ nguồn"
+    },
+    {
+      "k": "say",
+      "t": "Nhân vật có tính cách qua lời nói và hành động.",
+      "art": "👤 lời nói · hành động"
     },
     {
       "k": "choose",
-      "t": "Điền từ còn thiếu: Tốt gỗ hơn tốt __",
+      "t": "\"Uống nước nhớ nguồn\" khuyên ta điều gì?",
       "opts": [
-        "nhai",
-        "kim",
-        "nước sơn"
+        "Uống nhiều nước",
+        "Đi tìm suối",
+        "Biết ơn cội nguồn"
       ],
       "ok": 2,
-      "yes": "Đúng rồi! Đáp án là nước sơn.",
-      "no": "Đọc cả câu lên cho có vần, có nhịp."
+      "yes": "Đúng! Biết ơn người đi trước.",
+      "no": "Hiểu nghĩa bóng.",
+      "art": "💧"
     },
     {
       "k": "choose",
-      "t": "Điền từ còn thiếu: Có công mài sắt, có ngày nên __",
+      "t": "Ý chính của đoạn văn là?",
       "opts": [
-        "tông",
-        "đẹp",
-        "kim"
+        "Từ đầu tiên",
+        "Câu dài nhất",
+        "Ý bao quát cả đoạn"
       ],
       "ok": 2,
-      "yes": "Đúng rồi! Đáp án là kim.",
-      "no": "Đọc cả câu lên cho có vần, có nhịp."
+      "yes": "Đúng! Ý bao quát.",
+      "no": "Nó thâu tóm nội dung của cả đoạn.",
+      "art": "📄"
     },
     {
       "k": "choose",
-      "t": "Điền từ còn thiếu: Gieo gió gặt __",
+      "t": "\"Chị ngã em nâng\" nói về?",
       "opts": [
-        "bão",
-        "cao",
-        "thân"
+        "Giúp đỡ nhau",
+        "Học đi xe",
+        "Chị em đi chơi"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là bão.",
-      "no": "Đọc cả câu lên cho có vần, có nhịp."
+      "yes": "Đúng! Giúp nhau lúc khó.",
+      "no": "Hiểu nghĩa bóng.",
+      "art": "🤝"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Xác định chủ đề, ý chính, thông điệp; kết nối thông tin và suy luận ở mức phù hợp lứa…",
-        "Sai thì thử lại, bé sẽ giỏi hơn!"
+        "Tìm ý chính từng đoạn rồi nêu chủ đề",
+        "Thành ngữ có nghĩa bóng",
+        "Tính cách nhân vật hiện qua lời nói, hành động"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "Điền từ còn thiếu: Kiến tha lâu cũng __",
+      "q": "Muốn biết tính cách nhân vật, ta xem?",
       "opts": [
-        "đầy",
-        "rách",
-        "mòn"
+        "Lời nói và hành động",
+        "Tên bài",
+        "Số trang"
       ],
       "ok": 0,
-      "hint": "Đọc cả câu lên cho có vần, có nhịp.",
-      "yes": "Đúng rồi!"
+      "hint": "Người ta thể hiện mình bằng cách nào?",
+      "yes": "Đúng! Lời nói, hành động.",
+      "art": "👤"
     },
     {
-      "q": "Điền từ còn thiếu: Ăn quả nhớ kẻ trồng __",
+      "q": "Từ trái nghĩa với \"dũng cảm\" là?",
       "opts": [
-        "cây",
-        "nâng",
-        "kim"
+        "hèn nhát",
+        "mạnh mẽ",
+        "gan dạ"
       ],
       "ok": 0,
-      "hint": "Đọc cả câu lên cho có vần, có nhịp.",
-      "yes": "Đúng rồi!"
+      "hint": "Tìm từ ngược nghĩa.",
+      "yes": "Đúng! hèn nhát.",
+      "art": "dũng cảm ↔ ?"
     },
     {
-      "q": "Điền từ còn thiếu: Thương người như thể thương __",
+      "q": "Chủ đề bài đọc là gì?",
       "opts": [
-        "thân",
-        "rạng",
-        "đứng"
+        "Điều bài muốn nói đến",
+        "Tên nhà in",
+        "Số dòng của bài"
       ],
       "ok": 0,
-      "hint": "Đọc cả câu lên cho có vần, có nhịp.",
-      "yes": "Đúng rồi!"
+      "hint": "Chủ đề là nội dung chính nhất.",
+      "yes": "Đúng! Điều bài muốn nói.",
+      "art": "💡"
     }
   ]
 });

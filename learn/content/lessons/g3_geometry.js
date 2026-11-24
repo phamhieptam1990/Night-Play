@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Toán lớp 3 · Hình học phẳng và hình khối.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "g3_geometry",
   "grade": 3,
@@ -8,98 +8,104 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Hình học phẳng và hình khối.",
-      "art": "📐"
+      "t": "Góc vuông là góc ở góc cuốn vở. Góc nhỏ hơn gọi là góc nhọn, lớn hơn là góc tù.",
+      "art": "⊾ vuông\n< nhọn · > tù"
     },
     {
       "k": "say",
-      "t": "Góc vuông và góc không vuông",
-      "art": "📐"
+      "t": "Chu vi là độ dài đường bao quanh hình.",
+      "art": "Chữ nhật 5 và 3\n(5 + 3) × 2 = 16"
     },
     {
       "k": "say",
-      "t": "Các yếu tố của hình tam giác, tứ giác và hình đã học",
-      "art": "📐"
+      "t": "Hình vuông cạnh a có chu vi a × 4.",
+      "art": "Cạnh 6\n6 × 4 = 24"
     },
     {
       "k": "choose",
-      "t": "Hình tam giác có mấy góc?",
+      "t": "Góc nhỏ hơn góc vuông gọi là gì?",
       "opts": [
-        "2",
-        "4",
-        "3"
+        "Góc bẹt",
+        "Góc tù",
+        "Góc nhọn"
       ],
       "ok": 2,
-      "yes": "Đúng rồi! Đáp án là 3.",
-      "no": "Góc vuông giống góc của tờ giấy. So sánh góc với góc vuông."
+      "yes": "Đúng! Nhỏ hơn góc vuông là góc nhọn.",
+      "no": "So với góc cuốn vở: nhỏ hơn hay lớn hơn?",
+      "art": "∠"
     },
     {
       "k": "choose",
-      "t": "Hình vuông có cạnh 7 cm. Chu vi hình vuông là?",
+      "t": "Góc lớn hơn góc vuông gọi là gì?",
       "opts": [
-        "28 cm",
-        "11 cm",
-        "49 cm"
+        "Góc tù",
+        "Góc nhọn",
+        "Góc vuông"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là 28 cm.",
-      "no": "Chu vi là độ dài đi MỘT VÒNG quanh hình."
+      "yes": "Đúng! Góc tù.",
+      "no": "Góc này mở rộng hơn góc cuốn vở.",
+      "art": "∠"
     },
     {
       "k": "choose",
-      "t": "Hình vuông có mấy góc vuông?",
+      "t": "Hình chữ nhật dài 5 cm, rộng 3 cm. Chu vi là?",
       "opts": [
-        "4",
-        "5",
-        "3"
+        "16 cm",
+        "15 cm",
+        "8 cm"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là 4.",
-      "no": "Góc vuông giống góc của tờ giấy. So sánh góc với góc vuông."
+      "yes": "Đúng! (5 + 3) × 2 = 16.",
+      "no": "Cộng chiều dài và rộng rồi nhân 2.",
+      "art": "5 × 3"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Góc vuông và góc không vuông",
-        "Các yếu tố của hình tam giác, tứ giác và hình đã học",
-        "Chu vi một số hình"
+        "Nhọn nhỏ hơn vuông, tù lớn hơn vuông",
+        "Chu vi là tổng độ dài các cạnh",
+        "Chu vi hình vuông = cạnh × 4"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "Hình vuông có cạnh 3 cm. Chu vi hình vuông là?",
-      "opts": [
-        "6 cm",
-        "7 cm",
-        "12 cm"
-      ],
-      "ok": 2,
-      "hint": "Chu vi là độ dài đi MỘT VÒNG quanh hình.",
-      "yes": "Đúng rồi!"
-    },
-    {
-      "q": "Hình chữ nhật có mấy góc vuông?",
-      "opts": [
-        "5",
-        "4",
-        "2"
-      ],
-      "ok": 1,
-      "hint": "Góc vuông giống góc của tờ giấy. So sánh góc với góc vuông.",
-      "yes": "Đúng rồi!"
-    },
-    {
-      "q": "Hình chữ nhật dài 14 cm, rộng 4 cm. Chu vi là?",
+      "q": "Hình vuông cạnh 6 cm. Chu vi là?",
       "opts": [
         "36 cm",
-        "18 cm",
-        "22 cm"
+        "12 cm",
+        "24 cm"
+      ],
+      "ok": 2,
+      "hint": "Hình vuông có 4 cạnh bằng nhau.",
+      "yes": "Đúng! 6 × 4 = 24.",
+      "art": "6 cm"
+    },
+    {
+      "q": "Góc ở góc cuốn vở là góc gì?",
+      "opts": [
+        "Góc nhọn",
+        "Góc vuông",
+        "Góc tù"
+      ],
+      "ok": 1,
+      "hint": "Góc này đúng 90 độ.",
+      "yes": "Đúng! Góc vuông.",
+      "art": "📖"
+    },
+    {
+      "q": "Hình tam giác có ba cạnh 3, 4, 5 cm. Chu vi là?",
+      "opts": [
+        "12 cm",
+        "9 cm",
+        "60 cm"
       ],
       "ok": 0,
-      "hint": "Chu vi là độ dài đi MỘT VÒNG quanh hình.",
-      "yes": "Đúng rồi!"
+      "hint": "Cộng độ dài ba cạnh.",
+      "yes": "Đúng! 3 + 4 + 5 = 12.",
+      "art": "3 + 4 + 5"
     }
   ]
 });

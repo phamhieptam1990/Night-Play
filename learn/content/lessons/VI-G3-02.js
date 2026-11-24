@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Tiếng Việt lớp 3 · Kiến thức tiếng Việt.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "VI-G3-02",
   "grade": 3,
@@ -8,92 +8,104 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Kiến thức tiếng Việt.",
-      "art": "📖"
+      "t": "Dấu phẩy ngăn các ý liệt kê. Dấu chấm cuối câu kể, dấu hỏi cuối câu hỏi.",
+      "art": "hoa hồng, hoa cúc\nem ơi? tuyệt quá!"
     },
     {
       "k": "say",
-      "t": "Nhận biết, vận dụng từ ngữ, câu, dấu câu và một số quy tắc chính tả trong ngữ cảnh.",
-      "art": "📖"
+      "t": "Từ đồng nghĩa: nghĩa giống nhau. Từ trái nghĩa: nghĩa ngược nhau.",
+      "art": "chăm = siêng\nnóng ↔ lạnh"
+    },
+    {
+      "k": "say",
+      "t": "Câu kể, câu hỏi, câu cảm, câu khiến: mỗi loại có mục đích riêng.",
+      "art": "Ai đó? Đẹp quá!"
     },
     {
       "k": "choose",
-      "t": "Điền chữ còn thiếu: 🌊 __óng",
-      "opts": [
-        "ch",
-        "tr",
-        "s"
-      ],
-      "ok": 2,
-      "yes": "Đúng rồi! Đáp án là s.",
-      "no": "Nhìn hình và đọc to cả từ."
-    },
-    {
-      "k": "choose",
-      "t": "Từ nào là từ chỉ đặc điểm?",
-      "opts": [
-        "ngọt",
-        "mèo",
-        "chạy"
-      ],
-      "ok": 0,
-      "yes": "Đúng rồi! Đáp án là ngọt.",
-      "no": "Sự vật: nhìn thấy, sờ được. Hoạt động: làm được. Đặc điểm: dùng để tả."
-    },
-    {
-      "k": "choose",
-      "t": "Điền dấu câu: Trong vườn có hoa hồng __ hoa cúc và hoa lan.",
+      "t": "Điền dấu: Trong vườn có hoa hồng __ hoa cúc và hoa lan.",
       "opts": [
         ".",
         "?",
         ","
       ],
       "ok": 2,
-      "yes": "Đúng rồi! Đáp án là ,.",
-      "no": "Câu hỏi dùng dấu hỏi (?). Câu cảm, ngạc nhiên dùng dấu chấm than (!). Câu kể dùng…"
+      "yes": "Đúng! Dấu phẩy ngăn các ý liệt kê.",
+      "no": "Đây là các hoa được kể liệt kê nối tiếp nhau.",
+      "art": "hồng __ cúc"
+    },
+    {
+      "k": "choose",
+      "t": "Câu \"Bạn tên là gì?\" là câu gì?",
+      "opts": [
+        "Câu hỏi",
+        "Câu kể",
+        "Câu cảm"
+      ],
+      "ok": 0,
+      "yes": "Đúng! Câu hỏi.",
+      "no": "Câu này dùng để hỏi.",
+      "art": "Bạn tên là gì?"
+    },
+    {
+      "k": "choose",
+      "t": "Từ đồng nghĩa với \"chăm chỉ\" là?",
+      "opts": [
+        "mệt mỏi",
+        "lười biếng",
+        "siêng năng"
+      ],
+      "ok": 2,
+      "yes": "Đúng! siêng năng.",
+      "no": "Tìm từ có nghĩa gần giống.",
+      "art": "chăm chỉ = ?"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Nhận biết, vận dụng từ ngữ, câu, dấu câu và một số quy tắc chính tả trong ngữ cảnh.",
-        "Sai thì thử lại, bé sẽ giỏi hơn!"
+        "Dấu phẩy liệt kê, dấu chấm cuối câu kể",
+        "Đồng nghĩa giống nhau, trái nghĩa ngược nhau",
+        "Mỗi kiểu câu có dấu câu riêng"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "Câu “Bạn có thích đá bóng không?” thuộc kiểu câu nào?",
+      "q": "Từ trái nghĩa với \"nóng\" là?",
       "opts": [
-        "câu kể",
-        "câu khiến",
-        "câu hỏi"
+        "bỏng",
+        "ấm",
+        "lạnh"
       ],
       "ok": 2,
-      "hint": "Kể: nói điều đã xảy ra. Hỏi: để hỏi. Cảm: bày tỏ cảm xúc. Khiến: nhờ, bảo làm.",
-      "yes": "Đúng rồi!"
+      "hint": "Nghĩ xem điều ngược lại.",
+      "yes": "Đúng! nóng ↔ lạnh.",
+      "art": "nóng ↔ ?"
     },
     {
-      "q": "Từ nào đồng nghĩa với trung thực?",
+      "q": "Điền ch hay tr: __ăm chỉ.",
       "opts": [
-        "nhút nhát",
-        "thật thà",
-        "lười biếng"
+        "tr",
+        "ch",
+        "kh"
       ],
       "ok": 1,
-      "hint": "Đồng nghĩa là gần nghĩa nhau, dùng thay nhau được.",
-      "yes": "Đúng rồi!"
+      "hint": "Nghĩ đến người siêng năng.",
+      "yes": "Đúng! chăm chỉ.",
+      "art": "__ăm chỉ"
     },
     {
-      "q": "Từ nào trái nghĩa với chậm?",
+      "q": "Từ \"học sinh\" thuộc loại từ nào?",
       "opts": [
-        "nghèo",
-        "nhanh",
-        "nóng"
+        "Chỉ hoạt động",
+        "Chỉ sự vật",
+        "Chỉ đặc điểm"
       ],
       "ok": 1,
-      "hint": "Trái nghĩa là nghĩa ngược nhau.",
-      "yes": "Đúng rồi!"
+      "hint": "Từ này chỉ người.",
+      "yes": "Đúng! Chỉ sự vật.",
+      "art": "học sinh"
     }
   ]
 });

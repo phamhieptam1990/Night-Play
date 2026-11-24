@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Tiếng Anh lớp 5 · Nói (Speaking).
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "EN-G5-02",
   "grade": 5,
@@ -8,97 +8,109 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Nói (Speaking).",
-      "art": "🔤"
+      "t": "Câu hỏi Wh: What, Where, When, Who, Why, How.",
+      "art": "What? Where? Why?"
     },
     {
       "k": "say",
-      "t": "Hỏi, trả lời, mô tả và trình bày ngắn về bản thân, gia đình, trường học và môi trường…",
-      "art": "🔤"
+      "t": "Be: I am, he/she/it is, you/we/they are. Hôm qua dùng was/were.",
+      "art": "I was · They were"
+    },
+    {
+      "k": "say",
+      "t": "Trả lời đủ ý: Why? — Because ...",
+      "art": "Because it is raining."
     },
     {
       "k": "choose",
-      "t": "___ pencils do you have?Trả lời: “Five.”",
+      "t": "Hỏi lý do dùng từ nào?",
       "opts": [
-        "How many",
-        "Who",
-        "Where"
+        "Why",
+        "Where",
+        "Who"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là How many.",
-      "no": "Đọc câu trả lời để biết câu hỏi nói về điều gì: tên, nơi chốn, người, tuổi, số…",
+      "yes": "Đúng! Why.",
+      "no": "Câu trả lời thường bắt đầu bằng because.",
+      "art": "?",
       "optlang": "en"
     },
     {
       "k": "choose",
-      "t": "___ do you live?Trả lời: “In Hanoi.”",
+      "t": "Điền: My parents __ at home.",
       "opts": [
-        "Where",
-        "Who",
-        "What"
+        "are",
+        "am",
+        "is"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là Where.",
-      "no": "Đọc câu trả lời để biết câu hỏi nói về điều gì: tên, nơi chốn, người, tuổi, số…",
+      "yes": "Đúng! are.",
+      "no": "Parents là nhiều người.",
+      "art": "They __ at home.",
       "optlang": "en"
     },
     {
       "k": "choose",
-      "t": "___ is your name?Trả lời: “My name is Mai.”",
+      "t": "\"When is your birthday?\" Trả lời?",
       "opts": [
-        "Where",
-        "When",
-        "What"
+        "It is a cake.",
+        "I am ten.",
+        "It is in May."
       ],
       "ok": 2,
-      "yes": "Đúng rồi! Đáp án là What.",
-      "no": "Đọc câu trả lời để biết câu hỏi nói về điều gì: tên, nơi chốn, người, tuổi, số…",
+      "yes": "Đúng! In May.",
+      "no": "Nói thời gian.",
+      "art": "🎂",
       "optlang": "en"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Hỏi, trả lời, mô tả và trình bày ngắn về bản thân, gia đình, trường học và môi trường…",
-        "Sai thì thử lại, bé sẽ giỏi hơn!"
+        "Wh: What, Where, When, Who, Why, How",
+        "am/is/are và was/were",
+        "Why — Because"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "___ is your teacher?Trả lời: “Ms Lan.”",
+      "q": "Điền: She __ my teacher.",
       "opts": [
-        "Who",
-        "What time",
-        "How many"
+        "is",
+        "am",
+        "are"
       ],
       "ok": 0,
-      "hint": "Đọc câu trả lời để biết câu hỏi nói về điều gì: tên, nơi chốn, người, tuổi, số…",
-      "yes": "Đúng rồi!",
+      "hint": "Chủ ngữ là một người.",
+      "yes": "Đúng! is.",
+      "art": "She __ my teacher.",
       "optlang": "en"
     },
     {
-      "q": "___ is your birthday?Trả lời: “It's in May.”",
+      "q": "\"How old are you?\" Trả lời?",
       "opts": [
-        "Where",
-        "How many",
-        "When"
+        "I am fine.",
+        "It is red.",
+        "I am ten."
       ],
       "ok": 2,
-      "hint": "Đọc câu trả lời để biết câu hỏi nói về điều gì: tên, nơi chốn, người, tuổi, số…",
-      "yes": "Đúng rồi!",
+      "hint": "Nói tuổi.",
+      "yes": "Đúng! I am ten.",
+      "art": "How old?",
       "optlang": "en"
     },
     {
-      "q": "___ do you get up?Trả lời: “At six o'clock.”",
+      "q": "Điền: Yesterday I __ at school.",
       "opts": [
-        "What time",
-        "Who",
-        "How many"
+        "was",
+        "am",
+        "is"
       ],
       "ok": 0,
-      "hint": "Đọc câu trả lời để biết câu hỏi nói về điều gì: tên, nơi chốn, người, tuổi, số…",
-      "yes": "Đúng rồi!",
+      "hint": "Hôm qua là quá khứ.",
+      "yes": "Đúng! was.",
+      "art": "Yesterday I __ ...",
       "optlang": "en"
     }
   ]

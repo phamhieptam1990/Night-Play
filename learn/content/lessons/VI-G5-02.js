@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Tiếng Việt lớp 5 · Tiếng Việt và ngữ pháp.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "VI-G5-02",
   "grade": 5,
@@ -8,92 +8,104 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Tiếng Việt và ngữ pháp.",
-      "art": "📖"
+      "t": "Từ đồng nghĩa, trái nghĩa, từ nhiều nghĩa: chọn từ hợp ngữ cảnh.",
+      "art": "đẹp = xinh\nđẹp ↔ xấu"
     },
     {
       "k": "say",
-      "t": "Vận dụng kiến thức từ, câu, liên kết câu và quy tắc chính tả để hiểu và tạo lập văn bản.",
-      "art": "📖"
+      "t": "Dấu phẩy liệt kê, dấu hai chấm báo lời giải thích, dấu ngoặc kép trích lời.",
+      "art": ", : \" \""
+    },
+    {
+      "k": "say",
+      "t": "Câu ghép có hai vế. Nối bằng quan hệ từ: vì...nên, nếu...thì.",
+      "art": "Vì mưa nên đường trơn."
     },
     {
       "k": "choose",
-      "t": "Điền chữ còn thiếu: 🐷 __ợn",
+      "t": "Điền dấu: Trong vườn có hoa hồng __ hoa cúc và hoa lan.",
       "opts": [
-        "l",
-        "ng",
-        "nh"
-      ],
-      "ok": 0,
-      "yes": "Đúng rồi! Đáp án là l.",
-      "no": "Nhìn hình và đọc to cả từ."
-    },
-    {
-      "k": "choose",
-      "t": "Từ nào là danh từ?",
-      "opts": [
-        "ăn",
-        "bàn",
-        "xanh"
-      ],
-      "ok": 1,
-      "yes": "Đúng rồi! Đáp án là bàn.",
-      "no": "Sự vật: nhìn thấy, sờ được. Hoạt động: làm được. Đặc điểm: dùng để tả."
-    },
-    {
-      "k": "choose",
-      "t": "Điền dấu cuối câu: Em có thích môn Toán không __",
-      "opts": [
+        ",",
         "?",
-        "!",
         "."
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là ?.",
-      "no": "Câu hỏi dùng dấu hỏi (?). Câu cảm, ngạc nhiên dùng dấu chấm than (!). Câu kể dùng…"
+      "yes": "Đúng! Dấu phẩy ngăn các ý liệt kê.",
+      "no": "Các hoa được kể liệt kê nối tiếp nhau.",
+      "art": "hồng __ cúc"
+    },
+    {
+      "k": "choose",
+      "t": "Từ đồng nghĩa với \"xinh\" là?",
+      "opts": [
+        "xấu",
+        "đẹp",
+        "nhỏ"
+      ],
+      "ok": 1,
+      "yes": "Đúng! đẹp.",
+      "no": "Tìm từ cùng nghĩa.",
+      "art": "xinh = ?"
+    },
+    {
+      "k": "choose",
+      "t": "Điền quan hệ từ: Vì mưa __ đường trơn.",
+      "opts": [
+        "nên",
+        "mà",
+        "để"
+      ],
+      "ok": 0,
+      "yes": "Đúng! Vì...nên.",
+      "no": "Chỉ kết quả của nguyên nhân.",
+      "art": "Vì mưa __ đường trơn"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Vận dụng kiến thức từ, câu, liên kết câu và quy tắc chính tả để hiểu và tạo lập văn bản.",
-        "Sai thì thử lại, bé sẽ giỏi hơn!"
+        "Chọn từ đồng nghĩa, trái nghĩa hợp ngữ cảnh",
+        "Dùng đúng dấu câu",
+        "Câu ghép nối bằng quan hệ từ"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "Câu “Bạn có thích đá bóng không?” thuộc kiểu câu nào?",
+      "q": "Điền ch hay tr: __ân thành.",
       "opts": [
-        "câu hỏi",
-        "câu cảm",
-        "câu khiến"
+        "ch",
+        "x",
+        "tr"
       ],
       "ok": 0,
-      "hint": "Kể: nói điều đã xảy ra. Hỏi: để hỏi. Cảm: bày tỏ cảm xúc. Khiến: nhờ, bảo làm.",
-      "yes": "Đúng rồi!"
+      "hint": "Nghĩ đến người thật thà.",
+      "yes": "Đúng! chân thành.",
+      "art": "__ân thành"
     },
     {
-      "q": "Từ nào đồng nghĩa với bố?",
+      "q": "Từ trái nghĩa với \"rộng\" là?",
       "opts": [
-        "ba",
-        "mẹ",
-        "chị"
+        "hẹp",
+        "to",
+        "dài"
       ],
       "ok": 0,
-      "hint": "Đồng nghĩa là gần nghĩa nhau, dùng thay nhau được.",
-      "yes": "Đúng rồi!"
+      "hint": "Tìm từ ngược nghĩa.",
+      "yes": "Đúng! hẹp.",
+      "art": "rộng ↔ ?"
     },
     {
-      "q": "Từ nào trái nghĩa với nóng?",
+      "q": "\"Em ơi, đi học nào!\" là câu gì?",
       "opts": [
-        "lạnh",
-        "rỗng",
-        "hiền"
+        "Câu khiến",
+        "Câu kể",
+        "Câu hỏi"
       ],
       "ok": 0,
-      "hint": "Trái nghĩa là nghĩa ngược nhau.",
-      "yes": "Đúng rồi!"
+      "hint": "Câu này dùng để yêu cầu.",
+      "yes": "Đúng! Câu khiến.",
+      "art": "Em ơi, đi học nào!"
     }
   ]
 });

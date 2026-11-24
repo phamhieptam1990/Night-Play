@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Toán lớp 5 · Hình học phẳng và hình khối.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "g5_geometry",
   "grade": 5,
@@ -8,98 +8,104 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Hình học phẳng và hình khối.",
-      "art": "📐"
+      "t": "Diện tích hình thang = (đáy lớn + đáy bé) × chiều cao ÷ 2.",
+      "art": "(6 + 4) × 3 ÷ 2 = 15"
     },
     {
       "k": "say",
-      "t": "Tam giác, hình thang và các hình đã học",
-      "art": "📐"
+      "t": "Chu vi hình tròn = đường kính × 3,14. Diện tích = bán kính × bán kính × 3,14.",
+      "art": "d = 10\nC = 10 × 3,14 = 31,4"
     },
     {
       "k": "say",
-      "t": "Đường tròn, hình tròn và các yếu tố liên quan",
-      "art": "📐"
+      "t": "Thể tích hình hộp chữ nhật = dài × rộng × cao.",
+      "art": "4 × 3 × 2 = 24 cm³"
     },
     {
       "k": "choose",
-      "t": "Góc 30° là góc gì?",
+      "t": "Hình thang đáy 6 cm và 4 cm, cao 3 cm. Diện tích là?",
       "opts": [
-        "góc bẹt",
-        "góc tù",
-        "góc nhọn"
+        "13 cm²",
+        "30 cm²",
+        "15 cm²"
       ],
       "ok": 2,
-      "yes": "Đúng rồi! Đáp án là góc nhọn.",
-      "no": "Góc vuông 90°, góc bẹt 180°. Hai góc kề bù cộng lại 180°."
+      "yes": "Đúng! 10 × 3 ÷ 2 = 15.",
+      "no": "Cộng hai đáy, nhân chiều cao rồi chia 2.",
+      "art": "6, 4, cao 3"
     },
     {
       "k": "choose",
-      "t": "Hình vuông có chu vi 128 m. Cạnh hình vuông dài?",
+      "t": "Hình tròn đường kính 10 cm. Chu vi là? (π = 3,14)",
       "opts": [
-        "32 m",
-        "1024 m",
-        "64 m"
+        "31,4 cm",
+        "62,8 cm",
+        "314 cm"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là 32 m.",
-      "no": "Chu vi là độ dài đi MỘT VÒNG quanh hình."
+      "yes": "Đúng! 10 × 3,14 = 31,4.",
+      "no": "Chu vi = đường kính × 3,14.",
+      "art": "d = 10 cm"
     },
     {
       "k": "choose",
-      "t": "Hình bình hành có đáy 28 m, chiều cao 17 m. Diện tích là?",
+      "t": "Hình hộp dài 4, rộng 3, cao 2 cm. Thể tích là?",
       "opts": [
-        "476 m²",
-        "90 m²",
-        "45 m²"
+        "24 cm³",
+        "9 cm³",
+        "26 cm³"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là 476 m².",
-      "no": "Diện tích là phần mặt phẳng nằm BÊN TRONG hình (như số ô vuông phủ kín)."
+      "yes": "Đúng! 4 × 3 × 2 = 24.",
+      "no": "Nhân ba kích thước.",
+      "art": "4 × 3 × 2"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Tam giác, hình thang và các hình đã học",
-        "Đường tròn, hình tròn và các yếu tố liên quan",
-        "Hình hộp chữ nhật, hình lập phương và hình khối liên quan theo chương trình"
+        "Hình thang: (đáy lớn + đáy bé) × cao ÷ 2",
+        "Hình tròn: chu vi d × 3,14, diện tích r × r × 3,14",
+        "Thể tích hộp = dài × rộng × cao"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "Hình hộp chữ nhật dài 9 cm, rộng 5 cm, cao 8 cm. Thể tích là?",
+      "q": "Hình tròn bán kính 2 cm. Diện tích là? (π = 3,14)",
       "opts": [
-        "22 cm³",
-        "360 cm³",
-        "45 cm³"
+        "6,28 cm²",
+        "12,56 cm²",
+        "25,12 cm²"
       ],
       "ok": 1,
-      "hint": "Thể tích là phần không gian bên trong khối.",
-      "yes": "Đúng rồi!"
+      "hint": "Bán kính nhân bán kính rồi nhân 3,14.",
+      "yes": "Đúng! 2 × 2 × 3,14 = 12,56.",
+      "art": "r = 2 cm"
     },
     {
-      "q": "Hai góc kề bù có tổng bằng 180°. Một góc là 50°, góc còn lại là?",
+      "q": "Góc 135° là góc gì?",
       "opts": [
-        "40 °",
-        "130 °",
-        "310 °"
+        "Góc vuông",
+        "Góc tù",
+        "Góc nhọn"
       ],
       "ok": 1,
-      "hint": "Góc vuông 90°, góc bẹt 180°. Hai góc kề bù cộng lại 180°.",
-      "yes": "Đúng rồi!"
+      "hint": "So với 90°.",
+      "yes": "Đúng! Lớn hơn 90°.",
+      "art": "135°"
     },
     {
-      "q": "Hình chữ nhật dài 37 m, rộng 17 m. Chu vi là?",
+      "q": "Hình vuông cạnh 5 cm. Diện tích là?",
       "opts": [
-        "54 m",
-        "108 m",
-        "71 m"
+        "10 cm²",
+        "25 cm²",
+        "20 cm²"
       ],
       "ok": 1,
-      "hint": "Chu vi là độ dài đi MỘT VÒNG quanh hình.",
-      "yes": "Đúng rồi!"
+      "hint": "Cạnh nhân cạnh.",
+      "yes": "Đúng! 5 × 5 = 25.",
+      "art": "5 × 5"
     }
   ]
 });

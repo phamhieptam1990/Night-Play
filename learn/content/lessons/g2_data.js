@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Toán lớp 2 · Dữ liệu và phân loại.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "g2_data",
   "grade": 2,
@@ -8,98 +8,104 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Dữ liệu và phân loại.",
-      "art": "📊"
+      "t": "Phân loại: xếp các vật giống nhau vào cùng một nhóm.",
+      "art": "🍎🍎 🍌🍌🍌 🍇"
     },
     {
       "k": "say",
-      "t": "Thu thập và phân loại dữ liệu",
-      "art": "📊"
+      "t": "Đếm số lượng mỗi nhóm rồi ghi vào bảng.",
+      "art": "Táo: 2\nChuối: 3\nNho: 1"
     },
     {
       "k": "say",
-      "t": "Đọc bảng thống kê tranh hoặc bảng đơn giản",
-      "art": "📊"
+      "t": "Nhìn bảng: số lớn nhất là nhiều nhất, số bé nhất là ít nhất.",
+      "art": "Nhiều nhất: Chuối"
     },
     {
       "k": "choose",
-      "t": "Có mấy 🍎?🍇 : 🍇🍇🍇🍇🍇🍇🍌 : 🍌🍌🍌🍌🍌🍌🍌🍌🍎 : 🍎🍎",
+      "t": "Bảng: Táo 2, Chuối 3, Nho 1. Quả nào nhiều nhất?",
       "opts": [
-        "1",
+        "Nho",
+        "Chuối",
+        "Táo"
+      ],
+      "ok": 1,
+      "yes": "Đúng! 3 là lớn nhất.",
+      "no": "Tìm số lớn nhất.",
+      "art": "Táo 2 · Chuối 3 · Nho 1"
+    },
+    {
+      "k": "choose",
+      "t": "Bảng: Táo 2, Chuối 3, Nho 1. Quả nào ít nhất?",
+      "opts": [
+        "Táo",
+        "Nho",
+        "Chuối"
+      ],
+      "ok": 1,
+      "yes": "Đúng! 1 là bé nhất.",
+      "no": "Tìm số bé nhất.",
+      "art": "Táo 2 · Chuối 3 · Nho 1"
+    },
+    {
+      "k": "choose",
+      "t": "Có 🐶🐶🐱🐱🐱. Có mấy con mèo?",
+      "opts": [
         "2",
+        "5",
         "3"
       ],
-      "ok": 1,
-      "yes": "Đúng rồi! Đáp án là 2.",
-      "no": "Đọc kỹ bảng và chỉ đúng hàng hoặc cột đề hỏi."
-    },
-    {
-      "k": "choose",
-      "t": "Có mấy 🍎?🍓 : 🍓🍓🍓🍓🍓🥕 : 🥕🥕🥕🍎 : 🍎🍎🍎🍎🍎🍎",
-      "opts": [
-        "7",
-        "6",
-        "5"
-      ],
-      "ok": 1,
-      "yes": "Đúng rồi! Đáp án là 6.",
-      "no": "Đọc kỹ bảng và chỉ đúng hàng hoặc cột đề hỏi."
-    },
-    {
-      "k": "choose",
-      "t": "Có mấy 🍇?🍌 : 🍌🍌🍇 : 🍇🍇🍇🍇🍇🍇🥕 : 🥕🥕🥕🥕🥕🥕🥕🥕",
-      "opts": [
-        "7",
-        "8",
-        "6"
-      ],
       "ok": 2,
-      "yes": "Đúng rồi! Đáp án là 6.",
-      "no": "Đọc kỹ bảng và chỉ đúng hàng hoặc cột đề hỏi."
+      "yes": "Đúng! Có 3 con mèo.",
+      "no": "Chỉ đếm 🐱.",
+      "art": "🐶🐶🐱🐱🐱"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Thu thập và phân loại dữ liệu",
-        "Đọc bảng thống kê tranh hoặc bảng đơn giản",
-        "Trả lời câu hỏi từ dữ liệu"
+        "Phân loại: xếp vật giống nhau vào một nhóm",
+        "Đếm từng nhóm rồi ghi vào bảng",
+        "Số lớn nhất là nhiều nhất"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "Loại nhiều nhất hơn loại ít nhất mấy cái?🥕 : 🥕🥕🍇 : 🍇🍇🍇🍇🍌 : 🍌🍌🍌🍌🍌🍌🍌🍌🍌",
+      "q": "Chó 4 con, mèo 6 con. Mèo nhiều hơn chó mấy con?",
       "opts": [
-        "9",
-        "11",
-        "7"
+        "4",
+        "10",
+        "2"
       ],
       "ok": 2,
-      "hint": "Đọc kỹ bảng và chỉ đúng hàng hoặc cột đề hỏi.",
-      "yes": "Đúng rồi!"
+      "hint": "Hơn bao nhiêu thì lấy số lớn trừ số bé.",
+      "yes": "Đúng! 6 − 4 = 2.",
+      "art": "4 🐶  6 🐱"
     },
     {
-      "q": "Loại nhiều nhất hơn loại ít nhất mấy cái?🥕 : 🥕🥕🍎 : 🍎🍎🍎🍎🍌 : 🍌🍌🍌🍌🍌🍌🍌🍌",
+      "q": "Xe đạp và ô tô, vật nào đi trên đường nhiều bánh hơn?",
       "opts": [
-        "6",
-        "10",
-        "8"
+        "Ô tô",
+        "Bằng nhau",
+        "Xe đạp"
       ],
       "ok": 0,
-      "hint": "Đọc kỹ bảng và chỉ đúng hàng hoặc cột đề hỏi.",
-      "yes": "Đúng rồi!"
+      "hint": "Đếm số bánh của từng xe.",
+      "yes": "Đúng! Ô tô có 4 bánh.",
+      "art": "🚲 ? 🚗"
     },
     {
-      "q": "Có mấy 🍇?🍎 : 🍎🍎🥕 : 🥕🥕🥕🥕🥕🥕🍇 : 🍇🍇🍇🍇🍇🍇🍇",
+      "q": "Cam 5, quýt 3. Cả hai có bao nhiêu quả?",
       "opts": [
-        "6",
-        "8",
-        "7"
+        "15",
+        "2",
+        "8"
       ],
       "ok": 2,
-      "hint": "Đọc kỹ bảng và chỉ đúng hàng hoặc cột đề hỏi.",
-      "yes": "Đúng rồi!"
+      "hint": "Gộp lại là cộng.",
+      "yes": "Đúng! 5 + 3 = 8.",
+      "art": "5 + 3"
     }
   ]
 });

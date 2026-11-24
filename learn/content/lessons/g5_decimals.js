@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Toán lớp 5 · Số thập phân và các phép tính.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "g5_decimals",
   "grade": 5,
@@ -8,98 +8,104 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Số thập phân và các phép tính.",
-      "art": "🔢"
+      "t": "Số thập phân có phần nguyên và phần thập phân, ngăn cách bằng dấu phẩy.",
+      "art": "12,35\n12 nguyên · 35 phần trăm"
     },
     {
       "k": "say",
-      "t": "Khái niệm, đọc, viết và cấu tạo số thập phân",
-      "art": "🔢"
+      "t": "Cộng số thập phân: viết thẳng hàng dấu phẩy rồi cộng như số tự nhiên.",
+      "art": "1,5 + 2,25\n= 3,75"
     },
     {
       "k": "say",
-      "t": "So sánh và làm tròn số thập phân",
-      "art": "🔢"
+      "t": "Làm tròn đến hàng phần mười: nhìn chữ số hàng phần trăm.",
+      "art": "3,47 → 3,5"
     },
     {
       "k": "choose",
-      "t": "Chữ số hàng phần trăm của số 78,26 là?",
+      "t": "Trong 12,35 chữ số 3 ở hàng nào?",
       "opts": [
-        "6",
-        "7",
-        "2"
+        "Phần mười",
+        "Hàng chục",
+        "Phần trăm"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là 6.",
-      "no": "Đọc số từ PHẢI sang TRÁI: đơn vị, chục, trăm, nghìn…"
+      "yes": "Đúng! 3 phần mười.",
+      "no": "Hàng đứng ngay sau dấu phẩy có tên gọi riêng.",
+      "art": "12,35"
     },
     {
       "k": "choose",
-      "t": "Làm tròn số 59,39 đến hàng phần mười",
+      "t": "1,5 + 2,25 = ?",
       "opts": [
-        "59,4",
-        "59,6",
-        "59,5"
+        "3,75",
+        "4,0",
+        "3,3"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là 59,4.",
-      "no": "Nhìn chữ số ở hàng ngay bên phải hàng cần làm tròn."
+      "yes": "Đúng! 3,75.",
+      "no": "Viết thẳng hàng dấu phẩy: 1,50 + 2,25.",
+      "art": "1,5 + 2,25"
     },
     {
       "k": "choose",
-      "t": "? − 5,4 = 7,6",
+      "t": "Làm tròn 3,47 đến hàng phần mười được?",
       "opts": [
-        "2,2",
-        "13",
-        "13,1"
+        "3,0",
+        "3,5",
+        "3,4"
       ],
       "ok": 1,
-      "yes": "Đúng rồi! Đáp án là 13.",
-      "no": "Dùng phép tính NGƯỢC: cộng thì dùng trừ, nhân thì dùng chia."
+      "yes": "Đúng! 7 nên lên 3,5.",
+      "no": "Nhìn chữ số hàng phần trăm: 7 thì lên.",
+      "art": "3,47 ≈ ?"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Khái niệm, đọc, viết và cấu tạo số thập phân",
-        "So sánh và làm tròn số thập phân",
-        "Cộng, trừ, nhân, chia số thập phân theo chương trình"
+        "Dấu phẩy ngăn phần nguyên và phần thập phân",
+        "Cộng trừ: thẳng hàng dấu phẩy",
+        "Làm tròn: nhìn hàng kề bên phải"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "Số tiếp theo là số nào?3, 4,5, 6, 7,5, 9, ?",
+      "q": "Số nào lớn nhất?",
       "opts": [
-        "9,5",
-        "11,5",
-        "10,5"
+        "2,05",
+        "2,15",
+        "2,5"
       ],
       "ok": 2,
-      "hint": "Tìm xem mỗi số hơn số trước bao nhiêu, hoặc gấp mấy lần.",
-      "yes": "Đúng rồi!"
+      "hint": "So phần nguyên, rồi so phần mười.",
+      "yes": "Đúng! 2,5 lớn nhất.",
+      "art": "? lớn nhất"
     },
     {
-      "q": "1,8 + 2,9 = ?",
+      "q": "x + 1,2 = 5. Tìm x.",
       "opts": [
-        "4,8",
-        "0,47",
-        "4,7"
+        "6,2",
+        "4,2",
+        "3,8"
       ],
       "ok": 2,
-      "hint": "Viết các số sao cho dấu phẩy thẳng hàng với nhau.",
-      "yes": "Đúng rồi!"
+      "hint": "Số hạng = tổng trừ số hạng kia.",
+      "yes": "Đúng! 5 − 1,2 = 3,8.",
+      "art": "x + 1,2 = 5"
     },
     {
-      "q": "Chữ số hàng chục của số 75,64 là?",
+      "q": "0,1 bằng phân số nào?",
       "opts": [
-        "5",
-        "4",
-        "7"
+        "10/1",
+        "1/100",
+        "1/10"
       ],
       "ok": 2,
-      "hint": "Đọc số từ PHẢI sang TRÁI: đơn vị, chục, trăm, nghìn…",
-      "yes": "Đúng rồi!"
+      "hint": "Phần mười là mẫu số 10.",
+      "yes": "Đúng! 0,1 = 1/10.",
+      "art": "0,1 = ?"
     }
   ]
 });

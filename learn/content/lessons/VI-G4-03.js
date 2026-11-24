@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Tiếng Việt lớp 4 · Viết bài.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "VI-G4-03",
   "grade": 4,
@@ -8,92 +8,104 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Viết bài.",
-      "art": "📖"
+      "t": "Bài văn có ba phần: mở bài, thân bài, kết bài.",
+      "art": "Mở → Thân → Kết"
     },
     {
       "k": "say",
-      "t": "Lập ý và viết bài kể chuyện, miêu tả, thư hoặc văn bản thông dụng theo yêu cầu học tập.",
-      "art": "📖"
+      "t": "Danh từ chỉ người, vật; động từ chỉ hoạt động; tính từ chỉ đặc điểm.",
+      "art": "bạn · chạy · đẹp"
+    },
+    {
+      "k": "say",
+      "t": "Dấu phẩy và dấu chấm giúp câu rõ nghĩa. Câu kể, câu hỏi, câu cảm có dấu riêng.",
+      "art": ", . ? !"
     },
     {
       "k": "choose",
-      "t": "Điền chữ còn thiếu: 🦇 __ơi",
+      "t": "Phần giới thiệu đề tài của bài văn là?",
       "opts": [
-        "d",
-        "gh",
-        "gi"
+        "Mở bài",
+        "Kết bài",
+        "Thân bài"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là d.",
-      "no": "Nhìn hình và đọc to cả từ."
+      "yes": "Đúng! Mở bài.",
+      "no": "Phần đầu tiên của bài.",
+      "art": "①"
     },
     {
       "k": "choose",
-      "t": "Từ nào là danh từ?",
+      "t": "Từ nào là động từ?",
       "opts": [
-        "học",
-        "trăng",
-        "viết"
+        "bàn",
+        "chạy",
+        "đẹp"
       ],
       "ok": 1,
-      "yes": "Đúng rồi! Đáp án là trăng.",
-      "no": "Sự vật: nhìn thấy, sờ được. Hoạt động: làm được. Đặc điểm: dùng để tả."
+      "yes": "Đúng! Chạy.",
+      "no": "Động từ chỉ việc làm.",
+      "art": "chạy · đẹp · bàn"
     },
     {
       "k": "choose",
-      "t": "Điền dấu câu: Mẹ mua cam __ táo và chuối.",
+      "t": "Từ nào là tính từ?",
       "opts": [
-        "?",
-        ",",
-        "."
+        "bút",
+        "đẹp",
+        "chạy"
       ],
       "ok": 1,
-      "yes": "Đúng rồi! Đáp án là ,.",
-      "no": "Câu hỏi dùng dấu hỏi (?). Câu cảm, ngạc nhiên dùng dấu chấm than (!). Câu kể dùng…"
+      "yes": "Đúng! Đẹp.",
+      "no": "Tính từ chỉ đặc điểm, màu sắc, hình dáng.",
+      "art": "đẹp · chạy · bút"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Lập ý và viết bài kể chuyện, miêu tả, thư hoặc văn bản thông dụng theo yêu cầu học tập.",
-        "Sai thì thử lại, bé sẽ giỏi hơn!"
+        "Bài văn: mở bài, thân bài, kết bài",
+        "Danh từ, động từ, tính từ",
+        "Dùng dấu câu đúng"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "Câu “Trời hôm nay nắng đẹp.” thuộc kiểu câu nào?",
+      "q": "Điền ch hay tr: bầu __ời.",
       "opts": [
-        "câu hỏi",
-        "câu kể",
-        "câu khiến"
+        "th",
+        "tr",
+        "ch"
       ],
       "ok": 1,
-      "hint": "Kể: nói điều đã xảy ra. Hỏi: để hỏi. Cảm: bày tỏ cảm xúc. Khiến: nhờ, bảo làm.",
-      "yes": "Đúng rồi!"
+      "hint": "Nghĩ đến nơi có mây và mặt trời.",
+      "yes": "Đúng! bầu trời.",
+      "art": "bầu __ời"
     },
     {
-      "q": "Từ nào đồng nghĩa với mẹ?",
+      "q": "Từ đồng nghĩa với \"to lớn\" là?",
       "opts": [
-        "cô",
-        "bố",
-        "má"
+        "nhỏ bé",
+        "thấp",
+        "khổng lồ"
       ],
       "ok": 2,
-      "hint": "Đồng nghĩa là gần nghĩa nhau, dùng thay nhau được.",
-      "yes": "Đúng rồi!"
+      "hint": "Tìm từ cùng nghĩa.",
+      "yes": "Đúng! khổng lồ.",
+      "art": "to lớn = ?"
     },
     {
-      "q": "Từ nào trái nghĩa với khen?",
+      "q": "Phần nêu chi tiết, cảm xúc của bài văn là?",
       "opts": [
-        "khô",
-        "chê",
-        "hiền"
+        "Mở bài",
+        "Thân bài",
+        "Tên bài"
       ],
       "ok": 1,
-      "hint": "Trái nghĩa là nghĩa ngược nhau.",
-      "yes": "Đúng rồi!"
+      "hint": "Phần ở giữa, dài nhất.",
+      "yes": "Đúng! Thân bài.",
+      "art": "②"
     }
   ]
 });

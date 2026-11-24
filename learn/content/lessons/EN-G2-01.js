@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Tiếng Anh lớp 2 · Nghe hiểu chỉ dẫn.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "EN-G2-01",
   "grade": 2,
@@ -31,7 +31,7 @@ window.LearnLessons.reg({
       ],
       "ok": 1,
       "yes": "Đúng rồi! Đáp án là Đứng lên.",
-      "no": "Stand là đứng."
+      "no": "Nghe lại từ khoá trong câu tiếng Anh, rồi nghĩ nghĩa của nó."
     },
     {
       "k": "choose",
@@ -43,7 +43,7 @@ window.LearnLessons.reg({
       ],
       "ok": 2,
       "yes": "Đúng rồi! Đáp án là Ngồi xuống.",
-      "no": "Sit là ngồi."
+      "no": "Nghe lại từ khoá trong câu tiếng Anh, rồi nghĩ nghĩa của nó."
     },
     {
       "k": "choose",
@@ -55,7 +55,7 @@ window.LearnLessons.reg({
       ],
       "ok": 0,
       "yes": "Đúng rồi! Đáp án là Mở sách.",
-      "no": "Open là mở."
+      "no": "Nghe lại từ khoá trong câu tiếng Anh, rồi nghĩ nghĩa của nó."
     },
     {
       "k": "sum",
@@ -75,7 +75,7 @@ window.LearnLessons.reg({
         "Bật đèn"
       ],
       "ok": 0,
-      "hint": "Close là đóng.",
+      "hint": "Nghe lại từ khoá trong câu tiếng Anh, rồi nghĩ nghĩa của nó.",
       "yes": "Đúng rồi!"
     },
     {
@@ -86,7 +86,7 @@ window.LearnLessons.reg({
         "Nói!"
       ],
       "ok": 1,
-      "hint": "Listen là nghe.",
+      "hint": "Nghe lại từ khoá trong câu tiếng Anh, rồi nghĩ nghĩa của nó.",
       "yes": "Đúng rồi!"
     },
     {
@@ -97,7 +97,7 @@ window.LearnLessons.reg({
         "Cái cặp"
       ],
       "ok": 1,
-      "hint": "Board là cái bảng.",
+      "hint": "Nghe lại từ khoá trong câu tiếng Anh, rồi nghĩ nghĩa của nó.",
       "yes": "Đúng rồi!"
     }
   ]

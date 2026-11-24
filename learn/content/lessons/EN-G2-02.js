@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Tiếng Anh lớp 2 · Nói theo mẫu.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "EN-G2-02",
   "grade": 2,
@@ -8,97 +8,108 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Nói theo mẫu.",
-      "art": "🔤"
+      "t": "Nói theo mẫu: Hello! I am Nam. How are you?",
+      "art": "👋 Hello!"
     },
     {
       "k": "say",
-      "t": "Sử dụng lời chào, giới thiệu và mẫu câu rất ngắn trong hoạt động có hỗ trợ.",
-      "art": "🔤"
+      "t": "Trả lời: I am fine, thank you.",
+      "art": "😊 I am fine."
+    },
+    {
+      "k": "say",
+      "t": "Chào tạm biệt: Goodbye! See you.",
+      "art": "👋 Goodbye!"
     },
     {
       "k": "choose",
-      "t": "“Thank you.”",
+      "t": "Ai đó nói \"Hello!\". Bé đáp lại?",
       "opts": [
-        "You're welcome.",
-        "I'm sorry.",
-        "Goodbye."
+        "Hello!",
+        "Thank you",
+        "Goodbye!"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là You're welcome..",
-      "no": "Hello! → Hi! How are you? → I’m fine, thanks.",
+      "yes": "Đúng! Hello.",
+      "no": "Người ta chào, mình cũng chào.",
+      "art": "Hello!",
       "optlang": "en"
     },
     {
       "k": "choose",
-      "t": "“See you tomorrow!”",
+      "t": "\"How are you?\" là hỏi gì?",
       "opts": [
-        "See you!",
-        "Sorry.",
-        "I'm fine."
+        "Bạn khoẻ không?",
+        "Bạn tên gì?",
+        "Bạn mấy tuổi?"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là See you!.",
-      "no": "Hello! → Hi! How are you? → I’m fine, thanks.",
-      "optlang": "en"
+      "yes": "Đúng! Bạn khoẻ không?",
+      "no": "Hỏi sức khoẻ.",
+      "art": "How are you?"
     },
     {
       "k": "choose",
-      "t": "“Happy birthday!”",
+      "t": "Trả lời \"How are you?\"",
       "opts": [
-        "Thank you!",
-        "See you.",
-        "I'm sorry."
+        "I am fine, thank you.",
+        "Goodbye!",
+        "My name is Nam."
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là Thank you!.",
-      "no": "Hello! → Hi! How are you? → I’m fine, thanks.",
+      "yes": "Đúng! I am fine.",
+      "no": "Nói mình khoẻ.",
+      "art": "I am ...?",
       "optlang": "en"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Sử dụng lời chào, giới thiệu và mẫu câu rất ngắn trong hoạt động có hỗ trợ.",
-        "Sai thì thử lại, bé sẽ giỏi hơn!"
+        "Hello là xin chào, Goodbye là tạm biệt",
+        "How are you? — I am fine, thank you",
+        "My name is ... là tên của em"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "“I'm sorry.”",
+      "q": "Tạm biệt trong tiếng Anh là?",
       "opts": [
-        "Good night.",
-        "You're welcome.",
-        "That's OK."
+        "Thanks",
+        "Hello",
+        "Goodbye"
       ],
       "ok": 2,
-      "hint": "Hello! → Hi! How are you? → I’m fine, thanks.",
-      "yes": "Đúng rồi!",
+      "hint": "Nói khi chia tay.",
+      "yes": "Đúng! Goodbye.",
+      "art": "👋",
       "optlang": "en"
     },
     {
-      "q": "“Nice to meet you.”",
+      "q": "Cảm ơn trong tiếng Anh là?",
       "opts": [
-        "Goodbye!",
-        "Nice to meet you, too.",
-        "I'm eight."
+        "Sorry",
+        "Thank you",
+        "Hello"
       ],
       "ok": 1,
-      "hint": "Hello! → Hi! How are you? → I’m fine, thanks.",
-      "yes": "Đúng rồi!",
+      "hint": "Nói khi nhận quà.",
+      "yes": "Đúng! Thank you.",
+      "art": "🎁",
       "optlang": "en"
     },
     {
-      "q": "“How are you?”",
+      "q": "\"What is your name?\" Bé trả lời?",
       "opts": [
-        "See you.",
-        "I'm nine.",
-        "I'm fine, thanks."
+        "I am fine.",
+        "Goodbye.",
+        "My name is Nam."
       ],
       "ok": 2,
-      "hint": "Hello! → Hi! How are you? → I’m fine, thanks.",
-      "yes": "Đúng rồi!",
+      "hint": "Nói tên của mình.",
+      "yes": "Đúng! My name is...",
+      "art": "My name is ...?",
       "optlang": "en"
     }
   ]

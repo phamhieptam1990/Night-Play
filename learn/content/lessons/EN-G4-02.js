@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Tiếng Anh lớp 4 · Nói (Speaking).
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "EN-G4-02",
   "grade": 4,
@@ -8,97 +8,109 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Nói (Speaking).",
-      "art": "🔤"
+      "t": "Câu hỏi Wh: What là gì, Where là ở đâu, Who là ai, When là khi nào.",
+      "art": "What? Where? Who? When?"
     },
     {
       "k": "say",
-      "t": "Trao đổi thông tin cá nhân và chủ đề quen thuộc bằng câu đơn giản; phát âm đủ rõ để…",
-      "art": "🔤"
+      "t": "Với I thì am, he/she/it thì is, you/we/they thì are.",
+      "art": "She is · They are"
+    },
+    {
+      "k": "say",
+      "t": "Trả lời đủ câu: Where is the cat? — It is on the bed.",
+      "art": "🐱 on the bed"
     },
     {
       "k": "choose",
-      "t": "___ is your teacher?Trả lời: “Ms Lan.”",
+      "t": "Hỏi về nơi chốn dùng từ nào?",
       "opts": [
-        "What time",
         "Who",
-        "How many"
-      ],
-      "ok": 1,
-      "yes": "Đúng rồi! Đáp án là Who.",
-      "no": "Đọc câu trả lời để biết câu hỏi nói về điều gì: tên, nơi chốn, người, tuổi, số…",
-      "optlang": "en"
-    },
-    {
-      "k": "choose",
-      "t": "___ are you from?Trả lời: “I'm from Hue.”",
-      "opts": [
         "Where",
-        "Who",
-        "How many"
-      ],
-      "ok": 0,
-      "yes": "Đúng rồi! Đáp án là Where.",
-      "no": "Đọc câu trả lời để biết câu hỏi nói về điều gì: tên, nơi chốn, người, tuổi, số…",
-      "optlang": "en"
-    },
-    {
-      "k": "choose",
-      "t": "___ is your favourite colour?Trả lời: “It's blue.”",
-      "opts": [
-        "Who",
-        "How many",
         "What"
       ],
+      "ok": 1,
+      "yes": "Đúng! Where.",
+      "no": "Câu hỏi này muốn biết ở đâu.",
+      "art": "📍",
+      "optlang": "en"
+    },
+    {
+      "k": "choose",
+      "t": "Hỏi về người dùng từ nào?",
+      "opts": [
+        "Who",
+        "Where",
+        "When"
+      ],
+      "ok": 0,
+      "yes": "Đúng! Who.",
+      "no": "Câu hỏi này muốn biết ai.",
+      "art": "👤",
+      "optlang": "en"
+    },
+    {
+      "k": "choose",
+      "t": "Điền: My brother __ ten years old.",
+      "opts": [
+        "am",
+        "are",
+        "is"
+      ],
       "ok": 2,
-      "yes": "Đúng rồi! Đáp án là What.",
-      "no": "Đọc câu trả lời để biết câu hỏi nói về điều gì: tên, nơi chốn, người, tuổi, số…",
+      "yes": "Đúng! is.",
+      "no": "Chủ ngữ là một người (số ít).",
+      "art": "My brother __ ten.",
       "optlang": "en"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Trao đổi thông tin cá nhân và chủ đề quen thuộc bằng câu đơn giản; phát âm đủ rõ để…",
-        "Sai thì thử lại, bé sẽ giỏi hơn!"
+        "What là gì, Where là ở đâu, Who là ai",
+        "am, is, are theo chủ ngữ",
+        "Trả lời bằng câu đầy đủ"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "___ is your name?Trả lời: “My name is Mai.”",
+      "q": "\"Where is the cat?\" Trả lời?",
       "opts": [
-        "When",
-        "What",
-        "Where"
+        "Yes, it is.",
+        "It is on the bed.",
+        "It is red."
       ],
       "ok": 1,
-      "hint": "Đọc câu trả lời để biết câu hỏi nói về điều gì: tên, nơi chốn, người, tuổi, số…",
-      "yes": "Đúng rồi!",
+      "hint": "Nói chỗ ở của con mèo.",
+      "yes": "Đúng! It is on the bed.",
+      "art": "🐱 ?",
       "optlang": "en"
     },
     {
-      "q": "___ do you get up?Trả lời: “At six o'clock.”",
+      "q": "Điền: We __ in the classroom.",
       "opts": [
-        "Where",
-        "How many",
-        "What time"
+        "am",
+        "is",
+        "are"
       ],
       "ok": 2,
-      "hint": "Đọc câu trả lời để biết câu hỏi nói về điều gì: tên, nơi chốn, người, tuổi, số…",
-      "yes": "Đúng rồi!",
+      "hint": "We là nhiều người.",
+      "yes": "Đúng! We are.",
+      "art": "We __ here.",
       "optlang": "en"
     },
     {
-      "q": "___ is that man?Trả lời: “He is my uncle.”",
+      "q": "\"What is this?\" Trả lời?",
       "opts": [
-        "How many",
-        "Who",
-        "When"
+        "I am ten.",
+        "It is a book.",
+        "She is a girl."
       ],
       "ok": 1,
-      "hint": "Đọc câu trả lời để biết câu hỏi nói về điều gì: tên, nơi chốn, người, tuổi, số…",
-      "yes": "Đúng rồi!",
+      "hint": "Nói đồ vật.",
+      "yes": "Đúng! It is a book.",
+      "art": "📘",
       "optlang": "en"
     }
   ]

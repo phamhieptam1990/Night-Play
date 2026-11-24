@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Tiếng Anh lớp 3 · Nói (Speaking).
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "EN-G3-02",
   "grade": 3,
@@ -8,97 +8,109 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Nói (Speaking).",
-      "art": "🔤"
+      "t": "I am, you are, he is, she is. Dùng am, is, are đúng với chủ ngữ.",
+      "art": "I am · He is · They are"
     },
     {
       "k": "say",
-      "t": "Hỏi–đáp và nói câu/cụm câu đơn giản về chủ đề quen thuộc với hỗ trợ phù hợp.",
-      "art": "🔤"
+      "t": "Hỏi thăm: How are you? — I am fine. What is your name? — My name is Lan.",
+      "art": "💬 How are you?"
+    },
+    {
+      "k": "say",
+      "t": "Hỏi đáp ngắn: Is this a cat? — Yes, it is.",
+      "art": "Yes, it is. / No, it isn't."
     },
     {
       "k": "choose",
-      "t": "“Goodbye!”",
+      "t": "Điền am, is hay are: I __ a student.",
       "opts": [
-        "I'm fine.",
-        "Hello!",
-        "Bye! See you."
+        "is",
+        "are",
+        "am"
       ],
       "ok": 2,
-      "yes": "Đúng rồi! Đáp án là Bye! See you..",
-      "no": "Hello! → Hi! How are you? → I’m fine, thanks.",
+      "yes": "Đúng! I am.",
+      "no": "Chủ ngữ là I.",
+      "art": "I __ a student.",
       "optlang": "en"
     },
     {
       "k": "choose",
-      "t": "“Nice to meet you.”",
+      "t": "Điền am, is hay are: She __ my friend.",
       "opts": [
-        "Nice to meet you, too.",
-        "Goodbye!",
-        "You're welcome."
+        "is",
+        "are",
+        "am"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là Nice to meet you, too..",
-      "no": "Hello! → Hi! How are you? → I’m fine, thanks.",
+      "yes": "Đúng! She is.",
+      "no": "Chủ ngữ là một người (số ít).",
+      "art": "She __ my friend.",
       "optlang": "en"
     },
     {
       "k": "choose",
-      "t": "“Good night!”",
+      "t": "Điền am, is hay are: They __ happy.",
       "opts": [
-        "Thank you.",
-        "Good night!",
-        "I'm eight."
+        "is",
+        "are",
+        "am"
       ],
       "ok": 1,
-      "yes": "Đúng rồi! Đáp án là Good night!.",
-      "no": "Hello! → Hi! How are you? → I’m fine, thanks.",
+      "yes": "Đúng! They are.",
+      "no": "They chỉ nhiều người.",
+      "art": "They __ happy.",
       "optlang": "en"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Hỏi–đáp và nói câu/cụm câu đơn giản về chủ đề quen thuộc với hỗ trợ phù hợp.",
-        "Sai thì thử lại, bé sẽ giỏi hơn!"
+        "I am, he/she/it is, you/we/they are",
+        "Hỏi tên: What is your name?",
+        "Hỏi thăm: How are you?"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "“Good morning!”",
+      "q": "\"What is your name?\" Trả lời?",
       "opts": [
-        "Good morning!",
-        "Goodbye!",
-        "Thank you."
+        "My name is Lan.",
+        "Yes, it is.",
+        "I am fine."
       ],
       "ok": 0,
-      "hint": "Hello! → Hi! How are you? → I’m fine, thanks.",
-      "yes": "Đúng rồi!",
+      "hint": "Nói tên mình.",
+      "yes": "Đúng! My name is...",
+      "art": "What is your name?",
       "optlang": "en"
     },
     {
-      "q": "“How old are you?”",
+      "q": "\"How are you?\" Trả lời?",
       "opts": [
-        "My name is Nam.",
-        "I'm fine, thanks.",
-        "I'm eight."
+        "Goodbye.",
+        "My name is Lan.",
+        "I am fine, thank you."
       ],
       "ok": 2,
-      "hint": "Hello! → Hi! How are you? → I’m fine, thanks.",
-      "yes": "Đúng rồi!",
+      "hint": "Nói về sức khoẻ.",
+      "yes": "Đúng! I am fine.",
+      "art": "How are you?",
       "optlang": "en"
     },
     {
-      "q": "“I'm sorry.”",
+      "q": "Điền am, is hay are: We __ at school.",
       "opts": [
-        "Hello!",
-        "Good night.",
-        "That's OK."
+        "am",
+        "is",
+        "are"
       ],
       "ok": 2,
-      "hint": "Hello! → Hi! How are you? → I’m fine, thanks.",
-      "yes": "Đúng rồi!",
+      "hint": "We là chúng tôi (nhiều người).",
+      "yes": "Đúng! We are.",
+      "art": "We __ at school.",
       "optlang": "en"
     }
   ]

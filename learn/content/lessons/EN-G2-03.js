@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Tiếng Anh lớp 2 · Từ vựng theo chủ đề.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "EN-G2-03",
   "grade": 2,
@@ -8,97 +8,109 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Từ vựng theo chủ đề.",
-      "art": "🔤"
+      "t": "Con vật: cat là mèo, dog là chó, bird là chim.",
+      "art": "🐱 cat · 🐶 dog · 🐦 bird"
     },
     {
       "k": "say",
-      "t": "Mở rộng vốn từ quen thuộc thông qua tranh ảnh, trò chơi, bài hát và tình huống.",
-      "art": "🔤"
+      "t": "Màu sắc: red là đỏ, blue là xanh dương, yellow là vàng.",
+      "art": "🔴 red · 🔵 blue"
+    },
+    {
+      "k": "say",
+      "t": "Số: one, two, three. Và ngày trong tuần: Monday là thứ Hai.",
+      "art": "1 one · 2 two · 3 three"
     },
     {
       "k": "choose",
-      "t": "Đây là màu gì? 🟤",
+      "t": "Đây là con gì?",
       "opts": [
-        "yellow",
+        "bird",
+        "dog",
+        "cat"
+      ],
+      "ok": 2,
+      "yes": "Đúng! cat.",
+      "no": "Nghe tiếng kêu meo meo.",
+      "art": "🐱",
+      "optlang": "en"
+    },
+    {
+      "k": "choose",
+      "t": "Đây là con gì?",
+      "opts": [
+        "cat",
+        "fish",
+        "dog"
+      ],
+      "ok": 2,
+      "yes": "Đúng! dog.",
+      "no": "Nghe tiếng kêu gâu gâu.",
+      "art": "🐶",
+      "optlang": "en"
+    },
+    {
+      "k": "choose",
+      "t": "Màu này tiếng Anh là gì?",
+      "opts": [
+        "red",
         "green",
-        "brown"
-      ],
-      "ok": 2,
-      "yes": "Đúng rồi! Đáp án là brown.",
-      "no": "Nhìn màu của hình tròn rồi nhớ lại tên màu đó trong bài học hoặc bài hát.",
-      "optlang": "en"
-    },
-    {
-      "k": "choose",
-      "t": "Số 12 đọc là gì?",
-      "opts": [
-        "eleven",
-        "fifteen",
-        "twelve"
-      ],
-      "ok": 2,
-      "yes": "Đúng rồi! Đáp án là twelve.",
-      "no": "Đếm lần lượt từ một bằng tiếng Anh và dừng ở số cần tìm.",
-      "optlang": "en"
-    },
-    {
-      "k": "choose",
-      "t": "Đây là gì? ✋",
-      "opts": [
-        "hand",
-        "tooth",
-        "nose"
+        "blue"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là hand.",
-      "no": "Nhìn hình và nói tên bằng tiếng Việt trước, rồi nhớ từ tiếng Anh.",
+      "yes": "Đúng! red.",
+      "no": "Nhìn màu của quả táo.",
+      "art": "🔴",
       "optlang": "en"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Mở rộng vốn từ quen thuộc thông qua tranh ảnh, trò chơi, bài hát và tình huống.",
-        "Sai thì thử lại, bé sẽ giỏi hơn!"
+        "cat mèo, dog chó, bird chim",
+        "red đỏ, blue xanh dương, yellow vàng",
+        "one, two, three là một, hai, ba"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "Tuesday, Wednesday, __",
+      "q": "Số 3 tiếng Anh là?",
       "opts": [
-        "Monday",
-        "Friday",
-        "Thursday"
+        "one",
+        "two",
+        "three"
       ],
       "ok": 2,
-      "hint": "Đọc nhẩm thứ tự các ngày trong tuần (hoặc các tháng trong năm) từ đầu.",
-      "yes": "Đúng rồi!",
+      "hint": "Đếm 1, 2, 3.",
+      "yes": "Đúng! three.",
+      "art": "3",
       "optlang": "en"
     },
     {
-      "q": "Chọn cách viết đúng: ❄️",
+      "q": "Đây là gì?",
       "opts": [
-        "snoowy",
-        "snowwy",
-        "snowy"
+        "cat",
+        "dog",
+        "bird"
       ],
       "ok": 2,
-      "hint": "Nhìn hình và đọc từng chữ cái của từ.",
-      "yes": "Đúng rồi!",
+      "hint": "Con vật này biết bay.",
+      "yes": "Đúng! bird.",
+      "art": "🐦",
       "optlang": "en"
     },
     {
-      "q": "Đây là màu gì? ⚪",
+      "q": "Màu này tiếng Anh là gì?",
       "opts": [
-        "orange",
-        "purple",
-        "white"
+        "yellow",
+        "red",
+        "blue"
       ],
       "ok": 2,
-      "hint": "Nhìn màu của hình tròn rồi nhớ lại tên màu đó trong bài học hoặc bài hát.",
-      "yes": "Đúng rồi!",
+      "hint": "Nhìn màu của bầu trời.",
+      "yes": "Đúng! blue.",
+      "art": "🔵",
       "optlang": "en"
     }
   ]

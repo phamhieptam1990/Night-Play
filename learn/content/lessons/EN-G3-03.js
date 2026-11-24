@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Tiếng Anh lớp 3 · Đọc (Reading).
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "EN-G3-03",
   "grade": 3,
@@ -8,97 +8,104 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Đọc (Reading).",
-      "art": "🔤"
+      "t": "Đọc câu ngắn, tìm từ chính để hiểu nghĩa.",
+      "art": "🍎 I like apples."
     },
     {
       "k": "say",
-      "t": "Nhận diện chữ, từ và hiểu thông tin rất đơn giản trong văn bản ngắn có hỗ trợ hình ảnh.",
-      "art": "🔤"
+      "t": "Ngày trong tuần: Monday thứ Hai, Tuesday thứ Ba, Sunday Chủ nhật.",
+      "art": "Mon Tue Wed Thu Fri Sat Sun"
+    },
+    {
+      "k": "say",
+      "t": "Số: ten là mười, twenty là hai mươi.",
+      "art": "10 ten · 20 twenty"
     },
     {
       "k": "choose",
-      "t": "Số 13 đọc là gì?",
+      "t": "\"I like apples.\" nghĩa là?",
       "opts": [
-        "thirteen",
-        "twenty-three",
-        "sixteen"
+        "Tôi thích táo.",
+        "Tôi mua táo.",
+        "Tôi ghét táo."
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là thirteen.",
-      "no": "Đếm lần lượt từ một bằng tiếng Anh và dừng ở số cần tìm.",
-      "optlang": "en"
+      "yes": "Đúng! Tôi thích táo.",
+      "no": "Tìm từ like.",
+      "art": "🍎"
     },
     {
       "k": "choose",
-      "t": "Đây là gì? 🦵",
+      "t": "Sunday là ngày nào?",
       "opts": [
-        "eye",
-        "mouth",
-        "leg"
+        "Thứ Hai",
+        "Thứ Sáu",
+        "Chủ nhật"
       ],
       "ok": 2,
-      "yes": "Đúng rồi! Đáp án là leg.",
-      "no": "Nhìn hình và nói tên bằng tiếng Việt trước, rồi nhớ từ tiếng Anh.",
-      "optlang": "en"
+      "yes": "Đúng! Chủ nhật.",
+      "no": "Đây là ngày cuối tuần.",
+      "art": "Sunday"
     },
     {
       "k": "choose",
-      "t": "Từ read nghĩa là gì?",
+      "t": "Monday là ngày nào?",
       "opts": [
-        "bơi",
-        "đọc",
-        "giáo viên"
+        "Thứ Ba",
+        "Thứ Hai",
+        "Chủ nhật"
       ],
       "ok": 1,
-      "yes": "Đúng rồi! Đáp án là đọc.",
-      "no": "Nhớ lại từ này trong bài học hoặc bài hát."
+      "yes": "Đúng! Thứ Hai.",
+      "no": "Ngày đầu tuần.",
+      "art": "Monday"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Nhận diện chữ, từ và hiểu thông tin rất đơn giản trong văn bản ngắn có hỗ trợ hình ảnh.",
-        "Sai thì thử lại, bé sẽ giỏi hơn!"
+        "Đọc câu ngắn, tìm từ chính",
+        "Ngày trong tuần: Monday ... Sunday",
+        "Số: ten 10, twenty 20"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "Monday, Tuesday, __",
+      "q": "Số \"ten\" là số mấy?",
       "opts": [
-        "Sunday",
-        "Wednesday",
-        "Friday"
+        "1",
+        "10",
+        "20"
       ],
       "ok": 1,
-      "hint": "Đọc nhẩm thứ tự các ngày trong tuần (hoặc các tháng trong năm) từ đầu.",
-      "yes": "Đúng rồi!",
-      "optlang": "en"
+      "hint": "Sau nine là gì?",
+      "yes": "Đúng! 10.",
+      "art": "ten"
     },
     {
-      "q": "Ben has two pencils and one ruler in his bag.How many pencils does Ben have?",
+      "q": "\"cat\" nghĩa là?",
       "opts": [
-        "two",
-        "three",
-        "one"
+        "mèo",
+        "chó",
+        "chim"
       ],
       "ok": 0,
-      "hint": "Đọc lại đoạn, tìm câu có từ giống trong câu hỏi.",
-      "yes": "Đúng rồi!",
-      "optlang": "en"
+      "hint": "Con vật kêu meo meo.",
+      "yes": "Đúng! mèo.",
+      "art": "cat"
     },
     {
-      "q": "Số 99 đọc là gì?",
+      "q": "\"It is red.\" nghĩa là?",
       "opts": [
-        "ninety-nine",
-        "ninety-seven",
-        "one hundred"
+        "Nó màu đỏ.",
+        "Nó to.",
+        "Nó màu xanh."
       ],
       "ok": 0,
-      "hint": "Đếm lần lượt từ một bằng tiếng Anh và dừng ở số cần tìm.",
-      "yes": "Đúng rồi!",
-      "optlang": "en"
+      "hint": "Tìm từ chỉ màu.",
+      "yes": "Đúng! Nó màu đỏ.",
+      "art": "It is red."
     }
   ]
 });

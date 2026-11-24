@@ -11,7 +11,7 @@ global.window = {};
 const E = require("../../learn/engine.js"); require("../../learn/content/curriculum.js");
 const C = global.window.LEARN_CURRICULUM;
 const MARK = "BẢN NHÁP TỰ SINH";
-const EXTRA = require("./lesson-extra.js");
+const EXTRA = require("./lesson-extra.js"), TEACH = require("./lesson-teach.js");
 
 function rngFor(id) { let h = 2166136261; for (const c of id) h = Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0; return () => { h = (Math.imul(h, 1664525) + 1013904223) >>> 0; return h / 4294967296; }; }
 const cut = (s, n) => { s = String(s).replace(/\s+/g, " ").trim(); if (s.length <= n) return s; const t = s.slice(0, n - 1), i = t.lastIndexOf(" "); return (i > n * 0.5 ? t.slice(0, i) : t) + "…"; };
@@ -44,17 +44,22 @@ for (const subj of Object.keys(C.subjects)) for (const g of C.subjects[subj].gra
     if (fs.existsSync(file) && !fs.readFileSync(file, "utf8").includes(MARK)) continue;   /* bài viết tay: giữ nguyên */
     const skills = E.topicSkills(subj, g.grade, t.id), ex = EXTRA[t.id];
     if (!skills.length && !ex) { skip.push(subj + " lớp " + g.grade + " " + t.id + " " + t.name + " (chưa có kỹ năng)"); continue; }
-    const rnd = rngFor(t.id);
-    const qs = ex ? ex.qs.map(([text, o, hint]) => { const order = shuffle([0, 1, 2], rnd); return { text, opts: order.map(i => o[i]), ok: order.indexOf(0), hint, en: false }; }) : pickQuestions(subj, g.grade, skills, rnd, 6);
+    const rnd = rngFor(t.id), T = TEACH[t.id];
+    const mk = (r) => { const order = shuffle([0, 1, 2], rnd), o = [r[1], r[2], r[3]]; return { text: r[0], opts: order.map(i => o[i]), ok: order.indexOf(0), hint: r[4], yes: r[5] || ("Đúng rồi! Đáp án là " + r[1] + "."), art: r[6] || "", en: subj === "tanh" && o.every(v => /^[\x20-\x7E]+$/.test(v) && /[A-Za-z]/.test(v)) }; };
+    let qs;
+    if (T && T.qs.length >= 6) qs = T.qs.map(mk);
+    else if (ex) qs = ex.qs.map(([text, o, hint]) => { const order = shuffle([0, 1, 2], rnd); return { text, opts: order.map(i => o[i]), ok: order.indexOf(0), hint, en: false }; });
+    else qs = pickQuestions(subj, g.grade, skills, rnd, 6);
     if (qs.length < 5) { skip.push(t.id + ": chỉ có " + qs.length + " câu phù hợp"); continue; }
-    const sub = ex ? ex.say : (t.sub || []).map(s => cut(s, 88)).filter(Boolean), art = t.icon || "📘";
-    const screens = [{ k: "say", t: cut("Hôm nay mình học: " + t.name + ".", 88), art }];
-    sub.slice(0, 2).forEach(s => screens.push({ k: "say", t: s, art }));
-    qs.slice(0, 3).forEach(q => { const s = { k: "choose", t: q.text, opts: q.opts, ok: q.ok, yes: cut("Đúng rồi! Đáp án là " + q.opts[q.ok] + ".", 88), no: q.hint }; if (q.en) s.optlang = "en"; screens.push(s); });
-    const pts = (ex ? ex.sum : sub).slice(0, 3); while (pts.length < 2) pts.push(["Đọc kỹ đề rồi làm từng bước", "Sai thì thử lại, bé sẽ giỏi hơn!"][pts.length]);
+    const say = T ? T.say : null, sub = say ? say.map(x => x[0]) : (ex ? ex.say : (t.sub || []).map(s => cut(s, 88)).filter(Boolean)), art = t.icon || "📘";
+    const screens = [];
+    if (say) say.forEach(x => screens.push({ k: "say", t: x[0], art: x[1] || art }));
+    else { screens.push({ k: "say", t: cut("Hôm nay mình học: " + t.name + ".", 88), art }); sub.slice(0, 2).forEach(s => screens.push({ k: "say", t: s, art })); }
+    qs.slice(0, 3).forEach(q => { const s = { k: "choose", t: q.text, opts: q.opts, ok: q.ok, yes: q.yes || cut("Đúng rồi! Đáp án là " + q.opts[q.ok] + ".", 88), no: q.hint }; if (q.art) s.art = q.art; if (q.en) s.optlang = "en"; screens.push(s); });
+    const pts = ((T && T.sum) || (ex ? ex.sum : sub)).slice(0, 3); while (pts.length < 2) pts.push(["Đọc kỹ đề rồi làm từng bước", "Sai thì thử lại, bé sẽ giỏi hơn!"][pts.length]);
     screens.push({ k: "sum", t: "Bé nhớ nhé!", pts });
-    const tryit = qs.slice(3, 6).map(q => { const o = { q: q.text, opts: q.opts, ok: q.ok, hint: q.hint, yes: "Đúng rồi!" }; if (q.en) o.optlang = "en"; return o; });
-    const body = "/* " + MARK + " · " + (subj === "toan" ? "Toán" : subj === "tviet" ? "Tiếng Việt" : "Tiếng Anh") + " lớp " + g.grade + " · " + t.name + ".\n   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */\n" +
+    const tryit = qs.slice(3, 6).map(q => { const o = { q: q.text, opts: q.opts, ok: q.ok, hint: q.hint, yes: q.yes || "Đúng rồi!" }; if (q.art) o.art = q.art; if (q.en) o.optlang = "en"; return o; });
+    const body = "/* " + MARK + " · " + (subj === "toan" ? "Toán" : subj === "tviet" ? "Tiếng Việt" : "Tiếng Anh") + " lớp " + g.grade + " · " + t.name + ".\n   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */\n" +
       "window.LearnLessons.reg(" + JSON.stringify({ id: t.id, grade: g.grade, subj, title: cut(t.name, 58), screens, tryit }, null, 2) + ");\n";
     fs.writeFileSync(file, body); done.push(t.id);
   }

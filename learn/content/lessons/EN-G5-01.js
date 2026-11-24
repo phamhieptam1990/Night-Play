@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Tiếng Anh lớp 5 · Nghe (Listening).
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "EN-G5-01",
   "grade": 5,
@@ -31,7 +31,7 @@ window.LearnLessons.reg({
       ],
       "ok": 0,
       "yes": "Đúng rồi! Đáp án là Chủ nhật.",
-      "no": "Sunday là Chủ nhật."
+      "no": "Nghe lại từ khoá trong câu tiếng Anh, rồi nghĩ nghĩa của nó."
     },
     {
       "k": "choose",
@@ -43,7 +43,7 @@ window.LearnLessons.reg({
       ],
       "ok": 2,
       "yes": "Đúng rồi! Đáp án là Bác sĩ.",
-      "no": "Doctor là bác sĩ."
+      "no": "Nghe lại từ khoá trong câu tiếng Anh, rồi nghĩ nghĩa của nó."
     },
     {
       "k": "choose",
@@ -55,7 +55,7 @@ window.LearnLessons.reg({
       ],
       "ok": 2,
       "yes": "Đúng rồi! Đáp án là Thư viện.",
-      "no": "Library là thư viện."
+      "no": "Nghe lại từ khoá trong câu tiếng Anh, rồi nghĩ nghĩa của nó."
     },
     {
       "k": "sum",
@@ -75,7 +75,7 @@ window.LearnLessons.reg({
         "Thịt"
       ],
       "ok": 1,
-      "hint": "Fish là cá.",
+      "hint": "Nghe lại từ khoá trong câu tiếng Anh, rồi nghĩ nghĩa của nó.",
       "yes": "Đúng rồi!"
     },
     {
@@ -86,7 +86,7 @@ window.LearnLessons.reg({
         "Trên bàn"
       ],
       "ok": 0,
-      "hint": "Under là dưới.",
+      "hint": "Nghe lại từ khoá trong câu tiếng Anh, rồi nghĩ nghĩa của nó.",
       "yes": "Đúng rồi!"
     },
     {

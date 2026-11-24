@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Toán lớp 4 · Hình học.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "g4_geometry",
   "grade": 4,
@@ -8,98 +8,104 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Hình học.",
-      "art": "📐"
+      "t": "Dùng thước đo góc để đo: đặt tâm vào đỉnh góc, một cạnh ở số 0.",
+      "art": "∠ 60°"
     },
     {
       "k": "say",
-      "t": "Góc và đơn vị đo góc",
-      "art": "📐"
+      "t": "Góc nhọn bé hơn 90°. Góc vuông bằng 90°. Góc tù lớn hơn 90°.",
+      "art": "nhọn: bé hơn 90°\nvuông: 90°\ntù: lớn hơn 90°"
     },
     {
       "k": "say",
-      "t": "Hai đường thẳng vuông góc và song song",
-      "art": "📐"
+      "t": "Góc bẹt bằng 180°, đó là một đường thẳng.",
+      "art": "180° ―――"
     },
     {
       "k": "choose",
-      "t": "Góc bẹt bằng bao nhiêu độ?",
+      "t": "Góc 60° là góc gì?",
       "opts": [
-        "90 °",
-        "180 °",
-        "120 °"
+        "Góc vuông",
+        "Góc nhọn",
+        "Góc tù"
       ],
       "ok": 1,
-      "yes": "Đúng rồi! Đáp án là 180 °.",
-      "no": "Góc vuông 90°, góc bẹt 180°. Hai góc kề bù cộng lại 180°."
+      "yes": "Đúng! 60° bé hơn 90°.",
+      "no": "So 60° với 90°.",
+      "art": "60°"
     },
     {
       "k": "choose",
-      "t": "Đây là góc gì?",
+      "t": "Góc 120° là góc gì?",
       "opts": [
-        "góc nhọn",
-        "góc bẹt",
-        "góc vuông"
+        "Góc nhọn",
+        "Góc tù",
+        "Góc bẹt"
       ],
       "ok": 1,
-      "yes": "Đúng rồi! Đáp án là góc bẹt.",
-      "no": "Góc vuông giống góc của tờ giấy. So sánh góc với góc vuông."
+      "yes": "Đúng! Giữa 90° và 180°.",
+      "no": "So 120° với 90° và 180°.",
+      "art": "120°"
     },
     {
       "k": "choose",
-      "t": "Hai góc kề bù có tổng bằng 180°. Một góc là 70°, góc còn lại là?",
+      "t": "Góc vuông bằng bao nhiêu độ?",
       "opts": [
-        "20 °",
-        "110 °",
-        "70 °"
+        "180°",
+        "90°",
+        "60°"
       ],
       "ok": 1,
-      "yes": "Đúng rồi! Đáp án là 110 °.",
-      "no": "Góc vuông 90°, góc bẹt 180°. Hai góc kề bù cộng lại 180°."
+      "yes": "Đúng! 90°.",
+      "no": "Góc ở góc cuốn vở.",
+      "art": "⊾"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Góc và đơn vị đo góc",
-        "Hai đường thẳng vuông góc và song song",
-        "Hình bình hành, hình thoi và các hình đã học"
+        "Nhọn bé hơn 90°, vuông bằng 90°, tù lớn hơn 90°",
+        "Góc bẹt = 180°",
+        "Đo góc: tâm thước ở đỉnh góc, một cạnh ở số 0"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "Hai góc kề bù có tổng bằng 180°. Một góc là 40°, góc còn lại là?",
+      "q": "Góc bẹt bằng bao nhiêu độ?",
       "opts": [
-        "50 °",
-        "40 °",
-        "140 °"
+        "90°",
+        "360°",
+        "180°"
       ],
       "ok": 2,
-      "hint": "Góc vuông 90°, góc bẹt 180°. Hai góc kề bù cộng lại 180°.",
-      "yes": "Đúng rồi!"
+      "hint": "Góc bẹt là một đường thẳng.",
+      "yes": "Đúng! 180°.",
+      "art": "―――"
     },
     {
-      "q": "Góc vuông bằng bao nhiêu độ?",
+      "q": "Góc 90° và góc 30° cộng lại thành?",
       "opts": [
-        "90 °",
-        "45 °",
-        "60 °"
+        "120°",
+        "60°",
+        "90°"
       ],
       "ok": 0,
-      "hint": "Góc vuông 90°, góc bẹt 180°. Hai góc kề bù cộng lại 180°.",
-      "yes": "Đúng rồi!"
+      "hint": "Cộng số đo hai góc.",
+      "yes": "Đúng! 90 + 30 = 120.",
+      "art": "90° + 30°"
     },
     {
-      "q": "Hai góc kề bù có tổng bằng 180°. Một góc là 20°, góc còn lại là?",
+      "q": "Góc 45° là góc gì?",
       "opts": [
-        "160 °",
-        "340 °",
-        "20 °"
+        "Góc nhọn",
+        "Góc tù",
+        "Góc vuông"
       ],
       "ok": 0,
-      "hint": "Góc vuông 90°, góc bẹt 180°. Hai góc kề bù cộng lại 180°.",
-      "yes": "Đúng rồi!"
+      "hint": "So 45° với 90°.",
+      "yes": "Đúng! Bé hơn 90°.",
+      "art": "45°"
     }
   ]
 });

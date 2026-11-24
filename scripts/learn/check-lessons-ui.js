@@ -3,7 +3,7 @@
    Mặc định lấy mẫu 1 bài mỗi lớp x môn; --all kiểm hết. */
 "use strict";
 const { spawn } = require("child_process"), path = require("path"), fs = require("fs"), puppeteer = require("puppeteer-core");
-const root = path.join(__dirname, "..", ".."), PORT = 8879, ALL = process.argv.includes("--all"), w = ms => new Promise(r => setTimeout(r, ms));
+const root = path.join(__dirname, "..", ".."), PORT = +process.env.PORT || 8879, ALL = process.argv.includes("--all"), w = ms => new Promise(r => setTimeout(r, ms));
 global.window = {}; require(path.join(root, "learn/content/curriculum.js")); const C = global.window.LEARN_CURRICULUM;
 const idx = {}; (new Function("window", fs.readFileSync(path.join(root, "learn/content/lessons/index.js"), "utf8").replace("var P=window.LearnPath;if(P)", "var P={lessons:window.__L};")))(Object.assign(global.window, { __L: idx }));
 const list = []; for (const sj of Object.keys(C.subjects)) for (const g of C.subjects[sj].grades) { if (g.grade < 2) continue; const ts = g.topics.filter(t => idx[t.id]); (ALL ? ts : ts.slice(0, 1)).forEach(t => list.push({ sj, g: g.grade, id: t.id, n: idx[t.id].n, q: idx[t.id].q })); }

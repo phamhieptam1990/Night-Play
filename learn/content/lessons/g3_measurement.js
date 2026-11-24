@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Toán lớp 3 · Đại lượng và đo lường.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "g3_measurement",
   "grade": 3,
@@ -8,98 +8,104 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Đại lượng và đo lường.",
-      "art": "📐"
+      "t": "Diện tích là phần mặt phẳng hình chiếm. Diện tích hình chữ nhật = dài × rộng.",
+      "art": "6 × 4 = 24 cm²"
     },
     {
       "k": "say",
-      "t": "Đơn vị đo độ dài, khối lượng, dung tích",
-      "art": "📐"
+      "t": "Đổi đơn vị: 1 km = 1000 m, 1 kg = 1000 g, 1 giờ = 60 phút.",
+      "art": "1 km = 1000 m"
     },
     {
       "k": "say",
-      "t": "Thời gian và tiền Việt Nam",
-      "art": "📐"
+      "t": "Thời gian: từ 7 giờ đến 9 giờ là 2 giờ. Tiền: cộng các số lại.",
+      "art": "9 − 7 = 2 giờ"
     },
     {
       "k": "choose",
-      "t": "Hình chữ nhật dài 15 m, rộng 7 m. Diện tích là?",
+      "t": "Hình chữ nhật dài 6 cm, rộng 4 cm. Diện tích là?",
       "opts": [
-        "44 m²",
-        "105 m²",
-        "112 m²"
+        "10 cm²",
+        "24 cm²",
+        "20 cm²"
       ],
       "ok": 1,
-      "yes": "Đúng rồi! Đáp án là 105 m².",
-      "no": "Diện tích là phần mặt phẳng nằm BÊN TRONG hình (như số ô vuông phủ kín)."
+      "yes": "Đúng! 6 × 4 = 24.",
+      "no": "Diện tích: nhân dài với rộng.",
+      "art": "6 × 4"
     },
     {
       "k": "choose",
-      "t": "9 km = ? m",
+      "t": "Hình vuông cạnh 5 cm. Diện tích là?",
       "opts": [
-        "900 m",
-        "9000 m",
-        "90000 m"
+        "10 cm²",
+        "25 cm²",
+        "20 cm²"
       ],
       "ok": 1,
-      "yes": "Đúng rồi! Đáp án là 9000 m.",
-      "no": "Đổi từ đơn vị LỚN sang đơn vị BÉ thì NHÂN; từ BÉ sang LỚN thì CHIA."
+      "yes": "Đúng! 5 × 5 = 25.",
+      "no": "Cạnh nhân cạnh.",
+      "art": "5 × 5"
     },
     {
       "k": "choose",
-      "t": "Từ 11 giờ 28 phút đến 11 giờ 35 phút là bao nhiêu phút?",
+      "t": "3 km bằng bao nhiêu mét?",
       "opts": [
-        "12 phút",
-        "7 phút",
-        "53 phút"
+        "30 m",
+        "3 000 m",
+        "300 m"
       ],
       "ok": 1,
-      "yes": "Đúng rồi! Đáp án là 7 phút.",
-      "no": "Vẽ trục thời gian và đếm từ mốc đầu tới mốc cuối."
+      "yes": "Đúng! 3 × 1000 = 3 000.",
+      "no": "1 km là 1000 m.",
+      "art": "3 km = ? m"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Đơn vị đo độ dài, khối lượng, dung tích",
-        "Thời gian và tiền Việt Nam",
-        "Diện tích ở mức độ làm quen hoặc theo nội dung lớp"
+        "Diện tích chữ nhật = dài × rộng",
+        "1 km = 1000 m, 1 giờ = 60 phút",
+        "Hơn kém thì trừ, tổng thì cộng"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "Một quyển vở giá 6000 đồng. Mua 5 quyển hết bao nhiêu tiền?",
+      "q": "2 giờ bằng bao nhiêu phút?",
       "opts": [
-        "31000 đồng",
-        "30000 đồng",
-        "29000 đồng"
+        "200 phút",
+        "120 phút",
+        "60 phút"
       ],
       "ok": 1,
-      "hint": "Mua nhiều món thì CỘNG tiền từng món. Tiền trả lại = tiền đưa − tiền phải trả.",
-      "yes": "Đúng rồi!"
+      "hint": "Một giờ có 60 phút.",
+      "yes": "Đúng! 2 × 60 = 120.",
+      "art": "2 giờ = ? phút"
     },
     {
-      "q": "Hình vuông có cạnh 10 m. Diện tích là?",
+      "q": "Mua hộp bút 12 000 đồng và vở 8 000 đồng. Hết bao nhiêu?",
       "opts": [
-        "100 m²",
-        "40 m²",
-        "110 m²"
+        "20 000 đồng",
+        "4 000 đồng",
+        "96 000 đồng"
       ],
       "ok": 0,
-      "hint": "Diện tích là phần mặt phẳng nằm BÊN TRONG hình (như số ô vuông phủ kín).",
-      "yes": "Đúng rồi!"
+      "hint": "Mua cả hai thì cộng.",
+      "yes": "Đúng! 12 000 + 8 000 = 20 000.",
+      "art": "12 000 + 8 000"
     },
     {
-      "q": "240 phút = ? giờ",
+      "q": "Học từ 7 giờ đến 11 giờ. Học mấy giờ?",
       "opts": [
-        "40 giờ",
+        "3 giờ",
         "4 giờ",
-        "0,4 giờ"
+        "18 giờ"
       ],
       "ok": 1,
-      "hint": "Đổi từ đơn vị LỚN sang đơn vị BÉ thì NHÂN; từ BÉ sang LỚN thì CHIA.",
-      "yes": "Đúng rồi!"
+      "hint": "Lấy giờ sau trừ giờ trước.",
+      "yes": "Đúng! 11 − 7 = 4.",
+      "art": "7 giờ → 11 giờ"
     }
   ]
 });

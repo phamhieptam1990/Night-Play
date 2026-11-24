@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Toán lớp 5 · Đại lượng và đo lường.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "g5_measurement",
   "grade": 5,
@@ -8,98 +8,104 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Đại lượng và đo lường.",
-      "art": "📐"
+      "t": "Đổi đơn vị: 1 m² = 100 dm². Đi lên đơn vị lớn thì chia, xuống đơn vị bé thì nhân.",
+      "art": "2,9 m² = 290 dm²"
     },
     {
       "k": "say",
-      "t": "Đơn vị đo độ dài, khối lượng, diện tích, thể tích và thời gian",
-      "art": "📐"
+      "t": "Vận tốc là quãng đường đi được trong một giờ: v = s ÷ t.",
+      "art": "60 km trong 2 giờ\nv = 30 km/giờ"
     },
     {
       "k": "say",
-      "t": "Chuyển đổi đơn vị đo",
-      "art": "📐"
+      "t": "Quãng đường = vận tốc × thời gian. Thời gian = quãng đường ÷ vận tốc.",
+      "art": "s = 40 × 3 = 120 km"
     },
     {
       "k": "choose",
-      "t": "1,3 kg = ? g",
+      "t": "2,9 m² bằng bao nhiêu dm²?",
       "opts": [
-        "1300 g",
-        "130 g",
-        "0,001 g"
+        "290 dm²",
+        "2 900 dm²",
+        "29 dm²"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là 1300 g.",
-      "no": "Đổi từ đơn vị LỚN sang đơn vị BÉ thì NHÂN; từ BÉ sang LỚN thì CHIA."
+      "yes": "Đúng! 2,9 × 100 = 290.",
+      "no": "1 m² = 100 dm².",
+      "art": "2,9 m² = ? dm²"
     },
     {
       "k": "choose",
-      "t": "Từ 11 giờ 10 phút đến 14 giờ là bao lâu?",
+      "t": "9,2 giờ bằng bao nhiêu phút?",
       "opts": [
-        "3 giờ 10 phút",
-        "2 giờ 50 phút",
-        "3 giờ 50 phút"
+        "920 phút",
+        "552 phút",
+        "92 phút"
       ],
       "ok": 1,
-      "yes": "Đúng rồi! Đáp án là 2 giờ 50 phút.",
-      "no": "Vẽ trục thời gian và đếm từ mốc đầu tới mốc cuối."
+      "yes": "Đúng! 540 + 12 = 552.",
+      "no": "0,2 giờ = 12 phút; 9 giờ = 540 phút.",
+      "art": "9,2 giờ"
     },
     {
       "k": "choose",
-      "t": "Xe máy đi với vận tốc 25 km/giờ trong 4 giờ. Quãng đường đi được là?",
+      "t": "Ô tô đi 60 km trong 2 giờ. Vận tốc là?",
       "opts": [
-        "29 km",
-        "6 km",
-        "100 km"
+        "62 km/giờ",
+        "120 km/giờ",
+        "30 km/giờ"
       ],
       "ok": 2,
-      "yes": "Đúng rồi! Đáp án là 100 km.",
-      "no": "Vận tốc = quãng đường ÷ thời gian."
+      "yes": "Đúng! 60 ÷ 2 = 30.",
+      "no": "Vận tốc = quãng đường chia thời gian.",
+      "art": "60 km : 2 giờ"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Đơn vị đo độ dài, khối lượng, diện tích, thể tích và thời gian",
-        "Chuyển đổi đơn vị đo",
-        "Vận dụng số thập phân trong đo lường"
+        "Vận tốc v = s ÷ t",
+        "Quãng đường s = v × t, thời gian t = s ÷ v",
+        "Đổi đơn vị: lên thì chia, xuống thì nhân"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "2,7 m = ? cm",
+      "q": "Xe đi 40 km/giờ trong 3 giờ. Quãng đường là?",
       "opts": [
-        "27 cm",
-        "270 cm",
-        "2700 cm"
+        "43 km",
+        "120 km",
+        "13 km"
       ],
       "ok": 1,
-      "hint": "Đổi từ đơn vị LỚN sang đơn vị BÉ thì NHÂN; từ BÉ sang LỚN thì CHIA.",
-      "yes": "Đúng rồi!"
+      "hint": "Quãng đường = vận tốc nhân thời gian.",
+      "yes": "Đúng! 40 × 3 = 120.",
+      "art": "40 km/giờ × 3 giờ"
     },
     {
-      "q": "Từ 13 giờ 55 phút đến 15 giờ 40 phút là bao lâu?",
+      "q": "Đi 90 km với vận tốc 45 km/giờ. Mất bao lâu?",
       "opts": [
-        "1 giờ 45 phút",
-        "45 phút",
-        "2 giờ 15 phút"
+        "2 giờ",
+        "45 giờ",
+        "135 giờ"
       ],
       "ok": 0,
-      "hint": "Vẽ trục thời gian và đếm từ mốc đầu tới mốc cuối.",
-      "yes": "Đúng rồi!"
+      "hint": "Thời gian = quãng đường chia vận tốc.",
+      "yes": "Đúng! 90 ÷ 45 = 2.",
+      "art": "90 km : 45 km/giờ"
     },
     {
-      "q": "Xe máy đi với vận tốc 50 km/giờ trong 6 giờ. Quãng đường đi được là?",
+      "q": "3 giờ 15 phút bằng bao nhiêu phút?",
       "opts": [
-        "8 km",
-        "56 km",
-        "300 km"
+        "315 phút",
+        "75 phút",
+        "195 phút"
       ],
       "ok": 2,
-      "hint": "Vận tốc = quãng đường ÷ thời gian.",
-      "yes": "Đúng rồi!"
+      "hint": "Đổi 3 giờ ra phút rồi cộng 15.",
+      "yes": "Đúng! 180 + 15 = 195.",
+      "art": "3 giờ 15 phút"
     }
   ]
 });

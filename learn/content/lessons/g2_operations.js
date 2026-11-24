@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Toán lớp 2 · Các phép tính với số tự nhiên.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "g2_operations",
   "grade": 2,
@@ -8,98 +8,104 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Các phép tính với số tự nhiên.",
-      "art": "🔢"
+      "t": "Cộng có nhớ: cộng hàng đơn vị, đủ 10 thì viết số lẻ và nhớ 1 sang hàng chục.",
+      "art": "38 + 27\n8 + 7 = 15, viết 5 nhớ 1"
     },
     {
       "k": "say",
-      "t": "Cộng, trừ trong phạm vi 1000",
-      "art": "🔢"
+      "t": "Biểu thức có cả cộng và nhân: làm phép NHÂN trước, rồi mới cộng.",
+      "art": "2 + 3 × 4\n= 2 + 12 = 14"
     },
     {
       "k": "say",
-      "t": "Bảng nhân và bảng chia được học ở lớp 2",
-      "art": "🔢"
+      "t": "Tìm số chưa biết: dùng phép tính ngược lại.",
+      "art": "? + 5 = 12\n? = 12 − 5"
     },
     {
       "k": "choose",
-      "t": "60 + 36 − 16 = ?",
+      "t": "38 + 27 = ?",
       "opts": [
-        "8",
-        "112",
-        "80"
+        "55",
+        "64",
+        "65"
       ],
       "ok": 2,
-      "yes": "Đúng rồi! Đáp án là 80.",
-      "no": "Làm trong ngoặc trước, rồi nhân, chia, cuối cùng cộng, trừ (từ trái sang phải)."
+      "yes": "Đúng! 38 + 27 = 65.",
+      "no": "Hàng đơn vị 8 + 7 được 15: viết 5, nhớ 1.",
+      "art": "38 + 27"
     },
     {
       "k": "choose",
-      "t": "2 × ? = 16",
+      "t": "2 + 3 × 4 = ?",
       "opts": [
-        "8",
         "14",
-        "9"
+        "24",
+        "20"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là 8.",
-      "no": "Dùng phép tính NGƯỢC: cộng thì dùng trừ, nhân thì dùng chia."
+      "yes": "Đúng! 3 × 4 = 12, rồi 2 + 12 = 14.",
+      "no": "Phép nhân làm trước phép cộng.",
+      "art": "2 + 3 × 4"
     },
     {
       "k": "choose",
-      "t": "69 + 11 = ?",
+      "t": "? + 5 = 12. Số cần tìm là?",
       "opts": [
-        "80",
-        "90",
-        "81"
+        "7",
+        "5",
+        "17"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là 80.",
-      "no": "Đọc kỹ đề, làm từng bước rồi thử lại nhé."
+      "yes": "Đúng! 12 − 5 = 7.",
+      "no": "Muốn tìm số hạng chưa biết, lấy tổng trừ số hạng đã biết.",
+      "art": "? + 5 = 12"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Cộng, trừ trong phạm vi 1000",
-        "Bảng nhân và bảng chia được học ở lớp 2",
-        "Ý nghĩa phép nhân và phép chia"
+        "Cộng có nhớ: đủ 10 thì nhớ 1 sang hàng chục",
+        "Nhân trước, cộng trừ sau",
+        "Số chưa biết: dùng phép tính ngược"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "2 × 2 = ?",
+      "q": "5 × 4 = ?",
       "opts": [
-        "6",
-        "5",
-        "4"
+        "25",
+        "9",
+        "20"
       ],
       "ok": 2,
-      "hint": "Đọc kỹ đề, làm từng bước rồi thử lại nhé.",
-      "yes": "Đúng rồi!"
+      "hint": "5 × 4 là 4 lần số 5 cộng lại.",
+      "yes": "Đúng! 5 + 5 + 5 + 5 = 20.",
+      "art": "5 × 4"
     },
     {
-      "q": "44 − 38 + 9 = ?",
+      "q": "Lan có 45 viên bi, cho bạn 18 viên. Còn lại mấy viên?",
       "opts": [
-        "14",
-        "91",
-        "15"
+        "37",
+        "63",
+        "27"
       ],
       "ok": 2,
-      "hint": "Làm trong ngoặc trước, rồi nhân, chia, cuối cùng cộng, trừ (từ trái sang phải).",
-      "yes": "Đúng rồi!"
+      "hint": "Cho đi là bớt đi: dùng phép trừ.",
+      "yes": "Đúng! 45 − 18 = 27.",
+      "art": "45 − 18"
     },
     {
-      "q": "? + 26 = 55",
+      "q": "Bạn An tính 7 × 3 = 20. Phép tính đúng là?",
       "opts": [
-        "81",
-        "29",
-        "30"
+        "7 × 3 = 10",
+        "7 × 3 = 21",
+        "7 × 3 = 24"
       ],
       "ok": 1,
-      "hint": "Dùng phép tính NGƯỢC: cộng thì dùng trừ, nhân thì dùng chia.",
-      "yes": "Đúng rồi!"
+      "hint": "Đếm cách 3 từ 7: 7, 14, ...",
+      "yes": "Đúng! 7 × 3 = 21.",
+      "art": "7 × 3 = ?"
     }
   ]
 });

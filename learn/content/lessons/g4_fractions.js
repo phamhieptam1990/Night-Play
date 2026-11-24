@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Toán lớp 4 · Phân số.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "g4_fractions",
   "grade": 4,
@@ -8,18 +8,18 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Phân số.",
-      "art": "🔢"
+      "t": "Phân số bằng nhau: nhân hoặc chia cả tử và mẫu với CÙNG một số.",
+      "art": "1/2 = 2/4 = 4/8"
     },
     {
       "k": "say",
-      "t": "Nhận biết, đọc, viết và biểu diễn phân số",
-      "art": "🔢"
+      "t": "Rút gọn: chia cả tử và mẫu cho cùng một số. Cộng phân số cùng mẫu: cộng tử, giữ mẫu.",
+      "art": "2/6 = 1/3\n1/5 + 2/5 = 3/5"
     },
     {
       "k": "say",
-      "t": "Phân số bằng nhau và rút gọn hoặc quy đồng theo nội dung lớp",
-      "art": "🔢"
+      "t": "a/b của một số: chia số đó cho b rồi nhân với a.",
+      "art": "3/4 của 20\n20 ÷ 4 × 3 = 15"
     },
     {
       "k": "choose",
@@ -30,20 +30,9 @@ window.LearnLessons.reg({
         "8/10"
       ],
       "ok": 2,
-      "yes": "Đúng rồi! Đáp án là 8/10.",
-      "no": "Muốn có phân số bằng nhau: nhân (hoặc chia) cả tử và mẫu với CÙNG một số."
-    },
-    {
-      "k": "choose",
-      "t": "5/12 + 6/12 = ?",
-      "opts": [
-        "11/12",
-        "12/12",
-        "11/24"
-      ],
-      "ok": 0,
-      "yes": "Đúng rồi! Đáp án là 11/12.",
-      "no": "“a/b của một số”: chia số đó cho b rồi nhân với a."
+      "yes": "Đúng! Nhân đôi cả tử và mẫu.",
+      "no": "Nhân cả tử và mẫu với cùng một số.",
+      "art": "4/5 = ?"
     },
     {
       "k": "choose",
@@ -54,52 +43,69 @@ window.LearnLessons.reg({
         "1"
       ],
       "ok": 0,
-      "yes": "Đúng rồi! Đáp án là 3.",
-      "no": "Muốn có phân số bằng nhau: nhân (hoặc chia) cả tử và mẫu với CÙNG một số."
+      "yes": "Đúng! Nhân cả hai với 3.",
+      "no": "Mẫu nhân với mấy để được 12?",
+      "art": "1/4 = ?/12"
+    },
+    {
+      "k": "choose",
+      "t": "5/12 + 6/12 = ?",
+      "opts": [
+        "11/12",
+        "11/24",
+        "12/12"
+      ],
+      "ok": 0,
+      "yes": "Đúng! 5 + 6 = 11, mẫu giữ 12.",
+      "no": "Cùng mẫu: cộng tử số, giữ nguyên mẫu.",
+      "art": "5/12 + 6/12"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Nhận biết, đọc, viết và biểu diễn phân số",
-        "Phân số bằng nhau và rút gọn hoặc quy đồng theo nội dung lớp",
-        "So sánh phân số"
+        "Phân số bằng nhau: nhân hoặc chia cả tử và mẫu cho cùng số",
+        "Cùng mẫu: cộng hoặc trừ tử, giữ mẫu",
+        "a/b của một số: chia cho b rồi nhân a"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "4/11 + 4/11 = ?",
+      "q": "Rút gọn 6/8 được?",
       "opts": [
-        "8/22",
-        "8/11",
-        "9/11"
+        "6/4",
+        "3/4",
+        "2/3"
       ],
       "ok": 1,
-      "hint": "“a/b của một số”: chia số đó cho b rồi nhân với a.",
-      "yes": "Đúng rồi!"
+      "hint": "Chia cả tử và mẫu cho cùng một số.",
+      "yes": "Đúng! Chia cả hai cho 2.",
+      "art": "6/8"
     },
     {
-      "q": "Phân số nào bằng 1/4?",
+      "q": "3/4 của 20 là?",
       "opts": [
-        "4/7",
-        "3/4",
-        "3/12"
+        "80",
+        "5",
+        "15"
       ],
       "ok": 2,
-      "hint": "Muốn có phân số bằng nhau: nhân (hoặc chia) cả tử và mẫu với CÙNG một số.",
-      "yes": "Đúng rồi!"
+      "hint": "Chia 20 cho 4, rồi nhân với 3.",
+      "yes": "Đúng! 20 ÷ 4 × 3 = 15.",
+      "art": "3/4 của 20"
     },
     {
-      "q": "5/8 + 2/8 = ?",
+      "q": "9/10 − 4/10 = ?",
       "opts": [
-        "5/8",
-        "7/8",
-        "7/16"
+        "5/0",
+        "5/10",
+        "13/10"
       ],
       "ok": 1,
-      "hint": "“a/b của một số”: chia số đó cho b rồi nhân với a.",
-      "yes": "Đúng rồi!"
+      "hint": "Cùng mẫu: trừ tử số, giữ mẫu.",
+      "yes": "Đúng! 9 − 4 = 5.",
+      "art": "9/10 − 4/10"
     }
   ]
 });

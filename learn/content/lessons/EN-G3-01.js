@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Tiếng Anh lớp 3 · Nghe (Listening).
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "EN-G3-01",
   "grade": 3,
@@ -31,7 +31,7 @@ window.LearnLessons.reg({
       ],
       "ok": 0,
       "yes": "Đúng rồi! Đáp án là Táo.",
-      "no": "Apple là quả táo."
+      "no": "Nghe lại từ khoá trong câu tiếng Anh, rồi nghĩ nghĩa của nó."
     },
     {
       "k": "choose",
@@ -43,7 +43,7 @@ window.LearnLessons.reg({
       ],
       "ok": 2,
       "yes": "Đúng rồi! Đáp án là Thứ Hai.",
-      "no": "Monday là thứ Hai."
+      "no": "Nghe lại từ khoá trong câu tiếng Anh, rồi nghĩ nghĩa của nó."
     },
     {
       "k": "choose",
@@ -55,7 +55,7 @@ window.LearnLessons.reg({
       ],
       "ok": 1,
       "yes": "Đúng rồi! Đáp án là 8 tuổi.",
-      "no": "Eight là số tám."
+      "no": "Nghe lại từ khoá trong câu tiếng Anh, rồi nghĩ nghĩa của nó."
     },
     {
       "k": "sum",
@@ -86,7 +86,7 @@ window.LearnLessons.reg({
         "2"
       ],
       "ok": 2,
-      "hint": "Two là số hai.",
+      "hint": "Nghe lại từ khoá trong câu tiếng Anh, rồi nghĩ nghĩa của nó.",
       "yes": "Đúng rồi!"
     },
     {
@@ -97,7 +97,7 @@ window.LearnLessons.reg({
         "Màu xanh"
       ],
       "ok": 1,
-      "hint": "Red là màu đỏ.",
+      "hint": "Nghe lại từ khoá trong câu tiếng Anh, rồi nghĩ nghĩa của nó.",
       "yes": "Đúng rồi!"
     }
   ]

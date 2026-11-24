@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Tiếng Việt lớp 2 · Từ và câu.
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "VI-G2-02",
   "grade": 2,
@@ -8,92 +8,104 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Từ và câu.",
-      "art": "📖"
+      "t": "Viết đúng chính tả: ch hay tr, ng hay ngh. Ngh chỉ đứng trước e, ê, i.",
+      "art": "nghe · nghĩ\nngày · người"
     },
     {
       "k": "say",
-      "t": "Mở rộng vốn từ theo chủ điểm; nhận biết và sử dụng một số kiểu câu, dấu câu đã học.",
-      "art": "📖"
+      "t": "Từ chỉ sự vật, hoạt động, đặc điểm. Dấu chấm kết thúc câu kể; dấu phẩy ngăn các ý liệt kê.",
+      "art": "hoa hồng, hoa cúc,\nhoa lan."
+    },
+    {
+      "k": "say",
+      "t": "Từ trái nghĩa là hai từ có nghĩa ngược nhau.",
+      "art": "cao ↔ thấp\nsáng ↔ tối"
     },
     {
       "k": "choose",
-      "t": "Điền chữ còn thiếu: Mèo là một __on vật.",
+      "t": "Điền ng hay ngh: __ỉ ngơi.",
       "opts": [
-        "k",
-        "ch",
-        "c"
+        "gh",
+        "ng",
+        "ngh"
       ],
       "ok": 2,
-      "yes": "Đúng rồi! Đáp án là c.",
-      "no": "Nhìn chữ đứng ngay sau chỗ trống."
+      "yes": "Đúng! ngh đứng trước i.",
+      "no": "Chữ đứng sau là i.",
+      "art": "__ỉ ngơi"
     },
     {
       "k": "choose",
-      "t": "Điền chữ còn thiếu: 🥭 __oài",
+      "t": "Điền ch hay tr: con __âu.",
       "opts": [
-        "s",
-        "x",
-        "tr"
+        "th",
+        "tr",
+        "ch"
       ],
       "ok": 1,
-      "yes": "Đúng rồi! Đáp án là x.",
-      "no": "Nhìn hình và đọc to cả từ."
+      "yes": "Đúng! con trâu.",
+      "no": "Nghĩ đến con vật hay kéo cày.",
+      "art": "con __âu"
     },
     {
       "k": "choose",
-      "t": "Từ nào là từ chỉ sự vật?",
+      "t": "Điền dấu: Trong vườn có hoa hồng __ hoa cúc và hoa lan.",
       "opts": [
-        "dài",
-        "khóc",
-        "bút"
+        "?",
+        ".",
+        ","
       ],
       "ok": 2,
-      "yes": "Đúng rồi! Đáp án là bút.",
-      "no": "Sự vật: nhìn thấy, sờ được. Hoạt động: làm được. Đặc điểm: dùng để tả."
+      "yes": "Đúng! Dấu phẩy ngăn các ý liệt kê.",
+      "no": "Đây là các hoa được kể liệt kê nối tiếp nhau.",
+      "art": "hồng __ cúc"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Mở rộng vốn từ theo chủ điểm; nhận biết và sử dụng một số kiểu câu, dấu câu đã học.",
-        "Sai thì thử lại, bé sẽ giỏi hơn!"
+        "ngh chỉ đứng trước e, ê, i",
+        "Dấu phẩy ngăn các ý liệt kê, dấu chấm kết thúc câu kể",
+        "Từ trái nghĩa có nghĩa ngược nhau"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "Điền dấu cuối câu: Trời hôm nay nắng đẹp __",
+      "q": "Từ nào chỉ hoạt động?",
       "opts": [
-        ",",
-        "?",
-        "."
+        "bàn",
+        "đẹp",
+        "chạy"
       ],
       "ok": 2,
-      "hint": "Câu hỏi dùng dấu hỏi (?). Câu cảm, ngạc nhiên dùng dấu chấm than (!). Câu kể dùng…",
-      "yes": "Đúng rồi!"
+      "hint": "Hoạt động là việc làm của người hay vật.",
+      "yes": "Đúng! Chạy là hoạt động.",
+      "art": "chạy · bàn · đẹp"
     },
     {
-      "q": "Từ nào trái nghĩa với sạch?",
+      "q": "Từ trái nghĩa với \"cao\" là?",
       "opts": [
-        "bẩn",
-        "sai",
-        "mỏng"
+        "thấp",
+        "xa",
+        "to"
       ],
       "ok": 0,
-      "hint": "Trái nghĩa là nghĩa ngược nhau.",
-      "yes": "Đúng rồi!"
+      "hint": "Nghĩ xem cái gì ngược lại với cao.",
+      "yes": "Đúng! cao ↔ thấp.",
+      "art": "cao ↔ ?"
     },
     {
-      "q": "Điền chữ còn thiếu: Bố em làm __ề nông.",
+      "q": "Cuối câu kể ta đặt dấu gì?",
       "opts": [
-        "ngh",
-        "g",
-        "ng"
+        "Dấu chấm",
+        "Dấu phẩy",
+        "Dấu hỏi"
       ],
       "ok": 0,
-      "hint": "Nhìn chữ đứng ngay sau chỗ trống.",
-      "yes": "Đúng rồi!"
+      "hint": "Câu kể dùng để kể hoặc tả, nó kết thúc thế nào?",
+      "yes": "Đúng! Dấu chấm.",
+      "art": "Em đi học__"
     }
   ]
 });

@@ -1,5 +1,5 @@
 /* BẢN NHÁP TỰ SINH · Tiếng Anh lớp 4 · Đọc (Reading).
-   Lắp tự động từ chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js); chờ chủ site/giáo viên viết lại lời giảng. */
+   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */
 window.LearnLessons.reg({
   "id": "EN-G4-03",
   "grade": 4,
@@ -8,96 +8,104 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Hôm nay mình học: Đọc (Reading).",
-      "art": "🔤"
+      "t": "Đọc kỹ cả đoạn rồi tìm câu có đáp án.",
+      "art": "📖 Đọc → tìm → chọn"
     },
     {
       "k": "say",
-      "t": "Đọc hiểu văn bản ngắn, tìm thông tin trực tiếp và đoán nghĩa từ ngữ quen thuộc nhờ ngữ…",
-      "art": "🔤"
+      "t": "Từ chủ đề: school (trường), family (gia đình), food (đồ ăn).",
+      "art": "🏫 school"
+    },
+    {
+      "k": "say",
+      "t": "Ngày trong tuần: Friday là thứ Sáu, Saturday là thứ Bảy.",
+      "art": "Fri · Sat"
     },
     {
       "k": "choose",
-      "t": "Đây là gì? 🍎",
+      "t": "\"I have a brother.\" nghĩa là?",
       "opts": [
-        "pizza",
-        "apple",
-        "bread"
+        "Tôi có một con chó.",
+        "Tôi có một anh/em trai.",
+        "Tôi có một chị."
       ],
       "ok": 1,
-      "yes": "Đúng rồi! Đáp án là apple.",
-      "no": "Nhìn hình và nói tên bằng tiếng Việt trước, rồi nhớ từ tiếng Anh.",
-      "optlang": "en"
+      "yes": "Đúng! brother.",
+      "no": "Tìm từ brother.",
+      "art": "👦"
     },
     {
       "k": "choose",
-      "t": "Từ cook nghĩa là gì?",
+      "t": "school nghĩa là?",
       "opts": [
-        "đọc",
-        "bà",
-        "đầu bếp"
+        "bệnh viện",
+        "chợ",
+        "trường học"
       ],
       "ok": 2,
-      "yes": "Đúng rồi! Đáp án là đầu bếp.",
-      "no": "Nhớ lại từ này trong bài học hoặc bài hát."
+      "yes": "Đúng! trường học.",
+      "no": "Nơi em đi học.",
+      "art": "🏫"
     },
     {
       "k": "choose",
-      "t": "Sau February là gì?",
+      "t": "Friday là thứ mấy?",
       "opts": [
-        "November",
-        "June",
-        "March"
+        "thứ Tư",
+        "thứ Bảy",
+        "thứ Sáu"
       ],
       "ok": 2,
-      "yes": "Đúng rồi! Đáp án là March.",
-      "no": "Đọc nhẩm thứ tự các ngày trong tuần (hoặc các tháng trong năm) từ đầu.",
-      "optlang": "en"
+      "yes": "Đúng! thứ Sáu.",
+      "no": "Sau Thursday.",
+      "art": "Friday"
     },
     {
       "k": "sum",
       "t": "Bé nhớ nhé!",
       "pts": [
-        "Đọc hiểu văn bản ngắn, tìm thông tin trực tiếp và đoán nghĩa từ ngữ quen thuộc nhờ ngữ…",
-        "Sai thì thử lại, bé sẽ giỏi hơn!"
+        "Đọc kỹ rồi tìm đáp án trong bài",
+        "Từ vựng: school, family, food",
+        "Ngày trong tuần"
       ]
     }
   ],
   "tryit": [
     {
-      "q": "Đây là gì? 🔑",
+      "q": "\"She likes milk.\" nghĩa là?",
       "opts": [
-        "door",
-        "key",
-        "clock"
+        "Cô ấy bán sữa.",
+        "Cô ấy thích sữa.",
+        "Cô ấy ghét sữa."
       ],
       "ok": 1,
-      "hint": "Nhìn hình và nói tên bằng tiếng Việt trước, rồi nhớ từ tiếng Anh.",
-      "yes": "Đúng rồi!",
-      "optlang": "en"
+      "hint": "Tìm động từ likes.",
+      "yes": "Đúng! Cô ấy thích sữa.",
+      "art": "🥛"
     },
     {
-      "q": "Từ student nghĩa là gì?",
+      "q": "family nghĩa là?",
       "opts": [
-        "học sinh",
-        "nông dân",
-        "chạy"
+        "gia đình",
+        "thầy cô",
+        "bạn bè"
       ],
       "ok": 0,
-      "hint": "Nhớ lại từ này trong bài học hoặc bài hát.",
-      "yes": "Đúng rồi!"
+      "hint": "Gồm ba mẹ, anh chị em.",
+      "yes": "Đúng! gia đình.",
+      "art": "👨‍👩‍👧"
     },
     {
-      "q": "February, March, __",
+      "q": "Saturday là thứ mấy?",
       "opts": [
-        "April",
-        "July",
-        "May"
+        "thứ Bảy",
+        "Chủ nhật",
+        "thứ Sáu"
       ],
       "ok": 0,
-      "hint": "Đọc nhẩm thứ tự các ngày trong tuần (hoặc các tháng trong năm) từ đầu.",
-      "yes": "Đúng rồi!",
-      "optlang": "en"
+      "hint": "Sau Friday.",
+      "yes": "Đúng! thứ Bảy.",
+      "art": "Saturday"
     }
   ]
 });
