@@ -4,6 +4,7 @@
 "use strict";
 const fs = require("fs"), path = require("path");
 global.window = global;
+require("../../learn/content/bank.js");   /* ngân hàng câu: lớp ≥3 một số cảnh rơi về bộ sinh theo kỹ năng (cần bank) */
 const LT = require("../../learn/content/qtypes.js"), E = require("../../learn/engine.js"), Story = require("../../learn/story.js");
 const DIR = path.join(__dirname, "../../learn/content/trips");
 const SPEAKERS = ["bac-re", "mochi", "mam", "bibi", "ban-may"], SUBJ = ["toan", "tviet", "tanh"];

@@ -62,6 +62,21 @@ Ba gói chạy song song, mỗi gói giữ một vùng tệp riêng để không
 - [ ] B13. Rà lại toàn bộ bằng bé thật (hoặc phụ huynh quan sát) 5 phút, trên iPad và iPhone — Ghi lại: bé chạm vào đâu đầu tiên, có tự quay lại không, chỗ nào hỏi "cái này là gì". Mình mới đóng vai bằng ảnh Chrome, chưa có người thật
 - [ ] B14. iPhone SE thật: kiểm nút góc phải trên (sự kiện 📅) và góc phải dưới (＋ − ⌂) còn lệch icon không — Đã đổi cách căn giữa (flexbox thay grid) và vẽ ＋ − bằng SVG; Chrome headless đo tâm icon trùng tâm nút ở 320 và 375px nhưng không tái hiện được lỗi gốc, cần thử trên máy thật
 
+## H7. Khảo sát đóng vai bé lớp 2–5 (24/11/2026): còn lại sau đợt sửa
+
+Báo cáo gốc: docs/khao-sat-lop-2.md, khao-sat-lop-3.md, khao-sat-lop-4.md, khao-sat-lop-5.md (119 phát hiện). Đã sửa: nút Đúng/Sai khó đọc, chữ ngắt giữa vần, menu có nhãn, thanh trên/cổng loa, màn kết thúc "Đúng x/N", đề Việt/Anh theo lớp (bỏ kiểu lớp 1 ở lớp ≥3), câu mơ hồ, gợi ý không lộ đáp án, 5 dạng Toán lớp 5, bài học lớp 2–5 viết lời giảng, "Luyện thêm" và "Ôn chỗ hay sai", lời linh vật lớp 4–5, tranh nền theo môn.
+
+- [ ] Chống lặp trong một vòng (đọc bảng, "chữ số hàng", cùng từ hai lần ở ghép chữ) — thêm vào `engine.round` (L3-21).
+- [ ] `E.round` từng ném "Cannot read properties of undefined (reading 'id')" ở planRound khi chạy tay một script lấy mẫu; chưa tái hiện được trong bài đo — cần điều tra.
+- [ ] "Viết câu" chỉ chấm hình thức, nhận cả câu lạc đề (L3-22, L4-04): cần cách chấm nội dung (xem mục Chấm viết ở trên).
+- [ ] Trang Của bé + Bộ sưu tập: kỷ lục/so sánh bản thân, ô khoá nói rõ cách mở, bé lớn không thấy "toàn ?" (L3-24..26, L2-17, L4-17, L4-18); Bạn Số/Chữ chỉ có 28 bạn, toàn đồ lớp 1.
+- [ ] Nút ← của vườn có thể làm mất lớp với hồ sơ mới (L3-05) — cần kiểm lại trên hồ sơ thật.
+- [ ] Chữ "l" giống "I" hoa ở phông đậm (L2-05): đổi phông.
+- [ ] Toán lớp 5: biểu đồ quạt/cột bằng SVG thật, câu ra hỗn số, lời giải sau khi sai (L5-20).
+- [ ] Làm tròn số lớp 2: đang giữ làm tròn đến hàng chục; cần chủ site đối chiếu chương trình GDPT 2018 chính thức (L2-20).
+- [ ] Tách `learn/content/bank.js` (dòng quá dài) và `qtypes-hi.js` (7 dòng > 200 ký tự) theo quy tắc cấu trúc tệp.
+- [ ] Bé thật (hoặc phụ huynh quan sát) chơi thử trên iPad/iPhone thật: giọng đọc, kéo thả bằng ngón tay, bàn phím hệ điều hành.
+
 ## Tách tệp (theo quy tắc "Cấu trúc tệp" trong CLAUDE.md và GAME_RULES.md)
 
 - [ ] `learn/index.html` (~990 dòng): tách CSS ra `learn/css/` (nút, câu hỏi, menu, chúc mừng, màn kết thúc…) và JS ra `learn/js/` (vòng chơi, âm thanh, menu, kết quả); HTML chỉ còn khung.
