@@ -1,0 +1,24 @@
+/* Học Vui: giao diện chung (menu có nhãn, thanh trên thu gọn, Đúng/Sai, thẻ hình, màn kết thúc) — nạp SAU style trong index.html */
+.rev{position:fixed;left:50%;transform:translateX(-50%);top:4px;height:36px;padding:0 16px;border-radius:18px;z-index:40;display:none;align-items:center;gap:6px;background:rgba(22,17,48,.82);color:#fff;font:800 14px/1 inherit;border:1px solid rgba(255,255,255,.3);box-shadow:0 4px 12px rgba(0,0,0,.3);-webkit-tap-highlight-color:transparent}
+.rev i{font-style:normal}
+.revb{position:fixed;left:8px;top:2px;width:44px;height:44px;border-radius:22px;z-index:40;display:none;place-items:center;background:rgba(22,17,48,.82);color:#fff;text-decoration:none;font-weight:800;font-size:22px;border:1px solid rgba(255,255,255,.3);box-shadow:0 4px 12px rgba(0,0,0,.3)}
+body.tucked .rev{display:flex}body.tucked .revb{display:grid}
+@media (min-width:701px) and (min-height:431px){.top.tuck{max-height:80px;padding:10px 12px 4px 16px;opacity:1;overflow:visible;pointer-events:auto}body.tucked .rev,body.tucked .revb{display:none}}
+.mnu{position:fixed;z-index:25;right:12px;top:calc(env(safe-area-inset-top) + 66px);display:grid;grid-template-columns:repeat(2,104px);gap:8px;padding:12px;border-radius:26px;border:2px solid transparent;max-height:calc(100dvh - 80px);overflow-y:auto;background:linear-gradient(145deg,#211C52,#14152A) padding-box,linear-gradient(135deg,#9B83FF,#FF9A6B) border-box;box-shadow:0 24px 60px -10px rgba(0,0,0,.6),0 0 40px -6px rgba(155,131,255,.5);animation:pop .22s}
+.mt{width:104px;height:72px;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-weight:900;color:#fff;text-decoration:none;background:rgba(22,17,48,.72);border:1px solid rgba(255,255,255,.2);box-shadow:inset 0 0 12px rgba(155,131,255,.25)}
+.mt b{font-size:28px;line-height:1;font-weight:900}.mt small{font-size:13px;line-height:1.1;font-weight:800;color:#e9e4ff;white-space:nowrap}
+.mt:active{transform:scale(.94)}
+.mt#lang{grid-column:1/-1;height:48px;flex-direction:row;gap:8px;margin-top:6px;background:rgba(255,255,255,.06)}.mt#lang b{font-size:16px}
+@media (max-height:520px){.mnu{grid-template-columns:repeat(3,100px)}.mt{width:100px;height:62px}.mt b{font-size:24px}}
+.ans:not(.kz)>.ab:has(>.ico:only-child){color:#1f2a44}   /* nền trắng thì chữ phải tối (nút Đúng/Sai có cả chữ lẫn hình) */
+.ans[data-k=tf]>.ab:has(>.ico:only-child){background:linear-gradient(145deg,var(--c1),var(--c2));color:#fff;gap:8px;-webkit-text-stroke:2px var(--d);paint-order:stroke fill}
+.ans[data-k=tf]>.ab:has(>.ico:only-child)::after{display:block}
+.q h1 small,.q.pop h1 small{animation:none;position:static;transform:none;display:block;white-space:normal;max-width:none;overflow:visible;text-overflow:clip;padding:0;margin-top:8px;border:0;background:none;box-shadow:none;color:var(--ink2);font-size:clamp(14px,3.8vw,18px);letter-spacing:.02em;text-transform:none;line-height:1.3}   /* dòng nhắc trong đề (kiểu write) nằm trong luồng, không phải nhãn nổi */
+.ans[data-k=tf] .ab,.ans[data-k=tf] .ab.long{white-space:nowrap}.ans[data-k=tf]>.ab>.ico{max-height:60%;width:auto;flex:none}
+@media (max-height:430px) and (min-aspect-ratio:11/10){.ans[data-k=tf]>.ab{font-size:clamp(18px,5vh,24px);gap:6px}.ans[data-k=tf]>.ab>.ico{height:42%}}
+.ab{overflow-wrap:normal;word-break:keep-all;hyphens:none}   /* không bẻ từ giữa vần ("chườ/ng"): chữ co lại thay vì ngắt */
+.rrow.rmore{grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}.rrow.rmore .btn{min-height:46px;flex-direction:row}
+.dots.many i{width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-width:2px}
+.ab.tl:has(>.ico:only-child){font-size:clamp(36px,10vw,52px);min-height:clamp(56px,9dvh,80px)}   /* thẻ chỉ có hình: hình to, dễ chạm */
+@media (min-width:700px) and (min-height:700px){.ab.tl:has(>.ico:only-child){font-size:72px;min-height:100px}}
+@media (max-height:430px) and (min-aspect-ratio:11/10){.ab.tl:has(>.ico:only-child){font-size:34px;min-height:44px}}

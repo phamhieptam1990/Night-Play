@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="vi" data-app="hub">
 <head>
+<link rel="stylesheet" href="bg.css">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Học Vui</title>
@@ -58,22 +59,11 @@ body>:not(.aur):not(.ov):not(.fx):not(.mnu):not(.cf):not(.cheer):not(.rev):not(.
 /* di động: thanh trên tự thu lại sau 3 giây để bảng câu hỏi rộng hơn; chạm mép trên / vuốt xuống thì hiện lại */
 .top{max-height:80px;transition:max-height .28s ease,padding .28s ease,opacity .2s ease}
 .top.tuck{max-height:0;padding-top:0;padding-bottom:0;opacity:0;overflow:hidden;pointer-events:none}
-.rev{position:fixed;left:50%;transform:translateX(-50%);top:4px;height:36px;padding:0 16px;border-radius:18px;z-index:40;display:none;align-items:center;gap:6px;background:rgba(22,17,48,.82);color:#fff;font:800 14px/1 inherit;border:1px solid rgba(255,255,255,.3);box-shadow:0 4px 12px rgba(0,0,0,.3);-webkit-tap-highlight-color:transparent}
-.rev i{font-style:normal}
-.revb{position:fixed;left:8px;top:2px;width:44px;height:44px;border-radius:22px;z-index:40;display:none;place-items:center;background:rgba(22,17,48,.82);color:#fff;text-decoration:none;font-weight:800;font-size:22px;border:1px solid rgba(255,255,255,.3);box-shadow:0 4px 12px rgba(0,0,0,.3)}
-body.tucked .rev{display:flex}body.tucked .revb{display:grid}
-@media (min-width:701px) and (min-height:431px){.top.tuck{max-height:80px;padding:10px 12px 4px 16px;opacity:1;overflow:visible;pointer-events:auto}body.tucked .rev,body.tucked .revb{display:none}}
 @media (prefers-reduced-motion:reduce){.top{transition:none}}
 .ib{flex:none;min-width:50px;height:50px;border-radius:25px;display:grid;place-items:center;background:rgba(22,17,48,.72);color:#fff;border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);text-decoration:none;font-weight:800;font-size:22px;padding:0 12px;box-shadow:0 6px 16px rgba(0,0,0,.28),inset 0 0 12px rgba(155,131,255,.25)}
 .ib:active{transform:scale(.94)}
 .ib.main{background:linear-gradient(135deg,#9B83FF,#FF9A6B);color:#1a1033;font-size:26px;border-color:transparent}
 .ib[aria-pressed=false]{opacity:.6}
-.mnu{position:fixed;z-index:25;right:12px;top:calc(env(safe-area-inset-top) + 66px);display:grid;grid-template-columns:repeat(2,104px);gap:8px;padding:12px;border-radius:26px;border:2px solid transparent;max-height:calc(100dvh - 80px);overflow-y:auto;background:linear-gradient(145deg,#211C52,#14152A) padding-box,linear-gradient(135deg,#9B83FF,#FF9A6B) border-box;box-shadow:0 24px 60px -10px rgba(0,0,0,.6),0 0 40px -6px rgba(155,131,255,.5);animation:pop .22s}
-.mt{width:104px;height:72px;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-weight:900;color:#fff;text-decoration:none;background:rgba(22,17,48,.72);border:1px solid rgba(255,255,255,.2);box-shadow:inset 0 0 12px rgba(155,131,255,.25)}
-.mt b{font-size:28px;line-height:1;font-weight:900}.mt small{font-size:13px;line-height:1.1;font-weight:800;color:#e9e4ff;white-space:nowrap}
-.mt:active{transform:scale(.94)}
-.mt#lang{grid-column:1/-1;height:48px;flex-direction:row;gap:8px;margin-top:6px;background:rgba(255,255,255,.06)}.mt#lang b{font-size:16px}
-@media (max-height:520px){.mnu{grid-template-columns:repeat(3,100px)}.mt{width:100px;height:62px}.mt b{font-size:24px}}
 .prog .star{height:34px;padding:0 10px;font-size:14px;border-radius:17px}
 /* B4: màn chơi chỉ còn dòng ngày cập nhật; © / liên kết / Phụ huynh nằm trong menu ⋯ (mục ⓘ và 🔒) để bé không bấm nhầm */
 .foot .fc,.foot #fl,.foot .finfo{display:none}
@@ -143,9 +133,6 @@ body.g1 #pick,body.g1 #toMeTop{display:none}body.g1 #toGarden{margin-left:auto}
 /* nút chỉ có MỘT hình: hình phủ gần hết nút (to nhất có thể) trên nền sáng để màu hình nổi, nút nổi khối như các nút khác */
 .ans:not(.kz)>.ab:has(>.ico:only-child){display:flex;align-items:center;justify-content:center;padding:5px;background:linear-gradient(160deg,#fff,color-mix(in srgb,var(--c1) 28%,#fff));-webkit-text-stroke:0;text-shadow:none}
 .ans:not(.kz)>.ab:has(>.ico:only-child)::after{display:none}
-.ans:not(.kz)>.ab:has(>.ico:only-child){color:#1f2a44}   /* nền trắng thì chữ phải tối (nút Đúng/Sai có cả chữ lẫn hình) */
-.ans[data-k=tf]>.ab:has(>.ico:only-child){background:linear-gradient(145deg,var(--c1),var(--c2));color:#fff;gap:8px;-webkit-text-stroke:2px var(--d);paint-order:stroke fill}
-.ans[data-k=tf]>.ab:has(>.ico:only-child)::after{display:block}
 @keyframes pickme{0%,100%{transform:translateY(0) scale(1,1)}14%{transform:translateY(0) scale(1.08,.9)}42%{transform:translateY(-9%) scale(.95,1.07)}70%{transform:translateY(0) scale(1.05,.94)}85%{transform:translateY(-2%) scale(1,1)}}
 .ans:not(.kz)>.ab:has(>.ico:only-child)>.ico{animation:pickme 1.7s ease-in-out infinite;transform-origin:50% 90%}   /* hình nhún nhảy kiểu "chọn tớ đi" */
 .ans:not(.kz)>.ab:nth-child(2):has(>.ico:only-child)>.ico{animation-delay:-.25s}.ans:not(.kz)>.ab:nth-child(3):has(>.ico:only-child)>.ico{animation-delay:-.5s}.ans:not(.kz)>.ab:nth-child(4):has(>.ico:only-child)>.ico{animation-delay:-.75s}.ans:not(.kz)>.ab:nth-child(5):has(>.ico:only-child)>.ico{animation-delay:-1s}.ans:not(.kz)>.ab:nth-child(6):has(>.ico:only-child)>.ico{animation-delay:-1.25s}.ans:not(.kz)>.ab:nth-child(7):has(>.ico:only-child)>.ico{animation-delay:-.4s}.ans:not(.kz)>.ab:nth-child(8):has(>.ico:only-child)>.ico{animation-delay:-.9s}.ans:not(.kz)>.ab:nth-child(9):has(>.ico:only-child)>.ico{animation-delay:-1.4s}
@@ -163,9 +150,6 @@ body.g1 #pick,body.g1 #toMeTop{display:none}body.g1 #toGarden{margin-left:auto}
 .q.short{justify-content:center;align-items:center;text-align:center;padding-top:16px}.q.short h1{text-align:center}
 /* nhãn môn/dạng bài: thẻ nổi đè lên mép trên của bảng, như bong bóng gắn nhãn */
 .q small{position:absolute;left:50%;top:0;transform:translate(-50%,-50%);z-index:2;white-space:nowrap;max-width:calc(100% - 40px);overflow:hidden;text-overflow:ellipsis;padding:7px 16px;border-radius:99px;font-size:13px;font-weight:900;letter-spacing:.08em;color:#fff;background:linear-gradient(135deg,var(--s1),var(--s2));border:2px solid color-mix(in srgb,#fff 70%,transparent);box-shadow:0 6px 16px -4px color-mix(in srgb,var(--s2) 70%,transparent)}
-.q h1 small,.q.pop h1 small{animation:none;position:static;transform:none;display:block;white-space:normal;max-width:none;overflow:visible;text-overflow:clip;padding:0;margin-top:8px;border:0;background:none;box-shadow:none;color:var(--ink2);font-size:clamp(14px,3.8vw,18px);letter-spacing:.02em;text-transform:none;line-height:1.3}   /* dòng nhắc trong đề (kiểu write) nằm trong luồng, không phải nhãn nổi */
-.ans[data-k=tf] .ab,.ans[data-k=tf] .ab.long{white-space:nowrap}.ans[data-k=tf]>.ab>.ico{max-height:60%;width:auto;flex:none}
-@media (max-height:430px) and (min-aspect-ratio:11/10){.ans[data-k=tf]>.ab{font-size:clamp(18px,5vh,24px);gap:6px}.ans[data-k=tf]>.ab>.ico{height:42%}}
 .q,.q.short{padding:27px 22px 22px}   /* khung câu hỏi: lề đều bốn phía (nhãn nổi chỉ lấn 15px vào mép trên) */
 @keyframes lbl{from{opacity:0;transform:translate(-50%,-10%) scale(.7)}to{opacity:1;transform:translate(-50%,-50%)}}
 .q.pop small{animation:lbl .45s .05s cubic-bezier(.2,.9,.3,1.3) both}
@@ -174,7 +158,6 @@ body.g1 #pick,body.g1 #toMeTop{display:none}body.g1 #toGarden{margin-left:auto}
 @keyframes pop{from{opacity:0;transform:scale(.94) translateY(8px)}}
 .ans{flex:1 1 0;min-height:0;display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:minmax(56px,84px);align-content:center;gap:14px}
 .ab{position:relative;min-height:62px;border-radius:20px;font-weight:900;font-size:clamp(30px,10vw,50px);color:#fff;background:linear-gradient(145deg,var(--c1),var(--c2));--d:color-mix(in srgb,var(--c2) 58%,#000);box-shadow:0 7px 0 var(--d),0 14px 22px -4px var(--c2),inset 0 3px 0 rgba(255,255,255,.45);margin-bottom:7px;-webkit-text-stroke:5px var(--d);paint-order:stroke fill;text-shadow:0 3px 0 var(--d),0 6px 10px rgba(0,0,0,.35);letter-spacing:.01em;animation:fl 4s ease-in-out infinite alternate;overflow:hidden;padding:0 10px;overflow-wrap:anywhere}
-.ab{overflow-wrap:normal;word-break:keep-all;hyphens:none}   /* không bẻ từ giữa vần ("chườ/ng"): chữ co lại thay vì ngắt */
 .ab::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.35),transparent 40%);pointer-events:none}
 .ab:nth-child(2){animation-delay:-1s}.ab:nth-child(3){animation-delay:-2s}.ab:nth-child(4){animation-delay:-3s}
 @keyframes fl{to{transform:translateY(-4px)}}
@@ -267,8 +250,6 @@ body.g1 #pick,body.g1 #toMeTop{display:none}body.g1 #toGarden{margin-left:auto}
 .btn{display:inline-flex;align-items:center;justify-content:center;width:100%;min-height:54px;margin-top:10px;padding:0 24px;border-radius:99px;font-weight:900;font-size:19px;color:#fff;background:linear-gradient(135deg,var(--s1),var(--s2));box-shadow:0 10px 26px color-mix(in srgb,var(--s2) 50%,transparent)}
 .rrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
 .rrow .btn{width:auto;min-width:0;margin:0;min-height:68px;padding:6px 4px;flex-direction:column;gap:2px;font-size:14px;line-height:1.15;border-radius:22px;text-align:center}
-.rrow.rmore{grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}.rrow.rmore .btn{min-height:46px;flex-direction:row}
-.dots.many i{width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-width:2px}
 .rrow a.btn{text-decoration:none}.rrow .btn i{font-style:normal;font-size:26px;line-height:1}.rrow .btn span{font-weight:900;font-size:13.5px}
 .btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--line);box-shadow:none;font-size:16px;min-height:48px}
 .btn:active{transform:scale(.98)}
@@ -330,9 +311,6 @@ body.g1 #pick,body.g1 #toMeTop{display:none}body.g1 #toGarden{margin-left:auto}
 .ans.kz:not(.rv):not(.ld) .ab{animation:none}
 .ab.tl{min-height:48px;border-radius:16px;font-size:clamp(18px,5vw,24px);color:var(--ink);padding:0 10px;background:linear-gradient(145deg,color-mix(in srgb,var(--ink) 14%,var(--panel)),var(--panel));border:1.5px solid var(--line);box-shadow:0 6px 14px -6px rgba(0,0,0,.4),inset 0 2px 0 rgba(255,255,255,.12)}
 .ab.tl::after{display:none}
-.ab.tl:has(>.ico:only-child){font-size:clamp(36px,10vw,52px);min-height:clamp(56px,9dvh,80px)}   /* thẻ chỉ có hình: hình to, dễ chạm */
-@media (min-width:700px) and (min-height:700px){.ab.tl:has(>.ico:only-child){font-size:72px;min-height:100px}}
-@media (max-height:430px) and (min-aspect-ratio:11/10){.ab.tl:has(>.ico:only-child){font-size:34px;min-height:44px}}
 .ab.tl.sel{outline:3px solid var(--sg);outline-offset:-3px;transform:scale(1.04)}
 .ab.tl.ok{background:linear-gradient(145deg,#34D399,#059669);color:#fff;border-color:transparent}
 .ab.go{--c1:#34D399;--c2:#059669;color:#fff}.ab.go[disabled]{opacity:.45}
@@ -431,6 +409,7 @@ body.g1 #pick,body.g1 #toMeTop{display:none}body.g1 #toGarden{margin-left:auto}
 /* lề trên khung câu hỏi >= 26px ở MỌI cỡ màn (nhãn nổi thò xuống ~19px; quy tắc màn thấp từng đặt 16px làm nhãn đè chữ) */
 .q,.q.short,.q.pop,.q.rich{padding-top:26px!important}
 </style>
+<link rel="stylesheet" href="ui2.css">
 </head>
 <body data-subj="toan">
 <div class="spk-gate" id="spkGate" role="dialog" aria-label="Bật loa" hidden><a class="sgx" id="sgBack" href="/hoc/" aria-label="Quay lại">←</a><img class="sgm" id="sgMi" alt=""><div class="sgw"><button class="sgb" id="sgOn" type="button" aria-label="Bật loa">🔊</button></div><button class="sgs" id="sgOff" type="button" aria-label="Học không cần tiếng">🔇</button></div>
@@ -480,6 +459,7 @@ body.g1 #pick,body.g1 #toMeTop{display:none}body.g1 #toGarden{margin-left:auto}
 </div>
 <script src="slot.js"></script>
 <script src="content/phrases.js"></script>
+<script src="tone.js"></script>
 <script src="mascot-kit.js"></script>
 <script src="content/bank.js"></script>
 <script src="hint-texts.js"></script>
@@ -871,7 +851,7 @@ function start(){
 /* ---------- giao diện ---------- */
 function label(){ const t = T[lang]; $("sbd").innerHTML = '<img src="' + hd(subj, grade) + '" alt="">'; $("gbd").textContent = grade; $("pick").setAttribute("aria-label", t.sn[subj] + ", " + t.grade + " " + grade); }
 function chrome(){
-  const t = T[lang]; document.documentElement.lang = lang; document.title = t.title; document.body.dataset.subj = subj; document.body.classList.toggle("g1", grade === 1);
+  const t = T[lang]; document.documentElement.lang = lang; document.title = t.title; document.body.dataset.subj = subj; document.body.dataset.grade = grade; document.body.classList.toggle("g1", grade === 1);
   $("back").setAttribute("aria-label", t.back); $("back").href = hubUrl(); $("revBack").href = hubUrl(); $("revT").textContent = t.menu; menuUi(); sndUi(); label(); renderStars();
   LM.setLang(lang); $("mas").setAttribute("aria-label", LM.mascotName() + ""); LM.show(subj, grade).then(ok => { $("fb").hidden = ok; if(ok){ $("mas").setAttribute("aria-label", LM.mascotName()); LM.emote("happy", 1800); } });
   buildFooter();
@@ -958,9 +938,7 @@ stars = +ls("learn:stars") || 0;
   ["keydown", "keypress", "keyup"].forEach(ev => addEventListener(ev, e => { if(!g.hidden && e.key !== "Tab" && !(e.target && e.target.closest && e.target.closest("#spkGate"))){ e.stopImmediatePropagation(); e.preventDefault(); } }, true));   /* gõ phím không lọt xuyên cổng loa */
   $("sgOff").onclick = () => { AUTO = false; ls("learn:auto", "0"); sndUi(); GESTURE = true; g.hidden = true; };
 })();
-/* lớp 4–5: lời linh vật bớt "bé ơi" kiểu trẻ nhỏ (chỉ đổi chữ, tiếng Việt) */
-const toneUp = t => (typeof t !== "string" || lang !== "vi" || grade < 4) ? t : t.replace(/Cà Rốt bị lạc trong rừng! Giúp bạn ấy…?/, "Nhiệm vụ: đưa Cà Rốt về nhà.").replace(/ bé ơi/g, "").replace(/Chào bé yêu!/g, "Chào bạn!").replace(/ nè([!.?]|$)/g, "$1").replace(/(?<![\p{L}])Bé(?![\p{L}])/gu, "Bạn").replace(/(?<![\p{L}])bé(?![\p{L}])/gu, "bạn");
-{ const fs = LM.say, fe = LM.event; if(typeof fs === "function") LM.say = function(t){ const a = [].slice.call(arguments); a[0] = toneUp(t); return fs.apply(this, a); }; if(typeof fe === "function") LM.event = function(){ return toneUp(fe.apply(this, arguments)); }; }
+toneUp.install(LM);   /* tone.js: lớp 4–5 lời linh vật gọn hơn */
 LM.bind({ box: $("masBox"), bubble: $("say"), base: "../shared/art/learn/", lang, idleMs: 15000, onTap: speak });
 $("mas").onclick = () => LM.poke();
 /* dùng bàn phím: Tab tới linh vật là nghe đọc câu hỏi (Enter/Space để nghe lại) */
