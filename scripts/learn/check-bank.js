@@ -107,5 +107,44 @@ ok(E.weakSkills("toan", 5).join() === "pct_of", "weakSkills phải trả pct_of:
   ok(wk / tot > 1.5 * (wk0 / tot0) && wk / tot > .09, `focus weak phải dồn câu vào kỹ năng yếu: ${(100 * wk / tot).toFixed(1)}% so với ${(100 * wk0 / tot0).toFixed(1)}%`); }
 fresh(); ok(E.round("toan", 5, { lang: "vi" }).length === 5, "vòng thường vẫn 5 câu");
 
+/* 7) chống lặp trong một vòng (L3-21): ≥ 300 vòng cho mỗi môn × lớp, có cả vòng đã trộn kiểu câu như index.html */
+console.log("7) chống lặp trong vòng: không trùng đề, không trùng từ, mỗi kỹ năng ≤ 1 câu khi còn kỹ năng khác");
+require(path.join(root, "learn/content/qtypes.js")); const LT = window.LearnTypes;
+const plainQ = q => String(q.q || "").replace(/<[^>]+>/g, " ").replace(/[.,!?;:"“”()]/g, " ").replace(/\s+/g, " ").trim().toLowerCase();
+const wordQ = q => { const r = q.o && q.o.find(x => x.ok); let w = typeof q.reveal === "string" ? q.reveal : typeof q.ans === "string" ? q.ans : r ? String(r.v) : ""; w = w.toLowerCase().trim(); return /^[^\d\s<>]{3,16}$/.test(w) && !/^(đúng|sai|true|false)$/.test(w) ? w : ""; };
+const rep = { exact: 0, word: 0, skill: 0, rounds: 0 }; let sample = "";
+for (const sj of ["toan", "tviet", "tanh"]) for (let g = 1; g <= 5; g++) for (const lang of ["vi", "en"]) {
+  fresh(); E.setRng(seeded(g * 31 + sj.length * 7 + (lang === "vi" ? 1 : 2)));
+  for (let i = 0; i < 80; i++) for (const mixed of [false, true]) {
+    let r = E.round(sj, g, { lang }); if (mixed) r = LT.mix(r, sj, g, lang, 3); rep.rounds++;
+    const keys = new Set(), words = new Map(), sk = {};
+    r.forEach((q, k) => {
+      const key = plainQ(q) + "|" + (q.speak || ""), w = wordQ(q);
+      if (keys.has(key)) { rep.exact++; sample = `${sj} lớp ${g} ${lang}: trùng đề "${plainQ(q).slice(0, 40)}"`; } keys.add(key);
+      if (w && words.has(w)) { rep.word++; sample = `${sj} lớp ${g} ${lang}: cùng từ "${w}" ở câu ${words.get(w)} và ${k}`; } if (w) words.set(w, k);
+      if (!mixed && q.skill) sk[q.skill] = (sk[q.skill] || 0) + 1;
+    });
+    if (!mixed && E.skillsFor(sj, g).length >= 5 && Object.values(sk).some(c => c > 1)) { rep.skill++; sample = `${sj} lớp ${g}: lặp kỹ năng ${JSON.stringify(sk)}`; }
+  }
+}
+console.log(`   ${rep.rounds} vòng: trùng đề ${rep.exact}, trùng từ ${rep.word}, lặp kỹ năng ${rep.skill}`);
+ok(rep.rounds >= 300 * 15, "cần ≥ 300 vòng mỗi lớp × môn"); ok(rep.exact === 0, "có vòng lặp đề (" + sample + ")"); ok(rep.word === 0, "có vòng lặp từ (" + sample + ")"); ok(rep.skill === 0, "có vòng lặp kỹ năng (" + sample + ")");
+
+/* 8) E.round không ném lỗi với mọi tham số và dữ liệu tiến độ rỗng/lạ/hỏng ("Cannot read properties of undefined (reading 'id')") */
+console.log("8) E.round chịu mọi tham số (môn, lớp, n 1–40, focus, chủ đề) và tiến độ hỏng");
+const junk = [null, "", "null", "[]", "5", '"x"', "{", '{"_last":5}', '{"_last":"abc"}', '{"add10":null}', '{"add10":"x"}', '{"add10":{"n":"a","p":null,"tags":"zz"}}', '{"add10":{"n":5,"p":0.5,"tags":{"a":"b"}}}', '{"add10":[1]}', '{"_last":null}'];
+const errs = new Set(); let calls = 0;
+const topics = [...topicIds].slice(0, 6).concat([undefined, "zzz"]);
+for (const sj of ["toan", "tviet", "tanh", "khac", undefined, null]) for (const g of [0, 1, 2, 3, 4, 5, 6, "3", undefined, null, NaN]) for (const j of junk) {
+  fresh(); mem["learn:m:" + sj] = j; E.setRng(seeded(calls + 1));
+  for (const n of [1, 2, 3, 4, 5, 6, 7, 9, 10, 15, 20, 30, 40, 41, 0, NaN, undefined]) for (const focus of [undefined, "weak"]) {
+    if ((n | 0) % 3 === 1 && g !== 3 && g !== 5 && j !== null && j !== "{") continue;   /* thưa bớt tổ hợp để chạy nhanh */
+    const topic = topics[(calls++) % topics.length];
+    try { const r = E.round(sj, g, { n, focus, topic, lang: calls % 2 ? "vi" : "en" }); if (!Array.isArray(r)) errs.add("không trả về mảng"); else if (["toan", "tviet", "tanh"].includes(sj) && r.length !== Math.max(1, Math.min(40, (n | 0) || 5))) errs.add(`độ dài ${r.length} với n=${n}`); } catch (e) { errs.add(`${sj}/${g}/n=${n}/${focus}/${topic}/${j}: ${e.message}`); }
+  }
+}
+for (let n = 1; n <= 40; n++) for (const sj of ["toan", "tviet", "tanh"]) for (const g of [1, 2, 3, 4, 5]) { fresh(); try { if (E.round(sj, g, { n, lang: "vi" }).length !== n) errs.add(`n=${n} ${sj} lớp ${g}: sai độ dài`); } catch (e) { errs.add(`${sj}/${g}/n=${n}: ${e.message}`); } }
+console.log("   " + calls + " lần gọi E.round, lỗi: " + errs.size); ok(errs.size === 0, "E.round ném lỗi: " + [...errs].slice(0, 3).join(" ; "));
+
 console.log(bad ? `\n✗ ${bad} lỗi (${checks} phép kiểm)` : `\n✓ bộ máy học đạt (${checks} phép kiểm, ${BANK.length} câu dựng sẵn, ${Object.keys(E.SKILLS).length} kỹ năng)`);
 process.exit(bad ? 1 : 0);
