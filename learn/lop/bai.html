@@ -343,6 +343,7 @@ function endScreen(stage){
   P.markLearned(grade,subj,topic); const rw=P.complete(grade,subj,topic); mood("cheer"); setNext(true,COPY.test);
   speakIn(rw.first?"Bé học xong rồi! Bé có 3 nhiệm vụ mới trong vườn!":COPY.ready);
   $("m").classList.add("end");
+  if(window.LearnCelebrate) LearnCelebrate.show(rw.first?5:3,{lang:"vi",grade,key:subj+":"+topic,quiet:!AUTO});   /* chúc mừng toàn màn hình: thú nhảy, sao nổ, nhạc ngẫu nhiên */
   const w=document.createElement("div");w.className="endw";
   w.innerHTML='<img class="em" alt="" src="'+art("cheer")+'"><h2>Bé học xong rồi! 🎉</h2>'+(rw.first?'<div class="rw"><b>🎁 +3 nhiệm vụ</b><b>🌱 +2 hạt</b></div>':'<p>Bài này bé đã nhận phần thưởng rồi.</p>')+'<p>Giờ mình làm bài kiểm tra nhé!</p>';
   const acts=document.createElement("div");acts.className="acts";
@@ -373,6 +374,7 @@ document.head.appendChild(sc);
 })();
 </script>
 <script src="../icons.js"></script>
+<script src="../celebrate.js"></script>
 <script src="../../shared/offline.js" defer></script>
 <script src="../../shared/updated.js"></script>
 </body>
