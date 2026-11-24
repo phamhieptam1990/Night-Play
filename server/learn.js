@@ -5,6 +5,7 @@
    Thiết kế đầy đủ: docs/LEARN-FREE-VS-PLUS.md, docs/LEARN-COACH-DESIGN.md. Cần migration 009_learn_plus.sql. */
 const crypto = require("crypto");
 const SAFE = require("../learn/content/safe-words.js");
+const EXAM = require("./learn-exam.js");
 
 const FEATURES = ["coach", "explain", "exam6", "report"];     // multi/sync: sau (G5)
 /* Giá/gói MẶC ĐỊNH CHỜ CHỦ SITE XÁC NHẬN (docs/LEARN-NIGHTPASS-PLAN.md mục 8): tháng 99.000đ, quý 249.000đ, năm 790.000đ; không bán gói ngày/tuần. */
@@ -201,6 +202,20 @@ module.exports = function install(d) {
     const res = await coach(a.t.u, r);
     if (res.fallback) return fallback(r.mode, res.fallback);
     return out(200, { ok: true, source: res.source, ...res.out, left: res.left });
+  });
+
+  /* ---------- Đề thi thử lớp 6 (G4, bản nháp: 3 đề Toán sinh từ mẫu; xem server/learn-exam.js) ---------- */
+  route("GET", /^\/api\/learn\/exam\/([1-3])$/, async ({ m, headers }) => {
+    if (!on()) return off();
+    const a = await authLearn(headers, "exam6"); if (a.fail) return a.fail;
+    return out(200, { ok: true, exam: EXAM.publicExam(EXAM.makeExam(m[1])) });   // KHÔNG có đáp án
+  });
+  route("POST", /^\/api\/learn\/exam\/([1-3])\/grade$/, async ({ m, headers, body }) => {
+    if (!on()) return off();
+    const a = await authLearn(headers, "exam6"); if (a.fail) return a.fail;
+    if (await limited("lx:" + a.t.u, 20)) return out(429, { error: "rate_limited" });
+    if (!body || typeof body.answers !== "object" || Array.isArray(body.answers) || body.answers === null) return out(400, { error: "bad_input" });
+    return out(200, { ok: true, result: EXAM.gradeExam(EXAM.makeExam(m[1]), body.answers) });
   });
 
   return { PLANS_LEARN, FEATURES, isLearnPlan, grant, stateOf, passRoute, plans, on, coach, parse, vet, mockCoach, shape, TAGS };
