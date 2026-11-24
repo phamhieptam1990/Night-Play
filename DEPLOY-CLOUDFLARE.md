@@ -88,3 +88,9 @@ Kiểm tra mail không vào spam: gửi thử OTP tới Gmail + một hộp thư
 - **Khi sửa nội dung pháp lý** (`privacy.html`, `terms.html`, `shared/site.js`): chạy lại `NODE_PATH=<thư mục có puppeteer-core và pdfjs-dist> node scripts/build-legal-pdf.js` (cài tạm: `npm i --no-save pdfjs-dist@3.11.174`), rồi `node scripts/cozygame/check-legalpdf.js`, rồi commit 4 PDF + `legal/pdf-info.js`. Có số xác nhận Bộ Công Thương thì điền `license` trong `shared/site.js` trước khi dựng lại.
 - Không ghi chữ số nào của số định danh/CCCD vào file công khai, kể cả dạng che (`check-legal.js` quét); số thật chỉ nhập vào hồ sơ đăng ký Bộ Công Thương.
 - Sitemap/robots: không chặn `/legal/` (robots hiện không chặn); thêm các URL PDF vào `landing/sitemap.xml` nếu muốn lập chỉ mục.
+
+## Học Vui Plus (TẮT mặc định; chi tiết ở docs/LEARN-FREE-VS-PLUS.md)
+1. Chạy migration `server/db/migrations/009_learn_plus.sql` (`node server/db/migrate.js production --yes`) TRƯỚC khi bật. Mã mới không đụng bảng/cột mới khi `LEARN_PLUS` chưa bật, nên deploy trước hay sau migration đều không ảnh hưởng Night Pass.
+2. Biến (Variables and Secrets): `LEARN_PLUS=on` (bật), `LEARN_AI_KEY` (loại **Secret**, chỉ khi muốn AI thật; để trống = mô phỏng), tuỳ chọn `LEARN_AI_MODEL`, `LEARN_COACH_DAILY`, `LEARN_TEST_PRICE=on` (chỉ khi thử bằng 1.000đ).
+3. Trình duyệt chỉ hiện thẻ Plus khi cờ `learn:plus:on` bật (xem docs/LEARN-FREE-VS-PLUS.md mục 2); chưa có nút bật công khai.
+4. Trước khi deploy chạy `node scripts/check-worker-bundle.js` và các bài đo `scripts/learn/check-plus.js`, `check-coach.js`, `check-exam.js`.

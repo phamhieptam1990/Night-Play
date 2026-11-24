@@ -115,3 +115,7 @@ Không nêu một con số tổng giao diện (như "20 skin") trên trang công
 - Chrome thật, 390×844, mọi game ở trạng thái KHÔNG có Pass: liệt kê các nút có lớp `lock`, mở popup 🎨 đếm skin (`cozyplay/*`, `popplay/*`): mọi game có đúng 1 skin mở + 4 khoá (Chim Bay: 5); nút loại chơi khoá khớp bảng 3.1.
 - Chrome thật với token giả + `server/pro/<id>.js` trả qua interception: mọi khoá mất (`locks=0`), số skin Pass đếm được: 4 (game một danh mục), 16 (Đổi Đời 2048, 8 game Pop 4 loại), 20 (Bé Đấu Bố Mẹ), 12 (Làng Của Bé).
 - Đọc code: `server/app.js` (PLANS, `/api/pro`, trial, device), `scripts/cozygame/tpl.html`, `server/pro/*.js` (đầu file), game viết tay.
+
+## Học Vui Plus (sản phẩm riêng, tắt mặc định)
+
+Học Vui Plus KHÔNG phải một phần của Night Pass: gói riêng (`learn_passes`), token riêng (`a:"learn"`), bảng giá riêng (`PLANS_LEARN`). Có Night Pass không tự có Plus và ngược lại (bài đo `scripts/learn/check-plus.js` kiểm hai chiều). Học Vui bản miễn phí không đổi. Bảng sự thật đầy đủ: `docs/LEARN-FREE-VS-PLUS.md`.
