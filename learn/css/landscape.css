@@ -21,3 +21,11 @@
 @media (min-width:700px) and (min-height:700px){.game:has(.ans.kz) .q h1.pic{font-size:clamp(110px,min(32vw,22dvh),300px)!important}}
 @media (max-height:430px) and (min-aspect-ratio:11/10){.q h1.pic{font-size:clamp(70px,min(24vw,46dvh),200px)!important}}
 @media (min-width:700px) and (min-height:700px){.q h1.pic{font-size:clamp(160px,min(36vw,34dvh),340px)!important}}
+/* màn ngang thấp: thanh trên và chân trang gọn hơn để câu hỏi + thanh trên + chân trang luôn vừa 1 màn (không cuộn ~10px lúc thanh trên chưa tự thu) */
+@media (max-height:430px) and (min-aspect-ratio:11/10){
+  .top{padding-top:0;padding-bottom:0}
+  .foot{padding-top:0;padding-bottom:0}
+  .game{gap:4px 16px;padding-top:0}
+  .q{padding-top:20px;padding-bottom:12px}
+  .mas{width:50px;height:50px}
+}
