@@ -597,6 +597,7 @@
     if (SKLAB[skill] && !q.lab) q.lab = SKLAB[skill][c.lang === "vi" ? 0 : 1];
     if (HTX && !q.hint) { var hh = HTX.get(skill, c.lang); if (hh) q.hint = hh; }
     q.skill = skill; q.subj = meta.subj; q.diff = meta.diff; q.grade = c.grade; q.topic = topicOf(skill, c.grade); if (!q.type) q.type = "calculation";
+    if (!q.steps && q.grade === 5 && q.subj === "toan" && q.hint) q.steps = q.hint.concat([(c.lang === "vi" ? "Vậy đáp án là " : "So the answer is ") + q.o.filter(function (x) { return x.ok; })[0].v + "."]);   /* lời giải ngắn: chỉ hiện sau khi sai hai lần */
     return q;
   }
 
@@ -817,6 +818,9 @@
   /* kỹ năng Tiếng Việt + Tiếng Anh: learn/lang-skills.js (nạp trước engine trong trình duyệt, require trong Node) */
   var LS = root.LearnLangSkills || (typeof require !== "undefined" ? (function () { try { return require("./lang-skills.js"); } catch (e) { return null; } })() : null);
   if (LS) LS({ mk: mk, rnd: rnd, shuf: shuf, G: G, SK: SK, TOPIC: TOPIC, TAGS: TAGS, SKLAB: SKLAB, TRACKED: TRACKED });
+  /* Toán lớp 5 bổ sung (biểu đồ quạt SVG, hỗn số): learn/content/math5.js (nạp trước engine trong trình duyệt, require trong Node) */
+  var M5 = root.LearnMath5 || (typeof require !== "undefined" ? (function () { try { return require("./content/math5.js"); } catch (e) { return null; } })() : null);
+  if (M5) M5({ mk: mk, mkn: mkn, rnd: rnd, pk: pk, gcd: gcd, VI: VI, G: G, SK: SK, TOPIC: TOPIC, SKLAB: SKLAB });
   /* gợi ý tĩnh theo kỹ năng: learn/hint-texts.js (nạp trước engine trong trình duyệt) */
   var HTX = root.LearnHintTexts || (typeof require !== "undefined" ? (function () { try { return require("./hint-texts.js"); } catch (e) { return null; } })() : null);
   var E = {

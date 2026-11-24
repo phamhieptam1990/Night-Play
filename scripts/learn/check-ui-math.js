@@ -7,7 +7,7 @@ const { spawn } = require("child_process"), path = require("path"), fs = require
 const root = path.join(__dirname, "..", ".."), PORT = +process.env.PORT || 8880, w = ms => new Promise(r => setTimeout(r, ms));
 const si = process.argv.indexOf("--shots"), SHOTS = si > 0 ? process.argv[si + 1] : null; if (SHOTS) fs.mkdirSync(SHOTS, { recursive: true });
 const E = require(path.join(root, "learn/engine.js"));
-const NEW = ["place_value", "round_num", "expr_order", "unknown_num", "shape_id", "angle_type", "perimeter", "area_shape", "volume_box", "unit_convert", "measure_compare", "time_calc", "money_calc", "motion", "word_multi", "data_read", "fraction_of", "pattern_seq"];
+const NEW = ["place_value", "round_num", "expr_order", "unknown_num", "shape_id", "angle_type", "perimeter", "area_shape", "volume_box", "unit_convert", "measure_compare", "time_calc", "money_calc", "motion", "word_multi", "data_read", "fraction_of", "pattern_seq", "pie_chart", "mixed_num"];
 const NEWL = ["letter_start", "syllable_blend", "spell_ngh", "spell_init", "word_class", "punct", "sent_type", "synonym", "antonym_pair", "idiom", "greeting_vi", "reading_story", "en_colors", "en_numbers", "en_topic_vocab", "en_meaning", "en_a_an", "en_plural", "en_present_s", "en_wh", "en_days", "en_spelling", "en_greeting", "en_reading"];
 const LONLY = process.argv.includes("--lang-only"), HONLY = process.argv.includes("--hint-only"), VP = [[390, 844], [360, 640]], fails = []; const bad = m => { fails.push(m); console.log("  ✗ " + m); };
 (async () => {
@@ -15,7 +15,7 @@ const LONLY = process.argv.includes("--lang-only"), HONLY = process.argv.include
   const br = await puppeteer.launch({ executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", headless: "new", args: ["--mute-audio"] });
   let n = 0;
   try {
-    for (const sk of HONLY ? [] : LONLY ? NEWL : NEW.concat(NEWL)) for (const g of E.SKILLS[sk].grades) for (const [W, H] of VP) {
+    for (const sk of HONLY ? [] : LONLY ? NEWL : process.env.ONLY ? process.env.ONLY.split(",") : NEW.concat(NEWL)) for (const g of E.SKILLS[sk].grades) for (const [W, H] of VP) {
       n++; const tag = `${sk} lớp ${g} ${W}x${H}`, pg = await br.newPage(); await pg.setViewport({ width: W, height: H, hasTouch: true, isMobile: true });
       const errs = []; pg.on("pageerror", e => errs.push(e.message));
       await pg.goto(`http://localhost:${PORT}/learn/index.html?subj=${E.SKILLS[sk].subj}&grade=${g}&lang=vi&free=1`, { waitUntil: "networkidle0" }); await pg.evaluate(() => { const b = document.getElementById("sgOn"), g = document.getElementById("spkGate"); if (b && g && !g.hidden) b.click(); }); await w(300);

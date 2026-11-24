@@ -152,4 +152,56 @@ for (const lang of ["vi", "en"]) {
 }
 for (const id of ["pct_ratio", "motion_meet", "ratio_prop", "dec_muldiv", "frac_muldiv"]) gen(id, 5, "vi", 120, (q, t) => { ok(Array.isArray(q.hint) && q.hint.length === 2, "thiếu gợi ý: " + id); const h = q.hint.join(" ").replace(/<[^>]+>/g, ""), r = right(q).replace(/ .*$/, ""); ok(r.length < 3 || !new RegExp("(^|[^0-9,./])" + r.replace(/[.,/]/g, c => "\\" + c) + "([^0-9,/]|$)").test(h.replace(/\d+(?:[,.]\d+)?\s*[×÷+−]\s*\d+(?:[,.]\d+)?/g, " ")) || /^\d{1,2}$|^(100|1000)$/.test(r), "gợi ý nêu đáp án " + r + " | " + h.slice(0, 120)); });
 
+console.log("8) Toán lớp 5: biểu đồ quạt SVG và hỗn số (tự tính lại từ SVG và đề, không dùng công thức của bộ sinh)");
+const gcdN = (a, b) => b ? gcdN(b, a % b) : a, FR = /^(?:(\d+) )?(\d+)\/(\d+)$/;
+const fv = s => { const m = FR.exec(s); return m ? [(+(m[1] || 0)) * +m[3] + +m[2], +m[3]] : null; };           /* "w r/d" → [tử, mẫu] */
+const norm = ([n, d]) => { const g = gcdN(n, d); return [n / g, d / g]; };
+const canon = ([n, d]) => { [n, d] = norm([n, d]); const w = Math.floor(n / d), r = n % d; return r === 0 ? String(w) : (w ? w + " " : "") + r + "/" + d; };
+for (const lang of ["vi", "en"]) {
+  gen("pie_chart", 5, lang, N, (q) => {
+    const svg = q.q.match(/<svg[\s\S]*?<\/svg>/)[0], plain = txt(q.q.replace(svg, " "));
+    ok(/viewBox="0 0 120 120"/.test(svg) && /width="(\d+)" height="\1"/.test(svg), "SVG phải vuông viewBox 0 0 120 120: " + plain);
+    const labels = [...svg.matchAll(/<text[^>]*>([^<]*)<\/text>/g)].map(m => m[1]), letters = labels.filter((x, i) => i % 2 === 0), shown = labels.filter((x, i) => i % 2 === 1);
+    const k = letters.length; ok(k >= 3 && k <= 4 && (svg.match(/<path /g) || []).length === k, "số phần không khớp số nhãn: " + labels);
+    ok(letters.join("") === "ABCD".slice(0, k), "nhãn chữ phải là A, B, C…: " + letters);
+    const data = svg.match(/data-pie="([\d,]+)"/)[1].split(",").map(Number), unk = +svg.match(/data-unk="(-?\d+)"/)[1];
+    ok(data.length === k && data.reduce((a, b) => a + b, 0) === 100 && data.every(x => x >= 15 && x <= 60 && x % 5 === 0), "các phần phải tổng 100%, mỗi phần 15–60% và bội 5: " + data);
+    shown.forEach((t, i) => ok(i === unk ? t === "?" : t === data[i] + "%", "nhãn % không khớp dữ liệu: " + t + " vs " + data[i]));
+    ok(shown.filter(t => t === "?").length === (unk >= 0 ? 1 : 0), "đúng một phần ghi ? khi hỏi phần còn lại");
+    /* dùng ĐÚNG những gì bé thấy: phần trăm đọc từ nhãn trong SVG, tên phần đọc từ chú giải */
+    const pct = shown.map(t => (t === "?" ? null : +t.replace("%", ""))), names = {};
+    (plain.replace(/^.*?: (?=A )/, "").split(/ (?=Lớp có|The class|Phần|Số bạn|Bao nhiêu|How|What)/)[0].match(/[A-D] .+?(?= · [A-D] |$)/g) || []).forEach(z => { const m = z.match(/^([A-D]) (.+)$/); if (m) names[m[2].trim()] = "ABCD".indexOf(m[1]); });
+    ok(Object.keys(names).length === k, "chú giải phải có đủ " + k + " phần: " + plain);
+    const idx = nm => { const key = Object.keys(names).filter(x => nm.indexOf(x) >= 0).sort((a, b) => b.length - a.length)[0]; return key === undefined ? -1 : names[key]; };
+    const Nm = plain.match(/(?:Lớp có|The class has) (\d+)/), Ncls = Nm ? +Nm[1] : 0, R = rn(q); let exp, m;
+    if ((m = plain.match(/Phần ([A-D]) chiếm bao nhiêu|What percent is slice ([A-D])/))) { const u = "ABCD".indexOf(m[1] || m[2]); ok(u === unk, "phần ? không khớp"); exp = 100 - pct.filter((x, i) => i !== u).reduce((a, b) => a + b, 0); }
+    else if ((m = plain.match(/Số bạn thích (.+?) hơn (.+?) bao nhiêu phần trăm|How many percent more like (.+?) than (.+?)\?$/))) { const a = idx(m[1] || m[3]), b = idx(m[2] || m[4]); ok(a >= 0 && b >= 0 && a !== b, "không nhận ra hai phần: " + plain); exp = pct[a] - pct[b]; }
+    else if ((m = plain.match(/Số bạn thích (.+?) hơn (.+?) bao nhiêu bạn|How many more like (.+?) than (.+?)\?$/)) && Ncls) { const a = idx(m[1] || m[3]), b = idx(m[2] || m[4]); ok(a >= 0 && b >= 0 && a !== b, "không nhận ra hai phần: " + plain); exp = Ncls * (pct[a] - pct[b]) / 100; }
+    else if ((m = plain.match(/Bao nhiêu bạn thích (.+?)\?$|How many like (.+?)\?$/)) && Ncls) { const a = idx(m[1] || m[2]); ok(a >= 0, "không nhận ra phần: " + plain); exp = Ncls * pct[a] / 100; }
+    else throw new Error("không nhận ra kiểu câu: " + plain);
+    ok(Number.isInteger(exp) && exp > 0 && close(R, exp), "sai: " + plain + " → " + right(q) + " (đúng " + exp + ")");
+    ok(q.o.filter(o => !o.ok).every(o => !close(nums(o.v)[0], exp)), "nhiễu trùng đáp án: " + plain);
+    ok(Array.isArray(q.hint) && q.hint.length === 2 && Array.isArray(q.steps) && q.steps.length >= 2, "thiếu gợi ý/lời giải");
+    ok(!new RegExp("(^|[^0-9,.])" + String(exp).replace(".", "[.,]") + "(?![0-9])").test(q.hint.join(" ")), "gợi ý lộ đáp án: " + q.hint.join(" "));
+    ok(q.steps.join(" ").indexOf(String(exp)) >= 0, "lời giải phải nêu đáp án: " + q.steps.join(" "));
+  });
+  gen("mixed_num", 5, lang, N, (q, t0) => {
+    const t = t0.replace(/\(.*?\)/g, ""), opts = q.o.map(o => o.v), r = right(q);
+    ok(opts.every(o => FR.test(o)) && new Set(opts).size === 4, "lựa chọn phải là phân số/hỗn số hợp lệ, khác nhau: " + opts);
+    const rv = fv(r); let exp, m;
+    if ((m = t.match(/(\d+)\/(\d+)\s*$|(\d+)\/(\d+) (?:dưới dạng|as a)/)) && /^(Viết|Write)/.test(t)) { exp = [+(m[1] || m[3]), +(m[2] || m[4])]; ok(canon(exp) === r && /^\d+ \d+\/\d+$/.test(r), "phân số → hỗn số sai: " + t + " → " + r + " (đúng " + canon(exp) + ")"); }
+    else if (/^(Đổi|Change)/.test(t)) { m = t.match(/(\d+) (\d+)\/(\d+)/); exp = [+m[1] * +m[3] + +m[2], +m[3]]; ok(r === exp[0] + "/" + exp[1], "hỗn số → phân số sai: " + t + " → " + r); }
+    else { m = t.match(/(\d+) (\d+)\/(\d+) ([+−]) (\d+) (\d+)\/(\d+)/); const a = [+m[1] * +m[3] + +m[2], +m[3]], b = [+m[5] * +m[7] + +m[6], +m[7]], L = a[1] * b[1];
+      exp = m[4] === "+" ? [a[0] * b[1] + b[0] * a[1], L] : [a[0] * b[1] - b[0] * a[1], L]; ok(exp[0] > 0 && canon(exp).includes("/"), "kết quả phải dương và không nguyên: " + t); ok(canon(exp) === r, "cộng/trừ hỗn số sai: " + t + " → " + r + " (đúng " + canon(exp) + ")"); }
+    for (const o of q.o.filter(x => !x.ok)) { const w = fv(o.v); ok(w && Math.abs(w[0] / w[1] - exp[0] / exp[1]) > 1e-9, "nhiễu bằng giá trị đúng: " + t + " | " + o.v); ok(+(FR.exec(o.v)[2]) < +(FR.exec(o.v)[3]) || !/ /.test(o.v), "nhiễu có phần phân số ≥ 1: " + o.v); }
+    ok(Array.isArray(q.hint) && q.hint.length === 2 && Array.isArray(q.steps) && q.steps.length >= 2, "thiếu gợi ý/lời giải");
+    ok(!q.hint.join(" ").includes(r), "gợi ý lộ đáp án: " + r);
+    ok(/tối giản|simplified|thành phân số|into a fraction/.test(txt(q.q)), "đề phải nói rõ dạng đáp án: " + txt(q.q));
+  });
+}
+{ const wa = new Set(); for (let i = 0; i < 60; i++) { const q = E.make("mixed_num", { lang: "vi", grade: 5, used: {} }); wa.add(/^Viết/.test(txt(q.q)) ? "tohonso" : /^Đổi/.test(txt(q.q)) ? "tophanso" : /\+/.test(txt(q.q)) ? "cong" : "tru"); } ok(wa.size === 4, "mixed_num phải đủ 4 dạng (đổi 2 chiều, cộng, trừ): " + [...wa]); }
+{ const wa = new Set(); for (let i = 0; i < 80; i++) { const q = E.make("pie_chart", { lang: "vi", grade: 5, used: {} }); wa.add(txt(q.q.replace(/<svg[\s\S]*?<\/svg>/, " ")).replace(/^.*?· ?\S+(?: \S+)*? ?(?=Cả lớp|Phần|Số bạn|Có)/, "").slice(0, 8)); } ok(wa.size >= 3, "pie_chart phải đủ dạng: " + [...wa]); }
+/* lời giải sau khi sai (L5-20): mọi câu Toán lớp 5 có q.steps ≥ 2 dòng, dòng cuối nêu đáp án; không nằm trong gợi ý (gợi ý không lộ đáp án) */
+for (const id of Object.keys(E.SKILLS).filter(k => E.SKILLS[k].subj === "toan" && E.SKILLS[k].grades.includes(5))) gen(id, 5, "vi", 20, (q) => ok(Array.isArray(q.steps) && q.steps.length >= 2 && q.steps.every(x => typeof x === "string" && x.length > 3), "thiếu lời giải: " + id));
+
 console.log(bad ? "\n✗ " + bad + " lỗi (" + checks + " phép kiểm)" : "\n✓ kỹ năng Toán mới đạt (" + checks + " phép kiểm tự tính lại)"); process.exit(bad ? 1 : 0);
