@@ -278,7 +278,7 @@ body.g1 #pick,body.g1 #toMeTop{display:none}body.g1 #toGarden{margin-left:auto}
 .pl.g button[aria-pressed=true]{background:linear-gradient(135deg,#FFD36B,#FF9E6B);color:#2a1600;border-color:transparent;transform:translateY(-3px);box-shadow:0 8px 18px rgba(255,158,107,.5)}
 .vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .starrow{font-size:38px;letter-spacing:4px;margin:8px 0 2px;line-height:1.1}
-.stat b{font-size:30px}
+.stat b{font-size:clamp(17px,5vw,22px);line-height:1.25}
 .tip{font-size:13px!important;opacity:.8}
 .btn{font-size:30px}
 .pl button{min-height:48px;border-radius:16px;font-weight:800;font-size:15px;border:2px solid var(--line);background:color-mix(in srgb,var(--panel) 80%,transparent);padding:0 4px}
@@ -305,7 +305,7 @@ body.g1 #pick,body.g1 #toMeTop{display:none}body.g1 #toGarden{margin-left:auto}
 .mas .oft{position:absolute;left:50%;top:-6px;transform:translateX(-50%);font-size:28px;line-height:1;pointer-events:none;z-index:2;filter:drop-shadow(0 2px 2px rgba(0,0,0,.3))}.mas .oft:empty{display:none}
 .rstory,.rfarm{margin:6px 0 0;font-weight:800;font-size:15px;line-height:1.4;color:var(--ink)}.rfarm{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}.rfarm span{padding:4px 10px;border-radius:99px;background:color-mix(in srgb,var(--sg) 18%,var(--panel));border:1px solid color-mix(in srgb,var(--sg) 40%,var(--line));font-size:14px}.rfarm span.big{font-size:14px;line-height:1.4;background:linear-gradient(135deg,#FFE08A,#FFB020);border-color:#E59A00;color:#4a2c00}
 .rb{display:inline-flex;align-items:center;gap:4px}.rb i{width:12px;height:12px;border-radius:50%;background:color-mix(in srgb,var(--c) 18%,transparent);border:1.5px solid var(--c)}.rb i.on{background:var(--c);box-shadow:0 0 6px var(--c)}.rb i.td{outline:2px solid var(--ink);outline-offset:1px}
-@media (max-height:700px){#res .rmas{width:96px;height:96px}#res .starrow{font-size:30px;margin:2px 0}#res .stat{margin:6px 0}#res .stat div{padding:4px 6px}#res .stat b{font-size:24px}#res .rfarm{gap:4px}#res .rfarm span{padding:2px 8px;font-size:13px}}
+@media (max-height:700px){#res .rmas{width:96px;height:96px}#res .starrow{font-size:30px;margin:2px 0}#res .stat{margin:6px 0}#res .stat div{padding:4px 6px}#res .stat b{font-size:clamp(16px,4.6vw,20px)}#res .rfarm{gap:4px}#res .rfarm span{padding:2px 8px;font-size:13px}}
 /* màn thấp: thu gọn dải chương để không chèn ép khu trả lời */
 @media (max-height:780px){.adv{padding:4px 10px;gap:8px}.adv .pl{width:34px;height:34px}.adv b{font-size:12px}}
 @media (max-height:700px){.adv{display:none}}
@@ -829,7 +829,7 @@ function finish(){
   const t = T[lang]; dots();
   const top = Object.keys(wrongTags).sort((x, y) => wrongTags[y] - wrongTags[x])[0];
   const evn = roundStars >= 5 ? "endGreat" : roundStars >= 3 ? "endGood" : "endTry"; const line = LM.event(evn); $("rSay").textContent = line; if(!LM.cloneInto($("rMas"), window.LEARN_PHRASES.events[evn][0])) $("rMas").textContent = roundStars >= 5 ? "🏆" : "🎉"; $("rT").textContent = t.rT; $("rP").textContent = t.rP;
-  $("rStars").textContent = "⭐".repeat(roundStars) + "☆".repeat(5 - roundStars); $("rS").textContent = "⭐ +" + roundStars; $("rB").textContent = "🔥 " + best;
+  $("rStars").textContent = "⭐".repeat(roundStars) + "☆".repeat(5 - roundStars); $("rS").textContent = (lang === "en" ? "✔ Right " : "✔ Đúng ") + roundStars + "/5"; $("rB").textContent = (lang === "en" ? "🔥 Best streak " : "🔥 Chuỗi dài nhất ") + best;
   $("rTip").textContent = top ? t.tipErr + t.tag[top] + "." : t.tipOk; $("again").setAttribute("aria-label", t.again); $("resX").setAttribute("aria-label", t.close); $("change").setAttribute("aria-label", t.change);
   /* B11: lớp 1–2 — lý do quay lại: còn bao nhiêu bạn Số/Chữ đang chờ trong bộ sưu tập */
   if(grade <= 2 && window.Album){ try{ const left = Album.total() - Album.count(); if(left > 0) $("rTip").textContent += " " + (lang === "en" ? left + " new friends are waiting for you!" : "Còn " + left + " bạn đang chờ bé gặp, mai chơi tiếp nhé!"); }catch(e){} }
