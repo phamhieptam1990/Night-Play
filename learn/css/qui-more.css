@@ -65,3 +65,6 @@
 .ans.kz{gap:14px}
 /* lề trên khung câu hỏi >= 26px ở MỌI cỡ màn (nhãn nổi thò xuống ~19px; quy tắc màn thấp từng đặt 16px làm nhãn đè chữ) */
 .q,.q.short,.q.pop,.q.rich{padding-top:26px!important}
+/* bong bóng + câu có hình/bảng/nhiều dòng: bớt chỗ trời bóng bay (bóng vẫn đủ cao) để khung câu rộng, chữ bảng/hình không bị co nhỏ */
+.q[data-k=pop].rich~.ans .qb,.q[data-k=pop]:has(h1.long)~.ans .qb{min-height:132px;flex:0 0 132px}.q[data-k=pop].rich,.q[data-k=pop]:has(h1.long){padding:20px 14px 12px!important;gap:6px;flex-grow:2.4}
+@media (max-height:700px){.q[data-k=pop].rich~.ans .qb,.q[data-k=pop]:has(h1.long)~.ans .qb{min-height:112px;flex-basis:112px}.q[data-k=pop]:has(h1.long) h1.long{line-height:1.25}}
