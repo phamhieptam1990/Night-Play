@@ -143,16 +143,16 @@
   ];
   /* sắp xếp câu thành đoạn: các câu ĐÚNG THỨ TỰ (có từ nối hoặc trình tự thời gian rõ) */
   D.paragraphs = [
-    ["Đầu tiên, em rửa sạch rau.", "Sau đó, em cắt rau thành từng đoạn.", "Tiếp theo, em cho rau vào nồi nấu.", "Cuối cùng, em múc canh ra bát."],
+    ["Đầu tiên, em rửa sạch rau.", "Sau đó, em cắt rau thành từng đoạn.", "Cắt xong, em cho rau vào nồi nấu.", "Cuối cùng, em múc canh ra bát."],
     ["Buổi sáng, em thức dậy và đánh răng.", "Sau đó, em ăn sáng cùng cả nhà.", "Rồi em đeo cặp đến trường.", "Chiều về, em làm bài tập."],
-    ["Trước hết, bạn chuẩn bị giấy và bút màu.", "Sau đó, bạn vẽ hình ngôi nhà.", "Tiếp theo, bạn tô màu cho bức tranh.", "Cuối cùng, bạn ký tên vào góc tranh."],
+    ["Trước hết, bạn chuẩn bị giấy và bút màu.", "Sau đó, bạn vẽ hình ngôi nhà.", "Vẽ xong, bạn tô màu cho bức tranh.", "Cuối cùng, bạn ký tên vào góc tranh."],
     ["Hạt đậu được gieo xuống đất.", "Vài ngày sau, mầm đậu nhú lên.", "Mầm lớn dần thành cây non.", "Cuối cùng, cây ra hoa và kết quả."],
-    ["Đầu tiên, em lấy cặp sách ra khỏi giá.", "Sau đó, em xếp sách vở theo thời khóa biểu.", "Tiếp theo, em kiểm tra hộp bút.", "Cuối cùng, em đóng cặp và để gọn gàng."],
+    ["Đầu tiên, em lấy cặp sách ra khỏi giá.", "Sau đó, em xếp sách vở theo thời khóa biểu.", "Xếp sách xong, em kiểm tra hộp bút.", "Cuối cùng, em đóng cặp và để gọn gàng."],
     ["Buổi sáng, bà ra vườn hái rau.", "Buổi trưa, bà nấu cơm cho cả nhà.", "Buổi chiều, bà ngồi khâu áo dưới hiên.", "Buổi tối, bà kể chuyện cho các cháu nghe."],
-    ["Trước hết, chú thợ trộn vữa.", "Sau đó, chú xây từng hàng gạch.", "Tiếp theo, chú trát tường cho phẳng.", "Cuối cùng, chú quét sơn lên tường."],
+    ["Trước hết, chú thợ trộn vữa.", "Sau đó, chú xây từng hàng gạch.", "Xây xong, chú trát tường cho phẳng.", "Cuối cùng, chú quét sơn lên tường."],
     ["Sáng sớm, gà gáy báo trời sáng.", "Buổi trưa, nắng chiếu rực rỡ.", "Chiều đến, nắng nhạt dần.", "Tối đến, ánh trăng lên cao."],
     ["Sáng sớm, mặt trời mọc ở phía đông.", "Buổi trưa, nắng chiếu sáng gay gắt.", "Chiều tối, mặt trời lặn dần.", "Đêm đến, trăng sao lên cao."],
-    ["Đầu tiên, bé lấy bàn chải và kem đánh răng.", "Sau đó, bé chải răng thật kĩ.", "Tiếp theo, bé súc miệng bằng nước sạch.", "Cuối cùng, bé cất bàn chải gọn gàng."]
+    ["Đầu tiên, bé lấy bàn chải và kem đánh răng.", "Sau đó, bé chải răng thật kĩ.", "Chải xong, bé súc miệng bằng nước sạch.", "Cuối cùng, bé cất bàn chải gọn gàng."]
   ];
 
   /* ====================== TIẾNG ANH ====================== */
@@ -173,8 +173,8 @@
     toys: [["⚽", "ball"], ["🧸", "teddy bear"], ["🪁", "kite"], ["🎈", "balloon"], ["🤖", "robot"], ["🎮", "game"]]
   };
   D.meanings = [["cook", "đầu bếp"], ["nurse", "y tá"], ["library", "thư viện"], ["market", "chợ"], ["hospital", "bệnh viện"], ["garden", "vườn"], ["father", "bố"], ["mother", "mẹ"], ["grandmother", "bà"], ["grandfather", "ông"], ["teacher", "giáo viên"], ["student", "học sinh"], ["friend", "bạn"], ["school", "trường học"], ["doctor", "bác sĩ"], ["farmer", "nông dân"], ["run", "chạy"], ["jump", "nhảy"], ["swim", "bơi"], ["sing", "hát"], ["draw", "vẽ"], ["sleep", "ngủ"], ["read", "đọc"], ["write", "viết"]];
-  D.aWords = ["cat", "dog", "book", "pen", "bag", "table", "bike", "ruler", "car", "tree", "fish", "hat", "pencil", "school", "chair", "bed", "window", "door", "key", "house", "moon"];
-  D.anWords = ["apple", "egg", "orange", "umbrella", "elephant", "ice cream", "ant", "owl", "eraser", "arm", "eye", "ear", "onion", "uncle", "island"];
+  D.aWords = ["dog", "pen", "bag", "table", "bike", "ruler", "car", "tree", "fish", "hat", "pencil", "school", "chair", "bed", "window", "door", "key", "house", "moon"];
+  D.anWords = ["orange", "umbrella", "elephant", "ice cream", "ant", "owl", "eraser", "arm", "eye", "ear", "onion", "uncle", "island"];
   D.plurals = ["cat", "dog", "book", "bus", "box", "watch", "dish", "baby", "city", "child", "man", "woman", "foot", "tooth", "mouse", "pen", "bag", "class", "fox", "boy", "toy", "day", "bird", "flower", "star", "kiss", "bench", "wish", "puppy", "key", "house"];
   D.irregularPlural = { child: "children", man: "men", woman: "women", foot: "feet", tooth: "teeth", mouse: "mice" };
   /* chủ ngữ ngôi thứ ba số ít dùng động từ thêm -s/-es */
@@ -277,8 +277,9 @@
     G.punct = function (cc) {
       var dots = [".", ",", "?", "!"];
       if (cc.grade >= 3 && rnd(0, 2) === 0) { var ci = pk(D.commaItems); return fin((vi(cc) ? "Điền dấu câu: " : "Fill in the punctuation: ") + em(ci[0] + " __ " + ci[1] + "."), ",", W([".", "?", "!"], "punct")); }
-      var s = pk(D.sentences), ans = { k: ".", h: "?", c: "!", y: s[1] === "y" && /^Đừng|nào$/.test(s[0]) ? "!" : "." }[s[1]];
-      return fin((vi(cc) ? "Điền dấu cuối câu: " : "Fill in the end mark: ") + em(s[0] + " __"), ans, W(dots.filter(function (x) { return x !== ans; }), "punct"));
+      var s = pk(D.sentences), ans = { k: ".", h: "?", c: "!", y: "." }[s[1]];
+      /* câu khiến: "." và "!" đều chấp nhận được → không đưa "!" vào lựa chọn (chỉ có MỘT dấu hợp lý) */
+      return fin((vi(cc) ? "Điền dấu cuối câu: " : "Fill in the end mark: ") + em(s[0] + " __"), ans, W((s[1] === "y" ? [",", "?", ":"] : dots).filter(function (x) { return x !== ans; }), "punct"));
     };
     G.sent_type = function (cc) {
       var s = pk(D.sentences), names = { k: "câu kể", h: "câu hỏi", c: "câu cảm", y: "câu khiến" }, en = { k: "statement", h: "question", c: "exclamation", y: "command" }, end = { k: ".", h: "?", c: "!", y: "." }[s[1]];
@@ -363,8 +364,9 @@
       return fin((vi(cc) ? "Từ " : "What does ") + em(it[0]) + (vi(cc) ? " nghĩa là gì?" : " mean?"), it[1], W(wr, "word"));
     };
     G.en_a_an = function (cc) {
-      var an = rnd(0, 1), w = an ? pk(D.anWords) : pk(D.aWords);
-      return fin((vi(cc) ? "Điền a hay an: " : "Fill in a or an: ") + em("This is __ " + w + "."), an ? "an" : "a", W([an ? "a" : "an", "many", "two"], "en_rule"));
+      /* chọn cụm đúng cho MỘT từ: 1 đúng (a/an + từ), 3 sai (sai mạo từ và/hoặc thêm -s) → không còn đáp án nhiễu vô lý */
+      var an = rnd(0, 1), w = an ? pk(D.anWords) : pk(D.aWords), art = an ? "an " : "a ", bad = an ? "a " : "an ", pl = enPlural(w);
+      return fin((vi(cc) ? "Cụm nào viết đúng với từ " : "Which phrase is correct for ") + em("“" + w + "”") + "?", art + w, W([bad + w, art + pl, bad + pl], "en_rule"));
     };
     G.en_plural = function (cc) {
       var w = pk(D.plurals), ans = enPlural(w), base = w, wr = [w + "s", w + "es", w.replace(/y$/, "") + "ies", w + "en", w + "ren", w.replace(/y$/, "ys")];
@@ -424,7 +426,7 @@
     T("reading_story", "tviet", [1, 2, 3, 4, 5], 2, { 1: "VI-G1-02", 2: "VI-G2-01", 3: "VI-G3-01", 4: "VI-G4-02", 5: "VI-G5-01" }, ["Đọc hiểu", "Reading"]);
     T("en_colors", "tanh", [1, 2], 1, { 1: "EN-G1-02", 2: "EN-G2-03" }, ["Màu sắc", "Colours"]);
     T("en_numbers", "tanh", [1, 2, 3], 1, { 1: "EN-G1-02", 2: "EN-G2-03", 3: "EN-G3-03" }, ["Số đếm", "Numbers"]);
-    T("en_topic_vocab", "tanh", [1, 2, 3, 4, 5], 2, { 1: "EN-G1-02", 2: "EN-G2-03", 3: "EN-G3-03", 4: "EN-G4-03", 5: "EN-G5-03" }, ["Từ vựng", "Vocabulary"]);
+    T("en_topic_vocab", "tanh", [1, 2], 2, { 1: "EN-G1-02", 2: "EN-G2-03", 3: "EN-G3-03", 4: "EN-G4-03", 5: "EN-G5-03" }, ["Từ vựng", "Vocabulary"]);
     T("en_meaning", "tanh", [3, 4, 5], 2, { 3: "EN-G3-03", 4: "EN-G4-03", 5: "EN-G5-03" }, ["Nghĩa của từ", "Meaning"]);
     T("en_a_an", "tanh", [3, 4], 2, { 3: "EN-G3-04", 4: "EN-G4-04" }, ["a hay an", "a or an"]);
     T("en_plural", "tanh", [3, 4, 5], 2, { 3: "EN-G3-04", 4: "EN-G4-04", 5: "EN-G5-04" }, ["Số nhiều", "Plurals"]);
@@ -432,12 +434,12 @@
     T("en_wh", "tanh", [4, 5], 3, { 4: "EN-G4-02", 5: "EN-G5-02" }, ["Câu hỏi", "Questions"]);
     T("en_days", "tanh", [2, 3, 4], 2, { 2: "EN-G2-03", 3: "EN-G3-03", 4: "EN-G4-03" }, ["Thứ, tháng", "Days, months"]);
     T("en_spelling", "tanh", [2, 3, 4, 5], 2, { 2: "EN-G2-03", 3: "EN-G3-04", 4: "EN-G4-04", 5: "EN-G5-04" }, ["Chính tả", "Spelling"]);
-    T("en_greeting", "tanh", [1, 2, 3], 1, { 1: "EN-G1-01", 2: "EN-G2-02", 3: "EN-G3-02" }, ["Chào hỏi", "Greetings"]);
+    T("en_greeting", "tanh", [1, 2], 1, { 1: "EN-G1-01", 2: "EN-G2-02", 3: "EN-G3-02" }, ["Chào hỏi", "Greetings"]);
     T("en_reading", "tanh", [3, 4, 5], 3, { 3: "EN-G3-03", 4: "EN-G4-03", 5: "EN-G5-03" }, ["Đọc hiểu", "Reading"]);
     T("story_lit", "tviet", [1, 2, 3, 4, 5], 3, { 1: "VI-G1-02", 2: "VI-G2-01", 3: "VI-G3-01", 4: "VI-G4-01", 5: "VI-G5-01" }, ["Văn học", "Stories"]);
     T("para_order", "tviet", [3, 4, 5], 3, { 3: "VI-G3-03", 4: "VI-G4-03", 5: "VI-G5-03" }, ["Sắp xếp đoạn văn", "Paragraph order"]);
     T("vi_listen_word", "tviet", [1, 2], 1, { 1: "VI-G1-04", 2: "VI-G2-04" }, ["Nghe", "Listening"]);
-    T("en_listen_word", "tanh", [1, 2, 3, 4, 5], 1, { 1: "EN-G1-03", 2: "EN-G2-01", 3: "EN-G3-01", 4: "EN-G4-01", 5: "EN-G5-01" }, ["Nghe", "Listening"]);
+    T("en_listen_word", "tanh", [1, 2], 1, { 1: "EN-G1-03", 2: "EN-G2-01", 3: "EN-G3-01", 4: "EN-G4-01", 5: "EN-G5-01" }, ["Nghe", "Listening"]);
     T("en_listen_num", "tanh", [1, 2, 3], 2, { 1: "EN-G1-03", 2: "EN-G2-01", 3: "EN-G3-01" }, ["Nghe số", "Listen: numbers"]);
     T("en_listen_reply", "tanh", [3, 4, 5], 3, { 3: "EN-G3-01", 4: "EN-G4-01", 5: "EN-G5-01" }, ["Nghe hiểu", "Listening"]);
     /* kỹ năng chỉ theo dõi: kiểu câu sắp xếp / ghép chữ (qtypes.js) */
