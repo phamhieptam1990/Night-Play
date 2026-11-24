@@ -69,3 +69,10 @@
 .dragging{opacity:.3}
 .qslot.hot,.mc2.hot,.qs.hot{outline:3px solid var(--sg);outline-offset:1px}
 .qp .ab.tl,.qc .ab.tl,.qslot.fill{cursor:grab}
+/* khung lời giải sau lần sai thứ 2 (learn/js/solution.js): chữ to, dòng cuối (đáp án) nổi bật, nút Tiếp lớn */
+.hbox.sol{z-index:70}.sols{margin:0 0 4px;padding:0;list-style:none;counter-reset:s;display:grid;gap:8px}
+.sols li{counter-increment:s;position:relative;padding:10px 12px 10px 42px;border-radius:14px;background:rgba(255,255,255,.12);color:#fff;font:700 18px/1.35 var(--font);overflow-wrap:anywhere}
+.sols li::before{content:counter(s);position:absolute;left:10px;top:10px;width:24px;height:24px;border-radius:50%;background:#FFB020;color:#4a2c00;font:900 14px/24px var(--font);text-align:center}
+.sols li.last{background:rgba(74,222,128,.28);font-size:20px;font-weight:900;color:#FFE08A}
+.hbox.sol .hbtn button{min-height:56px;font-size:19px}
+@media (orientation:landscape) and (max-height:500px){.hbox.sol .hcard{max-height:94vh;padding:10px 14px}.sols{gap:5px}.sols li{font-size:16px;padding:6px 10px 6px 38px}.sols li::before{top:6px}.hbox.sol .hbtn button{min-height:46px}}

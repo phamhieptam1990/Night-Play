@@ -15,7 +15,9 @@ function gotWrong(tag, reveal, text){
   /* lần sai đầu tiên của câu này: ghi kỹ năng + mã lỗi tư duy */
   if(tries === 1){ E.record(subj, b.skill, false, tag || "other", { kind: b.kind || "mc" }); LM.emote("sad", 1600); if(TRIP) storyReact(false);
     else LM.say(t.hint[tag] || t.hint.other); return 1; }
-  locked = true; b.res = "miss"; if(reveal) reveal(); LM.emote("sad", 2000); LM.say(text ? t.reveal + " " + text + "." : t.hint.other); setTimeout(next, 1700); return 2;
+  locked = true; b.res = "miss"; if(reveal) reveal(); LM.emote("sad", 2000); LM.say(text ? t.reveal + " " + text + "." : t.hint.other);
+  if(b.steps && b.steps.length >= 2){ setTimeout(() => showSolution(b.steps, next), 700); return 2; }   /* có lời giải: giữ đến khi bé bấm Tiếp */
+  setTimeout(next, 1700); return 2;
 }
 const QAPI = { sfx: k => sfx(k), locked: () => locked, right: el => gotRight(el), wrong: (tag, reveal, text) => gotWrong(tag, reveal, text), say: t => LM.say(t) };
 function choose(btn, o){

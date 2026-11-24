@@ -31,6 +31,13 @@ const fails = []; const bad = (m) => { fails.push(m); console.log("  ✗ " + m);
         document.querySelectorAll("#ans button, #ans input, #mas, #snd, #mn, #back, #pick, .qk button").forEach(e => { const r = e.getBoundingClientRect(); if (!r.width || !r.height || getComputedStyle(e).visibility === "hidden" || e.closest(".top.tuck")) return; if (Math.min(r.width, r.height) < min) small.push((e.id || e.className).toString().slice(0, 16) + ":" + Math.round(r.width) + "x" + Math.round(r.height)); });
         const a = document.getElementById("ans"); return { sy: document.documentElement.scrollHeight > vh + 1, sx: document.documentElement.scrollWidth > vw + 1, clip: a.scrollHeight > a.clientHeight + 3, small: [...new Set(small)].slice(0, 3), kind: typeof bank !== "undefined" ? bank[0].kind : null };
       }, land);
+      await pg.evaluate(() => {   /* dựng câu ĐÚNG chủ đề (từ khoá của WriteTopics) cho kiểu "write"; thử đến khi LearnTypes.checkWrite báo ok */
+        window.__gs = b => { const en = b.subj === "tanh", rows = (window.WriteTopics && WriteTopics[en ? "en" : "vi"]) || [], r = rows.find(x => x[1] === b.topic), kws = r ? r[2].split(",").map(x => x.trim()).filter(x => x && !x.includes(" ")) : [];
+          const pad = en ? ["good", "kind", "nice", "big", "happy", "funny", "cute", "tall"] : ["đẹp", "vui", "tốt", "hay", "ngoan", "xinh", "lớn", "nhỏ"];
+          for (let i = 0; i < kws.length; i++) for (let j = 1; j < 3; j++) { const k = [kws[i], kws[(i + j) % kws.length]]; let w = (en ? "I like my " : "Em rất yêu ") + k.join(en ? " and " : " và "), x = 0; while (w.split(" ").length < (b.min || 3) + 1) w += " " + pad[x++ % pad.length];
+            w += "."; if (LearnTypes.checkWrite(w, b, b.lang).ok) return w; }
+          return en ? "I like my school and my friends." : "Em yêu ngôi trường của em."; };
+      });
       if (m.sy || m.sx) bad(tag + ": cuộn/tràn màn"); if (m.clip) bad(tag + ": vùng đáp án bị cắt"); if (m.small.length) bad(tag + ": nút nhỏ hơn quy định " + m.small.join(", "));
       if (k && m.kind !== k && !(k === "pop" && m.kind === "pop")) bad(tag + ": sinh ra kiểu " + m.kind);
       if (!land) {   /* chơi đúng rồi chơi sai (chỉ màn dọc đầu tiên mỗi kiểu, để bản nhanh không quá lâu) */
@@ -43,7 +50,7 @@ const fails = []; const bad = (m) => { fails.push(m); console.log("  ✗ " + m);
           else if (kd === "sort") { for (const it of b.items) { [...ans.querySelectorAll(".qp .pt")].find(x => x.textContent === it.v && !x.disabled).click(); await W(20); ans.querySelectorAll(".qbin")[it.bin].click(); await W(30); } }
           else if (kd === "order" || kd === "wordbuild") { for (const it of b.items) { [...ans.querySelectorAll(".pt")].find(x => x.textContent === it && x.style.visibility !== "hidden").click(); await W(30); } }
           else if (kd === "typein") { for (const c of b.ans) [...ans.querySelectorAll(".kb")].find(x => x.textContent === c).click(); ans.querySelector(".kb.go").click(); }
-          else if (kd === "dictate" || kd === "write") { const inp = ans.querySelector("input.qi"); inp.value = kd === "dictate" ? b.ans : (b.lang === "en" ? "I like my school and my friends." : "Em yêu ngôi trường của em."); ans.querySelector(".kb.go").click(); }
+          else if (kd === "dictate" || kd === "write") { const inp = ans.querySelector("input.qi"); inp.value = kd === "dictate" ? b.ans : window.__gs(b); ans.querySelector(".kb.go").click(); }
           else if (kd === "speak") { ans.querySelector(".sayb").click(); }
           else if (kd === "trace") { const g = ans.querySelector(".trg"), ic = ans.querySelector(".trc"), gd = g.getContext("2d").getImageData(0, 0, g.width, g.height).data, rc = ic.getBoundingClientRect(), fire = (t, X, Y) => ic.dispatchEvent(new PointerEvent(t, { clientX: rc.left + X * rc.width / g.width, clientY: rc.top + Y * rc.height / g.height, pointerId: 1, bubbles: true, cancelable: true }));
             for (let y = 4; y < g.height; y += 7) { let on = false; for (let X = 0; X < g.width; X += 7) { const a = gd[(y * g.width + X) * 4 + 3] > 12; if (a && !on) { fire("pointerdown", X, y); on = true; } else if (a) fire("pointermove", X, y); else if (on) { fire("pointerup", X, y); on = false; } } if (on) fire("pointerup", g.width - 1, y); }
@@ -78,6 +85,7 @@ const fails = []; const bad = (m) => { fails.push(m); console.log("  ✗ " + m);
       if (errs.length) bad(tag + ": lỗi trang: " + errs.slice(0, 2).join(" | "));
       await pg.close();
     }
+    if (!process.env.ONLY) { n += VP.length; for (const m of await require("./ui-sol-case.js")(br, PORT, VP.concat(FULL ? [] : [[844, 390]]), process.env.SHOT_DIR)) bad(m); }
   } finally { await br.close(); srv.kill(); }
   console.log("\n" + (fails.length ? "✗ " + fails.length + " lỗi giao diện trang học (" + n + " tổ hợp)" : "✓ giao diện trang học đạt (" + n + " tổ hợp, " + (FULL ? "đầy đủ" : "bản nhanh") + ")"));
   process.exit(fails.length ? 1 : 0);
