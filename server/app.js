@@ -60,15 +60,16 @@ const newCode = () => "NP" + Array.from(crypto.randomBytes(8), b => ALPHA[b % AL
 const ms = d => (d ? new Date(d).getTime() : 0);
 
 /* Token chỉ để định danh (user id); quyền thật nằm ở bảng passes. */
-function signToken(userId, exp, plan, kid) {
-  const body = b64u(JSON.stringify(kid ? { u: userId, x: exp, p: plan, k: kid } : { u: userId, x: exp, p: plan }));
+function signToken(userId, exp, plan, kid, app) {   // app = "learn" cho Học Vui Plus (token game không có trường a)
+  const o = kid ? { u: userId, x: exp, p: plan, k: kid } : { u: userId, x: exp, p: plan }; if (app) o.a = app;
+  const body = b64u(JSON.stringify(o));
   return body + "." + hmac(body);
 }
-function readToken(tok) {
+function readToken(tok, app) {   // token game (không a) KHÔNG mở Plus và ngược lại: phải khớp sản phẩm
   if (typeof tok !== "string") return null;
   const [body, sig] = tok.split(".");
   if (!body || !sig || !safeEq(sig, hmac(body))) return null;
-  try { const t = JSON.parse(Buffer.from(body, "base64url").toString()); return t && t.u ? t : null; } catch { return null; }
+  try { const t = JSON.parse(Buffer.from(body, "base64url").toString()); return t && t.u && (t.a || "") === (app || "") ? t : null; } catch { return null; }
 }
 /* ===== THIẾT BỊ (chặn chia sẻ Night Pass) =====
    Token có trường k = kid của một khoá thiết bị. Mỗi request tới /api/pass, /api/pro/* phải kèm X-Device-Sig = "<ts>.<chữ ký ECDSA P-256/SHA-256 base64url>"
@@ -115,11 +116,11 @@ async function deviceVerdict(t, ctx) {
 const bearerOf = headers => { const m = /^Bearer (.+)$/.exec(headers.authorization || ""); return m ? m[1] : ""; };
 const ctxOf = h => ({ sig: h["x-device-sig"], method: h["x-np-method"], path: h["x-np-path"] });
 /* Cấp token cho một thiết bị: có khoá công khai → token có k (đăng ký thiết bị, áp giới hạn); không có → token cũ (chỉ trong thời gian ân hạn). */
-async function issueToken(userId, exp, plan, pubHeader) {
+async function issueToken(userId, exp, plan, pubHeader, app) {
   const jwk = parsePub(pubHeader);
-  if (!jwk) return LOCK_OFF || Date.now() < LEGACY_UNTIL ? { token: signToken(userId, exp, plan) } : { token: null, needKey: true };
-  try { return { token: signToken(userId, exp, plan, await registerDevice(userId, jwk)) }; }
-  catch (e) { if (noTable(e)) return { token: signToken(userId, exp, plan) }; throw e; }
+  if (!jwk) return LOCK_OFF || (!app && Date.now() < LEGACY_UNTIL) ? { token: signToken(userId, exp, plan, undefined, app) } : { token: null, needKey: true };   // token Plus không có "ân hạn cũ": luôn cần khoá thiết bị (trừ khi DEVICE_LOCK=off)
+  try { return { token: signToken(userId, exp, plan, await registerDevice(userId, jwk), app) }; }
+  catch (e) { if (noTable(e)) return { token: signToken(userId, exp, plan, undefined, app) }; throw e; }
 }
 async function passState(userId, q = db) {
   const { rows: [p] } = await q.query("select exp, plan from passes where user_id = $1", [userId]);
@@ -215,7 +216,9 @@ const out = (status, body, type) => ({ status, body, type });   // type: trả v
 
 route("POST", /^\/api\/orders$/, async ({ body, ip }) => {
   if (await limited("o:" + ip, 10)) return out(429, { error: "rate_limited" });
-  const plan = PLANS[body.plan];
+  const isLearn = body.product === "learn";
+  if (isLearn && !learn.on()) return out(404, { error: "learn_off" });
+  const plan = isLearn ? learn.plans()[body.plan] : PLANS[body.plan];   // Plus: gói learn_* ở server/learn.js; game: PLANS (id learn_* không có ở đây nên không lẫn)
   const email = normEmail(body.email);
   if (!plan) return out(400, { error: "bad_plan" });
   if (!validEmail(email)) return out(400, { error: "bad_email" });
@@ -227,8 +230,11 @@ route("POST", /^\/api\/orders$/, async ({ body, ip }) => {
       order = await db.tx(async c => {
         const userId = await userIdForEmail(c, email, true);
         const { rows: [o] } = await c.query(
-          `insert into orders(id, code, user_id, email, plan, amount, method, expires_at)
-           values ($1, $2, $3, $4, $5, $6, $7, now() + make_interval(mins => $8)) returning code, expires_at`,
+          isLearn
+            ? `insert into orders(id, code, user_id, email, plan, amount, method, expires_at, product)
+               values ($1, $2, $3, $4, $5, $6, $7, now() + make_interval(mins => $8), 'learn') returning code, expires_at`
+            : `insert into orders(id, code, user_id, email, plan, amount, method, expires_at)
+               values ($1, $2, $3, $4, $5, $6, $7, now() + make_interval(mins => $8)) returning code, expires_at`,
           [id, newCode(), userId, email, body.plan, plan.amount, method, CFG.orderTtlMin]);
         return o;
       });
@@ -255,7 +261,7 @@ route("GET", /^\/api\/orders\/([a-f0-9]{32})$/, async ({ m, headers }) => {
         if (!r.rowCount) return out(200, { ...base, token: null, claimed: true });
       } catch (e) { if (!noTable(e)) throw e; }
     }
-    return out(200, { ...base, ...(await issueToken(o.user_id, ms(o.exp), o.plan, headers["x-device-pub"])) });
+    return out(200, { ...base, ...(await issueToken(o.user_id, ms(o.exp), o.plan, headers["x-device-pub"], learn.isLearnPlan(o.plan) ? "learn" : undefined)) });
   }
   if (Date.now() > ms(o.expires_at)) return out(200, { status: "expired" });
   return out(200, { status: "pending" });
@@ -288,12 +294,13 @@ route("POST", /^\/api\/webhook\/sepay$/, async ({ headers, body }) => {
       `insert into txs(id, amount, content, account, order_id, result, raw) values ($1, $2, $3, $4, $5, $6, $7)
        on conflict (id) do nothing returning id`,
       [txId, amount, content.slice(0, 200), account, order && result !== "wrong_account" ? order.id : null, result, JSON.stringify(body).slice(0, 4000)]);
-    if (ins.rowCount === 1 && result === "granted") await grant(c, order, txId);
+    if (ins.rowCount === 1 && result === "granted") await (learn.isLearnPlan(order.plan) ? learn.grant(c, order, txId) : grant(c, order, txId));
   });
   return out(200, { success: true });
 });
 
-route("GET", /^\/api\/pass$/, async ({ headers }) => {
+route("GET", /^\/api\/pass$/, async ({ headers, query }) => {
+  if (query.get("product") === "learn") return learn.passRoute(headers);   // Học Vui Plus: token a:"learn", bảng learn_passes
   const t = readToken(bearerOf(headers));
   if (!t) return out(401, { active: false, reason: "token" });
   const v = await deviceVerdict(t, ctxOf(headers));
@@ -1102,6 +1109,7 @@ route("GET", /^\/api\/health$/, async () => {
 
 /* ===== ĐIỂM VÀO ===== */
 /* Mã sự kiện 6 số (server/events.js): người chơi nhập mã → dùng các giao diện admin đã tích trong khoảng ngày của sự kiện */
+const learn = require("./learn")({ route, out, limited, noTable, db, readToken, deviceVerdict, ctxOf, bearerOf, issueToken, userIdForEmail: (c, e, create) => userIdForEmail(c, e, create), normEmail, validEmail, env });
 const events = require("./events")({ route, out, limited, hmac, safeEq, ipHash, adminGuard, noTable, b64u, db });
 async function handle({ method, pathname, query = new URLSearchParams(), headers = {}, bodyText = "", ip = "" }) {
   headers = { ...headers, "x-np-method": method, "x-np-path": pathname };   // ghi đè sau khi sao chép: client không giả được
