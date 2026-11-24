@@ -29,3 +29,4 @@
 @media (max-height:700px){.pnl.col .hint{display:none}}
 body:has(.ov.on) .goalchip{visibility:hidden}
 .ani.plant .pick span{overflow-wrap:anywhere;min-width:0}.ani.plant .pick{min-width:0}
+.tabs2.col{background:var(--d1,#2b1f5c);padding:4px 0}

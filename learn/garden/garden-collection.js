@@ -41,7 +41,7 @@ function colPanelGoal(){
   else h += "<p class='sm'>Bé đã mở hết đồ của lớp " + cg + "!</p>";
   var href = "../index.html?grade=" + Math.min(5, cg + 1), pr = "../parent/index.html";
   h += "<div class='cg-up'><b>" + (done ? (cg < 5 ? "🎓 Bé xong lớp " + cg + " rồi!" : "🎓 Bé xong lớp 5 rồi!") : "🌱 Bé vẫn đang ở lớp " + cg) + "</b><p>" +
-    (done ? (cg < 5 ? "Bố mẹ có thể cho bé sang lớp " + (cg + 1) + ": vườn đổi mùa, đồ cũ mang theo, đồ mới mở dần." : "Bé đã học hết chương trình. Bé cứ ôn lại và chăm vườn mỗi ngày nhé.") : (cg === 1 ? "Ở lại lớp 1 vẫn có việc: học tiếp chủ đề để mở đồ, thu hoạch nông sản đem đổi, bày đồ trang trí." : "Học tiếp các chủ đề để mở thêm đồ của lớp " + cg + ".")) + "</p>" +
+    (done ? (cg < 5 ? "Bố mẹ có thể cho bé sang lớp " + (cg + 1) + ": vườn đổi mùa, đồ cũ mang theo, đồ mới mở dần. Chưa sang cũng được: bé vẫn có việc ở vườn (chăm cây, thu hoạch, bày đồ trang trí, ôn chủ đề để kiếm thêm ⭐)." : "Bé đã học hết chương trình. Bé cứ ôn lại và chăm vườn mỗi ngày nhé.") : (cg === 1 ? "Ở lại lớp 1 vẫn có việc: học tiếp chủ đề để mở đồ, thu hoạch nông sản đem đổi, bày đồ trang trí." : "Học tiếp các chủ đề để mở thêm đồ của lớp " + cg + ".")) + "</p>" +
     "<div class='acts'>" + (done && cg < 5 ? "<a class='btn go' href='" + href + "&lang=vi'>Sang lớp " + (cg + 1) + "</a>" : "") + "<a class='btn g' href='" + pr + "'>Trang bố mẹ</a></div></div>";
   return h;
 }

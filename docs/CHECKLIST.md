@@ -32,13 +32,11 @@ Ba gói chạy song song, mỗi gói giữ một vùng tệp riêng để không
 
 ## H5. 3 khu vườn: Toán giữ nguyên + 2 khu vườn MỚI (Rừng Chữ, Vịnh Từ) + đổi màu theo lớp (kế hoạch: docs/LEARN-GARDEN-LAYOUTS-PLAN.md)
 
-- [?] Bạn duyệt bảng vật phẩm KHÁC NHAU theo lớp (cây, vật nuôi, trang trí mỗi lớp) — Bảng nháp trong LEARN-GARDEN-LAYOUTS-PLAN.md
-- [ ] Vẽ vật phẩm mới cho từng lớp (khoảng 20 loại mới: cây trồng, cây lâu năm, vật nuôi, đồ trang trí) theo phong cách Pop
-- [ ] Vật phẩm theo lớp: điều kiện mở theo chủ đề đã qua của đúng lớp (thay cho mở theo sao chung)
-- [?] Bạn duyệt quy tắc lên lớp: mang theo + đổi (bộ sưu tập, đổi chỗ, đổi hạt giống ở quầy Bác Rễ) và vào thẳng lớp: bộ khởi đầu + bộ sưu tập khóa mờ — Mục Khi bé lên lớp trong LEARN-GARDEN-LAYOUTS-PLAN.md
-- [ ] Bộ sưu tập chung (kho đồ mọi lớp, khóa mờ cho đồ chưa mở) + quầy đổi hạt giống của Bác Rễ
-- [ ] Vườn khởi đầu theo lớp (bé vào thẳng lớp 3) + bé ở lại lớp 1 vẫn có việc + gợi ý lên lớp cho phụ huynh
-- [ ] Kiểm bằng Chrome thật các cỡ màn, cập nhật bài đo vườn
+- [ ] Quầy đổi hạt: hạt giống trong kho là số chung (không theo loại), nên quầy đổi 2 nông sản lớp cũ lấy 1 hạt (3 lần/ngày) thay vì "hạt này lấy hạt kia" — cần bạn duyệt cách đổi này
+- [ ] Đồ trang trí chỉ có 4 chỗ đặt cố định (chạm để đặt/cất); chưa kéo thả đổi chỗ tự do
+- [ ] Sao lưu: khoá `gardenOwned`, `gardenDeco@*`, `gardenSwap` chưa nằm trong danh sách trắng của `learn/backup.js` (ngoài vùng gói A, giao gói C); đồ đã mở vẫn tính lại được từ tiến độ chủ đề, chỉ mất chỗ đặt trang trí khi khôi phục
+- [ ] 8 cây trồng mới chưa có linh vật riêng (mascot_<cây>_l1..l4) và ảnh kho; popup cây mới chưa có bong bóng lời thoại
+- [ ] Kiểm trên máy thật (iPhone/Android) các cỡ màn; đã kiểm bằng Chrome thật 360×640, 390×844, 844×390
 
 ## Học Vui Plus (G1–G6): phần làm được cục bộ đã xong (tắt mặc định); còn lại chờ người/bên ngoài
 
