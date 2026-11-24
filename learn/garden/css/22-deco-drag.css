@@ -1,0 +1,5 @@
+/* Kéo thả đồ trang trí (garden-deco-drag.js): đồ bấm được; vuốt nhanh vẫn cuộn vườn (touch-action để mặc định), bấm giữ mới nhấc lên */
+.gl img.dc.mv{pointer-events:auto;cursor:grab;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+.gl img.dc.lift{cursor:grabbing;animation:none;transform:scale(1.1) translateY(-6px);filter:drop-shadow(0 10px 8px rgba(0,0,0,.35));z-index:3}
+.gl img.dc.lift.bad{filter:drop-shadow(0 0 6px #FF5A5A) drop-shadow(0 10px 8px rgba(0,0,0,.3));opacity:.8}
+@media (prefers-reduced-motion:reduce){.gl img.dc.lift{transform:none}}

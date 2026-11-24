@@ -119,15 +119,29 @@
     return ok.length ? ok[i % ok.length].id : k;
   };
 
-  /* ---- đồ trang trí đặt ra vườn: lưu theo vườn ("gardenDeco@<ngăn>"), tối đa DECO_MAX ---- */
-  var SPOTS = [[150, 200], [575, 160], [1250, 150], [1400, 190]];   /* chỗ đặt (toạ độ thế giới, chân đồ vật) */
+  /* ---- đồ trang trí đặt ra vườn: lưu theo vườn ("gardenDeco@<ngăn>"), tối đa DECO_MAX.
+     Giá trị là mảng; mỗi phần tử là "id" (bản cũ: dùng chỗ cố định SPOTS theo thứ tự) hoặc { id, x, y } (bé kéo thả: x, y = 0..1 theo cỡ cảnh, tại CHÂN đồ vật). ---- */
+  var SPOTS = [[150, 200], [575, 160], [1250, 150], [1400, 190]];   /* chỗ mặc định (toạ độ thế giới, chân đồ vật) */
   G.SPOTS = SPOTS;
   function decoKey() { return "gardenDeco@" + (E().slot() || "old"); }
-  G.decoGet = function () { var a; try { a = JSON.parse(E().get(decoKey()) || "[]"); } catch (e) { a = []; } return (Array.isArray(a) ? a : []).filter(function (id) { return BY[id] && BY[id].kind === "deco" && G.isOpen(id); }).slice(0, G.DECO_MAX); };
+  function decoRaw() {   /* danh sách chuẩn hoá [{ id, x, y }] (x, y = null nếu chưa kéo), đã lọc đồ chưa mở */
+    var a; try { a = JSON.parse(E().get(decoKey()) || "[]"); } catch (e) { a = []; } if (!Array.isArray(a)) a = [];
+    var seen = {}; return a.map(function (e) { return typeof e === "string" ? { id: e, x: null, y: null } : e && typeof e === "object" ? { id: e.id, x: +e.x, y: +e.y } : null; })
+      .filter(function (e) { return e && BY[e.id] && BY[e.id].kind === "deco" && !seen[e.id] && (seen[e.id] = 1) && G.isOpen(e.id); })
+      .map(function (e) { var ok = e.x >= 0 && e.x <= 1 && e.y >= 0 && e.y <= 1 && isFinite(e.x) && isFinite(e.y); return { id: e.id, x: ok ? e.x : null, y: ok ? e.y : null }; }).slice(0, G.DECO_MAX);
+  }
+  function decoSave(a) { E().set(decoKey(), JSON.stringify(a.map(function (e) { return e.x == null ? e.id : { id: e.id, x: Math.round(e.x * 10000) / 10000, y: Math.round(e.y * 10000) / 10000 }; }))); }
+  G.decoGet = function () { return decoRaw().map(function (e) { return e.id; }); };
+  G.decoList = decoRaw;
   G.decoToggle = function (id) {
     var it = BY[id]; if (!it || it.kind !== "deco" || !G.isOpen(id)) return null;
-    var a = G.decoGet(), i = a.indexOf(id); if (i >= 0) a.splice(i, 1); else { if (a.length >= G.DECO_MAX) a.shift(); a.push(id); }
-    E().set(decoKey(), JSON.stringify(a)); return a;
+    var a = decoRaw(), i = a.map(function (e) { return e.id; }).indexOf(id); if (i >= 0) a.splice(i, 1); else { if (a.length >= G.DECO_MAX) a.shift(); a.push({ id: id, x: null, y: null }); }
+    decoSave(a); return a.map(function (e) { return e.id; });
+  };
+  /* bé kéo đồ trang trí tới chỗ mới: lưu toạ độ tương đối (0..1) của chân đồ vật; trả false nếu món chưa đặt hoặc toạ độ sai */
+  G.decoSet = function (id, x, y) {
+    if (!(x >= 0 && x <= 1 && y >= 0 && y <= 1)) return false;
+    var a = decoRaw(), e = a.filter(function (r) { return r.id === id; })[0]; if (!e) return false; e.x = x; e.y = y; decoSave(a); return true;
   };
 
   /* ---- quầy đổi hạt giống của Bác Rễ: SWAP_COST nông sản của giống LỚP CŨ (thấp hơn lớp đang học) → 1 hạt giống 🌱; mỗi ngày tối đa SWAP_PER_DAY lần ---- */

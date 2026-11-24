@@ -8,11 +8,11 @@ function renderDeco(){
   COL_DECO.forEach(function(e){ e.remove(); }); COL_DECO = [];
   if(!window.GardenItems) return;
   var lay = GardenLayout.layer("sprites"), w = 140;
-  GardenItems.decoGet().forEach(function(id, i){
-    var it = GardenItems.BY[id], sp = GardenItems.SPOTS[i], e = document.createElement("img");
-    e.className = "dc"; e.src = GardenLayout.ART + it.img; e.alt = ""; e.draggable = false;
+  GardenItems.decoList().forEach(function(d, i){
+    var it = GardenItems.BY[d.id], sp = decoSpot(d, i), e = document.createElement("img");
+    e.className = "dc"; e.src = GardenLayout.ART + it.img; e.alt = ""; e.draggable = false; e.dataset.id = d.id;
     e.style.left = ((sp[0] - w / 2) / W * 100) + "%"; e.style.top = ((sp[1] - w * .92) / H * 100) + "%"; e.style.width = (w / W * 100) + "%";
-    lay.appendChild(e); COL_DECO.push(e);
+    lay.appendChild(e); COL_DECO.push(e); decoBind(e, d.id);   /* kéo thả: garden-deco-drag.js */
   });
 }
 function colTile(it, placed){

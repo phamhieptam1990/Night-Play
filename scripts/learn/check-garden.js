@@ -116,5 +116,19 @@ console.log("9) linh vật + lời thoại của 8 cây mới (garden-crop-say.j
     ok(fs.existsSync(path.join(ART, "kho", "mascot_" + id + ".svg")), id + ": có ảnh kho"); }
   delete globalThis.GardenCropSay; }
 
+console.log("10) kéo thả đồ trang trí: lưu toạ độ tương đối, tránh nhà/ruộng (garden-deco-drag.js)");
+{ const GI = require(path.join(root, "learn/garden/garden-items.js")), D = require(path.join(root, "learn/garden/garden-deco-drag.js")), m = {};
+  GI.env = Object.assign({}, GI.env, { done: () => 99, total: () => 10, grade: () => 2, slot: () => "2:toan", get: k => (k in m ? m[k] : null), set: (k, v) => { m[k] = String(v); } });
+  m["gardenDeco@2:toan"] = JSON.stringify(["swallow", "frog"]);
+  ok(GI.decoGet().join() === "swallow,frog" && GI.decoList().every(e => e.x === null), "khoá cũ (mảng mã) vẫn đọc được, chưa có toạ độ");
+  ok(GI.decoSet("swallow", .5, .4) && GI.decoSet("nope", .5, .5) === false && GI.decoSet("frog", 1.4, .5) === false && GI.decoSet("frog", NaN, .5) === false, "decoSet nhận toạ độ 0..1, từ chối món chưa đặt và toạ độ sai");
+  const raw = JSON.parse(m["gardenDeco@2:toan"]); ok(raw[0].id === "swallow" && raw[0].x === .5 && raw[0].y === .4 && raw[1] === "frog", "lưu trong gardenDeco@2:toan: món đã kéo = { id, x, y }, món chưa kéo giữ mã");
+  ok(GI.decoGet().join() === "swallow,frog", "decoGet vẫn trả mã món"); GI.decoToggle("swallow"); ok(GI.decoGet().join() === "frog", "cất món đã kéo vẫn chạy"); GI.decoToggle("swallow"); ok(GI.decoList().pop().x === null, "đặt lại món: về chỗ mặc định");
+  m["gardenDeco@2:toan"] = JSON.stringify([{ id: "frog", x: 9, y: .2 }, { id: "frog", x: .1, y: .1 }, { id: "xx" }, 5, null]); ok(GI.decoGet().join() === "frog" && GI.decoList()[0].x === null, "dữ liệu hỏng: bỏ trùng/lạ, toạ độ ngoài 0..1 thì về mặc định");
+  const W = 1695, H = 1040, R = [[600, 100, 900, 360], [100, 500, 400, 800]];
+  ok(D.decoFree(800, 700, R, W, H) && !D.decoFree(700, 300, R, W, H) && !D.decoFree(250, 600, R, W, H) && !D.decoFree(5, 500, R, W, H) && !D.decoFree(800, H + 10, R, W, H), "decoFree: chỗ trống đạt; nhà, ruộng, sát mép bị loại");
+  const n = D.decoNearest(700, 300, R, W, H); ok(n && D.decoFree(n[0], n[1], R, W, H) && Math.hypot(n[0] - 700, n[1] - 300) < 200, "decoNearest trượt từ nhà ra chỗ trống gần (" + n + ")");
+  ok(D.decoNearest(700, 300, [[0, 0, W, H]], W, H) === null, "kín hết chỗ thì trả null (đồ về chỗ cũ)"); }
+
 console.log(bad ? "\n✗ " + bad + " lỗi (trên " + checks + " kiểm tra)" : "\n✓ Vườn đạt (" + checks + " kiểm tra)");
 process.exit(bad ? 1 : 0);
