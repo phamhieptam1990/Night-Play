@@ -18,6 +18,13 @@ window.LearnLessons.reg({
    "done": "Có 3 quả táo!"
   },
   {
+   "k": "tapcount",
+   "t": "Chạm đếm các quả chuối!",
+   "n": 2,
+   "e": "🍌",
+   "done": "Có 2 quả chuối!"
+  },
+  {
    "k": "say",
    "t": "Có thể xếp theo màu, theo hình hoặc theo loại.",
    "art": "🔴🔴  🔵🔵"
@@ -33,20 +40,31 @@ window.LearnLessons.reg({
    "ok": 0,
    "yes": "Đúng rồi! Có 3 quả táo.",
    "no": "Chỉ đếm quả táo, không đếm chuối nhé.",
-   "art": "🍎 🍌 🍎 🍎 🍌"
+   "art": "🍎🍌🍎🍎🍌"
   },
   {
    "k": "choose",
-   "t": "Có 2 quả chuối và 3 quả táo. Nhóm nào nhiều hơn?",
+   "t": "Nhóm nào nhiều hơn?",
    "opts": [
-    "Táo",
-    "Chuối",
-    "Bằng nhau"
+    "🍎",
+    "🍌"
    ],
    "ok": 0,
    "yes": "Giỏi quá! 3 nhiều hơn 2.",
    "no": "So sánh 2 và 3: số nào lớn hơn?",
-   "art": "🍌🍌   🍎🍎🍎"
+   "art": "🍌🍌  🍎🍎🍎"
+  },
+  {
+   "k": "choose",
+   "t": "Nhóm nào ít hơn?",
+   "opts": [
+    "🌙",
+    "⭐"
+   ],
+   "ok": 0,
+   "yes": "Đúng rồi! 2 ít hơn 4.",
+   "no": "Đếm từng nhóm rồi so sánh.",
+   "art": "⭐⭐⭐⭐\n🌙🌙"
   },
   {
    "k": "sum",
@@ -54,7 +72,7 @@ window.LearnLessons.reg({
    "pts": [
     "Xếp các thứ giống nhau vào một nhóm",
     "Đếm từng nhóm",
-    "So sánh nhóm nào nhiều hơn, ít hơn"
+    "So sánh nhóm nào nhiều, ít hơn"
    ]
   }
  ],
@@ -69,17 +87,18 @@ window.LearnLessons.reg({
    "ok": 0,
    "hint": "Chỉ đếm con mèo.",
    "yes": "Đúng rồi!",
-   "art": "🐶 🐱 🐶 🐱 🐱"
+   "art": "🐶🐱🐶🐱\n🐱"
   },
   {
-   "q": "Nhóm 4 ngôi sao và nhóm 2 mặt trăng. Nhóm nào ít hơn?",
+   "q": "Nhóm nào nhiều hơn?",
    "opts": [
-    "Mặt trăng",
-    "Ngôi sao"
+    "🐟",
+    "🐢"
    ],
    "ok": 0,
-   "hint": "2 ít hơn 4.",
-   "yes": "Đúng rồi!"
+   "hint": "Đếm từng nhóm.",
+   "yes": "Đúng rồi!",
+   "art": "🐟🐟🐟🐟\n🐢🐢"
   },
   {
    "q": "Có mấy chiếc xe đạp?",

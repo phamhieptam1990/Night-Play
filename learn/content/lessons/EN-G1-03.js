@@ -60,6 +60,19 @@ window.LearnLessons.reg({
    "optlang": "en"
   },
   {
+   "k": "choose",
+   "t": "Chọn hình của từ dog.",
+   "opts": [
+    "🐶",
+    "🐱",
+    "🐟"
+   ],
+   "ok": 0,
+   "yes": "Đúng rồi! Dog là con chó.",
+   "no": "Gâu gâu: dog.",
+   "art": "dog 🔊"
+  },
+  {
    "k": "sum",
    "t": "Bé nhớ nhé!",
    "pts": [

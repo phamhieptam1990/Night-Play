@@ -7,42 +7,57 @@ window.LearnLessons.reg({
  "screens": [
   {
    "k": "say",
-   "t": "Mình cùng đọc một câu chuyện ngắn nhé!",
+   "t": "Mình cùng đọc một câu chuyện ngắn!",
    "art": "📖"
   },
   {
    "k": "say",
-   "t": "Bé Na có một con mèo. Mèo tên là Mun.",
-   "art": "🐱"
+   "t": "Bé Na có một con mèo tên là Mun.",
+   "art": "👧🐱"
   },
   {
    "k": "say",
-   "t": "Mun thích ăn cá. Mun hay nằm ngủ trên ghế.",
+   "t": "Mun thích ăn cá. Mun hay ngủ trên ghế.",
    "art": "🐟  💤"
   },
   {
    "k": "choose",
    "t": "Bé Na có con gì?",
    "opts": [
-    "Con mèo",
-    "Con chó",
-    "Con gà"
+    "🐱",
+    "🐶",
+    "🐔"
    ],
    "ok": 0,
    "yes": "Đúng rồi! Bé Na có một con mèo.",
-   "no": "Đọc lại câu đầu của bài nhé."
+   "no": "Đọc lại câu đầu nhé.",
+   "art": "👧 ❓"
   },
   {
    "k": "choose",
    "t": "Mun thích ăn gì?",
    "opts": [
-    "Cá",
-    "Cơm",
-    "Rau"
+    "🐟",
+    "🍚",
+    "🥬"
    ],
    "ok": 0,
    "yes": "Giỏi quá! Mun thích ăn cá.",
-   "no": "Tìm chữ ăn trong bài."
+   "no": "Tìm chữ ăn trong bài.",
+   "art": "🐱 😋 ❓"
+  },
+  {
+   "k": "choose",
+   "t": "Mun ngủ ở đâu?",
+   "opts": [
+    "🪑",
+    "🌳",
+    "💧"
+   ],
+   "ok": 0,
+   "yes": "Đúng rồi! Mun ngủ trên ghế.",
+   "no": "Mun hay ngủ trên ...?",
+   "art": "🐱 💤 ❓"
   },
   {
    "k": "sum",
@@ -63,19 +78,21 @@ window.LearnLessons.reg({
     "Mít"
    ],
    "ok": 0,
-   "hint": "Đọc lại câu: Mèo tên là ...",
-   "yes": "Đúng rồi!"
+   "hint": "Đọc lại: Mèo tên là ...",
+   "yes": "Đúng rồi!",
+   "art": "🐱"
   },
   {
-   "q": "Mun hay nằm ngủ ở đâu?",
+   "q": "Mun hay ngủ ở đâu?",
    "opts": [
-    "Trên ghế",
-    "Trên cây",
-    "Dưới nước"
+    "🪑",
+    "🌳",
+    "💧"
    ],
    "ok": 0,
    "hint": "Mun hay nằm ngủ trên ...?",
-   "yes": "Đúng rồi!"
+   "yes": "Đúng rồi!",
+   "art": "🐱 💤"
   },
   {
    "q": "Ai có con mèo?",
@@ -86,7 +103,8 @@ window.LearnLessons.reg({
    ],
    "ok": 0,
    "hint": "Câu đầu: Bé ... có một con mèo.",
-   "yes": "Đúng rồi!"
+   "yes": "Đúng rồi!",
+   "art": "🐱"
   }
  ]
 });

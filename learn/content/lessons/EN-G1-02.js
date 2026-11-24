@@ -49,7 +49,21 @@ window.LearnLessons.reg({
   },
   {
    "k": "choose",
-   "t": "Số hai tiếng Anh là gì?",
+   "t": "Màu này tiếng Anh là gì?",
+   "opts": [
+    "blue",
+    "red",
+    "yellow"
+   ],
+   "ok": 0,
+   "yes": "Giỏi quá! Blue là xanh dương.",
+   "no": "Màu của bầu trời.",
+   "art": "🔵",
+   "optlang": "en"
+  },
+  {
+   "k": "choose",
+   "t": "Có mấy quả? Chọn từ đúng.",
    "opts": [
     "two",
     "one",
@@ -58,6 +72,20 @@ window.LearnLessons.reg({
    "ok": 0,
    "yes": "Giỏi quá! Two là số hai.",
    "no": "Đếm: one, two, three.",
+   "art": "🍎🍎",
+   "optlang": "en"
+  },
+  {
+   "k": "choose",
+   "t": "Mẹ tiếng Anh là gì?",
+   "opts": [
+    "mom",
+    "dad"
+   ],
+   "ok": 0,
+   "yes": "Đúng rồi! Mom là mẹ.",
+   "no": "Mẹ là mom.",
+   "art": "👩",
    "optlang": "en"
   },
   {
@@ -93,10 +121,11 @@ window.LearnLessons.reg({
    "ok": 0,
    "hint": "Mẹ là mom.",
    "yes": "Đúng rồi!",
+   "art": "👩",
    "optlang": "en"
   },
   {
-   "q": "Số ba tiếng Anh là gì?",
+   "q": "Có mấy quả? Chọn từ đúng.",
    "opts": [
     "three",
     "one",
@@ -105,6 +134,7 @@ window.LearnLessons.reg({
    "ok": 0,
    "hint": "Đếm: one, two, ...",
    "yes": "Đúng rồi!",
+   "art": "🍎🍎🍎",
    "optlang": "en"
   }
  ]

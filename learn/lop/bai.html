@@ -67,6 +67,7 @@ main.end .say,main.end .vhint{display:none}
 @keyframes vh{50%{transform:scale(1.04)}}@media (prefers-reduced-motion:reduce){.vhint{animation:none}}
 .stage{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;border-radius:26px;background:color-mix(in srgb,var(--panel) 80%,transparent);border:1px solid var(--line);padding:10px;overflow:hidden;text-align:center}
 .art{font-size:clamp(40px,13vw,72px);line-height:1.25;white-space:pre-line;font-weight:900}
+.g1 .art{font-size:clamp(52px,17vw,88px)}   /* lớp 1: hình to */
 .shp{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}.shp svg{width:clamp(64px,22vw,110px);height:auto}
 .row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center}
 .it{position:relative;width:clamp(48px,14vw,66px);height:clamp(48px,14vw,66px);border-radius:16px;font-size:clamp(28px,8.5vw,40px);display:grid;place-items:center;background:var(--panel);border:2px solid var(--line);transition:transform .15s,opacity .2s}
@@ -102,6 +103,7 @@ button.it:active{transform:scale(.92)}
 .opts{display:grid;gap:10px;width:100%;max-width:420px}
 .opt{min-height:56px;padding:6px 14px;border-radius:18px;font-weight:900;font-size:clamp(18px,5vw,22px);background:var(--panel);border:2px solid var(--line)}
 .opt:active{transform:scale(.98)}
+.opts.pic{grid-auto-flow:column;grid-auto-columns:1fr}.opt.pic{font-size:clamp(46px,15vw,72px);line-height:1;min-height:clamp(88px,24vw,120px);border-radius:24px;border-width:3px}.opt.num{font-size:clamp(34px,11vw,48px);min-height:72px}   /* lớp 1: đáp án là HÌNH hoặc SỐ thì to hơn */
 .opt.ok{background:#16a34a;color:#fff;border-color:#16a34a}
 .opt.no{animation:sh .35s;border-color:#F59E0B}
 @keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
@@ -118,7 +120,7 @@ button.it:active{transform:scale(.92)}
 .pop{animation:pop .4s}
 @keyframes pop{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}
 @media (prefers-reduced-motion:reduce){.pop,.opt.no{animation:none}}
-@media (max-height:430px) and (min-aspect-ratio:11/10){main{flex-direction:row;max-width:none;align-items:stretch}.say{flex-direction:column;align-items:center;flex:0 0 36%;justify-content:center}.bub::before{display:none}.stage{flex:1}.ib{height:40px;min-width:44px}.top{padding-top:6px}.foot{padding-bottom:6px}.nx,.bk{min-height:46px}.mas{width:64px;height:64px}.art{font-size:44px}}
+@media (max-height:430px) and (min-aspect-ratio:11/10){main{flex-direction:row;max-width:none;align-items:stretch}.say{flex-direction:column;align-items:center;flex:0 0 36%;justify-content:center}.bub::before{display:none}.stage{flex:1}.ib{height:40px;min-width:44px}.top{padding-top:6px}.foot{padding-bottom:6px}.nx,.bk{min-height:46px}.mas{width:64px;height:64px}.art,.g1 .art{font-size:44px}.opts{gap:6px}.opt{min-height:44px}.opt.pic{min-height:60px;font-size:38px}.opt.num{min-height:50px;font-size:30px}.pill,.trylab{font-size:11px}}
 </style>
 </head>
 <body>
@@ -152,7 +154,7 @@ button.it:active{transform:scale(.92)}
 "use strict";
 const $=id=>document.getElementById(id), P=window.LearnPath;
 function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
-const q=new URLSearchParams(location.search), grade=+q.get("grade"), subj=q.get("subj"), topic=q.get("topic");
+const q=new URLSearchParams(location.search), grade=+q.get("grade"), subj=q.get("subj"), topic=q.get("topic"); if(grade===1) document.documentElement.classList.add("g1");
 let lang=ls("lang"); if(q.get("lang")==="en"||q.get("lang")==="vi") lang=q.get("lang"); if(lang!=="en") lang="vi";
 const MAS={toan:["math","#34D399","#0EA5E9"],tviet:["vietnamese","#FFB020","#FB5A7A"],tanh:["english","#60A5FA","#A78BFA"]};
 const M=MAS[subj]||MAS.toan;
@@ -255,6 +257,7 @@ function quiz(stage,s,nl){
   const box=document.createElement("div");box.className="opts";stage.appendChild(box);let wrong=0,solved=false;
   const order=shuffle(s.opts.map((t,i)=>({t,ok:i===s.ok})));
   order.forEach(o=>{const b=document.createElement("button");b.type="button";b.className="opt";b.textContent=o.t;
+    if(grade===1){ if(/^[\p{Extended_Pictographic}\uFE0F\u200D\s]+$/u.test(o.t)){b.classList.add("pic");box.classList.add("pic")} else if(/^\d{1,3}$/.test(o.t)){b.classList.add("num");if(s.opts.every(x=>/^\d{1,3}$/.test(x)))box.classList.add("pic")} }
     b.onclick=()=>{ if(solved) return; if(s.optlang==="en") sayEn(o.t);
       if(o.ok){solved=true;b.classList.add("ok");mood("happy");speakIn(s.yes);setNext(true,nl);return}
       wrong++;b.classList.add("no");b.disabled=true;speakIn(wrong>=2?COPY.show:(s.no||COPY.another));

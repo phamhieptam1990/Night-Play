@@ -7,29 +7,41 @@ window.LearnLessons.reg({
  "screens": [
   {
    "k": "say",
-   "t": "Dài hơn hay ngắn hơn? Nặng hơn hay nhẹ hơn? Mình cùng so sánh nhé!",
+   "t": "Dài hơn, ngắn hơn, nặng hơn, nhẹ hơn!",
    "art": "📏"
   },
   {
    "k": "choose",
-   "t": "Con voi và con kiến, con nào nặng hơn?",
+   "t": "Con nào nặng hơn?",
    "opts": [
-    "Con voi",
-    "Con kiến"
+    "🐘",
+    "🐜"
    ],
    "ok": 0,
    "yes": "Đúng rồi! Con voi nặng hơn nhiều.",
-   "no": "Con nào to hơn thì thường nặng hơn đó.",
+   "no": "Con nào to hơn thì thường nặng hơn.",
    "art": "🐘  🐜"
   },
   {
+   "k": "choose",
+   "t": "Cái nào nhẹ hơn?",
+   "opts": [
+    "🎈",
+    "🧱"
+   ],
+   "ok": 0,
+   "yes": "Giỏi quá! Bóng bay rất nhẹ.",
+   "no": "Cái nào bay lên được?",
+   "art": "🎈  🧱"
+  },
+  {
    "k": "say",
-   "t": "Xem giờ đúng: kim ngắn chỉ giờ, kim dài chỉ số 12.",
+   "t": "Kim ngắn chỉ giờ, kim dài chỉ số 12.",
    "art": "🕒"
   },
   {
    "k": "choose",
-   "t": "Kim dài chỉ số 12, kim ngắn chỉ số 5. Là mấy giờ?",
+   "t": "Đồng hồ chỉ mấy giờ?",
    "opts": [
     "5 giờ",
     "12 giờ",
@@ -37,53 +49,58 @@ window.LearnLessons.reg({
    ],
    "ok": 0,
    "yes": "Giỏi quá! Đó là 5 giờ.",
-   "no": "Kim ngắn chỉ giờ. Nó đang chỉ số mấy?"
+   "no": "Kim ngắn chỉ giờ. Nó chỉ số mấy?",
+   "art": "🕔"
   },
   {
    "k": "say",
-   "t": "Tiền Việt Nam có tờ 1 000 đồng, 2 000 đồng, 5 000 đồng và 10 000 đồng.",
+   "t": "Tiền Việt Nam có tờ 1 000, 2 000, 5 000 đồng.",
    "art": "💵"
   },
   {
    "k": "choose",
-   "t": "Bé có tờ 2 000 đồng và tờ 5 000 đồng. Cả hai là bao nhiêu?",
+   "t": "Tờ 2 000 và tờ 5 000. Tất cả?",
    "opts": [
-    "7 000 đồng",
-    "3 000 đồng",
-    "10 000 đồng"
+    "7 000",
+    "3 000",
+    "10 000"
    ],
    "ok": 0,
    "yes": "Đúng rồi! 2 000 cộng 5 000 là 7 000.",
-   "no": "Gộp lại thì cộng: 2 cộng 5 là mấy nghìn?"
+   "no": "Gộp lại thì cộng: 2 cộng 5 là mấy?",
+   "art": "💵💵"
   },
   {
-   "k": "say",
-   "t": "Một tuần có 7 ngày. Thứ hai, ba, tư, năm, sáu, bảy và Chủ nhật.",
-   "art": "📅"
+   "k": "tapcount",
+   "t": "Chạm đếm 7 ngày trong tuần!",
+   "n": 7,
+   "e": "📅",
+   "done": "Một tuần có 7 ngày!"
   },
   {
    "k": "sum",
    "t": "Bé nhớ nhé!",
    "pts": [
     "Dài hơn, ngắn hơn, nặng hơn, nhẹ hơn",
-    "Kim ngắn chỉ giờ, kim dài chỉ số 12 là giờ đúng",
+    "Kim ngắn chỉ giờ",
     "Một tuần có 7 ngày"
    ]
   }
  ],
  "tryit": [
   {
-   "q": "Sợi dây dài 5 cm và sợi dây dài 12 cm. Sợi nào ngắn hơn?",
+   "q": "Sợi nào ngắn hơn?",
    "opts": [
-    "Sợi dài 5 cm",
-    "Sợi dài 12 cm"
+    "5 cm",
+    "12 cm"
    ],
    "ok": 0,
    "hint": "Số nhỏ hơn thì ngắn hơn.",
-   "yes": "Đúng rồi!"
+   "yes": "Đúng rồi!",
+   "art": "5  ⚖️  12"
   },
   {
-   "q": "Kim dài chỉ số 12, kim ngắn chỉ số 8. Là mấy giờ?",
+   "q": "Đồng hồ chỉ mấy giờ?",
    "opts": [
     "8 giờ",
     "12 giờ",
@@ -91,7 +108,8 @@ window.LearnLessons.reg({
    ],
    "ok": 0,
    "hint": "Kim ngắn chỉ số 8 nên là 8 giờ.",
-   "yes": "Đúng rồi!"
+   "yes": "Đúng rồi!",
+   "art": "🕗"
   },
   {
    "q": "Sau Thứ ba là thứ mấy?",
@@ -102,7 +120,8 @@ window.LearnLessons.reg({
    ],
    "ok": 0,
    "hint": "Đếm tiếp: Thứ hai, Thứ ba, ...",
-   "yes": "Đúng rồi!"
+   "yes": "Đúng rồi!",
+   "art": "📅"
   }
  ]
 });

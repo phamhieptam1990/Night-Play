@@ -13,8 +13,6 @@ Ba gói chạy song song, mỗi gói giữ một vùng tệp riêng để không
 
 ## H1. Khung điều hướng theo lớp
 
-- [ ] Lớp 1: làm các bài học và bài kiểm tra còn lại trực quan hơn (hình to, câu hỏi bằng hình, ít chữ) — Mới có 2 bài làm quen; các bài khác vẫn dùng chữ nhiều. Cần bạn duyệt hướng đi trước khi sửa 12 bài
-- [ ] Icon SVG: trang phụ huynh chưa nạp `icons.js` (còn emoji/ký tự chữ); nút có chữ kèm icon vẫn dùng icon màu (chỉ nút CHỈ có icon dùng bản nét đơn) — cần bạn quyết định có đổi nốt không
 
 ## H2. Bộ máy bài học
 

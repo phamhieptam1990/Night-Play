@@ -7,7 +7,8 @@ window.LearnLessons.reg({
  "screens": [
   {
    "k": "say",
-   "t": "Cùng học chào hỏi bằng tiếng Anh nhé! Chạm vào từ để nghe.",
+   "t": "Học chào hỏi tiếng Anh! Chạm để nghe.",
+   "art": "👋",
    "en": [
     "Hello",
     "Hi",
@@ -17,6 +18,7 @@ window.LearnLessons.reg({
   {
    "k": "say",
    "t": "Hello là xin chào. Goodbye là tạm biệt.",
+   "art": "👋  🚌",
    "en": [
     "Hello",
     "Goodbye"
@@ -24,7 +26,8 @@ window.LearnLessons.reg({
   },
   {
    "k": "say",
-   "t": "Hỏi tên: What's your name? Trả lời: My name is Na.",
+   "t": "Hỏi tên rồi trả lời nhé!",
+   "art": "🧒💬",
    "en": [
     "What's your name?",
     "My name is Na."
@@ -39,7 +42,8 @@ window.LearnLessons.reg({
    ],
    "ok": 0,
    "yes": "Đúng rồi! Hello là xin chào.",
-   "no": "Gặp nhau thì chào, chưa phải chia tay.",
+   "no": "Gặp nhau thì chào.",
+   "art": "🧒😊🧒",
    "optlang": "en"
   },
   {
@@ -52,6 +56,7 @@ window.LearnLessons.reg({
    "ok": 1,
    "yes": "Giỏi quá! Goodbye là tạm biệt.",
    "no": "Chia tay thì nói tạm biệt.",
+   "art": "🚌👋",
    "optlang": "en"
   },
   {
@@ -74,7 +79,8 @@ window.LearnLessons.reg({
    ],
    "ok": 0,
    "hint": "Gặp bạn thì nói Hello.",
-   "yes": "Đúng rồi!"
+   "yes": "Đúng rồi!",
+   "art": "👋"
   },
   {
    "q": "Gặp cô giáo buổi sáng, bé nói gì?",

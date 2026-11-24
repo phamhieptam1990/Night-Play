@@ -7,17 +7,17 @@ window.LearnLessons.reg({
  "screens": [
   {
    "k": "say",
-   "t": "Nói rõ ràng, nhìn bạn và lắng nghe khi bạn nói nhé.",
+   "t": "Nói rõ ràng, nhìn bạn, lắng nghe nhé!",
    "art": "🗣️  👂"
   },
   {
    "k": "say",
-   "t": "Chào hỏi lễ phép: Con chào bà ạ! Em chào cô ạ!",
-   "art": "👋"
+   "t": "Chào lễ phép: Con chào bà ạ!",
+   "art": "👋👵"
   },
   {
    "k": "say",
-   "t": "Giới thiệu mình: Mình tên là Na. Mình học lớp 1.",
+   "t": "Giới thiệu: Mình tên là Na. Mình học lớp 1.",
    "art": "😊"
   },
   {
@@ -30,19 +30,21 @@ window.LearnLessons.reg({
    ],
    "ok": 0,
    "yes": "Đúng rồi! Chào cô lễ phép.",
-   "no": "Chọn câu lịch sự nhất nhé."
+   "no": "Chọn câu lịch sự nhất nhé.",
+   "art": "👩‍🏫"
   },
   {
    "k": "choose",
-   "t": "Khi bạn đang nói, bé nên làm gì?",
+   "t": "Bạn đang nói, bé làm gì?",
    "opts": [
-    "Lắng nghe",
-    "Nói chen vào",
-    "Quay đi"
+    "👂 Lắng nghe",
+    "🗣️ Nói chen",
+    "🙈 Quay đi"
    ],
    "ok": 0,
    "yes": "Giỏi quá! Lắng nghe là tôn trọng bạn.",
-   "no": "Bạn đang nói thì mình nên làm gì?"
+   "no": "Bạn đang nói thì mình làm gì?",
+   "art": "🧒💬"
   },
   {
    "k": "sum",
@@ -64,10 +66,11 @@ window.LearnLessons.reg({
    ],
    "ok": 0,
    "hint": "Chào bà thật lễ phép.",
-   "yes": "Đúng rồi!"
+   "yes": "Đúng rồi!",
+   "art": "👵"
   },
   {
-   "q": "Muốn nói thì bé phải làm gì?",
+   "q": "Muốn nói, bé phải làm gì?",
    "opts": [
     "Chờ đến lượt",
     "Hét to lên",
@@ -75,7 +78,8 @@ window.LearnLessons.reg({
    ],
    "ok": 0,
    "hint": "Ai cũng có lượt nói.",
-   "yes": "Đúng rồi!"
+   "yes": "Đúng rồi!",
+   "art": "🙋"
   },
   {
    "q": "Được tặng quà, bé nói gì?",
@@ -86,7 +90,8 @@ window.LearnLessons.reg({
    ],
    "ok": 0,
    "hint": "Nói lời cảm ơn nhé.",
-   "yes": "Đúng rồi!"
+   "yes": "Đúng rồi!",
+   "art": "🎁"
   }
  ]
 });

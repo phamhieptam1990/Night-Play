@@ -7,7 +7,7 @@ window.LearnLessons.reg({
  "screens": [
   {
    "k": "say",
-   "t": "Viết đẹp cần ngồi thẳng lưng và cầm bút đúng cách.",
+   "t": "Ngồi thẳng lưng, cầm bút đúng cách.",
    "art": "✏️"
   },
   {
@@ -17,7 +17,7 @@ window.LearnLessons.reg({
   },
   {
    "k": "say",
-   "t": "Tên người luôn viết hoa chữ cái đầu. Ví dụ: Na, Nam, Hà.",
+   "t": "Tên người viết hoa chữ cái đầu.",
    "art": "Na   Nam   Hà"
   },
   {
@@ -29,8 +29,21 @@ window.LearnLessons.reg({
     "Bé na đi học"
    ],
    "ok": 0,
-   "yes": "Đúng rồi! Viết hoa đầu câu, tên Na, và có dấu chấm.",
-   "no": "Nhớ viết hoa chữ đầu câu và tên bạn."
+   "yes": "Đúng rồi! Viết hoa đầu câu, tên Na và có dấu chấm.",
+   "no": "Nhớ viết hoa chữ đầu câu và tên bạn.",
+   "art": "✍️"
+  },
+  {
+   "k": "choose",
+   "t": "Tên bạn viết thế nào?",
+   "opts": [
+    "Na",
+    "na"
+   ],
+   "ok": 0,
+   "yes": "Giỏi quá! Tên bạn viết hoa chữ đầu.",
+   "no": "Tên người luôn viết hoa chữ cái đầu.",
+   "art": "👧 ❓"
   },
   {
    "k": "choose",
@@ -42,7 +55,8 @@ window.LearnLessons.reg({
    ],
    "ok": 0,
    "yes": "Giỏi quá! Cuối câu có dấu chấm.",
-   "no": "Câu kể thường kết thúc bằng dấu ...?"
+   "no": "Câu kể kết thúc bằng dấu ...?",
+   "art": "Mẹ đi chợ ❓"
   },
   {
    "k": "sum",
@@ -64,7 +78,8 @@ window.LearnLessons.reg({
    ],
    "ok": 0,
    "hint": "Đầu câu luôn viết hoa.",
-   "yes": "Đúng rồi!"
+   "yes": "Đúng rồi!",
+   "art": "✍️"
   },
   {
    "q": "Câu nào viết đúng?",
@@ -86,7 +101,8 @@ window.LearnLessons.reg({
    ],
    "ok": 0,
    "hint": "Tên bạn viết hoa chữ cái đầu.",
-   "yes": "Đúng rồi!"
+   "yes": "Đúng rồi!",
+   "art": "👧"
   }
  ]
 });

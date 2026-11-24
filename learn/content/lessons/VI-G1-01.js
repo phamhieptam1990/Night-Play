@@ -7,22 +7,22 @@ window.LearnLessons.reg({
  "screens": [
   {
    "k": "say",
-   "t": "Chữ cái ghép lại thành tiếng. Cùng làm quen nhé!",
+   "t": "Chữ cái ghép thành tiếng. Cùng làm quen!",
    "art": "a  ă  â  b  c"
   },
   {
    "k": "say",
-   "t": "Âm b ghép với vần a thành tiếng ba.",
+   "t": "Âm b ghép vần a thành tiếng ba.",
    "art": "b + a = ba"
   },
   {
    "k": "say",
-   "t": "Ghép c với a thành ca. Ghép m với a thành ma.",
+   "t": "c + a = ca. m + a = ma.",
    "art": "c + a = ca\nm + a = ma"
   },
   {
    "k": "choose",
-   "t": "Ghép l với a thành tiếng gì?",
+   "t": "Ghép thành tiếng gì?",
    "opts": [
     "la",
     "lo",
@@ -30,7 +30,34 @@ window.LearnLessons.reg({
    ],
    "ok": 0,
    "yes": "Đúng rồi! l và a thành la.",
-   "no": "Đọc chậm: lờ, a, la."
+   "no": "Đọc chậm: lờ, a, la.",
+   "art": "l + a = ❓"
+  },
+  {
+   "k": "choose",
+   "t": "Chọn chữ đúng cho hình.",
+   "opts": [
+    "cá",
+    "cờ",
+    "cô"
+   ],
+   "ok": 0,
+   "yes": "Đúng rồi! Con cá.",
+   "no": "Con vật sống dưới nước.",
+   "art": "🐟"
+  },
+  {
+   "k": "choose",
+   "t": "Chọn chữ đúng cho hình.",
+   "opts": [
+    "nhà",
+    "nho",
+    "nhớ"
+   ],
+   "ok": 0,
+   "yes": "Giỏi quá! Ngôi nhà.",
+   "no": "Chỗ mình ở là gì?",
+   "art": "🏠"
   },
   {
    "k": "choose",
@@ -42,7 +69,8 @@ window.LearnLessons.reg({
    ],
    "ok": 0,
    "yes": "Đúng rồi! Tiếng bàn có vần an.",
-   "no": "Vần an có a rồi đến n."
+   "no": "Vần an có a rồi đến n.",
+   "art": "an"
   },
   {
    "k": "sum",
@@ -56,7 +84,7 @@ window.LearnLessons.reg({
  ],
  "tryit": [
   {
-   "q": "Ghép m với e thành tiếng gì?",
+   "q": "Ghép thành tiếng gì?",
    "opts": [
     "me",
     "mo",
@@ -64,21 +92,23 @@ window.LearnLessons.reg({
    ],
    "ok": 0,
    "hint": "Đọc chậm: mờ, e, me.",
-   "yes": "Đúng rồi!"
+   "yes": "Đúng rồi!",
+   "art": "m + e = ❓"
   },
   {
-   "q": "Tiếng nào có vần ao?",
+   "q": "Chọn chữ đúng cho hình.",
    "opts": [
-    "cao",
     "cơm",
-    "cá"
+    "cam",
+    "côm"
    ],
    "ok": 0,
-   "hint": "Vần ao có a rồi o.",
-   "yes": "Đúng rồi!"
+   "hint": "Món ăn trong bát của bé.",
+   "yes": "Đúng rồi!",
+   "art": "🍚"
   },
   {
-   "q": "Ghép t với ô thành tiếng gì?",
+   "q": "Ghép thành tiếng gì?",
    "opts": [
     "tô",
     "tơ",
@@ -86,7 +116,8 @@ window.LearnLessons.reg({
    ],
    "ok": 0,
    "hint": "Đọc chậm: tờ, ô, tô.",
-   "yes": "Đúng rồi!"
+   "yes": "Đúng rồi!",
+   "art": "t + ô = ❓"
   }
  ]
 });
