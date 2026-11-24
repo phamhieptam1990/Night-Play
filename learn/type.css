@@ -1,0 +1,11 @@
+/* Chữ "l" thường có ĐUÔI (tính năng cv05 của Inter) để bé không nhầm với "I" hoa ở chữ đậm (khảo sát L2-05).
+   Vẫn là Inter (SIL OFL 1.1, cùng tập ký tự với shared/fonts.css); bản rút gọn này giữ thêm tính năng cv05/cv08.
+   Nạp SAU shared/fonts.css để thay bản không có tính năng. Chỉ dùng cho các trang Học Vui. */
+@font-face{
+  font-family:"Inter";font-style:normal;font-weight:100 900;font-display:swap;
+  src:url("../shared/fonts/inter-var-latin-vi-cv.woff2") format("woff2");
+  unicode-range:U+0000-00FF,U+0100-017F,U+0192,U+01A0-01A1,U+01AF-01B0,U+02C6,U+02DC,U+0300-0301,U+0303-0304,U+0306-0309,U+0323,U+1EA0-1EF9,U+2010-2015,U+2018-201E,
+    U+2020-2022,U+2026,U+2030,U+2039-203A,U+20AB,U+20AC,U+2122,U+2190-2193,U+2212,U+2215,U+2605,U+2713-2715,U+25CF;
+}
+/* `font:` viết tắt đặt lại font-feature-settings nên phải áp cho MỌI phần tử và dùng !important */
+*,*::before,*::after{font-feature-settings:"cv05"!important}
