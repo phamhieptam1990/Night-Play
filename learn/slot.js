@@ -26,9 +26,18 @@
   }
   var S = { id: pick(), KEYS: KEYS, SUBJ: SUBJ };
   function mapKey(k) { return S.id && KEYS.indexOf(k) >= 0 ? k + "@" + S.id : k; }
+  /* THỜI ĐIỂM SỬA từng phần (chỗ cắm đồng bộ của Học Vui Plus): mỗi lần ghi/xoá một khoá tiến độ, nhớ giờ sửa vào "learn:mt" = { <khoá gốc đầy đủ>: giờ(ms) }.
+     Chỉ ghi các khoá tiến độ/vườn (không ghi giờ chơi, nhạc, giao diện). Gộp ghi sau 400ms để không làm chậm bé. Dữ liệu chỉ là số, không có tên/nội dung. Bản free không dùng tới. */
+  var MT_RE = /^(learn:(m:|pf:|err|day|dayk|stars|farm|habit|garden|trips|grade|subj|limit)|garden[A-Z])/, mt = null, mtTimer = 0;
+  function mtLoad() { if (mt) return mt; try { mt = JSON.parse(rget("learn:mt") || "{}") || {}; } catch (e) { mt = {}; } if (typeof mt !== "object" || Array.isArray(mt)) mt = {}; return mt; }
+  function mtFlush() { mtTimer = 0; if (mt) rset("learn:mt", JSON.stringify(mt)); }
+  function touch(fullKey, at) {
+    if (!MT_RE.test(fullKey)) return; mtLoad()[fullKey] = at || Date.now();
+    if (!mtTimer) { mtTimer = setTimeout(mtFlush, 400); if (mtTimer && mtTimer.unref) mtTimer.unref(); }
+  }
   proto.getItem = function (k) { return raw.get.call(this, this === root.localStorage ? mapKey(k) : k); };
-  proto.setItem = function (k, v) { return raw.set.call(this, this === root.localStorage ? mapKey(k) : k, v); };
-  proto.removeItem = function (k) { return raw.del.call(this, this === root.localStorage ? mapKey(k) : k); };
+  proto.setItem = function (k, v) { var f = this === root.localStorage ? mapKey(k) : k; var r = raw.set.call(this, f, v); if (this === root.localStorage) touch(f); return r; };
+  proto.removeItem = function (k) { var f = this === root.localStorage ? mapKey(k) : k; var r = raw.del.call(this, f); if (this === root.localStorage) touch(f); return r; };
   function remember() { if (S.id) { sset("learn:slot", S.id); rset("learn:slot", S.id); } }
   remember();
   S.set = function (grade, subj) { var id = valid(grade + ":" + subj); if (!id) return; S.id = id; remember(); };
@@ -58,6 +67,10 @@
     del.forEach(function (k) { try { raw.del.call(root.localStorage, k); } catch (e) {} });
     try { raw.del.call(root.localStorage, "learn:slot"); } catch (e) {} try { root.sessionStorage.removeItem("learn:slot"); } catch (e) {}
   };
+  S.mtimes = function () { return JSON.parse(JSON.stringify(mtLoad())); };
+  S.mtime = function (fullKey) { return mtLoad()[fullKey] || 0; };
+  S.touch = touch; S.flushMt = function () { if (mtTimer) { clearTimeout(mtTimer); } mtFlush(); };
+  try { root.addEventListener("pagehide", function () { if (mtTimer) S.flushMt(); }); } catch (e) {}
   S.raw = { get: function (k) { return rget(k); }, set: function (k, v) { rset(k, v); }, del: function (k) { try { raw.del.call(root.localStorage, k); } catch (e) {} } };   /* đọc/ghi khoá GỐC, không qua ngăn (sao lưu/khôi phục) */
   root.LearnSlot = S;
 })(typeof window !== "undefined" ? window : globalThis);

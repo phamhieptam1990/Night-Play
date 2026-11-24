@@ -7,7 +7,7 @@
   "use strict";
   var APP = "hocvui", V = 1, MAX_TOTAL = 2000000, MAX_ONE = 500000;
   /* tiến độ + lựa chọn của phụ huynh. KHÔNG gồm: thời gian đã chơi hôm nay (learn:time:*, learn:bonus:*), nhạc/đọc to, giao diện sáng-tối. */
-  var KEYS = ["learn:err", "learn:day", "learn:dayk", "learn:dayk:off", "learn:stars", "learn:farm", "learn:garden", "learn:trips", "learn:grade", "learn:subj", "learn:limit",
+  var KEYS = ["learn:err", "learn:day", "learn:dayk", "learn:dayk:off", "learn:stars", "learn:farm", "learn:habit", "learn:garden", "learn:trips", "learn:grade", "learn:subj", "learn:limit",
     "gardenFarm", "gardenTrees", "gardenSeen", "gardenHelp", "gardenBuddy", "gardenAnimals", "gardenGift", "gardenDaily", "gardenLv"];
   var PREFIX = ["learn:m:"];
   /* khoá GỐC (không qua ngăn vườn của slot.js) để sao lưu/khôi phục đúng từng vườn */
@@ -54,6 +54,44 @@
     if (root.Farm && root.Farm.resetCache) root.Farm.resetCache();
     return r.n;
   }
-  var api = { KEYS: KEYS, PREFIX: PREFIX, collect: collect, validate: validate, apply: apply, filename: filename };
+  /* ---- BẢN CHỤP ĐỒNG BỘ (chỗ cắm Học Vui Plus G5; bản free không gọi) ----
+     snapshot() -> { app, v: 2, at, parts: { <khoá>: { d: <chuỗi JSON>, u: <giờ sửa ms> } } } : cùng danh sách khoá với collect() nhưng kèm THỜI ĐIỂM SỬA từng phần
+     (lấy từ LearnSlot.mtimes(); khoá chưa có giờ sửa = 0, luôn thua bản có giờ).
+     merge(a, b) -> bản gộp: mỗi phần lấy bản MỚI HƠN; riêng tiến độ chủ đề (learn:pf:*:lp:*) gộp theo TỪNG CHỦ ĐỀ bằng trường u của chủ đề (path.js), sao tổng lấy số lớn hơn khi bằng giờ.
+     applySnapshot(s) ghi các phần vào máy (thay phần cùng khoá, không xoá phần máy có mà bản chụp không có). Không có tên/ảnh/nội dung câu hỏi. */
+  var SV = 2;
+  function mtOf(k) { return root.LearnSlot && root.LearnSlot.mtime ? root.LearnSlot.mtime(k) : 0; }
+  function snapshot() {
+    var c = collect(), parts = {}; Object.keys(c.data).forEach(function (k) { parts[k] = { d: c.data[k], u: mtOf(k) }; });
+    return { app: APP, v: SV, at: c.at, parts: parts };
+  }
+  function checkSnapshot(s) {
+    if (!s || typeof s !== "object" || s.app !== APP || s.v !== SV || !s.parts || typeof s.parts !== "object" || Array.isArray(s.parts)) return false;
+    var n = 0, total = 0; for (var k in s.parts) { if (!Object.prototype.hasOwnProperty.call(s.parts, k)) continue; var p = s.parts[k];
+      if (!okKey(k) || !p || typeof p.d !== "string" || p.d.length > MAX_ONE || typeof p.u !== "number" || !isFinite(p.u) || p.u < 0) return false; total += p.d.length; if (total > MAX_TOTAL) return false; n++; }
+    return n > 0;
+  }
+  function pj(t) { try { var o = JSON.parse(t); return o && typeof o === "object" && !Array.isArray(o) ? o : null; } catch (e) { return null; } }
+  function mergeTopics(da, db, ua, ub) {   /* hai bản tiến độ chủ đề: mỗi chủ đề lấy bản có u lớn hơn (bằng nhau thì bản có giờ sửa tệp lớn hơn) */
+    var A = pj(da) || {}, B = pj(db) || {}, out = {}, id; for (id in A) out[id] = A[id]; for (id in B) { if (!out[id] || (B[id].u || 0) > (out[id].u || 0) || ((B[id].u || 0) === (out[id].u || 0) && ub > ua)) out[id] = B[id]; }
+    return JSON.stringify(out);
+  }
+  function merge(a, b) {
+    if (!checkSnapshot(a) || !checkSnapshot(b)) throw new Error("sync: snapshot");
+    var parts = {}, k; for (k in a.parts) parts[k] = { d: a.parts[k].d, u: a.parts[k].u };
+    for (k in b.parts) { var x = parts[k], y = b.parts[k];
+      if (!x) { parts[k] = { d: y.d, u: y.u }; continue; }
+      if (/^learn:pf:[A-Za-z0-9_-]{1,16}:lp:/.test(k)) parts[k] = { d: mergeTopics(x.d, y.d, x.u, y.u), u: Math.max(x.u, y.u) };
+      else if (y.u > x.u) parts[k] = { d: y.d, u: y.u };
+      else if (y.u === x.u && k === "learn:stars" && +y.d > +x.d) parts[k] = { d: y.d, u: y.u };
+    }
+    return { app: APP, v: SV, at: Math.max(a.at || 0, b.at || 0), parts: parts };
+  }
+  function applySnapshot(s) {
+    if (!checkSnapshot(s)) throw new Error("sync: snapshot"); var st = ls(), n = 0; if (!st) throw new Error("backup: storage");
+    Object.keys(s.parts).forEach(function (k) { RAW.set(k, s.parts[k].d, st); n++; if (root.LearnSlot && root.LearnSlot.touch) root.LearnSlot.touch(k, s.parts[k].u); });
+    if (root.Farm && root.Farm.resetCache) root.Farm.resetCache(); return n;
+  }
+  var api = { KEYS: KEYS, PREFIX: PREFIX, collect: collect, validate: validate, apply: apply, filename: filename, snapshot: snapshot, merge: merge, applySnapshot: applySnapshot, checkSnapshot: checkSnapshot };
   if (typeof module !== "undefined" && module.exports) module.exports = api; else root.Backup = api;
 })(typeof window !== "undefined" ? window : globalThis);
