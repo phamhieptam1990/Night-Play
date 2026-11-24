@@ -84,3 +84,10 @@ avatar bé lớn, quyết định thiết kế chủ site, thử trên iPhone/iP
 - [x] Spec + mã client `scripts/cozygame/parts/truot-so/*.js` + `server/pro/truot-so-nam-cham.js` (3 loại: Số úp, Đua giờ, Nam châm nhiễu; 4 giao diện: Gỗ Cổ, Neon Đêm, Bong Bóng Biển, Phi Thuyền); nối hệ thống; check.js đạt (CHECK_ONLY)
 - [x] Ảnh Chrome 360×640: hộp nhập cỡ, bảng 5×5 free, giao diện Bong Bóng Biển
 - [ ] Chưa xem: Gỗ Cổ / Neon / Phi Thuyền, 380×760, ngang 844×390, 1200×640, màn kết thúc; linh vật Gấu Nam Châm đã có (check-mascot + check-art đạt); chưa kiểm bảng lớn (8×8–10×10) trên máy thật
+
+## G4. Game Cozy mới "Săn Chữ Ẩn" (ô chữ tìm từ, kéo ngón tay khoanh từ; từ tiếng Anh + nghĩa tiếng Việt; 3 độ khó) — 1 giao diện free + 4 trả phí
+
+- [x] Spec + mã client `scripts/cozygame/parts/san-chu/*.js` + `server/pro/san-chu-an.js` (3 loại: Từ ẩn, Đua giờ, Bão chữ; 4 giao diện đổi hình ô chữ + bộ từ: Sở Thú, Phố Ẩm Thực, Vũ Trụ, Biển Xanh); nối hệ thống; check.js đạt (CHECK_ONLY)
+- [x] Linh vật Cú Săn Chữ (kính tròn, kính lúp trên ô chữ), đủ 5 skin; check-mascot + check-art đạt
+- [x] Ảnh Chrome 360×640: bản free + giao diện Vũ Trụ
+- [ ] Chưa xem: Sở Thú / Ẩm Thực / Biển Xanh, 380×760, ngang 844×390, 1200×640, màn kết thúc; chưa thử kéo bằng ngón tay thật trên điện thoại (mới thử bằng mã)
