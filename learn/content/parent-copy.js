@@ -15,6 +15,7 @@
     shape_id: ["Nhận biết hình", "Recognising shapes"], angle_type: ["Góc và hình", "Angles and shapes"], perimeter: ["Chu vi", "Perimeter"], area_shape: ["Diện tích", "Area"], volume_box: ["Thể tích", "Volume"],
     unit_convert: ["Đổi đơn vị đo", "Converting units"], measure_compare: ["So sánh độ dài", "Comparing lengths"], time_calc: ["Thời gian, lịch", "Time and calendar"], money_calc: ["Tiền Việt Nam", "Money"], motion: ["Toán chuyển động", "Speed, distance, time"],
     word_multi: ["Toán đố nhiều bước", "Multi-step word problems"], data_read: ["Đọc bảng, biểu đồ", "Reading charts and tables"], fraction_of: ["Phân số", "Fractions"], pattern_seq: ["Tìm quy luật", "Number and shape patterns"],
+    pct_ratio: ["Tỉ số phần trăm, giảm giá, lãi", "Percent, discount, profit"], motion_meet: ["Chuyển động gặp nhau, đuổi kịp", "Meeting and catching up"], ratio_prop: ["Tỉ số, tỉ lệ, bản đồ", "Ratio and scale"], dec_muldiv: ["Nhân, chia số thập phân", "Multiplying and dividing decimals"], frac_muldiv: ["Nhân, chia phân số", "Multiplying and dividing fractions"],
     count_obj: ["Đếm đồ vật", "Counting objects"], number_line: ["Trục số", "Number line"], compare_num: ["So sánh số", "Comparing numbers"], order_num: ["Sắp xếp số", "Ordering numbers"], clock_read: ["Xem giờ", "Telling time"],
     add10: ["Cộng trong phạm vi 10", "Addition within 10"], sub10: ["Trừ trong phạm vi 10", "Subtraction within 10"],
     add20: ["Cộng trong phạm vi 20", "Addition within 20"], sub20: ["Trừ trong phạm vi 20", "Subtraction within 20"],

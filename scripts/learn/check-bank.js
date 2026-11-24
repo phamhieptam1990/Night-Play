@@ -97,5 +97,15 @@ fresh(); E.setRng(seeded(5)); const a = E.planRound("tviet", 1, 5).map(p => p.sk
 console.log("5) xuất theo question_generation_schema");
 fresh(); E.setRng(seeded(9)); const REQ = ["question_id", "grade", "strand", "topic_id", "difficulty", "question_type", "prompt", "expected_answer", "solution_steps", "misconception_tags", "curriculum_alignment"];
 for (const [sj, g] of [["toan", 2], ["toan", 3], ["tviet", 4], ["tanh", 3], ["tanh", 1]]) for (const q of E.round(sj, g, { lang: "vi" })) { const o = E.toSchema(q, CUR); ok(REQ.every(k => k in o), `${q.skill}: thiếu trường lược đồ`); ok(["foundation", "standard", "challenge"].includes(o.difficulty), `${q.skill}: difficulty`); ok(o.topic_id && o.prompt && o.expected_answer, `${q.skill}: trống`); ok(o.misconception_tags.length === 3 && o.misconception_tags.every(t => E.TAGS.includes(t)), `${q.skill}: mã lỗi`); ok(o.strand !== "", `${q.skill}: không tra được mạch (strand) cho ${o.topic_id}`); }
+console.log("6) vòng dài (Luyện nhiều hơn 10/20 câu, đề tổng hợp 30 câu) và chế độ ôn chỗ yếu: E.round(subj, grade, { n, focus: \"weak\" })");
+for (const n of [10, 20, 30]) for (const g of [4, 5]) { fresh(); E.setRng(seeded(n + g)); const r = E.round("toan", g, { lang: "vi", n }); const keys = r.map(q => q.q + "|" + (q.speak || ""));
+  ok(r.length === n, `E.round n=${n} lớp ${g}: phải đủ ${n} câu, có ${r.length}`); ok(new Set(keys).size >= n - 1, `n=${n} lớp ${g}: quá nhiều câu trùng (${new Set(keys).size}/${n})`); ok(r.every(q => q.grade === g && q.o && q.o.some(x => x.ok)), `n=${n} lớp ${g}: câu hỏng`);
+  const per = {}; r.forEach(q => per[q.skill] = (per[q.skill] || 0) + 1); ok(Math.max(...Object.values(per)) <= Math.ceil(n / E.skillsFor("toan", g).length) + 2, `n=${n} lớp ${g}: một kỹ năng chiếm quá nhiều (${JSON.stringify(per)})`); }
+fresh(); E.setRng(seeded(77)); for (let i = 0; i < 12; i++) { E.record("toan", "pct_of", false, "percent_misread"); E.record("toan", "dec_add", true); }
+ok(E.weakSkills("toan", 5).join() === "pct_of", "weakSkills phải trả pct_of: " + E.weakSkills("toan", 5));
+{ let wk = 0, tot = 0, wk0 = 0, tot0 = 0; for (let i = 0; i < 40; i++) { for (const q of E.round("toan", 5, { lang: "vi", n: 20, focus: "weak" })) { tot++; if (q.skill === "pct_of") wk++; } for (const q of E.round("toan", 5, { lang: "vi", n: 20 })) { tot0++; if (q.skill === "pct_of") wk0++; } }
+  ok(wk / tot > 1.5 * (wk0 / tot0) && wk / tot > .09, `focus weak phải dồn câu vào kỹ năng yếu: ${(100 * wk / tot).toFixed(1)}% so với ${(100 * wk0 / tot0).toFixed(1)}%`); }
+fresh(); ok(E.round("toan", 5, { lang: "vi" }).length === 5, "vòng thường vẫn 5 câu");
+
 console.log(bad ? `\n✗ ${bad} lỗi (${checks} phép kiểm)` : `\n✓ bộ máy học đạt (${checks} phép kiểm, ${BANK.length} câu dựng sẵn, ${Object.keys(E.SKILLS).length} kỹ năng)`);
 process.exit(bad ? 1 : 0);

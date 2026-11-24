@@ -61,11 +61,11 @@ for (const g of [3, 4, 5]) gen("fraction_of", g, "vi", N, (q, t, n) => {
   if (/của/.test(t)) ok(close(rn(q), n[0] * n[2] / n[1]), "sai: " + t + " → " + right(q));
   else { const m = right(q).match(/(\d+)\/(\d+)/), tt = t.match(/(\d+)\/(\d+) \+ (\d+)\/(\d+)/), nu = +tt[1] * (+m[2] / +tt[2]) + +tt[3] * (+m[2] / +tt[4]); ok(+m[2] % +tt[2] === 0 && +m[2] % +tt[4] === 0 && +m[1] === nu, "sai: " + t + " → " + right(q)); }
 });
-gen("data_read", 4, "vi", N, (q, t, n) => { const v = [...t.matchAll(/: (\d+) quyển/g)].map(m => +m[1]); if (/Trung bình/.test(t)) ok(close(rn(q), v.reduce((a, b) => a + b, 0) / 4), "sai: " + t); else if (/Cả bốn ngày/.test(t)) ok(rn(q) === v.reduce((a, b) => a + b, 0), "sai: " + t); });
-gen("data_read", 3, "vi", N, (q, t) => { const v = [...t.matchAll(/: (\d+) quyển/g)].map(m => +m[1]); if (/nhiều nhất/.test(t)) { const mx = Math.max(...v); ok(v.filter(x => x === mx).length === 1, "nhiều nhất bị hòa (hai đáp án đúng): " + t); ok(t.match(/(Thứ \S+): / ) && right(q) === ["Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm"][v.indexOf(mx)], "sai: " + t + " → " + right(q)); } });
-gen("data_read", 4, "vi", N, (q, t) => { const v = [...t.matchAll(/: (\d+) quyển/g)].map(m => +m[1]); if (/nhiều nhất/.test(t)) { const mx = Math.max(...v); ok(v.filter(x => x === mx).length === 1, "nhiều nhất bị hòa: " + t); } });
+gen("data_read", 4, "vi", N, (q, t, n) => { const v = [...t.matchAll(/Thứ \S+ (\d+)/g)].map(m => +m[1]); if (/Trung bình/.test(t)) ok(close(rn(q), v.reduce((a, b) => a + b, 0) / 4), "sai: " + t); else if (/Cả bốn ngày/.test(t)) ok(rn(q) === v.reduce((a, b) => a + b, 0), "sai: " + t); });
+gen("data_read", 3, "vi", N, (q, t) => { const v = [...t.matchAll(/Thứ \S+ (\d+)/g)].map(m => +m[1]); if (/nhiều nhất/.test(t)) { const mx = Math.max(...v); ok(v.filter(x => x === mx).length === 1, "nhiều nhất bị hòa (hai đáp án đúng): " + t); ok(v.length === 4 && right(q) === ["Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm"][v.indexOf(mx)], "sai: " + t + " → " + right(q)); } });
+gen("data_read", 4, "vi", N, (q, t) => { const v = [...t.matchAll(/Thứ \S+ (\d+)/g)].map(m => +m[1]); if (/nhiều nhất/.test(t)) { const mx = Math.max(...v); ok(v.filter(x => x === mx).length === 1, "nhiều nhất bị hòa: " + t); } });
 for (const g of [1, 2]) gen("data_read", g, "vi", N, (q, t) => { if (/nhiều nhất/.test(t) && !/hơn/.test(t)) { const rows = [...t.matchAll(/(\S+) : (\S+)/gu)].map(m => [m[1], Array.from(m[2]).length]), mx = Math.max(...rows.map(r => r[1])); ok(rows.filter(r => r[1] === mx).length === 1, "nhiều nhất bị hòa: " + t); } });
-gen("data_read", 5, "vi", N, (q, t, n) => { const v = [...t.matchAll(/: (\d+) quyển/g)].map(m => +m[1]), day = t.match(/\? (Thứ \S+) chiếm|(Thứ \S+) chiếm/), d = ["Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm"].find(x => t.indexOf(x + " chiếm") >= 0); ok(d && close(rn(q), v["Thứ Hai,Thứ Ba,Thứ Tư,Thứ Năm".split(",").indexOf(d)] * 100 / v.reduce((a, b) => a + b, 0)), "sai: " + t + " → " + right(q)); });
+gen("data_read", 5, "vi", N, (q, t, n) => { const v = [...t.matchAll(/Thứ \S+ (\d+)/g)].map(m => +m[1]), day = t.match(/\? (Thứ \S+) chiếm|(Thứ \S+) chiếm/), d = ["Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm"].find(x => t.indexOf(x + " chiếm") >= 0); ok(d && close(rn(q), v["Thứ Hai,Thứ Ba,Thứ Tư,Thứ Năm".split(",").indexOf(d)] * 100 / v.reduce((a, b) => a + b, 0)), "sai: " + t + " → " + right(q)); });
 for (const g of [1, 2]) gen("data_read", g, "vi", N, (q, t) => { const rows = [...t.matchAll(/(\S+) : (\S+)/gu)].map(m => [m[1], Array.from(m[2]).length]); if (/Có mấy/.test(t)) { const e = t.match(/Có mấy (\S+)\?/u)[1], r = rows.find(x => x[0] === e); ok(r && +rn(q) === r[1], "sai: " + t + " → " + right(q)); } });
 const isSeq = (s, a) => { const L = s.concat([a]), d = L.slice(1).map((x, i) => +(x - L[i]).toFixed(6)), r = L.slice(1).map((x, i) => x / L[i]);
   const lin = d.every(x => close(x, d[0])), geo = r.every(x => close(x, r[0])), sq = L.every((x, i) => x === (i + 1) * (i + 1)), tri = d.slice(1).every((x, i) => close(x - d[i], 1)), fib = L.slice(2).every((x, i) => close(x, L[i] + L[i + 1]));
@@ -100,5 +100,56 @@ for (const g of [2, 3, 4, 5]) gen("find_error", g, "vi", N, (q, t) => {
   body.forEach((ln, i) => { const m = ln.match(/(\d+) \+ (\d+)(?: \+ (\d+))? = (\d+) → viết (\d+)(, nhớ 1)?/); if (!m) throw new Error("không đọc được bước: " + ln); const shownCarry = m[3] ? +m[3] : 0, sum = +m[1] + +m[2] + shownCarry, okStep = shownCarry === carry && +m[4] === sum && +m[5] === sum % 10 && (m[6] ? 1 : 0) === (sum >= 10 ? 1 : 0); if (!okStep && first < 0) first = i; carry = m[6] ? 1 : 0; });
   const ans = first < 0 ? "Không sai" : "Bước " + (first + 1); ok(right(q) === ans, "bước sai tự tính = " + ans + " nhưng đáp án = " + right(q) + " | " + body.join(" ; "));
 });
+
+gen("data_read", 5, "vi", 60, (q, t) => { ok(/<div style=/.test(q.q) && q.q.indexOf("<i style=") < q.q.search(/chiếm|bao nhiêu|nhiều nhất|Trung bình/) && /\?\s*$/.test(t), "câu hỏi phải đứng SAU bảng/biểu đồ cột: " + t); });
+gen("data_read", 3, "vi", 60, (q, t) => ok(q.q.indexOf("<i style=") < q.q.search(/bao nhiêu|nhiều nhất/), "lớp 3: câu hỏi phải đứng sau dữ liệu: " + t));
+for (const g of [2, 3, 4]) gen("unit_convert", g, "vi", N, (q, t) => ok(q.o.every(o => /^\d+ \S+$/.test(o.v)), "lớp " + g + " chưa học số thập phân, đáp án nhiễu phải là số tự nhiên: " + t + " | " + q.o.map(o => o.v).join(" / ")));
+
+console.log("7) Toán lớp 5 nâng cao: phần trăm, gặp nhau / đuổi kịp, tỉ số, nhân chia thập phân và phân số (tự tính lại từ đề)");
+const frVal = z => { const m = z.match(/^(\d+)\/(\d+)$/); return m ? +m[1] / +m[2] : parseFloat(z.replace(",", ".")); };
+const distinctRight = q => { const vs = q.o.map(o => o.v), ok1 = q.o.filter(o => o.ok).length === 1; return ok1 && new Set(vs).size === vs.length; };
+for (const lang of ["vi", "en"]) {
+  gen("pct_ratio", 5, lang, N, (q, t, n) => {
+    ok(distinctRight(q), "đáp án trùng/không duy nhất: " + t);
+    let exp;
+    if (/(student|học sinh).*(top|giỏi)/.test(t) && /percent|phần trăm/.test(t) && !/of a number|của một số/.test(t)) exp = n[1] * 100 / n[0];
+    else if (/discount|giảm giá/.test(t)) exp = (n[0] - n[1]) * 100 / n[0];
+    else if (/profit|lãi/.test(t)) exp = (n[1] - n[0]) * 100 / n[0];
+    else { exp = n[1] * 100 / n[0]; }   /* p% của một số là a → số đó = a × 100 ÷ p */
+    ok(close(rn(q), exp), "sai: " + t + " → " + right(q) + " (đúng " + exp + ")");
+    ok(q.o.filter(o => !o.ok).every(o => !close(parseFloat(o.v.replace(",", ".")), exp)), "nhiễu trùng đáp án: " + t);
+    if (/profit|lãi/.test(t) || /discount|giảm giá/.test(t)) ok(Number.isInteger(exp), "tỉ số không nguyên: " + t);
+  });
+  gen("motion_meet", 5, lang, N, (q, t, n) => {
+    ok(distinctRight(q), "đáp án trùng: " + t); let exp;
+    if (/Vận tốc người thứ hai|second person/.test(t)) exp = n[1] / n[0] - n[2];                   /* đề: t giờ, S km, v1 → v2 = S ÷ t − v1 */
+    else if (/đuổi kịp|catch up/.test(t)) exp = n[0] / Math.abs(n[2] - n[1]);                      /* khoảng cách ÷ hiệu hai vận tốc */
+    else exp = n[0] / (n[1] + n[2]);                                                               /* ngược chiều: S ÷ (v1 + v2) */
+    ok(close(rn(q), exp), "sai: " + t + " → " + right(q) + " (đúng " + exp + ")");
+    ok(q.o.filter(o => !o.ok).every(o => !close(nums(o.v)[0], exp)), "nhiễu trùng đáp án: " + t);
+  });
+  gen("ratio_prop", 5, lang, N, (q, t, n) => {
+    ok(distinctRight(q), "đáp án trùng: " + t); let exp;
+    if (/ratio of the smaller|tỉ số của số bé/.test(t)) { const T = n[0], [a, b] = t.match(/(\d+)\/(\d+)/).slice(1).map(Number); exp = (/larger number is|Số lớn là/.test(t) ? b : a) * T / (a + b); }
+    else if (/scale|tỉ lệ/.test(t)) exp = n[1] * n[0 + 1 - 1 + 0] * 0 + (n[2] * n[1]) / 100 * 1;   /* tỉ lệ 1 : S, k cm → k × S ÷ 100 m */
+    else exp = (n[1] / n[0]) * n[2];
+    if (/scale|tỉ lệ/.test(t)) { const sc = +t.match(/1 : (\d+)/)[1], cm = +t.match(/(\d+) cm/)[1]; exp = cm * sc / 100; }
+    else if (!/ratio of the smaller|tỉ số của số bé/.test(t)) { const kg1 = +t.match(/(\d+) kg/)[1], money = +t.match(/(\d+) (?:đồng|dong)/)[1], kg2 = +t.match(/(\d+) kg[^0-9]*(?:như|of the same)?[^0-9]*$/)[1]; exp = money / kg1 * (n[n.length - 1] === money ? kg2 : n[n.length - 1]); }
+    ok(close(rn(q), exp), "sai: " + t + " → " + right(q) + " (đúng " + exp + ")");
+  });
+  gen("dec_muldiv", 5, lang, N, (q, t, n) => {
+    ok(distinctRight(q), "đáp án trùng: " + t); const m = t.match(/^([\d.,]+) ([×÷]) ([\d.,]+)/), a = parseFloat(m[1].replace(",", ".")), b = parseFloat(m[3].replace(",", ".")), exp = m[2] === "×" ? a * b : a / b;
+    ok(close(rn(q), +exp.toFixed(6)) && !/[.,]$/.test(m[1]), "sai: " + t + " → " + right(q) + " (đúng " + exp + ")");
+    ok(q.o.filter(o => !o.ok).every(o => !close(parseFloat(o.v.replace(",", ".")), exp)), "nhiễu trùng đáp án: " + t);
+  });
+  gen("frac_muldiv", 5, lang, N, (q, t) => {
+    ok(distinctRight(q), "đáp án trùng: " + t);
+    const m = t.match(/^(\d+)\/(\d+) ([×÷]) (?:(\d+)\/(\d+)|(\d+)) =/), a = +m[1], b = +m[2], c2 = m[4] ? +m[4] : +m[6], d2 = m[5] ? +m[5] : 1;
+    const exp = m[3] === "×" ? (a * c2) / (b * d2) : (a * d2) / (b * c2), r = right(q), rv = frVal(r), g = gcdI(+((r.split("/")[0])), +(r.split("/")[1] || 1));
+    ok(close(rv, exp), "sai: " + t + " → " + r + " (đúng " + exp + ")"); ok(/\//.test(r) ? g === 1 : true, "chưa rút gọn: " + t + " → " + r);
+    for (const o of q.o.filter(x => !x.ok)) ok(!close(frVal(o.v), exp), "nhiễu bằng giá trị đúng: " + t + " | " + o.v);
+  });
+}
+for (const id of ["pct_ratio", "motion_meet", "ratio_prop", "dec_muldiv", "frac_muldiv"]) gen(id, 5, "vi", 120, (q, t) => { ok(Array.isArray(q.hint) && q.hint.length === 2, "thiếu gợi ý: " + id); const h = q.hint.join(" ").replace(/<[^>]+>/g, ""), r = right(q).replace(/ .*$/, ""); ok(r.length < 3 || !new RegExp("(^|[^0-9,./])" + r.replace(/[.,/]/g, c => "\\" + c) + "([^0-9,/]|$)").test(h.replace(/\d+(?:[,.]\d+)?\s*[×÷+−]\s*\d+(?:[,.]\d+)?/g, " ")) || /^\d{1,2}$|^(100|1000)$/.test(r), "gợi ý nêu đáp án " + r + " | " + h.slice(0, 120)); });
 
 console.log(bad ? "\n✗ " + bad + " lỗi (" + checks + " phép kiểm)" : "\n✓ kỹ năng Toán mới đạt (" + checks + " phép kiểm tự tính lại)"); process.exit(bad ? 1 : 0);

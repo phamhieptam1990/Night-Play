@@ -311,12 +311,14 @@
     else { vals = [rnd(10, 40), rnd(10, 40), rnd(10, 40), rnd(10, 40)]; }
     if (g === 4) { var sum = vals.reduce(function (x, y) { return x + y; }, 0); vals[3] += (4 - sum % 4) % 4; }
     if (g <= 4) { var mxv = Math.max.apply(null, vals); if (vals.filter(function (z) { return z === mxv; }).length > 1) vals[vals.indexOf(mxv)] += 4; }   /* "nhiều nhất" phải có ĐÚNG MỘT ngày (cộng 4 giữ nguyên tính chia hết cho 4 của trung bình) */
-    rows = "<br>" + vals.map(function (x, i) { return days[i] + ": " + x + " " + lab; }).join("<br>") + "<br>";
+    /* bảng có THANH (biểu đồ cột ngang): dữ liệu hiện TRƯỚC, câu hỏi nằm SAU dữ liệu (L5-11, L4-09) */
+    var mxr = Math.max.apply(null, vals), BAR = ["#60a5fa", "#34d399", "#fbbf24", "#f472b6"];
+    rows = "<div style=\"margin:4px auto 6px;max-width:30em;font-size:.72em;font-weight:700;line-height:1.25;text-align:left\"><div style=\"opacity:.8;text-align:center;font-size:.85em;margin-bottom:2px\">" + (v ? "Số " + lab + " bán được" : "Books sold") + "</div>" + vals.map(function (x, i) { return "<div style=\"display:flex;align-items:center;gap:6px;margin:2px 0\"><span style=\"flex:0 0 4.6em;text-align:right\">" + days[i] + "</span><span style=\"flex:1;min-width:0\"><i style=\"display:block;height:.95em;border-radius:5px;background:" + BAR[i] + ";width:" + Math.max(6, Math.round(x * 100 / mxr)) + "%\"></i></span><b style=\"flex:0 0 2.2em\">" + x + "</b></div>"; }).join("") + "</div>";
     var total = vals.reduce(function (x, y) { return x + y; }, 0), j = rnd(0, 3), hiI = vals.indexOf(Math.max.apply(null, vals)), t = rnd(0, g === 3 ? 1 : 2);
-    if (g === 5) return mkn((v ? "Bảng cho biết số sách bán được. " + days[j] + " chiếm bao nhiêu phần trăm cả bốn ngày?" : "The table shows books sold. What percent of all four days is " + days[j] + "?") + rows, vals[j] * 100 / total, [[vals[j], "percent_misread"], [total - vals[j], "read_chart"], [vals[j] * 100 / total + 5, "percent_misread"]], c, "%");
-    if (t === 0) return mkn((v ? "Cả bốn ngày bán được bao nhiêu " + lab + "?" : "How many books were sold in all four days?") + rows, total, [[total - vals[0], "read_chart"], [total + 10, "off_by_one"], [total - 10, "off_by_one"]], c);
-    if (t === 1) return mk((v ? "Ngày nào bán được <em>nhiều nhất</em>?" : "Which day sold the <em>most</em>?") + rows, days[hiI], [0, 1, 2, 3].filter(function (x) { return x !== hiI; }).map(function (x) { return [days[x], "read_chart"]; }));
-    return mkn((v ? "Trung bình mỗi ngày bán được bao nhiêu " + lab + "?" : "On average, how many books were sold per day?") + rows, total / 4, [[total, "wrong_op"], [total / 4 + 1, "off_by_one"], [Math.max.apply(null, vals), "read_chart"]], c);
+    if (g === 5) return mkn(rows + (v ? days[j] + " chiếm bao nhiêu phần trăm cả bốn ngày?" : "What percent of all four days is " + days[j] + "?"), vals[j] * 100 / total, [[vals[j], "percent_misread"], [total - vals[j], "read_chart"], [vals[j] * 100 / total + 5, "percent_misread"]], c, "%");
+    if (t === 0) return mkn(rows + (v ? "Cả bốn ngày bán được bao nhiêu " + lab + "?" : "How many books were sold in all four days?"), total, [[total - vals[0], "read_chart"], [total + 10, "off_by_one"], [total - 10, "off_by_one"]], c);
+    if (t === 1) return mk(rows + (v ? "Ngày nào bán được <em>nhiều nhất</em>?" : "Which day sold the <em>most</em>?"), days[hiI], [0, 1, 2, 3].filter(function (x) { return x !== hiI; }).map(function (x) { return [days[x], "read_chart"]; }));
+    return mkn(rows + (v ? "Trung bình mỗi ngày bán được bao nhiêu " + lab + "?" : "On average, how many books were sold per day?"), total / 4, [[total, "wrong_op"], [total / 4 + 1, "off_by_one"], [Math.max.apply(null, vals), "read_chart"]], c);
   };
 
   /* phân số */
@@ -425,6 +427,111 @@
     return mk((v ? "Bạn An cộng " : "An adds ") + "<em>" + a + " + " + b + "</em><br>" + steps.join("<br>") + "<br><em>" + (v ? "An sai ở bước nào?" : "Where is the mistake?") + "</em>", ans, opts.filter(function (o) { return o[0] !== ans; }).slice(0, 3));
   };
 
+  /* ====== Toán lớp 5 nâng cao (F4): tỉ số phần trăm, chuyển động gặp nhau / đuổi kịp, tỉ số – tỉ lệ, nhân chia số thập phân, nhân chia phân số.
+     Mỗi câu gắn gợi ý ĐÚNG kiểu câu (q.hint = [bậc 1, bậc 2] theo ngôn ngữ) và không nêu đáp án. Kiểm tự tính lại: scripts/learn/check-mathskills.js mục 7. */
+  function H2(c, vi1, vi2, en1, en2) { return VI(c) ? [vi1, vi2] : [en1, en2]; }
+  function ri(x, avoid) { var r = Math.max(1, Math.round(x)); return r === avoid ? r + 2 : r; }   /* đáp án nhiễu của thời gian/vận tốc: làm tròn thành số tự nhiên */
+  function fr2(n, d) { var g = gcd(n, d); n /= g; d /= g; return d === 1 ? String(n) : n + "/" + d; }
+  G.pct_ratio = function (c) {
+    var v = VI(c), t = rnd(0, 3), q, n, m, p, x, y, a, nm = pk([["Lan", "Lan"], ["Nam", "Nam"], ["Mai", "Mai"]]);
+    if (t === 0) {
+      n = pk([20, 25, 40, 50, 80]); do { m = rnd(1, n - 1); } while ((m * 100) % n);
+      p = m * 100 / n;
+      q = mkn(v ? "Lớp có <em>" + n + "</em> học sinh, trong đó có <em>" + m + "</em> học sinh giỏi. Tỉ số phần trăm của học sinh giỏi so với cả lớp là?" : "A class has <em>" + n + "</em> students and <em>" + m + "</em> are top students. What percent of the class is that?", p, [[m, "percent_misread"], [100 - p, "wrong_op"], [Math.round(m * 1000 / (n - m)) / 10, "formula_confuse"], [r2(p / 10), "percent_misread"]], c, "%");
+      q.hint = H2(c, "Tỉ số phần trăm của a so với b là a ÷ b rồi nhân 100. Cái được so sánh là số học sinh giỏi, cả lớp là số chia.", "Chia số học sinh giỏi cho số học sinh cả lớp, được một số thập phân, rồi nhân với 100 (hoặc đổi thành phân số có mẫu 100).", "Percent of a compared with b is a ÷ b, then × 100. Compare the top students with the whole class.", "Divide the number of top students by the whole class, then multiply by 100 (or make a fraction with 100 at the bottom).");
+      return q;
+    }
+    if (t === 1) {
+      x = pk([40, 50, 80, 120, 200]) * 1000; p = pk([10, 20, 25, 30, 40, 50]); y = x - x * p / 100;
+      q = mkn(v ? "Một món đồ giá <em>" + x + " đồng</em>, nay bán <em>" + y + " đồng</em>. Cửa hàng đã giảm giá bao nhiêu phần trăm?" : "An item cost <em>" + x + " dong</em> and now sells for <em>" + y + " dong</em>. What percent discount is that?", p, [[100 - p, "wrong_op"], [r2((x - y) / 1000), "percent_misread"], [Math.round(y * 1000 / x) / 10, "percent_misread"], [p + 10, "percent_misread"]], c, "%");
+      q.hint = H2(c, "Giảm giá là số tiền đã BỚT đi. Tính số tiền bớt: giá cũ trừ giá mới.", "Phần trăm giảm = số tiền bớt ÷ giá cũ × 100. Chú ý: chia cho giá CŨ, không phải giá mới.", "A discount is the money taken OFF. Work out old price minus new price.", "Percent off = money taken off ÷ OLD price × 100. Divide by the old price, not the new one.");
+      return q;
+    }
+    if (t === 2) {
+      x = pk([20, 40, 50, 80, 200]) * 1000; p = pk([10, 20, 25, 40, 50]); y = x + x * p / 100;
+      q = mkn(v ? nm[0] + " mua một món hàng giá <em>" + x + " đồng</em> rồi bán lại với giá <em>" + y + " đồng</em>. Tiền lãi bằng bao nhiêu phần trăm giá mua?" : nm[1] + " buys an item for <em>" + x + " dong</em> and sells it for <em>" + y + " dong</em>. The profit is what percent of the buying price?", p, [[100 + p, "percent_misread"], [Math.round((y - x) * 1000 / y) / 10, "formula_confuse"], [r2(p / 2), "percent_misread"], [r2((y - x) / 1000), "percent_misread"]], c, "%");
+      q.hint = H2(c, "Tiền lãi = giá bán trừ giá mua.", "Phần trăm lãi = tiền lãi ÷ giá MUA × 100 (đề hỏi “so với giá mua”).", "Profit = selling price minus buying price.", "Percent profit = profit ÷ BUYING price × 100 (the question says “of the buying price”).");
+      return q;
+    }
+    p = pk([10, 20, 25, 40, 50]); n = rnd(2, 12) * 20; a = n * p / 100;
+    q = mkn(v ? "<em>" + p + "%</em> của một số là <em>" + a + "</em>. Số đó là?" : "<em>" + p + "%</em> of a number is <em>" + a + "</em>. The number is?", n, [[Math.max(1, Math.round(a * p / 100)), "percent_misread"], [a * 2, "concept_confuse"], [a + p, "wrong_op"], [a * 100, "percent_misread"]], c);
+    q.hint = H2(c, "Cả số là 100%. Biết một phần trăm nào đó của nó, hãy tìm 1% trước (chia cho số phần trăm).", "Rồi lấy 1% nhân với 100 để ra cả số. Có thể thử lại: tìm phần trăm của số vừa tìm xem có đúng bằng số đề cho không.", "The whole number is 100%. Know some percent of it? Find 1% first (divide by the percent).", "Then multiply 1% by 100 to get the whole number. Check: take that percent of your number and see if you get the one in the question.");
+    return q;
+  };
+  G.motion_meet = function (c) {
+    var v = VI(c), t = rnd(0, 2), v1, v2, tt, S, q, d, kmh = v ? "km/giờ" : "km/h", hh = v ? "giờ" : "h";
+    do { v1 = rnd(4, 12) * 5; v2 = rnd(4, 12) * 5; } while (v1 === v2);
+    tt = rnd(2, 5);
+    if (t === 0) { S = (v1 + v2) * tt;
+      q = mkn(v ? "Hai xe xuất phát cùng lúc từ A và B, đi <em>ngược chiều</em> để gặp nhau. AB dài <em>" + S + " km</em>, vận tốc hai xe là <em>" + v1 + " km/giờ</em> và <em>" + v2 + " km/giờ</em>. Sau mấy giờ hai xe gặp nhau?" : "Two cars leave A and B at the same time and drive <em>towards</em> each other. AB is <em>" + S + " km</em>; their speeds are <em>" + v1 + " km/h</em> and <em>" + v2 + " km/h</em>. After how many hours do they meet?", tt, [[ri(S / Math.abs(v1 - v2), tt), "formula_confuse"], [ri(S / v1, tt), "formula_confuse"], [ri(S / v2, tt), "formula_confuse"], [tt + 1, "off_by_one"], [tt - 1, "off_by_one"]], c, hh);
+      q.hint = H2(c, "Đi ngược chiều thì mỗi giờ hai xe lại gần nhau thêm (vận tốc xe 1 + vận tốc xe 2) km.", "Thời gian gặp nhau = quãng đường AB ÷ tổng hai vận tốc.", "Driving towards each other, every hour they get closer by (speed 1 + speed 2) km.", "Meeting time = distance AB ÷ the two speeds added together.");
+      return q; }
+    if (t === 1) { d = Math.abs(v1 - v2) * tt; var sl = Math.min(v1, v2), fa = Math.max(v1, v2);
+      q = mkn(v ? "Xe máy đi trước ô tô <em>" + d + " km</em>, cùng chiều. Vận tốc xe máy là <em>" + sl + " km/giờ</em>, ô tô là <em>" + fa + " km/giờ</em>. Sau mấy giờ ô tô đuổi kịp xe máy?" : "A motorbike is <em>" + d + " km</em> ahead of a car, going the same way. The motorbike goes <em>" + sl + " km/h</em> and the car <em>" + fa + " km/h</em>. After how many hours does the car catch up?", tt, [[ri(d / (sl + fa), tt), "formula_confuse"], [ri(d / fa, tt), "formula_confuse"], [ri(d / sl, tt), "formula_confuse"], [tt + 1, "off_by_one"], [tt - 1, "off_by_one"]], c, hh);
+      q.hint = H2(c, "Cùng chiều: mỗi giờ ô tô rút ngắn khoảng cách thêm (vận tốc ô tô − vận tốc xe máy) km.", "Thời gian đuổi kịp = khoảng cách ban đầu ÷ hiệu hai vận tốc.", "Same direction: every hour the car closes the gap by (car speed − bike speed) km.", "Catch-up time = starting gap ÷ the difference of the speeds.");
+      return q; }
+    S = (v1 + v2) * tt;
+    q = mkn(v ? "Hai người đi <em>ngược chiều</em> từ A và B, xuất phát cùng lúc, sau <em>" + tt + " giờ</em> thì gặp nhau. AB dài <em>" + S + " km</em>, người thứ nhất đi <em>" + v1 + " km/giờ</em>. Vận tốc người thứ hai là?" : "Two people leave A and B together and walk <em>towards</em> each other; they meet after <em>" + tt + " hours</em>. AB is <em>" + S + " km</em> and the first goes <em>" + v1 + " km/h</em>. The second person's speed is?", v2, [[S / tt, "formula_confuse"], [S / tt + v1, "wrong_op"], [ri(S / v1, v2), "formula_confuse"], [v2 + 5, "off_by_one"]], c, kmh);
+    q.hint = H2(c, "Tổng hai vận tốc = quãng đường AB ÷ thời gian gặp nhau.", "Vận tốc người thứ hai = tổng hai vận tốc trừ vận tốc người thứ nhất.", "Sum of the two speeds = distance AB ÷ time until they meet.", "Second speed = that sum minus the first person's speed.");
+    return q;
+  };
+  G.ratio_prop = function (c) {
+    var v = VI(c), t = rnd(0, 2), a, b, k, T, u, n1, n2, sc, cm, q, big;
+    if (t === 0) {
+      do { a = rnd(1, 5); b = rnd(2, 7); } while (a >= b || gcd(a, b) !== 1); k = rnd(2, 12); T = (a + b) * k; big = R() < .5;
+      q = mkn(v ? "Hai số có tổng là <em>" + T + "</em>, tỉ số của số bé và số lớn là <em>" + a + "/" + b + "</em>. Số " + (big ? "lớn" : "bé") + " là?" : "Two numbers add up to <em>" + T + "</em>; the ratio of the smaller to the larger is <em>" + a + "/" + b + "</em>. The " + (big ? "larger" : "smaller") + " number is?", (big ? b : a) * k, [[(big ? a : b) * k, "concept_confuse"], [k, "concept_confuse"], [r2(T * (big ? b : a) / b), "concept_confuse"], [T - (big ? b : a), "wrong_op"]], c);
+      q.hint = H2(c, "Vẽ sơ đồ: số bé " + a + " phần, số lớn " + b + " phần bằng nhau. Tổng số phần bằng nhau là bao nhiêu?", "Giá trị một phần = tổng ÷ tổng số phần. Rồi nhân với số phần của số cần tìm.", "Draw a diagram: the smaller is " + a + " equal parts, the larger is " + b + " equal parts. How many parts altogether?", "One part = total ÷ number of parts. Then multiply by the parts of the number you want.");
+      return q;
+    }
+    if (t === 1) {
+      u = rnd(6, 30) * 1000; n1 = rnd(2, 6); do { n2 = rnd(3, 12); } while (n2 === n1);
+      q = mkn(v ? "Mua <em>" + n1 + " kg</em> gạo hết <em>" + (u * n1) + " đồng</em>. Hỏi mua <em>" + n2 + " kg</em> gạo như thế hết bao nhiêu đồng?" : "<em>" + n1 + " kg</em> of rice costs <em>" + (u * n1) + " dong</em>. How much do <em>" + n2 + " kg</em> of the same rice cost?", u * n2, [[u * n1 * n2, "wrong_op"], [u * n1 + n2 * 1000, "wrong_op"], [u * n1 + (n2 - n1) * 1000, "concept_confuse"], [u, "concept_confuse"]], c, v ? "đồng" : "dong");
+      q.hint = H2(c, "Làm “rút về đơn vị”: tìm giá tiền của 1 kg trước.", "Giá 1 kg = tổng tiền ÷ số kg đã biết. Rồi nhân với số kg cần mua.", "Use the “unit rate” method: find the price of 1 kg first.", "Price of 1 kg = total ÷ kg known. Then multiply by the kg you want.");
+      return q;
+    }
+    sc = pk([500, 1000, 2000]); cm = rnd(2, 9);
+    q = mkn(v ? "Trên bản đồ tỉ lệ <em>1 : " + sc + "</em>, đoạn đường dài <em>" + cm + " cm</em>. Ngoài thực tế đoạn đường dài bao nhiêu mét?" : "On a map with scale <em>1 : " + sc + "</em>, a road is <em>" + cm + " cm</em> long. How long is it in real life, in metres?", cm * sc / 100, [[cm * sc, "unit_convert"], [r2(cm * sc / 1000), "unit_convert"], [cm * sc / 10, "unit_convert"], [cm * 100, "concept_confuse"]], c, v ? "m" : "m");
+    q.hint = H2(c, "Tỉ lệ 1 : " + sc + " nghĩa là 1 cm trên bản đồ ứng với " + sc + " cm ngoài thực tế.", "Nhân độ dài trên bản đồ với " + sc + " để ra số cm thật, rồi đổi sang mét (100 cm = 1 m).", "Scale 1 : " + sc + " means 1 cm on the map is " + sc + " cm in real life.", "Multiply the map length by " + sc + " to get real cm, then change to metres (100 cm = 1 m).");
+    return q;
+  };
+  G.dec_muldiv = function (c) {
+    var v = VI(c), t = rnd(0, 3), a, b, x, q, ans, F = function (n, d) { return fmt(r2(n).toFixed(d), c.lang); };
+    if (t === 0) { a = rnd(12, 99) / 10; b = rnd(2, 9); if (a % 1 === 0) a += .1; ans = r2(a * b);
+      q = mkn(F(a, 1) + " × " + b + " = <em>?</em>", ans, [[r2(ans * 10), "decimal_point"], [r2(ans / 10), "decimal_point"], [r2(Math.floor(a) * b + (a % 1) * 10), "decimal_point"], [r2(ans + .1), "off_by_one"]], c);
+      q.hint = H2(c, "Bỏ dấu phẩy, nhân như số tự nhiên: " + Math.round(a * 10) + " × " + b + ".", "Rồi đếm: số bị nhân có 1 chữ số ở phần thập phân thì tích cũng có 1 chữ số ở phần thập phân. Ước lượng cho chắc: làm tròn " + F(a, 1) + " rồi nhân.", "Ignore the point and multiply as whole numbers: " + Math.round(a * 10) + " × " + b + ".", "Then count: one decimal place in the factor means one in the answer. Estimate to be sure: round " + F(a, 1) + " first."); return q; }
+    if (t === 1) { a = rnd(12, 49) / 10; b = rnd(2, 9) / 10; ans = r2(a * b);
+      q = mkn(F(a, 1) + " × " + F(b, 1) + " = <em>?</em>", ans, [[r2(ans * 10), "decimal_point"], [r2(ans / 10), "decimal_point"], [r2(ans * 100), "decimal_point"], [r2(ans + .01), "off_by_one"]], c);
+      q.hint = H2(c, "Nhân như số tự nhiên, bỏ hết dấu phẩy: " + Math.round(a * 10) + " × " + Math.round(b * 10) + ".", "Hai thừa số có TẤT CẢ 2 chữ số ở phần thập phân, nên tích cũng phải có 2 chữ số ở phần thập phân.", "Multiply as whole numbers, ignoring the points: " + Math.round(a * 10) + " × " + Math.round(b * 10) + ".", "The factors have 2 decimal places in all, so the answer has 2 decimal places."); return q; }
+    if (t === 2) { b = rnd(2, 9); x = rnd(12, 59) / 10; if (x % 1 === 0) x += .1; a = r2(x * b);
+      q = mkn(F(a, 1) + " ÷ " + b + " = <em>?</em>", x, [[r2(x * 10), "decimal_point"], [r2(x / 10), "decimal_point"], [r2(x + .1), "off_by_one"], [r2(a * b), "wrong_op"]], c);
+      q.hint = H2(c, "Chia phần nguyên trước, khi hết phần nguyên thì viết dấu phẩy ở thương rồi chia tiếp.", "Có thể kiểm tra bằng phép nhân: thương × " + b + " phải bằng " + F(a, 1) + ".", "Divide the whole part first, then put the decimal point in the answer and carry on.", "Check by multiplying: answer × " + b + " must equal " + F(a, 1) + "."); return q; }
+    var mul = R() < .5; x = mul ? pk([10, 100, 1000]) : pk([10, 100]); a = mul ? rnd(12, 99) / 100 : rnd(12, 999) / 10; ans = r2(mul ? a * x : a / x);   /* thương tối đa 3 chữ số thập phân */
+    q = mkn(F(a, mul ? 2 : 1).replace(/([.,]\d*?)0+$/, "$1").replace(/[.,]$/, "") + (mul ? " × " : " ÷ ") + x + " = <em>?</em>", ans, [[r2(mul ? a / x : a * x), "decimal_point"], [r2(ans * 10), "decimal_point"], [r2(ans / 10), "decimal_point"]], c);
+    q.hint = H2(c, mul ? "Nhân với 10, 100, 1000: dấu phẩy dời sang PHẢI 1, 2, 3 chữ số." : "Chia cho 10, 100, 1000: dấu phẩy dời sang TRÁI 1, 2, 3 chữ số.", "Đếm số chữ số 0 của " + x + " để biết dời mấy chữ số. Thiếu chữ số thì thêm số 0.", mul ? "Times 10, 100, 1000: the point moves RIGHT 1, 2, 3 places." : "Divide by 10, 100, 1000: the point moves LEFT 1, 2, 3 places.", "Count the zeros of " + x + " to see how many places. Add zeros if you run out of digits."); return q;
+  };
+  G.frac_muldiv = function (c) {
+    var v = VI(c), t = rnd(0, 2), a, b, d, e, n, dn, q, ans, wr, i = 0, st, cand;
+    for (; i < 60; i++) {
+      b = rnd(2, 8); a = rnd(1, b - 1); d = rnd(2, 8); e = rnd(1, d - 1);
+      if (gcd(a, b) !== 1 || gcd(e, d) !== 1) continue;
+      if (t === 0) { n = a * e; dn = b * d; } else if (t === 1) { n = a * d; dn = b * e; } else { n = a * (e + 1); dn = b; e = e + 1; d = 1; }
+      if (n === dn || n > 2 * dn || gcd(n, dn) === dn) continue;
+      cand = fr2(n, dn); if (cand.indexOf("/") < 0) continue; break;
+    }
+    ans = cand; var g0 = gcd(n, dn), nn = n / g0, dd = dn / g0;
+    if (t === 0) { wr = [[fr2(a * d, b * e), "concept_confuse"], [(a + e) + "/" + (b + d), "add_denominator"], [fr2(a * e, b + d), "add_denominator"], [fr2(a + e, b * d), "add_denominator"]];
+      st = [v ? "Nhân phân số: tử nhân tử, mẫu nhân mẫu." : "Multiply fractions: top × top, bottom × bottom.", v ? "Nhân xong, rút gọn phân số (chia cả tử và mẫu cho cùng một số) nếu được." : "Then simplify (divide top and bottom by the same number) if you can."];
+      q = mk(a + "/" + b + " × " + e + "/" + d + " = <em>?</em>", ans, dedupe(wr, ans)); }
+    else if (t === 1) { wr = [[fr2(a * e, b * d), "concept_confuse"], [fr2(b * e, a * d), "concept_confuse"], [fr2(a * e, b + d), "add_denominator"], [fr2(a * d, b + e), "add_denominator"]];
+      st = [v ? "Chia cho một phân số thì nhân với phân số ĐẢO NGƯỢC (đổi chỗ tử và mẫu của số chia)." : "To divide by a fraction, multiply by its UPSIDE-DOWN fraction (swap its top and bottom).", v ? "Chỉ đảo phân số thứ hai (số chia). Sau đó nhân tử với tử, mẫu với mẫu và rút gọn." : "Flip only the second fraction (the divisor). Then multiply and simplify."];
+      q = mk(a + "/" + b + " ÷ " + e + "/" + d + " = <em>?</em>", ans, dedupe(wr, ans)); }
+    else { wr = [[fr2(a + e, b), "wrong_op"], [fr2(a, b * e), "concept_confuse"], [fr2(a * e, b * e), "concept_confuse"], [fr2(a * e + 1, b), "off_by_one"]];
+      st = [v ? "Nhân phân số với số tự nhiên: giữ nguyên mẫu số, lấy tử số nhân với số đó." : "Fraction × whole number: keep the bottom, multiply the top by the number.", v ? "Rút gọn kết quả nếu tử và mẫu cùng chia hết cho một số." : "Simplify if the top and bottom share a factor."];
+      q = mk(a + "/" + b + " × " + e + " = <em>?</em>", ans, dedupe(wr, ans)); }
+    q.hint = st; return q;
+  };
+  function dedupe(wr, ans) { var seen = {}; seen[ans] = 1; var o = []; wr.forEach(function (w) { var s = String(w[0]); if (!seen[s] && /\//.test(s) || (!seen[s] && /^\d+$/.test(s))) { seen[s] = 1; o.push(w); } }); var k = 2; while (o.length < 3 && k < 60) { var f = (parseInt(ans, 10) + k) + "/" + (parseInt(String(ans).split("/")[1] || 7, 10) + k), s2 = f; if (!seen[s2]) { seen[s2] = 1; o.push([s2, "other"]); } k++; } return o.slice(0, 3); }
+
   /* ---- danh mục kỹ năng: môn, lớp chính, độ khó (1 dễ … 3 khó) ---- */
   var A5 = [1, 2, 3, 4, 5];
   var SK = {
@@ -436,6 +543,7 @@
     add10: { subj: "toan", grades: [1], diff: 1 }, sub10: { subj: "toan", grades: [1], diff: 1 }, add20: { subj: "toan", grades: [1], diff: 2 }, sub20: { subj: "toan", grades: [1], diff: 2 },
     word_addsub: { subj: "toan", grades: [1, 2], diff: 2 }, add_carry: { subj: "toan", grades: [2], diff: 2 }, times25: { subj: "toan", grades: [2], diff: 2 },
     times69: { subj: "toan", grades: [3], diff: 3 }, div69: { subj: "toan", grades: [3], diff: 3 }, word_mul: { subj: "toan", grades: [3], diff: 3 },
+    pct_ratio: { subj: "toan", grades: [5], diff: 3 }, motion_meet: { subj: "toan", grades: [5], diff: 3 }, ratio_prop: { subj: "toan", grades: [5], diff: 3 }, dec_muldiv: { subj: "toan", grades: [5], diff: 3 }, frac_muldiv: { subj: "toan", grades: [5], diff: 3 },
     mul_carry: { subj: "toan", grades: [4], diff: 2 }, frac_basic: { subj: "toan", grades: [4], diff: 3 }, dec_add: { subj: "toan", grades: [5], diff: 2 }, pct_of: { subj: "toan", grades: [5], diff: 3 },
     spell_chtr: { subj: "tviet", grades: A5, diff: 1 }, tone: { subj: "tviet", grades: A5, diff: 1 }, antonym: { subj: "tviet", grades: [3, 4, 5], diff: 2 }, reading_short: { subj: "tviet", grades: A5, diff: 2 },
     vocab_animals: { subj: "tanh", grades: [1, 2], diff: 1 }, vocab_things: { subj: "tanh", grades: [1, 2], diff: 1 }, be_verb: { subj: "tanh", grades: [3, 4, 5], diff: 1 }, dialogue: { subj: "tanh", grades: [3, 4, 5], diff: 2 }
@@ -458,7 +566,7 @@
     money_calc: { 1: "g1_measurement", 2: "g2_measurement", 3: "g3_measurement", 4: "g4_measurement" }, motion: { 5: "g5_measurement" }, word_multi: { 3: "g3_four_operations", 4: "g4_operations", 5: "g5_ratio_percent" },
     data_read: { 1: "g1_data", 2: "g2_data", 3: "g3_statistics", 4: "g4_statistics", 5: "g5_statistics" }, fraction_of: { 3: "g3_fraction_intro", 4: "g4_fractions", 5: "g5_fractions" }, pattern_seq: { 1: "g1_numbers_100", 2: "g2_numbers_1000", 3: "g3_numbers_100000", 4: "g4_large_numbers", 5: "g5_decimals" },
     add10: { 1: G1 }, sub10: { 1: G1 }, add20: { 1: G1 }, sub20: { 1: G1 }, word_addsub: { 1: G1, 2: "g2_operations" }, add_carry: { 2: "g2_operations" }, times25: { 2: "g2_operations" },
-    times69: { 3: "g3_four_operations" }, div69: { 3: "g3_four_operations" }, word_mul: { 3: "g3_four_operations" }, mul_carry: { 4: "g4_operations" }, frac_basic: { 4: "g4_fractions" }, dec_add: { 5: "g5_decimals" }, pct_of: { 5: "g5_ratio_percent" },
+    times69: { 3: "g3_four_operations" }, div69: { 3: "g3_four_operations" }, word_mul: { 3: "g3_four_operations" }, pct_ratio: { 5: "g5_ratio_percent" }, motion_meet: { 5: "g5_measurement" }, ratio_prop: { 5: "g5_ratio_percent" }, dec_muldiv: { 5: "g5_decimals" }, frac_muldiv: { 5: "g5_fractions" }, mul_carry: { 4: "g4_operations" }, frac_basic: { 4: "g4_fractions" }, dec_add: { 5: "g5_decimals" }, pct_of: { 5: "g5_ratio_percent" },
     spell_chtr: VT, tone: VT, antonym: { 3: "VI-G3-02", 4: "VI-G4-01", 5: "VI-G5-02" }, reading_short: { 1: "VI-G1-02", 2: "VI-G2-01", 3: "VI-G3-01", 4: "VI-G4-02", 5: "VI-G5-01" },
     vocab_animals: EN, vocab_things: EN, be_verb: EB, dialogue: EB
   };
@@ -480,7 +588,7 @@
   }
 
   /* nhãn nổi trên khung câu hỏi cho các kỹ năng mới (mặc định của môn Toán là "Tính nhẩm" nên không hợp với hình, đo lường…) */
-  var SKLAB = { fraction_equiv: ["Phân số bằng nhau", "Equal fractions"], roman: ["Số La Mã", "Roman numerals"], angle_measure: ["Số đo góc", "Angle size"], find_error: ["Tìm lỗi sai", "Spot the mistake"], place_value: ["Giá trị chữ số", "Place value"], round_num: ["Làm tròn", "Rounding"], expr_order: ["Biểu thức", "Expressions"], unknown_num: ["Số chưa biết", "Missing number"], shape_id: ["Nhận biết hình", "Shapes"], angle_type: ["Góc", "Angles"], perimeter: ["Chu vi", "Perimeter"], area_shape: ["Diện tích", "Area"], volume_box: ["Thể tích", "Volume"], unit_convert: ["Đổi đơn vị", "Units"], measure_compare: ["Đo độ dài", "Length"], time_calc: ["Thời gian", "Time"], money_calc: ["Tiền Việt", "Money"], motion: ["Chuyển động", "Motion"], word_multi: ["Toán đố", "Word problem"], data_read: ["Đọc bảng", "Charts"], fraction_of: ["Phân số", "Fractions"], pattern_seq: ["Quy luật", "Patterns"] };
+  var SKLAB = { fraction_equiv: ["Phân số bằng nhau", "Equal fractions"], roman: ["Số La Mã", "Roman numerals"], angle_measure: ["Số đo góc", "Angle size"], find_error: ["Tìm lỗi sai", "Spot the mistake"], place_value: ["Giá trị chữ số", "Place value"], round_num: ["Làm tròn", "Rounding"], expr_order: ["Biểu thức", "Expressions"], unknown_num: ["Số chưa biết", "Missing number"], shape_id: ["Nhận biết hình", "Shapes"], angle_type: ["Góc", "Angles"], perimeter: ["Chu vi", "Perimeter"], area_shape: ["Diện tích", "Area"], volume_box: ["Thể tích", "Volume"], unit_convert: ["Đổi đơn vị", "Units"], measure_compare: ["Đo độ dài", "Length"], time_calc: ["Thời gian", "Time"], money_calc: ["Tiền Việt", "Money"], motion: ["Chuyển động", "Motion"], word_multi: ["Toán đố", "Word problem"], data_read: ["Đọc bảng", "Charts"], fraction_of: ["Phân số", "Fractions"], pattern_seq: ["Quy luật", "Patterns"], pct_ratio: ["Tỉ số phần trăm", "Percent"], motion_meet: ["Gặp nhau, đuổi kịp", "Meeting & catching up"], ratio_prop: ["Tỉ số, tỉ lệ", "Ratio"], dec_muldiv: ["Nhân chia số thập phân", "Decimals × ÷"], frac_muldiv: ["Nhân chia phân số", "Fractions × ÷"] };
   /* ---- tạo một câu cho kỹ năng ---- */
   function make(skill, c) {
     c = c || {}; c.lang = c.lang || "vi"; c.grade = c.grade || (SK[skill] && SK[skill].grades[0]) || 1;
@@ -591,15 +699,16 @@
     Object.keys(SK).forEach(function (id) { var k = SK[id]; if (k.subj !== subj) return; if (k.grades.indexOf(grade) >= 0) out.push({ id: id, review: false }); else if (grade > 1 && k.grades.indexOf(grade - 1) >= 0) out.push({ id: id, review: true }); });
     return out;
   }
-  function weight(c, m) {
+  function weight(c, m, focus) {
     var s = m[c.id], w = W[level(s)];
+    if (focus === "weak") { var lv = level(s); w *= (lv === "emerging" || lv === "developing") ? 4 : (lv === "not_started" ? 1.5 : .25); }   /* chế độ "Ôn chỗ hay sai": dồn câu vào kỹ năng bé còn yếu */
     if (s) { var tt = 0; Object.keys(s.tags || {}).forEach(function (t) { tt += s.tags[t]; }); w *= 1 + Math.min(2, tt / 3); }
     if (c.review) w *= .4;
     if ((m._last || []).indexOf(c.id) >= 0) w *= .6;
     return w;
   }
-  function planRound(subj, grade, n, topic) {
-    n = n || 5; var m = load(subj), cs = candidates(subj, grade);
+  function planRound(subj, grade, n, topic, focus) {
+    n = Math.max(1, Math.min(40, n || 5)); var m = load(subj), cs = candidates(subj, grade);
     if (topic) { var ct = cs.filter(function (c) { return topicOf(c.id, grade) === topic; }); if (ct.length) cs = ct; }   /* kiểm tra theo chủ đề: chỉ lấy kỹ năng của chủ đề đó (không có thì dùng cả lớp) */
     if (!cs.length) cs = Object.keys(SK).filter(function (id) { return SK[id].subj === subj; }).map(function (id) { return { id: id, review: false }; });
     var main = cs.filter(function (c) { return !c.review; }), pool = main.length ? main : cs;
@@ -611,8 +720,9 @@
     var warm = (solid.length && (R() < .5 || !unsolid.length)) ? solid[rnd(0, solid.length - 1)] : easy(unsolid.length ? unsolid : pool);
     var plan = [warm], cnt = {}; cnt[warm.id] = 1;
     while (plan.length < n) {
-      var av = cs.filter(function (c) { return (cnt[c.id] || 0) < 2; }); if (!av.length) av = cs;
-      var tot = 0, ws = av.map(function (c) { var w = weight(c, m); tot += w; return w; }), r = R() * tot, pick = av[av.length - 1];
+      var cap = Math.max(2, Math.ceil(n / cs.length) + (focus === "weak" ? 2 : 1));   /* vòng dài (10/20/30 câu): cho phép lặp kỹ năng nhiều hơn nhưng vẫn chia đều */
+      var av = cs.filter(function (c) { return (cnt[c.id] || 0) < cap; }); if (!av.length) av = cs;
+      var tot = 0, ws = av.map(function (c) { var w = weight(c, m, focus); tot += w; return w; }), r = R() * tot, pick = av[av.length - 1];
       for (var i = 0; i < av.length; i++) { r -= ws[i]; if (r <= 0) { pick = av[i]; break; } }
       plan.push(pick); cnt[pick.id] = (cnt[pick.id] || 0) + 1;
     }
@@ -621,10 +731,16 @@
     m._last = plan.map(function (p) { return p.id; }).filter(function (x, i, a) { return a.indexOf(x) === i; }); save(subj, m);
     return plan.map(function (p) { return { skill: p.id, topic: topicOf(p.id, grade), diff: SK[p.id].diff, review: p.review }; });
   }
-  /* một vòng hoàn chỉnh: n câu đã sinh, không lặp câu dựng sẵn */
+  /* kỹ năng bé còn yếu (đã làm nhưng chưa vững) của môn × lớp, yếu nhất trước: giao diện dùng để hiện "Ôn chỗ hay sai (còn N kỹ năng)" */
+  function weakSkills(subj, grade) {
+    var m = load(subj); return candidates(subj, grade).filter(function (c) { var s = m[c.id], lv = level(s); return s && s.n > 0 && (lv === "emerging" || lv === "developing"); })
+      .sort(function (a, b) { return m[a.id].p - m[b.id].p; }).map(function (c) { return c.id; });
+  }
+  /* một vòng hoàn chỉnh: n câu đã sinh, không lặp câu dựng sẵn.
+     opts = { lang, n (1–40; vòng thường 5, "Luyện nhiều hơn" 10/20, đề tổng hợp 30), topic, focus: "weak" = ưu tiên kỹ năng yếu } */
   function round(subj, grade, opts) {
     opts = opts || {}; var used = {}, lang = opts.lang || "vi", stems = {};
-    return planRound(subj, grade, opts.n || 5, opts.topic).map(function (p) {
+    return planRound(subj, grade, opts.n || 5, opts.topic, opts.focus).map(function (p) {
       var q, tries = 0; do { q = make(p.skill, { lang: lang, grade: grade, used: used }); tries++; } while (stems[q.q + "|" + (q.speak || "")] && tries < 8);   /* không lặp đúng một câu trong vòng */
       stems[q.q + "|" + (q.speak || "")] = 1; return q;
     });
@@ -677,7 +793,7 @@
   /* gợi ý tĩnh theo kỹ năng: learn/hint-texts.js (nạp trước engine trong trình duyệt) */
   var HTX = root.LearnHintTexts || (typeof require !== "undefined" ? (function () { try { return require("./hint-texts.js"); } catch (e) { return null; } })() : null);
   var E = {
-    TAGS: TAGS, SKILLS: SK, TRACKED: TRACKED, make: make, round: round, planRound: planRound, record: record, level: level, summary: summary, mastery4: mastery4, M4: M4, goals: goals, detailOn: detailOn, setDetail: setDetail, clearDetail: clearDetail, noteHint: noteHint, dayDetail: dayDetail, daily: daily, resetAll: resetAll, dayKey: dayKey, toSchema: toSchema, topicOf: topicOf,
+    TAGS: TAGS, SKILLS: SK, TRACKED: TRACKED, make: make, round: round, planRound: planRound, weakSkills: weakSkills, record: record, level: level, summary: summary, mastery4: mastery4, M4: M4, goals: goals, detailOn: detailOn, setDetail: setDetail, clearDetail: clearDetail, noteHint: noteHint, dayDetail: dayDetail, daily: daily, resetAll: resetAll, dayKey: dayKey, toSchema: toSchema, topicOf: topicOf,
     use: function (b) { backend = b; }, setRng: function (f) { R = f || Math.random; }, setBank: function (b) { BANK = b; }, load: load,
     skillsFor: function (subj, grade) { return candidates(subj, grade); },
     topicOf: topicOf,
