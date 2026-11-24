@@ -106,15 +106,17 @@
   /* nghe–viết (dictate) và viết câu (write): ô nhập chữ thật + nút ✓. dictate so khớp từ cần viết; write chấm theo tiêu chí hình thức (LearnTypes.checkWrite) */
   function renderText(b, host) {
     var fld = h("div", "qd fld txt"), inp = h("input", "qi"), go = tile("✓", "ab tl kb go"), row = h("div", "qk qt1"), isW = b.kind === "write";
+    var tipEl = h("div", "wtip"); tipEl.setAttribute("role", "status"); tipEl.style.cssText = "display:none;margin:8px 4px 0;padding:8px 12px;border-radius:12px;background:#fff7e0;color:#7a4b00;font-size:16px;line-height:1.35;text-align:center;font-weight:600";
     inp.type = "text"; inp.maxLength = isW ? 140 : 24; inp.placeholder = isW ? "…" : "?"; inp.setAttribute("autocomplete", "off"); inp.setAttribute("autocorrect", "off"); inp.setAttribute("autocapitalize", isW ? "sentences" : "off"); inp.setAttribute("spellcheck", "false"); inp.setAttribute("aria-label", b.lab || "");
     fld.appendChild(inp); go.setAttribute("aria-label", "✓");
     function norm(x) { x = String(x).replace(/\s+/g, " ").trim().toLowerCase(); return x.normalize ? x.normalize("NFC") : x; }
     function submit() {
       if (busy(host) || !inp.value.trim()) return;
+      tipEl.style.display = "none";
       if (isW) {
         var res = (window.LearnTypes && LearnTypes.checkWrite) ? LearnTypes.checkWrite(inp.value, b, b.lang) : { ok: inp.value.trim().length > 3, tip: "" };
         if (res.ok) { A.right(fld); return; }
-        shake(fld); var r0 = A.wrong("other", function () { fld.classList.add("okk"); }, null); if (A.say && res.tip) A.say(res.tip); if (r0 === 1) setTimeout(function () { inp.focus(); }, 300); return;
+        shake(fld); var r0 = A.wrong("other", function () { fld.classList.add("okk"); }, null); if (res.tip) { tipEl.textContent = res.tip; tipEl.style.display = "block"; } if (r0 === 1) setTimeout(function () { inp.focus(); }, 300); return;
       }
       var v = norm(inp.value);
       if ((b.accept || [b.ans]).indexOf(v) >= 0) { A.right(fld); return; }
@@ -122,7 +124,7 @@
       if (r === 1) setTimeout(function () { inp.value = ""; inp.focus(); }, 650);
     }
     go.onclick = submit; inp.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); submit(); } });
-    row.appendChild(go); host.appendChild(fld); host.appendChild(row); setTimeout(function () { try { inp.focus({ preventScroll: true }); } catch (e) {} }, 0);
+    row.appendChild(go); host.appendChild(fld); if (isW) host.appendChild(tipEl); host.appendChild(row); setTimeout(function () { try { inp.focus({ preventScroll: true }); } catch (e) {} }, 0);
   }
   /* đọc to (speak): bé đọc thành tiếng rồi tự báo; không có nhận dạng giọng nói nên ghi là "tự báo" */
   function renderSpeak(b, host) {

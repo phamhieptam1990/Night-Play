@@ -191,11 +191,14 @@
     if (!first || first === first.toLowerCase()) return { ok: false, tip: vi ? "Chữ đầu câu phải viết hoa nhé." : "Start the sentence with a capital letter." };
     if (!/[.?!…]$/.test(t)) return { ok: false, tip: vi ? "Cuối câu nhớ đặt dấu chấm (.) nhé." : "End the sentence with a full stop (.)." };
     if (/\d/.test(t)) return { ok: false, tip: vi ? "Viết bằng chữ, không dùng chữ số nhé." : "Write with words, not digits." };
+    var WC = root.WriteCheck || (typeof require !== "undefined" ? (function () { try { return require("./write-check.js"); } catch (e) { return null; } })() : null);
+    if (WC && spec && spec.topic) return WC.check(t, spec, spec.subj === "tanh" ? "en" : "vi", lang);
     return { ok: true, tip: "" };
   }
   G.write = function (subj, g, lang) {
     if (subj === "toan" || (subj === "tviet" && g < 2) || (subj === "tanh" && g < 3)) return null;
-    var topic = pick(WTOP[subj]), min = subj === "tviet" ? [0, 0, 3, 4, 5, 6][g] : [0, 0, 0, 3, 4, 5][g];
+    var WC = root.WriteCheck || (typeof require !== "undefined" ? (function () { try { return require("./write-check.js"); } catch (e) { return null; } })() : null), tp = WC ? WC.topicsFor(subj === "tviet" ? "vi" : "en", g) : [];
+    var topic = tp.length ? pick(tp)[1] : pick(WTOP[subj]), min = subj === "tviet" ? [0, 0, 3, 4, 5, 6][g] : [0, 0, 0, 3, 4, 5][g];
     return base("write", subj, g, lang, (subj === "tviet" ? "Viết một câu về <em>" + topic + "</em>" : "Write a sentence about <em>" + topic + "</em>") + "<br><small>" + (lang === "vi" ? "Chữ đầu viết hoa, cuối câu có dấu chấm" : "Capital letter first, full stop at the end") + "</small>", { min: min, topic: topic, speak: (subj === "tviet" ? "Viết một câu về " : "Write a sentence about ") + topic });
   };
   /* đọc to: bé đọc thành tiếng theo mẫu rồi tự báo đã đọc (không có nhận dạng giọng nói) */
