@@ -10,6 +10,7 @@ const w = ms => new Promise(r => setTimeout(r, ms));
 const QUICK = { toan: ["", "tf", "pic", "match", "order", "typein", "odd", "multi", "compare", "count", "memory", "numline", "clock", "find", "dragfill", "sort", "pop"], tviet: ["wordbuild", "dictate", "write", "speak", "trace"], tanh: ["dictate", "write", "speak"] };
 const ALL = { toan: QUICK.toan, tviet: ["", "tf", "pic", "match", "order", "wordbuild", "odd", "multi", "memory", "find", "dragfill", "sort", "pop", "dictate", "write", "speak", "trace"], tanh: ["", "tf", "pic", "match", "order", "wordbuild", "odd", "multi", "memory", "find", "dragfill", "sort", "pop", "dictate", "write", "speak"] };
 const VP = FULL ? [[390, 844], [360, 640], [844, 390]] : [[390, 844], [360, 640]];
+const WIDE = [[1180, 820], [1440, 900]];   /* iPad ngang / web (bố cục hai cột >= 1000px): chỉ kiểm tràn/cuộn/nút chạm, không chơi lại */
 const fails = []; const bad = (m) => { fails.push(m); console.log("  ✗ " + m); };
 
 (async () => {
@@ -18,10 +19,10 @@ const fails = []; const bad = (m) => { fails.push(m); console.log("  ✗ " + m);
   const br = await puppeteer.launch({ executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", headless: "new", args: ["--mute-audio"] });
   let n = 0;
   try {
-    for (const [subj, ks] of Object.entries(FULL ? ALL : QUICK)) for (const k of ks) for (const [W, H] of VP) {
+    for (const [subj, ks] of Object.entries(FULL ? ALL : QUICK)) for (const k of ks) for (const [W, H] of VP.concat(WIDE)) {
       if (process.env.ONLY && k !== process.env.ONLY) continue;
-      const land = W > H, tag = `${subj}/${k || "mc"} ${W}x${H}`; n++;
-      const pg = await br.newPage(); await pg.setViewport({ width: W, height: H, hasTouch: true, isMobile: true });
+      const land = W > H && H < 500, tag = `${subj}/${k || "mc"} ${W}x${H}`; n++;
+      const pg = await br.newPage(); await pg.setViewport({ width: W, height: H, hasTouch: true, isMobile: Math.min(W, H) < 700 });
       const errs = []; pg.on("pageerror", e => errs.push(e.message)); pg.on("console", m => { if (m.type() === "error") errs.push("console: " + m.text().slice(0, 90)); });
       await pg.goto(`http://localhost:${PORT}/learn/index.html?subj=${subj}&grade=${k === "pic" || k === "count" || (subj === "tviet" && (k === "dictate" || k === "speak")) ? 2 : k === "trace" ? 1 : 3}&lang=vi${k ? "&qk=" + k : ""}`, { waitUntil: "networkidle0" });
       const ready = async () => { await pg.waitForFunction(() => { const a = document.getElementById("ans"); return !a.classList.contains("ld") && a.children.length > 0; }, { timeout: 6000 }); await w(1000); };
@@ -40,7 +41,7 @@ const fails = []; const bad = (m) => { fails.push(m); console.log("  ✗ " + m);
       });
       if (m.sy || m.sx) bad(tag + ": cuộn/tràn màn"); if (m.clip) bad(tag + ": vùng đáp án bị cắt"); if (m.small.length) bad(tag + ": nút nhỏ hơn quy định " + m.small.join(", "));
       if (k && m.kind !== k && !(k === "pop" && m.kind === "pop")) bad(tag + ": sinh ra kiểu " + m.kind);
-      if (!land) {   /* chơi đúng rồi chơi sai (chỉ màn dọc đầu tiên mỗi kiểu, để bản nhanh không quá lâu) */
+      if (!land && W < 700) {   /* chơi đúng rồi chơi sai (chỉ màn dọc đầu tiên mỗi kiểu, để bản nhanh không quá lâu) */
         await pg.evaluate(async () => {
           const b = bank[cur], ans = document.getElementById("ans"), W = ms => new Promise(r => setTimeout(r, ms)), kd = b.kind, sel = kd === "pop" ? ".bln" : ".ab";
           if (kd === "count") { ans.querySelectorAll(".obj").forEach(o => o.click()); ans.querySelectorAll(".ab")[b.o.findIndex(x => x.ok)].click(); }

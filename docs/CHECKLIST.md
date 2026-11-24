@@ -59,7 +59,6 @@ Báo cáo gốc: docs/khao-sat-lop-2.md … khao-sat-lop-5.md (119 phát hiện)
 - [ ] Tách `learn/content/bank.js` (dòng quá dài) và `qtypes-hi.js` (7 dòng > 200 ký tự) theo quy tắc cấu trúc tệp.
 - [ ] Bé thật (hoặc phụ huynh quan sát) chơi thử trên iPad/iPhone thật: giọng đọc, kéo thả bằng ngón tay, bàn phím hệ điều hành.
 
-- [ ] Bố cục rộng cho iPad ngang/dọc và web (hiện bài kiểm tra và bài học vẫn là MỘT cột giữa ~560–600px như điện thoại đứng; chỉ trang Chương trình học có 2 cột): chia 2 cột (trái: linh vật + đề/hình lớn, phải: đáp án) từ 900px trở lên, đáp án lưới rộng hơn, bài học dùng cả khung (hình/ví dụ to bên trái, lời giảng và nút bên phải), tranh nền lấp hai bên. Sửa trong CSS tách riêng (`learn/css/wide.css`), kiểm 820×1180, 1180×820, 1440×900, 1920×1080.
 
 ## Tách tệp (theo quy tắc "Cấu trúc tệp" trong CLAUDE.md và GAME_RULES.md)
 

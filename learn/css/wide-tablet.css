@@ -1,0 +1,17 @@
+/* Tablet nhỏ / iPad dọc / Split View rộng vừa (700-999px): MỘT cột rộng đến ~720px, chữ và nút to hơn, đáp án vẫn 2x2 nhưng cao hơn.
+   Điện thoại (< 700px) không đổi; màn ngang thấp (<= 430px cao) giữ bố cục riêng trong landscape.css. */
+@media (min-width:700px) and (max-width:999px) and (min-height:560px){
+  .top{padding-inline:max(16px,env(safe-area-inset-left)) max(12px,env(safe-area-inset-right))}
+  .game{max-width:720px;gap:14px}
+  .mas{width:96px;height:96px}.mit p{font-size:18px;padding:12px 16px;min-height:52px}
+  .q h1{font-size:clamp(46px,7.2vw,76px)}.q h1.mid{font-size:clamp(34px,5vw,56px)}.q h1.long{font-size:clamp(24px,3.4vw,34px)}
+  .ans{grid-auto-rows:minmax(88px,150px);gap:16px}
+  .ab{min-height:88px;font-size:clamp(40px,6.4vw,58px)}.ab.long{font-size:clamp(22px,3.4vw,32px)}
+  .ans[data-k=pic] .ab,.ans[data-k=pic-n] .ab{font-size:clamp(46px,7vw,68px)}
+  .ans[data-k=tf] .ab,.ans[data-k=tf] .ab.long{font-size:clamp(28px,4vw,38px)}
+  .ans[data-k=compare] .ab,.ans[data-k=find] .ab{font-size:clamp(40px,6vw,58px)}
+  .ans.kz .ab{font-size:clamp(22px,3vw,30px)}.ab.tl,.qp .ab.tl{min-height:56px}.qk .kb{min-height:56px;font-size:26px}
+  .qd{min-height:68px}.qslot{height:56px}.qg .ab.tl{min-height:64px}.ab.mc2{min-height:56px}.ab.mem{min-height:84px}.qbin{min-height:120px}
+  .foot{padding-inline:max(16px,env(safe-area-inset-right))}
+}
+@media (min-width:700px) and (max-width:999px) and (min-height:560px){.game:has(.ans.kz) .q{flex-grow:.7}.game:has(.ans.kz) .ans{flex-grow:1.3}}

@@ -13,8 +13,8 @@ const fails = []; const bad = m => { fails.push(m); console.log("  ✗ " + m); }
   const br = await puppeteer.launch({ executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", headless: "new", args: ["--mute-audio"] });
   let n = 0;
   try {
-    for (const L of list) for (const step of [0, 3, L.n - 1, L.n, 999]) {
-      n++; const tag = `${L.id} màn ${step}`, pg = await br.newPage(); await pg.setViewport({ width: 360, height: 640, hasTouch: true, isMobile: true });
+    for (const [li, L] of list.entries()) for (const [W, H] of li < 3 ? [[360, 640], [1180, 820]] : [[360, 640]]) for (const step of W > 360 ? [0, 3, 999] : [0, 3, L.n - 1, L.n, 999]) {   /* vài bài đầu thêm iPad ngang 1180x820 (hai cột) */
+      n++; const tag = `${L.id} màn ${step}${W > 360 ? " " + W + "x" + H : ""}`, pg = await br.newPage(); await pg.setViewport({ width: W, height: H, hasTouch: true, isMobile: W < 700 });
       const errs = []; pg.on("pageerror", e => errs.push(e.message));
       await pg.goto(`http://localhost:${PORT}/learn/lop/bai.html?grade=${L.g}&subj=${L.sj}&topic=${L.id}&step=${step}`, { waitUntil: "networkidle0" });
       await pg.evaluate(() => { const b = document.getElementById("sgOn"), g = document.getElementById("spkGate"); if (b && g && !g.hidden) b.click(); }); await w(700);
