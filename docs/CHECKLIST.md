@@ -70,3 +70,11 @@ avatar bé lớn, quyết định thiết kế chủ site, thử trên iPhone/iP
 - [~] Sinh `node scripts/cozygame/gen.js ghep-ba-the`, kiểm Chrome thật: ĐÃ xem 360×640 (free + 4 skin); CHƯA xem 380×760, ngang 844×390, 1200×640; free + 4 skin; home / chơi / kết thúc / popup
 - [x] Bài đo riêng cho game (chỉ game này, không chạy cả repo) đạt
 - [ ] Linh vật SVG riêng (docs/MASCOT-ART-RULES.md) + thẻ npbadges — chưa làm, cần duyệt phong cách
+
+## G2. Game Cozy mới "Tìm Đôi Thẻ" (chạm 2 thẻ giống nhau xếp chồng, 3 độ khó) — 1 giao diện free + 4 trả phí
+
+- [x] Spec + mã client `scripts/cozygame/parts/tim-doi-the/*.js` + `server/pro/tim-doi-the.js` (3 loại: Thẻ Úp, Xáo liên tục, Đua giờ; 4 giao diện: Chợ Tết, Rừng Rậm, Phố Ẩm Thực, Đồ Chơi Bé)
+- [x] Nối hệ thống (wire.js, og.js, events, multi-games, music, widebg, rails/portalui, check.js, check-difficulty.js); ván sinh luôn giải được (đã đo 5 bố cục × 3 độ khó)
+- [x] Ảnh Chrome 360×640: free + 4 giao diện + menu ⋯ (độ khó/chế độ/giao diện tự nhận)
+- [ ] Chưa xem ảnh: 380×760, ngang 844×390, 1200×640, màn kết thúc, popup
+- [ ] Bài đo difficulty báo "huy hiệu hiện ở màn chọn" — cùng lỗi với ga-me-ban-trung / cho-hang-kieu-viet (do màn chính mới home3), không riêng game này

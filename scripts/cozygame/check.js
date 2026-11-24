@@ -14,7 +14,8 @@ const GAMES = {
   "shipper-sieu-toc": { g: "SS", pre: "G.route=G.lv.bestPerm.slice();startRun(G,false);G.runT=G.runLen+9;step(G,.01);clearTimeout(G.nt);" },
   "song-sot-cuoi-thang": { g: "SV", pre: "for(let i=0;i<4;i++){G.lock=false;choose(G,i%2==0);clearTimeout(G.nt);advance(G)}" },
   "xay-cau-tre": { g: "TB", pre: "TB.warren(G,4,40);" },
-  "ghep-ba-the": { g: "GT", pre: "GT.playTo(G,7);" }
+  "ghep-ba-the": { g: "GT", pre: "GT.playTo(G,7);" },
+  "tim-doi-the": { g: "TD", pre: "TD.playTo(G,5);" }
 };
 /* CHECK_ONLY=<id,id> chỉ đo các game này (bỏ các bài đo toàn repo) — dùng khi chỉ sửa một game */
 if (process.env.CHECK_ONLY) for (const k of Object.keys(GAMES)) if (!process.env.CHECK_ONLY.split(",").includes(k)) delete GAMES[k];
@@ -29,7 +30,7 @@ if (ONLY_LEARN) process.exit(runLearn() ? 0 : 1);
   /* 1. khung sinh ra phải khớp spec (không còn sửa tay trong file sinh ra) */
   try {
     execSync("node scripts/cozygame/gen.js all", { cwd: root, stdio: "pipe" });
-    const dirty = execSync("git status --porcelain -- cozyplay/games", { cwd: root }).toString().split("\n").filter(l => l && /(bao-nhieu|ve-mot|cat-banh|mat-tinh|noi-mot|ne-o-ga|shipper|song-sot|xay-cau|ghep-ba)/.test(l));
+    const dirty = execSync("git status --porcelain -- cozyplay/games", { cwd: root }).toString().split("\n").filter(l => l && /(bao-nhieu|ve-mot|cat-banh|mat-tinh|noi-mot|ne-o-ga|shipper|song-sot|xay-cau|ghep-ba|tim-doi)/.test(l));
     note(!dirty.length, "tổng", "file sinh ra khác bản đã commit (sửa tay hoặc quên commit?): " + dirty.join(" | "));
   } catch (e) { note(false, "tổng", "gen.js lỗi: " + String(e.message).slice(0, 120)); }
   const srv = spawn("python3", ["-m", "http.server", String(PORT)], { cwd: root, stdio: "ignore" });
@@ -39,7 +40,7 @@ if (ONLY_LEARN) process.exit(runLearn() ? 0 : 1);
     const G = GAMES[id], errs = [];
     console.log("== " + id);
     const mk = async (w, h, q, th) => { const pg = await br.newPage(); await pg.setViewport({ width: w, height: h }); pg.on("pageerror", e => errs.push(e.message));
-      await pg.evaluateOnNewDocument(th => { localStorage.setItem("np-sound", "0"); for (const k of ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "gt"]) localStorage.setItem(k + "-tut", "1"); localStorage.setItem("theme", th || "dark"); window.__m = []; addEventListener("message", e => { if (e.data && e.data.np) window.__m.push(e.data); }); }, th);
+      await pg.evaluateOnNewDocument(th => { localStorage.setItem("np-sound", "0"); for (const k of ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "gt", "td"]) localStorage.setItem(k + "-tut", "1"); localStorage.setItem("theme", th || "dark"); window.__m = []; addEventListener("message", e => { if (e.data && e.data.np) window.__m.push(e.data); }); }, th);
       await pg.goto(B + id + "/index.html?lang=vi" + (q || "")); await new Promise(r => setTimeout(r, 700)); return pg; };
     /* 2. free: không lỗi, thông báo theo giao diện, vừa màn, hạt giống */
     let pg = await mk(360, 640, "", "dark");

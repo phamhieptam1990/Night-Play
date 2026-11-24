@@ -21,6 +21,7 @@ window.NPS = (function () {
     "cho-hang-kieu-viet": { name: { vi: "Chở Hàng Kiểu Việt", en: "Overloaded Rider" }, url: "cozyplay/games/cho-hang-kieu-viet/index.html", board: true, site: "cozyplay" },
     "xe-ca-phe": { name: { vi: "Xe Cà Phê Của Tôi", en: "My Coffee Cart" }, url: "cozyplay/games/xe-ca-phe/index.html", board: true, site: "cozyplay" },
     "duong-ray": { name: { vi: "Đường Ray", en: "Rail Rush" }, url: "cozyplay/games/duong-ray/index.html", board: true, site: "cozyplay" },
+    "tim-doi-the": { name: { vi: "Tìm Đôi Thẻ", en: "Match Pairs" }, url: "cozyplay/games/tim-doi-the/index.html", board: true, site: "cozyplay" },
     "ghep-ba-the": { name: { vi: "Ghép Ba Thẻ", en: "Triple Tiles" }, url: "cozyplay/games/ghep-ba-the/index.html", board: true, site: "cozyplay" },
     "xay-cau-tre": { name: { vi: "Xây Cầu Tre", en: "Bamboo Bridge" }, url: "cozyplay/games/xay-cau-tre/index.html", board: true, site: "cozyplay" },
     "song-sot-cuoi-thang": { name: { vi: "Sống Sót Đến Cuối Tháng", en: "Survive to Payday" }, url: "cozyplay/games/song-sot-cuoi-thang/index.html", board: true, site: "cozyplay" },
