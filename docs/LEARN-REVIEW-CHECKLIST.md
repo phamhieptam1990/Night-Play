@@ -91,3 +91,8 @@ Cập nhật lần cuối: 2026-11-20. Bài đo Học Vui hiện nằm ở `scri
 - [ ] Chính tả: thêm từ có hình cho s/x, d/gi/r, l/n.
 - [ ] **Tô chữ lớp 1** (`trace`): thử bằng ngón tay trên điện thoại/iPad thật; chỉnh độ khó (ngưỡng phủ 60%, lem 30%, bút 30px) nếu bé khó qua hoặc qua quá dễ.
 - [ ] 12 câu hỏi/ngã mới (`tone`) và 3 đoạn đọc dài: cần giáo viên rà chính tả và nội dung.
+
+## G. Bài học lớp 2–5 (nháp tự lắp, 24/11/2026)
+
+- [ ] 54 bài lớp 2–5 do `scripts/learn/gen-lessons-draft.js` lắp từ chương trình và câu hỏi của engine (39 bài) + `scripts/learn/lesson-extra.js` soạn tay (15 bài). Cần giáo viên viết lại lời giảng cho hay, kiểm đáp án, độ khó, giọng văn; bài viết tay xong thì xoá dòng "BẢN NHÁP TỰ SINH" ở đầu tệp để bộ sinh không ghi đè.
+- [ ] Các bài không có hình minh hoạ riêng (chỉ biểu tượng chủ đề); cần thêm hình/ví dụ tương tác nếu muốn sinh động như bài lớp 1.

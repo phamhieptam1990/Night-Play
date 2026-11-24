@@ -14,11 +14,7 @@ Cập nhật: 2026-11-24. Quy ước: `[x]` xong · `[ ]` chưa làm · `[~]` đ
 ## H4. Soạn bài học hàng loạt (66 chủ đề)
 
 - [?] Bạn duyệt 12 bài lớp 1 (3 môn): giọng văn, độ dài, mức khó, từ tiếng Anh — Mở: /learn/lop/index.html?grade=1&subj=toan (tviet, tanh)
-- [ ] Lớp 2 (Toán 5, Việt 4, Anh 3)
-- [ ] Lớp 3 (Toán 6, Việt 4, Anh 4)
-- [ ] Lớp 4 (Toán 6, Việt 4, Anh 4)
-- [ ] Lớp 5 (Toán 6, Việt 4, Anh 4)
-- [ ] Mỗi đợt có người duyệt, tự soạn không chép SGK
+- [?] Duyệt 54 bài nháp lớp 2–5 (Toán, Việt, Anh): lời giảng tự lắp từ chương trình + ngân hàng câu hỏi, 15 bài soạn tay ngắn (thống kê, nói và nghe, viết, nghe tiếng Anh) — mở /learn/lop/index.html?grade=2&subj=toan … Bộ sinh: scripts/learn/gen-lessons-draft.js (+ lesson-extra.js); bộ kiểm: build-lessons.js, check-lessons-ui.js --all
 
 ## H5. 3 khu vườn: Toán giữ nguyên + 2 khu vườn MỚI (Rừng Chữ, Vịnh Từ) + đổi màu theo lớp (kế hoạch: docs/LEARN-GARDEN-LAYOUTS-PLAN.md)
 
@@ -33,7 +29,6 @@ Cập nhật: 2026-11-24. Quy ước: `[x]` xong · `[ ]` chưa làm · `[~]` đ
 ## Chuẩn bị chỗ cắm Plus ngay trong bản free (làm cùng H1–H3, tránh làm lại)
 
 - [ ] Dữ liệu tiến độ/vườn dạng JSON gọn, có thời điểm sửa từng phần (sẵn sàng đồng bộ)
-- [ ] JSON bài học có chỗ tuỳ chọn cho Plus: giảng lại bằng AI, bài nâng cao, biến thể không giới hạn
 
 ## Plus G1. Nền bán hàng (Học Vui Plus)
 

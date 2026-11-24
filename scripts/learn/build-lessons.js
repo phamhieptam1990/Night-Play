@@ -56,6 +56,7 @@ reg.forEach(L => {
     if (s.en !== undefined) { if (!Array.isArray(s.en) || s.en.length < 1 || s.en.length > 4) errs.push(x + ": en cần 1–4 từ/câu"); else s.en.forEach((e, j) => txt(x + " en[" + j + "]", e, 24)); }
     if (s.optlang !== undefined && s.optlang !== "en") errs.push(x + ": optlang chỉ nhận en");
   });
+  if (L.plus !== undefined) { const okK = { retell: 1, advanced: 1, variants: 1 }; if (!L.plus || typeof L.plus !== "object" || Array.isArray(L.plus) || Object.keys(L.plus).some(k => !okK[k])) errs.push(w + ": plus chỉ nhận object với khoá retell (giảng lại bằng AI), advanced (bài nâng cao), variants (biến thể không giới hạn)"); }   /* chỗ cắm Học Vui Plus, bản free bỏ qua */
   if (!(L.screens || []).some(s => s.k === "sum")) errs.push(w + ": thiếu màn tóm tắt (sum)");
   if (!Array.isArray(L.tryit) || L.tryit.length < 2 || L.tryit.length > 4) errs.push(w + ": cần 2–4 câu thử cùng");
   (L.tryit || []).forEach((q, i) => { const x = w + " thử cùng " + (i + 1); txt(x + " q", q.q); choose(x, q); txt(x + " hint", q.hint); txt(x + " yes", q.yes); if (q.optlang !== undefined && q.optlang !== "en") errs.push(x + ": optlang chỉ nhận en"); });
