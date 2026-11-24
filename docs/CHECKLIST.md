@@ -91,3 +91,11 @@ avatar bé lớn, quyết định thiết kế chủ site, thử trên iPhone/iP
 - [x] Linh vật Cú Săn Chữ (kính tròn, kính lúp trên ô chữ), đủ 5 skin; check-mascot + check-art đạt
 - [x] Ảnh Chrome 360×640: bản free + giao diện Vũ Trụ
 - [ ] Chưa xem: Sở Thú / Ẩm Thực / Biển Xanh, 380×760, ngang 844×390, 1200×640, màn kết thúc; chưa thử kéo bằng ngón tay thật trên điện thoại (mới thử bằng mã)
+
+## G5. Game Cozy mới "Sudoku Đêm" (Sudoku 9×9, mỗi đề đúng một đáp án; 3 độ khó) — 1 giao diện free + 4 trả phí
+
+- [x] Spec + mã client `scripts/cozygame/parts/sudoku/*.js` + `server/pro/sudoku-chu-so.js` (3 loại: Mini 6×6, Sudoku Chéo, Đua 15 phút; 4 giao diện: Bảng Phấn, Neon Đêm, Gỗ Cổ, Kẹo Pastel); nối hệ thống; check.js + check-mascot + check-art đạt
+- [x] Linh vật Cáo Giải Đố (bảng Sudoku 3×3 + bút chì); bàn phím số chừa góc dưới-phải cho linh vật mini
+- [x] Ảnh Chrome 360×640: bản free + Bảng Phấn
+- [ ] Chưa xem: Neon / Gỗ Cổ / Kẹo Pastel, Mini 6×6, Sudoku Chéo, 380×760, ngang 844×390, 1200×640, màn kết thúc
+- [ ] Sudoku Pop Play (con vật cho bé mầm non): làm riêng, chưa bắt đầu

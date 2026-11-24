@@ -14,6 +14,7 @@ const MODS = {   // require LITERAL (bundler không gộp được require độ
   "tim-doi-the": () => require("./pro/tim-doi-the"),
   "truot-so-nam-cham": () => require("./pro/truot-so-nam-cham"),
   "san-chu-an": () => require("./pro/san-chu-an"),
+  "sudoku-chu-so": () => require("./pro/sudoku-chu-so"),
   "ne-o-ga": () => require("./pro/ne-o-ga"),
   "noi-mot-net": () => require("./pro/noi-mot-net"),
   "shipper-sieu-toc": () => require("./pro/shipper-sieu-toc"),

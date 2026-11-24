@@ -16,6 +16,7 @@ const GAMES = {
   "xay-cau-tre": { g: "TB", pre: "TB.warren(G,4,40);" },
   "ghep-ba-the": { g: "GT", pre: "GT.playTo(G,7);" },
   "tim-doi-the": { g: "TD", pre: "TD.playTo(G,5);" },
+  "sudoku-chu-so": { g: "SD", pre: "SD.playTo(G,6);" },
   "san-chu-an": { g: "WS", pre: "WS.playTo(G,2);" },
   "truot-so-nam-cham": { g: "TS", pre: "if(!G)document.getElementById('szGo').click();TS.playTo(G,8);" }
 };
@@ -32,7 +33,7 @@ if (ONLY_LEARN) process.exit(runLearn() ? 0 : 1);
   /* 1. khung sinh ra phải khớp spec (không còn sửa tay trong file sinh ra) */
   try {
     execSync("node scripts/cozygame/gen.js all", { cwd: root, stdio: "pipe" });
-    const dirty = execSync("git status --porcelain -- cozyplay/games", { cwd: root }).toString().split("\n").filter(l => l && /(bao-nhieu|ve-mot|cat-banh|mat-tinh|noi-mot|ne-o-ga|shipper|song-sot|xay-cau|ghep-ba|tim-doi|truot-so|san-chu)/.test(l));
+    const dirty = execSync("git status --porcelain -- cozyplay/games", { cwd: root }).toString().split("\n").filter(l => l && /(bao-nhieu|ve-mot|cat-banh|mat-tinh|noi-mot|ne-o-ga|shipper|song-sot|xay-cau|ghep-ba|tim-doi|truot-so|san-chu|sudoku)/.test(l));
     note(!dirty.length, "tổng", "file sinh ra khác bản đã commit (sửa tay hoặc quên commit?): " + dirty.join(" | "));
   } catch (e) { note(false, "tổng", "gen.js lỗi: " + String(e.message).slice(0, 120)); }
   const srv = spawn("python3", ["-m", "http.server", String(PORT)], { cwd: root, stdio: "ignore" });
@@ -42,7 +43,7 @@ if (ONLY_LEARN) process.exit(runLearn() ? 0 : 1);
     const G = GAMES[id], errs = [];
     console.log("== " + id);
     const mk = async (w, h, q, th) => { const pg = await br.newPage(); await pg.setViewport({ width: w, height: h }); pg.on("pageerror", e => errs.push(e.message));
-      await pg.evaluateOnNewDocument(th => { localStorage.setItem("np-sound", "0"); for (const k of ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "gt", "td", "ts", "sc"]) localStorage.setItem(k + "-tut", "1"); localStorage.setItem("theme", th || "dark"); window.__m = []; addEventListener("message", e => { if (e.data && e.data.np) window.__m.push(e.data); }); }, th);
+      await pg.evaluateOnNewDocument(th => { localStorage.setItem("np-sound", "0"); for (const k of ["bg", "vn", "cb", "mt", "nn", "og", "ss", "sv", "xc", "gt", "td", "ts", "sc", "sd"]) localStorage.setItem(k + "-tut", "1"); localStorage.setItem("theme", th || "dark"); window.__m = []; addEventListener("message", e => { if (e.data && e.data.np) window.__m.push(e.data); }); }, th);
       await pg.goto(B + id + "/index.html?lang=vi" + (q || "")); await new Promise(r => setTimeout(r, 700)); return pg; };
     /* 2. free: không lỗi, thông báo theo giao diện, vừa màn, hạt giống */
     let pg = await mk(360, 640, "", "dark");
