@@ -1,0 +1,64 @@
+/* BỘ SƯU TẬP (learn/album/index.html): bạn đã gặp = quái vật đủ màu; bạn chưa gặp = BÓNG MỜ có gợi ý cách mở + tiến độ (không dùng dấu ?).
+   Popup nền màu, chữ sáng (GAME_RULES 0a-33). Tách từ khối <style> trong HTML. */
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100dvh;font-family:var(--font,Inter,system-ui,sans-serif);
+  background:radial-gradient(120% 60% at 50% 0,color-mix(in srgb,#8B5CFF 22%,transparent),transparent 60%),var(--bg);color:var(--ink)}
+button,a{font:inherit;color:inherit;cursor:pointer}
+[hidden]{display:none!important}
+.top{position:sticky;top:0;z-index:10;padding:calc(env(safe-area-inset-top) + 10px) 0 10px;background:color-mix(in srgb,var(--bg) 88%,transparent);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.bar{max-width:760px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-right)) 0 max(16px,env(safe-area-inset-left));display:flex;align-items:center;gap:10px}
+.ib{flex:none;display:grid;place-items:center;width:48px;height:48px;border-radius:50%;font-size:22px;font-weight:800;text-decoration:none;color:#fff;
+  background:linear-gradient(150deg,#3B4A63,#1E293B);border:1.5px solid rgba(255,255,255,.2)}
+.bar h1{flex:1;min-width:0;margin:0;font-size:clamp(19px,5vw,24px);font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cnt{flex:none;min-height:44px;display:inline-flex;align-items:center;gap:6px;padding:0 16px;border-radius:99px;font-weight:900;font-size:18px;color:#4a2c00;
+  background:linear-gradient(135deg,#FFE08A,#FFB020);border:2px solid #E59A00}
+.wrap{max-width:760px;margin:0 auto;padding:6px max(16px,env(safe-area-inset-right)) calc(32px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+.pbar{height:12px;border-radius:99px;background:color-mix(in srgb,var(--ink) 12%,transparent);overflow:hidden;margin:4px 0 10px}
+.pbar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#34D399,#FFB020,#FB5A7A);transition:width .6s}
+.lead{margin:0 0 6px;font-size:15px;font-weight:700;line-height:1.45;color:color-mix(in srgb,var(--ink) 82%,transparent)}
+h2{margin:18px 0 10px;font-size:20px;font-weight:900;display:flex;align-items:center;gap:10px}
+h2 small{font-size:15px;font-weight:800;opacity:.75}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:12px}
+.card{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:156px;padding:12px 6px 10px;border-radius:24px;
+  border:1.5px solid color-mix(in srgb,var(--bc) 55%,var(--line));background:linear-gradient(150deg,color-mix(in srgb,var(--bc) 32%,var(--panel)),var(--panel));
+  color:var(--ink);text-align:center}
+.card .nm{font-weight:900;font-size:14px;line-height:1.15;max-width:100%;overflow-wrap:anywhere}
+.card:active{transform:scale(.97)}
+.card.lock{background:color-mix(in srgb,var(--ink) 6%,var(--panel));border:1.5px dashed color-mix(in srgb,var(--ink) 30%,transparent)}
+.card.lock .bd{opacity:.4;filter:grayscale(.7)}
+.card.lock .bd-eyes,.card.lock .bd-mouth,.card.lock .bd-obj{display:none}
+.card.lock .nm{font-size:12.5px;font-weight:800;line-height:1.25;color:color-mix(in srgb,var(--ink) 88%,transparent)}
+.lp{display:block;width:78%;height:6px;border-radius:3px;background:color-mix(in srgb,var(--ink) 16%,transparent);overflow:hidden}
+.lp i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,#34D399,#FFB020)}
+.bdg{--bc:#8B5CFF}
+.bdg .bi{display:grid;place-items:center;width:62px;height:62px;border-radius:50%;font-size:32px;background:linear-gradient(135deg,#FFE08A,#FFB020);
+  box-shadow:0 0 0 4px color-mix(in srgb,#FFB020 35%,transparent)}
+.bdg[data-s=toan]{--bc:#12A07A}.bdg[data-s=toan] .bi{background:linear-gradient(135deg,#6EE7B7,#12A07A)}
+.bdg[data-s=tviet]{--bc:#EA6A1C}.bdg[data-s=tviet] .bi{background:linear-gradient(135deg,#FDBA74,#EA6A1C)}
+.bdg[data-s=tanh]{--bc:#2563EB}.bdg[data-s=tanh] .bi{background:linear-gradient(135deg,#93C5FD,#2563EB)}
+.bdg.lock .bi{background:color-mix(in srgb,var(--ink) 14%,transparent);box-shadow:none;opacity:.55;filter:grayscale(.8)}
+.bdg .sub{font-size:12.5px;font-weight:700;opacity:.8}
+.card.shake{animation:shk .35s}
+@keyframes shk{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.card.new::before{content:"✨";position:absolute;right:8px;top:6px;font-size:20px}
+.ov{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:16px;background:rgba(10,6,30,.62)}
+.pop{position:relative;width:min(100%,420px);max-height:calc(100dvh - 32px);overflow:auto;padding:22px 18px 18px;border-radius:30px;text-align:center;color:#fff;
+  background:linear-gradient(155deg,#5B3FD1,#241659);border:2px solid color-mix(in srgb,var(--bc) 70%,#fff);box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.pop .big{display:flex;justify-content:center;margin:6px 0 4px}
+.pop .big .bd.dim{opacity:.35;filter:grayscale(.6)}
+.pop .big .bd.dim .bd-eyes,.pop .big .bd.dim .bd-mouth,.pop .big .bd.dim .bd-obj{display:none}
+.pop .bi{display:grid;place-items:center;width:110px;height:110px;border-radius:50%;font-size:56px;background:linear-gradient(135deg,#FFE08A,#FFB020)}
+.pop .bi.off{opacity:.5;filter:grayscale(.8);background:rgba(255,255,255,.2)}
+.pop h3{margin:6px 0 6px;font-size:24px;font-weight:900}
+.pop p{margin:0 auto 14px;max-width:320px;font-size:17px;line-height:1.4;font-weight:700;color:rgba(255,255,255,.92)}
+.pop .pg{display:block;width:min(100%,260px);height:10px;margin:0 auto 14px;border-radius:5px;background:rgba(255,255,255,.22);overflow:hidden}
+.pop .pg i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,#34D399,#FFB020)}
+.pop .row{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.pop .btn{min-width:64px;min-height:56px;padding:0 22px;border-radius:99px;border:0;font-size:26px;font-weight:900;color:#4a2c00;
+  background:linear-gradient(135deg,#FFE08A,#FFB020);box-shadow:0 6px 0 #E59A00}
+.pop a.btn{display:inline-flex;align-items:center;justify-content:center;font-size:18px;text-decoration:none;text-align:center}
+.pop .x{position:absolute;right:12px;top:12px;width:44px;height:44px;border-radius:50%;border:0;font-size:20px;font-weight:900;color:#fff;background:rgba(255,255,255,.18)}
+:focus-visible{outline:3px solid #FFB020;outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.card.shake{animation:none}.pbar i{transition:none}}

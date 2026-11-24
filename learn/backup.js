@@ -7,7 +7,7 @@
   "use strict";
   var APP = "hocvui", V = 1, MAX_TOTAL = 2000000, MAX_ONE = 500000;
   /* tiến độ + lựa chọn của phụ huynh. KHÔNG gồm: thời gian đã chơi hôm nay (learn:time:*, learn:bonus:*), nhạc/đọc to, giao diện sáng-tối. */
-  var KEYS = ["learn:err", "learn:day", "learn:dayk", "learn:dayk:off", "learn:stars", "learn:farm", "learn:habit", "learn:garden", "learn:trips", "learn:grade", "learn:subj", "learn:limit",
+  var KEYS = ["learn:err", "learn:day", "learn:dayk", "learn:dayk:off", "learn:stars", "learn:farm", "learn:habit", "learn:records", "learn:garden", "learn:trips", "learn:grade", "learn:subj", "learn:limit",
     "gardenFarm", "gardenTrees", "gardenSeen", "gardenHelp", "gardenBuddy", "gardenAnimals", "gardenGift", "gardenDaily", "gardenLv", "gardenOwned", "gardenSwap"];
   var PREFIX = ["learn:m:"];
   /* khoá GỐC (không qua ngăn vườn của slot.js) để sao lưu/khôi phục đúng từng vườn */
