@@ -34,7 +34,6 @@ Cập nhật: 2026-11-24. Quy ước: `[x]` xong · `[ ]` chưa làm · `[~]` đ
 
 - [ ] Dữ liệu tiến độ/vườn dạng JSON gọn, có thời điểm sửa từng phần (sẵn sàng đồng bộ)
 - [ ] JSON bài học có chỗ tuỳ chọn cho Plus: giảng lại bằng AI, bài nâng cao, biến thể không giới hạn
-- [ ] Nút phụ huynh trong trang môn/bài học dẫn về cổng phụ huynh (bé không thấy giá)
 
 ## Plus G1. Nền bán hàng (Học Vui Plus)
 
