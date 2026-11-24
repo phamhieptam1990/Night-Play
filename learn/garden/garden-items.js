@@ -50,8 +50,9 @@
   function extendCI(CI, IDS, CATS) {
     if (!CI) return;
     Object.keys(NEWCROP).forEach(function (id) {
-      if (CI[id]) return; var n = NEWCROP[id], hm = n.cat === "hoamau";
+      if (CI[id]) return; var n = NEWCROP[id], hm = n.cat === "hoamau", sy = (root.GardenCropSay || {})[id];
       CI[id] = { vi: n.vi, subj: n.subj, sk: n.sk, g: n.g, skill: n.skill, ic: n.ic, per: hm ? [3, 4, 5, 6, 7] : [2, 3, 4, 5, 6], learn: ["Bài học " + n.subj + " lớp " + n.g, "Luyện tập và kiểm tra chủ đề", "Câu hỏi nhanh mỗi ngày"], care: CARE, tip: "Làm đúng bài, " + n.vi.toLowerCase() + " chín nhanh hơn.", cat: n.cat, need: (CATS && CATS[n.cat] && CATS[n.cat].need) || (hm ? 8 : 5), img: true };
+      if (sy) { CI[id].mas = true; CI[id].mn = sy.mn; CI[id].say = sy.say; }   /* linh vật + bong bóng lời thoại (garden-crop-say.js) */
       if (IDS && IDS.indexOf(id) < 0) IDS.push(id);
     });
   }

@@ -106,5 +106,15 @@ console.log("8) nút ← của vườn mang đúng lớp + môn (garden-nav.js, 
   ok(N.gardenBackHref(9, "xxx", "fr") === "../index.html", "tham số lạ bị bỏ, không sinh địa chỉ hỏng");
   ok(lay.SCRIPTS.includes("garden-nav") && lay.START.includes("initNav"), "garden-layout nạp garden-nav và gọi initNav"); ok(fs.existsSync(path.join(root, "learn/garden/garden-nav.js")), "có tệp garden-nav.js"); }
 
+console.log("9) linh vật + lời thoại của 8 cây mới (garden-crop-say.js, gen-crop-mascots-g.js)");
+{ const fs = require("fs"), GI = require(path.join(root, "learn/garden/garden-items.js")), ART = path.join(root, "shared/art/garden");
+  globalThis.GardenCropSay = require(path.join(root, "learn/garden/garden-crop-say.js")); const CI = {}, IDS = []; GI.extendCI(CI, IDS, { ngan: { need: 5 }, hoamau: { need: 8 } });
+  for (const id of IDS) { const c = CI[id]; ok(c.mas === true && c.mn && Array.isArray(c.say) && c.say.length === 2, id + ": có linh vật, tên và 2 lời thoại");
+    for (const t of c.say || []) ok(t.length > 0 && t.length <= 60 && /[.!?]$/.test(t) && !/\s{2}/.test(t), id + ": lời thoại <= 60 ký tự, có dấu kết câu (" + t.length + "): " + t);
+    for (let l = 1; l <= 4; l++) for (const ch of ["", "_cheer"]) { const f = path.join(ART, "mascot_" + id + "_l" + l + ch + ".svg"), t = fs.existsSync(f) ? fs.readFileSync(f, "utf8") : "";
+      ok(t && /id="face"/.test(t) && !/<(filter|mask|image|text)\b/.test(t) && t.length < 12000, id + " cấp " + l + ch + ": có tranh, có khuôn mặt, nhẹ, không filter/mask/image"); }
+    ok(fs.existsSync(path.join(ART, "kho", "mascot_" + id + ".svg")), id + ": có ảnh kho"); }
+  delete globalThis.GardenCropSay; }
+
 console.log(bad ? "\n✗ " + bad + " lỗi (trên " + checks + " kiểm tra)" : "\n✓ Vườn đạt (" + checks + " kiểm tra)");
 process.exit(bad ? 1 : 0);
