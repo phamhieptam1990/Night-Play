@@ -72,6 +72,11 @@ body.tucked .rev{display:flex}
 .mt:active{transform:scale(.94)}
 .mt#lang{font-size:22px}
 .prog .star{height:34px;padding:0 10px;font-size:14px;border-radius:17px}
+/* B4: màn chơi chỉ còn dòng ngày cập nhật; © / liên kết / Phụ huynh nằm trong menu ⋯ (mục ⓘ và 🔒) để bé không bấm nhầm */
+.foot .fc,.foot #fl,.foot .finfo{display:none}
+/* B5: loa tắt phải rõ là TẮT (nền đỏ), không mờ như nút hỏng; lớp 1 chỉ giữ ←, vườn, loa, ⋯ */
+.ib#snd[aria-pressed=false]{opacity:1;background:rgba(220,38,38,.5);border-color:rgba(254,202,202,.85)}
+body.g1 #pick,body.g1 #toMeTop{display:none}body.g1 #toGarden{margin-left:auto}
 @media (max-width:640px){footer.foot>.site-upd{flex:0 0 100%;order:99;width:100%;text-align:center;white-space:nowrap;font-size:10.5px;line-height:12px;padding:0}}
 @media (max-width:380px){.top{gap:6px;padding:10px 10px 4px 12px}.ib{min-width:44px;height:44px;padding:0 8px;font-size:20px}}
 .pick{flex:0 1 300px;margin:0 auto;min-width:0;display:flex;align-items:center;justify-content:center;gap:12px;height:56px;padding:0 18px;border-radius:30px;font-weight:800;font-size:15px;white-space:nowrap;background:color-mix(in srgb,var(--panel) 80%,transparent);border:1px solid var(--line);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
@@ -315,7 +320,8 @@ body.tucked .rev{display:flex}
 .qp .ab.tl{flex:none;min-width:52px;min-height:46px;padding:0 14px}
 .qp.ltr .ab.tl{min-width:44px;padding:0}
 .qd{min-height:56px;display:grid;place-items:center;border-radius:16px;font:900 clamp(30px,9vw,44px)/1 var(--font);background:color-mix(in srgb,var(--ink) 8%,transparent);border:2px solid color-mix(in srgb,var(--sg) 50%,var(--line))}
-.hintb{position:absolute;right:16px;top:0;transform:translateY(-50%);z-index:3;min-width:44px;min-height:44px;padding:0 12px;border-radius:99px;border:2px solid #E59A00;background:linear-gradient(135deg,#FFE08A,#FFB020);font-size:22px;line-height:1;cursor:pointer;box-shadow:0 4px 10px rgba(229,154,0,.35)}.hintb[hidden]{display:none}.hintb:active{transform:translateY(-50%) scale(.94)}
+.hintb{position:absolute;right:16px;top:0;transform:translateY(-50%);z-index:3;min-width:44px;min-height:44px;padding:0 12px;border-radius:99px;border:2px solid #E59A00;background:linear-gradient(135deg,#FFE08A,#FFB020);font-size:22px;line-height:1;cursor:pointer;box-shadow:0 4px 10px rgba(229,154,0,.35)}.hintb[hidden]{display:none}
+.spkq{position:absolute;left:16px;bottom:0;transform:translateY(50%);z-index:3;min-width:44px;min-height:44px;padding:0 12px;border-radius:99px;border:2px solid #3B82F6;background:linear-gradient(135deg,#BFDBFE,#60A5FA);font-size:22px;line-height:1;cursor:pointer;box-shadow:0 4px 10px rgba(59,130,246,.35)}.spkq[hidden]{display:none}.spkq:active{transform:translateY(50%) scale(.94)}   /* B2: lớp 1–2 có nút nghe lại to ngay trong thẻ câu hỏi */.hintb:active{transform:translateY(-50%) scale(.94)}
 .hbox{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:16px;background:radial-gradient(circle at 50% 28%,rgba(24,52,46,.62),rgba(6,14,12,.86));-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}.hbox[hidden]{display:none}
 /* popup gợi ý: nền MÀU (không trắng), chữ sáng; giống nhau ở chế độ sáng và tối (GAME_RULES 0a-33) */
 .hcard{width:min(94vw,440px);max-height:88vh;overflow:auto;padding:16px 16px 14px;border-radius:30px;background:linear-gradient(165deg,#2f6f60 0%,#1d4a41 52%,#14332d 100%);color:#F4FFF9;border:2px solid rgba(255,224,138,.6);box-shadow:0 22px 60px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.16)}
@@ -416,6 +422,7 @@ body.tucked .rev{display:flex}
   <button class="mt" id="mTheme" type="button" role="menuitem">🌓</button>
   <a class="mt" id="mMap" href="lop/index.html" role="menuitem" aria-label="Bản đồ lớp">🗺️</a>
   <a class="mt" id="mMe" href="me/index.html" role="menuitem" aria-label="Của bé">🌈</a>
+  <button class="mt" id="mInfo" type="button" role="menuitem">ⓘ</button>
   <button class="mt" id="mParent" type="button" role="menuitem">🔒</button>
 </div>
 <button class="rev" id="rev" type="button" aria-label="Menu"><i></i></button>
@@ -423,7 +430,7 @@ body.tucked .rev{display:flex}
   <div class="prog"><div class="dots" id="dots" aria-hidden="true"></div><span class="star" id="stars">⭐ 0</span><span class="streak" id="streak"></span></div>
   <div class="adv" id="adv"><img class="pl" id="plant" alt=""><div class="ai"><b id="advT"></b><div class="gl"><span id="goalT"></span><i><u id="goalBar"></u></i></div></div></div>
   <div class="mit"><button class="mas" id="mas" type="button"><span id="masBox" aria-hidden="true"></span><span class="oft" id="oft" aria-hidden="true"></span><span class="fb" id="fb" aria-hidden="true">🐾</span></button><p class="say" id="say" role="status" aria-live="polite"></p></div>
-  <section class="q" id="q" aria-live="polite"><small id="ql"></small><h1 id="qt"></h1><button type="button" class="hintb" id="hintBtn" hidden aria-label="Gợi ý">💡</button></section>
+  <section class="q" id="q" aria-live="polite"><small id="ql"></small><h1 id="qt"></h1><button type="button" class="spkq" id="spkQ" hidden aria-label="Nghe lại">🔊</button><button type="button" class="hintb" id="hintBtn" hidden aria-label="Gợi ý">💡</button></section>
   <div class="ans" id="ans"></div>
   <div class="hbox" id="hintBox" role="dialog" aria-modal="true" aria-labelledby="hintTitle" hidden><div class="hcard"><h2 id="hintTitle"></h2><div id="hintBody"></div><div class="hbtn"><button type="button" class="hnext" id="hintNext"></button><button type="button" class="hok" id="hintOk"></button></div></div></div>
 </main>
@@ -457,6 +464,8 @@ body.tucked .rev{display:flex}
 <script src="farm.js"></script>
 <script src="adventure.js"></script>
 <script src="story.js"></script>
+<script src="content/buddies.js"></script>
+<script src="album.js"></script>
 <script src="hint.js"></script>
 <script src="content/qtypes.js"></script>
 <script src="qui.js"></script>
@@ -491,13 +500,15 @@ const ls = (k, v) => { try{ if(v === undefined) return localStorage.getItem(k); 
 const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
 const shuf = a => { for(let i = a.length - 1; i > 0; i--){ const j = rnd(0, i); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 let lang = "vi", subj = "toan", grade = 1;
-{ const s = ls("lang"); if(s && T[s]) lang = s; else if(/^en/i.test(navigator.language || "")) lang = "en";
+{ const s = ls("lang"); if(s && T[s]) lang = s;
   const q = ls("learn:subj"); if(q && T.vi.sn[q]) subj = q; const g = +ls("learn:grade"); if(g >= 1 && g <= 5) grade = g;
   try{ const u = new URLSearchParams(location.search), a = u.get("subj"), b = u.get("lang"), c = +u.get("grade"); if(a && T.vi.sn[a]) subj = a; if(b && T[b]) lang = b; if(c >= 1 && c <= 5) grade = c; }catch(e){} }
 /* kiểm tra theo chủ đề: ?grade&subj&topic=<topic_id> (từ trang lop/); sai mã hoặc đổi môn/lớp thì bỏ */
 if(window.LearnSlot){ LearnSlot.set(grade, subj); if(window.Farm) Farm.resetCache(); }   /* vườn theo lớp × môn: phần thưởng chảy vào đúng vườn */
 let TOPIC_ID = null;
 try{ const tp = new URLSearchParams(location.search).get("topic"); if(tp && window.LearnEngine && LearnEngine.topicSkills(subj, grade, tp).length) TOPIC_ID = tp; }catch(e){}
+/* B12: lớp 1 vào thẳng trang kiểm tra mà chưa học xong chủ đề nào → đưa về bài làm quen đầu tiên (bỏ qua khi xem thử ?qk, ?trip, ?mission, ?free=1) */
+try{ const u = new URLSearchParams(location.search); if(!TOPIC_ID && grade === 1 && window.LearnPath && !u.get("qk") && !u.get("trip") && !u.get("mission") && !u.get("free")){ const nx = LearnPath.next(subj, grade); if(nx && nx.index === 0 && nx.hasLesson) location.replace("lop/bai.html?" + new URLSearchParams({ grade, subj, topic: nx.id }).toString()); } }catch(e){}
 /* không nhảy bài: chủ đề phải mở (xong chủ đề trước) mới làm kiểm tra theo chủ đề */
 if(TOPIC_ID && window.LearnPath && !LearnPath.unlocked(subj, grade, TOPIC_ID)){ location.replace("lop/index.html?" + new URLSearchParams({ grade, subj, lang }).toString()); }
 
@@ -511,6 +522,8 @@ function buildRound(){
     const qk = (new URLSearchParams(location.search).get("qk") || "").split(",").filter(Boolean);   /* ?qk=tf,match,... xem thử từng kiểu */
     bank = qk.length ? base.map((x, i) => { const k = qk[i % qk.length]; return (k === "pop" ? LearnTypes.asPop(x, lang) : LearnTypes.make(k, subj, grade, lang)) || x; }) : LearnTypes.mix(base, subj, grade, lang, 3);   /* thường ngày: trộn 3 câu kiểu khác vào vòng 5 câu */
   }catch(e){} }
+  /* B1: lớp 1–2 chưa đọc thạo — câu ít chữ nhất đứng đầu (bé thắng ngay), lời văn dài dồn về cuối; giữ nguyên thứ tự các câu còn lại */
+  if(grade <= 2 && bank.length > 1 && !TRIP){ const load = b => String(b.q || "").replace(/<[^>]+>/g, "").replace(/\p{Extended_Pictographic}/gu, "").length, k = bank.reduce((m, b, i) => load(b) < load(bank[m]) ? i : m, 0); if(k > 0) bank = [bank[k]].concat(bank.filter((x, i) => i !== k)); }
 }
 /* ---------- vòng chơi ---------- */
 let cur = 0, tries = 0, stars = 0, streak = 0, best = 0, wrongTags = {}, locked = false, roundStars = 0;
@@ -624,7 +637,7 @@ function renderHint(b, st){
 }
 function showHint(){ const b = bank[cur], st = hintSteps(b); if(!st || locked) return; if(!b.hl && b.skill) E.noteHint(subj, b.skill); b.hl = Math.min((b.hl || 0) + 1, st.length); renderHint(b, st); }   /* ghi 1 lần/câu: phụ huynh thấy bé hay cần gợi ý ở kỹ năng nào */
 function hintMore(){ const b = bank[cur], st = hintSteps(b); if(!st) return closeHint(); b.hl = Math.min((b.hl || 1) + 1, st.length); renderHint(b, st); }
-$("qt").addEventListener("click", e => { if(e.target.closest && e.target.closest(".lsn")){ GESTURE = true; speak(); } }); $("hintBtn").addEventListener("click", showHint); $("hintNext").addEventListener("click", hintMore); $("hintOk").addEventListener("click", closeHint);
+$("qt").addEventListener("click", e => { if(e.target.closest && e.target.closest(".lsn")){ GESTURE = true; speak(); } }); $("spkQ").addEventListener("click", () => { GESTURE = true; speak(); }); $("hintBtn").addEventListener("click", showHint); $("hintNext").addEventListener("click", hintMore); $("hintOk").addEventListener("click", closeHint);
 $("hintBox").addEventListener("click", e => { if(e.target === $("hintBox")) closeHint(); }); addEventListener("keydown", e => { if(e.key === "Escape") closeHint(); });
 function showQ(){
   const t = T[lang], b = bank[cur]; tries = 0; locked = false; dots(); advUi();
@@ -636,7 +649,7 @@ function showQ(){
     a.classList.remove("rv"); a.classList.add("ld"); clearTimeout(window.__ldT); clearTimeout(window.__rvT);
     const dl = matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 600;
     window.__ldT = setTimeout(() => { a.classList.remove("ld"); a.classList.add("rv"); window.__rvT = setTimeout(() => a.classList.remove("rv"), 900); }, dl); }
-  $("hintBox").hidden = true; b.hl = 0; { const hb = $("hintBtn"); hb.hidden = !hintSteps(b); hb.setAttribute("aria-label", lang === "en" ? "Hint" : "Gợi ý"); }
+  $("hintBox").hidden = true; b.hl = 0; { const hb = $("hintBtn"); hb.hidden = !hintSteps(b); hb.setAttribute("aria-label", lang === "en" ? "Hint" : "Gợi ý"); const sq = $("spkQ"); sq.hidden = !(grade <= 2 && !b.listen); sq.setAttribute("aria-label", lang === "en" ? "Listen again" : "Nghe lại"); }
   fitQ(); fitAns(); setTimeout(() => { if(bank[cur] === b){ fitQ(); fitAns(); } }, 700);   /* tính lại SAU khi bố cục kiểu câu (vd bong bóng) đã áp dụng */
   $("streak").textContent = streak > 1 ? "🔥 " + streak : "";
   storyScene();
@@ -747,6 +760,8 @@ function gotRight(el){
   { const cw = T[lang].cheer || {}; cheer(streak >= 3 ? 2 : 1, el, streak >= 5 ? cw.s5 : streak >= 3 ? cw.s3 : (tries === 0 && Math.random() < .5 ? cw.ok : "")); }
   if(tries === 0){ if(!(b.hl >= 2)) E.record(subj, b.skill, true, undefined, { kind: b.kind || "mc", hint: b.hl >= 1 }); stars++; roundStars++; ls("learn:stars", stars); const s = $("stars"); s.classList.remove("bump"); void s.offsetWidth; s.classList.add("bump"); b.res = "ok"; advUi(); } else b.res = "miss";
   LM.event(streak >= 5 ? "streak5" : streak >= 3 ? "streak3" : "ok"); storyReact(true); setTimeout(next, 1000); renderStars();
+  /* B11: lớp 1–2 — câu đúng đầu tiên của vòng: linh vật nói rõ mục tiêu nhìn thấy (còn mấy câu là xong, nhận sao) */
+  if(grade <= 2 && !TRIP && tries === 0 && roundStars === 1){ const left = bank.length - cur - 1; if(left > 0) LM.say(lang === "en" ? "Great! " + left + " more and you win stars!" : "Giỏi quá! Còn " + left + " câu nữa là bé nhận sao nhé!"); }
 }
 /* trả về 1 = sai lần đầu (cho thử lại, có gợi ý), 2 = sai lần hai (hiện đáp án rồi sang câu sau) */
 function gotWrong(tag, reveal, text){
@@ -775,7 +790,7 @@ function goBack(e){
 }
 function sndUi(){ const t = T[lang]; $("snd").textContent = AUTO ? "🔊" : "🔇"; $("snd").setAttribute("aria-pressed", String(AUTO)); const n = (AUTO ? t.autoOn : t.autoOff); $("snd").setAttribute("aria-label", n); $("snd").title = n; }
 function menuUi(){ const t = T[lang];
-  [["mn", t.menu], ["mPick", t.mPick], ["mAgain", t.mAgain], ["lang", t.lang], ["mMusic", t.music], ["mTheme", t.theme], ["mParent", PARENT_COPY.UI[lang].title]].forEach(([id, n]) => { $(id).setAttribute("aria-label", n); $(id).title = n; });
+  [["mn", t.menu], ["mPick", t.mPick], ["mAgain", t.mAgain], ["lang", t.lang], ["mMusic", t.music], ["mTheme", t.theme], ["mInfo", t.fiAria], ["mParent", PARENT_COPY.UI[lang].title]].forEach(([id, n]) => { $(id).setAttribute("aria-label", n); $(id).title = n; });
   $("lang").textContent = t.next; }
 function openMenu(){ $("mnu").hidden = false; $("mn").setAttribute("aria-expanded", "true"); const f = $("mnu").querySelector(".mt"); if(f) f.focus(); }
 function closeMenu(refocus){ if($("mnu").hidden) return; $("mnu").hidden = true; $("mn").setAttribute("aria-expanded", "false"); if(refocus) $("mn").focus(); }
@@ -786,6 +801,8 @@ function finish(){
   const evn = roundStars >= 5 ? "endGreat" : roundStars >= 3 ? "endGood" : "endTry"; const line = LM.event(evn); $("rSay").textContent = line; if(!LM.cloneInto($("rMas"), window.LEARN_PHRASES.events[evn][0])) $("rMas").textContent = roundStars >= 5 ? "🏆" : "🎉"; $("rT").textContent = t.rT; $("rP").textContent = t.rP;
   $("rStars").textContent = "⭐".repeat(roundStars) + "☆".repeat(5 - roundStars); $("rS").textContent = "⭐ +" + roundStars; $("rB").textContent = "🔥 " + best;
   $("rTip").textContent = top ? t.tipErr + t.tag[top] + "." : t.tipOk; $("again").setAttribute("aria-label", t.again); $("resX").setAttribute("aria-label", t.close); $("change").setAttribute("aria-label", t.change);
+  /* B11: lớp 1–2 — lý do quay lại: còn bao nhiêu bạn Số/Chữ đang chờ trong bộ sưu tập */
+  if(grade <= 2 && window.Album){ try{ const left = Album.total() - Album.count(); if(left > 0) $("rTip").textContent += " " + (lang === "en" ? left + " new friends are waiting for you!" : "Còn " + left + " bạn đang chờ bé gặp, mai chơi tiếp nhé!"); }catch(e){} }
   farmFinish();
   { const q = new URLSearchParams({ grade, subj, lang }).toString(), L = lang === "vi" ? ["Chơi lại", "Khu vườn", "Trang học"] : ["Play again", "Garden", "Lessons"];
     $("toGdn").hidden = false; $("toMap").hidden = false; $("toGdn").href = "garden/index.html?" + q; $("toMap").href = "lop/index.html?" + q;
@@ -803,7 +820,7 @@ function start(){
 /* ---------- giao diện ---------- */
 function label(){ const t = T[lang]; $("sbd").innerHTML = '<img src="' + hd(subj, grade) + '" alt="">'; $("gbd").textContent = grade; $("pick").setAttribute("aria-label", t.sn[subj] + ", " + t.grade + " " + grade); }
 function chrome(){
-  const t = T[lang]; document.documentElement.lang = lang; document.title = t.title; document.body.dataset.subj = subj;
+  const t = T[lang]; document.documentElement.lang = lang; document.title = t.title; document.body.dataset.subj = subj; document.body.classList.toggle("g1", grade === 1);
   $("back").setAttribute("aria-label", t.back); $("back").href = hubUrl(); menuUi(); sndUi(); label(); renderStars();
   LM.setLang(lang); $("mas").setAttribute("aria-label", LM.mascotName() + ""); LM.show(subj, grade).then(ok => { $("fb").hidden = ok; if(ok){ $("mas").setAttribute("aria-label", LM.mascotName()); LM.emote("happy", 1800); } });
   buildFooter();
@@ -874,6 +891,7 @@ $("back").addEventListener("click", goBack);
 $("mn").onclick = () => { $("mnu").hidden ? openMenu() : closeMenu(true); };
 $("mPick").onclick = () => { closeMenu(); sheet(); };
 $("mAgain").onclick = () => { closeMenu(); start(); };
+$("mInfo").onclick = () => { closeMenu(); openInfo(); };
 $("mParent").onclick = () => { closeMenu(); location.href = "parent/?lang=" + lang; };
 $("mMusic").onclick = () => { MUSIC = !MUSIC; ls("learn:music", MUSIC ? "1" : "0"); musicUi(); if(MUSIC) musicStart(); else musicStop(); };
 musicUi();

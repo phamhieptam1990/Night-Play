@@ -61,7 +61,7 @@
   function greet(subj, lang, tagName) {
     var g = get(), m = g.mem, vi = lang !== "en", h = new Date().getHours(), sd = streakDays(), gap = m.lastAt ? (Date.now() - m.lastAt) / 86400000 : 0;
     var tg = m.lastTop && tagName ? tagName(m.lastTop) : "";
-    if (m.rounds === 0) return vi ? "Chào bé! Mình là bạn học của bé. Cùng bắt đầu nhé!" : "Hi! I'm your learning buddy. Let's start!";
+    if (m.rounds === 0) return vi ? "Chào bé! Cùng học nhé!" : "Hi! Let's learn!";
     if (gap >= 3) return vi ? "Lâu quá không gặp! Mình nhớ bé lắm, học một chút nhé?" : "Long time no see! I missed you. Shall we learn a bit?";
     if (tg && m.lastStars < 5 && Math.random() < .7) return vi ? "Lần trước mình hay nhầm " + tg + ". Hôm nay luyện lại nhé!" : "Last time we mixed up " + tg + ". Let's practice it today!";
     if (sd >= 3) return vi ? "Ngày thứ " + sd + " liền rồi! Bé giỏi quá, mình tự hào lắm!" : "Day " + sd + " in a row! I'm so proud of you!";

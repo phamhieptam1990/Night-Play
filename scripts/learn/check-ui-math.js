@@ -18,7 +18,7 @@ const LONLY = process.argv.includes("--lang-only"), HONLY = process.argv.include
     for (const sk of HONLY ? [] : LONLY ? NEWL : NEW.concat(NEWL)) for (const g of E.SKILLS[sk].grades) for (const [W, H] of VP) {
       n++; const tag = `${sk} lớp ${g} ${W}x${H}`, pg = await br.newPage(); await pg.setViewport({ width: W, height: H, hasTouch: true, isMobile: true });
       const errs = []; pg.on("pageerror", e => errs.push(e.message));
-      await pg.goto(`http://localhost:${PORT}/learn/index.html?subj=${E.SKILLS[sk].subj}&grade=${g}&lang=vi`, { waitUntil: "networkidle0" });
+      await pg.goto(`http://localhost:${PORT}/learn/index.html?subj=${E.SKILLS[sk].subj}&grade=${g}&lang=vi&free=1`, { waitUntil: "networkidle0" });
       for (let k = 0; k < 6; k++) {
         await pg.evaluate((sk, g) => { bank = [0, 1, 2, 3, 4].map(() => E.make(sk, { lang: "vi", grade: g, used: {} })); cur = 0; tries = 0; locked = false; showQ(); }, sk, g); await w(500);
         const m = await pg.evaluate(() => {
@@ -85,7 +85,7 @@ const LONLY = process.argv.includes("--lang-only"), HONLY = process.argv.include
     /* câu có hình (SVG, bảng) ở kiểu Bắn bong bóng: khung câu thấp, hình phải co lại, chữ không bị nhãn đè, không tràn */
     for (const [W, H] of VP) for (const [sk, g] of [["shape_id", 1], ["shape_id", 2], ["angle_type", 4], ["data_read", 2], ["data_read", 4], ["pattern_seq", 1]]) {
       const tag = `bong bóng ${sk} lớp ${g} ${W}x${H}`, pg = await br.newPage(); await pg.setViewport({ width: W, height: H, hasTouch: true, isMobile: true }); n++;
-      await pg.goto(`http://localhost:${PORT}/learn/index.html?subj=toan&grade=${g}&lang=vi`, { waitUntil: "networkidle0" });
+      await pg.goto(`http://localhost:${PORT}/learn/index.html?subj=toan&grade=${g}&lang=vi&free=1`, { waitUntil: "networkidle0" });
       await pg.evaluate((sk, g) => { bank = [0, 1, 2, 3, 4].map(() => { const q = E.make(sk, { lang: "vi", grade: g, used: {} }); return LearnTypes.asPop(q, "vi") || q; }); cur = 0; tries = 0; locked = false; showQ(); }, sk, g); await w(900);
       const m = await pg.evaluate(() => { const q = document.getElementById("q"), h = document.getElementById("qt"), l = document.getElementById("ql"), sv = h.querySelector("svg"), hr = h.getBoundingClientRect(), qr = q.getBoundingClientRect(), lr = l.getBoundingClientRect(); return { kind: document.getElementById("ans").dataset.k, under: hr.top < lr.bottom - 2, dbg: "chữ cách đỉnh khung " + Math.round(hr.top - qr.top) + "px, mép dưới nhãn " + Math.round(lr.bottom - qr.top) + "px, cao khung " + Math.round(qr.height) + "px, chữ " + h.offsetHeight + "px", out: hr.bottom > qr.bottom + 1, ac: (a => a.scrollHeight > a.clientHeight + 3)(document.getElementById("ans")), ah: Math.round(document.getElementById("ans").getBoundingClientRect().height), fs: parseFloat(getComputedStyle(h).fontSize), sv: sv ? Math.round(sv.getBoundingClientRect().height) : null, txt: h.textContent.slice(0, 40) }; });
       if (m.ac) bad(`${tag}: vùng bong bóng (đáp án) bị cắt, cao chỉ ${m.ah}px`); if (m.under) bad(`${tag}: chữ câu hỏi bị nhãn đè lên ("${m.txt}"): ${m.dbg}, hình ${m.sv}px, chữ ${m.fs}px`); if (m.out) bad(`${tag}: nội dung tràn ra ngoài khung câu`); if (m.fs < 15) bad(`${tag}: chữ câu hỏi quá nhỏ (${m.fs}px)`); if (m.sv !== null && m.sv < 44) bad(`${tag}: hình quá nhỏ (${m.sv}px)`);

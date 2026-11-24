@@ -25,6 +25,10 @@ h1{margin:0;font-size:clamp(20px,5.4vw,28px);font-weight:900;flex:1;min-width:0;
 .wrap{position:relative;z-index:1;flex:1;min-height:0;display:flex;flex-direction:column;width:100%;max-width:1100px;margin:0 auto}
 .left{flex:none;padding:0 16px}
 /* hai ô chọn lớp / môn */
+/* B8: chọn lớp và môn bằng nút/thẻ hình to (không dropdown); hai ô chọn cũ ẩn, chỉ giữ để đồng bộ logic */
+.chips{display:flex;gap:8px;margin:2px 0 8px}.chips button{flex:1;min-height:44px;border-radius:14px;border:2px solid var(--line);background:var(--panel);font-weight:900;font-size:20px}.chips button[aria-pressed=true]{background:linear-gradient(135deg,var(--k1),var(--k2));color:#0b1020;border-color:transparent}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 10px}.tiles button{min-height:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border-radius:16px;border:2px solid var(--tk);background:var(--panel);font-weight:800;font-size:13px;padding:4px}.tiles button img{width:40px;height:40px;object-fit:contain}.tiles button[aria-pressed=true]{background:color-mix(in srgb,var(--tk) 38%,var(--panel))}
+.selwrap[hidden]{display:none}
 .pick{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;margin:2px 0 10px}
 .pick label{display:block;font-size:12px;font-weight:900;color:var(--ink2);letter-spacing:.04em;text-transform:uppercase;margin:0 0 3px 6px}
 .pick select{width:100%;min-height:54px;padding:0 38px 0 16px;border-radius:18px;border:2px solid var(--k1);background:var(--panel) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' fill='none' stroke='%23999' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 14px center;appearance:none;-webkit-appearance:none;font-weight:900;font-size:18px;box-shadow:0 6px 16px rgba(30,20,80,.14)}
@@ -125,7 +129,9 @@ h1{margin:0;font-size:clamp(20px,5.4vw,28px);font-weight:900;flex:1;min-width:0;
 </header>
 <div class="wrap" id="wrap">
   <aside class="left">
-    <div class="pick">
+    <div class="chips" id="chG" role="group" aria-label="Lớp"></div>
+    <div class="tiles" id="chS" role="group" aria-label="Môn"></div>
+    <div class="pick selwrap" hidden>
       <div><label for="selG" id="lG">Lớp</label><select id="selG"></select></div>
       <div><label for="selS" id="lS">Môn</label><select id="selS"></select></div>
     </div>
@@ -156,7 +162,7 @@ h1{margin:0;font-size:clamp(20px,5.4vw,28px);font-weight:900;flex:1;min-width:0;
 const $=id=>document.getElementById(id), P=window.LearnPath, LM=window.LearnMascot;
 function ls(k){try{return localStorage.getItem(k)}catch(e){return null}}
 function lsw(k,v){try{localStorage.setItem(k,v)}catch(e){}}
-let lang=ls("lang"); if(lang!=="en"&&lang!=="vi") lang=/^en/i.test(navigator.language||"")?"en":"vi";
+let lang=ls("lang"); if(lang!=="en"&&lang!=="vi") lang="vi";   /* B10: mặc định tiếng Việt, chỉ đổi khi người dùng tự chọn */
 const q=new URLSearchParams(location.search); if(q.get("lang")==="en"||q.get("lang")==="vi") lang=q.get("lang");
 const vi=lang==="vi";
 const SN={toan:["Toán","Math"],tviet:["Tiếng Việt","Vietnamese"],tanh:["Tiếng Anh","English"]};
@@ -195,7 +201,7 @@ let cards=[], idx=-1, guideOK=false;
 function fillSelects(){
   const sg=$("selG"); sg.innerHTML=""; for(let g=1;g<=5;g++){const o=document.createElement("option");o.value=g;o.textContent=T.gr+" "+g;sg.appendChild(o)}
   const ss=$("selS"); ss.innerHTML=""; P.SUBJ.forEach(s=>{const o=document.createElement("option");o.value=s;o.textContent=SN[s][vi?0:1];ss.appendChild(o)});
-  $("lG").textContent=T.gr; $("lS").textContent=T.sj;
+  $("lG").textContent=T.gr; $("lS").textContent=T.sj; $("chG").setAttribute("aria-label",T.gr); $("chS").setAttribute("aria-label",T.sj);
   sg.onchange=()=>change(+sg.value,S); ss.onchange=()=>change(G,ss.value);
 }
 function topicCard(s,g,t,m,i,total){
@@ -242,10 +248,15 @@ function showMascot(why){
   LM.bind({box:$("gbox"),bubble:null,base:"../../shared/art/learn/",lang,idleMs:25000});
   LM.show(S,G).then(ok=>{ guideOK=ok; if(!ok){ $("gbox").innerHTML='<img src="'+hd(S,G)+'" alt="">'; return; } LM.emote(why==="grade"?"cheer":"wow",1700); poke(); });
 }
+function fillTiles(){
+  const cg=$("chG"), cs=$("chS"); cg.innerHTML=""; cs.innerHTML="";
+  for(let g=1;g<=5;g++){const b=document.createElement("button");b.type="button";b.textContent=g;b.setAttribute("aria-label",T.gr+" "+g);b.setAttribute("aria-pressed",String(g===G));b.onclick=()=>change(g,S);cg.appendChild(b)}
+  P.SUBJ.forEach(s=>{const b=document.createElement("button");b.type="button";b.style.setProperty("--tk",MAS[s][2]);b.setAttribute("aria-pressed",String(s===S));b.innerHTML='<img src="'+hd(s,G)+'" alt=""><span>'+esc(SN[s][vi?0:1])+'</span>';b.onclick=()=>change(G,s);cs.appendChild(b)});
+}
 function render(){
   const m=MAS[S], ts=P.topics(S,G), x=P.summary(S,G), nl=ts.filter(t=>P.hasLesson(t.id)).length, id=G+":"+S;
   document.body.style.setProperty("--c1",m[2]); document.body.style.setProperty("--c2",m[3]); document.body.style.setProperty("--k1",m[2]); document.body.style.setProperty("--k2",m[3]);
-  $("selG").value=G; $("selS").value=S; $("toGarden").href=gardenUrl(G,S);
+  $("selG").value=G; $("selS").value=S; fillTiles(); $("toGarden").href=gardenUrl(G,S);
   P.setGrade(G); lsw("learn:subj",S);
   try{ history.replaceState(null,"","?"+new URLSearchParams({grade:G,subj:S,lang}).toString()); }catch(e){}
   const v=$("v"); v.innerHTML=""; v.scrollTop=0; $("wrap").scrollTop=0; $("stage").classList.remove("compact");

@@ -15,6 +15,7 @@
   var busy = false;
   function skip(n) { for (var p = n.parentNode; p && p.nodeType === 1; p = p.parentNode) { if (SKIP[p.nodeName.toUpperCase()] || (p.hasAttribute && p.hasAttribute("data-noicon"))) return true; } return false; }
   function swapText(t) {
+    if (!t.parentNode) return;   /* nút đã bị tháo khỏi cây do lần thay trước (danh sách thu sẵn) */
     var s = t.nodeValue; if (!s || !RE.test(s)) { RE.lastIndex = 0; return; } RE.lastIndex = 0; if (skip(t)) return;
     var frag = document.createDocumentFragment(), last = 0, m, any = false;
     while ((m = RE.exec(s))) { var name = lookup(m[1]); if (!name) continue; any = true;
@@ -35,7 +36,9 @@
     auto: function () {
       if (!document.body) return;
       if (!document.getElementById("li-sprite")) { var d = document.createElement("div"); d.id = "li-sprite"; d.setAttribute("aria-hidden", "true"); d.innerHTML = SPRITE; document.body.insertBefore(d, document.body.firstChild);
-        var st = document.createElement("style"); st.textContent = ".ico{display:inline-block;width:1em;height:1em;vertical-align:-.16em;flex:none;overflow:visible}"; document.head.appendChild(st); }
+        var st = document.createElement("style"); st.textContent = ".ico{display:inline-block;width:1em;height:1em;vertical-align:-.16em;flex:none;overflow:visible}" +
+          /* nút icon: căn giữa bằng flexbox (grid + place-items trên <button> bị lệch ở Safari iOS cũ, vd iPhone SE) */
+          ".ib,.hb,.mt,.sgb{display:flex;align-items:center;justify-content:center;text-align:center}.lsn{display:inline-flex;align-items:center;justify-content:center}.ib[hidden],.hb[hidden],.mt[hidden],.sgb[hidden]{display:none}.ib .ico,.hb .ico,.mt .ico,.sgb .ico{display:block;margin:0;vertical-align:baseline}"; document.head.appendChild(st); }
       run(document.body);
       if (window.MutationObserver) new MutationObserver(function (ms) { if (busy) return; for (var i = 0; i < ms.length; i++) { var m = ms[i]; if (m.type === "characterData") run(m.target); else for (var j = 0; j < m.addedNodes.length; j++) run(m.addedNodes[j]); } }).observe(document.body, { childList: true, subtree: true, characterData: true });
     } };

@@ -101,6 +101,14 @@ button,a{font:inherit;color:inherit;cursor:pointer}
 .fi{padding:12px 6px;border-radius:18px;text-align:center;background:rgba(0,0,0,.22);font-weight:800;font-size:13px;line-height:1.3}.fi i{display:block;font-style:normal;font-size:32px;line-height:1.15}
 .fi.lock{opacity:.5;border:1.5px dashed rgba(255,255,255,.4);background:none}
 .acts{display:grid;gap:10px}
+/* B8: lớp 1 — màn hình để bé xem: số sao + 3 nút hình to; thống kê cho người lớn ẩn sau nút "Dành cho người lớn" */
+.kidv{display:none}body.kidmode .kidv{display:flex;flex-direction:column;align-items:center;gap:12px;padding:4px 4px 32px}body.kidmode .snav,body.kidmode .cols{display:none}
+.kst{display:flex;align-items:center;gap:8px;font-weight:900;font-size:clamp(34px,11vw,52px)}
+.kgrid{display:grid;grid-template-columns:1fr;gap:14px;width:100%;max-width:420px}
+.kb{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:clamp(92px,17dvh,150px);border-radius:28px;text-decoration:none;color:#fff;background:linear-gradient(135deg,var(--s1),var(--s2));border:2px solid rgba(255,255,255,.5);box-shadow:0 12px 26px -10px rgba(0,0,0,.45)}.kb:active{transform:scale(.97)}
+.kb b{font-size:clamp(44px,13vw,70px);line-height:1}.kb span{font-weight:900;font-size:clamp(20px,6vw,26px)}
+@media (max-height:520px){.kgrid{grid-template-columns:repeat(3,1fr);max-width:none}.kb{min-height:96px}.kb b{font-size:44px}}
+.kad{min-height:44px;padding:0 18px;border-radius:99px;border:2px solid var(--line,rgba(255,255,255,.3));background:rgba(0,0,0,.2);color:inherit;font-weight:800;font-size:14px;cursor:pointer}
 .go{display:flex;align-items:center;justify-content:center;gap:8px;min-height:56px;padding:0 18px;border-radius:99px;font-weight:900;font-size:18px;text-align:center;text-decoration:none;color:#fff;background:linear-gradient(135deg,var(--s1),var(--s2));border:2px solid rgba(255,255,255,.28)}
 .go.alt{background:rgba(0,0,0,.22)}
 @media (prefers-reduced-motion:no-preference){.trip,.go,.tab,.gsel button{transition:transform .12s,filter .16s}.trip:active,.go:active,.tab:active{transform:scale(.98)}}
@@ -121,6 +129,15 @@ button,a{font:inherit;color:inherit;cursor:pointer}
 <body data-subj="toan">
 <header class="top" id="top"><div class="bar"><a class="ib" id="back" href="../index.html" aria-label="Quay lại">←</a><h1 id="ttl">Của bé</h1><a class="ib" id="toAlbum" href="../album/index.html" aria-label="Bộ sưu tập">📖</a></div></header>
 <main class="wrap">
+  <section class="kidv" id="kid" aria-label="Của bé">
+    <div class="kst" id="kStars"></div>
+    <div class="kgrid">
+      <a class="kb" id="kGarden" href="../garden/index.html"><b aria-hidden="true">🌱</b><span id="kgT"></span></a>
+      <a class="kb" id="kAlbum" href="../album/index.html"><b aria-hidden="true">📖</b><span id="kaT"></span></a>
+      <a class="kb" id="kPlay" href="../index.html"><b aria-hidden="true">🎮</b><span id="kpT"></span></a>
+    </div>
+    <button class="kad" id="kAdult" type="button"></button>
+  </section>
   <nav class="snav" id="snav" aria-label="Menu"></nav>
   <div class="cols">
     <section class="sec" id="s-ov" aria-labelledby="h-ov"><h2 id="h-ov"></h2>
@@ -156,17 +173,17 @@ button,a{font:inherit;color:inherit;cursor:pointer}
 const $ = id => document.getElementById(id), E = window.LearnEngine;
 const ls = k => { try{ return localStorage.getItem(k); }catch(e){ return null; } };
 let lang = "vi", subj = "toan", grade = 1;
-{ const s = ls("lang"); if(s === "en" || s === "vi") lang = s; else if(/^en/i.test(navigator.language || "")) lang = "en";
+{ const s = ls("lang"); if(s === "en" || s === "vi") lang = s;
   const q = ls("learn:subj"); if(q === "toan" || q === "tviet" || q === "tanh") subj = q; const g = +ls("learn:grade"); if(g >= 1 && g <= 5) grade = g;
   try{ const u = new URLSearchParams(location.search); if(u.get("lang") === "en" || u.get("lang") === "vi") lang = u.get("lang"); }catch(e){} }
 const T = {
-  vi: { title: "Của bé", back: "Quay lại", menu: "Menu", nav: ["Của bé", "Câu chuyện", "Lớn lên", "Khu vườn"], ov: "Bé học thế nào?", story: "Câu chuyện của bé", grow: "Bé lớn lên thế nào?", garden: "Khu vườn của bé",
+  vi: { title: "Của bé", back: "Quay lại", menu: "Menu", nav: ["Của bé", "Câu chuyện", "Lớn lên", "Khu vườn"], kg: "Khu vườn", ka: "Bạn của bé", kp: "Chơi", kad: "🔒 Dành cho người lớn", ov: "Bé học thế nào?", story: "Câu chuyện của bé", grow: "Bé lớn lên thế nào?", garden: "Khu vườn của bé",
     stars: "sao", streak: "ngày liền", crops: "nông sản", seeds: "hạt giống", days: ["T2", "T3", "T4", "T5", "T6", "T7", "CN"], legend: "Số câu bé làm mỗi ngày trong tuần",
     w0: "Tuần này mình chưa học. Học một chút nhé?", w1: "Bé đã học 1 ngày. Giỏi lắm!", wn: n => "Bé đã học " + n + " ngày trong tuần. Giỏi lắm!",
     rb: n => n ? "Cầu vồng đã sáng " + n + "/7 màu" : "Cầu vồng đang chờ bé tìm hạt màu đầu tiên", play: "Chơi", cont: "Đang dở, chơi tiếp", done: "Xong rồi, chơi lại", soon: "Sắp có",
     sn: { toan: "Toán", tviet: "Tiếng Việt", tanh: "Tiếng Anh" }, grade: "Lớp", ofK: "trên", skillsK: "kỹ năng đã vững", grown: "Đã lớn", growing: "Đang lớn", seed: "Chưa gieo", soonT: "Sắp có bài luyện",
     outfit: "Đồ của bé", learn: "▶ Học tiếp", gdn: "🌱 Vào khu vườn", locked: n => "Mở ở " + n + " ⭐" },
-  en: { title: "My page", back: "Back", menu: "Menu", nav: ["Me", "Story", "Growing", "Garden"], ov: "How am I learning?", story: "My story", grow: "How am I growing?", garden: "My garden",
+  en: { title: "My page", back: "Back", menu: "Menu", nav: ["Me", "Story", "Growing", "Garden"], kg: "Garden", ka: "My friends", kp: "Play", kad: "🔒 For grown-ups", ov: "How am I learning?", story: "My story", grow: "How am I growing?", garden: "My garden",
     stars: "stars", streak: "days in a row", crops: "crops", seeds: "seeds", days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], legend: "Questions I did each day this week",
     w0: "No learning yet this week. Shall we start?", w1: "You learned on 1 day. Great job!", wn: n => "You learned on " + n + " days this week. Great job!",
     rb: n => n ? "The rainbow lit up " + n + "/7 colors" : "The rainbow waits for the first color seed", play: "Play", cont: "Unfinished, continue", done: "Done, play again", soon: "Coming soon",
@@ -246,9 +263,13 @@ function chrome(){
   $("ttl").textContent = t.title; $("back").setAttribute("aria-label", t.back); $("snav").setAttribute("aria-label", t.menu);
   $("h-ov").textContent = t.ov; $("h-story").textContent = IDX ? Story.tx(IDX.season, lang) : t.story; $("h-grow").textContent = t.grow; $("h-garden").textContent = t.garden;
   $("toLearn").textContent = t.learn; $("toGarden").textContent = t.gdn;
+  { const kd = $("kid"); if(kd){ $("kgT").textContent = t.kg; $("kaT").textContent = t.ka; $("kpT").textContent = t.kp; $("kAdult").textContent = t.kad; $("kStars").innerHTML = "<span aria-hidden=\"true\">⭐</span> " + Farm.stars(); $("kStars").setAttribute("aria-label", Farm.stars() + " " + t.stars); } }
   nav(); tiles(); week(); if(IDX) rainbow(); grow(); garden(); gardenCard();
   document.documentElement.style.setProperty("--th", $("top").offsetHeight + "px");
 }
+/* B8: lớp 1 thấy màn hình dành cho bé; người lớn bấm nút để xem thống kê */
+if(grade === 1) document.body.classList.add("kidmode");
+$("kAdult").onclick = () => { document.body.classList.remove("kidmode"); document.documentElement.style.setProperty("--th", $("top").offsetHeight + "px"); scrollTo(0, 0); };
 chrome(); addEventListener("resize", () => document.documentElement.style.setProperty("--th", $("top").offsetHeight + "px"));
 fetch("../content/trips/index.json").then(r => r.json()).then(async idx => {
   IDX = idx; await Promise.all(idx.trips.filter(x => !x.soon).map(x => fetch("../content/trips/" + x.id + ".json").then(r => r.json()).then(j => { TRIPS[x.id] = j; }).catch(() => {})));

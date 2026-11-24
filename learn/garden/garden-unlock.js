@@ -93,5 +93,5 @@ function initUnlock(){
   /* lần đầu vào vườn (hoặc sau khi xoá tiến độ): tự mở SLIDE GIỚI THIỆU một lần (garden-intro.js) */
   /* lần đầu: bé CHỌN BẠN LÀM VƯỜN (garden-buddy.js) rồi xem slide giới thiệu */
   var showIntro = function(){ try { if(!localStorage.getItem("gardenHelp")){ localStorage.setItem("gardenHelp", "1"); if(typeof openIntro === "function") openIntro(); else openGuide(); } } catch (e) {} };
-  setTimeout(function(){ if(typeof buddyGet === "function" && !buddyGet()) openBuddy(showIntro, false); else showIntro(); }, 500);
+  setTimeout(function(){ if(typeof buddyGet === "function" && !buddyGet()){ var pp = window.LearnSlot && LearnSlot.parts && LearnSlot.parts(); if(pp && +pp.grade === 1 && typeof buddySave === "function"){ buddySave(buddyNow()); showIntro(); } else openBuddy(showIntro, false); } else showIntro();   /* B6: lớp 1 vào vườn ngay với Bác Rễ 5–7 tuổi; đổi bạn sau bằng cách bấm hình bạn làm vườn */ }, 500);
 }
