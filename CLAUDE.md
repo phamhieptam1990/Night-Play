@@ -3,6 +3,7 @@
 Khi tạo hoặc sửa BẤT KỲ game nào, đọc và làm theo [GAME_RULES.md](GAME_RULES.md) trước. Đó là danh sách các lỗi người dùng đã báo lặp lại (một màn hình không cuộn, chữ trong thẻ, nhân vật không mờ, nút ←, gợi ý "?", màn hình ngang, chơi hộ tiếp tục, thách đấu, Night Pass khác hẳn free).
 
 - Trả lời người dùng bằng tiếng Việt.
+- **Mỗi game mới PHẢI có linh vật riêng ngay lần làm đầu** (GAME_RULES.md mục 0 bước 5); chưa có linh vật thì chưa báo xong.
 - Khi vẽ/đổi linh vật hoặc skin 2D (SVG): đọc và làm theo [docs/MASCOT-ART-RULES.md](docs/MASCOT-ART-RULES.md) trước (hai phong cách Pop / Night tách bạch, không vẽ tự do).
 - Game Cozy sinh tự động: sửa `scripts/cozygame/specs/<id>.js` + `tpl.html`, rồi `node scripts/cozygame/gen.js all`; không sửa tay file `cozyplay/games/<id>/index.html` được sinh ra.
 - Trước mỗi commit chạy `NODE_PATH=<thư mục puppeteer-core> node scripts/cozygame/check.js` (phải "✓ tất cả đạt").

@@ -8,7 +8,8 @@ Nguyên tắc chung: **không báo "xong" khi chưa tự mở trình duyệt th�
 2. Thêm game vào bảng `GAMES` trong `scripts/cozygame/check.js` (khung `pre` đưa ván về trạng thái chơi dở).
 3. Chạy `NODE_PATH=<thư mục có puppeteer-core> node scripts/cozygame/check.js` → phải in "✓ tất cả đạt". Commit XONG rồi mới chạy lại (nếu không sẽ báo "file sinh ra khác bản đã commit").
 4. Chụp ảnh thật (puppeteer-core + Chrome, `python3 -m http.server`) ở: 360×640, 380×760, ngang 844×390 và 1200×640; bản free + MỌI giao diện Night Pass; màn home, màn chơi, màn kết thúc, popup. Tự nhìn ảnh.
-5. Commit nhỏ, tiếng Việt. Không push khi chưa được yêu cầu. Không commit `code.md`.
+5. **Mỗi game mới PHẢI có linh vật riêng ngay trong lần làm đầu tiên** (chủ site chốt; không để "làm sau"). Game Cozy (Night): thêm một khối `def(...)` vào `scripts/art/gen-night3d.js` (+ `OUT`, `SCENE`, `EST` nếu cần) và `DATA` / `LN` / `EN` trong `scripts/art/night3d-skins.js`, chạy `node scripts/art/gen-night3d.js` (sinh `shared/art/mascot-n3-<id>.svg` + khối đăng ký trong `mascot-games.js`; KHÔNG sửa tay các tệp sinh). Game Pop: theo docs/MASCOT-ART-RULES.md. Linh vật phải hiện ở màn chính (to) và trong khung đang chơi (mini + bong bóng thoại) như các game khác; đủ 5 skin; dấu hiệu nhận diện (`#mark`) không bị mũ che. Đo: `check-mascot.js --quick --only=<id>` và `check-art.js` phải đạt, chụp ảnh màn chính + khung chơi và TỰ NHÌN. Chưa có linh vật = chưa được báo "xong".
+6. Commit nhỏ, tiếng Việt. Không push khi chưa được yêu cầu. Không commit `code.md`.
 
 ## 0a. LỖI NGƯỜI DÙNG BÁO LẶP LẠI — đọc kỹ, kiểm tra từng dòng trước khi báo "xong"
 1. **Sửa MỘT chỗ = sửa cho TẤT CẢ nhóm**: Cozy sinh tự động, Cozy viết tay (Đập Deadline, Cánh Nhỏ Phiêu Lưu…), Pop Play, các trang cổng, VÀ cả điện thoại dọc, điện thoại ngang, iPad dọc/ngang. Game viết tay không tự hưởng thay đổi của `tpl.html`: phải nạp tay `shared/dock.js`, `fan.js`, `icons.js`… (từng bỏ sót hai game này nhiều lần).
@@ -274,6 +275,7 @@ Nguyên tắc dự án: game chạy **offline, không lag, không gọi máy ch�
 - [ ] Game có chọn độ khó: đổi theme theo độ khó (mục 5i), `check-difficulty.js` "✓"
 - [ ] Không cuộn, không chữ trơn, không nhân vật mờ, không lỗi console
 - [ ] Đã thêm game vào `check.js` và danh sách tải sẵn offline (`sw.js`) nếu cần
+- [ ] Đã làm LINH VẬT riêng cho game (gen-night3d.js / night3d-skins.js, hoặc Pop theo MASCOT-ART-RULES), hiện ở màn chính + khung chơi, check-mascot + check-art đạt
 - [ ] **Chụp qua trang cổng ở điện thoại dọc (390×844, 360×640): ←, 📷, 📤 phải ở trong menu ⋯ (← là nút duy nhất bên trái, không còn nút nổi của cổng); tên game nằm SÁT khung thông tin (≤ ~16px, tối đa 2 dòng, không cắt "…")** — `check-portal.js` đo tự động (mục "menu …" và "tên game …") cho MỌI game Cozy và Pop Play
 - [ ] **Game Cozy viết tay (không sinh tự động: Đập Deadline, Cánh Nhỏ Phiêu Lưu…) phải tự nạp `shared/dock.js` (gom 📷/📤/← của cổng vào thanh trên) + `shared/fan.js` (menu ⋯ + tên game sát khung ở chế độ local) + `shared/icons.js`; game có `#play` + `.top` thì nạp `shared/landscape.css/js` như các game sinh tự động. Thanh trên của game viết tay phải là `.top` có `h1`, nút ← là `#bBk`, nút phụ dùng id chuẩn (bSnd/bLang/bHelp/bBoard/restartBtn hoặc soundBtn/langBtn/askBtn).**
 - [ ] Báo cáo trung thực: cái gì đã kiểm tra, cái gì chưa (ví dụ trackpad thật)
