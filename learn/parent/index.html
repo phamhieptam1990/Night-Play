@@ -234,8 +234,8 @@ button{font:inherit;color:inherit;cursor:pointer}
 .tpc summary b,.dayh b,.sk b,.sk2 .nm{text-transform:none}
 /* ===== TIÊU ĐỀ MỤC RÕ RÀNG + BỐ CỤC RỘNG (full width trên máy tính) ===== */
 .sec>h2{display:flex;align-items:center;gap:12px;margin:0 0 14px;padding-left:0;font-size:clamp(20px,5.2vw,26px);font-weight:900;letter-spacing:-.01em;text-transform:none;color:var(--ink);line-height:1.2}
-.sec>h2::before{flex:none;display:grid;place-items:center;width:42px;height:42px;border-radius:14px;font-size:22px;line-height:1;background:linear-gradient(135deg,var(--s1),var(--s2));box-shadow:0 8px 18px -10px var(--s2)}
-#h1o::before{content:"📊"}#h2g::before{content:"🎯"}#h2d::before{content:"📚"}#h2m::before{content:"🗺️"}#h2w::before{content:"💡"}#h2l::before{content:"⏱️"}#h2s::before{content:"⚙️"}
+.sec>h2 .hi{flex:none;display:grid;place-items:center;width:42px;height:42px;border-radius:14px;font-size:22px;line-height:1;background:linear-gradient(135deg,var(--s1),var(--s2));box-shadow:0 8px 18px -10px var(--s2)}
+.sec>h2 .hi .ico{width:26px;height:26px}
 .sec>.note{font-size:15px;margin:-4px 2px 14px}
 .gtag{display:flex;align-items:center;gap:10px;margin:22px 4px 12px;font-size:15px;font-weight:900;letter-spacing:.04em;color:var(--ink)}.gtag::before{content:"";flex:none;width:10px;height:10px;border-radius:50%;background:var(--sg)}
 @media (min-width:1000px){
@@ -535,7 +535,8 @@ function weekly(){
     (r.praise ? '<p style="margin:8px 0 4px"><b>' + (vi ? "💬 Câu nên khen bé: " : "💬 Praise to say: ") + '</b>' + esc(r.praise) + '</p>' : "") +
     (r.ask ? '<p style="margin:4px 0"><b>' + (vi ? "🗣️ Trò chuyện tối nay: " : "🗣️ Tonight's chat: ") + '</b>' + esc(r.ask) + '</p>' : "");
 }
-function render(){ document.body.dataset.subj = subj; chrome(); headH(); navBar(); overview(); weekly(); tabs(); goals(); learned(); skillMap(); weak(); limit(); settings(); }
+function headIcons(){ [["h1o","📊"],["h2g","🎯"],["h2d","📚"],["h2m","🗺️"],["h2w","💡"],["h2l","⏱️"],["h2s","⚙️"]].forEach(a => { const h = $(a[0]); if(!h || h.querySelector(".hi")) return; const sp = document.createElement("span"); sp.className = "hi"; sp.setAttribute("aria-hidden", "true"); sp.innerHTML = window.LearnIcons ? LearnIcons.html(a[1]) : a[1]; h.insertBefore(sp, h.firstChild); }); }
+function render(){ document.body.dataset.subj = subj; chrome(); headIcons(); headH(); navBar(); overview(); weekly(); tabs(); goals(); learned(); skillMap(); weak(); limit(); settings(); }
 $("lang").onclick = () => { lang = lang === "vi" ? "en" : "vi"; ls("lang", lang); $("gm").textContent = ""; if($("dash").hidden) chrome(); else render(); };
 $("theme").onclick = () => { const d = document.documentElement.dataset.theme === "dark" ? "light" : "dark"; document.documentElement.dataset.theme = d; ls("theme", d); };
 chrome(); newSum();

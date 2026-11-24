@@ -538,7 +538,9 @@ function buildRound(){
     bank = qk.length ? base.map((x, i) => { const k = qk[i % qk.length]; return (k === "pop" ? LearnTypes.asPop(x, lang) : LearnTypes.make(k, subj, grade, lang)) || x; }) : LearnTypes.mix(base, subj, grade, lang, 3);   /* thường ngày: trộn 3 câu kiểu khác vào vòng 5 câu */
   }catch(e){} }
   /* B1: lớp 1–2 chưa đọc thạo — câu ít chữ nhất đứng đầu (bé thắng ngay), lời văn dài dồn về cuối; giữ nguyên thứ tự các câu còn lại */
-  if(grade <= 2 && bank.length > 1 && !TRIP){ const load = b => String(b.q || "").replace(/<[^>]+>/g, "").replace(/\p{Extended_Pictographic}/gu, "").length, k = bank.reduce((m, b, i) => load(b) < load(bank[m]) ? i : m, 0); if(k > 0) bank = [bank[k]].concat(bank.filter((x, i) => i !== k)); }
+  if(grade <= 2 && bank.length > 1 && !TRIP){ const load = b => String(b.q || "").replace(/<[^>]+>/g, "").replace(/\p{Extended_Pictographic}/gu, "").length, k = bank.reduce((m, b, i) => load(b) < load(bank[m]) ? i : m, 0); if(k > 0) bank = [bank[k]].concat(bank.filter((x, i) => i !== k));
+    if(grade === 1 && bank.length > 3){ const head = bank.map((b, i) => ({ b, i, l: load(b) })).sort((a, c) => a.l - c.l || a.i - c.i).slice(0, 3).sort((a, c) => a.i - c.i).map(o => o.b); bank = head.concat(bank.filter(b => !head.includes(b))); }   /* lớp 1: 3 câu ít chữ nhất đứng đầu, lời văn dài chỉ từ câu 4 */
+  }
 }
 /* ---------- vòng chơi ---------- */
 let cur = 0, tries = 0, stars = 0, streak = 0, best = 0, wrongTags = {}, locked = false, roundStars = 0;
