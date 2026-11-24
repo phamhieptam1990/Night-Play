@@ -14,12 +14,12 @@
     { id: "animals",   z: 6, note: "vật nuôi" },
     { id: "ui",        z: 7, note: "tooltip, chữ Zzz" }
   ];
-  var SCRIPTS = ["garden-layout", "garden-items", "garden-core", "garden-places", "garden-levels", "garden-plots", "garden-crops", "garden-tooltip", "garden-popup", "garden-plant-card", "garden-missions", "garden-events", "garden-fx", "garden-animals", "garden-time", "garden-buildings", "garden-menu", "garden-buddy", "garden-intro", "garden-trees", "garden-shadow", "garden-unlock", "garden-collection", "garden-weather", "garden-view", "garden-gift", "garden-farm", "garden-edit", "garden-engine"];
+  var SCRIPTS = ["garden-layout", "garden-items", "garden-core", "garden-places", "garden-levels", "garden-plots", "garden-crops", "garden-tooltip", "garden-popup", "garden-plant-card", "garden-missions", "garden-events", "garden-fx", "garden-animals", "garden-time", "garden-buildings", "garden-menu", "garden-buddy", "garden-intro", "garden-trees", "garden-shadow", "garden-unlock", "garden-collection", "garden-weather", "garden-view", "garden-gift", "garden-farm", "garden-edit", "garden-nav", "garden-engine"];
   /* CSS theo chức năng, nạp ĐÚNG thứ tự này (cascade phụ thuộc thứ tự: số đứng trước nạp trước, tệp sau ghi đè tệp trước). Tệp trong css/. */
   var STYLES = ["01-base", "02-stage", "03-tooltip", "04-popup", "05-popup-level", "06-menu-events", "07-popup-dark", "08-hud", "09-world-fx", "10-popup-kids", "11-tooltip-badge", "12-buildings", "13-animals-fx", "14-popup-float", "15-layout-legacy", "16-gift", "17-edit", "18-crops", "20-animal-card", "21-collection"];
   /* thư mục ảnh/cảnh dùng chung (animal_*.svg, mascot_*, produce_*, scene/, tree/, preview-*.html), tính từ trang vườn */
   var ART = "../../shared/art/garden/";
-  var START = ["initCrops", "initPlots", "initAnimals", "initTime", "initBuildings", "initMissions", "initEvents", "initLevels", "initMenu", "initTrees", "initShadow", "initUnlock", "initCollection", "initWeather", "initView", "initGift", "initFarm", "initEdit"];
+  var START = ["initCrops", "initPlots", "initAnimals", "initTime", "initBuildings", "initMissions", "initEvents", "initLevels", "initMenu", "initTrees", "initShadow", "initUnlock", "initCollection", "initWeather", "initView", "initGift", "initFarm", "initEdit", "initNav"];
 
   var layers = {};
   /* tầng không bấm được (bóng, cây ảnh, thời tiết): tạo một lớp phủ kín khung cảnh, z lấy từ LAYERS */

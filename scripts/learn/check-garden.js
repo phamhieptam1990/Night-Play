@@ -99,5 +99,12 @@ console.log("7) vật phẩm theo lớp, bộ sưu tập, quầy đổi hạt, v
   cg = 1; ok(Farm.starter() === null, "lớp 1: không có bộ khởi đầu (bắt đầu từ bãi cỏ)"); cg = 3; pass["1:toan"] = 1; ok(Farm.starter() === null, "đã học lớp thấp thì không phải vào thẳng: không tặng bộ khởi đầu");
   delete globalThis.LearnSlot; }
 
+console.log("8) nút ← của vườn mang đúng lớp + môn (garden-nav.js, L3-05)");
+{ const fs = require("fs"), N = require(path.join(root, "learn/garden/garden-nav.js")), lay = require(path.join(root, "learn/garden/garden-layout.js"));
+  ok(N.gardenBackHref(3, "toan", "vi") === "../index.html?grade=3&subj=toan&lang=vi", "← lớp 3 Toán: " + N.gardenBackHref(3, "toan", "vi"));
+  ok(N.gardenBackHref(5, "tanh", "") === "../index.html?grade=5&subj=tanh", "không có lang thì bỏ lang");
+  ok(N.gardenBackHref(9, "xxx", "fr") === "../index.html", "tham số lạ bị bỏ, không sinh địa chỉ hỏng");
+  ok(lay.SCRIPTS.includes("garden-nav") && lay.START.includes("initNav"), "garden-layout nạp garden-nav và gọi initNav"); ok(fs.existsSync(path.join(root, "learn/garden/garden-nav.js")), "có tệp garden-nav.js"); }
+
 console.log(bad ? "\n✗ " + bad + " lỗi (trên " + checks + " kiểm tra)" : "\n✓ Vườn đạt (" + checks + " kiểm tra)");
 process.exit(bad ? 1 : 0);
