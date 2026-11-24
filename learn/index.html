@@ -138,13 +138,13 @@ body.g1 #pick,body.g1 #toMeTop{display:none}body.g1 #toGarden{margin-left:auto}
 .q h1.mid{font-size:clamp(26px,7.6vw,46px);line-height:1.15}
 .q h1.long{font-size:clamp(20px,5.4vw,30px);line-height:1.4;letter-spacing:0;font-weight:700}.q h1{width:100%;text-wrap:pretty;color:var(--ink);text-shadow:0 1px 0 color-mix(in srgb,var(--bg) 60%,transparent)}
 /* nút chỉ có MỘT hình: hình phủ gần hết nút (to nhất có thể) trên nền sáng để màu hình nổi, nút nổi khối như các nút khác */
-.ab:has(>.ico:only-child){display:flex;align-items:center;justify-content:center;padding:5px;background:linear-gradient(160deg,#fff,color-mix(in srgb,var(--c1) 28%,#fff));-webkit-text-stroke:0;text-shadow:none}
-.ab:has(>.ico:only-child)::after{display:none}
+.ans:not(.kz)>.ab:has(>.ico:only-child){display:flex;align-items:center;justify-content:center;padding:5px;background:linear-gradient(160deg,#fff,color-mix(in srgb,var(--c1) 28%,#fff));-webkit-text-stroke:0;text-shadow:none}
+.ans:not(.kz)>.ab:has(>.ico:only-child)::after{display:none}
 @keyframes pickme{0%,100%{transform:translateY(0) scale(1,1)}14%{transform:translateY(0) scale(1.08,.9)}42%{transform:translateY(-9%) scale(.95,1.07)}70%{transform:translateY(0) scale(1.05,.94)}85%{transform:translateY(-2%) scale(1,1)}}
-.ab:has(>.ico:only-child)>.ico{animation:pickme 1.7s ease-in-out infinite;transform-origin:50% 90%}   /* hình nhún nhảy kiểu "chọn tớ đi" */
-.ab:nth-child(2):has(>.ico:only-child)>.ico{animation-delay:-.25s}.ab:nth-child(3):has(>.ico:only-child)>.ico{animation-delay:-.5s}.ab:nth-child(4):has(>.ico:only-child)>.ico{animation-delay:-.75s}.ab:nth-child(5):has(>.ico:only-child)>.ico{animation-delay:-1s}.ab:nth-child(6):has(>.ico:only-child)>.ico{animation-delay:-1.25s}.ab:nth-child(7):has(>.ico:only-child)>.ico{animation-delay:-.4s}.ab:nth-child(8):has(>.ico:only-child)>.ico{animation-delay:-.9s}.ab:nth-child(9):has(>.ico:only-child)>.ico{animation-delay:-1.4s}
-@media (prefers-reduced-motion:reduce){.ab:has(>.ico:only-child)>.ico{animation:none}}
-.ab:has(>.ico:only-child)>.ico{height:100%;width:auto;aspect-ratio:1;max-width:100%;vertical-align:baseline;filter:drop-shadow(0 3px 0 rgba(0,0,0,.18))}
+.ans:not(.kz)>.ab:has(>.ico:only-child)>.ico{animation:pickme 1.7s ease-in-out infinite;transform-origin:50% 90%}   /* hình nhún nhảy kiểu "chọn tớ đi" */
+.ans:not(.kz)>.ab:nth-child(2):has(>.ico:only-child)>.ico{animation-delay:-.25s}.ans:not(.kz)>.ab:nth-child(3):has(>.ico:only-child)>.ico{animation-delay:-.5s}.ans:not(.kz)>.ab:nth-child(4):has(>.ico:only-child)>.ico{animation-delay:-.75s}.ans:not(.kz)>.ab:nth-child(5):has(>.ico:only-child)>.ico{animation-delay:-1s}.ans:not(.kz)>.ab:nth-child(6):has(>.ico:only-child)>.ico{animation-delay:-1.25s}.ans:not(.kz)>.ab:nth-child(7):has(>.ico:only-child)>.ico{animation-delay:-.4s}.ans:not(.kz)>.ab:nth-child(8):has(>.ico:only-child)>.ico{animation-delay:-.9s}.ans:not(.kz)>.ab:nth-child(9):has(>.ico:only-child)>.ico{animation-delay:-1.4s}
+@media (prefers-reduced-motion:reduce){.ans:not(.kz)>.ab:has(>.ico:only-child)>.ico{animation:none}}
+.ans:not(.kz)>.ab:has(>.ico:only-child)>.ico{height:100%;width:auto;aspect-ratio:1;max-width:100%;vertical-align:baseline;filter:drop-shadow(0 3px 0 rgba(0,0,0,.18))}
 .ab.long{font-size:clamp(18px,5.2vw,26px);line-height:1.2;-webkit-text-stroke-width:3.5px}
 .q h1 em.bl{display:inline-block;width:1.5em;height:.9em;vertical-align:-.1em;margin:0 .08em;border:.07em dashed color-mix(in srgb,var(--ink) 60%,transparent);border-radius:.22em;background:color-mix(in srgb,var(--ink) 12%,transparent)!important;-webkit-background-clip:border-box!important;background-clip:border-box!important;color:transparent;-webkit-text-fill-color:transparent;overflow:hidden;text-indent:-9em;white-space:nowrap;box-sizing:border-box;animation:blp 1.6s ease-in-out infinite alternate}@keyframes blp{to{background-color:color-mix(in srgb,var(--ink) 24%,transparent)}}@media (prefers-reduced-motion:reduce){.q h1 em.bl{animation:none}}
 .q h1 em{font-style:normal;background:linear-gradient(100deg,var(--sg),var(--sx));-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -169,6 +169,7 @@ body.g1 #pick,body.g1 #toMeTop{display:none}body.g1 #toGarden{margin-left:auto}
 .ab:nth-child(2){animation-delay:-1s}.ab:nth-child(3){animation-delay:-2s}.ab:nth-child(4){animation-delay:-3s}
 @keyframes fl{to{transform:translateY(-4px)}}
 .ab:active{transform:translateY(5px);box-shadow:0 2px 0 var(--d),0 6px 12px -4px var(--c2),inset 0 3px 0 rgba(255,255,255,.45)}   /* nhấn xuống như nút thật */
+.ans.kz .ab{font-size:clamp(20px,5.6vw,28px);margin-bottom:0;-webkit-text-stroke:0;text-shadow:none;box-shadow:0 10px 24px -6px var(--c2),inset 0 2px 0 rgba(255,255,255,.35)}.ans.kz .ab:active{transform:scale(.96)}   /* các màn nhập chữ/số, ghép, sắp xếp… giữ nút gọn kiểu cũ */
 .ab.ok{background:linear-gradient(145deg,#34D399,#059669);animation:okp .5s;box-shadow:0 0 0 4px rgba(52,211,153,.5),0 10px 30px -4px #10B981}
 .ab.no{animation:shake .4s;filter:saturate(.3) brightness(.7)}
 .ab[disabled]{pointer-events:none}
