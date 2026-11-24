@@ -30,6 +30,12 @@ for (const subj of ["toan", "tviet", "tanh"]) for (let g = 1; g <= 5; g++) for (
   if (kind === "multi") { const n = q.opts.filter(o => o.ok).length; if (q.opts.length !== 6 || n < 2 || n > 3 || new Set(q.opts.map(o => o.v)).size !== 6) fail("multi", q); }
 }
 for (const subj of ["toan", "tviet", "tanh"]) for (let g = 1; g <= 5; g++) { const base = [1, 2, 3, 4, 5].map(() => ({ kind: "mc", o: [{ v: "1", ok: 1 }, { v: "2" }, { v: "3" }, { v: "4" }] })); const r = T.mix(base, subj, g, "vi", 3); const ks = r.map(x => x.kind); const nk = ks.filter(k => k !== "mc" && k !== "pop"), want = subj === "toan" && g >= 3 ? 2 : 3; if (ks.filter(k => k === "pop").length > 1) fail("nhiều hơn 1 pop", ks); if (ks[0] !== "mc" || nk.length !== want || new Set(nk).size !== want) fail("mix", ks); }
+{ const mk = (o, q) => ({ q: q || "Rút gọn <em>6/8</em>", subj: "toan", grade: 4, skill: "frac_basic", o: o.map(([v, ok, tag]) => ({ v, ok, tag })) });
+  const a = T.asTypein(mk([["3/4", 1], ["6/8", 0, "no_reduce"], ["2/3", 0], ["1/2", 0]]), "vi");
+  if (!a || !a.frac || a.exact !== true || a.ans !== "3/4" || a.dec !== false || a.tags["6/8"] !== "no_reduce") fail("asTypein phân số", a);
+  const b = T.asTypein(mk([["1 1/2", 1], ["3/2", 0], ["2/3", 0], ["1/3", 0]], "Tính 1/2 + 1"), "vi"); if (!b || !b.frac || b.exact !== true || b.ans !== "1 1/2") fail("asTypein hỗn số (có nhiễu bằng giá trị)", b);
+  const c = T.asTypein(mk([["5/6", 1], ["2/6", 0], ["1/6", 0], ["3/8", 0]], "Tính 1/2 + 1/3"), "vi"); if (!c || !c.frac || c.exact !== false) fail("asTypein phân số không nhiễu tương đương", c);
+  if (T.asTypein(mk([["3/4", 1], ["12", 0], ["2/3", 0], ["1/2", 0]]), "vi")) fail("lẫn phân số và số nguyên phải trả null"); }
 const EMO = /\p{Extended_Pictographic}/u;
 for (const subj of ["tviet", "tanh"]) for (let g = 3; g <= 5; g++) { for (const k of ["pic", "wordbuild", "find"]) if (T.kindsFor(subj, g).includes(k)) fail("kiểu emoji-từ-vựng còn ở lớp " + g, { subj, k });
   for (let i = 0; i < 300; i++) for (const k of T.kindsFor(subj, g)) { const q = T.make(k, subj, g, "vi"); if (!q) continue; const txt = JSON.stringify([q.q, q.o, q.opts, q.pairs, q.items, q.bins]).replace(/<[^>]+>/g, ""); if (["tf", "odd", "multi", "sort", "match", "memory", "dragfill", "order"].includes(k) && EMO.test(txt)) { fail("emoji ở lớp " + g, q); break; } } }

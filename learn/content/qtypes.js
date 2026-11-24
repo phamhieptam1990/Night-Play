@@ -351,7 +351,7 @@
   function pairsHi(subj) { return subj === "tviet" ? antPairs(4) : enPairs(4); }
   HI.match = function (subj, g, lang) {
     var vi = subj === "tviet";
-    return base("match", subj, g, lang, vi ? "Ghép mỗi từ với <em>từ trái nghĩa</em> của nó" : "Match each word with its <em>opposite</em> or <em>plural</em>", { pairs: pairsHi(subj), speak: vi ? "Ghép mỗi từ với từ trái nghĩa của nó." : "Match each word with its opposite or plural." });
+    return base("match", subj, g, lang, vi ? "Ghép mỗi từ với <em>từ trái nghĩa</em> của nó" : (lang === "vi" ? "Ghép mỗi từ với từ <em>trái nghĩa</em> hoặc <em>số nhiều</em>" : "Match each word with its <em>opposite</em> or <em>plural</em>"), { pairs: pairsHi(subj), speak: vi ? "Ghép mỗi từ với từ trái nghĩa của nó." : "Match each word with its opposite or plural." });
   };
   HI.memory = function (subj, g, lang) {
     return base("memory", subj, g, lang, lang === "vi" ? "Lật hai thẻ để tìm <em>cặp từ</em> đi cùng nhau" : "Flip two cards to find a <em>matching pair</em>", { pairs: pairsHi(subj), speak: lang === "vi" ? "Lật hai thẻ để tìm cặp từ đi cùng nhau." : "Flip two cards to find a matching pair." });
@@ -385,6 +385,15 @@
   /* câu chọn 1/4 có đáp án là SỐ NGUYÊN (có thể kèm đơn vị) → câu cho bé GÕ số. Giữ kỹ năng, chủ đề, mã lỗi của từng đáp án nhiễu (gõ trúng đáp án nhiễu nào thì ghi mã lỗi đó). */
   function asTypein(q, lang) {
     if (!q || q.kind || !q.o || q.o.length !== 4 || !q.skill) return null;
+    var fr = /^(\d{1,3} )?\d{1,4}\/\d{1,4}$/, isFr = q.o.every(function (x) { return fr.test(x.v); });
+    if (isFr) {   /* đáp án là phân số (hoặc hỗn số): bé gõ "3/4" / "1 1/2"; phím "/" và phím cách do qui.js hiện khi frac:true */
+      var fv = function (t) { var m = /^(?:(\d+) )?(\d+)\/(\d+)$/.exec(t); return (Number(m[1] || 0) * Number(m[3]) + Number(m[2])) / Number(m[3]); }, fok = null, ftags = {}, feq = false, j;
+      for (j = 0; j < 4; j++) { if (q.o[j].ok) fok = q.o[j].v; }
+      if (fok === null) return null;
+      for (j = 0; j < 4; j++) if (!q.o[j].ok) { ftags[q.o[j].v] = q.o[j].tag || "other"; if (Math.abs(fv(q.o[j].v) - fv(fok)) < 1e-9) feq = true; }
+      var fplain = String(q.q).replace(/<br>/g, ". ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+      return { kind: "typein", type: "typein", q: q.q, lab: LAB[lang].typein, subj: q.subj, grade: q.grade, skill: q.skill, topic: q.topic, diff: q.diff, id: q.id, hint: q.hint, ui: UI[lang], ans: fok, show: fok, dec: false, frac: true, exact: feq || /rút gọn|tối giản|simplif/i.test(fplain), sep: lang === "vi" ? "," : ".", unit: null, tags: ftags, speak: fplain, reveal: fok };
+    }
     var re = /^(\d{1,6}(?:[.,]\d{1,3})?)(?: (\S+))?$/, ok = null, show = "", tags = {}, unit = null, dec = false, i, m, key;
     for (i = 0; i < 4; i++) { m = re.exec(q.o[i].v); if (!m) return null; if (unit === null) unit = m[2] || ""; else if ((m[2] || "") !== unit) return null; key = String(Number(m[1].replace(",", "."))); if (/[.,]/.test(m[1])) dec = true; if (q.o[i].ok) { ok = key; show = m[1]; } else tags[key] = q.o[i].tag || "other"; }
     if (ok === null) return null;
