@@ -2,6 +2,15 @@
 
 Cập nhật: 2026-11-24. Quy ước: `[x]` xong · `[ ]` chưa làm · `[~]` đang làm · `[?]` chờ chủ site duyệt. Xong mục nào thì đổi ký hiệu mục đó (sửa đúng một dòng).
 
+## Điều phối (24/11/2026)
+
+Ba gói chạy song song, mỗi gói giữ một vùng tệp riêng để không đụng nhau. Các mục `[?]` chờ duyệt đã được điều phối CHỐT TẠM theo bản đề xuất trong kế hoạch tương ứng (chủ site xác nhận hoặc sửa sau).
+
+- **Gói A — Vườn theo lớp (H5):** `learn/garden/**`, `learn/farm.js`, `shared/art/garden/**`.
+- **Gói B — Lớp 1 trực quan + icon trang phụ huynh:** `learn/content/lessons/g1_*|VI-G1-*|EN-G1-*`, `learn/lop/bai.html`, `learn/parent/index.html`, `scripts/learn/gen-icons.js`.
+- **Gói C — Nền Plus + AI luyện cùng (chạy cục bộ, mock, tắt mặc định):** `worker/**`, `server/**`, `learn/plus.js`, `learn/slot.js|path.js|backup.js`, docs, `privacy.html`, `terms.html`.
+- Việc cần người/thiết bị thật (B13, B14, nghe loa thật, tô chữ trên cảm ứng, duyệt nội dung) vẫn giữ nguyên bên dưới.
+
 ## H1. Khung điều hướng theo lớp
 
 - [ ] Lớp 1: làm các bài học và bài kiểm tra còn lại trực quan hơn (hình to, câu hỏi bằng hình, ít chữ) — Mới có 2 bài làm quen; các bài khác vẫn dùng chữ nhiều. Cần bạn duyệt hướng đi trước khi sửa 12 bài
