@@ -153,7 +153,6 @@ I("candle", ["🕯", "🕯️"], h => { h.shadow(); h.p("M64 8C74 20 76 28 64 36
 I("eye", ["👁", "👁️"], h => { h.p("M8 64C28 32 100 32 120 64C100 96 28 96 8 64Z", "white"); h.c(64, 64, 24, "blue"); h.c(64, 64, 11, "dark", { ns: true }); h.dot(72, 56, 4, "#fff"); });
 I("unicorn", ["🦄"], h => { h.shadow(); h.p("M62 8L72 40L52 40Z", "yellow", { sw: 2.5 }); h.e(36, 50, 12, 18, "purple", -12); h.e(64, 74, 38, 36, "white"); h.e(64, 90, 22, 16, "pink"); h.eye(50, 68, 4.8); h.eye(78, 68, 4.8); h.dot(58, 90, 2.4, "#B3303F"); h.dot(70, 90, 2.4, "#B3303F"); h.p("M92 40C108 48 112 66 104 80C102 66 98 56 88 52Z", "pink", { sw: 2.5 }); });
 I("megaphone", ["📢"], h => { h.shadow(); h.p("M18 52L68 28L68 100L18 76Z", "orange"); h.r(10, 50, 14, 28, 6, "dark"); h.r(66, 26, 14, 76, 6, "yellow"); h.raw('<path d="M92 48C100 56 100 72 92 80M102 38C116 52 116 76 102 90" fill="none" stroke="#C76A18" stroke-width="5" stroke-linecap="round"/>'); h.r(26, 80, 14, 26, 6, "brown", 14); });
-I("speaker", ["🔊"], h => { h.p("M18 50L40 50L68 26L68 102L40 78L18 78Z", "blue"); h.raw('<path d="M82 46C92 56 92 72 82 82M92 34C108 50 108 78 92 94" fill="none" stroke="#2B64B9" stroke-width="6" stroke-linecap="round"/>'); h.hl(30, 58, 6, 3, 0); });
 I("question", ["❓"], h => { h.shadow(); h.raw('<path d="M40 44C40 22 90 18 90 46C90 62 66 66 64 82" fill="none" stroke="#B3303F" stroke-width="20" stroke-linecap="round"/><path d="M40 44C40 22 90 18 90 46C90 62 66 66 64 82" fill="none" stroke="#F25A5A" stroke-width="13" stroke-linecap="round"/>'); h.c(64, 104, 11, "red"); });
 I("check", ["✅"], h => { h.c(64, 64, 50, "green"); h.raw('<path d="M38 66L56 84L92 44" fill="none" stroke="#fff" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>'); });
 I("map", ["🗺", "🗺️", "📍"], h => { h.shadow(); h.p("M14 28L44 20L84 30L114 22L114 98L84 106L44 96L14 104Z", "cream"); h.l("M44 20L44 96M84 30L84 106", "tan", 3, { op: .7 }); h.p("M64 40C56 40 50 46 50 54C50 66 64 80 64 80C64 80 78 66 78 54C78 46 72 40 64 40Z", "red", { sw: 2.8 }); h.c(64, 54, 5, "white", { ns: true }); });
@@ -164,7 +163,6 @@ I("rocket", ["🚀"], h => { h.shadow(); h.p("M64 8C90 24 94 58 90 84L38 84C34 5
 I("bluesquare", ["🟦"], h => { h.shadow(64, 118, 36); h.r(16, 16, 96, 96, 22, "blue"); h.hl(36, 34, 12, 5, 0); });
 I("graysquare", ["🔲"], h => { h.shadow(64, 118, 36); h.r(16, 16, 96, 96, 22, "dark"); h.r(36, 36, 56, 56, 12, "white", 0, { ns: true }); });
 I("redtriangle", ["🔺"], h => { h.shadow(64, 118, 36); h.p("M64 16L116 106C118 110 116 114 110 114L18 114C12 114 10 110 12 106Z", "red"); h.hl(54, 48, 6, 14, 28); });
-I("speakeroff", ["🔇"], h => { h.p("M18 50L40 50L68 26L68 102L40 78L18 78Z", "gray"); h.raw('<path d="M84 52L114 82M114 52L84 82" fill="none" stroke="#B3303F" stroke-width="8" stroke-linecap="round"/>'); });
 I("note", ["🎶", "🎵"], h => { h.raw('<path d="M48 30L48 92M96 20L96 82M48 30L96 20" fill="none" stroke="#5F3BA9" stroke-width="9" stroke-linecap="round"/>'); h.e(36, 96, 17, 13, "purple", -20); h.e(84, 86, 17, 13, "purple", -20); h.hl(30, 92, 5, 3, -20); });
 I("pear", ["🍐"], h => { h.shadow(); h.p("M64 30C76 30 80 44 82 54C98 62 106 78 100 94C94 108 76 114 64 112C52 114 34 108 28 94C22 78 30 62 46 54C48 44 52 30 64 30Z", "lime"); h.l("M64 30C64 22 68 16 74 12", "brown", 4); h.p("M68 22C78 10 92 12 94 18C88 28 76 28 68 22Z", "green"); h.hl(46, 78, 6, 12, -20); });
 I("peach", ["🍑"], h => { h.shadow(); h.p("M64 36C40 28 20 44 22 72C24 100 48 114 64 106C80 114 104 100 106 72C108 44 88 28 64 36Z", "pink"); h.raw('<path d="M64 36C56 52 56 82 64 106" fill="none" stroke="#C84F84" stroke-width="3" stroke-linecap="round" opacity=".6"/>'); h.p("M66 34C74 20 90 20 94 28C88 38 74 40 66 34Z", "green"); h.hl(40, 62, 6, 12, -25); });
@@ -236,6 +234,43 @@ I("chefhat", ["👨‍🍳", "👩‍🍳"], h => { h.shadow(); h.c(36, 44, 22, 
 I("sunrise", ["🌅", "🌇"], h => { h.p("M12 88C12 58 34 40 64 40C94 40 116 58 116 88Z", "orange"); h.raw('<path d="M8 88L120 88" stroke="#C76A18" stroke-width="5" stroke-linecap="round"/><path d="M64 14L64 26M24 28L32 36M104 28L96 36" stroke="#FFB03F" stroke-width="6" stroke-linecap="round"/>'); h.r(10, 94, 108, 14, 7, "sky"); });
 
 I("rain", ["🌧", "🌧️"], h => { h.p("M30 70C10 70 6 44 28 38C28 14 62 8 76 30C100 24 116 48 104 66C102 70 98 70 92 70Z", "gray"); h.p("M36 82C36 82 30 92 30 96C30 100 34 102 36 102C38 102 42 100 42 96C42 92 36 82 36 82Z", "sky", { sw: 2 }); h.p("M62 86C62 86 56 96 56 100C56 104 60 106 62 106C64 106 68 104 68 100C68 96 62 86 62 86Z", "sky", { sw: 2 }); h.p("M88 82C88 82 82 92 82 96C82 100 86 102 88 102C90 102 94 100 94 96C94 92 88 82 88 82Z", "sky", { sw: 2 }); });
+/* =================== HỌ ICON ĐIỀU KHIỂN (nút) ===================
+   Cùng độ tròn mềm với bộ Pop: nét dày 16, đầu nét và góc bo tròn, MỘT màu = currentColor (đổi theo màu chữ của nút, sáng/tối đều đọc được).
+   U(tên, [ký tự chữ thay thế], [emoji thay thế], nội dung). Ký tự chữ chỉ được thay khi nằm TRONG nút/liên kết (không đụng chữ trong câu). */
+const UI = [];
+function U(name, glyphs, emojis, inner, ctl) { UI.push({ name, glyphs, emojis, inner, ctl: ctl || [] }); }   /* ctl: emoji có icon màu (Pop) ở chỗ khác, nhưng trong NÚT CHỈ CÓ ICON thì dùng bản nét đơn này */
+const UA = 'fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"';
+U("back", ["←"], [], '<path ' + UA + ' d="M104 64H26M56 34L26 64L56 94"/>');
+U("fwd", ["→"], [], '<path ' + UA + ' d="M24 64H102M72 34L102 64L72 94"/>');
+U("prev", ["‹", "◀"], [], '<path ' + UA + ' d="M80 26L42 64L80 102"/>');
+U("next", ["›", "▶"], [], '<path ' + UA + ' d="M48 26L86 64L48 102"/>');
+U("close", ["✕", "✖", "✗", "✘"], [], '<path ' + UA + ' d="M32 32L96 96M96 32L32 96"/>');
+U("check", ["✓", "✔"], [], '<path ' + UA + ' d="M24 68L52 96L104 36"/>');
+U("undo", ["↺"], [], '<path ' + UA + ' d="M30 50A42 42 0 1 1 28 84"/><path ' + UA + ' d="M24 22V52H54"/>');
+U("repeat", [], ["🔁"], '<path ' + UA + ' d="M26 56V50A16 16 0 0 1 42 34H100M84 16L102 34L84 52M102 72V78A16 16 0 0 1 86 94H28M44 76L26 94L44 112"/>');
+U("menu", ["⋯"], [], '<circle cx="26" cy="64" r="10" fill="currentColor"/><circle cx="64" cy="64" r="10" fill="currentColor"/><circle cx="102" cy="64" r="10" fill="currentColor"/>');
+U("info", ["ⓘ"], [], '<circle cx="64" cy="64" r="46" ' + UA.replace("16", "12") + '/><circle cx="64" cy="40" r="7" fill="currentColor"/><path ' + UA.replace("16", "12") + ' d="M64 58V92"/>');
+U("theme", [], ["🌓"], '<circle cx="64" cy="64" r="44" ' + UA.replace("16", "12") + '/><path d="M64 20A44 44 0 0 1 64 108Z" fill="currentColor"/>');
+U("plus", ["＋"], [], '<path ' + UA + ' d="M64 24V104M24 64H104"/>');
+U("minus", ["－"], [], '<path ' + UA + ' d="M24 64H104"/>');
+U("sound", [], ["🔊"], '<path ' + UA.replace("16", "12") + ' d="M20 50H40L68 28V100L40 78H20Z"/><path ' + UA.replace("16", "12") + ' d="M86 46C95 55 95 73 86 82M100 30C116 48 116 80 100 98"/>');
+U("mute", [], ["🔇"], '<path ' + UA.replace("16", "12") + ' d="M16 50H36L64 28V100L36 78H16Z"/><path ' + UA.replace("16", "12") + ' d="M86 50L116 80M116 50L86 80"/>');
+const U2 = 'fill="none" stroke="currentColor" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"';
+U("sprout", [], [], '<path ' + U2 + ' d="M64 110V62M64 72C64 48 46 34 22 36C22 60 40 74 64 72ZM64 60C64 40 80 26 104 28C104 50 88 62 64 60Z"/>', ["🌱"]);
+U("rainbow", [], [], '<path ' + U2 + ' d="M18 100A46 46 0 0 1 110 100M36 100A28 28 0 0 1 92 100M54 100A10 10 0 0 1 74 100"/>', ["🌈"]);
+U("bag", [], [], '<path ' + U2 + ' d="M32 56A22 22 0 0 1 54 34H74A22 22 0 0 1 96 56V104A8 8 0 0 1 88 112H40A8 8 0 0 1 32 104ZM52 34V26A12 12 0 0 1 76 26V34M48 82H80"/>', ["🎒"]);
+U("music", [], [], '<path ' + U2 + ' d="M50 92V34L98 24V82"/><ellipse cx="38" cy="92" rx="13" ry="11" fill="currentColor"/><ellipse cx="86" cy="82" rx="13" ry="11" fill="currentColor"/>', ["🎶"]);
+U("map", [], [], '<path ' + U2 + ' d="M18 34L46 24L82 36L110 26V94L82 104L46 92L18 102ZM46 24V92M82 36V104"/>', ["🗺️"]);
+U("lock", [], [], '<rect x="30" y="58" width="68" height="48" rx="10" ' + U2 + '/><path ' + U2 + ' d="M44 58V46A20 20 0 0 1 84 46V58"/><circle cx="64" cy="82" r="6" fill="currentColor"/>', ["🔒"]);
+U("bulb", [], [], '<path ' + U2 + ' d="M64 18C45 18 32 32 32 50C32 63 40 69 45 80H83C88 69 96 63 96 50C96 32 83 18 64 18ZM50 94H78M55 108H73"/>', ["💡"]);
+U("book", [], [], '<path ' + U2 + ' d="M64 36C52 28 36 28 20 32V98C36 94 52 94 64 102C76 94 92 94 108 98V32C92 28 76 28 64 36ZM64 36V102"/>', ["📖"]);
+U("calendar", [], [], '<rect x="22" y="36" width="84" height="68" rx="12" ' + U2 + '/><path ' + U2 + ' d="M22 58H106M44 24V44M84 24V44"/><circle cx="46" cy="80" r="5" fill="currentColor"/><circle cx="64" cy="80" r="5" fill="currentColor"/><circle cx="82" cy="80" r="5" fill="currentColor"/>', ["📅"]);
+U("home", [], [], '<path ' + U2 + ' d="M18 66L64 24L110 66M32 56V106H96V56M54 106V78H74V106"/>', ["🏡"]);
+U("edit", [], [], '<path ' + U2 + ' d="M24 104L30 76L82 24L104 46L52 98ZM70 36L92 58"/>', ["✏️", "✏"]);
+U("game", [], [], '<path ' + U2 + ' d="M36 44H92A24 24 0 0 1 116 68V76A16 16 0 0 1 90 86L82 76H46L38 86A16 16 0 0 1 12 76V68A24 24 0 0 1 36 44Z"/><path ' + U2 + ' d="M38 56V70M31 63H45"/><circle cx="84" cy="58" r="5" fill="currentColor"/><circle cx="98" cy="68" r="5" fill="currentColor"/>', ["🎮"]);
+const GLYPH = {}, CTL = {};   /* ký tự chữ → icon (chỉ thay trong nút) */
+UI.forEach(u => { u.glyphs.forEach(g => { GLYPH[g] = "ui-" + u.name; }); u.ctl.forEach(e => { CTL[e.replace(/\uFE0F/g, "")] = "ui-" + u.name; }); });
+
 /* =================== PHÁT RA =================== */
 const symbols = [], map = {}, files = [];
 for (const ic of icons) {
@@ -244,6 +279,11 @@ for (const ic of icons) {
   files.push({ name: ic.name, emojis: ic.emojis, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="' + ic.name + '">' + inner + "</svg>\n" });
   symbols.push('<symbol id="i-' + ic.name + '" viewBox="0 0 128 128">' + inner + "</symbol>");
   ic.emojis.forEach(e => { if (map[e]) throw new Error("emoji trùng: " + e); map[e] = ic.name; });
+}
+for (const u of UI) {
+  files.push({ name: "ui-" + u.name, emojis: u.glyphs.concat(u.emojis).concat(u.ctl), svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="' + u.name + '" color="#2B2250">' + u.inner + "</svg>\n" });
+  symbols.push('<symbol id="i-ui-' + u.name + '" viewBox="0 0 128 128">' + u.inner + "</symbol>");
+  u.glyphs.concat(u.emojis).forEach(e => { if (map[e]) throw new Error("ký tự trùng: " + e); map[e] = "ui-" + u.name; });
 }
 for (const f of fs.readdirSync(OUT)) if (f.endsWith(".svg")) fs.unlinkSync(path.join(OUT, f));
 files.forEach(x => fs.writeFileSync(path.join(OUT, x.name + ".svg"), x.svg));
@@ -263,6 +303,8 @@ const js = `/* SINH BỞI scripts/learn/gen-icons.js, không sửa tay. Bộ ico
   var MAP = ${JSON.stringify(map)};
   var SPRITE = ${JSON.stringify('<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs></defs>' + symbols.join("") + "</svg>")};
   var KEYS = ${JSON.stringify(keys)};
+  var CTLM = ${JSON.stringify(CTL)};   /* emoji → icon nét đơn, chỉ dùng trong nút CHỈ CÓ icon (cho cùng một kiểu với ← ✕ ✓…) */
+  var GL = ${JSON.stringify(GLYPH)};   /* ký tự chữ (← ▶ ✓ …): chỉ thay khi nằm trong nút / liên kết */
   function esc(s) { return s.replace(/[.*+?^\${}()|[\\]\\\\]/g, "\\\\$&"); }
   var RE = new RegExp("(" + KEYS.map(function (k) { return esc(k).replace(/\\uFE0F/g, ""); }).join("|") + ")\\\\uFE0F?", "g");
   var SKIP = { SCRIPT: 1, STYLE: 1, TEXTAREA: 1, INPUT: 1, OPTION: 1, SELECT: 1, TITLE: 1, SVG: 1, NOSCRIPT: 1 };
@@ -271,10 +313,13 @@ const js = `/* SINH BỞI scripts/learn/gen-icons.js, không sửa tay. Bộ ico
   function lookup(e) { return MAP[e] || MAP[norm(e)] || MAP[e + "\\uFE0F"]; }
   var busy = false;
   function skip(n) { for (var p = n.parentNode; p && p.nodeType === 1; p = p.parentNode) { if (SKIP[p.nodeName.toUpperCase()] || (p.hasAttribute && p.hasAttribute("data-noicon"))) return true; } return false; }
+  function inCtl(t) { var p = t.parentNode; return !!(p && p.closest && p.closest("button,a,[role=button],[role=menuitem],.ab,.mt,.ib,.hb")); }
+  function ctlOnly(t, e) { var c = t.parentNode && t.parentNode.closest && t.parentNode.closest("button,a,[role=button]"); if (!c) return false; var rest = c.textContent.replace(e, "").replace(/\uFE0F/g, "").replace(/\s+/g, ""); return rest.length <= 3; }
   function swapText(t) {
+    if (!t.parentNode) return;   /* nút đã bị tháo khỏi cây do lần thay trước (danh sách thu sẵn) */
     var s = t.nodeValue; if (!s || !RE.test(s)) { RE.lastIndex = 0; return; } RE.lastIndex = 0; if (skip(t)) return;
     var frag = document.createDocumentFragment(), last = 0, m, any = false;
-    while ((m = RE.exec(s))) { var name = lookup(m[1]); if (!name) continue; any = true;
+    while ((m = RE.exec(s))) { var name = lookup(m[1]); if (!name) continue; if (GL[m[1]] && !inCtl(t)) continue; if (CTLM[norm(m[1])] && ctlOnly(t, m[1])) name = CTLM[norm(m[1])]; any = true;
       if (m.index > last) frag.appendChild(document.createTextNode(s.slice(last, m.index)));
       var w = document.createElement("span"); w.innerHTML = svg(name); var el = w.firstChild; el.setAttribute("data-e", m[1]); frag.appendChild(el); last = m.index + m[0].length; }
     RE.lastIndex = 0; if (!any) return; if (last < s.length) frag.appendChild(document.createTextNode(s.slice(last)));
@@ -292,7 +337,9 @@ const js = `/* SINH BỞI scripts/learn/gen-icons.js, không sửa tay. Bộ ico
     auto: function () {
       if (!document.body) return;
       if (!document.getElementById("li-sprite")) { var d = document.createElement("div"); d.id = "li-sprite"; d.setAttribute("aria-hidden", "true"); d.innerHTML = SPRITE; document.body.insertBefore(d, document.body.firstChild);
-        var st = document.createElement("style"); st.textContent = ".ico{display:inline-block;width:1em;height:1em;vertical-align:-.16em;flex:none;overflow:visible}"; document.head.appendChild(st); }
+        var st = document.createElement("style"); st.textContent = ".ico{display:inline-block;width:1em;height:1em;vertical-align:-.16em;flex:none;overflow:visible}" +
+          /* nút icon: căn giữa bằng flexbox (grid + place-items trên <button> bị lệch ở Safari iOS cũ, vd iPhone SE) */
+          ".ib,.hb,.mt,.sgb{display:flex;align-items:center;justify-content:center;text-align:center}.lsn{display:inline-flex;align-items:center;justify-content:center}.ib[hidden],.hb[hidden],.mt[hidden],.sgb[hidden]{display:none}.ib .ico,.hb .ico,.mt .ico,.sgb .ico{display:block;margin:0;vertical-align:baseline}"; document.head.appendChild(st); }
       run(document.body);
       if (window.MutationObserver) new MutationObserver(function (ms) { if (busy) return; for (var i = 0; i < ms.length; i++) { var m = ms[i]; if (m.type === "characterData") run(m.target); else for (var j = 0; j < m.addedNodes.length; j++) run(m.addedNodes[j]); } }).observe(document.body, { childList: true, subtree: true, characterData: true });
     } };

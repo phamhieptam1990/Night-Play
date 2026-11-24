@@ -5,7 +5,7 @@ Cập nhật: 2026-11-24. Quy ước: `[x]` xong · `[ ]` chưa làm · `[~]` đ
 ## H1. Khung điều hướng theo lớp
 
 - [ ] Lớp 1: làm các bài học và bài kiểm tra còn lại trực quan hơn (hình to, câu hỏi bằng hình, ít chữ) — Mới có 2 bài làm quen; các bài khác vẫn dùng chữ nhiều. Cần bạn duyệt hướng đi trước khi sửa 12 bài
-- [ ] Icon SVG đợt 2: vẽ nốt ~50 emoji còn lại (người, bộ phận cơ thể, phương tiện: tàu/máy bay/xe máy, đồ ăn lẻ…), ký hiệu giao diện ▶ ◀ ↔ giữ chữ — Danh sách còn thiếu: 🌰 🦝 🧱 🌓 🦗 🔪 👩 👨 🛞 🏟 👥 🚆 🛤 🧊 ✍ 🧚 🔗 🙋 🏫 👨‍👩‍👧 🧐 😴 🧔 👦 👧 🧭 💪 🐺 🪷 🪣 🛶 🌭 📄 🐉 🪰 👅 👃 👄 🦶 🦵 🍗 🩳 🧣 🚢 🚂 🏍 🚁 🪟 🖨 🤔
+- [ ] Icon SVG đợt 2: vẽ nốt ~50 emoji còn lại kiểu Pop (người, bộ phận cơ thể, phương tiện: tàu/máy bay/xe máy, đồ ăn lẻ…) — Danh sách còn thiếu: 🌰 🦝 🧱 🌓 🦗 🔪 👩 👨 🛞 🏟 👥 🚆 🛤 🧊 ✍ 🧚 🔗 🙋 🏫 👨‍👩‍👧 🧐 😴 🧔 👦 👧 🧭 💪 🐺 🪷 🪣 🛶 🌭 📄 🐉 🪰 👅 👃 👄 🦶 🦵 🍗 🩳 🧣 🚢 🚂 🏍 🚁 🪟 🖨 🤔. **Đã xong 24/11:** họ icon NÚT nét đơn cùng kiểu (← → ‹ › ✕ ✓ ↺ ⋯ ⓘ ＋ － 🔊 🔇 🌓 🔁 + bản nét đơn của 🌱 🌈 🎒 🎶 🗺️ 🔒 💡 📖 📅 🏡 ✏️ 🎮 khi nút CHỈ có icon) trong `scripts/learn/gen-icons.js` → `learn/icons.js`. Còn: nút có chữ kèm icon vẫn dùng icon màu; trang phụ huynh chưa nạp icons.js
 
 ## H2. Bộ máy bài học
 
