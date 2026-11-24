@@ -78,3 +78,9 @@ avatar bé lớn, quyết định thiết kế chủ site, thử trên iPhone/iP
 - [x] Ảnh Chrome 360×640: free + 4 giao diện + menu ⋯ (độ khó/chế độ/giao diện tự nhận)
 - [ ] Chưa xem ảnh: 380×760, ngang 844×390, 1200×640, màn kết thúc, popup
 - [ ] Bài đo difficulty báo "huy hiệu hiện ở màn chọn" — cùng lỗi với ga-me-ban-trung / cho-hang-kieu-viet (do màn chính mới home3), không riêng game này
+
+## G3. Game Cozy mới "Trượt Số Nam Châm" (xếp số trượt cả dãy như đồ chơi nam châm; nhập số hàng × cột 2–10) — 1 giao diện free + 4 trả phí
+
+- [x] Spec + mã client `scripts/cozygame/parts/truot-so/*.js` + `server/pro/truot-so-nam-cham.js` (3 loại: Số úp, Đua giờ, Nam châm nhiễu; 4 giao diện: Gỗ Cổ, Neon Đêm, Bong Bóng Biển, Phi Thuyền); nối hệ thống; check.js đạt (CHECK_ONLY)
+- [x] Ảnh Chrome 360×640: hộp nhập cỡ, bảng 5×5 free, giao diện Bong Bóng Biển
+- [ ] Chưa xem: Gỗ Cổ / Neon / Phi Thuyền, 380×760, ngang 844×390, 1200×640, màn kết thúc; chưa có linh vật SVG; chưa kiểm bảng lớn (8×8–10×10) trên máy thật
