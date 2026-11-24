@@ -528,7 +528,7 @@ const shuf = a => { for(let i = a.length - 1; i > 0; i--){ const j = rnd(0, i); 
 let lang = "vi", subj = "toan", grade = 1;
 { const s = ls("lang"); if(s && T[s]) lang = s;
   const q = ls("learn:subj"); if(q && T.vi.sn[q]) subj = q; const g = +ls("learn:grade"); if(g >= 1 && g <= 5) grade = g;
-  try{ const u = new URLSearchParams(location.search), a = u.get("subj"), b = u.get("lang"), c = +u.get("grade"); if(a && T.vi.sn[a]) subj = a; if(b && T[b]) lang = b; if(c >= 1 && c <= 5) grade = c; }catch(e){} }
+  try{ const u = new URLSearchParams(location.search), a = u.get("subj"), b = u.get("lang"), c = +u.get("grade"); if(a && T.vi.sn[a]) subj = a; if(b && T[b]) lang = b; if(c >= 1 && c <= 5){ grade = c; ls("learn:grade", c); } }catch(e){} }   /* vào bằng ?grade=N thì nhớ lớp đó (trang phụ huynh, Của bé dùng chung) */
 /* kiểm tra theo chủ đề: ?grade&subj&topic=<topic_id> (từ trang lop/); sai mã hoặc đổi môn/lớp thì bỏ */
 if(window.LearnSlot){ LearnSlot.set(grade, subj); if(window.Farm) Farm.resetCache(); }   /* vườn theo lớp × môn: phần thưởng chảy vào đúng vườn */
 let TOPIC_ID = null;
