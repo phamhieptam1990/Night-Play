@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="vi">
 <head>
+<link rel="stylesheet" href="../bg.css">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Học Vui · Bài học</title>
@@ -124,6 +125,7 @@ button.it:active{transform:scale(.92)}
 </style>
 </head>
 <body>
+<div class="aur" aria-hidden="true" style="z-index:-1"></div>
 <div class="bg" aria-hidden="true"></div>
 <header class="top">
   <a class="ib" id="back" href="index.html" aria-label="Quay lại">←</a>
@@ -154,7 +156,7 @@ button.it:active{transform:scale(.92)}
 "use strict";
 const $=id=>document.getElementById(id), P=window.LearnPath;
 function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
-const q=new URLSearchParams(location.search), grade=+q.get("grade"), subj=q.get("subj"), topic=q.get("topic"); if(grade===1) document.documentElement.classList.add("g1");
+const q=new URLSearchParams(location.search), grade=+q.get("grade"), subj=q.get("subj"), topic=q.get("topic");document.body.dataset.subj=subj;document.body.dataset.grade=grade; if(grade===1) document.documentElement.classList.add("g1");
 let lang=ls("lang"); if(q.get("lang")==="en"||q.get("lang")==="vi") lang=q.get("lang"); if(lang!=="en") lang="vi";
 const MAS={toan:["math","#34D399","#0EA5E9"],tviet:["vietnamese","#FFB020","#FB5A7A"],tanh:["english","#60A5FA","#A78BFA"]};
 const M=MAS[subj]||MAS.toan;

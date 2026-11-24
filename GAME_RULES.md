@@ -295,3 +295,13 @@ Nguyên tắc dự án: game chạy **offline, không lag, không gọi máy ch�
 ## Chữ ký màn chơi + chống nhúng (`shared/guard.js`, `scripts/build.js` → `_headers`, `netlify.toml`, `server/server.js`)
 - **Chữ ký**: logo (`shared/favicon.svg`) + chữ "nightplay.vn" nhỏ mờ giữa mép dưới, tự gắn ở mọi trang `/games/` (không cần sửa từng game); `position:fixed`, `pointer-events:none`, bỏ qua khung < 300px (ô "Chơi cùng lúc"), bị gỡ thì tự gắn lại. Game mới đừng đặt nút/chữ ở sát giữa mép dưới (≤ 16px).
 - **Chống nhúng**: máy chủ gửi `frame-ancestors 'self'` + `X-Frame-Options: SAMEORIGIN` (cổng nhúng game cùng origin vẫn chạy; mở link trực tiếp trong Zalo/Messenger không ảnh hưởng). guard.js là lớp dự phòng khi file bị chép sang host khác: trang nằm trong iframe khác origin → `window.stop()` + thông báo + nút mở bản gốc. Muốn cho đối tác nhúng: thêm domain vào `frame-ancestors` (cả build.js và netlify.toml).
+
+## Cấu trúc tệp: tách rõ ràng, không để một tệp quá dài (bắt buộc cho code mới và code đang sửa)
+- **Giới hạn**: HTML tay viết ≤ 300 dòng; JS ≤ 400 dòng; CSS ≤ 400 dòng (cần lắm mới tới 600, ghi lý do ở đầu tệp); mỗi dòng ≤ ~200 ký tự (không viết cả khối vào một dòng).
+- **Mỗi tệp một nhiệm vụ**: ví dụ `learn/garden/` đã tách theo chức năng (animals, trees, plots, unlock, collection…); làm theo cách đó. Không có tệp "tổng hợp mọi thứ".
+- **HTML chỉ là khung**: CSS và JS để tệp riêng (`css/NN-ten.css`, `*.js`), nạp bằng `<link>`/`<script>`; không nhồi khối `<style>`/`<script>` dài trong HTML.
+- **Khi thêm tính năng** vào tệp đã dài: viết vào tệp MỚI (module) và chỉ thêm vài dòng nối vào tệp cũ; khi sửa phần lớn một tệp quá dài thì tách phần đó ra.
+- **Tệp sinh tự động** (`learn/icons.js`, `learn/content/curriculum.js`, `learn/content/lessons/index.js`, SVG, `learn/bg.css`…) không tính giới hạn nhưng phải có bộ sinh ở `scripts/` và dòng đầu ghi "SINH BỞI … không sửa tay".
+- **Dữ liệu lớn** (ngân hàng câu, bài học, bảng từ) để tệp dữ liệu riêng theo lớp/môn, không dồn vào tệp logic.
+- **Bài đo**: một bài đo một tệp trong `scripts/`, tên rõ chức năng (`check-<phần>.js`).
+- Tệp hiện đã vượt giới hạn (ví dụ `learn/index.html`, `learn/engine.js`, `learn/parent/index.html`, `learn/lang-skills.js`, `learn/content/qtypes.js`, `learn/lop/bai.html`) được ghi trong `docs/CHECKLIST.md` mục "Tách tệp"; tách dần, không thêm dòng mới vào phần đã quá dài.

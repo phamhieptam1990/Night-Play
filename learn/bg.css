@@ -1,0 +1,14 @@
+/* SINH BỞI scripts/learn/gen-learn-bg.js, không sửa tay. Tranh nền theo môn (body[data-subj]) cho trang học, kiểm tra và bài học; đổi tông theo lớp bằng body[data-grade]. */
+.aur{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.aur::before{content:"";position:absolute;z-index:1;inset:-12px 0;background:center bottom/cover no-repeat;opacity:1;pointer-events:none;animation:bgDrift 11s ease-in-out infinite alternate}
+body[data-subj=toan] .aur::before{background-image:url(../shared/art/learn/bg/toan.svg)}
+body[data-subj=tviet] .aur::before{background-image:url(../shared/art/learn/bg/tviet.svg)}
+body[data-subj=tanh] .aur::before{background-image:url(../shared/art/learn/bg/tanh.svg)}
+body[data-grade="1"] .aur::before{filter:none}
+body[data-grade="2"] .aur::before{filter:hue-rotate(28deg) saturate(1.05)}
+body[data-grade="3"] .aur::before{filter:hue-rotate(-30deg) saturate(1.05)}
+body[data-grade="4"] .aur::before{filter:hue-rotate(60deg) saturate(.95)}
+body[data-grade="5"] .aur::before{filter:hue-rotate(-62deg) saturate(.95) brightness(.95)}
+:root:not([data-theme=dark]) .aur::before{opacity:.85}
+@keyframes bgDrift{from{transform:translateY(0)}to{transform:translateY(10px)}}
+@media (prefers-reduced-motion:reduce){.aur::before{animation:none}}

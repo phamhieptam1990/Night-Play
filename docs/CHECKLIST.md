@@ -61,3 +61,11 @@ Ba gói chạy song song, mỗi gói giữ một vùng tệp riêng để không
 
 - [ ] B13. Rà lại toàn bộ bằng bé thật (hoặc phụ huynh quan sát) 5 phút, trên iPad và iPhone — Ghi lại: bé chạm vào đâu đầu tiên, có tự quay lại không, chỗ nào hỏi "cái này là gì". Mình mới đóng vai bằng ảnh Chrome, chưa có người thật
 - [ ] B14. iPhone SE thật: kiểm nút góc phải trên (sự kiện 📅) và góc phải dưới (＋ − ⌂) còn lệch icon không — Đã đổi cách căn giữa (flexbox thay grid) và vẽ ＋ − bằng SVG; Chrome headless đo tâm icon trùng tâm nút ở 320 và 375px nhưng không tái hiện được lỗi gốc, cần thử trên máy thật
+
+## Tách tệp (theo quy tắc "Cấu trúc tệp" trong CLAUDE.md và GAME_RULES.md)
+
+- [ ] `learn/index.html` (~990 dòng): tách CSS ra `learn/css/` (nút, câu hỏi, menu, chúc mừng, màn kết thúc…) và JS ra `learn/js/` (vòng chơi, âm thanh, menu, kết quả); HTML chỉ còn khung.
+- [ ] `learn/engine.js` (~800 dòng): tách theo môn/kỹ năng (Toán số học, hình học, đo lường, dữ liệu…), giữ một tệp nối.
+- [ ] `learn/parent/index.html` (~550 dòng), `learn/lop/bai.html` (~390 dòng), `learn/lang-skills.js` (~460 dòng), `learn/content/qtypes.js` (~420 dòng), `learn/qui.js` (~330 dòng): tách CSS/JS riêng và theo chức năng.
+- [ ] Mọi dòng quá dài (cả khối viết trên một dòng, nhất là CSS/JS trong HTML): xuống dòng theo luật.
+- [ ] Thêm bài đo `scripts/learn/check-filesize.js`: báo tệp tay viết vượt giới hạn dòng (bỏ qua tệp sinh tự động), chạy cùng các bài đo của Học Vui.
