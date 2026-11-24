@@ -25,7 +25,7 @@
     var res = { t: -1, vis: false };
     if (CFG.input) {
       var el = document.querySelector(CFG.input); if (!el) return res;
-      res.vis = shown(el); res.t = byThreshold(+el.value); return res;
+      res.vis = shown(el) || !el.closest("[hidden]"); res.t = byThreshold(+el.value); return res;
     }
     var cs = document.querySelectorAll(SEL);
     for (var c = 0; c < cs.length; c++) {
@@ -36,7 +36,7 @@
         if (t >= 0 && k.getAttribute("data-dt") !== NAMES[t]) k.setAttribute("data-dt", NAMES[t]);
         if (sel < 0 && (k.classList.contains("on") || k.getAttribute("aria-pressed") === "true")) sel = i;
       }
-      if (shown(cs[c])) res.vis = true;
+      if (shown(cs[c]) || !cs[c].closest("[hidden]")) res.vis = true;   /* màn chính mới (home3) ẩn chip bằng CSS nhưng chip vẫn nằm trong màn chọn đang mở; vào ván thì màn chọn có [hidden] */
       if (sel >= 0) { res.t = map(n, sel); if (res.vis) break; }
     }
     return res;
