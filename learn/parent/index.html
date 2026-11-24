@@ -339,6 +339,7 @@ button{font:inherit;color:inherit;cursor:pointer}
     <section class="sec" id="s-weak" aria-labelledby="h2w"><h2 id="h2w"></h2><div id="weak"></div></section>
     <section class="sec" id="s-limit" aria-labelledby="h2l"><h2 id="h2l"></h2><div class="card" id="limit"></div></section>
     <section class="sec" id="s-set" aria-labelledby="h2s"><h2 id="h2s"></h2><div class="card" id="set"></div></section>
+    <section class="sec" id="s-plus" aria-labelledby="h2p" hidden></section>
     </div>
     <a class="btn ghost" id="exit" href="/learn/index.html"></a>
     <p class="priv" id="priv"></p>
@@ -355,6 +356,9 @@ button{font:inherit;color:inherit;cursor:pointer}
 <script src="../habit.js"></script>
 <script src="../backup.js"></script>
 <script src="../limit.js"></script>
+<script src="../content/safe-words.js"></script>
+<script src="../plus.js"></script>
+<script src="../coach.js"></script>
 <script>
 "use strict";
 const C = window.PARENT_COPY, E = window.LearnEngine, LL = window.LearnLimit, $ = id => document.getElementById(id);
@@ -537,6 +541,7 @@ $("theme").onclick = () => { const d = document.documentElement.dataset.theme ==
 chrome(); newSum();
 if(passed()) open_(); else $("gi").focus();
 </script>
+<script src="plus-card.js"></script>
 <script src="../icons.js"></script>
 <script src="../../shared/offline.js" defer></script>
 <script src="../../shared/updated.js"></script>
