@@ -1,0 +1,16 @@
+/* Màn chờ tải trang (js/page-loading.js) */
+.pl-load{transition:opacity .3s ease;color:#4B4568}
+.pl-load.out{opacity:0;pointer-events:none}
+.pl-dark .pl-load{color:#C9CCF0}
+.pl-box{display:flex;flex-direction:column;align-items:center;gap:14px}
+.pl-mas{width:92px;height:92px;border-radius:50%;display:grid;place-items:center;font-size:48px;
+  background:linear-gradient(145deg,#FFE9A8,#FFB86B);box-shadow:0 8px 0 rgba(0,0,0,.12);animation:plHop 1s ease-in-out infinite}
+.pl-dark .pl-mas{background:linear-gradient(145deg,#5B4FD8,#8B6CF0)}
+.pl-dots{display:flex;gap:8px}
+.pl-dots i{width:10px;height:10px;border-radius:50%;background:#F59E0B;animation:plDot 1s ease-in-out infinite}
+.pl-dots i:nth-child(2){animation-delay:.15s}
+.pl-dots i:nth-child(3){animation-delay:.3s}
+.pl-txt{margin:0;font:800 15px/1.2 var(--font,system-ui,sans-serif)}
+@keyframes plHop{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes plDot{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
+@media (prefers-reduced-motion:reduce){.pl-mas,.pl-dots i{animation:none}}
