@@ -1,0 +1,43 @@
+/* Nhóm "cửa vào" ở đầu trang (Pop Play · Night Play · Học Vui) + hàng huy hiệu. Nạp SAU landing.css để ghi đè bố cục cũ (2 cửa).
+   Điện thoại: 3 ô nhỏ cùng hàng (icon trên, chữ dưới). Từ 700px: 3 thẻ ngang bằng nhau; nút Chơi ngay một hàng riêng phía trên. */
+.cta{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;width:100%;justify-items:start}
+.cta .btn.big{width:100%}
+.doors{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%}
+.door{flex-direction:column;justify-content:center;text-align:center;gap:6px;min-height:104px;padding:12px 6px;border-radius:20px}
+.door .dt{justify-items:center}
+.door b{font-size:15px;white-space:normal;line-height:1.15}
+.door small{font-size:12px;white-space:normal;line-height:1.2}
+.door .di{width:44px;height:44px;font-size:23px}
+.door.learn{border-color:#16A34A;background:linear-gradient(135deg,color-mix(in srgb,#16A34A 15%,var(--panel)),var(--panel))}
+.door.learn .di{background:linear-gradient(135deg,#4ADE80,#16A34A)}
+.door.learn:hover{box-shadow:0 8px 24px color-mix(in srgb,#16A34A 40%,transparent);border-color:#4ADE80}
+html[data-theme=dark] .door.learn{background:linear-gradient(135deg,rgba(22,163,74,.22),rgba(27,30,47,.78))}
+@media (min-width:700px){
+ .cta{justify-items:stretch;max-width:720px}
+ .cta .btn.big{width:auto;justify-self:start}
+ .doors{gap:12px}
+ .door{flex-direction:row;text-align:left;justify-content:flex-start;gap:12px;min-height:72px;padding:10px 14px 10px 12px}
+ .door .dt{justify-items:start}
+ .door b{font-size:18px;white-space:nowrap}
+ .door small{font-size:13.5px;white-space:nowrap}
+}
+@media (min-width:700px) and (max-width:1100px){.door{flex-direction:column;text-align:center;justify-content:center;gap:6px;min-height:104px;padding:12px 8px}.door .dt{justify-items:center}}
+/* huy hiệu: MỖI HUY HIỆU MỘT DÒNG. Điện thoại: xếp tự nhiên theo hàng (không xuống dòng chữ); từ 700px: lưới 3 cột đều */
+.badges{display:flex;flex-wrap:wrap;gap:8px;width:100%;max-width:720px;font-size:13px}
+.badges li{min-height:38px;white-space:nowrap;padding-right:11px}
+@media (min-width:700px){.badges{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.badges li{justify-content:flex-start;padding-right:8px}}
+@media (max-width:359px){.badges{font-size:12px;gap:6px}.badges li{padding-right:8px}}
+/* màn rộng: hàng icon game trải hết chiều ngang KHUNG nội dung (nằm dưới cả chữ lẫn điện thoại), không tràn ra hai mép cửa sổ */
+@media (min-width:900px){
+ .hero{overflow-x:clip}
+ .hero-in>.phones{grid-row:1 / span 4}
+ .hero-in>.marq{grid-column:1 / -1;grid-row:5;width:100%;margin-top:6px}
+}
+@media (min-width:700px) and (max-width:1100px){.badges{font-size:12px;gap:8px}.badges li{padding-right:6px;gap:5px}}
+/* hàng icon game (màn rộng): icon giữa phóng to + sóng; marq-wave.js đặt --mq-s / --mq-y */
+@media (min-width:900px){
+ .hero-in>.marq{height:160px;padding:44px 0 30px;overflow-y:visible;overflow-x:hidden}
+ .mi .mimg{transform:translate(var(--mq-x,0),var(--mq-y,0)) scale(var(--mq-s,1));transition:none;will-change:transform}
+ .mi{overflow:visible}
+}
+@media (prefers-reduced-motion:reduce){.mi .mimg{transform:none!important}}
