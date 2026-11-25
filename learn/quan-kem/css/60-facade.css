@@ -1,0 +1,7 @@
+/* Mặt tiền quán theo cấp: mái hiên chồng lên tường sau (sau khách, sau quầy); cấp cao thêm ánh sáng ấm. */
+#fac{left:0;top:0;width:100%;z-index:1;pointer-events:none;transform-origin:50% 0}
+#fac.pop{animation:facIn .9s cubic-bezier(.2,1.4,.4,1)}
+@keyframes facIn{from{transform:translateY(-14cqw) scaleY(.5);opacity:0}}
+#zCounter[data-lv="4"] #scBack{filter:brightness(1.04) saturate(1.1)}
+#zCounter[data-lv="5"] #scBack{filter:brightness(1.08) saturate(1.2)}
+.facd{top:0;z-index:1;pointer-events:none}

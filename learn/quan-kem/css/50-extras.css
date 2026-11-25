@@ -1,0 +1,19 @@
+/* Phần riêng từng lớp: chấm màu trên nhãn vị (lớp 1), mẩu giấy gọi món (lớp 5), hàng nút sang quán lớp khác, màn xếp chữ viết thực đơn (lớp 5). */
+.cl i{display:inline-block;width:3.2cqw;height:3.2cqw;border-radius:50%;margin-right:1cqw;vertical-align:-.4cqw;border:.5cqw solid #fff}
+#bub.note{background:linear-gradient(#FFFDF0,#F6EBC8);transform:rotate(-1.5deg);border:.5cqw dashed #C9A45C}
+#bub.note #bTxt{font-family:"Comic Sans MS","Bradley Hand",cursive;font-weight:700;color:#4a3a1a}
+.worlds .card{position:relative;padding:1cqw}.worlds .card.me{border-color:#FFD24D;border-width:1cqw;background:rgba(255,210,77,.25)}
+.worlds .gn{position:absolute;left:1.6cqw;top:1.2cqw;min-width:6cqw;height:6cqw;border-radius:50%;background:#FFD24D;color:#4a2c00;font-weight:900;font-size:4cqw;display:grid;place-items:center}
+#spell{position:fixed;inset:0;z-index:2147481000;display:grid;place-items:center;background:rgba(20,16,50,.6)}
+.sp-card{position:relative;width:min(92vw,380px);padding:18px 14px 16px;border-radius:26px;background:linear-gradient(#FFF8E4,#FFEBC4);display:flex;flex-direction:column;align-items:center;gap:10px;box-shadow:0 12px 30px rgba(0,0,0,.35)}
+.sp-img{width:min(34vw,120px);max-height:22vh;object-fit:contain}
+.sp-x{position:absolute;right:6px;top:6px;width:56px;height:56px;border-radius:50%;background:rgba(20,16,50,.7);color:#fff;display:grid;place-items:center}.sp-x svg{width:55%;height:55%}
+.sp-slots{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.sp-slots i{width:34px;height:42px;border-radius:10px;background:#fff;border:3px dashed #C9A45C;display:grid;place-items:center;font:900 24px system-ui;color:#4a2f00;font-style:normal}.sp-slots i.on{border-style:solid;background:#CFF3D6}
+.sp-tiles{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.sp-tiles button{width:56px;height:56px;border-radius:16px;background:linear-gradient(#8F7BFF,#6a4fd8);color:#fff;font:900 28px system-ui;box-shadow:0 5px 0 #3a2a8a;text-transform:lowercase}
+.sp-tiles button:disabled{opacity:.25;box-shadow:none}.sp-tiles button.no{animation:spno .35s}
+@keyframes spno{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@media (max-height:520px) and (min-aspect-ratio:11/10){.sp-card{flex-direction:row;flex-wrap:wrap;width:min(92vw,560px);padding:10px}.sp-img{max-height:100px}}
+#bub.note{z-index:8;left:40cqw;top:1.5cqw;width:57cqw;padding:1.6cqw 2cqw}#bub.note #bTxt{font-size:3.5cqw;line-height:1.2}
+#bub.note::before{top:12cqw}

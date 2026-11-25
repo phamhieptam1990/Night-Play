@@ -1,0 +1,18 @@
+/* Popup đồ vật (Bộ sưu tập) + sự kiện: ít chữ, nhiều hình. Hình to, dòng phụ là biểu tượng, nút có biểu tượng. */
+.ct span.cs{font-size:18px;font-weight:800;opacity:1;min-height:22px;line-height:22px}.ct.lock span.cs{font-size:15px}
+.ct .cti{width:68px;height:68px}.ct .cti img{width:68px!important;height:68px!important}
+.cgrid{grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px}@media (max-width:520px){.cgrid{grid-template-columns:repeat(3,1fr)}.ct b{font-size:13px}}
+.tabs2.col .t2{font-size:26px!important;line-height:1}
+/* sự kiện: hàng hình tiến độ + thưởng */
+.evdots{display:flex;gap:6px;flex-wrap:wrap}.evdots i{font-style:normal;font-size:22px;line-height:1;opacity:.9}.evdots i.dn{filter:drop-shadow(0 0 4px #FFD54A)}
+.evbig{display:flex;justify-content:center;padding:14px 8px;border-radius:18px;background:rgba(255,255,255,.12);margin-bottom:12px}
+.evbig .evdots{justify-content:center;gap:12px}.evbig .evdots i{font-size:48px}
+.evrw{display:flex;justify-content:center;gap:22px;font-size:34px;margin-bottom:14px}.evrw span{display:inline-flex;align-items:center;gap:6px}.evrw b{font:900 22px system-ui;color:#FFE08A}
+.evacts{display:flex;gap:10px}.evacts .btn{min-height:56px;font-size:22px}.evacts #cl,.evacts #sim{flex:0 0 56px;padding:0}.evacts .go{flex:1;display:flex;align-items:center;justify-content:center;text-decoration:none;font-weight:900}
+.alert .grow b{font-size:18px}.alert .evdots i{font-size:24px}.alert #rs{min-height:44px;font-size:18px}
+/* màn thấp / ngang: popup sự kiện gọn một khối, không cắt nút */
+@media (max-height:430px){
+.card:has(.evbig) .cico{display:none!important}.card:has(.evbig) .hd{padding:10px 64px 0 16px!important;text-align:left}.card:has(.evbig) .hd h2{font-size:22px!important}
+.card:has(.evbig) .cbody{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:8px 14px 12px!important}
+.evbig{flex:1 1 0;margin:0;padding:6px}.evbig .evdots i{font-size:34px}.evrw{margin:0;gap:12px;font-size:28px}.evacts{flex:0 0 100%}.evacts .btn{min-height:48px}
+}

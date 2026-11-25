@@ -40,7 +40,7 @@
 #guide .gd-again{display:block;width:100%;min-height:48px;margin-top:12px;border-radius:16px;border:2px solid rgba(255,255,255,.4);background:transparent;color:#fff;font:800 16px system-ui;cursor:pointer}
 @media (max-height:520px){#guide .gd-goal>img{width:84px;height:68px}#guide .gd-goal b{font-size:20px}#guide .gd-prize{margin-top:6px;padding:6px 10px;font-size:16px}}
 /* chip mục tiêu luôn thấy ở góc dưới trái (bé biết mình đang hướng tới gì), bấm mở bảng Chăm vườn */
-.goalchip{position:fixed;left:12px;right:70px;bottom:max(28px,calc(14px + env(safe-area-inset-bottom)));z-index:29;display:flex;align-items:center;gap:6px;min-height:46px;padding:0 16px;border-radius:99px;border:2px solid rgba(255,224,138,.8);background:linear-gradient(135deg,#6D4AE0,#3B2A9E);color:#fff;font:800 16px system-ui;box-shadow:0 8px 20px rgba(20,16,50,.4);cursor:pointer;max-width:calc(100vw - 96px)}
+.goalchip{position:fixed;left:12px;right:auto;width:max-content;bottom:max(28px,calc(14px + env(safe-area-inset-bottom)));z-index:29;display:flex;align-items:center;gap:6px;min-height:46px;padding:0 16px;border-radius:99px;border:2px solid rgba(255,224,138,.8);background:linear-gradient(135deg,#6D4AE0,#3B2A9E);color:#fff;font:800 16px system-ui;box-shadow:0 8px 20px rgba(20,16,50,.4);cursor:pointer;max-width:calc(100vw - 96px)}
 .goalchip b{padding:2px 9px;border-radius:99px;background:#FFE08A;color:#4a2c00;font-weight:900}
 /* ===== SLIDE GIỚI THIỆU ===== */
 #introCard{position:relative;display:flex;flex-direction:column;gap:12px;width:min(520px,100%);padding:18px 18px 16px!important;text-align:center;color:#fff;background:linear-gradient(165deg,#2f6f60,#1d4a41 52%,#14332d)!important;border:2px solid rgba(255,224,138,.6)!important}

@@ -40,7 +40,7 @@ function applyUnlock(stage, stars){
     var t = treeOfPlot(p); if(t){ if(t.el) t.el.classList.toggle("lk", lock); if(t.sh) t.sh.classList.toggle("lk", lock); }
   });
   o.animals.forEach(function(s, i){ s.locked = i >= na; if(s.el) s.el.classList.toggle("lk", s.locked); });
-  document.querySelectorAll(".bld").forEach(function(a, i){ a.classList.toggle("lk", i === 0 ? stage < 5 : stage < UNL.full); });   /* nhà bấm được khi xong nhà; kho, ao khi mở toàn cảnh */
+  document.querySelectorAll(".bld").forEach(function(a, i){ a.classList.toggle("lk", i === 0 || a.dataset.n === "Nhà của Bi" || a.dataset.n === "Quán kem" ? stage < 5 : stage < UNL.full); });   /* nhà bấm được khi xong nhà; kho, ao khi mở toàn cảnh */
   return { trees: nt, animals: na, stage: stage };
 }
 /* BẢNG "CHĂM VƯỜN HÔM NAY" cho bé (nút ☰ và 📅 cùng mở): một màn duy nhất, ngắn gọn.
@@ -53,7 +53,7 @@ function renderGoalChip(){
   var c = document.getElementById("goalChip"); if(!c) return; var n = missionsDone(), g = Farm.BUILD.goal(n), t = Farm.BUILD.tier(n);
   var img = "<img src='" + gardenerImg(n) + "' alt=''>";
   if(!g){ c.style.display = ""; c.innerHTML = img + "Cấp " + t; c.setAttribute("aria-label", "Cấp " + t + ": " + Farm.BUILD.TIER_NAMES[t]); return; }
-  var a = g.done - g.from, b = g.at - g.from; c.style.display = ""; c.innerHTML = img + "🎯 " + g.name + " <b>" + a + "/" + b + "</b>"; c.setAttribute("aria-label", "Cấp " + t + ". Mục tiêu: " + g.name + ", đã xong " + a + " trên " + b + " nhiệm vụ. Bấm để xem.");
+  var a = g.done - g.from, b = g.at - g.from; c.style.display = ""; c.innerHTML = img + "<img class='gcg' src='" + goalImg(g) + "' alt=''><b>" + a + "/" + b + "</b>"; c.setAttribute("aria-label", "Cấp " + t + ". Mục tiêu: " + g.name + ", đã xong " + a + " trên " + b + " nhiệm vụ. Bấm để xem.");
 }
 function renderGuide(u){
   var g = document.getElementById("guide"); if(!g) return;
@@ -67,7 +67,7 @@ function renderGuide(u){
   var many = u.stage >= UNL.full;
   g.innerHTML = "<div class='gd-a'>" + who + hero + "</div>" +
     "<div class='gd-m'><h4>📅 Nhiệm vụ hôm nay <small>xong 1 = mở thêm đất</small></h4><div class='gdc-list' id='gdMis'></div></div>" +
-    "<div class='gd-go2" + (many ? " many" : "") + "'><button type='button' id='gdIntro'>❓ " + (many ? "Hướng dẫn" : "Giới thiệu") + "</button>" + (u.stage >= 5 ? "<a href='" + GardenLayout.ART + "preview-house.html'>🏠 Nhà</a>" : "") + (u.stage >= UNL.full ? "<a href='" + GardenLayout.ART + "preview-barn.html'>📦 Kho</a><a href='" + GardenLayout.ART + "preview-pond.html'>🐟 Ao</a>" : "") + "<button type='button' class='gd-close' id='gdClose'>Đóng</button></div>";
+    "<div class='gd-go2" + (many ? " many" : "") + "'><button type='button' id='gdIntro'>❓ " + (many ? "Hướng dẫn" : "Giới thiệu") + "</button>" + (u.stage >= 5 ? "<a href='" + GardenLayout.ART + "preview-house.html' aria-label='Nhà'>🏠</a>" : "") + (u.stage >= UNL.full ? "<a href='" + GardenLayout.ART + "preview-barn.html' aria-label='Kho'>📦</a><a href='" + GardenLayout.ART + "preview-pond.html' aria-label='Ao'>🐟</a>" : "") + "<button type='button' class='gd-close' id='gdClose'>Đóng</button></div>";
   var cl = document.getElementById("gdClose"); if(cl) cl.onclick = function(){ if(typeof closeMn === "function") closeMn(); };
   var mi = g.querySelector(".gd-mas img"); if(mi){ mi.style.cursor = "pointer"; mi.setAttribute("role", "button"); mi.setAttribute("tabindex", "0"); mi.setAttribute("aria-label", "Đổi bạn làm vườn"); var again = function(){ if(typeof closeMn === "function") closeMn(); if(typeof openBuddy === "function") openBuddy(null, true); }; mi.onclick = again; mi.onkeydown = function(e){ if(e.key === "Enter" || e.key === " "){ e.preventDefault(); again(); } }; }
   var b = document.getElementById("gdIntro"); if(b) b.onclick = function(){ if(typeof closeMn === "function") closeMn(); if(typeof openIntro === "function") openIntro(); };

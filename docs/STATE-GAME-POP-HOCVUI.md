@@ -40,3 +40,9 @@ Cập nhật lần cuối: 2026-11-25. Chủ site nói tiếng Việt; trả l�
 - check-pop.js: ô cổng tối thiểu 60px ở điện thoại ngang (khớp code cổng). check-popmenu.js: thêm protocolTimeout, vẫn timeout khi chạy lẻ (chưa rõ nguyên nhân).
 - check-layout-pop / check-popnp chỉ hợp game menu-thẻ cũ, báo lỗi giả với game lớn (chưa có cách chạy đúng) .
 - CHƯA làm: Night Pass, đổi id, commit/push, bản Học Vui (bước 6), nút 🏠 Bi màn ngang hơi sát nút ?.
+
+## Cập nhật tối 2026-11-25 (sau push 622992f)
+- Bản Pop (2 game) ĐÃ COMMIT + PUSH (622992f). sw.js trong cây làm việc còn mục mascot-fx (nhóm Học Vui) chưa commit.
+- Đã kill 15 phiên claude khác theo yêu cầu chủ site (tránh tự chạy lại đốt quota). Không tạo cron.
+- Đang chạy 2 agent nền (bản Học Vui): Nhà của Bi (learn/nha-bi/, state docs/STATE-HOCVUI-NHABI.md) và Quán kem Tiếng Anh (learn/quan-kem/, state docs/STATE-HOCVUI-QUANKEM.md). Nếu mất: đọc 2 tệp state đó rồi giao agent mới.
+- CÒN LẠI: Night Pass cho 2 game Pop (chủ site: nếu quá lớn thì 2 giao diện mỗi game thay vì 4; mẫu server/pro/lang-cua-be.js), đổi id (tuỳ), commit/push Học Vui khi chủ site cho phép.

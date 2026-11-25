@@ -1,0 +1,5 @@
+/* Kéo đồ trang trí từ túi đồ ra vườn (garden-deco-tray.js): bảng túi đồ mờ đi khi đang kéo; hình đồ đi theo ngón tay, chân đồ ở đúng điểm chạm */
+.ov.dragging{opacity:0;pointer-events:none;transition:none}
+.ct:not(.lock):not(.placed){cursor:grab;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+img.dtg{position:fixed;z-index:200;width:96px;height:96px;transform:translate(-50%,-92%) scale(1.08);pointer-events:none;filter:drop-shadow(0 10px 8px rgba(0,0,0,.35))}
+img.dtg.bad{opacity:.75;filter:drop-shadow(0 0 6px #FF5A5A) drop-shadow(0 10px 8px rgba(0,0,0,.3))}

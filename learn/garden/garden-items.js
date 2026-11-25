@@ -138,6 +138,13 @@
     var a = decoRaw(), i = a.map(function (e) { return e.id; }).indexOf(id); if (i >= 0) a.splice(i, 1); else { if (a.length >= G.DECO_MAX) a.shift(); a.push({ id: id, x: null, y: null }); }
     decoSave(a); return a.map(function (e) { return e.id; });
   };
+  /* bé KÉO món từ túi đồ thả vào vườn (không còn chỗ sinh sẵn): đặt/dời món tại (x, y) = 0..1 (chân đồ vật). Đủ DECO_MAX thì món cũ nhất được cất. Trả false nếu món chưa mở/toạ độ sai. */
+  G.decoDrop = function (id, x, y) {
+    var it = BY[id]; if (!it || it.kind !== "deco" || !G.isOpen(id) || !(x >= 0 && x <= 1 && y >= 0 && y <= 1)) return false;
+    var a = decoRaw(), e = a.filter(function (r) { return r.id === id; })[0];
+    if (e) { e.x = x; e.y = y; } else { if (a.length >= G.DECO_MAX) a.shift(); a.push({ id: id, x: x, y: y }); }
+    decoSave(a); return true;
+  };
   /* bé kéo đồ trang trí tới chỗ mới: lưu toạ độ tương đối (0..1) của chân đồ vật; trả false nếu món chưa đặt hoặc toạ độ sai */
   G.decoSet = function (id, x, y) {
     if (!(x >= 0 && x <= 1 && y >= 0 && y <= 1)) return false;

@@ -1,0 +1,11 @@
+/* Tiến hoá thú: lớn dần mượt (width đổi theo --s), dáng bé con (đầu to, mập) → trưởng thành (cao hơn), lớp SVG chồng .evo, nhún khi lên cấp. */
+.pw{transition:left .7s cubic-bezier(.3,.8,.4,1),bottom .5s,width 1s cubic-bezier(.3,1.4,.5,1)}
+.pw.fast{transition:left .35s ease-out,width 1s}
+.pw .in>img#pet{transform-origin:50% 92%;transition:transform .8s}
+.rm[data-lv="0"] #pet{transform:scale(1.07,.95)}.rm[data-lv="1"] #pet{transform:scale(1.04,.98)}
+.rm[data-lv="3"] #pet{transform:scale(.99,1.02)}.rm[data-lv="4"] #pet{transform:scale(.97,1.04)}
+.pw .evo{z-index:3;pointer-events:none;animation:evoGlow 2.6s ease-in-out infinite}
+@keyframes evoGlow{50%{opacity:.78}}
+.pw.grow .in{animation:grow 1.2s cubic-bezier(.3,1.5,.5,1)}
+@keyframes grow{20%{transform:scale(.85,.8)}55%{transform:scale(1.18,1.2)}100%{transform:none}}
+@media (orientation:landscape) and (max-height:520px){.pw{width:min(calc(var(--U)*.46*var(--s,1)),41cqh)}}

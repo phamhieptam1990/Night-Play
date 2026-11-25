@@ -1,0 +1,9 @@
+/* MÀN NGANG thấp (điện thoại xoay ngang): thanh nút khu chuyển thành CỘT DỌC bên phải; khung dựng cỡ ảo 340x462 rồi scale (44-zones.js);
+   HUD (WorldKit) giữ ← bên trái, xu/sao/cấp bên phải; nhiệm vụ ngày xuống đáy trái. */
+@media (max-height:520px) and (min-aspect-ratio:11/10){
+  #world{padding:0}
+  #bar{left:auto;right:max(10px,env(safe-area-inset-right));top:58px;bottom:6px;flex-direction:column;justify-content:center;align-items:center;gap:4px;padding:0}
+  #bar button{width:56px;height:56px}#bar button.on{transform:translateX(-4px)}#bar button.sep{margin-left:0;margin-top:4px}
+  .wk-q{left:var(--wk-edge);right:auto;top:auto;bottom:10px!important}
+  .zhead{display:none}
+}

@@ -1,0 +1,11 @@
+/* Bộ sưu tập thú: nút tròn 56px dưới nút sách + bảng chọn thú (ô ≥ 84px). */
+#colBtn{position:fixed;z-index:20;right:var(--wk-edge);top:calc(var(--hudH) + 122px);width:56px;height:56px;background:linear-gradient(135deg,#7C5CFF,#4DB6F5);box-shadow:0 4px 0 rgba(40,30,120,.4)}
+.colov{position:fixed;inset:0;z-index:60;background:rgba(20,10,30,.62);display:grid;place-items:center}
+.colc{position:relative;max-width:92vw;padding:18px 14px 14px;border-radius:26px;background:linear-gradient(180deg,#FFF7E6,#FFE3B8);border:3px solid #fff;box-shadow:0 14px 34px rgba(0,0,0,.4)}
+.colg{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:min(86vw,460px)}
+.colt{position:relative;display:grid;place-items:center;width:clamp(84px,22vw,112px);aspect-ratio:1;border-radius:22px;background:#fff;border:3px solid #F3D9A8;text-decoration:none}
+.colt.on{border-color:#34D399;box-shadow:0 0 0 3px rgba(52,211,153,.4)}
+.colt img{width:86%;height:86%;object-fit:contain}
+.colt b{position:absolute;left:-4px;top:-6px;min-width:26px;height:26px;border-radius:13px;background:#FB5A7A;color:#fff;font:900 15px/26px system-ui;text-align:center;border:2px solid #fff}
+.colx{position:absolute;right:-8px;top:-10px;width:44px;height:44px;border-radius:50%;border:2px solid #fff;background:#EF4444;color:#fff;display:grid;place-items:center;cursor:pointer}
+@media (orientation:landscape) and (max-height:520px){#colBtn{right:auto;left:calc(var(--wk-edge) + 64px);top:auto;bottom:10px}.colt{width:84px}.colc{padding:14px 12px 10px}}

@@ -48,6 +48,7 @@
       }).catch(function () { S.svg = null; return false; });
     },
     emote: function (name, ms) {
+      if (window.MascotFx && !S.nofx) window.MascotFx.emote(name);
       if (!S.svg) return; if (P.emotions.indexOf(name) < 0) name = "happy";
       var c = S.svg.classList; P.emotions.forEach(function (e) { c.remove("em-" + e); }); if (name !== "idle") c.add("em-" + name);
       clearTimeout(S.emoT); if (name !== "idle" && ms !== 0) S.emoT = setTimeout(function () { K.emote("idle"); }, ms || 1800);
@@ -59,7 +60,8 @@
     /* sự kiện đã chuẩn bị sẵn: chọn câu + cảm xúc theo bảng */
     event: function (name) {
       var e = P.events[name]; if (!e) return ""; var l = lines(name); if (!l.length) return "";
-      K.emote(e[0], e[1]); if (name !== "idle") S.asleep = false; return K.say(pick(l));
+      if (window.MascotFx) window.MascotFx.event(name);   /* chuyển động thân + hạt bay (mascot-fx.js) */
+      S.nofx = true; K.emote(e[0], e[1]); S.nofx = false; if (name !== "idle") S.asleep = false; return K.say(pick(l));
     },
     /* CỔNG CHO AI: nhận {emotion?, event?, text?, ms?}; chỉ chạy phần hợp lệ, mọi thứ lạ đều rơi về bộ có sẵn. Trả {emotion,text,source}. */
     react: function (o) {

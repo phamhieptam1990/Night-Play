@@ -1,0 +1,32 @@
+/* Khung chung của GAME LỚN: thế giới phủ cả cửa sổ (HUD kính tối của WorldKit nằm trên), sân khấu #play căn giữa. Màu trong khung là màu CỐ ĐỊNH (popnp.css đổi --ink/--panel sang tối). */
+:root{--wk-off:0px;--bg:#FFF3E0;--ink:#3b2a1d;--muted:#8a6a50;--panel:#fff;--line:#f0d9bd;--accent:#FF8A3D;--on-accent:#fff;--good:#2fbf71;--bad:#e5484d;
+  --shadow:0 8px 24px rgba(120,70,20,.18);--display:var(--font);--hudH:64px}
+:root{--k-ink:#3b2a1d;--k-muted:#8a6a50;--k-panel:#fff;--k-line:#f0d9bd}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;overflow:hidden}
+body{background:#2b2030;color:var(--k-ink);font-family:var(--display);overscroll-behavior:none;touch-action:manipulation;-webkit-user-select:none;user-select:none;padding:0!important}
+button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulation;padding:0}
+button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
+img{-webkit-user-drag:none;user-select:none}
+[hidden]{display:none!important}
+/* khung Pop chuẩn: hàng nút (popmenu) + TÊN GAME + sân khấu. Sân khấu #play lấp đầy phần còn lại; HUD của WorldKit nằm đè lên đầu sân khấu (--wk-off = 0 ở Học Vui) */
+body{display:flex;justify-content:center;align-items:flex-start}
+.app{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%;height:100%;min-height:0}
+.play{position:relative;flex:1;min-height:0;width:100%;border-radius:22px;overflow:hidden;container-type:size;touch-action:none;
+  --U:min(100cqw,calc(100cqh*.85));--sh:0 1cqw 3cqw rgba(60,30,0,.22);background:linear-gradient(#FFE9D2 0 60%,#E2A96B 60%)}
+.scr{position:absolute;inset:0;display:flex;flex-direction:column;padding-top:var(--hudH)}
+.toast{position:absolute;left:50%;bottom:calc(max(18cqw,66px) + max(13.5cqw,50px) + 16px);transform:translateX(-50%);z-index:9;padding:1.2cqw 4cqw;border-radius:999px;
+background:linear-gradient(135deg,#5b3b8a,#8b4bb0);
+  color:#fff;box-shadow:var(--shadow);font-weight:800;font-size:4cqw;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap;max-width:94%;overflow:hidden;text-overflow:ellipsis}
+.toast.on{opacity:1}
+.ov{position:absolute;inset:0;z-index:8;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3cqw;padding:5cqw;text-align:center;
+  background:linear-gradient(160deg,rgba(60,30,90,.94),rgba(30,20,60,.96));color:#fff}
+.ov h2{margin:0;font-size:7cqw;font-weight:800;line-height:1.1}.ov p{margin:0;font-size:4.4cqw;font-weight:700;opacity:.9}
+.row{display:flex;gap:2.6cqw;flex-wrap:wrap;justify-content:center;align-items:center}
+.go,.ib2{display:grid;place-items:center;border-radius:999px}
+.go{min-width:max(22cqw,72px);min-height:56px;height:56px;background:linear-gradient(135deg,#34D399,#10B981);color:#fff;border:2px solid #fff;box-shadow:0 1.2cqw 0 #0a7a59}
+.go:active{transform:translateY(.8cqw);box-shadow:0 .4cqw 0 #0a7a59}
+.go svg{width:28px;height:28px}
+.ib2{width:max(13cqw,56px);height:max(13cqw,56px);min-width:56px;min-height:56px;background:rgba(255,255,255,.85);color:#3b2a1d;border:1.5px solid rgba(0,0,0,.18)}.ib2 svg{width:26px;height:26px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

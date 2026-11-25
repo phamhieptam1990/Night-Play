@@ -15,16 +15,17 @@ function renderDeco(){
     lay.appendChild(e); COL_DECO.push(e); decoBind(e, d.id);   /* kéo thả: garden-deco-drag.js */
   });
 }
+var KIND_IC = { crop: "🌱", tree: "🌳", animal: "🐾", deco: "🎀" };
 function colTile(it, placed){
   var s = GardenItems.state(it.id), lock = !s.open, deco = it.kind === "deco";
-  return "<button type='button' class='ct" + (lock ? " lock" : "") + (placed ? " placed" : "") + "' data-id='" + it.id + "' aria-label='" + it.n + (lock ? ", chưa mở. " + s.need : deco ? (placed ? ", đang đặt ở vườn. Bấm để cất" : ", bấm để đặt ra vườn") : "") + "'>" +
-    "<span class='cti'>" + colImg(it, 64) + (lock ? "<i class='lk' aria-hidden='true'>🔒</i>" : "") + (placed ? "<i class='pl' aria-hidden='true'>📍</i>" : "") + "</span><b>" + it.n + "</b><span>" + (lock ? s.need : deco ? (placed ? "Đang đặt" : "Đặt ra vườn") : GardenItems.KINDS[it.kind]) + "</span></button>";
+  return "<button type='button' class='ct" + (lock ? " lock" : "") + (placed ? " placed" : "") + "' data-id='" + it.id + "' aria-label='" + it.n + (lock ? ", chưa mở. " + s.need : deco ? (placed ? ", đang đặt ở vườn. Bấm để cất" : ", kéo thả ra vườn") : "") + "'>" +
+    "<span class='cti'>" + colImg(it, 64) + (lock ? "<i class='lk' aria-hidden='true'>🔒</i>" : "") + (placed ? "<i class='pl' aria-hidden='true'>📍</i>" : "") + "</span><b>" + it.n + "</b><span class='cs' aria-hidden='true'>" + (lock ? "📚 " + Math.max(1, (s.at || 1) - (s.done || 0)) : deco ? (placed ? "" : "✋") : KIND_IC[it.kind]) + "</span></button>";
 }
 function colPanelItems(){
   var cg = GardenItems.env.grade(), order = [cg].concat([1, 2, 3, 4, 5].filter(function(g){ return g !== cg; })), placed = GardenItems.decoGet();
-  return "<p class='sm hint' style='margin:0 0 8px'>Đồ mỗi lớp khác nhau. Học xong chủ đề của lớp nào thì mở đồ của lớp đó. Bấm <b>đồ trang trí</b> để đặt ra vườn (tối đa " + GardenItems.DECO_MAX + ").</p>" + order.map(function(g){
+  return order.map(function(g){
     var items = GardenItems.byGrade(g), n = items.filter(function(it){ return GardenItems.isOpen(it.id); }).length;
-    return "<h3 class='cg'>Lớp " + g + (g === cg ? " · đang học" : "") + " <small>" + n + "/" + items.length + "</small></h3><div class='cgrid'>" + items.map(function(it){ return colTile(it, placed.indexOf(it.id) >= 0); }).join("") + "</div>";
+    return "<h3 class='cg'>Lớp " + g + (g === cg ? " 📍" : "") + " <small>" + n + "/" + items.length + "</small></h3><div class='cgrid'>" + items.map(function(it){ return colTile(it, placed.indexOf(it.id) >= 0); }).join("") + "</div>";
   }).join("");
 }
 function colPanelSwap(){
@@ -49,7 +50,7 @@ function colBind(){
   card.querySelectorAll(".ct").forEach(function(b){ b.onclick = function(){
     var id = b.getAttribute("data-id"), it = GardenItems.BY[id], s = GardenItems.state(id);
     if(!s.open){ toast("🔒 " + it.n + ": " + s.need); return; }
-    if(it.kind === "deco"){ GardenItems.decoToggle(id); renderDeco(); openCollection("0", true); toast(GardenItems.decoGet().indexOf(id) >= 0 ? "📍 Đã đặt " + it.n.toLowerCase() + " ra vườn" : "Đã cất " + it.n.toLowerCase() + " vào kho"); return; }
+    if(it.kind === "deco"){ if(GardenItems.decoGet().indexOf(id) < 0){ toast("Bấm giữ rồi kéo " + it.n.toLowerCase() + " thả vào vườn nhé"); return; } GardenItems.decoToggle(id); renderDeco(); openCollection("0", true); toast("Đã cất " + it.n.toLowerCase() + " vào kho"); return; }
     toast(it.e + " " + it.n + " · " + GardenItems.KINDS[it.kind] + " lớp " + it.g);
   }; });
   card.querySelectorAll("[data-sw]").forEach(function(b){ b.onclick = function(){
@@ -62,13 +63,13 @@ function colBind(){
 function openCollection(tab, keep){
   if(!window.GardenItems) return; cur = null; if(!keep) lastFocus = document.getElementById("bCol");
   var c = GardenItems.counts(), t = tab || "0";
-  var h = "<div class='hd'><div class='pi' style='font-size:44px'>🎒</div><div><h2 id='ptitle'>Bộ sưu tập</h2><span class='chip'>" + c.open + "/" + c.total + " món</span></div></div><!--B-->" +
-    "<div class='tabs2 col' role='tablist'><button type='button' class='t2' data-t='0'>🎒 Đồ của bé</button><button type='button' class='t2' data-t='1'>🧺 Đổi hạt</button><button type='button' class='t2' data-t='2'>🎯 Lên lớp</button></div>" +
+  var h = "<div class='hd'><div class='pi' style='font-size:44px'>🎒</div><div><h2 id='ptitle'>Bộ sưu tập</h2><span class='chip'>⭐ " + c.open + "/" + c.total + "</span></div></div><!--B-->" +
+    "<div class='tabs2 col' role='tablist'><button type='button' class='t2' data-t='0' aria-label='Đồ của bé'>🎒</button><button type='button' class='t2' data-t='1' aria-label='Đổi hạt'>🧺</button><button type='button' class='t2' data-t='2' aria-label='Lên lớp'>🎯</button></div>" +
     "<div class='pnl sec col' data-p='0'>" + colPanelItems() + "</div><div class='pnl sec col' data-p='1'>" + colPanelSwap() + "</div><div class='pnl sec col' data-p='2'>" + colPanelGoal() + "</div>" +
     "<div class='acts'><button class='btn g' type='button' id='cl'>Đóng</button></div>";
   showCardH(h);
   var tb = card.querySelector(".t2[data-t='" + t + "']"); if(tb) tb.click();
-  colBind();
+  colBind(); if(typeof decoTrayBind === "function") decoTrayBind();
   try { GardenItems.env.set("gardenColSeen", String(c.open)); } catch (e) {}
   colBadge();
 }

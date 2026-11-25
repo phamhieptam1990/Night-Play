@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<title>Quán</title>
+<script src="../js/page-loading.js"></script>
+<script>var t=null;try{t=localStorage.getItem("theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"||t==="light"?t:(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")</script>
+<link rel="stylesheet" href="../../shared/fonts.css">
+<link rel="stylesheet" href="../../shared/worldkit/world-kit.css">
+<link rel="stylesheet" href="css/10-base.css">
+<link rel="stylesheet" href="css/20-counter.css">
+<link rel="stylesheet" href="css/30-zones.css">
+<link rel="stylesheet" href="css/40-landscape.css">
+<link rel="stylesheet" href="css/50-extras.css">
+<link rel="stylesheet" href="css/60-facade.css">
+</head>
+<body>
+<div id="world">
+  <div id="frame">
+    <section class="zone on" id="zCounter" aria-label="counter">
+      <img class="sc" id="scBack" src="" alt="" draggable="false">
+      <img class="sc" id="scFloor" src="" alt="" draggable="false">
+      <img class="sc" id="fac" src="" alt="" draggable="false" hidden>
+      <div id="queue"></div>
+      <img id="cust" src="" alt="" draggable="false">
+      <img class="sc" id="scStrip" src="" alt="" draggable="false">
+      <div id="decor"></div>
+      <img id="fox" src="" alt="" draggable="false">
+      <div id="bub"><div class="brow"><button class="bbtn" id="bSpk" type="button"></button><button class="bbtn aa" id="bAa" type="button"></button></div><p id="bTxt" hidden></p></div>
+      <div class="tray"></div><div id="tray"></div>
+      <img id="jm" src="" alt="" draggable="false">
+      <div id="stepfx"></div>
+      <div id="crates"></div>
+      <div id="acts"><button id="undoBtn" type="button"></button><button id="serveBtn" type="button"></button></div>
+    </section>
+    <section class="zone" id="zDine" aria-label="tables"></section>
+    <section class="zone" id="zShop" aria-label="shop"></section>
+    <section class="zone" id="zBook" aria-label="book"></section>
+    <div id="toast" role="status"></div>
+  </div>
+  <nav id="bar"></nav>
+</div>
+<script src="../../shared/worldkit/world-kit.js"></script>
+<script src="data/pick.js"></script>
+<script src="data/menu.js"></script>
+<script src="js/10-core.js"></script><script src="js/12-i18n.js"></script><script src="js/35-icons.js"></script><script src="js/36-step-icons.js"></script><script src="js/20-audio.js"></script>
+<script src="js/30-order.js"></script><script src="js/40-play.js"></script><script src="js/42-drag.js"></script><script src="js/44-zones.js"></script>
+<script src="js/46-dine.js"></script><script src="js/48-shop.js"></script><script src="js/50-book.js"></script><script src="js/52-world.js"></script><script src="js/54-spell.js"></script><script src="js/56-worlds.js"></script><script src="js/58-levelup.js"></script>
+<script src="../gifts-kem.js"></script><script src="js/60-boot.js"></script>
+</body>
+</html>

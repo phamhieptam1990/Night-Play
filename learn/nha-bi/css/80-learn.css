@@ -1,0 +1,16 @@
+/* Học Vui: toàn màn hình (không có hàng nút của cổng Pop), nút HUD 56px, nút sách nổi bật khi khay trống. */
+html,body{background:#2b2030}
+.app{gap:0}.play{border-radius:0}
+:root{--hudH:70px}
+#lessonBtn{position:fixed;z-index:20;right:var(--wk-edge);top:calc(var(--hudH) + 54px);background:linear-gradient(135deg,#FFB020,#FB5A7A);color:#fff;display:grid;place-items:center;
+  text-decoration:none;border-radius:50%;box-shadow:0 4px 0 rgba(120,40,20,.4);animation:bkb 2.4s ease-in-out infinite}
+#lessonBtn svg{width:30px;height:30px}#bgSnd svg{position:static;width:50%;height:50%}
+@keyframes bkb{50%{transform:translateY(-4px)}}
+@media (orientation:landscape) and (max-height:520px){
+  #lessonBtn{right:auto;left:var(--wk-edge);top:auto;bottom:10px}
+  .wk-q{top:calc(var(--hudH) + 4px)!important;left:var(--wk-edge)!important;right:auto!important;flex-direction:column;padding:8px 6px;border-radius:24px}
+  .mgh{top:calc(var(--hudH) + 2px);left:80px;right:230px;padding:2px 14px;gap:12px}.mgs-n{font-size:24px;min-width:70px;gap:6px}.mgs-n img{height:28px}.mgtb{height:12px}.mgc{font-size:22px;min-width:50px}
+  .cdn{font-size:150px}
+  .rstats{left:64px!important}.say{left:42%!important}
+}
+@media (max-width:420px){.wk-hud{gap:4px!important}.wk-pill{padding:0 6px 0 4px!important}.wk-pill b{font-size:14px}}

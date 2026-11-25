@@ -1,0 +1,5 @@
+/* Nút SVG thay nút chữ (garden-btn-icons.js) */
+.gbi{display:inline-flex!important;align-items:center;justify-content:center;gap:6px}
+.gbi .gi{width:1.5em;height:1.5em;flex:none;display:block}.gbi .gn{font:900 1em/1 system-ui}
+.btn.go.gbi .gi{width:34px;height:34px}.hb.gbi .gi{width:22px;height:22px}
+.goalchip .gcg{width:34px;height:34px;flex:none;object-fit:contain}

@@ -1,0 +1,23 @@
+/* Quán Kem (Học Vui): nền trang + thế giới toàn màn hình = HUD (WorldKit) + khung cảnh theo khu + thanh biểu tượng khu (đáy khi dọc). Không cuộn. */
+:root{--wk-off:0px;--bot:64px;--ink:#3a2a1d;--shadow:0 8px 24px rgba(120,60,10,.18)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;overflow:hidden}
+body{background:linear-gradient(#FFD9E8,#CFEFE6);color:var(--ink);font-family:var(--font,system-ui,sans-serif);overscroll-behavior:none;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+:root[data-theme="dark"] body{background:linear-gradient(#3a2146,#1f2f3a)}
+button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulation;padding:0;background:none}
+button:focus-visible,a:focus-visible{outline:3px solid #fff;outline-offset:2px}
+img{-webkit-user-drag:none;user-select:none}
+[hidden]{display:none!important}
+#world{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;padding:var(--hud,64px) 0 var(--bot)}
+#frame{position:relative;border-radius:22px;overflow:hidden;background:#FFD3E0;container-type:size;box-shadow:0 10px 30px rgba(80,40,10,.28);touch-action:pan-y;flex:none}
+.zone{position:absolute;inset:0;visibility:hidden;opacity:0;transition:opacity .25s}
+.zone.on{visibility:visible;opacity:1}
+.zone>*{position:absolute}
+#bar{position:fixed;left:0;right:0;bottom:max(8px,env(safe-area-inset-bottom));z-index:31;display:flex;justify-content:center;gap:4px;padding:0 8px;pointer-events:none}
+#bar button{pointer-events:auto;position:relative;display:grid;place-items:center;flex:none;width:56px;height:56px;border-radius:50%;border:2px solid rgba(255,255,255,.5);background:rgba(20,16,50,.62);color:#fff;box-shadow:0 5px 12px rgba(0,0,0,.28)}
+#bar button svg{width:28px;height:28px;display:block}
+#bar button.on{background:linear-gradient(135deg,#FF8FB1,#E5558A);border-color:#fff;transform:translateY(-4px)}
+#bar button.sep{margin-left:8px}
+#bar button .dot{position:absolute;right:-2px;top:-2px;width:14px;height:14px;border-radius:50%;background:#EF4444;border:2px solid #fff}
+.wk-q{bottom:auto!important;top:var(--qk-q,120px);left:calc(var(--wk-edge) + 2px);z-index:29}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

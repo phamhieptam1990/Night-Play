@@ -11,7 +11,7 @@ document.body.style.setProperty("--c1",M[1]); document.body.style.setProperty("-
 const back="index.html?"+new URLSearchParams({grade,subj,lang}).toString();
 $("back").href=back;
 const art=n=>"../../shared/art/learn/"+M[0]+"/"+M[0]+"_"+n+".svg", MI=$("mi");
-function mood(n){MI.src=art(n==="happy"?"happy":n==="cheer"?"cheer":"grade_"+(grade||1))}
+function mood(n){MI.src=art(n==="happy"?"happy":n==="cheer"?"cheer":"grade_"+(grade||1)); if(n!=="grade"&&window.MascotFx)MascotFx.mood(n)}
 const COPY={next:"Tiếp ▶",tryit:"Thử cùng nhé ▶",test:"Làm bài kiểm tra ▶",again:"Học lại",skip:"Kiểm tra luôn ▶",tchip:"Thử cùng · không tính điểm",combine:"Gộp lại",hear:"Nghe",
   done:"Xong! Bé giỏi quá! 🎉",ready:"Bé học xong rồi! Giờ mình làm bài kiểm tra nhé.",another:"Thử lại nhé, bé làm được mà!",show:"Đáp án đúng là đây nè!"};
 function strip(s){return String(s).replace(/[\u{1F000}-\u{1FFFF}☀-➿⭐️]/gu,"").replace(/\s+/g," ").trim()}
@@ -126,7 +126,7 @@ function quiz(stage,s,nl){
       b.classList.add("num");if(s.opts.every(x=>/^\d{1,3}$/.test(x)))box.classList.add("pic")} }
     b.onclick=()=>{ if(solved) return; if(s.optlang==="en") sayEn(o.t);
       if(o.ok){solved=true;b.classList.add("ok");mood("happy");speakIn(s.yes);setNext(true,nl);return}
-      wrong++;b.classList.add("no");b.disabled=true;speakIn(wrong>=2?COPY.show:(s.no||COPY.another));
+      wrong++;b.classList.add("no");window.MascotFx&&MascotFx.event("wrong");b.disabled=true;speakIn(wrong>=2?COPY.show:(s.no||COPY.another));
       if(wrong>=2){[...box.children].forEach(x=>{if(x.dataset.v===order.find(z=>z.ok).t)x.classList.add("ok")});solved=true;setNext(true,nl)}
     };box.appendChild(b)});
 }
@@ -223,7 +223,7 @@ function game(stage,s,nl){
       b.onclick=()=>{ if(solved) return;
         if(o.ok){solved=true;b.classList.add("ok");mood("happy");speakIn("Đúng rồi!");setTimeout(()=>{ri++;if(ri>=R.length){stage.innerHTML="";
           fin(stage,s.done||"Giỏi quá!",nl)}else round()},1000);return}
-        wrong++;b.classList.add("no");b.disabled=true;
+        wrong++;b.classList.add("no");window.MascotFx&&MascotFx.event("wrong");b.disabled=true;
         if(wrong>=2){solved=true;[...box.children].forEach(x=>{if(x.getAttribute("aria-label")===order.find(z=>z.ok).t)x.classList.add("ok")});speakIn("Đáp án đây nè!");
           setTimeout(()=>{ri++;if(ri>=R.length){stage.innerHTML="";fin(stage,s.done||"Giỏi quá!",nl)}else round()},1500)}
         else {speakIn("Thử lại nhé!");setTimeout(()=>{if(!solved)speakIn(r.say)},900)}
@@ -237,7 +237,7 @@ function endScreen(stage){
   $("m").classList.add("end");
   if(window.LearnCelebrate) LearnCelebrate.show(rw.first?5:3,{lang:"vi",grade,key:subj+":"+topic,quiet:!AUTO});   /* chúc mừng toàn màn hình: thú nhảy, sao nổ, nhạc ngẫu nhiên */
   const w=document.createElement("div");w.className="endw";
-  w.innerHTML='<img class="em" alt="" src="'+art("cheer")+'"><h2>Bé học xong rồi! 🎉</h2>'+(rw.first?'<div class="rw"><b>🎁 +3 nhiệm vụ</b><b>🌱 +2 hạt</b></div>'
+  w.innerHTML='<img class="em" alt="" src="'+art("cheer")+'"><h2>Bé học xong rồi! 🎉</h2>'+(rw.first?'<div class="rw"><b>🎁 +3 nhiệm vụ</b><b>🌱 +2 hạt</b>'+'</div>'
     :'<p>Bài này bé đã nhận phần thưởng rồi.</p>')+'<p>Giờ mình làm bài kiểm tra nhé!</p>';
   const acts=document.createElement("div");acts.className="acts";
   if(rw.first){const g=document.createElement("a");g.className="go2";g.href="../garden/index.html?"+new URLSearchParams({grade,subj}).toString();g.textContent="🌱 Vào vườn";acts.appendChild(g)}

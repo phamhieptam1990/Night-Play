@@ -1,0 +1,18 @@
+/* Mini-game: thanh điểm/giờ, đếm ngược, kết quả, sao rơi, vành. Khi đang chơi: ẩn khay đồ + thang đo. */
+.mgh{position:absolute;z-index:7;left:3cqw;right:3cqw;top:calc(var(--hudH) + 2cqw);display:flex;align-items:center;gap:2.4cqw;padding:1.4cqw 2.6cqw;border-radius:99px;
+  background:rgba(20,16,50,.62);border:2px solid rgba(255,255,255,.45);pointer-events:none}
+.mgs-n{display:flex;align-items:center;gap:1cqw;color:#fff;font:900 6cqw/1 system-ui;min-width:16cqw}.mgs-n img{height:7cqw}
+.mgtb{flex:1;height:3cqw;border-radius:2cqw;background:rgba(255,255,255,.25);overflow:hidden}.mgtb i{display:block;height:100%;width:100%;background:linear-gradient(#9fe8ff,#3fa0f0)}
+.mgc{min-width:12cqw;text-align:right;color:#FFE27A;font:900 6cqw/1 system-ui}
+.cdn{position:absolute;inset:0;z-index:9;display:grid;place-items:center;font:900 40cqw/1 system-ui;color:#fff;background:rgba(20,16,50,.45);text-shadow:0 1cqw 0 rgba(0,0,0,.3)}
+.play.mg .dock,.play.mg .rstats,.play.mg .want,.play.mg .say{display:none!important}
+body.mg .wk-q{display:none!important}
+.mgs{position:absolute;width:10cqw;transform:translate(-50%,-50%);z-index:3;pointer-events:none}
+.mgs.gold{width:13cqw}.mgs.gold::after{content:""}
+.mgp{font-size:6.4cqw;color:#FFE27A;text-shadow:0 .5cqw 0 rgba(60,20,0,.5)}
+.mgb{width:9cqw;z-index:3}
+.hoop{position:absolute;width:20cqw;height:14cqw;border:1.8cqw solid #FF7A94;border-radius:50%;transform:translate(-50%,-50%);z-index:2;box-shadow:inset 0 0 0 .7cqw #fff,0 0 3cqw rgba(255,122,148,.6);animation:hoopb 1s ease-in-out infinite}
+@keyframes hoopb{50%{transform:translate(-50%,-50%) scale(1.1)}}
+#ovEnd{gap:3cqw}#ovEnd h2{font-size:9cqw}
+.ris{display:flex;gap:3cqw;flex-wrap:wrap;justify-content:center;min-height:16cqw}
+.ri{display:grid;justify-items:center;gap:.4cqw;color:#fff;font:900 5cqw/1 system-ui;min-width:16cqw}.ri svg,.ri img{width:14cqw;height:14cqw}.ri b{font-weight:900}
