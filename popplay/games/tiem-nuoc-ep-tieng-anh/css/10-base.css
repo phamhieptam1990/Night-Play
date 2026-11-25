@@ -15,7 +15,7 @@ img{-webkit-user-drag:none;user-select:none}
 .top h1{flex:1;margin:0;font-size:clamp(18px,5.4vw,26px);font-weight:800;line-height:1;white-space:nowrap;min-width:0}
 .ib{width:44px;height:44px;border-radius:50%;background:var(--panel);box-shadow:var(--shadow);font-size:20px;display:grid;place-items:center;flex:none;border:1.5px solid color-mix(in srgb,currentColor 42%,transparent)}
 /* .play giữ nguyên cách Pop ở màn chọn; vào thế giới thì .play co giãn theo chỗ còn lại dưới tên game + HUD */
-.hud#hudSlot{height:56px;min-height:56px;padding:0;background:none;box-shadow:none;border:0}
+.hud#hudSlot{height:56px;min-height:56px;padding:0;background:none;box-shadow:none;border:0;pointer-events:none}
 html.tne-home .hud#hudSlot{display:none}html.tne-home .wk-hud,html.tne-home .wk-q{display:none!important}
 html.tne-world .app{height:100%}
 #play{position:relative}

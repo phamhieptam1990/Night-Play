@@ -1,0 +1,84 @@
+/* WorldGuide: lớp hướng dẫn từng bước (world-guide.js). Nền tối có lỗ sáng (clip-path), vòng nhấp nháy, bàn tay, thẻ chữ ngắn. Nút ≥56px, không cuộn, chỉ transform/opacity. */
+.wg{position:fixed;inset:0;z-index:2147482000;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-user-select:none;user-select:none;touch-action:none;pointer-events:none}
+.wg-dim{pointer-events:auto;position:absolute;inset:0;background:rgba(12,9,35,.74);animation:wgFade .25s}
+@keyframes wgFade{from{opacity:0}}
+.wg-rings{position:absolute;inset:0;pointer-events:none}
+.wg-ring{position:absolute;box-sizing:border-box;border:3px solid #FFD24D;box-shadow:0 0 0 3px rgba(255,210,77,.28),0 0 18px rgba(255,210,77,.7);animation:wgRing 1.2s ease-in-out infinite}
+@keyframes wgRing{50%{box-shadow:0 0 0 7px rgba(255,210,77,.18),0 0 26px rgba(255,210,77,.9)}}
+.wg-hand{position:absolute;left:0;top:0;width:60px;height:78px;pointer-events:none;will-change:transform;filter:drop-shadow(0 4px 6px rgba(0,0,0,.45))}
+.wg-hin{width:60px;height:78px}.wg-hsv{display:block}
+.wg-card{
+  pointer-events:auto;
+  position:absolute;
+  box-sizing:border-box;
+  display:grid;
+  grid-template-columns:56px 1fr 56px;
+  grid-template-areas:"m m s" "x d o";
+  align-items:center;
+  gap:8px 10px;
+  padding:12px;
+  border-radius:26px;
+  background:linear-gradient(160deg,#3B2A9E,#24195f);
+  border:2px solid rgba(255,255,255,.55);
+  color:#fff;
+  box-shadow:0 14px 36px rgba(0,0,0,.5);
+}
+.wg-card.in{animation:wgPop .3s cubic-bezier(.3,1.5,.5,1)}
+@keyframes wgPop{from{transform:scale(.9);opacity:0}}
+.wg-msg{grid-area:m;display:flex;align-items:center;gap:10px;min-width:0}
+.wg-ics{display:inline-flex;gap:2px;flex:none}
+.wg-ic{display:grid;place-items:center;width:40px;height:40px;font-style:normal;border-radius:12px;background:rgba(255,255,255,.14);color:#fff}
+.wg-ic svg{width:30px;height:30px}.wg-em{font-size:26px;line-height:1}
+.wg-tx{flex:1;min-width:0;font:800 20px/1.2 system-ui,-apple-system,sans-serif;text-align:left;overflow-wrap:anywhere}
+.wg-b{
+  display:grid;
+  place-items:center;
+  flex:none;
+  box-sizing:border-box;
+  width:56px;
+  height:56px;
+  padding:0;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,.55);
+  background:rgba(255,255,255,.14);
+  color:#fff;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.wg-b svg{width:28px;height:28px;display:block}.wg-b:active{transform:scale(.93)}.wg-b[hidden]{display:none}
+.wg-x{grid-area:x}.wg-spk{grid-area:s}
+.wg-ok{grid-area:o;width:auto;min-width:56px;border-radius:20px;background:linear-gradient(135deg,#34D399,#10B981);border-color:#fff}
+.wg-dots{grid-area:d;display:flex;justify-content:center;gap:7px}
+.wg-dots i{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.28)}.wg-dots i.on{background:#FFD24D;transform:scale(1.35)}.wg-dots i.dn{background:rgba(255,210,77,.6)}
+.wg-b:focus-visible{outline:3px solid #fff;outline-offset:2px}
+/* màn ngang: một hàng [✕] [hình+chữ+loa] [✓] cho thẻ thấp, đỡ che khu chơi */
+@media (min-width:600px) and (max-height:520px){
+.wg-card{grid-template-columns:56px 1fr 56px 56px;grid-template-areas:"x m s o" ". d d .";padding:10px 12px;row-gap:4px}
+.wg-tx{font-size:19px}}
+/* nút ? (hàng HUD / cột nút của game) */
+.wg-q{
+  position:relative;
+  display:grid;
+  place-items:center;
+  flex:none;
+  box-sizing:border-box;
+  width:56px;
+  height:56px;
+  padding:0;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,.5);
+  background:linear-gradient(135deg,#34D399,#0EA5A5);
+  color:#fff;
+  cursor:pointer;
+  box-shadow:0 4px 0 rgba(0,60,60,.4),0 6px 16px rgba(0,0,0,.28);
+  -webkit-tap-highlight-color:transparent;
+  pointer-events:auto;
+  z-index:21;
+}
+.wg-q svg{width:30px;height:30px;display:block}.wg-q:active{transform:scale(.94)}.wg-q.wg-off{display:none}
+.wg-q.wg-new{animation:wgNudge 1.2s ease-in-out infinite}
+@keyframes wgNudge{50%{transform:scale(1.14)}}
+.wg-q-fixed{position:fixed}
+.wg-q-hudfirst{position:absolute;left:var(--wk-edge);top:calc(var(--wk-top) + var(--wk-off,0px))}
+html.wg-on .wg-q{visibility:hidden}
+@media (prefers-reduced-motion:reduce){.wg-dim,.wg-card.in,.wg-ring,.wg-q.wg-new{animation:none}}
