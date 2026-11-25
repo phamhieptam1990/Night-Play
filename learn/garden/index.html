@@ -1,4 +1,6 @@
-<!doctype html><html lang="vi"><head><meta charset="utf-8"><script src="../js/page-loading.js"></script><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover"><title>Vườn Học Vui</title>
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><script>/* Mỗi môn một thế giới: Tiếng Việt = Nhà thú (nuôi thú), Tiếng Anh = Quán. Vào vườn của hai môn này thì chuyển thẳng sang game của lớp đó (thêm ?garden=1 để xem cảnh vườn cũ). Toán giữ khu vườn. */
+(function(){try{var q=new URLSearchParams(location.search),sj=q.get("subj"),g=+q.get("grade");if(q.get("garden")||(sj!=="tviet"&&sj!=="tanh"))return;if(!(g>=1&&g<=5)){g=+localStorage.getItem("learn:grade")||1;if(!(g>=1&&g<=5))g=1}
+location.replace((sj==="tviet"?"../nha-bi/index.html?grade=":"../quan-kem/index.html?grade=")+g)}catch(e){}})();</script><script src="../js/page-loading.js"></script><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover"><title>Vườn Học Vui</title>
 <!-- Trang vườn VIẾT TAY (không sinh). CSS và JS KHÔNG khai ở đây: danh sách + thứ tự nằm ở garden-layout.js (STYLES, SCRIPTS, START).
      Thêm tính năng = thêm css/NN-ten.css và/hoặc garden-ten.js rồi thêm tên vào garden-layout.js. Dữ liệu cây/ô: shared/art/garden/garden-data.js (SINH bởi scripts/learn/gen-scene-art.js). -->
 <style>
@@ -57,7 +59,7 @@ var S=window.LearnSlot; if(!S) return;
 var p=S.parts(), g=p?p.grade:(+(function(){try{return S.raw.get("learn:grade")}catch(e){return 1}})()||1), cur=p?p.subj:"";
 if(!(g>=1&&g<=5)) g=1;
 var M={toan:["math","Mochi","Toán","#34D399","#0EA5E9"],tviet:["vietnamese","Mầm","Tiếng Việt","#FFB020","#FB5A7A"],tanh:["english","Bibi","Tiếng Anh","#60A5FA","#A78BFA"]};
-function u(gr,sj){return "index.html?grade="+gr+"&subj="+sj}
+function u(gr,sj){return sj==="tviet"?"../nha-bi/index.html?grade="+gr:sj==="tanh"?"../quan-kem/index.html?grade="+gr:"index.html?grade="+gr+"&subj="+sj}
 var bar=document.createElement("nav"); bar.className="gsw"; bar.id="gsw"; bar.setAttribute("aria-label","Chuyển vườn");
 var cur0=cur,h="";
 var P=window.LearnPath, lg=+(function(){try{return S.raw.get("learn:grade")}catch(e){return 1}})()||1;

@@ -29,7 +29,7 @@
     WorldKit.popup({ big: [{ ic: "book" }, { ic: "coin", n: "+" + n }], acts: [{ ic: "check", go: 1 }] });
   };
   QK.initWorld = () => {
-    const q = new URLSearchParams(location.search), back = "../garden/index.html?" + new URLSearchParams({ grade: QK.grade(), subj: "tanh" }).toString();
+    const q = new URLSearchParams(location.search), back = "../index.html?" + new URLSearchParams({ grade: QK.grade(), subj: "tanh" }).toString();
     WorldKit.mount({ back: q.get("back") || back, pills: [{ id: "stars", ic: "star", val: S.stars }, { id: "coin", ic: "coin", val: S.coins }] });
     const a = document.querySelector(".wk-hud .wk-btn"); if (a) a.setAttribute("aria-label", QK.T("back"));
     QK.updateHud();

@@ -5,7 +5,7 @@
   var busy = false;
   N.grade = function () { return N.store.D().grade; };   /* lớp của thế giới này (?grade=), không phải lớp hiện tại của bé */
   N.lessonUrl = function () { return "../lop/index.html?subj=tviet&grade=" + N.grade(); };
-  N.gardenUrl = function () { return "../garden/index.html?grade=" + N.grade() + "&subj=tviet"; };
+  N.gardenUrl = function () { return "../index.html?grade=" + N.grade() + "&subj=tviet"; };   /* ← về trang Học Vui (vườn môn này CHÍNH LÀ game, không còn cảnh vườn riêng) */
   N.collectLesson = function (quiet) {
     if (busy || !window.LearnGifts || N.busy) return false;
     var p = LearnGifts.pending(N.grade()); if (!p.any) return false;
