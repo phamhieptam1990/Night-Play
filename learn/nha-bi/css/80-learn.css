@@ -11,6 +11,6 @@ html,body{background:#2b2030}
   .wk-q{top:calc(var(--hudH) + 4px)!important;left:var(--wk-edge)!important;right:auto!important;flex-direction:column;padding:8px 6px;border-radius:24px}
   .mgh{top:calc(var(--hudH) + 2px);left:80px;right:230px;padding:2px 14px;gap:12px}.mgs-n{font-size:24px;min-width:70px;gap:6px}.mgs-n img{height:28px}.mgtb{height:12px}.mgc{font-size:22px;min-width:50px}
   .cdn{font-size:150px}
-  .rstats{left:64px!important}.say{left:42%!important}
+  .rstats{left:64px!important}.say{left:max(50%,252px)!important}
 }
 @media (max-width:420px){.wk-hud{gap:4px!important}.wk-pill{padding:0 6px 0 4px!important}.wk-pill b{font-size:14px}}

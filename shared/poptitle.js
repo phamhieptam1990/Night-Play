@@ -28,7 +28,7 @@
       t.style.removeProperty("font-size");
       var pls = t.querySelectorAll(".pw"), lines = function () { var s = {}, n = 0; for (var k = 0; k < pls.length; k++) { var y = Math.round(pls[k].offsetTop / 4); if (!s[y]) { s[y] = 1; n++; } } return n; };   /* đếm dòng thật theo vị trí TỪNG TỪ (.pw; từng chữ .pl đang nảy nên offsetTop đổi theo animation; .pi có thể bị cắt chiều cao nên không đo bằng offsetHeight) */
       var cur = parseFloat(getComputedStyle(t).fontSize); var over = function () { return t.scrollWidth > t.clientWidth + 1; };   /* poplandscape.css ép white-space:nowrap!important (đã duyệt) → tên dài không xuống dòng mà TRÀN NGANG: cũng thu chữ cho tới khi vừa */
-      while (cur > 11 && (lines() > 2 || over())) { cur -= 0.5; t.style.setProperty("font-size", cur + "px", "important"); }
+      while (cur > 9 && (lines() > 2 || over())) { cur -= 0.5; t.style.setProperty("font-size", cur + "px", "important"); }
     } catch (e) {}
     t._ptFit = 0;
   }
