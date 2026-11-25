@@ -1,0 +1,14 @@
+/* Hoạt cảnh: thú đi qua, khói pizza/cà phê, đèn dây nhấp nháy. */
+.walk{position:absolute;left:0;top:var(--lane);width:9%;pointer-events:none;z-index:5;animation:wk var(--d) linear infinite;animation-delay:var(--o)}
+.walk img{display:block;width:100%;animation:hop .5s ease-in-out infinite}.walk.w1{top:var(--lane2)}.walk.w1 img{transform:scaleX(-1)}
+.walk.w1{animation-name:wk2}
+@keyframes wk{from{left:-12%}to{left:104%}}@keyframes wk2{from{left:104%}to{left:-12%}}@keyframes hop{50%{transform:translateY(-12%)}}
+.walk.w1 img{animation-name:hop2}@keyframes hop2{0%,100%{transform:scaleX(-1)}50%{transform:scaleX(-1) translateY(-12%)}}
+:root{--lane:88%;--lane2:94%}
+.puff{position:absolute;left:44%;top:36%;width:9%;aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.85);filter:blur(1px);opacity:0;animation:puff 3s ease-out infinite}
+.puff.b{left:52%;animation-delay:-1s}.puff.c{left:48%;animation-delay:-2s}
+@keyframes puff{0%{transform:translateY(0) scale(.5);opacity:0}25%{opacity:.8}100%{transform:translateY(-120%) scale(1.5);opacity:0}}
+.lights{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.lights circle{animation:tw 1.4s ease-in-out infinite}.ll{display:none}
+@keyframes tw{50%{opacity:.35}}
+.shop.open .back{animation:none}
+@media (prefers-reduced-motion:reduce){.walk,.puff,.spray,.coin,.dog,.lights circle{animation:none!important}}

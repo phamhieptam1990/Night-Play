@@ -1,0 +1,13 @@
+/* Màn ngang (rộng hơn cao): khung 800x360, sạp xếp 3 trên + 2 dưới + đài phun nước; nút sách và ? xuống cột phải. */
+@media (min-aspect-ratio:1/1){
+  :root{--hud:56px;--ratio:800/360;--lane:47%;--lane2:88%}
+  #stage{width:min(100vw,calc((100dvh - var(--hud)) * 800 / 360))}
+  .bgp,.lp{display:none}.bgl{display:block}.ll{display:block}
+  .shop{left:var(--lx);top:var(--ly);width:var(--lw)}
+  .tree.t1{left:92%;top:60%;width:8%}.tree.t2{left:0;top:58%;width:7%}
+  .plaza{left:75%;top:6%;width:23%}
+  .walk{width:5%}
+  .wk-hud .kc-book,.wg-q{position:fixed;right:max(10px,env(safe-area-inset-right));z-index:31}
+  .wk-hud .kc-book{top:calc(var(--hud) + 8px)}.wg-q{top:calc(var(--hud) + 66px)}
+}
+@media (max-height:430px){.shop .coin{font-size:11px}.prog{font-size:11px}}

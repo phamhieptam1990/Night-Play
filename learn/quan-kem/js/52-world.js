@@ -29,7 +29,10 @@
     WorldKit.popup({ big: [{ ic: "book" }, { ic: "coin", n: "+" + n }], acts: [{ ic: "check", go: 1 }] });
   };
   QK.initWorld = () => {
-    const q = new URLSearchParams(location.search), back = "../index.html?" + new URLSearchParams({ grade: QK.grade(), subj: "tanh" }).toString();
+    let q = new URLSearchParams(location.search), back = "../index.html?" + new URLSearchParams({ grade: QK.grade(), subj: "tanh" }).toString();
+    /* đi từ Khu chợ (?from=market): nhớ trong sessionStorage, nút ← về ../khu-cho/index.html (khu chợ tự xoá khoá khi mở) */
+    let from = ""; try { if (q.get("from") === "market") sessionStorage.setItem("learn:from", "market"); from = sessionStorage.getItem("learn:from") || ""; } catch (e) {}
+    if (from === "market") back = "../khu-cho/index.html";
     WorldKit.mount({ back: q.get("back") || back, pills: [{ id: "stars", ic: "star", val: S.stars }, { id: "coin", ic: "coin", val: S.coins }] });
     const a = document.querySelector(".wk-hud .wk-btn"); if (a) a.setAttribute("aria-label", QK.T("back"));
     QK.updateHud();

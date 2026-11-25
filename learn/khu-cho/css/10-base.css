@@ -1,0 +1,17 @@
+/* Khu chợ: trang không cuộn, khung cảnh giữ tỉ lệ (dọc 390x680, ngang 800x360), nền + cây + đài phun nước. */
+:root{--hud:62px;--ratio:390/680}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;font-family:system-ui,sans-serif;touch-action:manipulation}
+body{position:fixed;inset:0;background:linear-gradient(#8FD3FF 0,#8FD3FF var(--hud),transparent var(--hud)),repeating-linear-gradient(0deg,transparent 0 50px,rgba(150,110,60,.22) 50px 52px),repeating-linear-gradient(90deg,transparent 0 98px,rgba(150,110,60,.16) 98px 100px),linear-gradient(#E6CB96,#D8B97F)}
+#stage{position:absolute;left:50%;top:var(--hud);transform:translateX(-50%);width:min(100vw,calc((100dvh - var(--hud)) * 390 / 680));aspect-ratio:var(--ratio);overflow:hidden;border-radius:0 0 18px 18px;container-type:inline-size}
+.bg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.bgl{display:none}
+.tree,.fount{position:absolute;pointer-events:none}
+.tree.t1{left:66%;top:1%;width:20%}.tree.t2{left:-1%;top:90%;width:22%}
+.plaza{position:absolute;left:55%;top:72%;width:44%;pointer-events:none}.fount{position:static;width:100%;display:block}
+.spray{position:absolute;left:50%;top:22%;width:10%;aspect-ratio:1;border-radius:50%;background:radial-gradient(#fff,#bfeaff 60%,transparent 70%);opacity:0;animation:spray 2.4s ease-out infinite}
+@keyframes spray{0%{transform:translate(-50%,40%) scale(.4);opacity:.9}100%{transform:translate(-50%,-120%) scale(1.2);opacity:0}}
+.kc-ring{position:relative;width:76px;height:76px;margin:0 auto 14px}.kc-ring svg{width:100%;height:100%}.kc-ring b{position:absolute;inset:0;display:grid;place-items:center;font:900 20px system-ui;color:#fff}
+.wk-big .it svg{width:60px;height:60px}
+/* HUD gọn để vừa 360px: ← ? sao xu vòng sách */
+.wk-hud{gap:5px!important}.wk-hud .wk-pill{min-height:36px;padding:0 8px 0 5px;font-size:15px;gap:4px}.wk-hud .wk-pill svg{width:20px;height:20px}
+.wk-hud .wk-btn{width:44px;height:44px}.wk-hud .wk-lv{width:44px;height:44px;font-size:17px}.wk-hud .wg-q{width:44px;height:44px}
