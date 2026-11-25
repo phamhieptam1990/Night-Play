@@ -21,3 +21,11 @@
 
 ## Tìm Đôi Thẻ / Ghép Ba Thẻ nâng khó thật (trần 6)
 - Bảng LVC (tim-doi-the/board.js) và GB_LV (ghep-ba-the/logic.js); đo bot: xem CHECKLIST-LEVELUP.md. Mô phỏng: scratchpad simtd.js / simgt.js (puppeteer, hook window.TD / window.GT).
+
+## Popup "Chọn level" (xong) + việc còn lại
+- shared/levelup.js/.css: nút lưới ở thanh level mở bottom-sheet "Chọn level" (mọi level 1..trần; đã mở = bấm chơi được, hiện sao tốt nhất hoặc dấu tick; chưa mở = khoá; level hiện tại viền cam; nút đóng icon SVG; cuộn trong khung; ngang: hộp giữa màn). Chọn level thấp KHÔNG hạ `u` (level đã mở) — chỉ `go(i)`.
+- Gợi ý nhẹ "Thử level thấp hơn?" khi thua >=2 lần liên tiếp ở level đó (đếm `f` trong np-level:<id>, xoá khi thắng; level 1 không hiện). Khoá lưu cũ vẫn đọc được (thêm trường f).
+- Ảnh đã xem: scratchpad/shots/pick-390x844, pick-844x390 (qua-song), td-pick-390x844, td-pick-844x390 (tim-doi-the, có khoá + tick + gợi ý). Không có nút level trên HUD (HUD mỗi game khác nhau, dễ đè); chỉ ở màn kết thúc.
+- sw.js: np-shell-v640.
+- CHƯA LÀM (đổi hướng: NÂNG độ khó thật, không hạ): bảng tham số theo level + bot cho các game còn dễ (ne-o-ga, mat-tinh-khong, shipper-sieu-toc, bao-nhieu-giay, cat-banh-chung, noi-mot-net, song-sot-cuoi-thang, xay-cau-tre, duong-ray, truot-so-nam-cham, 7 game Pop 3 cấp...). Chưa hạ độ khó game nào. Mỗi game cần bot riêng (hook window.<X> như simtd.js); làm từng game: nới `max`/rules trong spec.level, đo 100 ván/level, ghi bảng vào CHECKLIST-LEVELUP.md.
+- Mẹo chạy: server http của python bị chặn trong phiên này; dùng srv.js (node http) trong scratchpad; puppeteer-core cài ở scratchpad/pp.

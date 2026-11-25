@@ -20,3 +20,21 @@
 .nplv-on .reward{font-size:20px!important;line-height:1;margin:0}
 .nplv-on .nplv{width:min(94%,300px)}
 }
+/* Popup "Chọn level" (bottom-sheet): cuộn được, nút đóng icon, ô level chỉ có số + sao/khoá/tick (không chữ tràn) */
+.nplv-hint{display:inline-flex;align-items:center;gap:8px;max-width:100%;min-height:48px;padding:6px 16px;border:2px dashed rgba(255,255,255,.55);border-radius:24px;background:rgba(40,40,60,.55);color:#fff;font:700 16px/1.2 var(--font,system-ui,sans-serif);text-align:left}
+.nplv-hint svg{width:22px;height:22px;flex:none}
+.nplp{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:flex-end;justify-content:center;background:rgba(10,10,25,.62);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.nplp-sheet{width:min(100%,460px);max-height:min(82vh,82dvh);display:flex;flex-direction:column;background:#1e1b3a;color:#fff;border-radius:24px 24px 0 0;padding:12px 14px calc(14px + env(safe-area-inset-bottom,0px));box-shadow:0 -6px 30px rgba(0,0,0,.45);font-family:var(--font,system-ui,sans-serif)}
+.nplp-head{display:flex;align-items:center;justify-content:space-between;flex:none;padding:0 4px 8px}
+.nplp-t{font:800 22px/1 inherit}
+.nplp .nplp-x{width:56px;height:56px;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.nplp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:10px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:6px 6px 6px}
+.nplp-c{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:76px;border:0;border-radius:18px;background:linear-gradient(135deg,#6d4ff0,#a24df0);color:#fff;cursor:pointer;font:800 26px/1 inherit;touch-action:manipulation;box-shadow:0 3px 0 rgba(0,0,0,.3)}
+.nplp-c b{font-weight:800}
+.nplp-c.now{outline:4px solid #f97316;outline-offset:1px}
+.nplp-c.lock{background:rgba(255,255,255,.1);color:rgba(255,255,255,.5);box-shadow:none;cursor:not-allowed}
+.nplp-s{display:flex;align-items:center;justify-content:center;gap:0;height:18px;font-style:normal}
+.nplp-s svg{width:16px;height:16px}
+.nplp-c:not(.lock) .nplp-s svg{color:#fbbf24}
+.nplp-s svg.st{fill:#fbbf24}
+@media (orientation:landscape) and (max-height:480px){.nplp{align-items:center}.nplp-sheet{max-height:92vh;border-radius:24px;width:min(94%,560px)}.nplp-c{min-height:64px}.nplp-grid{grid-template-columns:repeat(auto-fill,minmax(68px,1fr))}}
