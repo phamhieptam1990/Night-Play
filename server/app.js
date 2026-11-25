@@ -925,6 +925,18 @@ route("GET", /^\/api\/pro\/lang-cua-be\.js$/, async ({ headers, query, ip }) => 
   }
   return out(200, require("./pro/lang-cua-be").source({ trial }) + require("./pro/_premium").code, "application/javascript; charset=utf-8");
 });
+/* Hai game lớn của Pop Play (Nhà Của Bi, Quán Cáo Cam): 2 giao diện Night Pass mỗi game (shared/worldkit/world-pass.js); dùng thử 1 lần/ngày, vé tạm cho người chơi hộ */
+for (const wid of ["nuoi-thu-tieng-viet", "tiem-nuoc-ep-tieng-anh"]) route("GET", new RegExp("^/api/pro/" + wid + "\\.js$"), async ({ headers, query, ip }) => {
+  const pass = await authPass(headers); let trial = false, js = "application/javascript; charset=utf-8";
+  if (!pass && authHelper(headers)) return out(200, require("./pro/" + wid).source({ helper: true }), js);
+  if (!pass) {
+    if (query.get("trial") !== "1") return out(401, passFail(headers));
+    if (await limited("wp:" + wid + ":" + ipHash(ip), 1, 86400000)) return out(429, { error: "trial_used" });
+    trial = true;
+    await db.query("insert into paywall_daily(day, key, n) values ((now() at time zone $1)::date, $2, 1) on conflict (day, key) do update set n = paywall_daily.n + 1", [TZ, wid + "_theme:trial"]);
+  }
+  return out(200, require("./pro/" + wid).source({ trial }), js);
+});
 /* Cánh Nhỏ Phiêu Lưu (Cozy Play): 4 giao diện đẹp mỗi chuyến bay chỉ giao cho người có Night Pass; dùng thử: 1 ván/ngày */
 route("GET", /^\/api\/pro\/cozy-wings\.js$/, async ({ headers, query, ip }) => {
   const pass = await authPass(headers); let trial = false;

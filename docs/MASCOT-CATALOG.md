@@ -104,3 +104,8 @@ Khung Pop (viewBox 256, nhóm id shadow/body/face/sign/acc-*/fx, 5 skin × 8 the
 |---|---|---|---|---|---|---|
 | Nuôi Thú Tiếng Việt (`nuoi-thu-tieng-viet`) | Cún Bi (vàng cam, tai cụp nâu, đốm nâu quanh mắt TRÁI) | Vòng cổ đỏ + thẻ vàng dấu ✓, bát xanh có ô chữ A | Bác sĩ thú y: mũ y tá chữ thập, ống nghe, hộp cứu thương | Ca sĩ nhí: tai nghe, micro, nốt nhạc | Phù thủy chữ (Dạ quang): mũ phù thủy, đũa phép, chữ Ă phát sáng, áo choàng | Hiệp sĩ sách: mũ giáp lông đỏ, khiên là cuốn sách, áo choàng đỏ |
 | Tiệm Nước Ép Tiếng Anh (`tiem-nuoc-ep-tieng-anh`) | Cáo Cam chủ quán (má + mõm trắng, tai nhọn, đuôi xù chóp trắng; khác loài với Bi) | Ly nước cam có ống hút + tạp dề xanh có lát cam | Đầu bếp nước ép: mũ đầu bếp, đĩa cam | Du lịch vòng quanh thế giới: nón cói, quả địa cầu, máy bay giấy | Nhạc sĩ đường phố (Dạ quang): mũ lưỡi trai, ghi-ta, ánh đèn sân khấu | Siêu anh hùng nước ép: băng đô sao, khiên lát cam, quả cam vàng, áo choàng |
+
+## Night Pass của Bi + Cáo Cam (game lớn Pop)
+
+Không vẽ thân mới: mỗi giao diện Night Pass dùng đúng thân 3D mềm Pop (`mascot-pop-<id>.svg`) với skin có sẵn, ép bằng `NPArtSkinForce` trong `shared/worldkit/world-pass.js`: Nhà Của Bi = `night` "Phù thủy chữ" (Phòng Phù Thủy Chữ) và `star` "Hiệp sĩ sách" (Thư Viện Hiệp Sĩ); Quán Cáo Cam = `night` "Nhạc sĩ đường phố" (Quán Đêm Phố Nhạc) và `star` "Siêu anh hùng nước ép" (Quán Siêu Anh Hùng).
+
