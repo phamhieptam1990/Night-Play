@@ -26,13 +26,13 @@
 .c.cf{background:color-mix(in srgb,var(--bad) 28%,var(--cell,#fff))}
 @keyframes hintc{50%{transform:scale(1.07)}}
 .c:focus-visible{outline:.9cqw solid var(--sa);outline-offset:-.9cqw;z-index:3}
-.pal{flex:none;width:96cqw;display:flex;gap:1.2cqw;align-items:stretch;justify-content:center;padding-top:.6cqw}
+.pal{flex:none;width:94cqw;max-width:100%;box-sizing:border-box;display:flex;gap:1.2cqw;align-items:stretch;justify-content:center;padding-top:.6cqw}
 /* thẻ con vật: nền kẹo bóng, viền dưới dày kiểu nút 3D, con vật có đĩa sáng + bóng, nhãn "còn lại" dạng viên thuốc */
-.pk{position:relative;flex:1 1 0;min-width:0;height:14cqw;display:grid;place-items:center;border-radius:4.2cqw;
+.pk{position:relative;flex:1 1 0;min-width:0;max-width:calc((94cqw - 3.6cqw) / var(--n));height:14cqw;display:flex;align-items:center;justify-content:center;text-align:center;padding:0;overflow:visible;border-radius:4.2cqw;
   background:linear-gradient(180deg,#fff 0%,color-mix(in srgb,var(--sa) 14%,#fff) 100%);color:var(--si);
   border:.5cqw solid color-mix(in srgb,var(--sa) 45%,#fff);border-bottom-width:1.2cqw;
   box-shadow:0 1cqw 2cqw rgba(0,0,0,.2),inset 0 .5cqw 0 rgba(255,255,255,.9);font-size:calc(96cqw / (var(--n) + 1) * .62);transition:transform .12s}
-.pk i{font-style:normal;line-height:1;filter:drop-shadow(0 .5cqw .3cqw rgba(0,0,0,.25))}
+.pk i{font-style:normal;display:block;line-height:1;text-align:center;filter:drop-shadow(0 .5cqw .3cqw rgba(0,0,0,.25))}
 .pk b{position:absolute;right:-.6cqw;top:-1.6cqw;min-width:4.6cqw;height:4.6cqw;padding:0 .8cqw;box-sizing:border-box;border-radius:999px;display:grid;place-items:center;
   font-size:3cqw;font-weight:800;line-height:1;background:var(--sa);color:var(--sa2,#fff);border:.4cqw solid #fff;box-shadow:0 .4cqw .8cqw rgba(0,0,0,.25)}
 .pk:active{transform:translateY(.6cqw) scale(.96)}
