@@ -8,4 +8,4 @@
 .colt img{width:86%;height:86%;object-fit:contain}
 .colt b{position:absolute;left:-4px;top:-6px;min-width:26px;height:26px;border-radius:13px;background:#FB5A7A;color:#fff;font:900 15px/26px system-ui;text-align:center;border:2px solid #fff}
 .colx{position:absolute;right:-8px;top:-10px;width:44px;height:44px;border-radius:50%;border:2px solid #fff;background:#EF4444;color:#fff;display:grid;place-items:center;cursor:pointer}
-@media (orientation:landscape) and (max-height:520px){#colBtn{right:auto;left:calc(var(--wk-edge) + 64px);top:auto;bottom:10px}.colt{width:84px}.colc{padding:14px 12px 10px}}
+@media (orientation:landscape) and (min-aspect-ratio:11/10){#colBtn{right:auto;left:calc(var(--wk-edge) + 64px);top:auto;bottom:10px}.colt{width:84px}.colc{padding:14px 12px 10px}}

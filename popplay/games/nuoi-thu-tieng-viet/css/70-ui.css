@@ -36,7 +36,7 @@ place-items:center}
 .pk-it{display:grid;place-items:center;gap:2px;min-height:96px;border-radius:20px;color:#fff;border:2px solid rgba(255,255,255,.7);font:900 15px/1.1 system-ui;padding:8px}
 .pk-it span{font-size:42px;line-height:1}
 .lvl-up{position:absolute;inset:0}
-@media (orientation:landscape) and (max-height:520px){
+@media (orientation:landscape) and (min-aspect-ratio:11/10){
   html .app{display:flex!important;flex-direction:row!important;align-items:stretch!important;padding:0!important}html .app .play{grid-column:auto!important}.play{--U:min(100cqw,calc(100cqh*.9));align-self:stretch;height:100%;flex:1 1 0;width:auto!important;max-width:none!important;aspect-ratio:auto!important;border-radius:0}
   html .side{position:fixed!important;left:8px;top:8px;width:auto!important;z-index:30;display:block!important}html .side .top{display:flex;gap:8px;flex-wrap:nowrap}html .side .top>*{margin:0!important;position:static!important}html .side .top h1{display:none}
   #room{flex-direction:row}
