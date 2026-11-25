@@ -4,14 +4,21 @@ const rankIdx = n => n >= 3200 ? 4 : n >= 2200 ? 3 : n >= 1300 ? 2 : n >= 600 ? 
 const scoreOf = D => D.pts + D.bonus;
 const remain = D => D.C.time ? Math.max(0, D.C.time - D.time) : 0;
 const leftOf = D => D.tiles.reduce((a, t) => a + (t.on ? 1 : 0), 0);
-function newGame(seed, mode, t, ch) {
-  const C = CFG[t], sk = skinOf(), icons = sk.icons || ICONS, ps = shuffle(icons.map((_, i) => i), sub(seed, 31)).slice(0, C.K);
+/* LEVEL (trần GB_MAX = 6): mỗi level chỉnh số loại hình K (≤12), số ô khay sl (≥5), số tầng đè thêm big (≤2), lượt hoàn tác un, giờ đua tg (nhân, ≥0.6). Ván hôm nay/thách đấu luôn level 0. */
+const GB_LV = [{ K: 8, sl: 7, big: 0, un: 1, tg: 1, mx: .4 }, { K: 9, sl: 7, big: 1, un: 1, tg: 1, mx: .5 }, { K: 10, sl: 6, big: 1, un: 1, tg: .9, mx: .6 }, { K: 11, sl: 6, big: 2, un: 0, tg: .8, mx: .75 }, { K: 12, sl: 5, big: 4, un: 0, tg: .7, mx: .9 }, { K: 12, sl: 5, big: 7, un: 0, tg: .6, mx: 1 }];
+const GB_MAX = GB_LV.length, GB_K = "gt-lvu";
+let GBL = Math.max(0, Math.min(GB_MAX - 1, Math.floor(+LS.get(GB_K, 0)) || 0));
+function newGame(seed, mode, t, ch, lvForce) {
+  const lx = lvForce != null ? lvForce : (mode === "free" && !ch ? GBL : 0), X = GB_LV[Math.max(0, Math.min(GB_MAX - 1, lx))];
+  const C = Object.assign({}, CFG[t]); C.K = Math.max(C.K, X.K); C.big = Math.max(C.big, X.big); if (C.time) C.time = Math.max(54, Math.round(C.time * X.tg));
+  SLOTS = X.sl;
+  const sk = skinOf(), icons = sk.icons || ICONS, KK = Math.min(C.K, icons.length), ps = shuffle(icons.map((_, i) => i), sub(seed, 31)).slice(0, KK);
   const base = buildTiles(sk.layers || PILE, C.big);
-  let g = null; for (let a = 0; a < 60 && !g; a++) g = genKinds(base, C.K, sub(seed, 60 + a));
-  if (!g) g = { kind: base.map((_, i) => Math.floor(i / 3) % C.K), order: base.map((_, i) => i) };
+  let g = null; for (let a = 0; a < 60 && !g; a++) g = genKinds(base, KK, sub(seed, 60 + a), X.mx);
+  if (!g) g = { kind: base.map((_, i) => Math.floor(i / 3) % KK), order: base.map((_, i) => i) };
   base.forEach((b, i) => { b.i = i; b.k = ps[g.kind[i]]; b.on = true; b.sh = 0; });
   const D = { seed, mode, t, C, ch: ch || null, tiles: base, sol: g.order, tray: [], pops: [], fx: [], hist: [], pts: 0, bonus: 0, cleared: 0, combo: 0, maxCombo: 0, lastClr: -99,
-    undo: 1, over: false, reason: "end", time: 0, dur: 1e9, beat: false, shake: 0, flash: 0 };
+    undo: X.un, lx, over: false, reason: "end", time: 0, dur: 1e9, beat: false, shake: 0, flash: 0 };
   calcFree(D); return D;
 }
 function layTray(D) { D.tray.forEach((q, i) => { q.tx = slotX(i); q.ty = TRAY_Y + 4; }); }
@@ -88,7 +95,7 @@ const shareT = D => L2([TYPES[D.t][1], TYPES[D.t][2]]);
 function snapP(D) { return D.hist.length ? { h: D.hist.slice(), s: D.pts, t: Math.round(D.time * 10) / 10, u: D.undo, c: D.cleared } : null; }
 function restoreP(D, p) {
   for (const i of (p.h || []).slice(0, 80)) pickTile(D, +i | 0, true);
-  D.pts = +p.s || D.pts; D.time = +p.t || 0; D.undo = Math.max(0, Math.min(1, +p.u || 0)); D.cleared = +p.c || D.cleared; D.tray.forEach(q => { q.x = q.tx; q.y = q.ty; }); hud();
+  D.pts = +p.s || D.pts; D.time = +p.t || 0; D.undo = Math.max(0, Math.min(D.undo, +p.u || 0)); D.cleared = +p.c || D.cleared; D.tray.forEach(q => { q.x = q.tx; q.y = q.ty; }); hud();
 }
 function onBegin(D) { fitCanvas(); const u = $("gtU"); if (u && !u._b) { u._b = 1; u.onclick = () => undoTile(G); } }
 function onLang(D) { hud(); }

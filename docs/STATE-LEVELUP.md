@@ -18,3 +18,6 @@
 ## Đợt 2 xong
 - 28 game có level up (xem CHECKLIST-LEVELUP.md). Cozy sinh tự động: thêm `level:{max,rules,won?}` vào spec (levelgen.js) hoặc `level:{custom:...}`; game tay: `NPLevel.attach(...)`. levelup.js có thêm `host` (khung kết thúc tuỳ biến) và nhận `.erow`.
 - Bước tiếp (nếu muốn): thêm mục "Lên level" vào GAME_RULES.md; nâng số cache sw.js; viết check-levelup.js.
+
+## Tìm Đôi Thẻ / Ghép Ba Thẻ nâng khó thật (trần 6)
+- Bảng LVC (tim-doi-the/board.js) và GB_LV (ghep-ba-the/logic.js); đo bot: xem CHECKLIST-LEVELUP.md. Mô phỏng: scratchpad simtd.js / simgt.js (puppeteer, hook window.TD / window.GT).

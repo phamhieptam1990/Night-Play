@@ -1,15 +1,16 @@
 /* Tìm Đôi Thẻ — bố cục thẻ chồng tầng + sinh ván theo CẶP luôn giải được. Toạ độ "nửa thẻ": mỗi thẻ chiếm 2×2 (c cột, r hàng, l tầng). */
 const TW = 48, TH = 52, HW = TW / 2, HH = TH / 2, W = 360, H = 480, BOARD_T = 18, BOARD_H = H - BOARD_T - 14;
-const ICONS = ["🌸", "🌻", "🌷", "🌹", "🌺", "🍀", "🌼", "💐", "🍁", "🍄"];
+const ICONS = ["🌸", "🌻", "🌷", "🌹", "🌺", "🍀", "🌼", "💐", "🍁", "🍄", "🌿", "🪷"];
 /* Mỗi tầng: oy = hàng đầu; rows[j] = "dịch:mặt nạ" (# = có thẻ). Bản free dùng "kim tự tháp hoa". */
 const PILE = [
   { l: 0, oy: 0, rows: ["0:######", "0:######", "0:######", "0:######"] },
   { l: 1, oy: 1, rows: ["1:#####", "1:#####", "1:#####"] },
   { l: 2, oy: 2, rows: ["2:####", "2:####"] }
 ];
-/* Độ khó: 0 Dễ (ít thẻ, 6 loại), 1 Thường (cả bố cục, 8 loại), 2 Khó (thêm một tầng đè, 10 loại) */
-const LVC = [{ K: 6, n: 30, big: 0 }, { K: 8, n: 0, big: 0 }, { K: 10, n: 0, big: 1 }];
-const LVN = [["🌱", "Dễ", "Easy"], ["🌿", "Thường", "Normal"], ["🔥", "Khó", "Hard"]];
+/* Độ khó (trần TD_MAX = 6): K = số loại hoa (≤12), n = giới hạn số thẻ (0 = đủ bố cục), big = số tầng đè thêm, em = số lần chạm sai tối đa (0 = vô hạn), ns = 1: HẾT NƯỚC ĐI LÀ THUA (không tự xáo), tpp = giây cho mỗi cặp (0 = không hẹn giờ). 0-2 là Dễ/Thường/Khó cũ (ván hôm nay + thách đấu chỉ dùng 0-2). */
+const LVC = [{ K: 6, n: 30, big: 0, em: 0, ns: 0, tpp: 0 }, { K: 8, n: 0, big: 0, em: 0, ns: 0, tpp: 0 }, { K: 10, n: 0, big: 1, em: 0, ns: 0, tpp: 0 }, { K: 10, n: 0, big: 1, em: 0, ns: 1, tpp: 0 }, { K: 8, n: 0, big: 3, em: 10, ns: 1, tpp: 2.8 }, { K: 6, n: 0, big: 4, em: 4, ns: 1, tpp: 2.1 }];
+const TD_MAX = LVC.length;
+const LVN = [["🌱", "Dễ", "Easy"], ["🌿", "Thường", "Normal"], ["🔥", "Khó", "Hard"], ["⚡", "Rất khó", "Expert"], ["💀", "Cực khó", "Insane"], ["👑", "Bậc thầy", "Master"]];
 const CFG = [{ time: 0, hid: 0, shuf: 0 }, { time: 0, hid: 1, shuf: 0 }, { time: 0, hid: 0, shuf: 20 }, { time: 1, hid: 0, shuf: 0 }];
 function buildTiles(LY, C) {
   let ts = [];
@@ -17,7 +18,7 @@ function buildTiles(LY, C) {
     const m = /^(\d+):(.*)$/.exec(row), sh = m ? +m[1] : 0, s = m ? m[2] : row;
     for (let i = 0; i < s.length; i++) if (s[i] === "#") ts.push({ c: sh + 2 * i, r: L.oy + 2 * j, l: L.l });
   });
-  if (C.big) { const top = Math.max(...ts.map(t => t.l)) + 1; ts.filter(t => t.l === 1).forEach(t => ts.push({ c: t.c, r: t.r, l: top })); }
+  for (let b = 0; b < C.big; b++) { const top = Math.max(...ts.map(t => t.l)) + 1; ts.filter(t => t.l === 1 + b).forEach(t => ts.push({ c: t.c, r: t.r, l: top })); }   /* mỗi lượt đè thêm một tầng lên các thẻ tầng 1 + lượt */
   if (C.n && ts.length > C.n) {   /* Dễ: giữ phần giữa, bỏ thẻ ngoài rìa */
     const cx = ts.reduce((a, t) => a + t.c, 0) / ts.length, cy = ts.reduce((a, t) => a + t.r, 0) / ts.length;
     ts = ts.map(t => [t, Math.hypot(t.c - cx, (t.r - cy) * 1.1) - t.l * .3]).sort((a, b) => a[1] - b[1]).slice(0, C.n).map(x => x[0]);

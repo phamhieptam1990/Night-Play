@@ -43,7 +43,7 @@ module.exports = {
       sk: { basic: ["Spooky night", "Spooky night"], candy: ["Candy shop", "Candy shop"], ocean: ["Deep sea", "Deep sea"], orchard: ["Orchard", "Orchard"], space: ["Outer space", "Outer space"] } }
   },
   sfx: `{ok:()=>tone(620,.06,"triangle",.08),bad:()=>tone(150,.22,"sawtooth",.07),end:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.09,i*.09)),combo:n=>{const b=440*Math.pow(1.122,Math.min(n/3,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.1,"triangle",.09,i*.05))},up:()=>{[660,880].forEach((f,i)=>tone(f,.1,"triangle",.09,i*.06))}}`,
-  level: { max: 3, rules: [["K","add",1,10],["time","mul",-.1,65]] },   /* K = số loại hình (8→10, 10 đã có ở Night Pass); đua giờ 90s→72s */
+  level: { custom: String.raw`window.NPLevel&&NPLevel.attach({levels:GB_MAX,cur:()=>G?G.lx:-1,won:()=>!!G&&G.reason==="win",skip:()=>!G||G.mode!=="free"||!!G.ch,go:i=>{GBL=i;LS.set(GB_K,i);if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",G?G.t:TY,null)}});` },   /* trần GB_MAX=6, bảng GB_LV trong parts/ghep-ba-the/logic.js */
   gameJs: ["layout", "logic", "render"].map(part).join("\n"),
   drawCard: "",
   wire: { dvi: "Thẻ xếp chồng nhiều tầng: chạm thẻ không bị đè để cho vào khay, đủ 3 thẻ giống nhau thì biến mất. Khay đầy 7 ô là thua!", den: "Stacked tiles: tap an uncovered tile to drop it in the tray, 3 matching tiles vanish. A full 7-slot tray ends the game!",

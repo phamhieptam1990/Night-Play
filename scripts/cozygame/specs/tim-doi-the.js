@@ -48,7 +48,7 @@ module.exports = {
   wire: { dvi: "Thẻ xếp chồng nhiều tầng: chạm một thẻ không bị đè rồi chạm thẻ giống nó, cả đôi biến mất. 3 độ khó, dọn sạch bàn càng nhanh càng nhiều điểm!", den: "Stacked tiles: tap an uncovered tile, then its match, and the pair vanishes. 3 difficulty levels — clear the board fast for more points!",
     c1: "#3fb27f", c2: "#0b3a2b", emoji: "🌸", artKey: "pairtiles",
     art: '<g><rect x="86" y="170" width="150" height="160" rx="28" fill="#fff" opacity=".94"/><rect x="276" y="170" width="150" height="160" rx="28" fill="#fff" opacity=".94"/><rect x="181" y="250" width="150" height="160" rx="28" fill="#fff" stroke="#ffd24a" stroke-width="8"/></g><text x="161" y="275" font-size="84" text-anchor="middle">🌸</text><text x="351" y="275" font-size="84" text-anchor="middle">🌸</text><text x="256" y="355" font-size="90" text-anchor="middle">🌻</text>' },
-  test: String.raw`window.TD={get G(){return G},PF,CFG,LVC,begin,newGame,scoreOf,parseCh,drawCard,shareText,shareLink,fnv,dayKey,dayNo,finish,pickTile,findMove,useHint,reshuffle,buildTiles,genPairs,calcFree,
+  test: String.raw`window.TD={set DIF(v){DIF=v},get DIF(){return DIF},TD_MAX,loseNow,get G(){return G},PF,CFG,LVC,begin,newGame,scoreOf,parseCh,drawCard,shareText,shareLink,fnv,dayKey,dayNo,finish,pickTile,findMove,useHint,reshuffle,buildTiles,genPairs,calcFree,
  playTo(D,n){D=D||G;let k=0;while(D.pairs<n&&!D.over&&k++<400){const m=findMove(D);if(!m)break;pickTile(D,m[0]);pickTile(D,m[1])}return{pairs:D.pairs,over:D.over,score:scoreOf(D)}},
  solve(D){D=D||G;let k=0;while(!D.over&&k++<400){const m=findMove(D);if(!m)break;pickTile(D,m[0]);pickTile(D,m[1])}return{over:D.over,reason:D.reason,score:scoreOf(D)}},
  finishNow(D){D=D||G;D.over=true;finish(D)}};`

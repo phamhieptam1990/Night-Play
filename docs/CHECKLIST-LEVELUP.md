@@ -72,3 +72,20 @@ Game viết tay dùng độ khó có sẵn: ga-me-ban-trung, cho-hang-kieu-viet,
 - Lỗi 404 là /favicon.ico của http.server (không có ở site thật), có sẵn, không do level up.
 - check-resume.js: lỗi "bản lưu quá 7 ngày" / "ván hôm nay của ngày cũ vẫn hiện thẻ tiếp tục" xảy ra cả ở game không sửa (xay-cau-tre) => có sẵn (nghi do ngày hệ thống 2026-11-25 so với bài đo), bỏ qua.
 - check-difficulty.js sau khi đổi giao diện icon: 16/17 game đạt; dap-deadline báo "huy hiệu #npDifBadge không hiện" — có SẴN từ trước (bản git HEAD cũng lỗi, 9 dòng ✗), không do level up.
+
+## Tìm Đôi Thẻ + Ghép Ba Thẻ: level TĂNG THẬT (trần 6 level mỗi game) — thay các dòng cũ ở trên
+Hằng số: `TD_MAX = LVC.length = 6` (scripts/cozygame/parts/tim-doi-the/board.js, bảng LVC), `GB_MAX = GB_LV.length = 6` (parts/ghep-ba-the/logic.js, bảng GB_LV). Dữ liệu lưu `td-lv` / `gt-lvu` bị kẹp [0..trần-1]; ván hôm nay + thách đấu luôn level 0 (Tìm Đôi Thẻ: Dễ/Thường/Khó cũ qua seed%3). 3 chip Dễ/Thường/Khó ở màn chọn giữ nguyên; level 4-6 chỉ mở bằng "lên level".
+- Tìm Đôi Thẻ, mỗi level: K = số loại hoa (6→10→6; ICONS có 12, kẹp theo skin), big = số tầng đè thêm (0→4, tối đa 92 thẻ), em = số lần chạm sai tối đa (L4: 10, L5: 4), ns = hết nước đi là THUA (không tự xáo; từ L4... L3 trở lên), tpp = giây mỗi cặp (L5: 2.1s, L4 chỉ đồng hồ 2.8s, hiện đồng hồ). Level 0-2 y như cũ (có tự xáo).
+- Ghép Ba Thẻ, mỗi level: K 8→12 (kẹp theo skin), khay 7→6→5 ô (không dưới 5), big 0→7 tầng đè thêm (45→99 thẻ), mx = độ trộn loại hình giữa các tầng (.4→1), hoàn tác 1→0 (từ L4), giờ đua (Night Pass) nhân 1→.6 (≥54s).
+- Bot đo (puppeteer, 100 ván/level, hạt giống cố định; "người chơi trung bình" = tham lam chọn nước ít bí nhất, 4% chạm nhầm, 1.9 giây/cặp ở Tìm Đôi Thẻ):
+| Level | Tìm Đôi Thẻ (tỉ lệ thắng) | Ghép Ba Thẻ (tỉ lệ thắng) |
+|---|---|---|
+| 1 | 100% | 97% |
+| 2 | 100% | 92% |
+| 3 | 100% | 87% |
+| 4 | 79% (21% hết nước đi) | 83% |
+| 5 | 62% | 66% |
+| 6 | 33% (thua: giờ 37, hết nước 28, sai 2) | 49% |
+- Mọi ván ở MỌI level đều có lời giải (bộ giải theo thứ tự sinh ngược `sol`): 100/100 ván thắng theo bộ giải ở cả 6 level (Ghép Ba Thẻ tính cả khay 5 ô), kể cả Tìm Đôi Thẻ không tự xáo (ván sinh ngược luôn có đường thắng khi chọn đúng thứ tự).
+- Ghép Ba Thẻ level 6 chưa xuống 25-40% (bot đạt 49%): ba đòn còn lại (khay <5, hết hoàn tác đã dùng, thẻ úp là của Night Pass) không dùng thêm được; nếu cần khó hơn nữa thì tăng tỉ lệ nhầm của bot hoặc thêm thẻ nhiễu ở đợt sau.
+- Lưu ý: "Khoe điểm/Thách bạn" ở level cao mã hoá ván theo độ khó seed%3 nên người nhận chơi bản dễ hơn (điểm không so được với level 4-6). Ảnh màn chơi: scratchpad/shots/play-<id>-L0|L5-390x844|844x390.png.
