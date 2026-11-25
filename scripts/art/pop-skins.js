@@ -61,7 +61,7 @@ base("lang-cua-be", { emoji: "🏡", names: { badge: L("Thị trưởng nhí", "
   group: '<path d="M28 86Q128 58 228 86Q214 100 128 96Q42 100 28 86Z" fill="#F2D27A" stroke="#C8A040" stroke-width="3" stroke-linejoin="round"/><path d="M78 82Q86 36 128 32Q170 36 178 82Z" fill="#F2D27A" stroke="#C8A040" stroke-width="3" stroke-linejoin="round"/><path d="M80 74H176" stroke="#E8883A" stroke-width="7" stroke-linecap="round"/><g transform="rotate(14 224 170)"><rect x="219" y="112" width="8" height="100" rx="4" fill="#8A5A30" stroke="#5A3A20" stroke-width="2.5"/><path d="M210 112h26l-4 20h-18Z" fill="#B0B8C8" stroke="#6E7890" stroke-width="3" stroke-linejoin="round"/></g>',
   fx: { "default": ["🏡", "✨"], badge: ["🎖️", "⭐"], group: ["🌾", "🥕"], night: ["🏮", "🌙"], star: ["🏰", "👑"] },
   hi: [L("Chào mừng bé đến làng!", "Welcome to the village!"), L("Be be! Mình là trưởng làng!", "Baa! I'm the mayor!")], tap: [L("Be be, nhột quá!", "Baa, tickles!"), L("Xây thêm nhà nào!", "Build more houses!")] });
-module.exports = { S };
+module.exports = { S, fxNight, fxStar, capeBack, medal, laurel };
 
 /* ===== MỖI LINH VẬT: 3 SKIN CÒN LẠI (Huy hiệu, Dạ quang, Siêu sao) CŨNG RIÊNG THEO CHỦ ĐỀ GAME (chủ site: "skin của từng mascot khác hẳn nhau") ===== */
 const zzz = (x, y) => `<g fill="#fff" stroke="#8E9BB8" stroke-width="1.2" font-family="Inter,system-ui,sans-serif" font-weight="900"><text x="${x}" y="${y}" font-size="22">Z</text><text x="${x + 18}" y="${y - 16}" font-size="16">z</text><text x="${x + 32}" y="${y - 28}" font-size="12">z</text></g>`;

@@ -9,6 +9,8 @@
    - thông báo sự kiện (.ns-toast) không che tiêu đề; màn mở đầu (?intro=1) chạy rồi tự gỡ, không để lại lệch bố cục. */
 const { spawn } = require("child_process"), fs = require("fs"), path = require("path"), puppeteer = require("puppeteer-core");
 const root = path.join(__dirname, "..", ".."), args = process.argv.slice(2), quick = args.includes("--quick"), PORT = +process.env.NP_PORT || 8953, B = "http://localhost:" + PORT + "/";
+/* số thẻ kỳ vọng = số game thật trong mảng `games` của từng cổng (không dùng số cứng) */
+const WANT = {}; for (const k of ["cozy", "pop"]) { const s = fs.readFileSync(path.join(root, k + "play", "index.html"), "utf8"), i = s.indexOf("const games = ["), j = s.indexOf("\n];", i); WANT[k] = (s.slice(i, j).match(/^\s*\{ id:"/gm) || []).length; }
 const shots = (args.find(a => a.startsWith("--shots=")) || "").slice(8);
 const wait = ms => new Promise(r => setTimeout(r, ms)), fails = []; let n = 0;
 const note = (ok, m) => { n++; if (!ok) { fails.push(m); console.log("  ✗ " + m); } };
@@ -22,7 +24,8 @@ const MEASURE = kind => {
   if (main.scrollHeight > main.clientHeight + 1) out.errs.push("main cuộn " + main.scrollHeight + ">" + main.clientHeight);
   out.on = vis(host); out.tiny = main.classList.contains("sc-tiny");
   /* điện thoại dọc thấp >= 620px: sân khấu vẫn hiện (commit 5bf539a, ngưỡng 128px) nên lưới 4 cột co ô còn ~74px — chủ ý, vẫn >= 71.5 */
-  const tiles = [...document.querySelectorAll("#grid .tile")].filter(vis), mn = kind === "cozy" ? (vw <= 520 && vh >= 620 ? 71.5 : (vw > vh && vh < 560 ? 63.5 : 87.5)) : (vw > vh && vh < 560 ? 59.5 : 63.5);
+  /* iPad dọc 700-1000 x >=900 (768x1024): cozyplay minTile() chủ ý hạ sàn xuống 80 để 25 game vẫn nằm trọn 1 trang không phải vuốt (ô thực ~87px); bài đo theo đúng sàn đó */
+  const tiles = [...document.querySelectorAll("#grid .tile")].filter(vis), mn = kind === "cozy" ? (vw <= 520 && vh >= 620 ? 71.5 : (vw > vh && vh < 560 ? 63.5 : (vw >= 700 && vw <= 1000 && vh >= 900 && vh > vw ? 79.5 : 87.5))) : (vw > vh && vh < 560 ? 59.5 : 63.5);
   for (const t of tiles) { const r = t.getBoundingClientRect(); if (r.left > -1 && r.right < vw + 1 && (r.width < mn || r.height < mn)) { out.errs.push("ô game nhỏ " + Math.round(r.width)); break; } }
   if (!tiles.length) out.errs.push("lưới rỗng");
   const pt = document.getElementById("puToday"); out.puToday = vis(pt);
@@ -37,7 +40,7 @@ const MEASURE = kind => {
   const bar = getComputedStyle(info).flexDirection === "row"; out.bar = bar;   /* điện thoại dọc: thanh đáy (tên + nút Chơi), nhãn ở góc trên-trái của sân khấu, chồng thẻ chính giữa */
   if (bar) { inside(tag, "nhãn"); if (mid) { const r = mid.getBoundingClientRect(); if (Math.abs((r.left + r.right) / 2 - (box.left + box.right) / 2) > 3) out.errs.push("thẻ giữa không nằm chính giữa sân khấu"); if (r.bottom > ir.top + 1) out.errs.push("thẻ giữa bị thanh chữ đè " + Math.round(r.bottom - ir.top) + "px"); const tr = tag.getBoundingClientRect(); if (!(tr.right < r.left + 1 || tr.bottom < r.top + 1)) out.errs.push("nhãn đè lên thẻ giữa"); } }
   for (const [e, w] of [[play, "nút Chơi"], [name, "tên game"]].concat(bar ? [] : [[tag, "nhãn"]])) { const r = e.getBoundingClientRect(); if (r.left < ir.left - 1 || r.right > ir.right + 1 || r.top < ir.top - 1 || r.bottom > ir.bottom + 1) out.errs.push(w + " tràn khỏi thẻ chữ"); }
-  const pr = play.getBoundingClientRect(); if (pr.height < 43.5 || pr.width < (play.classList.contains("ico") ? 43.5 : 80)) out.errs.push("nút Chơi nhỏ " + Math.round(pr.width) + "x" + Math.round(pr.height));
+  const pr = play.getBoundingClientRect(); if (pr.height < 43.5 || pr.width < (play.classList.contains("sc-ic") ? 43.5 : 80)) out.errs.push("nút Chơi nhỏ " + Math.round(pr.width) + "x" + Math.round(pr.height));
   if (!mid) out.errs.push("không có thẻ giữa"); else { const r = inside(mid, "thẻ giữa"); if (r.width < (vw > vh && vh < 560 ? 60 : 70)) out.errs.push("thẻ giữa nhỏ " + Math.round(r.width)); const c = document.elementFromPoint(r.left + r.width * .7, r.top + r.height / 2); if (!c || !c.closest(".sc-card,.sc-nav")) out.errs.push("thẻ giữa bị che"); }
   if (tag.scrollWidth > tag.clientWidth + 1) out.errs.push("nhãn bị cắt (" + tag.textContent + ")");
   out.tag = tag.textContent; out.name = name.textContent; out.day = tag.classList.contains("day");
@@ -66,7 +69,7 @@ const MEASURE = kind => {
       const r = await pg.evaluate(MEASURE, kind); r.errs.forEach(e => note(false, tag + ": " + e)); note(!pg._er.length, tag + ": lỗi JS " + pg._er.join(" | "));
       const want = expectOn(w, h);
       note(r.on === want || (want && r.tiny), tag + ": sân khấu " + (r.on ? "hiện" : "ẩn") + " (cần " + (want ? "hiện" : "ẩn") + ")");
-      if (r.on) { note(r.cards === (kind === "cozy" ? 20 : 12), tag + ": " + r.cards + " thẻ"); note(r.day, tag + ": game giữa lúc mở trang phải là game hôm nay (" + r.tag + ")");
+      if (r.on) { note(r.cards === WANT[kind], tag + ": " + r.cards + " thẻ"); note(r.day, tag + ": game giữa lúc mở trang phải là game hôm nay (" + r.tag + ")");
         if (kind === "cozy") { note(/#\d+/.test(r.tag), tag + ": nhãn Hôm nay thiếu #N (" + r.tag + ")"); note(!r.puToday, tag + ": thẻ Hôm nay nhỏ hiện cùng lúc với sân khấu"); } }
       else if (kind === "cozy") note(r.puToday, tag + ": không có sân khấu thì thẻ Hôm nay nhỏ phải hiện");
       if (shots && lang === "vi") { fs.mkdirSync(shots, { recursive: true }); await pg.screenshot({ path: path.join(shots, (kind + "-" + theme + "-" + w + "x" + h) + ".png") }); }

@@ -1,0 +1,6 @@
+/* Hiệu ứng chuyển khu: Bi đi ra khỏi cảnh, cảnh đổi, Bi đi vào từ phía bên kia. Khu khoá thì mờ. */
+.rm .rbox,.rm .props{transition:opacity .25s}
+.rm.swap .rbox,.rm.swap .props{opacity:0}
+.rm .props img{transition:transform .3s}
+.rm.swap .props img{transform:translateY(2%)}
+.zb.shk{animation:shk .4s}@keyframes shk{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}

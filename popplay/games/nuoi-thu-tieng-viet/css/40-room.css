@@ -1,0 +1,50 @@
+/* HỘP 3D THẬT bằng CSS perspective (tường sau, tường trái/phải, trần, sàn hội tụ về điểm biến mất), một nguồn sáng trên-trái. Màu từng khu lấy từ biến --w1..--c (js/zones.js). */
+#room{padding-top:0}
+.rm{position:relative;flex:1;min-height:0;overflow:hidden;perspective:calc(var(--U)*1.2);perspective-origin:50% 30%;background:var(--w2,#E8A682);
+  --D:calc(var(--U)*.72)}
+.rbox{position:absolute;inset:0;transform-style:preserve-3d}
+.rbox>div{position:absolute;backface-visibility:hidden}
+.wb{inset:0;transform:translateZ(calc(var(--D)*-1));background:linear-gradient(var(--w1),var(--w2) 78%,var(--f2) 78.4%)}
+.ce{left:0;top:0;width:100%;height:var(--D);transform-origin:center top;transform:rotateX(-90deg);background:linear-gradient(var(--cc),var(--w1))}
+.wl{left:0;top:0;width:var(--D);height:100%;transform-origin:left center;transform:rotateY(90deg);background:linear-gradient(90deg,var(--s1),var(--s1))}
+.wr{right:0;top:0;width:var(--D);height:100%;transform-origin:right center;transform:rotateY(-90deg);background:linear-gradient(90deg,var(--s2),var(--s2))}
+.fl{left:0;bottom:0;width:100%;height:var(--D);transform-origin:center bottom;transform:rotateX(90deg);
+  background:repeating-linear-gradient(90deg,var(--f1) 0 11%,var(--f2) 11% 11.7%),linear-gradient(var(--f2),var(--f1));background-blend-mode:multiply}
+.fl::after{content:"";position:absolute;left:24%;right:24%;top:16%;bottom:14%;border-radius:50%;background:radial-gradient(#ff9db8,#e0486a);opacity:.85;
+  box-shadow:inset 0 0 0 2cqw rgba(255,255,255,.35);display:none}
+.rm[data-rug="1"] .fl::after{display:block}
+.fl .shine{position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.28),transparent 40%)}
+.rm[data-sky="1"] .wb{background:linear-gradient(#8FD6FF,#DFF4FF 70%,#7ED67A 70.4%)}
+.rm[data-sky="1"] .fl{background:repeating-linear-gradient(90deg,#7ED67A 0 11%,#6BC96A 11% 11.7%),linear-gradient(#5EBE62,#7ED67A)}
+.rm[data-sky="1"] .wb::before{content:"";position:absolute;left:12%;top:8%;width:12%;aspect-ratio:1;border-radius:50%;background:radial-gradient(#FFF6B0,#FFD24D 60%,rgba(255,210,77,0) 72%)}
+.bunt{position:absolute;left:0;right:0;top:0;height:7%;display:none;background:repeating-linear-gradient(90deg,#ff7a94 0 8%,#ffd93d 8% 16%,#7fd6c2 16% 24%);
+  clip-path:polygon(0 0,100% 0,100% 40%,96% 100%,92% 40%,88% 100%,84% 40%,80% 100%,76% 40%,72% 100%,68% 40%,64% 100%,60% 40%,56% 100%,52% 40%,
+    48% 100%,44% 40%,40% 100%,36% 40%,32% 100%,28% 40%,24% 100%,20% 40%,16% 100%,12% 40%,8% 100%,4% 40%,0 100%)}
+.rm[data-lv="1"] .bunt,.rm[data-lv="2"] .bunt,.rm[data-lv="3"] .bunt,.rm[data-lv="4"] .bunt{display:block}
+.rm[data-sky="1"] .bunt{display:none!important}
+.props{position:absolute;inset:0}
+.props img{position:absolute;height:auto;pointer-events:none}
+.pw{position:absolute;bottom:2%;left:calc(var(--x,50)*1%);width:calc(var(--U)*.46*var(--s,1));aspect-ratio:1;transform:translateX(-50%);
+  transition:left .7s cubic-bezier(.3,.8,.4,1),bottom .5s;touch-action:none;z-index:2}
+.pw.fast{transition:left .35s ease-out}.pw.nott{transition:none}
+.pw .in{position:relative;width:100%;height:100%;transform-origin:50% 92%;animation:breathe 3.2s ease-in-out infinite}
+.pw img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.pw .mud{opacity:var(--mud,0);transition:opacity .8s}
+.pw.hop .in{animation:hop .55s ease-out 2}.pw.wig .in{animation:wig .25s ease-in-out 6}.pw.sq .in{animation:squash .5s}
+@keyframes breathe{50%{transform:scale(1.025,1.04)}}
+@keyframes hop{40%{transform:translateY(-9cqw) scale(1.03,.98)}}
+@keyframes wig{25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
+@keyframes squash{30%{transform:scale(1.1,.88)}60%{transform:scale(.96,1.06)}}
+.say{position:absolute;left:50%;top:calc(var(--hudH) + 31cqw);transform:translateX(-50%) scale(.6);z-index:4;max-width:80%;padding:1.6cqw 4cqw;border-radius:4cqw;
+  background:linear-gradient(135deg,#6b4bb0,#8b4bb0);color:#fff;font-weight:800;font-size:4.6cqw;line-height:1.15;box-shadow:var(--sh);opacity:0;pointer-events:none;
+  transition:opacity .2s,transform .25s;text-align:center}
+.say.on{opacity:1;transform:translateX(-50%) scale(1)}
+.say b{display:block;font-size:6.4cqw;color:#FFE27A;letter-spacing:.2cqw}
+.dark{position:absolute;inset:0;z-index:5;background:radial-gradient(circle at 80% 50%,rgba(255,224,140,0),rgba(10,10,60,.72) 70%);opacity:0;pointer-events:none;transition:opacity .9s}
+.rm.night .dark{opacity:1}
+.rm[data-ph="dusk"]:not(.night) .dark{opacity:.22;background:rgba(255,120,60,.55)}
+.rm[data-ph="night"]:not(.night) .dark{opacity:.4;background:rgba(20,20,90,.8)}
+.pw .want{top:-6%;right:0;left:auto;bottom:auto;width:26%;height:auto;animation:wantb 1.2s ease-in-out infinite;pointer-events:none;
+  background:rgba(255,255,255,.92);border-radius:50%;padding:3%;box-shadow:0 .8cqw 1.6cqw rgba(0,0,0,.25);z-index:3}
+@keyframes wantb{50%{transform:translateY(-1.2cqw) scale(1.06)}}
+.fit{z-index:1}

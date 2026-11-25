@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pop 3D: Bi + Cáo Cam, 5 skin</title>
+<style>body{margin:0;background:#171236;color:#fff;font:700 12px system-ui,sans-serif;padding:10px}h2{margin:14px 0 6px;font-size:15px}.grid{display:grid;grid-template-columns:70px repeat(3,auto) 1fr;gap:8px;align-items:center;margin-bottom:4px}
+.c{border-radius:14px;padding:6px;background:linear-gradient(160deg,#2b2064,#171236);display:inline-block}.l .c{background:linear-gradient(160deg,#FFF4E0,#FFE3C0)}.n{opacity:.8;font-size:11px}
+.th{display:flex;gap:2px;flex-wrap:wrap}.th .c{padding:2px}svg{display:block}.s40{width:52px}.s120{width:132px}.s300{width:312px}.t80{width:76px}
+body.l{background:#fff7ea;color:#2a2350}</style></head><body>
+<p>Mở qua máy chủ tĩnh (fetch tệp svg). Thêm ?t=light cho nền sáng, ?skin=default|badge|group|night|star để lọc.</p>
+<script src="mascot-theme.js"></script>
+<script>
+var IDS=["nuoi-thu-tieng-viet","tiem-nuoc-ep-tieng-anh"],SK=["default","badge","group","night","star"];
+var Q=new URLSearchParams(location.search);if(Q.get("t")==="light")document.body.className="l";
+var K=Q.get("skin"),N=0;
+function mk(txt,sk,cls,th){var i=N++,s=txt.replace(/id="(pg|pe)"/g,'id="$1'+i+'"').replace(/url\(#(pg|pe)\)/g,'url(#$1'+i+')');var d=document.createElement("div");d.className="c "+cls;d.innerHTML=s;var v=d.querySelector("svg");v.setAttribute("class","np-mascot sk-"+sk);if(th)NPArtTheme.apply(v,th);return d}
+Promise.all(IDS.map(function(id){return fetch("mascot-pop-"+id+".svg").then(function(r){return r.text()})})).then(function(T){
+ IDS.forEach(function(id,j){var h=document.createElement("h2");h.textContent=id;document.body.appendChild(h);
+  SK.forEach(function(sk){if(K&&K!==sk)return;var g=document.createElement("div");g.className="grid";var n=document.createElement("div");n.className="n";n.textContent=sk;g.appendChild(n);
+   ["s40","s120","s300"].forEach(function(c){g.appendChild(mk(T[j],sk,c))});
+   var th=document.createElement("div");th.className="th";NPArtTheme.ids.forEach(function(t){th.appendChild(mk(T[j],sk,"t80",t))});g.appendChild(th);document.body.appendChild(g)})})});
+</script></body></html>

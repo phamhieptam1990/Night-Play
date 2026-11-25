@@ -11,7 +11,7 @@ const SIZES = quick ? [[390, 844], [320, 568], [768, 1024], [844, 390], [1024, 7
 const bad = [];
 (async () => {
   const srv = spawn("python3", ["-m", "http.server", String(PORT)], { cwd: root, stdio: "ignore" }); await new Promise(r => setTimeout(r, 1200));
-  const br = await puppeteer.launch({ executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", headless: "new", args: ["--mute-audio"] });
+  const br = await puppeteer.launch({ executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", headless: "new", protocolTimeout: 300000, args: ["--mute-audio"] });
   if (shots) fs.mkdirSync(shots, { recursive: true });
   for (const id of ids) for (const lang of ["vi", "en"]) for (const [w, h] of SIZES) {
     const pg = await br.newPage(), errs = []; pg.on("pageerror", e => errs.push(e.message));

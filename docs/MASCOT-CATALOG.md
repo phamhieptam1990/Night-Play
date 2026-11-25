@@ -96,3 +96,11 @@ Tấm hình: [pop-mascots-sheet.png](pop-mascots-sheet.png). Nguồn sinh: `node
 
 ## Night Play — 19 linh vật 3D mềm (17/11/2026)
 Mực Đọc Vị (Bạn Có Hiểu Tôi Không?), Rùa Lề Mề (Bao Nhiêu Giây?), Chưng Chưng Chảnh (Cắt Bánh Chưng), Trâu Nón Lá (Chở Hàng Kiểu Việt), Chim Sẻ Chong Chóng (Cánh Nhỏ Phiêu Lưu), Chuột Chũi Thức Khuya (Đập Deadline), Mèo Thần Tài (Đổi Đời 2048), Đầu Tàu Tèo (Đường Ray), Gà Mái Ngầu (Gà Mẹ Bắn Trứng), Heo Đất Chốt Đơn (Đoán Giá Chợ Việt), Tắc Kè Soi (Mắt Tinh Không?), Chuột Lạc Đường (Mê Cung Truyền Tay), Vịt Áo Mưa (Né Ổ Gà), Nhện Giăng Tơ (Nối Một Nét), Corgi Giao Hàng (Shipper Siêu Tốc), Gián Bất Tử (Sống Sót Đến Cuối Tháng), Bút Chì Liều (Vẽ Một Nét), Khỉ Thợ Xây (Xây Cầu Tre), Lười Phin Đá (Xe Cà Phê). Tên skin từng con: `scripts/art/night3d-skins.js`.
+
+## Pop 3D: 2 game học tiếng Việt / Anh (25/11/2026)
+Khung Pop (viewBox 256, nhóm id shadow/body/face/sign/acc-*/fx, 5 skin × 8 theme) + lớp đổ khối bằng gradient xuyên tâm (`#pg`, `#pe`), bóng đáy, ánh viền, vệt bóng; không filter. Nguồn sinh: `scripts/art/pop-3d-bi.js`, `pop-3d-fox.js`, `pop-3d-lib.js` (nạp bởi `gen-pop.js`); xem `shared/art/pop-nuoi-thu-tiem-preview.html`.
+
+| Game | Linh vật | Đạo cụ nhận diện | 2 | 3 | 4 | 5 |
+|---|---|---|---|---|---|---|
+| Nuôi Thú Tiếng Việt (`nuoi-thu-tieng-viet`) | Cún Bi (vàng cam, tai cụp nâu, đốm nâu quanh mắt TRÁI) | Vòng cổ đỏ + thẻ vàng dấu ✓, bát xanh có ô chữ A | Bác sĩ thú y: mũ y tá chữ thập, ống nghe, hộp cứu thương | Ca sĩ nhí: tai nghe, micro, nốt nhạc | Phù thủy chữ (Dạ quang): mũ phù thủy, đũa phép, chữ Ă phát sáng, áo choàng | Hiệp sĩ sách: mũ giáp lông đỏ, khiên là cuốn sách, áo choàng đỏ |
+| Tiệm Nước Ép Tiếng Anh (`tiem-nuoc-ep-tieng-anh`) | Cáo Cam chủ quán (má + mõm trắng, tai nhọn, đuôi xù chóp trắng; khác loài với Bi) | Ly nước cam có ống hút + tạp dề xanh có lát cam | Đầu bếp nước ép: mũ đầu bếp, đĩa cam | Du lịch vòng quanh thế giới: nón cói, quả địa cầu, máy bay giấy | Nhạc sĩ đường phố (Dạ quang): mũ lưỡi trai, ghi-ta, ánh đèn sân khấu | Siêu anh hùng nước ép: băng đô sao, khiên lát cam, quả cam vàng, áo choàng |

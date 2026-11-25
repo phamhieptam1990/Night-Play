@@ -1,0 +1,50 @@
+/* Quán Cáo Cam: thế giới toàn màn hình = HUD (WorldKit) + khung cảnh theo khu + thanh biểu tượng khu ở đáy (dọc) / bên trái (ngang). Không cuộn. */
+:root{--wk-off:0px;--bot:64px;--W:min(100vw,560px);--ink:#3a2a1d;--bg:#FFF1E0;--panel:#fff;--line:#f0d8bd;--accent:#E8730C;--on-accent:#fff;--shadow:0 8px 24px rgba(120,60,10,.18);--w:min(100vw,560px)}
+:root[data-theme="dark"]{--bg:#2a1c30;--panel:#3d2a45;--line:#5a4163;--accent:#FF9A3C;--on-accent:#2a1200;--ink:#FFF0E0}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;overflow:hidden}
+body{background:linear-gradient(#FFD9B8,#CFEFE6);color:var(--ink);font-family:var(--font,system-ui,sans-serif);overscroll-behavior:none;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulation;padding:0;background:none}
+button:focus-visible{outline:3px solid #fff;outline-offset:2px}
+img{-webkit-user-drag:none;user-select:none}
+[hidden]{display:none!important}
+/* khung Pop: .app/.side/.top (tên game + nút do popmenu/pophelp gom), #play phủ trọn màn: chứa màn chọn #home và thế giới #world */
+.app{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%}
+.side{width:var(--w);display:flex;flex-direction:column;gap:8px;position:relative;z-index:40}
+.top{display:flex;align-items:center;gap:8px}
+.top h1{flex:1;margin:0;font-size:clamp(18px,5.4vw,26px);font-weight:800;line-height:1;white-space:nowrap;min-width:0}
+.ib{width:44px;height:44px;border-radius:50%;background:var(--panel);box-shadow:var(--shadow);font-size:20px;display:grid;place-items:center;flex:none;border:1.5px solid color-mix(in srgb,currentColor 42%,transparent)}
+/* .play giữ nguyên cách Pop ở màn chọn; vào thế giới thì .play co giãn theo chỗ còn lại dưới tên game + HUD */
+.hud#hudSlot{height:56px;min-height:56px;padding:0;background:none;box-shadow:none;border:0}
+html.tne-home .hud#hudSlot{display:none}html.tne-home .wk-hud,html.tne-home .wk-q{display:none!important}
+html.tne-world .app{height:100%}
+#play{position:relative}
+html.tne-world body .app .play#play{flex:1 1 auto;min-height:0;width:100%;height:auto;aspect-ratio:auto;border-radius:0;box-shadow:none;background:none;overflow:hidden;container-type:normal}
+#world{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;padding:0 0 var(--bot)}
+#frame{position:relative;border-radius:22px;overflow:hidden;background:#FFD3B6;container-type:size;box-shadow:0 10px 30px rgba(80,40,10,.28);touch-action:pan-y;flex:none}
+.zone{position:absolute;inset:0;visibility:hidden;opacity:0;transition:opacity .25s}
+.zone.on{visibility:visible;opacity:1}
+.zone>*{position:absolute}
+#bar{position:absolute;left:0;right:0;bottom:max(8px,env(safe-area-inset-bottom));z-index:31;display:flex;justify-content:flex-end;gap:4px;padding:0 8px;pointer-events:none}
+#bar button{pointer-events:auto;position:relative;display:grid;place-items:center;flex:none;width:46px;height:46px;border-radius:50%;border:2px solid rgba(255,255,255,.5);background:rgba(20,16,50,.62);color:#fff;box-shadow:0 5px 12px rgba(0,0,0,.28)}
+#bar button svg{width:26px;height:26px;display:block}
+#bar button.on{background:linear-gradient(135deg,#FF9A3C,#E8730C);border-color:#fff;transform:translateY(-4px)}
+#bar button.sep{margin-left:8px}
+#bar button .dot{position:absolute;right:-2px;top:-2px;width:14px;height:14px;border-radius:50%;background:#EF4444;border:2px solid #fff}
+.wk-q{bottom:auto!important;top:var(--tne-q,120px);left:calc(var(--wk-edge) + 2px);z-index:29}
+@media (max-height:520px) and (min-aspect-ratio:11/10){
+  html.tne-world .hud#hudSlot{display:none}
+  html .side{display:none!important}html .app{display:flex!important;flex-direction:column;padding:0!important;gap:0}
+  #world{padding-bottom:0}
+  #bar{left:auto;right:max(10px,env(safe-area-inset-right));top:64px;bottom:8px;flex-direction:column;justify-content:center;align-items:center;gap:6px;padding:0}#bar button{width:48px;height:48px}#bar button.on{transform:translateX(-4px)}#bar button.sep{margin-left:0;margin-top:6px}
+  .wk-q{left:var(--wk-edge);right:auto;top:auto;bottom:10px!important}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* màn chọn chuẩn Pop: ô "chơi" (home3 dựng "Chơi ngay" từ ô đầu tiên) */
+.tiles{display:grid;gap:8px;width:100%}
+.tile{display:flex;align-items:center;gap:8px;min-height:64px;width:100%;border-radius:20px;background:linear-gradient(90deg,#E8730C,#F0A020);color:#fff;padding:0 12px;font-weight:800}
+.tile .ti{width:56px;flex:none;font-size:28px;text-align:center}.tile b{font-size:16px;white-space:nowrap;overflow:hidden}
+#bar button{width:56px;height:56px}#bar{gap:2px}#bar button svg{width:28px;height:28px}
+@media (max-height:520px) and (min-aspect-ratio:11/10){#bar button{width:56px;height:56px}}
+.dbar{flex:none;width:100%;min-height:56px;border-radius:999px;background:linear-gradient(90deg,#6a4fd8,#a04fd8);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-weight:800;font-size:16px}

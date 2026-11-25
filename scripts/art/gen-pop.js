@@ -1,6 +1,6 @@
 /* Sinh 11 linh vật POP còn lại (bản MẪU chờ duyệt): node scripts/art/gen-pop.js → shared/art/mascot-pop-<id>.svg + shared/art/pop-sheet.html
    Luật: docs/MASCOT-ART-RULES.md (phong cách Pop "đồ chơi mềm", khuôn mặt chữ ký + đạo cụ nhận diện id="sign" + dấu hiệu id="mark"). Chỉ có skin MẶC ĐỊNH ở bản mẫu này. */
-const fs = require("fs"), path = require("path"), out = path.join(__dirname, "../../shared/art"), { S: SK } = require("./pop-skins.js");
+const fs = require("fs"), path = require("path"), out = path.join(__dirname, "../../shared/art"), { S: SK, fxNight, fxStar, capeBack, medal, laurel } = require("./pop-skins.js");
 const eyes = '<g id="eyes" class="npa-blink"><circle cx="100" cy="112" r="14" fill="var(--ink)"/><circle cx="156" cy="112" r="14" fill="var(--ink)"/><circle cx="105" cy="106" r="5" fill="#fff"/><circle cx="161" cy="106" r="5" fill="#fff"/><circle cx="96" cy="118" r="2.5" fill="#fff"/><circle cx="152" cy="118" r="2.5" fill="#fff"/></g>';
 const blush = '<g id="blush"><ellipse cx="80" cy="138" rx="11" ry="7" fill="var(--bl)" opacity=".75"/><ellipse cx="176" cy="138" rx="11" ry="7" fill="var(--bl)" opacity=".75"/></g>';
 const smile = '<path id="mouth" class="m-talk" d="M114 144Q128 158 142 144" fill="none" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/>';
@@ -76,7 +76,7 @@ function svg(id, d) {
 <desc>Chữ ký khuôn mặt (giữ nguyên ở mọi skin): mắt tròn to hai chấm sáng, má hồng, miệng cười nhỏ, ${d.markTxt}. Đạo cụ nhận diện game (luôn có): ${d.prop}. 5 skin (1 miễn phí). Chi tiết nhỏ dùng màu cứng.</desc>
 <style>
 .${G}{--bg1:#2b2064;--bg2:#171236;--bgx:#FF8A4C;${vars}--bl:#FF9DB0;--ink:#2A2350;--hl:#fff;--sh:color-mix(in srgb,var(--bg2) 55%,#000);--c1:var(--p1);--c2:var(--p2);--st:var(--pst)}
-.${G}.sk-night{--c1:color-mix(in srgb,var(--p1) 60%,#0b0c3a);--c2:color-mix(in srgb,var(--p2) 55%,#0b0c3a);--st:color-mix(in srgb,var(--pst) 50%,#0b0c3a)}
+.${G}.sk-night{--c1:color-mix(in srgb,var(--p1) 60%,${d.nightTint || "#0b0c3a"});--c2:color-mix(in srgb,var(--p2) 55%,${d.nightTint || "#0b0c3a"});--st:color-mix(in srgb,var(--pst) 50%,${d.nightTint || "#0b0c3a"})}
 .${G}.sk-star{--c1:color-mix(in srgb,var(--p1) 70%,#fff);--c2:color-mix(in srgb,var(--p2) 84%,#fff)}
 .acc,.fx{display:none}
 .sk-badge .acc-badge,.sk-group .acc-group,.sk-night .acc-night,.sk-star .acc-star,.sk-night .fx-night,.sk-star .fx-star{display:inline}
@@ -84,12 +84,12 @@ function svg(id, d) {
 @keyframes npa-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}@keyframes npa-blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.12)}}@keyframes npa-twinkle{0%,100%{opacity:.25}50%{opacity:1}}
 :root.np-playing .npa,:root.np-playing .npa-twinkle{animation:none}@media (prefers-reduced-motion:reduce){.npa,.npa-twinkle{animation:none}}
 </style>
-<defs><linearGradient id="pg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--c1)"/><stop offset="1" style="stop-color:var(--c2)"/></linearGradient></defs>
+<defs>${d.r3d ? '<radialGradient id="pg" cx=".36" cy=".28" r=".85"><stop offset="0" style="stop-color:color-mix(in srgb,var(--c1) 62%,#fff)"/><stop offset=".5" style="stop-color:var(--c1)"/><stop offset="1" style="stop-color:var(--c2)"/></radialGradient>' : '<linearGradient id="pg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--c1)"/><stop offset="1" style="stop-color:var(--c2)"/></linearGradient>'}${d.defs || ""}</defs>
 <g id="shadow"><ellipse cx="128" cy="237" rx="72" ry="9" fill="var(--sh)" opacity=".4"/></g>
 <g id="all" class="npa npa-bob">
-${sk.back.group ? `<g id="back-group" class="acc acc-group">${sk.back.group}</g>` : ""}<g id="back-star" class="acc acc-star">${sk.back.star}</g>
+${sk.back.group ? `<g id="back-group" class="acc acc-group">${sk.back.group}</g>` : ""}${sk.back.night ? `<g id="back-night" class="acc acc-night">${sk.back.night}</g>` : ""}<g id="back-star" class="acc acc-star">${sk.back.star}</g>
 <g id="body">${body}</g>
-<g id="face">${eyes}${blush}${d.mark}${d.noMouth ? "" : smile}${d.beak || ""}</g>
+<g id="face">${d.markUnder ? d.mark : ""}${eyes}${blush}${d.markUnder ? "" : d.mark}${d.noMouth ? "" : smile}${d.beak || ""}</g>
 ${d.sign}
 <g id="acc-badge" class="acc acc-badge">${sk.badge}</g><g id="acc-group" class="acc acc-group">${sk.group}</g><g id="acc-night" class="acc acc-night">${sk.night}</g><g id="acc-star" class="acc acc-star">${sk.star}</g>
 <g id="fx-night" class="fx fx-night">${sk.fxNight}</g><g id="fx-star" class="fx fx-star">${sk.fxStar}</g>
@@ -97,6 +97,9 @@ ${d.sign}
 </svg>
 `;
 }
+/* 2 linh vật Pop 3D mới (Nuôi Thú Tiếng Việt, Tiệm Nước Ép Tiếng Anh) — dữ liệu ở pop-3d-*.js */
+const NEW3D = { "nuoi-thu-tieng-viet": require("./pop-3d-bi.js"), "tiem-nuoc-ep-tieng-anh": require("./pop-3d-fox.js") };
+for (const id in NEW3D) { const m = NEW3D[id]; G[id] = m.G; SK[id] = Object.assign({ badge: "", group: "", night: "", star: "", fxNight, fxStar }, m.S, { back: Object.assign({ star: capeBack }, m.S.back || {}) }); }
 const bellFix = s => s.replace(/var\(--bell\)/g, "#FFF3D4");
 for (const id in G) { let s = svg(id, G[id]); fs.writeFileSync(path.join(out, "mascot-pop-" + id + ".svg"), s); }
 console.log("đã sinh", Object.keys(G).length, "linh vật");

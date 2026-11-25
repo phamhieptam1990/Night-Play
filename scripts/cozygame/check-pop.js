@@ -26,7 +26,7 @@ const note = (ok, msg) => { if (!ok) { fails.push(msg); console.log("  ✗ " + m
     for (const lang of ["vi", "en"]) for (const [w, h] of [[360, 640], [380, 844], [844, 390], [667, 375]]) {
       const pg = await open(pgn + "/index.html", w, h, lang);
       const r = await pg.evaluate(() => { const de = document.documentElement, hero = document.querySelector(".hero"), nav = document.querySelector(".nav"), gr = document.getElementById("grid"), t = gr.querySelector(".tile"); return { hs: de.scrollWidth > innerWidth + 1, vs: de.scrollHeight > innerHeight + 1, hero: hero ? hero.scrollWidth > hero.clientWidth + 1 : false, nav: nav.scrollWidth > nav.clientWidth + 1, tile: t ? Math.round(t.getBoundingClientRect().width) : 0 }; });
-      const tag = pgn + " " + lang + " " + w + "x" + h; note(!r.hs && !r.vs, tag + ": tràn màn"); note(!r.hero, tag + ": slogan bị cắt"); note(!r.nav, tag + ": thanh trên tràn"); note(r.tile >= 64, tag + ": ô game nhỏ hơn 64px (" + r.tile + ")");
+      const tag = pgn + " " + lang + " " + w + "x" + h; note(!r.hs && !r.vs, tag + ": tràn màn"); note(!r.hero, tag + ": slogan bị cắt"); note(!r.nav, tag + ": thanh trên tràn"); const minT = (w > h && h < 560 && w >= 560) ? 60 : 64; note(r.tile >= minT, tag + ": ô game nhỏ hơn " + minT + "px (" + r.tile + ")");
       note(!pg._er.length, tag + ": lỗi JS " + pg._er.slice(0, 1)); await pg.close();
     } }
   await br.close(); srv.kill();

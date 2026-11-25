@@ -1,0 +1,28 @@
+/* Các khu còn lại: bàn khách (phố + bàn), vườn, cửa hàng, sổ công thức. Thẻ hình; chữ chỉ là từ Tiếng Anh. */
+.zbg{inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
+.walk{top:30cqw;width:15cqw;animation:walk 16s linear infinite;pointer-events:none}.walk:nth-of-type(3){animation-duration:22s;animation-delay:-8s;top:32cqw}.walk:nth-of-type(4){animation-duration:19s;animation-delay:-13s}
+@keyframes walk{from{transform:translateX(-18cqw)}to{transform:translateX(110cqw)}}
+#dStreet{left:0;top:0;width:100%;height:50cqw}#dFloor{left:0;top:50cqw;width:100%;height:calc(100cqh - 50cqw)}
+#dGrid{left:2cqw;right:2cqw;top:48cqw;bottom:2cqw;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:1cqw}
+.tbl{position:relative;display:grid;place-items:end center;min-height:0;border-radius:4cqw}
+.tbl .tb{width:92%;max-height:100%;object-fit:contain}.tbl.lock .tb{opacity:.35;filter:grayscale(.6)}
+.tbl .gu{position:absolute;left:50%;bottom:34%;width:46%;transform:translateX(-50%);animation:sit 2.4s ease-in-out infinite;pointer-events:none}
+@keyframes sit{50%{transform:translateX(-50%) translateY(-3%)}}
+.tbl .cu{position:absolute;left:30%;bottom:40%;width:22%;pointer-events:none}
+.tbl .lk{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}.tbl .lk svg{width:30%}.tbl .lk b{position:absolute;bottom:18%;background:rgba(20,16,50,.75);color:#FFE08A;border-radius:99px;padding:.4cqw 3cqw;font-size:4.4cqw}
+.tbl.occ{cursor:pointer}.tbl.occ::after{content:"";position:absolute;right:12%;top:6%;width:7cqw;height:7cqw;border-radius:50%;background:#FFD24D;box-shadow:0 0 0 .8cqw rgba(255,255,255,.7);animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.25)}}
+.tbl.leave .gu{animation:leave .8s forwards}@keyframes leave{to{transform:translateX(120%);opacity:0}}
+.zhead{left:3cqw;right:3cqw;top:2cqw;height:11cqw;display:flex;align-items:center;gap:2cqw;justify-content:flex-end;color:#fff}
+.zhead i{display:flex;align-items:center;gap:1cqw;padding:1cqw 3cqw;border-radius:99px;background:rgba(20,16,50,.7);font-style:normal;font-weight:900;font-size:5cqw}.zhead svg{width:6.5cqw;height:6.5cqw}
+.cards{left:3cqw;right:3cqw;top:15cqw;bottom:3cqw;display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:minmax(0,33cqw);gap:2.4cqw;align-content:start}
+.card{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:.6cqw;padding:1.6cqw 1cqw 1.4cqw;border-radius:4.4cqw;background:rgba(20,16,50,.55);border:.6cqw solid rgba(255,255,255,.45);color:#fff;min-height:44px;overflow:hidden}
+.card img.ci{width:70%;flex:1;min-height:0;object-fit:contain}.card b{font-size:3.8cqw;line-height:1;text-shadow:0 .3cqw 0 rgba(0,0,0,.4)}
+.card.lock img.ci{filter:grayscale(1) brightness(.7);opacity:.55}.card.silh img.ci{filter:brightness(0);opacity:.35}
+.card .lk{position:absolute;left:50%;top:34%;width:30%;transform:translate(-50%,-50%)}.card .lk svg{width:100%;display:block}
+.card .pr{display:flex;align-items:center;gap:.8cqw;padding:.4cqw 2cqw;border-radius:99px;background:#2fae4a;font-weight:900;font-size:4cqw}.card .pr svg{width:4.6cqw;height:4.6cqw}
+.card .pr.no{background:rgba(255,255,255,.22)}.card .pr.ok{background:transparent;color:#9cf0ae}
+.card .cnt{position:absolute;right:1.6cqw;top:1.6cqw;min-width:6cqw;height:6cqw;padding:0 1.4cqw;border-radius:99px;background:#FFD24D;color:#4a2c00;font-weight:900;font-size:3.8cqw;display:grid;place-items:center}
+.card.pop{animation:cardpop .4s cubic-bezier(.2,1.6,.4,1)}@keyframes cardpop{from{transform:scale(.85)}}
+.row4{left:3cqw;right:3cqw;display:flex;gap:2.4cqw;justify-content:center}.row4 .card{flex:1;height:24cqw}
+.lvbar{left:3cqw;right:3cqw;top:15cqw;display:flex;align-items:center;justify-content:center;gap:2cqw}
