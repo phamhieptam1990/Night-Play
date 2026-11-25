@@ -19,7 +19,7 @@
   };
   /* cỡ khung: vừa chỗ còn lại của .play (trừ thanh biểu tượng), giữ tỉ lệ cao ≤1,75 và ≥1,36 theo bề rộng; HUD của kit đặt đúng ô #hudSlot dưới tên game */
   const fit = () => {
-    const w = $("world"), f = $("frame"), cw = w.clientWidth, land = matchMedia("(max-height:520px) and (min-aspect-ratio:11/10)").matches, ch = w.clientHeight - (land ? 8 : 64); if (!cw || ch <= 0) return;
+    const w = $("world"), f = $("frame"), cw = w.clientWidth, land = matchMedia("(min-aspect-ratio:11/10)").matches, ch = w.clientHeight - (land ? 8 : 64); if (!cw || ch <= 0) return;
     const fw = Math.max(200, Math.min(560, cw, ch / 1.36)), fh = Math.min(ch, fw * 1.75);
     f.style.width = fw + "px"; f.style.height = fh + "px"; f.classList.toggle("tall", fh / fw >= 1.5);
     /* màn ngang thấp: dựng khung ở cỡ ẢO 340×462 (nút cỡ cố định vẫn vừa) rồi thu nhỏ bằng transform cho vừa chiều cao */

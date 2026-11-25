@@ -41,3 +41,5 @@ html[data-theme=dark] .door.learn{background:linear-gradient(135deg,rgba(22,163,
  .mi{overflow:visible}
 }
 @media (prefers-reduced-motion:reduce){.mi .mimg{transform:none!important}}
+/* menu trên cùng ở 1000-1180px: thu gọn khoảng cách chữ để logo không bị đè */
+@media (min-width:1000px) and (max-width:1180px){.top .bar{gap:6px}.links a{padding:0 7px;font-size:14px;min-width:0}.links{gap:0}.top .tools{gap:6px}.top .btn.sm{padding:0 14px}}
