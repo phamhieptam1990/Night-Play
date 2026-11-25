@@ -34,6 +34,7 @@ function render() {
     b.className = cls; if (v) { const e = document.createElement("i"); e.textContent = an[v - 1]; b.appendChild(e); if (G.pop === i) b.classList.add("pop"); }
     b.onclick = () => tapCell(i); box.appendChild(b);
   }
+  box.style.setProperty("--bs", box.clientWidth + "px");
   const pal = $("pal"), cnt = new Array(N + 1).fill(0); G.val.forEach(v => { if (v) cnt[v]++; });
   pal.innerHTML = ""; pal.style.setProperty("--n", N);
   for (let d = 1; d <= N; d++) {
@@ -42,6 +43,7 @@ function render() {
   }
   G.pop = -1; $("undoBtn").disabled = !G.mv.length || G.over; $("hintBtn").disabled = G.over || !leftCount(G); $("hintBtn").innerHTML = "💡" + (G.hints ? "<sub>" + G.hints + "</sub>" : "");
 }
+if (window.ResizeObserver) new ResizeObserver(() => { const b = $("board"); if (b && b.clientWidth) b.style.setProperty("--bs", b.clientWidth + "px"); }).observe($("board"));
 function updHud() {
   if (!G) return;
   $("hl").textContent = "🐾 " + leftCount(G) + " " + T("left"); $("hr").textContent = (G.combo >= 2 ? "🔥×" + G.combo + " · " : "") + "✕ " + G.mist;
