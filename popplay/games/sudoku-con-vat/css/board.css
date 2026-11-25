@@ -43,8 +43,12 @@
 .pk.hl{animation:hintc .7s ease-in-out infinite}
 .pk:focus-visible{outline:.9cqw solid var(--sa);outline-offset:.3cqw}
 .ctl{gap:3.4cqw}
-.ctl .ib2{width:14.5cqw;height:14.5cqw;min-width:44px;min-height:44px}
-.ctl .ib2.main{width:17cqw;height:17cqw}
+/* nút điều khiển: cỡ theo khung chơi (44–56px) khóa bằng !important để không bị luật màn ngang/kính phóng to; icon to theo nút */
+.ctl{flex-wrap:nowrap;gap:clamp(6px,3cqw,16px);overflow:hidden}
+#arena .ctl .ib2:not([data-l]){width:clamp(44px,13cqw,56px)!important;height:clamp(44px,13cqw,56px)!important;min-width:44px!important;min-height:44px!important;
+  flex:none;font-size:clamp(22px,7.4cqw,28px)!important;line-height:1;padding:0}
+#arena .ctl .ib2.main:not([data-l]){width:clamp(48px,15.5cqw,62px)!important;height:clamp(48px,15.5cqw,62px)!important;font-size:clamp(26px,8.6cqw,32px)!important}
+#arena .ctl .ib2 svg{width:1.15em!important;height:1.15em!important;display:block}
 .ctl .ib2 sub{position:absolute;right:-.4cqw;top:-.4cqw;font-size:3.2cqw;line-height:1;background:var(--accent);color:var(--on-accent);border-radius:999px;padding:.3cqw .9cqw}
 .ctl .ib2{position:relative}
 .hwBoard{flex:none;display:grid;grid-template-columns:repeat(var(--n),1fr);gap:.6cqw;width:38cqw;aspect-ratio:1;font-size:calc(38cqw / var(--n) * .62)}
