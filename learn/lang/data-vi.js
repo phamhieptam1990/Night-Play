@@ -152,6 +152,61 @@
       ["Cô giáo ốm, em đến thăm cô. Em nói:", "Cô mau khỏe nhé ạ!", ["Chúc mừng sinh nhật cô!", "Em xin lỗi cô ạ!", "Tạm biệt cô ạ!"]], ["Em được bố mẹ cho quà. Em nói:",
           "Con cảm ơn bố mẹ ạ!", ["Con xin lỗi bố mẹ ạ!", "Con chào bố mẹ ạ!", "Con tạm biệt bố mẹ!"]]
     ];
+    /* VIẾT ĐOẠN NGẮN (lớp 2): câu viết đúng (hoa đầu câu + chấm cuối câu), câu lạc đề trong đoạn.
+       paraOdd: on = các câu CÙNG chủ đề; lạc đề lấy từ chủ đề khác (không bao giờ nói về chủ đề đang hỏi). */
+    D.writeSent = ["Em đi học.", "Mẹ nấu cơm.", "Con mèo ngủ trên ghế.", "Bé tưới cây trong vườn.", "Trời hôm nay rất đẹp.", "Bố đưa em đến trường.",
+        "Lan đọc sách ở nhà.", "Chim hót trên cành cây.", "Em giúp mẹ quét nhà.", "Bà kể chuyện cho bé."];
+    D.paraOdd = [
+      { topic: "con mèo", on: ["Con mèo có bộ lông mềm.", "Mèo thích bắt chuột.", "Mắt mèo sáng long lanh.", "Mèo nằm ngủ trên ghế."] },
+      { topic: "trường em", on: ["Trường em có sân rộng.", "Lớp em học ở tầng hai.", "Cô giáo dạy em đọc.", "Em học cùng các bạn."] },
+      { topic: "khu vườn", on: ["Vườn em có nhiều hoa.", "Hoa hồng nở đỏ thắm.", "Bướm bay lượn quanh hoa.", "Em tưới cây mỗi sáng."] },
+      { topic: "cơn mưa", on: ["Trời đổ mưa rào.", "Mây đen phủ kín trời.", "Nước mưa rơi trên mái.", "Mưa tạnh, có cầu vồng."] }
+    ];
+    /* NÓI VÀ NGHE (lớp 3-5), đều là chọn đáp án, KHÔNG chấm âm thanh.
+       talkPolite: [lớp, tình huống, lời lịch sự (đúng), 3 lời thiếu lịch sự]. talkReason: lí do hợp lí cho ý kiến (nhiễu hoàn toàn lạc đề).
+       talkListen: "bạn kể / cô dặn" bằng chữ rồi hỏi; đáp án đọc được từ lời kể (lớp 5 hỏi ý chính, đáp án là ý tóm tắt). */
+    D.talkPolite = [
+      [[3], "Em muốn hỏi bài cô giáo. Em nói:", "Cô ơi, cho em hỏi ạ?", ["Này, nghe em hỏi đây!", "Cô trả lời em mau lên!", "Ê cô, bài này là gì?"]],
+      [[3], "Bạn đang nói, em muốn góp ý. Em nên:", "Chờ bạn nói xong rồi nói", ["Nói chen ngay vào", "Quay đi chỗ khác", "Hét to hơn bạn"]],
+      [[3], "Em cần mượn thước của bạn. Em nói:", "Cho mình mượn thước nhé?", ["Đưa thước đây!", "Thước đâu, mau lên!", "Bạn phải cho tớ thước!"]],
+      [[3], "Em muốn bạn nói nhỏ lại. Em nói:", "Nói nhỏ giúp mình nhé?", ["Câm miệng đi!", "Bạn ồn quá, im đi!", "Nói to nữa lên!"]],
+      [[3], "Cô giáo gọi tên em. Em nên:", "Đứng lên và trả lời ạ", ["Ngồi im không đáp", "Quay sang nói chuyện", "Cười rồi bỏ đi"]],
+      [[4, 5], "Em không đồng ý với bạn. Em nói:", "Mình nghĩ hơi khác bạn", ["Bạn nói sai hết rồi!", "Ý bạn chẳng ra gì!", "Mình không nghe bạn nữa!"]],
+      [[4, 5], "Bạn nêu một ý kiến hay. Em nói:", "Ý của bạn hay đấy!", ["Ý của bạn dở quá!", "Bạn nói gì cũng sai!", "Mình chẳng thèm nghe!"]],
+      [[4, 5], "Nhóm đang thảo luận, em muốn nói. Em nên:", "Giơ tay xin phát biểu", ["Giành lời của bạn", "Nói to át tiếng bạn", "Đứng dậy bỏ đi"]],
+      [[4, 5], "Bạn góp ý em chưa đúng. Em đáp:", "Cảm ơn, mình sẽ xem lại", ["Kệ mình, bạn đừng nói!", "Bạn chẳng hiểu gì cả!", "Mình luôn luôn đúng!"]],
+      [[4, 5], "Em muốn thuyết phục bạn. Em nên:", "Nêu lí do thật rõ ràng", ["Ép bạn phải nghe theo", "Nói to cho bạn sợ", "Chê bạn trước cả lớp"]]
+    ];
+    D.talkReason = [
+      [[4, 5], "Lớp mình nên trồng thêm cây xanh.", "Cây giúp mát, sạch khí", ["Hôm nay trời có mây", "Bạn Nam thích ăn kem", "Cái bảng màu xanh lá"]],
+      [[4, 5], "Lớp mình nên đọc sách mỗi ngày.", "Sách giúp em hiểu biết", ["Quyển sách có bìa đỏ", "Hôm qua lớp đá bóng", "Cô giáo đi xe máy"]],
+      [[4, 5], "Chúng ta nên xếp hàng khi vào lớp.", "Xếp hàng giúp trật tự", ["Hàng cây trước lớp cao", "Em thích ăn cơm với cá", "Mái nhà màu đỏ"]],
+      [[4, 5], "Em nên đi ngủ sớm.", "Ngủ đủ giấc, khỏe người", ["Gối nhà em màu trắng", "Hôm nay ông đến chơi", "Đồng hồ treo trên tường"]],
+      [[4, 5], "Chúng ta cần tiết kiệm nước.", "Nước sạch có hạn", ["Cái vòi nước màu bạc", "Nhà em có bốn người", "Em thích mưa mùa hè"]],
+      [[4, 5], "Không nên xả rác ra đường.", "Rác làm bẩn môi trường", ["Con đường rất dài", "Em đi học bằng xe đạp", "Hôm nay là thứ Ba"]],
+      [[5], "Em ủng hộ việc đi bộ đến trường.", "Đi bộ khỏe, ít khói xe", ["Cặp sách của em màu xanh", "Trường em có ba lớp một", "Em thích học môn vẽ"]]
+    ];
+    D.talkListen = [
+      { g: [3], t: "Bạn Nam kể: “Chiều qua, mình cùng bố ra công viên thả diều. Gió to nên diều bay rất cao.”", q: "Nam đi công viên cùng ai?", a: "bố", d: ["mẹ", "ông", "anh"] },
+      { g: [3], t: "Cô Hoa dặn: “Mai cả lớp mang theo mũ và nước uống để đi tham quan vườn thú.”", q: "Ngày mai lớp đi đâu?", a: "vườn thú", d: ["công viên", "thư viện", "bảo tàng"] },
+      { g: [3], t: "Bạn Mai nói: “Mình tên là Mai, nhà mình ở gần chợ. Mình thích vẽ tranh.”", q: "Mai thích làm gì?", a: "vẽ tranh", d: ["hát", "chạy bộ", "nấu ăn"] },
+      { g: [3, 4], t: "Bạn Tú kể: “Hôm qua mình làm rơi quyển vở xuống vũng nước. Bạn Lan cho mình mượn vở để chép bài.”", q: "Ai cho Tú mượn vở?", a: "Lan", d: ["Hùng", "Mai", "cô giáo"] },
+      { g: [4],
+          t: "Bạn Hùng thông báo: “Thứ Bảy này, lớp mình dọn vệ sinh sân trường lúc bảy giờ sáng. Bạn nào đến sớm sẽ được nhận găng tay.”",
+          q: "Lớp dọn vệ sinh lúc mấy giờ?", a: "bảy giờ sáng", d: ["sáu giờ sáng", "tám giờ sáng", "bảy giờ tối"] },
+      { g: [4],
+          t: "Cô giáo nói: “Bài tập về nhà là viết một đoạn văn tả con vật em yêu thích, nộp vào thứ Tư.”",
+          q: "Bài tập phải nộp vào ngày nào?", a: "thứ Tư", d: ["thứ Hai", "thứ Năm", "thứ Sáu"] },
+      { g: [5],
+          t: "Bạn Linh trình bày: “Rác nhựa trôi ra biển làm hại cá và rùa. Vì vậy, chúng ta nên hạn chế dùng túi ni lông và mang túi vải khi đi chợ.”",
+          q: "Ý chính bạn Linh muốn nói là gì?", a: "Hạn chế dùng túi ni lông", d: ["Cá và rùa sống ở biển", "Đi chợ rất vui", "Túi vải có nhiều màu"] },
+      { g: [5],
+          t: "Cô Thu nhắc: “Trước khi qua đường, các em phải quan sát hai bên, chờ xe dừng hẳn rồi mới đi. Như vậy mới an toàn.”",
+          q: "Cô Thu nhắc các em điều gì?", a: "Nhìn kĩ rồi mới qua", d: ["Đi thật nhanh qua đường", "Chạy khi thấy có xe", "Không cần nhìn xe"] },
+      { g: [5],
+          t: "Bạn Bình phát biểu: “Mình đề nghị lớp quyên góp sách cũ cho trẻ em vùng cao, vì các bạn ấy rất thiếu sách để đọc.”",
+          q: "Bạn Bình đề nghị điều gì?", a: "Quyên góp sách cũ", d: ["Mua đồ chơi mới", "Đi chơi vùng cao", "Bán sách cũ lấy tiền"] }
+    ];
   }
   if (typeof module !== "undefined" && module.exports) module.exports = part; else (root.LearnLangParts = root.LearnLangParts || {})["data-vi"] = part;
 })(typeof window !== "undefined" ? window : globalThis);

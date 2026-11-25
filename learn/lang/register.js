@@ -18,6 +18,11 @@
     T("idiom", "tviet", [4, 5], 3, { 4: "VI-G4-01", 5: "VI-G5-01" }, ["Thành ngữ", "Idioms"]);
     T("greeting_vi", "tviet", [1, 2], 1, { 1: "VI-G1-04", 2: "VI-G2-04" }, ["Giao tiếp", "Manners"]);
     T("reading_story", "tviet", [1, 2, 3, 4, 5], 2, { 1: "VI-G1-02", 2: "VI-G2-01", 3: "VI-G3-01", 4: "VI-G4-02", 5: "VI-G5-01" }, ["Đọc hiểu", "Reading"]);
+    T("write_sent", "tviet", [2], 1, { 2: "VI-G2-03" }, ["Viết câu", "Writing"]);
+    T("para_odd", "tviet", [2], 2, { 2: "VI-G2-03" }, ["Viết đoạn", "Paragraph"]);
+    T("talk_polite", "tviet", [3, 4, 5], 1, { 3: "VI-G3-04", 4: "VI-G4-04", 5: "VI-G5-04" }, ["Nói lịch sự", "Polite talk"]);
+    T("talk_listen", "tviet", [3, 4, 5], 2, { 3: "VI-G3-04", 4: "VI-G4-04", 5: "VI-G5-04" }, ["Nghe hiểu", "Listening"]);
+    T("talk_reason", "tviet", [4, 5], 3, { 4: "VI-G4-04", 5: "VI-G5-04" }, ["Nêu lí do", "Giving reasons"]);
     T("en_colors", "tanh", [1, 2], 1, { 1: "EN-G1-02", 2: "EN-G2-03" }, ["Màu sắc", "Colours"]);
     T("en_numbers", "tanh", [1, 2, 3], 1, { 1: "EN-G1-02", 2: "EN-G2-03", 3: "EN-G3-03" }, ["Số đếm", "Numbers"]);
     T("en_topic_vocab", "tanh", [1, 2], 2, { 1: "EN-G1-02", 2: "EN-G2-03", 3: "EN-G3-03", 4: "EN-G4-03", 5: "EN-G5-03" }, ["Từ vựng", "Vocabulary"]);

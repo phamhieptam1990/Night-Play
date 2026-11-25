@@ -5,7 +5,7 @@
   function json(k) { try { var o = JSON.parse(ls(k) || "null"); return o && typeof o === "object" ? o : null; } catch (e) { return null; } }
   function pf() { var p = String(ls("learn:pf") || "1"); return /^[A-Za-z0-9_-]{1,16}$/.test(p) ? p : "1"; }
   V.curGrade = function () { var g = +ls("learn:grade"); return g >= 1 && g <= 5 ? g : 1; };
-  V.learned = function (g) { var o = json("learn:pf:" + pf() + ":lp:" + g + ":tviet") || {}, n = 0, k; for (k in o) if (o[k] && o[k].l > 0) n++; return Math.min(n, V.TOTAL[g - 1]); };
+  V.learned = function (g) { var o = json("learn:pf:" + pf() + ":lp:" + g + ":tviet") || {}, n = 0, k; for (k in o) if (o[k] && (o[k].l > 0 || o[k].b >= 3)) n++; return Math.min(n, V.TOTAL[g - 1]); };
   V.isOpen = function (g) { return g === V.curGrade() || V.learned(g) > 0; };
   V.world = function (g) { return json(g === 3 ? "learn:nhabi:world" : "learn:nhabi:world:" + g) || null; };
   V.pet = function (g) { return window.NB_PETS[g]; };
@@ -21,6 +21,6 @@
     return t;
   };
   V.back = function () { return "../index.html?grade=" + V.curGrade() + "&subj=tviet"; };
-  V.lessonUrl = function (g) { return "../lop/index.html?subj=tviet&grade=" + g; };
+  V.lessonUrl = function (g) { return window.LessonLink ? LessonLink.url("tviet", g) : "../lop/index.html?subj=tviet&grade=" + g; };
   V.petUrl = function (g) { return "../nha-bi/index.html?grade=" + g + "&from=hub"; };
 })(window.VT);

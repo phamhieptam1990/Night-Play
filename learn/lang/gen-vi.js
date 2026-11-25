@@ -98,6 +98,27 @@
       return fin(shown.map(function (x, i) { return L[i] + ". " + x; }).join("<br>") + "<br>" + em(vi(cc) ? "Sắp xếp thành đoạn văn đúng:" :
           "Put them in the right order:"), rightOrder, W(wr, "reading"));
     };
+    /* VIẾT ĐOẠN NGẮN (lớp 2) + NÓI VÀ NGHE (lớp 3-5): chọn đáp án, dữ liệu trong data-vi.js */
+    G.write_sent = function () {
+      var s = pk(D.writeSent), low = s.charAt(0).toLowerCase() + s.slice(1), nodot = s.slice(0, -1);
+      return fin("Câu nào viết đúng?", s, W([low, nodot, low.slice(0, -1)], "spelling"));
+    };
+    G.para_odd = function () {
+      var t = pk(D.paraOdd), others = D.paraOdd.filter(function (x) { return x !== t; }), off = pk(pk(others).on), on = shuf(t.on.slice()).slice(0, 3);
+      return fin("Đoạn văn nói về " + em(t.topic) + ". Câu nào " + em("không") + " thuộc đoạn văn?", off, W(on, "reading"));
+    };
+    G.talk_polite = function (cc) {
+      var it = pk(D.talkPolite.filter(function (x) { return x[0].indexOf(cc.grade) >= 0; }));
+      return fin(it[1], it[2], W(it[3], "other"));
+    };
+    G.talk_reason = function (cc) {
+      var it = pk(D.talkReason.filter(function (x) { return x[0].indexOf(cc.grade) >= 0; }));
+      return fin("Bạn nêu ý kiến: " + em("“" + it[1] + "”") + "<br>Lí do nào hợp lí nhất?", it[2], W(it[3], "other"));
+    };
+    G.talk_listen = function (cc) {
+      var it = pk(D.talkListen.filter(function (x) { return x.g.indexOf(cc.grade) >= 0; }));
+      return fin(it.t + "<br>" + em(it.q), it.a, W(it.d, "reading"));
+    };
   }
   if (typeof module !== "undefined" && module.exports) module.exports = part; else (root.LearnLangParts = root.LearnLangParts || {})["gen-vi"] = part;
 })(typeof window !== "undefined" ? window : globalThis);

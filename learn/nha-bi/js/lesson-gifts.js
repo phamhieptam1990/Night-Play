@@ -4,7 +4,7 @@
   "use strict";
   var busy = false;
   N.grade = function () { return N.store.D().grade; };   /* lớp của thế giới này (?grade=), không phải lớp hiện tại của bé */
-  N.lessonUrl = function () { return "../lop/index.html?subj=tviet&grade=" + N.grade(); };
+  N.lessonUrl = function () { return window.LessonLink ? LessonLink.url("tviet", N.grade()) : "../lop/index.html?subj=tviet&grade=" + N.grade(); };
   N.fromHub = function () {   /* ?from=hub (lưu sessionStorage để giữ khi tải lại) → ← về vườn thú */
     try { var f = new URLSearchParams(location.search).get("from"); var nav = performance.getEntriesByType && performance.getEntriesByType("navigation")[0];
       if (f === "hub") sessionStorage.setItem("learn:nhabi:from", "hub"); else if (!nav || nav.type !== "reload") sessionStorage.removeItem("learn:nhabi:from"); return sessionStorage.getItem("learn:nhabi:from") === "hub"; } catch (e) { return false; }

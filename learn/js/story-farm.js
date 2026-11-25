@@ -41,7 +41,7 @@ function farmFinish(){
     if(rep.seeds) chips.push("<span>🌱 +" + rep.seeds + (vi ? " hạt giống" : " seeds") + "</span>");
   if(tr && tr.seed) chips.push("<span class='big'>" + (vi ? "🌱 Hạt quý mới về vườn: +1" : "🌱 A rare seed came home: +1") + "</span>");
   chips.push("<span>🎁 " + (vi ? "Quà: " : "Gift: ") + Math.min(rep.questGoal, rep.questNow) + "/" + rep.questGoal + "</span>");
-  if(CP && CP.first) chips.push("<span class='big'>" + (vi ? "🎁 Qua chủ đề! +3 nhiệm vụ, +2 🌱" : "🎁 Topic passed! +3 garden tasks, +2 🌱") + "</span>");
+  if(CP && CP.first) chips.push("<span class='big'>" + (subj === "tviet" ? (vi ? "🎁 Qua chủ đề! Quà đã chờ ở Vườn Thú" : "🎁 Topic passed! Gifts wait at the Pet Garden") : subj === "tanh" ? (vi ? "🎁 Qua chủ đề! Quà đã chờ ở Khu Chợ" : "🎁 Topic passed! Gifts wait at the Market") : (vi ? "🎁 Qua chủ đề! +3 nhiệm vụ, +2 🌱" : "🎁 Topic passed! +3 garden tasks, +2 🌱")) + "</span>");
     else if(TOPIC_ID && roundStars < 3) chips.push("<span>" + (vi ? "Đúng 3 câu là qua chủ đề. Thử lại nhé!" : "Get 3 right to pass and earn tasks. Try again!") + "</span>");
   if(rep.goalHit) chips.push("<span class='big'>" + (vi ? "🎉 Đủ mục tiêu ngày! +2 🌱 +3 ⭐" : "🎉 Daily goal done! +2 🌱 +3 ⭐") + "</span>");
   if(rep.newOutfit) chips.push("<span class='big'>" + rep.newOutfit.e + " " + (vi ? "Mở trang phục mới: " : "New outfit: ") + rep.newOutfit.n + "</span>");

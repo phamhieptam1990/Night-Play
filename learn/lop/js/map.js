@@ -59,7 +59,7 @@ function topicCard(s,g,t,m,i,total){
     ?'<span class="chip2 g">📖 '+T.hasLesson+'</span>':'<span class="chip2 a">'+T.soon+'</span>'); if(!hasT&&!t.ready) chips+='<span class="chip2 a">'+T.nt+'</span>'; }
   if(st!=="new") chips+='<span class="chip2 b">'+(passed?"✅ ":"")+T.stn[st]+'</span>';
   if(rec.r) chips+='<span class="chip2 b">🎁 '+(vi?"Đã nhận thưởng":"Reward claimed")+'</span>';
-  else if(unl) chips+='<span class="chip2 b">🎁 '+(vi?"Xong là có 3 nhiệm vụ vườn":"Finish = 3 garden tasks")+'</span>';
+  else if(unl) chips+='<span class="chip2 b">🎁 '+(s==="tviet"?(vi?"Xong là có quà ở Vườn Thú":"Finish = gift at the Pet Garden"):s==="tanh"?(vi?"Xong là có quà ở Khu Chợ":"Finish = gift at the Market"):vi?"Xong là có 3 nhiệm vụ vườn":"Finish = 3 garden tasks")+'</span>';
   const TE=(window.LEARN_TEASERS||{})[t.id]||["📚",""];
   const subs=(t.sub||[]).slice(0,2).map(esc).join(" · ");
   const pic='<div class="pic"><span class="big" aria-hidden="true">'+esc(TE[0])+'</span><span class="ttl"><small>'+esc(t.tag||"")+'</small>'+esc(t.name)+'</span>'+(unl
@@ -90,7 +90,7 @@ function narrate(i,scroll){
   cards.forEach((c,k)=>c.classList.toggle("cur",k===i));
   $("stepn").textContent=(i+1)+"/"+ts.length; $("next").innerHTML='<span class="t">'+T.next.replace(" ›","")+' </span>›';
   bub((vi?"Chủ đề ":"Topic ")+(i+1)+": "+t.name, (!P.unlocked(S,G,t.id)?(vi?"Mình học xong chủ đề "+idx+" rồi mới mở chủ đề này nhé!":"Finish the topic before this one first!"):(
-    TE[1]?TE[1]+" ":"")+(hasL?(vi?"Học xong có nhiệm vụ trong vườn đó! Bấm Học nhé!":"Finish it for garden tasks! Tap Learn!"):(vi
+    TE[1]?TE[1]+" ":"")+(hasL?(S!=="toan"?(vi?"Học xong có quà đó! Bấm Học nhé!":"Finish it for a gift! Tap Learn!"):vi?"Học xong có nhiệm vụ trong vườn đó! Bấm Học nhé!":"Finish it for garden tasks! Tap Learn!"):(vi
     ?"Bài học đang được soạn. Mình làm kiểm tra nhé!":"Lesson coming soon. Try the quiz!"))));
   if(guideOK&&LM){ LM.wake(true); LM.emote(hasL?"happy":"think",1600); poke(); }
   if(scroll&&cards[i]){ const beh=(q.get("instant")||matchMedia("(prefers-reduced-motion:reduce)").matches)?"auto":"smooth";

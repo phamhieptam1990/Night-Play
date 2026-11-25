@@ -9,7 +9,7 @@
   KC.curGrade = () => { const g = +get("learn:grade") || 0; return g >= 1 && g <= 5 ? g : 1; };
   KC.total = g => TOTAL[g - 1];
   KC.info = g => {
-    const lp = json("learn:pf:" + pf() + ":lp:" + g + ":tanh"), done = Object.keys(lp).filter(k => lp[k] && lp[k].l).length;
+    const lp = json("learn:pf:" + pf() + ":lp:" + g + ":tanh"), done = Object.keys(lp).filter(k => lp[k] && (lp[k].l || lp[k].b >= 3)).length;
     const sv = json("learn:quankem:save" + (g > 1 ? ":" + g : "")), pts = (sv.served | 0) + Math.floor((sv.learnCoins | 0) / 5);
     let lv = 1; LV.forEach((n, i) => { if (pts >= n) lv = i + 1; });
     let pend = 0; try { pend = window.QuanKemGift ? QuanKemGift.pending(g).coins | 0 : 0; } catch (e) {}
@@ -17,5 +17,5 @@
   };
   KC.all = () => [1, 2, 3, 4, 5].map(KC.info);
   KC.shopUrl = g => "../quan-kem/index.html?grade=" + g + "&from=market";
-  KC.bookUrl = g => "../lop/index.html?subj=tanh&grade=" + g;
+  KC.bookUrl = g => window.LessonLink ? LessonLink.url("tanh", g) : "../lop/index.html?subj=tanh&grade=" + g;
 })();

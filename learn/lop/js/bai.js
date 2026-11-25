@@ -233,14 +233,15 @@ function game(stage,s,nl){
 }
 function endScreen(stage){
   P.markLearned(grade,subj,topic); const rw=P.complete(grade,subj,topic); mood("cheer"); setNext(true,COPY.test);
-  speakIn(rw.first?"Bé học xong rồi! Bé có 3 nhiệm vụ mới trong vườn!":COPY.ready);
+  const HUB={tviet:["Vườn Thú","vuon-thu"],tanh:["Khu Chợ","khu-cho"]}[subj];
+  speakIn(rw.first?(HUB?"Bé học xong rồi! Quà đã chờ ở "+HUB[0]+"!":"Bé học xong rồi! Bé có 3 nhiệm vụ mới trong vườn!"):COPY.ready);
   $("m").classList.add("end");
   if(window.LearnCelebrate) LearnCelebrate.show(rw.first?5:3,{lang:"vi",grade,key:subj+":"+topic,quiet:!AUTO});   /* chúc mừng toàn màn hình: thú nhảy, sao nổ, nhạc ngẫu nhiên */
   const w=document.createElement("div");w.className="endw";
-  w.innerHTML='<img class="em" alt="" src="'+art("cheer")+'"><h2>Bé học xong rồi! 🎉</h2>'+(rw.first?'<div class="rw"><b>🎁 +3 nhiệm vụ</b><b>🌱 +2 hạt</b>'+'</div>'
+  w.innerHTML='<img class="em" alt="" src="'+art("cheer")+'"><h2>Bé học xong rồi! 🎉</h2>'+(rw.first?(HUB?'<div class="rw"><b>🎁 Quà đã chờ ở '+HUB[0]+'</b></div>':'<div class="rw"><b>🎁 +3 nhiệm vụ</b><b>🌱 +2 hạt</b>'+'</div>')
     :'<p>Bài này bé đã nhận phần thưởng rồi.</p>')+'<p>Giờ mình làm bài kiểm tra nhé!</p>';
   const acts=document.createElement("div");acts.className="acts";
-  if(rw.first){const g=document.createElement("a");g.className="go2";g.href="../garden/index.html?"+new URLSearchParams({grade,subj}).toString();g.textContent="🌱 Vào vườn";acts.appendChild(g)}
+  if(rw.first){const g=document.createElement("a");g.className="go2";g.href=HUB?"../"+HUB[1]+"/index.html?grade="+grade:"../garden/index.html?"+new URLSearchParams({grade,subj}).toString();g.textContent=HUB?"🎁 "+HUB[0]:"🌱 Vào vườn";acts.appendChild(g)}
   if(window.Album){const al=document.createElement("a");al.className="go2 alt";al.href="../album/index.html?from=lop";
     al.textContent="📖 Bộ sưu tập "+Album.count()+"/"+Album.total();acts.appendChild(al)}
   const r=document.createElement("button");r.type="button";r.className="go2 alt";r.textContent=COPY.again;r.onclick=()=>show(0);acts.appendChild(r);
