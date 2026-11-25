@@ -46,7 +46,7 @@ module.exports = {
       sk: { basic: ["Pastel candy", "Pastel candy"], wood: ["Old wood", "Old wood"], neon: ["Neon night", "Neon night"], bubble: ["Sea bubbles", "Sea bubbles"], metal: ["Spaceship", "Spaceship"] } }
   },
   sfx: `{ok:n=>tone(420+Math.min(n||1,8)*40,.07,"triangle",.08),bad:()=>tone(150,.2,"sawtooth",.07),end:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.09,i*.09)),combo:n=>tone(660,.1,"triangle",.09),up:()=>{[660,880].forEach((f,i)=>tone(f,.1,"triangle",.09,i*.06))}}`,
-  level: { custom: String.raw`const TS_LV=[[3,3],[3,4],[4,4],[4,5],[5,5]];   /* trần 5 level: lưới 3x3 → 5x5 (ô ≥ 56px; xáo ngược từ ô đã giải nên luôn giải được) */
+  level: { custom: String.raw`const TS_LV=[[3,3],[3,4],[4,4],[4,5],[5,5],[5,6],[6,6],[6,7],[7,7]];   /* trần 9 level: lưới 3x3 → 7x7 (ô ≥ 48px; xáo ngược từ ô đã giải nên luôn giải được) */
 window.NPLevel&&NPLevel.attach({levels:TS_LV.length,cur:()=>{if(!G)return -1;let k=0;TS_LV.forEach((s,i)=>{if(G.n>=s[0]*s[1])k=i});return k},won:()=>!!G&&G.reason==="win",skip:()=>!G||G.mode!=="free"||!!G.ch,go:i=>{SZ=TS_LV[i].slice();LS.set("ts-sz",SZ);if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",G?G.t:TY,null)}});` },
   gameJs: ["core", "render", "size"].map(part).join("\n"),
   drawCard: "",

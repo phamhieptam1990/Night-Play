@@ -251,8 +251,8 @@ function showEnd(D){show("end");const n=D.done;$("eT").textContent=T(D.reason);$
  if(n>=15||n>(D.prevBest||0))NPJuice.confetti($("play"),20,["🚂","⭐","🚉"]);if(PF.pro&&PF.pro.trial)setTimeout(()=>PF.lockPro(),0)}
 $("bRem").onclick=()=>{if(!G)return;const g=G;if(PF.pro&&PF.pro.trial)PF.lockPro();begin(g.seed,g.mode,g.t,g.ch)};
 $("bAgain").onclick=()=>{if(PF.pro&&PF.pro.trial)PF.lockPro();if(G&&G.mode==="daily"&&!G.ch)begin(G.seed,"daily",0,null);else begin(newSeed(),"free",TY,null)};
-/* ===== LÊN LEVEL (sinh bằng levelgen.js, dán tay vì game này không có spec; trần 4 level, tham số bị kẹp) ===== */
-const LVU_MAX=4,LVU_K="dr-lvu",LVU_R=[["sp0","mul",-0.06,3.6],["sp1","mul",-0.06,1.7],["v","mul",0.06,60]],CFG_0=JSON.parse(JSON.stringify(CFG));
+/* ===== LÊN LEVEL (sinh bằng levelgen.js, dán tay vì game này không có spec; trần 10 level, tham số bị kẹp) ===== */
+const LVU_MAX=10,LVU_K="dr-lvu",LVU_R=[["sp0","mul",-0.045,2.6],["sp1","mul",-0.045,1.2],["v","mul",0.04,75],["ink","mul",-0.04,900],["exp","add",0.03,0.5]],CFG_0=JSON.parse(JSON.stringify(CFG));
 let LVU=Math.max(0,Math.min(LVU_MAX-1,Math.floor(+LS.get(LVU_K,0))||0)),LPLAY=0;
 function applyLvu(L){CFG.forEach((c,i)=>{const o=CFG_0[i];for(const k in o)c[k]=o[k];LVU_R.forEach(([k,m,s,lim])=>{const f=v=>{if(typeof v!=="number"||v<=0)return v;let x=m==="mul"?v*(1+s*L):v+s*L;x=s<0?Math.max(x,Math.min(v,lim)):Math.min(x,Math.max(v,lim));return Math.round(x*100)/100};if(Array.isArray(o[k]))c[k]=o[k].map(f);else if(typeof o[k]==="number")c[k]=f(o[k])})})}
 const begin_0=begin;begin=function(seed,mode,t,ch){const L=mode==="free"&&!ch?LVU:0;applyLvu(L);LPLAY=L;return begin_0.apply(this,arguments)};

@@ -182,7 +182,7 @@ function costOf(L,perm,detail){let t=0,pos=L.shop,pen=0,ev=[],cnt=0;for(const i 
   if(s.can!=null&&t>s.can){pen+=10;st="cancel"}else{if(s.urg!=null&&t>s.urg){pen+=8;st="late"}if(s.hot!=null&&t>s.hot){pen+=.5*(t-s.hot);st="cold"}}ev.push({i,t,st});cnt++;if(L.cap&&cnt%L.cap===0&&cnt<perm.length){t+=dist(L.M,pos,L.shop)/VEL;pos=L.shop}}
  return detail?{total:t+pen,time:t,pen,ev}:t+pen}
 function permsOf(n,fn){const a=[];for(let i=0;i<n;i++)a.push(i);const rec=k=>{if(k===n){fn(a);return}for(let i=k;i<n;i++){let x=a[k];a[k]=a[i];a[i]=x;rec(k+1);x=a[k];a[k]=a[i];a[i]=x}};rec(0)}
-function genLevel(D,l){const R=sub(D.seed,100+l),C=D.C,n=C.n,sk=skinOf(),kind=sk.metric||"manh",snap=sk.snap||0,pts=[],mg=36;let tries=0;
+function genLevel(D,l){const R=sub(D.seed,100+l),C=D.C,n=Math.round(C.n),sk=skinOf(),kind=sk.metric||"manh",snap=sk.snap||0,pts=[],mg=36;let tries=0;
  const M={kind,ry:H*.5,bridges:[W*.26,W*.74],cap:C.cap||0};
  while(pts.length<n+1&&tries++<4000){let x=mg+R()*(W-2*mg),y=mg+R()*(H-2*mg);if(snap){x=Math.round(x/snap)*snap;y=Math.round(y/snap)*snap}if(kind==="river"&&Math.abs(y-M.ry)<24)continue;if(pts.every(q=>Math.hypot(q.x-x,q.y-y)>=(n>=7?56:66)))pts.push({x,y})}
  while(pts.length<n+1)pts.push({x:mg+R()*(W-2*mg),y:mg+R()*(H-2*mg)});
@@ -319,8 +319,8 @@ $("bLang").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lan
 $("bSnd").onclick=()=>{if(window.NPAudio)NPAudio.set(!NPAudio.get());$("bSnd").textContent=snd()?"🔊":"🔇"};
 $("bDaily").onclick=()=>begin(fnv(GID+"|"+dayKey()),"daily",0,null);$("bFree").onclick=()=>begin(newSeed(),"free",TY,null);
 
-/* ===== LÊN LEVEL (sinh từ spec.level; trần 4 level, tham số bị kẹp) ===== */
-const LVU_MAX=4,LVU_K="ss-lvu",LVU_R=[["plan","mul",-0.06,22]],CFG_0=JSON.parse(JSON.stringify(CFG));
+/* ===== LÊN LEVEL (sinh từ spec.level; trần 10 level, tham số bị kẹp) ===== */
+const LVU_MAX=10,LVU_K="ss-lvu",LVU_R=[["plan","mul",-0.04,12],["n","add",0.4,7]],CFG_0=JSON.parse(JSON.stringify(CFG));
 let LVU=Math.max(0,Math.min(LVU_MAX-1,Math.floor(+LS.get(LVU_K,0))||0)),LPLAY=0;
 function applyLvu(L){CFG.forEach((c,i)=>{const o=CFG_0[i];for(const k in o)c[k]=o[k];LVU_R.forEach(([k,m,s,lim])=>{const f=v=>{if(typeof v!=="number"||v<=0)return v;let x=m==="mul"?v*(1+s*L):v+s*L;x=s<0?Math.max(x,Math.min(v,lim)):Math.min(x,Math.max(v,lim));return Math.round(x*100)/100};if(Array.isArray(o[k]))c[k]=o[k].map(f);else if(typeof o[k]==="number")c[k]=f(o[k])})})}
 const begin_0=begin;begin=function(seed,mode,t,ch){const L=mode==="free"&&!ch?LVU:0;applyLvu(L);LPLAY=L;return begin_0.apply(this,arguments)};

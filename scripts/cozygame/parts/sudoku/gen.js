@@ -1,7 +1,8 @@
 /* Sudoku — sinh đề theo hạt giống, MỖI ĐỀ CHỈ CÓ MỘT ĐÁP ÁN (bộ giải quay lui, chọn ô ít khả năng nhất). Hỗ trợ 9×9, 6×6 (hộp 2×3) và Sudoku Chéo (hai đường chéo cũng không trùng). */
 const W = 360, H = 360, PAD = 6;
 const TYPEDEF = [{ N: 9, br: 3, bc: 3, diag: 0, time: 0 }, { N: 6, br: 2, bc: 3, diag: 0, time: 0 }, { N: 9, br: 3, bc: 3, diag: 1, time: 0 }, { N: 9, br: 3, bc: 3, diag: 0, time: 1 }];
-const CLUES = { 9: [40, 32, 27], 6: [22, 18, 14], d: [38, 32, 28] };
+/* số gợi ý mục tiêu theo level 0..7 (level 3-7 ít gợi ý dần; bộ sinh bỏ ô tới khi không bỏ thêm được mà vẫn còn MỘT đáp án) */
+const CLUES = { 9: [40, 32, 27, 25, 24, 23, 22, 21], 6: [22, 18, 14, 12, 11, 10, 9, 8], d: [38, 32, 28, 26, 25, 24, 23, 22] };
 const LVN = [["🌱", "Dễ", "Easy"], ["🌿", "Thường", "Normal"], ["🔥", "Khó", "Hard"]];
 function peersOf(T) {
   const N = T.N, P = [];
@@ -30,7 +31,11 @@ function genSudoku(seed, ty, lv) {
   const T = TYPEDEF[ty], P = peersOf(T), N = T.N, R = sub(seed, 11), sol = [], g0 = new Array(N * N).fill(0);
   solveCount(T, P, g0, 1, R, sol); const full = sol[0], puz = full.slice(), target = (T.diag ? CLUES.d : CLUES[N])[lv];
   const order = []; for (let i = 0; i < N * N; i++) order.push(i); for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(R() * (i + 1)), x = order[i]; order[i] = order[j]; order[j] = x; }
-  let left = N * N;
-  for (const i of order) { if (left <= target) break; const keep = puz[i]; puz[i] = 0; if (solveCount(T, P, puz.slice(), 2) !== 1) puz[i] = keep; else left--; }
-  return { T, P, sol: full, puz };
+  let left = N * N, best = null;
+  for (let at = 0; at < (lv >= 4 ? 4 : 1); at++) {   /* level cao: thử nhiều thứ tự bỏ ô, lấy đề ít gợi ý nhất */
+    const pz = full.slice(), od = at ? order.slice().sort(() => R() - .5) : order; let lf = N * N;
+    for (const i of od) { if (lf <= target) break; const keep = pz[i]; pz[i] = 0; if (solveCount(T, P, pz.slice(), 2) !== 1) pz[i] = keep; else lf--; }
+    if (!best || lf < left) { best = pz; left = lf; } if (left <= target) break;
+  }
+  return { T, P, sol: full, puz: best };
 }

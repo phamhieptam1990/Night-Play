@@ -21,13 +21,13 @@ function parseCh() {
     const m = /[#&]ch=([\w-]+)/.exec(location.hash); if (!m) return null;
     let b = m[1].replace(/-/g, "+").replace(/_/g, "/"); b += "===".slice((b.length + 3) % 4);
     const o = JSON.parse(atob(b)), I = (v, a, z) => Number.isInteger(v) && v >= a && v <= z;
-    return I(o.t, 0, 3) && I(o.lv, 1, 3) && I(o.s, 0, 4294967295) && I(o.sc, 0, MAXS) ? { t: o.t, lv: o.lv, s: o.s, sc: o.sc } : null;
+    return I(o.t, 0, 3) && I(o.lv, 1, LV_MAX) && I(o.s, 0, 4294967295) && I(o.sc, 0, MAXS) ? { t: o.t, lv: o.lv, s: o.s, sc: o.sc } : null;
   } catch (e) { return null; }
 }
 function shareLink() {
   const l = LANG === "en" ? "&l=en" : "";
   if (G.daily) return location.origin + "/api/share/sudoku-con-vat?d=1&n=" + G.daily.n + "&s=" + G.score + l;
-  return location.origin + "/api/share/sudoku-con-vat?ch=" + b64e({ t: G.t, lv: G.lv, s: G.seed, sc: G.score }) + l;
+  return location.origin + "/api/share/sudoku-con-vat?ch=" + b64e({ t: G.t, lv: Math.min(3, G.lv), s: G.seed, sc: G.score }) + l;
 }
 function startRows() {
   const P = G.Pz, an = skinOf(G.t).an, rows = [];
@@ -37,7 +37,7 @@ function startRows() {
 function shareText() {
   const st = "⭐".repeat(G.stars) + "☆".repeat(3 - G.stars);
   return (G.daily ? "📅 " + T("daily.t", { n: G.daily.n }) : TY_ICON[G.t] + " " + T("title")) + "\n" + startRows() + "\n" + T("hook", { n: G.Pz.empty }) + "\n" +
-    TY_ICON[G.t] + " " + T("ty")[G.t] + " · " + LVE[G.lv - 1] + " · " + st + " " + G.score + "\n" + shareLink();
+    TY_ICON[G.t] + " " + T("ty")[G.t] + " · " + lvIcon(G.lv) + " · " + st + " " + G.score + "\n" + shareLink();
 }
 function rr(x, a, b, w, h, r) { x.beginPath(); x.moveTo(a + r, b); x.arcTo(a + w, b, a + w, b + h, r); x.arcTo(a + w, b + h, a, b + h, r); x.arcTo(a, b + h, a, b, r); x.arcTo(a, b, a + w, b, r); x.closePath(); }
 function fitText(x, tx, px, font, maxW) { let s = px; do { x.font = font.replace("$", s); s -= 2; } while (x.measureText(tx).width > maxW && s > 20); }
@@ -56,7 +56,7 @@ function drawCard() {
     x.strokeStyle = "#b8c4d8"; x.lineWidth = 2; x.strokeRect(bx, by, cs, cs);
     if (P.puz[i]) { x.font = Math.round(cs * .62) + "px " + F; x.fillStyle = "#000"; x.fillText(an[P.puz[i] - 1], bx + cs / 2, by + cs / 2 + 4); }
   }
-  x.fillStyle = "#3b2a1d"; x.font = "800 46px " + F; x.fillText(TY_ICON[G.t] + " " + T("ty")[G.t] + " · " + LVE[G.lv - 1], W / 2, 930);
+  x.fillStyle = "#3b2a1d"; x.font = "800 46px " + F; x.fillText(TY_ICON[G.t] + " " + T("ty")[G.t] + " · " + lvIcon(G.lv), W / 2, 930);
   x.fillStyle = "#fff"; x.font = "800 76px " + F; const hk = T("hook", { n: P.empty }); fitText(x, hk, 76, "800 $px " + F, 960); x.fillText(hk, W / 2, 1030);
   x.fillStyle = "#fff3c9"; x.font = "800 60px " + F; x.fillText("⭐".repeat(G.stars) + "  " + G.score, W / 2, 1130);
   x.fillStyle = "#fff"; x.font = "800 44px " + F; x.fillText(T("cd.foot") + " " + location.host, W / 2, 1230);

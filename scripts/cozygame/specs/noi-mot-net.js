@@ -31,7 +31,7 @@ module.exports = {
       pct: "🧠 Hardest: {n} links", sk: { basic: ["Graph paper", "Graph paper"], metro: ["Metro map", "Metro map"], star: ["Constellation", "Constellation"], circuit: ["Circuit board", "Circuit board"], lantern: ["Lantern street", "Lantern street"] } }
   },
   sfx: `{step:()=>tone(520,.05,"triangle",.05),ok:()=>{[660,880,1100].forEach((f,i)=>tone(f,.1,"triangle",.09,i*.06))},bad:()=>tone(170,.25,"sawtooth",.07),end:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.09,i*.09)),combo:n=>{const b=440*Math.pow(1.122,Math.min(n/3,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.1,"triangle",.09,i*.05))}}`,
-  level: { max: 4, rules: [["dur","mul",-.08,30],["mStep","mul",.05,1.5]] },   /* lên level cuối màn: scripts/cozygame/levelgen.js */
+  level: { max: 10, rules: [["dur","mul",-.06,30],["m0","add",.3,8],["mStep","mul",.06,1.8]] },   /* lên level cuối màn: scripts/cozygame/levelgen.js */
   gameJs: String.raw`
 let W=360,H=400,SC=1;const ctx=cv.getContext("2d");
 const CFG=[{dur:90,lives:0,m0:4,mStep:1.15,bonus:5},{dur:0,lives:3,m0:5,mStep:1.3,bonus:0,dir:1},{dur:45,lives:0,m0:4,mStep:1.2,bonus:3,mem:1},{dur:120,lives:0,m0:6,mStep:.9,bonus:8,dbl:1}];

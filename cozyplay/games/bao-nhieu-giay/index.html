@@ -202,9 +202,9 @@ function proFx(n){const h=$("play");if(!h)return;for(let i=0;i<(n>=12?2:1);i++){
 const SF=n=>n;
 function fitCanvas(){}
 
-const CFG=[{n:3,tg:[10,10,10],hint:0,tick:0},{n:3,tg:[15,15,15],hint:5,tick:1},{n:5,tg:null,hint:0,tick:0},{n:1,tg:[30],hint:0,tick:0}];
+const CFG=[{n:3,tg:[10,10,10],hint:0,tick:0},{n:3,tg:[15,15,15],hint:5,tick:1},{n:5,tg:null,hint:0,tick:0,tm:1},{n:1,tg:[30],hint:0,tick:0}];
 const fmt=x=>(Math.round(x*100)/100).toFixed(2).replace(".",LANG==="vi"?",":".");
-function newGame(seed,mode,t,ch){const C=CFG[t],R=sub(seed,1),tg=C.tg||Array.from({length:C.n},()=>Math.round((3+R()*10)*4)/4);
+function newGame(seed,mode,t,ch){const C=CFG[t],R=sub(seed,1),tg=C.tg||Array.from({length:C.n},()=>Math.round((3+R()*10)*(C.tm||1)*4)/4);
  return{seed,mode,t,C,ch:ch||null,tg,i:0,res:[],st:"ready",t0:0,over:false,reason:"end",time:0,dur:1e9,beat:false,maxCombo:0,nt:0,lt:0}}
 const scoreOf=D=>D.res.reduce((a,r)=>a+r.sc,0);
 const rankIdx=n=>{const k=n/(G?G.C.n:3);return k>=950?4:k>=850?3:k>=650?2:k>=350?1:0};
@@ -329,8 +329,8 @@ $("bLang").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lan
 $("bSnd").onclick=()=>{if(window.NPAudio)NPAudio.set(!NPAudio.get());$("bSnd").textContent=snd()?"🔊":"🔇"};
 $("bDaily").onclick=()=>begin(fnv(GID+"|"+dayKey()),"daily",0,null);$("bFree").onclick=()=>begin(newSeed(),"free",TY,null);
 
-/* ===== LÊN LEVEL (sinh từ spec.level; trần 4 level, tham số bị kẹp) ===== */
-const LVU_MAX=4,LVU_K="bg-lvu",LVU_R=[["tg","mul",0.12,40]],CFG_0=JSON.parse(JSON.stringify(CFG));
+/* ===== LÊN LEVEL (sinh từ spec.level; trần 10 level, tham số bị kẹp) ===== */
+const LVU_MAX=10,LVU_K="bg-lvu",LVU_R=[["tg","mul",0.14,60],["tm","mul",0.1,2.2],["hint","mul",-0.1,1]],CFG_0=JSON.parse(JSON.stringify(CFG));
 let LVU=Math.max(0,Math.min(LVU_MAX-1,Math.floor(+LS.get(LVU_K,0))||0)),LPLAY=0;
 function applyLvu(L){CFG.forEach((c,i)=>{const o=CFG_0[i];for(const k in o)c[k]=o[k];LVU_R.forEach(([k,m,s,lim])=>{const f=v=>{if(typeof v!=="number"||v<=0)return v;let x=m==="mul"?v*(1+s*L):v+s*L;x=s<0?Math.max(x,Math.min(v,lim)):Math.min(x,Math.max(v,lim));return Math.round(x*100)/100};if(Array.isArray(o[k]))c[k]=o[k].map(f);else if(typeof o[k]==="number")c[k]=f(o[k])})})}
 const begin_0=begin;begin=function(seed,mode,t,ch){const L=mode==="free"&&!ch?LVU:0;applyLvu(L);LPLAY=L;return begin_0.apply(this,arguments)};

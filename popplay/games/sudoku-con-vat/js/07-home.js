@@ -36,7 +36,7 @@ function openHow(t) {
 }
 $("hwBack").onclick = () => showOv(null);
 function openCh() {
-  $("chH").textContent = T("ch.h"); $("chV").innerHTML = "⭐ " + CH.sc; $("chP").textContent = TY_ICON[CH.t] + " " + T("ty")[CH.t] + " · " + LVE[CH.lv - 1] + " — " + T("ch.p", { s: CH.sc });
+  $("chH").textContent = T("ch.h"); $("chV").innerHTML = "⭐ " + CH.sc; $("chP").textContent = TY_ICON[CH.t] + " " + T("ty")[CH.t] + " · " + lvIcon(CH.lv) + " — " + T("ch.p", { s: CH.sc });
   $("chGo").textContent = "▶ " + T("go"); showOv("ovCh");
 }
 $("chNo").onclick = () => { CH = null; showOv(null); };

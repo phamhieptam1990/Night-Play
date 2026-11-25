@@ -429,7 +429,7 @@ $("bSnd").onclick=()=>{if(window.NPAudio)NPAudio.set(!NPAudio.get());$("bSnd").t
 $("bDaily").onclick=()=>begin(fnv(GID+"|"+dayKey()),"daily",0,null);$("bFree").onclick=()=>begin(newSeed(),"free",TY,null);
 
 /* ===== LÊN LEVEL (tuỳ biến theo game) ===== */
-const TS_LV=[[3,3],[3,4],[4,4],[4,5],[5,5]];   /* trần 5 level: lưới 3x3 → 5x5 (ô ≥ 56px; xáo ngược từ ô đã giải nên luôn giải được) */
+const TS_LV=[[3,3],[3,4],[4,4],[4,5],[5,5],[5,6],[6,6],[6,7],[7,7]];   /* trần 9 level: lưới 3x3 → 7x7 (ô ≥ 48px; xáo ngược từ ô đã giải nên luôn giải được) */
 window.NPLevel&&NPLevel.attach({levels:TS_LV.length,cur:()=>{if(!G)return -1;let k=0;TS_LV.forEach((s,i)=>{if(G.n>=s[0]*s[1])k=i});return k},won:()=>!!G&&G.reason==="win",skip:()=>!G||G.mode!=="free"||!!G.ch,go:i=>{SZ=TS_LV[i].slice();LS.set("ts-sz",SZ);if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",G?G.t:TY,null)}});
 
 applySkin();renderHome();show("home");requestAnimationFrame(tick);

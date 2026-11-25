@@ -1,13 +1,14 @@
 /* Săn Chữ Ẩn — luật: kéo ngón tay qua một hàng chữ thẳng (ngang/dọc/chéo) để khoanh từ trong danh sách. Tìm hết là thắng. */
+const lvInfo = i => LVN[i] || ["🔥", "Cấp " + (i + 1), "Level " + (i + 1)];
 const rankIdx = n => n >= 2600 ? 4 : n >= 1800 ? 3 : n >= 1100 ? 2 : n >= 500 ? 1 : 0;
 const scoreOf = D => D.pts + D.bonus;
 const remain = D => D.CF.time ? Math.max(0, D.limit - D.time) : 0;
 const foundOf = D => D.words.reduce((a, w) => a + (w.found ? 1 : 0), 0);
-let DIF = (() => { const v = LS.get("sc-lv", 1); return v === 0 || v === 1 || v === 2 ? v : 1; })();
+let DIF = (() => { const v = LS.get("sc-lv", 1); return Number.isInteger(v) && v >= 0 && v < LVC.length ? v : 1; })();
 const lvOf = (seed, mode) => mode === "free" ? DIF : seed % 3;
 function newGame(seed, mode, t, ch) {
-  const lv = lvOf(seed, mode); seed = seed - seed % 3 + lv; const sk = skinOf(), P = genPuzzle(seed, lv, sk) || genPuzzle(seed + 3, lv, { words: WORDS });
-  const D = { seed, mode, t, lv, CF: CFG[t], n: P.n, grid: P.grid, words: P.words, used: P.used, ch: ch || null, sel: null, order: [], pts: 0, bonus: 0, combo: 0, maxCombo: 0, lastF: -99, hints: 3, hint: null, errs: 0,
+  const lv = lvOf(seed, mode); seed = seed - seed % 3 + Math.min(lv, 2); const sk = skinOf(), P = genPuzzle(seed, lv, sk) || genPuzzle(seed + 3, lv, { words: WORDS });
+  const D = { seed, mode, t, lv, CF: CFG[t], n: P.n, grid: P.grid, words: P.words, used: P.used, ch: ch || null, sel: null, order: [], pts: 0, bonus: 0, combo: 0, maxCombo: 0, lastF: -99, hints: lv >= 6 ? 1 : lv >= 4 ? 2 : 3, hint: null, errs: 0,
     fx: [], shake: 0, flash: 0, storms: 0, nextStorm: CFG[t].storm, limit: 60 + P.words.length * 14, over: false, reason: "end", time: 0, dur: 1e9, beat: false };
   return D;
 }
@@ -64,10 +65,10 @@ function HUD(D) {
   return [[scoreOf(D), "sc"], [D.CF.time ? Math.ceil(remain(D)) + "s" : mmss(D.time), "tm"], [foundOf(D) + "/" + D.words.length, "ex"]];
 }
 function endChips(D) {
-  const n = scoreOf(D), lv = LVN[D.lv];
+  const n = scoreOf(D), lv = lvInfo(D.lv);
   return [lv[0] + " " + L2([lv[1], lv[2]]), TYPES[D.t][0] + " " + L2([TYPES[D.t][1], TYPES[D.t][2]]), "🔤 " + T("sets", { n: foundOf(D) }), D.maxCombo > 1 ? "🔥×" + D.maxCombo : "", (D.prevBest > 0 && n > D.prevBest) ? T("rec") : ""];
 }
-const shareT = D => L2([LVN[D.lv][1], LVN[D.lv][2]]) + " · " + L2([TYPES[D.t][1], TYPES[D.t][2]]);
+const shareT = D => L2([lvInfo(D.lv)[1], lvInfo(D.lv)[2]]) + " · " + L2([TYPES[D.t][1], TYPES[D.t][2]]);
 function snapP(D) { return D.order.length ? { f: D.order.slice(), s: D.pts, t: Math.round(D.time * 10) / 10, n: D.hints, o: D.storms } : null; }
 function restoreP(D, p) {
   for (const i of (p.f || []).slice(0, 20)) { const w = D.words[i | 0]; if (w && !w.found) { w.found = true; w.col = D.order.length % 6; w.dir = w.cells; D.order.push(i | 0); } }
@@ -83,6 +84,6 @@ function onLang(D) { hud(); }
 new MutationObserver(() => { if (!$("home").hidden) renderLevels(); }).observe($("home"), { attributes: true, attributeFilter: ["hidden"] });
 document.addEventListener("click", e => { if (e.target.closest && e.target.closest("#bLang")) setTimeout(renderLevels, 0); });
 renderLevels();
-/* lên level cuối màn (shared/levelup.js): trần 3 = 3 độ khó đã cân chỉnh; chỉ ván thắng mới mở level tiếp */
-window.NPLevel && NPLevel.attach({ levels: 3, cur: () => G ? G.lv : -1, won: () => !!G && G.reason === "win", skip: () => !G || G.mode !== "free" || !!G.ch,
+/* lên level cuối màn (shared/levelup.js): trần 8 level (lưới 8→14, 6→14 từ); chỉ ván thắng mới mở level tiếp */
+window.NPLevel && NPLevel.attach({ levels: LVC.length, cur: () => G ? G.lv : -1, won: () => !!G && G.reason === "win", skip: () => !G || G.mode !== "free" || !!G.ch,
   go: i => { DIF = i; LS.set("sc-lv", i); if (PF.pro && PF.pro.trial) PF.lockPro(); begin(newSeed(), "free", G ? G.t : TY, null); } });

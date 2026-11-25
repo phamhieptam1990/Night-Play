@@ -31,10 +31,10 @@ module.exports = {
       sk: { basic: ["Palette", "Palette"], hive: ["Honeycomb", "Honeycomb"], petri: ["Petri dish", "Petri dish"], sky: ["Starry sky", "Starry sky"], wall: ["Stained wall", "Stained wall"] } }
   },
   sfx: `{ok:()=>tone(780,.07,"triangle",.08),bad:()=>tone(160,.25,"sawtooth",.07),end:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.09,i*.09)),combo:n=>{const b=440*Math.pow(1.122,Math.min(n/3,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.1,"triangle",.09,i*.05))},up:()=>{[660,880,1320].forEach((f,i)=>tone(f,.1,"triangle",.09,i*.06))}}`,
-  level: { max: 4, rules: [["dur","mul",-.1,30],["per","mul",-.08,8]] },   /* lên level cuối màn: scripts/cozygame/levelgen.js */
+  level: { max: 10, rules: [["dur","mul",-.06,30],["per","mul",-.06,6],["dm","mul",-.05,.6],["shuf","mul",-.05,2]] },   /* lên level cuối màn: scripts/cozygame/levelgen.js */
   gameJs: String.raw`
 let W=360,H=360,SC=1;const ctx=cv.getContext("2d");
-const CFG=[{mode:"time",dur:60,pen:5,kind:"l"},{mode:"time",dur:60,pen:5,kind:"h",spin:1},{mode:"life",lives:3,per:12,kind:"l",flick:1},{mode:"time",dur:30,pen:3,kind:"l",shuf:4}];
+const CFG=[{mode:"time",dur:60,pen:5,kind:"l",dm:1},{mode:"time",dur:60,pen:5,kind:"h",spin:1,dm:1},{mode:"life",lives:3,per:12,kind:"l",flick:1,dm:1},{mode:"time",dur:30,pen:3,kind:"l",shuf:4,dm:1}];
 const SPIN=.45;const angOf=D=>D&&D.C.spin?D.time*SPIN:0;
 const colsOf=L=>Math.min(9,2+Math.floor(L/3));
 const pctOf=n=>Math.min(99,Math.round(100*(1-Math.exp(-n/12))));
@@ -45,7 +45,7 @@ function layoutTiles(kind,n,R){const out=[],m=Math.min(W,H);
  else if(kind==="wall"){const w=Math.min(W*.96/(n+.5),120),h=Math.min(H*.92/n/1.07,w*.68),tw=w*(n+.5),th=h*1.07*n,x0=(W-tw)/2,y0=(H-th)/2;for(let row=0;row<n;row++)for(let c=0;c<n;c++)out.push({x:x0+w*(c+.5+(row%2?.5:0)),y:y0+h*1.07*(row+.5),r:Math.hypot(w,h)/2,w:w*.94,h:h*.94})}
  else{const g=m*.94/n,x0=(W-g*n)/2,y0=(H-g*n)/2;for(let row=0;row<n;row++)for(let c=0;c<n;c++)out.push({x:x0+g*(c+.5),y:y0+g*(row+.5),r:g/2,w:g*.9,h:g*.9})}
  return out}
-function mkLevel(D,L){const R=sub(D.seed,100+L),K=D.C.kind,n=colsOf(L),h=Math.floor(R()*360),s=K==="h"?68:52+Math.floor(R()*22),l=K==="h"?52:40+Math.floor(R()*20),d=K==="h"?Math.max(2,56*Math.pow(.93,L-1)):Math.max(1.5,24*Math.pow(.925,L-1));
+function mkLevel(D,L){const R=sub(D.seed,100+L),K=D.C.kind,n=colsOf(L),h=Math.floor(R()*360),s=K==="h"?68:52+Math.floor(R()*22),l=K==="h"?52:40+Math.floor(R()*20),d=K==="h"?Math.max(2,56*Math.pow(.93,L-1)*(D.C.dm||1)):Math.max(1.5,24*Math.pow(.925,L-1)*(D.C.dm||1));
  const tiles=layoutTiles(skinOf().layout||"grid",n,R),odd=Math.floor(R()*tiles.length),col="hsl("+h+","+s+"%,"+l+"%)",oc=K==="h"?"hsl("+((h+d)%360)+","+s+"%,"+l+"%)":"hsl("+h+","+s+"%,"+Math.round((l+(l>52?-d:d))*10)/10+"%)";
  D.lv={L,n,tiles,odd,col,oc,d};D.lvStart=D.time;D.levT=0}
 function newGame(seed,mode,t,ch){const C=CFG[t],D={seed,mode,t,C,ch:ch||null,L:1,lives:C.lives||0,pen:0,errs:0,over:false,reason:"end",time:0,dur:1e9,beat:false,maxCombo:0,combo:0,lv:null,lvStart:0,levT:0,flash:0,rev:null,shake:0,fx:[]};mkLevel(D,1);return D}

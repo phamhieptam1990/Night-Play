@@ -15,7 +15,7 @@ $("undoBtn").onclick = undo; $("hintBtn").onclick = hint; $("resetBtn").onclick 
 function retry() { if (!G || HELPER) return; begin(G.t, { lv: G.lv, seed: G.seed, daily: G.daily, ch: G.ch }); }
 $("retryBtn").onclick = retry;
 $("againBtn").onclick = () => { if (!G) return; if (G.daily) return startDaily(); begin(G.t, { lv: G.lv }); };
-window.NPLevel&&NPLevel.attach({levels:3,dupe:"#againBtn",cur:()=>G?G.lv-1:-1,go:i=>{LVL=i+1;LS.set("sd-lv",LVL);begin(G.t, { lv: i + 1 })},skip:()=>!!(G && (G.daily || G.ch))});   /* lên level khi kết thúc màn (shared/levelup.js) */
+window.NPLevel&&NPLevel.attach({levels:LV_MAX,dupe:"#againBtn",cur:()=>G?G.lv-1:-1,go:i=>{LVL=Math.min(3,i+1);LS.set("sd-lv",LVL);begin(G.t, { lv: i + 1 })},skip:()=>!!(G && (G.daily || G.ch))});   /* lên level khi kết thúc màn (shared/levelup.js) */
 $("shareBtn").onclick = () => openGate(() => { showOv("ovEnd"); doShare(); }, "ovEnd", "gt.sh");
 $("ovEnd").addEventListener("pointerdown", e => { if (HELPER || e.target.closest("button") || performance.now() - endAt < 450) return; $("againBtn").onclick(); });
 $("homeBtn2").onclick = goHome;
@@ -41,7 +41,7 @@ if (window.NP) {
   NP.onPause(() => { paused = true; $("play").classList.add("paused"); if (window.speechSynthesis) speechSynthesis.cancel(); }, () => { paused = false; $("play").classList.remove("paused"); });
 }
 function restoreFrom(S) {
-  LVL = S.lv; begin(S.t, { seed: S.s, lv: S.lv });
+  LVL = Math.min(3, S.lv); begin(S.t, { seed: S.s, lv: S.lv });
   const s = String(S.v || ""); if (s.length === G.val.length) {
     for (let i = 0; i < s.length; i++) { const v = +s[i]; if (G.Pz.puz[i] || !(v >= 0 && v <= G.Pz.N)) continue; if (v === G.Pz.sol[i]) G.val[i] = v; }
   }
@@ -51,7 +51,7 @@ if (passToken() && !HELPER) PF.loadPro(false).catch(() => {});
 applyLang(); goHome();
 if (BOOT_H) {
   const I = (v, a, z) => HS && Number.isInteger(v) && v >= a && v <= z;
-  if (HS && I(HS.t, 0, 3) && I(HS.lv, 1, 3) && I(HS.s, 0, 4294967295)) {
+  if (HS && I(HS.t, 0, 3) && I(HS.lv, 1, LV_MAX) && I(HS.s, 0, 4294967295)) {
     const okT = HS.tk && /^h\.\d{13}\.[\w-]{43}$/.test(HS.tk), go2 = () => restoreFrom(HS);
     if (okT) PF.loadPro(false, HS.tk).then(() => { if (/^[a-z]{3,10}$/.test(HS.sk || "") && PF.skins[HS.t][HS.sk]) PF.skinSel[HS.t] = HS.sk; }).catch(() => {}).finally(go2); else go2();
   }

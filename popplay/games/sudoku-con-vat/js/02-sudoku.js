@@ -6,7 +6,7 @@ const TYPEDEF = [
   { N: 4, br: 2, bc: 2, diag: 1 }, { N: 6, br: 2, bc: 3, diag: 1 }
 ];
 /* số gợi ý (ô có sẵn) theo loại × cấp 1..3 */
-const CLUES = [[11, 9, 7], [26, 22, 18], [10, 9, 8], [28, 25, 22]];
+const CLUES = [[11, 9, 7, 6, 5, 5, 4, 4], [26, 22, 18, 16, 14, 13, 12, 11], [10, 9, 8, 7, 6, 5, 5, 4], [28, 25, 22, 19, 17, 15, 14, 13]];
 function peersOf(T) {
   const N = T.N, P = [];
   for (let i = 0; i < N * N; i++) {

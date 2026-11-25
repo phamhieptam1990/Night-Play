@@ -218,7 +218,7 @@ const passToken=()=>{try{const p=JSON.parse(localStorage.getItem("pass"));return
 /* ===== NGÔN NGỮ ===== */
 const I18N={
 vi:{title:"Vẽ Chữ Thành Quái Vật",docTitle:"Vẽ Chữ Thành Quái Vật",sound:"Âm thanh",lang:"Ngôn ngữ",home:"Về màn chọn",
- ty:["Chữ tiếng Việt","Chữ tiếng Anh","Con số","Hình khối"],lv:["Cấp 1","Cấp 2","Cấp 3"],"lv.pick":"Chọn cấp độ",
+ ty:["Chữ tiếng Việt","Chữ tiếng Anh","Con số","Hình khối"],lv:["Cấp 1","Cấp 2","Cấp 3","Cấp 4","Cấp 5","Cấp 6","Cấp 7","Cấp 8"],"lv.pick":"Chọn cấp độ",
  "tr.0":"Tô chữ {l}","tr.1":"Tô chữ {l}","tr.2":"Tô số {l}","tr.3":"Tô hình {l}",
  "sh.circle":"tròn","sh.square":"vuông","sh.triangle":"tam giác","sh.star":"ngôi sao","sh.heart":"trái tim","sh.diamond":"thoi","sh.rect":"chữ nhật","sh.moon":"trăng","sh.cross":"dấu cộng","sh.hex":"lục giác",
  "how.1":"✏️ Tô theo nét chấm. Tô đủ, chữ sẽ sống dậy!","how.2":"🐾 Mỗi lần tô được một quái vật dễ thương, chỉ riêng bé có","how.3":"📖 Sưu tập đủ quái vật vào album nhé!","how.go":"Bắt đầu!",
@@ -237,7 +237,7 @@ vi:{title:"Vẽ Chữ Thành Quái Vật",docTitle:"Vẽ Chữ Thành Quái Vậ
  "sk.2.basic":"Ma bông","sk.2.cloud":"Mây bông","sk.2.night":"Đêm ma quái","sk.2.jelly":"Kẹo dẻo","sk.2.moon":"Ánh trăng",
  "sk.3.basic":"Rồng nhí","sk.3.lava":"Núi lửa","sk.3.ice":"Băng giá","sk.3.forest":"Rừng xanh","sk.3.gold":"Vàng ròng"},
 en:{title:"Letter Monsters",docTitle:"Letter Monsters",sound:"Sound",lang:"Language",home:"Back",
- ty:["Vietnamese letters","English letters","Numbers","Shapes"],lv:["Level 1","Level 2","Level 3"],"lv.pick":"Pick a level",
+ ty:["Vietnamese letters","English letters","Numbers","Shapes"],lv:["Level 1","Level 2","Level 3","Level 4","Level 5","Level 6","Level 7","Level 8"],"lv.pick":"Pick a level",
  "tr.0":"Trace the letter {l}","tr.1":"Trace the letter {l}","tr.2":"Trace the number {l}","tr.3":"Trace the {l}",
  "sh.circle":"circle","sh.square":"square","sh.triangle":"triangle","sh.star":"star","sh.heart":"heart","sh.diamond":"diamond","sh.rect":"rectangle","sh.moon":"moon","sh.cross":"plus sign","sh.hex":"hexagon",
  "how.1":"✏️ Trace along the dots. Finish it and the shape comes alive!","how.2":"🐾 Every trace makes a cute monster that is yours alone","how.3":"📖 Collect them all in your album!","how.go":"Start!",
@@ -262,7 +262,11 @@ const T=(k,v)=>{let s=(I18N[LANG][k]!=null?I18N[LANG][k]:I18N.vi[k]!=null?I18N.v
 const VI=Array.from("AĂÂBCDĐEÊGHIKLMNOÔƠPQRSTUƯVXY"),EN=Array.from("ABCDEFGHIJKLMNOPQRSTUVWXYZ"),NU=Array.from("0123456789"),SH=["circle","square","triangle","star","heart","diamond","rect","moon","cross","hex"];
 const ITEMS=[VI,EN,NU,SH],TYI=["🍎","🐝","🧮","🔷"],FAMI=["🫧","👾","👻","🐉"];
 const POOLS=[[Array.from("ILTVUOCXHE"),Array.from("ILTVUOCXHEANMYKPDĐRS"),VI],[Array.from("ILTVUOCXHE"),Array.from("ILTVUOCXHEANMYKPDFJZW"),EN],[Array.from("013475"),Array.from("0123456789").filter(x=>x!=="8"),NU],[["circle","square","triangle","heart","star"],["circle","square","triangle","heart","star","diamond","rect","moon"],SH]];
-const LV=[{w:.115,need:.62,tol:.07},{w:.092,need:.67,tol:.055},{w:.074,need:.71,tol:.045}];   /* w: bề dày nét bút · need: tô phủ bao nhiêu thì xong · tol: dung sai */
+POOLS[0].push(VI,...["ĂÂĐÊÔƠƯGQRSKBPM","ĂÂĐÊÔƠƯGQRSK","ĂÂĐÊÔƠƯGQ","ĂÂĐÊÔƠƯ"].map(x=>Array.from(x)));
+POOLS[1].push(EN,...["ABDEFGJKMNPQRSWYZ","BGJKMQRSWYZ","BGJQRSKZ","GJQRSKZ"].map(x=>Array.from(x)));
+POOLS[2].push(NU,...["23456789","235689","235689","5689"].map(x=>Array.from(x)));
+POOLS[3].push(SH,["rect","diamond","star","heart","moon","cross","hex"],["diamond","star","heart","moon","cross","hex"],["star","heart","moon","cross","hex"],["moon","cross","hex","star"]);   /* cấp 4-8: gom chữ/hình khó vẽ dần */
+const LV=[{w:.115,need:.62,tol:.07},{w:.092,need:.67,tol:.055},{w:.074,need:.71,tol:.045},{w:.066,need:.74,tol:.04},{w:.06,need:.76,tol:.034},{w:.055,need:.78,tol:.03},{w:.05,need:.8,tol:.027},{w:.046,need:.82,tol:.024}];   /* w: bề dày nét bút · need: tô phủ bao nhiêu thì xong · tol: dung sai */
 const RARB=[8,15,24,30],COMBO_ACC=80;
 const labelOf=(t,it)=>t===3?T("sh."+it):it;
 function makePlan(t,lv,seed,bias){
@@ -493,7 +497,11 @@ function fillDeco(sk){document.querySelectorAll(".dc").forEach(d=>{d.innerHTML="
 const BOOT_H=!!(window.NP&&NP.helper),HELPER=BOOT_H&&!(NP.resumeBoot&&NP.resumeBoot());   /* ?resume=1 nạp ván dở qua đường của chơi hộ: nhánh nạp dùng BOOT_H, còn nút/điểm/chia sẻ dùng HELPER (người chơi thật, không ẩn nút ở màn kết thúc) */
 let prog=Object.assign({best:0,played:0},LS.get("qv-prog",{}));
 const saveProg=()=>{if(!HELPER)LS.set("qv-prog",prog)};
-let LVL=Math.min(3,Math.max(1,+LS.get("qv-lv",1)||1)),G=null,paused=false,sound=true,payFor=null,skFor=0,gateBack="ovPay",gid=0,CH=null,endAt=0,MON=null;
+const NLV=8,LVI=["🌱","🌿","🌳","🌲","🔥","⚡","💎","👑"];
+function lvStep(box,ic,key){const u=(window.NPLevel&&NPLevel.unlocked)?NPLevel.unlocked():0,mx=Math.max(3,Math.min(NLV,u+1));if(LVL>mx)LVL=mx;
+  ic.slice(0,NLV).forEach((e,i)=>{const b=document.createElement("button"),on=LVL===i+1;b.type="button";b.className="lvb"+(on?" on":"");b.innerHTML=e+(on?" <small>"+(i+1)+"</small>":"");b.setAttribute("aria-label",T("lv")[i]);
+    if(i+1>mx){b.disabled=true;b.style.opacity=".35"}else b.onclick=()=>{LVL=i+1;LS.set(key,LVL);renderHome()};if(on)b.style.flex="2";box.appendChild(b)})}   /* mọi level là một chip (độ khó/cc.js đọc .lvs); chưa mở = mờ */
+let LVL=Math.min(NLV,Math.max(1,+LS.get("qv-lv",1)||1)),G=null,paused=false,sound=true,payFor=null,skFor=0,gateBack="ovPay",gid=0,CH=null,endAt=0,MON=null;
 sound=!(window.NPAudio&&!NPAudio.get());
 const today=()=>new Date(Date.now()+252e5).toISOString().slice(0,10);
 let ALB=null;
@@ -511,11 +519,11 @@ function dailyDone(g){const di=g.daily,st=dailyStore();if(st.last!==di.key){st.s
 const startDaily=()=>{const di=dailyInfo();begin(di.t,{seed:di.seed,daily:di,lv:di.lv})};
 const b64e=o=>btoa(JSON.stringify(o)).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
 function parseCh(){try{const m=/[#&]ch=([\w-]+)/.exec(location.hash);if(!m)return null;let b=m[1].replace(/-/g,"+").replace(/_/g,"/");b+="===".slice((b.length+3)%4);const o=JSON.parse(atob(b)),I=(v,a,z)=>Number.isInteger(v)&&v>=a&&v<=z;
-  return I(o.t,0,3)&&I(o.lv,1,3)&&I(o.s,0,4294967295)&&I(o.sc,0,300)?{t:o.t,lv:o.lv,s:o.s,sc:o.sc}:null}catch(e){return null}}
+  return I(o.t,0,3)&&I(o.lv,1,NLV)&&I(o.s,0,4294967295)&&I(o.sc,0,300)?{t:o.t,lv:o.lv,s:o.s,sc:o.sc}:null}catch(e){return null}}
 function shareLink(){const l=LANG==="en"?"&l=en":"";if(G.daily)return location.origin+"/api/share/ve-chu-quai-vat?d=1&n="+G.daily.n+"&s="+G.total+l;
   return location.origin+"/api/share/ve-chu-quai-vat?ch="+b64e({t:G.t,lv:G.lv,s:G.seed,sc:G.total})+l}
 function shareText(){const rs=G.res,best=rs.slice().sort((a,b)=>b.M.rar-a.M.rar)[0];
-  return (G.daily?"📅 "+T("daily.t",{n:G.daily.n}):TYI[G.t]+" "+T("title"))+"\n"+T("tx.line",{t:T("ty")[G.t],l:["🌱","🌿","🌳"][G.lv-1],s:G.total})+"\n"+rs.map(r=>T("tx.mon",{i:labelOf(G.t,r.item),n:r.M.name,r:"✨".repeat(r.M.rar+1)})).join("\n")+(G.maxCombo>=2?"\n🔥 "+T("cb.best",{n:G.maxCombo}):"")+(best?"\n"+T("cd.no",{n:albCount(G.t),m:ITEMS[G.t].length}):"")+"\n"+T("cd.ask")+"\n"+shareLink()}
+  return (G.daily?"📅 "+T("daily.t",{n:G.daily.n}):TYI[G.t]+" "+T("title"))+"\n"+T("tx.line",{t:T("ty")[G.t],l:LVI[G.lv-1],s:G.total})+"\n"+rs.map(r=>T("tx.mon",{i:labelOf(G.t,r.item),n:r.M.name,r:"✨".repeat(r.M.rar+1)})).join("\n")+(G.maxCombo>=2?"\n🔥 "+T("cb.best",{n:G.maxCombo}):"")+(best?"\n"+T("cd.no",{n:albCount(G.t),m:ITEMS[G.t].length}):"")+"\n"+T("cd.ask")+"\n"+shareLink()}
 const F="Inter,system-ui,-apple-system,'Segoe UI','Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";
 function fitText(x,tx,px,font,maxW){let s=px;do{x.font=font.replace("$",s);s-=2}while(x.measureText(tx).width>maxW&&s>20)}
 function rr(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
@@ -561,7 +569,7 @@ async function saveImg(M,kind){
 }
 function openCh(){
   const pl=makePlan(CH.t,CH.lv,CH.s,false)[0],M=makeMonster(CH.t,pl.item,pl.ms);
-  $("chH").textContent=T("ch.h");$("chP").textContent=TYI[CH.t]+" "+T("ty")[CH.t]+" · "+["🌱","🌿","🌳"][CH.lv-1]+" — "+T("ch.p",{sc:CH.sc});$("chGo").textContent="✏️ "+T("ch.go");
+  $("chH").textContent=T("ch.h");$("chP").textContent=TYI[CH.t]+" "+T("ty")[CH.t]+" · "+LVI[CH.lv-1]+" — "+T("ch.p",{sc:CH.sc});$("chGo").textContent="✏️ "+T("ch.go");
   const c=$("chC"),x=c.getContext("2d");x.clearRect(0,0,360,360);x.drawImage(monsterImg(M,360),0,0);showOv("ovCh");
 }
 $("chNo").onclick=()=>{CH=null;showOv(null)};
@@ -573,7 +581,7 @@ function showOv(id){if(id!=="ovMon")cancelAnimationFrame(bornAnim);for(const o o
 function renderHome(){
   const h=$("home");h.innerHTML="";
   const lv=document.createElement("div");lv.className="lvs";lv.setAttribute("role","group");lv.setAttribute("aria-label",T("lv.pick"));
-  [["🌱","1"],["🌿","2"],["🌳","3"]].forEach(([e,n],i)=>{const b=document.createElement("button");b.type="button";b.className="lvb"+(LVL===i+1?" on":"");b.innerHTML=e+" <small>"+n+"</small>";b.setAttribute("aria-label",T("lv")[i]);b.onclick=()=>{LVL=i+1;LS.set("qv-lv",LVL);renderHome()};lv.appendChild(b)});
+  lvStep(lv,LVI,"qv-lv");
   h.appendChild(lv);
   const di=dailyInfo(),ds=dailyStore(),db=document.createElement("button");db.type="button";db.className="dbar";
   db.innerHTML="<span>📅 "+T("daily.t",{n:di.n})+"</span><span>"+(ds.streak&&(ds.last===di.key||ds.last===dayBefore(di.key))?"🔥 "+ds.streak+" ":"")+(ds.best[di.key]!=null?"✓ "+ds.best[di.key]:"▶")+"</span>";db.onclick=startDaily;h.appendChild(db);
@@ -590,7 +598,7 @@ function renderHome(){
   $("hl").textContent="📖 "+albTotal();$("hr").textContent=prog.best?"🏆 "+prog.best:"";
 }
 function openHow(t){
-  $("hwH").textContent=TYI[t]+" "+T("ty")[t];$("hwC").textContent=["🌱","🌿","🌳"][LVL-1]+" "+T("lv")[LVL-1];
+  $("hwH").textContent=TYI[t]+" "+T("ty")[t];$("hwC").textContent=LVI[LVL-1]+" "+T("lv")[LVL-1];
   $("hwL").innerHTML=["1","2","3"].map((n,i)=>"<li><b>"+["✏️","🐾","📖"][i]+"</b><span>"+T("how."+n).replace(/^[^\s]+\s/,"")+"</span></li>").join("");
   $("hwGo").textContent="▶ "+T("how.go");$("hwGo").onclick=()=>begin(t);$("hwBack").setAttribute("aria-label",T("home"));showOv("ovHow");
 }
@@ -823,7 +831,7 @@ $("langBtn").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("l
 $("homeBtn").onclick=()=>{if(!HELPER)goHome()};
 function again(){if(!G)return;if(G.daily)return startDaily();begin(G.t,{lv:G.ch?LVL:G.lv})}
 $("againBtn").onclick=again;
-window.NPLevel&&NPLevel.attach({levels:3,dupe:"#againBtn",cur:()=>G?G.lv-1:-1,go:i=>{LVL=i+1;LS.set("qv-lv",LVL);begin(G.t,{lv:i+1})},skip:()=>!!(G&&(G.daily||G.ch))});   /* lên level khi kết thúc màn (shared/levelup.js) */
+window.NPLevel&&NPLevel.attach({levels:8,dupe:"#againBtn",cur:()=>G?G.lv-1:-1,go:i=>{LVL=i+1;LS.set("qv-lv",LVL);begin(G.t,{lv:i+1})},skip:()=>!!(G&&(G.daily||G.ch))});   /* lên level khi kết thúc màn (shared/levelup.js) */
 $("shareBtn").onclick=()=>openGate(()=>{showOv("ovEnd");doShare()},"ovEnd","gt.sh");
 $("albBtn").onclick=()=>openAlbum(G?G.t:0);
 $("ovEnd").addEventListener("pointerdown",e=>{if(HELPER||e.target.closest("button")||e.target.closest("canvas")||performance.now()-endAt<450)return;again()});
@@ -850,7 +858,7 @@ if(passToken()&&!HELPER)PF.loadPro(false).catch(()=>{});
 applyLang();goHome();
 if(!BOOT_H){CH=parseCh();if(CH)openCh();else if(location.hash==="#daily")startDaily()}
 else{const HS=window.NP&&NP.initialState,I=(v,a,z)=>Number.isInteger(v)&&v>=a&&v<=z;
-  if(HS&&I(HS.t,0,3)&&I(HS.lv,1,3)&&I(HS.s,0,4294967295)&&I(HS.r,0,2)){const go=()=>begin(HS.t,{seed:HS.s,lv:HS.lv,r0:HS.r}),okT=HS.tk&&/^h\.\d{13}\.[\w-]{43}$/.test(HS.tk);
+  if(HS&&I(HS.t,0,3)&&I(HS.lv,1,NLV)&&I(HS.s,0,4294967295)&&I(HS.r,0,2)){const go=()=>begin(HS.t,{seed:HS.s,lv:HS.lv,r0:HS.r}),okT=HS.tk&&/^h\.\d{13}\.[\w-]{43}$/.test(HS.tk);
     if(okT)PF.loadPro(false,HS.tk).then(()=>{if(/^[a-z]{3,10}$/.test(HS.sk||"")&&PF.skins[HS.t][HS.sk])PF.skinSel[HS.t]=HS.sk}).catch(()=>{}).finally(go);else go()}}
 window.QV={get G(){return G},get TR(){return TR},get MON(){return MON},get CH(){return CH},PF,ITEMS,POOLS,LV,hash,makePlan,makeMonster,composeMonster,monsterImg,layoutOf,cry,renderOut,drawCard,shareText,shareLink,dailyInfo,parseCh,b64e,startDaily,begin,goHome,albGet,albCount,openAlbum,openHow,
   setLv(n){LVL=n},solve(){TR&&TR.solve()},finishTrace(){TR&&TR.solve()},

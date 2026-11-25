@@ -179,12 +179,12 @@ const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(R
 const track=(f,k)=>{try{fetch("/api/paywall",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({f,k}),keepalive:true}).catch(()=>{})}catch(e){}};
 const subUrl=()=>"../../../subscribe.html?from="+encodeURIComponent("popplay/index.html#thap-vong-mau")+"&plan=month";
 const passToken=()=>{try{const p=JSON.parse(localStorage.getItem("pass"));return p&&p.token}catch(e){return null}};
-const LVE=["🌱","🌿","🌳"];
+const LVE=["🌱","🌿","🌳","🌲","🔥","⚡","💎","👑"];
 
 /* ===== NGÔN NGỮ ===== */
 const I18N={
 vi:{title:"Tháp Vòng Màu",docTitle:"Tháp Vòng Màu",sound:"Âm thanh",lang:"Ngôn ngữ",home:"Về màn chọn",
- ty:["Tháp 3 cột","Tháp 4 cột","Tháp xáo trộn","Tháp vòng tròn"],lv:["Cấp 1","Cấp 2","Cấp 3"],"lv.pick":"Chọn cấp độ",
+ ty:["Tháp 3 cột","Tháp 4 cột","Tháp xáo trộn","Tháp vòng tròn"],lv:["Cấp 1","Cấp 2","Cấp 3","Cấp 4","Cấp 5","Cấp 6","Cấp 7","Cấp 8"],"lv.pick":"Chọn cấp độ",
  how:[["Chuyển **cả tháp** sang cột có cờ 🏁","Vòng **to** không đè lên vòng **nhỏ**","Chạm cột **nhấc**, chạm cột khác **đặt**. Càng ít lần càng giỏi!"],
   ["Có **4 cột**! Chuyển cả tháp sang cột có cờ 🏁","Vòng **to** vẫn không đè lên vòng **nhỏ**","Dùng khéo **2 cột phụ** để đi ít lần hơn!"],
   ["Vòng đang **lộn xộn**. Gom hết sang cột có cờ 🏁","Vòng **to** vẫn không đè lên vòng **nhỏ**","Mỗi lần xáo là **một câu đố mới**. Nghĩ rồi hãy chạm!"],
@@ -202,7 +202,7 @@ vi:{title:"Tháp Vòng Màu",docTitle:"Tháp Vòng Màu",sound:"Âm thanh",lang:
  "sk.2.basic":"Cầu vồng","sk.2.magic":"Phép thuật","sk.2.toy":"Đồ chơi gỗ","sk.2.garden":"Vườn hoa","sk.2.night":"Đêm sao",
  "sk.3.basic":"Cầu vồng","sk.3.carousel":"Đu quay","sk.3.galaxy":"Thiên hà","sk.3.clock":"Đồng hồ","sk.3.donut":"Bánh vòng"},
 en:{title:"Rainbow Rings",docTitle:"Rainbow Rings",sound:"Sound",lang:"Language",home:"Back",
- ty:["3 Pegs","4 Pegs","Shuffled Tower","Round Tower"],lv:["Level 1","Level 2","Level 3"],"lv.pick":"Pick a level",
+ ty:["3 Pegs","4 Pegs","Shuffled Tower","Round Tower"],lv:["Level 1","Level 2","Level 3","Level 4","Level 5","Level 6","Level 7","Level 8"],"lv.pick":"Pick a level",
  how:[["Move **the whole tower** to the flag peg 🏁","A **big** ring never sits on a **small** one","Tap a peg to **lift**, tap another to **drop**. Fewer moves = better!"],
   ["There are **4 pegs**! Move the tower to the flag 🏁","A **big** ring still can't sit on a **small** one","Use the **2 spare pegs** wisely to save moves!"],
   ["The rings are **mixed up**. Gather them on the flag peg 🏁","A **big** ring still can't sit on a **small** one","Every shuffle is a **new puzzle**. Think, then tap!"],
@@ -231,12 +231,13 @@ function solveFrom(P,pos){const goal=Array(P.n).fill(P.goal).join(""),k0=pos.joi
   const t=tops(P,s);for(let a=0;a<P.pegs;a++){const d=t[a];if(d<0)continue;for(let b=0;b<P.pegs;b++){if(a===b)continue;if(P.cyc&&b!==(a+1)%P.pegs)continue;if(t[b]>=0&&t[b]<d)continue;const nx=s.slice();nx[d]=b;const k=nx.join("");if(!prev.has(k)){prev.set(k,{from:ks,mv:[a,b]});q.push(nx)}}}}
  return null}
 
-/* ===== CÂU ĐỐ: 4 loại × 3 cấp, vị trí cột bắt đầu/đích (và cách xáo ở loại 3) chọn theo hạt giống ===== */
+/* ===== CÂU ĐỐ: 4 loại × 8 cấp, vị trí cột bắt đầu/đích (và cách xáo ở loại 3) chọn theo hạt giống ===== */
+const scat=(n,pegs,cyc,g,tries)=>{let best=null,bl=-1;for(let k=0;k<tries;k++){const pos=Array.from({length:n},()=>rand(0,pegs-1));if(pos.every(x=>x===g))continue;const sl=solveFrom({n,pegs,goal:g,cyc},pos);if(sl&&sl.length>bl){bl=sl.length;best=pos}}return best||Array(n).fill((g+1)%pegs)};   /* xáo vòng: lấy mẫu có lời giải dài nhất (BFS luôn có đường) */
 function makePuzzle(t,lv,seed){
-  RNG=mulberry32((seed^Math.imul(t+1,2246822519)^Math.imul(lv,3266489917))>>>0);let P;
-  if(t===0||t===1){const n=(t===0?[3,4,5]:[4,5,6])[lv-1],pegs=t===0?3:4,st=rand(0,pegs-1);let g=rand(0,pegs-1);while(g===st)g=rand(0,pegs-1);P={n,pegs,cyc:false,goal:g,start:Array(n).fill(st)}}
-  else if(t===2){const n=[3,4,5][lv-1],pegs=3,g=rand(0,2);let pos;do{pos=[];for(let i=0;i<n;i++)pos.push(rand(0,2))}while(pos.every(x=>x===g)||(()=>{const Q={n,pegs,goal:g,cyc:false},sl=solveFrom(Q,pos);return !sl||sl.length<n+1})());P={n,pegs,cyc:false,goal:g,start:pos}}
-  else{const n=[2,3,4][lv-1],st=rand(0,2);P={n,pegs:3,cyc:true,goal:(st+1)%3,start:Array(n).fill(st)}}
+  RNG=mulberry32((seed^Math.imul(t+1,2246822519)^Math.imul(lv,3266489917))>>>0);let P;const sc=lv>=4&&lv%2===0;
+  if(t===0||t===1){const n=(t===0?[3,4,5,5,6,6,7,7]:[4,5,6,7,7,8,8,9])[lv-1],pegs=t===0?3:4,st=rand(0,pegs-1);let g=rand(0,pegs-1);while(g===st)g=rand(0,pegs-1);P={n,pegs,cyc:false,goal:g,start:sc&&t===0?scat(n,pegs,false,g,40):Array(n).fill(st)}}
+  else if(t===2){const n=[3,4,5,5,6,6,7,7][lv-1],pegs=3,g=rand(0,2);let pos;if(lv>=4)pos=scat(n,3,false,g,60);else do{pos=[];for(let i=0;i<n;i++)pos.push(rand(0,2))}while(pos.every(x=>x===g)||(()=>{const Q={n,pegs,goal:g,cyc:false},sl=solveFrom(Q,pos);return !sl||sl.length<n+1})());P={n,pegs,cyc:false,goal:g,start:pos}}
+  else{const n=[2,3,4,4,5,5,5,5][lv-1],st=rand(0,2),g=lv===7?(st+2)%3:(st+1)%3;P={n,pegs:3,cyc:true,goal:g,start:sc?scat(n,3,true,g,60):Array(n).fill(st)}}
   RNG=MR;const sol=solveFrom(P,P.start);P.opt=sol?sol.length:1;P.t=t;P.lv=lv;return P}
 const MAXS=300;
 const scoreOf=(opt,used,hints)=>Math.max(30,Math.min(MAXS,Math.round(MAXS*opt/Math.max(used,1))-20*hints));
@@ -265,7 +266,11 @@ function fillDeco(sk){document.querySelectorAll(".dc").forEach(d=>{d.innerHTML="
 const BOOT_H=!!(window.NP&&NP.helper),HELPER=BOOT_H&&!(NP.resumeBoot&&NP.resumeBoot()),HS=BOOT_H&&NP.initialState&&typeof NP.initialState==="object"?NP.initialState:null;
 let prog=Object.assign({solved:0,perfect:0},LS.get("tv-prog",{}));
 const saveProg=()=>{if(!HELPER)LS.set("tv-prog",prog)};
-let LVL=Math.min(3,Math.max(1,+LS.get("tv-lv",1)||1)),G=null,CH=null,paused=false,sound=true,payFor=null,skFor=0,gateBack="ovPay",endAt=0;
+const NLV=8;
+function lvStep(box,ic,key){const u=(window.NPLevel&&NPLevel.unlocked)?NPLevel.unlocked():0,mx=Math.max(3,Math.min(NLV,u+1));if(LVL>mx)LVL=mx;
+  ic.slice(0,NLV).forEach((e,i)=>{const b=document.createElement("button"),on=LVL===i+1;b.type="button";b.className="lvb"+(on?" on":"");b.innerHTML=e+(on?" <small>"+(i+1)+"</small>":"");b.setAttribute("aria-label",T("lv")[i]);
+    if(i+1>mx){b.disabled=true;b.style.opacity=".35"}else b.onclick=()=>{LVL=i+1;LS.set(key,LVL);renderHome()};if(on)b.style.flex="2";box.appendChild(b)})}   /* mọi level là một chip (độ khó/cc.js đọc .lvs); chưa mở = mờ */
+let LVL=Math.min(NLV,Math.max(1,+LS.get("tv-lv",1)||1)),G=null,CH=null,paused=false,sound=true,payFor=null,skFor=0,gateBack="ovPay",endAt=0;
 sound=!(window.NPAudio&&!NPAudio.get());
 const today=()=>new Date(Date.now()+252e5).toISOString().slice(0,10);
 
@@ -286,7 +291,7 @@ function dailyDone(g){const di=g.daily,st=dailyStore();if(st.last!==di.key){st.s
 const startDaily=()=>{const di=dailyInfo();begin(di.t,{seed:di.seed,daily:di,lv:di.lv})};
 const b64e=o=>btoa(JSON.stringify(o)).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
 function parseCh(){try{const m=/[#&]ch=([\w-]+)/.exec(location.hash);if(!m)return null;let b=m[1].replace(/-/g,"+").replace(/_/g,"/");b+="===".slice((b.length+3)%4);const o=JSON.parse(atob(b)),I=(v,a,z)=>Number.isInteger(v)&&v>=a&&v<=z;
-  return I(o.t,0,3)&&I(o.lv,1,3)&&I(o.s,0,4294967295)&&I(o.sc,0,300)?{t:o.t,lv:o.lv,s:o.s,sc:o.sc}:null}catch(e){return null}}
+  return I(o.t,0,3)&&I(o.lv,1,NLV)&&I(o.s,0,4294967295)&&I(o.sc,0,300)?{t:o.t,lv:o.lv,s:o.s,sc:o.sc}:null}catch(e){return null}}
 function shareLink(){const l=LANG==="en"?"&l=en":"";if(G.daily)return location.origin+"/api/share/thap-vong-mau?d=1&n="+G.daily.n+"&s="+G.score+l;return location.origin+"/api/share/thap-vong-mau?ch="+b64e({t:G.t,lv:G.lv,s:G.seed,sc:G.score})+l}
 const RGB=["🔴","🟠","🟡","🟢","🔵","🟣"];
 function startRow(){const P=G.P;const cols=[];for(let k=0;k<P.pegs;k++){const d=[];for(let i=0;i<P.n;i++)if(P.start[i]===k)d.push(RGB[Math.min(5,Math.round(i*5/Math.max(1,P.n-1)))]);cols.push((d.join("")||"▫️")+(k===P.goal?"🏁":""))}return cols.join(" ┃ ")}
@@ -328,7 +333,7 @@ function showOv(id){for(const o of ovs)$(o).hidden=(o!==id)}
 function renderHome(){
   const h=$("home");h.innerHTML="";
   const lv=document.createElement("div");lv.className="lvs";lv.setAttribute("role","group");lv.setAttribute("aria-label",T("lv.pick"));
-  LVE.forEach((e,i)=>{const b=document.createElement("button");b.type="button";b.className="lvb"+(LVL===i+1?" on":"");b.innerHTML=e+" <small>"+(i+1)+"</small>";b.setAttribute("aria-label",T("lv")[i]);b.onclick=()=>{LVL=i+1;LS.set("tv-lv",LVL);renderHome()};lv.appendChild(b)});
+  lvStep(lv,LVE,"tv-lv");
   h.appendChild(lv);
   const di=dailyInfo(),ds=dailyStore(),db=document.createElement("button");db.type="button";db.className="dbar";
   db.innerHTML="<span>📅 "+T("daily.t",{n:di.n})+"</span><span>"+(ds.streak&&(ds.last===di.key||ds.last===dayBefore(di.key))?"🔥 "+ds.streak+" ":"")+(ds.best[di.key]!=null?"✓ "+ds.best[di.key]:"▶")+"</span>";db.onclick=startDaily;h.appendChild(db);
@@ -459,7 +464,7 @@ function retry(){if(!G||HELPER)return;begin(G.t,{lv:G.lv,seed:G.seed,daily:G.dai
 $("retryBtn").onclick=retry;
 function again(){if(!G)return;if(G.daily)return startDaily();begin(G.t,{lv:G.lv,seed:G.ch?G.seed:undefined,ch:G.ch})}
 $("againBtn").onclick=()=>{if(!G)return;if(G.daily)return startDaily();begin(G.t,{lv:G.lv})};
-window.NPLevel&&NPLevel.attach({levels:3,dupe:"#againBtn",cur:()=>G?G.lv-1:-1,go:i=>{LVL=i+1;LS.set("tv-lv",LVL);begin(G.t,{lv:i+1})},skip:()=>!!(G&&(G.daily||G.ch))});   /* lên level khi kết thúc màn (shared/levelup.js) */
+window.NPLevel&&NPLevel.attach({levels:8,dupe:"#againBtn",cur:()=>G?G.lv-1:-1,go:i=>{LVL=i+1;LS.set("tv-lv",LVL);begin(G.t,{lv:i+1})},skip:()=>!!(G&&(G.daily||G.ch))});   /* lên level khi kết thúc màn (shared/levelup.js) */
 $("shareBtn").onclick=()=>openGate(()=>{showOv("ovEnd");doShare()},"ovEnd","gt.sh");
 $("ovEnd").addEventListener("pointerdown",e=>{if(HELPER||e.target.closest("button")||performance.now()-endAt<450)return;$("againBtn").onclick()});
 $("homeBtn2").onclick=goHome;
@@ -476,7 +481,7 @@ if(window.NP){
 if(passToken()&&!HELPER)PF.loadPro(false).catch(()=>{});
 applyLang();goHome();
 if(BOOT_H){const I=(v,a,z)=>HS&&Number.isInteger(v)&&v>=a&&v<=z;
-  if(HS&&I(HS.t,0,3)&&I(HS.lv,1,3)&&I(HS.s,0,4294967295)){const go2=()=>{LVL=HS.lv;begin(HS.t,{seed:HS.s,lv:HS.lv});
+  if(HS&&I(HS.t,0,3)&&I(HS.lv,1,NLV)&&I(HS.s,0,4294967295)){const go2=()=>{LVL=HS.lv;begin(HS.t,{seed:HS.s,lv:HS.lv});
       if(Array.isArray(HS.mv))for(const m of HS.mv.slice(0,120)){if(!Array.isArray(m)||m.length!==2||G.over)break;const [a,b]=m;if(!(Number.isInteger(a)&&Number.isInteger(b)&&a>=0&&b>=0&&a<G.P.pegs&&b<G.P.pegs)||legal(G.P,G.pos,a,b))break;doMove(a,b)}
       render();updHud()},okT=HS.tk&&/^h\.\d{13}\.[\w-]{43}$/.test(HS.tk);
     if(okT)PF.loadPro(false,HS.tk).then(()=>{if(/^[a-z]{3,10}$/.test(HS.sk||"")&&PF.skins[HS.t][HS.sk])PF.skinSel[HS.t]=HS.sk}).catch(()=>{}).finally(go2);else go2()}}

@@ -98,8 +98,8 @@ body{transition:background .4s,color .4s}
 :root[data-diff="easy"][data-theme="dark"]{--bg:#0E2A22;--panel:#173b30;--line:#245443}
 :root[data-diff="mid"]{--bg:#E8F0FF;--line:#c9d8f6}
 :root[data-diff="mid"][data-theme="dark"]{--bg:#0d1a33;--panel:#16264a;--line:#223a6b}
-:root[data-diff="hard"]{--bg:#FFEBDD;--line:#f6cfb0}
-:root[data-diff="hard"][data-theme="dark"]{--bg:#2a1206;--ink:#ffeee2;--muted:#e0b79c;--panel:#40200e;--line:#5f3315}
+:root[data-diff="hard"],:root[data-diff^="l"]{--bg:#FFEBDD;--line:#f6cfb0}
+:root[data-diff="hard"][data-theme="dark"],:root[data-diff^="l"][data-theme="dark"]{--bg:#2a1206;--ink:#ffeee2;--muted:#e0b79c;--panel:#40200e;--line:#5f3315}
 /* màn chọn chuyến bay: ô ảnh lớn, không chữ */
 .tiles{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;width:100%;max-width:340px}
 .tile{position:relative;grid-column:span 2;border-radius:18px;overflow:hidden;background:var(--panel);box-shadow:var(--shadow)}
@@ -507,7 +507,7 @@ let LANG=(()=>{const q=new URLSearchParams(location.search).get("lang");if(q==="
 /* ===== NGÔN NGỮ ===== */
 const I18N={
 vi:{back:"Về màn chọn",title:"Cánh Nhỏ Phiêu Lưu",docTitle:"Cánh Nhỏ Phiêu Lưu",sound:"Âm thanh",lang:"Ngôn ngữ",pause:"Tạm dừng",resume:"Tiếp tục",how:"Cách chơi",
- "st.h":"Chọn chuyến bay","st.p":"Chọn một chuyến bay nhé","dif.h":"Độ khó","dif.easy":"Dễ","dif.mid":"Vừa","dif.hard":"Khó","best":"Kỷ lục {n}",
+ "st.h":"Chọn chuyến bay","st.p":"Chọn một chuyến bay nhé","dif.h":"Độ khó","dif.easy":"Dễ","dif.mid":"Vừa","dif.hard":"Khó","dif.l4":"Level 4","dif.l5":"Level 5","dif.l6":"Level 6","dif.l7":"Level 7","dif.l8":"Level 8","best":"Kỷ lục {n}",
  "ty.bee":"Ong Mật Về Tổ","ty.bee.d":"Né mạng nhện, hái phấn hoa, gió đổi hướng","ty.fish":"Cá Chuồn Vượt Sóng","ty.fish.d":"Chạm để nhảy, giữ tay để lặn","ty.lantern":"Đèn Lồng Trung Thu","ty.lantern.d":"Nhặt nến giữ lửa không tắt","ty.kite":"Diều Giấy","ty.kite.d":"Kéo ngón tay để diều lên xuống","ty.bug":"Bọ Rùa Phiêu Lưu","ty.dep":"Né Dép","ty.bug.d":"Giữ tay để lượn, thả tay để rơi","ty.dep.d":"Mẹ ném dép, bạn chạy, chạm để nhảy",
  "tip.bee":"Chạm để vỗ cánh · gió đang đổi hướng","tip.fish":"Chạm: nhảy lên · Giữ tay: lặn xuống","tip.lantern":"Chạm để bay · nhặt nến giữ lửa","tip.kite":"Kéo ngón tay lên xuống để điều khiển diều","tip.bug":"Giữ tay: lượn lên · Thả tay: rơi xuống","tip.dep":"Chạm: nhảy · Giữ tay: nhảy cao",
  "hud.bee":"🌬️ {w} · 🏠 Tổ {n}","hud.fish":"🫧 Ngọc trai {n}","hud.lantern":"🔥 Lửa","hud.kite":"🎀 {n} · 🌬️ {w}","hud.bug":"💧 Giọt sương {n}","hud.dep":"🥿 Dép đã né {n}",
@@ -520,7 +520,7 @@ vi:{back:"Về màn chọn",title:"Cánh Nhỏ Phiêu Lưu",docTitle:"Cánh Nh�
  "sk.kite.default":"Trời xanh","sk.kite.rice":"Đồng lúa chiều","sk.kite.beach":"Bãi biển","sk.kite.alps":"Núi tuyết","sk.kite.dusk":"Hoàng hôn rực",
  "sk.bug.default":"Khu vườn","sk.dep.default":"Phố nhà mình","sk.dep.tet":"Phố Tết","sk.dep.mua":"Phố mưa","sk.dep.dem":"Phố đêm","sk.dep.bien":"Hè biển","sk.bug.rain":"Vườn sau mưa","sk.bug.mush":"Rừng nấm","sk.bug.night":"Vườn đêm","sk.bug.autumn":"Mùa thu lá đỏ"},
 en:{back:"Back to flights",title:"Little Wings",docTitle:"Little Wings",sound:"Sound",lang:"Language",pause:"Pause",resume:"Resume",how:"How to play",
- "st.h":"Pick a flight","st.p":"Pick a flight","dif.h":"Difficulty","dif.easy":"Easy","dif.mid":"Medium","dif.hard":"Hard","best":"Best {n}",
+ "st.h":"Pick a flight","st.p":"Pick a flight","dif.h":"Difficulty","dif.easy":"Easy","dif.mid":"Medium","dif.hard":"Hard","dif.l4":"Level 4","dif.l5":"Level 5","dif.l6":"Level 6","dif.l7":"Level 7","dif.l8":"Level 8","best":"Best {n}",
  "ty.bee":"Honey Bee Home","ty.bee.d":"Dodge webs, gather pollen, shifting wind","ty.fish":"Flying Fish","ty.fish.d":"Tap to jump, hold to dive","ty.lantern":"Mid-Autumn Lantern","ty.lantern.d":"Collect candles, keep the flame","ty.kite":"Paper Kite","ty.kite.d":"Drag your finger to steer the kite","ty.bug":"Ladybug Adventure","ty.dep":"Slipper Dash","ty.bug.d":"Hold to glide, release to drop","ty.dep.d":"Mom throws slippers, you run, tap to jump",
  "tip.bee":"Tap to flap · the wind keeps changing","tip.fish":"Tap: jump · Hold: dive","tip.lantern":"Tap to fly · grab candles for flame","tip.kite":"Drag your finger up and down to steer","tip.bug":"Hold: glide up · Release: drop","tip.dep":"Tap: jump · Hold: jump higher",
  "hud.bee":"🌬️ {w} · 🏠 Hive {n}","hud.fish":"🫧 Pearls {n}","hud.lantern":"🔥 Flame","hud.kite":"🎀 {n} · 🌬️ {w}","hud.bug":"💧 Dew {n}","hud.dep":"🥿 Slippers dodged {n}",
@@ -543,6 +543,8 @@ const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const W=360,BX=96,HR=13;let H=480;
 const TYPES=["bee","fish","lantern","kite","bug","dep"];
 const DIFF={easy:{hearts:4,sp:.85,gap:1.3,mult:1,wind:.55,drain:.7,rain:.65,id:"easy"},mid:{hearts:3,sp:1,gap:1.08,mult:1.5,wind:1,drain:1,rain:1,id:"mid"},hard:{hearts:2,sp:1.2,gap:.92,mult:2,wind:1.45,drain:1.3,rain:1.35,id:"hard"}};
+/* level 4-8 (chỉ mở qua popup Chọn level): nhanh hơn, ít khoảng hở, gió/mưa/hao pin nhiều hơn, còn 1 tim ở level 7-8 */
+[[2,1.3,.86,2.3,1.6,1.45,1.5],[2,1.4,.8,2.6,1.8,1.6,1.7],[1,1.5,.75,3,2,1.8,1.9],[1,1.6,.7,3.4,2.2,2,2.1],[1,1.7,.66,4,2.4,2.2,2.3]].forEach((x,i)=>{DIFF["l"+(i+4)]={hearts:x[0],sp:x[1],gap:x[2],mult:x[3],wind:x[4],drain:x[5],rain:x[6],id:"l"+(i+4)}});
 const PF=window.PF={W,BX,t,pickOf,types:{},pro:null,order:TYPES,S:null,dim:{W:360,H:480},safe:{top:0,bottom:0,pad:34},skins:{},skinSel:{},
   catalog:{bee:["default","sakura","lavender","royal","firefly"],fish:["default","coral","sunset","arctic","glow"],lantern:["default","hoian","moon","festival","snow"],kite:["default","rice","beach","alps","dusk"],bug:["default","rain","mush","night","autumn"],dep:["default","tet","mua","dem","bien"]}};
 PF.skinSel=LS.get("cw-skin",{});
@@ -877,9 +879,9 @@ function applyLayout(l){PF.safe=l==="full"?{top:112,bottom:64,pad:34}:l==="windo
 PF.applyLayout=applyLayout;
 /* Thử thách Night Pass (khung chung shared/npchallenge.js): seed cố định; ngưỡng 1000 là mức "giỏi" của game hoặc ƯỚC LƯỢNG (chưa đo bằng người chơi) */
 window.NP_CHALLENGE={id:"cozy-wings",start(){if(!PF.types.bee)return false;diff="mid";applyDiffTheme();startRound("bee")},judge(r){return !!r&&r.score>=1000&&!!r.extra&&r.extra.type==="bee"&&r.extra.diff==="mid"}};
-/* lên level cuối màn (shared/levelup.js): trần 3 = Dễ/Vừa/Khó có sẵn; ván hôm nay và thách đấu không dùng */
-const CW_LV=["easy","mid","hard"];
-window.NPLevel&&NPLevel.attach({levels:3,dupe:"#againBtn",cur:()=>PF.S&&PF.S.D?CW_LV.indexOf(PF.S.D.id):-1,skip:()=>!!(CH||(PF.S&&PF.S.daily)),go:i=>{diff=CW_LV[i];LS.set("cw-diff",diff);applyDiffTheme();startRound(PF.cur||"letters")}});
+/* lên level cuối màn (shared/levelup.js): trần 8 = Dễ/Vừa/Khó + 5 level thêm (l4-l8); ván hôm nay và thách đấu không dùng */
+const CW_LV=["easy","mid","hard","l4","l5","l6","l7","l8"];
+window.NPLevel&&NPLevel.attach({levels:CW_LV.length,dupe:"#againBtn",cur:()=>PF.S&&PF.S.D?CW_LV.indexOf(PF.S.D.id):-1,skip:()=>!!(CH||(PF.S&&PF.S.daily)),go:i=>{diff=CW_LV[i];LS.set("cw-diff",diff);applyDiffTheme();startRound(PF.cur||"letters")}});
 function startRound(type,resume,opts){
   if(!PF.types[type])return;audio();chBeat=false;
   const sk=curSkin(type);applyLayout(sk?sk.layout:"classic");window.NPWide&&NPWide.skin(sk,type+":"+(PF.skinSel[type]||"default"));
@@ -934,7 +936,7 @@ const subUrl=()=>"../../../subscribe.html?from="+encodeURIComponent("cozyplay/in
 const ICO={bee:"🐝",fish:"🐟",lantern:"🏮",kite:"🪁",bug:"🐞",dep:"🥿"};
 const DIFF_ICO={easy:"🌱",mid:"⚡",hard:"🔥"};
 function applyDiffTheme(){document.documentElement.dataset.diff=diff}
-function renderDiff(){const box=$("diffs");box.textContent="";applyDiffTheme();["easy","mid","hard"].forEach(id=>{const b=document.createElement("button");b.type="button";b.className="dif"+(diff===id?" on":"");b.textContent=DIFF_ICO[id];b.setAttribute("aria-label",t("dif."+id));b.setAttribute("aria-pressed",diff===id);b.onclick=()=>{diff=id;LS.set("cw-diff",id);renderDiff();renderCards()};box.appendChild(b)})}
+function renderDiff(){const box=$("diffs");box.textContent="";applyDiffTheme();["easy","mid","hard"].forEach(id=>{const b=document.createElement("button");b.type="button";b.className="dif"+(diff===id||(id==="hard"&&diff[0]==="l")?" on":"");b.textContent=DIFF_ICO[id];b.setAttribute("aria-label",t("dif."+id));b.setAttribute("aria-pressed",diff===id);b.onclick=()=>{diff=id;LS.set("cw-diff",id);renderDiff();renderCards()};box.appendChild(b)})}
 const STRIP_MQ=matchMedia("(max-width:520px) and (orientation:portrait) and (max-height:760px)");   /* điện thoại thấp: danh sách chuyến bay là dải trượt ngang, thẻ lịch nằm RIÊNG phía trên dải */
 if(STRIP_MQ.addEventListener)STRIP_MQ.addEventListener("change",()=>{try{renderCards()}catch(e){}});
 function renderCards(){

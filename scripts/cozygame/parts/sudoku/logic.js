@@ -1,19 +1,21 @@
 /* Sudoku — luật chơi: chạm ô, bấm số để điền (hoặc ghi chú ✏️). Sai hiện đỏ, tính lỗi. Điền đúng hết là thắng. */
-const CFG = TYPEDEF;
+const CFG = TYPEDEF, SD_MAX = 8;   /* 8 level: 0-2 = chip Dễ/Thường/Khó; 3-7 = ít gợi ý hơn, ít 💡, đua giờ ngắn hơn (mở qua popup Chọn level) */
+const lvInfo = i => LVN[i] || ["🔥", "Cấp " + (i + 1), "Level " + (i + 1)];
 const rankIdx = n => n >= 2600 ? 4 : n >= 1900 ? 3 : n >= 1300 ? 2 : n >= 700 ? 1 : 0;
-let DIF = (() => { const v = LS.get("sd-lv", 1); return v === 0 || v === 1 || v === 2 ? v : 1; })();
+let DIF = (() => { const v = LS.get("sd-lv", 1); return Number.isInteger(v) && v >= 0 && v < SD_MAX ? v : 1; })();
+const D_HINTS = lv => lv >= 6 ? 1 : lv >= 4 ? 2 : 3;
 const lvOf = (seed, mode) => mode === "free" ? DIF : seed % 3;
 const okCount = D => D.val.reduce((a, v, i) => a + (v && v === D.sol[i] && !D.puz[i] ? 1 : 0), 0);
 const scoreOf = D => D.reason === "win" ? D.final : okCount(D) * 5;
-const remain = D => D.T.time ? Math.max(0, 900 - D.time) : 0;
+const remain = D => D.T.time ? Math.max(0, 900 - 50 * Math.max(0, D.lv - 2) - D.time) : 0;
 function newGame(seed, mode, t, ch) {
-  const lv = lvOf(seed, mode); seed = seed - seed % 3 + lv; const P = genSudoku(seed, t === 1 ? 1 : t === 2 ? 2 : 0, lv);
-  const n = P.T.N * P.T.N, D = { seed, mode, t, lv, T: Object.assign({}, P.T, { time: TYPEDEF[t].time }), N: P.T.N, P: P.P, sol: P.sol, puz: P.puz, val: P.puz.slice(), notes: new Array(n).fill(0), sel: -1, notesOn: false, mistakes: 0, hints: 3, used: 0,
+  const lv = lvOf(seed, mode); seed = seed - seed % 3 + Math.min(lv, 2); const P = genSudoku(seed, t === 1 ? 1 : t === 2 ? 2 : 0, lv);
+  const n = P.T.N * P.T.N, D = { seed, mode, t, lv, T: Object.assign({}, P.T, { time: TYPEDEF[t].time }), N: P.T.N, P: P.P, sol: P.sol, puz: P.puz, val: P.puz.slice(), notes: new Array(n).fill(0), sel: -1, notesOn: false, mistakes: 0, hints: D_HINTS(lv), used: 0,
     ch: ch || null, fx: [], shake: 0, flash: 0, final: 0, over: false, reason: "end", time: 0, dur: 1e9, beat: false };
   return D;
 }
 function winNow(D, quiet) {
-  if (D.over) return; const base = [600, 960, 1320][D.lv] * (D.T.diag ? 1.15 : D.T.N === 6 ? .7 : 1), par = [600, 900, 1200][D.lv];
+  if (D.over) return; const base = (600 + 360 * D.lv) * (D.T.diag ? 1.15 : D.T.N === 6 ? .7 : 1), par = 600 + 300 * D.lv;
   D.final = Math.max(100, Math.round(base + (D.T.time ? Math.ceil(remain(D)) * 1.5 : Math.max(0, par - D.time) * 1.2) - D.mistakes * 40 - D.used * 60)); D.over = true; D.reason = "win"; D.sel = -1; if (quiet) return;
   sfx.end(); NPJuice.confetti($("play"), 24, CONF); setTimeout(() => { if (G === D) finish(D); }, 900);
 }
@@ -52,10 +54,10 @@ function HUD(D) {
   return [[D.T.time ? Math.ceil(remain(D)) + "s" : mmss(D.time), "tm"], [D.mistakes, "er"], [left, "ex"]];
 }
 function endChips(D) {
-  const n = scoreOf(D), lv = LVN[D.lv];
+  const n = scoreOf(D), lv = lvInfo(D.lv);
   return [lv[0] + " " + L2([lv[1], lv[2]]), TYPES[D.t][0] + " " + L2([TYPES[D.t][1], TYPES[D.t][2]]), "✕ " + D.mistakes, "💡 " + D.used, (D.prevBest > 0 && n > D.prevBest) ? T("rec") : ""];
 }
-const shareT = D => L2([LVN[D.lv][1], LVN[D.lv][2]]) + " · " + L2([TYPES[D.t][1], TYPES[D.t][2]]);
+const shareT = D => L2([lvInfo(D.lv)[1], lvInfo(D.lv)[2]]) + " · " + L2([TYPES[D.t][1], TYPES[D.t][2]]);
 function snapP(D) { return D.time > 1 || D.val.some((v, i) => v !== D.puz[i]) ? { v: D.val.join(""), t: Math.round(D.time), m: D.mistakes, h: D.hints, u: D.used } : null; }
 function restoreP(D, p) {
   const s = String(p.v || ""); if (s.length !== D.val.length) return;
@@ -85,6 +87,6 @@ function renderLevels() {
 new MutationObserver(() => { if (!$("home").hidden) renderLevels(); }).observe($("home"), { attributes: true, attributeFilter: ["hidden"] });
 document.addEventListener("click", e => { if (e.target.closest && e.target.closest("#bLang")) setTimeout(renderLevels, 0); });
 renderLevels();
-/* lên level cuối màn (shared/levelup.js): trần 3 = 3 độ khó đã cân chỉnh; chỉ ván thắng mới mở level tiếp */
-window.NPLevel && NPLevel.attach({ levels: 3, cur: () => G ? G.lv : -1, won: () => !!G && G.reason === "win", skip: () => !G || G.mode !== "free" || !!G.ch,
+/* lên level cuối màn (shared/levelup.js): trần 8 level; chỉ ván thắng mới mở level tiếp */
+window.NPLevel && NPLevel.attach({ levels: SD_MAX, cur: () => G ? G.lv : -1, won: () => !!G && G.reason === "win", skip: () => !G || G.mode !== "free" || !!G.ch,
   go: i => { DIF = i; LS.set("sd-lv", i); if (PF.pro && PF.pro.trial) PF.lockPro(); begin(newSeed(), "free", G ? G.t : TY, null); } });

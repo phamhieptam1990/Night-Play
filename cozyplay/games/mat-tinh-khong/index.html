@@ -166,7 +166,7 @@ function proFx(n){const h=$("play");if(!h)return;for(let i=0;i<(n>=12?2:1);i++){
 const SF=n=>n;
 
 let W=360,H=360,SC=1;const ctx=cv.getContext("2d");
-const CFG=[{mode:"time",dur:60,pen:5,kind:"l"},{mode:"time",dur:60,pen:5,kind:"h",spin:1},{mode:"life",lives:3,per:12,kind:"l",flick:1},{mode:"time",dur:30,pen:3,kind:"l",shuf:4}];
+const CFG=[{mode:"time",dur:60,pen:5,kind:"l",dm:1},{mode:"time",dur:60,pen:5,kind:"h",spin:1,dm:1},{mode:"life",lives:3,per:12,kind:"l",flick:1,dm:1},{mode:"time",dur:30,pen:3,kind:"l",shuf:4,dm:1}];
 const SPIN=.45;const angOf=D=>D&&D.C.spin?D.time*SPIN:0;
 const colsOf=L=>Math.min(9,2+Math.floor(L/3));
 const pctOf=n=>Math.min(99,Math.round(100*(1-Math.exp(-n/12))));
@@ -177,7 +177,7 @@ function layoutTiles(kind,n,R){const out=[],m=Math.min(W,H);
  else if(kind==="wall"){const w=Math.min(W*.96/(n+.5),120),h=Math.min(H*.92/n/1.07,w*.68),tw=w*(n+.5),th=h*1.07*n,x0=(W-tw)/2,y0=(H-th)/2;for(let row=0;row<n;row++)for(let c=0;c<n;c++)out.push({x:x0+w*(c+.5+(row%2?.5:0)),y:y0+h*1.07*(row+.5),r:Math.hypot(w,h)/2,w:w*.94,h:h*.94})}
  else{const g=m*.94/n,x0=(W-g*n)/2,y0=(H-g*n)/2;for(let row=0;row<n;row++)for(let c=0;c<n;c++)out.push({x:x0+g*(c+.5),y:y0+g*(row+.5),r:g/2,w:g*.9,h:g*.9})}
  return out}
-function mkLevel(D,L){const R=sub(D.seed,100+L),K=D.C.kind,n=colsOf(L),h=Math.floor(R()*360),s=K==="h"?68:52+Math.floor(R()*22),l=K==="h"?52:40+Math.floor(R()*20),d=K==="h"?Math.max(2,56*Math.pow(.93,L-1)):Math.max(1.5,24*Math.pow(.925,L-1));
+function mkLevel(D,L){const R=sub(D.seed,100+L),K=D.C.kind,n=colsOf(L),h=Math.floor(R()*360),s=K==="h"?68:52+Math.floor(R()*22),l=K==="h"?52:40+Math.floor(R()*20),d=K==="h"?Math.max(2,56*Math.pow(.93,L-1)*(D.C.dm||1)):Math.max(1.5,24*Math.pow(.925,L-1)*(D.C.dm||1));
  const tiles=layoutTiles(skinOf().layout||"grid",n,R),odd=Math.floor(R()*tiles.length),col="hsl("+h+","+s+"%,"+l+"%)",oc=K==="h"?"hsl("+((h+d)%360)+","+s+"%,"+l+"%)":"hsl("+h+","+s+"%,"+Math.round((l+(l>52?-d:d))*10)/10+"%)";
  D.lv={L,n,tiles,odd,col,oc,d};D.lvStart=D.time;D.levT=0}
 function newGame(seed,mode,t,ch){const C=CFG[t],D={seed,mode,t,C,ch:ch||null,L:1,lives:C.lives||0,pen:0,errs:0,over:false,reason:"end",time:0,dur:1e9,beat:false,maxCombo:0,combo:0,lv:null,lvStart:0,levT:0,flash:0,rev:null,shake:0,fx:[]};mkLevel(D,1);return D}
@@ -296,8 +296,8 @@ $("bLang").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lan
 $("bSnd").onclick=()=>{if(window.NPAudio)NPAudio.set(!NPAudio.get());$("bSnd").textContent=snd()?"🔊":"🔇"};
 $("bDaily").onclick=()=>begin(fnv(GID+"|"+dayKey()),"daily",0,null);$("bFree").onclick=()=>begin(newSeed(),"free",TY,null);
 
-/* ===== LÊN LEVEL (sinh từ spec.level; trần 4 level, tham số bị kẹp) ===== */
-const LVU_MAX=4,LVU_K="mt-lvu",LVU_R=[["dur","mul",-0.1,30],["per","mul",-0.08,8]],CFG_0=JSON.parse(JSON.stringify(CFG));
+/* ===== LÊN LEVEL (sinh từ spec.level; trần 10 level, tham số bị kẹp) ===== */
+const LVU_MAX=10,LVU_K="mt-lvu",LVU_R=[["dur","mul",-0.06,30],["per","mul",-0.06,6],["dm","mul",-0.05,0.6],["shuf","mul",-0.05,2]],CFG_0=JSON.parse(JSON.stringify(CFG));
 let LVU=Math.max(0,Math.min(LVU_MAX-1,Math.floor(+LS.get(LVU_K,0))||0)),LPLAY=0;
 function applyLvu(L){CFG.forEach((c,i)=>{const o=CFG_0[i];for(const k in o)c[k]=o[k];LVU_R.forEach(([k,m,s,lim])=>{const f=v=>{if(typeof v!=="number"||v<=0)return v;let x=m==="mul"?v*(1+s*L):v+s*L;x=s<0?Math.max(x,Math.min(v,lim)):Math.min(x,Math.max(v,lim));return Math.round(x*100)/100};if(Array.isArray(o[k]))c[k]=o[k].map(f);else if(typeof o[k]==="number")c[k]=f(o[k])})})}
 const begin_0=begin;begin=function(seed,mode,t,ch){const L=mode==="free"&&!ch?LVU:0;applyLvu(L);LPLAY=L;return begin_0.apply(this,arguments)};

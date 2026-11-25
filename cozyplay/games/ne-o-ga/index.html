@@ -333,8 +333,8 @@ $("bLang").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lan
 $("bSnd").onclick=()=>{if(window.NPAudio)NPAudio.set(!NPAudio.get());$("bSnd").textContent=snd()?"🔊":"🔇"};
 $("bDaily").onclick=()=>begin(fnv(GID+"|"+dayKey()),"daily",0,null);$("bFree").onclick=()=>begin(newSeed(),"free",TY,null);
 
-/* ===== LÊN LEVEL (sinh từ spec.level; trần 4 level, tham số bị kẹp) ===== */
-const LVU_MAX=4,LVU_K="og-lvu",LVU_R=[["v0","mul",0.07,340],["v1","mul",0.07,620],["carP","add",0.06,0.6]],CFG_0=JSON.parse(JSON.stringify(CFG));
+/* ===== LÊN LEVEL (sinh từ spec.level; trần 10 level, tham số bị kẹp) ===== */
+const LVU_MAX=10,LVU_K="og-lvu",LVU_R=[["v0","mul",0.05,420],["v1","mul",0.05,760],["carP","add",0.04,0.7]],CFG_0=JSON.parse(JSON.stringify(CFG));
 let LVU=Math.max(0,Math.min(LVU_MAX-1,Math.floor(+LS.get(LVU_K,0))||0)),LPLAY=0;
 function applyLvu(L){CFG.forEach((c,i)=>{const o=CFG_0[i];for(const k in o)c[k]=o[k];LVU_R.forEach(([k,m,s,lim])=>{const f=v=>{if(typeof v!=="number"||v<=0)return v;let x=m==="mul"?v*(1+s*L):v+s*L;x=s<0?Math.max(x,Math.min(v,lim)):Math.min(x,Math.max(v,lim));return Math.round(x*100)/100};if(Array.isArray(o[k]))c[k]=o[k].map(f);else if(typeof o[k]==="number")c[k]=f(o[k])})})}
 const begin_0=begin;begin=function(seed,mode,t,ch){const L=mode==="free"&&!ch?LVU:0;applyLvu(L);LPLAY=L;return begin_0.apply(this,arguments)};

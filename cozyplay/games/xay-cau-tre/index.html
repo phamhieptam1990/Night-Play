@@ -173,7 +173,7 @@ const CFG=[{veh:[0,1,2,3],bud:22,cap:1},{veh:[0,1,2,3],bud:26,cap:1,wide:1,pier:
 const RIGHT=["🧍","🚵"];const vEm=i=>(isProSk()&&skinOf().veh&&skinOf().veh[i])||VEH[i][0];
 const emj="'Apple Color Emoji','Segoe UI Emoji',sans-serif";
 function geoOf(D){const sk=skinOf(),g=Object.assign({lx:60,rx:300,ly:220,ry:220},sk.geo||{});if(D&&D.C.wide){g.lx=40;g.rx=320}return g}
-function initNodes(D){const g=geoOf(D);D.g=g;D.nodes=[{x:g.lx,y:g.ly,fix:1},{x:g.lx,y:g.ly+40,fix:1},{x:g.rx,y:g.ry,fix:1},{x:g.rx,y:g.ry+40,fix:1}];if(D.C.pier)D.nodes.push({x:Math.round((g.lx+g.rx)/2/GR)*GR,y:Math.max(g.ly,g.ry)+120,fix:1});D.mem=[];D.bud=D.C.bud;D.hl=-1;D.rat=null;D.sel=null;D.hovEnd=null;D.wv=null}
+function initNodes(D){const g=geoOf(D);D.g=g;D.nodes=[{x:g.lx,y:g.ly,fix:1},{x:g.lx,y:g.ly+40,fix:1},{x:g.rx,y:g.ry,fix:1},{x:g.rx,y:g.ry+40,fix:1}];if(D.C.pier)D.nodes.push({x:Math.round((g.lx+g.rx)/2/GR)*GR,y:Math.max(g.ly,g.ry)+120,fix:1});D.mem=[];D.bud=Math.round(D.C.bud);D.hl=-1;D.rat=null;D.sel=null;D.hovEnd=null;D.wv=null}
 function newGame(seed,mode,t,ch){const C=CFG[t],R=sub(seed,1),vw=C.veh.map(i=>VEH[i][3]*(C.wmul||1)*(.92+R()*.16));
  const D={seed,mode,t,C,ch:ch||null,vw,st:"build",attempt:1,passedBest:0,passedNow:0,won:false,over:false,reason:"end",time:0,dur:1e9,beat:false,maxCombo:0,vi:0,vs:0,wait:0,acc:0,drag:null,fx:[],brk:-1,ft:0};initNodes(D);return D}
 const scoreOf=D=>Math.max(0,Math.max(D.passedBest,D.passedNow)*300+(D.won?D.bud*35:0)-(D.attempt-1)*60);
@@ -360,8 +360,8 @@ $("bLang").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lan
 $("bSnd").onclick=()=>{if(window.NPAudio)NPAudio.set(!NPAudio.get());$("bSnd").textContent=snd()?"🔊":"🔇"};
 $("bDaily").onclick=()=>begin(fnv(GID+"|"+dayKey()),"daily",0,null);$("bFree").onclick=()=>begin(newSeed(),"free",TY,null);
 
-/* ===== LÊN LEVEL (sinh từ spec.level; trần 4 level, tham số bị kẹp) ===== */
-const LVU_MAX=4,LVU_K="xc-lvu",LVU_R=[["bud","mul",-0.04,19],["cap","mul",-0.03,0.82]],CFG_0=JSON.parse(JSON.stringify(CFG));
+/* ===== LÊN LEVEL (sinh từ spec.level; trần 10 level, tham số bị kẹp) ===== */
+const LVU_MAX=10,LVU_K="xc-lvu",LVU_R=[["bud","mul",-0.02,18],["cap","mul",-0.035,0.55],["wmul","mul",0.03,1.6]],CFG_0=JSON.parse(JSON.stringify(CFG));
 let LVU=Math.max(0,Math.min(LVU_MAX-1,Math.floor(+LS.get(LVU_K,0))||0)),LPLAY=0;
 function applyLvu(L){CFG.forEach((c,i)=>{const o=CFG_0[i];for(const k in o)c[k]=o[k];LVU_R.forEach(([k,m,s,lim])=>{const f=v=>{if(typeof v!=="number"||v<=0)return v;let x=m==="mul"?v*(1+s*L):v+s*L;x=s<0?Math.max(x,Math.min(v,lim)):Math.min(x,Math.max(v,lim));return Math.round(x*100)/100};if(Array.isArray(o[k]))c[k]=o[k].map(f);else if(typeof o[k]==="number")c[k]=f(o[k])})})}
 const begin_0=begin;begin=function(seed,mode,t,ch){const L=mode==="free"&&!ch?LVU:0;applyLvu(L);LPLAY=L;return begin_0.apply(this,arguments)};

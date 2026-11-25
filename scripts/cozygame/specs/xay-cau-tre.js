@@ -34,7 +34,7 @@ module.exports = {
       sk: { basic: ["Country canal", "Country canal"], delta: ["Mekong canal", "Mekong canal"], mount: ["Mountain gorge", "Mountain gorge"], paddy: ["Rice terraces", "Rice terraces"], city: ["Saigon canal", "Saigon canal"] } }
   },
   sfx: `{add:()=>tone(500,.05,"triangle",.06),rem:()=>tone(260,.07,"sine",.06),go:()=>tone(420,.14,"sawtooth",.06),ok:()=>{[660,880,1100].forEach((f,i)=>tone(f,.1,"triangle",.09,i*.06))},bad:()=>{tone(110,.4,"sawtooth",.1);tone(70,.5,"square",.08,.05)},end:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.09,i*.09)),combo:n=>{const b=440*Math.pow(1.122,Math.min(n/3,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.1,"triangle",.09,i*.05))}}`,
-  level: { max: 4, rules: [["bud","mul",-.04,19],["cap","mul",-.03,.82]] },   /* lên level cuối màn: scripts/cozygame/levelgen.js */
+  level: { max: 10, rules: [["bud","mul",-.02,18],["cap","mul",-.035,.55],["wmul","mul",.03,1.6]] },   /* lên level cuối màn: scripts/cozygame/levelgen.js */
   gameJs: String.raw`
 let W=360,H=420,SC=1;const ctx=cv.getContext("2d");
 const GR=20,LMAX=60,TC=12,CC=12,LREF=40,MAXNODE=64;
@@ -43,7 +43,7 @@ const CFG=[{veh:[0,1,2,3],bud:22,cap:1},{veh:[0,1,2,3],bud:26,cap:1,wide:1,pier:
 const RIGHT=["🧍","🚵"];const vEm=i=>(isProSk()&&skinOf().veh&&skinOf().veh[i])||VEH[i][0];
 const emj="'Apple Color Emoji','Segoe UI Emoji',sans-serif";
 function geoOf(D){const sk=skinOf(),g=Object.assign({lx:60,rx:300,ly:220,ry:220},sk.geo||{});if(D&&D.C.wide){g.lx=40;g.rx=320}return g}
-function initNodes(D){const g=geoOf(D);D.g=g;D.nodes=[{x:g.lx,y:g.ly,fix:1},{x:g.lx,y:g.ly+40,fix:1},{x:g.rx,y:g.ry,fix:1},{x:g.rx,y:g.ry+40,fix:1}];if(D.C.pier)D.nodes.push({x:Math.round((g.lx+g.rx)/2/GR)*GR,y:Math.max(g.ly,g.ry)+120,fix:1});D.mem=[];D.bud=D.C.bud;D.hl=-1;D.rat=null;D.sel=null;D.hovEnd=null;D.wv=null}
+function initNodes(D){const g=geoOf(D);D.g=g;D.nodes=[{x:g.lx,y:g.ly,fix:1},{x:g.lx,y:g.ly+40,fix:1},{x:g.rx,y:g.ry,fix:1},{x:g.rx,y:g.ry+40,fix:1}];if(D.C.pier)D.nodes.push({x:Math.round((g.lx+g.rx)/2/GR)*GR,y:Math.max(g.ly,g.ry)+120,fix:1});D.mem=[];D.bud=Math.round(D.C.bud);D.hl=-1;D.rat=null;D.sel=null;D.hovEnd=null;D.wv=null}
 function newGame(seed,mode,t,ch){const C=CFG[t],R=sub(seed,1),vw=C.veh.map(i=>VEH[i][3]*(C.wmul||1)*(.92+R()*.16));
  const D={seed,mode,t,C,ch:ch||null,vw,st:"build",attempt:1,passedBest:0,passedNow:0,won:false,over:false,reason:"end",time:0,dur:1e9,beat:false,maxCombo:0,vi:0,vs:0,wait:0,acc:0,drag:null,fx:[],brk:-1,ft:0};initNodes(D);return D}
 const scoreOf=D=>Math.max(0,Math.max(D.passedBest,D.passedNow)*300+(D.won?D.bud*35:0)-(D.attempt-1)*60);

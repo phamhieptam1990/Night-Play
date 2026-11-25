@@ -1,7 +1,8 @@
 /* Săn Chữ Ẩn — ô chữ tìm từ (word search). Sinh lưới theo hạt giống: đặt từ vào các hướng cho phép, ô còn lại điền chữ ngẫu nhiên. */
 const W = 360, H = 520, PAD = 12, MAXG = 336;
 const DIRS = [[0, 1], [1, 0], [1, 1], [-1, 1], [0, -1], [-1, 0], [-1, -1], [1, -1]];   /* [dòng, cột]: → ↓ ↘ ↗ ← ↑ ↖ ↙ */
-const LVC = [{ n: 8, k: 6, nd: 2 }, { n: 10, k: 8, nd: 4 }, { n: 12, k: 10, nd: 8 }];
+const LVC = [{ n: 8, k: 6, nd: 2 }, { n: 10, k: 8, nd: 4 }, { n: 12, k: 10, nd: 8 },
+  { n: 13, k: 11, nd: 8 }, { n: 13, k: 12, nd: 8 }, { n: 14, k: 13, nd: 8 }, { n: 14, k: 14, nd: 8 }, { n: 14, k: 14, nd: 8 }];   /* level 3-7: lưới tới 14×14, tới 14 từ, nhiễu chữ cái dày dần (mô hình 360px: ô ≥ 24px) */
 const LVN = [["🌱", "Dễ", "Easy"], ["🌿", "Thường", "Normal"], ["🔥", "Khó", "Hard"]];
 const CFG = [{ time: 0, hid: 0, storm: 0 }, { time: 0, hid: 1, storm: 0 }, { time: 1, hid: 0, storm: 0 }, { time: 0, hid: 0, storm: 25 }];
 /* [từ tiếng Anh, nghĩa tiếng Việt] — chủ đề free "Trở lại trường" */
@@ -32,7 +33,7 @@ function genPuzzle(seed, lv, sk) {
     }
     if (words.length < L.k) continue;
     const used = new Set(words.flatMap(x => x.cells)), F = sub(seed, 500 + att), A = "ABCDEFGHIJKLMNOPQRSTUVWXYZ", ink = words.map(x => x.w).join("");
-    for (let i = 0; i < n * n; i++) if (!grid[i] && inside(shape, Math.floor(i / n), i % n, n)) grid[i] = F() < .35 ? ink[Math.floor(F() * ink.length)] : A[Math.floor(F() * 26)];
+    for (let i = 0; i < n * n; i++) if (!grid[i] && inside(shape, Math.floor(i / n), i % n, n)) grid[i] = F() < .35 + .04 * Math.max(0, lv - 2) ? ink[Math.floor(F() * ink.length)] : A[Math.floor(F() * 26)];
     return { n, grid, words, used };
   }
   return null;

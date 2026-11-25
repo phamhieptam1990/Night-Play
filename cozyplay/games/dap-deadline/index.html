@@ -529,6 +529,8 @@ DD.modes.classic={id:"classic",title:()=>pk("end.title"),timeLabel:()=>t("left")
 DD.diffs.normal={id:"normal",stay:1,gap:1,score:1};
 /* ĐỘ KHÓ: MỞ CHO MỌI NGƯỜI (không cần Night Pass): Dễ / Thường / Khó / Điên. Nhân điểm theo độ khó (0,8 / 1 / 1,3 / 1,7) */
 DD.diffs.easy={id:"easy",stay:1.25,gap:1.15,score:.8};DD.diffs.hard={id:"hard",stay:.82,gap:.85,score:1.3};DD.diffs.rage={id:"rage",stay:.65,gap:.7,score:1.7};
+/* level 5-8 (chỉ mở qua popup Chọn level, không có chip): sâu ở lại ngắn dần, ra dày dần, điểm nhân tăng (≤2,3 để không vượt trần điểm máy chủ) */
+[[.58,.62,1.85],[.52,.55,2],[.47,.5,2.15],[.42,.45,2.3]].forEach((x,i)=>{DD.diffs["lv"+(i+5)]={id:"lv"+(i+5),stay:x[0],gap:x[1],score:x[2]}});
 let mode=DD.modes.classic,diff=DD.diffs.normal,runT0=0;
 DD.pk=(k,pr)=>pk(k,pr);
 DD.g={get PESTS(){return PESTS},get COFFEE(){return COFFEE},ROUND,$,cells,say:t=>say(t),render:()=>render(),end:()=>end(),
@@ -804,8 +806,8 @@ function resumeRound(by){
   paused=false;pausedBy=null;runT0+=performance.now()-pauseT;$("pauseOv").hidden=true;pauseTxt(false);clearInterval(tickT);tickT=setInterval(tick,100);spawn();hudPulse(2500);syncPauseBtn();
 }
 let endInfo=null,ovKind="start",endAtDD=0;
-/* lên level cuối màn (shared/levelup.js): trần 4 = Dễ/Thường/Khó/Cực khó có sẵn; chế độ khoá độ khó và thách đấu không dùng */
-const DD_LV=["easy","normal","hard","rage"];
+/* lên level cuối màn (shared/levelup.js): trần 8 = Dễ/Thường/Khó/Cực khó + 4 level thêm (lv5-lv8); chế độ khoá độ khó và thách đấu không dùng */
+const DD_LV=["easy","normal","hard","rage","lv5","lv6","lv7","lv8"];
 window.NPLevel&&NPLevel.attach({levels:DD_LV.length,host:"#overlay",dupe:"#againBtn",cur:()=>mode.lockDiff?-1:DD_LV.indexOf(diff.id),skip:()=>!!(mode.lockDiff||(typeof CH!=="undefined"&&CH)||(window.NP&&NP.helper)),go:i=>{DD.sel.diff=DD_LV[i];start()}});
 function end(){
   endSecs=roundSecs();endMood=mood;
@@ -1086,7 +1088,7 @@ DD.fetchTicket=function(){   /* vé cho bạn bè chơi hộ; tự thử lại k
 addEventListener("online",()=>{if(!DD.ticket)DD.fetchTicket();if(!DD.pro&&passToken()&&!(window.NP&&NP.helper))DD.loadPro(false).catch(()=>{})});
 setInterval(()=>{if(!DD.ticket||Date.now()-(DD.ticketAt||0)>20*36e5)DD.fetchTicket()},60000);
 DD.lockPro=function(){   /* hết lượt dùng thử: trả về bản miễn phí */
-  for(const k of ["endless","daily","boss"])delete DD.modes[k];for(const k of ["easy","hard","rage"])delete DD.diffs[k];delete DD.skins.cafe;delete DD.skins.retro;delete DD.skins.neon;delete DD.skins.sakura;for(const k of ["g4","g5","g6"])delete DD.grids[k];delete DD.packs.animals;delete DD.packs.lover;
+  for(const k of ["endless","daily","boss"])delete DD.modes[k];for(const k of ["easy","hard","rage","lv5","lv6","lv7","lv8"])delete DD.diffs[k];delete DD.skins.cafe;delete DD.skins.retro;delete DD.skins.neon;delete DD.skins.sakura;for(const k of ["g4","g5","g6"])delete DD.grids[k];delete DD.packs.animals;delete DD.packs.lover;
   DD.pro=null;DD.hooks.onHit=null;DD.hooks.onEnd=null;if(DD.baseThwack)window.thwack=DD.baseThwack;DD.want=Object.assign(DD.want||{},{mode:"classic",diff:"normal",skin:"default",grid:"g3",pack:"deadline"});DD.refresh();
 };
 $("setupBtn").addEventListener("click",()=>{ if(running){say(t("busy"));return} DD.refresh();openSheet("setup") });

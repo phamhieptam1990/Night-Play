@@ -19,6 +19,6 @@ const track = (f, k) => { try { fetch("/api/paywall", { method: "POST", headers:
 const subUrl = () => "../../../subscribe.html?from=" + encodeURIComponent("popplay/index.html#sudoku-con-vat") + "&plan=month";
 const passToken = () => { try { const p = JSON.parse(localStorage.getItem("pass")); return p && p.token; } catch (e) { return null; } };
 const today = () => new Date(Date.now() + 252e5).toISOString().slice(0, 10);
-const LVE = ["🌱", "🌿", "🌳"];
+const LVE = ["🌱", "🌿", "🌳"], LV_MAX = 8, lvIcon = l => LVE[l - 1] || "🔥";   /* cấp 1-3 = chip ở màn chọn; cấp 4-8 = mở qua popup Chọn level (ít gợi ý hơn) */
 const TY_ICON = ["🐶", "🦊", "🐱", "🦁"];
 const MAXS = 300;

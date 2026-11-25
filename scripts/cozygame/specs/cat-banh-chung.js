@@ -35,7 +35,11 @@ module.exports = {
       sk: { basic: ["Tet kitchen", "Tet kitchen"], pizza: ["Pizza parlour", "Pizza parlour"], ninja: ["Ninja dojo", "Ninja dojo"], lab: ["Laser lab", "Laser lab"], candy: ["Candy factory", "Candy factory"] } }
   },
   sfx: `{cut:()=>{tone(700,.08,"sawtooth",.06);tone(300,.12,"triangle",.07,.04)},ok:()=>{[660,880,1100].forEach((f,i)=>tone(f,.1,"triangle",.09,i*.06))},near:()=>{[520,660].forEach((f,i)=>tone(f,.1,"triangle",.08,i*.07))},bad:()=>tone(170,.25,"sawtooth",.07),end:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.09,i*.09)),combo:n=>{const b=440*Math.pow(1.122,Math.min(n/3,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.1,"triangle",.09,i*.05))}}`,
-  level: { max: 3, rules: [["parts","add",1,4]] },   /* lên level cuối màn: scripts/cozygame/levelgen.js */
+  level: { custom: String.raw`const CB_LV=[[0,0,0,4,1],[0,0,0,5,1],[0,0,0,6,1],[3,0,0,6,1],[3,1,0,6.5,1],[3,0,1,7,1],[4,1,0,7.5,1.2],[4,1,1,8,1.2],[4,1,1,9,1.5],[4,1,1,10,1.8]],CB_0=JSON.parse(JSON.stringify(CFG));
+let CBL=Math.max(0,Math.min(CB_LV.length-1,Math.floor(+LS.get("cb-lvu",0))||0)),CBP=0;
+function cbApply(L){const v=CB_LV[L];CFG.forEach((c,i)=>{const o=CB_0[i];for(const k in o)c[k]=o[k];if(!L)return;if(v[0])c.parts=Math.max(o.parts,v[0]);if(v[1])c.rot=1;if(v[2])c.fog=1;c.strict=v[3];c.rs=v[4]})}
+const cb_begin=begin;begin=function(seed,mode,t,ch){const L=mode==="free"&&!ch?CBL:0;cbApply(L);CBP=L;return cb_begin.apply(this,arguments)};
+window.NPLevel&&NPLevel.attach({levels:CB_LV.length,cur:()=>G?CBP:-1,won:()=>!!G,skip:()=>!G||G.mode!=="free"||!!G.ch,go:i=>{CBL=i;LS.set("cb-lvu",i);if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",G?G.t:TY,null)}});` },
   gameJs: String.raw`
 let W=360,H=400,SC=1;const ctx=cv.getContext("2d");
 const CFG=[{parts:2,pool:["sq","circle","semi","pent","blob"]},{parts:2,rot:1,pool:["sq","circle","pent","L","star"]},{parts:3,pool:["sq","circle","pent","blob","semi"]},{parts:4,fog:1,pool:["sq","circle","pent","semi","blob"]}],ROUNDS=5;
@@ -59,20 +63,20 @@ const SF=n=>n;
 function area(P){let a=0;for(let i=0;i<P.length;i++){const p=P[i],q=P[(i+1)%P.length];a+=p[0]*q[1]-q[0]*p[1]}return Math.abs(a)/2}
 function clipHalf(P,ln,side){const out=[],dx=ln.b[0]-ln.a[0],dy=ln.b[1]-ln.a[1],f=p=>side*((p[0]-ln.a[0])*dy-(p[1]-ln.a[1])*dx);for(let i=0;i<P.length;i++){const p=P[i],q=P[(i+1)%P.length],fp=f(p),fq=f(q);if(fp>=0)out.push(p);if((fp>=0)!==(fq>=0)){const u=fp/(fp-fq);out.push([p[0]+(q[0]-p[0])*u,p[1]+(q[1]-p[1])*u])}}return out}
 function splitAll(poly,lines){let pcs=[poly];for(const ln of lines){const nx=[];for(const p of pcs){const a=clipHalf(p,ln,1),b=clipHalf(p,ln,-1);if(a.length>=3&&area(a)>1)nx.push(a);if(b.length>=3&&area(b)>1)nx.push(b)}pcs=nx}return pcs}
-function scoreCut(poly,lines,parts){const pcs=splitAll(poly,lines),A=area(poly),ar=pcs.map(p=>area(p)/A).sort((x,y)=>y-x);if(pcs.length!==parts)return{sc:0,ar,pcs,bad:1};let s=0;ar.forEach(a=>s+=Math.abs(a-1/parts));const r=s/(2*(1-1/parts));return{sc:Math.max(0,Math.round(1000*(1-Math.min(1,r*4)))),ar,pcs,r}}
+function scoreCut(poly,lines,parts,k){const pcs=splitAll(poly,lines),A=area(poly),ar=pcs.map(p=>area(p)/A).sort((x,y)=>y-x);if(pcs.length!==parts)return{sc:0,ar,pcs,bad:1};let s=0;ar.forEach(a=>s+=Math.abs(a-1/parts));const r=s/(2*(1-1/parts));return{sc:Math.max(0,Math.round(1000*(1-Math.min(1,r*(k||4))))),ar,pcs,r}}
 function drCut(D,a,b){const len=Math.hypot(b[0]-a[0],b[1]-a[1]);if(len<26){toast(T("short"),900);return}
  const dx=(b[0]-a[0])/len,dy=(b[1]-a[1])/len,L=1200,ln={a:[a[0]-dx*L,a[1]-dy*L],b:[b[0]+dx*L,b[1]+dy*L],sa:a,sb:b};
  const hit=splitAll(D.poly,[ln]).length>1;if(!hit){toast(T("miss"),1100);return}
  const need=D.C.parts===2?1:2,lines=D.lines.concat([ln]);D.lines=lines;sfx.cut();if(window.NPFx)NPFx.buzz(18);
  if(lines.length<need){D.msg=T("needTwo");return}
- const r=scoreCut(D.poly,lines,D.C.parts);
+ const r=scoreCut(D.poly,lines,D.C.parts,D.C.strict);
  if(r.bad){const cr=splitAll(D.poly,lines).length;toast(D.C.parts===3?T("cross"):T("crossNeed"),1800);D.lines=[];if(cr<1)D.lines=[];return}
  D.pieces=r.pcs;D.st="res";D.anim=0;const ratio=r.ar.map(x=>Math.round(x*1000)/10);D.res.push({sc:r.sc,ratio,kind:D.shapes[D.i].kind,poly:D.poly.map(p=>[Math.round(p[0]*10)/10,Math.round(p[1]*10)/10]),lines:D.lines.map(l=>[l.sa,l.sb])});
  const idx=r.sc>=960?0:r.sc>=880?1:r.sc>=700?2:r.sc>=400?3:4;D.reIdx=idx;(idx<=1?sfx.ok:idx<=3?sfx.near:sfx.bad)();if(r.sc>=880)D.maxCombo++;
  if(idx<=2){NPJuice.text($("play"),T("re")[idx],{color:"#ffd24a",top:"24%",size:6});if(idx<=1)burst(14)}
  hud();clearTimeout(D.nt);D.nt=setTimeout(()=>{if(G===D&&D.st==="res")drNext(D)},2600)}
 function drNext(D){clearTimeout(D.nt);D.i++;if(D.i>=ROUNDS){D.over=true;sfx.end();finish(D);return}setPoly(D);hud()}
-function step(D,dt){D.time+=dt;if(D.st==="res")D.anim=Math.min(1,D.anim+dt*2.2);if(D.C.rot&&D.st==="cut"&&D.base){D.rot+=dt*(.9+D.i*.12);const co=Math.cos(D.rot),si=Math.sin(D.rot);D.poly=D.base.map(p=>{const x=p[0]-W/2,y=p[1]-H/2;return[W/2+x*co-y*si,H/2+x*si+y*co]})}}
+function step(D,dt){D.time+=dt;if(D.st==="res")D.anim=Math.min(1,D.anim+dt*2.2);if(D.C.rot&&D.st==="cut"&&D.base){D.rot+=dt*(.9+D.i*.12)*(D.C.rs||1);const co=Math.cos(D.rot),si=Math.sin(D.rot);D.poly=D.base.map(p=>{const x=p[0]-W/2,y=p[1]-H/2;return[W/2+x*co-y*si,H/2+x*si+y*co]})}}
 function burst(n){if(!isProSk()&&n<12)return;const host=$("play"),L=(skinOf().deco||["⭐","🔪"]);for(let i=0;i<n;i++){if(host.querySelectorAll(".eb2").length>30)break;const e=document.createElement("i"),a=Math.random()*6.283,d=14+Math.random()*30;e.className="eb2";e.textContent=L[i%L.length];e.style.left="50%";e.style.top="46%";e.style.setProperty("--dx",Math.cos(a)*d+"cqw");e.style.setProperty("--dy",(Math.sin(a)*d*.8-4)+"cqw");e.style.setProperty("--rt",(Math.random()*120-60)+"deg");host.appendChild(e);setTimeout(()=>e.remove(),950)}}
 const fp=x=>(Math.round(x*10)/10).toFixed(1).replace(".",LANG==="vi"?",":".");
 function HUD(D){const last=D.res[D.res.length-1];return[[scoreOf(D),"sc"],[Math.min(D.i+1,ROUNDS)+"/"+ROUNDS,"rnd"],[last?last.ratio.map(fp).join("/"):"—","ex"]]}

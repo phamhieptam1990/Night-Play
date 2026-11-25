@@ -287,7 +287,7 @@ function showEnd(){if(!G)return;const sv=getSave();sv.total++;sv.best=Math.max(s
  const helper=!!(window.NP&&NP.helper);$("bShare").hidden=helper;$("bAgain").hidden=helper;$("bBoard").hidden=helper;$("bHome").hidden=helper}
 const rematch=()=>{if(!G)return;const g=G;if(PF.pro&&PF.pro.trial)PF.lockPro();begin(g.seed,g.mode,g.t,g.ch,g.custom,g.n)};
 function again(){if(!G)return;const t=G.t;if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",t,null)}
-const MZ_LV=[6,8,10,12,14];   /* trần 5 level: cỡ mê cung 6→14 ô (ô ≥ 22px trên 360px; SZMAX=15 của game vẫn là kẹp cứng) */
+const MZ_LV=[6,7,8,9,10,11,12,14,15];   /* trần 9 level: cỡ mê cung 6→15 ô (ô ≥ 22px trên 360px; SZMAX=15 là kẹp cứng; mê cung DFS luôn có đường đi) */
 window.NPLevel&&NPLevel.attach({levels:MZ_LV.length,cur:()=>{if(!G)return -1;let k=0;MZ_LV.forEach((n,i)=>{if(G.n>=n)k=i});return k},won:()=>!!G&&!G.why,skip:()=>!G||G.mode!=="free"||!!G.ch||G.t===3,go:i=>{SZ=clampN(MZ_LV[i],SZMIN,SZMAX);LS.set("mz-size",SZ);if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",G?G.t:TY,null)}});
 /* ===== CHIA SẺ ===== */
 function shareLink(){const o={s:G.custom?0:G.seed,sc:G.score,t:G.t,n:G.n};if(G.custom)o.m=bitsToB64(G.custom);return location.origin+"/api/share/"+GID+"?ch="+b64e(o)+(LANG==="en"?"&l=en":"")}

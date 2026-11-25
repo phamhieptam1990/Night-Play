@@ -136,7 +136,7 @@ const dayNo=k=>Math.floor((Date.parse(k+"T00:00:00Z")-Date.parse("2026-01-01T00:
 const b64e=o=>btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
 const clamp=(v,a,b)=>v<a?a:v>b?b:v;
 function parseCh(h){try{const m=/[#&]ch=([A-Za-z0-9_-]{1,200})/.exec(h||"");if(!m)return null;let t=m[1].replace(/-/g,"+").replace(/_/g,"/");while(t.length%4)t+="=";const o=JSON.parse(decodeURIComponent(escape(atob(t))));
- if(o&&Number.isInteger(o.s)&&o.s>=0&&o.s<=4294967295&&Number.isInteger(o.sc)&&o.sc>=0&&o.sc<=MAXS){const t2=Number.isInteger(o.t)&&o.t>=0&&o.t<=3?o.t:0;const lv=Number.isInteger(o.lv)&&o.lv>=0&&o.lv<=2?o.lv:1;return{s:o.s,sc:o.sc,t:t2,lv}}return null}catch(e){return null}}
+ if(o&&Number.isInteger(o.s)&&o.s>=0&&o.s<=4294967295&&Number.isInteger(o.sc)&&o.sc>=0&&o.sc<=MAXS){const t2=Number.isInteger(o.t)&&o.t>=0&&o.t<=3?o.t:0;const lv=Number.isInteger(o.lv)&&o.lv>=0&&o.lv<LVMAX?o.lv:1;return{s:o.s,sc:o.sc,t:t2,lv}}return null}catch(e){return null}}
 /* ===== CẢNH / VẼ: bộ hàm dùng chung cho cả bản trả phí ===== */
 const W=360,H=500,PX=40,GYF=.8,RX=96,WB=1.15,RW=13,WMAX=.62;
 let VW=W;const K={g(c,x,y,w,h,cols){const g=c.createLinearGradient(0,y,0,y+h);cols.forEach((q,i)=>g.addColorStop(i/Math.max(1,cols.length-1),q));c.fillStyle=g;c.fillRect(x,y,w,h)},r(c,x,y,w,h,col){c.fillStyle=col;c.fillRect(x,y,w,h)},o(c,x,y,rx,ry,col){c.fillStyle=col;c.beginPath();c.ellipse(x,y,rx,ry,0,0,6.283);c.fill()},p(c,pts,col){c.fillStyle=col;c.beginPath();pts.forEach((q,i)=>i?c.lineTo(q[0],q[1]):c.moveTo(q[0],q[1]));c.closePath();c.fill()},
@@ -154,7 +154,8 @@ const CATALOG=[["basic","Xe số","Moped","🛵"],["cub","Cub cổ","Classic Cub
 const BASEP={v0:5.0,ib:1.1,tq:6.6,damp:1.6,gapMin:14,gapVar:16,bump:1,startItems:3,addPer:1,cpD:110,time:0,wind:0,lag:9,jit:0,pay:1,cargo:0,rain:0};
 const PF={pro:null,ticket:null,types:TYPES,K,skins:{basic:{bike:{body:"#d63a2a",seat:"#2a2a2a",rack:"#5a5a5a"},hero:"🛵📦"}},modeCfg:[{},null,null,null],cargoTet:null,skinSel:LS.get("ch-skin","basic")};
 let TY=(()=>{const v=LS.get("ch-type",0);return Number.isInteger(v)&&v>=0&&v<4?v:0})();
-let LV=(()=>{const v=LS.get("ch-lv",1);return Number.isInteger(v)&&v>=0&&v<3?v:1})();
+const LVMAX=8;   /* 8 level: 0-2 = Dễ/Vừa/Khó (chip ở màn chọn), 3-7 = khó dần (LVM): đường xóc hơn, hàng nặng hơn, khoảng thở ngắn */
+let LV=(()=>{const v=LS.get("ch-lv",1);return Number.isInteger(v)&&v>=0&&v<LVMAX?v:1})();
 const tLocked=t=>!PF.modeCfg[t];
 const skinOf=()=>PF.skins[PF.skinSel]||PF.skins.basic;
 function applySkin(){const sk=skinOf(),pl=$("play");(pl._v||[]).forEach(k=>pl.style.removeProperty(k));const vv=sk.vl?(isDark()?sk.vd:sk.vl):{};pl._v=Object.keys(vv);for(const k of pl._v)pl.style.setProperty(k,vv[k]);
@@ -169,6 +170,7 @@ let G=null,CH=null,lastEnd=0,raf=0,last=0,acc=0,SC=1;
 const getSave=()=>LS.get("ch-save",{streak:0,last:"",best:0,total:0,days:{}});
 const newSeed=()=>(Math.random()*4294967296)>>>0;
 const LVM=[{ib:.82,tq:1.15,bump:.8,gap:1.25,v0:.95},{ib:1,tq:1,bump:1,gap:1,v0:1},{ib:1.2,tq:.95,bump:1.25,gap:.8,v0:1.08}];
+for(let k=1;k<=5;k++)LVM.push({ib:1.2+.06*k,tq:.95-.03*k,bump:1.25+.09*k,gap:Math.max(.5,.8-.05*k),v0:1.08+.03*k});
 function cfgOf(t,lv,mode){const o=Object.assign({},BASEP,PF.modeCfg[t]||{}),m=LVM[mode==="daily"?1:lv];o.ib*=m.ib;o.tq*=m.tq;o.bump*=m.bump;o.gapMin*=m.gap;o.gapVar*=m.gap;o.v0*=m.v0;o.lv=mode==="daily"?1:lv;return o}
 /* con đường: gò đồi nhẹ + gờ giảm tốc / ổ gà / dốc cầu sinh theo hạt giống */
 function mkRoad(seed,P){const R=sub(seed,1),ph=[R()*6.28,R()*6.28,R()*6.28],rb=sub(seed,2),bumps=[];let bx=22;
@@ -272,14 +274,14 @@ function hideRule(){const r=$("rule");if(r.hidden)return;clearTimeout(hideRule.t
 function show(id){const rl=$("rule");if(rl){rl.hidden=true;clearTimeout(hideRule.t)}if(id!=="game"&&$("ttl"))$("ttl").textContent=T("title");["home","game","end"].forEach(s=>$(s).hidden=s!==id);["ovCh","ovSkin","ovPay"].forEach(o=>$(o).hidden=true);$("bRe").hidden=id!=="game"}
 function toast(m,ms){const t=$("toast");t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,ms||1800)}
 const scoreNow=()=>Math.min(MAXS,Math.floor(G.score));
-function updHud(){if(!G)return;if(!$("game").hidden)$("ttl").textContent=TYPES[G.t][0]+" "+L2([TYPES[G.t][1],TYPES[G.t][2]])+(G.mode!=="daily"&&G.P.lv!==1?" "+LEVELS[G.P.lv][0]:"");$("sSc").textContent=scoreNow();$("sScL").textContent=T("sc");
+function updHud(){if(!G)return;if(!$("game").hidden)$("ttl").textContent=TYPES[G.t][0]+" "+L2([TYPES[G.t][1],TYPES[G.t][2]])+(G.mode!=="daily"&&G.P.lv!==1?" "+(LEVELS[G.P.lv]?LEVELS[G.P.lv][0]:"🔥"+(G.P.lv+1)):"");$("sSc").textContent=scoreNow();$("sScL").textContent=T("sc");
  if(G.P.time){$("sSh").textContent=Math.ceil(G.timeLeft);$("sShL").textContent=T("tm")}else{$("sSh").textContent=G.items.length;$("sShL").textContent=T("sh")}
  $("sEx").textContent="×"+Math.max(1,G.combo);$("sExL").textContent=T("ex");
  const tg=$("tgt");if(G.ch){tg.hidden=false;tg.classList.toggle("beat",!!G.beat);$("tgtT").textContent=T("tgt",{n:G.ch.sc})+" · "+scoreNow();$("tgtB").style.width=Math.min(100,Math.round(scoreNow()/Math.max(1,G.ch.sc)*100))+"%"}else tg.hidden=true;
  $("gHint").textContent=G.over?"":T("hintCp",{n:Math.max(0,Math.ceil(G.nextCp-G.D)),k:G.items.length})}
 function renderHome(){const sv=getSave(),k=dayKey(),done=TY?(sv.dayT||{})[k+"|"+TY]:sv.days[k];$("ttl").textContent=T("title");$("hSub").textContent=T("sub");$("dN").textContent="#"+dayNo(k);$("dT").textContent=T("daily");$("dS").textContent=done!=null?T("done",{s:done}):T("dS");if(TY)$("dT").textContent+=" "+TYPES[TY][0];$("bFree").textContent=T("free");$("hNote").textContent=T("note");$("bLang").textContent=LANG==="vi"?"EN":"VI";$("bSnd").textContent=snd()?"🔊":"🔇";
  $("hHero").textContent=skinOf().hero||"🛵📦";renderTypes();renderLevels();$("hChips").innerHTML="";[sv.streak?T("streak",{n:sv.streak}):"",sv.best?T("best",{n:sv.best}):"",sv.total?T("tot",{n:sv.total}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("hChips").appendChild(c)})}
-function renderLevels(){const b=$("lvs");b.innerHTML="";$("lvCap").textContent=LANG==="vi"?"Cấp độ cho chạy thoải mái (đường hôm nay giữ cố định cho công bằng)":"Level for free ride (daily route stays fixed for fairness)";LEVELS.forEach((t,i)=>{const e=document.createElement("button");e.type="button";e.className="lv"+(LV===i?" on":"");e.textContent=t[0]+" "+L2([t[1],t[2]]);e.onclick=()=>{LV=i;LS.set("ch-lv",i);renderLevels()};b.appendChild(e)})}
+function renderLevels(){const b=$("lvs");b.innerHTML="";$("lvCap").textContent=LANG==="vi"?"Cấp độ cho chạy thoải mái (đường hôm nay giữ cố định cho công bằng)":"Level for free ride (daily route stays fixed for fairness)";LEVELS.forEach((t,i)=>{const e=document.createElement("button");e.type="button";e.className="lv"+(LV===i||(i===2&&LV>2)?" on":"");e.textContent=t[0]+" "+L2([t[1],t[2]]);e.onclick=()=>{LV=i;LS.set("ch-lv",i);renderLevels()};b.appendChild(e)})}
 function renderTypes(){const b=$("tys");b.innerHTML="";TYPES.forEach((t,i)=>{const e=document.createElement("button");e.type="button";e.className="ty"+(TY===i?" on":"")+(tLocked(i)?" lock":"");e.innerHTML='<span class="e">'+t[0]+'</span><span class="t">'+L2([t[1],t[2]])+"</span>";e.onclick=()=>{if(tLocked(i)){openPay(i,null);return}TY=i;LS.set("ch-type",i);renderHome()};b.appendChild(e)})}
 function showRule(t){const r=$("rule");r.innerHTML="";const h=document.createElement("h3");h.textContent=TYPES[t][0]+" "+L2([TYPES[t][1],TYPES[t][2]]);r.appendChild(h);I18[LANG]["r"+t].forEach(x=>{const q=document.createElement("p");q.textContent=x;r.appendChild(q)});r.classList.remove("out");r.hidden=false;clearTimeout(hideRule.t);hideRule.t=setTimeout(hideRule,5500)}
 function showTut(){const r=$("rule");r.innerHTML="";const h=document.createElement("h3");h.textContent="🎓 "+T("tutT");r.appendChild(h);["t1","t2","t3"].forEach(k=>{const q=document.createElement("p");q.textContent=T(k);r.appendChild(q)});r.classList.remove("out");r.hidden=false;clearTimeout(hideRule.t);hideRule.t=setTimeout(hideRule,9000)}
@@ -300,7 +302,7 @@ function showEnd(){if(!G)return;show("end");const sc=scoreNow(),why={empty:"endE
  const helper=!!(window.NP&&NP.helper);$("bShare").hidden=helper;$("bAgain").hidden=helper;$("bBoard").hidden=helper;$("bHome").hidden=helper;$("bClip").hidden=helper||!(window.NPFx&&NPFx.canRec())||!clipReady}
 function rematch(){if(!G)return;const g=G;if(PF.pro&&PF.pro.trial)PF.lockPro();begin(g.seed,g.mode,g.t,g.ch,g.P.lv)}
 function again(){if(!G)return;const t=G.t;if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",t,null)}
-window.NPLevel&&NPLevel.attach({levels:3,cur:()=>G?LV:-1,won:()=>!!G&&true,skip:()=>!G||G.mode!=="free"||!!G.ch,go:i=>{LV=i;LS.set("ch-lv",i);if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",G?G.t:TY,null,i)}});   /* lên level cuối màn (shared/levelup.js); trần 3 = 3 độ khó đã cân chỉnh */
+window.NPLevel&&NPLevel.attach({levels:LVMAX,cur:()=>G?G.P.lv:-1,won:()=>!!G&&true,skip:()=>!G||G.mode!=="free"||!!G.ch,go:i=>{LV=i;LS.set("ch-lv",i);if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",G?G.t:TY,null,i)}});   /* lên level cuối màn (shared/levelup.js); trần 3 = 3 độ khó đã cân chỉnh */
 /* ===== QUAY VIDEO (cắt thành đoạn ~28 giây để luôn giữ được pha đổ hàng cuối cùng) ===== */
 let clipReady=false,clipT=0;
 function recBegin(){clipReady=false;clipT=0;if(window.NP&&NP.helper)return;if(window.NPFx&&NPFx.canRec()){try{NPFx.recStart(cv,32000)}catch(e){}}}
@@ -374,7 +376,7 @@ if(window.NP&&NP.state)NP.state(()=>{if(!G||G.over)return null;const s={seed:G.s
 /* ===== KHỞI ĐỘNG ===== */
 applySkin();renderHome();show("home");requestAnimationFrame(tick);
 const proP=passToken()&&!(window.NP&&NP.helper)?PF.loadPro(false).catch(()=>{}):Promise.resolve();
-if(window.NP&&NP.helper){const HS=NP.initialState&&typeof NP.initialState==="object"?NP.initialState:{};const seed=Number.isInteger(HS.seed)&&HS.seed>=0&&HS.seed<=4294967295?HS.seed:newSeed();const ht=Number.isInteger(HS.t)&&HS.t>=0&&HS.t<=3?HS.t:0;const hlv=Number.isInteger(HS.lv)&&HS.lv>=0&&HS.lv<=2?HS.lv:1;$("bBoard").hidden=true;
+if(window.NP&&NP.helper){const HS=NP.initialState&&typeof NP.initialState==="object"?NP.initialState:{};const seed=Number.isInteger(HS.seed)&&HS.seed>=0&&HS.seed<=4294967295?HS.seed:newSeed();const ht=Number.isInteger(HS.t)&&HS.t>=0&&HS.t<=3?HS.t:0;const hlv=Number.isInteger(HS.lv)&&HS.lv>=0&&HS.lv<LVMAX?HS.lv:1;$("bBoard").hidden=true;
  const go=()=>begin(seed,"challenge",ht,null,hlv);
  if(/^h\.\d{13}\.[A-Za-z0-9_-]{43}$/.test(HS.tk||""))PF.loadPro(false,HS.tk).then(()=>{if(/^[a-z0-9]{3,10}$/.test(HS.sk||"")&&PF.skins[HS.sk])PF.skinSel=HS.sk}).catch(()=>{}).finally(go);else go()}
 else{const c0=parseCh(location.hash);if(c0)proP.then(()=>openCh(c0));else if(location.hash==="#daily")$("bDaily").click()}

@@ -200,7 +200,7 @@ const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const I18N={
 vi:{title:"Tên Lửa Của Bé",docTitle:"Tên Lửa Của Bé",sound:"Âm thanh",lang:"Ngôn ngữ",home:"Về màn chọn",
  ty:["Tên lửa","Cá con bơi xa","Tàu hỏa chạy mãi","Khủng long chạy"],
- lv:["Cấp 1","Cấp 2","Cấp 3"],"lv.pick":"Chọn cấp độ",
+ lv:["Cấp 1","Cấp 2","Cấp 3","Cấp 4","Cấp 5","Cấp 6","Cấp 7","Cấp 8"],"lv.pick":"Chọn cấp độ",
  fuel:["Hết nhiên liệu rồi! ⛽","Hết bong bóng khí rồi! 🫧","Hết than rồi! ⚫","Đói bụng rồi! 🍖"],
  "how.0.1":"👈👉|Chạm TRÁI hoặc PHẢI để né ☄️ và nhặt ⭐","how.0.2":"⛽|Hết nhiên liệu thì trả lời câu hỏi","how.0.3":"🚀|Đúng là tên lửa phóng vụt lên! Không bao giờ thua",
  "how.1.1":"👆👇|Chạm TRÊN hoặc DƯỚI để né 🗑️ và nhặt 🦪","how.1.2":"🫧|Hết bong bóng khí thì trả lời câu hỏi","how.1.3":"🐟|Đúng là cá con bơi vọt đi! Không bao giờ thua",
@@ -223,7 +223,7 @@ vi:{title:"Tên Lửa Của Bé",docTitle:"Tên Lửa Của Bé",sound:"Âm than
  "sk.3.basic":"Khủng long xanh","sk.3.trex":"T-Rex","sk.3.trice":"Ba sừng","sk.3.dragon":"Rồng","sk.3.robot":"Khủng long rô-bốt"},
 en:{title:"Baby Rocket",docTitle:"Baby Rocket",sound:"Sound",lang:"Language",home:"Back",
  ty:["Rocket","Little Fish","Choo-Choo Train","Dino Run"],
- lv:["Level 1","Level 2","Level 3"],"lv.pick":"Pick a level",
+ lv:["Level 1","Level 2","Level 3","Level 4","Level 5","Level 6","Level 7","Level 8"],"lv.pick":"Pick a level",
  fuel:["Out of fuel! ⛽","Out of air bubbles! 🫧","Out of coal! ⚫","So hungry! 🍖"],
  "how.0.1":"👈👉|Tap LEFT or RIGHT to dodge ☄️ and grab ⭐","how.0.2":"⛽|Out of fuel? Answer a question","how.0.3":"🚀|Right answer, rocket zooms up! You never lose",
  "how.1.1":"👆👇|Tap UP or DOWN to dodge 🗑️ and grab 🦪","how.1.2":"🫧|Out of bubbles? Answer a question","how.1.3":"🐟|Right answer, the fish zooms off! You never lose",
@@ -253,14 +253,14 @@ const DEST_E=[["☁️","🛰️","🌙","🔴","🪐","☄️","🌌"],["🏖�
 const THR=[0,150,300,450,600,750,900],RUN=10,ROUNDS=10,DT=1/60,ALTRATE=5;
 const destOf=a=>{let r=0;for(let i=0;i<THR.length;i++)if(a>=THR[i])r=i;return r};
 const ALPHA={vi:Array.from("AĂÂBCDĐEÊGHIKLMNOÔƠPQRSTUƯVXY"),en:Array.from("ABCDEFGHIJKLMNOPQRSTUVWXYZ")};
-const LVPOOL=[12,21,99];
+const LVPOOL=[12,21,99,99,99,99,99,99],CONF=["AĂÂ","OÔƠ","UƯ","EÊ","DĐ","CGO","IJL","MNW","PQRB","VUY","FEPT","HKX","SZ"];   /* CONF: nhóm chữ dễ nhầm, cấp >=4 lấy làm đáp án nhiễu */
 const LNAME={A:"a",Ă:"á",Â:"ớ",B:"bờ",C:"cờ",D:"dờ",Đ:"đờ",E:"e",Ê:"ê",G:"gờ",H:"hờ",I:"i",K:"ca",L:"lờ",M:"mờ",N:"nờ",O:"o",Ô:"ô",Ơ:"ơ",P:"pờ",Q:"quờ",R:"rờ",S:"sờ",T:"tờ",U:"u",Ư:"ư",V:"vờ",X:"xờ",Y:"y"};
 const ENW={A:"apple",B:"ball",C:"cat",D:"dog",E:"egg",F:"fish",G:"goat",H:"hat",I:"ice cream",J:"juice",K:"kite",L:"lion",M:"moon",N:"nest",O:"orange",P:"pig",Q:"queen",R:"rabbit",S:"sun",T:"tree",U:"umbrella",V:"van",W:"whale",X:"xylophone",Y:"yo-yo",Z:"zebra"};
 const WORDS={vi:{A:"🍒",Ă:"🍚",Â:"🫖",B:"🐄",C:"🐟",D:"🍉",Đ:"💡",E:"👶",Ê:"🐸",G:"🐔",H:"🌸",I:"🐖",K:"🍦",L:"🍃",M:"🐱",N:"🏠",O:"🐝",Ô:"🚗",Ơ:"🌶️",P:"🔋",Q:"🍊",R:"🐢",S:"⭐",T:"🍎",U:"🥾",Ư:"🦅",V:"🦆",X:"🚌",Y:"🐦"},
  en:{A:"🍎",B:"⚽",C:"🐱",D:"🐶",E:"🥚",F:"🐟",G:"🐐",H:"🎩",I:"🍦",J:"🧃",K:"🪁",L:"🦁",M:"🌙",N:"🪺",O:"🍊",P:"🐷",Q:"👑",R:"🐰",S:"☀️",T:"🌳",U:"☂️",V:"🚐",W:"🐳",X:"🎹",Y:"🪀",Z:"🦓"}};
 const EMO=["🍎","⭐","🐥","🎈","🍓","🐟","🚗","🌸"];
 /* cấp độ: dStart/dMax = mức hiển thị (0 đếm hình → 1 phép tính có hình → 2 chỉ số); nmax = số lớn nhất */
-const LVCFG=[{ds:0,dm:1,nmax:5,pObs:.45,iv:1.15},{ds:0,dm:2,nmax:10,pObs:.65,iv:1.0},{ds:1,dm:2,nmax:20,pObs:.85,iv:.85}];
+const LVCFG=[{ds:0,dm:1,nmax:5,pObs:.45,iv:1.15},{ds:0,dm:2,nmax:10,pObs:.65,iv:1.0},{ds:1,dm:2,nmax:20,pObs:.85,iv:.85},{ds:1,dm:2,nmax:25,pObs:.88,iv:.8},{ds:2,dm:2,nmax:30,pObs:.9,iv:.75},{ds:2,dm:2,nmax:35,pObs:.92,iv:.7},{ds:2,dm:2,nmax:40,pObs:.94,iv:.65},{ds:2,dm:2,nmax:50,pObs:.96,iv:.6}];
 
 /* ===== CÂU HỎI — sinh theo hạt giống; mức hiển thị d phụ thuộc bé làm đúng liên tục nhưng NỘI DUNG (loại + con số) chỉ phụ thuộc hạt giống ===== */
 function kindsFor(seed){RNG=mulberry32(sub32(seed,777));const k=shuffle([0,1,2,3,4]).concat(shuffle([0,1,2,3,4]));RNG=MR;return k}   /* 0 chữ · 1 đếm · 2 cộng · 3 trừ · 4 so sánh */
@@ -272,12 +272,12 @@ function genQ(i,d,lv,seed,lang){
   const r=[0,1,2,3,4,5,6,7].map(()=>RNG()),nm=cf.nmax;let q;
   const e=EMO[Math.floor(r[7]*EMO.length)];
   if(kind===0){const AL=ALPHA[lang],pool=AL.slice(0,Math.min(AL.length,LVPOOL[lv-1]===99?AL.length:Math.round(LVPOOL[lv-1]*AL.length/29))),t=pool[Math.floor(r[0]*pool.length)];
-   const o=shuffle([t].concat(shuffle(pool.filter(x=>x!==t)).slice(0,2)));
+   const sim=lv>=4?pool.filter(x=>x!==t&&CONF.some(g=>g.includes(t)&&g.includes(x))):[],o=shuffle([t].concat(shuffle(sim).concat(shuffle(pool.filter(x=>x!==t&&!sim.includes(x)))).slice(0,2)));
    const nm2=lang==="vi"?LNAME[t]:t;
    q={kind,pr:T("q.let"),body:'<button class="snd" type="button" id="qsnd" aria-label="🔊">🔊</button>'+(d===0?'<span style="font-size:14cqw;margin-left:3cqw">'+WORDS[lang][t]+"</span>":""),opts:o,a:o.indexOf(t),say:lang==="vi"?nm2:t+", as in "+ENW[t],hint:"h.let",letter:t}}
-  else if(kind===1){const n=lv===3?3+Math.floor(r[0]*10):1+Math.floor(r[0]*Math.min(nm,10));let body;
+  else if(kind===1){const n=lv>3?5+Math.floor(r[0]*(6+2*(lv-3))):lv===3?3+Math.floor(r[0]*10):1+Math.floor(r[0]*Math.min(nm,10));let body;
    if(d===0)body=pics(e,n,fsFor(n));else{const e2=EMO[(EMO.indexOf(e)+1+Math.floor(r[1]*6))%EMO.length],m=2+Math.floor(r[2]*(d+2)),list=[];for(let k=0;k<n;k++)list.push(e);for(let k=0;k<m;k++)list.push(e2);RNG=mulberry32(sub32(seed,i+500));const sh=shuffle(list);RNG=MR;body='<span class="pics" style="font-size:'+fsFor(n+m)+'cqw">'+sh.map(x=>"<span>"+x+"</span>").join("")+"</span>"}
-   RNG=mulberry32(sub32(seed,i+900));const o=opts3(n,1,Math.max(6,Math.min(nm+2,14)));RNG=MR;
+   RNG=mulberry32(sub32(seed,i+900));const o=opts3(n,1,Math.max(6,Math.min(nm+2,14),n+2));RNG=MR;
    q={kind,pr:T("q.count",{e}),body,opts:o.map(String),a:o.indexOf(n),say:T("q.count",{e:""}),hint:"h.count"}}
   else if(kind===2){const a=1+Math.floor(r[0]*(nm-1)),b=1+Math.floor(r[1]*(nm-a)),s=a+b;
    q={kind,pr:T("q.add"),body:eqBody(e,a,b,"+",d,s),opts:null,ans:s,say:a+(lang==="vi"?" cộng ":" plus ")+b+(lang==="vi"?" bằng mấy":" equals"),hint:"h.add"}}
@@ -346,7 +346,11 @@ let DEST=Object.assign({},dest0,LS.get("tl-dest",{}));
 const saveDest=()=>{if(!HELPER)LS.set("tl-dest",DEST)};
 const destSet=t=>new Set(Array.isArray(DEST[t])?DEST[t].filter(x=>Number.isInteger(x)&&x>=0&&x<7):[]);
 function addDest(t,i){const s=destSet(t),isNew=!s.has(i);s.add(i);DEST[t]=[...s].sort();saveDest();return isNew}
-let LVL=clamp(+LS.get("tl-lv",1)||1,1,3),G=null,CH=null,paused=false,sound=true,payFor=null,skFor=0,gateBack="ovPay",endAt=0,gid=0;
+const NLV=8,LVI=["🌱","🌿","🌳","🌲","🔥","⚡","💎","👑"];
+function lvStep(box,ic,key){const u=(window.NPLevel&&NPLevel.unlocked)?NPLevel.unlocked():0,mx=Math.max(3,Math.min(NLV,u+1));if(LVL>mx)LVL=mx;
+  ic.slice(0,NLV).forEach((e,i)=>{const b=document.createElement("button"),on=LVL===i+1;b.type="button";b.className="lvb"+(on?" on":"");b.innerHTML=e+(on?" <small>"+(i+1)+"</small>":"");b.setAttribute("aria-label",T("lv")[i]);
+    if(i+1>mx){b.disabled=true;b.style.opacity=".35"}else b.onclick=()=>{LVL=i+1;LS.set(key,LVL);renderHome()};if(on)b.style.flex="2";box.appendChild(b)})}   /* mọi level là một chip (độ khó/cc.js đọc .lvs); chưa mở = mờ */
+let LVL=clamp(+LS.get("tl-lv",1)||1,1,NLV),G=null,CH=null,paused=false,sound=true,payFor=null,skFor=0,gateBack="ovPay",endAt=0,gid=0;
 sound=!(window.NPAudio&&!NPAudio.get());
 const today=()=>new Date(Date.now()+252e5).toISOString().slice(0,10);
 
@@ -369,12 +373,12 @@ function dailyDone(g){const di=g.daily,st=dailyStore();if(st.last!==di.key){st.s
 const startDaily=()=>{const di=dailyInfo();begin(di.t,{seed:di.seed,daily:di,lv:2})};
 const b64e=o=>btoa(JSON.stringify(o)).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
 function parseCh(){try{const m=/[#&]ch=([\w-]+)/.exec(location.hash);if(!m)return null;let b=m[1].replace(/-/g,"+").replace(/_/g,"/");b+="===".slice((b.length+3)%4);const o=JSON.parse(atob(b)),I=(v,a,z)=>Number.isInteger(v)&&v>=a&&v<=z;
-  return I(o.t,0,3)&&I(o.lv,1,3)&&I(o.s,0,4294967295)&&I(o.sc,0,300)?{t:o.t,lv:o.lv,s:o.s,sc:o.sc}:null}catch(e){return null}}
+  return I(o.t,0,3)&&I(o.lv,1,NLV)&&I(o.s,0,4294967295)&&I(o.sc,0,300)?{t:o.t,lv:o.lv,s:o.s,sc:o.sc}:null}catch(e){return null}}
 function shareLink(){const l=LANG==="en"?"&l=en":"";if(G.daily)return location.origin+"/api/share/"+GID+"?d=1&n="+G.daily.n+"&s="+G.score+l;
   return location.origin+"/api/share/"+GID+"?ch="+b64e({t:G.t,lv:G.lv,s:G.seed,sc:G.score})+l}
 function pathEmoji(g){return DEST_E[g.t].slice(0,g.dest+1).join("")}
 function shareText(){const dn=T("d"+G.t)[G.dest];
-  return (G.maxCombo>=3?"🔥 ×"+G.maxCombo+" ":"")+(G.daily?"📅 "+T("title")+" "+T("daily.t",{n:G.daily.n}):TY_ICON[G.t]+" "+T("title"))+"\n"+T("tx.line",{t:T("ty")[G.t],l:["🌱","🌿","🌳"][G.lv-1],h:DEST_E[G.t][G.dest]+" "+dn})+"\n"+T("tx.stat",{s:G.stars,r:G.first,p:G.score})+"\n"+pathEmoji(G)+"\n"+T("cd.ask")+"\n"+shareLink()}
+  return (G.maxCombo>=3?"🔥 ×"+G.maxCombo+" ":"")+(G.daily?"📅 "+T("title")+" "+T("daily.t",{n:G.daily.n}):TY_ICON[G.t]+" "+T("title"))+"\n"+T("tx.line",{t:T("ty")[G.t],l:LVI[G.lv-1],h:DEST_E[G.t][G.dest]+" "+dn})+"\n"+T("tx.stat",{s:G.stars,r:G.first,p:G.score})+"\n"+pathEmoji(G)+"\n"+T("cd.ask")+"\n"+shareLink()}
 function fitText(x,tx,px,font,maxW){let s=px;do{x.font=font.replace("$",s);s-=2}while(x.measureText(tx).width>maxW&&s>20)}
 function rr(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
 function drawCard(){
@@ -400,7 +404,7 @@ async function doShare(){
 }
 function openCh(){
   $("chH").textContent=T("ch.h");$("chV").innerHTML=TY_ICON[CH.t]+" <span>"+CH.sc+"</span>";
-  $("chP").textContent=T("ty")[CH.t]+" · "+["🌱","🌿","🌳"][CH.lv-1]+" — "+T("ch.p",{sc:CH.sc});$("chGo").textContent="▶ "+T("how.go");showOv("ovCh");
+  $("chP").textContent=T("ty")[CH.t]+" · "+LVI[CH.lv-1]+" — "+T("ch.p",{sc:CH.sc});$("chGo").textContent="▶ "+T("how.go");showOv("ovCh");
 }
 $("chNo").onclick=()=>{CH=null;showOv(null)};
 $("chGo").onclick=()=>{begin(CH.t,{seed:CH.s,ch:CH,lv:CH.lv})};
@@ -411,7 +415,7 @@ function showOv(id){for(const o of ovs)$(o).hidden=(o!==id)}
 function renderHome(){
   const h=$("home");h.innerHTML="";
   const lv=document.createElement("div");lv.className="lvs";lv.setAttribute("role","group");lv.setAttribute("aria-label",T("lv.pick"));
-  [["🌱","1"],["🌿","2"],["🌳","3"]].forEach(([e,n],i)=>{const b=document.createElement("button");b.type="button";b.className="lvb"+(LVL===i+1?" on":"");b.innerHTML=e+" <small>"+n+"</small>";b.setAttribute("aria-label",T("lv")[i]);b.onclick=()=>{LVL=i+1;LS.set("tl-lv",LVL);renderHome()};lv.appendChild(b)});
+  lvStep(lv,LVI,"tl-lv");
   h.appendChild(lv);
   const di=dailyInfo(),ds=dailyStore(),db=document.createElement("button");db.type="button";db.className="dbar";
   db.innerHTML="<span>📅 "+T("daily.t",{n:di.n})+" "+TY_ICON[di.t]+"</span><span>"+(ds.streak&&(ds.last===di.key||ds.last===dayBefore(di.key))?"🔥 "+ds.streak+" ":"")+(ds.best[di.key]!=null?"✓ "+ds.best[di.key]:"▶")+"</span>";db.onclick=startDaily;h.appendChild(db);
@@ -427,7 +431,7 @@ function renderHome(){
 }
 function stickerRow(el,t,cur){const s=destSet(t);el.innerHTML="";for(let i=0;i<7;i++){const e=document.createElement("span");e.textContent=DEST_E[t][i];e.title=T("d"+t)[i];if(!s.has(i))e.className="off";if(i===cur)e.classList.add("cur");el.appendChild(e)}}
 function openHow(t){
-  $("hwH").textContent=TY_ICON[t]+" "+T("ty")[t];$("hwC").textContent=["🌱","🌿","🌳"][LVL-1]+" "+T("lv")[LVL-1];$("hwK").textContent="🏅 "+destSet(t).size+"/7";
+  $("hwH").textContent=TY_ICON[t]+" "+T("ty")[t];$("hwC").textContent=LVI[LVL-1]+" "+T("lv")[LVL-1];$("hwK").textContent="🏅 "+destSet(t).size+"/7";
   $("hwL").innerHTML=["1","2","3"].map(n=>{const [ic,tx]=T("how."+t+"."+n).split("|");return "<li><b>"+ic+"</b><span>"+tx+"</span></li>"}).join("");
   stickerRow($("hwS"),t,-1);
   $("hwGo").textContent="▶ "+T("how.go");$("hwGo").onclick=()=>begin(t);$("hwBack").setAttribute("aria-label",T("home"));showOv("ovHow");
@@ -706,7 +710,7 @@ $("soundBtn").onclick=()=>{sound=!sound;if(window.NPAudio)NPAudio.set(sound);els
 $("langBtn").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}applyLang()};
 $("homeBtn").onclick=()=>{if(!HELPER)goHome()};
 $("againBtn").onclick=()=>{if(!G)return;if(G.daily)return startDaily();begin(G.t)};
-window.NPLevel&&NPLevel.attach({levels:3,dupe:"#againBtn",cur:()=>G?G.lv-1:-1,go:i=>{LVL=i+1;LS.set("tl-lv",LVL);begin(G.t,{lv:i+1})},skip:()=>!!(G&&(G.daily||G.ch))});   /* lên level khi kết thúc màn (shared/levelup.js) */
+window.NPLevel&&NPLevel.attach({levels:8,dupe:"#againBtn",cur:()=>G?G.lv-1:-1,go:i=>{LVL=i+1;LS.set("tl-lv",LVL);begin(G.t,{lv:i+1})},skip:()=>!!(G&&(G.daily||G.ch))});   /* lên level khi kết thúc màn (shared/levelup.js) */
 $("shareBtn").onclick=()=>openGate(()=>{showOv("ovEnd");doShare()},"ovEnd","gt.sh");
 function replay(){if(!G)return;if(G.daily)return startDaily();begin(G.t)}
 $("ovEnd").addEventListener("pointerdown",e=>{if(HELPER||e.target.closest("button")||performance.now()-endAt<450)return;replay()});
@@ -732,7 +736,7 @@ if(window.NP){
 if(passToken()&&!HELPER)PF.loadPro(false).catch(()=>{});
 applyLang();goHome();
 if(BOOT_H){const I=(v,a,z)=>HS&&Number.isInteger(v)&&v>=a&&v<=z;
-  if(HS&&I(HS.t,0,3)&&I(HS.lv,1,3)&&I(HS.s,0,4294967295)){const go=()=>{LVL=HS.lv;begin(HS.t,{seed:HS.s})},okT=HS.tk&&/^h\.\d{13}\.[\w-]{43}$/.test(HS.tk);
+  if(HS&&I(HS.t,0,3)&&I(HS.lv,1,NLV)&&I(HS.s,0,4294967295)){const go=()=>{LVL=HS.lv;begin(HS.t,{seed:HS.s})},okT=HS.tk&&/^h\.\d{13}\.[\w-]{43}$/.test(HS.tk);
    if(okT)PF.loadPro(false,HS.tk).then(()=>{if(/^[a-z]{3,10}$/.test(HS.sk||"")&&PF.skins[HS.t][HS.sk])PF.skinSel[HS.t]=HS.sk}).catch(()=>{}).finally(go);else go()}}
 else{CH=parseCh();if(CH)openCh();else if(location.hash==="#daily")startDaily()}
 /* hook kiểm thử */
