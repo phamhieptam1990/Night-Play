@@ -20,7 +20,7 @@ const POP = id => ({ id, url: "popplay/games/" + id + "/index.html", chips: ".lv
 /* khai báo mọi game có chọn độ khó: chips = bộ chọn chip; size = [giá trị] cho game chọn bằng ô số */
 const GAMES = [
   POP("qua-song"), POP("thap-vong-mau"), POP("be-dau-bo-me"), POP("bo-me-5-giay"), POP("doan-tuoi-nao"), POP("ve-chu-quai-vat"), POP("nhay-theo-so"),
-  POP("ten-lua-cua-be"), POP("con-vat-an-so"), POP("be-noi-dung-khong"),
+  POP("ten-lua-cua-be"), POP("con-vat-an-so"), POP("be-noi-dung-khong"), POP("sudoku-con-vat"),
   { id: "tim-doi-the", url: "cozyplay/games/tim-doi-the/index.html", chips: "#lvs>button", start: "document.getElementById('bFree').click()", end: "try{G.over=true;finish(G)}catch(e){}" },
   { id: "ga-me-ban-trung", url: "cozyplay/games/ga-me-ban-trung/index.html", chips: "#lvs>button", start: "document.getElementById('bFree').click()", end: "try{G.over=true;endGame()}catch(e){}" },
   { id: "cho-hang-kieu-viet", url: "cozyplay/games/cho-hang-kieu-viet/index.html", chips: "#lvs>button", start: "document.getElementById('bFree').click()", end: "try{G.over=true;endRun()}catch(e){}" },

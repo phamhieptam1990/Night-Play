@@ -1,0 +1,50 @@
+/* Sudoku Con Vật — bàn Sudoku (lưới N×N, mỗi số là một con vật), bàn chọn con vật, hàng nút. Giao diện Night Pass chỉ đổi biến --cell*, --bd* và tệp css riêng. */
+.scene{position:relative;flex:1;min-height:0;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:2cqw;padding:2cqw 2cqw 0}
+.dc{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.dc i{position:absolute;font-style:normal;font-size:6cqw;opacity:.24;animation:drift 10s linear infinite}
+.brd{--cs:calc(88cqw / var(--n));position:relative;flex:none;width:88cqw;aspect-ratio:1;display:grid;
+  grid-template-columns:repeat(var(--n),1fr);grid-template-rows:repeat(var(--n),1fr);gap:0;
+  border-radius:var(--rad);padding:1cqw;box-sizing:content-box;margin:0 auto;background:var(--bdbg,var(--sp));border:var(--bd);box-shadow:var(--sh)}
+.c{position:relative;display:grid;place-items:center;min-width:0;min-height:0;padding:0;margin:0;
+  background:var(--cell,color-mix(in srgb,var(--sp) 92%,transparent));color:var(--si);
+  border:.25cqw solid var(--cline,rgba(60,40,20,.18));font-size:calc(var(--cs) * .6);line-height:1;border-radius:var(--cr,0)}
+.c.b2{background:var(--cell2,color-mix(in srgb,var(--sa) 10%,var(--cell,#fff)))}
+.c.rr{border-right:.7cqw solid var(--cthick,var(--si))}
+.c.bb{border-bottom:.7cqw solid var(--cthick,var(--si))}
+.c.dg::after{content:"";position:absolute;inset:7%;border-radius:50%;border:.5cqw dashed color-mix(in srgb,var(--sa) 55%,transparent);pointer-events:none}
+.c.gv{background:var(--cellg,color-mix(in srgb,var(--sa) 22%,var(--cell,#fff)))}
+.c.gv i{filter:drop-shadow(0 .4cqw 0 rgba(0,0,0,.18))}
+.c i{font-style:normal;display:block;transition:transform .15s}
+.c.pop i{animation:cpop .35s cubic-bezier(.2,1.7,.4,1)}
+@keyframes cpop{0%{transform:scale(.2)}100%{transform:scale(1)}}
+.c.pe{background:color-mix(in srgb,var(--sa) 14%,var(--cell,#fff))}
+.c.sm{background:color-mix(in srgb,var(--sa) 30%,var(--cell,#fff))}
+.c.sel{background:color-mix(in srgb,var(--sa) 46%,var(--cell,#fff));outline:.8cqw solid var(--sa);outline-offset:-.8cqw;z-index:2}
+.c.bad{animation:shake .4s;background:color-mix(in srgb,var(--bad) 35%,var(--cell,#fff))}
+.c.bad i{animation:none}
+.c.hl{animation:hintc .7s ease-in-out infinite;background:color-mix(in srgb,var(--warn) 45%,var(--cell,#fff))}
+.c.cf{background:color-mix(in srgb,var(--bad) 28%,var(--cell,#fff))}
+@keyframes hintc{50%{transform:scale(1.07)}}
+.c:focus-visible{outline:.9cqw solid var(--sa);outline-offset:-.9cqw;z-index:3}
+.pal{flex:none;width:98cqw;display:flex;gap:.4cqw;align-items:stretch;justify-content:center}
+.pk{position:relative;flex:1 1 0;min-width:0;aspect-ratio:1/1;max-height:22cqw;border-radius:4cqw;display:grid;place-items:center;
+  background:var(--pkbg,var(--sp));color:var(--si);border:var(--pkbd,.5cqw solid rgba(255,255,255,.9));box-shadow:var(--sh);font-size:calc(100cqw / (var(--n) + 1) * .7)}
+.pk i{font-style:normal;line-height:1}
+.pk b{position:absolute;right:.6cqw;bottom:.2cqw;font-size:3.2cqw;font-weight:800;color:var(--si);opacity:.75}
+.pk:active{transform:scale(.94)}
+.pk.on{outline:.9cqw solid var(--sa);outline-offset:.2cqw;background:color-mix(in srgb,var(--sa) 28%,var(--sp))}
+.pk.done{opacity:.35}
+.pk.hl{animation:hintc .7s ease-in-out infinite}
+.pk:focus-visible{outline:.9cqw solid var(--sa);outline-offset:.3cqw}
+.ctl{gap:3.4cqw}
+.ctl .ib2{width:14.5cqw;height:14.5cqw;min-width:44px;min-height:44px}
+.ctl .ib2.main{width:17cqw;height:17cqw}
+.ctl .ib2 sub{position:absolute;right:-.4cqw;top:-.4cqw;font-size:3.2cqw;line-height:1;background:var(--accent);color:var(--on-accent);border-radius:999px;padding:.3cqw .9cqw}
+.ctl .ib2{position:relative}
+.hwBoard{display:grid;grid-template-columns:repeat(var(--n),1fr);gap:.6cqw;width:34cqw;aspect-ratio:1;font-size:6cqw}
+.hwBoard span{display:grid;place-items:center;border-radius:1cqw;background:color-mix(in srgb,var(--sa,#3b82f6) 14%,#fff);line-height:1;min-width:0}
+.hwBoard span.q{background:#fff;border:.4cqw dashed var(--accent)}
+.hwArt .e{font-size:11cqw;line-height:1}
+.hwArt .ar{font-size:7cqw;color:var(--muted)}
+.hwArt .row2{display:flex;gap:1.6cqw;font-size:8cqw;line-height:1}
+@media (prefers-reduced-motion:reduce){.c.hl,.pk.hl,.c.pop i{animation:none}}

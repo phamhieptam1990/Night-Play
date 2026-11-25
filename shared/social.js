@@ -50,6 +50,7 @@ window.NPS = (function () {
     "be-dau-bo-me": { name: { vi: "Bé Đấu Bố Mẹ", en: "Kid vs Parent" }, url: "popplay/games/be-dau-bo-me/index.html", board: true, kids: true, site: "popplay" },
     "qua-song": { name: { vi: "Qua Sông Cùng Bé", en: "River Crossing" }, url: "popplay/games/qua-song/index.html", board: true, kids: true, site: "popplay" },
     "thap-vong-mau": { name: { vi: "Tháp Vòng Màu", en: "Rainbow Rings" }, url: "popplay/games/thap-vong-mau/index.html", board: true, kids: true, site: "popplay" },
+    "sudoku-con-vat": { name: { vi: "Sudoku Con Vật", en: "Animal Sudoku" }, url: "popplay/games/sudoku-con-vat/index.html", board: true, kids: true, site: "popplay" },
     "lang-cua-be": { name: { vi: "Làng Của Bé", en: "Baby's Village" }, url: "popplay/games/lang-cua-be/index.html", board: true, kids: true, site: "popplay" },
   };
 

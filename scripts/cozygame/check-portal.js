@@ -8,7 +8,7 @@ const COZY = ["song-sot-cuoi-thang", "xay-cau-tre", "ne-o-ga", "shipper-sieu-toc
 const POP = { "bo-me-5-giay": "begin(0,{});setTimeout(()=>{G.p=3;G.j=2;G.bonus=20;G.mcp=3;G.mcj=2;finish()},300)", "con-vat-an-so": "begin(0,{});setTimeout(()=>{G.sc=180;G.ok=6;finish()},300)",
   "nhay-theo-so": "begin(0,{});setTimeout(()=>{G.rn=6;G.rs=4;finish()},300)", "doan-tuoi-nao": "begin(0,{});setTimeout(()=>{G.m=5;G.cor=3;G.dsum=10;G.sumT=20;finish()},300)",
   "lang-cua-be": "startSession(0,null,{});setTimeout(()=>{S.good=4;S.score=40;finishSession()},400)", "pop-fly": "startRound(Object.keys(PF.types||{})[0]||0);setTimeout(()=>{const S=PF.S;if(S){S.score=120;S.correct=5}finishRound()},500)",
-  "be-dau-bo-me": "", "be-noi-dung-khong": "", "qua-song": "", "ten-lua-cua-be": "", "thap-vong-mau": "", "ve-chu-quai-vat": "" };
+  "be-dau-bo-me": "", "be-noi-dung-khong": "", "qua-song": "", "ten-lua-cua-be": "", "thap-vong-mau": "", "sudoku-con-vat": "", "ve-chu-quai-vat": "" };
 const VPS = [[380, 760], [844, 390], [1000, 536], [820, 600]];
 /* ĐIỆN THOẠI DỌC qua trang cổng: đúng 1 nút ← + 1 nút menu ⋯ (≥44px), 📷/📤 nằm TRONG bảng menu #npFan, không còn nút nổi/← của cổng, tiêu đề không bị cắt, ← và ⋯ không bị đè. Chạy trong khung game. */
 const MENU_MEASURE = mode => {   // mode: "phone" (mặc định) | "tab" (iPad dọc: ← + 🔊 ngoài menu) | "land" (iPad ngang: giữ cột nút, không gom)

@@ -4,7 +4,7 @@
    (4) mọi khối nằm trọn màn, trang không cuộn; (5) không chồng lên nhau; (6) chữ ≥ 11px. Thoát mã 1 nếu có lỗi. */
 const { spawn } = require("child_process"), path = require("path"), puppeteer = require("puppeteer-core");
 const root = path.join(__dirname, "..", ".."), PORT = 8977, B = "http://localhost:" + PORT + "/popplay/games/";
-const IDS = ["be-dau-bo-me", "be-noi-dung-khong", "bo-me-5-giay", "con-vat-an-so", "doan-tuoi-nao", "lang-cua-be", "nhay-theo-so", "pop-fly", "qua-song", "ten-lua-cua-be", "thap-vong-mau", "ve-chu-quai-vat"];
+const IDS = ["be-dau-bo-me", "be-noi-dung-khong", "bo-me-5-giay", "con-vat-an-so", "doan-tuoi-nao", "lang-cua-be", "nhay-theo-so", "pop-fly", "qua-song", "sudoku-con-vat", "ten-lua-cua-be", "thap-vong-mau", "ve-chu-quai-vat"];
 const VPS = [[360, 560], [390, 664], [430, 760], [820, 1050], [844, 340], [667, 300], [568, 300], [1180, 760]];
 const only = (process.argv[2] || "").split(",").filter(Boolean), list = only.length ? only : IDS, fails = [];
 const note = (id, W, H, res, m) => { const s = id + " " + W + "x" + H + (res ? " (có ván dở)" : "") + ": " + m; fails.push(s); console.log("  ✗ " + s); };

@@ -54,6 +54,7 @@
     "qua-song":         { bpm: 92,  root: 57, sc: "mix", prog: [0, 3, 4, 3, 0, 3, 4, 0], lead: "pluck",  groove: 0, bass: [0, 8], arp: [0, 6, 12] },
     "ten-lua-cua-be":   { bpm: 122, root: 62, sc: "mix", prog: [0, 6, 3, 4, 0, 6, 3, 0], lead: "square", groove: 2, bass: [0, 4, 8, 12], arp: [2, 6, 10, 14] },
     "thap-vong-mau":    { bpm: 100, root: 60, sc: "pen", prog: [0, 2, 3, 4, 0, 2, 3, 0], lead: "marimba",groove: 1, bass: [0, 8], arp: [0, 4, 8, 12] },
+    "sudoku-con-vat":   { bpm: 96, root: 62, sc: "pen", prog: [0, 3, 4, 0, 2, 3, 4, 0], lead: "marimba",groove: 1, bass: [0, 8], arp: [0, 4, 8, 12] },
     "ve-chu-quai-vat":  { bpm: 104, root: 59, sc: "dor", prog: [0, 6, 3, 4, 0, 6, 5, 4], lead: "pluck",  groove: 1, bass: [0, 6, 8, 14], arp: [2, 6, 10, 14] }
   };
   var S = SPEC[ID];

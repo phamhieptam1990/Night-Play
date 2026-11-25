@@ -45,6 +45,7 @@
 .pt-title[data-pt="doan-tuoi-nao"]{--pt-a:#ff9cc6;--pt-b:#ee4a97;--pt-shadow:#992660;--pt-ic:"🎂"}          /* hồng */
 .pt-title[data-pt="nhay-theo-so"]{--pt-a:#ffbf4d;--pt-b:#ee4c7c;--pt-shadow:#9b2850;--pt-ic:"💃"}           /* vàng → hồng */
 .pt-title[data-pt="thap-vong-mau"]{--pt-a:#ff86b8;--pt-b:#6f5ce8;--pt-shadow:#3c2d9c;--pt-ic:"🌈"}          /* hồng → tím */
+.pt-title[data-pt="sudoku-con-vat"]{--pt-a:#6fc4ff;--pt-b:#7a5cff;--pt-shadow:#2c3f9c;--pt-ic:"🐶"}          /* xanh dương → tím */
 .pt-title[data-pt="ve-chu-quai-vat"]{--pt-a:#b985ff;--pt-b:#5b36d8;--pt-shadow:#361e92;--pt-ic:"👾"}        /* tím */
 
 /* điện thoại dọc: tên game xuống 2 dòng (tiếng Việt dài, vd "Bố Mẹ Thử Thách 5 Giây") không được chạm/đè thanh điểm phía dưới: đệm 8px + chừa chỗ chân chữ (y, g, ậ) bị bóng đổ phình ra */

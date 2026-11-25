@@ -776,6 +776,7 @@ const NEW_GAMES = {   // 7 game mới của Pop Play (mỗi game 4 loại × 5 g
   "nhay-theo-so": { vi: "Nhảy Theo Số", en: "Dance by Numbers", types: [["Nhảy", "Jump"], ["Vỗ tay", "Clap"], ["Dậm chân", "Stomp"], ["Vẫy tay", "Wave"]], dvi: "Màn hình hiện phép tính, bé nhảy hoặc vỗ tay đúng số lần. Vừa học vừa vận động!", den: "A sum appears, the kid jumps or claps that many times. Learn and move!" },
   "qua-song": { vi: "Qua Sông Cùng Bé", en: "River Crossing", types: [["Cảnh sát & Trộm", "Cops & Robbers"], ["Bác nông dân", "Farmer's Trip"], ["Cả nhà qua sông", "Family Crossing"], ["Qua cầu đêm", "Night Bridge"]], dvi: "Đố vui đưa cả nhóm qua sông bằng thuyền. Chọn sai chỉ bị nhắc nhẹ, không bao giờ thua!", den: "A cosy puzzle: get everyone across the river. Wrong picks only get a gentle reminder!" },
   "thap-vong-mau": { vi: "Tháp Vòng Màu", en: "Rainbow Rings", types: [["Tháp 3 cột", "3 Pegs"], ["Tháp 4 cột", "4 Pegs"], ["Tháp xáo trộn", "Shuffled Tower"], ["Tháp vòng tròn", "Round Tower"]], dvi: "Chuyển các vòng màu từ cột này sang cột kia: vòng to không được đè lên vòng nhỏ!", den: "Move the colourful rings between pegs: a big ring never sits on a small one!" },
+  "sudoku-con-vat": { vi: "Sudoku Con Vật", en: "Animal Sudoku", types: [["Sudoku 4×4", "Sudoku 4×4"], ["Sudoku 6×6", "Sudoku 6×6"], ["Sudoku chéo 4×4", "Diagonal 4×4"], ["Sudoku chéo 6×6", "Diagonal 6×6"]], dvi: "Xếp các bạn thú vào bàn Sudoku: mỗi hàng, cột, ô không lặp. Sai chỉ bị nhắc nhẹ, không bao giờ thua!", den: "Place the animals on the Sudoku board: no repeats in any row, column or box. A wrong pick is a gentle nudge, you never lose!" },
 };
 for (const id in NEW_GAMES) POP_GAMES[id] = { max: 300, kids: true };
 const COZY_NEW = {   // game mới của Cozy Play (người lớn): 1 loại × 5 giao diện (1 free + 4 Night Pass). ch = {s:hạt giống uint32, sc:điểm 0..max}
@@ -1019,6 +1020,7 @@ const PRO_MODS = {   // require LITERAL (esbuild của Netlify không gộp đư
   "nhay-theo-so": () => require("./pro/nhay-theo-so"),
   "qua-song": () => require("./pro/qua-song"),
   "thap-vong-mau": () => require("./pro/thap-vong-mau"),
+  "sudoku-con-vat": () => require("./pro/sudoku-con-vat"),
   "gia-cho-viet": () => require("./pro/gia-cho-viet"),
   "xin-nghi": () => require("./pro/xin-nghi"),
   "doi-doi-2048": () => require("./pro/doi-doi-2048"),

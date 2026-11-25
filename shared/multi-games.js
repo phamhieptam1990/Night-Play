@@ -51,6 +51,7 @@
     "be-dau-bo-me":       { portal: "popplay", icon: "⚔️", vi: "Bé Đấu Bố Mẹ", en: "Kid vs Parent", mode: "focus", realtime: true, minW: 360, minH: 420, resumable: false, why: "Hai người chơi chung màn hình, ai chạm trước thắng: cần khung lớn; chưa lưu được ván" },
     "qua-song":           { portal: "popplay", icon: "⛵", vi: "Qua Sông Cùng Bé", en: "River Crossing", mode: "parallel", realtime: false, minW: 300, minH: 340, resumable: true, why: "Đố qua sông theo lượt, không đồng hồ, không bao giờ thua" },
     "thap-vong-mau":      { portal: "popplay", icon: "🌈", vi: "Tháp Vòng Màu", en: "Rainbow Rings", mode: "parallel", realtime: false, minW: 300, minH: 340, resumable: true, why: "Xếp vòng theo lượt, không đồng hồ" },
+    "sudoku-con-vat":     { portal: "popplay", icon: "🐶", vi: "Sudoku Con Vật", en: "Animal Sudoku", mode: "parallel", realtime: false, minW: 300, minH: 340, resumable: true, why: "Xếp bạn thú theo lượt, không đồng hồ" },
     "lang-cua-be":        { portal: "popplay", icon: "🏘️", vi: "Làng Của Bé", en: "Baby's Village", mode: "parallel", realtime: false, minW: 300, minH: 340, resumable: true, why: "Đố chữ/số tự nhịp, không bao giờ thua" },
     "pop-fly":            { portal: "popplay", icon: "🐦", vi: "Chim Bay Học Vui", en: "Fly & Learn", mode: "focus", realtime: true, minW: 340, minH: 400, resumable: true, why: "Bay và nhặt chữ liên tục" }
   };

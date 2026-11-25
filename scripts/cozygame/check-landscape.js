@@ -72,7 +72,7 @@ const note = (ok, msg) => { if (!ok) { fails.push(msg); console.log("  ✗ " + m
     }
   }
   /* Pop Play (12 game .app/.side/.play dùng shared/poplandscape.css): màn chọn ngang — khung #play ở giữa, không tràn, nút thanh trên ~42px, không bị cắt */
-  if (!only.length) for (const id of ["be-dau-bo-me", "be-noi-dung-khong", "bo-me-5-giay", "con-vat-an-so", "doan-tuoi-nao", "lang-cua-be", "nhay-theo-so", "pop-fly", "qua-song", "ten-lua-cua-be", "thap-vong-mau", "ve-chu-quai-vat"]) {
+  if (!only.length) for (const id of ["be-dau-bo-me", "be-noi-dung-khong", "bo-me-5-giay", "con-vat-an-so", "doan-tuoi-nao", "lang-cua-be", "nhay-theo-so", "pop-fly", "qua-song", "sudoku-con-vat", "ten-lua-cua-be", "thap-vong-mau", "ve-chu-quai-vat"]) {
     console.log("== pop " + id);
     for (const [W, H] of VPS) {
       const pg = await br.newPage(); await pg.setViewport({ width: W, height: H, isMobile: true, hasTouch: true }); await pg.evaluateOnNewDocument(() => { localStorage.setItem("np-sound", "0"); localStorage.setItem("theme", "dark"); localStorage.setItem("pophelp-seen:" + location.pathname.split("/").slice(-2)[0], "1"); });   /* tắt hiệu ứng nảy của nút ? (làm nút 47-48px) */

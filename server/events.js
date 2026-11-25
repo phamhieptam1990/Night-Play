@@ -32,6 +32,7 @@ const MODS = {   // require LITERAL (bundler không gộp được require độ
   "qua-song": () => require("./pro/qua-song"),
   "ten-lua-cua-be": () => require("./pro/ten-lua-cua-be"),
   "thap-vong-mau": () => require("./pro/thap-vong-mau"),
+  "sudoku-con-vat": () => require("./pro/sudoku-con-vat"),
   "ve-chu-quai-vat": () => require("./pro/ve-chu-quai-vat"),
 };
 const JS = "application/javascript; charset=utf-8";
