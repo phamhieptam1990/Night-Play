@@ -89,3 +89,8 @@ Tất cả đã commit + push tới `1d7e956` trừ phần ĐANG CHẠY bên dư
 
 ## Cách chạy bài đo / chụp ảnh (nhắc lại)
 - `export PATH="$PATH:/opt/homebrew/bin"`; NODE_PATH puppeteer-core ở `/private/tmp/claude-501/-Users-lap60775-a4b-game/079674bc-a5ec-429d-b755-df793dc8c5af/scratchpad/pp/node_modules` (mất thì `npm i puppeteer-core` ở thư mục tạm); Chrome `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome` (`--allow-file-access-from-files`). Quy ước: chỉ kiểm phạm vi đã sửa, tự nhìn ảnh thật, không push khi chưa được yêu cầu, không commit code.md. Mỗi commit kết thúc `Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>`.
+
+## HOÀN THÀNH 2026-11-26 (sáng): Vườn Thú + Khu Chợ ĐÃ XONG và đã đẩy lên
+- learn/vuon-thu/ (Tiếng Việt, 5 chuồng) và learn/khu-cho/ (Tiếng Anh, 5 quán) xong, xem ảnh thật đạt; learn/garden/index.html đã chuyển hướng: tviet → vuon-thu, tanh → khu-cho (?garden=1 xem vườn cũ); nút ← trong nha-bi/quan-kem về hub khi có ?from=hub|market.
+- check-garden ✓ 266; sw.js cache v639, mọi tệp có thật. Trang duyệt learn/review-game-lon.html có link 2 hub.
+- Còn lỏng: hướng dẫn ở hub chỉ hiện sau 2-3 giây; chưa bấm tay ← ở quán/phòng thú để thấy về hub (đã xác nhận href); Khu Chợ chưa có hoạt cảnh khách thú vào quán; vẫn chờ chủ site quyết mức "học trước chơi sau"/lời mời sang Học Vui.
