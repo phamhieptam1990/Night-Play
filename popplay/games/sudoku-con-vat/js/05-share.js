@@ -27,7 +27,7 @@ function parseCh() {
 function shareLink() {
   const l = LANG === "en" ? "&l=en" : "";
   if (G.daily) return location.origin + "/api/share/sudoku-con-vat?d=1&n=" + G.daily.n + "&s=" + G.score + l;
-  return location.origin + "/api/share/sudoku-con-vat?ch=" + b64e({ t: G.t, lv: Math.min(3, G.lv), s: G.seed, sc: G.score }) + l;
+  return location.origin + "/api/share/sudoku-con-vat?ch=" + b64e({ t: G.t, lv: G.lv, s: G.seed, sc: G.score }) + l;
 }
 function startRows() {
   const P = G.Pz, an = skinOf(G.t).an, rows = [];

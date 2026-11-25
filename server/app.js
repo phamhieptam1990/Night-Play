@@ -1072,7 +1072,7 @@ route("GET", new RegExp("^/api/pro/(" + NG_IDS + ")\\.js$"), async ({ m, headers
 });
 route("GET", new RegExp("^/api/share/(" + NG_IDS + ")$"), async ({ m, query, headers }) => {
   const id = m[1], g = NEW_GAMES[id], en = query.get("l") === "en", L = en ? 1 : 0, o = b64json(query.get("ch")), origin = reqOrigin(headers), name = g[en ? "en" : "vi"];
-  const okCh = o && intIn(o.t, 0, 3) && intIn(o.lv, 1, 3) && intIn(o.s, 0, 4294967295) && intIn(o.sc, 0, 300);
+  const okCh = o && intIn(o.t, 0, 3) && intIn(o.lv, 1, 8) && intIn(o.s, 0, 4294967295) && intIn(o.sc, 0, 300);
   const daily = query.get("d") === "1", dn = /^\d{1,4}$/.test(query.get("n") || "") ? query.get("n") : "", ds = /^\d{1,3}$/.test(query.get("s") || "") ? query.get("s") : "";
   let title = name, desc = en ? g.den : g.dvi, img = "home", go = "";
   if (daily) { title = en ? "📅 " + name + " — today #" + dn + (ds ? ": " + ds + " points" : "") : "📅 " + name + " — hôm nay #" + dn + (ds ? ": " + ds + " điểm" : ""); desc = en ? "Same challenge for every family today. Can you beat it?" : "Hôm nay mọi nhà cùng một thử thách. Nhà bạn làm được không?"; img = "daily"; go = "#daily"; }

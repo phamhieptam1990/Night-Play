@@ -214,9 +214,9 @@ const scoreOf = D => D.pts + D.bonus;
 const remain = D => D.CF.time ? Math.max(0, D.limit - D.time) : 0;
 const foundOf = D => D.words.reduce((a, w) => a + (w.found ? 1 : 0), 0);
 let DIF = (() => { const v = LS.get("sc-lv", 1); return Number.isInteger(v) && v >= 0 && v < LVC.length ? v : 1; })();
-const lvOf = (seed, mode) => mode === "free" ? DIF : seed % 3;
+const lvOf = (seed, mode) => mode === "free" ? DIF : mode === "daily" ? seed % 3 : seed % 8;   /* thách đấu mang đủ 8 level trong seed (seed%8); ván hôm nay giữ seed%3 */
 function newGame(seed, mode, t, ch) {
-  const lv = lvOf(seed, mode); seed = seed - seed % 3 + Math.min(lv, 2); const sk = skinOf(), P = genPuzzle(seed, lv, sk) || genPuzzle(seed + 3, lv, { words: WORDS });
+  const lv = lvOf(seed, mode); const M = mode === "daily" ? 3 : 8; seed = seed - seed % M + (mode === "daily" ? Math.min(lv, 2) : lv); const sk = skinOf(), P = genPuzzle(seed, lv, sk) || genPuzzle(seed + 3, lv, { words: WORDS });
   const D = { seed, mode, t, lv, CF: CFG[t], n: P.n, grid: P.grid, words: P.words, used: P.used, ch: ch || null, sel: null, order: [], pts: 0, bonus: 0, combo: 0, maxCombo: 0, lastF: -99, hints: lv >= 6 ? 1 : lv >= 4 ? 2 : 3, hint: null, errs: 0,
     fx: [], shake: 0, flash: 0, storms: 0, nextStorm: CFG[t].storm, limit: 60 + P.words.length * 14, over: false, reason: "end", time: 0, dur: 1e9, beat: false };
   return D;
