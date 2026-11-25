@@ -31,6 +31,7 @@ module.exports = {
       sk: { basic: ["Palette", "Palette"], hive: ["Honeycomb", "Honeycomb"], petri: ["Petri dish", "Petri dish"], sky: ["Starry sky", "Starry sky"], wall: ["Stained wall", "Stained wall"] } }
   },
   sfx: `{ok:()=>tone(780,.07,"triangle",.08),bad:()=>tone(160,.25,"sawtooth",.07),end:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.09,i*.09)),combo:n=>{const b=440*Math.pow(1.122,Math.min(n/3,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.1,"triangle",.09,i*.05))},up:()=>{[660,880,1320].forEach((f,i)=>tone(f,.1,"triangle",.09,i*.06))}}`,
+  level: { max: 4, rules: [["dur","mul",-.1,30],["per","mul",-.08,8]] },   /* lên level cuối màn: scripts/cozygame/levelgen.js */
   gameJs: String.raw`
 let W=360,H=360,SC=1;const ctx=cv.getContext("2d");
 const CFG=[{mode:"time",dur:60,pen:5,kind:"l"},{mode:"time",dur:60,pen:5,kind:"h",spin:1},{mode:"life",lives:3,per:12,kind:"l",flick:1},{mode:"time",dur:30,pen:3,kind:"l",shuf:4}];

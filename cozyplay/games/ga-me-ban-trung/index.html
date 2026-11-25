@@ -5,7 +5,7 @@
 <script src="../../../shared/guard.js"></script><script src="../../../shared/npicon.js"></script><script src="../../../shared/layout.js"></script>
 <script src="../../../shared/device.js"></script>
 <script src="../../../shared/help.js" defer></script>
-<script src="../../../shared/bridge.js"></script>
+<script src="../../../shared/bridge.js"></script><script src="../../../shared/levelup.js"></script>
 <script src="../../../shared/art/mascot-art.js" defer></script>
 <script src="../../../shared/fx.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -328,6 +328,7 @@ function showEnd(){if(!G)return;show("end");const why={lose:"endL",clear:"endW",
  const helper=!!(window.NP&&NP.helper);$("bShare").hidden=helper;$("bAgain").hidden=helper;$("bBoard").hidden=helper;$("bHome").hidden=helper}
 function rematch(){if(!G)return;const g=G;if(PF.pro&&PF.pro.trial)PF.lockPro();begin(g.seed,g.mode,g.t,g.ch,g.cfg.lv)}
 function again(){if(!G)return;const t=G.t;if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",t,null)}
+window.NPLevel&&NPLevel.attach({levels:3,cur:()=>G?LV:-1,won:()=>!!G&&["clear","rescue"].includes(G.why),skip:()=>!G||G.mode!=="free"||!!G.ch,go:i=>{LV=i;LS.set("gm-lv",i);if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",G?G.t:TY,null,i)}});   /* lên level cuối màn (shared/levelup.js); trần 3 = 3 độ khó đã cân chỉnh */
 /* ===== CHIA SẺ ===== */
 function shareLink(){return location.origin+"/api/share/"+GID+"?ch="+b64e({s:G.seed,sc:Math.min(MAXS,G.score),sh:Math.max(5,Math.min(200,G.cfg.shots||G.used||DAILY_SHOTS)),t:G.t,lv:G.cfg.lv})+(LANG==="en"?"&l=en":"")}
 function shareText(){return TYPES[G.t][0]+" "+T("share")+(G.t?" · "+L2([TYPES[G.t][1],TYPES[G.t][2]]):"")+(G.mode==="daily"?" #"+dayNo(dayKey()):"")+"\n"+(G.hatched.length?T("hatched")+": "+G.hatched.join(""):T("none"))+"\n🏅 "+G.score+" · "+T("rk")[rankIdx(G.score)]+(G.maxCombo>1?" · 🔥×"+G.maxCombo:"")+(G.ch?"\n⚔ "+G.score+" vs "+G.ch.sc+(G.score>G.ch.sc?" 🎉":""):"")+"\n"+T("ask")+"\n"+shareLink()}

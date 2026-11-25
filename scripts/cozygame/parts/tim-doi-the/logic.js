@@ -103,3 +103,6 @@ function onLang(D) { hud(); }
 new MutationObserver(() => { if (!$("home").hidden) renderLevels(); }).observe($("home"), { attributes: true, attributeFilter: ["hidden"] });
 document.addEventListener("click", e => { if (e.target.closest && e.target.closest("#bLang")) setTimeout(renderLevels, 0); });
 renderLevels();
+/* lên level khi kết thúc màn (shared/levelup.js): level = độ khó Dễ/Thường/Khó; chỉ ván dọn sạch bàn mới mở level tiếp */
+window.NPLevel && NPLevel.attach({ levels: 3, cur: () => G ? G.lv : -1, won: () => !!G && G.reason === "win", skip: () => !G || G.mode !== "free" || !!G.ch,
+  go: i => { DIF = i; LS.set("td-lv", i); if (PF.pro && PF.pro.trial) PF.lockPro(); begin(newSeed(), "free", G ? G.t : TY, null); } });

@@ -32,6 +32,7 @@ function gen(id) {
   const PROJS = "function proFx(n){const h=$(\"play\");if(!h)return;for(let i=0;i<(n>=12?2:1);i++){const r=document.createElement(\"i\");r.className=\"pfx\"+(i?\" b\":\"\");h.appendChild(r);setTimeout(()=>r.remove(),1100)}h.classList.remove(\"pglow\");void h.offsetWidth;h.classList.add(\"pglow\");setTimeout(()=>h.classList.remove(\"pglow\"),800)}\n";
   rep.EXTRA_CSS = (rep.EXTRA_CSS || "") + PROCSS;
   rep.GAMEJS = PROJS + rep.GAMEJS.split("function burst(n){if(!isProSk()&&n<12)return;").join("function burst(n){if(isProSk())proFx(n);if(!isProSk()&&n<12)return;");
+  rep.LEVELJS = require("./levelgen.js")(sp);
   let t = tpl;
   for (const k of Object.keys(rep)) t = t.split("@@" + k + "@@").join(rep[k]);
   t = t.replace(/<html lang="vi">/, '<html lang="vi">');

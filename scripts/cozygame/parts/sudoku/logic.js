@@ -85,3 +85,6 @@ function renderLevels() {
 new MutationObserver(() => { if (!$("home").hidden) renderLevels(); }).observe($("home"), { attributes: true, attributeFilter: ["hidden"] });
 document.addEventListener("click", e => { if (e.target.closest && e.target.closest("#bLang")) setTimeout(renderLevels, 0); });
 renderLevels();
+/* lên level cuối màn (shared/levelup.js): trần 3 = 3 độ khó đã cân chỉnh; chỉ ván thắng mới mở level tiếp */
+window.NPLevel && NPLevel.attach({ levels: 3, cur: () => G ? G.lv : -1, won: () => !!G && G.reason === "win", skip: () => !G || G.mode !== "free" || !!G.ch,
+  go: i => { DIF = i; LS.set("sd-lv", i); if (PF.pro && PF.pro.trial) PF.lockPro(); begin(newSeed(), "free", G ? G.t : TY, null); } });

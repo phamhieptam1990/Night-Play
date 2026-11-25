@@ -35,6 +35,7 @@ module.exports = {
       sk: { basic: ["Tet kitchen", "Tet kitchen"], pizza: ["Pizza parlour", "Pizza parlour"], ninja: ["Ninja dojo", "Ninja dojo"], lab: ["Laser lab", "Laser lab"], candy: ["Candy factory", "Candy factory"] } }
   },
   sfx: `{cut:()=>{tone(700,.08,"sawtooth",.06);tone(300,.12,"triangle",.07,.04)},ok:()=>{[660,880,1100].forEach((f,i)=>tone(f,.1,"triangle",.09,i*.06))},near:()=>{[520,660].forEach((f,i)=>tone(f,.1,"triangle",.08,i*.07))},bad:()=>tone(170,.25,"sawtooth",.07),end:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.09,i*.09)),combo:n=>{const b=440*Math.pow(1.122,Math.min(n/3,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.1,"triangle",.09,i*.05))}}`,
+  level: { max: 3, rules: [["parts","add",1,4]] },   /* lên level cuối màn: scripts/cozygame/levelgen.js */
   gameJs: String.raw`
 let W=360,H=400,SC=1;const ctx=cv.getContext("2d");
 const CFG=[{parts:2,pool:["sq","circle","semi","pent","blob"]},{parts:2,rot:1,pool:["sq","circle","pent","L","star"]},{parts:3,pool:["sq","circle","pent","blob","semi"]},{parts:4,fog:1,pool:["sq","circle","pent","semi","blob"]}],ROUNDS=5;

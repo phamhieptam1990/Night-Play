@@ -15,6 +15,7 @@ $("undoBtn").onclick = undo; $("hintBtn").onclick = hint; $("resetBtn").onclick 
 function retry() { if (!G || HELPER) return; begin(G.t, { lv: G.lv, seed: G.seed, daily: G.daily, ch: G.ch }); }
 $("retryBtn").onclick = retry;
 $("againBtn").onclick = () => { if (!G) return; if (G.daily) return startDaily(); begin(G.t, { lv: G.lv }); };
+window.NPLevel&&NPLevel.attach({levels:3,dupe:"#againBtn",cur:()=>G?G.lv-1:-1,go:i=>{LVL=i+1;LS.set("sd-lv",LVL);begin(G.t, { lv: i + 1 })},skip:()=>!!(G && (G.daily || G.ch))});   /* lên level khi kết thúc màn (shared/levelup.js) */
 $("shareBtn").onclick = () => openGate(() => { showOv("ovEnd"); doShare(); }, "ovEnd", "gt.sh");
 $("ovEnd").addEventListener("pointerdown", e => { if (HELPER || e.target.closest("button") || performance.now() - endAt < 450) return; $("againBtn").onclick(); });
 $("homeBtn2").onclick = goHome;
