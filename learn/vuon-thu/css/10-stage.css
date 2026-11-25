@@ -1,0 +1,13 @@
+/* Sân khấu vườn: tỉ lệ cố định, căn giữa dưới HUD, không cuộn. Nền ngoài sân khấu cùng màu cỏ. */
+:root{--hudH:64px}
+html,body{margin:0;height:100%;overflow:hidden;background:#6FC84C;font-family:var(--font,system-ui,sans-serif);-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+body{background:radial-gradient(circle at 50% 40%,#8FD95D,#5DB041)}
+.stage{position:fixed;overflow:hidden;border-radius:0;user-select:none}
+.stage .bgs{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.deco{position:absolute;transform:translate(-50%,-50%);pointer-events:none;filter:drop-shadow(0 3px 2px rgba(0,0,0,.2))}
+.deco.d0{animation:dsw 4s ease-in-out infinite}.deco.d1{animation:dsw 5s ease-in-out -1s infinite}
+@keyframes dsw{50%{transform:translate(-50%,-54%)}}
+.wk-lv{display:none!important}
+#bookBtn{background:linear-gradient(135deg,#FFB020,#FB5A7A);animation:bkb 2.4s ease-in-out infinite}
+@keyframes bkb{50%{transform:translateY(-3px)}}
+@media (max-width:440px){.wk-hud{gap:4px!important}.wk-btn{width:42px;height:42px}.wk-pill{padding:0 6px 0 4px!important}.wk-pill b{font-size:14px}.wk-pill svg{width:20px;height:20px}}
