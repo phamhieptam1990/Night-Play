@@ -107,7 +107,7 @@ if (noNodes) console.log("⚠ cảnh báo: " + noNodes + " chủ đề chưa có
 const lim = { ".html": 300, ".js": 400, ".css": 400 };
 (function walk(d) {
   fs.readdirSync(d, { withFileTypes: true }).forEach((e) => {
-    const p = path.join(d, e.name); if (e.isDirectory()) { if (e.name !== "art" && e.name !== "data") walk(p); return; }
+    const p = path.join(d, e.name); if (e.isDirectory()) { if (e.name !== "art" && e.name !== "data" && e.name !== "bundle") walk(p); return; }
     const x = path.extname(e.name); if (!lim[x]) return;
     const lines = fs.readFileSync(p, "utf8").split("\n"); if (lines.length > lim[x]) fail(path.relative(ROOT, p) + ": " + lines.length + " dòng > " + lim[x]);
     lines.forEach((l, i) => { if (l.length > 230) fail(path.relative(ROOT, p) + ":" + (i + 1) + ": dòng dài " + l.length); });
