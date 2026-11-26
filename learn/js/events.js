@@ -29,7 +29,6 @@ document.addEventListener("pointerdown", e => { GESTURE = true; try{ sessionStor
 stars = +ls("learn:stars") || 0;
 /* MÀN BẬT LOA trước bài kiểm tra: cú chạm này mở khóa âm thanh của trình duyệt (iPhone/Safari chỉ cho đọc sau một cú chạm) */
 (function(){ const g = $("spkGate"); if(!g || !window.Voice) return; if(ls("learn:auto") === "0") return;
-  try{ if(sessionStorage.getItem("learn:spk") === "1") return; }catch(_){}   /* đã bật loa một lần trong phiên này: không hỏi lại ở từng bài/câu (cú chạm đầu của trang tự đọc) */   /* bé đã chọn tắt tiếng: không hỏi lại */
   const f = SUBF[subj]; $("sgBack").href = hubUrl(); $("sgMi").src = "../shared/art/learn/" + f + "/" + f + "_happy.svg"; g.hidden = false;
   $("sgOn").onclick = () => { try{ sessionStorage.setItem("learn:spk", "1"); }catch(_){} AUTO = true; ls("learn:auto", "1"); sndUi(); GESTURE = true; g.hidden = true; speak(); };
   /* gõ phím không lọt xuyên cổng loa */

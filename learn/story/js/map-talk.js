@@ -12,7 +12,8 @@
   function show(title, text) {
     if (shown || !text || !document.body) return;
     if (root.StoryGate && root.StoryGate.isOpen()) { root.StoryGate.onClose(function () { show(title, text); }); return; }   /* chờ bé bật loa xong rồi linh vật mới phóng to đọc*/
-    shown = true;
+    var same = root.__storyTalked === text; root.__storyTalked = text; shown = true;
+    if (same) return;   /* cùng câu vừa đọc ở màn trước (bản đồ lớp → bản đồ chủ đề): không phóng to và đọc lại */
     var reduce = root.matchMedia && root.matchMedia("(prefers-reduced-motion: reduce)").matches;
     el = document.createElement("div"); el.className = "stk"; el.setAttribute("role", "status");
     var b = document.createElement("div"); b.className = "tb"; var m = document.createElement("img"); m.className = "tm"; m.alt = ""; m.src = K.face(K.subj, K.grade);

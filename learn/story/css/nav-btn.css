@@ -1,0 +1,11 @@
+/* Nút tròn cùng bộ màu rực theo môn: nút ← quay lại, nút loa ở thanh trên và nút tiếp (cảnh truyện) cùng một kiểu: gradient theo môn, viền trắng, biểu tượng trắng. Nạp ở cả ba màn. */
+body{--nb1:var(--nx1,var(--k1,#34d399));--nb2:var(--nx2,var(--k2,#0ea5e9))}
+body[data-subj="toan"]{--nx1:#2ee6a6;--nx2:#0a8bf0}
+body[data-subj="tviet"]{--nx1:#ffb02e;--nx2:#ff4f7b}
+body[data-subj="tanh"]{--nx1:#5fa8ff;--nx2:#8b5cf6}
+body .ib,body .spkb{color:#fff;border:3px solid #fff;
+  background:radial-gradient(120% 90% at 30% 18%,rgba(255,255,255,.5) 0,transparent 46%),linear-gradient(150deg,var(--nb1),var(--nb2));
+  box-shadow:0 4px 0 rgba(0,0,0,.22),0 8px 16px rgba(0,0,0,.25),inset 0 -4px 8px rgba(0,0,0,.14)}
+body .ib svg,body .spkb svg{filter:drop-shadow(0 2px 0 rgba(0,0,0,.3))}
+body .spkb.on{background:linear-gradient(150deg,#ffe68a,#ffb84a);color:#3a2300;border-color:#fff}
+body .ib:active,body .spkb:active{transform:translateY(2px) scale(.96)}

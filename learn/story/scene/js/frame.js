@@ -4,7 +4,7 @@
   "use strict";
   var K = root.StoryCore, U = root.SceneU, S = root.SceneT, V = root.SceneVoice, X = root.SceneFx;
   var $ = function (id) { return document.getElementById(id); };
-  var LM = root.LearnMascot, ok = false, nextFn = null, land = false, intro = true, talkT = 0, wordT = 0;
+  var LM = root.LearnMascot, ok = false, nextFn = null, land = false, intro = true, talkT = 0, wordT = 0, saidT = 0;
   function isLand() { var s = $("sc"); return s.clientWidth > s.clientHeight * 1.05; }
   function setBg() {
     land = isLand(); $("sc").dataset.o = land ? "l" : "p";
@@ -35,14 +35,15 @@
     say: function (text, o) {
       o = o || {}; var b = $("bub"); clearInterval(wordT); delete b.dataset.full; b.textContent = text; X.cls(b, "pop"); fitBub(); setTimeout(fitBub, 60);
       if (o.emote) F.emote(o.emote);
-      if (o.quiet) V.set("", null); else { if (intro) F.talk(o.speak || text); V.set(o.speak || text, o.vo); }
-      intro = false;
+      var first = intro; intro = false; if (!first) F.said();   /* lời tiếp theo: bóng thoại nhỏ trên đầu linh vật vài giây */
+      if (o.quiet) V.set("", null); else { if (first) F.talk(o.speak || text); V.set(o.speak || text, o.vo); }
     },
     /* LINH VẬT HIỆN TO giữa cảnh đọc lời mở đầu của màn; đọc xong (hoặc chạm, hoặc hết giờ dự phòng) thì thu nhỏ về góc. Chỉ màn dọc có hiệu ứng (css/glass.css). */
     talk: function (text) {
       var sc = $("sc"); clearTimeout(talkT); sc.classList.add("talk"); F.words($("bub").textContent);
       talkT = setTimeout(F.untalk, Math.min(9000, Math.max(2600, String(text).length * 85 + 1200)));
     },
+    said: function () { var sc = $("sc"); sc.classList.add("said"); clearTimeout(saidT); saidT = setTimeout(function () { sc.classList.remove("said"); }, 3400); },
     untalk: function () { clearTimeout(talkT); F.unwords(); $("sc").classList.remove("talk"); },
     /* bóng thoại TRÊN ĐẦU linh vật hiện chữ TỪNG TỪ theo nhịp đọc (chữ chưa tới thì mờ); thu nhỏ thì trả lại chữ nguyên */
     words: function (text) {
@@ -54,7 +55,7 @@
     unwords: function () { clearInterval(wordT); var b = $("bub"); if (b && b.dataset.full != null) { b.textContent = b.dataset.full; delete b.dataset.full; fitBub(); } },
     emote: function (n, ms) { if (LM && ok) LM.emote(n, ms || 1600); },
     hop: function () { X.cls($("pal"), "hop", 600); },
-    clear: function () { F.play.innerHTML = ""; F.play.className = "play"; F.next(false); intro = true; F.untalk(); },
+    clear: function () { F.play.innerHTML = ""; F.play.className = "play"; F.next(false); intro = true; F.untalk(); clearTimeout(saidT); $("sc").classList.remove("said"); },
     /* chuỗi đèn lồng: n đèn; set(i, "on"|"miss"|"cur"|"") */
     beads: function (n) { var h = $("beads"); h.innerHTML = ""; for (var i = 0; i < n; i++) h.appendChild(U.el("i", "")); },
     bead: function (i, st) { var c = $("beads").children[i]; if (!c) return; c.className = st || ""; },

@@ -112,7 +112,7 @@
 
 ;
 /* ---- js/speaker-gate.js ---- */
-/* Lớp truyện: TRANG BẬT LOA dùng chung cho cả luồng bản đồ lớp → bản đồ chủ đề → cảnh truyện. Hiện MỘT lần mỗi phiên, ở trang đầu tiên bé vào; các trang sau bỏ qua.
+/* Lớp truyện: TRANG BẬT LOA dùng chung cho cả luồng bản đồ lớp → bản đồ chủ đề → cảnh truyện. Hiện MỘT lần mỗi lần mở trang (các màn chuyển bằng StoryNav dùng chung một tài liệu nên không hỏi lại); mở lại/tải lại trang thì hỏi lại vì trình duyệt chặn tiếng.
    Cú chạm vào nút loa lớn mở khoá âm thanh của trình duyệt (iPhone/Safari chỉ cho đọc sau một cú chạm). Bé đã tắt tiếng (learn:auto = 0) hoặc máy không có giọng thì vào thẳng.
    Lưu ý: bản đồ lớp, bản đồ chủ đề và cảnh truyện là các TRANG KHÁC NHAU; sang trang mới trình duyệt có thể vẫn cần một cú chạm đầu để đọc (đã có nhắc "chạm để nghe" + đọc ngay khi chạm).
    StoryGate.need() · StoryGate.show({title, back}, bắtĐầu) · StoryGate.isOpen() · StoryGate.onClose(fn) */
@@ -122,7 +122,7 @@
   function ls(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function ss(k, v) { try { if (v == null) return sessionStorage.getItem(k); sessionStorage.setItem(k, v); } catch (e) {} return null; }
   function L(a, b) { return K.lang === "en" ? b : a; }
-  function need() { return !!root.Voice && ls("learn:auto") !== "0" && ss(KEY) !== "1"; }
+  function need() { return !!root.Voice && ls("learn:auto") !== "0" && !root.__storySpk; }   /* chỉ miễn trong CÙNG tài liệu (các màn chuyển bằng StoryNav); tải trang mới là hiện lại vì trình duyệt chặn tiếng */
   function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
   function show(o, start) {
     open = true; var g = el("div", "sgate"); g.setAttribute("role", "dialog"); g.setAttribute("aria-label", L("Bật loa để nghe truyện nhé!", "Turn the sound on to hear the story!"));
@@ -137,7 +137,7 @@
     var off = el("button", "sgs"); off.type = "button"; off.textContent = L("Không nghe", "No sound");
     [back, m, t, h, on, off].forEach(function (e) { g.appendChild(e); });
     function go(sound) {
-      try { localStorage.setItem("learn:auto", sound ? "1" : "0"); } catch (e) {} ss(KEY, "1"); open = false;
+      try { localStorage.setItem("learn:auto", sound ? "1" : "0"); } catch (e) {} root.__storySpk = true; open = false;
       g.classList.add("out"); setTimeout(function () { if (g.parentNode) g.parentNode.removeChild(g); }, 350);
       if (start) start();   /* gọi ngay trong cú chạm: giọng đọc đầu tiên được phép phát */
       var w = waits; waits = []; w.forEach(function (f) { try { f(); } catch (e) {} });
@@ -361,7 +361,7 @@
     var plain = String(text).replace(/<[^>]+>/g, ""), wide = opt.wide != null ? opt.wide : Array.from(plain).length > 13;
     var b = U.el("button", "ob" + (wide ? " wide" : ""), ""), im = U.el("img", "oi"), tx = U.el("span", "tx ct");
     b.type = "button"; im.alt = ""; im.draggable = false; im.src = "art/props/" + kind + "-" + c + ".svg"; im.onerror = function () { im.style.visibility = "hidden"; };
-    if (opt.html) tx.innerHTML = text; else tx.textContent = text;
+    if (opt.html) { tx.innerHTML = text; b.classList.add("hasbd"); } else tx.textContent = text;
     if (!wide) b.classList.add("z" + (size(text) || "m")); b.style.setProperty("--pc", COLOR[c]); b.style.setProperty("--d", (-(i * .55)) + "s");
     b.appendChild(im); b.appendChild(tx); b.setAttribute("aria-label", plain || "?"); b.dataset.i = i; return b;
   }
@@ -380,7 +380,7 @@
   "use strict";
   var K = root.StoryCore, U = root.SceneU, S = root.SceneT, V = root.SceneVoice, X = root.SceneFx;
   var $ = function (id) { return document.getElementById(id); };
-  var LM = root.LearnMascot, ok = false, nextFn = null, land = false, intro = true, talkT = 0, wordT = 0;
+  var LM = root.LearnMascot, ok = false, nextFn = null, land = false, intro = true, talkT = 0, wordT = 0, saidT = 0;
   function isLand() { var s = $("sc"); return s.clientWidth > s.clientHeight * 1.05; }
   function setBg() {
     land = isLand(); $("sc").dataset.o = land ? "l" : "p";
@@ -411,14 +411,15 @@
     say: function (text, o) {
       o = o || {}; var b = $("bub"); clearInterval(wordT); delete b.dataset.full; b.textContent = text; X.cls(b, "pop"); fitBub(); setTimeout(fitBub, 60);
       if (o.emote) F.emote(o.emote);
-      if (o.quiet) V.set("", null); else { if (intro) F.talk(o.speak || text); V.set(o.speak || text, o.vo); }
-      intro = false;
+      var first = intro; intro = false; if (!first) F.said();   /* lời tiếp theo: bóng thoại nhỏ trên đầu linh vật vài giây */
+      if (o.quiet) V.set("", null); else { if (first) F.talk(o.speak || text); V.set(o.speak || text, o.vo); }
     },
     /* LINH VẬT HIỆN TO giữa cảnh đọc lời mở đầu của màn; đọc xong (hoặc chạm, hoặc hết giờ dự phòng) thì thu nhỏ về góc. Chỉ màn dọc có hiệu ứng (css/glass.css). */
     talk: function (text) {
       var sc = $("sc"); clearTimeout(talkT); sc.classList.add("talk"); F.words($("bub").textContent);
       talkT = setTimeout(F.untalk, Math.min(9000, Math.max(2600, String(text).length * 85 + 1200)));
     },
+    said: function () { var sc = $("sc"); sc.classList.add("said"); clearTimeout(saidT); saidT = setTimeout(function () { sc.classList.remove("said"); }, 3400); },
     untalk: function () { clearTimeout(talkT); F.unwords(); $("sc").classList.remove("talk"); },
     /* bóng thoại TRÊN ĐẦU linh vật hiện chữ TỪNG TỪ theo nhịp đọc (chữ chưa tới thì mờ); thu nhỏ thì trả lại chữ nguyên */
     words: function (text) {
@@ -430,7 +431,7 @@
     unwords: function () { clearInterval(wordT); var b = $("bub"); if (b && b.dataset.full != null) { b.textContent = b.dataset.full; delete b.dataset.full; fitBub(); } },
     emote: function (n, ms) { if (LM && ok) LM.emote(n, ms || 1600); },
     hop: function () { X.cls($("pal"), "hop", 600); },
-    clear: function () { F.play.innerHTML = ""; F.play.className = "play"; F.next(false); intro = true; F.untalk(); },
+    clear: function () { F.play.innerHTML = ""; F.play.className = "play"; F.next(false); intro = true; F.untalk(); clearTimeout(saidT); $("sc").classList.remove("said"); },
     /* chuỗi đèn lồng: n đèn; set(i, "on"|"miss"|"cur"|"") */
     beads: function (n) { var h = $("beads"); h.innerHTML = ""; for (var i = 0; i < n; i++) h.appendChild(U.el("i", "")); },
     bead: function (i, st) { var c = $("beads").children[i]; if (!c) return; c.className = st || ""; },
@@ -1217,8 +1218,10 @@
   function learn(g, rw) {
     F.clear(); X.sfx("win"); F.emote("cheer", 3000); var chips = [];
     if (rw && rw.first) { var h = hub(g); chips.push(chip(h[0], h[1])); }
-    var acts = [act("map", S.T.map, g.mapUrl, true)]; if (g.hasT) acts.push(act("flag", S.T.challenge, g.testUrl));
+    var acts = [act("map", S.T.map, g.mapUrl, true)];
     layout(g, "stop-learn", chips, acts); X.burst(F.play, 14);
+    /* nút tiếp to giữa đáy: đi TIẾP luôn (không phải chọn): có thử thách thì vào thử thách; không có thì sang truyện kế / về bản đồ */
+    var to = g.hasT ? g.testUrl : (g.nextUrl || g.mapUrl); F.next(true, function () { StoryNav.go(to); }, g.hasT ? "flag" : (g.nextUrl ? "sail" : "map"));
     F.say(L("Khám phá xong rồi! Bé thật giỏi!" + (g.hasT ? " Giờ mình tới thử thách nhé." : ""), "Exploring is done! Well done!" + (g.hasT ? " Now to the challenge." : "")), { emote: "cheer" });
   }
   function test(g, r) {
@@ -1229,13 +1232,15 @@
         if (r.rep.goalHit) chips.push(chip(L("🎉 Đủ mục tiêu ngày!", "🎉 Daily goal done!"))); if (r.rep.newOutfit) chips.push(chip(r.rep.newOutfit.e + " " + r.rep.newOutfit.n)); }
       if (r.HB && r.HB.gift) chips.push(chip("🎁 " + r.HB.gift));
       if (r.CP && r.CP.first) { var h = hub(g); chips.push(chip(h[0], h[1])); }
-      acts.push(act("map", S.T.map, g.mapUrl, !g.nextUrl)); if (g.nextUrl) acts.push(act("sail", S.T.nextTopic, g.nextUrl));
+      acts.push(act("map", S.T.map, g.mapUrl, true));   /* bản đồ là nút phụ; nút to giữa đáy = sang truyện kế (hoặc về bản đồ nếu đây là truyện cuối) */
       F.say(K.tx(g.story.end), { emote: "cheer" });
     } else {
-      F.emote("happy", 2500); if (g.hasL) acts.push(act("step", S.T.explore, g.learnUrl)); acts.push(act("retry", S.T.again, g.testUrl, g.hasL)); acts.push(act("map", S.T.map, g.mapUrl, true));
+      F.emote("happy", 2500); if (g.hasL) acts.push(act("step", S.T.explore, g.learnUrl)); acts.push(act("retry", S.T.again, g.testUrl, true)); acts.push(act("map", S.T.map, g.mapUrl, true));
       F.say(L("Mình gần tới rồi! Bé thử đi lại đường khám phá, rồi mình cùng thử tiếp nhé.", "We are almost there! Let us walk the explore path again, then try once more."), { emote: "happy" });
     }
     layout(g, pass ? "stop-end" : "stop-test", chips, acts, r.stars); if (pass) X.burst(F.play, 16);
+    if (pass) F.next(true, function () { StoryNav.go(g.nextUrl || g.mapUrl); }, g.nextUrl ? "sail" : "map");
+    else { var back = g.hasL ? g.learnUrl : g.testUrl; F.next(true, function () { StoryNav.go(back); }, g.hasL ? "step" : "retry"); }
     void vi;
   }
   root.SceneEnd = { learn: learn, test: test };

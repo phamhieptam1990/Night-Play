@@ -17,7 +17,7 @@
     var plain = String(text).replace(/<[^>]+>/g, ""), wide = opt.wide != null ? opt.wide : Array.from(plain).length > 13;
     var b = U.el("button", "ob" + (wide ? " wide" : ""), ""), im = U.el("img", "oi"), tx = U.el("span", "tx ct");
     b.type = "button"; im.alt = ""; im.draggable = false; im.src = "art/props/" + kind + "-" + c + ".svg"; im.onerror = function () { im.style.visibility = "hidden"; };
-    if (opt.html) tx.innerHTML = text; else tx.textContent = text;
+    if (opt.html) { tx.innerHTML = text; b.classList.add("hasbd"); } else tx.textContent = text;
     if (!wide) b.classList.add("z" + (size(text) || "m")); b.style.setProperty("--pc", COLOR[c]); b.style.setProperty("--d", (-(i * .55)) + "s");
     b.appendChild(im); b.appendChild(tx); b.setAttribute("aria-label", plain || "?"); b.dataset.i = i; return b;
   }

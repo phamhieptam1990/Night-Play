@@ -21,8 +21,10 @@
   function learn(g, rw) {
     F.clear(); X.sfx("win"); F.emote("cheer", 3000); var chips = [];
     if (rw && rw.first) { var h = hub(g); chips.push(chip(h[0], h[1])); }
-    var acts = [act("map", S.T.map, g.mapUrl, true)]; if (g.hasT) acts.push(act("flag", S.T.challenge, g.testUrl));
+    var acts = [act("map", S.T.map, g.mapUrl, true)];
     layout(g, "stop-learn", chips, acts); X.burst(F.play, 14);
+    /* nút tiếp to giữa đáy: đi TIẾP luôn (không phải chọn): có thử thách thì vào thử thách; không có thì sang truyện kế / về bản đồ */
+    var to = g.hasT ? g.testUrl : (g.nextUrl || g.mapUrl); F.next(true, function () { StoryNav.go(to); }, g.hasT ? "flag" : (g.nextUrl ? "sail" : "map"));
     F.say(L("Khám phá xong rồi! Bé thật giỏi!" + (g.hasT ? " Giờ mình tới thử thách nhé." : ""), "Exploring is done! Well done!" + (g.hasT ? " Now to the challenge." : "")), { emote: "cheer" });
   }
   function test(g, r) {
@@ -33,13 +35,15 @@
         if (r.rep.goalHit) chips.push(chip(L("🎉 Đủ mục tiêu ngày!", "🎉 Daily goal done!"))); if (r.rep.newOutfit) chips.push(chip(r.rep.newOutfit.e + " " + r.rep.newOutfit.n)); }
       if (r.HB && r.HB.gift) chips.push(chip("🎁 " + r.HB.gift));
       if (r.CP && r.CP.first) { var h = hub(g); chips.push(chip(h[0], h[1])); }
-      acts.push(act("map", S.T.map, g.mapUrl, !g.nextUrl)); if (g.nextUrl) acts.push(act("sail", S.T.nextTopic, g.nextUrl));
+      acts.push(act("map", S.T.map, g.mapUrl, true));   /* bản đồ là nút phụ; nút to giữa đáy = sang truyện kế (hoặc về bản đồ nếu đây là truyện cuối) */
       F.say(K.tx(g.story.end), { emote: "cheer" });
     } else {
-      F.emote("happy", 2500); if (g.hasL) acts.push(act("step", S.T.explore, g.learnUrl)); acts.push(act("retry", S.T.again, g.testUrl, g.hasL)); acts.push(act("map", S.T.map, g.mapUrl, true));
+      F.emote("happy", 2500); if (g.hasL) acts.push(act("step", S.T.explore, g.learnUrl)); acts.push(act("retry", S.T.again, g.testUrl, true)); acts.push(act("map", S.T.map, g.mapUrl, true));
       F.say(L("Mình gần tới rồi! Bé thử đi lại đường khám phá, rồi mình cùng thử tiếp nhé.", "We are almost there! Let us walk the explore path again, then try once more."), { emote: "happy" });
     }
     layout(g, pass ? "stop-end" : "stop-test", chips, acts, r.stars); if (pass) X.burst(F.play, 16);
+    if (pass) F.next(true, function () { StoryNav.go(g.nextUrl || g.mapUrl); }, g.nextUrl ? "sail" : "map");
+    else { var back = g.hasL ? g.learnUrl : g.testUrl; F.next(true, function () { StoryNav.go(back); }, g.hasL ? "step" : "retry"); }
     void vi;
   }
   root.SceneEnd = { learn: learn, test: test };

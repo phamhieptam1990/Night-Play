@@ -25,16 +25,19 @@ body.scn[data-subj="tanh"]{--gl-ink:#2a1f6b;--gl-acc:#6a4fe0;--gl-line:rgba(106,
 .scn .bt,.scn .mname{color:var(--gl-acc,var(--gl-ink));font-weight:900;letter-spacing:.3px;text-shadow:var(--gl-sh,none)}
 .scn .bub::first-line{font-weight:900}
 .scn .bub{border-left:5px solid var(--gl-acc,var(--gl-line))}
-/* GỌN (màn dọc hẹp): hàng trên = linh vật (trái) + nút tiếp (phải) cùng một hàng; bóng thoại nằm dưới, trải hết chiều ngang (không bị linh vật/nút nén thành cột hẹp). */
+/* GỌN (màn dọc hẹp): KHÔNG còn thẻ lời ở đáy. Linh vật nhỏ ở góc dưới trái, nút tiếp TO ở GIỮA đáy cho bé dễ bấm. Lời của linh vật hiện ở bóng thoại phóng to (đầu mỗi màn)
+   và bóng thoại nhỏ nổi lên trên đầu linh vật vài giây khi linh vật nói thêm (class .said do frame.js bật). */
 @media (orientation:portrait) and (max-width:700px){
-  body.scn{--castH:clamp(150px,21dvh,168px);--rowH:68px}
-  .scn .cast{flex-direction:column;align-items:stretch;justify-content:flex-end;gap:4px;padding:4px 10px 8px}
+  body.scn{--castH:104px;--rowH:72px}
+  .scn .cast{flex-direction:row;align-items:flex-end;justify-content:flex-start;gap:0;padding:4px 10px 12px}
   .scn .sc.hasnext .cast{padding-right:10px}
-  .scn .pal{width:var(--rowH);height:var(--rowH);align-self:flex-start;margin-left:2px;display:grid;place-items:center}
+  .scn .pal{width:var(--rowH);height:var(--rowH);align-self:flex-end;margin-left:2px;display:grid;place-items:center}
   .scn .pal svg,.scn .pal img{width:auto;height:100%;max-width:100%}
-  .scn .bub{flex:0 0 auto;margin:0;max-height:calc(var(--castH) - var(--rowH) - 14px);border-left-width:5px}
-  .scn .bub::before{display:none}
-  .scn .nxt{bottom:calc(var(--castH) - var(--rowH) - 2px);right:12px}
+  .scn .sc:not(.talk):not(.said) .bub{display:none}
+  .scn .sc.said:not(.talk) .bub{position:absolute;left:12px;right:12px;bottom:calc(var(--rowH) + 20px);margin:0;max-height:none;z-index:6;animation:bubIn .35s ease-out both}
+  .scn .sc.said:not(.talk) .bub::before{display:block;left:26px;bottom:-9px;top:auto;transform:rotate(-45deg)}
+  .scn .nxt{width:92px;height:92px;border-radius:46px;left:calc(50% - 46px);right:auto;bottom:10px}.scn .nxt svg{width:46px;height:46px}
+}
 }
 /* LINH VẬT HIỆN TO đọc lời mở đầu rồi thu nhỏ về góc (class .talk do frame.js bật/tắt; màn dọc hẹp). Dùng translate/scale riêng để không đụng animation nhún của linh vật. */
 @media (orientation:portrait) and (max-width:700px){
@@ -63,3 +66,22 @@ body.scn[data-subj="tanh"]{--gl-ink:#2a1f6b;--gl-acc:#6a4fe0;--gl-line:rgba(106,
 .scn .bub .w.on{opacity:1}.scn .bub .w.cur{transform:scale(1.12);color:var(--gl-acc,inherit)}
 @keyframes bubIn{from{opacity:0;transform:translateY(16px) scale(.6)}}
 @media (prefers-reduced-motion:reduce){.scn .bub .w{transition:none}.scn .sc.talk .bub{animation:none}}
+
+/* màn tô số: khung tô nền xanh navy ĐẶC (không để đường đi xuyên qua làm mờ nét), nút làm lại rõ */
+.scn .ltw{background:rgba(14,26,58,.9);border:3px solid rgba(255,255,255,.9);box-shadow:0 8px 20px rgba(0,0,0,.3)}
+.scn .round{background:#fff;color:#10203a;border-color:var(--gl-acc,var(--k1))}.scn .round svg{width:26px;height:26px}
+/* nhãn có hình bạn số: hình nằm gọn TRONG nhãn, không bị cắt */
+.scn .ob.hasbd .tx{overflow:visible;top:31%;height:44%;left:8%;right:8%}
+.scn .ob.hasbd .tx>*{max-width:100%;max-height:100%}
+.scn .ob.hasbd .tx svg,.scn .ob.hasbd .tx img{width:auto;height:100%;max-width:100%;display:block;margin:0 auto}
+/* nút tiếp: màu rực hơn theo môn, viền trắng, ánh bóng trên, mũi tên trắng, quầng sáng nhịp thở */
+.scn .nxt{color:#fff;border:4px solid #fff;
+  background:radial-gradient(120% 90% at 30% 18%,rgba(255,255,255,.55) 0,transparent 46%),linear-gradient(150deg,var(--nx1,#34d399),var(--nx2,#0ea5e9));
+  box-shadow:0 6px 0 rgba(0,0,0,.22),0 12px 24px rgba(0,0,0,.28),0 0 0 6px color-mix(in srgb,var(--nx2,#0ea5e9) 35%,transparent),inset 0 -6px 10px rgba(0,0,0,.14)}
+.scn .nxt svg{filter:drop-shadow(0 2px 0 rgba(0,0,0,.3))}
+body.scn[data-subj="toan"]{--nx1:#2ee6a6;--nx2:#0a8bf0}
+body.scn[data-subj="tviet"]{--nx1:#ffb02e;--nx2:#ff4f7b}
+body.scn[data-subj="tanh"]{--nx1:#5fa8ff;--nx2:#8b5cf6}
+.scn .nxt.pulse{animation:nxGlow 1.6s ease-in-out infinite}
+@keyframes nxGlow{50%{transform:scale(1.08);box-shadow:0 6px 0 rgba(0,0,0,.22),0 12px 24px rgba(0,0,0,.28),0 0 0 12px color-mix(in srgb,var(--nx2,#0ea5e9) 28%,transparent),inset 0 -6px 10px rgba(0,0,0,.14)}}
+@media (prefers-reduced-motion:reduce){.scn .nxt.pulse{animation:none}}
