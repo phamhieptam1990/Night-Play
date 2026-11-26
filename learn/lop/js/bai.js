@@ -28,7 +28,9 @@ function say(t,force){
     } }});
 }
 /* màn bật loa đang mở thì để nút loa tự đọc, tránh đọc hai lần */
-function firstTouch(){ if(touched) return; touched=true; const h=$("vhint"); if(h&&!noVoiceShown) h.hidden=true; if(AUTO&&curText&&$("spkGate").hidden) say(curText); }
+function spkDone(){ try{ return sessionStorage.getItem("learn:spk")==="1"; }catch(e){ return false; } }
+function spkMark(){ try{ sessionStorage.setItem("learn:spk","1"); }catch(e){} }
+function firstTouch(){ spkMark(); if(touched) return; touched=true; const h=$("vhint"); if(h&&!noVoiceShown) h.hidden=true; if(AUTO&&curText&&$("spkGate").hidden) say(curText); }
 ["pointerdown","keydown","touchstart"].forEach(ev=>addEventListener(ev,firstTouch,{passive:true,once:false}));
 function sayEn(t){ if(window.Voice) Voice.say(t,"tanh","en",{profile:"lesson",fail:()=>{}}); }
 let AUTO=ls("learn:auto")!=="0";   /* bài học: mặc định TỰ ĐỌC (bé lớp 1 chưa đọc thạo); bé tắt được bằng nút 🔊 */
@@ -36,10 +38,10 @@ function sndUi(){$("snd").textContent=AUTO?"🔊":"🔇";$("snd").setAttribute("
 
 /* MÀN BẬT LOA toàn màn hình trước khi vào bài: cú chạm này mở khóa âm thanh của trình duyệt (iPhone/Safari chỉ cho đọc sau một cú chạm) */
 (function(){const g=$("spkGate"); $("sgBack").href=back; $("sgMi").src=art("happy");
-  const close=()=>{g.hidden=true};
+  const close=()=>{g.hidden=true;spkMark()};
   $("sgOn").onclick=()=>{AUTO=true;ls("learn:auto","1");sndUi();close();touched=true;const h=$("vhint");if(h&&!noVoiceShown)h.hidden=true;if(curText)say(curText)};
   $("sgOff").onclick=()=>{AUTO=false;ls("learn:auto","0");sndUi();close();touched=true;const h=$("vhint");if(h)h.hidden=true};
-  if(!window.Voice || grade>=4) close();   /* lớp 4–5 đọc thạo: vào thẳng bài có chữ, không qua màn loa to; loa vẫn bật bằng nút 🔊 */
+  if(!window.Voice || grade>=4 || spkDone()) close();   /* lớp 4–5, hoặc ĐÃ bật loa một lần trong phiên: không hỏi lại ở bài/câu sau (cú chạm đầu của trang tự đọc) */   /* lớp 4–5 đọc thạo: vào thẳng bài có chữ, không qua màn loa to; loa vẫn bật bằng nút 🔊 */
 })();
 $("snd").onclick=()=>{AUTO=!AUTO;ls("learn:auto",AUTO?"1":"0");sndUi();if(AUTO)say(curText,true);else if(window.speechSynthesis)speechSynthesis.cancel()};
 $("mi").parentNode.onclick=()=>{touched=true;say(curText,true)}; sndUi();

@@ -1,0 +1,51 @@
+/* Cảnh truyện (mọi game): thẻ/bóng thoại dạng KÍNH TRONG SUỐT, gọn hơn (đệm hẹp, chữ vừa, nút tiếp nhỏ). Sáng: kính trắng + chữ tối; tối: kính tối + chữ sáng.
+   Nạp SAU skin.css/wide.css. */
+body.scn{--gl:rgba(255,255,255,.62);--gl-ink:#10203a;--gl-line:rgba(255,255,255,.8);--gl-blur:blur(10px) saturate(1.2)}
+:root[data-theme="dark"] body.scn{--gl:rgba(16,22,46,.62);--gl-ink:#f5f8ff;--gl-line:rgba(255,255,255,.3)}
+.scn .bub,.scn .bt,.scn .lart,.scn .shp,.scn .qcard,.scn .mname,.scn .mrhyme,.scn .fbar,.scn .ttip,.scn .tdisp{background:var(--gl);color:var(--gl-ink);border:2px solid var(--gl-line);
+  box-shadow:0 4px 14px rgba(5,20,50,.2);text-shadow:none;-webkit-backdrop-filter:var(--gl-blur);backdrop-filter:var(--gl-blur)}
+.scn .ct,.scn .ob{color:var(--gl-ink)}
+.scn .bub::before{background:var(--gl);border-color:var(--gl-line);border-width:2px}
+/* gọn: đệm hẹp, chữ vừa */
+body.scn .bub{padding:8px 14px;border-radius:18px;font-size:clamp(15px,4.2vw,18px);line-height:1.28;margin-bottom:clamp(10px,3dvh,24px)}
+body.scn .bt{padding:7px 18px;font-size:clamp(20px,5.6vw,26px)}
+body.scn .mname{padding:4px 16px;font-size:clamp(20px,5.6vw,26px)}body.scn .mrhyme{padding:6px 14px;font-size:clamp(14px,3.8vw,17px)}
+body.scn .lart{padding:9px 14px}body.scn .qcard{padding:8px 14px}body.scn .ttip{padding:6px 14px;font-size:clamp(14px,3.8vw,17px)}body.scn .fbar{padding:4px 14px}
+@media (orientation:landscape) and (max-height:600px){body.scn .bub{padding:7px 12px;font-size:clamp(14px,2.4vw,17px)}body.scn .lart{padding:6px 12px}body.scn .qcard{padding:6px 12px}}
+/* nút tiếp nhỏ hơn */
+.scn .nxt{width:48px;height:48px;border-radius:24px;right:10px;bottom:10px}.scn .nxt svg{width:24px;height:24px}.scn .sc.hasnext .cast{padding-right:64px}
+/* MÀU + KIỂU CHỮ RIÊNG THEO TRUYỆN (môn): Mochi / Toán xanh ngọc, Mầm / Tiếng Việt cam-hồng, Bibi / Tiếng Anh tím-xanh. Không dùng chữ đen/trắng mặc định.
+   --gl-ink = màu chữ; --gl-acc = màu nhấn (viền thẻ, tên truyện); sáng dùng tông đậm, tối dùng tông nhạt cùng họ màu. */
+body.scn[data-subj="toan"]{--gl-ink:#06404f;--gl-acc:#0fa57c;--gl-line:rgba(15,165,124,.55);--gl-wt:800;--gl-ls:.1px;--gl-sh:0 1px 0 rgba(255,255,255,.7)}
+body.scn[data-subj="tviet"]{--gl-ink:#5b1f22;--gl-acc:#e0562c;--gl-line:rgba(224,86,44,.5);--gl-wt:700;--gl-ls:.2px;--gl-sh:0 1px 0 rgba(255,255,255,.75)}
+body.scn[data-subj="tanh"]{--gl-ink:#2a1f6b;--gl-acc:#6a4fe0;--gl-line:rgba(106,79,224,.5);--gl-wt:800;--gl-ls:.3px;--gl-sh:0 1px 0 rgba(255,255,255,.7)}
+:root[data-theme="dark"] body.scn[data-subj="toan"]{--gl-ink:#c8fbea;--gl-acc:#52e3b6;--gl-line:rgba(82,227,182,.55);--gl-sh:none}
+:root[data-theme="dark"] body.scn[data-subj="tviet"]{--gl-ink:#ffe6c8;--gl-acc:#ff9a6a;--gl-line:rgba(255,154,106,.55);--gl-sh:none}
+:root[data-theme="dark"] body.scn[data-subj="tanh"]{--gl-ink:#e4deff;--gl-acc:#b3a0ff;--gl-line:rgba(179,160,255,.55);--gl-sh:none}
+.scn .bub,.scn .mrhyme,.scn .ttip,.scn .lart,.scn .qcard{font-weight:var(--gl-wt,800);letter-spacing:var(--gl-ls,0);text-shadow:var(--gl-sh,none)}
+.scn .bt,.scn .mname{color:var(--gl-acc,var(--gl-ink));font-weight:900;letter-spacing:.3px;text-shadow:var(--gl-sh,none)}
+.scn .bub::first-line{font-weight:900}
+.scn .bub{border-left:5px solid var(--gl-acc,var(--gl-line))}
+/* GỌN (màn dọc hẹp): hàng trên = linh vật (trái) + nút tiếp (phải) cùng một hàng; bóng thoại nằm dưới, trải hết chiều ngang (không bị linh vật/nút nén thành cột hẹp). */
+@media (orientation:portrait) and (max-width:700px){
+  body.scn{--castH:clamp(150px,21dvh,168px);--rowH:68px}
+  .scn .cast{flex-direction:column;align-items:stretch;justify-content:flex-end;gap:4px;padding:4px 10px 8px}
+  .scn .sc.hasnext .cast{padding-right:10px}
+  .scn .pal{width:var(--rowH);height:var(--rowH);align-self:flex-start;margin-left:2px;display:grid;place-items:center}
+  .scn .pal svg,.scn .pal img{width:auto;height:100%;max-width:100%}
+  .scn .bub{flex:0 0 auto;margin:0;max-height:calc(var(--castH) - var(--rowH) - 14px);border-left-width:5px}
+  .scn .bub::before{display:none}
+  .scn .nxt{bottom:calc(var(--castH) - var(--rowH) - 2px);right:12px}
+}
+/* LINH VẬT HIỆN TO đọc lời mở đầu rồi thu nhỏ về góc (class .talk do frame.js bật/tắt; màn dọc hẹp). Dùng translate/scale riêng để không đụng animation nhún của linh vật. */
+@media (orientation:portrait) and (max-width:700px){
+  .scn .pal{transition:translate .65s cubic-bezier(.2,.85,.25,1),scale .65s cubic-bezier(.2,.85,.25,1)}
+  .scn .play{transition:opacity .5s,filter .5s}
+  .scn .sc.talk .play{opacity:.15;filter:blur(3px);pointer-events:none}
+  .scn .sc.talk .pal{translate:calc(50vw - 54px) -26dvh;scale:2.7;transform-origin:50% 100%}
+}
+@media (prefers-reduced-motion:reduce){.scn .pal,.scn .play{transition:none}}
+/* nhắc khi web im lặng (chưa chạm / máy chưa có giọng) */
+.scn .vhint{position:absolute;left:12px;right:12px;bottom:calc(var(--castH) + 10px);z-index:7;text-align:center;padding:7px 14px;border-radius:99px;font-weight:800;font-size:clamp(13px,3.6vw,15px);line-height:1.3;
+  background:var(--gl);color:var(--gl-ink);border:2px solid var(--gl-line);-webkit-backdrop-filter:var(--gl-blur);backdrop-filter:var(--gl-blur);box-shadow:0 4px 14px rgba(5,20,50,.2)}
+.scn .vhint[hidden]{display:none}

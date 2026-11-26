@@ -9,6 +9,8 @@
     map: L("Bản đồ truyện", "Story map"), nextTopic: L("Chuyện tiếp theo", "Next story"), again: L("Đi lại", "Go again"), explore: L("Đi đường khám phá", "Explore the path"),
     challenge: L("Tới thử thách", "To the challenge"), hint: L("Gợi ý", "Hint"), tick: L("Xong", "Done"), del: L("Xoá", "Delete"), yes: L("Đúng", "Yes"), no: L("Chưa đúng", "Not yet"),
     merge: L("Gộp lại", "Put together"), bye: L("Chào nhé", "Wave"), missing: L("Chưa có chuyện này", "This story is not ready"),
+    noVoice: L("🔇 Máy chưa có giọng đọc. Nhờ ba mẹ bật giọng đọc trong Cài đặt của máy nhé.", "🔇 No voice on this device. Ask a grown-up to turn on a voice in Settings."),
+    tapHear: L("👆 Chạm vào màn hình để nghe bạn nói", "👆 Tap the screen to hear the story"),
     rest: L("Nghỉ một chút nhé", "Time to rest"), loading: L("Đang mở truyện…", "Opening the story…"),
     askSay: L("Chạm vào đây để nghe", "Tap to hear"), mic: L("Đã đọc to xong", "I read it aloud")
   };

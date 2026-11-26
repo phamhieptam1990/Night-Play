@@ -248,6 +248,8 @@
     map: L("Bản đồ truyện", "Story map"), nextTopic: L("Chuyện tiếp theo", "Next story"), again: L("Đi lại", "Go again"), explore: L("Đi đường khám phá", "Explore the path"),
     challenge: L("Tới thử thách", "To the challenge"), hint: L("Gợi ý", "Hint"), tick: L("Xong", "Done"), del: L("Xoá", "Delete"), yes: L("Đúng", "Yes"), no: L("Chưa đúng", "Not yet"),
     merge: L("Gộp lại", "Put together"), bye: L("Chào nhé", "Wave"), missing: L("Chưa có chuyện này", "This story is not ready"),
+    noVoice: L("🔇 Máy chưa có giọng đọc. Nhờ ba mẹ bật giọng đọc trong Cài đặt của máy nhé.", "🔇 No voice on this device. Ask a grown-up to turn on a voice in Settings."),
+    tapHear: L("👆 Chạm vào màn hình để nghe bạn nói", "👆 Tap the screen to hear the story"),
     rest: L("Nghỉ một chút nhé", "Time to rest"), loading: L("Đang mở truyện…", "Opening the story…"),
     askSay: L("Chạm vào đây để nghe", "Tap to hear"), mic: L("Đã đọc to xong", "I read it aloud")
   };
@@ -394,19 +396,31 @@
   function mark(on) { if (!btn) return; btn.classList.toggle("on", on); btn.setAttribute("aria-pressed", String(on));
     btn.setAttribute("aria-label", on ? root.SceneT.T.stopListen : root.SceneT.T.listen); }
   function stop() { clearInterval(poll); mark(false); try { if (root.Voice) root.Voice.stop(); } catch (e) {} }
+  /* WEB IM LẶNG: máy không có giọng ("novoice") → báo ba mẹ; trình duyệt chặn tự phát khi chưa chạm ("blocked"/lỗi khác) → nhớ câu, nhắc "chạm để nghe" và đọc ngay ở cú chạm đầu tiên. */
+  var pending = null, hintEl = null;
+  function hint(msg) {
+    var sc = document.getElementById("sc"); if (!sc) return; if (!hintEl) { hintEl = document.createElement("div"); hintEl.className = "vhint"; hintEl.setAttribute("role", "status"); sc.appendChild(hintEl); }
+    hintEl.textContent = msg || ""; hintEl.hidden = !msg;
+  }
+  function silent(why, text, o) {
+    if (why === "novoice") { pending = null; hint(root.SceneT.T.noVoice); return; }
+    pending = { text: text, o: o || null }; hint(root.SceneT.T.tapHear);
+  }
+  function retry() { if (!pending) return; var p = pending; pending = null; touched = true; speakNow(p.text, p.o); }
+  ["pointerdown", "touchstart", "keydown"].forEach(function (ev) { document.addEventListener(ev, retry, { passive: true, capture: true }); });
   function speakNow(text, o) {
-    var V = root.Voice; if (!V || !text) return; stop(); mark(true); o = o || {};
+    var V = root.Voice; if (!V || !text) return; stop(); hint(""); pending = null; mark(true); o = o || {};
     var lang = o.lang || (K.subj === "tanh" && !o.vi ? "en" : K.lang), mix = !o.lang && K.subj === "tanh" && K.lang === "vi" && V.sayMix;
-    (mix ? V.sayMix : V.say)(text, K.subj, lang, { profile: o.profile || "narr", fail: function () { mark(false); } });
+    (mix ? V.sayMix : V.say)(text, K.subj, lang, { profile: o.profile || "narr", fail: function (why) { mark(false); silent(why, text, o); } });
     var t0 = Date.now(), quiet = 0;
     poll = setInterval(function () { var sp = root.speechSynthesis && root.speechSynthesis.speaking; quiet = sp ? 0 : quiet + 1;
-      if ((quiet >= 3 && Date.now() - t0 > 1500) || Date.now() - t0 > 40000) { clearInterval(poll); mark(false); } }, 500);
+      if ((quiet >= 3 && Date.now() - t0 > 1500) || Date.now() - t0 > 40000) { clearInterval(poll); mark(false); if (S.onEnd) S.onEnd(); } }, 500);
   }
   var S = {
     bind: function (b) { btn = b; b.onclick = function () { touched = true; if (b.classList.contains("on")) stop(); else speakNow(cur, curOpt); }; },
     ok: function () { return !!root.Voice; },
     /* đặt lời đang nói (loa đọc lời này) và tự đọc nếu được phép */
-    set: function (text, o) { cur = text || ""; curOpt = o || null; stop(); if (cur && auto()) speakNow(cur, o); },
+    set: function (text, o) { cur = text || ""; curOpt = o || null; pending = null; hint(""); stop(); if (cur && auto()) speakNow(cur, o); },
     say: function (text, o) { speakNow(text, o); },
     stop: stop, touched: function () { return touched; }
   };
@@ -453,7 +467,7 @@
   "use strict";
   var K = root.StoryCore, U = root.SceneU, S = root.SceneT, V = root.SceneVoice, X = root.SceneFx;
   var $ = function (id) { return document.getElementById(id); };
-  var LM = root.LearnMascot, ok = false, nextFn = null, land = false;
+  var LM = root.LearnMascot, ok = false, nextFn = null, land = false, intro = true, talkT = 0;
   function isLand() { var s = $("sc"); return s.clientWidth > s.clientHeight * 1.05; }
   function setBg() {
     land = isLand(); $("sc").dataset.o = land ? "l" : "p";
@@ -476,6 +490,7 @@
         LM.show(K.subj, K.grade).then(function (r) { ok = r; if (!r) $("pal").innerHTML = '<img alt="" src="' + K.face(K.subj, K.grade) + '">'; }); }
       else $("pal").innerHTML = '<img alt="" src="' + K.face(K.subj, K.grade) + '">';
       $("pal").onclick = function () { X.cls($("pal"), "hop", 600); F.emote("happy"); X.sfx("tap"); V.say($("bub").textContent); };
+      V.onEnd = function () { setTimeout(F.untalk, 450); }; $("cast").addEventListener("pointerdown", F.untalk); $("sc").addEventListener("pointerdown", function () { if ($("sc").classList.contains("talk")) F.untalk(); }, true);
       setBg(); var t = 0; addEventListener("resize", function () { clearTimeout(t); t = setTimeout(setBg, 80); });
       if (typeof ResizeObserver !== "undefined") new ResizeObserver(function () { clearTimeout(t); t = setTimeout(setBg, 60); }).observe($("sc"));
     },
@@ -483,11 +498,18 @@
     say: function (text, o) {
       o = o || {}; var b = $("bub"); b.textContent = text; X.cls(b, "pop"); fitBub(); setTimeout(fitBub, 60);
       if (o.emote) F.emote(o.emote);
-      if (o.quiet) V.set("", null); else V.set(o.speak || text, o.vo);
+      if (o.quiet) V.set("", null); else { if (intro) F.talk(o.speak || text); V.set(o.speak || text, o.vo); }
+      intro = false;
     },
+    /* LINH VẬT HIỆN TO giữa cảnh đọc lời mở đầu của màn; đọc xong (hoặc chạm, hoặc hết giờ dự phòng) thì thu nhỏ về góc. Chỉ màn dọc có hiệu ứng (css/glass.css). */
+    talk: function (text) {
+      var sc = $("sc"); clearTimeout(talkT); sc.classList.add("talk");
+      talkT = setTimeout(F.untalk, Math.min(9000, Math.max(2600, String(text).length * 85 + 1200)));
+    },
+    untalk: function () { clearTimeout(talkT); $("sc").classList.remove("talk"); },
     emote: function (n, ms) { if (LM && ok) LM.emote(n, ms || 1600); },
     hop: function () { X.cls($("pal"), "hop", 600); },
-    clear: function () { F.play.innerHTML = ""; F.play.className = "play"; F.next(false); },
+    clear: function () { F.play.innerHTML = ""; F.play.className = "play"; F.next(false); intro = true; F.untalk(); },
     /* chuỗi đèn lồng: n đèn; set(i, "on"|"miss"|"cur"|"") */
     beads: function (n) { var h = $("beads"); h.innerHTML = ""; for (var i = 0; i < n; i++) h.appendChild(U.el("i", "")); },
     bead: function (i, st) { var c = $("beads").children[i]; if (!c) return; c.className = st || ""; },

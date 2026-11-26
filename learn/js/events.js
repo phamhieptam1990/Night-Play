@@ -25,12 +25,13 @@ LearnLimit.guard({ busy: () => $("res").hidden && $("sheet").hidden, copy: () =>
   return { t: u.lock.t, p: u.lock.p, hub: u.lock.hub, parent: u.lock.parent, hubUrl: hubUrl(), parentUrl: "parent/?lang=" + lang }; } });
 $("mTheme").onclick = () => { closeMenu(); const d = document.documentElement.dataset.theme === "dark" ? "light" : "dark"; document.documentElement.dataset.theme = d; ls("theme", d); };
 $("snd").onclick = () => { AUTO = !AUTO; ls("learn:auto", AUTO ? "1" : "0"); sndUi(); if(AUTO) speak(); else if("speechSynthesis" in window) speechSynthesis.cancel(); };
-document.addEventListener("pointerdown", e => { GESTURE = true; if(!$("mnu").hidden && !e.target.closest("#mnu,#mn")) closeMenu(); }, true);
+document.addEventListener("pointerdown", e => { GESTURE = true; try{ sessionStorage.setItem("learn:spk", "1"); }catch(_){}  if(!$("mnu").hidden && !e.target.closest("#mnu,#mn")) closeMenu(); }, true);
 stars = +ls("learn:stars") || 0;
 /* MÀN BẬT LOA trước bài kiểm tra: cú chạm này mở khóa âm thanh của trình duyệt (iPhone/Safari chỉ cho đọc sau một cú chạm) */
-(function(){ const g = $("spkGate"); if(!g || !window.Voice) return; if(ls("learn:auto") === "0") return;   /* bé đã chọn tắt tiếng: không hỏi lại */
+(function(){ const g = $("spkGate"); if(!g || !window.Voice) return; if(ls("learn:auto") === "0") return;
+  try{ if(sessionStorage.getItem("learn:spk") === "1") return; }catch(_){}   /* đã bật loa một lần trong phiên này: không hỏi lại ở từng bài/câu (cú chạm đầu của trang tự đọc) */   /* bé đã chọn tắt tiếng: không hỏi lại */
   const f = SUBF[subj]; $("sgBack").href = hubUrl(); $("sgMi").src = "../shared/art/learn/" + f + "/" + f + "_happy.svg"; g.hidden = false;
-  $("sgOn").onclick = () => { AUTO = true; ls("learn:auto", "1"); sndUi(); GESTURE = true; g.hidden = true; speak(); };
+  $("sgOn").onclick = () => { try{ sessionStorage.setItem("learn:spk", "1"); }catch(_){} AUTO = true; ls("learn:auto", "1"); sndUi(); GESTURE = true; g.hidden = true; speak(); };
   /* gõ phím không lọt xuyên cổng loa */
   ["keydown", "keypress", "keyup"].forEach(ev => addEventListener(ev, e => { if(!g.hidden && e.key !== "Tab" && !(e.target && e.target.closest && e.target.closest("#spkGate"))){
     e.stopImmediatePropagation(); e.preventDefault(); } }, true));

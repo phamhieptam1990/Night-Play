@@ -26,26 +26,30 @@
     return cand.sort(function (a, b) { return score(b) - score(a); })[0];
   }
   function stopAudio() { if (curAudio) { try { curAudio.pause(); } catch (e) {} curAudio = null; } }
-  function stop() { mixId++; try { if (ss && (ss.speaking || ss.pending)) ss.cancel(); } catch (e) {} stopAudio(); }
+  function stop() { mixId++; machine.seq = (machine.seq | 0) + 1; clearTimeout(machine.t); if (machine.cur) machine.cur.started = true;   /* huỷ cả câu đang chờ/thử lại: không đọc lại câu cũ, câu mới không phải chờ */
+    try { if (ss && (ss.speaking || ss.pending)) ss.cancel(); } catch (e) {} stopAudio(); }
   /* giọng máy. QUAN TRỌNG: đọc NGAY trong cú chạm (Safari/iPhone chỉ cho phát trong cú chạm); chỉ hủy giọng đang đọc dở khi THẬT SỰ đang đọc,
      rồi chờ một nhịp (Chrome bỏ speak() ngay sau cancel()). opt.fail() chạy nếu sau 2 giây máy vẫn chưa bắt đầu đọc (chưa có giọng / bị tắt tiếng). */
   function machine(text, who, lang, opt) {
     opt = opt || {}; if (!ss) { if (opt.fail) opt.fail(); return; }
     /* Chrome/Safari hay NUỐT câu nói ngay sau cancel(): chờ ~180ms rồi nói; nếu 0,9 giây mà chưa bắt đầu thì hủy và thử lại (tối đa 2 lần) trước khi báo lỗi.
        (Lỗi cũ: vừa nói xong câu khen rồi bấm Tiếp, câu của màn sau bị nuốt → bé thấy "im ru".) */
+    var mySeq = machine.seq = (machine.seq | 0) + 1;   /* chỉ câu MỚI NHẤT được đọc: câu cũ đang chờ/thử lại tự bỏ */
     var go = function (attempt) {
+      if (mySeq !== machine.seq) return;
       try {
         var u = new SpeechSynthesisUtterance(text), p = PROFILE[opt.profile] || PROFILE[who] || PROFILE.def, v = pickVoice(lang), started = false;
         u.lang = LANG[lang] || lang; u.pitch = p.pitch; u.rate = p.rate; if (v) u.voice = v;
         var rec = { started: false, at: Date.now() }; machine.cur = rec;
         u.onstart = function () { started = true; rec.started = true; };
-        u.onend = function () { if (opt.done) opt.done(true); };
+        u.onboundary = function () { started = true; rec.started = true; };   /* Safari iPhone hay KHÔNG bắn onstart: có tiếng/đã đọc xong cũng tính là đã đọc, để đồng hồ canh không đọc LẠI lần nữa */
+        u.onend = function () { started = true; rec.started = true; if (opt.done) opt.done(true); };
         u.onerror = function (e) { if (e && (e.error === "canceled" || e.error === "interrupted")) return; if (opt.fail) opt.fail(e && e.error === "not-allowed" ? "blocked" : (e && e.error) || "error"); };
         machine.u = u;   /* GIỮ THAM CHIẾU: Chrome có thể thu gom utterance đang đọc → câu sau im lặng */
         try { ss.resume(); } catch (e) {} ss.speak(u);
         /* đồng hồ canh: (1) bỏ qua nếu đã có câu MỚI hơn (không đọc lại câu cũ, không hủy câu mới); (2) nếu bộ đọc vẫn đang bận/đang nạp giọng thì CHỜ thêm, không hủy (hủy giết câu sắp phát); chỉ hủy + thử lại khi bộ đọc thật sự rảnh mà chưa ra tiếng */
         var check = function (n) {
-          if (started || machine.u !== u) return;
+          if (started || machine.u !== u || mySeq !== machine.seq) return;
           if ((ss.speaking || ss.pending) && n < 4) { setTimeout(function () { check(n + 1); }, 900); return; }
           if (attempt < 2) { try { ss.cancel(); } catch (e) {} setTimeout(function () { if (machine.u === u) go(attempt + 1); }, 160); }
           else if (opt.fail) opt.fail(v || !((ss.getVoices() || []).length) ? "blocked" : "novoice");   /* "novoice" CHỈ khi danh sách giọng đã tải mà không có giọng nào đúng ngôn ngữ */
@@ -57,7 +61,7 @@
     /* KHÔNG hủy câu chưa kịp bắt đầu: cancel() lúc câu trước đang nạp làm bộ đọc Chrome/macOS bị KẸT CỨNG (từ đó mọi câu sau im lặng). Chờ nó bắt đầu (tối đa 3 giây) rồi mới ngắt, chỉ giữ câu mới nhất. */
     var cur = machine.cur;
     if (cur && !cur.started && Date.now() - cur.at < 3000) {
-      (function wait() { if (cur.started || Date.now() - cur.at >= 3000) { launch(); } else machine.t = setTimeout(wait, 80); })();
+      (function wait() { if (mySeq !== machine.seq) return; if (cur.started || Date.now() - cur.at >= 3000) { launch(); } else machine.t = setTimeout(wait, 80); })();
       return;
     }
     launch();

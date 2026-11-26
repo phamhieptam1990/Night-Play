@@ -7,19 +7,31 @@
   function mark(on) { if (!btn) return; btn.classList.toggle("on", on); btn.setAttribute("aria-pressed", String(on));
     btn.setAttribute("aria-label", on ? root.SceneT.T.stopListen : root.SceneT.T.listen); }
   function stop() { clearInterval(poll); mark(false); try { if (root.Voice) root.Voice.stop(); } catch (e) {} }
+  /* WEB IM LẶNG: máy không có giọng ("novoice") → báo ba mẹ; trình duyệt chặn tự phát khi chưa chạm ("blocked"/lỗi khác) → nhớ câu, nhắc "chạm để nghe" và đọc ngay ở cú chạm đầu tiên. */
+  var pending = null, hintEl = null;
+  function hint(msg) {
+    var sc = document.getElementById("sc"); if (!sc) return; if (!hintEl) { hintEl = document.createElement("div"); hintEl.className = "vhint"; hintEl.setAttribute("role", "status"); sc.appendChild(hintEl); }
+    hintEl.textContent = msg || ""; hintEl.hidden = !msg;
+  }
+  function silent(why, text, o) {
+    if (why === "novoice") { pending = null; hint(root.SceneT.T.noVoice); return; }
+    pending = { text: text, o: o || null }; hint(root.SceneT.T.tapHear);
+  }
+  function retry() { if (!pending) return; var p = pending; pending = null; touched = true; speakNow(p.text, p.o); }
+  ["pointerdown", "touchstart", "keydown"].forEach(function (ev) { document.addEventListener(ev, retry, { passive: true, capture: true }); });
   function speakNow(text, o) {
-    var V = root.Voice; if (!V || !text) return; stop(); mark(true); o = o || {};
+    var V = root.Voice; if (!V || !text) return; stop(); hint(""); pending = null; mark(true); o = o || {};
     var lang = o.lang || (K.subj === "tanh" && !o.vi ? "en" : K.lang), mix = !o.lang && K.subj === "tanh" && K.lang === "vi" && V.sayMix;
-    (mix ? V.sayMix : V.say)(text, K.subj, lang, { profile: o.profile || "narr", fail: function () { mark(false); } });
+    (mix ? V.sayMix : V.say)(text, K.subj, lang, { profile: o.profile || "narr", fail: function (why) { mark(false); silent(why, text, o); } });
     var t0 = Date.now(), quiet = 0;
     poll = setInterval(function () { var sp = root.speechSynthesis && root.speechSynthesis.speaking; quiet = sp ? 0 : quiet + 1;
-      if ((quiet >= 3 && Date.now() - t0 > 1500) || Date.now() - t0 > 40000) { clearInterval(poll); mark(false); } }, 500);
+      if ((quiet >= 3 && Date.now() - t0 > 1500) || Date.now() - t0 > 40000) { clearInterval(poll); mark(false); if (S.onEnd) S.onEnd(); } }, 500);
   }
   var S = {
     bind: function (b) { btn = b; b.onclick = function () { touched = true; if (b.classList.contains("on")) stop(); else speakNow(cur, curOpt); }; },
     ok: function () { return !!root.Voice; },
     /* đặt lời đang nói (loa đọc lời này) và tự đọc nếu được phép */
-    set: function (text, o) { cur = text || ""; curOpt = o || null; stop(); if (cur && auto()) speakNow(cur, o); },
+    set: function (text, o) { cur = text || ""; curOpt = o || null; pending = null; hint(""); stop(); if (cur && auto()) speakNow(cur, o); },
     say: function (text, o) { speakNow(text, o); },
     stop: stop, touched: function () { return touched; }
   };
