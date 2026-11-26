@@ -15,7 +15,7 @@ function newGame(seed, mode, t, ch, lvForce) {
   const C = Object.assign({}, CFG[t]); C.K = Math.max(C.K, X.K); C.big = Math.max(C.big, X.big); if (C.time) C.time = Math.max(B ? 45 : 54, Math.round(C.time * X.tg));
   SLOTS = X.sl;
   const sk = skinOf(), icons = sk.icons || ICONS, KK = Math.min(C.K, icons.length), ps = shuffle(icons.map((_, i) => i), sub(seed, 31)).slice(0, KK);
-  const base = buildTiles(sk.layers || PILE, C.big);
+  const base = buildTiles(sk.layers || randomPile(sub(seed, 17)), C.big);
   let g = null; for (let a = 0; a < 60 && !g; a++) g = genKinds(base, KK, sub(seed, 60 + a), X.mx);
   if (!g) g = { kind: base.map((_, i) => Math.floor(i / 3) % KK), order: base.map((_, i) => i) };
   base.forEach((b, i) => { b.i = i; b.k = ps[g.kind[i]]; b.on = true; b.sh = 0; });

@@ -11,7 +11,7 @@ function newGame(seed, mode, t, ch) {
   const B = Math.max(0, lv - (TD_MAX - 1)), LC0 = Object.assign({}, LVC[Math.min(lv, TD_MAX - 1)]), sk = skinOf(), icons = sk.icons || ICONS, LC = Object.assign({}, LC0, { K: Math.min(LC0.K, icons.length) }), C = Object.assign({}, CFG[t]); if (B) { LC.tpp = Math.max(1.4, +(LC.tpp * (1 - .03 * B)).toFixed(2)); if (LC.em) LC.em = Math.max(2, LC.em - Math.floor(B / 5)); }   /* vượt trần: giây/cặp ngắn dần (sàn 1.4s), ít lượt chạm sai hơn (sàn 2) */
   if (LC.tpp) C.time = 1;
   const ps = shuffle(icons.map((_, i) => i), sub(seed, 31)).slice(0, LC.K);
-  const base = buildTiles(sk.layers || PILE, LC);
+  const base = buildTiles(sk.layers || randomPile(sub(seed, 17)), LC);
   let g = null; for (let a = 0; a < 60 && !g; a++) g = genPairs(base, LC.K, sub(seed, 60 + a));
   if (!g) g = { kind: base.map((_, i) => Math.floor(i / 2) % LC.K), order: base.map((_, i) => i) };
   base.forEach((b, i) => { b.i = i; b.k = ps[g.kind[i]]; b.on = true; b.sh = 0; });

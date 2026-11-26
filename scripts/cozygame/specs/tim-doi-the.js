@@ -1,6 +1,7 @@
 /* Tìm Đôi Thẻ — thẻ xếp chồng nhiều tầng; chạm thẻ không bị đè rồi chạm thẻ GIỐNG nó thì cả đôi biến mất. Có 3 độ khó. Hết nước đi tự xáo lại.
    Mã client nằm ở scripts/cozygame/parts/tim-doi-the/*.js (bố cục, luật chơi, vẽ) và được ghép vào gameJs khi sinh. */
 const fs = require("fs"), path = require("path");
+const shared = f => fs.readFileSync(path.join(__dirname, "..", "parts", "shared", f + ".js"), "utf8");
 const part = f => fs.readFileSync(path.join(__dirname, "..", "parts", "tim-doi-the", f + ".js"), "utf8");
 module.exports = {
   id: "tim-doi-the", prefix: "td", title: { vi: "Tìm Đôi Thẻ", en: "Match Pairs" }, maxScore: 6000,
@@ -43,7 +44,7 @@ module.exports = {
       sk: { basic: ["Flower garden", "Flower garden"], tet: ["Lunar fair", "Lunar fair"], jungle: ["Jungle", "Jungle"], food: ["Food street", "Food street"], toy: ["Toy box", "Toy box"] } }
   },
   sfx: `{ok:()=>tone(620,.06,"triangle",.08),bad:()=>tone(150,.22,"sawtooth",.07),end:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.09,i*.09)),combo:n=>{const b=440*Math.pow(1.122,Math.min(n/3,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.1,"triangle",.09,i*.05))},up:()=>{[660,880].forEach((f,i)=>tone(f,.1,"triangle",.09,i*.06))}}`,
-  gameJs: ["board", "logic", "render"].map(part).join("\n"),
+  gameJs: [shared("random-pile")].concat(["board", "logic", "render"].map(part)).join("\n"),
   drawCard: "",
   wire: { dvi: "Thẻ xếp chồng nhiều tầng: chạm một thẻ không bị đè rồi chạm thẻ giống nó, cả đôi biến mất. 3 độ khó, dọn sạch bàn càng nhanh càng nhiều điểm!", den: "Stacked tiles: tap an uncovered tile, then its match, and the pair vanishes. 3 difficulty levels — clear the board fast for more points!",
     c1: "#3fb27f", c2: "#0b3a2b", emoji: "🌸", artKey: "pairtiles",

@@ -165,6 +165,47 @@ const cv=$("cv")||null;
 const isProSk=()=>!!PF.skins[PF.skinSel]&&PF.skinSel!=="basic";
 function proFx(n){const h=$("play");if(!h)return;for(let i=0;i<(n>=12?2:1);i++){const r=document.createElement("i");r.className="pfx"+(i?" b":"");h.appendChild(r);setTimeout(()=>r.remove(),1100)}h.classList.remove("pglow");void h.offsetWidth;h.classList.add("pglow");setTimeout(()=>h.classList.remove("pglow"),800)}
 const SF=n=>n;
+/* Đống thẻ NGẪU NHIÊN (dùng chung Ghép Ba Thẻ và Tìm Đôi Thẻ): mỗi ván xếp thẻ thành một hình khác (kim cương, tim, vòng, chữ thập, tháp, tròn…),
+   thẻ vẫn là thẻ chữ nhật xếp chồng nhiều tầng. Hạt giống R lấy từ hạt của ván nên ván hằng ngày giống nhau cho mọi người.
+   randomPile(R) -> mảng tầng cùng khuôn với PILE: { l, oy, rows: ["dịch:mặt nạ", ...] }.
+   Tầng l+1 đặt lệch nửa thẻ lên trên, chỉ ở chỗ có đủ bốn thẻ tầng l bên dưới đỡ (như kim tự tháp). */
+const RP_SHAPES = [
+  ["######", "######", "######", "######", "######"],                                   /* tháp chữ nhật */
+  ["..##..", ".####.", "######", "######", ".####.", "..##.."],                       /* kim cương */
+  [".##..##.", "########", "########", ".######.", "..####..", "...##..."],           /* trái tim */
+  ["#######", "#######", "##...##", "##...##", "#######", "#######"],                  /* vòng có lỗ */
+  ["..###..", "..###..", "#######", "#######", "#######", "..###..", "..###.."],      /* chữ thập */
+  ["#######", ".######", "..#####", "...####", "....###", ".....##"],                  /* bậc thang tam giác */
+  [".#####.", "#######", "#######", "#######", ".#####."],                              /* bầu dục */
+  ["###..###", "########", "########", ".######.", "########", "########", "###..###"], /* đồng hồ cát nằm */
+  ["#.#.#.#", "#######", "#######", "#######", "#######"],                              /* vương miện */
+  ["##....", "####..", "######", "..####", "....##", "..####", "######"]                /* chữ S */
+];
+function rpCells(shape, flip) {
+  const A = new Set(); shape.forEach((row, j) => { for (let i = 0; i < row.length; i++) if (row[i] === "#") A.add((flip ? row.length - 1 - i : i) + "," + j); });
+  return A;
+}
+function randomPile(R, maxTiles) {   /* hình nào chỉ ra được một tầng (không chồng nhau) thì bốc hình khác */
+  for (let a = 0; a < 12; a++) { const L = rpOne(R, maxTiles || 60); if (L.length >= 2) return L; }
+  return rpOne(function () { return 0; }, maxTiles || 60);
+}
+function rpOne(R, maxTiles) {
+  const sh = RP_SHAPES[Math.floor(R() * RP_SHAPES.length)], flip = R() < .5, layers = []; let A = rpCells(sh, flip), total = 0;
+  for (let l = 0; l < 3 && A.size; l++) {
+    if (l && total + A.size > maxTiles) break;
+    const rows = {}; A.forEach(k => { const [i, j] = k.split(",").map(Number); (rows[j] = rows[j] || []).push(i); });
+    const js = Object.keys(rows).map(Number).sort((a, b) => a - b), j0 = js[0], j1 = js[js.length - 1], out = [];
+    for (let j = j0; j <= j1; j++) {
+      const r = rows[j]; if (!r) { out.push("0:"); continue; }
+      const i0 = Math.min(...r), i1 = Math.max(...r); let m = ""; for (let i = i0; i <= i1; i++) m += A.has(i + "," + j) ? "#" : ".";
+      out.push((l + 2 * i0) + ":" + m);
+    }
+    layers.push({ l, oy: l + 2 * j0, rows: out }); total += A.size;
+    const B = new Set(); A.forEach(k => { const [i, j] = k.split(",").map(Number); if (A.has((i + 1) + "," + j) && A.has(i + "," + (j + 1)) && A.has((i + 1) + "," + (j + 1))) B.add(k); }); A = B;
+  }
+  return layers;
+}
+
 /* Ghép Ba Thẻ — bố cục thẻ chồng lớp + sinh ván LUÔN giải được.
    Toạ độ theo "nửa thẻ": mỗi thẻ chiếm 2×2 đơn vị (c = cột, r = hàng, l = tầng). Thẻ ở tầng cao đè lên thẻ tầng thấp nếu hai khung giao nhau. */
 const TW = 48, TH = 52, HW = TW / 2, HH = TH / 2 - 0, W = 360, H = 480, TRAY_Y = 14, BOARD_T = 92, BOARD_H = H - BOARD_T - 12;
@@ -232,7 +273,7 @@ function newGame(seed, mode, t, ch, lvForce) {
   const C = Object.assign({}, CFG[t]); C.K = Math.max(C.K, X.K); C.big = Math.max(C.big, X.big); if (C.time) C.time = Math.max(B ? 45 : 54, Math.round(C.time * X.tg));
   SLOTS = X.sl;
   const sk = skinOf(), icons = sk.icons || ICONS, KK = Math.min(C.K, icons.length), ps = shuffle(icons.map((_, i) => i), sub(seed, 31)).slice(0, KK);
-  const base = buildTiles(sk.layers || PILE, C.big);
+  const base = buildTiles(sk.layers || randomPile(sub(seed, 17)), C.big);
   let g = null; for (let a = 0; a < 60 && !g; a++) g = genKinds(base, KK, sub(seed, 60 + a), X.mx);
   if (!g) g = { kind: base.map((_, i) => Math.floor(i / 3) % KK), order: base.map((_, i) => i) };
   base.forEach((b, i) => { b.i = i; b.k = ps[g.kind[i]]; b.on = true; b.sh = 0; });

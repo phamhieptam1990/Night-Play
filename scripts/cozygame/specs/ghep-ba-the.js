@@ -1,6 +1,7 @@
 /* Ghép Ba Thẻ — thẻ xếp chồng nhiều tầng; chạm thẻ không bị đè để cho vào khay 7 ô, đủ 3 thẻ giống nhau thì biến mất. Khay đầy là thua.
    Mã client nằm ở scripts/cozygame/parts/ghep-ba-the/*.js (bố cục, luật chơi, vẽ) và được ghép vào gameJs khi sinh. */
 const fs = require("fs"), path = require("path");
+const shared = f => fs.readFileSync(path.join(__dirname, "..", "parts", "shared", f + ".js"), "utf8");
 const part = f => fs.readFileSync(path.join(__dirname, "..", "parts", "ghep-ba-the", f + ".js"), "utf8");
 module.exports = {
   id: "ghep-ba-the", prefix: "gt", title: { vi: "Ghép Ba Thẻ", en: "Triple Tiles" }, maxScore: 8000,
@@ -44,7 +45,7 @@ module.exports = {
   },
   sfx: `{ok:()=>tone(620,.06,"triangle",.08),bad:()=>tone(150,.22,"sawtooth",.07),end:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.09,i*.09)),combo:n=>{const b=440*Math.pow(1.122,Math.min(n/3,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.1,"triangle",.09,i*.05))},up:()=>{[660,880].forEach((f,i)=>tone(f,.1,"triangle",.09,i*.06))}}`,
   level: { custom: String.raw`window.NPLevel&&NPLevel.attach({levels:GB_MAX,endless:true,cur:()=>G?G.lx:-1,won:()=>!!G&&G.reason==="win",skip:()=>!G||G.mode!=="free"||!!G.ch,go:i=>{GBL=i;LS.set(GB_K,i);if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",G?G.t:TY,null)}});` },   /* trần GB_MAX=6, bảng GB_LV trong parts/ghep-ba-the/logic.js */
-  gameJs: ["layout", "logic", "render"].map(part).join("\n"),
+  gameJs: [shared("random-pile")].concat(["layout", "logic", "render"].map(part)).join("\n"),
   drawCard: "",
   wire: { dvi: "Thẻ xếp chồng nhiều tầng: chạm thẻ không bị đè để cho vào khay, đủ 3 thẻ giống nhau thì biến mất. Khay đầy 7 ô là thua!", den: "Stacked tiles: tap an uncovered tile to drop it in the tray, 3 matching tiles vanish. A full 7-slot tray ends the game!",
     c1: "#8a4bd6", c2: "#2a1058", emoji: "🎃", artKey: "ghepthe",
