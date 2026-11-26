@@ -35,9 +35,8 @@
           var b = E("button", "pb" + (a.alt ? " alt" : ""), svg(a.icon)); b.type = "button"; b.setAttribute("aria-label", a.label); b.title = a.label; b.onclick = a.go; btns.appendChild(b);
         });
         host.classList.toggle("multi", (o.acts || []).length > 1); host.classList.remove("pop"); void host.offsetWidth; host.classList.add("pop");
-        /* không còn thẻ lời cố định: lần đầu linh vật phóng to đọc; các lần sau (hoặc câu trùng) hiện lời nổi vài giây trên các nút */
-        var talked = false; if (firstSet && o.text && !o.noTalk && root.StoryTalk) { firstSet = false; talked = !!root.StoryTalk.show(o.title, o.text); }
-        if (!talked) { host.classList.add("said"); clearTimeout(saidT); saidT = setTimeout(function () { host.classList.remove("said"); }, 3600); } else host.classList.remove("said");
+        /* không còn thẻ lời: mỗi lần chọn điểm, linh vật phóng to đọc lời của điểm đó (câu trùng câu vừa đọc thì bỏ qua) */
+        if (o.text && !o.noTalk && root.StoryTalk) root.StoryTalk.show(o.title, o.text);
       }
     };
   }

@@ -68,9 +68,9 @@ body.scn[data-subj="tanh"]{--gl-ink:#2a1f6b;--gl-acc:#6a4fe0;--gl-line:rgba(106,
 .scn .ltw{background:rgba(14,26,58,.9);border:3px solid rgba(255,255,255,.9);box-shadow:0 8px 20px rgba(0,0,0,.3)}
 .scn .round{background:#fff;color:#10203a;border-color:var(--gl-acc,var(--k1))}.scn .round svg{width:26px;height:26px}
 /* nhãn có hình bạn số: hình nằm gọn TRONG nhãn, không bị cắt */
-.scn .ob.hasbd .tx{overflow:visible;top:31%;height:44%;left:8%;right:8%}
-.scn .ob.hasbd .tx>*{max-width:100%;max-height:100%}
-.scn .ob.hasbd .tx svg,.scn .ob.hasbd .tx img{width:auto;height:100%;max-width:100%;display:block;margin:0 auto}
+.scn .ob.hasbd:not(.wide) .tx{overflow:visible;top:31%;height:44%;left:8%;right:8%}
+.scn .ob.hasbd:not(.wide) .tx>*{max-width:100%;max-height:100%}
+.scn .ob.hasbd:not(.wide) .tx svg,.scn .ob.hasbd:not(.wide) .tx img{width:auto;height:100%;max-width:100%;display:block;margin:0 auto}
 /* nút tiếp: màu rực hơn theo môn, viền trắng, ánh bóng trên, mũi tên trắng, quầng sáng nhịp thở */
 .scn .nxt{color:#fff;border:4px solid #fff;
   background:radial-gradient(120% 90% at 30% 18%,rgba(255,255,255,.55) 0,transparent 46%),linear-gradient(150deg,var(--nx1,#34d399),var(--nx2,#0ea5e9));
@@ -82,3 +82,6 @@ body.scn[data-subj="tanh"]{--nx1:#5fa8ff;--nx2:#8b5cf6}
 .scn .nxt.pulse{animation:nxGlow 1.6s ease-in-out infinite}
 @keyframes nxGlow{50%{transform:scale(1.08);box-shadow:0 6px 0 rgba(0,0,0,.22),0 12px 24px rgba(0,0,0,.28),0 0 0 12px color-mix(in srgb,var(--nx2,#0ea5e9) 28%,transparent),inset 0 -6px 10px rgba(0,0,0,.14)}}
 @media (prefers-reduced-motion:reduce){.scn .nxt.pulse{animation:none}}
+/* thẻ rộng (màn "Bé nhớ nhé"): chữ cao theo nội dung, không bị cắt bởi height:35% của vật tròn */
+.scn .ob.wide .tx{height:auto;top:auto;left:auto;right:auto;overflow:visible;line-height:1.25;padding:2px 0}
+.scn .ob.wide{min-height:58px}

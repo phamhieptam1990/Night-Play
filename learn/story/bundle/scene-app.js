@@ -112,9 +112,9 @@
 
 ;
 /* ---- js/speaker-gate.js ---- */
-/* Lớp truyện: TRANG BẬT LOA dùng chung cho cả luồng bản đồ lớp → bản đồ chủ đề → cảnh truyện. Hiện MỘT lần mỗi lần mở trang (các màn chuyển bằng StoryNav dùng chung một tài liệu nên không hỏi lại); mở lại/tải lại trang thì hỏi lại vì trình duyệt chặn tiếng.
-   Cú chạm vào nút loa lớn mở khoá âm thanh của trình duyệt (iPhone/Safari chỉ cho đọc sau một cú chạm). Bé đã tắt tiếng (learn:auto = 0) hoặc máy không có giọng thì vào thẳng.
-   Lưu ý: bản đồ lớp, bản đồ chủ đề và cảnh truyện là các TRANG KHÁC NHAU; sang trang mới trình duyệt có thể vẫn cần một cú chạm đầu để đọc (đã có nhắc "chạm để nghe" + đọc ngay khi chạm).
+/* Lớp truyện: TRANG BẬT LOA dùng chung cho bản đồ lớp, bản đồ chủ đề và cảnh truyện. Hiện MỘT lần mỗi lần mở trang: các màn chuyển bằng StoryNav (js/spa.js)
+   dùng chung một tài liệu nên không hỏi lại; mở lại hoặc tải lại trang thì hỏi lại vì trình duyệt chặn tiếng.
+   Cú chạm vào nút loa lớn mở khoá âm thanh (iPhone/Safari chỉ cho đọc sau một cú chạm). Bé đã tắt tiếng (learn:auto = 0) hoặc máy không có giọng thì vào thẳng.
    StoryGate.need() · StoryGate.show({title, back}, bắtĐầu) · StoryGate.isOpen() · StoryGate.onClose(fn) */
 (function (root) {
   "use strict";

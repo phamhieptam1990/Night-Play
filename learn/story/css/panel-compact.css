@@ -34,12 +34,9 @@ body .pic{display:none}
 body .pbody{display:none}
 body .pact{position:absolute;left:50%;transform:translateX(-50%);right:auto;top:auto;bottom:4px;z-index:2;gap:12px;align-items:center;pointer-events:auto}
 body .pbtns{gap:12px}
-body .panel.said .pbody{display:block;position:absolute;left:12px;right:12px;bottom:104px;padding:10px 14px;border-radius:18px;pointer-events:none;
   background:rgba(255,255,255,.82);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:2px solid rgba(255,255,255,.9);box-shadow:0 6px 18px rgba(0,0,0,.22);animation:bubIn .35s ease-out both}
-:root[data-theme="dark"] body .panel.said .pbody{background:rgba(16,22,46,.82);border-color:rgba(255,255,255,.28)}
-body .panel .pt{font-size:clamp(16px,4.6vw,19px)}body .panel .ptx{margin-top:2px}
+:root[data-theme="dark"] body .panel .pt{font-size:clamp(16px,4.6vw,19px)}body .panel .ptx{margin-top:2px}
 @media (orientation:landscape) and (max-height:600px){
   body .panel{min-height:78px}body .pb{width:64px;height:64px;border-radius:32px}body .pb svg{width:32px;height:32px}
-  body .panel.said .pbody{bottom:84px;right:auto;width:min(560px,70vw);left:50%;transform:translateX(-50%)}
-}
+  }
 

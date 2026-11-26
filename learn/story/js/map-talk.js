@@ -10,9 +10,10 @@
     e.classList.add("out"); setTimeout(function () { if (e.parentNode) e.parentNode.removeChild(e); }, 650);
   }
   function show(title, text) {
-    if (shown || !text || !document.body) return false;
+    if (!text || !document.body) return false;
     if (root.StoryGate && root.StoryGate.isOpen()) { root.StoryGate.onClose(function () { show(title, text); }); return true; }   /* chờ bé bật loa xong rồi linh vật mới phóng to đọc*/
     var same = root.__storyTalked === text; root.__storyTalked = text; shown = true;
+    if (!same && el) { clearTimeout(t1); clearInterval(wt); if (el.parentNode) el.parentNode.removeChild(el); el = null; }   /* điểm khác: thay bằng lời mới ngay */
     if (same) return false;   /* cùng câu vừa đọc ở màn trước (bản đồ lớp → bản đồ chủ đề): không phóng to và đọc lại */
     var reduce = root.matchMedia && root.matchMedia("(prefers-reduced-motion: reduce)").matches;
     el = document.createElement("div"); el.className = "stk"; el.setAttribute("role", "status");
