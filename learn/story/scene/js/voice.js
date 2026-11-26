@@ -8,7 +8,7 @@
     btn.setAttribute("aria-label", on ? root.SceneT.T.stopListen : root.SceneT.T.listen); }
   function stop() { clearInterval(poll); mark(false); try { if (root.Voice) root.Voice.stop(); } catch (e) {} }
   /* WEB IM LẶNG: máy không có giọng ("novoice") → báo ba mẹ; trình duyệt chặn tự phát khi chưa chạm ("blocked"/lỗi khác) → nhớ câu, nhắc "chạm để nghe" và đọc ngay ở cú chạm đầu tiên. */
-  var pending = null, hintEl = null;
+  var pending = null, hintEl = null, lastText = "", lastAt = 0;
   function hint(msg) {
     var sc = document.getElementById("sc"); if (!sc) return; if (!hintEl) { hintEl = document.createElement("div"); hintEl.className = "vhint"; hintEl.setAttribute("role", "status"); sc.appendChild(hintEl); }
     hintEl.textContent = msg || ""; hintEl.hidden = !msg;
@@ -21,7 +21,7 @@
   ["pointerdown", "touchstart", "keydown"].forEach(function (ev) { document.addEventListener(ev, retry, { passive: true, capture: true }); });
   function speakNow(text, o) {
     var V = root.Voice; if (!V || !text) return; stop(); hint(""); pending = null; mark(true); o = o || {};
-    var lang = o.lang || (K.subj === "tanh" && !o.vi ? "en" : K.lang), mix = !o.lang && K.subj === "tanh" && K.lang === "vi" && V.sayMix;
+    var vl = K.voiceLang(text), lang = o.lang || (K.subj === "tanh" && !o.vi && vl !== "vi" ? "en" : vl), mix = !o.lang && K.subj === "tanh" && vl === "vi" && V.sayMix;
     (mix ? V.sayMix : V.say)(text, K.subj, lang, { profile: o.profile || "narr", fail: function (why) { mark(false); silent(why, text, o); } });
     var t0 = Date.now(), quiet = 0;
     poll = setInterval(function () { var sp = root.speechSynthesis && root.speechSynthesis.speaking; quiet = sp ? 0 : quiet + 1;
@@ -31,7 +31,11 @@
     bind: function (b) { btn = b; b.onclick = function () { touched = true; if (b.classList.contains("on")) stop(); else speakNow(cur, curOpt); }; },
     ok: function () { return !!root.Voice; },
     /* đặt lời đang nói (loa đọc lời này) và tự đọc nếu được phép */
-    set: function (text, o) { cur = text || ""; curOpt = o || null; pending = null; hint(""); stop(); if (cur && auto()) speakNow(cur, o); },
+    /* cùng một lời đặt hai lần liền (khung màn + kiểu màn đều gọi say) thì chỉ đọc một lần */
+    set: function (text, o) {
+      var now = Date.now(), dup = text && text === lastText && now - lastAt < 1500; lastText = text || ""; lastAt = now;
+      cur = text || ""; curOpt = o || null; if (dup) return; pending = null; hint(""); stop(); if (cur && auto()) speakNow(cur, o);
+    },
     say: function (text, o) { speakNow(text, o); },
     stop: stop, touched: function () { return touched; }
   };

@@ -99,3 +99,13 @@ avatar bé lớn, quyết định thiết kế chủ site, thử trên iPhone/iP
 - [x] Ảnh Chrome 360×640: bản free + Bảng Phấn
 - [ ] Chưa xem: Neon / Gỗ Cổ / Kẹo Pastel, Mini 6×6, Sudoku Chéo, 380×760, ngang 844×390, 1200×640, màn kết thúc
 - [ ] Sudoku Pop Play (con vật cho bé mầm non): làm riêng, chưa bắt đầu
+
+## Game Cozy mới: Nối Đôi (kiểu Onet / Pikachu)
+
+- [x] Spec `scripts/cozygame/specs/noi-doi.js` + mã client `scripts/cozygame/parts/noi-doi/*.js` (bàn lưới + đường nối ≤ 2 chỗ rẽ, luật chơi, vẽ); sinh `cozyplay/games/noi-doi/index.html`
+- [x] Free: giao diện Vườn Hoa + loại Cổ điển + 3 độ khó (Dễ/Thường/Khó). Night Pass (`server/pro/noi-doi.js`): 3 loại (Đua giờ, Rơi xuống, Xáo liên tục) + 3 giao diện (Rừng Rậm, Phố Ẩm Thực, Đồ Chơi Bé) dùng hình của Tìm Đôi Thẻ
+- [x] Đăng ký: cozyplay/index.html, leaderboard, server/app.js + events.js, shared (multi-games, music, social, portalui, rails, widebg), sw.js, check.js, check-difficulty.js
+- [x] Linh vật Night 3D: Chuột Vàng Nối Đôi (scripts/art/gen-night3d.js + night3d-skins.js, sinh `mascot-n3-noi-doi.svg`)
+- [x] Kiểm tự động: 25 ván × 5 độ khó × (Cổ điển, Rơi xuống) đều dọn sạch được; 0 lỗi JS
+- [ ] Chụp ảnh đủ khung (360×640, 380×760, ngang 844×390, 1200×640) free + 3 giao diện Night Pass; màn kết thúc, popup; qua trang cổng cozyplay/index.html#noi-doi
+- [ ] Chạy đầy đủ `scripts/cozygame/check.js` (cổng 8877 đang bị phiên khác chiếm khi làm)

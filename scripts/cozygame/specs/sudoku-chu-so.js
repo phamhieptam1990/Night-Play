@@ -6,7 +6,7 @@ module.exports = {
   id: "sudoku-chu-so", prefix: "sd", title: { vi: "Sudoku Đêm", en: "Night Sudoku" }, maxScore: 3500,
   hero: "🔢🧠", deco: ["🔢", "✏️", "🧠", "⭐"],
   types: [["🔢", "Cổ điển 9×9", "Classic 9×9"], ["🧩", "Mini 6×6", "Mini 6×6"], ["❌", "Sudoku Chéo", "Diagonal"], ["⏱️", "Đua 15 phút", "15 min race"]],
-  catalog: [["basic", "Giấy Kẻ Ô", "Paper grid", "📝"], ["chalk", "Bảng Phấn", "Chalkboard", "🧑‍🏫"], ["neon", "Neon Đêm", "Neon night", "🌃"], ["wood", "Gỗ Cổ", "Old wood", "🪵"], ["candy", "Kẹo Pastel", "Pastel candy", "🍬"]],
+  catalog: [["basic", "Giấy Kẻ Ô", "Paper grid", "📝"], ["chalk", "Bảng Phấn", "Chalkboard", "🧑‍🏫"], ["neon", "Neon Đêm", "Neon night", "🌃"], ["wood", "Gỗ Cổ", "Old wood", "🪵"], ["candy", "Kẹo Pastel", "Pastel candy", "🍬"], ["bubble", "Số Bong Bóng", "Bubble digits", "🫧"]],
   rootCss: `:root{--bg:#eef3fb;--panel:#ffffff;--ink:#1b2750;--muted:#56648f;--accent:#2f55d0;--on:#ffffff;--good:#1a9a55;--bad:#d23b3b;--line:#d3dcf5;--pbg:linear-gradient(#dde8ff,#f6f9ff);--field:#eef3ff;--field2:#dbe4fb;
  --display:var(--font);--body:var(--font)}
 :root[data-theme="dark"]{--bg:#0f1526;--panel:#1b2646;--ink:#eef2ff;--muted:#a9b6e6;--accent:#8fb2ff;--on:#0b1330;--good:#3ddc84;--bad:#ff6b6b;--line:#2d3f73;--pbg:linear-gradient(#1c2a52,#0f1526);--field:#131d38;--field2:#223158}`,

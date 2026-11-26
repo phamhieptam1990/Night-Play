@@ -153,7 +153,7 @@ const PF={pro:null,ticket:null,types:TYPES.map((_,i)=>i===0),skins:{basic:{}},sk
 let TY=(()=>{const v=LS.get("sd-type",0);return Number.isInteger(v)&&v>=0&&v<TYPES.length?v:0})();
 const tLocked=t=>!PF.types[t];
 const skinOf=()=>PF.skins[PF.skinSel]||PF.skins.basic;
-const CATALOG=[["basic","Giấy Kẻ Ô","Paper grid","📝"],["chalk","Bảng Phấn","Chalkboard","🧑‍🏫"],["neon","Neon Đêm","Neon night","🌃"],["wood","Gỗ Cổ","Old wood","🪵"],["candy","Kẹo Pastel","Pastel candy","🍬"]];
+const CATALOG=[["basic","Giấy Kẻ Ô","Paper grid","📝"],["chalk","Bảng Phấn","Chalkboard","🧑‍🏫"],["neon","Neon Đêm","Neon night","🌃"],["wood","Gỗ Cổ","Old wood","🪵"],["candy","Kẹo Pastel","Pastel candy","🍬"],["bubble","Số Bong Bóng","Bubble digits","🫧"]];
 function applySkin(){const sk=skinOf(),pl=$("play");(pl._v||[]).forEach(k=>pl.style.removeProperty(k));const vv=sk.vl?(isDark()?sk.vd:sk.vl):{};pl._v=Object.keys(vv);for(const k of pl._v)pl.style.setProperty(k,vv[k]);$("skCss").textContent=sk.css||"";
  const d=$("deco");d.innerHTML="";const Ld=sk.deco||["🔢","✏️","🧠","⭐"],Rr=mulberry32(5);[0,1,2,3,4,5].forEach(i=>{const e=document.createElement("i");e.textContent=Ld[i%Ld.length];e.style.left=(Rr()*90)+"%";e.style.top=(15+Rr()*80)+"%";e.style.animationDelay=(-Rr()*8)+"s";d.appendChild(e)});draw()}
 addEventListener("storage",e=>{if(e.key==="theme"){document.documentElement.dataset.theme=e.newValue||"light";applySkin()}});
@@ -326,7 +326,9 @@ function paint(c, D, tm, dk, withBg) {
   c.textAlign = "center"; c.textBaseline = "middle";
   for (let i = 0; i < N * N; i++) {
     const r = Math.floor(i / N), cc = i % N, x = g.x0 + (cc + .5) * g.cell, y = g.y0 + (r + .5) * g.cell, v = D.val[i];
-    if (v) { const given = D.puz[i]; c.font = (given ? "800 " : "700 ") + Math.round(g.cell * .6) + "px Inter,system-ui,sans-serif"; c.fillStyle = v !== D.sol[i] ? (sk.badInk || "#d23b3b") : given ? (sk.given || (dk ? "#f1f4ff" : "#1b2750")) : (D.hintSet && D.hintSet[i] ? "#e08a00" : (sk.user || (dk ? "#8fb2ff" : "#2f63e0"))); c.fillText(String(v), x, y + g.cell * .04); }
+    if (v) { const given = D.puz[i]; c.font = (given ? "800 " : "700 ") + Math.round(g.cell * .6) + "px Inter,system-ui,sans-serif"; const dc = sk.digit && v === D.sol[i] ? sk.digit[v % sk.digit.length] : null;   /* giao diện nhiều màu: mỗi số một màu, viền trắng như quả bóng */
+    if (dc) { c.lineJoin = "round"; c.lineWidth = Math.max(2, g.cell * .13); c.strokeStyle = sk.digitLine || "#ffffff"; c.strokeText(String(v), x, y + g.cell * .04); }
+    c.fillStyle = dc || (v !== D.sol[i] ? (sk.badInk || "#d23b3b") : given ? (sk.given || (dk ? "#f1f4ff" : "#1b2750")) : (D.hintSet && D.hintSet[i] ? "#e08a00" : (sk.user || (dk ? "#8fb2ff" : "#2f63e0")))); c.fillText(String(v), x, y + g.cell * .04); }
     else if (D.notes[i]) { c.font = "700 " + Math.round(g.cell * .24) + "px Inter,system-ui,sans-serif"; c.fillStyle = sk.noteInk || (dk ? "#a9b6e6" : "#6a7aa8"); const cols = N === 6 ? 3 : 3;
       for (let d = 1; d <= N; d++) if (D.notes[i] & (1 << d)) { const k = d - 1; c.fillText(String(d), g.x0 + cc * g.cell + g.cell * (.2 + .3 * (k % cols)), g.y0 + r * g.cell + g.cell * (.22 + .28 * Math.floor(k / cols))); } }
   }

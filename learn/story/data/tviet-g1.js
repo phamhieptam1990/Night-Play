@@ -50,6 +50,21 @@ window.LearnStories["VI-G1-00c"] = {
     end: { vi: "Hàng chào", en: "Waving Line" }
   }
 };
+window.LearnStories["VI-G1-00d"] = {
+  title: { vi: "Các bạn chữ hoa", en: "The Capital Letters" },
+  intro: { vi: "Cuối rừng có các bạn chữ hoa đang đứng trên bục cao. Mầm muốn bé chào từng bạn nhé.", en: "At the edge of the forest, capital letters stand on a tall stage. Sprout wants you to greet each one." },
+  fork: { vi: "Bé có thể chào từng bạn một, hoặc băng qua nhanh nếu bé đã nhận ra chữ hoa rồi.", en: "You can greet them one by one, or dash across if you already know capital letters." },
+  learn: { vi: "Bạn Mây dắt bé lên bục. Chữ hoa to hơn chữ thường, bé nhìn và tô theo nhé!", en: "Cloud Friend leads you onto the stage. Capitals are bigger than small letters. Look and trace along!" },
+  test: { vi: "Các bạn chữ hoa và chữ thường đứng lẫn vào nhau. Mầm tin là bé tìm đúng được!", en: "Capital and small letters are mixed up. Sprout believes you can find the right ones!" },
+  end: { vi: "Các bạn chữ hoa vẫy chào bé. Bạn Mây hỏi: chữ hoa đứng ở đâu trong câu nhỉ?", en: "The capitals wave goodbye. Cloud Friend wonders: where do capital letters stand in a sentence?" },
+  nodes: {
+    intro: { vi: "Bục chữ hoa", en: "Capital Stage" },
+    fork: { vi: "Ngã ba bục", en: "Stage Fork" },
+    learn: { vi: "Đường chữ to", en: "Big Letter Path" },
+    test: { vi: "Hàng chữ hoa", en: "Capital Row" },
+    end: { vi: "Bục cuối", en: "Last Step" }
+  }
+};
 window.LearnStories["VI-G1-01"] = {
   title: { vi: "Ghép chữ thành tiếng", en: "Letters Make Sounds" },
   intro: { vi: "Cổng thư viện cây khóa kín. Mầm nói: ghép đúng vần mới mở được!", en: "The tree library gate is locked. Sprout says we must build the right word to open it!" },

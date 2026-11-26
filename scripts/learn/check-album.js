@@ -8,9 +8,10 @@ global.window = global; global.localStorage = mk();
 for (const f of ["content/buddies.js", "content/buddies-ext.js", "content/curriculum.js", "content/badges-g35.js"]) vm.runInThisContext(fs.readFileSync("learn/" + f, "utf8"));
 const Album = require("../../learn/album.js"), Path = require("../../learn/path.js"); global.LearnPath = Path; global.Album = Album;
 global.LearnBadges = require("../../learn/me/badges.js"); require("../../learn/album/lock-hint.js"); const L = global.LearnLock;
-const B = LEARN_BUDDIES, keys = Object.keys(B), letters = keys.filter(x => !/^\d+$/.test(x));
+const B = LEARN_BUDDIES, keys = Object.keys(B), caps = keys.filter(x => /^[A-ZĂÂĐÊÔƠƯ]$/.test(x)), letters = keys.filter(x => !/^\d+$/.test(x) && !caps.includes(x));
 const ALPHA = "a ă â b c d đ e ê g h i k l m n o ô ơ p q r s t u ư v x y".split(" ");
 ok(ALPHA.length === 29 && ALPHA.every(c => letters.includes(c)) && letters.length === 29, "Bạn Chữ phải đủ 29 chữ cái, có " + letters.length);
+ok(["A", "Ă", "Â", "B", "C", "D"].every(c => caps.includes(c)), "thiếu bạn chữ hoa A Ă Â B C D");
 for (const k of keys) { const d = B[k]; ok(d.name && d.say && d.obj && /^#[0-9a-f]{6}$/i.test(d.c), k + ": thiếu trường"); ok(d.rhyme.length <= 90, k + ": vè dài "
   + d.rhyme.length); ok(/[.!]$/.test(d.rhyme) && !/\?/.test(d.rhyme), k + ": vè phải kết bằng . hoặc !"); }
 const ext = Object.keys(LEARN_BUDDIES_EXT), needs = ext.map(k => LEARN_BUDDIES_EXT[k].need);

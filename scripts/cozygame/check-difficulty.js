@@ -22,6 +22,7 @@ const GAMES = [
   POP("qua-song"), POP("thap-vong-mau"), POP("be-dau-bo-me"), POP("bo-me-5-giay"), POP("doan-tuoi-nao"), POP("ve-chu-quai-vat"), POP("nhay-theo-so"),
   POP("ten-lua-cua-be"), POP("con-vat-an-so"), POP("be-noi-dung-khong"), POP("sudoku-con-vat"),
   { id: "tim-doi-the", url: "cozyplay/games/tim-doi-the/index.html", chips: "#lvs>button", start: "document.getElementById('bFree').click()", end: "try{G.over=true;finish(G)}catch(e){}" },
+  { id: "noi-doi", url: "cozyplay/games/noi-doi/index.html", chips: "#lvs>button", start: "document.getElementById('bFree').click()", end: "try{G.over=true;finish(G)}catch(e){}" },
   { id: "ga-me-ban-trung", url: "cozyplay/games/ga-me-ban-trung/index.html", chips: "#lvs>button", start: "document.getElementById('bFree').click()", end: "try{G.over=true;endGame()}catch(e){}" },
   { id: "cho-hang-kieu-viet", url: "cozyplay/games/cho-hang-kieu-viet/index.html", chips: "#lvs>button", start: "document.getElementById('bFree').click()", end: "try{G.over=true;endRun()}catch(e){}" },
   { id: "dap-deadline", url: "cozyplay/games/dap-deadline/index.html", chips: "#lvs>button", force: true, start: "document.getElementById('bPlay').click()", end: "try{end()}catch(e){}" },

@@ -25,6 +25,7 @@
     "san-chu-an": { bpm: 94,  root: 64, sc: "maj", prog: [0, 3, 4, 0, 5, 3, 4, 0], lead: "marimba",groove: 1, bass: [0, 7], arp: [0, 4, 7, 12] },
     "truot-so-nam-cham": { bpm: 90,  root: 60, sc: "maj", prog: [0, 5, 3, 4, 0, 5, 4, 0], lead: "marimba",groove: 0, bass: [0, 7], arp: [0, 4, 7, 12] },
     "tim-doi-the":      { bpm: 96,  root: 62, sc: "maj", prog: [0, 4, 5, 3, 0, 4, 3, 0], lead: "marimba",groove: 1, bass: [0, 7], arp: [0, 4, 7, 11] },
+    "noi-doi":          { bpm: 108, root: 60, sc: "maj", prog: [0, 3, 4, 0, 5, 3, 4, 0], lead: "marimba",groove: 1, bass: [0, 7], arp: [0, 4, 7, 12] },
     "ghep-ba-the":      { bpm: 88,  root: 57, sc: "pen", prog: [0, 3, 4, 0, 5, 3, 4, 0], lead: "marimba",groove: 0, bass: [0, 7], arp: [0, 4, 7, 12] },
     "mat-tinh-khong":   { bpm: 92,  root: 59, sc: "dor", prog: [0, 3, 0, 4, 0, 3, 5, 4], lead: "marimba",groove: 1, bass: [0, 7, 10], arp: [0, 4, 8, 12] },
     "noi-mot-net":      { bpm: 100, root: 64, sc: "min", prog: [0, 5, 2, 6, 0, 5, 3, 4], lead: "bell",   groove: 1, bass: [0, 8], arp: [0, 2, 4, 6, 8, 10, 12, 14] },

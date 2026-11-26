@@ -17,7 +17,7 @@ const CORE_A = ["../slot.js", "../content/phrases.js", "../mascot-kit.js", "../m
   "../content/qtypes.js", "../hint.js", "../path.js", "../content/lessons/index.js", "../content/parent-copy.js",
   "../limit.js"];
 // (../voice.js nạp riêng giữa CORE_A và CORE_B)
-const CORE_B = ["../farm.js", "../habit.js", "../adventure.js", "../content/buddies.js", "../buddy.js", "../album.js",
+const CORE_B = ["../farm.js", "../habit.js", "../adventure.js", "../content/buddies.js", "../glyph-a.js", "../buddy.js", "../album.js",
   "../lop/js/shape-buddies.js", "../lop/js/shape-defs.js", "js/sfx-ambient.js", "sfx.js"];
 const APP = ["js/story-default.js", "js/core.js", "js/speaker-gate.js", "scene/js/strings.js", "scene/js/util.js",
   "scene/js/fx.js", "scene/js/voice.js", "scene/js/props.js", "scene/js/frame.js", "scene/js/kinds-learn-a.js",

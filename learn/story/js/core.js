@@ -44,8 +44,12 @@
       var s = document.createElement("script"); s.src = "data/" + subj + "-g" + g + ".js"; s.onload = s.onerror = function () { res(); }; document.head.appendChild(s);
     });
   }
+  /* NGÔN NGỮ GIỌNG ĐỌC cho một đoạn chữ: chữ có dấu tiếng Việt luôn đọc bằng giọng Việt (môn Tiếng Việt / bài học vẫn tiếng Việt dù giao diện chọn English);
+     chữ không dấu thì theo ngôn ngữ giao diện. Tránh giọng Anh đọc chữ Việt. */
+  var VI_MARK = /[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/i;
+  function voiceLang(text) { return VI_MARK.test(String(text || "")) ? "vi" : lang; }
   var K = {
-    P: P, q: q, lang: lang, vi: vi, SUBJ: SUBJ, MAS: MAS, T: T, grade: G, subj: S, esc: esc, tx: tx, storyFor: storyFor, loadData: loadData, ls: ls, lsw: lsw,
+    voiceLang: voiceLang, P: P, q: q, lang: lang, vi: vi, SUBJ: SUBJ, MAS: MAS, T: T, grade: G, subj: S, esc: esc, tx: tx, storyFor: storyFor, loadData: loadData, ls: ls, lsw: lsw,
     setGS: function (g, s) { K.grade = g; K.subj = s; S = s; G = g; if (P) P.setGrade(g); lsw("learn:subj", s); },
     face: function (s, g) { return "../../shared/art/learn/" + MAS[s].f + "/" + MAS[s].f + "_grade_" + g + ".svg"; },
     color: function (s) { root.document.body.style.setProperty("--k1", MAS[s].c[0]); root.document.body.style.setProperty("--k2", MAS[s].c[1]); },

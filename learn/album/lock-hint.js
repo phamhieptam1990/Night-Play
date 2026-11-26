@@ -9,7 +9,8 @@
   function reg(topic, title, syms) { syms.forEach(function (s) { LESSON[s] = { s: "toan", g: 1, topic: topic, title: title }; }); }
   reg("g1_ready_n05", "Số 0–5", ["0", "1", "2", "3", "4", "5"]); reg("g1_ready_n610", "Số 6–10", ["6", "7", "8", "9", "10"]);
   [["VI-G1-00", "chữ a, ă, â, o, ô, ơ", ["a", "ă", "â", "o", "ô", "ơ"]], ["VI-G1-00b", "chữ e, ê, i, u, ư", ["e", "ê", "i", "u", "ư"]],
-    ["VI-G1-00c", "chữ b, c, d, đ, g, h", ["b", "c", "d", "đ", "g", "h"]]].forEach(function (x) { reg(x[0], x[1], x[2]); LESSON[x[2][0]].s = "tviet";
+    ["VI-G1-00c", "chữ b, c, d, đ, g, h", ["b", "c", "d", "đ", "g", "h"]],
+    ["VI-G1-00d", "chữ hoa A, Ă, Â, B, C, D", ["A", "Ă", "Â", "B", "C", "D"]]].forEach(function (x) { reg(x[0], x[1], x[2]); LESSON[x[2][0]].s = "tviet";
       x[2].forEach(function (c) { LESSON[c].s = "tviet"; }); });
   function ls(k) { try { return root.localStorage.getItem(k); } catch (e) { return null; } }
   function questions() {

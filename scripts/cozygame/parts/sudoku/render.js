@@ -22,7 +22,9 @@ function paint(c, D, tm, dk, withBg) {
   c.textAlign = "center"; c.textBaseline = "middle";
   for (let i = 0; i < N * N; i++) {
     const r = Math.floor(i / N), cc = i % N, x = g.x0 + (cc + .5) * g.cell, y = g.y0 + (r + .5) * g.cell, v = D.val[i];
-    if (v) { const given = D.puz[i]; c.font = (given ? "800 " : "700 ") + Math.round(g.cell * .6) + "px Inter,system-ui,sans-serif"; c.fillStyle = v !== D.sol[i] ? (sk.badInk || "#d23b3b") : given ? (sk.given || (dk ? "#f1f4ff" : "#1b2750")) : (D.hintSet && D.hintSet[i] ? "#e08a00" : (sk.user || (dk ? "#8fb2ff" : "#2f63e0"))); c.fillText(String(v), x, y + g.cell * .04); }
+    if (v) { const given = D.puz[i]; c.font = (given ? "800 " : "700 ") + Math.round(g.cell * .6) + "px Inter,system-ui,sans-serif"; const dc = sk.digit && v === D.sol[i] ? sk.digit[v % sk.digit.length] : null;   /* giao diện nhiều màu: mỗi số một màu, viền trắng như quả bóng */
+    if (dc) { c.lineJoin = "round"; c.lineWidth = Math.max(2, g.cell * .13); c.strokeStyle = sk.digitLine || "#ffffff"; c.strokeText(String(v), x, y + g.cell * .04); }
+    c.fillStyle = dc || (v !== D.sol[i] ? (sk.badInk || "#d23b3b") : given ? (sk.given || (dk ? "#f1f4ff" : "#1b2750")) : (D.hintSet && D.hintSet[i] ? "#e08a00" : (sk.user || (dk ? "#8fb2ff" : "#2f63e0")))); c.fillText(String(v), x, y + g.cell * .04); }
     else if (D.notes[i]) { c.font = "700 " + Math.round(g.cell * .24) + "px Inter,system-ui,sans-serif"; c.fillStyle = sk.noteInk || (dk ? "#a9b6e6" : "#6a7aa8"); const cols = N === 6 ? 3 : 3;
       for (let d = 1; d <= N; d++) if (D.notes[i] & (1 << d)) { const k = d - 1; c.fillText(String(d), g.x0 + cc * g.cell + g.cell * (.2 + .3 * (k % cols)), g.y0 + r * g.cell + g.cell * (.22 + .28 * Math.floor(k / cols))); } }
   }

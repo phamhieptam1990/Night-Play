@@ -25,6 +25,7 @@ window.NPS = (function () {
     "san-chu-an": { name: { vi: "Săn Chữ Ẩn", en: "Word Hunt" }, url: "cozyplay/games/san-chu-an/index.html", board: true, site: "cozyplay" },
     "truot-so-nam-cham": { name: { vi: "Trượt Số Nam Châm", en: "Magnetic Number Slide" }, url: "cozyplay/games/truot-so-nam-cham/index.html", board: true, site: "cozyplay" },
     "tim-doi-the": { name: { vi: "Tìm Đôi Thẻ", en: "Match Pairs" }, url: "cozyplay/games/tim-doi-the/index.html", board: true, site: "cozyplay" },
+    "noi-doi": { name: { vi: "Nối Đôi", en: "Link Pairs" }, url: "cozyplay/games/noi-doi/index.html", board: true, site: "cozyplay" },
     "ghep-ba-the": { name: { vi: "Ghép Ba Thẻ", en: "Triple Tiles" }, url: "cozyplay/games/ghep-ba-the/index.html", board: true, site: "cozyplay" },
     "xay-cau-tre": { name: { vi: "Xây Cầu Tre", en: "Bamboo Bridge" }, url: "cozyplay/games/xay-cau-tre/index.html", board: true, site: "cozyplay" },
     "song-sot-cuoi-thang": { name: { vi: "Sống Sót Đến Cuối Tháng", en: "Survive to Payday" }, url: "cozyplay/games/song-sot-cuoi-thang/index.html", board: true, site: "cozyplay" },

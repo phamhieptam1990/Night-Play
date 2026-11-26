@@ -30,7 +30,7 @@
       wt = setInterval(function () { if (i >= sp.length) { clearInterval(wt); return; } sp[i - 1].classList.remove("cur"); sp[i].classList.add("on", "cur"); i++; }, step);
     }
     if (auto() && root.Voice) {
-      try { var V = root.Voice; (K.subj === "tanh" && K.lang === "vi" && V.sayMix ? V.sayMix : V.say)(text, K.subj, K.lang, { profile: "narr", fail: function () {} }); } catch (e) {}
+      try { var V = root.Voice; var vl = K.voiceLang(text); (K.subj === "tanh" && vl === "vi" && V.sayMix ? V.sayMix : V.say)(text, K.subj, vl, { profile: "narr", fail: function () {} }); } catch (e) {}
     }
     t1 = setTimeout(end, Math.min(9000, Math.max(2800, text.length * 85 + 1400)));
     return true;   /* true = đã phóng to đọc */

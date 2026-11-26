@@ -13,7 +13,7 @@
   var TH = {
     "ban-co-hieu-toi": "💬 ❓ 💡 🧩", "bao-nhieu-giay": "⏱️ ⏳ 🎯 🐢", "cat-banh-chung": "🥮 🍃 🔪 🎋", "cho-hang-kieu-viet": "📦 🐔 🛵 🚚",
     "cozy-wings": "🪽 🕊️ ☁️ ✨", "dap-deadline": "📅 ⏰ 💥 📝", "doi-doi-2048": "🔢 🧬 ✨ 🎲", "duong-ray": "🚂 🛤️ 🚉 🚦",
-    "ga-me-ban-trung": "🥚 🐔 🌾 🐥", "gia-cho-viet": "🧺 🥬 🍅 🛒", "mat-tinh-khong": "👁️ 🎨 🔍 🌈", "ghep-ba-the": "🎃 👻 🦇 🌙", "tim-doi-the": "🌸 🌻 🦋 🍀", "truot-so-nam-cham": "🔢 🧲 🧩 ⭐", "san-chu-an": "🔤 🔍 📚 ✏️", "sudoku-chu-so": "🔢 🧠 ✏️ ⭐", "me-cung-truyen-tay": "🧭 🌀 ⭐ 🗺️",
+    "ga-me-ban-trung": "🥚 🐔 🌾 🐥", "gia-cho-viet": "🧺 🥬 🍅 🛒", "mat-tinh-khong": "👁️ 🎨 🔍 🌈", "ghep-ba-the": "🎃 👻 🦇 🌙", "tim-doi-the": "🌸 🌻 🦋 🍀", "noi-doi": "🔗 🦁 🍜 🧸", "truot-so-nam-cham": "🔢 🧲 🧩 ⭐", "san-chu-an": "🔤 🔍 📚 ✏️", "sudoku-chu-so": "🔢 🧠 ✏️ ⭐", "me-cung-truyen-tay": "🧭 🌀 ⭐ 🗺️",
     "ne-o-ga": "🌧️ 🛵 ☔ 🕳️", "noi-mot-net": "✍️ 🔗 ⭐ 💡", "shipper-sieu-toc": "🛵 📦 🍜 🏠", "song-sot-cuoi-thang": "💰 💸 🍜 ☕",
     "ve-mot-net": "✏️ 📐 ⭕ 🖍️", "xay-cau-tre": "🎋 🌉 🛶 🌾", "xe-ca-phe": "☕ 🧋 🛵 🫘", "xin-nghi": "📝 🗂️ ☕ 🗓️",
     "be-dau-bo-me": "🧸 🍼 🎈 ⭐", "be-noi-dung-khong": "🙅 🙆 🎈 ❓", "bo-me-5-giay": "⏱️ 🧸 👨‍👩‍👧 🎈", "con-vat-an-so": "🐊 🧮 🍎 🐘",

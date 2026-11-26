@@ -22,7 +22,8 @@ const READY = {
   tviet: [
     { id: "VI-G1-00", tag: "Làm quen", icon: "🔤", ready: true, name: "Làm quen các bạn chữ: a, ă, â, o, ô, ơ", sub: ["Gặp các bạn chữ có hình gợi nhớ", "Tô chữ bằng ngón tay", "Nghe tên chữ rồi chạm vào đúng bạn"] },
     { id: "VI-G1-00b", tag: "Làm quen", icon: "🔤", ready: true, name: "Làm quen các bạn chữ: e, ê, i, u, ư", sub: ["Gặp thêm các bạn chữ mới", "Tô chữ và ôn lại bạn cũ", "Bắn bóng bay tìm đúng bạn chữ"] },
-    { id: "VI-G1-00c", tag: "Làm quen", icon: "🔤", ready: true, name: "Làm quen các bạn chữ: b, c, d, đ, g, h", sub: ["Gặp các bạn chữ phụ âm", "Nghe âm đầu và chọn đúng bạn", "Ôn lại tất cả các bạn đã gặp"] }
+    { id: "VI-G1-00c", tag: "Làm quen", icon: "🔤", ready: true, name: "Làm quen các bạn chữ: b, c, d, đ, g, h", sub: ["Gặp các bạn chữ phụ âm", "Nghe âm đầu và chọn đúng bạn", "Ôn lại tất cả các bạn đã gặp"] },
+    { id: "VI-G1-00d", tag: "Làm quen", icon: "🔠", ready: true, name: "Làm quen chữ hoa: A, Ă, Â, B, C, D", sub: ["Gặp các bạn chữ hoa to hơn chữ thường", "Tô chữ hoa bằng ngón tay", "So chữ hoa với chữ thường"] }
   ]
 };
 for (const k of Object.keys(READY)) { const g1 = out.subjects[k].grades.find(g => g.grade === 1); if (g1) READY[k].slice().reverse().forEach(t => { if (!g1.topics.some(x => x.id === t.id)) g1.topics.unshift(t); }); }

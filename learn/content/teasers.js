@@ -5,6 +5,7 @@ window.LEARN_TEASERS = {
   "VI-G1-00": ["🍎🥣🎩", "Bạn A cầm quả táo, bạn O cầm quả bóng! Gặp các bạn chữ nhé!"],
   "VI-G1-00b": ["🐸🕯️☕", "Bạn Ê là chú ếch, bạn I là cây nến! Gặp tiếp các bạn nhé!"],
   "VI-G1-00c": ["🐻🌙🥁", "Bạn B là chú gấu, bạn C là mặt trăng! Gặp các bạn nhé!"],
+  "VI-G1-00d": ["⛺🐝🥁", "Chữ hoa to hơn chữ thường! Bạn A là cái lều, bạn B là chú ong. Gặp các bạn nhé!"],
   g1_numbers_100: ["🪵🪵🪵", "Một bó có 10 que tính. 3 bó là bao nhiêu que nhỉ?"],
   g1_add_sub: ["🍎🍎➕🍎", "3 quả táo thêm 1 quả nữa thì có mấy quả nhỉ?"],
   g1_geometry: ["🔴🟦🔺", "Bánh xe thì tròn, vì sao cửa sổ lại vuông nhỉ?"],

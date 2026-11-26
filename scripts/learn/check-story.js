@@ -1,5 +1,5 @@
 /* Kiểm LỚP TRUYỆN (learn/story/): node scripts/learn/check-story.js
-   (1) 71 chủ đề đều chạy được: truyện (viết sẵn hoặc mặc định) đủ 6 trường, đường đi dựng được ở mọi trạng thái tiến độ, cả dọc lẫn ngang.
+   (1) 72 chủ đề đều chạy được: truyện (viết sẵn hoặc mặc định) đủ 6 trường, đường đi dựng được ở mọi trạng thái tiến độ, cả dọc lẫn ngang.
    (2) Dữ liệu viết sẵn: đủ vi và en, mỗi chuỗi <= 120 ký tự, không từ cấm (bộ khung truyện mục 4 + LearnSafe), id chủ đề đúng môn/lớp.
    (3) 15 tệp learn/story/data/<môn>-g<lớp>.js đúng tên, không tệp thừa. (4) Tệp tay viết trong learn/story/ không vượt giới hạn dòng. */
 "use strict";
@@ -72,7 +72,7 @@ NODE_KINDS.forEach((k) => nodeName("mặc định", k, Def.NODES[k]));
   strs.forEach((t) => { if (NODE_BAN.test(t) && !/Lớp truyện|Class map/.test(t)) fail("core.js T: chữ cấm trên bản đồ: " + t); });
 }
 
-/* (1) 71 chủ đề chạy được */
+/* (1) 72 chủ đề chạy được */
 let n = 0;
 const stub = (o) => ({
   get: () => ({ l: o.l, t: o.t, b: o.b, r: 0 }), hasLesson: () => o.hl, hasTest: () => o.ht, unlocked: () => o.unl
@@ -100,8 +100,8 @@ SUBJ.forEach((s) => C.subjects[s].grades.forEach((gr) => gr.topics.forEach((t) =
     } catch (e) { fail(t.id + ": dựng đường lỗi: " + e.message); }
   })))))));
 })));
-console.log("chủ đề:", n, "(cần 71)");
-if (noNodes) console.log("⚠ cảnh báo: " + noNodes + " chủ đề chưa có trường nodes (dùng tên khám phá mặc định)"); if (n !== 71) fail("số chủ đề " + n + " khác 71");
+console.log("chủ đề:", n, "(cần 72)");
+if (noNodes) console.log("⚠ cảnh báo: " + noNodes + " chủ đề chưa có trường nodes (dùng tên khám phá mặc định)"); if (n !== 72) fail("số chủ đề " + n + " khác 71");
 
 /* (4) cỡ tệp tay viết */
 const lim = { ".html": 300, ".js": 400, ".css": 400 };
@@ -114,4 +114,4 @@ const lim = { ".html": 300, ".js": 400, ".css": 400 };
   });
 })(S);
 if (bad) { console.log("\n✗ có " + bad + " lỗi"); process.exit(1); }
-console.log("✓ Lớp truyện: 71 chủ đề chạy được, dữ liệu đúng, 15 tệp đúng tên");
+console.log("✓ Lớp truyện: 72 chủ đề chạy được, dữ liệu đúng, 15 tệp đúng tên");
