@@ -10,10 +10,10 @@
     e.classList.add("out"); setTimeout(function () { if (e.parentNode) e.parentNode.removeChild(e); }, 650);
   }
   function show(title, text) {
-    if (shown || !text || !document.body) return;
-    if (root.StoryGate && root.StoryGate.isOpen()) { root.StoryGate.onClose(function () { show(title, text); }); return; }   /* chờ bé bật loa xong rồi linh vật mới phóng to đọc*/
+    if (shown || !text || !document.body) return false;
+    if (root.StoryGate && root.StoryGate.isOpen()) { root.StoryGate.onClose(function () { show(title, text); }); return true; }   /* chờ bé bật loa xong rồi linh vật mới phóng to đọc*/
     var same = root.__storyTalked === text; root.__storyTalked = text; shown = true;
-    if (same) return;   /* cùng câu vừa đọc ở màn trước (bản đồ lớp → bản đồ chủ đề): không phóng to và đọc lại */
+    if (same) return false;   /* cùng câu vừa đọc ở màn trước (bản đồ lớp → bản đồ chủ đề): không phóng to và đọc lại */
     var reduce = root.matchMedia && root.matchMedia("(prefers-reduced-motion: reduce)").matches;
     el = document.createElement("div"); el.className = "stk"; el.setAttribute("role", "status");
     var b = document.createElement("div"); b.className = "tb"; var m = document.createElement("img"); m.className = "tm"; m.alt = ""; m.src = K.face(K.subj, K.grade);
@@ -32,6 +32,7 @@
       try { var V = root.Voice; (K.subj === "tanh" && K.lang === "vi" && V.sayMix ? V.sayMix : V.say)(text, K.subj, K.lang, { profile: "narr", fail: function () {} }); } catch (e) {}
     }
     t1 = setTimeout(end, Math.min(9000, Math.max(2800, text.length * 85 + 1400)));
+    return true;   /* true = đã phóng to đọc */
   }
   root.StoryTalk = { show: show };
 })(window);

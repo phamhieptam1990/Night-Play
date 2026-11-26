@@ -4,16 +4,17 @@
 body .panel{background:linear-gradient(155deg,rgba(255,255,255,.66),rgba(255,255,255,.52));backdrop-filter:blur(12px) saturate(1.2);-webkit-backdrop-filter:blur(12px) saturate(1.2);
   border-color:rgba(255,255,255,.75);box-shadow:0 8px 24px rgba(0,0,0,.22)}
 @media (orientation:portrait) and (max-width:700px){
-  body .panel{display:block;padding:36px 16px 14px;margin-top:0}
+  body .panel{display:block;padding:36px 16px 98px;margin-top:0}
   body .pbody{display:block;padding:0}
   body .pic{position:absolute;left:16px;top:-34px;width:68px;height:68px;z-index:2}body .pic .big{box-shadow:0 4px 10px rgba(0,0,0,.35);border:3px solid var(--trim,#fff)}
   body .pic .mf{width:26px;height:26px;right:-8px;bottom:-4px}
-  body .pact{position:absolute;right:14px;top:-26px;z-index:2;gap:8px}
+  body .pact{position:absolute;left:50%;transform:translateX(-50%);right:auto;top:auto;bottom:12px;z-index:2;gap:12px;align-items:center}
   body .pbtns{gap:8px}
   body .pt{margin:0;font-size:clamp(17px,4.8vw,20px);text-align:left}
   body .ptx{margin:4px 0 0;-webkit-line-clamp:3}
   body .spk{width:46px;height:46px;border-radius:23px;box-shadow:0 4px 10px rgba(0,0,0,.3)}body .spk svg{width:22px;height:22px}
-  body .pb{width:52px;height:52px;border-radius:26px;box-shadow:0 4px 10px rgba(0,0,0,.3)}body .pb svg{width:26px;height:26px}
+  body .pb{width:80px;height:80px;border-radius:40px;border:4px solid #fff;box-shadow:0 5px 0 rgba(0,0,0,.2),0 10px 18px rgba(0,0,0,.28)}body .pb svg{width:40px;height:40px}
+  body .pb.alt{width:64px;height:64px;border-radius:32px}body .pb.alt svg{width:30px;height:30px}
 }
 /* nhãn node cũng dạng kính trong suốt; node đang tới giữ tông vàng nhưng trong suốt */
 body .nd .lb{background:rgba(255,255,255,.58);backdrop-filter:blur(8px) saturate(1.2);-webkit-backdrop-filter:blur(8px) saturate(1.2);border:2px solid rgba(255,255,255,.75);box-shadow:0 3px 8px rgba(5,20,50,.18)}
@@ -25,3 +26,20 @@ body .nd.st-cur .lb{background:linear-gradient(135deg,rgba(255,230,138,.78),rgba
 :root[data-theme="dark"] body .nd.st-cur .lb{background:linear-gradient(135deg,rgba(255,226,140,.92),rgba(255,184,74,.88));border-color:rgba(255,240,190,.9);color:#3a2300}
 :root[data-theme="dark"] .pkb{background:rgba(16,22,46,.72);color:#f7f9ff;border-color:var(--tk,#6cc);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 :root[data-theme="dark"] .pkp{background:rgba(16,22,46,.82);border-color:rgba(255,255,255,.28);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+/* KHÔNG CÒN THẺ LỜI ở đáy bản đồ: chỉ còn các nút hành động to ở giữa đáy. Lời hiện nổi vài giây (class .said do panel.js bật) khi bé chọn điểm khác. */
+body .panel,:root[data-theme="dark"] body .panel{background:none;border:0;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;padding:0;width:100%;max-width:none;
+  left:0;transform:none;display:block;bottom:calc(6px + env(safe-area-inset-bottom));min-height:98px;pointer-events:none;border-radius:0}
+body .panel.pop{animation:none}
+body .pic{display:none}
+body .pbody{display:none}
+body .pact{position:absolute;left:50%;transform:translateX(-50%);right:auto;top:auto;bottom:4px;z-index:2;gap:12px;align-items:center;pointer-events:auto}
+body .pbtns{gap:12px}
+body .panel.said .pbody{display:block;position:absolute;left:12px;right:12px;bottom:104px;padding:10px 14px;border-radius:18px;pointer-events:none;
+  background:rgba(255,255,255,.82);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:2px solid rgba(255,255,255,.9);box-shadow:0 6px 18px rgba(0,0,0,.22);animation:bubIn .35s ease-out both}
+:root[data-theme="dark"] body .panel.said .pbody{background:rgba(16,22,46,.82);border-color:rgba(255,255,255,.28)}
+body .panel .pt{font-size:clamp(16px,4.6vw,19px)}body .panel .ptx{margin-top:2px}
+@media (orientation:landscape) and (max-height:600px){
+  body .panel{min-height:78px}body .pb{width:64px;height:64px;border-radius:32px}body .pb svg{width:32px;height:32px}
+  body .panel.said .pbody{bottom:84px;right:auto;width:min(560px,70vw);left:50%;transform:translateX(-50%)}
+}
+
