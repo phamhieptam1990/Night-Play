@@ -42,10 +42,16 @@
     b.style.cssText = "position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:2147483000;max-width:calc(100vw - 32px);padding:9px 16px;border:0;border-radius:999px;font:600 13px/1.2 system-ui,sans-serif;color:#fff;background:linear-gradient(90deg,#7c5cff,#ff8a3d);box-shadow:0 4px 16px rgba(0,0,0,.35);white-space:nowrap;transition:opacity .4s" + (act ? ";cursor:pointer" : ";pointer-events:none");
     if (act) b.onclick = act;
     document.body.appendChild(b);
+    if (act) return;   /* viên thuốc "Có bản mới · Cập nhật" nằm lại tới khi bấm (trước đây tự ẩn sau 5 giây nên dễ bỏ lỡ khi đang chơi) */
     setTimeout(function () { b.style.opacity = "0"; setTimeout(function () { if (b.parentNode) b.parentNode.removeChild(b); shown = false; }, 450); }, 5000);
   };
   var isEn = function () { return document.documentElement.lang === "en"; };
-  var pill = function (id, ver) { toast(isEn() ? "New version · Update" : "Có bản mới · Cập nhật", function () { reload(id, ver); }); };
+  /* có bản mới: hiện "Có bản mới vX · cập nhật sau N giây" rồi TỰ TẢI LẠI (bấm vào = cập nhật ngay). Ván đang chơi có lưu dở nên tải lại không mất tiến độ. */
+  var pill = function (id, ver) {
+    var n = 6, t = function () { var v = ver ? " v" + ver : ""; return isEn() ? "New version" + v + " · updating in " + n + "s (tap now)" : "Có bản mới" + v + " · cập nhật sau " + n + " giây (bấm ngay)"; };
+    toast(t(), function () { reload(id, ver); }); var b = document.querySelector("button[role=status]");
+    var iv = setInterval(function () { n--; if (n <= 0) { clearInterval(iv); reload(id, ver); return; } if (b) b.textContent = t(); }, 1000);
+  };
   /* vừa tải lại để lên bản mới: báo "Đã cập nhật" 5 giây (kể cả trang cổng tự tải lại, không có thao tác của người chơi) */
   try {
     var done = sessionStorage.getItem(DONE);
@@ -60,7 +66,7 @@
     fetch("/version.json?t=" + Date.now(), { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
       busy = false; if (!j || !j.id || j.id === NP_BUILD) return;
       if (get() === j.id) return;                        // đã thử tải lại cho mã này mà vẫn khác: không lặp vô hạn
-      if (portal || !touched) { toast(isEn() ? "New version · updating…" : "Có bản mới · đang cập nhật…"); setTimeout(function () { reload(j.id, j.ver); }, 1500); } else pill(j.id, j.ver);
+      if (portal || !touched) { toast((isEn() ? "New version" : "Có bản mới") + (j.ver ? " v" + j.ver : "") + (isEn() ? " · updating…" : " · đang cập nhật…")); setTimeout(function () { reload(j.id, j.ver); }, 1500); } else pill(j.id, j.ver);
     }).catch(function () { busy = false; });
   };
   document.addEventListener("visibilitychange", check);
