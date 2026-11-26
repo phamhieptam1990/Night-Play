@@ -17,6 +17,7 @@
 <link rel="stylesheet" href="css/map-topics.css">
 <link rel="stylesheet" href="css/map-dialog.css">
 <link rel="stylesheet" href="css/map-wide.css">
+<link rel="stylesheet" href="css/map-mode.css">
 </head>
 <body>
 <div class="bg" aria-hidden="true"></div>
@@ -29,6 +30,10 @@
 </header>
 <div class="wrap" id="wrap">
   <aside class="left">
+    <div class="mode" id="mode" role="group" aria-label="Kiểu học">
+      <span class="on" aria-current="true" aria-label="Lớp học"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.500C7 4 10 4.300 12 6c2-1.700 5-2 8-.5V19c-3-1.500-6-1.200-8 .5-2-1.700-5-2-8-.5z" fill="currentColor"/></svg><span class="t">Lớp học</span></span>
+      <a id="toStory" href="../story/index.html" aria-label="Lớp truyện"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z" fill="currentColor"/></svg><span class="t">Lớp truyện</span></a>
+    </div>
     <div class="chips" id="chG" role="group" aria-label="Lớp"></div>
     <div class="tiles" id="chS" role="group" aria-label="Môn"></div>
     <div class="pick selwrap" hidden>
@@ -77,6 +82,7 @@
 <script src="../path.js"></script>
 <script src="../content/lessons/index.js"></script>
 <script src="js/map.js"></script>
+<script src="js/mode.js"></script>
 <script src="../icons.js"></script>
 <script src="../../shared/offline.js" defer></script>
 <script src="../../shared/updated.js"></script>

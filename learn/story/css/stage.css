@@ -1,0 +1,30 @@
+/* Khung bản đồ: nền tranh, đường chấm, điểm dừng, linh vật đồng hành. Vị trí điểm dừng tính bằng % khung (xem js/route.js). */
+.area{position:relative;flex:1;min-height:0;display:grid;place-items:center;padding:4px 10px 8px}
+.stage{position:relative;overflow:hidden;border-radius:22px;border:2px solid color-mix(in srgb,var(--k1) 50%,var(--line));box-shadow:0 8px 24px rgba(0,0,0,.22);
+  background:linear-gradient(180deg,color-mix(in srgb,var(--k2) 38%,var(--bg)),color-mix(in srgb,var(--k1) 34%,var(--bg)))}
+.bgart{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;user-select:none}
+.paths{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.ed{fill:none;stroke:rgba(255,255,255,.75);stroke-width:7;stroke-linecap:round;stroke-dasharray:0 13;vector-effect:non-scaling-stroke;opacity:.9}
+.ed.done{stroke:var(--k1);stroke-width:10;filter:drop-shadow(0 1px 1px rgba(0,0,0,.35))}
+.nd{position:absolute;transform:translate(-50%,-50%);width:56px;display:flex;flex-direction:column;align-items:center;gap:1px;z-index:2}
+.ni{position:relative;width:56px;height:56px;border-radius:50%;display:block;background:var(--panel);box-shadow:0 5px 10px rgba(0,0,0,.28)}
+.ni img{width:100%;height:100%;display:block;pointer-events:none;border-radius:50%}
+.nd .lb{margin-top:3px;width:max-content;max-width:130px;padding:1px 7px;border-radius:10px;background:color-mix(in srgb,var(--panel) 90%,transparent);color:var(--ink);
+  font-size:12px;font-weight:800;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nd .bd{position:absolute;top:-6px;right:6px;width:24px;height:24px}.nd .bd img{width:100%;height:100%;display:block}
+.nd .strs{position:absolute;top:44px;left:50%;transform:translateX(-50%);display:flex;gap:0;pointer-events:none}.nd .strs img{width:14px;height:14px;display:block}
+.nd .num{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:18px;font-weight:900;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6);pointer-events:none}
+.nd.st-off .ni{opacity:.5;filter:grayscale(.65)}.nd.st-off .lb{opacity:.7}.nd.st-off.side .ni{opacity:.32}
+.nd.st-cur .ni{animation:ring 1.8s ease-in-out infinite;box-shadow:0 0 0 4px var(--k1),0 0 0 8px color-mix(in srgb,var(--k1) 30%,transparent),0 5px 10px rgba(0,0,0,.28)}
+.nd.st-cur .lb{background:var(--k1);color:#0b1020}
+.nd.sel .ni{box-shadow:0 0 0 4px #fff,0 0 0 7px var(--k2),0 5px 10px rgba(0,0,0,.28)}
+.nd:active .ni{transform:scale(.94)}
+.k-island{width:100px}.k-island .lb{width:auto;max-width:100%;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;text-align:center;font-size:12px}
+@keyframes ring{50%{transform:scale(1.07)}}
+/* linh vật: đứng cạnh điểm (bên phải; sang trái khi điểm nằm nửa phải khung), đi mượt tới điểm mới */
+.pal{position:absolute;z-index:1;width:clamp(54px,17%,84px);transform:translate(34px,-82%);transition:left 1s ease-in-out,top 1s ease-in-out;cursor:pointer;pointer-events:auto}
+.pal.flip{transform:translate(calc(-100% - 34px),-82%)}.pal.now{transition:none}.pal.hi{transform:translate(34px,-20%)}.pal.hi.flip{transform:translate(calc(-100% - 34px),-20%)}
+.pal .pbox{width:100%;animation:bob 2.4s ease-in-out infinite;filter:drop-shadow(0 4px 4px rgba(0,0,0,.3))}
+.pal .pbox svg,.pal .pbox img{display:block;width:100%;height:auto}
+.pal.walk .pbox{animation:walk .5s ease-in-out 2}.pal.hop .pbox{animation:hop .5s ease-out 1}
+@keyframes bob{50%{transform:translateY(-4px)}}@keyframes walk{50%{transform:translateY(-9px) rotate(-4deg)}}@keyframes hop{40%{transform:translateY(-16px) scale(1.06)}}

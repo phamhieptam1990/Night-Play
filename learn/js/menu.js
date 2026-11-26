@@ -3,9 +3,13 @@ const mqL = matchMedia("(max-height:430px) and (min-aspect-ratio:11/10)");
 function placeStars(){ const st = $("stars"); if(mqL.matches){ if(st.parentNode !== $("topRow")) $("snd").before(st); } else if(st.parentNode !== $("streak").parentNode) $("streak").before(st); }
 if(mqL.addEventListener) mqL.addEventListener("change", placeStars);
 /* ← : về TRANG TRƯỚC ĐÓ nếu bé đến từ một trang cùng site (hub game, trang môn...); mở thẳng trang học thì về hub Học Vui */
-function hubUrl(){ return (lang === "en" ? "/en" : "") + "/hoc/"; }
+function storyUrl(){   /* đi từ Lớp truyện (sessionStorage learn:from=story): ← và các nút về đều về bản đồ truyện */
+  try{ const u = sessionStorage.getItem("learn:from") === "story" && sessionStorage.getItem("learn:from:url"); return u && /^\/learn\/story\/[a-z-]+\.html\?/.test(u) ? u : ""; }catch(_){ return ""; }
+}
+function hubUrl(){ return storyUrl() || (lang === "en" ? "/en" : "") + "/hoc/"; }
 function goBack(e){
   e.preventDefault(); let same = false;
+  if(storyUrl()){ location.href = storyUrl(); return; }
   try{ const r = new URL(document.referrer); same = !!document.referrer && r.origin === location.origin && r.pathname !== location.pathname; }catch(_){}
   if(same && history.length > 1) history.back(); else location.href = hubUrl();
 }

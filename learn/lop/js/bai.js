@@ -8,7 +8,8 @@ let lang=ls("lang"); if(q.get("lang")==="en"||q.get("lang")==="vi") lang=q.get("
 const MAS={toan:["math","#34D399","#0EA5E9"],tviet:["vietnamese","#FFB020","#FB5A7A"],tanh:["english","#60A5FA","#A78BFA"]};
 const M=MAS[subj]||MAS.toan;
 document.body.style.setProperty("--c1",M[1]); document.body.style.setProperty("--c2",M[2]);
-const back="index.html?"+new URLSearchParams({grade,subj,lang}).toString();
+let back="index.html?"+new URLSearchParams({grade,subj,lang}).toString();
+try{if(sessionStorage.getItem("learn:from")==="story"){const u=sessionStorage.getItem("learn:from:url");if(/^\/learn\/story\/[a-z-]+\.html\?/.test(u||""))back=u}}catch(e){}   /* đi từ Lớp truyện: ← về bản đồ truyện */
 $("back").href=back;
 const art=n=>"../../shared/art/learn/"+M[0]+"/"+M[0]+"_"+n+".svg", MI=$("mi");
 function mood(n){MI.src=art(n==="happy"?"happy":n==="cheer"?"cheer":"grade_"+(grade||1)); if(n!=="grade"&&window.MascotFx)MascotFx.mood(n)}
