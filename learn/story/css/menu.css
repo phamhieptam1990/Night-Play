@@ -1,0 +1,18 @@
+/* Nút menu ở góc phải thanh trên + ba nút biểu tượng LỚN (thoát ra chương trình học / theme / ngôn ngữ), không chữ. Cùng kiểu nút tròn với ← và loa (nav-btn.css). */
+.top .mnb{flex:none;margin-left:8px;width:48px;height:48px;padding:0;border-radius:24px;display:grid;place-items:center}.top .mnb svg{width:26px;height:26px}
+.top h1:not([hidden]) ~ .mnb{margin-left:auto}   /* bản đồ chủ đề: đẩy nút sang phải; bản đồ lớp: ô chọn lớp đã có margin-left:auto */
+.top .mnp{position:fixed;top:calc(66px + env(safe-area-inset-top));right:12px;z-index:90;display:flex;flex-direction:column;align-items:flex-end;gap:12px;background:none;border:0;box-shadow:none;padding:0}
+.top .mnp[hidden]{display:none}
+.mnp .mni{width:68px;height:68px;border-radius:34px;display:grid;place-items:center;padding:0;color:#fff;border:4px solid #fff;cursor:pointer;text-decoration:none;
+  background:radial-gradient(120% 90% at 30% 18%,rgba(255,255,255,.5) 0,transparent 46%),linear-gradient(150deg,var(--nb1),var(--nb2));
+  box-shadow:0 5px 0 rgba(0,0,0,.22),0 10px 20px rgba(0,0,0,.3);animation:mniIn .25s ease-out both}
+.mnp .mni:nth-child(2){animation-delay:.05s}.mnp .mni:nth-child(3){animation-delay:.1s}
+.mnp .mni svg{width:38px;height:38px;filter:drop-shadow(0 2px 0 rgba(0,0,0,.3))}
+.mnp .mni:active{transform:translateY(3px) scale(.96)}.mnp .mni:focus-visible{outline:4px solid #fff;outline-offset:3px}
+@keyframes mniIn{from{opacity:0;transform:translateY(-10px) scale(.7)}}
+@media (prefers-reduced-motion:reduce){.mnp .mni{animation:none}}
+/* màn THẤP (điện thoại ngang): một hàng ngang, nút nhỏ lại, không bị cắt */
+@media (max-height:520px){
+  .top .mnp{top:calc(58px + env(safe-area-inset-top));left:12px;right:12px;flex-direction:row-reverse;flex-wrap:wrap;justify-content:flex-start;gap:10px}
+  .mnp .mni{width:56px;height:56px;border-radius:28px}.mnp .mni svg{width:30px;height:30px}
+}

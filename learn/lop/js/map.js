@@ -6,6 +6,7 @@ function lsw(k,v){try{localStorage.setItem(k,v)}catch(e){}}
 let lang=ls("lang"); if(lang!=="en"&&lang!=="vi") lang="vi";   /* B10: mặc định tiếng Việt, chỉ đổi khi người dùng tự chọn */
 const q=new URLSearchParams(location.search); if(q.get("lang")==="en"||q.get("lang")==="vi") lang=q.get("lang");
 const vi=lang==="vi";
+document.documentElement.lang=lang;   /* chân trang "Last updated" (shared/updated.js) đọc thuộc tính này */
 const SN={toan:["Toán","Math"],tviet:["Tiếng Việt","Vietnamese"],tanh:["Tiếng Anh","English"]};
 const MAS={toan:["math","Mochi","#34D399","#0EA5E9"],tviet:["vietnamese","Mầm","#FFB020","#FB5A7A"],tanh:["english","Bibi","#60A5FA","#A78BFA"]};
 const ST={new:"📚",learned:"📖",passed:"✅",star:"⭐"};
@@ -18,11 +19,17 @@ const T={
   intro:vi?"Giới thiệu ›":"Start tour ›",next:vi?"Tiếp ›":"Next ›",lessons:vi?"bài học":"lessons",passed:vi?"đã qua":"passed",
   stn:{new:vi?"Chưa học":"Not started",learned:vi?"Đã học":"Learned",passed:vi?"Đã qua kiểm tra":"Passed",star:vi?"Thành thạo":"Mastered"}
 };
+/* GIAO DIỆN TIẾNG ANH: chương trình (learn/content/curriculum.js) chỉ có tiếng Việt, nên tên chủ đề / mô tả lấy từ dữ liệu truyện (learn/story/data, đủ cả 72 chủ đề, có title.en + intro.en). Chưa nạp xong thì nạp rồi vẽ lại. */
+const SL={};
+function loadStories(s,g){ const k=s+g; if(vi||SL[k]) return Promise.resolve(); return SL[k]=new Promise(res=>{ const sc=document.createElement("script"); sc.src="../story/data/"+s+"-g"+g+".js"; sc.onload=sc.onerror=()=>{ SL[k+"d"]=1; res(); }; document.head.appendChild(sc); }); }
+function L(t){ if(vi) return t; const st=(window.LearnStories||{})[t.id]; if(!st) return Object.assign({},t,{tag:SN[S][1],sub:[]});
+  return Object.assign({},t,{name:(st.title&&st.title.en)||t.name,tag:SN[S][1],sub:st.intro&&st.intro.en?[st.intro.en]:[]}); }
+const gname=n=>vi?n:String(n).replace(/^Vườn của (.+)$/,"$1's Garden");
 function el(h){const d=document.createElement("div");d.innerHTML=h.trim();return d.firstChild}
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
 const hd=(s,g)=>"../../shared/art/learn/"+MAS[s][0]+"/"+MAS[s][0]+"_grade_"+g+".svg";
 const gardenUrl=(g,s)=>"../garden/index.html?"+new URLSearchParams({grade:g,subj:s}).toString();
-const IDEAS=["🌟 Vườn Sao","🍓 Vườn Dâu","🌈 Vườn Cầu Vồng","🐝 Vườn Ong","🦋 Vườn Bướm","🍀 Vườn May Mắn"];
+const IDEAS=vi?["🌟 Vườn Sao","🍓 Vườn Dâu","🌈 Vườn Cầu Vồng","🐝 Vườn Ong","🦋 Vườn Bướm","🍀 Vườn May Mắn"]:["🌟 Star Garden","🍓 Berry Garden","🌈 Rainbow Garden","🐝 Bee Garden","🦋 Butterfly Garden","🍀 Lucky Garden"];
 function okName(n){ n=n.replace(/\s+/g," ").trim(); if(n.length<2||n.length>20) return ""; if(!/^[\p{L}\p{N}\p{Extended_Pictographic} ]+$/u.test(n)) return "";
   if(LM&&LM.clean&&LM.clean(n)!==n) return ""; return n; }
 function rename(id,m,done){
@@ -61,8 +68,8 @@ function topicCard(s,g,t,m,i,total){
   if(st!=="new") chips+='<span class="chip2 b">'+(passed?"✅ ":"")+T.stn[st]+'</span>';
   if(rec.r) chips+='<span class="chip2 b">🎁 '+(vi?"Đã nhận thưởng":"Reward claimed")+'</span>';
   else if(unl) chips+='<span class="chip2 b">🎁 '+(s==="tviet"?(vi?"Xong là có quà ở Vườn Thú":"Finish = gift at the Pet Garden"):s==="tanh"?(vi?"Xong là có quà ở Khu Chợ":"Finish = gift at the Market"):vi?"Xong là có 3 nhiệm vụ vườn":"Finish = 3 garden tasks")+'</span>';
-  const TE=(window.LEARN_TEASERS||{})[t.id]||["📚",""];
-  const subs=(t.sub||[]).slice(0,2).map(esc).join(" · ");
+  const TE=vi?((window.LEARN_TEASERS||{})[t.id]||["📚",""]):[((window.LEARN_TEASERS||{})[t.id]||["📚"])[0],""];
+  t=L(t); const subs=(t.sub||[]).slice(0,2).map(esc).join(" · ");
   const pic='<div class="pic"><span class="big" aria-hidden="true">'+esc(TE[0])+'</span><span class="ttl"><small>'+esc(t.tag||"")+'</small>'+esc(t.name)+'</span>'+(unl
     ?'':'<span class="lock" aria-hidden="true">🔒</span>')+'</div>';
   const main=learnU||testU;
@@ -87,7 +94,7 @@ function intro(){
     "Hi! I’m "+m[1]+". "+ts.length+" topics here. Tap “Start tour”!"));
 }
 function narrate(i,scroll){
-  const ts=P.topics(S,G); if(!ts.length) return; i=((i%ts.length)+ts.length)%ts.length; idx=i; const t=ts[i], TE=(window.LEARN_TEASERS||{})[t.id]||["",""], hasL=P.hasLesson(t.id);
+  const ts=P.topics(S,G); if(!ts.length) return; i=((i%ts.length)+ts.length)%ts.length; idx=i; const t=L(ts[i]), TE=vi?((window.LEARN_TEASERS||{})[ts[i].id]||["",""]):["",""], hasL=P.hasLesson(t.id);
   cards.forEach((c,k)=>c.classList.toggle("cur",k===i));
   $("stepn").textContent=(i+1)+"/"+ts.length; $("next").innerHTML='<span class="t">'+T.next.replace(" ›","")+' </span>›';
   bub((vi?"Chủ đề ":"Topic ")+(i+1)+": "+t.name, (!P.unlocked(S,G,t.id)?(vi?"Mình học xong chủ đề "+idx+" rồi mới mở chủ đề này nhé!":"Finish the topic before this one first!"):(
@@ -111,6 +118,8 @@ function fillTiles(){
     b.innerHTML='<img src="'+hd(s,G)+'" alt=""><span>'+esc(SN[s][vi?0:1])+'</span>';b.onclick=()=>change(G,s);cs.appendChild(b)});
 }
 function render(){
+  if(!vi&&!SL[S+G+"d"]){ loadStories(S,G).then(render); return; }
+  const ttl=$("ttl"); if(ttl) ttl.textContent=T.course; document.title="Học Vui · "+T.course;
   const m=MAS[S], ts=P.topics(S,G), x=P.summary(S,G), nl=ts.filter(t=>P.hasLesson(t.id)).length, id=G+":"+S;
   document.body.style.setProperty("--c1",m[2]); document.body.style.setProperty("--c2",m[3]); document.body.style.setProperty("--k1",m[2]); document.body.style.setProperty("--k2",m[3]);
   $("selG").value=G; $("selS").value=S; fillTiles(); $("toGarden").href=gardenUrl(G,S);
@@ -118,9 +127,9 @@ function render(){
   try{ history.replaceState(null,"","?"+new URLSearchParams({grade:G,subj:S,lang}).toString()); }catch(e){}
   const v=$("v"); v.innerHTML=""; v.scrollTop=0; $("wrap").scrollTop=0; $("stage").classList.remove("compact");
   v.appendChild(el('<div class="sum"><b>'+esc(SN[S][vi?0:1])+" · "+T.gr+" "+G+'</b><span>'+ts.length+" "+T.topics+" · 📖 "+nl+" "+T.lessons+" · ✅ "+x.done+" "+T.passed+'</span></div>'));
-  const gr=el('<div class="gr"><span class="gn">🌱 '+esc(LearnSlot.name(id))+'</span><button type="button" class="gb ren" aria-label="'+T.rename+'">✏️</button><a class="gb" href="'
+  const gr=el('<div class="gr"><span class="gn">🌱 '+esc(gname(LearnSlot.name(id)))+'</span><button type="button" class="gb ren" aria-label="'+T.rename+'">✏️</button><a class="gb" href="'
     +gardenUrl(G,S)+'">'+T.visit+'</a></div>');
-  gr.querySelector(".ren").onclick=()=>rename(id,m,()=>{gr.querySelector(".gn").textContent="🌱 "+LearnSlot.name(id)});
+  gr.querySelector(".ren").onclick=()=>rename(id,m,()=>{gr.querySelector(".gn").textContent="🌱 "+gname(LearnSlot.name(id))});
   v.appendChild(gr);
   cards=ts.map((t,i)=>{const c=topicCard(S,G,t,m,i,ts.length); v.appendChild(c); return c});
   if(LearnSlot.hasLegacy()){ const o=el('<a class="old" href="../garden/index.html">'+T.old+'</a>'); o.onclick=()=>LearnSlot.setLegacy(); v.appendChild(o); }

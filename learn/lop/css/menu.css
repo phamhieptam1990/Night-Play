@@ -1,0 +1,16 @@
+/* Nút menu (góc phải thanh trên) + hàng nút biểu tượng LỚN thả xuống: khu vườn, của bé, phụ huynh, ngôn ngữ, giao diện. Không chữ. */
+.top .mnb{margin-left:auto;font-size:0}.top .mnb svg{width:26px;height:26px}
+.top h1{flex:1}.top h1 + .mnb{margin-left:0}
+.top .mnp{position:fixed;top:calc(68px + env(safe-area-inset-top));right:12px;z-index:90;display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+.top .mnp[hidden]{display:none}
+.mnp .mni,.mnp #toGarden{display:grid!important;place-items:center;width:68px;height:68px;min-width:68px;border-radius:34px;padding:0;font-size:34px;line-height:1;cursor:pointer;border:2px solid rgba(255,255,255,.55);
+  background:linear-gradient(150deg,rgba(124,92,255,.95),rgba(56,130,255,.95));color:#fff;box-shadow:0 5px 0 rgba(0,0,0,.25),0 10px 20px rgba(0,0,0,.35);animation:mniIn .25s ease-out both}
+.mnp .mni:nth-child(2){animation-delay:.04s}.mnp .mni:nth-child(3){animation-delay:.08s}.mnp .mni:nth-child(4){animation-delay:.12s}.mnp .mni:nth-child(5){animation-delay:.16s}
+.mnp .mni svg{width:38px;height:38px}.mnp .mni:active{transform:translateY(3px) scale(.96)}.mnp .mni:focus-visible{outline:4px solid #fff;outline-offset:3px}
+@keyframes mniIn{from{opacity:0;transform:translateY(-10px) scale(.7)}}
+@media (prefers-reduced-motion:reduce){.mnp .mni{animation:none}}
+/* màn THẤP (điện thoại ngang): xếp các nút thành MỘT HÀNG ngang từ góc phải, nút nhỏ lại, không bị cắt */
+@media (max-height:520px){
+  .top .mnp{top:calc(58px + env(safe-area-inset-top));left:12px;right:12px;flex-direction:row-reverse;flex-wrap:wrap;justify-content:flex-start;gap:10px}
+  .mnp .mni,.mnp #toGarden{width:56px;height:56px;min-width:56px;border-radius:28px;font-size:28px}.mnp .mni svg{width:30px;height:30px}
+}
