@@ -15,7 +15,7 @@ const T={
   hasLesson:vi?"Có bài học":"Lesson ready",soon:vi?"Sắp có bài học":"Lesson coming soon",nt:vi?"Sắp có bài kiểm tra":"Quiz coming soon",
   learn:vi?"Học":"Learn",quiz:vi?"Kiểm tra":"Quiz",more:vi?"Xem thêm":"More",visit:vi?"🌱 Vào vườn":"🌱 Visit",
   rename:vi?"Đặt tên cho khu vườn":"Name your garden",hintName:vi?"Tên vui thôi nhé, đừng dùng tên thật hay số điện thoại.":"Just a fun name. No real names or phone numbers.",
-  badName:vi?"Tên 2–20 chữ, không dùng ký tự lạ nhé.":"2–20 letters please.",cancel:vi?"Thôi":"Cancel",save:vi?"Lưu":"Save",old:vi?"🌳 Vườn cũ của bé":"🌳 Your first garden",
+  badName:vi?"Tên 2–20 chữ, không dùng ký tự lạ nhé.":"2–20 letters please.",cancel:vi?"Thôi":"Cancel",save:vi?"Lưu":"Save",old:vi?"🌳 Vườn cũ của em":"🌳 Your first garden",
   intro:vi?"Giới thiệu ›":"Start tour ›",next:vi?"Tiếp ›":"Next ›",lessons:vi?"bài học":"lessons",passed:vi?"đã qua":"passed",
   stn:{new:vi?"Chưa học":"Not started",learned:vi?"Đã học":"Learned",passed:vi?"Đã qua kiểm tra":"Passed",star:vi?"Thành thạo":"Mastered"}
 };
@@ -90,7 +90,7 @@ function poke(){ const g=$("gmas"); g.classList.remove("poke"); void g.offsetWid
 function intro(){
   idx=-1; cards.forEach(c=>c.classList.remove("cur")); const m=MAS[S], ts=P.topics(S,G), nl=ts.filter(t=>P.hasLesson(t.id)).length;
   $("stepn").textContent="0/"+ts.length; $("next").innerHTML='<span class="t">'+T.intro.replace(" ›","")+' </span>›';
-  bub("", vi?((G>=4?"Chào bạn! Mình là ":"Chào bé! Mình là ")+m[1]+" nè. Có "+ts.length+" chủ đề"+(nl?", "+nl+" bài học đã sẵn sàng":"")+". Bấm “Giới thiệu” nhé!"):(
+  bub("", vi?((G>=4?"Chào bạn! Mình là ":"Chào em! Mình là ")+m[1]+" nè. Có "+ts.length+" chủ đề"+(nl?", "+nl+" bài học đã sẵn sàng":"")+". Bấm “Giới thiệu” nhé!"):(
     "Hi! I’m "+m[1]+". "+ts.length+" topics here. Tap “Start tour”!"));
 }
 function narrate(i,scroll){

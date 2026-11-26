@@ -18,9 +18,9 @@ function openGift(btn){
   for(var i = 1; i <= 7; i++) dots += "<i class='gd" + (i < day ? " on" : i === day ? " on now" : "") + (i === 7 ? " big" : "") + "'>" + (i === 7 ? "🎁" : i <= day ? "✓" : i) + "</i>";
   var more = day < 7 ? "Còn " + (7 - day) + " ngày nữa là có quà to!" : "Quà to của cả tuần! Mai bắt đầu tuần mới nhé.";
   lastFocus = document.activeElement;
-  showCardH("<div class='hd'><div class='pi'>🎁</div><div><h2>" + (rw.bonus ? "Quà to cả tuần!" : "Quà của bé hôm nay") + "</h2><span class='chip'>🔥 Ngày thứ " + g.streak + " liền nhau</span></div></div><!--B-->" +
+  showCardH("<div class='hd'><div class='pi'>🎁</div><div><h2>" + (rw.bonus ? "Quà to cả tuần!" : "Quà của em hôm nay") + "</h2><span class='chip'>🔥 Ngày thứ " + g.streak + " liền nhau</span></div></div><!--B-->" +
     "<div class='sec'><div class='gift-rw'><span>🌱 <b>+" + rw.seed + "</b> hạt giống</span><span>⭐ <b>+" + rw.star + "</b> sao</span></div></div>" +
-    "<div class='sec'><h3>Tuần này</h3><div class='gdots'>" + dots + "</div><p>" + more + "</p><p><small>Hôm nay bé đã mở quà rồi. Mai quay lại để nhận tiếp nhé!</small></p></div>" +
+    "<div class='sec'><h3>Tuần này</h3><div class='gdots'>" + dots + "</div><p>" + more + "</p><p><small>Hôm nay em đã mở quà rồi. Mai quay lại để nhận tiếp nhé!</small></p></div>" +
     "<div class='acts'><button class='btn g' type='button' id='cl'>Cảm ơn!</button></div>");
 }
 function initGift(){

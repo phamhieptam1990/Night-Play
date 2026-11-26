@@ -33,7 +33,7 @@ function decoTrayBind(){
       var p = world(ev), to = !cancel && p.inside ? decoNearest(p.x, p.y, s.rects) : null;
       if(!to){ toast(cancel || !p.inside ? "Thả vào khung vườn nhé" : "Chỗ này đầy rồi, thử chỗ khác nhé"); return; }
       GardenItems.decoDrop(it.id, to[0] / W, to[1] / H); renderDeco(); closeCard();   /* đóng túi đồ để bé thấy món vừa đặt */
-      toast("📍 Đã đặt " + it.n.toLowerCase() + " ở chỗ bé chọn");
+      toast("📍 Đã đặt " + it.n.toLowerCase() + " ở chỗ em chọn");
     }
     b.addEventListener("pointerdown", function(ev){
       if(ev.pointerType === "mouse" && ev.button !== 0) return;

@@ -18,7 +18,7 @@ const CEL_THEMES = {
   4: { name: "sunset", hue: 14, sat: 78, big: "☀️", zoo: ["🦁", "🐴", "🐒", "🦒", "🐘", "🐻", "🦊", "🐔"], kinds: ["diamond", "star", "dot", "star"], col: ["#FFEB94", "#FFCB86", "#FF9BC8", "#FFFFFF", "#FFB03F", "#CDAEFF"] },
   5: { name: "space", hue: 255, sat: 62, big: "🚀", zoo: ["🦉", "🐉", "🐺", "🦄", "🦊", "🦝", "🦋", "🐍"], kinds: ["star", "diamond", "star", "dot"], col: ["#FFFFFF", "#9ACBFF", "#CDAEFF", "#FFEB94", "#97EBDD", "#FF9BC8"] }
 };
-const CEL_WORDS = { vi: { 5: ["Siêu giỏi!", "Đỉnh quá đi!", "Xuất sắc!"], 4: ["Giỏi quá!", "Tuyệt vời!", "Hay lắm!"], 3: ["Làm tốt lắm!", "Cố lên nào!", "Bé giỏi lắm!"] }, en: { 5: ["Superstar!", "Amazing!", "Outstanding!"], 4: ["Great job!", "Wonderful!", "Well done!"], 3: ["Nice work!", "Good going!", "Keep it up!"] } };
+const CEL_WORDS = { vi: { 5: ["Siêu giỏi!", "Đỉnh quá đi!", "Xuất sắc!"], 4: ["Giỏi quá!", "Tuyệt vời!", "Hay lắm!"], 3: ["Làm tốt lắm!", "Cố lên nào!", "Em giỏi lắm!"] }, en: { 5: ["Superstar!", "Amazing!", "Outstanding!"], 4: ["Great job!", "Wonderful!", "Well done!"], 3: ["Nice work!", "Good going!", "Keep it up!"] } };
 function celHash(str){ let h = 7; for(let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0; return h; }
 let celRAF = 0, celTO = 0, celDone = null, AC = null, QUIET = false, LANG = "vi";
 function celJingle(){

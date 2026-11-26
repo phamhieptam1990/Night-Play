@@ -14,11 +14,11 @@ function finish(){
     $("change").setAttribute("aria-label", t.change);
   /* B11: lớp 1–2 — lý do quay lại: còn bao nhiêu bạn Số/Chữ đang chờ trong bộ sưu tập */
   if(grade <= 2 && window.Album){ try{ const left = Album.total() - Album.count(); if(left > 0) $("rTip").textContent += " " + (lang === "en"
-    ? left + " new friends are waiting for you!" : "Còn " + left + " bạn đang chờ bé gặp, mai chơi tiếp nhé!"); }catch(e){} }
+    ? left + " new friends are waiting for you!" : "Còn " + left + " bạn đang chờ em gặp, mai chơi tiếp nhé!"); }catch(e){} }
   let HB = null; try{ if(window.Habit) HB = Habit.note(subj, roundStars, lang); }catch(e){}
   if(HB){ let tp = HB.praise + (top ? " " + (lang === "en" ? "Practise: " : "Luyện thêm: ") + t.tag[top] + "." : "");
     if(grade <= 2 && window.Album){ try{ const left = Album.total() - Album.count(); if(left > 0) tp += " " + (lang === "en"
-      ? left + " friends are waiting!" : "Còn " + left + " bạn đang chờ bé!"); }catch(e){} }
+      ? left + " friends are waiting!" : "Còn " + left + " bạn đang chờ em!"); }catch(e){} }
     $("rTip").textContent = tp; }
   { const wk = (grade >= 3 && !TRIP && !TOPIC_ID && E.weakSkills) ? E.weakSkills(subj, grade).length : 0, vi = lang !== "en";
     $("rMore").hidden = !(grade >= 3 && !TRIP && !TOPIC_ID); $("bMore").querySelector("span").textContent = vi ? "Luyện thêm 10 câu" : "10 more questions";

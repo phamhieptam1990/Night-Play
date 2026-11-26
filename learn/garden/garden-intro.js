@@ -1,9 +1,9 @@
 /* SLIDE GIỚI THIỆU cho bé (4 trang, mỗi trang một ý, chữ to, có hình): hiện tự động lần đầu vào vườn (hoặc sau khi xoá tiến độ),
    xem lại bằng nút "❓ Xem lại giới thiệu" trong bảng Chăm vườn. Nền màu của popup, bấm ▶ / ◀ / chấm tròn / phím mũi tên; "Bỏ qua" đóng ngay. */
 var INTRO = [
-  { mas: 1, t: "Chào bé! Mình là Bác Rễ", p: "Mình là người làm vườn. Vườn của bé còn trống trơn, mình cùng làm cho vườn thật đẹp nhé!" },
+  { mas: 1, t: "Chào em! Mình là Bác Rễ", p: "Mình là người làm vườn. Vườn của em còn trống trơn, mình cùng làm cho vườn thật đẹp nhé!" },
   { em: "💧 🧪 🐟", t: "Làm nhiệm vụ mỗi ngày", p: "Mỗi ngày có 3 nhiệm vụ: Toán, Tiếng Việt, Tiếng Anh. Chơi 5 câu, đúng 3 câu là xong." },
-  { img: "dat", t: "Xong nhiệm vụ, có đất mới", p: "Nhiệm vụ đầu tiên giúp bé có mảnh đất để cất nhà. Mỗi nhiệm vụ mở thêm một phần đất." },
+  { img: "dat", t: "Xong nhiệm vụ, có đất mới", p: "Nhiệm vụ đầu tiên giúp em có mảnh đất để cất nhà. Mỗi nhiệm vụ mở thêm một phần đất." },
   { img: "nha", t: "Mục tiêu: cất nhà cấp 4", p: "Làm 5 nhiệm vụ là xong nhà. Sau đó có ruộng để trồng cây, rồi cả khu vườn!" }
 ];
 var introAt = 0, introEl = null;

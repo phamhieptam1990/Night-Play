@@ -2,12 +2,12 @@ const T = {
   vi:{music:"Nhạc nền",noVoice:"Máy chưa đọc được. Nhờ bố mẹ nhé!",cheer:{ok:"Giỏi quá!",s3:"3 liên tiếp! 🔥",s5:"Siêu sao! 🌟",end:"Tuyệt vời! 🎉"}
     ,title:"Học Vui",grade:"Lớp",lang:"Ngôn ngữ",next:"EN",back:"Quay lại",stars:"sao",
       sn:{toan:"Toán",tviet:"Tiếng Việt",tanh:"Tiếng Anh"},si:{toan:"🔢",tviet:"📖",tanh:"🔤"},
-      hello:["Chào bé! Mình học 5 câu nhé!","Sẵn sàng chưa? Mình bắt đầu nào!"],good:["Giỏi quá!","Chính xác!","Tuyệt vời!","Đúng rồi!","Bé thông minh ghê!"],
+      hello:["Chào em! Mình học 5 câu nhé!","Sẵn sàng chưa? Mình bắt đầu nào!"],good:["Giỏi quá!","Chính xác!","Tuyệt vời!","Đúng rồi!","Em thông minh ghê!"],
       retry:"Chưa đúng, thử lại nhé!",reveal:"Đáp án là",streak:"liên tiếp",
       q:{toan:"Tính nhẩm",tviet:"Tiếng Việt",tanh:"Tiếng Anh"},
-      rT:"Xong rồi!",rP:"Bé hoàn thành 5 câu.",rS:"sao nhận được",rB:"đúng liên tiếp",again:"Chơi tiếp ▶",change:"Đổi môn / lớp",
-      tipOk:"Bé làm rất tốt, không mắc lỗi nào!",tipErr:"Lần sau mình luyện thêm: ",
-      shT:"Bé muốn học gì?",shS:"Môn",shG:"Lớp",go:"Bắt đầu ▶",src:"Theo chương trình GDPT 2018",srcLink:"Nguồn tham chiếu",pri:"Quyền riêng tư",menu:"Menu",mPick:"Đổi môn / lớp",
+      rT:"Xong rồi!",rP:"Em hoàn thành 5 câu.",rS:"sao nhận được",rB:"đúng liên tiếp",again:"Chơi tiếp ▶",change:"Đổi môn / lớp",
+      tipOk:"Em làm rất tốt, không mắc lỗi nào!",tipErr:"Lần sau mình luyện thêm: ",
+      shT:"Em muốn học gì?",shS:"Môn",shG:"Lớp",go:"Bắt đầu ▶",src:"Theo chương trình GDPT 2018",srcLink:"Nguồn tham chiếu",pri:"Quyền riêng tư",menu:"Menu",mPick:"Đổi môn / lớp",
         mAgain:"Chơi lại vòng này",autoOn:"Tự đọc đề: đang bật",autoOff:"Tự đọc đề: đang tắt",theme:"Sáng / Tối",terms:"Điều khoản",contact:"Liên hệ",hub:"Về Play Hub",
         fi:"Phụ huynh",fiAria:"Thông tin cho phụ huynh",close:"Đóng",tagline:"Vào là học liền",iSubj:"Các môn",iPar:"Dành cho phụ huynh",iSrc:"Nguồn tham chiếu chương trình",
         iData:"Tiến độ học được lưu ngay trên thiết bị này. Không có quảng cáo, không chat tự do với AI.",iPath:"Xem chương trình theo lớp",brand:{

@@ -10,7 +10,7 @@
     name = tt ? (tt.lastChild && tt.lastChild.nodeType === 3 ? tt.lastChild.textContent : tt.textContent) : "";
     var C = window.LearnMapCtx(), G = C.G, S = C.S, vi = C.vi, m = C.m, face = C.face;
     var p = new URLSearchParams({ grade: G, subj: S, topic: tid, lang: C.lang }).toString(), story = "../story/map.html?" + p, bg = "../story/art/bg-" + S + "-" + G + "-p.svg";
-    var T = vi ? ["Bé muốn chơi kiểu nào?", "Truyện", "Đi phiêu lưu cùng " + m[1], "Lớp học",
+    var T = vi ? ["Em muốn chơi kiểu nào?", "Truyện", "Đi phiêu lưu cùng " + m[1], "Lớp học",
       "Học từng bước, có bài thử", "Chạm vào bạn số 3 nhé!", "Đóng", "Chọn kiểu chơi"]
       : ["How do you want to play?", "Story", "Adventure with " + m[1], "Lesson", "Step by step, with a quiz", "Tap number 3!", "Close", "Choose how to play"];
     var o = document.createElement("div"); o.className = "ov pc"; o.setAttribute("role", "dialog"); o.setAttribute("aria-label", T[7]);

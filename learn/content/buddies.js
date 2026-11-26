@@ -22,17 +22,17 @@ window.LEARN_BUDDIES = {
   "ă": { on: "cái bát", name: "Bạn Ă", say: "ă", obj: "🥣", c: "#fb923c", rhyme: "Chữ ă đội cái bát úp, ăn cơm ngon lành!" },
   "â": { on: "cái mũ ảo thuật", name: "Bạn Â", say: "ớ", obj: "🎩", c: "#fbbf24", rhyme: "Chữ â đội mũ nhọn, như chú ảo thuật gia!" },
   "o": { on: "quả bóng", name: "Bạn O", say: "o", obj: "⚽", c: "#34d399", rhyme: "Chữ o tròn như quả bóng, lăn lăn trên sân!" },
-  "ô": { on: "mũ đầu bếp", name: "Bạn Ô", say: "ô", obj: "👨‍🍳", c: "#22d3ee", rhyme: "Chữ ô đội mũ bếp, nấu món ngon cho bé!" },
+  "ô": { on: "mũ đầu bếp", name: "Bạn Ô", say: "ô", obj: "👨‍🍳", c: "#22d3ee", rhyme: "Chữ ô đội mũ bếp, nấu món ngon cho em!" },
   "ơ": { on: "chú kiến", name: "Bạn Ơ", say: "ơ", obj: "🐜", c: "#60a5fa", rhyme: "Chữ ơ có cái râu nhỏ, như chú kiến siêng năng!" },
-  "e": { on: "con mắt", name: "Bạn E", say: "e", obj: "👁️", c: "#a78bfa", rhyme: "Chữ e như con mắt nhỏ, nheo nheo nhìn bé!" },
+  "e": { on: "con mắt", name: "Bạn E", say: "e", obj: "👁️", c: "#a78bfa", rhyme: "Chữ e như con mắt nhỏ, nheo nheo nhìn em!" },
   "ê": { on: "chú ếch", name: "Bạn Ê", say: "ê", obj: "🐸", c: "#f472b6", rhyme: "Chữ ê đội mũ nhọn, kêu ê ê như chú ếch!" },
   "i": { on: "cây nến", name: "Bạn I", say: "i", obj: "🕯️", c: "#4ade80", rhyme: "Chữ i như cây nến nhỏ, có ngọn lửa chấm tròn!" },
-  "u": { on: "cái cốc", name: "Bạn U", say: "u", obj: "☕", c: "#f59e0b", rhyme: "Chữ u như cái cốc nhỏ, rót nước cho bé uống!" },
+  "u": { on: "cái cốc", name: "Bạn U", say: "u", obj: "☕", c: "#f59e0b", rhyme: "Chữ u như cái cốc nhỏ, rót nước cho em uống!" },
   "ư": { on: "chú kỳ lân", name: "Bạn Ư", say: "ư", obj: "🦄", c: "#f87171", rhyme: "Chữ ư như cái cốc có râu, ư ư vui ghê!" },
   "b": { on: "chú gấu", name: "Bạn B", say: "bờ", obj: "🐻", c: "#fb923c", rhyme: "Chữ b như chú gấu, bụng to bên cây gậy!" },
   "c": { on: "mặt trăng", name: "Bạn C", say: "cờ", obj: "🌙", c: "#fbbf24", rhyme: "Chữ c như trăng khuyết, treo trên bầu trời đêm!" },
   "d": { on: "cái trống", name: "Bạn D", say: "dờ", obj: "🥁", c: "#34d399", rhyme: "Chữ d như cái trống nhỏ, có cán bên phải!" },
   "đ": { on: "cái cửa", name: "Bạn Đ", say: "đờ", obj: "🚪", c: "#22d3ee", rhyme: "Chữ đ như cái cửa nhỏ, có thanh ngang ở trên!" },
   "g": { on: "kính lúp", name: "Bạn G", say: "gờ", obj: "🔍", c: "#60a5fa", rhyme: "Chữ g như kính lúp nhỏ, soi gà con ra sao!" },
-  "h": { on: "cái ghế", name: "Bạn H", say: "hờ", obj: "🪑", c: "#a78bfa", rhyme: "Chữ h như cái ghế cao, bé ngồi nghỉ chân nào!" }
+  "h": { on: "cái ghế", name: "Bạn H", say: "hờ", obj: "🪑", c: "#a78bfa", rhyme: "Chữ h như cái ghế cao, em ngồi nghỉ chân nào!" }
 };

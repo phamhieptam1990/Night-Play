@@ -30,7 +30,7 @@ function colPanelItems(){
 }
 function colPanelSwap(){
   var F = window.Farm, cg = GardenItems.env.grade(), left = GardenItems.swapLeft(), list = GardenItems.swapList(F ? F.get().crops : {});
-  var head = "<div class='cs-who'><img src='" + gardenerImg(missionsDone()) + "' alt='Bác Rễ'><p>" + (cg > 1 ? "Bác Rễ đổi hạt cho bé! Đưa " + GardenItems.SWAP_COST + " nông sản lớp cũ, bé nhận 1 🌱 hạt giống để trồng cây của lớp này." : "Lên lớp 2 thì Bác Rễ mở quầy đổi hạt. Bé cứ thu hoạch thật nhiều nông sản nhé!") + "</p></div>";
+  var head = "<div class='cs-who'><img src='" + gardenerImg(missionsDone()) + "' alt='Bác Rễ'><p>" + (cg > 1 ? "Bác Rễ đổi hạt cho em! Đưa " + GardenItems.SWAP_COST + " nông sản lớp cũ, em nhận 1 🌱 hạt giống để trồng cây của lớp này." : "Lên lớp 2 thì Bác Rễ mở quầy đổi hạt. Em cứ thu hoạch thật nhiều nông sản nhé!") + "</p></div>";
   if(cg < 2) return head;
   var rows = list.length ? list.map(function(r){ var it = GardenItems.BY[r.id]; return "<div class='cs-row'>" + colImg(it, 48) + "<b>" + it.n + "</b><span>có " + r.have + "</span><button type='button' class='btn' data-sw='" + r.id + "'" + (left ? "" : " disabled") + ">Đổi " + GardenItems.SWAP_COST + " → 1 🌱</button></div>"; }).join("") : "<p class='sm'>Chưa có nông sản lớp cũ trong kho (cần ít nhất " + GardenItems.SWAP_COST + " cái cùng loại). Trồng và thu hoạch cây lớp trước nhé!</p>";
   return head + "<p class='sm cs-left'>Hôm nay còn <b>" + left + "</b> lần đổi.</p>" + rows;
@@ -39,10 +39,10 @@ function colPanelGoal(){
   var cg = GardenItems.env.grade(), E = GardenItems.env, d = E.done(cg), t = E.total(cg), c = GardenItems.counts(), goals = GardenItems.nextGoals(4), done = GardenItems.gradeDone(cg), h = "";
   h += "<div class='cg-top'><b>Lớp " + cg + ": " + d + "/" + t + " chủ đề</b><div class='gd-bar'><i style='width:" + (t ? Math.round(d / t * 100) : 0) + "%'></i></div><span>Đã sưu tầm " + c.open + "/" + c.total + " món</span></div>";
   if(goals.length) h += "<h3 class='cg'>Món tiếp theo</h3>" + goals.map(function(it){ var s = GardenItems.state(it.id); return "<div class='cs-row'>" + colImg(it, 44) + "<b>" + it.n + "</b><span>cần qua " + s.at + " chủ đề (có " + s.done + ")</span></div>"; }).join("");
-  else h += "<p class='sm'>Bé đã mở hết đồ của lớp " + cg + "!</p>";
+  else h += "<p class='sm'>Em đã mở hết đồ của lớp " + cg + "!</p>";
   var href = "../index.html?grade=" + Math.min(5, cg + 1), pr = "../parent/index.html";
-  h += "<div class='cg-up'><b>" + (done ? (cg < 5 ? "🎓 Bé xong lớp " + cg + " rồi!" : "🎓 Bé xong lớp 5 rồi!") : "🌱 Bé vẫn đang ở lớp " + cg) + "</b><p>" +
-    (done ? (cg < 5 ? "Bố mẹ có thể cho bé sang lớp " + (cg + 1) + ": vườn đổi mùa, đồ cũ mang theo, đồ mới mở dần. Chưa sang cũng được: bé vẫn có việc ở vườn (chăm cây, thu hoạch, bày đồ trang trí, ôn chủ đề để kiếm thêm ⭐)." : "Bé đã học hết chương trình. Bé cứ ôn lại và chăm vườn mỗi ngày nhé.") : (cg === 1 ? "Ở lại lớp 1 vẫn có việc: học tiếp chủ đề để mở đồ, thu hoạch nông sản đem đổi, bày đồ trang trí." : "Học tiếp các chủ đề để mở thêm đồ của lớp " + cg + ".")) + "</p>" +
+  h += "<div class='cg-up'><b>" + (done ? (cg < 5 ? "🎓 Em xong lớp " + cg + " rồi!" : "🎓 Em xong lớp 5 rồi!") : "🌱 Em vẫn đang ở lớp " + cg) + "</b><p>" +
+    (done ? (cg < 5 ? "Bố mẹ có thể cho em sang lớp " + (cg + 1) + ": vườn đổi mùa, đồ cũ mang theo, đồ mới mở dần. Chưa sang cũng được: em vẫn có việc ở vườn (chăm cây, thu hoạch, bày đồ trang trí, ôn chủ đề để kiếm thêm ⭐)." : "Em đã học hết chương trình. Em cứ ôn lại và chăm vườn mỗi ngày nhé.") : (cg === 1 ? "Ở lại lớp 1 vẫn có việc: học tiếp chủ đề để mở đồ, thu hoạch nông sản đem đổi, bày đồ trang trí." : "Học tiếp các chủ đề để mở thêm đồ của lớp " + cg + ".")) + "</p>" +
     "<div class='acts'>" + (done && cg < 5 ? "<a class='btn go' href='" + href + "&lang=vi'>Sang lớp " + (cg + 1) + "</a>" : "") + "<a class='btn g' href='" + pr + "'>Trang bố mẹ</a></div></div>";
   return h;
 }
@@ -57,14 +57,14 @@ function colBind(){
     var F = window.Farm, g = F.get(), r = GardenItems.swap(b.getAttribute("data-sw"), g.crops);
     if(!r.ok){ toast(r.why === "limit" ? "Hôm nay đổi đủ rồi, mai Bác Rễ đổi tiếp nhé" : "Chưa đủ nông sản để đổi"); return; }
     F.save(); F.addSeeds(r.seeds); var se = document.getElementById("nSeed"), ce = document.getElementById("nCrop"); if(se) se.textContent = F.get().seeds; if(ce) ce.textContent = F.cropTotal();
-    toast("🌱 Bác Rễ đổi cho bé 1 hạt giống!"); openCollection("1", true);
+    toast("🌱 Bác Rễ đổi cho em 1 hạt giống!"); openCollection("1", true);
   }; });
 }
 function openCollection(tab, keep){
   if(!window.GardenItems) return; cur = null; if(!keep) lastFocus = document.getElementById("bCol");
   var c = GardenItems.counts(), t = tab || "0";
   var h = "<div class='hd'><div class='pi' style='font-size:44px'>🎒</div><div><h2 id='ptitle'>Bộ sưu tập</h2><span class='chip'>⭐ " + c.open + "/" + c.total + "</span></div></div><!--B-->" +
-    "<div class='tabs2 col' role='tablist'><button type='button' class='t2' data-t='0' aria-label='Đồ của bé'>🎒</button><button type='button' class='t2' data-t='1' aria-label='Đổi hạt'>🧺</button><button type='button' class='t2' data-t='2' aria-label='Lên lớp'>🎯</button></div>" +
+    "<div class='tabs2 col' role='tablist'><button type='button' class='t2' data-t='0' aria-label='Đồ của em'>🎒</button><button type='button' class='t2' data-t='1' aria-label='Đổi hạt'>🧺</button><button type='button' class='t2' data-t='2' aria-label='Lên lớp'>🎯</button></div>" +
     "<div class='pnl sec col' data-p='0'>" + colPanelItems() + "</div><div class='pnl sec col' data-p='1'>" + colPanelSwap() + "</div><div class='pnl sec col' data-p='2'>" + colPanelGoal() + "</div>" +
     "<div class='acts'><button class='btn g' type='button' id='cl'>Đóng</button></div>";
   showCardH(h);

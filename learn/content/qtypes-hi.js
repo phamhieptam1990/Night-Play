@@ -110,7 +110,7 @@
       { items: s.slice(), speak: lang === "vi" ? "Xếp các từ thành câu đúng." : "Put the words in the right order.", reveal: s.join(" ") });
   };
   /* kéo thẻ vào chỗ trống: [lớp nhỏ nhất, câu có "__", đáp án, [3 nhiễu khác loại hẳn]] — nhiễu sai ngữ pháp/ngữ nghĩa rõ, không điền được */
-  var DF = { vi: [[1, "Bé tưới __ mỗi sáng.", "cây", ["sách", "bàn", "bút"]], [1, "Mẹ nấu __ cho cả nhà.", "cơm", ["ghế", "mây", "bút"]], [1, "Em đọc __ ở thư viện.",
+  var DF = { vi: [[1, "Em tưới __ mỗi sáng.", "cây", ["sách", "bàn", "bút"]], [1, "Mẹ nấu __ cho cả nhà.", "cơm", ["ghế", "mây", "bút"]], [1, "Em đọc __ ở thư viện.",
     "sách", ["cơm", "mưa", "chó"]], [1, "Con mèo ngủ trên __.", "ghế", ["gió", "bút", "mưa"]], [1, "Em đi __ mỗi ngày.", "học", ["đẹp", "xanh", "nhỏ"]],
       [1, "Trời hôm nay rất __.", "đẹp", ["ăn", "chạy", "sách"]], [1, "Chú chó đang __ ngoài sân.", "chạy", ["xanh", "bàn", "đẹp"]],
     [3, "Cô giáo giảng bài rất __.", "hay", ["bàn", "cặp", "trường"]], [3, "Em đã __ xong bài tập về nhà.", "làm", ["xanh", "nhỏ", "bàn"]],

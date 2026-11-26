@@ -30,7 +30,7 @@
   /* Bậc 3 KHÔNG nêu chữ số, số chữ số hay khoảng của kết quả (bé lớp 4–5 muốn tự nghĩ): chỉ chỉ cách TỰ KIỂM TRA bằng phép ngược. */
   function lead(p, vi) {
     var a = p.a, b = p.b, op = p.op, inv = op === "+" ? ["−", b, a] : op === "−" ? ["+", b, a] : op === "×" ? ["÷", b, a] : ["×", b, a];
-    return vi ? "Làm xong thì tự kiểm tra bằng phép ngược: lấy kết quả của bé " + (op === "+" ? "<b>trừ " + b + "</b>" : op === "−" ? "<b>cộng " + b + "</b>" : op === "×" ? "<b>chia " + b + "</b>" : "<b>nhân " + b + "</b>") + ", phải ra <b>" + a + "</b>."
+    return vi ? "Làm xong thì tự kiểm tra bằng phép ngược: lấy kết quả của em " + (op === "+" ? "<b>trừ " + b + "</b>" : op === "−" ? "<b>cộng " + b + "</b>" : op === "×" ? "<b>chia " + b + "</b>" : "<b>nhân " + b + "</b>") + ", phải ra <b>" + a + "</b>."
       : "Check with the opposite operation: take your answer and " + (op === "+" ? "<b>subtract " + b + "</b>" : op === "−" ? "<b>add " + b + "</b>" : op === "×" ? "<b>divide by " + b + "</b>" : "<b>multiply by " + b + "</b>") + ". You should get <b>" + a + "</b>.";
   }
   function binSteps(p, vi, opts) {
@@ -64,7 +64,7 @@
       s1 = vi ? "Phép chia là phép nhân ngược: tìm số nhân với <b>" + b + "</b> ra <b>" + a + "</b>: " + b + " × <b>?</b> = " + a + "." : "Division is multiplication backwards: " + b + " × <b>?</b> = " + a + ".";
       s2 = (vi ? "Đếm thêm " + b + " mỗi lần cho tới " + a + ": " : "Count on by " + b + " up to " + a + ": ") + t.join(", ") + ".";
     }
-    return [s1, s2, opts && opts.full ? (vi ? "Đáp án: <b>" + a + " " + op + " " + b + " = " + ans + "</b>. Bé tìm ô " + ans + " nhé!" : "Answer: <b>" + a + " " + op + " " + b + " = " + ans + "</b>.") : lead(p, vi)];
+    return [s1, s2, opts && opts.full ? (vi ? "Đáp án: <b>" + a + " " + op + " " + b + " = " + ans + "</b>. Em tìm ô " + ans + " nhé!" : "Answer: <b>" + a + " " + op + " " + b + " = " + ans + "</b>.") : lead(p, vi)];
   }
   /* biểu thức nhiều phép: nhắc quy tắc, làm bước đầu, lộ chữ số đầu */
   function firstStep(tk) {

@@ -43,8 +43,8 @@
         nature: { vi: "vật sáng trên trời", en:
         "shining things in the sky" }, school: { vi: "đồ dùng học tập", en: "school things" } };
     var SENT = {
-      vi: [["Em", "đi", "học"], ["Mẹ", "nấu", "cơm"], ["Bé", "chơi", "bóng"], ["Em", "yêu", "mẹ"], ["Bố", "đọc", "sách", "cho", "bé"], ["Trời", "hôm",
-          "nay", "rất", "đẹp"], ["Bé", "tưới",
+      vi: [["Em", "đi", "học"], ["Mẹ", "nấu", "cơm"], ["Em", "chơi", "bóng"], ["Em", "yêu", "mẹ"], ["Bố", "đọc", "sách", "cho", "em"], ["Trời", "hôm",
+          "nay", "rất", "đẹp"], ["Em", "tưới",
           "cây", "mỗi", "sáng"], ["Con", "mèo", "ngủ", "trên", "ghế"]],
       en: [["I", "like", "apples"], ["I", "have", "a", "dog"], ["She", "reads", "a", "book"], ["The", "cat", "is", "small"], ["We", "go", "to",
           "school"], ["He", "can", "run", "fast"],

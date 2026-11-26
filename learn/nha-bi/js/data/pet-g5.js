@@ -11,11 +11,11 @@
     ["vit-cao-su", "vịt cao su", 0]],
   scene: { living: { c: ["#DDEEFF", "#A9CFF5", "#E4F1FF", "#B9D8F7", "#D2B98E", "#A58650", "#F2F8FF"] } },
   start: { food: { tao: 2, ca: 2 }, soap: 2, toys: ["dia-bay"] },
-  say: {"feed": ["Ngon quá!", "Hò hò, ngon quá!", "Cảm ơn bé nhé!"],
+  say: {"feed": ["Ngon quá!", "Hò hò, ngon quá!", "Cảm ơn em nhé!"],
     "wash": ["Mát quá!", "Thơm quá!", "Sạch bong rồi!"],
     "play": ["Vui quá!", "Bay bay nào!", "Chơi nữa nào!"],
     "sleep": ["Ngủ ngon nhé!", "Ngày mới vui vẻ!"],
-    "miss": ["Tia nhớ bé lắm!", "Bé đã về rồi!"],
-    "hi": ["Chào bé!", "Tia vui quá!"]
+    "miss": ["Tia nhớ em lắm!", "Em đã về rồi!"],
+    "hi": ["Chào em!", "Tia vui quá!"]
   }
 };

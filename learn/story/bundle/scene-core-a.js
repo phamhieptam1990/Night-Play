@@ -502,7 +502,7 @@ window.LEARN_CURRICULUM={"v":2,"subjects":{"toan":{"name":"Toán","grades":[{"gr
   { id: "tviet-tone-02", subj: "tviet", skill: "tone", grades: [1, 2], diff: 1, type: "fill_blank", stem: "con __ (kêu meo meo)", answer: "mèo", wrong: [["meo", "tone"], ["mẻo", "tone"], ["mẹo", "tone"]] },
   { id: "tviet-tone-03", subj: "tviet", skill: "tone", grades: [1, 2], diff: 1, type: "fill_blank", stem: "con __ (có tai dài, thích ăn cà rốt)", answer: "thỏ", wrong: [["thố", "tone"], ["thọ", "tone"], ["thõ", "tone"]] },
   { id: "tviet-tone-04", subj: "tviet", skill: "tone", grades: [1, 2], diff: 1, type: "fill_blank", stem: "Em __ tay trước khi ăn.", answer: "rửa", wrong: [["rữa", "tone"], ["rựa", "tone"], ["rúa", "tone"]] },
-  { id: "tviet-tone-05", subj: "tviet", skill: "tone", grades: [2, 3], diff: 1, type: "fill_blank", stem: "Bé bị __ đau chân.", answer: "ngã", wrong: [["ngả", "tone"], ["ngạ", "tone"], ["ngá", "tone"]] },
+  { id: "tviet-tone-05", subj: "tviet", skill: "tone", grades: [2, 3], diff: 1, type: "fill_blank", stem: "Em bị __ đau chân.", answer: "ngã", wrong: [["ngả", "tone"], ["ngạ", "tone"], ["ngá", "tone"]] },
   { id: "tviet-tone-06", subj: "tviet", skill: "tone", grades: [2, 3], diff: 1, type: "fill_blank", stem: "Em __ sách ra đọc.", answer: "mở", wrong: [["mỡ", "tone"], ["mộ", "tone"], ["mố", "tone"]] },
   { id: "tviet-tone-07", subj: "tviet", skill: "tone", grades: [2, 3], diff: 1, type: "fill_blank", stem: "Em __ tranh rất đẹp.", answer: "vẽ", wrong: [["vẻ", "tone"], ["vệ", "tone"], ["vé", "tone"]] },
   { id: "tviet-tone-08", subj: "tviet", skill: "tone", grades: [2, 3], diff: 1, type: "fill_blank", stem: "Chiếc __ dùng để quét nhà.", answer: "chổi", wrong: [["chối", "tone"], ["chỗi", "tone"], ["chói", "tone"]] },
@@ -517,7 +517,7 @@ window.LEARN_CURRICULUM={"v":2,"subjects":{"toan":{"name":"Toán","grades":[{"gr
   { id: "tviet-antonym-02", subj: "tviet", skill: "antonym", grades: [3, 4, 5], diff: 2, type: "choose", stem: "Trái nghĩa với “nóng” là…", answer: "lạnh", wrong: [["ấm", "meaning"], ["khô", "meaning"], ["sáng", "meaning"]] },
   { id: "tviet-antonym-03", subj: "tviet", skill: "antonym", grades: [3, 4, 5], diff: 2, type: "choose", stem: "Trái nghĩa với “sáng” là…", answer: "tối", wrong: [["trắng", "meaning"], ["xanh", "meaning"], ["đỏ", "meaning"]] },
   /* ---------- Tiếng Việt: đọc hiểu ngắn ---------- */
-  { id: "tviet-reading_short-01", subj: "tviet", skill: "reading_short", grades: [1, 2], diff: 2, type: "choose", stem: "Bé Na có một con mèo trắng. Con mèo của Na màu gì?", answer: "trắng", wrong: [["đen", "reading"], ["vàng", "reading"], ["xám", "reading"]] },
+  { id: "tviet-reading_short-01", subj: "tviet", skill: "reading_short", grades: [1, 2], diff: 2, type: "choose", stem: "Em Na có một con mèo trắng. Con mèo của Na màu gì?", answer: "trắng", wrong: [["đen", "reading"], ["vàng", "reading"], ["xám", "reading"]] },
   { id: "tviet-reading_short-02", subj: "tviet", skill: "reading_short", grades: [1, 2], diff: 2, type: "choose", stem: "Sáng nay trời mưa to. Bố cho Nam đi học bằng ô tô. Bố đưa Nam đi học bằng gì?", answer: "ô tô", wrong: [["xe đạp", "reading"], ["đi bộ", "reading"], ["xe buýt", "reading"]] },
   { id: "tviet-reading_short-03", subj: "tviet", skill: "reading_short", grades: [1, 2], diff: 2, type: "choose", stem: "Trong vườn có ba cây cam và hai cây bưởi. Vườn có mấy cây bưởi?", answer: "hai", wrong: [["ba", "reading"], ["năm", "reading"], ["một", "reading"]] },
 
@@ -548,7 +548,7 @@ window.LEARN_CURRICULUM={"v":2,"subjects":{"toan":{"name":"Toán","grades":[{"gr
   { id: "tviet-tone-16", subj: "tviet", skill: "tone", grades: [3, 4, 5], diff: 2, type: "fill_blank", stem: "Mẹ __ em đi học mỗi sáng.", answer: "đưa", wrong: [["đứa", "tone"], ["đừa", "tone"], ["đửa", "tone"]] },
   { id: "tviet-tone-17", subj: "tviet", skill: "tone", grades: [3, 4, 5], diff: 2, type: "fill_blank", stem: "Bà em đã __ tuổi, tóc bạc phơ.", answer: "cao", wrong: [["cào", "tone"], ["cảo", "tone"], ["cạo", "tone"]] },
   { id: "tviet-tone-18", subj: "tviet", skill: "tone", grades: [3, 4, 5], diff: 2, type: "fill_blank", stem: "Mùa thu, lá vàng __ đầy sân.", answer: "rụng", wrong: [["rúng", "tone"], ["rùng", "tone"], ["rũng", "tone"]] },
-  { id: "tviet-tone-19", subj: "tviet", skill: "tone", grades: [3, 4, 5], diff: 2, type: "fill_blank", stem: "Bé Mai __ lời cô giáo dặn.", answer: "nhớ", wrong: [["nhờ", "tone"], ["nhở", "tone"], ["nhỡ", "tone"]] },
+  { id: "tviet-tone-19", subj: "tviet", skill: "tone", grades: [3, 4, 5], diff: 2, type: "fill_blank", stem: "Em Mai __ lời cô giáo dặn.", answer: "nhớ", wrong: [["nhờ", "tone"], ["nhở", "tone"], ["nhỡ", "tone"]] },
   { id: "tviet-tone-20", subj: "tviet", skill: "tone", grades: [3, 4, 5], diff: 2, type: "fill_blank", stem: "Trời __ nên em mặc áo ấm.", answer: "lạnh", wrong: [["lánh", "tone"], ["lảnh", "tone"], ["lãnh", "tone"]] },
   { id: "tviet-tone-21", subj: "tviet", skill: "tone", grades: [3, 4, 5], diff: 2, type: "fill_blank", stem: "Em xin phép cô giáo để được __ một câu.", answer: "hỏi", wrong: [["hói", "tone"], ["hòi", "tone"], ["họi", "tone"]] },
   { id: "tviet-tone-22", subj: "tviet", skill: "tone", grades: [3, 4, 5], diff: 2, type: "fill_blank", stem: "Mẹ __ cho em một chiếc áo mới.", answer: "mua", wrong: [["mùa", "tone"], ["mủa", "tone"], ["mụa", "tone"]] },
@@ -2019,7 +2019,7 @@ window.LEARN_CURRICULUM={"v":2,"subjects":{"toan":{"name":"Toán","grades":[{"gr
             "A triangle has base <em>" + a + " " + u + "</em> and height <em>" + h + " " + u + "</em>. Its area is?", a * h / 2, [[a * h,
                 "formula_confuse"], [a + h, "formula_confuse"], [(
             a + h) / 2 | 0, "formula_confuse"]], c, U); }
-        a = rnd(3, 15); b = a + rnd(2, 10); h = rnd(2, 12) * (((a + b) % 2) ? 2 : 1); return mkn(v ? "Hình thang có đáy bé <em>" + a + " " + u +
+        a = rnd(3, 15); b = a + rnd(2, 10); h = rnd(2, 12) * (((a + b) % 2) ? 2 : 1); return mkn(v ? "Hình thang có đáy em <em>" + a + " " + u +
             "</em>, đáy lớn <em>" + b + " " + u +
             "</em>, chiều cao <em>" + h + " " + u + "</em>. Diện tích là?" : "A trapezoid has bases <em>" + a + " " + u + "</em> and <em>" + b + " " +
                 u + "</em> and height <em>" + h + " " +
@@ -3260,7 +3260,7 @@ window.LEARN_CURRICULUM={"v":2,"subjects":{"toan":{"name":"Toán","grades":[{"gr
       { items: s.slice(), speak: lang === "vi" ? "Xếp các từ thành câu đúng." : "Put the words in the right order.", reveal: s.join(" ") });
   };
   /* kéo thẻ vào chỗ trống: [lớp nhỏ nhất, câu có "__", đáp án, [3 nhiễu khác loại hẳn]] — nhiễu sai ngữ pháp/ngữ nghĩa rõ, không điền được */
-  var DF = { vi: [[1, "Bé tưới __ mỗi sáng.", "cây", ["sách", "bàn", "bút"]], [1, "Mẹ nấu __ cho cả nhà.", "cơm", ["ghế", "mây", "bút"]], [1, "Em đọc __ ở thư viện.",
+  var DF = { vi: [[1, "Em tưới __ mỗi sáng.", "cây", ["sách", "bàn", "bút"]], [1, "Mẹ nấu __ cho cả nhà.", "cơm", ["ghế", "mây", "bút"]], [1, "Em đọc __ ở thư viện.",
     "sách", ["cơm", "mưa", "chó"]], [1, "Con mèo ngủ trên __.", "ghế", ["gió", "bút", "mưa"]], [1, "Em đi __ mỗi ngày.", "học", ["đẹp", "xanh", "nhỏ"]],
       [1, "Trời hôm nay rất __.", "đẹp", ["ăn", "chạy", "sách"]], [1, "Chú chó đang __ ngoài sân.", "chạy", ["xanh", "bàn", "đẹp"]],
     [3, "Cô giáo giảng bài rất __.", "hay", ["bàn", "cặp", "trường"]], [3, "Em đã __ xong bài tập về nhà.", "làm", ["xanh", "nhỏ", "bàn"]],
@@ -3511,8 +3511,8 @@ window.LEARN_CURRICULUM={"v":2,"subjects":{"toan":{"name":"Toán","grades":[{"gr
         nature: { vi: "vật sáng trên trời", en:
         "shining things in the sky" }, school: { vi: "đồ dùng học tập", en: "school things" } };
     var SENT = {
-      vi: [["Em", "đi", "học"], ["Mẹ", "nấu", "cơm"], ["Bé", "chơi", "bóng"], ["Em", "yêu", "mẹ"], ["Bố", "đọc", "sách", "cho", "bé"], ["Trời", "hôm",
-          "nay", "rất", "đẹp"], ["Bé", "tưới",
+      vi: [["Em", "đi", "học"], ["Mẹ", "nấu", "cơm"], ["Em", "chơi", "bóng"], ["Em", "yêu", "mẹ"], ["Bố", "đọc", "sách", "cho", "em"], ["Trời", "hôm",
+          "nay", "rất", "đẹp"], ["Em", "tưới",
           "cây", "mỗi", "sáng"], ["Con", "mèo", "ngủ", "trên", "ghế"]],
       en: [["I", "like", "apples"], ["I", "have", "a", "dog"], ["She", "reads", "a", "book"], ["The", "cat", "is", "small"], ["We", "go", "to",
           "school"], ["He", "can", "run", "fast"],
@@ -4051,7 +4051,7 @@ window.LEARN_CURRICULUM={"v":2,"subjects":{"toan":{"name":"Toán","grades":[{"gr
   /* Bậc 3 KHÔNG nêu chữ số, số chữ số hay khoảng của kết quả (bé lớp 4–5 muốn tự nghĩ): chỉ chỉ cách TỰ KIỂM TRA bằng phép ngược. */
   function lead(p, vi) {
     var a = p.a, b = p.b, op = p.op, inv = op === "+" ? ["−", b, a] : op === "−" ? ["+", b, a] : op === "×" ? ["÷", b, a] : ["×", b, a];
-    return vi ? "Làm xong thì tự kiểm tra bằng phép ngược: lấy kết quả của bé " + (op === "+" ? "<b>trừ " + b + "</b>" : op === "−" ? "<b>cộng " + b + "</b>" : op === "×" ? "<b>chia " + b + "</b>" : "<b>nhân " + b + "</b>") + ", phải ra <b>" + a + "</b>."
+    return vi ? "Làm xong thì tự kiểm tra bằng phép ngược: lấy kết quả của em " + (op === "+" ? "<b>trừ " + b + "</b>" : op === "−" ? "<b>cộng " + b + "</b>" : op === "×" ? "<b>chia " + b + "</b>" : "<b>nhân " + b + "</b>") + ", phải ra <b>" + a + "</b>."
       : "Check with the opposite operation: take your answer and " + (op === "+" ? "<b>subtract " + b + "</b>" : op === "−" ? "<b>add " + b + "</b>" : op === "×" ? "<b>divide by " + b + "</b>" : "<b>multiply by " + b + "</b>") + ". You should get <b>" + a + "</b>.";
   }
   function binSteps(p, vi, opts) {
@@ -4085,7 +4085,7 @@ window.LEARN_CURRICULUM={"v":2,"subjects":{"toan":{"name":"Toán","grades":[{"gr
       s1 = vi ? "Phép chia là phép nhân ngược: tìm số nhân với <b>" + b + "</b> ra <b>" + a + "</b>: " + b + " × <b>?</b> = " + a + "." : "Division is multiplication backwards: " + b + " × <b>?</b> = " + a + ".";
       s2 = (vi ? "Đếm thêm " + b + " mỗi lần cho tới " + a + ": " : "Count on by " + b + " up to " + a + ": ") + t.join(", ") + ".";
     }
-    return [s1, s2, opts && opts.full ? (vi ? "Đáp án: <b>" + a + " " + op + " " + b + " = " + ans + "</b>. Bé tìm ô " + ans + " nhé!" : "Answer: <b>" + a + " " + op + " " + b + " = " + ans + "</b>.") : lead(p, vi)];
+    return [s1, s2, opts && opts.full ? (vi ? "Đáp án: <b>" + a + " " + op + " " + b + " = " + ans + "</b>. Em tìm ô " + ans + " nhé!" : "Answer: <b>" + a + " " + op + " " + b + " = " + ans + "</b>.") : lead(p, vi)];
   }
   /* biểu thức nhiều phép: nhắc quy tắc, làm bước đầu, lộ chữ số đầu */
   function firstStep(tk) {

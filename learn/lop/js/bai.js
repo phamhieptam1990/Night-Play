@@ -14,7 +14,7 @@ $("back").href=back;
 const art=n=>"../../shared/art/learn/"+M[0]+"/"+M[0]+"_"+n+".svg", MI=$("mi");
 function mood(n){MI.src=art(n==="happy"?"happy":n==="cheer"?"cheer":"grade_"+(grade||1)); if(n!=="grade"&&window.MascotFx)MascotFx.mood(n)}
 const COPY={next:"Tiếp ▶",tryit:"Thử cùng nhé ▶",test:"Làm bài kiểm tra ▶",again:"Học lại",skip:"Kiểm tra luôn ▶",tchip:"Thử cùng · không tính điểm",combine:"Gộp lại",hear:"Nghe",
-  done:"Xong! Bé giỏi quá! 🎉",ready:"Bé học xong rồi! Giờ mình làm bài kiểm tra nhé.",another:"Thử lại nhé, bé làm được mà!",show:"Đáp án đúng là đây nè!"};
+  done:"Xong! Em giỏi quá! 🎉",ready:"Em học xong rồi! Giờ mình làm bài kiểm tra nhé.",another:"Thử lại nhé, em làm được mà!",show:"Đáp án đúng là đây nè!"};
 function strip(s){return String(s).replace(/[\u{1F000}-\u{1FFFF}☀-➿⭐️]/gu,"").replace(/\s+/g," ").trim()}
 /* GIỌNG ĐỌC: trình duyệt CHỈ cho phát sau khi bé chạm màn hình ít nhất một lần, nên màn đầu im lặng. Cách xử lý:
    (1) hiện thanh "Chạm để nghe" ở màn đầu cho tới khi bé chạm; (2) chạm lần đầu thì đọc NGAY câu đang hiện; (3) nếu máy không có giọng tiếng Việt thì báo rõ thay vì im. */
@@ -183,7 +183,7 @@ function trace(stage,s,nl){
   function mark(x,y){const x0=Math.max(0,Math.floor((x-BR)/cell)),x1=Math.min(GS-1,Math.floor((x+BR)/cell)),y0=Math.max(0,Math.floor((y-BR)/cell)),y1=Math.min(GS-1,
     Math.floor((y+BR)/cell));for(let gy=y0;gy<=y1;gy++)for(let gx=x0;gx<=x1;gx++){const i=gy*GS+gx;if(mask[i]&&!cov[i]){const cx=(gx+.5)*cell,cy=(gy+.5)*cell;
     if((cx-x)*(cx-x)+(cy-y)*(cy-y)<=BR*BR){cov[i]=1;covN++}}}}
-  function finish(){if(done)return;done=true;ding("ok");sparks(stage,10);mood("cheer");speakIn("Giỏi quá! Bé tô đẹp lắm!");BD.jump(top.querySelector(".bd"));setNext(true,nl)}
+  function finish(){if(done)return;done=true;ding("ok");sparks(stage,10);mood("cheer");speakIn("Giỏi quá! Em tô đẹp lắm!");BD.jump(top.querySelector(".bd"));setNext(true,nl)}
   function pos(e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*N/r.width,(e.clientY-r.top)*N/r.height]}
   function seg(a,b){const dist=Math.hypot(b[0]-a[0],b[1]-a[1]),n=Math.max(1,Math.ceil(dist/4));ctx.strokeStyle=d.c;ctx.lineWidth=BR*2;ctx.lineCap="round";ctx.lineJoin="round";
     ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.stroke();for(let i=0;i<=n;i++)mark(a[0]+(b[0]-a[0])*i/n,a[1]+(b[1]-a[1])*i/n);
@@ -213,7 +213,7 @@ function popgame(stage,s,nl){
     bl.style.setProperty("--bc",(BD.get(sy)||{}).c||"#60a5fa");bl.setAttribute("aria-label",sy);
     const cx=(i%cols)*24+4+(Math.floor(i/cols)%2?5:0),cy=Math.floor(i/cols)*46+(i%2?6:0);bl.style.left=cx+"%";bl.style.top=cy+"%";bl.style.animationDelay=(i*.27)+"s";
     bl.onclick=()=>{if(bl.classList.contains("pop"))return;if(sy===s.target){bl.classList.add("pop");ding("pop");left--;mood("happy");if(left===0){setTimeout(()=>{sky.remove();
-      sparks(stage,12);ding("ok");fin(stage,"Giỏi quá! Bé tìm hết bạn "+d.say.replace("Số ","")+"!",nl)},400)}else speakIn("Còn "+left+" bạn nữa!")}else{bl.classList.remove("no");
+      sparks(stage,12);ding("ok");fin(stage,"Giỏi quá! Em tìm hết bạn "+d.say.replace("Số ","")+"!",nl)},400)}else speakIn("Còn "+left+" bạn nữa!")}else{bl.classList.remove("no");
       void bl.offsetWidth;bl.classList.add("no");ding("no");speakIn("Bạn này chưa phải. Tìm bạn "+d.say.toLowerCase()+" nhé!")}};sky.appendChild(bl)});
   speakIn(s.t);setNext(false,nl);
 }
@@ -243,12 +243,12 @@ function game(stage,s,nl){
 function endScreen(stage){
   P.markLearned(grade,subj,topic); const rw=P.complete(grade,subj,topic); mood("cheer"); setNext(true,COPY.test);
   const HUB={tviet:["Vườn Thú","vuon-thu"],tanh:["Khu Chợ","khu-cho"]}[subj];
-  speakIn(rw.first?(HUB?"Bé học xong rồi! Quà đã chờ ở "+HUB[0]+"!":"Bé học xong rồi! Bé có 3 nhiệm vụ mới trong vườn!"):COPY.ready);
+  speakIn(rw.first?(HUB?"Em học xong rồi! Quà đã chờ ở "+HUB[0]+"!":"Em học xong rồi! Em có 3 nhiệm vụ mới trong vườn!"):COPY.ready);
   $("m").classList.add("end");
   if(window.LearnCelebrate) LearnCelebrate.show(rw.first?5:3,{lang:"vi",grade,key:subj+":"+topic,quiet:!AUTO});   /* chúc mừng toàn màn hình: thú nhảy, sao nổ, nhạc ngẫu nhiên */
   const w=document.createElement("div");w.className="endw";
-  w.innerHTML='<img class="em" alt="" src="'+art("cheer")+'"><h2>Bé học xong rồi! 🎉</h2>'+(rw.first?(HUB?'<div class="rw"><b>🎁 Quà đã chờ ở '+HUB[0]+'</b></div>':'<div class="rw"><b>🎁 +3 nhiệm vụ</b><b>🌱 +2 hạt</b>'+'</div>')
-    :'<p>Bài này bé đã nhận phần thưởng rồi.</p>')+'<p>Giờ mình làm bài kiểm tra nhé!</p>';
+  w.innerHTML='<img class="em" alt="" src="'+art("cheer")+'"><h2>Em học xong rồi! 🎉</h2>'+(rw.first?(HUB?'<div class="rw"><b>🎁 Quà đã chờ ở '+HUB[0]+'</b></div>':'<div class="rw"><b>🎁 +3 nhiệm vụ</b><b>🌱 +2 hạt</b>'+'</div>')
+    :'<p>Bài này em đã nhận phần thưởng rồi.</p>')+'<p>Giờ mình làm bài kiểm tra nhé!</p>';
   const acts=document.createElement("div");acts.className="acts";
   if(rw.first){const g=document.createElement("a");g.className="go2";g.href=HUB?"../"+HUB[1]+"/index.html?grade="+grade:"../garden/index.html?"+new URLSearchParams({grade,subj}).toString();g.textContent=HUB?"🎁 "+HUB[0]:"🌱 Vào vườn";acts.appendChild(g)}
   if(window.Album){const al=document.createElement("a");al.className="go2 alt";al.href="../album/index.html?from=lop";

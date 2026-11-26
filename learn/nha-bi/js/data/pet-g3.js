@@ -10,11 +10,11 @@
     ["gau-bong", "gấu bông", 0],
     ["dia-bay", "đĩa bay", 0]],
   start: { food: { xuong: 2, tao: 2 }, soap: 2, toys: ["bong"] },
-  say: {"feed": ["Ngon quá!", "Ăm ăm, ngon quá!", "Cảm ơn bé nhé!"],
+  say: {"feed": ["Ngon quá!", "Ăm ăm, ngon quá!", "Cảm ơn em nhé!"],
     "wash": ["Mát quá!", "Thơm quá!", "Sạch bong rồi!"],
     "play": ["Vui quá!", "Chơi nữa nào!", "Gâu gâu!"],
     "sleep": ["Ngủ ngon nhé!", "Ngày mới vui vẻ!"],
-    "miss": ["Bi nhớ bé lắm!", "Bé đã về rồi!"],
-    "hi": ["Chào bé!", "Bi vui quá!"]
+    "miss": ["Bi nhớ em lắm!", "Em đã về rồi!"],
+    "hi": ["Chào em!", "Bi vui quá!"]
   }
 };

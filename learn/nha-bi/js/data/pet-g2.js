@@ -11,11 +11,11 @@
     ["dia-bay", "đĩa bay", 0]],
   scene: { living: { c: ["#EDE6FF", "#C7B8F2", "#F1ECFF", "#D3C8F6", "#DDB98A", "#B58B54", "#F8F4FF"] } },
   start: { food: { ca: 2, sua: 2 }, soap: 2, toys: ["vit-cao-su"] },
-  say: {"feed": ["Ngon quá!", "Meo meo, ngon quá!", "Cảm ơn bé nhé!"],
+  say: {"feed": ["Ngon quá!", "Meo meo, ngon quá!", "Cảm ơn em nhé!"],
     "wash": ["Mát quá!", "Thơm quá!", "Sạch bong rồi!"],
     "play": ["Vui quá!", "Meo meo!", "Chơi nữa nào!"],
     "sleep": ["Ngủ ngon nhé!", "Ngày mới vui vẻ!"],
-    "miss": ["Mây nhớ bé lắm!", "Bé đã về rồi!"],
-    "hi": ["Chào bé!", "Meo! Mây vui quá!"]
+    "miss": ["Mây nhớ em lắm!", "Em đã về rồi!"],
+    "hi": ["Chào em!", "Meo! Mây vui quá!"]
   }
 };

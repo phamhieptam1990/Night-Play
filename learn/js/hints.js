@@ -12,7 +12,7 @@ function hintSteps(b){
     const st = b.hint.slice(), en = lang === "en";
     st.push(b.kind === "typein" ? (en
       ? "Put your answer back into the question: does it fit? Estimate first to see if it is about the right size." :
-      "Thử thay đáp án của bé vào đề xem có khớp không. Ước lượng trước xem kết quả cỡ lớn hay nhỏ.") : (en ? "Two wrong answers have been faded out." : "Mình đã làm mờ bớt 2 đáp án sai cho bé."));
+      "Thử thay đáp án của em vào đề xem có khớp không. Ước lượng trước xem kết quả cỡ lớn hay nhỏ.") : (en ? "Two wrong answers have been faded out." : "Mình đã làm mờ bớt 2 đáp án sai cho em."));
     return st;
   }
   return null;

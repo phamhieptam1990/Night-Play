@@ -12,11 +12,11 @@ var buddySel = null, buddyDone = null, buddyEl = null, buddyAgain = false;
 function buddyRender(){
   var c = document.getElementById("buddyCard"), s = buddySel;
   c.innerHTML =
-    "<h2>Chọn bạn làm vườn của bé</h2>" +
+    "<h2>Chọn bạn làm vườn của em</h2>" +
     "<div class='bd-who' role='group' aria-label='Chọn bạn'>" + ["chung", "nam", "nu"].map(function(w){ return "<button type='button' class='bd-c" + (s.w === w ? " on" : "") + "' data-w='" + w + "' aria-pressed='" + (s.w === w) + "'><img src='" + buddyImg(w, s.a, 3) + "' alt=''><b>" + BUDDY_ICON[w] + " " + BUDDY_W[w] + "</b></button>"; }).join("") + "</div>" +
-    (buddyAgain ? "<p class='bd-q'>Bé mấy tuổi?</p><div class='bd-age' role='group' aria-label='Độ tuổi'><button type='button' data-a='nho' class='" + (s.a === "nho" ? "on" : "") + "' aria-pressed='" + (s.a === "nho") + "'>5–7 tuổi</button><button type='button' data-a='lon' class='" + (s.a === "lon" ? "on" : "") + "' aria-pressed='" + (s.a === "lon") + "'>8–10 tuổi</button></div>" : "") +
+    (buddyAgain ? "<p class='bd-q'>Em mấy tuổi?</p><div class='bd-age' role='group' aria-label='Độ tuổi'><button type='button' data-a='nho' class='" + (s.a === "nho" ? "on" : "") + "' aria-pressed='" + (s.a === "nho") + "'>5–7 tuổi</button><button type='button' data-a='lon' class='" + (s.a === "lon" ? "on" : "") + "' aria-pressed='" + (s.a === "lon") + "'>8–10 tuổi</button></div>" : "") +
     "<button type='button' class='bd-ok' id='bdOk'>Chọn bạn này ✓</button>" +
-    "<p class='bd-note'>" + (buddyAgain ? "<button type='button' class='bd-x' id='bdX'>Giữ như cũ</button>" : "Sau này bé đổi lại được.") + "</p>";
+    "<p class='bd-note'>" + (buddyAgain ? "<button type='button' class='bd-x' id='bdX'>Giữ như cũ</button>" : "Sau này em đổi lại được.") + "</p>";
   c.querySelectorAll(".bd-c").forEach(function(b){ b.onclick = function(){ buddySel.w = b.getAttribute("data-w"); buddyRender(); var o = document.getElementById("bdOk"); if(o) o.focus(); }; });
   c.querySelectorAll(".bd-age button").forEach(function(b){ b.onclick = function(){ buddySel.a = b.getAttribute("data-a"); buddyRender(); }; });
   document.getElementById("bdOk").onclick = function(){ buddySave(buddySel); closeBuddy(true); };

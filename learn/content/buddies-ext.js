@@ -5,7 +5,7 @@
 (function (root) {
   "use strict";
   var X = {
-    "k": { on: "que kem", name: "Bạn K", say: "ca", obj: "🍦", c: "#f472b6", rhyme: "Chữ k đứng thẳng như que kem, hai tay dang ra đón bé!", need: 1 },
+    "k": { on: "que kem", name: "Bạn K", say: "ca", obj: "🍦", c: "#f472b6", rhyme: "Chữ k đứng thẳng như que kem, hai tay dang ra đón em!", need: 1 },
     "l": { on: "chiếc lá", name: "Bạn L", say: "lờ", obj: "🍃", c: "#4ade80", rhyme: "Chữ l đứng thẳng như chiếc lá dài, gió thổi lá đung đưa!", need: 2 },
     "m": { on: "chú mèo", name: "Bạn M", say: "mờ", obj: "🐱", c: "#fb923c", rhyme: "Chữ m như hai tai mèo nhọn, kêu meo meo vui ghê!", need: 3 },
     "n": { on: "cây nấm", name: "Bạn N", say: "nờ", obj: "🍄", c: "#f87171", rhyme: "Chữ n như cây nấm nhỏ, mọc lên sau cơn mưa!", need: 5 },

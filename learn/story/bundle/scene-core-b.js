@@ -70,14 +70,14 @@
   function greet(subj, lang, tagName) {
     var g = get(), m = g.mem, vi = lang !== "en", h = new Date().getHours(), sd = streakDays(), gap = m.lastAt ? (Date.now() - m.lastAt) / 86400000 : 0;
     var tg = m.lastTop && tagName ? tagName(m.lastTop) : "";
-    if (m.rounds === 0) return vi ? "Chào bé! Cùng học nhé!" : "Hi! Let's learn!";
-    if (gap >= 3) return vi ? "Lâu quá không gặp! Mình nhớ bé lắm, học một chút nhé?" : "Long time no see! I missed you. Shall we learn a bit?";
+    if (m.rounds === 0) return vi ? "Chào em! Cùng học nhé!" : "Hi! Let's learn!";
+    if (gap >= 3) return vi ? "Lâu quá không gặp! Mình nhớ em lắm, học một chút nhé?" : "Long time no see! I missed you. Shall we learn a bit?";
     if (tg && m.lastStars < 5 && Math.random() < .7) return vi ? "Lần trước mình hay nhầm " + tg + ". Hôm nay luyện lại nhé!" : "Last time we mixed up " + tg + ". Let's practice it today!";
-    if (sd >= 3) return vi ? "Ngày thứ " + sd + " liền rồi! Bé giỏi quá, mình tự hào lắm!" : "Day " + sd + " in a row! I'm so proud of you!";
-    if (m.lastStars === 5) return vi ? "Lần trước bé đúng hết cả 5 câu! Hôm nay thử giữ phong độ nhé!" : "You got all 5 last time! Let's keep it up!";
+    if (sd >= 3) return vi ? "Ngày thứ " + sd + " liền rồi! Em giỏi quá, mình tự hào lắm!" : "Day " + sd + " in a row! I'm so proud of you!";
+    if (m.lastStars === 5) return vi ? "Lần trước em đúng hết cả 5 câu! Hôm nay thử giữ phong độ nhé!" : "You got all 5 last time! Let's keep it up!";
     if (h < 11) return vi ? "Chào buổi sáng! Học một chút cho tỉnh táo nào!" : "Good morning! A little learning to wake up!";
     if (h >= 19) return vi ? "Buổi tối rồi, mình học nhẹ nhàng một lượt rồi đi ngủ nhé!" : "It's evening. One calm round, then bedtime!";
-    return vi ? "Bé quay lại rồi! Mình học tiếp nào!" : "You're back! Let's keep learning!";
+    return vi ? "Em quay lại rồi! Mình học tiếp nào!" : "You're back! Let's keep learning!";
   }
   /* NHIỆM VỤ → ĐẤT: mỗi nhiệm vụ trong ngày (water = Toán · fert = Tiếng Việt · fish = Tiếng Anh) xong là MỞ THÊM MỘT PHẦN ĐẤT của khu vườn (build.n tăng 1, khu vườn chọn cảnh theo n).
      Mỗi nhiệm vụ chỉ tính MỘT lần mỗi ngày (cùng khoá "gardenDaily" với bảng nhiệm vụ trong vườn, ngày tính theo UTC như vườn). build.fx = hiệu ứng chăm cây chờ vườn áp dụng lần mở tới. */
@@ -97,10 +97,10 @@
      got[n] = điều bé vừa có khi xong nhiệm vụ thứ n. goal(n) = mục tiêu tiếp theo { img, name, at (số nhiệm vụ để đạt), from (mốc bắt đầu của mục tiêu này), done = n, prize }; null khi đã mở cả vườn. */
   var BUILD = {
     full: 7,
-    got: ["", "📍 Bé đã có mảnh đất để cất nhà!", "⛺ Lều lá đã dựng xong!", "🏡 Nhà tranh đã lên!", "🧱 Nhà tường đã xong!", "🏠 Nhà cấp 4 đã hoàn thiện!", "🌱 Mở thêm ruộng 12 ô cho bé trồng cây!", "🎉 Cả khu vườn đã mở ra!"],
+    got: ["", "📍 Em đã có mảnh đất để cất nhà!", "⛺ Lều lá đã dựng xong!", "🏡 Nhà tranh đã lên!", "🧱 Nhà tường đã xong!", "🏠 Nhà cấp 4 đã hoàn thiện!", "🌱 Mở thêm ruộng 12 ô cho em trồng cây!", "🎉 Cả khu vườn đã mở ra!"],
     goal: function (n) {
-      if (n < 1) return { img: "dat", name: "Mảnh đất cất nhà", at: 1, from: 0, done: n, prize: "📍 Một mảnh đất của riêng bé để cất nhà" };
-      if (n < 5) return { img: "nha", name: "Nhà cấp 4", at: 5, from: 0, done: n, prize: "🏠 Căn nhà của bé, vào chơi được bên trong" };
+      if (n < 1) return { img: "dat", name: "Mảnh đất cất nhà", at: 1, from: 0, done: n, prize: "📍 Một mảnh đất của riêng em để cất nhà" };
+      if (n < 5) return { img: "nha", name: "Nhà cấp 4", at: 5, from: 0, done: n, prize: "🏠 Căn nhà của em, vào chơi được bên trong" };
       if (n < 6) return { img: "ruong", name: "Ruộng 12 ô", at: 6, from: 5, done: n, prize: "🌱 12 ô đất để gieo hạt, chăm cây và hái nông sản" };
       if (n < 7) return { img: "co", name: "Cả khu vườn", at: 7, from: 6, done: n, prize: "🎉 Kho, ao cá, cối xay. Rồi có bạn vật nuôi và cây ăn trái" };
       return null;
@@ -111,7 +111,7 @@
   BUILD.TIER_NAMES = ["", "Chồi non", "Có nón", "Biết tưới", "Thợ vườn", "Bác làm vườn"];
   BUILD.tier = function (n) { return n < 1 ? 1 : n < 2 ? 2 : n < 4 ? 3 : n < 5 ? 4 : 5; };
   /* lời Bác Rễ giới thiệu nhiệm vụ theo n (ngắn, bé đọc được trong 1 lần nhìn) */
-  BUILD.say = ["Chào bé! Mình là Bác Rễ. Làm 1 nhiệm vụ, mình cho bé đất cất nhà nhé!", "Có đất rồi! Làm nhiệm vụ tiếp, mình dựng lều lá cho bé!", "Lều lá xong! Thêm nhiệm vụ nữa là lên nhà tranh!", "Nhà tranh đẹp quá! Mình xây nhà tường tiếp nhé!", "Sắp xong rồi! Thêm 1 nhiệm vụ là có nhà ngói cấp 4!", "Nhà cấp 4 xong! Làm 1 nhiệm vụ để mở ruộng gieo hạt!", "Có ruộng rồi! Thêm 1 nhiệm vụ là mở cả khu vườn!", "Cả khu vườn của bé đây! Kiếm ⭐ để có bạn và cây mới nhé!"];
+  BUILD.say = ["Chào em! Mình là Bác Rễ. Làm 1 nhiệm vụ, mình cho em đất cất nhà nhé!", "Có đất rồi! Làm nhiệm vụ tiếp, mình dựng lều lá cho em!", "Lều lá xong! Thêm nhiệm vụ nữa là lên nhà tranh!", "Nhà tranh đẹp quá! Mình xây nhà tường tiếp nhé!", "Sắp xong rồi! Thêm 1 nhiệm vụ là có nhà ngói cấp 4!", "Nhà cấp 4 xong! Làm 1 nhiệm vụ để mở ruộng gieo hạt!", "Có ruộng rồi! Thêm 1 nhiệm vụ là mở cả khu vườn!", "Cả khu vườn của em đây! Kiếm ⭐ để có bạn và cây mới nhé!"];
   BUILD.sayAt = function (n) { return BUILD.say[Math.min(n, BUILD.say.length - 1)]; };
   /* HẠT GIỐNG MỞ DẦN: 10 loại. 3 hạt đầu (mỗi môn một loại, đúng cây chính của môn) mở cùng ruộng; các hạt sau mở bằng ⭐ hoặc nông sản trong kho. */
   var SEEDS = {
@@ -124,8 +124,8 @@
     var q = SEEDS[id]; if (!q) return { open: true, need: "" };
     var n = get().build.n, st = stars(), cr = cropTotal();
     if (q.n != null) return { open: n >= q.n, need: "Mở khi có ruộng" };
-    if (q.stars != null) return { open: st >= q.stars, need: "Cần " + q.stars + " ⭐ (bé có " + st + ")" };
-    return { open: cr >= q.crops, need: "Cần " + q.crops + " nông sản trong kho (bé có " + cr + ")" };
+    if (q.stars != null) return { open: st >= q.stars, need: "Cần " + q.stars + " ⭐ (em có " + st + ")" };
+    return { open: cr >= q.crops, need: "Cần " + q.crops + " nông sản trong kho (em có " + cr + ")" };
   }
   /* số nhiệm vụ CHƯA làm hôm nay (0..3), để hiện số đỏ trên nút 🌱 ở trang học và trang của bé */
   function missionsLeft() {
@@ -156,7 +156,7 @@
   var GIFTS = [   /* mốc theo TỔNG số ngày đã học (không cần liên tiếp) */
     { at: 3, seeds: 1, vi: "Mở được 3 ngày học! Bác Rễ tặng 1 hạt giống 🌱", en: "3 learning days! You got a seed 🌱" },
     { at: 7, seeds: 2, vi: "7 ngày học rồi! Quà: 2 hạt giống 🌱🌱", en: "7 learning days! Gift: 2 seeds 🌱🌱" },
-    { at: 14, seeds: 3, vi: "14 ngày học! Bé thật kiên trì, nhận 3 hạt giống 🌱", en: "14 learning days! So persistent: 3 seeds 🌱" },
+    { at: 14, seeds: 3, vi: "14 ngày học! Em thật kiên trì, nhận 3 hạt giống 🌱", en: "14 learning days! So persistent: 3 seeds 🌱" },
     { at: 30, seeds: 5, vi: "30 ngày học! Siêu kiên trì, nhận 5 hạt giống 🌟", en: "30 learning days! Super persistent: 5 seeds 🌟" }
   ];
   function pad(n) { return ("0" + n).slice(-2); }
@@ -179,10 +179,10 @@
   /* lời khen: nỗ lực + tiến bộ so với CHÍNH BÉ. prev = số câu đúng lần trước (cùng môn) hoặc null. */
   function praise(correct, prev, lang) {
     var vi = lang !== "en";
-    if (prev != null && correct > prev) return vi ? "Đúng " + prev + " → " + correct + " câu. Bé tiến bộ rồi!" : "" + prev + " → " + correct + " right. You improved!";
-    if (correct >= 5) return vi ? "Đúng hết! Bé luyện chăm nên giỏi lên." : "All correct! Your practice is paying off.";
-    if (correct >= 3) return vi ? "Bé làm tốt lắm. Luyện thêm là vững ngay!" : "Well done. A few left to practise and you'll have it!";
-    return vi ? "Câu khó giúp não bé lớn lên. Bé không bỏ cuộc là giỏi rồi!" : "Hard questions make your brain grow. You didn't give up, and that's great! Try again.";
+    if (prev != null && correct > prev) return vi ? "Đúng " + prev + " → " + correct + " câu. Em tiến bộ rồi!" : "" + prev + " → " + correct + " right. You improved!";
+    if (correct >= 5) return vi ? "Đúng hết! Em luyện chăm nên giỏi lên." : "All correct! Your practice is paying off.";
+    if (correct >= 3) return vi ? "Em làm tốt lắm. Luyện thêm là vững ngay!" : "Well done. A few left to practise and you'll have it!";
+    return vi ? "Câu khó giúp não em lớn lên. Em không bỏ cuộc là giỏi rồi!" : "Hard questions make your brain grow. You didn't give up, and that's great! Try again.";
   }
 
   /* gọi MỘT lần khi hết vòng (trước Farm.recordRound). Ghi ngày học, tổng ngày, quà mốc; trả về thứ để hiển thị. */
@@ -207,12 +207,12 @@
     var a1 = n1 ? Math.round(o1 * 100 / n1) : 0, a0 = n0 ? Math.round(o0 * 100 / n0) : 0;
     out.n = n1; out.days = days; out.acc = a1;
     if (!n1) {
-      out.lines.push(vi ? "Tuần này bé chưa học. Không sao, chỉ cần 5 phút mỗi ngày là đủ vui và đủ nhớ." : "No learning this week yet. Just 5 minutes a day is enough.");
-      out.ask = vi ? "Tối nay ba mẹ rủ bé chơi một vòng 5 câu cùng nhau nhé?" : "Tonight, try one 5-question round together!";
+      out.lines.push(vi ? "Tuần này em chưa học. Không sao, chỉ cần 5 phút mỗi ngày là đủ vui và đủ nhớ." : "No learning this week yet. Just 5 minutes a day is enough.");
+      out.ask = vi ? "Tối nay ba mẹ rủ em chơi một vòng 5 câu cùng nhau nhé?" : "Tonight, try one 5-question round together!";
       return out;
     }
-    out.lines.push(vi ? "Bé học " + days + "/7 ngày, làm " + n1 + " câu, đúng " + a1 + "%." : "Learned " + days + "/7 days, " + n1 + " questions, " + a1 + "% correct.");
-    if (n0 >= 5) out.lines.push(a1 > a0 ? (vi ? "Tăng " + (a1 - a0) + " điểm % so với tuần trước. Bé đang tiến bộ!" : "Up " + (a1 - a0) + " points vs last week. Improving!") : a1 === a0 ? (vi ? "Giữ vững phong độ so với tuần trước." : "Steady versus last week.") : (vi ? "Hơi giảm so với tuần trước, thường do bé đang thử câu khó hơn. Đừng lo." : "Slightly lower, often because harder questions were tried. No worry."));
+    out.lines.push(vi ? "Em học " + days + "/7 ngày, làm " + n1 + " câu, đúng " + a1 + "%." : "Learned " + days + "/7 days, " + n1 + " questions, " + a1 + "% correct.");
+    if (n0 >= 5) out.lines.push(a1 > a0 ? (vi ? "Tăng " + (a1 - a0) + " điểm % so với tuần trước. Em đang tiến bộ!" : "Up " + (a1 - a0) + " points vs last week. Improving!") : a1 === a0 ? (vi ? "Giữ vững phong độ so với tuần trước." : "Steady versus last week.") : (vi ? "Hơi giảm so với tuần trước, thường do em đang thử câu khó hơn. Đừng lo." : "Slightly lower, often because harder questions were tried. No worry."));
     /* kỹ năng mới vững (bậc ≥ 3) và kỹ năng cần luyện thêm */
     var best = null, weak = null, cur = root.LEARN_CURRICULUM, nm = function (id) { try { return (root.PARENT_COPY || {}).SKILL[id][vi ? 0 : 1]; } catch (e) { return ""; } };
     ["toan", "tviet", "tanh"].forEach(function (s) {
@@ -224,8 +224,8 @@
     var bn = best && nm(best.id), wn = weak && nm(weak.id);
     if (bn) { out.lines.push(vi ? "Đang vững: " + bn + "." : "Strong: " + bn + "."); out.praise = vi ? "Con giỏi phần \"" + bn + "\" quá! Mẹ/ba thấy con đã luyện rất chăm." : "You're great at \"" + bn + "\"! I can see how hard you practised."; }
     else out.praise = vi ? "Ba mẹ thấy con chịu khó học mỗi ngày, ba mẹ tự hào về con!" : "I'm proud of how you keep learning every day!";
-    if (wn) { out.lines.push(vi ? "Nên luyện thêm: " + wn + " (chơi vài câu mỗi ngày là vững)." : "Needs practice: " + wn + " (a few questions a day)."); out.ask = vi ? "Hỏi bé: \"Con kể ba mẹ nghe phần \"" + wn + "\" làm thế nào nhé?\" (bé giảng lại là cách nhớ lâu nhất)" : "Ask: \"Can you teach me how \"" + wn + "\" works?\" (teaching back helps memory most)"; }
-    else out.ask = vi ? "Hỏi bé: \"Hôm nay con học được điều gì vui nhất?\"" : "Ask: \"What was the most fun thing you learned today?\"";
+    if (wn) { out.lines.push(vi ? "Nên luyện thêm: " + wn + " (chơi vài câu mỗi ngày là vững)." : "Needs practice: " + wn + " (a few questions a day)."); out.ask = vi ? "Hỏi em: \"Con kể ba mẹ nghe phần \"" + wn + "\" làm thế nào nhé?\" (em giảng lại là cách nhớ lâu nhất)" : "Ask: \"Can you teach me how \"" + wn + "\" works?\" (teaching back helps memory most)"; }
+    else out.ask = vi ? "Hỏi em: \"Hôm nay con học được điều gì vui nhất?\"" : "Ask: \"What was the most fun thing you learned today?\"";
     return out;
   }
 
@@ -299,19 +299,19 @@ window.LEARN_BUDDIES = {
   "ă": { on: "cái bát", name: "Bạn Ă", say: "ă", obj: "🥣", c: "#fb923c", rhyme: "Chữ ă đội cái bát úp, ăn cơm ngon lành!" },
   "â": { on: "cái mũ ảo thuật", name: "Bạn Â", say: "ớ", obj: "🎩", c: "#fbbf24", rhyme: "Chữ â đội mũ nhọn, như chú ảo thuật gia!" },
   "o": { on: "quả bóng", name: "Bạn O", say: "o", obj: "⚽", c: "#34d399", rhyme: "Chữ o tròn như quả bóng, lăn lăn trên sân!" },
-  "ô": { on: "mũ đầu bếp", name: "Bạn Ô", say: "ô", obj: "👨‍🍳", c: "#22d3ee", rhyme: "Chữ ô đội mũ bếp, nấu món ngon cho bé!" },
+  "ô": { on: "mũ đầu bếp", name: "Bạn Ô", say: "ô", obj: "👨‍🍳", c: "#22d3ee", rhyme: "Chữ ô đội mũ bếp, nấu món ngon cho em!" },
   "ơ": { on: "chú kiến", name: "Bạn Ơ", say: "ơ", obj: "🐜", c: "#60a5fa", rhyme: "Chữ ơ có cái râu nhỏ, như chú kiến siêng năng!" },
-  "e": { on: "con mắt", name: "Bạn E", say: "e", obj: "👁️", c: "#a78bfa", rhyme: "Chữ e như con mắt nhỏ, nheo nheo nhìn bé!" },
+  "e": { on: "con mắt", name: "Bạn E", say: "e", obj: "👁️", c: "#a78bfa", rhyme: "Chữ e như con mắt nhỏ, nheo nheo nhìn em!" },
   "ê": { on: "chú ếch", name: "Bạn Ê", say: "ê", obj: "🐸", c: "#f472b6", rhyme: "Chữ ê đội mũ nhọn, kêu ê ê như chú ếch!" },
   "i": { on: "cây nến", name: "Bạn I", say: "i", obj: "🕯️", c: "#4ade80", rhyme: "Chữ i như cây nến nhỏ, có ngọn lửa chấm tròn!" },
-  "u": { on: "cái cốc", name: "Bạn U", say: "u", obj: "☕", c: "#f59e0b", rhyme: "Chữ u như cái cốc nhỏ, rót nước cho bé uống!" },
+  "u": { on: "cái cốc", name: "Bạn U", say: "u", obj: "☕", c: "#f59e0b", rhyme: "Chữ u như cái cốc nhỏ, rót nước cho em uống!" },
   "ư": { on: "chú kỳ lân", name: "Bạn Ư", say: "ư", obj: "🦄", c: "#f87171", rhyme: "Chữ ư như cái cốc có râu, ư ư vui ghê!" },
   "b": { on: "chú gấu", name: "Bạn B", say: "bờ", obj: "🐻", c: "#fb923c", rhyme: "Chữ b như chú gấu, bụng to bên cây gậy!" },
   "c": { on: "mặt trăng", name: "Bạn C", say: "cờ", obj: "🌙", c: "#fbbf24", rhyme: "Chữ c như trăng khuyết, treo trên bầu trời đêm!" },
   "d": { on: "cái trống", name: "Bạn D", say: "dờ", obj: "🥁", c: "#34d399", rhyme: "Chữ d như cái trống nhỏ, có cán bên phải!" },
   "đ": { on: "cái cửa", name: "Bạn Đ", say: "đờ", obj: "🚪", c: "#22d3ee", rhyme: "Chữ đ như cái cửa nhỏ, có thanh ngang ở trên!" },
   "g": { on: "kính lúp", name: "Bạn G", say: "gờ", obj: "🔍", c: "#60a5fa", rhyme: "Chữ g như kính lúp nhỏ, soi gà con ra sao!" },
-  "h": { on: "cái ghế", name: "Bạn H", say: "hờ", obj: "🪑", c: "#a78bfa", rhyme: "Chữ h như cái ghế cao, bé ngồi nghỉ chân nào!" }
+  "h": { on: "cái ghế", name: "Bạn H", say: "hờ", obj: "🪑", c: "#a78bfa", rhyme: "Chữ h như cái ghế cao, em ngồi nghỉ chân nào!" }
 };
 
 ;

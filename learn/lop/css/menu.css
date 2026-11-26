@@ -14,3 +14,5 @@
   .top .mnp{top:calc(58px + env(safe-area-inset-top));left:12px;right:12px;flex-direction:row-reverse;flex-wrap:wrap;justify-content:flex-start;gap:10px}
   .mnp .mni,.mnp #toGarden{width:56px;height:56px;min-width:56px;border-radius:28px;font-size:28px}.mnp .mni svg{width:30px;height:30px}
 }
+/* thanh trên nằm TRÊN bong bóng thoại / khung bài (trang bài học) để bảng nút không bị chìm */
+header.top{position:relative;z-index:80}

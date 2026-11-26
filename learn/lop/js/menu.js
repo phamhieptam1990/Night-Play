@@ -4,7 +4,8 @@
   "use strict";
   var D = document, hd = D.querySelector("header.top");
   if (!hd || hd.querySelector(".mnb")) return;
-  var lang = D.documentElement.lang === "en" ? "en" : "vi", vi = lang === "vi", other = vi ? "en" : "vi";
+  var ql = new URLSearchParams(location.search).get("lang"), sl = ""; try { sl = localStorage.getItem("lang") || ""; } catch (x) {}
+  var lang = (ql === "en" || ql === "vi") ? ql : (sl === "en" ? "en" : D.documentElement.lang === "en" ? "en" : "vi"), vi = lang === "vi", other = vi ? "en" : "vi";
   var L = vi ? { menu: "Menu", themeD: "Giao diện tối", themeL: "Giao diện sáng", lang: "English" } : { menu: "Menu", themeD: "Dark theme", themeL: "Light theme", lang: "Tiếng Việt" };
   var IC = {
     dots: '<path d="M5 12h.01M12 12h.01M19 12h.01" stroke="currentColor" stroke-width="4.4" stroke-linecap="round"/>',
@@ -18,6 +19,9 @@
   var btn = el("button", "ib mnb", svg(IC.dots)); btn.type = "button"; btn.setAttribute("aria-haspopup", "true"); btn.setAttribute("aria-expanded", "false"); btn.setAttribute("aria-label", L.menu); btn.title = L.menu;
   var pop = el("div", "mnp"); pop.hidden = true; pop.setAttribute("role", "menu");
   ["toGarden", "toMe", "toParent"].forEach(function (id) { var a = D.getElementById(id); if (a) { a.classList.add("mni"); a.setAttribute("role", "menuitem"); a.title = a.getAttribute("aria-label") || ""; pop.appendChild(a); } });
+  /* trang con (bài học...) không có các nút 🌱🌈🔒: thêm nút THOÁT RA chương trình học */
+  if (!pop.children.length) { var ex = el("a", "ib mni", '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H5v16h5M14 8l4 4-4 4M18 12H9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>');
+    ex.href = (vi ? "" : "/en") + "/hoc/"; ex.setAttribute("role", "menuitem"); ex.setAttribute("aria-label", vi ? "Thoát ra chương trình học" : "Leave to the learning hub"); ex.title = ex.getAttribute("aria-label"); pop.appendChild(ex); }
   var th = el("button", "ib mni", ""); th.type = "button"; th.setAttribute("role", "menuitem");
   var lg = el("button", "ib mni", svg(IC.lang)); lg.type = "button"; lg.setAttribute("role", "menuitem"); lg.setAttribute("aria-label", L.lang); lg.title = L.lang;
   function paintTheme() { var n = dark() ? L.themeL : L.themeD; th.innerHTML = svg(dark() ? IC.sun : IC.moon); th.setAttribute("aria-label", n); th.title = n; }

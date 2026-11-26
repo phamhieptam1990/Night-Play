@@ -7,7 +7,7 @@ function gotRight(el){
   LM.event(streak >= 5 ? "streak5" : streak >= 3 ? "streak3" : "ok"); storyReact(true); setTimeout(next, 1000); renderStars();
   /* B11: lớp 1–2 — câu đúng đầu tiên của vòng: linh vật nói rõ mục tiêu nhìn thấy (còn mấy câu là xong, nhận sao) */
   if(grade <= 2 && !TRIP && tries === 0 && roundStars === 1){ const left = bank.length - cur - 1; if(left > 0) LM.say(lang === "en"
-    ? "Great! " + left + " more and you win stars!" : "Giỏi quá! Còn " + left + " câu nữa là bé nhận sao nhé!"); }
+    ? "Great! " + left + " more and you win stars!" : "Giỏi quá! Còn " + left + " câu nữa là em nhận sao nhé!"); }
 }
 /* trả về 1 = sai lần đầu (cho thử lại, có gợi ý), 2 = sai lần hai (hiện đáp án rồi sang câu sau) */
 function gotWrong(tag, reveal, text){

@@ -3,7 +3,7 @@
   var D = window.NB_DATA || {}, g = D.grade || 3;
   WorldGuide.init({
     key: "nb:g" + g, lang: function () { return "vi"; },
-    vars: function () { return { pet: (D.pet && D.pet.name) || "bé" }; },
+    vars: function () { return { pet: (D.pet && D.pet.name) || "em" }; },
     btn: { mode: "fixed", css: "#wgBtn{right:var(--wk-edge);top:calc(var(--hudH,66px) + 190px)}@media (orientation:landscape) and (min-aspect-ratio:11/10){#wgBtn{right:auto;left:calc(var(--wk-edge) + 128px);top:auto;bottom:10px}}" },
     steps: [
       { sel: "#zbar .zb:nth-child(2)", act: "tap", ic: ["food"], t: "Chạm bếp để lấy đồ ăn" },

@@ -26,7 +26,7 @@ function applyFx(k){
 function doQuest(){ var q = LearnPath.quest(QP.grade, QP.subj); if(q.left <= 0) return; var k = QT[q.done % 3].k; q.left--; q.done++; LearnPath.saveQuest(QP.grade, QP.subj, q); applyFx(k); renderQuest(); }
 function nextLessonCard(){
   var nx = LearnPath.next(QP.subj, QP.grade), prm = "grade=" + QP.grade + "&subj=" + QP.subj;
-  if(!nx) return "<div class='gdc dn'><i aria-hidden='true'>🎉</i><div><b>Xong chương trình lớp này!</b><small>Bé đã học hết các chủ đề</small></div></div>";
+  if(!nx) return "<div class='gdc dn'><i aria-hidden='true'>🎉</i><div><b>Xong chương trình lớp này!</b><small>Em đã học hết các chủ đề</small></div></div>";
   var href = (nx.hasLesson ? "../lop/bai.html?" : "../index.html?") + prm + "&topic=" + encodeURIComponent(nx.id);
   return "<div class='gdc nx'><i aria-hidden='true'>📖</i><div><b>Học bài mới</b><small>Chủ đề " + (nx.index + 1) + "/" + nx.total + ": " + nx.name + "</small></div><a class='gdc-go' href='" + href + "'>" + (nx.hasLesson ? "Học" : "Kiểm tra") + "</a></div>";
 }

@@ -51,7 +51,7 @@
   { id: "tviet-tone-02", subj: "tviet", skill: "tone", grades: [1, 2], diff: 1, type: "fill_blank", stem: "con __ (kêu meo meo)", answer: "mèo", wrong: [["meo", "tone"], ["mẻo", "tone"], ["mẹo", "tone"]] },
   { id: "tviet-tone-03", subj: "tviet", skill: "tone", grades: [1, 2], diff: 1, type: "fill_blank", stem: "con __ (có tai dài, thích ăn cà rốt)", answer: "thỏ", wrong: [["thố", "tone"], ["thọ", "tone"], ["thõ", "tone"]] },
   { id: "tviet-tone-04", subj: "tviet", skill: "tone", grades: [1, 2], diff: 1, type: "fill_blank", stem: "Em __ tay trước khi ăn.", answer: "rửa", wrong: [["rữa", "tone"], ["rựa", "tone"], ["rúa", "tone"]] },
-  { id: "tviet-tone-05", subj: "tviet", skill: "tone", grades: [2, 3], diff: 1, type: "fill_blank", stem: "Bé bị __ đau chân.", answer: "ngã", wrong: [["ngả", "tone"], ["ngạ", "tone"], ["ngá", "tone"]] },
+  { id: "tviet-tone-05", subj: "tviet", skill: "tone", grades: [2, 3], diff: 1, type: "fill_blank", stem: "Em bị __ đau chân.", answer: "ngã", wrong: [["ngả", "tone"], ["ngạ", "tone"], ["ngá", "tone"]] },
   { id: "tviet-tone-06", subj: "tviet", skill: "tone", grades: [2, 3], diff: 1, type: "fill_blank", stem: "Em __ sách ra đọc.", answer: "mở", wrong: [["mỡ", "tone"], ["mộ", "tone"], ["mố", "tone"]] },
   { id: "tviet-tone-07", subj: "tviet", skill: "tone", grades: [2, 3], diff: 1, type: "fill_blank", stem: "Em __ tranh rất đẹp.", answer: "vẽ", wrong: [["vẻ", "tone"], ["vệ", "tone"], ["vé", "tone"]] },
   { id: "tviet-tone-08", subj: "tviet", skill: "tone", grades: [2, 3], diff: 1, type: "fill_blank", stem: "Chiếc __ dùng để quét nhà.", answer: "chổi", wrong: [["chối", "tone"], ["chỗi", "tone"], ["chói", "tone"]] },
@@ -66,7 +66,7 @@
   { id: "tviet-antonym-02", subj: "tviet", skill: "antonym", grades: [3, 4, 5], diff: 2, type: "choose", stem: "Trái nghĩa với “nóng” là…", answer: "lạnh", wrong: [["ấm", "meaning"], ["khô", "meaning"], ["sáng", "meaning"]] },
   { id: "tviet-antonym-03", subj: "tviet", skill: "antonym", grades: [3, 4, 5], diff: 2, type: "choose", stem: "Trái nghĩa với “sáng” là…", answer: "tối", wrong: [["trắng", "meaning"], ["xanh", "meaning"], ["đỏ", "meaning"]] },
   /* ---------- Tiếng Việt: đọc hiểu ngắn ---------- */
-  { id: "tviet-reading_short-01", subj: "tviet", skill: "reading_short", grades: [1, 2], diff: 2, type: "choose", stem: "Bé Na có một con mèo trắng. Con mèo của Na màu gì?", answer: "trắng", wrong: [["đen", "reading"], ["vàng", "reading"], ["xám", "reading"]] },
+  { id: "tviet-reading_short-01", subj: "tviet", skill: "reading_short", grades: [1, 2], diff: 2, type: "choose", stem: "Em Na có một con mèo trắng. Con mèo của Na màu gì?", answer: "trắng", wrong: [["đen", "reading"], ["vàng", "reading"], ["xám", "reading"]] },
   { id: "tviet-reading_short-02", subj: "tviet", skill: "reading_short", grades: [1, 2], diff: 2, type: "choose", stem: "Sáng nay trời mưa to. Bố cho Nam đi học bằng ô tô. Bố đưa Nam đi học bằng gì?", answer: "ô tô", wrong: [["xe đạp", "reading"], ["đi bộ", "reading"], ["xe buýt", "reading"]] },
   { id: "tviet-reading_short-03", subj: "tviet", skill: "reading_short", grades: [1, 2], diff: 2, type: "choose", stem: "Trong vườn có ba cây cam và hai cây bưởi. Vườn có mấy cây bưởi?", answer: "hai", wrong: [["ba", "reading"], ["năm", "reading"], ["một", "reading"]] },
 
@@ -97,7 +97,7 @@
   { id: "tviet-tone-16", subj: "tviet", skill: "tone", grades: [3, 4, 5], diff: 2, type: "fill_blank", stem: "Mẹ __ em đi học mỗi sáng.", answer: "đưa", wrong: [["đứa", "tone"], ["đừa", "tone"], ["đửa", "tone"]] },
   { id: "tviet-tone-17", subj: "tviet", skill: "tone", grades: [3, 4, 5], diff: 2, type: "fill_blank", stem: "Bà em đã __ tuổi, tóc bạc phơ.", answer: "cao", wrong: [["cào", "tone"], ["cảo", "tone"], ["cạo", "tone"]] },
   { id: "tviet-tone-18", subj: "tviet", skill: "tone", grades: [3, 4, 5], diff: 2, type: "fill_blank", stem: "Mùa thu, lá vàng __ đầy sân.", answer: "rụng", wrong: [["rúng", "tone"], ["rùng", "tone"], ["rũng", "tone"]] },
-  { id: "tviet-tone-19", subj: "tviet", skill: "tone", grades: [3, 4, 5], diff: 2, type: "fill_blank", stem: "Bé Mai __ lời cô giáo dặn.", answer: "nhớ", wrong: [["nhờ", "tone"], ["nhở", "tone"], ["nhỡ", "tone"]] },
+  { id: "tviet-tone-19", subj: "tviet", skill: "tone", grades: [3, 4, 5], diff: 2, type: "fill_blank", stem: "Em Mai __ lời cô giáo dặn.", answer: "nhớ", wrong: [["nhờ", "tone"], ["nhở", "tone"], ["nhỡ", "tone"]] },
   { id: "tviet-tone-20", subj: "tviet", skill: "tone", grades: [3, 4, 5], diff: 2, type: "fill_blank", stem: "Trời __ nên em mặc áo ấm.", answer: "lạnh", wrong: [["lánh", "tone"], ["lảnh", "tone"], ["lãnh", "tone"]] },
   { id: "tviet-tone-21", subj: "tviet", skill: "tone", grades: [3, 4, 5], diff: 2, type: "fill_blank", stem: "Em xin phép cô giáo để được __ một câu.", answer: "hỏi", wrong: [["hói", "tone"], ["hòi", "tone"], ["họi", "tone"]] },
   { id: "tviet-tone-22", subj: "tviet", skill: "tone", grades: [3, 4, 5], diff: 2, type: "fill_blank", stem: "Mẹ __ cho em một chiếc áo mới.", answer: "mua", wrong: [["mùa", "tone"], ["mủa", "tone"], ["mụa", "tone"]] },

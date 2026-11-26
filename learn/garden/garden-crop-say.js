@@ -3,14 +3,14 @@
    garden-items.js (extendCI) đọc bảng này khi thêm cây mới vào CI. Dùng được cả ở trình duyệt (GardenCropSay) lẫn node (scripts/learn/check-garden.js). */
 (function (root) {
   var SAY = {
-    bokchoy: { mn: "Cải Xanh", say: ["Cải Xanh đây! Mình cùng đọc chữ nhé!", "Cải xanh mướt rồi! Bé thu hoạch nhé!"] },
-    cucumber: { mn: "Dưa Leo", say: ["Dưa Leo đây! Cùng đếm từng bước nào!", "Dưa leo giòn mát rồi! Bé hái mình nhé!"] },
-    pumpkin: { mn: "Bí Đỏ", say: ["Hello! Mình là Bí Đỏ! Học từ mới nào!", "Bí tròn vo rồi! Bé thu hoạch nhé!"] },
-    potato: { mn: "Khoai Tây", say: ["Khoai Tây đây! Bé tính thử giúp mình nhé!", "Khoai to rồi! Bé đào mình lên nào!"] },
+    bokchoy: { mn: "Cải Xanh", say: ["Cải Xanh đây! Mình cùng đọc chữ nhé!", "Cải xanh mướt rồi! Em thu hoạch nhé!"] },
+    cucumber: { mn: "Dưa Leo", say: ["Dưa Leo đây! Cùng đếm từng bước nào!", "Dưa leo giòn mát rồi! Em hái mình nhé!"] },
+    pumpkin: { mn: "Bí Đỏ", say: ["Hello! Mình là Bí Đỏ! Học từ mới nào!", "Bí tròn vo rồi! Em thu hoạch nhé!"] },
+    potato: { mn: "Khoai Tây", say: ["Khoai Tây đây! Em tính thử giúp mình nhé!", "Khoai to rồi! Em đào mình lên nào!"] },
     cabbage: { mn: "Cải Bắp", say: ["Cải Bắp đây! Cùng đọc nhiều hơn nhé!", "Cải bắp cuộn tròn rồi! Thu hoạch nè!"] },
-    onion: { mn: "Hành Tím", say: ["Hello! Mình là Hành Tím! Nói tiếng Anh nhé!", "Hành tím chín rồi! Bé nhổ mình lên nhé!"] },
-    rice: { mn: "Lúa Nước", say: ["Lúa Nước đây! Đọc đúng nhiều, lúa lớn nhanh!", "Lúa vàng óng rồi! Bé gặt mình nhé!"] },
-    bean: { mn: "Đậu Đậu", say: ["Đậu Đậu đây! Cùng giải toán thật vui nhé!", "Quả đậu căng tròn rồi! Bé hái mình nhé!"] }
+    onion: { mn: "Hành Tím", say: ["Hello! Mình là Hành Tím! Nói tiếng Anh nhé!", "Hành tím chín rồi! Em nhổ mình lên nhé!"] },
+    rice: { mn: "Lúa Nước", say: ["Lúa Nước đây! Đọc đúng nhiều, lúa lớn nhanh!", "Lúa vàng óng rồi! Em gặt mình nhé!"] },
+    bean: { mn: "Đậu Đậu", say: ["Đậu Đậu đây! Cùng giải toán thật vui nhé!", "Quả đậu căng tròn rồi! Em hái mình nhé!"] }
   };
   if (typeof module !== "undefined" && module.exports) module.exports = SAY; else root.GardenCropSay = SAY;
 })(typeof window !== "undefined" ? window : globalThis);
