@@ -52,8 +52,8 @@
     home: function () { return "../lop/index.html?" + q2({ grade: K.grade, subj: K.subj }); },
     pickUrl: function (g, s) { return "index.html?" + q2({ grade: g || K.grade, subj: s || K.subj }); },
     mapUrl: function (g, s, id) { return "map.html?" + q2({ grade: g, subj: s, topic: id }); },
-    learnUrl: function (g, s, id) { return "../lop/bai.html?" + q2({ grade: g, subj: s, topic: id }); },
-    testUrl: function (g, s, id) { return "../index.html?" + q2({ grade: g, subj: s, topic: id }); },
+    learnUrl: function (g, s, id) { return "scene.html?" + q2({ grade: g, subj: s, topic: id, step: "learn" }); },
+    testUrl: function (g, s, id) { return "scene.html?" + q2({ grade: g, subj: s, topic: id, step: "test" }); },
     /* cờ "bé đi từ lớp truyện": trang bài học và trang kiểm tra đọc cờ này để ← về lại bản đồ truyện */
     leave: function () { try { sessionStorage.setItem("learn:from", "story"); sessionStorage.setItem("learn:from:url", location.pathname + location.search); } catch (e) {} },
     clearFlag: function () { try { sessionStorage.removeItem("learn:from"); sessionStorage.removeItem("learn:from:url"); } catch (e) {} },

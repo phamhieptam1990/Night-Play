@@ -1,0 +1,9 @@
+/* Cảnh THỬ THÁCH: sân khấu của một câu, đồ vật đếm, đồng hồ, đúng / chưa đúng, bóng bay nổ. */
+.tstage{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(6px,1.6dvh,14px);width:100%;max-height:100%;min-height:0}
+.tobjs{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 8px;max-width:94%;padding:4px 10px;border-radius:20px;background:rgba(255,255,255,.55)}
+.tobjs .it{font-size:clamp(30px,8dvh,48px)}
+.tclk{width:clamp(110px,26dvh,170px);aspect-ratio:1;filter:drop-shadow(0 5px 6px rgba(0,0,0,.3))}.tclk svg{width:100%;height:100%;display:block}
+.tf .ob.zl .tx{font-size:calc(var(--ow)*.42)}.tfi{display:grid;place-items:center;width:100%}.tfi svg{width:1em;height:1em}.tfi.t0{color:#168a55}.tfi.t1{color:#d9467a}
+.opts.tf{--ow:min(34vw,19dvh)}.ob.popd{animation:pop .4s ease-out both}@keyframes pop{40%{transform:scale(1.4)}to{transform:scale(0);opacity:0}}
+.ob.sel{transform:scale(1.1)}.ob.sel .oi{filter:drop-shadow(0 0 12px #fff) drop-shadow(0 0 4px var(--k1))}.ob.sm{--ow:var(--sw)}
+.opts.n3 .ob.zl .tx{font-size:calc(var(--ow)*.34)}.ob.mem.open .oi{filter:drop-shadow(0 0 8px #fff)}

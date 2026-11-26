@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><script src="../js/page-loading.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Lớp truyện</title>
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" type="image/svg+xml" sizes="any" href="/shared/favicon.svg">
+<script>try{var t=localStorage.getItem("theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"||t==="light"?t:(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");</script>
+<link rel="stylesheet" href="../../shared/fonts.css">
+<link rel="stylesheet" href="../type.css">
+<link rel="stylesheet" href="../../shared/theme.css">
+<link rel="stylesheet" href="../content/buddy.css">
+<link rel="stylesheet" href="../css/mascot-fx.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="scene/css/frame.css">
+<link rel="stylesheet" href="scene/css/props.css">
+<link rel="stylesheet" href="scene/css/learn.css">
+<link rel="stylesheet" href="scene/css/pick.css">
+<link rel="stylesheet" href="scene/css/tiles.css">
+<link rel="stylesheet" href="scene/css/input.css">
+<link rel="stylesheet" href="scene/css/end.css">
+<link rel="stylesheet" href="scene/css/wide.css">
+</head>
+<body class="scn">
+<header class="top">
+  <a class="ib" id="back" href="index.html" aria-label="Quay lại"><svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="3.400" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></a>
+  <div class="beads" id="beads" role="img" aria-label="Tiến độ"></div>
+  <button class="ib spkb" id="spk" type="button" aria-label="Nghe" aria-pressed="false" hidden><svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M4 9.500v5h3.500L12 18.500v-13L7.500 9.500zM15.500 8.500a5 5 0 0 1 0 7M18 6a8.500 8.500 0 0 1 0 12" stroke="currentColor" stroke-width="2.200" stroke-linecap="round" fill="currentColor"/></svg></button>
+</header>
+<main class="sc" id="sc">
+  <img class="sbg" id="sbg" alt="" draggable="false">
+  <div class="play" id="play"></div>
+  <div class="cast" id="cast">
+    <div class="pal" id="pal"></div>
+    <div class="bub" id="bub" role="status" aria-live="polite"></div>
+  </div>
+  <button class="nxt" id="nxt" type="button" aria-label="Đi tiếp" hidden></button>
+</main>
+<script>window.LearnLessons={reg:function(o){window.LearnLessons.cur=o;window.dispatchEvent(new Event("lesson"))}};</script>
+<script src="../slot.js"></script>
+<script src="../content/phrases.js"></script>
+<script src="../mascot-kit.js"></script>
+<script src="../mascot-fx.js"></script>
+<script src="../hint-texts.js"></script>
+<script src="../content/curriculum.js"></script>
+<script src="../content/bank.js"></script>
+<script src="../lang/data-vi.js"></script>
+<script src="../lang/data-vi-read.js"></script>
+<script src="../lang/data-en.js"></script>
+<script src="../lang/rules.js"></script>
+<script src="../lang/gen-base.js"></script>
+<script src="../lang/gen-vi.js"></script>
+<script src="../lang/gen-listen.js"></script>
+<script src="../lang/gen-en.js"></script>
+<script src="../lang/register.js"></script>
+<script src="../lang-skills.js"></script>
+<script src="../content/math5.js"></script>
+<script src="../engine/core.js"></script>
+<script src="../engine/gen-arith.js"></script>
+<script src="../engine/gen-geo.js"></script>
+<script src="../engine/gen-measure.js"></script>
+<script src="../engine/gen-fraction.js"></script>
+<script src="../engine/gen-g5.js"></script>
+<script src="../engine/topics.js"></script>
+<script src="../engine/progress.js"></script>
+<script src="../engine/round.js"></script>
+<script src="../engine/report.js"></script>
+<script src="../engine.js"></script>
+<script src="../content/qtypes-hi.js"></script>
+<script src="../content/write-topics.js"></script>
+<script src="../content/write-check.js"></script>
+<script src="../content/qtypes/core.js"></script>
+<script src="../content/qtypes/gen-basic.js"></script>
+<script src="../content/qtypes/gen-lang.js"></script>
+<script src="../content/qtypes/gen-more.js"></script>
+<script src="../content/qtypes.js"></script>
+<script src="../hint.js"></script>
+<script src="../path.js"></script>
+<script src="../content/lessons/index.js"></script>
+<script src="../content/parent-copy.js"></script>
+<script src="../limit.js"></script>
+<script src="../voice.js"></script>
+<script src="../farm.js"></script>
+<script src="../habit.js"></script>
+<script src="../adventure.js"></script>
+<script src="../content/buddies.js"></script>
+<script src="../buddy.js"></script>
+<script src="../album.js"></script>
+<script src="../lop/js/shape-buddies.js"></script>
+<script src="../lop/js/shape-defs.js"></script>
+<script src="js/story-default.js"></script>
+<script src="js/core.js"></script>
+<script src="js/sfx-ambient.js"></script>
+<script src="sfx.js"></script>
+<script src="scene/js/strings.js"></script>
+<script src="scene/js/util.js"></script>
+<script src="scene/js/fx.js"></script>
+<script src="scene/js/voice.js"></script>
+<script src="scene/js/props.js"></script>
+<script src="scene/js/frame.js"></script>
+<script src="scene/js/kinds-learn-a.js"></script>
+<script src="scene/js/kinds-learn-b.js"></script>
+<script src="scene/js/kinds-learn-c.js"></script>
+<script src="scene/js/learn-flow.js"></script>
+<script src="scene/js/bank.js"></script>
+<script src="scene/js/kinds-test-pick.js"></script>
+<script src="scene/js/kinds-test-count.js"></script>
+<script src="scene/js/kinds-test-tiles.js"></script>
+<script src="scene/js/kinds-test-cards.js"></script>
+<script src="scene/js/kinds-test-input.js"></script>
+<script src="scene/js/kinds-test-draw.js"></script>
+<script src="scene/js/test-flow.js"></script>
+<script src="scene/js/end.js"></script>
+<script src="scene/js/boot.js"></script>
+<script src="../../shared/offline.js" defer></script>
+</body>
+</html>

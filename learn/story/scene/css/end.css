@@ -1,0 +1,12 @@
+/* Cảnh KẾT: hình lớn, chuỗi sao sáng, quà, nút tròn SVG. */
+.endw{display:flex;flex-direction:column;align-items:center;gap:clamp(8px,2dvh,16px);max-width:94%;text-align:center}
+.eimg{width:clamp(96px,28dvh,170px);height:auto;filter:drop-shadow(0 6px 8px rgba(0,0,0,.35));animation:obyay 1s ease-out both}
+.estars{display:flex;gap:6px}.estars img{width:clamp(36px,11vw,52px);height:auto;filter:grayscale(1) brightness(1.4);opacity:.6}.estars img.on{filter:drop-shadow(0 0 8px #ffd34d);opacity:1;
+  animation:starpop .6s ease-out both}
+@keyframes starpop{from{transform:scale(0) rotate(-40deg)}60%{transform:scale(1.35) rotate(10deg)}}
+.rchips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}.rchip{display:inline-flex;align-items:center;min-height:44px;padding:4px 14px;border-radius:22px;
+  background:rgba(255,255,255,.95);color:#1b1b34;font-weight:900;font-size:clamp(14px,4vw,18px);text-decoration:none;box-shadow:0 4px 10px rgba(0,0,0,.25)}
+.endacts{display:flex;gap:16px;justify-content:center;align-items:center}
+.pb{flex:none;width:58px;height:58px;border-radius:29px;display:grid;place-items:center;color:#0b1020;text-decoration:none;background:linear-gradient(135deg,var(--k1),var(--k2));
+  box-shadow:0 5px 0 rgba(0,0,0,.22)}
+.pb svg{width:30px;height:30px}.pb.alt{background:#fff;color:#1b1b34;border:3px solid var(--k1);box-shadow:0 4px 0 rgba(0,0,0,.18)}.pb:active{transform:translateY(3px)}

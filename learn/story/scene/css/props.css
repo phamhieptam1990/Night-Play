@@ -1,0 +1,36 @@
+/* Cảnh truyện: vật trên tranh (đáp án), thẻ nội dung, lưới vật, hiệu ứng nhún / rơi / bay / lắc. Nhãn trắng của vật luôn nền sáng nên chữ luôn tối. */
+.ct{color:#1b1b34}
+.qcard{position:relative;display:flex;align-items:center;justify-content:center;gap:8px;max-width:min(94%,520px);padding:8px 12px 8px 14px;border-radius:20px;
+  background:rgba(255,255,255,.96);color:#1b1b34;
+  border:3px solid color-mix(in srgb,var(--k1) 70%,#fff);box-shadow:0 5px 14px rgba(0,0,0,.25);font-weight:900;font-size:clamp(17px,5vw,26px);line-height:1.25;text-align:center;flex:none}
+.qcard .qt{min-width:0;overflow-wrap:anywhere}.qcard .qt em{font-style:normal;color:#d9467a}.qcard .qt small{display:block;font-size:.62em;font-weight:700;color:#4b5563}
+.qcard .qt svg{max-width:100%;height:auto;max-height:22dvh}.qcard .qt .bl{display:inline-block;min-width:2.2em;border-bottom:4px dashed #d9467a;color:#d9467a;font-style:normal}
+.qcard .qt .bl.filled{border-bottom-style:solid;color:#168a55}.qcard.big .qt{font-size:1.5em;letter-spacing:.04em}
+.qcard.pic .qt{font-size:2em;line-height:1.1}.qcard .lsn{display:none}
+.qspk{flex:none;width:44px;height:44px;border-radius:22px;display:grid;place-items:center;color:#0b1020;background:linear-gradient(135deg,var(--k1),var(--k2))}
+.qspk svg{width:22px;height:22px}.qspk.on{box-shadow:0 0 0 4px #fff}
+.opts{--ow:min(38vw,21dvh);display:grid;gap:clamp(4px,1.4dvh,12px) clamp(4px,2vw,14px);justify-content:center;align-content:center;grid-template-columns:repeat(2,var(--ow));flex:none}
+.opts.n1{grid-template-columns:var(--ow)}.opts.n3{grid-template-columns:repeat(3,var(--ow));--ow:min(28vw,19dvh)}.opts.n5,.opts.n6,.opts.n9{grid-template-columns:repeat(3,var(--ow));
+  --ow:min(28vw,15dvh)}
+.opts.n8,.opts.n7{grid-template-columns:repeat(4,var(--ow));--ow:min(21vw,13dvh)}.opts.wides{grid-template-columns:1fr;width:min(94%,430px);--ow:auto}
+.ob{position:relative;display:block;width:var(--ow);aspect-ratio:1;padding:0;border:0;background:none;color:#1b1b34;animation:obbob 3.2s ease-in-out infinite;animation-delay:var(--d,0s);
+  transition:transform .15s,filter .2s}
+.ob .oi{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;filter:drop-shadow(0 4px 4px rgba(0,0,0,.28))}
+.ob .tx{position:absolute;left:15%;right:15%;top:38.500%;height:35%;display:grid;place-items:center;text-align:center;font-weight:900;line-height:1.05;overflow:hidden;overflow-wrap:anywhere;
+  font-size:calc(var(--ow)*.2)}
+.ob.zl .tx{font-size:calc(var(--ow)*.3)}.ob.zm .tx{font-size:calc(var(--ow)*.22)}.ob.zs .tx{font-size:calc(var(--ow)*.15)}.ob.zxs .tx{font-size:calc(var(--ow)*.115)}
+.ob:active{transform:scale(.94)}.ob[disabled]{cursor:default}
+.ob.wide{aspect-ratio:auto;width:100%;min-height:50px;display:flex;align-items:center;gap:10px;padding:6px 14px 6px 8px;border-radius:18px;background:#fff;border:3px solid var(--pc,#fff);
+  animation:none;box-shadow:0 4px 0 rgba(0,0,0,.18)}
+.ob.wide .oi{position:static;flex:none;width:38px;height:38px;filter:none}.ob.wide .tx{position:static;flex:1;display:block;text-align:left;font-size:clamp(14px,3.9vw,18px);line-height:1.25}
+.ob.ok{animation:obyay .7s ease-out both;z-index:3}.ob.ok .oi{filter:drop-shadow(0 0 12px #ffe27a) drop-shadow(0 0 4px #fff)}
+.ob.no{animation:obwob .5s ease-out both;opacity:.8}.ob.glow{animation:obglow 1s ease-in-out infinite}.ob.glow .oi{filter:drop-shadow(0 0 14px #ffe27a)}
+.ob.wide.ok,.ob.wide.glow{box-shadow:0 0 0 4px #ffe27a,0 4px 0 rgba(0,0,0,.18)}.ob.gone{visibility:hidden}
+.opts .ob.float{animation:obfloat 4s ease-in-out infinite;animation-delay:var(--d,0s)}
+@keyframes obbob{50%{transform:translateY(-5px) rotate(-1.5deg)}}@keyframes obyay{30%{transform:scale(1.2) rotate(6deg)}60%{transform:scale(.95) rotate(-4deg)}to{transform:scale(1.08)}}
+@keyframes obwob{20%{transform:translateX(-7px) rotate(-5deg)}50%{transform:translateX(7px) rotate(5deg)}to{transform:none}}
+@keyframes obglow{50%{transform:scale(1.1)}}@keyframes obfloat{50%{transform:translateY(-12px)}}
+.shk{animation:obwob .45s}
+.drop{animation:drop .6s cubic-bezier(.3,1.4,.5,1) both}@keyframes drop{from{transform:translateY(-120%);opacity:0}}
+.flyin{animation:flyin .7s ease-out both}@keyframes flyin{from{transform:translateX(110%) rotate(20deg);opacity:0}}
+@media (prefers-reduced-motion:reduce){.ob,.ob.glow{animation:none!important}}

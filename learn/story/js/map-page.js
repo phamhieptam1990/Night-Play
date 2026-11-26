@@ -1,5 +1,5 @@
 /* Trang bản đồ MỘT chủ đề (map.html?grade&subj&topic): vẽ đường đi, đặt linh vật ở điểm đang làm, hiện lời kể và nút việc cần làm.
-   Điểm "Học bài" mở lop/bai.html, điểm "Kiểm tra" mở trang kiểm tra chủ đề (learn/index.html): hai khung đó giữ nguyên. */
+   Điểm "Khám phá" và "Thử thách" mở cảnh truyện scene.html (learn/story/scene/). */
 (function () {
   "use strict";
   var K = StoryCore, P = K.P, R = StoryRoute, SG = StoryStage, T = K.T, q = K.q;
@@ -15,7 +15,7 @@
 
   function nodeLabel(k) { return StoryDefault.labelOf(story.nodes, k, K.lang); }
   function text(k) { return K.tx(story[k === "exam" ? "test" : k]); }
-  function go(url) { K.leave(); location.href = url; }
+  function go(url) { location.href = url; }   /* cảnh khám phá / thử thách nằm ngay trong Lớp truyện (scene.html), không còn sang trang bài học / kiểm tra cũ */
   function toMap() { location.href = K.pickUrl(grade, subj); }
   var A = {
     learn: function () { return { label: topic.ready ? T.goPlay : T.goLearn, icon: "step", go: function () { go(K.learnUrl(grade, subj, tid)); } }; },

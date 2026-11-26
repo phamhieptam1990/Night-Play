@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Thử âm thanh truyện</title>
+<style>
+body{margin:0;padding:16px;font:16px system-ui,sans-serif;background:#f6f3ff;color:#2a2350}
+h1{font-size:20px;margin:0 0 12px}.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-bottom:16px}
+button{display:flex;align-items:center;gap:8px;min-height:48px;padding:8px 12px;border:2px solid #7c5cff;border-radius:14px;background:#fff;color:inherit;font:inherit;cursor:pointer}
+button[aria-pressed=true]{background:#7c5cff;color:#fff}svg{width:22px;height:22px;flex:none}
+</style></head><body>
+<h1>Thử âm thanh Lớp học truyện</h1>
+<div class="g" id="sfx"></div>
+<div class="g" id="amb"></div>
+<div class="g"><button id="mu" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+ stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z"/><path id="x" d="M17 9l5 6M22 9l-5 6"/></svg><span>Tắt tiếng</span></button></div>
+<script src="js/sfx-ambient.js"></script>
+<script src="sfx.js"></script>
+<script>
+const I = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+StorySfx.names.forEach(n => {
+  const b = document.createElement("button"); b.innerHTML = I + "<span>" + n + "</span>"; b.onclick = () => StorySfx.play(n); sfx.append(b); });
+[["toan", "Toán"], ["tviet", "Tiếng Việt"], ["tanh", "Tiếng Anh"], [null, "Dừng nền"]].forEach(([s, l]) => { const b = document.createElement("button"); b.innerHTML = I + "<span>" + l + "</span>";
+  b.onclick = () => StorySfx.ambient(s); amb.append(b); });
+function ui(){ const m = StorySfx.muted(); mu.setAttribute("aria-pressed", String(m)); x.style.display = m ? "" : "none"; }
+mu.onclick = () => { StorySfx.setMuted(!StorySfx.muted()); ui(); }; ui();
+</script></body></html>

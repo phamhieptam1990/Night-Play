@@ -1,5 +1,5 @@
 /* Khu chợ: trang không cuộn, khung cảnh giữ tỉ lệ (dọc 390x680, ngang 800x360), nền + cây + đài phun nước. */
-:root{--hud:62px;--ratio:390/680}
+:root{--hud:calc(62px * var(--wk-s,1));--ratio:390/680}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;font-family:system-ui,sans-serif;touch-action:manipulation}
 body{position:fixed;inset:0;background:linear-gradient(#8FD3FF 0,#8FD3FF var(--hud),transparent var(--hud)),repeating-linear-gradient(0deg,transparent 0 50px,rgba(150,110,60,.22) 50px 52px),repeating-linear-gradient(90deg,transparent 0 98px,rgba(150,110,60,.16) 98px 100px),linear-gradient(#E6CB96,#D8B97F)}

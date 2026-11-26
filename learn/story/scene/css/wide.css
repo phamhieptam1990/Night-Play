@@ -1,0 +1,22 @@
+/* Cảnh truyện, màn NGANG (điện thoại xoay ngang): nhân vật + bong bóng bên trái, vùng chơi bên phải. Thanh trên gọn. */
+@media (orientation:landscape) and (max-height:600px){
+  body.scn{--castW:34%}
+  .scn .top{min-height:48px;padding:3px 12px 1px}.sc{margin:0 8px calc(6px + env(safe-area-inset-bottom))}
+  .play{left:var(--castW);bottom:0;padding:6px 8px}.sc.hasnext .play{padding-bottom:70px}
+  .cast{right:auto;top:0;width:var(--castW);height:auto;flex-direction:column-reverse;align-items:center;justify-content:flex-start;gap:2px;padding:6px 6px 6px}
+  .sc.hasnext .cast{padding-right:6px}
+  .pal{width:clamp(70px,22dvh,108px);align-self:center}
+  .bub{flex:none;width:100%;max-height:50%;margin:0 0 8px;font-size:clamp(12px,2.9vw,15px);padding:7px 10px}
+  .bub::before{left:50%;bottom:-11px;top:auto;margin-left:-9px;transform:rotate(-45deg)}
+  .opts{--ow:min(21vw,34dvh);grid-template-columns:repeat(4,var(--ow))}.opts.n1{grid-template-columns:var(--ow)}.opts.n2{grid-template-columns:repeat(2,var(--ow))}
+    .opts.n3{grid-template-columns:repeat(3,var(--ow))}
+  .opts.n9{grid-template-columns:repeat(5,var(--ow));--ow:min(12vw,24dvh)}.opts.n6{grid-template-columns:repeat(3,var(--ow));--ow:min(15vw,25dvh)}
+    .opts.n8,.opts.n7{grid-template-columns:repeat(4,var(--ow));--ow:min(13vw,24dvh)}
+  .opts.tf{--ow:min(18vw,32dvh)}.opts.wides{width:min(96%,420px);grid-template-columns:1fr 1fr;--ow:auto}
+  .qcard{font-size:clamp(15px,4.4dvh,21px);padding:5px 10px}.qcard .qt svg{max-height:34dvh}
+  .tpad{grid-template-columns:repeat(6,clamp(44px,9vw,60px));gap:5px}.tkey{height:clamp(40px,12dvh,52px);font-size:22px}.tin{font-size:clamp(24px,8dvh,34px)}
+  .tmatch .ob{--ow:min(15vw,24dvh)}.tbin{min-height:clamp(76px,30dvh,110px)}.it{font-size:clamp(30px,10dvh,52px)}.lart .lrow{font-size:clamp(26px,9dvh,44px)}
+  .bimg{width:clamp(70px,24dvh,110px)}.eimg{width:clamp(70px,24dvh,110px)}.tclk{width:clamp(90px,34dvh,130px)}.lbasket{width:clamp(80px,28dvh,110px)}
+  .tcv{width:min(40vw,40dvh)}.ttrace{width:min(40vw,40dvh)}.tsea{width:min(52vw,380px);height:56px}.tsll{width:min(52vw,380px)}
+}
+@media (max-width:359px){.opts{--ow:min(40vw,20dvh)}.bub{font-size:13px}}
