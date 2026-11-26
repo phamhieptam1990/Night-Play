@@ -28,7 +28,6 @@
     retry: L("Chưa tới nơi cũng không sao! Mình đi từng bước rồi thử lại nhé.", "No worries! Let us go step by step, then try again."),
     here: L("Bé đang ở đây", "You are here"), speak: L("Nghe kể", "Listen"), stopSpeak: L("Dừng đọc", "Stop")
   };
-  var NODE_KINDS = ["intro", "fork", "learn", "test", "end"];
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   function tx(o) { return o ? (o[lang] || o.vi || "") : ""; }
   function q2(o) { o.lang = lang; return new URLSearchParams(o).toString(); }
@@ -37,8 +36,7 @@
   function storyFor(t) {
     var d = (root.LearnStories || {})[t.id] || {}, def = root.StoryDefault.make(S, t.name), out = {};
     FIELDS.forEach(function (f) { out[f] = d[f] && d[f].vi ? d[f] : def[f]; });
-    out.nodes = {};   /* tên điểm dừng theo từng truyện (<= 18 ký tự); thiếu thì dùng tên khám phá mặc định */
-    NODE_KINDS.forEach(function (k) { var n = d.nodes && d.nodes[k]; out.nodes[k] = n && n.vi && n.vi.length <= 18 ? n : def.nodes[k]; });
+    out.nodes = root.StoryDefault.nodesOf(d);   /* tên điểm dừng theo từng truyện; thiếu thì tên khám phá mặc định */
     return out;
   }
   function loadData(subj, g) {

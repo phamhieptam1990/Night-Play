@@ -26,6 +26,15 @@
     intro: { vi: "Khởi hành", en: "Set off" }, fork: { vi: "Ngã rẽ", en: "Fork" }, learn: { vi: "Khám phá", en: "Explore" },
     test: { vi: "Thử thách", en: "Challenge" }, end: { vi: "Kho báu", en: "Treasure" }
   };
-  var api = { NODES: NODES, make: make, MAS: MAS };
+  var KINDS = ["intro", "fork", "learn", "test", "end"];
+  /* tên điểm dừng của một truyện d: dùng d.nodes nếu hợp lệ (vi <= 18 ký tự), thiếu thì tên mặc định */
+  function nodesOf(d) {
+    var out = {}; KINDS.forEach(function (k) { var n = d && d.nodes && d.nodes[k]; out[k] = n && n.vi && n.en && n.vi.length <= 18 ? n : NODES[k]; }); return out;
+  }
+  /* nhãn trên bản đồ. Nhánh "băng qua thử" dùng tên thử thách + sao ★ để khác nhánh đi từng bước (hai điểm không bao giờ cùng chữ) */
+  function labelOf(nodes, kind, lang) {
+    var n = nodes[kind === "exam" ? "test" : kind], t = n[lang === "en" ? "en" : "vi"] || n.vi; return kind === "exam" ? t + " ★" : t;
+  }
+  var api = { NODES: NODES, KINDS: KINDS, nodesOf: nodesOf, labelOf: labelOf, make: make, MAS: MAS };
   if (typeof module !== "undefined" && module.exports) module.exports = api; else root.StoryDefault = api;
 })(typeof window !== "undefined" ? window : globalThis);

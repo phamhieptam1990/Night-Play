@@ -13,21 +13,21 @@
   $("back").href = K.pickUrl(grade, subj);
   var hasNext = ti + 1 < topics.length;
 
-  function nodeLabel(k) { return K.tx(story.nodes[k === "exam" ? "test" : k]); }
+  function nodeLabel(k) { return StoryDefault.labelOf(story.nodes, k, K.lang); }
   function text(k) { return K.tx(story[k === "exam" ? "test" : k]); }
   function go(url) { K.leave(); location.href = url; }
   function toMap() { location.href = K.pickUrl(grade, subj); }
   var A = {
-    learn: function () { return { label: topic.ready ? T.goPlay : T.goLearn, icon: "book", go: function () { go(K.learnUrl(grade, subj, tid)); } }; },
-    test: function (alt) { return { label: T.goTest, icon: "check", alt: alt, go: function () { go(K.testUrl(grade, subj, tid)); } }; },
-    exam: function () { return { label: T.goExam, icon: "check", go: function () { go(K.testUrl(grade, subj, tid)); } }; }
+    learn: function () { return { label: topic.ready ? T.goPlay : T.goLearn, icon: "step", go: function () { go(K.learnUrl(grade, subj, tid)); } }; },
+    test: function (alt) { return { label: T.goTest, icon: "flag", alt: alt, go: function () { go(K.testUrl(grade, subj, tid)); } }; },
+    exam: function () { return { label: T.goExam, icon: "bolt", go: function () { go(K.testUrl(grade, subj, tid)); } }; }
   };
   /* nội dung bảng theo điểm đang chọn */
   function show(n) {
     sel = n.kind; var f = route.info, acts = [], tx = text(n.kind), title = K.tx(story.title);
-    if (!f.unl) { panel.set({ title: title, text: T.locked, acts: [{ label: T.goHome, icon: "map", go: toMap }] }); return; }
+    if (!f.unl) { panel.set({ title: title, text: T.locked, pic: "stop-lock", acts: [{ label: T.goHome, icon: "map", go: toMap }] }); return; }
     if (n.tap || n.st === "cur") {
-      if (n.kind === "intro") { if (!K.seen(tid)) acts.push({ label: T.goStart, icon: "go", go: start }); }
+      if (n.kind === "intro") { if (!K.seen(tid)) acts.push({ label: T.goStart, icon: "sail", go: start }); }
       else if (n.kind === "fork") { acts.push(A.learn(), A.exam()); acts[0].label = T.pathLearn; acts[1].label = T.pathExam; }
       else if (n.kind === "learn") acts.push(A.learn());
       else if (n.kind === "test") acts.push(A.test());
@@ -35,12 +35,12 @@
         acts.push(f.tried && !f.passed ? { label: T.goRetry, icon: "retry", go: A.exam().go } : A.exam());
         if (f.tried && !f.passed && f.hasL && !f.learned) { tx = T.retry; acts.push(Object.assign(A.learn(), { alt: true })); }
       } else if (n.kind === "end") {
-        if (hasNext) acts.push({ label: T.goNext, icon: "go", go: function () { location.href = K.mapUrl(grade, subj, topics[ti + 1].id); } });
+        if (hasNext) acts.push({ label: T.goNext, icon: "next", go: function () { location.href = K.mapUrl(grade, subj, topics[ti + 1].id); } });
         acts.push({ label: T.goHome, icon: "map", alt: hasNext, go: toMap });
       }
       if (n.kind === "test" && f.tried && !f.passed) { acts[0] = { label: T.goRetry, icon: "retry", go: A.test().go }; }
     } else tx = T.notYet;
-    panel.set({ title: nodeLabel(n.kind), text: tx, acts: acts });
+    panel.set({ title: nodeLabel(n.kind), text: tx, pic: "stop-" + (n.kind === "exam" ? "test" : n.kind), acts: acts });
   }
   function start() {
     K.markSeen(tid); sel = ""; draw(false); comp.emote("cheer");
@@ -53,13 +53,13 @@
     SG.bg(stage, subj, grade, orient);
     SG.paths(stage, route.edges.map(function (e) { return { a: route.by[e.a].pos, b: route.by[e.b].pos, done: e.done }; }), orient);
     route.nodes.forEach(function (n) {
-      SG.node(stage, { id: n.id, kind: n.kind, pos: n.pos, st: n.st, off: n.off, stars: n.stars, label: nodeLabel(n.kind), icon: "stop-" + (n.kind === "exam" ? "test" : n.kind),
+      SG.node(stage, { id: n.id, kind: n.kind, pos: n.pos, st: n.st, off: n.off, stars: n.stars, label: nodeLabel(n.kind), say: text(n.kind), sp: n.sp, icon: "stop-" + (n.kind === "exam" ? "test" : n.kind),
         lock: !route.info.unl && n.kind !== "intro" }, function () { show(n); if (comp && n.tap) comp.emote("happy"); });
     });
     var curN = route.by[route.cur] || route.by.intro;
-    if (keep) { stage.appendChild(keep); comp.to(pt(curN), false); } else {
+    if (keep) { stage.appendChild(keep); comp.to(pt(curN), false, curN.cs); } else {
       comp = SG.companion(stage, subj, grade); var from = route.by[K.at(tid)] || curN;
-      comp.to(pt(from), true); if (from !== curN) setTimeout(function () { comp.to(pt(curN), false); }, 600);
+      comp.to(pt(from), true, from.cs); if (from !== curN) setTimeout(function () { comp.to(pt(curN), false, curN.cs); }, 600);
     }
     K.setAt(tid, curN.id);
     if (first || !sel) show(curN); else show(route.by[sel] || curN);

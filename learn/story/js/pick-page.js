@@ -26,8 +26,9 @@
   function next() { var n = P.next(subj, grade); return n ? n.index : 0; }
   function show(i) {
     sel = i; var t = topics[i], st = R.topicState(P, subj, grade, t), story = K.storyFor(t), acts = [];
-    if (!st.lock) acts.push({ label: T.goStart, icon: "go", go: function () { location.href = K.mapUrl(grade, subj, t.id); } });
-    panel.set({ title: K.tx(story.title), text: st.lock ? T.locked : K.tx(story.intro), acts: acts });
+    if (!st.lock) acts.push({ label: T.goStart, icon: "sail", go: function () { location.href = K.mapUrl(grade, subj, t.id); } });
+    panel.set({ title: K.tx(story.title), text: st.lock ? T.locked : K.tx(story.intro), acts: acts,
+      pic: st.lock ? "stop-lock" : st.done ? "stop-end" : st.part ? "stop-learn" : "stop-intro" });
     $("stage").querySelectorAll(".nd").forEach(function (b, k) { b.classList.toggle("sel", k === i); });
   }
   function draw() {
@@ -36,7 +37,8 @@
     SG.paths(stage, topics.slice(1).map(function (t, i) { return { a: pts[i], b: pts[i + 1], done: R.topicState(P, subj, grade, topics[i]).done }; }), orient);
     topics.forEach(function (t, i) {
       st = R.topicState(P, subj, grade, t);
-      var d = { id: t.id, kind: "island", pos: pts[i], st: st.done ? "done" : st.lock ? "off" : "cur", label: (window.LearnStories && LearnStories[t.id] && K.tx(LearnStories[t.id].title)) || t.name, icon: st.done ? "stop-end" : st.part ? "stop-learn" : "stop-intro",
+      var d = { id: t.id, kind: "island", pos: pts[i], st: st.done ? "done" : st.lock ? "off" : "cur", label: (window.LearnStories && LearnStories[t.id] && K.tx(LearnStories[t.id].title)) || t.name,
+        icon: st.done ? "stop-end" : st.part ? "stop-learn" : "stop-intro",
         lock: st.lock, stars: st.stars, num: String(i + 1), noStar: true };
       SG.node(stage, d, function () { show(i); if (comp) comp.to(pts[i], false); });
     });

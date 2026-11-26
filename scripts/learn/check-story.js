@@ -82,6 +82,13 @@ SUBJ.forEach((s) => C.subjects[s].grades.forEach((gr) => gr.topics.forEach((t) =
   const d = written[t.id] || {}, def = Def.make(s, t.name), merged = {};
   FIELDS.forEach((k) => { merged[k] = d[k] && d[k].vi ? d[k] : def[k]; });
   check(t.id + "(đầy đủ)", merged, true);
+  /* nhãn trên một bản đồ không được trùng chữ (kể cả nhánh băng qua thử), cả vi lẫn en, và không có chữ cấm */
+  const nodes = Def.nodesOf(d);
+  ["vi", "en"].forEach((l) => {
+    const labs = ["intro", "fork", "learn", "test", "exam", "end"].map((k) => Def.labelOf(nodes, k, l)), low = labs.map((x) => x.toLowerCase());
+    low.forEach((x, i) => { if (low.indexOf(x) !== i) fail(t.id + ": nhãn trùng trên bản đồ (" + l + "): " + labs[i]); });
+    labs.forEach((x) => { if (NODE_BAN.test(x)) fail(t.id + ": nhãn có chữ cấm (" + l + "): " + x); });
+  });
   let c = 0;
   [0, 1].forEach((l) => [0, 1, 2].forEach((tt) => [0, 2, 3, 5].forEach((b) => [0, 1].forEach((hl) => [0, 1].forEach((ht) => [0, 1].forEach((unl) => ["p", "l"].forEach((o) => {
     try {

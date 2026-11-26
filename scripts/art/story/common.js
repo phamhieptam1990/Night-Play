@@ -6,8 +6,12 @@ exports.pick = a => a[Math.floor(rnd() * a.length)];
 exports.lg = (id, a, b, h) => `<linearGradient id="${id}" x1="0" y1="0" x2="${h ? 1 : 0}" y2="${h ? 0 : 1}"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`;
 exports.shadow = (x, y, rx) => `<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${(rx * .28).toFixed(1)}" fill="#000" opacity=".15"/>`;
 const f = n => +n.toFixed(1);
-exports.cloud = (x, y, s, o) => `<g transform="translate(${f(x)} ${f(y)}) scale(${s})" opacity="${o || .9}"><ellipse cx="0" cy="0" rx="46" ry="14" fill="#fff"/><circle cx="-14" cy="-10" r="16" fill="#fff"/><circle cx="12" cy="-14" r="20" fill="#fff"/><circle cx="30" cy="-4" r="12" fill="#fff"/></g>`;
-exports.sparkle = (x, y, r, c) => `<path d="M${f(x)} ${f(y - r)}Q${f(x)} ${f(y)} ${f(x + r)} ${f(y)}Q${f(x)} ${f(y)} ${f(x)} ${f(y + r)}Q${f(x)} ${f(y)} ${f(x - r)} ${f(y)}Q${f(x)} ${f(y)} ${f(x)} ${f(y - r)}z" fill="${c || "#fff"}" opacity=".85"/>`;
+exports.cloud = (x, y, s, o) => `<g transform="translate(${f(x)} ${f(y)}) scale(${s})" opacity="${o || .9}">
+<ellipse cx="0" cy="0" rx="46" ry="14" fill="#fff"/>
+<circle cx="-14" cy="-10" r="16" fill="#fff"/><circle cx="12" cy="-14" r="20" fill="#fff"/><circle cx="30" cy="-4" r="12" fill="#fff"/></g>`;
+exports.sparkle = (x, y, r, c) => `<path d="M${f(x)} ${f(y - r)}
+Q${f(x)} ${f(y)} ${f(x + r)} ${f(y)}
+Q${f(x)} ${f(y)} ${f(x)} ${f(y + r)}Q${f(x)} ${f(y)} ${f(x - r)} ${f(y)}Q${f(x)} ${f(y)} ${f(x)} ${f(y - r)}z" fill="${c || "#fff"}" opacity=".85"/>`;
 /* đường qua các điểm → {d, pts (mẫu để tránh đè)} */
 exports.curve = P => {
   let d = `M${f(P[0][0])} ${f(P[0][1])}`; const pts = [];
@@ -21,11 +25,12 @@ exports.curve = P => {
   return { d, pts };
 };
 /* chọn n chỗ trong vùng [x0,x1]x[y0,y1], cách đường ≥ clear và cách nhau ≥ gap; trả về mảng [x,y] sắp theo y (xa trước) */
-exports.spots = (n, box, pts, clear, gap, taken, up) => {
+exports.spots = (n, box, pts, clear, gap, taken, up, ok) => {
   const out = []; taken = taken || [];
   for (let k = 0; k < n * 40 && out.length < n; k++) {
     const x = box[0] + rnd() * (box[1] - box[0]), y = box[2] + rnd() * (box[3] - box[2]);
     if (pts.some(p => Math.hypot(p[0] - x, (p[1] - y) * 1.3) < clear)) continue;
+    if (ok && !ok(x, y)) continue;
     if (up && pts.some(p => Math.abs(p[0] - x) < up * .45 && y - p[1] > 0 && y - p[1] < up)) continue;
     if (out.concat(taken).some(p => Math.hypot(p[0] - x, (p[1] - y) * 1.5) < gap)) continue;
     out.push([x, y]);

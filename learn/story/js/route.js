@@ -4,14 +4,30 @@
    Chủ đề không có kiểm tra (hoặc không có bài học) thì chỉ một đường thẳng, không ngã rẽ. Vị trí tính bằng % khung tranh (p = dọc, l = ngang). */
 (function (root) {
   "use strict";
+  /* [x%, y%, loa, linh vật]: loa = l|r|u (trái/phải/trên icon), linh vật đứng bên l|r. Chọn bằng tìm kiếm tự động sao cho loa 44px không đè icon, nhãn,
+     loa khác hay linh vật (ở mọi cỡ khung từ 300 đến 800); loa u = phía trên icon. Sửa số ở đây phải chạy lại quét 71 chủ đề (scripts/learn/check-story.js + quét Chrome). */
   var LAY = {
-    p: { intro: [24, 62], fork: [50, 50], learn: [22, 37], test: [22, 22], exam: [78, 37], end: [50, 8] },
-    l: { intro: [11, 54], fork: [35, 38], learn: [54, 22], test: [75, 22], exam: [58, 58], end: [89, 42] }
+    p: {
+      intro: [25, 62, "l", "r"], fork: [68, 48, "l", "r"], learn: [25, 39, "l", "r"], test: [21, 22, "u", "r"], exam: [65, 31, "r", "l"], end: [74, 11, "r", "l"]
+    },
+    l: {
+      intro: [20, 60, "r", "l"], fork: [31, 32, "l", "r"], learn: [51, 31, "r", "l"], test: [74, 33, "u", "r"], exam: [57, 60, "r", "l"], end: [88, 56, "r", "l"]
+    }
   };
   /* đường thẳng n điểm (bản đồ lớp dùng chung): dọc zigzag từ dưới lên, ngang zigzag từ trái sang */
   function chain(n, o) {
     var pts = [], i, t;
     for (i = 0; i < n; i++) { t = n > 1 ? i / (n - 1) : 0.5; pts.push(o === "p" ? [i % 2 ? 72 : 28, 60 - 51 * t] : [9 + 82 * t, i % 2 ? 28 : 52]); }
+    return pts;
+  }
+  /* đường thẳng trên bản đồ chủ đề (không ngã rẽ): hướng ngang cần chừa chỗ cho loa ở hai đầu */
+  function line(n, o) {
+    var pts = chain(n, o), last = n - 1;
+    if (o !== "l") return pts;
+    pts.forEach(function (p, i) {
+      p[0] = 16 + 68 * (n > 1 ? i / last : 0.5);
+      p[2] = i === 0 ? "r" : i === last ? "l" : "u"; p[3] = i === 0 ? "l" : i === last ? "r" : "r";
+    });
     return pts;
   }
   function info(P, subj, g, t) {
@@ -34,7 +50,7 @@
     else if (full) cur = f.learned ? "test" : f.tried ? "exam" : "fork";
     else cur = single;
     if (!f.unl) cur = "";
-    var pts = full ? LAY[o] : null, ch = full ? null : chain(kinds.length, o);
+    var pts = full ? LAY[o] : null, ch = full ? null : line(kinds.length, o);
     kinds.forEach(function (k, i) {
       var st = k === cur ? "cur" : done[k] ? "done" : "off", tap = false;
       if (f.unl) {
@@ -47,7 +63,11 @@
       if (k === "end" && endReached) st = "cur";
       if (k === "end" && endReached) done.end = true;
       var onBranch = k === "test" ? (!full || f.learned) : k === "exam" ? !f.learned : true;
-      N[k] = { id: k, kind: k, st: st, tap: tap, pos: pts ? pts[k] : ch[i], stars: (k === "test" || k === "exam") && onBranch && f.r.b > 0 ? f.r.b : 0, off: !onBranch && st === "off" };
+      var pp = pts ? pts[k] : ch[i], inw = pp[0] < 50;
+      N[k] = {
+        id: k, kind: k, st: st, tap: tap, pos: [pp[0], pp[1]], sp: pp[2] || (inw ? "l" : "r"), cs: pp[3] || (inw ? "r" : "l"),
+        stars: (k === "test" || k === "exam") && onBranch && f.r.b > 0 ? f.r.b : 0, off: !onBranch && st === "off"
+      };
     });
     if (f.unl && cur === "end") N.end.st = "cur";
     var E = edges.map(function (e) {

@@ -35,15 +35,21 @@
     stage.appendChild(s);
   }
   function stars(n) { var s = el("span", "strs"); for (var i = 0; i < Math.min(5, n); i++) s.appendChild(art("star")); return s; }
-  /* một điểm dừng: d = {id, kind, pos, st, tap, stars, label, icon, lock, num} */
+  /* một điểm dừng: d = {id, kind, pos, st, stars, label, icon, lock, num, say}. Khung .nd chứa nút điểm (.nb) và nút loa (.nspk) cạnh nhau, không lồng nút. */
   function node(stage, d, onTap) {
-    var b = el("button", "nd st-" + d.st + " k-" + d.kind + (d.off ? " side" : "") + (d.lock ? " lk" : ""));
-    b.type = "button"; b.style.left = d.pos[0] + "%"; b.style.top = d.pos[1] + "%"; b.setAttribute("aria-label", d.label + (d.st === "cur" ? ", " + K.T.here : ""));
+    var w = el("div", "nd st-" + d.st + " k-" + d.kind + (d.off ? " side" : "") + (d.lock ? " lk" : "") + " s" + (d.sp || (d.pos[0] < 50 ? "l" : "r"))), b = el("button", "nb");
+    b.type = "button"; w.style.left = d.pos[0] + "%"; w.style.top = d.pos[1] + "%"; b.setAttribute("aria-label", d.label + (d.st === "cur" ? ", " + K.T.here : ""));
     var ni = el("span", "ni"); ni.appendChild(art(d.lock ? "stop-lock" : d.icon)); if (d.num && !d.lock) ni.appendChild(el("b", "num", d.num)); b.appendChild(ni);
     if (d.st === "done" && !d.noStar) { var bd = el("span", "bd"); bd.appendChild(art("star")); b.appendChild(bd); }
     if (d.stars) b.appendChild(stars(d.stars));
-    b.appendChild(el("span", "lb", K.esc(d.label)));
-    b.onclick = function () { onTap(d); }; stage.appendChild(b); d.el = b; return b;
+    b.appendChild(el("span", "lb", K.esc(d.label))); b.onclick = function () { onTap(d); }; w.appendChild(b);
+    if (d.say && root.StoryVoice && root.StoryVoice.ok()) {   /* loa riêng của điểm: đọc lời kể của chính điểm này, chỉ khi bé bấm */
+      var sp = el("button", "nspk", '<span class="sp"><svg viewBox="0 0 24 24" aria-hidden="true">'
+        + '<path d="M4 9.500v5h3.500L12 18.500v-13L7.500 9.500zM15.500 8.500a5 5 0 0 1 0 7M18 6a8.500 8.500 0 0 1 0 12" stroke="currentColor" stroke-width="2.200" stroke-linecap="round" fill="currentColor"/></svg></span>');
+      sp.type = "button"; sp.dataset.lb = K.T.speak + ": " + d.label; sp.setAttribute("aria-label", sp.dataset.lb); sp.title = K.T.speak;
+      sp.onclick = function (e) { e.stopPropagation(); root.StoryVoice.toggle(sp, d.say); }; w.appendChild(sp);
+    }
+    stage.appendChild(w); d.el = w; return w;
   }
   /* linh vật đồng hành: đứng cạnh điểm, đi tới điểm khác bằng chuyển động mượt */
   function companion(stage, subj, grade) {
@@ -56,8 +62,8 @@
     p.onclick = function () { if (LM && ok) { LM.wake(true); LM.emote("happy", 1400); } p.classList.remove("hop"); void p.offsetWidth; p.classList.add("hop"); };
     return {
       el: p,
-      to: function (pos, instant) {
-        if (instant) p.classList.add("now"); p.style.left = pos[0] + "%"; p.style.top = pos[1] + "%"; p.classList.toggle("flip", pos[0] > 55); p.classList.toggle("hi", pos[1] < 26);
+      to: function (pos, instant, side) {   /* side: bên của điểm mà linh vật đứng (l|r) */
+        if (instant) p.classList.add("now"); p.style.left = pos[0] + "%"; p.style.top = pos[1] + "%"; p.classList.toggle("flip", (side || (pos[0] >= 50 ? "l" : "r")) === "l");
         if (instant) { void p.offsetWidth; p.classList.remove("now"); } else p.classList.add("walk");
       },
       emote: function (n) { if (LM && ok) LM.emote(n, 1600); }
