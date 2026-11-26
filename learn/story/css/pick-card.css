@@ -1,12 +1,12 @@
 /* Trang chọn của Lớp truyện: MỘT thẻ nhỏ (linh vật + "Lớp N") thay hai hàng nút che bản đồ; bấm thẻ mới mở bảng chọn lớp + môn. */
-.pickhd{flex-wrap:nowrap;justify-content:flex-start;position:absolute}
-.pkb{display:inline-flex;align-items:center;gap:6px;min-height:48px;padding:4px 12px 4px 8px;border-radius:16px;border:2px solid var(--tk,#6cc);background:var(--soft,#e8fbf6);color:var(--ink-k,#0b2a3a);
+.pickhd{flex-wrap:nowrap;justify-content:flex-start;position:absolute}   /* thẻ lớp nằm bên PHẢI, nút ← bên trái */
+.pkb{margin-left:auto;display:inline-flex;align-items:center;gap:6px;min-height:48px;padding:4px 12px 4px 8px;border-radius:16px;border:2px solid var(--tk,#6cc);background:var(--soft,#e8fbf6);color:var(--ink-k,#0b2a3a);
   font:900 18px/1 inherit;font-family:inherit;box-shadow:var(--lift,0 4px 10px rgba(0,0,0,.25));cursor:pointer}
 .pkb:active{transform:scale(.96)}.pkb:focus-visible{outline:3px solid #fff;outline-offset:2px}
 .pkb img{width:36px;height:36px;object-fit:contain;flex:none}
 .pkb i{width:9px;height:9px;border:solid currentColor;border-width:0 3px 3px 0;transform:translateY(-2px) rotate(45deg);margin-left:2px;opacity:.7}
 .pkb[aria-expanded=true] i{transform:translateY(2px) rotate(-135deg)}
-.pkp{position:absolute;left:14px;top:calc(100% + 4px);z-index:30;width:min(360px,calc(100vw - 28px));padding:12px;border-radius:20px;background:var(--soft,#e8fbf6);border:2px solid var(--trim,#bfe);
+.pkp{position:absolute;right:14px;top:calc(100% + 4px);z-index:30;width:min(360px,calc(100vw - 28px));padding:12px;border-radius:20px;background:var(--soft,#e8fbf6);border:2px solid var(--trim,#bfe);
   box-shadow:0 14px 30px -8px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:10px}
 .pkp[hidden]{display:none}
 .pkp .grades{flex:none;justify-content:center;gap:8px}.pkp .subjs{order:0;flex:none;grid-template-columns:repeat(3,1fr)}

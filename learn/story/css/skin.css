@@ -21,13 +21,13 @@ body h1{font-size:clamp(20px,5.4vw,28px)}
 body .pt{font-size:clamp(17px,4.6vw,21px)}
 body .ptx{font-size:clamp(15px,4vw,18px);line-height:1.3;-webkit-line-clamp:3}
 body .nd .lb{font-size:15px;max-width:150px;padding:2px 9px}
-body .k-island .lb{font-size:15px}
+body .k-island .lb{width:max-content;font-size:13px;line-height:1.15;max-width:134px;padding:2px 8px;border-width:1.5px}   /* nhãn đảo gọn, rộng hơn đảo để ít dòng, không che bản đồ */
 body .chip{font-size:21px}body .tile{font-size:14px;min-height:50px}
 body .panel{padding:10px 12px}body .pic{width:64px;height:64px}
 @media (orientation:landscape) and (max-height:600px){body .pt{font-size:17px}body .ptx{font-size:15px;-webkit-line-clamp:2}body h1{font-size:20px}body .pic{width:56px;height:56px}}
 /* Đệm rộng: chữ không sát viền */
 body h1{padding:9px 24px}
-body .nd .lb{padding:4px 13px;border-radius:14px}
+body .nd .lb{padding:3px 9px;border-radius:12px}
 body .panel{padding:12px 16px 12px 14px;gap:4px 12px}
 body .pbody{padding:2px 6px 2px 2px}
 body .chip,body .tile{padding:4px 10px}

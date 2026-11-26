@@ -1,0 +1,27 @@
+/* Bảng lời kể trên màn hẹp dọc: hình minh hoạ đứng TRÊN mép thẻ bên trái, loa + nút tròn đứng trên mép thẻ bên phải (như hai "tai" của thẻ);
+   bên trong thẻ chỉ có tên + lời kể, trải trọn chiều ngang (không bị hình/nút nén). Hai nút (ngã rẽ) cũng nằm ở mép trên bên phải. */
+/* nền thẻ dạng kính trong suốt (thấy bản đồ phía sau), chữ tối vẫn đủ tương phản nhờ lớp trắng mờ + làm nhoè nền */
+body .panel{background:linear-gradient(155deg,rgba(255,255,255,.66),rgba(255,255,255,.52));backdrop-filter:blur(12px) saturate(1.2);-webkit-backdrop-filter:blur(12px) saturate(1.2);
+  border-color:rgba(255,255,255,.75);box-shadow:0 8px 24px rgba(0,0,0,.22)}
+@media (orientation:portrait) and (max-width:700px){
+  body .panel{display:block;padding:36px 16px 14px;margin-top:0}
+  body .pbody{display:block;padding:0}
+  body .pic{position:absolute;left:16px;top:-34px;width:68px;height:68px;z-index:2}body .pic .big{box-shadow:0 4px 10px rgba(0,0,0,.35);border:3px solid var(--trim,#fff)}
+  body .pic .mf{width:26px;height:26px;right:-8px;bottom:-4px}
+  body .pact{position:absolute;right:14px;top:-26px;z-index:2;gap:8px}
+  body .pbtns{gap:8px}
+  body .pt{margin:0;font-size:clamp(17px,4.8vw,20px);text-align:left}
+  body .ptx{margin:4px 0 0;-webkit-line-clamp:3}
+  body .spk{width:46px;height:46px;border-radius:23px;box-shadow:0 4px 10px rgba(0,0,0,.3)}body .spk svg{width:22px;height:22px}
+  body .pb{width:52px;height:52px;border-radius:26px;box-shadow:0 4px 10px rgba(0,0,0,.3)}body .pb svg{width:26px;height:26px}
+}
+/* nhãn node cũng dạng kính trong suốt; node đang tới giữ tông vàng nhưng trong suốt */
+body .nd .lb{background:rgba(255,255,255,.58);backdrop-filter:blur(8px) saturate(1.2);-webkit-backdrop-filter:blur(8px) saturate(1.2);border:2px solid rgba(255,255,255,.75);box-shadow:0 3px 8px rgba(5,20,50,.18)}
+body .nd.st-cur .lb{background:linear-gradient(135deg,rgba(255,230,138,.78),rgba(255,184,74,.7));border-color:rgba(255,255,255,.85)}
+/* THEME TỐI: kính tối + chữ sáng (theme sáng dùng kính trắng + chữ tối ở trên) */
+:root[data-theme="dark"] body .panel{background:linear-gradient(155deg,rgba(16,22,46,.7),rgba(16,22,46,.55));border-color:rgba(255,255,255,.28);box-shadow:0 8px 24px rgba(0,0,0,.45)}
+:root[data-theme="dark"] body .pt{color:#f7f9ff;text-shadow:none}:root[data-theme="dark"] body .ptx{color:#dde5ff}
+:root[data-theme="dark"] body .nd .lb{background:rgba(16,22,46,.62);border-color:rgba(255,255,255,.3);color:#f7f9ff;box-shadow:0 3px 8px rgba(0,0,0,.4)}
+:root[data-theme="dark"] body .nd.st-cur .lb{background:linear-gradient(135deg,rgba(255,226,140,.92),rgba(255,184,74,.88));border-color:rgba(255,240,190,.9);color:#3a2300}
+:root[data-theme="dark"] .pkb{background:rgba(16,22,46,.72);color:#f7f9ff;border-color:var(--tk,#6cc);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+:root[data-theme="dark"] .pkp{background:rgba(16,22,46,.82);border-color:rgba(255,255,255,.28);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
