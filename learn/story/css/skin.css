@@ -1,0 +1,33 @@
+/* Bản đồ truyện: cùng "da" kính màu với cảnh (scene/css/skin.css). Không nền trắng chữ đen / nền đen chữ trắng; chữ xanh đậm cùng tông, tương phản >= 6:1. */
+body{--ink-k:color-mix(in srgb,var(--k2) 24%,#07142e);--trim:#fff3c9;
+  --glass:linear-gradient(155deg,color-mix(in srgb,var(--k1) 78%,#fff) 0%,color-mix(in srgb,var(--k2) 70%,#fff) 100%);
+  --soft:linear-gradient(160deg,color-mix(in srgb,var(--k1) 46%,#fff4dc),color-mix(in srgb,var(--k2) 42%,#fff4dc));
+  --lift:inset 0 2px 0 rgba(255,255,255,.6),inset 0 -4px 0 rgba(0,40,80,.14),0 6px 16px rgba(5,20,50,.28)}
+h1{flex:0 1 auto;padding:6px 18px;border-radius:20px;background:var(--glass);color:var(--ink-k);border:3px solid var(--trim);box-shadow:var(--lift);text-shadow:0 1px 0 rgba(255,255,255,.45)}
+.top{justify-content:flex-start}
+.panel{background:var(--glass);border-color:var(--trim);box-shadow:var(--lift),0 8px 22px rgba(0,0,0,.25)}
+.pt{color:var(--ink-k);text-shadow:0 1px 0 rgba(255,255,255,.4)}.ptx{color:color-mix(in srgb,var(--k2) 18%,#07142e);font-weight:700}
+.pic .big,.ni{background:var(--soft)}
+.nd .lb{background:var(--soft);color:var(--ink-k);border:2px solid var(--trim);box-shadow:0 3px 7px rgba(5,20,50,.25)}
+.nd.st-off .lb{opacity:.92}.nd.st-cur .lb{background:linear-gradient(135deg,#ffe68a,#ffb84a);color:#3a2300}
+.spk,.nspk .sp,.pb.alt{background:var(--soft);color:var(--ink-k);border-color:var(--trim);box-shadow:var(--lift)}
+.spk.on,.nspk.on .sp{background:linear-gradient(135deg,#ffe68a,#ffb84a);color:#3a2300}
+.pb{color:#06223a}
+.chip,.tile{background:var(--soft);color:var(--ink-k);border-color:var(--trim);box-shadow:var(--lift)}
+.chip[aria-pressed=true]{background:linear-gradient(135deg,#ffe68a,#ffb84a);color:#3a2300}
+.tile[aria-pressed=true]{background:var(--glass);border-color:var(--tk);box-shadow:0 0 0 3px var(--tk),var(--lift)}
+/* Chữ đủ to cho bé: tối thiểu 15px ở mọi chỗ đọc */
+body h1{font-size:clamp(20px,5.4vw,28px)}
+body .pt{font-size:clamp(17px,4.6vw,21px)}
+body .ptx{font-size:clamp(15px,4vw,18px);line-height:1.3;-webkit-line-clamp:3}
+body .nd .lb{font-size:15px;max-width:150px;padding:2px 9px}
+body .k-island .lb{font-size:15px}
+body .chip{font-size:21px}body .tile{font-size:14px;min-height:50px}
+body .panel{padding:10px 12px}body .pic{width:64px;height:64px}
+@media (orientation:landscape) and (max-height:600px){body .pt{font-size:17px}body .ptx{font-size:15px;-webkit-line-clamp:2}body h1{font-size:20px}body .pic{width:56px;height:56px}}
+/* Đệm rộng: chữ không sát viền */
+body h1{padding:9px 24px}
+body .nd .lb{padding:4px 13px;border-radius:14px}
+body .panel{padding:12px 16px 12px 14px;gap:4px 12px}
+body .pbody{padding:2px 6px 2px 2px}
+body .chip,body .tile{padding:4px 10px}

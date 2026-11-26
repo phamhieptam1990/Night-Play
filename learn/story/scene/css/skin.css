@@ -1,0 +1,37 @@
+/* Cảnh truyện: "da" màu thống nhất. Không nền trắng chữ đen / nền đen chữ trắng: thẻ là kính màu theo môn (--k1 → --k2), chữ xanh đậm cùng tông, viền vàng kem, bóng nổi.
+   Nạp SAU các tệp css cảnh khác (ghi đè nền/chữ). */
+body.scn{--ink-k:color-mix(in srgb,var(--k2) 24%,#07142e);--trim:#fff3c9;
+  --glass:linear-gradient(155deg,color-mix(in srgb,var(--k1) 78%,#fff) 0%,color-mix(in srgb,var(--k2) 70%,#fff) 100%);
+  --soft:linear-gradient(160deg,color-mix(in srgb,var(--k1) 46%,#fff4dc),color-mix(in srgb,var(--k2) 42%,#fff4dc));
+  --lift:inset 0 2px 0 rgba(255,255,255,.6),inset 0 -4px 0 rgba(0,40,80,.14),0 6px 16px rgba(5,20,50,.32)}
+/* bảng lời kể + tên truyện: kính màu đậm, viền kem, chữ xanh đậm */
+.scn .bub,.scn .bt{background:var(--glass);color:var(--ink-k);border:3px solid var(--trim);box-shadow:var(--lift);text-shadow:0 1px 0 rgba(255,255,255,.45)}
+.scn .bub::before{background:color-mix(in srgb,var(--k1) 78%,#fff);border-color:var(--trim)}
+.scn .bt{letter-spacing:.2px}
+/* thẻ tương tác và nền chữ lớn: kính nhạt ngả màu */
+.scn .lart,.scn .shp,.scn .qcard,.scn .tdisp,.scn .tkey,.scn .tk,.scn .ob.wide,.scn .tslot.fill{background:var(--soft);color:var(--ink-k);border-color:var(--trim);box-shadow:var(--lift)}
+.scn .tkey.go,.scn .tk.sel{background:linear-gradient(135deg,#ffe68a,#ffb84a);color:#3a2300}
+.scn .ttip{background:color-mix(in srgb,var(--k1) 30%,#fff1c8);color:var(--ink-k);box-shadow:var(--lift)}
+.scn .ct,.scn .ob{color:var(--ink-k)}
+.scn .mname,.scn .mrhyme,.scn .fbar,.scn .ttrace,.scn .rchip,.scn .tbin{background:var(--soft);color:var(--ink-k);border-color:var(--trim);box-shadow:var(--lift)}
+/* Màn rộng (máy tính, tablet): khung cảnh gọn giữa trang, không kéo bong bóng dài cả màn */
+@media (min-width:700px) and (min-height:601px){
+  body.scn .top,body.scn .sc{width:min(100%,820px);align-self:center}
+  .scn .bub{flex:0 1 560px;font-size:clamp(17px,2.2vw,22px);padding:12px 18px}
+  .scn .pal{width:clamp(110px,16vw,150px)}
+}
+/* Chữ đủ to cho bé: tối thiểu 15px */
+body.scn .bub{font-size:clamp(17px,4.8vw,21px);line-height:1.32}
+body.scn .bt{font-size:clamp(24px,7vw,34px)}
+body.scn .mrhyme{font-size:clamp(16px,4.4vw,20px)}body.scn .mname{font-size:clamp(24px,7vw,34px)}
+body.scn .ttip{font-size:clamp(16px,4.4vw,19px)}
+@media (orientation:landscape) and (max-height:600px){body.scn .bub{font-size:clamp(15px,2.6vw,18px)}body.scn .mrhyme{font-size:16px}}
+/* Đệm rộng: chữ không sát viền */
+body.scn .bub{padding:14px 20px}
+body.scn .bt{padding:11px 26px}
+body.scn .mname{padding:6px 22px}body.scn .mrhyme{padding:9px 18px}
+body.scn .ttip{padding:9px 18px}body.scn .fbar{padding:5px 20px}
+body.scn .lart{padding:14px 20px}body.scn .qcard{padding:12px 18px 12px 20px}
+body.scn .tk{padding:0 16px}body.scn .tdisp{padding:6px 24px}
+body.scn .ob.wide{padding:8px 18px 8px 10px}
+@media (orientation:landscape) and (max-height:600px){body.scn .bub{padding:9px 14px}body.scn .lart{padding:8px 14px}body.scn .qcard{padding:7px 14px}}
