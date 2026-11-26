@@ -25,14 +25,14 @@ const BASE = "https://nightplay.vn";
 /* ---------- menu di động (< 760px): ngăn kéo dưới thanh trên ---------- */
 const MENU = {
   vi: { open: "Mở menu", close: "Đóng menu", hub: "Tổng quan Học Vui", subjects: "Môn học", onpage: "Trong trang", cta: "Vào học thử",
-        sec: { mon: "Chọn môn", cachhoc: "Cách học", giasu: "Gia sư AI", tinhnang: "Tính năng", lop: "Linh vật theo lớp", trochoi: "Trò chơi",
+        sec: { mon: "Chọn môn", cachhoc: "Cách học", giasu: "Gợi ý", tinhnang: "Tính năng", lop: "Linh vật theo lớp", trochoi: "Trò chơi",
             chuongtrinh: "Chương trình", luyenthi:
-            "Luyện thi lớp 6", phuhuynh: "Phụ huynh", antoan: "An toàn", hoi: "Hỏi đáp" },
+            "Chuẩn bị lên lớp 6", phuhuynh: "Phụ huynh", antoan: "An toàn", hoi: "Hỏi đáp" },
         more: [["/hoc/phu-huynh/", "Dành cho phụ huynh"], ["/", "Play Hub"], ["/popplay/", "Pop Play"], ["/cozyplay/", "Night Play"],
             ["/privacy.html", "Quyền riêng tư"], ["/terms.html",
             "Điều khoản"], ["mailto:support@nightplay.vn", "Liên hệ"]] },
   en: { open: "Open menu", close: "Close menu", hub: "Fun Learning overview", subjects: "Subjects", onpage: "On this page", cta: "Try it now",
-        sec: { mon: "Pick a subject", cachhoc: "How it works", giasu: "AI tutor", tinhnang: "Features", lop: "Mascot by grade", trochoi: "Games",
+        sec: { mon: "Pick a subject", cachhoc: "How it works", giasu: "Hints", tinhnang: "Features", lop: "Mascot by grade", trochoi: "Games",
             chuongtrinh: "Curriculum", luyenthi:
             "Grade 6 prep", phuhuynh: "Parents", antoan: "Safety", hoi: "FAQ" },
         more: [["/en/hoc/parents/", "For parents"], ["/en/", "Play Hub"], ["/popplay/", "Pop Play"], ["/cozyplay/", "Night Play"], ["/privacy.html",
@@ -154,7 +154,7 @@ ${menuHtml(l, sl, ["cachhoc", "giasu", "tinhnang", "lop", "trochoi", "chuongtrin
 </div></section>
 
 <section class="sec" id="giasu"><div class="wrap demo">
-  <div class="reveal"><span class="tag" style="text-align:left">AI</span><h2 style="text-align:left;margin:0 0 14px">${esc(
+  <div class="reveal"><span class="tag" style="text-align:left">💡</span><h2 style="text-align:left;margin:0 0 14px">${esc(
       s.demoH)}</h2><p class="sub" style="text-align:left;margin:0 0 20px">${esc(s.demoSub)}</p>
     <ul class="points">${s.demoPoints.map(p => `<li>${esc(p)}</li>`).join("")}</ul></div>
   <div class="reveal"><div class="card chat" aria-label="${t.ex}">${chat}<div class="chips" aria-hidden="true">${s.chips.map(c => `<b>${esc(
@@ -200,7 +200,7 @@ ${s.exam ? `<section class="sec" id="luyenthi"><div class="wrap">
   <div class="reveal"><span class="tag" style="text-align:left">${t.parTag}</span><h2 style="text-align:left;margin:0 0 14px">${esc(
       t.parH)}</h2><p class="sub" style="text-align:left;margin:0 0 20px">${esc(t.parSub)}</p>
     <ul class="points">${t.parPoints.map(p => `<li>${esc(p)}</li>`).join("")}<li><span><b>${esc(t.timeH)}.</b> ${esc(t.timeP)}</span></li></ul></div>
-  <div class="reveal"><div class="card zalo"><div class="zh"><i aria-hidden="true">Z</i>${esc(t.zaloHead)}</div>
+  <div class="reveal"><div class="card zalo"><div class="zh"><i aria-hidden="true">👪</i>${esc(t.zaloHead)}</div>
     <div class="zb">${esc(s.zalo)}<b>${esc(s.zaloTail)}</b>${esc(s.zaloTip)}</div>
     <div class="bars">${s.bars.map(b => `<div>${esc(b[0])}<span style="--p:${b[1]}%"></span></div>`).join("")}</div></div><p class="note">${t.zaloNote}</p></div>
 </div></section>
