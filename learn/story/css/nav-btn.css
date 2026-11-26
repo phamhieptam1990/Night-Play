@@ -7,5 +7,10 @@ body .ib,body .spkb{color:#fff;border:3px solid #fff;
   background:radial-gradient(120% 90% at 30% 18%,rgba(255,255,255,.5) 0,transparent 46%),linear-gradient(150deg,var(--nb1),var(--nb2));
   box-shadow:0 4px 0 rgba(0,0,0,.22),0 8px 16px rgba(0,0,0,.25),inset 0 -4px 8px rgba(0,0,0,.14)}
 body .ib svg,body .spkb svg{filter:drop-shadow(0 2px 0 rgba(0,0,0,.3))}
-body .spkb.on{background:linear-gradient(150deg,#ffe68a,#ffb84a);color:#3a2300;border-color:#fff}
+/* loa ĐANG ĐỌC: nền trắng + biểu tượng cam đậm + viền vàng + vòng sáng nhịp, khác hẳn nút loa lúc nghỉ (gradient theo môn, biểu tượng trắng) */
+body .spkb.on{background:#fff;color:#e8590c;border-color:#ffc21a;animation:spkOn 1s ease-in-out infinite;
+  box-shadow:0 0 0 4px rgba(255,194,26,.55),0 4px 0 rgba(0,0,0,.18),0 8px 18px rgba(0,0,0,.3)}
+body .spkb.on svg{filter:none}
+@keyframes spkOn{50%{box-shadow:0 0 0 9px rgba(255,194,26,.18),0 4px 0 rgba(0,0,0,.18),0 8px 18px rgba(0,0,0,.3)}}
+@media (prefers-reduced-motion:reduce){body .spkb.on{animation:none}}
 body .ib:active,body .spkb:active{transform:translateY(2px) scale(.96)}
