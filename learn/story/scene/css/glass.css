@@ -27,7 +27,7 @@ body.scn[data-subj="tanh"]{--gl-ink:#2a1f6b;--gl-acc:#6a4fe0;--gl-line:rgba(106,
 .scn .bub{border-left:5px solid var(--gl-acc,var(--gl-line))}
 /* GỌN (màn dọc hẹp): KHÔNG còn thẻ lời ở đáy. Linh vật nhỏ ở góc dưới trái, nút tiếp TO ở GIỮA đáy cho bé dễ bấm. Lời của linh vật hiện ở bóng thoại phóng to (đầu mỗi màn)
    và bóng thoại nhỏ nổi lên trên đầu linh vật vài giây khi linh vật nói thêm (class .said do frame.js bật). */
-@media (orientation:portrait) and (max-width:700px){
+@media all{
   body.scn{--castH:104px;--rowH:72px}
   .scn .cast{flex-direction:row;align-items:flex-end;justify-content:flex-start;gap:0;padding:4px 10px 12px}
   .scn .sc.hasnext .cast{padding-right:10px}
@@ -38,7 +38,7 @@ body.scn[data-subj="tanh"]{--gl-ink:#2a1f6b;--gl-acc:#6a4fe0;--gl-line:rgba(106,
   .scn .nxt{width:92px;height:92px;border-radius:46px;left:calc(50% - 46px);right:auto;bottom:10px}.scn .nxt svg{width:46px;height:46px}
 }
 /* LINH VẬT HIỆN TO đọc lời mở đầu rồi thu nhỏ về góc (class .talk do frame.js bật/tắt; màn dọc hẹp). Dùng translate/scale riêng để không đụng animation nhún của linh vật. */
-@media (orientation:portrait) and (max-width:700px){
+@media all{
   .scn .pal{transition:translate .65s cubic-bezier(.2,.85,.25,1),scale .65s cubic-bezier(.2,.85,.25,1)}
   .scn .play{transition:opacity .5s,filter .5s}
   .scn .sc.talk .play{opacity:0;filter:blur(4px);pointer-events:none}   /* đang phóng to đọc: ẩn vùng chơi + nút tiếp + đèn tiến độ, chỉ còn linh vật và lời */
@@ -54,7 +54,7 @@ body.scn[data-subj="tanh"]{--gl-ink:#2a1f6b;--gl-acc:#6a4fe0;--gl-line:rgba(106,
   background:var(--gl);color:var(--gl-ink);border:2px solid var(--gl-line);-webkit-backdrop-filter:var(--gl-blur);backdrop-filter:var(--gl-blur);box-shadow:0 4px 14px rgba(5,20,50,.2)}
 .scn .vhint[hidden]{display:none}
 /* BÓNG THOẠI TRÊN ĐẦU LINH VẬT khi phóng to: nổi lên phía trên đầu, có đuôi chỉ xuống, hiện từng từ. Hết .talk thì về chỗ cũ ở đáy. */
-@media (orientation:portrait) and (max-width:700px){
+@media all{
   .scn .sc.talk .bub{position:absolute;left:7%;right:7%;bottom:calc(24dvh + 12px + 72px * 2.8 + 12px);margin:0;max-height:none;overflow:visible;padding:12px 16px;border-left-width:2px;
     font-size:clamp(18px,5.4vw,23px)!important;line-height:1.3;text-align:center;transform-origin:50% 100%;animation:bubIn .5s cubic-bezier(.2,.9,.3,1.25) both}
   .scn .sc.talk .bub::before{display:block;left:calc(50% - 9px);bottom:-10px;top:auto;transform:rotate(-45deg)}
