@@ -21,6 +21,6 @@ h1{margin:0;flex:1;min-width:0;font-size:clamp(18px,5vw,26px);font-weight:900;wh
 .subjs{order:3;flex:1 0 100%;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .tile{min-height:46px;display:flex;align-items:center;justify-content:center;gap:3px;border-radius:14px;border:2px solid var(--tk);background:var(--panel);
   font-weight:800;font-size:12px;padding:2px 3px;min-width:0}
-.tile img{width:26px;height:26px;object-fit:contain;flex:none}.tile span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tile img{width:26px;height:26px;object-fit:contain;flex:none}.tile span{min-width:0;overflow-wrap:anywhere;line-height:1.1;text-wrap:balance}
 .tile[aria-pressed=true]{background:color-mix(in srgb,var(--tk) 40%,var(--panel))}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

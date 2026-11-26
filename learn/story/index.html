@@ -17,14 +17,18 @@
 <link rel="stylesheet" href="css/skin.css">
 <link rel="stylesheet" href="css/wide.css">
 <link rel="stylesheet" href="css/full.css">
+<link rel="stylesheet" href="css/pick-card.css">
 </head>
 <body>
 <header class="top pickhd">
   <a class="ib" id="back" href="../lop/index.html" aria-label="Quay lại"><svg viewBox="0 0 24 24" aria-hidden="true">
     <path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="3.400" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></a>
   <h1 id="ttl" hidden>Lớp truyện</h1>
-  <div class="grades" id="grades" role="group" aria-label="Lớp"></div>
-  <div class="subjs" id="subjs" role="group" aria-label="Môn"></div>
+  <button class="pkb" id="pkb" type="button" aria-haspopup="true" aria-expanded="false"></button>
+  <div class="pkp" id="pkp" hidden>
+    <div class="grades" id="grades" role="group" aria-label="Lớp"></div>
+    <div class="subjs" id="subjs" role="group" aria-label="Môn"></div>
+  </div>
 </header>
 <main class="area" id="area">
   <div class="stage" id="stage" aria-label="Bản đồ"></div>

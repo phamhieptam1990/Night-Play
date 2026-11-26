@@ -13,13 +13,19 @@
       var b = E("button", "tile", '<img src="' + K.face(id, grade) + '" alt=""><span>' + K.esc(K.MAS[id].name[K.vi ? 0 : 1]) + "</span>"); b.type = "button";
       b.style.setProperty("--tk", K.MAS[id].c[0]); b.setAttribute("aria-pressed", String(id === subj)); b.onclick = function () { change(grade, id); }; s.appendChild(b);
     });
+    var pb = $("pkb"); pb.innerHTML = '<img src="' + K.face(subj, grade) + '" alt=""><b>' + K.esc(T.grade) + " " + grade + '</b><i aria-hidden="true"></i>';
+    pb.setAttribute("aria-label", K.MAS[subj].name[K.vi ? 0 : 1] + ", " + T.grade + " " + grade); pb.style.setProperty("--tk", K.MAS[subj].c[0]);
     for (var i = 1; i <= 5; i++) (function (n) {
       var b = E("button", "chip", String(n)); b.type = "button"; b.setAttribute("aria-label", T.grade + " " + n); b.setAttribute("aria-pressed", String(n === grade));
       b.onclick = function () { change(n, subj); }; g.appendChild(b);
     })(i);
   }
+  function pk(on) { $("pkp").hidden = !on; $("pkb").setAttribute("aria-expanded", String(on)); }
+  $("pkb").onclick = function (e) { e.stopPropagation(); pk($("pkp").hidden); };
+  document.addEventListener("click", function (e) { if (!$("pkp").hidden && !$("pkp").contains(e.target)) pk(false); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") pk(false); });
   function change(g, s) {
-    if (g === grade && s === subj) return; grade = g; subj = s; K.setGS(g, s); sel = -1;
+    pk(false); if (g === grade && s === subj) return; grade = g; subj = s; K.setGS(g, s); sel = -1;
     try { history.replaceState(null, "", K.pickUrl(g, s)); } catch (e) {}
     $("back").href = "../lop/index.html?" + new URLSearchParams({ grade: g, subj: s, lang: K.lang }); load();
   }

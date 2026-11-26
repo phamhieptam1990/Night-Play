@@ -1,0 +1,22 @@
+/* Trang "Của bé" (lớp 1): CẢNH minh hoạ, bé chạm thẳng vào vật: bạn linh vật ở giữa, luống rau (Khu vườn) bên trái, máy chơi game (Chơi) bên phải. Không có thẻ chữ. */
+.kidv{display:none}
+body.kidmode .snav,body.kidmode .cols{display:none}
+body.kidmode .kidv{display:flex;flex-direction:column;align-items:center;gap:10px;padding:0 0 28px}
+.kst{display:flex;align-items:center;gap:8px;font-weight:900;font-size:clamp(30px,9vw,44px);padding:2px 20px 2px 14px;border-radius:99px;background:rgba(255,255,255,.14);border:2px solid rgba(255,255,255,.3)}
+.kgrid{position:relative;width:100%;max-width:440px;min-height:min(62dvh,520px);display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1.15fr 1fr;gap:6px 10px;padding:14px 10px 12px;border-radius:32px;overflow:hidden;
+  background:radial-gradient(120% 55% at 50% 100%,#3f9a5e 0 58%,transparent 59%),radial-gradient(90% 40% at 12% 62%,#56b36f 0 60%,transparent 61%),radial-gradient(90% 40% at 92% 66%,#4aa766 0 60%,transparent 61%),linear-gradient(#9fdcf6 0,#cdeefb 46%,#7fcf8f 47%,#3f9a5e 100%);
+  box-shadow:0 14px 30px -14px rgba(0,0,0,.55);border:2px solid rgba(255,255,255,.35)}
+.kb{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;text-decoration:none;color:#fff;background:none;border:0;box-shadow:none;border-radius:24px;min-height:0;padding:0}
+.kb:active{transform:scale(.95)}.kb:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.kb b{display:flex;align-items:center;justify-content:center;line-height:1;font-weight:400}
+.kb span{max-width:100%;padding:6px 16px;border-radius:99px;background:#fff7e0;color:#4a2f12;border:2px solid #e2b96a;font-weight:900;font-size:clamp(17px,5vw,22px);box-shadow:0 4px 0 #c99a44}
+#kAlbum{grid-column:1/3;grid-row:1}
+#kAlbum b img{width:clamp(130px,46vw,210px);height:clamp(130px,46vw,210px);object-fit:contain;filter:drop-shadow(0 10px 8px rgba(0,0,0,.28));animation:kbob 3.2s ease-in-out infinite}
+#kGarden b,#kPlay b{width:clamp(96px,32vw,150px);height:clamp(80px,26vw,120px);position:relative;font-size:clamp(54px,17vw,84px);align-items:flex-end;padding-bottom:22%}
+#kGarden b::before{content:"";position:absolute;left:4%;right:4%;bottom:0;height:46%;border-radius:50%;background:radial-gradient(#8a5a35 0 60%,#6e4526 100%);box-shadow:0 5px 0 #5a381d;z-index:-1}
+#kPlay b::before{content:"";position:absolute;left:14%;right:14%;bottom:0;height:42%;border-radius:12px 12px 40% 40%/12px 12px 30% 30%;background:linear-gradient(#b98355,#8c5b34);box-shadow:0 5px 0 #6b4424;z-index:-1}
+#kGarden b,#kPlay b{isolation:isolate}#kGarden b::after,#kPlay b::after{content:none}
+@keyframes kbob{50%{transform:translateY(-6px)}}@media (prefers-reduced-motion:reduce){#kAlbum b img{animation:none}}
+.kad{margin-top:2px}
+@media (max-height:520px){.kidv{flex-direction:row;flex-wrap:wrap;justify-content:center}.kgrid{max-width:none;min-height:0;grid-template-columns:1fr 1.2fr 1fr;grid-template-rows:auto;padding:12px}
+  #kAlbum{grid-column:2;grid-row:1}#kGarden{grid-column:1;grid-row:1}#kPlay{grid-column:3;grid-row:1}#kAlbum b img{width:clamp(90px,26dvh,130px);height:clamp(90px,26dvh,130px)}}

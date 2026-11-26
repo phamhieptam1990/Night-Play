@@ -14,9 +14,10 @@ function hubPage(l) {
         }).join("");
   const nav = SUBJ.map(x => `<a href="${pre}${x}/">${t.nav[x]}</a>`).join("");
   const faq = t.common_faq.map(f => `<details class="card"><summary>${esc(f[0])}</summary><p>${esc(f[1])}</p></details>`).join("");
-  const feats = t.feats.map(f => `<article class="card feat reveal"><div class="fi" aria-hidden="true">${f[0]}</div><h3>${esc(f[1].split("Mít").join(
-      l === "vi" ? "Linh vật" :
-      "Mascot"))}</h3><p>${esc(f[2].split("Mít").join(l === "vi" ? "linh vật" : "the mascot"))}</p></article>`).join("");
+  /* "Mít" = chỗ điền tên linh vật. Ở trang chung: tên → "linh vật"/"the mascot", không để lặp ("Linh vật Linh vật") và đầu câu viết hoa. */
+  const mas = (x, head) => { let r = x.split(l === "vi" ? "Linh vật Mít" : "Mít the companion").join(l === "vi" ? "Linh vật" : "Your mascot companion").split("Mít").join(l === "vi" ? "linh vật" : "the mascot");
+    return head ? r.charAt(0).toUpperCase() + r.slice(1) : r; };
+  const feats = t.feats.map(f => `<article class="card feat reveal"><div class="fi" aria-hidden="true">${f[0]}</div><h3>${esc(mas(f[1], 1))}</h3><p>${esc(mas(f[2], 1))}</p></article>`).join("");
   const tcs = SUBJ.map((sl, i) => `<div class="tc ${CLS[sl]}" data-mas="${MK[sl]}"><img class="mi trio t${i}" ${mi(sl)} src="${asset(sl,
       "happy")}" width="190" height="190" alt="${MAS[sl].n}"><a class="tcl" href="${pre}${sl}/"><b>${esc(MAS[sl].brand[l])}</b><small>${esc(
           MAS[sl].tag[l])}</small></a></div>`).join("");

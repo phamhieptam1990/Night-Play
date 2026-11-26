@@ -19,8 +19,10 @@ function strip(s){return String(s).replace(/[\u{1F000}-\u{1FFFF}☀-➿⭐️]/g
 /* GIỌNG ĐỌC: trình duyệt CHỈ cho phát sau khi bé chạm màn hình ít nhất một lần, nên màn đầu im lặng. Cách xử lý:
    (1) hiện thanh "Chạm để nghe" ở màn đầu cho tới khi bé chạm; (2) chạm lần đầu thì đọc NGAY câu đang hiện; (3) nếu máy không có giọng tiếng Việt thì báo rõ thay vì im. */
 let touched=false, noVoiceShown=false;
-function say(t){
+let lastSp="",lastSpAt=0;
+function say(t,force){
   if(!window.Voice) return;
+  const now=Date.now(); if(!force&&t===lastSp&&now-lastSpAt<2500) return; lastSp=t; lastSpAt=now;   /* cùng một câu gọi hai lần liền (vd cổng loa + chạm đầu): chỉ đọc một lần; bé bấm tay thì force */
   (subj==="tanh"?Voice.sayMix:Voice.say)(strip(t),subj,"vi",{profile:"lesson",fail:why=>{ const h=$("vhint"); if(!h) return; if(why==="novoice"){ if(noVoiceShown) return;
     noVoiceShown=true; h.hidden=false; h.textContent="🔇 Máy chưa có giọng đọc tiếng Việt. Nhờ ba mẹ bật giọng đọc trong Cài đặt của máy nhé."; } else if(!touched){ h.hidden=false;
     } }});
@@ -39,8 +41,8 @@ function sndUi(){$("snd").textContent=AUTO?"🔊":"🔇";$("snd").setAttribute("
   $("sgOff").onclick=()=>{AUTO=false;ls("learn:auto","0");sndUi();close();touched=true;const h=$("vhint");if(h)h.hidden=true};
   if(!window.Voice || grade>=4) close();   /* lớp 4–5 đọc thạo: vào thẳng bài có chữ, không qua màn loa to; loa vẫn bật bằng nút 🔊 */
 })();
-$("snd").onclick=()=>{AUTO=!AUTO;ls("learn:auto",AUTO?"1":"0");sndUi();if(AUTO)say(curText);else if(window.speechSynthesis)speechSynthesis.cancel()};
-$("mi").parentNode.onclick=()=>{touched=true;say(curText)}; sndUi();
+$("snd").onclick=()=>{AUTO=!AUTO;ls("learn:auto",AUTO?"1":"0");sndUi();if(AUTO)say(curText,true);else if(window.speechSynthesis)speechSynthesis.cancel()};
+$("mi").parentNode.onclick=()=>{touched=true;say(curText,true)}; sndUi();
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 const SH={
@@ -68,7 +70,7 @@ function show(i){
   if(isTry){const c=document.createElement("div");c.className="chip";c.textContent=COPY.tchip;stage.appendChild(c)}
   setNext(false,nextLabel);
   if(isTry) return quiz(stage,{t:s.q,opts:s.opts,ok:s.ok,yes:s.yes,no:s.hint,hint:s.hint,art:s.art,optlang:s.optlang,final:true},nextLabel);
-  speakIn(s.t, s.k==="sum"&&s.pts?[s.t].concat(s.pts).join(". "):null);
+  if(s.k!=="game") speakIn(s.t, s.k==="sum"&&s.pts?[s.t].concat(s.pts).join(". "):null);   /* game: mỗi vòng tự đọc câu hỏi, không đọc câu dẫn trước (tránh đọc chồng) */
   if(s.k==="say"){ artOf(stage,s); setNext(true,nextLabel); }
   else if(s.k==="sum"){ const u=document.createElement("ul");u.className="pts";s.pts.forEach(p=>{const l=document.createElement("li");l.textContent=p;u.appendChild(l)});
     stage.appendChild(u); setNext(true,nextLabel); }

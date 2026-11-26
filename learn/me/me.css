@@ -102,15 +102,7 @@ button,a{font:inherit;color:inherit;cursor:pointer}
   font-size:32px;line-height:1.15}
 .fi.lock{opacity:.5;border:1.5px dashed rgba(255,255,255,.4);background:none}
 .acts{display:grid;gap:10px}
-/* B8: lớp 1 — màn hình để bé xem: số sao + 3 nút hình to; thống kê cho người lớn ẩn sau nút "Dành cho người lớn" */
-.kidv{display:none}body.kidmode .kidv{display:flex;flex-direction:column;align-items:center;gap:12px;padding:4px 4px 32px}body.kidmode .snav,body.kidmode .cols{display:none}
-.kst{display:flex;align-items:center;gap:8px;font-weight:900;font-size:clamp(34px,11vw,52px)}
-.kgrid{display:grid;grid-template-columns:1fr;gap:14px;width:100%;max-width:420px}
-.kb{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:clamp(92px,17dvh,150px);border-radius:28px;text-decoration:none;
-  color:#fff;background:linear-gradient(135deg,var(--s1),var(--s2));border:2px solid rgba(255,255,255,.5);
-  box-shadow:0 12px 26px -10px rgba(0,0,0,.45)}.kb:active{transform:scale(.97)}
-.kb b{font-size:clamp(44px,13vw,70px);line-height:1}.kb b img{display:block;width:1.15em;height:1.15em;object-fit:contain}.kb span{font-weight:900;font-size:clamp(20px,6vw,26px)}
-@media (max-height:520px){.kgrid{grid-template-columns:repeat(3,1fr);max-width:none}.kb{min-height:96px}.kb b{font-size:44px}}
+/* B8: lớp 1 — màn "Của bé" dạng cảnh minh hoạ: xem css/me-kid.css */
 .kad{min-height:44px;padding:0 18px;border-radius:99px;border:2px solid var(--line,rgba(255,255,255,.3));background:rgba(0,0,0,.2);color:inherit;font-weight:800;
   font-size:14px;cursor:pointer}
 .go{display:flex;align-items:center;justify-content:center;gap:8px;min-height:56px;padding:0 18px;border-radius:99px;font-weight:900;font-size:18px;text-align:center;
