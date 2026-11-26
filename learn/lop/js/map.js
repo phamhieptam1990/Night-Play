@@ -41,6 +41,7 @@ function rename(id,m,done){
 /* ---------------- trạng thái: một lớp + một môn ---------------- */
 let G=+q.get("grade"); if(!(G>=1&&G<=5)) G=P.grade()||1;
 let S=q.get("subj"); if(!MAS[S]) S=ls("learn:subj"); if(!MAS[S]) S="toan";
+window.LearnMapCtx=()=>({G,S,vi,lang,m:MAS[S],face:hd(S,G)});   /* js/play-choice.js đọc lớp/môn đang chọn */
 let cards=[], idx=-1, guideOK=false;
 
 function fillSelects(){
@@ -68,7 +69,7 @@ function topicCard(s,g,t,m,i,total){
   const acts=(learnU?'<a class="cta" href="'+esc(learnU)+'">'+(t.ready?(vi?"🎮 Chơi":"🎮 Play"):T.learn)+' ›</a>':(testU
     ?'<a class="cta ghost" href="'+esc(testU)+'">'+T.quiz+' ›</a>':''))+(learnU&&testU?'<a class="more" href="'+esc(
     testU)+'">'+T.quiz+'</a>':'')+'<a class="more" href="chu-de.html?'+esc(prm)+'">'+T.more+' ›</a>';
-  const card=el('<article class="tp'+(passed?" done":"")+(unl?"":" locked")+'"><span class="num" aria-hidden="true">'+(passed?"✓":(i+1))+'</span>'+(main
+  const card=el('<article class="tp'+(passed?" done":"")+(unl?"":" locked")+'" data-tid="'+esc(t.id)+'" data-learn="'+esc(learnU||"")+'" data-ready="'+(t.ready?1:0)+'"><span class="num" aria-hidden="true">'+(passed?"✓":(i+1))+'</span>'+(main
     ?'<a class="tpa" href="'+esc(main)+'" aria-label="'+esc(t.name)+'">'+pic+'</a>':'<div class="tpa">'+pic+'</div>')+'<div class="tpb"><p class="subtxt">'+subs
     +'</p><div class="chips2">'+chips+'</div><div class="acts2">'+acts+'</div></div></article>');
   card.addEventListener("pointerenter",()=>narrate(i,false));

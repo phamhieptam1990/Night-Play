@@ -69,7 +69,7 @@
     o = o || {}; var u = new URL(url, location.href), my = ++navId;
     if (u.origin !== location.origin || !VIEW.test(u.pathname)) { location.href = u.href; return Promise.resolve(); }
     var page = /\.html$/.test(u.pathname) ? u.href : new URL("index.html" + u.search, u.href).href;
-    return fetch(page).then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(function (txt) {
+    return fetch(page, { cache: "no-cache" }).then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(function (txt) {
       if (my !== navId) return; return swap(new DOMParser().parseFromString(txt, "text/html"), u, o);
     }).catch(function () { if (my === navId) location.href = u.href; });
   }
