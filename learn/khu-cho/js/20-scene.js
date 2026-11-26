@@ -1,7 +1,7 @@
 /* Dựng cảnh chợ: nền, 5 sạp (nút), đài phun nước, cây, thú đi qua, đèn nhấp nháy. Toạ độ sạp theo % khung (CSS biến --px/--py/--pw dọc, --lx/--ly/--lw ngang). */
 (function () {
   "use strict";
-  const A = "../quan-kem/art/g", K = "art/";
+  const A = "../quan-kem/art/g", K = "art/", TP = "../vuon-thu/art/";   /* trang phục theo lớp dùng chung với Vườn thú */
   const POS = [[1, 4, 30, 1, 30, 14], [2, 208, 128, 1, 215, 14], [3, 4, 238, 1, 400, 14], [4, 208, 336, 1, 120, 192], [5, 4, 446, 1, 310, 192]];
   const PW = 178, LW = 175, PH = 680, LH = 360, LWID = 800, PWID = 390;
   const pct = (v, t) => (v / t * 100).toFixed(2) + "%";
@@ -17,21 +17,20 @@
       for (let i = 0; i < 13; i++) { const t = (i + .5) / 13, y = (1 - t) * (1 - t) * 10 + 2 * t * (1 - t) * 52 + t * t * 10 + 24; c += '<circle cx="' + (W * t).toFixed(1) + '" cy="' + y.toFixed(1) + '" r="3.500" fill="' + ["#FFE08A", "#FF9FBF", "#9EE3FF"][i % 3] + '" style="animation-delay:' + (i % 4) * .3 + 's"/>'; }
       h += '<svg class="lights l' + p[0] + '" viewBox="0 0 ' + W + " " + H + '" preserveAspectRatio="none" aria-hidden="true">' + c + "</svg>";
     });
-    const D = KC.all();
-    POS.forEach((p, i) => {
-      const d = D[i], g = p[0], S = (e => e.join(";"))(["--px:" + pct(p[1], PWID), "--py:" + pct(p[2], PH), "--pw:" + pct(PW, PWID), "--lx:" + pct(p[4], LWID), "--ly:" + pct(p[5], LH), "--lw:" + pct(LW, LWID)]);
-      h += '<button type="button" class="shop ' + (d.open ? "open" : "locked") + '" data-g="' + g + '" data-lv="' + d.lv + '" style="' + S + '" aria-label="' + g + '">';
-      h += '<span class="art">' + img("back", K + "stall-back-" + g + ".svg") + img("dog", A + g + "/chu-quan.svg") + img("front", K + "stall-front-" + g + ".svg");
-      if (d.open && d.lv > 1) h += img("mai", A + g + "/mai-" + d.lv + ".svg");
+    const G = KC.curGrade(), D = KC.info(G), IT = KC.items(), dn = IT.filter(x => x.done).length;
+    IT.forEach((it, i) => {
+      const p = POS[i], g = i + 1, open = it.open, S = ["--px:" + pct(p[1], PWID), "--py:" + pct(p[2], PH), "--pw:" + pct(PW, PWID), "--lx:" + pct(p[4], LWID), "--ly:" + pct(p[5], LH), "--lw:" + pct(LW, LWID)].join(";");
+      h += '<button type="button" class="shop ' + (open ? "open" : "locked") + '" data-i="' + i + '" data-lv="' + D.lv + '" style="' + S + '" aria-label="' + KC.esc(it.name) + '">';
+      h += '<span class="art">' + img("back", K + "stall-back-" + g + ".svg") + '<span class="dog">' + (it.status === "star" ? "" : img("tp bk", TP + "tp-" + G + "-back.svg")) + img("own", A + G + "/chu-quan.svg") + img("tp", TP + (it.status === "star" ? "tpr-" + g + "-neck.svg" : "tp-" + G + "-head.svg")) + "</span>" + img("front", K + "stall-front-" + g + ".svg") + img("dc", K + "deco-g" + G + ".svg");
+      if (open && D.lv > 1) h += img("mai", A + G + "/mai-" + D.lv + ".svg");
       h += '<span class="sgn">' + img("", A + g + "/sign-2.svg") + "</span>";
       if (g >= 4) h += '<i class="puff"></i><i class="puff b"></i><i class="puff c"></i>';
       h += "</span>";
-      if (d.open) {
-        h += '<span class="dots">' + [1, 2, 3, 4, 5].map(n => "<i" + (n <= d.lv ? ' class="on"' : "") + "></i>").join("") + "</span>";
-        if (d.pend > 0) h += '<span class="coin">' + WorldKit.svg("coin") + "<b>" + d.pend + "</b></span>";
-      } else {
-        h += '<span class="shut"></span><span class="lk">' + ring(d.done, d.total) + WorldKit.svg("lock") + '</span><span class="prog">' + d.done + "/" + d.total + "</span>";
-      }
+      h += '<span class="tname">' + KC.esc(it.name) + "</span>";
+      if (open) {
+        h += '<span class="dots">' + (it.done ? "<i class=\"on\"></i>" : "<i></i>") + "</span>";
+        if (i === 0 && D.pend > 0) h += '<span class="coin">' + WorldKit.svg("coin") + "<b>" + D.pend + "</b></span>";
+      } else h += '<span class="shut"></span><span class="lk">' + ring(dn, IT.length) + WorldKit.svg("lock") + '</span><span class="prog">' + (i + 1) + "</span>";
       h += "</button>";
     });
     const W = ["meo", "gau", "heo", "tho", "meo", "gau"];

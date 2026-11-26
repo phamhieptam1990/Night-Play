@@ -1,12 +1,12 @@
 /* Chuồng thú: hộp vuông (bãi sau · nhà · thú · rào trước), thú đi qua lại / thở / ngủ; chuồng khoá mờ. */
 .pen{position:absolute;aspect-ratio:1;transform:translate(-50%,-50%);padding:0;border:0;background:none;cursor:pointer;font:inherit}
 .pen>img,.pen .walk,.pen .plate,.pen .lvb,.pen .gift,.pen .lockb{position:absolute}
-.pen .bg,.pen .fr{inset:0;width:100%;height:100%;pointer-events:none}
+.pen .bg,.pen .fr,.pen .dc{inset:0;width:100%;height:100%;pointer-events:none}
 .pen .house{left:22%;top:2%;width:56%;pointer-events:none;filter:drop-shadow(0 4px 3px rgba(0,0,0,.2))}
 .pen:active{transform:translate(-50%,-50%) scale(.97)}
 .pen .walk{left:50%;bottom:21%;width:var(--ps);transform:translateX(-50%)}
 .pen .pet{display:block;width:100%;pointer-events:none;filter:drop-shadow(0 3px 2px rgba(0,0,0,.2))}
-.pen .breath{transform-origin:50% 100%;animation:br 3.4s ease-in-out var(--d) infinite}
+.pen .breath{position:relative;isolation:isolate;transform-origin:50% 100%;animation:br 3.4s ease-in-out var(--d) infinite}
 @keyframes br{50%{transform:scale(1.03,1.06)}}
 .pen.m-walk .walk{left:32%;animation:pace 12s linear var(--d) infinite;transform:translateX(-50%)}
 .pen.m-walk .hop{animation:hop .6s ease-in-out infinite}
@@ -18,7 +18,7 @@
 .pen .zz{position:absolute;right:-4%;top:-14%;font:900 calc(var(--u)*30)/1 system-ui;color:#fff;text-shadow:0 2px 0 #7A8FD0}
 .pen .zz i{display:inline-block;font-style:normal;animation:zz 2.4s ease-in-out infinite}.pen .zz i:nth-child(2){animation-delay:.5s}.pen .zz i:nth-child(3){animation-delay:1s}
 @keyframes zz{0%{opacity:0;transform:translateY(8px)}40%{opacity:1}100%{opacity:0;transform:translateY(-12px)}}
-.pen .plate{left:50%;bottom:-5%;transform:translateX(-50%);padding:0 .6em;border-radius:99px;background:#FFF3D6;border:2px solid #E0B66A;color:#6B4A1A;font:900 max(11px,calc(var(--u)*26))/1.5 system-ui;white-space:nowrap;box-shadow:0 2px 0 rgba(120,80,20,.3)}
+.pen .plate{left:50%;bottom:-5%;transform:translateX(-50%);padding:0 .6em;border-radius:14px;background:#FFF3D6;border:2px solid #E0B66A;color:#6B4A1A;font:900 max(11px,calc(var(--u)*20))/1.5 system-ui;white-space:normal;text-align:center;width:max-content;max-width:100%;line-height:1.2;box-shadow:0 2px 0 rgba(120,80,20,.3)}
 .pen .lvb{right:6%;top:6%;display:grid;place-items:center;width:max(24px,calc(var(--u)*62));aspect-ratio:1}
 .pen .lvb svg{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 2px 1px rgba(0,0,0,.3))}
 .pen .lvb b{position:relative;font:900 max(11px,calc(var(--u)*28))/1 system-ui;color:#7A4A00;margin-top:8%}
@@ -31,6 +31,7 @@
 .pen .lockb{left:50%;top:60%;width:max(40px,calc(var(--u)*120));aspect-ratio:1;transform:translate(-50%,-50%);display:grid;place-items:center;border-radius:50%;background:rgba(40,36,70,.55)}
 .pen .lockb .rg{position:absolute;inset:0;width:100%;height:100%}
 .pen .lockb img{position:static;width:46%;margin-top:-10%}
-.pen .lockb b{position:absolute;bottom:-10%;font:900 max(10px,calc(var(--u)*24))/1 system-ui;color:#fff;background:#4B3E8F;border-radius:99px;padding:.15em .5em}
+.pen .lockb b{position:absolute;right:-12%;top:-6%;font:900 max(10px,calc(var(--u)*24))/1 system-ui;color:#fff;background:#4B3E8F;border-radius:99px;padding:.15em .5em}
 .pen.cur:not(.lock)::after{content:"";position:absolute;left:12%;right:12%;top:46%;bottom:6%;border-radius:50%;box-shadow:0 0 0 3px rgba(255,255,255,.7);animation:cur 2s ease-in-out infinite;pointer-events:none}
 @keyframes cur{50%{opacity:.2}}
+.pen .tp{position:absolute;left:0;top:0;width:100%;pointer-events:none}.pen .tp.bk{z-index:-1}

@@ -9,6 +9,9 @@
   V.isOpen = function (g) { return g === V.curGrade() || V.learned(g) > 0; };
   V.world = function (g) { return json(g === 3 ? "learn:nhabi:world" : "learn:nhabi:world:" + g) || null; };
   V.pet = function (g) { return window.NB_PETS[g]; };
+  /* chuồng của lớp hiện tại = chủ đề Tiếng Việt của lớp; thú mỗi chuồng lần lượt đổi, bắt đầu từ linh vật của lớp */
+  V.items = function () { return window.LessonLink ? LessonLink.items("tviet", V.curGrade()) : []; };
+  V.petOf = function (i) { return ((V.curGrade() - 1 + i) % 5) + 1; };
   V.level = function (g) {
     var W = V.world(g), L = V.pet(g).pet.levels, love = W ? Math.max(0, +W.love || 0) : 0, i = 0;
     while (i + 1 < L.length && love >= L[i + 1][1]) i++; return i;

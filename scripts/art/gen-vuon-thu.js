@@ -60,7 +60,8 @@ w("vuon-ngang.svg", svg("0 60 1200 520", scene(1200, 640,
 
 /* ---------- chuồng: bãi + hàng rào theo lớp (viewBox 300x300; nhà ở nửa trên, bãi ở nửa dưới) ---------- */
 const PEN = [["#FFC6D8", "#FF8FB1", "#F4A0BC", "#fff"], ["#FFD9A0", "#FFB04D", "#F29B3C", "#fff"], ["#E8CFA0", "#C99A5E", "#B07F44", "#fff"],
-  ["#BDE9B0", "#7FCB6B", "#5FB152", "#fff"], ["#D5C6FF", "#A98BF2", "#8D6FDB", "#fff"]];
+  ["#BDE9B0", "#7FCB6B", "#5FB152", "#fff"], ["#D5C6FF", "#A98BF2", "#8D6FDB", "#fff"],
+  ["#FFE6A0", "#FFC94D", "#E8B02E", "#fff"], ["#BDE8F2", "#6CC5D9", "#4FA9BE", "#fff"]];   /* 6, 7: thêm cho lớp 1 có 7 chủ đề */
 const CX = 150, CY = 215, RX = 138, RY = 68;
 const pt = (a, k) => [CX + Math.cos(a * Math.PI / 180) * RX * k, CY + Math.sin(a * Math.PI / 180) * RY * k];
 function posts(from, to, n, c2, rail) {

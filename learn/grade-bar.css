@@ -1,0 +1,8 @@
+/* Hàng nút lớp 1–5 nằm đè trong nền, giữa thanh trên; màn hẹp hoặc thấp thì xuống đáy trang. */
+.gbar{position:fixed;left:50%;top:max(10px,env(safe-area-inset-top));transform:translateX(-50%);z-index:40;display:flex;gap:6px;padding:5px 8px;border-radius:99px;
+  background:rgba(20,16,50,.55);box-shadow:0 3px 10px rgba(0,0,0,.28);backdrop-filter:blur(4px)}
+.gbar button{width:40px;height:40px;border-radius:50%;border:2px solid rgba(255,255,255,.55);background:rgba(255,255,255,.18);color:#fff;font:900 18px/1 system-ui;cursor:pointer;padding:0}
+.gbar button.on{background:#FFD24D;border-color:#fff;color:#5A3A00;box-shadow:0 0 0 3px rgba(255,210,77,.45)}
+.gbar button:active{transform:scale(.92)}
+@media (max-width:700px),(max-height:430px){.gbar{top:auto;bottom:max(8px,env(safe-area-inset-bottom))}}
+@media (max-height:430px){.gbar button{width:34px;height:34px;font-size:16px}}

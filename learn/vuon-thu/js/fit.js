@@ -2,7 +2,7 @@
 (function (V) {
   "use strict";
   V.fit = function () {
-    var st = document.getElementById("stage"), W = innerWidth, H = innerHeight, hud = 0, land = W / H > 0.97, L = V.LAY[land ? "ngang" : "doc"];
+    var st = document.getElementById("stage"), W = innerWidth, H = innerHeight, hud = 0, land = W / H > 0.97, L = V.AR[land ? "ngang" : "doc"];
     var ah = H, h = H, w = W;   /* nền giãn kín cả trang; --u theo cạnh nhỏ để chuồng/chữ không méo */
     st.style.cssText = "width:" + w + "px;height:" + h + "px;left:0;top:0;--u:" + Math.min(W / L.w, H / (L.w / L.ar)) + "px";
     var m = land ? "ngang" : "doc"; if (V.mode !== m) { V.mode = m; if (V.relayout) V.relayout(); }

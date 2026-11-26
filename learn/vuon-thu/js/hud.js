@@ -7,5 +7,6 @@
     var a = document.createElement("a"); a.className = "wk-btn"; a.id = "bookBtn"; a.href = V.lessonUrl(V.curGrade()); a.setAttribute("aria-label", "Học bài");
     a.innerHTML = WorldKit.svg("book"); var h = document.querySelector(".wk-hud"); if (h) h.appendChild(a);
   };
-  V.hudSync = function () { var t = V.totals(); WorldKit.setPill("stars", t.stars); WorldKit.setPill("food", t.food); WorldKit.setPill("soap", t.soap); };
+  V.hudSync = function () {
+    var bk = document.getElementById("bookBtn"), back = document.querySelector(".wk-hud a.wk-btn"); if (bk) bk.href = V.lessonUrl(V.curGrade()); if (back && back !== bk) back.href = V.back(); var t = V.totals(); WorldKit.setPill("stars", t.stars); WorldKit.setPill("food", t.food); WorldKit.setPill("soap", t.soap); };
 })(window.VT);

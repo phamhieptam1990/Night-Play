@@ -2,7 +2,8 @@
 (function (V) {
   "use strict";
   V.fit(); V.build(); V.hudInit();
-  function refresh() { if (document.hidden) return; V.build(); V.hudSync(); }
+  LearnGradeBar.mount({ get: V.curGrade, onChange: function () { V.build(); V.hudSync(); } });
+  function refresh() { if (document.hidden) return; V.build(); V.hudSync(); LearnGradeBar.sync(V.curGrade()); }
   document.addEventListener("visibilitychange", refresh);
   addEventListener("pageshow", function (e) { if (e.persisted) refresh(); });
   window.VTDebug = V;
