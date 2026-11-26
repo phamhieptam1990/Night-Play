@@ -6,12 +6,20 @@
   var OBJ = { "quả táo": "apple", "cái bát": "bowl", "cái mũ ảo thuật": "magic hat", "quả bóng": "ball", "mũ đầu bếp": "chef's hat", "chú kiến": "ant", "con mắt": "eye", "chú ếch": "frog",
     "cây nến": "candle", "cái cốc": "cup", "chú kỳ lân": "unicorn", "chú gấu": "bear", "mặt trăng": "moon", "cái trống": "drum", "cái cửa": "door", "kính lúp": "magnifying glass",
     "cái ghế": "chair", "cái lều": "tent", "cái mũ nhọn": "pointed hat", "chú ong": "bee" };
+  /* môn TOÁN: các bạn Số (tên bạn = hình gợi nhớ), số đếm, đồ vật cho ăn */
+  var FRIEND = { "trứng": "egg", "bút chì": "pencil", "thiên nga": "swan", "bướm": "butterfly", "thuyền": "boat", "đội mũ": "hat", "sâu": "caterpillar", "cần câu": "fishing rod",
+    "người tuyết": "snowman", "bóng bay": "balloon", "kẹo mút": "lollipop" };
+  var NUM = { "không": "zero", "một": "one", "hai": "two", "ba": "three", "bốn": "four", "năm": "five", "sáu": "six", "bảy": "seven", "tám": "eight", "chín": "nine", "mười": "ten" };
+  var FOOD = { "quả táo": "apples", "cái bánh": "cookies", "quả dâu": "strawberries", "quả chuối": "bananas", "củ cà rốt": "carrots", "quả nho": "grapes" };
+  function fr(a) { return FRIEND[a] ? a + " (" + FRIEND[a] + ")" : a; }
   var PATS = [
-    [/^Gặp bạn (.+?) nè! Chạm vào bạn để chào nhé!$/, function (m, a) { return "Meet friend " + cap(a) + "! Tap the friend to say hi!"; }],
-    [/^Tô theo bạn (.+?) nhé! Dùng ngón tay vẽ\.$/, function (m, a) { return "Trace friend " + cap(a) + " with your finger!"; }],
+    [/^Gặp bạn (.+?) nè! Chạm vào bạn để chào nhé!$/, function (m, a) { return "Meet friend " + fr(cap(a)) + "! Tap the friend to say hi!"; }],
+    [/^Tô theo bạn (.+?) nhé! Dùng ngón tay vẽ\.$/, function (m, a) { return "Trace friend " + fr(cap(a)) + " with your finger!"; }],
     [/^Bạn (.+?) đâu nào\?$/, function (m, a) { return "Where is friend " + cap(a) + "?"; }],
     [/^Bạn nào cầm (.+)\?$/, function (m, o) { return "Which friend holds the " + o + (OBJ[o] ? " (" + OBJ[o] + ")" : "") + "?"; }],
-    [/^Bắn bóng bay! Chạm vào các bóng có (.+?) nhé!$/, function (m, a) { return "Pop the balloons! Tap the balloons with " + a + "."; }]
+    [/^Bắn bóng bay! Chạm vào các bóng có số (.+?) nhé!$/, function (m, a) { return "Pop the balloons! Tap the balloons with the number " + (NUM[a] || a) + " (" + a + ")."; }],
+    [/^Bắn bóng bay! Chạm vào các bóng có (.+?) nhé!$/, function (m, a) { return "Pop the balloons! Tap the balloons with " + a + "."; }],
+    [/^Bạn (.+?) đói rồi! Chạm vào (.+?) (quả táo|cái bánh|quả dâu|quả chuối|củ cà rốt|quả nho) cho bạn ăn nhé!$/, function (m, n, c, f) { return "Friend " + (NUM[n] || n) + " is hungry! Tap " + (NUM[c] || c) + " " + FOOD[f] + " (" + c + " " + f + ") to feed them!"; }]
   ];
   function cap(a) { return / hoa$/.test(a) ? a + " (capital)" : a; }   /* "a hoa" = chữ A viết hoa */
   var DICT = {

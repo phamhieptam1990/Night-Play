@@ -2019,7 +2019,7 @@ window.LEARN_CURRICULUM={"v":2,"subjects":{"toan":{"name":"Toán","grades":[{"gr
             "A triangle has base <em>" + a + " " + u + "</em> and height <em>" + h + " " + u + "</em>. Its area is?", a * h / 2, [[a * h,
                 "formula_confuse"], [a + h, "formula_confuse"], [(
             a + h) / 2 | 0, "formula_confuse"]], c, U); }
-        a = rnd(3, 15); b = a + rnd(2, 10); h = rnd(2, 12) * (((a + b) % 2) ? 2 : 1); return mkn(v ? "Hình thang có đáy em <em>" + a + " " + u +
+        a = rnd(3, 15); b = a + rnd(2, 10); h = rnd(2, 12) * (((a + b) % 2) ? 2 : 1); return mkn(v ? "Hình thang có đáy nhỏ <em>" + a + " " + u +
             "</em>, đáy lớn <em>" + b + " " + u +
             "</em>, chiều cao <em>" + h + " " + u + "</em>. Diện tích là?" : "A trapezoid has bases <em>" + a + " " + u + "</em> and <em>" + b + " " +
                 u + "</em> and height <em>" + h + " " +
@@ -4199,12 +4199,20 @@ window.LEARN_CURRICULUM={"v":2,"subjects":{"toan":{"name":"Toán","grades":[{"gr
   var OBJ = { "quả táo": "apple", "cái bát": "bowl", "cái mũ ảo thuật": "magic hat", "quả bóng": "ball", "mũ đầu bếp": "chef's hat", "chú kiến": "ant", "con mắt": "eye", "chú ếch": "frog",
     "cây nến": "candle", "cái cốc": "cup", "chú kỳ lân": "unicorn", "chú gấu": "bear", "mặt trăng": "moon", "cái trống": "drum", "cái cửa": "door", "kính lúp": "magnifying glass",
     "cái ghế": "chair", "cái lều": "tent", "cái mũ nhọn": "pointed hat", "chú ong": "bee" };
+  /* môn TOÁN: các bạn Số (tên bạn = hình gợi nhớ), số đếm, đồ vật cho ăn */
+  var FRIEND = { "trứng": "egg", "bút chì": "pencil", "thiên nga": "swan", "bướm": "butterfly", "thuyền": "boat", "đội mũ": "hat", "sâu": "caterpillar", "cần câu": "fishing rod",
+    "người tuyết": "snowman", "bóng bay": "balloon", "kẹo mút": "lollipop" };
+  var NUM = { "không": "zero", "một": "one", "hai": "two", "ba": "three", "bốn": "four", "năm": "five", "sáu": "six", "bảy": "seven", "tám": "eight", "chín": "nine", "mười": "ten" };
+  var FOOD = { "quả táo": "apples", "cái bánh": "cookies", "quả dâu": "strawberries", "quả chuối": "bananas", "củ cà rốt": "carrots", "quả nho": "grapes" };
+  function fr(a) { return FRIEND[a] ? a + " (" + FRIEND[a] + ")" : a; }
   var PATS = [
-    [/^Gặp bạn (.+?) nè! Chạm vào bạn để chào nhé!$/, function (m, a) { return "Meet friend " + cap(a) + "! Tap the friend to say hi!"; }],
-    [/^Tô theo bạn (.+?) nhé! Dùng ngón tay vẽ\.$/, function (m, a) { return "Trace friend " + cap(a) + " with your finger!"; }],
+    [/^Gặp bạn (.+?) nè! Chạm vào bạn để chào nhé!$/, function (m, a) { return "Meet friend " + fr(cap(a)) + "! Tap the friend to say hi!"; }],
+    [/^Tô theo bạn (.+?) nhé! Dùng ngón tay vẽ\.$/, function (m, a) { return "Trace friend " + fr(cap(a)) + " with your finger!"; }],
     [/^Bạn (.+?) đâu nào\?$/, function (m, a) { return "Where is friend " + cap(a) + "?"; }],
     [/^Bạn nào cầm (.+)\?$/, function (m, o) { return "Which friend holds the " + o + (OBJ[o] ? " (" + OBJ[o] + ")" : "") + "?"; }],
-    [/^Bắn bóng bay! Chạm vào các bóng có (.+?) nhé!$/, function (m, a) { return "Pop the balloons! Tap the balloons with " + a + "."; }]
+    [/^Bắn bóng bay! Chạm vào các bóng có số (.+?) nhé!$/, function (m, a) { return "Pop the balloons! Tap the balloons with the number " + (NUM[a] || a) + " (" + a + ")."; }],
+    [/^Bắn bóng bay! Chạm vào các bóng có (.+?) nhé!$/, function (m, a) { return "Pop the balloons! Tap the balloons with " + a + "."; }],
+    [/^Bạn (.+?) đói rồi! Chạm vào (.+?) (quả táo|cái bánh|quả dâu|quả chuối|củ cà rốt|quả nho) cho bạn ăn nhé!$/, function (m, n, c, f) { return "Friend " + (NUM[n] || n) + " is hungry! Tap " + (NUM[c] || c) + " " + FOOD[f] + " (" + c + " " + f + ") to feed them!"; }]
   ];
   function cap(a) { return / hoa$/.test(a) ? a + " (capital)" : a; }   /* "a hoa" = chữ A viết hoa */
   var DICT = {
@@ -4758,6 +4766,1424 @@ window.LEARN_CURRICULUM={"v":2,"subjects":{"toan":{"name":"Toán","grades":[{"gr
       "Greet, say the main idea, say thanks",
     "Nhận xét lịch sự":
       "Comment politely"
+  });
+})(window);
+
+;
+/* ---- ../content/lesson-en-tanh-a.js ---- */
+/* Bản dịch lời bài học môn Tiếng Anh sang tiếng Anh (giao diện English). Nạp sau lesson-en.js. Chữ/từ ví dụ giữ nguyên. */
+(function (root) {
+  "use strict";
+  if (!root.LessonEN) return;
+  root.LessonEN.add({
+    "Học chào hỏi tiếng Anh! Chạm để nghe.":
+      "Let's learn English greetings! Tap to listen.",
+    "Hello là xin chào. Goodbye là tạm biệt.":
+      "Hello means \"xin chào\". Goodbye means \"tạm biệt\".",
+    "Hỏi tên rồi trả lời nhé!":
+      "Ask a name, then answer!",
+    "Gặp bạn, em nói gì?":
+      "What do you say when you meet a friend?",
+    "Đúng rồi! Hello là xin chào.":
+      "Correct! Hello means \"xin chào\".",
+    "Gặp nhau thì chào.":
+      "When you meet, you greet.",
+    "Chia tay bạn, em nói gì?":
+      "What do you say when you part from a friend?",
+    "Giỏi quá! Goodbye là tạm biệt.":
+      "Great job! Goodbye means \"tạm biệt\".",
+    "Chia tay thì nói tạm biệt.":
+      "When you part, you say goodbye.",
+    "Em nhớ nhé!":
+      "Remember!",
+    "Hello: xin chào":
+      "Hello: \"xin chào\"",
+    "Goodbye: tạm biệt":
+      "Goodbye: \"tạm biệt\"",
+    "My name is ...: tên mình là ...":
+      "My name is ...: \"tên mình là ...\"",
+    "Cùng học từ mới: số, màu sắc và gia đình. Chạm để nghe!":
+      "Let's learn new words: numbers, colors, and family. Tap to listen!",
+    "Màu đỏ là red, màu xanh là blue, màu vàng là yellow.":
+      "The color \"đỏ\" is red, \"xanh\" is blue, \"vàng\" is yellow.",
+    "Mẹ là mom. Ba là dad.":
+      "\"Mẹ\" is mom. \"Ba\" is dad.",
+    "Màu đỏ tiếng Anh là gì?":
+      "What is the color \"đỏ\" in English?",
+    "Đúng rồi! Red là màu đỏ.":
+      "Correct! Red is \"đỏ\".",
+    "Nhớ nhé: red là đỏ.":
+      "Remember: red is \"đỏ\".",
+    "Màu này tiếng Anh là gì?":
+      "What is this color called in English?",
+    "Giỏi quá! Blue là xanh dương.":
+      "Great job! Blue is \"xanh dương\".",
+    "Màu của bầu trời.":
+      "The color of the sky.",
+    "Có mấy quả? Chọn từ đúng.":
+      "How many are there? Choose the right word.",
+    "Giỏi quá! Two là số hai.":
+      "Great job! Two is \"hai\".",
+    "Đếm: one, two, three.":
+      "Count: one, two, three.",
+    "Mẹ tiếng Anh là gì?":
+      "What is \"mẹ\" in English?",
+    "Đúng rồi! Mom là mẹ.":
+      "Correct! Mom is \"mẹ\".",
+    "Mẹ là mom.":
+      "\"Mẹ\" is mom.",
+    "red: đỏ, blue: xanh dương, yellow: vàng":
+      "red: \"đỏ\", blue: \"xanh dương\", yellow: \"vàng\"",
+    "mom: mẹ, dad: ba":
+      "mom: \"mẹ\", dad: \"ba\"",
+    "one, two, three: một, hai, ba":
+      "one, two, three: \"một, hai, ba\"",
+    "Bắt chước cách phát âm nhé! Chạm vào từ, nghe rồi đọc theo.":
+      "Copy the pronunciation! Tap a word, listen, then say it.",
+    "Cat là con mèo. Dog là con chó.":
+      "Cat is \"con mèo\". Dog is \"con chó\".",
+    "Đọc cùng nhé: How are you? I'm fine, thank you.":
+      "Read along: How are you? I'm fine, thank you.",
+    "Con mèo tiếng Anh là gì?":
+      "What is \"con mèo\" in English?",
+    "Đúng rồi! Cat là con mèo.":
+      "Correct! Cat is \"con mèo\".",
+    "Meo meo: cat.":
+      "Meow meow: cat.",
+    "Con cá tiếng Anh là gì?":
+      "What is \"con cá\" in English?",
+    "Giỏi quá! Fish là con cá.":
+      "Great job! Fish is \"con cá\".",
+    "Con vật sống dưới nước.":
+      "An animal that lives in water.",
+    "Chọn hình của từ dog.":
+      "Choose the picture for the word dog.",
+    "Đúng rồi! Dog là con chó.":
+      "Correct! Dog is \"con chó\".",
+    "Gâu gâu: dog.":
+      "Woof woof: dog.",
+    "Nghe rồi đọc theo":
+      "Listen, then repeat",
+    "How are you?: bạn khỏe không?":
+      "How are you?: \"bạn khỏe không?\"",
+    "I'm fine: mình khỏe":
+      "I'm fine: \"mình khỏe\"",
+    "Hôm nay mình học: Nghe hiểu chỉ dẫn.":
+      "Today we learn: Understanding instructions.",
+    "Em nghe chỉ dẫn rồi làm theo: Stand up! Sit down!":
+      "Listen to the instruction, then do it: Stand up! Sit down!",
+    "Nghe kỹ từng từ nhé.":
+      "Listen carefully to each word.",
+    "Stand up! nghĩa là gì?":
+      "What does \"Stand up!\" mean?",
+    "Đúng rồi! Đáp án là Đứng lên.":
+      "Correct! The answer is Đứng lên.",
+    "Nghe lại từ khoá trong câu tiếng Anh, rồi nghĩ nghĩa của nó.":
+      "Listen again for the key word in the English sentence, then think about its meaning.",
+    "Sit down! nghĩa là gì?":
+      "What does \"Sit down!\" mean?",
+    "Đúng rồi! Đáp án là Ngồi xuống.":
+      "Correct! The answer is Ngồi xuống.",
+    "Open your book. Em làm gì?":
+      "Open your book. What do you do?",
+    "Đúng rồi! Đáp án là Mở sách.":
+      "Correct! The answer is Mở sách.",
+    "Stand up = đứng lên":
+      "Stand up = \"đứng lên\"",
+    "Sit down = ngồi xuống":
+      "Sit down = \"ngồi xuống\"",
+    "Nói theo mẫu: Hello! I am Nam. How are you?":
+      "Say it after the model: Hello! I am Nam. How are you?",
+    "Trả lời: I am fine, thank you.":
+      "Answer: I am fine, thank you.",
+    "Chào tạm biệt: Goodbye! See you.":
+      "Say goodbye: Goodbye! See you.",
+    "Ai đó nói \"Hello!\". Em đáp lại?":
+      "Someone says \"Hello!\". What do you say back?",
+    "Đúng! Hello.":
+      "Correct! Hello.",
+    "Người ta chào, mình cũng chào.":
+      "When people greet you, greet them back.",
+    "\"How are you?\" là hỏi gì?":
+      "What does \"How are you?\" ask?",
+    "Đúng! Bạn khoẻ không?":
+      "Correct! It asks \"Bạn khoẻ không?\"",
+    "Hỏi sức khoẻ.":
+      "Asking how someone is.",
+    "Trả lời \"How are you?\"":
+      "Answer \"How are you?\"",
+    "Đúng! I am fine.":
+      "Correct! I am fine.",
+    "Nói mình khoẻ.":
+      "Say that you are well.",
+    "Hello là xin chào, Goodbye là tạm biệt":
+      "Hello means \"xin chào\", Goodbye means \"tạm biệt\"",
+    "My name is ... là tên của em":
+      "\"My name is ...\" tells your name",
+    "Con vật: cat là mèo, dog là chó, bird là chim.":
+      "Animals: cat is \"mèo\", dog is \"chó\", bird is \"chim\".",
+    "Màu sắc: red là đỏ, blue là xanh dương, yellow là vàng.":
+      "Colors: red is \"đỏ\", blue is \"xanh dương\", yellow is \"vàng\".",
+    "Số: one, two, three. Và ngày trong tuần: Monday là thứ Hai.":
+      "Numbers: one, two, three. And days of the week: Monday is \"thứ Hai\".",
+    "Đây là con gì?":
+      "What animal is this?",
+    "Đúng! cat.":
+      "Correct! cat.",
+    "Nghe tiếng kêu meo meo.":
+      "Listen to the sound meow meow.",
+    "Đúng! dog.":
+      "Correct! dog.",
+    "Nghe tiếng kêu gâu gâu.":
+      "Listen to the sound woof woof.",
+    "Đúng! red.":
+      "Correct! red.",
+    "Nhìn màu của quả táo.":
+      "Look at the color of the apple.",
+    "cat mèo, dog chó, bird chim":
+      "cat \"mèo\", dog \"chó\", bird \"chim\"",
+    "red đỏ, blue xanh dương, yellow vàng":
+      "red \"đỏ\", blue \"xanh dương\", yellow \"vàng\"",
+    "one, two, three là một, hai, ba":
+      "one, two, three are \"một, hai, ba\"",
+    "Hôm nay mình học: Nghe (Listening).":
+      "Today we learn: Listening.",
+    "Nghe từ và cụm từ, rồi chọn thông tin đúng.":
+      "Listen to words and phrases, then choose the right information.",
+    "Nghe kỹ con số, màu sắc và tên.":
+      "Listen carefully for numbers, colors, and names.",
+    "I like apples. Em thích gì?":
+      "I like apples. What does the speaker like?",
+    "Đúng rồi! Đáp án là Táo.":
+      "Correct! The answer is Táo (apples).",
+    "It is Monday. Hôm nay là thứ mấy?":
+      "It is Monday. What day is it today?",
+    "Đúng rồi! Đáp án là Thứ Hai.":
+      "Correct! The answer is Thứ Hai (Monday).",
+    "She is eight. Cô em mấy tuổi?":
+      "She is eight. How old is she?",
+    "Đúng rồi! Đáp án là 8 tuổi.":
+      "Correct! The answer is 8 tuổi (8 years old).",
+    "Nghe kỹ từ khoá":
+      "Listen for the key word",
+    "Chọn đáp án hợp với điều đã nghe":
+      "Choose the answer that matches what you heard",
+    "I am, you are, he is, she is. Dùng am, is, are đúng với chủ ngữ.":
+      "I am, you are, he is, she is. Use am, is, are to match the subject.",
+    "Hỏi thăm: How are you? — I am fine. What is your name? — My name is Lan.":
+      "Asking how someone is: How are you? — I am fine. What is your name? — My name is Lan.",
+    "Hỏi đáp ngắn: Is this a cat? — Yes, it is.":
+      "Short questions and answers: Is this a cat? — Yes, it is.",
+    "Điền am, is hay are: I __ a student.":
+      "Fill in am, is, or are: I __ a student.",
+    "Đúng! I am.":
+      "Correct! I am.",
+    "Chủ ngữ là I.":
+      "The subject is I.",
+    "Điền am, is hay are: She __ my friend.":
+      "Fill in am, is, or are: She __ my friend.",
+    "Đúng! She is.":
+      "Correct! She is.",
+    "Chủ ngữ là một người (số ít).":
+      "The subject is one person (singular).",
+    "Điền am, is hay are: They __ happy.":
+      "Fill in am, is, or are: They __ happy.",
+    "Đúng! They are.":
+      "Correct! They are.",
+    "They chỉ nhiều người.":
+      "They means more than one person.",
+    "Hỏi tên: What is your name?":
+      "Asking a name: What is your name?",
+    "Hỏi thăm: How are you?":
+      "Asking how someone is: How are you?",
+    "Đọc câu ngắn, tìm từ chính để hiểu nghĩa.":
+      "Read short sentences and find the main word to understand the meaning.",
+    "Ngày trong tuần: Monday thứ Hai, Tuesday thứ Ba, Sunday Chủ nhật.":
+      "Days of the week: Monday is \"thứ Hai\", Tuesday is \"thứ Ba\", Sunday is \"Chủ nhật\".",
+    "Số: ten là mười, twenty là hai mươi.":
+      "Numbers: ten is \"mười\", twenty is \"hai mươi\".",
+    "\"I like apples.\" nghĩa là?":
+      "What does \"I like apples.\" mean?",
+    "Đúng! Tôi thích táo.":
+      "Correct! \"Tôi thích táo.\""
+  });
+})(window);
+
+;
+/* ---- ../content/lesson-en-tanh-b.js ---- */
+/* Bản dịch lời bài học môn Tiếng Anh sang tiếng Anh (giao diện English). Nạp sau lesson-en.js. Chữ/từ ví dụ giữ nguyên. */
+(function (root) {
+  "use strict";
+  if (!root.LessonEN) return;
+  root.LessonEN.add({
+    "Tìm từ like.":
+      "Find the word like.",
+    "Sunday là ngày nào?":
+      "Which day is Sunday?",
+    "Đúng! Chủ nhật.":
+      "Correct! Chủ nhật.",
+    "Đây là ngày cuối tuần.":
+      "This is a weekend day.",
+    "Monday là ngày nào?":
+      "Which day is Monday?",
+    "Đúng! Thứ Hai.":
+      "Correct! Thứ Hai.",
+    "Ngày đầu tuần.":
+      "The first day of the week.",
+    "Đọc câu ngắn, tìm từ chính":
+      "Read short sentences and find the main word",
+    "Ngày trong tuần: Monday ... Sunday":
+      "Days of the week: Monday ... Sunday",
+    "Số: ten 10, twenty 20":
+      "Numbers: ten 10, twenty 20",
+    "Dùng a trước phụ âm, an trước nguyên âm (a, e, i, o, u).":
+      "Use a before a consonant and an before a vowel (a, e, i, o, u).",
+    "Số nhiều thường thêm s: cat → cats. Từ tận cùng s, x, ch, sh thì thêm es.":
+      "Plurals usually add s: cat → cats. Words ending in s, x, ch, sh add es.",
+    "Viết đúng chính tả: đọc to từng chữ cái.":
+      "Spell correctly: read each letter out loud.",
+    "Điền a hay an: This is __ apple.":
+      "Fill in a or an: This is __ apple.",
+    "Đúng! an apple.":
+      "Correct! an apple.",
+    "Chữ cái đầu của apple là gì?":
+      "What is the first letter of apple?",
+    "Điền a hay an: This is __ dog.":
+      "Fill in a or an: This is __ dog.",
+    "Đúng! a dog.":
+      "Correct! a dog.",
+    "Chữ cái đầu của dog là phụ âm.":
+      "The first letter of dog is a consonant.",
+    "Số nhiều của cat là?":
+      "What is the plural of cat?",
+    "Đúng! cats.":
+      "Correct! cats.",
+    "Thêm s.":
+      "Add s.",
+    "a trước phụ âm, an trước nguyên âm":
+      "a before a consonant, an before a vowel",
+    "Số nhiều thường thêm s":
+      "Plurals usually add s",
+    "Tận cùng x, s, ch, sh thêm es":
+      "Words ending in x, s, ch, sh add es",
+    "Nghe lời nói ngắn rồi tìm thông tin chính.":
+      "Listen to a short talk and find the main information.",
+    "Chú ý giờ giấc, nơi chốn và việc làm.":
+      "Pay attention to times, places, and actions.",
+    "I get up at six. Mấy giờ bạn dậy?":
+      "I get up at six. What time does the speaker get up?",
+    "Đúng rồi! Đáp án là 6 giờ.":
+      "Correct! The answer is 6 giờ (six o'clock).",
+    "He goes to school by bike. Bạn ấy đi bằng gì?":
+      "He goes to school by bike. How does he go?",
+    "Đúng rồi! Đáp án là Xe đạp.":
+      "Correct! The answer is Xe đạp (by bike).",
+    "She can swim. Bạn ấy biết làm gì?":
+      "She can swim. What can she do?",
+    "Đúng rồi! Đáp án là Bơi.":
+      "Correct! The answer is Bơi (swim).",
+    "Nghe giờ, nơi chốn, việc làm":
+      "Listen for time, place, and action",
+    "Chọn thông tin đúng":
+      "Choose the right information",
+    "Câu hỏi Wh: What là gì, Where là ở đâu, Who là ai, When là khi nào.":
+      "Wh-questions: What asks which thing, Where asks the place, Who asks the person, When asks the time.",
+    "Với I thì am, he/she/it thì is, you/we/they thì are.":
+      "With I use am, with he/she/it use is, with you/we/they use are.",
+    "Trả lời đủ câu: Where is the cat? — It is on the bed.":
+      "Answer in a full sentence: Where is the cat? — It is on the bed.",
+    "Hỏi về nơi chốn dùng từ nào?":
+      "Which word asks about a place?",
+    "Đúng! Where.":
+      "Correct! Where.",
+    "Câu hỏi này muốn biết ở đâu.":
+      "This question wants to know the place.",
+    "Hỏi về người dùng từ nào?":
+      "Which word asks about a person?",
+    "Đúng! Who.":
+      "Correct! Who.",
+    "Câu hỏi này muốn biết ai.":
+      "This question wants to know the person.",
+    "Điền: My brother __ ten years old.":
+      "Fill in: My brother __ ten years old.",
+    "Đúng! is.":
+      "Correct! is.",
+    "What là gì, Where là ở đâu, Who là ai":
+      "What asks about a thing, Where asks about a place, Who asks about a person",
+    "am, is, are theo chủ ngữ":
+      "am, is, are depend on the subject",
+    "Trả lời bằng câu đầy đủ":
+      "Answer in a full sentence",
+    "Đọc kỹ cả đoạn rồi tìm câu có đáp án.":
+      "Read the whole passage carefully, then find the sentence with the answer.",
+    "Từ chủ đề: school (trường), family (gia đình), food (đồ ăn).":
+      "Topic words: school, family, food.",
+    "Ngày trong tuần: Friday là thứ Sáu, Saturday là thứ Bảy.":
+      "Days of the week: Friday is \"thứ Sáu\", Saturday is \"thứ Bảy\".",
+    "\"I have a brother.\" nghĩa là?":
+      "What does \"I have a brother.\" mean?",
+    "Đúng! brother.":
+      "Correct! brother.",
+    "Tìm từ brother.":
+      "Find the word brother.",
+    "school nghĩa là?":
+      "What does school mean?",
+    "Đúng! trường học.":
+      "Correct! \"trường học\" (school).",
+    "Nơi em đi học.":
+      "The place where you go to learn.",
+    "Friday là thứ mấy?":
+      "Which day is Friday?",
+    "Đúng! thứ Sáu.":
+      "Correct! Thứ Sáu.",
+    "Sau Thursday.":
+      "It comes after Thursday.",
+    "Đọc kỹ rồi tìm đáp án trong bài":
+      "Read carefully, then find the answer in the text",
+    "Từ vựng: school, family, food":
+      "Vocabulary: school, family, food",
+    "Ngày trong tuần":
+      "Days of the week",
+    "Dùng a trước phụ âm, an trước nguyên âm.":
+      "Use a before a consonant and an before a vowel.",
+    "Với he, she, it, động từ thêm s: He plays.":
+      "With he, she, it the verb adds s: He plays.",
+    "Số nhiều: cat → cats, box → boxes, child → children.":
+      "Plurals: cat → cats, box → boxes, child → children.",
+    "Điền: She __ football.":
+      "Fill in: She __ football.",
+    "Đúng! She plays.":
+      "Correct! She plays.",
+    "Chủ ngữ she là một người.":
+      "The subject she is one person.",
+    "Điền: I __ milk.":
+      "Fill in: I __ milk.",
+    "Đúng! I like.":
+      "Correct! I like.",
+    "Điền a hay an: This is __ orange.":
+      "Fill in a or an: This is __ orange.",
+    "Đúng! an orange.":
+      "Correct! an orange.",
+    "Chữ cái đầu của orange là gì?":
+      "What is the first letter of orange?",
+    "He/She/It: động từ thêm s hoặc es":
+      "He/She/It: add s or es to the verb",
+    "Nghe đoạn nói ngắn và chọn ý đúng.":
+      "Listen to a short talk and choose the right idea.",
+    "Chú ý nghề nghiệp, nơi chốn và thời gian.":
+      "Pay attention to jobs, places, and times.",
+    "We play football on Sunday. Chơi vào ngày nào?":
+      "We play football on Sunday. On which day do they play?",
+    "Đúng rồi! Đáp án là Chủ nhật.":
+      "Correct! The answer is Chủ nhật (Sunday).",
+    "My mother is a doctor. Mẹ làm nghề gì?":
+      "My mother is a doctor. What is her job?",
+    "Đúng rồi! Đáp án là Bác sĩ.":
+      "Correct! The answer is Bác sĩ (doctor).",
+    "I am going to the library. Bạn đi đâu?":
+      "I am going to the library. Where is the speaker going?",
+    "Đúng rồi! Đáp án là Thư viện.":
+      "Correct! The answer is Thư viện (library).",
+    "Nghe kỹ nghề, nơi chốn, thời gian":
+      "Listen for jobs, places, and times",
+    "Loại bỏ đáp án sai":
+      "Cross out the wrong answers",
+    "Câu hỏi Wh: What, Where, When, Who, Why, How.":
+      "Wh-questions: What, Where, When, Who, Why, How.",
+    "Be: I am, he/she/it is, you/we/they are. Hôm qua dùng was/were.":
+      "Be: I am, he/she/it is, you/we/they are. For yesterday use was/were.",
+    "Trả lời đủ ý: Why? — Because ...":
+      "Give a full reason: Why? — Because ...",
+    "Hỏi lý do dùng từ nào?":
+      "Which word asks for a reason?",
+    "Đúng! Why.":
+      "Correct! Why.",
+    "Câu trả lời thường bắt đầu bằng because.":
+      "The answer usually starts with because.",
+    "Điền: My parents __ at home.":
+      "Fill in: My parents __ at home.",
+    "Đúng! are.":
+      "Correct! are.",
+    "Parents là nhiều người.":
+      "Parents means more than one person.",
+    "\"When is your birthday?\" Trả lời?":
+      "\"When is your birthday?\" How do you answer?",
+    "Đúng! In May.":
+      "Correct! In May.",
+    "Nói thời gian.":
+      "Say a time.",
+    "am/is/are và was/were":
+      "am/is/are and was/were",
+    "Đọc đoạn ngắn, tìm ý chính và chi tiết.":
+      "Read a short passage and find the main idea and the details.",
+    "Từ chủ đề: hobby (sở thích), job (nghề), place (nơi chốn).":
+      "Topic words: hobby (\"sở thích\"), job (\"nghề\"), place (\"nơi chốn\").",
+    "Câu phủ định: He does not like fish.":
+      "A negative sentence: He does not like fish.",
+    "\"He is a doctor.\" nghĩa là?":
+      "What does \"He is a doctor.\" mean?",
+    "Đúng! doctor = bác sĩ.":
+      "Correct! doctor = \"bác sĩ\".",
+    "Tìm từ doctor.":
+      "Find the word doctor.",
+    "hobby nghĩa là?":
+      "What does hobby mean?",
+    "Đúng! sở thích.":
+      "Correct! \"sở thích\" (hobby).",
+    "Việc em thích làm lúc rảnh.":
+      "Something you like to do in your free time.",
+    "\"She does not like fish.\" nghĩa là?":
+      "What does \"She does not like fish.\" mean?",
+    "Đúng! Không thích.":
+      "Correct! She does not like it.",
+    "Chú ý does not.":
+      "Watch for does not.",
+    "Đọc tìm ý chính và chi tiết":
+      "Read for the main idea and details",
+    "Từ: hobby, job, place":
+      "Words: hobby, job, place",
+    "Số nhiều: thêm s, hoặc es sau s, x, ch, sh. Bất quy tắc: child → children.":
+      "Plurals: add s, or es after s, x, ch, sh. Irregular: child → children.",
+    "He, she, it: động từ thêm s hoặc es.":
+      "He, she, it: add s or es to the verb."
+  });
+})(window);
+
+;
+/* ---- ../content/lesson-en-tanh-c.js ---- */
+/* Bản dịch lời bài học môn Tiếng Anh sang tiếng Anh (giao diện English). Nạp sau lesson-en.js. Chữ/từ ví dụ giữ nguyên. */
+(function (root) {
+  "use strict";
+  if (!root.LessonEN) return;
+  root.LessonEN.add({
+    "Viết đúng chính tả: đọc to rồi viết.":
+      "Spell correctly: read it aloud, then write it.",
+    "Số nhiều của child là?":
+      "What is the plural of child?",
+    "Đúng! children.":
+      "Correct! children.",
+    "Đây là từ bất quy tắc.":
+      "This is an irregular word.",
+    "Số nhiều của box là?":
+      "What is the plural of box?",
+    "Đúng! boxes.":
+      "Correct! boxes.",
+    "Tận cùng x thì thêm es.":
+      "Words ending in x add es.",
+    "Điền: She __ breakfast every day.":
+      "Fill in: She __ breakfast every day.",
+    "Đúng! eats.":
+      "Correct! eats.",
+    "Số nhiều: s, es, bất quy tắc":
+      "Plurals: s, es, irregular",
+    "He/She/It: động từ thêm s, es":
+      "He/She/It: add s or es to the verb",
+    "Đọc to rồi viết đúng chính tả":
+      "Read aloud, then spell correctly"
+  });
+})(window);
+
+;
+/* ---- ../content/lesson-en-toan-a.js ---- */
+/* Bản dịch lời bài học TOÁN sang tiếng Anh (giao diện English). Nạp sau lesson-en.js. */
+(function (root) {
+  "use strict";
+  if (!root.LessonEN) return;
+  root.LessonEN.add({
+    "Cộng là gộp. Trừ là bớt!":
+      "Addition means putting together. Subtraction means taking away!",
+    "Chạm Gộp lại nhé!":
+      "Tap \"Put together\"!",
+    "3 + 2 = 5. Có 5 quả táo!":
+      "3 + 2 = 5. There are 5 apples!",
+    "Em ăn 2 cái bánh. Chạm vào 2 cái!":
+      "You eat 2 cookies. Tap 2 of them!",
+    "5 − 2 = 3. Còn 3 cái bánh!":
+      "5 − 2 = 3. 3 cookies are left!",
+    "Gộp các chú cá lại nào!":
+      "Put the fish together!",
+    "2 + 4 = 6. Có 6 chú cá!":
+      "2 + 4 = 6. There are 6 fish!",
+    "Tất cả có mấy quả?":
+      "How many are there in all?",
+    "Đúng rồi! 4 + 3 = 7.":
+      "Correct! 4 + 3 = 7.",
+    "Đếm hết các quả dâu nhé.":
+      "Count all the strawberries.",
+    "Bóng bay mất 1 quả. Chạm 1 quả!":
+      "1 balloon floats away. Tap 1 balloon!",
+    "6 − 1 = 5. Còn 5 quả bóng!":
+      "6 − 1 = 5. 5 balloons are left!",
+    "Còn lại mấy quả bóng?":
+      "How many balloons are left?",
+    "Giỏi quá! 6 − 2 = 4.":
+      "Great job! 6 − 2 = 4.",
+    "Bớt đi thì còn ít hơn lúc đầu.":
+      "Taking away leaves fewer than at the start.",
+    "Cộng là gộp lại":
+      "Addition means putting together",
+    "Trừ là bớt đi":
+      "Subtraction means taking away",
+    "Đếm tiếp để cộng, đếm lùi để trừ":
+      "Count on to add, count back to subtract",
+    "Mình cùng xếp các thứ giống nhau vào một nhóm nhé!":
+      "Let's sort things that are the same into one group!",
+    "Chạm vào từng quả táo để đếm nào!":
+      "Tap each apple to count!",
+    "Có 3 quả táo!":
+      "There are 3 apples!",
+    "Chạm đếm các quả chuối!":
+      "Tap to count the bananas!",
+    "Có 2 quả chuối!":
+      "There are 2 bananas!",
+    "Có thể xếp theo màu, theo hình hoặc theo loại.":
+      "You can sort by color, shape, or kind.",
+    "Có mấy quả táo?":
+      "How many apples are there?",
+    "Đúng rồi! Có 3 quả táo.":
+      "Correct! There are 3 apples.",
+    "Chỉ đếm quả táo, không đếm chuối nhé.":
+      "Count only the apples, not the bananas.",
+    "Nhóm nào nhiều hơn?":
+      "Which group has more?",
+    "Giỏi quá! 3 nhiều hơn 2.":
+      "Great job! 3 is more than 2.",
+    "So sánh 2 và 3: số nào lớn hơn?":
+      "Compare 2 and 3: which number is greater?",
+    "Nhóm nào ít hơn?":
+      "Which group has fewer?",
+    "Đúng rồi! 2 ít hơn 4.":
+      "Correct! 2 is fewer than 4.",
+    "Đếm từng nhóm rồi so sánh.":
+      "Count each group, then compare.",
+    "Xếp các thứ giống nhau vào một nhóm":
+      "Sort things that are the same into one group",
+    "Đếm từng nhóm":
+      "Count each group",
+    "So sánh nhóm nào nhiều, ít hơn":
+      "Compare which group has more or fewer",
+    "Xung quanh em có rất nhiều hình đấy!":
+      "There are lots of shapes around you!",
+    "Hình tròn tròn trịa, không có góc. Giống bánh xe!":
+      "A circle is perfectly round and has no corners. Like a wheel!",
+    "Hình vuông có 4 cạnh bằng nhau.":
+      "A square has 4 equal sides.",
+    "Hình tam giác có 3 cạnh và 3 góc.":
+      "A triangle has 3 sides and 3 corners.",
+    "Hình chữ nhật có 4 cạnh: 2 cạnh dài và 2 cạnh ngắn.":
+      "A rectangle has 4 sides: 2 long sides and 2 short sides.",
+    "Chạm đếm các hình tròn!":
+      "Tap to count the circles!",
+    "Có 4 hình tròn!":
+      "There are 4 circles!",
+    "Bánh xe hình nào?":
+      "What shape is a wheel?",
+    "Đúng rồi! Bánh xe hình tròn.":
+      "Correct! A wheel is a circle.",
+    "Hình nào tròn trịa, lăn được?":
+      "Which shape is perfectly round and can roll?",
+    "Hình nào có 3 cạnh?":
+      "Which shape has 3 sides?",
+    "Giỏi quá! Tam giác có 3 cạnh.":
+      "Great job! A triangle has 3 sides.",
+    "Tam giác: tam là ba đó.":
+      "Triangle: \"tam\" means three.",
+    "Hình nào có 4 cạnh bằng nhau?":
+      "Which shape has 4 equal sides?",
+    "Đúng rồi! Hình vuông.":
+      "Correct! A square.",
+    "Nghĩ tới viên gạch men vuông.":
+      "Think of a square floor tile.",
+    "Còn các bạn hình khối nữa nè! Chạm vào từng bạn nhé.":
+      "There are solid shapes too! Tap each friend.",
+    "Quả bóng giống khối nào?":
+      "Which solid is a ball like?",
+    "Đúng rồi! Quả bóng là khối cầu.":
+      "Correct! A ball is a sphere.",
+    "Khối nào lăn tròn được?":
+      "Which solid can roll?",
+    "Lon nước giống khối nào?":
+      "Which solid is a drink can like?",
+    "Giỏi quá! Lon nước là khối trụ.":
+      "Great job! A can is a cylinder.",
+    "Lon nước tròn và cao, đứng được.":
+      "A can is round and tall, and it can stand up.",
+    "Hình tròn: không có góc":
+      "Circle: no corners",
+    "Hình vuông: 4 cạnh bằng nhau":
+      "Square: 4 equal sides",
+    "Hình tam giác: 3 cạnh":
+      "Triangle: 3 sides",
+    "Khối cầu, khối trụ, khối hộp là các hình khối":
+      "Sphere, cylinder, and box are solid shapes",
+    "Dài hơn, ngắn hơn, nặng hơn, nhẹ hơn!":
+      "Longer, shorter, heavier, lighter!",
+    "Con nào nặng hơn?":
+      "Which animal is heavier?",
+    "Đúng rồi! Con voi nặng hơn nhiều.":
+      "Correct! The elephant is much heavier.",
+    "Con nào to hơn thì thường nặng hơn.":
+      "The bigger one is usually heavier.",
+    "Cái nào nhẹ hơn?":
+      "Which one is lighter?",
+    "Giỏi quá! Bóng bay rất nhẹ.":
+      "Great job! A balloon is very light.",
+    "Cái nào bay lên được?":
+      "Which one can float up?",
+    "Kim ngắn chỉ giờ, kim dài chỉ số 12.":
+      "The short hand shows the hour, the long hand points to 12.",
+    "Đồng hồ chỉ mấy giờ?":
+      "What time does the clock show?",
+    "Giỏi quá! Đó là 5 giờ.":
+      "Great job! It is 5 o'clock.",
+    "Kim ngắn chỉ giờ. Nó chỉ số mấy?":
+      "The short hand shows the hour. Which number does it point to?",
+    "Tiền Việt Nam có tờ 1 000, 2 000, 5 000 đồng.":
+      "Vietnamese money has 1 000, 2 000, and 5 000 đồng notes.",
+    "Tờ 2 000 và tờ 5 000. Tất cả?":
+      "A 2 000 note and a 5 000 note. How much in all?",
+    "Đúng rồi! 2 000 cộng 5 000 là 7 000.":
+      "Correct! 2 000 plus 5 000 is 7 000.",
+    "Gộp lại thì cộng: 2 cộng 5 là mấy?":
+      "Putting together means adding: what is 2 plus 5?",
+    "Chạm đếm 7 ngày trong tuần!":
+      "Tap to count the 7 days of the week!",
+    "Một tuần có 7 ngày!":
+      "A week has 7 days!",
+    "Dài hơn, ngắn hơn, nặng hơn, nhẹ hơn":
+      "Longer, shorter, heavier, lighter",
+    "Kim ngắn chỉ giờ":
+      "The short hand shows the hour",
+    "Một tuần có 7 ngày":
+      "A week has 7 days",
+    "Cùng đếm và đọc số nhé!":
+      "Let's count and read numbers!",
+    "Chạm vào từng quả táo để đếm!":
+      "Tap each apple to count!",
+    "Có 6 quả táo. Đó là số 6!":
+      "There are 6 apples. That is the number 6!",
+    "Chạm đếm các ngôi sao!":
+      "Tap to count the stars!",
+    "Có 8 ngôi sao. Đó là số 8!":
+      "There are 8 stars. That is the number 8!",
+    "10 que tính buộc thành 1 bó: 1 chục.":
+      "10 sticks tied into 1 bundle: 1 ten.",
+    "Số 23 có 2 chục và 3 đơn vị.":
+      "The number 23 has 2 tens and 3 ones.",
+    "Số này có mấy chục?":
+      "How many tens does this number have?",
+    "Đúng rồi! Số 45 có 4 chục.":
+      "Correct! The number 45 has 4 tens.",
+    "Mỗi 🟦 là 1 chục. Đếm 🟦 nhé.":
+      "Each 🟦 is 1 ten. Count the 🟦.",
+    "Số nào lớn hơn?":
+      "Which number is greater?",
+    "Giỏi quá! 8 chục nhiều hơn 3 chục.":
+      "Great job! 8 tens is more than 3 tens.",
+    "So sánh số chục trước.":
+      "Compare the tens first.",
+    "Đếm tiếp: 48, 49, ?":
+      "Keep counting: 48, 49, ?",
+    "Đúng rồi! Sau 49 là 50.":
+      "Correct! After 49 comes 50.",
+    "Sau 49 là số tròn chục nào?":
+      "After 49, which round ten comes next?",
+    "Đếm từng vật một":
+      "Count the things one by one",
+    "10 đơn vị là 1 chục":
+      "10 ones make 1 ten",
+    "So sánh số chục trước":
+      "Compare the tens first",
+    "Xin chào! Cùng gặp các bạn Số nhé! Chạm vào số để nghe.":
+      "Hello! Let's meet the Number friends! Tap a number to hear it.",
+    "Đếm hình rồi chạm vào đúng bạn Số nhé!":
+      "Count the pictures, then tap the right Number friend!",
+    "Đếm giỏi quá!":
+      "Great counting!",
+    "Mỗi số là một bạn có tên riêng":
+      "Each number is a friend with its own name",
+    "Đếm đồ vật để biết là số mấy":
+      "Count objects to find the number",
+    "Tô số bằng ngón tay giúp mình nhớ lâu":
+      "Tracing numbers with your finger helps you remember",
+    "Phân loại: xếp các vật giống nhau vào cùng một nhóm.":
+      "Sorting: put things that are the same into one group.",
+    "Đếm số lượng mỗi nhóm rồi ghi vào bảng.":
+      "Count each group, then write it in the table.",
+    "Nhìn bảng: số lớn nhất là nhiều nhất, số nhỏ nhất là ít nhất.":
+      "Look at the table: the largest number is the most, the smallest number is the fewest.",
+    "Bảng: Táo 2, Chuối 3, Nho 1. Quả nào nhiều nhất?":
+      "Table: Apples 2, Bananas 3, Grapes 1. Which fruit is the most?",
+    "Đúng! 3 là lớn nhất.":
+      "Correct! 3 is the largest.",
+    "Tìm số lớn nhất.":
+      "Find the largest number.",
+    "Bảng: Táo 2, Chuối 3, Nho 1. Quả nào ít nhất?":
+      "Table: Apples 2, Bananas 3, Grapes 1. Which fruit is the fewest?"
+  });
+})(window);
+
+;
+/* ---- ../content/lesson-en-toan-b.js ---- */
+/* Bản dịch lời bài học TOÁN sang tiếng Anh (giao diện English). Nạp sau lesson-en.js. */
+(function (root) {
+  "use strict";
+  if (!root.LessonEN) return;
+  root.LessonEN.add({
+    "Đúng! 1 là nhỏ nhất.":
+      "Correct! 1 is the smallest.",
+    "Tìm số nhỏ nhất.":
+      "Find the smallest number.",
+    "Có 🐶🐶🐱🐱🐱. Có mấy con mèo?":
+      "There are 🐶🐶🐱🐱🐱. How many cats?",
+    "Đúng! Có 3 con mèo.":
+      "Correct! There are 3 cats.",
+    "Chỉ đếm 🐱.":
+      "Count only 🐱.",
+    "Phân loại: xếp vật giống nhau vào một nhóm":
+      "Sorting: put things that are the same into one group",
+    "Đếm từng nhóm rồi ghi vào bảng":
+      "Count each group, then write it in the table",
+    "Số lớn nhất là nhiều nhất":
+      "The largest number is the most",
+    "Hình tròn không có góc. Hình vuông có 4 cạnh bằng nhau.":
+      "A circle has no corners. A square has 4 equal sides.",
+    "Hình tam giác có 3 cạnh, 3 góc. Hình chữ nhật có 4 cạnh, 4 góc vuông.":
+      "A triangle has 3 sides and 3 corners. A rectangle has 4 sides and 4 right angles.",
+    "Nhìn đồ vật quanh em: quả bóng là hình cầu, hộp quà là hình khối hộp.":
+      "Look at objects around you: a ball is a sphere, a gift box is a cuboid.",
+    "Hình nào có đúng 3 cạnh?":
+      "Which shape has exactly 3 sides?",
+    "Đúng! Tam giác có 3 cạnh.":
+      "Correct! A triangle has 3 sides.",
+    "Đếm số cạnh của từng hình.":
+      "Count the sides of each shape.",
+    "Đúng! Đó là hình vuông.":
+      "Correct! It is a square.",
+    "Hình này có 4 góc vuông và các cạnh bằng nhau.":
+      "This shape has 4 right angles and equal sides.",
+    "Hình nào không có cạnh và không có góc?":
+      "Which shape has no sides and no corners?",
+    "Đúng! Hình tròn không có góc.":
+      "Correct! A circle has no corners.",
+    "Hình này cong tròn đều.":
+      "This shape curves evenly all around.",
+    "Tam giác 3 cạnh, vuông và chữ nhật 4 cạnh":
+      "Triangle: 3 sides; square and rectangle: 4 sides",
+    "Hình tròn không có góc":
+      "A circle has no corners",
+    "Đồ vật quanh ta có dạng các hình quen thuộc":
+      "Objects around us have familiar shapes",
+    "1 mét bằng 100 xăng-ti-mét. 1 ki-lô-gam bằng 1000 gam.":
+      "1 meter equals 100 centimeters. 1 kilogram equals 1000 grams.",
+    "Đọc giờ: kim ngắn chỉ giờ, kim dài chỉ phút. Kim dài ở số 12 là giờ đúng.":
+      "Reading time: the short hand shows the hour, the long hand shows the minutes. The long hand at 12 means o'clock.",
+    "Tiền Việt Nam: cộng các tờ lại để biết tổng.":
+      "Vietnamese money: add the notes together to find the total.",
+    "1 m bằng bao nhiêu cm?":
+      "How many cm is 1 m?",
+    "Đúng! 1 m = 100 cm.":
+      "Correct! 1 m = 100 cm.",
+    "Nhớ: 1 mét có 100 xăng-ti-mét.":
+      "Remember: 1 meter has 100 centimeters.",
+    "2 m bằng bao nhiêu cm?":
+      "How many cm is 2 m?",
+    "Đúng! 2 × 100 = 200.":
+      "Correct! 2 × 100 = 200.",
+    "Mỗi mét là 100 cm, có 2 mét.":
+      "Each meter is 100 cm, and there are 2 meters.",
+    "Kim ngắn chỉ số 3, kim dài chỉ số 12. Là mấy giờ?":
+      "The short hand points to 3, the long hand points to 12. What time is it?",
+    "Đúng! Đó là 3 giờ.":
+      "Correct! It is 3 o'clock.",
+    "Kim ngắn chỉ giờ.":
+      "The short hand shows the hour.",
+    "1 m = 100 cm, 1 kg = 1000 g":
+      "1 m = 100 cm, 1 kg = 1000 g",
+    "Kim ngắn chỉ giờ, kim dài chỉ phút":
+      "The short hand shows the hour, the long hand shows the minutes",
+    "Cộng các tờ tiền để biết tổng":
+      "Add the notes to find the total",
+    "Số 732 có 7 trăm, 3 chục và 2 đơn vị. Mỗi chữ số đứng ở một hàng.":
+      "The number 732 has 7 hundreds, 3 tens, and 2 ones. Each digit sits in its own place.",
+    "Làm tròn đến hàng chục: nhìn hàng đơn vị. Từ 0 đến 4 giữ chục, từ 5 đến 9 thì lên.":
+      "Rounding to the nearest ten: look at the ones digit. 0 to 4 stays, 5 to 9 rounds up.",
+    "Dãy số có quy luật: xem mỗi số hơn số đứng trước bao nhiêu.":
+      "A number pattern has a rule: see how much each number is more than the one before.",
+    "Chữ số hàng chục của số 732 là?":
+      "What is the tens digit of 732?",
+    "Đúng! 732 có 3 chục.":
+      "Correct! 732 has 3 tens.",
+    "Đọc từ trái sang phải: hàng trăm, hàng chục, hàng đơn vị.":
+      "Read from left to right: hundreds, tens, ones.",
+    "Chữ số hàng trăm của số 485 là?":
+      "What is the hundreds digit of 485?",
+    "Đúng! 485 có 4 trăm.":
+      "Correct! 485 has 4 hundreds.",
+    "Chữ số đứng đầu của số có ba chữ số thuộc hàng nào?":
+      "Which place does the first digit of a three-digit number belong to?",
+    "Làm tròn 78 đến hàng chục được số nào?":
+      "What is 78 rounded to the nearest ten?",
+    "Đúng! Hàng đơn vị là 8 nên lên chục.":
+      "Correct! The ones digit is 8, so it rounds up.",
+    "Nhìn hàng đơn vị: nó là 5 trở lên hay nhỏ hơn 5?":
+      "Look at the ones digit: is it 5 or more, or less than 5?",
+    "Số có ba chữ số có hàng trăm, chục, đơn vị":
+      "A three-digit number has hundreds, tens, and ones",
+    "Đơn vị từ 5 trở lên thì làm tròn lên chục":
+      "If the ones digit is 5 or more, round up the tens",
+    "Dãy số: tìm số hơn kém giữa hai số liền nhau":
+      "Number pattern: find the difference between two numbers next to each other",
+    "Cộng có nhớ: cộng hàng đơn vị, đủ 10 thì viết số lẻ và nhớ 1 sang hàng chục.":
+      "Adding with regrouping: add the ones, and when you reach 10, write the extra ones and carry 1 to the tens.",
+    "Biểu thức có cả cộng và nhân: làm phép NHÂN trước, rồi mới cộng.":
+      "An expression with both addition and multiplication: MULTIPLY first, then add.",
+    "Tìm số chưa biết: dùng phép tính ngược lại.":
+      "Finding an unknown number: use the inverse operation.",
+    "Đúng! 38 + 27 = 65.":
+      "Correct! 38 + 27 = 65.",
+    "Hàng đơn vị 8 + 7 được 15: viết 5, nhớ 1.":
+      "Ones: 8 + 7 makes 15: write 5, carry 1.",
+    "Đúng! 3 × 4 = 12, rồi 2 + 12 = 14.":
+      "Correct! 3 × 4 = 12, then 2 + 12 = 14.",
+    "Phép nhân làm trước phép cộng.":
+      "Multiplication comes before addition.",
+    "? + 5 = 12. Số cần tìm là?":
+      "? + 5 = 12. What is the missing number?",
+    "Đúng! 12 − 5 = 7.":
+      "Correct! 12 − 5 = 7.",
+    "Muốn tìm số hạng chưa biết, lấy tổng trừ số hạng đã biết.":
+      "To find an unknown addend, subtract the known addend from the sum.",
+    "Cộng có nhớ: đủ 10 thì nhớ 1 sang hàng chục":
+      "Adding with regrouping: when you reach 10, carry 1 to the tens",
+    "Nhân trước, cộng trừ sau":
+      "Multiply first, add and subtract after",
+    "Số chưa biết: dùng phép tính ngược":
+      "Unknown number: use the inverse operation",
+    "Bảng nhân chia: nhân và chia là hai phép tính ngược nhau.":
+      "Multiplication and division tables: multiplication and division are inverse operations.",
+    "Biểu thức có ngoặc: tính trong ngoặc trước. Không ngoặc: nhân chia trước, cộng trừ sau.":
+      "Expressions with brackets: do what is inside the brackets first. Without brackets: multiply and divide first, then add and subtract.",
+    "Bài toán nhiều gấp mấy lần: dùng phép nhân. Chia đều: dùng phép chia.":
+      "\"How many times as many\" problems use multiplication. Sharing equally uses division.",
+    "Đúng! 6 × 7 = 42.":
+      "Correct! 6 × 7 = 42.",
+    "Nhớ bảng nhân 6: 6 × 6 = 36, rồi cộng thêm 6.":
+      "Remember the 6 times table: 6 × 6 = 36, then add 6 more.",
+    "Đúng! 7 × 8 = 56.":
+      "Correct! 7 × 8 = 56.",
+    "Tìm số nhân với 8 được 56.":
+      "Find the number that times 8 gives 56.",
+    "Đúng! 6 × 5 = 30.":
+      "Correct! 6 × 5 = 30.",
+    "Tính trong ngoặc trước.":
+      "Work out the brackets first.",
+    "Nhân và chia là hai phép ngược nhau":
+      "Multiplication and division are inverse operations",
+    "Trong ngoặc làm trước; nhân chia trước, cộng trừ sau":
+      "Brackets first; multiply and divide before adding and subtracting",
+    "Tìm thừa số: lấy tích chia thừa số kia":
+      "Finding a factor: divide the product by the other factor",
+    "Chia hình thành các phần bằng nhau. Lấy 1 trong 4 phần là một phần tư: 1/4.":
+      "Divide a shape into equal parts. Taking 1 of 4 parts is one quarter: 1/4.",
+    "Phân số có tử số và mẫu số. Mẫu cho biết chia mấy phần, tử cho biết lấy mấy phần.":
+      "A fraction has a numerator and a denominator. The denominator tells how many parts it is divided into, the numerator tells how many parts are taken.",
+    "1/3 của 12 là: chia 12 cho 3.":
+      "1/3 of 12 is: divide 12 by 3.",
+    "Chia chiếc bánh thành 4 phần bằng nhau, lấy 1 phần. Là phân số nào?":
+      "A cake is cut into 4 equal parts and you take 1 part. Which fraction is it?",
+    "Đúng! 1/4.":
+      "Correct! 1/4.",
+    "Mẫu là số phần bằng nhau cả bánh được chia.":
+      "The denominator is the number of equal parts the cake is divided into.",
+    "Trong phân số 3/4, mẫu số là?":
+      "In the fraction 3/4, what is the denominator?",
+    "Đúng! Mẫu số là 4.":
+      "Correct! The denominator is 4.",
+    "Mẫu số nằm dưới gạch ngang.":
+      "The denominator is below the fraction line.",
+    "1/3 của 12 là?":
+      "What is 1/3 of 12?",
+    "Đúng! 12 ÷ 3 = 4.":
+      "Correct! 12 ÷ 3 = 4.",
+    "Chia 12 làm 3 phần bằng nhau.":
+      "Split 12 into 3 equal parts.",
+    "Mẫu: chia mấy phần. Tử: lấy mấy phần":
+      "Denominator: how many parts. Numerator: how many parts taken",
+    "1/b của một số: chia số đó cho b":
+      "1/b of a number: divide that number by b",
+    "Cùng tử số, mẫu càng nhỏ thì phân số càng lớn":
+      "With the same numerator, the smaller the denominator, the greater the fraction",
+    "Góc vuông là góc ở góc cuốn vở. Góc nhỏ hơn gọi là góc nhọn, lớn hơn là góc tù.":
+      "A right angle is like the corner of a notebook. A smaller angle is acute, a larger angle is obtuse.",
+    "Chu vi là độ dài đường bao quanh hình.":
+      "Perimeter is the length of the line around a shape.",
+    "Hình vuông cạnh a có chu vi a × 4.":
+      "A square with side a has perimeter a × 4.",
+    "Góc nhỏ hơn góc vuông gọi là gì?":
+      "What is an angle smaller than a right angle called?",
+    "Đúng! Nhỏ hơn góc vuông là góc nhọn.":
+      "Correct! An angle smaller than a right angle is acute.",
+    "So với góc cuốn vở: nhỏ hơn hay lớn hơn?":
+      "Compare with the corner of a notebook: smaller or larger?",
+    "Góc lớn hơn góc vuông gọi là gì?":
+      "What is an angle larger than a right angle called?",
+    "Đúng! Góc tù.":
+      "Correct! An obtuse angle.",
+    "Góc này mở rộng hơn góc cuốn vở.":
+      "This angle opens wider than the corner of a notebook.",
+    "Hình chữ nhật dài 5 cm, rộng 3 cm. Chu vi là?":
+      "A rectangle is 5 cm long and 3 cm wide. What is the perimeter?",
+    "Đúng! (5 + 3) × 2 = 16.":
+      "Correct! (5 + 3) × 2 = 16.",
+    "Cộng chiều dài và rộng rồi nhân 2.":
+      "Add the length and width, then multiply by 2.",
+    "Nhọn nhỏ hơn vuông, tù lớn hơn vuông":
+      "Acute is smaller than right, obtuse is larger than right",
+    "Chu vi là tổng độ dài các cạnh":
+      "Perimeter is the sum of the lengths of the sides",
+    "Chu vi hình vuông = cạnh × 4":
+      "Perimeter of a square = side × 4",
+    "Diện tích là phần mặt phẳng hình chiếm. Diện tích hình chữ nhật = dài × rộng.":
+      "Area is the amount of flat surface a shape covers. Area of a rectangle = length × width.",
+    "Đổi đơn vị: 1 km = 1000 m, 1 kg = 1000 g, 1 giờ = 60 phút.":
+      "Converting units: 1 km = 1000 m, 1 kg = 1000 g, 1 hour = 60 minutes.",
+    "Thời gian: từ 7 giờ đến 9 giờ là 2 giờ. Tiền: cộng các số lại.":
+      "Time: from 7 o'clock to 9 o'clock is 2 hours. Money: add the amounts.",
+    "Hình chữ nhật dài 6 cm, rộng 4 cm. Diện tích là?":
+      "A rectangle is 6 cm long and 4 cm wide. What is the area?",
+    "Đúng! 6 × 4 = 24.":
+      "Correct! 6 × 4 = 24.",
+    "Diện tích: nhân dài với rộng.":
+      "Area: multiply length by width.",
+    "Hình vuông cạnh 5 cm. Diện tích là?":
+      "A square has side 5 cm. What is the area?",
+    "Đúng! 5 × 5 = 25.":
+      "Correct! 5 × 5 = 25."
+  });
+})(window);
+
+;
+/* ---- ../content/lesson-en-toan-c.js ---- */
+/* Bản dịch lời bài học TOÁN sang tiếng Anh (giao diện English). Nạp sau lesson-en.js. */
+(function (root) {
+  "use strict";
+  if (!root.LessonEN) return;
+  root.LessonEN.add({
+    "Cạnh nhân cạnh.":
+      "Side times side.",
+    "3 km bằng bao nhiêu mét?":
+      "How many meters is 3 km?",
+    "Đúng! 3 × 1000 = 3 000.":
+      "Correct! 3 × 1000 = 3 000.",
+    "1 km là 1000 m.":
+      "1 km is 1000 m.",
+    "Diện tích chữ nhật = dài × rộng":
+      "Area of a rectangle = length × width",
+    "1 km = 1000 m, 1 giờ = 60 phút":
+      "1 km = 1000 m, 1 hour = 60 minutes",
+    "Hơn kém thì trừ, tổng thì cộng":
+      "Difference: subtract. Total: add",
+    "Số đến 100 000: 45 213 gồm 4 chục nghìn, 5 nghìn, 2 trăm, 1 chục, 3 đơn vị.":
+      "Numbers up to 100 000: 45 213 is 4 ten-thousands, 5 thousands, 2 hundreds, 1 ten, 3 ones.",
+    "Làm tròn đến hàng trăm: nhìn chữ số hàng chục. Từ 5 trở lên thì lên một trăm.":
+      "Rounding to the nearest hundred: look at the tens digit. From 5 up rounds to the next hundred.",
+    "I = 1, V = 5, X = 10. Số nhỏ đứng SAU thì cộng (XI = 11), đứng TRƯỚC thì trừ.":
+      "I = 1, V = 5, X = 10. A smaller number AFTER adds (XI = 11), BEFORE subtracts.",
+    "Trong số 45 213, chữ số 5 ở hàng nào?":
+      "In the number 45 213, which place is the digit 5 in?",
+    "Đúng! 5 nghìn.":
+      "Correct! 5 thousands.",
+    "Đếm từ phải sang: đơn vị, chục, trăm, nghìn...":
+      "Count from the right: ones, tens, hundreds, thousands...",
+    "Giá trị của chữ số 2 trong 45 213 là?":
+      "What is the value of the digit 2 in 45 213?",
+    "Đúng! 200.":
+      "Correct! 200.",
+    "Chữ số 2 đứng ở hàng trăm.":
+      "The digit 2 is in the hundreds place.",
+    "Làm tròn 1 270 đến hàng trăm được?":
+      "What is 1 270 rounded to the nearest hundred?",
+    "Đúng! Hàng chục là 7 nên lên.":
+      "Correct! The tens digit is 7, so it rounds up.",
+    "Nhìn hàng chục: từ 5 trở lên thì lên.":
+      "Look at the tens digit: from 5 up rounds up.",
+    "Đọc số theo hàng: chục nghìn, nghìn, trăm...":
+      "Read a number by place: ten thousands, thousands, hundreds...",
+    "Làm tròn: nhìn chữ số ở hàng kề bên phải":
+      "Rounding: look at the digit in the place to its right",
+    "La Mã: I = 1, V = 5, X = 10":
+      "Roman: I = 1, V = 5, X = 10",
+    "Bảng số liệu ghi số lượng của mỗi loại.":
+      "A data table records the count of each kind.",
+    "Nhiều nhất là số lớn nhất, ít nhất là số nhỏ nhất. Hơn bao nhiêu thì trừ.":
+      "The most is the largest number, the fewest is the smallest. \"How many more\" means subtract.",
+    "Có thể xảy ra, chắc chắn hay không thể: ví dụ ngày mai mặt trời mọc là chắc chắn.":
+      "Possible, certain, or impossible: for example, the sun rising tomorrow is certain.",
+    "Lớp có 5 bạn thích mèo, 8 bạn thích chó. Bên nào nhiều hơn?":
+      "The class has 5 children who like cats and 8 who like dogs. Which side has more?",
+    "Đúng rồi! Đáp án là Thích chó.":
+      "Correct! The answer is Thích chó (likes dogs).",
+    "So sánh 5 và 8: số nào lớn hơn?":
+      "Compare 5 and 8: which number is greater?",
+    "Tổ 1 hái 12 quả, tổ 2 hái 9 quả. Cả hai tổ hái mấy quả?":
+      "Group 1 picked 12 fruits and group 2 picked 9. How many did both groups pick?",
+    "Đúng rồi! Đáp án là 21.":
+      "Correct! The answer is 21.",
+    "Gộp lại thì dùng phép cộng.":
+      "Putting together means addition.",
+    "Bảng có: Cam 7, Táo 4, Lê 6. Loại nào ít nhất?":
+      "The table shows: Oranges 7, Apples 4, Pears 6. Which kind is the fewest?",
+    "Đúng rồi! Đáp án là Táo.":
+      "Correct! The answer is Táo (apples).",
+    "Tìm số nhỏ nhất trong 7, 4, 6.":
+      "Find the smallest number among 7, 4, 6.",
+    "Bảng số liệu giúp ta so sánh các số":
+      "A data table helps us compare numbers",
+    "Gộp lại thì cộng, hơn kém thì trừ":
+      "Put together to add, find the difference to subtract",
+    "Phân số bằng nhau: nhân hoặc chia cả tử và mẫu với CÙNG một số.":
+      "Equal fractions: multiply or divide the numerator and denominator by the SAME number.",
+    "Rút gọn: chia cả tử và mẫu cho cùng một số. Cộng phân số cùng mẫu: cộng tử, giữ mẫu.":
+      "Simplifying: divide the numerator and denominator by the same number. Adding fractions with the same denominator: add the numerators, keep the denominator.",
+    "a/b của một số: chia số đó cho b rồi nhân với a.":
+      "a/b of a number: divide the number by b, then multiply by a.",
+    "Phân số nào bằng 4/5?":
+      "Which fraction equals 4/5?",
+    "Đúng! Nhân đôi cả tử và mẫu.":
+      "Correct! Double both the numerator and denominator.",
+    "Nhân cả tử và mẫu với cùng một số.":
+      "Multiply the numerator and denominator by the same number.",
+    "Đúng! Nhân cả hai với 3.":
+      "Correct! Multiply both by 3.",
+    "Mẫu nhân với mấy để được 12?":
+      "What do you multiply the denominator by to get 12?",
+    "Đúng! 5 + 6 = 11, mẫu giữ 12.":
+      "Correct! 5 + 6 = 11, the denominator stays 12.",
+    "Cùng mẫu: cộng tử số, giữ nguyên mẫu.":
+      "Same denominator: add the numerators and keep the denominator.",
+    "Phân số bằng nhau: nhân hoặc chia cả tử và mẫu cho cùng số":
+      "Equal fractions: multiply or divide the numerator and denominator by the same number",
+    "Cùng mẫu: cộng hoặc trừ tử, giữ mẫu":
+      "Same denominator: add or subtract the numerators, keep the denominator",
+    "a/b của một số: chia cho b rồi nhân a":
+      "a/b of a number: divide by b, then multiply by a",
+    "Dùng thước đo góc để đo: đặt tâm vào đỉnh góc, một cạnh ở số 0.":
+      "Use a protractor to measure: put the center on the vertex, one side on 0.",
+    "Góc nhọn nhỏ hơn 90°. Góc vuông bằng 90°. Góc tù lớn hơn 90°.":
+      "An acute angle is less than 90°. A right angle equals 90°. An obtuse angle is more than 90°.",
+    "Góc bẹt bằng 180°, đó là một đường thẳng.":
+      "A straight angle equals 180°: it is a straight line.",
+    "Góc 60° là góc gì?":
+      "What kind of angle is 60°?",
+    "Đúng! 60° nhỏ hơn 90°.":
+      "Correct! 60° is less than 90°.",
+    "So 60° với 90°.":
+      "Compare 60° with 90°.",
+    "Góc 120° là góc gì?":
+      "What kind of angle is 120°?",
+    "Đúng! Giữa 90° và 180°.":
+      "Correct! Between 90° and 180°.",
+    "So 120° với 90° và 180°.":
+      "Compare 120° with 90° and 180°.",
+    "Góc vuông bằng bao nhiêu độ?":
+      "How many degrees is a right angle?",
+    "Đúng! 90°.":
+      "Correct! 90°.",
+    "Góc ở góc cuốn vở.":
+      "The corner of a notebook.",
+    "Nhọn nhỏ hơn 90°, vuông bằng 90°, tù lớn hơn 90°":
+      "Acute is less than 90°, right equals 90°, obtuse is more than 90°",
+    "Góc bẹt = 180°":
+      "Straight angle = 180°",
+    "Đo góc: tâm thước ở đỉnh góc, một cạnh ở số 0":
+      "Measuring an angle: protractor center on the vertex, one side on 0",
+    "Số lớn chia thành lớp: lớp đơn vị, lớp nghìn, lớp triệu. Mỗi lớp có 3 hàng.":
+      "Large numbers are split into periods: ones, thousands, millions. Each period has 3 places.",
+    "Mỗi chữ số có giá trị theo hàng của nó. Trong 673 849, chữ số 7 chỉ 70 nghìn.":
+      "Each digit has a value by its place. In 673 849, the digit 7 means 70 thousand.",
+    "Làm tròn đến hàng nghìn: nhìn chữ số hàng trăm. Từ 5 trở lên thì lên.":
+      "Rounding to the nearest thousand: look at the hundreds digit. From 5 up rounds up.",
+    "Trong số 673 849, chữ số 9 có giá trị là?":
+      "In 673 849, what is the value of the digit 9?",
+    "Đúng! Giá trị là 9.":
+      "Correct! The value is 9.",
+    "9 đứng ở hàng cuối cùng, hàng đơn vị.":
+      "9 is in the last place, the ones place.",
+    "Trong số 248 596, chữ số 4 có giá trị là?":
+      "In 248 596, what is the value of the digit 4?",
+    "Đúng! 40 000.":
+      "Correct! 40 000.",
+    "4 đứng ở hàng chục nghìn.":
+      "4 is in the ten-thousands place.",
+    "Làm tròn 12 121 đến hàng nghìn được?":
+      "What is 12 121 rounded to the nearest thousand?",
+    "Đúng! Hàng trăm là 1 nên giữ.":
+      "Correct! The hundreds digit is 1, so keep it.",
+    "Hàng trăm là 1, nhỏ hơn 5.":
+      "The hundreds digit is 1, less than 5.",
+    "Số lớn chia lớp, mỗi lớp 3 hàng":
+      "Large numbers split into periods of 3 places",
+    "Giá trị chữ số phụ thuộc hàng":
+      "A digit's value depends on its place",
+    "Làm tròn: nhìn hàng kề bên phải":
+      "Rounding: look at the place to the right",
+    "Chu vi: cộng độ dài các cạnh. Diện tích chữ nhật = dài × rộng.":
+      "Perimeter: add the side lengths. Area of a rectangle = length × width.",
+    "Đổi đơn vị: 1 tấn = 1000 kg, 1 giờ = 60 phút, 1 m² = 10 000 cm².":
+      "Converting units: 1 tonne = 1000 kg, 1 hour = 60 minutes, 1 m² = 10 000 cm².",
+    "Thời gian và tiền: tính từng bước, ghi rõ đơn vị.":
+      "Time and money: work step by step and write the units clearly.",
+    "Chữ nhật dài 8 cm, rộng 5 cm. Chu vi là?":
+      "A rectangle is 8 cm long and 5 cm wide. What is the perimeter?",
+    "Đúng! (8 + 5) × 2 = 26.":
+      "Correct! (8 + 5) × 2 = 26.",
+    "Cộng dài và rộng rồi nhân 2.":
+      "Add the length and width, then multiply by 2.",
+    "Chữ nhật dài 8 cm, rộng 5 cm. Diện tích là?":
+      "A rectangle is 8 cm long and 5 cm wide. What is the area?",
+    "Đúng! 8 × 5 = 40.":
+      "Correct! 8 × 5 = 40.",
+    "Nhân dài với rộng.":
+      "Multiply length by width.",
+    "3 tấn bằng bao nhiêu ki-lô-gam?":
+      "How many kilograms is 3 tonnes?",
+    "Đúng! 3 000 kg.":
+      "Correct! 3 000 kg.",
+    "1 tấn là 1000 kg.":
+      "1 tonne is 1000 kg.",
+    "Chu vi cộng các cạnh, diện tích nhân dài với rộng":
+      "Perimeter: add the sides; area: multiply length by width",
+    "1 tấn = 1000 kg, 1 giờ = 60 phút":
+      "1 tonne = 1000 kg, 1 hour = 60 minutes",
+    "Tính từng bước và ghi đúng đơn vị":
+      "Work step by step and write the right units",
+    "Nhân số lớn: nhân từng hàng, nhớ sang hàng bên trái.":
+      "Multiplying large numbers: multiply place by place, carry to the left.",
+    "Biểu thức: ngoặc trước, rồi nhân chia, cuối cùng cộng trừ.":
+      "Expressions: brackets first, then multiply and divide, last add and subtract.",
+    "Tìm lỗi: thử tính lại từng bước, so với kết quả.":
+      "Finding a mistake: redo each step and compare with the result.",
+    "Đúng! 485.":
+      "Correct! 485.",
+    "7 × 5 = 35 viết 5 nhớ 3; 9 × 5 = 45 cộng 3.":
+      "7 × 5 = 35: write 5, carry 3; 9 × 5 = 45, add 3.",
+    "Đúng! 95.":
+      "Correct! 95.",
+    "Chia từng hàng: 28 chia 3 được 9.":
+      "Divide place by place: 28 divided by 3 is 9.",
+    "Đúng! 6 × 5 = 30, rồi 24 + 30.":
+      "Correct! 6 × 5 = 30, then 24 + 30.",
+    "Làm phép nhân trước.":
+      "Do the multiplication first.",
+    "Nhân: nhân từng hàng rồi cộng phần nhớ":
+      "Multiplying: multiply place by place, then add the carried numbers",
+    "Ngoặc trước, nhân chia rồi mới cộng trừ":
+      "Brackets first, then multiply and divide, then add and subtract",
+    "Tìm lỗi bằng cách tính lại từng bước":
+      "Find mistakes by redoing each step",
+    "Trung bình cộng: cộng các số rồi chia cho số các số.":
+      "The mean: add the numbers, then divide by how many numbers there are.",
+    "Biểu đồ cột: cột càng cao thì số càng lớn.":
+      "Bar chart: the taller the bar, the greater the number.",
+    "Khả năng: chắc chắn, có thể, không thể xảy ra.":
+      "Chance: certain, possible, impossible.",
+    "Trung bình cộng của 4 và 8 là?":
+      "What is the mean of 4 and 8?",
+    "Đúng! 12 ÷ 2 = 6.":
+      "Correct! 12 ÷ 2 = 6.",
+    "Cộng hai số rồi chia cho 2.":
+      "Add the two numbers, then divide by 2.",
+    "Trung bình cộng của 6, 7 và 8 là?":
+      "What is the mean of 6, 7, and 8?",
+    "Đúng! 21 ÷ 3 = 7.":
+      "Correct! 21 ÷ 3 = 7.",
+    "Cộng ba số rồi chia cho 3.":
+      "Add the three numbers, then divide by 3."
+  });
+})(window);
+
+;
+/* ---- ../content/lesson-en-toan-d.js ---- */
+/* Bản dịch lời bài học TOÁN sang tiếng Anh (giao diện English). Nạp sau lesson-en.js. */
+(function (root) {
+  "use strict";
+  if (!root.LessonEN) return;
+  root.LessonEN.add({
+    "Ba ngày bán 10, 20, 30 quyển. Trung bình mỗi ngày bán?":
+      "A shop sells 10, 20, and 30 books in three days. What is the mean per day?",
+    "Đúng! 60 ÷ 3 = 20.":
+      "Correct! 60 ÷ 3 = 20.",
+    "Tổng ba ngày chia cho 3.":
+      "The total of three days divided by 3.",
+    "Trung bình cộng = tổng chia số số hạng":
+      "Mean = total divided by the number of values",
+    "Cột cao nhất là số lớn nhất":
+      "The tallest bar is the greatest number",
+    "Biết khi nào chắc chắn, có thể, không thể":
+      "Know when something is certain, possible, or impossible",
+    "Số thập phân có phần nguyên và phần thập phân, ngăn cách bằng dấu phẩy.":
+      "A decimal has a whole part and a decimal part, separated by a decimal comma.",
+    "Cộng số thập phân: viết thẳng hàng dấu phẩy rồi cộng như số tự nhiên.":
+      "Adding decimals: line up the commas, then add like whole numbers.",
+    "Làm tròn đến hàng phần mười: nhìn chữ số hàng phần trăm.":
+      "Rounding to the nearest tenth: look at the hundredths digit.",
+    "Trong 12,35 chữ số 3 ở hàng nào?":
+      "In 12,35, which place is the digit 3 in?",
+    "Đúng! 3 phần mười.":
+      "Correct! 3 tenths.",
+    "Hàng đứng ngay sau dấu phẩy có tên gọi riêng.":
+      "The place right after the comma has its own name.",
+    "Đúng! 3,75.":
+      "Correct! 3,75.",
+    "Viết thẳng hàng dấu phẩy: 1,50 + 2,25.":
+      "Line up the commas: 1,50 + 2,25.",
+    "Làm tròn 3,47 đến hàng phần mười được?":
+      "What is 3,47 rounded to the nearest tenth?",
+    "Đúng! 7 nên lên 3,5.":
+      "Correct! 7 rounds up to 3,5.",
+    "Nhìn chữ số hàng phần trăm: 7 thì lên.":
+      "Look at the hundredths digit: 7 rounds up.",
+    "Dấu phẩy ngăn phần nguyên và phần thập phân":
+      "The comma separates the whole part and the decimal part",
+    "Cộng trừ: thẳng hàng dấu phẩy":
+      "Adding and subtracting: line up the commas",
+    "Cộng phân số khác mẫu: quy đồng mẫu số trước, rồi cộng tử số.":
+      "Adding fractions with different denominators: find a common denominator first, then add the numerators.",
+    "Phân số bằng nhau: nhân hoặc chia cả tử và mẫu với cùng một số khác 0.":
+      "Equal fractions: multiply or divide the numerator and denominator by the same number other than 0.",
+    "Phân số của một số: chia cho mẫu, nhân với tử.":
+      "Fraction of a number: divide by the denominator, multiply by the numerator.",
+    "Đúng! 3/15 + 1/15 = 4/15.":
+      "Correct! 3/15 + 1/15 = 4/15.",
+    "Quy đồng: đưa 1/5 về mẫu 15 rồi cộng tử.":
+      "Common denominator: change 1/5 to a denominator of 15, then add the numerators.",
+    "Đúng! 3/6 + 2/6 = 5/6.":
+      "Correct! 3/6 + 2/6 = 5/6.",
+    "Mẫu chung của 2 và 3 là 6.":
+      "The common denominator of 2 and 3 is 6.",
+    "Phân số nào bằng 2/3?":
+      "Which fraction equals 2/3?",
+    "Đúng! Nhân cả hai với 2.":
+      "Correct! Multiply both by 2.",
+    "Khác mẫu: quy đồng rồi mới cộng trừ":
+      "Different denominators: find a common denominator first, then add or subtract",
+    "Phân số bằng nhau: nhân hoặc chia cả tử và mẫu":
+      "Equal fractions: multiply or divide the numerator and denominator",
+    "Diện tích hình thang = (đáy lớn + đáy nhỏ) × chiều cao ÷ 2.":
+      "Area of a trapezoid = (long base + short base) × height ÷ 2.",
+    "Chu vi hình tròn = đường kính × 3,14. Diện tích = bán kính × bán kính × 3,14.":
+      "Circumference of a circle = diameter × 3,14. Area = radius × radius × 3,14.",
+    "Thể tích hình hộp chữ nhật = dài × rộng × cao.":
+      "Volume of a cuboid = length × width × height.",
+    "Hình thang đáy 6 cm và 4 cm, cao 3 cm. Diện tích là?":
+      "A trapezoid has bases 6 cm and 4 cm, and height 3 cm. What is the area?",
+    "Đúng! 10 × 3 ÷ 2 = 15.":
+      "Correct! 10 × 3 ÷ 2 = 15.",
+    "Cộng hai đáy, nhân chiều cao rồi chia 2.":
+      "Add the two bases, multiply by the height, then divide by 2.",
+    "Hình tròn đường kính 10 cm. Chu vi là? (π = 3,14)":
+      "A circle has diameter 10 cm. What is the circumference? (π = 3,14)",
+    "Đúng! 10 × 3,14 = 31,4.":
+      "Correct! 10 × 3,14 = 31,4.",
+    "Chu vi = đường kính × 3,14.":
+      "Circumference = diameter × 3,14.",
+    "Hình hộp dài 4, rộng 3, cao 2 cm. Thể tích là?":
+      "A box is 4 long, 3 wide, 2 cm high. What is the volume?",
+    "Đúng! 4 × 3 × 2 = 24.":
+      "Correct! 4 × 3 × 2 = 24.",
+    "Nhân ba kích thước.":
+      "Multiply the three dimensions.",
+    "Hình thang: (đáy lớn + đáy nhỏ) × cao ÷ 2":
+      "Trapezoid: (long base + short base) × height ÷ 2",
+    "Hình tròn: chu vi d × 3,14, diện tích r × r × 3,14":
+      "Circle: circumference d × 3,14, area r × r × 3,14",
+    "Thể tích hộp = dài × rộng × cao":
+      "Volume of a box = length × width × height",
+    "Đổi đơn vị: 1 m² = 100 dm². Đi lên đơn vị lớn thì chia, xuống đơn vị nhỏ thì nhân.":
+      "Converting units: 1 m² = 100 dm². Going up to a larger unit, divide; down to a smaller unit, multiply.",
+    "Vận tốc là quãng đường đi được trong một giờ: v = s ÷ t.":
+      "Speed is the distance traveled in one hour: v = s ÷ t.",
+    "Quãng đường = vận tốc × thời gian. Thời gian = quãng đường ÷ vận tốc.":
+      "Distance = speed × time. Time = distance ÷ speed.",
+    "2,9 m² bằng bao nhiêu dm²?":
+      "How many dm² is 2,9 m²?",
+    "Đúng! 2,9 × 100 = 290.":
+      "Correct! 2,9 × 100 = 290.",
+    "1 m² = 100 dm².":
+      "1 m² = 100 dm².",
+    "9,2 giờ bằng bao nhiêu phút?":
+      "How many minutes is 9,2 hours?",
+    "Đúng! 540 + 12 = 552.":
+      "Correct! 540 + 12 = 552.",
+    "0,2 giờ = 12 phút; 9 giờ = 540 phút.":
+      "0,2 hours = 12 minutes; 9 hours = 540 minutes.",
+    "Ô tô đi 60 km trong 2 giờ. Vận tốc là?":
+      "A car travels 60 km in 2 hours. What is the speed?",
+    "Đúng! 60 ÷ 2 = 30.":
+      "Correct! 60 ÷ 2 = 30.",
+    "Vận tốc = quãng đường chia thời gian.":
+      "Speed = distance divided by time.",
+    "Vận tốc v = s ÷ t":
+      "Speed v = s ÷ t",
+    "Quãng đường s = v × t, thời gian t = s ÷ v":
+      "Distance s = v × t, time t = s ÷ v",
+    "Đổi đơn vị: lên thì chia, xuống thì nhân":
+      "Converting units: up divide, down multiply",
+    "Tỉ số của a và b là a : b. Ví dụ 3 bút đỏ và 5 bút xanh có tỉ số 3 : 5.":
+      "The ratio of a to b is a : b. For example 3 red pens and 5 blue pens have the ratio 3 : 5.",
+    "Tỉ số phần trăm: bao nhiêu phần trong 100 phần. Lấy a chia b rồi nhân 100.":
+      "Percentage: how many parts out of 100. Divide a by b, then multiply by 100.",
+    "Tìm phần trăm của một số: chia cho 100 rồi nhân.":
+      "Finding a percentage of a number: divide by 100, then multiply.",
+    "Có 3 bút đỏ và 5 bút xanh. Tỉ số bút đỏ và bút xanh là?":
+      "There are 3 red pens and 5 blue pens. What is the ratio of red pens to blue pens?",
+    "Đúng! 3 : 5.":
+      "Correct! 3 : 5.",
+    "Viết số bút đỏ trước, bút xanh sau.":
+      "Write the red pens first, the blue pens second.",
+    "Lớp có 20 bạn, 5 bạn đi xe buýt. Tỉ số phần trăm là?":
+      "A class has 20 children and 5 ride the bus. What is the percentage?",
+    "Đúng! 5 ÷ 20 = 0,25 = 25%.":
+      "Correct! 5 ÷ 20 = 0,25 = 25%.",
+    "Lấy 5 chia 20 rồi nhân 100.":
+      "Divide 5 by 20, then multiply by 100.",
+    "10% của 40 là?":
+      "What is 10% of 40?",
+    "Đúng! 40 ÷ 10 = 4.":
+      "Correct! 40 ÷ 10 = 4.",
+    "10% nghĩa là chia cho 10.":
+      "10% means divide by 10.",
+    "Tỉ số a : b":
+      "Ratio a : b",
+    "Tỉ số phần trăm = a ÷ b × 100":
+      "Percentage = a ÷ b × 100",
+    "a% của một số: chia 100 rồi nhân a":
+      "a% of a number: divide by 100, then multiply by a",
+    "Tỉ số phần trăm cho biết bao nhiêu phần trong 100 phần.":
+      "A percentage tells how many parts out of 100.",
+    "Biểu đồ hình quạt chia hình tròn thành các phần. Cả hình tròn là 100%.":
+      "A pie chart splits a circle into parts. The whole circle is 100%.",
+    "Đọc biểu đồ: tìm phần lớn nhất, so sánh các phần.":
+      "Reading a chart: find the largest part and compare the parts.",
+    "50% của 80 là?":
+      "What is 50% of 80?",
+    "Đúng rồi! Đáp án là 40.":
+      "Correct! The answer is 40.",
+    "50% là một nửa.":
+      "50% is one half.",
+    "Đúng rồi! Đáp án là 25%.":
+      "Correct! The answer is 25%.",
+    "Cả hình tròn ứng với bao nhiêu phần trăm?":
+      "What percentage does the whole circle stand for?",
+    "Đúng rồi! Đáp án là 100%.":
+      "Correct! The answer is 100%.",
+    "Cả hình là toàn bộ.":
+      "The whole circle is the whole thing.",
+    "50% là một nửa, 25% là một phần tư":
+      "50% is one half, 25% is one quarter",
+    "Cả hình tròn là 100%":
+      "The whole circle is 100%"
   });
 })(window);
 

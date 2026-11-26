@@ -121,7 +121,7 @@
             "A triangle has base <em>" + a + " " + u + "</em> and height <em>" + h + " " + u + "</em>. Its area is?", a * h / 2, [[a * h,
                 "formula_confuse"], [a + h, "formula_confuse"], [(
             a + h) / 2 | 0, "formula_confuse"]], c, U); }
-        a = rnd(3, 15); b = a + rnd(2, 10); h = rnd(2, 12) * (((a + b) % 2) ? 2 : 1); return mkn(v ? "Hình thang có đáy em <em>" + a + " " + u +
+        a = rnd(3, 15); b = a + rnd(2, 10); h = rnd(2, 12) * (((a + b) % 2) ? 2 : 1); return mkn(v ? "Hình thang có đáy nhỏ <em>" + a + " " + u +
             "</em>, đáy lớn <em>" + b + " " + u +
             "</em>, chiều cao <em>" + h + " " + u + "</em>. Diện tích là?" : "A trapezoid has bases <em>" + a + " " + u + "</em> and <em>" + b + " " +
                 u + "</em> and height <em>" + h + " " +

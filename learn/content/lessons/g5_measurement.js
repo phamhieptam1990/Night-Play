@@ -8,7 +8,7 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Đổi đơn vị: 1 m² = 100 dm². Đi lên đơn vị lớn thì chia, xuống đơn vị em thì nhân.",
+      "t": "Đổi đơn vị: 1 m² = 100 dm². Đi lên đơn vị lớn thì chia, xuống đơn vị nhỏ thì nhân.",
       "art": "2,9 m² = 290 dm²"
     },
     {
