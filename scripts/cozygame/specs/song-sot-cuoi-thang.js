@@ -55,7 +55,7 @@ module.exports = {
       sk: { basic: ["Notebook", "Notebook"], chat: ["Group chat", "Group chat"], bank: ["Bank SMS", "Bank SMS"], shop: ["Online mall", "Online mall"], cal: ["Calendar", "Calendar"] } }
   },
   sfx: `{yes:()=>{tone(620,.06,"triangle",.07);tone(820,.08,"triangle",.07,.05)},no:()=>tone(260,.1,"sine",.06),cash:()=>{[1200,1500,1900].forEach((f,i)=>tone(f,.07,"square",.04,i*.05))},bad:()=>tone(170,.25,"sawtooth",.07),end:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.09,i*.09)),combo:n=>{const b=440*Math.pow(1.122,Math.min(n/3,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.1,"triangle",.09,i*.05))}}`,
-  level: { max: 10, rules: [["m0","mul",-.05,3000],["f","add",.04,2.2],["cost","add",2,140],["timer","mul",-.05,3]], won: "G.reason==='win'" },   /* lên level cuối màn: scripts/cozygame/levelgen.js */
+  level: { max: 10, rules: [["m0","mul",-.05,6000],["f","add",.02,2.2],["timer","mul",-.05,3.5]], won: "G.reason==='win'" },   /* lên level cuối màn: scripts/cozygame/levelgen.js */
   gameJs: String.raw`
 const CFG=[{m0:8000,cost:115,f:1.45,pool:"c"},{m0:10000,cost:115,f:1.35,pool:"ct",env:1},{m0:8000,cost:115,f:1.5,pool:"cs",timer:6},{m0:3500,cost:58,f:1.2,pool:"cu",study:1}];
 /* [nhóm, thẻ danh hiệu, emoji, VN tình huống, VN có, VN không, EN tình huống, EN có, EN không, tiền(có), tinh thần(có), tiền(không), tinh thần(không), cược] — tiền tính bằng nghìn đồng */

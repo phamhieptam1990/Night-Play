@@ -266,11 +266,13 @@ POOLS[0].push(VI,...["ĂÂĐÊÔƠƯGQRSKBPM","ĂÂĐÊÔƠƯGQRSK","ĂÂĐÊÔ�
 POOLS[1].push(EN,...["ABDEFGJKMNPQRSWYZ","BGJKMQRSWYZ","BGJQRSKZ","GJQRSKZ"].map(x=>Array.from(x)));
 POOLS[2].push(NU,...["23456789","235689","235689","5689"].map(x=>Array.from(x)));
 POOLS[3].push(SH,["rect","diamond","star","heart","moon","cross","hex"],["diamond","star","heart","moon","cross","hex"],["star","heart","moon","cross","hex"],["moon","cross","hex","star"]);   /* cấp 4-8: gom chữ/hình khó vẽ dần */
-const LV=[{w:.115,need:.62,tol:.07},{w:.092,need:.67,tol:.055},{w:.074,need:.71,tol:.045},{w:.066,need:.74,tol:.04},{w:.06,need:.76,tol:.034},{w:.055,need:.78,tol:.03},{w:.05,need:.8,tol:.027},{w:.046,need:.82,tol:.024}];   /* w: bề dày nét bút · need: tô phủ bao nhiêu thì xong · tol: dung sai */
+const LV=[{w:.115,need:.62,tol:.07},{w:.092,need:.67,tol:.055},{w:.074,need:.71,tol:.045},{w:.066,need:.74,tol:.04},{w:.06,need:.76,tol:.034},{w:.055,need:.78,tol:.03},{w:.05,need:.8,tol:.027},{w:.046,need:.82,tol:.024}];
+const lvOf=l=>{const b=LV[Math.min(l,8)-1],B=window.NPLevel?NPLevel.boost(l-1):0;return B?{w:b.w*Math.max(.87,1-.006*B),need:Math.min(.86,b.need+.0015*B),tol:b.tol*Math.max(.8,1-.01*B)}:b};   /* level >= 9: nét mảnh hơn, phủ nhiều hơn, dung sai chặt hơn (có trần) */
+/* w: bề dày nét bút · need: tô phủ bao nhiêu thì xong · tol: dung sai */
 const RARB=[8,15,24,30],COMBO_ACC=80;
 const labelOf=(t,it)=>t===3?T("sh."+it):it;
 function makePlan(t,lv,seed,bias){
-  const R=mulberry32(hash("plan",t,lv,seed));let p=POOLS[t][lv-1].slice();
+  const R=mulberry32(hash("plan",t,lv,seed));let p=POOLS[t][Math.min(lv,8)-1].slice();
   for(let i=p.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[p[i],p[j]]=[p[j],p[i]]}
   if(bias){const a=albGet();p=p.filter(x=>!a[t+":"+x]).concat(p.filter(x=>a[t+":"+x]))}
   return p.slice(0,3).map((item,i)=>({item,ms:hash("ms",t,item,seed,i)}));
@@ -497,7 +499,7 @@ function fillDeco(sk){document.querySelectorAll(".dc").forEach(d=>{d.innerHTML="
 const BOOT_H=!!(window.NP&&NP.helper),HELPER=BOOT_H&&!(NP.resumeBoot&&NP.resumeBoot());   /* ?resume=1 nạp ván dở qua đường của chơi hộ: nhánh nạp dùng BOOT_H, còn nút/điểm/chia sẻ dùng HELPER (người chơi thật, không ẩn nút ở màn kết thúc) */
 let prog=Object.assign({best:0,played:0},LS.get("qv-prog",{}));
 const saveProg=()=>{if(!HELPER)LS.set("qv-prog",prog)};
-const NLV=8,LVI=["🌱","🌿","🌳","🌲","🔥","⚡","💎","👑"];
+const NLV=8,LVI=["🌱","🌿","🌳","🌲","🔥","⚡","💎","👑"],lvIc=l=>LVI[Math.min(l,8)-1]+(l>8?l:"");
 function lvStep(box,ic,key){const u=(window.NPLevel&&NPLevel.unlocked)?NPLevel.unlocked():0,mx=Math.max(3,Math.min(NLV,u+1));if(LVL>mx)LVL=mx;
   ic.slice(0,NLV).forEach((e,i)=>{const b=document.createElement("button"),on=LVL===i+1;b.type="button";b.className="lvb"+(on?" on":"");b.innerHTML=e+(on?" <small>"+(i+1)+"</small>":"");b.setAttribute("aria-label",T("lv")[i]);
     if(i+1>mx){b.disabled=true;b.style.opacity=".35"}else b.onclick=()=>{LVL=i+1;LS.set(key,LVL);renderHome()};if(on)b.style.flex="2";box.appendChild(b)})}   /* mọi level là một chip (độ khó/cc.js đọc .lvs); chưa mở = mờ */
@@ -523,7 +525,7 @@ function parseCh(){try{const m=/[#&]ch=([\w-]+)/.exec(location.hash);if(!m)retur
 function shareLink(){const l=LANG==="en"?"&l=en":"";if(G.daily)return location.origin+"/api/share/ve-chu-quai-vat?d=1&n="+G.daily.n+"&s="+G.total+l;
   return location.origin+"/api/share/ve-chu-quai-vat?ch="+b64e({t:G.t,lv:G.lv,s:G.seed,sc:G.total})+l}
 function shareText(){const rs=G.res,best=rs.slice().sort((a,b)=>b.M.rar-a.M.rar)[0];
-  return (G.daily?"📅 "+T("daily.t",{n:G.daily.n}):TYI[G.t]+" "+T("title"))+"\n"+T("tx.line",{t:T("ty")[G.t],l:LVI[G.lv-1],s:G.total})+"\n"+rs.map(r=>T("tx.mon",{i:labelOf(G.t,r.item),n:r.M.name,r:"✨".repeat(r.M.rar+1)})).join("\n")+(G.maxCombo>=2?"\n🔥 "+T("cb.best",{n:G.maxCombo}):"")+(best?"\n"+T("cd.no",{n:albCount(G.t),m:ITEMS[G.t].length}):"")+"\n"+T("cd.ask")+"\n"+shareLink()}
+  return (G.daily?"📅 "+T("daily.t",{n:G.daily.n}):TYI[G.t]+" "+T("title"))+"\n"+T("tx.line",{t:T("ty")[G.t],l:lvIc(G.lv),s:G.total})+"\n"+rs.map(r=>T("tx.mon",{i:labelOf(G.t,r.item),n:r.M.name,r:"✨".repeat(r.M.rar+1)})).join("\n")+(G.maxCombo>=2?"\n🔥 "+T("cb.best",{n:G.maxCombo}):"")+(best?"\n"+T("cd.no",{n:albCount(G.t),m:ITEMS[G.t].length}):"")+"\n"+T("cd.ask")+"\n"+shareLink()}
 const F="Inter,system-ui,-apple-system,'Segoe UI','Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";
 function fitText(x,tx,px,font,maxW){let s=px;do{x.font=font.replace("$",s);s-=2}while(x.measureText(tx).width>maxW&&s>20)}
 function rr(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
@@ -569,7 +571,7 @@ async function saveImg(M,kind){
 }
 function openCh(){
   const pl=makePlan(CH.t,CH.lv,CH.s,false)[0],M=makeMonster(CH.t,pl.item,pl.ms);
-  $("chH").textContent=T("ch.h");$("chP").textContent=TYI[CH.t]+" "+T("ty")[CH.t]+" · "+LVI[CH.lv-1]+" — "+T("ch.p",{sc:CH.sc});$("chGo").textContent="✏️ "+T("ch.go");
+  $("chH").textContent=T("ch.h");$("chP").textContent=TYI[CH.t]+" "+T("ty")[CH.t]+" · "+lvIc(CH.lv)+" — "+T("ch.p",{sc:CH.sc});$("chGo").textContent="✏️ "+T("ch.go");
   const c=$("chC"),x=c.getContext("2d");x.clearRect(0,0,360,360);x.drawImage(monsterImg(M,360),0,0);showOv("ovCh");
 }
 $("chNo").onclick=()=>{CH=null;showOv(null)};
@@ -611,7 +613,7 @@ function stopAll(){if(window.NPAudio)NPAudio.silence();clearTimeout(hintT);TR=nu
 /* Thử thách Night Pass (khung chung shared/npchallenge.js): ván mức khó nhất, seed cố định */
 window.NP_CHALLENGE={id:"ve-chu-quai-vat",start(){begin(0,{seed:20261116,lv:3})},judge(r){return !!r&&r.score>=230&&!!r.extra&&r.extra.lv===3}};
 async function begin(t,o){
-  o=o||{};stopAll();const lv=o.lv||LVL;if(o.lv)LVL=o.lv;const seed=o.seed!=null?o.seed>>>0:Math.floor(MR()*4294967296);
+  o=o||{};stopAll();const lv=o.lv||LVL;if(o.lv)LVL=Math.min(NLV,o.lv);const seed=o.seed!=null?o.seed>>>0:Math.floor(MR()*4294967296);
   const plan=makePlan(t,lv,seed,!(o.daily||o.ch||o.seed!=null));
   G={t,lv,seed,plan,r:0,res:[],id:++gid,over:false,daily:o.daily||null,ch:o.ch||null,total:0,combo:0,maxCombo:0};
   if(Number.isInteger(o.r0)&&o.r0>=0&&o.r0<3)G.r=o.r0;
@@ -625,7 +627,7 @@ function upd(){if(!G)return;$("hl").textContent="🎯 "+G.res.reduce((s,r)=>s+r.
   $("dots").innerHTML=[0,1,2].map(i=>'<i class="'+(i<G.res.length?"ok":i===G.r?"on":"")+'"></i>').join("");
   const st=G.plan[Math.min(G.r,2)];$("qp").textContent=T("tr."+G.t,{l:labelOf(G.t,st.item)})}
 async function startTrace(){
-  const id=G.id,st=G.plan[G.r],t=G.t,item=st.item,lv=LV[G.lv-1];upd();say(T("tr."+t,{l:labelOf(t,item)}));
+  const id=G.id,st=G.plan[G.r],t=G.t,item=st.item,lv=lvOf(G.lv);upd();say(T("tr."+t,{l:labelOf(t,item)}));
   await FONTS;if(!G||G.id!==id)return;
   const cv=$("tc"),bx=$("tbox").getBoundingClientRect(),n=Math.min(900,Math.max(300,Math.round(bx.width*(window.devicePixelRatio||1))));cv.width=cv.height=n;
   const x=cv.getContext("2d"),geo=glyphGeo(t,item,n,TBOX),tw=n*.12;
@@ -831,7 +833,7 @@ $("langBtn").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("l
 $("homeBtn").onclick=()=>{if(!HELPER)goHome()};
 function again(){if(!G)return;if(G.daily)return startDaily();begin(G.t,{lv:G.ch?LVL:G.lv})}
 $("againBtn").onclick=again;
-window.NPLevel&&NPLevel.attach({levels:8,dupe:"#againBtn",cur:()=>G?G.lv-1:-1,go:i=>{LVL=i+1;LS.set("qv-lv",LVL);begin(G.t,{lv:i+1})},skip:()=>!!(G&&(G.daily||G.ch))});   /* lên level khi kết thúc màn (shared/levelup.js) */
+window.NPLevel&&NPLevel.attach({levels:8,endless:true,dupe:"#againBtn",cur:()=>G?G.lv-1:-1,go:i=>{LVL=Math.min(NLV,i+1);LS.set("qv-lv",LVL);begin(G.t,{lv:i+1})},skip:()=>!!(G&&(G.daily||G.ch))});   /* lên level khi kết thúc màn (shared/levelup.js) */
 $("shareBtn").onclick=()=>openGate(()=>{showOv("ovEnd");doShare()},"ovEnd","gt.sh");
 $("albBtn").onclick=()=>openAlbum(G?G.t:0);
 $("ovEnd").addEventListener("pointerdown",e=>{if(HELPER||e.target.closest("button")||e.target.closest("canvas")||performance.now()-endAt<450)return;again()});

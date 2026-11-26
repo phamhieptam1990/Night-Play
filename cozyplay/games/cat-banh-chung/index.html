@@ -322,10 +322,10 @@ $("bDaily").onclick=()=>begin(fnv(GID+"|"+dayKey()),"daily",0,null);$("bFree").o
 
 /* ===== LÊN LEVEL (tuỳ biến theo game) ===== */
 const CB_LV=[[0,0,0,4,1],[0,0,0,5,1],[0,0,0,6,1],[3,0,0,6,1],[3,1,0,6.5,1],[3,0,1,7,1],[4,1,0,7.5,1.2],[4,1,1,8,1.2],[4,1,1,9,1.5],[4,1,1,10,1.8]],CB_0=JSON.parse(JSON.stringify(CFG));
-let CBL=Math.max(0,Math.min(CB_LV.length-1,Math.floor(+LS.get("cb-lvu",0))||0)),CBP=0;
-function cbApply(L){const v=CB_LV[L];CFG.forEach((c,i)=>{const o=CB_0[i];for(const k in o)c[k]=o[k];if(!L)return;if(v[0])c.parts=Math.max(o.parts,v[0]);if(v[1])c.rot=1;if(v[2])c.fog=1;c.strict=v[3];c.rs=v[4]})}
+let CBL=Math.max(0,Math.min(CB_LV.length+29,Math.floor(+LS.get("cb-lvu",0))||0)),CBP=0;
+function cbApply(L){const v=CB_LV[Math.min(L,CB_LV.length-1)],B=window.NPLevel?NPLevel.boost(L):0;CFG.forEach((c,i)=>{const o=CB_0[i];for(const k in o)c[k]=o[k];if(!L)return;if(v[0])c.parts=Math.max(o.parts,v[0]);if(v[1])c.rot=1;if(v[2])c.fog=1;c.strict=v[3]+.15*B;c.rs=v[4]+.03*B})}   /* i>=N: strict +0.15/bậc (tối đa 14,5), tốc độ xoay +0.03/bậc (tối đa 2,7) */
 const cb_begin=begin;begin=function(seed,mode,t,ch){const L=mode==="free"&&!ch?CBL:0;cbApply(L);CBP=L;return cb_begin.apply(this,arguments)};
-window.NPLevel&&NPLevel.attach({levels:CB_LV.length,cur:()=>G?CBP:-1,won:()=>!!G,skip:()=>!G||G.mode!=="free"||!!G.ch,go:i=>{CBL=i;LS.set("cb-lvu",i);if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",G?G.t:TY,null)}});
+window.NPLevel&&NPLevel.attach({levels:CB_LV.length,endless:true,cur:()=>G?CBP:-1,won:()=>!!G,skip:()=>!G||G.mode!=="free"||!!G.ch,go:i=>{CBL=i;LS.set("cb-lvu",i);if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",G?G.t:TY,null)}});
 
 applySkin();renderHome();show("home");requestAnimationFrame(tick);
 const proP=passToken()&&!(window.NP&&NP.helper)?PF.loadPro(false).catch(()=>{}):Promise.resolve();

@@ -237,17 +237,17 @@ en:{title:"Dance by Numbers",docTitle:"Dance by Numbers",sound:"Sound",lang:"Lan
  "sk.3.basic":"Beach","sk.3.sky":"Rainbow sky","sk.3.garden":"Flower garden","sk.3.castle":"Castle","sk.3.aurora":"Aurora"}
 };
 const T=(k,v)=>{let s=(I18N[LANG][k]!=null?I18N[LANG][k]:I18N.vi[k]!=null?I18N.vi[k]:k);if(typeof s!=="string")return s;if(v)for(const x in v)s=s.split("{"+x+"}").join(v[x]);return s};
-const TY_ICON=["🦘","👏","🦶","👋"],LV_ICON=["🌱","🌿","🌳","🌲","🔥","⚡","💎","👑"],ROUNDS=10;
+const TY_ICON=["🦘","👏","🦶","👋"],LV_ICON=["🌱","🌿","🌳","🌲","🔥","⚡","💎","👑"],ROUNDS=10,lvIc=l=>LV_ICON[Math.min(l,8)-1]+(l>8?l:"");
 
 /* ===== PHÉP TÍNH (sinh theo hạt giống: cùng hạt giống ⇒ cùng 10 phép tính) ===== */
 const PICS=["🍎","🍓","⭐","🐥","🍪","🎈","🐟","🌸"];
-function genQ(lv){
-  const pic=pick(PICS);let a,b,op="+";
+function genQ(lvIn){
+  const lv=Math.min(lvIn,8),B=window.NPLevel?NPLevel.boost(lvIn-1):0,pic=pick(PICS);   /* level >= 9: luật cấp 8, đáp số lớn dần (tối đa +6) */let a,b,op="+";
   if(lv===1){a=rand(1,4);b=rand(1,5-a)}
   else if(lv===2){if(RNG()<.2){op="−";a=rand(3,10);b=rand(1,a-1)}else{a=rand(1,8);b=rand(1,10-a)}}
   else if(lv===3){if(RNG()<.4){op="−";a=rand(5,15);b=rand(1,a-1)}else{a=rand(1,12);b=rand(1,15-a)}}
-  else{const [mx,pm,mn]=[[20,.45,3],[20,.5,8],[22,.5,10],[25,.5,12],[30,.5,15]][lv-4];   /* đáp số (số lần nhảy) ngày càng lớn: mn..mx */
-    if(RNG()<pm){op="−";a=rand(mn+1,mx);b=a-rand(mn,a-1)}else{const s=rand(mn,mx);a=rand(1,s-1);b=s-a}}
+  else{const [mx,pm,mn]=[[20,.45,3],[20,.5,8],[22,.5,10],[25,.5,12],[30,.5,15]][lv-4],mx2=mx+Math.min(6,B),mn2=mn+Math.min(4,B>>1);   /* đáp số (số lần nhảy) ngày càng lớn: mn..mx */
+    if(RNG()<pm){op="−";a=rand(mn2+1,mx2);b=a-rand(mn2,a-1)}else{const s=rand(mn2,mx2);a=rand(1,s-1);b=s-a}}
   return{a,b,op,ans:op==="+"?a+b:a-b,pic};
 }
 function genQs(seed,lv){const out=[];for(let r=0;r<ROUNDS;r++){RNG=mulberry32((seed^Math.imul(r+1,2654435761))>>>0);out.push(genQ(lv))}RNG=MR;return out}
@@ -507,7 +507,7 @@ function parseCh(){try{const m=/[#&]ch=([\w-]+)/.exec(location.hash);if(!m)retur
 function shareLink(){const l=LANG==="en"?"&l=en":"";if(G.daily)return location.origin+"/api/share/nhay-theo-so?d=1&n="+G.daily.n+"&s="+G.total+l;
   return location.origin+"/api/share/nhay-theo-so?ch="+b64e({t:G.t,lv:G.lv,s:G.seed,sc:G.total})+l}
 function shareText(){const em=G.hist.map(h=>h==="1"?"🟩":h==="2"?"🟨":"⬜").join("");
-  return (G.daily?"📅 "+T("daily.t",{n:G.daily.n}):"💃 "+T("title"))+"\n"+T("tx.line",{t:TY_ICON[G.t]+" "+T("ty")[G.t],l:LV_ICON[G.lv-1],s:G.total})+"\n"+em+(G.maxC>=2?" 🔥×"+G.maxC:"")+"\n"+T("cd.ask")+"\n"+shareLink()}
+  return (G.daily?"📅 "+T("daily.t",{n:G.daily.n}):"💃 "+T("title"))+"\n"+T("tx.line",{t:TY_ICON[G.t]+" "+T("ty")[G.t],l:lvIc(G.lv),s:G.total})+"\n"+em+(G.maxC>=2?" 🔥×"+G.maxC:"")+"\n"+T("cd.ask")+"\n"+shareLink()}
 function fitText(x,tx,px,font,maxW){let s=px;do{x.font=font.replace("$",s);s-=2}while(x.measureText(tx).width>maxW&&s>20)}
 const FONT="Inter,system-ui,-apple-system,'Segoe UI','Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";
 function drawCard(){
@@ -524,7 +524,7 @@ function drawCard(){
   if(G.maxC>=2){x.fillStyle="#fff";x.font="800 56px "+FONT;x.fillText("🔥 Combo ×"+G.maxC,W/2,1010)}
   G.hist.forEach((h,i)=>{const cx=W/2+(i-4.5)*76;x.fillStyle=h==="1"?"#2fbf71":h==="2"?"#ffb020":"rgba(255,255,255,.5)";x.beginPath();x.arc(cx,1210,26,0,7);x.fill()});
   x.fillStyle="#fff";fitText(x,T("cd.ask"),56,"800 $px "+FONT,940);x.fillText(T("cd.ask"),W/2,1282);
-  x.globalAlpha=.9;x.font="800 36px "+FONT;x.fillText(TY_ICON[G.t]+" "+T("ty")[G.t]+" · "+LV_ICON[G.lv-1]+" · "+location.host,W/2,1328);x.globalAlpha=1;return c}
+  x.globalAlpha=.9;x.font="800 36px "+FONT;x.fillText(TY_ICON[G.t]+" "+T("ty")[G.t]+" · "+lvIc(G.lv)+" · "+location.host,W/2,1328);x.globalAlpha=1;return c}
 async function doShare(){
   const tx=shareText();let blob=null;try{blob=await new Promise(r=>drawCard().toBlob(r,"image/png"))}catch(e){}
   if(blob){const file=new File([blob],"nhay-theo-so.png",{type:"image/png"});try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],text:tx});return}}catch(e){if(e&&e.name==="AbortError")return}}
@@ -533,7 +533,7 @@ async function doShare(){
 }
 function openCh(){
   $("chH").textContent=T("ch.h");$("chV").innerHTML=CH.sc+" <small>/300</small>";
-  $("chP").textContent=TY_ICON[CH.t]+" "+T("ty")[CH.t]+" · "+LV_ICON[CH.lv-1]+" — "+T("ch.p",{s:CH.sc});$("chGo").textContent="▶ "+T("how.go");showOv("ovCh");
+  $("chP").textContent=TY_ICON[CH.t]+" "+T("ty")[CH.t]+" · "+lvIc(CH.lv)+" — "+T("ch.p",{s:CH.sc});$("chGo").textContent="▶ "+T("how.go");showOv("ovCh");
 }
 $("chNo").onclick=()=>{CH=null;showOv(null)};
 $("chGo").onclick=()=>{LVL=CH.lv;begin(CH.t,{seed:CH.s,ch:CH,lv:CH.lv})};
@@ -571,7 +571,7 @@ async function makeClip(){
       x.save();x.translate(20,150);x.beginPath();if(x.roundRect)x.roundRect(0,0,500,470,30);else x.rect(0,0,500,470);x.clip();S.showCnt=!!seg;drawScene(x,500,470,tt,S);x.restore();
       x.strokeStyle="#fff";x.lineWidth=6;x.beginPath();if(x.roundRect)x.roundRect(20,150,500,470,30);else x.rect(20,150,500,470);x.stroke();
       x.fillStyle="#fff";
-      if(tt<INTRO){x.font="800 50px "+FONT;x.fillText(TY_ICON[G.t]+" "+T("ty")[G.t]+" · "+LV_ICON[G.lv-1],W/2,90)}
+      if(tt<INTRO){x.font="800 50px "+FONT;x.fillText(TY_ICON[G.t]+" "+T("ty")[G.t]+" · "+lvIc(G.lv),W/2,90)}
       else if(seg){fitText(x,expr,84,"800 $px "+FONT,480);x.fillText(expr,W/2,88);x.font="800 28px "+FONT;x.fillText((log.indexOf(seg.q)+1)+" / "+log.length,W/2,128)}
       else{x.font="800 44px "+FONT;const hd=T("card.h",{v:T("cardv")[G.t]});fitText(x,hd,44,"800 $px "+FONT,500);x.fillText(hd,W/2,88);x.font="800 28px "+FONT;x.fillText(G.total+"/300 "+T("pts")+(maxCb>=2?"  🔥×"+maxCb:""),W/2,128)}
       x.font="800 26px "+FONT;x.fillText(T("cd.ask"),W/2,660);x.globalAlpha=.85;x.font="800 22px "+FONT;x.fillText(location.host,W/2,696);x.globalAlpha=1;
@@ -641,7 +641,7 @@ function frame(){
 window.NP_CHALLENGE={id:"nhay-theo-so",start(){begin(0,{seed:20261116,lv:3})},judge(r){return !!r&&r.score>=280&&!!r.extra&&r.extra.lv===3}};
 async function begin(t,o){
   o=o||{};if(window.NPAudio)NPAudio.silence();clearTimers();musStop();camStop();const id=++gid;
-  const lv=o.lv||LVL;LVL=lv;const seed=o.seed!=null?o.seed:Math.floor(MR()*4294967296)>>>0;
+  const lv=o.lv||LVL;LVL=Math.min(NLV,lv);const seed=o.seed!=null?o.seed:Math.floor(MR()*4294967296)>>>0;
   G={t,lv,seed,qs:genQs(seed,lv),r:o.r||0,cnt:0,tries:0,first:o.first||0,rs:o.rs||0,rn:o.rn||0,combo:o.cb||0,maxC:o.mc||0,hist:o.hist||[],log:o.log||[],open:false,over:false,id,daily:o.daily||null,ch:o.ch||null,grid:{t0:performance.now()+1e4,ms:600},att:[],total:0,q:null};
   showOv(null);$("home").hidden=true;$("arena").hidden=false;$("homeBtn").hidden=false;
   const sk=skinOf(t);applyVars($("play"),sk);skCss(sk);fillDeco(sk);$("play").style.setProperty("--rad",sk.vars["--rad"]);dressUp(sk,t);
@@ -656,7 +656,7 @@ async function begin(t,o){
 function freezeTimers(){if(G){clearTimeout(G.stT);clearTimeout(G.rsT);clearInterval(G.daT);if(SC)SC.cheer=false}}
 function thawTimers(){if(G&&!G.over&&G.q&&G.open&&G.cnt===G.q.ans){const id=G.id;G.stT=setTimeout(()=>{if(G&&G.id===id)settle()},900)}else if(G&&!G.over&&G.q&&!G.open&&G.cnt!==G.q.ans){G.rsT=setTimeout(resetCnt,500)}}
 function clearTimers(){if(G){clearTimeout(G.nxT);clearTimeout(G.stT);clearTimeout(G.rsT);clearInterval(G.daT)}}
-const bpmOf=(lv,r)=>Math.min([150,150,150,155,160,165,168,172][lv-1],[80,92,104,112,120,126,132,138][lv-1]+r*[3,4,5,5,5,5,5,6][lv-1]);
+const bpmOf=(lvIn,r)=>{const lv=Math.min(lvIn,8),B=window.NPLevel?NPLevel.boost(lvIn-1):0,x=Math.min(12,B);return Math.min([150,150,150,155,160,165,168,172][lv-1]+x,[80,92,104,112,120,126,132,138][lv-1]+r*[3,4,5,5,5,5,5,6][lv-1]+x)};
 function startQ(){
   if(!G||G.over)return;if(paused){clearTimeout(G.nxT);G.nxT=setTimeout(startQ,300);return}if(G.r>=ROUNDS)return finish();
   const q=G.q=G.qs[G.r],now=performance.now(),ms=60000/bpmOf(G.lv,G.r);
@@ -664,7 +664,7 @@ function startQ(){
   renderQ();upd();say(sayExpr(q)+". "+T("ask")[G.t]);
 }
 function renderQ(){
-  if(!G||!G.q)return;const q=G.q;$("qp").textContent=T("ask")[G.t];const x=$("qx");x.className="qx l"+G.lv;x.innerHTML=exprHtml(q,G.lv);renderPips();
+  if(!G||!G.q)return;const q=G.q;$("qp").textContent=T("ask")[G.t];const x=$("qx");x.className="qx l"+Math.min(G.lv,8);x.innerHTML=exprHtml(q,G.lv);renderPips();
 }
 function renderPips(){const n=Math.max(G.q.ans,G.cnt),p=$("pips");let s="";for(let i=0;i<n;i++)s+='<b class="'+(i>=G.q.ans?"over":i<G.cnt?"on":"")+'"></b>';p.innerHTML=s}
 function upd(){if(!G)return;$("hl").textContent="🎯 "+Math.min(G.r+1,ROUNDS)+"/"+ROUNDS;$("hr").textContent="⭐ "+G.first}
@@ -780,7 +780,7 @@ $("langBtn").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("l
 $("homeBtn").onclick=()=>{if(!HELPER)goHome()};
 function again(){if(!G)return;if(G.daily)return startDaily();begin(G.t,{lv:G.lv})}
 $("againBtn").onclick=again;
-window.NPLevel&&NPLevel.attach({levels:8,dupe:"#againBtn",cur:()=>G?G.lv-1:-1,go:i=>{LVL=i+1;LS.set("nt-lv",LVL);begin(G.t,{lv:i+1})},skip:()=>!!(G&&(G.daily||G.ch))});   /* lên level khi kết thúc màn (shared/levelup.js) */
+window.NPLevel&&NPLevel.attach({levels:8,endless:true,dupe:"#againBtn",cur:()=>G?G.lv-1:-1,go:i=>{LVL=Math.min(NLV,i+1);LS.set("nt-lv",LVL);begin(G.t,{lv:i+1})},skip:()=>!!(G&&(G.daily||G.ch))});   /* lên level khi kết thúc màn (shared/levelup.js) */
 $("shareBtn").onclick=()=>openGate(()=>{showOv("ovEnd");doShare()},"ovEnd","gt.sh");
 $("clipBtn").onclick=()=>openGate(()=>openClip(),"ovEnd","gt.sh");
 $("ovEnd").addEventListener("pointerdown",e=>{if(HELPER||e.target.closest("button")||performance.now()-endAt<450)return;again()});

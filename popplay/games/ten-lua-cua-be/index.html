@@ -260,7 +260,9 @@ const WORDS={vi:{A:"🍒",Ă:"🍚",Â:"🫖",B:"🐄",C:"🐟",D:"🍉",Đ:"�
  en:{A:"🍎",B:"⚽",C:"🐱",D:"🐶",E:"🥚",F:"🐟",G:"🐐",H:"🎩",I:"🍦",J:"🧃",K:"🪁",L:"🦁",M:"🌙",N:"🪺",O:"🍊",P:"🐷",Q:"👑",R:"🐰",S:"☀️",T:"🌳",U:"☂️",V:"🚐",W:"🐳",X:"🎹",Y:"🪀",Z:"🦓"}};
 const EMO=["🍎","⭐","🐥","🎈","🍓","🐟","🚗","🌸"];
 /* cấp độ: dStart/dMax = mức hiển thị (0 đếm hình → 1 phép tính có hình → 2 chỉ số); nmax = số lớn nhất */
+let BO=0;   /* số bậc vượt cấp 8 (NPLevel.boost): nmax +1/bậc (sàn trần 70), chướng ngại dày hơn (pObs tới .985), nhịp chướng ngại ngắn dần (sàn .45s) */
 const LVCFG=[{ds:0,dm:1,nmax:5,pObs:.45,iv:1.15},{ds:0,dm:2,nmax:10,pObs:.65,iv:1.0},{ds:1,dm:2,nmax:20,pObs:.85,iv:.85},{ds:1,dm:2,nmax:25,pObs:.88,iv:.8},{ds:2,dm:2,nmax:30,pObs:.9,iv:.75},{ds:2,dm:2,nmax:35,pObs:.92,iv:.7},{ds:2,dm:2,nmax:40,pObs:.94,iv:.65},{ds:2,dm:2,nmax:50,pObs:.96,iv:.6}];
+const cfOf=lv=>{const b=LVCFG[lv-1];return BO?{ds:b.ds,dm:b.dm,nmax:Math.min(70,b.nmax+BO),pObs:Math.min(.985,b.pObs+.001*BO),iv:Math.max(.45,b.iv-.005*BO)}:b};
 
 /* ===== CÂU HỎI — sinh theo hạt giống; mức hiển thị d phụ thuộc bé làm đúng liên tục nhưng NỘI DUNG (loại + con số) chỉ phụ thuộc hạt giống ===== */
 function kindsFor(seed){RNG=mulberry32(sub32(seed,777));const k=shuffle([0,1,2,3,4]).concat(shuffle([0,1,2,3,4]));RNG=MR;return k}   /* 0 chữ · 1 đếm · 2 cộng · 3 trừ · 4 so sánh */
@@ -268,7 +270,7 @@ function opts3(ans,lo,hi){const s=new Set([ans]);let k=0;while(s.size<3&&k++<60)
 const pics=(e,n,fs)=>'<span class="pics" style="font-size:'+fs+'cqw">'+('<span>'+e+"</span>").repeat(n)+"</span>";
 const fsFor=n=>n<=5?13:n<=8?10.5:n<=12?8.4:n<=16?6.6:5.4;
 function genQ(i,d,lv,seed,lang){
-  const kinds=kindsFor(seed),kind=kinds[i%10],cf=LVCFG[lv-1];RNG=mulberry32(sub32(seed,i));
+  const kinds=kindsFor(seed),kind=kinds[i%10],cf=cfOf(lv);RNG=mulberry32(sub32(seed,i));
   const r=[0,1,2,3,4,5,6,7].map(()=>RNG()),nm=cf.nmax;let q;
   const e=EMO[Math.floor(r[7]*EMO.length)];
   if(kind===0){const AL=ALPHA[lang],pool=AL.slice(0,Math.min(AL.length,LVPOOL[lv-1]===99?AL.length:Math.round(LVPOOL[lv-1]*AL.length/29))),t=pool[Math.floor(r[0]*pool.length)];
@@ -444,7 +446,7 @@ const cv=$("cv"),cx=cv.getContext("2d");let CK=1;
 function fit(){const r=$("run").getBoundingClientRect();if(!r.width)return;const d=Math.min(2.5,window.devicePixelRatio||1);cv.width=Math.round(r.width*d);cv.height=Math.round(r.height*d);CK=cv.width/360}
 new ResizeObserver(fit).observe($("run"));
 function genSeg(seg){
-  const cf=LVCFG[G.lv-1];RNG=mulberry32(sub32(G.seed,1000+seg));const ents=[];let tt=1.4;
+  const cf=G.cf;RNG=mulberry32(sub32(G.seed,1000+seg));const ents=[];let tt=1.4;
   while(tt<RUN-0.5){const a=RNG(),b=RNG(),c=RNG(),d=RNG(),lane=b<.5?0:1,obs=a<cf.pObs;
     if(obs)ents.push({at:tt,lane,k:"o",v:Math.floor(c*3)});
     if(d<.85||obs){const sl=obs?(G.t===3?lane:1-lane):(c<.5?0:1);ents.push({at:tt+(G.t===3&&obs?0:.0),lane:sl,k:"s",air:G.t===3&&obs})}
@@ -466,7 +468,7 @@ function flameFx(){const W=G.W,p=hpos(),sk=skinOf(G.t),b=W.ph==="boost";if(W.fx.
    if(G.t===0){y+=36;vy=120+MR()*80;x+=(MR()-.5)*14}else{x-=G.t===2?(210):(G.t===3?18:44);vx=-90-MR()*90;y+=(G.t===3?-34:G.t===2?-12:0)+(MR()-.5)*12;if(G.t===2)x=p.x-190+MR()*8}
    W.fx.push({x,y,vx,vy,l:.35+MR()*.3,m:.65,c:b?(MR()<.5?"#ffe27a":"#ff6a1f"):sk.fx,r:2+MR()*(b?5:2.4)})}}
 function runStep(){
-  const W=G.W,C=CFG[G.t],cf=LVCFG[G.lv-1];W.t+=DT;if(W.stun>0)W.stun-=DT;if(W.slow>0)W.slow-=DT;
+  const W=G.W,C=CFG[G.t],cf=G.cf;W.t+=DT;if(W.stun>0)W.stun-=DT;if(W.slow>0)W.slow-=DT;
   G.alt+=ALTRATE*DT*(W.slow>0?.35:1);G.run+=C.V*DT*(W.slow>0?.5:1);
   const tgt=W.lane;W.lx+= (tgt-W.lx)*Math.min(1,DT*14);if(Math.abs(tgt-W.lx)<.01)W.lx=tgt;
   if(G.t===3&&W.jt>=0){W.jt+=DT;const u=W.jt/.9;if(u>=1){W.jt=-1;W.jh=0}else W.jh=4*100*u*(1-u)}
@@ -498,10 +500,10 @@ function renderQ(speak){
   if(speak)say(q.kind===0?q.say:q.say)}
 function answer(i){
   if(!G||G.over||G.W.ph!=="ask"||G.qOk||paused)return;const q=G.q,btn=$("qans").children[i];
-  if(i===q.a){G.qOk=true;btn.classList.add("good");sfx.good();const first=G.wrong===0;if(first){G.first++;G.combo++;if(G.combo>G.maxCombo)G.maxCombo=G.combo;comboFx();G.streak++;if(G.streak>=2&&G.d<LVCFG[G.lv-1].dm){G.d++;G.streak=0}}
+  if(i===q.a){G.qOk=true;btn.classList.add("good");sfx.good();const first=G.wrong===0;if(first){G.first++;G.combo++;if(G.combo>G.maxCombo)G.maxCombo=G.combo;comboFx();G.streak++;if(G.streak>=2&&G.d<G.cf.dm){G.d++;G.streak=0}}
    $("mb").textContent=pick2(T("ok"));G.mood="happy";G.moodT=2.2;$("mb").classList.remove("h");if(window.NPFx)NPFx.buzz([30,40,30]);
    G.W.gain=first?50:30;G.W.askDone=0;G.W.kickAt=0;G.W.t0=performance.now();G.W.goAt=G.W.tt+.55;G.W.boostPending=true}
-  else{G.wrong++;G.streak=0;if(G.wrong===1)comboLose();if(G.d>LVCFG[G.lv-1].ds)G.d--;G.qdis.add(i);btn.classList.add("bad");btn.disabled=true;sfx.no();
+  else{G.wrong++;G.streak=0;if(G.wrong===1)comboLose();if(G.d>G.cf.ds)G.d--;G.qdis.add(i);btn.classList.add("bad");btn.disabled=true;sfx.no();
    $("mb").textContent=T(q.hint);$("mb").classList.add("h");say(q.kind===0?q.say:T(q.hint));
    if(G.wrong>=2){const c=$("qans").children[q.a];if(c)c.classList.add("pulse")}}}
 const tierOf=c=>c>=8?3:c>=5?2:c>=3?1:0;
@@ -627,7 +629,7 @@ raf=requestAnimationFrame(loop);
 window.NP_CHALLENGE={id:"ten-lua-cua-be",start(){begin(0,{seed:20261116,lv:3})},judge(r){return !!r&&r.score>=280&&!!r.extra&&r.extra.lv===3}};
 function begin(t,o){
   o=o||{};if(window.NPAudio)NPAudio.silence();gid++;
-  const lv=o.lv||LVL;G={t,lv,seed:o.seed!=null?o.seed:Math.floor(MR()*4294967295)>>>0,daily:o.daily||null,ch:o.ch||null,W:newWorld(),alt:0,run:0,dest:0,stars:0,first:0,hits:0,combo:0,maxCombo:0,bonus:0,mood:"idle",moodT:0,qi:0,qdone:0,d:LVCFG[lv-1].ds,streak:0,newD:[],over:false,q:null,wrong:0,auto:false,score:0};
+  const lv=o.lv||LVL;BO=o.bo||0;G={t,lv,bo:BO,cf:cfOf(lv),seed:o.seed!=null?o.seed:Math.floor(MR()*4294967295)>>>0,daily:o.daily||null,ch:o.ch||null,W:newWorld(),alt:0,run:0,dest:0,stars:0,first:0,hits:0,combo:0,maxCombo:0,bonus:0,mood:"idle",moodT:0,qi:0,qdone:0,d:LVCFG[lv-1].ds,streak:0,newD:[],over:false,q:null,wrong:0,auto:false,score:0};
   showOv(null);$("home").hidden=true;$("run").hidden=false;$("homeBtn").hidden=false;$("qp").hidden=true;$("banner").hidden=true;$("cmb").hidden=true;$("fuel").classList.remove("low");
   const sk=skinOf(t);applyVars($("play"),sk);skCss(sk);window.NPWide&&NPWide.skin(sk,t+":"+PF.skinSel[t]);acc=0;lastT=performance.now();fit();updHud();window.NP&&NP.start();
 }
@@ -709,10 +711,10 @@ function syncSound(){$("soundBtn").textContent=sound?"🔊":"🔇"}
 $("soundBtn").onclick=()=>{sound=!sound;if(window.NPAudio)NPAudio.set(sound);else if(!sound&&window.speechSynthesis)speechSynthesis.cancel();syncSound()};
 $("langBtn").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lang",LANG)}catch(e){}applyLang()};
 $("homeBtn").onclick=()=>{if(!HELPER)goHome()};
-$("againBtn").onclick=()=>{if(!G)return;if(G.daily)return startDaily();begin(G.t)};
-window.NPLevel&&NPLevel.attach({levels:8,dupe:"#againBtn",cur:()=>G?G.lv-1:-1,go:i=>{LVL=i+1;LS.set("tl-lv",LVL);begin(G.t,{lv:i+1})},skip:()=>!!(G&&(G.daily||G.ch))});   /* lên level khi kết thúc màn (shared/levelup.js) */
+$("againBtn").onclick=()=>{if(!G)return;if(G.daily)return startDaily();begin(G.t,{bo:G.bo})};
+window.NPLevel&&NPLevel.attach({levels:8,endless:true,dupe:"#againBtn",cur:()=>G?G.lv-1+(G.bo||0):-1,go:i=>{LVL=Math.min(NLV,i+1);LS.set("tl-lv",LVL);begin(G.t,{lv:LVL,bo:NPLevel.boost(i)})},skip:()=>!!(G&&(G.daily||G.ch))});   /* lên level khi kết thúc màn (shared/levelup.js) */
 $("shareBtn").onclick=()=>openGate(()=>{showOv("ovEnd");doShare()},"ovEnd","gt.sh");
-function replay(){if(!G)return;if(G.daily)return startDaily();begin(G.t)}
+function replay(){if(!G)return;if(G.daily)return startDaily();begin(G.t,{bo:G.bo})}
 $("ovEnd").addEventListener("pointerdown",e=>{if(HELPER||e.target.closest("button")||performance.now()-endAt<450)return;replay()});
 $("homeBtn2").onclick=goHome;
 $("rankBtn").onclick=()=>{window.NP&&NP.brag&&NP.brag()};

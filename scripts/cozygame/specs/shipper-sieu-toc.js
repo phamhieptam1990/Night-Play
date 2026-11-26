@@ -32,7 +32,7 @@ module.exports = {
       auto: "Time's up! Auto-picking the rest", sk: { basic: ["Block city", "Block city"], saigon: ["Saigon grid", "Saigon grid"], hanoi: ["Old quarter", "Old quarter"], mekong: ["River & bridges", "River & bridges"], tower: ["High-rise", "High-rise"] } }
   },
   sfx: `{tap:()=>tone(560,.05,"triangle",.06),ok:()=>{[660,880,1100].forEach((f,i)=>tone(f,.1,"triangle",.09,i*.06))},drop:()=>{tone(800,.06,"square",.05);tone(1200,.08,"square",.05,.05)},bad:()=>tone(170,.25,"sawtooth",.07),go:()=>tone(440,.12,"sawtooth",.06),tick:()=>tone(900,.03,"square",.04),end:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.09,i*.09)),combo:n=>{const b=440*Math.pow(1.122,Math.min(n/3,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.1,"triangle",.09,i*.05))}}`,
-  level: { max: 10, rules: [["plan","mul",-.04,12],["n","add",.4,7]] },   /* lên level cuối màn: scripts/cozygame/levelgen.js */
+  level: { max: 10, rules: [["plan","mul",-.04,16],["n","add",.4,6.3]] },   /* lên level cuối màn: scripts/cozygame/levelgen.js */
   gameJs: String.raw`
 let W=360,H=420,SC=1;const ctx=cv.getContext("2d");const VEL=70,VIS=3.4;
 const CFG=[{n:5,plan:30,urg:[1,1,1],hot:[0,1,1],can:[0,0,1]},{n:6,plan:26,urg:[1,2,2],hot:[0,1,1],can:[0,1,1],rush:1},{n:5,plan:28,urg:[0,0,0],hot:[5,5,5],can:[0,0,0],allhot:1},{n:7,plan:40,urg:[1,1,2],hot:[1,1,1],can:[0,1,1],cap:3}];

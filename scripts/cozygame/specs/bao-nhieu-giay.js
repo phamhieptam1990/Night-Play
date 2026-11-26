@@ -73,7 +73,7 @@ module.exports = {
       sk: { basic: ["Patient turtle", "Patient turtle"], sand: ["Desert hourglass", "Desert hourglass"], bomb: ["Time bomb", "Time bomb"], rocket: ["Launch control", "Launch control"], oven: ["Old bakery", "Old bakery"] } }
   },
   sfx: `{tick:()=>tone(900,.03,"square",.04),go:()=>tone(520,.1,"triangle",.08),ok:()=>{[660,880,1100].forEach((f,i)=>tone(f,.1,"triangle",.09,i*.06))},near:()=>{[520,660].forEach((f,i)=>tone(f,.1,"triangle",.08,i*.07))},bad:()=>tone(170,.25,"sawtooth",.07),end:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.09,i*.09)),combo:n=>{const b=440*Math.pow(1.122,Math.min(n/3,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.1,"triangle",.09,i*.05))}}`,
-  level: { max: 10, rules: [["tg","mul",.14,60],["tm","mul",.1,2.2],["hint","mul",-.1,1]] },   /* lên level cuối màn: scripts/cozygame/levelgen.js */
+  level: { max: 10, rules: [["tg","mul",.14,45],["tm","mul",.1,2.2],["hint","mul",-.1,1]] },   /* lên level cuối màn: scripts/cozygame/levelgen.js */
   gameJs: String.raw`
 const CFG=[{n:3,tg:[10,10,10],hint:0,tick:0},{n:3,tg:[15,15,15],hint:5,tick:1},{n:5,tg:null,hint:0,tick:0,tm:1},{n:1,tg:[30],hint:0,tick:0}];
 const fmt=x=>(Math.round(x*100)/100).toFixed(2).replace(".",LANG==="vi"?",":".");

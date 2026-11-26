@@ -323,12 +323,12 @@ $("bLang").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("lan
 $("bSnd").onclick=()=>{if(window.NPAudio)NPAudio.set(!NPAudio.get());$("bSnd").textContent=snd()?"🔊":"🔇"};
 $("bDaily").onclick=()=>begin(fnv(GID+"|"+dayKey()),"daily",0,null);$("bFree").onclick=()=>begin(newSeed(),"free",TY,null);
 
-/* ===== LÊN LEVEL (sinh từ spec.level; trần 10 level, tham số bị kẹp) ===== */
+/* ===== LÊN LEVEL (sinh từ spec.level; trần 10 level, tham số bị kẹp; thắng level cuối thì tự nâng tiếp, bước chậm lại + giới hạn nới dần) ===== */
 const LVU_MAX=10,LVU_K="nn-lvu",LVU_R=[["dur","mul",-0.06,30],["m0","add",0.3,8],["mStep","mul",0.06,1.8]],CFG_0=JSON.parse(JSON.stringify(CFG));
-let LVU=Math.max(0,Math.min(LVU_MAX-1,Math.floor(+LS.get(LVU_K,0))||0)),LPLAY=0;
-function applyLvu(L){CFG.forEach((c,i)=>{const o=CFG_0[i];for(const k in o)c[k]=o[k];LVU_R.forEach(([k,m,s,lim])=>{const f=v=>{if(typeof v!=="number"||v<=0)return v;let x=m==="mul"?v*(1+s*L):v+s*L;x=s<0?Math.max(x,Math.min(v,lim)):Math.min(x,Math.max(v,lim));return Math.round(x*100)/100};if(Array.isArray(o[k]))c[k]=o[k].map(f);else if(typeof o[k]==="number")c[k]=f(o[k])})})}
+let LVU=Math.max(0,Math.min(LVU_MAX+29,Math.floor(+LS.get(LVU_K,0))||0)),LPLAY=0;
+function applyLvu(L0){const B=Math.max(0,L0-(LVU_MAX-1)),L=Math.min(L0,LVU_MAX-1)+0.5*B;CFG.forEach((c,i)=>{const o=CFG_0[i];for(const k in o)c[k]=o[k];LVU_R.forEach(([k,m,s,lim])=>{const f=v=>{if(typeof v!=="number"||v<=0)return v;let x=m==="mul"?v*(1+s*L):v+s*L;const lm0=v+(lim-v)*(1+0.05*B),lm=s<0?Math.max(lm0,lim*0.6):lm0;x=s<0?Math.max(x,Math.min(v,lm)):Math.min(x,Math.max(v,lm));return Math.round(x*100)/100};if(Array.isArray(o[k]))c[k]=o[k].map(f);else if(typeof o[k]==="number")c[k]=f(o[k])})})}
 const begin_0=begin;begin=function(seed,mode,t,ch){const L=mode==="free"&&!ch?LVU:0;applyLvu(L);LPLAY=L;return begin_0.apply(this,arguments)};
-window.NPLevel&&NPLevel.attach({levels:LVU_MAX,cur:()=>G?LPLAY:-1,won:()=>!!G&&(true),skip:()=>!G||G.mode!=="free"||!!G.ch,go:i=>{LVU=i;LS.set(LVU_K,i);if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",G?G.t:TY,null)}});
+window.NPLevel&&NPLevel.attach({levels:LVU_MAX,endless:true,cur:()=>G?LPLAY:-1,won:()=>!!G&&(true),skip:()=>!G||G.mode!=="free"||!!G.ch,go:i=>{LVU=i;LS.set(LVU_K,i);if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",G?G.t:TY,null)}});
 
 applySkin();renderHome();show("home");requestAnimationFrame(tick);
 const proP=passToken()&&!(window.NP&&NP.helper)?PF.loadPro(false).catch(()=>{}):Promise.resolve();

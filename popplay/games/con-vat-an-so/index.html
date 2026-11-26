@@ -283,17 +283,18 @@ function okList(t,flip,ref,v){const n=v.length,o=[];
   else if(t===2){v.forEach((x,i)=>{if((x%2===0)!==flip)o.push([i])})}
   else{for(let i=0;i<n;i++)for(let j=i+1;j<n;j++)if(flip?Math.abs(v[i]-v[j])===ref:v[i]+v[j]===ref)o.push([i,j])}
   return o}
+const upEff=u=>u<=5?u:5+Math.min(25,u-5)*.1;   /* level >= 9 (up > 5): tăng chậm, trần up 7.5 */
 function mkSpec(t,lv,seed,r,up){
-  up=lv===3?(up|0):0;   /* up 0-5 = level 4-8: giữ luật của cấp 3 nhưng số lớn hơn, nhiều vật hơn (từ up 3), đảo luật nhiều hơn */
+  up=lv===3?upEff(up|0):0;   /* up 0-5 = level 4-8: giữ luật của cấp 3 nhưng số lớn hơn, nhiều vật hơn (từ up 3), đảo luật nhiều hơn */
   const g=mulberry32((seed^Math.imul(r+1,2654435761))>>>0),R=()=>g(),ri=(a,b)=>a+Math.floor(R()*(b-a+1));
   const shf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
-  const flip=r>0&&R()<[.18,.28,.32][lv-1]+.05*up,n=NIT[t][lv-1]+(up>=3?1:0),max=MAXV[t][lv-1]+(t===3?3*up:Math.round(MAXV[t][lv-1]*.15*up));let v,ref=null,ok=null;
+  const flip=r>0&&R()<Math.min(.7,[.18,.28,.32][lv-1]+.05*up),n=NIT[t][lv-1]+(up>=3?1:0),max=MAXV[t][lv-1]+(t===3?Math.round(3*up):Math.round(MAXV[t][lv-1]*.15*up));let v,ref=null,ok=null;
   for(let tries=0;tries<400;tries++){
     if(t===0){ref=lv===1?ri(2,4):ri(3,max-3);const sm=()=>ri(1,ref-1),bg=()=>ri(ref+1,max),s=new Set();const c=flip?sm():bg();s.add(c);let k=0;while(s.size<n&&k++<80)s.add(flip?bg():sm());v=shf([...s])}
     else if(t===1){const s=shf(Array.from({length:max},(_,i)=>i+1));v=s.slice(0,n)}
     else if(t===2){const want=flip?1:0,s=new Set();s.add(want?2*ri(0,(max-1)>>1)+1:2*ri(1,max>>1));let k=0;while(s.size<n&&k++<80){const x=ri(1,max);if(x%2!==want)s.add(x)}v=shf([...s])}
-    else{const T0=lv===1?ri(3,6):lv===2?ri(6,10):ri(10+2*up,20+4*up);
-      if(flip){ref=ri(1,[3,5,8][lv-1]+up);const a=ri(1,max-ref);v=[a,a+ref]}else{ref=T0;const a=ri(1,ref-1);v=[a,ref-a]}
+    else{const T0=lv===1?ri(3,6):lv===2?ri(6,10):ri(Math.round(10+2*up),Math.round(20+4*up));
+      if(flip){ref=ri(1,Math.round([3,5,8][lv-1]+up));const a=ri(1,max-ref);v=[a,a+ref]}else{ref=T0;const a=ri(1,ref-1);v=[a,ref-a]}
       while(v.length<n)v.push(ri(1,max));v=shf(v)}
     ok=okList(t,flip,ref,v);if(t===3?ok.length===1:ok.length===1&&v.length===n&&new Set(v).size===n)break;
   }
@@ -537,7 +538,7 @@ function frame(ts){
     if(it.dead||it.fly)continue;let x,y;
     if(lv===1){x=it.x0+2.2*Math.sin(T_*.9*it.sp+it.ph);y=it.y0+1.8*Math.sin(T_*1.1*it.sp+it.ph*1.7)}
     else if(lv===2){x=it.x0+Math.min(9,Math.max(0,it.x0-2),Math.max(0,98-it.S-it.x0))*Math.sin(T_*.8*it.sp+it.ph);y=it.y0+3*Math.sin(T_*1.2*it.sp+it.ph*1.3)}
-    else{x=it.x0+Math.min(7,Math.max(0,it.x0-2),Math.max(0,98-it.S-it.x0))*Math.sin(T_*1.0*it.sp+it.ph);const H=60;y=24+(((it.y0-24)+T_*8*(1+.22*(G.up||0))*it.sp)%H+H)%H}
+    else{x=it.x0+Math.min(7,Math.max(0,it.x0-2),Math.max(0,98-it.S-it.x0))*Math.sin(T_*1.0*it.sp+it.ph);const H=60;y=24+(((it.y0-24)+T_*8*(1+.22*upEff(G.up||0))*it.sp)%H+H)%H}
     it.x=x;it.y=y;it.el.style.transform="translate("+x.toFixed(2)+"cqw,"+y.toFixed(2)+"cqw)";
   }
 }
@@ -669,7 +670,7 @@ $("langBtn").onclick=()=>{LANG=LANG==="vi"?"en":"vi";try{localStorage.setItem("l
 $("homeBtn").onclick=()=>{if(!HELPER)goHome()};
 function again(){if(!G)return;if(G.daily)return startDaily();LVL=G.lv;begin(G.t)}
 $("againBtn").onclick=again;
-window.NPLevel&&NPLevel.attach({levels:8,dupe:"#againBtn",cur:()=>G?(G.lv===3?2+(G.up||0):G.lv-1):-1,go:i=>{LVL=Math.min(3,i+1);UP=Math.max(0,i-2);LS.set("cv-lv",LVL);begin(G.t)},skip:()=>!!(G&&(G.daily||G.ch))});   /* lên level khi kết thúc màn (shared/levelup.js) */
+window.NPLevel&&NPLevel.attach({levels:8,endless:true,dupe:"#againBtn",cur:()=>G?(G.lv===3?2+(G.up||0):G.lv-1):-1,go:i=>{LVL=Math.min(3,i+1);UP=Math.max(0,i-2);LS.set("cv-lv",LVL);begin(G.t)},skip:()=>!!(G&&(G.daily||G.ch))});   /* lên level khi kết thúc màn (shared/levelup.js) */
 $("shareBtn").onclick=()=>openGate(()=>{showOv("ovEnd");doShare()},"ovEnd","gt.sh");
 $("ovEnd").addEventListener("pointerdown",e=>{if(HELPER||e.target.closest("button")||performance.now()-endAt<450)return;again()});
 $("homeBtn2").onclick=goHome;

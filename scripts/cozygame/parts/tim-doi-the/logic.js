@@ -4,11 +4,12 @@ const rankIdx = n => n >= 2300 ? 4 : n >= 1500 ? 3 : n >= 900 ? 2 : n >= 400 ? 1
 const scoreOf = D => D.pts + D.bonus;
 const remain = D => D.C.time ? Math.max(0, D.limit - D.time - D.pen) : 0;
 const leftOf = D => D.tiles.reduce((a, t) => a + (t.on ? 1 : 0), 0) / 2;
-let DIF = (() => { const v = Math.floor(+LS.get("td-lv", 1)); return v >= 0 && v < TD_MAX ? v : 1; })();   /* kẹp trong [0..TD_MAX-1] */
+let DIF = (() => { const v = Math.floor(+LS.get("td-lv", 1)); return v >= 0 && v < TD_MAX + 30 ? v : 1; })();   /* cho phép vượt trần (level tự nâng) */
 const lvOf = (seed, mode) => mode === "free" ? DIF : seed % 3;
 function newGame(seed, mode, t, ch) {
   const lv = lvOf(seed, mode); seed = seed - seed % 3 + lv % 3;   /* độ khó nằm trong hạt giống → chia sẻ/thách đấu/đấu lại đúng ván */
-  const LC0 = LVC[lv], sk = skinOf(), icons = sk.icons || ICONS, LC = Object.assign({}, LC0, { K: Math.min(LC0.K, icons.length) }), C = Object.assign({}, CFG[t]); if (LC.tpp) C.time = 1;
+  const B = Math.max(0, lv - (TD_MAX - 1)), LC0 = Object.assign({}, LVC[Math.min(lv, TD_MAX - 1)]), sk = skinOf(), icons = sk.icons || ICONS, LC = Object.assign({}, LC0, { K: Math.min(LC0.K, icons.length) }), C = Object.assign({}, CFG[t]); if (B) { LC.tpp = Math.max(1.4, +(LC.tpp * (1 - .03 * B)).toFixed(2)); if (LC.em) LC.em = Math.max(2, LC.em - Math.floor(B / 5)); }   /* vượt trần: giây/cặp ngắn dần (sàn 1.4s), ít lượt chạm sai hơn (sàn 2) */
+  if (LC.tpp) C.time = 1;
   const ps = shuffle(icons.map((_, i) => i), sub(seed, 31)).slice(0, LC.K);
   const base = buildTiles(sk.layers || PILE, LC);
   let g = null; for (let a = 0; a < 60 && !g; a++) g = genPairs(base, LC.K, sub(seed, 60 + a));
@@ -109,5 +110,5 @@ new MutationObserver(() => { if (!$("home").hidden) renderLevels(); }).observe($
 document.addEventListener("click", e => { if (e.target.closest && e.target.closest("#bLang")) setTimeout(renderLevels, 0); });
 renderLevels();
 /* lên level khi kết thúc màn (shared/levelup.js): level = bảng LVC (trần TD_MAX = 6); chỉ ván dọn sạch bàn mới mở level tiếp */
-window.NPLevel && NPLevel.attach({ levels: TD_MAX, cur: () => G ? G.lv : -1, won: () => !!G && G.reason === "win", skip: () => !G || G.mode !== "free" || !!G.ch,
+window.NPLevel && NPLevel.attach({ levels: TD_MAX, endless: true, cur: () => G ? G.lv : -1, won: () => !!G && G.reason === "win", skip: () => !G || G.mode !== "free" || !!G.ch,
   go: i => { DIF = i; LS.set("td-lv", i); if (PF.pro && PF.pro.trial) PF.lockPro(); begin(newSeed(), "free", G ? G.t : TY, null); } });

@@ -29,3 +29,7 @@
 - sw.js: np-shell-v640.
 - CHƯA LÀM (đổi hướng: NÂNG độ khó thật, không hạ): bảng tham số theo level + bot cho các game còn dễ (ne-o-ga, mat-tinh-khong, shipper-sieu-toc, bao-nhieu-giay, cat-banh-chung, noi-mot-net, song-sot-cuoi-thang, xay-cau-tre, duong-ray, truot-so-nam-cham, 7 game Pop 3 cấp...). Chưa hạ độ khó game nào. Mỗi game cần bot riêng (hook window.<X> như simtd.js); làm từng game: nới `max`/rules trong spec.level, đo 100 ván/level, ghi bảng vào CHECKLIST-LEVELUP.md.
 - Mẹo chạy: server http của python bị chặn trong phiên này; dùng srv.js (node http) trong scratchpad; puppeteer-core cài ở scratchpad/pp.
+
+## Level tự nâng không trần (2026-11-26, xong cả 30 game)
+- Thắng level cuối thì có "Level N+1" (tối đa 30 bậc vượt trần): `NPLevel.attach({..., endless:true})`, game dùng `NPLevel.boost(i)`. Chi tiết + từng game: docs/CHECKLIST-ENDLESS-LEVEL.md. Game Cozy tham số (levelgen.js) tự nâng chậm dần + nới giới hạn 5%/bậc.
+- Còn nên làm: chơi thử thật ở bậc cao xay-cau-tre, song-sot-cuoi-thang (chưa mô phỏng độ khả thi); thắng thật ghep-ba-the và ga-me-ban-trung để thấy nút "Level N+1"; kiểm server cho link thách đấu lv > 8 của cho-hang-kieu-viet / ga-me-ban-trung.

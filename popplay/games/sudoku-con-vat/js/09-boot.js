@@ -12,10 +12,10 @@ $("soundBtn").onclick = () => { sound = !sound; if (window.NPAudio) NPAudio.set(
 $("langBtn").onclick = () => { LANG = LANG === "vi" ? "en" : "vi"; try { localStorage.setItem("lang", LANG); } catch (e) {} applyLang(); };
 $("homeBtn").onclick = () => { if (!HELPER) goHome(); };
 $("undoBtn").onclick = undo; $("hintBtn").onclick = hint; $("resetBtn").onclick = resetPuz;
-function retry() { if (!G || HELPER) return; begin(G.t, { lv: G.lv, seed: G.seed, daily: G.daily, ch: G.ch }); }
+function retry() { if (!G || HELPER) return; begin(G.t, { lv: G.lv, seed: G.seed, daily: G.daily, ch: G.ch, bo: G.bo }); }
 $("retryBtn").onclick = retry;
-$("againBtn").onclick = () => { if (!G) return; if (G.daily) return startDaily(); begin(G.t, { lv: G.lv }); };
-window.NPLevel&&NPLevel.attach({levels:LV_MAX,dupe:"#againBtn",cur:()=>G?G.lv-1:-1,go:i=>{LVL=Math.min(3,i+1);LS.set("sd-lv",LVL);begin(G.t, { lv: i + 1 })},skip:()=>!!(G && (G.daily || G.ch))});   /* lên level khi kết thúc màn (shared/levelup.js) */
+$("againBtn").onclick = () => { if (!G) return; if (G.daily) return startDaily(); begin(G.t, { lv: G.lv, bo: G.bo }); };
+window.NPLevel&&NPLevel.attach({levels:LV_MAX,endless:true,dupe:"#againBtn",cur:()=>G?G.lv-1+(G.bo||0):-1,go:i=>{LVL=Math.min(3,i+1);LS.set("sd-lv",LVL);begin(G.t, { lv: Math.min(LV_MAX, i + 1), bo: NPLevel.boost(i) })},skip:()=>!!(G && (G.daily || G.ch))});   /* lên level khi kết thúc màn (shared/levelup.js) */
 $("shareBtn").onclick = () => openGate(() => { showOv("ovEnd"); doShare(); }, "ovEnd", "gt.sh");
 $("ovEnd").addEventListener("pointerdown", e => { if (HELPER || e.target.closest("button") || performance.now() - endAt < 450) return; $("againBtn").onclick(); });
 $("homeBtn2").onclick = goHome;
@@ -34,14 +34,14 @@ addEventListener("storage", e => { if (e.key === "theme") document.documentEleme
 if (window.NP) {
   NP.state(() => {
     if (!G || G.over) return null;
-    const st = { t: G.t, lv: G.lv, s: G.seed, v: G.val.join(""), m: G.mist, h: G.hints };
+    const st = { t: G.t, lv: G.lv, s: G.seed, v: G.val.join(""), m: G.mist, h: G.hints, b: G.bo };
     if (PF.pro && !PF.pro.trial && PF.ticket) { st.tk = PF.ticket; const sk = PF.skinSel[G.t]; if (sk && sk !== "basic" && PF.skins[G.t][sk]) st.sk = sk; }
     return st;
   });
   NP.onPause(() => { paused = true; $("play").classList.add("paused"); if (window.speechSynthesis) speechSynthesis.cancel(); }, () => { paused = false; $("play").classList.remove("paused"); });
 }
 function restoreFrom(S) {
-  LVL = Math.min(3, S.lv); begin(S.t, { seed: S.s, lv: S.lv });
+  LVL = Math.min(3, S.lv); begin(S.t, { seed: S.s, lv: S.lv, bo: Math.max(0, Math.min(30, +S.b || 0)) });
   const s = String(S.v || ""); if (s.length === G.val.length) {
     for (let i = 0; i < s.length; i++) { const v = +s[i]; if (G.Pz.puz[i] || !(v >= 0 && v <= G.Pz.N)) continue; if (v === G.Pz.sol[i]) G.val[i] = v; }
   }

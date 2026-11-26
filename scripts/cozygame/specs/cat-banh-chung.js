@@ -36,10 +36,10 @@ module.exports = {
   },
   sfx: `{cut:()=>{tone(700,.08,"sawtooth",.06);tone(300,.12,"triangle",.07,.04)},ok:()=>{[660,880,1100].forEach((f,i)=>tone(f,.1,"triangle",.09,i*.06))},near:()=>{[520,660].forEach((f,i)=>tone(f,.1,"triangle",.08,i*.07))},bad:()=>tone(170,.25,"sawtooth",.07),end:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.09,i*.09)),combo:n=>{const b=440*Math.pow(1.122,Math.min(n/3,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.1,"triangle",.09,i*.05))}}`,
   level: { custom: String.raw`const CB_LV=[[0,0,0,4,1],[0,0,0,5,1],[0,0,0,6,1],[3,0,0,6,1],[3,1,0,6.5,1],[3,0,1,7,1],[4,1,0,7.5,1.2],[4,1,1,8,1.2],[4,1,1,9,1.5],[4,1,1,10,1.8]],CB_0=JSON.parse(JSON.stringify(CFG));
-let CBL=Math.max(0,Math.min(CB_LV.length-1,Math.floor(+LS.get("cb-lvu",0))||0)),CBP=0;
-function cbApply(L){const v=CB_LV[L];CFG.forEach((c,i)=>{const o=CB_0[i];for(const k in o)c[k]=o[k];if(!L)return;if(v[0])c.parts=Math.max(o.parts,v[0]);if(v[1])c.rot=1;if(v[2])c.fog=1;c.strict=v[3];c.rs=v[4]})}
+let CBL=Math.max(0,Math.min(CB_LV.length+29,Math.floor(+LS.get("cb-lvu",0))||0)),CBP=0;
+function cbApply(L){const v=CB_LV[Math.min(L,CB_LV.length-1)],B=window.NPLevel?NPLevel.boost(L):0;CFG.forEach((c,i)=>{const o=CB_0[i];for(const k in o)c[k]=o[k];if(!L)return;if(v[0])c.parts=Math.max(o.parts,v[0]);if(v[1])c.rot=1;if(v[2])c.fog=1;c.strict=v[3]+.15*B;c.rs=v[4]+.03*B})}   /* i>=N: strict +0.15/bậc (tối đa 14,5), tốc độ xoay +0.03/bậc (tối đa 2,7) */
 const cb_begin=begin;begin=function(seed,mode,t,ch){const L=mode==="free"&&!ch?CBL:0;cbApply(L);CBP=L;return cb_begin.apply(this,arguments)};
-window.NPLevel&&NPLevel.attach({levels:CB_LV.length,cur:()=>G?CBP:-1,won:()=>!!G,skip:()=>!G||G.mode!=="free"||!!G.ch,go:i=>{CBL=i;LS.set("cb-lvu",i);if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",G?G.t:TY,null)}});` },
+window.NPLevel&&NPLevel.attach({levels:CB_LV.length,endless:true,cur:()=>G?CBP:-1,won:()=>!!G,skip:()=>!G||G.mode!=="free"||!!G.ch,go:i=>{CBL=i;LS.set("cb-lvu",i);if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",G?G.t:TY,null)}});` },
   gameJs: String.raw`
 let W=360,H=400,SC=1;const ctx=cv.getContext("2d");
 const CFG=[{parts:2,pool:["sq","circle","semi","pent","blob"]},{parts:2,rot:1,pool:["sq","circle","pent","L","star"]},{parts:3,pool:["sq","circle","pent","blob","semi"]},{parts:4,fog:1,pool:["sq","circle","pent","semi","blob"]}],ROUNDS=5;

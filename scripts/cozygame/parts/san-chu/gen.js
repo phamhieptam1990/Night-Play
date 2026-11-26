@@ -17,7 +17,7 @@ function inside(shape, r, c, n) {
   return true;
 }
 function genPuzzle(seed, lv, sk) {
-  const L = LVC[lv], n = L.n, shape = sk.shape || "square", pool = (sk.words || WORDS).filter(w => w[0].length <= n - (shape === "square" ? 0 : 2));
+  const L = LVC[Math.min(lv, LVC.length - 1)], B = Math.max(0, lv - (LVC.length - 1)), n = L.n, shape = sk.shape || "square", pool = (sk.words || WORDS).filter(w => w[0].length <= n - (shape === "square" ? 0 : 2));
   for (let att = 0; att < 30; att++) {
     const R = sub(seed, 7 + att), grid = new Array(n * n).fill(""), words = [], order = shuffle(pool.map((_, i) => i), R).map(i => pool[i]).slice(0, L.k + 4).sort((a, b) => b[0].length - a[0].length);
     for (const [w, vi] of order) {
@@ -33,7 +33,7 @@ function genPuzzle(seed, lv, sk) {
     }
     if (words.length < L.k) continue;
     const used = new Set(words.flatMap(x => x.cells)), F = sub(seed, 500 + att), A = "ABCDEFGHIJKLMNOPQRSTUVWXYZ", ink = words.map(x => x.w).join("");
-    for (let i = 0; i < n * n; i++) if (!grid[i] && inside(shape, Math.floor(i / n), i % n, n)) grid[i] = F() < .35 + .04 * Math.max(0, lv - 2) ? ink[Math.floor(F() * ink.length)] : A[Math.floor(F() * 26)];
+    for (let i = 0; i < n * n; i++) if (!grid[i] && inside(shape, Math.floor(i / n), i % n, n)) grid[i] = F() < Math.min(.72, .35 + .04 * Math.max(0, Math.min(lv, LVC.length - 1) - 2) + .012 * B) ? ink[Math.floor(F() * ink.length)] : A[Math.floor(F() * 26)];
     return { n, grid, words, used };
   }
   return null;

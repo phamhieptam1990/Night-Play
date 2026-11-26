@@ -808,7 +808,10 @@ function resumeRound(by){
 let endInfo=null,ovKind="start",endAtDD=0;
 /* lên level cuối màn (shared/levelup.js): trần 8 = Dễ/Thường/Khó/Cực khó + 4 level thêm (lv5-lv8); chế độ khoá độ khó và thách đấu không dùng */
 const DD_LV=["easy","normal","hard","rage","lv5","lv6","lv7","lv8"];
-window.NPLevel&&NPLevel.attach({levels:DD_LV.length,host:"#overlay",dupe:"#againBtn",cur:()=>mode.lockDiff?-1:DD_LV.indexOf(diff.id),skip:()=>!!(mode.lockDiff||(typeof CH!=="undefined"&&CH)||(window.NP&&NP.helper)),go:i=>{DD.sel.diff=DD_LV[i];start()}});
+/* i >= 8 (vượt trần, NPLevel.boost 1..30): id "lv<i+1>", sâu ở lại ×.97/bậc (≥.35), ra dày ×.97/bậc (≥.35), điểm nhân giữ 2,3 */
+const ddLvId=i=>i<DD_LV.length?DD_LV[i]:"lv"+(i+1),ddLvIdx=id=>{const j=DD_LV.indexOf(id);return j>=0?j:/^lv\d+$/.test(id)?+id.slice(2)-1:-1};
+function ddLvDiff(i){const id=ddLvId(i);if(!DD.diffs[id]){const B=window.NPLevel?NPLevel.boost(i):0,f=Math.pow(.97,B);DD.diffs[id]={id,stay:Math.max(.35,.42*f),gap:Math.max(.35,.45*f),score:2.3}}return id}
+window.NPLevel&&NPLevel.attach({levels:DD_LV.length,host:"#overlay",dupe:"#againBtn",endless:true,cur:()=>mode.lockDiff?-1:ddLvIdx(diff.id),skip:()=>!!(mode.lockDiff||(typeof CH!=="undefined"&&CH)||(window.NP&&NP.helper)),go:i=>{DD.sel.diff=i<DD_LV.length?DD_LV[i]:ddLvDiff(i);start()}});
 function end(){
   endSecs=roundSecs();endMood=mood;
   running=false;paused=false;pausedBy=null;$("pauseOv").hidden=true;syncPauseBtn();clearTimeout(hudT);document.body.classList.remove("hud-dim");clearInterval(tickT);clearTimeout(spawnT);cells.forEach(c=>{clearTimeout(c.timer);hide(c)});

@@ -4,12 +4,13 @@ const rankIdx = n => n >= 2600 ? 4 : n >= 1800 ? 3 : n >= 1100 ? 2 : n >= 500 ? 
 const scoreOf = D => D.pts + D.bonus;
 const remain = D => D.CF.time ? Math.max(0, D.limit - D.time) : 0;
 const foundOf = D => D.words.reduce((a, w) => a + (w.found ? 1 : 0), 0);
-let DIF = (() => { const v = LS.get("sc-lv", 1); return Number.isInteger(v) && v >= 0 && v < LVC.length ? v : 1; })();
+let DIF = (() => { const v = LS.get("sc-lv", 1); return Number.isInteger(v) && v >= 0 && v < LVC.length + 30 ? v : 1; })();
+const eLv = lv => Math.min(lv, LVC.length - 1), bLv = lv => Math.max(0, lv - (LVC.length - 1));   /* vượt trần: lưới/số từ giữ tối đa; thêm chữ nhiễu dày hơn (gen.js), hết 💡, ván đua giờ ngắn dần (sàn 60%) */
 const lvOf = (seed, mode) => mode === "free" ? DIF : mode === "daily" ? seed % 3 : seed % 8;   /* thách đấu mang đủ 8 level trong seed (seed%8); ván hôm nay giữ seed%3 */
 function newGame(seed, mode, t, ch) {
-  const lv = lvOf(seed, mode); const M = mode === "daily" ? 3 : 8; seed = seed - seed % M + (mode === "daily" ? Math.min(lv, 2) : lv); const sk = skinOf(), P = genPuzzle(seed, lv, sk) || genPuzzle(seed + 3, lv, { words: WORDS });
-  const D = { seed, mode, t, lv, CF: CFG[t], n: P.n, grid: P.grid, words: P.words, used: P.used, ch: ch || null, sel: null, order: [], pts: 0, bonus: 0, combo: 0, maxCombo: 0, lastF: -99, hints: lv >= 6 ? 1 : lv >= 4 ? 2 : 3, hint: null, errs: 0,
-    fx: [], shake: 0, flash: 0, storms: 0, nextStorm: CFG[t].storm, limit: 60 + P.words.length * 14, over: false, reason: "end", time: 0, dur: 1e9, beat: false };
+  const lv = lvOf(seed, mode); const M = mode === "daily" ? 3 : 8; seed = seed - seed % M + (mode === "daily" ? Math.min(lv, 2) : eLv(lv)); const sk = skinOf(), P = genPuzzle(seed, lv, sk) || genPuzzle(seed + 3, lv, { words: WORDS });
+  const D = { seed, mode, t, lv, CF: CFG[t], n: P.n, grid: P.grid, words: P.words, used: P.used, ch: ch || null, sel: null, order: [], pts: 0, bonus: 0, combo: 0, maxCombo: 0, lastF: -99, hints: lv >= 8 ? 0 : lv >= 6 ? 1 : lv >= 4 ? 2 : 3, hint: null, errs: 0,
+    fx: [], shake: 0, flash: 0, storms: 0, nextStorm: CFG[t].storm, limit: Math.round((60 + P.words.length * 14) * Math.max(.6, 1 - .03 * bLv(lv))), over: false, reason: "end", time: 0, dur: 1e9, beat: false };
   return D;
 }
 const cellsOfSel = D => { const s = D.sel; if (!s) return []; const n = D.n, r0 = Math.floor(s.a / n), c0 = s.a % n, o = []; for (let i = 0; i <= s.len; i++) o.push((r0 + s.d[0] * i) * n + c0 + s.d[1] * i); return o; };
@@ -85,5 +86,5 @@ new MutationObserver(() => { if (!$("home").hidden) renderLevels(); }).observe($
 document.addEventListener("click", e => { if (e.target.closest && e.target.closest("#bLang")) setTimeout(renderLevels, 0); });
 renderLevels();
 /* lên level cuối màn (shared/levelup.js): trần 8 level (lưới 8→14, 6→14 từ); chỉ ván thắng mới mở level tiếp */
-window.NPLevel && NPLevel.attach({ levels: LVC.length, cur: () => G ? G.lv : -1, won: () => !!G && G.reason === "win", skip: () => !G || G.mode !== "free" || !!G.ch,
+window.NPLevel && NPLevel.attach({ levels: LVC.length, endless: true, cur: () => G ? G.lv : -1, won: () => !!G && G.reason === "win", skip: () => !G || G.mode !== "free" || !!G.ch,
   go: i => { DIF = i; LS.set("sc-lv", i); if (PF.pro && PF.pro.trial) PF.lockPro(); begin(newSeed(), "free", G ? G.t : TY, null); } });

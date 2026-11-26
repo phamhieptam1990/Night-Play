@@ -881,7 +881,10 @@ PF.applyLayout=applyLayout;
 window.NP_CHALLENGE={id:"cozy-wings",start(){if(!PF.types.bee)return false;diff="mid";applyDiffTheme();startRound("bee")},judge(r){return !!r&&r.score>=1000&&!!r.extra&&r.extra.type==="bee"&&r.extra.diff==="mid"}};
 /* lên level cuối màn (shared/levelup.js): trần 8 = Dễ/Vừa/Khó + 5 level thêm (l4-l8); ván hôm nay và thách đấu không dùng */
 const CW_LV=["easy","mid","hard","l4","l5","l6","l7","l8"];
-window.NPLevel&&NPLevel.attach({levels:CW_LV.length,dupe:"#againBtn",cur:()=>PF.S&&PF.S.D?CW_LV.indexOf(PF.S.D.id):-1,skip:()=>!!(CH||(PF.S&&PF.S.daily)),go:i=>{diff=CW_LV[i];LS.set("cw-diff",diff);applyDiffTheme();startRound(PF.cur||"letters")}});
+/* i >= 8 (vượt trần, NPLevel.boost 1..30): id "l<i+1>"; từ bản l8, mỗi bậc tốc độ +.012 (≤+.36), khoảng hở ×.99 (≥.5), gió/mưa +.015 (≤+.4); điểm nhân giữ 4 */
+const cwLvIdx=id=>{const j=CW_LV.indexOf(id);return j>=0?j:/^l\d+$/.test(id)?+id.slice(1)-1:-1};
+function cwLvDiff(i){if(i<CW_LV.length)return CW_LV[i];const id="l"+(i+1);if(!DIFF[id]){const B=window.NPLevel?NPLevel.boost(i):0,b=DIFF.l8;DIFF[id]={hearts:1,sp:b.sp+Math.min(.36,.012*B),gap:Math.max(.5,b.gap*Math.pow(.99,B)),mult:b.mult,wind:b.wind+Math.min(.4,.015*B),drain:b.drain+Math.min(.4,.015*B),rain:b.rain+Math.min(.4,.015*B),id};I18N.vi["dif."+id]="Level "+(i+1);I18N.en["dif."+id]="Level "+(i+1)}return id}
+window.NPLevel&&NPLevel.attach({levels:CW_LV.length,endless:true,dupe:"#againBtn",cur:()=>PF.S&&PF.S.D?cwLvIdx(PF.S.D.id):-1,skip:()=>!!(CH||(PF.S&&PF.S.daily)),go:i=>{diff=cwLvDiff(i);LS.set("cw-diff",diff);applyDiffTheme();startRound(PF.cur||"letters")}});
 function startRound(type,resume,opts){
   if(!PF.types[type])return;audio();chBeat=false;
   const sk=curSkin(type);applyLayout(sk?sk.layout:"classic");window.NPWide&&NPWide.skin(sk,type+":"+(PF.skinSel[type]||"default"));

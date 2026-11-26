@@ -38,10 +38,12 @@ function solveCount(T, P, g, lim, R, out) {
   for (const d of ds) { g[best] = d; cnt += solveCount(T, P, g, lim - cnt, R, out); if (cnt >= lim) break; }
   g[best] = 0; return cnt;
 }
-function genSudoku(seed, ty, lv) {
+/* sàn số gợi ý mà bộ sinh thật sự đạt được (đo bằng cách bỏ ô tới khi hết bỏ được mà vẫn duy nhất) theo loại bàn */
+const CLUE_FLOOR = [4, 9, 3, 5];
+function genSudoku(seed, ty, lv, bo) {
   const T = TYPEDEF[ty], P = peersOf(T), N = T.N, R = sub(seed, 11), sol = [], g0 = new Array(N * N).fill(0);
   solveCount(T, P, g0, 1, R, sol);
-  const full = sol[0], puz = full.slice(), target = CLUES[ty][lv - 1], order = [];
+  const full = sol[0], puz = full.slice(), target = Math.max(CLUE_FLOOR[ty], CLUES[ty][lv - 1] - (bo || 0)), order = [];
   for (let i = 0; i < N * N; i++) order.push(i);
   for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(R() * (i + 1)), x = order[i]; order[i] = order[j]; order[j] = x; }
   let left = N * N;
@@ -53,9 +55,9 @@ function genSudoku(seed, ty, lv) {
   return { T, P, sol: full, puz };
 }
 /* câu đố của game: seed + loại + cấp -> {N,T,P,sol,puz,empty} */
-function makePuzzle(t, lv, seed) {
-  const S = genSudoku(seed, t, lv), n = S.T.N * S.T.N;
-  return { t, lv, seed, N: S.T.N, T: S.T, P: S.P, sol: S.sol, puz: S.puz, empty: S.puz.filter(v => !v).length, n };
+function makePuzzle(t, lv, seed, bo) {
+  const S = genSudoku(seed, t, lv, bo), n = S.T.N * S.T.N;
+  return { t, lv, seed, bo: bo || 0, N: S.T.N, T: S.T, P: S.P, sol: S.sol, puz: S.puz, empty: S.puz.filter(v => !v).length, n };
 }
 /* ô nào đang trùng bạn thú với ô cùng hàng/cột/ô/đường chéo (để nhắc nhẹ) */
 const dupPeers = (Pz, val, i, v) => Pz.P[i].filter(p => val[p] === v);

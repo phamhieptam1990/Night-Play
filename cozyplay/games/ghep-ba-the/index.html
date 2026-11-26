@@ -224,10 +224,12 @@ const leftOf = D => D.tiles.reduce((a, t) => a + (t.on ? 1 : 0), 0);
 /* LEVEL (trần GB_MAX = 6): mỗi level chỉnh số loại hình K (≤12), số ô khay sl (≥5), số tầng đè thêm big (≤2), lượt hoàn tác un, giờ đua tg (nhân, ≥0.6). Ván hôm nay/thách đấu luôn level 0. */
 const GB_LV = [{ K: 8, sl: 7, big: 0, un: 1, tg: 1, mx: .4 }, { K: 9, sl: 7, big: 1, un: 1, tg: 1, mx: .5 }, { K: 10, sl: 6, big: 1, un: 1, tg: .9, mx: .6 }, { K: 11, sl: 6, big: 2, un: 0, tg: .8, mx: .75 }, { K: 12, sl: 5, big: 4, un: 0, tg: .7, mx: .9 }, { K: 12, sl: 5, big: 7, un: 0, tg: .6, mx: 1 }];
 const GB_MAX = GB_LV.length, GB_K = "gt-lvu";
-let GBL = Math.max(0, Math.min(GB_MAX - 1, Math.floor(+LS.get(GB_K, 0)) || 0));
+let GBL = Math.max(0, Math.min(GB_MAX + 29, Math.floor(+LS.get(GB_K, 0)) || 0));   /* i >= GB_MAX: vượt trần, NPLevel.boost(i) = 1..30 bậc */
 function newGame(seed, mode, t, ch, lvForce) {
-  const lx = lvForce != null ? lvForce : (mode === "free" && !ch ? GBL : 0), X = GB_LV[Math.max(0, Math.min(GB_MAX - 1, lx))];
-  const C = Object.assign({}, CFG[t]); C.K = Math.max(C.K, X.K); C.big = Math.max(C.big, X.big); if (C.time) C.time = Math.max(54, Math.round(C.time * X.tg));
+  const lx = lvForce != null ? lvForce : (mode === "free" && !ch ? GBL : 0), X0 = GB_LV[Math.max(0, Math.min(GB_MAX - 1, lx))], B = window.NPLevel ? NPLevel.boost(lx) : 0;
+  /* vượt trần: mỗi bậc thêm tầng đè (tối đa +3, tức big 10), thêm loại hình (≤ số icon), giờ đua ngắn dần (tg ≥ .36, sàn 45 giây) */
+  const X = Object.assign({}, X0, B ? { K: X0.K + Math.min(4, B >> 1), big: X0.big + Math.min(3, Math.ceil(B / 4)), tg: Math.max(.36, X0.tg - .01 * B) } : {});
+  const C = Object.assign({}, CFG[t]); C.K = Math.max(C.K, X.K); C.big = Math.max(C.big, X.big); if (C.time) C.time = Math.max(B ? 45 : 54, Math.round(C.time * X.tg));
   SLOTS = X.sl;
   const sk = skinOf(), icons = sk.icons || ICONS, KK = Math.min(C.K, icons.length), ps = shuffle(icons.map((_, i) => i), sub(seed, 31)).slice(0, KK);
   const base = buildTiles(sk.layers || PILE, C.big);
@@ -467,7 +469,7 @@ $("bSnd").onclick=()=>{if(window.NPAudio)NPAudio.set(!NPAudio.get());$("bSnd").t
 $("bDaily").onclick=()=>begin(fnv(GID+"|"+dayKey()),"daily",0,null);$("bFree").onclick=()=>begin(newSeed(),"free",TY,null);
 
 /* ===== LÊN LEVEL (tuỳ biến theo game) ===== */
-window.NPLevel&&NPLevel.attach({levels:GB_MAX,cur:()=>G?G.lx:-1,won:()=>!!G&&G.reason==="win",skip:()=>!G||G.mode!=="free"||!!G.ch,go:i=>{GBL=i;LS.set(GB_K,i);if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",G?G.t:TY,null)}});
+window.NPLevel&&NPLevel.attach({levels:GB_MAX,endless:true,cur:()=>G?G.lx:-1,won:()=>!!G&&G.reason==="win",skip:()=>!G||G.mode!=="free"||!!G.ch,go:i=>{GBL=i;LS.set(GB_K,i);if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",G?G.t:TY,null)}});
 
 applySkin();renderHome();show("home");requestAnimationFrame(tick);
 const proP=passToken()&&!(window.NP&&NP.helper)?PF.loadPro(false).catch(()=>{}):Promise.resolve();

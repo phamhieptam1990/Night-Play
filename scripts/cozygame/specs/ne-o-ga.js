@@ -31,7 +31,7 @@ module.exports = {
       dg: "🕳️ dodged {n} potholes", bd: "🥖×{n}", sk: { basic: ["Rainy street", "Rainy street"], saigon: ["Saigon rain night", "Saigon rain night"], hanoi: ["Hanoi old quarter", "Hanoi old quarter"], mekong: ["Mekong bridge", "Mekong bridge"], dalat: ["Da Lat pass", "Da Lat pass"] } }
   },
   sfx: `{move:()=>tone(420,.05,"triangle",.05),ok:()=>{[660,880,1100].forEach((f,i)=>tone(f,.09,"triangle",.08,i*.05))},coat:()=>{[500,700,900].forEach((f,i)=>tone(f,.08,"square",.05,i*.05))},bad:()=>{tone(120,.3,"sawtooth",.1);tone(80,.35,"square",.08,.05)},splash:()=>tone(260,.15,"sine",.05),end:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.09,i*.09)),combo:n=>{const b=440*Math.pow(1.122,Math.min(n/3,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.1,"triangle",.09,i*.05))}}`,
-  level: { max: 10, rules: [["v0","mul",.05,420],["v1","mul",.05,760],["carP","add",.04,.7]] },   /* lên level cuối màn: scripts/cozygame/levelgen.js */
+  level: { max: 10, rules: [["v0","mul",.05,400],["v1","mul",.05,720],["carP","add",.04,.5]] },   /* lên level cuối màn: scripts/cozygame/levelgen.js */
   gameJs: String.raw`
 let W=360,H=560,SC=1;const ctx=cv.getContext("2d");
 const CFG=[{v0:280,v1:520,carP:.25,rain:1,night:0,storm:0},{v0:310,v1:560,carP:.25,rain:2,night:0,storm:1,gust:1,fog:1},{v0:290,v1:520,carP:.5,rain:1,night:0,storm:0,onc:1},{v0:280,v1:500,carP:.25,rain:1,night:1,storm:0,batt:1}];

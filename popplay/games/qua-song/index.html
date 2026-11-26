@@ -182,7 +182,7 @@ const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(R
 const track=(f,k)=>{try{fetch("/api/paywall",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({f,k}),keepalive:true}).catch(()=>{})}catch(e){}};
 const subUrl=()=>"../../../subscribe.html?from="+encodeURIComponent("popplay/index.html#qua-song")+"&plan=month";
 const passToken=()=>{try{const p=JSON.parse(localStorage.getItem("pass"));return p&&p.token}catch(e){return null}};
-const LVE=["🌱","🌿","🌳","🌲","🔥","⚡","💎","👑"];
+const LVE=["🌱","🌿","🌳","🌲","🔥","⚡","💎","👑"],lvIc=l=>LVE[Math.min(l,8)-1]+(l>8?l:"");   /* nhãn level: >8 thêm số */
 
 /* ===== NGÔN NGỮ ===== */
 const I18N={
@@ -242,24 +242,25 @@ function solveFrom(P,m0,b0){const n=P.ents.length,full=(1<<n)-1,key=(m,b)=>m*2+b
 
 /* ===== CÂU ĐỐ: 4 loại × 8 cấp, nhiều biến thể chọn theo hạt giống ===== */
 const R=(k,row,t)=>({k,row:!!row,t:t||1});
-function makePuzzle(t,lv,seed){
+function makePuzzle(t,lvIn,seed){
+  const lv=Math.min(lvIn,8),B=window.NPLevel?NPLevel.boost(lvIn-1):0;   /* level >= 9: dùng luật cấp 8 + B bậc khó thêm (thêm vật / ràng buộc / thời gian) */
   RNG=mulberry32((seed^Math.imul(t+1,2246822519)^Math.imul(lv,3266489917))>>>0);let P;
-  if(t===0){const [n,cap]=[[2,2],[3,2],[4,3],[5,3],[6,4],[7,4],[6,4],[7,4]][lv-1],e=[];for(let i=0;i<n;i++)e.push(R("C",1));for(let i=0;i<n;i++)e.push(R("T",lv<7));
+  if(t===0){const [n0,cap]=[[2,2],[3,2],[4,3],[5,3],[6,4],[7,4],[6,4],[7,4]][lv-1],n=n0+(B>=6?1:0),e=[];for(let i=0;i<n;i++)e.push(R("C",1));for(let i=0;i<n;i++)e.push(R("T",lv<7));
     P={ents:e,cap,mode:"moves",bad:L=>{let c=0,x=0;for(const i of L){if(e[i].k==="C")c++;else x++}return c>0&&x>c},why:()=>({k:"w.rule0"})}}
-  else if(t===1){const n=[3,4,5,5,5,5,5,5][lv-1],star=lv>1&&RNG()<.5,e=[R("F",1)];for(let i=1;i<=n;i++)e.push(R("x"+i,0));
+  else if(t===1){const n=[3,4,5,5,5,5,5,5][lv-1]+(B>=8?1:0),star=lv>1&&RNG()<.5,e=[R("F",1)];for(let i=1;i<=n;i++)e.push(R("x"+i,0));
     let edges=star?[[1,2],[1,3]]:[[1,2],[2,3]];
-    if(lv>=4){const pairs=[];for(let a=1;a<=n;a++)for(let b=a+1;b<=n;b++)pairs.push([a,b]);const k=[0,0,0,3,3,4,4,5][lv-1];let best=null,bo=0;
+    if(lv>=4){const pairs=[];for(let a=1;a<=n;a++)for(let b=a+1;b<=n;b++)pairs.push([a,b]);const k=[0,0,0,3,3,4,4,5][lv-1]+Math.min(2,B/5|0);let best=null,bo=0;
       for(let tr=0;tr<40;tr++){const ps=pairs.slice(),ed=[];while(ed.length<k)ed.push(ps.splice(Math.floor(RNG()*ps.length),1)[0]);
         const sv=solveFrom({ents:e,cap:2,mode:"moves",bad:L=>!L.includes(0)&&ed.some(([a,b])=>L.includes(a)&&L.includes(b))},0,0);if(sv&&sv.cost>bo){bo=sv.cost;best=ed}}
       if(best)edges=best}   /* cấp cao: chọn bộ "ai ăn ai" giải được nhưng đường dài nhất trong 40 mẫu */
     P={ents:e,cap:2,mode:"moves",edges,bad:L=>!L.includes(0)&&edges.some(([a,b])=>L.includes(a)&&L.includes(b)),why:L=>{const g=edges.find(([a,b])=>L.includes(a)&&L.includes(b));return g?{k:"w.eat",a:g[0],b:g[1]}:{k:"w.rule0"}}}}
-  else if(t===2){const [s,d]=lv===1?pick([[1,0],[0,1]]):lv===2?pick([[2,1],[1,2]]):[[2,2],[3,3],[4,3],[4,4],[5,4],[5,5]][lv-3],e=[R("Fa",1),R("M",1),R("P",1),R("Tf",0)];for(let i=0;i<s;i++)e.push(R("S",0));for(let i=0;i<d;i++)e.push(R("D",0));
+  else if(t===2){let [s,d]=lv===1?pick([[1,0],[0,1]]):lv===2?pick([[2,1],[1,2]]):[[2,2],[3,3],[4,3],[4,4],[5,4],[5,5]][lv-3];if(B>=8)s++;if(B>=16)d++;const e=[R("Fa",1),R("M",1),R("P",1),R("Tf",0)];for(let i=0;i<s;i++)e.push(R("S",0));for(let i=0;i<d;i++)e.push(R("D",0));
     const has=(L,k)=>L.some(i=>e[i].k===k);
     P={ents:e,cap:lv>=4?3:2,mode:"moves",bad:L=>!!bad2(L),why:L=>({k:bad2(L)||"w.rule0"})};
     function bad2(L){if(has(L,"Tf")&&!has(L,"P")&&L.length>1)return"w.rule2c";if(has(L,"Fa")&&has(L,"D")&&!has(L,"M"))return"w.rule2a";if(has(L,"M")&&has(L,"S")&&!has(L,"Fa"))return"w.rule2b";return null}}
-  else{const sets=[[[1,2,5,10],[1,2,4,9],[1,3,4,9]],[[1,2,5,8,10],[1,2,4,8,13],[1,2,3,6,9]],[[2,3,6,8,12],[1,3,4,8,12],[2,3,5,9,13]],[[1,2,5,10,12],[2,3,7,9,14],[1,3,6,9,11]],[[2,4,5,9,12],[3,5,8,11,15],[1,4,6,10,16]],[[1,2,5,8,13,17],[1,3,4,8,13,19],[2,3,6,9,14,18]],[[2,4,5,9,12,20],[3,5,7,11,16,21],[1,4,7,12,15,22]],[[3,4,8,12,17,24],[2,5,9,13,19,26],[4,6,9,14,18,25]]][lv-1],ts=pick(sets),e=ts.map(x=>R("p",1,x));
+  else{const sets=[[[1,2,5,10],[1,2,4,9],[1,3,4,9]],[[1,2,5,8,10],[1,2,4,8,13],[1,2,3,6,9]],[[2,3,6,8,12],[1,3,4,8,12],[2,3,5,9,13]],[[1,2,5,10,12],[2,3,7,9,14],[1,3,6,9,11]],[[2,4,5,9,12],[3,5,8,11,15],[1,4,6,10,16]],[[1,2,5,8,13,17],[1,3,4,8,13,19],[2,3,6,9,14,18]],[[2,4,5,9,12,20],[3,5,7,11,16,21],[1,4,7,12,15,22]],[[3,4,8,12,17,24],[2,5,9,13,19,26],[4,6,9,14,18,25]]][lv-1],ts=pick(sets).map(x=>Math.round(x*(1+.04*B))),e=(B>=10?ts.concat([Math.round(ts[ts.length-1]*1.2)]):ts).map(x=>R("p",1,x));
     P={ents:e,cap:2,mode:"time",bad:()=>false,why:()=>({k:"w.rule0"})}}
-  RNG=MR;const sol=solveFrom(P,0,0);P.opt=sol?sol.cost:1;P.t=t;P.lv=lv;return P}
+  RNG=MR;const sol=solveFrom(P,0,0);P.opt=sol?sol.cost:1;P.t=t;P.lv=lvIn;return P}
 const MAXS=300;
 const scoreOf=(opt,used,hints)=>Math.max(30,Math.min(MAXS,Math.round(MAXS*opt/Math.max(used,1))-20*hints));
 const starsOf=(opt,used)=>used<=opt?3:used<=Math.ceil(opt*1.35)?2:1;
@@ -315,7 +316,7 @@ function parseCh(){try{const m=/[#&]ch=([\w-]+)/.exec(location.hash);if(!m)retur
   return I(o.t,0,3)&&I(o.lv,1,NLV)&&I(o.s,0,4294967295)&&I(o.sc,0,300)?{t:o.t,lv:o.lv,s:o.s,sc:o.sc}:null}catch(e){return null}}
 function shareLink(){const l=LANG==="en"?"&l=en":"";if(G.daily)return location.origin+"/api/share/qua-song?d=1&n="+G.daily.n+"&s="+G.score+l;return location.origin+"/api/share/qua-song?ch="+b64e({t:G.t,lv:G.lv,s:G.seed,sc:G.score})+l}
 function shareText(){const st="⭐".repeat(G.stars)+"☆".repeat(3-G.stars),unit=G.P.mode==="time"?T("mins"):T("moves");
-  return (G.daily?"📅 "+T("daily.t",{n:G.daily.n}):TY_ICON[G.t]+" "+T("title"))+"\n"+startRow()+"\n"+T(G.P.mode==="time"?"hook.t":"hook.m",{n:G.P.opt})+"\n"+TY_ICON[G.t]+" "+T("ty")[G.t]+" · "+LVE[G.lv-1]+" · "+st+" "+G.score+" ("+G.used+"/"+G.P.opt+" "+unit+")\n"+shareLink()}
+  return (G.daily?"📅 "+T("daily.t",{n:G.daily.n}):TY_ICON[G.t]+" "+T("title"))+"\n"+startRow()+"\n"+T(G.P.mode==="time"?"hook.t":"hook.m",{n:G.P.opt})+"\n"+TY_ICON[G.t]+" "+T("ty")[G.t]+" · "+lvIc(G.lv)+" · "+st+" "+G.score+" ("+G.used+"/"+G.P.opt+" "+unit+")\n"+shareLink()}
 function startRow(){const cast=skinOf(G.t).cast||{};return G.P.ents.map(e=>castOf(e,cast)).join("")+" ➜ "+(skinOf(G.t).boat||"⛵")+" ➜ 🏁"}
 function fitText(x,tx,px,font,maxW){let s=px;do{x.font=font.replace("$",s);s-=2}while(x.measureText(tx).width>maxW&&s>20)}
 function rr(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
@@ -332,7 +333,7 @@ function drawCard(){
   x.fillStyle="#000";const sk=skinOf(G.t),cast=sk.cast||{},ents=G.P.ents,cols=2,sz=Math.min(104,Math.floor(500/Math.ceil(ents.length/cols)));
   x.font=(sz-8)+"px "+F;ents.forEach((e,i)=>x.fillText(castOf(e,cast),140+(i%cols)*118,200+sz/2+Math.floor(i/cols)*sz));
   x.font="170px "+F;x.fillText(sk.boat||"⛵",540,470);x.font="120px "+F;x.fillText("🏁",860,450);
-  x.fillStyle="#3b2a1d";x.font="800 46px "+F;x.fillText(TY_ICON[G.t]+" "+T("ty")[G.t]+" · "+LVE[G.lv-1],W/2,780);
+  x.fillStyle="#3b2a1d";x.font="800 46px "+F;x.fillText(TY_ICON[G.t]+" "+T("ty")[G.t]+" · "+lvIc(G.lv),W/2,780);
   /* CÂU HỎI THÁCH THỨC */
   x.fillStyle="#fff";x.font="800 76px "+F;const hk=T(G.P.mode==="time"?"hook.t":"hook.m",{n:G.P.opt});fitText(x,hk,76,"800 $px "+F,960);x.fillText(hk,W/2,900);
   x.fillStyle="#fff3c9";x.font="800 60px "+F;x.fillText("⭐".repeat(G.stars)+"  "+G.score+"  ("+G.used+"/"+G.P.opt+")",W/2,1030);
@@ -344,7 +345,7 @@ async function doShare(){
   if(navigator.share){try{await navigator.share({text:tx});return}catch(e){if(e&&e.name==="AbortError")return}}
   try{await navigator.clipboard.writeText(tx);toast(T("txt.copied"),1600)}catch(e){toast(tx,4000)}
 }
-function openCh(){$("chH").textContent=T("ch.h");$("chV").innerHTML="⭐ "+CH.sc;$("chP").textContent=TY_ICON[CH.t]+" "+T("ty")[CH.t]+" · "+LVE[CH.lv-1]+" — "+T("ch.p",{s:CH.sc});$("chGo").textContent="▶ "+T("go");showOv("ovCh")}
+function openCh(){$("chH").textContent=T("ch.h");$("chV").innerHTML="⭐ "+CH.sc;$("chP").textContent=TY_ICON[CH.t]+" "+T("ty")[CH.t]+" · "+lvIc(CH.lv)+" — "+T("ch.p",{s:CH.sc});$("chGo").textContent="▶ "+T("go");showOv("ovCh")}
 $("chNo").onclick=()=>{CH=null;showOv(null)};
 $("chGo").onclick=()=>{LVL=CH.lv;begin(CH.t,{seed:CH.s,ch:CH,lv:CH.lv})};
 
@@ -498,7 +499,7 @@ function retry(){if(!G||HELPER)return;begin(G.t,{lv:G.lv,seed:G.seed,daily:G.dai
 $("retryBtn").onclick=retry;
 function again(){if(!G)return;if(G.daily)return startDaily();begin(G.t,{lv:G.lv,seed:G.ch?G.seed:undefined,ch:G.ch})}
 $("againBtn").onclick=()=>{if(!G)return;if(G.daily)return startDaily();begin(G.t,{lv:G.lv})};
-window.NPLevel&&NPLevel.attach({levels:8,dupe:"#againBtn",cur:()=>G?G.lv-1:-1,go:i=>{LVL=i+1;LS.set("qs-lv",LVL);begin(G.t,{lv:i+1})},skip:()=>!!(G&&(G.daily||G.ch))});   /* lên level khi kết thúc màn (shared/levelup.js) */
+window.NPLevel&&NPLevel.attach({levels:8,endless:true,dupe:"#againBtn",cur:()=>G?G.lv-1:-1,go:i=>{LVL=Math.min(NLV,i+1);LS.set("qs-lv",LVL);begin(G.t,{lv:i+1})},skip:()=>!!(G&&(G.daily||G.ch))});   /* lên level khi kết thúc màn (shared/levelup.js) */
 $("shareBtn").onclick=()=>openGate(()=>{showOv("ovEnd");doShare()},"ovEnd","gt.sh");
 $("ovEnd").addEventListener("pointerdown",e=>{if(HELPER||e.target.closest("button")||performance.now()-endAt<450)return;$("againBtn").onclick()});
 $("homeBtn2").onclick=goHome;

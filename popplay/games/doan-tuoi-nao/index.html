@@ -285,7 +285,7 @@ const ALPHA={vi:Array.from("AĂÂBCDĐEÊGHIKLMNOÔƠPQRSTUƯVXY"),en:Array.from
 const WORDS={vi:{A:"🍒",Ă:"🍚",Â:"🫖",B:"🐄",C:"🐟",D:"🍉",Đ:"💡",E:"👶",Ê:"🐸",G:"🐔",H:"🌸",I:"🐖",K:"🍦",L:"🍃",M:"🐱",N:"🏠",O:"🐝",Ô:"🚗",Ơ:"🌶️",P:"🔋",Q:"🍊",R:"🐢",S:"⭐",T:"🍎",U:"🥾",Ư:"🦅",V:"🦆",X:"🚌",Y:"🐦"},
  en:{A:"🍎",B:"⚽",C:"🐱",D:"🐶",E:"🥚",F:"🐟",G:"🐐",H:"🎩",I:"🍦",J:"🧃",K:"🪁",L:"🦁",M:"🌙",N:"🪺",O:"🍊",P:"🐷",Q:"👑",R:"🐰",S:"☀️",T:"🌳",U:"☂️",V:"🚐",W:"🐳",X:"🎹",Y:"🪀",Z:"🦓"}};
 const ANIM=["🐔","🐷","🐄","🐑","🦆","🐰","🐱","🐶","🍎","⭐"];
-const TY_ICON=["🧠","🍎","🧮","➕"],LV_ICON=["🌱","🌿","🌳"],LV_BASE=[3.5,5.5,7.5],LV_D=[4.25,6.25,8.25],ROUNDS=10,TIME=60000;
+const TY_ICON=["🧠","🍎","🧮","➕"],LV_ICON=["🌱","🌿","🌳"],lvIc=l=>LV_ICON[Math.min(l,3)-1]+(l>3?l:""),LV_BASE=[3.5,5.5,7.5],LV_D=[4.25,6.25,8.25],ROUNDS=10,TIME=60000;
 function opts3(ans,min,max,sp){const s=new Set([ans]);let g=0;sp=sp||3;while(s.size<3&&g++<80){const v=ans+rand(1,sp)*(RNG()<.5?-1:1);if(v>=min&&v<=max)s.add(v)}let k=1;while(s.size<3)s.add(ans+k++);return shuffle([...s])}
 const mk=(o,ans,pr,body,say,da)=>{o=o.map(String);return{pr,body,o,a:o.indexOf(String(ans)),say:say||pr,da}};
 const qb=(x,c)=>'<span class="qb'+(c?" "+c:"")+'">'+x+"</span>";
@@ -304,7 +304,7 @@ function qNumber(da){
     const x=rand(1,mx-1);return mk(opts3(x+1,1,mx+3,2),x+1,T("p.nextN",{n:x}),qb(x,"huge"),T("p.nextN",{n:x}),da)}
   if(da<7.8){const st=pick([2,5,10]),a=st===2?rand(0,10):rand(0,6)*st;if(RNG()<.65){const seq=[a,a+st,a+2*st],ans=a+3*st;return mk(opts3(ans,0,200,st),ans,T("p.next"),qb(seq.join(" , ")+" , ?"),T("p.next"),da)}
     const m=rand(11,48);return mk(shuffle([m,m-2,m+2]),m,T("p.between"),qb((m-1)+" , ? , "+(m+1)),T("p.between"),da)}
-  if(RNG()<.5){const ev=rand(2,40)*2,s=new Set([ev]);while(s.size<3){const v=rand(2,90);if(v%2)s.add(v)}return mk(shuffle([...s]),ev,T("p.even"),qb("2️⃣4️⃣","sym"),T("p.even"),da)}
+  if(RNG()<.5){const ev=rand(2,40+Math.max(0,Math.round((da-9)*5)))*2,s=new Set([ev]);while(s.size<3){const v=rand(2,90);if(v%2)s.add(v)}return mk(shuffle([...s]),ev,T("p.even"),qb("2️⃣4️⃣","sym"),T("p.even"),da)}
   const st=pick([3,4,-3,-4,6,7]),a=st<0?rand(18,40):rand(2,20),seq=[a,a+st,a+2*st,a+3*st],ans=a+4*st;return mk(opts3(ans,0,300,5),ans,T("p.next"),qb(seq.join(" , ")+" , ?"),T("p.next"),da)}
 function qMath(da){let a,b,c,tx,ans;
   if(da<4.3){a=rand(1,4);b=rand(1,5-a);ans=a+b;tx=a+" + "+b}
@@ -312,11 +312,11 @@ function qMath(da){let a,b,c,tx,ans;
   else if(da<6.6){if(RNG()<.55){a=rand(5,14);b=rand(3,20-a);ans=a+b;tx=a+" + "+b}else{a=rand(8,20);b=rand(2,a-1);ans=a-b;tx=a+" − "+b}}
   else if(da<7.8){const k=rand(0,2);if(k===0){a=rand(10,50);b=rand(6,30);ans=a+b;tx=a+" + "+b}else if(k===1){a=rand(20,60);b=rand(5,a-5);ans=a-b;tx=a+" − "+b}else{a=rand(2,5);b=pick([2,5,10]);ans=a*b;tx=a+" × "+b}}
   else if(da<9){const k=rand(0,2);if(k===0){a=rand(2,9);b=rand(2,9);ans=a*b;tx=a+" × "+b}else if(k===1){a=rand(5,20);b=rand(3,15);c=rand(1,a+b-1);ans=a+b-c;tx=a+" + "+b+" − "+c}else{b=rand(2,9);ans=rand(2,9);a=b*ans;tx=a+" ÷ "+b}}
-  else{const k=rand(0,1);a=rand(3,9);b=rand(3,9);c=rand(1,20);if(k===0){ans=a*b+c;tx=a+" × "+b+" + "+c}else{ans=a*b-c;tx=a+" × "+b+" − "+c}}
-  return mk(opts3(ans,0,200,da<5.4?2:da<7.8?4:7),ans,T("p.math"),qb(tx+" = ?"),opsSay(tx),da)}
+  else{const k=rand(0,1),ex=Math.max(0,Math.min(4,Math.round((da-9)*2)));a=rand(3,9+ex);b=rand(3,9+ex);c=rand(1,20+3*ex);if(k===0){ans=a*b+c;tx=a+" × "+b+" + "+c}else{ans=a*b-c;tx=a+" × "+b+" − "+c}}
+  return mk(opts3(ans,0,260,da<5.4?2:da<7.8?4:7),ans,T("p.math"),qb(tx+" = ?"),opsSay(tx),da)}
 /* sinh câu thứ i của ván: chỉ phụ thuộc (loại, cấp, hạt giống, i) → hai nhà cùng hạt giống ⇒ cùng bộ câu */
-function genQ(t,lv,seed,i){
-  const da=LV_BASE[lv-1]+i/(ROUNDS-1)*1.5;RNG=mulberry32(seed>>>0);const ord=shuffle([1,2,3]);RNG=mulberry32((seed^Math.imul(i+1,2654435761))>>>0);
+function genQ(t,lvIn,seed,i){
+  const lv=Math.min(lvIn,3),B=window.NPLevel?NPLevel.boost(lvIn-1):0,da=LV_BASE[lv-1]+i/(ROUNDS-1)*1.5+Math.min(2,.07*B);   /* level >= 4: da tăng tối đa +2 → số lớn hơn ở nấc khó nhất */RNG=mulberry32(seed>>>0);const ord=shuffle([1,2,3]);RNG=mulberry32((seed^Math.imul(i+1,2654435761))>>>0);
   const kind=t===0?ord[i%3]:t;const q=(kind===1?qLetter:kind===2?qNumber:qMath)(da);q.kind=kind;RNG=MR;return q}
 
 /* ===== TUỔI NÃO (chỉ để vui) =====
@@ -385,7 +385,7 @@ function parseCh(){try{const m=/[#&]ch=([\w-]+)/.exec(location.hash);if(!m)retur
 function shareLink(){const l=LANG==="en"?"&l=en":"";if(G.daily)return location.origin+"/api/share/doan-tuoi-nao?d=1&n="+G.daily.n+"&s="+G.res.score+l;
   return location.origin+"/api/share/doan-tuoi-nao?ch="+b64e({t:G.t,lv:G.lv,s:G.seed,sc:G.res.score})+l}
 const histEmoji=h=>h.map(x=>x==="o"?"🟩":"🟨").concat(Array(Math.max(0,ROUNDS-h.length)).fill("⬜")).join("");
-function shareText(){return (G.daily?"📅 "+T("daily.t",{n:G.daily.n})+"\n":"")+T("tx.head",{a:G.res.age,r:AGE})+"\n"+TT_ICON[G.title]+" "+T("tt."+G.title)+" · "+TY_ICON[G.t]+" "+LV_ICON[G.lv-1]+"\n"+histEmoji(G.hist)+"\n"+(G.maxCombo>=2?T("tx.cb",{b:G.maxCombo})+"\n":"")+T("tx.ask")+"\n"+shareLink()+"\n"+T("tx.fun")}
+function shareText(){return (G.daily?"📅 "+T("daily.t",{n:G.daily.n})+"\n":"")+T("tx.head",{a:G.res.age,r:AGE})+"\n"+TT_ICON[G.title]+" "+T("tt."+G.title)+" · "+TY_ICON[G.t]+" "+lvIc(G.lv)+"\n"+histEmoji(G.hist)+"\n"+(G.maxCombo>=2?T("tx.cb",{b:G.maxCombo})+"\n":"")+T("tx.ask")+"\n"+shareLink()+"\n"+T("tx.fun")}
 function fitText(x,tx,px,font,maxW){let s=px;do{x.font=font.replace("$",s);s-=2}while(x.measureText(tx).width>maxW&&s>20)}
 function rr(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
 function drawCard(){
@@ -414,7 +414,7 @@ async function doShare(){
 }
 function openCh(){
   $("chH").textContent=T("ch.h");const a=ageFromScore(CH.sc);$("chM").innerHTML="";$("chA").innerHTML='<span class="nn">'+CH.sc+'</span><span class="un">'+T("pts")+"</span>";
-  $("chP").textContent=TY_ICON[CH.t]+" "+T("ty")[CH.t]+" · "+LV_ICON[CH.lv-1]+" — "+T("ch.p",{s:CH.sc,a});$("chGo").textContent="▶ "+T("how.go");showOv("ovCh");
+  $("chP").textContent=TY_ICON[CH.t]+" "+T("ty")[CH.t]+" · "+lvIc(CH.lv)+" — "+T("ch.p",{s:CH.sc,a});$("chGo").textContent="▶ "+T("how.go");showOv("ovCh");
 }
 $("chNo").onclick=()=>{CH=null;showOv(null)};
 $("chGo").onclick=()=>needProfile(()=>{LVL=CH.lv;begin(CH.t,{seed:CH.s,ch:CH,lv:CH.lv})});
@@ -511,7 +511,7 @@ function tap(i){
 }
 function finish(){
   if(!G||G.over)return;G.over=true;G.run=false;G.open=false;clearTimers();const m=G.m,cor=G.cor;
-  const D=m>0?G.dsum/m:LV_D[G.lv-1];G.res=calc(AGE,D,cor,m,G.sumT);G.title=titleOf(G.res,AGE,m,cor,G.maxCombo);
+  const D=m>0?G.dsum/m:LV_D[Math.min(G.lv,3)-1];G.res=calc(AGE,D,cor,m,G.sumT);G.title=titleOf(G.res,AGE,m,cor,G.maxCombo);
   if(!HELPER){prog.played++;prog.best=Math.max(prog.best,G.res.score);saveProg()}
   if(G.daily&&!HELPER)dailyDone(G);
   endAt=performance.now();sfx.win();renderEnd();emojiBurst(26);window.NP&&NP.result({score:G.res.score,extra:{t:G.t,lv:G.lv,age:G.res.age}});
@@ -594,7 +594,7 @@ $("langBtn").onclick=()=>{const mid=G&&!G.over;LANG=LANG==="vi"?"en":"vi";try{lo
 $("homeBtn").onclick=()=>{if(!HELPER)goHome()};
 function again(){if(!G)return;if(G.daily)return startDaily();begin(G.t,{lv:G.ch?LVL:G.lv})}
 $("againBtn").onclick=again;
-window.NPLevel&&NPLevel.attach({levels:3,dupe:"#againBtn",cur:()=>G?G.lv-1:-1,go:i=>{LVL=i+1;LS.set("dt-lv",LVL);begin(G.t,{lv:i+1})},skip:()=>!!(G&&(G.daily||G.ch))});   /* lên level khi kết thúc màn (shared/levelup.js) */
+window.NPLevel&&NPLevel.attach({levels:3,endless:true,dupe:"#againBtn",cur:()=>G?G.lv-1:-1,go:i=>{LVL=Math.min(3,i+1);LS.set("dt-lv",LVL);begin(G.t,{lv:i+1})},skip:()=>!!(G&&(G.daily||G.ch))});   /* lên level khi kết thúc màn (shared/levelup.js) */
 $("shareBtn").onclick=()=>openGate(()=>{showOv("ovEnd");doShare()},"ovEnd","gt.sh");
 $("ovEnd").addEventListener("pointerdown",e=>{if(HELPER||e.target.closest("button")||performance.now()-endAt<450)return;again()});
 $("homeBtn2").onclick=goHome;

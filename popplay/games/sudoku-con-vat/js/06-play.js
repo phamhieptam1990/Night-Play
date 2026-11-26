@@ -8,10 +8,12 @@ const saveProg = () => { if (!HELPER) LS.set("sd-prog", prog); };
 /* Thử thách Night Pass (khung chung shared/npchallenge.js): cấp khó nhất, hạt giống cố định */
 window.NP_CHALLENGE = { id: "sudoku-con-vat", start() { begin(1, { seed: 20261125, lv: 3 }); }, judge(r) { return !!r && !!r.extra && r.extra.lv === 3 && r.extra.stars === 3; } };
 
+/* level vượt cấp 8 (bo = NPLevel.boost): ít gợi ý ô hơn tới sàn của bàn (xem CLUE_FLOOR) + số lượt 💡 giảm dần (còn tối thiểu 1) */
+const hintMax = bo => (bo ? Math.max(1, 3 - Math.floor(bo / 6)) : 99);
 function begin(t, o) {
   o = o || {}; if (window.NPAudio) NPAudio.silence(); showOv(null);
-  const lv = o.lv || LVL, seed = o.seed != null ? o.seed : Math.floor(MR() * 1e9), Pz = makePuzzle(t, lv, seed);
-  G = { t, lv, seed, Pz, val: Pz.puz.slice(), mv: [], sel: -1, brush: 0, mist: 0, hints: 0, over: false, combo: 0, hs: {}, bad: -1, hl: -1,
+  const lv = o.lv || LVL, seed = o.seed != null ? o.seed : Math.floor(MR() * 1e9), bo = o.bo || 0, Pz = makePuzzle(t, lv, seed, bo);
+  G = { t, lv, bo, hmax: hintMax(bo), seed, Pz, val: Pz.puz.slice(), mv: [], sel: -1, brush: 0, mist: 0, hints: 0, over: false, combo: 0, hs: {}, bad: -1, hl: -1,
     daily: o.daily || null, ch: o.ch || null };
   $("home").hidden = true; $("arena").hidden = false; $("homeBtn").hidden = false;
   const sk = skinOf(t); applyVars($("play"), sk); skCss(sk); fillDeco(sk); $("play").dataset.ty = t; $("play").dataset.sk = PF.skinSel[t];
@@ -41,7 +43,7 @@ function render() {
     const b = document.createElement("button"); b.type = "button"; b.className = "pk" + (G.brush === d ? " on" : "") + (cnt[d] >= N ? " done" : "");
     b.innerHTML = "<i>" + an[d - 1] + "</i><b>" + (N - cnt[d] > 0 ? N - cnt[d] : "✓") + "</b>"; b.dataset.d = d; b.setAttribute("aria-label", an[d - 1]); b.onclick = () => tapAnimal(d); pal.appendChild(b);
   }
-  G.pop = -1; $("undoBtn").disabled = !G.mv.length || G.over; $("hintBtn").disabled = G.over || !leftCount(G); $("hintBtn").innerHTML = "💡" + (G.hints ? "<sub>" + G.hints + "</sub>" : "");
+  G.pop = -1; $("undoBtn").disabled = !G.mv.length || G.over; $("hintBtn").disabled = G.over || !leftCount(G) || G.hints >= G.hmax; $("hintBtn").innerHTML = "💡" + (G.hints ? "<sub>" + G.hints + "</sub>" : "");
 }
 if (window.ResizeObserver) new ResizeObserver(() => { const b = $("board"); if (b && b.clientWidth) b.style.setProperty("--bs", b.clientWidth + "px"); }).observe($("board"));
 function updHud() {
@@ -81,7 +83,8 @@ function undo() {
 }
 function resetPuz() { if (!G || G.over) return; G.val = G.Pz.puz.slice(); G.mv = []; G.sel = -1; G.brush = 0; G.combo = 0; G.hs = {}; G.hl = -1; render(); updHud(); }
 function hint() {
-  if (!G || G.over) return; const P = G.Pz; let i = G.sel;
+  if (!G || G.over) return; if (G.hints >= G.hmax) { toast(LANG === "vi" ? "Hết lượt gợi ý" : "No hints left", 1500); return; }
+  const P = G.Pz; let i = G.sel;
   if (i < 0 || P.puz[i] || G.val[i]) {
     let best = -1, bn = 99;
     for (let k = 0; k < G.val.length; k++) if (!G.val[k]) { const used = new Set(P.P[k].map(p => G.val[p])); let n = 0; for (let d = 1; d <= P.N; d++) if (!used.has(d)) n++; if (n < bn) { bn = n; best = k; } }

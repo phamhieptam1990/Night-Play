@@ -34,7 +34,7 @@ module.exports = {
       sk: { basic: ["Country canal", "Country canal"], delta: ["Mekong canal", "Mekong canal"], mount: ["Mountain gorge", "Mountain gorge"], paddy: ["Rice terraces", "Rice terraces"], city: ["Saigon canal", "Saigon canal"] } }
   },
   sfx: `{add:()=>tone(500,.05,"triangle",.06),rem:()=>tone(260,.07,"sine",.06),go:()=>tone(420,.14,"sawtooth",.06),ok:()=>{[660,880,1100].forEach((f,i)=>tone(f,.1,"triangle",.09,i*.06))},bad:()=>{tone(110,.4,"sawtooth",.1);tone(70,.5,"square",.08,.05)},end:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.09,i*.09)),combo:n=>{const b=440*Math.pow(1.122,Math.min(n/3,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.1,"triangle",.09,i*.05))}}`,
-  level: { max: 10, rules: [["bud","mul",-.02,18],["cap","mul",-.035,.55],["wmul","mul",.03,1.6]] },   /* lên level cuối màn: scripts/cozygame/levelgen.js */
+  level: { max: 10, rules: [["bud","mul",-.02,24],["cap","mul",-.035,.68],["wmul","mul",.03,1.45]] },   /* lên level cuối màn: scripts/cozygame/levelgen.js */
   gameJs: String.raw`
 let W=360,H=420,SC=1;const ctx=cv.getContext("2d");
 const GR=20,LMAX=60,TC=12,CC=12,LREF=40,MAXNODE=64;

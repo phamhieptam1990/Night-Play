@@ -3,21 +3,23 @@
    - levels: số level (0..levels-1); cur(): level ván vừa chơi (0-based); go(i): bắt đầu ván mới ở level i (dùng đúng hàm bắt đầu ván của game);
      host (tuỳ chọn): bộ chọn khung màn kết thúc nếu không phải #ovEnd/#end/#res/#result/#ovSum;
      dupe (tuỳ chọn): bộ chọn nút "chơi lại" cùng level của game, ẩn đi khi có thanh level (vd "#againBtn");
+     endless (tuỳ chọn, true = LEVEL TỰ NÂNG KHÔNG TRẦN): thắng level cuối thì vẫn có nút "Level N+1"; go(i) sẽ nhận i >= levels → game dùng NPLevel.boost(i) để khó thêm;
      won(r) (tuỳ chọn): ván có đạt không (mặc định: luôn); skip() (tuỳ chọn): true thì không hiện (ván hôm nay / thách đấu).
    - Việc làm: lưu level đã mở + sao tốt nhất (localStorage "np-level:<id game>"), khi NP.result thì chèn thanh "Level N+1 ▶" nổi bật + "↻ Level N" phụ vào màn kết thúc.
      Không phạt: thua thì chỉ có "↻ Level N". Không hiện ở chơi hộ (?helper=1) / thách đấu (#ch=) / chơi cùng lúc (?multi=1).
-   API: NPLevel.unlocked() → level cao nhất đã mở (0-based); NPLevel.stars() → {idx: sao}. Giao diện: shared/levelup.css. */
+   API: NPLevel.boost(i) → số bậc vượt trần (0 nếu i < levels; 1,2,3… với level N+1, N+2…), tối đa 30 bậc; NPLevel.unlocked() → level cao nhất đã mở (0-based); NPLevel.stars() → {idx: sao}. Giao diện: shared/levelup.css. */
 (function () {
   "use strict";
   var NP = window.NP; if (!NP || !NP.gid || window.NPLevel) return;
   var base = ((document.currentScript && document.currentScript.src) || "").replace(/levelup\.js(\?.*)?$/, "");
   if (base) { var lk = document.createElement("link"); lk.rel = "stylesheet"; lk.href = base + "levelup.css"; (document.head || document.documentElement).appendChild(lk); }
-  var KEY = "np-level:" + NP.gid, HOSTS = ["ovEnd", "end", "res", "result", "ovSum"];
+  var EXTRA = 30, KEY = "np-level:" + NP.gid, HOSTS = ["ovEnd", "end", "res", "result", "ovSum"];
   var q = new URLSearchParams(location.search), cfg = null, panel = null, poll = 0, dupe = null, host = null, picker = null;
   var off = q.get("helper") === "1" || q.get("multi") === "1" || /^#ch=/.test(location.hash);
   var vi = function () { return (document.documentElement.lang || "vi").slice(0, 2) !== "en"; };
 
-  function load() { try { var d = JSON.parse(localStorage.getItem(KEY)); if (d && typeof d === "object") return { u: Math.max(0, Math.min(cfg ? cfg.levels - 1 : 99, Math.floor(+d.u) || 0)), s: d.s && typeof d.s === "object" ? d.s : {}, f: d.f && typeof d.f === "object" ? d.f : {} }; } catch (e) {} return { u: 0, s: {}, f: {} }; }
+  function total() { return cfg ? (cfg.endless ? cfg.levels + EXTRA : cfg.levels) : 1; }
+  function load() { try { var d = JSON.parse(localStorage.getItem(KEY)); if (d && typeof d === "object") return { u: Math.max(0, Math.min(cfg ? total() - 1 : 99, Math.floor(+d.u) || 0)), s: d.s && typeof d.s === "object" ? d.s : {}, f: d.f && typeof d.f === "object" ? d.f : {} }; } catch (e) {} return { u: 0, s: {}, f: {} }; }
   function save(d) { try { localStorage.setItem(KEY, JSON.stringify(d)); } catch (e) {} }
   function visible(el) { return !!(el && !el.hidden && el.getClientRects().length); }
   function findHost() { if (cfg && cfg.host) { var c = document.querySelector(cfg.host); return visible(c) ? c : null; } for (var i = 0; i < HOSTS.length; i++) { var e = document.getElementById(HOSTS[i]); if (visible(e)) return e; } return null; }
@@ -31,11 +33,11 @@
   function ib(cls, svg, label, txt) { var b = el("button", cls); b.type = "button"; b.innerHTML = svg + (txt ? "<b>" + txt + "</b>" : ""); b.setAttribute("aria-label", label); b.title = label; return b; }
 
   function build(cur, res) {
-    var N = cfg.levels, d = load(), box = el("div", "nplv"), last = cur >= N - 1, V = vi();
+    var N = cfg.levels, d = load(), box = el("div", "nplv"), last = cur >= total() - 1, V = vi();
     var row = el("div", "nplv-row");
     if (res.won && !last) {
       var nx = ib("nplv-next", ICON.next, (V ? "Level khó hơn: " : "Harder level: ") + (cur + 2), cur + 2); nx.onclick = function () { go(cur + 1); }; row.appendChild(nx);
-    } else if (res.won && last) { var tr = el("div", "nplv-max"); tr.innerHTML = ICON.star + "<b>" + N + "</b>"; tr.setAttribute("role", "img"); tr.setAttribute("aria-label", V ? "Đã thành thạo tất cả level" : "All levels mastered"); row.appendChild(tr); }
+    } else if (res.won && last) { var tr = el("div", "nplv-max"); tr.innerHTML = ICON.star + "<b>" + (cur + 1) + "</b>"; tr.setAttribute("role", "img"); tr.setAttribute("aria-label", V ? "Đã thành thạo tất cả level" : "All levels mastered"); row.appendChild(tr); }
     var rp = ib("nplv-again", ICON.again, (V ? "Chơi lại Level " : "Replay Level ") + (cur + 1)); rp.onclick = function () { go(cur); }; row.appendChild(rp);
     if (N > 1) { var mn = ib("nplv-menu", ICON.menu, V ? "Chọn level" : "Choose level"); mn.onclick = function () { pick(cur); }; row.appendChild(mn); }
     box.appendChild(row);
@@ -48,7 +50,7 @@
 
   /* Popup "Chọn level": mọi level 1..trần; đã mở = chơi được (sao tốt nhất / dấu tick), chưa mở = khoá; level hiện tại viền cam. Mở được bất cứ lúc nào từ màn kết thúc. */
   function pick(cur) {
-    closePick(); var N = cfg.levels, d = load(), V = vi();
+    closePick(); var N = Math.min(total(), Math.max(cfg.levels, load().u + 2)), d = load(), V = vi();
     var ov = el("div", "nplp"); ov.setAttribute("role", "dialog"); ov.setAttribute("aria-label", V ? "Chọn level" : "Choose level");
     var sh = el("div", "nplp-sheet"), hd = el("div", "nplp-head"), cx = ib("nplp-x", ICON.close, V ? "Đóng" : "Close");
     hd.appendChild(el("b", "nplp-t", V ? "Level" : "Levels")); hd.appendChild(cx); sh.appendChild(hd);
@@ -70,14 +72,14 @@
 
   function onResult(r) {
     if (!cfg || off) return;
-    var cur = cfg.cur(); if (typeof cur !== "number" || !(cur >= 0) || cur >= cfg.levels) return;
+    var cur = cfg.cur(); if (typeof cur !== "number" || !(cur >= 0) || cur >= total()) return;
     try { if (cfg.skip && cfg.skip()) return; } catch (e) {}
     var won = true; try { if (cfg.won) won = !!cfg.won(r || {}); } catch (e) {}
     var d = load(), fresh = false;
     if (!won) { d.f[cur] = (+d.f[cur] || 0) + 1; save(d); }
     if (won) {
       delete d.f[cur];
-      if (cur + 1 > d.u && cur + 1 < cfg.levels) { d.u = cur + 1; fresh = true; }
+      if (cur + 1 > d.u && cur + 1 < total()) { d.u = cur + 1; fresh = true; }
       var st = r && r.extra && +r.extra.stars; if (st > 0 && st > (+d.s[cur] || 0)) d.s[cur] = st; save(d);
     }
     clear(); var tries = 0;
@@ -99,6 +101,7 @@
 
   window.NPLevel = {
     attach: function (c) { cfg = c && (c.levels = Math.min(10, c.levels | 0)) > 1 && typeof c.cur === "function" && typeof c.go === "function" ? c : null; },
+    boost: function (i) { return cfg && i >= cfg.levels ? Math.min(EXTRA, i - cfg.levels + 1) : 0; },
     unlocked: function () { return load().u; }, stars: function () { return load().s; }
   };
 })();

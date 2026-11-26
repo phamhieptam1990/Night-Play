@@ -136,7 +136,7 @@ const dayNo=k=>Math.floor((Date.parse(k+"T00:00:00Z")-Date.parse("2026-01-01T00:
 const b64e=o=>btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
 const clamp=(v,a,b)=>v<a?a:v>b?b:v;
 function parseCh(h){try{const m=/[#&]ch=([A-Za-z0-9_-]{1,200})/.exec(h||"");if(!m)return null;let t=m[1].replace(/-/g,"+").replace(/_/g,"/");while(t.length%4)t+="=";const o=JSON.parse(decodeURIComponent(escape(atob(t))));
- if(o&&Number.isInteger(o.s)&&o.s>=0&&o.s<=4294967295&&Number.isInteger(o.sc)&&o.sc>=0&&o.sc<=MAXS){const t2=Number.isInteger(o.t)&&o.t>=0&&o.t<=3?o.t:0;const lv=Number.isInteger(o.lv)&&o.lv>=0&&o.lv<LVMAX?o.lv:1;return{s:o.s,sc:o.sc,t:t2,lv}}return null}catch(e){return null}}
+ if(o&&Number.isInteger(o.s)&&o.s>=0&&o.s<=4294967295&&Number.isInteger(o.sc)&&o.sc>=0&&o.sc<=MAXS){const t2=Number.isInteger(o.t)&&o.t>=0&&o.t<=3?o.t:0;const lv=Number.isInteger(o.lv)&&o.lv>=0&&o.lv<LVMAX+30?o.lv:1;return{s:o.s,sc:o.sc,t:t2,lv}}return null}catch(e){return null}}
 /* ===== CẢNH / VẼ: bộ hàm dùng chung cho cả bản trả phí ===== */
 const W=360,H=500,PX=40,GYF=.8,RX=96,WB=1.15,RW=13,WMAX=.62;
 let VW=W;const K={g(c,x,y,w,h,cols){const g=c.createLinearGradient(0,y,0,y+h);cols.forEach((q,i)=>g.addColorStop(i/Math.max(1,cols.length-1),q));c.fillStyle=g;c.fillRect(x,y,w,h)},r(c,x,y,w,h,col){c.fillStyle=col;c.fillRect(x,y,w,h)},o(c,x,y,rx,ry,col){c.fillStyle=col;c.beginPath();c.ellipse(x,y,rx,ry,0,0,6.283);c.fill()},p(c,pts,col){c.fillStyle=col;c.beginPath();pts.forEach((q,i)=>i?c.lineTo(q[0],q[1]):c.moveTo(q[0],q[1]));c.closePath();c.fill()},
@@ -155,7 +155,7 @@ const BASEP={v0:5.0,ib:1.1,tq:6.6,damp:1.6,gapMin:14,gapVar:16,bump:1,startItems
 const PF={pro:null,ticket:null,types:TYPES,K,skins:{basic:{bike:{body:"#d63a2a",seat:"#2a2a2a",rack:"#5a5a5a"},hero:"🛵📦"}},modeCfg:[{},null,null,null],cargoTet:null,skinSel:LS.get("ch-skin","basic")};
 let TY=(()=>{const v=LS.get("ch-type",0);return Number.isInteger(v)&&v>=0&&v<4?v:0})();
 const LVMAX=8;   /* 8 level: 0-2 = Dễ/Vừa/Khó (chip ở màn chọn), 3-7 = khó dần (LVM): đường xóc hơn, hàng nặng hơn, khoảng thở ngắn */
-let LV=(()=>{const v=LS.get("ch-lv",1);return Number.isInteger(v)&&v>=0&&v<LVMAX?v:1})();
+let LV=(()=>{const v=LS.get("ch-lv",1);return Number.isInteger(v)&&v>=0&&v<LVMAX+30?v:1})();
 const tLocked=t=>!PF.modeCfg[t];
 const skinOf=()=>PF.skins[PF.skinSel]||PF.skins.basic;
 function applySkin(){const sk=skinOf(),pl=$("play");(pl._v||[]).forEach(k=>pl.style.removeProperty(k));const vv=sk.vl?(isDark()?sk.vd:sk.vl):{};pl._v=Object.keys(vv);for(const k of pl._v)pl.style.setProperty(k,vv[k]);
@@ -170,8 +170,10 @@ let G=null,CH=null,lastEnd=0,raf=0,last=0,acc=0,SC=1;
 const getSave=()=>LS.get("ch-save",{streak:0,last:"",best:0,total:0,days:{}});
 const newSeed=()=>(Math.random()*4294967296)>>>0;
 const LVM=[{ib:.82,tq:1.15,bump:.8,gap:1.25,v0:.95},{ib:1,tq:1,bump:1,gap:1,v0:1},{ib:1.2,tq:.95,bump:1.25,gap:.8,v0:1.08}];
+/* i >= LVMAX (vượt trần, NPLevel.boost 1..30): lấy bản level cuối rồi mỗi bậc thêm ib +.01 (≤+.3), tq -.005 (≥.65), bump +.02 (≤+.5), gap -.008 (≥.4), v0 +.008 (≤1.45) */
 for(let k=1;k<=5;k++)LVM.push({ib:1.2+.06*k,tq:.95-.03*k,bump:1.25+.09*k,gap:Math.max(.5,.8-.05*k),v0:1.08+.03*k});
-function cfgOf(t,lv,mode){const o=Object.assign({},BASEP,PF.modeCfg[t]||{}),m=LVM[mode==="daily"?1:lv];o.ib*=m.ib;o.tq*=m.tq;o.bump*=m.bump;o.gapMin*=m.gap;o.gapVar*=m.gap;o.v0*=m.v0;o.lv=mode==="daily"?1:lv;return o}
+function lvmOf(lv){const b=LVM[Math.min(lv,LVMAX-1)],B=window.NPLevel?NPLevel.boost(lv):0;return B?{ib:b.ib+Math.min(.3,.01*B),tq:Math.max(.65,b.tq-.005*B),bump:b.bump+Math.min(.5,.02*B),gap:Math.max(.4,b.gap-.008*B),v0:Math.min(1.45,b.v0+.008*B)}:b}
+function cfgOf(t,lv,mode){const o=Object.assign({},BASEP,PF.modeCfg[t]||{}),m=lvmOf(mode==="daily"?1:lv);o.ib*=m.ib;o.tq*=m.tq;o.bump*=m.bump;o.gapMin*=m.gap;o.gapVar*=m.gap;o.v0*=m.v0;o.lv=mode==="daily"?1:lv;return o}
 /* con đường: gò đồi nhẹ + gờ giảm tốc / ổ gà / dốc cầu sinh theo hạt giống */
 function mkRoad(seed,P){const R=sub(seed,1),ph=[R()*6.28,R()*6.28,R()*6.28],rb=sub(seed,2),bumps=[];let bx=22;
  for(let i=0;i<500;i++){bx+=P.gapMin+rb()*P.gapVar*(1-Math.min(.45,i/160));const ty=rb();bumps.push(ty<.5?{x:bx,w:1.7,h:.17}:ty<.8?{x:bx,w:1.1,h:-.13}:{x:bx,w:2.6,h:.24})}
@@ -302,7 +304,7 @@ function showEnd(){if(!G)return;show("end");const sc=scoreNow(),why={empty:"endE
  const helper=!!(window.NP&&NP.helper);$("bShare").hidden=helper;$("bAgain").hidden=helper;$("bBoard").hidden=helper;$("bHome").hidden=helper;$("bClip").hidden=helper||!(window.NPFx&&NPFx.canRec())||!clipReady}
 function rematch(){if(!G)return;const g=G;if(PF.pro&&PF.pro.trial)PF.lockPro();begin(g.seed,g.mode,g.t,g.ch,g.P.lv)}
 function again(){if(!G)return;const t=G.t;if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",t,null)}
-window.NPLevel&&NPLevel.attach({levels:LVMAX,cur:()=>G?G.P.lv:-1,won:()=>!!G&&true,skip:()=>!G||G.mode!=="free"||!!G.ch,go:i=>{LV=i;LS.set("ch-lv",i);if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",G?G.t:TY,null,i)}});   /* lên level cuối màn (shared/levelup.js); trần 3 = 3 độ khó đã cân chỉnh */
+window.NPLevel&&NPLevel.attach({levels:LVMAX,endless:true,cur:()=>G?G.P.lv:-1,won:()=>!!G&&true,skip:()=>!G||G.mode!=="free"||!!G.ch,go:i=>{LV=i;LS.set("ch-lv",i);if(PF.pro&&PF.pro.trial)PF.lockPro();begin(newSeed(),"free",G?G.t:TY,null,i)}});   /* lên level cuối màn (shared/levelup.js); trần 3 = 3 độ khó đã cân chỉnh */
 /* ===== QUAY VIDEO (cắt thành đoạn ~28 giây để luôn giữ được pha đổ hàng cuối cùng) ===== */
 let clipReady=false,clipT=0;
 function recBegin(){clipReady=false;clipT=0;if(window.NP&&NP.helper)return;if(window.NPFx&&NPFx.canRec()){try{NPFx.recStart(cv,32000)}catch(e){}}}
@@ -376,7 +378,7 @@ if(window.NP&&NP.state)NP.state(()=>{if(!G||G.over)return null;const s={seed:G.s
 /* ===== KHỞI ĐỘNG ===== */
 applySkin();renderHome();show("home");requestAnimationFrame(tick);
 const proP=passToken()&&!(window.NP&&NP.helper)?PF.loadPro(false).catch(()=>{}):Promise.resolve();
-if(window.NP&&NP.helper){const HS=NP.initialState&&typeof NP.initialState==="object"?NP.initialState:{};const seed=Number.isInteger(HS.seed)&&HS.seed>=0&&HS.seed<=4294967295?HS.seed:newSeed();const ht=Number.isInteger(HS.t)&&HS.t>=0&&HS.t<=3?HS.t:0;const hlv=Number.isInteger(HS.lv)&&HS.lv>=0&&HS.lv<LVMAX?HS.lv:1;$("bBoard").hidden=true;
+if(window.NP&&NP.helper){const HS=NP.initialState&&typeof NP.initialState==="object"?NP.initialState:{};const seed=Number.isInteger(HS.seed)&&HS.seed>=0&&HS.seed<=4294967295?HS.seed:newSeed();const ht=Number.isInteger(HS.t)&&HS.t>=0&&HS.t<=3?HS.t:0;const hlv=Number.isInteger(HS.lv)&&HS.lv>=0&&HS.lv<LVMAX+30?HS.lv:1;$("bBoard").hidden=true;
  const go=()=>begin(seed,"challenge",ht,null,hlv);
  if(/^h\.\d{13}\.[A-Za-z0-9_-]{43}$/.test(HS.tk||""))PF.loadPro(false,HS.tk).then(()=>{if(/^[a-z0-9]{3,10}$/.test(HS.sk||"")&&PF.skins[HS.sk])PF.skinSel=HS.sk}).catch(()=>{}).finally(go);else go()}
 else{const c0=parseCh(location.hash);if(c0)proP.then(()=>openCh(c0));else if(location.hash==="#daily")$("bDaily").click()}

@@ -229,7 +229,8 @@ const WORDS={vi:{A:"🍒",Ă:"🍚",Â:"🫖",B:"🐄",C:"🐟",D:"🍉",Đ:"�
 const ANIM=["🐔","🐷","🐄","🐑","🦆","🐰","🐱","🐶"];
 const TY_ICON=["➕","🔍","🐔","⚖️","🧩"];
 const ROUNDS=10,SHUF=[1600,1350,1100,900],TMO=16000;
-let QUP=0;   /* 0-4 = level 5-8: giữ bảng câu hỏi cấp 4 nhưng số lớn hơn, dãy khó hơn, đảo đáp án nhanh hơn, hết giờ sớm hơn */
+let QUP=0,QX=0;   /* QX = số bậc vượt cấp 8 (G.up-4, NPLevel.boost): số lớn hơn, đảo đáp án nhanh hơn, hết giờ sớm hơn (có sàn) */
+   /* 0-4 = level 5-8: giữ bảng câu hỏi cấp 4 nhưng số lớn hơn, dãy khó hơn, đảo đáp án nhanh hơn, hết giờ sớm hơn */
 function opts3(ans,min,max,sp){const s=new Set([ans]);let g=0;sp=sp||3;while(s.size<3&&g++<80){const v=ans+rand(1,sp)*(RNG()<.5?-1:1);if(v>=min&&v<=max)s.add(v)}let k=1;while(s.size<3)s.add(ans+k++);return shuffle([...s])}
 const fin=(o,ans,pr,body,say,big)=>({pr,body,o:o.map(String),a:o.indexOf(ans),say:say||pr,big});
 
@@ -239,13 +240,13 @@ const Q=[
  (lv,w)=>{let tx,ans;
   if(w==="k"){let a,b,sub=false;
    if(lv===1){a=rand(1,4);b=rand(1,5-a)}else if(lv===2){sub=RNG()<.4;a=rand(2,9);b=sub?rand(1,a-1):rand(1,10-a)}
-   else if(lv===3){sub=RNG()<.45;a=rand(4,18);b=sub?rand(1,a-1):rand(1,20-a)}else{sub=RNG()<.5;a=rand(8+2*QUP,28+6*QUP);b=sub?rand(2,a-1):rand(2,30+6*QUP-a)}
+   else if(lv===3){sub=RNG()<.45;a=rand(4,18);b=sub?rand(1,a-1):rand(1,20-a)}else{sub=RNG()<.5;a=rand(8+2*QUP,28+6*QUP+QX);b=sub?rand(2,a-1):rand(2,30+6*QUP+QX-a)}
    ans=sub?a-b:a+b;tx=a+(sub?" − ":" + ")+b}
   else{let a,b,c;
    if(lv===1){a=rand(5,12);b=rand(3,9);c=rand(1,a+b-1);ans=a+b-c;tx=a+" + "+b+" − "+c}
    else if(lv===2){a=rand(10,25);b=rand(5,20);c=rand(1,15);ans=a+b-c;tx=a+" + "+b+" − "+c}
    else if(lv===3){a=rand(2,6);b=rand(2,6);c=rand(1,20);ans=a*b+c;tx=a+" × "+b+" + "+c}
-   else{a=rand(6,9+QUP);b=rand(6,9+QUP);c=rand(1,20+5*QUP);ans=a*b-c;tx=a+" × "+b+" − "+c}}
+   else{a=rand(6,9+QUP);b=rand(6,9+QUP);c=rand(1,20+5*QUP+QX);ans=a*b-c;tx=a+" × "+b+" − "+c}}
   return fin(opts3(ans,0,120,lv<3?2:4),ans,T("p.math"),'<span class="qb">'+tx+" = ?</span>",tx.replace(/×/g,"nhân ").replace(/−/g,"trừ").replace(/\+/g,"cộng"))},
  /* 1 · Tìm chữ */
  (lv,w)=>{const TT=TIERS[LANG];
@@ -257,7 +258,7 @@ const Q=[
   const e2=pick(ANIM.filter(x=>x!==e)),n=rand(3,[8,10,12,14][lv-1]+Math.min(2,QUP)),m=rand(2,6+Math.min(2,QUP)),list=shuffle(Array(n).fill(e).concat(Array(m).fill(e2)));
   return fin(opts3(n,1,20),n,T("p.cntP",{e}),'<span class="qb cnt" style="font-size:'+(n+m>14?7.2:8.6)+'cqw">'+list.join("")+"</span>",T("p.cntP",{e:""}))},
  /* 3 · Số to số nhỏ */
- (lv,w)=>{const mx=w==="k"?[5,10,20,50][lv-1]+20*QUP:[20,50,100,500][lv-1]+120*QUP,d=Math.max(6,[4,9,15,40][lv-1]-9*QUP);let big=w==="k"&&lv<3?true:RNG()<.5;const s=new Set();
+ (lv,w)=>{const mx=w==="k"?[5,10,20,50][lv-1]+20*QUP:[20,50,100,500][lv-1]+120*QUP+6*QX,d=Math.max(6,[4,9,15,40][lv-1]-9*QUP);let big=w==="k"&&lv<3?true:RNG()<.5;const s=new Set();
   if(w==="k")while(s.size<3)s.add(rand(1,mx));else{const x=rand(5,mx-d);s.add(x);while(s.size<3)s.add(x+rand(1,d))}
   const v=[...s],ans=big?Math.max(...v):Math.min(...v);return fin(shuffle(v),ans,T(big?"p.big":"p.small"),'<span class="qb huge">'+(big?"🔼":"🔽")+"</span>",T(big?"p.big":"p.small"))},
  /* 4 · Dãy số bí ẩn */
@@ -409,10 +410,10 @@ function build(side,q){
 }
 function nextRound(){
   if(!G||G.over)return;if(G.r>=ROUNDS)return finish();
-  const id=G.id;RNG=mulberry32((G.seed^Math.imul(G.r+1,2654435761))>>>0);QUP=G.up||0;G.q={k:Q[G.t](G.lv,"k"),p:Q[G.t](G.lv,"p")};QUP=0;RNG=MR;G.lock={k:false,p:false};G.open=true;
+  const id=G.id;RNG=mulberry32((G.seed^Math.imul(G.r+1,2654435761))>>>0);QUP=Math.min(4,G.up||0);QX=Math.max(0,(G.up||0)-4);G.q={k:Q[G.t](G.lv,"k"),p:Q[G.t](G.lv,"p")};QUP=QX=0;RNG=MR;G.lock={k:false,p:false};G.open=true;
   build("k",G.q.k);build("p",G.q.p);upd();say(G.q.k.say);
-  clearInterval(G.shT);G.shT=setInterval(()=>{if(!G||G.id!==id||!G.open||paused)return;const bs=[...$("ap").children],ord=shuffle(bs.map((_,i)=>i));bs.forEach((b,i)=>b.style.order=ord[i])},Math.max(480,SHUF[G.lv-1]-110*(G.up||0)));
-  clearTimeout(G.toT);G.toT=setTimeout(()=>{if(!G||G.id!==id||!G.open)return;G.open=false;toast("⏱");G.hist.push("-");G.r++;G.nxT=setTimeout(nextRound,800)},TMO-1200*(G.up||0));
+  clearInterval(G.shT);G.shT=setInterval(()=>{if(!G||G.id!==id||!G.open||paused)return;const bs=[...$("ap").children],ord=shuffle(bs.map((_,i)=>i));bs.forEach((b,i)=>b.style.order=ord[i])},Math.max(480-Math.min(14,Math.max(0,(G.up||0)-4))*7,SHUF[G.lv-1]-110*Math.min(4,G.up||0)));
+  clearTimeout(G.toT);G.toT=setTimeout(()=>{if(!G||G.id!==id||!G.open)return;G.open=false;toast("⏱");G.hist.push("-");G.r++;G.nxT=setTimeout(nextRound,800)},Math.max(8000,TMO-1200*Math.min(4,G.up||0)-120*Math.min(25,Math.max(0,(G.up||0)-4))));
 }
 function tap(side,i){
   if(!G||!G.open||G.lock[side]||paused||G.over)return;
@@ -506,7 +507,7 @@ $("langBtn").onclick=()=>{const mid=G&&!G.over;LANG=LANG==="vi"?"en":"vi";try{lo
 $("homeBtn").onclick=()=>{if(!HELPER)goHome()};
 function again(){if(!G)return;if(G.daily)return startDaily();if(SR&&!SR.done)return begin(G.t,{cont:true});begin(G.t,{newSeries:SER&&!G.ch})}
 $("againBtn").onclick=again;
-window.NPLevel&&NPLevel.attach({levels:8,dupe:"#againBtn",cur:()=>G?(G.lv===4?3+(G.up||0):G.lv-1):-1,go:i=>{LVL=Math.min(4,i+1);UP=Math.max(0,i-3);LS.set("bd-lv",LVL);begin(G.t,{newSeries:!!SER})},skip:()=>!!(G&&(G.daily||G.ch||(typeof SR!=="undefined"&&SR&&!SR.done)))});   /* lên level khi kết thúc màn (shared/levelup.js) */
+window.NPLevel&&NPLevel.attach({levels:8,endless:true,dupe:"#againBtn",cur:()=>G?(G.lv===4?3+(G.up||0):G.lv-1):-1,go:i=>{LVL=Math.min(4,i+1);UP=Math.max(0,i-3);LS.set("bd-lv",LVL);begin(G.t,{newSeries:!!SER})},skip:()=>!!(G&&(G.daily||G.ch||(typeof SR!=="undefined"&&SR&&!SR.done)))});   /* lên level khi kết thúc màn (shared/levelup.js) */
 $("shareBtn").onclick=()=>openGate(()=>{showOv("ovEnd");doShare()},"ovEnd","gt.sh");
 $("ovEnd").addEventListener("pointerdown",e=>{if(HELPER||e.target.closest("button")||performance.now()-endAt<450)return;again()});
 $("homeBtn2").onclick=goHome;

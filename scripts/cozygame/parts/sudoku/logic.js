@@ -2,20 +2,21 @@
 const CFG = TYPEDEF, SD_MAX = 8;   /* 8 level: 0-2 = chip Dễ/Thường/Khó; 3-7 = ít gợi ý hơn, ít 💡, đua giờ ngắn hơn (mở qua popup Chọn level) */
 const lvInfo = i => LVN[i] || ["🔥", "Cấp " + (i + 1), "Level " + (i + 1)];
 const rankIdx = n => n >= 2600 ? 4 : n >= 1900 ? 3 : n >= 1300 ? 2 : n >= 700 ? 1 : 0;
-let DIF = (() => { const v = LS.get("sd-lv", 1); return Number.isInteger(v) && v >= 0 && v < SD_MAX ? v : 1; })();
-const D_HINTS = lv => lv >= 6 ? 1 : lv >= 4 ? 2 : 3;
+let DIF = (() => { const v = LS.get("sd-lv", 1); return Number.isInteger(v) && v >= 0 && v < SD_MAX + 30 ? v : 1; })();
+const D_HINTS = lv => lv >= 8 ? 0 : lv >= 6 ? 1 : lv >= 4 ? 2 : 3;   /* level > 8 (vượt trần): độ khó đề giữ ở mức 7 (ít gợi ý nhất mà vẫn MỘT đáp án), thử thách thêm: hết 💡, ván đua giờ ngắn dần (sàn 5 phút) */
+const eLv = lv => Math.min(lv, SD_MAX - 1), bLv = lv => Math.max(0, lv - (SD_MAX - 1));
 const lvOf = (seed, mode) => mode === "free" ? DIF : mode === "daily" ? seed % 3 : seed % 8;   /* thách đấu mang đủ 8 level trong seed (seed%8); ván hôm nay giữ seed%3 */
 const okCount = D => D.val.reduce((a, v, i) => a + (v && v === D.sol[i] && !D.puz[i] ? 1 : 0), 0);
 const scoreOf = D => D.reason === "win" ? D.final : okCount(D) * 5;
-const remain = D => D.T.time ? Math.max(0, 900 - 50 * Math.max(0, D.lv - 2) - D.time) : 0;
+const remain = D => D.T.time ? Math.max(0, Math.max(300, (900 - 50 * Math.max(0, eLv(D.lv) - 2)) * (1 - .03 * bLv(D.lv))) - D.time) : 0;
 function newGame(seed, mode, t, ch) {
-  const lv = lvOf(seed, mode); const M = mode === "daily" ? 3 : 8; seed = seed - seed % M + (mode === "daily" ? Math.min(lv, 2) : lv); const P = genSudoku(seed, t === 1 ? 1 : t === 2 ? 2 : 0, lv);
+  const lv = lvOf(seed, mode); const M = mode === "daily" ? 3 : 8; seed = seed - seed % M + (mode === "daily" ? Math.min(lv, 2) : eLv(lv)); const P = genSudoku(seed, t === 1 ? 1 : t === 2 ? 2 : 0, eLv(lv));
   const n = P.T.N * P.T.N, D = { seed, mode, t, lv, T: Object.assign({}, P.T, { time: TYPEDEF[t].time }), N: P.T.N, P: P.P, sol: P.sol, puz: P.puz, val: P.puz.slice(), notes: new Array(n).fill(0), sel: -1, notesOn: false, mistakes: 0, hints: D_HINTS(lv), used: 0,
     ch: ch || null, fx: [], shake: 0, flash: 0, final: 0, over: false, reason: "end", time: 0, dur: 1e9, beat: false };
   return D;
 }
 function winNow(D, quiet) {
-  if (D.over) return; const base = (600 + 360 * D.lv) * (D.T.diag ? 1.15 : D.T.N === 6 ? .7 : 1), par = 600 + 300 * D.lv;
+  if (D.over) return; const base = (600 + 360 * eLv(D.lv) + 60 * bLv(D.lv)) * (D.T.diag ? 1.15 : D.T.N === 6 ? .7 : 1), par = 600 + 300 * eLv(D.lv);
   D.final = Math.max(100, Math.round(base + (D.T.time ? Math.ceil(remain(D)) * 1.5 : Math.max(0, par - D.time) * 1.2) - D.mistakes * 40 - D.used * 60)); D.over = true; D.reason = "win"; D.sel = -1; if (quiet) return;
   sfx.end(); NPJuice.confetti($("play"), 24, CONF); setTimeout(() => { if (G === D) finish(D); }, 900);
 }
@@ -88,5 +89,5 @@ new MutationObserver(() => { if (!$("home").hidden) renderLevels(); }).observe($
 document.addEventListener("click", e => { if (e.target.closest && e.target.closest("#bLang")) setTimeout(renderLevels, 0); });
 renderLevels();
 /* lên level cuối màn (shared/levelup.js): trần 8 level; chỉ ván thắng mới mở level tiếp */
-window.NPLevel && NPLevel.attach({ levels: SD_MAX, cur: () => G ? G.lv : -1, won: () => !!G && G.reason === "win", skip: () => !G || G.mode !== "free" || !!G.ch,
+window.NPLevel && NPLevel.attach({ levels: SD_MAX, endless: true, cur: () => G ? G.lv : -1, won: () => !!G && G.reason === "win", skip: () => !G || G.mode !== "free" || !!G.ch,
   go: i => { DIF = i; LS.set("sd-lv", i); if (PF.pro && PF.pro.trial) PF.lockPro(); begin(newSeed(), "free", G ? G.t : TY, null); } });
