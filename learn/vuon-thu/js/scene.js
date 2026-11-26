@@ -19,13 +19,9 @@
     b.appendChild(img(V.ART + "chuong-" + ca + "-sau.svg", "bg")); b.appendChild(img(V.NB + P.house + ".svg", "house"));
     var w = el("div", "walk"), h = el("div", "hop"), br = el("div", "breath"), p = img(V.NB + a + (open && mode === "sleep" ? "-sleep" : "") + ".svg", "pet", P.pet.name);
     p.dataset.art = a; p.dataset.mode = open ? mode : ""; br.appendChild(p);
-    var G = V.curGrade();   /* trang phục theo lớp: áo choàng/ba lô sau lưng, đầu-cổ, ngực; lớp 5 thêm vương miện */
-    if (it.status === "star") ["neck", "chest", "hat"].forEach(function (k) { br.appendChild(img(V.ART + "tpr-" + (i + 1) + "-" + k + ".svg", "tp")); });   /* đạt 5 sao: mặc đồ nghề (đầu bếp, cảnh sát...) */
-    else {
-      br.insertBefore(img(V.ART + "tp-" + G + "-back.svg", "tp bk"), p); br.appendChild(img(V.ART + "tp-" + G + "-head.svg", "tp")); br.appendChild(img(V.ART + "tp-" + G + "-chest.svg", "tp"));
-      if (G === 5) br.appendChild(img(V.NB + "vuong-mien.svg", "tp"));
-    } h.appendChild(br); w.appendChild(h); b.appendChild(w);
-    if (open && mode === "sleep") w.appendChild(el("span", "zz", "<i>z</i><i>z</i><i>Z</i>"));
+    var G = V.curGrade();   /* trang phục: bé chọn trong tủ đồ, chưa chọn thì tự động (5 sao -> đồ nghề, còn lại -> bộ của lớp) */
+    Wardrobe.layers(Wardrobe.resolve("vt", "tviet", G, i, it.status), false).forEach(function (l) { var im = img(l.src, "tp" + (l.bk ? " bk" : "")); if (l.bk) br.insertBefore(im, p); else br.appendChild(im); });
+    br.setAttribute("data-pet", V.NB + a + ".svg");
     b.appendChild(img(V.ART + "chuong-" + ca + "-truoc.svg", "fr"));
     b.appendChild(img(V.ART + "deco-g" + V.curGrade() + ".svg", "dc"));   /* trang trí theo lớp */
     b.appendChild(el("span", "plate", it.name));
@@ -33,7 +29,11 @@
       b.appendChild(el("span", "lvb", WK().svg(it.done ? "star" : "book") + "<b>" + (it.status === "star" ? "★" : it.done ? "✓" : it.i + 1) + "</b>"));
       if (i === 0 && V.gift(V.curGrade())) b.appendChild(el("span", "gift", WK().svg("gift")));
     } else b.appendChild(el("span", "lockb", '<img src="' + V.ART + 'khoa.svg" alt=""><b>' + (it.i + 1) + "</b>"));
-    b.onclick = function () { if (open) { if (V.sfx) V.sfx(); location.href = it.url; } else V.lockPopup(it); };
+    if (open) b.appendChild(el("span", "wbtn", Wardrobe.ICON)).setAttribute("role", "button"), b.lastChild.setAttribute("aria-label", "Đổi trang phục");
+    b.onclick = function (e) {
+      if (e.target.closest(".wbtn")) return Wardrobe.pick({ game: "vt", subj: "tviet", G: V.curGrade(), i: i, owner: false, base: V.NB + a + ".svg", onPick: V.build });
+      if (open) { if (V.sfx) V.sfx(); location.href = it.url; } else V.lockPopup(it);
+    };
     return b;
   }
   V.build = function () {

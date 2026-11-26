@@ -20,14 +20,17 @@
     const G = KC.curGrade(), D = KC.info(G), IT = KC.items(), dn = IT.filter(x => x.done).length;
     IT.forEach((it, i) => {
       const p = POS[i], g = i + 1, open = it.open, S = ["--px:" + pct(p[1], PWID), "--py:" + pct(p[2], PH), "--pw:" + pct(PW, PWID), "--lx:" + pct(p[4], LWID), "--ly:" + pct(p[5], LH), "--lw:" + pct(LW, LWID)].join(";");
+      const wl = Wardrobe.layers(Wardrobe.resolve("kc", "tanh", G, i, it.status), true);   /* chủ quán mặc bộ bé chọn (tủ đồ), chưa chọn thì tự động */
+      const dogHtml = '<span class="dog">' + wl.filter(l => l.bk).map(l => img("tp bk", l.src)).join("") + img("own", A + G + "/chu-quan.svg") + wl.filter(l => !l.bk).map(l => img("tp", l.src)).join("") + "</span>";
       h += '<button type="button" class="shop ' + (open ? "open" : "locked") + '" data-i="' + i + '" data-lv="' + D.lv + '" style="' + S + '" aria-label="' + KC.esc(it.name) + '">';
-      h += '<span class="art">' + img("back", K + "stall-back-" + g + ".svg") + '<span class="dog">' + (it.status === "star" ? "" : img("tp bk", TP + "tp-" + G + "-back.svg")) + img("own", A + G + "/chu-quan.svg") + img("tp", TP + (it.status === "star" ? "tpr-" + g + "-neck.svg" : "tp-" + G + "-head.svg")) + "</span>" + img("front", K + "stall-front-" + g + ".svg") + img("dc", K + "deco-g" + G + ".svg");
+      h += '<span class="art">' + img("back", K + "stall-back-" + g + ".svg") + dogHtml + img("front", K + "stall-front-" + g + ".svg") + img("dc", K + "deco-g" + G + ".svg");
       if (open && D.lv > 1) h += img("mai", A + G + "/mai-" + D.lv + ".svg");
       h += '<span class="sgn">' + img("", A + g + "/sign-2.svg") + "</span>";
       if (g >= 4) h += '<i class="puff"></i><i class="puff b"></i><i class="puff c"></i>';
       h += "</span>";
       h += '<span class="tname">' + KC.esc(it.name) + "</span>";
       if (open) {
+        h += '<span class="wbtn" role="button" data-i="' + i + '" aria-label="Wardrobe">' + Wardrobe.ICON + "</span>";
         h += '<span class="dots">' + (it.done ? "<i class=\"on\"></i>" : "<i></i>") + "</span>";
         if (i === 0 && D.pend > 0) h += '<span class="coin">' + WorldKit.svg("coin") + "<b>" + D.pend + "</b></span>";
       } else h += '<span class="shut"></span><span class="lk">' + ring(dn, IT.length) + WorldKit.svg("lock") + '</span><span class="prog">' + (i + 1) + "</span>";

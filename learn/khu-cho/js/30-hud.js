@@ -22,6 +22,9 @@
     const hud = document.querySelector(".wk-hud"), a = hud.querySelector("a.wk-btn"), b = hud.querySelector("button.wk-btn");
     if (a) a.setAttribute("aria-label", "Back"); if (b) { b.innerHTML = WorldKit.svg("book"); b.classList.add("kc-book"); b.setAttribute("aria-label", "Lessons"); }
     KC.hudSync();
-    document.getElementById("stage").addEventListener("click", e => { const s = e.target.closest(".shop"); if (s) KC.tap(+s.dataset.i); });
+    document.getElementById("stage").addEventListener("click", e => {
+      const w = e.target.closest(".wbtn");
+      if (w) { e.stopPropagation(); const G = KC.curGrade(), i = +w.dataset.i; return Wardrobe.pick({ game: "kc", subj: "tanh", G: G, i: i, owner: true, base: "../quan-kem/art/g" + G + "/chu-quan.svg", onPick: KC.build }); }
+      const s = e.target.closest(".shop"); if (s) KC.tap(+s.dataset.i); });
   };
 })();

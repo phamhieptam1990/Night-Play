@@ -1,0 +1,12 @@
+/* Tủ đồ trang phục (wardrobe.js): nút áo trên chuồng/quán + hộp chọn bộ. */
+.wbtn{position:absolute;left:4%;top:4%;width:max(30px,9%);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.92);border:2px solid #FFB04D;
+  box-shadow:0 2px 5px rgba(0,0,0,.3);z-index:6;cursor:pointer}
+.wbtn svg{width:62%;height:62%}.wbtn:active{transform:scale(.9)}
+.wd{position:fixed;inset:0;z-index:90;display:grid;place-items:center;background:rgba(20,16,50,.6);padding:12px}
+.wd-box{position:relative;width:min(560px,100%);max-height:92dvh;overflow:auto;border-radius:22px;background:#FFF8E6;border:3px solid #E0B66A;padding:36px 12px 12px;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.wd-x{position:absolute;right:8px;top:6px;width:44px;height:44px;border:0;border-radius:50%;background:#FFD24D;color:#5A3A00;font:900 26px/1 system-ui;cursor:pointer}
+.wd-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px}
+.wd-c{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border-radius:16px;border:3px solid #E8D7A8;background:#fff;cursor:pointer;font:inherit;min-height:44px}
+.wd-c.on{border-color:#43BE85;box-shadow:0 0 0 3px rgba(67,190,133,.35)}.wd-c.wd-no{opacity:.55;cursor:default}
+.wd-c b{font:900 13px/1.2 system-ui;color:#5A3A00;text-align:center}.wd-h{font:700 11px/1.2 system-ui;color:#8A6A3A;font-style:normal}
+.wd-p{position:relative;display:block;width:88px;height:88px;isolation:isolate}.wd-p img{position:absolute;left:0;top:0;width:100%}.wd-l.bk{z-index:-1}
