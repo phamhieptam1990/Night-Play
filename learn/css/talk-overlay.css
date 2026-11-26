@@ -1,0 +1,16 @@
+/* Linh vật phóng to + bóng thoại trên đầu (learn/js/talk-overlay.js): nền mờ, linh vật giữa, bóng thoại hiện từng từ, xong thu nhỏ về góc dưới trái. Sáng/tối theo data-theme. */
+.ltk{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:20px;background:rgba(8,16,36,.42);
+  -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);opacity:0;transition:opacity .35s}
+.ltk.on{opacity:1}
+.ltk .tb{position:relative;max-width:min(88vw,400px);padding:12px 18px;border-radius:20px;text-align:center;font-weight:800;font-size:clamp(18px,5.2vw,24px);line-height:1.32;
+  background:rgba(255,255,255,.9);color:#10203a;border:2px solid rgba(255,255,255,.9);box-shadow:0 8px 24px rgba(0,0,0,.3);animation:ltkIn .5s cubic-bezier(.2,.9,.3,1.25) both;transform-origin:50% 100%}
+.ltk .tb::after{content:"";position:absolute;left:calc(50% - 9px);bottom:-10px;width:18px;height:18px;background:rgba(255,255,255,.9);border-left:2px solid rgba(255,255,255,.9);
+  border-bottom:2px solid rgba(255,255,255,.9);transform:rotate(-45deg);border-radius:0 0 0 5px}
+.ltk .tt{display:block;margin-bottom:4px;font-weight:900;color:var(--c1,#0a7)}
+.ltk .tm{width:min(54vw,230px);height:auto;filter:drop-shadow(0 10px 12px rgba(0,0,0,.35));animation:ltkBob 2.6s ease-in-out infinite}
+.ltk .w{opacity:.28;display:inline-block;transition:opacity .25s,transform .25s}.ltk .w.on{opacity:1}.ltk .w.cur{transform:scale(1.12);color:color-mix(in srgb,var(--c1,#0a7) 50%,#0b1a33)}
+.ltk.out{opacity:0;transform-origin:14% 90%;transform:scale(.12);transition:transform .6s cubic-bezier(.5,0,.75,.4),opacity .55s}
+@keyframes ltkIn{from{opacity:0;transform:translateY(16px) scale(.6)}}@keyframes ltkBob{50%{transform:translateY(-6px)}}
+:root[data-theme="dark"] .ltk .tb{background:rgba(16,22,46,.86);color:#f5f8ff;border-color:rgba(255,255,255,.3)}
+:root[data-theme="dark"] .ltk .tb::after{background:rgba(16,22,46,.86);border-color:rgba(255,255,255,.3)}
+@media (prefers-reduced-motion:reduce){.ltk,.ltk.out,.ltk .tb,.ltk .tm,.ltk .w{animation:none;transition:none}}

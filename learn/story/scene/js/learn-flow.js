@@ -50,7 +50,7 @@
       var at = K.q.get("at");   /* ?at=N: xem thử thẳng màn thứ N (chỉ để duyệt) */
       if (at != null && /^\d+$/.test(at)) return show(Math.min(+at, scr.length - 1));
       F.clear(); banner(g, "learn", K.tx(g.story.title)); F.say(K.tx(g.story.learn), { emote: "happy" }); F.next(true, function () { show(0); });
-    }).catch(function () { F.clear(); F.say(S.T.missing, { quiet: true }); F.next(true, function () { location.href = g.mapUrl; }, "map"); });
+    }).catch(function () { F.clear(); F.say(S.T.missing, { quiet: true }); F.next(true, function () { StoryNav.go(g.mapUrl); }, "map"); });
   }
   root.SceneLearn = { run: run };
 })(window);

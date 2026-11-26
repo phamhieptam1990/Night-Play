@@ -10,7 +10,7 @@
   function run(g) {
     var lang = K.lang, bank, cur = 0, tries = 0, stars = 0, streak = 0, best = 0, wrongTags = {}, locked = false, running = true, timer = 0;
     try { bank = root.SceneBank.build(g.subj, g.grade, lang, g.topic.id); } catch (e) { console.error(e); bank = []; }
-    if (!bank.length) { F.clear(); F.say(S.T.missing, { quiet: true }); F.next(true, function () { location.href = g.mapUrl; }, "map"); return; }
+    if (!bank.length) { F.clear(); F.say(S.T.missing, { quiet: true }); F.next(true, function () { StoryNav.go(g.mapUrl); }, "map"); return; }
     F.beads(bank.length); F.beadsTo(-1);
     if (root.LearnLimit && root.LearnLimit.guard) { var u = (root.PARENT_COPY && root.PARENT_COPY.UI && root.PARENT_COPY.UI[lang] || {}).lock || {};
       root.LearnLimit.guard({ busy: function () { return running;

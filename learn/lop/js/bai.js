@@ -38,7 +38,7 @@ function sndUi(){$("snd").textContent=AUTO?"🔊":"🔇";$("snd").setAttribute("
 
 /* MÀN BẬT LOA toàn màn hình trước khi vào bài: cú chạm này mở khóa âm thanh của trình duyệt (iPhone/Safari chỉ cho đọc sau một cú chạm) */
 (function(){const g=$("spkGate"); $("sgBack").href=back; $("sgMi").src=art("happy");
-  const close=()=>{g.hidden=true;spkMark()};
+  const close=()=>{g.hidden=true;spkMark();setTimeout(()=>talk($("bub").textContent),60)};
   $("sgOn").onclick=()=>{AUTO=true;ls("learn:auto","1");sndUi();close();touched=true;const h=$("vhint");if(h&&!noVoiceShown)h.hidden=true;if(curText)say(curText)};
   $("sgOff").onclick=()=>{AUTO=false;ls("learn:auto","0");sndUi();close();touched=true;const h=$("vhint");if(h)h.hidden=true};
   if(!window.Voice || grade>=4 || spkDone()) close();   /* lớp 4–5, hoặc ĐÃ bật loa một lần trong phiên: không hỏi lại ở bài/câu sau (cú chạm đầu của trang tự đọc) */   /* lớp 4–5 đọc thạo: vào thẳng bài có chữ, không qua màn loa to; loa vẫn bật bằng nút 🔊 */
@@ -62,9 +62,13 @@ function build(){
 }
 function dots(){[...$("dots").children].forEach((e,i)=>{e.className=(i<=idx?"on":"")+(i===idx?" cur":"")})}
 function setNext(en,label){const n=$("nx");n.disabled=!en;n.textContent=label||COPY.next}
-function speakIn(t,sp){sp=sp||t;curText=sp;$("bub").textContent=t;if(AUTO&&touched)say(sp)}   /* sp: lời đọc nếu khác chữ trong bong bóng (màn "Bé nhớ nhé" đọc cả các ý) */
+let talked=false;
+/* linh vật phóng to + bóng thoại trên đầu: câu ĐẦU của mỗi màn (chờ màn bật loa đóng); xong thu nhỏ về góc (learn/js/talk-overlay.js) */
+function talk(t){ if(talked||!t||!window.LearnTalk||!$("spkGate").hidden) return; talked=true; LearnTalk.show({img:$("mi").src,text:t}); }
+function speakIn(t,sp){sp=sp||t;curText=sp;$("bub").textContent=t;talk(t);if(AUTO&&touched)say(sp)}   /* sp: lời đọc nếu khác chữ trong bong bóng (màn "Bé nhớ nhé" đọc cả các ý) */
 function show(i){
   idx=Math.max(0,Math.min(steps.length-1,i)); const st=steps[idx], stage=$("stage"); stage.innerHTML=""; stage.classList.remove("pop"); void stage.offsetWidth; stage.classList.add("pop");
+  talked=false; if(window.LearnTalk) LearnTalk.hide();
   dots(); $("bk").disabled=idx===0; mood("grade"); $("m").classList.remove("end");
   const last=idx===steps.length-1, nextLabel=(st.kind==="learn"&&idx===L.screens.length-1)?COPY.tryit:COPY.next;
   if(st.kind==="end") return endScreen(stage);

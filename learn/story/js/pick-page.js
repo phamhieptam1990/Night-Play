@@ -32,7 +32,7 @@
   function next() { var n = P.next(subj, grade); return n ? n.index : 0; }
   function show(i) {
     sel = i; var t = topics[i], st = R.topicState(P, subj, grade, t), story = K.storyFor(t), acts = [];
-    if (!st.lock) acts.push({ label: T.goStart, icon: "sail", go: function () { location.href = K.mapUrl(grade, subj, t.id); } });
+    if (!st.lock) acts.push({ label: T.goStart, icon: "sail", go: function () { StoryNav.go(K.mapUrl(grade, subj, t.id)); } });
     panel.set({ title: K.tx(story.title), text: st.lock ? T.locked : K.tx(story.intro), acts: acts,
       pic: st.lock ? "stop-lock" : st.done ? "stop-end" : st.part ? "stop-learn" : "stop-intro" });
     $("stage").querySelectorAll(".nd").forEach(function (b, k) { b.classList.toggle("sel", k === i); });
@@ -52,6 +52,7 @@
     comp = SG.companion(stage, subj, grade); comp.to(pts[at], true); show(at);
   }
   function load() { tiles(); K.color(subj); K.loadData(subj, grade).then(function () { topics = P.topics(subj, grade); draw(); }); }
+  if (window.StoryGate && StoryGate.need()) StoryGate.show({ title: K.MAS[subj].name[K.vi ? 0 : 1] + " · " + T.grade + " " + grade, back: $("back").href });   /* trang bật loa dùng chung, một lần mỗi phiên */
   panel = StoryPanel.mount($("panel"));
   if (typeof ResizeObserver !== "undefined") new ResizeObserver(function () { if (topics.length) { if (SG.orient($("area")) !== orient) draw(); else SG.fit($("stage"), $("area")); } }).observe($("area"));
   window.addEventListener("pageshow", function (e) { if (e.persisted && topics.length) draw(); });

@@ -7,7 +7,7 @@
   var grade = +q.get("grade"), subj = q.get("subj"), tid = q.get("topic") || "";
   var topics = (grade >= 1 && grade <= 5 && K.MAS[subj]) ? P.topics(subj, grade) : [], ti = -1;
   topics.forEach(function (t, i) { if (t.id === tid) ti = i; });
-  if (ti < 0) { location.replace("index.html" + (K.MAS[subj] && grade >= 1 && grade <= 5 ? "?" + new URLSearchParams({ grade: grade, subj: subj }) : "")); return; }
+  if (ti < 0) { StoryNav.go("index.html" + (K.MAS[subj] && grade >= 1 && grade <= 5 ? "?" + new URLSearchParams({ grade: grade, subj: subj }) : ""), { replace: true }); return; }
   K.setGS(grade, subj); K.color(subj); K.clearFlag();
   var topic = topics[ti], story, route, orient, comp, panel, sel = "";
   $("back").href = K.pickUrl(grade, subj);
@@ -15,8 +15,8 @@
 
   function nodeLabel(k) { return StoryDefault.labelOf(story.nodes, k, K.lang); }
   function text(k) { return K.tx(story[k === "exam" ? "test" : k]); }
-  function go(url) { location.href = url; }   /* cảnh khám phá / thử thách nằm ngay trong Lớp truyện (scene.html), không còn sang trang bài học / kiểm tra cũ */
-  function toMap() { location.href = K.pickUrl(grade, subj); }
+  function go(url) { StoryNav.go(url); }   /* cảnh khám phá / thử thách nằm ngay trong Lớp truyện (scene.html), không còn sang trang bài học / kiểm tra cũ */
+  function toMap() { StoryNav.go(K.pickUrl(grade, subj)); }
   var A = {
     learn: function () { return { label: topic.ready ? T.goPlay : T.goLearn, icon: "step", go: function () { go(K.learnUrl(grade, subj, tid)); } }; },
     test: function (alt) { return { label: T.goTest, icon: "flag", alt: alt, go: function () { go(K.testUrl(grade, subj, tid)); } }; },
@@ -35,7 +35,7 @@
         acts.push(f.tried && !f.passed ? { label: T.goRetry, icon: "retry", go: A.exam().go } : A.exam());
         if (f.tried && !f.passed && f.hasL && !f.learned) { tx = T.retry; acts.push(Object.assign(A.learn(), { alt: true })); }
       } else if (n.kind === "end") {
-        if (hasNext) acts.push({ label: T.goNext, icon: "next", go: function () { location.href = K.mapUrl(grade, subj, topics[ti + 1].id); } });
+        if (hasNext) acts.push({ label: T.goNext, icon: "next", go: function () { StoryNav.go(K.mapUrl(grade, subj, topics[ti + 1].id)); } });
         acts.push({ label: T.goHome, icon: "map", alt: hasNext, go: toMap });
       }
       if (n.kind === "test" && f.tried && !f.passed) { acts[0] = { label: T.goRetry, icon: "retry", go: A.test().go }; }
@@ -66,6 +66,7 @@
   }
   function boot() {
     story = K.storyFor(topic); document.title = T.title + " · " + K.tx(story.title); $("ttl").textContent = K.tx(story.title);
+    if (window.StoryGate && StoryGate.need()) StoryGate.show({ title: K.tx(story.title), back: K.pickUrl(grade, subj) });   /* trang bật loa dùng chung, một lần mỗi phiên */
     panel = StoryPanel.mount($("panel")); draw(true);
     var ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(function () { if (SG.orient($("area")) !== orient) draw(false); else SG.fit($("stage"), $("area")); }) : null;
     if (ro) ro.observe($("area")); else window.addEventListener("resize", function () { draw(false); });
