@@ -102,6 +102,9 @@
   window.NPLevel = {
     attach: function (c) { cfg = c && (c.levels = Math.min(10, c.levels | 0)) > 1 && typeof c.cur === "function" && typeof c.go === "function" ? c : null; },
     boost: function (i) { return cfg && i >= cfg.levels ? Math.min(EXTRA, i - cfg.levels + 1) : 0; },
-    unlocked: function () { return load().u; }, stars: function () { return load().s; }
+    unlocked: function () { return load().u; }, stars: function () { return load().s; },
+    /* mở bảng chọn level từ ngoài (nút "Level" trong Control Center ở màn chọn, shared/cc.js); has() = game có level để chọn */
+    has: function () { return !!cfg; },
+    open: function () { if (!cfg) return false; var c = -1; try { c = cfg.cur(); } catch (e) {} pick(typeof c === "number" && c >= 0 && c < total() ? c : -1); return true; }
   };
 })();

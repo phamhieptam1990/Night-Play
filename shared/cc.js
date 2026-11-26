@@ -38,7 +38,7 @@
     else { var l2 = el("span", "cl"); l2.textContent = t1 || t; b.appendChild(l2); }
   }
   /* nhãn dự phòng theo vai trò (nút gốc chưa có aria-label/title thì không được hiện tên thô "help"/"board"/"lang") */
-  var RLM = { help: ["Hướng dẫn", "How to play"], board: ["Xếp hạng", "Leaderboard"], lang: ["Ngôn ngữ", "Language"], theme: ["Sáng / Tối", "Light / Dark"], fs: ["Toàn màn hình", "Fullscreen"], npch: ["Thử thách", "Challenge"], pass: ["Sự kiện", "Event"], npset: ["Cài đặt Night Pass", "Night Pass settings"], skinbtn: ["Giao diện", "Appearance"], cam: ["Chụp ảnh", "Photo"], shr: ["Chia sẻ", "Share"], lock: ["Khoá trẻ em", "Kids lock"], snd: ["Âm thanh", "Sound"], skin: ["Linh vật & skin", "Mascot & skin"] };
+  var RLM = { help: ["Hướng dẫn", "How to play"], board: ["Xếp hạng", "Leaderboard"], lang: ["Ngôn ngữ", "Language"], theme: ["Sáng / Tối", "Light / Dark"], fs: ["Toàn màn hình", "Fullscreen"], npch: ["Thử thách", "Challenge"], lv: ["Chọn level", "Choose level"], pass: ["Sự kiện", "Event"], npset: ["Cài đặt Night Pass", "Night Pass settings"], skinbtn: ["Giao diện", "Appearance"], cam: ["Chụp ảnh", "Photo"], shr: ["Chia sẻ", "Share"], lock: ["Khoá trẻ em", "Kids lock"], snd: ["Âm thanh", "Sound"], skin: ["Linh vật & skin", "Mascot & skin"] };
   function RL(r) { var a = RLM[r]; return a ? a[vi() ? 0 : 1] : r; }
   /* TOÀN MÀN HÌNH: nút gốc #npFsBtn chỉ VÀO; đang ở toàn màn hình thì ô trong bảng phải hiện "thu nhỏ" và bấm = thoát (NPFs.exit) */
   var FSX = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>';
@@ -180,6 +180,12 @@
     var IDS = { help: ["bHelp", "phBtn", "askBtn"], board: ["bBoard"], lang: ["bLang", "langBtn"], theme: ["themeBtn2", "themeBtn"], fs: ["npFsBtn"], npch: ["npChBtn"], pass: ["nsPill"], npset: ["npSetBtn"], npmc: ["npMcBtn"] }, olds = {};
     [].slice.call(document.querySelectorAll("#npFan .pn .it,#npPmFan .pn .it")).forEach(function (o) { var r = o.getAttribute("data-r"); if (r && !o.hidden && !olds[r]) olds[r] = o; });
     Object.keys(IDS).forEach(function (r) { if (olds[r]) return; for (var i = 0; i < IDS[r].length; i++) { var e = $(IDS[r][i]); if (e && !e.closest("#ccRoot")) { olds[r] = e; return; } } });
+    /* LEVEL: game có lên level (NPLevel) → nút mở bảng chọn level (thẻ số to đậm); nút giả không gắn vào trang, chỉ để bảng bấm hộ */
+    if (!olds.lv && window.NPLevel && NPLevel.has && NPLevel.has()) {
+      var lb0 = el("button"); lb0.type = "button"; lb0.setAttribute("aria-label", RL("lv"));
+      lb0.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4v-5h4v-5h4V5h4"/><path d="M4 20h16"/></svg>';
+      lb0.addEventListener("click", function () { NPLevel.open(); }); olds.lv = lb0;
+    }
     /* linh vật = nút giao diện (icon là CHÍNH linh vật đang hiện ở màn chọn) */
     var hs = document.querySelector("#hHero .npa-box svg,#paHero .npa-box svg,#hHero svg,#paHero svg");
     if (olds.npmc) {
@@ -188,7 +194,7 @@
       kb.addEventListener("click", function () { olds.npmc.click(); close(); }); (bar || pn).appendChild(kb);
     }
     /* chức năng gom THẺ 2×2 (4 nút / thẻ). Nhấn giữ thẻ → mở rộng thành danh sách CÓ CHỮ */
-    var ORDER = ["help", "board", "lang", "theme", "fs", "npch", "pass", "npset"], list4 = ORDER.filter(function (r) { return olds[r]; });
+    var ORDER = ["help", "board", "lv", "lang", "theme", "fs", "npch", "pass", "npset"], list4 = ORDER.filter(function (r) { return olds[r]; });
     var STAY = { lang: 1, theme: 1 };
     for (var gi = 0; gi < list4.length; gi += 4) {
       (function (roles) {
