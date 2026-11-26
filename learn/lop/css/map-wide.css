@@ -32,4 +32,5 @@
   .stage{flex-direction:column;align-items:center}.gmas,.stage.compact .gmas{width:72px;height:72px}.gname{display:none}.gbub{font-size:13px;padding:6px 10px}
   .pick select{min-height:44px;font-size:16px}.pick{margin-bottom:6px}.step button{min-height:42px}.stage{padding:8px;gap:8px}.pic{height:130px}}
 @media (prefers-reduced-motion:reduce){.gmas,.gmas.poke,.gbub.pop{animation:none}}
-.site-upd.fixed{position:static;width:auto;text-align:center;padding:8px 0 18px;pointer-events:none}
+/* dòng "Cập nhật lần cuối" nổi mờ ở đáy, KHÔNG chiếm chỗ trong bố cục */
+.site-upd.fixed{position:fixed;left:0;right:0;bottom:calc(2px + env(safe-area-inset-bottom));width:auto;padding:0;text-align:center;font-size:9.5px;line-height:11px;opacity:.55;pointer-events:none;z-index:1}
