@@ -1,8 +1,8 @@
 /* Cảnh truyện: khung chung. Mọi cảnh KHÔNG cuộn trang. Dọc: vùng chơi phía trên, nhân vật + bong bóng ở đáy. Ngang: nhân vật bên trái, vùng chơi bên phải (wide.css). */
 body.scn{--castH:clamp(124px,21dvh,176px)}
 .scn .top{gap:8px}
-.beads{flex:1;min-width:0;display:flex;align-items:center;justify-content:center;gap:clamp(4px,1.4vw,9px);height:34px}
-.beads i{flex:0 1 20px;min-width:7px;max-width:20px;aspect-ratio:.8;border-radius:46% 46% 50% 50%;background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,.65);
+.beads{flex:1;min-width:0;display:flex;align-items:center;justify-content:center;gap:clamp(2px,.9vw,8px);height:34px;padding:0 4px}   /* nhiều đèn (chủ đề dài): thu nhỏ cho vừa giữa nút ← và nút loa, không tràn đè nút */
+.beads i{flex:0 1 20px;min-width:3px;max-width:20px;aspect-ratio:.8;border-radius:46% 46% 50% 50%;background:rgba(255,255,255,.22);border:max(1.5px,min(2px,.5vw)) solid rgba(255,255,255,.65);
   transition:transform .25s,background .25s,box-shadow .25s}
 .beads i.on{background:radial-gradient(circle at 50% 38%,#fff7b8,#ffc83d 70%);border-color:#fff;box-shadow:0 0 10px 3px rgba(255,208,70,.75)}
 .beads i.miss{background:radial-gradient(circle at 50% 38%,#e9f6ff,#9fd0ff 70%);border-color:#fff;box-shadow:0 0 8px 2px rgba(150,200,255,.6)}
