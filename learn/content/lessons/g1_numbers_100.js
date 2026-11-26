@@ -96,7 +96,7 @@ window.LearnLessons.reg({
    "art": "🟦🟦🟦"
   },
   {
-   "q": "Số nào bé nhất?",
+   "q": "Số nào nhỏ nhất?",
    "opts": [
     "15",
     "29",

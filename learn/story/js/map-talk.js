@@ -6,7 +6,7 @@
   var K = root.StoryCore, shown = false, el = null, t1 = 0, t2 = 0, wt = 0;
   function auto() { var a; try { a = localStorage.getItem("learn:auto"); } catch (e) {} return a !== "0"; }
   function end() {
-    clearTimeout(t1); clearInterval(wt); if (!el) return; var e = el; el = null; try { if (root.StoryVoice) root.StoryVoice.stop(); } catch (x) {}
+    clearTimeout(t1); clearInterval(wt); if (!el) return; var e = el; el = null; root.__storySaying = ""; try { if (root.StoryVoice) root.StoryVoice.stop(); } catch (x) {}
     e.classList.add("out"); setTimeout(function () { if (e.parentNode) e.parentNode.removeChild(e); }, 650);
   }
   function show(title, text) {
@@ -30,9 +30,12 @@
       wt = setInterval(function () { if (i >= sp.length) { clearInterval(wt); return; } sp[i - 1].classList.remove("cur"); sp[i].classList.add("on", "cur"); i++; }, step);
     }
     if (auto() && root.Voice) {
-      try { var V = root.Voice; var vl = K.voiceLang(text); (K.subj === "tanh" && vl === "vi" && V.sayMix ? V.sayMix : V.say)(text, K.subj, vl, { profile: "narr", fail: function () {} }); } catch (e) {}
+      try { var V = root.Voice; var vl = K.voiceLang(text); (K.subj === "tanh" && vl === "vi" && V.sayMix ? V.sayMix : V.say)(text, K.subj, vl, { profile: "narr", fail: function () { if (root.__storySaying === text) root.__storySaying = ""; },
+        done: function () { root.__storyHeard = text; if (root.__storySaying === text) root.__storySaying = ""; } }); root.__storySaying = text; } catch (e) {}   /* chỉ khi ĐỌC XONG trọn câu mới ghi nhận "đã nghe": cảnh truyện bỏ qua đọc lại câu này; bị ngắt giữa chừng thì cảnh đọc lại đủ */
     }
-    t1 = setTimeout(end, Math.min(9000, Math.max(2800, text.length * 85 + 1400)));
+    /* hết giờ dự kiến mà giọng vẫn đang đọc thì CHỜ đọc xong rồi mới thu nhỏ (trước đây đóng đúng giờ và cắt ngang câu); tối đa thêm ~10 giây */
+    var waits = 0, fin = function () { var sp = root.speechSynthesis && root.speechSynthesis.speaking; if (sp && el && waits++ < 20) { t1 = setTimeout(fin, 500); return; } end(); };
+    t1 = setTimeout(fin, Math.min(9000, Math.max(2800, text.length * 85 + 1400)));
     return true;   /* true = đã phóng to đọc */
   }
   root.StoryTalk = { show: show };

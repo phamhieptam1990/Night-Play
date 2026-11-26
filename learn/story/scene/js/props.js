@@ -18,6 +18,13 @@
     var b = U.el("button", "ob" + (wide ? " wide" : ""), ""), im = U.el("img", "oi"), tx = U.el("span", "tx ct");
     b.type = "button"; im.alt = ""; im.draggable = false; im.src = "art/props/" + kind + "-" + c + ".svg"; im.onerror = function () { im.style.visibility = "hidden"; };
     if (opt.html) { tx.innerHTML = text; b.classList.add("hasbd"); } else tx.textContent = text;
+    /* NHÓM HÌNH (chuỗi emoji lặp: "🍎🍎🍎🍎"): xếp lưới cột × hàng (4 hình = 2×2, 5–6 = 3×2, 7–9 = 3×3) và tính cỡ theo ô — trước đây chỉ theo số ký tự nên 4 hình trở lên bị tràn dòng và cắt cụt */
+    if (!opt.html && !wide) { var em = String(text).match(/\p{Extended_Pictographic}(?:\uFE0F|\u200D\p{Extended_Pictographic})*/gu);
+      if (em && em.length > 1 && em.join("") === String(text).replace(/\s+/g, "")) {
+        var n = em.length, cols = n <= 3 ? n : n === 4 ? 2 : 3, rows = Math.ceil(n / cols);
+        tx.textContent = ""; em.forEach(function (g) { var sp = U.el("span", "eg"); sp.textContent = g; tx.appendChild(sp); });
+        b.classList.add("emo"); b.style.setProperty("--ec", cols); b.style.setProperty("--ef", Math.min(.6 / (cols * 1.25), .32 / (rows * 1.1)).toFixed(3));
+      } }
     if (!wide) b.classList.add("z" + (size(text) || "m")); b.style.setProperty("--pc", COLOR[c]); b.style.setProperty("--d", (-(i * .55)) + "s");
     b.appendChild(im); b.appendChild(tx); b.setAttribute("aria-label", plain || "?"); b.dataset.i = i; return b;
   }

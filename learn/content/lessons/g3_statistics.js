@@ -13,7 +13,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "say",
-      "t": "Nhiều nhất là số lớn nhất, ít nhất là số bé nhất. Hơn bao nhiêu thì trừ.",
+      "t": "Nhiều nhất là số lớn nhất, ít nhất là số nhỏ nhất. Hơn bao nhiêu thì trừ.",
       "art": "8 − 5 = 3"
     },
     {

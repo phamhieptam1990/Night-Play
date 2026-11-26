@@ -18,6 +18,9 @@
     return text.replace(/(^|[^A-Za-zÀ-ỹ])([Bb])é(?![A-Za-zÀ-ỹ])/g, function (m, a, b, off) {
       var after = text.slice(off + m.length, off + m.length + 9).trim(), before = text.slice(Math.max(0, off - 7), off + a.length);
       if (/^(xíu|nhỏ|tí|bỏng|hơn|nhất|quá|con|gái|trai|xinh|như|lắm)(?![A-Za-zÀ-ỹ])/.test(after) || /(^|[^A-Za-zÀ-ỹ])(em|số|hình|cái|chiếc|quả|to|nhỏ|con) $/.test(before)) return m;
+      /* "bé" là NHỎ khi đứng cạnh từ chỉ cỡ/lớn bé: "từ bé đến lớn", "từ lớn đến bé", "to hay bé", "lớn, bé" */
+      var near = text.slice(Math.max(0, off - 16), off + m.length + 16);
+      if (/(lớn|to\b|nhỏ|dài|ngắn|nặng|nhẹ|cao|thấp|nhiều|ít|dần|giảm|tăng)/i.test(near.replace(m, " "))) return m;
       return a + (b === "B" ? "Em" : "em");
     });
   }

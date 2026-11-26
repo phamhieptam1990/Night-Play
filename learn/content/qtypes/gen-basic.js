@@ -63,11 +63,11 @@
       if (subj === "toan") {
         var r = RANGE[g - 1], nums = distinctNums(4, r[0], r[1]).sort(function (a, b) { return a - b; }), asc = R() < .6, items = nums.map(String);
             if (!asc) items.reverse();
-        return base("order", subj, g, lang, asc ? (lang === "vi" ? "Xếp từ <em>bé đến lớn</em>" : "Put in order, <em>smallest first</em>") : (
-            lang === "vi" ? "Xếp từ <em>lớn đến bé</em>" :
-            "Put in order, <em>biggest first</em>"), { items: items, speak: asc ? (lang === "vi" ? "Xếp các số từ bé đến lớn." :
+        return base("order", subj, g, lang, asc ? (lang === "vi" ? "Xếp từ <em>nhỏ đến lớn</em>" : "Put in order, <em>smallest first</em>") : (
+            lang === "vi" ? "Xếp từ <em>lớn đến nhỏ</em>" :
+            "Put in order, <em>biggest first</em>"), { items: items, speak: asc ? (lang === "vi" ? "Xếp các số từ nhỏ đến lớn." :
                 "Put the numbers in order, smallest first.") : (
-            lang === "vi" ? "Xếp các số từ lớn đến bé." : "Put the numbers in order, biggest first."), reveal: items.join(" ") });
+            lang === "vi" ? "Xếp các số từ lớn đến nhỏ." : "Put the numbers in order, biggest first."), reveal: items.join(" ") });
       }
       var S = SENT[subj === "tanh" ? "en" : "vi"].filter(function (s) { return g <= 2 ? s.length <= 4 : true; }), s = pick(S);
       return base("order", subj, g, lang, lang === "vi" ? "Xếp các từ thành <em>câu đúng</em>" : "Put the words in the <em>right order</em>", { items:

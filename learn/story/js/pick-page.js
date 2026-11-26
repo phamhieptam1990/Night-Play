@@ -42,11 +42,13 @@
     SG.bg(stage, subj, grade, orient); pts = R.chain(topics.length, orient);
     SG.paths(stage, topics.slice(1).map(function (t, i) { return { a: pts[i], b: pts[i + 1], done: R.topicState(P, subj, grade, topics[i]).done }; }), orient);
     topics.forEach(function (t, i) {
-      st = R.topicState(P, subj, grade, t);
+      st = R.topicState(P, subj, grade, t); var locked = st.lock;   /* st dùng chung cho cả vòng lặp: giữ riêng trạng thái khoá của điểm này cho hàm bấm */
       var d = { id: t.id, kind: "island", pos: pts[i], st: st.done ? "done" : st.lock ? "off" : "cur", label: (window.LearnStories && LearnStories[t.id] && K.tx(LearnStories[t.id].title)) || t.name,
         icon: st.done ? "stop-end" : st.part ? "stop-learn" : "stop-intro",
         lock: st.lock, stars: st.stars, num: String(i + 1), noStar: true };
-      SG.node(stage, d, function () { show(i); if (comp) comp.to(pts[i], false); });
+      SG.node(stage, d, function () { show(i); if (comp) comp.to(pts[i], false);
+        if (!locked) setTimeout(function () { StoryNav.go(K.mapUrl(grade, subj, t.id)); }, 350);   /* chạm chủ đề đã mở = vào luôn bản đồ chủ đề (không cần bấm nút) */
+      });
     });
     var at = sel >= 0 ? sel : next();
     comp = SG.companion(stage, subj, grade); comp.to(pts[at], true); show(at);

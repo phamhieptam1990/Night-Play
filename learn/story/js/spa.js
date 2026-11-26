@@ -22,7 +22,7 @@
     evs.forEach(function (e) { try { e[0](e[1], e[2], e[3]); } catch (x) {} }); evs = [];
     tms.forEach(function (t) { oCT(t); oCI(t); }); tms = [];
     ros.forEach(function (o) { try { o.disconnect(); } catch (x) {} }); ros = [];
-    try { if (root.Voice) root.Voice.stop(); } catch (x) {}
+    try { if (root.Voice && !root.__storySaying) root.Voice.stop(); } catch (x) {}   /* câu bản đồ đang đọc dở thì để đọc TIẾP qua màn mới (cảnh không đọc lại); màn mới có lời khác sẽ tự ngắt */
     try { if (root.StorySfxAmb) root.StorySfxAmb.stop(); } catch (x) {}
   }
   function abs(u) { return new URL(u, location.href).href; }

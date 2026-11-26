@@ -41,6 +41,7 @@
       if (n.kind === "test" && f.tried && !f.passed) { acts[0] = { label: T.goRetry, icon: "retry", go: A.test().go }; }
     } else tx = T.notYet;
     panel.set({ title: nodeLabel(n.kind), text: tx, pic: "stop-" + (n.kind === "exam" ? "test" : n.kind), acts: acts });
+    return acts;
   }
   function start() {
     K.markSeen(tid); sel = ""; draw(false); comp.emote("cheer");
@@ -54,7 +55,11 @@
     SG.paths(stage, route.edges.map(function (e) { return { a: route.by[e.a].pos, b: route.by[e.b].pos, done: e.done }; }), orient);
     route.nodes.forEach(function (n) {
       SG.node(stage, { id: n.id, kind: n.kind, pos: n.pos, st: n.st, off: n.off, stars: n.stars, label: nodeLabel(n.kind), say: text(n.kind), sp: n.sp, icon: "stop-" + (n.kind === "exam" ? "test" : n.kind),
-        lock: !route.info.unl && n.kind !== "intro" }, function () { show(n); if (comp && n.tap) comp.emote("happy"); });
+        lock: !route.info.unl && n.kind !== "intro" }, function () {
+        var acts = show(n); if (comp && n.tap) comp.emote("happy");
+        /* BÉ CHẠM NODE = VÀO LUÔN khi điểm đó chỉ có MỘT việc để làm (khởi hành / học / thử thách / kiểm tra); điểm cần chọn (hai hướng, kết thúc) vẫn giữ nút */
+        if (n.tap && acts && acts.length === 1 && /^(intro|learn|test|exam)$/.test(n.kind)) setTimeout(function () { acts[0].go(); }, 250);
+      });
     });
     var curN = route.by[route.cur] || route.by.intro;
     if (keep) { stage.appendChild(keep); comp.to(pt(curN), false, curN.cs); } else {

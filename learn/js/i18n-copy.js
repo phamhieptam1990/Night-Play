@@ -19,7 +19,7 @@ const T = {
         table_confuse:"nhầm bảng cửu chương",carry_error:"nhầm số nhớ khi nhân",add_denominator:"cộng cả mẫu số",decimal_point:"đặt dấu phẩy sai",percent_misread:"nhầm phần trăm",
         spelling:"chính tả",tone:"dấu thanh",meaning:"nghĩa của từ",word:"từ vựng",grammar:"am / is / are",other:"đọc kỹ đề"},
       hint:{word_class:"Từ này là vật, việc làm hay đặc điểm nhỉ?",punct:"Đọc to câu lên, nghe giọng nói nhé!",sent_type:"Câu này kể, hỏi, cảm hay khiến nhỉ?",
-        en_rule:"Nhớ lại quy tắc nhé!",place_value:"Nhìn kỹ chữ số đứng ở hàng nào nhé!",unit_convert:"Nhớ 1 đơn vị lớn bằng bao nhiêu đơn vị bé nha!",
+        en_rule:"Nhớ lại quy tắc nhé!",place_value:"Nhìn kỹ chữ số đứng ở hàng nào nhé!",unit_convert:"Nhớ 1 đơn vị lớn bằng bao nhiêu đơn vị nhỏ nha!",
         formula_confuse:"Chu vi đi quanh, diện tích phủ kín nhé!",order_ops:"Ngoặc trước, nhân chia trước nha!",read_chart:"Chỉ đúng hàng rồi đọc lại nhé!",
         concept_confuse:"Nhớ lại đặc điểm của hình nào!",pattern_miss:"Xem mỗi số thêm bao nhiêu nhé!",off_by_one:"Đếm lại thật kỹ nhé!",wrong_op:"Xem lại: cộng hay trừ nhỉ?",
         forget_carry:"Nhớ số nhớ nhé!",tens_error:"Xem lại hàng chục nào!",table_confuse:"Đọc lại bảng cửu chương nhé!",carry_error:"Nhân xong nhớ cộng số nhớ nha!",

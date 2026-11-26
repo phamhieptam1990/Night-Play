@@ -100,12 +100,12 @@
       var v = VI(c), t = rnd(0, 2), a, b, k, T, u, n1, n2, sc, cm, q, big;
       if (t === 0) {
         do { a = rnd(1, 5); b = rnd(2, 7); } while (a >= b || gcd(a, b) !== 1); k = rnd(2, 12); T = (a + b) * k; big = R() < .5;
-        q = mkn(v ? "Hai số có tổng là <em>" + T + "</em>, tỉ số của số bé và số lớn là <em>" + a + "/" + b + "</em>. Số " + (big ? "lớn" : "bé") +
+        q = mkn(v ? "Hai số có tổng là <em>" + T + "</em>, tỉ số của số nhỏ và số lớn là <em>" + a + "/" + b + "</em>. Số " + (big ? "lớn" : "nhỏ") +
             " là?" : "Two numbers add up to <em>" +
             T + "</em>; the ratio of the smaller to the larger is <em>" + a + "/" + b + "</em>. The " + (big ? "larger" : "smaller") + " number is?",
                 (big ? b : a) * k, [[(big ? a : b) * k,
             "concept_confuse"], [k, "concept_confuse"], [r2(T * (big ? b : a) / b), "concept_confuse"], [T - (big ? b : a), "wrong_op"]], c);
-        q.hint = H2(c, "Vẽ sơ đồ: số bé " + a + " phần, số lớn " + b + " phần bằng nhau. Tổng số phần bằng nhau là bao nhiêu?",
+        q.hint = H2(c, "Vẽ sơ đồ: số nhỏ " + a + " phần, số lớn " + b + " phần bằng nhau. Tổng số phần bằng nhau là bao nhiêu?",
             "Giá trị một phần = tổng ÷ tổng số phần. Rồi nhân với số phần của số cần tìm.", "Draw a diagram: the smaller is " + a + " equal parts, the larger is " + b +
             " equal parts. How many parts altogether?", "One part = total ÷ number of parts. Then multiply by the parts of the number you want.");
         return q;

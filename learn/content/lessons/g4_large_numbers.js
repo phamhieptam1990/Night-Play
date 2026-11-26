@@ -57,7 +57,7 @@ window.LearnLessons.reg({
       ],
       "ok": 1,
       "yes": "Đúng! Hàng trăm là 1 nên giữ.",
-      "no": "Hàng trăm là 1, bé hơn 5.",
+      "no": "Hàng trăm là 1, nhỏ hơn 5.",
       "art": "12 121 ≈ ?"
     },
     {

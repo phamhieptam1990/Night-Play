@@ -342,7 +342,7 @@
     /* cùng một lời đặt hai lần liền (khung màn + kiểu màn đều gọi say) thì chỉ đọc một lần */
     set: function (text, o, silent) {   /* silent: chỉ ghi nhớ lời cho nút loa, không tự đọc (câu vừa được đọc ở màn trước) */
       var now = Date.now(), dup = text && text === lastText && now - lastAt < 1500; lastText = text || ""; lastAt = now;
-      cur = text || ""; curOpt = o || null; if (dup) return; pending = null; hint(""); stop(); if (cur && !silent && auto()) speakNow(cur, o);
+      cur = text || ""; curOpt = o || null; if (dup || silent) return; pending = null; hint(""); stop(); if (cur && auto()) speakNow(cur, o);
     },
     say: function (text, o) { speakNow(text, o); },
     stop: stop, touched: function () { return touched; }
@@ -372,6 +372,13 @@
     var b = U.el("button", "ob" + (wide ? " wide" : ""), ""), im = U.el("img", "oi"), tx = U.el("span", "tx ct");
     b.type = "button"; im.alt = ""; im.draggable = false; im.src = "art/props/" + kind + "-" + c + ".svg"; im.onerror = function () { im.style.visibility = "hidden"; };
     if (opt.html) { tx.innerHTML = text; b.classList.add("hasbd"); } else tx.textContent = text;
+    /* NHÓM HÌNH (chuỗi emoji lặp: "🍎🍎🍎🍎"): xếp lưới cột × hàng (4 hình = 2×2, 5–6 = 3×2, 7–9 = 3×3) và tính cỡ theo ô — trước đây chỉ theo số ký tự nên 4 hình trở lên bị tràn dòng và cắt cụt */
+    if (!opt.html && !wide) { var em = String(text).match(/\p{Extended_Pictographic}(?:\uFE0F|\u200D\p{Extended_Pictographic})*/gu);
+      if (em && em.length > 1 && em.join("") === String(text).replace(/\s+/g, "")) {
+        var n = em.length, cols = n <= 3 ? n : n === 4 ? 2 : 3, rows = Math.ceil(n / cols);
+        tx.textContent = ""; em.forEach(function (g) { var sp = U.el("span", "eg"); sp.textContent = g; tx.appendChild(sp); });
+        b.classList.add("emo"); b.style.setProperty("--ec", cols); b.style.setProperty("--ef", Math.min(.6 / (cols * 1.25), .32 / (rows * 1.1)).toFixed(3));
+      } }
     if (!wide) b.classList.add("z" + (size(text) || "m")); b.style.setProperty("--pc", COLOR[c]); b.style.setProperty("--d", (-(i * .55)) + "s");
     b.appendChild(im); b.appendChild(tx); b.setAttribute("aria-label", plain || "?"); b.dataset.i = i; return b;
   }
@@ -422,9 +429,9 @@
       o = o || {}; var b = $("bub"); clearInterval(wordT); delete b.dataset.full; b.textContent = text; X.cls(b, "pop"); fitBub(); setTimeout(fitBub, 60);
       if (o.emote) F.emote(o.emote);
       var first = intro; intro = false; if (!first) F.said();   /* lời tiếp theo: bóng thoại nhỏ trên đầu linh vật vài giây */
-      /* bản đồ vừa phóng to đọc ĐÚNG câu này (StoryTalk, window.__storyTalked): vào cảnh không phóng to và đọc lại lần nữa (trước đây nghe hai lần) */
-      var norm = function (t) { return String(t || "").replace(/\s+/g, " ").trim(); }, heard = first && !o.quiet && root.__storyTalked && norm(root.__storyTalked) === norm(o.speak || text);
-      if (first) root.__storyTalked = "";
+      /* bản đồ vừa ĐỌC XONG đúng câu này (StoryTalk, window.__storyHeard): vào cảnh không phóng to và đọc lại (trước đây nghe hai lần). Bản đồ bị ngắt giữa câu thì cảnh vẫn đọc đủ. */
+      var norm = function (t) { return String(t || "").replace(/\s+/g, " ").trim(); }, heard = first && !o.quiet && (norm(root.__storyHeard) === norm(o.speak || text) || norm(root.__storySaying) === norm(o.speak || text)) && norm(o.speak || text);
+      if (first) { root.__storyTalked = ""; root.__storyHeard = ""; if (!heard) root.__storySaying = ""; }
       if (o.quiet) V.set("", null); else if (heard) V.set(o.speak || text, o.vo, true); else { if (first) F.talk(o.speak || text); V.set(o.speak || text, o.vo); }
     },
     /* LINH VẬT HIỆN TO giữa cảnh đọc lời mở đầu của màn; đọc xong (hoặc chạm, hoặc hết giờ dự phòng) thì thu nhỏ về góc. Chỉ màn dọc có hiệu ứng (css/glass.css). */

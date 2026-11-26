@@ -115,3 +115,6 @@ body.scn[data-subj="tanh"]{--nx1:#5fa8ff;--nx2:#8b5cf6}
 @media (prefers-reduced-motion:reduce){.scn .sc.speaking:not(.talk) .pal,.scn .sc.speaking:not(.talk) .pal::after{animation:none}}
 /* thanh trên luôn FULL bề ngang: khi vào cảnh bằng bản đồ (router gộp trang), css riêng của cảnh nối vào cuối trang nên luật skin.css "width:min(100%,820px)" thắng css/full.css "width:100%" — loa nằm giữa thay vì góc phải. File này nạp cuối nên chốt lại ở đây. */
 body.scn .top{width:100%;left:0;right:0}
+/* thẻ NHÓM HÌNH (props.js: class .emo): lưới cột × hàng, cỡ theo ô, không cắt */
+.scn .ob.emo .tx{display:grid;grid-template-columns:repeat(var(--ec),auto);justify-content:center;align-content:center;gap:0 .08em;overflow:visible;line-height:1.05;font-size:calc(var(--ow)*var(--ef))}
+.scn .ob.emo .tx .eg{display:block;text-align:center}

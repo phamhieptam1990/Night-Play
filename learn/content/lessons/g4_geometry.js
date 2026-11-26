@@ -13,8 +13,8 @@ window.LearnLessons.reg({
     },
     {
       "k": "say",
-      "t": "Góc nhọn bé hơn 90°. Góc vuông bằng 90°. Góc tù lớn hơn 90°.",
-      "art": "nhọn: bé hơn 90°\nvuông: 90°\ntù: lớn hơn 90°"
+      "t": "Góc nhọn nhỏ hơn 90°. Góc vuông bằng 90°. Góc tù lớn hơn 90°.",
+      "art": "nhọn: nhỏ hơn 90°\nvuông: 90°\ntù: lớn hơn 90°"
     },
     {
       "k": "say",
@@ -30,7 +30,7 @@ window.LearnLessons.reg({
         "Góc tù"
       ],
       "ok": 1,
-      "yes": "Đúng! 60° bé hơn 90°.",
+      "yes": "Đúng! 60° nhỏ hơn 90°.",
       "no": "So 60° với 90°.",
       "art": "60°"
     },
@@ -64,7 +64,7 @@ window.LearnLessons.reg({
       "k": "sum",
       "t": "Em nhớ nhé!",
       "pts": [
-        "Nhọn bé hơn 90°, vuông bằng 90°, tù lớn hơn 90°",
+        "Nhọn nhỏ hơn 90°, vuông bằng 90°, tù lớn hơn 90°",
         "Góc bẹt = 180°",
         "Đo góc: tâm thước ở đỉnh góc, một cạnh ở số 0"
       ]
@@ -104,7 +104,7 @@ window.LearnLessons.reg({
       ],
       "ok": 0,
       "hint": "So 45° với 90°.",
-      "yes": "Đúng! Bé hơn 90°.",
+      "yes": "Đúng! Nhỏ hơn 90°.",
       "art": "45°"
     }
   ]

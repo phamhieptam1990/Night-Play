@@ -57,10 +57,10 @@
       if (subj === "toan") {
         var r = RANGE[g - 1], nums = distinctNums(9, r[0], r[1]), big = R() < .5, tv = big ? Math.max.apply(null, nums) : Math.min.apply(null, nums);
         return base("find", subj, g, lang, big ? (lang === "vi" ? "Chạm vào <em>số lớn nhất</em>" : "Tap the <em>biggest number</em>") : (
-            lang === "vi" ? "Chạm vào <em>số bé nhất</em>" :
+            lang === "vi" ? "Chạm vào <em>số nhỏ nhất</em>" :
             "Tap the <em>smallest number</em>"), { o: nums.map(function (n) { var x = { v: String(n) }; if (n === tv) x.ok = 1; return x; }), dk:
                 "find", speak: big ? (lang === "vi" ?
-            "Chạm vào số lớn nhất." : "Tap the biggest number.") : (lang === "vi" ? "Chạm vào số bé nhất." : "Tap the smallest number."), reveal: String(tv) });
+            "Chạm vào số lớn nhất." : "Tap the biggest number.") : (lang === "vi" ? "Chạm vào số nhỏ nhất." : "Tap the smallest number."), reveal: String(tv) });
       }
       var v = pick(V), rest = shuf(V.filter(function (x) { return x !== v; })).slice(0, 8), all = shuf([v].concat(rest)), nm = name(v, subj);
       return base("find", subj, g, lang, subj === "tanh" ? (lang === "vi" ? "Tìm <em>" + nm + "</em>" : "Find the <em>" + nm + "</em>") : (

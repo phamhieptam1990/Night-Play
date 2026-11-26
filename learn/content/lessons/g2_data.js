@@ -18,7 +18,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "say",
-      "t": "Nhìn bảng: số lớn nhất là nhiều nhất, số bé nhất là ít nhất.",
+      "t": "Nhìn bảng: số lớn nhất là nhiều nhất, số nhỏ nhất là ít nhất.",
       "art": "Nhiều nhất: Chuối"
     },
     {
@@ -43,8 +43,8 @@ window.LearnLessons.reg({
         "Chuối"
       ],
       "ok": 1,
-      "yes": "Đúng! 1 là bé nhất.",
-      "no": "Tìm số bé nhất.",
+      "yes": "Đúng! 1 là nhỏ nhất.",
+      "no": "Tìm số nhỏ nhất.",
       "art": "Táo 2 · Chuối 3 · Nho 1"
     },
     {
@@ -79,7 +79,7 @@ window.LearnLessons.reg({
         "2"
       ],
       "ok": 2,
-      "hint": "Hơn bao nhiêu thì lấy số lớn trừ số bé.",
+      "hint": "Hơn bao nhiêu thì lấy số lớn trừ số nhỏ.",
       "yes": "Đúng! 6 − 4 = 2.",
       "art": "4 🐶  6 🐱"
     },

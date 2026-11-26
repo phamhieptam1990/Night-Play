@@ -57,7 +57,7 @@ window.LearnLessons.reg({
       ],
       "ok": 1,
       "yes": "Đúng! Hàng đơn vị là 8 nên lên chục.",
-      "no": "Nhìn hàng đơn vị: nó là 5 trở lên hay bé hơn 5?",
+      "no": "Nhìn hàng đơn vị: nó là 5 trở lên hay nhỏ hơn 5?",
       "art": "78 ≈ ?"
     },
     {
@@ -79,7 +79,7 @@ window.LearnLessons.reg({
         "70"
       ],
       "ok": 1,
-      "hint": "Nhìn hàng đơn vị: nó là 5 trở lên hay bé hơn 5?",
+      "hint": "Nhìn hàng đơn vị: nó là 5 trở lên hay nhỏ hơn 5?",
       "yes": "Đúng! Hàng đơn vị là 3 nên giữ chục.",
       "art": "63 ≈ ?"
     },

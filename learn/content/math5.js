@@ -56,7 +56,7 @@
       of: [["Tìm phần trăm của phần đó trên biểu đồ.", "Số bạn = số bạn cả lớp × phần trăm ÷ 100. Có thể nhẩm: một nửa, một phần tư, một phần mười của cả lớp."],
         ["Find that slice’s percent on the chart.", "Number = class size × percent ÷ 100. You can also think: a half, a quarter or a tenth of the class."]],
       rest: [["Cả hình tròn là 100%.", "Cộng các phần đã biết, rồi lấy 100% trừ đi tổng đó."], ["The whole circle is 100%.", "Add the known slices, then take that total away from 100%."]],
-      diff: [["Đọc phần trăm của hai phần trên biểu đồ.", "Muốn biết hơn bao nhiêu thì lấy số lớn trừ số bé."], ["Read the percent of the two slices.", "To find how many more, take the smaller from the bigger."]],
+      diff: [["Đọc phần trăm của hai phần trên biểu đồ.", "Muốn biết hơn bao nhiêu thì lấy số lớn trừ số nhỏ."], ["Read the percent of the two slices.", "To find how many more, take the smaller from the bigger."]],
       diffn: [["Tìm hiệu hai phần trăm trước.", "Rồi lấy hiệu đó × số bạn cả lớp ÷ 100."], ["Find the difference of the two percents first.", "Then do difference × class size ÷ 100."]]
     };
     G.pie_chart = function (c) {   /* chữ càng ít càng tốt: khung câu hỏi nhỏ, SVG phải còn đủ to để đọc nhãn */

@@ -18,7 +18,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "say",
-      "t": "I = 1, V = 5, X = 10. Số em đứng SAU thì cộng (XI = 11), đứng TRƯỚC thì trừ.",
+      "t": "I = 1, V = 5, X = 10. Số nhỏ đứng SAU thì cộng (XI = 11), đứng TRƯỚC thì trừ.",
       "art": "XI = 10 + 1 = 11\nIX = 10 − 1 = 9"
     },
     {

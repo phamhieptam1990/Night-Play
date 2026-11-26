@@ -76,7 +76,7 @@ window.LearnLessons.reg({
       "opts": [
         "Số bằng 0",
         "Số lớn nhất",
-        "Số bé nhất"
+        "Số nhỏ nhất"
       ],
       "ok": 1,
       "hint": "Cột càng cao thì số càng lớn.",
