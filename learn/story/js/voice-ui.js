@@ -1,4 +1,4 @@
-/* Đọc to lời kể bằng giọng đọc chung (learn/voice.js). Chỉ đọc khi bé bấm; bấm lần nữa để dừng; một lúc chỉ một nút đang đọc.
+/* Đọc to lời kể bằng giọng đọc chung (learn/voice.js). Chỉ đọc khi em bấm; bấm lần nữa để dừng; một lúc chỉ một nút đang đọc.
    StoryVoice.toggle(nút, lời) · StoryVoice.stop() · StoryVoice.ok() (máy có Voice không). */
 (function (root) {
   "use strict";

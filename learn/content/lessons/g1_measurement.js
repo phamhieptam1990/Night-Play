@@ -79,7 +79,7 @@ window.LearnLessons.reg({
   },
   {
    "k": "sum",
-   "t": "Bé nhớ nhé!",
+   "t": "Em nhớ nhé!",
    "pts": [
     "Dài hơn, ngắn hơn, nặng hơn, nhẹ hơn",
     "Kim ngắn chỉ giờ",

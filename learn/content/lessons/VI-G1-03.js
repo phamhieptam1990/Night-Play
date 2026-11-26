@@ -13,7 +13,7 @@ window.LearnLessons.reg({
   {
    "k": "say",
    "t": "Đầu câu viết hoa, cuối câu có dấu chấm.",
-   "art": "Bé đi học."
+   "art": "Em đi học."
   },
   {
    "k": "say",
@@ -24,9 +24,9 @@ window.LearnLessons.reg({
    "k": "choose",
    "t": "Cách viết nào đúng?",
    "opts": [
-    "Bé Na đi học.",
-    "bé na đi học",
-    "Bé na đi học"
+    "Em Na đi học.",
+    "em na đi học",
+    "Em na đi học"
    ],
    "ok": 0,
    "yes": "Đúng rồi! Viết hoa đầu câu, tên Na và có dấu chấm.",
@@ -60,7 +60,7 @@ window.LearnLessons.reg({
   },
   {
    "k": "sum",
-   "t": "Bé nhớ nhé!",
+   "t": "Em nhớ nhé!",
    "pts": [
     "Chữ đầu câu viết hoa",
     "Tên người viết hoa",

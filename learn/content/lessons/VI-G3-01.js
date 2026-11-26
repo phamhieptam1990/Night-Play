@@ -23,7 +23,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "choose",
-      "t": "\"Bé nhặt rác bỏ vào thùng.\" Bé làm gì?",
+      "t": "\"Em nhặt rác bỏ vào thùng.\" Em làm gì?",
       "opts": [
         "Nhặt rác",
         "Đá bóng",
@@ -59,7 +59,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Tìm ai, làm gì, ở đâu, khi nào",
         "Ý chính là điều nói nhiều nhất"
@@ -90,7 +90,7 @@ window.LearnLessons.reg({
       "yes": "Đúng rồi!"
     },
     {
-      "q": "\"Trời mưa to. Bé mang ô.\" Vì sao bé mang ô?",
+      "q": "\"Trời mưa to. Em mang ô.\" Vì sao em mang ô?",
       "opts": [
         "Vì trời mưa",
         "Vì trời nắng",

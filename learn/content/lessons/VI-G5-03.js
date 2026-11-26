@@ -59,7 +59,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Mở bài, thân bài, kết bài",
         "Rà soát ý và chính tả"

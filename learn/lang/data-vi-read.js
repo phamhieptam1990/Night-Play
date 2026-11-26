@@ -6,8 +6,8 @@
     var D = L.D;
     /* đọc hiểu: g = các lớp, t = đoạn, q = câu hỏi, a = đáp án (có TRONG đoạn), d = 3 đáp án nhiễu (KHÔNG có nghĩa đúng) */
     D.readVi = [
-      { g: [1], t: "Bé Lan có một con mèo. Con mèo tên là Mun.", q: "Con mèo tên là gì?", a: "Mun", d: ["Lan", "Mít", "Bông"] },
-      { g: [1], t: "Sáng nay mẹ đưa bé đi học. Bé đi bằng xe đạp.", q: "Bé đi học bằng gì?", a: "xe đạp", d: ["xe buýt", "ô tô", "xe máy"] },
+      { g: [1], t: "Em Lan có một con mèo. Con mèo tên là Mun.", q: "Con mèo tên là gì?", a: "Mun", d: ["Lan", "Mít", "Bông"] },
+      { g: [1], t: "Sáng nay mẹ đưa em đi học. Em đi bằng xe đạp.", q: "Em đi học bằng gì?", a: "xe đạp", d: ["xe buýt", "ô tô", "xe máy"] },
       { g: [1, 2], t: "Trên cành cây có hai chú chim. Chúng hót rất vui.", q: "Trên cành có mấy chú chim?", a: "hai", d: ["một", "ba", "bốn"] },
       { g: [1], t: "Bố mua cho Nam một quả bóng đỏ.", q: "Quả bóng có màu gì?", a: "đỏ", d: ["xanh", "vàng", "trắng"] },
       { g: [2], t: "Chủ nhật, cả nhà em về quê thăm bà. Bà trồng rất nhiều rau và hoa trong vườn.", q: "Cả nhà về quê thăm ai?", a: "bà", d: ["ông", "cô", "dì"] },
@@ -35,7 +35,7 @@
       { g: [2], t: "Sáng thứ Bảy, Lan cùng bố ra chợ mua cá. Bố chọn một con cá chép to.", q: "Bố chọn mua con gì?", a: "cá chép", d: ["cá thu", "con tôm", "con cua"] },
       { g: [2], t: "Ở sân trường có một cây phượng. Mùa hè, hoa phượng nở đỏ rực.", q: "Hoa phượng nở vào mùa nào?", a: "mùa hè", d: ["mùa đông",
           "mùa thu", "mùa xuân"] },
-      { g: [2], t: "Bé Na đang vẽ tranh. Bé vẽ một ngôi nhà, một cái cây và một chú chim.", q: "Bé Na đang làm gì?", a: "vẽ tranh", d: ["đọc sách", "hát", "nấu ăn"] },
+      { g: [2], t: "Em Na đang vẽ tranh. Em vẽ một ngôi nhà, một cái cây và một chú chim.", q: "Em Na đang làm gì?", a: "vẽ tranh", d: ["đọc sách", "hát", "nấu ăn"] },
       { g: [3], t: "Giờ ra chơi, các bạn nam đá bóng ở sân. Các bạn nữ nhảy dây dưới gốc cây.", q: "Các bạn nữ chơi trò gì?", a: "nhảy dây", d:
           ["đá bóng", "đuổi bắt", "cờ vua"] },
       { g: [3], t: "Bà ngoại em sống ở quê. Mỗi dịp hè, em về quê giúp bà cho gà ăn.", q: "Em giúp bà việc gì?", a: "cho gà ăn", d: ["quét nhà", "nấu cơm", "rửa bát"] },
@@ -102,14 +102,14 @@
           "Quạ khát nước, tìm mãi mới thấy một chiếc bình. Nước ở đáy bình, mỏ Quạ không với tới. Quạ nghĩ ra cách nhặt từng viên sỏi thả vào bình. Nước dâng lên dần, Quạ uống được nước.",
           q: "Quạ là con vật như thế nào?", a: "thông minh, kiên trì", d: ["lười biếng", "nhút nhát", "hay khoe khoang"] },
       { g: [4], t:
-          "Cô bé Mai trồng một hạt đậu trong chậu nhỏ. Ngày nào Mai cũng tưới nước và đặt chậu ra chỗ nắng. Mấy hôm sau, mầm đậu nhú lên xanh mướt. Mai reo lên sung sướng.",
+          "Cô em Mai trồng một hạt đậu trong chậu nhỏ. Ngày nào Mai cũng tưới nước và đặt chậu ra chỗ nắng. Mấy hôm sau, mầm đậu nhú lên xanh mướt. Mai reo lên sung sướng.",
           q:
           "Điều gì làm Mai sung sướng?", a: "mầm đậu nhú lên", d: ["được đi chơi", "nhận quà", "được điểm mười"] },
       { g: [5], t:
-          "Người thợ rèn già dạy cậu học trò: “Muốn rèn được con dao sắc, con phải kiên nhẫn đập sắt hết lần này đến lần khác.” Cậu bé ban đầu nản chí nhưng rồi vẫn miệt mài luyện tập. Nhiều tháng sau, cậu rèn được con dao tốt.",
+          "Người thợ rèn già dạy cậu học trò: “Muốn rèn được con dao sắc, con phải kiên nhẫn đập sắt hết lần này đến lần khác.” Cậu em ban đầu nản chí nhưng rồi vẫn miệt mài luyện tập. Nhiều tháng sau, cậu rèn được con dao tốt.",
           q: "Câu chuyện muốn nói điều gì?", a: "kiên nhẫn sẽ thành công", d: ["làm nhanh là giỏi", "nên bỏ cuộc sớm", "dao quan trọng nhất"] },
       { g: [5], t:
-          "Người thợ rèn già dạy cậu học trò: “Muốn rèn được con dao sắc, con phải kiên nhẫn đập sắt hết lần này đến lần khác.” Cậu bé ban đầu nản chí nhưng rồi vẫn miệt mài luyện tập. Nhiều tháng sau, cậu rèn được con dao tốt.",
+          "Người thợ rèn già dạy cậu học trò: “Muốn rèn được con dao sắc, con phải kiên nhẫn đập sắt hết lần này đến lần khác.” Cậu em ban đầu nản chí nhưng rồi vẫn miệt mài luyện tập. Nhiều tháng sau, cậu rèn được con dao tốt.",
           q: "Lúc đầu, cậu học trò cảm thấy thế nào?", a: "nản chí", d: ["vui mừng", "tự hào", "tức giận"] },
       { g: [5], t:
           "Trong chuyến đi dã ngoại, cả lớp thấy một túi rác bị bỏ lại bên suối. Bạn Hà nói: “Chúng ta hãy nhặt rác để dòng suối luôn sạch.” Cả lớp cùng làm, chỉ một lúc, bờ suối đã sạch sẽ.",
@@ -122,10 +122,10 @@
       { g: [3, 4], t: "Hà quên làm bài tập nên rất lo lắng. Hà nói thật với cô giáo. Cô mỉm cười và cho Hà làm bù vào hôm sau.", q:
           "Câu chuyện khuyên điều gì?", a: "hãy luôn trung thực", d:
           ["đừng làm bài tập", "chép bài của bạn", "giấu lỗi của mình"] },
-      { g: [4, 5], t: "Cậu bé Nam thấy một chiếc ví rơi trên đường. Nam không giữ lại mà đem đến đồn công an. Người mất ví rất biết ơn Nam.", q:
+      { g: [4, 5], t: "Cậu em Nam thấy một chiếc ví rơi trên đường. Nam không giữ lại mà đem đến đồn công an. Người mất ví rất biết ơn Nam.", q:
           "Nam đã làm gì với chiếc ví?", a:
           "đem đến đồn công an", d: ["giữ lại cho mình", "vứt đi", "đưa cho bạn"] },
-      { g: [4, 5], t: "Cậu bé Nam thấy một chiếc ví rơi trên đường. Nam không giữ lại mà đem đến đồn công an. Người mất ví rất biết ơn Nam.", q:
+      { g: [4, 5], t: "Cậu em Nam thấy một chiếc ví rơi trên đường. Nam không giữ lại mà đem đến đồn công an. Người mất ví rất biết ơn Nam.", q:
           "Nam là người như thế nào?", a: "trung thực",
           d: ["tham lam", "lười biếng", "nhút nhát"] },
       {g: [3,4,5], t: "Sáng nay trời đen kịt, gió nổi mạnh. Mẹ vội thu quần áo phơi ngoài sân vào nhà.", q: "Vì sao mẹ vội thu quần áo?", a:
@@ -133,10 +133,10 @@
           "nhà có khách","đến giờ ăn cơm"]},
       {g: [4,5], t: "Nam hứa sẽ về sớm giúp bà tưới rau. Nhưng chiều đó Nam mải đá bóng nên quên mất. Tối về, thấy luống rau héo, Nam rất áy náy.", q:
           "Nam cảm thấy thế nào khi thấy rau héo?", a: "áy náy", d: ["tự hào","hờ hững","vui sướng"]},
-      {g: [1,2,3], t: "Bài thơ: Bé có đôi bàn tay / Rửa sạch trước khi ăn / Bé ngoan, bé khỏe mạnh / Cả nhà đều vui lắm.", q:
-          "Bé rửa gì trước khi ăn?", a: "đôi bàn tay", d: ["đôi chân","khuôn mặt","bát đũa"]},
-      {g: [3,4,5], t: "Bài thơ: Mặt trời dậy từ sớm / Gọi bé thức dậy chơi / Hoa cười, chim hót vang / Ngày mới tới rồi thôi.", q:
-          "Mặt trời gọi bé làm gì?", a: "thức dậy", d: ["đi ngủ","ăn cơm","làm bài"]}
+      {g: [1,2,3], t: "Bài thơ: Em có đôi bàn tay / Rửa sạch trước khi ăn / Em ngoan, em khỏe mạnh / Cả nhà đều vui lắm.", q:
+          "Em rửa gì trước khi ăn?", a: "đôi bàn tay", d: ["đôi chân","khuôn mặt","bát đũa"]},
+      {g: [3,4,5], t: "Bài thơ: Mặt trời dậy từ sớm / Gọi em thức dậy chơi / Hoa cười, chim hót vang / Ngày mới tới rồi thôi.", q:
+          "Mặt trời gọi em làm gì?", a: "thức dậy", d: ["đi ngủ","ăn cơm","làm bài"]}
     ];
     /* sắp xếp câu thành đoạn: các câu ĐÚNG THỨ TỰ (có từ nối hoặc trình tự thời gian rõ) */
     D.paragraphs = [
@@ -150,7 +150,7 @@
       ["Trước hết, chú thợ trộn vữa.", "Sau đó, chú xây từng hàng gạch.", "Xây xong, chú trát tường cho phẳng.", "Cuối cùng, chú quét sơn lên tường."],
       ["Sáng sớm, gà gáy báo trời sáng.", "Buổi trưa, nắng chiếu rực rỡ.", "Chiều đến, nắng nhạt dần.", "Tối đến, ánh trăng lên cao."],
       ["Sáng sớm, mặt trời mọc ở phía đông.", "Buổi trưa, nắng chiếu sáng gay gắt.", "Chiều tối, mặt trời lặn dần.", "Đêm đến, trăng sao lên cao."],
-      ["Đầu tiên, bé lấy bàn chải và kem đánh răng.", "Sau đó, bé chải răng thật kĩ.", "Chải xong, bé súc miệng bằng nước sạch.", "Cuối cùng, bé cất bàn chải gọn gàng."]
+      ["Đầu tiên, em lấy bàn chải và kem đánh răng.", "Sau đó, em chải răng thật kĩ.", "Chải xong, em súc miệng bằng nước sạch.", "Cuối cùng, em cất bàn chải gọn gàng."]
     ];
   }
   if (typeof module !== "undefined" && module.exports) module.exports = part; else (root.LearnLangParts = root.LearnLangParts || {})["data-vi-read"] = part;

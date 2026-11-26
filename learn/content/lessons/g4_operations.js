@@ -62,7 +62,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Nhân: nhân từng hàng rồi cộng phần nhớ",
         "Ngoặc trước, nhân chia rồi mới cộng trừ",

@@ -62,7 +62,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Nhọn nhỏ hơn vuông, tù lớn hơn vuông",
         "Chu vi là tổng độ dài các cạnh",

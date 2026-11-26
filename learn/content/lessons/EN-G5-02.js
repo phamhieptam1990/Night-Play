@@ -65,7 +65,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Wh: What, Where, When, Who, Why, How",
         "am/is/are và was/were",

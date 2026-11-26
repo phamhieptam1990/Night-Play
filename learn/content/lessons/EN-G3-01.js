@@ -23,7 +23,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "choose",
-      "t": "I like apples. Bé thích gì?",
+      "t": "I like apples. Em thích gì?",
       "opts": [
         "Táo",
         "Chuối",
@@ -47,7 +47,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "choose",
-      "t": "She is eight. Cô bé mấy tuổi?",
+      "t": "She is eight. Cô em mấy tuổi?",
       "opts": [
         "6 tuổi",
         "8 tuổi",
@@ -59,7 +59,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Nghe kỹ từ khoá",
         "Chọn đáp án hợp với điều đã nghe"

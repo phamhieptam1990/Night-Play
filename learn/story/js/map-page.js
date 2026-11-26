@@ -46,7 +46,7 @@
     K.markSeen(tid); sel = ""; draw(false); comp.emote("cheer");
   }
   function pt(n) { return n.pos; }
-  /* vẽ lại cả bản đồ (đổi hướng màn / sau khi bé xong một điểm) */
+  /* vẽ lại cả bản đồ (đổi hướng màn / sau khi em xong một điểm) */
   function draw(first) {
     var stage = $("stage"); orient = SG.fit(stage, $("area")); route = R.build(P, subj, grade, topic, K.seen(tid), orient);
     var oldPal = comp, keep = oldPal ? stage.querySelector(".pal") : null; stage.innerHTML = "";

@@ -62,7 +62,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Nhân và chia là hai phép ngược nhau",
         "Trong ngoặc làm trước; nhân chia trước, cộng trừ sau",

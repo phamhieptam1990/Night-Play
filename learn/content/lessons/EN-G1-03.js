@@ -74,7 +74,7 @@ window.LearnLessons.reg({
   },
   {
    "k": "sum",
-   "t": "Bé nhớ nhé!",
+   "t": "Em nhớ nhé!",
    "pts": [
     "Nghe rồi đọc theo",
     "How are you?: bạn khỏe không?",

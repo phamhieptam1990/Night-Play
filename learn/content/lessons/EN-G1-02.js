@@ -90,7 +90,7 @@ window.LearnLessons.reg({
   },
   {
    "k": "sum",
-   "t": "Bé nhớ nhé!",
+   "t": "Em nhớ nhé!",
    "pts": [
     "red: đỏ, blue: xanh dương, yellow: vàng",
     "mom: mẹ, dad: ba",

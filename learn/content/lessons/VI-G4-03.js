@@ -62,7 +62,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Bài văn: mở bài, thân bài, kết bài",
         "Danh từ, động từ, tính từ",

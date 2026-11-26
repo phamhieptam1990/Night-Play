@@ -59,7 +59,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Nghe giờ, nơi chốn, việc làm",
         "Chọn thông tin đúng"

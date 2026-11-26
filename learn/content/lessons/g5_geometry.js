@@ -8,7 +8,7 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Diện tích hình thang = (đáy lớn + đáy bé) × chiều cao ÷ 2.",
+      "t": "Diện tích hình thang = (đáy lớn + đáy em) × chiều cao ÷ 2.",
       "art": "(6 + 4) × 3 ÷ 2 = 15"
     },
     {
@@ -62,9 +62,9 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
-        "Hình thang: (đáy lớn + đáy bé) × cao ÷ 2",
+        "Hình thang: (đáy lớn + đáy em) × cao ÷ 2",
         "Hình tròn: chu vi d × 3,14, diện tích r × r × 3,14",
         "Thể tích hộp = dài × rộng × cao"
       ]

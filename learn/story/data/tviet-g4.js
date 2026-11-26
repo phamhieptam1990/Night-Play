@@ -6,13 +6,13 @@ window.LearnStories["VI-G4-01"] = {
     en: "On the highest branch sits an old tale. Sprout wonders what its characters want to tell us."
   },
   fork: {
-    vi: "Bé có thể đọc cùng Mầm và tìm chủ đề từng bước, hoặc băng qua nhanh tới các câu hỏi nếu đã quen.",
+    vi: "Em có thể đọc cùng Mầm và tìm chủ đề từng bước, hoặc băng qua nhanh tới các câu hỏi nếu đã quen.",
     en: "You can read with Sprout and find the theme step by step, or dash to the questions if you are used to this."
   },
-  learn: { vi: "Bạn Mây chỉ chi tiết đáng chú ý và cách tác giả dùng hình ảnh. Bé đọc kỹ nhé!", en: "Cloud Friend points out key details and the author's images. Read closely!" },
-  test: { vi: "Cành cây gửi bé vài câu hỏi về chủ đề và nhân vật. Bé nghĩ rồi chọn nhé!", en: "The branch sends a few questions about theme and characters. Think, then choose!" },
+  learn: { vi: "Bạn Mây chỉ chi tiết đáng chú ý và cách tác giả dùng hình ảnh. Em đọc kỹ nhé!", en: "Cloud Friend points out key details and the author's images. Read closely!" },
+  test: { vi: "Cành cây gửi em vài câu hỏi về chủ đề và nhân vật. Em nghĩ rồi chọn nhé!", en: "The branch sends a few questions about theme and characters. Think, then choose!" },
   end: {
-    vi: "Truyện cổ giờ có thêm một người bạn là bé. Bạn Mây háo hức: còn truyện về thế giới thật nữa!",
+    vi: "Truyện cổ giờ có thêm một người bạn là em. Bạn Mây háo hức: còn truyện về thế giới thật nữa!",
     en: "The old tale now has you as a friend. Cloud Friend cheers: there are stories about the real world too!"
   },
   nodes: {
@@ -26,17 +26,17 @@ window.LearnStories["VI-G4-01"] = {
 window.LearnStories["VI-G4-02"] = {
   title: { vi: "Tìm tin trong thư viện", en: "Hunting for Facts in the Library" },
   intro: {
-    vi: "Một bản tin nhỏ nói về các loài chim trong rừng. Mầm cần bé tìm đúng thông tin giúp.",
+    vi: "Một bản tin nhỏ nói về các loài chim trong rừng. Mầm cần em tìm đúng thông tin giúp.",
     en: "A short article describes the birds of the forest. Sprout needs your help finding the right information."
   },
-  fork: { vi: "Bé có thể tìm thông tin từng bước, hoặc băng qua nhanh nếu đã quen đọc bản tin.", en: "You can find facts step by step, or dash across if you know informational texts." },
+  fork: { vi: "Em có thể tìm thông tin từng bước, hoặc băng qua nhanh nếu đã quen đọc bản tin.", en: "You can find facts step by step, or dash across if you know informational texts." },
   learn: {
-    vi: "Bạn Mây chỉ tiêu đề, đoạn và hình minh họa. Bé xem chúng giúp gì cho việc tìm tin nhé!",
+    vi: "Bạn Mây chỉ tiêu đề, đoạn và hình minh họa. Em xem chúng giúp gì cho việc tìm tin nhé!",
     en: "Cloud Friend shows titles, paragraphs and pictures. See how each helps you find facts!"
   },
-  test: { vi: "Mỗi câu hỏi cần một thông tin trong bản tin. Bé tìm và chọn đúng nhé!", en: "Each question needs one fact from the article. Find it and choose!" },
+  test: { vi: "Mỗi câu hỏi cần một thông tin trong bản tin. Em tìm và chọn đúng nhé!", en: "Each question needs one fact from the article. Find it and choose!" },
   end: {
-    vi: "Bé tìm được hết thông tin! Mầm ghi vào sổ rừng. Sắp tới sẽ đến lượt bé tự viết nhé.",
+    vi: "Em tìm được hết thông tin! Mầm ghi vào sổ rừng. Sắp tới sẽ đến lượt em tự viết nhé.",
     en: "You found all the facts! Sprout notes them in the forest book. Soon it will be your turn to write."
   },
   nodes: {
@@ -54,13 +54,13 @@ window.LearnStories["VI-G4-03"] = {
     en: "Old Root opens a writing workshop. Today there is a story to tell, a garden to describe and a letter to write."
   },
   fork: {
-    vi: "Bé có thể lập dàn ý từng bước cùng Mầm, hoặc băng qua nhanh viết luôn nếu đã quen.",
+    vi: "Em có thể lập dàn ý từng bước cùng Mầm, hoặc băng qua nhanh viết luôn nếu đã quen.",
     en: "You can plan an outline step by step with Sprout, or dash across and write if you are used to it."
   },
-  learn: { vi: "Mầm chỉ cách lập ý, mở đầu, thân đoạn và kết cho từng kiểu viết. Bé xem nhé!", en: "Sprout shows how to plan the opening, body and ending for each kind of writing." },
-  test: { vi: "Bé chọn đề, lập ý rồi viết. Đọc lại để sửa nếu bé thấy cần!", en: "Choose a topic, plan, then write. Read it over and change what you like!" },
+  learn: { vi: "Mầm chỉ cách lập ý, mở đầu, thân đoạn và kết cho từng kiểu viết. Em xem nhé!", en: "Sprout shows how to plan the opening, body and ending for each kind of writing." },
+  test: { vi: "Em chọn đề, lập ý rồi viết. Đọc lại để sửa nếu em thấy cần!", en: "Choose a topic, plan, then write. Read it over and change what you like!" },
   end: {
-    vi: "Trang viết của bé treo trên cành, lá thơm thơm. Bạn Mây muốn nghe bé nói về nó nữa!",
+    vi: "Trang viết của em treo trên cành, lá thơm thơm. Bạn Mây muốn nghe em nói về nó nữa!",
     en: "Your writing hangs on a branch, smelling of fresh leaves. Cloud Friend wants to hear you talk about it!"
   },
   nodes: {
@@ -74,14 +74,14 @@ window.LearnStories["VI-G4-03"] = {
 window.LearnStories["VI-G4-04"] = {
   title: { vi: "Diễn đàn trong rừng", en: "The Forest Forum" },
   intro: {
-    vi: "Cả rừng đang bàn nên làm gì cho lễ hội mùa thu. Mầm mời bé nêu ý và lắng nghe ý khác.",
+    vi: "Cả rừng đang bàn nên làm gì cho lễ hội mùa thu. Mầm mời em nêu ý và lắng nghe ý khác.",
     en: "The forest is planning its autumn festival. Sprout invites you to share ideas and listen to others."
   },
-  fork: { vi: "Bé có thể thảo luận từng bước, hoặc băng qua nhanh nêu ý ngay nếu đã quen.", en: "You can discuss step by step, or dash across and share your idea right away." },
+  fork: { vi: "Em có thể thảo luận từng bước, hoặc băng qua nhanh nêu ý ngay nếu đã quen.", en: "You can discuss step by step, or dash across and share your idea right away." },
   learn: { vi: "Bác Rễ chỉ cách nêu ý kiến kèm lí do, và tiếp nhận ý khác một cách thân thiện.", en: "Old Root shows how to give an opinion with reasons and welcome other ideas kindly." },
-  test: { vi: "Bé chọn cách nói hợp lí nhất cho mỗi tình huống trong diễn đàn nhé!", en: "Choose the most thoughtful way to speak in each forum moment!" },
+  test: { vi: "Em chọn cách nói hợp lí nhất cho mỗi tình huống trong diễn đàn nhé!", en: "Choose the most thoughtful way to speak in each forum moment!" },
   end: {
-    vi: "Lễ hội được chọn xong, ai cũng góp ý. Bạn Mây nói: nhờ bé, cuộc họp thật vui!",
+    vi: "Lễ hội được chọn xong, ai cũng góp ý. Bạn Mây nói: nhờ em, cuộc họp thật vui!",
     en: "The festival is planned and everyone helped. Cloud Friend says: thanks to you, the meeting was lovely!"
   },
   nodes: {

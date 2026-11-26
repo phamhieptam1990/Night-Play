@@ -12,7 +12,7 @@
     .opts.n3{grid-template-columns:repeat(3,var(--ow))}
   .opts.n9{grid-template-columns:repeat(5,var(--ow));--ow:min(12vw,24dvh)}.opts.n6{grid-template-columns:repeat(3,var(--ow));--ow:min(15vw,25dvh)}
     .opts.n8,.opts.n7{grid-template-columns:repeat(4,var(--ow));--ow:min(13vw,24dvh)}
-  .opts.tf{--ow:min(18vw,32dvh)}.opts.wides{width:min(96%,420px);grid-template-columns:1fr 1fr;--ow:auto}
+  .opts.tf{--ow:min(18vw,32dvh)}.opts.wides{width:min(96%,640px);grid-template-columns:1fr 1fr;--ow:auto}
   .qcard{font-size:clamp(15px,4.4dvh,21px);padding:5px 10px}.qcard .qt svg{max-height:34dvh}
   .tpad{grid-template-columns:repeat(6,clamp(44px,9vw,60px));gap:5px}.tkey{height:clamp(40px,12dvh,52px);font-size:22px}.tin{font-size:clamp(24px,8dvh,34px)}
   .tmatch .ob{--ow:min(15vw,24dvh)}.tbin{min-height:clamp(76px,30dvh,110px)}.it{font-size:clamp(30px,10dvh,52px)}.lart .lrow{font-size:clamp(26px,9dvh,44px)}

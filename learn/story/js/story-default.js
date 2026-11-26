@@ -13,12 +13,12 @@
     var m = MAS[subj] || "Mochi", w = WORLD[subj] || WORLD.toan, n = short(name, 36);
     return {
       title: { vi: n, en: n },
-      intro: { vi: m + " rủ bé đi dạo " + w.vi + ". Hôm nay mình ghé chỗ “" + n + "”!", en: m + " invites you to " + w.en + ". Today we visit a brand new spot!" },
-      fork: { vi: "Đường đi chia hai: học từng bước, hoặc thử sức thi vượt bài. Bé chọn nhé!", en: "The path splits in two: learn step by step, or try the skip-ahead test. You choose!" },
-      learn: { vi: m + " cùng bé học thật vui, từng bước một.", en: m + " and you learn step by step, nice and easy." },
+      intro: { vi: m + " rủ em đi dạo " + w.vi + ". Hôm nay mình ghé chỗ “" + n + "”!", en: m + " invites you to " + w.en + ". Today we visit a brand new spot!" },
+      fork: { vi: "Đường đi chia hai: học từng bước, hoặc thử sức thi vượt bài. Em chọn nhé!", en: "The path splits in two: learn step by step, or try the skip-ahead test. You choose!" },
+      learn: { vi: m + " cùng em học thật vui, từng bước một.", en: m + " and you learn step by step, nice and easy." },
       test: { vi: "Thử sức một chút nào! Chưa tới cũng không sao, mình thử lại sau.", en: "Time to try your best! If it is not there yet, we can try again later." },
       nodes: NODES,
-      end: { vi: "Tới nơi rồi! " + m + " vỗ tay khen bé đã đi thật xa.", en: "We made it! " + m + " cheers for how far you have come." }
+      end: { vi: "Tới nơi rồi! " + m + " vỗ tay khen em đã đi thật xa.", en: "We made it! " + m + " cheers for how far you have come." }
     };
   }
   /* tên điểm dừng mặc định (kiểu khám phá, KHÔNG có chữ học/bài/kiểm tra/thi) khi dữ liệu truyện chưa có trường nodes */

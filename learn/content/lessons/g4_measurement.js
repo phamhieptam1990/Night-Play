@@ -62,7 +62,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Chu vi cộng các cạnh, diện tích nhân dài với rộng",
         "1 tấn = 1000 kg, 1 giờ = 60 phút",

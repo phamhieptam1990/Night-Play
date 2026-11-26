@@ -62,7 +62,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Tam giác 3 cạnh, vuông và chữ nhật 4 cạnh",
         "Hình tròn không có góc",

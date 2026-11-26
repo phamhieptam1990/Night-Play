@@ -35,7 +35,7 @@ window.LearnLessons.reg({
   },
   {
    "k": "choose",
-   "t": "Gặp bạn, bé nói gì?",
+   "t": "Gặp bạn, em nói gì?",
    "opts": [
     "Hello",
     "Goodbye"
@@ -48,7 +48,7 @@ window.LearnLessons.reg({
   },
   {
    "k": "choose",
-   "t": "Chia tay bạn, bé nói gì?",
+   "t": "Chia tay bạn, em nói gì?",
    "opts": [
     "Hello",
     "Goodbye"
@@ -61,7 +61,7 @@ window.LearnLessons.reg({
   },
   {
    "k": "sum",
-   "t": "Bé nhớ nhé!",
+   "t": "Em nhớ nhé!",
    "pts": [
     "Hello: xin chào",
     "Goodbye: tạm biệt",
@@ -83,7 +83,7 @@ window.LearnLessons.reg({
    "art": "👋"
   },
   {
-   "q": "Gặp cô giáo buổi sáng, bé nói gì?",
+   "q": "Gặp cô giáo buổi sáng, em nói gì?",
    "opts": [
     "Hello",
     "Goodbye"

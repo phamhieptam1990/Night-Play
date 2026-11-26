@@ -59,7 +59,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Đọc câu hỏi, tìm từ khoá",
         "Tên bài cho biết nội dung chính"

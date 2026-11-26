@@ -74,7 +74,7 @@ window.LearnLessons.reg({
   },
   {
    "k": "sum",
-   "t": "Bé nhớ nhé!",
+   "t": "Em nhớ nhé!",
    "pts": [
     "Đếm từng vật một",
     "10 đơn vị là 1 chục",

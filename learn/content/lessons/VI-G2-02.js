@@ -62,7 +62,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "ngh chỉ đứng trước e, ê, i",
         "Dấu phẩy ngăn các ý liệt kê, dấu chấm kết thúc câu kể",

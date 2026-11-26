@@ -13,7 +13,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "say",
-      "t": "Bé nghe chỉ dẫn rồi làm theo: Stand up! Sit down!",
+      "t": "Em nghe chỉ dẫn rồi làm theo: Stand up! Sit down!",
       "art": "🔤"
     },
     {
@@ -47,7 +47,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "choose",
-      "t": "Open your book. Bé làm gì?",
+      "t": "Open your book. Em làm gì?",
       "opts": [
         "Mở sách",
         "Vẽ tranh",
@@ -59,7 +59,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Stand up = đứng lên",
         "Sit down = ngồi xuống"
@@ -68,7 +68,7 @@ window.LearnLessons.reg({
   ],
   "tryit": [
     {
-      "q": "Close the door. Bé làm gì?",
+      "q": "Close the door. Em làm gì?",
       "opts": [
         "Đóng cửa",
         "Mở cửa",
@@ -90,7 +90,7 @@ window.LearnLessons.reg({
       "yes": "Đúng rồi!"
     },
     {
-      "q": "Look at the board. Bé nhìn gì?",
+      "q": "Look at the board. Em nhìn gì?",
       "opts": [
         "Cái bàn",
         "Cái bảng",

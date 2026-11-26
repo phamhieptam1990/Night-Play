@@ -43,7 +43,7 @@
     if (d.st === "done" && !d.noStar) { var bd = el("span", "bd"); bd.appendChild(art("star")); b.appendChild(bd); }
     if (d.stars) b.appendChild(stars(d.stars));
     b.appendChild(el("span", "lb", K.esc(d.label))); b.onclick = function () { onTap(d); }; w.appendChild(b);
-    if (d.say && root.StoryVoice && root.StoryVoice.ok()) {   /* loa riêng của điểm: đọc lời kể của chính điểm này, chỉ khi bé bấm */
+    if (d.say && root.StoryVoice && root.StoryVoice.ok()) {   /* loa riêng của điểm: đọc lời kể của chính điểm này, chỉ khi em bấm */
       var sp = el("button", "nspk", '<span class="sp"><svg viewBox="0 0 24 24" aria-hidden="true">'
         + '<path d="M4 9.500v5h3.500L12 18.500v-13L7.500 9.500zM15.500 8.500a5 5 0 0 1 0 7M18 6a8.500 8.500 0 0 1 0 12" stroke="currentColor" stroke-width="2.200" stroke-linecap="round" fill="currentColor"/></svg></span>');
       sp.type = "button"; sp.dataset.lb = K.T.speak + ": " + d.label; sp.setAttribute("aria-label", sp.dataset.lb); sp.title = K.T.speak;

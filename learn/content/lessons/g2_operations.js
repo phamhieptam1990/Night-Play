@@ -62,7 +62,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Cộng có nhớ: đủ 10 thì nhớ 1 sang hàng chục",
         "Nhân trước, cộng trừ sau",

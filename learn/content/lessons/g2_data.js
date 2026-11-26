@@ -62,7 +62,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Phân loại: xếp vật giống nhau vào một nhóm",
         "Đếm từng nhóm rồi ghi vào bảng",

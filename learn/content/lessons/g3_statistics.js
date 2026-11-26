@@ -59,7 +59,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Bảng số liệu giúp ta so sánh các số",
         "Gộp lại thì cộng, hơn kém thì trừ"

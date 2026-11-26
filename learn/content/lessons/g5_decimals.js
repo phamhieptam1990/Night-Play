@@ -62,7 +62,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Dấu phẩy ngăn phần nguyên và phần thập phân",
         "Cộng trừ: thẳng hàng dấu phẩy",

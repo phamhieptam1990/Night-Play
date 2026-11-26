@@ -62,7 +62,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Nhọn bé hơn 90°, vuông bằng 90°, tù lớn hơn 90°",
         "Góc bẹt = 180°",

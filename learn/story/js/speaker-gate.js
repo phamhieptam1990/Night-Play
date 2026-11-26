@@ -1,6 +1,6 @@
 /* Lớp truyện: TRANG BẬT LOA dùng chung cho bản đồ lớp, bản đồ chủ đề và cảnh truyện. Hiện MỘT lần mỗi lần mở trang: các màn chuyển bằng StoryNav (js/spa.js)
    dùng chung một tài liệu nên không hỏi lại; mở lại hoặc tải lại trang thì hỏi lại vì trình duyệt chặn tiếng.
-   Cú chạm vào nút loa lớn mở khoá âm thanh (iPhone/Safari chỉ cho đọc sau một cú chạm). Bé đã tắt tiếng (learn:auto = 0) hoặc máy không có giọng thì vào thẳng.
+   Cú chạm vào nút loa lớn mở khoá âm thanh (iPhone/Safari chỉ cho đọc sau một cú chạm). Em đã tắt tiếng (learn:auto = 0) hoặc máy không có giọng thì vào thẳng.
    StoryGate.need() · StoryGate.show({title, back}, bắtĐầu) · StoryGate.isOpen() · StoryGate.onClose(fn) */
 (function (root) {
   "use strict";
@@ -15,13 +15,14 @@
     var back = el("a", "ib sgx", '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>');
     back.href = o.back || "index.html"; back.setAttribute("aria-label", K.T.back || L("Quay lại", "Back"));
     var m = el("img", "sgm"); m.alt = ""; m.src = K.face(K.subj, K.grade);
-    var t = el("div", "sgt"); t.textContent = o.title || ""; var h = el("div", "sgh"); h.textContent = L("Bật loa để nghe truyện nhé!", "Turn the sound on to hear the story!");
+    var t = el("div", "sgt"); t.textContent = o.title || "";
     var ic = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5zM15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12"'
       + ' stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="currentColor"/></svg>';
-    var on = el("button", "sgb", ic + "<span>" + L("Bật loa", "Sound on") + "</span>");
+    var on = el("button", "sgb", ic);
     on.type = "button"; on.setAttribute("aria-label", L("Bật loa", "Sound on"));
-    var off = el("button", "sgs"); off.type = "button"; off.textContent = L("Không nghe", "No sound");
-    [back, m, t, h, on, off].forEach(function (e) { g.appendChild(e); });
+    var off = el("button", "sgs", '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M16 9.5l5 5M21 9.5l-5 5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" fill="none"/></svg>');
+    off.type = "button"; off.setAttribute("aria-label", L("Không nghe", "No sound"));   /* chỉ biểu tượng loa gạch chéo, không chữ */
+    [back, m, t, on, off].forEach(function (e) { g.appendChild(e); });
     function go(sound) {
       try { localStorage.setItem("learn:auto", sound ? "1" : "0"); } catch (e) {} root.__storySpk = true; open = false;
       g.classList.add("out"); setTimeout(function () { if (g.parentNode) g.parentNode.removeChild(g); }, 350);

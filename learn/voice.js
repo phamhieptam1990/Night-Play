@@ -12,6 +12,15 @@
     sen:   { pitch: 1.5, rate: .95 }, lesson: { pitch: 1.08, rate: .9 }, narr:  { pitch: 1.15, rate: .9 }, def: { pitch: 1.4, rate: .95 }
   };
   var LANG = { vi: "vi-VN", en: "en-US" };
+  /* GIỌNG MÁY đọc sai từ "bé" (ra "bớ") trên mọi máy: khi đọc tiếng Việt bằng giọng máy thì thay "bé" bằng "em" (chữ hiển thị và tệp thu sẵn giữ nguyên). */
+  function spoken(text, lang) {   /* giữ "bé" nghĩa là NHỎ: "số bé nhất", "bé hơn 5", "bé xíu" */
+    if (lang !== "vi") return text; text = String(text);
+    return text.replace(/(^|[^A-Za-zÀ-ỹ])([Bb])é(?![A-Za-zÀ-ỹ])/g, function (m, a, b, off) {
+      var after = text.slice(off + m.length, off + m.length + 9).trim(), before = text.slice(Math.max(0, off - 7), off + a.length);
+      if (/^(xíu|nhỏ|tí|bỏng|hơn|nhất|quá|con|gái|trai|xinh|như|lắm)(?![A-Za-zÀ-ỹ])/.test(after) || /(^|[^A-Za-zÀ-ỹ])(em|số|hình|cái|chiếc|quả|to|nhỏ|con) $/.test(before)) return m;
+      return a + (b === "B" ? "Em" : "em");
+    });
+  }
   function key(who, text) { var s = who + "|" + String(text).replace(/\s+/g, " ").trim(), h = 5381, i; for (i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) >>> 0; return h.toString(16); }
   var ss = root.speechSynthesis, curAudio = null;
   /* chọn giọng máy tốt nhất: ưu tiên giọng "tự nhiên/cao cấp" (Natural, Premium, Enhanced, Google, Online), rồi giọng nữ trẻ */
@@ -38,7 +47,7 @@
     var go = function (attempt) {
       if (mySeq !== machine.seq) return;
       try {
-        var u = new SpeechSynthesisUtterance(text), p = PROFILE[opt.profile] || PROFILE[who] || PROFILE.def, v = pickVoice(lang), started = false;
+        var u = new SpeechSynthesisUtterance(spoken(text, lang)), p = PROFILE[opt.profile] || PROFILE[who] || PROFILE.def, v = pickVoice(lang), started = false;
         u.lang = LANG[lang] || lang; u.pitch = p.pitch; u.rate = p.rate; if (v) u.voice = v;
         var rec = { started: false, at: Date.now() }; machine.cur = rec;
         u.onstart = function () { started = true; rec.started = true; };
@@ -96,6 +105,8 @@
   ("a all aloud and at basket belong biggest build by capital card cards count different divided dot drag each end equals even false find first flip full gap in into is it left letter letters listen make match matching minus number numbers on one or order pair pick pictures plus put read right smallest stop tap the then this three time times to together true two what which with word words write " +
    "starts start begin begins blank fill missing correct wrong sentence sentences about of how many does do you see choose select complete picture sound sounds rhymes spell spelling tone mark marks type say name animal animals fruit fruits car cat dog bird fish apple").split(" ").forEach(function (w) { ENG[w] = 1; });
   "xe meo ga heo chim vit ngua cua ca ba me bo co con an em".split(" ").forEach(function (w) { VI_ASCII[w] = 1; });
+  /* từ Việt không dấu hay gặp trong lời truyện Tiếng Anh (thiếu thì bị đọc bằng giọng Anh: "Em nghe", "xong"...) */
+  "nghe nhanh tin theo trang trong hoa quen vang xong tranh kho tai boong ngon mang thong reo sai sao khe tinh nhau mai thanh quanh dung gian tham gia sau chia hay quy chim trai sinh xanh".split(" ").forEach(function (w) { VI_ASCII[w] = 1; });
   function splitMix(text, base) {
     var toks = [], segs = [];
     (String(text).match(/\S+/g) || []).forEach(function (tk) {
@@ -108,7 +119,7 @@
     });
     /* từ không dấu có thể là Việt hoặc Anh ("do", "can", "xin"): là Anh khi KHÔNG kề từ Việt nào và kề một từ Anh; còn lại là Việt */
     var real = toks.filter(function (x) { return x.l !== "n"; });
-    real.forEach(function (x, i) { if (x.l === "?") { var p = real[i - 1], n = real[i + 1], nb = [p, /[.?!,:;]$/.test(x.t) ? null : n].filter(Boolean).map(function (y) { return y.l; });
+    real.forEach(function (x, i) { if (x.l === "?") { var p = real[i - 1], n = real[i + 1], nb = [p && /[.?!]$/.test(p.t) ? null : p, /[.?!,:;]$/.test(x.t) ? null : n].filter(Boolean).map(function (y) { return y.l === "?" ? "vi" : y.l; });   /* câu mới sau dấu chấm thì không dính từ Anh cuối câu trước; từ kề là từ Việt-không-dấu ("?") tính là Việt */
       x.r = base === "en" ? (nb.indexOf("vi") < 0 ? "en" : "vi") : (nb.indexOf("vi") < 0 && nb.indexOf("en") >= 0 ? "en" : "vi"); } });
     real.forEach(function (x) { if (x.l === "?") x.l = x.r; });
     var cur = null;
@@ -130,7 +141,7 @@
       say1(sg.t, who, sg.l, o);
     })();
   }
-  var api = { sayMix: sayMix, splitMix: splitMix, EXT: EXT, index: function () { return index; }, say: say, stop: stop, key: key, pickVoice: pickVoice, PROFILE: PROFILE, BASE: BASE, voices: function () { return ss ? ss.getVoices() : []; } };
+  var api = { spoken: spoken, sayMix: sayMix, splitMix: splitMix, EXT: EXT, index: function () { return index; }, say: say, stop: stop, key: key, pickVoice: pickVoice, PROFILE: PROFILE, BASE: BASE, voices: function () { return ss ? ss.getVoices() : []; } };
   if (ss && ss.addEventListener) ss.addEventListener("voiceschanged", function () {});
   if (typeof module !== "undefined" && module.exports) module.exports = api; else root.Voice = api;
 })(typeof window !== "undefined" ? window : globalThis);

@@ -7,7 +7,7 @@ window.LearnLessons.reg({
  "screens": [
   {
    "k": "say",
-   "t": "Xung quanh bé có rất nhiều hình đấy!",
+   "t": "Xung quanh em có rất nhiều hình đấy!",
    "shapes": [
     "circle",
     "square",
@@ -119,7 +119,7 @@ window.LearnLessons.reg({
   },
   {
    "k": "sum",
-   "t": "Bé nhớ nhé!",
+   "t": "Em nhớ nhé!",
    "pts": [
     "Hình tròn: không có góc",
     "Hình vuông: 4 cạnh bằng nhau",

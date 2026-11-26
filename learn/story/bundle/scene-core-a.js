@@ -81,7 +81,7 @@
 /* ---- ../content/phrases.js ---- */
 /* BỘ CÂU THOẠI + CẢM XÚC CỦA LINH VẬT HỌC VUI (chuẩn bị sẵn, chạy offline, không sinh lúc chơi).
    AI gia sư chỉ được CHỌN sự kiện/cảm xúc trong bộ này (hoặc gửi câu ngắn đã qua bộ lọc của mascot-kit.js).
-   Quy tắc: mỗi câu <= 40 ký tự; giọng ấm, không so sánh bé với bạn khác, không dọa, không hứa "giỏi chắc chắn". Xem docs/LEARN-MASCOT-AI-CONTRACT.md. */
+   Quy tắc: mỗi câu <= 40 ký tự; giọng ấm, không so sánh em với bạn khác, không dọa, không hứa "giỏi chắc chắn". Xem docs/LEARN-MASCOT-AI-CONTRACT.md. */
 window.LEARN_PHRASES = {
   version: 1,
   maxLen: 40,
@@ -95,23 +95,23 @@ window.LEARN_PHRASES = {
     tap: ["happy", 1400], idle: ["sleepy", 0], wake: ["wow", 1400], pick: ["wow", 1400],
     thinking: ["think", 0], offline: ["sad", 2400]
   },
-  eventName: { vi: { hello: "Chào", start: "Bắt đầu vòng", ok: "Trả lời đúng", streak3: "3 câu liền", streak5: "5 câu liền", wrong: "Sai lần 1", reveal: "Hiện đáp án", hint: "Gợi ý", comfort: "An ủi", praiseEffort: "Khen cố gắng", endGreat: "Kết thúc xuất sắc", endGood: "Kết thúc tốt", endTry: "Kết thúc cần cố", tap: "Bé chạm linh vật", idle: "Bé im lâu", wake: "Bé quay lại", pick: "Đổi môn/lớp", thinking: "AI đang nghĩ", offline: "Mất mạng" },
+  eventName: { vi: { hello: "Chào", start: "Bắt đầu vòng", ok: "Trả lời đúng", streak3: "3 câu liền", streak5: "5 câu liền", wrong: "Sai lần 1", reveal: "Hiện đáp án", hint: "Gợi ý", comfort: "An ủi", praiseEffort: "Khen cố gắng", endGreat: "Kết thúc xuất sắc", endGood: "Kết thúc tốt", endTry: "Kết thúc cần cố", tap: "Em chạm linh vật", idle: "Em im lâu", wake: "Em quay lại", pick: "Đổi môn/lớp", thinking: "AI đang nghĩ", offline: "Mất mạng" },
               en: { hello: "Hello", start: "Round start", ok: "Correct", streak3: "3 in a row", streak5: "5 in a row", wrong: "First miss", reveal: "Reveal answer", hint: "Hint", comfort: "Comfort", praiseEffort: "Praise effort", endGreat: "Great finish", endGood: "Good finish", endTry: "Needs practice", tap: "Child taps mascot", idle: "Child idle", wake: "Child returns", pick: "Change subject/grade", thinking: "AI thinking", offline: "Offline" } },
   shared: {
     vi: {
-      hello: ["Chào bé!", "Chào bé yêu!", "Chào bé, mình học nhé!"],
-      streak3: ["Ba câu liền! Giỏi ghê! 🔥", "Đúng ba câu liền luôn!", "Bé đang bốc lửa rồi! 🔥"],
-      streak5: ["Năm câu liền! Siêu sao! 🌟", "Bé là nhà vô địch! 🏆", "Quá đỉnh luôn! 🌟"],
+      hello: ["Chào em!", "Chào em yêu!", "Chào em, mình học nhé!"],
+      streak3: ["Ba câu liền! Giỏi ghê! 🔥", "Đúng ba câu liền luôn!", "Em đang bốc lửa rồi! 🔥"],
+      streak5: ["Năm câu liền! Siêu sao! 🌟", "Em là nhà vô địch! 🏆", "Quá đỉnh luôn! 🌟"],
       wrong: ["Chưa đúng, thử lại nhé!", "Gần đúng rồi, thử lại nào!", "Không sao, mình thử lại!"],
       reveal: ["Mình xem đáp án nhé.", "Không sao, lần sau sẽ đúng!", "Cùng nhìn đáp án nào!"],
       hint: ["Đọc kỹ đề thêm lần nữa nhé!", "Thử nghĩ từng bước nhé!", "Chậm lại một chút nè!"],
-      comfort: ["Không sao đâu, ai cũng vấp mà!", "Sai cũng là đang học đó bé!", "Mình cố thêm chút nữa nhé!"],
-      praiseEffort: ["Bé cố gắng rất tốt!", "Mình thích sự chăm chỉ của bé!", "Chăm quá, khen bé nhé!"],
-      endGreat: ["Tuyệt đỉnh! Bé xuất sắc!", "Cả vòng gần như hoàn hảo!", "Bé giỏi quá trời! 🏆"],
-      endGood: ["Giỏi lắm! Mình chơi tiếp nhé?", "Làm tốt lắm bé ơi!", "Còn chút xíu nữa là hoàn hảo!"],
-      endTry: ["Cố lên, lần sau sẽ tốt hơn!", "Mình luyện thêm nhé, bé làm được!", "Bé đã rất cố gắng rồi!"],
-      idle: ["Bé ơi, mình học tiếp nhé?", "Zzz… bé còn đó không?", "Mình đợi bé nè!"],
-      wake: ["Ôi, bé về rồi!", "Hihi, tiếp tục nào!", "Bé quay lại rồi nè!"],
+      comfort: ["Không sao đâu, ai cũng vấp mà!", "Sai cũng là đang học đó em!", "Mình cố thêm chút nữa nhé!"],
+      praiseEffort: ["Em cố gắng rất tốt!", "Mình thích sự chăm chỉ của em!", "Chăm quá, khen em nhé!"],
+      endGreat: ["Tuyệt đỉnh! Em xuất sắc!", "Cả vòng gần như hoàn hảo!", "Em giỏi quá trời! 🏆"],
+      endGood: ["Giỏi lắm! Mình chơi tiếp nhé?", "Làm tốt lắm em ơi!", "Còn chút xíu nữa là hoàn hảo!"],
+      endTry: ["Cố lên, lần sau sẽ tốt hơn!", "Mình luyện thêm nhé, em làm được!", "Em đã rất cố gắng rồi!"],
+      idle: ["Em ơi, mình học tiếp nhé?", "Zzz… em còn đó không?", "Mình đợi em nè!"],
+      wake: ["Ôi, em về rồi!", "Hihi, tiếp tục nào!", "Em quay lại rồi nè!"],
       pick: ["Ồ, mình đổi trò nhé!", "Chọn gì cũng vui!", "Sẵn sàng rồi nè!"],
       thinking: ["Để mình nghĩ một chút…", "Hmm, đợi mình xíu nhé…", "Mình đang suy nghĩ…"],
       offline: ["Mất mạng rồi, mình học bài có sẵn!", "Không có mạng vẫn học được!"]
@@ -138,15 +138,15 @@ window.LEARN_PHRASES = {
   /* câu riêng từng linh vật (giọng riêng): start, ok, tap */
   mascots: {
     mochi: {
-      vi: { start: ["Chào bé! Mochi đếm cùng bé nhé!", "Mình giải đố số nào!", "Sẵn sàng tính nhẩm chưa?"], ok: ["Chuẩn rồi!", "Bé giỏi toán quá!", "Mochi mê câu này!", "Đúng rồi, +1 điểm!"], tap: ["Hihi, nhột quá!", "Mochi thích số lắm!", "Chạm Mochi nè, nghe đề nhé!"] },
+      vi: { start: ["Chào em! Mochi đếm cùng em nhé!", "Mình giải đố số nào!", "Sẵn sàng tính nhẩm chưa?"], ok: ["Chuẩn rồi!", "Em giỏi toán quá!", "Mochi mê câu này!", "Đúng rồi, +1 điểm!"], tap: ["Hihi, nhột quá!", "Mochi thích số lắm!", "Chạm Mochi nè, nghe đề nhé!"] },
       en: { start: ["Hi! Let’s count together!", "Time for number puzzles!", "Ready for mental math?"], ok: ["Spot on!", "You’re great at math!", "Mochi loves this one!", "Correct, +1 star!"], tap: ["Hehe, that tickles!", "Mochi loves numbers!", "Tap me to hear it again!"] }
     },
     mam: {
-      vi: { start: ["Mầm đây! Mình đọc chữ nhé!", "Chữ nào cũng vui!", "Mở sách ra nào!"], ok: ["Hay quá!", "Bé đọc giỏi ghê!", "Mầm vỗ cánh khen nè!", "Chính xác luôn!"], tap: ["Mầm nghe nè!", "Hú hú, đọc to lên nào!", "Chạm Mầm, nghe đề nhé!"] },
+      vi: { start: ["Mầm đây! Mình đọc chữ nhé!", "Chữ nào cũng vui!", "Mở sách ra nào!"], ok: ["Hay quá!", "Em đọc giỏi ghê!", "Mầm vỗ cánh khen nè!", "Chính xác luôn!"], tap: ["Mầm nghe nè!", "Hú hú, đọc to lên nào!", "Chạm Mầm, nghe đề nhé!"] },
       en: { start: ["Mầm here! Let’s read!", "Every word is fun!", "Open the book!"], ok: ["Lovely!", "You read so well!", "Flap flap, great job!", "Exactly right!"], tap: ["Mầm is listening!", "Hoo hoo, read aloud!", "Tap me to hear it!"] }
     },
     bibi: {
-      vi: { start: ["Hi bé! Mình học nào!", "Bibi sẵn sàng! Let’s go!", "Hello! Bắt đầu thôi!"], ok: ["Great!", "Yay, đúng rồi!", "Well done!", "Perfect!"], tap: ["Hi hi!", "Bibi nói Hi nè!", "Hello hello!"] },
+      vi: { start: ["Hi em! Mình học nào!", "Bibi sẵn sàng! Let’s go!", "Hello! Bắt đầu thôi!"], ok: ["Great!", "Yay, đúng rồi!", "Well done!", "Perfect!"], tap: ["Hi hi!", "Bibi nói Hi nè!", "Hello hello!"] },
       en: { start: ["Hi! Let’s learn!", "Bibi is ready! Let’s go!", "Hello! Let’s start!"], ok: ["Great!", "Yay, you got it!", "Well done!", "Perfect!"], tap: ["Hi hi!", "Bibi says Hi!", "Hello hello!"] }
     }
   }
@@ -627,7 +627,7 @@ window.LEARN_CURRICULUM={"v":2,"subjects":{"toan":{"name":"Toán","grades":[{"gr
        Mỗi mục = [chữ cần điền, phần còn lại của từ, câu ngữ cảnh có "__"]; CÂU NGỮ CẢNH bắt buộc để chỉ có MỘT cách điền hợp nghĩa
        (không có câu thì "ngọt/gọt", "nghe/ghe" đều là từ có thật). */
     D.nghItems = [
-      ["ng", "ã", "Em bị __ã đau chân."], ["ng", "ày", "Hôm nay là __ày thứ Hai."], ["ng", "ủ", "Bé __ủ trưa trên giường."], ["ng", "ô",
+      ["ng", "ã", "Em bị __ã đau chân."], ["ng", "ày", "Hôm nay là __ày thứ Hai."], ["ng", "ủ", "Em __ủ trưa trên giường."], ["ng", "ô",
           "Mẹ luộc bắp __ô cho em."], ["ng", "on",
           "Bát canh này rất __on."], ["ng", "ọt", "Quả cam này rất __ọt."],
       ["ng", "ựa", "Con __ựa chạy rất nhanh."], ["ng", "ười", "Cô giáo là một __ười tốt."], ["ng", "ón", "Em có mười __ón tay."], ["ng", "õ",
@@ -635,7 +635,7 @@ window.LEARN_CURRICULUM={"v":2,"subjects":{"toan":{"name":"Toán","grades":[{"gr
           "Con __ỗng bơi trên ao."], ["ng", "ang", "Em đi __ang qua sân trường."], ["ng", "ôi", "Em ở trong một __ôi nhà nhỏ."],
       ["ngh", "e", "Em __e cô giảng bài."], ["ngh", "é", "Con __é đang ăn cỏ."], ["ngh", "ỉ", "Giờ ra chơi em được __ỉ."], ["ngh", "ĩ",
           "Em __ĩ ra cách giải bài toán."], ["ngh", "ề",
-          "Bố em làm __ề nông."], ["ngh", "ệ", "Bà dùng củ __ệ nấu ăn."], ["ngh", "iêng", "Cây cột bị __iêng."], ["ngh", "ịch", "Bé hay __ịch ngợm."],
+          "Bố em làm __ề nông."], ["ngh", "ệ", "Bà dùng củ __ệ nấu ăn."], ["ngh", "iêng", "Cây cột bị __iêng."], ["ngh", "ịch", "Em hay __ịch ngợm."],
       ["g", "à", "Con __à gáy ò ó o."], ["g", "ỗ", "Cái bàn làm bằng __ỗ."], ["g", "ạo", "Mẹ nấu cơm bằng __ạo."], ["g", "ấu", "Con __ấu thích ăn mật ong."], ["g", "ốc",
           "Chim đậu trên __ốc cây."], ["g", "ạch", "Ngôi nhà xây bằng __ạch."], ["g", "ối", "Em ôm __ối ngủ."], ["g", "ửi", "Em __ửi thư cho bà."],
               ["g", "ần", "Nhà em ở __ần trường."],
@@ -668,7 +668,7 @@ window.LEARN_CURRICULUM={"v":2,"subjects":{"toan":{"name":"Toán","grades":[{"gr
     D.traits = ["đẹp", "cao", "to", "nhỏ", "xanh", "nhanh", "chậm", "thơm", "ngọt", "sạch", "dài", "ngắn", "nóng", "lạnh", "đỏ", "tròn"];
     /* câu: k = kể, h = hỏi, c = cảm, y = khiến */
     D.sentences = [
-      ["Bé đi học", "k"], ["Mẹ nấu cơm", "k"], ["Trời hôm nay nắng đẹp", "k"], ["Con mèo nằm trên ghế", "k"], ["Em đang đọc sách", "k"],
+      ["Em đi học", "k"], ["Mẹ nấu cơm", "k"], ["Trời hôm nay nắng đẹp", "k"], ["Con mèo nằm trên ghế", "k"], ["Em đang đọc sách", "k"],
           ["Bố đi làm về", "k"], ["Chim hót trên cành cây", "k"],
       ["Bạn tên là gì", "h"], ["Con đang làm gì đấy", "h"], ["Mẹ đi đâu rồi", "h"], ["Sao bạn lại buồn", "h"], ["Bạn có thích đá bóng không", "h"],
           ["Ai đang gõ cửa vậy", "h"],
@@ -687,7 +687,7 @@ window.LEARN_CURRICULUM={"v":2,"subjects":{"toan":{"name":"Toán","grades":[{"gr
         "hoa cúc và hoa lan"], ["Sáng nay",
         "trời có nắng"], ["Em thích đọc truyện", "xem phim hoạt hình và chơi cờ"]];
     D.synonyms = [
-      { w: "to", s: ["lớn"], d: ["nhỏ", "thấp", "chậm", "ngắn"] }, { w: "xinh", s: ["đẹp"], d: ["xấu", "già", "nhỏ", "buồn"] }, { w: "nhỏ", s: ["bé"],
+      { w: "to", s: ["lớn"], d: ["nhỏ", "thấp", "chậm", "ngắn"] }, { w: "xinh", s: ["đẹp"], d: ["xấu", "già", "nhỏ", "buồn"] }, { w: "nhỏ", s: ["em"],
           d: ["to", "cao", "dài", "nặng"] },
       { w: "học sinh", s: ["học trò"], d: ["giáo viên", "bác sĩ", "thợ may", "ca sĩ"] }, { w: "mẹ", s: ["má"], d: ["bố", "anh", "chị", "cô"] }, { w:
           "bố", s: ["ba", "cha"], d: ["mẹ", "anh", "chị", "em"] },
@@ -750,8 +750,8 @@ window.LEARN_CURRICULUM={"v":2,"subjects":{"toan":{"name":"Toán","grades":[{"gr
     ];
     /* VIẾT ĐOẠN NGẮN (lớp 2): câu viết đúng (hoa đầu câu + chấm cuối câu), câu lạc đề trong đoạn.
        paraOdd: on = các câu CÙNG chủ đề; lạc đề lấy từ chủ đề khác (không bao giờ nói về chủ đề đang hỏi). */
-    D.writeSent = ["Em đi học.", "Mẹ nấu cơm.", "Con mèo ngủ trên ghế.", "Bé tưới cây trong vườn.", "Trời hôm nay rất đẹp.", "Bố đưa em đến trường.",
-        "Lan đọc sách ở nhà.", "Chim hót trên cành cây.", "Em giúp mẹ quét nhà.", "Bà kể chuyện cho bé."];
+    D.writeSent = ["Em đi học.", "Mẹ nấu cơm.", "Con mèo ngủ trên ghế.", "Em tưới cây trong vườn.", "Trời hôm nay rất đẹp.", "Bố đưa em đến trường.",
+        "Lan đọc sách ở nhà.", "Chim hót trên cành cây.", "Em giúp mẹ quét nhà.", "Bà kể chuyện cho em."];
     D.paraOdd = [
       { topic: "con mèo", on: ["Con mèo có bộ lông mềm.", "Mèo thích bắt chuột.", "Mắt mèo sáng long lanh.", "Mèo nằm ngủ trên ghế."] },
       { topic: "trường em", on: ["Trường em có sân rộng.", "Lớp em học ở tầng hai.", "Cô giáo dạy em đọc.", "Em học cùng các bạn."] },
@@ -817,8 +817,8 @@ window.LEARN_CURRICULUM={"v":2,"subjects":{"toan":{"name":"Toán","grades":[{"gr
     var D = L.D;
     /* đọc hiểu: g = các lớp, t = đoạn, q = câu hỏi, a = đáp án (có TRONG đoạn), d = 3 đáp án nhiễu (KHÔNG có nghĩa đúng) */
     D.readVi = [
-      { g: [1], t: "Bé Lan có một con mèo. Con mèo tên là Mun.", q: "Con mèo tên là gì?", a: "Mun", d: ["Lan", "Mít", "Bông"] },
-      { g: [1], t: "Sáng nay mẹ đưa bé đi học. Bé đi bằng xe đạp.", q: "Bé đi học bằng gì?", a: "xe đạp", d: ["xe buýt", "ô tô", "xe máy"] },
+      { g: [1], t: "Em Lan có một con mèo. Con mèo tên là Mun.", q: "Con mèo tên là gì?", a: "Mun", d: ["Lan", "Mít", "Bông"] },
+      { g: [1], t: "Sáng nay mẹ đưa em đi học. Em đi bằng xe đạp.", q: "Em đi học bằng gì?", a: "xe đạp", d: ["xe buýt", "ô tô", "xe máy"] },
       { g: [1, 2], t: "Trên cành cây có hai chú chim. Chúng hót rất vui.", q: "Trên cành có mấy chú chim?", a: "hai", d: ["một", "ba", "bốn"] },
       { g: [1], t: "Bố mua cho Nam một quả bóng đỏ.", q: "Quả bóng có màu gì?", a: "đỏ", d: ["xanh", "vàng", "trắng"] },
       { g: [2], t: "Chủ nhật, cả nhà em về quê thăm bà. Bà trồng rất nhiều rau và hoa trong vườn.", q: "Cả nhà về quê thăm ai?", a: "bà", d: ["ông", "cô", "dì"] },
@@ -846,7 +846,7 @@ window.LEARN_CURRICULUM={"v":2,"subjects":{"toan":{"name":"Toán","grades":[{"gr
       { g: [2], t: "Sáng thứ Bảy, Lan cùng bố ra chợ mua cá. Bố chọn một con cá chép to.", q: "Bố chọn mua con gì?", a: "cá chép", d: ["cá thu", "con tôm", "con cua"] },
       { g: [2], t: "Ở sân trường có một cây phượng. Mùa hè, hoa phượng nở đỏ rực.", q: "Hoa phượng nở vào mùa nào?", a: "mùa hè", d: ["mùa đông",
           "mùa thu", "mùa xuân"] },
-      { g: [2], t: "Bé Na đang vẽ tranh. Bé vẽ một ngôi nhà, một cái cây và một chú chim.", q: "Bé Na đang làm gì?", a: "vẽ tranh", d: ["đọc sách", "hát", "nấu ăn"] },
+      { g: [2], t: "Em Na đang vẽ tranh. Em vẽ một ngôi nhà, một cái cây và một chú chim.", q: "Em Na đang làm gì?", a: "vẽ tranh", d: ["đọc sách", "hát", "nấu ăn"] },
       { g: [3], t: "Giờ ra chơi, các bạn nam đá bóng ở sân. Các bạn nữ nhảy dây dưới gốc cây.", q: "Các bạn nữ chơi trò gì?", a: "nhảy dây", d:
           ["đá bóng", "đuổi bắt", "cờ vua"] },
       { g: [3], t: "Bà ngoại em sống ở quê. Mỗi dịp hè, em về quê giúp bà cho gà ăn.", q: "Em giúp bà việc gì?", a: "cho gà ăn", d: ["quét nhà", "nấu cơm", "rửa bát"] },
@@ -913,14 +913,14 @@ window.LEARN_CURRICULUM={"v":2,"subjects":{"toan":{"name":"Toán","grades":[{"gr
           "Quạ khát nước, tìm mãi mới thấy một chiếc bình. Nước ở đáy bình, mỏ Quạ không với tới. Quạ nghĩ ra cách nhặt từng viên sỏi thả vào bình. Nước dâng lên dần, Quạ uống được nước.",
           q: "Quạ là con vật như thế nào?", a: "thông minh, kiên trì", d: ["lười biếng", "nhút nhát", "hay khoe khoang"] },
       { g: [4], t:
-          "Cô bé Mai trồng một hạt đậu trong chậu nhỏ. Ngày nào Mai cũng tưới nước và đặt chậu ra chỗ nắng. Mấy hôm sau, mầm đậu nhú lên xanh mướt. Mai reo lên sung sướng.",
+          "Cô em Mai trồng một hạt đậu trong chậu nhỏ. Ngày nào Mai cũng tưới nước và đặt chậu ra chỗ nắng. Mấy hôm sau, mầm đậu nhú lên xanh mướt. Mai reo lên sung sướng.",
           q:
           "Điều gì làm Mai sung sướng?", a: "mầm đậu nhú lên", d: ["được đi chơi", "nhận quà", "được điểm mười"] },
       { g: [5], t:
-          "Người thợ rèn già dạy cậu học trò: “Muốn rèn được con dao sắc, con phải kiên nhẫn đập sắt hết lần này đến lần khác.” Cậu bé ban đầu nản chí nhưng rồi vẫn miệt mài luyện tập. Nhiều tháng sau, cậu rèn được con dao tốt.",
+          "Người thợ rèn già dạy cậu học trò: “Muốn rèn được con dao sắc, con phải kiên nhẫn đập sắt hết lần này đến lần khác.” Cậu em ban đầu nản chí nhưng rồi vẫn miệt mài luyện tập. Nhiều tháng sau, cậu rèn được con dao tốt.",
           q: "Câu chuyện muốn nói điều gì?", a: "kiên nhẫn sẽ thành công", d: ["làm nhanh là giỏi", "nên bỏ cuộc sớm", "dao quan trọng nhất"] },
       { g: [5], t:
-          "Người thợ rèn già dạy cậu học trò: “Muốn rèn được con dao sắc, con phải kiên nhẫn đập sắt hết lần này đến lần khác.” Cậu bé ban đầu nản chí nhưng rồi vẫn miệt mài luyện tập. Nhiều tháng sau, cậu rèn được con dao tốt.",
+          "Người thợ rèn già dạy cậu học trò: “Muốn rèn được con dao sắc, con phải kiên nhẫn đập sắt hết lần này đến lần khác.” Cậu em ban đầu nản chí nhưng rồi vẫn miệt mài luyện tập. Nhiều tháng sau, cậu rèn được con dao tốt.",
           q: "Lúc đầu, cậu học trò cảm thấy thế nào?", a: "nản chí", d: ["vui mừng", "tự hào", "tức giận"] },
       { g: [5], t:
           "Trong chuyến đi dã ngoại, cả lớp thấy một túi rác bị bỏ lại bên suối. Bạn Hà nói: “Chúng ta hãy nhặt rác để dòng suối luôn sạch.” Cả lớp cùng làm, chỉ một lúc, bờ suối đã sạch sẽ.",
@@ -933,10 +933,10 @@ window.LEARN_CURRICULUM={"v":2,"subjects":{"toan":{"name":"Toán","grades":[{"gr
       { g: [3, 4], t: "Hà quên làm bài tập nên rất lo lắng. Hà nói thật với cô giáo. Cô mỉm cười và cho Hà làm bù vào hôm sau.", q:
           "Câu chuyện khuyên điều gì?", a: "hãy luôn trung thực", d:
           ["đừng làm bài tập", "chép bài của bạn", "giấu lỗi của mình"] },
-      { g: [4, 5], t: "Cậu bé Nam thấy một chiếc ví rơi trên đường. Nam không giữ lại mà đem đến đồn công an. Người mất ví rất biết ơn Nam.", q:
+      { g: [4, 5], t: "Cậu em Nam thấy một chiếc ví rơi trên đường. Nam không giữ lại mà đem đến đồn công an. Người mất ví rất biết ơn Nam.", q:
           "Nam đã làm gì với chiếc ví?", a:
           "đem đến đồn công an", d: ["giữ lại cho mình", "vứt đi", "đưa cho bạn"] },
-      { g: [4, 5], t: "Cậu bé Nam thấy một chiếc ví rơi trên đường. Nam không giữ lại mà đem đến đồn công an. Người mất ví rất biết ơn Nam.", q:
+      { g: [4, 5], t: "Cậu em Nam thấy một chiếc ví rơi trên đường. Nam không giữ lại mà đem đến đồn công an. Người mất ví rất biết ơn Nam.", q:
           "Nam là người như thế nào?", a: "trung thực",
           d: ["tham lam", "lười biếng", "nhút nhát"] },
       {g: [3,4,5], t: "Sáng nay trời đen kịt, gió nổi mạnh. Mẹ vội thu quần áo phơi ngoài sân vào nhà.", q: "Vì sao mẹ vội thu quần áo?", a:
@@ -944,10 +944,10 @@ window.LEARN_CURRICULUM={"v":2,"subjects":{"toan":{"name":"Toán","grades":[{"gr
           "nhà có khách","đến giờ ăn cơm"]},
       {g: [4,5], t: "Nam hứa sẽ về sớm giúp bà tưới rau. Nhưng chiều đó Nam mải đá bóng nên quên mất. Tối về, thấy luống rau héo, Nam rất áy náy.", q:
           "Nam cảm thấy thế nào khi thấy rau héo?", a: "áy náy", d: ["tự hào","hờ hững","vui sướng"]},
-      {g: [1,2,3], t: "Bài thơ: Bé có đôi bàn tay / Rửa sạch trước khi ăn / Bé ngoan, bé khỏe mạnh / Cả nhà đều vui lắm.", q:
-          "Bé rửa gì trước khi ăn?", a: "đôi bàn tay", d: ["đôi chân","khuôn mặt","bát đũa"]},
-      {g: [3,4,5], t: "Bài thơ: Mặt trời dậy từ sớm / Gọi bé thức dậy chơi / Hoa cười, chim hót vang / Ngày mới tới rồi thôi.", q:
-          "Mặt trời gọi bé làm gì?", a: "thức dậy", d: ["đi ngủ","ăn cơm","làm bài"]}
+      {g: [1,2,3], t: "Bài thơ: Em có đôi bàn tay / Rửa sạch trước khi ăn / Em ngoan, em khỏe mạnh / Cả nhà đều vui lắm.", q:
+          "Em rửa gì trước khi ăn?", a: "đôi bàn tay", d: ["đôi chân","khuôn mặt","bát đũa"]},
+      {g: [3,4,5], t: "Bài thơ: Mặt trời dậy từ sớm / Gọi em thức dậy chơi / Hoa cười, chim hót vang / Ngày mới tới rồi thôi.", q:
+          "Mặt trời gọi em làm gì?", a: "thức dậy", d: ["đi ngủ","ăn cơm","làm bài"]}
     ];
     /* sắp xếp câu thành đoạn: các câu ĐÚNG THỨ TỰ (có từ nối hoặc trình tự thời gian rõ) */
     D.paragraphs = [
@@ -961,7 +961,7 @@ window.LEARN_CURRICULUM={"v":2,"subjects":{"toan":{"name":"Toán","grades":[{"gr
       ["Trước hết, chú thợ trộn vữa.", "Sau đó, chú xây từng hàng gạch.", "Xây xong, chú trát tường cho phẳng.", "Cuối cùng, chú quét sơn lên tường."],
       ["Sáng sớm, gà gáy báo trời sáng.", "Buổi trưa, nắng chiếu rực rỡ.", "Chiều đến, nắng nhạt dần.", "Tối đến, ánh trăng lên cao."],
       ["Sáng sớm, mặt trời mọc ở phía đông.", "Buổi trưa, nắng chiếu sáng gay gắt.", "Chiều tối, mặt trời lặn dần.", "Đêm đến, trăng sao lên cao."],
-      ["Đầu tiên, bé lấy bàn chải và kem đánh răng.", "Sau đó, bé chải răng thật kĩ.", "Chải xong, bé súc miệng bằng nước sạch.", "Cuối cùng, bé cất bàn chải gọn gàng."]
+      ["Đầu tiên, em lấy bàn chải và kem đánh răng.", "Sau đó, em chải răng thật kĩ.", "Chải xong, em súc miệng bằng nước sạch.", "Cuối cùng, em cất bàn chải gọn gàng."]
     ];
   }
   if (typeof module !== "undefined" && module.exports) module.exports = part; else (root.LearnLangParts = root.LearnLangParts || {})["data-vi-read"] = part;

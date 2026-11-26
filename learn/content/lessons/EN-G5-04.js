@@ -65,7 +65,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Số nhiều: s, es, bất quy tắc",
         "He/She/It: động từ thêm s, es",

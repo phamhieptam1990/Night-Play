@@ -23,7 +23,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "choose",
-      "t": "Bé Na có một con mèo trắng. Mèo của Na màu gì?",
+      "t": "Em Na có một con mèo trắng. Mèo của Na màu gì?",
       "opts": [
         "Màu trắng",
         "Màu vàng",
@@ -62,7 +62,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Đọc rõ, ngắt nghỉ ở dấu câu",
         "Trả lời câu hỏi bằng thông tin trong bài",
@@ -72,7 +72,7 @@ window.LearnLessons.reg({
   ],
   "tryit": [
     {
-      "q": "Sáng nay trời mưa, bé mang áo mưa đi học. Vì sao bé mang áo mưa?",
+      "q": "Sáng nay trời mưa, em mang áo mưa đi học. Vì sao em mang áo mưa?",
       "opts": [
         "Vì trời mưa",
         "Vì trời lạnh",

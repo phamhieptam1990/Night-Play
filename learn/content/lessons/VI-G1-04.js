@@ -22,7 +22,7 @@ window.LearnLessons.reg({
   },
   {
    "k": "choose",
-   "t": "Gặp cô giáo, bé nói gì?",
+   "t": "Gặp cô giáo, em nói gì?",
    "opts": [
     "Em chào cô ạ!",
     "Này cô!",
@@ -35,7 +35,7 @@ window.LearnLessons.reg({
   },
   {
    "k": "choose",
-   "t": "Bạn đang nói, bé làm gì?",
+   "t": "Bạn đang nói, em làm gì?",
    "opts": [
     "👂 Lắng nghe",
     "🗣️ Nói chen",
@@ -48,7 +48,7 @@ window.LearnLessons.reg({
   },
   {
    "k": "sum",
-   "t": "Bé nhớ nhé!",
+   "t": "Em nhớ nhé!",
    "pts": [
     "Chào hỏi lễ phép",
     "Nói rõ ràng",
@@ -58,7 +58,7 @@ window.LearnLessons.reg({
  ],
  "tryit": [
   {
-   "q": "Bà đến chơi, bé nói gì?",
+   "q": "Bà đến chơi, em nói gì?",
    "opts": [
     "Cháu chào bà ạ!",
     "Bà đi đi",
@@ -70,7 +70,7 @@ window.LearnLessons.reg({
    "art": "👵"
   },
   {
-   "q": "Muốn nói, bé phải làm gì?",
+   "q": "Muốn nói, em phải làm gì?",
    "opts": [
     "Chờ đến lượt",
     "Hét to lên",
@@ -82,7 +82,7 @@ window.LearnLessons.reg({
    "art": "🙋"
   },
   {
-   "q": "Được tặng quà, bé nói gì?",
+   "q": "Được tặng quà, em nói gì?",
    "opts": [
     "Con cảm ơn ạ!",
     "Cho thêm đi",

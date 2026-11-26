@@ -56,8 +56,8 @@ for (const subj of Object.keys(C.subjects)) for (const g of C.subjects[subj].gra
     if (say) say.forEach(x => screens.push({ k: "say", t: x[0], art: x[1] || art }));
     else { screens.push({ k: "say", t: cut("Hôm nay mình học: " + t.name + ".", 88), art }); sub.slice(0, 2).forEach(s => screens.push({ k: "say", t: s, art })); }
     qs.slice(0, 3).forEach(q => { const s = { k: "choose", t: q.text, opts: q.opts, ok: q.ok, yes: q.yes || cut("Đúng rồi! Đáp án là " + q.opts[q.ok] + ".", 88), no: q.hint }; if (q.art) s.art = q.art; if (q.en) s.optlang = "en"; screens.push(s); });
-    const pts = ((T && T.sum) || (ex ? ex.sum : sub)).slice(0, 3); while (pts.length < 2) pts.push(["Đọc kỹ đề rồi làm từng bước", "Sai thì thử lại, bé sẽ giỏi hơn!"][pts.length]);
-    screens.push({ k: "sum", t: "Bé nhớ nhé!", pts });
+    const pts = ((T && T.sum) || (ex ? ex.sum : sub)).slice(0, 3); while (pts.length < 2) pts.push(["Đọc kỹ đề rồi làm từng bước", "Sai thì thử lại, em sẽ giỏi hơn!"][pts.length]);
+    screens.push({ k: "sum", t: "Em nhớ nhé!", pts });
     const tryit = qs.slice(3, 6).map(q => { const o = { q: q.text, opts: q.opts, ok: q.ok, hint: q.hint, yes: q.yes || "Đúng rồi!" }; if (q.art) o.art = q.art; if (q.en) o.optlang = "en"; return o; });
     const body = "/* " + MARK + " · " + (subj === "toan" ? "Toán" : subj === "tviet" ? "Tiếng Việt" : "Tiếng Anh") + " lớp " + g.grade + " · " + t.name + ".\n   Lắp từ scripts/learn/lesson-teach.js (lời giảng soạn tay) hoặc chương trình + ngân hàng câu hỏi (scripts/learn/gen-lessons-draft.js). */\n" +
       "window.LearnLessons.reg(" + JSON.stringify({ id: t.id, grade: g.grade, subj, title: cut(t.name, 58), screens, tryit }, null, 2) + ");\n";

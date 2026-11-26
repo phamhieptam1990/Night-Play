@@ -65,7 +65,7 @@ window.LearnLessons.reg({
    "opts": [
     "bàn",
     "bố",
-    "bé"
+    "em"
    ],
    "ok": 0,
    "yes": "Đúng rồi! Tiếng bàn có vần an.",
@@ -74,7 +74,7 @@ window.LearnLessons.reg({
   },
   {
    "k": "sum",
-   "t": "Bé nhớ nhé!",
+   "t": "Em nhớ nhé!",
    "pts": [
     "Chữ cái ghép thành tiếng",
     "Tiếng ghép thành từ",
@@ -103,7 +103,7 @@ window.LearnLessons.reg({
     "côm"
    ],
    "ok": 0,
-   "hint": "Món ăn trong bát của bé.",
+   "hint": "Món ăn trong bát của em.",
    "yes": "Đúng rồi!",
    "art": "🍚"
   },

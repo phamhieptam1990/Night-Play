@@ -1,12 +1,12 @@
 /* Cảnh THỬ THÁCH (điểm "test" và nhánh băng-qua-thử): 5 câu từ LearnEngine/LearnTypes như trang kiểm tra cũ, mỗi câu là MỘT TÌNH HUỐNG TRUYỆN (nhân vật nhờ, đáp án là vật trên tranh).
-   Ghi tiến độ đúng như trang cũ: E.record (kỹ năng), Habit.note, Farm.recordRound, LearnPath.markTested + complete. Bé không thấy số câu: tiến độ là chuỗi đèn lồng sáng dần.
+   Ghi tiến độ đúng như trang cũ: E.record (kỹ năng), Habit.note, Farm.recordRound, LearnPath.markTested + complete. Em không thấy số câu: tiến độ là chuỗi đèn lồng sáng dần.
    Kiểu câu → bộ dựng: SceneTestKinds[kind](c) (kinds-test-*.js); kiểu chưa có thì dùng "chọn vật" (fallback). */
 (function (root) {
   "use strict";
   var K = root.StoryCore, U = root.SceneU, X = root.SceneFx, S = root.SceneT, F = root.SceneFrame, V = root.SceneVoice, E = root.LearnEngine, P = K.P;
   var R = root.SceneTestKinds = root.SceneTestKinds || {};
   function askGroup(k) { return S.ASK[k] ? k : "mc"; }
-  function stemHtml(q) { return String(q).replace(/<button[^>]*class="lsn"[^>]*>[\s\S]*?<\/button>/g, "").replace(/(<br\s*\/?>\s*)+$/i, ""); }
+  function stemHtml(q) { return String(q).replace(/<button[^>]*class="lsn"[^>]*>[\s\S]*?<\/button>/g, "").replace(/^(\s*<br\s*\/?>)+\s*/i, "").replace(/(<br\s*\/?>\s*)+$/i, ""); }   /* bỏ <br> thừa ở đầu (sau khi gỡ nút loa cũ) và ở cuối: không còn dòng trống đẩy chữ xuống thấp */
   function run(g) {
     var lang = K.lang, bank, cur = 0, tries = 0, stars = 0, streak = 0, best = 0, wrongTags = {}, locked = false, running = true, timer = 0;
     try { bank = root.SceneBank.build(g.subj, g.grade, lang, g.topic.id); } catch (e) { console.error(e); bank = []; }

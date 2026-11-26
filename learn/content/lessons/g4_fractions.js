@@ -62,7 +62,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Phân số bằng nhau: nhân hoặc chia cả tử và mẫu cho cùng số",
         "Cùng mẫu: cộng hoặc trừ tử, giữ mẫu",

@@ -62,7 +62,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Số lớn chia lớp, mỗi lớp 3 hàng",
         "Giá trị chữ số phụ thuộc hàng",

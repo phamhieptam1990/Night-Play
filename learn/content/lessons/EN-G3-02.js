@@ -65,7 +65,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "I am, he/she/it is, you/we/they are",
         "Hỏi tên: What is your name?",

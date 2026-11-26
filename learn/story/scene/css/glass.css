@@ -85,3 +85,31 @@ body.scn[data-subj="tanh"]{--nx1:#5fa8ff;--nx2:#8b5cf6}
 /* thẻ rộng (màn "Bé nhớ nhé"): chữ cao theo nội dung, không bị cắt bởi height:35% của vật tròn */
 .scn .ob.wide .tx{height:auto;top:auto;left:auto;right:auto;overflow:visible;line-height:1.25;padding:2px 0}
 .scn .ob.wide{min-height:58px}
+/* chữ con (.ct) trong thẻ kính theo màu của thẻ (skin.css ép .ct về chữ tối nên chế độ tối bị đen trên nền tối) */
+.scn .qcard .ct,.scn .lart .ct,.scn .bub .ct,.scn .shp .ct,.scn .tdisp .ct{color:inherit}
+/* ô trống kéo thả phải THẤY RÕ trên mọi nền (biển/cát): khung kính tối, ô trống viền trắng đậm + viền trong tối, ô trống kế tiếp nhấp nháy */
+.scn .tslots{background:rgba(14,26,62,.5);border:3px dashed #fff;box-shadow:0 4px 14px rgba(5,20,50,.3)}
+.scn .tslot:not(.fill){background:rgba(255,255,255,.3);border:3px dashed #fff;box-shadow:inset 0 0 0 2px rgba(14,26,62,.35)}
+.scn .tslot.fill{border:3px solid #fff}
+.scn .tslot:not(.fill):first-child,.scn .tslot.fill + .tslot:not(.fill){animation:slotHint 1.2s ease-in-out infinite}
+@keyframes slotHint{50%{background:rgba(255,226,122,.55);box-shadow:inset 0 0 0 2px rgba(14,26,62,.35),0 0 0 4px rgba(255,226,122,.7)}}
+@media (prefers-reduced-motion:reduce){.scn .tslot:not(.fill){animation:none!important}}
+/* thẻ hình ĐANG CHỌN (nối hai cột, chọn nhiều...): viền vàng cam đậm bám theo hình thẻ + quầng sáng nhịp, thấy rõ trên cả nền cát sáng (trước chỉ có bóng trắng nên chìm) */
+.scn .ob.sel{transform:scale(1.08)}
+.scn .ob.sel .oi,.scn .tmatch .ob.sel .oi{animation:selGlow 1s ease-in-out infinite;
+  filter:drop-shadow(3px 0 0 #ffb703) drop-shadow(-3px 0 0 #ffb703) drop-shadow(0 3px 0 #ffb703) drop-shadow(0 -3px 0 #ffb703) drop-shadow(0 0 12px #ff8a00)}
+@keyframes selGlow{50%{filter:drop-shadow(3px 0 0 #ffe066) drop-shadow(-3px 0 0 #ffe066) drop-shadow(0 3px 0 #ffe066) drop-shadow(0 -3px 0 #ffe066) drop-shadow(0 0 20px #ffb703)}}
+@media (prefers-reduced-motion:reduce){.scn .ob.sel .oi{animation:none}}
+/* thẻ đáp án chữ: không ngắt giữa từ ("What's" không còn bị tách thành "What'" / "s"); chỉ ngắt khi một từ dài hơn cả thẻ */
+.scn .ob.wide .tx{overflow-wrap:break-word;word-break:normal;min-width:0}
+.scn .ob.wide{min-width:0}
+/* hàng đáp án CHỮ (thẻ rộng) trong lưới --ow: cột co theo chiều cao màn (≈140px) nên chữ bị bóp; cho cột rộng theo chữ, tối đa 680px */
+.scn .opts:not(.wides):has(> .ob.wide){grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));width:min(96%,680px);--ow:auto}
+/* LINH VẬT ĐANG ĐỌC (class .speaking trên #sc do voice.js bật khi giọng đọc chạy): linh vật nhún nhịp + huy hiệu sóng âm bên cạnh, để bé thấy linh vật đang nói câu hỏi */
+.scn .pal{position:relative}
+.scn .sc.speaking:not(.talk) .pal{animation:palTalk .6s ease-in-out infinite}
+.scn .sc.speaking:not(.talk) .pal::after{content:"";position:absolute;right:-6px;top:-6px;width:30px;height:30px;border-radius:50%;border:2px solid #ffc21a;
+  background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z' fill='%23e8590c'/%3E%3Cpath d='M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12' stroke='%23e8590c' stroke-width='2.2' stroke-linecap='round' fill='none'/%3E%3C/svg%3E") center/70% no-repeat;
+  box-shadow:0 0 0 3px rgba(255,194,26,.45);animation:spkOn 1s ease-in-out infinite}
+@keyframes palTalk{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-5px) scale(1.06)}}
+@media (prefers-reduced-motion:reduce){.scn .sc.speaking:not(.talk) .pal,.scn .sc.speaking:not(.talk) .pal::after{animation:none}}

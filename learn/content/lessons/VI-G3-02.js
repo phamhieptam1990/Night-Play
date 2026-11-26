@@ -62,7 +62,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Dấu phẩy liệt kê, dấu chấm cuối câu kể",
         "Đồng nghĩa giống nhau, trái nghĩa ngược nhau",

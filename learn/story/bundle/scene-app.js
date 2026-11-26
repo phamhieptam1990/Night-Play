@@ -15,12 +15,12 @@
     var m = MAS[subj] || "Mochi", w = WORLD[subj] || WORLD.toan, n = short(name, 36);
     return {
       title: { vi: n, en: n },
-      intro: { vi: m + " rủ bé đi dạo " + w.vi + ". Hôm nay mình ghé chỗ “" + n + "”!", en: m + " invites you to " + w.en + ". Today we visit a brand new spot!" },
-      fork: { vi: "Đường đi chia hai: học từng bước, hoặc thử sức thi vượt bài. Bé chọn nhé!", en: "The path splits in two: learn step by step, or try the skip-ahead test. You choose!" },
-      learn: { vi: m + " cùng bé học thật vui, từng bước một.", en: m + " and you learn step by step, nice and easy." },
+      intro: { vi: m + " rủ em đi dạo " + w.vi + ". Hôm nay mình ghé chỗ “" + n + "”!", en: m + " invites you to " + w.en + ". Today we visit a brand new spot!" },
+      fork: { vi: "Đường đi chia hai: học từng bước, hoặc thử sức thi vượt bài. Em chọn nhé!", en: "The path splits in two: learn step by step, or try the skip-ahead test. You choose!" },
+      learn: { vi: m + " cùng em học thật vui, từng bước một.", en: m + " and you learn step by step, nice and easy." },
       test: { vi: "Thử sức một chút nào! Chưa tới cũng không sao, mình thử lại sau.", en: "Time to try your best! If it is not there yet, we can try again later." },
       nodes: NODES,
-      end: { vi: "Tới nơi rồi! " + m + " vỗ tay khen bé đã đi thật xa.", en: "We made it! " + m + " cheers for how far you have come." }
+      end: { vi: "Tới nơi rồi! " + m + " vỗ tay khen em đã đi thật xa.", en: "We made it! " + m + " cheers for how far you have come." }
     };
   }
   /* tên điểm dừng mặc định (kiểu khám phá, KHÔNG có chữ học/bài/kiểm tra/thi) khi dữ liệu truyện chưa có trường nodes */
@@ -45,7 +45,7 @@
 /* ---- js/core.js ---- */
 /* Lõi Lớp truyện: tham số trang, ngôn ngữ, chuỗi giao diện vi/en, đọc truyện (data + mặc định), cờ quay về, nhớ bước đi của linh vật.
    Tiến độ học KHÔNG lưu ở đây: dùng chung với lớp truyền thống qua LearnPath. Chỉ có 2 khoá riêng, chỉ chứa mã chủ đề:
-     learn:story:seen = { <chủ đề>: 1 } bé đã nghe lời mở đầu ; learn:story:at = { <chủ đề>: <điểm dừng> } nơi linh vật đứng lần trước. */
+     learn:story:seen = { <chủ đề>: 1 } em đã nghe lời mở đầu ; learn:story:at = { <chủ đề>: <điểm dừng> } nơi linh vật đứng lần trước. */
 (function (root) {
   "use strict";
   var P = root.LearnPath, q = new URLSearchParams(location.search);
@@ -69,9 +69,9 @@
     goStart: L("Khởi hành", "Set off"), goLearn: L("Khám phá", "Explore"), goTest: L("Thử thách", "Challenge"), goExam: L("Băng qua thử", "Dash across"),
     goPlay: L("Chơi", "Play"), goHome: L("Bản đồ lớp", "Class map"), goNext: L("Chủ đề tiếp", "Next topic"), goRetry: L("Thử lại", "Try again"),
     notYet: L("Chưa tới đây nè. Mình đi từng bước nhé!", "Not here yet. One step at a time!"),
-    locked: L("Chủ đề này sẽ mở khi bé xong chủ đề trước nhé.", "This opens after you finish the topic before it."),
+    locked: L("Chủ đề này sẽ mở khi em xong chủ đề trước nhé.", "This opens after you finish the topic before it."),
     retry: L("Chưa tới nơi cũng không sao! Mình đi từng bước rồi thử lại nhé.", "No worries! Let us go step by step, then try again."),
-    here: L("Bé đang ở đây", "You are here"), speak: L("Nghe kể", "Listen"), stopSpeak: L("Dừng đọc", "Stop")
+    here: L("Em đang ở đây", "You are here"), speak: L("Nghe kể", "Listen"), stopSpeak: L("Dừng đọc", "Stop")
   };
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   function tx(o) { return o ? (o[lang] || o.vi || "") : ""; }
@@ -103,7 +103,7 @@
     mapUrl: function (g, s, id) { return "map.html?" + q2({ grade: g, subj: s, topic: id }); },
     learnUrl: function (g, s, id) { return "scene.html?" + q2({ grade: g, subj: s, topic: id, step: "learn" }); },
     testUrl: function (g, s, id) { return "scene.html?" + q2({ grade: g, subj: s, topic: id, step: "test" }); },
-    /* cờ "bé đi từ lớp truyện": trang bài học và trang kiểm tra đọc cờ này để ← về lại bản đồ truyện */
+    /* cờ "em đi từ lớp truyện": trang bài học và trang kiểm tra đọc cờ này để ← về lại bản đồ truyện */
     leave: function () { try { sessionStorage.setItem("learn:from", "story"); sessionStorage.setItem("learn:from:url", location.pathname + location.search); } catch (e) {} },
     clearFlag: function () { try { sessionStorage.removeItem("learn:from"); sessionStorage.removeItem("learn:from:url"); } catch (e) {} },
     seen: function (id) { return !!obj("learn:story:seen")[id]; },
@@ -118,7 +118,7 @@
 /* ---- js/speaker-gate.js ---- */
 /* Lớp truyện: TRANG BẬT LOA dùng chung cho bản đồ lớp, bản đồ chủ đề và cảnh truyện. Hiện MỘT lần mỗi lần mở trang: các màn chuyển bằng StoryNav (js/spa.js)
    dùng chung một tài liệu nên không hỏi lại; mở lại hoặc tải lại trang thì hỏi lại vì trình duyệt chặn tiếng.
-   Cú chạm vào nút loa lớn mở khoá âm thanh (iPhone/Safari chỉ cho đọc sau một cú chạm). Bé đã tắt tiếng (learn:auto = 0) hoặc máy không có giọng thì vào thẳng.
+   Cú chạm vào nút loa lớn mở khoá âm thanh (iPhone/Safari chỉ cho đọc sau một cú chạm). Em đã tắt tiếng (learn:auto = 0) hoặc máy không có giọng thì vào thẳng.
    StoryGate.need() · StoryGate.show({title, back}, bắtĐầu) · StoryGate.isOpen() · StoryGate.onClose(fn) */
 (function (root) {
   "use strict";
@@ -133,13 +133,14 @@
     var back = el("a", "ib sgx", '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>');
     back.href = o.back || "index.html"; back.setAttribute("aria-label", K.T.back || L("Quay lại", "Back"));
     var m = el("img", "sgm"); m.alt = ""; m.src = K.face(K.subj, K.grade);
-    var t = el("div", "sgt"); t.textContent = o.title || ""; var h = el("div", "sgh"); h.textContent = L("Bật loa để nghe truyện nhé!", "Turn the sound on to hear the story!");
+    var t = el("div", "sgt"); t.textContent = o.title || "";
     var ic = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5zM15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12"'
       + ' stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="currentColor"/></svg>';
-    var on = el("button", "sgb", ic + "<span>" + L("Bật loa", "Sound on") + "</span>");
+    var on = el("button", "sgb", ic);
     on.type = "button"; on.setAttribute("aria-label", L("Bật loa", "Sound on"));
-    var off = el("button", "sgs"); off.type = "button"; off.textContent = L("Không nghe", "No sound");
-    [back, m, t, h, on, off].forEach(function (e) { g.appendChild(e); });
+    var off = el("button", "sgs", '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M16 9.5l5 5M21 9.5l-5 5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" fill="none"/></svg>');
+    off.type = "button"; off.setAttribute("aria-label", L("Không nghe", "No sound"));   /* chỉ biểu tượng loa gạch chéo, không chữ */
+    [back, m, t, on, off].forEach(function (e) { g.appendChild(e); });
     function go(sound) {
       try { localStorage.setItem("learn:auto", sound ? "1" : "0"); } catch (e) {} root.__storySpk = true; open = false;
       g.classList.add("out"); setTimeout(function () { if (g.parentNode) g.parentNode.removeChild(g); }, 350);
@@ -154,7 +155,7 @@
 
 ;
 /* ---- scene/js/strings.js ---- */
-/* Cảnh truyện: chuỗi giao diện vi/en và biểu tượng SVG (nút không có chữ). Tuyệt đối KHÔNG có chữ học/bài/kiểm tra/thi/quiz/test/Sai trong giao diện bé thấy
+/* Cảnh truyện: chuỗi giao diện vi/en và biểu tượng SVG (nút không có chữ). Tuyệt đối KHÔNG có chữ học/bài/kiểm tra/thi/quiz/test/Sai trong giao diện em thấy
    (scripts/learn/check-story.js quét tệp này). Lời của truyện (title, learn, test, end) lấy từ learn/story/data/*, nội dung câu hỏi lấy từ engine. */
 (function (root) {
   "use strict";
@@ -172,27 +173,27 @@
   };
   /* lời nhân vật theo tình huống: {k: [vi, en]}; chọn ngẫu nhiên theo chỉ số */
   var ASK = {
-    mc: [["Giúp mình chọn nhé!", "Help me choose!"], ["Bé chạm vào đáp án hợp nhé!", "Tap the one that fits!"], ["Mình cần bé giúp một tay!", "I need your help!"]],
-    count: [["Bé đếm giúp mình nhé!", "Count them for me!"], ["Chạm từng món để đếm nha!", "Tap each one to count!"]],
-    typein: [["Bé viết con số vào bảng nhé!", "Write the number on the board!"], ["Số nào đây nhỉ? Bé gõ giúp mình!", "Which number? Type it for me!"]],
-    order: [["Bé xếp giúp mình theo thứ tự nhé!", "Put them in order for me!"], ["Chạm lần lượt để xếp nha!", "Tap one by one to line up!"]],
+    mc: [["Giúp mình chọn nhé!", "Help me choose!"], ["Em chạm vào đáp án hợp nhé!", "Tap the one that fits!"], ["Mình cần em giúp một tay!", "I need your help!"]],
+    count: [["Em đếm giúp mình nhé!", "Count them for me!"], ["Chạm từng món để đếm nha!", "Tap each one to count!"]],
+    typein: [["Em viết con số vào bảng nhé!", "Write the number on the board!"], ["Số nào đây nhỉ? Em gõ giúp mình!", "Which number? Type it for me!"]],
+    order: [["Em xếp giúp mình theo thứ tự nhé!", "Put them in order for me!"], ["Chạm lần lượt để xếp nha!", "Tap one by one to line up!"]],
     match: [["Ghép giúp mình từng đôi nhé!", "Match them in pairs!"], ["Chạm một bên rồi chạm bên kia nha!", "Tap one side, then the other!"]],
-    sort: [["Bé cất giúp mình vào đúng rổ nhé!", "Put each one in the right basket!"], ["Chọn một thẻ rồi chạm rổ nha!", "Pick a card, then tap a basket!"]],
-    multi: [["Chọn tất cả những cái hợp nhé!", "Pick every one that fits!"], ["Có nhiều hơn một cái đó, bé tìm nha!", "More than one fits, find them!"]],
-    memory: [["Lật hai thẻ tìm đôi giống nhau nhé!", "Flip two cards to find a pair!"], ["Bé nhớ vị trí rồi ghép đôi nha!", "Remember where they are and pair up!"]],
-    numline: [["Bé kéo thuyền tới đúng số nhé!", "Slide the boat to the right number!"]],
+    sort: [["Em cất giúp mình vào đúng rổ nhé!", "Put each one in the right basket!"], ["Chọn một thẻ rồi chạm rổ nha!", "Pick a card, then tap a basket!"]],
+    multi: [["Chọn tất cả những cái hợp nhé!", "Pick every one that fits!"], ["Có nhiều hơn một cái đó, em tìm nha!", "More than one fits, find them!"]],
+    memory: [["Lật hai thẻ tìm đôi giống nhau nhé!", "Flip two cards to find a pair!"], ["Em nhớ vị trí rồi ghép đôi nha!", "Remember where they are and pair up!"]],
+    numline: [["Em kéo thuyền tới đúng số nhé!", "Slide the boat to the right number!"]],
     clock: [["Đồng hồ chỉ mấy giờ nhỉ?", "What time does the clock show?"]],
-    dictate: [["Bé nghe rồi viết lại giúp mình nhé!", "Listen and write it for me!"]],
-    write: [["Bé viết vào cuốn sổ của mình nhé!", "Write in my little book!"]],
-    speak: [["Bé đọc to cho mình nghe nhé!", "Read it out loud for me!"]],
-    trace: [["Bé tô theo nét mờ nhé!", "Trace the faint lines!"]],
-    tf: [["Bé xem đúng hay chưa đúng nhé!", "Is it right or not yet?"]],
-    dragfill: [["Bé đưa thẻ vào chỗ trống nhé!", "Bring the card to the empty spot!"]],
-    find: [["Bé tìm giúp mình trong tranh nhé!", "Find it in the picture!"]]
+    dictate: [["Em nghe rồi viết lại giúp mình nhé!", "Listen and write it for me!"]],
+    write: [["Em viết vào cuốn sổ của mình nhé!", "Write in my little book!"]],
+    speak: [["Em đọc to cho mình nghe nhé!", "Read it out loud for me!"]],
+    trace: [["Em tô theo nét mờ nhé!", "Trace the faint lines!"]],
+    tf: [["Em xem đúng hay chưa đúng nhé!", "Is it right or not yet?"]],
+    dragfill: [["Em đưa thẻ vào chỗ trống nhé!", "Bring the card to the empty spot!"]],
+    find: [["Em tìm giúp mình trong tranh nhé!", "Find it in the picture!"]]
   };
-  var GOOD = [["Đúng rồi! Giỏi quá!", "Yes! Well done!"], ["Hoan hô! Bé làm được rồi!", "Hooray! You did it!"], ["Tuyệt vời! Cảm ơn bé!", "Great! Thank you!"], ["Chính xác! Mình reo lên nè!", "Exactly! I am so happy!"]];
-  var OOPS = [["Chưa phải rồi, mình thử cách khác nhé!", "Not that one, let us try another way!"], ["Hmm, mình nhìn kỹ lại một chút nhé!", "Hmm, let us look again!"], ["Gần tới rồi, bé thử lại nha!", "Almost there, try again!"]];
-  var SHOW = [["Mình chỉ cho bé nè, nhìn vật đang sáng nhé!", "Look, the glowing one is for you!"]];
+  var GOOD = [["Đúng rồi! Giỏi quá!", "Yes! Well done!"], ["Hoan hô! Em làm được rồi!", "Hooray! You did it!"], ["Tuyệt vời! Cảm ơn em!", "Great! Thank you!"], ["Chính xác! Mình reo lên nè!", "Exactly! I am so happy!"]];
+  var OOPS = [["Chưa phải rồi, mình thử cách khác nhé!", "Not that one, let us try another way!"], ["Hmm, mình nhìn kỹ lại một chút nhé!", "Hmm, let us look again!"], ["Gần tới rồi, em thử lại nha!", "Almost there, try again!"]];
+  var SHOW = [["Mình chỉ cho em nè, nhìn vật đang sáng nhé!", "Look, the glowing one is for you!"]];
   var ICON = {
     back: '<path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="3.400" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
     next: '<path d="M5 12h13M12.500 6l6 6-6 6" stroke="currentColor" stroke-width="3.200" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
@@ -304,13 +305,14 @@
 
 ;
 /* ---- scene/js/voice.js ---- */
-/* Cảnh truyện: giọng đọc. Tự đọc lời nhân vật (theo cài đặt chung learn:auto, tắt khi âm thanh đã tắt); nút loa đọc lại / dừng. Dùng Voice của learn/voice.js. */
+/* Cảnh truyện: giọng đọc. Tự đọc lời nhân vật (theo cài đặt learn:auto; không phụ thuộc nút tắt nhạc/hiệu ứng); nút loa đọc lại / dừng. Dùng Voice của learn/voice.js. */
 (function (root) {
   "use strict";
   var K = root.StoryCore, cur = "", curOpt = null, btn = null, poll = 0, touched = false;
-  function auto() { var a; try { a = localStorage.getItem("learn:auto"); } catch (e) {} return a !== "0" && !muted(); }
+  function auto() { var a; try { a = localStorage.getItem("learn:auto"); } catch (e) {} return a !== "0"; }   /* lời đọc chỉ phụ thuộc cài đặt đọc (learn:auto, em chọn ở màn bật loa) — KHÔNG theo cờ tắt nhạc/hiệu ứng dùng chung (np-sound, learn:music): trước đây tắt nhạc ở nơi khác là truyện im hẳn, không báo gì */
   function muted() { try { return !!(root.StorySfx && root.StorySfx.muted && root.StorySfx.muted()); } catch (e) { return false; } }
-  function mark(on) { if (!btn) return; btn.classList.toggle("on", on); btn.setAttribute("aria-pressed", String(on));
+  function mark(on) { var sc = document.getElementById("sc"); if (sc) sc.classList.toggle("speaking", !!on);   /* linh vật nhún + sóng âm khi đang đọc */
+    if (!btn) return; btn.classList.toggle("on", on); btn.setAttribute("aria-pressed", String(on));
     btn.setAttribute("aria-label", on ? root.SceneT.T.stopListen : root.SceneT.T.listen); }
   function stop() { clearInterval(poll); mark(false); try { if (root.Voice) root.Voice.stop(); } catch (e) {} }
   /* WEB IM LẶNG: máy không có giọng ("novoice") → báo ba mẹ; trình duyệt chặn tự phát khi chưa chạm ("blocked"/lỗi khác) → nhớ câu, nhắc "chạm để nghe" và đọc ngay ở cú chạm đầu tiên. */
@@ -1123,14 +1125,14 @@
 ;
 /* ---- scene/js/test-flow.js ---- */
 /* Cảnh THỬ THÁCH (điểm "test" và nhánh băng-qua-thử): 5 câu từ LearnEngine/LearnTypes như trang kiểm tra cũ, mỗi câu là MỘT TÌNH HUỐNG TRUYỆN (nhân vật nhờ, đáp án là vật trên tranh).
-   Ghi tiến độ đúng như trang cũ: E.record (kỹ năng), Habit.note, Farm.recordRound, LearnPath.markTested + complete. Bé không thấy số câu: tiến độ là chuỗi đèn lồng sáng dần.
+   Ghi tiến độ đúng như trang cũ: E.record (kỹ năng), Habit.note, Farm.recordRound, LearnPath.markTested + complete. Em không thấy số câu: tiến độ là chuỗi đèn lồng sáng dần.
    Kiểu câu → bộ dựng: SceneTestKinds[kind](c) (kinds-test-*.js); kiểu chưa có thì dùng "chọn vật" (fallback). */
 (function (root) {
   "use strict";
   var K = root.StoryCore, U = root.SceneU, X = root.SceneFx, S = root.SceneT, F = root.SceneFrame, V = root.SceneVoice, E = root.LearnEngine, P = K.P;
   var R = root.SceneTestKinds = root.SceneTestKinds || {};
   function askGroup(k) { return S.ASK[k] ? k : "mc"; }
-  function stemHtml(q) { return String(q).replace(/<button[^>]*class="lsn"[^>]*>[\s\S]*?<\/button>/g, "").replace(/(<br\s*\/?>\s*)+$/i, ""); }
+  function stemHtml(q) { return String(q).replace(/<button[^>]*class="lsn"[^>]*>[\s\S]*?<\/button>/g, "").replace(/^(\s*<br\s*\/?>)+\s*/i, "").replace(/(<br\s*\/?>\s*)+$/i, ""); }   /* bỏ <br> thừa ở đầu (sau khi gỡ nút loa cũ) và ở cuối: không còn dòng trống đẩy chữ xuống thấp */
   function run(g) {
     var lang = K.lang, bank, cur = 0, tries = 0, stars = 0, streak = 0, best = 0, wrongTags = {}, locked = false, running = true, timer = 0;
     try { bank = root.SceneBank.build(g.subj, g.grade, lang, g.topic.id); } catch (e) { console.error(e); bank = []; }
@@ -1230,7 +1232,7 @@
     layout(g, "stop-learn", chips, acts); X.burst(F.play, 14);
     /* nút tiếp to giữa đáy: đi TIẾP luôn (không phải chọn): có thử thách thì vào thử thách; không có thì sang truyện kế / về bản đồ */
     var to = g.hasT ? g.testUrl : (g.nextUrl || g.mapUrl); F.next(true, function () { StoryNav.go(to); }, g.hasT ? "flag" : (g.nextUrl ? "sail" : "map"));
-    F.say(L("Khám phá xong rồi! Bé thật giỏi!" + (g.hasT ? " Giờ mình tới thử thách nhé." : ""), "Exploring is done! Well done!" + (g.hasT ? " Now to the challenge." : "")), { emote: "cheer" });
+    F.say(L("Khám phá xong rồi! Em thật giỏi!" + (g.hasT ? " Giờ mình tới thử thách nhé." : ""), "Exploring is done! Well done!" + (g.hasT ? " Now to the challenge." : "")), { emote: "cheer" });
   }
   function test(g, r) {
     F.clear(); var pass = r.stars >= 3, chips = [], vi = K.lang !== "en", acts = [];
@@ -1244,7 +1246,7 @@
       F.say(K.tx(g.story.end), { emote: "cheer" });
     } else {
       F.emote("happy", 2500); if (g.hasL) acts.push(act("step", S.T.explore, g.learnUrl)); acts.push(act("retry", S.T.again, g.testUrl, true)); acts.push(act("map", S.T.map, g.mapUrl, true));
-      F.say(L("Mình gần tới rồi! Bé thử đi lại đường khám phá, rồi mình cùng thử tiếp nhé.", "We are almost there! Let us walk the explore path again, then try once more."), { emote: "happy" });
+      F.say(L("Mình gần tới rồi! Em thử đi lại đường khám phá, rồi mình cùng thử tiếp nhé.", "We are almost there! Let us walk the explore path again, then try once more."), { emote: "happy" });
     }
     layout(g, pass ? "stop-end" : "stop-test", chips, acts, r.stars); if (pass) X.burst(F.play, 16);
     if (pass) F.next(true, function () { StoryNav.go(g.nextUrl || g.mapUrl); }, g.nextUrl ? "sail" : "map");

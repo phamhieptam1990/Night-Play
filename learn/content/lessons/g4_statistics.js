@@ -62,7 +62,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Trung bình cộng = tổng chia số số hạng",
         "Cột cao nhất là số lớn nhất",

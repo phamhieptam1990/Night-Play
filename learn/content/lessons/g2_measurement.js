@@ -62,7 +62,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "1 m = 100 cm, 1 kg = 1000 g",
         "Kim ngắn chỉ giờ, kim dài chỉ phút",

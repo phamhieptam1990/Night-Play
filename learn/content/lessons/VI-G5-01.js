@@ -62,7 +62,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Tìm ý chính từng đoạn rồi nêu chủ đề",
         "Thành ngữ có nghĩa bóng",

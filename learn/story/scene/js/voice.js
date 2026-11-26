@@ -1,10 +1,11 @@
-/* Cảnh truyện: giọng đọc. Tự đọc lời nhân vật (theo cài đặt chung learn:auto, tắt khi âm thanh đã tắt); nút loa đọc lại / dừng. Dùng Voice của learn/voice.js. */
+/* Cảnh truyện: giọng đọc. Tự đọc lời nhân vật (theo cài đặt learn:auto; không phụ thuộc nút tắt nhạc/hiệu ứng); nút loa đọc lại / dừng. Dùng Voice của learn/voice.js. */
 (function (root) {
   "use strict";
   var K = root.StoryCore, cur = "", curOpt = null, btn = null, poll = 0, touched = false;
-  function auto() { var a; try { a = localStorage.getItem("learn:auto"); } catch (e) {} return a !== "0" && !muted(); }
+  function auto() { var a; try { a = localStorage.getItem("learn:auto"); } catch (e) {} return a !== "0"; }   /* lời đọc chỉ phụ thuộc cài đặt đọc (learn:auto, em chọn ở màn bật loa) — KHÔNG theo cờ tắt nhạc/hiệu ứng dùng chung (np-sound, learn:music): trước đây tắt nhạc ở nơi khác là truyện im hẳn, không báo gì */
   function muted() { try { return !!(root.StorySfx && root.StorySfx.muted && root.StorySfx.muted()); } catch (e) { return false; } }
-  function mark(on) { if (!btn) return; btn.classList.toggle("on", on); btn.setAttribute("aria-pressed", String(on));
+  function mark(on) { var sc = document.getElementById("sc"); if (sc) sc.classList.toggle("speaking", !!on);   /* linh vật nhún + sóng âm khi đang đọc */
+    if (!btn) return; btn.classList.toggle("on", on); btn.setAttribute("aria-pressed", String(on));
     btn.setAttribute("aria-label", on ? root.SceneT.T.stopListen : root.SceneT.T.listen); }
   function stop() { clearInterval(poll); mark(false); try { if (root.Voice) root.Voice.stop(); } catch (e) {} }
   /* WEB IM LẶNG: máy không có giọng ("novoice") → báo ba mẹ; trình duyệt chặn tự phát khi chưa chạm ("blocked"/lỗi khác) → nhớ câu, nhắc "chạm để nghe" và đọc ngay ở cú chạm đầu tiên. */

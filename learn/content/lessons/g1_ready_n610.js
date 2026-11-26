@@ -85,7 +85,7 @@ window.LearnLessons.reg({
   {
    "k": "game",
    "t": "Nghe tên rồi chạm vào đúng bạn nhé!",
-   "done": "Giỏi quá! Bé nhận ra các bạn rồi!",
+   "done": "Giỏi quá! Em nhận ra các bạn rồi!",
    "rounds": [
     {
      "say": "Bạn số sáu đâu nào?",
@@ -166,7 +166,7 @@ window.LearnLessons.reg({
   {
    "k": "game",
    "t": "Nghe tên rồi chạm vào đúng bạn nhé!",
-   "done": "Giỏi quá! Bé nhận ra các bạn rồi!",
+   "done": "Giỏi quá! Em nhận ra các bạn rồi!",
    "rounds": [
     {
      "say": "Bạn số chín đâu nào?",
@@ -274,7 +274,7 @@ window.LearnLessons.reg({
   },
   {
    "k": "sum",
-   "t": "Bé nhớ nhé!",
+   "t": "Em nhớ nhé!",
    "pts": [
     "Mỗi số là một bạn có tên riêng",
     "Đếm đồ vật để biết là số mấy",

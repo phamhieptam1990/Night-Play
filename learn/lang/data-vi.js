@@ -31,7 +31,7 @@
        Mỗi mục = [chữ cần điền, phần còn lại của từ, câu ngữ cảnh có "__"]; CÂU NGỮ CẢNH bắt buộc để chỉ có MỘT cách điền hợp nghĩa
        (không có câu thì "ngọt/gọt", "nghe/ghe" đều là từ có thật). */
     D.nghItems = [
-      ["ng", "ã", "Em bị __ã đau chân."], ["ng", "ày", "Hôm nay là __ày thứ Hai."], ["ng", "ủ", "Bé __ủ trưa trên giường."], ["ng", "ô",
+      ["ng", "ã", "Em bị __ã đau chân."], ["ng", "ày", "Hôm nay là __ày thứ Hai."], ["ng", "ủ", "Em __ủ trưa trên giường."], ["ng", "ô",
           "Mẹ luộc bắp __ô cho em."], ["ng", "on",
           "Bát canh này rất __on."], ["ng", "ọt", "Quả cam này rất __ọt."],
       ["ng", "ựa", "Con __ựa chạy rất nhanh."], ["ng", "ười", "Cô giáo là một __ười tốt."], ["ng", "ón", "Em có mười __ón tay."], ["ng", "õ",
@@ -39,7 +39,7 @@
           "Con __ỗng bơi trên ao."], ["ng", "ang", "Em đi __ang qua sân trường."], ["ng", "ôi", "Em ở trong một __ôi nhà nhỏ."],
       ["ngh", "e", "Em __e cô giảng bài."], ["ngh", "é", "Con __é đang ăn cỏ."], ["ngh", "ỉ", "Giờ ra chơi em được __ỉ."], ["ngh", "ĩ",
           "Em __ĩ ra cách giải bài toán."], ["ngh", "ề",
-          "Bố em làm __ề nông."], ["ngh", "ệ", "Bà dùng củ __ệ nấu ăn."], ["ngh", "iêng", "Cây cột bị __iêng."], ["ngh", "ịch", "Bé hay __ịch ngợm."],
+          "Bố em làm __ề nông."], ["ngh", "ệ", "Bà dùng củ __ệ nấu ăn."], ["ngh", "iêng", "Cây cột bị __iêng."], ["ngh", "ịch", "Em hay __ịch ngợm."],
       ["g", "à", "Con __à gáy ò ó o."], ["g", "ỗ", "Cái bàn làm bằng __ỗ."], ["g", "ạo", "Mẹ nấu cơm bằng __ạo."], ["g", "ấu", "Con __ấu thích ăn mật ong."], ["g", "ốc",
           "Chim đậu trên __ốc cây."], ["g", "ạch", "Ngôi nhà xây bằng __ạch."], ["g", "ối", "Em ôm __ối ngủ."], ["g", "ửi", "Em __ửi thư cho bà."],
               ["g", "ần", "Nhà em ở __ần trường."],
@@ -72,7 +72,7 @@
     D.traits = ["đẹp", "cao", "to", "nhỏ", "xanh", "nhanh", "chậm", "thơm", "ngọt", "sạch", "dài", "ngắn", "nóng", "lạnh", "đỏ", "tròn"];
     /* câu: k = kể, h = hỏi, c = cảm, y = khiến */
     D.sentences = [
-      ["Bé đi học", "k"], ["Mẹ nấu cơm", "k"], ["Trời hôm nay nắng đẹp", "k"], ["Con mèo nằm trên ghế", "k"], ["Em đang đọc sách", "k"],
+      ["Em đi học", "k"], ["Mẹ nấu cơm", "k"], ["Trời hôm nay nắng đẹp", "k"], ["Con mèo nằm trên ghế", "k"], ["Em đang đọc sách", "k"],
           ["Bố đi làm về", "k"], ["Chim hót trên cành cây", "k"],
       ["Bạn tên là gì", "h"], ["Con đang làm gì đấy", "h"], ["Mẹ đi đâu rồi", "h"], ["Sao bạn lại buồn", "h"], ["Bạn có thích đá bóng không", "h"],
           ["Ai đang gõ cửa vậy", "h"],
@@ -91,7 +91,7 @@
         "hoa cúc và hoa lan"], ["Sáng nay",
         "trời có nắng"], ["Em thích đọc truyện", "xem phim hoạt hình và chơi cờ"]];
     D.synonyms = [
-      { w: "to", s: ["lớn"], d: ["nhỏ", "thấp", "chậm", "ngắn"] }, { w: "xinh", s: ["đẹp"], d: ["xấu", "già", "nhỏ", "buồn"] }, { w: "nhỏ", s: ["bé"],
+      { w: "to", s: ["lớn"], d: ["nhỏ", "thấp", "chậm", "ngắn"] }, { w: "xinh", s: ["đẹp"], d: ["xấu", "già", "nhỏ", "buồn"] }, { w: "nhỏ", s: ["em"],
           d: ["to", "cao", "dài", "nặng"] },
       { w: "học sinh", s: ["học trò"], d: ["giáo viên", "bác sĩ", "thợ may", "ca sĩ"] }, { w: "mẹ", s: ["má"], d: ["bố", "anh", "chị", "cô"] }, { w:
           "bố", s: ["ba", "cha"], d: ["mẹ", "anh", "chị", "em"] },
@@ -154,8 +154,8 @@
     ];
     /* VIẾT ĐOẠN NGẮN (lớp 2): câu viết đúng (hoa đầu câu + chấm cuối câu), câu lạc đề trong đoạn.
        paraOdd: on = các câu CÙNG chủ đề; lạc đề lấy từ chủ đề khác (không bao giờ nói về chủ đề đang hỏi). */
-    D.writeSent = ["Em đi học.", "Mẹ nấu cơm.", "Con mèo ngủ trên ghế.", "Bé tưới cây trong vườn.", "Trời hôm nay rất đẹp.", "Bố đưa em đến trường.",
-        "Lan đọc sách ở nhà.", "Chim hót trên cành cây.", "Em giúp mẹ quét nhà.", "Bà kể chuyện cho bé."];
+    D.writeSent = ["Em đi học.", "Mẹ nấu cơm.", "Con mèo ngủ trên ghế.", "Em tưới cây trong vườn.", "Trời hôm nay rất đẹp.", "Bố đưa em đến trường.",
+        "Lan đọc sách ở nhà.", "Chim hót trên cành cây.", "Em giúp mẹ quét nhà.", "Bà kể chuyện cho em."];
     D.paraOdd = [
       { topic: "con mèo", on: ["Con mèo có bộ lông mềm.", "Mèo thích bắt chuột.", "Mắt mèo sáng long lanh.", "Mèo nằm ngủ trên ghế."] },
       { topic: "trường em", on: ["Trường em có sân rộng.", "Lớp em học ở tầng hai.", "Cô giáo dạy em đọc.", "Em học cùng các bạn."] },

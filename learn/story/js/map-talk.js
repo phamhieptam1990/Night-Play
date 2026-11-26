@@ -1,5 +1,5 @@
-/* Bản đồ truyện: LINH VẬT PHÓNG TO đọc lời kể lúc vào trang (bóng thoại trên đầu, chữ hiện từng từ), xong thu nhỏ về góc rồi biến mất để bé xem bản đồ.
-   Chỉ hiện MỘT lần mỗi lần mở trang (panel.js gọi ở lần đặt lời đầu tiên). Tự đọc nếu bé chưa tắt tiếng; trình duyệt chặn tự phát thì vẫn hiện chữ theo nhịp. Chạm để bỏ qua.
+/* Bản đồ truyện: LINH VẬT PHÓNG TO đọc lời kể lúc vào trang (bóng thoại trên đầu, chữ hiện từng từ), xong thu nhỏ về góc rồi biến mất để em xem bản đồ.
+   Chỉ hiện MỘT lần mỗi lần mở trang (panel.js gọi ở lần đặt lời đầu tiên). Tự đọc nếu em chưa tắt tiếng; trình duyệt chặn tự phát thì vẫn hiện chữ theo nhịp. Chạm để bỏ qua.
    StoryTalk.show(tiêuĐề, lời) */
 (function (root) {
   "use strict";
@@ -11,7 +11,7 @@
   }
   function show(title, text) {
     if (!text || !document.body) return false;
-    if (root.StoryGate && root.StoryGate.isOpen()) { root.StoryGate.onClose(function () { show(title, text); }); return true; }   /* chờ bé bật loa xong rồi linh vật mới phóng to đọc*/
+    if (root.StoryGate && root.StoryGate.isOpen()) { root.StoryGate.onClose(function () { show(title, text); }); return true; }   /* chờ em bật loa xong rồi linh vật mới phóng to đọc*/
     var same = root.__storyTalked === text; root.__storyTalked = text; shown = true;
     if (!same && el) { clearTimeout(t1); clearInterval(wt); if (el.parentNode) el.parentNode.removeChild(el); el = null; }   /* điểm khác: thay bằng lời mới ngay */
     if (same) return false;   /* cùng câu vừa đọc ở màn trước (bản đồ lớp → bản đồ chủ đề): không phóng to và đọc lại */

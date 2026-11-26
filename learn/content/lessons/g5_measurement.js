@@ -8,7 +8,7 @@ window.LearnLessons.reg({
   "screens": [
     {
       "k": "say",
-      "t": "Đổi đơn vị: 1 m² = 100 dm². Đi lên đơn vị lớn thì chia, xuống đơn vị bé thì nhân.",
+      "t": "Đổi đơn vị: 1 m² = 100 dm². Đi lên đơn vị lớn thì chia, xuống đơn vị em thì nhân.",
       "art": "2,9 m² = 290 dm²"
     },
     {
@@ -62,7 +62,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Vận tốc v = s ÷ t",
         "Quãng đường s = v × t, thời gian t = s ÷ v",

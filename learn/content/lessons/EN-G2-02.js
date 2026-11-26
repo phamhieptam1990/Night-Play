@@ -23,7 +23,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "choose",
-      "t": "Ai đó nói \"Hello!\". Bé đáp lại?",
+      "t": "Ai đó nói \"Hello!\". Em đáp lại?",
       "opts": [
         "Hello!",
         "Thank you",
@@ -64,7 +64,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Hello là xin chào, Goodbye là tạm biệt",
         "How are you? — I am fine, thank you",
@@ -100,7 +100,7 @@ window.LearnLessons.reg({
       "optlang": "en"
     },
     {
-      "q": "\"What is your name?\" Bé trả lời?",
+      "q": "\"What is your name?\" Em trả lời?",
       "opts": [
         "I am fine.",
         "Goodbye.",

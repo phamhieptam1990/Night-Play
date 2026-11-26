@@ -49,7 +49,7 @@ window.LearnLessons.reg({
       "k": "choose",
       "t": "Câu nào nói về con mèo?",
       "opts": [
-        "Bé đi học.",
+        "Em đi học.",
         "Mẹ nấu cơm.",
         "Con mèo ngủ trên ghế."
       ],
@@ -59,7 +59,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Đầu câu viết hoa",
         "Cuối câu kể có dấu chấm"

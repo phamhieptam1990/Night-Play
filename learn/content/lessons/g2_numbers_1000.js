@@ -62,7 +62,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Số có ba chữ số có hàng trăm, chục, đơn vị",
         "Đơn vị từ 5 trở lên thì làm tròn lên chục",

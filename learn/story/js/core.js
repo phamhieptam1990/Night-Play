@@ -1,6 +1,6 @@
 /* Lõi Lớp truyện: tham số trang, ngôn ngữ, chuỗi giao diện vi/en, đọc truyện (data + mặc định), cờ quay về, nhớ bước đi của linh vật.
    Tiến độ học KHÔNG lưu ở đây: dùng chung với lớp truyền thống qua LearnPath. Chỉ có 2 khoá riêng, chỉ chứa mã chủ đề:
-     learn:story:seen = { <chủ đề>: 1 } bé đã nghe lời mở đầu ; learn:story:at = { <chủ đề>: <điểm dừng> } nơi linh vật đứng lần trước. */
+     learn:story:seen = { <chủ đề>: 1 } em đã nghe lời mở đầu ; learn:story:at = { <chủ đề>: <điểm dừng> } nơi linh vật đứng lần trước. */
 (function (root) {
   "use strict";
   var P = root.LearnPath, q = new URLSearchParams(location.search);
@@ -24,9 +24,9 @@
     goStart: L("Khởi hành", "Set off"), goLearn: L("Khám phá", "Explore"), goTest: L("Thử thách", "Challenge"), goExam: L("Băng qua thử", "Dash across"),
     goPlay: L("Chơi", "Play"), goHome: L("Bản đồ lớp", "Class map"), goNext: L("Chủ đề tiếp", "Next topic"), goRetry: L("Thử lại", "Try again"),
     notYet: L("Chưa tới đây nè. Mình đi từng bước nhé!", "Not here yet. One step at a time!"),
-    locked: L("Chủ đề này sẽ mở khi bé xong chủ đề trước nhé.", "This opens after you finish the topic before it."),
+    locked: L("Chủ đề này sẽ mở khi em xong chủ đề trước nhé.", "This opens after you finish the topic before it."),
     retry: L("Chưa tới nơi cũng không sao! Mình đi từng bước rồi thử lại nhé.", "No worries! Let us go step by step, then try again."),
-    here: L("Bé đang ở đây", "You are here"), speak: L("Nghe kể", "Listen"), stopSpeak: L("Dừng đọc", "Stop")
+    here: L("Em đang ở đây", "You are here"), speak: L("Nghe kể", "Listen"), stopSpeak: L("Dừng đọc", "Stop")
   };
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   function tx(o) { return o ? (o[lang] || o.vi || "") : ""; }
@@ -58,7 +58,7 @@
     mapUrl: function (g, s, id) { return "map.html?" + q2({ grade: g, subj: s, topic: id }); },
     learnUrl: function (g, s, id) { return "scene.html?" + q2({ grade: g, subj: s, topic: id, step: "learn" }); },
     testUrl: function (g, s, id) { return "scene.html?" + q2({ grade: g, subj: s, topic: id, step: "test" }); },
-    /* cờ "bé đi từ lớp truyện": trang bài học và trang kiểm tra đọc cờ này để ← về lại bản đồ truyện */
+    /* cờ "em đi từ lớp truyện": trang bài học và trang kiểm tra đọc cờ này để ← về lại bản đồ truyện */
     leave: function () { try { sessionStorage.setItem("learn:from", "story"); sessionStorage.setItem("learn:from:url", location.pathname + location.search); } catch (e) {} },
     clearFlag: function () { try { sessionStorage.removeItem("learn:from"); sessionStorage.removeItem("learn:from:url"); } catch (e) {} },
     seen: function (id) { return !!obj("learn:story:seen")[id]; },

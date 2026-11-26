@@ -65,7 +65,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "a trước phụ âm, an trước nguyên âm",
         "He/She/It: động từ thêm s hoặc es",

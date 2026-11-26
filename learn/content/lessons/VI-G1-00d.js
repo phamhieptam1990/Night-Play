@@ -99,7 +99,7 @@ window.LearnLessons.reg({
   {
    "k": "game",
    "t": "Nghe tên rồi chạm vào đúng bạn nhé!",
-   "done": "Giỏi quá! Bé nhận ra các bạn rồi!",
+   "done": "Giỏi quá! Em nhận ra các bạn rồi!",
    "rounds": [
     {
      "say": "Bạn a hoa đâu nào?",
@@ -133,7 +133,7 @@ window.LearnLessons.reg({
   {
    "k": "game",
    "t": "Nghe tên rồi chạm vào đúng bạn nhé!",
-   "done": "Giỏi quá! Bé nhận ra các bạn rồi!",
+   "done": "Giỏi quá! Em nhận ra các bạn rồi!",
    "rounds": [
     {
      "say": "Bạn bờ hoa đâu nào?",
@@ -167,7 +167,7 @@ window.LearnLessons.reg({
   {
    "k": "game",
    "t": "Bạn nào cầm đồ vật này? Chạm vào nhé!",
-   "done": "Giỏi quá! Bé nhớ mặt các bạn rồi!",
+   "done": "Giỏi quá! Em nhớ mặt các bạn rồi!",
    "rounds": [
     {
      "say": "Bạn nào cầm cái lều?",
@@ -230,7 +230,7 @@ window.LearnLessons.reg({
   {
    "k": "game",
    "t": "Chữ hoa to hơn chữ thường. Chạm vào chữ hoa nhé!",
-   "done": "Giỏi quá! Bé biết chữ hoa rồi!",
+   "done": "Giỏi quá! Em biết chữ hoa rồi!",
    "rounds": [
     {
      "say": "Chữ nào là chữ hoa?",
@@ -268,7 +268,7 @@ window.LearnLessons.reg({
   },
   {
    "k": "sum",
-   "t": "Bé nhớ nhé!",
+   "t": "Em nhớ nhé!",
    "pts": [
     "Chữ hoa to hơn chữ thường",
     "Tên người và đầu câu viết bằng chữ hoa",

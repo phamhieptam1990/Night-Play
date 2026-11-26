@@ -62,7 +62,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Chọn từ đồng nghĩa, trái nghĩa hợp ngữ cảnh",
         "Dùng đúng dấu câu",

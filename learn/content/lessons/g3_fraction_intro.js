@@ -62,11 +62,11 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Mẫu: chia mấy phần. Tử: lấy mấy phần",
         "1/b của một số: chia số đó cho b",
-        "Cùng tử số, mẫu càng bé thì phân số càng lớn"
+        "Cùng tử số, mẫu càng em thì phân số càng lớn"
       ]
     }
   ],
@@ -91,7 +91,7 @@ window.LearnLessons.reg({
         "1/3"
       ],
       "ok": 1,
-      "hint": "Cùng tử 1: mẫu càng bé, mỗi phần càng to.",
+      "hint": "Cùng tử 1: mẫu càng em, mỗi phần càng to.",
       "yes": "Đúng! Chia ít phần thì mỗi phần to hơn.",
       "art": "1/2  1/3  1/4"
     },

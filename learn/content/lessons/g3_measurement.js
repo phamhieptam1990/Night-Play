@@ -62,7 +62,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Diện tích chữ nhật = dài × rộng",
         "1 km = 1000 m, 1 giờ = 60 phút",

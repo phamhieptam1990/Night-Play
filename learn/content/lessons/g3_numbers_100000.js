@@ -18,7 +18,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "say",
-      "t": "I = 1, V = 5, X = 10. Số bé đứng SAU thì cộng (XI = 11), đứng TRƯỚC thì trừ.",
+      "t": "I = 1, V = 5, X = 10. Số em đứng SAU thì cộng (XI = 11), đứng TRƯỚC thì trừ.",
       "art": "XI = 10 + 1 = 11\nIX = 10 − 1 = 9"
     },
     {
@@ -62,7 +62,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "Đọc số theo hàng: chục nghìn, nghìn, trăm...",
         "Làm tròn: nhìn chữ số ở hàng kề bên phải",

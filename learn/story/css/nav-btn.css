@@ -14,3 +14,9 @@ body .spkb.on svg{filter:none}
 @keyframes spkOn{50%{box-shadow:0 0 0 9px rgba(255,194,26,.18),0 4px 0 rgba(0,0,0,.18),0 8px 18px rgba(0,0,0,.3)}}
 @media (prefers-reduced-motion:reduce){body .spkb.on{animation:none}}
 body .ib:active,body .spkb:active{transform:translateY(2px) scale(.96)}
+/* nút loa trong thẻ câu hỏi: cùng bộ màu với loa ở thanh trên (nghỉ = gradient theo môn + biểu tượng trắng; đang đọc = trắng + cam + vòng vàng) */
+body .qspk{color:#fff;border:3px solid #fff;background:radial-gradient(120% 90% at 30% 18%,rgba(255,255,255,.5) 0,transparent 46%),linear-gradient(150deg,var(--nb1),var(--nb2));
+  box-shadow:0 3px 0 rgba(0,0,0,.22),0 6px 12px rgba(0,0,0,.25)}
+body .qspk svg{filter:drop-shadow(0 2px 0 rgba(0,0,0,.3))}
+body .qspk.on{background:#fff;color:#e8590c;border-color:#ffc21a;box-shadow:0 0 0 4px rgba(255,194,26,.55),0 3px 0 rgba(0,0,0,.18);animation:spkOn 1s ease-in-out infinite}
+body .qspk.on svg{filter:none}

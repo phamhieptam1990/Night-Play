@@ -1,4 +1,4 @@
-/* Cảnh truyện: chuỗi giao diện vi/en và biểu tượng SVG (nút không có chữ). Tuyệt đối KHÔNG có chữ học/bài/kiểm tra/thi/quiz/test/Sai trong giao diện bé thấy
+/* Cảnh truyện: chuỗi giao diện vi/en và biểu tượng SVG (nút không có chữ). Tuyệt đối KHÔNG có chữ học/bài/kiểm tra/thi/quiz/test/Sai trong giao diện em thấy
    (scripts/learn/check-story.js quét tệp này). Lời của truyện (title, learn, test, end) lấy từ learn/story/data/*, nội dung câu hỏi lấy từ engine. */
 (function (root) {
   "use strict";
@@ -16,27 +16,27 @@
   };
   /* lời nhân vật theo tình huống: {k: [vi, en]}; chọn ngẫu nhiên theo chỉ số */
   var ASK = {
-    mc: [["Giúp mình chọn nhé!", "Help me choose!"], ["Bé chạm vào đáp án hợp nhé!", "Tap the one that fits!"], ["Mình cần bé giúp một tay!", "I need your help!"]],
-    count: [["Bé đếm giúp mình nhé!", "Count them for me!"], ["Chạm từng món để đếm nha!", "Tap each one to count!"]],
-    typein: [["Bé viết con số vào bảng nhé!", "Write the number on the board!"], ["Số nào đây nhỉ? Bé gõ giúp mình!", "Which number? Type it for me!"]],
-    order: [["Bé xếp giúp mình theo thứ tự nhé!", "Put them in order for me!"], ["Chạm lần lượt để xếp nha!", "Tap one by one to line up!"]],
+    mc: [["Giúp mình chọn nhé!", "Help me choose!"], ["Em chạm vào đáp án hợp nhé!", "Tap the one that fits!"], ["Mình cần em giúp một tay!", "I need your help!"]],
+    count: [["Em đếm giúp mình nhé!", "Count them for me!"], ["Chạm từng món để đếm nha!", "Tap each one to count!"]],
+    typein: [["Em viết con số vào bảng nhé!", "Write the number on the board!"], ["Số nào đây nhỉ? Em gõ giúp mình!", "Which number? Type it for me!"]],
+    order: [["Em xếp giúp mình theo thứ tự nhé!", "Put them in order for me!"], ["Chạm lần lượt để xếp nha!", "Tap one by one to line up!"]],
     match: [["Ghép giúp mình từng đôi nhé!", "Match them in pairs!"], ["Chạm một bên rồi chạm bên kia nha!", "Tap one side, then the other!"]],
-    sort: [["Bé cất giúp mình vào đúng rổ nhé!", "Put each one in the right basket!"], ["Chọn một thẻ rồi chạm rổ nha!", "Pick a card, then tap a basket!"]],
-    multi: [["Chọn tất cả những cái hợp nhé!", "Pick every one that fits!"], ["Có nhiều hơn một cái đó, bé tìm nha!", "More than one fits, find them!"]],
-    memory: [["Lật hai thẻ tìm đôi giống nhau nhé!", "Flip two cards to find a pair!"], ["Bé nhớ vị trí rồi ghép đôi nha!", "Remember where they are and pair up!"]],
-    numline: [["Bé kéo thuyền tới đúng số nhé!", "Slide the boat to the right number!"]],
+    sort: [["Em cất giúp mình vào đúng rổ nhé!", "Put each one in the right basket!"], ["Chọn một thẻ rồi chạm rổ nha!", "Pick a card, then tap a basket!"]],
+    multi: [["Chọn tất cả những cái hợp nhé!", "Pick every one that fits!"], ["Có nhiều hơn một cái đó, em tìm nha!", "More than one fits, find them!"]],
+    memory: [["Lật hai thẻ tìm đôi giống nhau nhé!", "Flip two cards to find a pair!"], ["Em nhớ vị trí rồi ghép đôi nha!", "Remember where they are and pair up!"]],
+    numline: [["Em kéo thuyền tới đúng số nhé!", "Slide the boat to the right number!"]],
     clock: [["Đồng hồ chỉ mấy giờ nhỉ?", "What time does the clock show?"]],
-    dictate: [["Bé nghe rồi viết lại giúp mình nhé!", "Listen and write it for me!"]],
-    write: [["Bé viết vào cuốn sổ của mình nhé!", "Write in my little book!"]],
-    speak: [["Bé đọc to cho mình nghe nhé!", "Read it out loud for me!"]],
-    trace: [["Bé tô theo nét mờ nhé!", "Trace the faint lines!"]],
-    tf: [["Bé xem đúng hay chưa đúng nhé!", "Is it right or not yet?"]],
-    dragfill: [["Bé đưa thẻ vào chỗ trống nhé!", "Bring the card to the empty spot!"]],
-    find: [["Bé tìm giúp mình trong tranh nhé!", "Find it in the picture!"]]
+    dictate: [["Em nghe rồi viết lại giúp mình nhé!", "Listen and write it for me!"]],
+    write: [["Em viết vào cuốn sổ của mình nhé!", "Write in my little book!"]],
+    speak: [["Em đọc to cho mình nghe nhé!", "Read it out loud for me!"]],
+    trace: [["Em tô theo nét mờ nhé!", "Trace the faint lines!"]],
+    tf: [["Em xem đúng hay chưa đúng nhé!", "Is it right or not yet?"]],
+    dragfill: [["Em đưa thẻ vào chỗ trống nhé!", "Bring the card to the empty spot!"]],
+    find: [["Em tìm giúp mình trong tranh nhé!", "Find it in the picture!"]]
   };
-  var GOOD = [["Đúng rồi! Giỏi quá!", "Yes! Well done!"], ["Hoan hô! Bé làm được rồi!", "Hooray! You did it!"], ["Tuyệt vời! Cảm ơn bé!", "Great! Thank you!"], ["Chính xác! Mình reo lên nè!", "Exactly! I am so happy!"]];
-  var OOPS = [["Chưa phải rồi, mình thử cách khác nhé!", "Not that one, let us try another way!"], ["Hmm, mình nhìn kỹ lại một chút nhé!", "Hmm, let us look again!"], ["Gần tới rồi, bé thử lại nha!", "Almost there, try again!"]];
-  var SHOW = [["Mình chỉ cho bé nè, nhìn vật đang sáng nhé!", "Look, the glowing one is for you!"]];
+  var GOOD = [["Đúng rồi! Giỏi quá!", "Yes! Well done!"], ["Hoan hô! Em làm được rồi!", "Hooray! You did it!"], ["Tuyệt vời! Cảm ơn em!", "Great! Thank you!"], ["Chính xác! Mình reo lên nè!", "Exactly! I am so happy!"]];
+  var OOPS = [["Chưa phải rồi, mình thử cách khác nhé!", "Not that one, let us try another way!"], ["Hmm, mình nhìn kỹ lại một chút nhé!", "Hmm, let us look again!"], ["Gần tới rồi, em thử lại nha!", "Almost there, try again!"]];
+  var SHOW = [["Mình chỉ cho em nè, nhìn vật đang sáng nhé!", "Look, the glowing one is for you!"]];
   var ICON = {
     back: '<path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="3.400" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
     next: '<path d="M5 12h13M12.500 6l6 6-6 6" stroke="currentColor" stroke-width="3.200" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',

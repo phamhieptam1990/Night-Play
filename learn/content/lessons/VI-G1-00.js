@@ -68,7 +68,7 @@ window.LearnLessons.reg({
   {
    "k": "game",
    "t": "Nghe tên rồi chạm vào đúng bạn nhé!",
-   "done": "Giỏi quá! Bé nhận ra các bạn rồi!",
+   "done": "Giỏi quá! Em nhận ra các bạn rồi!",
    "rounds": [
     {
      "say": "Bạn a đâu nào?",
@@ -132,7 +132,7 @@ window.LearnLessons.reg({
   {
    "k": "game",
    "t": "Nghe tên rồi chạm vào đúng bạn nhé!",
-   "done": "Giỏi quá! Bé nhận ra các bạn rồi!",
+   "done": "Giỏi quá! Em nhận ra các bạn rồi!",
    "rounds": [
     {
      "say": "Bạn o đâu nào?",
@@ -166,7 +166,7 @@ window.LearnLessons.reg({
   {
    "k": "game",
    "t": "Bạn nào cầm đồ vật này? Chạm vào nhé!",
-   "done": "Giỏi quá! Bé nhớ mặt các bạn rồi!",
+   "done": "Giỏi quá! Em nhớ mặt các bạn rồi!",
    "rounds": [
     {
      "say": "Bạn nào cầm quả táo?",
@@ -247,7 +247,7 @@ window.LearnLessons.reg({
   {
    "k": "game",
    "t": "Nghe tên rồi chạm vào đúng bạn nhé!",
-   "done": "Giỏi quá! Bé nhận ra các bạn rồi!",
+   "done": "Giỏi quá! Em nhận ra các bạn rồi!",
    "rounds": [
     {
      "say": "Bạn ă đâu nào?",
@@ -298,7 +298,7 @@ window.LearnLessons.reg({
   },
   {
    "k": "sum",
-   "t": "Bé nhớ nhé!",
+   "t": "Em nhớ nhé!",
    "pts": [
     "Mỗi chữ cái là một bạn có tên và hình riêng",
     "Nhớ hình bạn cầm để nhớ chữ",

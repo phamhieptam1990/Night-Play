@@ -20,7 +20,7 @@ window.LearnLessons.reg({
   },
   {
    "k": "take",
-   "t": "Bé ăn 2 cái bánh. Chạm vào 2 cái!",
+   "t": "Em ăn 2 cái bánh. Chạm vào 2 cái!",
    "n": 5,
    "m": 2,
    "e": "🍪",
@@ -70,7 +70,7 @@ window.LearnLessons.reg({
   },
   {
    "k": "sum",
-   "t": "Bé nhớ nhé!",
+   "t": "Em nhớ nhé!",
    "pts": [
     "Cộng là gộp lại",
     "Trừ là bớt đi",

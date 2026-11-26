@@ -9,10 +9,11 @@
 .sgate .sgh{font-weight:800;font-size:clamp(16px,4.6vw,20px);color:#fff;padding:8px 18px;border-radius:99px;background:rgba(255,255,255,.2);
   border:2px solid rgba(255,255,255,.5);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .sgate .sgb{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:clamp(130px,38vw,168px);
-  aspect-ratio:1;border-radius:50%;color:#0b1020;font-weight:900;font-size:17px;
-  background:linear-gradient(145deg,#fff,#ffe9a8);box-shadow:0 8px 0 rgba(0,0,0,.22),0 14px 28px rgba(0,0,0,.35);animation:gpulse 1.6s ease-in-out infinite}
-.sgate .sgb svg{width:46%;height:46%}.sgate .sgb:active{transform:translateY(4px)}.sgate .sgb:focus-visible{outline:4px solid #fff;outline-offset:4px}
-.sgate .sgs{min-height:44px;padding:0 18px;color:#fff;font-weight:700;font-size:15px;opacity:.85;text-decoration:underline;background:none;border:0}
+  aspect-ratio:1;border-radius:50%;color:#fff;border:6px solid #fff;
+  background:radial-gradient(120% 90% at 30% 18%,rgba(255,255,255,.55) 0,transparent 46%),linear-gradient(150deg,#ffd23f,#ff7a1a);box-shadow:0 8px 0 rgba(0,0,0,.22),0 14px 28px rgba(0,0,0,.35);animation:gpulse 1.6s ease-in-out infinite}
+.sgate .sgb svg{width:54%;height:54%;filter:drop-shadow(0 3px 0 rgba(0,0,0,.28))}.sgate .sgb:active{transform:translateY(4px)}.sgate .sgb:focus-visible{outline:4px solid #fff;outline-offset:4px}
+.sgate .sgs{width:60px;height:60px;border-radius:50%;display:grid;place-items:center;color:#fff;background:rgba(10,20,60,.35);border:3px solid #fff;box-shadow:0 4px 0 rgba(0,0,0,.2)}
+.sgate .sgs svg{width:56%;height:56%}.sgate .sgs:active{transform:translateY(2px)}
 @media (orientation:landscape) and (max-height:600px){.sgate{flex-direction:row;flex-wrap:wrap;gap:8px 22px}.sgate .sgm{width:clamp(80px,26dvh,130px)}.sgate .sgt,.sgate .sgh{flex:0 0 auto}}
 @keyframes gbob{50%{transform:translateY(-6px)}}@keyframes gpulse{50%{transform:scale(1.07)}}
 @media (prefers-reduced-motion:reduce){.sgate .sgm,.sgate .sgb{animation:none}}

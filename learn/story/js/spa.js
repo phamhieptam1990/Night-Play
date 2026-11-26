@@ -65,8 +65,14 @@
       root.scrollTo(0, 0); return mount(doc);
     });
   }
+  /* mở khoá giọng đọc NGAY trong cú chạm đang chuyển màn: Safari/iPad chỉ cho speechSynthesis phát nếu đã có một lệnh speak() chạy trong cú chạm, mà lời đọc của màn mới đến sau khi tải xong (bất đồng bộ).
+     Câu rỗng âm lượng 0, không nghe thấy gì. */
+  function prime() {
+    try { var ss = root.speechSynthesis; if (!ss || !root.Voice || localStorage.getItem("learn:auto") === "0") return;
+      var u = new root.SpeechSynthesisUtterance(" "); u.volume = 0; ss.speak(u); } catch (e) {}
+  }
   function go(url, o) {
-    o = o || {}; var u = new URL(url, location.href), my = ++navId;
+    o = o || {}; var u = new URL(url, location.href), my = ++navId; prime();
     if (u.origin !== location.origin || !VIEW.test(u.pathname)) { location.href = u.href; return Promise.resolve(); }
     var page = /\.html$/.test(u.pathname) ? u.href : new URL("index.html" + u.search, u.href).href;
     return fetch(page, { cache: "no-cache" }).then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(function (txt) {

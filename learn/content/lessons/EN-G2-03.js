@@ -65,7 +65,7 @@ window.LearnLessons.reg({
     },
     {
       "k": "sum",
-      "t": "Bé nhớ nhé!",
+      "t": "Em nhớ nhé!",
       "pts": [
         "cat mèo, dog chó, bird chim",
         "red đỏ, blue xanh dương, yellow vàng",

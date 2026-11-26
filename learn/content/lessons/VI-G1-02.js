@@ -12,7 +12,7 @@ window.LearnLessons.reg({
   },
   {
    "k": "say",
-   "t": "Bé Na có một con mèo tên là Mun.",
+   "t": "Em Na có một con mèo tên là Mun.",
    "art": "👧🐱"
   },
   {
@@ -22,14 +22,14 @@ window.LearnLessons.reg({
   },
   {
    "k": "choose",
-   "t": "Bé Na có con gì?",
+   "t": "Em Na có con gì?",
    "opts": [
     "🐱",
     "🐶",
     "🐔"
    ],
    "ok": 0,
-   "yes": "Đúng rồi! Bé Na có một con mèo.",
+   "yes": "Đúng rồi! Em Na có một con mèo.",
    "no": "Đọc lại câu đầu nhé.",
    "art": "👧 ❓"
   },
@@ -61,7 +61,7 @@ window.LearnLessons.reg({
   },
   {
    "k": "sum",
-   "t": "Bé nhớ nhé!",
+   "t": "Em nhớ nhé!",
    "pts": [
     "Đọc kỹ từng câu",
     "Tìm câu trả lời ngay trong bài",
@@ -97,12 +97,12 @@ window.LearnLessons.reg({
   {
    "q": "Ai có con mèo?",
    "opts": [
-    "Bé Na",
-    "Bé Nam",
+    "Em Na",
+    "Em Nam",
     "Mẹ"
    ],
    "ok": 0,
-   "hint": "Câu đầu: Bé ... có một con mèo.",
+   "hint": "Câu đầu: Em ... có một con mèo.",
    "yes": "Đúng rồi!",
    "art": "🐱"
   }

@@ -1,5 +1,5 @@
 /* Trang chọn của Lớp truyện (index.html?grade&subj): chọn môn + lớp, rồi bản đồ lớp dạng các ĐẢO (mỗi chủ đề một đảo).
-   Bé chạm đảo → xem lời mở đầu → "Đi" vào bản đồ chủ đề (map.html). Đảo chưa tới thì mờ + khoá; linh vật đứng ở đảo bé cần đi tiếp. */
+   Em chạm đảo → xem lời mở đầu → "Đi" vào bản đồ chủ đề (map.html). Đảo chưa tới thì mờ + khoá; linh vật đứng ở đảo em cần đi tiếp. */
 (function () {
   "use strict";
   var K = StoryCore, P = K.P, R = StoryRoute, SG = StoryStage, T = K.T, E = SG.el;
