@@ -14,7 +14,7 @@ const CORE_A = ["../slot.js", "../content/phrases.js", "../mascot-kit.js", "../m
   "../engine/topics.js", "../engine/progress.js", "../engine/round.js", "../engine/report.js", "../engine.js",
   "../content/qtypes-hi.js", "../content/write-topics.js", "../content/write-check.js", "../content/qtypes/core.js",
   "../content/qtypes/gen-basic.js", "../content/qtypes/gen-lang.js", "../content/qtypes/gen-more.js",
-  "../content/qtypes.js", "../hint.js", "../path.js", "../content/lessons/index.js", "../content/lesson-en.js", "../content/parent-copy.js",
+  "../content/qtypes.js", "../hint.js", "../path.js", "../content/lessons/index.js", "../content/lesson-en.js", "../content/lesson-en-g23.js", "../content/lesson-en-g45.js", "../content/parent-copy.js",
   "../limit.js"];
 // (../voice.js nạp riêng giữa CORE_A và CORE_B)
 const CORE_B = ["../farm.js", "../habit.js", "../adventure.js", "../content/buddies.js", "../glyph-a.js", "../buddy.js", "../album.js",

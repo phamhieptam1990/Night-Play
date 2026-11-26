@@ -101,5 +101,5 @@
     if (o && typeof o === "object") { var r = {}; Object.keys(o).forEach(function (k) { r[k] = walk(o[k], k); }); return r; }
     return o;
   }
-  root.LessonEN = { tr: tr, apply: function (lesson) { return walk(lesson, ""); }, DICT: DICT };
+  root.LessonEN = { tr: tr, apply: function (lesson) { return walk(lesson, ""); }, DICT: DICT, add: function (m) { Object.keys(m).forEach(function (k) { DICT[k] = m[k]; }); } };   /* add: thêm bản dịch từ lesson-en-g23.js / lesson-en-g45.js */
 })(window);
