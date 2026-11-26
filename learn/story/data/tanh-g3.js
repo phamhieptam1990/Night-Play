@@ -1,11 +1,11 @@
 (window.LearnStories = window.LearnStories || {});
 window.LearnStories["EN-G3-01"] = {
   title:{vi:"Chiếc hộp nhạc của Bibi",en:"Bibi's Music Box"},
-  intro:{vi:"Hộp nhạc của Bibi hát khe khẽ, mà Bibi chưa nghe rõ lời. Em giúp Bibi lắng tai nhé?",en:"Bibi's music box is singing softly, but Bibi can't catch the words. Will you listen with me?"},
+  intro:{vi:"Hộp nhạc của Bibi thì thầm khe khẽ, mà Bibi chưa nghe rõ lời. Em giúp Bibi lắng tai nhé?",en:"Bibi's music box is whispering softly, but Bibi can't catch the words. Will you listen with me?"},
   fork:{vi:"Bạn Mây chỉ hai lối: nghe từng đoạn một, hoặc băng qua nhanh nghe luôn cả khúc ca. Lối nào cũng vui!",en:"Cloud Pal shows two paths: listen bit by bit, or dash across to the whole song. Both are fun!"},
   learn:{vi:"Mình khẽ nhắm mắt, nghe kỹ từng từ, từng con số và màu sắc trong khúc ca nhé.",en:"Let's close our eyes and listen closely to each word, number and colour in the song."},
   test:{vi:"Hộp nhạc có vài câu hỏi nhỏ. Em nghe rồi thử sức chọn điều mình nghe thấy nhé!",en:"The music box has a few little questions. Listen, then pick what you heard!"},
-  end:{vi:"Hộp nhạc hát vang cả khúc ca. Bibi cảm ơn đôi tai tinh tường của em! Lần sau ta cùng trò chuyện nhé.",en:"The music box sings the whole song! Thank you for your clever ears. Next, let's chat together."},
+  end:{vi:"Hộp nhạc kể trọn câu chuyện. Bibi cảm ơn đôi tai tinh tường của em! Lần sau ta cùng trò chuyện nhé.",en:"The music box tells the whole story! Thank you for your clever ears. Next, let's chat together."},
   nodes:{
     intro:{vi:"Hộp nhạc",en:"Music box"},
     fork:{vi:"Ngã ba nốt nhạc",en:"Note fork"},

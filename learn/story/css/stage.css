@@ -36,3 +36,8 @@
 .nspk svg{width:18px;height:18px}.nspk.on .sp{background:var(--k1);color:#0b1020}
 .nd.st-off .nspk{opacity:.8}
 .k-exam .ni{box-shadow:0 0 0 3px var(--k2),0 5px 10px rgba(0,0,0,.28)}.k-exam.st-cur .ni{box-shadow:0 0 0 4px var(--k1),0 0 0 8px color-mix(in srgb,var(--k2) 40%,transparent)}
+/* bóng lời ngắn trên đầu linh vật khi bé chạm */
+.pal .pbub{position:absolute;left:50%;bottom:calc(100% + 4px);transform:translateX(-50%) scale(.7);transform-origin:50% 100%;white-space:nowrap;padding:6px 12px;border-radius:14px;font-weight:900;font-size:14px;
+  color:#10203a;background:rgba(255,255,255,.94);border:2px solid var(--trim,#fff);box-shadow:0 4px 12px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:3}
+.pal .pbub.on{opacity:1;transform:translateX(-50%) scale(1)}
+:root[data-theme="dark"] .pal .pbub{color:#f5f8ff;background:rgba(16,22,46,.9);border-color:rgba(255,255,255,.3)}

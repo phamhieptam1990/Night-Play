@@ -20,7 +20,7 @@ window.LearnStories["EN-G1-02"] = {
   fork:{vi:"Em có thể khám phá từng quầy một. Hoặc băng qua nhanh, gọi tên luôn nếu em đã biết nhiều từ rồi.",en:"Explore stall by stall. Or dash across and name things now if you know many words."},
   learn:{vi:"Bibi chỉ red, blue, one, two, cat, book. Em nghe và nói theo nhé.",en:"Bibi points: red, blue, one, two, cat, book. Listen and say them after Bibi."},
   test:{vi:"Chủ quầy hỏi: đây là gì? Em thử sức, chọn đúng từ cho Bibi để mang quà về nhé.",en:"The seller asks: what is this? Give it a go and pick the right word for Bibi's gift."},
-  end:{vi:"Giỏ của Bibi đầy từ mới! Cảm ơn em. Bibi nghe thấy tiếng hát vang lên từ xa, em có nghe không?",en:"Bibi's basket is full of new words! Thank you. Bibi hears singing far away. Can you hear it?"},
+  end:{vi:"Giỏ của Bibi đầy từ mới! Cảm ơn em. Bibi nghe thấy tiếng nói vui vẻ vang lên từ xa, em có nghe không?",en:"Bibi's basket is full of new words! Thank you. Bibi hears cheerful voices far away. Can you hear them?"},
   nodes:{
     intro:{vi:"Bến thuyền",en:"Boat dock"},
     fork:{vi:"Ngã ba chợ",en:"Market fork"},
@@ -30,17 +30,17 @@ window.LearnStories["EN-G1-02"] = {
   }
 };
 window.LearnStories["EN-G1-03"] = {
-  title:{vi:"Khúc Hát Trên Thuyền",en:"The Song on the Boat"},
-  intro:{vi:"Bibi hát trên thuyền buồm nhưng quên mất nhịp. Bibi muốn em hát cùng, vui lắm.",en:"Bibi sings on the sailboat but forgot the beat. Bibi would love you to sing along."},
-  fork:{vi:"Em có thể bắt chước từng âm thật chậm cùng Bibi. Hoặc băng qua nhanh, hát luôn nếu em đã tự tin rồi nhé.",en:"Copy each sound slowly with Bibi. Or dash across and sing right away if you feel ready."},
+  title:{vi:"Vần Vui Trên Thuyền",en:"Fun Sounds on the Boat"},
+  intro:{vi:"Bibi đọc vần trên thuyền buồm nhưng quên mất nhịp. Bibi muốn em đọc cùng, vui lắm.",en:"Bibi chants sounds on the sailboat but forgot the beat. Bibi would love you to say them along."},
+  fork:{vi:"Em có thể bắt chước từng âm thật chậm cùng Bibi. Hoặc băng qua nhanh, đọc luôn nếu em đã tự tin rồi nhé.",en:"Copy each sound slowly with Bibi. Or dash across and say them right away if you feel ready."},
   learn:{vi:"Bibi nói chậm từng âm: cat, hat, sun. Em nghe rồi nói theo, vỗ tay theo nhịp nhé.",en:"Bibi says each sound slowly: cat, hat, sun. Listen, say it, and clap to the beat."},
   test:{vi:"Bibi nói một âm, em nghe và thử sức chọn đúng từ. Cứ thong thả, Bibi sẽ nói lại nếu em cần.",en:"Bibi says a sound and you pick the right word. Take your time, Bibi will say it again."},
-  end:{vi:"Cả thuyền cùng hát vang! Bibi cảm ơn em. Gió thổi về hướng một vùng đất mới, mình đi xem nhé?",en:"The whole boat sings! Thank you from Bibi. The wind blows toward a new land. Shall we look?"},
+  end:{vi:"Cả thuyền cùng đọc vang! Bibi cảm ơn em. Gió thổi về hướng một vùng đất mới, mình đi xem nhé?",en:"The whole boat chants along! Thank you from Bibi. The wind blows toward a new land. Shall we look?"},
   nodes:{
     intro:{vi:"Mũi thuyền",en:"Ship's bow"},
     fork:{vi:"Ngã ba biển",en:"Sea fork"},
     learn:{vi:"Cánh buồm",en:"Sail deck"},
-    test:{vi:"Boong hát",en:"Singing deck"},
-    end:{vi:"Tiếng hát xa",en:"Far song"}
+    test:{vi:"Boong vần",en:"Rhyme deck"},
+    end:{vi:"Tiếng gọi xa",en:"Far voices"}
   }
 };

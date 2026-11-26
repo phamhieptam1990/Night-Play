@@ -59,7 +59,21 @@
       LM.bind({ box: box, bubble: null, base: "../../shared/art/learn/", lang: K.lang, idleMs: 0 });
       LM.show(subj, grade).then(function (r) { ok = r; if (!r) box.innerHTML = '<img src="' + K.face(subj, grade) + '" alt="">'; });
     } else box.innerHTML = '<img src="' + K.face(subj, grade) + '" alt="">';
-    p.onclick = function () { if (LM && ok) { LM.wake(true); LM.emote("happy", 1400); } p.classList.remove("hop"); void p.offsetWidth; p.classList.add("hop"); };
+    /* BÉ CHẠM LINH VẬT: nhảy + đổi biểu cảm + tiếng "tách" + bóng lời ngắn trên đầu + đọc lời đó (mỗi lần một câu khác, câu thứ 4 nhắc chạm nút tròn để đi tiếp) */
+    var taps = 0, bub = null, bt = 0, EMO = ["happy", "wow", "cheer"];
+    var LINES = subj === "tanh" ? ["Hello!", "Hi!", "Let's go!", "Tap the big button!", "You can do it!"]
+      : K.lang === "en" ? ["Hello!", "Let us go together!", "You are great!", "Tap the big button!", "What shall we learn today?"]
+      : ["Chào em!", "Mình đi cùng nhau nhé!", "Em giỏi lắm!", "Chạm nút tròn to để đi nào!", "Hôm nay mình học gì nhỉ?"];
+    p.onclick = function (e) {
+      if (e && e.stopPropagation) e.stopPropagation();
+      var text = LINES[taps % LINES.length], emo = EMO[taps % EMO.length]; taps++;
+      if (LM && ok) { LM.wake(true); LM.emote(emo, 1400); }
+      p.classList.remove("hop"); void p.offsetWidth; p.classList.add("hop");
+      try { if (root.StorySfx) root.StorySfx.play("tap"); } catch (x) {}
+      if (!bub) { bub = el("div", "pbub"); bub.setAttribute("role", "status"); p.appendChild(bub); }
+      bub.textContent = text; bub.classList.remove("on"); void bub.offsetWidth; bub.classList.add("on"); clearTimeout(bt); bt = setTimeout(function () { bub.classList.remove("on"); }, 2600);
+      try { var a = localStorage.getItem("learn:auto"); if (a !== "0" && root.Voice) root.Voice.say(text, subj, subj === "tanh" || K.lang === "en" ? "en" : "vi", { profile: "narr", fail: function () {} }); } catch (x) {}
+    };
     return {
       el: p,
       to: function (pos, instant, side) {   /* side: bên của điểm mà linh vật đứng (l|r) */

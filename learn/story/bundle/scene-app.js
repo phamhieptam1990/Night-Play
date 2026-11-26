@@ -340,9 +340,9 @@
     ok: function () { return !!root.Voice; },
     /* đặt lời đang nói (loa đọc lời này) và tự đọc nếu được phép */
     /* cùng một lời đặt hai lần liền (khung màn + kiểu màn đều gọi say) thì chỉ đọc một lần */
-    set: function (text, o) {
+    set: function (text, o, silent) {   /* silent: chỉ ghi nhớ lời cho nút loa, không tự đọc (câu vừa được đọc ở màn trước) */
       var now = Date.now(), dup = text && text === lastText && now - lastAt < 1500; lastText = text || ""; lastAt = now;
-      cur = text || ""; curOpt = o || null; if (dup) return; pending = null; hint(""); stop(); if (cur && auto()) speakNow(cur, o);
+      cur = text || ""; curOpt = o || null; if (dup) return; pending = null; hint(""); stop(); if (cur && !silent && auto()) speakNow(cur, o);
     },
     say: function (text, o) { speakNow(text, o); },
     stop: stop, touched: function () { return touched; }
@@ -422,7 +422,10 @@
       o = o || {}; var b = $("bub"); clearInterval(wordT); delete b.dataset.full; b.textContent = text; X.cls(b, "pop"); fitBub(); setTimeout(fitBub, 60);
       if (o.emote) F.emote(o.emote);
       var first = intro; intro = false; if (!first) F.said();   /* lời tiếp theo: bóng thoại nhỏ trên đầu linh vật vài giây */
-      if (o.quiet) V.set("", null); else { if (first) F.talk(o.speak || text); V.set(o.speak || text, o.vo); }
+      /* bản đồ vừa phóng to đọc ĐÚNG câu này (StoryTalk, window.__storyTalked): vào cảnh không phóng to và đọc lại lần nữa (trước đây nghe hai lần) */
+      var norm = function (t) { return String(t || "").replace(/\s+/g, " ").trim(); }, heard = first && !o.quiet && root.__storyTalked && norm(root.__storyTalked) === norm(o.speak || text);
+      if (first) root.__storyTalked = "";
+      if (o.quiet) V.set("", null); else if (heard) V.set(o.speak || text, o.vo, true); else { if (first) F.talk(o.speak || text); V.set(o.speak || text, o.vo); }
     },
     /* LINH VẬT HIỆN TO giữa cảnh đọc lời mở đầu của màn; đọc xong (hoặc chạm, hoặc hết giờ dự phòng) thì thu nhỏ về góc. Chỉ màn dọc có hiệu ứng (css/glass.css). */
     talk: function (text) {

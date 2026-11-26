@@ -20,3 +20,16 @@ body .qspk{color:#fff;border:3px solid #fff;background:radial-gradient(120% 90% 
 body .qspk svg{filter:drop-shadow(0 2px 0 rgba(0,0,0,.3))}
 body .qspk.on{background:#fff;color:#e8590c;border-color:#ffc21a;box-shadow:0 0 0 4px rgba(255,194,26,.55),0 3px 0 rgba(0,0,0,.18);animation:spkOn 1s ease-in-out infinite}
 body .qspk.on svg{filter:none}
+/* NÚT VÀO CHỦ ĐỀ (bản đồ) = NÚT TIẾP (cảnh truyện): cùng cỡ 92px, cùng viền trắng, cùng nằm GIỮA đáy, mọi kích thước màn, để bé nhận ra "bấm nút to tròn này để đi tiếp". Loa của bảng đứng cạnh bên trái, không đẩy lệch nút. */
+body .pb,body .pb.alt{color:#fff;border:4px solid #fff;background:radial-gradient(120% 90% at 30% 18%,rgba(255,255,255,.55) 0,transparent 46%),linear-gradient(150deg,var(--nb1),var(--nb2));
+  box-shadow:0 6px 0 rgba(0,0,0,.22),0 12px 24px rgba(0,0,0,.28),0 0 0 6px color-mix(in srgb,var(--nb2) 35%,transparent),inset 0 -6px 10px rgba(0,0,0,.14)}   /* cùng màu + bóng với nút tiếp ở cảnh truyện */
+body .pb{width:94px;height:94px;border-radius:47px}body .pb svg{width:46px;height:46px;filter:drop-shadow(0 2px 0 rgba(0,0,0,.3))}
+body .pb.alt{width:72px;height:72px;border-radius:36px}body .pb.alt svg{width:36px;height:36px}
+body .pact{bottom:10px}
+body .pact .spk{position:absolute;right:100%;margin-right:12px;top:50%;transform:translateY(-50%)}
+/* loa nhỏ cạnh nút vào chủ đề: cùng kiểu màu với nút tròn (gradient theo môn, viền trắng, biểu tượng trắng), giữ cỡ nhỏ 46px; đang đọc = trắng + cam + vòng vàng */
+body .pact .spk{width:46px;height:46px;color:#fff;border:3px solid #fff;background:radial-gradient(120% 90% at 30% 18%,rgba(255,255,255,.5) 0,transparent 46%),linear-gradient(150deg,var(--nb1),var(--nb2));
+  box-shadow:0 3px 0 rgba(0,0,0,.22),0 6px 12px rgba(0,0,0,.25)}
+body .pact .spk svg{width:22px;height:22px;filter:drop-shadow(0 2px 0 rgba(0,0,0,.3))}
+body .pact .spk.on{background:#fff;color:#e8590c;border-color:#ffc21a;box-shadow:0 0 0 4px rgba(255,194,26,.55),0 3px 0 rgba(0,0,0,.18);animation:spkOn 1s ease-in-out infinite}
+body .pact .spk.on svg{filter:none}

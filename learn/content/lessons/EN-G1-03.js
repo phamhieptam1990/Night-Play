@@ -25,7 +25,7 @@ window.LearnLessons.reg({
   },
   {
    "k": "say",
-   "t": "Hát cùng nhé: How are you? I'm fine, thank you.",
+   "t": "Đọc cùng nhé: How are you? I'm fine, thank you.",
    "en": [
     "How are you?",
     "I'm fine, thank you."
@@ -115,7 +115,7 @@ window.LearnLessons.reg({
     "Bạn mấy tuổi?"
    ],
    "ok": 0,
-   "hint": "Nhớ bài hát How are you?",
+   "hint": "Nhớ câu chào How are you?",
    "yes": "Đúng rồi!"
   }
  ]

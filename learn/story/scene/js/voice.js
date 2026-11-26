@@ -33,9 +33,9 @@
     ok: function () { return !!root.Voice; },
     /* đặt lời đang nói (loa đọc lời này) và tự đọc nếu được phép */
     /* cùng một lời đặt hai lần liền (khung màn + kiểu màn đều gọi say) thì chỉ đọc một lần */
-    set: function (text, o) {
+    set: function (text, o, silent) {   /* silent: chỉ ghi nhớ lời cho nút loa, không tự đọc (câu vừa được đọc ở màn trước) */
       var now = Date.now(), dup = text && text === lastText && now - lastAt < 1500; lastText = text || ""; lastAt = now;
-      cur = text || ""; curOpt = o || null; if (dup) return; pending = null; hint(""); stop(); if (cur && auto()) speakNow(cur, o);
+      cur = text || ""; curOpt = o || null; if (dup) return; pending = null; hint(""); stop(); if (cur && !silent && auto()) speakNow(cur, o);
     },
     say: function (text, o) { speakNow(text, o); },
     stop: stop, touched: function () { return touched; }
