@@ -28,13 +28,23 @@
 .nplp-head{display:flex;align-items:center;justify-content:space-between;flex:none;padding:0 4px 8px}
 .nplp-t{font:800 22px/1 inherit}
 .nplp .nplp-x{width:56px;height:56px;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
-.nplp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:10px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:6px 6px 6px}
-.nplp-c{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:76px;border:0;border-radius:18px;background:linear-gradient(135deg,#6d4ff0,#a24df0);color:#fff;cursor:pointer;font:800 26px/1 inherit;touch-action:manipulation;box-shadow:0 3px 0 rgba(0,0,0,.3)}
-.nplp-c b{font-weight:800}
-.nplp-c.now{outline:4px solid #f97316;outline-offset:1px}
-.nplp-c.lock{background:rgba(255,255,255,.1);color:rgba(255,255,255,.5);box-shadow:none;cursor:not-allowed}
-.nplp-s{display:flex;align-items:center;justify-content:center;gap:0;height:18px;font-style:normal}
-.nplp-s svg{width:16px;height:16px}
-.nplp-c:not(.lock) .nplp-s svg{color:#fbbf24}
-.nplp-s svg.st{fill:#fbbf24}
-@media (orientation:landscape) and (max-height:480px){.nplp{align-items:center}.nplp-sheet{max-height:92vh;border-radius:24px;width:min(94%,560px)}.nplp-c{min-height:64px}.nplp-grid{grid-template-columns:repeat(auto-fill,minmax(68px,1fr))}}
+.nplp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:12px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:8px 6px 10px}
+/* ô level = THẺ HÌNH như thẻ game ở ngoài cổng: bo lớn, nền chuyển màu riêng từng level, vành sáng + bóng nổi, SỐ TO ĐẬM, sao/khoá/tick ở đáy thẻ */
+.nplp-c{--c1:#6d4ff0;--c2:#a24df0;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;aspect-ratio:1/1.08;min-height:86px;border:2px solid rgba(255,255,255,.55);border-radius:22px;
+  background:radial-gradient(120% 70% at 30% 0%,rgba(255,255,255,.42),transparent 55%),linear-gradient(150deg,var(--c1),var(--c2));color:#fff;cursor:pointer;font:900 40px/1 var(--font,system-ui,sans-serif);letter-spacing:-.5px;touch-action:manipulation;
+  text-shadow:0 2px 0 rgba(0,0,0,.28),0 0 14px rgba(255,255,255,.35);box-shadow:0 5px 0 rgba(0,0,0,.32),0 10px 20px rgba(0,0,0,.28),inset 0 -8px 14px rgba(0,0,0,.16)}
+.nplp-c::after{content:"";position:absolute;left:-30%;top:-40%;width:70%;height:90%;border-radius:50%;background:rgba(255,255,255,.16);pointer-events:none}
+.nplp-c:nth-child(6n+2){--c1:#14b8a6;--c2:#2563eb}.nplp-c:nth-child(6n+3){--c1:#f59e0b;--c2:#ef4444}.nplp-c:nth-child(6n+4){--c1:#ec4899;--c2:#8b5cf6}
+.nplp-c:nth-child(6n+5){--c1:#22c55e;--c2:#0ea5a4}.nplp-c:nth-child(6n+6){--c1:#fb7185;--c2:#f97316}
+.nplp-c:active:not(.lock){transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.32),0 4px 10px rgba(0,0,0,.25),inset 0 -8px 14px rgba(0,0,0,.16)}
+.nplp-c b{font-weight:900;position:relative;z-index:1}
+.nplp-c.now{outline:4px solid #ffd24a;outline-offset:2px;animation:nplpNow 1.8s ease-in-out infinite}
+@keyframes nplpNow{50%{outline-color:#fff}}
+.nplp-c.lock{background:linear-gradient(150deg,rgba(255,255,255,.12),rgba(255,255,255,.05));border-color:rgba(255,255,255,.18);color:rgba(255,255,255,.55);text-shadow:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.04);cursor:not-allowed}
+.nplp-c.lock::after{display:none}
+.nplp-s{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:1px;height:20px;font-style:normal}
+.nplp-s svg{width:18px;height:18px}
+.nplp-c:not(.lock) .nplp-s svg{color:#ffe27a;filter:drop-shadow(0 1px 0 rgba(0,0,0,.35))}
+.nplp-s svg.nplp-st{fill:#ffd24a;background:none;border:0;box-shadow:none;border-radius:0;padding:0;min-width:0;min-height:0}
+@media (prefers-reduced-motion:reduce){.nplp-c.now{animation:none}}
+@media (orientation:landscape) and (max-height:480px){.nplp{align-items:center}.nplp-sheet{max-height:92vh;border-radius:24px;width:min(94%,560px)}.nplp-c{min-height:70px;font-size:32px}.nplp-grid{grid-template-columns:repeat(auto-fill,minmax(76px,1fr))}}

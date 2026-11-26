@@ -50,7 +50,7 @@
 
   /* Popup "Chọn level": mọi level 1..trần; đã mở = chơi được (sao tốt nhất / dấu tick), chưa mở = khoá; level hiện tại viền cam. Mở được bất cứ lúc nào từ màn kết thúc. */
   function pick(cur) {
-    closePick(); var N = Math.min(total(), Math.max(cfg.levels, load().u + 2)), d = load(), V = vi();
+    closePick(); var d = load(), N = Math.min(total(), d.u + 2), V = vi();   /* chỉ hiện level đã mở + MỘT level kế tiếp (khoá); không phơi sẵn level chưa tới */
     var ov = el("div", "nplp"); ov.setAttribute("role", "dialog"); ov.setAttribute("aria-label", V ? "Chọn level" : "Choose level");
     var sh = el("div", "nplp-sheet"), hd = el("div", "nplp-head"), cx = ib("nplp-x", ICON.close, V ? "Đóng" : "Close");
     hd.appendChild(el("b", "nplp-t", V ? "Level" : "Levels")); hd.appendChild(cx); sh.appendChild(hd);
@@ -59,7 +59,7 @@
       var open = k <= d.u, st = Math.max(0, Math.min(3, +d.s[k] || 0)), c = el("button", "nplp-c" + (open ? "" : " lock") + (k === cur ? " now" : ""));
       c.type = "button"; c.disabled = !open; c.setAttribute("aria-label", (V ? "Level " : "Level ") + (k + 1) + (open ? "" : (V ? " (khoá)" : " (locked)")));
       var sub = "";
-      if (!open) sub = ICON.lock; else if (st) { for (var j = 0; j < st; j++) sub += ICON.star.replace("<svg", '<svg class="st"'); } else if (k < d.u) sub = ICON.check;
+      if (!open) sub = ICON.lock; else if (st) { for (var j = 0; j < st; j++) sub += ICON.star.replace("<svg", '<svg class="nplp-st"'); } else if (k < d.u) sub = ICON.check;
       c.innerHTML = "<b>" + (k + 1) + '</b><i class="nplp-s">' + sub + "</i>";
       if (open) c.onclick = function () { closePick(); go(k); };
       gr.appendChild(c);
