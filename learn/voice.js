@@ -8,9 +8,9 @@
   var BASE = (function () { try { var s = document.currentScript && document.currentScript.src; if (s) return s.replace(/learn\/voice\.js.*$/, "shared/audio/voice/"); } catch (e) {} return "/shared/audio/voice/"; })();
   /* hồ sơ: pitch/rate cho giọng máy. Nhân vật theo MÔN: toan (Mochi), tviet (Mầm), tanh (Bibi) + bạn trái cây theo môn + Sen Sen */
   var PROFILE = {
-    toan:  { pitch: 1.55, rate: .98 }, tviet: { pitch: 1.4, rate: .92 }, tanh: { pitch: 1.6, rate: .95 },
-    sen:   { pitch: 1.5, rate: .95 }, lesson: { pitch: 1.08, rate: .9 }, narr:  { pitch: 1.15, rate: .9 }, def: { pitch: 1.4, rate: .95 }
-  };
+    toan:  { pitch: 1.12, rate: .96 }, tviet: { pitch: 1.08, rate: .92 }, tanh: { pitch: 1.12, rate: .95 },
+    sen:   { pitch: 1.1, rate: .95 }, lesson: { pitch: 1, rate: .92 }, narr:  { pitch: 1.02, rate: .92 }, def: { pitch: 1.05, rate: .95 }
+  };   /* cao độ gần tự nhiên (trước 1.4–1.6 làm giọng máy méo, nghe rè / ẻo lả) */
   var LANG = { vi: "vi-VN", en: "en-US" };
   /* GIỌNG MÁY đọc sai từ "bé" (ra "bớ") trên mọi máy: khi đọc tiếng Việt bằng giọng máy thì thay "bé" bằng "em" (chữ hiển thị và tệp thu sẵn giữ nguyên). */
   function spoken(text, lang) {   /* giữ "bé" nghĩa là NHỎ: "số bé nhất", "bé hơn 5", "bé xíu" */
@@ -28,10 +28,13 @@
     if (!ss) return null; var vs = ss.getVoices() || [], tag = (LANG[lang] || lang).toLowerCase(), pre = tag.slice(0, 2);
     var cand = vs.filter(function (v) { return v.lang && v.lang.toLowerCase().replace("_", "-").indexOf(pre) === 0; });
     if (!cand.length) return null;
+    /* chấm điểm giọng: loại giọng hề/lạ của hệ điều hành, tránh giọng nam (bé nghe giọng cô giáo/chị), ưu tiên giọng nữ tự nhiên chất lượng cao, ưu tiên giọng cài sẵn trong máy (ổn định, ít rè hơn giọng trực tuyến) */
     function score(v) { var n = (v.name || "").toLowerCase(), sc = 0;
-      if (/natural|neural|premium|enhanced|online/.test(n)) sc += 6; if (/google|microsoft|siri/.test(n)) sc += 3;
-      if (/hoaimy|hoai my|linh|mai|female|nữ|samantha|ava|allison|aria|jenny|zira/.test(n)) sc += 2;
-      if (v.lang.toLowerCase().replace("_", "-") === tag) sc += 2; if (!v.localService) sc += 1; return sc; }
+      if (/albert|bad news|bahh|bells|boing|bubbles|cellos|deranged|fred|good news|hysterical|jester|junior|kathy|organ|ralph|superstar|trinoids|whisper|wobble|zarvox|bruce|victoria|agnes|princess|grandpa|grandma|rocko|eddy|sandy|shelley|flo\b/.test(n)) sc -= 100;
+      if (/\b(aaron|arthur|daniel|gordon|rishi|reed|alex|tom|guy|david|mark|james|george|ryan|male|nam minh|namminh|thomas|oliver|lee|fred)\b/.test(n)) sc -= 25;
+      if (/hoaimy|hoai my|linh|samantha|ava|allison|susan|zoe|karen|moira|tessa|serena|fiona|catherine|martha|jenny|aria|zira|hazel|emma|female|nữ|siri/.test(n)) sc += 6;
+      if (/natural|neural|premium|enhanced|online/.test(n)) sc += 6; if (/microsoft|siri/.test(n)) sc += 2; if (/compact/.test(n)) sc -= 3;
+      if (v.localService) sc += 2; if (v.lang.toLowerCase().replace("_", "-") === tag) sc += 2; return sc; }
     return cand.sort(function (a, b) { return score(b) - score(a); })[0];
   }
   function stopAudio() { if (curAudio) { try { curAudio.pause(); } catch (e) {} curAudio = null; } }
@@ -86,6 +89,7 @@
   function say(text, who, lang, opt) { mixId++; say1(text, who, lang, opt); }
   function say1(text, who, lang, opt) {
     who = who || "def"; lang = lang || "vi"; text = String(text || "").trim(); if (!text) return; opt = opt || {};
+    if (lang === "en" && onlyVi(text)) lang = "vi";
     var k = key(who, text), ext = index && index[who + "/" + k];
     stopAudio();
     if (!ext || EXT.indexOf(ext) < 0) return machine(text, who, lang, opt);
@@ -107,12 +111,17 @@
   "xe meo ga heo chim vit ngua cua ca ba me bo co con an em".split(" ").forEach(function (w) { VI_ASCII[w] = 1; });
   /* từ Việt không dấu hay gặp trong lời truyện Tiếng Anh (thiếu thì bị đọc bằng giọng Anh: "Em nghe", "xong"...) */
   "nghe nhanh tin theo trang trong hoa quen vang xong tranh kho tai boong ngon mang thong reo sai sao khe tinh nhau mai thanh quanh dung gian tham gia sau chia hay quy chim trai sinh xanh".split(" ").forEach(function (w) { VI_ASCII[w] = 1; });
+  /* từ KHÔNG BAO GIỜ là tiếng Anh: luôn đọc giọng Việt, bất kể từ kề ("blue - xanh", "xanh" đứng riêng) */
+  var VI_ONLY = {};
+  "xanh chia nghe nhanh theo trang trong quen vang xong tranh kho tai boong ngon thong reo sai sao khe tinh nhau quanh dung gian tham gia quy chim trai sinh ba meo ga heo vit ngua cua ca bo co con em".split(" ").forEach(function (w) { VI_ONLY[w] = 1; });
+  function onlyVi(text) { var w = String(text).toLowerCase().match(/[a-zà-ỹ]+/g) || []; return w.length > 0 && w.every(function (x) { return VI_ONLY[x] || /[à-ỹ]/.test(x); }) && w.some(function (x) { return VI_ONLY[x]; }); }
   function splitMix(text, base) {
     var toks = [], segs = [];
     (String(text).match(/\S+/g) || []).forEach(function (tk) {
       var core = tk.replace(/^[^A-Za-z\u00C0-\u1EF9\d]+|[^A-Za-z\u00C0-\u1EF9\d]+$/g, ""), l;
       if (!core || /^\d+$/.test(core)) l = "n";   /* dấu câu / số: đi theo đoạn bên cạnh */
       else if (!/^[A-Za-z]+(?:['\u2019\-][A-Za-z]+)*$/.test(core)) l = "vi";
+      else if (VI_ONLY[core.toLowerCase()]) l = "vi";
       else if (base === "en") l = ENG[core.toLowerCase()] ? "en" : VI_ASCII[core.toLowerCase()] ? "vi" : "?";   /* câu nền tiếng Anh: từ không dấu lạ thì Anh, trừ khi kề từ Việt */
       else l = VI_ASCII[core.toLowerCase()] ? "?" : "en";
       toks.push({ t: tk, l: l });

@@ -65,8 +65,8 @@ window.LEARN_PHRASES = {
       en: { start: ["Mầm here! Let’s read!", "Every word is fun!", "Open the book!"], ok: ["Lovely!", "You read so well!", "Flap flap, great job!", "Exactly right!"], tap: ["Mầm is listening!", "Hoo hoo, read aloud!", "Tap me to hear it!"] }
     },
     bibi: {
-      vi: { start: ["Hi em! Mình học nào!", "Bibi sẵn sàng! Let’s go!", "Hello! Bắt đầu thôi!"], ok: ["Great!", "Yay, đúng rồi!", "Well done!", "Perfect!"], tap: ["Hi hi!", "Bibi nói Hi nè!", "Hello hello!"] },
-      en: { start: ["Hi! Let’s learn!", "Bibi is ready! Let’s go!", "Hello! Let’s start!"], ok: ["Great!", "Yay, you got it!", "Well done!", "Perfect!"], tap: ["Hi hi!", "Bibi says Hi!", "Hello hello!"] }
+      vi: { start: ["Hi em! Mình học nào!", "Bibi sẵn sàng! Let’s go!", "Hello! Bắt đầu thôi!"], ok: ["Great!", "Yay, đúng rồi!", "Well done!", "Perfect!"], tap: ["Hi!", "Bibi nói Hi nè!", "Hello hello!"] },
+      en: { start: ["Hi! Let’s learn!", "Bibi is ready! Let’s go!", "Hello! Let’s start!"], ok: ["Great!", "Yay, you got it!", "Well done!", "Perfect!"], tap: ["Hi!", "Bibi says Hi!", "Hello hello!"] }
     }
   }
 };

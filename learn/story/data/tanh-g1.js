@@ -5,7 +5,7 @@ window.LearnStories["EN-G1-01"] = {
   fork:{vi:"Em có thể khám phá lời chào từng chút cùng Bibi. Hoặc băng qua nhanh nếu em đã biết Hello rồi nhé.",en:"Explore greetings little by little with Bibi. Or dash across if you already know Hello."},
   learn:{vi:"Bibi vẫy tay nói Hello và Goodbye. Em nghe rồi nói theo Bibi nhé.",en:"Bibi waves and says Hello and Goodbye. Listen, then say it after Bibi."},
   test:{vi:"Bạn mới vẫy tay chào. Em thử sức, chọn lời chào đúng để trả lời giúp Bibi nhé.",en:"The new friend waves. Give it a go and pick the right greeting to answer for Bibi."},
-  end:{vi:"Hi hi! Bibi có thêm một bạn mới. Cảm ơn em! Bibi thấy cái gì màu đỏ kìa, em thấy chưa?",en:"Hi hi! Bibi has a new friend. Thank you! Bibi sees something red. Do you see it?"},
+  end:{vi:"Hi! Bibi có thêm một bạn mới. Cảm ơn em! Bibi thấy cái gì màu đỏ kìa, em thấy chưa?",en:"Hi! Bibi has a new friend. Thank you! Bibi sees something red. Do you see it?"},
   nodes:{
     intro:{vi:"Bến thuyền",en:"Boat dock"},
     fork:{vi:"Ngã ba hải âu",en:"Gull fork"},
