@@ -34,8 +34,7 @@ body.scn[data-subj="tanh"]{--gl-ink:#2a1f6b;--gl-acc:#6a4fe0;--gl-line:rgba(106,
   .scn .pal{width:var(--rowH);height:var(--rowH);align-self:flex-end;margin-left:2px;display:grid;place-items:center}
   .scn .pal svg,.scn .pal img{width:auto;height:100%;max-width:100%}
   .scn .sc:not(.talk):not(.said) .bub{display:none}
-  .scn .sc.said:not(.talk) .bub{position:absolute;left:12px;right:12px;bottom:calc(var(--rowH) + 20px);margin:0;max-height:none;z-index:6;animation:bubIn .35s ease-out both}
-  .scn .sc.said:not(.talk) .bub::before{display:block;left:26px;bottom:-9px;top:auto;transform:rotate(-45deg)}
+  .scn .sc.said:not(.talk) .bub{display:none}   /* không còn thẻ lời đè lên nút tiếp: lời của linh vật đã có ở bóng thoại phóng to và ở thẻ trong màn */
   .scn .nxt{width:92px;height:92px;border-radius:46px;left:calc(50% - 46px);right:auto;bottom:10px}.scn .nxt svg{width:46px;height:46px}
 }
 /* LINH VẬT HIỆN TO đọc lời mở đầu rồi thu nhỏ về góc (class .talk do frame.js bật/tắt; màn dọc hẹp). Dùng translate/scale riêng để không đụng animation nhún của linh vật. */
