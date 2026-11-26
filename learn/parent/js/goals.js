@@ -110,7 +110,7 @@ function settings(){
   $("bkf").onchange = () => { const f = $("bkf").files[0]; $("bkf").value = ""; if(!f) return; if(f.size > 2500000){ toast(u.bkBad); return; }
     const r = new FileReader(); r.onerror = () => toast(u.bkBad);
     r.onload = () => { let o = null; try{ o = JSON.parse(String(r.result)); }catch(e){} if(!Backup.validate(o).ok){ toast(u.bkBad); return; }
-      askYes(u.bkAsk, u.bkAskP, u.bkYes, () => { try{ Backup.apply(o); render(); toast(U().bkDone); }catch(e){ toast(u.bkBad); } }); };
+      askYes(u.bkAsk, u.bkAskP, u.bkYes, () => { try{ Backup.apply(o); try{ sessionStorage.removeItem("learn:slot"); }catch(e){} toast(U().bkDone); setTimeout(() => location.reload(), 900); }catch(e){ toast(u.bkBad); } }); };
     r.readAsText(f); };
   $("rs").onclick = () => askYes(u.resetAsk, u.resetP, u.resetYes, () => { E.resetAll(); if(window.Farm) Farm.resetAll(); render(); toast(U().resetDone); });
 }

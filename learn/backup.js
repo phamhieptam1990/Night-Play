@@ -6,16 +6,21 @@
 (function (root) {
   "use strict";
   var APP = "hocvui", V = 1, MAX_TOTAL = 2000000, MAX_ONE = 500000;
-  /* tiến độ + lựa chọn của phụ huynh. KHÔNG gồm: thời gian đã chơi hôm nay (learn:time:*, learn:bonus:*), nhạc/đọc to, giao diện sáng-tối. */
+  /* (danh sách cũ, chỉ để tham khảo/tương thích; việc lọc khoá do okKey() quyết định) */
   var KEYS = ["learn:err", "learn:day", "learn:dayk", "learn:dayk:off", "learn:stars", "learn:farm", "learn:habit", "learn:records", "learn:garden", "learn:trips", "learn:grade", "learn:subj", "learn:limit",
     "gardenFarm", "gardenTrees", "gardenSeen", "gardenHelp", "gardenBuddy", "gardenAnimals", "gardenGift", "gardenDaily", "gardenLv", "gardenOwned", "gardenSwap"];
   var PREFIX = ["learn:m:"];
   /* khoá GỐC (không qua ngăn vườn của slot.js) để sao lưu/khôi phục đúng từng vườn */
   var RAW = { get: function (k, st) { return root.LearnSlot ? root.LearnSlot.raw.get(k) : st.getItem(k); }, set: function (k, v, st) { if (root.LearnSlot) root.LearnSlot.raw.set(k, v); else st.setItem(k, v); }, del: function (k, st) { if (root.LearnSlot) root.LearnSlot.raw.del(k); else st.removeItem(k); } };
-  var SLOTP = ["learn:farm@", "learn:garden@", "gardenFarm@", "gardenTrees@", "gardenSeen@", "gardenHelp@", "gardenAnimals@", "gardenGift@", "gardenDaily@", "gardenLv@", "gardenName@", "gardenQuest@", "gardenDeco@"];
+  /* "GIỐNG 100% THIẾT BỊ CŨ": mọi khoá của Học Vui (learn:* và garden*, kể cả khoá vườn có hậu tố @lớp:môn, hồ sơ bé, tủ đồ, Quán, Nhà Bi, truyện, giờ chơi, nhạc...) + giao diện/ngôn ngữ.
+     LOẠI RA: learn:plus* (token/cờ Plus: tệp tự tạo không được bật Plus) và learn:from* (trạng thái tạm của phiên). */
+  var ALWAYS = ["theme", "lang", "wg:say"];
   function okKey(k) {
-    if (SLOTP.some(function (p) { return k.indexOf(p) === 0 && /^[1-5]:(toan|tviet|tanh)$/.test(k.slice(p.length)); })) return true;
-    if (/^learn:pf:[A-Za-z0-9_-]{1,16}:lp:[1-5]:(toan|tviet|tanh)$/.test(k)) return true; if (/^learn:pf:[A-Za-z0-9_-]{1,16}:album$/.test(k)) return true; return KEYS.indexOf(k) >= 0 || PREFIX.some(function (p) { return k.indexOf(p) === 0 && /^[a-z0-9_]+$/.test(k.slice(p.length)) && k.length <= 24; }); }
+    if (typeof k !== "string" || k.length > 90) return false;
+    if (ALWAYS.indexOf(k) >= 0) return true;
+    if (/^learn:plus/.test(k) || /^learn:from/.test(k) || k === "learn:mt") return false;
+    return /^(learn:|garden)[A-Za-z0-9_:@-]*$/.test(k);
+  }
   function ls() { try { return root.localStorage; } catch (e) { return null; } }
   function allKeys(st) { var out = []; for (var i = 0; i < st.length; i++) { var k = st.key(i); if (k && okKey(k)) out.push(k); } return out; }
   function two(n) { return (n < 10 ? "0" : "") + n; }
@@ -36,7 +41,7 @@
       if (!okKey(k)) return { ok: false, why: "key" };
       if (typeof v !== "string" || v.length > MAX_ONE) return { ok: false, why: "value" };
       total += v.length; if (total > MAX_TOTAL) return { ok: false, why: "size" };
-      if (k !== "learn:grade" && k !== "learn:subj" && k !== "learn:stars" && k !== "gardenLv") { try { JSON.parse(v); } catch (e) { return { ok: false, why: "json" }; } }
+      if (/^\s*[\[{]/.test(v)) { try { JSON.parse(v); } catch (e) { return { ok: false, why: "json" }; } }   /* giá trị dạng JSON phải đọc được */
       n++;
     }
     if (o.data["learn:grade"] != null && !/^[1-5]$/.test(o.data["learn:grade"])) return { ok: false, why: "grade" };
@@ -61,8 +66,10 @@
      applySnapshot(s) ghi các phần vào máy (thay phần cùng khoá, không xoá phần máy có mà bản chụp không có). Không có tên/ảnh/nội dung câu hỏi. */
   var SV = 2;
   function mtOf(k) { return root.LearnSlot && root.LearnSlot.mtime ? root.LearnSlot.mtime(k) : 0; }
+  /* đồng bộ Plus giữ phạm vi CŨ (tiến độ + lựa chọn); bản sao lưu tệp thì lấy mọi thứ */
+  function SYNC_OK(k) { return !/^(learn:(time|bonus|music|auto|slot|albumSeen|lastRound|wear|quankem|nhabi|story)|theme$|lang$|wg:say)/.test(k); }
   function snapshot() {
-    var c = collect(), parts = {}; Object.keys(c.data).forEach(function (k) { parts[k] = { d: c.data[k], u: mtOf(k) }; });
+    var c = collect(), parts = {}; Object.keys(c.data).forEach(function (k) { if (!SYNC_OK(k)) return; parts[k] = { d: c.data[k], u: mtOf(k) }; });
     return { app: APP, v: SV, at: c.at, parts: parts };
   }
   function checkSnapshot(s) {

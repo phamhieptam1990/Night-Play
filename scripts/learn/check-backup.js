@@ -7,19 +7,20 @@ const Farm = require("../../learn/farm.js"), B = require("../../learn/backup.js"
 Farm.addSeeds(4); Farm.addCrop("wheat", 7); Farm.addStars(55);
 A.setItem("learn:m:toan", JSON.stringify({ add10: { n: 9, ok: 8, p: .9, tags: {}, t: 1 } })); A.setItem("learn:grade", "3"); A.setItem("learn:subj", "tviet"); A.setItem("learn:limit", "30");
 A.setItem("learn:trips", JSON.stringify({ "dao-so-01": { done: 1, best: 5 } })); A.setItem("gardenFarm", "{}"); A.setItem("gardenLv", "2");
-A.setItem("learn:time:2026-11-20", "600"); A.setItem("theme", "dark"); A.setItem("learn:music", "0"); A.setItem("lang", "en"); A.setItem("evil", "x");
+A.setItem("learn:time:2026-11-20", "600"); A.setItem("theme", "dark"); A.setItem("learn:music", "0"); A.setItem("lang", "en"); A.setItem("evil", "x"); A.setItem("learn:wear:1:zoo", "{\"a\":1}"); A.setItem("learn:quankem:save:3", "{\"served\":4}"); A.setItem("learn:nhabi:world:4", "{}"); A.setItem("gardenColSeen", "3"); A.setItem("gardenQuest@3:toan", "{}"); A.setItem("learn:plus", "{\"token\":\"x\"}"); A.setItem("learn:plus:test", "1");
 const f = B.collect(), keys = Object.keys(f.data);
 ok(f.app === "hocvui" && f.v === 1 && keys.includes("learn:farm") && keys.includes("learn:m:toan") && keys.includes("learn:trips") && keys.includes("learn:stars"), "thiếu khoá tiến độ");
-ok(!keys.some(k => /learn:time|theme|learn:music|^lang$|evil/.test(k)), "xuất nhầm khoá không thuộc danh sách");
+ok(keys.includes("learn:time:2026-11-20") && keys.includes("theme") && keys.includes("learn:wear:1:zoo") && keys.includes("learn:quankem:save:3") && keys.includes("learn:nhabi:world:4") && keys.includes("gardenColSeen") && keys.includes("gardenQuest@3:toan"), "thiếu khoá cần giống máy cũ");
+ok(!keys.includes("evil") && !keys.some(k => /^learn:plus/.test(k)), "xuất nhầm evil/Plus");
 ok(B.validate(JSON.parse(JSON.stringify(f))).ok, "tệp vừa xuất phải hợp lệ");
 /* máy khác: kho trống, có sẵn dữ liệu cũ khác */
 const wire = JSON.parse(JSON.stringify(f)); global.localStorage = mk(); const Z = global.localStorage; Z.setItem("learn:m:tanh", "{\"x\":1}"); Z.setItem("learn:farm", "{\"v\":1,\"seeds\":99}"); Z.setItem("theme", "light");
 const n = B.apply(wire);
 ok(n === keys.length, "số khoá đã ghi " + n);
 ok(Z.getItem("learn:m:tanh") === null, "dữ liệu tiến độ cũ phải bị thay thế");
-ok(Z.getItem("theme") === "light", "không được đụng khoá ngoài danh sách");
+ok(Z.getItem("theme") === "dark" && Z.getItem("learn:wear:1:zoo") === "{\"a\":1}" && Z.getItem("learn:quankem:save:3") && Z.getItem("learn:plus") === null, "giao diện/tủ đồ/Quán phải giống máy cũ, không nạp Plus");
 ok(Z.getItem("learn:grade") === "3" && Z.getItem("learn:stars") === "55" && Farm.get().seeds === 7 && Farm.cropTotal() === 7, "dữ liệu sau khi nạp: hạt " + Farm.get().seeds);
-ok(!Z.getItem("learn:time:2026-11-20"), "không nạp thời gian chơi hôm nay");
+ok(Z.getItem("learn:time:2026-11-20") === "600", "giờ chơi phải giống máy cũ");
 /* tệp xấu: không ghi gì */
 const before = JSON.stringify(Z.m);
 const cases = { "app lạ": { app: "x", v: 1, data: {} }, "phiên bản": { app: "hocvui", v: 2, data: {} }, "không có data": { app: "hocvui", v: 1 }, "khoá lạ": { app: "hocvui", v: 1, data: { evil: "1" } }, "khoá nguy hiểm": JSON.parse('{"app":"hocvui","v":1,"data":{"__proto__":"1"}}'), "tệp rỗng": { app: "hocvui", v: 1, data: {} },
