@@ -25,7 +25,14 @@
   var get = function () { try { return sessionStorage.getItem(KEY); } catch (e) { return null; } };
   var set = function (v) { try { sessionStorage.setItem(KEY, v); } catch (e) {} };
   var DONE = "np-upd-done";
-  var reload = function (id, ver) { set(id); try { sessionStorage.setItem(DONE, ver || "1"); } catch (e) {} try { var w = navigator.serviceWorker && navigator.serviceWorker.controller; if (w) w.postMessage({ np: "precache" }); } catch (e) {} setTimeout(function () { location.reload(); }, 250); };
+  /* tải lại ĐÚNG bản mới: nhờ service worker làm tươi mọi tệp đã lưu (css/js/html trước) rồi mới tải lại; tối đa chờ 6 giây (mạng chậm vẫn tải lại, lần sau tự đồng bộ nền) */
+  var reload = function (id, ver) {
+    set(id); try { sessionStorage.setItem(DONE, ver || "1"); } catch (e) {}
+    var fired = false, go = function () { if (fired) return; fired = true; location.reload(); };
+    try { var w = navigator.serviceWorker && navigator.serviceWorker.controller;
+      if (w) { navigator.serviceWorker.addEventListener("message", function (e) { if (e.data && e.data.np === "fresh") go(); }); w.postMessage({ np: "refresh" }); setTimeout(go, 6000); return; } } catch (e) {}
+    setTimeout(go, 250);
+  };
   /* thanh thông báo ở đáy màn hình, tự đóng sau 5 giây; act (tuỳ chọn) = bấm vào để cập nhật */
   var toast = function (text, act) {
     if (shown || !document.body) return; shown = true;
@@ -44,12 +51,16 @@
     var done = sessionStorage.getItem(DONE);
     if (done) { sessionStorage.removeItem(DONE); var say = function () { toast((isEn() ? "Updated to the new version" : "Đã cập nhật bản mới") + (done !== "1" ? " · v" + done : "")); }; if (document.body) say(); else document.addEventListener("DOMContentLoaded", say); }
   } catch (e) {}
+  /* chưa có thao tác nào từ lúc mở/quay lại tab (không có ván/bài dở để mất): tự tải lại như trang cổng; đang chơi dở thì chỉ hiện viên thuốc "Cập nhật" */
+  var touched = false;
+  ["pointerdown", "keydown", "touchstart"].forEach(function (ev) { addEventListener(ev, function () { touched = true; }, { passive: true, capture: true }); });
+  document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") touched = false; });
   var check = function () {
     if (busy || document.visibilityState === "hidden") return; busy = true;
     fetch("/version.json?t=" + Date.now(), { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
       busy = false; if (!j || !j.id || j.id === NP_BUILD) return;
       if (get() === j.id) return;                        // đã thử tải lại cho mã này mà vẫn khác: không lặp vô hạn
-      if (portal) { toast(isEn() ? "New version · updating…" : "Có bản mới · đang cập nhật…"); setTimeout(function () { reload(j.id, j.ver); }, 1500); } else pill(j.id, j.ver);
+      if (portal || !touched) { toast(isEn() ? "New version · updating…" : "Có bản mới · đang cập nhật…"); setTimeout(function () { reload(j.id, j.ver); }, 1500); } else pill(j.id, j.ver);
     }).catch(function () { busy = false; });
   };
   document.addEventListener("visibilitychange", check);

@@ -4,7 +4,7 @@
   "use strict";
   var K = root.StoryCore, U = root.SceneU, S = root.SceneT, V = root.SceneVoice, X = root.SceneFx;
   var $ = function (id) { return document.getElementById(id); };
-  var LM = root.LearnMascot, ok = false, nextFn = null, land = false, intro = true, talkT = 0;
+  var LM = root.LearnMascot, ok = false, nextFn = null, land = false, intro = true, talkT = 0, wordT = 0;
   function isLand() { var s = $("sc"); return s.clientWidth > s.clientHeight * 1.05; }
   function setBg() {
     land = isLand(); $("sc").dataset.o = land ? "l" : "p";
@@ -33,17 +33,25 @@
     },
     /* nhân vật nói: bong bóng + giọng đọc. o = {speak: chữ đọc khác chữ hiện, emote, vo: tuỳ chọn Voice, quiet: không tự đọc} */
     say: function (text, o) {
-      o = o || {}; var b = $("bub"); b.textContent = text; X.cls(b, "pop"); fitBub(); setTimeout(fitBub, 60);
+      o = o || {}; var b = $("bub"); clearInterval(wordT); delete b.dataset.full; b.textContent = text; X.cls(b, "pop"); fitBub(); setTimeout(fitBub, 60);
       if (o.emote) F.emote(o.emote);
       if (o.quiet) V.set("", null); else { if (intro) F.talk(o.speak || text); V.set(o.speak || text, o.vo); }
       intro = false;
     },
     /* LINH VẬT HIỆN TO giữa cảnh đọc lời mở đầu của màn; đọc xong (hoặc chạm, hoặc hết giờ dự phòng) thì thu nhỏ về góc. Chỉ màn dọc có hiệu ứng (css/glass.css). */
     talk: function (text) {
-      var sc = $("sc"); clearTimeout(talkT); sc.classList.add("talk");
+      var sc = $("sc"); clearTimeout(talkT); sc.classList.add("talk"); F.words($("bub").textContent);
       talkT = setTimeout(F.untalk, Math.min(9000, Math.max(2600, String(text).length * 85 + 1200)));
     },
-    untalk: function () { clearTimeout(talkT); $("sc").classList.remove("talk"); },
+    untalk: function () { clearTimeout(talkT); F.unwords(); $("sc").classList.remove("talk"); },
+    /* bóng thoại TRÊN ĐẦU linh vật hiện chữ TỪNG TỪ theo nhịp đọc (chữ chưa tới thì mờ); thu nhỏ thì trả lại chữ nguyên */
+    words: function (text) {
+      var b = $("bub"), ws = String(text).split(/\s+/).filter(Boolean), step = Math.min(420, Math.max(150, (String(text).length * 62) / Math.max(1, ws.length))), i = 0;
+      F.unwords(); b.dataset.full = text; b.innerHTML = ""; var sp = ws.map(function (w) { var e = U.el("span", "w"); e.textContent = w; b.appendChild(e); b.appendChild(document.createTextNode(" ")); return e; });
+      if (!sp.length) return; sp[0].classList.add("on"); i = 1;
+      wordT = setInterval(function () { if (i >= sp.length) { clearInterval(wordT); return; } sp[i - 1].classList.remove("cur"); sp[i].classList.add("on", "cur"); i++; }, step);
+    },
+    unwords: function () { clearInterval(wordT); var b = $("bub"); if (b && b.dataset.full != null) { b.textContent = b.dataset.full; delete b.dataset.full; fitBub(); } },
     emote: function (n, ms) { if (LM && ok) LM.emote(n, ms || 1600); },
     hop: function () { X.cls($("pal"), "hop", 600); },
     clear: function () { F.play.innerHTML = ""; F.play.className = "play"; F.next(false); intro = true; F.untalk(); },

@@ -4,7 +4,6 @@ body.scn{--gl:rgba(255,255,255,.62);--gl-ink:#10203a;--gl-line:rgba(255,255,255,
 :root[data-theme="dark"] body.scn{--gl:rgba(16,22,46,.62);--gl-ink:#f5f8ff;--gl-line:rgba(255,255,255,.3)}
 .scn .bub,.scn .bt,.scn .lart,.scn .shp,.scn .qcard,.scn .mname,.scn .mrhyme,.scn .fbar,.scn .ttip,.scn .tdisp{background:var(--gl);color:var(--gl-ink);border:2px solid var(--gl-line);
   box-shadow:0 4px 14px rgba(5,20,50,.2);text-shadow:none;-webkit-backdrop-filter:var(--gl-blur);backdrop-filter:var(--gl-blur)}
-.scn .ct,.scn .ob{color:var(--gl-ink)}
 .scn .bub::before{background:var(--gl);border-color:var(--gl-line);border-width:2px}
 /* gọn: đệm hẹp, chữ vừa */
 body.scn .bub{padding:8px 14px;border-radius:18px;font-size:clamp(15px,4.2vw,18px);line-height:1.28;margin-bottom:clamp(10px,3dvh,24px)}
@@ -41,7 +40,11 @@ body.scn[data-subj="tanh"]{--gl-ink:#2a1f6b;--gl-acc:#6a4fe0;--gl-line:rgba(106,
 @media (orientation:portrait) and (max-width:700px){
   .scn .pal{transition:translate .65s cubic-bezier(.2,.85,.25,1),scale .65s cubic-bezier(.2,.85,.25,1)}
   .scn .play{transition:opacity .5s,filter .5s}
-  .scn .sc.talk .play{opacity:.15;filter:blur(3px);pointer-events:none}
+  .scn .sc.talk .play{opacity:0;filter:blur(4px);pointer-events:none}   /* đang phóng to đọc: ẩn vùng chơi + nút tiếp + đèn tiến độ, chỉ còn linh vật và lời */
+  .scn .nxt,.scn .beads,.scn .beads i{transition:opacity .4s}
+  .scn .sc.talk .nxt{opacity:0;pointer-events:none}
+  .scn:has(.sc.talk) .beads{opacity:.2}
+  .scn .sc.talk .vhint{opacity:1}
   .scn .sc.talk .pal{translate:calc(50vw - 54px) -26dvh;scale:2.7;transform-origin:50% 100%}
 }
 @media (prefers-reduced-motion:reduce){.scn .pal,.scn .play{transition:none}}
@@ -49,3 +52,14 @@ body.scn[data-subj="tanh"]{--gl-ink:#2a1f6b;--gl-acc:#6a4fe0;--gl-line:rgba(106,
 .scn .vhint{position:absolute;left:12px;right:12px;bottom:calc(var(--castH) + 10px);z-index:7;text-align:center;padding:7px 14px;border-radius:99px;font-weight:800;font-size:clamp(13px,3.6vw,15px);line-height:1.3;
   background:var(--gl);color:var(--gl-ink);border:2px solid var(--gl-line);-webkit-backdrop-filter:var(--gl-blur);backdrop-filter:var(--gl-blur);box-shadow:0 4px 14px rgba(5,20,50,.2)}
 .scn .vhint[hidden]{display:none}
+/* BÓNG THOẠI TRÊN ĐẦU LINH VẬT khi phóng to: nổi lên phía trên đầu, có đuôi chỉ xuống, hiện từng từ. Hết .talk thì về chỗ cũ ở đáy. */
+@media (orientation:portrait) and (max-width:700px){
+  .scn .sc.talk .bub{position:absolute;left:7%;right:7%;bottom:calc(30dvh + 8px + 184px + 14px);margin:0;max-height:none;overflow:visible;padding:12px 16px;border-left-width:2px;
+    font-size:clamp(18px,5.4vw,23px)!important;line-height:1.3;text-align:center;transform-origin:50% 100%;animation:bubIn .5s cubic-bezier(.2,.9,.3,1.25) both}
+  .scn .sc.talk .bub::before{display:block;left:calc(50% - 9px);bottom:-10px;top:auto;transform:rotate(-45deg)}
+  .scn .sc.talk .pal{translate:calc(50vw - 54px) -30dvh}
+}
+.scn .bub .w{opacity:.28;transition:opacity .25s,transform .25s;display:inline-block}
+.scn .bub .w.on{opacity:1}.scn .bub .w.cur{transform:scale(1.12);color:var(--gl-acc,inherit)}
+@keyframes bubIn{from{opacity:0;transform:translateY(16px) scale(.6)}}
+@media (prefers-reduced-motion:reduce){.scn .bub .w{transition:none}.scn .sc.talk .bub{animation:none}}
