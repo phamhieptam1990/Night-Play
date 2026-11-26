@@ -84,6 +84,7 @@ function bg(W, H, trees, plaza, label) {
     '<ellipse cx="' + plaza[0] + '" cy="' + plaza[1] + '" rx="' + plaza[2] + '" ry="' + plaza[3] + '" fill="url(#' + q + ')" opacity=".9" stroke="#D89AB4" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round"/>' +
     fl + trees.map(t => tree(t[0], t[1], t[2], t[3])).join("") + bunt(10, 22), label);
 }
-put("bg-p", bg(390, 680, [[340, 120, 0.9, "#4FB86B"], [40, 668, 1, "#5FC27A"], [366, 190, 0.7, "#8ED06A"]], [300, 590, 105, 62], "Phố chợ, màn dọc"));
-put("bg-l", bg(800, 360, [[740, 345, 1, "#4FB86B"], [790, 190, 0.8, "#8ED06A"], [20, 345, 0.9, "#5FC27A"]], [690, 100, 100, 56], "Phố chợ, màn ngang"));
+const stretch = s => s.replace("<svg ", "<svg preserveAspectRatio=\"none\" "); /* nền giãn kín trang */
+put("bg-p", stretch(bg(390, 680, [[340, 120, 0.9, "#4FB86B"], [40, 668, 1, "#5FC27A"], [366, 190, 0.7, "#8ED06A"]], [300, 590, 105, 62], "Phố chợ, màn dọc")));
+put("bg-l", stretch(bg(800, 360, [[740, 345, 1, "#4FB86B"], [790, 190, 0.8, "#8ED06A"], [20, 345, 0.9, "#5FC27A"]], [690, 100, 100, 56], "Phố chợ, màn ngang")));
 console.log("Đã sinh " + n + " tranh khu chợ -> learn/khu-cho/art/");

@@ -10,5 +10,11 @@
   .nd{width:50px}.ni{width:50px;height:50px}.nd .strs{top:39px}.nd .num{font-size:16px}
   .k-island{width:96px}
 }
+/* Màn rộng (máy tính, máy tính bảng ngang/dọc): thanh chọn lớp + môn gọn một hàng, căn giữa */
+@media (min-width:700px){
+  .top{min-height:54px;padding:6px 14px 2px}
+  .pickhd{flex-wrap:nowrap;justify-content:flex-start}.grades{flex:0 0 auto}.subjs{order:0;flex:0 1 460px;grid-template-columns:repeat(3,1fr);gap:6px}
+  body .tile{min-height:44px}body .chip{min-height:44px;font-size:19px}
+}
 @media (max-width:359px){.chip{font-size:17px}.tile{font-size:12px}}
-@media (min-width:900px) and (min-height:601px){.stage{max-height:100%}.panel{width:min(640px,calc(100% - 24px))}}
+@media (min-width:900px) and (min-height:601px){.panel{width:min(640px,calc(100% - 24px))}}

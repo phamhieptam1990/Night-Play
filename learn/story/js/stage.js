@@ -2,17 +2,17 @@
    Dùng chung cho bản đồ một chủ đề (map.html) và bản đồ lớp dạng đảo (index.html). Tranh nền / biểu tượng lấy ở art/; thiếu tranh thì còn nền gradient. */
 (function (root) {
   "use strict";
-  var K = root.StoryCore, RATIO = { p: 390 / 680, l: 800 / 360 };
+  var K = root.StoryCore;
   function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
   function inner(box) {
     var c = getComputedStyle(box), px = function (v) { return parseFloat(v) || 0; };
     return [box.clientWidth - px(c.paddingLeft) - px(c.paddingRight), box.clientHeight - px(c.paddingTop) - px(c.paddingBottom)];
   }
-  function orient(box) { var d = inner(box); return d[0] > d[1] * 1.05 ? "l" : "p"; }
+  function orient(box) { var d = inner(box); return d[0] / d[1] > 1.1 ? "l" : "p"; }
   /* đặt kích thước khung theo vùng chứa; trả hướng p|l */
   function fit(stage, box) {
-    var o = orient(box), r = RATIO[o], d = inner(box), w = d[0], h = d[1], sw = w / h > r ? h * r : w, sh = sw / r;
-    stage.style.width = Math.floor(sw) + "px"; stage.style.height = Math.floor(sh) + "px"; stage.dataset.o = o; return o;
+    var o = orient(box), d = inner(box);   /* phủ kín vùng chứa mọi thiết bị: tranh nền và vị trí % cùng giãn theo khung */
+    stage.style.width = Math.floor(d[0]) + "px"; stage.style.height = Math.floor(d[1]) + "px"; stage.dataset.o = o; return o;
   }
   function art(name, alt) {
     var i = el("img"); i.alt = alt || ""; i.draggable = false; i.src = "art/" + name + ".svg"; i.onerror = function () { i.style.visibility = "hidden"; }; return i;
