@@ -15,6 +15,8 @@
   /* GIỌNG MÁY đọc sai từ "bé" (ra "bớ") trên mọi máy: khi đọc tiếng Việt bằng giọng máy thì thay "bé" bằng "em" (chữ hiển thị và tệp thu sẵn giữ nguyên). */
   function spoken(text, lang) {   /* giữ "bé" nghĩa là NHỎ: "số bé nhất", "bé hơn 5", "bé xíu" */
     if (lang !== "vi") return text; text = String(text);
+    /* CHỮ CÁI đứng riêng: máy đọc "ă" thành "a", "â" thành "ơ" (không đọc được nguyên âm ngắn khi chỉ có một ký tự) → đọc bằng âm tiết thật "ắ" / "ấ" (giữ đúng nguyên âm ă / â, thêm dấu sắc) */
+    text = text.replace(/(^|[^A-Za-zÀ-ỹ])([ĂăÂâỚớ])(?![A-Za-zÀ-ỹ])/g, function (m, a, c) { return a + (c === "Ă" ? "Ắ" : c === "ă" ? "ắ" : (c === "Â" || c === "Ớ") ? "Ấ" : "ấ"); });   /* "ớ" đứng riêng là tên chữ â cũ trong bài */
     return text.replace(/(^|[^A-Za-zÀ-ỹ])([Bb])é(?![A-Za-zÀ-ỹ])/g, function (m, a, b, off) {
       var after = text.slice(off + m.length, off + m.length + 9).trim(), before = text.slice(Math.max(0, off - 7), off + a.length);
       if (/^(xíu|nhỏ|tí|bỏng|hơn|nhất|quá|con|gái|trai|xinh|như|lắm)(?![A-Za-zÀ-ỹ])/.test(after) || /(^|[^A-Za-zÀ-ỹ])(em|số|hình|cái|chiếc|quả|to|nhỏ|con) $/.test(before)) return m;
@@ -125,7 +127,7 @@
       if (!core || /^\d+$/.test(core)) l = "n";   /* dấu câu / số: đi theo đoạn bên cạnh */
       else if (!/^[A-Za-z]+(?:['\u2019\-][A-Za-z]+)*$/.test(core)) l = "vi";
       else if (VI_ONLY[core.toLowerCase()]) l = "vi";
-      else if (base === "en") l = ENG[core.toLowerCase()] ? "en" : VI_ASCII[core.toLowerCase()] ? "vi" : "?";   /* câu nền tiếng Anh: từ không dấu lạ thì Anh, trừ khi kề từ Việt */
+      else if (base === "en") l = ENG[core.toLowerCase()] ? "en" : VI_ASCII[core.toLowerCase()] ? "?" : "en";   /* câu nền tiếng Anh: từ không dấu LẠ luôn là Anh (trước đây dính từ Việt kề bên nên đọc nhầm giọng Việt); chỉ từ Việt-không-dấu quen thuộc mới xét theo từ kề */
       else l = VI_ASCII[core.toLowerCase()] ? "?" : "en";
       toks.push({ t: tk, l: l });
     });
@@ -153,7 +155,19 @@
       say1(sg.t, who, sg.l, o);
     })();
   }
-  var api = { spoken: spoken, sayMix: sayMix, splitMix: splitMix, EXT: EXT, index: function () { return index; }, say: say, stop: stop, key: key, pickVoice: pickVoice, PROFILE: PROFILE, BASE: BASE, voices: function () { return ss ? ss.getVoices() : []; } };
+  /* ĐỌC THEO NGÔN NGỮ GIAO DIỆN + MÔN: câu có dấu tiếng Việt lẫn chữ Anh (và ngược lại) được TÁCH từng đoạn, đoạn nào giọng đó.
+     ui = "vi"|"en" (ngôn ngữ giao diện). Có dấu Việt: giao diện Anh hoặc môn Tiếng Anh → đọc lẫn (nền theo giao diện); còn lại đọc giọng Việt.
+     Không có dấu Việt: môn Tiếng Anh luôn giọng Anh, môn khác theo giao diện. */
+  var VI_RE = /[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/i;
+  function speak(text, who, ui, opt) {
+    text = String(text || ""); ui = ui === "en" ? "en" : "vi";
+    /* môn Tiếng Việt: tên chữ / tiếng ngắn đứng riêng ("a.", "bờ") là TIẾNG VIỆT dù giao diện English */
+    if (!VI_RE.test(text) && who === "tviet" && /^\s*[A-Za-z]{1,3}[\s.!?,]*$/.test(text)) return say(text, who, "vi", opt);
+    if (!VI_RE.test(text)) return say(text, who, who === "tanh" ? "en" : ui, opt);
+    if (ui === "en" || who === "tanh") return sayMix(text, who, ui, opt);
+    return say(text, who, "vi", opt);
+  }
+  var api = { spoken: spoken, speak: speak, sayMix: sayMix, splitMix: splitMix, EXT: EXT, index: function () { return index; }, say: say, stop: stop, key: key, pickVoice: pickVoice, PROFILE: PROFILE, BASE: BASE, voices: function () { return ss ? ss.getVoices() : []; } };
   if (ss && ss.addEventListener) ss.addEventListener("voiceschanged", function () {});
   if (typeof module !== "undefined" && module.exports) module.exports = api; else root.Voice = api;
 })(typeof window !== "undefined" ? window : globalThis);

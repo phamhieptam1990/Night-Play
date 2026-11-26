@@ -329,8 +329,9 @@
   ["pointerdown", "touchstart", "keydown"].forEach(function (ev) { document.addEventListener(ev, retry, { passive: true, capture: true }); });
   function speakNow(text, o) {
     var V = root.Voice; if (!V || !text) return; stop(); hint(""); pending = null; mark(true); o = o || {};
-    var vl = K.voiceLang(text), lang = o.lang || (K.subj === "tanh" && !o.vi && vl !== "vi" ? "en" : vl), mix = !o.lang && K.subj === "tanh" && vl === "vi" && V.sayMix;
-    (mix ? V.sayMix : V.say)(text, K.subj, lang, { profile: o.profile || "narr", fail: function (why) { mark(false); silent(why, text, o); } });
+    var opt = { profile: o.profile || "narr", fail: function (why) { mark(false); silent(why, text, o); } };
+    if (o.lang || !V.speak) { var vl = K.voiceLang(text); V.say(text, K.subj, o.lang || (K.subj === "tanh" && !o.vi && vl !== "vi" ? "en" : vl), opt); }
+    else V.speak(text, K.subj, K.lang, opt);   /* tách đoạn Việt / Anh theo giao diện + môn (learn/voice.js) */
     var t0 = Date.now(), quiet = 0;
     poll = setInterval(function () { var sp = root.speechSynthesis && root.speechSynthesis.speaking; quiet = sp ? 0 : quiet + 1;
       if ((quiet >= 3 && Date.now() - t0 > 1500) || Date.now() - t0 > 40000) { clearInterval(poll); mark(false); if (S.onEnd) S.onEnd(); } }, 500);
@@ -708,6 +709,7 @@
   }
   function run(g) {
     load(g.topic.id).then(function (L) {
+      if (K.lang === "en" && L.subj === "tviet" && root.LessonEN) L = root.LessonEN.apply(L);   /* môn Tiếng Việt giao diện English: dịch LỜI HƯỚNG DẪN, giữ chữ/từ/câu đọc hiểu tiếng Việt (learn/content/lesson-en.js) */
       var scr = L.screens || [], i = -1;
       F.beads(scr.length); F.beadsTo(-1);
       function ctx(s) {

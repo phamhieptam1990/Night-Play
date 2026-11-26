@@ -30,7 +30,7 @@
       wt = setInterval(function () { if (i >= sp.length) { clearInterval(wt); return; } sp[i - 1].classList.remove("cur"); sp[i].classList.add("on", "cur"); i++; }, step);
     }
     if (auto() && root.Voice) {
-      try { var V = root.Voice; var vl = K.voiceLang(text); (K.subj === "tanh" && vl === "vi" && V.sayMix ? V.sayMix : V.say)(text, K.subj, vl, { profile: "narr", fail: function () { if (root.__storySaying === text) root.__storySaying = ""; },
+      try { var V = root.Voice, say = V.speak ? function (t, w, o) { V.speak(t, w, K.lang, o); } : function (t, w, o) { V.say(t, w, K.voiceLang(t), o); }; say(text, K.subj, { profile: "narr", fail: function () { if (root.__storySaying === text) root.__storySaying = ""; },
         done: function () { root.__storyHeard = text; if (root.__storySaying === text) root.__storySaying = ""; } }); root.__storySaying = text; } catch (e) {}   /* chỉ khi ĐỌC XONG trọn câu mới ghi nhận "đã nghe": cảnh truyện bỏ qua đọc lại câu này; bị ngắt giữa chừng thì cảnh đọc lại đủ */
     }
     /* hết giờ dự kiến mà giọng vẫn đang đọc thì CHỜ đọc xong rồi mới thu nhỏ (trước đây đóng đúng giờ và cắt ngang câu); tối đa thêm ~10 giây */

@@ -12,8 +12,8 @@
     var V = root.Voice; if (!V || !text) return;
     if (cur === b) { stop(); return; }
     stop(); cur = b; mark(b, true);
-    var vl = K.voiceLang(text), fn = K.subj === "tanh" && vl === "vi" && V.sayMix ? V.sayMix : V.say;
-    fn(text, K.subj, vl, { profile: "narr", fail: function () { if (cur === b) stop(); } });
+    var opt = { profile: "narr", fail: function () { if (cur === b) stop(); } };
+    if (V.speak) V.speak(text, K.subj, K.lang, opt); else V.say(text, K.subj, K.voiceLang(text), opt);
     var quiet = 0, t0 = Date.now();   /* hết đọc thì nút tự về trạng thái nghỉ */
     poll = setInterval(function () {
       var sp = root.speechSynthesis && root.speechSynthesis.speaking; quiet = sp ? 0 : quiet + 1;

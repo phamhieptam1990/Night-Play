@@ -18,6 +18,7 @@
   }
   function run(g) {
     load(g.topic.id).then(function (L) {
+      if (K.lang === "en" && L.subj === "tviet" && root.LessonEN) L = root.LessonEN.apply(L);   /* môn Tiếng Việt giao diện English: dịch LỜI HƯỚNG DẪN, giữ chữ/từ/câu đọc hiểu tiếng Việt (learn/content/lesson-en.js) */
       var scr = L.screens || [], i = -1;
       F.beads(scr.length); F.beadsTo(-1);
       function ctx(s) {
