@@ -13,6 +13,8 @@ Q.start = function (g) {
     '<div class="gqSug" id="gqSug"></div><form class="gqIn" id="gqF" autocomplete="off"><input id="gi" type="text" enterkeyhint="go" autocapitalize="none" autocorrect="off" spellcheck="false"><button type="submit" class="btnbig" id="gqOk"></button></form>' +
     '<div class="gqBar"><button type="button" class="ib2" id="gqHint">💡</button><button type="button" class="ib2" id="gqSkip">⏭</button></div>';
   $("gqF").onsubmit = e => { e.preventDefault(); submit(); }; $("gi").oninput = sugg; $("gqHint").onclick = hint; $("gqSkip").onclick = () => reveal(false);
+  /* bàn phím ảo che ô gõ: khi đang gõ, đưa ô gõ lên ĐẦU khung (bàn phím không bao giờ che phần trên) */
+  $("gi").onfocus = () => $("play").classList.add("kb"); $("gi").onblur = () => setTimeout(() => $("play").classList.remove("kb"), 120);
   showQ(g);
 };
 Q.hud = g => [(g.hearts ? "❤️".repeat(g.lives) + "🖤".repeat(3 - g.lives) : "🌍 " + Math.min(g.i + 1, NQ) + "/" + NQ), "✅ " + g.ok + (g.combo >= 2 ? " 🔥" + g.combo : "")];

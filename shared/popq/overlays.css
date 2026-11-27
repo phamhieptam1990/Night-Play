@@ -50,3 +50,5 @@
 #stage{position:relative;flex:1;min-height:0;z-index:1;display:flex;flex-direction:column;overflow:hidden}
 .tile.t0{--tc:#7ED957}.tile.t1{--tc:#6EC4FF}.tile.t2{--tc:#FFB84D}.tile.t3{--tc:#C79BFF}
 .tile{background:linear-gradient(160deg,color-mix(in srgb,var(--tc,#fff) 55%,#fff),color-mix(in srgb,var(--tc,#fff) 85%,#fff));color:#3b2a1d}
+/* nút 🎨 đổi giao diện chuyển sang menu Control Center (cc.js bấm hộ #hwSkin) */
+#hwSkin{display:none!important}

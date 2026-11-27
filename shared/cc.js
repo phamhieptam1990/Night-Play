@@ -217,7 +217,7 @@
     }
     /* GIAO DIỆN (skin riêng của game: bạn trai/bạn gái…): mở đúng bộ chọn có sẵn — Cozy #bSkin, Đập Deadline #bOpts, Pop = nút 🎨 của ô chế độ đang chọn */
     var skinBtn = function () {
-      var e = $("bSkin") || $("bOpts"); if (e) return e;
+      var e = $("bSkin") || $("bOpts") || $("hwSkin"); if (e) return e;
       var ts = modeEls(), t = ts[POP ? modeIdx(ts) : 0]; return t ? t.querySelector(".sk,.skinBtn") : null;
     };
     /* game có popup tuỳ chọn dạng chip (#setup: giao diện, cỡ bàn 3×3…6×6, gói chơi, bạn đồng hành) → gom MỘT thẻ 2×2 (mỗi nhóm một nút tròn); chạm hoặc nhấn giữ → mở rộng thành danh sách nhóm + chip (chạm chip = bấm hộ chip gốc) */
