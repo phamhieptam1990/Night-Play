@@ -1,7 +1,7 @@
 "use strict";
 /* Chùa Học Bá Online (Cozy Play): bộ đếm "hôm nay đã có N người cùng cầu" (thật, đếm lượt cầu) và bảng thi đua tuần theo lớp / trường / tỉnh.
    Không lưu IP hay định danh cá nhân: chỉ cộng dồn điểm công đức theo TÊN NHÓM do người chơi tự khai. Bảng: temple_daily, temple_groups (migrations/010_temple.sql). */
-const PROVINCES = require("./data/provinces.json");
+const PROVINCES = require("./provinces.json");
 const MAX_SCORE = 3000;
 module.exports = function register({ route, out, db, limited, ipHash, TZ }) {
   const clean = s => String(s == null ? "" : s).trim().replace(/\s+/g, " ");
