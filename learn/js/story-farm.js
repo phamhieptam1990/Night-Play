@@ -35,12 +35,11 @@ function farmFinish(){
   let CP = null; if(TOPIC_ID && !TRIP && window.LearnPath){ LearnPath.markTested(grade, subj, TOPIC_ID, roundStars);
     if(roundStars >= 3) CP = LearnPath.complete(grade, subj, TOPIC_ID); }
   let tr = null; if(TRIP){ tr = Story.finish(TRIP.id, roundStars); if(tr.seed) Farm.addSeeds(1); }
-  $("rStory").textContent = "📖 " + (TRIP ? Story.tx(TRIP.outro.text, lang) : ch.outro(ok, roundStars));
+  $("rStory").textContent = ""; $("rStory").hidden = true;   /* gọn: bỏ lời truyện ở màn kết quả */
   const cn = { carrot: vi ? "cà rốt" : "carrots", wheat: vi ? "lúa mì" : "wheat", strawberry: vi ? "dâu tây" : "strawberries" }[rep.crop];
-  const chips = []; if(rep.cropN) chips.push("<span>" + (vi ? "🧺 +" + rep.cropN + " " + cn : "🧺 +" + rep.cropN + " " + cn)+ "</span>");
-    if(rep.seeds) chips.push("<span>🌱 +" + rep.seeds + (vi ? " hạt giống" : " seeds") + "</span>");
+  const chips = [], rw = []; if(rep.cropN) rw.push("🧺 +" + rep.cropN + " " + cn); if(rep.seeds) rw.push("🌱 +" + rep.seeds);
+  if(rw.length) chips.push("<span>" + rw.join(" · ") + "</span>");
   if(tr && tr.seed) chips.push("<span class='big'>" + (vi ? "🌱 Hạt quý mới về vườn: +1" : "🌱 A rare seed came home: +1") + "</span>");
-  chips.push("<span>🎁 " + (vi ? "Quà: " : "Gift: ") + Math.min(rep.questGoal, rep.questNow) + "/" + rep.questGoal + "</span>");
   if(CP && CP.first) chips.push("<span class='big'>" + (subj === "tviet" ? (vi ? "🎁 Qua chủ đề! Quà đã chờ ở Vườn Thú" : "🎁 Topic passed! Gifts wait at the Pet Garden") : subj === "tanh" ? (vi ? "🎁 Qua chủ đề! Quà đã chờ ở Khu Chợ" : "🎁 Topic passed! Gifts wait at the Market") : (vi ? "🎁 Qua chủ đề! +3 nhiệm vụ, +2 🌱" : "🎁 Topic passed! +3 garden tasks, +2 🌱")) + "</span>");
     else if(TOPIC_ID && roundStars < 3) chips.push("<span>" + (vi ? "Đúng 3 câu là qua chủ đề. Thử lại nhé!" : "Get 3 right to pass and earn tasks. Try again!") + "</span>");
   if(rep.goalHit) chips.push("<span class='big'>" + (vi ? "🎉 Đủ mục tiêu ngày! +2 🌱 +3 ⭐" : "🎉 Daily goal done! +2 🌱 +3 ⭐") + "</span>");
@@ -52,5 +51,6 @@ function farmFinish(){
       gt.at - gt.done) + ")" : "") : "🎯 Mission done! A new part of the garden opens 🌱") : (vi
       ? "🎯 " + T[lang].sn[subj] + ": xong nhiệm vụ" : "🎯 Today's mission is already done")) + "</span>"); $("toGdn").hidden = false; }
     else if(mk && roundStars < 3) chips.push("<span>" + (vi ? "🎯 Đúng 3 câu là xong nhiệm vụ. Thử lại nhé!" : "🎯 Get at least 3 right to finish the mission. Try again!") + "</span>"); }
-  $("rFarm").innerHTML = chips.join(""); gardenBadge(); ADV = null; farmOutfit();
+  const extra = chips.slice(rw.length ? 1 : 0), hint = extra.filter(c => c.indexOf("class='big'") < 0), big = extra.filter(c => c.indexOf("class='big'") >= 0);
+  $("rFarm").innerHTML = (rw.length ? chips[0] : "") + (big.length ? big[big.length - 1] : hint[0] || "");   /* gọn: thưởng + tối đa 1 thông báo */ gardenBadge(); ADV = null; farmOutfit();
 }

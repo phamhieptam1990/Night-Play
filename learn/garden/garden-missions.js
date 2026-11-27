@@ -40,10 +40,13 @@ function nextLessonCard(){
 }
 function renderQuest(){
   var q = LearnPath.quest(QP.grade, QP.subj), el = document.getElementById("gdMis"), h = document.querySelector(".gd-m h4");
-  if(h) h.innerHTML = "🎁 Nhiệm vụ <small>mỗi bài xong có 3 nhiệm vụ</small>";
+  if(h) h.innerHTML = "👉 Việc tiếp theo";
   if(el){ var out = [];
+    var act = 0;
     for(var i = 0; i < Math.min(q.left, 3); i++){ var t = QT[(q.done + i) % 3], why = questReady(t.k);
-      out.push("<div class='gdc" + (why ? " wt" : "") + "'><i aria-hidden='true'>" + t.ic + "</i><div><b>" + t.t + "</b><small>" + (why || t.d) + "</small></div>" + (why ? "<span class='gdc-go' aria-hidden='true'>🔒</span>" : "<button type='button' class='gdc-go' data-q='1' data-k='" + t.k + "'>Làm</button>") + "</div>"); }
+      if(why) continue;   /* gọn: nhiệm vụ còn bị khoá thì không hiện, chỉ hiện việc bé làm được ngay */
+      act++; out.push("<div class='gdc'><i aria-hidden='true'>" + t.ic + "</i><div><b>" + t.t + "</b><small>" + t.d + "</small></div><button type='button' class='gdc-go' data-q='1' data-k='" + t.k + "'>Làm</button></div>"); }
+    if(!act && q.left > 0){ var nx0 = nextLessonCard(); out.push(nx0.replace("Học bài mới</b><small>", "Học bài tiếp</b><small>Học xong sẽ mở ruộng, ao để chăm vườn · ")); }
     if(q.left > 3) out.push("<div class='gdc dn'><i aria-hidden='true'>🎁</i><div><b>Còn " + (q.left - 3) + " nhiệm vụ nữa</b><small>Làm xong mới học bài mới</small></div></div>");
     if(q.left === 0) out.push(nextLessonCard());
     el.innerHTML = out.join("");
