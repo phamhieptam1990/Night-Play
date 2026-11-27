@@ -1,0 +1,21 @@
+/* Đàn piano trong nhà (HousePiano): màn phủ toàn màn hình, kính tối kiểu Night Pass; phím trắng/đen to chạm được. */
+.hp-ov{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;gap:10px;padding:max(10px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));
+  background:linear-gradient(165deg,#2A2060,#14152A);color:#fff;font-family:system-ui,sans-serif;touch-action:none;-webkit-user-select:none;user-select:none}
+.hp-top{display:flex;align-items:center;gap:12px}.hp-top h2{margin:0;font-size:clamp(20px,4vw,28px);font-weight:900}
+.hp-x{width:48px;height:48px;border-radius:50%;border:2px solid rgba(255,255,255,.4);background:rgba(255,255,255,.12);color:#fff;font-size:22px;cursor:pointer}
+.hp-modes,.hp-songs{display:flex;gap:8px;overflow-x:auto;padding:2px}
+.hp-m,.hp-s{flex:none;display:grid;grid-auto-flow:column;align-items:center;gap:6px;min-height:48px;padding:0 14px;border-radius:99px;border:2px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);color:#fff;font:800 15px system-ui;cursor:pointer;position:relative}
+.hp-m i,.hp-s i{font-style:normal;font-size:20px}.hp-m.on,.hp-s.on{background:linear-gradient(135deg,#7C5CFF,#FF8A3D);border-color:#fff}.hp-m.off{opacity:.45}.hp-s em{font-style:normal;color:#7CFFB2}
+.hp-info{margin:0;min-height:44px;padding:10px 14px;border-radius:16px;background:rgba(255,255,255,.12);font-weight:800;font-size:clamp(15px,3.4vw,19px)}
+.hp-kb{position:relative;flex:1;min-height:170px;max-height:340px;margin-top:auto}
+.hk{position:absolute;top:0;border:0;padding:0;cursor:pointer;touch-action:none;transition:transform .06s,background .1s}
+.hk.w{height:100%;background:linear-gradient(#fff,#EDE9FF);border:2px solid #14152A;border-radius:0 0 14px 14px;display:grid;align-items:end;justify-items:center;padding-bottom:10px;color:#4B3FA0;font:900 clamp(11px,2.4vw,16px) system-ui}
+.hk.b{height:62%;z-index:2;background:linear-gradient(#3b3560,#14152A);border:2px solid #000;border-radius:0 0 10px 10px}
+.hk.press{background:linear-gradient(#FFE08A,#FFB020)!important;transform:translateY(3px)}.hk.b.press{background:linear-gradient(#FF9A3C,#E8730C)!important}
+.hk.next{animation:hkNext .7s ease-in-out infinite;background:linear-gradient(#FFF3B0,#FFD24D)!important}.hk.b.next{background:linear-gradient(#FFD24D,#FF9A3C)!important}
+@keyframes hkNext{50%{transform:translateY(5px)}}
+.hp-toast{position:absolute;left:50%;top:14%;transform:translateX(-50%);padding:12px 20px;border-radius:99px;background:#fff;color:#4B3FA0;font:900 18px system-ui;box-shadow:0 8px 24px rgba(0,0,0,.4);animation:hpIn .25s;pointer-events:none;text-align:center}
+@keyframes hpIn{from{opacity:0;transform:translate(-50%,10px)}}
+@media (max-height:430px){.hp-ov{gap:6px}.hp-info{min-height:34px;padding:6px 12px}.hp-kb{min-height:120px}.hp-m,.hp-s{min-height:40px}}
+@media (prefers-reduced-motion:reduce){.hk.next{animation:none}}
+@media (max-width:520px){.hp-modes,.hp-songs{flex-wrap:wrap}.hp-m,.hp-s{min-height:42px;padding:0 10px;font-size:14px}}

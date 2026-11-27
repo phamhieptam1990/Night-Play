@@ -12,7 +12,7 @@ function drainMisFx(){ var fx = window.Farm ? Farm.get().build.fx : []; if(!fx.l
 function doneMis(k){ var d = getDaily(); d[k] = 1; saveDaily(d);
   if(k === "water"){ PLOTS.forEach(function(p){ if(p.planted && !p.locked && !p.hurt && p.got < p.need){ p.got++; badge(p, p.el); } }); toast("💧 Đã tưới nước: cả vườn lớn thêm 1 bước!"); }
   if(k === "fert"){ var n = 0; PLOTS.forEach(function(p){ if(n < 3 && p.planted && !p.locked && !p.hurt && p.got < p.need - 1){ p.got = Math.min(p.need, p.got + 2); badge(p, p.el); n++; } }); toast("🧪 Đã bón phân: 3 cây lớn thêm 2 bước!"); }
-  if(k === "fish") toast("🐟 Có thức ăn cho cá rồi! Vào ao cá để cho cá ăn nhé.");
+  if(k === "fish"){ if(window.Farm && Farm.feedFish) Farm.feedFish(); toast("🐟 Cá được ăn no rồi! Bấm ao cá để xem và mua thêm bạn mới."); }
   renderMis(); }
 /* ---- VƯỜN THEO LỚP × MÔN: nhiệm vụ đến từ BÀI HỌC. Mỗi chủ đề xong (học hết hoặc kiểm tra đạt) = 3 nhiệm vụ (tưới, bón, cho cá) + 2 hạt giống.
    Hết nhiệm vụ thì vườn chỉ đường sang chủ đề kế tiếp; xong chủ đề đó mới có nhiệm vụ mới. Dữ liệu: LearnPath.quest (khoá gardenQuest của vườn). Vườn cũ (không ngăn) giữ nhiệm vụ hằng ngày như trước. ---- */
@@ -21,9 +21,17 @@ var QT = [{ k: "water", ic: "💧", t: "Tưới nước", d: "Cả vườn lớn
 function applyFx(k){
   if(k === "water"){ PLOTS.forEach(function(p){ if(p.planted && !p.locked && !p.hurt && p.got < p.need){ p.got++; badge(p, p.el); } }); toast("💧 Đã tưới nước: cả vườn lớn thêm 1 bước!"); }
   if(k === "fert"){ var n = 0; PLOTS.forEach(function(p){ if(n < 3 && p.planted && !p.locked && !p.hurt && p.got < p.need - 1){ p.got = Math.min(p.need, p.got + 2); badge(p, p.el); n++; } }); toast("🧪 Đã bón phân: 3 cây lớn thêm 2 bước!"); }
-  if(k === "fish") toast("🐟 Có thức ăn cho cá rồi! Vào ao cá để cho cá ăn nhé.");
+  if(k === "fish"){ if(window.Farm && Farm.feedFish) Farm.feedFish(); toast("🐟 Cá được ăn no rồi! Bấm ao cá để xem và mua thêm bạn mới."); }
 }
-function doQuest(){ var q = LearnPath.quest(QP.grade, QP.subj); if(q.left <= 0) return; var k = QT[q.done % 3].k; q.left--; q.done++; LearnPath.saveQuest(QP.grade, QP.subj, q); applyFx(k); renderQuest(); }
+/* Nhiệm vụ chăm vườn chỉ làm được khi vườn CÓ thứ để chăm: tưới/bón cần ruộng/cây đã gieo (ruộng mở ở bước 6), cho cá ăn cần ao (bước 7). Chưa có thì thẻ ghi rõ phải xây gì trước; nhiệm vụ vẫn giữ lại. */
+function questReady(k){
+  var st = typeof stageNow === "function" ? stageNow() : 7;
+  if(k === "fish") return st >= 7 ? "" : "Chờ có ao cá (học thêm bài để mở vườn)";
+  if(st < 6) return "Chờ có ruộng (học thêm bài để cất nhà, mở ruộng)";
+  var n = PLOTS.filter(function(p){ return p.planted && !p.locked && !p.hurt && p.got < p.need; }).length;
+  return n ? "" : "Gieo hạt xuống ruộng trước đã";
+}
+function doQuest(){ var q = LearnPath.quest(QP.grade, QP.subj); if(q.left <= 0) return; var k = this && this.dataset && this.dataset.k ? this.dataset.k : QT[q.done % 3].k; if(questReady(k)) return; q.left--; q.done++; LearnPath.saveQuest(QP.grade, QP.subj, q); applyFx(k); renderQuest(); }
 function nextLessonCard(){
   var nx = LearnPath.next(QP.subj, QP.grade), prm = "grade=" + QP.grade + "&subj=" + QP.subj;
   if(!nx) return "<div class='gdc dn'><i aria-hidden='true'>🎉</i><div><b>Xong chương trình lớp này!</b><small>Em đã học hết các chủ đề</small></div></div>";
@@ -34,7 +42,8 @@ function renderQuest(){
   var q = LearnPath.quest(QP.grade, QP.subj), el = document.getElementById("gdMis"), h = document.querySelector(".gd-m h4");
   if(h) h.innerHTML = "🎁 Nhiệm vụ <small>mỗi bài xong có 3 nhiệm vụ</small>";
   if(el){ var out = [];
-    for(var i = 0; i < Math.min(q.left, 3); i++){ var t = QT[(q.done + i) % 3]; out.push("<div class='gdc'><i aria-hidden='true'>" + t.ic + "</i><div><b>" + t.t + "</b><small>" + t.d + "</small></div><button type='button' class='gdc-go' data-q='1'>Làm</button></div>"); }
+    for(var i = 0; i < Math.min(q.left, 3); i++){ var t = QT[(q.done + i) % 3], why = questReady(t.k);
+      out.push("<div class='gdc" + (why ? " wt" : "") + "'><i aria-hidden='true'>" + t.ic + "</i><div><b>" + t.t + "</b><small>" + (why || t.d) + "</small></div>" + (why ? "<span class='gdc-go' aria-hidden='true'>🔒</span>" : "<button type='button' class='gdc-go' data-q='1' data-k='" + t.k + "'>Làm</button>") + "</div>"); }
     if(q.left > 3) out.push("<div class='gdc dn'><i aria-hidden='true'>🎁</i><div><b>Còn " + (q.left - 3) + " nhiệm vụ nữa</b><small>Làm xong mới học bài mới</small></div></div>");
     if(q.left === 0) out.push(nextLessonCard());
     el.innerHTML = out.join("");

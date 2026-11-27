@@ -1,0 +1,17 @@
+/* Vẽ tranh "pro" (DrawPro): màn phủ toàn màn hình, kính tối kiểu Night Pass; nút tròn to chạm được. */
+.dp-ov{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;gap:8px;padding:max(10px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));
+  background:linear-gradient(165deg,#2A2060,#14152A);color:#fff;font-family:system-ui,sans-serif;-webkit-user-select:none;user-select:none}
+.dp-top{display:flex;align-items:center;gap:8px}.dp-top h2{margin:0;font-size:clamp(18px,4vw,26px);font-weight:900}.dp-sp{flex:1}
+.dp-x,.dp-i{flex:none;width:46px;height:46px;border-radius:50%;border:2px solid rgba(255,255,255,.4);background:rgba(255,255,255,.12);color:#fff;font-size:21px;cursor:pointer}.dp-i[disabled]{opacity:.35}.dp-i.go{background:linear-gradient(135deg,#34D399,#10B981);border-color:#fff}
+.dp-stage{flex:1;min-height:120px;display:grid;place-items:center}.dp-cv{display:block;background:#fff;border-radius:14px;box-shadow:0 8px 28px rgba(0,0,0,.45);touch-action:none;cursor:crosshair}
+.dp-tools,.dp-pal,.dp-tpl,.dp-gal,.dp-tray{display:flex;gap:6px;overflow-x:auto;align-items:center;padding:2px}
+.dp-t{flex:none;display:grid;justify-items:center;gap:0;min-width:58px;min-height:52px;padding:4px 8px;border-radius:14px;border:2px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;font:800 11px system-ui;cursor:pointer}
+.dp-t i{font-style:normal;font-size:22px;line-height:1.1}.dp-t.on{background:linear-gradient(135deg,#7C5CFF,#FF8A3D);border-color:#fff}
+.dp-c{flex:none;width:38px;height:38px;border-radius:50%;border:3px solid rgba(255,255,255,.55);cursor:pointer}.dp-c.on{border-color:#FFD24D;box-shadow:0 0 0 3px rgba(255,210,77,.55);transform:scale(1.12)}
+.dp-tray button{flex:none;width:54px;height:54px;border-radius:14px;border:2px solid rgba(255,255,255,.3);background:rgba(255,255,255,.14);padding:3px;cursor:pointer}.dp-tray button.on{border-color:#FFD24D}.dp-tray img{width:100%;height:100%;object-fit:contain}
+.dp-sz{width:100%;max-width:320px;accent-color:#FFB020}
+.dp-tpl b{flex:none;font-size:14px}.dp-p{flex:none;min-height:40px;padding:0 12px;border-radius:99px;border:2px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);color:#fff;font:800 14px system-ui;cursor:pointer}
+.dp-gal img{flex:none;height:54px;aspect-ratio:4/3;object-fit:cover;border-radius:8px;border:2px solid rgba(255,255,255,.4);background:#fff;cursor:pointer}.dp-none{font-size:13px;opacity:.7}
+.dp-toast{position:absolute;left:50%;top:14%;transform:translateX(-50%);padding:10px 18px;border-radius:99px;background:#fff;color:#4B3FA0;font:900 16px system-ui;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+@media (max-height:520px){.dp-ov{gap:4px}.dp-tpl,.dp-gal,.dp-sz{display:none}.dp-t{min-height:42px}.dp-c{width:32px;height:32px}}
+.dp-tray[hidden]{display:none}

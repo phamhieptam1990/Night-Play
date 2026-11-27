@@ -135,6 +135,30 @@
   var RESET_KEYS = ["learn:farm", "learn:garden", "learn:stars", "learn:trips", "gardenFarm", "gardenTrees", "gardenSeen", "gardenHelp", "gardenAnimals", "gardenGift", "gardenDaily", "gardenOwned", "gardenSwap"];
   function resetAll() { cache = null; RESET_KEYS.forEach(function (k) { try { root.localStorage.removeItem(k); } catch (e) {} }); if (root.LearnSlot) root.LearnSlot.clearAll(); }
   function resetCache() { cache = null; }   /* sau khi nạp dữ liệu từ tệp (learn/backup.js): đọc lại từ kho */
-  var api = { starter: starter, missionsLeft: missionsLeft, SEEDS: SEEDS, seedState: seedState, BUILD: BUILD, missionDone: missionDone, MISSION_SUBJ: MISSION_SUBJ, resetCache: resetCache, resetAll: resetAll, RESET_KEYS: RESET_KEYS, KEY: KEY, GOAL: GOAL, CROP: CROP, OUTFITS: OUTFITS, day: day, get: get, save: save, stars: stars, addStars: addStars, addSeeds: addSeeds, addCrop: addCrop, cropTotal: cropTotal, streakDays: streakDays, recordRound: recordRound, outfitsOwned: outfitsOwned, wearing: wearing, wear: wear, greet: greet };
+  /* ===== AO CÁ: bé dùng NÔNG SẢN đã thu hoạch (kho "crops") để mua cá thả ao; cho cá ăn (nhiệm vụ "fish") thì cá no cả ngày ===== */
+  var FISH = [   /* sinh vật ao, xếp theo giá (nông sản): icon tạm là SVG linh vật shared/art/garden/ao/sv-<id>.svg (scripts/art/gen-ao-sinh-vat.js) */
+    { id: "vang", n: "Cá vàng", ic: "🐠", price: 4 }, { id: "oc", n: "Ốc sên", ic: "🐌", price: 4 }, { id: "chep", n: "Cá chép", ic: "🐟", price: 6 },
+    { id: "tom", n: "Tôm", ic: "🦐", price: 8 }, { id: "cua", n: "Cua", ic: "🦀", price: 10 }, { id: "ngua", n: "Cá ngựa", ic: "🦄", price: 12 },
+    { id: "koi", n: "Cá koi", ic: "🎏", price: 15 }, { id: "saobien", n: "Sao biển", ic: "⭐", price: 18 }, { id: "nuc", n: "Cá nóc", ic: "🐡", price: 20 },
+    { id: "rua", n: "Rùa", ic: "🐢", price: 25 }, { id: "sua", n: "Sứa", ic: "🪼", price: 28 }, { id: "bachtuoc", n: "Bạch tuộc", ic: "🐙", price: 35 },
+    { id: "heo", n: "Cá heo", ic: "🐬", price: 45 }, { id: "map", n: "Cá mập con", ic: "🦈", price: 60 }, { id: "ca_voi", n: "Cá voi", ic: "🐳", price: 80 }
+  ];
+  function fishOf(g) { if (!g.fish || typeof g.fish !== "object") g.fish = { vang: 1 }; return g.fish; }   /* ao mới có sẵn 1 cá vàng */
+  function fishTotal() { var f = fishOf(get()), n = 0; for (var k in f) n += f[k] | 0; return n; }
+  function spendCrops(n) {   /* trừ n nông sản (lấy từ loại nhiều nhất trước); false nếu không đủ */
+    var g = get(); if (cropTotal() < n) return false;
+    var ids = Object.keys(g.crops).sort(function (a, b) { return g.crops[b] - g.crops[a]; });
+    for (var i = 0; i < ids.length && n > 0; i++) { var t = Math.min(n, g.crops[ids[i]] | 0); g.crops[ids[i]] -= t; n -= t; }
+    save(); return true;
+  }
+  function buyFish(id) {
+    var f = null; FISH.forEach(function (x) { if (x.id === id) f = x; }); if (!f) return { ok: false, why: "none" };
+    if (fishTotal() >= 20) return { ok: false, why: "full" };   /* ao đầy */
+    if (!spendCrops(f.price)) return { ok: false, why: "crops" };
+    var g = get(); fishOf(g)[id] = (fishOf(g)[id] | 0) + 1; save(); return { ok: true };
+  }
+  function fishFed() { var g = get(); return g.fishFed === day(); }
+  function feedFish() { var g = get(); g.fishFed = day(); save(); }
+  var api = { FISH: FISH, fishOf: function () { return fishOf(get()); }, fishTotal: fishTotal, buyFish: buyFish, fishFed: fishFed, feedFish: feedFish, starter: starter, missionsLeft: missionsLeft, SEEDS: SEEDS, seedState: seedState, BUILD: BUILD, missionDone: missionDone, MISSION_SUBJ: MISSION_SUBJ, resetCache: resetCache, resetAll: resetAll, RESET_KEYS: RESET_KEYS, KEY: KEY, GOAL: GOAL, CROP: CROP, OUTFITS: OUTFITS, day: day, get: get, save: save, stars: stars, addStars: addStars, addSeeds: addSeeds, addCrop: addCrop, cropTotal: cropTotal, streakDays: streakDays, recordRound: recordRound, outfitsOwned: outfitsOwned, wearing: wearing, wear: wear, greet: greet };
   if (typeof module !== "undefined" && module.exports) module.exports = api; else root.Farm = api;
 })(typeof window !== "undefined" ? window : globalThis);

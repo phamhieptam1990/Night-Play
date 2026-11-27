@@ -1,0 +1,4 @@
+/* Sửa thời khoá biểu (timetable.js) */
+.ttrow{display:flex;gap:8px;align-items:stretch}.ttrow a{flex:1}.ttdn{flex:none;width:52px;border-radius:14px;border:2px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);font-size:22px;cursor:pointer}.ttdn.on{background:rgba(52,211,153,.3);border-color:#34D399}
+.ttg{display:grid;grid-template-columns:34px repeat(5,1fr);gap:6px;margin:10px 0;align-items:center;text-align:center}.ttg b{font-size:14px;color:#fff}
+.ttc{min-height:52px;border-radius:12px;border:2px solid rgba(255,255,255,.35);background:rgba(255,255,255,.14);font-size:26px;cursor:pointer}.ttc:active{transform:scale(.94)}
