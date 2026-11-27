@@ -16,7 +16,7 @@
   /* Thử thách hằng ngày của Đập Deadline bị khoá ở bản Free (docs/FREE-VS-NIGHTPASS.md 3.1): không chọn làm "Hôm nay" */
   var NO_FREE_DAILY = { "dap-deadline": 1 };
   /* khoá lưu điểm theo ngày của từng game (cùng bảng SAVE trong shared/rails.js; check-portalui.js so hai bảng) */
-  var SAVE = { "bao-nhieu-giay": "bg-save", "cat-banh-chung": "cb-save", "mat-tinh-khong": "mt-save", "ghep-ba-the": "gt-save", "tim-doi-the": "td-save", "noi-doi": "nd-save", "truot-so-nam-cham": "ts-save", "san-chu-an": "sc-save", "sudoku-chu-so": "sd-save", "ne-o-ga": "og-save", "noi-mot-net": "nn-save", "shipper-sieu-toc": "ss-save", "song-sot-cuoi-thang": "sv-save", "ve-mot-net": "vn-save", "xay-cau-tre": "xc-save",
+  var SAVE = { "bao-nhieu-giay": "bg-save", "cat-banh-chung": "cb-save", "mat-tinh-khong": "mt-save", "ghep-ba-the": "gt-save", "tim-doi-the": "td-save", "noi-doi": "nd-save", "bat-ke-noi-doi": "kl-save", "hoi-xoay-dap-xoay": "hx-save", "truot-so-nam-cham": "ts-save", "san-chu-an": "sc-save", "sudoku-chu-so": "sd-save", "ne-o-ga": "og-save", "noi-mot-net": "nn-save", "shipper-sieu-toc": "ss-save", "song-sot-cuoi-thang": "sv-save", "ve-mot-net": "vn-save", "xay-cau-tre": "xc-save",
     "cho-hang-kieu-viet": "ch-save", "doi-doi-2048": "d48-save", "duong-ray": "dr-save", "ga-me-ban-trung": "gm-save", "gia-cho-viet": "gcv-save", "me-cung-truyen-tay": "mz-save", "xin-nghi": "xn-save", "xe-ca-phe": "xcp-save", "cozy-wings": "cw-best" };
   var CROWN = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/></svg>';
   var PLAY = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>';

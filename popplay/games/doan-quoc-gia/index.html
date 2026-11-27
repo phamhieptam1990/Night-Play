@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<script src="../../../shared/guard.js"></script><script src="../../../shared/npicon.js"></script><script src="../../../shared/layout-pop.js"></script>
+<script src="../../../shared/device.js"></script>
+<script src="../../../shared/bridge.js"></script><script src="../../../shared/levelup.js"></script>
+<script src="../../../shared/fx.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Đoán Quốc Gia</title>
+<link rel="preload" href="../../../shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../../shared/fonts.css">
+<script>var savedTheme=null;try{savedTheme=localStorage.getItem("theme")}catch(e){}document.documentElement.dataset.theme=savedTheme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")</script>
+<link rel="stylesheet" href="../../../shared/popq/frame.css">
+<link rel="stylesheet" href="../../../shared/popq/overlays.css">
+<link rel="stylesheet" href="../../../shared/popq/pro.css">
+<link rel="stylesheet" href="css/game.css">
+<script src="../../../shared/offline.js" defer></script>
+<script src="../../../shared/art/mascot-art.js" defer></script>
+<link rel="stylesheet" href="../../../shared/poplandscape.css"><link rel="stylesheet" href="../../../shared/layout-pop.css">
+<link rel="stylesheet" href="../../../shared/popnp.css">
+<link rel="stylesheet" href="../../../shared/poptitle.css"><script src="../../../shared/poptitle.js" defer></script>
+<link rel="stylesheet" href="../../../shared/endui.css"><script src="../../../shared/endui.js" defer></script>
+</head>
+<body>
+<div class="app">
+  <div class="side">
+    <div class="top">
+      <h1 id="title" class="pt-title" data-pt="doan-quoc-gia"></h1>
+      <button class="ib" id="homeBtn" type="button" hidden>🏠</button>
+      <button class="ib" id="soundBtn" type="button">🔊</button>
+      <button class="ib" id="langBtn" type="button" style="font-size:14px;font-weight:800">VI</button>
+    </div>
+    <div class="hud"><span id="hl"></span><span id="hr"></span></div>
+  </div>
+  <div class="play" id="play">
+    <div id="home"></div>
+    <div id="arena" hidden>
+      <div class="dc"></div>
+      <div id="stage"></div>
+    </div>
+    <div class="toast" id="toast" role="status"></div>
+    <div class="ov" id="ovHow" hidden>
+      <h2 id="hwH"></h2><div class="row"><span class="chip" id="hwC"></span></div>
+      <div class="hwArt" id="hwArt"></div><ul class="hwL card3" id="hwL"></ul>
+      <div class="row"><button class="ib2" id="hwBack" type="button">←</button><button class="ib2" id="hwSkin" type="button" aria-label="Skin">🎨</button><button class="btnbig" id="hwGo" type="button"></button></div>
+    </div>
+    <div class="ov" id="ovCh" hidden>
+      <h2 id="chH"></h2><div class="vs" id="chV"></div><p id="chP"></p>
+      <div class="row"><button class="ib2" id="chNo" type="button">✕</button><button class="btnbig" id="chGo" type="button"></button></div>
+    </div>
+    <div class="ov" id="ovEnd" hidden>
+      <h2 id="enH"></h2><div class="vs" id="enV"></div><div class="reward" id="enR"></div><p id="enP"></p><p class="near" id="enN" hidden></p>
+      <div class="row"><button class="ib2 main" id="againBtn" type="button">▶</button><button class="ib2" id="retryBtn" type="button" hidden>↻</button><button class="ib2" id="shareBtn" type="button" hidden>📤</button><button class="ib2" id="homeBtn2" type="button">🏠</button><button class="ib2" id="rankBtn" type="button" hidden>🏆</button></div>
+      <p class="cap" id="enL" hidden></p>
+    </div>
+    <div class="ov" id="ovSkin" hidden>
+      <h2 id="skH"></h2><div class="skgrid" id="skGrid"></div><button class="ghost" id="skBack" type="button"></button>
+    </div>
+    <div class="ov" id="ovPay" hidden>
+      <h2 id="pwH"></h2><p id="pwP"></p>
+      <div class="row"><button class="btnbig" id="pwGo" type="button"></button></div>
+      <div class="row"><button class="ghost" id="pwTrial" type="button"></button><button class="ghost" id="pwLater" type="button"></button></div>
+    </div>
+    <div class="ov" id="ovGate" hidden>
+      <h2 id="gtH"></h2><p id="gtP"></p><div class="nums" id="gtNums"></div><button class="ghost" id="gtX" type="button"></button>
+    </div>
+  </div>
+</div>
+<script src="../../../shared/popq/core.js"></script>
+<script src="js/10-data.js"></script>
+<script src="../../../shared/popq/dict.js"></script>
+<script src="../../../shared/popq/run.js"></script>
+<script src="../../../shared/popq/pro.js"></script>
+<script src="data/world.js"></script>
+<script src="js/20-match.js"></script>
+<script src="js/30-geo.js"></script>
+<script src="../../../shared/popq/boot.js"></script>
+<script src="../../../shared/season.js"></script>
+<script>window.POPHELP={"vi":{"t":"Cách chơi","s":[["🗺️","Nhìn hình bản đồ hoặc một phần lá cờ."],["⌨️","Gõ tên nước rồi bấm OK. Kẹt thì bấm 💡 để gợi ý."],["⭐","Ít gợi ý, ít lần sai thì được nhiều điểm!"]]},"en":{"t":"How to play","s":[["🗺️","Look at the map shape or part of a flag."],["⌨️","Type the country's name and tap OK. Stuck? Tap 💡 for a hint."],["⭐","Fewer hints and mistakes earn more points!"]]}}</script><script src="../../../shared/pophelp.js" defer></script><script src="../../../shared/popmenu.js" defer></script><script src="../../../shared/popfit.js" defer></script><script src="../../../shared/icons.js" defer></script><script src="../../../shared/resume.js" defer></script><script src="../../../shared/passwatch.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+/* PopQ — khung chung: biến màu, thanh trên, HUD, màn chọn (lưới 4 loại chơi, thanh cấp, thẻ Hôm nay).
+   Cùng khuôn Tháp Vòng Màu để màn chọn dùng chung luật poplandscape. */
+:root{--bg:#FFF6EC;--ink:#3b2a1d;--muted:#8a6f5a;--panel:#fff;--line:#f0d9c0;--accent:#FF5A1F;--on-accent:#fff;--good:#2fbf71;--bad:#e5484d;--warn:#ffb020;
+  --shadow:0 8px 24px rgba(120,70,20,.16);
+  --display:var(--font);--w:min(calc(100vw - 24px),calc((100dvh - 176px)*.75),760px)}
+:root[data-theme="dark"]{--bg:#1B2340;--ink:#F2F4FF;--muted:#a9b2d8;--panel:#26305a;--line:#38437a;--accent:#FF7A45;--on-accent:#2a1204;--shadow:0 8px 24px rgba(0,0,0,.4)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;overflow:hidden}
+body{background:var(--bg);color:var(--ink);font-family:var(--display);display:flex;justify-content:center;align-items:center;
+  padding:8px 12px calc(8px + env(safe-area-inset-bottom));overscroll-behavior:none;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulation}
+button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
+[hidden]{display:none!important}
+.app{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%}
+.side{width:var(--w);display:flex;flex-direction:column;gap:8px}
+.top{display:flex;align-items:center;gap:8px}
+.top h1{flex:1;margin:0;font-size:clamp(18px,5.4vw,26px);font-weight:800;line-height:1;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.ib{width:44px;height:44px;border-radius:50%;background:var(--panel);box-shadow:var(--shadow);font-size:20px;display:grid;place-items:center;flex:none}
+.ib:active{transform:scale(.92)}
+.hud{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:34px;padding:2px 14px;border-radius:999px;background:var(--panel);
+  box-shadow:var(--shadow);font-size:22px;font-weight:800}
+.play{position:relative;width:var(--w);aspect-ratio:3/4;border-radius:26px;overflow:hidden;background:var(--bg);box-shadow:var(--shadow);container-type:size;
+  touch-action:manipulation;
+  --sb:linear-gradient(#bfe8ff,#e6f6d8);--pb:linear-gradient(#5ec3ff,#2f8fe0);--sp:#fff;--si:#3b2a1d;--sa:#ff5a1f;--sa2:#fff;--rad:5cqw;
+    --bd:.8cqw solid rgba(255,255,255,.9);--sh:0 1cqw 3cqw rgba(0,0,0,.18)}
+#home,#arena{position:absolute;inset:0}
+#home{display:flex;flex-direction:column;gap:2.4cqw;padding:3cqw;background:var(--sb)}
+.lvs{display:flex;gap:2cqw;justify-content:center;align-items:center;background:rgba(255,255,255,.7);border-radius:999px;padding:1.2cqw 2cqw;box-shadow:var(--sh)}
+.lvb{flex:1;height:11cqw;border-radius:999px;background:transparent;color:#3b2a1d;font-size:6cqw;font-weight:800;display:flex;align-items:center;justify-content:center;gap:1cqw}
+.lvb small{font-size:4.2cqw}
+.lvb.on{background:var(--accent);color:var(--on-accent);box-shadow:0 .8cqw 0 color-mix(in srgb,var(--accent) 55%,#000)}
+.tiles{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:2.4cqw}
+.tile{position:relative;border-radius:5cqw;background:var(--sb);color:var(--si);border:var(--bd);box-shadow:var(--sh);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:.6cqw;padding:1cqw;overflow:hidden;text-align:center;cursor:pointer}
+.tile:active{transform:scale(.97)}
+.tile .ti{font-size:17cqw;line-height:1}.tile b{font-size:4.6cqw;line-height:1.05;font-weight:800}
+.tile .sk{position:absolute;right:1.6cqw;top:1.6cqw;width:max(9cqw,36px);height:max(9cqw,36px);border-radius:50%;background:var(--sp);font-size:4.6cqw;display:grid;
+  place-items:center;box-shadow:var(--sh)}
+.tile .sk i{position:absolute;right:-.8cqw;top:-.8cqw;font-size:2.8cqw;font-style:normal;background:var(--sp);border-radius:50%;line-height:1;padding:.2cqw}
+.tile .bd{position:absolute;left:2cqw;top:1.6cqw;font-size:3.6cqw;font-weight:800;opacity:.85}
+.dbar{flex:none;height:10.4cqw;border:0;border-radius:999px;background:linear-gradient(90deg,var(--accent),#7a5cff);color:#fff;display:flex;align-items:center;
+  justify-content:space-between;padding:0 4.5cqw;font-weight:800;font-size:4.6cqw;box-shadow:var(--sh)}
+.dbar:active{transform:scale(.98)}

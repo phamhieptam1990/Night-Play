@@ -13,12 +13,12 @@
   var TH = {
     "ban-co-hieu-toi": "💬 ❓ 💡 🧩", "bao-nhieu-giay": "⏱️ ⏳ 🎯 🐢", "cat-banh-chung": "🥮 🍃 🔪 🎋", "cho-hang-kieu-viet": "📦 🐔 🛵 🚚",
     "cozy-wings": "🪽 🕊️ ☁️ ✨", "dap-deadline": "📅 ⏰ 💥 📝", "doi-doi-2048": "🔢 🧬 ✨ 🎲", "duong-ray": "🚂 🛤️ 🚉 🚦",
-    "ga-me-ban-trung": "🥚 🐔 🌾 🐥", "gia-cho-viet": "🧺 🥬 🍅 🛒", "mat-tinh-khong": "👁️ 🎨 🔍 🌈", "ghep-ba-the": "🎃 👻 🦇 🌙", "tim-doi-the": "🌸 🌻 🦋 🍀", "noi-doi": "🔗 🦁 🍜 🧸", "truot-so-nam-cham": "🔢 🧲 🧩 ⭐", "san-chu-an": "🔤 🔍 📚 ✏️", "sudoku-chu-so": "🔢 🧠 ✏️ ⭐", "me-cung-truyen-tay": "🧭 🌀 ⭐ 🗺️",
+    "ga-me-ban-trung": "🥚 🐔 🌾 🐥", "gia-cho-viet": "🧺 🥬 🍅 🛒", "mat-tinh-khong": "👁️ 🎨 🔍 🌈", "ghep-ba-the": "🎃 👻 🦇 🌙", "tim-doi-the": "🌸 🌻 🦋 🍀", "noi-doi": "🔗 🦁 🍜 🧸", "bat-ke-noi-doi": "🔍 🕵️ ❓ 📢", "hoi-xoay-dap-xoay": "❓ 😈 🌀 💡", "truot-so-nam-cham": "🔢 🧲 🧩 ⭐", "san-chu-an": "🔤 🔍 📚 ✏️", "sudoku-chu-so": "🔢 🧠 ✏️ ⭐", "me-cung-truyen-tay": "🧭 🌀 ⭐ 🗺️",
     "ne-o-ga": "🌧️ 🛵 ☔ 🕳️", "noi-mot-net": "✍️ 🔗 ⭐ 💡", "shipper-sieu-toc": "🛵 📦 🍜 🏠", "song-sot-cuoi-thang": "💰 💸 🍜 ☕",
     "ve-mot-net": "✏️ 📐 ⭕ 🖍️", "xay-cau-tre": "🎋 🌉 🛶 🌾", "xe-ca-phe": "☕ 🧋 🛵 🫘", "xin-nghi": "📝 🗂️ ☕ 🗓️",
     "be-dau-bo-me": "🧸 🍼 🎈 ⭐", "be-noi-dung-khong": "🙅 🙆 🎈 ❓", "bo-me-5-giay": "⏱️ 🧸 👨‍👩‍👧 🎈", "con-vat-an-so": "🐊 🧮 🍎 🐘",
     "doan-tuoi-nao": "🎂 🎈 🎁 👶", "lang-cua-be": "🏡 🌳 🐶 🎈", "nhay-theo-so": "💃 🧮 🎵 🪩", "pop-fly": "🐦 ☁️ 🌈 ⭐",
-    "qua-song": "🛶 🌊 ⭐ 🌉", "ten-lua-cua-be": "🚀 ⭐ 🌙 🪐", "thap-vong-mau": "🔴 🟡 🔵 🌈", "sudoku-con-vat": "🐶 🐱 🐰 🐸", "ve-chu-quai-vat": "👾 ✏️ 🍎 🐙"
+    "qua-song": "🛶 🌊 ⭐ 🌉", "ten-lua-cua-be": "🚀 ⭐ 🌙 🪐", "thap-vong-mau": "🔴 🟡 🔵 🌈", "sudoku-con-vat": "🐶 🐱 🐰 🐸", "me-cung-toan": "🐭 🧀 ➕ ➗", "doan-quoc-gia": "🌍 🗺️ 🏳️ ✈️", "kham-pha-vu-tru": "🚀 🪐 ⭐ 🌙", "ve-chu-quai-vat": "👾 ✏️ 🍎 🐙"
   };
   var st = document.createElement("style");
   st.textContent = "#npWide{position:fixed;left:0;top:0;right:0;bottom:0;z-index:-1;pointer-events:none;display:none;contain:strict}" +

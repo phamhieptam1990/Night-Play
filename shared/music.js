@@ -25,6 +25,8 @@
     "san-chu-an": { bpm: 94,  root: 64, sc: "maj", prog: [0, 3, 4, 0, 5, 3, 4, 0], lead: "marimba",groove: 1, bass: [0, 7], arp: [0, 4, 7, 12] },
     "truot-so-nam-cham": { bpm: 90,  root: 60, sc: "maj", prog: [0, 5, 3, 4, 0, 5, 4, 0], lead: "marimba",groove: 0, bass: [0, 7], arp: [0, 4, 7, 12] },
     "tim-doi-the":      { bpm: 96,  root: 62, sc: "maj", prog: [0, 4, 5, 3, 0, 4, 3, 0], lead: "marimba",groove: 1, bass: [0, 7], arp: [0, 4, 7, 11] },
+    "bat-ke-noi-doi":    { bpm: 92, root: 57, sc: "pen", prog: [0, 3, 4, 0, 5, 3, 4, 0], lead: "marimba", groove: 1, bass: [0, 7], arp: [0, 4, 7, 12] },
+    "hoi-xoay-dap-xoay": { bpm: 112, root: 62, sc: "maj", prog: [0, 3, 4, 0, 5, 3, 4, 0], lead: "marimba", groove: 1, bass: [0, 7], arp: [0, 4, 7, 12] },
     "noi-doi":          { bpm: 108, root: 60, sc: "maj", prog: [0, 3, 4, 0, 5, 3, 4, 0], lead: "marimba",groove: 1, bass: [0, 7], arp: [0, 4, 7, 12] },
     "ghep-ba-the":      { bpm: 88,  root: 57, sc: "pen", prog: [0, 3, 4, 0, 5, 3, 4, 0], lead: "marimba",groove: 0, bass: [0, 7], arp: [0, 4, 7, 12] },
     "mat-tinh-khong":   { bpm: 92,  root: 59, sc: "dor", prog: [0, 3, 0, 4, 0, 3, 5, 4], lead: "marimba",groove: 1, bass: [0, 7, 10], arp: [0, 4, 8, 12] },
@@ -55,6 +57,9 @@
     "qua-song":         { bpm: 92,  root: 57, sc: "mix", prog: [0, 3, 4, 3, 0, 3, 4, 0], lead: "pluck",  groove: 0, bass: [0, 8], arp: [0, 6, 12] },
     "ten-lua-cua-be":   { bpm: 122, root: 62, sc: "mix", prog: [0, 6, 3, 4, 0, 6, 3, 0], lead: "square", groove: 2, bass: [0, 4, 8, 12], arp: [2, 6, 10, 14] },
     "thap-vong-mau":    { bpm: 100, root: 60, sc: "pen", prog: [0, 2, 3, 4, 0, 2, 3, 0], lead: "marimba",groove: 1, bass: [0, 8], arp: [0, 4, 8, 12] },
+    "me-cung-toan":      { bpm: 104, root: 60, sc: "maj", prog: [0, 3, 4, 0, 2, 3, 4, 0], lead: "marimba", groove: 1, bass: [0, 8], arp: [0, 4, 8, 12] },
+    "doan-quoc-gia":     { bpm: 100, root: 64, sc: "maj", prog: [0, 3, 4, 0, 2, 3, 4, 0], lead: "marimba", groove: 1, bass: [0, 8], arp: [0, 4, 8, 12] },
+    "kham-pha-vu-tru":   { bpm: 84, root: 57, sc: "pen", prog: [0, 3, 4, 0, 2, 3, 4, 0], lead: "marimba", groove: 1, bass: [0, 8], arp: [0, 4, 8, 12] },
     "sudoku-con-vat":   { bpm: 96, root: 62, sc: "pen", prog: [0, 3, 4, 0, 2, 3, 4, 0], lead: "marimba",groove: 1, bass: [0, 8], arp: [0, 4, 8, 12] },
     "ve-chu-quai-vat":  { bpm: 104, root: 59, sc: "dor", prog: [0, 6, 3, 4, 0, 6, 5, 4], lead: "pluck",  groove: 1, bass: [0, 6, 8, 14], arp: [2, 6, 10, 14] }
   };

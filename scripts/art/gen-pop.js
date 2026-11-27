@@ -99,6 +99,7 @@ ${d.sign}
 }
 /* 2 linh vật Pop 3D mới (Nuôi Thú Tiếng Việt, Tiệm Nước Ép Tiếng Anh) — dữ liệu ở pop-3d-*.js */
 const NEW3D = { "nuoi-thu-tieng-viet": require("./pop-3d-bi.js"), "tiem-nuoc-ep-tieng-anh": require("./pop-3d-fox.js") };
+Object.assign(NEW3D, require("./pop-quiz-mascots.js"));
 for (const id in NEW3D) { const m = NEW3D[id]; G[id] = m.G; SK[id] = Object.assign({ badge: "", group: "", night: "", star: "", fxNight, fxStar }, m.S, { back: Object.assign({ star: capeBack }, m.S.back || {}) }); }
 const bellFix = s => s.replace(/var\(--bell\)/g, "#FFF3D4");
 for (const id in G) { let s = svg(id, G[id]); fs.writeFileSync(path.join(out, "mascot-pop-" + id + ".svg"), s); }

@@ -45,6 +45,9 @@
 .pt-title[data-pt="doan-tuoi-nao"]{--pt-a:#ff9cc6;--pt-b:#ee4a97;--pt-shadow:#992660;--pt-ic:"🎂"}          /* hồng */
 .pt-title[data-pt="nhay-theo-so"]{--pt-a:#ffbf4d;--pt-b:#ee4c7c;--pt-shadow:#9b2850;--pt-ic:"💃"}           /* vàng → hồng */
 .pt-title[data-pt="thap-vong-mau"]{--pt-a:#ff86b8;--pt-b:#6f5ce8;--pt-shadow:#3c2d9c;--pt-ic:"🌈"}          /* hồng → tím */
+.pt-title[data-pt="me-cung-toan"]{--pt-a:#7ED957;--pt-b:#2FA66B;--pt-shadow:#17613f;--pt-ic:"🐭"}
+.pt-title[data-pt="doan-quoc-gia"]{--pt-a:#6fc4ff;--pt-b:#2f7fe0;--pt-shadow:#12408c;--pt-ic:"🌍"}
+.pt-title[data-pt="kham-pha-vu-tru"]{--pt-a:#a78bfa;--pt-b:#5b3fd6;--pt-shadow:#2d1b78;--pt-ic:"🚀"}
 .pt-title[data-pt="sudoku-con-vat"]{--pt-a:#6fc4ff;--pt-b:#7a5cff;--pt-shadow:#2c3f9c;--pt-ic:"🐶"}          /* xanh dương → tím */
 .pt-title[data-pt="ve-chu-quai-vat"]{--pt-a:#b985ff;--pt-b:#5b36d8;--pt-shadow:#361e92;--pt-ic:"👾"}        /* tím */
 

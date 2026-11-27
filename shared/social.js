@@ -25,6 +25,8 @@ window.NPS = (function () {
     "san-chu-an": { name: { vi: "Săn Chữ Ẩn", en: "Word Hunt" }, url: "cozyplay/games/san-chu-an/index.html", board: true, site: "cozyplay" },
     "truot-so-nam-cham": { name: { vi: "Trượt Số Nam Châm", en: "Magnetic Number Slide" }, url: "cozyplay/games/truot-so-nam-cham/index.html", board: true, site: "cozyplay" },
     "tim-doi-the": { name: { vi: "Tìm Đôi Thẻ", en: "Match Pairs" }, url: "cozyplay/games/tim-doi-the/index.html", board: true, site: "cozyplay" },
+    "bat-ke-noi-doi": { name: { vi: "Bắt Kẻ Nói Dối", en: "Fallacy Hunter" }, url: "cozyplay/games/bat-ke-noi-doi/index.html", board: true, site: "cozyplay" },
+    "hoi-xoay-dap-xoay": { name: { vi: "Hỏi Xoáy Đáp Xoay", en: "Twist Trap Quiz" }, url: "cozyplay/games/hoi-xoay-dap-xoay/index.html", board: true, site: "cozyplay" },
     "noi-doi": { name: { vi: "Nối Đôi", en: "Link Pairs" }, url: "cozyplay/games/noi-doi/index.html", board: true, site: "cozyplay" },
     "ghep-ba-the": { name: { vi: "Ghép Ba Thẻ", en: "Triple Tiles" }, url: "cozyplay/games/ghep-ba-the/index.html", board: true, site: "cozyplay" },
     "xay-cau-tre": { name: { vi: "Xây Cầu Tre", en: "Bamboo Bridge" }, url: "cozyplay/games/xay-cau-tre/index.html", board: true, site: "cozyplay" },
@@ -53,6 +55,9 @@ window.NPS = (function () {
     "be-dau-bo-me": { name: { vi: "Bé Đấu Bố Mẹ", en: "Kid vs Parent" }, url: "popplay/games/be-dau-bo-me/index.html", board: true, kids: true, site: "popplay" },
     "qua-song": { name: { vi: "Qua Sông Cùng Bé", en: "River Crossing" }, url: "popplay/games/qua-song/index.html", board: true, kids: true, site: "popplay" },
     "thap-vong-mau": { name: { vi: "Tháp Vòng Màu", en: "Rainbow Rings" }, url: "popplay/games/thap-vong-mau/index.html", board: true, kids: true, site: "popplay" },
+    "me-cung-toan": { name: { vi: "Mê Cung Toán Nhanh", en: "Quick Math Maze" }, url: "popplay/games/me-cung-toan/index.html", board: true, kids: true, site: "popplay" },
+    "doan-quoc-gia": { name: { vi: "Đoán Quốc Gia", en: "Guess the Country" }, url: "popplay/games/doan-quoc-gia/index.html", board: true, kids: true, site: "popplay" },
+    "kham-pha-vu-tru": { name: { vi: "Khám Phá Vũ Trụ", en: "Space Explorer" }, url: "popplay/games/kham-pha-vu-tru/index.html", board: true, kids: true, site: "popplay" },
     "sudoku-con-vat": { name: { vi: "Sudoku Con Vật", en: "Animal Sudoku" }, url: "popplay/games/sudoku-con-vat/index.html", board: true, kids: true, site: "popplay" },
     "lang-cua-be": { name: { vi: "Làng Của Bé", en: "Baby's Village" }, url: "popplay/games/lang-cua-be/index.html", board: true, kids: true, site: "popplay" },
   };

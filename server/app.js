@@ -776,9 +776,12 @@ const NEW_GAMES = {   // 7 game mới của Pop Play (mỗi game 4 loại × 5 g
   "nhay-theo-so": { vi: "Nhảy Theo Số", en: "Dance by Numbers", types: [["Nhảy", "Jump"], ["Vỗ tay", "Clap"], ["Dậm chân", "Stomp"], ["Vẫy tay", "Wave"]], dvi: "Màn hình hiện phép tính, bé nhảy hoặc vỗ tay đúng số lần. Vừa học vừa vận động!", den: "A sum appears, the kid jumps or claps that many times. Learn and move!" },
   "qua-song": { vi: "Qua Sông Cùng Bé", en: "River Crossing", types: [["Cảnh sát & Trộm", "Cops & Robbers"], ["Bác nông dân", "Farmer's Trip"], ["Cả nhà qua sông", "Family Crossing"], ["Qua cầu đêm", "Night Bridge"]], dvi: "Đố vui đưa cả nhóm qua sông bằng thuyền. Chọn sai chỉ bị nhắc nhẹ, không bao giờ thua!", den: "A cosy puzzle: get everyone across the river. Wrong picks only get a gentle reminder!" },
   "thap-vong-mau": { vi: "Tháp Vòng Màu", en: "Rainbow Rings", types: [["Tháp 3 cột", "3 Pegs"], ["Tháp 4 cột", "4 Pegs"], ["Tháp xáo trộn", "Shuffled Tower"], ["Tháp vòng tròn", "Round Tower"]], dvi: "Chuyển các vòng màu từ cột này sang cột kia: vòng to không được đè lên vòng nhỏ!", den: "Move the colourful rings between pegs: a big ring never sits on a small one!" },
+  "me-cung-toan": { vi: "Mê Cung Toán Nhanh", en: "Quick Math Maze", maxSc: 3000, types: [["Rừng Xanh", "Green Forest"], ["Hang Động", "Bat Cave"], ["Lâu Đài", "Castle"], ["Vũ Trụ", "Outer Space"]], dvi: "Chuột chạy qua các cổng, mỗi cổng là một phép tính từ cộng trừ tới phân số. Chọn sai là rẽ vào đường cụt!", den: "The mouse runs through gates, each a sum from adding to fractions. A wrong pick is a dead end!" },
+  "doan-quoc-gia": { vi: "Đoán Quốc Gia", en: "Guess the Country", maxSc: 1500, types: [["Hình bản đồ", "Map shape"], ["Lá cờ", "Flag"], ["Bản đồ + cờ", "Map + flag"], ["Thử thách", "Challenge"]], dvi: "Chỉ thấy đường viền một nước hoặc một phần lá cờ, gõ tên nước đó. Bạn đoán được mấy nước?", den: "See only a country's outline or part of its flag, then type its name. How many can you guess?" },
+  "kham-pha-vu-tru": { vi: "Khám Phá Vũ Trụ", en: "Space Explorer", maxSc: 1000, types: [["Hệ Mặt Trời", "Solar System"], ["Mặt Trăng & Mặt Trời", "Moon & Sun"], ["Phi hành gia", "Astronauts"], ["Sao & Thiên hà", "Stars & Galaxies"]], dvi: "Tên lửa bay qua 5 trạm trong vũ trụ, mỗi trạm một câu hỏi và một điều thú vị để khám phá!", den: "A rocket flies past 5 stops in space, each with a question and a fun fact to discover!" },
   "sudoku-con-vat": { vi: "Sudoku Con Vật", en: "Animal Sudoku", types: [["Sudoku 4×4", "Sudoku 4×4"], ["Sudoku 6×6", "Sudoku 6×6"], ["Sudoku chéo 4×4", "Diagonal 4×4"], ["Sudoku chéo 6×6", "Diagonal 6×6"]], dvi: "Xếp các bạn thú vào bàn Sudoku: mỗi hàng, cột, ô không lặp. Sai chỉ bị nhắc nhẹ, không bao giờ thua!", den: "Place the animals on the Sudoku board: no repeats in any row, column or box. A wrong pick is a gentle nudge, you never lose!" },
 };
-for (const id in NEW_GAMES) POP_GAMES[id] = { max: 300, kids: true };
+for (const id in NEW_GAMES) POP_GAMES[id] = { max: NEW_GAMES[id].maxSc || 300, kids: true };
 const COZY_NEW = {   // game mới của Cozy Play (người lớn): 1 loại × 5 giao diện (1 free + 4 Night Pass). ch = {s:hạt giống uint32, sc:điểm 0..max}
   "gia-cho-viet": { vi: "Đoán Giá Chợ Việt", en: "Guess the Market Price", max: 500, dvi: "5 món mỗi ngày, cả nước cùng đoán. Bạn đoán sát giá chợ cỡ nào?", den: "5 items a day, everyone guesses the same. How close can you get to the market price?" },
   "doi-doi-2048": { vi: "Đổi Đời 2048", en: "Life Upgrade 2048", max: 20000, dvi: "Ghép đồ từ quả trứng lên biệt thự. Hôm nay cả nước chơi cùng một bàn, bạn lên đời tới đâu?", den: "Merge from an egg up to a villa. Everyone plays the same board today — how far can you go?" },
@@ -791,6 +794,8 @@ const COZY_NEW = {   // game mới của Cozy Play (người lớn): 1 loại ×
   "san-chu-an": { vi: "Săn Chữ Ẩn", en: "Word Hunt", max: 5000, dvi: "Ô chữ tìm từ: kéo ngón tay qua hàng chữ thẳng để khoanh từ tiếng Anh trong danh sách, kèm nghĩa tiếng Việt. 3 độ khó, ngày nào cũng có ô chữ mới!", den: "Word search: drag along a straight line of letters to circle the listed English words, with Vietnamese meanings. 3 difficulty levels and a new puzzle every day!" },
   "truot-so-nam-cham": { vi: "Trượt Số Nam Châm", en: "Magnetic Number Slide", max: 10000, dvi: "Xếp số trượt kiểu nam châm: chạm một ô cùng hàng/cột với ô trống, cả dãy trượt theo. Tự nhập số hàng và số cột, ván nào cũng giải được!", den: "Magnetic sliding number puzzle: tap a tile in the gap's row or column and the whole line slides. Type your own rows and columns!" },
   "tim-doi-the": { vi: "Tìm Đôi Thẻ", en: "Match Pairs", max: 6000, dvi: "Thẻ xếp chồng nhiều tầng: chạm một thẻ không bị đè rồi chạm thẻ giống nó, cả đôi biến mất. 3 độ khó, dọn sạch bàn càng nhanh càng nhiều điểm!", den: "Stacked tiles: tap an uncovered tile, then its match, and the pair vanishes. 3 difficulty levels — clear the board fast for more points!" },
+  "bat-ke-noi-doi": { vi: "Bắt Kẻ Nói Dối", en: "Fallacy Hunter", max: 6000, dvi: "Đọc đoạn quảng cáo hay bình luận rồi chỉ ra lỗi lập luận: đánh tráo khái niệm, gán ghép, công kích cá nhân… Có giải thích sau mỗi câu!", den: "Read an ad or comment and spot the flawed reasoning: switching meanings, false links, personal attacks… with an explanation after every answer!" },
+  "hoi-xoay-dap-xoay": { vi: "Hỏi Xoáy Đáp Xoay", en: "Twist Trap Quiz", max: 6000, dvi: "Câu đố mẹo và nghịch lý: một cân bông và một cân sắt, cái nào nặng hơn? Tỉ lệ sai cao, gửi bạn bè để bẫy!", den: "Trick questions and paradoxes: a kilo of cotton or a kilo of iron, which is heavier? High miss rate, send them to friends to trap them!" },
   "noi-doi": { vi: "Nối Đôi", en: "Link Pairs", max: 6500, dvi: "Chạm hai thẻ giống nhau, nối được bằng đường tối đa 2 chỗ rẽ qua ô trống thì cả đôi biến mất. 3 độ khó, dọn sạch bàn càng nhanh càng nhiều điểm!", den: "Tap two matching tiles; link them with a path of at most 2 turns through empty cells and the pair vanishes. 3 difficulty levels — clear the board fast for more points!" },
   "ghep-ba-the": { vi: "Ghép Ba Thẻ", en: "Triple Tiles", max: 8000, dvi: "Thẻ xếp chồng nhiều tầng: chạm thẻ không bị đè để cho vào khay, đủ 3 thẻ giống nhau thì biến mất. Khay đầy 7 ô là thua!", den: "Stacked tiles: tap an uncovered tile to drop it in the tray, 3 matching tiles vanish. A full 7-slot tray ends the game!" },
   "xay-cau-tre": { vi: "Xây Cầu Tre", en: "Bamboo Bridge", max: 3000, dvi: "Dùng số cây tre giới hạn để xây cầu qua kênh. Người, xe đạp, xe máy, xe bò lần lượt đi qua. Cầu của bạn có trụ nổi không?", den: "Use a limited number of bamboo poles to build a bridge across the canal. A walker, bicycle, motorbike and ox cart cross in turn. Will your bridge hold?" },
@@ -1033,6 +1038,9 @@ const PRO_MODS = {   // require LITERAL (esbuild của Netlify không gộp đư
   "nhay-theo-so": () => require("./pro/nhay-theo-so"),
   "qua-song": () => require("./pro/qua-song"),
   "thap-vong-mau": () => require("./pro/thap-vong-mau"),
+  "me-cung-toan": () => require("./pro/me-cung-toan"),
+  "doan-quoc-gia": () => require("./pro/doan-quoc-gia"),
+  "kham-pha-vu-tru": () => require("./pro/kham-pha-vu-tru"),
   "sudoku-con-vat": () => require("./pro/sudoku-con-vat"),
   "gia-cho-viet": () => require("./pro/gia-cho-viet"),
   "xin-nghi": () => require("./pro/xin-nghi"),
@@ -1046,6 +1054,8 @@ const PRO_MODS = {   // require LITERAL (esbuild của Netlify không gộp đư
   "san-chu-an": () => require("./pro/san-chu-an"),
   "truot-so-nam-cham": () => require("./pro/truot-so-nam-cham"),
   "tim-doi-the": () => require("./pro/tim-doi-the"),
+  "bat-ke-noi-doi": () => require("./pro/bat-ke-noi-doi"),
+  "hoi-xoay-dap-xoay": () => require("./pro/hoi-xoay-dap-xoay"),
   "noi-doi": () => require("./pro/noi-doi"),
   "ghep-ba-the": () => require("./pro/ghep-ba-the"),
   "xay-cau-tre": () => require("./pro/xay-cau-tre"),
@@ -1074,7 +1084,7 @@ route("GET", new RegExp("^/api/pro/(" + NG_IDS + ")\\.js$"), async ({ m, headers
 });
 route("GET", new RegExp("^/api/share/(" + NG_IDS + ")$"), async ({ m, query, headers }) => {
   const id = m[1], g = NEW_GAMES[id], en = query.get("l") === "en", L = en ? 1 : 0, o = b64json(query.get("ch")), origin = reqOrigin(headers), name = g[en ? "en" : "vi"];
-  const okCh = o && intIn(o.t, 0, 3) && intIn(o.lv, 1, 8) && intIn(o.s, 0, 4294967295) && intIn(o.sc, 0, 300);
+  const okCh = o && intIn(o.t, 0, 3) && intIn(o.lv, 1, 8) && intIn(o.s, 0, 4294967295) && intIn(o.sc, 0, g.maxSc || 300);
   const daily = query.get("d") === "1", dn = /^\d{1,4}$/.test(query.get("n") || "") ? query.get("n") : "", ds = /^\d{1,3}$/.test(query.get("s") || "") ? query.get("s") : "";
   let title = name, desc = en ? g.den : g.dvi, img = "home", go = "";
   if (daily) { title = en ? "📅 " + name + " — today #" + dn + (ds ? ": " + ds + " points" : "") : "📅 " + name + " — hôm nay #" + dn + (ds ? ": " + ds + " điểm" : ""); desc = en ? "Same challenge for every family today. Can you beat it?" : "Hôm nay mọi nhà cùng một thử thách. Nhà bạn làm được không?"; img = "daily"; go = "#daily"; }

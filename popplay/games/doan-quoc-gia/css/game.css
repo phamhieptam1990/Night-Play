@@ -1,0 +1,19 @@
+/* Đoán Quốc Gia — vùng hình (bản đồ / cờ), ô gõ, gợi ý. */
+.play{--sb:linear-gradient(#bfe4ff,#7cc0f5);--accent:#2f7fe0}
+.gqTop{flex:none;display:flex;align-items:center;gap:1cqw;padding:2cqw 3cqw 1cqw}
+.gqTop u{flex:1;height:2.6cqw;border-radius:99px;background:rgba(255,255,255,.55);text-decoration:none}.gqTop u.dn{background:var(--good)}.gqTop u.cur{background:var(--accent);box-shadow:0 0 0 .6cqw #fff}
+.gqTop b{flex:none;font-size:3.8cqw;font-weight:800;color:#0e2a55;background:rgba(255,255,255,.8);border-radius:99px;padding:.4cqw 2.4cqw;min-height:5cqw}.gqTop b:empty{display:none}
+.gq{position:relative;flex:1;min-height:0;margin:1cqw 3cqw;border-radius:5cqw;background:#eaf4ff;box-shadow:var(--shadow);display:grid;place-items:center;overflow:hidden;padding:2cqw}
+.gq svg.map{width:100%;height:100%;max-height:100%}.gq svg.map path{fill:#2f7fe0;stroke:#0e3b86;stroke-width:.8;stroke-linejoin:round}
+.gq.flag svg.flag{width:100%;height:100%;border-radius:3cqw;box-shadow:0 1cqw 3cqw rgba(0,0,0,.25)}
+.gq .rv{width:100%;height:100%;display:grid;place-items:center}.gq .rv svg{width:100%;height:auto;max-height:100%;aspect-ratio:3/2;border-radius:3cqw;box-shadow:0 1cqw 3cqw rgba(0,0,0,.25)}
+.gq.shk{animation:shake .4s}
+.gqPat{flex:none;min-height:6cqw;text-align:center;font:800 5.4cqw/1.2 var(--display);letter-spacing:.4cqw;color:#0e2a55;padding:1cqw 3cqw;white-space:pre-wrap}
+.gqSug{flex:none;display:flex;gap:1.6cqw;padding:0 3cqw;min-height:0;flex-wrap:nowrap;overflow:hidden}
+.gqSug button{flex:1 1 0;min-width:0;min-height:44px;border-radius:99px;background:var(--panel);color:var(--ink);font-weight:800;font-size:3.8cqw;box-shadow:var(--shadow);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 2cqw}
+.gqIn{flex:none;display:flex;gap:2cqw;padding:1.6cqw 3cqw}
+.gqIn input{flex:1;min-width:0;height:13cqw;min-height:48px;border-radius:99px;border:.6cqw solid var(--accent);background:#fff;color:#10284a;font:800 5.2cqw var(--display);padding:0 4cqw;outline:0;-webkit-user-select:text;user-select:text}
+.gqIn .btnbig{padding:0 6cqw;min-height:48px;font-size:5cqw}
+.gqBar{flex:none;display:flex;gap:4cqw;justify-content:center;padding:1cqw 3cqw 3cqw}
+.gqBar .ib2{width:11cqw;height:11cqw;font-size:5cqw}
+.play.paused .gq{opacity:.5}
