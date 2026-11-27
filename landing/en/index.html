@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en" data-app="hub">
 <head>
+<script src="../../shared/guard.js"></script>
 <meta charset="utf-8">
 <script>/* chẩn đoán: mở /?dbg=1 -> bảng lỗi JS + cấu hình máy ở góc trên (chỉ khi có ?dbg) */
 if(/[?&]dbg=1/.test(location.search)){(function(){var L=[];addEventListener("error",function(e){L.push("ERR "+e.message+" @"+String(e.filename||"").split("/").pop()+":"+e.lineno+":"+e.colno)},true);addEventListener("unhandledrejection",function(e){L.push("REJ "+(e.reason&&e.reason.message||e.reason))});

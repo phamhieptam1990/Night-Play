@@ -191,7 +191,19 @@
       title: { vi: "Vẽ chữ sống dậy", en: "Letters come alive" },
       story: { vi: "Quái vật Nét Mực chỉ ra đời khi bé tô thật khéo theo nét chấm. Tô đẹp ở mức khó để có quái vật mới!", en: "The Ink Monster is only born when you trace the dots neatly. Trace well on the hardest level!" },
       goal: { vi: "Tô đủ 3 chữ ở mức khó và đạt từ 230 điểm.", en: "Trace all 3 letters on the hardest level and score at least 230." },
-      badgeName: { vi: "Kỷ niệm chương Bút Thần", en: "Magic Pen medal" } }
+      badgeName: { vi: "Kỷ niệm chương Bút Thần", en: "Magic Pen medal" } },
+    { id: "nuoi-thu-tieng-viet", game: "nuoi-thu-tieng-viet", app: "popplay", group: "kid", hero: "🐶", badge: "🦴",
+      heroName: { vi: "Cún Bi", en: "Bi the pup" },
+      title: { vi: "Bi đớp sao", en: "Bi catches the stars" },
+      story: { vi: "Cún Bi muốn đớp thật nhiều sao rơi trong sân nhà. Giúp Bi đớp nhanh và liên tục nhé!", en: "Bi the pup wants to catch lots of falling stars in the yard. Help Bi catch them fast and keep the combo going!" },
+      goal: { vi: "Chơi Sao rơi và đạt từ 22 điểm.", en: "Play Falling Stars and score at least 22." },
+      badgeName: { vi: "Kỷ niệm chương Xương Vàng", en: "Golden Bone medal" } },
+    { id: "tiem-nuoc-ep-tieng-anh", game: "tiem-nuoc-ep-tieng-anh", app: "popplay", group: "kid", hero: "🦊", badge: "🧃",
+      heroName: { vi: "Cáo Cam chủ quán", en: "Fox the juice-bar owner" },
+      title: { vi: "Giờ cao điểm ở quán", en: "Rush hour at the bar" },
+      story: { vi: "Quán Cáo Cam đông khách giờ cao điểm. Nghe khách gọi món bằng tiếng Anh và ép nước thật đúng, thật nhanh!", en: "Fox's Juice Bar is packed at rush hour. Listen to the English orders and squeeze the right juice, fast!" },
+      goal: { vi: "Phục vụ ở mức khó và đạt từ 1200 điểm.", en: "Serve on the hard level and score at least 1200." },
+      badgeName: { vi: "Kỷ niệm chương Ly Nước Vàng", en: "Golden Juice medal" } }
   ];
   var KEY = "np-badges";
   function load() { try { var o = JSON.parse(localStorage.getItem(KEY)); return o && typeof o === "object" ? o : {}; } catch (e) { return {}; } }

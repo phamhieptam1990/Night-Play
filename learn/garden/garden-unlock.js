@@ -89,7 +89,7 @@ function refreshUnlock(announce){
   renderGuide(u);
 }
 function initUnlock(){
-  var dt = document.getElementById("devTabs"); if(dt) dt.style.display = /[?&](dev=1|edit)\b/.test(location.search) ? "" : "none";   /* tab thử nghiệm (sự kiện, màu, giờ) chỉ hiện khi ?dev=1 hoặc ?edit */
+  var dt = document.getElementById("devTabs"); if(dt) dt.style.display = (/[?&](dev=1|edit)\b/.test(location.search) && /^(localhost|127\.|192\.168\.|10\.|.*\.local)/.test(location.hostname)) ? "" : "none";   /* tab thử nghiệm (sự kiện, màu, giờ) chỉ hiện khi ?dev=1 hoặc ?edit */
   if(typeof drainMisFx === "function") drainMisFx();   /* chăm cây từ nhiệm vụ làm bên trang học */
   refreshUnlock(true);
   /* lần đầu vào vườn (hoặc sau khi xoá tiến độ): tự mở SLIDE GIỚI THIỆU một lần (garden-intro.js) */

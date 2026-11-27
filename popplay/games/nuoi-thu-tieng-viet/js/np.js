@@ -23,6 +23,9 @@
     NP.state(function () { var s = N.mgState(); if (s) return s; return N.screen !== "home" ? { t: "room" } : null; });
     NP.onPause(function () { N.paused = true; }, function () { N.paused = false; });
   }
+  /* Night Pass: thử thách Sao rơi, hạt giống cố định, thắng khi từ 22 điểm (bậc quà cao nhất) */
+  window.NP_CHALLENGE = { id: "nuoi-thu-tieng-viet", judge: function (r) { return !!r && r.score >= 22; },
+    start: function () { if (N.busy || N.mgActive()) return false; N.goWorld(); N.goZone(N.store.D().mg.stars.zone); setTimeout(function () { N.mgStart("stars", { seed: 20261127, ch: { sc: 0 } }); }, 1600); return true; } };
   N.bootFromBridge = function () {
     var st = window.NP ? NP.initialState : null;
     if (st && st.t === "mg" && st.p && (st.p.g === "stars" || st.p.g === "ball") && Number.isInteger(st.p.s)) { window.restoreP(st.t, st.p); return true; }

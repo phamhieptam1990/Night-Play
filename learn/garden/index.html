@@ -1,4 +1,5 @@
-<!doctype html><html lang="vi"><head><meta charset="utf-8"><script>/* Mỗi môn một thế giới: Tiếng Việt = Vườn Thú (nhiều chuồng), Tiếng Anh = Khu Chợ (nhiều quán). Vào vườn của hai môn này thì chuyển thẳng sang game của lớp đó (thêm ?garden=1 để xem cảnh vườn cũ). Toán giữ khu vườn. */
+<!doctype html><html lang="vi"><head>
+<script src="../../shared/guard.js"></script><meta charset="utf-8"><script>/* Mỗi môn một thế giới: Tiếng Việt = Vườn Thú (nhiều chuồng), Tiếng Anh = Khu Chợ (nhiều quán). Vào vườn của hai môn này thì chuyển thẳng sang game của lớp đó (thêm ?garden=1 để xem cảnh vườn cũ). Toán giữ khu vườn. */
 (function(){try{var q=new URLSearchParams(location.search),sj=q.get("subj"),g=+q.get("grade");if(q.get("garden")||(sj!=="tviet"&&sj!=="tanh"))return;if(!(g>=1&&g<=5)){g=+localStorage.getItem("learn:grade")||1;if(!(g>=1&&g<=5))g=1}
 location.replace((sj==="tviet"?"../vuon-thu/index.html?grade=":"../khu-cho/index.html?grade=")+g)}catch(e){}})();</script><script src="../js/page-loading.js"></script><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover"><title>Vườn Học Vui</title>
 <!-- Trang vườn VIẾT TAY (không sinh). CSS và JS KHÔNG khai ở đây: danh sách + thứ tự nằm ở garden-layout.js (STYLES, SCRIPTS, START).

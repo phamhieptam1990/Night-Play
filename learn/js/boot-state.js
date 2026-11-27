@@ -1,8 +1,8 @@
 const COL = [["#FF5A7A","#E5484D"],["#34B9FF","#2563EB"],["#FFB020","#F97316"],["#A78BFA","#7C5CFF"]];
 const SLUG = {toan:"toan",tviet:"tieng-viet",tanh:"tieng-anh"};
 const $ = id => document.getElementById(id);
-// liên kết duyệt chỉ hiện khi chạy thử (máy chủ cục bộ hoặc ?dev=1), bé không thấy trên bản thật
-const DEV = /[?&]dev=1/.test(location.search) || /^(localhost|127\.|192\.168\.|10\.|.*\.local)/.test(location.hostname);
+// liên kết duyệt chỉ hiện khi chạy thử trên máy chủ cục bộ; bản thật KHÔNG bật được bằng ?dev=1
+const DEV = /^(localhost|127\.|192\.168\.|10\.|.*\.local)/.test(location.hostname);
 const ls = (k, v) => { try{ if(v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); }catch(e){} return null; };
 const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
 const shuf = a => { for(let i = a.length - 1; i > 0; i--){ const j = rnd(0, i); [a[i], a[j]] = [a[j], a[i]]; } return a; };
