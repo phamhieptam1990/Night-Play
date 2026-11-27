@@ -7,7 +7,10 @@
   const go = it => { const el = document.querySelector('.shop[data-i="' + it.i + '"]'); if (el) el.classList.add("enter"); setTimeout(() => { location.href = it.url; }, 220); };
   KC.tap = i => {
     const IT = KC.items(), it = IT[i]; if (!it) return;
-    if (it.open) return go(it);
+    if (it.open && !it.done) return WorldKit.popup({ title: it.name, big: [{ img: "../quan-kem/art/g" + (i + 1) + "/sign-2.svg" }, { ic: "book" }],
+      html: '<p class="kc-gate">Take the quick test first, then come play in the shop!</p>', acts: [{ ic: "book", go: 1, label: "Take the test", fn: () => go(it), keep: 1 }, { ic: "close", label: "Close" }] });
+    if (it.open) return WorldKit.popup({ title: it.name, big: [{ img: "../quan-kem/art/g" + (i + 1) + "/sign-2.svg" }, { ic: "play" }],   /* quầy đã học xong: bé chọn CHƠI hay HỌC LẠI, không bị đẩy thẳng vào bài */
+      acts: [{ ic: "play", go: 1, label: "Play", href: KC.shopUrl(KC.curGrade()) }, { ic: "book", label: "Review", href: it.url }, { ic: "close", label: "Close" }] });
     const dn = IT.filter(x => x.done).length;
     WorldKit.popup({ big: [{ img: "../quan-kem/art/g" + (i + 1) + "/sign-2.svg" }, { ic: "lock" }], html: '<div class="kc-ring">' + KC.ring(dn, IT.length) + "<b>" + dn + "/" + IT.length + "</b></div>",
       acts: [{ ic: "book", go: 1, href: KC.bookUrl(KC.curGrade()) }, { ic: "close" }] });

@@ -32,7 +32,7 @@
     if (open) b.appendChild(el("span", "wbtn", Wardrobe.ICON)).setAttribute("role", "button"), b.lastChild.setAttribute("aria-label", "Đổi trang phục");
     b.onclick = function (e) {
       if (e.target.closest(".wbtn")) return Wardrobe.pick({ game: "vt", subj: "tviet", G: V.curGrade(), i: i, owner: false, base: V.NB + a + ".svg", onPick: V.build });
-      if (open) { if (V.sfx) V.sfx(); location.href = it.url; } else V.lockPopup(it);
+      if (open && !it.done) V.testPopup(it); else if (open) { if (V.sfx) V.sfx(); V.playPopup(it); } else V.lockPopup(it);
     };
     return b;
   }

@@ -18,7 +18,7 @@
   };
   KC.all = () => [1, 2, 3, 4, 5].map(KC.info);
   /* sạp của lớp hiện tại = chủ đề Tiếng Anh của lớp (khoá nếu chưa đạt chủ đề liền trước); chủ quán = linh vật của lớp */
-  KC.items = () => window.LessonLink ? LessonLink.items("tanh", KC.curGrade()) : [];
+  KC.items = () => window.LessonLink ? LessonLink.items("tanh", KC.curGrade()).map(x => Object.assign({}, x, { name: KC.enName ? KC.enName(x.id, x.name) : x.name })) : [];
   KC.shopUrl = g => "../quan-kem/index.html?grade=" + g + "&from=market";
   KC.bookUrl = g => window.LessonLink ? LessonLink.url("tanh", g) : "../lop/index.html?subj=tanh&grade=" + g;
 })();
