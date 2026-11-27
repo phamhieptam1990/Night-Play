@@ -1,0 +1,10 @@
+/* Đổi màu đồ vật trong nhà (recolor.js) */
+.rc-layer{position:absolute;inset:0;z-index:6}.rc-layer[hidden]{display:none}
+.rc-hit{position:absolute;border:3px dashed rgba(255,255,255,.95);border-radius:14px;background:rgba(124,92,255,.16);cursor:pointer;padding:0;z-index:1;box-shadow:0 0 0 2px rgba(60,30,120,.35)}
+.rc-hit span{position:absolute;left:50%;top:6px;transform:translateX(-50%);white-space:nowrap;padding:3px 10px;border-radius:99px;background:rgba(20,16,50,.78);color:#fff;font:800 clamp(10px,1.6vw,15px) system-ui;pointer-events:none}
+.rc-hit:active{background:rgba(255,210,77,.3)}
+.rcb.on{background:linear-gradient(135deg,#7C5CFF,#FF8A3D)!important}
+.rc-sheet{position:fixed;left:0;right:0;bottom:0;z-index:150;padding:14px 16px max(14px,env(safe-area-inset-bottom));background:linear-gradient(165deg,#6C5CFF,#B26BFF);color:#fff;border-radius:22px 22px 0 0;box-shadow:0 -8px 30px rgba(20,16,50,.4);font-family:system-ui,sans-serif}
+.rc-sheet[hidden]{display:none}.rc-sheet>b{display:block;font-size:18px;margin-bottom:10px}
+.rc-pal{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}.rc-c{width:44px;height:44px;border-radius:50%;border:3px solid rgba(255,255,255,.7);cursor:pointer}.rc-c.on{border-color:#FFD24D;box-shadow:0 0 0 3px rgba(255,210,77,.6);transform:scale(1.12)}
+.rc-act{display:flex;gap:10px;margin-top:12px}.rc-b{flex:1;min-height:46px;border-radius:14px;border:2px solid rgba(255,255,255,.6);background:rgba(255,255,255,.2);color:#fff;font:900 15px system-ui;cursor:pointer}.rc-b.go{background:linear-gradient(135deg,#34D399,#10B981);border-color:#fff}
