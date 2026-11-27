@@ -1,0 +1,29 @@
+/* THẺ TRẢ LỜI + MÀN NGANG NHỎ của cảnh truyện (nạp SAU glass.css): thẻ đáp án có CỠ TỐI THIỂU để hình và chữ luôn đọc được (trước: cỡ thẻ theo chiều cao màn nên màn ngang thấp
+   co thẻ còn ~76px, chữ 9px, hình tí hon); ô trống khi kéo thẻ vào không tràn; màn ngang thấp: linh vật to hơn, bóng thoại không bị cắt. */
+/* --- cỡ tối thiểu của thẻ và chữ/hình trong thẻ (mọi màn) --- */
+.scn .opts{--ow:max(112px,min(38vw,21dvh))}
+.scn .ob.zl .tx{font-size:max(calc(var(--ow)*.3),22px)}.scn .ob.zm .tx{font-size:max(calc(var(--ow)*.19),18px)}
+.scn .ob.zs .tx{font-size:max(calc(var(--ow)*.15),16px)}.scn .ob.zxs .tx{font-size:max(calc(var(--ow)*.115),14px)}
+.scn .tf .ob.zl .tx,.scn .opts.tf .ob.zl .tx{font-size:max(calc(var(--ow)*.42),26px)}.scn .opts.n3 .ob.zl .tx{font-size:max(calc(var(--ow)*.34),24px)}
+.scn .ob.emo .tx{font-size:max(calc(var(--ow)*var(--ef)),30px)}
+.scn .ob .tx svg,.scn .ob .tx img{min-width:28px;min-height:28px}
+.scn .ob .tx{padding:0 2px;overflow-wrap:normal;word-break:normal;hyphens:none}
+/* --- ô trống ___ / ô thả (.bl trong .qt): nằm gọn trong khung câu hỏi; thẻ thả vào xuống dòng/co chữ thay vì tràn ra ngoài --- */
+.scn .qcard .qt{max-width:100%;overflow-wrap:anywhere;word-break:break-word}
+.scn .qcard .qt .bl{display:inline-block;box-sizing:border-box;min-width:2.2em;max-width:100%;vertical-align:bottom;overflow-wrap:anywhere;word-break:break-word;white-space:normal;line-height:1.15;text-align:center}
+.scn .qcard .qt .bl.filled{font-size:.88em;padding:0 .2em}
+.scn .qcard .qt .bl.filled:has(svg),.scn .qcard .qt .bl svg,.scn .qcard .qt .bl img{max-height:1.4em;width:auto;vertical-align:middle}
+.scn .qcard{max-width:96%;overflow-wrap:anywhere}
+.scn .qcard .blank,.scn .qcard .qb,.scn .tslot,.scn .qcard [data-slot]{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;min-width:1.6em;max-width:100%;box-sizing:border-box;overflow:hidden;white-space:nowrap;text-overflow:clip}
+.scn .tslot{min-width:clamp(44px,12vw,62px);max-width:34vw;font-size:clamp(16px,4.6vw,24px)}
+.scn .tslot .it,.scn .tslot svg,.scn .tslot img{max-height:1.2em;width:auto}
+/* --- màn ngang thấp (điện thoại xoay ngang) --- */
+@media (orientation:landscape) and (max-height:600px){
+  .scn .opts{--ow:max(104px,min(21vw,34dvh))}.scn .opts.n6{--ow:max(92px,min(15vw,25dvh))}.scn .opts.n8,.scn .opts.n7{--ow:max(84px,min(13vw,24dvh))}
+  .scn .opts.n9{--ow:max(76px,min(12vw,24dvh))}.scn .opts.tf{--ow:max(110px,min(18vw,32dvh))}.scn .tmatch .ob{--ow:max(84px,min(15vw,24dvh))}
+  body.scn{--rowH:clamp(96px,30dvh,150px);--castH:calc(var(--rowH) + 24px)}
+  /* linh vật to đọc lời: nằm bên TRÁI, bóng thoại bên PHẢI (không cắt ở mép trên) */
+  .scn .sc.talk .pal{translate:calc(24vw - 12px - var(--rowH) / 2) 0;scale:1.9;transform-origin:50% 100%}
+  .scn .sc.talk .bub{left:calc(24vw + var(--rowH) * .95 + 8px);right:4vw;top:max(12dvh,56px);bottom:auto;max-height:calc(100dvh - 100px);overflow:auto;font-size:clamp(15px,2.8vw,19px)}
+  .scn .sc.talk .bub::before{left:-11px;right:auto;top:auto;bottom:34px;transform:rotate(45deg)}
+}

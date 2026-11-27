@@ -10,3 +10,6 @@ html[data-pm-all].np-pm #npPmBk,html[data-pm-all].np-pm #npPmFab{position:fixed!
 @media (orientation:landscape) and (min-aspect-ratio:11/10){html[data-pm-all] #room{flex-direction:row}}
 html[data-pm-all] .wg-q{display:none!important}   /* nút "?" hướng dẫn thế giới → ô ✦ trong menu ⋯ (popmenu.js) */
 html[data-pm-all] #wpBtn{display:none!important}   /* nút "Giao diện" → ô vương miện trong menu ⋯ (shared/cc.js) */
+
+/* nút phụ của HUD (túi đồ, cấp, nhiệm vụ ngày) tự mờ cùng ← ⋯ khi không chạm (html.np-idle, do shared/popmenu.js) */
+.wk-q,.wk-btn,.wk-lv{transition:opacity .35s}html.np-idle .wk-q,html.np-idle .wk-btn,html.np-idle .wk-lv{opacity:0;pointer-events:none}

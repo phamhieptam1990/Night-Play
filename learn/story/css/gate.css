@@ -14,6 +14,6 @@
 .sgate .sgb svg{width:54%;height:54%;filter:drop-shadow(0 3px 0 rgba(0,0,0,.28))}.sgate .sgb:active{transform:translateY(4px)}.sgate .sgb:focus-visible{outline:4px solid #fff;outline-offset:4px}
 .sgate .sgs{width:60px;height:60px;border-radius:50%;display:grid;place-items:center;color:#fff;background:rgba(10,20,60,.35);border:3px solid #fff;box-shadow:0 4px 0 rgba(0,0,0,.2)}
 .sgate .sgs svg{width:56%;height:56%}.sgate .sgs:active{transform:translateY(2px)}
-@media (orientation:landscape) and (max-height:600px){.sgate{flex-direction:row;flex-wrap:wrap;gap:8px 22px}.sgate .sgm{width:clamp(80px,26dvh,130px)}.sgate .sgt,.sgate .sgh{flex:0 0 auto}}
+@media (orientation:landscape) and (max-height:600px){.sgate{flex-direction:row;flex-wrap:nowrap;gap:8px 22px;padding:12px 24px}.sgate .sgs{position:absolute;right:16px;bottom:12px;width:52px;height:52px}.sgate .sgt{font-size:clamp(20px,3.4vw,30px)}.sgate .sgm{width:clamp(110px,46dvh,210px)}.sgate .sgt,.sgate .sgh{flex:0 0 auto}}
 @keyframes gbob{50%{transform:translateY(-6px)}}@keyframes gpulse{50%{transform:scale(1.07)}}
 @media (prefers-reduced-motion:reduce){.sgate .sgm,.sgate .sgb{animation:none}}

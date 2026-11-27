@@ -8,3 +8,11 @@ html[data-pm-all].np-pm #npPmBk,html[data-pm-all].np-pm #npPmFab{position:fixed!
 html[data-pm-all] .wg-q{display:none!important}
 html[data-pm-all] .wk-btn[aria-label="Về"]{display:none!important}   /* ← của HUD trùng với ← của menu */
 html[data-pm-all] #wpBtn{display:none!important}   /* nút "Giao diện" → ô vương miện trong menu ⋯ (shared/cc.js) */
+
+/* nút phụ của HUD (túi đồ, cấp, nhiệm vụ ngày) tự mờ cùng ← ⋯ khi không chạm (html.np-idle, do shared/popmenu.js) */
+.wk-q,.wk-btn,.wk-lv{transition:opacity .35s}html.np-idle .wk-q,html.np-idle .wk-btn,html.np-idle .wk-lv{opacity:0;pointer-events:none}
+/* khung tràn màn hình: HUD (sao, xu) dồn sang trái; bong bóng gọi món (🔊 nghe + Aa) nằm dưới nút ⋯ và trên máy ép, không bị HUD/⋯/máy che */
+html[data-pm-all] .wk-hud{padding-left:var(--wk-edge)!important;justify-content:flex-start}
+html[data-pm-all] #bub{z-index:12;top:max(5cqw,76px)}
+html[data-pm-all] #jm,html[data-pm-all] .machine{z-index:3}
+html[data-pm-all] .wk-sp{display:none}   /* bỏ khoảng đệm đẩy sao/xu sang phải: dồn trái, nhường chỗ cho bong bóng gọi món */

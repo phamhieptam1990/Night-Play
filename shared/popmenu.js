@@ -197,6 +197,15 @@
   try { new MutationObserver(function () { if (moved) themeSync(); }).observe(de, { attributes: true, attributeFilter: ["data-theme", "class", "style"] }); } catch (e) {}
   [mqP, mqT].forEach(function (q) { try { q.addEventListener("change", sync); } catch (e) { try { q.addListener(sync); } catch (e2) {} } });
   addEventListener("pagehide", function () { flag(false); });
+  /* game lớn (data-pm-all): ←, ⋯ và các nút phụ của HUD TỰ ẨN sau 3,5 giây không chạm (html.np-idle), chạm vào đâu cũng hiện lại; đang mở menu thì không ẩn */
+  if (ALL) {
+    var idleT = 0, ist = document.createElement("style");
+    ist.textContent = "#npPmBk,#npPmFab{transition:opacity .35s}html.np-idle #npPmBk,html.np-idle #npPmFab{opacity:0;pointer-events:none}";
+    document.head.appendChild(ist);
+    var wake = function () { de.classList.remove("np-idle"); clearTimeout(idleT); idleT = setTimeout(function () { if (!open) de.classList.add("np-idle"); else wake(); }, 3500); };
+    ["pointerdown", "pointermove", "keydown", "touchstart"].forEach(function (ev) { addEventListener(ev, wake, { passive: true, capture: true }); });
+    wake();
+  }
   function init() { sync(); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
   setTimeout(sync, 600); setTimeout(sync, 2000);
