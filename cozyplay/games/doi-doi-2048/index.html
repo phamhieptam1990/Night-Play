@@ -90,7 +90,6 @@ body{display:flex;justify-content:center}
   </section>
   <section class="scr" id="end" hidden>
     <div class="card" style="text-align:center"><div class="mut" id="eT"></div><div class="bt" id="eBt"></div><div class="big" id="eSc"></div><div class="rk" id="eRk"></div></div>
-    <div class="mini" id="eMini"></div>
     <div class="chips" id="eChips"></div>
     <p class="mut" id="eVs" style="text-align:center;margin:0"></p>
     <div class="row"><button class="btn grow" id="bShare" type="button">📤</button><button class="btn alt" id="bRem" type="button" hidden aria-label="rematch">⚔️</button><button class="btn alt" id="bAgain" type="button" aria-label="new">🎲</button><button class="btn alt" id="bHome" type="button">🏠</button></div>
@@ -213,7 +212,6 @@ function finish(){const sv=getSave();sv.total++;sv.best=Math.max(sv.best,G.score
  if(G.mode==="daily"&&G.t!==0){sv.dayT=sv.dayT||{};const kk=dayKey()+"|"+G.t;if(sv.dayT[kk]==null||G.score>sv.dayT[kk])sv.dayT[kk]=G.score}else if(G.mode==="daily"){const k=dayKey();if(sv.days[k]==null||G.score>sv.days[k])sv.days[k]=G.score;if(sv.last!==k){const y=new Date(Date.parse(k+"T00:00:00Z")-864e5).toISOString().slice(0,10);sv.streak=sv.last===y?sv.streak+1:1;sv.last=k}}
  LS.set("d48-save",sv);lastEnd=performance.now();const score=Math.min(MAXS,G.score);window.NP&&NP.result({score,extra:{mode:G.mode,best:G.best,moves:G.moves,ranked:G.mode==="daily"&&G.t===0,rankHint:T("rankHint")}});sfx.end();
  show("end");$("eT").textContent=G.cap&&G.moves>=G.cap?T("endC",{n:G.cap}):T("endN");$("eBt").textContent=lad()[G.best-1][0];$("eSc").textContent=G.score;$("eRk").textContent="🏅 "+L2(ranksOf()[rankOf(G.best)])+" · "+nm(G.best);
- const m=$("eMini");m.innerHTML="";boardRows().forEach(r=>r.forEach(v=>{const s=document.createElement("span");s.textContent=v?lad()[v-1][0]:"";m.appendChild(s)}));
  $("eChips").innerHTML="";[G.mode==="daily"?"📅 #"+dayNo(dayKey()):"",T("moves",{n:G.moves}),G.mode==="daily"&&sv.streak?T("streak",{n:sv.streak}):""].filter(Boolean).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;$("eChips").appendChild(c)});
  $("eVs").textContent=G.ch?T("vsC",{a:G.score,b:G.ch.sc})+" · "+(G.score>G.ch.sc?T("win"):G.score<G.ch.sc?T("lose"):T("tie")):"";
  $("bRem").hidden=!(G.ch||G.mode==="daily")||!!(window.NP&&NP.helper);if(G.ch&&G.score>G.ch.sc)NPJuice.confetti($("play"),26);
