@@ -790,6 +790,7 @@ const COZY_NEW = {   // game mới của Cozy Play (người lớn): 1 loại ×
   "cho-hang-kieu-viet": { vi: "Chở Hàng Kiểu Việt", en: "Overloaded Rider", max: 20000, dvi: "Chất cả đống hàng lên xe máy rồi giữ thăng bằng đi tới nơi. Càng chất cao càng nhiều điểm, đổ là mất hết!", den: "Pile a mountain of cargo on a scooter and keep it balanced to the finish. The taller the stack, the higher the score — drop it and it’s gone!" },
   "xe-ca-phe": { vi: "Xe Cà Phê Của Tôi", en: "My Coffee Cart", max: 20000, dvi: "Pha đúng công thức, phục vụ khách thật nhanh, cuối ngày nâng cấp xe cà phê thành quán rồi cả chuỗi. Bạn bán được bao nhiêu?", den: "Make the right recipes fast, serve customers, and grow your coffee cart into a café and a whole chain. How much can you sell?" },
   "duong-ray": { vi: "Đường Ray", en: "Rail Rush", max: 500, dvi: "Vẽ đường ray dẫn từng đoàn tàu về đúng ga cùng màu, đừng để hai tàu đâm nhau. Bạn đưa được bao nhiêu chuyến tàu về ga?", den: "Draw rails to bring each train to the station of its colour — and never let two trains collide. How many can you deliver?" },
+  "chua-hoc-ba": { vi: "Chùa Học Bá Online", en: "Study Temple Online", max: 3000, dvi: "Thắp hương cầu thi, xin quẻ học tập mỗi ngày và gõ mõ tích công đức. Muốn lời cầu linh thì phải dâng lễ: trả lời đúng một câu ôn bài!", den: "Light incense for exams, draw a study fortune every day and tap the wooden fish. To have your wish answered, make an offering: answer a study question!" },
   "sudoku-chu-so": { vi: "Sudoku Đêm", en: "Night Sudoku", max: 3500, dvi: "Sudoku điền số 1–9: mỗi hàng, cột, hộp không trùng số. 3 độ khó, mỗi đề chỉ có một đáp án, ngày nào cũng có đề mới!", den: "Classic Sudoku: no repeated number in any row, column or box. 3 difficulty levels, exactly one answer per puzzle, a new puzzle every day!" },
   "san-chu-an": { vi: "Săn Chữ Ẩn", en: "Word Hunt", max: 5000, dvi: "Ô chữ tìm từ: kéo ngón tay qua hàng chữ thẳng để khoanh từ tiếng Anh trong danh sách, kèm nghĩa tiếng Việt. 3 độ khó, ngày nào cũng có ô chữ mới!", den: "Word search: drag along a straight line of letters to circle the listed English words, with Vietnamese meanings. 3 difficulty levels and a new puzzle every day!" },
   "truot-so-nam-cham": { vi: "Trượt Số Nam Châm", en: "Magnetic Number Slide", max: 10000, dvi: "Xếp số trượt kiểu nam châm: chạm một ô cùng hàng/cột với ô trống, cả dãy trượt theo. Tự nhập số hàng và số cột, ván nào cũng giải được!", den: "Magnetic sliding number puzzle: tap a tile in the gap's row or column and the whole line slides. Type your own rows and columns!" },
@@ -1056,6 +1057,7 @@ const PRO_MODS = {   // require LITERAL (esbuild của Netlify không gộp đư
   "tim-doi-the": () => require("./pro/tim-doi-the"),
   "bat-ke-noi-doi": () => require("./pro/bat-ke-noi-doi"),
   "hoi-xoay-dap-xoay": () => require("./pro/hoi-xoay-dap-xoay"),
+  "chua-hoc-ba": () => require("./pro/chua-hoc-ba"),
   "noi-doi": () => require("./pro/noi-doi"),
   "ghep-ba-the": () => require("./pro/ghep-ba-the"),
   "xay-cau-tre": () => require("./pro/xay-cau-tre"),
@@ -1130,6 +1132,7 @@ route("GET", /^\/api\/pro\/daily$/, async ({ headers }) => {
 });
 /* Đếm lượt xem / bấm vào tính năng bị khóa (ẩn danh, chỉ số tổng hợp theo ngày) */
 const PAYWALL_KEYS = new Set(["endless", "daily", "boss", "diff", "skin", "grid", "pack", "stats", "fly_stars", "fly_math", "fly_skin", "wing_skin", "village_skin", "duel_skin", ...Object.keys(NEW_GAMES).map(id => id + "_skin"), ...Object.keys(COZY_NEW).map(id => id + "_skin")]);
+require("./temple")({ route, out, db, limited, ipHash, TZ });   // Chùa Học Bá Online: bộ đếm cầu + bảng thi đua lớp/trường/tỉnh
 route("POST", /^\/api\/paywall$/, async ({ body, ip }) => {
   const f = String(body.f || ""), k = String(body.k || "");
   if (!PAYWALL_KEYS.has(f) || !["view", "click", "trial"].includes(k)) return out(400, { error: "bad_event" });

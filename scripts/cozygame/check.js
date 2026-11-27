@@ -18,6 +18,7 @@ const GAMES = {
   "tim-doi-the": { g: "TD", pre: "TD.playTo(G,5);" },
   "bat-ke-noi-doi": { g: "KL", pre: "KL.playTo(G,4);" },
   "hoi-xoay-dap-xoay": { g: "HX", pre: "HX.playTo(G,4);" },
+  "chua-hoc-ba": { g: "HB", pre: "HB.playAll(G);" },
   "noi-doi": { g: "ND", pre: "ND.playTo(G,5);" },
   "sudoku-chu-so": { g: "SD", pre: "SD.playTo(G,6);" },
   "san-chu-an": { g: "WS", pre: "WS.playTo(G,2);" },

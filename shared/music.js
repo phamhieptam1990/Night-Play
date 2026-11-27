@@ -27,6 +27,7 @@
     "tim-doi-the":      { bpm: 96,  root: 62, sc: "maj", prog: [0, 4, 5, 3, 0, 4, 3, 0], lead: "marimba",groove: 1, bass: [0, 7], arp: [0, 4, 7, 11] },
     "bat-ke-noi-doi":    { bpm: 92, root: 57, sc: "pen", prog: [0, 3, 4, 0, 5, 3, 4, 0], lead: "marimba", groove: 1, bass: [0, 7], arp: [0, 4, 7, 12] },
     "hoi-xoay-dap-xoay": { bpm: 112, root: 62, sc: "maj", prog: [0, 3, 4, 0, 5, 3, 4, 0], lead: "marimba", groove: 1, bass: [0, 7], arp: [0, 4, 7, 12] },
+    "chua-hoc-ba":      { bpm: 84, root: 57, sc: "pen", prog: [0, 3, 4, 0, 5, 3, 4, 0], lead: "marimba", groove: 1, bass: [0, 7], arp: [0, 4, 7, 12] },
     "noi-doi":          { bpm: 108, root: 60, sc: "maj", prog: [0, 3, 4, 0, 5, 3, 4, 0], lead: "marimba",groove: 1, bass: [0, 7], arp: [0, 4, 7, 12] },
     "ghep-ba-the":      { bpm: 88,  root: 57, sc: "pen", prog: [0, 3, 4, 0, 5, 3, 4, 0], lead: "marimba",groove: 0, bass: [0, 7], arp: [0, 4, 7, 12] },
     "mat-tinh-khong":   { bpm: 92,  root: 59, sc: "dor", prog: [0, 3, 0, 4, 0, 3, 5, 4], lead: "marimba",groove: 1, bass: [0, 7, 10], arp: [0, 4, 8, 12] },

@@ -12,5 +12,5 @@ window.SITE = {
   email:     "support@nightplay.vn",
   domain:    "nightplay.vn",
   updated:   "2026-11-10",       // ngày hiển thị ở chân trang (fallback)
-  legalDate: "20/11/2026"        // ngày hiệu lực / cập nhật của chính sách & điều khoản
+  legalDate: "27/11/2026"        // ngày hiệu lực / cập nhật của chính sách & điều khoản
 };
