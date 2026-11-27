@@ -17,4 +17,5 @@
 .gqBar{flex:none;display:flex;gap:4cqw;justify-content:center;padding:1cqw 3cqw 3cqw}
 .gqBar .ib2{width:11cqw;height:11cqw;font-size:5cqw}
 .play.paused .gq{opacity:.5}
-.play.kb .gqIn{order:-2;padding-top:3cqw}.play.kb .gqBar,.play.kb .gqTop{display:none}.play.kb .gqSug{order:-1}
+/* ô gõ + chip gợi ý luôn ở ĐẦU khung: bàn phím ảo không bao giờ che, bố cục không nhảy */
+.gqIn{order:-2;padding-top:3cqw}.gqSug{order:-1;padding-top:0}
