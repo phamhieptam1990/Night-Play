@@ -301,7 +301,19 @@
     } catch (x) { cov = null; }
     d.setAttribute("data-npa-ghost", "1"); document.body.appendChild(d); holding = 1;
     try { if (window.NP && NP.menuPause) froze = NP.menuPause(); } catch (x) {}
-    var done = function () { if (!holding) return; holding = 0; try { d.remove(); } catch (x) {} if (cov) { try { cov.remove(); } catch (x) {} } if (froze) { try { NP.menuResume(); } catch (x) {} } };
+    /* GIỮ LƯỢT CHẠM ĐẦU TIÊN trong lúc game đóng băng (trước đây bị nuốt → phải bấm 2-3 lần): tìm phần tử THẬT dưới ngón tay (bỏ qua bản sao màn chính), bấm hộ khi game chạy tiếp */
+    var qEl = null, capture = function (e) {
+      if (!holding || !d.isConnected) return; e.stopPropagation(); e.preventDefault(); if (qEl) return;
+      var pe = cov ? cov.style.pointerEvents : ""; if (cov) cov.style.pointerEvents = "none";
+      try { qEl = document.elementFromPoint(e.clientX, e.clientY); } catch (x) {} if (cov) cov.style.pointerEvents = pe;
+      if (qEl && (qEl === document.body || qEl === document.documentElement || qEl.id === "play")) qEl = null;
+    };
+    window.addEventListener("click", capture, true);
+    var replay = function () {
+      window.removeEventListener("click", capture, true); var el = qEl; qEl = null; if (!el || !el.isConnected) return;
+      setTimeout(function () { try { if (!el.isConnected) return; if (/^(INPUT|TEXTAREA)$/.test(el.tagName)) el.focus(); else el.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, view: window })); } catch (x) {} }, 60);
+    };
+    var done = function () { if (!holding) return; holding = 0; replay(); try { d.remove(); } catch (x) {} if (cov) { try { cov.remove(); } catch (x) {} } if (froze) { try { NP.menuResume(); } catch (x) {} } };
     /* THEO Ý CHỦ SITE: linh vật bay RA GIỮA màn hình, phình lên rồi NỔ TUNG (hạt + vòng sáng theo skin) trong lúc màn chơi SÁNG LÊN (bản sao màn chính mờ dần) → mở màn game */
     try {
       /* 1) MỌI thẻ/nút/chữ còn lại của màn chính bay ra khỏi khung (lệch nhau chút) · 2) linh vật bay ra giữa · 3) nổ tung · 4) màn chơi sáng lên */

@@ -13,6 +13,8 @@ Q.start = function (g) {
     '<div class="gqSug" id="gqSug"></div><form class="gqIn" id="gqF" autocomplete="off"><input id="gi" type="text" enterkeyhint="go" autocapitalize="none" autocorrect="off" spellcheck="false"><button type="submit" class="btnbig" id="gqOk"></button></form>' +
     '<div class="gqBar"><button type="button" class="ib2" id="gqHint">💡</button><button type="button" class="ib2" id="gqSkip">⏭</button></div>';
   $("gqF").onsubmit = e => { e.preventDefault(); submit(); }; $("gi").oninput = sugg; $("gqHint").onclick = hint; $("gqSkip").onclick = () => reveal(false);
+  /* chạm chip / OK không làm ô gõ mất focus (mất focus = bàn phím đóng, bố cục đổi, lượt chạm đầu bị nuốt → phải bấm 2-3 lần) */
+  $("gqSug").onmousedown = $("gqOk").onmousedown = $("gqSug").onpointerdown = $("gqOk").onpointerdown = e => e.preventDefault();
   showQ(g);
 };
 Q.hud = g => [(g.hearts ? "❤️".repeat(g.lives) + "🖤".repeat(3 - g.lives) : "🌍 " + Math.min(g.i + 1, NQ) + "/" + NQ), "✅ " + g.ok + (g.combo >= 2 ? " 🔥" + g.combo : "")];
@@ -54,7 +56,7 @@ function submit() {
   const g = Q_API.G; if (!g || g.over || locked || paused) return; const q = g.qs[g.i], v = $("gi").value.trim(); if (!v) return;
   if (isMatch(q.c, v)) return correct(g, q);
   q.wr++; g.combo = 0; sfx.no(); if (window.NPFx) NPFx.buzz(30); $("gq").classList.remove("shk"); void $("gq").offsetWidth; $("gq").classList.add("shk"); updHud();
-  if (q.wr >= 3) return reveal(false); toast(T("wrong"), 900, "warn"); drawQ(g); $("gi").select();
+  if (q.wr >= 3) return reveal(false); toast(T("wrong"), 900, "warn"); drawQ(g);
 }
 function correct(g, q) {
   locked = true; clearInterval(gtm); g.combo++; g.ok++; const gain = Math.max(20, 100 - 25 * q.hn - 15 * q.wr) + Math.min(5, g.combo - 1) * 5; g.pts += gain; sfx.ok(); if (g.combo >= 3) sfx.combo(g.combo);
