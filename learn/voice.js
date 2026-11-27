@@ -118,7 +118,7 @@
   "nghe nhanh tin theo trang trong hoa quen vang xong tranh kho tai boong ngon mang thong reo sai sao khe tinh nhau mai thanh quanh dung gian tham gia sau chia hay quy chim trai sinh xanh".split(" ").forEach(function (w) { VI_ASCII[w] = 1; });
   /* từ KHÔNG BAO GIỜ là tiếng Anh: luôn đọc giọng Việt, bất kể từ kề ("blue - xanh", "xanh" đứng riêng) */
   var VI_ONLY = {};
-  "xanh chia nghe nhanh theo trang trong quen vang xong tranh kho tai boong ngon thong reo sai sao khe tinh nhau quanh dung gian tham gia quy chim trai sinh ba meo ga heo vit ngua cua ca bo co con em".split(" ").forEach(function (w) { VI_ONLY[w] = 1; });
+  "xanh chia nghe nhanh theo trang trong quen vang xong tranh kho tai boong ngon thong reo sai sao khe tinh nhau quanh dung gian tham gia quy chim trai sinh ba hai meo ga heo vit ngua cua ca bo co con em".split(" ").forEach(function (w) { VI_ONLY[w] = 1; });
   function onlyVi(text) { var w = String(text).toLowerCase().match(/[a-zà-ỹ]+/g) || []; return w.length > 0 && w.every(function (x) { return VI_ONLY[x] || /[à-ỹ]/.test(x); }) && w.some(function (x) { return VI_ONLY[x]; }); }
   function splitMix(text, base) {
     var toks = [], segs = [];
