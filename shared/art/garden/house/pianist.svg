@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Gấu Đô, nghệ sĩ đàn"><title>Gấu Đô</title><desc>Linh vật nghệ sĩ đàn: gấu nâu mắt to hai chấm sáng, má hồng, nơ hồng. Pop, đồ chơi mềm.</desc><defs><linearGradient id="pm-a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d8ab7d"/><stop offset="1" stop-color="#C98A4B"/></linearGradient><linearGradient id="pm-b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f9e7ca"/><stop offset="1" stop-color="#F6DDB5"/></linearGradient><linearGradient id="pm-e" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ca9a71"/><stop offset="1" stop-color="#B5733A"/></linearGradient><linearGradient id="pm-t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff889f"/><stop offset="1" stop-color="#FF5A7A"/></linearGradient></defs>
+<g id="pm-fx" aria-hidden="true"><text x="22" y="48" font-size="34" fill="#FFD24D">♪</text><text x="206" y="36" font-size="40" fill="#FF8FC2">♫</text><text x="228" y="92" font-size="28" fill="#7DE0FF">♪</text></g>
+<g id="pm-body">
+<ellipse cx="128" cy="214" rx="84" ry="66" fill="url(#pm-a)" stroke="#976838" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<ellipse cx="128" cy="222" rx="52" ry="50" fill="url(#pm-b)" stroke="#b9a688" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="74" cy="52" r="26" fill="url(#pm-e)" stroke="#88562c" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="182" cy="52" r="26" fill="url(#pm-e)" stroke="#88562c" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="74" cy="54" r="12" fill="#F6B58A"/><circle cx="182" cy="54" r="12" fill="#F6B58A"/>
+<circle cx="128" cy="96" r="66" fill="url(#pm-a)" stroke="#976838" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<ellipse cx="128" cy="116" rx="34" ry="26" fill="url(#pm-b)" stroke="#b9a688" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M84 70C94 46 120 36 146 40C122 46 104 58 98 82Z" fill="#fff" opacity=".5"/>
+<circle cx="102" cy="90" r="12" fill="#3B2A1D"/><circle cx="106.2" cy="85.44" r="4.800000000000001" fill="#fff"/><circle cx="97.44" cy="94.8" r="2.4000000000000004" fill="#fff"/><circle cx="154" cy="90" r="12" fill="#3B2A1D"/><circle cx="158.2" cy="85.44" r="4.800000000000001" fill="#fff"/><circle cx="149.44" cy="94.8" r="2.4000000000000004" fill="#fff"/><ellipse cx="88" cy="112" rx="11" ry="7" fill="#FF8FA8" opacity=".55"/><ellipse cx="168" cy="112" rx="11" ry="7" fill="#FF8FA8" opacity=".55"/>
+<ellipse cx="128" cy="106" rx="11" ry="8" fill="#3B2A1D"/><path d="M128 114V124M114 124Q128 138 142 124" fill="none" stroke="#3B2A1D" stroke-width="4" stroke-linecap="round"/>
+<path d="M104 164L128 178L152 164L152 190L128 180L104 190Z" fill="url(#pm-t)" stroke="#bf445c" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+</g>
+<g id="paw-l"><ellipse cx="64" cy="186" rx="26" ry="22" fill="url(#pm-a)" stroke="#976838" stroke-width="3"/><ellipse cx="64" cy="192" rx="12" ry="9" fill="#F6B58A"/></g>
+<g id="paw-r"><ellipse cx="192" cy="186" rx="26" ry="22" fill="url(#pm-a)" stroke="#976838" stroke-width="3"/><ellipse cx="192" cy="192" rx="12" ry="9" fill="#F6B58A"/></g></svg>
