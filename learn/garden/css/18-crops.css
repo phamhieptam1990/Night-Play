@@ -135,11 +135,5 @@
   #guide .gd-goal>img{width:52px;height:46px}#guide .gd-goal b{font-size:16px}
 }
 #guide .gdc.wt{opacity:.75;background:rgba(148,163,184,.16);border-color:rgba(148,163,184,.45)}#guide .gdc.wt .gdc-go{background:transparent;min-width:44px;font-size:22px}   /* nhiệm vụ chăm vườn chờ có ruộng/ao */
-/* AO CÁ (garden-pond.js) */
-.pond{position:relative;height:96px;border-radius:16px;overflow:hidden;background:linear-gradient(#7fd4ff,#2f8fd8)}.pond .pf{position:absolute;left:-12%;font-style:normal;width:40px;animation:pfSwim 9s linear infinite}
-@keyframes pfSwim{to{left:104%}}.pshop{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-height:36vh;overflow:auto}
-.pbuy{display:grid;justify-items:center;gap:1px;padding:8px 4px;border-radius:14px;border:2px solid #FFD24D;background:rgba(255,255,255,.14);color:inherit;min-height:84px}
-.pbuy .pe{display:grid;place-items:center;height:46px}.pbuy .pe img,.pond .pf img{width:100%;height:100%;object-fit:contain;display:block}.pbuy .pe img{width:46px}.pbuy b{font-size:13px}.pbuy small{font-size:11px;opacity:.8}.pbuy em{font-style:normal;font-weight:800;font-size:13px}.pbuy.off{opacity:.5;border-color:rgba(255,255,255,.3)}
-.pond .pf img{transform:scaleX(-1)}   /* các bạn quay mặt trái trong tranh, bơi sang phải thì lật lại */
 
 #guide .gdc.nx{background:rgba(255,224,138,.18);border-color:#FFD166}#guide .gdc.nx .gdc-go{min-width:88px;box-shadow:0 0 0 3px rgba(255,208,102,.35)}   /* việc tiếp theo nổi bật */

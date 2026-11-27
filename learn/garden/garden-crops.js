@@ -15,7 +15,9 @@ function initCrops(){
 }
 /* gọi từ badge(): vẽ/xoá cây trong ô theo trạng thái hiện tại */
 function cropSprite(p, b){
-  if(p.tree || p.base0) return;
+  if(p.tree){ if(typeof treeSync === "function") treeSync(p, b); return; }
+  if(p.base0) return;
+  if(typeof fruitMark === "function") fruitMark(p, b, 26);   /* biểu tượng loài trên ô ruộng, to dần theo giai đoạn */
   var im = b.querySelector(".cs"), want = p.planted && p.crop ? GardenLayout.ART + "crop_" + p.crop + (stg(p) >= 4 ? "" : "_s" + stg(p)) + ".svg" : "";
   if(!want){ if(im) im.remove(); saveFarm(); return; }
   if(!im){ im = document.createElement("img"); im.className = "cs"; im.alt = ""; b.insertBefore(im, b.firstChild); }

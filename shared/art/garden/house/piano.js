@@ -3,7 +3,7 @@
 (function (root) {
   "use strict";
   var NAMES = { 0: "Đô", 2: "Rê", 4: "Mi", 5: "Fa", 7: "Sol", 9: "La", 11: "Si" }, BLACK = { 1: 1, 3: 1, 6: 1, 8: 1, 10: 1 };
-  var mq = matchMedia("(orientation:portrait) and (max-width:700px)"), mas, masT = 0, el, kb, info, songsEl, modeBtns = {}, mode = "free", song = null, step = 0, timers = [], rec = null, took = null, keys = {};
+  var mq = matchMedia("(orientation:portrait) and (max-width:1100px)"), mas, masT = 0, el, kb, info, songsEl, modeBtns = {}, mode = "free", song = null, step = 0, timers = [], rec = null, took = null, keys = {};
   function $(t, c, h) { var e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; }
   function done() { try { return JSON.parse(localStorage.getItem("gardenPiano") || "{}"); } catch (e) { return {}; } }
   function markDone(id) { var d = done(); d[id] = 1; try { localStorage.setItem("gardenPiano", JSON.stringify(d)); } catch (e) {} }
@@ -85,10 +85,15 @@
       b.onclick = function () { song = s; if (mode === "free" || mode === "rec") mode = "learn"; setMode(mode === "listen" ? "listen" : "learn"); }; songsEl.appendChild(b);
     });
   }
-  var modes;
+  var modes, gating = false;
+  /* màn bật loa trước khi vào đàn (PlaySound); không có PlaySound thì vào thẳng */
   function open() {
+    if (el || gating) return; if (!root.PlaySound) return openReal(); gating = true;
+    PlaySound.gate({ title: "Đàn piano", emoji: "🎹", onBack: function () { gating = false; }, start: function () { gating = false; openReal(); } });
+  }
+  function openReal() {
     if (el) return; el = $("div", "hp-ov"); el.setAttribute("role", "dialog"); el.setAttribute("aria-modal", "true"); el.setAttribute("aria-label", "Đàn piano");
-    var top = $("div", "hp-top"), x = $("button", "hp-x", "✕"); x.type = "button"; x.setAttribute("aria-label", "Đóng"); x.onclick = close; top.appendChild(x); top.appendChild($("h2", "", "🎹 Đàn piano"));
+    var top = $("div", "hp-top"), x = $("button", "hp-x", "✕"); x.type = "button"; x.setAttribute("aria-label", "Đóng"); x.onclick = close; top.appendChild(x); top.appendChild($("h2", "", "🎹 Đàn piano")); if (root.PlaySound) PlaySound.button(top, "hp-snd");
     modes = $("div", "hp-modes"); top.appendChild(modes); songsEl = $("div", "hp-songs"); info = $("p", "hp-info"); kb = $("div", "hp-kb");
     el.appendChild(top); el.appendChild(songsEl); el.appendChild(info); el.appendChild(kb); document.body.appendChild(el);
     kb.addEventListener("pointerdown", function (e) { var k = e.target.closest(".hk"); if (k) { e.preventDefault(); hit(+k.dataset.m); } });

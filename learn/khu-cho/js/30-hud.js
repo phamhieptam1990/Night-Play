@@ -7,6 +7,7 @@
   const go = it => { const el = document.querySelector('.shop[data-i="' + it.i + '"]'); if (el) el.classList.add("enter"); setTimeout(() => { location.href = it.url; }, 220); };
   KC.tap = i => {
     const IT = KC.items(), it = IT[i]; if (!it) return;
+    if (KC.waiting(it, KC.curGrade())) return UnlockFx.celebrate({ title: it.name, img: "../quan-kem/art/g" + (i + 1) + "/sign-2.svg", done: () => { UnlockFx.mark("kc", KC.curGrade() + ":" + it.id); KC.build(); } });   /* tự mở quà: chạm hộp 3 lần */
     if (it.open && !it.done) return WorldKit.popup({ title: it.name, big: [{ img: "../quan-kem/art/g" + (i + 1) + "/sign-2.svg" }, { ic: "book" }],
       html: '<p class="kc-gate">Take the quick test first, then come play in the shop!</p>', acts: [{ ic: "book", go: 1, label: "Take the test", fn: () => go(it), keep: 1 }, { ic: "close", label: "Close" }] });
     if (it.open) return WorldKit.popup({ title: it.name, big: [{ img: "../quan-kem/art/g" + (i + 1) + "/sign-2.svg" }, { ic: "play" }],   /* quầy đã học xong: bé chọn CHƠI hay HỌC LẠI, không bị đẩy thẳng vào bài */

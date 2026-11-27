@@ -10,9 +10,10 @@
       'stroke-linecap="round" stroke-dasharray="' + (C * f).toFixed(1) + " " + C.toFixed(1) + '" transform="rotate(-90 22 22)"/></svg>';
   }
   /* chuồng thứ i = chủ đề thứ i của lớp hiện tại; thú đổi theo i (bắt đầu từ linh vật của lớp); khoá nếu chưa đạt chủ đề liền trước */
+  V.waiting = function (it) { return !!(window.UnlockFx && it.open && !it.done && !UnlockFx.seen("vt", V.curGrade() + ":" + it.id)); };   /* đủ điều kiện nhưng bé chưa tự mở quà */
   function pen(it, L, i) {
-    var g = V.petOf(i), P = V.pet(g), a = P.pet.art, open = it.open, mode = V.MODE[g], sc = P.pet.scaleByLevel[1], at = L.at[i];
-    var b = el("button", "pen" + (open ? "" : " lock") + (open && !it.done ? " cur" : "") + " m-" + (open ? mode : "none"));
+    var g = V.petOf(i), P = V.pet(g), a = P.pet.art, wait = V.waiting(it), open = it.open && !wait, mode = V.MODE[g], sc = P.pet.scaleByLevel[1], at = L.at[i];
+    var b = el("button", "pen" + (open ? "" : " lock") + (wait ? " ready" : "") + (open && !it.done ? " cur" : "") + " m-" + (open ? mode : "none"));
     b.type = "button"; b.id = "pen-" + i; b.dataset.g = g; b.setAttribute("aria-label", it.name + (open ? "" : ", chưa mở"));
     b.style.cssText = "left:" + at[0] + "%;top:" + at[1] + "%;width:" + L.pen + "%;--ps:" + (30 * sc).toFixed(1) + "%;--d:" + (i * -2.3) + "s";
     var ca = i < 5 ? g : i + 1;   /* kiểu chuồng: 5 kiểu theo thú, chuồng thứ 6, 7 dùng kiểu riêng */
@@ -28,10 +29,12 @@
     if (open) {
       b.appendChild(el("span", "lvb", WK().svg(it.done ? "star" : "book") + "<b>" + (it.status === "star" ? "★" : it.done ? "✓" : it.i + 1) + "</b>"));
       if (i === 0 && V.gift(V.curGrade())) b.appendChild(el("span", "gift", WK().svg("gift")));
-    } else b.appendChild(el("span", "lockb", '<img src="' + V.ART + 'khoa.svg" alt=""><b>' + (it.i + 1) + "</b>"));
+    } else if (wait) b.appendChild(el("span", "ufx-ready", "🎁"));
+    else b.appendChild(el("span", "lockb", '<img src="' + V.ART + 'khoa.svg" alt=""><b>' + (it.i + 1) + "</b>"));
     if (open) b.appendChild(el("span", "wbtn", Wardrobe.ICON)).setAttribute("role", "button"), b.lastChild.setAttribute("aria-label", "Đổi trang phục");
     b.onclick = function (e) {
       if (e.target.closest(".wbtn")) return Wardrobe.pick({ game: "vt", subj: "tviet", G: V.curGrade(), i: i, owner: false, base: V.NB + a + ".svg", onPick: V.build });
+      if (wait) return UnlockFx.celebrate({ title: it.name, img: V.NB + a + ".svg", done: function () { UnlockFx.mark("vt", V.curGrade() + ":" + it.id); V.build(); } });   /* tự mở quà: chạm hộp 3 lần */
       if (open && !it.done) V.testPopup(it); else if (open) { if (V.sfx) V.sfx(); V.playPopup(it); } else V.lockPopup(it);
     };
     return b;

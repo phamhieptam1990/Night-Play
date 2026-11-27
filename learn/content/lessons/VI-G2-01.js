@@ -19,7 +19,7 @@ window.LearnLessons.reg({
     {
       "k": "say",
       "t": "Ghép vần: phụ âm + vần + thanh thành tiếng. Ví dụ m + ưa + huyền = mưa.",
-      "art": "m + ưa + ` = mưa"
+      "art": "m + ưa = mưa"
     },
     {
       "k": "choose",
@@ -58,7 +58,7 @@ window.LearnLessons.reg({
       "ok": 0,
       "yes": "Đúng! mưa.",
       "no": "Nhớ vần ưa và dấu huyền.",
-      "art": "m + ưa + `"
+      "art": "m + ưa"
     },
     {
       "k": "sum",

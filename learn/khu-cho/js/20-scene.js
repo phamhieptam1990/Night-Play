@@ -8,6 +8,7 @@
   const img = (c, s) => '<img class="' + c + '" src="' + s + '" alt="" draggable="false">';
   const ring = (done, total) => '<svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="19" fill="rgba(20,16,50,.55)" stroke="rgba(255,255,255,.3)" stroke-width="4"/><circle cx="22" cy="22" r="19" fill="none" stroke="#FFD24D" stroke-width="4" stroke-linecap="round" stroke-dasharray="' + (119.4 * done / total).toFixed(1) + ' 120" transform="rotate(-90 22 22)"/></svg>';
   KC.ring = ring;
+  KC.waiting = (it, G) => !!(window.UnlockFx && it.open && !it.done && !UnlockFx.seen("kc", G + ":" + it.id));   /* đủ điều kiện nhưng bé chưa tự mở quà */
   KC.build = () => {
     const st = document.getElementById("stage"); let h = img("bg bgp", K + "bg-p.svg") + img("bg bgl", K + "bg-l.svg");
     h += '<div class="plaza"><img class="fount" src="' + K + 'fountain.svg" alt=""><i class="spray"></i></div>';
@@ -19,10 +20,10 @@
     });
     const G = KC.curGrade(), D = KC.info(G), IT = KC.items(), dn = IT.filter(x => x.done).length;
     IT.forEach((it, i) => {
-      const p = POS[i], g = i + 1, open = it.open, S = ["--px:" + pct(p[1], PWID), "--py:" + pct(p[2], PH), "--pw:" + pct(PW, PWID), "--lx:" + pct(p[4], LWID), "--ly:" + pct(p[5], LH), "--lw:" + pct(LW, LWID)].join(";");
+      const p = POS[i], g = i + 1, wait = KC.waiting(it, G), open = it.open && !wait, S = ["--px:" + pct(p[1], PWID), "--py:" + pct(p[2], PH), "--pw:" + pct(PW, PWID), "--lx:" + pct(p[4], LWID), "--ly:" + pct(p[5], LH), "--lw:" + pct(LW, LWID)].join(";");
       const wl = Wardrobe.layers(Wardrobe.resolve("kc", "tanh", G, i, it.status), true);   /* chủ quán mặc bộ bé chọn (tủ đồ), chưa chọn thì tự động */
       const dogHtml = '<span class="dog">' + wl.filter(l => l.bk).map(l => img("tp bk", l.src)).join("") + img("own", A + G + "/chu-quan.svg") + wl.filter(l => !l.bk).map(l => img("tp", l.src)).join("") + "</span>";
-      h += '<button type="button" class="shop ' + (open ? "open" : "locked") + '" data-i="' + i + '" data-lv="' + D.lv + '" style="' + S + '" aria-label="' + KC.esc(it.name) + '">';
+      h += '<button type="button" class="shop ' + (open ? "open" : "locked" + (wait ? " ready" : "")) + '" data-i="' + i + '" data-lv="' + D.lv + '" style="' + S + '" aria-label="' + KC.esc(it.name) + '">';
       h += '<span class="art">' + img("back", K + "stall-back-" + g + ".svg") + dogHtml + img("front", K + "stall-front-" + g + ".svg") + img("dc", K + "deco-g" + G + ".svg");
       if (open && D.lv > 1) h += img("mai", A + G + "/mai-" + D.lv + ".svg");
       h += '<span class="sgn">' + img("", A + g + "/sign-2.svg") + "</span>";
@@ -33,7 +34,8 @@
         h += '<span class="wbtn" role="button" data-i="' + i + '" aria-label="Wardrobe">' + Wardrobe.ICON + "</span>";
         h += '<span class="dots">' + (it.done ? "<i class=\"on\"></i>" : "<i></i>") + "</span>";
         if (i === 0 && D.pend > 0) h += '<span class="coin">' + WorldKit.svg("coin") + "<b>" + D.pend + "</b></span>";
-      } else h += '<span class="shut"></span><span class="lk">' + ring(dn, IT.length) + WorldKit.svg("lock") + '</span><span class="prog">' + (i + 1) + "</span>";
+      } else if (wait) h += '<span class="shut"></span><span class="ufx-ready" aria-hidden="true">🎁</span>';
+      else h += '<span class="shut"></span><span class="lk">' + ring(dn, IT.length) + WorldKit.svg("lock") + '</span><span class="prog">' + (i + 1) + "</span>";
       h += "</button>";
     });
     const W = ["meo", "gau", "heo", "tho", "meo", "gau"];

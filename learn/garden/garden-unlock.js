@@ -76,14 +76,16 @@ function renderGuide(u){
 }
 function openGuide(){ if(typeof openMn === "function") openMn(); }
 var UNL_STAGE = null;
+/* nhận quà: bé CHẠM hộp quà 3 lần (hiệu ứng pháo giấy) rồi mới thấy món mới; không có UnlockFx thì báo như cũ */
+function giftOpen(emoji, text){ if(window.UnlockFx) UnlockFx.celebrate({ emoji: emoji, title: text.replace(/^[^\p{L}\s]+\s/u, "") }); else toast(text); }
 function refreshUnlock(announce){
   var prev = UNL_STAGE, u = applyUnlock(stageNow(), stars0()), seen = null; UNL_STAGE = u.stage;
   try { seen = JSON.parse(localStorage.getItem("gardenSeen") || "null") || null; } catch (e) { seen = null; }
   if(prev !== null && prev !== u.stage && typeof setPhase === "function"){ curPhase = null; setPhase(PHASE, true); }   /* đổi cảnh nền khi mở thêm đất */
   if(announce && seen){
-    if(u.stage > (seen.s | 0)) toast(STAGE_TOAST[u.stage] || "");
-    else if(u.trees > seen.t) toast("🌳 Một cây ăn trái mới mọc trong vườn!");
-    else if(u.animals > seen.a) toast("🐣 Một bạn vật nuôi mới đến vườn!");
+    if(u.stage > (seen.s | 0)) giftOpen(STAGE_ICONS[u.stage] || "🎁", STAGE_TOAST[u.stage] || "");
+    else if(u.trees > seen.t) giftOpen("🌳", "Một cây ăn trái mới mọc trong vườn!");
+    else if(u.animals > seen.a) giftOpen("🐣", "Một bạn vật nuôi mới đến vườn!");
   }
   try { localStorage.setItem("gardenSeen", JSON.stringify({ s: u.stage, t: u.trees, a: u.animals })); } catch (e) {}
   renderGuide(u);

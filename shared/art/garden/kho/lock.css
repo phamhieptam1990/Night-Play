@@ -1,0 +1,2 @@
+/* Linh vật khoá trong Kho (preview-barn.html): mờ xám, huy hiệu 🔒, vẫn bấm được để xem cách mở */
+.crate.locked .mbox{filter:grayscale(1) brightness(.8);opacity:.7}.crate.locked .cnt{background:#FFE9B0;font-size:15px}

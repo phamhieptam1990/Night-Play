@@ -36,7 +36,7 @@
   function build() {
     el = E("div", "dp-ov"); el.setAttribute("role", "dialog"); el.setAttribute("aria-modal", "true"); el.setAttribute("aria-label", "Vẽ tranh");
     var top = E("div", "dp-top"), und, red;
-    top.appendChild(btn("dp-x", "✕", "Đóng", close)); top.appendChild(E("h2", "", "🎨 Vẽ tranh")); top.appendChild(E("span", "dp-sp"));
+    top.appendChild(btn("dp-x", "✕", "Đóng", close)); top.appendChild(E("h2", "", "🎨 Vẽ tranh")); top.appendChild(E("span", "dp-sp")); if (root.PlaySound) PlaySound.button(top, "dp-snd");
     und = btn("dp-i", "↩", "Hoàn tác", function () { core.undo(); }); red = btn("dp-i", "↪", "Làm lại", function () { core.redo(); });
     top.appendChild(und); top.appendChild(red); top.appendChild(btn("dp-i", "🗑", "Xoá hết", function () { core.clear(); })); top.appendChild(btn("dp-i go", "💾", "Lưu và treo tường", save));
     stage = E("div", "dp-stage"); cv = E("canvas", "dp-cv"); stage.appendChild(cv);
@@ -53,7 +53,12 @@
     setTool("pen"); setColor(COLORS[1]); renderGallery(); fit(); setTimeout(fit, 60);
   }
   function onKey(e) { if (el && e.key === "Escape") { e.stopPropagation(); close(); } }
-  function open() { if (el) return; build(); addEventListener("resize", fit); addEventListener("keydown", onKey, true); }
-  function close() { removeEventListener("resize", fit); removeEventListener("keydown", onKey, true); if (el) el.remove(); el = null; tools = {}; cols = []; }
+  var gating = false;
+  function open() {   /* màn bật loa trước, rồi vào vẽ; nhạc nền êm chạy khi đang bật loa */
+    if (el || gating) return; if (!root.PlaySound) return openReal(); gating = true;
+    PlaySound.gate({ title: "Vẽ tranh", emoji: "🎨", onBack: function () { gating = false; }, start: function () { gating = false; openReal(); } });
+  }
+  function openReal() { if (el) return; build(); addEventListener("resize", fit); addEventListener("keydown", onKey, true); if (root.PlayMusic) PlayMusic.start({ root: 64, step: .7, wave: "triangle", vol: .045 }); }
+  function close() { if (root.PlayMusic) PlayMusic.stop(); removeEventListener("resize", fit); removeEventListener("keydown", onKey, true); if (el) el.remove(); el = null; tools = {}; cols = []; }
   root.DrawPro = { open: open, close: close };
 })(window);

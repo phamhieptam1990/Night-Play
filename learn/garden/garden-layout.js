@@ -14,12 +14,12 @@
     { id: "animals",   z: 6, note: "vật nuôi" },
     { id: "ui",        z: 7, note: "tooltip, chữ Zzz" }
   ];
-  var SCRIPTS = ["garden-layout", "garden-crop-say", "garden-items", "garden-core", "garden-places", "garden-levels", "garden-plots", "garden-crops", "garden-tooltip", "garden-popup", "garden-plant-card", "garden-missions", "garden-events", "garden-fx", "garden-animals", "garden-time", "garden-buildings", "garden-pond", "garden-menu", "garden-buddy", "garden-intro", "garden-trees", "garden-shadow", "garden-unlock", "garden-collection", "garden-deco-drag", "garden-deco-tray", "garden-weather", "garden-view", "garden-gift", "garden-farm", "garden-edit", "garden-nav", "garden-btn-icons", "garden-engine"];
+  var SCRIPTS = ["garden-layout", "garden-crop-say", "garden-items", "garden-core", "garden-places", "garden-levels", "garden-plots", "garden-crops", "garden-tooltip", "garden-popup", "garden-plant-card", "garden-missions", "garden-events", "garden-fx", "garden-animals", "garden-time", "garden-buildings", "garden-menu", "garden-buddy", "garden-intro", "garden-trees", "garden-shadow", "garden-unlock", "garden-collection", "garden-deco-drag", "garden-deco-tray", "garden-weather", "garden-view", "garden-gift", "garden-farm", "garden-edit", "garden-nav", "garden-btn-icons", "garden-tools", "garden-multi-plant", "garden-tree-grow", "garden-harvest-fx", "garden-sound", "garden-engine"];
   /* CSS theo chức năng, nạp ĐÚNG thứ tự này (cascade phụ thuộc thứ tự: số đứng trước nạp trước, tệp sau ghi đè tệp trước). Tệp trong css/. */
-  var STYLES = ["01-base", "02-stage", "03-tooltip", "04-popup", "05-popup-level", "06-menu-events", "07-popup-dark", "08-hud", "09-world-fx", "10-popup-kids", "11-tooltip-badge", "12-buildings", "13-animals-fx", "14-popup-float", "15-layout-legacy", "16-gift", "17-edit", "18-crops", "20-animal-card", "21-collection", "22-deco-drag", "23-deco-tray", "24-popup-visual", "25-btn-icons"];
+  var STYLES = ["01-base", "02-stage", "03-tooltip", "04-popup", "05-popup-level", "06-menu-events", "07-popup-dark", "08-hud", "09-world-fx", "10-popup-kids", "11-tooltip-badge", "12-buildings", "13-animals-fx", "14-popup-float", "15-layout-legacy", "16-gift", "17-edit", "18-crops", "20-animal-card", "21-collection", "22-deco-drag", "23-deco-tray", "24-popup-visual", "25-btn-icons", "26-tools", "27-multi-plant", "28-tree-grow", "29-harvest-fx"];
   /* thư mục ảnh/cảnh dùng chung (animal_*.svg, mascot_*, produce_*, scene/, tree/, preview-*.html), tính từ trang vườn */
   var ART = "../../shared/art/garden/";
-  var START = ["initCrops", "initPlots", "initAnimals", "initTime", "initBuildings", "initMissions", "initEvents", "initLevels", "initMenu", "initTrees", "initShadow", "initUnlock", "initCollection", "initWeather", "initView", "initGift", "initFarm", "initEdit", "initNav"];
+  var START = ["initCrops", "initPlots", "initAnimals", "initTime", "initBuildings", "initMissions", "initEvents", "initLevels", "initMenu", "initTrees", "initShadow", "initUnlock", "initCollection", "initWeather", "initView", "initGift", "initFarm", "initEdit", "initNav", "initTools", "initSound"];
 
   var layers = {};
   /* tầng không bấm được (bóng, cây ảnh, thời tiết): tạo một lớp phủ kín khung cảnh, z lấy từ LAYERS */
@@ -33,11 +33,13 @@
   function writeStyles() {
     LAYERS.forEach(function (l) { document.documentElement.style.setProperty("--z-" + l.id, l.z); });
     STYLES.forEach(function (n) { document.write('<link rel="stylesheet" href="css/' + n + '.css">'); });
+    document.write('<link rel="stylesheet" href="../../shared/unlock-fx.css"><link rel="stylesheet" href="../../shared/play-sound.css">');
   }
   /* trang gọi cuối <body>: dữ liệu sinh, rồi các mô-đun theo SCRIPTS, rồi điều phối (đồng bộ, đúng thứ tự) */
   function writeScripts() {
     document.write('<script src="../farm.js"><\/script>');
     document.write('<script src="' + ART + 'garden-data.js"><\/script>');
+    document.write('<script src="../../shared/play-sound.js"><\/script><script src="../../shared/play-music.js"><\/script><script src="../../shared/unlock-fx.js"><\/script>');
     SCRIPTS.forEach(function (n) { if (n !== "garden-layout") document.write('<script src="' + n + '.js"><\/script>'); });
   }
 

@@ -14,4 +14,5 @@ function initTrees(){
     e.style.setProperty("--sd", (4.5 + Math.random() * 3) + "s"); e.style.setProperty("--sl", (-Math.random() * 6) + "s");   /* mỗi cây lắc lệch pha */
     t.el = e; GardenLayout.layer("sprites").appendChild(e);
   });
+  if(typeof treeSyncAll === "function") treeSyncAll();   /* ảnh cây đúng loài và cỡ theo giai đoạn */
 }

@@ -1,0 +1,8 @@
+/* Thanh dụng cụ thu hoạch (garden-tools.js): liềm, lưỡi hái, hiệu ứng cắt */
+.tlbar{position:fixed;left:max(12px,env(safe-area-inset-left));bottom:max(110px,calc(env(safe-area-inset-bottom) + 90px));z-index:31;display:flex;gap:8px}
+.tlb{display:grid;justify-items:center;gap:0;width:62px;min-height:58px;padding:5px 2px;border-radius:16px;border:2px solid rgba(255,255,255,.55);background:rgba(20,16,50,.6);color:#fff;font:800 11px system-ui;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tlb svg{width:30px;height:30px}.tlb.on{background:linear-gradient(135deg,#FFC83D,#FB923C);border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.7)}
+body.tool-on .hs{cursor:crosshair}body.tool-on .hs.ripe::before{border-color:#FFE27A;background:rgba(255,226,122,.25)}
+.fxslash{position:absolute;height:5px;border-radius:5px;background:linear-gradient(90deg,transparent,#fff,transparent);box-shadow:0 0 10px 2px #fff;pointer-events:none;z-index:9;transform-origin:left center}
+.fxleaf{position:absolute;pointer-events:none;z-index:9;font-size:18px;line-height:1}
+.fxsweep{position:absolute;left:0;top:0;width:90px;pointer-events:none;z-index:9;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent)}

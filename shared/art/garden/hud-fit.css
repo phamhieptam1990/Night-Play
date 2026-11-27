@@ -1,0 +1,4 @@
+/* Thanh trên (.hud2) của các trang kho / ao / nhà: một hàng, không tràn trên màn hẹp (nạp SAU style của trang) */
+.hud2{flex-wrap:nowrap}.hud2 .sp{flex:1 1 0;min-width:0}
+.hud2 .lvbar{flex:none;flex-wrap:nowrap}.hud2 .ttl{white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:430px){.hud2{gap:6px}.hb2{width:42px;height:42px;flex:none}.hud2 .ttl{font-size:14px;padding:0 10px;min-height:40px}.hud2 .lvbar{gap:4px;padding:3px 6px}.hud2 .lvbar button{min-width:32px;min-height:32px;font-size:13px}}

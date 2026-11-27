@@ -227,7 +227,7 @@ Nho: 1)_
 
 - **1. [say]** Đọc to, rõ, ngắt nghỉ ở dấu phẩy và dấu chấm. Nghe kỹ để hiểu câu chuyện.  _(hình: 📖 Đọc chậm rãi)_
 - **2. [say]** Đọc xong, hỏi: Ai? Làm gì? Ở đâu? Khi nào? Câu trả lời nằm ngay trong bài.  _(hình: Ai? Làm gì? Ở đâu?)_
-- **3. [say]** Ghép vần: phụ âm + vần + thanh thành tiếng. Ví dụ m + ưa + huyền = mưa.  _(hình: m + ưa + ` = mưa)_
+- **3. [say]** Ghép vần: phụ âm + vần + thanh thành tiếng. Ví dụ m + ưa + huyền = mưa.  _(hình: m + ưa = mưa)_
 - **4. [choose]** Bé Na có một con mèo trắng. Mèo của Na màu gì?  _(hình: 🐱)_
   - Đáp án: **Màu trắng** ✔ · Màu vàng · Màu đen
   - Khen: Đúng! Mèo màu trắng.
@@ -236,7 +236,7 @@ Nho: 1)_
   - Đáp án: **Cá** ✔ · Thịt · Rau
   - Khen: Đúng! Mẹ mua cá.
   - Gợi ý khi sai: Tìm từ đứng sau chữ mua.
-- **6. [choose]** Ghép m + ưa + dấu huyền được tiếng nào?  _(hình: m + ưa + `)_
+- **6. [choose]** Ghép m + ưa + dấu huyền được tiếng nào?  _(hình: m + ưa)_
   - Đáp án: **mưa** ✔ · mua · mứa
   - Khen: Đúng! mưa.
   - Gợi ý khi sai: Nhớ vần ưa và dấu huyền.

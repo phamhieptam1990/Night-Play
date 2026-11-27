@@ -1,0 +1,14 @@
+/* Màn bật loa + nút loa (play-sound.js) */
+.psb{display:grid;place-items:center;flex:none;width:46px;height:46px;padding:0;border-radius:50%;border:2px solid rgba(255,255,255,.45);background:rgba(20,16,50,.45);color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.psb svg{width:58%;height:58%}.psb.off{background:rgba(120,120,140,.55);color:#e5e7eb}.psb:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.psg{position:fixed;inset:0;z-index:900;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(12px,2.6dvh,20px);padding:24px;text-align:center;background:linear-gradient(160deg,#6D4AE0,#2D2A7A);transition:opacity .3s;font-family:system-ui,sans-serif}
+.psg.out{opacity:0;pointer-events:none}
+.psg-x{position:absolute;left:max(12px,env(safe-area-inset-left));top:max(10px,env(safe-area-inset-top));width:48px;height:48px;border-radius:50%;border:2px solid rgba(255,255,255,.5);background:rgba(255,255,255,.15);color:#fff;font:900 24px/1 system-ui;cursor:pointer}
+.psg-e{font-size:clamp(72px,22vw,120px);line-height:1;filter:drop-shadow(0 8px 10px rgba(0,0,0,.3));animation:psgb 2.6s ease-in-out infinite}.psg-m{width:min(46vw,200px);height:auto;animation:psgb 2.6s ease-in-out infinite}
+.psg-t{font-weight:900;font-size:clamp(20px,6vw,28px);color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.25);max-width:92%}
+.psg-b{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:clamp(130px,38vw,168px);aspect-ratio:1;border-radius:50%;border:5px solid #fff;background:linear-gradient(160deg,#34D399,#10B981);color:#fff;font:900 clamp(15px,4.4vw,19px) system-ui;box-shadow:0 8px 0 #0B7A56,0 14px 24px rgba(0,0,0,.35);cursor:pointer}
+.psg-b svg{width:54%;height:54%;filter:drop-shadow(0 3px 0 rgba(0,0,0,.28))}.psg-b:active{transform:translateY(4px)}.psg-b:focus-visible{outline:4px solid #fff;outline-offset:4px}
+.psg-s{width:60px;height:60px;border-radius:50%;display:grid;place-items:center;color:#fff;background:rgba(10,20,60,.35);border:3px solid #fff;cursor:pointer}.psg-s svg{width:56%;height:56%}
+@keyframes psgb{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@media (orientation:landscape) and (max-height:600px){.psg{flex-direction:row;gap:8px 22px;padding:12px 24px}.psg-b{width:120px}.psg-e{font-size:72px}}
+@media (prefers-reduced-motion:reduce){.psg-e,.psg-m{animation:none}}

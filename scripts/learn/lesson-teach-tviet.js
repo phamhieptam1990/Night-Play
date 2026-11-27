@@ -3,11 +3,11 @@ module.exports = {
   "VI-G2-01": { say: [
     ["Đọc to, rõ, ngắt nghỉ ở dấu phẩy và dấu chấm. Nghe kỹ để hiểu câu chuyện.", "📖 Đọc chậm rãi"],
     ["Đọc xong, hỏi: Ai? Làm gì? Ở đâu? Khi nào? Câu trả lời nằm ngay trong bài.", "Ai? Làm gì? Ở đâu?"],
-    ["Ghép vần: phụ âm + vần + thanh thành tiếng. Ví dụ m + ưa + huyền = mưa.", "m + ưa + ` = mưa"]],
+    ["Ghép vần: phụ âm + vần + thanh thành tiếng. Ví dụ m + ưa + huyền = mưa.", "m + ưa = mưa"]],
     qs: [
       ["Bé Na có một con mèo trắng. Mèo của Na màu gì?", "Màu trắng", "Màu đen", "Màu vàng", "Tìm từ chỉ màu trong câu.", "Đúng! Mèo màu trắng.", "🐱"],
       ["Mẹ đi chợ mua cá. Mẹ mua gì?", "Cá", "Thịt", "Rau", "Tìm từ đứng sau chữ mua.", "Đúng! Mẹ mua cá.", "🛒"],
-      ["Ghép m + ưa + dấu huyền được tiếng nào?", "mưa", "mua", "mứa", "Nhớ vần ưa và dấu huyền.", "Đúng! mưa.", "m + ưa + `"],
+      ["Ghép m + ưa + dấu huyền được tiếng nào?", "mưa", "mua", "mứa", "Nhớ vần ưa và dấu huyền.", "Đúng! mưa.", "m + ưa"],
       ["Sáng nay trời mưa, bé mang áo mưa đi học. Vì sao bé mang áo mưa?", "Vì trời mưa", "Vì trời nắng", "Vì trời lạnh", "Đọc câu đầu của bài.",
           "Đúng! Trời mưa.", "🌧️"],
       ["Tiếng nào ghép được từ ch + ợ + dấu nặng?", "chợ", "chở", "chỡ", "Ghép đúng dấu nặng dưới chữ ơ.", "Đúng! chợ.", "ch + ợ"],
