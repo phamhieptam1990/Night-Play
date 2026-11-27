@@ -1,0 +1,10 @@
+/* TOÀN MÀN HÌNH (html[data-pm-all]): nút giao diện nằm trong menu ⋯ (shared/popmenu.js), không còn tên game/hàng nút chiếm chỗ; sân khấu phủ trọn cửa sổ, HUD kính đè lên đầu khung. Nạp cuối <head>. */
+html[data-pm-all] body{padding:0!important}
+html[data-pm-all] .app{position:fixed;inset:0;display:block!important;width:auto;height:auto;padding:0!important;gap:0}
+html[data-pm-all] .side{position:fixed!important;left:0;top:0;width:0!important;height:0;overflow:visible;z-index:45;display:block!important}
+html[data-pm-all] .side .top h1,html[data-pm-all] .side .top>#homeBtn,html[data-pm-all] .hud#hudSlot{display:none!important}
+html[data-pm-all] body .app .play#play{position:absolute;inset:0;width:100%!important;height:100%!important;max-width:none!important;aspect-ratio:auto!important;border-radius:0}
+html[data-pm-all].np-pm #npPmBk,html[data-pm-all].np-pm #npPmFab{position:fixed!important}
+html[data-pm-all] .wg-q{display:none!important}
+html[data-pm-all] .wk-btn[aria-label="Về"]{display:none!important}   /* ← của HUD trùng với ← của menu */
+html[data-pm-all] #wpBtn{display:none!important}   /* nút "Giao diện" → ô vương miện trong menu ⋯ (shared/cc.js) */

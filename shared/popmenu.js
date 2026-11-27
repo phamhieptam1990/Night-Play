@@ -17,7 +17,9 @@
   var top = document.querySelector(".top"); if (!top) return;
   var mqP = matchMedia("(max-width:520px) and (orientation:portrait)"), mqT = matchMedia("(pointer:coarse) and (orientation:portrait) and (max-width:1100px)")   /* tới 1100px như fan.js: iPad Pro 13 dọc rộng 1032px từng lọt ra ngoài -> nút nằm 3 nơi (dải trên của cổng, hàng nút trong game, góc dưới) */, cur = "";
   /* "p" = điện thoại dọc (gom cả 🔊); "t" = máy tính bảng cảm ứng dọc (iPad 768/834 rộng): giữ ← và 🔊 ngoài menu, gom phần còn lại; máy tính chuột / màn ngang: "" (không gom) */
-  var mode = function () { return mqP.matches ? "p" : mqT.matches ? "t" : ""; };
+  /* game lớn (data-pm-all trên <html>): MỌI cỡ màn đều dùng menu ⋯ kiểu Control Center, gom cả 🔊 vào menu, khung chơi tràn màn hình */
+  var ALL = document.documentElement.hasAttribute("data-pm-all");
+  var mode = function () { return ALL ? "p" : mqP.matches ? "p" : mqT.matches ? "t" : ""; };
   var de = document.documentElement;
   var par = null; try { par = window.parent !== window ? window.parent : null; if (par) par.document.getElementById("stage"); } catch (e) { par = null; }
   if (par && !par.document.getElementById("stage")) par = null;
@@ -32,10 +34,11 @@
     dots: '<svg class="d" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="19" cy="12" r="2.2"/></svg>',
     x: '<svg class="x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
     lock: "<svg " + S + '><rect x="5" y="11" width="14" height="10" rx="2.2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
+    gd: "<svg " + S + '><path d="M12 3l2.2 6.3L21 12l-6.8 2.7L12 21l-2.2-6.3L3 12l6.8-2.7z"/></svg>',
     pause: "<svg " + S + '><path d="M8 5v14M16 5v14"/></svg>'
   };
   /* thứ tự trong bảng: [vai trò, id nút, nhãn vi, nhãn en] */
-  var ROLES = [["help", "phBtn", "Hướng dẫn", "Help"], ["snd", "soundBtn", "Âm thanh", "Sound"], ["lang", "langBtn", "Ngôn ngữ", "Language"], ["theme", "themeBtn2", "Sáng / Tối", "Light / Dark"], ["pause", "pauseBtn", "Tạm dừng", "Pause"], ["cam", "npPmCam", "Chụp ảnh", "Photo"], ["shr", "npPmShr", "Chia sẻ", "Share"], ["lock", "npPmLock", "Khoá màn", "Lock"], ["npch", "npChBtn", "Thử thách", "Challenge"], ["npmc", "npMcBtn", "Linh vật & skin", "Mascot & skins"], ["fs", "npFsBtn", "Toàn màn hình", "Full screen"], ["npset", "npSetBtn", "Cài đặt Night Pass", "Night Pass settings"], ["pass", "nsPill", "Sự kiện", "Event"]];
+  var ROLES = [["help", "phBtn", "Hướng dẫn", "Help"], ["snd", "soundBtn", "Âm thanh", "Sound"], ["lang", "langBtn", "Ngôn ngữ", "Language"], ["guide", "npPmGd", "Chỉ đường", "Tour"], ["theme", "themeBtn2", "Sáng / Tối", "Light / Dark"], ["pause", "pauseBtn", "Tạm dừng", "Pause"], ["cam", "npPmCam", "Chụp ảnh", "Photo"], ["shr", "npPmShr", "Chia sẻ", "Share"], ["lock", "npPmLock", "Khoá màn", "Lock"], ["npch", "npChBtn", "Thử thách", "Challenge"], ["npmc", "npMcBtn", "Linh vật & skin", "Mascot & skins"], ["fs", "npFsBtn", "Toàn màn hình", "Full screen"], ["npset", "npSetBtn", "Cài đặt Night Pass", "Night Pass settings"], ["pass", "nsPill", "Sự kiện", "Event"]];
 
   /* Ô ICON TO (chủ site: "thích icon to hơn icon có chữ"): ô vuông kính tối s×s, icon svg v px nét dày, emoji e px, chữ ngôn ngữ (VI/EN) l px đậm; KHÔNG chữ nhãn; nút bật = viền + quầng màu nhấn; huy hiệu số 20px ở góc. pre = tiền tố chọn (iPad: "html.np-tab ") */
   function TILE(s, v, e, l, pre) {
@@ -72,12 +75,12 @@
     "#npPmFan .it svg{width:22px!important;height:22px!important;flex:none}" +
     "#npPmFan .it::after{content:none!important;display:none!important}" +   /* KHÔNG chữ trong ô (aria-label + title thay) */
     "#npPmFan .it[hidden]{display:none!important}html.np-locked #npPmCam,html.np-locked #npPmShr,html.np-locked #npPmLock,html.np-locked #npPmFab,html.np-locked #npPmFan{display:none!important}" +
-    "html.np-pm #soundBtn{position:fixed!important;z-index:45;right:calc(var(--back-x,16px) + 52px + env(safe-area-inset-right,0px));top:calc(env(safe-area-inset-top,0px) + var(--back-y,16px));width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;margin:0!important}" +
+    "html.np-pm #soundBtn:not(.it){position:fixed!important;z-index:45;right:calc(var(--back-x,16px) + 52px + env(safe-area-inset-right,0px));top:calc(env(safe-area-inset-top,0px) + var(--back-y,16px));width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;margin:0!important}" +
     "html.np-tab #npPmFan .pn{grid-template-columns:repeat(3,76px);gap:12px;padding:14px;top:calc(env(safe-area-inset-top,0px) + 66px)}" + TILE(76, 36, 34, 24, "html.np-tab ") +
     "@media (max-width:520px) and (orientation:portrait){" +
     /* GAME_RULES 0a-23: cả khối (tên game + thanh điểm + khung chơi) NEO LÊN SÁT hàng nút, không căn giữa phần màn hình còn lại (tên game từng cách hàng nút ~120px, khung chơi lệch xuống dưới) */
     "html.np-pm body{padding-top:calc(88px + env(safe-area-inset-top,0px))!important;align-items:flex-start!important}" +
-    "html.np-pm #soundBtn{right:calc(var(--back-x,16px) + 64px + env(safe-area-inset-right,0px))!important;width:var(--tap-lg,56px)!important;height:var(--tap-lg,56px)!important;min-width:var(--tap-lg,56px)!important;min-height:var(--tap-lg,56px)!important}" +
+    "html.np-pm #soundBtn:not(.it){right:calc(var(--back-x,16px) + 64px + env(safe-area-inset-right,0px))!important;width:var(--tap-lg,56px)!important;height:var(--tap-lg,56px)!important;min-width:var(--tap-lg,56px)!important;min-height:var(--tap-lg,56px)!important}" +
     "#npPmFan .pn{top:calc(env(safe-area-inset-top,0px) + 80px);grid-template-columns:repeat(3,68px);gap:10px;padding:12px;background:linear-gradient(160deg,#211C52,#14152A) padding-box,linear-gradient(135deg,#9B83FF,#FF9A6B) border-box!important;color:#fff!important;border:1.5px solid transparent!important;box-shadow:0 14px 36px rgba(0,0,0,.5),0 0 26px rgba(124,92,255,.32)!important;border-radius:26px}" +
     TILE(68, 32, 30, 21, "") +
     "}" +
@@ -88,7 +91,7 @@
     "@media (prefers-reduced-motion:reduce){#npPmFab svg,#npPmFan .bk,#npPmFan .pn{transition:none!important}#npPmFab.nudge{animation:none}}";
   document.head.appendChild(st);
 
-  var passHome = null, bk, fab, fan, panel, cam, shr, lck, probe, open = false, moved = false, saved = [], order = [];
+  var passHome = null, gd, bk, fab, fan, panel, cam, shr, lck, probe, open = false, moved = false, saved = [], order = [];
   function mk(tag, id, cls) { var e = document.createElement(tag); if (id) e.id = id; if (cls) e.className = cls; if (tag === "button") e.type = "button"; return e; }
   function build() {
     if (fab) return;
@@ -162,10 +165,11 @@
   function adopt() {
     var m = mode(); if (!m) return; if (moved && cur !== m) restore();
     build();
+    if (ALL && !gd && document.querySelector(".wg-q")) { gd = mk("button", "npPmGd"); gd.className = "ib"; gd.innerHTML = ICO.gd; gd.addEventListener("click", function () { var q = document.querySelector(".wg-q"); if (q) q.click(); }); top.appendChild(gd); }   /* nút "?" của hướng dẫn thế giới (WorldKit) → ô trong menu */
     if (!moved) { moved = true; cur = m; de.classList.toggle("np-tab", m === "t"); order = Array.prototype.slice.call(top.children); de.classList.add("np-pm"); fitW(); flag(true); if (!$("phBtn") || $("phBtn").classList.contains("ph-new")) fab.classList.add("nudge"); }
     if (cam && !cam.parentNode) { cam.className = shr.className = lck.className = "ib"; }
     ROLES.forEach(function (r) {
-      if (r[0] === "snd") return;   /* 🔊 luôn ở NGOÀI menu, cố định cạnh ⋯ */
+      if (r[0] === "snd" && !ALL) return;   /* 🔊 luôn ở NGOÀI menu, cố định cạnh ⋯ (trừ game data-pm-all: 🔊 vào menu) */
       var e = $(r[1]) || (r[1] === "npPmCam" ? cam : r[1] === "npPmShr" ? shr : r[1] === "npPmLock" ? lck : null);
       if (!e || e.parentNode === panel) return;
       if (e.parentNode !== top && e !== cam && e !== shr && e !== lck && r[0] !== "pass") return;
@@ -183,7 +187,7 @@
     saved.forEach(function (e) { if (e.parentNode === panel) top.insertBefore(e, fan); });
     if (passHome && passHome.el.parentNode === panel) { unlab(passHome.el); if (passHome.next && passHome.next.parentNode === passHome.parent) passHome.parent.insertBefore(passHome.el, passHome.next); else passHome.parent.appendChild(passHome.el); } passHome = null;
     saved = []; moved = false;
-    [cam, shr, lck].forEach(function (e) { if (e && e.parentNode) e.parentNode.removeChild(e); });
+    [cam, shr, lck, gd].forEach(function (e) { if (e && e.parentNode) e.parentNode.removeChild(e); });
   }
   function sync() { if (mode()) adopt(); else restore(); }
 

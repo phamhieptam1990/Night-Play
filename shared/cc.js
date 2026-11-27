@@ -72,7 +72,8 @@
   function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
   /* icon của nút cũ: tách HUY HIỆU (b/i con trực tiếp: số ngày còn lại, chấm báo) ra góc; phần còn lại: SVG/ảnh/span giữ nguyên, chữ trần (📚, EN, ?) bọc span để phóng to */
   function ico(o) {
-    var c = o.cloneNode(true), bds = [].filter.call(c.children, function (k) { return k.tagName === "B" || k.tagName === "I"; }), tx = [];
+    var c = o.cloneNode(true); if (o.id === "wpBtn") [].slice.call(c.querySelectorAll("span")).forEach(function (n) { n.remove(); });   /* nút "Giao diện" của game lớn: chỉ giữ icon vương miện */
+    var bds = [].filter.call(c.children, function (k) { return k.tagName === "B" || k.tagName === "I"; }), tx = [];
     bds.forEach(function (k) { tx.push((k.textContent || "").trim()); k.remove(); });
     var h = c.innerHTML.trim(); if (!/<(svg|img|span|canvas)/i.test(h)) h = '<span class="ic">' + h + "</span>";
     tx.forEach(function (t) { h += '<span class="bd' + (t ? "" : " dot") + '">' + t.replace(/</g, "&lt;") + "</span>"; });
@@ -119,11 +120,11 @@
       };
       fillStats(); var stT = 0; var stLoop = function () { if (!root || !root.classList.contains("on") || !openF) return; fillStats(); stT = (window.__npRST || setTimeout)(stLoop, 500); }; (window.__npRST || setTimeout)(stLoop, 500);
       var mkc = function (o) {
-        var r = o.getAttribute("data-r") || o.getAttribute("data-rr") || (/nps-cam/.test(o.className) ? "cam" : /nps-fab/.test(o.className) ? "shr" : o.id === "klock" ? "lock" : ""), c = el("button", "m c in " + r); c.type = "button"; c.innerHTML = ico(o); var lb = o.getAttribute("aria-label") || o.title || RL(r);
+        var r = o.getAttribute("data-r") || o.getAttribute("data-rr") || (/nps-cam/.test(o.className) ? "cam" : /nps-fab/.test(o.className) ? "shr" : o.id === "klock" ? "lock" : ""), c = el("button", "m c in " + (r === "snd" ? "sndt" : r)); c.type = "button"; var icoo = function () { if (r !== "snd") return ico(o); var on = true; try { on = window.NPAudio ? !!NPAudio.get() : true; } catch (e) {} return on ? SVG.snd : SVG.mute; }; c.innerHTML = icoo(); var lb = o.getAttribute("aria-label") || o.title || RL(r);
         /* toàn màn hình đang bật: nút trở thành THU NHỎ (icon thu vào + nhãn "Thu nhỏ về như cũ") */
         if (r === "fs" && de.classList.contains("np-fs")) { c.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>'; lb = vi() ? "Thu nhỏ về như cũ" : "Exit full screen"; c.classList.add("exit"); }
         c.setAttribute("aria-label", lb); c.title = lb;
-        c.addEventListener("click", function () { if (r === "fs" && c.classList.contains("exit") && window.NPFs) NPFs.exit(); else o.click(); if (!keepOpen[r]) close(); else RT(function () { c.innerHTML = ico(o); var l2 = o.getAttribute("aria-label") || o.title || RL(r); c.setAttribute("aria-label", l2); c.title = l2; }, 320); });
+        c.addEventListener("click", function () { if (r === "fs" && c.classList.contains("exit") && window.NPFs) NPFs.exit(); else o.click(); if (!keepOpen[r]) close(); else RT(function () { c.innerHTML = icoo(); var l2 = o.getAttribute("aria-label") || o.title || RL(r); c.setAttribute("aria-label", l2); c.title = l2; }, 320); });
         return c;
       };
       for (gi2 = 0; gi2 < its.length; gi2 += 4) { var cd = el("div", "card"); its.slice(gi2, gi2 + 4).forEach(function (o) { cd.appendChild(mkc(o)); }); pn.appendChild(cd); }
@@ -177,7 +178,7 @@
     if (bar) { pn.appendChild(bar); bar.appendChild(sb); } else pn.appendChild(sb);
     /* các nút của menu cũ, nhận theo vai trò (data-r) */
     /* nguồn nút: ô trong menu cũ (màn dọc) HOẶC nút có sẵn trên thanh (màn ngang không dựng menu cũ) — tìm theo vai trò/id, hidden vẫn bấm hộ được */
-    var IDS = { help: ["bHelp", "phBtn", "askBtn"], board: ["bBoard"], lang: ["bLang", "langBtn"], theme: ["themeBtn2", "themeBtn"], fs: ["npFsBtn"], npch: ["npChBtn"], pass: ["nsPill"], npset: ["npSetBtn"], npmc: ["npMcBtn"] }, olds = {};
+    var IDS = { help: ["bHelp", "phBtn", "askBtn"], board: ["bBoard"], lang: ["bLang", "langBtn"], theme: ["themeBtn2", "themeBtn"], fs: ["npFsBtn"], npch: ["npChBtn"], pass: ["nsPill"], npset: ["npSetBtn"], npmc: ["npMcBtn"], wp: ["wpBtn"] }, olds = {};
     [].slice.call(document.querySelectorAll("#npFan .pn .it,#npPmFan .pn .it")).forEach(function (o) { var r = o.getAttribute("data-r"); if (r && !o.hidden && !olds[r]) olds[r] = o; });
     Object.keys(IDS).forEach(function (r) { if (olds[r]) return; for (var i = 0; i < IDS[r].length; i++) { var e = $(IDS[r][i]); if (e && !e.closest("#ccRoot")) { olds[r] = e; return; } } });
     /* LEVEL: game có lên level (NPLevel) → nút mở bảng chọn level (thẻ số to đậm); nút giả không gắn vào trang, chỉ để bảng bấm hộ */
@@ -194,7 +195,7 @@
       kb.addEventListener("click", function () { olds.npmc.click(); close(); }); (bar || pn).appendChild(kb);
     }
     /* chức năng gom THẺ 2×2 (4 nút / thẻ). Nhấn giữ thẻ → mở rộng thành danh sách CÓ CHỮ */
-    var ORDER = ["help", "board", "lv", "lang", "theme", "fs", "npch", "pass", "npset"], list4 = ORDER.filter(function (r) { return olds[r]; });
+    var ORDER = ["help", "board", "lv", "lang", "theme", "fs", "npch", "pass", "wp", "npset"], list4 = ORDER.filter(function (r) { return olds[r]; });
     var STAY = { lang: 1, theme: 1 };
     for (var gi = 0; gi < list4.length; gi += 4) {
       (function (roles) {

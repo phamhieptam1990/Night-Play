@@ -6,8 +6,8 @@
   N.goHome = function () { N.mgStop(); N.show("home"); };
   /* WorldKit nằm đè đầu sân khấu: báo cho kit biết hàng ← ⋯ của cổng cao bao nhiêu (--wk-off) và chừa chỗ cho cảnh (--hudH) */
   N.syncOff = function () {
-    var de = document.documentElement, pm = de.classList.contains("np-pm") && innerHeight > innerWidth, play = de.classList.contains("np-playing");
-    var off = play ? (pm ? 64 : 0) : Math.max(0, Math.round(N.$("play").getBoundingClientRect().top));
+    var de = document.documentElement, pm = de.classList.contains("np-pm") && (innerHeight > innerWidth || de.hasAttribute("data-pm-all")), play = de.classList.contains("np-playing");
+    var off = de.hasAttribute("data-pm-all") ? 70 : play ? (pm ? 64 : 0) : Math.max(0, Math.round(N.$("play").getBoundingClientRect().top));   /* toàn màn hình: HUD nằm dưới hàng ← ⋯ */
     de.style.setProperty("--wk-off", off + "px"); de.style.setProperty("--hudH", (off + 68) + "px");
   };
   addEventListener("resize", function () { N.syncOff(); }); setInterval(N.syncOff, 500);   /* np-playing do bridge.js bật chậm hơn lúc đổi màn */

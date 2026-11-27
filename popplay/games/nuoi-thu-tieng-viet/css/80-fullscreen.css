@@ -1,0 +1,12 @@
+/* TOÀN MÀN HÌNH (html[data-pm-all]): mọi nút giao diện (←, ?, 🔊, EN, Night Pass…) nằm trong menu ⋯ kiểu Control Center của shared/popmenu.js; không còn hàng nút/tên game chiếm chỗ,
+   sân khấu #play phủ trọn cửa sổ ở mọi cỡ (điện thoại dọc/ngang, iPad, máy tính). Nạp SAU 70-ui.css để thắng khối landscape. */
+html[data-pm-all] body{padding:0!important}
+html[data-pm-all] .app{display:block!important;position:fixed;inset:0;width:auto;height:auto;padding:0!important;gap:0}
+html[data-pm-all] .side{position:fixed!important;left:0;top:0;width:0!important;height:0;overflow:visible;z-index:45;display:block!important}
+html[data-pm-all] .side .top h1,html[data-pm-all] .side .top>#homeBtn{display:none!important}
+html[data-pm-all] .app .play{position:absolute;inset:0;width:100%!important;height:100%!important;max-width:none!important;aspect-ratio:auto!important;border-radius:0;flex:none}
+html[data-pm-all] #room{flex-direction:column}
+html[data-pm-all].np-pm #npPmBk,html[data-pm-all].np-pm #npPmFab{position:fixed!important}
+@media (orientation:landscape) and (min-aspect-ratio:11/10){html[data-pm-all] #room{flex-direction:row}}
+html[data-pm-all] .wg-q{display:none!important}   /* nút "?" hướng dẫn thế giới → ô ✦ trong menu ⋯ (popmenu.js) */
+html[data-pm-all] #wpBtn{display:none!important}   /* nút "Giao diện" → ô vương miện trong menu ⋯ (shared/cc.js) */
