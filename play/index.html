@@ -72,6 +72,10 @@ html[data-theme=dark] .hubsys .orbstage{background:radial-gradient(circle at 50%
 .side{flex:none;width:100%;min-width:0;max-width:560px;display:grid;gap:clamp(6px,1.4dvh,14px);justify-items:center;text-align:center}
 h1{margin:0;font-size:clamp(22px,min(6vw,3.8dvh),44px);line-height:1.1;letter-spacing:-.6px;font-weight:800}
 .sub{margin:0;color:var(--ink2);font-size:clamp(14px,2dvh,17px);max-width:34em}
+.joinpill{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:0 18px;border-radius:999px;background:var(--accent);color:var(--on-accent,#fff);font-weight:800;font-size:14px;text-decoration:none;box-shadow:var(--shadow);border:0;cursor:pointer}.joinpill{transition:transform .18s,box-shadow .18s,filter .18s}
+@media (hover:hover){.joinpill:hover{transform:translateY(-2px) scale(1.05);box-shadow:0 8px 22px color-mix(in srgb,var(--accent) 55%,transparent);filter:brightness(1.1)}}
+.joinpill:active{transform:scale(.96);filter:brightness(.95)}
+@media (prefers-reduced-motion:reduce){.joinpill{transition:none}.joinpill:hover{transform:none}}.side .joinpill{justify-self:start;align-self:flex-start}.joinpill:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .resume{display:none;align-items:center;gap:10px;min-height:48px;padding:6px 10px 6px 8px;border-radius:18px;box-sizing:border-box;width:100%;text-align:left;color:var(--ink);text-decoration:none;font-weight:700;font-size:14.5px;
   background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 14%,var(--panel)),var(--panel));border:1.5px solid color-mix(in srgb,var(--accent) 42%,var(--line));box-shadow:0 6px 18px color-mix(in srgb,var(--accent) 16%,transparent);transition:border-color .18s ease,box-shadow .18s ease}
 .resume.on{display:flex}.resume b{font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
@@ -96,7 +100,7 @@ h1{margin:0;font-size:clamp(22px,min(6vw,3.8dvh),44px);line-height:1.1;letter-sp
 [data-m=bibi]{--iw:90%;--il:5%;--it:6.3%}
 .world.learn .th img{position:absolute;height:auto;width:var(--iw);max-width:none;left:var(--il);top:var(--it)}
 @media (max-width:420px){.world.learn .th{width:34px;height:34px;margin-left:-12px}.world.learn h2{font-size:18px}.world.learn .tag{font-size:11px}}
-@media (max-height:720px) and (max-width:700px){.sub{display:none}.doors{gap:8px}.world.learn .tag{display:none}.world.learn .th{width:36px;height:36px}}
+@media (max-height:720px) and (max-width:700px){.sub,.joinpill{display:none}.doors{gap:8px}.world.learn .tag{display:none}.world.learn .th{width:36px;height:36px}}
 @media (max-height:600px) and (max-width:360px){.hubsys{gap:4px}.side{gap:4px}.hubsys .orbstage{width:min(100cqw,120cqh,282px)}.world.learn .th{width:32px;height:32px}}
 .world .di{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:23px;line-height:1;background:rgba(255,255,255,.2)}
 .world .dt{display:grid;gap:1px;min-width:0;flex:1}
@@ -186,6 +190,7 @@ h1{margin:0;font-size:clamp(22px,min(6vw,3.8dvh),44px);line-height:1.1;letter-sp
     <div class="side">
       <h1 id="h1">Chọn thế giới của bạn</h1>
       <p class="sub" id="sub">Hai nơi chơi game riêng, không quảng cáo, không theo dõi cá nhân. Chạm một game hoặc một thế giới.</p>
+      <a class="joinpill" id="joinPill" href="../join.html"><span aria-hidden="true">🎟️</span><span>Nhập mã bạn bè</span></a>
       <a class="resume" id="resume" href="../popplay/index.html"><span class="ri" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.6v14.8a1 1 0 0 0 1.5.86l12-7.4a1 1 0 0 0 0-1.72l-12-7.4A1 1 0 0 0 7 4.6z"/></svg></span><span class="rt"><span id="rtx"></span><b id="rname"></b></span><svg class="rch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></a>
       <div class="doors">
         <a class="world pop" id="aPop" href="../popplay/index.html"><span class="di" aria-hidden="true">🎈</span><span class="dt"><span class="tag" id="tPop">Dành cho bé</span><h2>Pop Play</h2><span class="dsc" id="dPop">Game vui, an toàn, màu sắc tươi sáng cho các bé.</span></span><span class="go"><span id="gPop">Vào Pop Play</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
@@ -238,7 +243,7 @@ function applyLang(){
   { const at = lang === "vi" ? "Giới thiệu" : "About", ah = lang === "vi" ? "/?landing=1" : "/en/?landing=1";
     $("aboutTxt").textContent = at; $("about").textContent = at; $("aboutLink").href = ah; $("about").href = ah;
     $("aboutLink").setAttribute("aria-label", lang === "vi" ? "Giới thiệu Play Hub" : "About Play Hub"); }
-  $("joinLink").textContent = lang === "vi" ? "Nhập mã bạn bè" : "Friend code";
+  $("joinLink").textContent = lang === "vi" ? "Nhập mã bạn bè" : "Friend code"; $("joinPill").lastElementChild.textContent = lang === "vi" ? "Nhập mã bạn bè" : "Enter friend code";
   { const jt = lang === "vi" ? "Nhập mã bạn bè" : "Enter friend code"; $("joinBtn").setAttribute("aria-label", jt); $("joinBtn").title = jt; }
   $("voiceLink").textContent = lang === "vi" ? "Giọng đọc" : "Voice";
   $("priv").textContent = t.privacy; $("terms").textContent = lang === "vi" ? "Điều khoản" : "Terms"; $("docs").textContent = lang === "vi" ? "Tài liệu" : "Documents"; { const dt = lang === "vi" ? "Tài liệu" : "Documents", db = $("docBtn"); db.setAttribute("aria-label", dt); db.title = dt; } $("mail").textContent = t.contact;

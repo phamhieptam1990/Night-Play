@@ -71,7 +71,7 @@ window.NPS = (function () {
       bragOk: "Đã lên bảng xếp hạng!", bragView: "Xem bảng xếp hạng", badNick: "Biệt danh chưa hợp lệ (2–16 ký tự, không chứa link/email).", scoreLine: "Điểm của bạn",
       gotT: "Bạn bè đã chơi hộ xong!", gotP: "Kết quả chơi hộ", points: "điểm", view: "Xem kết quả", bragNow: "Khoe điểm", allRes: "Tất cả kết quả", rank: "Bảng xếp hạng", results: "Kết quả chơi hộ",
       shot: "Chụp màn hình", shotT: "Ảnh chụp màn hình", shotErr: "Không chụp được màn hình. Vui lòng thử lại.", save: "Lưu ảnh", shareImg: "Chia sẻ ảnh", copyImg: "Sao chép ảnh", imgCopied: "Đã sao chép ảnh",
-      codeLbl: "Hoặc đưa mã bạn bè này (nhập ở nightplay.vn/join):", linkCopied: "Đã sao chép link, dán vào Zalo, Messenger… để gửi bạn bè", viaApps: "Link đã được sao chép: dán vào Zalo, Messenger… hoặc gửi nhanh qua:", shareText: "Chơi hộ mình một lượt {g} nhé!", shotText: "Mình vừa chơi {g} trên {b}!", resumeP: "Bạn ấy sẽ chơi tiếp đúng chỗ bạn đang dở rồi báo kết quả về cho bạn.", kidName: "Tên vui của bạn", reroll: "Đổi tên khác", kidP: "Bạn được đặt tên vui tự động, không cần gõ gì cả. Chỉ tên vui và điểm được lưu, và chỉ khi bạn bấm \"Khoe điểm\".", bestIn: "Điểm cao nhất của bạn ở", sendApps: "Gửi qua Zalo, Messenger…" },
+      codeLbl: "Hoặc mã bạn bè (nhập ở nightplay.vn/join)", linkLbl: "Link (gửi qua Zalo, Messenger…)", onceS: "Dùng 1 lần · hết hạn sau 24 giờ", copyCode: "Chép mã", shareLink: "Gửi link", shareCode: "Gửi mã", codeShare: "Chơi hộ mình {g} nhé! Mã bạn bè: {c} (nhập ở nightplay.vn/join)", linkCopied: "Đã sao chép link, dán vào Zalo, Messenger… để gửi bạn bè", viaApps: "Link đã được sao chép: dán vào Zalo, Messenger… hoặc gửi nhanh qua:", shareText: "Chơi hộ mình một lượt {g} nhé!", shotText: "Mình vừa chơi {g} trên {b}!", resumeP: "Bạn ấy sẽ chơi tiếp đúng chỗ bạn đang dở rồi báo kết quả về cho bạn.", kidName: "Tên vui của bạn", reroll: "Đổi tên khác", kidP: "Bạn được đặt tên vui tự động, không cần gõ gì cả. Chỉ tên vui và điểm được lưu, và chỉ khi bạn bấm \"Khoe điểm\".", bestIn: "Điểm cao nhất của bạn ở", sendApps: "Gửi qua Zalo, Messenger…" },
     en: { share: "Ask a friend to play", shareT: "Ask a friend to play one round for you", shareP: "Send this link to a friend. They play one round for you and the result is sent back to you.",
       copy: "Copy link", copied: "Copied", send: "Send via…", once: "The link works once and expires in 24 hours. The helper cannot share it further. We don't store your info: the result is encrypted and only you can read it.",
       waiting: "Waiting for your friend to open the link…", playing: "Your friend is playing…", done: "Result is in!", expired: "This link has expired.", close: "Close", err: "Something went wrong, please try again.", offline: "You need a connection to create a help link. Your game keeps running; try again once you are online.", queued: "You are offline: your score will be sent automatically when you are back online.", slow: "Too many tries, please wait a few minutes.", noShare: "This game doesn't support this yet.",
@@ -79,7 +79,7 @@ window.NPS = (function () {
       bragOk: "You're on the leaderboard!", bragView: "View leaderboard", badNick: "Invalid nickname (2–16 characters, no links/emails).", scoreLine: "Your score",
       gotT: "Your friend finished playing for you!", gotP: "Result", points: "points", view: "View result", bragNow: "Show off score", allRes: "All results", rank: "Leaderboard", results: "Shared results",
       shot: "Screenshot", shotT: "Screenshot", shotErr: "Couldn't capture the screen. Please try again.", save: "Save image", shareImg: "Share image", copyImg: "Copy image", imgCopied: "Image copied",
-      codeLbl: "Or give your friend this code (enter it at nightplay.vn/join):", linkCopied: "Link copied. Paste it into Zalo, Messenger… to send it to friends", viaApps: "Link copied: paste it into Zalo, Messenger… or send quickly via:", shareText: "Play a round of {g} for me!", shotText: "I just played {g} on {b}!", resumeP: "Your friend continues right where you left off and sends the result back to you.", kidName: "Your fun name", reroll: "New name", kidP: "You get a fun name automatically, no typing needed. Only the fun name and score are saved, and only if you press \"Show off score\".", bestIn: "Your best score in", sendApps: "Send via Zalo, Messenger…" }
+      codeLbl: "Or friend code (enter at nightplay.vn/join)", linkLbl: "Link (send via Zalo, Messenger…)", onceS: "One use · expires in 24 hours", copyCode: "Copy code", shareLink: "Share link", shareCode: "Share code", codeShare: "Play {g} for me! Friend code: {c} (enter it at nightplay.vn/join)", linkCopied: "Link copied. Paste it into Zalo, Messenger… to send it to friends", viaApps: "Link copied: paste it into Zalo, Messenger… or send quickly via:", shareText: "Play a round of {g} for me!", shotText: "I just played {g} on {b}!", resumeP: "Your friend continues right where you left off and sends the result back to you.", kidName: "Your fun name", reroll: "New name", kidP: "You get a fun name automatically, no typing needed. Only the fun name and score are saved, and only if you press \"Show off score\".", bestIn: "Your best score in", sendApps: "Send via Zalo, Messenger…" }
   };
   var brandOf = function (id) { var g = GAMES[id]; return g && g.site === "popplay" ? "Pop Play" : "Night Play"; };
   /* Tên vui cho trẻ em: ghép từ danh sách có sẵn (phải khớp KID_NAMES ở server/app.js) */
@@ -163,7 +163,7 @@ window.NPS = (function () {
     return poll().catch(function () {}).then(function () { return createShare2(game, base, st); });   /* hỏi máy chủ trước: link cũ đã có người nhận thì KHÔNG dùng lại */
   }
   function createShare2(game, base, st) {
-    var arr = prune(), cur = arr.filter(function (s) { return s.game === game && s.state === "open"; })[0];   /* link đã có người nhận chỉ dùng được một lần → phải tạo link mới */
+    var arr = prune(), cur = arr.filter(function (s) { return s.game === game && s.state === "open" && s.code; })[0];   /* chỉ dùng lại lời nhờ ĐÃ CÓ MÃ bạn bè; lời nhờ cũ (link dài / tạo khi máy chủ chưa có migration 011) bỏ qua → tạo mới để luôn có mã */   /* link đã có người nhận chỉ dùng được một lần → phải tạo link mới */
     if (cur) { if ((cur.st || "") !== st) { cur.st = st; save(arr); if (cur.short) encrypt(cur.key, st).then(function (e) { call("POST", "/relay/" + cur.id + "/st", { token: cur.owner, st: e }); }).catch(function () {}); }   /* chưa ai nhận: cập nhật tiến trình mới nhất */
       return Promise.resolve({ share: cur, link: linkFor(cur, base), reused: true, code: cur.code || "" }); }
     var owner = b64.enc(rnd(16));
@@ -293,9 +293,16 @@ window.NPS = (function () {
     "@media (max-height:480px){.nps-sheet{max-width:520px;padding:10px 14px;border-radius:16px}.nps-sheet h3{font-size:16px;margin:0 0 6px}.nps-sheet p:not(.nps-st):not(.nps-err){display:none}.nps-sheet input{padding:8px 10px;font-size:14px}" +
     ".nps-row{margin-top:8px}.nps-row button{height:38px}.nps-st{margin:6px 0 0;font-size:13px}.nps-apps{margin-top:6px}.nps-apps a{height:34px}.nps-dlg{padding:14px}.nps-dlg h3{font-size:17px}.nps-big{font-size:34px;margin:2px 0}}" +
     "@media (max-height:480px){.nps-sheet{border-radius:20px;padding:12px 14px}.nps-sheet .nps-row button,.nps-dlg .nps-row button,.nps-dlg a.nps-s{height:44px}.nps-sheet .nps-apps a{height:38px}.nps-sheet input{min-height:44px}}" +
+    /* hộp chia sẻ GỌN: mỗi nhóm (link / mã) một hàng: nội dung + hai nút tròn (gửi, chép) */
+    ".nps-lb{margin:8px 0 2px;font-size:12.5px;font-weight:700;opacity:.8}.nps-r{display:flex;align-items:center;gap:8px}.nps-r input{flex:1 1 auto;min-width:0;width:auto}" +
+    ".nps-cd{flex:1 1 auto;min-width:0;font-weight:800;font-size:24px;letter-spacing:.14em;user-select:all;cursor:pointer;padding:4px 2px}" +
+    ".nps-ib{flex:none;width:46px;height:46px;border-radius:50%;padding:0;display:grid;place-items:center;border:1.5px solid rgba(167,150,255,.5);background:rgba(255,255,255,.08);color:inherit;cursor:pointer}.nps-ib.pri{background:var(--accent,#7C5CFF);color:var(--on-accent,#fff);border-color:transparent}.nps-ib svg{width:22px;height:22px}" +
+    ".nps-chips{display:flex;flex-wrap:wrap;gap:6px}.nps-chips a{flex:none;min-height:34px;display:inline-flex;align-items:center;padding:0 10px;border-radius:999px;font-size:12.5px;font-weight:700;border:1.5px solid rgba(167,150,255,.5);color:inherit;text-decoration:none}" +
+    ".nps-cl{display:block;width:100%;margin-top:12px;min-height:44px;border-radius:14px;font-weight:700}" +
     "@media (prefers-reduced-motion:reduce){.nps-fab,.nps-toast,.nps-bd{transition:none}}";
   var SHARE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"/></svg>';
 
+  var COPY_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>', OK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
   var CAM_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l1.6-2.4h6.8L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.6"/></svg>';
   var coarse = function () { return !!(window.matchMedia && matchMedia("(pointer:coarse)").matches); };
   function copyText(t) {
@@ -403,24 +410,31 @@ window.NPS = (function () {
       if (!g) { sheet.innerHTML = '<p>' + esc(T("noShare")) + '</p><div class="nps-row"><button class="nps-s" id="npsNo" type="button">' + esc(T("close")) + '</button></div>'; sheet.hidden = false; document.getElementById("npsNo").onclick = hideSheet; return; }
       toGame({ type: "pause" });   /* tạm dừng game để tiến trình không chạy tiếp khi đang chia sẻ */
       requestState().then(function (state) { return createShare(game, base, encState(state)); }).then(function (r) {
-        var s = r.share, native = !!navigator.share && coarse(), text = T("shareText").replace("{g}", gameName(game, packOf(s.st)));
-        var enc = encodeURIComponent, apps = [['Telegram', 'https://t.me/share/url?url=' + enc(r.link) + '&text=' + enc(text)], ['WhatsApp', 'https://wa.me/?text=' + enc(text + ' ' + r.link)]];
-        if (coarse()) apps.unshift(['Messenger', 'fb-messenger://share/?link=' + enc(r.link)]);
-        sheet.innerHTML = '<h3>' + esc(T("shareT")) + '</h3><p>' + esc(T(s.st ? "resumeP" : "shareP")) + '</p>' +
-          '<input id="npsLink" readonly value="' + esc(r.link) + '" aria-label="Link"><p class="nps-st" id="npsSt" role="status"></p>' +
-          (r.code ? '<p style="margin:2px 0 0;font-size:13px;opacity:.85;text-align:center">' + esc(T("codeLbl")) + '</p><p style="margin:2px 0 8px;font-weight:800;font-size:24px;letter-spacing:.14em;text-align:center;user-select:all" aria-label="' + esc(T("codeLbl")) + '">' + esc(fmtCode(r.code)) + '</p>' : "") +
-          '<div class="nps-row' + (native ? ' wrap' : '') + '"><button class="nps-s" id="npsNo" type="button">' + esc(T("close")) + '</button>' +
-          (native ? '<button class="nps-p" id="npsSend" type="button">' + esc(T("sendApps")) + '</button>' : "") +
-          '<button class="' + (native ? "nps-s" : "nps-p") + '" id="npsCopy" type="button">' + esc(T("copy")) + '</button></div>' +
-          (native ? "" : '<p class="nps-note">' + esc(T("viaApps")) + '</p><div class="nps-apps">' + apps.map(function (a) { return '<a href="' + esc(a[1]) + '" target="_blank" rel="noopener noreferrer">' + a[0] + '</a>'; }).join("") + '</div>') +
-          '<p class="nps-note">' + esc(T("once")) + '</p>';
+        var s = r.share, native = !!navigator.share && coarse(), gname = gameName(game, packOf(s.st)), enc = encodeURIComponent, joinUrl = location.origin + "/join.html";
+        var linkText = T("shareText").replace("{g}", gname), codeText = r.code ? T("codeShare").replace("{g}", gname).replace("{c}", fmtCode(r.code)) : "";
+        /* nút ứng dụng cho máy tính (không có hộp chia sẻ của hệ điều hành): gửi LINK hoặc gửi MÃ riêng */
+        /* nút ứng dụng cho máy tính / trình duyệt không có hộp chia sẻ hệ điều hành. Zalo + Messenger KHÔNG có địa chỉ chia sẻ chính thức trên web → bấm là CHÉP nội dung rồi mở trang chat để dán; Telegram/WhatsApp mở thẳng với nội dung. */
+        var chips = function (txt, url) {
+          var full = txt + " " + url, a = [["Zalo", "https://chat.zalo.me/", full], [coarse() ? "Messenger" : "Messenger", coarse() ? "fb-messenger://share/?link=" + enc(url) : "https://www.messenger.com/", coarse() ? "" : full],
+            ["Telegram", "https://t.me/share/url?url=" + enc(url) + "&text=" + enc(txt), ""], ["WhatsApp", "https://wa.me/?text=" + enc(full), ""]];
+          return '<span class="nps-chips">' + a.map(function (x) { return '<a href="' + esc(x[1]) + '" target="_blank" rel="noopener noreferrer"' + (x[2] ? ' data-copy="' + esc(x[2]) + '"' : "") + ">" + x[0] + "</a>"; }).join("") + "</span>";
+        };
+        var ib = function (id, icon, label, pri) { return '<button class="nps-ib' + (pri ? " pri" : "") + '" id="' + id + '" type="button" aria-label="' + esc(label) + '" title="' + esc(label) + '">' + icon + "</button>"; };
+        sheet.innerHTML = '<h3>' + esc(T("share")) + '</h3><p class="nps-st" id="npsSt" role="status"></p>' +
+          '<div class="nps-lb">' + esc(T("linkLbl")) + '</div><div class="nps-r"><input id="npsLink" readonly value="' + esc(r.link) + '" aria-label="Link">' + (native ? ib("npsSend", SHARE_ICON, T("shareLink"), 1) : "") + ib("npsCopy", COPY_ICON, T("copy")) + '</div>' + (native ? "" : '<div class="nps-r" style="margin-top:6px">' + chips(linkText, r.link) + "</div>") +
+          (r.code ? '<div class="nps-lb">' + esc(T("codeLbl")) + '</div><div class="nps-r"><span class="nps-cd" id="npsCode" role="button" tabindex="0" aria-label="' + esc(T("copyCode")) + '">' + esc(fmtCode(r.code)) + '</span>' + (native ? ib("npsSendCode", SHARE_ICON, T("shareCode"), 1) : "") + ib("npsCopyCode", COPY_ICON, T("copyCode")) + '</div>' + (native ? "" : '<div class="nps-r" style="margin-top:6px">' + chips(codeText, joinUrl) + "</div>") : "") +
+          '<button class="nps-s nps-cl" id="npsNo" type="button">' + esc(T("close")) + '</button><p class="nps-note" style="margin:8px 0 0">' + esc(T("onceS")) + '</p>';
         sheet.hidden = false;
+        if (!sheet.__cp) { sheet.__cp = 1; sheet.addEventListener("click", function (e) { var c = e.target.closest && e.target.closest("a[data-copy]"); if (c) { copyText(c.getAttribute("data-copy")).then(function (ok) { if (ok) toast(T("linkCopied"), 3600); }); } }); }   /* gắn MỘT lần (hộp chia sẻ dùng lại nhiều lần) */
         var inp = document.getElementById("npsLink"), copyBtn = document.getElementById("npsCopy"); inp.onfocus = function () { inp.select(); };
-        var copied = function () { copyBtn.textContent = T("copied"); setTimeout(function () { copyBtn.textContent = T("copy"); }, 1600); };
+        var flash = function (btn, icon) { btn.innerHTML = OK_ICON; setTimeout(function () { btn.innerHTML = icon; }, 1600); };
         document.getElementById("npsNo").onclick = function () { clearInterval(shareTimer); hideSheet(); };
-        copyBtn.onclick = function () { copyText(r.link).then(function (ok) { if (ok) copied(); else inp.select(); }); };
-        if (native) document.getElementById("npsSend").onclick = function () { navigator.share({ title: gameName(game, packOf(s.st)), text: text, url: r.link }).catch(function () {}); };
-        else copyText(r.link).then(function (ok) { if (ok) { copied(); toast(T("linkCopied"), 3600); } });      /* trên web: tự sao chép link */
+        copyBtn.onclick = function () { copyText(r.link).then(function (ok) { if (ok) flash(copyBtn, COPY_ICON); else inp.select(); }); };
+        var cc = document.getElementById("npsCopyCode"); if (cc) { var cdo = function () { copyText(fmtCode(r.code)).then(function (ok) { if (ok) flash(cc, COPY_ICON); }); }; cc.onclick = cdo; document.getElementById("npsCode").onclick = cdo; }
+        if (native) {
+          document.getElementById("npsSend").onclick = function () { navigator.share({ title: gname, text: linkText, url: r.link }).catch(function () {}); };
+          var sc = document.getElementById("npsSendCode"); if (sc) sc.onclick = function () { navigator.share({ title: gname, text: codeText, url: joinUrl }).catch(function () {}); };
+        } else copyText(r.link).then(function (ok) { if (ok) { flash(copyBtn, COPY_ICON); toast(T("linkCopied"), 3600); } });      /* trên web: tự sao chép link */
         var refresh = function () { var cur = load().filter(function (x) { return x.id === s.id; })[0] || s, el = document.getElementById("npsSt"); if (!el) { clearInterval(shareTimer); return; }
           el.textContent = T(cur.state === "claimed" ? "playing" : cur.state === "done" ? "done" : cur.state === "expired" ? "expired" : "waiting"); };
         refresh(); clearInterval(shareTimer); shareTimer = setInterval(function () { poll().then(refresh); }, 5000);
