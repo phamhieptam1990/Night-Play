@@ -65,6 +65,7 @@
     ".npa-box{position:relative;display:flex;align-items:flex-end;justify-content:center;width:100%;height:100%;min-height:0;pointer-events:none}" +
     ".npa-box>svg{display:block;width:100%;height:100%;max-height:100%;overflow:visible;transform-origin:50% 100%}" +
     "#play:has(#home:not([hidden])) .npa-mini,#play:has(#ovStart:not([hidden])) .npa-mini,#play:has(#village:not([hidden])) .npa-mini{display:none}" +
+    "html.npa-fly .npa-mini{visibility:hidden!important}" +
     ".npa-mini{position:absolute;z-index:6;pointer-events:auto;touch-action:none;cursor:grab;-webkit-user-select:none;user-select:none}.npa-mini.drag{cursor:grabbing;z-index:8}.npa-mini.drag .npa-box>svg{scale:1.12}.npa-mini.bl{left:6px;bottom:6px}.npa-mini.br{right:6px;bottom:6px}" +
     /* BONG BÓNG KIỂU NIGHT PASS: thẻ tím đậm, viền + quầng sáng màu nhấn của linh vật (--npa-ac), đuôi chỉ về linh vật; Pop tròn hơn + chữ to hơn */
     ".npa-bub{--dx:0px;--npa-ac:#a99bff;position:absolute;left:50%;bottom:100%;transform:translate(calc(-50% + var(--dx)),var(--dy,0px));transform-origin:50% 100%;margin-bottom:10px;max-width:min(240px,calc(100vw - 24px));width:max-content;box-sizing:border-box;padding:9px 14px;border-radius:18px;background:var(--bbg,linear-gradient(165deg,#2b2064,#171236 85%));color:#fff;border:2px solid var(--bbd,color-mix(in srgb,var(--npa-ac) 75%,#fff 8%));text-shadow:0 1px 2px rgba(0,0,0,.35);font:800 14px/1.3 system-ui,-apple-system,'Segoe UI',sans-serif;text-align:center;text-wrap:balance;box-shadow:0 8px 22px rgba(0,0,0,.45),0 0 22px var(--bgl,color-mix(in srgb,var(--npa-ac) 45%,transparent)),inset 0 1px 0 rgba(255,255,255,.22);opacity:0;pointer-events:none;z-index:7}" +
@@ -293,7 +294,7 @@
     d.innerHTML = uniq(sn.html); var sv = d.firstChild; if (sv && sv.style) { sv.style.width = "100%"; sv.style.height = "100%"; }
     try {
       if (sn.cl && sn.scr && sn.scr.parentNode) {   /* bản sao màn chính che màn chơi */
-        cov = sn.cl; cov.hidden = false; cov.removeAttribute("hidden"); cov.id = sn.sid; cov.style.pointerEvents = "auto"; cov.style.zIndex = "2147482990";
+        cov = sn.cl; cov.hidden = false; cov.removeAttribute("hidden"); cov.setAttribute("data-npa-cover", "1"); cov.id = sn.sid; cov.style.pointerEvents = "auto"; cov.style.zIndex = "2147482990";
         var hh = cov.querySelector(".npa-hero"); if (hh) hh.style.visibility = "hidden";
         var bb = cov.querySelectorAll(".npa-bub"); for (var k = 0; k < bb.length; k++) bb[k].remove();
         sn.scr.parentNode.insertBefore(cov, sn.scr.nextSibling);
@@ -301,7 +302,13 @@
       }
     } catch (x) { cov = null; }
     d.setAttribute("data-npa-ghost", "1"); document.body.appendChild(d); holding = 1;
+    /* KHUNG CHƠI MỜ cho tới khi linh vật đáp xuống (layout đã dựng xong bên dưới), rồi sáng dần lên mới cho chơi; linh vật mini ở góc ẩn tới lúc đó */
+    var veil = document.createElement("div"); veil.setAttribute("data-npa-veil", "1"); veil.style.cssText = "position:fixed;inset:0;z-index:2147482985;pointer-events:none;background:rgba(8,6,20,.8);-webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px)";
+    document.body.appendChild(veil); document.documentElement.classList.add("npa-fly");
+    /* kín NGAY khung hình đầu (không mờ dần vào): 0,2 giây đầu game còn tự xếp lại (tiêu đề chuyển hàng, chip độ khó chọn chỗ) → không để người chơi thấy */
     try { if (window.NP && NP.menuPause) froze = NP.menuPause(); } catch (x) {}
+    /* đồng hồ ảo đóng băng giữ luôn các hẹn giờ dựng giao diện (tiêu đề, chip độ khó…) tới khi linh vật đáp → khung đổi sau khi đáp ("giật"). Thả đồng hồ ~0,7 giây NGAY ĐẦU (khung đang mờ) để dựng xong hết, rồi đóng băng lại. */
+    if (froze) try { NP.menuNudge(700); } catch (x) {}
     /* GIỮ LƯỢT CHẠM ĐẦU TIÊN trong lúc game đóng băng (trước đây bị nuốt → phải bấm 2-3 lần): tìm phần tử THẬT dưới ngón tay (bỏ qua bản sao màn chính), bấm hộ khi game chạy tiếp */
     var qEl = null, capture = function (e) {
       if (!holding || !d.isConnected) return; e.stopPropagation(); e.preventDefault(); if (qEl) return;
@@ -314,7 +321,7 @@
       window.removeEventListener("click", capture, true); var el = qEl; qEl = null; if (!el || !el.isConnected) return;
       setTimeout(function () { try { if (!el.isConnected) return; if (/^(INPUT|TEXTAREA)$/.test(el.tagName)) el.focus(); else el.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, view: window })); } catch (x) {} }, 60);
     };
-    var done = function () { if (!holding) return; holding = 0; replay(); try { d.remove(); } catch (x) {} if (cov) { try { cov.remove(); } catch (x) {} } if (froze) { try { NP.menuResume(); } catch (x) {} } };
+    var done = function () { if (!holding) return; holding = 0; replay(); try { d.remove(); veil.remove(); document.documentElement.classList.remove("npa-fly"); } catch (x) {} if (cov) { try { cov.remove(); } catch (x) {} } if (froze) { try { NP.menuResume(); } catch (x) {} } };
     /* THEO Ý CHỦ SITE: linh vật bay RA GIỮA màn hình, phình lên rồi NỔ TUNG (hạt + vòng sáng theo skin) trong lúc màn chơi SÁNG LÊN (bản sao màn chính mờ dần) → mở màn game */
     try {
       /* 1) MỌI thẻ/nút/chữ còn lại của màn chính bay ra khỏi khung (lệch nhau chút) · 2) linh vật bay ra giữa · 3) nổ tung · 4) màn chơi sáng lên */
@@ -334,6 +341,8 @@
       var hc = { x: r.left + r.width / 2, y: r.top + r.height / 2 }, mx2 = mr.left + mr.width / 2 - hc.x, my2 = mr.top + mr.height / 2 - hc.y, sc2 = Math.max(.08, Math.min(1, mr.width / r.width)), ccx = pr.left + pr.width / 2 - hc.x, ccy = pr.top + pr.height * .42 - hc.y;
       d.style.transformOrigin = "50% 50%";
       /* đường bay TỰ NHIÊN: lấy mẫu mượt (easeInOut) từng chặng, thêm LẮC LƯ (xoay ±9° + dập dềnh ngang/dọc) tắt dần khi đáp xuống */
+      /* bản sao màn chính TRÙNG id (#home/#ovStart) nên CSS kiểu :has(#ovStart:not([hidden])) tưởng màn bắt đầu còn mở → game giữ bố cục cũ tới lúc bản sao biến mất rồi mới nhảy sang bố cục thật ("giật"). Gỡ id TRƯỚC lúc đáp (các mảnh đã bay đi, khung còn tối) để bố cục thật vào chỗ trước khi sáng lên. */
+      if (cov) (window.__npRST || setTimeout)(function () { try { cov.removeAttribute("id"); cov.style.visibility = "hidden"; } catch (x) {}   /* các mảnh đã bay đi; ẩn nốt phần sót (thẻ chế độ, chữ ở đáy màn) để không hiện rồi biến mất lúc sáng lên */ try { dispatchEvent(new Event("resize")); if (froze) NP.menuNudge(380); } catch (x) {} }, Math.max(0, T - 350));   /* resize + thả đồng hồ ngắn: chip độ khó/tiêu đề tự xếp lại NGAY lúc khung còn tối */
       var ez = function (t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }, kf = [], N = 44, q, tt, px, py, sc, rot, sw, ph;
       for (q = 0; q <= N; q++) {
         tt = q / N;
@@ -345,10 +354,13 @@
       }
       kf.push({ offset: 1, transform: "translate(" + mx2 + "px," + my2 + "px) scale(" + sc2 + ")", opacity: 0 });
       var a = d.animate(kf, { duration: T, easing: "linear", fill: "forwards" });
-      a.onfinish = done;
-      if (cov && cov.animate) cov.animate([{ opacity: 1 }, { opacity: 1, offset: .72 }, { opacity: 0 }], { duration: T, fill: "forwards", easing: "ease-in" });
+      a.onfinish = function () {   /* đã đáp xuống: mini hiện lại, khung chơi sáng dần (~0,55 giây) rồi mới chạy tiếp */
+        document.documentElement.classList.remove("npa-fly");
+        try { veil.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 550, fill: "forwards", easing: "ease-in-out" }); if (cov && cov.animate) cov.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 550, fill: "forwards", easing: "ease-in-out" }); } catch (x) {}
+        (window.__npRST || setTimeout)(done, 560);
+      };
     } catch (x) { done(); return; }
-    (window.__npRST || setTimeout)(done, T + 250);
+    (window.__npRST || setTimeout)(done, T + 1200);
   }
   addEventListener("np:start", leave);
   /* THÔNG BÁO CỦA GAME (toast) → vào BONG BÓNG linh vật: game gọi `if(window.NPArt&&NPArt.say(msg,ms))return;` đầu hàm toast; trả false (không có linh vật/khung quá nhỏ) thì game hiện toast như cũ. Ưu tiên linh vật mini khi đang chơi, hero ở màn chính. */

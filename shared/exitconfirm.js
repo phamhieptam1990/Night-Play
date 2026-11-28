@@ -26,7 +26,7 @@
     "html.np-playing,html.np-playing body{overscroll-behavior:none;touch-action:pan-x pan-y}" +
     "html.np-playing *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}" +
     "html.np-playing input,html.np-playing textarea,html.np-playing [contenteditable]{-webkit-user-select:text;user-select:text}" +
-    (/\/games\//.test(location.pathname) ? "html.np-playing h1,html.np-playing .app .top h1,html.np-playing .app .top h1.pt-title,html.np-playing .top h1{display:none!important}html.np-playing .top{justify-content:flex-end}" : "") +
+    (/\/games\//.test(location.pathname) ? "html.np-playing h1,html.np-playing .app .top h1,html.np-playing .app .top h1.pt-title,html.np-playing .top h1,html:has(#play[data-scr=game]) .app .top h1,html:has(#play[data-scr=game]) .app .top h1.pt-title,html:has(#play[data-scr=game]) .top h1{display:none!important}html.np-playing .top,html:has(#play[data-scr=game]) .top{justify-content:flex-end}"   /* ẩn tiêu đề NGAY khi vào màn chơi (không đợi hết đếm 3-2-1 mới ẩn → khung không nhảy lên 41px) */ : "") +
     "html.np-locked #bBk,html.np-locked #bkBack,html.np-locked #homeBtn,html.np-locked #bBack{display:none!important}" +
     "#npxO{position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;padding:12px;background:rgba(8,6,20,.62);font-family:var(--font)}" +
     "#npxO .npxc{box-sizing:border-box;width:min(360px,100%);max-height:100%;border-radius:22px;padding:18px 16px 14px;text-align:center;border:2px solid var(--npx-line);background:var(--npx-bg);color:var(--npx-ink);box-shadow:0 18px 50px rgba(0,0,0,.5)}" +

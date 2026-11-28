@@ -124,6 +124,7 @@ html.playing,html.playing body{overflow:hidden;height:100%;overscroll-behavior:n
 #stage.on{display:block}
 #stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff;opacity:0;transition:opacity .35s ease}
 #stage iframe.show{opacity:1}
+#stage iframe,#stage iframe:focus,#stage iframe:focus-visible,#stage:focus,#stage:focus-visible{outline:none!important;box-shadow:none}   /* khung xanh quanh game = vòng focus mặc định của Chrome khi iframe nhận focus */
 #home{position:absolute;top:max(12px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));z-index:2;
   width:44px;height:44px;border-radius:50%;padding:0;background:rgba(255,255,255,.34);color:#fff;
   -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1.5px solid rgba(255,255,255,.7);

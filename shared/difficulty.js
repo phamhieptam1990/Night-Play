@@ -29,6 +29,7 @@
     }
     var cs = document.querySelectorAll(SEL);
     for (var c = 0; c < cs.length; c++) {
+      if (isClone(cs[c])) continue;   /* chip của bản sao màn chính (hiệu ứng vào game) không tính là chip đang hiện */
       var kids = [].filter.call(cs[c].children, function (k) { return k.nodeType === 1; }), n = kids.length; if (n < 2) continue;
       lastN = n; var sel = -1;
       for (var i = 0; i < n; i++) {
@@ -81,8 +82,11 @@
     b.classList.add("show"); place(b);
   }
   /* điểm trống nếu phần tử trên cùng tại đó chỉ là khung nền (không chữ, không nút, không canvas, không ảnh) */
+  function isClone(c) { var h = c.closest("#home,#ovStart,#village"); return !!(h && h.previousElementSibling && h.previousElementSibling.id === h.id); }   /* bản sao màn chính (hiệu ứng vào game) trùng id với bản thật đứng ngay trước */
   function free(x, y) {
-    var e = document.elementFromPoint(x, y); if (!e || e === D || e === document.body) return true;
+    var e = null, es = document.elementsFromPoint ? document.elementsFromPoint(x, y) : [document.elementFromPoint(x, y)];
+    for (var q = 0; q < es.length; q++) { var c = es[q]; if (c && c.closest && !c.closest("[data-npa-veil],[data-npa-ghost]") && !isClone(c)) { e = c; break; } }   /* bỏ qua lớp phủ hiệu ứng vào game (màn mờ, linh vật bay, bản sao màn chính) để chip đặt đúng chỗ ngay từ đầu */
+    if (!e || e === D || e === document.body) return true;
     if (/^(BUTTON|CANVAS|SVG|IMG|H1|H2|H3|P|SPAN|B|I|INPUT|SELECT|A|LABEL|LI|EM|SMALL|TEXTAREA)$/i.test(e.tagName) || e.getAttribute("role") === "button") return false;
     for (var n = e.firstChild; n; n = n.nextSibling) if (n.nodeType === 3 && n.textContent.trim()) return false;
     return !(e.children.length === 0 && getComputedStyle(e).backgroundImage !== "none");

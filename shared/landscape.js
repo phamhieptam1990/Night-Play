@@ -2,7 +2,7 @@
 (function () {
   "use strict";
   var pl = document.getElementById("play"); if (!pl) return;
-  function scr() { var cur = "", s = pl.children; for (var i = 0; i < s.length; i++) { if (s[i].tagName === "SECTION" && !s[i].hidden && !cur) cur = s[i].id; } if (pl.dataset.scr !== cur) pl.dataset.scr = cur; }
+  function scr() { var cur = "", s = pl.children; for (var i = 0; i < s.length; i++) { if (s[i].tagName === "SECTION" && !s[i].hidden && !cur && !s[i].hasAttribute("data-npa-cover")) cur = s[i].id;   /* bản sao màn chính của hiệu ứng vào game (shared/art/mascot-art.js) không tính là màn đang hiện */ } if (pl.dataset.scr !== cur) pl.dataset.scr = cur; }
   try { new MutationObserver(scr).observe(pl, { subtree: true, attributes: true, attributeFilter: ["hidden"] }); } catch (e) {}
   /* màn chọn DỌC: linh vật (#hHero) phình theo ô còn trống (ô flex:1 1 0 nên cỡ ô không phụ thuộc chữ → không vòng lặp), chia theo số emoji để 2 emoji (☕🛒) không tràn; CSS dùng --hs */
   var heroEl = null, heroRO = null;
