@@ -1,2 +1,4 @@
-/* Bố cục nút góc của vườn Toán: hàng trên chỉ còn ← (trái) và loa/túi/lịch (phải); nút đổi môn/lớp (LearnGradeBar, linh vật môn + lớp) ở cột nút góc trái, xếp NGAY TRÊN nút dụng cụ; thu phóng gom thành 1 nút góc phải (garden-tools.js + world-fab). */
-.gbar.gbar-l{left:max(12px,env(safe-area-inset-left));right:auto;top:auto;bottom:calc(max(110px,calc(env(safe-area-inset-bottom) + 90px)) + 66px);align-items:flex-start}
+/* Bố cục nút góc của vườn Toán: hàng trên chỉ còn ← (trái) và loa/túi/lịch (phải); cột góc trái xếp từ dưới lên CÁCH ĐỀU 10px, không đè nhau: chip mục tiêu → nút dụng cụ → nút chọn môn/lớp (LearnGradeBar). Thu phóng gom thành 1 nút góc phải (garden-tools.js + world-fab), cùng mép đáy với chip. */
+:root{--gc-b:max(28px,calc(14px + env(safe-area-inset-bottom)));--gc-top:calc(var(--gc-b) + 44px + 10px);--gc-fab:56px}
+@media (max-height:430px){:root{--gc-fab:46px}}
+.gbar.gbar-l{left:max(12px,env(safe-area-inset-left));right:auto;top:auto;bottom:calc(var(--gc-top) + var(--gc-fab) + 10px);align-items:flex-start}
