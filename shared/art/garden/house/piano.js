@@ -105,11 +105,14 @@
     ["pointerup", "pointercancel", "pointerleave"].forEach(function (n) { kb.addEventListener(n, function (e) { delete last[e.pointerId]; }); });
     kb.addEventListener("touchmove", function (e) { e.preventDefault(); }, { passive: false });
     kb.addEventListener("touchstart", function (e) { e.preventDefault(); }, { passive: false });
-    addEventListener("resize", onResize); addEventListener("keydown", onKey, true);
+    addEventListener("resize", onResize); addEventListener("orientationchange", onResize); if (mq.addEventListener) mq.addEventListener("change", onResize); addEventListener("keydown", onKey, true);
     build(); renderSongs(); setMode("free");
   }
-  function onResize() { if (el) { var s = song, m = mode; build(); if (m === "learn" && s) show(); } }
+  /* xoay máy: iOS báo resize/orientationchange khi kích thước chưa đổi xong → dựng lại ngay + 2 lần nữa sau khi ổn định */
+  var rzT = [];
+  function relayout() { if (!el) return; var s = song, m = mode; build(); if (m === "learn" && s) show(); }
+  function onResize() { if (!el) return; rzT.forEach(clearTimeout); relayout(); rzT = [setTimeout(relayout, 120), setTimeout(relayout, 450)]; }
   function onKey(e) { if (el && e.key === "Escape") { e.stopPropagation(); close(); } }
-  function close() { clearTimers(); root.HouseAudio.stop(); rec = null; mas = null; if (root.HouseLanes) HouseLanes.reset(); removeEventListener("resize", onResize); removeEventListener("keydown", onKey, true); if (el) el.remove(); el = null; song = null; mode = "free"; }
+  function close() { clearTimers(); root.HouseAudio.stop(); rec = null; mas = null; if (root.HouseLanes) HouseLanes.reset(); removeEventListener("resize", onResize); removeEventListener("orientationchange", onResize); if (mq.removeEventListener) mq.removeEventListener("change", onResize); rzT.forEach(clearTimeout); removeEventListener("keydown", onKey, true); if (el) el.remove(); el = null; song = null; mode = "free"; }
   root.HousePiano = { open: open, close: close };
 })(window);
