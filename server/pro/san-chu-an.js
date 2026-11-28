@@ -28,4 +28,7 @@ function main(PF, OPTS) {
   for (const id in S) { const d = S[id], b = v(d.h); PF.skins[id] = Object.assign({ vl: b.vl, vd: b.vd }, d); delete PF.skins[id].h; }
   PF.pro = { trial: !!OPTS.trial };
 }
-exports.source = function (opts) { return "(" + main.toString() + ")(PF," + JSON.stringify({ trial: !!(opts && opts.trial) }) + ");"; };
+const EXTRA = require("./san-chu-words");
+/* Nối bộ từ bổ sung (san-chu-words.js) vào từng chủ đề, bỏ từ trùng. */
+const addWords = "for(const k in " + "EXTRA_W" + "){const s=PF.skins[k];if(!s)continue;const seen=new Set(s.words.map(w=>w[0]));EXTRA_W[k].forEach(w=>{if(!seen.has(w[0])){seen.add(w[0]);s.words.push(w);}});}";
+exports.source = function (opts) { return "(" + main.toString() + ")(PF," + JSON.stringify({ trial: !!(opts && opts.trial) }) + ");(function(EXTRA_W){" + addWords + "})(" + JSON.stringify(EXTRA) + ");"; };

@@ -38,7 +38,7 @@ module.exports = {
       sk: { basic: ["City detective", "City detective"], noir: ["Film noir", "Film noir"], news: ["Evening news", "Evening news"], neon: ["Neon case", "Neon case"] } }
   },
   sfx: `{ok:()=>tone(660,.08,"triangle",.09),bad:()=>tone(160,.22,"sawtooth",.07),end:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.09,i*.09)),combo:n=>{const b=440*Math.pow(1.122,Math.min(n/2,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.1,"triangle",.08,i*.05))}}`,
-  gameJs: ["data", "core"].map((f, i) => i ? rd("quiz", "core.js") : rd("bat-ke-noi-doi", "data.js")).join("\n"),
+  gameJs: [rd("bat-ke-noi-doi", "data.js"), rd("bat-ke-noi-doi", "bank-gen.js"), rd("quiz", "core.js")].join("\n"),
   drawCard: "",
   wire: { dvi: "Đọc đoạn quảng cáo hay bình luận rồi chỉ ra lỗi lập luận: đánh tráo khái niệm, gán ghép, công kích cá nhân… Có giải thích sau mỗi câu!", den: "Read an ad or comment and spot the flawed reasoning: switching meanings, false links, personal attacks… with an explanation after every answer!",
     c1: "#6a5cff", c2: "#1a1a5a", emoji: "🕵️", artKey: "fallacy", art: '<g><rect x="70" y="120" width="372" height="190" rx="30" fill="#fff" opacity=".94"/><path d="M110 170H402M110 210H360M110 250H300" stroke="#8c86d8" stroke-width="16" stroke-linecap="round"/><circle cx="360" cy="360" r="62" fill="none" stroke="#ffd24a" stroke-width="20"/><path d="M404 404L450 450" stroke="#ffd24a" stroke-width="24" stroke-linecap="round"/></g>' },

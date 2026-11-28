@@ -38,7 +38,7 @@ module.exports = {
       sk: { basic: ["Twist arcade", "Twist arcade"], circus: ["Circus", "Circus"], magic: ["Magician", "Magician"], space: ["Black hole", "Black hole"] } }
   },
   sfx: `{ok:()=>tone(660,.08,"triangle",.09),bad:()=>tone(160,.22,"sawtooth",.07),end:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.09,i*.09)),combo:n=>{const b=440*Math.pow(1.122,Math.min(n/2,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.1,"triangle",.08,i*.05))}}`,
-  gameJs: ["data", "core"].map((f, i) => i ? rd("quiz", "core.js") : rd("hoi-xoay-dap-xoay", "data.js")).join("\n"),
+  gameJs: [rd("hoi-xoay-dap-xoay", "data.js"), ...fs.readdirSync(path.join(__dirname, "..", "parts", "hoi-xoay-dap-xoay")).filter(f => /^bank\d+\.js$/.test(f)).sort().map(f => rd("hoi-xoay-dap-xoay", f)), rd("quiz", "core.js")].join("\n"),
   drawCard: "",
   wire: { dvi: "Câu đố mẹo và nghịch lý: một cân bông và một cân sắt, cái nào nặng hơn? Tỉ lệ sai cao, gửi bạn bè để bẫy!", den: "Trick questions and paradoxes: a kilo of cotton or a kilo of iron, which is heavier? High miss rate, send them to friends to trap them!",
     c1: "#ff4fa3", c2: "#4a0d3a", emoji: "😈", artKey: "twist", art: '<g><circle cx="256" cy="256" r="150" fill="#fff" opacity=".94"/><path d="M256 140Q330 140 330 205Q330 250 285 270Q256 282 256 315" fill="none" stroke="#c2188a" stroke-width="30" stroke-linecap="round"/><circle cx="256" cy="372" r="20" fill="#c2188a"/></g>' },

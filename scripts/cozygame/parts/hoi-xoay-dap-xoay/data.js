@@ -18,6 +18,8 @@ const RID = [
   ["⏪", "“Hôm kia” của “ngày mai” là ngày nào?", "What is “the day before yesterday” of “tomorrow”?", ["Hôm qua", "Yesterday"], ["Hôm nay", "Today"], ["Ngày mai", "Tomorrow"], "Ngày mai lùi 2 ngày là hôm qua.", "Tomorrow minus two days is yesterday."],
   ["🛫", "Máy bay rơi đúng biên giới Việt – Lào. Người sống sót được chôn ở nước nào?", "A plane crashes exactly on the border of two countries. Where do you bury the survivors?", ["Không chôn người còn sống", "You don't bury survivors"], ["Việt Nam", "The first country"], ["Lào", "The second country"], "Người sống sót thì cần được cứu, đâu cần chôn!", "Survivors need help, not burying!"]
 ];
+/* Các tệp bank1..bank5.js: mỗi câu 2 dòng (vi rồi en), trường ngăn bằng "|": biểu tượng|câu hỏi|ĐÚNG|sai1|sai2|giải thích. */
+function P(a) { for (let i = 0; i < a.length; i += 2) { const v = a[i].split("|"), e = a[i + 1].split("|"); RID.push([v[0], v[1], e[1], [v[2], e[2]], [v[3], e[3]], [v[4], e[4]], v[5], e[5]]); } }
 function buildQs(seed, n, t) {
   const R = sub(seed, 9), out = []; let pool = [];
   while (out.length < n) {

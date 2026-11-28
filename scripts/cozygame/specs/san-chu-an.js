@@ -43,7 +43,7 @@ module.exports = {
       sk: { basic: ["Back to school", "Back to school"], zoo: ["Zoo", "Zoo"], food: ["Food street", "Food street"], space: ["Outer space", "Outer space"], sea: ["Deep sea", "Deep sea"] } }
   },
   sfx: `{ok:()=>tone(560,.05,"triangle",.07),bad:()=>tone(150,.2,"sawtooth",.07),end:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.09,i*.09)),combo:n=>{const b=440*Math.pow(1.122,Math.min(n/3,8));[0,1,2].forEach(i=>tone(b*(1+i*.25),.1,"triangle",.09,i*.05))},up:()=>{[660,880].forEach((f,i)=>tone(f,.1,"triangle",.09,i*.06))}}`,
-  gameJs: ["gen", "logic", "render"].map(part).join("\n"),
+  gameJs: ["words", "gen", "logic", "render"].map(part).join("\n"),
   drawCard: "",
   wire: { dvi: "Ô chữ tìm từ: kéo ngón tay qua hàng chữ thẳng để khoanh từ tiếng Anh trong danh sách, kèm nghĩa tiếng Việt. 3 độ khó, ngày nào cũng có ô chữ mới!", den: "Word search: drag along a straight line of letters to circle the listed English words, with Vietnamese meanings. 3 difficulty levels and a new puzzle every day!",
     c1: "#d8975a", c2: "#4a2810", emoji: "🔤", artKey: "wordhunt",

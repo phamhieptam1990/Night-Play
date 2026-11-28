@@ -5,9 +5,6 @@ const LVC = [{ n: 8, k: 6, nd: 2 }, { n: 10, k: 8, nd: 4 }, { n: 12, k: 10, nd: 
   { n: 13, k: 11, nd: 8 }, { n: 13, k: 12, nd: 8 }, { n: 14, k: 13, nd: 8 }, { n: 14, k: 14, nd: 8 }, { n: 14, k: 14, nd: 8 }];   /* level 3-7: lưới tới 14×14, tới 14 từ, nhiễu chữ cái dày dần (mô hình 360px: ô ≥ 24px) */
 const LVN = [["🌱", "Dễ", "Easy"], ["🌿", "Thường", "Normal"], ["🔥", "Khó", "Hard"]];
 const CFG = [{ time: 0, hid: 0, storm: 0 }, { time: 0, hid: 1, storm: 0 }, { time: 1, hid: 0, storm: 0 }, { time: 0, hid: 0, storm: 25 }];
-/* [từ tiếng Anh, nghĩa tiếng Việt] — chủ đề free "Trở lại trường" */
-const WORDS = [["BUS", "xe buýt"], ["DESK", "bàn học"], ["SCHOOL", "trường"], ["GAMES", "trò chơi"], ["RECESS", "giờ ra chơi"], ["LUNCH", "bữa trưa"], ["BELL", "chuông"], ["READ", "đọc"],
-  ["FRIENDS", "bạn bè"], ["TEACHER", "giáo viên"], ["FUN", "vui"], ["MATH", "toán"], ["BOOK", "sách"], ["PENCIL", "bút chì"], ["CLASS", "lớp học"], ["STUDY", "học bài"]];
 function inside(shape, r, c, n) {
   const m = (n - 1) / 2, dr = Math.abs(r - m), dc = Math.abs(c - m);
   if (shape === "round") return dr * dr + dc * dc <= (m + .6) * (m + .6);
