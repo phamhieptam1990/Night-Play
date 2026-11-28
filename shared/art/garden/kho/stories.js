@@ -1,5 +1,5 @@
 /* TRUYỆN NGẮN của 10 linh vật trong Kho (mỗi bạn một truyện, 5-6 trang, câu ngắn, có bài học nhỏ gắn với môn của bạn đó).
-   KhoStory.read(it, ctx): đọc từng trang bằng khung linh vật MC; nút ‹ Lại / Tiếp › / 🔊 Nghe; trang cuối: 🧠 Thử thách (bảng lớp, kho/quiz.js) · 🔁 Đọc lại · ✓ Xong. ctx = { MC, who, name, emoji, imgs, back(), quiz() }. Đã đọc lưu "khoStory" (localStorage). */
+   KhoStory.read(it, ctx): đọc từng trang bằng khung linh vật MC (TỰ ĐỌC to khi loa bật, nút 🔊 ở thanh trên Kho bật/tắt); nút ‹ Lại / Tiếp › / 🔊 Nghe; trang cuối: 🧠 Thử thách (bảng lớp, kho/quiz.js) · 🔁 Đọc lại · ✓ Xong. ctx = { MC, who, name, emoji, imgs, back(), quiz() }. Đã đọc lưu "khoStory" (localStorage). */
 (function (root) {
   "use strict";
   var S = {
@@ -74,6 +74,7 @@
       "Lê Lê hiểu rằng: chia đều thì ai cũng vui.",
       "Bé nhớ nhé: một nửa là 1/2, một phần tư là 1/4. Chia bánh thật đều nha!"] }
   };
+  function soundOn() { try { return root.PlaySound ? PlaySound.on() : localStorage.getItem("play:snd") !== "0"; } catch (e) { return true; } }
   function done() { try { return JSON.parse(localStorage.getItem("khoStory") || "{}") || {}; } catch (e) { return {}; } }
   function mark(id) { var d = done(); d[id] = 1; try { localStorage.setItem("khoStory", JSON.stringify(d)); } catch (e) {} }
   /* it = [id, tên, emoji, số lượng...] */
@@ -84,7 +85,7 @@
       if (i > 0) btns.push(["‹ Lại", function () { i--; page(); }]);
       if (!last) btns.push(["Tiếp ›", function () { i++; page(); }, "p"]); else { if (ctx.quiz) btns.push(["🧠 Thử thách", function () { mark(it[0]); ctx.quiz(); }, "p"]); btns.push(["🔁 Đọc lại", function () { i = 0; page(); }], ["✓ Xong", function () { mark(it[0]); ctx.back(); }, "ok"]); }
       btns.push(["🔊 Nghe", function () { MC.speak(txt); }]);
-      MC.open({ who: ctx.who, name: "📖 " + s.t + " · " + (i + 1) + "/" + s.p.length, emoji: ctx.emoji, imgs: ctx.imgs, text: txt, btns: btns });
+      MC.open({ who: ctx.who, name: "📖 " + s.t + " · " + (i + 1) + "/" + s.p.length, emoji: ctx.emoji, imgs: ctx.imgs, text: txt, btns: btns, speak: soundOn() });   /* loa bật → tự đọc mỗi trang khi bấm Tiếp */
     }
     page();
   }
