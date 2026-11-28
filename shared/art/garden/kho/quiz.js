@@ -25,6 +25,11 @@
     var bank = (root.KHO_BANK[subj] || root.KHO_BANK.tviet)[g], r, tries = 0; do { r = pick(bank); tries++; } while (make.last === r[0] && tries < 6); make.last = r[0];
     return { q: r[0], a: r[1], w: r.slice(2) };
   }
+  function soundOn() { try { return root.PlaySound ? PlaySound.on() : localStorage.getItem("play:snd") !== "0"; } catch (e) { return true; } }
+  /* chữ → lời đọc: phép tính đọc thành "cộng, trừ, nhân, chia", phân số "1/4" đọc "1 phần 4" */
+  function spoken(t) {
+    return t.replace(/ \+ /g, " cộng ").replace(/ − /g, " trừ ").replace(/ × /g, " nhân ").replace(/ : /g, " chia ").replace(/ = \?/g, " bằng mấy?").replace(/(\d+)\/(\d+)/g, "$1 phần $2").replace(/cm²/g, "xăng-ti-mét vuông").replace(/ cm/g, " xăng-ti-mét").replace(/[“”]/g, "");
+  }
   var SAY = ["Mình biết rồi! Đáp án là", "Để mình thử nhé, mình nghĩ là", "Dễ ợ! Mình chọn", "Hừm… chắc là"], OK = ["Giỏi quá!", "Chính xác!", "Bé thông minh ghê!", "Tuyệt vời!"], NO = ["Không sao, mình cùng xem nhé.", "Gần đúng rồi, xem lại nào.", "Cố lên, lần sau sẽ đúng!"];
   function ask(it, ctx) {
     var MC = ctx.MC, m = ctx.MS[it[0]], subj = m[1], grade = m[2], streak = 0, ov = document.createElement("div"); ov.className = "kq"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-label", "Bảng lớp");
@@ -32,18 +37,22 @@
     function avatar(id) { var b = document.createElement("div"); b.className = "kq-av"; MC.img(b, { imgs: ctx.imgs(id), emoji: ctx.emoji(id) }); return b; }
     function round() {
       var q = make(subj, grade), others = ctx.IT.filter(function (x) { return x[0] !== it[0]; }), other = pick(others), om = ctx.MS[other[0]], right = Math.random() < .5, claim = right ? q.a : pick(q.w);
-      ov.innerHTML = "<div class='kq-wrap'><div class='kq-board'><div class='kq-top'><span>📚 Bảng lớp " + grade + " · " + ({ toan: "Toán", tviet: "Tiếng Việt", tanh: "Tiếng Anh" }[subj] || "") + "</span><b class='kq-st'>" + (streak ? "⭐ x" + streak : "") + "</b></div><div class='kq-q'></div></div>" +
+      ov.innerHTML = "<div class='kq-wrap'><div class='kq-brow'><div class='kq-ask'></div><div class='kq-board'><div class='kq-top'><span>📚 Bảng lớp " + grade + " · " + ({ toan: "Toán", tviet: "Tiếng Việt", tanh: "Tiếng Anh" }[subj] || "") + "</span><b class='kq-st'>" + (streak ? "⭐ x" + streak : "") + "</b></div><div class='kq-q'></div></div></div>" +
         "<div class='kq-row'><div class='kq-who'></div><div class='kq-say'></div></div><div class='kq-btns'></div></div>";
       ov.querySelector(".kq-q").textContent = q.q;
+      var ask = ov.querySelector(".kq-ask"); ask.appendChild(avatar(it[0])); ask.insertAdjacentHTML("beforeend", "<small>" + m[0] + " hỏi</small>");   /* linh vật đứng hỏi cạnh bảng */
       var who = ov.querySelector(".kq-who"); who.appendChild(avatar(other[0])); who.insertAdjacentHTML("beforeend", "<small>" + om[0] + "</small>");
       var say = ov.querySelector(".kq-say"), btns = ov.querySelector(".kq-btns"); say.innerHTML = pick(SAY) + " <b></b>. Bé xác nhận giúp mình nhé: mình trả lời đúng không?"; say.querySelector("b").textContent = "“" + claim + "”";
       function B(t, cls, fn) { var b = document.createElement("button"); b.type = "button"; b.className = cls; b.textContent = t; b.onclick = fn; btns.appendChild(b); return b; }
-      B("✅ Đúng rồi", "ok", function () { fin(right); }); B("❌ Chưa đúng", "no", function () { fin(!right); }); B("🔊", "snd", function () { MC.speak(q.q + ". " + om[0] + " trả lời: " + claim); });
+      var qSay = spoken(q.q) + " " + om[0] + " trả lời: " + spoken(claim) + ". Bé xác nhận giúp mình nhé!";
+      if (soundOn()) MC.speak(qSay);   /* loa bật → tự đọc câu hỏi và lời trả lời của bạn kia */
+      B("✅ Đúng rồi", "ok", function () { fin(right); }); B("❌ Chưa đúng", "no", function () { fin(!right); }); B("🔊", "snd", function () { MC.speak(qSay); });
       function fin(kidRight) {
         streak = kidRight ? streak + 1 : 0; btns.innerHTML = "";
         say.innerHTML = (kidRight ? "🎉 " + pick(OK) : "💪 " + pick(NO)) + " " + (right ? "<b></b> đúng thật, " + om[0] + " trả lời đúng!" : om[0] + " nhầm rồi. Đáp án đúng là <b></b>.");
         say.querySelector("b").textContent = "“" + q.a + "”"; ov.querySelector(".kq-st").textContent = streak ? "⭐ x" + streak : "";
         ov.querySelector(".kq-wrap").classList.add(kidRight ? "good" : "bad");
+        if (soundOn()) MC.speak(say.textContent.replace(/[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/gu, "").replace(/[“”]/g, ""));   /* đọc lời khen / giải thích đáp án đúng */
         B("▶ Câu hỏi tiếp", "ok", round); B("🏁 Kết thúc", "no", function () { ov.remove(); ctx.back(); });
       }
     }

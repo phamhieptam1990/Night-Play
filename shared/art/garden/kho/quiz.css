@@ -11,3 +11,22 @@
 .kq-btns .ok{background:linear-gradient(135deg,#34D399,#10A06C)}.kq-btns .no{background:linear-gradient(135deg,#FB7185,#E11D48)}.kq-btns .snd{flex:0 0 64px;min-width:0;background:rgba(255,255,255,.16)}.kq-btns button:active{transform:translateY(3px);box-shadow:none}
 .kq-wrap.good .kq-board{box-shadow:inset 0 0 22px rgba(0,0,0,.5),0 0 0 4px #34D399}.kq-wrap.bad .kq-board{box-shadow:inset 0 0 22px rgba(0,0,0,.5),0 0 0 4px #FB7185}
 @media (max-height:480px){.kq-wrap{gap:6px;padding:8px}.kq-q{font-size:20px;min-height:2.2em}.kq-av,.kq-who{width:60px;height:60px}.kq-btns button{min-height:46px;font-size:16px}.kq-board{padding:6px 10px 10px}}
+.kq-brow{display:flex;gap:8px;align-items:flex-end}.kq-brow .kq-board{flex:1;min-width:0}
+.kq-ask{flex:none;width:84px;text-align:center}.kq-ask small{display:block;font:800 13px system-ui;margin-top:2px;color:#FFE14D}.kq-ask .kq-av{animation:kqHop .6s ease-out}
+@keyframes kqHop{0%{transform:translateY(14px) scale(.8);opacity:0}60%{transform:translateY(-6px) scale(1.06);opacity:1}100%{transform:none}}
+@media (max-width:420px){.kq-ask{width:70px}.kq-ask .kq-av{width:70px;height:70px}.kq-q{font-size:clamp(19px,5.4vw,26px)}}
+@media (max-height:480px){.kq-ask{width:60px}.kq-ask .kq-av{width:60px;height:60px}}
+@media (prefers-reduced-motion:reduce){.kq-ask .kq-av{animation:none}}
+@media (max-height:480px){.kq-ask,.kq-who{width:62px}.kq-av,.kq-ask .kq-av{width:48px;height:48px}.kq-av .mc-em{font-size:36px}.kq-ask small,.kq-who small{font-size:11px;line-height:1.1;margin-top:0}.kq-row{align-items:flex-start}.kq-say{font-size:14px;padding:8px 10px}}
+/* linh vật HỎI đứng đè lên góc dưới-phải của bảng (không để bên trái) */
+.kq-brow{position:relative;display:block}.kq-brow .kq-board{width:100%;box-sizing:border-box;padding-bottom:30px}
+.kq-ask{position:absolute;right:4px;bottom:-30px;z-index:4;width:92px;pointer-events:none}.kq-ask .kq-av{width:92px;height:92px;filter:drop-shadow(0 6px 6px rgba(0,0,0,.45))}
+.kq-ask small{position:absolute;left:50%;bottom:-2px;transform:translateX(-50%);white-space:nowrap;margin:0;padding:2px 10px;border-radius:99px;background:rgba(20,16,50,.85);border:2px solid rgba(255,255,255,.5);color:#FFE14D;font:800 12px system-ui}
+.kq-q{padding-bottom:6px}.kq-row{margin-top:18px}
+@media (max-width:420px){.kq-ask{width:76px}.kq-ask .kq-av{width:76px;height:76px}.kq-brow .kq-board{padding-bottom:26px}}
+@media (max-height:480px){.kq-ask{width:62px;bottom:-22px}.kq-ask .kq-av{width:62px;height:62px}.kq-ask small{font-size:10px;padding:1px 8px}.kq-brow .kq-board{padding-bottom:20px}.kq-row{margin-top:12px}}
+/* tinh chỉnh: thấy trọn thân linh vật; nhãn tên nằm dưới, sát lề phải (không tràn khung) */
+.kq-ask{bottom:-4px;right:6px}.kq-ask small{left:auto;right:0;bottom:-22px;transform:none}.kq-row{margin-top:30px}
+@media (max-width:420px){.kq-row{margin-top:28px}}
+@media (max-height:480px){.kq-ask{bottom:-2px}.kq-ask small{bottom:-18px}.kq-row{margin-top:22px}}
+@media (max-height:480px){.kq-q{padding-right:60px}}
