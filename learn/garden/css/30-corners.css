@@ -2,3 +2,5 @@
 :root{--gc-b:max(28px,calc(14px + env(safe-area-inset-bottom)));--gc-top:calc(var(--gc-b) + 44px + 10px);--gc-fab:56px}
 @media (max-height:430px){:root{--gc-fab:46px}}
 .gbar.gbar-l{left:max(12px,env(safe-area-inset-left));right:auto;top:auto;bottom:calc(var(--gc-top) + var(--gc-fab) + 10px);align-items:flex-start}
+/* Bảng "Chăm vườn hôm nay": chỉ MỘT nút đóng (✕ lớn ở hàng dưới); nút ✕ tròn góc trên phải trùng chức năng và đè lên thẻ mục tiêu nên ẩn. */
+#mnov .hd .rd{display:none!important}
