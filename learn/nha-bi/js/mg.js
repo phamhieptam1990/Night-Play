@@ -6,6 +6,7 @@
   N.mgKinds = {};
   function rng(seed) { var a = seed >>> 0; return function () { a = (a + 0x6D2B79F5) >>> 0; var t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
   N.mgActive = function () { return !!G; };
+  N.mgKind = function () { return G && G.kind; };
     function hud() {
     N.$("mgScore").textContent = G.score; N.$("mgTime").style.width = Math.max(0, G.t / G.secs * 100) + "%";
     N.$("mgCombo").textContent = G.combo >= 2 ? "×" + G.combo : "";
@@ -19,11 +20,15 @@
     };
     G.miss = function () { G.combo = 0; hud(); };
     N.busy = true; N.$("play").classList.add("mg"); document.body.classList.add("mg"); N.$("mgh").hidden = false; N.petX(50, true); N.setExp("cun"); hud();
-    var c = N.$("mgCd"), n = 3; c.hidden = false; c.textContent = n;
-    cdT = setInterval(function () {
-      n--; if (n > 0) { c.textContent = n; N.sfx.tap(); return; }
-      clearInterval(cdT); c.hidden = true; G.run = true; N.mgKinds[kind].init(G); last = performance.now(); raf = requestAnimationFrame(loop);
-    }, 700);
+    var c = N.$("mgCd"), n = 3;
+    function count() {   /* đếm 3-2-1 rồi bắt đầu ván */
+      n = 3; c.hidden = false; c.textContent = n;
+      cdT = setInterval(function () {
+        n--; if (n > 0) { c.textContent = n; N.sfx.tap(); return; }
+        clearInterval(cdT); c.hidden = true; G.run = true; N.mgKinds[kind].init(G); last = performance.now(); raf = requestAnimationFrame(loop); if (N.mgHelpTip) N.mgHelpTip(kind);
+      }, 700);
+    }
+    if (N.mgHelpNeeded && N.mgHelpNeeded(kind)) N.mgHelpShow(kind, count); else count();   /* 3 ván đầu: hiện thẻ Cách chơi trước */
   };
   function loop(now) {
     if (!G) return; var dt = Math.min(.05, (now - last) / 1000); last = now;
@@ -31,7 +36,7 @@
     if (G.t <= 0) return end(); raf = requestAnimationFrame(loop);
   }
   function cleanup() {
-    cancelAnimationFrame(raf); clearInterval(cdT); if (G && G.run) N.mgKinds[G.kind].stop(G);
+    cancelAnimationFrame(raf); clearInterval(cdT); if (N.mgHelpHide) N.mgHelpHide(); if (G && G.run) N.mgKinds[G.kind].stop(G);
     N.$("mgh").hidden = true; N.$("mgCd").hidden = true; N.$("play").classList.remove("mg"); document.body.classList.remove("mg"); N.$("ovEnd").hidden = true;
     G = null; N.busy = false; N.petX(50); N.setExp("cun"); N.renderTray(); N.paint();
   }

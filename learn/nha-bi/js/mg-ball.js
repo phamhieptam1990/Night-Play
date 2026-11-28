@@ -25,7 +25,7 @@
     },
     step: function (G, dt) {
       if (G.hoop) { G.hoop.life -= dt; if (G.hoop.life <= 0) { G.hoop.el.remove(); G.hoop = null; G.hT = 2.2; } return; }
-      G.hT -= dt; if (G.hT > 0) return; var x = 22 + G.rnd() * 56, y = 38 + G.rnd() * 22, el = document.createElement("div"); el.className = "hoop"; el.style.left = x + "%"; el.style.top = y + "%";
+      G.hT -= dt; if (G.hT > 0) return; var x = 22 + G.rnd() * 56, y = 38 + G.rnd() * 22, el = document.createElement("div"); G.hn = (G.hn | 0) + 1; el.className = "hoop" + (G.hn <= 2 ? " cue" : ""); el.style.left = x + "%"; el.style.top = y + "%";
       N.$("rm").appendChild(el); G.hoop = { el: el, x: x, y: y, life: 4.5 };
     },
     stop: function (G) {

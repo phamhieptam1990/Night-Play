@@ -12,6 +12,7 @@
   N.hudInit(); lessonBtn(); N.collectionInit(); N.initRoom(); N.show("room"); N.enterZone("living"); N.paint(); N.initHabit();
   N.$("enNo").onclick = function () { N.sfx.tap(); N.mgClose(); };
   N.$("enGo").onclick = function () { N.sfx.tap(); N.mgAgain(); };
+  N.$("enHelp").onclick = function () { N.sfx.tap(); if (N.mgKind()) N.mgHelpShow(N.mgKind(), null); };
   if (away > 6) { N.setExp("cun-joy", 1800); N.hearts(4); N.say(N.rnd(D.say.miss), "", 2400); } else N.say(N.rnd(D.say.hi), "", 1600);
   setTimeout(function () { if (!N.collectLesson()) N.checkin(); }, 700);
   /* nút góc: thanh khu đáy gom thành 1 nút (phải); nút chọn lớp bằng linh vật (trái), chỉ các lớp đã tới */

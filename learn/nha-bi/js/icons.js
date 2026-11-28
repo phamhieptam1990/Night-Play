@@ -11,6 +11,7 @@
     check: '<path d="M5 12.500l4.500 4.500L19 7.500" stroke="currentColor" stroke-width="3.600" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
     sound: '<path d="M4 9.500h3.500L12 5.500v13l-4.500-4H4z" fill="currentColor"/><path d="M15.500 8.500a5 5 0 0 1 0 7M18 6a8.500 8.500 0 0 1 0 12" stroke="currentColor" stroke-width="2.400" stroke-linecap="round" fill="none"/>',
     mute: '<path d="M4 9.500h3.500L12 5.500v13l-4.500-4H4z" fill="currentColor"/><path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="2.600" stroke-linecap="round" fill="none"/>',
+    help: '<circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M9.200 9.600a2.800 2.800 0 1 1 4.200 2.400c-.900.600-1.400 1.100-1.400 2.200" stroke="#fff" stroke-width="2.400" stroke-linecap="round" fill="none"/><circle cx="12" cy="17.300" r="1.500" fill="#fff"/>',
     lock: '<rect x="5" y="10.500" width="14" height="10" rx="3" fill="currentColor"/><path d="M8 10.500V8a4 4 0 0 1 8 0v2.500" stroke="currentColor" stroke-width="2.600" fill="none"/>'
   };
   N.icon = function (n) { return '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">' + (P[n] || "") + "</svg>"; };
