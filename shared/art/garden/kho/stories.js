@@ -1,5 +1,5 @@
 /* TRUYỆN NGẮN của 10 linh vật trong Kho (mỗi bạn một truyện, 5-6 trang, câu ngắn, có bài học nhỏ gắn với môn của bạn đó).
-   KhoStory.read(it, ctx): đọc từng trang bằng khung linh vật MC; nút ‹ Lại / Tiếp › / 🔊 Nghe; trang cuối: 🔁 Đọc lại · ✓ Xong. ctx = { MC, who, name, emoji, imgs, back() }. Đã đọc lưu "khoStory" (localStorage). */
+   KhoStory.read(it, ctx): đọc từng trang bằng khung linh vật MC; nút ‹ Lại / Tiếp › / 🔊 Nghe; trang cuối: 🧠 Thử thách (bảng lớp, kho/quiz.js) · 🔁 Đọc lại · ✓ Xong. ctx = { MC, who, name, emoji, imgs, back(), quiz() }. Đã đọc lưu "khoStory" (localStorage). */
 (function (root) {
   "use strict";
   var S = {
@@ -82,7 +82,7 @@
     function page() {
       var last = i === s.p.length - 1, txt = s.p[i], btns = [];
       if (i > 0) btns.push(["‹ Lại", function () { i--; page(); }]);
-      if (!last) btns.push(["Tiếp ›", function () { i++; page(); }, "p"]); else btns.push(["✓ Xong", function () { mark(it[0]); ctx.back(); }, "ok"], ["🔁 Đọc lại", function () { i = 0; page(); }]);
+      if (!last) btns.push(["Tiếp ›", function () { i++; page(); }, "p"]); else { if (ctx.quiz) btns.push(["🧠 Thử thách", function () { mark(it[0]); ctx.quiz(); }, "p"]); btns.push(["🔁 Đọc lại", function () { i = 0; page(); }], ["✓ Xong", function () { mark(it[0]); ctx.back(); }, "ok"]); }
       btns.push(["🔊 Nghe", function () { MC.speak(txt); }]);
       MC.open({ who: ctx.who, name: "📖 " + s.t + " · " + (i + 1) + "/" + s.p.length, emoji: ctx.emoji, imgs: ctx.imgs, text: txt, btns: btns });
     }
