@@ -546,3 +546,10 @@ main p a:not(.btn){transition:color .18s ease,text-decoration-color .18s ease}
 .hvt span{font-size:16px;line-height:1.4;opacity:.95}
 .hvg{font-size:17px}
 @media (min-width:760px){.hvc{padding:28px 24px;gap:12px}.hvi{width:88px;height:88px}.hvt{gap:6px}.hvt b{font-size:30px}.hvt span{font-size:17px}.hvg{margin-top:10px}}
+
+/* Chân trang máy tính: cột logo/© KHÔNG co (trước đây co về ~0 khi hàng liên kết dài nên chữ "Play Hub" đè lên "Pop Play"); hàng liên kết chiếm phần còn lại và tự xuống dòng khi thiếu chỗ */
+@media (min-width:1000px){
+ .fl{flex:0 0 auto}.fl .brand{white-space:nowrap}.fl .copy{white-space:nowrap}
+ .fr{flex:1 1 0;min-width:0;max-width:none;justify-content:flex-end}
+ .flinks{justify-content:flex-end}
+}
