@@ -3,10 +3,13 @@
 (function (root) {
   "use strict";
   var LANES = [60, 62, 64, 65, 67, 69, 71, 72], COL = ["#FF5A5A", "#FF9A3C", "#FFD24D", "#7ED957", "#34D399", "#38BDF8", "#7C5CFF", "#FF4F9A"], NAMES = ["Đô", "Rê", "Mi", "Fa", "Sol", "La", "Si", "Đô"];
-  var SPEEDS = [{ vi: "Chậm", ic: "🐢", beat: 780 }, { vi: "Vừa", ic: "🐰", beat: 600 }, { vi: "Nhanh", ic: "🚀", beat: 460 }];
+  var LEVELS = [{ vi: "Chậm", ic: "🐢", beat: 780 }, { vi: "Vừa", ic: "🐰", beat: 620 }, { vi: "Nhanh", ic: "🚀", beat: 500 }, { vi: "Siêu tốc", ic: "⚡", beat: 400 }, { vi: "Thần tốc", ic: "🔥", beat: 330 }];
   var LEAD = 4, FALL = 3.6, WP = 75, WG = 135, WO = 215, COUNT = 1800;
-  var kb, field, api, song, S = null, raf = 0, lvl = +(lsGet("gardenPianoFallLv") || 1), hud, bars;
+  var kb, field, api, song, S = null, raf = 0, lvl = +(lsGet("gardenPianoFallLv") || 0), hud, bars;
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  /* tiến độ level từng bài: gardenPianoLv = { id: { u: level cao nhất đã mở (0-based), s: [sao mỗi level] } } */
+  function prog(id) { var d = {}; try { d = JSON.parse(lsGet("gardenPianoLv") || "{}") || {}; } catch (e) {} var o = d[id] || { u: 0, s: [] }; o.u = Math.max(0, Math.min(LEVELS.length - 1, o.u | 0)); return { all: d, me: o }; }
+  function saveProg(p, id) { p.all[id] = p.me; try { localStorage.setItem("gardenPianoLv", JSON.stringify(p.all)); } catch (e) {} }
   function best() { try { return JSON.parse(lsGet("gardenPianoFall") || "{}"); } catch (e) { return {}; } }
   function el(c, h, p) { var e = document.createElement("div"); e.className = c; if (h != null) e.innerHTML = h; (p || kb).appendChild(e); return e; }
   function laneOf(m) { var b = 0, bd = 99; LANES.forEach(function (x, i) { var d = Math.abs(x - m); if (d < bd) { bd = d; b = i; } }); return b; }
@@ -18,18 +21,21 @@
     stop(); kb = k; api = a; song = sg; field = kb.querySelector(".hp-tiles"); ready();
   }
   function ready() {
-    var wasRun = !!S; if (wasRun) { cancelAnimationFrame(raf); S = null; if (root.HouseBacking) HouseBacking.stop(120); } clean(); if (api.run) api.run(false);
-    var b = best()[song.id], c = el("hf-card");
-    c.innerHTML = "<h3>🎮 Phím rơi</h3><p class='hf-song'>" + song.ic + " " + song.vi + "</p><p class='hf-best'>" + (b ? "Cao nhất: <b>" + b.s + "</b> " + stars(b.st) : "Chưa chơi bài này") + "</p><div class='hf-lv'></div>" +
-      "<button type='button' class='hf-go'>▶ Bắt đầu</button><p class='hf-tip'>Ô nốt rơi xuống, chạm vạch sáng thì bấm đúng phím màu!</p>";
-    var lv = c.querySelector(".hf-lv"); SPEEDS.forEach(function (s, i) { var x = document.createElement("button"); x.type = "button"; x.className = "hf-l" + (i === lvl ? " on" : ""); x.innerHTML = "<i>" + s.ic + "</i>" + s.vi;
-      x.onclick = function () { lvl = i; try { localStorage.setItem("gardenPianoFallLv", i); } catch (e) {} Array.prototype.forEach.call(lv.children, function (y, j) { y.classList.toggle("on", j === i); }); }; lv.appendChild(x); });
-    c.querySelector(".hf-go").onclick = start;
+    if (S) { cancelAnimationFrame(raf); S = null; if (root.HouseBacking) HouseBacking.stop(120); } clean(); if (api.run) api.run(false);
+    var pr = prog(song.id).me; lvl = Math.min(lvl, pr.u); var c = el("hf-card");
+    c.innerHTML = "<h3>🎮 Phím rơi</h3><p class='hf-song'>" + song.ic + " " + song.vi + "</p><p class='hf-best'></p><div class='hf-lv'></div>" +
+      "<button type='button' class='hf-go'>▶ Bắt đầu</button><p class='hf-tip'>Ô nốt rơi xuống, chạm vạch sáng thì bấm đúng phím màu! Được ≥1 sao để lên level.</p>";
+    var lv = c.querySelector(".hf-lv"), bt = c.querySelector(".hf-best");
+    function info() { var b = best()[song.id + "@" + lvl]; bt.innerHTML = "<b>Lv" + (lvl + 1) + " " + LEVELS[lvl].vi + "</b> · " + (b ? "Cao nhất <b>" + b.s + "</b> " + stars(b.st) : "Chưa chơi level này"); }
+    LEVELS.forEach(function (l, i) { var x = document.createElement("button"), lock = i > pr.u; x.type = "button"; x.className = "hf-l" + (i === lvl ? " on" : "") + (lock ? " lk" : ""); x.setAttribute("aria-label", "Level " + (i + 1) + " " + l.vi + (lock ? " (chưa mở)" : ""));
+      x.innerHTML = "<i>" + (lock ? "🔒" : l.ic) + "</i>" + (i + 1) + (pr.s[i] ? "<small>" + stars(pr.s[i]) + "</small>" : "");
+      x.onclick = function () { if (lock) { bt.textContent = "Chơi xong Level " + i + " với ≥1 sao để mở khoá nhé!"; return; } lvl = i; try { localStorage.setItem("gardenPianoFallLv", i); } catch (e) {} Array.prototype.forEach.call(lv.children, function (y, j) { y.classList.toggle("on", j === i); }); info(); }; lv.appendChild(x); });
+    info(); c.querySelector(".hf-go").onclick = start;
   }
   function stars(n) { return "★★★".slice(0, n) + "☆☆☆".slice(0, 3 - n); }
   /* ---- vào game ---- */
   function start() {
-    clean(); var beat = SPEEDS[lvl].beat, t = LEAD * beat, notes = song.n.map(function (n) { var o = { t: t, d: n[1] * beat, m: n[0], lane: laneOf(n[0]), st: 0, el: null }; t += n[1] * beat; return o; });
+    clean(); var beat = LEVELS[lvl].beat, t = LEAD * beat, notes = song.n.map(function (n) { var o = { t: t, d: n[1] * beat, m: n[0], lane: laneOf(n[0]), st: 0, el: null }; t += n[1] * beat; return o; });
     S = { beat: beat, notes: notes, t0: performance.now() + COUNT, H: field.clientHeight || 300, score: 0, combo: 0, maxc: 0, p: 0, g: 0, o: 0, miss: 0, lo: 0, end: t + 900, fin: false };
     if (api.run) api.run(true);
     hud = el("hf-hud", "<span class='hf-sc'>0</span><span class='hf-cb'></span><span class='hf-x'>" + song.ic + "</span>"); bars = el("hf-prog", "<i></i>");
@@ -79,15 +85,19 @@
   /* ---- kết thúc ---- */
   function finish() {
     if (!S || S.fin) return; S.fin = true; cancelAnimationFrame(raf); if (root.HouseBacking) HouseBacking.stop(700); document.removeEventListener("visibilitychange", onVis);
-    var n = S.notes.length, acc = (S.p + S.g * .8 + S.o * .5) / n, st = acc >= .9 ? 3 : acc >= .7 ? 2 : acc >= .4 ? 1 : 0, bs = best(), prev = bs[song.id], rec = !prev || S.score > prev.s, sc = S.score, mc = S.maxc;
-    if (rec) { bs[song.id] = { s: sc, st: Math.max(st, prev ? prev.st : 0) }; try { localStorage.setItem("gardenPianoFall", JSON.stringify(bs)); } catch (e) {} }
+    var n = S.notes.length, acc = (S.p + S.g * .8 + S.o * .5) / n, st = acc >= .9 ? 3 : acc >= .7 ? 2 : acc >= .4 ? 1 : 0, bs = best(), bk = song.id + "@" + lvl, prev = bs[bk], rec = !prev || S.score > prev.s, sc = S.score, mc = S.maxc;
+    if (rec) { bs[bk] = { s: sc, st: Math.max(st, prev ? prev.st : 0) }; try { localStorage.setItem("gardenPianoFall", JSON.stringify(bs)); } catch (e) {} }
+    var pr = prog(song.id), up = false, last = lvl >= LEVELS.length - 1; pr.me.s[lvl] = Math.max(st, pr.me.s[lvl] | 0);
+    if (st >= 1 && lvl === pr.me.u && !last) { pr.me.u++; up = true; } saveProg(pr, song.id);
     S = null; if (api.run) api.run(false); clean();
     [60, 64, 67, 72].forEach(function (m, i) { setTimeout(function () { if (root.HouseAudio && kb) HouseAudio.note(m, 1.2, .45); }, i * 130); });
     var c = el("hf-card hf-end", "<h3>" + (st >= 3 ? "🏆 Siêu đỉnh!" : st >= 1 ? "🎉 Giỏi lắm!" : "💪 Cố lên nào!") + "</h3><div class='hf-stars'>" + [0, 1, 2].map(function (i) { return "<b class='" + (i < st ? "on" : "") + "' style='--i:" + i + "'>★</b>"; }).join("") + "</div>" +
-      "<p class='hf-song'>" + song.ic + " " + song.vi + "</p><p class='hf-res'>Điểm <b>" + sc + "</b>" + (rec ? " · <em>Kỷ lục mới!</em>" : "") + "</p><p class='hf-res'>Combo dài nhất <b>" + mc + "</b> · Chính xác <b>" + Math.round(acc * 100) + "%</b></p>" +
-      "<div class='hf-row'><button type='button' class='hf-go'>🔄 Chơi lại</button><button type='button' class='hf-l' data-x='1'>🎵 Bài khác</button></div>");
-    c.querySelector(".hf-go").onclick = start; c.querySelector("[data-x]").onclick = function () { clean(); if (api.back) api.back(); };
-    if (st >= 3) for (var i = 0; i < 8; i++) setTimeout(function () { burst((Math.random() * 8) | 0, 10, COL[(Math.random() * 8) | 0]); }, i * 140);
+      (up ? "<div class='hf-lvup'>⬆️ LÊN LEVEL! Mở Lv" + (lvl + 2) + " " + LEVELS[lvl + 1].ic + " " + LEVELS[lvl + 1].vi + "</div>" : st >= 1 && last ? "<div class='hf-lvup'>👑 Đã thông bài ở level cao nhất!</div>" : st < 1 ? "<p class='hf-tip'>Được ≥1 sao để mở level kế nhé</p>" : "") +
+      "<p class='hf-song'>" + song.ic + " " + song.vi + " · Lv" + (lvl + 1) + "</p><p class='hf-res'>Điểm <b>" + sc + "</b>" + (rec ? " · <em>Kỷ lục mới!</em>" : "") + "</p><p class='hf-res'>Combo dài nhất <b>" + mc + "</b> · Chính xác <b>" + Math.round(acc * 100) + "%</b></p>" +
+      "<div class='hf-row'>" + (st >= 1 && pr.me.u > lvl ? "<button type='button' class='hf-go' data-n='1'>⬆️ Level " + (lvl + 2) + " ▶</button><button type='button' class='hf-l' data-r='1'>🔄 Lv" + (lvl + 1) + "</button>" : "<button type='button' class='hf-go' data-r='1'>🔄 Chơi lại</button>") + "<button type='button' class='hf-l' data-x='1'>🎵 Bài khác</button></div>");
+    var gn = c.querySelector("[data-n]"), gr = c.querySelector("[data-r]"); if (gn) gn.onclick = function () { lvl++; try { localStorage.setItem("gardenPianoFallLv", lvl); } catch (e) {} start(); }; if (gr) gr.onclick = start;
+    if (up) { banner("⬆️ LÊN LEVEL!"); [72, 76, 79, 84].forEach(function (m, i) { setTimeout(function () { if (root.HouseAudio) HouseAudio.note(m, .9, .4); }, 500 + i * 110); }); } c.querySelector("[data-x]").onclick = function () { clean(); if (api.back) api.back(); };
+    if (st >= 3 || up) for (var i = 0; i < 8; i++) setTimeout(function () { burst((Math.random() * 8) | 0, 10, COL[(Math.random() * 8) | 0]); }, i * 140);
   }
   root.HouseFall = { open: open, press: press, stop: stop };
 })(window);
