@@ -7,3 +7,6 @@
 /* bạn đã mua bơi trong ao */
 .fish.own img{display:block;width:100%;height:auto;pointer-events:none;filter:drop-shadow(0 3px 3px rgba(20,60,90,.35))}.fish.own.spawn{animation:swim var(--dur) linear infinite,fishPop .8s cubic-bezier(.3,1.6,.5,1)}
 @keyframes fishPop{from{opacity:0;scale:.2}60%{scale:1.3}}
+.fish.own img.flip{transform:scaleX(-1)}
+/* nút loa Ao cá (ao/pond-sound.js): cùng cỡ nút ← trên thanh trên */
+.hud2 .pond-snd{width:48px;height:48px;margin-left:8px;background:rgba(20,16,50,.62);border-color:rgba(255,255,255,.45);box-shadow:0 4px 12px rgba(20,16,50,.3);pointer-events:auto}
