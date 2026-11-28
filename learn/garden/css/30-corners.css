@@ -1,0 +1,2 @@
+/* Bố cục nút góc của vườn Toán: hàng trên chỉ còn ← (trái) và loa/túi/lịch (phải); nút đổi môn/lớp (LearnGradeBar, linh vật môn + lớp) ở cột nút góc trái, xếp NGAY TRÊN nút dụng cụ; thu phóng gom thành 1 nút góc phải (garden-tools.js + world-fab). */
+.gbar.gbar-l{left:max(12px,env(safe-area-inset-left));right:auto;top:auto;bottom:calc(max(110px,calc(env(safe-area-inset-bottom) + 90px)) + 66px);align-items:flex-start}

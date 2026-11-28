@@ -44,7 +44,10 @@ function initTools(){
   /* gom 2 nút dụng cụ về MỘT nút tròn góc trái (không che vườn): nạp world-fab rồi gắn */
   (function (cb) { if (window.WorldFab) return cb(); var l = document.createElement("link"); l.rel = "stylesheet"; l.href = "../../shared/worldkit/world-fab.css"; document.head.appendChild(l);
     var s = document.createElement("script"); s.src = "../../shared/worldkit/world-fab.js"; s.onload = cb; document.head.appendChild(s); })(function () {
-    WorldFab.mount({ list: bar, side: "left", label: "Dụng cụ thu hoạch", bottom: "max(110px,calc(env(safe-area-inset-bottom) + 90px))" }); });
+    WorldFab.mount({ list: bar, side: "left", label: "Dụng cụ thu hoạch", bottom: "max(110px,calc(env(safe-area-inset-bottom) + 90px))" });
+    var z = document.querySelector(".zoom");   /* thu phóng ＋ − nhà: gom thành MỘT nút kính lúp ở góc dưới phải (không che quà/đồ trong vườn) */
+    if (z) WorldFab.mount({ list: z, side: "right", label: "Thu phóng", bottom: "max(28px,calc(14px + env(safe-area-inset-bottom)))",
+      icon: "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' aria-hidden='true'><circle cx='10.5' cy='10.5' r='6.5'/><path d='M15.5 15.5L21 21M10.5 7.8v5.4M7.8 10.5h5.4'/></svg>" }); });
   /* Liềm: chạm 1 lần = cắt (chờ ~0,28s xem có chạm lần 2) · chạm 2 lần nhanh hoặc nhấn giữ = mở thẻ cây */
   var lt = null, held = false, pend = null;
   function plotOf(e){ var h = e.target.closest && e.target.closest(".hs"); return h ? PLOTS.filter(function(q){ return q.el === h; })[0] : null; }

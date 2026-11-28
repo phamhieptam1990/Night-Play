@@ -8,22 +8,9 @@ location.replace((sj==="tviet"?"../vuon-thu/index.html?grade=":"../khu-cho/index
 /* chặn phóng to NGUYÊN TRANG bằng hai ngón (làm nút ＋ － trôi mất khỏi màn hình và kẹt không thu nhỏ được); vườn tự xử lý kẹp hai ngón bằng setZoom */
 html,body,.fsw{touch-action:pan-x pan-y}
 /* chuyển qua lại giữa các vườn (lớp × môn) */
-.gsw{position:fixed;left:50%;top:calc(max(10px,env(safe-area-inset-top)) + 52px);transform:translateX(-50%);z-index:31;display:flex;align-items:center;gap:4px;padding:4px;border-radius:99px;background:rgba(22,17,48,.74);border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 6px 16px rgba(0,0,0,.3)}
-.gsw a{display:inline-flex;align-items:center;justify-content:center;min-width:44px;height:44px;border-radius:22px;text-decoration:none;color:#fff;font:800 14px/1 system-ui,sans-serif;padding:0 6px;opacity:.7}
-.gsw a img{width:36px;height:36px;object-fit:contain}
-.gsw a[aria-current=true]{opacity:1;background:linear-gradient(135deg,var(--a,#34D399),var(--b,#0EA5E9));box-shadow:0 0 0 2px rgba(255,255,255,.55)}
-.gsw a[aria-current=true] span{margin:0 8px 0 2px}.gsw span{display:none}
-.gsw .gsn{display:flex;gap:2px;padding-right:6px;margin-right:2px;border-right:1px solid rgba(255,255,255,.25)}.gsw .gnb{position:relative;min-width:34px;height:44px;border-radius:18px;font-size:17px;font-weight:900;color:#fff;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;opacity:.8}.gsw .gnb[aria-current=true]{opacity:1;background:#fff;color:#1b1340}.gsw .gnb i{position:absolute;right:1px;top:1px;font-style:normal;font-size:10px;color:#4ade80}.gsw .gnb.lk{opacity:.35;font-size:14px}
-@media (max-width:400px){.gsw .gnb{min-width:28px;font-size:15px}.gsw .gsn{padding-right:3px;margin-right:1px}}
 /* màn rộng (web): thanh nằm NGANG HÀNG với HUD (giữa trên cùng, chỗ đang trống), không đè lên cảnh vườn */
-@media (min-width:700px) and (min-height:431px){.gsw{top:max(10px,env(safe-area-inset-top));padding:2px;background:rgba(22,17,48,.6)}.gsw a{height:40px}.gsw .gnb{height:40px}.gsw a img{width:32px;height:32px}}
-@media (max-width:400px){.gsw{max-width:calc(100vw - 12px);gap:0;padding:3px}.gsw a{min-width:38px;padding:0 2px}.gsw a img{width:32px;height:32px}}
-@media (max-height:430px){.gsw{top:6px;left:auto;right:64px;transform:none}}
 
 /* ===== HUD GỌN ĐỂ KHÔNG CHE KHU VƯỜN ===== */
-.gsw{display:none}.gsw.open{display:flex;top:calc(max(10px,env(safe-area-inset-top)) + 54px)}
-.gsw-t{position:fixed;z-index:31;left:50%;top:max(10px,env(safe-area-inset-top));transform:translateX(-50%);display:flex;align-items:center;gap:4px;height:44px;padding:0 10px 0 4px;border-radius:20px;background:rgba(22,17,48,.5);border:1px solid rgba(255,255,255,.3);color:#fff;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.gsw-t img{width:32px;height:32px;object-fit:contain}.gsw-t b{font:900 14px/1 system-ui,sans-serif;background:#fff;color:#1b1340;border-radius:10px;padding:3px 7px}.gsw-t.on{background:rgba(22,17,48,.85)}
 .zoom{opacity:.62;transition:opacity .2s;gap:6px}.zoom:hover,.zoom:focus-within,.zoom:active{opacity:1}.zoom .hb{width:44px!important;height:44px!important;font-size:19px!important}
 .goalchip{opacity:.85;min-height:44px!important;font-size:13px!important;padding:0 10px!important}
 .hud .hb,.hud .st1{opacity:.88}.hud .hb{width:44px;height:44px;font-size:19px}
@@ -35,6 +22,7 @@ html,body,.fsw{touch-action:pan-x pan-y}
 <script src="../content/lessons/index.js"></script>
 <script src="garden-layout.js"></script>
 <script>GardenLayout.writeStyles()</script>
+<link rel="stylesheet" href="../grade-bar.css">
 </head><body class="fs">
 <div class="fsw" id="fsw"><div class="stage" id="st"><img src="../../shared/art/garden/scene/scene-01-xay-0-na.svg" alt="Khu vườn Học Vui" id="sceneImg"><div id="tip" class="tip" aria-hidden="true"></div></div></div>
 <div class="hud"><div class="hl"><a class="hb" href="../index.html" aria-label="Quay lại bài học">←</a><span class="st1">🌱 <b id="nSeed">3</b></span><span class="st1">⭐ <b id="nStar">12</b></span><span class="st1" id="chCrop">🧺 <b id="nCrop">47</b></span><span class="st1" id="chStreak" title="Số ngày liền nhau bé ghé vườn">🔥 <b id="nStreak">0</b></span></div>
@@ -54,29 +42,18 @@ html,body,.fsw{touch-action:pan-x pan-y}
 <div class="acts"><button class="btn g" type="button" id="mncl">Đóng</button></div></div></div></div>
 <div class="ov" id="ov" role="dialog" aria-modal="true" aria-labelledby="ptitle"><div class="card" id="card"></div></div><div class="toast" id="toast" role="status"></div>
 <script>GardenLayout.writeScripts()</script>
+<script src="../grade-bar.js"></script>
 <script>
+/* Chọn môn + lớp: dùng chung bảng của Vườn Thú / Khu Chợ (learn/grade-bar.js): MỘT nút linh vật góc trái, bấm xổ 3 linh vật môn + các lớp đã mở. */
 (function(){
-var S=window.LearnSlot; if(!S) return;
-var p=S.parts(), g=p?p.grade:(+(function(){try{return S.raw.get("learn:grade")}catch(e){return 1}})()||1), cur=p?p.subj:"";
+var S=window.LearnSlot, B=window.LearnGradeBar; if(!S||!B) return;
+var p=S.parts(), lg=+(function(){try{return S.raw.get("learn:grade")}catch(e){return 1}})()||1, g=p?p.grade:lg, cur=p&&p.subj?p.subj:"toan", P=window.LearnPath, top=Math.max(g,lg,1), gi;
 if(!(g>=1&&g<=5)) g=1;
-var M={toan:["math","Mochi","Toán","#34D399","#0EA5E9"],tviet:["vietnamese","Mầm","Tiếng Việt","#FFB020","#FB5A7A"],tanh:["english","Bibi","Tiếng Anh","#60A5FA","#A78BFA"]};
-function u(gr,sj){return sj==="tviet"?"../vuon-thu/index.html?grade="+gr:sj==="tanh"?"../khu-cho/index.html?grade="+gr:"index.html?grade="+gr+"&subj="+sj}
-var bar=document.createElement("nav"); bar.className="gsw"; bar.id="gsw"; bar.setAttribute("aria-label","Chuyển vườn");
-var cur0=cur,h="";
-var P=window.LearnPath, lg=+(function(){try{return S.raw.get("learn:grade")}catch(e){return 1}})()||1;
-function doneG(gr,sj){try{var ts=P.topics(sj,gr);return ts.length>0&&ts.every(function(t){return P.completed(gr,sj,t.id)})}catch(e){return false}}
-h+='<span class="gsn" role="group" aria-label="Chọn lớp">';
-for(var gi=1;gi<=5;gi++){var tg=cur||"toan",on=gi===g,ok=on||gi===lg||doneG(gi,tg);
-  h+=ok?'<a class="gnb" href="'+u(gi,tg)+'" aria-label="Lớp '+gi+(doneG(gi,tg)?" đã học xong":"")+'"'+(on?' aria-current="true"':'')+'>'+gi+(doneG(gi,tg)&&!on?'<i>✓</i>':'')+'</a>':'';}   /* lớp chưa học xong và không phải lớp đang học: ẩn (chỉ hiện lớp đã active) */
-h+='</span>';
-Object.keys(M).forEach(function(k){var m=M[k];h+='<a href="'+u(g,k)+'" title="'+m[2]+'" aria-label="Vườn '+m[2]+'"'+(k===cur?' aria-current="true" style="--a:'+m[3]+';--b:'+m[4]+'"':"")+'><img src="../../shared/art/learn/'+m[0]+'/'+m[0]+'_head.svg" alt=""><span>'+m[2]+'</span></a>'});
-bar.innerHTML=h; document.body.appendChild(bar);
-/* THU GỌN: mặc định chỉ một nút nhỏ (linh vật môn đang ở); bấm mới xổ lớp + môn, tự thu lại sau 6 giây / khi chạm vào vườn */
-var curM=M[cur||"toan"], tg=document.createElement("button"); tg.type="button"; tg.className="gsw-t"; tg.id="gswT"; tg.setAttribute("aria-label","Đổi môn / lớp"); tg.setAttribute("aria-expanded","false");
-tg.innerHTML='<img src="../../shared/art/learn/'+curM[0]+'/'+curM[0]+'_head.svg" alt=""><b>'+g+'</b>'; document.body.appendChild(tg);
-var tmr=0; function setOpen(o){bar.classList.toggle("open",o);tg.setAttribute("aria-expanded",o);tg.classList.toggle("on",o);clearTimeout(tmr);if(o)tmr=setTimeout(function(){setOpen(false)},6000)}
-tg.onclick=function(e){e.stopPropagation();setOpen(!bar.classList.contains("open"))};
-document.addEventListener("pointerdown",function(e){if(bar.classList.contains("open")&&!bar.contains(e.target)&&e.target!==tg&&!tg.contains(e.target))setOpen(false)},true);
+function doneG(gr){try{var ts=P.topics(cur,gr);return ts.length>0&&ts.every(function(t){return P.completed(gr,cur,t.id)})}catch(e){return false}}
+for(gi=1;gi<=5;gi++) if(doneG(gi)) top=Math.max(top,gi);
+var head=cur==="tviet"?"vietnamese":cur==="tanh"?"english":"math";
+B.mount({ side:"left", persist:false, subject:cur, max:Math.min(5,top), get:function(){return g}, icon:function(){return "../../shared/art/learn/"+head+"/"+head+"_head.svg"},
+  onChange:function(n){ location.href="index.html?grade="+n+"&subj="+cur; } });
 })();
 </script>
 <script src="../icons.js"></script>
