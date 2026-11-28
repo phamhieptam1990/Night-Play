@@ -11,7 +11,7 @@
   function say(t) { info.textContent = t; }
   function toast(t) { var x = $("div", "hp-toast", t); el.appendChild(x); setTimeout(function () { x.remove(); }, 2200); }
   /* ---- bàn phím: 8 phím trắng (điện thoại hẹp) hoặc 15 (2 quãng tám) ---- */
-  function lanes() { return mq.matches && root.HouseLanes; }
+  function lanes() { return (mode === "fall" || mq.matches) && root.HouseLanes; }
   /* Gấu Đô ngồi sau đàn: màn ngang nhô lên trên bàn phím; màn dọc nằm giữa phần chữ và các phím màu */
   function mascot() {
     if (!mas) { mas = $("div", "hp-mascot idle"); mas.innerHTML = root.HOUSE_PIANIST || ""; mas.setAttribute("aria-hidden", "true"); }
@@ -42,6 +42,7 @@
     dance(m); k.classList.add("press"); setTimeout(function () { k.classList.remove("press"); }, 170);
   }
   function hit(m) {
+    if (mode === "fall") { press(m, true); return HouseFall.press(m); }
     press(m); if (rec) rec.push([Date.now() - rec.t0, m]);
     if (mode !== "learn" || !song) return;
     if (m === song.n[step][0]) {
@@ -63,7 +64,9 @@
     say("Đang chơi \"" + song.vi + "\"… em nghe nhé!"); playList(list, function () { say("Hết bài rồi! Em thử tập bài này nhé."); mode = "free"; renderModes(); });
   }
   function setMode(m) {
-    clearTimers(); root.HouseAudio.stop(); if (rec && m !== "rec") rec = null; mode = m; step = 0;
+    var wasFall = mode === "fall"; if (root.HouseFall) HouseFall.stop(); if (root.HouseBacking) HouseBacking.stop(60);
+    clearTimers(); root.HouseAudio.stop(); if (rec && m !== "rec") rec = null; mode = m; step = 0; el.classList.toggle("fall", m === "fall"); el.classList.remove("run"); if (wasFall !== (m === "fall")) build();
+    if (m === "fall") { if (!song) song = root.HOUSE_SONGS[0]; renderSongs(); renderModes(); HouseFall.open(kb, song, { back: function () { setMode("free"); }, run: function (on) { if (el) el.classList.toggle("run", on); } }); return; }
     if (m === "free") say("Bấm phím để chơi nhạc, tự sáng tác nhé!");
     if (m === "learn") { if (!song) song = root.HOUSE_SONGS[0]; renderSongs(); show(); }
     if (m === "listen") { if (!song) song = root.HOUSE_SONGS[0]; renderSongs(); listen(); }
@@ -73,7 +76,7 @@
   function stopRec() { if (!rec) return; took = rec.slice(); rec = null; mode = "free"; say(took.length ? "Đã thu " + took.length + " nốt. Bấm ▶ để nghe lại bản của em!" : "Chưa có nốt nào, thử thu lại nhé"); renderModes(); }
   function replay() { if (!took || !took.length) return say("Chưa có bản thu. Bấm ⏺ trước nhé"); clearTimers(); say("▶ Đang phát lại bản của em…"); playList(took.map(function (n) { return [n[0], n[1]]; }), function () { say("Hết bản thu rồi!"); }); }
   function renderModes() {
-    var M = [["free", "🎹", "Chơi"], ["learn", "🎯", "Tập bài"], ["listen", "👂", "Nghe bài"], [rec ? "stop" : "rec", rec ? "⏹" : "⏺", rec ? "Dừng" : "Thu âm"], ["play", "▶", "Phát lại"]];
+    var M = [["free", "🎹", "Chơi"], ["learn", "🎯", "Tập bài"], ["fall", "🎮", "Phím rơi"], ["listen", "👂", "Nghe bài"], [rec ? "stop" : "rec", rec ? "⏹" : "⏺", rec ? "Dừng" : "Thu âm"], ["play", "▶", "Phát lại"]];
     modes.innerHTML = ""; M.forEach(function (x) {
       var b = $("button", "hp-m" + (mode === x[0] || (x[0] === "stop" && rec) ? " on" : ""), "<i>" + x[1] + "</i><span>" + x[2] + "</span>"); b.type = "button"; if (x[0] === "play" && !took) b.classList.add("off");
       b.onclick = function () { if (x[0] === "stop") stopRec(); else if (x[0] === "play") replay(); else setMode(x[0]); }; modes.appendChild(b);
@@ -82,7 +85,7 @@
   function renderSongs() {
     var d = done(); songsEl.innerHTML = ""; root.HOUSE_SONGS.forEach(function (s) {
       var b = $("button", "hp-s" + (song === s ? " on" : ""), "<i>" + s.ic + "</i><span>" + s.vi + "</span>" + (d[s.id] ? "<em>✓</em>" : "")); b.type = "button";
-      b.onclick = function () { song = s; if (mode === "free" || mode === "rec") mode = "learn"; setMode(mode === "listen" ? "listen" : "learn"); }; songsEl.appendChild(b);
+      b.onclick = function () { song = s; setMode(mode === "listen" || mode === "fall" ? mode : "learn"); }; songsEl.appendChild(b);
     });
   }
   var modes, gating = false;
@@ -100,19 +103,19 @@
     var last = {};
     function keyAt(x, y) { var t = document.elementFromPoint(x, y); return t && t.closest ? t.closest(".hk") : null; }
     function slide(e) { var k = keyAt(e.clientX, e.clientY); if (!k || last[e.pointerId] === k) return; last[e.pointerId] = k; hit(+k.dataset.m); }
-    kb.addEventListener("pointerdown", function (e) { e.preventDefault(); try { kb.releasePointerCapture(e.pointerId); e.target.releasePointerCapture(e.pointerId); } catch (x) {} last[e.pointerId] = null; slide(e); });
-    kb.addEventListener("pointermove", function (e) { if (mode === "learn") return; if (e.pressure > 0 || e.buttons || e.pointerType === "touch") { e.preventDefault(); slide(e); } });
+    kb.addEventListener("pointerdown", function (e) { var kk = e.target.closest(".hk"); if (!kk) return; e.preventDefault(); try { kb.releasePointerCapture(e.pointerId); e.target.releasePointerCapture(e.pointerId); } catch (x) {} last[e.pointerId] = null; slide(e); });
+    kb.addEventListener("pointermove", function (e) { if (mode === "learn" || mode === "fall") return; if (e.pressure > 0 || e.buttons || e.pointerType === "touch") { e.preventDefault(); slide(e); } });
     ["pointerup", "pointercancel", "pointerleave"].forEach(function (n) { kb.addEventListener(n, function (e) { delete last[e.pointerId]; }); });
     kb.addEventListener("touchmove", function (e) { e.preventDefault(); }, { passive: false });
-    kb.addEventListener("touchstart", function (e) { e.preventDefault(); }, { passive: false });
+    kb.addEventListener("touchstart", function (e) { if (e.target.closest(".hk")) e.preventDefault(); }, { passive: false });
     addEventListener("resize", onResize); addEventListener("orientationchange", onResize); if (mq.addEventListener) mq.addEventListener("change", onResize); addEventListener("keydown", onKey, true);
     build(); renderSongs(); setMode("free");
   }
   /* xoay máy: iOS báo resize/orientationchange khi kích thước chưa đổi xong → dựng lại ngay + 2 lần nữa sau khi ổn định */
   var rzT = [];
-  function relayout() { if (!el) return; var s = song, m = mode; build(); if (m === "learn" && s) show(); }
+  function relayout() { if (!el || mode === "fall") return; var s = song, m = mode; build(); if (m === "learn" && s) show(); }
   function onResize() { if (!el) return; rzT.forEach(clearTimeout); relayout(); rzT = [setTimeout(relayout, 120), setTimeout(relayout, 450)]; }
   function onKey(e) { if (el && e.key === "Escape") { e.stopPropagation(); close(); } }
-  function close() { clearTimers(); root.HouseAudio.stop(); rec = null; mas = null; if (root.HouseLanes) HouseLanes.reset(); removeEventListener("resize", onResize); removeEventListener("orientationchange", onResize); if (mq.removeEventListener) mq.removeEventListener("change", onResize); rzT.forEach(clearTimeout); removeEventListener("keydown", onKey, true); if (el) el.remove(); el = null; song = null; mode = "free"; }
+  function close() { if (root.HouseFall) HouseFall.stop(); if (root.HouseBacking) HouseBacking.stop(60); clearTimers(); root.HouseAudio.stop(); rec = null; mas = null; if (root.HouseLanes) HouseLanes.reset(); removeEventListener("resize", onResize); removeEventListener("orientationchange", onResize); if (mq.removeEventListener) mq.removeEventListener("change", onResize); rzT.forEach(clearTimeout); removeEventListener("keydown", onKey, true); if (el) el.remove(); el = null; song = null; mode = "free"; }
   root.HousePiano = { open: open, close: close };
 })(window);

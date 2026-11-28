@@ -18,5 +18,5 @@
     if (live.length > 60) live = live.slice(-30);
   }
   function stop() { live.forEach(function (o) { try { o.stop(); } catch (e) {} }); live = []; }
-  root.HouseAudio = { note: note, stop: stop, ctx: ctx };
+  root.HouseAudio = { note: note, stop: stop, ctx: ctx, out: function () { ctx(); return master; } };
 })(window);
