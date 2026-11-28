@@ -1,4 +1,17 @@
-/* Sửa thời khoá biểu (timetable.js) */
-.ttrow{display:flex;gap:8px;align-items:stretch}.ttrow a{flex:1}.ttdn{flex:none;width:52px;border-radius:14px;border:2px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);font-size:22px;cursor:pointer}.ttdn.on{background:rgba(52,211,153,.3);border-color:#34D399}
-.ttg{display:grid;grid-template-columns:34px repeat(5,1fr);gap:6px;margin:10px 0;align-items:center;text-align:center}.ttg b{font-size:14px;color:#fff}
-.ttc{min-height:52px;border-radius:12px;border:2px solid rgba(255,255,255,.35);background:rgba(255,255,255,.14);font-size:26px;cursor:pointer}.ttc:active{transform:scale(.94)}
+/* Thời khoá biểu trong nhà (timetable.js): bảng trên tường tô màu theo môn, thẻ "Hôm nay học gì?" và màn đổi lịch (chạm ô → chọn môn). Biểu tượng môn: tt/subj-*.svg (scripts/art/gen-tt-icons.js). */
+.tt .s0{--a:#FFE9D6;--b:#FFB77A}.tt .s1{--a:#DDF8EA;--b:#7FD9AE}.tt .s2{--a:#E1F0FF;--b:#8CC4FF}
+.tt div.s0,.tt div.s1,.tt div.s2{background:var(--a);border-color:var(--b)}.tt div.s0.on,.tt div.s1.on,.tt div.s2.on{background:var(--b);box-shadow:0 0 0 2px #fff inset,0 0 0 2px #FF9A3C}
+.tt .em{position:relative;display:grid;place-items:center;width:100%;height:100%}.tt .tic{width:84%;height:auto;max-height:92%;object-fit:contain;display:block}.tt .ok{position:absolute;right:0;bottom:0;width:46%;aspect-ratio:1;display:grid;place-items:center;border-radius:50%;background:#34D399;color:#fff;font-size:70%;border:1px solid #fff}
+.tic{width:34px;height:34px;display:block;flex:none}.tic.big{width:46px;height:46px}
+.ttrow{display:flex;gap:8px;align-items:stretch}.ttrow a.ttl{flex:1;display:flex;align-items:center;gap:12px;padding:8px 14px;min-height:64px;border-radius:18px;background:linear-gradient(135deg,var(--c1),var(--c2));border:2px solid #fff;box-shadow:0 4px 0 rgba(0,0,0,.2);color:#fff;text-decoration:none;font:900 19px system-ui;text-shadow:0 1px 2px rgba(0,0,0,.35)}
+.ttl span{flex:1;display:grid;line-height:1.15}.ttl small{font-size:12px;font-weight:800;opacity:.9}.ttl em{font-style:normal;font-size:14px;padding:6px 12px;border-radius:99px;background:rgba(255,255,255,.28)}.ttl:active{transform:translateY(2px)}
+.ttdn{flex:none;width:60px;border-radius:18px;border:2px solid rgba(255,255,255,.4);background:rgba(255,255,255,.12);color:#fff;font-size:24px;line-height:1;cursor:pointer;display:grid;place-items:center;align-content:center;gap:2px}.ttdn small{font-size:11px;font-weight:800}.ttdn.on{background:rgba(52,211,153,.35);border-color:#7CFFB2}
+.ttg{display:grid;grid-template-columns:30px repeat(5,1fr);gap:6px;margin:12px 0 8px;align-items:center;text-align:center}.ttg b{font-size:14px;color:#fff;opacity:.9}.ttg b.on{color:#FFE14D;opacity:1}
+.ttc{display:grid;place-items:center;min-height:56px;padding:4px;border-radius:14px;border:2px solid rgba(255,255,255,.35);background:var(--a);cursor:pointer;-webkit-tap-highlight-color:transparent}.ttc .tic{width:100%;max-width:46px;height:auto}
+.ttc.sel{border-color:#fff;box-shadow:0 0 0 3px #FFE14D,0 0 14px rgba(255,225,77,.7);transform:scale(1.06)}.ttc.pop{animation:ttPop .3s}@keyframes ttPop{40%{transform:scale(1.22) rotate(-4deg)}}
+.ttpick{margin-top:6px;padding:10px;border-radius:18px;background:rgba(255,255,255,.12);border:2px dashed rgba(255,255,255,.4)}.ttwho{margin:0 0 8px;font-size:14px;text-align:center}.ttwho b{color:#FFE14D}
+.ttsubs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.tts{display:grid;justify-items:center;gap:4px;padding:10px 4px;border-radius:16px;border:3px solid rgba(255,255,255,.55);background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff;font:900 14px system-ui;text-shadow:0 1px 2px rgba(0,0,0,.35);cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.2)}
+.tts.on{border-color:#fff;box-shadow:0 0 0 3px #FFE14D,0 4px 0 rgba(0,0,0,.2)}.tts:active{transform:translateY(3px);box-shadow:none}
+@media (max-width:420px){.ttrow a.ttl{font-size:17px;padding:6px 10px}.tic.big{width:40px;height:40px}}
+@media (prefers-reduced-motion:reduce){.ttc.pop{animation:none}}
+.ttc.s0{--a:#FFE9D6}.ttc.s1{--a:#DDF8EA}.ttc.s2{--a:#E1F0FF}
