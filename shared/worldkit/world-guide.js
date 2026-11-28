@@ -62,7 +62,7 @@
     try { var st = S.cfg.steps[S.i], txt = msg(st).replace(/[^\p{L}\p{N}\s.,!?'’-]/gu, " ").replace(/\s+/g, " ").trim(), lg = lang() === "vi" ? "vi" : "en";
       if (root.Voice && Voice.say) { Voice.say(txt, S.cfg.voice || "narr", lg, {}); return; }
       if (!root.speechSynthesis) return; var u = new SpeechSynthesisUtterance(txt);
-      speechSynthesis.cancel(); u.npForce = true; u.lang = lg === "vi" ? "vi-VN" : "en-US"; u.rate = .85; u.pitch = 1.1; speechSynthesis.speak(u); } catch (e) {}
+      speechSynthesis.cancel(); u.npForce = true; u.lang = lg === "vi" ? "vi-VN" : "en-US"; u.rate = 1; u.pitch = 1; speechSynthesis.speak(u); } catch (e) {}
   }
   function rr(x, y, w, h, r) { r = Math.min(r, w / 2, h / 2);
     return "M" + (x + r) + " " + y + "H" + (x + w - r) + "a" + r + " " + r + " 0 0 1 " + r + " " + r +

@@ -8,9 +8,9 @@
   var BASE = (function () { try { var s = document.currentScript && document.currentScript.src; if (s) return s.replace(/learn\/voice\.js.*$/, "shared/audio/voice/"); } catch (e) {} return "/shared/audio/voice/"; })();
   /* hồ sơ: pitch/rate cho giọng máy. Nhân vật theo MÔN: toan (Mochi), tviet (Mầm), tanh (Bibi) + bạn trái cây theo môn + Sen Sen */
   var PROFILE = {
-    toan:  { pitch: 1.12, rate: .96 }, tviet: { pitch: 1.08, rate: .92 }, tanh: { pitch: 1.12, rate: .95 },
-    sen:   { pitch: 1.1, rate: .95 }, lesson: { pitch: 1, rate: .92 }, narr:  { pitch: 1.02, rate: .92 }, def: { pitch: 1.05, rate: .95 }
-  };   /* cao độ gần tự nhiên (trước 1.4–1.6 làm giọng máy méo, nghe rè / ẻo lả) */
+    toan:  { pitch: 1, rate: 1 }, tviet: { pitch: 1, rate: .96 }, tanh: { pitch: 1, rate: 1 },
+    sen:   { pitch: 1, rate: 1 }, lesson: { pitch: 1, rate: 1 }, narr:  { pitch: 1, rate: 1 }, def: { pitch: 1, rate: 1 }
+  };   /* KHÔNG đổi cao độ, tốc độ bình thường: giọng máy đổi pitch (resample) + kéo chậm (<1) nghe RÈ và CHẬM (Khu chợ báo "vừa chậm vừa rè"; trước đó 1.4–1.6 còn méo hơn). Giọng trẻ con do tệp thu sẵn / chọn giọng, không do pitch. */
   var LANG = { vi: "vi-VN", en: "en-US" };
   /* GIỌNG MÁY đọc sai từ "bé" (ra "bớ") trên mọi máy: khi đọc tiếng Việt bằng giọng máy thì thay "bé" bằng "em" (chữ hiển thị và tệp thu sẵn giữ nguyên). */
   function spoken(text, lang) {   /* giữ "bé" nghĩa là NHỎ: "số bé nhất", "bé hơn 5", "bé xíu" */
