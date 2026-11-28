@@ -40,7 +40,9 @@ function applyUnlock(stage, stars){
     var t = treeOfPlot(p); if(t){ if(t.el) t.el.classList.toggle("lk", lock); if(t.sh) t.sh.classList.toggle("lk", lock); }
   });
   o.animals.forEach(function(s, i){ s.locked = i >= na; if(s.el) s.el.classList.toggle("lk", s.locked); });
-  document.querySelectorAll(".bld").forEach(function(a, i){ a.classList.toggle("lk", i === 0 || a.dataset.n === "Nhà của Bi" || a.dataset.n === "Quán kem" ? stage < 5 : stage < UNL.full); });   /* nhà bấm được khi xong nhà; kho, ao khi mở toàn cảnh */
+  /* nhà bấm được khi xong nhà (bước 5); kho, ao khi mở toàn cảnh. Khoá theo TÊN công trình, không theo thứ tự trong danh sách (Chuồng thú được thêm trước nên từng làm Trong nhà bị ẩn tới bước 7). */
+  var EARLY = { "Trong nhà": 1, "Chuồng thú": 1, "Nhà của Bi": 1, "Quán kem": 1 };
+  document.querySelectorAll(".bld").forEach(function(a){ a.classList.toggle("lk", stage < (EARLY[a.dataset.n] ? 5 : UNL.full)); });
   return { trees: nt, animals: na, stage: stage };
 }
 /* BẢNG "CHĂM VƯỜN HÔM NAY" cho bé (nút ☰ và 📅 cùng mở): một màn duy nhất, ngắn gọn.
