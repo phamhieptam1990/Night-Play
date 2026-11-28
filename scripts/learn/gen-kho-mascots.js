@@ -6,6 +6,8 @@
    Đây là bản MẪU CHỜ DUYỆT (chỉ skin Mặc định; 4 skin trả phí làm sau khi chủ site duyệt dáng). */
 "use strict";
 const fs = require("fs"), path = require("path");
+/* Trang preview đã gỡ (nhẹ code): không ghi preview*.html. */
+const _ws = require("fs").writeFileSync; require("fs").writeFileSync = function (p) { return /preview[^\/\\]*\.html$/.test(String(p)) ? undefined : _ws.apply(this, arguments); };
 const root = path.join(__dirname, "../../shared/art/garden");
 const f = n => Math.round(n * 10) / 10;
 

@@ -6,6 +6,8 @@
    Vườn chọn thư mục theo lớp ở learn/garden/garden-unlock.js (sceneDir). */
 "use strict";
 const fs = require("fs"), path = require("path");
+/* Trang preview đã gỡ (nhẹ code): không ghi preview*.html. */
+const _ws = require("fs").writeFileSync; require("fs").writeFileSync = function (p) { return /preview[^\/\\]*\.html$/.test(String(p)) ? undefined : _ws.apply(this, arguments); };
 const DIR = path.join(__dirname, "..", "..", "shared", "art", "garden", "scene");
 const NAMES = [];
 for (const [pre, nm] of [["01", "toan-canh"], ["05", "hoang-hon"], ["06", "ban-dem"]]) NAMES.push(`scene-${pre}-${nm}-na.svg`);

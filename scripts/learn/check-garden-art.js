@@ -4,6 +4,8 @@
    hoạt ảnh đặt tên npa-*, có tắt khi prefers-reduced-motion, XML hợp lệ, không màu cứng trong biến mất, cỡ tệp trong ngân sách. */
 "use strict";
 const fs = require("fs"), path = require("path");
+/* Trang preview đã gỡ (nhẹ code): không ghi preview*.html. */
+const _ws = require("fs").writeFileSync; require("fs").writeFileSync = function (p) { return /preview[^\/\\]*\.html$/.test(String(p)) ? undefined : _ws.apply(this, arguments); };
 const dir = path.join(__dirname, "../../shared/art/garden");
 const BAN = /<(image|foreignObject|script|filter|mask|feGaussianBlur|feDropShadow)\b|backdrop-filter|filter\s*:|\bhref=|xlink:href/i;
 const files = []; for (const d of ["", "scene"]) for (const f of fs.readdirSync(path.join(dir, d)).filter(f => f.endsWith(".svg")).sort()) files.push({ rel: (d ? d + "/" : "") + f, scene: d === "scene" });

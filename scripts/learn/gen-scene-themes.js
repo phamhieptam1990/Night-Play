@@ -1,3 +1,5 @@
+/* Trang preview đã gỡ (nhẹ code): không ghi preview*.html. */
+const _ws = require("fs").writeFileSync; require("fs").writeFileSync = function (p) { return /preview[^\/\\]*\.html$/.test(String(p)) ? undefined : _ws.apply(this, arguments); };
 // Ba cảnh theo môn (Vườn Số / Rừng Chữ / Vịnh Từ) (một phần của scripts/learn/gen-scene-art.js; nhận các tên dùng chung qua đối tượng X, chạy đúng vị trí cũ)
 "use strict";
 module.exports = function (X) {

@@ -3,6 +3,8 @@
    Mỗi vật là một hàm vẽ (nhà, rào, giếng, kho, cối xay, cây, ruộng, ao...) có CẤP ĐỘ (level) để sau này bé đạt gì thì nâng cấp đúng vị trí đó:
    nhà lá → nhà tranh → nhà tường → nhà ngói; rào tre → rào gỗ → tường đá...  Không filter/ảnh/script; hoạt ảnh chỉ transform/opacity (npa-*).
    KHÔNG sửa tay tệp sinh ra. */
+/* Trang preview đã gỡ (nhẹ code): không ghi preview*.html. */
+const _ws = require("fs").writeFileSync; require("fs").writeFileSync = function (p) { return /preview[^\/\\]*\.html$/.test(String(p)) ? undefined : _ws.apply(this, arguments); };
 "use strict";
 /* Các phần dựng cảnh nằm ở scripts/learn/gen-scene-*.js (lõi, vật nhỏ + cây, công trình, bố cục); tệp này ghép cảnh và xuất ảnh. */
 const SP = {};

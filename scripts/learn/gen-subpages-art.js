@@ -1,6 +1,8 @@
 /* Sinh 3 TRANG CON của khu vườn Học Vui (bản duyệt): Trong nhà, Kho nông sản, Ao cá. Xem plan-learn-garden.md mục 2g.
    Chạy: node scripts/learn/gen-subpages-art.js → shared/art/garden/preview-house.html, preview-barn.html, preview-pond.html
    Phong cách Pop; hoạt ảnh chỉ transform/opacity, tắt khi prefers-reduced-motion. Số liệu (huy hiệu mở/chưa, tồn kho, đơn hàng) là DỮ LIỆU MẪU để duyệt. */
+/* Trang preview đã gỡ (nhẹ code): không ghi preview*.html. */
+const _ws = require("fs").writeFileSync; require("fs").writeFileSync = function (p) { return /preview[^\/\\]*\.html$/.test(String(p)) ? undefined : _ws.apply(this, arguments); };
 "use strict";
 const fs = require("fs"), path = require("path");
 const out = path.join(__dirname, "../../shared/art/garden");

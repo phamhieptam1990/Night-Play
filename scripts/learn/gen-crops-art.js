@@ -6,6 +6,8 @@
    hoạt ảnh CHỈ transform/opacity đặt tên npa-*, tắt khi prefers-reduced-motion / html.np-playing, không filter/ảnh/script. */
 "use strict";
 const fs = require("fs"), path = require("path");
+/* Trang preview đã gỡ (nhẹ code): không ghi preview*.html. */
+const _ws = require("fs").writeFileSync; require("fs").writeFileSync = function (p) { return /preview[^\/\\]*\.html$/.test(String(p)) ? undefined : _ws.apply(this, arguments); };
 const out = path.join(__dirname, "../../shared/art/garden");
 fs.mkdirSync(out, { recursive: true });
 const f = n => Math.round(n * 10) / 10, cx = 128, G = 226;

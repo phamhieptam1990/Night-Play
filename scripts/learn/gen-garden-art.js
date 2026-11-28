@@ -5,6 +5,8 @@
    KHÔNG sửa tay các tệp sinh ra trong shared/art/garden/. */
 "use strict";
 const fs = require("fs"), path = require("path");
+/* Trang preview đã gỡ (nhẹ code): không ghi preview*.html. */
+const _ws = require("fs").writeFileSync; require("fs").writeFileSync = function (p) { return /preview[^\/\\]*\.html$/.test(String(p)) ? undefined : _ws.apply(this, arguments); };
 const out = path.join(__dirname, "../../shared/art/garden");
 fs.mkdirSync(out, { recursive: true });
 

@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+/* Trang preview đã gỡ (nhẹ code): không ghi preview*.html. */
+const _ws = require("fs").writeFileSync; require("fs").writeFileSync = function (p) { return /preview[^\/\\]*\.html$/.test(String(p)) ? undefined : _ws.apply(this, arguments); };
 /* SINH tranh Nhà Của Bi → shared/art/nuoi-thu/*.svg (+ trang xem thử preview.html).
    Chạy: node scripts/art/gen-nuoi-thu.js   Không sửa tay các tệp sinh ra. */
 "use strict";

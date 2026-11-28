@@ -28,7 +28,7 @@ function buildFooter(){
     "<h4>" + esc(t.iSubj) + '</h4><div class="isj">' + subs + "</div>" +
     "<h4>" + esc(t.iPar) + '</h4><ul class="il">' + "<li>" + L(pre + "/hoc/" + SLUG[subj] + "/#chuongtrinh", t.iPath) + "</li><li>" + L("../privacy.html",
       t.pri) + "</li><li>" + L("../terms.html", t.terms) + "</li><li>" + L("mailto:support@nightplay.vn", t.contact + ": support@nightplay.vn") + "</li><li>" + L(
-      "../play/index.html", t.hub) + "</li>" + (DEV ? "<li>" + L("mascot-review.html", "🐾 Linh vật (duyệt)") + "</li>" : "") + "</ul>" +
+      "../play/index.html", t.hub) + "</li>"  + "</ul>" +
     "<h4>" + esc(t.iSrc) + '</h4><ul class="il src">' + srcs + "</ul>" +
     '<p class="cp">' + esc(t.iData) + "</p>";
   $("ix").onclick = closeInfo;

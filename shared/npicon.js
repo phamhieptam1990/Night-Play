@@ -1,5 +1,5 @@
 /* BỘ ICON 2D (SVG) CHUNG — phong cách "sticker" cùng họ với linh vật: màu tự nhiên của từng vật, đổ bóng gradient, điểm sáng, nét viền tím than, viền trắng ngoài (die-cut) nên nổi trên nền tối.
-   BẬT MẶC ĐỊNH (chủ site chọn gắn vào game). Tắt để quay lại emoji gốc: NPIcon.on = false. Xem thử: npicon-preview.html.
+   BẬT MẶC ĐỊNH (chủ site chọn gắn vào game). Tắt để quay lại emoji gốc: NPIcon.on = false.
    TRUYỀN THEME: màu từng vật được pha một chút màu theme (--ic1), mặc định theo --accent của game. Biến CSS đặt ở bất kỳ phần tử nào (kế thừa xuống):
      --ic1 màu theme chính (nhóm A) · --ic2 màu theme phụ (nhóm B) · --ic-ink nét viền · --ic-stk viền trắng ngoài · --ic-mix tỉ lệ pha theme (mặc định 14%)
    API:  NPIcon.svg(name, {c1,c2,ink,sticker,mix,size,title}) → chuỗi SVG (theme riêng cho MỘT icon)

@@ -5,6 +5,8 @@
    Chạy: node scripts/learn/gen-icons.js        Thêm icon: viết một khối I("tên", ["🍎"], h => {...}) ở dưới, chạy lại. */
 "use strict";
 const fs = require("fs"), path = require("path");
+/* Trang preview đã gỡ (nhẹ code): không ghi preview*.html. */
+const _ws = require("fs").writeFileSync; require("fs").writeFileSync = function (p) { return /preview[^\/\\]*\.html$/.test(String(p)) ? undefined : _ws.apply(this, arguments); };
 const root = path.join(__dirname, "..", "..");
 const OUT = path.join(root, "shared", "art", "learn", "icons");
 fs.mkdirSync(OUT, { recursive: true });

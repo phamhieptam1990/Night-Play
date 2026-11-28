@@ -7,6 +7,8 @@
    Chạy: node scripts/learn/gen-crop-mascots-g.js  (không sửa tay tệp sinh ra) + trang duyệt shared/art/garden/preview-crop-mascots-g.html. */
 "use strict";
 const fs = require("fs"), path = require("path");
+/* Trang preview đã gỡ (nhẹ code): không ghi preview*.html. */
+const _ws = require("fs").writeFileSync; require("fs").writeFileSync = function (p) { return /preview[^\/\\]*\.html$/.test(String(p)) ? undefined : _ws.apply(this, arguments); };
 const out = path.join(__dirname, "../../shared/art/garden"), kho = path.join(out, "kho");
 fs.mkdirSync(kho, { recursive: true });
 const INK = "#2A2350";
