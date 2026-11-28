@@ -1,0 +1,4 @@
+/* Kho: linh vật/nông sản đứng ĐÚNG trên mặt kệ (ảnh không tràn khỏi ô chứa đè lên thanh gỗ): ô là flex đáy, ảnh cao tối đa bằng ô, vuông vức theo chiều cao. */
+.crate .mbox{display:flex;align-items:flex-end;justify-content:center;overflow:visible}
+.crate .mbox img{height:100%;width:auto;max-width:100%;min-height:0;object-fit:contain;object-position:50% 100%;margin-bottom:3px}
+.crate .mbox .mc-em{line-height:1;margin-bottom:3px}
