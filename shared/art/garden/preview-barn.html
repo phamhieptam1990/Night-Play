@@ -46,19 +46,20 @@ var MS={carrot:["Cà Rốt","toan",2,["Cà Rốt đây! Cùng tính nhẩm nào!
 function talk(it){var m=MS[it[0]]||[it[1],"toan",2,["Chào bé!"]],n=0,lv=window.LV||3,imgs=["kho/mascot_"+it[0]+".svg","mascot_"+it[0]+"_l"+lv+".svg"];
 var ex=it[3]?"Trong kho đang có "+it[3]+" bạn "+m[0]+" của bé đó!":"Mình đang ngủ vì chưa ai thu hoạch mình. Học bài hoặc trồng mình nhé!",sd=window.Farm?Farm.streakDays():0,L=[m[3][0]].concat(sd>=2?["Ngày thứ "+sd+" liền rồi, bé giỏi quá!"]:[],[ex],m[3].slice(1));
 function line(){return L[n%L.length]}
-function show(){MC.open({who:m[1],name:m[0]+" · trong kho "+it[3],emoji:it[2],imgs:imgs,text:line(),btns:[["📖 Nghe truyện",function(){story(it,m)},"p"],["💬 Kể tiếp",function(){n++;show()}],["🔊 Nghe",function(){MC.speak(line())}],["📚 Học cùng "+m[0],function(){location.href="../../../learn/index.html?subj="+m[1]+"&grade="+m[2]+"&lang=vi"}]]})}
+function show(){MC.open({who:m[1],name:m[0]+" · trong kho "+it[3],emoji:it[2],imgs:imgs,text:line(),btns:[["📖 Nghe truyện",function(){story(it,m)},"p"],["🧠 Hỏi đáp",function(){quiz(it)},"p"],["💬 Kể tiếp",function(){n++;show()}],["🔊 Nghe",function(){MC.speak(line())}],["📚 Học cùng "+m[0],function(){location.href="../../../learn/index.html?subj="+m[1]+"&grade="+m[2]+"&lang=vi"}]]})}
 show()}
 var SUB={toan:"Toán",tviet:"Tiếng Việt",tanh:"Tiếng Anh"};
 /* LINH VẬT ĐANG KHOÁ: bấm vào thì linh vật nói rõ bé cần làm gì để mở (Farm.seedState(id).need) và dẫn tới bài học để kiếm ⭐ */
 function lockInfo(it){var ss=window.Farm&&Farm.seedState?Farm.seedState(it[0]):{open:true};return ss.open?null:ss}
 function lockTalk(it,ss){var m=MS[it[0]]||[it[1],"toan",2,[""]],st=window.Farm?Farm.stars():0,hasStars=/⭐/.test(ss.need||""),n=0;
 var L=["Mình là "+m[0]+", đang bị khoá 🔒. "+(ss.need||"Em làm thêm bài học nhé")+".",hasStars?"Cách có ⭐: làm bài học, mỗi bài làm đúng em được thêm ⭐. Đủ ⭐ là mình mở ra, em gieo hạt trồng mình được!":/ruộng/.test(ss.need||"")?"Cách mở: làm nhiệm vụ chăm vườn mỗi ngày để có ruộng, rồi gieo hạt trồng mình nhé!":"Em học và thu hoạch thêm, mình sẽ mở ra!"];
-function show(){MC.open({who:m[1],name:m[0]+" · đang khoá 🔒",emoji:"🔒",imgs:mimgs(it),text:L[n%L.length],btns:[["💬 Kể tiếp",function(){n++;show()},"p"],["📖 Nghe truyện",function(){story(it,m)}],["📚 Làm bài để mở mình",function(){location.href="../../../learn/index.html?subj="+m[1]+"&grade="+m[2]+"&lang=vi"}],["🔊 Nghe",function(){MC.speak(L[n%L.length])}]]})}
+function show(){MC.open({who:m[1],name:m[0]+" · đang khoá 🔒",emoji:"🔒",imgs:mimgs(it),text:L[n%L.length],btns:[["💬 Kể tiếp",function(){n++;show()},"p"],["📖 Nghe truyện",function(){story(it,m)}],["🧠 Hỏi đáp",function(){quiz(it)}],["📚 Làm bài để mở mình",function(){location.href="../../../learn/index.html?subj="+m[1]+"&grade="+m[2]+"&lang=vi"}],["🔊 Nghe",function(){MC.speak(L[n%L.length])}]]})}
 show()}
 
 /* TRUYỆN của từng linh vật (kho/stories.js): đọc xong quay lại khung trò chuyện */
-function story(it,m){if(!window.KhoStory)return;var back=function(){var lk=lockInfo(it);if(lk)lockTalk(it,lk);else talk(it)};
-KhoStory.read(it,{MC:MC,who:m[1],emoji:it[2],imgs:mimgs(it),back:back,quiz:window.KhoQuiz?function(){KhoQuiz.ask(it,{MC:MC,MS:MS,IT:IT,imgs:function(id){return mimgs([id])},emoji:function(id){var x=IT.filter(function(y){return y[0]===id})[0];return x?x[2]:"🌱"},back:back})}:null})}
+function backTo(it){return function(){var lk=lockInfo(it);if(lk)lockTalk(it,lk);else talk(it)}}
+function quiz(it){if(!window.KhoQuiz)return;KhoQuiz.ask(it,{MC:MC,MS:MS,IT:IT,imgs:function(id){return mimgs([id])},emoji:function(id){var x=IT.filter(function(y){return y[0]===id})[0];return x?x[2]:"🌱"},back:backTo(it)})}
+function story(it,m){if(!window.KhoStory)return;KhoStory.read(it,{MC:MC,who:m[1],emoji:it[2],imgs:mimgs(it),back:backTo(it),quiz:window.KhoQuiz?function(){quiz(it)}:null})}
 function mimgs(it){return["kho/mascot_"+it[0]+".svg","mascot_"+it[0]+"_l"+(window.LV||3)+".svg"]}
 /* KỆ KHO: mỗi nông sản là MỘT LINH VẬT đứng trên kệ gỗ (con số = đã thu hoạch; 0 thì mờ như đang ngủ) */
 function draw(){var sh=document.getElementById("sh");sh.innerHTML=IT.map(function(it,i){var m=MS[it[0]]||[it[1],"toan"];var lk=lockInfo(it);return "<button class='crate"+(it[3]?"":" empty")+(lk?" locked":"")+"' data-i='"+i+"' aria-label='"+m[0]+(lk?": đang khoá, bấm để biết cách mở":": "+it[3])+"'><span class='cnt'>"+(lk?"🔒":it[3])+"</span><div class='mbox' data-i='"+i+"'></div><div class='plank'></div><b>"+m[0]+"</b><small>"+(SUB[m[1]]||"")+"</small></button>"}).join("");
