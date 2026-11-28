@@ -33,7 +33,7 @@ function renderHint(b, st){
 }
 /* ghi 1 lần/câu: phụ huynh thấy bé hay cần gợi ý ở kỹ năng nào */
 function showHint(){ const b = bank[cur], st = hintSteps(b); if(!st || locked) return; if(!b.hl && b.skill) E.noteHint(subj, b.skill); b.hl = Math.min((b.hl || 0) + 1, st.length);
-  renderHint(b, st); }
+  renderHint(b, st); CoachLink.onHint(b, b.hl); }
 function hintMore(){ const b = bank[cur], st = hintSteps(b); if(!st) return closeHint(); b.hl = Math.min((b.hl || 1) + 1, st.length); renderHint(b, st); }
 $("qt").addEventListener("click", e => { if(e.target.closest && e.target.closest(".lsn")){ GESTURE = true; speak(); } });
   $("spkQ").addEventListener("click", () => { GESTURE = true; speak(); }); $("hintBtn").addEventListener("click", showHint); $("hintNext").addEventListener("click", hintMore);

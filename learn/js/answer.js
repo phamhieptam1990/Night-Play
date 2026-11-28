@@ -10,11 +10,11 @@ function gotRight(el){
     ? "Great! " + left + " more and you win stars!" : "Giỏi quá! Còn " + left + " câu nữa là em nhận sao nhé!"); }
 }
 /* trả về 1 = sai lần đầu (cho thử lại, có gợi ý), 2 = sai lần hai (hiện đáp án rồi sang câu sau) */
-function gotWrong(tag, reveal, text){
+function gotWrong(tag, reveal, text, wrongTxt){
   const t = T[lang], b = bank[cur]; tries++; streak = 0; sfx("no"); err(tag || "other"); $("streak").textContent = "";
   /* lần sai đầu tiên của câu này: ghi kỹ năng + mã lỗi tư duy */
   if(tries === 1){ E.record(subj, b.skill, false, tag || "other", { kind: b.kind || "mc" }); LM.emote("sad", 1600); if(TRIP) storyReact(false);
-    else LM.say(t.hint[tag] || t.hint.other); return 1; }
+    else { LM.say(t.hint[tag] || t.hint.other); CoachLink.onWrong(b, wrongTxt, tag); } return 1; }
   locked = true; b.res = "miss"; if(reveal) reveal(); LM.emote("sad", 2000); LM.say(text ? t.reveal + " " + text + "." : t.hint.other);
   if(b.steps && b.steps.length >= 2){ setTimeout(() => showSolution(b.steps, next), 700); return 2; }   /* có lời giải: giữ đến khi bé bấm Tiếp */
   setTimeout(next, 1700); return 2;
@@ -25,6 +25,6 @@ function choose(btn, o){
   if(o.ok){ Array.from($("ans").children).forEach(x => x.disabled = true); gotRight(btn); return; }
   btn.classList.add("no"); btn.disabled = true;
   gotWrong(o.tag, () => { const right = b.o.find(x => x.ok); Array.from($("ans").children).forEach(x => { x.disabled = true; if(x.textContent === right.v) x.classList.add("ok");
-    }); }, b.o.find(x => x.ok).v);
+    }); }, b.o.find(x => x.ok).v, btn.textContent);
 }
 function next(){ cur++; if(TRIP) Story.rest(TRIP.id, cur); if(cur >= ROUND_N) return finish(); showQ(); }
