@@ -41,6 +41,10 @@ function initTools(){
     var b = document.createElement("button"); b.type = "button"; b.className = "tlb"; b.dataset.t = d[0]; b.setAttribute("aria-label", d[1]); b.title = d[1]; b.innerHTML = TOOL_SVG[d[0]] + "<span>" + d[2] + "</span>";
     b.onclick = function(){ setTool(d[0]); }; bar.appendChild(b); });
   document.body.appendChild(bar);
+  /* gom 2 nút dụng cụ về MỘT nút tròn góc trái (không che vườn): nạp world-fab rồi gắn */
+  (function (cb) { if (window.WorldFab) return cb(); var l = document.createElement("link"); l.rel = "stylesheet"; l.href = "../../shared/worldkit/world-fab.css"; document.head.appendChild(l);
+    var s = document.createElement("script"); s.src = "../../shared/worldkit/world-fab.js"; s.onload = cb; document.head.appendChild(s); })(function () {
+    WorldFab.mount({ list: bar, side: "left", label: "Dụng cụ thu hoạch", bottom: "max(110px,calc(env(safe-area-inset-bottom) + 90px))" }); });
   /* Liềm: chạm 1 lần = cắt (chờ ~0,28s xem có chạm lần 2) · chạm 2 lần nhanh hoặc nhấn giữ = mở thẻ cây */
   var lt = null, held = false, pend = null;
   function plotOf(e){ var h = e.target.closest && e.target.closest(".hs"); return h ? PLOTS.filter(function(q){ return q.el === h; })[0] : null; }

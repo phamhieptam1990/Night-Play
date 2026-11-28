@@ -7,7 +7,9 @@ window.VT = { TOTAL: [7, 4, 4, 4, 4], ART: "art/", NB: "../nha-bi/art/",
     var A = this.AR[m], at = [], i, big = n >= 6;
     if (m === "doc") { var st = big ? 12 : 16.5, c = n >= 7 ? 52 : n === 6 ? 54 : 57; for (i = 0; i < n; i++) at.push([i % 2 ? 75 : 25, +(c + (i - (n - 1) / 2) * st).toFixed(1)]); }
     else { var sx = n > 1 ? 79 / (n - 1) : 0; for (i = 0; i < n; i++) at.push([+(n > 1 ? 10.5 + i * sx : 50).toFixed(1), i % 2 ? 33 : 61]); }
-    return { ar: A.ar, w: A.w, pen: m === "doc" ? (big ? 40 : 45) : (big ? 17 : 19), at: at };
+    var s = m === "doc" && window.WorldKit && WorldKit.safe ? WorldKit.safe(24) : null;   /* chuồng + nhãn nằm giữa hàng nút trên và thanh lớp dưới, không bị nút đè */
+    if (s) at = at.map(function (a) { return [a[0], +s.y(a[1]).toFixed(1)]; });
+    return { ar: A.ar, w: A.w, pen: (m === "doc" ? (big ? 40 : 45) : (big ? 17 : 19)) * (s ? s.k : 1), at: at, my: s ? s.y : function (v) { return v; } };
   },
   /* tư thế thú trong chuồng: walk = đi qua lại, sleep = nằm ngủ, chew = ngồi nhai */
   MODE: [null, "walk", "sleep", "walk", "chew", "walk"],

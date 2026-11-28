@@ -1,6 +1,6 @@
 /* BỘ KHUNG DÙNG CHUNG cho các "game lớn" của Học Vui (Nuôi Thú Tiếng Việt, Quán Nước Ép Tiếng Anh): HUD kính tối như khu vườn, ít chữ nhiều hình.
    Nút ≥44px, lề 16px + safe-area, chỉ transform/opacity. Dùng: WorldKit (world-kit.js). Không sửa tệp này trong game; cần đổi thì báo người điều phối. */
-:root{--wk-edge:max(14px,env(safe-area-inset-left));--wk-top:max(10px,env(safe-area-inset-top));--wk-glass:rgba(20,16,50,.58);--wk-line:rgba(255,255,255,.5);--wk-gold:#FFD24D}
+:root{--wk-edge:max(14px,env(safe-area-inset-left));--wk-top:max(10px,env(safe-area-inset-top));--wk-glass:rgba(20,16,50,.26);--wk-line:rgba(255,255,255,.42);--wk-gold:#FFD24D}
 .wk-hud{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;gap:8px;padding:calc(var(--wk-top) + var(--wk-off,0px)) var(--wk-edge) 8px;pointer-events:none}   /* --wk-off: chiều cao thanh trên của cổng/popmenu nếu game có (game đặt) */
 .wk-hud>*{pointer-events:auto}.wk-sp{flex:1}
 .wk-btn{position:relative;display:grid;place-items:center;flex:none;width:48px;height:48px;border-radius:50%;border:2px solid var(--wk-line);background:var(--wk-glass);color:#fff;text-decoration:none;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.28);-webkit-tap-highlight-color:transparent;padding:0}
@@ -25,3 +25,16 @@
 .wk-toast svg{width:22px;height:22px}
 @media (max-height:430px){.wk-btn{width:44px;height:44px}.wk-lv{width:46px;height:46px;font-size:17px}.wk-card{padding:12px}.wk-big{margin:4px 0 8px}.wk-big .it svg,.wk-big .it img{width:44px;height:44px}}
 @media (prefers-reduced-motion:reduce){.wk-card,.wk-ov,.wk-pill.bump{animation:none}}
+/* KÍNH TRONG SUỐT (chủ site: "button với card cho nhìn xuyên"): nút, viên, thẻ đều mờ kính, thấy cảnh phía sau; hàng nút trên gọn, đồng cỡ (cả nút ? của WorldGuide). */
+.wk-btn,.wk-pill,.wk-lv,.wk-q,.wk-hud .wg-q{-webkit-backdrop-filter:blur(7px) saturate(1.2);backdrop-filter:blur(7px) saturate(1.2);box-shadow:0 3px 10px rgba(0,0,0,.18)}
+.wk-btn{width:44px;height:44px}.wk-hud .wg-q{width:44px;height:44px;border:2px solid var(--wk-line);background:rgba(14,165,165,.34);box-shadow:0 3px 10px rgba(0,0,0,.18)}.wk-hud .wg-q svg{width:24px;height:24px}
+.wk-hud{gap:6px}.wk-pill{min-height:38px;padding:0 9px 0 6px;font-size:15px}.wk-pill svg{width:20px;height:20px}
+.wk-ov{background:rgba(20,16,50,.28);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.wk-card{background:linear-gradient(160deg,rgba(59,42,158,.6),rgba(36,25,95,.6));-webkit-backdrop-filter:blur(10px) saturate(1.2);backdrop-filter:blur(10px) saturate(1.2);box-shadow:0 14px 40px rgba(0,0,0,.32)}
+.wk-acts .wk-b{background:rgba(255,255,255,.1)}.wk-toast{background:rgba(20,16,50,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+/* POPUP NHẬN QUÀ DẠNG SLIDE (từ 3 vật phẩm): vuốt ngang, mỗi trang một vật phẩm to, chấm trang bên dưới; không xếp dọc nên thẻ không tràn. */
+.wk-slides{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin:6px 0 8px;overscroll-behavior-x:contain}.wk-slides::-webkit-scrollbar{display:none}
+.wk-sl{flex:0 0 100%;scroll-snap-align:center;display:grid;place-items:center;min-height:148px}
+.wk-sl .it{display:grid;justify-items:center;gap:6px;font:900 30px system-ui}.wk-sl .it svg,.wk-sl .it img{width:104px;height:104px}
+.wk-dots{display:flex;justify-content:center;gap:8px;margin:0 0 14px}.wk-dots i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.38);cursor:pointer;transition:width .2s,background .2s}.wk-dots i.on{width:24px;border-radius:5px;background:var(--wk-gold)}
+@media (max-height:430px){.wk-sl{min-height:96px}.wk-sl .it svg,.wk-sl .it img{width:64px;height:64px}}

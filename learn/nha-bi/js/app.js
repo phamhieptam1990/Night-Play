@@ -14,5 +14,8 @@
   N.$("enGo").onclick = function () { N.sfx.tap(); N.mgAgain(); };
   if (away > 6) { N.setExp("cun-joy", 1800); N.hearts(4); N.say(N.rnd(D.say.miss), "", 2400); } else N.say(N.rnd(D.say.hi), "", 1600);
   setTimeout(function () { if (!N.collectLesson()) N.checkin(); }, 700);
+  /* nút góc: thanh khu đáy gom thành 1 nút (phải); nút chọn lớp bằng linh vật (trái), chỉ các lớp đã tới */
+  if (window.WorldFab) WorldFab.mount({ list: N.$("zbar"), side: "right", label: "Các khu" });
+  if (window.LearnGradeBar) LearnGradeBar.mount({ side: "left", persist: false, max: Math.max.apply(null, N.collectionGrades()), get: function () { return D.grade; }, icon: function (g) { return "art/" + NB_PETS[g].pet.art + ".svg"; }, onChange: function (g) { location.href = "index.html?grade=" + g; } });
   window.NBDebug = N;
 })(window.NB);

@@ -20,7 +20,7 @@
     });
     const G = KC.curGrade(), D = KC.info(G), IT = KC.items(), dn = IT.filter(x => x.done).length;
     IT.forEach((it, i) => {
-      const p = POS[i], g = i + 1, wait = KC.waiting(it, G), open = it.open && !wait, S = ["--px:" + pct(p[1], PWID), "--py:" + pct(p[2], PH), "--pw:" + pct(PW, PWID), "--lx:" + pct(p[4], LWID), "--ly:" + pct(p[5], LH), "--lw:" + pct(LW, LWID)].join(";");
+      const p = POS[i], SF = window.WorldKit && WorldKit.safe ? WorldKit.safe(26) : null, g = i + 1, wait = KC.waiting(it, G), open = it.open && !wait, S = ["--px:" + (p[1] / PWID * 100 + (SF ? PW / PWID * 100 * (1 - SF.k) / 2 : 0)).toFixed(2) + "%", "--py:" + (SF ? SF.y(p[2] / PH * 100) : p[2] / PH * 100).toFixed(2) + "%", "--pw:" + (PW / PWID * 100 * (SF ? SF.k : 1)).toFixed(2) + "%", "--lx:" + pct(p[4], LWID), "--ly:" + pct(p[5], LH), "--lw:" + pct(LW, LWID)].join(";");
       const wl = Wardrobe.layers(Wardrobe.resolve("kc", "tanh", G, i, it.status), true);   /* chủ quán mặc bộ bé chọn (tủ đồ), chưa chọn thì tự động */
       const dogHtml = '<span class="dog">' + wl.filter(l => l.bk).map(l => img("tp bk", l.src)).join("") + img("own", A + G + "/chu-quan.svg") + wl.filter(l => !l.bk).map(l => img("tp", l.src)).join("") + "</span>";
       h += '<button type="button" class="shop ' + (open ? "open" : "locked" + (wait ? " ready" : "")) + '" data-i="' + i + '" data-lv="' + D.lv + '" style="' + S + '" aria-label="' + KC.esc(it.name) + '">';

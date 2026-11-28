@@ -42,7 +42,7 @@
   V.build = function () {
     var st = document.getElementById("stage"), m = V.mode || "doc", items = V.items(), L = V.lay(m, items.length); st.innerHTML = ""; st.className = "stage " + m;
     st.appendChild(img(V.ART + (m === "doc" ? "vuon-doc" : "vuon-ngang") + ".svg", "bgs"));
-    V.DECO[m].forEach(function (d, k) { var i = img(V.NB + d[0] + ".svg", "deco d" + (k % 3)); i.style.cssText = "left:" + d[1] + "%;top:" + d[2] + "%;width:" + d[3] + "%"; st.appendChild(i); });
+    V.DECO[m].forEach(function (d, k) { var i = img(V.NB + d[0] + ".svg", "deco d" + (k % 3)); i.style.cssText = "left:" + d[1] + "%;top:" + L.my(d[2]).toFixed(1) + "%;width:" + d[3] + "%"; st.appendChild(i); });
     items.forEach(function (it, i) { st.appendChild(pen(it, L, i)); });
     if (V.life) V.life(st);
   };

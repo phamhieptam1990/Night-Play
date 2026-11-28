@@ -21,6 +21,11 @@
   function el(t, c, h) { var e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; }
   var K = {
     IC: IC, svg: svg, el: el,
+    /* VÙNG AN TOÀN cho cảnh: dưới hàng nút trên (.wk-hud); đáy chừa 14px + extra (nhãn). y(p) đổi toạ độ % cả khung → % trong vùng an toàn; k = hệ số thu nhỏ vật thể (0.6..1). */
+    safe: function (extra) {
+      var H = innerHeight, h = document.querySelector(".wk-hud"), t = h ? h.getBoundingClientRect().bottom + 6 : 70, b = 14 + (extra || 0);
+      return { H: H, t: t, b: b, k: Math.max(.6, Math.min(1, (H - t - b) / H)), y: function (p) { return t / H * 100 + p * (H - t - b) / H; } };
+    },
     mount: function (o) {
       var h = el("div", "wk-hud"), inP = false; try { inP = root.parent !== root; } catch (e) { inP = true; }
       /* trong cổng Pop Play (khung iframe) cổng đã có nút ← cố định góc trên-trái: HUD chừa chỗ, không tự vẽ ← */
@@ -39,7 +44,14 @@
     popup: function (o) {
       var ov = el("div", "wk-ov"), c = el("div", "wk-card"); ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true");
       if (o.title) c.appendChild(el("h2", "", o.title));
-      var big = el("div", "wk-big"); (o.big || []).forEach(function (b) { big.appendChild(el("span", "it", (b.ic ? svg(b.ic) : '<img alt="" src="' + b.img + '">') + (b.n != null ? "<span>" + b.n + "</span>" : ""))); }); c.appendChild(big);
+      function itemHtml(b) { return (b.ic ? svg(b.ic) : '<img alt="" src="' + b.img + '">') + (b.n != null ? "<span>" + b.n + "</span>" : ""); }
+      var items = o.big || [];
+      if (items.length >= 3 && o.slide !== false) {   /* từ 3 vật phẩm trở lên: SLIDE vuốt ngang, mỗi trang một vật phẩm lớn + chấm trang (không xếp dọc/tràn thẻ) */
+        var sl = el("div", "wk-slides"), dots = el("div", "wk-dots"); sl.setAttribute("role", "group"); sl.setAttribute("aria-roledescription", "carousel");
+        items.forEach(function (b, i) { sl.appendChild(el("div", "wk-sl", '<span class="it">' + itemHtml(b) + "</span>")); var d = el("i", i ? "" : "on"); d.onclick = function () { sl.scrollTo({ left: i * sl.clientWidth, behavior: "smooth" }); }; dots.appendChild(d); });
+        sl.addEventListener("scroll", function () { var n = Math.round(sl.scrollLeft / Math.max(1, sl.clientWidth)); [].forEach.call(dots.children, function (d, i) { d.classList.toggle("on", i === n); }); });
+        c.appendChild(sl); c.appendChild(dots);
+      } else { var big = el("div", "wk-big"); items.forEach(function (b) { big.appendChild(el("span", "it", itemHtml(b))); }); c.appendChild(big); }
       if (o.html) c.appendChild(el("div", "", o.html));
       var acts = el("div", "wk-acts"); function close() { ov.remove(); if (o.onClose) o.onClose(); }
       (o.acts || [{ ic: "check", go: 1 }]).forEach(function (a) { var b = el(a.href ? "a" : "button", "wk-b" + (a.go ? " go" : ""), svg(a.ic)); if (a.href) b.href = a.href; else b.type = "button"; b.setAttribute("aria-label", a.label || a.ic); b.onclick = function () { if (a.fn) a.fn(); if (!a.keep && !a.href) close(); }; acts.appendChild(b); });

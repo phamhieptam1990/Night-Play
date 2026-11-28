@@ -1,0 +1,13 @@
+/* Nút góc gom hàng nút (world-fab.js): nút tròn kính + danh sách xổ dọc phía trên. Ghi đè bố cục cũ của hàng nút bằng !important vì mỗi game tự đặt vị trí hàng nút của nó. */
+.wfab{position:fixed;bottom:max(14px,env(safe-area-inset-bottom));z-index:41;display:flex;flex-direction:column-reverse;align-items:center;gap:8px}
+.wfab-right{right:max(12px,env(safe-area-inset-right))}.wfab-left{left:max(12px,env(safe-area-inset-left))}
+.wfab-t{display:grid;place-items:center;width:56px;height:56px;padding:0;border-radius:50%;border:2px solid rgba(255,255,255,.55);background:rgba(20,16,50,.28);color:#fff;cursor:pointer;-webkit-backdrop-filter:blur(8px) saturate(1.2);backdrop-filter:blur(8px) saturate(1.2);box-shadow:0 3px 10px rgba(0,0,0,.2);-webkit-tap-highlight-color:transparent}
+.wfab-t>svg,.wfab-t>img{width:60%;height:60%;display:block;object-fit:contain}.wfab-t:active{transform:scale(.93)}
+.wfab-list{position:static!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;transform:none!important;width:auto!important;height:auto!important;margin:0!important;padding:6px!important;display:none!important;flex-direction:column-reverse!important;align-items:center!important;justify-content:flex-start!important;gap:6px!important;border-radius:99px;background:rgba(20,16,50,.24);-webkit-backdrop-filter:blur(8px) saturate(1.2);backdrop-filter:blur(8px) saturate(1.2);box-shadow:0 3px 10px rgba(0,0,0,.18);pointer-events:auto!important}
+.wfab.open .wfab-list{display:flex!important;animation:wfIn .16s ease-out}@keyframes wfIn{from{opacity:0;transform:translateY(8px)}}
+.wfab-list>*{margin:0!important;transform:none!important}
+.wfab-list button,.wfab-list .zb{flex:none!important;width:52px!important;height:52px!important;min-width:52px!important;max-width:none!important;border-radius:50%!important;background:rgba(255,255,255,.1)!important;box-shadow:none!important}
+.wfab-list button.on,.wfab-list .zb.on{background:rgba(255,200,77,.45)!important;border-color:#fff!important}
+@media (max-height:430px){.wfab-t{width:46px;height:46px}.wfab-list button,.wfab-list .zb{width:42px!important;height:42px!important;min-width:42px!important}}
+.wfab-list .tlb span{display:none}.wfab-list .tlb svg{width:34px;height:34px}
+.wfab-t span{display:none}

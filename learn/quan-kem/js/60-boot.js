@@ -12,6 +12,9 @@
   $("serveBtn").onclick = QK.serve; $("undoBtn").onclick = QK.undo; $("bSpk").onclick = QK.replay; $("bAa").onclick = QK.revealText;
   QK.initWorld(); labels(); QK.renderCrates(); QK.renderDecor(); QK.renderMachine(); QK.renderFacade();
   QK.fit(); requestAnimationFrame(QK.fit); setTimeout(QK.fit, 300);
+  /* nút góc: hàng nút đáy gom thành 1 nút (phải); nút chọn lớp bằng linh vật chủ quán (trái), chỉ hiện các lớp đã tới */
+  if (window.WorldFab) WorldFab.mount({ list: $("bar"), side: "right", label: "Menu" });
+  if (window.LearnGradeBar) LearnGradeBar.mount({ side: "left", persist: false, max: QK.curGrade(), get: QK.grade, icon: g => "art/g" + g + "/chu-quan.svg", onChange: g => { const q = new URLSearchParams(location.search); q.set("grade", g); location.search = q.toString(); } });
   QK.begin(0);
   QK.claimLessons();
   document.addEventListener("visibilitychange", () => { if (document.hidden) QK.pause(true); else { QK.pause(false); QK.claimLessons(); } });
