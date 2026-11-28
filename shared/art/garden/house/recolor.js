@@ -47,7 +47,7 @@
         b.style.cssText = "left:" + h[0] / 12.8 + "%;top:" + h[1] / 7.6 + "%;width:" + h[2] / 12.8 + "%;height:" + h[3] / 7.6 + "%" + (o.wall || o.floor ? ";z-index:0" : ""); b.onclick = function () { pick(o); }; layer.appendChild(b); });
     });
     rm.appendChild(layer); sheet = E("div", "rc-sheet"); sheet.hidden = true; document.body.appendChild(sheet);
-    var hud = document.querySelector(".hud2"), sp = hud.querySelector(".sp"), btn = E("button", "hb2 rcb", "🎨"); btn.type = "button"; btn.setAttribute("aria-label", "Đổi màu đồ vật trong nhà"); btn.title = "Đổi màu đồ vật";
+    var hud = document.querySelector(".hud2"), sp = hud.querySelector(".sp"), btn = E("button", "hb2 rcb", window.HouseIcons ? HouseIcons.palette : "🎨"); btn.type = "button"; btn.setAttribute("aria-label", "Đổi màu đồ vật trong nhà"); btn.title = "Đổi màu đồ vật";
     btn.onclick = function () { on = !on; layer.hidden = !on; btn.classList.toggle("on", on); if (!on) { sheet.hidden = true; } else if (typeof toast === "function") toast("Chạm vào đồ vật để đổi màu 🎨"); };
     hud.insertBefore(btn, sp);
   }

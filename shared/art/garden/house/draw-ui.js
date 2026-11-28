@@ -36,9 +36,9 @@
   function build() {
     el = E("div", "dp-ov"); el.setAttribute("role", "dialog"); el.setAttribute("aria-modal", "true"); el.setAttribute("aria-label", "Vẽ tranh");
     var top = E("div", "dp-top"), und, red;
-    top.appendChild(btn("dp-x", "✕", "Đóng", close)); top.appendChild(E("h2", "", "🎨 Vẽ tranh")); top.appendChild(E("span", "dp-sp")); if (root.PlaySound) PlaySound.button(top, "dp-snd");
-    und = btn("dp-i", "↩", "Hoàn tác", function () { core.undo(); }); red = btn("dp-i", "↪", "Làm lại", function () { core.redo(); });
-    top.appendChild(und); top.appendChild(red); top.appendChild(btn("dp-i", "🗑", "Xoá hết", function () { core.clear(); })); top.appendChild(btn("dp-i go", "💾", "Lưu và treo tường", save));
+    top.appendChild(btn("dp-x", root.HouseIcons ? HouseIcons.x : "✕", "Đóng", close)); top.appendChild(E("h2", "", "🎨 Vẽ tranh")); top.appendChild(E("span", "dp-sp")); if (root.PlaySound) PlaySound.button(top, "dp-snd");
+    und = btn("dp-i", root.HouseIcons ? HouseIcons.undo : "↩", "Hoàn tác", function () { core.undo(); }); red = btn("dp-i", root.HouseIcons ? HouseIcons.redo : "↪", "Làm lại", function () { core.redo(); });
+    top.appendChild(und); top.appendChild(red); top.appendChild(btn("dp-i", root.HouseIcons ? HouseIcons.trash : "🗑", "Xoá hết", function () { core.clear(); })); top.appendChild(btn("dp-i go", root.HouseIcons ? HouseIcons.save : "💾", "Lưu và treo tường", save));
     stage = E("div", "dp-stage"); cv = E("canvas", "dp-cv"); stage.appendChild(cv);
     var bar = E("div", "dp-tools"); TOOLS.forEach(function (t) { var b = btn("dp-t", "<i>" + t[1] + "</i><span>" + t[2] + "</span>", t[2], function () { setTool(t[0]); }); tools[t[0]] = b; bar.appendChild(b); });
     tray = E("div", "dp-tray"); tray.hidden = true; STAMPS.forEach(function (id) { var b = E("button", "", "<img alt='' src='ao/sv-" + id + ".svg'>"); b.type = "button"; b.dataset.id = id; b.onclick = function () { pickStamp(id); }; tray.appendChild(b); });

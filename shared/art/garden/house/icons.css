@@ -1,0 +1,5 @@
+/* Nút tròn dùng biểu tượng SVG (icons.js): căn giữa tuyệt đối trên mọi trình duyệt; thanh trên của Vẽ tranh gọn lại để 6 nút + tiêu đề không tràn màn hình hẹp. */
+.hp-x,.dp-x,.dp-i,.hb2.rcb{display:grid;place-items:center;padding:0;line-height:1}
+.hp-x svg,.dp-x svg,.dp-i svg,.hb2.rcb svg{width:22px;height:22px;display:block;flex:none}
+.dp-top{flex-wrap:nowrap}.dp-top h2{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:520px){.dp-top{gap:6px}.dp-x,.dp-i{width:40px;height:40px}.dp-x svg,.dp-i svg{width:20px;height:20px}.dp-top h2{font-size:16px}.dp-top .psb{width:40px;height:40px}}

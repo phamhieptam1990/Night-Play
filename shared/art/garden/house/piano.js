@@ -99,8 +99,8 @@
     PlaySound.gate({ title: "Đàn piano", emoji: "🎹", onBack: function () { gating = false; }, start: function () { gating = false; openReal(); } });
   }
   function openReal() {
-    if (el) return; el = $("div", "hp-ov"); el.setAttribute("role", "dialog"); el.setAttribute("aria-modal", "true"); el.setAttribute("aria-label", "Đàn piano");
-    var top = $("div", "hp-top"), x = $("button", "hp-x", "✕"); x.type = "button"; x.setAttribute("aria-label", "Đóng"); x.onclick = close; top.appendChild(x); top.appendChild($("h2", "", "🎹 Đàn piano")); if (root.PlaySound) PlaySound.button(top, "hp-snd");
+    if (el) return; if (root.HouseAudio) HouseAudio.unlock();   /* đang trong cú bấm "Bật loa" → mở khoá âm thanh iOS */ el = $("div", "hp-ov"); el.setAttribute("role", "dialog"); el.setAttribute("aria-modal", "true"); el.setAttribute("aria-label", "Đàn piano");
+    var top = $("div", "hp-top"), x = $("button", "hp-x", root.HouseIcons ? HouseIcons.x : "✕"); x.type = "button"; x.setAttribute("aria-label", "Đóng"); x.onclick = close; top.appendChild(x); top.appendChild($("h2", "", "🎹 Đàn piano")); if (root.PlaySound) PlaySound.button(top, "hp-snd");
     modes = $("div", "hp-modes"); songsEl = $("div", "hp-songs"); info = $("p", "hp-info"); kb = $("div", "hp-kb");
     menu = $("div", "hp-menu"); menu.appendChild($("h4", "", "Chế độ chơi")); menu.appendChild(modes); menu.appendChild($("h4", "", "Chọn bài hát")); menu.appendChild(songsEl);
     mb = $("button", "hp-mb"); mb.type = "button"; mb.setAttribute("aria-label", "Menu đàn"); mb.onclick = function () { toggleMenu(); }; top.appendChild(mb);
