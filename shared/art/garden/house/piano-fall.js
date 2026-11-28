@@ -13,7 +13,7 @@
   function best() { try { return JSON.parse(lsGet("gardenPianoFall") || "{}"); } catch (e) { return {}; } }
   function el(c, h, p) { var e = document.createElement("div"); e.className = c; if (h != null) e.innerHTML = h; (p || kb).appendChild(e); return e; }
   function laneOf(m) { var b = 0, bd = 99; LANES.forEach(function (x, i) { var d = Math.abs(x - m); if (d < bd) { bd = d; b = i; } }); return b; }
-  function clean() { if (!kb) return; Array.prototype.slice.call(kb.querySelectorAll(".hf-hud,.hf-card,.hf-count,.hf-pop,.hf-sp,.hf-banner")).forEach(function (e) { e.remove(); }); if (field) field.innerHTML = ""; kb.classList.remove("hf-boost"); }
+  function clean() { if (!kb) return; Array.prototype.slice.call(kb.querySelectorAll(".hf-hud,.hf-card,.hf-count,.hf-pop,.hf-sp,.hf-banner,.hf-ring,.hf-beam,.hf-note")).forEach(function (e) { e.remove(); }); if (field) field.innerHTML = ""; kb.classList.remove("hf-boost"); }
   function stop() { cancelAnimationFrame(raf); raf = 0; S = null; if (root.HouseBacking) HouseBacking.stop(120); document.removeEventListener("visibilitychange", onVis); clean(); if (api && api.run) api.run(false); }
   function onVis() { if (document.hidden && S) { ready(); } }
   /* ---- màn chuẩn bị ---- */
@@ -68,7 +68,7 @@
     bn.st = 1; var q = bd <= WP ? 0 : bd <= WG ? 1 : 2, base = [100, 70, 40][q]; S[["p", "g", "o"][q]]++; S.combo++; S.maxc = Math.max(S.maxc, S.combo); S.score += Math.round(base * (1 + Math.min(S.combo, 40) / 20));
     if (root.HouseAudio) HouseAudio.note(bn.m, Math.min(1.6, bn.d / 1000 + .3), .55);
     if (bn.el) { bn.el.classList.add("hit"); var t = bn.el; setTimeout(function () { t.remove(); bn.st = 2; bn.el = null; }, 260); }
-    pop(lane, ["Hoàn hảo!", "Tuyệt!", "Được!"][q], ["p", "g", "o"][q]); burst(lane, q === 0 ? 12 : 7); flash(lane);
+    pop(lane, ["Hoàn hảo!", "Tuyệt!", "Được!"][q], ["p", "g", "o"][q]); burst(lane, q === 0 ? 12 : 7); flash(lane); fx(lane, q);
     if (S.combo % 10 === 0) banner("🔥 Combo x" + S.combo + "!"); upd();
   }
   function upd() { hud.querySelector(".hf-sc").textContent = S.score; var c = hud.querySelector(".hf-cb"); c.textContent = S.combo >= 3 ? "🔥 x" + S.combo : ""; c.classList.remove("bump"); void c.offsetWidth; c.classList.add("bump"); }
@@ -79,6 +79,14 @@
   function burst(lane, k, col) {
     for (var i = 0; i < k; i++) { var e = el("hf-sp"), a = Math.PI * (1 + i / (k - 1 || 1)), r = 26 + Math.random() * 46; e.style.left = (lane + .5) * 12.5 + "%"; e.style.background = col || COL[lane];
       e.style.setProperty("--dx", Math.cos(a) * r + "px"); e.style.setProperty("--dy", Math.sin(a) * r * 1.3 + "px"); (function (x) { setTimeout(function () { x.remove(); }, 650); })(e); }
+  }
+  /* hiệu ứng khi bấm TRÚNG: vòng sóng lan ra + cột sáng bay lên + nốt nhạc ♪ / sao ✨ bay lên (Hoàn hảo thêm vòng vàng) */
+  function fx(lane, q) {
+    var x = (lane + .5) * 12.5 + "%", i, e;
+    e = el("hf-ring" + (q === 0 ? " gold" : ""), ""); e.style.left = x; e.style.setProperty("--c", COL[lane]); setTimeout(function () { e.remove(); }, 600);
+    e = el("hf-beam", ""); e.style.left = lane * 12.5 + "%"; e.style.setProperty("--c", COL[lane]); setTimeout(function () { e.remove(); }, 450);
+    for (i = 0; i < (q === 0 ? 3 : 2); i++) { e = el("hf-note", ["♪", "♫", "✨", "★"][(Math.random() * 4) | 0]); e.style.left = x; e.style.setProperty("--dx", (Math.random() * 60 - 30) + "px"); e.style.setProperty("--dr", (Math.random() * 50 - 25) + "deg"); e.style.animationDelay = i * 60 + "ms"; e.style.color = i % 2 ? "#fff" : COL[lane]; (function (n) { setTimeout(function () { n.remove(); }, 1100); })(e); }
+    if (q === 0) { var f = kb.querySelector(".hp-tiles"); if (f) { f.classList.remove("hf-glow"); void f.offsetWidth; f.classList.add("hf-glow"); } }
   }
   function flash(lane) { var p = kb.querySelectorAll(".hk.pad")[lane]; if (!p) return; p.classList.add("hf-flash"); setTimeout(function () { p.classList.remove("hf-flash"); }, 160); }
   function banner(t) { var b = el("hf-banner", t); kb.classList.add("hf-boost"); setTimeout(function () { b.remove(); kb.classList.remove("hf-boost"); }, 900); }

@@ -3,3 +3,7 @@
 .pbuy{display:grid;justify-items:center;gap:1px;padding:8px 4px;border-radius:14px;border:2px solid #FFD24D;background:rgba(255,255,255,.14);color:inherit;min-height:84px;font:inherit;cursor:pointer}
 .pbuy.off{opacity:.55}.pbuy .pe{display:grid;place-items:center;height:46px}.pbuy .pe img{width:46px;height:46px;object-fit:contain}
 .pbuy b{font-size:13px}.pbuy small{font-size:11px;opacity:.85}.pbuy em{font-style:normal;font-weight:800;font-size:13px}
+
+/* bạn đã mua bơi trong ao */
+.fish.own img{display:block;width:100%;height:auto;pointer-events:none;filter:drop-shadow(0 3px 3px rgba(20,60,90,.35))}.fish.own.spawn{animation:swim var(--dur) linear infinite,fishPop .8s cubic-bezier(.3,1.6,.5,1)}
+@keyframes fishPop{from{opacity:0;scale:.2}60%{scale:1.3}}

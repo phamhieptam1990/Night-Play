@@ -64,7 +64,7 @@
     say("Đang chơi \"" + song.vi + "\"… em nghe nhé!"); playList(list, function () { say("Hết bài rồi! Em thử tập bài này nhé."); mode = "free"; renderModes(); });
   }
   function setMode(m) {
-    var wasFall = mode === "fall"; if (root.HouseFall) HouseFall.stop(); if (root.HouseBacking) HouseBacking.stop(60);
+    toggleMenu(false); var wasFall = mode === "fall"; if (root.HouseFall) HouseFall.stop(); if (root.HouseBacking) HouseBacking.stop(60);
     clearTimers(); root.HouseAudio.stop(); if (rec && m !== "rec") rec = null; mode = m; step = 0; el.classList.toggle("fall", m === "fall"); el.classList.remove("run"); if (wasFall !== (m === "fall")) build();
     if (m === "fall") { if (!song) song = root.HOUSE_SONGS[0]; renderSongs(); renderModes(); HouseFall.open(kb, song, { back: function () { setMode("free"); }, run: function (on) { if (el) el.classList.toggle("run", on); } }); return; }
     if (m === "free") say("Bấm phím để chơi nhạc, tự sáng tác nhé!");
@@ -76,10 +76,11 @@
   function stopRec() { if (!rec) return; took = rec.slice(); rec = null; mode = "free"; say(took.length ? "Đã thu " + took.length + " nốt. Bấm ▶ để nghe lại bản của em!" : "Chưa có nốt nào, thử thu lại nhé"); renderModes(); }
   function replay() { if (!took || !took.length) return say("Chưa có bản thu. Bấm ⏺ trước nhé"); clearTimers(); say("▶ Đang phát lại bản của em…"); playList(took.map(function (n) { return [n[0], n[1]]; }), function () { say("Hết bản thu rồi!"); }); }
   function renderModes() {
+    menuLabel();
     var M = [["free", "🎹", "Chơi"], ["learn", "🎯", "Tập bài"], ["fall", "🎮", "Phím rơi"], ["listen", "👂", "Nghe bài"], [rec ? "stop" : "rec", rec ? "⏹" : "⏺", rec ? "Dừng" : "Thu âm"], ["play", "▶", "Phát lại"]];
     modes.innerHTML = ""; M.forEach(function (x) {
       var b = $("button", "hp-m" + (mode === x[0] || (x[0] === "stop" && rec) ? " on" : ""), "<i>" + x[1] + "</i><span>" + x[2] + "</span>"); b.type = "button"; if (x[0] === "play" && !took) b.classList.add("off");
-      b.onclick = function () { if (x[0] === "stop") stopRec(); else if (x[0] === "play") replay(); else setMode(x[0]); }; modes.appendChild(b);
+      b.onclick = function () { if (x[0] === "play") toggleMenu(false); if (x[0] === "stop") stopRec(); else if (x[0] === "play") replay(); else setMode(x[0]); }; modes.appendChild(b);
     });
   }
   function renderSongs() {
@@ -88,7 +89,10 @@
       b.onclick = function () { song = s; setMode(mode === "listen" || mode === "fall" ? mode : "learn"); }; songsEl.appendChild(b);
     });
   }
-  var modes, gating = false;
+  var modes, gating = false, menu, mb;
+  /* MENU: các nút chế độ + danh sách bài hát gom vào bảng ☰ để vùng chơi rộng */
+  function toggleMenu(on) { if (!menu) return; var o = on == null ? !menu.classList.contains("on") : on; menu.classList.toggle("on", o); mb.classList.toggle("on", o); mb.setAttribute("aria-expanded", o); }
+  function menuLabel() { var m = { free: "🎹 Chơi", learn: "🎯 Tập bài", fall: "🎮 Phím rơi", listen: "👂 Nghe bài", rec: "⏺ Thu âm" }[mode] || "🎹"; if (mb) mb.innerHTML = "<b>☰</b><span>" + m + (song && mode !== "free" && mode !== "rec" ? " · " + song.vi : "") + "</span>"; }
   /* màn bật loa trước khi vào đàn (PlaySound); không có PlaySound thì vào thẳng */
   function open() {
     if (el || gating) return; if (!root.PlaySound) return openReal(); gating = true;
@@ -97,8 +101,11 @@
   function openReal() {
     if (el) return; el = $("div", "hp-ov"); el.setAttribute("role", "dialog"); el.setAttribute("aria-modal", "true"); el.setAttribute("aria-label", "Đàn piano");
     var top = $("div", "hp-top"), x = $("button", "hp-x", "✕"); x.type = "button"; x.setAttribute("aria-label", "Đóng"); x.onclick = close; top.appendChild(x); top.appendChild($("h2", "", "🎹 Đàn piano")); if (root.PlaySound) PlaySound.button(top, "hp-snd");
-    modes = $("div", "hp-modes"); top.appendChild(modes); songsEl = $("div", "hp-songs"); info = $("p", "hp-info"); kb = $("div", "hp-kb");
-    el.appendChild(top); el.appendChild(songsEl); el.appendChild(info); el.appendChild(kb); document.body.appendChild(el);
+    modes = $("div", "hp-modes"); songsEl = $("div", "hp-songs"); info = $("p", "hp-info"); kb = $("div", "hp-kb");
+    menu = $("div", "hp-menu"); menu.appendChild($("h4", "", "Chế độ chơi")); menu.appendChild(modes); menu.appendChild($("h4", "", "Chọn bài hát")); menu.appendChild(songsEl);
+    mb = $("button", "hp-mb"); mb.type = "button"; mb.setAttribute("aria-label", "Menu đàn"); mb.onclick = function () { toggleMenu(); }; top.appendChild(mb);
+    el.addEventListener("pointerdown", function (e) { if (menu.classList.contains("on") && !e.target.closest(".hp-menu,.hp-mb")) toggleMenu(false); });
+    el.appendChild(top); el.appendChild(menu); el.appendChild(info); el.appendChild(kb); document.body.appendChild(el);
     /* Vuốt nhiều phím (glissando): theo dõi từng ngón; di sang phím khác thì gõ phím đó; chặn cử chỉ cuộn/vuốt-quay-lại của trình duyệt trên vùng đàn */
     var last = {};
     function keyAt(x, y) { var t = document.elementFromPoint(x, y); return t && t.closest ? t.closest(".hk") : null; }
