@@ -79,6 +79,7 @@
     var ul = card.querySelector("#phLs"); ul.innerHTML = "";
     d.s.forEach(function (x) { var li = document.createElement("li"), i = document.createElement("i"), s = document.createElement("span"); i.textContent = x[0]; s.textContent = x[1]; li.appendChild(i); li.appendChild(s); ul.appendChild(li); });
     var nt = card.querySelector("#phNt"); nt.textContent = d.n || ""; nt.hidden = !d.n;
+    if (window.speechSynthesis && window.SpeechSynthesisUtterance) { var vl = document.createElement("a"); vl.href = "/voice.html?lang=" + (vi ? "vi" : "en"); vl.target = "_blank"; vl.rel = "noopener"; vl.textContent = vi ? "🔊 Đổi giọng đọc" : "🔊 Change voice"; vl.style.cssText = "display:block;color:#fff;font-weight:800;text-decoration:underline;padding:6px 0"; nt.appendChild(vl); nt.hidden = false; }   /* lối vào chọn giọng đọc (voice.html) */
     card.querySelector("#phGo").textContent = vi ? "Đã hiểu!" : "Got it!";
     var sy = card.querySelector("#phSay"); sy.setAttribute("aria-label", vi ? "Đọc to" : "Read aloud");
     var li = card.querySelector("#phLis"); li.innerHTML = ICO_SND; li.setAttribute("aria-label", vi ? "Nghe hướng dẫn" : "Listen to the guide"); li.hidden = !(window.speechSynthesis && window.SpeechSynthesisUtterance);

@@ -90,6 +90,7 @@
         row.className = "hlpIt"; if (m && m[2]) { ic.textContent = m[1]; sp.textContent = m[2]; } else { ic.className = "n"; ic.textContent = String(i + 1); sp.textContent = t; }
         row.appendChild(ic); row.appendChild(sp); body.appendChild(row);
       });
+      if (!say.hidden) { var vl = document.createElement("a"); vl.className = "hlpVc"; vl.href = "/voice.html?lang=" + (vi ? "vi" : "en"); vl.target = "_blank"; vl.rel = "noopener"; vl.textContent = vi ? "🔊 Đổi giọng đọc" : "🔊 Change voice"; vl.style.cssText = "align-self:center;color:#fff;font-weight:800;text-decoration:underline;font-size:calc(var(--tip-t,20px)*.7*var(--hf,1));padding:6px 10px"; body.appendChild(vl); }   /* lối vào chọn giọng đọc (shared/tts.js + voice.html) */
       ov.hidden = false; hlpFit();
     };
     setInterval(function () { b.hidden = !texts().length; }, 600);

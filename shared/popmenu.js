@@ -35,10 +35,11 @@
     x: '<svg class="x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
     lock: "<svg " + S + '><rect x="5" y="11" width="14" height="10" rx="2.2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
     gd: "<svg " + S + '><path d="M12 3l2.2 6.3L21 12l-6.8 2.7L12 21l-2.2-6.3L3 12l6.8-2.7z"/></svg>',
-    pause: "<svg " + S + '><path d="M8 5v14M16 5v14"/></svg>'
+    pause: "<svg " + S + '><path d="M8 5v14M16 5v14"/></svg>',
+    voice: "<svg " + S + '><path d="M4 9.5v5h4l5 4v-13l-5 4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>'
   };
   /* thứ tự trong bảng: [vai trò, id nút, nhãn vi, nhãn en] */
-  var ROLES = [["help", "phBtn", "Hướng dẫn", "Help"], ["snd", "soundBtn", "Âm thanh", "Sound"], ["lang", "langBtn", "Ngôn ngữ", "Language"], ["guide", "npPmGd", "Chỉ đường", "Tour"], ["theme", "themeBtn2", "Sáng / Tối", "Light / Dark"], ["pause", "pauseBtn", "Tạm dừng", "Pause"], ["cam", "npPmCam", "Chụp ảnh", "Photo"], ["shr", "npPmShr", "Chia sẻ", "Share"], ["lock", "npPmLock", "Khoá màn", "Lock"], ["npch", "npChBtn", "Thử thách", "Challenge"], ["npmc", "npMcBtn", "Linh vật & skin", "Mascot & skins"], ["fs", "npFsBtn", "Toàn màn hình", "Full screen"], ["npset", "npSetBtn", "Cài đặt Night Pass", "Night Pass settings"], ["pass", "nsPill", "Sự kiện", "Event"]];
+  var ROLES = [["help", "phBtn", "Hướng dẫn", "Help"], ["snd", "soundBtn", "Âm thanh", "Sound"], ["lang", "langBtn", "Ngôn ngữ", "Language"], ["guide", "npPmGd", "Chỉ đường", "Tour"], ["voice", "npPmVoice", "Giọng đọc", "Voice"], ["theme", "themeBtn2", "Sáng / Tối", "Light / Dark"], ["pause", "pauseBtn", "Tạm dừng", "Pause"], ["cam", "npPmCam", "Chụp ảnh", "Photo"], ["shr", "npPmShr", "Chia sẻ", "Share"], ["lock", "npPmLock", "Khoá màn", "Lock"], ["npch", "npChBtn", "Thử thách", "Challenge"], ["npmc", "npMcBtn", "Linh vật & skin", "Mascot & skins"], ["fs", "npFsBtn", "Toàn màn hình", "Full screen"], ["npset", "npSetBtn", "Cài đặt Night Pass", "Night Pass settings"], ["pass", "nsPill", "Sự kiện", "Event"]];
 
   /* Ô ICON TO (chủ site: "thích icon to hơn icon có chữ"): ô vuông kính tối s×s, icon svg v px nét dày, emoji e px, chữ ngôn ngữ (VI/EN) l px đậm; KHÔNG chữ nhãn; nút bật = viền + quầng màu nhấn; huy hiệu số 20px ở góc. pre = tiền tố chọn (iPad: "html.np-tab ") */
   function TILE(s, v, e, l, pre) {
@@ -91,7 +92,7 @@
     "@media (prefers-reduced-motion:reduce){#npPmFab svg,#npPmFan .bk,#npPmFan .pn{transition:none!important}#npPmFab.nudge{animation:none}}";
   document.head.appendChild(st);
 
-  var passHome = null, gd, bk, fab, fan, panel, cam, shr, lck, probe, open = false, moved = false, saved = [], order = [];
+  var passHome = null, vc, gd, bk, fab, fan, panel, cam, shr, lck, probe, open = false, moved = false, saved = [], order = [];
   function mk(tag, id, cls) { var e = document.createElement(tag); if (id) e.id = id; if (cls) e.className = cls; if (tag === "button") e.type = "button"; return e; }
   function build() {
     if (fab) return;
@@ -104,6 +105,7 @@
       lck = mk("button", "npPmLock"); lck.innerHTML = ICO.lock; lck.addEventListener("click", click("#klock"));
       shr = mk("button", "npPmShr"); shr.innerHTML = ICO.shr; shr.addEventListener("click", click(".nps-fab:not(.nps-cam)"));
     }
+    vc = mk("button", "npPmVoice"); vc.innerHTML = ICO.voice; vc.addEventListener("click", function () { try { window.open(new URL("/voice.html?lang=" + (vi() ? "vi" : "en"), location.href).href, "_blank", "noopener"); } catch (e) {} });   /* Giọng đọc: mở tab mới, ván đang chơi giữ nguyên */
     top.insertBefore(bk, top.firstChild); top.appendChild(fan); top.appendChild(fab);
     bk.addEventListener("click", back);
     fab.addEventListener("click", function (e) { e.stopPropagation(); setOpen(!open); });
@@ -113,6 +115,7 @@
     document.addEventListener("pointerdown", function (e) { if (open && !(fan.contains(e.target) || fab.contains(e.target))) setOpen(false); }, true);
     addEventListener("keydown", function (e) { if (e.key === "Escape" && open) { e.stopPropagation(); setOpen(false); fab.focus(); } }, true);
   }
+  function own(id) { return id === "npPmCam" ? cam : id === "npPmShr" ? shr : id === "npPmLock" ? lck : id === "npPmVoice" ? vc : null; }
   function playing() { var h = $("homeBtn"), p = $("pauseBtn"); return !!((h && !h.hidden) || (p && !p.hidden)); }
   /* thẻ "cách chơi" (#ovHow) mở trước khi vào ván: nút ← riêng của thẻ (#hwBack) bị ẩn ở điện thoại dọc nên ← trên thanh trên phải ĐÓNG thẻ (về màn danh sách game), không thoát thẳng ra cổng */
   function howBtn() { var ids = ["hwBack", "prBack"], i, b, o; for (i = 0; i < ids.length; i++) { b = $(ids[i]); o = b && b.closest(".ov"); if (o && !o.hidden) return b; } return null; }   /* #prBack: thẻ chọn tuổi của Đoán Tuổi Nào */
@@ -128,11 +131,11 @@
     sA(fab, "aria-label", t); if (fab.title !== t) fab.title = t;
     var b = howOpen() ? (v ? "Đóng" : "Close") : playing() ? (v ? "Về màn chọn" : "Back to menu") : (v ? "Thoát" : "Exit"); sA(bk, "aria-label", b); if (bk.title !== b) bk.title = b;
     ROLES.forEach(function (r) {
-      var e = $(r[1]) || (r[1] === "npPmCam" ? cam : r[1] === "npPmShr" ? shr : r[1] === "npPmLock" ? lck : null); if (!(e && e.parentNode === panel)) return;
+      var e = $(r[1]) || own(r[1]); if (!(e && e.parentNode === panel)) return;
       var dl = v ? r[2] : r[3], ga = e.getAttribute("aria-label") || "", resume = r[0] === "pause" && /^(Tiếp tục|Chơi tiếp|Resume|Continue|Play on)/i.test(ga);
       sA(e, "data-l", resume ? ga : dl);
       /* ô icon KHÔNG có chữ nhãn: tên nằm ở aria-label (nếu game chưa đặt; ô do popmenu tự dựng luôn đặt) + title (chú thích khi rê/giữ) */
-      if (!ga || e.getAttribute("data-al") === "1" || e === cam || e === shr || e === lck) { sA(e, "aria-label", dl); sA(e, "data-al", "1"); ga = dl; }
+      if (!ga || e.getAttribute("data-al") === "1" || e === cam || e === shr || e === lck || e === vc) { sA(e, "aria-label", dl); sA(e, "data-al", "1"); ga = dl; }
       if (e.title !== ga) e.title = ga;
       if (r[0] === "pause" && e.classList.contains("rs") !== resume) e.classList.toggle("rs", resume);   /* ⏸ ↔ ▶ theo trạng thái */
     });
@@ -168,11 +171,12 @@
     if (ALL && !gd && document.querySelector(".wg-q")) { gd = mk("button", "npPmGd"); gd.className = "ib"; gd.innerHTML = ICO.gd; gd.addEventListener("click", function () { var q = document.querySelector(".wg-q"); if (q) q.click(); }); top.appendChild(gd); }   /* nút "?" của hướng dẫn thế giới (WorldKit) → ô trong menu */
     if (!moved) { moved = true; cur = m; de.classList.toggle("np-tab", m === "t"); order = Array.prototype.slice.call(top.children); de.classList.add("np-pm"); fitW(); flag(true); if (!$("phBtn") || $("phBtn").classList.contains("ph-new")) fab.classList.add("nudge"); }
     if (cam && !cam.parentNode) { cam.className = shr.className = lck.className = "ib"; }
+    if (vc && !vc.parentNode) vc.className = "ib";
     ROLES.forEach(function (r) {
       if (r[0] === "snd" && !ALL) return;   /* 🔊 luôn ở NGOÀI menu, cố định cạnh ⋯ (trừ game data-pm-all: 🔊 vào menu) */
-      var e = $(r[1]) || (r[1] === "npPmCam" ? cam : r[1] === "npPmShr" ? shr : r[1] === "npPmLock" ? lck : null);
+      var e = $(r[1]) || own(r[1]);
       if (!e || e.parentNode === panel) return;
-      if (e.parentNode !== top && e !== cam && e !== shr && e !== lck && r[0] !== "pass") return;
+      if (e.parentNode !== top && e !== cam && e !== shr && e !== lck && e !== vc && r[0] !== "pass") return;
       if (e.parentNode === top) saved.push(e); else if (r[0] === "pass") { passHome = { el: e, parent: e.parentNode, next: e.nextSibling }; }
       e.setAttribute("data-r", r[0]); e.classList.add("it"); panel.appendChild(e);
     });
@@ -187,7 +191,7 @@
     saved.forEach(function (e) { if (e.parentNode === panel) top.insertBefore(e, fan); });
     if (passHome && passHome.el.parentNode === panel) { unlab(passHome.el); if (passHome.next && passHome.next.parentNode === passHome.parent) passHome.parent.insertBefore(passHome.el, passHome.next); else passHome.parent.appendChild(passHome.el); } passHome = null;
     saved = []; moved = false;
-    [cam, shr, lck, gd].forEach(function (e) { if (e && e.parentNode) e.parentNode.removeChild(e); });
+    [cam, shr, lck, vc, gd].forEach(function (e) { if (e && e.parentNode) e.parentNode.removeChild(e); });
   }
   function sync() { if (mode()) adopt(); else restore(); }
 

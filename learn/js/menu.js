@@ -18,9 +18,10 @@ function sndUi(){ const t = T[lang]; $("snd").textContent = AUTO ? "🔊" : "�
 function menuUi(){ const t = T[lang];
   [["mn", t.menu], ["mPick", t.mPick], ["mAgain", t.mAgain], ["lang", t.lang], ["mMusic", t.music], ["mTheme", t.theme], ["mInfo", t.fiAria], ["mParent",
     PARENT_COPY.UI[lang].title]].forEach(([id, n]) => { $(id).setAttribute("aria-label", n); $(id).title = n; });
-  const LB = lang === "en" ? ["Subject","Replay","Music","Theme","Map","Mine","Info","Parents","Tiếng Việt"] : ["Đổi môn","Chơi lại","Nhạc","Sáng/Tối","Bản đồ","Của bé",
-    "Thông tin","Phụ huynh","English"];
-  ["lPick","lAgain","lMusic","lTheme","lMap","lMe","lInfo","lParent","lLang"].forEach((id, i) => { if(id) $(id).textContent = LB[i]; });
+  const LB = lang === "en" ? ["Subject","Replay","Music","Theme","Map","Mine","Info","Parents","Tiếng Việt","Voice"] : ["Đổi môn","Chơi lại","Nhạc","Sáng/Tối","Bản đồ","Của bé",
+    "Thông tin","Phụ huynh","English","Giọng đọc"];
+  ["lPick","lAgain","lMusic","lTheme","lMap","lMe","lInfo","lParent","lLang","lVoice"].forEach((id, i) => { if(id) $(id).textContent = LB[i]; });
+  $("mVoice").setAttribute("aria-label", LB[9]);
   $("lang").firstChild.textContent = t.next; }
 function openMenu(){ $("mnu").hidden = false; $("mn").setAttribute("aria-expanded", "true"); const f = $("mnu").querySelector(".mt"); if(f) f.focus(); }
 function closeMenu(refocus){ if($("mnu").hidden) return; $("mnu").hidden = true; $("mn").setAttribute("aria-expanded", "false"); if(refocus) $("mn").focus(); }
