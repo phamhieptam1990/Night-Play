@@ -20,7 +20,6 @@
   if (typeof NP_BUILD === "undefined" || !NP_BUILD || !window.fetch) return;
   var host = location.hostname;
   if (location.protocol !== "https:" && host !== "localhost" && host !== "127.0.0.1") return;
-  var portal = /^\/(play|cozyplay|popplay)\/(index\.html)?$/.test(location.pathname);
   var busy = false, shown = false, KEY = "np-newver-tried";
   var get = function () { try { return sessionStorage.getItem(KEY); } catch (e) { return null; } };
   var set = function (v) { try { sessionStorage.setItem(KEY, v); } catch (e) {} };
@@ -46,27 +45,36 @@
     setTimeout(function () { b.style.opacity = "0"; setTimeout(function () { if (b.parentNode) b.parentNode.removeChild(b); shown = false; }, 450); }, 5000);
   };
   var isEn = function () { return document.documentElement.lang === "en"; };
-  /* có bản mới: hiện "Có bản mới vX · cập nhật sau N giây" rồi TỰ TẢI LẠI (bấm vào = cập nhật ngay). Ván đang chơi có lưu dở nên tải lại không mất tiến độ. */
-  var pill = function (id, ver) {
-    var n = 6, t = function () { var v = ver ? " v" + ver : ""; return isEn() ? "New version" + v + " · updating in " + n + "s (tap now)" : "Có bản mới" + v + " · cập nhật sau " + n + " giây (bấm ngay)"; };
-    toast(t(), function () { reload(id, ver); }); var b = document.querySelector("button[role=status]");
-    var iv = setInterval(function () { n--; if (n <= 0) { clearInterval(iv); reload(id, ver); return; } if (b) b.textContent = t(); }, 1000);
-  };
   /* vừa tải lại để lên bản mới: báo "Đã cập nhật" 5 giây (kể cả trang cổng tự tải lại, không có thao tác của người chơi) */
   try {
     var done = sessionStorage.getItem(DONE);
     if (done) { sessionStorage.removeItem(DONE); var say = function () { toast((isEn() ? "Updated to the new version" : "Đã cập nhật bản mới") + (done !== "1" ? " · v" + done : "")); }; if (document.body) say(); else document.addEventListener("DOMContentLoaded", say); }
   } catch (e) {}
-  /* chưa có thao tác nào từ lúc mở/quay lại tab (không có ván/bài dở để mất): tự tải lại như trang cổng; đang chơi dở thì chỉ hiện viên thuốc "Cập nhật" */
-  var touched = false;
-  ["pointerdown", "keydown", "touchstart"].forEach(function (ev) { addEventListener(ev, function () { touched = true; }, { passive: true, capture: true }); });
-  document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") touched = false; });
+  /* CHỈ CẬP NHẬT KHI Ở MÀN CHÍNH (chủ site: "đang chơi thì không được update, ra màn hình chính mới update"): trang cổng = không có game mở trong khung (#stage.on);
+     game = đang ở màn chọn (#home / #ovStart hiện), không ở màn chơi / kết thúc / đếm 3-2-1 / hiệu ứng vào game. Có bản mới mà đang chơi thì chỉ GHI NHỚ (không hiện gì, không tải lại), ra màn chính mới tự cập nhật. */
+  var pend = null, wait = false;
+  var atMain = function () {
+    try {
+      var st = document.getElementById("stage"); if (st && /^\/(play|cozyplay|popplay)\/(index\.html)?$/.test(location.pathname)) return !st.classList.contains("on");   /* #stage chỉ là khung game của TRANG CỔNG; game có #stage riêng thì không tính */
+      if (document.querySelector("[data-npa-veil],[data-npa-ghost]") || document.documentElement.classList.contains("np-playing")) return false;
+      var h = document.getElementById("home"), o = document.getElementById("ovStart");
+      if (h || o) return !!((h && !h.hidden) || (o && !o.hidden));
+      return true;   // game một màn không có màn chọn: không đang chơi thì cho cập nhật
+    } catch (e) { return false; }
+  };
+  var apply = function () {
+    if (!pend || wait || !atMain()) return;
+    var j = pend; wait = true;
+    toast((isEn() ? "New version" : "Có bản mới") + (j.ver ? " v" + j.ver : "") + (isEn() ? " · updating…" : " · đang cập nhật…"));
+    setTimeout(function () { wait = false; if (atMain()) { pend = null; reload(j.id, j.ver); } }, 1500);   // vào ván trong 1,5 giây này thì thôi, chờ lần ra màn chính sau
+  };
+  setInterval(apply, 2000);
   var check = function () {
     if (busy || document.visibilityState === "hidden") return; busy = true;
     fetch("/version.json?t=" + Date.now(), { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
       busy = false; if (!j || !j.id || j.id === NP_BUILD) return;
       if (get() === j.id) return;                        // đã thử tải lại cho mã này mà vẫn khác: không lặp vô hạn
-      if (portal || !touched) { toast((isEn() ? "New version" : "Có bản mới") + (j.ver ? " v" + j.ver : "") + (isEn() ? " · updating…" : " · đang cập nhật…")); setTimeout(function () { reload(j.id, j.ver); }, 1500); } else pill(j.id, j.ver);
+      pend = j; apply();
     }).catch(function () { busy = false; });
   };
   document.addEventListener("visibilitychange", check);
