@@ -87,6 +87,6 @@ function initCollection(){
   renderDeco();
   /* bộ khởi đầu: bé vào thẳng lớp cao nhận thêm hạt giống một lần cho mỗi vườn */
   var sm = window.Farm && Farm.starter && Farm.starter(), E = GardenItems.env, key = "gardenStart@" + (E.slot() || "old");
-  if(sm && !E.get(key)){ E.set(key, "1"); Farm.addSeeds(3); var se = document.getElementById("nSeed"); if(se) se.textContent = Farm.get().seeds; setTimeout(function(){ toast("🎁 Bác Rễ tặng bộ khởi đầu lớp " + sm.grade + ": 3 hạt giống, nhà, ruộng và vài bạn vật nuôi!"); }, 1400); }
+  if(sm && !E.get(key)){ E.set(key, "1"); Farm.addSeeds(3); var se = document.getElementById("nSeed"); if(se) se.textContent = Farm.get().seeds; setTimeout(function(){ toast("🎁 Quà khởi đầu lớp " + sm.grade + ": 3 hạt giống, nhà, ruộng và vài bạn vật nuôi!", 4200); }, 1400); }
   colBadge();
 }
