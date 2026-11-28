@@ -96,7 +96,15 @@
     var top = $("div", "hp-top"), x = $("button", "hp-x", "✕"); x.type = "button"; x.setAttribute("aria-label", "Đóng"); x.onclick = close; top.appendChild(x); top.appendChild($("h2", "", "🎹 Đàn piano")); if (root.PlaySound) PlaySound.button(top, "hp-snd");
     modes = $("div", "hp-modes"); top.appendChild(modes); songsEl = $("div", "hp-songs"); info = $("p", "hp-info"); kb = $("div", "hp-kb");
     el.appendChild(top); el.appendChild(songsEl); el.appendChild(info); el.appendChild(kb); document.body.appendChild(el);
-    kb.addEventListener("pointerdown", function (e) { var k = e.target.closest(".hk"); if (k) { e.preventDefault(); hit(+k.dataset.m); } });
+    /* Vuốt nhiều phím (glissando): theo dõi từng ngón; di sang phím khác thì gõ phím đó; chặn cử chỉ cuộn/vuốt-quay-lại của trình duyệt trên vùng đàn */
+    var last = {};
+    function keyAt(x, y) { var t = document.elementFromPoint(x, y); return t && t.closest ? t.closest(".hk") : null; }
+    function slide(e) { var k = keyAt(e.clientX, e.clientY); if (!k || last[e.pointerId] === k) return; last[e.pointerId] = k; hit(+k.dataset.m); }
+    kb.addEventListener("pointerdown", function (e) { e.preventDefault(); try { kb.releasePointerCapture(e.pointerId); e.target.releasePointerCapture(e.pointerId); } catch (x) {} last[e.pointerId] = null; slide(e); });
+    kb.addEventListener("pointermove", function (e) { if (mode === "learn") return; if (e.pressure > 0 || e.buttons || e.pointerType === "touch") { e.preventDefault(); slide(e); } });
+    ["pointerup", "pointercancel", "pointerleave"].forEach(function (n) { kb.addEventListener(n, function (e) { delete last[e.pointerId]; }); });
+    kb.addEventListener("touchmove", function (e) { e.preventDefault(); }, { passive: false });
+    kb.addEventListener("touchstart", function (e) { e.preventDefault(); }, { passive: false });
     addEventListener("resize", onResize); addEventListener("keydown", onKey, true);
     build(); renderSongs(); setMode("free");
   }
