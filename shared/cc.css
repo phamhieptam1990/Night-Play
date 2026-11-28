@@ -357,6 +357,7 @@ html #play[data-scr="game"] #game:not(#_):not(#__){justify-content:safe center!i
 
 /* THẺ SỐ LIỆU VÁN khi đang chơi: tên chế độ + 2 ô (Điểm, Lượt/Combo) + các chỉ số khác */
 #ccRoot .card.cstats{grid-column:1 / -1;grid-row:auto;display:flex;flex-direction:column;gap:8px;padding:10px 12px;height:auto;min-height:0;border-radius:calc(var(--s) * .34);align-self:start}
+#ccRoot .card.cstats .sh{flex:1 1 auto;min-height:0;height:auto;padding:0!important;align-items:center}   /* tiêu đề có đệm trên ~16px làm thẻ cao 166px > ô 154px → hàng Điểm/Lượt bị cắt đáy */
 #ccRoot .card.cstats .sh b{font:900 clamp(16px,calc(var(--s) * .26),21px)/1.1 var(--font,system-ui);text-shadow:0 1px 0 rgba(0,0,0,.35)}
 #ccRoot .card.cstats .sg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 #ccRoot .card.cstats .sc{background:color-mix(in srgb,var(--ccink) 12%,transparent);border-radius:16px;padding:8px 12px;display:flex;flex-direction:column;gap:2px}
@@ -375,6 +376,8 @@ html #play[data-scr="game"] #game:not(#_):not(#__){justify-content:safe center!i
 
 /* BỎ VIỀN quanh bảng (kể cả viền màu nhấn của giao diện Night Pass và khung sáng của game phía sau) — chỉ còn nền kính mờ */
 #ccRoot .pn,html[data-npgrad] #ccRoot .pn{border:0!important;box-shadow:none!important;outline:0}
+@media (orientation:portrait){#ccRoot .pn.play{height:calc(var(--rows,6) * var(--s) + (var(--rows,6) - 1) * var(--g) + 32px)!important}}   /* max-content của lưới có thẻ span 2 hàng tính thiếu ~49px → thẻ nút cuối bị cắt đáy */
+#ccRoot .pn,html[data-npgrad] #ccRoot .pn{background:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}   /* KHÔNG nền bao ngoài: chỉ còn nền riêng từng thẻ 4 nút (chủ site chốt; trước đây nền lấy theo --panel nên mỗi theme một kiểu) */
 #ccRoot .ml{border:0!important;box-shadow:none!important}
 
 /* MÀN NGANG ĐANG CHƠI: thẻ số liệu cột TRÁI (3 ô rộng), mỗi thẻ nút một hàng 4 nút bên PHẢI — không đè, không bị ép */

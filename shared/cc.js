@@ -128,7 +128,7 @@
         return c;
       };
       for (gi2 = 0; gi2 < its.length; gi2 += 4) { var cd = el("div", "card"); its.slice(gi2, gi2 + 4).forEach(function (o) { cd.appendChild(mkc(o)); }); pn.appendChild(cd); }
-      pn.classList.add("play"); pn.style.setProperty("--cr", Math.max(2, pn.querySelectorAll(":scope>.card:not(.cstats)").length));   /* số thẻ nút → màn ngang: thẻ số liệu cột trái cao bằng ngần ấy hàng */
+      pn.classList.add("play"); pn.style.setProperty("--cr", Math.max(2, pn.querySelectorAll(":scope>.card:not(.cstats)").length)); pn.style.setProperty("--rows", 2 + 2 * Math.ceil(pn.querySelectorAll(":scope>.card:not(.cstats)").length / 2));   /* số hàng lưới (dọc): thẻ số liệu 2 hàng + mỗi cặp thẻ nút 2 hàng → CSS đặt đúng chiều cao, không bị cắt thẻ cuối */   /* số thẻ nút → màn ngang: thẻ số liệu cột trái cao bằng ngần ấy hàng */
       bk.addEventListener("pointerdown", close);
       var sy2 = null; pn.addEventListener("pointerdown", function (e) { sy2 = e.target === pn ? e.clientY : null; }); pn.addEventListener("pointerup", function (e) { if (sy2 != null && e.clientY - sy2 > 60) close(); sy2 = null; });
       de.appendChild(root); return;
