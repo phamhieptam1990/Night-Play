@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="vi" data-app="hub">
+<head>
+<meta charset="utf-8">
+<base href="/">
+<script src="shared/guard.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#12141F">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/svg+xml" sizes="any" href="/shared/favicon.svg">
+<title>Nhập mã bạn bè · Play Hub</title>
+<script>
+try{var t=localStorage.getItem("theme")}catch(e){}
+document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
+(function(){var q=new URLSearchParams(location.search).get("lang"),s=null;try{s=localStorage.getItem("lang")}catch(e){}
+var l=[q,s].find(function(x){return x==="vi"||x==="en"})||(/^vi/i.test(navigator.language||"")?"vi":"en");document.documentElement.lang=l;})();
+</script>
+<link rel="preload" href="shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="shared/fonts.css">
+<link rel="stylesheet" href="shared/theme.css">
+<link rel="stylesheet" href="shared/bars.css">
+<link rel="stylesheet" href="shared/joinpage.css">
+</head>
+<body>
+<header class="jt"><a class="ib" id="back" href="play/index.html" aria-label="Back">←</a><h1 id="ttl"></h1>
+  <div class="seg" role="group" id="langSeg"><button type="button" data-l="vi" lang="vi" aria-label="Tiếng Việt">VI</button><button type="button" data-l="en" lang="en" aria-label="English">EN</button></div></header>
+<main class="gate"><section class="card" aria-labelledby="h">
+  <div class="big" aria-hidden="true">🎟️</div><h2 id="h"></h2><p id="sub"></p>
+  <form id="f" autocomplete="off"><input id="code" type="text" inputmode="latin" autocapitalize="characters" autocorrect="off" spellcheck="false" maxlength="9" placeholder="ABCD-2345">
+    <p class="msg" id="err" role="alert"></p><button class="btn" id="go" type="submit"></button></form>
+  <p class="fine" id="fine"></p>
+</section></main>
+<footer class="foot"><a id="fHome" href="play/index.html"></a><a id="fPriv" href="privacy.html"></a></footer>
+<script src="shared/social.js"></script>
+<script src="shared/joinpage.js"></script>
+<script src="shared/updated.js"></script>
+<script src="shared/bars.js"></script>
+</body>
+</html>

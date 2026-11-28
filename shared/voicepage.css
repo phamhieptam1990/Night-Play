@@ -33,4 +33,5 @@ main{width:min(560px,100%);margin:0 auto;padding:6px 16px 24px;display:grid;gap:
 .help b{color:var(--ink)}
 .reset{width:100%;min-height:48px;border-radius:14px;background:var(--panel);box-shadow:var(--shadow);font-weight:700}
 .loading{color:var(--muted);font-size:14px;margin:0}
+.foot a{text-decoration:none}.foot a:hover,.foot a:focus-visible{text-decoration:none;opacity:.8}
 .foot{display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:center;padding:6px 16px 20px;font-size:13px}

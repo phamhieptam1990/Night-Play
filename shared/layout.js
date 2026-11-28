@@ -7,8 +7,9 @@
 (function () {
   "use strict";
   var de = document.documentElement; de.classList.add("npl"); window.NPLayoutNew = 1;
-  if (!/[?&]home3=0/.test(location.search)) de.classList.add("np-h3");   /* màn chọn mới (home3.js) bật NGAY lúc nạp: không vẽ layout cũ rồi mới đổi (home3.js gỡ lớp này nếu không dựng được) */
-  try { var sty0 = document.createElement("style"); sty0.textContent = "html.np-h3:not(.np-h3at) :is(#home,#village,#ovStart){visibility:hidden!important}"; (document.head || document.documentElement).appendChild(sty0); } catch (e) {}   /* ẩn màn chọn cũ cho tới khi màn chọn mới dựng xong (home3.js đặt np-h3at) → không còn khoảnh khắc layout cũ hiện ra lúc nạp */
+  var NOH3 = /[?&]home3=0/.test(location.search) || /[?&]multi=1/.test(location.search);   /* chơi cùng lúc (?multi=1): resume.js KHÔNG nạp home3.js nên không dùng màn chọn mới (nếu bật np-h3 thì #home bị ẩn mãi → khung chỉ còn nền) */
+  if (!NOH3) de.classList.add("np-h3");   /* màn chọn mới (home3.js) bật NGAY lúc nạp: không vẽ layout cũ rồi mới đổi (home3.js gỡ lớp này nếu không dựng được) */
+  if (!NOH3) try { var sty0 = document.createElement("style"); sty0.textContent = "html.np-h3:not(.np-h3at) :is(#home,#village,#ovStart){visibility:hidden!important}"; (document.head || document.documentElement).appendChild(sty0); } catch (e) {}   /* ẩn màn chọn cũ cho tới khi màn chọn mới dựng xong (home3.js đặt np-h3at) → không còn khoảnh khắc layout cũ hiện ra lúc nạp */
   var MINROW = 72, MAXROW = 84, busy = 0;
   function land() { return innerWidth > innerHeight * 1.1; }
   function num(pl, k, d) { return parseFloat(getComputedStyle(pl).getPropertyValue(k)) || d; }

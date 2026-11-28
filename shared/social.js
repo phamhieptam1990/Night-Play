@@ -71,7 +71,7 @@ window.NPS = (function () {
       bragOk: "Đã lên bảng xếp hạng!", bragView: "Xem bảng xếp hạng", badNick: "Biệt danh chưa hợp lệ (2–16 ký tự, không chứa link/email).", scoreLine: "Điểm của bạn",
       gotT: "Bạn bè đã chơi hộ xong!", gotP: "Kết quả chơi hộ", points: "điểm", view: "Xem kết quả", bragNow: "Khoe điểm", allRes: "Tất cả kết quả", rank: "Bảng xếp hạng", results: "Kết quả chơi hộ",
       shot: "Chụp màn hình", shotT: "Ảnh chụp màn hình", shotErr: "Không chụp được màn hình. Vui lòng thử lại.", save: "Lưu ảnh", shareImg: "Chia sẻ ảnh", copyImg: "Sao chép ảnh", imgCopied: "Đã sao chép ảnh",
-      linkCopied: "Đã sao chép link, dán vào Zalo, Messenger… để gửi bạn bè", viaApps: "Link đã được sao chép: dán vào Zalo, Messenger… hoặc gửi nhanh qua:", shareText: "Chơi hộ mình một lượt {g} nhé!", shotText: "Mình vừa chơi {g} trên {b}!", resumeP: "Bạn ấy sẽ chơi tiếp đúng chỗ bạn đang dở rồi báo kết quả về cho bạn.", kidName: "Tên vui của bạn", reroll: "Đổi tên khác", kidP: "Bạn được đặt tên vui tự động, không cần gõ gì cả. Chỉ tên vui và điểm được lưu, và chỉ khi bạn bấm \"Khoe điểm\".", bestIn: "Điểm cao nhất của bạn ở", sendApps: "Gửi qua Zalo, Messenger…" },
+      codeLbl: "Hoặc đưa mã bạn bè này (nhập ở nightplay.vn/join):", linkCopied: "Đã sao chép link, dán vào Zalo, Messenger… để gửi bạn bè", viaApps: "Link đã được sao chép: dán vào Zalo, Messenger… hoặc gửi nhanh qua:", shareText: "Chơi hộ mình một lượt {g} nhé!", shotText: "Mình vừa chơi {g} trên {b}!", resumeP: "Bạn ấy sẽ chơi tiếp đúng chỗ bạn đang dở rồi báo kết quả về cho bạn.", kidName: "Tên vui của bạn", reroll: "Đổi tên khác", kidP: "Bạn được đặt tên vui tự động, không cần gõ gì cả. Chỉ tên vui và điểm được lưu, và chỉ khi bạn bấm \"Khoe điểm\".", bestIn: "Điểm cao nhất của bạn ở", sendApps: "Gửi qua Zalo, Messenger…" },
     en: { share: "Ask a friend to play", shareT: "Ask a friend to play one round for you", shareP: "Send this link to a friend. They play one round for you and the result is sent back to you.",
       copy: "Copy link", copied: "Copied", send: "Send via…", once: "The link works once and expires in 24 hours. The helper cannot share it further. We don't store your info: the result is encrypted and only you can read it.",
       waiting: "Waiting for your friend to open the link…", playing: "Your friend is playing…", done: "Result is in!", expired: "This link has expired.", close: "Close", err: "Something went wrong, please try again.", offline: "You need a connection to create a help link. Your game keeps running; try again once you are online.", queued: "You are offline: your score will be sent automatically when you are back online.", slow: "Too many tries, please wait a few minutes.", noShare: "This game doesn't support this yet.",
@@ -79,7 +79,7 @@ window.NPS = (function () {
       bragOk: "You're on the leaderboard!", bragView: "View leaderboard", badNick: "Invalid nickname (2–16 characters, no links/emails).", scoreLine: "Your score",
       gotT: "Your friend finished playing for you!", gotP: "Result", points: "points", view: "View result", bragNow: "Show off score", allRes: "All results", rank: "Leaderboard", results: "Shared results",
       shot: "Screenshot", shotT: "Screenshot", shotErr: "Couldn't capture the screen. Please try again.", save: "Save image", shareImg: "Share image", copyImg: "Copy image", imgCopied: "Image copied",
-      linkCopied: "Link copied. Paste it into Zalo, Messenger… to send it to friends", viaApps: "Link copied: paste it into Zalo, Messenger… or send quickly via:", shareText: "Play a round of {g} for me!", shotText: "I just played {g} on {b}!", resumeP: "Your friend continues right where you left off and sends the result back to you.", kidName: "Your fun name", reroll: "New name", kidP: "You get a fun name automatically, no typing needed. Only the fun name and score are saved, and only if you press \"Show off score\".", bestIn: "Your best score in", sendApps: "Send via Zalo, Messenger…" }
+      codeLbl: "Or give your friend this code (enter it at nightplay.vn/join):", linkCopied: "Link copied. Paste it into Zalo, Messenger… to send it to friends", viaApps: "Link copied: paste it into Zalo, Messenger… or send quickly via:", shareText: "Play a round of {g} for me!", shotText: "I just played {g} on {b}!", resumeP: "Your friend continues right where you left off and sends the result back to you.", kidName: "Your fun name", reroll: "New name", kidP: "You get a fun name automatically, no typing needed. Only the fun name and score are saved, and only if you press \"Show off score\".", bestIn: "Your best score in", sendApps: "Send via Zalo, Messenger…" }
   };
   var brandOf = function (id) { var g = GAMES[id]; return g && g.site === "popplay" ? "Pop Play" : "Night Play"; };
   /* Tên vui cho trẻ em: ghép từ danh sách có sẵn (phải khớp KID_NAMES ở server/app.js) */
@@ -114,6 +114,15 @@ window.NPS = (function () {
     dec: function (s) { s = s.replace(/-/g, "+").replace(/_/g, "/"); while (s.length % 4) s += "="; var r = atob(s), a = new Uint8Array(r.length); for (var i = 0; i < r.length; i++) a[i] = r.charCodeAt(i); return a; }
   };
   var rnd = function (n) { return crypto.getRandomValues(new Uint8Array(n)); };
+  /* MÃ BẠN BÈ: 8 ký tự (bảng chữ không có 0/1/I/O cho dễ gõ), tạo ngay trên máy người nhờ. id + khoá AES suy ra từ mã bằng PBKDF2 (100k vòng) nên máy chủ KHÔNG biết mã (chỉ thấy id băm) và không đọc được dữ liệu; link chỉ còn /h/<mã>. */
+  var CODE_ABC = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
+  var newCode = function () { var a = rnd(8), s = "", i; for (i = 0; i < 8; i++) s += CODE_ABC.charAt(a[i] & 31); return s; };
+  var normCode = function (t) { t = String(t || "").toUpperCase().replace(/[\s-]/g, ""); return /^[2-9A-HJ-NP-Z]{8}$/.test(t) ? t : ""; };
+  var fmtCode = function (c) { return c ? c.slice(0, 4) + "-" + c.slice(4) : ""; };
+  function deriveCode(code) {
+    return crypto.subtle.importKey("raw", enc.encode(code), "PBKDF2", false, ["deriveBits"]).then(function (k) { return crypto.subtle.deriveBits({ name: "PBKDF2", salt: enc.encode("np-friend-code-v1"), iterations: 100000, hash: "SHA-256" }, k, 256); })
+      .then(function (bits) { var a = new Uint8Array(bits); return { id: b64.enc(a.slice(0, 16)), key: b64.enc(a.slice(16, 32)) }; });
+  }
   var sha256hex = function (s) { return crypto.subtle.digest("SHA-256", enc.encode(s)).then(function (h) { return Array.prototype.map.call(new Uint8Array(h), function (x) { return ("0" + x.toString(16)).slice(-2); }).join(""); }); };
   var aesKey = function (k, use) { return crypto.subtle.importKey("raw", b64.dec(k), "AES-GCM", false, [use]); };
   function encrypt(k, obj) {
@@ -145,7 +154,7 @@ window.NPS = (function () {
     save(a); return a;
   }
   /* Link ngắn /h/<mã 8 ký tự>#<khoá 22 ký tự> (game + tiến trình đã mã hoá nằm ở máy chủ); link dài cũ help.html#id.key.game.st vẫn mở được */
-  var linkFor = function (s, base) { return s.short ? location.origin + "/h/" + s.id + "#" + s.key : new URL(base || "help.html", location.href).href + "#" + s.id + "." + s.key + "." + s.game + (s.st ? "." + s.st : ""); };
+  var linkFor = function (s, base) { return s.code ? location.origin + "/h/" + s.code : s.short ? location.origin + "/h/" + s.id + "#" + s.key : new URL(base || "help.html", location.href).href + "#" + s.id + "." + s.key + "." + s.game + (s.st ? "." + s.st : ""); };
   var encState = function (o) { try { return o ? b64.enc(enc.encode(JSON.stringify(o))) : ""; } catch (e) { return ""; } };   /* trạng thái game → chuỗi trong #fragment */
 
   /* Tạo lời nhờ: mỗi game chỉ có 1 lời nhờ đang chờ/đang chơi cùng lúc (dùng lại link cũ nếu còn hiệu lực). */
@@ -156,21 +165,23 @@ window.NPS = (function () {
   function createShare2(game, base, st) {
     var arr = prune(), cur = arr.filter(function (s) { return s.game === game && s.state === "open"; })[0];   /* link đã có người nhận chỉ dùng được một lần → phải tạo link mới */
     if (cur) { if ((cur.st || "") !== st) { cur.st = st; save(arr); if (cur.short) encrypt(cur.key, st).then(function (e) { call("POST", "/relay/" + cur.id + "/st", { token: cur.owner, st: e }); }).catch(function () {}); }   /* chưa ai nhận: cập nhật tiến trình mới nhất */
-      return Promise.resolve({ share: cur, link: linkFor(cur, base), reused: true }); }
-    var key = b64.enc(rnd(16)), owner = b64.enc(rnd(16));
-    return Promise.all([sha256hex(owner), st ? encrypt(key, st) : ""]).then(function (v) {
+      return Promise.resolve({ share: cur, link: linkFor(cur, base), reused: true, code: cur.code || "" }); }
+    var owner = b64.enc(rnd(16));
+    return sha256hex(owner).then(function (oh) {
       var tryMake = function (n) {
-        var id = b64.enc(rnd(6));   /* 8 ký tự */
-        return call("POST", "/relay", { id: id, owner: v[0], game: game, st: v[1] }).then(function (r) {
-          if (r.status === 409 && n < 3) return tryMake(n + 1);
-          if (r.status === 429) throw new Error("slow"); if (r.status !== 200) throw new Error("err");
-          return { id: id, short: !!r.body.short };
+        var code = newCode();
+        return deriveCode(code).then(function (d) {
+          return (st ? encrypt(d.key, st) : Promise.resolve("")).then(function (est) { return call("POST", "/relay", { id: d.id, owner: oh, game: game, st: est }); }).then(function (r) {
+            if (r.status === 409 && n < 3) return tryMake(n + 1);
+            if (r.status === 429) throw new Error("slow"); if (r.status !== 200) throw new Error("err");
+            return { id: d.id, key: d.key, code: r.body.short ? code : "", short: !!r.body.short };   /* máy chủ chưa có migration 011 → link dài như cũ (không dùng mã) */
+          });
         });
       };
       return tryMake(0);
     }).then(function (m) {
-      var s = { id: m.id, key: key, owner: owner, game: game, at: Date.now(), state: "open", result: null, seen: true, st: st, short: m.short }, a = load(); a.unshift(s); save(a);
-      return { share: s, link: linkFor(s, base), reused: false };
+      var s = { id: m.id, key: m.key, owner: owner, game: game, at: Date.now(), state: "open", result: null, seen: true, st: st, short: m.short, code: m.code }, a = load(); a.unshift(s); save(a);
+      return { share: s, link: linkFor(s, base), reused: false, code: m.code };
     });
   }
 
@@ -397,6 +408,7 @@ window.NPS = (function () {
         if (coarse()) apps.unshift(['Messenger', 'fb-messenger://share/?link=' + enc(r.link)]);
         sheet.innerHTML = '<h3>' + esc(T("shareT")) + '</h3><p>' + esc(T(s.st ? "resumeP" : "shareP")) + '</p>' +
           '<input id="npsLink" readonly value="' + esc(r.link) + '" aria-label="Link"><p class="nps-st" id="npsSt" role="status"></p>' +
+          (r.code ? '<p style="margin:2px 0 0;font-size:13px;opacity:.85;text-align:center">' + esc(T("codeLbl")) + '</p><p style="margin:2px 0 8px;font-weight:800;font-size:24px;letter-spacing:.14em;text-align:center;user-select:all" aria-label="' + esc(T("codeLbl")) + '">' + esc(fmtCode(r.code)) + '</p>' : "") +
           '<div class="nps-row' + (native ? ' wrap' : '') + '"><button class="nps-s" id="npsNo" type="button">' + esc(T("close")) + '</button>' +
           (native ? '<button class="nps-p" id="npsSend" type="button">' + esc(T("sendApps")) + '</button>' : "") +
           '<button class="' + (native ? "nps-s" : "nps-p") + '" id="npsCopy" type="button">' + esc(T("copy")) + '</button></div>' +
@@ -497,5 +509,5 @@ window.NPS = (function () {
   }
 
   return { fmtScore: fmtScore, fmtScoreU: fmtScoreU, isPct: isPct, kidName: kidName, isKidName: isKidName, isKid: isKid, brandOf: brandOf, GAMES: GAMES, T: T, lang: lang, gameName: gameName, packOf: packOf, load: load, save: save, prune: prune, linkFor: linkFor, createShare: createShare, poll: poll, onResult: onResult,
-    isNet: isNet, claim: claim, relayInfo: relayInfo, sendResult: sendResult, submitScore: submitScore, getScores: getScores, nickGet: nickGet, nickSet: nickSet, initParent: initParent, TTL: TTL, STR: STR };
+    isNet: isNet, claim: claim, relayInfo: relayInfo, deriveCode: deriveCode, normCode: normCode, fmtCode: fmtCode, sendResult: sendResult, submitScore: submitScore, getScores: getScores, nickGet: nickGet, nickSet: nickSet, initParent: initParent, TTL: TTL, STR: STR };
 })();

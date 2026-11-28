@@ -163,6 +163,7 @@ h1{margin:0;font-size:clamp(22px,min(6vw,3.8dvh),44px);line-height:1.1;letter-sp
   </a>
   <div class="tools">
     <a id="passBtn" class="pill" href="../subscribe.html"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/></svg><span>Night Pass</span></a>
+    <a id="joinBtn" class="ico" href="../join.html" aria-label="Nhập mã bạn bè" title="Nhập mã bạn bè"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.4"/><path d="M2.8 20a6.2 6.2 0 0 1 12.4 0"/><path d="M16.5 4.8a3.4 3.4 0 0 1 0 6.4M18.5 14.3a6 6 0 0 1 2.7 5.7"/></svg></a>
     <a id="docBtn" class="ico" href="../documents.html" aria-label="Tài liệu" title="Tài liệu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></a>
     <button id="themeBtn" class="ico" type="button" aria-label="Theme">
       <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
@@ -200,6 +201,7 @@ h1{margin:0;font-size:clamp(22px,min(6vw,3.8dvh),44px);line-height:1.1;letter-sp
   <nav><a id="about" href="/?landing=1">Giới thiệu</a>
   <a id="learnLink" href="../hoc/">Học Vui</a>
   <a id="pass2" href="../subscribe.html">Night Pass</a>
+  <a id="joinLink" href="../join.html">Nhập mã bạn bè</a>
   <a id="voiceLink" href="../voice.html">Giọng đọc</a>
   <a id="priv" href="../privacy.html" target="_blank" rel="noopener">Quyền riêng tư</a>
   <a id="terms" href="../terms.html" target="_blank" rel="noopener">Điều khoản</a>
@@ -236,6 +238,8 @@ function applyLang(){
   { const at = lang === "vi" ? "Giới thiệu" : "About", ah = lang === "vi" ? "/?landing=1" : "/en/?landing=1";
     $("aboutTxt").textContent = at; $("about").textContent = at; $("aboutLink").href = ah; $("about").href = ah;
     $("aboutLink").setAttribute("aria-label", lang === "vi" ? "Giới thiệu Play Hub" : "About Play Hub"); }
+  $("joinLink").textContent = lang === "vi" ? "Nhập mã bạn bè" : "Friend code";
+  { const jt = lang === "vi" ? "Nhập mã bạn bè" : "Enter friend code"; $("joinBtn").setAttribute("aria-label", jt); $("joinBtn").title = jt; }
   $("voiceLink").textContent = lang === "vi" ? "Giọng đọc" : "Voice";
   $("priv").textContent = t.privacy; $("terms").textContent = lang === "vi" ? "Điều khoản" : "Terms"; $("docs").textContent = lang === "vi" ? "Tài liệu" : "Documents"; { const dt = lang === "vi" ? "Tài liệu" : "Documents", db = $("docBtn"); db.setAttribute("aria-label", dt); db.title = dt; } $("mail").textContent = t.contact;
   $("copy").textContent = "© " + new Date().getFullYear() + " Play Hub. " + t.rights;

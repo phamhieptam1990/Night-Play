@@ -420,6 +420,7 @@ main{flex:1;min-height:0;width:100%;max-width:1200px;display:flex;flex-direction
 <nav class="nav" aria-label="Main">
   <a class="mark" id="hubLink" href="../play/index.html"><svg class="mk" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="var(--accent)"/><path d="M25 18l22 14-22 14z" fill="#fff"/></svg><span id="hName"></span></a>
   <div class="tools">
+    <a id="joinBtn" class="ico" href="../join.html" aria-label="Nhập mã bạn bè" title="Nhập mã bạn bè"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.4"/><path d="M2.8 20a6.2 6.2 0 0 1 12.4 0"/><path d="M16.5 4.8a3.4 3.4 0 0 1 0 6.4M18.5 14.3a6 6 0 0 1 2.7 5.7"/></svg></a>
     <a id="multiBtn" class="ico" href="../cozyplay/multi.html?portal=pop" aria-label="Play together" title="Play together"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="8" height="16" rx="2"/><rect x="13" y="4" width="8" height="16" rx="2"/></svg></a>
     <a id="rankBtn" class="ico" href="../leaderboard.html?from=popplay/index.html" aria-label="Leaderboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg></a>
     <a id="hubBtn" class="ico" href="../play/index.html" aria-label="Home"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3L2 12h3v8h5v-5h4v5h5v-8h3z"/></svg></a>
@@ -623,7 +624,7 @@ function applyLang(){
   $("tAds").textContent = t.noAds; $("tTrack").textContent = t.noTrack; $("tFree").textContent = t.free;
   $("fH1").textContent = t.product; $("fH2").textContent = t.support;
   $("fGames").textContent = t.games; $("fHub").textContent = t.hub; $("fHelp").textContent = t.helpRes; $("fRank").textContent = t.rank;
-  $("rankBtn").setAttribute("aria-label", t.rank); $("rankBtn").title = t.rank; { const ml = /^vi/i.test(document.documentElement.lang || "vi") ? "Chơi cùng lúc" : "Play together"; $("multiBtn").setAttribute("aria-label", ml); $("multiBtn").title = ml; }
+  $("rankBtn").setAttribute("aria-label", t.rank); $("rankBtn").title = t.rank; { const jt = /^vi/i.test(document.documentElement.lang || "vi") ? "Nhập mã bạn bè" : "Enter friend code"; $("joinBtn").setAttribute("aria-label", jt); $("joinBtn").title = jt; } { const ml = /^vi/i.test(document.documentElement.lang || "vi") ? "Chơi cùng lúc" : "Play together"; $("multiBtn").setAttribute("aria-label", ml); $("multiBtn").title = ml; }
   $("hubBtn").setAttribute("aria-label", t.hub); $("hubBtn").title = t.hub; $("hubLink").setAttribute("aria-label", t.hub + " – " + BRAND);
   const fm = $("fMail"); fm.href = "mailto:" + EMAIL; fm.textContent = t.contact;
   { const vi = /^vi/i.test(document.documentElement.lang || "vi"), ah = vi ? "/?landing=1" : "/en/?landing=1", at = vi ? "Giới thiệu Play Hub" : "About Play Hub";

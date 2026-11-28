@@ -138,15 +138,16 @@ const WARN = '<svg class="em" style="color:var(--warn)" viewBox="0 0 24 24" fill
 /* Link ngắn: /h/<mã 8 ký tự>#<khoá 22 ký tự> (game + tiến trình lấy từ máy chủ). Link dài cũ: help.html#<id>.<khoá>.<game>[.<tiến trình>] vẫn mở được. Phần sau # không bao giờ gửi lên máy chủ. */
 const SHORT = location.pathname.match(/^\/h\/([A-Za-z0-9_-]{8,22})\/?$/);
 const parts = location.hash.slice(1).split(".");
-const id = SHORT ? SHORT[1] : parts[0], key = SHORT ? parts[0] : parts[1];
+const CODE = SHORT && !location.hash.slice(1) ? NPS.normCode(SHORT[1]) : "";   // link mã bạn bè /h/<8 ký tự>: id + khoá suy ra từ mã
+let id = SHORT ? SHORT[1] : parts[0], key = SHORT ? parts[0] : parts[1];
 let game = SHORT ? "" : parts[2], rstate = !SHORT && /^[A-Za-z0-9_-]{1,2000}$/.test(parts[3] || "") ? parts[3] : "";   // tiến trình của người nhờ (nếu có)
 let loading = !!SHORT, gone = false, netErr = false;
-const keyOk = /^[A-Za-z0-9_-]{22}$|^[A-Za-z0-9_-]{43}$/.test(key || "") && /^[A-Za-z0-9_-]{8,22}$/.test(id || "");
+let keyOk = /^[A-Za-z0-9_-]{22}$|^[A-Za-z0-9_-]{43}$/.test(key || "") && /^[A-Za-z0-9_-]{8,22}$/.test(id || "");
 const isValid = () => keyOk && !!NPS.GAMES[game];
-const tokKey = "np_help_" + id;
+const tokKey = () => "np_help_" + id;
 const GN = () => NPS.gameName(game, (result && result.extra && result.extra.pack) || NPS.packOf(rstate));   /* tên theo loại game của người nhờ (Thú vật / Người yêu…) */
-const getTok = () => { try { return sessionStorage.getItem(tokKey); } catch (e) { return null; } };
-const setTok = v => { try { sessionStorage.setItem(tokKey, v); } catch (e) {} };
+const getTok = () => { try { return sessionStorage.getItem(tokKey()); } catch (e) { return null; } };
+const setTok = v => { try { sessionStorage.setItem(tokKey(), v); } catch (e) {} };
 let result = null, stage = "intro";
 
 function view() {
@@ -186,7 +187,7 @@ function send() {
   clearTimeout(retryT);
   const t = L(); $("res").classList.add("on"); $("resCard").innerHTML = ICON + "<h1>" + esc(NPS.fmtScore(game, result.score)) + (NPS.isPct(game) ? "" : " " + esc(t.pts)) + "</h1><p>" + esc(t.sending) + "</p>";
   NPS.sendResult(id, getTok(), key, result).then(() => {
-    try { sessionStorage.removeItem(tokKey); } catch (e) {} stage = "done"; $("stage").classList.remove("on"); $("stage").querySelectorAll("iframe").forEach(x => x.remove()); root.classList.remove("playing"); view();
+    try { sessionStorage.removeItem(tokKey()); } catch (e) {} stage = "done"; $("stage").classList.remove("on"); $("stage").querySelectorAll("iframe").forEach(x => x.remove()); root.classList.remove("playing"); view();
   }).catch(() => {
     if (++tries < 15) { retryT = setTimeout(send, Math.min(2500 * tries, 10000)); return; }   /* mất mạng: tự gửi lại, người chơi hộ vẫn thấy 'đang gửi' như bình thường */
     $("resCard").innerHTML = WARN + "<h1>" + esc(NPS.fmtScore(game, result.score)) + (NPS.isPct(game) ? "" : " " + esc(t.pts)) + "</h1><p>" + esc(t.sendErr) + '</p><button class="cta" id="re" type="button">' + esc(t.retry) + "</button>"; $("re").onclick = () => { tries = 0; send(); };
@@ -196,12 +197,17 @@ function setLang(l, save) { root.lang = l; if (save) try { localStorage.setItem(
 document.querySelectorAll("#langSeg button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.l, true)));
 $("themeBtn").addEventListener("click", () => { const n = root.dataset.theme === "dark" ? "light" : "dark"; root.dataset.theme = n; document.querySelector("meta[name=theme-color]").content = n === "dark" ? "#12141F" : "#F6F4F1"; try { localStorage.setItem("theme", n); } catch (e) {} });
 view();
-if (SHORT) {
-  if (!keyOk) { loading = false; view(); }
-  else NPS.relayInfo(id, key).then(r => { game = r.game; rstate = /^[A-Za-z0-9_-]{1,2000}$/.test(r.st) ? r.st : ""; try { sessionStorage.setItem("np_helpinfo_" + id, JSON.stringify([game, rstate])); } catch (e) {} })
+function loadInfo() {
+  if (!keyOk) { loading = false; view(); return; }
+  NPS.relayInfo(id, key).then(r => { game = r.game; rstate = /^[A-Za-z0-9_-]{1,2000}$/.test(r.st) ? r.st : ""; try { sessionStorage.setItem("np_helpinfo_" + id, JSON.stringify([game, rstate])); } catch (e) {} })
     .catch(e => { let c = null; try { c = JSON.parse(sessionStorage.getItem("np_helpinfo_" + id)); } catch (x) {}
       if (c && getTok()) { game = c[0]; rstate = c[1]; return; }   /* đã nhận link rồi mà tải lại trang: dùng thông tin đã lưu */
       if (NPS.isNet && NPS.isNet(e)) netErr = true; else gone = true; }).then(() => { loading = false; view(); });
+}
+if (SHORT) {
+  if (CODE) NPS.deriveCode(CODE).then(d => { id = d.id; key = d.key; keyOk = true; loadInfo(); }, () => { loading = false; keyOk = false; view(); });
+  else if (!location.hash.slice(1)) { keyOk = false; loading = false; view(); }   // /h/<mã> không đúng dạng mã bạn bè và không có khoá → link hỏng
+  else loadInfo();
 }
 </script>
 <script src="shared/updated.js"></script>
