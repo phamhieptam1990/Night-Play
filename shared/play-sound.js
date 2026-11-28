@@ -22,7 +22,7 @@
   function gate(o) {
     if (seen) { if (o.start) o.start(on()); return; }
     var g = el("div", "psg"); g.setAttribute("role", "dialog"); g.setAttribute("aria-modal", "true"); g.setAttribute("aria-label", "Bật loa");
-    var x = el("button", "psg-x", "←"); x.type = "button"; x.setAttribute("aria-label", "Quay lại");
+    var x = el("button", "psg-x", '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>'); x.type = "button"; x.setAttribute("aria-label", "Quay lại");
     x.onclick = function () { if (o.onBack) { g.remove(); o.onBack(); } else if (o.back) location.href = o.back; else g.remove(); };
     var m = o.img ? el("img", "psg-m") : el("div", "psg-e", o.emoji || "🎵"); if (o.img) { m.src = o.img; m.alt = ""; }
     var t = el("div", "psg-t"); t.textContent = o.title || "";

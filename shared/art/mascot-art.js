@@ -72,6 +72,7 @@
     "[data-npa-style=pop] .npa-bub,.npa-box[data-npa-style=pop] .npa-bub{border-radius:22px;font-size:15px;padding:10px 16px}.npa-bub{font-weight:900}" +
     /* bong bóng của linh vật MINI nằm TRÊN đầu linh vật (không che đường bay ngang của chim/nhân vật), hẹp, canh theo bên còn chỗ */
     ".npa-mini .npa-bub{left:0;right:auto;bottom:100%;top:auto;transform:none;transform-origin:20px 100%;margin:0 0 10px;max-width:min(176px,calc(100vw - 24px));padding:7px 12px;font-size:13px}" +
+    ".npa-bub.lng{font-weight:700;font-size:12.5px;line-height:1.38;text-wrap:pretty;text-align:left;padding:9px 13px;max-width:min(268px,calc(100vw - 24px))}.npa-mini .npa-bub.lng{max-width:min(268px,calc(100vw - 24px));font-size:12.5px;padding:9px 13px}" +
     ".npa-mini .npa-bub::after{left:18px;right:auto;bottom:-8px;top:auto;margin:0;transform:rotate(45deg);border-radius:0 0 4px 0}" +
     ".npa-mini.br .npa-bub{left:auto;right:0;transform-origin:calc(100% - 20px) 100%}.npa-mini.br .npa-bub::after{left:auto;right:18px}" +
     /* BONG BÓNG THEO TÂM TRẠNG (đúng/sai/combo/hỏi): màu đậm, viền sáng, quầng sáng cùng màu */
@@ -165,12 +166,12 @@
     var c = AURA[this.skin] || AURA["default"]; a.style.setProperty("--au1", c[0]); a.style.setProperty("--au2", "transparent"); a.style.setProperty("--au3", c[1]); a.setAttribute("data-t", String(tier));
     var self = this; clearTimeout(this.at); this.at = rst(function () { self.aura(0); }, 7000);   /* hết chuỗi nếu 7 giây không có combo mới */
   };
-  Inst.prototype.say = function (text, ms, mood) {
+  Inst.prototype.say = function (text, ms, mood, lng) {   /* lng: lời giải thích dài (≤240 chữ, bong bóng rộng hơn) */
     var h = this.host, w = this.box; if (!w || !text || !this.visible()) return false;
     if (innerWidth < 300 || innerHeight < (this.role !== "mini" && h.getBoundingClientRect().height >= 200 ? 260 : 340)) return false;   /* khung quá nhỏ: không có chỗ cho chữ */
     if (this.role !== "mini" && h.getBoundingClientRect().height < 150) return false;   /* hero quá thấp (màn ngang thấp): bong bóng sẽ che mặt linh vật → không hiện */
     var b = w.querySelector(".npa-bub"); if (!b) { b = document.createElement("div"); b.className = "npa-bub"; w.appendChild(b); }
-    b.textContent = String(text).slice(0, 48); clearTimeout(this.bt); w.setAttribute("data-npa-style", this.def.style || (/pop/.test(this.def.file) ? "pop" : "night"));
+    b.textContent = String(text).slice(0, lng ? 240 : 48); b.classList.toggle("lng", !!lng); clearTimeout(this.bt); w.setAttribute("data-npa-style", this.def.style || (/pop/.test(this.def.file) ? "pop" : "night"));
     try { var ac = getComputedStyle(this.svg), c = ac.getPropertyValue("--bgx").trim() || ac.getPropertyValue("--pa").trim() || ac.getPropertyValue("--a").trim(); if (c) b.style.setProperty("--npa-ac", c); } catch (e) {}
     b.style.setProperty("--dx", "0px"); b.style.opacity = 0; if (mood) b.setAttribute("data-mood", mood); else b.removeAttribute("data-mood");
     var mini = /npa-mini/.test(h.className);
@@ -351,10 +352,10 @@
   }
   addEventListener("np:start", leave);
   /* THÔNG BÁO CỦA GAME (toast) → vào BONG BÓNG linh vật: game gọi `if(window.NPArt&&NPArt.say(msg,ms))return;` đầu hàm toast; trả false (không có linh vật/khung quá nhỏ) thì game hiện toast như cũ. Ưu tiên linh vật mini khi đang chơi, hero ở màn chính. */
-  function sayAll(text, ms, kind) {
+  function sayAll(text, ms, kind, lng) {
     var pick2 = null, i; for (i = 0; i < insts.length; i++) if (insts[i].svg && insts[i].visible() && insts[i].role === "mini") { pick2 = insts[i]; break; }
     if (!pick2) for (i = 0; i < insts.length; i++) if (insts[i].svg && insts[i].visible()) { pick2 = insts[i]; break; }
-    if (!pick2) return false; pick2.ls = Date.now(); return pick2.say(text, ms || 2200, kind === "ok" ? "ok" : kind === "bad" || kind === "miss" ? "bad" : kind === "combo" ? "combo" : kind === "half" ? "half" : "cool") === true;
+    if (!pick2) return false; pick2.ls = Date.now(); return pick2.say(text, ms || 2200, kind === "ok" ? "ok" : kind === "bad" || kind === "miss" ? "bad" : kind === "combo" ? "combo" : kind === "half" ? "half" : "cool", lng) === true;
   }
   function refresh() { insts.forEach(function (it) { if (it.svg) it.paint(); }); }
   document.addEventListener("visibilitychange", function () { if (!document.hidden) refresh(); });

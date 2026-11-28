@@ -58,10 +58,11 @@
     $(".wg-ok", r).setAttribute("aria-label", "OK"); $(".wg-x", r).setAttribute("aria-label", "Skip"); S.els.spk.setAttribute("aria-label", "Listen");
     document.body.appendChild(r);
   }
-  function speak() {
-    try { if (!root.speechSynthesis) return; var st = S.cfg.steps[S.i],
-      u = new SpeechSynthesisUtterance(msg(st).replace(/[^\p{L}\p{N}\s.,!?'’-]/gu, " "));
-      speechSynthesis.cancel(); u.npForce = true; u.lang = lang() === "vi" ? "vi-VN" : "en-US"; u.rate = .85; u.pitch = 1.1; speechSynthesis.speak(u); } catch (e) {}
+  function speak() {   /* ưu tiên giọng chung Học Vui (tệp thu sẵn / giọng máy tốt nhất + cao độ riêng, learn/voice.js); không có thì giọng máy mặc định */
+    try { var st = S.cfg.steps[S.i], txt = msg(st).replace(/[^\p{L}\p{N}\s.,!?'’-]/gu, " ").replace(/\s+/g, " ").trim(), lg = lang() === "vi" ? "vi" : "en";
+      if (root.Voice && Voice.say) { Voice.say(txt, S.cfg.voice || "narr", lg, {}); return; }
+      if (!root.speechSynthesis) return; var u = new SpeechSynthesisUtterance(txt);
+      speechSynthesis.cancel(); u.npForce = true; u.lang = lg === "vi" ? "vi-VN" : "en-US"; u.rate = .85; u.pitch = 1.1; speechSynthesis.speak(u); } catch (e) {}
   }
   function rr(x, y, w, h, r) { r = Math.min(r, w / 2, h / 2);
     return "M" + (x + r) + " " + y + "H" + (x + w - r) + "a" + r + " " + r + " 0 0 1 " + r + " " + r +

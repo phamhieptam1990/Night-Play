@@ -250,10 +250,10 @@ function endScreen(stage){
   w.innerHTML='<img class="em" alt="" src="'+art("cheer")+'"><h2>Em học xong rồi! 🎉</h2>'+(rw.first?(HUB?'<div class="rw"><b>🎁 Quà đã chờ ở '+HUB[0]+'</b></div>':'<div class="rw"><b>🎁 +3 nhiệm vụ</b><b>🌱 +2 hạt</b>'+'</div>')
     :'<p>Bài này em đã nhận phần thưởng rồi.</p>')+'<p>Giờ mình làm bài kiểm tra nhé!</p>';
   const acts=document.createElement("div");acts.className="acts";
-  if(rw.first){const g=document.createElement("a");g.className="go2";g.href=HUB?"../"+HUB[1]+"/index.html?grade="+grade:"../garden/index.html?"+new URLSearchParams({grade,subj}).toString();g.textContent=HUB?"🎁 "+HUB[0]:"🌱 Vào vườn";acts.appendChild(g)}
-  if(window.Album){const al=document.createElement("a");al.className="go2 alt";al.href="../album/index.html?from=lop";
-    al.textContent="📖 Bộ sưu tập "+Album.count()+"/"+Album.total();acts.appendChild(al)}
-  const r=document.createElement("button");r.type="button";r.className="go2 alt";r.textContent=COPY.again;r.onclick=()=>show(0);acts.appendChild(r);
+  if(rw.first){const g=document.createElement("a");g.className="go2 ic";g.href=HUB?"../"+HUB[1]+"/index.html?grade="+grade:"../garden/index.html?"+new URLSearchParams({grade,subj}).toString();g.innerHTML='<span aria-hidden="true">'+(HUB?"🎁":"🌱")+"</span>";g.setAttribute("aria-label",HUB?HUB[0]:"Vào vườn");g.title=g.getAttribute("aria-label");acts.appendChild(g)}
+  if(window.Album){const al=document.createElement("a");al.className="go2 alt ic";al.href="../album/index.html?from=lop";
+    const cnt=Album.count()+"/"+Album.total();al.innerHTML='<span aria-hidden="true">📖</span><small class="cnt">'+cnt+"</small>";al.setAttribute("aria-label","Bộ sưu tập "+cnt);al.title="Bộ sưu tập "+cnt;acts.appendChild(al)}
+  const r=document.createElement("button");r.type="button";r.className="go2 alt ic";r.innerHTML='<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>';r.setAttribute("aria-label",COPY.again);r.title=COPY.again;r.onclick=()=>show(0);acts.appendChild(r);
   w.appendChild(acts);stage.appendChild(w);
 }
 $("nx").onclick=()=>{

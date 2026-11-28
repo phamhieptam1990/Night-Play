@@ -2,8 +2,17 @@
    Thanh nút nằm góc dưới trái; chạm lại nút đang chọn để về chế độ thường (chạm cây mở thẻ như cũ). */
 var TOOL = null;
 var TOOL_SVG = {
-  sickle: "<svg viewBox='0 0 32 32' aria-hidden='true'><path d='M7 27 L17 17' stroke='#8B5A2B' stroke-width='3.4' stroke-linecap='round'/><path d='M15 18 C6 14 8 5 20 4 C14 7 14 12 21 13 C23 16 19 19 15 18Z' fill='#E7ECF3' stroke='#6B7A90' stroke-width='1.4'/></svg>",
-  scythe: "<svg viewBox='0 0 32 32' aria-hidden='true'><path d='M24 29 L12 8' stroke='#8B5A2B' stroke-width='3' stroke-linecap='round'/><path d='M13 9 C8 3 15 1 29 6 C22 6 18 8 17 14Z' fill='#E7ECF3' stroke='#6B7A90' stroke-width='1.4'/></svg>"
+  /* Liềm: lưỡi cong ánh thép + cán gỗ có vòng nắm. Lưỡi hái: cán dài cong, hai tay nắm, lưỡi dài vắt ngang. Mỗi SVG có id gradient riêng (không trùng khi cùng nằm trong trang). */
+  sickle: "<svg viewBox='0 0 48 48' aria-hidden='true'><defs><linearGradient id='tgSk' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='#ffffff'/><stop offset='.55' stop-color='#cfd9e6'/><stop offset='1' stop-color='#8a9bb2'/></linearGradient>" +
+    "<linearGradient id='tgWd' x1='0' y1='0' x2='1' y2='0'><stop offset='0' stop-color='#a8672c'/><stop offset='1' stop-color='#6e3f17'/></linearGradient></defs>" +
+    "<path d='M9.5 42 L22 29.5' stroke='url(#tgWd)' stroke-width='7' stroke-linecap='round'/><path d='M13 38.5 l3.2 3.2 M16.2 35.3 l3.2 3.2' stroke='#4a2a0e' stroke-width='1.6' stroke-linecap='round' opacity='.55'/>" +
+    "<path d='M22 29 C10 25 7 10 22 6 C31 3.6 40 8 42.5 15.5 C37.5 11.2 30.5 11.4 27.4 15.2 C25.2 18 26 21.6 28.6 24 C26.4 26.6 24.4 28 22 29Z' fill='url(#tgSk)' stroke='#586a82' stroke-width='1.5' stroke-linejoin='round'/>" +
+    "<path d='M13 18.5 C14.5 12.5 19 9.6 25 8.8' stroke='#fff' stroke-width='1.8' stroke-linecap='round' fill='none' opacity='.9'/><circle cx='22' cy='29.5' r='3.6' fill='#9aa8bb' stroke='#586a82' stroke-width='1.4'/><circle cx='21.2' cy='28.7' r='1.1' fill='#fff' opacity='.85'/></svg>",
+  scythe: "<svg viewBox='0 0 48 48' aria-hidden='true'><defs><linearGradient id='tgSc' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='#ffffff'/><stop offset='.5' stop-color='#d3dcea'/><stop offset='1' stop-color='#8697af'/></linearGradient>" +
+    "<linearGradient id='tgWd2' x1='0' y1='0' x2='1' y2='0'><stop offset='0' stop-color='#b2713a'/><stop offset='1' stop-color='#6e3f17'/></linearGradient></defs>" +
+    "<path d='M10.5 45 C13.5 32 17 19 21.5 8' stroke='url(#tgWd2)' stroke-width='4.6' stroke-linecap='round' fill='none'/><path d='M14 33.2 l-6.5 -2.4 M17.4 22.8 l6.6 -1.6' stroke='#8a5426' stroke-width='3' stroke-linecap='round'/><circle cx='7.2' cy='30.6' r='1.9' fill='#c98a4b'/><circle cx='24.4' cy='21' r='1.9' fill='#c98a4b'/>" +
+    "<path d='M20.5 9.5 C27 1.8 40.5 2.2 46 13.2 C38.8 8.6 30.4 10 22.8 17 C22.2 14.4 21.4 11.8 20.5 9.5Z' fill='url(#tgSc)' stroke='#586a82' stroke-width='1.5' stroke-linejoin='round'/>" +
+    "<path d='M24 8 C30 4.6 37.6 5.4 42.4 10' stroke='#fff' stroke-width='1.8' stroke-linecap='round' fill='none' opacity='.9'/><rect x='18.2' y='8.2' width='7' height='4' rx='1.6' transform='rotate(-14 21.7 10.2)' fill='#9aa8bb' stroke='#586a82' stroke-width='1.2'/></svg>"
 };
 function ripePlot(p){ return p.planted && !p.locked && p.got >= p.need; }
 function harvestPlot(p){

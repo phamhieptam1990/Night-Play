@@ -42,10 +42,11 @@ function showFact(g, good) {
   const s = g.qs[g.i], L = idx(LANG), f = $("spFact"), last = g.i >= NS - 1;
   f.hidden = false; $("spAns").hidden = true;
   f.innerHTML = '<b>' + (good ? "⭐ " + T("good") : "💫 " + T("bad") + " " + s.q[4][L]) + '</b><small>' + T("fact") + '</small><p></p><button type="button" class="btnbig" id="spNext"></button>';
-  f.querySelector("p").textContent = s.q[7 + L]; $("spNext").textContent = last ? "🏁 " + T("fin") : "🚀 " + T("next"); $("spNext").onclick = () => nextStop(g);
+  const bub = !!(window.NPArt && NPArt.say(s.q[7 + L], 15000, good ? "ok" : "bad", true)); f.querySelector("p").textContent = bub ? "" : s.q[7 + L]; f.querySelector("p").hidden = bub; $("spNext").textContent = last ? "🏁 " + T("fin") : "🚀 " + T("next"); $("spNext").onclick = () => nextStop(g);
   say(s.q[7 + L]);
 }
 function nextStop(g) {
+  document.querySelectorAll(".npa-bub.lng").forEach(b => { b.style.opacity = 0; });
   if (g.over) return; if (g.i >= NS - 1) { const stars = g.ok >= 5 ? 3 : g.ok >= 3 ? 2 : g.ok >= 1 ? 1 : 0; g.info = T("info", { n: g.ok }); return finish({ score: g.pts + (g.ok === NS ? 100 : 0), stars }); }
   g.i++; updHud(); drawTrack(g); setTimeout(() => showStop(g), 420);
 }

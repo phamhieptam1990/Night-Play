@@ -11,7 +11,7 @@ const curQ = D => D.qs[D.i];
 function qzHtml(D) {
   const q = curQ(D), vi = LANG === "vi", L = a => a[vi ? 0 : 1];
   const opts = q.o.map((o, k) => '<button type="button" class="qzO' + (D.ans >= 0 ? (k === q.ci ? " ok" : k === D.ans ? " no" : "") : "") + '" data-k="' + k + '"' + (D.ans >= 0 ? " disabled" : "") + "><b>" + "ABCD"[k] + "</b><span>" + L(o) + "</span></button>").join("");
-  let fb = ""; if (D.ans >= 0) { const good = D.ans === q.ci; fb = '<div class="qzFb ' + (good ? "g" : "b") + '"><b>' + (good ? "✓ " + T("right") : (D.ans === -2 ? "⏱ " + T("late") : "✗ " + T("wrong"))) + "</b><p>" + L(q.w) + "</p>" + (D.C.tot ? "" : '<button type="button" class="btn grow" id="qzNext">' + T(D.i >= D.qs.length - 1 ? "fin" : "next") + " ▶</button>") + "</div>"; }
+  let fb = ""; if (D.ans >= 0) { const good = D.ans === q.ci; fb = '<div class="qzFb ' + (good ? "g" : "b") + '"><b>' + (good ? "✓ " + T("right") : (D.ans === -2 ? "⏱ " + T("late") : "✗ " + T("wrong"))) + "</b>" + (D.bub ? "" : "<p>" + L(q.w) + "</p>") + (D.C.tot ? "" : '<button type="button" class="btn grow" id="qzNext">' + T(D.i >= D.qs.length - 1 ? "fin" : "next") + " ▶</button>") + "</div>"; }
   return '<div class="qzTop"><span class="qzTag">' + L(q.tg) + '</span><span class="qzNo">' + (D.C.tot || D.C.lives ? "#" + (D.i + 1) : (D.i + 1) + "/" + D.qs.length) + '</span></div><div class="qzCard"><i class="qzAv">' + q.ic + '</i><p class="qzTx">' + L(q.p) + '</p></div><div class="qzOpts">' + opts + "</div>" + fb + '<div class="qzBar"><i id="qzBarI"></i></div>';
 }
 function renderQ(D) { const h = $("qz"); if (!h || !D || D.over && D.ans < 0) return; h.innerHTML = qzHtml(D); h.dataset.n = curQ(D).o.length; }
@@ -23,15 +23,18 @@ function answer(D, k) {
     if (D.combo > 1) sfx.combo(D.combo * 2); NPJuice.text($("play"), "+" + add + (D.combo > 1 ? " ×" + D.combo : ""), { color: "#ffd24a", top: "26%", size: 5.4 }); if (window.NPFx) NPFx.buzz(15); }
   else { D.bad++; D.combo = 0; if (D.C.tot) D.time += 5; sfx.bad(); if (window.NPFx) NPFx.buzz([30, 20, 30]); }
   if (D.C.lives && D.bad >= D.C.lives) { D.dead = true; }
-  if (D.C.tot) D.adv = 1.1; renderQ(D); hud();
+  if (D.C.tot) D.adv = 1.1;
+  D.bub = !D.C.tot && !!(window.NPArt && NPArt.say(q.w[LANG === "vi" ? 0 : 1], 15000, good ? "ok" : "bad", true));   /* lời giải thích vào bong bóng linh vật; không có linh vật thì giữ thẻ như cũ */
+  renderQ(D); hud();
 }
+const hushBub = () => document.querySelectorAll(".npa-bub.lng").forEach(b => { b.style.opacity = 0; });
 function nextQ(D) {
   if (!D || D.over || D.ans < 0) return;
-  if (D.dead) return endNow(D, "dead"); D.i++; D.ans = -1; D.qt = 0; D.adv = 0;
+  if (D.dead) return endNow(D, "dead"); D.i++; D.ans = -1; D.qt = 0; D.adv = 0; D.bub = false; hushBub();
   if (D.i >= D.qs.length) return endNow(D, "win"); renderQ(D); hud();
 }
 function endNow(D, why) {
-  if (D.over) return; D.over = true; D.reason = why;
+  if (D.over) return; D.over = true; D.reason = why; hushBub();
   if (why === "win" && !D.bad) D.pts += 200; else if (why === "win") D.pts += 80;
   sfx.end(); if (why !== "dead" && why !== "time") NPJuice.confetti($("play"), 24, CONF); else D.flash = 1;
   setTimeout(() => { if (G === D) finish(D); }, 800);
