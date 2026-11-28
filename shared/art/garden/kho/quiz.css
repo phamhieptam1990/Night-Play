@@ -41,3 +41,4 @@
 @media (prefers-reduced-motion:reduce){.kq-say,.kq-who .kq-av{animation:none}}
 .kq-row{min-height:112px;align-items:center}.kq-who small{display:block;text-align:center}
 @media (max-width:420px){.kq-row{min-height:108px}}@media (max-height:480px){.kq-row{min-height:72px}}
+.kq-btns button{white-space:nowrap}

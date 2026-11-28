@@ -46,7 +46,7 @@
       function B(t, cls, fn) { var b = document.createElement("button"); b.type = "button"; b.className = cls; b.textContent = t; b.onclick = fn; btns.appendChild(b); return b; }
       var qSay = spoken(q.q) + " " + om[0] + " trả lời: " + spoken(claim) + ". Bé xác nhận giúp mình nhé!";
       if (soundOn()) MC.speak(qSay);   /* loa bật → tự đọc câu hỏi và lời trả lời của bạn kia */
-      B("✅ Đúng rồi", "ok", function () { fin(right); }); B("❌ Chưa đúng", "no", function () { fin(!right); }); B("🔊", "snd", function () { MC.speak(qSay); });
+      B("✅ Đúng", "ok", function () { fin(right); }); B("❌ Sai", "no", function () { fin(!right); }); B("🔊", "snd", function () { MC.speak(qSay); });
       function fin(kidRight) {
         streak = kidRight ? streak + 1 : 0; btns.innerHTML = "";
         say.innerHTML = (kidRight ? "🎉 " + pick(OK) : "💪 " + pick(NO)) + " " + (right ? "<b></b> đúng thật, " + om[0] + " trả lời đúng!" : om[0] + " nhầm rồi. Đáp án đúng là <b></b>.");
