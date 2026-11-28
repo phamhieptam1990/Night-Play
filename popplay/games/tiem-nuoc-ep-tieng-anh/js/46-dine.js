@@ -19,7 +19,7 @@
   }
   function tap(id, el) {
     const s = seats.find(x => x.id === id); if (!s || !s.tip) return; s.tip = false; TNE.addCoins(1); TNE.sfx.coin();
-    TNE.speak(D.say.table[(id + s.c.length) % D.say.table.length], .95); el.classList.add("leave"); setTimeout(() => leave(id), 900);
+    TNE.speak(D.say.table[(id + s.c.length) % D.say.table.length]); el.classList.add("leave"); setTimeout(() => leave(id), 900);
   }
   TNE.renderDine = () => {
     if (!built) build(); const g = $("dGrid"), n = TNE.tables(); g.innerHTML = "";

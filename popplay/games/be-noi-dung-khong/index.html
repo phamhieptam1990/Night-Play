@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <script src="../../../shared/guard.js"></script><script src="../../../shared/npicon.js"></script><script src="../../../shared/layout-pop.js"></script>
 <script src="../../../shared/device.js"></script>
-<script src="../../../shared/bridge.js"></script><script src="../../../shared/levelup.js"></script>
+<script src="../../../shared/bridge.js"></script><script src="../../../shared/tts.js"></script><script src="../../../shared/levelup.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Bé Nói Đúng Không?</title>
 <link rel="preload" href="../../../shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
@@ -417,7 +417,7 @@ function tone(f,d,ty,v,dl,dest){const c=audio();if(!c)return;const t0=c.currentT
 const sfx={good:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.16,"triangle",.12,i*.08)),no:()=>{tone(330,.14,"sine",.09);tone(262,.2,"sine",.09,.12)},tick:()=>tone(520,.09,"triangle",.08),go:()=>tone(880,.25,"triangle",.14),win:()=>[523,659,784,1047,1319].forEach((f,i)=>tone(f,.2,"triangle",.12,i*.1)),pop:()=>tone(760,.07,"square",.05),combo:n=>{const tr=n>=8?3:n>=5?2:n>=3?1:0,b=523*Math.pow(2,Math.min(n,10)/12);for(let i=0;i<2+tr*2;i++)tone(b*Math.pow(1.26,i),.14+tr*.03,tr>=2?"square":"triangle",.07+tr*.015,i*.07);if(tr>=2)tone(b*4,.4,"sine",.06,.3)}};
 function say(text,cb,id){let done=false;const fin=()=>{if(!done){done=true;clearTimeout(tm);if(cb&&(id==null||(G&&G.id===id)))cb()}},tm=setTimeout(fin,4500);
  if(!sound||!window.speechSynthesis||!text){clearTimeout(tm);done=true;if(cb)setTimeout(()=>{if(id==null||(G&&G.id===id))cb()},0);return}
- try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang=LANG==="vi"?"vi-VN":"en-US";u.rate=.85;u.pitch=1.15;u.onend=fin;u.onerror=fin;speechSynthesis.speak(u)}catch(e){fin()}}
+ NPTTS.speak(text,{lang:LANG,onend:fin,onerror:fin})}
 let toastT=0;function toast(m,ms){const e=$("toast");e.textContent=m;e.classList.add("on");clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove("on"),ms||1700)}
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 

@@ -8,7 +8,7 @@ function solClose(go){
 function solSpeak(lines){
   if(!AUTO) return; const lg = subj === "tanh" && lang !== "vi" ? "en" : (lang === "vi" ? "vi" : "en"), txt = lines.map(x => x.replace(/[×]/g, lang === "vi" ? " nhân " : " times ").replace(/[÷]/g, lang === "vi" ? " chia " : " divided by ")
     .replace(/[−]/g, lang === "vi" ? " trừ " : " minus ").replace(/\+/g, lang === "vi" ? " cộng " : " plus ").replace(/=/g, lang === "vi" ? " bằng " : " equals ")).join(" ");
-  try{ if(window.Voice) Voice.say(txt, subj, lg, {}); else if("speechSynthesis" in window){ const u = new SpeechSynthesisUtterance(txt); u.lang = lg === "vi" ? "vi-VN" : "en-US"; u.rate = .9; speechSynthesis.speak(u); } }catch(e){}
+  try{ if(window.Voice) Voice.say(txt, subj, lg, {}); else if("speechSynthesis" in window){ const u = new SpeechSynthesisUtterance(txt); u.lang = lg === "vi" ? "vi-VN" : "en-US"; u.rate = 1; speechSynthesis.speak(u); } }catch(e){}
 }
 function showSolution(steps, done){
   let box = $("solBox"), vi = lang === "vi";

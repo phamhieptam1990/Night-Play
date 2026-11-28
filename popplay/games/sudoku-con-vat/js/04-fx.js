@@ -19,7 +19,7 @@ const sfx = {
 };
 function say(text) {
   if (!sound || !window.speechSynthesis || !text) return;
-  try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = LANG === "vi" ? "vi-VN" : "en-US"; u.rate = .9; u.pitch = 1.15; speechSynthesis.speak(u); } catch (e) {}
+  NPTTS.speak(text, { lang: LANG });
 }
 let toastT = 0;
 function toast(m, ms, k) {

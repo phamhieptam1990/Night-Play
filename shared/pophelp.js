@@ -55,11 +55,8 @@
     try {
       if (speaking) { speechSynthesis.cancel(); speaking = false; mark(false); return; }
       var d = dat(), tx = d.s.map(function (x) { return x[1].replace(/[^\p{L}\p{N}\s.,!?:'’+\-−×÷=]/gu, " "); }).join(". ");
-      speechSynthesis.cancel();
-      var u = new SpeechSynthesisUtterance(tx);
-      u.npForce = true; u.lang = lang() === "vi" ? "vi-VN" : "en-US"; u.rate = .85; u.pitch = 1.1;
-      u.onend = u.onerror = function () { speaking = false; mark(false); };
-      speaking = true; mark(true); speechSynthesis.speak(u);
+      speaking = true; mark(true);
+      NPTTS.speak(tx, { lang: lang(), force: true, onend: function () { speaking = false; mark(false); }, onerror: function () { speaking = false; mark(false); } });
     } catch (e) { speaking = false; }
   }
   function stopSay() { try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {} speaking = false; mark(false); }

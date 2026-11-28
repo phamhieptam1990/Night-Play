@@ -26,26 +26,7 @@
     step() { tone(680, .07, "triangle", .07, 0, 900); },
     coin() { tone(1175, .1, "square", .05); tone(1568, .2, "square", .05, .08); }
   };
-  /* chấm điểm giọng en-US (như learn/voice.js): loại giọng hề/lạ của macOS (Albert, Bad News, Bahh, Zarvox…), tránh giọng nam trầm, ưu tiên giọng nữ tự nhiên chất lượng cao cài sẵn trong máy */
-  function score(v) {
-    const n = (v.name || "").toLowerCase(); let sc = 0;
-    if (/albert|bad news|bahh|bells|boing|bubbles|cellos|deranged|fred|good news|hysterical|jester|junior|kathy|organ|ralph|superstar|trinoids|whisper|wobble|zarvox|bruce|victoria|agnes|princess|grandpa|grandma|rocko|eddy|sandy|shelley|flo\b/.test(n)) sc -= 100;
-    if (/\b(aaron|arthur|daniel|gordon|rishi|reed|alex|tom|guy|david|mark|james|george|ryan|male|thomas|oliver|lee)\b/.test(n)) sc -= 25;
-    if (/samantha|ava|allison|susan|zoe|karen|moira|tessa|serena|fiona|catherine|martha|jenny|aria|zira|hazel|emma|female|siri/.test(n)) sc += 6;
-    if (/natural|neural|premium|enhanced|online/.test(n)) sc += 6; if (/microsoft|siri/.test(n)) sc += 2; if (/compact/.test(n)) sc -= 3;
-    if (v.localService) sc += 2; if (/^en[-_]US$/i.test(v.lang)) sc += 2; return sc;
-  }
-  function pickVoice() {
-    try { const vs = (speechSynthesis.getVoices() || []).filter(v => /^en/i.test(v.lang)); voice = vs.sort((a, b) => score(b) - score(a))[0] || null; } catch (e) {}
-  }
-  try { pickVoice(); speechSynthesis.addEventListener("voiceschanged", pickVoice); } catch (e) {}
-  TNE.cancelSpeech = () => { try { speechSynthesis.cancel(); } catch (e) {} };
-  TNE.speak = (text, rate) => {
-    if (!sound || !window.speechSynthesis) return false;
-    try {
-      speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = "en-US"; u.rate = rate || .88; u.pitch = 1.05; if (voice) u.voice = voice;
-      speechSynthesis.speak(u); return true;
-    } catch (e) { return false; }
-  };
+  TNE.cancelSpeech = () => NPTTS.cancel();
+  TNE.speak = (text, rate) => sound && !!window.speechSynthesis && NPTTS.speak(text, { lang: "en", rate });   /* giọng chung: shared/tts.js */
   if (window.NPAudio) { const s0 = NPAudio.silence; NPAudio.silence = function () { TNE.cancelSpeech(); return s0.apply(this, arguments); }; }
 })();

@@ -20,7 +20,7 @@
   }
   function tap(id, el) {
     const s = seats.find(x => x.id === id); if (!s || !s.tip) return; s.tip = false; QK.addCoins(QK.tip()); QK.sfx.coin();
-    QK.speak(D.say.table[(id + s.c.length) % D.say.table.length], .95); el.classList.add("leave"); setTimeout(() => leave(id), 900);
+    QK.speak(D.say.table[(id + s.c.length) % D.say.table.length]); el.classList.add("leave"); setTimeout(() => leave(id), 900);
   }
   QK.renderDine = () => {
     if (!built) build(); if (QK.renderFacade) QK.renderFacade(); const g = $("dGrid"), n = QK.tables(); g.innerHTML = ""; $("dSign").src = QK.art("sign-" + QK.save.up.sign);

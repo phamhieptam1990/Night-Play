@@ -33,7 +33,7 @@
           e.stopPropagation(); if (b.classList.contains("on")) { stop(); return; }
           var tx = []; c[2].forEach(function (i) { var el = d.getElementById(i); if (!el) return; var li = el.querySelectorAll("li"); if (li.length) li.forEach(function (x) { tx.push(x.textContent); }); else tx.push(el.textContent); });
           var t = tx.join(". ").replace(/[^\p{L}\p{N}\s.,!?:'’+\-−×÷=]/gu, " ").replace(/\s+/g, " ").trim(); if (!t) return;
-          try { speechSynthesis.cancel(); var u = new SpeechSynthesisUtterance(t); u.npForce = true; u.lang = vi ? "vi-VN" : "en-US"; u.rate = .85; u.pitch = 1.1; u.onend = u.onerror = function () { b.classList.remove("on"); }; b.classList.add("on"); speechSynthesis.speak(u); } catch (er) { b.classList.remove("on"); }
+          try { b.classList.add("on"); var off = function () { b.classList.remove("on"); }; NPTTS.speak(t, { lang: vi ? "vi" : "en", force: true, onend: off, onerror: off }); } catch (er) { b.classList.remove("on"); }
         });
         try { new MutationObserver(function () { if (ov.hidden) stop(); }).observe(ov, { attributes: true, attributeFilter: ["hidden"] }); } catch (e) {}
       });

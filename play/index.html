@@ -200,6 +200,7 @@ h1{margin:0;font-size:clamp(22px,min(6vw,3.8dvh),44px);line-height:1.1;letter-sp
   <nav><a id="about" href="/?landing=1">Giới thiệu</a>
   <a id="learnLink" href="../hoc/">Học Vui</a>
   <a id="pass2" href="../subscribe.html">Night Pass</a>
+  <a id="voiceLink" href="../voice.html">Giọng đọc</a>
   <a id="priv" href="../privacy.html" target="_blank" rel="noopener">Quyền riêng tư</a>
   <a id="terms" href="../terms.html" target="_blank" rel="noopener">Điều khoản</a>
   <a id="docs" href="../documents.html">Tài liệu</a>
@@ -235,6 +236,7 @@ function applyLang(){
   { const at = lang === "vi" ? "Giới thiệu" : "About", ah = lang === "vi" ? "/?landing=1" : "/en/?landing=1";
     $("aboutTxt").textContent = at; $("about").textContent = at; $("aboutLink").href = ah; $("about").href = ah;
     $("aboutLink").setAttribute("aria-label", lang === "vi" ? "Giới thiệu Play Hub" : "About Play Hub"); }
+  $("voiceLink").textContent = lang === "vi" ? "Giọng đọc" : "Voice";
   $("priv").textContent = t.privacy; $("terms").textContent = lang === "vi" ? "Điều khoản" : "Terms"; $("docs").textContent = lang === "vi" ? "Tài liệu" : "Documents"; { const dt = lang === "vi" ? "Tài liệu" : "Documents", db = $("docBtn"); db.setAttribute("aria-label", dt); db.title = dt; } $("mail").textContent = t.contact;
   $("copy").textContent = "© " + new Date().getFullYear() + " Play Hub. " + t.rights;
   $("passBtn").href = "../subscribe.html?from=play/index.html&lang=" + lang; $("passBtn").lastChild.textContent = t.pass; $("passBtn").setAttribute("aria-label", t.upgrade);

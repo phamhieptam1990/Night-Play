@@ -28,20 +28,8 @@
   }
   function key(who, text) { var s = who + "|" + String(text).replace(/\s+/g, " ").trim(), h = 5381, i; for (i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) >>> 0; return h.toString(16); }
   var ss = root.speechSynthesis, curAudio = null;
-  /* chọn giọng máy tốt nhất: ưu tiên giọng "tự nhiên/cao cấp" (Natural, Premium, Enhanced, Google, Online), rồi giọng nữ trẻ */
-  function pickVoice(lang) {
-    if (!ss) return null; var vs = ss.getVoices() || [], tag = (LANG[lang] || lang).toLowerCase(), pre = tag.slice(0, 2);
-    var cand = vs.filter(function (v) { return v.lang && v.lang.toLowerCase().replace("_", "-").indexOf(pre) === 0; });
-    if (!cand.length) return null;
-    /* chấm điểm giọng: loại giọng hề/lạ của hệ điều hành, tránh giọng nam (bé nghe giọng cô giáo/chị), ưu tiên giọng nữ tự nhiên chất lượng cao, ưu tiên giọng cài sẵn trong máy (ổn định, ít rè hơn giọng trực tuyến) */
-    function score(v) { var n = (v.name || "").toLowerCase(), sc = 0;
-      if (/albert|bad news|bahh|bells|boing|bubbles|cellos|deranged|fred|good news|hysterical|jester|junior|kathy|organ|ralph|superstar|trinoids|whisper|wobble|zarvox|bruce|victoria|agnes|princess|grandpa|grandma|rocko|eddy|sandy|shelley|flo\b/.test(n)) sc -= 100;
-      if (/\b(aaron|arthur|daniel|gordon|rishi|reed|alex|tom|guy|david|mark|james|george|ryan|male|nam minh|namminh|thomas|oliver|lee|fred)\b/.test(n)) sc -= 25;
-      if (/hoaimy|hoai my|linh|samantha|ava|allison|susan|zoe|karen|moira|tessa|serena|fiona|catherine|martha|jenny|aria|zira|hazel|emma|female|nữ|siri/.test(n)) sc += 6;
-      if (/natural|neural|premium|enhanced|online/.test(n)) sc += 6; if (/microsoft|siri/.test(n)) sc += 2; if (/compact/.test(n)) sc -= 3;
-      if (v.localService) sc += 2; if (v.lang.toLowerCase().replace("_", "-") === tag) sc += 2; return sc; }
-    return cand.sort(function (a, b) { return score(b) - score(a); })[0];
-  }
+  /* chọn giọng máy: dùng chung shared/tts.js (giọng người dùng tự chọn ở voice.html, không thì giọng tốt nhất của máy). Trang nạp voice.js PHẢI nạp shared/tts.js trước. */
+  function pickVoice(lang) { return root.NPTTS ? NPTTS.pickVoice(lang) : null; }
   function stopAudio() { if (curAudio) { try { curAudio.pause(); } catch (e) {} curAudio = null; } }
   function stop() { mixId++; machine.seq = (machine.seq | 0) + 1; clearTimeout(machine.t); if (machine.cur) machine.cur.started = true;   /* huỷ cả câu đang chờ/thử lại: không đọc lại câu cũ, câu mới không phải chờ */
     try { if (ss && (ss.speaking || ss.pending)) ss.cancel(); } catch (e) {} stopAudio(); }
@@ -56,7 +44,7 @@
       if (mySeq !== machine.seq) return;
       try {
         var u = new SpeechSynthesisUtterance(spoken(text, lang)), p = PROFILE[opt.profile] || PROFILE[who] || PROFILE.def, v = pickVoice(lang), started = false;
-        u.lang = LANG[lang] || lang; u.pitch = p.pitch; u.rate = p.rate; if (v) u.voice = v;
+        u.lang = LANG[lang] || lang; u.pitch = p.pitch; u.rate = p.rate * (root.NPTTS ? NPTTS.rate() : 1); if (v) u.voice = v;
         var rec = { started: false, at: Date.now() }; machine.cur = rec;
         u.onstart = function () { started = true; rec.started = true; };
         u.onboundary = function () { started = true; rec.started = true; };   /* Safari iPhone hay KHÔNG bắn onstart: có tiếng/đã đọc xong cũng tính là đã đọc, để đồng hồ canh không đọc LẠI lần nữa */

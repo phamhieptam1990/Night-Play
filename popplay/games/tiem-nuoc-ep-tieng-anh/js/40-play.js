@@ -55,7 +55,7 @@
     const o = G.orders[G.round]; G.busy = true;
     if (TNE.judge(o.items, G.tray)) {
       const st = Math.max(1, 3 - G.tries), co = st + TNE.diff(); G.stars += st; G.coins += co; G.hist.push(st); setCust(o.cust, "vui"); TNE.sfx.ding();
-      const w = D.say.thanks[(o.say + G.round) % D.say.thanks.length]; TNE.say(w); TNE.speak(w, .95);
+      const w = D.say.thanks[(o.say + G.round) % D.say.thanks.length]; TNE.say(w); TNE.speak(w);
       TNE.addCoins(co); if (TNE.onServed) TNE.onServed({ st, tray: G.tray.slice(), cust: o.cust });
       G.round++; $("cust").classList.add("hop");
       later(() => { $("cust").classList.remove("hop"); if (G.round >= D.rounds) finish(); else nextCustomer(); }, 1700);

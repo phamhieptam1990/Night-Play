@@ -57,7 +57,7 @@
     const o = G.orders[G.round]; G.busy = true;
     if (QK.judge(o.items, G.tray)) {
       const st = Math.max(1, 3 - G.tries), co = st + QK.grade() + QK.save.up.machine - 1; G.stars += st; G.coins += co; setCust(o.cust, "vui"); QK.sfx.ding();
-      const w = D.say.thanks[(o.say + G.round) % D.say.thanks.length]; QK.say(w); QK.speak(w, .95);
+      const w = D.say.thanks[(o.say + G.round) % D.say.thanks.length]; QK.say(w); QK.speak(w);
       QK.addCoins(co); if (QK.onServed) QK.onServed({ st, tray: G.tray.slice(), cust: o.cust });
       G.round++; $("cust").classList.add("hop");
       later(() => { $("cust").classList.remove("hop"); if (G.round >= D.rounds) finish(); else nextCustomer(); }, 1700);

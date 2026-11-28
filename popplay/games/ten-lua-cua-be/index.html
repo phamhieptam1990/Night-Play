@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <script src="../../../shared/guard.js"></script><script src="../../../shared/npicon.js"></script><script src="../../../shared/layout-pop.js"></script>
 <script src="../../../shared/device.js"></script>
-<script src="../../../shared/bridge.js"></script><script src="../../../shared/levelup.js"></script>
+<script src="../../../shared/bridge.js"></script><script src="../../../shared/tts.js"></script><script src="../../../shared/levelup.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tên Lửa Của Bé</title>
 <link rel="preload" href="../../../shared/fonts/inter-var-latin-vi.woff2" as="font" type="font/woff2" crossorigin>
@@ -363,7 +363,7 @@ function tone(f,d,ty,v,dl,f2){const c=audio();if(!c)return;const t0=c.currentTim
 function noise(d,v,f0,f1){const c=audio();if(!c)return;const n=Math.floor(c.sampleRate*d),b=c.createBuffer(1,n,c.sampleRate),a=b.getChannelData(0);for(let i=0;i<n;i++)a[i]=(Math.random()*2-1)*(1-i/n);const s=c.createBufferSource(),fl=c.createBiquadFilter(),g=c.createGain();s.buffer=b;fl.type="bandpass";fl.frequency.setValueAtTime(f0,c.currentTime);fl.frequency.exponentialRampToValueAtTime(f1,c.currentTime+d);g.gain.value=v;s.connect(fl);fl.connect(g);g.connect(c.destination);s.start()}
 const sfx={star:()=>tone(900+Math.random()*200,.1,"triangle",.08),hit:()=>{tone(150,.25,"sawtooth",.1,0,60)},good:()=>{tone(660,.12,"triangle",.12);tone(880,.16,"triangle",.12,.09);tone(1100,.2,"triangle",.1,.18)},no:()=>tone(240,.22,"sine",.1),tick:()=>tone(520,.09,"triangle",.08),go:()=>tone(880,.25,"triangle",.14),
  whoosh:()=>{noise(1.3,.35,300,3500);tone(180,1.2,"sawtooth",.07,0,900)},win:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.2,"triangle",.12,i*.1)),dest:()=>[784,988,1175].forEach((f,i)=>tone(f,.18,"triangle",.1,i*.08))};
-function say(text){if(!sound||!window.speechSynthesis||!text)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang=LANG==="vi"?"vi-VN":"en-US";u.rate=.85;u.pitch=1.15;speechSynthesis.speak(u)}catch(e){}}
+function say(text){if(!sound||!window.speechSynthesis||!text)return;NPTTS.speak(text,{lang:LANG})}
 let toastT=0;function toast(m,ms){const e=$("toast");e.textContent=m;e.classList.add("on");clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove("on"),ms||1500)}
 
 /* ===== HÔM NAY · THÁCH ĐẤU · CHIA SẺ ===== */

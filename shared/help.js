@@ -71,9 +71,8 @@
       try {
         if (speaking) { stopSay(); return; }
         var vi = (document.documentElement.lang || "vi").slice(0, 2) !== "en", tx = [].map.call(ov.querySelectorAll(".hlpIt span"), function (e) { return e.textContent; }).join(". ");
-        speechSynthesis.cancel(); var u = new SpeechSynthesisUtterance(tx); u.npForce = true; u.lang = vi ? "vi-VN" : "en-US"; u.rate = .9;
-        u.onend = u.onerror = function () { speaking = false; mark(false); };
-        speaking = true; mark(true); speechSynthesis.speak(u);
+        speaking = true; mark(true);
+        NPTTS.speak(tx, { lang: vi ? "vi" : "en", force: true, onend: function () { speaking = false; mark(false); }, onerror: function () { speaking = false; mark(false); } });
       } catch (e) { speaking = false; }
     };
     lis.onclick = say.onclick;

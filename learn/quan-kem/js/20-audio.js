@@ -26,16 +26,6 @@
     step() { tone(680, .07, "triangle", .07, 0, 900); },
     coin() { tone(1175, .1, "square", .05); tone(1568, .2, "square", .05, .08); }
   };
-  function pickVoice() {
-    try { const vs = speechSynthesis.getVoices(); voice = vs.find(v => /^en[-_]US/i.test(v.lang)) || vs.find(v => /^en/i.test(v.lang)) || null; } catch (e) {}
-  }
-  try { pickVoice(); speechSynthesis.addEventListener("voiceschanged", pickVoice); } catch (e) {}
-  QK.cancelSpeech = () => { try { speechSynthesis.cancel(); } catch (e) {} };
-  QK.speak = (text, rate) => {
-    if (!sound || !window.speechSynthesis) return false;
-    try {
-      speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = "en-US"; u.rate = rate || .85; u.pitch = 1.15; if (voice) u.voice = voice;
-      speechSynthesis.speak(u); return true;
-    } catch (e) { return false; }
-  };
+  QK.cancelSpeech = () => NPTTS.cancel();
+  QK.speak = (text, rate) => sound && !!window.speechSynthesis && NPTTS.speak(text, { lang: "en", rate });   /* giọng chung: shared/tts.js */
 })();

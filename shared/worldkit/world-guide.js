@@ -61,8 +61,7 @@
   function speak() {   /* ưu tiên giọng chung Học Vui (tệp thu sẵn / giọng máy tốt nhất + cao độ riêng, learn/voice.js); không có thì giọng máy mặc định */
     try { var st = S.cfg.steps[S.i], txt = msg(st).replace(/[^\p{L}\p{N}\s.,!?'’-]/gu, " ").replace(/\s+/g, " ").trim(), lg = lang() === "vi" ? "vi" : "en";
       if (root.Voice && Voice.say) { Voice.say(txt, S.cfg.voice || "narr", lg, {}); return; }
-      if (!root.speechSynthesis) return; var u = new SpeechSynthesisUtterance(txt);
-      speechSynthesis.cancel(); u.npForce = true; u.lang = lg === "vi" ? "vi-VN" : "en-US"; u.rate = 1; u.pitch = 1; speechSynthesis.speak(u); } catch (e) {}
+      if (root.NPTTS) NPTTS.speak(txt, { lang: lg, force: true }); } catch (e) {}
   }
   function rr(x, y, w, h, r) { r = Math.min(r, w / 2, h / 2);
     return "M" + (x + r) + " " + y + "H" + (x + w - r) + "a" + r + " " + r + " 0 0 1 " + r + " " + r +

@@ -11,7 +11,7 @@ table{width:100%;border-collapse:collapse;margin-top:10px}td,th{padding:8px;bord
 <div class="row"><button class="p" id="go" type="button">▶ Nghe giọng này</button><button id="auto" type="button">🔊 Giọng tự chọn của game</button><button id="rec" type="button">🎙️ Phát tệp thu sẵn</button></div>
 <p id="msg" class="n"></p>
 <h3>Mọi giọng có trên máy này</h3><table><thead><tr><th>Tên</th><th>Ngôn ngữ</th><th>Loại</th></tr></thead><tbody id="tb"></tbody></table>
-</div><script src="voice.js"></script><script>
+</div><script src="../shared/tts.js"></script><script src="voice.js"></script><script>
 var $=function(i){return document.getElementById(i)},ss=window.speechSynthesis;
 function list(){var vs=(ss&&ss.getVoices())||[],lg=$("lg").value,pre=lg==="vi"?"vi":"en";$("vo").innerHTML="<option value=''>(tự chọn tốt nhất)</option>"+vs.filter(function(v){return v.lang.toLowerCase().indexOf(pre)===0}).map(function(v){return "<option value='"+v.name+"'>"+v.name+" ("+v.lang+(v.localService?"":", online")+")</option>"}).join("");
 $("tb").innerHTML=vs.map(function(v){return "<tr><td>"+v.name+"</td><td>"+v.lang+"</td><td>"+(v.localService?"trên máy":"online")+"</td></tr>"}).join("")||"<tr><td colspan=3>Máy này chưa có giọng nào.</td></tr>";

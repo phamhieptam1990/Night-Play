@@ -20,7 +20,7 @@ function speak(){
   try{ const lg = b.speakLang ? (b.speakLang === "vi" ? "vi-VN" : "en-US") : (subj === "tanh" ? "en-US" : (vi ? "vi-VN" : "en-US")),
     busy = speechSynthesis.speaking || speechSynthesis.pending; if(busy) speechSynthesis.cancel();
     /* nếu đang đọc dở thì hủy rồi chờ một nhịp (Chrome bỏ speak() ngay sau cancel()); nếu không thì đọc NGAY trong cú chạm (Safari chỉ cho phát trong cú chạm) */
-    const go = () => { const u = new SpeechSynthesisUtterance(window.Voice && lg === "vi-VN" ? Voice.spoken(txt, "vi") : txt); u.lang = lg; u.rate = .9; let ok = false;
+    const go = () => { const u = new SpeechSynthesisUtterance(window.Voice && lg === "vi-VN" ? Voice.spoken(txt, "vi") : txt); u.lang = lg; u.rate = 1; let ok = false;
       const vs = speechSynthesis.getVoices(), vo = vs.find(x => x.lang === lg) || vs.find(x => x.lang.slice(0, 2) === lg.slice(0, 2)); if(vo) u.voice = vo;
       u.onstart = () => { ok = true; }; u.onerror = e => { if(e.error !== "canceled" && e.error !== "interrupted") LM.say(T[lang].noVoice); };
       if(speechSynthesis.paused) speechSynthesis.resume(); speechSynthesis.speak(u);
