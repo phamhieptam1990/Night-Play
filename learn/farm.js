@@ -28,11 +28,11 @@
     return cache;
   }
   /* VƯỜN KHỞI ĐẦU: bé vào THẲNG lớp 2+ (chưa qua chủ đề nào ở các lớp thấp hơn) có sẵn nhà vừa + ruộng, vài cây và vài bạn vật nuôi để chăm ngay.
-     Lớp 2: nhà tranh (n=3); lớp 3-5: nhà cấp 4 + ruộng (n=6). Đồ hiếm của lớp thấp KHÔNG tặng (xem garden/garden-items.js). Trả về null nếu không áp dụng. */
+     Lớp 2-5 đều có nhà cấp 4 + ruộng (n=6); lớp 2 ít cây/vật nuôi hơn một chút (2 cây, 3 bạn), lớp 3-5: 3 cây, 4 bạn. Đồ hiếm của lớp thấp KHÔNG tặng (xem garden/garden-items.js). Trả về null nếu không áp dụng. */
   function starter() {
     var S = root.LearnSlot, p = S && S.parts && S.parts(); if (!p || p.grade < 2 || !S.passed) return null;
     for (var g = 1; g < p.grade; g++) for (var i = 0; i < S.SUBJ.length; i++) if (S.passed(g, S.SUBJ[i]) > 0) return null;
-    return { n: p.grade === 2 ? 3 : 6, trees: p.grade === 2 ? 1 : 3, animals: p.grade === 2 ? 2 : 4, grade: p.grade };
+    return { n: 6, trees: p.grade === 2 ? 2 : 3, animals: p.grade === 2 ? 3 : 4, grade: p.grade };   /* lớp 2 cũng có nhà + ruộng ngay (trước đây chỉ nhà tranh nên trống trơn) */
   }
   function save() { if (cache) wr(KEY, JSON.stringify(cache)); }
   function stars() { return +rd("learn:stars") || 0; }

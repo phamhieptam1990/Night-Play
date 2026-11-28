@@ -58,8 +58,8 @@ function renderGoalChip(){
 /* 3 ô to đi tới Nhà / Kho / Ao cá (chỉ hiện khi đã mở); không còn nút Hướng dẫn / Đóng ở đáy (? ở header, ✕ ở góc) */
 function places(u){
   if(u.stage < 5) return "";
-  var A = GardenLayout.ART, h = "<a href='" + A + "preview-house.html' aria-label='Nhà'><i>🏠</i><span>Nhà</span></a>";
-  if(u.stage >= UNL.full) h += "<a href='" + A + "preview-barn.html' aria-label='Kho'><i>📦</i><span>Kho</span></a><a href='" + A + "preview-pond.html' aria-label='Ao cá'><i>🐟</i><span>Ao cá</span></a>";
+  var A = GardenLayout.ART, h = "<a href='" + A + "preview-house.html' aria-label='Nhà'><i>🏠</i></a>";
+  if(u.stage >= UNL.full) h += "<a href='" + A + "preview-barn.html' aria-label='Kho'><i>📦</i></a><a href='" + A + "preview-pond.html' aria-label='Ao cá'><i>🐟</i></a>";
   return "<div class='gd-act'><div class='gd-places'>" + h + "</div></div>";
 }
 function renderGuide(u){
