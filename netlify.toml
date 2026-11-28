@@ -17,6 +17,12 @@
   status = 200
   force = true
 
+# Link chơi hộ ngắn /h/<mã>#<khoá> → trang help.html (trang tự đọc mã từ đường dẫn)
+[[redirects]]
+  from = "/h/*"
+  to = "/help.html"
+  status = 200
+
 # Trang admin không để công cụ tìm kiếm lập chỉ mục (truy cập vẫn cần ADMIN_KEY)
 [[headers]]
   for = "/*"

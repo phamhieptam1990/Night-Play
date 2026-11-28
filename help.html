@@ -2,10 +2,14 @@
 <html lang="vi" data-app="hub">
 <head>
 <meta charset="utf-8">
+<base href="/">
 <script src="shared/guard.js"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#12141F">
 <meta name="robots" content="noindex,nofollow">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Play Hub">
+<meta property="og:title" content="Chơi hộ mình một lượt nhé! 🎮"><meta property="og:description" content="Bạn mình nhờ chơi hộ một lượt game vui. Không cần đăng ký, chơi ngay trên điện thoại.">
+<meta property="og:image" content="https://nightplay.vn/lp/img/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="referrer" content="no-referrer">
 <link rel="icon" type="image/svg+xml" sizes="any" href="/shared/favicon.svg">
 <title>Chơi hộ bạn · Play Hub</title>
@@ -131,10 +135,14 @@ const HOUR = '<svg class="em" viewBox="0 0 24 24" fill="none" stroke="currentCol
 const LINKX = '<svg class="em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1M4 4l16 16"/></svg>';
 const WARN = '<svg class="em" style="color:var(--warn)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.01"/></svg>';
 
-/* link: help.html#<id 22 ký tự>.<khoá 43 ký tự>.<game> — phần sau # không bao giờ được gửi lên máy chủ */
+/* Link ngắn: /h/<mã 8 ký tự>#<khoá 22 ký tự> (game + tiến trình lấy từ máy chủ). Link dài cũ: help.html#<id>.<khoá>.<game>[.<tiến trình>] vẫn mở được. Phần sau # không bao giờ gửi lên máy chủ. */
+const SHORT = location.pathname.match(/^\/h\/([A-Za-z0-9_-]{8,22})\/?$/);
 const parts = location.hash.slice(1).split(".");
-const id = parts[0], key = parts[1], game = parts[2], rstate = /^[A-Za-z0-9_-]{1,2000}$/.test(parts[3] || "") ? parts[3] : "";   // tiến trình của người nhờ (nếu có)
-const valid = /^[A-Za-z0-9_-]{22}$/.test(id || "") && /^[A-Za-z0-9_-]{43}$/.test(key || "") && NPS.GAMES[game];
+const id = SHORT ? SHORT[1] : parts[0], key = SHORT ? parts[0] : parts[1];
+let game = SHORT ? "" : parts[2], rstate = !SHORT && /^[A-Za-z0-9_-]{1,2000}$/.test(parts[3] || "") ? parts[3] : "";   // tiến trình của người nhờ (nếu có)
+let loading = !!SHORT, gone = false, netErr = false;
+const keyOk = /^[A-Za-z0-9_-]{22}$|^[A-Za-z0-9_-]{43}$/.test(key || "") && /^[A-Za-z0-9_-]{8,22}$/.test(id || "");
+const isValid = () => keyOk && !!NPS.GAMES[game];
 const tokKey = "np_help_" + id;
 const GN = () => NPS.gameName(game, (result && result.extra && result.extra.pack) || NPS.packOf(rstate));   /* tên theo loại game của người nhờ (Thú vật / Người yêu…) */
 const getTok = () => { try { return sessionStorage.getItem(tokKey); } catch (e) { return null; } };
@@ -144,7 +152,9 @@ let result = null, stage = "intro";
 function view() {
   const t = L(), card = $("card"); card.className = "card"; document.title = t.title; $("fHome").textContent = t.home; $("fPriv").textContent = t.priv; $("themeBtn").setAttribute("aria-label", t.theme);
   document.querySelectorAll("#langSeg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.l === root.lang)));
-  if (!valid) { card.className = "card st-bad"; card.innerHTML = LINKX + "<h1>" + esc(t.bad) + "</h1><p>" + esc(t.badP) + '</p><a class="nb-a" href="play/index.html">' + esc(t.more) + "</a>"; return; }
+  if (loading) { card.innerHTML = ICON + "<h1>" + esc(t.t) + "</h1>"; return; }
+  if (gone) stage = "used";
+  if (!isValid() && !gone) { card.className = "card st-bad"; card.innerHTML = LINKX + "<h1>" + esc(netErr ? t.offline : t.bad) + "</h1><p>" + esc(netErr ? "" : t.badP) + '</p><a class="nb-a" href="play/index.html">' + esc(t.more) + "</a>"; return; }
   if (stage === "used") { card.className = "card st-used"; card.innerHTML = HOUR + "<h1>" + esc(t.used) + "</h1><p>" + esc(t.usedP) + '</p><p class="hint">' + esc(t.usedH) + '</p><a class="nb-a" href="play/index.html">' + esc(t.more) + "</a>"; return; }
   if (stage === "done") { card.innerHTML = ICON + "<h1>" + esc(t.doneT) + '</h1><div class="big">' + esc(NPS.fmtScore(game, result.score)) + "</div><p>" + (NPS.isPct(game) ? "" : esc(t.pts) + " · ") + esc(GN()) + "</p><p>" + esc(t.doneP) + '</p><button class="cta" id="more" type="button">' + esc(t.more) + "</button>"; $("more").onclick = () => { location.href = "index.html"; }; return; }
   card.innerHTML = ICON + "<h1>" + esc(t.t) + '</h1><p class="game">' + esc(GN()) + "</p><p>" + esc(t.p) + '</p>' + (rstate ? '<p class="game" style="font-size:15px">' + esc(t.resumeP) + '</p>' : '') + '<ul class="how"><li><b>1</b><span>' + esc(t.s1) + "</span></li><li><b>2</b><span>" + esc(t.s2) + "</span></li><li><b>3</b><span>" + esc(t.s3) + '</span></li></ul><button class="cta" id="go" type="button">' + esc(getTok() ? t.resume : t.start) + '</button><p class="err" id="err" role="alert"></p><p class="small">' + esc(t.privacy) + "</p>";
@@ -158,7 +168,7 @@ function start() {
     .then(play).catch(e => { starting = false; if (e.message === "slow" || (NPS.isNet && NPS.isNet(e))) { btn.disabled = false; $("err").textContent = e.message === "slow" ? L().slow : L().offline; } else { stage = "used"; view(); } });   /* mất mạng ≠ link đã dùng: giữ nút để bấm lại khi có mạng */
 }
 function play() {
-  const g = NPS.GAMES[game], f = document.createElement("iframe"), u = new URL(g.url, location.href);
+  const g = NPS.GAMES[game], f = document.createElement("iframe"), u = new URL(g.url, document.baseURI);
   u.searchParams.set("helper", "1"); u.searchParams.set("lang", root.lang); if (rstate) u.searchParams.set("s", rstate);
   f.allow = "autoplay"; f.title = GN(); f.src = u.href;
   $("stage").querySelectorAll("iframe").forEach(x => x.remove()); $("stage").insertBefore(f, $("tag"));
@@ -186,6 +196,13 @@ function setLang(l, save) { root.lang = l; if (save) try { localStorage.setItem(
 document.querySelectorAll("#langSeg button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.l, true)));
 $("themeBtn").addEventListener("click", () => { const n = root.dataset.theme === "dark" ? "light" : "dark"; root.dataset.theme = n; document.querySelector("meta[name=theme-color]").content = n === "dark" ? "#12141F" : "#F6F4F1"; try { localStorage.setItem("theme", n); } catch (e) {} });
 view();
+if (SHORT) {
+  if (!keyOk) { loading = false; view(); }
+  else NPS.relayInfo(id, key).then(r => { game = r.game; rstate = /^[A-Za-z0-9_-]{1,2000}$/.test(r.st) ? r.st : ""; try { sessionStorage.setItem("np_helpinfo_" + id, JSON.stringify([game, rstate])); } catch (e) {} })
+    .catch(e => { let c = null; try { c = JSON.parse(sessionStorage.getItem("np_helpinfo_" + id)); } catch (x) {}
+      if (c && getTok()) { game = c[0]; rstate = c[1]; return; }   /* đã nhận link rồi mà tải lại trang: dùng thông tin đã lưu */
+      if (NPS.isNet && NPS.isNet(e)) netErr = true; else gone = true; }).then(() => { loading = false; view(); });
+}
 </script>
 <script src="shared/updated.js"></script>
 <script src="shared/bars.js"></script>

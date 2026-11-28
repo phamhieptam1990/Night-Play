@@ -14,6 +14,12 @@ const JSON_H = { "Content-Type": "application/json; charset=utf-8", "Cache-Contr
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    /* Link chơi hộ ngắn /h/<mã>#<khoá>: trả đúng trang help.html (trang tự đọc mã từ đường dẫn) */
+    if (/^\/h\/[A-Za-z0-9_-]{8,22}\/?$/.test(url.pathname) && env.ASSETS) {
+      let r = await env.ASSETS.fetch(new Request(url.origin + "/help.html", { redirect: "manual" }));
+      for (let i = 0; i < 2 && r.status >= 300 && r.status < 400 && r.headers.get("location"); i++) r = await env.ASSETS.fetch(new Request(new URL(r.headers.get("location"), url.origin).href, { redirect: "manual" }));
+      return new Response(r.body, { status: r.status, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-cache", "Referrer-Policy": "no-referrer" } });
+    }
     if (!url.pathname.startsWith("/api")) return env.ASSETS ? env.ASSETS.fetch(request) : new Response("Not found", { status: 404 });
     await load();
     /* Thông báo chỉ nêu TÊN biến bị thiếu/sai, không chứa giá trị (app.js tự ném lỗi như vậy). */

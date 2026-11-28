@@ -58,6 +58,7 @@ function serveStatic(req, res, pathname) {
       if (d.startsWith(base + path.sep) && fs.existsSync(path.join(d, "index.html"))) { const q = (req.url || "").indexOf("?"); res.writeHead(301, { Location: rel + "/" + (q >= 0 ? req.url.slice(q) : "") }); return res.end(); }
     }
   }
+  if (/^\/h\/[A-Za-z0-9_-]{8,22}\/?$/.test(rel)) rel = "/help.html";   // link chơi hộ ngắn
   if (rel.endsWith("/")) rel += "index.html";
   let file = path.resolve(STATIC_ROOT, "." + rel);
   /* Landing giới thiệu: nguồn nằm ở landing/ nhưng triển khai lên gốc (/, /en/, /lp/...; xem scripts/build.js) → bản dev tìm thêm ở landing/ */

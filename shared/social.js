@@ -144,7 +144,8 @@ window.NPS = (function () {
     a.forEach(function (s) { if ((s.state === "open" || s.state === "claimed") && now - s.at > TTL) s.state = "expired"; });
     save(a); return a;
   }
-  var linkFor = function (s, base) { return new URL(base || "help.html", location.href).href + "#" + s.id + "." + s.key + "." + s.game + (s.st ? "." + s.st : ""); };
+  /* Link ngắn /h/<mã 8 ký tự>#<khoá 22 ký tự> (game + tiến trình đã mã hoá nằm ở máy chủ); link dài cũ help.html#id.key.game.st vẫn mở được */
+  var linkFor = function (s, base) { return s.short ? location.origin + "/h/" + s.id + "#" + s.key : new URL(base || "help.html", location.href).href + "#" + s.id + "." + s.key + "." + s.game + (s.st ? "." + s.st : ""); };
   var encState = function (o) { try { return o ? b64.enc(enc.encode(JSON.stringify(o))) : ""; } catch (e) { return ""; } };   /* trạng thái game → chuỗi trong #fragment */
 
   /* Tạo lời nhờ: mỗi game chỉ có 1 lời nhờ đang chờ/đang chơi cùng lúc (dùng lại link cũ nếu còn hiệu lực). */
@@ -154,12 +155,21 @@ window.NPS = (function () {
   }
   function createShare2(game, base, st) {
     var arr = prune(), cur = arr.filter(function (s) { return s.game === game && s.state === "open"; })[0];   /* link đã có người nhận chỉ dùng được một lần → phải tạo link mới */
-    if (cur) { if (cur.state === "open" && (cur.st || "") !== st) { cur.st = st; save(arr); }   /* chưa ai nhận: cập nhật tiến trình mới nhất vào link (không cần máy chủ) */
+    if (cur) { if ((cur.st || "") !== st) { cur.st = st; save(arr); if (cur.short) encrypt(cur.key, st).then(function (e) { call("POST", "/relay/" + cur.id + "/st", { token: cur.owner, st: e }); }).catch(function () {}); }   /* chưa ai nhận: cập nhật tiến trình mới nhất */
       return Promise.resolve({ share: cur, link: linkFor(cur, base), reused: true }); }
-    var id = b64.enc(rnd(16)), key = b64.enc(rnd(32)), owner = b64.enc(rnd(16));
-    return sha256hex(owner).then(function (h) { return call("POST", "/relay", { id: id, owner: h }); }).then(function (r) {
-      if (r.status === 429) throw new Error("slow"); if (r.status !== 200) throw new Error("err");
-      var s = { id: id, key: key, owner: owner, game: game, at: Date.now(), state: "open", result: null, seen: true, st: st }, a = load(); a.unshift(s); save(a);
+    var key = b64.enc(rnd(16)), owner = b64.enc(rnd(16));
+    return Promise.all([sha256hex(owner), st ? encrypt(key, st) : ""]).then(function (v) {
+      var tryMake = function (n) {
+        var id = b64.enc(rnd(6));   /* 8 ký tự */
+        return call("POST", "/relay", { id: id, owner: v[0], game: game, st: v[1] }).then(function (r) {
+          if (r.status === 409 && n < 3) return tryMake(n + 1);
+          if (r.status === 429) throw new Error("slow"); if (r.status !== 200) throw new Error("err");
+          return { id: id, short: !!r.body.short };
+        });
+      };
+      return tryMake(0);
+    }).then(function (m) {
+      var s = { id: m.id, key: key, owner: owner, game: game, at: Date.now(), state: "open", result: null, seen: true, st: st, short: m.short }, a = load(); a.unshift(s); save(a);
       return { share: s, link: linkFor(s, base), reused: false };
     });
   }
@@ -191,6 +201,14 @@ window.NPS = (function () {
     var tok = b64.enc(rnd(16));
     return sha256hex(tok).then(function (h) { return call("POST", "/relay/" + id + "/claim", { claim: h }); }).then(function (r) {
       if (r.status !== 200) throw new Error(r.status === 429 ? "slow" : "unavailable"); return tok;
+    });
+  }
+  /* Link ngắn: hỏi máy chủ game + tiến trình (giải mã bằng khoá trong #) → { game, st } hoặc ném lỗi "gone" */
+  function relayInfo(id, key) {
+    return call("GET", "/relay/" + id + "/info").then(function (r) {
+      if (r.status !== 200 || r.body.state !== "open" || !r.body.game) throw new Error(r.status === 200 ? "used" : "gone");
+      var st = r.body.st; if (!st) return { game: r.body.game, st: "" };
+      return decrypt(key, st).then(function (x) { return { game: r.body.game, st: typeof x === "string" ? x : "" }; }, function () { return { game: r.body.game, st: "" }; });
     });
   }
   function sendResult(id, tok, key, result) {
@@ -479,5 +497,5 @@ window.NPS = (function () {
   }
 
   return { fmtScore: fmtScore, fmtScoreU: fmtScoreU, isPct: isPct, kidName: kidName, isKidName: isKidName, isKid: isKid, brandOf: brandOf, GAMES: GAMES, T: T, lang: lang, gameName: gameName, packOf: packOf, load: load, save: save, prune: prune, linkFor: linkFor, createShare: createShare, poll: poll, onResult: onResult,
-    isNet: isNet, claim: claim, sendResult: sendResult, submitScore: submitScore, getScores: getScores, nickGet: nickGet, nickSet: nickSet, initParent: initParent, TTL: TTL, STR: STR };
+    isNet: isNet, claim: claim, relayInfo: relayInfo, sendResult: sendResult, submitScore: submitScore, getScores: getScores, nickGet: nickGet, nickSet: nickSet, initParent: initParent, TTL: TTL, STR: STR };
 })();

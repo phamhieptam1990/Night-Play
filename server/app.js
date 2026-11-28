@@ -751,7 +751,7 @@ route("POST", ACT_PATH("email"), ctx => adminAct(ctx, "email_change", async (c, 
    Không lưu IP/thiết bị/email. IP chỉ được băm kèm ngày (không đảo ngược được) để giới hạn spam trong vài giờ. */
 const ipHash = ip => hmac("ip|" + ip + "|" + new Date().toISOString().slice(0, 10)).slice(0, 16);
 const sha256hex = s => crypto.createHash("sha256").update(String(s)).digest("hex");
-const RID = "[A-Za-z0-9_-]{22}", HEX64 = /^[a-f0-9]{64}$/;
+const RID = "[A-Za-z0-9_-]{8,22}", HEX64 = /^[a-f0-9]{64}$/;
 
 /* Game có bảng xếp hạng (chỉ game dành cho người lớn; trang trẻ em không có). max = điểm tối đa hợp lệ của 1 lượt chơi. */
 /* Game trẻ em (kids:true): KHÔNG nhận tên gõ tay. Chỉ nhận tên vui ghép từ danh sách có sẵn: "<Con vật> <Tính từ> <số 10-99>" (VI) hoặc "<Adj> <Animal> <số>" (EN).
@@ -839,9 +839,23 @@ route("GET", /^\/api\/scores$/, async ({ query }) => {
 /* Chơi hộ: 1) chủ nhân tạo  2) người chơi hộ nhận (chỉ 1 lần)  3) người chơi hộ gửi kết quả đã mã hoá  4) chủ nhân lấy rồi xác nhận → xoá */
 route("POST", /^\/api\/relay$/, async ({ body, ip }) => {
   if (!new RegExp("^" + RID + "$").test(String(body.id)) || !HEX64.test(String(body.owner))) return out(400, { error: "bad_input" });
+  const game = /^[a-z0-9-]{1,40}$/.test(String(body.game || "")) ? String(body.game) : null, st = /^[A-Za-z0-9_-]{0,4000}$/.test(String(body.st || "")) ? String(body.st || "") : "";
   if (await limited("rl:" + ipHash(ip), 8, 3600000)) return out(429, { error: "slow_down" });
-  const r = await db.query("insert into relays(id, owner_hash, expires_at) values ($1, $2, now() + interval '24 hours') on conflict do nothing", [body.id, body.owner]);
-  return r.rowCount ? out(200, { ok: true, ttlHours: 24 }) : out(409, { error: "exists" });
+  let r, short = !!game;
+  try { r = await db.query("insert into relays(id, owner_hash, expires_at, game, st) values ($1, $2, now() + interval '24 hours', $3, $4) on conflict do nothing", [body.id, body.owner, game, st || null]); }
+  catch (e) { if (!noTable(e)) throw e; short = false; r = await db.query("insert into relays(id, owner_hash, expires_at) values ($1, $2, now() + interval '24 hours') on conflict do nothing", [body.id, body.owner]); }   // chưa chạy migration 011 → client dùng link dài như cũ
+  return r.rowCount ? out(200, { ok: true, ttlHours: 24, short }) : out(409, { error: "exists" });
+});
+// Trang /h/<mã> hỏi: link còn dùng được không, game nào, tiến trình (đã mã hoá) của người nhờ. Chỉ trả khi chưa ai nhận.
+route("GET", new RegExp("^/api/relay/(" + RID + ")/info$"), async ({ m }) => {
+  let r; try { ({ rows: [r] } = await db.query("select state, game, st, expires_at from relays where id = $1", [m[1]])); } catch (e) { if (!noTable(e)) throw e; return out(404, { error: "gone" }); }
+  if (!r || ms(r.expires_at) < Date.now()) return out(404, { error: "gone" });
+  return out(200, r.state === "open" && r.game ? { state: "open", game: r.game, st: r.st || "" } : { state: r.state });
+});
+route("POST", new RegExp("^/api/relay/(" + RID + ")/st$"), async ({ m, body }) => {      // chủ nhân cập nhật tiến trình mới nhất khi link chưa ai nhận
+  if (typeof body.token !== "string" || body.token.length < 16 || body.token.length > 64 || !/^[A-Za-z0-9_-]{0,4000}$/.test(String(body.st || ""))) return out(400, { error: "bad_input" });
+  try { const r = await db.query("update relays set st = $3 where id = $1 and owner_hash = $2 and state = 'open'", [m[1], sha256hex(body.token), body.st || null]); return r.rowCount ? out(200, { ok: true }) : out(403, { error: "forbidden" }); }
+  catch (e) { if (!noTable(e)) throw e; return out(503, { error: "migration_required" }); }
 });
 route("POST", new RegExp("^/api/relay/(" + RID + ")/claim$"), async ({ m, body, ip }) => {
   if (!HEX64.test(String(body.claim))) return out(400, { error: "bad_input" });

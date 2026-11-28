@@ -15,8 +15,8 @@
     "directory": "./dist",
     "binding": "ASSETS",
     "not_found_handling": "none",
-    // chỉ /api/* chạy Worker (tốn hạn mức); mọi file tĩnh phục vụ thẳng, không giới hạn
-    "run_worker_first": ["/api/*"]
+    // chỉ /api/* và /h/* (link chơi hộ ngắn) chạy Worker (tốn hạn mức); mọi file tĩnh phục vụ thẳng, không giới hạn
+    "run_worker_first": ["/api/*", "/h/*"]
   },
   "observability": { "enabled": true }
 }
