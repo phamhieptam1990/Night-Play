@@ -118,3 +118,8 @@
   setInterval(check, 1200);
   addEventListener("resize", function () { setTimeout(check, 300); });
 })();
+/* tắt phóng to trình duyệt: nạp shared/nozoom.js cạnh guard.js */
+(function () {
+  var cs = document.currentScript; if (!cs || !cs.src) return;
+  var s = document.createElement("script"); s.src = cs.src.replace(/guard\.js(\?.*)?$/, "nozoom.js$1"); cs.parentNode.insertBefore(s, cs.nextSibling);
+})();
