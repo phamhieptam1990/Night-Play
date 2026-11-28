@@ -104,6 +104,8 @@ canvas#cv{border-radius:3cqw;background:linear-gradient(var(--field),var(--field
 .qzFb{background:var(--panel);border:.7cqw solid var(--line);border-radius:3.6cqw;padding:2.6cqw 3cqw;display:flex;flex-direction:column;gap:1.4cqw}
 .qzFb.g{border-color:var(--good)}.qzFb.b{border-color:var(--bad)}.qzFb b{font:800 4.4cqw var(--font)}.qzFb.g b{color:var(--good)}.qzFb.b b{color:var(--bad)}.qzFb p{margin:0;font:600 3.7cqw/1.35 var(--font);color:var(--ink)}
 .qzBar{margin-bottom:6cqw;height:1.6cqw;border-radius:9px;background:var(--line);overflow:hidden;margin-top:auto}.qzBar i{display:block;height:100%;background:var(--accent);transform-origin:left}
+.qzO.dim{opacity:.3}
+.qzFab{position:absolute;left:0;bottom:10cqw;z-index:5;min-height:48px;padding:0 6cqw;box-shadow:0 1.4cqw 3.6cqw rgba(0,0,0,.42)}.qzFab.g{background:var(--good);color:#fff}.qzFab.b{background:var(--accent);color:var(--on)}
 .pfx{position:absolute;left:50%;top:46%;width:14cqw;height:14cqw;margin:-7cqw 0 0 -7cqw;border-radius:50%;border:1.2cqw solid var(--accent);box-shadow:0 0 5cqw var(--accent),inset 0 0 4cqw var(--accent);pointer-events:none;z-index:9;animation:pfx .85s ease-out forwards}.pfx.b{animation-delay:.14s;border-color:#fff}@keyframes pfx{from{transform:scale(.2);opacity:.95}to{transform:scale(4.6);opacity:0}}#play.pglow::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:8;box-shadow:inset 0 0 14cqw var(--accent);animation:pgl .7s ease-out forwards}@keyframes pgl{from{opacity:1}to{opacity:0}}@media (prefers-reduced-motion:reduce){.pfx,#play.pglow::after{display:none}}
 </style>
 <style id="skCss"></style>
@@ -542,8 +544,8 @@ function newGame(seed, mode, t, ch) {
 const curQ = D => D.qs[D.i];
 function qzHtml(D) {
   const q = curQ(D), vi = LANG === "vi", L = a => a[vi ? 0 : 1];
-  const opts = q.o.map((o, k) => D.ans >= 0 && D.bub && k !== q.ci && k !== D.ans ? "" : '<button type="button" class="qzO' + (D.ans >= 0 ? (k === q.ci ? " ok" : k === D.ans ? " no" : "") : "") + '" data-k="' + k + '"' + (D.ans >= 0 ? " disabled" : "") + "><b>" + "ABCD"[k] + "</b><span>" + L(o) + "</span></button>").join("");
-  let fb = ""; if (D.ans >= 0) { const good = D.ans === q.ci; fb = '<div class="qzFb ' + (good ? "g" : "b") + '"><b>' + (good ? "✓ " + T("right") : (D.ans === -2 ? "⏱ " + T("late") : "✗ " + T("wrong"))) + "</b>" + (D.bub ? "" : "<p>" + L(q.w) + "</p>") + (D.C.tot ? "" : '<button type="button" class="btn grow" id="qzNext">' + T(D.i >= D.qs.length - 1 ? "fin" : "next") + " ▶</button>") + "</div>"; }
+  const opts = q.o.map((o, k) => '<button type="button" class="qzO' + (D.ans >= 0 ? (k === q.ci ? " ok" : k === D.ans ? " no" : D.bub ? " dim" : "") : "") + '" data-k="' + k + '"' + (D.ans >= 0 ? " disabled" : "") + "><b>" + "ABCD"[k] + "</b><span>" + L(o) + "</span></button>").join("");
+  let fb = ""; if (D.ans >= 0 && D.bub) fb = '<button type="button" class="btn qzFab ' + (D.ans === q.ci ? "g" : "b") + '" id="qzNext">' + T(D.i >= D.qs.length - 1 ? "fin" : "next") + " ▶</button>"; else if (D.ans >= 0) { const good = D.ans === q.ci; fb = '<div class="qzFb ' + (good ? "g" : "b") + '"><b>' + (good ? "✓ " + T("right") : (D.ans === -2 ? "⏱ " + T("late") : "✗ " + T("wrong"))) + "</b>" + (D.bub ? "" : "<p>" + L(q.w) + "</p>") + (D.C.tot ? "" : '<button type="button" class="btn grow" id="qzNext">' + T(D.i >= D.qs.length - 1 ? "fin" : "next") + " ▶</button>") + "</div>"; }
   return '<div class="qzTop"><span class="qzTag">' + L(q.tg) + '</span><span class="qzNo">' + (D.C.tot || D.C.lives ? "#" + (D.i + 1) : (D.i + 1) + "/" + D.qs.length) + '</span></div><div class="qzCard"><i class="qzAv">' + q.ic + '</i><p class="qzTx">' + L(q.p) + '</p></div><div class="qzOpts">' + opts + "</div>" + fb + '<div class="qzBar"><i id="qzBarI"></i></div>';
 }
 function renderQ(D) { const h = $("qz"); if (!h || !D || D.over && D.ans < 0) return; h.innerHTML = qzHtml(D); h.dataset.n = curQ(D).o.length; }
