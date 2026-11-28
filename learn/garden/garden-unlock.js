@@ -55,6 +55,13 @@ function renderGoalChip(){
   if(!g){ c.style.display = ""; c.innerHTML = img + "Cấp " + t; c.setAttribute("aria-label", "Cấp " + t + ": " + Farm.BUILD.TIER_NAMES[t]); return; }
   var a = g.done - g.from, b = g.at - g.from; c.style.display = ""; c.innerHTML = img + "<img class='gcg' src='" + goalImg(g) + "' alt=''><b>" + a + "/" + b + "</b>"; c.setAttribute("aria-label", "Cấp " + t + ". Mục tiêu: " + g.name + ", đã xong " + a + " trên " + b + " nhiệm vụ. Bấm để xem.");
 }
+/* 3 ô to đi tới Nhà / Kho / Ao cá (chỉ hiện khi đã mở); không còn nút Hướng dẫn / Đóng ở đáy (? ở header, ✕ ở góc) */
+function places(u){
+  if(u.stage < 5) return "";
+  var A = GardenLayout.ART, h = "<a href='" + A + "preview-house.html' aria-label='Nhà'><i>🏠</i><span>Nhà</span></a>";
+  if(u.stage >= UNL.full) h += "<a href='" + A + "preview-barn.html' aria-label='Kho'><i>📦</i><span>Kho</span></a><a href='" + A + "preview-pond.html' aria-label='Ao cá'><i>🐟</i><span>Ao cá</span></a>";
+  return "<div class='gd-act'><div class='gd-places'>" + h + "</div></div>";
+}
 function renderGuide(u){
   var g = document.getElementById("guide"); if(!g) return;
   var n = missionsDone(), goal = Farm.BUILD.goal(n), t = Farm.BUILD.tier(n), hero;
@@ -67,8 +74,10 @@ function renderGuide(u){
   var many = u.stage >= UNL.full;
   g.innerHTML = "<div class='gd-a'>" + who + hero + "</div>" +
     "<div class='gd-m'><h4>📅 Nhiệm vụ hôm nay <small>xong 1 = mở thêm đất</small></h4><div class='gdc-list' id='gdMis'></div></div>" +
-    "<div class='gd-go2" + (many ? " many" : "") + "'><button type='button' id='gdIntro'>❓ " + (many ? "Hướng dẫn" : "Giới thiệu") + "</button>" + (u.stage >= 5 ? "<a href='" + GardenLayout.ART + "preview-house.html' aria-label='Nhà'>🏠</a>" : "") + (u.stage >= UNL.full ? "<a href='" + GardenLayout.ART + "preview-barn.html' aria-label='Kho'>📦</a><a href='" + GardenLayout.ART + "preview-pond.html' aria-label='Ao'>🐟</a>" : "") + "<button type='button' class='gd-close' id='gdClose'>Đóng</button></div>";
-  var cl = document.getElementById("gdClose"); if(cl) cl.onclick = function(){ if(typeof closeMn === "function") closeMn(); };
+    places(u);
+  /* nút ? nằm ở HEADER của bảng (cạnh ✕), không còn ở hàng nút cuối */
+  var hd = document.querySelector("#mncard .hd"), old = document.getElementById("gdIntro"); if(old) old.remove();
+  if(hd){ var q = document.createElement("button"); q.type = "button"; q.id = "gdIntro"; q.className = "rq"; q.setAttribute("data-noicon", ""); q.setAttribute("aria-label", many ? "Hướng dẫn" : "Giới thiệu"); q.textContent = "?"; hd.appendChild(q); }
   var mi = g.querySelector(".gd-mas img"); if(mi){ mi.style.cursor = "pointer"; mi.setAttribute("role", "button"); mi.setAttribute("tabindex", "0"); mi.setAttribute("aria-label", "Đổi bạn làm vườn"); var again = function(){ if(typeof closeMn === "function") closeMn(); if(typeof openBuddy === "function") openBuddy(null, true); }; mi.onclick = again; mi.onkeydown = function(e){ if(e.key === "Enter" || e.key === " "){ e.preventDefault(); again(); } }; }
   var b = document.getElementById("gdIntro"); if(b) b.onclick = function(){ if(typeof closeMn === "function") closeMn(); if(typeof openIntro === "function") openIntro(); };
   if(typeof renderMis === "function") renderMis();
