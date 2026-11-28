@@ -332,6 +332,8 @@ window.NP = (function () {
   var multi = q.get("multi") === "1", mPaused = false, mBlur = true, mUser = false, mOver = false, mPausedByUs = false, mBase = ((document.currentScript && document.currentScript.src) || "").replace(/bridge\.js(\?.*)?$/, "");
   var vt = { off: 0, at: 0 }, held = {}, heldT = {}, alias = {};
   /* ĐỒNG HỒ ẢO dùng chung: chế độ chơi cùng lúc (host tạm dừng khung) VÀ trang game thường (mở menu ⋯ → tạm dừng, đóng menu → đếm 3-2-1: shared/menupause.js gọi NP.freeze/thaw). Không áp cho chế độ chơi hộ (?helper=1). */
+  /* CHƠI HỘ (?helper=1): người chơi hộ chỉ cần chơi MỘT lượt → ẩn các nút của bản thường (chia sẻ, chụp ảnh, Night Pass, toàn màn hình, linh vật, sáng/tối, ngôn ngữ, bảng xếp hạng, ⋯ Control Center…) vì chúng trải dài đè lên bàn chơi; CHỈ GIỮ 🔊 và ⏸ tạm dừng (nút ✕ thoát nằm ở thanh trên của trang chơi hộ) */
+  if (helper) { try { document.documentElement.classList.add("np-helper"); var hs = document.createElement("style"); hs.textContent = "html.np-helper :is(#npSetBtn,#nsPill,#wpBtn,#npFsBtn,#npMcBtn,#themeBtn2,#themeBtn,#bLang,#langBtn,#bCam,#bShr,#bBoard,#npChBtn,#npFab,#npPmFab,#npPmFan,.nps-fab,#klock,#bHelp,#phBtn,#askBtn,#homeBtn,#bBk,#bBack,#npPmBk,#bRe,#restartBtn,#bRestart,#ccOpen,#ccRoot,#h3Cal,#h3Dots,#findFab){display:none!important}"; (document.head || document.documentElement).appendChild(hs); } catch (e) {} }
   var PAUSABLE = !helper, mMenu = false, mMenuByUs = false, ownCd = false;
   if (multi || PAUSABLE) {
     (function () {   /* đồng hồ ảo */
